@@ -1,0 +1,158 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 2.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+    <class
+        name="edu.wustl.catissuecore.dataModel.domain.User"
+        table="CATISSUE_USER"
+        dynamic-update="false"
+        dynamic-insert="false"
+    >
+
+        <id
+            name="identifier"
+            column="IDENTIFIER"
+            type="long"
+            length="30"
+            unsaved-value="null"
+        >
+            <generator class="native">
+            </generator>
+        </id>
+
+        <property
+            name="lastName"
+            type="string"
+            update="true"
+            insert="true"
+            column="LAST_NAME"
+            length="50"
+        />
+
+        <property
+            name="firstName"
+            type="string"
+            update="true"
+            insert="true"
+            column="FIRST_NAME"
+            length="50"
+        />
+
+        <many-to-one
+            name="institute"
+            class="edu.wustl.catissuecore.dataModel.domain.Institute"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="INSTITUTE_ID"
+        />
+
+        <many-to-one
+            name="department"
+            class="edu.wustl.catissuecore.dataModel.domain.Department"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="DEPARTMENT_ID"
+        />
+
+        <many-to-one
+            name="address"
+            class="edu.wustl.catissuecore.dataModel.domain.Address"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="ADDRESS_ID"
+        />
+
+        <property
+            name="loginName"
+            type="string"
+            update="true"
+            insert="true"
+            column="LOGIN"
+            length="50"
+            not-null="true"
+            unique="true"
+        />
+
+        <many-to-one
+            name="activityStatus"
+            class="edu.wustl.catissuecore.dataModel.domain.ActivityStatus"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="ACTIVITY_STATUS_ID"
+        />
+
+        <property
+            name="dateAdded"
+            type="date"
+            update="true"
+            insert="true"
+            column="DATE_ADDED"
+        />
+
+        <property
+            name="memberSince"
+            type="date"
+            update="true"
+            insert="true"
+            column="MEMBER_SINCE"
+        />
+
+        <property
+            name="password"
+            type="string"
+            update="true"
+            insert="true"
+            column="PASSWORD"
+            length="50"
+        />
+
+        <property
+            name="email"
+            type="string"
+            update="true"
+            insert="true"
+            column="EMAIL"
+            length="50"
+            not-null="true"
+            unique="true"
+        />
+
+        <many-to-one
+            name="role"
+            class="edu.wustl.catissuecore.dataModel.domain.Role"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="ROLE_ID"
+        />
+
+        <property
+            name="commentString"
+            type="string"
+            update="true"
+            insert="true"
+            column="STATUSCOMMENT"
+            length="2000"
+        />
+
+        <!--
+            To add non XDoclet property mappings, create a file named
+                hibernate-properties-User.xml
+            containing the additional properties and place it in your merge dir.
+        -->
+
+    </class>
+
+</hibernate-mapping>

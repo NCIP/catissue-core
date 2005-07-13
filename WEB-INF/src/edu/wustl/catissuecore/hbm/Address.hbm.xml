@@ -1,0 +1,97 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 2.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+    <class
+        name="edu.wustl.catissuecore.dataModel.domain.Address"
+        table="CATISSUE_ADDRESS"
+        dynamic-update="false"
+        dynamic-insert="false"
+    >
+
+        <id
+            name="identifier"
+            column="IDENTIFIER"
+            type="long"
+            length="30"
+            unsaved-value="null"
+        >
+            <generator class="native">
+            </generator>
+        </id>
+
+        <property
+            name="street"
+            type="string"
+            update="true"
+            insert="true"
+            column="STREET"
+            length="50"
+        />
+
+        <property
+            name="city"
+            type="string"
+            update="true"
+            insert="true"
+            column="CITY"
+            length="50"
+        />
+
+        <property
+            name="state"
+            type="string"
+            update="true"
+            insert="true"
+            column="STATE"
+            length="50"
+        />
+
+        <property
+            name="country"
+            type="string"
+            update="true"
+            insert="true"
+            column="COUNTRY"
+            length="50"
+        />
+
+        <property
+            name="zip"
+            type="string"
+            update="true"
+            insert="true"
+            column="ZIP"
+            length="50"
+        />
+
+        <property
+            name="phone"
+            type="string"
+            update="true"
+            insert="true"
+            column="PHONE"
+            length="50"
+        />
+
+        <property
+            name="fax"
+            type="string"
+            update="true"
+            insert="true"
+            column="FAX"
+            length="50"
+        />
+
+        <!--
+            To add non XDoclet property mappings, create a file named
+                hibernate-properties-Address.xml
+            containing the additional properties and place it in your merge dir.
+        -->
+
+    </class>
+
+</hibernate-mapping>

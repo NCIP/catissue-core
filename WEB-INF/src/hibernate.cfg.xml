@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration
+    PUBLIC "-//Hibernate/Hibernate Configuration DTD//EN"
+    "http://hibernate.sourceforge.net/hibernate-configuration-2.0.dtd">
+ 
+<hibernate-configuration>
+	
+    <session-factory>
+    	<property name="show_sql">true</property>
+    	
+        <!-- List of all Mapping files -->
+        <mapping resource="edu/wustl/catissuecore/dataModel/hbm/User.hbm.xml"/>
+        <mapping resource="edu/wustl/catissuecore/dataModel/hbm/Address.hbm.xml"/>
+        <mapping resource="edu/wustl/catissuecore/dataModel/hbm/Department.hbm.xml"/>
+        <mapping resource="edu/wustl/catissuecore/dataModel/hbm/Institute.hbm.xml"/>
+        <mapping resource="edu/wustl/catissuecore/dataModel/hbm/Role.hbm.xml"/>
+        <mapping resource="edu/wustl/catissuecore/dataModel/hbm/ActivityStatus.hbm.xml"/>
+        <mapping resource="edu/wustl/catissuecore/dataModel/hbm/Participant.hbm.xml"/>
+        <mapping resource="edu/wustl/catissuecore/dataModel/hbm/Accession.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/dataModel/hbm/ReportedProblem.hbm.xml"/>
+		<!--mapping resource="edu/wustl/catissuecore/dataModel/hbm/Specimen.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/dataModel/hbm/Segment.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/dataModel/hbm/Sample.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/dataModel/hbm/Audit.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/dataModel/hbm/BiospecimenStorage.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/dataModel/hbm/BiospecimenDistribution.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/dataModel/hbm/Box.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/dataModel/hbm/Capacity.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/dataModel/hbm/Collection.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/dataModel/hbm/Distribution.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/dataModel/hbm/Eventlog.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/dataModel/hbm/InfectionAgent.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/dataModel/hbm/Protocol.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/dataModel/hbm/ProtocolRequirement.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/dataModel/hbm/Site.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/dataModel/hbm/Study.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/dataModel/hbm/StudyRequirement.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/dataModel/hbm/Unit.hbm.xml"/-->
+    </session-factory>
+    
+</hibernate-configuration>

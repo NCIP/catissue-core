@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 1.1//EN"
+       "http://jakarta.apache.org/struts/dtds/tiles-config_1_1.dtd">
+
+<tiles-definitions>
+
+	<!-- Home tab pages definitions start -->
+	<definition name=".catissuecore.homePageDef" path="/pages/Layout.jsp">
+		<put name="title" value="caTISSUE Core" />
+		<put name="header" value="/pages/MainHeader.jsp" />
+		<put name="applicationheader" value="/pages/ApplicationHeader.jsp" />
+		<put name="commonmenu" value="/pages/subMenu/Common.jsp" />
+		<put name="submenu" value="/pages/subMenu/Home.jsp" />
+		<put name="mainmenu" value="/pages/mainMenu/Home.jsp" />
+		<put name="content" value="/pages/content/home/Home.jsp" />
+		<put name="applicationfooter" value="/pages/ApplicationFooter.jsp" />
+		<put name="mainfooter" value="/pages/MainFooter.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.reportProblemDef" extends=".catissuecore.homePageDef">
+		<put name="content" value="/pages/content/common/ReportProblem.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.reportProblemSuccessDef" extends=".catissuecore.homePageDef">
+		<put name="content" value="/pages/content/common/success.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.forgotPasswordDef" extends=".catissuecore.homePageDef">
+		<put name="content" value="/pages/content/common/ForgotPassword.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.forgotPasswordSuccessDef" extends=".catissuecore.homePageDef">
+		<put name="content" value="/pages/content/common/success.jsp" />
+	</definition>
+	
+	<!-- Home tab pages definitions end -->
+
+	<!-- Manage Administrative Data tab pages definitions start -->
+	<definition name=".catissuecore.manageAdminDataHomeDef" extends=".catissuecore.homePageDef">
+		<put name="submenu" value="/pages/subMenu/ManageAdminData.jsp" />
+		<put name="mainmenu" value="/pages/mainMenu/ManageAdminData.jsp" />
+		<put name="content" value="/pages/content/manageAdministrativeData/Home.jsp"/>
+	</definition>
+
+	<definition name=".catissuecore.userDef" extends=".catissuecore.manageAdminDataHomeDef">
+		<put name="content" value="/pages/content/manageAdministrativeData/User.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.userAddSuccessDef" extends=".catissuecore.manageAdminDataHomeDef">
+		<put name="content" value="/pages/content/common/success.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.userEditSuccessDef" extends=".catissuecore.manageAdminDataHomeDef">
+		<put name="content" value="/pages/content/common/success.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.instituteDef" extends=".catissuecore.manageAdminDataHomeDef">
+		<put name="content" value="/pages/content/manageAdministrativeData/Institute.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.instituteAddSuccessDef" extends=".catissuecore.manageAdminDataHomeDef">
+		<put name="content" value="/pages/content/common/success.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.instituteEditSuccessDef" extends=".catissuecore.manageAdminDataHomeDef">
+		<put name="content" value="/pages/content/common/success.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.approveUserDef" extends=".catissuecore.manageAdminDataHomeDef">
+		<put name="content" value="/pages/content/manageAdministrativeData/ApproveUser.jsp" />
+	</definition>
+	<definition name=".catissuecore.userDetailsDef" extends=".catissuecore.manageAdminDataHomeDef">
+		<put name="content" value="/pages/content/manageAdministrativeData/UserDetails.jsp" />
+	</definition>
+	
+	<definition name=".catissuecore.reportedProblemDef" extends=".catissuecore.manageAdminDataHomeDef">
+		<put name="content" value="/pages/content/manageAdministrativeData/ReportedProblem.jsp" />
+	</definition>
+	<definition name=".catissuecore.problemDetailsDef" extends=".catissuecore.manageAdminDataHomeDef">
+		<put name="content" value="/pages/content/manageAdministrativeData/ProblemDetails.jsp" />
+	</definition>
+	<!-- Manage Administrative Data tab pages definitions end -->
+
+	<!-- Manage BioSpecimen tab pages definitions start -->
+	<definition name=".catissuecore.manageBioSpecimenHomeDef" extends=".catissuecore.homePageDef">
+		<put name="submenu" value="/pages/subMenu/ManageBioSpecimen.jsp" />
+		<put name="mainmenu" value="/pages/mainMenu/ManageBioSpecimen.jsp" />
+		<put name="content" value="/pages/content/manageBioSpecimen/Home.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.participantDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/Participant.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.participantAddSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/common/success.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.participantEditSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/common/success.jsp" />
+	</definition>
+	
+	<definition name=".catissuecore.accessionDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/Accession.jsp" />
+	</definition>
+	
+	<definition name=".catissuecore.accessionAddSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/common/success.jsp" />
+	</definition>
+	
+	<definition name=".catissuecore.accessionEditSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/common/success.jsp" />
+	</definition>
+
+	<!-- BioSpecimen tab pages definitions end -->
+
+	<!-- Search tab pages definitions start -->
+
+	<definition name=".catissuecore.queryResultsTreeViewDef" path="/pages/content/search/TreeView.jsp">
+	</definition>
+	
+	<definition name=".catissuecore.searchHomeDef" extends=".catissuecore.homePageDef">
+		<put name="submenu" value="/pages/subMenu/Search.jsp" />
+		<put name="mainmenu" value="/pages/mainMenu/Search.jsp" />
+		<put name="content" value="/pages/content/search/Home.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.queryResultsDef" extends=".catissuecore.searchHomeDef">
+		<put name="content" value="/pages/content/search/QueryResultsView.jsp" />
+	</definition>
+
+	<!-- Query edit pages definitions begin -->
+	<definition name=".catissuecore.queryDataViewDef" path="/pages/content/search/ContentLayout.jsp">
+	</definition>
+
+	<definition name=".catissuecore.queryParticipantViewDef" extends=".catissuecore.queryDataViewDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/Participant.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.queryAccessionViewDef" extends=".catissuecore.queryDataViewDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/Accession.jsp" />
+	</definition>
+	
+	<definition name=".catissuecore.queryResultsSpreadsheetViewDef" extends=".catissuecore.queryDataViewDef">
+		<put name="content" value="/pages/content/search/DataView.jsp"/>
+	</definition>
+	
+	<!-- Query edit pages definitions end -->
+	
+	<!-- Search tab pages definitions end -->
+
+</tiles-definitions>

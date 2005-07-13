@@ -1,0 +1,135 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 2.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+    <class
+        name="edu.wustl.catissuecore.dataModel.domain.Participant"
+        table="CATISSUE_PARTICIPANT"
+        dynamic-update="false"
+        dynamic-insert="false"
+    >
+
+        <id
+            name="identifier"
+            column="IDENTIFIER"
+            type="long"
+            length="30"
+            unsaved-value="null"
+        >
+            <generator class="native">
+            </generator>
+        </id>
+
+        <property
+            name="lastName"
+            type="string"
+            update="true"
+            insert="true"
+            column="LAST_NAME"
+            length="50"
+        />
+
+        <property
+            name="firstName"
+            type="string"
+            update="true"
+            insert="true"
+            column="FIRST_NAME"
+            length="50"
+        />
+
+        <property
+            name="middleName"
+            type="string"
+            update="true"
+            insert="true"
+            column="MIDDLE_NAME"
+            length="50"
+        />
+
+        <property
+            name="dateOfBirth"
+            type="date"
+            update="true"
+            insert="true"
+            column="DATE_OF_BIRTH"
+        />
+
+        <property
+            name="gender"
+            type="string"
+            update="true"
+            insert="true"
+            column="GENDER"
+            length="20"
+        />
+
+        <property
+            name="socialSecurityNumber"
+            type="string"
+            update="true"
+            insert="true"
+            column="SOCIAL_SECURITY_NUMBER"
+            length="50"
+            unique="true"
+        />
+
+        <property
+            name="uniqueMedicalRecordNumber"
+            type="string"
+            update="true"
+            insert="true"
+            column="UNIQUE_MEDICAL_RECORD_NUMBER"
+            length="50"
+            unique="true"
+        />
+
+        <property
+            name="race"
+            type="string"
+            update="true"
+            insert="true"
+            column="RACE"
+            length="20"
+        />
+
+        <many-to-one
+            name="activityStatus"
+            class="edu.wustl.catissuecore.dataModel.domain.ActivityStatus"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="ACTIVITY_STATUS_ID"
+        />
+
+        <set
+            name="accessionCollection"
+            table="CATISSUE_ACCESSION"
+            lazy="false"
+            inverse="true"
+            cascade="save-update"
+            sort="unsorted"
+        >
+
+              <key
+                  column="PARTICIPANT_IDENTIFIER"
+              />
+
+              <one-to-many
+                  class="edu.wustl.catissuecore.dataModel.domain.Accession"
+              />
+        </set>
+
+        <!--
+            To add non XDoclet property mappings, create a file named
+                hibernate-properties-Participant.xml
+            containing the additional properties and place it in your merge dir.
+        -->
+
+    </class>
+
+</hibernate-mapping>

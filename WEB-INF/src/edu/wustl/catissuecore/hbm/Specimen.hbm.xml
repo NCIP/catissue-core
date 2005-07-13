@@ -1,0 +1,268 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 2.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+    <class
+        name="edu.wustl.catissuecore.dataModel.domain.Specimen"
+        table="CATISSUE_SPECIMEN"
+        dynamic-update="false"
+        dynamic-insert="false"
+    >
+
+        <id
+            name="identifier"
+            column="IDENTIFIER"
+            type="long"
+            length="30"
+            unsaved-value="null"
+        >
+            <generator class="native">
+            </generator>
+        </id>
+
+        <property
+            name="tissueSite"
+            type="string"
+            update="true"
+            insert="true"
+            column="TISSUE_SITE"
+            length="50"
+        />
+
+        <property
+            name="tissueSide"
+            type="string"
+            update="true"
+            insert="true"
+            column="TISSUE_SIDE"
+            length="50"
+        />
+
+        <property
+            name="type"
+            type="string"
+            update="true"
+            insert="true"
+            column="SPECIMEN_TYPE"
+            length="50"
+        />
+
+        <property
+            name="processIdentifier"
+            type="string"
+            update="true"
+            insert="true"
+            column="PROCESS_IDENTIFIER"
+            length="50"
+        />
+
+        <property
+            name="quantity"
+            type="double"
+            update="true"
+            insert="true"
+            column="RECEIVED_QUANTITY"
+            length="50"
+        />
+
+        <property
+            name="quantityUnit"
+            type="double"
+            update="true"
+            insert="true"
+            column="QUANTITY_UNIT"
+            length="50"
+        />
+
+        <property
+            name="receivedQuality"
+            type="string"
+            update="true"
+            insert="true"
+            column="RECEIVED_QUALITY"
+            length="50"
+        />
+
+        <property
+            name="reviewed"
+            type="boolean"
+            update="true"
+            insert="true"
+            column="REVIEWED"
+        />
+
+        <property
+            name="reviewedDate"
+            type="date"
+            update="true"
+            insert="true"
+            column="REVIEWED_DATE"
+        />
+
+        <many-to-one
+            name="reviewedBy"
+            class="edu.wustl.catissuecore.dataModel.domain.User"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="REVIEWED_BY"
+        />
+
+        <property
+            name="neoplasticCellularityPercentage"
+            type="double"
+            update="true"
+            insert="true"
+            column="NEOPLASTIC_CELLULARITY_PERCENT"
+            length="50"
+        />
+
+        <property
+            name="necrosisPercentage"
+            type="double"
+            update="true"
+            insert="true"
+            column="NECROSIS_PERCENT"
+            length="50"
+        />
+
+        <property
+            name="lymphocyticPercentage"
+            type="double"
+            update="true"
+            insert="true"
+            column="LYMPHOCYTIC_PERCENT"
+            length="50"
+        />
+
+        <property
+            name="totalCellularityPercentage"
+            type="double"
+            update="true"
+            insert="true"
+            column="TOTAL_CELLULARITY_PERCENT"
+            length="50"
+        />
+
+        <property
+            name="histologicalQuality"
+            type="string"
+            update="true"
+            insert="true"
+            column="HISTOLOGICAL_QUALITY"
+            length="50"
+        />
+
+        <property
+            name="sampleDerived"
+            type="boolean"
+            update="true"
+            insert="true"
+            column="SAMPLE_DERIVED"
+        />
+
+        <property
+            name="available"
+            type="boolean"
+            update="true"
+            insert="true"
+            column="AVAILABLE"
+            length="50"
+        />
+
+        <property
+            name="availableQuantity"
+            type="double"
+            update="true"
+            insert="true"
+            column="AVAILABLE_QUANTITY"
+            length="50"
+        />
+
+        <property
+            name="comments"
+            type="string"
+            update="true"
+            insert="true"
+            column="COMMENTS"
+            length="200"
+        />
+
+        <many-to-one
+            name="activityStatus"
+            class="edu.wustl.catissuecore.dataModel.domain.ActivityStatus"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="ACTIVITY_STATUS_ID"
+        />
+
+        <property
+            name="barcode"
+            type="string"
+            update="true"
+            insert="true"
+            column="BARCODE"
+            length="50"
+        />
+
+        <many-to-one
+            name="accession"
+            class="edu.wustl.catissuecore.dataModel.domain.Accession"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="ACCESSION_ID"
+        />
+
+        <set
+            name="segmentCollection"
+            table="CATISSUE_SEGMENT"
+            lazy="false"
+            inverse="true"
+            cascade="save-update"
+            sort="unsorted"
+        >
+
+              <key
+                  column="SPECIMEN_ID"
+              />
+
+              <one-to-many
+                  class="edu.wustl.catissuecore.dataModel.domain.Segment"
+              />
+        </set>
+
+        <set
+            name="sampleCollection"
+            table="CATISSUE_SAMPLE"
+            lazy="false"
+            inverse="true"
+            cascade="save-update"
+            sort="unsorted"
+        >
+
+              <key
+                  column="SPECIMEN_ID"
+              />
+
+              <one-to-many
+                  class="edu.wustl.catissuecore.dataModel.domain.Sample"
+              />
+        </set>
+
+        <!--
+            To add non XDoclet property mappings, create a file named
+                hibernate-properties-Specimen.xml
+            containing the additional properties and place it in your merge dir.
+        -->
+
+    </class>
+
+</hibernate-mapping>

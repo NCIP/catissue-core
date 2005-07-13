@@ -1,0 +1,90 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 2.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+    <class
+        name="edu.wustl.catissuecore.dataModel.domain.ReportedProblem"
+        table="CATISSUE_REPORTED_PROBLEM"
+        dynamic-update="false"
+        dynamic-insert="false"
+    >
+
+        <id
+            name="identifier"
+            column="IDENTIFIER"
+            type="long"
+            length="30"
+            unsaved-value="null"
+        >
+            <generator class="native">
+            </generator>
+        </id>
+
+        <property
+            name="from"
+            type="string"
+            update="true"
+            insert="true"
+            column="REPORTERS_EMAIL_ID"
+            length="50"
+            not-null="true"
+        />
+
+        <property
+            name="messageBody"
+            type="string"
+            update="true"
+            insert="true"
+            column="MESSAGE_BODY"
+            length="200"
+            not-null="true"
+        />
+
+        <property
+            name="subject"
+            type="string"
+            update="true"
+            insert="true"
+            column="SUBJECT"
+            length="100"
+        />
+
+        <property
+            name="reportedDate"
+            type="date"
+            update="true"
+            insert="true"
+            column="REPORTED_DATE"
+        />
+
+        <many-to-one
+            name="activityStatus"
+            class="edu.wustl.catissuecore.dataModel.domain.ActivityStatus"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="ACTIVITY_STATUS_ID"
+        />
+
+        <property
+            name="comments"
+            type="string"
+            update="true"
+            insert="true"
+            column="COMMENTS"
+            length="2000"
+        />
+
+        <!--
+            To add non XDoclet property mappings, create a file named
+                hibernate-properties-ReportedProblem.xml
+            containing the additional properties and place it in your merge dir.
+        -->
+
+    </class>
+
+</hibernate-mapping>

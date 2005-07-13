@@ -1,0 +1,223 @@
+<?xml version ="1.0"?>
+
+<!--Ant Script for create Build for caTISSUE Core-->
+
+<project name="caTISSUE_Core" default="compile">
+	
+	<!--define require dir and Properties -->	
+	<property name="base.dir" value="."/>
+    <property name="src.dir" value="${base.dir}/WEB-INF/src"/>
+    <property name="target.dir" value="${base.dir}/WEB-INF/classes"/>
+    <property name="lib.dir" value="${base.dir}/WEB-INF/lib"/>
+    <property name="build.dir" value="${base.dir}/build"/>
+	<property name="hbm.dir" value="${src.dir}/edu/wustl/catissuecore/hbm"/>
+	<property name="tomcat.dir" value="CATALINA_HOME"/>
+	
+	<property name="extra_lib.dir" value="${base.dir}/extra_lib"/>
+    
+    <property name="generateforce" value="true"/>
+    
+	<path id="app.classpath">
+		<fileset dir="${lib.dir}">
+			<include name="*.jar"/>
+		</fileset>
+	</path>
+	
+	<path id="xdoclet.classpath">
+		<path refid="app.classpath"/>
+
+        <pathelement location="${extra_lib.dir}/commons-net-1.2.2.jar"/>
+		<pathelement location="${extra_lib.dir}/hibernate-tools.jar"/>
+		<pathelement location="${extra_lib.dir}/servlet-api.jar"/>
+		<pathelement location="${extra_lib.dir}/xdoclet-1.2.jar"/>
+		<pathelement location="${extra_lib.dir}/xdoclet-hibernate-module-1.2.jar"/>
+		<pathelement location="${extra_lib.dir}/xdoclet-xdoclet-module-1.2.jar"/>
+		<pathelement location="${extra_lib.dir}/xerces.jar"/>
+		<pathelement location="${extra_lib.dir}/xjavadoc-1.0.2.jar"/>
+		<pathelement location="${extra_lib.dir}/xsdlib.jar"/>
+	</path>
+	
+    <!--Build the complete project-->
+    <!--target name="build" depends="compile,generateHBM,copy-resources,buildjar,createExe">
+    </target-->
+	
+	<!-- sub tasks -->    
+	<target name="init">
+    	<!-- Create the time stamp -->
+	    <tstamp/>
+    	<!-- Create the build directory structure used by compile -->
+	    <mkdir dir="${target.dir}"/>
+	    <mkdir dir="${build.dir}"/>
+  	</target>
+  	
+	<target name="FTPUpload" description="Upload the build file to ftp server">
+		<ftp server="paftp.persistent.co.in" userid="washu" password="washu123"
+		   	 remotedir = "/catissuecore/" action = "put"			
+			 binary="yes" passive="no">
+	    		<fileset dir="${build.dir}"/>
+		</ftp>
+	</target>
+	
+	<target name="TarApp" depends="init">
+		<tar destfile="${build.dir}/catissuecore.tar"
+	      	 basedir="${base.dir}"
+	      	 excludes="**/catissuecore.tar,**/build/"/>
+	</target> 
+	
+	<target name="AppSetup" depends="compile,TarApp,FTPUpload">
+		</target>
+<!--includes="**css/*,**/images/*,**/jss/*,**/pages/*,**/WEB-INF/*,*.jsp"-->
+	<target name="StartTomcat">
+	    <echo>"${tomcat.dir}"/</echo>
+  	</target>
+
+	<target name="imvishnu">
+	  <sshexec host="im-vishnu.wustl.edu"
+		username="clususer"
+		password="cl~user4vishnu"
+		command="pwd"/>
+	</target>
+	
+	
+	
+    		<!-- Compile all files, generated and hand-written -->
+    <target name="compile" depends="init">
+        <javac destdir="${target.dir}" includes="**/*.*" includeAntRuntime="false">
+            <src path="${src.dir}"/>
+            <classpath>
+              <fileset dir="${lib.dir}">
+                  <include name="*.jar"/>
+              </fileset>
+            </classpath>       
+        </javac>
+    </target>
+    
+    <!--Copy required resources-->
+    <!--target name="copy-resources">
+        <copy todir="${target.dir}">
+        <fileset dir="${src.dir}">
+            <exclude name="**/*.java"/>
+        </fileset>
+    	</copy>
+    </target-->
+    
+	
+	
+	<!-- sshexec host="somehost"
+		username="dude"
+		password="yo"
+		command="touch somefile"/-->
+
+	
+    <!-- Create the application JAR -->
+    <target name="buildjar" depends="compile" >
+        <delete>
+            <fileset dir="${build.dir}" includes="**/*"/>
+        </delete>
+        
+        <jar taskname="buildJar" jarfile="${build.dir}/catissuecore.jar">
+            <fileset dir="${target.dir}" includes="**/*"/>
+        </jar>
+    </target>
+    
+    <!--Create executable required Structure-->
+    <!--target name="createExe">
+	    <copy todir="${build.dir}">
+        	<fileset dir="${base.dir}">
+            	<include name="hibernate.properties"/>
+        	</fileset>
+    	</copy>
+		
+    	<copy todir="${base.dir}/${icons.dir}">
+    		<fileset dir="${icons.dir}"/>
+    	</copy>
+    	
+    	<copy todir="${base.dir}/${lib.dir}">
+    		<fileset dir="${lib.dir}"/>
+    	</copy>
+    </target-->
+ 
+    <target name="generateHBM" description="Generates Hibernate class descriptor files.">
+    	<!-- Define the hibernatedoclet task -->    	
+    	<taskdef name="hibernatedoclet" classname="xdoclet.modules.hibernate.HibernateDocletTask">
+    		<classpath refid="xdoclet.classpath"/>
+		</taskdef>    
+		
+		<!-- Execute the hibernatedoclet task -->		
+		<hibernatedoclet destdir="${src.dir}" excludedtags="@version,@author,@todo"
+					     force="${generateforce}" mergedir="${src.dir}" verbose="false">
+			<fileset dir="${src.dir}">
+				<!--include name="**/promoterAna/*.java"/-->
+				<include name="**/domain/*.java"/>
+			</fileset>
+    		<hibernate version="2.0"/>
+		</hibernatedoclet>	
+		
+		<!-- Upgrade grammar from Hibernate1 to Hibernate2 -->
+	    <replace dir="${src.dir}">
+	        <include name="**/db/*.hbm.xml"/>
+	        <replacefilter token="readonly=" value="inverse="/>
+	        <replacefilter token="role=" value="name="/>
+	        <replacefilter token="hibernate-mapping.dtd" value="hibernate-mapping-2.0.dtd"/>
+	    </replace>
+	    
+	    <copy todir="${hbm.dir}">
+        	<fileset dir="${src.dir}/edu/wustl/catissuecore/domain">
+            	<include name="*.hbm.xml"/>
+        	</fileset>
+	    </copy>
+    	
+    	<delete>
+            <fileset dir="${src.dir}/edu/wustl/catissuecore/domain" includes="*.hbm.xml"/>
+        </delete>
+    </target>
+
+	<!--Not Complete, YET TO DO-->
+	<target name="Genrate-Schema" depends="buildjar, generateHBM">
+    	<java classname="edu.wustl.common.util.dbManager.GenerateSchema">
+	    	<arg value="true"/>		
+				
+            <classpath>
+	            <pathelement location="${build.dir}/catissuecore.jar"/>
+            	<fileset dir="${lib.dir}">
+                  <include name="*.jar"/>
+              </fileset>
+            </classpath>       
+      	</java>
+    </target>
+	
+	<!--target name="DBImport" depends="Genrate-Schema">
+    	<java classname="edu.wustl.lims.db.DBImportUtil">
+    		<classpath refid="eclipse.classpath"/>
+            <classpath>
+	            <pathelement location="${LIMSPlugin.dir}/lims.jar"/>
+            	
+            	<fileset dir="${lib.dir}">
+                  <include name="*.jar"/>
+              </fileset>
+            </classpath>       
+      	</java>
+    </target-->
+    
+	<!--target name="GenerateDB" depends="DBImport">
+    </target-->
+      		
+    <!--target name="schemaexport">
+    	<taskdef name="schemaexport" classname="net.sf.hibernate.tool.hbm2ddl.SchemaExportTask">
+	    	<classpath>
+		   		<pathelement path="${target.dir}"/>
+            	<fileset dir="${lib.dir}">
+                	  <include name="*.jar"/>
+                	  <include name="*.class"/>
+	            </fileset>
+    	 	</classpath>       
+   		</taskdef>
+    
+    	<schemaexport properties="hibernate.properties"
+        		quiet="yes" text="no" drop="no" delimiter=";" output="schema-export.sql">
+        	<fileset dir="./bin">
+            	<include name="*.hbm.xml"/>
+        	</fileset>
+    	</schemaexport>
+	</target-->
+</project>

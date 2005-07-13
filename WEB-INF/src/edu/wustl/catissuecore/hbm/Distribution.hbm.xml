@@ -1,0 +1,119 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 2.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+    <class
+        name="edu.wustl.catissuecore.dataModel.domain.Distribution"
+        table="CATISSUE_DISTRIBUTION"
+        dynamic-update="false"
+        dynamic-insert="false"
+    >
+
+        <id
+            name="identifier"
+            column="IDENTIFIER"
+            type="long"
+            length="30"
+            unsaved-value="null"
+        >
+            <generator class="native">
+            </generator>
+        </id>
+
+        <property
+            name="date"
+            type="date"
+            update="true"
+            insert="true"
+            column="DISTRIBUTION_DATE"
+            length="50"
+        />
+
+        <many-to-one
+            name="distributedBy"
+            class="edu.wustl.catissuecore.dataModel.domain.User"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="DISTRIBUTED_BY"
+        />
+
+        <property
+            name="trackNumber"
+            type="string"
+            update="true"
+            insert="true"
+            column="TRACK_NUMBER"
+            length="50"
+        />
+
+        <property
+            name="mode"
+            type="string"
+            update="true"
+            insert="true"
+            column="DISTRIBUTION_MODE"
+            length="50"
+        />
+
+        <many-to-one
+            name="toSite"
+            class="edu.wustl.catissuecore.dataModel.domain.Site"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="TO_SITE_IDENTIFIER"
+        />
+
+        <set
+            name="itemDistributionCollection"
+            table="CATISSUE_BIOSPECIMEN_DISTRIBUTION"
+            lazy="false"
+            inverse="true"
+            cascade="save-update"
+            sort="unsorted"
+        >
+
+              <key
+                  column="DISTRIBUTION_ID"
+              />
+
+              <one-to-many
+                  class="edu.wustl.catissuecore.dataModel.domain.BiospecimenDistribution"
+              />
+        </set>
+
+        <many-to-one
+            name="study"
+            class="edu.wustl.catissuecore.dataModel.domain.Study"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="STUDY_IDENTIFIER"
+        />
+
+        <many-to-one
+            name="fromSite"
+            class="edu.wustl.catissuecore.dataModel.domain.Site"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="FROM_SITE_IDENTIFIER"
+        />
+
+        <!--
+            To add non XDoclet property mappings, create a file named
+                hibernate-properties-Distribution.xml
+            containing the additional properties and place it in your merge dir.
+        -->
+
+    </class>
+
+</hibernate-mapping>

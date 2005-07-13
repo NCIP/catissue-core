@@ -1,0 +1,6 @@
+1. Date format to be incorporated in code.
+2. On error changing the color of asterisk mark on the page.
+3. The confirmation message.
+5. Clob.
+6. Logger messages from resource bundle.
+8. styleClass attribute for the pagination tag.

@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 2.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+    <class
+        name="edu.wustl.catissuecore.dataModel.domain.ProtocolRequirement"
+        table="CATISSUE_PROTOCOL_REQUIREMENT"
+        dynamic-update="false"
+        dynamic-insert="false"
+    >
+
+        <id
+            name="identifier"
+            column="IDENTIFIER"
+            type="long"
+            length="30"
+            unsaved-value="null"
+        >
+            <generator class="native">
+            </generator>
+        </id>
+
+        <property
+            name="specimenType"
+            type="string"
+            update="true"
+            insert="true"
+            column="SPECIMEN_TYPE"
+            length="50"
+        />
+
+        <property
+            name="quantity"
+            type="double"
+            update="true"
+            insert="true"
+            column="QUANTITY"
+            length="50"
+        />
+
+        <property
+            name="quantityUnit"
+            type="string"
+            update="true"
+            insert="true"
+            column="QUANTITY_UNIT"
+            length="50"
+        />
+
+        <property
+            name="diseaseStatus"
+            type="string"
+            update="true"
+            insert="true"
+            column="DISEASE_STATUS"
+            length="50"
+        />
+
+        <many-to-one
+            name="protocol"
+            class="edu.wustl.catissuecore.dataModel.domain.Study"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="STUDY_IDENTIFIER"
+        />
+
+        <!--
+            To add non XDoclet property mappings, create a file named
+                hibernate-properties-ProtocolRequirement.xml
+            containing the additional properties and place it in your merge dir.
+        -->
+
+    </class>
+
+</hibernate-mapping>

@@ -1,0 +1,110 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 2.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+    <class
+        name="edu.wustl.catissuecore.dataModel.domain.Unit"
+        table="CATISSUE_UNIT"
+        dynamic-update="false"
+        dynamic-insert="false"
+    >
+
+        <id
+            name="identifier"
+            column="IDENTIFIER"
+            type="long"
+            length="30"
+            unsaved-value="null"
+        >
+            <generator class="native">
+            </generator>
+        </id>
+
+        <property
+            name="type"
+            type="string"
+            update="true"
+            insert="true"
+            column="TYPE"
+            length="50"
+        />
+
+        <many-to-one
+            name="activityStatus"
+            class="edu.wustl.catissuecore.dataModel.domain.ActivityStatus"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="ACTIVITY_STATUS_ID"
+        />
+
+        <property
+            name="barCode"
+            type="string"
+            update="true"
+            insert="true"
+            column="BAR_CODE"
+            length="100"
+        />
+
+        <many-to-one
+            name="capacity"
+            class="edu.wustl.catissuecore.dataModel.domain.Capacity"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="CAPACITY_ID"
+        />
+
+        <many-to-one
+            name="address"
+            class="edu.wustl.catissuecore.dataModel.domain.Address"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="ADDRESS_IDENTIFIER"
+        />
+
+        <many-to-one
+            name="site"
+            class="edu.wustl.catissuecore.dataModel.domain.Site"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="SITE_IDENTIFIER"
+        />
+
+        <set
+            name="collectionCollection"
+            table="CATISSUE_COLLECTION"
+            lazy="false"
+            inverse="true"
+            cascade="save-update"
+            sort="unsorted"
+        >
+
+              <key
+                  column="UNIT_ID"
+              />
+
+              <one-to-many
+                  class="edu.wustl.catissuecore.dataModel.domain.Collection"
+              />
+        </set>
+
+        <!--
+            To add non XDoclet property mappings, create a file named
+                hibernate-properties-Unit.xml
+            containing the additional properties and place it in your merge dir.
+        -->
+
+    </class>
+
+</hibernate-mapping>

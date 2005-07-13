@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 2.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+    <class
+        name="edu.wustl.catissuecore.dataModel.domain.Capacity"
+        table="CATISSUE_CAPACITY"
+        dynamic-update="false"
+        dynamic-insert="false"
+    >
+
+        <id
+            name="identifier"
+            column="IDENTIFIER"
+            type="long"
+            length="30"
+            unsaved-value="null"
+        >
+            <generator class="native">
+            </generator>
+        </id>
+
+        <property
+            name="dimensionOne"
+            type="int"
+            update="true"
+            insert="true"
+            column="DIMENSION_ONE"
+            length="50"
+        />
+
+        <property
+            name="dimensionTwo"
+            type="int"
+            update="true"
+            insert="true"
+            column="DIMENSION_TWO"
+            length="50"
+        />
+
+        <property
+            name="dimensionThree"
+            type="int"
+            update="true"
+            insert="true"
+            column="DIMENSION_THREE"
+            length="50"
+        />
+
+        <!--
+            To add non XDoclet property mappings, create a file named
+                hibernate-properties-Capacity.xml
+            containing the additional properties and place it in your merge dir.
+        -->
+
+    </class>
+
+</hibernate-mapping>

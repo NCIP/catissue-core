@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 2.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+    <class
+        name="edu.wustl.catissuecore.dataModel.domain.Institute"
+        table="CATISSUE_INSTITUTE"
+        dynamic-update="false"
+        dynamic-insert="false"
+    >
+
+        <id
+            name="identifier"
+            column="IDENTIFIER"
+            type="long"
+            length="30"
+            unsaved-value="null"
+        >
+            <generator class="native">
+            </generator>
+        </id>
+
+        <property
+            name="name"
+            type="string"
+            update="true"
+            insert="true"
+            column="NAME"
+            length="50"
+            not-null="true"
+        />
+
+        <property
+            name="type"
+            type="string"
+            update="true"
+            insert="true"
+            column="TYPE"
+            length="50"
+        />
+
+        <many-to-one
+            name="address"
+            class="edu.wustl.catissuecore.dataModel.domain.Address"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="ADDRESS_ID"
+        />
+
+        <!--
+            To add non XDoclet property mappings, create a file named
+                hibernate-properties-Institute.xml
+            containing the additional properties and place it in your merge dir.
+        -->
+
+    </class>
+
+</hibernate-mapping>

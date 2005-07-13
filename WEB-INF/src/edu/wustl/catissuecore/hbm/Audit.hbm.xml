@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 2.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+    <class
+        name="edu.wustl.catissuecore.dataModel.domain.Audit"
+        table="CATISSUE_AUDIT"
+        dynamic-update="false"
+        dynamic-insert="false"
+    >
+
+        <id
+            name="identifier"
+            column="IDENTIFIER"
+            type="long"
+            length="30"
+            unsaved-value="null"
+        >
+            <generator class="native">
+            </generator>
+        </id>
+
+        <property
+            name="timeStamp"
+            type="date"
+            update="true"
+            insert="true"
+            column="AUDIT_TIMESTAMP"
+        />
+
+        <many-to-one
+            name="user"
+            class="edu.wustl.catissuecore.dataModel.domain.User"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="USER_ID"
+        />
+
+        <set
+            name="eventLogCollection"
+            table="CATISSUE_EVENTLOG"
+            lazy="false"
+            inverse="true"
+            cascade="save-update"
+            sort="unsorted"
+        >
+
+              <key
+                  column="AUDIT_ID"
+              />
+
+              <one-to-many
+                  class="edu.wustl.catissuecore.dataModel.domain.EventLog"
+              />
+        </set>
+
+        <!--
+            To add non XDoclet property mappings, create a file named
+                hibernate-properties-Audit.xml
+            containing the additional properties and place it in your merge dir.
+        -->
+
+    </class>
+
+</hibernate-mapping>

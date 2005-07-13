@@ -1,0 +1,98 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 2.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+    <class
+        name="edu.wustl.catissuecore.dataModel.domain.EventLog"
+        table="CATISSUE_EVENTLOG"
+        dynamic-update="false"
+        dynamic-insert="false"
+    >
+
+        <id
+            name="identifier"
+            column="IDENTIFIER"
+            type="long"
+            length="30"
+            unsaved-value="null"
+        >
+            <generator class="native">
+            </generator>
+        </id>
+
+        <property
+            name="objectID"
+            type="long"
+            update="true"
+            insert="true"
+            column="OBJECT_ID"
+            length="50"
+        />
+
+        <property
+            name="objectType"
+            type="string"
+            update="true"
+            insert="true"
+            column="OBJECT_TYPE"
+            length="50"
+        />
+
+        <property
+            name="elementName"
+            type="string"
+            update="true"
+            insert="true"
+            column="ELEMENT_NAME"
+            length="50"
+        />
+
+        <property
+            name="eventType"
+            type="string"
+            update="true"
+            insert="true"
+            column="EVENT_TYPE"
+            length="50"
+        />
+
+        <property
+            name="previousValue"
+            type="string"
+            update="true"
+            insert="true"
+            column="PREVIOUS_VALUE"
+            length="50"
+        />
+
+        <property
+            name="currentValue"
+            type="string"
+            update="true"
+            insert="true"
+            column="CURRENT_VALUE"
+            length="50"
+        />
+
+        <many-to-one
+            name="audit"
+            class="edu.wustl.catissuecore.dataModel.domain.Audit"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="AUDIT_ID"
+        />
+
+        <!--
+            To add non XDoclet property mappings, create a file named
+                hibernate-properties-EventLog.xml
+            containing the additional properties and place it in your merge dir.
+        -->
+
+    </class>
+
+</hibernate-mapping>
