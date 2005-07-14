@@ -14,7 +14,8 @@ PUBLIC
 		<form-bean name="instituteForm" type="edu.wustl.catissuecore.actionForm.InstituteForm"/>
 		<form-bean name="domainObjectListForm" type="edu.wustl.catissuecore.actionForm.DomainObjectListForm"/>		
 		<form-bean name="abstractActionForm" type="edu.wustl.catissuecore.actionForm.AbstractActionForm"/>				
-		<form-bean name="departmentForm" type="edu.wustl.caTISSUECore.actionForm.DepartmentForm"/>
+		<form-bean name="departmentForm" type="edu.wustl.catissuecore.actionForm.DepartmentForm"/>
+		<form-bean name="loginForm" type="edu.wustl.catissuecore.actionForm.LoginForm"/>
 	</form-beans>
 	
 	<action-mappings>
@@ -33,6 +34,21 @@ PUBLIC
 		 <action path="/Search"
                     type="org.apache.struts.actions.ForwardAction"
                     parameter=".catissuecore.searchHomeDef" />
+                    
+                    
+        <!-- Login Module Actions Begin -->
+        
+        <action path="/Login"
+			type="edu.wustl.catissuecore.action.LoginAction"
+			name="loginForm"
+			validate="true"
+			input="/Home.do"
+			scope="request">
+			<forward name="success" path="/Participant.do?operation=add&amp;pageOf=" />
+			<forward name="failure" path=".catissuecore.homePageDef" />
+		</action>
+        
+        <!-- Login Module Actions End -->
                     
 		<!-- Participant Actions Begins -->
         <action path="/Participant"

@@ -1,12 +1,9 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
+<%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
 
 <table summary="" cellpadding="0" cellspacing="0" border="0" width="100%" height="100%">
                     
-                    <!-- banner begins -->
-                    <tr>
-                      <td class="bannerHome"><img src="images/bannerHome.gif" height="140"></td>
-                    </tr>
-                    <!-- banner begins -->
+                   
                     
                     <tr>
                       <td height="100%">
@@ -50,7 +47,9 @@
                                       <tr>
                                         <td class="sidebarContent">
                                           <table cellpadding="2" cellspacing="0" border="0">
-										   <form action="dashboard.jsp">
+                                          <html:errors />
+										   <html:form action="Login.do">
+									
                                             <tr>
                                               <td class="sidebarLogin" align="right">
                                               	<label for="loginID">
@@ -59,7 +58,7 @@
 											  </td>
                                               
                                               <td class="formFieldLogin">
-                                              	<input class="formField" type="text" name="loginID" size="14" />
+                                                 	<html:text styleClass="formField" property="loginName" size="14" />
                                               </td>
                                             </tr>
 
@@ -72,37 +71,37 @@
                                               </td>
                                               
                                               <td class="formFieldLogin">
-                                              	<input class="formField" type="password" name="password" size="14" />
+                                              	<html:password styleClass="formField" property="loginName" size="14" />
                                               </td>
                                             </tr>
 
 
                                             <tr>
 											 <td>&nbsp;</td>	
-                                              <td><input class="actionButton" type="submit" value="Login"/></td>
+                                              <td><html:submit><bean:message key="app.login"/></html:submit></td>
                                             </tr>
 									
 
-					    <tr>
-					      <td>
-					      	<div>
-					      		<a class="loginSignup" href="User.do?operation=add">
-					      			<bean:message key="app.signup"/>
-					      		</a>
-					      	</div>
-					      </td>	
-					    </tr>
-
-					    <tr>
-					      <td colspan="2">
-					      	<a class="loginSignup" href="ForgotPassword.do">
-					      		<bean:message key="app.requestPassword"/>
-					      	</a>
-					      </td>
-					    </tr>	
+										    <tr>
+										      <td>
+										      	<div>
+										      		<a class="loginSignup" href="User.do?operation=add">
+										      			<bean:message key="app.signup"/>
+										      		</a>
+										      	</div>
+										      </td>	
+										    </tr>
+					
+										    <tr>
+										      <td colspan="2">
+										      	<a class="loginSignup" href="ForgotPassword.do">
+										      		<bean:message key="app.requestPassword"/>
+										      	</a>
+										      </td>
+										    </tr>	
 						
 
-										</form>
+										</html:form>
                                           </table>
                                         </td>
                                       </tr>

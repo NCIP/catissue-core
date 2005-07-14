@@ -18,6 +18,7 @@
 		<put name="applicationfooter" value="/pages/ApplicationFooter.jsp" />
 		<put name="mainfooter" value="/pages/MainFooter.jsp" />
 	</definition>
+	
 
 	<definition name=".catissuecore.reportProblemDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/common/ReportProblem.jsp" />
