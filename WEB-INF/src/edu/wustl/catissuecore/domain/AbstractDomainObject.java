@@ -33,21 +33,21 @@ public abstract class AbstractDomainObject
             case Constants.USER_FORM_ID:
                 className = User.class.getName();
             	break;
-            case Constants.PARTICIPANT_FORM_ID:
-                className = Participant.class.getName();
-            	break;
-            case Constants.ACCESSION_FORM_ID:
-                className = Accession.class.getName();
-            	break;
-            case Constants.INSTITUTE_FORM_ID:
-                className = Institute.class.getName();
-            	break;
-            case Constants.ACTIVITY_STATUS_FORM_ID:
-                className = ActivityStatus.class.getName();
-            	break;
-            case Constants.REPORTEDPROBLEM_FORM_ID:
-                className = ReportedProblem.class.getName();
-            	break;
+//            case Constants.PARTICIPANT_FORM_ID:
+//                className = Participant.class.getName();
+//            	break;
+//            case Constants.ACCESSION_FORM_ID:
+//                className = Accession.class.getName();
+//            	break;
+//            case Constants.INSTITUTE_FORM_ID:
+//                className = Institute.class.getName();
+//            	break;
+//            case Constants.ACTIVITY_STATUS_FORM_ID:
+//                className = ActivityStatus.class.getName();
+//            	break;
+//            case Constants.REPORTEDPROBLEM_FORM_ID:
+//                className = ReportedProblem.class.getName();
+//            	break;
         }
         return className;
     }
@@ -59,16 +59,16 @@ public abstract class AbstractDomainObject
     public abstract void setAllValues(AbstractActionForm abstractForm);
     
     /**
-	 * Returns the unique identifier assigned to the domain object.
-     * @return returns a unique identifier assigned to the domain object.
+	 * Returns the unique systemIdentifier assigned to the domain object.
+     * @return returns a unique systemIdentifier assigned to the domain object.
      * @see #setIdentifier(Long)
 	 * */
-    public abstract Long getIdentifier();
+    public abstract Long getSystemIdentifier();
 
     /**
-	 * Sets an identifier for the domain object.
-	 * @param identifier identifier for the domain object.
+	 * Sets an systemIdentifier for the domain object.
+	 * @param systemIdentifier systemIdentifier for the domain object.
 	 * @see #getIdentifier()
 	 * */
-    public abstract void setIdentifier(Long identifier);
+    public abstract void setSystemIdentifier(Long systemIdentifier);
 }
