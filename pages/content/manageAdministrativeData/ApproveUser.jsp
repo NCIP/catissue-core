@@ -1,8 +1,8 @@
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
-<%@ taglib uri="/WEB-INF/PagenationTag.tld" prefix="custom" %>
-<%@ page import="edu.wustl.catissuecore.domain.User,edu.wustl.catissuecore.util.global.Constants"%>
+<%@ taglib uri="/WEB-INF/PagenationTag.tld" prefix="custom"%>
+<%@ page import="edu.wustl.catissuecore.domain.User,edu.wustl.catissuecore.util.global.Constants,edu.wustl.catissuecore.domain.Address"%>
 
 <html:errors/>
 
@@ -27,7 +27,7 @@
 				</tr>
 				<tr>
 					<td>
-						<html:hidden property="identifier" />
+						<html:hidden property="systemIdentifier" />
 					</td>
 				</tr>
 				
@@ -46,22 +46,11 @@
 				<!-- paging ends -->				
 				
 				<tr>
-					<td class="dataTablePrimaryLabel" height="20">
-						<html:checkbox property="value(userselectAll)" onclick="CheckAll(this)">
-							<bean:message key="app.selectAll"/>
-						</html:checkbox>
-					</td>
-				</tr>
-				
-				<tr>
 					<td>
 					<table summary="Enter summary of data here" cellpadding="3"
 						cellspacing="0" border="0" class="dataTable" width="100%">
 						
 						<tr>
-							<th class="dataTableHeader" scope="col" align="center">
-								<bean:message key="approveUser.approvereject" />
-							</th>
 							<th class="dataTableHeader" scope="col" align="center">
 								<bean:message key="user.loginName" />
 							</th>
@@ -69,28 +58,21 @@
 								<bean:message key="user.userName" />
 							</th>
 							<th class="dataTableHeader" scope="col" align="center">
-								<bean:message key="user.email" />
+								<bean:message key="user.emailAddress" />
 							</th>
 							<th class="dataTableHeader" scope="col" align="center">
 								<bean:message key="approveUser.registrationDate" />
 							</th>
 						</tr>
-						<%
-							int i=0;
-						%>
 						
 						<logic:iterate id="currentUser" name="showDomainObjectList">
 							<tr class="dataRowLight">
 								<%
         								User user = (User) currentUser;
-        								String checkBoxName = "value(user" + i + ")";
-										String checkBoxValue = user.getIdentifier().toString();
-										String userDetailsLink = Constants.USER_DETAILS_SHOW_ACTION+"?"+Constants.IDENTIFIER+"="+checkBoxValue;
-										i++;
+										String identifier = user.getSystemIdentifier().toString();
+										//String userDetailsLink = Constants.USER_DETAILS_SHOW_ACTION+"?"+Constants.IDENTIFIER+"="+identifier;
+										String userDetailsLink = "User.do?operation=edit&amp;pageOf=query";
         						%>
-								<td class="dataCellText">
-									<html:checkbox property="<%=checkBoxName%>" value="<%=checkBoxValue%>" />
-								</td>
 								<td class="dataCellText">
 									<a href="<%=userDetailsLink%>" >
 										<bean:write	name="currentUser" property="loginName" />
@@ -101,7 +83,8 @@
 									<bean:write name="currentUser" property="firstName" />
 								</td>
 								<td class="dataCellText">
-									<bean:write name="currentUser" property="email" />
+									<bean:define id="addr" name="currentUser" property="address"/>
+									<bean:write name="addr" property="emailAddress"/>
 								</td>
 								<td class="dataCellText">
 									<bean:write name="currentUser" property="dateAdded" />
@@ -112,34 +95,6 @@
 					</td>
 				</tr>
 				
-				<tr>
-					<td align="right" class="actionSection">
-					<!-- action buttons begins -->
-					<table cellpadding="4" cellspacing="0" border="0">
-					
-					<br/>
-						<tr>
-							<td>
-								<%
-									String setOperation = "setOperation('"+Constants.ACTIVITY_STATUS_APPROVE+"')";
-								%>
-								<html:submit styleClass="actionButton" onclick="<%=setOperation%>">
-									<bean:message  key="buttons.approve" />
-								</html:submit>
-							</td>
-							<td>
-								<%
-									setOperation = "setOperation('"+Constants.ACTIVITY_STATUS_REJECT+"')";
-								%>
-								<html:submit styleClass="actionButton" onclick="<%=setOperation%>">
-									<bean:message  key="buttons.reject" />
-								</html:submit>
-							</td>
-						</tr>
-					</table>
-					<!-- action buttons end -->
-					</td>
-				</tr>
 			</html:form>
 		</table>
 		</td>

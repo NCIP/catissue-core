@@ -6,7 +6,9 @@
 <%
         String operation = (String) request.getAttribute(Constants.OPERATION);
         String formName;
-        String searchFormName = new String(Constants.USER_SEARCH_ACTION);
+		
+		//Change this to Constants.USER_EDIT_ACTION
+        String searchFormName = new String(Constants.USER_EDIT_ACTION);
 
         boolean readOnlyValue;
         if (operation.equals(Constants.EDIT))
@@ -19,7 +21,8 @@
             formName = Constants.USER_ADD_ACTION;
             readOnlyValue = false;
         }
-        %>
+		String pageOf = (String)request.getAttribute(Constants.PAGEOF);        
+%>
 
 <html:errors />
 
@@ -27,6 +30,7 @@
 	
 	<html:form action="<%=Constants.USER_ADD_ACTION%>">
 		<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>">
+			<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
 			<!-- ENTER IDENTIFIER BEGINS-->
 			<br />
 			<tr>
@@ -46,12 +50,16 @@
 							</label>
 						</td>
 						<td class="formField">
-							<html:text styleClass="formFieldSized" size="30" styleId="identifier" property="identifier" />
+							<html:text styleClass="formFieldSized" size="30" styleId="systemIdentifier" property="systemIdentifier" />
 						</td>
 					</tr>
 					<%
-        				String changeAction = "setFormAction('" + searchFormName
-                							  + "');setOperation('" + Constants.SEARCH + "');";
+        				String changeAction = "setFormAction('" + "User.do"
+	                							  + "');setOperation('" + Constants.EDIT + "')";
+						//searchFormName
+						//Constants.SEARCH
+							
+
 			        %>
 					<tr>
 						<td align="right" colspan="3">
@@ -69,6 +77,7 @@
 				</td>
 			</tr>
 			<!-- ENTER IDENTIFIER ENDS-->
+			</logic:notEqual>
 		</logic:notEqual>
 
 
@@ -269,7 +278,7 @@
 							<html:text styleClass="formFieldSized" size="30" styleId="faxNumber" property="faxNumber" />
 						</td>
 					</tr>
-					
+					<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">					
 					<tr>
 						<td class="formRequiredNotice" width="5">*</td>
 						<td class="formRequiredLabel">
@@ -283,7 +292,6 @@
 							</html:select>
 						</td>
 					</tr>
-					<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
 					<tr>
 						<td class="formRequiredNotice" width="5">*</td>
 							<td class="formRequiredLabel">

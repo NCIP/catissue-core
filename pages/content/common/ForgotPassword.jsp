@@ -12,7 +12,7 @@
 			
 		   <html:form action="/ForgotPasswordSearch">	
 			 <tr>
-				 <td> <html:hidden property="operation"  value="<%=operation%>"/></td>
+				 <td> <html:hidden property="<%=Constants.OPERATION%>"  value="<%=operation%>"/></td>
 			 </tr>		
 	    	  <tr>
 			    <td>
@@ -32,8 +32,8 @@
 				 </tr>
 				 <tr>
 				     <td class="formRequiredNotice" width="5">&nbsp;</td>
-				     <td class="formLabel"><label for="email"><bean:message key="user.email"/></label></td>
-				     <td class="formField"><html:text styleClass="formFieldSized" size="30" styleId="email" property="email"/></td>
+				     <td class="formLabel"><label for="emailAddress"><bean:message key="user.emailAddress"/></label></td>
+				     <td class="formField"><html:text styleClass="formFieldSized" size="30" styleId="emailAddress" property="emailAddress"/></td>
 				 </tr>
 				 <tr>
 				  <td align="right" colspan="3">
