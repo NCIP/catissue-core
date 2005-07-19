@@ -36,6 +36,10 @@
 		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>
 	
+	<definition name=".catissuecore.userSignUpDef" extends=".catissuecore.homePageDef">
+		<put name="content" value="/pages/content/manageAdministrativeData/User.jsp" />
+	</definition>
+	
 	<!-- Home tab pages definitions end -->
 
 	<!-- Manage Administrative Data tab pages definitions start -->
@@ -82,6 +86,7 @@
 	<definition name=".catissuecore.problemDetailsDef" extends=".catissuecore.manageAdminDataHomeDef">
 		<put name="content" value="/pages/content/manageAdministrativeData/ProblemDetails.jsp" />
 	</definition>
+	
 	<!-- Manage Administrative Data tab pages definitions end -->
 
 	<!-- Manage BioSpecimen tab pages definitions start -->
@@ -115,6 +120,9 @@
 		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>
 
+	<definition name=".catissuecore.newSpecimenDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/NewSpecimen.jsp" />
+	</definition>
 	<!-- BioSpecimen tab pages definitions end -->
 
 	<!-- Search tab pages definitions start -->
@@ -149,7 +157,39 @@
 	</definition>
 	
 	<!-- Query edit pages definitions end -->
-	
+
 	<!-- Search tab pages definitions end -->
+	
+	<!-- Summary tab pages definitions Begin -->
+	<definition name=".catissuecore.summaryHomeDef" extends=".catissuecore.homePageDef">
+		<put name="submenu" value="/pages/subMenu/Summary.jsp" />
+		<put name="mainmenu" value="/pages/mainMenu/Summary.jsp" />
+		<put name="content" value="/pages/content/summary/Home.jsp" />
+	</definition>
+	<!-- Summary tab pages definitions End -->
+	
+	<!-- Help tab pages definitions Begin -->
+	<definition name=".catissuecore.helpHomeDef" extends=".catissuecore.homePageDef">
+		<put name="submenu" value="/pages/subMenu/Help.jsp" />
+		<put name="mainmenu" value="/pages/mainMenu/Help.jsp" />
+		<put name="content" value="/pages/content/help/Home.jsp" />
+	</definition>
+	<!-- Help tab pages definitions End -->
+	
+	<!-- Summary tab pages definitions Begin -->
+	<definition name=".catissuecore.summaryLoggedInDef" extends=".catissuecore.homePageDef">
+		<put name="submenu" value="/pages/subMenu/Summary.jsp" />
+		<put name="mainmenu" value="/pages/mainMenu/LoggedInSummary.jsp" />
+		<put name="content" value="/pages/content/summary/Home.jsp" />
+	</definition>
+	<!-- Summary tab pages definitions End -->
+	
+	<!-- Help tab pages definitions Begin -->
+	<definition name=".catissuecore.helpLoggedInDef" extends=".catissuecore.homePageDef">
+		<put name="submenu" value="/pages/subMenu/Help.jsp" />
+		<put name="mainmenu" value="/pages/mainMenu/LoggedInHelp.jsp" />
+		<put name="content" value="/pages/content/help/Home.jsp" />
+	</definition>
+	<!-- Help tab pages definitions End -->
 
 </tiles-definitions>
