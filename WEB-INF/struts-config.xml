@@ -8,14 +8,12 @@ PUBLIC
 	
 	<form-beans>
 		<form-bean name="userForm" type="edu.wustl.catissuecore.actionForm.UserForm"/>
-		<form-bean name="participantForm" type="edu.wustl.catissuecore.actionForm.ParticipantForm"/>
-		<form-bean name="accessionForm" type="edu.wustl.catissuecore.actionForm.AccessionForm"/>
 		<form-bean name="reportedProblemForm" type="edu.wustl.catissuecore.actionForm.ReportedProblemForm"/>
 		<form-bean name="instituteForm" type="edu.wustl.catissuecore.actionForm.InstituteForm"/>
 		<form-bean name="domainObjectListForm" type="edu.wustl.catissuecore.actionForm.DomainObjectListForm"/>		
-		<form-bean name="abstractActionForm" type="edu.wustl.catissuecore.actionForm.AbstractActionForm"/>				
 		<form-bean name="departmentForm" type="edu.wustl.catissuecore.actionForm.DepartmentForm"/>
 		<form-bean name="loginForm" type="edu.wustl.catissuecore.actionForm.LoginForm"/>
+		<form-bean name="newSpecimenForm" type="edu.wustl.catissuecore.actionForm.NewSpecimenForm"/>
 	</form-beans>
 	
 	<action-mappings>
@@ -31,11 +29,26 @@ PUBLIC
                     type="org.apache.struts.actions.ForwardAction"
                     parameter=".catissuecore.manageBioSpecimenHomeDef" />
 					
-		 <action path="/Search"
+		<action path="/Search"
                     type="org.apache.struts.actions.ForwardAction"
                     parameter=".catissuecore.searchHomeDef" />
                     
+		 <action path="/Summary"
+                    type="org.apache.struts.actions.ForwardAction"
+                    parameter=".catissuecore.summaryHomeDef" />
                     
+         <action path="/Help"
+                    type="org.apache.struts.actions.ForwardAction"
+                    parameter=".catissuecore.helpHomeDef" />
+                    
+         <action path="/LoggedInSummary"
+                    type="org.apache.struts.actions.ForwardAction"
+                    parameter=".catissuecore.summaryLoggedInDef" />
+                    
+         <action path="/LoggedInHelp"
+                    type="org.apache.struts.actions.ForwardAction"
+                    parameter=".catissuecore.helpLoggedInDef" />
+         
         <!-- Login Module Actions Begin -->
         
         <action path="/Login"
@@ -44,90 +57,19 @@ PUBLIC
 			validate="true"
 			input="/Home.do"
 			scope="request">
-			<forward name="success" path="/Participant.do?operation=add&amp;pageOf=" />
+			<forward name="success" path="/ManageAdministrativeData.do" />
 			<forward name="failure" path=".catissuecore.homePageDef" />
 		</action>
         
+        <action path="/SignUp"
+			type="edu.wustl.catissuecore.action.UserAction"
+			scope="request">
+			<forward name="success" path=".catissuecore.userSignUpDef" />
+			<forward name="failure" path=".catissuecore.userSignUpDef" />
+		</action>
+		
         <!-- Login Module Actions End -->
                     
-		<!-- Participant Actions Begins -->
-        <action path="/Participant"
-			type="edu.wustl.catissuecore.action.ParticipantAction"
-			scope="request">
-			<forward name="success" path=".catissuecore.participantDef" />
-			<forward name="failure" path=".catissuecore.participantDef" />
-		</action>
-		
-		<action path="/ParticipantAdd"
-			type="edu.wustl.catissuecore.action.CommonAddEditAction"
-			name="participantForm"
-			validate="true"
-			input="/Participant.do?operation=add&amp;pageOf="
-			scope="request">
-			<forward name="success" path=".catissuecore.participantAddSuccessDef" />
-			<forward name="failure" path="/error.jsp" />
-		</action>
-		
-		<action path="/ParticipantEdit"
-			type="edu.wustl.catissuecore.action.CommonAddEditAction"
-			name="participantForm"
-			validate="true"
-			input="/Participant.do?operation=edit&amp;pageOf="
-			scope="request">
-			<forward name="success" path=".catissuecore.participantEditSuccessDef" />
-			<forward name="failure" path="/error.jsp" />
-		</action>
-		
-		<action path="/ParticipantSearch"
-		    type="edu.wustl.catissuecore.action.CommonSearchAction"
-			name="participantForm"
-			validate="true"
-			input="/Participant.do?operation=edit&amp;pageOf="
-			scope="request">
-			<forward name="success" path="/Participant.do?operation=edit&amp;pageOf="/>
-			<forward name="failure" path="/Participant.do?operation=edit&amp;pageOf="/>
-		</action>    
-		<!-- Participant Actions Ends -->
-		
-		<!-- Accession Actions Begins -->
-		<action path="/Accession"
-			type="edu.wustl.catissuecore.action.AccessionAction"
-			scope="request">
-			<forward name="success" path=".catissuecore.accessionDef" />
-			<forward name="failure" path=".catissuecore.accessionDef" />
-		</action>
-		
-		<action path="/AccessionAdd"
-			type="edu.wustl.catissuecore.action.CommonAddEditAction"
-			name="accessionForm"
-			validate="true"
-			input="/Accession.do?operation=add&amp;pageOf="
-			scope="request">
-			<forward name="success" path=".catissuecore.accessionAddSuccessDef" />
-			<forward name="failure" path="/error.jsp" />
-		</action>
-
-		<action path="/AccessionEdit"
-			type="edu.wustl.catissuecore.action.CommonAddEditAction"
-			name="accessionForm"
-			validate="true"
-			input="/Accession.do?operation=edit&amp;pageOf="
-			scope="request">
-			<forward name="success" path=".catissuecore.accessionEditSuccessDef" />
-			<forward name="failure" path="/error.jsp" />
-		</action>
-
-		<action path="/AccessionSearch"
-		    type="edu.wustl.catissuecore.action.CommonSearchAction"
-			name="accessionForm"
-			validate="true"
-			input="/Accession.do?operation=edit&amp;pageOf="
-			scope="request">
-			<forward name="success" path="/Accession.do?operation=edit&amp;pageOf="/>
-			<forward name="failure" path="/Accession.do?operation=edit&amp;pageOf="/>
-		</action>    
-		<!-- Accession Actions Ends -->
-		
 		<!-- Institute Actions Begins-->
 		<action path="/Institute"
 			type="edu.wustl.catissuecore.action.InstituteAction"
@@ -179,7 +121,7 @@ PUBLIC
 			type="edu.wustl.catissuecore.action.CommonAddEditAction"
 			name="userForm"
 			validate="true"
-			input="/User.do?operation=add"
+			input="/User.do?operation=add&amp;pageOf="
 			scope="request">
 			<forward name="success" path=".catissuecore.userAddSuccessDef" />
 			<forward name="failure" path="/error.jsp" />
@@ -189,7 +131,7 @@ PUBLIC
 			type="edu.wustl.catissuecore.action.CommonAddEditAction"
 			name="userForm"
 			validate="true"
-			input="/User.do?operation=edit"
+			input="/User.do?operation=edit&amp;pageOf="
 			scope="request">
 			<forward name="success" path=".catissuecore.userEditSuccessDef" />
 			<forward name="failure" path="/error.jsp" />
@@ -201,10 +143,11 @@ PUBLIC
 			validate="true"
 			input="/User.do?operation=edit"
 			scope="request">
-			<forward name="success" path="/User.do?operation=edit"/>
-			<forward name="failure" path="/User.do?operation=edit"/>
+			<forward name="success" path="/User.do?operation=edit&amp;pageOf="/>
+			<forward name="failure" path="/User.do?operation=edit&amp;pageOf="/>
 		</action>    
 		<!-- User Actions Ends-->
+		
 		<!-- Department Actions Begins-->
 		<action path="/Department"
 			type="edu.wustl.catissuecore.action.DepartmentAction"
@@ -241,6 +184,7 @@ PUBLIC
 			<forward name="failure" path="/Department.do?operation=edit"/>
 		</action>    
 		<!-- Department Actions Ends-->
+		
 		<!--Report Problem Actions Begins-->
 		<action path="/ReportProblem"
 			type="edu.wustl.catissuecore.action.ReportProblemAction"
@@ -278,6 +222,25 @@ PUBLIC
 			<forward name="failure" path=".catissuecore.forgotPasswordDef" />
 		</action>
 		<!--Forgot Password Actions Ends-->
+
+		<!--New Specimen Actions Begin-->
+		<action path="/NewSpecimen"
+			type="edu.wustl.catissuecore.action.NewSpecimenAction"
+			scope="request">
+			<forward name="success" path=".catissuecore.newSpecimenDef" />
+			<forward name="failure" path=".catissuecore.newSpecimenDef" />
+		</action>
+		
+		<action path="/SpecimenAdd"
+			type="edu.wustl.catissuecore.action.CommonAddEditAction"
+			name="newSpecimenForm"
+			validate="true"
+			input="/NewSpecimen.do?operation=add"
+			scope="request">
+			<forward name="success" path=".catissuecore.instituteAddSuccessDef" />
+			<forward name="failure" path="/error.jsp" />
+		</action>
+		<!--New Specimen Actions Begin-->
 
 		<!--Approve User Actions Begin-->
 		<action path="/ApproveUserShow"
@@ -351,59 +314,6 @@ PUBLIC
 			type="edu.wustl.catissuecore.action.DataViewAction">
 			<forward name="success" path=".catissuecore.queryResultsSpreadsheetViewDef" />
 		</action>
-		
-		<!--Participant Object View Actions Begin-->
-		<action path="/QueryParticipant"
-			type="edu.wustl.catissuecore.action.ParticipantAction"
-			scope="request">
-			<forward name="success" path=".catissuecore.queryParticipantViewDef" />
-			<forward name="failure" path=".catissuecore.queryParticipantViewDef" />
-		</action>
-		
-		<action path="/QueryParticipantSearch"
-		    type="edu.wustl.catissuecore.action.CommonSearchAction"
-			name="participantForm"
-			scope="request">
-			<forward name="success" path="/QueryParticipant.do?operation=view&amp;pageOf=query"/>
-			<forward name="failure" path="/QueryParticipant.do?operation=view&amp;pageOf=query"/>
-		</action>
-		<!--Participant Object View Actions End-->
-		
-		<!--Accession Object View Actions Begin-->
-		<action path="/QueryAccession"
-			type="edu.wustl.catissuecore.action.AccessionAction"
-			scope="request">
-			<forward name="success" path=".catissuecore.queryAccessionViewDef" />
-			<forward name="failure" path=".catissuecore.queryAccessionViewDef" />
-		</action>
-		
-		<action path="/QueryAccessionSearch"
-		    type="edu.wustl.catissuecore.action.CommonSearchAction"
-			name="accessionForm"
-			scope="request">
-			<forward name="success" path="/QueryAccession.do?operation=view&amp;pageOf=query"/>
-			<forward name="failure" path="/QueryAccession.do?operation=view&amp;pageOf=query"/>
-		</action>
-		<!--Accession Object View Actions End-->
-		
-		<!-- Actions to make the fields editable in the Query Results Object View Begin -->
-		<action path="/MakeParticipantEditable"
-		    type="edu.wustl.catissuecore.action.MakeEditableAction"
-			name="participantForm"
-			scope="request">
-			<forward name="edit" path="/QueryParticipant.do?operation=edit&amp;pageOf=query"/>
-			<forward name="view" path="/QueryParticipant.do?operation=view&amp;pageOf=query"/>
-		</action>
-		
-		<action path="/MakeAccessionEditable"
-		    type="edu.wustl.catissuecore.action.MakeEditableAction"
-			name="accessionForm"
-			scope="request">
-			<forward name="edit" path="/QueryAccession.do?operation=edit&amp;pageOf=query"/>
-			<forward name="view" path="/QueryAccession.do?operation=view&amp;pageOf=query"/>
-		</action>
-		<!-- Actions to make the fields editable in the Query Results Object View End -->
-		
 		<!--Query Result View Actions End-->
 	</action-mappings>
 	
