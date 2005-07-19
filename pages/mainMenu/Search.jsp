@@ -5,7 +5,7 @@
             <tr>
               <td width="1"><!-- anchor to skip main menu --><a href="#content"><img src="images/shim.gif" alt="Skip Menu" width="1" height="1" border="0" /></a></td>
               <!-- link 1 begins -->
-              <td height="20" class="mainMenuItem" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'mainMenuItem'),hideCursor()" onclick="document.location.href='/Home.do'">
+              <td height="20" class="mainMenuItem" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'mainMenuItem'),hideCursor()" onclick="document.location.href='Home.do'">
                 <html:link styleClass="mainMenuLink" page="/Home.do">
 					<bean:message key="app.home" />
 				</html:link>
@@ -13,7 +13,7 @@
               <!-- link 1 ends -->
 			   <td><img src="images/mainMenuSeparator.gif" width="1" height="16" alt="" /></td>
 			  <!-- link 2 begins -->
-              <td height="20" class="mainMenuItem" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'mainMenuItem'),hideCursor()" onclick="document.location.href='/ManageAdministrativeData.do'">
+              <td height="20" class="mainMenuItem" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'mainMenuItem'),hideCursor()" onclick="document.location.href='ManageAdministrativeData.do'">
                 <html:link styleClass="mainMenuLink" page="/ManageAdministrativeData.do">
                 	<bean:message key="app.administrativeData" />
                 </html:link>
@@ -22,7 +22,7 @@
 			 <td><img src="images/mainMenuSeparator.gif" width="1" height="16" alt="" /></td>
 			  
               <!-- link 3 begins -->
-              <td height="20" class="mainMenuItem" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'mainMenuItem'),hideCursor()" onclick="document.location.href='/ManageBioSpecimen.do'">
+              <td height="20" class="mainMenuItem" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'mainMenuItem'),hideCursor()" onclick="document.location.href='ManageBioSpecimen.do'">
                 <html:link styleClass="mainMenuLink" page="/ManageBioSpecimen.do">
                 	<bean:message key="app.biospecimen" />
                 </html:link>
@@ -30,16 +30,24 @@
              <!-- link 3 ends -->
               <td><img src="images/mainMenuSeparator.gif" width="1" height="16" alt="" /></td>
 		      <!-- link 4 begins -->
-              <td height="20" class="mainMenuItemOver" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'mainMenuItemOver'),hideCursor()" onclick="document.location.href='/Search.do'">
+              <td height="20" class="mainMenuItemOver" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'mainMenuItemOver'),hideCursor()" onclick="document.location.href='Search.do'">
                 <html:link styleClass="mainMenuLink" page="/Search.do">
                 	<bean:message key="app.search" />
                 </html:link>
               </td>
               <!-- link 4 ends -->
+              <td><img src="images/mainMenuSeparator.gif" width="1" height="16" alt="" /></td>
+			  <!-- link 2 begins -->
+              <td height="20" class="mainMenuItem" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'mainMenuItem'),hideCursor()" onclick="document.location.href='Summary.do'">
+                <html:link styleClass="mainMenuLink" page="/LoggedInSummary.do">
+                	<bean:message key="app.summary" />
+                </html:link>
+              </td>
+              <!-- link 2 ends -->
 			  <td><img src="images/mainMenuSeparator.gif" width="1" height="16" alt="" /></td>	
   		      <!-- link 5 begins -->
-              <td height="20" class="mainMenuItem" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'mainMenuItem'),hideCursor()" onclick="document.location.href='/ManageBioSpecimen.do'">
-                <html:link styleClass="mainMenuLink" page="/ManageBioSpecimen.do">
+              <td height="20" class="mainMenuItem" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'mainMenuItem'),hideCursor()" onclick="document.location.href='#'">
+                <html:link styleClass="mainMenuLink" page="/LoggedInHelp.do">
                 	<bean:message key="app.help" />
                 </html:link>
               </td>
