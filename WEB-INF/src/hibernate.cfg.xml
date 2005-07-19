@@ -9,33 +9,32 @@
     	<property name="show_sql">true</property>
     	
         <!-- List of all Mapping files -->
-        <mapping resource="edu/wustl/catissuecore/dataModel/hbm/User.hbm.xml"/>
-        <mapping resource="edu/wustl/catissuecore/dataModel/hbm/Address.hbm.xml"/>
-        <mapping resource="edu/wustl/catissuecore/dataModel/hbm/Department.hbm.xml"/>
-        <mapping resource="edu/wustl/catissuecore/dataModel/hbm/Institute.hbm.xml"/>
-        <mapping resource="edu/wustl/catissuecore/dataModel/hbm/Role.hbm.xml"/>
-        <mapping resource="edu/wustl/catissuecore/dataModel/hbm/ActivityStatus.hbm.xml"/>
-        <mapping resource="edu/wustl/catissuecore/dataModel/hbm/Participant.hbm.xml"/>
-        <mapping resource="edu/wustl/catissuecore/dataModel/hbm/Accession.hbm.xml"/>
-		<mapping resource="edu/wustl/catissuecore/dataModel/hbm/ReportedProblem.hbm.xml"/>
-		<!--mapping resource="edu/wustl/catissuecore/dataModel/hbm/Specimen.hbm.xml"/>
-		<mapping resource="edu/wustl/catissuecore/dataModel/hbm/Segment.hbm.xml"/>
-		<mapping resource="edu/wustl/catissuecore/dataModel/hbm/Sample.hbm.xml"/>
-		<mapping resource="edu/wustl/catissuecore/dataModel/hbm/Audit.hbm.xml"/>
-		<mapping resource="edu/wustl/catissuecore/dataModel/hbm/BiospecimenStorage.hbm.xml"/>
-		<mapping resource="edu/wustl/catissuecore/dataModel/hbm/BiospecimenDistribution.hbm.xml"/>
-		<mapping resource="edu/wustl/catissuecore/dataModel/hbm/Box.hbm.xml"/>
-		<mapping resource="edu/wustl/catissuecore/dataModel/hbm/Capacity.hbm.xml"/>
-		<mapping resource="edu/wustl/catissuecore/dataModel/hbm/Collection.hbm.xml"/>
-		<mapping resource="edu/wustl/catissuecore/dataModel/hbm/Distribution.hbm.xml"/>
-		<mapping resource="edu/wustl/catissuecore/dataModel/hbm/Eventlog.hbm.xml"/>
-		<mapping resource="edu/wustl/catissuecore/dataModel/hbm/InfectionAgent.hbm.xml"/>
-		<mapping resource="edu/wustl/catissuecore/dataModel/hbm/Protocol.hbm.xml"/>
-		<mapping resource="edu/wustl/catissuecore/dataModel/hbm/ProtocolRequirement.hbm.xml"/>
-		<mapping resource="edu/wustl/catissuecore/dataModel/hbm/Site.hbm.xml"/>
-		<mapping resource="edu/wustl/catissuecore/dataModel/hbm/Study.hbm.xml"/>
-		<mapping resource="edu/wustl/catissuecore/dataModel/hbm/StudyRequirement.hbm.xml"/>
-		<mapping resource="edu/wustl/catissuecore/dataModel/hbm/Unit.hbm.xml"/-->
+        <mapping resource="edu/wustl/catissuecore/hbm/User.hbm.xml"/>
+        <mapping resource="edu/wustl/catissuecore/hbm/Address.hbm.xml"/>
+        <mapping resource="edu/wustl/catissuecore/hbm/Department.hbm.xml"/>
+        <mapping resource="edu/wustl/catissuecore/hbm/Institution.hbm.xml"/>
+        <mapping resource="edu/wustl/catissuecore/hbm/ReportedProblem.hbm.xml"/>
+        <!--mapping resource="edu/wustl/catissuecore/hbm/Participant.hbm.xml"/>
+        <mapping resource="edu/wustl/catissuecore/hbm/Role.hbm.xml"/>
+        <mapping resource="edu/wustl/catissuecore/hbm/Accession.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/Specimen.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/Segment.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/Sample.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/Audit.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/BiospecimenStorage.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/BiospecimenDistribution.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/Box.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/Capacity.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/Collection.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/Distribution.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/Eventlog.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/InfectionAgent.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/Protocol.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/ProtocolRequirement.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/Site.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/Study.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/StudyRequirement.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/Unit.hbm.xml"/-->
     </session-factory>
     
 </hibernate-configuration>
