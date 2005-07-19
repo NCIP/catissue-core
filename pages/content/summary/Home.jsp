@@ -1,0 +1,15 @@
+<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
+	<tr>
+		<td colspan="2">
+			<ul>
+				<li>
+					<font color="#000000" size="3" face="Verdana">
+						<strong>
+							This page will show the aggregate data to public user.	
+						</strong>
+					</font>
+				</li>
+		   </ul>
+		</td>
+	</tr>
+</table>
