@@ -10,7 +10,6 @@
 
 package edu.wustl.catissuecore.action;
 
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -27,7 +26,6 @@ import edu.wustl.catissuecore.actionForm.DomainObjectListForm;
 import edu.wustl.catissuecore.dao.AbstractBizLogic;
 import edu.wustl.catissuecore.dao.BizLogicFactory;
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
-import edu.wustl.catissuecore.domain.ActivityStatus;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.GeneratePassword;
@@ -59,12 +57,15 @@ public class ApproveUserAction extends Action
         AbstractBizLogic dao = BizLogicFactory.getDAO(Constants.USER_FORM_ID);
 
         List list = null;
+        String activityStatus = null;
 
         while (iterator.hasNext())
         {
             String identifier = (String) iterator.next();
-            String objName = AbstractDomainObject.getDomainObjectName(Constants.USER_FORM_ID);
-            list = dao.retrieve(objName, Constants.IDENTIFIER, new Long(identifier));
+            String objName = AbstractDomainObject
+                    .getDomainObjectName(Constants.USER_FORM_ID);
+            list = dao.retrieve(objName, Constants.IDENTIFIER, new Long(
+                    identifier));
 
             if (list.size() != 0)
             {
@@ -72,31 +73,34 @@ public class ApproveUserAction extends Action
                 String emailBody = null;
 
                 //Set the time of approval.
-                user.setMemberSince(Calendar.getInstance().getTime());
+                //                user.setMemberSince(Calendar.getInstance().getTime());
 
                 //Sets the comments given by the approver.
                 if (approveUserForm.getComments() != null)
                 {
-//                    StringWriter str = new StringWriter(approveUserForm.getComments().length());
-//                    str.write(approveUserForm.getComments());
-//                    Clob newClob = new SerialClob(approveUserForm.getComments().toCharArray() ); 
-//                    user.setComments(newClob);
-//                    DatabaseMetaData dbMetaData = st.getConnection().getMetaData();
+                    //                    StringWriter str = new StringWriter(approveUserForm.getComments().length());
+                    //                    str.write(approveUserForm.getComments());
+                    //                    Clob newClob = new SerialClob(approveUserForm.getComments().toCharArray() ); 
+                    //                    user.setComments(newClob);
+                    //                    DatabaseMetaData dbMetaData = st.getConnection().getMetaData();
                     //Clob newClob =  new ClobImpl(approveUserForm.getComments());
-                    user.setCommentString(approveUserForm.getComments());
-//                    System.out.println("CLOB VALUE..................."+newClob.toString());
-//                    user.getComments().getAsciiStream().read(approveUserForm.getComments().getBytes());
+                    user.setComments(approveUserForm.getComments());
+                    //                    System.out.println("CLOB VALUE..................."+newClob.toString());
+                    //                    user.getComments().getAsciiStream().read(approveUserForm.getComments().getBytes());
                 }
 
-                if (approveUserForm.getOperation().equals(Constants.ACTIVITY_STATUS_APPROVE))
+                if (approveUserForm.getOperation().equals(
+                        Constants.ACTIVITY_STATUS_APPROVE))
                 {
                     //If operation is equal to Approve, generate a password for the user.
-                    String password = GeneratePassword.getPassword(user.getLoginName());
+                    String password = GeneratePassword.getPassword(user
+                            .getLoginName());
                     user.setPassword(password);
 
-                    //Retrieve the Activity Status for approve status.
-                    list = dao.retrieve(AbstractDomainObject.getDomainObjectName(Constants.ACTIVITY_STATUS_FORM_ID),
-                                    "status", Constants.ACTIVITY_STATUS_ACTIVE);
+                    //Change the Activity Status to approve status.
+                    //                    list = dao.retrieve(AbstractDomainObject.getDomainObjectName(Constants.ACTIVITY_STATUS_FORM_ID),
+                    //                                    "status", Constants.ACTIVITY_STATUS_ACTIVE);
+                    activityStatus = Constants.ACTIVITY_STATUS_ACTIVE;
 
                     emailBody = "Your membership has been approved.\n\nLogin Name : "
                             + user.getLoginName()
@@ -106,39 +110,40 @@ public class ApproveUserAction extends Action
                 }
                 else
                 {
-                    //Retrieve the Activity Status for reject status.
-                    list = dao.retrieve(AbstractDomainObject.getDomainObjectName(Constants.ACTIVITY_STATUS_FORM_ID),
-                                    "status", Constants.ACTIVITY_STATUS_REJECT);
-                    
+                    //Change the Activity Status for reject status.
+                    //                    list = dao.retrieve(AbstractDomainObject.getDomainObjectName(Constants.ACTIVITY_STATUS_FORM_ID),
+                    //                                    "status", Constants.ACTIVITY_STATUS_REJECT);
+                    activityStatus = Constants.ACTIVITY_STATUS_REJECT;
+
                     emailBody = "Your membership has been rejected."
-                        + "\n\nRegards,\n-catissuecore Administrator.";
+                            + "\n\nRegards,\n-catissuecore Administrator.";
                 }
 
                 //Sets the activity status as active.
-                ActivityStatus activityStatus = (ActivityStatus) list.get(0);
                 user.setActivityStatus(activityStatus);
 
                 //Updates user's information in the database.
                 dao.update(user);
-                
+
                 SendEmail email = new SendEmail();
-                
+
                 //Sends the membership status email to the user.
-                boolean emailStatus = email.sendmail(user.getEmailAddress(),
-                        Variables.toAddress, Variables.mailServer,
+                boolean emailStatus = email.sendmail(user.getAddress()
+                        .getEmailAddress(), Variables.toAddress,
+                        Variables.mailServer,
                         Constants.APPROVE_USER_EMAIL_SUBJECT, emailBody);
-                
+
                 if (emailStatus == true)
                 {
                     Logger.out.debug("Password successfully sent to "
                             + user.getLoginName() + " at "
-                            + user.getEmailAddress());
+                            + user.getAddress().getEmailAddress());
                 }
                 else
                 {
                     Logger.out.error("Sending Password Failed to "
                             + user.getLoginName() + " at "
-                            + user.getEmailAddress());
+                            + user.getAddress().getEmailAddress());
                     target = new String(Constants.FAILURE);
                 }
                 target = new String(Constants.SUCCESS);

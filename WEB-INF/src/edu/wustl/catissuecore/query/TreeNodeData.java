@@ -62,8 +62,8 @@ public class TreeNodeData
     }
     
     /**
-     * Sets the identifier of the data this node represents.
-     * @param id the identifier.
+     * Sets the systemIdentifier of the data this node represents.
+     * @param id the systemIdentifier.
      * @see #getId()
      */
     public void setId(long id)
@@ -72,8 +72,8 @@ public class TreeNodeData
     }
     
     /**
-     * Returns the identifier of the data this node represents.
-     * @return the identifier of the data this node represents.
+     * Returns the systemIdentifier of the data this node represents.
+     * @return the systemIdentifier of the data this node represents.
      * @see #setId(long)
      */
     public long getId()

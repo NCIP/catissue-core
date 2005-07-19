@@ -18,7 +18,6 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
-import edu.wustl.catissuecore.domain.ActivityStatus;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Validator;
@@ -33,9 +32,9 @@ public class ReportedProblemForm extends AbstractActionForm
 {
 
     /**
-     * identifier is a unique id assigned to each reported problem.
+     * systemIdentifier is a unique id assigned to each reported problem.
      * */
-    private long identifier;
+    private long systemIdentifier;
 
     /**
      * States which operation is to be performed.
@@ -76,7 +75,7 @@ public class ReportedProblemForm extends AbstractActionForm
      */
     private void reset()
     {
-        this.identifier = -1;
+        this.systemIdentifier = -1;
         this.operation = null;
         this.from = null;
         this.subject = null;
@@ -93,23 +92,23 @@ public class ReportedProblemForm extends AbstractActionForm
     }
 
     /**
-     * Returns the identifier assigned to the reported problem.
-     * @return the identifier assigned to the reported problem.
+     * Returns the systemIdentifier assigned to the reported problem.
+     * @return the systemIdentifier assigned to the reported problem.
      * @see #setIdentifier(long)
      */
-    public long getIdentifier()
+    public long getSystemIdentifier()
     {
-        return identifier;
+        return systemIdentifier;
     }
 
     /**
-     * Sets the identifier to the reported problem.
-     * @param identifier The identifier to set.
+     * Sets the systemIdentifier to the reported problem.
+     * @param systemIdentifier The systemIdentifier to set.
      * @see #getIdentifier()
      */
-    public void setIdentifier(long identifier)
+    public void setSystemIdentifier(long systemIdentifier)
     {
-        this.identifier = identifier;
+        this.systemIdentifier = systemIdentifier;
     }
 
     /**

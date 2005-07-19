@@ -9,11 +9,15 @@
 
 package edu.wustl.catissuecore.domain;
 
+import java.io.Serializable;
+
+import edu.wustl.catissuecore.actionForm.AbstractActionForm;
+
 /**
  * A collection of scientist and/or clinician users with a common research objective related to biospecimen collection and utilization.
  * @hibernate.class table="CATISSUE_CANCER_RESEARCH_GROUP"
  */
-public class CancerResearchGroup implements java.io.Serializable
+public class CancerResearchGroup extends AbstractDomainObject implements Serializable
 {
 	private static final long serialVersionUID = 1234567890L;
 
@@ -68,4 +72,12 @@ public class CancerResearchGroup implements java.io.Serializable
 	{
 		this.name = name;
 	}
+	
+	
+    /* (non-Javadoc)
+     * @see edu.wustl.catissuecore.domain.AbstractDomainObject#setAllValues(edu.wustl.catissuecore.actionForm.AbstractActionForm)
+     */
+    public void setAllValues(AbstractActionForm abstractForm)
+    {
+    }
 }

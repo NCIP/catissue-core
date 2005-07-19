@@ -36,7 +36,7 @@ public class Constants
 	public static final String FORGOT_PASSWORD = "forgotpassword";
 	public static final String YOUR_PASSWORD = "Your Password";
 	
-	public static final String IDENTIFIER = "identifier";
+	public static final String IDENTIFIER = "systemIdentifier";
 	public static final String LOGINNAME = "loginName";
 	public static final String LASTNAME = "lastName";
 	public static final String FIRSTNAME = "firstName";
@@ -70,6 +70,16 @@ public class Constants
 	public static final String RECEIVEDSITELIST = "receivedSiteList";
 	public static final String RECEIVEDMODELIST = "receivedModeList";
 	public static final String ACTIVITYSTATUSLIST = "activityStatusList";
+	
+	//New Specimen lists.
+	public static final String SPECIMEN_COLLECTION_GROUP_LIST = "specimenCollectionGroupIdList";
+	public static final String SPECIMEN_TYPE_LIST = "specimenTypeList";
+	public static final String SPECIMEN_SUB_TYPE_LIST = "specimenSubTypeList";
+	public static final String TISSUE_SITE_LIST = "tissueSiteList";
+	public static final String TISSUE_SIDE_LIST = "tissueSideList";
+	public static final String PATHOLOGICAL_STATUS_LIST = "pathologicalStatusList";
+	public static final String BIOHAZARD_TYPE_LIST = "biohazardTypeList";
+	public static final String BIOHAZARD_NAME_LIST = "biohazardNameList";
 	
 	//Constants required in User.jsp Page
 	public static final String USER_SEARCH_ACTION = "UserSearch.do";
@@ -132,8 +142,8 @@ public class Constants
 	//Spreadsheet view Constants in DataViewAction.
 	public static final String PARTICIPANT = "Participant";
 	public static final String ACCESSION = "Accession";
-	public static final String QUERY_PARTICIPANT_SEARCH_ACTION = "QueryParticipantSearch.do?identifier=";
-	public static final String QUERY_ACCESSION_SEARCH_ACTION = "QueryAccessionSearch.do?identifier=";
+	public static final String QUERY_PARTICIPANT_SEARCH_ACTION = "QueryParticipantSearch.do?systemIdentifier=";
+	public static final String QUERY_ACCESSION_SEARCH_ACTION = "QueryAccessionSearch.do?systemIdentifier=";
 	
 	//Individual view Constants in DataViewAction.
 	public static final String SPREADSHEET_COLUMN_LIST = "spreadsheetColumnList";
@@ -255,7 +265,8 @@ public class Constants
 	
 	public static final String [] TIME_HOUR_AMPM_ARRAY = {"AM","PM"}; 
 	
-	public static final String [] STATEARRAY = {
+	public static final String [] STATEARRAY = 
+	{
 	        "Alabama",//Alabama 
             "Alaska",//Alaska 
             "Arizona",//Arizona 
@@ -310,7 +321,8 @@ public class Constants
             "Other",//Other 
 	};
 	
-	public static final String [] COUNTRYARRAY = {  
+	public static final String [] COUNTRYARRAY = 
+	{  
 	        "United States", 
             "Canada", 
             "Afghanistan", 
@@ -539,5 +551,76 @@ public class Constants
             "Zaire",//Zaire 
             "Zambia",//Zambia 
             "Zimbabwe",//Zimbabwe  
+	};
+	
+	public static final String [] CANCER_RESEARCH_GROUP_VALUES = {
+	        "Siteman Cancer Center",
+	        "Washington University"
+	};
+	
+	public static final String [] ACTIVITY_STATUS_VALUES = {
+	        "Active",
+	        "Disabled",
+	        "Closed",
+	        "New",
+	        "Reject",
+	        "Pending"
+	};
+	
+	//Only for showing UI.
+	public static final String [] ROLE_VALUES = {
+	        "Administrator",
+	        "Clinician",
+	        "Technician",
+	        "Scientist",
+	        "Public",
+	        "Collector"
+	};
+	
+	public static final String [] INSTITUTE_VALUES = {
+	        "Washington University"
+	};
+	
+	public static final String [] DEPARTMENT_VALUES = {
+	        "Cardiology",
+	        "Pathology"
+	};
+	
+	public static final String [] SPECIMEN_TYPE_VALUES = {
+	        "Tissue",
+	        "Fluid",
+	        "Cell",
+	        "Molecular"
+	};
+	
+	public static final String [] SPECIMEN_SUB_TYPE_VALUES = {
+	        "Blood",
+	        "Serum",
+	        "Plasma",
+	};
+	
+	public static final String [] TISSUE_SITE_VALUES = {
+	        "Adrenal-Cortex",
+	        "Adrenal-Medulla",
+	        "Adrenal-NOS"
+	};
+	
+	public static final String [] TISSUE_SIDE_VALUES = {
+	        "Lavage",
+	        "Metastatic Lesion",
+	};
+	
+	public static final String [] PATHOLOGICAL_STATUS_VALUES = {
+	        "Primary Tumor",
+	        "Metastatic Node",
+	        "Non-Maglignant Tissue",
+	};
+
+	public static final String [] BIOHAZARD_NAME_VALUES = {
+	        "Radioactive",
+	};
+	
+	public static final String [] BIOHAZARD_TYPE_VALUES = {
+	        "",
 	};
 }

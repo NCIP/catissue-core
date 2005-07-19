@@ -32,9 +32,9 @@ import edu.wustl.common.util.logger.Logger;
 public class UserForm extends AbstractActionForm
 {
     /**
-     * identifier is a unique id assigned to each User.
+     * systemIdentifier is a unique id assigned to each User.
      * */
-    private long identifier;
+    private long systemIdentifier;
 
     /**
      * Represents the operation(Add/Edit) to be performed.
@@ -138,22 +138,21 @@ public class UserForm extends AbstractActionForm
         try
         {
             User user = (User)abstractDomain;
-            this.identifier = user.getIdentifier().longValue();
+            this.systemIdentifier = user.getSystemIdentifier().longValue();
             this.loginName = user.getLoginName();
             this.lastName = user.getLastName();
             this.firstName = user.getFirstName();
-            this.institution = user.getInstitute().getName();
-            this.emailAddress = user.getEmailAddress();
+            this.institution = user.getInstitution().getName();
+            this.emailAddress = user.getAddress().getEmailAddress();
             this.department = user.getDepartment().getName();
             this.street = user.getAddress().getStreet();
             this.city = user.getAddress().getCity();
             this.state = user.getAddress().getState();
             this.country = user.getAddress().getCountry();
-            this.zipCode = user.getAddress().getZip();
-            this.phoneNumber = user.getAddress().getPhone();
-            this.faxNumber = user.getAddress().getFax();
-            this.activityStatus = user.getActivityStatus().getStatus();
-            this.role = user.getRole().getName();
+            this.zipCode = user.getAddress().getZipCode();
+            this.phoneNumber = user.getAddress().getPhoneNumber();
+            this.faxNumber = user.getAddress().getFaxNumber();
+//            this.role = user.getRole().getName();
         }
         catch (Exception excp)
         {
@@ -163,23 +162,23 @@ public class UserForm extends AbstractActionForm
     }
 
     /**
-     * Returns the identifier assigned to User.
+     * Returns the systemIdentifier assigned to User.
      * @return int representing the id assigned to User.
      * @see #setIdentifier(int)
      * */
-    public long getIdentifier()
+    public long getSystemIdentifier()
     {
-        return (this.identifier);
+        return (this.systemIdentifier);
     }
 
     /**
      * Sets an id for the User.
-     * @param identifier id to be assigned to the User.
+     * @param systemIdentifier id to be assigned to the User.
      * @see #getIdentifier()
      * */
-    public void setIdentifier(long identifier)
+    public void setSystemIdentifier(long systemIdentifier)
     {
-        this.identifier = identifier;
+        this.systemIdentifier = systemIdentifier;
     }
     
     /**
@@ -544,7 +543,7 @@ public class UserForm extends AbstractActionForm
      * */
     private void reset()
     {
-        this.identifier = -1;
+        this.systemIdentifier = -1;
         this.operation = null;
         this.loginName = null;
         this.lastName = null;
@@ -560,6 +559,7 @@ public class UserForm extends AbstractActionForm
         this.phoneNumber = null;
         this.faxNumber = null;
         this.role = null;
+        this.cancerResearchGroup = null;
         this.activityStatus = Constants.ACTIVITY_STATUS_NEW;
     }
 
@@ -574,7 +574,7 @@ public class UserForm extends AbstractActionForm
         {
             if (operation.equals(Constants.SEARCH))
             {
-                checkValidNumber(new Long(identifier).toString(),"user.identifier",errors,validator);
+                checkValidNumber(new Long(systemIdentifier).toString(),"user.systemIdentifier",errors,validator);
             }
             if (operation.equals(Constants.ADD) || operation.equals(Constants.EDIT))
             {

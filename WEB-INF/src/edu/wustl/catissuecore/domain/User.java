@@ -5,78 +5,111 @@
  * Company: Washington University, School of Medicine, St. Louis.
  * @author Mandar Deshmukh
  * @version 1.00
- * Created on July 12, 2005
  */
 
 package edu.wustl.catissuecore.domain;
 
+import java.io.Serializable;
+import java.sql.Clob;
+import java.sql.SQLException;
+import java.util.Calendar;
 import java.util.Date;
+
+import edu.wustl.catissuecore.actionForm.AbstractActionForm;
+import edu.wustl.catissuecore.actionForm.UserForm;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * A person who interacts with the caTISSUE Core data system and/or participates in the process of biospecimen collection, processing, or utilization.
  * @hibernate.class table="CATISSUE_USER"
- * @author Mandar Deshmukh
  */
-public class User implements java.io.Serializable
+public class User extends AbstractDomainObject implements Serializable
 {
-	private static final long serialVersionUID = 1234567890L;
-	
-	/**
-	 * System generated unique identifier.
+    /**
+	 * System generated unique systemIdentifier.
 	 */
 	protected Long systemIdentifier;
-	
-	/**
-	 * Last name of the User.
-	 */
-	protected String lastName;
-	
-	/**
-	 * First Name of the User. 
-	 */
-	protected String firstName;
-	
-	/**
-	 * User-friendly text string for system log in.
-	 */
-	protected String loginName;
-	
-	/**
-	 * Encrypted text string to verify the user identity.
-	 */
-	protected String password;
-	
-	/**
-	 * Date, when user was added to the system.
-	 */
-	protected Date dateAdded;
-	
-	/**
-	 * Defines whether this user record can be queried (Active) or not queried (Inactive) by any actor
-	 */
-	protected String activityStatus;
-	
-	/**
-	 * Department to which the user belongs.
-	 */
-	private Department department;
-	
-	/**
+
+    /**
+     * A string containing the Last Name of the user.
+     */
+    protected String lastName = "";
+
+    /**
+     * A string containing the First Name of the user.
+     */
+    protected String firstName = "";
+
+    /**
+     * Institute of the user.
+     */
+    protected Institution institution = new Institution();
+
+    /**
+     * Department of the user.
+     */
+    protected Department department = new Department();
+
+    /**
+     * Contact address of the User.
+     */
+    protected Address address = new Address();
+
+    /**
+     * A string containing the login name of the user.
+     */
+    protected String loginName = "";
+
+    /**
+     * A string containing the password in increpted format of the user.
+     */
+    protected String password;
+
+    /**
+     * Date, when user was added to the system
+     */
+    protected Date dateAdded;
+
+    /**
+     * Activity Status of user, it could be CLOSED, ACTIVE, DISABLED
+     */
+    protected String activityStatus;
+
+    /**
 	 * Cancer Research Group to which the user belongs.
 	 */
 	private CancerResearchGroup cancerResearchGroup;
-	
-	/**
-	 * Institution to which the user belongs.
-	 */
-	private Institution institution;
-	
-	/**
-	 * Address of the user.
-	 */
-	private edu.wustl.catissuecore.domain.Address address;
+    
+    /**
+     * Comments given by the approver.
+     */
+    protected Clob commentClob;
+    
+    /**
+     * Comments given by the approver. 
+     */
+    protected String comments;
 
-	/**
+    /**
+     * Initialize a new User instance. 
+     * Note: Hibernate invokes this constructor through reflection API.  
+     */
+    public User()
+    {
+    	this.dateAdded = Calendar.getInstance().getTime();
+    }
+
+    /**
+     * This Constructor Copies the data from an UserForm object to a User object.
+     * @param user An UserForm object containing the information about the user.  
+     */
+    public User(UserForm uform)
+    {
+    	this();
+        setAllValues(uform);
+    }
+
+    /**
 	 * Returns the systemIdentifier assigned to user.
 	 * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"
 	 * unsaved-value="null" generator-class="native"
@@ -281,4 +314,95 @@ public class User implements java.io.Serializable
 	{
 		this.address = address;
 	}
+
+	/**
+     * Returns the comments given by the approver. 
+     * @return the comments given by the approver.
+     * @see #setCommentClob(String)
+     */
+    public Clob getCommentClob()
+    {
+        return commentClob;
+    }
+    
+    /**
+     * Sets the comments given by the approver.
+     * @param comments the comments given by the approver.
+     * @see #getCommentClob() 
+     */
+    public void setCommentClob(Clob commentClob) throws SQLException
+    {
+        if (commentClob == null)
+        {
+            comments = "";
+            commentClob = null;
+        }
+        else
+        {
+            this.commentClob = commentClob;
+            this.comments = commentClob.getSubString(1L,(int)commentClob.length());
+        }
+    }
+    
+    /**
+     * Returns the comments given by the approver. 
+     * @hibernate.property name="comments" type="string" 
+     * column="STATUS_COMMENT" length="2000" 
+     * @return the comments given by the approver.
+     * @see #setComments(String)
+     */
+    public String getComments()
+    {
+        return comments;
+    }
+    
+    /**
+     * Sets the commnets given by the approver.
+     * @param comments The comments to set.
+     * @see #getComments()
+     */
+    public void setComments(String commentString)
+    {
+        if (commentString == null)
+        {
+            commentString = "";
+        }
+        else
+        {
+            this.comments = commentString;
+        }
+    }
+    
+    /**
+     * This function Copies the data from an UserForm object to a User object.
+     * @param user An UserForm object containing the information about the user.  
+     * */
+    public void setAllValues(AbstractActionForm abstractForm)
+    {
+        try
+        {
+            UserForm uform = (UserForm) abstractForm;
+            this.systemIdentifier = new Long(uform.getSystemIdentifier());
+            this.loginName = uform.getLoginName();
+            this.lastName = uform.getLastName();
+            this.firstName = uform.getFirstName();
+            this.loginName = uform.getLoginName();
+            this.institution.setName(uform.getInstitution());
+            this.department.setName(uform.getDepartment());
+            this.cancerResearchGroup.setName(uform.getCancerResearchGroup());
+            
+            activityStatus = uform.getActivityStatus();
+            address.setStreet(uform.getStreet());
+            address.setCity(uform.getCity());
+            address.setState(uform.getState());
+            address.setCountry(uform.getCountry());
+            address.setZipCode(uform.getZipCode());
+            address.setPhoneNumber(uform.getPhoneNumber());
+            address.setFaxNumber(uform.getFaxNumber());
+        }
+        catch (Exception excp)
+        {
+            Logger.out.error(excp.getMessage());
+        }
+    }
 }

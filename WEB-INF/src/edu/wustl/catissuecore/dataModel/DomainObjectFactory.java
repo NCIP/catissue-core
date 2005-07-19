@@ -11,14 +11,8 @@
 package edu.wustl.catissuecore.dataModel;
 
 import edu.wustl.catissuecore.actionForm.AbstractActionForm;
-import edu.wustl.catissuecore.actionForm.AccessionForm;
-import edu.wustl.catissuecore.actionForm.InstituteForm;
-import edu.wustl.catissuecore.actionForm.ParticipantForm;
 import edu.wustl.catissuecore.actionForm.UserForm;
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
-import edu.wustl.catissuecore.domain.Accession;
-import edu.wustl.catissuecore.domain.Institute;
-import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 
@@ -44,18 +38,18 @@ public class DomainObjectFactory
                 UserForm userForm = (UserForm) form;
                 abstractDomain = new User(userForm);
                 break;
-            case Constants.PARTICIPANT_FORM_ID:
-                ParticipantForm participantForm = (ParticipantForm) form;
-            	abstractDomain = new Participant(participantForm);
-            	break;
-            case Constants.ACCESSION_FORM_ID:
-                AccessionForm accessionForm = (AccessionForm) form;
-            	abstractDomain = new Accession(accessionForm);
-            	break;
-            case Constants.INSTITUTE_FORM_ID:
-            	InstituteForm instituteForm = (InstituteForm) form;
-            	abstractDomain = new Institute(instituteForm);
-            	break;
+//            case Constants.PARTICIPANT_FORM_ID:
+//                ParticipantForm participantForm = (ParticipantForm) form;
+//            	abstractDomain = new Participant(participantForm);
+//            	break;
+//            case Constants.ACCESSION_FORM_ID:
+//                AccessionForm accessionForm = (AccessionForm) form;
+//            	abstractDomain = new Accession(accessionForm);
+//            	break;
+//            case Constants.INSTITUTE_FORM_ID:
+//            	InstituteForm instituteForm = (InstituteForm) form;
+//            	abstractDomain = new Institute(instituteForm);
+//            	break;
         }
         return abstractDomain;
     }

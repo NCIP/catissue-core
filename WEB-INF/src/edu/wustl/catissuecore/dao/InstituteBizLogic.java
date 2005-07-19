@@ -11,7 +11,7 @@
 package edu.wustl.catissuecore.dao;
 
 import net.sf.hibernate.HibernateException;
-import edu.wustl.catissuecore.domain.Institute;
+import edu.wustl.catissuecore.domain.Institution;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.dbManager.DAOException;
 
@@ -26,11 +26,10 @@ public class InstituteBizLogic extends AbstractBizLogic
 	 * */
 	public void insert(Object obj) throws HibernateException, DAOException
 	{
-		Institute institute = (Institute)obj;
+	    Institution institute = (Institution)obj;
         AbstractDAO dao = DAOFactory.getDAO(Constants.HIBERNATE_DAO);
 		dao.openSession();
 		
-		dao.insert(institute.getAddress());
 	    dao.insert(institute);
 	    
 	    dao.closeSession();

@@ -13,10 +13,9 @@ package edu.wustl.catissuecore.dao;
 import java.util.List;
 
 import net.sf.hibernate.HibernateException;
-import edu.wustl.catissuecore.domain.ActivityStatus;
+import edu.wustl.catissuecore.domain.CancerResearchGroup;
 import edu.wustl.catissuecore.domain.Department;
-import edu.wustl.catissuecore.domain.Institute;
-import edu.wustl.catissuecore.domain.Role;
+import edu.wustl.catissuecore.domain.Institution;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.dbManager.DAOException;
@@ -38,9 +37,9 @@ public class UserBizLogic extends AbstractBizLogic
 	{
 		User user = (User)obj;
 		Department department = null;
-		Institute institute = null;
-		ActivityStatus activityStatus = null;
-		Role role = null;
+		Institution institution = null;
+		CancerResearchGroup cancerResearchGroup = null;
+//		Role role = null;
 		
         AbstractDAO dao = DAOFactory.getDAO(Constants.HIBERNATE_DAO);
 		dao.openSession();
@@ -51,23 +50,29 @@ public class UserBizLogic extends AbstractBizLogic
 		    department = (Department) list.get(0);
 		}
 		 
-		list = dao.retrieve(Institute.class.getName(), "name", user.getInstitute().getName());
+		list = dao.retrieve(Institution.class.getName(), "name", user.getInstitution().getName());
 		if (list.size() != 0)
 		{
-		    institute = (Institute) list.get(0);
+		    institution = (Institution) list.get(0);
 		}
  
-		list = dao.retrieve(Role.class.getName(), "name", user.getRole().getName());
+//		list = dao.retrieve(Role.class.getName(), "name", user.getRole().getName());
+//		if (list.size() != 0)
+//		{
+//		    role = (Role) list.get(0);		    
+//		}
+		
+		list = dao.retrieve(CancerResearchGroup.class.getName(), "name", user.getCancerResearchGroup().getName());
 		if (list.size() != 0)
 		{
-		    role = (Role) list.get(0);		    
+		    cancerResearchGroup = (CancerResearchGroup) list.get(0);		    
 		}
 	    
-	    list = dao.retrieve(ActivityStatus.class.getName(), "status", user.getActivityStatus().getStatus());
-	    if (list.size() != 0)
-	    {
-	        activityStatus = (ActivityStatus) list.get(0);
-	    }
+//	    list = dao.retrieve(ActivityStatus.class.getName(), "status", user.getActivityStatus().getStatus());
+//	    if (list.size() != 0)
+//	    {
+//	        activityStatus = (ActivityStatus) list.get(0);
+//	    }
 
 //	    try{
 //	        user.setCommentClob(Hibernate.createClob(" "));
@@ -78,9 +83,9 @@ public class UserBizLogic extends AbstractBizLogic
 //	    }
 	    
 	    user.setDepartment(department);
-	    user.setInstitute(institute);
-	    user.setRole(role);
-	    user.setActivityStatus(activityStatus);
+	    user.setInstitution(institution);
+//	    user.setRole(role);
+	    user.setCancerResearchGroup(cancerResearchGroup);
 	    
 	    dao.insert(user.getAddress());
 	    dao.insert(user);
@@ -99,31 +104,31 @@ public class UserBizLogic extends AbstractBizLogic
             HibernateException
     {
         User user = (User)obj;
-        ActivityStatus activityStatus = null;
+//        ActivityStatus activityStatus = null;
         List list = null;
         
         HibernateDAO dao = new HibernateDAO();
         dao.openSession();
         
-        list = dao.retrieve(ActivityStatus.class.getName(),"status",user.getActivityStatus().getStatus());
-	    if (list.size() != 0)
-	    {
-	        activityStatus = (ActivityStatus) list.get(0);
-	    }
-
-	    user.setActivityStatus(activityStatus);
+//        list = dao.retrieve(ActivityStatus.class.getName(),"status",user.getActivityStatus().getStatus());
+//	    if (list.size() != 0)
+//	    {
+//	        activityStatus = (ActivityStatus) list.get(0);
+//	    }
+//
+//	    user.setActivityStatus(activityStatus);
 	    
 //	    super.edit(user);
 	    
-	    if (user.getCommentString() != null)
+	    if (user.getComments() != null)
 	    {
 	        System.out.println("In Clob...........................");
-	        String comments = new String(user.getCommentString());
+	        String comments = new String(user.getComments());
 //	        try
 //	        {
 //	            
 //	            CLOB clob = null;
-//	            list = retrieveInSameSession(User.class.getName(),"identifier",user.getIdentifier());
+//	            list = retrieveInSameSession(User.class.getName(),"systemIdentifier",user.getIdentifier());
 //	            session.refresh(user,LockMode.UPGRADE);
 //	            clob = (CLOB) user.getCommentClob();
 //	            if (list.size() != 0)

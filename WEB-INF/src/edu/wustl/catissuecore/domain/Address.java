@@ -10,12 +10,14 @@
 
 package edu.wustl.catissuecore.domain;
 
+import edu.wustl.catissuecore.actionForm.AbstractActionForm;
+
 /**
  * A set of attributes that defines the physical location of a User or Site.
  * @hibernate.class table="CATISSUE_ADDRESS"
  * @author Mandar Deshmukh
  */
-public class Address implements java.io.Serializable
+public class Address extends AbstractDomainObject implements java.io.Serializable
 {
 	private static final long serialVersionUID = 1234567890L;
 
@@ -58,11 +60,11 @@ public class Address implements java.io.Serializable
 	 * Fax number
 	 */
 	protected String faxNumber;
-
+	
 	/**
-	 * Email Address
-	 */
-	protected String emailAddress;
+     * A string containing the Email Address of the user.
+     */
+    private String emailAddress = null;
 
 	/**
 	 * Returns the identifier assigned to Address.
@@ -216,23 +218,33 @@ public class Address implements java.io.Serializable
 	{
 		this.faxNumber = faxNumber;
 	}
-
+	
 	/**
-	 * Returns the associated email Address.
-	 * @hibernate.property name="emailAddress" type="string" column="EMAIL_ADDRESS" length="100"
-	 * @return associated emailAddress.
-	 */
-	public String getEmailAddress()
-	{
-		return emailAddress;
-	}
+     * @hibernate.property name="emailAddress" type="string" 
+     * column="EMAIL_ADDRESS" length="50" not-null="true" unique="true"
+     * Returns the Email Address of the user.
+     * @return String representing the emailAddress address of the user.
+     */
+    public String getEmailAddress()
+    {
+        return (this.emailAddress);
+    }
 
-	/**
-	 * @param emailAddress
-	 * set the emailAddress of the address.
-	 */
-	public void setEmailAddress(String emailAddress)
-	{
-		this.emailAddress = emailAddress;
-	}
+    /**
+     * Sets the emailAddress address of the user.
+     * @param emailAddress String representing emailAddress address of the user.
+     * @see #getEmailAddress()
+     */
+    public void setEmailAddress(String email)
+    {
+        this.emailAddress = email;
+    }
+    
+    /* (non-Javadoc)
+     * @see edu.wustl.catissuecore.domain.AbstractDomainObject#setAllValues(edu.wustl.catissuecore.actionForm.AbstractActionForm)
+     */
+    public void setAllValues(AbstractActionForm abstractForm)
+    {
+
+    }
 }

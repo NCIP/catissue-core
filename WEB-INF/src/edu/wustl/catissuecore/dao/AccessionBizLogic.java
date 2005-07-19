@@ -10,12 +10,7 @@
 
 package edu.wustl.catissuecore.dao;
 
-import java.util.List;
-
 import net.sf.hibernate.HibernateException;
-import edu.wustl.catissuecore.domain.Accession;
-import edu.wustl.catissuecore.domain.Participant;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.dbManager.DAOException;
 
 /**
@@ -34,18 +29,18 @@ public class AccessionBizLogic extends AbstractBizLogic
     public void insert(Object obj) throws HibernateException,
             DAOException
     {
-        Accession accession = (Accession) obj;
-        AbstractDAO dao = DAOFactory.getDAO(Constants.HIBERNATE_DAO);
-        dao.openSession();
-        
-        List list = dao.retrieve(Participant.class.getName(), Constants.IDENTIFIER,
-                accession.getParticipant().getIdentifier().toString());
-        Participant participant = (Participant) list.get(0);
-        if (list.size() != 0)
-        {
-            accession.setParticipant(participant);
-            dao.insert(accession);
-        }
-        dao.closeSession();
+//        Accession accession = (Accession) obj;
+//        AbstractDAO dao = DAOFactory.getDAO(Constants.HIBERNATE_DAO);
+//        dao.openSession();
+//        
+//        List list = dao.retrieve(Participant.class.getName(), Constants.IDENTIFIER,
+//                accession.getParticipant().getIdentifier().toString());
+//        Participant participant = (Participant) list.get(0);
+//        if (list.size() != 0)
+//        {
+//            accession.setParticipant(participant);
+//            dao.insert(accession);
+//        }
+//        dao.closeSession();
     }
 }
