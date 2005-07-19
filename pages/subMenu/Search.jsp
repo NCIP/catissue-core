@@ -1,7 +1,11 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 
 <tr>
-    <td class="subMenuPrimaryTitle" height="22"></td>
+    <td class="subMenuPrimaryTitle" height="22">
+		<a href="#content">
+    		<img src="images/shim.gif" alt="Skip Menu" width="1" height="1" border="0" />
+    	</a>
+	</td>
   </tr>
   <tr>
     <td class="subMenuPrimaryItems">
