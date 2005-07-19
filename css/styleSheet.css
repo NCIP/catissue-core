@@ -371,6 +371,17 @@ DATA TABLE BEGINS
   border-right:1px solid #5C5C5C; /* constant: dark gray */
   padding-left:0.4em;
 }
+.dataTableWhiteLabel{ /* for the optional second row */
+  font-family:arial,helvetica,verdana,sans-serif;
+  font-size:0.8em;
+  font-weight:bold;
+  background-color:#FFFFFF; /* constant: white */
+  color:#5C5C5C; /* constant: dark gray */
+  border-top:1px solid #5C5C5C; /* constant: dark gray */
+  border-left:1px solid #5C5C5C; /* constant: dark gray */
+  border-right:1px solid #5C5C5C; /* constant: dark gray */
+  padding-left:0.4em;
+}
 .dataTableHeader{ /* for the horizontal column headers */
   font-family:arial,helvetica,verdana,sans-serif;
   background-color:#CCCCCC; /* constant: medium gray */

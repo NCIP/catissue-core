@@ -29,7 +29,7 @@
 				
 				<tr>
 					<td>
-						<html:hidden property="identifier" />
+						<html:hidden property="systemIdentifier" />
 					</td>
 				</tr>
 				
@@ -80,7 +80,7 @@
 							<tr class="dataRowLight">
 								<%
         								ReportedProblem reportedProblem = (ReportedProblem) problem;
-										String checkBoxValue = reportedProblem.getIdentifier().toString();
+										String checkBoxValue = reportedProblem.getSystemIdentifier().toString();
         								String checkBoxName = "value(problem" + checkBoxValue + ")";
 										String problemDetailsLink = Constants.PROBLEM_DETAILS_ACTION+"?"+Constants.IDENTIFIER+"="+checkBoxValue;				
         						%>

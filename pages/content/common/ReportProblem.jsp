@@ -29,12 +29,16 @@
                  </tr>
                  
 				 <tr>
-				     <td class="formTitle" height="20" colspan="3"><bean:message key="reportproblem.title"/></td>
+				     <td class="formTitle" height="20" colspan="3">
+				     	<bean:message key="reportproblem.title"/>
+				     </td>
 				 </tr>
 					
 				 <tr>
 				     <td class="formRequiredNotice" width="5">&nbsp;</td>
-				     <td class="formLabel"><label for="from"><o:><bean:message  key="fields.to" />:</o:></label></td>
+				     <td class="formLabel">
+				     	<label for="from"><o:><bean:message  key="fields.to" />:</o:></label>
+				     </td>
 				     <td class="formField"><%=toAddress%></td>
 				 </tr>
 				 <tr>
