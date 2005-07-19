@@ -14,16 +14,16 @@
   </tr>
   
   <tr>
-  	<td class="subMenuSecondaryTitle" onmouseover="changeMenuStyle(this,'subMenuSecondaryTitleOver'),showCursor()" onmouseout="changeMenuStyle(this,'subMenuSecondaryTitle'),hideCursor()" height="20" onclick="document.location.href='#'">
-		<a class="subMenuSecondary" href="#">
+  	<td class="subMenuSecondaryTitle" onmouseover="changeMenuStyle(this,'subMenuSecondaryTitleOver'),showCursor()" onmouseout="changeMenuStyle(this,'subMenuSecondaryTitle'),hideCursor()" height="20" onclick="document.location.href='http://cabig.nci.nih.gov/'">
+		<a class="subMenuSecondary" href="http://cabig.nci.nih.gov/">
 			<bean:message key="app.cabigHome" />
 		</a>
 	</td>
   </tr>
   
   <tr>
-  	<td class="subMenuSecondaryTitle" onmouseover="changeMenuStyle(this,'subMenuSecondaryTitleOver'),showCursor()" onmouseout="changeMenuStyle(this,'subMenuSecondaryTitle'),hideCursor()" height="20" onclick="document.location.href='#'">
-  		<a class="subMenuSecondary" href="#">
+  	<td class="subMenuSecondaryTitle" onmouseover="changeMenuStyle(this,'subMenuSecondaryTitleOver'),showCursor()" onmouseout="changeMenuStyle(this,'subMenuSecondaryTitle'),hideCursor()" height="20" onclick="document.location.href='http://ncicb.nci.nih.gov/'">
+  		<a class="subMenuSecondary" href="http://ncicb.nci.nih.gov/">
   			<bean:message key="app.ncicbHome" />
   		</a>
   	</td>
