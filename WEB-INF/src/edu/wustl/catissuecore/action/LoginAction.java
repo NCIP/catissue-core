@@ -3,7 +3,6 @@ package edu.wustl.catissuecore.action;
 
 import java.io.IOException;
 
-import javax.mail.Session;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -94,15 +93,14 @@ public class LoginAction extends Action
     }
     
     
-    private boolean login(String loginName, String Password)
+    private boolean login(String loginName, String password)
     {
         boolean bool=false;
-        if(loginName.equals("aarti"))
+        if(loginName.equals("admin") && password.equals("admin"))
         {
             bool=true;
         }
         
-        System.out.println(loginName+"********"+bool);
         return bool;
     }
 }
