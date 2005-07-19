@@ -40,7 +40,7 @@ public class PagenationTag extends TagSupport
         try
         {
             JspWriter out = pageContext.getOut();
-            out.println("<table class=\"formtextbg\" border=0 bordercolor=#666699 width=100%>");
+            out.println("<table class=\"dataTableWhiteLabel\" border=0 bordercolor=#666699 width=100%>");
 
             if (pageNum > numLinks)
             {
