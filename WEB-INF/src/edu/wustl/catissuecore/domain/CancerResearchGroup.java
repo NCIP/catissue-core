@@ -1,6 +1,6 @@
 /**
- * <p>Title: Department Class</p>
- * <p>Description: A department to which a User belongs to.  </p>
+ * <p>Title: CancerResearchGroup Class</p>
+ * <p>Description: A collection of scientist and/or clinician users with a common research objective related to biospecimen collection and utilization.</p>
  * Copyright:    Copyright (c) year
  * Company: Washington University, School of Medicine, St. Louis.
  * @author Mandar Deshmukh
@@ -10,10 +10,10 @@
 package edu.wustl.catissuecore.domain;
 
 /**
- * A department to which a User belongs to.
- * @hibernate.class table="CATISSUE_DEPARTMENT"
+ * A collection of scientist and/or clinician users with a common research objective related to biospecimen collection and utilization.
+ * @hibernate.class table="CATISSUE_CANCER_RESEARCH_GROUP"
  */
-public class Department implements java.io.Serializable
+public class CancerResearchGroup implements java.io.Serializable
 {
 	private static final long serialVersionUID = 1234567890L;
 
@@ -21,18 +21,17 @@ public class Department implements java.io.Serializable
 	 * System generated unique identifier.
 	 */
 	protected Long systemIdentifier;
-
+	
 	/**
-	 * Name of the department.
+	 * Name of the cancer research group.
 	 */
 	protected String name;
 
 	/**
-	 * Returns the systemIdentifier assigned to department.
-	 * 
+	 * Returns the unique identifier of the cancer research group.
 	 * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long"
 	 * length="30" unsaved-value="null" generator-class="native"
-	 * @return a unique systemIdentifier assigned to the department.
+	 * @return a unique systemIdentifier assigned to the cancer research group.
 	 */
 	public Long getSystemIdentifier()
 	{
@@ -40,9 +39,9 @@ public class Department implements java.io.Serializable
 	}
 
 	/**
-	 * Sets an identifier for the department.
+	 * Sets an identifier for the cancer research group.
 	 * 
-	 * @param systemIdentifier Unique identifier to be assigned to the department.
+	 * @param systemIdentifier Unique identifier to be assigned to the cancer research group.
 	 */
 	public void setSystemIdentifier(Long systemIdentifier)
 	{
@@ -50,8 +49,7 @@ public class Department implements java.io.Serializable
 	}
 
 	/**
-	 * Returns the name of the department.
-	 * 
+	 * Returns the name of the cancer research group.
 	 * @hibernate.property name="name" type="string" column="NAME" length="50"
 	 * not-null="true" unique="true"
 	 * @return name of the department.
@@ -62,9 +60,9 @@ public class Department implements java.io.Serializable
 	}
 
 	/**
-	 * Sets the name of the department.
+	 * Sets the name of the cancer research group.
 	 * 
-	 * @param name Name of the department.
+	 * @param name Name of the cancer research group.
 	 */
 	public void setName(String name)
 	{

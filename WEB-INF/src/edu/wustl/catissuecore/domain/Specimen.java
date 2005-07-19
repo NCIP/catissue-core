@@ -1,704 +1,478 @@
 /**
  * <p>Title: Specimen Class>
- * <p>Description:  Models the Specimen information. </p>
+ * <p>Description:  A single unit of tissue, body fluid, or derivative 
+ * biological macromolecule that is collected or created from a Participant </p>
  * Copyright:    Copyright (c) year
  * Company: Washington University, School of Medicine, St. Louis.
  * @author Gautam Shetty
  * @version 1.00
- * Created on Apr 7, 2005
  */
 
 package edu.wustl.catissuecore.domain;
 
+import java.io.Serializable;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashSet;
-
-import edu.wustl.catissuecore.actionForm.AbstractActionForm;
+import java.util.Set;
 
 /**
- * Models the Specimen information.
- * 
+ * A single unit of tissue, body fluid, or derivative biological macromolecule 
+ * that is collected or created from a Participant
  * @hibernate.class table="CATISSUE_SPECIMEN"
- * @author kapil_kaveeshwar
+ * @author gautam_shetty
  */
-public class Specimen extends AbstractDomainObject implements java.io.Serializable
+public abstract class Specimen implements Serializable
 {
-	private static final long serialVersionUID = 1234567890L;
+    private static final long serialVersionUID = 1234567890L;
 
-	/**
-	 * identifier is a unique id assigned to each Participant.
-	 */
-	protected Long identifier;
-	
-	/**
-	 * Site where the specimen is anatomically derived from.
-	 */
-	protected String tissueSite;
-	
-	/**
-	 * Specifies bilateral sites, left or right.
-	 */
-	protected String tissueSide;
-	
-	/**
-	 * Type of specimen.
-	 */
-	protected String type;
-	
-	/**
-	 * Identifier for the way in which the specimen is collected and processed.
-	 */
-	protected String processIdentifier;
-	
-	/**
-	 * Quantity of specimen received.
-	 */
-	protected Double quantity;
-	
-	/**
-	 * Units of quantity (e.g. ml, g, or no units). 
-	 */
-	protected String quantityUnit;
-	
-	/**
-	 * Quality of specimen upon receipt.
-	 */
-	protected String receivedQuality;
-	
-	/**
-	 * Specifies whether histological / cytological review of the specimen 
-	 * match the diagnosis of record?
-	 */
-	protected Boolean reviewed;
-	
-	/**
-	 * Date specimen was reviewed.
-	 */
-	protected Date reviewedDate;
-	
-	/**
-	 * Technician who reviewed the Biospecimen.
-	 */
-	protected User reviewedBy;
-	
-	/**
-	 * Percentage neoplastic cellularity of the specimen.
-	 */
-	protected Double neoplasticCellularityPercentage;
-	
-	/**
-	 * Percentage necrosis of the specimen
-	 */
-	protected Double necrosisPercentage;
-	
-	/**
-	 * Percentage lymphocytic cellularity of the specimen
-	 */
-	protected Double lymphocyticPercentage;
-	
-	/**
-	 * Percentage total cellularity of the specimen.
-	 */
-	protected Double totalCellularityPercentage;
-	
-	/**
-	 * Histological Quality of the specimen.
-	 */
-	protected String histologicalQuality;
-	
-	/**
-	 * Specifies whether high quality samples been successfully derived from this specimen?
-	 */
-	protected Boolean sampleDerived;
-	
-	/**
-	 * Specifies if this specimen is still physically available.
-	 */
-	protected Boolean available;
-	
-	/**
-	 * Quantity of specimen still available.
-	 */
-	protected Double availableQuantity;
-	
-	/**
-	 * Comments on specimen.
-	 */
-	protected String comments;
-
-	/**
-	 * Activity Status of specimen, it could be CLOSED, ACTIVE, DISABLED
-	 */
-	protected ActivityStatus activityStatus;
-
-	/**
-	 * Bar code for the specimen.
-	 */
-	protected String barcode;
-	
-	/**
-	 * Accession through which this specimen was collected.
-	 */
-	protected Accession accession;
-	
-	/**
-	 * Collection of segments associated with this specimen.
-	 */
-	protected Collection segmentCollection = new HashSet();
-	
-	/**
-	 * Collection of samples associated with this specimen.
-	 */
-	protected Collection sampleCollection = new HashSet();
-
-	/**
-	 * Returns the identifier assigned to Specimen.
-	 * @return Long representing the id assigned to specimen.
-	 * @see #setIdentifier(Long)
-	 * @hibernate.id name="identifier" column="IDENTIFIER" type="long" length="30"
-	 * unsaved-value="null" generator-class="native"
-	 */
-	public Long getIdentifier()
-	{
-		return identifier;
-	}
-
-	/**
-	 * Sets the identifier to the Specimen.
-	 * @param identifier the identifier to the Specimen.
-	 * @see #getIdentifier()
-	 */
-	public void setIdentifier(Long identifier)
-	{
-		this.identifier = identifier;
-	}
-
-	/**
-	 * Returns the site where the specimen is anatomically derived from.
-	 * @hibernate.property name="tissueSite" type="string" column="TISSUE_SITE" length="50"
-	 * @return the site where the specimen is anatomically derived from.
-	 * @see #setTissueSite(String)
-	 */
-	public String getTissueSite()
-	{
-		return tissueSite;
-	}
-
-	/**
-	 * Sets the site where the specimen is anatomically derived from.
-	 * @param tissueSite the site where the specimen is anatomically derived from.
-	 * @see #getTissueSite()
-	 */
-	public void setTissueSite(String tissueSite)
-	{
-		this.tissueSite = tissueSite;
-	}
-
-	/**
-	 * Returns the bilateral sites, left or right.
-	 * @hibernate.property name="tissueSide" type="string" column="TISSUE_SIDE" length="50"
-	 * @return the bilateral sites, left or right.
-	 * @see #setTissueSide(String)
-	 */
-	public String getTissueSide()
-	{
-		return tissueSide;
-	}
-
-	/**
-	 * Sets the bilateral sites, left or right.
-	 * @param tissueSide the bilateral sites, left or right.
-	 * @see #getTissueSide()
-	 */
-	public void setTissueSide(String tissueSide)
-	{
-		this.tissueSide = tissueSide;
-	}
-
-	/**
-	 * Returns the type of the specimen.
-	 * @hibernate.property name="type" type="string" column="SPECIMEN_TYPE" length="50"
-	 * @return the type of the specimen.
-	 * @see #setType(String)
-	 */
-	public String getType()
-	{
-		return type;
-	}
-
-	/**
-	 * Sets the type of the specimen.
-	 * @param type the type of the specimen.
-	 * @see #getType()
-	 */
-	public void setType(String type)
-	{
-		this.type = type;
-	}
-
-	/**
-	 * Returns the identifier for the way in which the specimen is collected and processed.
-	 * @hibernate.property name="processIdentifier" type="string" column="PROCESS_IDENTIFIER" length="50"
-	 * @return the identifier for the way in which the specimen is collected and processed.
-	 * @see #setProcessIdentifier(String)
-	 */
-	public String getProcessIdentifier()
-	{
-		return processIdentifier;
-	}
-
-	/**
-	 * Sets the identifier for the way in which the specimen is collected and processed.
-	 * @param processIdentifier the identifier for the way in which the specimen is collected and processed.
-	 * @see #getProcessIdentifier()
-	 */
-	public void setProcessIdentifier(String processIdentifier)
-	{
-		this.processIdentifier = processIdentifier;
-	}
-
-	/**
-	 * Returns the quantity of specimen received.
-	 * @hibernate.property name="quantity" type="double" column="RECEIVED_QUANTITY" length="50"
-	 * @return the quantity of specimen received.
-	 * @see #setQuantity(Double)
-	 */
-	public Double getQuantity()
-	{
-		return quantity;
-	}
-
-	/**
-	 * Sets the quantity of specimen received.
-	 * @param quantity the quantity of specimen received.
-	 * @see #getQuantity()
-	 */
-	public void setQuantity(Double quantity)
-	{
-		this.quantity = quantity;
-	}
-
-	/**
-	 * Returns the units of quantity (e.g. ml, g, or no units).
-	 * @hibernate.property name="quantityUnit" type="double" column="QUANTITY_UNIT" length="50"
-	 * @return the units of quantity (e.g. ml, g, or no units).
-	 * @see #setQuantityUnit(String)
-	 */
-	public String getQuantityUnit()
-	{
-		return quantityUnit;
-	}
-
-	/**
-	 * Sets the units of quantity (e.g. ml, g, or no units).
-	 * @param quantityUnit the units of quantity (e.g. ml, g, or no units).
-	 * @see #getQuantityUnit()
-	 */
-	public void setQuantityUnit(String quantityUnit)
-	{
-		this.quantityUnit = quantityUnit;
-	}
-
-	/**
-	 * Returns the quality of specimen upon receipt.
-	 * @hibernate.property name="receivedQuality" type="string" column="RECEIVED_QUALITY" length="50"
-	 * @return the quality of specimen upon receipt.
-	 * @see #setReceivedQuality(String)
-	 */
-	public String getReceivedQuality()
-	{
-		return receivedQuality;
-	}
-
-	/**
-	 * Sets the quality of specimen upon receipt.
-	 * @param receivedQuality the quality of specimen upon receipt.
-	 * @see #getReceivedQuality()
-	 */
-	public void setReceivedQuality(String receivedQuality)
-	{
-		this.receivedQuality = receivedQuality;
-	}
-
-	/**
-	 * Returns the reviewed status of the specimen.
-	 * @hibernate.property name="receivedQuality" type="boolean" column="REVIEWED"
-	 * @return the reviewed status of the specimen.
-	 * @see #setReviewed(Boolean)
-	 */
-	public Boolean getReviewed()
-	{
-		return reviewed;
-	}
-
-	/**
-	 * Sets the reviewed status of the specimen.
-	 * @param reviewed the reviewed status of the specimen.
-	 * @see #getReviewed()
-	 */
-	public void setReviewed(Boolean reviewed)
-	{
-		this.reviewed = reviewed;
-	}
-
-	/**
-	 * Returns the date specimen was reviewed.
-	 * @hibernate.property name="reviewedDate" type="date" column="REVIEWED_DATE"
-	 * @return the date specimen was reviewed.
-	 * @see #setReviewedDate(java.util.Date)
-	 */
-	public java.util.Date getReviewedDate()
-	{
-		return reviewedDate;
-	}
-
-	/**
-	 * Sets the date specimen was reviewed.
-	 * @param reviewedDate the date specimen was reviewed.
-	 * @see #getReviewedDate()
-	 */
-	public void setReviewedDate(java.util.Date reviewedDate)
-	{
-		this.reviewedDate = reviewedDate;
-	}
-
-	/**
-	 * Returns the technician who reviewed the Biospecimen.
-	 * @hibernate.many-to-one column="REVIEWED_BY" class="edu.wustl.catissuecore.domain.User"
-	 * constrained="true"
-	 * @return the technician who reviewed the Biospecimen.
-	 * @see #setReviewedBy(User)
-	 */
-	public User getReviewedBy()
-	{
-		return reviewedBy;
-	}
-
-	/**
-	 * Sets the technician who reviewed the Biospecimen.
-	 * @param reviewedBy the technician who reviewed the Biospecimen.
-	 * @see #getReviewedBy()
-	 */
-	public void setReviewedBy(User reviewedBy)
-	{
-		this.reviewedBy = reviewedBy;
-	}
-
-	/**
-	 * Returns the percentage neoplastic cellularity of the specimen.
-	 * @hibernate.property name="neoplasticCellularityPercentage" type="double"
-	 * column="NEOPLASTIC_CELLULARITY_PERCENT" length="50"
-	 * @return the percentage neoplastic cellularity of the specimen.
-	 * @see #setNeoplasticCellularityPercentage(Double)
-	 */
-	public Double getNeoplasticCellularityPercentage()
-	{
-		return neoplasticCellularityPercentage;
-	}
-
-	/**
-	 * Sets the percentage neoplastic cellularity of the specimen.
-	 * @param neoplasticCellularityPercentage the percentage neoplastic cellularity of the specimen.
-	 * @see #getNeoplasticCellularityPercentage()
-	 */
-	public void setNeoplasticCellularityPercentage(Double neoplasticCellularityPercentage)
-	{
-		this.neoplasticCellularityPercentage = neoplasticCellularityPercentage;
-	}
-
-	/**
-	 * Returns the percentage necrosis of the specimen.
-	 * @hibernate.property name="necrosisPercentage" type="double" column="NECROSIS_PERCENT"
-	 * length="50"
-	 * @return the percentage necrosis of the specimen.
-	 * @see #setNecrosisPercentage(Double)
-	 */
-	public Double getNecrosisPercentage()
-	{
-		return necrosisPercentage;
-	}
-
-	/**
-	 * Sets the percentage necrosis of the specimen.
-	 * @param necrosisPercentage the percentage necrosis of the specimen.
-	 * @see #getNecrosisPercentage()
-	 */
-	public void setNecrosisPercentage(Double necrosisPercentage)
-	{
-		this.necrosisPercentage = necrosisPercentage;
-	}
-
-	/**
-	 * Returns the percentage lymphocytic cellularity of the specimen.
-	 * @hibernate.property name="lymphocyticPercentage" type="double"
-	 *                     column="LYMPHOCYTIC_PERCENT" length="50"
-	 * @return the percentage lymphocytic cellularity of the specimen.
-	 * @see #setLymphocyticPercentage(Double)
-	 */
-	public Double getLymphocyticPercentage()
-	{
-		return lymphocyticPercentage;
-	}
-
-	/**
-	 * Sets the percentage lymphocytic cellularity of the specimen.
-	 * @param lymphocyticPercentage the percentage lymphocytic cellularity of the specimen.
-	 * @see #getLymphocyticPercentage()
-	 */
-	public void setLymphocyticPercentage(Double lymphocyticPercentage)
-	{
-		this.lymphocyticPercentage = lymphocyticPercentage;
-	}
-
-	/**
-	 * Returns the percentage total cellularity of the specimen.
-	 * @hibernate.property name="totalCellularityPercentage" type="double"
-	 *                     column="TOTAL_CELLULARITY_PERCENT" length="50"
-	 * @return the percentage total cellularity of the specimen.
-	 * @see #setTotalCellularityPercentage(Double)
-	 */
-	public Double getTotalCellularityPercentage()
-	{
-		return totalCellularityPercentage;
-	}
-
-	/**
-	 * Sets the percentage total cellularity of the specimen.
-	 * @param totalCellularityPercentage the percentage total cellularity of the specimen.
-	 * @see #getTotalCellularityPercentage()
-	 */
-	public void setTotalCellularityPercentage(Double totalCellularityPercentage)
-	{
-		this.totalCellularityPercentage = totalCellularityPercentage;
-	}
-
-	/**
-	 * Returns the histological quality of the specimen.
-	 * @hibernate.property name="histologicalQuality" type="string" column="HISTOLOGICAL_QUALITY"
-	 *                     length="50"
-	 * @return the histological quality of the specimen.
-	 * @see #setHistologicalQuality(String)
-	 */
-	public String getHistologicalQuality()
-	{
-		return histologicalQuality;
-	}
-
-	/**
-	 * Sets the histological quality of the specimen.
-	 * @param histologicalQuality the histological quality of the specimen.
-	 * @see #getHistologicalQuality()
-	 */
-	public void setHistologicalQuality(String histologicalQuality)
-	{
-		this.histologicalQuality = histologicalQuality;
-	}
-
-	/**
-	 * Returns the status whether high quality samples have been successfully derived from this specimen?
-	 * @hibernate.property name="sampleDerived" type="boolean" column="SAMPLE_DERIVED"
-	 * @return the status whether high quality samples have been successfully derived from this specimen?
-	 * @see #setSampleDerived(Boolean)
-	 */
-	public Boolean getSampleDerived()
-	{
-		return sampleDerived;
-	}
-
-	/**
-	 * Sets the status whether high quality samples have been successfully derived from this specimen?
-	 * @param sampleDerived the status whether high quality samples have been successfully derived from this specimen?
-	 * @see #getSampleDerived()
-	 */
-	public void setSampleDerived(Boolean sampleDerived)
-	{
-		this.sampleDerived = sampleDerived;
-	}
-
-	/**
-	 * Returns the status whether this specimen is physically available.
-	 * @hibernate.property name="available" type="boolean" column="AVAILABLE" length="50"
-	 * @return the status whether this specimen is physically available.
-	 * @see #getAvailable()
-	 */
-	public Boolean getAvailable()
-	{
-		return available;
-	}
-
-	/**
-	 * Sets the status whether this specimen is physically available.
-	 * @param available the status whether this specimen is physically available.
-	 * @see #getAvailable()
-	 */
-	public void setAvailable(Boolean available)
-	{
-		this.available = available;
-	}
-
-	/**
-	 * Returns the available quantity of the specimen.
-	 * @hibernate.property name="availableQuantity" type="double" column="AVAILABLE_QUANTITY" 
-	 * length="50"
-	 * @return the available quantity of the specimen.
-	 * @see #setAvailableQuantity(Double)
-	 */
-	public Double getAvailableQuantity()
-	{
-		return availableQuantity;
-	}
-
-	/**
-	 * Sets the available quantity of the specimen.
-	 * @param availableQuantity the available quantity of the specimen.
-	 * @see #getAvailableQuantity()
-	 */
-	public void setAvailableQuantity(Double availableQuantity)
-	{
-		this.availableQuantity = availableQuantity;
-	}
-
-	/**
-	 * Returns the comments on the specimen. 
-	 * @hibernate.property name="comments" type="string" column="COMMENTS" length="200"
-	 * @return the comments on the specimen.
-	 * @see #setComments(String)
-	 */
-	public String getComments()
-	{
-		return comments;
-	}
-
-	/**
-	 * Sets the comments on the specimen.
-	 * @param commnets the comments on the specimen.
-	 * @see #getComments()
-	 */
-	public void setComments(String commnets)
-	{
-		this.comments = commnets;
-	}
-
-	/**
-	 * Returns the activity status of the Specimen.
-	 * @hibernate.many-to-one column="ACTIVITY_STATUS_ID"
-	 * class="edu.wustl.catissuecore.domain.ActivityStatus"
-	 * constrained="true"
-	 * @return Returns the activity status of the Specimen.
-	 * @see #setActivityStatus(ActivityStatus)
-	 */
-	public ActivityStatus getActivityStatus()
-	{
-		return activityStatus;
-	}
-
-	/**
-	 * Sets the activity status of the Specimen.
-	 * @param activityStatus activity status of the Specimen.
-	 * @see #getActivityStatus()
-	 */
-	public void setActivityStatus(ActivityStatus activityStatus)
-	{
-		this.activityStatus = activityStatus;
-	}
-
-	/**
-	 * Returns the barcode of the specimen.
-	 * @hibernate.property name="barcode" type="string" column="BARCODE" length="50"
-	 * @return the barcode of the specimen.
-	 * @see #setBarcode(String)
-	 */
-	public String getBarcode()
-	{
-		return barcode;
-	}
-
-	/**
-	 * Sets the barcode of the specimen.
-	 * @param barCode the barcode of the specimen.
-	 * @see #getBarcode()
-	 */
-	public void setBarcode(String barCode)
-	{
-		this.barcode = barCode;
-	}
-
-	/**
-	 * Returns the accession associated with the specimen.
-	 * @hibernate.many-to-one column="ACCESSION_ID"
-	 * class="edu.wustl.catissuecore.domain.Accession"
-	 * @return the accession associated with the specimen.
-	 * @see #setAccession(Accession)
-	 */
-	public Accession getAccession()
-	{
-		return accession;
-	}
-
-	/**
-	 * Sets the accession associated with the specimen.
-	 * @param accession the accession associated with the specimen.
-	 * @see #getAccession()
-	 */
-	public void setAccession(Accession accession)
-	{
-		this.accession = accession;
-	}
-
-	/**
-	 * Returns the collection of segments derived from this specimen.
-	 * @return the collection of segments derived from this specimen.
-	 * @hibernate.set name="segmentCollection" table="CATISSUE_SEGMENT"
-	 * cascade="save-update" inverse="true" lazy="false"
-	 * @hibernate.collection-key column="SPECIMEN_ID"
-	 * @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.Segment"
-	 * @see #setSegmentCollection(Collection)
-	 */
-	public java.util.Collection getSegmentCollection()
-	{
-		return segmentCollection;
-	}
-
-	/**
-	 * Sets the collection of segments derived from this specimen.
-	 * @param segmentCollection the collection of segments derived from this specimen.
-	 * @see #getSegmentCollection()
-	 */
-	public void setSegmentCollection(java.util.Collection segmentCollection)
-	{
-		this.segmentCollection = segmentCollection;
-	}
-
-	/**
-	 * Returns the collection of sample derived from this specimen.
-	 * @return the collection of sample derived from this specimen.
-	 * @hibernate.set name="sampleCollection" table="CATISSUE_SAMPLE"
-	 * cascade="save-update" inverse="true" lazy="false"
-	 * @hibernate.collection-key column="SPECIMEN_ID"
-	 * @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.Sample"
-	 * @see #setSampleCollection(Collection)
-	 */
-	public java.util.Collection getSampleCollection()
-	{
-		return sampleCollection;
-	}
-
-	/**
-	 * Sets the collection of sample derived from this specimen.
-	 * @param sampleCollection the collection of sample derived from this specimen.
-	 * @see #getSampleCollection()
-	 */
-	public void setSampleCollection(java.util.Collection sampleCollection)
-	{
-		this.sampleCollection = sampleCollection;
-	}
-	
-    /* (non-Javadoc)
-     * @see edu.wustl.catissuecore.domain.AbstractDomainObject#setAllValues(edu.wustl.catissuecore.actionForm.AbstractActionForm)
+    /**
+     * System generated unique identifier.
      */
-    public void setAllValues(AbstractActionForm abstractForm)
-    {
+    protected Long systemIdentifier;
 
+    /**
+     * Type of specimen. e.g. Serum, Plasma, Blood, Fresh Tissue etc.
+     */
+    protected String type;
+
+    /**
+     * Is this specimen still physically available in the tissue bank?
+     */
+    protected Boolean available;
+
+    /**
+     * Reference to dimensional position one of the specimen in Storage Container.
+     */
+    protected Integer positionDimensionOne;
+
+    /**
+     * Reference to dimensional position two of the specimen in Storage Container.
+     */
+    protected Integer positionDimensionTwo;
+
+    /**
+     * Barcode assigned to the specimen.
+     */
+    protected String barcode;
+
+    /**
+     * Comments on specimen.
+     */
+    protected String comments;
+
+    /**
+     * Defines whether this Specimen record can be queried (Active) 
+     * or not queried (Inactive) by any actor.
+     */
+    protected String activityStatus;
+
+    /**
+     * Parent specimen from which this specimen is derived. 
+     */
+    private Specimen parentSpecimen;
+
+    /**
+     * Collection of attributes of a Specimen that renders it potentially harmful to a User.
+     */
+    protected Collection biohazardCollection = new HashSet();
+
+    /**
+     * A physically discreet container that is used to store a specimen  e.g. Box, Freezer etc.
+     */
+    protected StorageContainer storageContainer;
+
+    /**
+     * Collection of Specimen Event Parameters associated with this specimen. 
+     */
+    protected Collection specimenEventCollection = new HashSet();
+
+    /**
+     * Collection of children specimens derived from this specimen. 
+     */
+    protected Collection childrenSpecimen = new HashSet();
+
+    /**
+     * Collection of a pre-existing, externally defined identifier associated with a specimen.
+     */
+    protected Collection externalIdentifierCollection = new HashSet();
+
+    /**
+     * An event that results in the collection of one or more specimen from a participant.
+     */
+    protected SpecimenCollectionGroup specimenCollectionGroup;
+
+    /**
+     * The combined anatomic state and pathological disease classification of a specimen.
+     */
+    protected SpecimenCharacteristics specimenCharacteristics;
+
+    /**
+     * Returns the system generated unique identifier.
+     * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"
+     * unsaved-value="null" generator-class="native"
+     * @return the system generated unique identifier.
+     * @see #setSystemIdentifier(Long)
+     * */
+    public Long getSystemIdentifier()
+    {
+        return systemIdentifier;
+    }
+
+    /**
+     * Sets the system generated unique identifier.
+     * @param identifier the system generated unique identifier.
+     * @see #getSystemIdentifier()
+     * */
+    public void setSystemIdentifier(Long systemIdentifier)
+    {
+        this.systemIdentifier = systemIdentifier;
+    }
+
+    /**
+     * Returns the type of specimen. e.g. Serum, Plasma, Blood, Fresh Tissue etc.
+     * @hibernate.property name="type" type="string" column="TYPE" length="50"
+     * @return The type of specimen. e.g. Serum, Plasma, Blood, Fresh Tissue etc.
+     * @see #setType(String)
+     */
+    public String getType()
+    {
+        return type;
+    }
+
+    /**
+     * Sets the type of specimen. e.g. Serum, Plasma, Blood, Fresh Tissue etc.
+     * @param type The type of specimen. e.g. Serum, Plasma, Blood, Fresh Tissue etc.
+     * @see #getType()
+     */
+    public void setType(String type)
+    {
+        this.type = type;
+    }
+
+    /**
+     * Returns true if this specimen still physically available 
+     * in the tissue bank else returns false.
+     * @hibernate.property name="available" type="boolean" column="AVAILABLE"
+     * @return true if this specimen still physically available 
+     * in the tissue bank else returns false.
+     * @see #setAvailable(Boolean)
+     */
+    public Boolean getAvailable()
+    {
+        return available;
+    }
+
+    /**
+     * Sets true if this specimen still physically available 
+     * in the tissue bank else returns false.
+     * @param available true if this specimen still physically available else false.
+     * @see #getAvailable()
+     */
+    public void setAvailable(Boolean available)
+    {
+        this.available = available;
+    }
+
+    /**
+     * Returns the reference to dimensional position one of the specimen in Storage Container.
+     * @hibernate.property name="positionDimensionOne" type="int" column="POSITION_DIMENSION_ONE" length="30"  
+     * @return the reference to dimensional position one of the specimen in Storage Container.
+     * @see #setPositionDimensionOne(Integer)
+     */
+    public Integer getPositionDimensionOne()
+    {
+        return positionDimensionOne;
+    }
+
+    /**
+     * Sets the reference to dimensional position one of the specimen in Storage Container.
+     * @param positionDimensionOne the reference to dimensional position one of the specimen 
+     * in Storage Container.
+     * @see #getPositionDimensionOne()
+     */
+    public void setPositionDimensionOne(Integer positionDimensionOne)
+    {
+        this.positionDimensionOne = positionDimensionOne;
+    }
+
+    /**
+     * Returns the reference to dimensional position two of the specimen in Storage Container.
+     * @hibernate.property name="positionDimensionTwo" type="int" column="POSITION_DIMENSION_TWO" length="50"  
+     * @return the reference to dimensional position two of the specimen in Storage Container.
+     * @see #setPositionDimensionOne(Integer)
+     */
+    public Integer getPositionDimensionTwo()
+    {
+        return positionDimensionTwo;
+    }
+
+    /**
+     * Sets the reference to dimensional position two of the specimen in Storage Container.
+     * @param positionDimensionTwo the reference to dimensional position two of the specimen 
+     * in Storage Container.
+     * @see #getPositionDimensionTwo()
+     */
+    public void setPositionDimensionTwo(Integer positionDimensionTwo)
+    {
+        this.positionDimensionTwo = positionDimensionTwo;
+    }
+
+    /**
+     * Returns the barcode assigned to the specimen.
+     * @hibernate.property name="barcode" type="string" column="BARCODE" length="50"
+     * @return the barcode assigned to the specimen.
+     * @see #setBarcode(String)
+     */
+    public String getBarcode()
+    {
+        return barcode;
+    }
+
+    /**
+     * Sets the barcode assigned to the specimen.
+     * @param barCode the barcode assigned to the specimen.
+     * @see #getBarcode()
+     */
+    public void setBarcode(String barcode)
+    {
+        this.barcode = barcode;
+    }
+
+    /**
+     * Returns the comments on the specimen.
+     * @hibernate.property name="comments" type="string" column="COMMENTS" length="200"
+     * @return the comments on the specimen.
+     * @see #setComments(String)
+     */
+    public String getComments()
+    {
+        return comments;
+    }
+
+    /**
+     * Sets the comments on the specimen.
+     * @param comments The comments to set.
+     * @see #getComments()
+     */
+    public void setComments(String comments)
+    {
+        this.comments = comments;
+    }
+
+    /**
+     * Returns whether this Specimen record can be queried (Active) or not queried (Inactive) by any actor.
+     * @hibernate.property name="activityStatus" type="string" column="ACTIVITY_STATUS" length="50"
+     * @return "Active" if this Specimen record can be queried or "Inactive" if cannot be queried.
+     * @see #setActivityStatus(String)
+     */
+    public String getActivityStatus()
+    {
+        return activityStatus;
+    }
+
+    /**
+     * Sets whether this Specimen record can be queried (Active) or not queried (Inactive) by any actor.
+     * @param activityStatus "Active" if this Specimen record can be queried else "Inactive".
+     * @see #getActivityStatus()
+     */
+    public void setActivityStatus(String activityStatus)
+    {
+        this.activityStatus = activityStatus;
+    }
+
+    /**
+     * Returns the parent specimen from which this specimen is derived.
+     * @hibernate.many-to-one column="PARENT_SPECIMEN_ID"
+     * class="edu.wustl.catissuecore.domain.Specimen" constrained="true"
+     * @return the parent specimen from which this specimen is derived.
+     * @see #setParentSpecimen(SpecimenNew)
+     */
+    public Specimen getParentSpecimen()
+    {
+        return parentSpecimen;
+    }
+
+    /**
+     * Sets the parent specimen from which this specimen is derived.
+     * @param parentSpecimen the parent specimen from which this specimen is derived.
+     * @see #getParentSpecimen()
+     */
+    public void setParentSpecimen(Specimen parentSpecimen)
+    {
+        this.parentSpecimen = parentSpecimen;
+    }
+
+    /**
+     * Returns the collection of attributes of a Specimen 
+     * that renders it potentially harmful to a User.
+     * @hibernate.set name="biohazardCollection" table="CATISSUE_SPECIMEN_BIOHAZARD_RELATIONSHIP"
+     * cascade="save-update" inverse="true" lazy="false"
+     * @hibernate.collection-key column="SPECIMEN_ID"
+     * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.Biohazard" column="BIOHAZARD_ID"
+     * @return the collection of attributes of a Specimen 
+     * that renders it potentially harmful to a User.
+     * @see #setBiohazardCollection(Set)
+     */
+    public Collection getBiohazardCollection()
+    {
+        return biohazardCollection;
+    }
+
+    /**
+     * Sets the collection of attributes of a Specimen 
+     * that renders it potentially harmful to a User.
+     * @param biohazardCollection the collection of attributes of a Specimen 
+     * that renders it potentially harmful to a User.
+     * @see #getBiohazardCollection()
+     */
+    public void setBiohazardCollection(Collection biohazardCollection)
+    {
+        this.biohazardCollection = biohazardCollection;
+    }
+
+    /**
+     * Returns the collection of Specimen Event Parameters associated with this specimen.  
+     * @hibernate.set name="specimenEventCollection" table="CATISSUE_SPECIMEN_EVENT"
+     * cascade="save-update" inverse="true" lazy="false"
+     * @hibernate.collection-key column="SPECIMEN_ID"
+     * @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.SpecimenEventParameters"
+     * @return the collection of Specimen Event Parameters associated with this specimen.
+     * @see #setSpecimenEventCollection(Set)
+     */
+    public Collection getSpecimenEventCollection()
+    {
+        return specimenEventCollection;
+    }
+
+    /**
+     * Sets the collection of Specimen Event Parameters associated with this specimen.
+     * @param specimenEventCollection the collection of Specimen Event Parameters 
+     * associated with this specimen.
+     * @see #getSpecimenEventCollection()
+     */
+    public void setSpecimenEventCollection(Collection specimenEventCollection)
+    {
+        this.specimenEventCollection = specimenEventCollection;
+    }
+
+    /**
+     * Returns the collection of children specimens derived from this specimen.
+     * @hibernate.set name="childrenSpecimen" table="CATISSUE_SPECIMEN"
+     * cascade="save-update" inverse="true" lazy="false"
+     * @hibernate.collection-key column="PARENT_SPECIMEN_ID"
+     * @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.Specimen"
+     * @return the collection of children specimens derived from this specimen.
+     * @see #setChildrenSpecimen(Set)
+     */
+    public Collection getChildrenSpecimen()
+    {
+        return childrenSpecimen;
+    }
+
+    /**
+     * Sets the collection of children specimens derived from this specimen.
+     * @param childrenSpecimen the collection of children specimens 
+     * derived from this specimen.
+     * @see #getChildrenSpecimen()
+     */
+    public void setChildrenSpecimen(Collection childrenSpecimen)
+    {
+        this.childrenSpecimen = childrenSpecimen;
+    }
+
+    /**
+     * Returns the physically discreet container that is used to store a specimen  e.g. Box, Freezer etc.
+     * @hibernate.many-to-one column="STORAGE_CONTAINER_IDENTIFIER" 
+     * class="edu.wustl.catissuecore.domain.StorageContainer" constrained="true"
+     * @return the physically discreet container that is used to store a specimen  e.g. Box, Freezer etc.
+     * @see #setStorageContainer(StorageContainer)
+     */
+    public StorageContainer getStorageContainer()
+    {
+        return storageContainer;
+    }
+
+    /**
+     * Sets the physically discreet container that is used to store a specimen  e.g. Box, Freezer etc.
+     * @param storageContainer the physically discreet container that is used to store a specimen  
+     * e.g. Box, Freezer etc.
+     * @see #getStorageContainer()
+     */
+    public void setStorageContainer(StorageContainer storageContainer)
+    {
+        this.storageContainer = storageContainer;
+    }
+
+    /**
+     * Returns the collection of a pre-existing, externally defined identifier associated with a specimen.
+     * @hibernate.set name="externalIdentifierCollection" table="CATISSUE_EXTERNAL_IDENTIFIER"
+     * cascade="save-update" inverse="true" lazy="false"
+     * @hibernate.collection-key column="SPECIMEN_ID"
+     * @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.ExternalIdentifier"
+     * @return the collection of a pre-existing, externally defined identifier associated with a specimen.
+     * @see #setExternalIdentifierCollection(Set)
+     */
+    public Collection getExternalIdentifierCollection()
+    {
+        return externalIdentifierCollection;
+    }
+
+    /**
+     * Sets the collection of a pre-existing, externally defined identifier 
+     * associated with a specimen.
+     * @param externalIdentifierCollection the collection of a pre-existing, 
+     * externally defined identifier associated with a specimen.
+     * @see #getExternalIdentifierCollection()
+     */
+    public void setExternalIdentifierCollection(Collection externalIdentifierCollection)
+    {
+        this.externalIdentifierCollection = externalIdentifierCollection;
+    }
+
+    /**
+     * Returns the event that results in the collection of one or more specimen from a participant.
+     * @hibernate.many-to-one column="SPECIMEN_COLLECTION_GROUP_ID"
+	 * class="edu.wustl.catissuecore.domain.SpecimenCollectionGroup" constrained="true"
+     * @return the event that results in the collection of one or more specimen from a participant.
+     * @see #setSpecimenCollectionGroup(SpecimenCollectionGroup)
+     */
+    public SpecimenCollectionGroup getSpecimenCollectionGroup()
+    {
+        return specimenCollectionGroup;
+    }
+
+    /**
+     * Sets the event that results in the collection of one or more specimen from a participant.
+     * @param specimenCollectionGroup the event that results in the collection of one or more 
+     * specimen from a participant.
+     * @see #getSpecimenCollectionGroup()
+     */
+    public void setSpecimenCollectionGroup(
+            SpecimenCollectionGroup specimenCollectionGroup)
+    {
+        this.specimenCollectionGroup = specimenCollectionGroup;
+    }
+
+    /**
+     * Returns the combined anatomic state and pathological disease classification of a specimen.
+     * @hibernate.many-to-one column="SPECIMEN_CHARACTERISTICS_ID" 
+     * class="edu.wustl.catissuecore.domain.SpecimenCharacteristics" constrained="true"
+     * @return the combined anatomic state and pathological disease classification of a specimen.
+     * @see #setSpecimenCharacteristics(SpecimenCharacteristics)
+     */
+    public SpecimenCharacteristics getSpecimenCharacteristics()
+    {
+        return specimenCharacteristics;
+    }
+
+    /**
+     * Sets the combined anatomic state and pathological disease classification of a specimen.
+     * @param specimenCharacteristics the combined anatomic state and pathological disease 
+     * classification of a specimen.
+     * @see #getSpecimenCharacteristics()
+     */
+    public void setSpecimenCharacteristics(SpecimenCharacteristics specimenCharacteristics)
+    {
+        this.specimenCharacteristics = specimenCharacteristics;
     }
 }

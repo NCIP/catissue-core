@@ -1,0 +1,149 @@
+/**
+ * <p>Title: CollectionProtocolEvent Class</p>
+ * <p>Description: A required specimen collection event associated with a Collection Protocol. </p>
+ * Copyright:    Copyright (c) year
+ * Company: Washington University, School of Medicine, St. Louis.
+ * @author Mandar Deshmukh
+ * @version 1.00
+ * Created on July 12, 2005
+ */
+
+package edu.wustl.catissuecore.domain;
+
+import java.util.Collection;
+import java.util.HashSet;
+
+/**
+ * A required specimen collection event associated with a Collection Protocol.
+ * 
+ * @hibernate.class table="CATISSUE_COLLECTION_PROTOCOL_EVENT"
+ * @author Mandar Deshmukh
+ */
+public class CollectionProtocolEvent implements java.io.Serializable
+{
+	private static final long serialVersionUID = 1234567890L;
+	
+	/**
+	 * System generated unique identifier.
+	 */
+	protected Long systemIdentifier;
+	
+	/**
+	 * Defines the required clinical status of the participant at the time of specimen collection. e.g. Pre-Op, Post-op, Pre-RX etc.
+	 */
+	protected String clinicalStatus;
+	
+	/**
+	 * Defines the relative time point in days, with respect to the registration date of participant on this protocol, when the specimen should be collected from participant.
+	 */
+	protected Double studyCalendarEventPoint;
+	
+	/**
+	 * Collection of SpecimenRequirements associated with the CollectionProtocolEvent.
+	 */
+	protected Collection specimenRequirementCollection = new HashSet();
+	
+	/**
+	 * CollectionProtocol associated with the CollectionProtocolEvent.
+	 */
+	protected CollectionProtocol collectionProtocol;
+
+	/**
+	 * Returns the systemIdentifier.
+	 * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"
+	 * unsaved-value="null" generator-class="native"
+	 * @return Returns the systemIdentifier.
+	 */
+	public Long getSystemIdentifier()
+	{
+		return systemIdentifier;
+	}
+
+	/**
+	 * @param systemIdentifier The systemIdentifier to set.
+	 */
+	public void setSystemIdentifier(Long systemIdentifier)
+	{
+		this.systemIdentifier = systemIdentifier;
+	}
+
+	/**
+	 * Returns the clinicalStatus.
+	 * @hibernate.property name="clinicalStatus" type="string"
+	 * column="CLINICAL_STATUS" length="50"
+	 * @return Returns the clinicalStatus.
+	 */
+	public String getClinicalStatus()
+	{
+		return clinicalStatus;
+	}
+
+	/**
+	 * @param clinicalStatus The clinicalStatus to set.
+	 */
+	public void setClinicalStatus(String clinicalStatus)
+	{
+		this.clinicalStatus = clinicalStatus;
+	}
+
+	/**
+	 * Returns the studyCalendarEventPoint.
+	 * @hibernate.property name="studyCalendarEventPoint" type="double"
+	 * column="STUDY_CALENDAR_EVENT_POINT" length="50"
+	 * @return Returns the studyCalendarEventPoint.
+	 */
+	public Double getStudyCalendarEventPoint()
+	{
+		return studyCalendarEventPoint;
+	}
+
+	/**
+	 * @param studyCalendarEventPoint The studyCalendarEventPoint to set.
+	 */
+	public void setStudyCalendarEventPoint(Double studyCalendarEventPoint)
+	{
+		this.studyCalendarEventPoint = studyCalendarEventPoint;
+	}
+
+	/**
+	 * Returns the collection of SpecimenRequirements for this Protocol.
+	 * @hibernate.set name="specimenRequirementCollection" table="CATISSUE_COLLECTION_SPECIMEN_REQUIREMENT" 
+	 * cascade="save-update" inverse="true" lazy="false"
+	 * @hibernate.collection-key column="COLLECTION_PROTOCOL_EVENT_ID"
+	 * @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.SpecimenRequirement" column="SPECIMEN_REQUIREMENT_ID"
+	 * @return Returns the collection of SpecimenRequirements for this Protocol.
+	 */
+	public Collection getSpecimenRequirementCollection()
+	{
+		return specimenRequirementCollection;
+	}
+
+	/**
+	 * @param specimenRequirementCollection
+	 *  The specimenRequirementCollection to set.
+	 */
+	public void setSpecimenRequirementCollection(Collection specimenRequirementCollection)
+	{
+		this.specimenRequirementCollection = specimenRequirementCollection;
+	}
+
+	/**
+	 * Returns the collectionProtocol.
+	 * @hibernate.many-to-one column="COLLECTION_PROTOCOL_ID" class="edu.wustl.catissuecore.domain.CollectionProtocol"
+	 * constrained="true"
+	 * @return Returns the collectionProtocol.
+	 */
+	public CollectionProtocol getCollectionProtocol()
+	{
+		return collectionProtocol;
+	}
+
+	/**
+	 * @param collectionProtocol
+	 *  The collectionProtocol to set.
+	 */
+	public void setCollectionProtocol(CollectionProtocol collectionProtocol)
+	{
+		this.collectionProtocol = collectionProtocol;
+	}
+}

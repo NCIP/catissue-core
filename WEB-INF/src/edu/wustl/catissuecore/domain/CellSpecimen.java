@@ -1,0 +1,82 @@
+/**
+ * <p>Title: CellSpecimen Class>
+ * <p>Description:  A biospecimen composed of purified single cells not in the 
+ * context of a tissue or other biospecimen fluid.</p>
+ * Copyright:    Copyright (c) year
+ * Company: Washington University, School of Medicine, St. Louis.
+ * @author Gautam Shetty
+ * @version 1.00
+ */
+
+package edu.wustl.catissuecore.domain;
+
+import java.io.Serializable;
+
+/**
+ * A biospecimen composed of purified single cells not in the 
+ * context of a tissue or other biospecimen fluid.
+ * @hibernate.joined-subclass table="CATISSUE_CELL_SPECIMEN"
+ * @hibernate.joined-subclass-key column="IDENTIFIER" 
+ * @author gautam_shetty
+ */
+public class CellSpecimen extends Specimen implements Serializable
+{
+    private static final long serialVersionUID = 1234567890L;
+
+    /**
+     * Absolute number of cells contained in the biospecimen
+     * at the time of its generation.
+     */
+    protected Integer quantityInCellCount;
+
+    /**
+     * Absolute number of cells remaining in the biospecimen.
+     */
+    protected Integer availableQuantityInCellCount;
+
+    /**
+     * Returns the absolute number of cells contained in the biospecimen
+     * at the time of its generation.
+     * @hibernate.property name="quantityInCellCount" type="int" 
+     * column="QUANTITY_IN_CELL_COUNT" length="50"
+     * @return the absolute number of cells contained in the biospecimen
+     * at the time of its generation.
+     * @see #setQuantityInCellCount(Integer)
+     */
+    public Integer getQuantityInCellCount()
+    {
+        return quantityInCellCount;
+    }
+
+    /**
+     * Sets the absolute number of cells contained in the biospecimen.
+     * @param quantityInCellCount the absolute number of cells contained in the biospecimen.
+     * @see #getQuantityInCellCount()
+     */
+    public void setQuantityInCellCount(Integer quantityInCellCount)
+    {
+        this.quantityInCellCount = quantityInCellCount;
+    }
+
+    /**
+     * Returns the absolute number of cells remaining in the biospecimen.
+     * @hibernate.property name="availableQuantityInCellCount" type="int" 
+     * column="AVAILABLE_QUANTITY_IN_CELL_COUNT" length="50"
+     * @return the absolute number of cells remaining in the biospecimen.
+     * @see #setAvailableQuantityInCellCount(Integer)
+     */
+    public Integer getAvailableQuantityInCellCount()
+    {
+        return availableQuantityInCellCount;
+    }
+
+    /**
+     * Sets the absolute number of cells remaining in the biospecimen.
+     * @param availableQuantityInCellCount the absolute number of cells remaining in the biospecimen.
+     * @see #getAvailableQuantityInCellCount()
+     */
+    public void setAvailableQuantityInCellCount(Integer availableQuantityInCellCount)
+    {
+        this.availableQuantityInCellCount = availableQuantityInCellCount;
+    }
+}

@@ -1,0 +1,176 @@
+/**
+ * <p>Title: TransferEventParameters Class</p>
+ * <p>Description: Attributes associated with moving specimen from one storage location to another. </p>
+ * Copyright:    Copyright (c) year
+ * Company: Washington University, School of Medicine, St. Louis.
+ * @author Mandar Deshmukh
+ * @version 1.00
+ */
+
+package edu.wustl.catissuecore.domain;
+
+/**
+ * Attributes associated with moving specimen from one storage location to another.
+ * @hibernate.joined-subclass table="CATISSUE_TRANSFER_EVENT_PARAMETER"
+ * @hibernate.joined-subclass-key column="IDENTIFIER" 
+ */
+public class TransferEventParameters extends SpecimenEventParameters implements java.io.Serializable
+{
+	private static final long serialVersionUID = 1234567890L;
+
+	/**
+	 * Reference to dimensional position one of the specimen in previous storage container before transfer.
+	 */
+	protected Integer fromPositionDimensionOne;
+
+	/**
+	 * Reference to dimensional position two of the specimen in previous storage container before transfer.
+	 */
+	protected Integer fromPositionDimensionTwo;
+
+	/**
+	 * Reference to dimensional position one of the specimen in new storage container after transfer.
+	 */
+	protected Integer toPositionDimensionOne;
+
+	/**
+	 * Reference to dimensional position two of the specimen in new storage container after transfer.
+	 */
+	protected Integer toPositionDimensionTwo;
+
+	/**
+	 * Storage Container to which the transfer is made. 
+	 */
+	protected StorageContainer toStorageContainer;
+
+	/**
+	 * Storage Container from which the transfer is made.
+	 */
+	protected StorageContainer fromStorageContainer;
+
+	/**
+	 * Returns the Reference to dimensional position one of the specimen in previous storage container before transfer.
+	 * @hibernate.property name="fromPositionDimensionOne" type="int" column="FROM_POSITION_DIMENSION_ONE" length="30"
+	 * @return fromPositionDimensionOne.
+	 */
+	public Integer getFromPositionDimensionOne()
+	{
+		return fromPositionDimensionOne;
+	}
+
+	/**
+	 * Sets the fromPositionDimensionOne. 
+	 * @param fromPositionDimensionOne
+	 * Reference to dimensional position one of the specimen in previous storage container before transfer.
+	 */
+	public void setFromPositionDimensionOne(Integer fromPositionDimensionOne)
+	{
+		this.fromPositionDimensionOne = fromPositionDimensionOne;
+	}
+
+	/**
+	 * Returns the Reference to dimensional position two of the specimen in previous storage container before transfer.
+	 * @hibernate.property name="fromPositionDimensionTwo" type="int" column="FROM_POSITION_DIMENSION_TWO" length="30"
+	 * @return fromPositionDimensionTwo.
+	 */
+	public Integer getFromPositionDimensionTwo()
+	{
+		return fromPositionDimensionTwo;
+	}
+
+	/**
+	 * Sets the fromPositionDimensionTwo. 
+	 * 
+	 * @param fromPositionDimensionTwo
+	 * Reference to dimensional position two of the specimen in previous storage container before transfer.
+	 */
+	public void setFromPositionDimensionTwo(Integer fromPositionDimensionTwo)
+	{
+		this.fromPositionDimensionTwo = fromPositionDimensionTwo;
+	}
+
+	/**
+	 * Returns the Reference to dimensional position one of the specimen in new storage container after transfer.
+	 * @hibernate.property name="toPositionDimensionOne" type="int" column="TO_POSITION_DIMENSION_ONE" length="30"
+	 * @return toPositionDimensionOne.
+	 */
+	public Integer getToPositionDimensionOne()
+	{
+		return toPositionDimensionOne;
+	}
+
+	/**
+	 * Sets the toPositionDimensionOne. 
+	 * @param toPositionDimensionOne
+	 * Reference to dimensional position one of the specimen in new storage container after transfer.
+	 */
+	public void setToPositionDimensionOne(Integer toPositionDimensionOne)
+	{
+		this.toPositionDimensionOne = toPositionDimensionOne;
+	}
+
+	/**
+	 * Returns the Reference to dimensional position two of the specimen in new storage container after transfer.
+	 * @hibernate.property name="toPositionDimensionTwo" type="int" column="TO_POSITION_DIMENSION_TWO" length="30"
+	 * @return toPositionDimensionTwo.
+	 */
+	public Integer getToPositionDimensionTwo()
+	{
+		return toPositionDimensionTwo;
+	}
+
+	/**
+	 * Sets the toPositionDimensionTwo. 
+	 * @param toPositionDimensionTwo
+	 * Reference to dimensional position two of the specimen in new storage container after transfer.
+	 */
+	public void setToPositionDimensionTwo(Integer toPositionDimensionTwo)
+	{
+		this.toPositionDimensionTwo = toPositionDimensionTwo;
+	}
+
+	/**
+	 * Returns the new StorageContainer.  
+	 * @hibernate.many-to-one column="TO_STORAGE_CONTAINER_ID"
+	 * class="edu.wustl.catissuecore.domain.StorageContainer"
+	 * constrained="true"
+	 * @return the new StorageContainer. 
+	 */
+	public StorageContainer getToStorageContainer()
+	{
+		return toStorageContainer;
+	}
+
+	/**
+	 * @param toStorageContainer
+	 *            The toStorageContainer to set.
+	 */
+	public void setToStorageContainer(StorageContainer toStorageContainer)
+	{
+		this.toStorageContainer = toStorageContainer;
+	}
+
+	/**
+	 * Returns the old StorageContainer. 
+	 * @hibernate.many-to-one column="FROM_STORAGE_CONTAINER_ID"
+	 * class="edu.wustl.catissuecore.domain.StorageContainer"
+	 * constrained="true"
+	 * @return the old StorageContainer. 
+	 */
+	public edu.wustl.catissuecore.domain.StorageContainer getFromStorageContainer()
+	{
+
+		return fromStorageContainer;
+	}
+
+	/**
+	 * @param fromStorageContainer
+	 *            The fromStorageContainer to set.
+	 */
+	public void setFromStorageContainer(
+			edu.wustl.catissuecore.domain.StorageContainer fromStorageContainer)
+	{
+		this.fromStorageContainer = fromStorageContainer;
+	}
+
+}

@@ -1,0 +1,84 @@
+/**
+ * <p>Title: FluidSpecimen Class>
+ * <p>Description:  A single unit of body fluid specimen that is 
+ * collected or created from a Participant.</p>
+ * Copyright:    Copyright (c) year
+ * Company: Washington University, School of Medicine, St. Louis.
+ * @author Gautam Shetty
+ * @version 1.00
+ */
+
+package edu.wustl.catissuecore.domain;
+
+import java.io.Serializable;
+
+/**
+ * A single unit of body fluid specimen that is 
+ * collected or created from a Participant.
+ * @hibernate.joined-subclass table="CATISSUE_FLUID_SPECIMEN"
+ * @hibernate.joined-subclass-key column="IDENTIFIER" 
+ * @author gautam_shetty
+ */
+public class FluidSpecimen extends Specimen implements Serializable
+{
+    private static final long serialVersionUID = 1234567890L;
+
+    /**
+     * Initial amount of specimen either 
+     * directly collected from participant or created from another specimen.
+     */
+    protected Double quantityInMiliLiter;
+
+    /**
+     * Current available quantity of the specimen.
+     */
+    protected Double availableQuantityInMiliLiter;
+
+    /**
+     * Returns the initial amount of specimen either 
+     * directly collected from participant or created from another specimen.
+     * @hibernate.property name="quantityInMiliLiter" type="double" 
+	 * column="QUANTITY_IN_MILILITER" length="50"
+     * @return the initial amount of specimen either 
+     * directly collected from participant or created from another specimen.
+     * @see #setQuantityInMiliLiter(Double)
+     */
+    public Double getQuantityInMiliLiter()
+    {
+        return quantityInMiliLiter;
+    }
+
+    /**
+     * Sets the initial amount of specimen either 
+     * directly collected from participant or created from another specimen. 
+     * @param quantityInMiliLiter the initial amount of specimen either 
+     * directly collected from participant or created from another specimen.
+     * @see #getQuantityInMiliLiter()
+     */
+    public void setQuantityInMiliLiter(Double quantityInMiliLiter)
+    {
+        this.quantityInMiliLiter = quantityInMiliLiter;
+    }
+
+    /**
+     * Returns the current available quantity of the specimen.
+     * @hibernate.property name="availableQuantityInMiliLiter" type="double" 
+	 * column="AVAILABLE_QUANTITY_IN_MILILITER" length="50"
+     * @return the current available quantity of the specimen.
+     * @see #setAvailableQuantityInMiliLiter(Double)
+     */
+    public Double getAvailableQuantityInMiliLiter()
+    {
+        return availableQuantityInMiliLiter;
+    }
+
+    /**
+     * Sets the current available quantity of the specimen. 
+     * @param availableQuantityInMiliLiter the current available quantity of the specimen.
+     * @see #getAvailableQuantityInMiliLiter()
+     */
+    public void setAvailableQuantityInMiliLiter(Double availableQuantityInMiliLiter)
+    {
+        this.availableQuantityInMiliLiter = availableQuantityInMiliLiter;
+    }
+}

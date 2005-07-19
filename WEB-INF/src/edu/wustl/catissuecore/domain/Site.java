@@ -1,263 +1,180 @@
 /**
  * <p>Title: Site Class>
- * <p>Description:  Models the Site information of the bio-specimen. </p>
+ * <p>Description:  A physical location associated with biospecimen collection, storage, processing, or utilization. </p>
  * Copyright:    Copyright (c) year
  * Company: Washington University, School of Medicine, St. Louis.
- * @author Gautam Shetty
+ * @author Aniruddha Phadnis
  * @version 1.00
- * Created on Apr 7, 2005
  */
 
 package edu.wustl.catissuecore.domain;
 
 /**
- * Models the Site information of the bio-specimen.
+ * A physical location associated with biospecimen collection, storage, processing, or utilization.
  * @hibernate.class table="CATISSUE_SITE"
- * @author gautam_shetty
  */
 public class Site implements java.io.Serializable
 {
+	private static final long serialVersionUID = 1234567890L;
 
-    private static final long serialVersionUID = 1234567890L;
-
-    /**
-	 * identifier is a unique id assigned to each site.
-	 */
-    protected Long identifier;
-
-    /**
-     * Name of the site.
+	/**
+     * System generated unique identifier
      */
-    protected String name;
-
-    /**
-     * Type of site (e.g. Collection site, repository, or laboratory).
+	protected Long systemIdentifier;
+	
+	/**
+     * Name of the physical location.
      */
-    protected String type;
-
-    /**
-     * Departmental affiliation.
+	protected String name;
+	
+	/**
+     * Function of the site (e.g. Collection site, repository, or laboratory).
      */
-    protected String department;
-
-    /**
-     * Shipping address of site.
+	protected String type;
+	
+	/**
+     * The User who currently coordinates operations at the Site.
      */
-    protected String shippingAddress;
-
-    /**
-     * Person responsible at that site.
+	protected User coordinator = new User();
+	
+	/**
+     * Defines whether this Site record can be queried (Active) or not queried (Inactive) by any actor.
      */
-    protected User coordinator;
-
-    /**
-     * Activity Status of Site, it could be CLOSED, ACTIVE, DISABLED.
+	protected String activityStatus;
+	
+	/**
+     * The address of the site.
      */
-    protected ActivityStatus activityStatus;
+	private Address address = new Address();
 
-    /**
-     * Physical location of the site (e.g. room number, building).
+	/**
+     * Returns the system generated unique identifier.
+     * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"
+     * unsaved-value="null" generator-class="native"
+     * @return the system generated unique identifier.
+     * @see #setSystemIdentifier(Long)
      */
-    private Address address;
+	public Long getSystemIdentifier()
+	{
+		return systemIdentifier;
+	}
 
-    /**
-     * Institute of the Site.
+	/**
+     * Sets a unique system identifier.
+     * @param systemIdentifier identifier to be set.
+     * @see #getSystemIdentifier()
      */
-    private Institute institute;
+	public void setSystemIdentifier(Long systemIdentifier)
+	{
+		this.systemIdentifier = systemIdentifier;
+	}
 
-    /**
-	 * Returns the identifier assigned to site.
-	 * @return Long representing the id assigned to site.
-	 * @hibernate.id name="identifier" column="IDENTIFIER" type="long" length="30"
-	 * unsaved-value="null" generator-class="native"
-	 * @see #setIdentifier(Long)
-	 */
-    public Long getIdentifier()
-    {
-        return identifier;
-    }
-
-    /**
-     * Sets the identifier assigned to site.
-     * @param identifier the identifier assigned to site.
-     * @see #getIdentifier()
-     */
-    public void setIdentifier(Long identifier)
-    {
-        this.identifier = identifier;
-    }
-
-    /**
-     * Return the name of the site.
-	 * @hibernate.property name="name" type="string" column="NAME" length="50"
-     * @return the name of the site.
+	/**
+     * Returns the name of the physical location.
+     * @hibernate.property name="name" type="string" 
+     * column="NAME" length="50"
+     * @return the name of the physical location.
      * @see #setName(String)
      */
-    public String getName()
-    {
-        return name;
-    }
+	public String getName()
+	{
+		return name;
+	}
 
-    /**
-     * Sets the name of the site.
-     * @param name the name of the site.
+	/**
+     * Sets the physical location.
+     * @param name the physical location to be set.
      * @see #getName()
      */
-    public void setName(String name)
-    {
-        this.name = name;
-    }
+	public void setName(String name)
+	{
+		this.name = name;
+	}
 
-    /**
-     * Returns the type of the site.
-     * @hibernate.property name="type" type="string" column="TYPE" length="50"
-     * @return the type of the site.
+	/**
+     * Returns the function of the site.
+     * @hibernate.property name="type" type="string" 
+     * column="TYPE" length="50"
+     * @return the function of the site.
      * @see #setType(String)
      */
-    public String getType()
-    {
-        return type;
-    }
+	public String getType()
+	{
+		return type;
+	}
 
-    /**
-     * Sets the type of the site.
-     * @param type the type of the site.
+	/**
+     * Sets the function of the site..
+     * @param type Function of the site to be set.
      * @see #getType()
      */
-    public void setType(String type)
-    {
-        this.type = type;
-    }
+	public void setType(String type)
+	{
+		this.type = type;
+	}
 
-    /**
-     * Returns the department affiliation of the site.
-     * @hibernate.property name="department" type="string" column="DEPARTMENT" length="50"
-     * @return the department affiliation of the site.
-     * @see #setDepartment(String)
-     */
-    public String getDepartment()
-    {
-        return department;
-    }
-
-    /**
-     * Sets the department affiliation of the site.
-     * @param department the department affiliation of the site.
-     * @see #getDepartment()
-     */
-    public void setDepartment(String department)
-    {
-        this.department = department;
-    }
-
-    /**
-     * Returns the shipping address of site.
-     * @hibernate.property name="shippingAddress" type="string" column="SHIPPING_ADDRESS" length="50"
-     * @return the shipping address of site.
-     * @see #setShippingAddress(String)
-     */
-    public String getShippingAddress()
-    {
-        return shippingAddress;
-    }
-
-    /**
-     * Sets the shipping address of site.
-     * @param shippingAddress the shipping address of site.
-     * @see #getShippingAddress()
-     */
-    public void setShippingAddress(String shippingAddress)
-    {
-        this.shippingAddress = shippingAddress;
-    }
-
-    /**
-     * Returns the person who is responsible at that site.
-     * @hibernate.many-to-one column="COORDINATOR" class="edu.wustl.catissuecore.domain.User"
-	 * constrained="true"
-     * @return the person who is responsible at that site.
+	/**
+     * Returns the coordinator associated with this site.
+     * @hibernate.many-to-one column="USER_ID"  class="edu.wustl.catissuecore.domain.User" constrained="true"
+     * @return coordinator associated with this site.
      * @see #setCoordinator(User)
      */
-    public User getCoordinator()
-    {
-        return coordinator;
-    }
+	public User getCoordinator()
+	{
+		return coordinator;
+	}
 
-    /**
-     * Sets the person who is responsible at that site.
-     * @param coordinator the person who is responsible at that site.
+	/**
+     * Sets the coordinator to this site.
+     * @param coordinator coordinator to be set.
      * @see #getCoordinator()
      */
-    public void setCoordinator(User coordinator)
-    {
-        this.coordinator = coordinator;
-    }
+	public void setCoordinator(edu.wustl.catissuecore.domain.User coordinator)
+	{
+		this.coordinator = coordinator;
+	}
 
-    /**
-	 * Returns the activity status of the Site.
-	 * @hibernate.many-to-one column="ACTIVITY_STATUS_ID"
-	 * class="edu.wustl.catissuecore.domain.ActivityStatus"
-	 * constrained="true"
-	 * @return Returns the activity status of the Site.
-	 * @see #setActivityStatus(ActivityStatus)
-	 */
-    public ActivityStatus getActivityStatus()
-    {
-        return activityStatus;
-    }
+	/**
+     * Returns the activity status.
+     * @hibernate.property name="activityStatus" type="string" 
+     * column="ACTIVITY_STATUS" length="50"
+     * @return String the activity status.
+     * @see #getActivityStatus(User)
+     */
+	public String getActivityStatus()
+	{
+		return activityStatus;
+	}
 
-    /**
-     * Sets the activity status of the Site.
-     * @param activityStatus the activity status of the Site.
+	/**
+     * Sets the the activity status.
+     * @param activityStatus activity status of the site to be set.
      * @see #getActivityStatus()
      */
-    public void setActivityStatus(ActivityStatus activityStatus)
-    {
-        this.activityStatus = activityStatus;
-    }
+	public void setActivityStatus(String activityStatus)
+	{
+		this.activityStatus = activityStatus;
+	}
 
-    /**
-     * Returns the address of the site.
-	 * @hibernate.many-to-one column="ADDRESS_ID" 
+	/**
+	 * Returns the address of the site.
+	 * @return Address of the site.
+	 * @hibernate.many-to-one column="ADDRESS_ID"
 	 * class="edu.wustl.catissuecore.domain.Address" constrained="true"
-     * @return the address of the site.
-     * @see #setAddress(Address)
-     */
-    public Address getAddress()
-    {
-        return address;
-    }
+	 * @see #setAddress(Address)
+	 */
+	public Address getAddress()
+	{
+		return address;
+	}
 
-    /**
-     * Sets the address of the site.
-     * @param address the address of the site.
-     * @see #getAddress()
-     */
-    public void setAddress(Address address)
-    {
-        this.address = address;
-    }
-
-    /**
-     * Returns the institute of the site.
-     * @hibernate.many-to-one column="INSTITUTE_ID" 
-     * class="edu.wustl.catissuecore.domain.Institute" constrained="true"
-     * @return Returns the institute of the site.
-     * @see #setInstitute(Institute)
-     */
-    public Institute getInstitute()
-    {
-
-        return institute;
-    }
-
-    /**
-     * Sets the institute of the site.
-     * @param institute the institute of the site.
-     * @see #getInstitute()
-     */
-    public void setInstitute(Institute institute)
-    {
-        this.institute = institute;
-    }
+	/**
+	 * Sets the address of the site.
+	 * @param address address of the site to be set.
+	 * @see #getAddress()
+	 */
+	public void setAddress(Address address)
+	{
+		this.address = address;
+	}
 }
