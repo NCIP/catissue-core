@@ -32,8 +32,6 @@ public class LoginForm extends ActionForm
          * password entered by user
          */
         private String password = new String();
-        
-        
  
         /**
          * @return Returns the loginName.
@@ -85,5 +83,16 @@ public class LoginForm extends ActionForm
                 errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("user.password")));
             }
             return errors;
+        }
+        
+        
+        /**
+         * Resets the values of all the fields.
+         * This method defined in ActionForm is overridden in this class.
+         */
+        public void reset(ActionMapping mapping, HttpServletRequest request)
+        {
+            this.loginName = null;
+            this.password = null;
         }
 }

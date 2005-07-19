@@ -83,7 +83,7 @@ public class ForgotPasswordSearchAction extends Action
                     SendEmail email = new SendEmail();
                     
                     String body = "\n User Name : " + user.getLoginName() + "\n Password : " + user.getPassword();
-                    boolean emailStatus = email.sendmail(user.getEmailAddress(),
+                    boolean emailStatus = email.sendmail(user.getAddress().getEmailAddress(),
                             Variables.toAddress, Variables.mailServer,
                             Constants.YOUR_PASSWORD, body);
                     
@@ -94,12 +94,12 @@ public class ForgotPasswordSearchAction extends Action
                     if (emailStatus == true)
                     {
                         
-                        Logger.out.debug("Password successfully sent to "+user.getLoginName()+" at "+user.getEmailAddress());
+                        Logger.out.debug("Password successfully sent to "+user.getLoginName()+" at "+user.getAddress().getEmailAddress());
                         target = new String(Constants.SUCCESS);
                     }
                     else
                     {
-                        Logger.out.error("Sending Password Failed to "+user.getLoginName()+" at "+user.getEmailAddress());
+                        Logger.out.error("Sending Password Failed to "+user.getLoginName()+" at "+user.getAddress().getEmailAddress());
                         target = new String(Constants.FAILURE);
                     }
                 }

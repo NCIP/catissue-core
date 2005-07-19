@@ -18,7 +18,7 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
-import edu.wustl.catissuecore.domain.Institute;
+import edu.wustl.catissuecore.domain.Institution;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Validator;
@@ -31,9 +31,9 @@ import edu.wustl.common.util.logger.Logger;
 public class InstituteForm extends AbstractActionForm
 {
     /**
-     * identifier is a unique id assigned to each Institute.
+     * systemIdentifier is a unique id assigned to each Institute.
      * */
-    private long identifier = -1;
+    private long systemIdentifier = -1;
 
     /**
      * A String containing the operation(Add/Edit) to be performed.
@@ -101,17 +101,9 @@ public class InstituteForm extends AbstractActionForm
     {
         try
         {
-            Institute institute = (Institute)abstractDomain;
-            this.identifier = institute.getIdentifier().longValue();
+            Institution institute = (Institution) abstractDomain;
+            this.systemIdentifier = institute.getSystemIdentifier().longValue();
             this.name = institute.getName();
-            this.type = institute.getType();
-            this.street = institute.getAddress().getStreet();
-            this.city = institute.getAddress().getCity();
-            this.state = institute.getAddress().getState();
-            this.country = institute.getAddress().getCountry();
-            this.zip = institute.getAddress().getZip();
-            this.phone = institute.getAddress().getPhone();
-            this.fax = institute.getAddress().getFax();
         }
         catch (Exception excp)
         {
@@ -120,23 +112,23 @@ public class InstituteForm extends AbstractActionForm
     }
 
     /**
-     * Returns the identifier assigned to Institute.
+     * Returns the systemIdentifier assigned to Institute.
      * @return int representing the id assigned to Institute.
-     * @see #setIdentifier(int)
+     * @see #setSystemIdentifier(int)
      * */
-    public long getIdentifier()
+    public long getSystemIdentifier()
     {
-        return (this.identifier);
+        return (this.systemIdentifier);
     }
 
     /**
      * Sets an id for the Institute.
-     * @param identifier id to be assigned to the Institute.
-     * @see #getIdentifier()
+     * @param systemIdentifier id to be assigned to the Institute.
+     * @see #getSystemIdentifier()
      * */
-    public void setIdentifier(long identifier)
+    public void setSystemIdentifier(long identifier)
     {
-        this.identifier = identifier;
+        this.systemIdentifier = identifier;
     }
     
     /**
@@ -388,7 +380,7 @@ public class InstituteForm extends AbstractActionForm
      * */
     private void reset()
     {
-        this.identifier = -1;
+        this.systemIdentifier = -1;
         this.name = null;
         this.type = null;
         this.street = null;
@@ -412,7 +404,7 @@ public class InstituteForm extends AbstractActionForm
         {
             if (operation.equals(Constants.SEARCH))
             {
-                checkValidNumber(new Long(identifier).toString(),"institute.identifier",errors,validator);
+                checkValidNumber(new Long(systemIdentifier).toString(),"institute.systemIdentifier",errors,validator);
             }
             if (operation.equals(Constants.ADD) || operation.equals(Constants.EDIT))
             {

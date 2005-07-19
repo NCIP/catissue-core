@@ -56,8 +56,8 @@ public class CommonSearchAction extends Action
         
         AbstractActionForm abstractForm = (AbstractActionForm) form;
 
-        /* Get the identifier whose information is to be searched */
-        long identifier = abstractForm.getIdentifier();
+        /* Get the systemIdentifier whose information is to be searched */
+        long identifier = abstractForm.getSystemIdentifier();
 
         try
         {
@@ -85,7 +85,7 @@ public class CommonSearchAction extends Action
                  * display an Error message.
                  */
                 ActionErrors errors = new ActionErrors();
-                errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.unknown",ApplicationProperties.getValue("user.identifier")));
+                errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.unknown",ApplicationProperties.getValue("user.systemIdentifier")));
                 saveErrors(request,errors);
                 target = new String(Constants.FAILURE);
             }

@@ -11,6 +11,8 @@
 
 package edu.wustl.catissuecore.action;
 
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,7 +27,7 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.actionForm.AbstractActionForm;
 import edu.wustl.catissuecore.dao.AbstractBizLogic;
 import edu.wustl.catissuecore.dao.BizLogicFactory;
-import edu.wustl.catissuecore.domain.AbstractDomainObject;
+import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 
 /**
@@ -63,8 +65,21 @@ public class DomainObjectListAction extends Action
         
         if (pageNum == Constants.START_PAGE)
         {
+            //Only for showing UI.
+            User user = new User();
+            user.setSystemIdentifier(new Long(12));
+            user.setLoginName("Srikanth");
+            user.setLastName("Adiga");
+            user.setFirstName("Srikanth");
+            user.getAddress().setEmailAddress("srikanth@persistent.co.in");
+            user.setDateAdded(Calendar.getInstance().getTime());
+            
+            list = new ArrayList();
+            list.add(user);
+            
+            
             //If start page is to be shown retrieve the list of users from the database. 
-            list = abstractDAO.retrieve(AbstractDomainObject.getDomainObjectName(abstractForm.getFormId()),"activityStatus.status",abstractForm.getActivityStatus());
+//            list = abstractDAO.retrieve(AbstractDomainObject.getDomainObjectName(abstractForm.getFormId()),"activityStatus.status",abstractForm.getActivityStatus());
             if (Constants.NUMBER_RESULTS_PER_PAGE > list.size())
             {
                 endIndex = list.size();
@@ -107,4 +122,5 @@ public class DomainObjectListAction extends Action
         
         return mapping.findForward(Constants.SUCCESS);
     }
+    
 }

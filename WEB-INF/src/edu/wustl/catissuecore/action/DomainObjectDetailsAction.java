@@ -51,17 +51,17 @@ public class DomainObjectDetailsAction extends Action
         while (iterator.hasNext())
         {
             currentDomainObject = (AbstractDomainObject)iterator.next();
-            if (identifier == currentDomainObject.getIdentifier().longValue())
+            if (identifier == currentDomainObject.getSystemIdentifier().longValue())
             {
                 break;
             }
-            prevIdentifier = currentDomainObject.getIdentifier();
+            prevIdentifier = currentDomainObject.getSystemIdentifier();
         }
         
         if (iterator.hasNext())
         {
             AbstractDomainObject nextDomainObject = (AbstractDomainObject)iterator.next();
-            nextIdentifier = nextDomainObject.getIdentifier();
+            nextIdentifier = nextDomainObject.getSystemIdentifier();
         }
         
         request.setAttribute(Constants.CURRENT_RECORD,currentDomainObject);

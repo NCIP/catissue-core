@@ -25,7 +25,6 @@ import edu.wustl.catissuecore.actionForm.DomainObjectListForm;
 import edu.wustl.catissuecore.dao.AbstractBizLogic;
 import edu.wustl.catissuecore.dao.BizLogicFactory;
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
-import edu.wustl.catissuecore.domain.ActivityStatus;
 import edu.wustl.catissuecore.domain.ReportedProblem;
 import edu.wustl.catissuecore.util.global.Constants;
 
@@ -55,6 +54,7 @@ public class ReportedProblemPendingCloseAction extends Action
         AbstractBizLogic dao = BizLogicFactory.getDAO(Constants.REPORTEDPROBLEM_FORM_ID);
 
         List list = null;
+        String activityStatus = null;
 
         while (iterator.hasNext())
         {
@@ -75,20 +75,21 @@ public class ReportedProblemPendingCloseAction extends Action
                 if (domainObjectListForm.getOperation().equals(Constants.ACTIVITY_STATUS_CLOSED))
                 {
 
-                    //Retrieve the Activity Status for closed status.
-                    list = dao.retrieve(AbstractDomainObject.getDomainObjectName(Constants.ACTIVITY_STATUS_FORM_ID),
-                                    "status", Constants.ACTIVITY_STATUS_CLOSED);
+                    //Change the Activity Status for closed status.
+//                    list = dao.retrieve(AbstractDomainObject.getDomainObjectName(Constants.ACTIVITY_STATUS_FORM_ID),
+//                                    "status", Constants.ACTIVITY_STATUS_CLOSED);
+                    activityStatus = Constants.ACTIVITY_STATUS_CLOSED;
 
                 }
                 else
                 {
-                    //Retrieve the Activity Status for pending status.
-                    list = dao.retrieve(AbstractDomainObject.getDomainObjectName(Constants.ACTIVITY_STATUS_FORM_ID),
-                                    "status", Constants.ACTIVITY_STATUS_PENDING);
+                    //Change the Activity Status for pending status.
+//                    list = dao.retrieve(AbstractDomainObject.getDomainObjectName(Constants.ACTIVITY_STATUS_FORM_ID),
+//                                    "status", Constants.ACTIVITY_STATUS_PENDING);
+                    activityStatus = Constants.ACTIVITY_STATUS_PENDING;
                 }
 
-                //Sets the activity status as pending.
-                ActivityStatus activityStatus = (ActivityStatus) list.get(0);
+                //Sets the activity status.
                 reportedProblem.setActivityStatus(activityStatus);
 
                 //Updates reported problem's information in the database.

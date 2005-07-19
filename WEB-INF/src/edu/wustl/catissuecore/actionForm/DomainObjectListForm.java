@@ -33,7 +33,7 @@ import edu.wustl.common.util.logger.Logger;
 public class DomainObjectListForm extends AbstractActionForm
 {
     
-    protected long identifier;
+    protected long systemIdentifier;
     
     /**
      * Represents the operation(Approve/Reject) to be performed.
@@ -106,30 +106,30 @@ public class DomainObjectListForm extends AbstractActionForm
      */
     private void reset()
     {
-        identifier = -1;
+        systemIdentifier = -1;
         operation = null;
         comments = null;
         values = new HashMap();
     }
     
     /**
-     * Returns the identifier assigned to User.
+     * Returns the systemIdentifier assigned to User.
      * @return int representing the id assigned to User.
-     * @see #setIdentifier(int)
+     * @see #setSystemIdentifier(int)
      * */
-    public long getIdentifier()
+    public long getSystemIdentifier()
     {
-        return (this.identifier);
+        return (this.systemIdentifier);
     }
 
     /**
      * Sets an id for the User.
-     * @param identifier id to be assigned to the User.
-     * @see #getIdentifier()
+     * @param systemIdentifier id to be assigned to the User.
+     * @see #getSystemIdentifier()
      * */
-    public void setIdentifier(long identifier)
+    public void setSystemIdentifier(long identifier)
     {
-        this.identifier = identifier;
+        this.systemIdentifier = identifier;
     }
     
     /**

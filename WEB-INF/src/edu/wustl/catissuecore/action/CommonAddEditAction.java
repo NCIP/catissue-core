@@ -69,7 +69,7 @@ public class CommonAddEditAction extends Action
             	String objName = AbstractDomainObject.getDomainObjectName(abstractForm.getFormId());
             	
                 List list = dao.retrieve( objName, Constants.IDENTIFIER, 
-										  new Long(abstractForm.getIdentifier()));
+										  new Long(abstractForm.getSystemIdentifier()));
 
                 if (list.size() != 0)
                 {

@@ -26,18 +26,18 @@ public abstract class AbstractActionForm extends ActionForm
 {
 
     /**
-     * Returns the identifier assigned to Participant.
+     * Returns the systemIdentifier assigned to Participant.
      * @return int representing the id assigned to User.
      * @see #setIdentifier(int)
      * */
-    public abstract long getIdentifier();
+    public abstract long getSystemIdentifier();
 
     /**
      * Sets an id for the Participant.
-     * @param identifier id to be assigned to the Participant.
+     * @param systemIdentifier id to be assigned to the Participant.
      * @see #getIdentifier()
      * */
-    public abstract void setIdentifier(long identifier);
+    public abstract void setSystemIdentifier(long systemIdentifier);
 
     /**
      * Returns the id assigned to form bean.
