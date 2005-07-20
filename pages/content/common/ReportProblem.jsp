@@ -35,13 +35,6 @@
 				 </tr>
 					
 				 <tr>
-				     <td class="formRequiredNotice" width="5">&nbsp;</td>
-				     <td class="formLabel">
-				     	<label for="from"><o:><bean:message  key="fields.to" />:</o:></label>
-				     </td>
-				     <td class="formField"><%=toAddress%></td>
-				 </tr>
-				 <tr>
 				     <td class="formRequiredNotice" width="5">*</td>
 				     <td class="formRequiredLabel"><label for="from"><bean:message key="fields.from"/></label></td>
 				     <td class="formField"><html:text styleClass="formFieldSized" size="30" styleId="from" property="from"/></td>
