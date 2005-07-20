@@ -9,11 +9,15 @@
 
 package edu.wustl.catissuecore.domain;
 
+import edu.wustl.catissuecore.actionForm.AbstractActionForm;
+import edu.wustl.catissuecore.actionForm.SiteForm;
+import edu.wustl.common.util.logger.Logger;
+
 /**
  * A physical location associated with biospecimen collection, storage, processing, or utilization.
  * @hibernate.class table="CATISSUE_SITE"
  */
-public class Site implements java.io.Serializable
+public class Site extends AbstractDomainObject implements java.io.Serializable
 {
 	private static final long serialVersionUID = 1234567890L;
 
@@ -33,24 +37,24 @@ public class Site implements java.io.Serializable
 	protected String type;
 	
 	/**
-     * A string containing the Email Address of the user.
+     * EmailAddress Address of the site.
      */
-	protected String emailAddress = null;
-
-	/**
-     * Defines whether this Site record can be queried (Active) or not queried (Inactive) by any actor.
-     */
-	protected String activityStatus;
-
+    private String emailAddress;
+	
 	/**
      * The User who currently coordinates operations at the Site.
      */
 	protected User coordinator = new User();
 	
 	/**
+     * Defines whether this Site record can be queried (Active) or not queried (Inactive) by any actor.
+     */
+	protected String activityStatus;
+	
+	/**
      * The address of the site.
      */
-	protected Address address = new Address();
+	private Address address = new Address();
 
 	/**
      * Returns the system generated unique identifier.
@@ -117,50 +121,28 @@ public class Site implements java.io.Serializable
 	{
 		this.type = type;
 	}
-
+	
 	/**
-     * @hibernate.property name="emailAddress" type="string" 
+	 * Returns the emailAddress Address of the site.	
+	 * @hibernate.property name="emailAddress" type="string" 
      * column="EMAIL_ADDRESS" length="150" not-null="true" unique="true"
-     * Returns the Email Address of the user.
-     * @return String representing the emailAddress address of the user.
+     * @return String representing the emailAddress address of the site.
      */
     public String getEmailAddress()
     {
-        return (this.emailAddress);
+        return emailAddress;
     }
 
     /**
-     * Sets the emailAddress address of the user.
-     * @param emailAddress String representing emailAddress address of the user.
+     * Sets the emailAddress address of the site.
+     * @param emailAddress String representing emailAddress address of the site.
      * @see #getEmailAddress()
      */
-    public void setEmailAddress(String email)
+    public void setEmailAddress(String emailAddress)
     {
-        this.emailAddress = email;
-    }
+        this.emailAddress = emailAddress;
+    }	
 
-    /**
-     * Returns the activity status.
-     * @hibernate.property name="activityStatus" type="string" 
-     * column="ACTIVITY_STATUS" length="50"
-     * @return String the activity status.
-     * @see #getActivityStatus(User)
-     */
-	public String getActivityStatus()
-	{
-		return activityStatus;
-	}
-
-	/**
-     * Sets the the activity status.
-     * @param activityStatus activity status of the site to be set.
-     * @see #getActivityStatus()
-     */
-	public void setActivityStatus(String activityStatus)
-	{
-		this.activityStatus = activityStatus;
-	}
-	
 	/**
      * Returns the coordinator associated with this site.
      * @hibernate.many-to-one column="USER_ID"  class="edu.wustl.catissuecore.domain.User" constrained="true"
@@ -180,6 +162,28 @@ public class Site implements java.io.Serializable
 	public void setCoordinator(edu.wustl.catissuecore.domain.User coordinator)
 	{
 		this.coordinator = coordinator;
+	}
+
+	/**
+     * Returns the activity status.
+     * @hibernate.property name="activityStatus" type="string" 
+     * column="ACTIVITY_STATUS" length="50"
+     * @return String the activity status.
+     * @see #getActivityStatus(User)
+     */
+	public String getActivityStatus()
+	{
+		return activityStatus;
+	}
+
+	/**
+     * Sets the the activity status.
+     * @param activityStatus activity status of the site to be set.
+     * @see #getActivityStatus()
+     */
+	public void setActivityStatus(String activityStatus)
+	{
+		this.activityStatus = activityStatus;
 	}
 
 	/**
@@ -203,4 +207,33 @@ public class Site implements java.io.Serializable
 	{
 		this.address = address;
 	}
+	
+	/**
+     * This function Copies the data from an SiteForm object to a Site object.
+     * @param siteForm An SiteForm object containing the information about the site.  
+     * */
+    public void setAllValues(AbstractActionForm abstractForm)
+    {
+        try
+        {
+            SiteForm form 	= (SiteForm) abstractForm;
+            this.systemIdentifier = new Long(form.getSystemIdentifier());
+            this.name 		= form.getName();
+            this.type 		= form.getType();
+            this.emailAddress = form.getEmailAddress();            
+            this.activityStatus = form.getActivityStatus();
+            
+            address.setStreet(form.getStreet());
+            address.setCity(form.getCity());
+            address.setState(form.getState());
+            address.setCountry(form.getCountry());
+            address.setZipCode(form.getZipCode());
+            address.setPhoneNumber(form.getPhoneNumber());
+            address.setFaxNumber(form.getFaxNumber());
+        }
+        catch (Exception excp)
+        {
+            Logger.out.error(excp.getMessage());
+        }
+    }
 }
