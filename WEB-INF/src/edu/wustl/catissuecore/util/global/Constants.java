@@ -56,7 +56,9 @@ public class Constants
 	public static final String COUNTRYLIST = "countryList";
 	public static final String ROLELIST = "roleList";
 	public static final String CANCER_RESEARCH_GROUP_LIST = "cancerResearchGroupList";
-	public static final String GENDERLIST = "genderList";
+	public static final String GENOTYPIC_GENDER_LIST = "genotypicGenderList";
+	public static final String ETHNICITY_LIST = "ethnicityList";
+	public static final String PARTICIPANT_MEDICAL_RECORD_SOURCE_LIST = "participantMedicalRecordSourceList";
 	public static final String RACELIST = "raceList";
 	public static final String PARTICIPANTLIST = "participantList";
 	public static final String PARTICIPANTIDLIST = "participantIdList";
@@ -80,6 +82,13 @@ public class Constants
 	public static final String PATHOLOGICAL_STATUS_LIST = "pathologicalStatusList";
 	public static final String BIOHAZARD_TYPE_LIST = "biohazardTypeList";
 	public static final String BIOHAZARD_NAME_LIST = "biohazardNameList";
+	
+	//SpecimenCollecionGroup lists.
+	public static final String PROTOCOL_TITLE_LIST = "protocolTitleList";
+	public static final String PARTICIPANT_NAME_LIST = "participantNameList";
+	public static final String PROTOCOL_PARTICIPANT_NUMBER_LIST = "protocolParticipantNumberList";
+	public static final String STUDY_CALENDAR_EVENT_POINT_LIST = "studyCalendarEventPointList";
+	public static final String CLINICAL_STATUS_LIST = "cinicalStatusList";
 	
 	//Constants required in User.jsp Page
 	public static final String USER_SEARCH_ACTION = "UserSearch.do";
@@ -115,7 +124,10 @@ public class Constants
 	//New Specimen Data Actions.
 	public static final String SPECIMEN_ADD_ACTION = "SpecimenAdd.do";
 	public static final String SPECIMEN_EDIT_ACTION = "SpecimenEdit.do";
-	
+
+	public static final String SPECIMEN_COLLECTION_GROUP_ADD_ACTION = "SpecimenCollectionGroupAdd.do";
+	public static final String SPECIMEN_COLLECTION_GROUP_EDIT_ACTION = "SpecimenCollectionGroupEdit.do";
+
 	//Levels of nodes in query results tree.
 	public static final int MAX_LEVEL = 5;
 	public static final int MIN_LEVEL = 1;
@@ -233,7 +245,7 @@ public class Constants
 	public static final String [] RECEIVEDMODEARRAY = {
 	        "by hand", "courier", "FedEX", "UPS"
 	};
-	public static final String [] GENDERARRAY = {
+	public static final String [] GENOTYPIC_GENDER_ARRAY = {
 	        "Male",
 	        "Female"
 	};
@@ -617,10 +629,36 @@ public class Constants
 	};
 
 	public static final String [] BIOHAZARD_NAME_VALUES = {
-	        "Radioactive",
+	        ""
 	};
 	
 	public static final String [] BIOHAZARD_TYPE_VALUES = {
-	        "",
+	        "Radioactive"
+	};
+	
+	public static final String [] ETHNICITY_VALUES = {
+	        "-- Select --"
+	};
+	
+	public static final String [] PARTICIPANT_MEDICAL_RECORD_SOURCE_VALUES = {
+	        "-- Select --"
+	};
+	
+	public static final String [] PROTOCOL_TITLE_ARRAY = {
+	        "Protocol-1"
+	};
+	        
+	public static final String [] PARTICIPANT_NAME_ARRAY = {
+	        "LastName,FirstName"
+	};
+	public static final String [] PROTOCOL_PARTICIPANT_NUMBER_ARRAY = {
+	        "1","2","3","4"
+	};
+	public static final String [] STUDY_CALENDAR_EVENT_POINT_ARRAY = {
+	        "30","60","90"
+	};
+	public static final String [] CLINICAL_STATUS_ARRAY = {
+	        "Pre-Opt",
+	        "Post-Opt"
 	};
 }
