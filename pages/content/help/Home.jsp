@@ -3,11 +3,9 @@
 		<td colspan="2">
 			<ul>
 				<li>
-					<font color="#000000" size="3" face="Verdana">
-						<strong>
-							This is a dummy help page.	
-						</strong>
-					</font>
+					<strong>
+						&lt;TBD&gt;
+					</strong>
 				</li>
 		   </ul>
 		</td>

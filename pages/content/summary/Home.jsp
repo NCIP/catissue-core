@@ -3,11 +3,9 @@
 		<td colspan="2">
 			<ul>
 				<li>
-					<font color="#000000" size="3" face="Verdana">
-						<strong>
-							This page will show the aggregate data to public user.	
-						</strong>
-					</font>
+					<strong>
+						&lt;TBD&gt;
+					</strong>
 				</li>
 		   </ul>
 		</td>

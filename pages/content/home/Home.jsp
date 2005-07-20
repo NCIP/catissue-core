@@ -14,26 +14,26 @@
                             
                               <!-- welcome begins -->
                               <table summary="" cellpadding="0" cellspacing="0" border="0" width="600" height="100%">
-                                <tr><td class="welcomeTitle" height="20">WELCOME TO caTISSUE Core</td>
+                                <tr><td class="welcomeTitle" height="20">Welcome TO caTISSUE Core</td>
                                 </tr>
                                 <tr>
                                   <td class="welcomeContent" valign="top">
 								  <ul>
-									<li><strong>This is caTISSUE Core Home Page</strong></li>
+									<li><strong>&lt;TBD&gt;</strong></li>
                                   </td>
                                 </tr>
                               </table>
                               <!-- welcome ends -->
                             
                             </td>
-                            <td valign="top">
+                            <td valign="top" halign="right">
                               
                               <!-- sidebar begins -->
-                              <table summary="" cellpadding="0" cellspacing="0" border="0" height="100%">
+                              <table summary="" cellpadding="0" cellspacing="0" border="0" width="220" height="100%">
                                 
                                 <!-- login begins -->
                                 <tr>
-                                  <td valign="top" halign="right">
+                                  <td valign="top">
 								   <table summary="" cellpadding="2" cellspacing="0" border="0" width="100%" class="sidebarSection">
 									
                                       <tr>
@@ -76,7 +76,7 @@
 
                                             <tr>
 											 <td>&nbsp;</td>	
-                                              <td><html:submit><bean:message key="app.login"/></html:submit></td>
+                                              <td><html:submit styleClass="actionButton"><bean:message key="app.login"/></html:submit></td>
                                             </tr>
 									
 
@@ -109,15 +109,47 @@
                                 </tr>
                                 <!-- login ends -->
                                 
-                                <!-- spacer cell begins (keep for dynamic expanding)>
-                                <tr><td valign="top" height="100%">
+                                <!-- what's new begins -->
+                                <tr>
+                                  <td valign="top">
+                                    <table summary="" cellpadding="0" cellspacing="0" border="0" width="100%" class="sidebarSection">
+                                      <tr>
+                                        <td class="sidebarTitle" height="20">WHAT'S NEW</td>
+                                      </tr>
+                                      <tr>
+                                        <td class="sidebarContent">&lt;TBD&gt;</td>
+                                      </tr>
+                                    </table>
+                                  </td>
+                                </tr>
+                                <!-- what's new ends -->
+                                
+                                <!-- did you know? begins -->
+                                <tr>
+                                  <td valign="top">
+                                    <table summary="" cellpadding="0" cellspacing="0" border="0" width="100%" height="100%" class="sidebarSection">
+                                    <tr>
+                                      <td class="sidebarTitle" height="20">DID YOU KNOW?</td>
+                                    </tr>
+                                    <tr>
+                                      <td class="sidebarContent" valign="top">&lt;TBD&gt;</td>
+                                    </tr>
+                                    </table>
+                                  </td>
+                                </tr>
+                                <!-- did you know? ends -->
+                                
+                                <!-- spacer cell begins (keep for dynamic expanding)-->
+                                <tr>
+                                <td valign="top" height="100%">
                                     <table summary="" cellpadding="0" cellspacing="0" border="0" width="100%" height="100%" class="sidebarSection">
                                     <tr>
                                       <td class="sidebarContent" valign="top">&nbsp;</td>
                                     </tr>
                                     </table>
-																</td></tr>
-                                <spacer cell ends -->
+								</td>
+								</tr>
+                                <!-- spacer cell ends -->
 																
                               </table>
                               <!-- sidebar ends -->
