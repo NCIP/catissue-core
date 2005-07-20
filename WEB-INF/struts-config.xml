@@ -18,6 +18,9 @@ PUBLIC
 		<form-bean name="institutionForm" type="edu.wustl.catissuecore.actionForm.InstitutionForm"/>
 		<form-bean name="collectionProtocolForm" type="edu.wustl.catissuecore.actionForm.CollectionProtocolForm"/>
 		<form-bean name="distributionProtocolForm" type="edu.wustl.catissuecore.actionForm.DistributionProtocolForm"/>
+		<form-bean name="storageTypeForm" type="edu.wustl.catissuecore.actionForm.StorageTypeForm"/>
+		<form-bean name="storageContainerForm" type="edu.wustl.catissuecore.actionForm.StorageContainerForm"/>
+		<form-bean name="siteForm" type="edu.wustl.catissuecore.actionForm.SiteForm"/>
 	</form-beans>
 	
 	<action-mappings>
@@ -440,6 +443,124 @@ PUBLIC
 		</action>
 		<!--Reported Problem Actions End-->
 		
+		<!-- StorageType Actions Begins -->
+        <action path="/StorageType"
+			type="edu.wustl.catissuecore.action.StorageTypeAction"
+			scope="request">
+			<forward name="success" path=".catissuecore.storageTypeDef" />
+			<forward name="failure" path=".catissuecore.storageTypeDef" />
+		</action>
+		
+		<action path="/StorageTypeAdd"
+			type="edu.wustl.catissuecore.action.CommonAddEditAction"
+			name="storageTypeForm"
+			validate="true"
+			input="/StorageType.do?operation=add"
+			scope="request">
+			<forward name="success" path=".catissuecore.storageTypeAddSuccessDef" />
+			<forward name="failure" path="/error.jsp" />
+		</action>
+		
+		<action path="/StorageTypeEdit"
+			type="edu.wustl.catissuecore.action.CommonAddEditAction"
+			name="storageTypeForm"
+			validate="true"
+			input="/StorageType.do?operation=edit"
+			scope="request">
+			<forward name="success" path=".catissuecore.storageTypeEditSuccessDef" />
+			<forward name="failure" path="/error.jsp" />
+		</action>
+		
+		<action path="/StorageTypeSearch"
+		    type="edu.wustl.catissuecore.action.CommonSearchAction"
+			name="storageTypeForm"
+			validate="true"
+			input="/StorageType.do?operation=edit"
+			scope="request">
+			<forward name="success" path="/StorageType.do?operation=edit"/>
+			<forward name="failure" path="/StorageType.do?operation=edit"/>
+		</action>    
+		<!-- StorageType Actions Ends -->
+		
+		
+		<!-- StorageContainer Actions Begins -->
+        <action path="/StorageContainer"
+			type="edu.wustl.catissuecore.action.StorageContainerAction"
+			scope="request">
+			<forward name="success" path=".catissuecore.storageContainerDef" />
+			<forward name="failure" path=".catissuecore.storageContainerDef" />
+		</action>
+		
+		<action path="/StorageContainerAdd"
+			type="edu.wustl.catissuecore.action.CommonAddEditAction"
+			name="storageContainerForm"
+			validate="true"
+			input="/StorageContainer.do?operation=add"
+			scope="request">
+			<forward name="success" path=".catissuecore.storageContainerAddSuccessDef" />
+			<forward name="failure" path="/error.jsp" />
+		</action>
+		
+		<action path="/StorageContainerEdit"
+			type="edu.wustl.catissuecore.action.CommonAddEditAction"
+			name="storageContainerForm"
+			validate="true"
+			input="/StorageContainer.do?operation=edit"
+			scope="request">
+			<forward name="success" path=".catissuecore.storageContainerEditSuccessDef" />
+			<forward name="failure" path="/error.jsp" />
+		</action>
+		
+		<action path="/StorageContainerSearch"
+		    type="edu.wustl.catissuecore.action.CommonSearchAction"
+			name="storageContainerForm"
+			validate="true"
+			input="/StorageContainer.do?operation=edit"
+			scope="request">
+			<forward name="success" path="/StorageContainer.do?operation=edit"/>
+			<forward name="failure" path="/StorageContainer.do?operation=edit"/>
+		</action>    
+		<!-- StorageContainer Actions Ends -->
+		
+		
+		<!-- Site Actions Begins -->
+        <action path="/Site"
+			type="edu.wustl.catissuecore.action.SiteAction"
+			scope="request">
+			<forward name="success" path=".catissuecore.siteDef" />
+			<forward name="failure" path=".catissuecore.siteDef" />
+		</action>
+		
+		<action path="/SiteAdd"
+			type="edu.wustl.catissuecore.action.CommonAddEditAction"
+			name="siteForm"
+			validate="true"
+			input="/Site.do?operation=add"
+			scope="request">
+			<forward name="success" path=".catissuecore.siteAddSuccessDef" />
+			<forward name="failure" path="/error.jsp" />
+		</action>
+		
+		<action path="/SiteEdit"
+			type="edu.wustl.catissuecore.action.CommonAddEditAction"
+			name="siteForm"
+			validate="true"
+			input="/Site.do?operation=edit"
+			scope="request">
+			<forward name="success" path=".catissuecore.siteEditSuccessDef" />
+			<forward name="failure" path="/error.jsp" />
+		</action>
+		
+		<action path="/SiteSearch"
+		    type="edu.wustl.catissuecore.action.CommonSearchAction"
+			name="siteForm"
+			validate="true"
+			input="/Site.do?operation=edit"
+			scope="request">
+			<forward name="success" path="/Site.do?operation=edit"/>
+			<forward name="failure" path="/Site.do?operation=edit"/>
+		</action>    
+		<!-- Site Actions Ends -->
 		<!--Query Result View Actions Begin-->
 		<action path="/QueryResults"
 			type="edu.wustl.catissuecore.action.QueryResultsAction">
