@@ -62,14 +62,15 @@
 		
 		<div>
 			<img src="images/subMenuArrow.gif" width="7" height="7" alt="" /> 
-				<bean:message key="app.institute" />
-					<a class="subMenuPrimary" href="Institute.do?operation=add">
+				<bean:message key="app.institution" />
+					<a class="subMenuPrimary" href="Institution.do?operation=add">
 						<bean:message key="app.add" />
 					</a> | 
-					<a class="subMenuPrimary" href="Institute.do?operation=search">
+					<a class="subMenuPrimary" href="Institution.do?operation=search">
 						<bean:message key="app.edit" />
 					</a>
 		</div>
+		
 		<div>
 			<img src="images/subMenuArrow.gif" width="7" height="7" alt="" /> 
 				<bean:message key="app.department" />
