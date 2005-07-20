@@ -72,6 +72,10 @@ public class Constants
 	public static final String RECEIVEDSITELIST = "receivedSiteList";
 	public static final String RECEIVEDMODELIST = "receivedModeList";
 	public static final String ACTIVITYSTATUSLIST = "activityStatusList";
+	public static final String USERLIST = "userList";
+	public static final String SITETYPELIST = "siteTypeList";
+	public static final String STORAGECONTAINERLIST="storageContainerList";
+	public static final String SITELIST="siteList";
 	
 	//New Specimen lists.
 	public static final String SPECIMEN_COLLECTION_GROUP_LIST = "specimenCollectionGroupIdList";
@@ -196,6 +200,8 @@ public class Constants
 	public static final int DEPARTMENT_FORM_ID = 8;
 	public static final int COLLECTIONPROTOCOL_FORM_ID = 9;
 	public static final int DISTRIBUTIONPROTOCOL_FORM_ID = 10;
+	public static final int STORAGE_CONTAINER_ID = 11;
+	public static final int STORAGE_TYPE_ID = 12;
 	//Status message key Constants
 	public static final String STATUS_MESSAGE_KEY = "statusMessageKey";
 	
@@ -678,5 +684,11 @@ public class Constants
 	public static final String [] CLINICAL_STATUS_ARRAY = {
 	        "Pre-Opt",
 	        "Post-Opt"
+	};
+	
+	public static final String [] SITE_TYPE_ARRAY = {
+			"Collection",
+			"Laboratory",
+			"Repository"
 	};
 }

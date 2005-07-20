@@ -56,7 +56,7 @@ public class SiteAction extends Action
         request.setAttribute(Constants.COUNTRYLIST, Constants.COUNTRYARRAY);
 
         //Sets the activityStatusList attribute to be used in the Site Add/Edit Page.
-        request.setAttribute(Constants.ACTIVITYSTATUSLIST, Constants.ACTIVITY_STATUS_ARRAY);
+        request.setAttribute(Constants.ACTIVITYSTATUSLIST, Constants.ACTIVITY_STATUS_VALUES);
         
         //Sets the siteTypeList attribute to be used in the Site Add/Edit Page.
         request.setAttribute(Constants.SITETYPELIST, Constants.SITE_TYPE_ARRAY);

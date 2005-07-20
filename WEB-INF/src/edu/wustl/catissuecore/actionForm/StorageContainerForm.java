@@ -114,21 +114,21 @@ public class StorageContainerForm extends AbstractActionForm
      */
     public void setAllValues(AbstractDomainObject abstractDomain)
     {
-        try
-        {
-        	StorageContainer container = (StorageContainer) abstractDomain;
-            this.systemIdentifier = container.getSystemIdentifier().longValue();
-            this.type = container.getStorageType().getType();
-            this.defaultTemperature = container.getTempratureInCentigrade().doubleValue();
-            this.oneDimensionCapacity = container.getStorageContainerCapacity().getOneDimensionCapacity().intValue();
-            this.twoDimensionCapacity = container.getStorageContainerCapacity().getTwoDimensionCapacity().intValue();
-            this.oneDimensionLabel = container.getStorageContainerCapacity().getOneDimensionLabel();
-            this.twoDimensionLabel = container.getStorageContainerCapacity().getTwoDimensionLabel();
-        }
-        catch (Exception excp)
-        {
-            Logger.out.error(excp.getMessage(),excp);
-        }
+//        try
+//        {
+//        	StorageContainer container = (StorageContainer) abstractDomain;
+//            this.systemIdentifier = container.getSystemIdentifier().longValue();
+//            this.type = container.getStorageType().getType();
+//            this.defaultTemperature = container.getTempratureInCentigrade().doubleValue();
+//            this.oneDimensionCapacity = container.getStorageContainerCapacity().getOneDimensionCapacity().intValue();
+//            this.twoDimensionCapacity = container.getStorageContainerCapacity().getTwoDimensionCapacity().intValue();
+//            this.oneDimensionLabel = container.getStorageContainerCapacity().getOneDimensionLabel();
+//            this.twoDimensionLabel = container.getStorageContainerCapacity().getTwoDimensionLabel();
+//        }
+//        catch (Exception excp)
+//        {
+//            Logger.out.error(excp.getMessage(),excp);
+//        }
     }
 
     /**
