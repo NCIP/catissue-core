@@ -144,17 +144,29 @@
 				 </tr>
 				 <tr>
 				     <td class="formRequiredNotice" width="5">&nbsp;</td>
-				     <td class="formLabel"><label for="lastName"><bean:message key="user.lastName"/></label></td>
+				     <td class="formLabel">
+				     	<label for="lastName">
+				     		<bean:message key="user.lastName"/>
+				     	</label>
+				     </td>
 				     <td class="formField"><html:text styleClass="formFieldSized" size="30" styleId="lastName" property="lastName" readonly="<%=readOnlyForAll%>"/></td>
 				 </tr>
 				  <tr>
 				     <td class="formRequiredNotice" width="5">&nbsp;</td>
-				     <td class="formLabel"><label for="firstName"><bean:message key="user.firstName"/></label></td>
+				     <td class="formLabel">
+				     	<label for="firstName">
+				     		<bean:message key="user.firstName"/>
+				     	</label>
+				     </td>
 				     <td class="formField"><html:text styleClass="formFieldSized" size="30" styleId="firstName" property="firstName" readonly="<%=readOnlyForAll%>"/></td>
 				 </tr>
 				 <tr>
 				     <td class="formRequiredNotice" width="5">&nbsp;</td>
-				     <td class="formLabel"><label for="middleName"><bean:message key="participant.middleName"/></label></td>
+				     <td class="formLabel">
+				     	<label for="middleName">
+				     		<bean:message key="participant.middleName"/>
+				     	</label>
+				     </td>
 				     <td class="formField"><html:text styleClass="formFieldSized" size="30" styleId="middleName" property="middleName" readonly="<%=readOnlyForAll%>"/></td>
 				 </tr>
 				 <tr>
@@ -163,15 +175,15 @@
 				     	<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;</logic:equal>
 				     </td>
 				     <td class="formRequiredLabel">
-						<label for="state">
-							<bean:message key="participant.dateOfBirth"/>
+						<label for="birthDate">
+							<bean:message key="participant.birthDate"/>
 						</label>
 					</td>
 					 
 					 <td class="formField">
 					 <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
-					 <html:text styleClass="formDateSized" size="35" styleId="dateOfBirth" property="dateOfBirth" readonly="true"/>
-						<a href="javascript:show_calendar('participantForm.dateOfBirth');">
+					 <html:text styleClass="formDateSized" size="25" styleId="birthDate" property="birthDate" readonly="true"/>
+						<a href="javascript:show_calendar('participantForm.birthDate');">
 							<img src="images\calendar.gif" width=24 height=22 border=0>
 						</a>
 					 </td>
@@ -183,26 +195,10 @@
 				     </td>
 				     <td class="formRequiredLabel"><label for="state"><bean:message key="participant.gender"/></label></td>
 				     <td class="formField">
-				     	<html:select property="gender" styleClass="formFieldSized" styleId="gender" size="1" disabled="<%=readOnlyForAll%>">
-							<html:options name="genderList" labelName="genderList"/>		
+				     	<html:select property="genotypicGender" styleClass="formFieldSized" styleId="genotypicGender" size="1" disabled="<%=readOnlyForAll%>">
+							<html:options name="genotypicGenderList" labelName="genotypicGenderList"/>		
 						</html:select>
 		        	  </td>
-				 </tr>
-				 <tr>
-					 <td class="formRequiredNotice" width="5">
-				     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">*</logic:notEqual>
-				     	<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;</logic:equal>
-				     </td>
-				     <td class="formRequiredLabel"><label for="socialSecurityNumber"><bean:message key="participant.socialSecurityNumber"/></label></td>
-				     <td class="formField"><html:text styleClass="formFieldSized" size="30" styleId="socialSecurityNumber" property="socialSecurityNumber" readonly="<%=readOnlyForAll%>"/></td>
-				 </tr>
-				 <tr>
-				     <td class="formRequiredNotice" width="5">
-				     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">*</logic:notEqual>
-				     	<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;</logic:equal>
-				     </td>
-				     <td class="formRequiredLabel"><label for="uniqueMedicalRecordNumber"><bean:message key="participant.uniqueMedicalRecordNumber"/></label></td>
-				     <td class="formField"><html:text styleClass="formFieldSized" size="30" styleId="uniqueMedicalRecordNumber" property="uniqueMedicalRecordNumber" readonly="<%=readOnlyForAll%>"/></td>
 				 </tr>
 				 <tr>
 				     <td class="formRequiredNotice" width="5">
@@ -216,6 +212,88 @@
 						</html:select>
 		        	  </td>
 				 </tr>
+				 <tr>
+				     <td class="formRequiredNotice" width="5">
+				     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">*</logic:notEqual>
+				     	<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;</logic:equal>
+				     </td>
+				     <td class="formRequiredLabel">
+				     	<label for="ethnicity">
+				     		<bean:message key="participant.ethnicity"/>
+				     	</label>
+				     </td>
+				     <td class="formField">
+				     	<html:select property="ethnicity" styleClass="formFieldSized" styleId="ethnicity" size="1" disabled="<%=readOnlyForAll%>">
+							<html:options name="ethnicityList" labelName="ethnicityList"/>		
+						</html:select>
+		        	  </td>
+				 </tr>
+				 <tr>
+					 <td class="formRequiredNotice" width="5">
+				     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">*</logic:notEqual>
+				     	<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;</logic:equal>
+				     </td>
+				     <td class="formRequiredLabel">
+				     	<label for="socialSecurityNumber">
+				     		<bean:message key="participant.socialSecurityNumber"/>
+				     	</label>
+				     </td>
+				     <td class="formField">
+				     	<html:text styleClass="formFieldSized" size="30" styleId="socialSecurityNumber" property="socialSecurityNumber" readonly="<%=readOnlyForAll%>"/>
+				     </td>
+				 </tr>
+				 
+				 <!-- Medical Identifiers Begin here -->
+				 <tr>
+				     <td class="formSubTableTitle" height="20" colspan="2">
+				     	<bean:message key="participant.medicalIdentifier"/>
+				     </td>
+				     <td class="formButtonField">
+				     	<html:submit styleClass="actionButton">
+							<bean:message key="buttons.addMore"/>
+						</html:submit>
+				    </td>
+				  </tr>
+				 <tr>
+				 	<td class="formSerialNumberLabel" width="5">
+				     	#
+				    </td>
+				    <td class="formLeftSubTableTitle">
+						<bean:message key="medicalrecord.source"/>
+					</td>
+				    <td class="formRightSubTableTitle">
+						<bean:message key="medicalrecord.number"/>
+					</td>
+				 </tr>
+				 <tr>
+				 	<td class="formSerialNumberField" width="5">
+				     	1
+				     </td>
+				    <td class="formField">
+						<html:select property="participantMedicalRecordSource(1)" styleClass="formFieldSized" styleId="participantMedicalRecordSource" size="1" disabled="<%=readOnlyForAll%>">
+							<html:options name="participantMedicalRecordSourceList" labelName="participantMedicalRecordSourceList"/>		
+						</html:select>
+					</td>
+				    <td class="formField">
+				     	<html:text styleClass="formFieldSized" size="30" styleId="participantMedicalRecordNumber" property="participantMedicalRecordNumber(1)" readonly="<%=readOnlyForAll%>"/>
+				    </td>
+				 </tr>	
+				 			 
+				 <tr>
+			     	<td class="formSerialNumberField" width="5">
+				     	2
+				     </td>
+				    <td class="formField">
+						<html:select property="participantMedicalRecordSource(2)" styleClass="formFieldSized" styleId="participantMedicalRecordSource" size="1" disabled="<%=readOnlyForAll%>">
+							<html:options name="participantMedicalRecordSourceList" labelName="participantMedicalRecordSourceList"/>		
+						</html:select>
+					</td>
+				    <td class="formField">
+				     	<html:text styleClass="formFieldSized" size="30" styleId="participantMedicalRecordNumber" property="participantMedicalRecordNumber(2)" readonly="<%=readOnlyForAll%>"/>
+				    </td>
+				 </tr>
+				 
+				 <!-- Medical Identifiers End here -->
  			   	 <logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">		
 				 	<tr>
 				  		<td align="right" colspan="3">
@@ -235,13 +313,17 @@
 											<bean:message key="buttons.reset"/>
 										</html:reset>
 									</td> 
+									<td>
+										<html:submit styleClass="actionButton">
+											<bean:message key="buttons.submitAndRegisterParticipant"/>
+										</html:submit>
+									</td> 
 								</tr>
 							</table>
 							<!-- action buttons end -->
 				  		</td>
 				 	</tr>
 				 </logic:notEqual>
-				 
 				 
 				</logic:notEqual>
 				</table>
