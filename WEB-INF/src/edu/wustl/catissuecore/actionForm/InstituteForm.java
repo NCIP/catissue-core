@@ -362,7 +362,7 @@ public class InstituteForm extends AbstractActionForm
      */
     public int getFormId()
     {
-        return Constants.INSTITUTE_FORM_ID;
+        return Constants.INSTITUTION_FORM_ID;
     }
     
     /**

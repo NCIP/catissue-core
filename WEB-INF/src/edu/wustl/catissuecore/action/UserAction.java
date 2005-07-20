@@ -89,7 +89,7 @@ public class UserAction extends Action
 //                instituteArray[i] = institute.getName();
 //                i++;
 //            }
-            request.setAttribute(Constants.INSTITUTELIST, Constants.INSTITUTE_VALUES);
+            request.setAttribute(Constants.INSTITUTIONLIST, Constants.INSTITUTE_VALUES);
 
 //            //Sets the departmentList attribute to be used in the Add/Edit User Page.
 //            List departmentList = dao.retrieve(Department.class.getName());
