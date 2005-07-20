@@ -123,6 +123,10 @@
 	<definition name=".catissuecore.newSpecimenDef" extends=".catissuecore.manageBioSpecimenHomeDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/NewSpecimen.jsp" />
 	</definition>
+	
+	<definition name=".catissuecore.specimenCollectionGroupDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/SpecimenCollectionGroup.jsp" />
+	</definition>
 	<!-- BioSpecimen tab pages definitions end -->
 
 	<!-- Search tab pages definitions start -->
