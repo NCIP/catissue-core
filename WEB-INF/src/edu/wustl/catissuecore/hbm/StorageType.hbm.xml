@@ -6,8 +6,8 @@
 
 <hibernate-mapping>
     <class
-        name="edu.wustl.catissuecore.domain.Department"
-        table="CATISSUE_DEPARTMENT"
+        name="edu.wustl.catissuecore.domain.StorageType"
+        table="CATISSUE_STORAGE_TYPE"
         dynamic-update="false"
         dynamic-insert="false"
     >
@@ -15,7 +15,7 @@
         <id
             name="systemIdentifier"
             column="IDENTIFIER"
-            type="long"
+            type="int"
             length="30"
             unsaved-value="null"
         >
@@ -24,19 +24,38 @@
         </id>
 
         <property
-            name="name"
+            name="type"
             type="string"
             update="true"
             insert="true"
-            column="NAME"
+            column="TYPE"
             length="50"
             not-null="true"
             unique="true"
         />
 
+        <property
+            name="defaultTempratureInCentigrade"
+            type="double"
+            update="true"
+            insert="true"
+            column="DEFAULT_TEMPERATURE_IN_CENTIGRADE"
+            length="30"
+        />
+
+        <many-to-one
+            name="defaultStorageCapacity"
+            class="edu.wustl.catissuecore.domain.StorageContainerCapacity"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="STORAGE_CONTAINER_CAPACITY_ID"
+        />
+
         <!--
             To add non XDoclet property mappings, create a file named
-                hibernate-properties-Department.xml
+                hibernate-properties-StorageType.xml
             containing the additional properties and place it in your merge dir.
         -->
 

@@ -1,0 +1,198 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 2.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+    <class
+        name="edu.wustl.catissuecore.domain.SpecimenRequirement"
+        table="CATISSUE_SPECIMEN_REQUIREMENT"
+        dynamic-update="false"
+        dynamic-insert="false"
+    >
+
+        <id
+            name="systemIdentifier"
+            column="IDENTIFIER"
+            type="long"
+            length="30"
+            unsaved-value="null"
+        >
+            <generator class="native">
+            </generator>
+        </id>
+
+        <property
+            name="specimenType"
+            type="string"
+            update="true"
+            insert="true"
+            column="SPECIMEN_TYPE"
+            length="50"
+        />
+
+        <property
+            name="tissueSite"
+            type="string"
+            update="true"
+            insert="true"
+            column="TISSUE_SITE"
+            length="50"
+        />
+
+        <property
+            name="tissueSide"
+            type="string"
+            update="true"
+            insert="true"
+            column="TISSUE_SIDE"
+            length="50"
+        />
+
+        <property
+            name="pathologyStatus"
+            type="string"
+            update="true"
+            insert="true"
+            column="PATHOLOGY_STATUS"
+            length="50"
+        />
+
+        <set
+            name="distributionProtocolCollection"
+            table="CATISSUE_DISTRIBUTION_SPECIMEN_REQUIREMENT"
+            lazy="false"
+            inverse="true"
+            cascade="save-update"
+            sort="unsorted"
+        >
+
+              <key
+                  column="SPECIMEN_REQUIREMENT_ID"
+              />
+
+              <many-to-many
+                  class="edu.wustl.catissuecore.domain.DistributionProtocol"
+                  column="DISTRIBUTION_PROTOCOL_ID"
+                  outer-join="auto"
+              />
+
+        </set>
+
+        <set
+            name="collectionProtocolEventCollection"
+            table="CATISSUE_COLLECTION_SPECIMEN_REQUIREMENT"
+            lazy="false"
+            inverse="true"
+            cascade="save-update"
+            sort="unsorted"
+        >
+
+              <key
+                  column="SPECIMEN_REQUIREMENT_ID"
+              />
+
+              <many-to-many
+                  class="edu.wustl.catissuecore.domain.CollectionProtocolEvent"
+                  column="COLLECTION_PROTOCOL_EVENT_ID"
+                  outer-join="auto"
+              />
+
+        </set>
+
+        <!--
+            To add non XDoclet property mappings, create a file named
+                hibernate-properties-SpecimenRequirement.xml
+            containing the additional properties and place it in your merge dir.
+        -->
+
+        <joined-subclass
+            name="edu.wustl.catissuecore.domain.FluidSpecimenRequirement"
+            table="CATISSUE_FLUID_SPECIMEN_REQUIREMENT"
+            dynamic-update="false"
+            dynamic-insert="false"
+        >
+        <key
+            column="IDENTIFIER"
+        />
+        <property
+            name="quantityInMiliLiter"
+            type="double"
+            update="true"
+            insert="true"
+            column="QUANTITY_IN_MILILITER"
+            length="50"
+        />
+
+        </joined-subclass>
+        <joined-subclass
+            name="edu.wustl.catissuecore.domain.MolecularSpecimenRequirement"
+            table="CATISSUE_MOLECULAR_SPECIMEN_REQUIREMENT"
+            dynamic-update="false"
+            dynamic-insert="false"
+        >
+        <key
+            column="IDENTIFIER"
+        />
+        <property
+            name="quantityInMicroGram"
+            type="double"
+            update="true"
+            insert="true"
+            column="QUANTITY_IN_MICRO_GRAM"
+            length="50"
+        />
+
+        <property
+            name="concentrationInMicroGramPerMicroLiter"
+            type="double"
+            update="true"
+            insert="true"
+            column="CONCENTRATION_IN_MICROGRAM_PER_MICROLITER"
+            length="50"
+        />
+
+        </joined-subclass>
+        <joined-subclass
+            name="edu.wustl.catissuecore.domain.CellSpecimenRequirement"
+            table="CATISSUE_CELL_SPECIMEN_REQUIREMENT"
+            dynamic-update="false"
+            dynamic-insert="false"
+        >
+        <key
+            column="IDENTIFIER"
+        />
+        <property
+            name="quantityInCellCount"
+            type="int"
+            update="true"
+            insert="true"
+            column="QUANTITY_IN_CELL_COUNT"
+            length="50"
+        />
+
+        </joined-subclass>
+        <joined-subclass
+            name="edu.wustl.catissuecore.domain.TissueSpecimenRequirement"
+            table="CATISSUE_TISSUE_SPECIMEN_REQUIREMENT"
+            dynamic-update="false"
+            dynamic-insert="false"
+        >
+        <key
+            column="IDENTIFIER"
+        />
+        <property
+            name="quantityInGram"
+            type="double"
+            update="true"
+            insert="true"
+            column="QUANTITY_IN_GRAM"
+            length="50"
+        />
+
+        </joined-subclass>
+
+    </class>
+
+</hibernate-mapping>

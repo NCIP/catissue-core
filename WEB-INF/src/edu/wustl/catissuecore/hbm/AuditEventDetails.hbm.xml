@@ -6,14 +6,14 @@
 
 <hibernate-mapping>
     <class
-        name="edu.wustl.catissuecore.dataModel.domain.Audit"
-        table="CATISSUE_AUDIT"
+        name="edu.wustl.catissuecore.domain.AuditEventDetails"
+        table="CATISSUE_AUDIT_EVENT_DETAILS"
         dynamic-update="false"
         dynamic-insert="false"
     >
 
         <id
-            name="identifier"
+            name="systemIdentifier"
             column="IDENTIFIER"
             type="long"
             length="30"
@@ -24,44 +24,45 @@
         </id>
 
         <property
-            name="timeStamp"
-            type="date"
+            name="elementName"
+            type="string"
             update="true"
             insert="true"
-            column="AUDIT_TIMESTAMP"
+            column="ELEMENT_NAME"
+            length="50"
+        />
+
+        <property
+            name="previousValue"
+            type="string"
+            update="true"
+            insert="true"
+            column="PREVIOUS_VALUE"
+            length="50"
+        />
+
+        <property
+            name="currentValue"
+            type="string"
+            update="true"
+            insert="true"
+            column="CURRENT_VALUE"
+            length="50"
         />
 
         <many-to-one
-            name="user"
-            class="edu.wustl.catissuecore.dataModel.domain.User"
+            name="auditEventLog"
+            class="edu.wustl.catissuecore.domain.AuditEventLog"
             cascade="none"
             outer-join="auto"
             update="true"
             insert="true"
-            column="USER_ID"
+            column="AUDIT_EVENT_LOG_ID"
         />
-
-        <set
-            name="eventLogCollection"
-            table="CATISSUE_EVENTLOG"
-            lazy="false"
-            inverse="true"
-            cascade="save-update"
-            sort="unsorted"
-        >
-
-              <key
-                  column="AUDIT_ID"
-              />
-
-              <one-to-many
-                  class="edu.wustl.catissuecore.dataModel.domain.EventLog"
-              />
-        </set>
 
         <!--
             To add non XDoclet property mappings, create a file named
-                hibernate-properties-Audit.xml
+                hibernate-properties-AuditEventDetails.xml
             containing the additional properties and place it in your merge dir.
         -->
 

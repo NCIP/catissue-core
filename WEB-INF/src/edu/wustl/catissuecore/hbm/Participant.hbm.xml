@@ -6,14 +6,14 @@
 
 <hibernate-mapping>
     <class
-        name="edu.wustl.catissuecore.dataModel.domain.Participant"
+        name="edu.wustl.catissuecore.domain.Participant"
         table="CATISSUE_PARTICIPANT"
         dynamic-update="false"
         dynamic-insert="false"
     >
 
         <id
-            name="identifier"
+            name="systemIdentifier"
             column="IDENTIFIER"
             type="long"
             length="30"
@@ -51,20 +51,38 @@
         />
 
         <property
-            name="dateOfBirth"
+            name="birthDate"
             type="date"
             update="true"
             insert="true"
-            column="DATE_OF_BIRTH"
+            column="BIRTH_DATE"
         />
 
         <property
-            name="gender"
+            name="genotypicGender"
             type="string"
             update="true"
             insert="true"
             column="GENDER"
             length="20"
+        />
+
+        <property
+            name="race"
+            type="string"
+            update="true"
+            insert="true"
+            column="RACE"
+            length="50"
+        />
+
+        <property
+            name="ethnicity"
+            type="string"
+            update="true"
+            insert="true"
+            column="ETHNICITY"
+            length="50"
         />
 
         <property
@@ -78,37 +96,17 @@
         />
 
         <property
-            name="uniqueMedicalRecordNumber"
+            name="activityStatus"
             type="string"
             update="true"
             insert="true"
-            column="UNIQUE_MEDICAL_RECORD_NUMBER"
-            length="50"
-            unique="true"
-        />
-
-        <property
-            name="race"
-            type="string"
-            update="true"
-            insert="true"
-            column="RACE"
+            column="ACTIVITY_STATUS"
             length="20"
         />
 
-        <many-to-one
-            name="activityStatus"
-            class="edu.wustl.catissuecore.dataModel.domain.ActivityStatus"
-            cascade="none"
-            outer-join="auto"
-            update="true"
-            insert="true"
-            column="ACTIVITY_STATUS_ID"
-        />
-
         <set
-            name="accessionCollection"
-            table="CATISSUE_ACCESSION"
+            name="participantMedicalIdentifierCollection"
+            table="CATISSUE_PARTICIPANT_MEDICAL_IDENTIFIER"
             lazy="false"
             inverse="true"
             cascade="save-update"
@@ -116,11 +114,29 @@
         >
 
               <key
-                  column="PARTICIPANT_IDENTIFIER"
+                  column="PARTICIPANT_ID"
               />
 
               <one-to-many
-                  class="edu.wustl.catissuecore.dataModel.domain.Accession"
+                  class="edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier"
+              />
+        </set>
+
+        <set
+            name="collectionProtocolRegistrationCollection"
+            table="CATISSUE_COLLECTION_PROTOCOL_REGISTRATION"
+            lazy="false"
+            inverse="false"
+            cascade="none"
+            sort="unsorted"
+        >
+
+              <key
+                  column="PARTICIPANT_ID"
+              />
+
+              <one-to-many
+                  class="edu.wustl.catissuecore.domain.CollectionProtocolRegistration"
               />
         </set>
 

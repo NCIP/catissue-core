@@ -6,14 +6,14 @@
 
 <hibernate-mapping>
     <class
-        name="edu.wustl.catissuecore.dataModel.domain.EventLog"
-        table="CATISSUE_EVENTLOG"
+        name="edu.wustl.catissuecore.domain.AuditEventLog"
+        table="CATISSUE_AUDIT_EVENT_LOG"
         dynamic-update="false"
         dynamic-insert="false"
     >
 
         <id
-            name="identifier"
+            name="systemIdentifier"
             column="IDENTIFIER"
             type="long"
             length="30"
@@ -24,29 +24,20 @@
         </id>
 
         <property
-            name="objectID"
+            name="objectIdentifier"
             type="long"
             update="true"
             insert="true"
-            column="OBJECT_ID"
+            column="OBJECT_IDENTIFIER"
             length="50"
         />
 
         <property
-            name="objectType"
+            name="objectName"
             type="string"
             update="true"
             insert="true"
-            column="OBJECT_TYPE"
-            length="50"
-        />
-
-        <property
-            name="elementName"
-            type="string"
-            update="true"
-            insert="true"
-            column="ELEMENT_NAME"
+            column="OBJECT_NAME"
             length="50"
         />
 
@@ -59,37 +50,37 @@
             length="50"
         />
 
-        <property
-            name="previousValue"
-            type="string"
-            update="true"
-            insert="true"
-            column="PREVIOUS_VALUE"
-            length="50"
-        />
-
-        <property
-            name="currentValue"
-            type="string"
-            update="true"
-            insert="true"
-            column="CURRENT_VALUE"
-            length="50"
-        />
-
         <many-to-one
             name="audit"
-            class="edu.wustl.catissuecore.dataModel.domain.Audit"
+            class="edu.wustl.catissuecore.domain.AuditEvent"
             cascade="none"
             outer-join="auto"
             update="true"
             insert="true"
-            column="AUDIT_ID"
+            column="AUDIT_EVENT_ID"
         />
+
+        <set
+            name="auditEventDetailsCollcetion"
+            table="CATISSUE_AUDIT_EVENT_DETAILS"
+            lazy="false"
+            inverse="false"
+            cascade="none"
+            sort="unsorted"
+        >
+
+              <key
+                  column="AUDIT_EVENT_LOG_ID"
+              />
+
+              <one-to-many
+                  class="edu.wustl.catissuecore.domain.AuditEventDetails"
+              />
+        </set>
 
         <!--
             To add non XDoclet property mappings, create a file named
-                hibernate-properties-EventLog.xml
+                hibernate-properties-AuditEventLog.xml
             containing the additional properties and place it in your merge dir.
         -->
 

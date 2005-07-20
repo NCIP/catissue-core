@@ -6,14 +6,14 @@
 
 <hibernate-mapping>
     <class
-        name="edu.wustl.catissuecore.dataModel.domain.Collection"
-        table="CATISSUE_COLLECTION"
+        name="edu.wustl.catissuecore.domain.CollectionProtocolEvent"
+        table="CATISSUE_COLLECTION_PROTOCOL_EVENT"
         dynamic-update="false"
         dynamic-insert="false"
     >
 
         <id
-            name="identifier"
+            name="systemIdentifier"
             column="IDENTIFIER"
             type="long"
             length="30"
@@ -24,74 +24,57 @@
         </id>
 
         <property
-            name="type"
+            name="clinicalStatus"
             type="string"
             update="true"
             insert="true"
-            column="TYPE"
+            column="CLINICAL_STATUS"
             length="50"
         />
 
-        <many-to-one
-            name="activityStatus"
-            class="edu.wustl.catissuecore.dataModel.domain.ActivityStatus"
-            cascade="none"
-            outer-join="auto"
-            update="true"
-            insert="true"
-            column="ACTIVITY_STATUS_ID"
-        />
-
         <property
-            name="barCode"
-            type="string"
+            name="studyCalendarEventPoint"
+            type="double"
             update="true"
             insert="true"
-            column="BAR_CODE"
-            length="100"
-        />
-
-        <many-to-one
-            name="capacity"
-            class="edu.wustl.catissuecore.dataModel.domain.Capacity"
-            cascade="none"
-            outer-join="auto"
-            update="true"
-            insert="true"
-            column="CAPACITY_ID"
+            column="STUDY_CALENDAR_EVENT_POINT"
+            length="50"
         />
 
         <set
-            name="boxCollection"
-            table="CATISSUE_BOX"
+            name="specimenRequirementCollection"
+            table="CATISSUE_COLLECTION_SPECIMEN_REQUIREMENT"
             lazy="false"
-            inverse="true"
+            inverse="false"
             cascade="save-update"
             sort="unsorted"
         >
 
               <key
-                  column="COLLECTION_ID"
+                  column="COLLECTION_PROTOCOL_EVENT_ID"
               />
 
-              <one-to-many
-                  class="edu.wustl.catissuecore.dataModel.domain.Box"
+              <many-to-many
+                  class="edu.wustl.catissuecore.domain.SpecimenRequirement"
+                  column="SPECIMEN_REQUIREMENT_ID"
+                  outer-join="auto"
               />
+
         </set>
 
         <many-to-one
-            name="unit"
-            class="edu.wustl.catissuecore.dataModel.domain.Unit"
+            name="collectionProtocol"
+            class="edu.wustl.catissuecore.domain.CollectionProtocol"
             cascade="none"
             outer-join="auto"
             update="true"
             insert="true"
-            column="UNIT_ID"
+            column="COLLECTION_PROTOCOL_ID"
         />
 
         <!--
             To add non XDoclet property mappings, create a file named
-                hibernate-properties-Collection.xml
+                hibernate-properties-CollectionProtocolEvent.xml
             containing the additional properties and place it in your merge dir.
         -->
 

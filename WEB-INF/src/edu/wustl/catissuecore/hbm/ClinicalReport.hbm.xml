@@ -6,14 +6,14 @@
 
 <hibernate-mapping>
     <class
-        name="edu.wustl.catissuecore.dataModel.domain.Role"
-        table="CATISSUE_ROLE"
+        name="edu.wustl.catissuecore.domain.ClinicalReport"
+        table="CATISSUE_CLINICAL_REPORT"
         dynamic-update="false"
         dynamic-insert="false"
     >
 
         <id
-            name="identifier"
+            name="systemIdentifier"
             column="IDENTIFIER"
             type="long"
             length="30"
@@ -24,19 +24,27 @@
         </id>
 
         <property
-            name="name"
+            name="surgicalPathologyNumber"
             type="string"
             update="true"
             insert="true"
-            column="NAME"
+            column="SURGICAL_PATHOLOGICAL_NUMBER"
             length="50"
-            not-null="true"
-            unique="true"
+        />
+
+        <many-to-one
+            name="participantMedicalIdentifier"
+            class="edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="PARTICIPENT_MEDICAL_IDENTIFIER_ID"
         />
 
         <!--
             To add non XDoclet property mappings, create a file named
-                hibernate-properties-Role.xml
+                hibernate-properties-ClinicalReport.xml
             containing the additional properties and place it in your merge dir.
         -->
 

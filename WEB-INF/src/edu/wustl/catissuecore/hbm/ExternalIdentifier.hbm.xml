@@ -6,8 +6,8 @@
 
 <hibernate-mapping>
     <class
-        name="edu.wustl.catissuecore.domain.Department"
-        table="CATISSUE_DEPARTMENT"
+        name="edu.wustl.catissuecore.domain.ExternalIdentifier"
+        table="CATISSUE_EXTERNAL_IDENTIFIER"
         dynamic-update="false"
         dynamic-insert="false"
     >
@@ -30,13 +30,30 @@
             insert="true"
             column="NAME"
             length="50"
-            not-null="true"
-            unique="true"
+        />
+
+        <property
+            name="value"
+            type="string"
+            update="true"
+            insert="true"
+            column="VALUE"
+            length="50"
+        />
+
+        <many-to-one
+            name="specimen"
+            class="edu.wustl.catissuecore.domain.Specimen"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="SPECIMEN_ID"
         />
 
         <!--
             To add non XDoclet property mappings, create a file named
-                hibernate-properties-Department.xml
+                hibernate-properties-ExternalIdentifier.xml
             containing the additional properties and place it in your merge dir.
         -->
 

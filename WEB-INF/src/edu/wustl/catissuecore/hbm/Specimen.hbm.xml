@@ -6,14 +6,14 @@
 
 <hibernate-mapping>
     <class
-        name="edu.wustl.catissuecore.dataModel.domain.Specimen"
+        name="edu.wustl.catissuecore.domain.Specimen"
         table="CATISSUE_SPECIMEN"
         dynamic-update="false"
         dynamic-insert="false"
     >
 
         <id
-            name="identifier"
+            name="systemIdentifier"
             column="IDENTIFIER"
             type="long"
             length="30"
@@ -24,145 +24,12 @@
         </id>
 
         <property
-            name="tissueSite"
-            type="string"
-            update="true"
-            insert="true"
-            column="TISSUE_SITE"
-            length="50"
-        />
-
-        <property
-            name="tissueSide"
-            type="string"
-            update="true"
-            insert="true"
-            column="TISSUE_SIDE"
-            length="50"
-        />
-
-        <property
             name="type"
             type="string"
             update="true"
             insert="true"
-            column="SPECIMEN_TYPE"
+            column="TYPE"
             length="50"
-        />
-
-        <property
-            name="processIdentifier"
-            type="string"
-            update="true"
-            insert="true"
-            column="PROCESS_IDENTIFIER"
-            length="50"
-        />
-
-        <property
-            name="quantity"
-            type="double"
-            update="true"
-            insert="true"
-            column="RECEIVED_QUANTITY"
-            length="50"
-        />
-
-        <property
-            name="quantityUnit"
-            type="double"
-            update="true"
-            insert="true"
-            column="QUANTITY_UNIT"
-            length="50"
-        />
-
-        <property
-            name="receivedQuality"
-            type="string"
-            update="true"
-            insert="true"
-            column="RECEIVED_QUALITY"
-            length="50"
-        />
-
-        <property
-            name="reviewed"
-            type="boolean"
-            update="true"
-            insert="true"
-            column="REVIEWED"
-        />
-
-        <property
-            name="reviewedDate"
-            type="date"
-            update="true"
-            insert="true"
-            column="REVIEWED_DATE"
-        />
-
-        <many-to-one
-            name="reviewedBy"
-            class="edu.wustl.catissuecore.dataModel.domain.User"
-            cascade="none"
-            outer-join="auto"
-            update="true"
-            insert="true"
-            column="REVIEWED_BY"
-        />
-
-        <property
-            name="neoplasticCellularityPercentage"
-            type="double"
-            update="true"
-            insert="true"
-            column="NEOPLASTIC_CELLULARITY_PERCENT"
-            length="50"
-        />
-
-        <property
-            name="necrosisPercentage"
-            type="double"
-            update="true"
-            insert="true"
-            column="NECROSIS_PERCENT"
-            length="50"
-        />
-
-        <property
-            name="lymphocyticPercentage"
-            type="double"
-            update="true"
-            insert="true"
-            column="LYMPHOCYTIC_PERCENT"
-            length="50"
-        />
-
-        <property
-            name="totalCellularityPercentage"
-            type="double"
-            update="true"
-            insert="true"
-            column="TOTAL_CELLULARITY_PERCENT"
-            length="50"
-        />
-
-        <property
-            name="histologicalQuality"
-            type="string"
-            update="true"
-            insert="true"
-            column="HISTOLOGICAL_QUALITY"
-            length="50"
-        />
-
-        <property
-            name="sampleDerived"
-            type="boolean"
-            update="true"
-            insert="true"
-            column="SAMPLE_DERIVED"
         />
 
         <property
@@ -171,15 +38,32 @@
             update="true"
             insert="true"
             column="AVAILABLE"
+        />
+
+        <property
+            name="positionDimensionOne"
+            type="int"
+            update="true"
+            insert="true"
+            column="POSITION_DIMENSION_ONE"
+            length="30"
+        />
+
+        <property
+            name="positionDimensionTwo"
+            type="int"
+            update="true"
+            insert="true"
+            column="POSITION_DIMENSION_TWO"
             length="50"
         />
 
         <property
-            name="availableQuantity"
-            type="double"
+            name="barcode"
+            type="string"
             update="true"
             insert="true"
-            column="AVAILABLE_QUANTITY"
+            column="BARCODE"
             length="50"
         />
 
@@ -192,38 +76,49 @@
             length="200"
         />
 
-        <many-to-one
-            name="activityStatus"
-            class="edu.wustl.catissuecore.dataModel.domain.ActivityStatus"
-            cascade="none"
-            outer-join="auto"
-            update="true"
-            insert="true"
-            column="ACTIVITY_STATUS_ID"
-        />
-
         <property
-            name="barcode"
+            name="activityStatus"
             type="string"
             update="true"
             insert="true"
-            column="BARCODE"
+            column="ACTIVITY_STATUS"
             length="50"
         />
 
         <many-to-one
-            name="accession"
-            class="edu.wustl.catissuecore.dataModel.domain.Accession"
+            name="parentSpecimen"
+            class="edu.wustl.catissuecore.domain.Specimen"
             cascade="none"
             outer-join="auto"
             update="true"
             insert="true"
-            column="ACCESSION_ID"
+            column="PARENT_SPECIMEN_ID"
         />
 
         <set
-            name="segmentCollection"
-            table="CATISSUE_SEGMENT"
+            name="biohazardCollection"
+            table="CATISSUE_SPECIMEN_BIOHAZARD_RELATIONSHIP"
+            lazy="false"
+            inverse="false"
+            cascade="save-update"
+            sort="unsorted"
+        >
+
+              <key
+                  column="SPECIMEN_ID"
+              />
+
+              <many-to-many
+                  class="edu.wustl.catissuecore.domain.Biohazard"
+                  column="BIOHAZARD_ID"
+                  outer-join="auto"
+              />
+
+        </set>
+
+        <set
+            name="specimenEventCollection"
+            table="CATISSUE_SPECIMEN_EVENT"
             lazy="false"
             inverse="true"
             cascade="save-update"
@@ -235,13 +130,41 @@
               />
 
               <one-to-many
-                  class="edu.wustl.catissuecore.dataModel.domain.Segment"
+                  class="edu.wustl.catissuecore.domain.SpecimenEventParameters"
               />
         </set>
 
         <set
-            name="sampleCollection"
-            table="CATISSUE_SAMPLE"
+            name="childrenSpecimen"
+            table="CATISSUE_SPECIMEN"
+            lazy="false"
+            inverse="true"
+            cascade="save-update"
+            sort="unsorted"
+        >
+
+              <key
+                  column="PARENT_SPECIMEN_ID"
+              />
+
+              <one-to-many
+                  class="edu.wustl.catissuecore.domain.Specimen"
+              />
+        </set>
+
+        <many-to-one
+            name="storageContainer"
+            class="edu.wustl.catissuecore.domain.StorageContainer"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="STORAGE_CONTAINER_IDENTIFIER"
+        />
+
+        <set
+            name="externalIdentifierCollection"
+            table="CATISSUE_EXTERNAL_IDENTIFIER"
             lazy="false"
             inverse="true"
             cascade="save-update"
@@ -253,15 +176,157 @@
               />
 
               <one-to-many
-                  class="edu.wustl.catissuecore.dataModel.domain.Sample"
+                  class="edu.wustl.catissuecore.domain.ExternalIdentifier"
               />
         </set>
+
+        <many-to-one
+            name="specimenCollectionGroup"
+            class="edu.wustl.catissuecore.domain.SpecimenCollectionGroup"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="SPECIMEN_COLLECTION_GROUP_ID"
+        />
+
+        <many-to-one
+            name="specimenCharacteristics"
+            class="edu.wustl.catissuecore.domain.SpecimenCharacteristics"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="SPECIMEN_CHARACTERISTICS_ID"
+        />
 
         <!--
             To add non XDoclet property mappings, create a file named
                 hibernate-properties-Specimen.xml
             containing the additional properties and place it in your merge dir.
         -->
+
+        <joined-subclass
+            name="edu.wustl.catissuecore.domain.FluidSpecimen"
+            table="CATISSUE_FLUID_SPECIMEN"
+            dynamic-update="false"
+            dynamic-insert="false"
+        >
+        <key
+            column="IDENTIFIER"
+        />
+        <property
+            name="quantityInMiliLiter"
+            type="double"
+            update="true"
+            insert="true"
+            column="QUANTITY_IN_MILILITER"
+            length="50"
+        />
+
+        <property
+            name="availableQuantityInMiliLiter"
+            type="double"
+            update="true"
+            insert="true"
+            column="AVAILABLE_QUANTITY_IN_MILILITER"
+            length="50"
+        />
+
+        </joined-subclass>
+        <joined-subclass
+            name="edu.wustl.catissuecore.domain.CellSpecimen"
+            table="CATISSUE_CELL_SPECIMEN"
+            dynamic-update="false"
+            dynamic-insert="false"
+        >
+        <key
+            column="IDENTIFIER"
+        />
+        <property
+            name="quantityInCellCount"
+            type="int"
+            update="true"
+            insert="true"
+            column="QUANTITY_IN_CELL_COUNT"
+            length="50"
+        />
+
+        <property
+            name="availableQuantityInCellCount"
+            type="int"
+            update="true"
+            insert="true"
+            column="AVAILABLE_QUANTITY_IN_CELL_COUNT"
+            length="50"
+        />
+
+        </joined-subclass>
+        <joined-subclass
+            name="edu.wustl.catissuecore.domain.MolecularSpecimen"
+            table="CATISSUE_MOLECULAR_SPECIMEN"
+            dynamic-update="false"
+            dynamic-insert="false"
+        >
+        <key
+            column="IDENTIFIER"
+        />
+        <property
+            name="concentrationInMicrogramPerMicroLiter"
+            type="double"
+            update="true"
+            insert="true"
+            column="CONCENTRATION_IN_MICROGRAM_PER_MICROLITER"
+            length="50"
+        />
+
+        <property
+            name="quantityInMicroGram"
+            type="double"
+            update="true"
+            insert="true"
+            column="QUANTITY_IN_MICROGRAM"
+            length="50"
+        />
+
+        <property
+            name="availableQuantityInMicroGram"
+            type="double"
+            update="true"
+            insert="true"
+            column="AVAILABLE_QUANTITY_IN_MICROGRAM"
+            length="50"
+        />
+
+        </joined-subclass>
+        <joined-subclass
+            name="edu.wustl.catissuecore.domain.TissueSpecimen"
+            table="CATISSUE_TISSUE_SPECIMEN"
+            dynamic-update="false"
+            dynamic-insert="false"
+        >
+        <key
+            column="IDENTIFIER"
+        />
+        <property
+            name="quantityInGram"
+            type="double"
+            update="true"
+            insert="true"
+            column="QUANTITY_IN_GRAM"
+            length="50"
+        />
+
+        <property
+            name="availableQuantityInGram"
+            type="double"
+            update="true"
+            insert="true"
+            column="AVAILABLE_QUANTITY_IN_GRAM"
+            length="50"
+        />
+
+        </joined-subclass>
 
     </class>
 

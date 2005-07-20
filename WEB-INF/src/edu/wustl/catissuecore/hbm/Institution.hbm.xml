@@ -6,14 +6,14 @@
 
 <hibernate-mapping>
     <class
-        name="edu.wustl.catissuecore.dataModel.domain.Capacity"
-        table="CATISSUE_CAPACITY"
+        name="edu.wustl.catissuecore.domain.Institution"
+        table="CATISSUE_INSTITUTION"
         dynamic-update="false"
         dynamic-insert="false"
     >
 
         <id
-            name="identifier"
+            name="systemIdentifier"
             column="IDENTIFIER"
             type="long"
             length="30"
@@ -24,35 +24,19 @@
         </id>
 
         <property
-            name="dimensionOne"
-            type="int"
+            name="name"
+            type="string"
             update="true"
             insert="true"
-            column="DIMENSION_ONE"
+            column="NAME"
             length="50"
-        />
-
-        <property
-            name="dimensionTwo"
-            type="int"
-            update="true"
-            insert="true"
-            column="DIMENSION_TWO"
-            length="50"
-        />
-
-        <property
-            name="dimensionThree"
-            type="int"
-            update="true"
-            insert="true"
-            column="DIMENSION_THREE"
-            length="50"
+            not-null="true"
+            unique="true"
         />
 
         <!--
             To add non XDoclet property mappings, create a file named
-                hibernate-properties-Capacity.xml
+                hibernate-properties-Institution.xml
             containing the additional properties and place it in your merge dir.
         -->
 

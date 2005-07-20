@@ -6,14 +6,14 @@
 
 <hibernate-mapping>
     <class
-        name="edu.wustl.catissuecore.dataModel.domain.Site"
+        name="edu.wustl.catissuecore.domain.Site"
         table="CATISSUE_SITE"
         dynamic-update="false"
         dynamic-insert="false"
     >
 
         <id
-            name="identifier"
+            name="systemIdentifier"
             column="IDENTIFIER"
             type="long"
             length="30"
@@ -42,61 +42,43 @@
         />
 
         <property
-            name="department"
+            name="emailAddress"
             type="string"
             update="true"
             insert="true"
-            column="DEPARTMENT"
-            length="50"
+            column="EMAIL_ADDRESS"
+            length="150"
+            not-null="true"
+            unique="true"
         />
 
         <property
-            name="shippingAddress"
+            name="activityStatus"
             type="string"
             update="true"
             insert="true"
-            column="SHIPPING_ADDRESS"
+            column="ACTIVITY_STATUS"
             length="50"
         />
 
         <many-to-one
             name="coordinator"
-            class="edu.wustl.catissuecore.dataModel.domain.User"
+            class="edu.wustl.catissuecore.domain.User"
             cascade="none"
             outer-join="auto"
             update="true"
             insert="true"
-            column="COORDINATOR"
-        />
-
-        <many-to-one
-            name="activityStatus"
-            class="edu.wustl.catissuecore.dataModel.domain.ActivityStatus"
-            cascade="none"
-            outer-join="auto"
-            update="true"
-            insert="true"
-            column="ACTIVITY_STATUS_ID"
+            column="USER_ID"
         />
 
         <many-to-one
             name="address"
-            class="edu.wustl.catissuecore.dataModel.domain.Address"
+            class="edu.wustl.catissuecore.domain.Address"
             cascade="none"
             outer-join="auto"
             update="true"
             insert="true"
             column="ADDRESS_ID"
-        />
-
-        <many-to-one
-            name="institute"
-            class="edu.wustl.catissuecore.dataModel.domain.Institute"
-            cascade="none"
-            outer-join="auto"
-            update="true"
-            insert="true"
-            column="INSTITUTE_ID"
         />
 
         <!--

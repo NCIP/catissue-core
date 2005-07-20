@@ -1,0 +1,243 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 2.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+    <class
+        name="edu.wustl.catissuecore.domain.SpecimenProtocol"
+        table="CATISSUE_SPECIMEN_PROTOCOL"
+        dynamic-update="false"
+        dynamic-insert="false"
+    >
+
+        <id
+            name="systemIdentifier"
+            column="IDENTIFIER"
+            type="long"
+            length="30"
+            unsaved-value="null"
+        >
+            <generator class="native">
+            </generator>
+        </id>
+
+        <many-to-one
+            name="principalInvestigator"
+            class="edu.wustl.catissuecore.domain.User"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="PRINCIPAL_INVESTIGATOR_ID"
+        />
+
+        <property
+            name="title"
+            type="string"
+            update="true"
+            insert="true"
+            column="TITLE"
+            length="50"
+            not-null="true"
+            unique="true"
+        />
+
+        <property
+            name="shortTitle"
+            type="string"
+            update="true"
+            insert="true"
+            column="SHORT_TITLE"
+            length="50"
+        />
+
+        <property
+            name="irbIdentifier"
+            type="string"
+            update="true"
+            insert="true"
+            column="IRB_IDENTIFIER"
+            length="50"
+        />
+
+        <property
+            name="startDate"
+            type="date"
+            update="true"
+            insert="true"
+            column="START_DATE"
+            length="50"
+        />
+
+        <property
+            name="endDate"
+            type="date"
+            update="true"
+            insert="true"
+            column="END_DATE"
+            length="50"
+        />
+
+        <property
+            name="enrollment"
+            type="int"
+            update="true"
+            insert="true"
+            column="ENROLLMENT"
+            length="50"
+        />
+
+        <property
+            name="descriptionURL"
+            type="string"
+            update="true"
+            insert="true"
+            column="DESCRIPTION_URL"
+            length="200"
+        />
+
+        <property
+            name="activityStatus"
+            type="string"
+            update="true"
+            insert="true"
+            column="ACTIVITY_STATUS"
+            length="50"
+        />
+
+        <!--
+            To add non XDoclet property mappings, create a file named
+                hibernate-properties-SpecimenProtocol.xml
+            containing the additional properties and place it in your merge dir.
+        -->
+
+        <joined-subclass
+            name="edu.wustl.catissuecore.domain.CollectionProtocol"
+            table="CATISSUE_COLLECTION_PROTOCOL"
+            dynamic-update="false"
+            dynamic-insert="false"
+        >
+        <key
+            column="IDENTIFIER"
+        />
+
+        <set
+            name="distributionProtocolCollection"
+            table="CATISSUE_COLLECTION_DISTRIBUTION_RELATION"
+            lazy="false"
+            inverse="false"
+            cascade="save-update"
+            sort="unsorted"
+        >
+
+              <key
+                  column="COLLECTION_PROTOCOL_ID"
+              />
+
+              <many-to-many
+                  class="edu.wustl.catissuecore.domain.DistributionProtocol"
+                  column="DISTRIBUTION_PROTOCOL_ID"
+                  outer-join="auto"
+              />
+
+        </set>
+
+        <set
+            name="userCollection"
+            table="CATISSUE_COLLECTION_COORDINATORS"
+            lazy="false"
+            inverse="false"
+            cascade="save-update"
+            sort="unsorted"
+        >
+
+              <key
+                  column="COLLECTION_PROTOCOL_ID"
+              />
+
+              <many-to-many
+                  class="edu.wustl.catissuecore.domain.User"
+                  column="USER_ID"
+                  outer-join="auto"
+              />
+
+        </set>
+
+        <set
+            name="collectionProtocolEventCollection"
+            table="CATISSUE_COLLECTION_PROTOCOL_EVENT"
+            lazy="false"
+            inverse="true"
+            cascade="save-update"
+            sort="unsorted"
+        >
+
+              <key
+                  column="COLLECTION_PROTOCOL_ID"
+              />
+
+              <one-to-many
+                  class="edu.wustl.catissuecore.domain.CollectionProtocolEvent"
+              />
+        </set>
+
+        </joined-subclass>
+        <joined-subclass
+            name="edu.wustl.catissuecore.domain.DistributionProtocol"
+            table="CATISSUE_DISTRIBUTION_PROTOCOL"
+            dynamic-update="false"
+            dynamic-insert="false"
+        >
+        <key
+            column="IDENTIFIER"
+        />
+
+        <set
+            name="specimenRequirementCollection"
+            table="CATISSUE_DISTRIBUTION_SPECIMEN_REQUIREMENT"
+            lazy="false"
+            inverse="false"
+            cascade="save-update"
+            sort="unsorted"
+        >
+
+              <key
+                  column="DISTRIBUTION_PROTOCOL_ID"
+              />
+
+              <many-to-many
+                  class="edu.wustl.catissuecore.domain.SpecimenRequirement"
+                  column="SPECIMEN_REQUIREMENT_ID"
+                  outer-join="auto"
+              />
+
+        </set>
+
+        <set
+            name="collectionProtocolCollection"
+            table="CATISSUE_COLLECTION_DISTRIBUTION_RELATION"
+            lazy="false"
+            inverse="true"
+            cascade="save-update"
+            sort="unsorted"
+        >
+
+              <key
+                  column="DISTRIBUTION_PROTOCOL_ID"
+              />
+
+              <many-to-many
+                  class="edu.wustl.catissuecore.domain.CollectionProtocol"
+                  column="COLLECTION_PROTOCOL_ID"
+                  outer-join="auto"
+              />
+
+        </set>
+
+        </joined-subclass>
+
+    </class>
+
+</hibernate-mapping>

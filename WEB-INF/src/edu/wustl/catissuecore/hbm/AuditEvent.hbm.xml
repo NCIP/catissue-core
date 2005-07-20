@@ -6,16 +6,16 @@
 
 <hibernate-mapping>
     <class
-        name="edu.wustl.catissuecore.dataModel.domain.Box"
-        table="CATISSUE_BOX"
+        name="edu.wustl.catissuecore.domain.AuditEvent"
+        table="CATISSUE_AUDIT_EVENT"
         dynamic-update="false"
         dynamic-insert="false"
     >
 
         <id
-            name="identifier"
+            name="systemIdentifier"
             column="IDENTIFIER"
-            type="long"
+            type="int"
             length="30"
             unsaved-value="null"
         >
@@ -24,56 +24,62 @@
         </id>
 
         <property
-            name="type"
+            name="ipAddress"
             type="string"
             update="true"
             insert="true"
-            column="TYPE"
-            length="50"
+            column="IP_ADDRESS"
+            length="20"
+        />
+
+        <set
+            name="auditEventLogCollection"
+            table="CATISSUE_AUDIT_EVENT_LOG"
+            lazy="false"
+            inverse="false"
+            cascade="none"
+            sort="unsorted"
+        >
+
+              <key
+                  column="AUDIT_EVENT_ID"
+              />
+
+              <one-to-many
+                  class="edu.wustl.catissuecore.domain.AuditEventLog"
+              />
+        </set>
+
+        <property
+            name="timestamp"
+            type="date"
+            update="true"
+            insert="true"
+            column="EVENT_TIMESTAMP"
         />
 
         <many-to-one
-            name="activityStatus"
-            class="edu.wustl.catissuecore.dataModel.domain.ActivityStatus"
+            name="user"
+            class="edu.wustl.catissuecore.domain.User"
             cascade="none"
             outer-join="auto"
             update="true"
             insert="true"
-            column="ACTIVITY_STATUS_ID"
+            column="USER_ID"
         />
 
         <property
-            name="barCode"
+            name="comments"
             type="string"
             update="true"
             insert="true"
-            column="BAR_CODE"
-            length="100"
-        />
-
-        <many-to-one
-            name="capacity"
-            class="edu.wustl.catissuecore.dataModel.domain.Capacity"
-            cascade="none"
-            outer-join="auto"
-            update="true"
-            insert="true"
-            column="CAPACITY_ID"
-        />
-
-        <many-to-one
-            name="collection"
-            class="edu.wustl.catissuecore.dataModel.domain.Collection"
-            cascade="none"
-            outer-join="auto"
-            update="true"
-            insert="true"
-            column="COLLECTION_ID"
+            column="COMMENTS"
+            length="500"
         />
 
         <!--
             To add non XDoclet property mappings, create a file named
-                hibernate-properties-Box.xml
+                hibernate-properties-AuditEvent.xml
             containing the additional properties and place it in your merge dir.
         -->
 

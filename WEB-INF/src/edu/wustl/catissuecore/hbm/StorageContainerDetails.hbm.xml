@@ -6,14 +6,14 @@
 
 <hibernate-mapping>
     <class
-        name="edu.wustl.catissuecore.dataModel.domain.ActivityStatus"
-        table="CATISSUE_ACTIVITY_STATUS"
+        name="edu.wustl.catissuecore.domain.StorageContainerDetails"
+        table="CATISSUE_STORAGE_CONTAINER_DETAILS"
         dynamic-update="false"
         dynamic-insert="false"
     >
 
         <id
-            name="identifier"
+            name="systemIdentifier"
             column="IDENTIFIER"
             type="long"
             length="30"
@@ -24,19 +24,26 @@
         </id>
 
         <property
-            name="status"
+            name="key"
             type="string"
             update="true"
             insert="true"
-            column="STATUS"
+            column="KEY"
             length="50"
-            not-null="true"
-            unique="true"
+        />
+
+        <property
+            name="value"
+            type="string"
+            update="true"
+            insert="true"
+            column="VALUE"
+            length="50"
         />
 
         <!--
             To add non XDoclet property mappings, create a file named
-                hibernate-properties-ActivityStatus.xml
+                hibernate-properties-StorageContainerDetails.xml
             containing the additional properties and place it in your merge dir.
         -->
 

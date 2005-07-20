@@ -6,14 +6,14 @@
 
 <hibernate-mapping>
     <class
-        name="edu.wustl.catissuecore.dataModel.domain.InfectionAgent"
-        table="CATISSUE_INFECTION_AGENT"
+        name="edu.wustl.catissuecore.domain.CancerResearchGroup"
+        table="CATISSUE_CANCER_RESEARCH_GROUP"
         dynamic-update="false"
         dynamic-insert="false"
     >
 
         <id
-            name="identifier"
+            name="systemIdentifier"
             column="IDENTIFIER"
             type="long"
             length="30"
@@ -30,32 +30,13 @@
             insert="true"
             column="NAME"
             length="50"
+            not-null="true"
+            unique="true"
         />
-
-        <set
-            name="accessionCollection"
-            table="CATISSUE_ACCESSION_INFECTION"
-            lazy="false"
-            inverse="true"
-            cascade="save-update"
-            sort="unsorted"
-        >
-
-              <key
-                  column="INFECTION_ID"
-              />
-
-              <many-to-many
-                  class="edu.wustl.catissuecore.dataModel.domain.Accession"
-                  column="ACCESSION_ID"
-                  outer-join="auto"
-              />
-
-        </set>
 
         <!--
             To add non XDoclet property mappings, create a file named
-                hibernate-properties-InfectionAgent.xml
+                hibernate-properties-CancerResearchGroup.xml
             containing the additional properties and place it in your merge dir.
         -->
 

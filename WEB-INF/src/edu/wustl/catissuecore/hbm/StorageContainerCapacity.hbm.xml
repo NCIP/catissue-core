@@ -6,14 +6,14 @@
 
 <hibernate-mapping>
     <class
-        name="edu.wustl.catissuecore.dataModel.domain.StudyRequirement"
-        table="CATISSUE_STUDY_REQUIREMENT"
+        name="edu.wustl.catissuecore.domain.StorageContainerCapacity"
+        table="CATISSUE_STORAGE_CONTAINER_CAPACITY"
         dynamic-update="false"
         dynamic-insert="false"
     >
 
         <id
-            name="identifier"
+            name="systemIdentifier"
             column="IDENTIFIER"
             type="long"
             length="30"
@@ -24,63 +24,44 @@
         </id>
 
         <property
-            name="bioSpecimenType"
+            name="oneDimensionCapacity"
+            type="int"
+            update="true"
+            insert="true"
+            column="ONE_DIMENSION_CAPACITY"
+            length="30"
+        />
+
+        <property
+            name="twoDimensionCapacity"
+            type="int"
+            update="true"
+            insert="true"
+            column="TWO_DIMENSION_CAPACITY"
+            length="30"
+        />
+
+        <property
+            name="oneDimensionLabel"
             type="string"
             update="true"
             insert="true"
-            column="TYPE"
+            column="ONE_DIMENSION_LABEL"
             length="50"
         />
 
         <property
-            name="bioSpecimenSubType"
+            name="twoDimensionLabel"
             type="string"
             update="true"
             insert="true"
-            column="BIOSPECIMEN_SUB_TYPE"
+            column="TWO_DIMENSION_LABEL"
             length="50"
-        />
-
-        <property
-            name="quantity"
-            type="double"
-            update="true"
-            insert="true"
-            column="QUANTITY"
-            length="50"
-        />
-
-        <property
-            name="quantityUnit"
-            type="string"
-            update="true"
-            insert="true"
-            column="QUANTITY_UNIT"
-            length="50"
-        />
-
-        <property
-            name="diseaseStatus"
-            type="string"
-            update="true"
-            insert="true"
-            column="DISEASE_STATUS"
-            length="50"
-        />
-
-        <many-to-one
-            name="study"
-            class="edu.wustl.catissuecore.dataModel.domain.Study"
-            cascade="none"
-            outer-join="auto"
-            update="true"
-            insert="true"
-            column="STUDY_IDENTIFIER"
         />
 
         <!--
             To add non XDoclet property mappings, create a file named
-                hibernate-properties-StudyRequirement.xml
+                hibernate-properties-StorageContainerCapacity.xml
             containing the additional properties and place it in your merge dir.
         -->
 

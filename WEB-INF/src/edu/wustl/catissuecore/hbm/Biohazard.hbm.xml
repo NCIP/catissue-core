@@ -6,15 +6,15 @@
 
 <hibernate-mapping>
     <class
-        name="edu.wustl.catissuecore.domain.ReportedProblem"
-        table="CATISSUE_REPORTED_PROBLEM"
+        name="edu.wustl.catissuecore.domain.Biohazard"
+        table="CATISSUE_BIOHAZARD"
         dynamic-update="false"
         dynamic-insert="false"
     >
 
         <id
             name="systemIdentifier"
-            column="SYSTEM_IDENTIFIER"
+            column="IDENTIFIER"
             type="long"
             length="30"
             unsaved-value="null"
@@ -24,49 +24,12 @@
         </id>
 
         <property
-            name="from"
+            name="name"
             type="string"
             update="true"
             insert="true"
-            column="REPORTERS_EMAIL_ID"
+            column="NAME"
             length="50"
-            not-null="true"
-        />
-
-        <property
-            name="messageBody"
-            type="string"
-            update="true"
-            insert="true"
-            column="MESSAGE_BODY"
-            length="200"
-            not-null="true"
-        />
-
-        <property
-            name="subject"
-            type="string"
-            update="true"
-            insert="true"
-            column="SUBJECT"
-            length="100"
-        />
-
-        <property
-            name="reportedDate"
-            type="date"
-            update="true"
-            insert="true"
-            column="REPORTED_DATE"
-        />
-
-        <property
-            name="activityStatus"
-            type="string"
-            update="true"
-            insert="true"
-            column="ACTIVITY_STATUS"
-            length="100"
         />
 
         <property
@@ -75,12 +38,42 @@
             update="true"
             insert="true"
             column="COMMENTS"
-            length="2000"
+            length="500"
         />
+
+        <property
+            name="type"
+            type="string"
+            update="true"
+            insert="true"
+            column="TYPE"
+            length="50"
+        />
+
+        <set
+            name="specimenCollection"
+            table="CATISSUE_SPECIMEN_BIOHAZARD_RELATIONSHIP"
+            lazy="false"
+            inverse="true"
+            cascade="save-update"
+            sort="unsorted"
+        >
+
+              <key
+                  column="BIOHAZARD_ID"
+              />
+
+              <many-to-many
+                  class="edu.wustl.catissuecore.domain.Specimen"
+                  column="SPECIMEN_ID"
+                  outer-join="auto"
+              />
+
+        </set>
 
         <!--
             To add non XDoclet property mappings, create a file named
-                hibernate-properties-ReportedProblem.xml
+                hibernate-properties-Biohazard.xml
             containing the additional properties and place it in your merge dir.
         -->
 

@@ -6,14 +6,14 @@
 
 <hibernate-mapping>
     <class
-        name="edu.wustl.catissuecore.dataModel.domain.Institute"
-        table="CATISSUE_INSTITUTE"
+        name="edu.wustl.catissuecore.domain.SpecimenCharacteristics"
+        table="CATISSUE_SPECIMEN_CHARACTERISTICS"
         dynamic-update="false"
         dynamic-insert="false"
     >
 
         <id
-            name="identifier"
+            name="systemIdentifier"
             column="IDENTIFIER"
             type="long"
             length="30"
@@ -24,37 +24,35 @@
         </id>
 
         <property
-            name="name"
+            name="tissueSite"
             type="string"
             update="true"
             insert="true"
-            column="NAME"
+            column="TISSUE_SITE"
             length="50"
-            not-null="true"
         />
 
         <property
-            name="type"
+            name="tissueSide"
             type="string"
             update="true"
             insert="true"
-            column="TYPE"
+            column="TISSUE_SIDE"
             length="50"
         />
 
-        <many-to-one
-            name="address"
-            class="edu.wustl.catissuecore.dataModel.domain.Address"
-            cascade="none"
-            outer-join="auto"
+        <property
+            name="pathologicalStatus"
+            type="string"
             update="true"
             insert="true"
-            column="ADDRESS_ID"
+            column="PATHOLOGICAL_STATUS"
+            length="50"
         />
 
         <!--
             To add non XDoclet property mappings, create a file named
-                hibernate-properties-Institute.xml
+                hibernate-properties-SpecimenCharacteristics.xml
             containing the additional properties and place it in your merge dir.
         -->
 

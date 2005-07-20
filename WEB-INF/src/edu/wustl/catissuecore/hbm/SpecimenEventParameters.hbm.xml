@@ -1,0 +1,606 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 2.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+    <class
+        name="edu.wustl.catissuecore.domain.SpecimenEventParameters"
+        table="CATISSUE_SPECIMEN_EVENT_PARAMETERS"
+        dynamic-update="false"
+        dynamic-insert="false"
+    >
+
+        <id
+            name="systemIdentifier"
+            column="IDENTIFIER"
+            type="int"
+            length="30"
+            unsaved-value="null"
+        >
+            <generator class="native">
+            </generator>
+        </id>
+
+        <many-to-one
+            name="specimen"
+            class="edu.wustl.catissuecore.domain.Specimen"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="SPECIMEN_ID"
+        />
+
+        <property
+            name="timestamp"
+            type="date"
+            update="true"
+            insert="true"
+            column="EVENT_TIMESTAMP"
+        />
+
+        <many-to-one
+            name="user"
+            class="edu.wustl.catissuecore.domain.User"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="USER_ID"
+        />
+
+        <property
+            name="comments"
+            type="string"
+            update="true"
+            insert="true"
+            column="COMMENTS"
+            length="500"
+        />
+
+        <!--
+            To add non XDoclet property mappings, create a file named
+                hibernate-properties-SpecimenEventParameters.xml
+            containing the additional properties and place it in your merge dir.
+        -->
+
+        <joined-subclass
+            name="edu.wustl.catissuecore.domain.FixedEventParameters"
+            table="CATISSUE_FIXED_EVENT_PARAMETERS"
+            dynamic-update="false"
+            dynamic-insert="false"
+        >
+        <key
+            column="IDENTIFIER"
+        />
+        <property
+            name="fixationType"
+            type="string"
+            update="true"
+            insert="true"
+            column="FIXATION_TYPE"
+            length="50"
+            not-null="true"
+        />
+
+        <property
+            name="durationInMinutes"
+            type="int"
+            update="true"
+            insert="true"
+            column="DURATION_IN_MINUTES"
+            length="30"
+        />
+
+        </joined-subclass>
+        <joined-subclass
+            name="edu.wustl.catissuecore.domain.Distribution"
+            table="CATISSUE_DISTRIBUTION"
+            dynamic-update="false"
+            dynamic-insert="false"
+        >
+        <key
+            column="IDENTIFIER"
+        />
+
+        <many-to-one
+            name="toSite"
+            class="edu.wustl.catissuecore.domain.Site"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="TO_SITE_ID"
+        />
+
+        <many-to-one
+            name="fromSite"
+            class="edu.wustl.catissuecore.domain.Site"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="FROM_SITE_ID"
+        />
+
+        <many-to-one
+            name="distributionProtocol"
+            class="edu.wustl.catissuecore.domain.DistributionProtocol"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="DISTRIBUTION_PROTOCOL_ID"
+        />
+
+        <set
+            name="distributedItemCollection"
+            table="CATISSUE_DISTRIBUTED_ITEM"
+            lazy="false"
+            inverse="true"
+            cascade="save-update"
+            sort="unsorted"
+        >
+
+              <key
+                  column="DISTRIBUTION_ID"
+              />
+
+              <one-to-many
+                  class="edu.wustl.catissuecore.domain.DistributedItem"
+              />
+        </set>
+
+        </joined-subclass>
+        <joined-subclass
+            name="edu.wustl.catissuecore.domain.FrozenEventParameters"
+            table="CATISSUE_FROZEN_EVENT_PARAMETERS"
+            dynamic-update="false"
+            dynamic-insert="false"
+        >
+        <key
+            column="IDENTIFIER"
+        />
+        <property
+            name="method"
+            type="string"
+            update="true"
+            insert="true"
+            column="METHOD"
+            length="50"
+        />
+
+        </joined-subclass>
+        <joined-subclass
+            name="edu.wustl.catissuecore.domain.CheckInCheckOutEventParameter"
+            table="CATISSUE_CHECKIN_CHECKOUT_EVENT_PARAMETER"
+            dynamic-update="false"
+            dynamic-insert="false"
+        >
+        <key
+            column="IDENTIFIER"
+        />
+        <property
+            name="storageStatus"
+            type="string"
+            update="true"
+            insert="true"
+            column="STORAGE_STATUS"
+            length="100"
+            not-null="true"
+        />
+
+        </joined-subclass>
+        <joined-subclass
+            name="edu.wustl.catissuecore.domain.ProcedureEventParameters"
+            table="CATISSUE_PROCEDURE_EVENT_PARAMETERS"
+            dynamic-update="false"
+            dynamic-insert="false"
+        >
+        <key
+            column="IDENTIFIER"
+        />
+        <property
+            name="url"
+            type="string"
+            update="true"
+            insert="true"
+            column="URL"
+            length="200"
+            not-null="true"
+        />
+
+        <property
+            name="name"
+            type="string"
+            update="true"
+            insert="true"
+            column="NAME"
+            length="50"
+            not-null="true"
+        />
+
+        </joined-subclass>
+        <joined-subclass
+            name="edu.wustl.catissuecore.domain.SpunEventParameters"
+            table="CATISSUE_SPUN_EVENT_PARAMETERS"
+            dynamic-update="false"
+            dynamic-insert="false"
+        >
+        <key
+            column="IDENTIFIER"
+        />
+        <property
+            name="GForce"
+            type="double"
+            update="true"
+            insert="true"
+            column="GFORCE"
+            length="30"
+        />
+
+        <property
+            name="durationInMinutes"
+            type="int"
+            update="true"
+            insert="true"
+            column="DURATION_IN_MINUTES"
+            length="30"
+        />
+
+        </joined-subclass>
+        <joined-subclass
+            name="edu.wustl.catissuecore.domain.TransferEventParameters"
+            table="CATISSUE_TRANSFER_EVENT_PARAMETER"
+            dynamic-update="false"
+            dynamic-insert="false"
+        >
+        <key
+            column="IDENTIFIER"
+        />
+        <property
+            name="fromPositionDimensionOne"
+            type="int"
+            update="true"
+            insert="true"
+            column="FROM_POSITION_DIMENSION_ONE"
+            length="30"
+        />
+
+        <property
+            name="fromPositionDimensionTwo"
+            type="int"
+            update="true"
+            insert="true"
+            column="FROM_POSITION_DIMENSION_TWO"
+            length="30"
+        />
+
+        <property
+            name="toPositionDimensionOne"
+            type="int"
+            update="true"
+            insert="true"
+            column="TO_POSITION_DIMENSION_ONE"
+            length="30"
+        />
+
+        <property
+            name="toPositionDimensionTwo"
+            type="int"
+            update="true"
+            insert="true"
+            column="TO_POSITION_DIMENSION_TWO"
+            length="30"
+        />
+
+        <many-to-one
+            name="toStorageContainer"
+            class="edu.wustl.catissuecore.domain.StorageContainer"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="TO_STORAGE_CONTAINER_ID"
+        />
+
+        <many-to-one
+            name="fromStorageContainer"
+            class="edu.wustl.catissuecore.domain.StorageContainer"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="FROM_STORAGE_CONTAINER_ID"
+        />
+
+        </joined-subclass>
+        <joined-subclass
+            name="edu.wustl.catissuecore.domain.CollectionEventParameters"
+            table="CATISSUE_COLLECTION_EVENT_PARAMETERS"
+            dynamic-update="false"
+            dynamic-insert="false"
+        >
+        <key
+            column="IDENTIFIER"
+        />
+        <property
+            name="procedure"
+            type="string"
+            update="true"
+            insert="true"
+            column="PROCEDURE"
+            length="50"
+        />
+
+        <property
+            name="container"
+            type="string"
+            update="true"
+            insert="true"
+            column="CONTAINER"
+            length="50"
+        />
+
+        </joined-subclass>
+        <joined-subclass
+            name="edu.wustl.catissuecore.domain.ReceivedEventParameters"
+            table="CATISSUE_RECEIVED_EVENT_PARAMETERS"
+            dynamic-update="false"
+            dynamic-insert="false"
+        >
+        <key
+            column="IDENTIFIER"
+        />
+        <property
+            name="receivedQuality"
+            type="string"
+            update="true"
+            insert="true"
+            column="RECEIVED_QUALITY"
+        />
+
+        </joined-subclass>
+        <joined-subclass
+            name="edu.wustl.catissuecore.domain.EmbeddedEventParameters"
+            table="CATISSUE_EMBEDDED_EVENT_PARAMETERS"
+            dynamic-update="false"
+            dynamic-insert="false"
+        >
+        <key
+            column="IDENTIFIER"
+        />
+        <property
+            name="embeddingMedium"
+            type="string"
+            update="true"
+            insert="true"
+            column="EMBEDDING_MEDIUM"
+            length="50"
+        />
+
+        </joined-subclass>
+        <joined-subclass
+            name="edu.wustl.catissuecore.domain.ThawEventParameters"
+            table="CATISSUE_THAW_EVENT_PARAMETERS"
+            dynamic-update="false"
+            dynamic-insert="false"
+        >
+        <key
+            column="IDENTIFIER"
+        />
+
+        </joined-subclass>
+        <joined-subclass
+            name="edu.wustl.catissuecore.domain.ReviewEventParameters"
+            table="CATISSUE_REVIEW_EVENT_PARAMETERS"
+            dynamic-update="false"
+            dynamic-insert="false"
+        >
+        <key
+            column="IDENTIFIER"
+        />
+
+        <joined-subclass
+            name="edu.wustl.catissuecore.domain.CellSpecimenReviewParameters"
+            table="CATISSUE_CELL_SPECIMEN_REVIEW_PARAMETERS"
+            dynamic-update="false"
+            dynamic-insert="false"
+        >
+        <key
+            column="IDENTIFIER"
+        />
+        <property
+            name="neoplasticCellularityPercentage"
+            type="double"
+            update="true"
+            insert="true"
+            column="NEOPLASTIC_CELLULARITY_PERCENTAGE"
+            length="30"
+        />
+
+        <property
+            name="viableCellPercentage"
+            type="double"
+            update="true"
+            insert="true"
+            column="VIABLE_CELL_PERCENTAGE"
+            length="30"
+        />
+
+        </joined-subclass>
+        <joined-subclass
+            name="edu.wustl.catissuecore.domain.TissueSpecimenReviewEventParameters"
+            table="CATISSUE_TISSUE_SPECIMEN_REVIEW_EVENT_PARAMETERS"
+            dynamic-update="false"
+            dynamic-insert="false"
+        >
+        <key
+            column="IDENTIFIER"
+        />
+        <property
+            name="neoplasticCellularityPercentage"
+            type="double"
+            update="true"
+            insert="true"
+            column="NEOPLASTIC_CELLULARITY_PERCENTAGE"
+            length="30"
+        />
+
+        <property
+            name="necrosisPercentage"
+            type="double"
+            update="true"
+            insert="true"
+            column="NECROSIS_PERCENTAGE"
+            length="30"
+        />
+
+        <property
+            name="lymphocyticPercentage"
+            type="double"
+            update="true"
+            insert="true"
+            column="LYMPHOCYTIC_PERCENTAGE"
+            length="30"
+        />
+
+        <property
+            name="totalCellularityPercentage"
+            type="double"
+            update="true"
+            insert="true"
+            column="TOTAL_CELLULARITY_PERCENTAGE"
+            length="30"
+        />
+
+        <property
+            name="histologicalQuality"
+            type="string"
+            update="true"
+            insert="true"
+            column="HISTOLOGICAL_QUALITY"
+            length="50"
+        />
+
+        </joined-subclass>
+        <joined-subclass
+            name="edu.wustl.catissuecore.domain.FluidSpecimenReviewEventParameters"
+            table="CATISSUE_FLUID_SPECIMEN_REVIEW_EVENT_PARAMETERS"
+            dynamic-update="false"
+            dynamic-insert="false"
+        >
+        <key
+            column="IDENTIFIER"
+        />
+        <property
+            name="cellCount"
+            type="double"
+            update="true"
+            insert="true"
+            column="CELL_COUNT"
+            length="30"
+        />
+
+        </joined-subclass>
+        <joined-subclass
+            name="edu.wustl.catissuecore.domain.MolecularSpecimenReviewParameters"
+            table="CATISSUE_MOLECULAR_SPECIMEN_REVIEW_PARAMETERS"
+            dynamic-update="false"
+            dynamic-insert="false"
+        >
+        <key
+            column="IDENTIFIER"
+        />
+        <property
+            name="gelImageURL"
+            type="string"
+            update="true"
+            insert="true"
+            column="GEL_IMAGE_URL"
+            length="200"
+        />
+
+        <property
+            name="qualityIndex"
+            type="string"
+            update="true"
+            insert="true"
+            column="QUALITY_INDEX"
+            length="50"
+        />
+
+        <property
+            name="laneNumber"
+            type="string"
+            update="true"
+            insert="true"
+            column="LANE_NUMBER"
+            length="50"
+        />
+
+        <property
+            name="gelNumber"
+            type="int"
+            update="true"
+            insert="true"
+            column="GEL_NUMBER"
+            length="30"
+        />
+
+        <property
+            name="absorbanceAt260"
+            type="double"
+            update="true"
+            insert="true"
+            column="ABSORBANCE_AT_260"
+            length="30"
+        />
+
+        <property
+            name="absorbanceAt280"
+            type="double"
+            update="true"
+            insert="true"
+            column="ABSORBANCE_AT_280"
+            length="30"
+        />
+
+        <property
+            name="ratio28STo18S"
+            type="double"
+            update="true"
+            insert="true"
+            column="RATIO_28S_TO_18S"
+            length="30"
+        />
+
+        </joined-subclass>
+
+        </joined-subclass>
+        <joined-subclass
+            name="edu.wustl.catissuecore.domain.DisposalEventParameters"
+            table="CATISSUE_DISPOSAL_EVENT_PARAMETERS"
+            dynamic-update="false"
+            dynamic-insert="false"
+        >
+        <key
+            column="IDENTIFIER"
+        />
+        <property
+            name="reason"
+            type="string"
+            update="true"
+            insert="true"
+            column="REASON"
+            length="50"
+            not-null="true"
+        />
+
+        </joined-subclass>
+
+    </class>
+
+</hibernate-mapping>

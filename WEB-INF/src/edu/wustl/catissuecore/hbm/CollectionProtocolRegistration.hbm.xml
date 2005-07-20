@@ -6,14 +6,14 @@
 
 <hibernate-mapping>
     <class
-        name="edu.wustl.catissuecore.dataModel.domain.BioSpecimenStorage"
-        table="CATISSUE_BIOSPECIMEN_STORAGE"
+        name="edu.wustl.catissuecore.domain.CollectionProtocolRegistration"
+        table="CATISSUE_COLLECTION_PROTOCOL_REGISTRATION"
         dynamic-update="false"
         dynamic-insert="false"
     >
 
         <id
-            name="identifier"
+            name="systemIdentifier"
             column="IDENTIFIER"
             type="long"
             length="30"
@@ -24,63 +24,45 @@
         </id>
 
         <property
-            name="bioSpecimenType"
+            name="protocolParticipantIdentifier"
             type="string"
             update="true"
             insert="true"
-            column="TYPE"
+            column="PROTOCOL_PARTICIPANT_IDENTIFIER"
             length="50"
         />
 
         <property
-            name="bioSpecimenIdentifier"
-            type="long"
+            name="registrationDate"
+            type="date"
             update="true"
             insert="true"
-            column="BIOSPECIMEN_IDENTIFIER"
-            length="50"
-        />
-
-        <property
-            name="positionDimensionOne"
-            type="long"
-            update="true"
-            insert="true"
-            column="POSITION_DIMENSION_ONE"
-            length="50"
-        />
-
-        <property
-            name="positionDimensionTwo"
-            type="long"
-            update="true"
-            insert="true"
-            column="POSITION_DIMENSION_TWO"
-            length="50"
-        />
-
-        <property
-            name="positionDimensionThree"
-            type="long"
-            update="true"
-            insert="true"
-            column="POSITION_DIMENSION_THREE"
-            length="50"
+            column="REGISTRATION_DATE"
         />
 
         <many-to-one
-            name="box"
-            class="edu.wustl.catissuecore.dataModel.domain.Box"
+            name="participant"
+            class="edu.wustl.catissuecore.domain.Participant"
             cascade="none"
             outer-join="auto"
             update="true"
             insert="true"
-            column="BOX_IDENTIFIER"
+            column="PARTICIPANT_ID"
+        />
+
+        <many-to-one
+            name="collectionProtocol"
+            class="edu.wustl.catissuecore.domain.CollectionProtocol"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="COLLECTION_PROTOCOL_ID"
         />
 
         <!--
             To add non XDoclet property mappings, create a file named
-                hibernate-properties-BioSpecimenStorage.xml
+                hibernate-properties-CollectionProtocolRegistration.xml
             containing the additional properties and place it in your merge dir.
         -->
 

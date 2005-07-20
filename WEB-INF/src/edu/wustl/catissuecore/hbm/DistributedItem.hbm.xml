@@ -6,13 +6,14 @@
 
 <hibernate-mapping>
     <class
-        name="edu.wustl.catissuecore.dataModel.domain.BiospecimenDistribution"
+        name="edu.wustl.catissuecore.domain.DistributedItem"
+        table="CATISSUE_DISTRIBUTED_ITEM"
         dynamic-update="false"
         dynamic-insert="false"
     >
 
         <id
-            name="identifier"
+            name="systemIdentifier"
             column="IDENTIFIER"
             type="long"
             length="30"
@@ -23,44 +24,27 @@
         </id>
 
         <property
-            name="biospecimenType"
-            type="string"
-            update="true"
-            insert="true"
-            column="BIOSPECIMEN_TYPE"
-            length="50"
-        />
-
-        <property
-            name="bioSpecimenIdentifier"
-            type="long"
-            update="true"
-            insert="true"
-            column="BIOSPECIMEN_IDENTIFIER"
-            length="50"
-        />
-
-        <property
             name="quantity"
             type="double"
             update="true"
             insert="true"
             column="QUANTITY"
-            length="50"
+            length="30"
         />
 
-        <property
-            name="quanityUnit"
-            type="string"
+        <many-to-one
+            name="specimen"
+            class="edu.wustl.catissuecore.domain.Specimen"
+            cascade="none"
+            outer-join="auto"
             update="true"
             insert="true"
-            column="QUANITY_UNIT"
-            length="50"
+            column="SPECIMEN_ID"
         />
 
         <many-to-one
             name="distribution"
-            class="edu.wustl.catissuecore.dataModel.domain.Distribution"
+            class="edu.wustl.catissuecore.domain.Distribution"
             cascade="none"
             outer-join="auto"
             update="true"
@@ -70,7 +54,7 @@
 
         <!--
             To add non XDoclet property mappings, create a file named
-                hibernate-properties-BiospecimenDistribution.xml
+                hibernate-properties-DistributedItem.xml
             containing the additional properties and place it in your merge dir.
         -->
 

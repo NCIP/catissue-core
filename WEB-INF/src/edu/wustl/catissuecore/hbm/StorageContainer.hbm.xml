@@ -6,8 +6,8 @@
 
 <hibernate-mapping>
     <class
-        name="edu.wustl.catissuecore.domain.User"
-        table="CATISSUE_USER"
+        name="edu.wustl.catissuecore.domain.StorageContainer"
+        table="CATISSUE_STORAGE_CONTAINER"
         dynamic-update="false"
         dynamic-insert="false"
     >
@@ -24,49 +24,39 @@
         </id>
 
         <property
-            name="lastName"
+            name="name"
             type="string"
             update="true"
             insert="true"
-            column="LAST_NAME"
+            column="NAME"
             length="50"
         />
 
         <property
-            name="firstName"
-            type="string"
+            name="tempratureInCentigrade"
+            type="double"
             update="true"
             insert="true"
-            column="FIRST_NAME"
-            length="50"
+            column="TEMPERATURE"
+            length="30"
         />
 
         <property
-            name="loginName"
+            name="isFull"
+            type="boolean"
+            update="true"
+            insert="true"
+            column="IS_CONTAINER_FULL"
+        />
+
+        <property
+            name="barcode"
             type="string"
             update="true"
             insert="true"
-            column="LOGIN_NAME"
+            column="BARCODE"
             length="50"
-            not-null="true"
             unique="true"
-        />
-
-        <property
-            name="password"
-            type="string"
-            update="true"
-            insert="true"
-            column="PASSWORD"
-            length="50"
-        />
-
-        <property
-            name="dateAdded"
-            type="date"
-            update="true"
-            insert="true"
-            column="DATE_ADDED"
         />
 
         <property
@@ -75,82 +65,88 @@
             update="true"
             insert="true"
             column="ACTIVITY_STATUS"
-            length="50"
+            length="30"
         />
 
         <many-to-one
-            name="department"
-            class="edu.wustl.catissuecore.domain.Department"
+            name="storageType"
+            class="edu.wustl.catissuecore.domain.StorageType"
             cascade="none"
             outer-join="auto"
             update="true"
             insert="true"
-            column="DEPARTMENT_ID"
+            column="STORAGE_TYPE_ID"
         />
 
         <many-to-one
-            name="cancerResearchGroup"
-            class="edu.wustl.catissuecore.domain.CancerResearchGroup"
+            name="site"
+            class="edu.wustl.catissuecore.domain.Site"
             cascade="none"
             outer-join="auto"
             update="true"
             insert="true"
-            column="CANCER_RESEARCH_GROUP_ID"
+            column="SITE_ID"
         />
 
         <many-to-one
-            name="institution"
-            class="edu.wustl.catissuecore.domain.Institution"
+            name="parentContainer"
+            class="edu.wustl.catissuecore.domain.StorageContainer"
             cascade="none"
             outer-join="auto"
             update="true"
             insert="true"
-            column="INSTITUTION_ID"
-        />
-
-        <many-to-one
-            name="address"
-            class="edu.wustl.catissuecore.domain.Address"
-            cascade="none"
-            outer-join="auto"
-            update="true"
-            insert="true"
-            column="ADDRESS_ID"
+            column="PARENT_CONTAINER_ID"
         />
 
         <set
-            name="collectionProtocolCollection"
-            table="CATISSUE_COLLECTION_COORDINATORS"
+            name="storageContainerDetailsCollection"
+            table="CATISSUE_STORAGE_CONTAINER_DETAILS"
             lazy="false"
-            inverse="true"
-            cascade="save-update"
+            inverse="false"
+            cascade="none"
             sort="unsorted"
         >
 
               <key
-                  column="USER_ID"
+                  column="STORAGE_CONTAINER_ID"
               />
 
-              <many-to-many
-                  class="edu.wustl.catissuecore.domain.CollectionProtocol"
-                  column="COLLECTION_PROTOCOL_ID"
-                  outer-join="auto"
+              <one-to-many
+                  class="edu.wustl.catissuecore.domain.StorageContainerDetails"
               />
-
         </set>
 
-        <property
-            name="comments"
-            type="string"
+        <many-to-one
+            name="storageContainerCapacity"
+            class="edu.wustl.catissuecore.domain.StorageContainerCapacity"
+            cascade="none"
+            outer-join="auto"
             update="true"
             insert="true"
-            column="STATUS_COMMENT"
-            length="2000"
+            column="STORAGE_CONTAINER_CAPACITY_ID"
         />
+
+        <set
+            name="childrenContainerCollection"
+            table="CATISSUE_STORAGE_CONTAINER"
+            lazy="false"
+            inverse="false"
+            cascade="none"
+            sort="unsorted"
+        >
+
+              <key
+                  column="PARENT_CONTAINER_ID"
+              />
+
+              <one-to-many
+                  class="edu.wustl.catissuecore.domain.StorageContainer"
+              />
+        </set>
 
         <!--
             To add non XDoclet property mappings, create a file named
-                hibernate-properties-User.xml
+                hibernate-properties-StorageContainer.xml
             containing the additional properties and place it in your merge dir.
         -->
 
