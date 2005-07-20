@@ -14,6 +14,8 @@ PUBLIC
 		<form-bean name="departmentForm" type="edu.wustl.catissuecore.actionForm.DepartmentForm"/>
 		<form-bean name="loginForm" type="edu.wustl.catissuecore.actionForm.LoginForm"/>
 		<form-bean name="newSpecimenForm" type="edu.wustl.catissuecore.actionForm.NewSpecimenForm"/>
+		<form-bean name="participantForm" type="edu.wustl.catissuecore.actionForm.ParticipantForm"/>
+		<form-bean name="specimenCollectionGroupForm" type="edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm"/>
 	</form-beans>
 	
 	<action-mappings>
@@ -69,7 +71,46 @@ PUBLIC
 		</action>
 		
         <!-- Login Module Actions End -->
-                    
+            
+        <!-- Participant Actions Begins -->
+        <action path="/Participant"
+			type="edu.wustl.catissuecore.action.ParticipantAction"
+			scope="request">
+			<forward name="success" path=".catissuecore.participantDef" />
+			<forward name="failure" path=".catissuecore.participantDef" />
+		</action>
+		
+		<action path="/ParticipantAdd"
+			type="edu.wustl.catissuecore.action.CommonAddEditAction"
+			name="participantForm"
+			validate="true"
+			input="/Participant.do?operation=add&amp;pageOf="
+			scope="request">
+			<forward name="success" path=".catissuecore.participantAddSuccessDef" />
+			<forward name="failure" path="/error.jsp" />
+		</action>
+		
+		<action path="/ParticipantEdit"
+			type="edu.wustl.catissuecore.action.CommonAddEditAction"
+			name="participantForm"
+			validate="true"
+			input="/Participant.do?operation=edit&amp;pageOf="
+			scope="request">
+			<forward name="success" path=".catissuecore.participantEditSuccessDef" />
+			<forward name="failure" path="/error.jsp" />
+		</action>
+		
+		<action path="/ParticipantSearch"
+		    type="edu.wustl.catissuecore.action.CommonSearchAction"
+			name="participantForm"
+			validate="true"
+			input="/Participant.do?operation=edit&amp;pageOf="
+			scope="request">
+			<forward name="success" path="/Participant.do?operation=edit&amp;pageOf="/>
+			<forward name="failure" path="/Participant.do?operation=edit&amp;pageOf="/>
+		</action>    
+		<!-- Participant Actions Ends -->
+		            
 		<!-- Institute Actions Begins-->
 		<action path="/Institute"
 			type="edu.wustl.catissuecore.action.InstituteAction"
@@ -241,6 +282,25 @@ PUBLIC
 			<forward name="failure" path="/error.jsp" />
 		</action>
 		<!--New Specimen Actions Begin-->
+		
+		<!--SpecimenCollectonGroup Actions Begin-->
+		<action path="/SpecimenCollectionGroup"
+			type="edu.wustl.catissuecore.action.SpecimenCollectionGroupAction"
+			scope="request">
+			<forward name="success" path=".catissuecore.specimenCollectionGroupDef" />
+			<forward name="failure" path=".catissuecore.specimenCollectionGroupDef" />
+		</action>
+		
+		<action path="/SpecimenCollectionGroupAdd"
+			type="edu.wustl.catissuecore.action.CommonAddEditAction"
+			name="specimenCollectionGroupForm"
+			validate="true"
+			input="/SpecimenCollectionGroup.do?operation=add"
+			scope="request">
+			<forward name="success" path=".catissuecore.instituteAddSuccessDef" />
+			<forward name="failure" path="/error.jsp" />
+		</action>
+		<!--SpecimenCollectonGroup Actions Begin-->
 
 		<!--Approve User Actions Begin-->
 		<action path="/ApproveUserShow"
