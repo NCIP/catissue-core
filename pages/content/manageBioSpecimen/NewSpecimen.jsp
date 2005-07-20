@@ -151,22 +151,20 @@
    					</td>
 				 </tr>
 				 <tr>
-			     	<td class="formRequiredNotice" width="5">*</td>
+			     	<td class="formRequiredNotice" width="5">&nbsp;</td>
 				    <td class="formLabel">
 						<label for="specimenCollectionGroupId">
 							<bean:message key="specimen.specimenCollectionGroupId"/>
 						</label>
 					</td>
-					<td class="formSmallField">
+					<td class="formField" colspan="2">
 			     		<html:select property="specimenCollectionGroupId" styleClass="formFieldSmallSized" styleId="specimenCollectionGroupId" size="1" disabled="<%=readOnlyForAll%>">
 							<html:options name="specimenCollectionGroupIdList" labelName="specimenCollectionGroupIdList"/>		
 						</html:select>
-		        	</td>
-		        	<td class="formField">
 		        		<a href="SpecimenCollectionGroup.do?operation=add">
-      						<bean:message key="app.specimenCollectionGroup" />
+      						<bean:message key="app.addNew" />
    						</a>
-   					</td>
+		        	</td>
 				 </tr>
 				 <tr>
 				 	<td class="formRequiredNotice" width="5">&nbsp;</td>
@@ -175,14 +173,11 @@
 				     		<bean:message key="specimen.type"/>
 				     	</label>
 				    </td>
-				    <td class="formField">
+				    <td class="formField" colspan="2">
 				     	<html:select property="type" styleClass="formFieldSized" styleId="type" size="1" disabled="<%=readOnlyForAll%>">
 							<html:options name="specimenTypeList" labelName="specimenTypeList"/>		
 						</html:select>
 		        	</td>
-		        	<td class="formField">
-		        		&nbsp;
-   					</td>
 				 </tr>
 				 <tr>
 				    <td class="formRequiredNotice" width="5">&nbsp;</td>
@@ -191,14 +186,11 @@
 				     		<bean:message key="specimen.subType"/>
 				     	</label>
 				    </td>
-				    <td class="formField">
+				    <td class="formField" colspan="2">
 				     	<html:select property="subType" styleClass="formFieldSized" styleId="subType" size="1" disabled="<%=readOnlyForAll%>">
 							<html:options name="specimenSubTypeList" labelName="specimenSubTypeList"/>		
 						</html:select>
 		        	</td>
-		        	<td class="formField">
-		        		&nbsp;
-   					</td>
 				 </tr>
 				 <tr>
 				     <td class="formRequiredNotice" width="5">
@@ -210,14 +202,11 @@
 							<bean:message key="specimen.tissueSite"/>
 						</label>
 					</td>
-				     <td class="formField">
+				     <td class="formField" colspan="2">
 				     	<html:select property="tissueSite" styleClass="formFieldSized" styleId="tissueSite" size="1" disabled="<%=readOnlyForAll%>">
 							<html:options name="tissueSiteList" labelName="tissueSiteList"/>		
 						</html:select>
 		        	  </td>
-		        	  <td class="formField">
-		        	  	&nbsp;
-   					  </td>
 				 </tr>
 				 <tr>
 				     <td class="formRequiredNotice" width="5">
@@ -229,14 +218,11 @@
 							<bean:message key="specimen.tissueSide"/>
 						</label>
 					</td>
-				     <td class="formField">
+				     <td class="formField" colspan="2">
 				     	<html:select property="tissueSide" styleClass="formFieldSized" styleId="tissueSide" size="1" disabled="<%=readOnlyForAll%>">
 							<html:options name="tissueSideList" labelName="tissueSideList"/>		
 						</html:select>
 		        	  </td>
-		        	  <td class="formField">
-		        	  &nbsp;
-   					  </td>
 				 </tr>
 				 <tr>
 				    <td class="formRequiredNotice" width="5">
@@ -248,14 +234,11 @@
 							<bean:message key="specimen.pathologicalStatus"/>
 						</label>
 					</td>
-				    <td class="formField">
+				    <td class="formField" colspan="2">
 				     	<html:select property="pathologicalStatus" styleClass="formFieldSized" styleId="pathologicalStatus" size="1" disabled="<%=readOnlyForAll%>">
 							<html:options name="pathologicalStatusList" labelName="pathologicalStatusList"/>		
 						</html:select>
 		        	</td>
-		        	<td class="formField">
-		        	&nbsp;
-   					</td>
 				 </tr>
 				 <tr>
 			     	<td class="formRequiredNotice" width="5">
@@ -267,12 +250,9 @@
 							<bean:message key="specimen.concentration"/>
 						</label>
 					</td>
-				    <td class="formField">
+				    <td class="formField" colspan="2">
 				     	<html:text styleClass="formFieldSized" size="30" styleId="concentration" property="concentration" readonly="<%=readOnlyForAll%>"/>
 				    </td>
-				    <td class="formField">
-		        	&nbsp;
-   					</td>
 				 </tr>
 				 <tr>
 			     	<td class="formRequiredNotice" width="5">
@@ -284,12 +264,9 @@
 							<bean:message key="specimen.quantity"/>
 						</label>
 					</td>
-				    <td class="formField">
+				    <td class="formField" colspan="2">
 				     	<html:text styleClass="formFieldSized" size="30" styleId="quantity" property="quantity" readonly="<%=readOnlyForAll%>"/>
 				    </td>
-				    <td class="formField">
-		        	&nbsp;
-   					</td>
 				 </tr>
 
 				 <!-- Storage Begins here -->
@@ -297,7 +274,7 @@
 				     <td class="formSubTableTitle" height="20" colspan="2">
 				     	<bean:message key="specimen.storage"/>
 				     </td>
-				     <td class="formButtonField">
+				     <td class="formButtonField" colspan="2">
 				     	<html:submit styleClass="actionButton">
 							<bean:message key="buttons.showMap"/>
 						</html:submit>
@@ -313,7 +290,7 @@
 							<bean:message key="specimen.storageContainer"/>
 						</label>
 					</td>
-				    <td class="formField">
+				    <td class="formField" colspan="2">
 				     	<html:text styleClass="formFieldSized" size="30" styleId="storageContainer" property="storageContainer" readonly="<%=readOnlyForAll%>"/>
 				    </td>
 				 </tr>
@@ -327,7 +304,7 @@
 							<bean:message key="specimen.positionDimensionOne"/>
 						</label>
 					</td>
-				    <td class="formField">
+				    <td class="formField" colspan="2">
 				     	<html:text styleClass="formFieldSized" size="30" styleId="positionDimensionOne" property="positionDimensionOne" readonly="<%=readOnlyForAll%>"/>
 				    </td>
 				 </tr>
@@ -341,7 +318,7 @@
 							<bean:message key="specimen.positionDimensionTwo"/>
 						</label>
 					</td>
-				    <td class="formField">
+				    <td class="formField" colspan="2">
 				     	<html:text styleClass="formFieldSized" size="30" styleId="positionDimensionTwo" property="positionDimensionTwo" readonly="<%=readOnlyForAll%>"/>
 				    </td>
 				 </tr>
@@ -352,7 +329,7 @@
 				     <td class="formSubTableTitle" height="20" colspan="2">
 				     	<bean:message key="specimen.externalIdentifier"/>
 				     </td>
-				     <td class="formButtonField">
+				     <td class="formButtonField" colspan="2">
 				     	<html:submit styleClass="actionButton">
 							<bean:message key="buttons.addMore"/>
 						</html:submit>
@@ -365,7 +342,7 @@
 				    <td class="formLeftSubTableTitle">
 						<bean:message key="externalIdentifier.name"/>
 					</td>
-				    <td class="formRightSubTableTitle">
+				    <td class="formRightSubTableTitle" colspan="2">
 						<bean:message key="externalIdentifier.value"/>
 					</td>
 				 </tr>
@@ -376,7 +353,7 @@
 				    <td class="formField">
 						<html:text styleClass="formFieldSized" size="30" styleId="externalIdentifierName" property="externalIdentifierType(1)" readonly="<%=readOnlyForAll%>"/>
 					</td>
-				    <td class="formField">
+				    <td class="formField" colspan="2">
 				     	<html:text styleClass="formFieldSized" size="30" styleId="externalIdentifierValue" property="externalIdentifierName(1)" readonly="<%=readOnlyForAll%>"/>
 				    </td>
 				 </tr>	
@@ -388,7 +365,7 @@
 				    <td class="formField">
 						<html:text styleClass="formFieldSized" size="30" styleId="externalIdentifierName" property="externalIdentifierType(2)" readonly="<%=readOnlyForAll%>"/>
 					</td>
-				    <td class="formField">
+				    <td class="formField" colspan="2">
 				     	<html:text styleClass="formFieldSized" size="30" styleId="externalIdentifierValue" property="externalIdentifierName(2)" readonly="<%=readOnlyForAll%>"/>
 				    </td>
 				 </tr>
@@ -396,18 +373,23 @@
 				 
 				 <!-- Bio-hazards Begin here -->
 				 <tr>
-				     <td class="formSubTableTitle" height="20" colspan="3">
+				     <td class="formSubTableTitle" height="20" colspan="2">
 				     	<bean:message key="specimen.biohazards"/>
 				     </td>
-				 </tr>
-				 <tr>
+				     <td class="formButtonField" colspan="2">
+				     	<html:submit styleClass="actionButton">
+							<bean:message key="buttons.addMore"/>
+						</html:submit>
+				    </td>
+				  </tr>
+				  <tr>
 				 	<td class="formSerialNumberLabel" width="5">
 				     	#
 				    </td>
 				    <td class="formLeftSubTableTitle">
 						<bean:message key="biohazards.type"/>
 					</td>
-				    <td class="formRightSubTableTitle">
+				    <td class="formRightSubTableTitle" colspan="2">
 						<bean:message key="biohazards.name"/>
 					</td>
 				 </tr>
@@ -420,7 +402,7 @@
 							<html:options name="biohazardTypeList" labelName="biohazardTypeList"/>		
 						</html:select>
 					 </td>
-				     <td class="formField">
+				     <td class="formField" colspan="2">
 				     	<html:select property="biohazard(1)" styleClass="formFieldSized" styleId="race" size="1" disabled="<%=readOnlyForAll%>">
 							<html:options name="biohazardNameList" labelName="biohazardNameList"/>		
 						</html:select>
@@ -435,7 +417,7 @@
 							<html:options name="biohazardTypeList" labelName="biohazardTypeList"/>		
 						</html:select>
 				    </td>
-				    <td class="formField">
+				    <td class="formField" colspan="2">
 				     	<html:select property="biohazard(2)" styleClass="formFieldSized" styleId="gender" size="1" disabled="<%=readOnlyForAll%>">
 							<html:options name="biohazardNameList" labelName="biohazardNameList"/>		
 						</html:select>
@@ -453,14 +435,14 @@
 							<bean:message key="specimen.comments"/>
 						</label>
 					</td>
-				    <td class="formField">
+				    <td class="formField" colspan="2">
 				    	<html:textarea styleClass="formFieldSized" rows="3" styleId="comments" property="comments" readonly="<%=readOnlyForAll%>"/>
 				    </td>
 				 </tr>
 				 
  			   	 <logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">		
 				 	<tr>
-				  		<td align="right" colspan="3">
+				  		<td align="right" colspan="4">
 							<%
 								String changeAction = "setFormAction('"+formName+"')";
 				 			%>
