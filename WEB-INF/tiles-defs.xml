@@ -87,6 +87,48 @@
 		<put name="content" value="/pages/content/manageAdministrativeData/ProblemDetails.jsp" />
 	</definition>
 
+	<!-- Storage Type -->
+	<definition name=".catissuecore.storageTypeDef" extends=".catissuecore.manageAdminDataHomeDef">
+		<put name="content" value="/pages/content/manageAdministrativeData/StorageType.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.storageTypeAddSuccessDef" extends=".catissuecore.manageAdminDataHomeDef">
+		<put name="content" value="/pages/content/common/success.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.storageTypeEditSuccessDef" extends=".catissuecore.manageAdminDataHomeDef">
+		<put name="content" value="/pages/content/common/success.jsp" />
+	</definition>
+	<!-- Storage Type -->
+	
+	<!-- Storage Container -->
+	<definition name=".catissuecore.storageContainerDef" extends=".catissuecore.manageAdminDataHomeDef">
+		<put name="content" value="/pages/content/manageAdministrativeData/StorageContainer.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.storageContainerAddSuccessDef" extends=".catissuecore.manageAdminDataHomeDef">
+		<put name="content" value="/pages/content/common/success.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.storageContainerEditSuccessDef" extends=".catissuecore.manageAdminDataHomeDef">
+		<put name="content" value="/pages/content/common/success.jsp" />
+	</definition>
+	<!-- Storage Container -->
+	
+	<!-- Site -->
+	<definition name=".catissuecore.siteDef" extends=".catissuecore.manageAdminDataHomeDef">
+		<put name="content" value="/pages/content/manageAdministrativeData/Site.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.siteAddSuccessDef" extends=".catissuecore.manageAdminDataHomeDef">
+		<put name="content" value="/pages/content/common/success.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.siteEditSuccessDef" extends=".catissuecore.manageAdminDataHomeDef">
+		<put name="content" value="/pages/content/common/success.jsp" />
+	</definition>
+	<!-- Site -->
+	
 	<definition name=".catissuecore.collectionProtocolDef" extends=".catissuecore.manageAdminDataHomeDef">
 		<put name="content" value="/pages/content/manageAdministrativeData/CollectionProtocol.jsp" />
 	</definition>
