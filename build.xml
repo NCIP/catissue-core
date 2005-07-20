@@ -155,7 +155,7 @@
 		
 		<!-- Upgrade grammar from Hibernate1 to Hibernate2 -->
 	    <replace dir="${src.dir}">
-	        <include name="**/db/*.hbm.xml"/>
+	        <include name="**/domain/*.hbm.xml"/>
 	        <replacefilter token="readonly=" value="inverse="/>
 	        <replacefilter token="role=" value="name="/>
 	        <replacefilter token="hibernate-mapping.dtd" value="hibernate-mapping-2.0.dtd"/>
@@ -173,9 +173,10 @@
     </target>
 
 	<!--Not Complete, YET TO DO-->
-	<target name="Genrate-Schema" depends="buildjar, generateHBM">
+	<!--target name="Genrate-Schema" depends="buildjar, generateHBM"-->
+	<target name="Genrate-Schema" depends="buildjar">
     	<java classname="edu.wustl.common.util.dbManager.GenerateSchema">
-	    	<arg value="true"/>		
+	    	<arg value="false"/>		
 				
             <classpath>
 	            <pathelement location="${build.dir}/catissuecore.jar"/>
