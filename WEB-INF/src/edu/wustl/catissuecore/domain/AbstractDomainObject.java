@@ -30,9 +30,6 @@ public abstract class AbstractDomainObject
         String className = null;
         switch(FORM_TYPE)
         {
-            case Constants.USER_FORM_ID:
-                className = User.class.getName();
-            	break;
 //            case Constants.PARTICIPANT_FORM_ID:
 //                className = Participant.class.getName();
 //            	break;

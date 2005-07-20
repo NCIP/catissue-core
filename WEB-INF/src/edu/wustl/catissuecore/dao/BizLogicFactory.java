@@ -28,18 +28,18 @@ public class BizLogicFactory
         
         switch(FORM_TYPE)
         {
-            case Constants.USER_FORM_ID:
-                abstractBizLogic = new UserBizLogic();
-            	break;
-            case Constants.ACCESSION_FORM_ID:
-                abstractBizLogic = new AccessionBizLogic();
-            	break;
-            case Constants.INSTITUTE_FORM_ID:
-                abstractBizLogic = new InstituteBizLogic();
-            	break;
-            case Constants.REPORTEDPROBLEM_FORM_ID:
-                abstractBizLogic = new ReportedProblemBizLogic();
-            	break;
+//            case Constants.USER_FORM_ID:
+//                abstractBizLogic = new UserBizLogic();
+//            	break;
+////            case Constants.ACCESSION_FORM_ID:
+////                abstractBizLogic = new AccessionBizLogic();
+////            	break;
+//            case Constants.INSTITUTION_FORM_ID:
+//                abstractBizLogic = new InstituteBizLogic();
+//            	break;
+//            case Constants.REPORTEDPROBLEM_FORM_ID:
+//                abstractBizLogic = new ReportedProblemBizLogic();
+//            	break;
             default:
                 abstractBizLogic = new AbstractBizLogic();
             	break;

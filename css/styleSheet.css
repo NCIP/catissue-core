@@ -381,6 +381,31 @@ input.formFieldSmallSized,textarea.formFieldSmallSized,select.formFieldSmallSize
   font-size:1em;
   width:20em;
 }
+/* used by mandar in collection prptocol. Size set to 5em */
+.formFieldSized5{ /* for the form elements themselves and with a constant width (on elements) */
+  font-family:arial,helvetica,verdana,sans-serif;
+  border:1px solid #5C5C5C; /* constant: dark gray */
+  font-size:1em;
+	width:5em;
+}
+td.formFieldAllBorders{ /* for the cell that contains the form elements */
+  font-family:arial,helvetica,verdana,sans-serif;
+  font-size:0.7em;
+  color:#000000; /* constant: black */
+  border-right:1px solid #5C5C5C; /* constant: dark gray */
+  border-bottom:1px solid #5C5C5C; /* constant: dark gray */
+  border-left:1px solid #5C5C5C; /* constant: dark gray */
+  border-top:1px solid #5C5C5C; /* constant: dark gray */
+  background-color:#F4F4F5; /* constant: light gray */
+}
+.formFieldSized10{ /* for the form elements themselves and with a constant width (on elements) */
+  font-family:arial,helvetica,verdana,sans-serif;
+  border:1px solid #5C5C5C; /* constant: dark gray */
+  font-size:1em;
+	width:10em;
+}
+
+
 input.formDateSized{ /* for the form elements themselves and with a constant width (on elements) */
   font-family:arial,helvetica,verdana,sans-serif;
   border:1px solid #5C5C5C; /* constant: dark gray */
@@ -584,3 +609,13 @@ p,.p{ /* for paragraphs */
 img.img{ /* for images that need a border */
   border:1px solid #5C5C5C; /* constant: dark gray */
 }
+
+.tabrightmostcell{ /* for the rightmost cell */
+ font-family:arial,helvetica,verdana,sans-serif;
+  font-size:0.7em;
+  color:#000000; /* constant: black */
+  border-right:1px solid #5C5C5C; /* constant: dark gray */
+  border-bottom:1px solid #5C5C5C; /* constant: dark gray */
+  background-color:#F4F4F5; /* constant: light gray */ 
+  border-left:1px solid #5C5C5C; /* constant: dark gray */
+ }

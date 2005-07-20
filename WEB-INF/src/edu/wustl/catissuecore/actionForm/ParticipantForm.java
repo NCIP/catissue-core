@@ -111,16 +111,16 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
      */
     public void setAllValues(AbstractDomainObject abstractDomain)
     {
-        Participant participant = (Participant) abstractDomain;
-        this.systemIdentifier = participant.getSystemIdentifier().longValue();
-        this.lastName = participant.getLastName();
-        this.firstName = participant.getFirstName();
-        this.middleName = participant.getMiddleName();
-        this.birthDate = Utility.parseDateToString(participant.getBirthDate()); 
-        this.genotypicGender = participant.getGenotypicGender();
-        this.socialSecurityNumber = participant.getSocialSecurityNumber();
-        this.race = participant.getRace();
-    }
+//    	Participant participant = (Participant) abstractDomain;
+//        this.systemIdentifier = participant.getSystemIdentifier().longValue();
+//        this.lastName = participant.getLastName();
+//        this.firstName = participant.getFirstName();
+//        this.middleName = participant.getMiddleName();
+//        this.birthDate = Utility.parseDateToString(participant.getBirthDate()); 
+//        this.genotypicGender = participant.getGenotypicGender();
+//        this.socialSecurityNumber = participant.getSocialSecurityNumber();
+//        this.race = participant.getRace();
+   }
     
     /**
      * Returns the systemIdentifier assigned to the Participant.
