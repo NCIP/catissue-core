@@ -9,13 +9,15 @@ PUBLIC
 	<form-beans>
 		<form-bean name="userForm" type="edu.wustl.catissuecore.actionForm.UserForm"/>
 		<form-bean name="reportedProblemForm" type="edu.wustl.catissuecore.actionForm.ReportedProblemForm"/>
-		<form-bean name="instituteForm" type="edu.wustl.catissuecore.actionForm.InstituteForm"/>
 		<form-bean name="domainObjectListForm" type="edu.wustl.catissuecore.actionForm.DomainObjectListForm"/>		
 		<form-bean name="departmentForm" type="edu.wustl.catissuecore.actionForm.DepartmentForm"/>
 		<form-bean name="loginForm" type="edu.wustl.catissuecore.actionForm.LoginForm"/>
 		<form-bean name="newSpecimenForm" type="edu.wustl.catissuecore.actionForm.NewSpecimenForm"/>
 		<form-bean name="participantForm" type="edu.wustl.catissuecore.actionForm.ParticipantForm"/>
 		<form-bean name="specimenCollectionGroupForm" type="edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm"/>
+		<form-bean name="institutionForm" type="edu.wustl.catissuecore.actionForm.InstitutionForm"/>
+		<form-bean name="collectionProtocolForm" type="edu.wustl.catissuecore.actionForm.CollectionProtocolForm"/>
+		<form-bean name="distributionProtocolForm" type="edu.wustl.catissuecore.actionForm.DistributionProtocolForm"/>
 	</form-beans>
 	
 	<action-mappings>
@@ -110,45 +112,45 @@ PUBLIC
 			<forward name="failure" path="/Participant.do?operation=edit&amp;pageOf="/>
 		</action>    
 		<!-- Participant Actions Ends -->
-		            
-		<!-- Institute Actions Begins-->
-		<action path="/Institute"
-			type="edu.wustl.catissuecore.action.InstituteAction"
+		
+		<!-- Institution Actions Begins-->
+		<action path="/Institution"
+			type="edu.wustl.catissuecore.action.InstitutionAction"
 			scope="request">
-			<forward name="success" path=".catissuecore.instituteDef" />
-			<forward name="failure" path=".catissuecore.instituteDef" />
+			<forward name="success" path=".catissuecore.institutionDef" />
+			<forward name="failure" path=".catissuecore.institutionDef" />
 		</action>
 
-		<action path="/InstituteAdd"
+		<action path="/InstitutionAdd"
 			type="edu.wustl.catissuecore.action.CommonAddEditAction"
-			name="instituteForm"
+			name="institutionForm"
 			validate="true"
-			input="/Institute.do?operation=add"
+			input="/Institution.do?operation=add"
 			scope="request">
-			<forward name="success" path=".catissuecore.instituteAddSuccessDef" />
+			<forward name="success" path=".catissuecore.institutionAddSuccessDef" />
 			<forward name="failure" path="/error.jsp" />
 		</action>
 
-		<action path="/InstituteEdit"
+		<action path="/InstitutionEdit"
 			type="edu.wustl.catissuecore.action.CommonAddEditAction"
-			name="instituteForm"
+			name="institutionForm"
 			validate="true"
-			input="/Institute.do?operation=edit"
+			input="/Institution.do?operation=edit"
 			scope="request">
-			<forward name="success" path=".catissuecore.instituteEditSuccessDef" />
+			<forward name="success" path=".catissuecore.institutionEditSuccessDef" />
 			<forward name="failure" path="/error.jsp" />
 		</action>
 
-		<action path="/InstituteSearch"
+		<action path="/InstitutionSearch"
 		    type="edu.wustl.catissuecore.action.CommonSearchAction"
-			name="instituteForm"
+			name="institutionForm"
 			validate="true"
-			input="/Institute.do?operation=search"
+			input="/Institution.do?operation=search"
 			scope="request">
-			<forward name="success" path="/Institute.do?operation=edit"/>
-			<forward name="failure" path="/Institute.do?operation=search"/>
+			<forward name="success" path="/Institution.do?operation=edit"/>
+			<forward name="failure" path="/Institution.do?operation=search"/>
 		</action>    
-		<!-- Institute Actions Ends-->
+		<!-- Institution Actions Ends-->
 
 		<!-- User Actions Begins-->
 		<action path="/User"
@@ -225,6 +227,86 @@ PUBLIC
 			<forward name="failure" path="/Department.do?operation=edit"/>
 		</action>    
 		<!-- Department Actions Ends-->
+		
+			<!-- CollectionProtocol Actions Begins-->
+		<action path="/CollectionProtocol"
+			type="edu.wustl.catissuecore.action.CollectionProtocolAction"
+			scope="request">
+			<forward name="success" path=".catissuecore.collectionProtocolDef" />
+			<forward name="failure" path=".catissuecore.collectionProtocolDef" />
+		</action>
+
+		<action path="/CollectionProtocolAdd"
+			type="edu.wustl.catissuecore.action.CommonAddEditAction"
+			name="collectionProtocolForm"
+			validate="true"
+			input="/CollectionProtocol.do?operation=add"
+			scope="request">
+			<forward name="success" path=".catissuecore.collectionProtocolAddSuccessDef" />
+			<forward name="failure" path="/error.jsp" />
+		</action>
+
+		<action path="/CollectionProtocolEdit"
+			type="edu.wustl.catissuecore.action.CommonAddEditAction"
+			name="collectionProtocolForm"
+			validate="true"
+			input="/CollectionProtocol.do?operation=edit"
+			scope="request">
+			<forward name="success" path=".catissuecore.collectionProtocolEditSuccessDef" />
+			<forward name="failure" path="/error.jsp" />
+		</action>
+
+		<action path="/CollectionProtocolSearch"
+		    type="edu.wustl.catissuecore.action.CommonSearchAction"
+			name="collectionProtocolForm"
+			validate="true"
+			input="/CollectionProtocol.do?operation=search"
+			scope="request">
+			<forward name="success" path="/CollectionProtocol.do?operation=edit"/>
+			<forward name="failure" path="/CollectionProtocol.do?operation=search"/>
+		</action>    
+		<!-- CollectionProtocol Actions Ends-->
+		
+		
+		<!-- DistributionProtocol Actions Begins-->
+		<action path="/DistributionProtocol"
+			type="edu.wustl.catissuecore.action.DistributionProtocolAction"
+			scope="request">
+			<forward name="success" path=".catissuecore.distributionProtocolDef" />
+			<forward name="failure" path=".catissuecore.distributionProtocolDef" />
+		</action>
+
+		<action path="/DistributionProtocolAdd"
+			type="edu.wustl.catissuecore.action.CommonAddEditAction"
+			name="distributionProtocolForm"
+			validate="true"
+			input="/DistributionProtocol.do?operation=add"
+			scope="request">
+			<forward name="success" path=".catissuecore.distributionProtocolAddSuccessDef" />
+			<forward name="failure" path="/error.jsp" />
+		</action>
+
+		<action path="/DistributionProtocolEdit"
+			type="edu.wustl.catissuecore.action.CommonAddEditAction"
+			name="distributionProtocolForm"
+			validate="true"
+			input="/DistributionProtocol.do?operation=edit"
+			scope="request">
+			<forward name="success" path=".catissuecore.distributionProtocolEditSuccessDef" />
+			<forward name="failure" path="/error.jsp" />
+		</action>
+
+		<action path="/DistributionProtocolSearch"
+		    type="edu.wustl.catissuecore.action.CommonSearchAction"
+			name="distributionProtocolForm"
+			validate="true"
+			input="/DistributionProtocol.do?operation=search"
+			scope="request">
+			<forward name="success" path="/DistributionProtocol.do?operation=edit"/>
+			<forward name="failure" path="/DistributionProtocol.do?operation=search"/>
+		</action>    
+		<!-- DistributionProtocol Actions Ends-->
+		
 		
 		<!--Report Problem Actions Begins-->
 		<action path="/ReportProblem"

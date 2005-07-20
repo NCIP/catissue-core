@@ -61,15 +61,15 @@
 		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>
 
-	<definition name=".catissuecore.instituteDef" extends=".catissuecore.manageAdminDataHomeDef">
-		<put name="content" value="/pages/content/manageAdministrativeData/Institute.jsp" />
+	<definition name=".catissuecore.institutionDef" extends=".catissuecore.manageAdminDataHomeDef">
+		<put name="content" value="/pages/content/manageAdministrativeData/Institution.jsp" />
 	</definition>
 
-	<definition name=".catissuecore.instituteAddSuccessDef" extends=".catissuecore.manageAdminDataHomeDef">
+	<definition name=".catissuecore.institutionAddSuccessDef" extends=".catissuecore.manageAdminDataHomeDef">
 		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>
 
-	<definition name=".catissuecore.instituteEditSuccessDef" extends=".catissuecore.manageAdminDataHomeDef">
+	<definition name=".catissuecore.institutionEditSuccessDef" extends=".catissuecore.manageAdminDataHomeDef">
 		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>
 
@@ -86,7 +86,46 @@
 	<definition name=".catissuecore.problemDetailsDef" extends=".catissuecore.manageAdminDataHomeDef">
 		<put name="content" value="/pages/content/manageAdministrativeData/ProblemDetails.jsp" />
 	</definition>
-	
+
+	<definition name=".catissuecore.collectionProtocolDef" extends=".catissuecore.manageAdminDataHomeDef">
+		<put name="content" value="/pages/content/manageAdministrativeData/CollectionProtocol.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.collectionProtocolAddSuccessDef" extends=".catissuecore.manageAdminDataHomeDef">
+		<put name="content" value="/pages/content/common/success.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.collectionProtocolEditSuccessDef" extends=".catissuecore.manageAdminDataHomeDef">
+		<put name="content" value="/pages/content/common/success.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.departmentDef" extends=".catissuecore.manageAdminDataHomeDef">
+		<put name="content" value="/pages/content/manageAdministrativeData/Department.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.departmentAddSuccessDef" extends=".catissuecore.manageAdminDataHomeDef">
+		<put name="content" value="/pages/content/common/success.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.departmentEditSuccessDef" extends=".catissuecore.manageAdminDataHomeDef">
+		<put name="content" value="/pages/content/common/success.jsp" />
+	</definition>
+
+
+	<definition name=".catissuecore.distributionProtocolDef" extends=".catissuecore.manageAdminDataHomeDef">
+		<put name="content" value="/pages/content/manageAdministrativeData/DistributionProtocol.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.distributionProtocolAddSuccessDef" extends=".catissuecore.manageAdminDataHomeDef">
+		<put name="content" value="/pages/content/common/success.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.distributionProtocolEditSuccessDef" extends=".catissuecore.manageAdminDataHomeDef">
+		<put name="content" value="/pages/content/common/success.jsp" />
+	</definition>
+
+
+
 	<!-- Manage Administrative Data tab pages definitions end -->
 
 	<!-- Manage BioSpecimen tab pages definitions start -->
