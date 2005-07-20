@@ -61,6 +61,8 @@ public class Address extends AbstractDomainObject implements java.io.Serializabl
 	 */
 	protected String faxNumber;
 	
+	protected String emailAddress;
+	
 	/**
 	 * Returns the identifier assigned to Address.
 	 * 
@@ -220,5 +222,19 @@ public class Address extends AbstractDomainObject implements java.io.Serializabl
     public void setAllValues(AbstractActionForm abstractForm)
     {
 
+    }
+    /**
+     * @return Returns the emailAddress.
+     */
+    public String getEmailAddress()
+    {
+        return emailAddress;
+    }
+    /**
+     * @param emailAddress The emailAddress to set.
+     */
+    public void setEmailAddress(String emailAddress)
+    {
+        this.emailAddress = emailAddress;
     }
 }
