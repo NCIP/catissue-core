@@ -5,7 +5,7 @@
     
       <td height="20" class="footerMenuItem" onmouseover="changeMenuStyle(this,'footerMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'footerMenuItem'),hideCursor()" onclick="document.location.href='#'">
         &nbsp;&nbsp;
-		<a class="footerMenuLink" href="ReportProblem.do">
+		<a class="footerMenuLink" href="#">
 			<bean:message key="app.contactUs" />
 		</a>&nbsp;&nbsp;
       </td>
@@ -49,8 +49,8 @@
       
       <td height="20" class="footerMenuItem" onmouseover="changeMenuStyle(this,'footerMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'footerMenuItem'),hideCursor()" onclick="document.location.href='#'">
         &nbsp;&nbsp;
-        <a class="footerMenuLink" href="#">
-        	<bean:message key="app.applicationSupport" />
+        <a class="footerMenuLink" href="ReportProblem.do">
+        	<bean:message key="app.reportProblem" />
         </a>&nbsp;&nbsp;
       </td>
       
