@@ -276,7 +276,6 @@ FORM BEGINS
   color:#000000; /* constant: black */
   border-bottom:1px solid #5C5C5C; /* constant: dark gray */
   border-left:1px solid #5C5C5C; /* constant: dark gray */
-  border-right:1px solid #5C5C5C; /* constant: dark gray */
   text-align:left;
 }
 .formRightSubTableTitle{ /* for subtitles in the table */
@@ -307,12 +306,20 @@ td.formButtonField{ /* for the cell that contains the form elements */
   border-right:1px solid #5C5C5C; /* constant: dark gray */
   border-bottom:1px solid #5C5C5C; /* constant: dark gray */
   background-color:#CCCCCC; /* constant: medium gray */
+  text-align:right;
 }
 td.formField{ /* for the cell that contains the form elements */
   font-family:arial,helvetica,verdana,sans-serif;
   font-size:0.7em;
   color:#000000; /* constant: black */
   border-right:1px solid #5C5C5C; /* constant: dark gray */
+  border-bottom:1px solid #5C5C5C; /* constant: dark gray */
+  background-color:#F4F4F5; /* constant: light gray */
+}
+td.formSmallField{ /* for the cell that contains the form elements with link on right side */
+  font-family:arial,helvetica,verdana,sans-serif;
+  font-size:0.7em;
+  color:#000000; /* constant: black */
   border-bottom:1px solid #5C5C5C; /* constant: dark gray */
   background-color:#F4F4F5; /* constant: light gray */
 }
@@ -348,7 +355,13 @@ input.formFieldSized,textarea.formFieldSized,select.formFieldSized{ /* for the f
   font-family:arial,helvetica,verdana,sans-serif;
   border:1px solid #5C5C5C; /* constant: dark gray */
   font-size:1em;
-	width:25em;
+  width:25em;
+}
+input.formFieldSmallSized,textarea.formFieldSmallSized,select.formFieldSmallSized{ /* for the form elements themselves and with a constant width (on elements) */
+  font-family:arial,helvetica,verdana,sans-serif;
+  border:1px solid #5C5C5C; /* constant: dark gray */
+  font-size:1em;
+  width:20em;
 }
 input.formDateSized{ /* for the form elements themselves and with a constant width (on elements) */
   font-family:arial,helvetica,verdana,sans-serif;
