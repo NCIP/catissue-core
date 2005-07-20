@@ -40,7 +40,7 @@ public class Constants
 	public static final String LOGINNAME = "loginName";
 	public static final String LASTNAME = "lastName";
 	public static final String FIRSTNAME = "firstName";
-	public static final String INSTITUTE = "institute";
+	public static final String INSTITUTION = "institution";
 	public static final String EMAIL = "email";
 	public static final String DEPARTMENT = "department";
 	public static final String ADDRESS = "address";
@@ -50,7 +50,7 @@ public class Constants
 	public static final String OPERATION = "operation";
 	public static final String ACTIVITY_STATUS = "activityStatus";
 	
-	public static final String INSTITUTELIST = "instituteList";
+	public static final String INSTITUTIONLIST = "institutionList";
 	public static final String DEPARTMENTLIST = "departmentList";
 	public static final String STATELIST = "stateList";
 	public static final String COUNTRYLIST = "countryList";
@@ -105,10 +105,15 @@ public class Constants
 	public static final String PARTICIPANT_ADD_ACTION = "ParticipantAdd.do";
 	public static final String PARTICIPANT_EDIT_ACTION = "ParticipantEdit.do";
 
-	//Constants required in User.jsp Page
-	public static final String INSTITUTE_SEARCH_ACTION = "InstituteSearch.do";
-	public static final String INSTITUTE_ADD_ACTION = "InstituteAdd.do";
-	public static final String INSTITUTE_EDIT_ACTION = "InstituteEdit.do";
+	//Constants required in Institution.jsp Page
+	public static final String INSTITUTION_SEARCH_ACTION = "InstitutionSearch.do";
+	public static final String INSTITUTION_ADD_ACTION = "InstitutionAdd.do";
+	public static final String INSTITUTION_EDIT_ACTION = "InstitutionEdit.do";
+
+//	Constants required in Department.jsp Page
+	public static final String DEPARTMENT_SEARCH_ACTION = "DepartmentSearch.do";
+	public static final String DEPARTMENT_ADD_ACTION = "DepartmentAdd.do";
+	public static final String DEPARTMENT_EDIT_ACTION = "DepartmentEdit.do";
 	
 	//Constants required for Approve user
 	public static final String USER_DETAILS_SHOW_ACTION = "UserDetailsShow.do";
@@ -185,10 +190,12 @@ public class Constants
 	public static final int PARTICIPANT_FORM_ID = 2;
 	public static final int ACCESSION_FORM_ID = 3;
 	public static final int REPORTEDPROBLEM_FORM_ID = 4;
-	public static final int INSTITUTE_FORM_ID = 5;
+	public static final int INSTITUTION_FORM_ID = 5;
 	public static final int APPROVE_USER_FORM_ID = 6;
 	public static final int ACTIVITY_STATUS_FORM_ID = 7;
-	
+	public static final int DEPARTMENT_FORM_ID = 8;
+	public static final int COLLECTIONPROTOCOL_FORM_ID = 9;
+	public static final int DISTRIBUTIONPROTOCOL_FORM_ID = 10;
 	//Status message key Constants
 	public static final String STATUS_MESSAGE_KEY = "statusMessageKey";
 	
@@ -564,6 +571,17 @@ public class Constants
             "Zambia",//Zambia 
             "Zimbabwe",//Zimbabwe  
 	};
+	
+//	Constants required in CollectionProtocol.jsp Page
+	public static final String COLLECTIONPROTOCOL_SEARCH_ACTION = "CollectionProtocolSearch.do";
+	public static final String COLLECTIONPROTOCOL_ADD_ACTION = "CollectionProtocolAdd.do";
+	public static final String COLLECTIONPROTOCOL_EDIT_ACTION = "CollectionProtocolEdit.do";
+
+//	Constants required in DistributionProtocol.jsp Page
+	public static final String DISTRIBUTIONPROTOCOL_SEARCH_ACTION = "DistributionProtocolSearch.do";
+	public static final String DISTRIBUTIONPROTOCOL_ADD_ACTION = "DistributionProtocolAdd.do";
+	public static final String DISTRIBUTIONPROTOCOL_EDIT_ACTION = "DistributionProtocolEdit.do";
+
 	
 	public static final String [] CANCER_RESEARCH_GROUP_VALUES = {
 	        "Siteman Cancer Center",

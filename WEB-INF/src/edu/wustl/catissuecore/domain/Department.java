@@ -9,11 +9,13 @@
 
 package edu.wustl.catissuecore.domain;
 
+import edu.wustl.catissuecore.actionForm.AbstractActionForm;
+import edu.wustl.catissuecore.domain.AbstractDomainObject;
 /**
  * A department to which a User belongs to.
- * @hibernate.class table="CATISSUE_DEPARTMENT"
+ *  * @hibernate.class table="CATISSUE_DEPARTMENT"
  */
-public class Department implements java.io.Serializable
+public class Department extends AbstractDomainObject implements java.io.Serializable
 {
 	private static final long serialVersionUID = 1234567890L;
 
@@ -69,5 +71,13 @@ public class Department implements java.io.Serializable
 	public void setName(String name)
 	{
 		this.name = name;
+	}
+
+	/* (non-Javadoc)
+	 * @see edu.wustl.catissuecore.domain.AbstractDomainObject#setAllValues(edu.wustl.catissuecore.actionForm.AbstractActionForm)
+	 */
+	public void setAllValues(AbstractActionForm abstractForm) {
+		// TODO Auto-generated method stub
+
 	}
 }
