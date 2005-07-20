@@ -25,6 +25,7 @@
 		</div>
 		
 		<div>
+			
 			<img src="images/subMenuArrow.gif" width="7" height="7" alt=""/> 
 				<bean:message key="app.distributionProtocol" />
 		</div>
@@ -37,6 +38,7 @@
 						<bean:message key="app.edit" /> 
 					</a>
 		</div>
+		
 		
 		<div>
 			<img src="images/subMenuArrow.gif" width="7" height="7" alt="" /> 
@@ -81,7 +83,39 @@
 						<bean:message key="app.edit" />
 					</a>
 		</div>
-		
+		<div>
+			<img src="images/subMenuArrow.gif" width="7" height="7" alt="" /> 
+				<bean:message key="app.storagetype" />
+					<a class="subMenuPrimary" href="StorageType.do?operation=add">
+						<bean:message key="app.add" />
+					</a> | 
+					<a class="subMenuPrimary" href="StorageType.do?operation=search">
+						<bean:message key="app.edit" />
+					</a>
+		</div>
+
+		<div>
+			<img src="images/subMenuArrow.gif" width="7" height="7" alt="" /> 
+				<bean:message key="app.storageContainer" />
+					<a class="subMenuPrimary" href="StorageContainer.do?operation=add">
+						<bean:message key="app.add" />
+					</a> | 
+					<a class="subMenuPrimary" href="StorageContainer.do?operation=search">
+						<bean:message key="app.edit" />
+					</a>
+		</div>
+	
+		<div>
+			<img src="images/subMenuArrow.gif" width="7" height="7" alt="" /> 
+				<bean:message key="app.site" />
+					<a class="subMenuPrimary" href="Site.do?operation=add">
+						<bean:message key="app.add" />
+					</a> | 
+					<a class="subMenuPrimary" href="Site.do?operation=search">
+						<bean:message key="app.edit" />
+					</a>
+		</div>		
+
 		<div>
 			<img src="images/subMenuArrow.gif" width="7" height="7" alt="" />
 				<a class="subMenuPrimary" href="ApproveUserShow.do?pageNum=1"> 
