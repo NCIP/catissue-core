@@ -33,7 +33,7 @@
       </div>
       <div>
       	<img src="images/subMenuArrow.gif" width="7" height="7" alt="" />
-      		<a class="subMenuPrimary" href="#">
+      		<a class="subMenuPrimary" href="SpecimenCollectionGroup.do?operation=add">
       			<bean:message key="app.specimenCollectionGroup" />
       		</a>
       </div>
