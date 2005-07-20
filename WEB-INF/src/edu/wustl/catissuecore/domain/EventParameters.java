@@ -14,7 +14,7 @@ import edu.wustl.catissuecore.domain.User;
 
 /**
  * Attributes associated with a generic event.
- * @hibernate.class table="CATISSUE_EVENT_PARAMETERS"
+ * 
  * @author Aniruddha Phadnis
  */
 public abstract class EventParameters implements java.io.Serializable

@@ -108,9 +108,9 @@ public class CollectionProtocolEvent implements java.io.Serializable
 	/**
 	 * Returns the collection of SpecimenRequirements for this Protocol.
 	 * @hibernate.set name="specimenRequirementCollection" table="CATISSUE_COLLECTION_SPECIMEN_REQUIREMENT" 
-	 * cascade="save-update" inverse="true" lazy="false"
+	 * cascade="save-update" inverse="false" lazy="false"
 	 * @hibernate.collection-key column="COLLECTION_PROTOCOL_EVENT_ID"
-	 * @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.SpecimenRequirement" column="SPECIMEN_REQUIREMENT_ID"
+	 * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.SpecimenRequirement" column="SPECIMEN_REQUIREMENT_ID"
 	 * @return Returns the collection of SpecimenRequirements for this Protocol.
 	 */
 	public Collection getSpecimenRequirementCollection()

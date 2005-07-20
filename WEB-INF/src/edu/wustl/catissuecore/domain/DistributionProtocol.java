@@ -26,20 +26,20 @@ public class DistributionProtocol extends SpecimenProtocol implements java.io.Se
 	/**
 	 * Collection of specimenRequirements associated with the DistributionProtocol.
 	 */
-	private Collection specimenRequirementCollection = new HashSet();
+	protected Collection specimenRequirementCollection = new HashSet();
 	
 	/**
 	 * Collection of protocols(CollectionProtocols) associated with the DistributionProtocol.
 	 */
-	private Collection collectionProtocolCollection = new HashSet();
+	protected Collection collectionProtocolCollection = new HashSet();
 	
 	// ---- Method section
 	/**
 	 * Returns the collection of SpecimenRequirements for this Protocol.
 	 * @hibernate.set name="specimenRequirementCollection" table="CATISSUE_DISTRIBUTION_SPECIMEN_REQUIREMENT" 
-	 * cascade="save-update" inverse="true" lazy="false"
-	 * @hibernate.collection-key column="DISTRIBUTION_PROTOCOL_EVENT_ID"
-	 * @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.SpecimenRequirement" column="SPECIMEN_REQUIREMENT_ID"
+	 * cascade="save-update" inverse="false" lazy="false"
+	 * @hibernate.collection-key column="DISTRIBUTION_PROTOCOL_ID"
+	 * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.SpecimenRequirement" column="SPECIMEN_REQUIREMENT_ID"
 	 * @return Returns the collection of SpecimenRequirements for this Protocol.
 	 */
 	public Collection getSpecimenRequirementCollection()

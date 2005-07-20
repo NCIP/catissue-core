@@ -15,7 +15,8 @@ import java.io.Serializable;
 /**
  * A molecular derivative (I.e. RNA / DNA / Protein Lysate) 
  * obtained from a specimen.
- * @hibernate.class table="CATISSUE_MOLECULAR_SPECIMEN"
+ * @hibernate.joined-subclass table="CATISSUE_MOLECULAR_SPECIMEN"
+ * @hibernate.joined-subclass-key column="IDENTIFIER" 
  * @author gautam_shetty
  */
 public class MolecularSpecimen extends Specimen implements Serializable

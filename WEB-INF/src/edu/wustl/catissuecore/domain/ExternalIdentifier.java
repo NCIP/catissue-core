@@ -36,7 +36,9 @@ public class ExternalIdentifier implements Serializable
      * Value of the legacy identifier.
      */
     protected String value;
-
+    
+    protected Specimen specimen;
+	
     /**
      * Returns the system generated unique identifier.
      * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"
@@ -102,4 +104,21 @@ public class ExternalIdentifier implements Serializable
     {
         this.value = value;
     }
+    
+	/**
+     * @hibernate.many-to-one column="SPECIMEN_ID"  class="edu.wustl.catissuecore.domain.Specimen" constrained="true"
+	 * @see #setParticipant(Site)
+     */
+	public Specimen getSpecimen() 
+	{
+		return specimen;
+	}
+	
+	/**
+	 * @param specimen The specimen to set.
+	 */
+	public void setSpecimen(Specimen specimen) 
+	{
+		this.specimen = specimen;
+	}
 }

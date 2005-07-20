@@ -65,7 +65,7 @@ public class StorageContainerDetails implements java.io.Serializable
      * @return Name of parameter.
      * @see #setKey(String)
      * @hibernate.property name="key" type="string" 
-     * column="KEY" length="30"
+     * column="KEY" length="50"
      */
 	public String getKey()
 	{
@@ -87,7 +87,7 @@ public class StorageContainerDetails implements java.io.Serializable
      * @return The value of parameter.
      * @see #setValue(String)
      * @hibernate.property name="value" type="string" 
-     * column="VALUE" length="30"
+     * column="VALUE" length="50"
      */
 	public String getValue()
 	{
@@ -103,27 +103,4 @@ public class StorageContainerDetails implements java.io.Serializable
 	{
 		this.value = value;
 	}
-
-	/**
-     * Returns the type of the defined key. 
-     * @return The type of the defined key.
-     * @see #setType(String)
-     * @hibernate.property name="type" type="string" 
-     * column="TYPE" length="30"
-     */
-	public String getType()
-	{
-		return type;
-	}
-
-	/**
-     * Sets the type of the defined key.
-     * @param type the type of the defined key.
-     * @see #getType()
-     */
-	public void setType(String type)
-	{
-		this.type = type;
-	}
-
 }

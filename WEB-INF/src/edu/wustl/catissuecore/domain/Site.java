@@ -33,19 +33,24 @@ public class Site implements java.io.Serializable
 	protected String type;
 	
 	/**
+     * A string containing the Email Address of the user.
+     */
+	protected String emailAddress = null;
+
+	/**
+     * Defines whether this Site record can be queried (Active) or not queried (Inactive) by any actor.
+     */
+	protected String activityStatus;
+
+	/**
      * The User who currently coordinates operations at the Site.
      */
 	protected User coordinator = new User();
 	
 	/**
-     * Defines whether this Site record can be queried (Active) or not queried (Inactive) by any actor.
-     */
-	protected String activityStatus;
-	
-	/**
      * The address of the site.
      */
-	private Address address = new Address();
+	protected Address address = new Address();
 
 	/**
      * Returns the system generated unique identifier.
@@ -114,27 +119,27 @@ public class Site implements java.io.Serializable
 	}
 
 	/**
-     * Returns the coordinator associated with this site.
-     * @hibernate.many-to-one column="USER_ID"  class="edu.wustl.catissuecore.domain.User" constrained="true"
-     * @return coordinator associated with this site.
-     * @see #setCoordinator(User)
+     * @hibernate.property name="emailAddress" type="string" 
+     * column="EMAIL_ADDRESS" length="150" not-null="true" unique="true"
+     * Returns the Email Address of the user.
+     * @return String representing the emailAddress address of the user.
      */
-	public User getCoordinator()
-	{
-		return coordinator;
-	}
+    public String getEmailAddress()
+    {
+        return (this.emailAddress);
+    }
 
-	/**
-     * Sets the coordinator to this site.
-     * @param coordinator coordinator to be set.
-     * @see #getCoordinator()
+    /**
+     * Sets the emailAddress address of the user.
+     * @param emailAddress String representing emailAddress address of the user.
+     * @see #getEmailAddress()
      */
-	public void setCoordinator(edu.wustl.catissuecore.domain.User coordinator)
-	{
-		this.coordinator = coordinator;
-	}
+    public void setEmailAddress(String email)
+    {
+        this.emailAddress = email;
+    }
 
-	/**
+    /**
      * Returns the activity status.
      * @hibernate.property name="activityStatus" type="string" 
      * column="ACTIVITY_STATUS" length="50"
@@ -154,6 +159,27 @@ public class Site implements java.io.Serializable
 	public void setActivityStatus(String activityStatus)
 	{
 		this.activityStatus = activityStatus;
+	}
+	
+	/**
+     * Returns the coordinator associated with this site.
+     * @hibernate.many-to-one column="USER_ID"  class="edu.wustl.catissuecore.domain.User" constrained="true"
+     * @return coordinator associated with this site.
+     * @see #setCoordinator(User)
+     */
+	public User getCoordinator()
+	{
+		return coordinator;
+	}
+
+	/**
+     * Sets the coordinator to this site.
+     * @param coordinator coordinator to be set.
+     * @see #getCoordinator()
+     */
+	public void setCoordinator(edu.wustl.catissuecore.domain.User coordinator)
+	{
+		this.coordinator = coordinator;
 	}
 
 	/**

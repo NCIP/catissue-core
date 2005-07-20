@@ -19,4 +19,23 @@ public abstract class SpecimenEventParameters extends EventParameters
 			java.io.Serializable
 {
 	private static final long serialVersionUID = 1234567890L;
+	
+	protected Specimen specimen;
+	
+	/**
+     * @hibernate.many-to-one column="SPECIMEN_ID"  class="edu.wustl.catissuecore.domain.Specimen" constrained="true"
+	 * @see #setParticipant(Site)
+     */
+	public Specimen getSpecimen() 
+	{
+		return specimen;
+	}
+	
+	/**
+	 * @param specimen The specimen to set.
+	 */
+	public void setSpecimen(Specimen specimen) 
+	{
+		this.specimen = specimen;
+	}
 }

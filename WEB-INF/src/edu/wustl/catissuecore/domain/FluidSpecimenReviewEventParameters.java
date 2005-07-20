@@ -11,7 +11,8 @@ package edu.wustl.catissuecore.domain;
 
 /**
  * Attributes associated with a review event of a fluid specimen.
- * @hibernate.class table="CATISSUE_FLUID_SPECIMEN_REVIEW_EVENT_PARAMETERS"
+ * @hibernate.joined-subclass table="CATISSUE_FLUID_SPECIMEN_REVIEW_EVENT_PARAMETERS"
+ * @hibernate.joined-subclass-key column="IDENTIFIER" 
  * @author Aniruddha Phadnis
  */
 public class FluidSpecimenReviewEventParameters extends ReviewEventParameters

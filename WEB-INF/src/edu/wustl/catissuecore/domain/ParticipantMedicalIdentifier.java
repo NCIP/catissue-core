@@ -33,6 +33,11 @@ public class ParticipantMedicalIdentifier implements java.io.Serializable
 	protected Site site;
 	
 	/**
+     * 
+     */
+	protected Participant participant;
+
+	/**
      * Returns System generated unique identifier.
      * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"
      * unsaved-value="null" generator-class="native"
@@ -95,5 +100,22 @@ public class ParticipantMedicalIdentifier implements java.io.Serializable
 	public void setSite(Site site)
 	{
 		this.site = site;
+	}
+	
+	/**
+     * @hibernate.many-to-one column="PARTICIPANT_ID"  class="edu.wustl.catissuecore.domain.Participant" constrained="true"
+	 * @see #setParticipant(Site)
+     */
+	public Participant getParticipant() 
+	{
+		return participant;
+	}
+	
+	/**
+	 * @param participant The participant to set.
+	 */
+	public void setParticipant(Participant participant) 
+	{
+		this.participant = participant;
 	}
 }

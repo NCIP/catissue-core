@@ -1,13 +1,25 @@
 
 package edu.wustl.catissuecore.domain;
 
+/**
+ * @hibernate.class table="CATISSUE_AUDIT_EVENT_DETAILS"
+ **/
 public class AuditEventDetails implements java.io.Serializable
 {
-
 	private static final long serialVersionUID = 1234567890L;
 
 	protected Long systemIdentifier;
+	protected String elementName;
+	protected String previousValue;
+	protected String currentValue;
 
+	protected AuditEventLog auditEventLog;
+	/**
+     * @return Long System generated unique identifier.
+     * @see #setSystemIdentifier(Long)
+     * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"
+     * unsaved-value="null" generator-class="native" 
+     */
 	public Long getSystemIdentifier()
 	{
 		return systemIdentifier;
@@ -18,8 +30,10 @@ public class AuditEventDetails implements java.io.Serializable
 		this.systemIdentifier = systemIdentifier;
 	}
 
-	protected String elementName;
-
+	/**
+	 * @hibernate.property name="elementName" type="string"
+     * column="ELEMENT_NAME" length="50" 
+	 **/
 	public String getElementName()
 	{
 		return elementName;
@@ -30,8 +44,10 @@ public class AuditEventDetails implements java.io.Serializable
 		this.elementName = elementName;
 	}
 
-	protected String previousValue;
-
+	/**
+	 * @hibernate.property name="previousValue" type="string"
+     * column="PREVIOUS_VALUE" length="50" 
+	 **/
 	public String getPreviousValue()
 	{
 		return previousValue;
@@ -42,8 +58,10 @@ public class AuditEventDetails implements java.io.Serializable
 		this.previousValue = previousValue;
 	}
 
-	protected String currentValue;
-
+	/**
+	 * @hibernate.property name="currentValue" type="string"
+     * column="CURRENT_VALUE" length="50" 
+	 **/
 	public String getCurrentValue()
 	{
 		return currentValue;
@@ -53,5 +71,20 @@ public class AuditEventDetails implements java.io.Serializable
 	{
 		this.currentValue = currentValue;
 	}
-
+	
+	/**
+     * @hibernate.many-to-one column="AUDIT_EVENT_LOG_ID"  class="edu.wustl.catissuecore.domain.AuditEventLog" constrained="true"
+	 * @see #setParticipant(Site)
+     */
+	public AuditEventLog getAuditEventLog() 
+	{
+		return auditEventLog;
+	}
+	/**
+	 * @param auditEventLog The auditEventLog to set.
+	 */
+	public void setAuditEventLog(AuditEventLog auditEventLog) 
+	{
+		this.auditEventLog = auditEventLog;
+	}
 }

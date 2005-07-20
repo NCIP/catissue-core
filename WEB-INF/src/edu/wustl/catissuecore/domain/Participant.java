@@ -318,7 +318,6 @@ public class Participant implements java.io.Serializable
 	 */
 	public Collection getParticipantMedicalIdentifierCollection()
 	{
-
 		return participantMedicalIdentifierCollection;
 	}
 
@@ -332,7 +331,7 @@ public class Participant implements java.io.Serializable
 		this.participantMedicalIdentifierCollection = participantMedicalIdentifierCollection;
 	}
 
-	/*
+	/**
 	 * Returns collection of collection protocol registrations of this participant.
 	 * @return collection of collection protocol registrations of this participant.
 	 * @hibernate.set name="collectionProtocolRegistrationCollection" table="CATISSUE_COLLECTION_PROTOCOL_REGISTRATION"

@@ -62,11 +62,6 @@ public class Address extends AbstractDomainObject implements java.io.Serializabl
 	protected String faxNumber;
 	
 	/**
-     * A string containing the Email Address of the user.
-     */
-    private String emailAddress = null;
-
-	/**
 	 * Returns the identifier assigned to Address.
 	 * 
 	 * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"
@@ -218,28 +213,7 @@ public class Address extends AbstractDomainObject implements java.io.Serializabl
 	{
 		this.faxNumber = faxNumber;
 	}
-	
-	/**
-     * @hibernate.property name="emailAddress" type="string" 
-     * column="EMAIL_ADDRESS" length="50" not-null="true" unique="true"
-     * Returns the Email Address of the user.
-     * @return String representing the emailAddress address of the user.
-     */
-    public String getEmailAddress()
-    {
-        return (this.emailAddress);
-    }
-
-    /**
-     * Sets the emailAddress address of the user.
-     * @param emailAddress String representing emailAddress address of the user.
-     * @see #getEmailAddress()
-     */
-    public void setEmailAddress(String email)
-    {
-        this.emailAddress = email;
-    }
-    
+	   
     /* (non-Javadoc)
      * @see edu.wustl.catissuecore.domain.AbstractDomainObject#setAllValues(edu.wustl.catissuecore.actionForm.AbstractActionForm)
      */

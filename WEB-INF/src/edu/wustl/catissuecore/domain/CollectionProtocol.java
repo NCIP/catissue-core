@@ -26,22 +26,22 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 	/**
 	 * Collection of studies associated with the CollectionProtocol.
 	 */
-	private Collection distributionProtocolCollection = new HashSet();
+	protected Collection distributionProtocolCollection = new HashSet();
 	
 	/**
 	 * Collection of users associated with the CollectionProtocol.
 	 */
-	private Collection userCollection = new HashSet();
+	protected Collection userCollection = new HashSet();
 	
 	/**
 	 * Collection of CollectionProtocolEvents associated with the CollectionProtocol.
 	 */
-	private Collection collectionProtocolEventCollection = new HashSet();
+	protected Collection collectionProtocolEventCollection = new HashSet();
 
 	/**
 	 * Returns the collection of Studies for this Protocol.
 	 * @hibernate.set name="distributionProtocolCollection" table="CATISSUE_COLLECTION_DISTRIBUTION_RELATION" 
-	 * cascade="save-update" inverse="true" lazy="false"
+	 * cascade="save-update" inverse="false" lazy="false"
 	 * @hibernate.collection-key column="COLLECTION_PROTOCOL_ID"
 	 * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.DistributionProtocol" column="DISTRIBUTION_PROTOCOL_ID"
 	 * @return Returns the collection of Studies for this Protocol.
@@ -62,7 +62,7 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 	/**
 	 * Returns the collection of Users(ProtocolCoordinators) for this Protocol.
 	 * @hibernate.set name="userCollection" table="CATISSUE_COLLECTION_COORDINATORS" 
-	 * cascade="save-update" inverse="true" lazy="false"
+	 * cascade="save-update" inverse="false" lazy="false"
 	 * @hibernate.collection-key column="COLLECTION_PROTOCOL_ID"
 	 * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.User" column="USER_ID"
 	 * @return The collection of Users(ProtocolCoordinators) for this Protocol.

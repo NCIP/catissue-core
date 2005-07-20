@@ -17,7 +17,7 @@ import java.util.HashSet;
 /**
  * An event that results in the collection 
  * of one or more specimen from a participant.
- * @hibernate.class name="CATISSUE_SPECIMEN_COLLECTION_GROUP"
+ * @hibernate.class table="CATISSUE_SPECIMEN_COLLECTION_GROUP"
  * @author gautam_shetty
  */
 public class SpecimenCollectionGroup implements Serializable
@@ -225,7 +225,7 @@ public class SpecimenCollectionGroup implements Serializable
     /**
      * Returns the clinical report associated with the participant at the 
      * time of the SpecimenCollection Group receipt.
-     * @hibernate.many-to-one column="CLINICAL_ID" 
+     * @hibernate.many-to-one column="CLINICAL_REPORT_ID" 
 	 * class="edu.wustl.catissuecore.domain.ClinicalReport" constrained="true"
      * @return the clinical report associated with the participant at the 
      * time of the SpecimenCollection Group receipt.

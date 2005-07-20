@@ -11,6 +11,8 @@
 package edu.wustl.catissuecore.domain;
 
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.HashSet;
 
 /**
  * An attribute of a Specimen that renders 
@@ -41,6 +43,8 @@ public class Biohazard implements Serializable
      * Type of biohazard (Infectious, Radioactive, Toxic, Carcinogen, Mutagen).
      */
     protected String type;
+    
+    protected Collection specimenCollection = new HashSet();
 
     /**
      * Returns the system generated unique identifier.
@@ -129,4 +133,28 @@ public class Biohazard implements Serializable
     {
         this.type = type;
     }
+    
+	/*
+     * @hibernate.many-to-one column="SPECIMEN_ID"  class="edu.wustl.catissuecore.domain.Specimen" constrained="true"
+	 * @see #setParticipant(Site)
+     */
+    /**
+     * @hibernate.set name="specimenCollection" table="CATISSUE_SPECIMEN_BIOHAZARD_RELATIONSHIP"
+     * cascade="save-update" inverse="true" lazy="false"
+     * @hibernate.collection-key column="BIOHAZARD_ID"
+     * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.Specimen" column="SPECIMEN_ID"
+
+     * */
+	public Collection getSpecimenCollection() 
+	{
+		return specimenCollection;
+	}
+	
+	/**
+	 * @param specimen The specimen to set.
+	 */
+	public void setSpecimenCollection(Collection specimenCollection) 
+	{
+		this.specimenCollection = specimenCollection;
+	}
 }

@@ -10,6 +10,9 @@
 
 package edu.wustl.catissuecore.domain;
 
+import java.util.Collection;
+import java.util.HashSet;
+
 /**
  * @author mandar_deshmukh
  * Required generic attributes for a Specimen associated with a Collection or Distribution Protocol.
@@ -44,6 +47,16 @@ public abstract class SpecimenRequirement implements java.io.Serializable
 	 */
 	protected String pathologyStatus;
 
+	/**
+	 * Collection of studies associated with the CollectionProtocol.
+	 */
+	protected Collection distributionProtocolCollection = new HashSet();
+	
+	/**
+	 * Collection of studies associated with the CollectionProtocol.
+	 */
+	protected Collection collectionProtocolEventCollection = new HashSet();
+	
 	/**
 	 * Returns the systemIdentifier.
 	 * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"
@@ -138,5 +151,45 @@ public abstract class SpecimenRequirement implements java.io.Serializable
 	public void setPathologyStatus(String pathologyStatus)
 	{
 		this.pathologyStatus = pathologyStatus;
+	}
+	
+	/**
+	 * Returns the collection of Studies for this Protocol requirement.
+	 * @hibernate.set name="distributionProtocolCollection" table="CATISSUE_DISTRIBUTION_SPECIMEN_REQUIREMENT" 
+	 * cascade="save-update" inverse="true" lazy="false"
+	 * @hibernate.collection-key column="SPECIMEN_REQUIREMENT_ID"
+	 * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.DistributionProtocol" column="DISTRIBUTION_PROTOCOL_ID"
+	 * @return Returns the collection of Studies for this Protocol.
+	 */
+	public Collection getDistributionProtocolCollection()
+	{
+		return distributionProtocolCollection;
+	}
+
+	/**
+	 * @param studyCollection The studyCollection to set.
+	 */
+	public void setDistributionProtocolCollection(Collection distributionProtocolCollection)
+	{
+		this.distributionProtocolCollection = distributionProtocolCollection;
+	}
+	
+	/**
+	 * @hibernate.set name="collectionProtocolCollection" table="CATISSUE_COLLECTION_SPECIMEN_REQUIREMENT" 
+	 * cascade="save-update" inverse="true" lazy="false"
+	 * @hibernate.collection-key column="SPECIMEN_REQUIREMENT_ID"
+	 * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.CollectionProtocolEvent" column="COLLECTION_PROTOCOL_EVENT_ID"
+	 * @return Returns the collection of Studies for this Protocol.
+	 */
+	public Collection getCollectionProtocolEventCollection() 
+	{
+		return collectionProtocolEventCollection;
+	}
+	/**
+	 * @param collectionProtocolCollection The collectionProtocolCollection to set.
+	 */
+	public void setCollectionProtocolEventCollection(Collection collectionProtocolEventCollection) 
+	{
+		this.collectionProtocolEventCollection = collectionProtocolEventCollection;
 	}
 }

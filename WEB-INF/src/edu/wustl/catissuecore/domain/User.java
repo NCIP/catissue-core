@@ -13,7 +13,9 @@ import java.io.Serializable;
 import java.sql.Clob;
 import java.sql.SQLException;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 
 import edu.wustl.catissuecore.actionForm.AbstractActionForm;
 import edu.wustl.catissuecore.actionForm.UserForm;
@@ -89,7 +91,12 @@ public class User extends AbstractDomainObject implements Serializable
      * Comments given by the approver. 
      */
     protected String comments;
-
+    
+    /**
+     * Set of collection protocol.
+     * */
+    protected Collection collectionProtocolCollection = new HashSet();
+    
     /**
      * Initialize a new User instance. 
      * Note: Hibernate invokes this constructor through reflection API.  
@@ -315,6 +322,26 @@ public class User extends AbstractDomainObject implements Serializable
 		this.address = address;
 	}
 
+	/**
+	 * @return Returns the collectionProtocolCollection.
+	 * @hibernate.set name="collectionProtocolCollection" table="CATISSUE_COLLECTION_COORDINATORS" 
+	 * cascade="save-update" inverse="true" lazy="false"
+	 * @hibernate.collection-key column="USER_ID"
+	 * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.CollectionProtocol" column="COLLECTION_PROTOCOL_ID"
+	 */
+	public Collection getCollectionProtocolCollection() 
+	{
+		return collectionProtocolCollection;
+	}
+	
+	/**
+	 * @param collectionProtocolCollection The collectionProtocolCollection to set.
+	 */
+	public void setCollectionProtocolCollection(Collection collectionProtocolCollection) 
+	{
+		this.collectionProtocolCollection = collectionProtocolCollection;
+	}
+	
 	/**
      * Returns the comments given by the approver. 
      * @return the comments given by the approver.

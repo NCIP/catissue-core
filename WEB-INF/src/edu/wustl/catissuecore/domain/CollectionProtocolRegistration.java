@@ -30,7 +30,7 @@ public class CollectionProtocolRegistration implements Serializable
      * A unique number given by a User to a Participant 
      * registered to a Collection Protocol.
      */
-    protected Long protocolParticipantIdentifier;
+    protected String protocolParticipantIdentifier;
 
     /**
      * Date on which the Participant is registered to the Collection Protocol.
@@ -73,13 +73,13 @@ public class CollectionProtocolRegistration implements Serializable
     /**
      * Returns the unique number given by a User to a Participant 
      * registered to a Collection Protocol.
-     * @hibernate.property name="protocolParticipantIdentifier" type="long"
+     * @hibernate.property name="protocolParticipantIdentifier" type="string"
      * column="PROTOCOL_PARTICIPANT_IDENTIFIER" length="50"
      * @return the unique number given by a User to a Participant 
      * registered to a Collection Protocol.
      * @see #setProtocolParticipantIdentifier(Long)
      */
-    public Long getProtocolParticipantIdentifier()
+    public String getProtocolParticipantIdentifier()
     {
         return protocolParticipantIdentifier;
     }
@@ -92,7 +92,7 @@ public class CollectionProtocolRegistration implements Serializable
      * @see #getProtocolParticipantIdentifier()
      */
     public void setProtocolParticipantIdentifier(
-            Long protocolParticipantIdentifier)
+    		String protocolParticipantIdentifier)
     {
         this.protocolParticipantIdentifier = protocolParticipantIdentifier;
     }
