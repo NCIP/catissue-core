@@ -72,6 +72,10 @@ public class Constants
 	public static final String RECEIVEDSITELIST = "receivedSiteList";
 	public static final String RECEIVEDMODELIST = "receivedModeList";
 	public static final String ACTIVITYSTATUSLIST = "activityStatusList";
+	public static final String USERLIST = "userList";
+	public static final String SITETYPELIST = "siteTypeList";
+	public static final String STORAGECONTAINERLIST = "storageContainerList";
+	public static final String SITELIST = "siteList";
 	
 	//New Specimen lists.
 	public static final String SPECIMEN_COLLECTION_GROUP_LIST = "specimenCollectionGroupIdList";
@@ -99,6 +103,21 @@ public class Constants
 	public static final String ACCESSION_SEARCH_ACTION = "AccessionSearch.do";
 	public static final String ACCESSION_ADD_ACTION = "AccessionAdd.do";
 	public static final String ACCESSION_EDIT_ACTION = "AccessionEdit.do";
+	
+	//Constants required in StorageType.jsp Page
+	public static final String STORAGE_TYPE_SEARCH_ACTION = "StorageTypeSearch.do";
+	public static final String STORAGE_TYPE_ADD_ACTION = "StorageTypeAdd.do";
+	public static final String STORAGE_TYPE_EDIT_ACTION = "StorageTypeEdit.do";
+	
+//	Constants required in StorageContainer.jsp Page
+	public static final String STORAGE_CONTAINER_SEARCH_ACTION = "StorageContainerSearch.do";
+	public static final String STORAGE_CONTAINER_ADD_ACTION = "StorageContainerAdd.do";
+	public static final String STORAGE_CONTAINER_EDIT_ACTION = "StorageContainerEdit.do";
+	
+//	Constants required in Site.jsp Page
+	public static final String SITE_SEARCH_ACTION = "SiteSearch.do";
+	public static final String SITE_ADD_ACTION = "SiteAdd.do";
+	public static final String SITE_EDIT_ACTION = "SiteEdit.do";
 	
 	//Constants required in Partcipant.jsp Page
 	public static final String PARTICIPANT_SEARCH_ACTION = "ParticipantSearch.do";
@@ -196,6 +215,10 @@ public class Constants
 	public static final int DEPARTMENT_FORM_ID = 8;
 	public static final int COLLECTIONPROTOCOL_FORM_ID = 9;
 	public static final int DISTRIBUTIONPROTOCOL_FORM_ID = 10;
+	public static final int STORAGE_TYPE_ID = 11;
+	public static final int SITE_FORM_ID = 12;
+	public static final int STORAGE_CONTAINER_ID = 13;
+	
 	//Status message key Constants
 	public static final String STATUS_MESSAGE_KEY = "statusMessageKey";
 	
@@ -572,111 +595,15 @@ public class Constants
             "Zimbabwe",//Zimbabwe  
 	};
 	
-//	Constants required in CollectionProtocol.jsp Page
-	public static final String COLLECTIONPROTOCOL_SEARCH_ACTION = "CollectionProtocolSearch.do";
-	public static final String COLLECTIONPROTOCOL_ADD_ACTION = "CollectionProtocolAdd.do";
-	public static final String COLLECTIONPROTOCOL_EDIT_ACTION = "CollectionProtocolEdit.do";
-
-//	Constants required in DistributionProtocol.jsp Page
-	public static final String DISTRIBUTIONPROTOCOL_SEARCH_ACTION = "DistributionProtocolSearch.do";
-	public static final String DISTRIBUTIONPROTOCOL_ADD_ACTION = "DistributionProtocolAdd.do";
-	public static final String DISTRIBUTIONPROTOCOL_EDIT_ACTION = "DistributionProtocolEdit.do";
-
-	
-	public static final String [] CANCER_RESEARCH_GROUP_VALUES = {
-	        "Siteman Cancer Center",
-	        "Washington University"
+	public static final String [] ACTIVITY_STATUS_ARRAY = {
+			"Active",
+			"Closed",
+			"Disabled"
 	};
 	
-	public static final String [] ACTIVITY_STATUS_VALUES = {
-	        "Active",
-	        "Disabled",
-	        "Closed",
-	        "New",
-	        "Reject",
-	        "Pending"
-	};
-	
-	//Only for showing UI.
-	public static final String [] ROLE_VALUES = {
-	        "Administrator",
-	        "Clinician",
-	        "Technician",
-	        "Scientist",
-	        "Public",
-	        "Collector"
-	};
-	
-	public static final String [] INSTITUTE_VALUES = {
-	        "Washington University"
-	};
-	
-	public static final String [] DEPARTMENT_VALUES = {
-	        "Cardiology",
-	        "Pathology"
-	};
-	
-	public static final String [] SPECIMEN_TYPE_VALUES = {
-	        "Tissue",
-	        "Fluid",
-	        "Cell",
-	        "Molecular"
-	};
-	
-	public static final String [] SPECIMEN_SUB_TYPE_VALUES = {
-	        "Blood",
-	        "Serum",
-	        "Plasma",
-	};
-	
-	public static final String [] TISSUE_SITE_VALUES = {
-	        "Adrenal-Cortex",
-	        "Adrenal-Medulla",
-	        "Adrenal-NOS"
-	};
-	
-	public static final String [] TISSUE_SIDE_VALUES = {
-	        "Lavage",
-	        "Metastatic Lesion",
-	};
-	
-	public static final String [] PATHOLOGICAL_STATUS_VALUES = {
-	        "Primary Tumor",
-	        "Metastatic Node",
-	        "Non-Maglignant Tissue",
-	};
-
-	public static final String [] BIOHAZARD_NAME_VALUES = {
-	        ""
-	};
-	
-	public static final String [] BIOHAZARD_TYPE_VALUES = {
-	        "Radioactive"
-	};
-	
-	public static final String [] ETHNICITY_VALUES = {
-	        "-- Select --"
-	};
-	
-	public static final String [] PARTICIPANT_MEDICAL_RECORD_SOURCE_VALUES = {
-	        "-- Select --"
-	};
-	
-	public static final String [] PROTOCOL_TITLE_ARRAY = {
-	        "Protocol-1"
-	};
-	        
-	public static final String [] PARTICIPANT_NAME_ARRAY = {
-	        "LastName,FirstName"
-	};
-	public static final String [] PROTOCOL_PARTICIPANT_NUMBER_ARRAY = {
-	        "1","2","3","4"
-	};
-	public static final String [] STUDY_CALENDAR_EVENT_POINT_ARRAY = {
-	        "30","60","90"
-	};
-	public static final String [] CLINICAL_STATUS_ARRAY = {
-	        "Pre-Opt",
-	        "Post-Opt"
+	public static final String [] SITE_TYPE_ARRAY = {
+			"Collection",
+			"Laboratory",
+			"Repository"
 	};
 }
