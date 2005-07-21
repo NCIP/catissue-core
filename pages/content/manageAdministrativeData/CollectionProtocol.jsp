@@ -216,7 +216,7 @@
 						 <td class="formField" colspan=2>
 						 <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
 						 <html:text styleClass="formDateSized" size="35" styleId="startDate" property="startDate" readonly="true"/>
-							<a href="javascript:show_calendar('collectionProtocolForm.startDate','','','DD-MON-YYYY');">
+							<a href="javascript:show_calendar('collectionProtocolForm.startDate','','','MM-DD-YYYY');">
 								<img src="images\calendar.gif" width=24 height=22 border=0>
 							</a>
 						 </td>
@@ -234,7 +234,7 @@
 						 <td class="formField" colspan=2>
 						 <div id="overDiv1" style="position:absolute; visibility:hidden; z-index:1000;"></div>
 						 <html:text styleClass="formDateSized" size="35" styleId="endDate" property="endDate" readonly="true"/>
-							<a href="javascript:show_calendar('collectionProtocolForm.endDate','','','DD-MON-YYYY');">
+							<a href="javascript:show_calendar('collectionProtocolForm.endDate','','','MM-DD-YYYY');">
 								<img src="images\calendar.gif" width=24 height=22 border=0>
 							</a>
 						 </td>
@@ -311,20 +311,20 @@
 </table>
 
 <!-- to insert the div tag -->
-<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage">
+<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="753">
 <tr><td>
 <table summary="" cellpadding="3" cellspacing="0" border="0" >
 	<tr>
 		<td rowspan=2 class="tabrightmostcell">1</td>
 		<td class="formField">
-			<table summary="" cellpadding="3" cellspacing="0" border="0">
+			<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
 				<tr>
-					<td class="formRequiredLabel">
+					<td class="formRequiredLabel" >
 						<label for="clinicalstatus">
 					    	<bean:message key="collectionprotocol.clinicalstatus" />
 						</label>
 					</td>
-				    <td class="formField" colspan=2>
+				    <td class="onlyBottomBorder" colspan=2>
 				    	<html:select property="clinicalStatus" styleClass="formField" styleId="clinicalStatus" size="1">
 				        	<html:option value="Type1">Pre-Opt</html:option>
 							<html:option value="Type1">Pre-Opt</html:option>
@@ -354,7 +354,7 @@
 			        	<b><bean:message key="collectionprotocol.specimenreq" /></b>
 			        </td>
 			        <td class="formTitle">	
-			     	   <html:button property="addSpecimenReq">Add More</html:button>
+			     	   <html:button property="addSpecimenReq" styleClass="actionButton">Add More</html:button>
 			        </td>
 			    </tr>
 			    
