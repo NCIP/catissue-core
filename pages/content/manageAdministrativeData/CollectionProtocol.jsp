@@ -367,29 +367,29 @@
 			    </tr>
 			    
 			    <TR> <!-- SUB TITLES -->
-			        <td class="tabrightmostcell">
+			        <td class="formLeftSubTableTitle">
 		        		<bean:message key="collectionprotocol.specimennumber" />
 			        </td>
-			        <td class="formRequiredLabel">
+			        <td class="formLeftSubTableTitle">
 			        	<bean:message key="collectionprotocol.specimentype" />
 			        </td>
-			        <td class="formRequiredLabel">
+			        <td class="formLeftSubTableTitle">
 			        	<bean:message key="collectionprotocol.specimensubtype" />
 			        </td>
 			        
-			        <td class="formRequiredLabel">
+			        <td class="formLeftSubTableTitle">
 			        	<bean:message key="collectionprotocol.specimensite" />
 				    </td>
-			        <td class=formRequiredLabel>
+			        <td class=formLeftSubTableTitle>
 				        <bean:message key="collectionprotocol.specimenside" />
 				    </td>
-			        <td  class=formRequiredLabel>
+			        <td  class=formLeftSubTableTitle>
 			    		<bean:message key="collectionprotocol.specimenstatus" />
 				    </td>
-			        <td class=formRequiredLabel>
+			        <td class=formLeftSubTableTitle>
 			        	<bean:message key="collectionprotocol.quantity" />
 			        </td>
-			        <td class=formRequiredLabel>
+			        <td class=formLeftSubTableTitle>
 			        	<bean:message key="collectionprotocol.unit" />
 			        </td>
 			    </TR><!-- SUB TITLES END -->
@@ -441,7 +441,7 @@
 			        	<html:text styleClass="formFieldSized5" styleId="enrollment" property="enrollment" readonly="<%=readOnlyValue%>" />        
 			        </td>
 			        <td class="formField">
-			        	<span id="unitspan">
+			        	<span id="unitspan">&nbsp;
 						</span>
 					</td>
 				</TR>	<!-- SPECIMEN REQ DATA END -->
