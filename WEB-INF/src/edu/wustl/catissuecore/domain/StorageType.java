@@ -9,13 +9,17 @@
  */
 
 package edu.wustl.catissuecore.domain;
+
+import edu.wustl.catissuecore.actionForm.AbstractActionForm;
 import edu.wustl.catissuecore.domain.StorageContainerCapacity;
+import edu.wustl.catissuecore.actionForm.StorageTypeForm;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * Type of the storage container e.g. Freezer, Box etc.
  * @hibernate.class table="CATISSUE_STORAGE_TYPE"
  */
-public class StorageType implements java.io.Serializable
+public class StorageType extends AbstractDomainObject implements java.io.Serializable
 {
 	private static final long serialVersionUID = 1234567890L;
 
@@ -126,5 +130,30 @@ public class StorageType implements java.io.Serializable
 	public void setDefaultStorageCapacity(StorageContainerCapacity defaultStorageCapacity)
 	{
 		this.defaultStorageCapacity = defaultStorageCapacity;
+	}
+	
+	/**
+	 * This function Copies the data from a StorageTypeForm object to a StorageType object.
+	 * @param storageTypeForm A StorageTypeForm object containing the information about the StorageType.  
+	 * */
+	public void setAllValues(AbstractActionForm abstractForm)
+	{
+	    try
+	    {
+	        StorageTypeForm storageTypeForm = (StorageTypeForm) abstractForm;
+	        
+	        this.systemIdentifier = new Long(storageTypeForm.getSystemIdentifier());
+	        this.type = storageTypeForm.getType();
+	        this.defaultTempratureInCentigrade = new Double(storageTypeForm.getDefaultTemperature());
+	        defaultStorageCapacity.setSystemIdentifier(systemIdentifier);
+	        defaultStorageCapacity.setOneDimensionCapacity(new Integer(storageTypeForm.getOneDimensionCapacity()));
+	        defaultStorageCapacity.setTwoDimensionCapacity(new Integer(storageTypeForm.getTwoDimensionCapacity()));
+	        defaultStorageCapacity.setOneDimensionLabel(storageTypeForm.getOneDimensionLabel());
+	        defaultStorageCapacity.setTwoDimensionLabel(storageTypeForm.getTwoDimensionLabel());
+	    }
+	    catch(Exception excp)
+	    {
+	        Logger.out.error(excp.getMessage());
+	    }
 	}
 }

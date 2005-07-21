@@ -84,21 +84,21 @@ public class StorageTypeForm extends AbstractActionForm
      */
     public void setAllValues(AbstractDomainObject abstractDomain)
     {
-//        try
-//        {
-//            StorageType storageType = (StorageType) abstractDomain;
-//            this.systemIdentifier = storageType.getSystemIdentifier().longValue();
-//            this.type = storageType.getType();
-//            this.defaultTemperature = storageType.getDefaultTempratureInCentigrade().doubleValue();
-//            this.oneDimensionCapacity = storageType.getDefaultStorageCapacity().getOneDimensionCapacity().intValue();
-//            this.twoDimensionCapacity = storageType.getDefaultStorageCapacity().getTwoDimensionCapacity().intValue();
-//            this.oneDimensionLabel = storageType.getDefaultStorageCapacity().getOneDimensionLabel();
-//            this.twoDimensionLabel = storageType.getDefaultStorageCapacity().getTwoDimensionLabel();
-//        }
-//        catch (Exception excp)
-//        {
-//            Logger.out.error(excp.getMessage(),excp);
-//        }
+        try
+        {
+            StorageType storageType = (StorageType) abstractDomain;
+            this.systemIdentifier = storageType.getSystemIdentifier().longValue();
+            this.type = storageType.getType();
+            this.defaultTemperature = storageType.getDefaultTempratureInCentigrade().doubleValue();
+            this.oneDimensionCapacity = storageType.getDefaultStorageCapacity().getOneDimensionCapacity().intValue();
+            this.twoDimensionCapacity = storageType.getDefaultStorageCapacity().getTwoDimensionCapacity().intValue();
+            this.oneDimensionLabel = storageType.getDefaultStorageCapacity().getOneDimensionLabel();
+            this.twoDimensionLabel = storageType.getDefaultStorageCapacity().getTwoDimensionLabel();
+        }
+        catch (Exception excp)
+        {
+            Logger.out.error(excp.getMessage(),excp);
+        }
     }
 
     /**
