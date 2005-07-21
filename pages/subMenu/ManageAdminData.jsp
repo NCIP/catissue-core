@@ -16,10 +16,10 @@
 		</div>
 		<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-					<a class="subMenuPrimary" href="#">
+					<a class="subMenuPrimary" href="CollectionProtocol.do?operation=add">
 						<bean:message key="app.add" /> 
 					</a> | 
-					<a class="subMenuPrimary" href="#">
+					<a class="subMenuPrimary" href="CollectionProtocol.do?operation=search">
 						<bean:message key="app.edit" /> 
 					</a>
 		</div>
@@ -31,10 +31,10 @@
 		</div>
 		<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-					<a class="subMenuPrimary" href="#">
+					<a class="subMenuPrimary" href="DistributionProtocol.do?operation=add">
 						<bean:message key="app.add" /> 
 					</a> | 
-					<a class="subMenuPrimary" href="#">
+					<a class="subMenuPrimary" href="DistributionProtocol.do?operation=search">
 						<bean:message key="app.edit" /> 
 					</a>
 		</div>
