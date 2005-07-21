@@ -328,7 +328,7 @@
 			<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
 				<tr>
 					<td class="formRequiredNotice" width="5">*</td>
-					<td class="formRequiredLabel" >
+					<td class="formRequiredLabel" width="32%">
 						<label for="clinicalstatus">
 					    	<bean:message key="collectionprotocol.clinicalstatus" />
 						</label>
@@ -452,7 +452,7 @@
 </table> <!-- outer table for CPE ends -->
 </td></tr>
 </table>
-<table width="89%">		
+<table width="95%">		
 	<!-- to keep -->
 		<tr>
 			<td align="right" colspan="3">
