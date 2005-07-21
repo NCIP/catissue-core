@@ -22,7 +22,7 @@ public class CollectionEventParameters extends SpecimenEventParameters
 	/**	
 	 *	Method of specimen collection from participant (e.g. needle biopsy, central venous line, bone marrow aspiration)
 	 */
-	protected String procedure;
+	protected String collectionProcedure;
 	
 	/**
 	 * Container type in which specimen is collected (e.g. clot tube, KEDTA, ACD, sterile specimen cup)
@@ -31,21 +31,21 @@ public class CollectionEventParameters extends SpecimenEventParameters
 
 	/**
 	 * Returns the procedure of collection.
-	 * @hibernate.property name="procedure" type="string" column="PROCEDURE" length="50"
+	 * @hibernate.property name="collectionProcedure" type="string" column="COLLECTION_PROCEDURE" length="50"
 	 * @return procedure of collection.
 	 */
-	public String getProcedure()
+	public String getCollectionProcedure()
 	{
-		return procedure;
+		return collectionProcedure;
 	}
 
 	/**
 	 * Sets the procedure. 
 	 * @param procedure procedure of collection.
 	 */
-	public void setProcedure(String procedure)
+	public void setCollectionProcedure(String collectionProcedure)
 	{
-		this.procedure = procedure;
+		this.collectionProcedure = collectionProcedure;
 	}
 
 	/**
