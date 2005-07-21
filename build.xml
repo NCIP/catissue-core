@@ -12,6 +12,7 @@
     <property name="build.dir" value="${base.dir}/build"/>
 	<property name="hbm.dir" value="${src.dir}/edu/wustl/catissuecore/hbm"/>
 	<property name="tomcat.dir" value="CATALINA_HOME"/>
+	<property name="deploy.dir" value="d:\jboss\"/>
 	
 	<property name="extra_lib.dir" value="${base.dir}/extra_lib"/>
     
@@ -63,6 +64,17 @@
 	      	 basedir="${base.dir}"
 	      	 excludes="**/catissuecore.tar,**/build/"/>
 	</target> 
+	
+	<target name="WarApp" depends="init">
+		<war destfile="$(deploy.dir)\catissuecore.war" webxml="WEB-INF/web.xml" excludes="**/catissuecore.war,**/$(lib.dir)/,**/build/">
+			<fileset dir="${base.dir}"/>
+		  	<lib dir="${lib.dir}">
+            	<include name="*.jar"/>
+        	</lib>
+		</war>
+	</target>
+
+
 	
 	<target name="AppSetup" depends="compile,TarApp,FTPUpload">
 		</target>
