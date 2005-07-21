@@ -26,18 +26,13 @@ public class StorageContainerDetails implements java.io.Serializable
 	/**
      * Name of parameter.
      */
-	protected String key;
+	protected String parameterName;
 	
 	/**
      * Value assigned to the parameter.
      */
 	protected String value;
 	
-	/**
-     * Type of the defined key. It could be user defined, pre defined, CDE.
-     */
-	protected String type;
-
 	/**
      * Returns System generated unique identifier.
      * @return Long System generated unique identifier.
@@ -63,23 +58,23 @@ public class StorageContainerDetails implements java.io.Serializable
 	/**
      * Returns the name of parameter. 
      * @return Name of parameter.
-     * @see #setKey(String)
-     * @hibernate.property name="key" type="string" 
-     * column="KEY" length="50"
+     * @see #setParameterName(String)
+     * @hibernate.property name="parameterName" type="string" 
+     * column="ARAMETER_NAME" length="50"
      */
-	public String getKey()
+	public String getParameterName()
 	{
-		return key;
+		return parameterName;
 	}
 
 	/**
      * Sets the name of parameter.
-     * @param key the name of parameter.
-     * @see #getKey()
+     * @param parameterName the name of parameter.
+     * @see #getParameterName()
      */
-	public void setKey(String key)
+	public void setParameterName(String parameterName)
 	{
-		this.key = key;
+		this.parameterName = parameterName;
 	}
 
 	/**
