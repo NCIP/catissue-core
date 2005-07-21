@@ -21,7 +21,7 @@
       </div>
       <div>
       	<img src="images/subMenuArrow.gif" width="7" height="7" alt="" />
-      		<a class="subMenuPrimary" href="NewSpecimen.do?operation=add">
+      		<a class="subMenuPrimary" href="NewSpecimen.do?operation=add&amp;pageOf=">
       			<bean:message key="app.newSpecimen" />
       		</a>
       </div>

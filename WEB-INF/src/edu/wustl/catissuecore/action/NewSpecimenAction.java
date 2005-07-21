@@ -39,6 +39,10 @@ public class NewSpecimenAction extends Action
         //Sets the operation attribute to be used in the Add/Edit User Page. 
         request.setAttribute(Constants.OPERATION, operation);
         
+        String pageOf = request.getParameter(Constants.PAGEOF);
+        
+        request.setAttribute(Constants.PAGEOF,pageOf);
+        
         String [] specimenCollectionGroupArray = {"1","2","3","4"}; 
         request.setAttribute(Constants.SPECIMEN_COLLECTION_GROUP_LIST,specimenCollectionGroupArray);
         
