@@ -104,6 +104,21 @@ public class Constants
 	public static final String ACCESSION_ADD_ACTION = "AccessionAdd.do";
 	public static final String ACCESSION_EDIT_ACTION = "AccessionEdit.do";
 	
+//	Constants required in StorageType.jsp Page
+	public static final String STORAGE_TYPE_SEARCH_ACTION = "StorageTypeSearch.do";
+	public static final String STORAGE_TYPE_ADD_ACTION = "StorageTypeAdd.do";
+	public static final String STORAGE_TYPE_EDIT_ACTION = "StorageTypeEdit.do";
+	
+//	Constants required in StorageContainer.jsp Page
+	public static final String STORAGE_CONTAINER_SEARCH_ACTION = "StorageContainerSearch.do";
+	public static final String STORAGE_CONTAINER_ADD_ACTION = "StorageContainerAdd.do";
+	public static final String STORAGE_CONTAINER_EDIT_ACTION = "StorageContainerEdit.do";
+	
+//	Constants required in Site.jsp Page
+	public static final String SITE_SEARCH_ACTION = "SiteSearch.do";
+	public static final String SITE_ADD_ACTION = "SiteAdd.do";
+	public static final String SITE_EDIT_ACTION = "SiteEdit.do";
+	
 	//Constants required in Partcipant.jsp Page
 	public static final String PARTICIPANT_SEARCH_ACTION = "ParticipantSearch.do";
 	public static final String PARTICIPANT_ADD_ACTION = "ParticipantAdd.do";
