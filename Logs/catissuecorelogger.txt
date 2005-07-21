@@ -7035,3 +7035,124 @@ INFO  [http8080-Processor24] util.PropertyMessageResources - Initializing, confi
 INFO  [http8080-Processor24] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
 INFO  [http8080-Processor24] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
 INFO  [http8080-Processor24] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [main]  - Home for caTISSUECore Application: D:\tomcat\webapps\catissuecore
+INFO  [main]  - Logger Configuration file: D:\tomcat\webapps\catissuecore\WEB-INF\classes\ApplicationResources.properties
+INFO  [main] util.PropertyMessageResources - Initializing, config='org.apache.struts.util.LocalStrings', returnNull=true
+INFO  [main] util.PropertyMessageResources - Initializing, config='org.apache.struts.action.ActionResources', returnNull=true
+INFO  [main] util.PropertyMessageResources - Initializing, config='ApplicationResources', returnNull=true
+INFO  [main] tiles.TilesPlugin - Tiles definition factory loaded for module ''.
+INFO  [http8080-Processor25] tiles.TilesRequestProcessor - Tiles definition factory found for request processor ''.
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.actions.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.bean.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.util.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor23]  - Inside Login Action, Just before validation
+INFO  [http8080-Processor23]  - >>>>>>>>>>>>> SUCESSFUL LOGIN <<<<<<<<< 
+INFO  [http8080-Processor23] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.logic.LocalStrings', returnNull=true
+INFO  [http8080-Processor23] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.logic.LocalStrings', returnNull=true
+INFO  [http8080-Processor23] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor23] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor23] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [main]  - Home for caTISSUECore Application: D:\tomcat\webapps\catissuecore
+INFO  [main]  - Logger Configuration file: D:\tomcat\webapps\catissuecore\WEB-INF\classes\ApplicationResources.properties
+INFO  [main] util.PropertyMessageResources - Initializing, config='org.apache.struts.util.LocalStrings', returnNull=true
+INFO  [main] util.PropertyMessageResources - Initializing, config='org.apache.struts.action.ActionResources', returnNull=true
+INFO  [main] util.PropertyMessageResources - Initializing, config='ApplicationResources', returnNull=true
+INFO  [main] tiles.TilesPlugin - Tiles definition factory loaded for module ''.
+INFO  [http8080-Processor25] tiles.TilesRequestProcessor - Tiles definition factory found for request processor ''.
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.actions.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.bean.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.util.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25]  - Inside Login Action, Just before validation
+INFO  [http8080-Processor25]  - >>>>>>>>>>>>> SUCESSFUL LOGIN <<<<<<<<< 
+INFO  [http8080-Processor24] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.logic.LocalStrings', returnNull=true
+INFO  [http8080-Processor24] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.logic.LocalStrings', returnNull=true
+INFO  [http8080-Processor24] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor24] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor24] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [main]  - Home for caTISSUECore Application: D:\tomcat\webapps\catissuecore
+INFO  [main]  - Logger Configuration file: D:\tomcat\webapps\catissuecore\WEB-INF\classes\ApplicationResources.properties
+INFO  [main] util.PropertyMessageResources - Initializing, config='org.apache.struts.util.LocalStrings', returnNull=true
+INFO  [main] util.PropertyMessageResources - Initializing, config='org.apache.struts.action.ActionResources', returnNull=true
+INFO  [main] util.PropertyMessageResources - Initializing, config='ApplicationResources', returnNull=true
+INFO  [main] tiles.TilesPlugin - Tiles definition factory loaded for module ''.
+INFO  [http8080-Processor25] tiles.TilesRequestProcessor - Tiles definition factory found for request processor ''.
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.actions.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.bean.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.util.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25]  - Inside Login Action, Just before validation
+INFO  [http8080-Processor25]  - >>>>>>>>>>>>> SUCESSFUL LOGIN <<<<<<<<< 
+INFO  [http8080-Processor24] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.logic.LocalStrings', returnNull=true
+INFO  [http8080-Processor24] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.logic.LocalStrings', returnNull=true
+INFO  [http8080-Processor24] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor24] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor24] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25]  - Inside Login Action, Just before validation
+INFO  [http8080-Processor25]  - >>>>>>>>>>>>> SUCESSFUL LOGIN <<<<<<<<< 
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [main]  - Home for caTISSUECore Application: D:\tomcat\webapps\catissuecore
+INFO  [main]  - Logger Configuration file: D:\tomcat\webapps\catissuecore\WEB-INF\classes\ApplicationResources.properties
+INFO  [main] util.PropertyMessageResources - Initializing, config='org.apache.struts.util.LocalStrings', returnNull=true
+INFO  [main] util.PropertyMessageResources - Initializing, config='org.apache.struts.action.ActionResources', returnNull=true
+INFO  [main] util.PropertyMessageResources - Initializing, config='ApplicationResources', returnNull=true
+INFO  [main] tiles.TilesPlugin - Tiles definition factory loaded for module ''.
+INFO  [http8080-Processor25] tiles.TilesRequestProcessor - Tiles definition factory found for request processor ''.
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.actions.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.bean.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.util.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor24]  - Inside Login Action, Just before validation
+INFO  [http8080-Processor24]  - >>>>>>>>>>>>> SUCESSFUL LOGIN <<<<<<<<< 
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.logic.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.logic.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [main]  - Home for caTISSUECore Application: D:\tomcat\webapps\catissuecore
+INFO  [main]  - Logger Configuration file: D:\tomcat\webapps\catissuecore\WEB-INF\classes\ApplicationResources.properties
+INFO  [main] util.PropertyMessageResources - Initializing, config='org.apache.struts.util.LocalStrings', returnNull=true
+INFO  [main] util.PropertyMessageResources - Initializing, config='org.apache.struts.action.ActionResources', returnNull=true
+INFO  [main] util.PropertyMessageResources - Initializing, config='ApplicationResources', returnNull=true
+INFO  [main] tiles.TilesPlugin - Tiles definition factory loaded for module ''.
+INFO  [http8080-Processor25] tiles.TilesRequestProcessor - Tiles definition factory found for request processor ''.
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.actions.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.bean.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.util.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25]  - Inside Login Action, Just before validation
+INFO  [http8080-Processor25]  - >>>>>>>>>>>>> SUCESSFUL LOGIN <<<<<<<<< 
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.logic.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.logic.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25]  - Inside Login Action, Just before validation
+INFO  [http8080-Processor25]  - >>>>>>>>>>>>> SUCESSFUL LOGIN <<<<<<<<< 
