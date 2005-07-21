@@ -113,7 +113,7 @@
 		<tr>
 		<td colspan="3">
 		<!-- table 4 -->
-			<table summary="" cellpadding="3" cellspacing="0" border="0" width="97%">
+			<table summary="" cellpadding="3" cellspacing="0" border="0" width="96%">
 				<tr>
 					<td><html:hidden property="operation" value="<%=operation%>" /></td>
 				</tr>
@@ -303,59 +303,11 @@
 </table>
 
 <!--  outer table for CPE -->
-<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="875">
-<tr><td>
-<table summary="" cellpadding="3" cellspacing="0" border="0" width=97%>
-	<tr>
-	<td class="formTitle">
-			<b><bean:message key="collectionprotocol.eventtitle" /></b>
-	</td>
-	<td align="right" class="formTitle">		
-			<html:button property="addCollectionProtocolEvents" styleClass="actionButton">Add More</html:button>
-	</td>
-	</tr>
-</table>
-</td></tr>
-</table>
 
 <!-- to insert the div tag -->
-<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="100%">
-<tr><td>
-<table summary="" cellpadding="3" cellspacing="0" border="0" >
+<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="96%">
 	<tr>
-		<td rowspan=2 class="tabrightmostcell">1</td>
-		<td class="formField">
-			<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
-				<tr>
-					<td class="formRequiredLabel" >
-						<label for="clinicalstatus">
-					    	<bean:message key="collectionprotocol.clinicalstatus" />
-						</label>
-					</td>
-				    <td class="formField" colspan=2>
-				    	<html:select property="clinicalStatus" styleClass="formField" styleId="clinicalStatus" size="1">
-				        	<html:option value="Type1">Pre-Opt</html:option>
-							<html:option value="Type1">Pre-Opt</html:option>
-							<html:option value="Type2">Post-Opt</html:option>
-						</html:select>
-				    </td>
-				</tr>
-			    <tr>
-			        <td colspan="1" class="formRequiredLabel">
-			        	<bean:message key="collectionprotocol.studycalendartitle" />
-			        </td>
-			        <td colspan="2" class="formField">
-			        	<html:text styleClass="formFieldSized5" size="30" styleId="studycalendartitle" property="studycalendartitle" readonly="<%=readOnlyValue%>" />
-			        	<bean:message key="collectionprotocol.studycalendarcomment" />
-					</td>
-			    </tr>
-			</TABLE>
-		</td>
-	</tr>
-
-<!-- 2nd row -->
-	<tr>
-		<td class="formField">
+		<td>
 			<table summary="" cellpadding="3" cellspacing="0" border="0" width=100%>
 			    <tr>
 			        <td colspan="7" class="formTitle">
@@ -449,8 +401,9 @@
 		</td>
 	</tr>
 </table> <!-- outer table for CPE ends -->
-</td></tr>
-</table>
+
+
+
 <table width="96%">		
 	<!-- to keep -->
 		<tr>
