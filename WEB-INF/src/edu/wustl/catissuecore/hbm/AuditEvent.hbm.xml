@@ -15,7 +15,7 @@
         <id
             name="systemIdentifier"
             column="IDENTIFIER"
-            type="int"
+            type="long"
             length="30"
             unsaved-value="null"
         >

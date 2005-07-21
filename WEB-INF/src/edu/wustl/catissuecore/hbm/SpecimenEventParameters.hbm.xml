@@ -15,7 +15,7 @@
         <id
             name="systemIdentifier"
             column="IDENTIFIER"
-            type="int"
+            type="long"
             length="30"
             unsaved-value="null"
         >
@@ -327,11 +327,11 @@
             column="IDENTIFIER"
         />
         <property
-            name="procedure"
+            name="collectionProcedure"
             type="string"
             update="true"
             insert="true"
-            column="PROCEDURE"
+            column="COLLECTION_PROCEDURE"
             length="50"
         />
 

@@ -24,11 +24,11 @@
         </id>
 
         <property
-            name="key"
+            name="parameterName"
             type="string"
             update="true"
             insert="true"
-            column="KEY"
+            column="ARAMETER_NAME"
             length="50"
         />
 

@@ -52,15 +52,6 @@
             unique="true"
         />
 
-        <property
-            name="activityStatus"
-            type="string"
-            update="true"
-            insert="true"
-            column="ACTIVITY_STATUS"
-            length="50"
-        />
-
         <many-to-one
             name="coordinator"
             class="edu.wustl.catissuecore.domain.User"
@@ -69,6 +60,15 @@
             update="true"
             insert="true"
             column="USER_ID"
+        />
+
+        <property
+            name="activityStatus"
+            type="string"
+            update="true"
+            insert="true"
+            column="ACTIVITY_STATUS"
+            length="50"
         />
 
         <many-to-one

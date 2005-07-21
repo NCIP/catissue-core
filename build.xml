@@ -176,7 +176,7 @@
 	<!--target name="Genrate-Schema" depends="buildjar, generateHBM"-->
 	<target name="Genrate-Schema" depends="buildjar">
     	<java classname="edu.wustl.common.util.dbManager.GenerateSchema">
-	    	<arg value="false"/>		
+	    	<arg value="true"/>		
 				
             <classpath>
 	            <pathelement location="${build.dir}/catissuecore.jar"/>
