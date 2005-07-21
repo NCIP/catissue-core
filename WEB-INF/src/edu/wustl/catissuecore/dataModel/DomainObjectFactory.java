@@ -11,8 +11,10 @@
 package edu.wustl.catissuecore.dataModel;
 
 import edu.wustl.catissuecore.actionForm.AbstractActionForm;
+import edu.wustl.catissuecore.actionForm.StorageTypeForm;
 import edu.wustl.catissuecore.actionForm.UserForm;
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
+import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 
@@ -50,6 +52,9 @@ public class DomainObjectFactory
 //            	InstituteForm instituteForm = (InstituteForm) form;
 //            	abstractDomain = new Institute(instituteForm);
 //            	break;
+            case Constants.STORAGE_TYPE_FORM_ID:
+            	StorageTypeForm storageTypeForm = (StorageTypeForm) form;
+            	abstractDomain = new StorageType(storageTypeForm);
         }
         return abstractDomain;
     }

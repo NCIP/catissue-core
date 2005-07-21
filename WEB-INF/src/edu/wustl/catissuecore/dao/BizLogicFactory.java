@@ -40,6 +40,9 @@ public class BizLogicFactory
 //            case Constants.REPORTEDPROBLEM_FORM_ID:
 //                abstractBizLogic = new ReportedProblemBizLogic();
 //            	break;
+        	case Constants.STORAGE_TYPE_FORM_ID :
+        		abstractBizLogic = new StorageTypeBizLogic();
+        		break;
             default:
                 abstractBizLogic = new AbstractBizLogic();
             	break;

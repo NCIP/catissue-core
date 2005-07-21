@@ -295,7 +295,7 @@ public class StorageTypeForm extends AbstractActionForm
      */
     public int getFormId()
     {
-        return Constants.STORAGE_TYPE_ID;
+        return Constants.STORAGE_TYPE_FORM_ID;
     }
     
     /**
