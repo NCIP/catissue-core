@@ -155,7 +155,7 @@
 							</label>
 						</td>
 						<td class="formField">
-							<html:text styleClass="formFieldSized" size="30" styleId="noOfContainers" property="noOfContainers" readonly="<%=readOnlyValue%>" />
+							<html:text styleClass="formFieldSized10" size="30" styleId="noOfContainers" property="noOfContainers" readonly="<%=readOnlyValue%>" />
 						</td>
 					</tr>
 					
@@ -167,11 +167,7 @@
 							</label>
 						</td>
 						<td class="formField">
-							<html:text styleClass="actionButton" size="30" styleId="startNumber" property="startNumber" readonly="<%=readOnlyValue%>" />
-							&nbsp;
-							<html:submit styleClass="actionButton" onclick="">
-								<bean:message key="buttons.next"/>
-							</html:submit>
+							<html:text styleClass="formFieldSized10" size="30" styleId="startNumber" property="startNumber" readonly="<%=readOnlyValue%>" />
 						</td>
 					</tr>
 					
@@ -183,7 +179,7 @@
 							</label>
 						</td>
 						<td class="formField" colspan="1">
-							<html:text styleClass="formFieldSized" size="30" styleId="barcode" property="barcode" readonly="<%=readOnlyValue%>" />
+							<html:text styleClass="formFieldSized10" size="30" styleId="barcode" property="barcode" readonly="<%=readOnlyValue%>" />
 						</td>
 					</tr>
 
@@ -195,7 +191,7 @@
 							</label>
 						</td>
 						<td class="formField" colspan="1">
-							<html:text styleClass="formFieldSized" size="30" styleId="defaultTemperature" property="defaultTemperature" readonly="<%=readOnlyValue%>" />
+							<html:text styleClass="formFieldSized10" size="30" styleId="defaultTemperature" property="defaultTemperature" readonly="<%=readOnlyValue%>" />
 							°C
 						</td>
 					</tr>
@@ -216,7 +212,7 @@
 							</label>
 						</td>
 						<td class="formField" colspan="1">
-							<html:text styleClass="formFieldSized" size="30" styleId="oneDimensionLabel" property="oneDimensionLabel" readonly="<%=readOnlyValue%>" />
+							<html:text styleClass="formFieldSized10" size="30" styleId="oneDimensionLabel" property="oneDimensionLabel" readonly="<%=readOnlyValue%>" />
 						</td>
 					</tr>
 					
@@ -228,7 +224,7 @@
 							</label>
 						</td>
 						<td class="formField" colspan="1">
-							<html:text styleClass="formFieldSized" size="30" styleId="twoDimensionLabel" property="twoDimensionLabel" readonly="<%=readOnlyValue%>" />
+							<html:text styleClass="formFieldSized10" size="30" styleId="twoDimensionLabel" property="twoDimensionLabel" readonly="<%=readOnlyValue%>" />
 						</td>
 					</tr>
 					
@@ -260,17 +256,17 @@
 					<tr>
 						<td class="formSerialNumberField" width="5">1.</td>
 						<td class="formField" >
-							<html:text styleClass="formFieldSized" size="30" styleId="key" property="key" readonly="<%=readOnlyValue%>" />
+							<html:text styleClass="formFieldSized10" size="30" styleId="key" property="key" readonly="<%=readOnlyValue%>" />
 						</td>
 						<td class="formField" colspan="1">
-							<html:text styleClass="formFieldSized" size="30" styleId="type" property="type" readonly="<%=readOnlyValue%>" />
+							<html:text styleClass="formFieldSized10" size="30" styleId="type" property="type" readonly="<%=readOnlyValue%>" />
 						</td>
 					</tr>
 					
 					</logic:equal>
 				</table>
 				
-				<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">	
+				<table summary="" cellpadding="3" cellspacing="0" border="0" width="500">	
 					<tr>
 						<td align="right">
 						<%
