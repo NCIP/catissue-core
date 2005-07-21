@@ -9,6 +9,18 @@
 	var search2='~';
 	var insno=0;
 	var insno1=1;
+
+	var ugul = new Array(4);
+	ugul[0]="ML";
+	ugul[1]="GM";
+	ugul[2]="CC";
+	ugul[3]="MG";
+
+	function changeUnit(listname)
+	{
+		var i = listname.selectedIndex;
+		unitspan.innerHTML =ugul[i];  
+	}
 //-->
 </SCRIPT>
 <script type="text/javascript" language="javascript" src="../../../javaScript.js">
@@ -389,12 +401,11 @@
 				<TR>	<!-- SPECIMEN REQ DATA -->
 			        <td class="tabrightmostcell">1.</td>
 			        <td class="formField">
-			           	<html:select property="specimenType" styleClass="formFieldSized10" styleId="specimenType" size="1">
-				        	<html:option value="0">Select Specimen Type</html:option>
-							<html:option value="Type1">Fluid Specimen</html:option>
-							<html:option value="Type2">Tissue Specimen</html:option>
-							<html:option value="Cell Specimen">Cell Specimen</html:option>
-							<html:option value="Molecular Specimen">Molecular Specimen</html:option>
+			           	<html:select property="specimenType" styleClass="formFieldSized10" styleId="specimenType" size="1" onchange="changeUnit(specimenType)">
+							<html:option value="0">Fluid Specimen</html:option>
+							<html:option value="1">Tissue Specimen</html:option>
+							<html:option value="2">Cell Specimen</html:option>
+							<html:option value="3">Molecular Specimen</html:option>
 						</html:select>
 			        </td>
 			        <td class="formField">
@@ -433,7 +444,10 @@
 			        <td class="formField">
 			        	<html:text styleClass="formFieldSized5" styleId="enrollment" property="enrollment" readonly="<%=readOnlyValue%>" />        
 			        </td>
-			        <td class="formField">ug, ul</td>
+			        <td class="formField">
+			        	<span id="unitspan">
+						</span>
+					</td>
 				</TR>	<!-- SPECIMEN REQ DATA END -->
 			</TABLE>
 		</td>
