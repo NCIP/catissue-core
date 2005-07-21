@@ -333,7 +333,7 @@
 					    	<bean:message key="collectionprotocol.clinicalstatus" />
 						</label>
 					</td>
-				    <td class="onlyBottomBorder" colspan=2>
+				    <td class="formField" colspan=2>
 				    	<html:select property="clinicalStatus" styleClass="formField" styleId="clinicalStatus" size="1">
 				        	<html:option value="Type1">Pre-Opt</html:option>
 							<html:option value="Type1">Pre-Opt</html:option>
@@ -346,7 +346,7 @@
 			        <td colspan="1" class="formLabel">
 			        	<bean:message key="collectionprotocol.studycalendartitle" />
 			        </td>
-			        <td colspan="2" class="onlyBottomBorder">
+			        <td colspan="2" class="formField">
 			        	<html:text styleClass="formFieldSized5" size="30" styleId="studycalendartitle" property="studycalendartitle" readonly="<%=readOnlyValue%>" />
 			        	<bean:message key="collectionprotocol.studycalendarcomment" />
 					</td>
