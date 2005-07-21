@@ -336,7 +336,7 @@
 			        <td colspan="1" class="formRequiredLabel">
 			        	<bean:message key="collectionprotocol.studycalendartitle" />
 			        </td>
-			        <td colspan="2" class="formField">
+			        <td colspan="2" class="onlyBottomBorder">
 			        	<html:text styleClass="formFieldSized5" size="30" styleId="studycalendartitle" property="studycalendartitle" readonly="<%=readOnlyValue%>" />
 			        	<bean:message key="collectionprotocol.studycalendarcomment" />
 					</td>
