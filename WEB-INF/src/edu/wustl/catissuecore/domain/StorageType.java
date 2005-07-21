@@ -10,6 +10,8 @@
 
 package edu.wustl.catissuecore.domain;
 
+import java.io.Serializable;
+
 import edu.wustl.catissuecore.actionForm.AbstractActionForm;
 import edu.wustl.catissuecore.domain.StorageContainerCapacity;
 import edu.wustl.catissuecore.actionForm.StorageTypeForm;
@@ -19,7 +21,7 @@ import edu.wustl.common.util.logger.Logger;
  * Type of the storage container e.g. Freezer, Box etc.
  * @hibernate.class table="CATISSUE_STORAGE_TYPE"
  */
-public class StorageType extends AbstractDomainObject implements java.io.Serializable
+public class StorageType extends AbstractDomainObject implements Serializable
 {
 	private static final long serialVersionUID = 1234567890L;
 
@@ -41,7 +43,18 @@ public class StorageType extends AbstractDomainObject implements java.io.Seriali
 	/**
      * Default capacity of a storage container.
      */
-	private StorageContainerCapacity defaultStorageCapacity;
+	private StorageContainerCapacity defaultStorageCapacity = new StorageContainerCapacity();
+	
+	//DO Not delete required by hibernate
+	public StorageType()
+	{
+		
+	}
+	
+	public StorageType(AbstractActionForm abstractForm)
+	{
+		setAllValues(abstractForm);
+	}
 	
 	/**
      * Returns System generated unique identifier.
