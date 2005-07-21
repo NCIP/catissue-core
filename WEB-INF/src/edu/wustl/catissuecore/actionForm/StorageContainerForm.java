@@ -364,7 +364,7 @@ public class StorageContainerForm extends AbstractActionForm
      */
     public int getFormId()
     {
-        return Constants.STORAGE_CONTAINER_ID;
+        return Constants.STORAGE_CONTAINER_FORM_ID;
     }
     
     /**
