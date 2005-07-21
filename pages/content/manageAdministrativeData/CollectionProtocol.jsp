@@ -60,7 +60,7 @@
 <html:form action="<%=Constants.COLLECTIONPROTOCOL_ADD_ACTION%>">
 
 <!-- table 1 -->
-<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="875">
+<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="810">
 	<logic:notEqual name="operation" value="<%=Constants.ADD%>">
 		<!-- ENTER IDENTIFIER BEGINS-->
 		<br />
@@ -154,7 +154,7 @@
 <!-- protocol coordinators -->	
 					<tr>
 						<td class="formRequiredNotice" width="5">&nbsp;</td>
-						<td class="formRequiredLabel">
+						<td class="formLabel">
 							<label for="protocolcoordinator">
 								<bean:message key="collectionprotocol.protocolcoordinator" />
 							</label>
@@ -189,7 +189,7 @@
 <!-- short title -->						
 					<tr>
 						<td class="formRequiredNotice" width="5">&nbsp;</td>
-						<td class="formRequiredLabel">
+						<td class="formLabel">
 							<label for="shorttitle">
 								<bean:message key="collectionprotocol.shorttitle" />
 							</label>
@@ -202,7 +202,7 @@
 <!-- irb id -->						
 					<tr>
 						<td class="formRequiredNotice" width="5">&nbsp;</td>
-						<td class="formRequiredLabel">
+						<td class="formLabel">
 							<label for="irbid">
 								<bean:message key="collectionprotocol.irbid" />
 							</label>
@@ -215,7 +215,7 @@
 <!-- startdate -->						
 					<tr>
 						<td class="formRequiredNotice" width="5">&nbsp;</td>
-						<td class="formRequiredLabel">
+						<td class="formLabel">
 							<label for="startdate">
 								<bean:message key="collectionprotocol.startdate" />
 							</label>
@@ -233,7 +233,7 @@
 <!-- enddate -->						
 					<tr>
 						<td class="formRequiredNotice" width="5">&nbsp;</td>
-						<td class="formRequiredLabel">
+						<td class="formLabel">
 							<label for="enddate">
 								<bean:message key="collectionprotocol.enddate" />
 							</label>
@@ -251,7 +251,7 @@
 <!-- no of participants -->						
 					<tr>
 						<td class="formRequiredNotice" width="5">&nbsp;</td>
-						<td class="formRequiredLabel">
+						<td class="formLabel">
 							<label for="participants">
 								<bean:message key="collectionprotocol.participants" />
 							</label>
@@ -264,7 +264,7 @@
 <!-- descriptionurl -->						
 					<tr>
 						<td class="formRequiredNotice" width="5">&nbsp;</td>
-						<td class="formRequiredLabel">
+						<td class="formLabel">
 							<label for="descriptionurl">
 								<bean:message key="collectionprotocol.descriptionurl" />
 							</label>
@@ -281,7 +281,7 @@
 					%>
 							<tr>
 								<td class="formRequiredNotice" width="5">&nbsp;</td>
-								<td class="formRequiredLabel">
+								<td class="formLabel">
 									<label for="activityStatus">
 										<bean:message key="collectionprotocol.activitystatus" />
 									</label>
@@ -303,7 +303,7 @@
 </table>
 
 <!--  outer table for CPE -->
-<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="875">
+<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="810">
 <tr><td>
 <table summary="" cellpadding="3" cellspacing="0" border="0" width=97%>
 	<tr>
@@ -327,6 +327,7 @@
 		<td class="formField">
 			<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
 				<tr>
+					<td class="formRequiredNotice" width="5">*</td>
 					<td class="formRequiredLabel" >
 						<label for="clinicalstatus">
 					    	<bean:message key="collectionprotocol.clinicalstatus" />
@@ -341,7 +342,8 @@
 				    </td>
 				</tr>
 			    <tr>
-			        <td colspan="1" class="formRequiredLabel">
+					<td class="formRequiredNotice" width="5">&nbsp;</td>
+			        <td colspan="1" class="formLabel">
 			        	<bean:message key="collectionprotocol.studycalendartitle" />
 			        </td>
 			        <td colspan="2" class="onlyBottomBorder">
@@ -358,7 +360,7 @@
 		<td class="formField">
 			<table summary="" cellpadding="3" cellspacing="0" border="0" width=100%>
 			    <tr>
-			        <td colspan="7" class="formTitle">
+			        <td colspan="6" class="formTitle">
 			        	<b><bean:message key="collectionprotocol.specimenreq" /></b>
 			        </td>
 			        <td class="formTitle">	
@@ -389,9 +391,10 @@
 			        <td class=formLeftSubTableTitle>
 			        	<bean:message key="collectionprotocol.quantity" />
 			        </td>
-			        <td class=formLeftSubTableTitle>
+<!--			        <td class=formLeftSubTableTitle>
 			        	<bean:message key="collectionprotocol.unit" />
 			        </td>
+-->
 			    </TR><!-- SUB TITLES END -->
 				
 				<TR>	<!-- SPECIMEN REQ DATA -->
@@ -439,8 +442,6 @@
 			        </td>
 			        <td class="formField">
 			        	<html:text styleClass="formFieldSized5" styleId="enrollment" property="enrollment" readonly="<%=readOnlyValue%>" />        
-			        </td>
-			        <td class="formField">
 			        	<span id="unitspan">&nbsp;
 						</span>
 					</td>
@@ -451,7 +452,7 @@
 </table> <!-- outer table for CPE ends -->
 </td></tr>
 </table>
-<table width="96%">		
+<table width="89%">		
 	<!-- to keep -->
 		<tr>
 			<td align="right" colspan="3">
