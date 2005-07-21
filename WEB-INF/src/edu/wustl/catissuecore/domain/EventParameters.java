@@ -24,7 +24,7 @@ public abstract class EventParameters implements java.io.Serializable
 	/**
      * System generated unique identifier.
      */
-	protected Integer systemIdentifier;
+	protected Long systemIdentifier;
 	
 	/**
      * Date and time of the event.
@@ -45,10 +45,10 @@ public abstract class EventParameters implements java.io.Serializable
      * Returns System generated unique identifier.
      * @return System generated unique identifier.
      * @see #setSystemIdentifier(Integer)
-     * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="int" length="30"
+     * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"
      * unsaved-value="null" generator-class="native" 
      */
-	public Integer getSystemIdentifier()
+	public Long getSystemIdentifier()
 	{
 		return systemIdentifier;
 	}
@@ -58,7 +58,7 @@ public abstract class EventParameters implements java.io.Serializable
      * @param systemIdentifier Identifier to be set.
      * @see #getSystemIdentifier()
      */
-	public void setSystemIdentifier(Integer systemIdentifier)
+	public void setSystemIdentifier(Long systemIdentifier)
 	{
 		this.systemIdentifier = systemIdentifier;
 	}
