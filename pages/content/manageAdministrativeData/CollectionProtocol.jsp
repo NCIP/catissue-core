@@ -60,7 +60,7 @@
 <html:form action="<%=Constants.COLLECTIONPROTOCOL_ADD_ACTION%>">
 
 <!-- table 1 -->
-<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
+<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="875">
 	<logic:notEqual name="operation" value="<%=Constants.ADD%>">
 		<!-- ENTER IDENTIFIER BEGINS-->
 		<br />
@@ -113,7 +113,7 @@
 		<tr>
 		<td colspan="3">
 		<!-- table 4 -->
-			<table summary="" cellpadding="3" cellspacing="0" border="0">
+			<table summary="" cellpadding="3" cellspacing="0" border="0" width="97%">
 				<tr>
 					<td><html:hidden property="operation" value="<%=operation%>" /></td>
 				</tr>
@@ -137,7 +137,7 @@
 								<bean:message key="collectionprotocol.principalinvestigator" />
 							</label>
 						</td>
-						<td class="formField">
+						<td class="formField" colspan=2>
 							<html:select property="principalinvestigator" styleClass="formFieldSized" styleId="principalinvestigator" size="1">
 							 	<html:option value="Rakesh">Rakesh</html:option>
 								<html:option value="Mark">Mark</html:option>
@@ -145,8 +145,6 @@
 								<html:option value="Srikant">Srikant</html:option>
 								<html:option value="Mandar">Mandar</html:option>
 							</html:select>
-						</td>
-						<td class="formField">
 							<html:link page="User.do?operation=add">
 							 <bean:message key="collectionprotocol.addinvestigator" />
 							 </html:link>
@@ -161,7 +159,7 @@
 								<bean:message key="collectionprotocol.protocolcoordinator" />
 							</label>
 						</td>
-						<td class="formField">
+						<td class="formField" colspan=2>
 							<html:select property="protocolcoordinator" styleClass="formFieldSized" styleId="protocolcoordinator" size="4" multiple="true">
 							 	<html:option value="Rakesh">Rakesh</html:option>
 								<html:option value="Mark">Mark</html:option>
@@ -169,8 +167,6 @@
 								<html:option value="Srikant">Srikant</html:option>
 								<html:option value="Mandar">Mandar</html:option>
 							</html:select>
-						</td>
-						<td class="formField">	
 							<html:link page="User.do?operation=add">
 							 <bean:message key="collectionprotocol.addcoordinator" />
 							 </html:link>
@@ -455,7 +451,7 @@
 </table> <!-- outer table for CPE ends -->
 </td></tr>
 </table>
-<table width=88%>		
+<table width="96%">		
 	<!-- to keep -->
 		<tr>
 			<td align="right" colspan="3">
@@ -465,7 +461,7 @@
 				
 				<!-- action buttons begins -->
 				<!-- table 6 -->
-				<table cellpadding="4" cellspacing="0" border="0">
+				<table cellpadding="4" cellspacing="0" border="0" >
 					<tr>
 						<td>
 							<html:submit styleClass="actionButton" value="Submit" onclick="<%=changeAction%>" />
