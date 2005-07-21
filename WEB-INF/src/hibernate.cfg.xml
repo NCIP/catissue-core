@@ -8,33 +8,37 @@
     <session-factory>
     	<property name="show_sql">true</property>
     	
+    	
         <!-- List of all Mapping files -->
-        <mapping resource="edu/wustl/catissuecore/hbm/User.hbm.xml"/>
         <mapping resource="edu/wustl/catissuecore/hbm/Address.hbm.xml"/>
-        <mapping resource="edu/wustl/catissuecore/hbm/Department.hbm.xml"/>
-        <mapping resource="edu/wustl/catissuecore/hbm/Institution.hbm.xml"/>
-        <mapping resource="edu/wustl/catissuecore/hbm/ReportedProblem.hbm.xml"/>
-        <!--mapping resource="edu/wustl/catissuecore/hbm/Participant.hbm.xml"/>
-        <mapping resource="edu/wustl/catissuecore/hbm/Role.hbm.xml"/>
-        <mapping resource="edu/wustl/catissuecore/hbm/Accession.hbm.xml"/>
-		<mapping resource="edu/wustl/catissuecore/hbm/Specimen.hbm.xml"/>
-		<mapping resource="edu/wustl/catissuecore/hbm/Segment.hbm.xml"/>
-		<mapping resource="edu/wustl/catissuecore/hbm/Sample.hbm.xml"/>
-		<mapping resource="edu/wustl/catissuecore/hbm/Audit.hbm.xml"/>
-		<mapping resource="edu/wustl/catissuecore/hbm/BiospecimenStorage.hbm.xml"/>
-		<mapping resource="edu/wustl/catissuecore/hbm/BiospecimenDistribution.hbm.xml"/>
-		<mapping resource="edu/wustl/catissuecore/hbm/Box.hbm.xml"/>
-		<mapping resource="edu/wustl/catissuecore/hbm/Capacity.hbm.xml"/>
-		<mapping resource="edu/wustl/catissuecore/hbm/Collection.hbm.xml"/>
-		<mapping resource="edu/wustl/catissuecore/hbm/Distribution.hbm.xml"/>
-		<mapping resource="edu/wustl/catissuecore/hbm/Eventlog.hbm.xml"/>
-		<mapping resource="edu/wustl/catissuecore/hbm/InfectionAgent.hbm.xml"/>
-		<mapping resource="edu/wustl/catissuecore/hbm/Protocol.hbm.xml"/>
-		<mapping resource="edu/wustl/catissuecore/hbm/ProtocolRequirement.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/AuditEvent.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/AuditEventDetails.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/AuditEventLog.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/Biohazard.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/CancerResearchGroup.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/ClinicalReport.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/CollectionProtocolEvent.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/CollectionProtocolRegistration.hbm.x
+		<mapping resource="edu/wustl/catissuecore/hbm/CVS
+		<mapping resource="edu/wustl/catissuecore/hbm/Department.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/DistributedItem.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/ExternalIdentifier.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/Institution.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/Participant.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/ParticipantMedicalIdentifier.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/ReportedProblem.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/Site.hbm.xml"/>
-		<mapping resource="edu/wustl/catissuecore/hbm/Study.hbm.xml"/>
-		<mapping resource="edu/wustl/catissuecore/hbm/StudyRequirement.hbm.xml"/>
-		<mapping resource="edu/wustl/catissuecore/hbm/Unit.hbm.xml"/-->
+		<mapping resource="edu/wustl/catissuecore/hbm/Specimen.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/SpecimenCharacteristics.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/SpecimenCollectionGroup.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/SpecimenEventParameters.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/SpecimenProtocol.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/SpecimenRequirement.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/StorageContainer.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/StorageContainerCapacity.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/StorageContainerDetails.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/StorageType.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/User.hbm.xml"/>
     </session-factory>
     
 </hibernate-configuration>
