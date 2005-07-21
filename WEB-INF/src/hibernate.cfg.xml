@@ -18,8 +18,7 @@
 		<mapping resource="edu/wustl/catissuecore/hbm/CancerResearchGroup.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/ClinicalReport.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/CollectionProtocolEvent.hbm.xml"/>
-		<mapping resource="edu/wustl/catissuecore/hbm/CollectionProtocolRegistration.hbm.x
-		<mapping resource="edu/wustl/catissuecore/hbm/CVS
+		<mapping resource="edu/wustl/catissuecore/hbm/CollectionProtocolRegistration.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/Department.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/DistributedItem.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/ExternalIdentifier.hbm.xml"/>

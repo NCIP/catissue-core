@@ -33,8 +33,9 @@ public class DBUtil
 	
 		try
 		{
-		    //System.out.println("USER DIR "+System.getProperty("user.home")+System.getProperty("user.dir"));
+		    System.out.println("USER DIR "+System.getProperty("user.home")+System.getProperty("user.dir"));
 			File file = new File(Variables.catissueHome+System.getProperty("file.separator")+"hibernate.properties");
+			System.out.println("File "+file);
 			BufferedInputStream stram = new BufferedInputStream(new FileInputStream(file));
 			Properties p = new Properties();
 			p.load(stram);

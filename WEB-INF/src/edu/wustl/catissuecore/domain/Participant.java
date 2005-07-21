@@ -192,7 +192,7 @@ public class Participant implements java.io.Serializable
      * @param birthDate String representing the date of birth of the Participant.
      * @see #getDateOfBirth()
      */
-	public void getBirthDate(Date birthDate)
+	public void setBirthDate(Date birthDate)
 	{
 		this.birthDate = birthDate;
 	}
