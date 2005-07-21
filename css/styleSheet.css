@@ -152,7 +152,6 @@ td.subMenuFooter{ /* for the last row in the submenu left of the footer menu */
   border-bottom:1px solid #CCCCCC; /* constant: medium gray */
   border-right:1px solid #CCCCCC; /* constant: medium gray */
 }
-
 /*############### 
 LINKS BEGIN 
 ###############*/
@@ -620,3 +619,10 @@ img.img{ /* for images that need a border */
   background-color:#F4F4F5; /* constant: light gray */ 
   border-left:1px solid #5C5C5C; /* constant: dark gray */
  }
+td.onlyBottomBorder{ /* for the cell that contains the form elements */
+  font-family:arial,helvetica,verdana,sans-serif;
+  font-size:0.7em;
+  color:#000000; /* constant: black */
+  border-bottom:1px solid #5C5C5C; /* constant: dark gray */
+  background-color:#F4F4F5; /* constant: light gray */
+}
