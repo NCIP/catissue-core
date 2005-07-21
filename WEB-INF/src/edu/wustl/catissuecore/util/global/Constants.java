@@ -215,8 +215,8 @@ public class Constants
 	public static final int DEPARTMENT_FORM_ID = 8;
 	public static final int COLLECTIONPROTOCOL_FORM_ID = 9;
 	public static final int DISTRIBUTIONPROTOCOL_FORM_ID = 10;
-	public static final int STORAGE_CONTAINER_ID = 11;
-	public static final int STORAGE_TYPE_ID = 12;
+	public static final int STORAGE_CONTAINER_FORM_ID = 11;
+	public static final int STORAGE_TYPE_FORM_ID = 12;
 	//Status message key Constants
 	public static final String STATUS_MESSAGE_KEY = "statusMessageKey";
 	
