@@ -295,7 +295,7 @@
 </table>
 
 <!--  outer table for CPE -->
-<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="753">
+<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="875">
 <tr><td>
 <table summary="" cellpadding="3" cellspacing="0" border="0" width=97%>
 	<tr>
@@ -311,7 +311,7 @@
 </table>
 
 <!-- to insert the div tag -->
-<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="753">
+<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="100%">
 <tr><td>
 <table summary="" cellpadding="3" cellspacing="0" border="0" >
 	<tr>
@@ -350,7 +350,7 @@
 		<td class="formField">
 			<table summary="" cellpadding="3" cellspacing="0" border="0" width=100%>
 			    <tr>
-			        <td colspan="6" class="formTitle">
+			        <td colspan="7" class="formTitle">
 			        	<b><bean:message key="collectionprotocol.specimenreq" /></b>
 			        </td>
 			        <td class="formTitle">	
@@ -365,6 +365,10 @@
 			        <td class="formRequiredLabel">
 			        	<bean:message key="collectionprotocol.specimentype" />
 			        </td>
+			        <td class="formRequiredLabel">
+			        	<bean:message key="collectionprotocol.specimensubtype" />
+			        </td>
+			        
 			        <td class="formRequiredLabel">
 			        	<bean:message key="collectionprotocol.specimensite" />
 				    </td>
@@ -394,13 +398,20 @@
 						</html:select>
 			        </td>
 			        <td class="formField">
+			           	<html:select property="specimenSubType" styleClass="formFieldSized10" styleId="specimenSubType" size="1">
+				        	<html:option value="0">Select Specimen SubType</html:option>
+							<html:option value="Type1">Blood</html:option>
+							<html:option value="Type2">Cerum</html:option>
+						</html:select>
+			        </td>
+			        <td class="formField">
 			           	<html:select property="tissueSite" styleClass="formFieldSized10" styleId="tissueSite" size="1">
 				        	<html:option value="Select Tissue Site">Select Tissue Site</html:option>
 							<html:option value="Adrenal-Cortex">Adrenal-Cortex</html:option>
 							<html:option value="Adrenal-Medulla">Adrenal-Medulla</html:option>
 							<html:option value="Adrenal-NOS">Adrenal-NOS</html:option>
 						</html:select>
-			        <a href="javascript:show_calendar('as.T1');">
+			        <a href="#">
 					<img src="images/Tree.gif" border="0" width="26" height="22"></a>
 					</td>
 			        <td class="formField">

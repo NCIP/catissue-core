@@ -59,12 +59,28 @@ public class CollectionProtocolForm extends AbstractActionForm
     private String studycalendartitle;
     private String enrollment;
     private String tissueType;
+
     private String tissueSide;
     private String tissueSite;
     private String specimenType;
+    private String specimenSubType;    
+
     
     
     
+    
+	/**
+	 * @return Returns the specimenSubType.
+	 */
+	public String getSpecimenSubType() {
+		return specimenSubType;
+	}
+	/**
+	 * @param specimenSubType The specimenSubType to set.
+	 */
+	public void setSpecimenSubType(String specimenSubType) {
+		this.specimenSubType = specimenSubType;
+	}
 	/**
 	 * @return Returns the clinicalStatus.
 	 */
@@ -149,6 +165,9 @@ public class CollectionProtocolForm extends AbstractActionForm
 	public void setTissueType(String tissueType) {
 		this.tissueType = tissueType;
 	}
+	
+	
+	
     /**
      * No argument constructor for CollectionProtocolForm class. 
      */
