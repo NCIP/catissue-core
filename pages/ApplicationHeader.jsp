@@ -2,7 +2,7 @@
 	<tr>
 		<td height="50" align="left">
 			<a href="#">
-				<img src="images/appLogo.gif" alt="Application Logo" height="35" hspace="10" border="0">
+				<img src="images/appLogo.gif" alt="Application Logo" height="55" hspace="5" border="0">
 			</a>
 		</td>
 	</tr>
