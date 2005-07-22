@@ -61,8 +61,20 @@ public class DistributionProtocolForm extends AbstractActionForm
     private String tissueSide;
     private String tissueSite;
     private String specimenType;
+    private String specimenSubType;
     
-    
+	/**
+	 * @return Returns the specimenSubType.
+	 */
+	public String getSpecimenSubType() {
+		return specimenSubType;
+	}
+	/**
+	 * @param specimenSubType The specimenSubType to set.
+	 */
+	public void setSpecimenSubType(String specimenSubType) {
+		this.specimenSubType = specimenSubType;
+	}
 	/**
 	 * @return Returns the protocolCollection.
 	 */

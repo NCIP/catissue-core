@@ -41,23 +41,23 @@
 <%
     String operation = (String) request.getAttribute(Constants.OPERATION);
     String formName;
-    String searchFormName = new String(Constants.COLLECTIONPROTOCOL_SEARCH_ACTION);
+    String searchFormName = new String(Constants.DISTRIBUTIONPROTOCOL_SEARCH_ACTION);
 
     boolean readOnlyValue;
     if (operation.equals(Constants.EDIT))
     {
-        formName = Constants.COLLECTIONPROTOCOL_EDIT_ACTION;
+        formName = Constants.DISTRIBUTIONPROTOCOL_EDIT_ACTION;
         readOnlyValue = false;
     }
     else
     {
-        formName = Constants.COLLECTIONPROTOCOL_ADD_ACTION;
+        formName = Constants.DISTRIBUTIONPROTOCOL_ADD_ACTION;
         readOnlyValue = false;
     }
 %>
         
 <html:errors />
-<html:form action="<%=Constants.COLLECTIONPROTOCOL_ADD_ACTION%>">
+<html:form action="<%=Constants.DISTRIBUTIONPROTOCOL_ADD_ACTION%>">
 
 <!-- table 1 -->
 <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="875">
@@ -70,7 +70,7 @@
 				<table summary="" cellpadding="3" cellspacing="0" border="0">
 					<tr>
 						<td class="formTitle" height="20" colspan="3">
-							<bean:message key="collectionprotocol.searchTitle" />
+							<bean:message key="distributionprotocol.searchTitle" />
 						</td>
 					</tr>
 
@@ -78,7 +78,7 @@
 						<td class="formRequiredNotice" width="5">*</td>
 						<td class="formRequiredLabel">
 							<label for="identifier">
-								<bean:message key="collectionprotocol.identifier" />
+								<bean:message key="distributionprotocol.identifier" />
 							</label>
 						</td>
 						<td class="formField">
@@ -109,7 +109,7 @@
 		</logic:notEqual>
 
 
-		<!-- NEW COLLECTIONPROTOCOL ENTRY BEGINS-->
+		<!-- NEW DISTRIBUTIONPROTOCOL ENTRY BEGINS-->
 		<tr>
 		<td colspan="3">
 		<!-- table 4 -->
@@ -125,7 +125,7 @@
 <!-- page title -->					
 					<tr>
 						<td class="formTitle" height="20" colspan="4">
-							<bean:message key="collectionprotocol.title" />
+							<bean:message key="distributionprotocol.title" />
 						</td>
 					</tr>
 					
@@ -134,7 +134,7 @@
 						<td class="formRequiredNotice" width="5">*</td>
 						<td class="formRequiredLabel">
 							<label for="principalinvestigator">
-								<bean:message key="collectionprotocol.principalinvestigator" />
+								<bean:message key="distributionprotocol.principalinvestigator" />
 							</label>
 						</td>
 						<td class="formField" colspan=2>
@@ -146,7 +146,7 @@
 								<html:option value="Mandar">Mandar</html:option>
 							</html:select>
 							<html:link page="User.do?operation=add">
-							 <bean:message key="collectionprotocol.addinvestigator" />
+							 <bean:message key="distributionprotocol.addinvestigator" />
 							 </html:link>
 						</td>
 					</tr>
@@ -156,7 +156,7 @@
 						<td class="formRequiredNotice" width="5">&nbsp;</td>
 						<td class="formRequiredLabel">
 							<label for="protocolcoordinator">
-								<bean:message key="collectionprotocol.protocolcoordinator" />
+								<bean:message key="distributionprotocol.protocolcoordinator" />
 							</label>
 						</td>
 						<td class="formField" colspan=2>
@@ -168,7 +168,7 @@
 								<html:option value="Mandar">Mandar</html:option>
 							</html:select>
 							<html:link page="User.do?operation=add">
-							 <bean:message key="collectionprotocol.addcoordinator" />
+							 <bean:message key="distributionprotocol.addcoordinator" />
 							 </html:link>
 						</td>
 					</tr>
@@ -178,7 +178,7 @@
 						<td class="formRequiredNotice" width="5">*</td>
 						<td class="formRequiredLabel">
 							<label for="protocoltitle">
-								<bean:message key="collectionprotocol.protocoltitle" />
+								<bean:message key="distributionprotocol.protocoltitle" />
 							</label>
 						</td>
 						<td class="formField" colspan=2>
@@ -191,7 +191,7 @@
 						<td class="formRequiredNotice" width="5">&nbsp;</td>
 						<td class="formRequiredLabel">
 							<label for="shorttitle">
-								<bean:message key="collectionprotocol.shorttitle" />
+								<bean:message key="distributionprotocol.shorttitle" />
 							</label>
 						</td>
 						<td class="formField" colspan=2>
@@ -204,7 +204,7 @@
 						<td class="formRequiredNotice" width="5">&nbsp;</td>
 						<td class="formRequiredLabel">
 							<label for="irbid">
-								<bean:message key="collectionprotocol.irbid" />
+								<bean:message key="distributionprotocol.irbid" />
 							</label>
 						</td>
 						<td class="formField" colspan=2>
@@ -217,14 +217,14 @@
 						<td class="formRequiredNotice" width="5">&nbsp;</td>
 						<td class="formRequiredLabel">
 							<label for="startdate">
-								<bean:message key="collectionprotocol.startdate" />
+								<bean:message key="distributionprotocol.startdate" />
 							</label>
 						</td>
 			
 						 <td class="formField" colspan=2>
 						 <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
 						 <html:text styleClass="formDateSized" size="35" styleId="startDate" property="startDate" readonly="true"/>
-							<a href="javascript:show_calendar('collectionProtocolForm.startDate','','','MM-DD-YYYY');">
+							<a href="javascript:show_calendar('distributionProtocolForm.startDate','','','MM-DD-YYYY');">
 								<img src="images\calendar.gif" width=24 height=22 border=0>
 							</a>
 						 </td>
@@ -235,14 +235,14 @@
 						<td class="formRequiredNotice" width="5">&nbsp;</td>
 						<td class="formRequiredLabel">
 							<label for="enddate">
-								<bean:message key="collectionprotocol.enddate" />
+								<bean:message key="distributionprotocol.enddate" />
 							</label>
 						</td>
 			
 						 <td class="formField" colspan=2>
 						 <div id="overDiv1" style="position:absolute; visibility:hidden; z-index:1000;"></div>
 						 <html:text styleClass="formDateSized" size="35" styleId="endDate" property="endDate" readonly="true"/>
-							<a href="javascript:show_calendar('collectionProtocolForm.endDate','','','MM-DD-YYYY');">
+							<a href="javascript:show_calendar('distributionProtocolForm.endDate','','','MM-DD-YYYY');">
 								<img src="images\calendar.gif" width=24 height=22 border=0>
 							</a>
 						 </td>
@@ -253,7 +253,7 @@
 						<td class="formRequiredNotice" width="5">&nbsp;</td>
 						<td class="formRequiredLabel">
 							<label for="participants">
-								<bean:message key="collectionprotocol.participants" />
+								<bean:message key="distributionprotocol.participants" />
 							</label>
 						</td>
 						<td class="formField" colspan=2>
@@ -266,7 +266,7 @@
 						<td class="formRequiredNotice" width="5">&nbsp;</td>
 						<td class="formRequiredLabel">
 							<label for="descriptionurl">
-								<bean:message key="collectionprotocol.descriptionurl" />
+								<bean:message key="distributionprotocol.descriptionurl" />
 							</label>
 						</td>
 						<td class="formField" colspan=2>
@@ -276,14 +276,14 @@
 
 <!-- activitystatus -->	
 					<%
-						if(formName == Constants.COLLECTIONPROTOCOL_EDIT_ACTION)
+						if(formName == Constants.DISTRIBUTIONPROTOCOL_EDIT_ACTION)
 						{
 					%>
 							<tr>
 								<td class="formRequiredNotice" width="5">&nbsp;</td>
 								<td class="formRequiredLabel">
 									<label for="activityStatus">
-										<bean:message key="collectionprotocol.activitystatus" />
+										<bean:message key="distributionprotocol.activitystatus" />
 									</label>
 								</td>
 								<td class="formField" colspan=2>
@@ -310,8 +310,8 @@
 		<td>
 			<table summary="" cellpadding="3" cellspacing="0" border="0" width=100%>
 			    <tr>
-			        <td colspan="7" class="formTitle">
-			        	<b><bean:message key="collectionprotocol.specimenreq" /></b>
+			        <td colspan="6" class="formTitle">
+			        	<b><bean:message key="distributionprotocol.specimenreq" /></b>
 			        </td>
 			        <td class="formTitle">	
 			     	   <html:button property="addSpecimenReq" styleClass="actionButton">Add More</html:button>
@@ -320,29 +320,26 @@
 			    
 			    <TR> <!-- SUB TITLES -->
 			        <td class="formLeftSubTableTitle">
-		        		<bean:message key="collectionprotocol.specimennumber" />
+		        		<bean:message key="distributionprotocol.specimennumber" />
 			        </td>
 			        <td class="formLeftSubTableTitle">
-			        	<bean:message key="collectionprotocol.specimentype" />
+			        	<bean:message key="distributionprotocol.specimentype" />
 			        </td>
 			        <td class="formLeftSubTableTitle">
-			        	<bean:message key="collectionprotocol.specimensubtype" />
+			        	<bean:message key="distributionprotocol.specimensubtype" />
 			        </td>
 			        
 			        <td class="formLeftSubTableTitle">
-			        	<bean:message key="collectionprotocol.specimensite" />
+			        	<bean:message key="distributionprotocol.specimensite" />
 				    </td>
 			        <td class=formLeftSubTableTitle>
-				        <bean:message key="collectionprotocol.specimenside" />
+				        <bean:message key="distributionprotocol.specimenside" />
 				    </td>
 			        <td  class=formLeftSubTableTitle>
-			    		<bean:message key="collectionprotocol.specimenstatus" />
+			    		<bean:message key="distributionprotocol.specimenstatus" />
 				    </td>
 			        <td class=formLeftSubTableTitle>
-			        	<bean:message key="collectionprotocol.quantity" />
-			        </td>
-			        <td class=formLeftSubTableTitle>
-			        	<bean:message key="collectionprotocol.unit" />
+			        	<bean:message key="distributionprotocol.quantity" />
 			        </td>
 			    </TR><!-- SUB TITLES END -->
 				
@@ -391,9 +388,8 @@
 			        </td>
 			        <td class="formField">
 			        	<html:text styleClass="formFieldSized5" styleId="enrollment" property="enrollment" readonly="<%=readOnlyValue%>" />        
-			        </td>
-			        <td class="formField">
-			        	<span id="unitspan">&nbsp;
+			        	&nbsp;
+			          	<span id="unitspan">&nbsp;
 						</span>
 					</td>
 				</TR>	<!-- SPECIMEN REQ DATA END -->
@@ -429,6 +425,6 @@
 		</tr>
 	</logic:notEqual>
 
-	<!-- NEW COLLECTIONPROTOCOL ENTRY ends-->
+	<!-- NEW DISTRIBUTIONPROTOCOL ENTRY ends-->
 </table>
 </html:form>
