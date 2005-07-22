@@ -56,6 +56,17 @@ public class Site extends AbstractDomainObject implements java.io.Serializable
      */
 	private Address address = new Address();
 
+	//Default Constructor Required by hibernate
+	public Site()
+	{
+	}
+	
+	//Parameterized constructor
+	public Site(AbstractActionForm abstractForm)
+	{
+		setAllValues(abstractForm);
+	}
+	
 	/**
      * Returns the system generated unique identifier.
      * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"
@@ -222,6 +233,7 @@ public class Site extends AbstractDomainObject implements java.io.Serializable
             this.type 		= form.getType();
             this.emailAddress = form.getEmailAddress();            
             this.activityStatus = form.getActivityStatus();
+            coordinator.setSystemIdentifier(new Long(form.getCoordinatorId()));
             
             address.setStreet(form.getStreet());
             address.setCity(form.getCity());
