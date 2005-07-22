@@ -626,3 +626,13 @@ td.onlyBottomBorder{ /* for the cell that contains the form elements */
   border-bottom:1px solid #5C5C5C; /* constant: dark gray */
   background-color:#F4F4F5; /* constant: light gray */
 }
+/*  used for addmore functionality */
+
+	div#d1
+	{
+	 display:none;
+	}
+	div#d999
+	{
+	 display:none;
+	}
