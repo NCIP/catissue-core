@@ -16,8 +16,11 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.LoginForm;
+import edu.wustl.common.security.SecurityManager;
+import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
+import gov.nih.nci.security.authorization.domainobjects.User;
 /**
  * 
  *<p>Title: </p>
@@ -36,7 +39,7 @@ public class LoginAction extends Action
     public ActionForward execute(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException
-    {
+    {		
         String loginName = null;
         String password = null;
         HttpSession session = null;
@@ -55,7 +58,9 @@ public class LoginAction extends Action
         
         try {
             
-            boolean loginOK = login(loginName,password);
+//            boolean loginOK = login(loginName,password);
+             
+            boolean loginOK = SecurityManager.getInstance(LoginAction.class).login(loginName,password);
         if (loginOK)
         {
             Logger.out.info(">>>>>>>>>>>>> SUCESSFUL LOGIN <<<<<<<<< ");
@@ -93,14 +98,5 @@ public class LoginAction extends Action
     }
     
     
-    private boolean login(String loginName, String password)
-    {
-        boolean bool=false;
-        if(loginName.equals("admin") && password.equals("admin"))
-        {
-            bool=true;
-        }
-        
-        return bool;
-    }
+   
 }
