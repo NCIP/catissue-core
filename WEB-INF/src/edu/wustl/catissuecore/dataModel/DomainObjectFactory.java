@@ -11,9 +11,11 @@
 package edu.wustl.catissuecore.dataModel;
 
 import edu.wustl.catissuecore.actionForm.AbstractActionForm;
+import edu.wustl.catissuecore.actionForm.SiteForm;
 import edu.wustl.catissuecore.actionForm.StorageTypeForm;
 import edu.wustl.catissuecore.actionForm.UserForm;
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
+import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -55,6 +57,11 @@ public class DomainObjectFactory
             case Constants.STORAGE_TYPE_FORM_ID:
             	StorageTypeForm storageTypeForm = (StorageTypeForm) form;
             	abstractDomain = new StorageType(storageTypeForm);
+            	break;
+            case Constants.SITE_FORM_ID:
+            	SiteForm siteForm = (SiteForm) form;
+            	abstractDomain = new Site(siteForm);
+            	break;
         }
         return abstractDomain;
     }
