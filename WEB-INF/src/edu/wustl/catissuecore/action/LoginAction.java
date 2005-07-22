@@ -16,11 +16,10 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.LoginForm;
-import edu.wustl.common.security.SecurityManager;
-import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.util.logger.Logger;
-import gov.nih.nci.security.authorization.domainobjects.User;
+
 /**
  * 
  *<p>Title: </p>
@@ -32,6 +31,7 @@ import gov.nih.nci.security.authorization.domainobjects.User;
  */
 public class LoginAction extends Action
 {
+
     /**
      * Overrides the execute method of Action class.
      * Initializes the various drop down fields in Institute.jsp Page.
@@ -39,50 +39,53 @@ public class LoginAction extends Action
     public ActionForward execute(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException
-    {		
+    {
         String loginName = null;
         String password = null;
         HttpSession session = null;
-        
+
         if (form == null)
         {
             Logger.out.debug("Form is Null");
             return (mapping.findForward(Constants.FAILURE));
         }
-        
+
         LoginForm loginForm = (LoginForm) form;
         Logger.out.info("Inside Login Action, Just before validation");
-        
+
         loginName = loginForm.getLoginName();
         password = loginForm.getPassword();
-        
-        try {
-            
-//            boolean loginOK = login(loginName,password);
-             
-            boolean loginOK = SecurityManager.getInstance(LoginAction.class).login(loginName,password);
-        if (loginOK)
+
+        try
         {
-            Logger.out.info(">>>>>>>>>>>>> SUCESSFUL LOGIN <<<<<<<<< ");
-            session = request.getSession(true);
-            return mapping.findForward(Constants.SUCCESS);
-        }
-        else
-        {
-            Logger.out.info("User " + loginName + " Invalid user. Sending back to the login Page");
-            ActionErrors errors = new ActionErrors();
-            errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-                    "errors.incorrectLoginNamePassword"));
-            //Report any errors we have discovered
-            if (!errors.isEmpty())
+
+            boolean loginOK = SecurityManager.getInstance(LoginAction.class)
+                    .login(loginName, password);
+            if (loginOK)
             {
-                saveErrors(request, errors);
+                Logger.out.info(">>>>>>>>>>>>> SUCESSFUL LOGIN <<<<<<<<< ");
+                session = request.getSession(true);
+                //            session.setAttribute(Constants.USER,loginName);
+                return mapping.findForward(Constants.SUCCESS);
             }
-            return (mapping.findForward(Constants.FAILURE));
+            else
+            {
+                Logger.out.info("User " + loginName
+                        + " Invalid user. Sending back to the login Page");
+                ActionErrors errors = new ActionErrors();
+                errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+                        "errors.incorrectLoginNamePassword"));
+                //Report any errors we have discovered
+                if (!errors.isEmpty())
+                {
+                    saveErrors(request, errors);
+                }
+                return (mapping.findForward(Constants.FAILURE));
+            }
         }
-        }
-        catch (Exception e){
-            Logger.out.info("Exception: "+e.getMessage());
+        catch (Exception e)
+        {
+            Logger.out.info("Exception: " + e.getMessage());
             ActionErrors errors = new ActionErrors();
             errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
                     "errors.exceptionErrorMessage"));
@@ -93,10 +96,7 @@ public class LoginAction extends Action
             }
             return (mapping.findForward(Constants.FAILURE));
         }
-        
-       
+
     }
-    
-    
-   
+
 }

@@ -93,9 +93,8 @@ public class ApproveUserAction extends Action
                         Constants.ACTIVITY_STATUS_APPROVE))
                 {
                     //If operation is equal to Approve, generate a password for the user.
-                    String password = GeneratePassword.getPassword(user
-                            .getLoginName());
-                    user.setPassword(password);
+                    String password = GeneratePassword.getPassword(user.getUser().getLoginName());
+                    user.getUser().setPassword(password);
 
                     //Change the Activity Status to approve status.
                     //                    list = dao.retrieve(AbstractDomainObject.getDomainObjectName(Constants.ACTIVITY_STATUS_FORM_ID),
@@ -103,7 +102,7 @@ public class ApproveUserAction extends Action
                     activityStatus = Constants.ACTIVITY_STATUS_ACTIVE;
 
                     emailBody = "Your membership has been approved.\n\nLogin Name : "
-                            + user.getLoginName()
+                            + user.getUser().getLoginName()
                             + "\nPassword : "
                             + password
                             + "\n\nRegards,\n-catissuecore Administrator.";
@@ -136,13 +135,13 @@ public class ApproveUserAction extends Action
                 if (emailStatus == true)
                 {
                     Logger.out.debug("Password successfully sent to "
-                            + user.getLoginName() + " at "
+                            + user.getUser().getLoginName() + " at "
                             + user.getAddress().getEmailAddress());
                 }
                 else
                 {
                     Logger.out.error("Sending Password Failed to "
-                            + user.getLoginName() + " at "
+                            + user.getUser().getLoginName() + " at "
                             + user.getAddress().getEmailAddress());
                     target = new String(Constants.FAILURE);
                 }

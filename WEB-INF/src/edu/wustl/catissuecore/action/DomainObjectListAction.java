@@ -68,11 +68,11 @@ public class DomainObjectListAction extends Action
             //Only for showing UI.
             User user = new User();
             user.setSystemIdentifier(new Long(12));
-            user.setLoginName("Srikanth");
-            user.setLastName("Adiga");
-            user.setFirstName("Srikanth");
+            user.getUser().setLoginName("Srikanth");
+            user.getUser().setLastName("Adiga");
+            user.getUser().setFirstName("Srikanth");
             user.getAddress().setEmailAddress("srikanth@persistent.co.in");
-            user.setDateAdded(Calendar.getInstance().getTime());
+            user.getUser().setStartDate(Calendar.getInstance().getTime());
             
             list = new ArrayList();
             list.add(user);

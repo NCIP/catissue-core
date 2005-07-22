@@ -31,6 +31,7 @@ import edu.wustl.common.util.logger.Logger;
  * */
 public class UserForm extends AbstractActionForm
 {
+
     /**
      * systemIdentifier is a unique id assigned to each User.
      * */
@@ -40,11 +41,11 @@ public class UserForm extends AbstractActionForm
      * Represents the operation(Add/Edit) to be performed.
      * */
     private String operation;
-    
+
     /**
      * login name of the user.
      */
-    private String loginName;  
+    private String loginName;
 
     /**
      * Last Name of the user.
@@ -105,22 +106,27 @@ public class UserForm extends AbstractActionForm
      * Fax number of the user.
      * */
     private String faxNumber;
-    
+
     /**
      * Role of the user.
      * */
     private String role;
-    
+
     /**
      * Cancer Research Group of the user.  
      */
     private String cancerResearchGroup;
-    
+
     /**
      * Activity status of the user.
      */
     private String activityStatus;
-    
+
+    /**
+     * Comments given by user.
+     */
+    private String comments;
+
     /**
      * No argument constructor for UserForm class. 
      */
@@ -137,11 +143,11 @@ public class UserForm extends AbstractActionForm
     {
         try
         {
-            User user = (User)abstractDomain;
+            User user = (User) abstractDomain;
             this.systemIdentifier = user.getSystemIdentifier().longValue();
-            this.loginName = user.getLoginName();
-            this.lastName = user.getLastName();
-            this.firstName = user.getFirstName();
+            this.loginName = user.getUser().getLoginName();
+            this.lastName = user.getUser().getLastName();
+            this.firstName = user.getUser().getFirstName();
             this.institution = user.getInstitution().getName();
             this.emailAddress = user.getAddress().getEmailAddress();
             this.department = user.getDepartment().getName();
@@ -152,11 +158,11 @@ public class UserForm extends AbstractActionForm
             this.zipCode = user.getAddress().getZipCode();
             this.phoneNumber = user.getAddress().getPhoneNumber();
             this.faxNumber = user.getAddress().getFaxNumber();
-//            this.role = user.getRole().getName();
+            //            this.role = user.getRole().getName();
         }
         catch (Exception excp)
         {
-            excp.printStackTrace();	
+            excp.printStackTrace();
             Logger.out.error(excp.getMessage());
         }
     }
@@ -180,7 +186,7 @@ public class UserForm extends AbstractActionForm
     {
         this.systemIdentifier = systemIdentifier;
     }
-    
+
     /**
      * Returns the operation(Add/Edit) to be performed.
      * @return Returns the operation.
@@ -189,7 +195,7 @@ public class UserForm extends AbstractActionForm
     {
         return operation;
     }
-    
+
     /**
      * Sets the operation to be performed.
      * @param operation The operation to set.
@@ -198,7 +204,7 @@ public class UserForm extends AbstractActionForm
     {
         this.operation = operation;
     }
-    
+
     /**
      * Returns the login name of the user.
      * @return String representing the login name of the user
@@ -327,7 +333,7 @@ public class UserForm extends AbstractActionForm
     {
         return cancerResearchGroup;
     }
-    
+
     /**
      * Sets the cancer research group the user belongs.
      * @param cancerResearchGroup The cancerResearchGroup to set.
@@ -337,6 +343,7 @@ public class UserForm extends AbstractActionForm
     {
         this.cancerResearchGroup = cancerResearchGroup;
     }
+
     /**
      * Returns the Street Address of the user.
      * @return String representing mailing address of the user.
@@ -486,7 +493,7 @@ public class UserForm extends AbstractActionForm
     {
         return role;
     }
-    
+
     /**
      * Sets the role of the user.
      * @param role the role of the user.
@@ -496,7 +503,7 @@ public class UserForm extends AbstractActionForm
     {
         this.role = role;
     }
-    
+
     /**
      * @return Returns the activityStatus.
      */
@@ -504,6 +511,7 @@ public class UserForm extends AbstractActionForm
     {
         return activityStatus;
     }
+
     /**
      * @param activityStatus The activityStatus to set.
      */
@@ -511,15 +519,32 @@ public class UserForm extends AbstractActionForm
     {
         this.activityStatus = activityStatus;
     }
+
+    /**
+     * @return Returns the comments.
+     */
+    public String getComments()
+    {
+        return comments;
+    }
+
+    /**
+     * @param comments The comments to set.
+     */
+    public void setComments(String comments)
+    {
+        this.comments = comments;
+    }
+
     /**
      * Checks the operation to be performed is add operation.
      * @return Returns true if operation is equal to "add", else it returns false
      * */
     public boolean isAddOperation()
     {
-        return(getOperation().equals(Constants.ADD));
+        return (getOperation().equals(Constants.ADD));
     }
-    
+
     /**
      * Returns the id assigned to form bean
      */
@@ -527,7 +552,7 @@ public class UserForm extends AbstractActionForm
     {
         return Constants.USER_FORM_ID;
     }
-    
+
     /**
      * Resets the values of all the fields.
      * This method defined in ActionForm is overridden in this class.
@@ -536,7 +561,7 @@ public class UserForm extends AbstractActionForm
     {
         reset();
     }
-    
+
     /**
      * Resets the values of all the fields.
      * Is called by the overridden reset method defined in ActionForm.  
@@ -564,9 +589,10 @@ public class UserForm extends AbstractActionForm
     }
 
     /**
-    * Overrides the validate method of ActionForm.
-    * */
-    public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
+     * Overrides the validate method of ActionForm.
+     * */
+    public ActionErrors validate(ActionMapping mapping,
+            HttpServletRequest request)
     {
         ActionErrors errors = new ActionErrors();
         Validator validator = new Validator();
@@ -574,76 +600,99 @@ public class UserForm extends AbstractActionForm
         {
             if (operation.equals(Constants.SEARCH))
             {
-                checkValidNumber(new Long(systemIdentifier).toString(),"user.systemIdentifier",errors,validator);
+                checkValidNumber(new Long(systemIdentifier).toString(),
+                        "user.systemIdentifier", errors, validator);
             }
-            if (operation.equals(Constants.ADD) || operation.equals(Constants.EDIT))
+            if (operation.equals(Constants.ADD)
+                    || operation.equals(Constants.EDIT))
             {
                 if (validator.isEmpty(loginName))
                 {
-                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("user.loginName")));
+                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+                            "errors.item.required", ApplicationProperties
+                                    .getValue("user.loginName")));
                 }
                 else
                 {
                     if (!Character.isLetter(loginName.charAt(0)))
                     {
-                        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("user.loginName")));
+                        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+                                "errors.item.format", ApplicationProperties
+                                        .getValue("user.loginName")));
                     }
                 }
-                
+
                 if (validator.isEmpty(lastName))
                 {
-                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("user.lastName")));
+                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+                            "errors.item.required", ApplicationProperties
+                                    .getValue("user.lastName")));
                 }
 
                 if (validator.isEmpty(firstName))
                 {
-                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("user.firstName")));
-                }
-                
-                if (validator.isEmpty(street))
-                {
-                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("user.address")));
+                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+                            "errors.item.required", ApplicationProperties
+                                    .getValue("user.firstName")));
                 }
 
-                if(validator.isEmpty(emailAddress))
+                if (validator.isEmpty(street))
                 {
-                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("user.email")));
+                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+                            "errors.item.required", ApplicationProperties
+                                    .getValue("user.address")));
+                }
+
+                if (validator.isEmpty(emailAddress))
+                {
+                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+                            "errors.item.required", ApplicationProperties
+                                    .getValue("user.email")));
                 }
                 else
                 {
                     if (!validator.isValidEmailAddress(emailAddress))
                     {
-                        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("user.email")));
+                        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+                                "errors.item.format", ApplicationProperties
+                                        .getValue("user.email")));
                     }
                 }
-                
-                checkValidString(city,"user.city",errors,validator);
-                checkValidNumber(zipCode,"user.zip",errors,validator);
-                
-                if (role == null)
-                {
-                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("user.role")));
-                }
+
+                checkValidString(city, "user.city", errors, validator);
+                checkValidNumber(zipCode, "user.zip", errors, validator);
+
+//                if (role == null)
+//                {
+//                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+//                            "errors.item.required", ApplicationProperties
+//                                    .getValue("user.role")));
+//                }
             }
             if (operation.equals(Constants.FORGOT_PASSWORD))
             {
-                if ((validator.isEmpty(loginName)) && (validator.isEmpty(emailAddress)))
+                if ((validator.isEmpty(loginName))
+                        && (validator.isEmpty(emailAddress)))
                 {
-                    errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.forgotpassword.required"));
+                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+                            "errors.forgotpassword.required"));
                 }
                 else
                 {
-                    if (!validator.isValidEmailAddress(emailAddress) && (!validator.isEmpty(emailAddress)))
+                    if (!validator.isValidEmailAddress(emailAddress)
+                            && (!validator.isEmpty(emailAddress)))
                     {
-                        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("user.emailAddress")));
+                        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+                                "errors.item.format", ApplicationProperties
+                                        .getValue("user.emailAddress")));
                     }
                 }
             }
         }
-        catch(Exception excp)
+        catch (Exception excp)
         {
-            Logger.out.error(excp.getMessage(),excp);
+            Logger.out.error(excp.getMessage(), excp);
         }
         return errors;
-     }
+    }
 }
