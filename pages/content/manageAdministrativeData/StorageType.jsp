@@ -108,7 +108,7 @@
 
 		<tr>
 			<td class="formRequiredNotice" width="5">&nbsp;</td>
-			<td class="formRequiredLabel">
+			<td class="formLabel">
 				<label for="defaultTemperature">
 					<bean:message key="storageType.defaultTemperature"/>
 				</label>
@@ -121,7 +121,7 @@
 
 
 		<tr>			
-			<td class="formSubTableTitle" colspan="3">
+			<td class="formTitle" colspan="3">
 				<label for="defaultCapacity">
 					<bean:message key="storageType.defaultCapacity"/>
 				</label>
@@ -130,7 +130,7 @@
 
 		<tr>
 			<td class="formRequiredNotice" width="5">&nbsp;</td>
-			<td class="formRequiredLabel">
+			<td class="formLabel">
 				<label for="oneDimensionCapacity">
 					<bean:message key="storageType.oneDimensionCapacity"/>
 				</label>
@@ -142,7 +142,7 @@
 
 		<tr>
 			<td class="formRequiredNotice" width="5">&nbsp;</td>
-			<td class="formRequiredLabel">
+			<td class="formLabel">
 				<label for="twoDimensionCapacity">
 					<bean:message key="storageType.twoDimensionCapacity"/>
 				</label>
@@ -154,7 +154,7 @@
 
 		<tr>
 			<td class="formRequiredNotice" width="5">&nbsp;</td>
-			<td class="formRequiredLabel">
+			<td class="formLabel">
 				<label for="oneDimensionLabel">
 					<bean:message key="storageType.oneDimensionLabel"/>
 				</label>
@@ -167,7 +167,7 @@
 
 		<tr>
 			<td class="formRequiredNotice" width="5">&nbsp;</td>
-			<td class="formRequiredLabel">
+			<td class="formLabel">
 				<label for="twoDimensionLabel">
 					<bean:message key="storageType.twoDimensionLabel"/>
 				</label>

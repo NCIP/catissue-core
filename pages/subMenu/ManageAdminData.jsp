@@ -9,48 +9,7 @@
 </tr>
 
 <tr>
-	<td class="subMenuPrimaryItems">
-		<div>
-			<img src="images/subMenuArrow.gif" width="7" height="7" alt=""/> 
-				<bean:message key="app.collectionProtocol" />
-		</div>
-		<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-					<a class="subMenuPrimary" href="CollectionProtocol.do?operation=add">
-						<bean:message key="app.add" /> 
-					</a> | 
-					<a class="subMenuPrimary" href="CollectionProtocol.do?operation=search">
-						<bean:message key="app.edit" /> 
-					</a>
-		</div>
-		
-		<div>
-			
-			<img src="images/subMenuArrow.gif" width="7" height="7" alt=""/> 
-				<bean:message key="app.distributionProtocol" />
-		</div>
-		<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-					<a class="subMenuPrimary" href="DistributionProtocol.do?operation=add">
-						<bean:message key="app.add" /> 
-					</a> | 
-					<a class="subMenuPrimary" href="DistributionProtocol.do?operation=search">
-						<bean:message key="app.edit" /> 
-					</a>
-		</div>
-		
-		
-		<div>
-			<img src="images/subMenuArrow.gif" width="7" height="7" alt="" /> 
-				<bean:message key="app.site" />
-					<a class="subMenuPrimary" href="#">
-						<bean:message key="app.add" />
-					</a> | 
-					<a class="subMenuPrimary" href="#">
-						<bean:message key="app.edit" />
-					</a>
-		</div>
-		
+	<td class="subMenuPrimaryItems">		
 		<div>
 			<img src="images/subMenuArrow.gif" width="7" height="7" alt="" /> 
 				<bean:message key="app.user" />
@@ -83,6 +42,18 @@
 						<bean:message key="app.edit" />
 					</a>
 		</div>
+		
+		<div>
+			<img src="images/subMenuArrow.gif" width="7" height="7" alt="" /> 
+				<bean:message key="app.site" />
+					<a class="subMenuPrimary" href="Site.do?operation=add">
+						<bean:message key="app.add" />
+					</a> | 
+					<a class="subMenuPrimary" href="Site.do?operation=search">
+						<bean:message key="app.edit" />
+					</a>
+		</div>
+		
 		<div>
 			<img src="images/subMenuArrow.gif" width="7" height="7" alt="" /> 
 				<bean:message key="app.storagetype" />
@@ -104,18 +75,37 @@
 						<bean:message key="app.edit" />
 					</a>
 		</div>
-	
+		
 		<div>
-			<img src="images/subMenuArrow.gif" width="7" height="7" alt="" /> 
-				<bean:message key="app.site" />
-					<a class="subMenuPrimary" href="Site.do?operation=add">
-						<bean:message key="app.add" />
-					</a> | 
-					<a class="subMenuPrimary" href="Site.do?operation=search">
-						<bean:message key="app.edit" />
-					</a>
-		</div>		
+			<img src="images/subMenuArrow.gif" width="7" height="7" alt=""/> 
+				<bean:message key="app.collectionProtocol" />
+		</div>
 
+		<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					<a class="subMenuPrimary" href="CollectionProtocol.do?operation=add">
+						<bean:message key="app.add" /> 
+					</a> | 
+					<a class="subMenuPrimary" href="CollectionProtocol.do?operation=search">
+						<bean:message key="app.edit" /> 
+					</a>
+		</div>
+		
+		<div>
+			
+			<img src="images/subMenuArrow.gif" width="7" height="7" alt=""/> 
+				<bean:message key="app.distributionProtocol" />
+		</div>
+		<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					<a class="subMenuPrimary" href="DistributionProtocol.do?operation=add">
+						<bean:message key="app.add" /> 
+					</a> | 
+					<a class="subMenuPrimary" href="DistributionProtocol.do?operation=search">
+						<bean:message key="app.edit" /> 
+					</a>
+		</div>
+		
 		<div>
 			<img src="images/subMenuArrow.gif" width="7" height="7" alt="" />
 				<a class="subMenuPrimary" href="ApproveUserShow.do?pageNum=1"> 

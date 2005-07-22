@@ -3,6 +3,15 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 
+<head>
+	<script language="JavaScript">
+		function onRadioButtonClick(no)
+		{
+			alert(document.form1.p1.value);
+		}
+	</script>
+</head>
+
 <%
         String operation = (String) request.getAttribute(Constants.OPERATION);
         String formName;
@@ -23,9 +32,10 @@
 
 <html:errors />
 
+
 <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
 	
-	<html:form action="<%=Constants.STORAGE_CONTAINER_ADD_ACTION%>">
+	<html:form action="<%=Constants.STORAGE_CONTAINER_ADD_ACTION%>" name="form1" type="edu.wustl.catissuecore.actionForm.StorageContainerForm">
 		<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>">
 			<!-- ENTER IDENTIFIER BEGINS-->
 			<br />
@@ -110,9 +120,9 @@
 					</tr>
 					
 					<tr>
-						<td class="formRequiredNotice" width="5">*</td>
-						<td class="formRequiredLabel">
-							<html:radio styleClass="" styleId="parentContainer" property="parentContainer" value="1" >
+						<td class="formRequiredNotice" width="5">&nbsp;</td>
+						<td class="formLabel">
+							<html:radio styleClass="" styleId="parentContainer" property="parentContainer" value="1" onclick="onRadioButtonClick()">
 								<label for="site">
 									<bean:message key="storageContainer.site" />
 								</label>
@@ -130,9 +140,9 @@
 					</tr>
 					
 					<tr>
-						<td class="formRequiredNotice" width="5">*</td>
-						<td class="formRequiredLabel" nowrap>
-							<html:radio styleClass="" styleId="parentContainer" property="parentContainer" value="2">
+						<td class="formRequiredNotice" width="5">&nbsp;</td>
+						<td class="formLabel" nowrap>
+							<html:radio styleClass="" styleId="parentContainer" property="parentContainer" value="2" onclick="onRadioButtonClick()">
 								<label for="site">
 									<bean:message key="storageContainer.parentContainer" />
 								</label>
@@ -148,8 +158,8 @@
 					</tr>
 	
 					<tr>
-						<td class="formRequiredNotice" width="5">*</td>
-						<td class="formRequiredLabel">
+						<td class="formRequiredNotice" width="5">&nbsp;</td>
+						<td class="formLabel">
 							<label for="noOfContainers">
 								<bean:message key="storageContainer.noOfContainers" />
 							</label>
@@ -160,8 +170,8 @@
 					</tr>
 					
 					<tr>
-						<td class="formRequiredNotice" width="5">*</td>
-						<td class="formRequiredLabel">
+						<td class="formRequiredNotice" width="5">&nbsp;</td>
+						<td class="formLabel">
 							<label for="startNumber">
 								<bean:message key="storageContainer.startNumber" />
 							</label>
@@ -172,8 +182,8 @@
 					</tr>
 					
 					<tr>
-						<td class="formRequiredNotice" width="5">*</td>
-						<td class="formRequiredLabel">
+						<td class="formRequiredNotice" width="5">&nbsp;</td>
+						<td class="formLabel">
 							<label for="startNumber">
 								<bean:message key="storageContainer.barcode" />
 							</label>
@@ -184,8 +194,8 @@
 					</tr>
 
 					<tr>
-						<td class="formRequiredNotice" width="5">*</td>
-						<td class="formRequiredLabel">
+						<td class="formRequiredNotice" width="5">&nbsp;</td>
+						<td class="formLabel">
 							<label for="defaultTemperature">
 								<bean:message key="storageContainer.temperature" />
 							</label>
@@ -205,8 +215,8 @@
 					</tr>
 					
 					<tr>
-						<td class="formRequiredNotice" width="5">*</td>
-						<td class="formRequiredLabel">
+						<td class="formRequiredNotice" width="5">&nbsp;</td>
+						<td class="formLabel">
 							<label for="oneDimensionLabel">
 								<bean:message key="storageContainer.oneDimensionLabel" />
 							</label>
@@ -217,8 +227,8 @@
 					</tr>
 					
 					<tr>
-						<td class="formRequiredNotice" width="5">*</td>
-						<td class="formRequiredLabel" nowrap>
+						<td class="formRequiredNotice" width="5">&nbsp;</td>
+						<td class="formLabel" nowrap>
 							<label for="twoDimensionLabel">
 								<bean:message key="storageContainer.twoDimensionLabel" />
 							</label>
@@ -229,24 +239,26 @@
 					</tr>
 					
 					<tr>
-						<td class="formTitle" colspan="3">
+						<td class="formTitle" colspan="2">
 							<label for="details">
 								<bean:message key="storageContainer.details" />
 							</label>
-							<html:submit styleClass="actionButton" onclick="">
+						</td>
+						<td class="formTitle" align="Right">
+							<html:submit styleClass="actionButton" onclick="replaceSpeChar(outerdiv,d1,search1)">
 								<bean:message key="buttons.addMore"/>
 							</html:submit>
 						</td>
 					</tr>
 									
 					<tr>
-						<td class="formSubTableTitle" width="5">#</td>
-						<td class="formSubTableTitle" nowrap>
+						<td class="formLeftSubTableTitle" width="5">#</td>
+						<td class="formRightSubTableTitle" nowrap>
 							<label for="key">
 								<bean:message key="storageContainer.key" />
 							</label>
 						</td>
-						<td class="formSubTableTitle" nowrap colspan="1">
+						<td class="formRightSubTableTitle" nowrap>
 							<label for="value">
 								<bean:message key="storageContainer.value" />
 							</label>
@@ -301,3 +313,4 @@
 		<!-- NEW STORAGE CONTAINER REGISTRATION ends-->
 	</html:form>
 </table>
+
