@@ -1,7 +1,7 @@
 /**
  * <p>Title: DistributionProtocolForm Class>
  * <p>Description:  DistributionProtocolForm Class is used to encapsulate all the request parameters passed 
- * from ApplicationUser Add/Edit webpage. </p>
+ * from User Add/Edit webpage. </p>
  * Copyright:    Copyright (c) year
  * Company: Washington University, School of Medicine, St. Louis.
  * @author Gautam Shetty
@@ -31,7 +31,7 @@ import edu.wustl.catissuecore.util.global.Validator;
 public class DistributionProtocolForm extends AbstractActionForm
 {
     /**
-     * identifier is a unique id assigned to each ApplicationUser.
+     * identifier is a unique id assigned to each User.
      * */
     private long identifier;
 
@@ -280,8 +280,8 @@ public class DistributionProtocolForm extends AbstractActionForm
 		this.operation = operation;
 	}
     /**
-     * Returns the identifier assigned to ApplicationUser.
-     * @return int representing the id assigned to ApplicationUser.
+     * Returns the identifier assigned to User.
+     * @return int representing the id assigned to User.
      * @see #setIdentifier(int)
      * */
     public long getIdentifier()
@@ -290,8 +290,8 @@ public class DistributionProtocolForm extends AbstractActionForm
     }
 
     /**
-     * Sets an id for the ApplicationUser.
-     * @param identifier id to be assigned to the ApplicationUser.
+     * Sets an id for the User.
+     * @param identifier id to be assigned to the User.
      * @see #getIdentifier()
      * */
     public void setIdentifier(long identifier)

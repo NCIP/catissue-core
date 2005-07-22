@@ -22,7 +22,7 @@ public class CollectionProtocolRegistration implements Serializable
     private static final long serialVersionUID = 1234567890L;
 
     /**
-     * System generated unique identifier.
+     * System generated unique systemIdentifier.
      */
     protected Long systemIdentifier;
 
@@ -49,10 +49,10 @@ public class CollectionProtocolRegistration implements Serializable
     private CollectionProtocol collectionProtocol;
 
     /**
-     * Returns the system generated unique identifier.
+     * Returns the system generated unique systemIdentifier.
      * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"
      * unsaved-value="null" generator-class="native"
-     * @return the system generated unique identifier.
+     * @return the system generated unique systemIdentifier.
      * @see #setSystemIdentifier(Long)
      * */
     public Long getSystemIdentifier()
@@ -61,8 +61,8 @@ public class CollectionProtocolRegistration implements Serializable
     }
 
     /**
-     * Sets the system generated unique identifier.
-     * @param identifier the system generated unique identifier.
+     * Sets the system generated unique systemIdentifier.
+     * @param systemIdentifier the system generated unique systemIdentifier.
      * @see #getSystemIdentifier()
      * */
     public void setSystemIdentifier(Long systemIdentifier)

@@ -22,7 +22,7 @@ public class Institution extends AbstractDomainObject implements Serializable
 	private static final long serialVersionUID = 1234567890L;
 	
 	/**
-	 * System generated unique identifier.
+	 * System generated unique systemIdentifier.
 	 */
 	protected Long systemIdentifier;
 	
@@ -32,10 +32,10 @@ public class Institution extends AbstractDomainObject implements Serializable
 	protected String name;
 
 	/**
-	 * Returns the unique identifier assigned to institution.
+	 * Returns the unique systemIdentifier assigned to institution.
 	 * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long"
 	 * length="30" unsaved-value="null" generator-class="native"
-	 * @return A unique identifier assigned to the institution.
+	 * @return A unique systemIdentifier assigned to the institution.
 	 * @see #setIdentifier(int)
 	 * */
 	public Long getSystemIdentifier()
@@ -44,8 +44,8 @@ public class Institution extends AbstractDomainObject implements Serializable
 	}
 
 	/**
-	 * Sets an identifier for the institution.
-	 * @param identifier Unique identifier to be assigned to the institution.
+	 * Sets an systemIdentifier for the institution.
+	 * @param systemIdentifier Unique systemIdentifier to be assigned to the institution.
 	 * @see #getIdentifier()
 	 * */
 	public void setSystemIdentifier(Long systemIdentifier)

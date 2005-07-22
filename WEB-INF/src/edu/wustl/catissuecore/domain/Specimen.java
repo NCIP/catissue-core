@@ -26,7 +26,7 @@ public abstract class Specimen implements Serializable
     private static final long serialVersionUID = 1234567890L;
 
     /**
-     * System generated unique identifier.
+     * System generated unique systemIdentifier.
      */
     protected Long systemIdentifier;
 
@@ -92,7 +92,7 @@ public abstract class Specimen implements Serializable
     protected Collection childrenSpecimen = new HashSet();
 
     /**
-     * Collection of a pre-existing, externally defined identifier associated with a specimen.
+     * Collection of a pre-existing, externally defined systemIdentifier associated with a specimen.
      */
     protected Collection externalIdentifierCollection = new HashSet();
 
@@ -107,10 +107,10 @@ public abstract class Specimen implements Serializable
     protected SpecimenCharacteristics specimenCharacteristics;
 
     /**
-     * Returns the system generated unique identifier.
+     * Returns the system generated unique systemIdentifier.
      * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"
      * unsaved-value="null" generator-class="native"
-     * @return the system generated unique identifier.
+     * @return the system generated unique systemIdentifier.
      * @see #setSystemIdentifier(Long)
      * */
     public Long getSystemIdentifier()
@@ -119,8 +119,8 @@ public abstract class Specimen implements Serializable
     }
 
     /**
-     * Sets the system generated unique identifier.
-     * @param identifier the system generated unique identifier.
+     * Sets the system generated unique systemIdentifier.
+     * @param systemIdentifier the system generated unique systemIdentifier.
      * @see #getSystemIdentifier()
      * */
     public void setSystemIdentifier(Long systemIdentifier)
@@ -404,12 +404,12 @@ public abstract class Specimen implements Serializable
     }
 
     /**
-     * Returns the collection of a pre-existing, externally defined identifier associated with a specimen.
+     * Returns the collection of a pre-existing, externally defined systemIdentifier associated with a specimen.
      * @hibernate.set name="externalIdentifierCollection" table="CATISSUE_EXTERNAL_IDENTIFIER"
      * cascade="save-update" inverse="true" lazy="false"
      * @hibernate.collection-key column="SPECIMEN_ID"
      * @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.ExternalIdentifier"
-     * @return the collection of a pre-existing, externally defined identifier associated with a specimen.
+     * @return the collection of a pre-existing, externally defined systemIdentifier associated with a specimen.
      * @see #setExternalIdentifierCollection(Set)
      */
     public Collection getExternalIdentifierCollection()
@@ -418,10 +418,10 @@ public abstract class Specimen implements Serializable
     }
 
     /**
-     * Sets the collection of a pre-existing, externally defined identifier 
+     * Sets the collection of a pre-existing, externally defined systemIdentifier 
      * associated with a specimen.
      * @param externalIdentifierCollection the collection of a pre-existing, 
-     * externally defined identifier associated with a specimen.
+     * externally defined systemIdentifier associated with a specimen.
      * @see #getExternalIdentifierCollection()
      */
     public void setExternalIdentifierCollection(Collection externalIdentifierCollection)

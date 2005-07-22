@@ -30,7 +30,7 @@ public abstract class SpecimenProtocol implements java.io.Serializable
 	/**
 	 * The current principal investigator of the protocol.
 	 */
-	protected ApplicationUser principalInvestigator;
+	protected User principalInvestigator;
 	
 	/**
 	 * Full title assigned to the protocol.
@@ -93,12 +93,12 @@ public abstract class SpecimenProtocol implements java.io.Serializable
 
 	/**
 	 * Returns the principal investigator of the protocol.
-	 * @hibernate.many-to-one column="PRINCIPAL_INVESTIGATOR_ID" class="edu.wustl.catissuecore.domain.ApplicationUser"
+	 * @hibernate.many-to-one column="PRINCIPAL_INVESTIGATOR_ID" class="edu.wustl.catissuecore.domain.User"
 	 * constrained="true"
 	 * @return the principal investigator of the protocol.
-	 * @see #setPrincipalInvestigator(ApplicationUser)
+	 * @see #setPrincipalInvestigator(User)
 	 */
-	public ApplicationUser getPrincipalInvestigator()
+	public User getPrincipalInvestigator()
 	{
 		return principalInvestigator;
 	}
@@ -106,7 +106,7 @@ public abstract class SpecimenProtocol implements java.io.Serializable
 	/**
 	 * @param principalInvestigator The principalInvestigator to set.
 	 */
-	public void setPrincipalInvestigator(ApplicationUser principalInvestigator)
+	public void setPrincipalInvestigator(User principalInvestigator)
 	{
 		this.principalInvestigator = principalInvestigator;
 	}

@@ -76,6 +76,7 @@ public class AbstractBizLogic
         }
         catch(DAOException daoExp)
         {
+            daoExp.printStackTrace();
             Logger.out.error(daoExp.getMessage(),daoExp);
         }
         finally

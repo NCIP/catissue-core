@@ -22,7 +22,7 @@ public class DistributedItem implements java.io.Serializable
 	private static final long serialVersionUID = 1234567890L;
 
 	/**
-     * System generated unique identifier.
+     * System generated unique systemIdentifier.
      */
 	protected Long systemIdentifier;
 	
@@ -43,8 +43,8 @@ public class DistributedItem implements java.io.Serializable
 	protected Distribution distribution;
 
 	/**
-     * Returns the system generated unique identifier.
-     * @return Long System generated unique identifier.
+     * Returns the system generated unique systemIdentifier.
+     * @return Long System generated unique systemIdentifier.
      * @see #setSystemIdentifier(Long)
      * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"
      * unsaved-value="null" generator-class="native" 
@@ -55,8 +55,8 @@ public class DistributedItem implements java.io.Serializable
 	}
 
 	/**
-     * Sets the system generated unique identifier.
-     * @param systemIdentifier the system generated unique identifier.
+     * Sets the system generated unique systemIdentifier.
+     * @param systemIdentifier the system generated unique systemIdentifier.
      * @see #getSystemIdentifier()
      */
 	public void setSystemIdentifier(Long systemIdentifier)

@@ -20,7 +20,7 @@ public class Department extends AbstractDomainObject implements java.io.Serializ
 	private static final long serialVersionUID = 1234567890L;
 
 	/**
-	 * System generated unique identifier.
+	 * System generated unique systemIdentifier.
 	 */
 	protected Long systemIdentifier;
 
@@ -42,9 +42,9 @@ public class Department extends AbstractDomainObject implements java.io.Serializ
 	}
 
 	/**
-	 * Sets an identifier for the department.
+	 * Sets an systemIdentifier for the department.
 	 * 
-	 * @param systemIdentifier Unique identifier to be assigned to the department.
+	 * @param systemIdentifier Unique systemIdentifier to be assigned to the department.
 	 */
 	public void setSystemIdentifier(Long systemIdentifier)
 	{

@@ -64,7 +64,7 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 	 * @hibernate.set name="userCollection" table="CATISSUE_COLLECTION_COORDINATORS" 
 	 * cascade="save-update" inverse="false" lazy="false"
 	 * @hibernate.collection-key column="COLLECTION_PROTOCOL_ID"
-	 * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.ApplicationUser" column="USER_ID"
+	 * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.User" column="USER_ID"
 	 * @return The collection of Users(ProtocolCoordinators) for this Protocol.
 	 */
 	public Collection getUserCollection()

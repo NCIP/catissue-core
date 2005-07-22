@@ -19,7 +19,7 @@ public class StorageContainerCapacity implements java.io.Serializable
 	private static final long serialVersionUID = 1234567890L;
 
 	/**
-     * System generated unique identifier.
+     * System generated unique systemIdentifier.
      */
 	protected Long systemIdentifier;
 	
@@ -44,8 +44,8 @@ public class StorageContainerCapacity implements java.io.Serializable
 	protected String twoDimensionLabel;
 
 	/**
-     * Returns System generated unique identifier.
-     * @return Long System generated unique identifier.
+     * Returns System generated unique systemIdentifier.
+     * @return Long System generated unique systemIdentifier.
      * @see #setSystemIdentifier(Long)
      * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"
      * unsaved-value="null" generator-class="native" 
@@ -56,7 +56,7 @@ public class StorageContainerCapacity implements java.io.Serializable
 	}
 
 	/**
-     * Sets unique identifier.
+     * Sets unique systemIdentifier.
      * @param systemIdentifier Identifier to be set.
      * @see #getSystemIdentifier()
      */

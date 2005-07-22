@@ -2,7 +2,7 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <%@ taglib uri="/WEB-INF/PagenationTag.tld" prefix="custom"%>
-<%@ page import="edu.wustl.catissuecore.util.global.Constants, edu.wustl.catissuecore.domain.Address, edu.wustl.catissuecore.domain.ApplicationUser"%>
+<%@ page import="edu.wustl.catissuecore.util.global.Constants, edu.wustl.catissuecore.domain.Address, edu.wustl.catissuecore.domain.User"%>
 
 <html:errors/>
 
@@ -68,7 +68,7 @@
 						<logic:iterate id="currentUser" name="showDomainObjectList">
 							<tr class="dataRowLight">
 								<%
-        								ApplicationUser user = (ApplicationUser) currentUser;
+        								User user = (User) currentUser;
 										String identifier = user.getSystemIdentifier().toString();
 										//String userDetailsLink = Constants.USER_DETAILS_SHOW_ACTION+"?"+Constants.IDENTIFIER+"="+identifier;
 										String userDetailsLink = "User.do?operation=edit&amp;pageOf=query";

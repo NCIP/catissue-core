@@ -1,7 +1,7 @@
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
-<%@ page import="edu.wustl.catissuecore.util.global.Constants, edu.wustl.catissuecore.domain.ApplicationUser"%>
+<%@ page import="edu.wustl.catissuecore.util.global.Constants, edu.wustl.catissuecore.domain.User"%>
 
 <%
 	Long identifier = (Long)request.getAttribute(Constants.PREVIOUS_PAGE);
@@ -29,7 +29,7 @@
 					</tr>
 					<tr>
 						<%
-							ApplicationUser user = (ApplicationUser)request.getAttribute(Constants.CURRENT_RECORD);
+							User user = (User)request.getAttribute(Constants.CURRENT_RECORD);
 							String userIdentifier = user.getSystemIdentifier().toString();
 							String propertyName = "value(user" + userIdentifier + ")";
 						%>

@@ -237,7 +237,7 @@ public class Constants
 	public static final String ACTIVITY_STATUS_PENDING = "Pending";
 	public static final String ACTIVITY_STATUS_CLOSED = "Closed";
 	
-	//Approve ApplicationUser Constants
+	//Approve User Constants
 	public static final int ZERO = 0;
 	public static final int START_PAGE = 1;
 	public static final int NUMBER_RESULTS_PER_PAGE = 5;

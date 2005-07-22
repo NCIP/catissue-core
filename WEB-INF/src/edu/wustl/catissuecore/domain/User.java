@@ -1,5 +1,5 @@
 /**
- * <p>Title: ApplicationUser Class</p>
+ * <p>Title: User Class</p>
  * <p>Description: A person who interacts with the caTISSUE Core 
  * data system and/or participates in the process of biospecimen 
  * collection, processing, or utilization.</p>
@@ -28,7 +28,7 @@ import edu.wustl.common.util.logger.Logger;
  * processing, or utilization.
  * @hibernate.class table="CATISSUE_USER"
  */
-public class ApplicationUser extends AbstractDomainObject implements Serializable
+public class User extends AbstractDomainObject implements Serializable
 {
     /**
 	 * System generated unique systemIdentifier.
@@ -36,7 +36,7 @@ public class ApplicationUser extends AbstractDomainObject implements Serializabl
 	protected Long systemIdentifier;
 	
 	/**
-	 * ApplicationUser object in the CSM.
+	 * User object in the CSM.
 	 */
 	protected gov.nih.nci.security.authorization.domainobjects.User user = 
 	    		new gov.nih.nci.security.authorization.domainobjects.User(); 
@@ -52,7 +52,7 @@ public class ApplicationUser extends AbstractDomainObject implements Serializabl
     protected Department department = new Department();
 
     /**
-     * Contact address of the ApplicationUser.
+     * Contact address of the User.
      */
     protected Address address = new Address();
 
@@ -99,19 +99,19 @@ public class ApplicationUser extends AbstractDomainObject implements Serializabl
         this.user = user;
     }
     /**
-     * Initialize a new ApplicationUser instance.
+     * Initialize a new User instance.
      * Note: Hibernate invokes this constructor through reflection API.  
      */
-    public ApplicationUser()
+    public User()
     {
         this.user.setStartDate(Calendar.getInstance().getTime());
     }
 
     /**
-     * This Constructor Copies the data from an UserForm object to a ApplicationUser object.
+     * This Constructor Copies the data from an UserForm object to a User object.
      * @param user An UserForm object containing the information about the user.  
      */
-    public ApplicationUser(UserForm uform)
+    public User(UserForm uform)
     {
     	this();
         setAllValues(uform);
@@ -310,7 +310,7 @@ public class ApplicationUser extends AbstractDomainObject implements Serializabl
     }
     
     /**
-     * This function Copies the data from an UserForm object to a ApplicationUser object.
+     * This function Copies the data from an UserForm object to a User object.
      * @param user An UserForm object containing the information about the user.  
      * */
     public void setAllValues(AbstractActionForm abstractForm)

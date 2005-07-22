@@ -22,8 +22,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.dao.AbstractBizLogic;
-import edu.wustl.catissuecore.dao.AbstractDAO;
-import edu.wustl.catissuecore.dao.BizLogicFactory; 
+import edu.wustl.catissuecore.dao.BizLogicFactory;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
 

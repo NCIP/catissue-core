@@ -24,7 +24,7 @@ public class CollectionProtocolEvent implements java.io.Serializable
 	private static final long serialVersionUID = 1234567890L;
 	
 	/**
-	 * System generated unique identifier.
+	 * System generated unique systemIdentifier.
 	 */
 	protected Long systemIdentifier;
 	

@@ -24,7 +24,7 @@ public class StorageContainer implements java.io.Serializable
 	private static final long serialVersionUID = 1234567890L;
 
 	/**
-     * System generated unique identifier.
+     * System generated unique systemIdentifier.
      */
 	protected Long systemIdentifier;
 
@@ -84,8 +84,8 @@ public class StorageContainer implements java.io.Serializable
 	private Collection childrenContainerCollection = new HashSet();
 
 	/**
-     * Returns System generated unique identifier.
-     * @return System generated unique identifier.
+     * Returns System generated unique systemIdentifier.
+     * @return System generated unique systemIdentifier.
      * @see #setSystemIdentifier(Long)
      * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"
      * unsaved-value="null" generator-class="native" 
@@ -96,7 +96,7 @@ public class StorageContainer implements java.io.Serializable
 	}
 
 	/**
-     * Sets unique identifier.
+     * Sets unique systemIdentifier.
      * @param systemIdentifier Identifier to be set.
      * @see #getSystemIdentifier()
      */

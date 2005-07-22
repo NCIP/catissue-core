@@ -24,7 +24,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.dao.AbstractBizLogic;
 import edu.wustl.catissuecore.dao.BizLogicFactory;
-import edu.wustl.catissuecore.domain.ApplicationUser;
+import edu.wustl.catissuecore.domain.User;
 
 import edu.wustl.catissuecore.util.global.Constants;
 
@@ -46,13 +46,13 @@ public class SiteAction extends Action
         //Gets the value of the operation parameter.
         String operation = request.getParameter(Constants.OPERATION);
 
-        //Sets the operation attribute to be used in the Add/Edit ApplicationUser Page. 
+        //Sets the operation attribute to be used in the Add/Edit User Page. 
         request.setAttribute(Constants.OPERATION, operation);
 
-        //Sets the stateList attribute to be used in the Add/Edit ApplicationUser Page.
+        //Sets the stateList attribute to be used in the Add/Edit User Page.
         request.setAttribute(Constants.STATELIST, Constants.STATEARRAY);
 
-        //Sets the countryList attribute to be used in the Add/Edit ApplicationUser Page.
+        //Sets the countryList attribute to be used in the Add/Edit User Page.
         request.setAttribute(Constants.COUNTRYLIST, Constants.COUNTRYARRAY);
 
         //Sets the activityStatusList attribute to be used in the Site Add/Edit Page.
@@ -68,14 +68,14 @@ public class SiteAction extends Action
             int i;
             
 //          Sets the roleList attribute to be used in the Site Add/Edit Page.
-            List userList = dao.retrieve(ApplicationUser.class.getName());
+            List userList = dao.retrieve(User.class.getName());
             String[] userArray = new String[userList.size()];
             String[] userIdArray = new String[userList.size()];
             iterator = userList.listIterator();
             i = 0;
             while (iterator.hasNext())
             {
-                ApplicationUser user = (ApplicationUser) iterator.next();
+                User user = (User) iterator.next();
                 userArray[i] = user.getUser().getLastName() + ", " + user.getUser().getFirstName();
                 userIdArray[i] = user.getSystemIdentifier().toString();
                 i++;

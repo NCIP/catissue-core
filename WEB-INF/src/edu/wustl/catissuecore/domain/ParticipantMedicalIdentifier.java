@@ -18,7 +18,7 @@ public class ParticipantMedicalIdentifier implements java.io.Serializable
 	private static final long serialVersionUID = 1234567890L;
 
 	/**
-	 * System generated unique identifier
+	 * System generated unique systemIdentifier
      */
 	protected Long systemIdentifier;
 
@@ -41,7 +41,7 @@ public class ParticipantMedicalIdentifier implements java.io.Serializable
      * Returns System generated unique identifier.
      * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"
      * unsaved-value="null" generator-class="native"
-     * @return System generated unique identifier.
+     * @return System generated unique systemIdentifier.
      * @see #setSystemIdentifier(Long)
      */
 	public Long getSystemIdentifier()
@@ -50,8 +50,8 @@ public class ParticipantMedicalIdentifier implements java.io.Serializable
 	}
 
 	/**
-     * Sets a system identifier for a particular medical record.
-     * @param systemIdentifier identifier for a particular medical record.
+     * Sets a system systemIdentifier for a particular medical record.
+     * @param systemIdentifier systemIdentifier for a particular medical record.
      * @see #getSystemIdentifier()
      * */
 	public void setSystemIdentifier(Long systemIdentifier)

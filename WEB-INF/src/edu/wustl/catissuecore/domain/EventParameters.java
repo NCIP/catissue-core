@@ -10,7 +10,7 @@
 package edu.wustl.catissuecore.domain;
 
 import java.util.Date;
-import edu.wustl.catissuecore.domain.ApplicationUser;
+import edu.wustl.catissuecore.domain.User;
 
 /**
  * Attributes associated with a generic event.
@@ -32,9 +32,9 @@ public abstract class EventParameters implements java.io.Serializable
 	protected Date timestamp;
 	
 	/**
-     * ApplicationUser who performs the event.
+     * User who performs the event.
      */
-	protected ApplicationUser user;
+	protected User user;
 	
 	/**
      * Text comments on event.
@@ -88,11 +88,11 @@ public abstract class EventParameters implements java.io.Serializable
 	/**
      * Returns user who performs the event.
      * @hibernate.many-to-one column="USER_ID" 
-     * class="edu.wustl.catissuecore.domain.ApplicationUser" constrained="true"
+     * class="edu.wustl.catissuecore.domain.User" constrained="true"
      * @return The user who performs the event.
-     * @see #setUser(ApplicationUser)
+     * @see #setUser(User)
      */
-	public ApplicationUser getUser()
+	public User getUser()
 	{
 		return user;
 	}
@@ -102,7 +102,7 @@ public abstract class EventParameters implements java.io.Serializable
      * @param user user who performs the event.
      * @see #getUser()
      */
-	public void setUser(ApplicationUser user)
+	public void setUser(User user)
 	{
 		this.user = user;
 	}

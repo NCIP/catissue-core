@@ -27,7 +27,7 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.actionForm.UserForm;
 import edu.wustl.catissuecore.dao.AbstractBizLogic;
 import edu.wustl.catissuecore.dao.BizLogicFactory;
-import edu.wustl.catissuecore.domain.ApplicationUser;
+import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.SendEmail;
@@ -62,19 +62,19 @@ public class ForgotPasswordSearchAction extends Action
             if (!validator.isEmpty(uForm.getLoginName()))
             {
                 //if loginName is entered retrieve password using loginName.
-                list = dao.retrieve(ApplicationUser.class.getName(), Constants.LOGINNAME,
+                list = dao.retrieve(User.class.getName(), Constants.LOGINNAME,
                         uForm.getLoginName());
             }
             else
             {
                 //if loginName is not entered retrieve password using email address.
-                list = dao.retrieve(ApplicationUser.class.getName(), Constants.EMAIL,
+                list = dao.retrieve(User.class.getName(), Constants.EMAIL,
                         uForm.getEmailAddress());
             }
             
             if (list.size() != 0)
             {
-                ApplicationUser user = (ApplicationUser) list.get(0);
+                User user = (User) list.get(0);
                 
                 Logger.out.debug("Password successfully retrieved for user: "+user.getUser().getLoginName());
                 
@@ -82,7 +82,7 @@ public class ForgotPasswordSearchAction extends Action
                 {
                     SendEmail email = new SendEmail();
                     
-                    String body = "\n ApplicationUser Name : " + user.getUser().getLoginName() + "\n Password : " + user.getUser().getPassword();
+                    String body = "\n User Name : " + user.getUser().getLoginName() + "\n Password : " + user.getUser().getPassword();
                     boolean emailStatus = email.sendmail(user.getAddress().getEmailAddress(),
                             Variables.toAddress, Variables.mailServer,
                             Constants.YOUR_PASSWORD, body);

@@ -1,7 +1,7 @@
 /**
  * <p>Title: ExternalIdentifier Class>
  * <p>Description: A pre-existing, externally defined 
- * identifier associated with a specimen.</p>
+ * systemIdentifier associated with a specimen.</p>
  * Copyright:    Copyright (c) year
  * Company: Washington University, School of Medicine, St. Louis.
  * @author Gautam Shetty
@@ -14,7 +14,7 @@ import java.io.Serializable;
 
 /**
  * A pre-existing, externally defined 
- * identifier associated with a specimen.
+ * systemIdentifier associated with a specimen.
  * @hibernate.class table="CATISSUE_EXTERNAL_IDENTIFIER"
  * @author gautam_shetty
  */
@@ -23,27 +23,27 @@ public class ExternalIdentifier implements Serializable
     private static final long serialVersionUID = 1234567890L;
 
     /**
-     * System generated unique identifier.
+     * System generated unique systemIdentifier.
      */
     protected Long systemIdentifier;
 
     /**
-     * Name of the legacy identifier.
+     * Name of the legacy systemIdentifier.
      */
     protected String name;
 
     /**
-     * Value of the legacy identifier.
+     * Value of the legacy systemIdentifier.
      */
     protected String value;
     
     protected Specimen specimen;
 	
     /**
-     * Returns the system generated unique identifier.
+     * Returns the system generated unique systemIdentifier.
      * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"
      * unsaved-value="null" generator-class="native"
-     * @return the system generated unique identifier.
+     * @return the system generated unique systemIdentifier.
      * @see #setSystemIdentifier(Long)
      * */
     public Long getSystemIdentifier()
@@ -52,8 +52,8 @@ public class ExternalIdentifier implements Serializable
     }
 
     /**
-     * Sets the system generated unique identifier.
-     * @param identifier the system generated unique identifier.
+     * Sets the system generated unique systemIdentifier.
+     * @param systemIdentifier the system generated unique systemIdentifier.
      * @see #getSystemIdentifier()
      * */
     public void setSystemIdentifier(Long systemIdentifier)
@@ -62,10 +62,10 @@ public class ExternalIdentifier implements Serializable
     }
 
     /**
-     * Returns the name of the legacy identifier.
+     * Returns the name of the legacy systemIdentifier.
      * @hibernate.property name="name" type="string" 
      * column="NAME" length="50"
-     * @return the name of the legacy identifier.
+     * @return the name of the legacy systemIdentifier.
      * @see #setName(String)
      */
     public String getName()
@@ -74,8 +74,8 @@ public class ExternalIdentifier implements Serializable
     }
 
     /**
-     * Sets the name of the legacy identifier.
-     * @param name the name of the legacy identifier.
+     * Sets the name of the legacy systemIdentifier.
+     * @param name the name of the legacy systemIdentifier.
      * @see #getName()
      */
     public void setName(String name)
@@ -84,10 +84,10 @@ public class ExternalIdentifier implements Serializable
     }
 
     /**
-     * Returns the value of the legacy identifier.
+     * Returns the value of the legacy systemIdentifier.
      * @hibernate.property name="value" type="string" 
      * column="VALUE" length="50"
-     * @return the value of the legacy identifier.
+     * @return the value of the legacy systemIdentifier.
      * @see #setValue(String)
      */
     public String getValue()
@@ -96,8 +96,8 @@ public class ExternalIdentifier implements Serializable
     }
 
     /**
-     * Sets the value of the legacy identifier.
-     * @param value the value of the legacy identifier.
+     * Sets the value of the legacy systemIdentifier.
+     * @param value the value of the legacy systemIdentifier.
      * @see #getValue()
      */
     public void setValue(String value)

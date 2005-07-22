@@ -70,7 +70,7 @@ public class LoginAction extends Action
             }
             else
             {
-                Logger.out.info("ApplicationUser " + loginName
+                Logger.out.info("User " + loginName
                         + " Invalid user. Sending back to the login Page");
                 ActionErrors errors = new ActionErrors();
                 errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(

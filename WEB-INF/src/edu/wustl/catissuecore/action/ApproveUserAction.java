@@ -26,7 +26,7 @@ import edu.wustl.catissuecore.actionForm.DomainObjectListForm;
 import edu.wustl.catissuecore.dao.AbstractBizLogic;
 import edu.wustl.catissuecore.dao.BizLogicFactory;
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
-import edu.wustl.catissuecore.domain.ApplicationUser;
+import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.GeneratePassword;
 import edu.wustl.catissuecore.util.global.SendEmail;
@@ -69,7 +69,7 @@ public class ApproveUserAction extends Action
 
             if (list.size() != 0)
             {
-                ApplicationUser user = (ApplicationUser) list.get(0);
+                User user = (User) list.get(0);
                 String emailBody = null;
 
                 //Set the time of approval.

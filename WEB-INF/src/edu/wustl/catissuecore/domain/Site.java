@@ -42,9 +42,9 @@ public class Site extends AbstractDomainObject implements java.io.Serializable
     private String emailAddress;
 	
 	/**
-     * The ApplicationUser who currently coordinates operations at the Site.
+     * The User who currently coordinates operations at the Site.
      */
-	protected ApplicationUser coordinator = new ApplicationUser();
+	protected User coordinator = new User();
 	
 	/**
      * Defines whether this Site record can be queried (Active) or not queried (Inactive) by any actor.
@@ -156,11 +156,11 @@ public class Site extends AbstractDomainObject implements java.io.Serializable
 
 	/**
      * Returns the coordinator associated with this site.
-     * @hibernate.many-to-one column="USER_ID"  class="edu.wustl.catissuecore.domain.ApplicationUser" constrained="true"
+     * @hibernate.many-to-one column="USER_ID"  class="edu.wustl.catissuecore.domain.User" constrained="true"
      * @return coordinator associated with this site.
-     * @see #setCoordinator(ApplicationUser)
+     * @see #setCoordinator(User)
      */
-	public ApplicationUser getCoordinator()
+	public User getCoordinator()
 	{
 		return coordinator;
 	}
@@ -170,7 +170,7 @@ public class Site extends AbstractDomainObject implements java.io.Serializable
      * @param coordinator coordinator to be set.
      * @see #getCoordinator()
      */
-	public void setCoordinator(edu.wustl.catissuecore.domain.ApplicationUser coordinator)
+	public void setCoordinator(edu.wustl.catissuecore.domain.User coordinator)
 	{
 		this.coordinator = coordinator;
 	}
@@ -180,7 +180,7 @@ public class Site extends AbstractDomainObject implements java.io.Serializable
      * @hibernate.property name="activityStatus" type="string" 
      * column="ACTIVITY_STATUS" length="50"
      * @return String the activity status.
-     * @see #getActivityStatus(ApplicationUser)
+     * @see #getActivityStatus(User)
      */
 	public String getActivityStatus()
 	{

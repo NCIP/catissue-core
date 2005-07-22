@@ -16,7 +16,7 @@ import net.sf.hibernate.HibernateException;
 import edu.wustl.catissuecore.domain.CancerResearchGroup;
 import edu.wustl.catissuecore.domain.Department;
 import edu.wustl.catissuecore.domain.Institution;
-import edu.wustl.catissuecore.domain.ApplicationUser;
+import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMTransactionException;
@@ -42,7 +42,7 @@ public class UserBizLogic extends AbstractBizLogic
         try
         {
 
-            ApplicationUser user = (ApplicationUser) obj;
+            User user = (User) obj;
 
             Department department = null;
             Institution institution = null;
@@ -99,7 +99,7 @@ public class UserBizLogic extends AbstractBizLogic
      */
     public void update(Object obj) throws DAOException, HibernateException
     {
-        ApplicationUser user = (ApplicationUser) obj;
+        User user = (User) obj;
         List list = null;
 
         HibernateDAO dao = new HibernateDAO();
@@ -112,12 +112,12 @@ public class UserBizLogic extends AbstractBizLogic
             //	        {
             //	            
             //	            CLOB clob = null;
-            //	            list = retrieveInSameSession(ApplicationUser.class.getName(),"systemIdentifier",user.getIdentifier());
+            //	            list = retrieveInSameSession(User.class.getName(),"systemIdentifier",user.getIdentifier());
             //	            session.refresh(user,LockMode.UPGRADE);
             //	            clob = (CLOB) user.getCommentClob();
             //	            if (list.size() != 0)
             //	            {
-            //	                user = (ApplicationUser)list.get(0);
+            //	                user = (User)list.get(0);
             //	                clob = (CLOB) user.getCommentClob();
             //	            }
             //		        Writer clobWriter = clob.getCharacterOutputStream();
@@ -154,7 +154,7 @@ public class UserBizLogic extends AbstractBizLogic
     ////		{
     ////			System.out.println(aList.get(i));
     ////		}
-    //		ApplicationUser user = new ApplicationUser();
+    //		User user = new User();
     //		
     //		user.setLoginName("abcd123");
     //		user.setEmail("abcd@abcd.com");

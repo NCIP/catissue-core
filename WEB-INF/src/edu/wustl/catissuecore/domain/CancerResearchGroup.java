@@ -22,7 +22,7 @@ public class CancerResearchGroup extends AbstractDomainObject implements Seriali
 	private static final long serialVersionUID = 1234567890L;
 
 	/**
-	 * System generated unique identifier.
+	 * System generated unique systemIdentifier.
 	 */
 	protected Long systemIdentifier;
 	
@@ -32,7 +32,7 @@ public class CancerResearchGroup extends AbstractDomainObject implements Seriali
 	protected String name;
 
 	/**
-	 * Returns the unique identifier of the cancer research group.
+	 * Returns the unique systemIdentifier of the cancer research group.
 	 * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long"
 	 * length="30" unsaved-value="null" generator-class="native"
 	 * @return a unique systemIdentifier assigned to the cancer research group.
@@ -43,9 +43,9 @@ public class CancerResearchGroup extends AbstractDomainObject implements Seriali
 	}
 
 	/**
-	 * Sets an identifier for the cancer research group.
+	 * Sets an systemIdentifier for the cancer research group.
 	 * 
-	 * @param systemIdentifier Unique identifier to be assigned to the cancer research group.
+	 * @param systemIdentifier Unique systemIdentifier to be assigned to the cancer research group.
 	 */
 	public void setSystemIdentifier(Long systemIdentifier)
 	{
