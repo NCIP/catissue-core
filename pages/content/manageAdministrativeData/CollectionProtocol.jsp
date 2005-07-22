@@ -19,32 +19,14 @@
 	}
 //-->
 </SCRIPT>
-
+<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 <SCRIPT LANGUAGE="JavaScript">
-/* section for outer block start */
-var search1='`';
-var insno=1;
-
-function b1(div,d1,searchChar)
-{
-	var y = d1.innerHTML;
-	insno=insno+1;
-	var starpos = y.indexOf(searchChar); // pos of 1st `.  ie: No.
-	var adstr="";
-	var c=0;
-	for(c=0;c<starpos;c++)
-	{
-		adstr = y.replace(searchChar,insno);
-		starpos = y.indexOf(searchChar); 
-		y = adstr;
-	}
-	addDiv(div,adstr);
-}
-/* section for outer block end */
+	var search1='#';
+	var insno=1;
 
 /* section for inner block start */
 var str = "";
-var search2='`';
+var search2='#';
 var insno1=1
 function setStr()
 {
@@ -312,7 +294,7 @@ function addDiv(div,adstr)
 						</td>
 			
 						 <td class="formField" colspan=2>
-						 <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
+						 <div id="startdateDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
 						 <html:text styleClass="formDateSized" size="35" styleId="startDate" property="startDate" readonly="true"/>
 							<a href="javascript:show_calendar('collectionProtocolForm.startDate','','','MM-DD-YYYY');">
 								<img src="images\calendar.gif" width=24 height=22 border=0>
@@ -330,7 +312,7 @@ function addDiv(div,adstr)
 						</td>
 			
 						 <td class="formField" colspan=2>
-						 <div id="overDiv1" style="position:absolute; visibility:hidden; z-index:1000;"></div>
+						 <div id="enddateDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
 						 <html:text styleClass="formDateSized" size="35" styleId="endDate" property="endDate" readonly="true"/>
 							<a href="javascript:show_calendar('collectionProtocolForm.endDate','','','MM-DD-YYYY');">
 								<img src="images\calendar.gif" width=24 height=22 border=0>
@@ -401,7 +383,7 @@ function addDiv(div,adstr)
 			<b><bean:message key="collectionprotocol.eventtitle" /></b>
 	</td>
 	<td align="right" class="formTitle">		
-			<html:button property="addCollectionProtocolEvents" styleClass="actionButton" onclick="b1(outerdiv,d1,search1)">Add More</html:button>
+			<html:button property="addCollectionProtocolEvents" styleClass="actionButton" onclick="replaceSpeChar(outerdiv,d1,search1)">Add More</html:button>
 	</td>
 	</tr>
 </table>
@@ -583,14 +565,14 @@ function addDiv(div,adstr)
 <tr><td>
 <table summary="" cellpadding="3" cellspacing="0" border="0" >
 	<tr>
-		<td rowspan=2 class="tabrightmostcell">`</td>
+		<td rowspan=2 class="tabrightmostcell">#</td>
 		<td class="formField">
 			<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
 				<tr>
 					<td class="formRequiredNotice" width="5">*</td>
 					<td class="formRequiredLabel" width="32%">
 						<label for="clinicalstatus">
-					    	Clinical Status
+					    	Clinical Status_#
 						</label>
 					</td>
 				    <td class="formField" colspan=2>
@@ -625,7 +607,7 @@ function addDiv(div,adstr)
 			     	   <input type="button" name="addSpecimenReq" value="Add More" class="actionButton">
 			        </td>
 			    </tr>
-			    < div id="subdiv`">
+			    <div id="subdiv#">
 			    <TR> <!-- SUB TITLES -->
 			        <td class="formLeftSubTableTitle">
 		        		#
@@ -658,7 +640,7 @@ function addDiv(div,adstr)
 				<TR>	<!-- SPECIMEN REQ DATA -->
 			        <td class="tabrightmostcell">1.</td>
 			        <td class="formField">
-			           	<select name="specimenType" size="1" onchange="changeUnit(specimenType)" class="formFieldSized10" id="specimenType"><option value="0">Fluid Specimen</option>
+			           	<select name="specimenType_#" size="1" onchange="changeUnit(specimenType)" class="formFieldSized10" id="specimenType"><option value="0">Fluid Specimen</option>
 							<option value="1">Tissue Specimen</option>
 							<option value="2">Cell Specimen</option>
 							<option value="3">Molecular Specimen</option></select>
