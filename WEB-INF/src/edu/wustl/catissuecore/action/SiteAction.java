@@ -63,24 +63,28 @@ public class SiteAction extends Action
         
         try
 		{
-        	/*AbstractBizLogic dao = BizLogicFactory.getDAO(Constants.SITE_FORM_ID);
+        	AbstractBizLogic dao = BizLogicFactory.getDAO(Constants.SITE_FORM_ID);
             ListIterator iterator = null;
             int i;
             
 //          Sets the roleList attribute to be used in the Site Add/Edit Page.
             List userList = dao.retrieve(User.class.getName());
             String[] userArray = new String[userList.size()];
+            String[] userIdArray = new String[userList.size()];
             iterator = userList.listIterator();
             i = 0;
             while (iterator.hasNext())
             {
                 User user = (User) iterator.next();
                 userArray[i] = user.getLastName() + ", " + user.getFirstName();
+                userIdArray[i] = user.getSystemIdentifier().toString();
                 i++;
             }
-            */
-        	String [] userArray = {"Phadnis, Aniruddha","Kaveeshwar, Kapil"};
+            
+        	//String [] userArray = {"Phadnis, Aniruddha","Kaveeshwar, Kapil"};
+        	
         	request.setAttribute(Constants.USERLIST, userArray);
+        	request.setAttribute(Constants.USERIDLIST, userIdArray);
 		}
         catch(Exception e)
 		{
