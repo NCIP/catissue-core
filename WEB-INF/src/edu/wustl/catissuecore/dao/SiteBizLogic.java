@@ -14,7 +14,7 @@ import java.util.List;
 
 import net.sf.hibernate.HibernateException;
 import edu.wustl.catissuecore.domain.Site;
-import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.domain.ApplicationUser;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.dbManager.DAOException;
 
@@ -39,10 +39,10 @@ public class SiteBizLogic extends AbstractBizLogic
 		dao.openSession();
 		
 		System.out.println("HERE...");
-		List list = dao.retrieve(User.class.getName(), "systemIdentifier", site.getCoordinator().getSystemIdentifier());
+		List list = dao.retrieve(ApplicationUser.class.getName(), "systemIdentifier", site.getCoordinator().getSystemIdentifier());
 		if (list.size() != 0)
 		{
-		    User user = (User) list.get(0);
+		    ApplicationUser user = (ApplicationUser) list.get(0);
 		    site.setCoordinator(user);
 		}
 		
