@@ -82,7 +82,7 @@ public class ApplicationUser extends AbstractDomainObject implements Serializabl
     protected Collection collectionProtocolCollection = new HashSet();
     
     /**
-     * @hibernate.many-to-one column="CSM_USER_ID" class="gov.nih.nci.security.authorization.domainobjects.ApplicationUser"
+     * @hibernate.many-to-one column="CSM_USER_ID" class="gov.nih.nci.security.authorization.domainobjects.User"
 	 * constrained="true"
      * @return Returns the user.
      */
