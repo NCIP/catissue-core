@@ -127,7 +127,7 @@
 						</td>
 						<td class="formField">
 							<html:select property="coordinatorId" styleClass="formFieldSized" styleId="coordinatorId" size="1">
-								<html:options name="userList" labelName="userList" />
+								<html:options name="userIdList" labelName="userList" />
 							</html:select>
 							&nbsp;
 							<html:link page="/User.do?operation=add&amp;pageOf=">
@@ -137,8 +137,8 @@
 					</tr>
 		
 					<tr>
-						<td class="formRequiredNotice" width="5">*</td>
-						<td class="formRequiredLabel">
+						<td class="formRequiredNotice" width="5">&nbsp;</td>
+						<td class="formLabel">
 							<label for="emailAddress">
 								<bean:message key="site.emailAddress" />
 							</label>
@@ -149,8 +149,8 @@
 					</tr>
 									
 					<tr>
-						<td class="formRequiredNotice" width="5">*</td>
-						<td class="formRequiredLabel">
+						<td class="formRequiredNotice" width="5">&nbsp;</td>
+						<td class="formLabel">
 							<label for="street">
 								<bean:message key="site.street" />
 							</label>
@@ -161,8 +161,8 @@
 					</tr>
 					
 					<tr>
-						<td class="formRequiredNotice" width="5">*</td>
-						<td class="formRequiredLabel">
+						<td class="formRequiredNotice" width="5">&nbsp;</td>
+						<td class="formLabel">
 							<label for="city">
 								<bean:message key="site.city" />
 							</label>
@@ -173,8 +173,8 @@
 					</tr>
 					
 					<tr>
-						<td class="formRequiredNotice" width="5">*</td>
-						<td class="formRequiredLabel">
+						<td class="formRequiredNotice" width="5">&nbsp;</td>
+						<td class="formLabel">
 							<label for="state">
 								<bean:message key="site.state" />
 							</label>
@@ -187,8 +187,8 @@
 					</tr>
 					
 					<tr>
-						<td class="formRequiredNotice" width="5">*</td>
-						<td class="formRequiredLabel">
+						<td class="formRequiredNotice" width="5">&nbsp;</td>
+						<td class="formLabel">
 							<label for="country">
 								<bean:message key="site.country"/>
 							</label>
@@ -202,8 +202,8 @@
 					</tr>
 					
 					<tr>
-						<td class="formRequiredNotice" width="5">*</td>
-						<td class="formRequiredLabel">
+						<td class="formRequiredNotice" width="5">&nbsp;</td>
+						<td class="formLabel">
 							<label for="zipCode">
 								<bean:message key="site.zipCode" />
 							</label>

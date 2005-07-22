@@ -197,7 +197,7 @@
 					</tr>
 					
 					<tr>
-						<td class="formSubTableTitle" colspan="3">
+						<td class="formTitle" colspan="3">
 							<label for="capacity">
 								<bean:message key="storageContainer.capacity" />
 							</label>
@@ -229,7 +229,7 @@
 					</tr>
 					
 					<tr>
-						<td class="formSubTableTitle" colspan="3">
+						<td class="formTitle" colspan="3">
 							<label for="details">
 								<bean:message key="storageContainer.details" />
 							</label>
