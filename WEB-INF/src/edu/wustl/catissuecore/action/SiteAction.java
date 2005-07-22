@@ -76,7 +76,7 @@ public class SiteAction extends Action
             while (iterator.hasNext())
             {
                 User user = (User) iterator.next();
-                userArray[i] = user.getLastName() + ", " + user.getFirstName();
+                userArray[i] = user.getUser().getLastName() + ", " + user.getUser().getFirstName();
                 userIdArray[i] = user.getSystemIdentifier().toString();
                 i++;
             }
