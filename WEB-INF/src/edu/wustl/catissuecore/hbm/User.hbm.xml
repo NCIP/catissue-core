@@ -23,50 +23,14 @@
             </generator>
         </id>
 
-        <property
-            name="lastName"
-            type="string"
+        <many-to-one
+            name="user"
+            class="gov.nih.nci.security.authorization.domainobjects.User"
+            cascade="none"
+            outer-join="auto"
             update="true"
             insert="true"
-            column="LAST_NAME"
-            length="50"
-        />
-
-        <property
-            name="firstName"
-            type="string"
-            update="true"
-            insert="true"
-            column="FIRST_NAME"
-            length="50"
-        />
-
-        <property
-            name="loginName"
-            type="string"
-            update="true"
-            insert="true"
-            column="LOGIN_NAME"
-            length="50"
-            not-null="true"
-            unique="true"
-        />
-
-        <property
-            name="password"
-            type="string"
-            update="true"
-            insert="true"
-            column="PASSWORD"
-            length="50"
-        />
-
-        <property
-            name="dateAdded"
-            type="date"
-            update="true"
-            insert="true"
-            column="DATE_ADDED"
+            column="CSM_USER_ID"
         />
 
         <property

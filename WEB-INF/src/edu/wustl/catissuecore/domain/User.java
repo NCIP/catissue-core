@@ -84,8 +84,7 @@ public class User extends AbstractDomainObject implements Serializable
     /**
      * @hibernate.many-to-one column="CSM_USER_ID" class="gov.nih.nci.security.authorization.domainobjects.User"
 	 * constrained="true"
-     * @return Returns the user.
-     */
+	 * */
     public gov.nih.nci.security.authorization.domainobjects.User getUser()
     {
         return user;
