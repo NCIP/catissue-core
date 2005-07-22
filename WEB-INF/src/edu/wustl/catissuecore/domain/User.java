@@ -1,6 +1,8 @@
 /**
  * <p>Title: User Class</p>
- * <p>Description: A person who interacts with the caTISSUE Core data system and/or participates in the process of biospecimen collection, processing, or utilization.</p>
+ * <p>Description: A person who interacts with the caTISSUE Core 
+ * data system and/or participates in the process of biospecimen 
+ * collection, processing, or utilization.</p>
  * Copyright:    Copyright (c) year
  * Company: Washington University, School of Medicine, St. Louis.
  * @author Mandar Deshmukh
@@ -14,7 +16,6 @@ import java.sql.Clob;
 import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashSet;
 
 import edu.wustl.catissuecore.actionForm.AbstractActionForm;
@@ -22,7 +23,9 @@ import edu.wustl.catissuecore.actionForm.UserForm;
 import edu.wustl.common.util.logger.Logger;
 
 /**
- * A person who interacts with the caTISSUE Core data system and/or participates in the process of biospecimen collection, processing, or utilization.
+ * A person who interacts with the caTISSUE Core data system 
+ * and/or participates in the process of biospecimen collection, 
+ * processing, or utilization.
  * @hibernate.class table="CATISSUE_USER"
  */
 public class User extends AbstractDomainObject implements Serializable
@@ -31,16 +34,12 @@ public class User extends AbstractDomainObject implements Serializable
 	 * System generated unique systemIdentifier.
 	 */
 	protected Long systemIdentifier;
-
-    /**
-     * A string containing the Last Name of the user.
-     */
-    protected String lastName = "";
-
-    /**
-     * A string containing the First Name of the user.
-     */
-    protected String firstName = "";
+	
+	/**
+	 * User object in the CSM.
+	 */
+	protected gov.nih.nci.security.authorization.domainobjects.User user = 
+	    		new gov.nih.nci.security.authorization.domainobjects.User(); 
 
     /**
      * Institute of the user.
@@ -58,29 +57,14 @@ public class User extends AbstractDomainObject implements Serializable
     protected Address address = new Address();
 
     /**
-     * A string containing the login name of the user.
-     */
-    protected String loginName = "";
-
-    /**
-     * A string containing the password in increpted format of the user.
-     */
-    protected String password;
-
-    /**
-     * Date, when user was added to the system
-     */
-    protected Date dateAdded;
-
-    /**
+	 * Cancer Research Group to which the user belongs.
+	 */
+	private CancerResearchGroup cancerResearchGroup = new CancerResearchGroup();
+	
+	/**
      * Activity Status of user, it could be CLOSED, ACTIVE, DISABLED
      */
     protected String activityStatus;
-
-    /**
-	 * Cancer Research Group to which the user belongs.
-	 */
-	private CancerResearchGroup cancerResearchGroup;
     
     /**
      * Comments given by the approver.
@@ -98,12 +82,27 @@ public class User extends AbstractDomainObject implements Serializable
     protected Collection collectionProtocolCollection = new HashSet();
     
     /**
-     * Initialize a new User instance. 
+     * @return Returns the user.
+     */
+    public gov.nih.nci.security.authorization.domainobjects.User getUser()
+    {
+        return user;
+    }
+    /**
+     * @param user The user to set.
+     */
+    public void setUser(
+            gov.nih.nci.security.authorization.domainobjects.User user)
+    {
+        this.user = user;
+    }
+    /**
+     * Initialize a new User instance.
      * Note: Hibernate invokes this constructor through reflection API.  
      */
     public User()
     {
-    	this.dateAdded = Calendar.getInstance().getTime();
+        this.user.setStartDate(Calendar.getInstance().getTime());
     }
 
     /**
@@ -128,102 +127,11 @@ public class User extends AbstractDomainObject implements Serializable
 	}
 
 	/**
-	 * @param identifier The identifier to set.
+	 * @param systemIdentifier The systemIdentifier to set.
 	 */
 	public void setSystemIdentifier(Long systemIdentifier)
 	{
 		this.systemIdentifier = systemIdentifier;
-	}
-
-	/**
-	 * Returns the lastname assigned to user.
-	 * @hibernate.property name="lastName" type="string" column="LAST_NAME" length="50"
-	 * @return Returns the lastName.
-	 */
-	public String getLastName()
-	{
-		return lastName;
-	}
-
-	/**
-	 * @param lastName The lastName of user.
-	 */
-	public void setLastName(String lastName)
-	{
-		this.lastName = lastName;
-	}
-
-	/**
-	 * Returns the firstname assigned to user.
-	 * @hibernate.property name="firstName" type="string" column="FIRST_NAME" length="50"
-	 * @return Returns the firstName.
-	 */
-	public String getFirstName()
-	{
-		return firstName;
-	}
-
-	/**
-	 * @param firstName The firstName of user.
-	 */
-	public void setFirstName(String firstName)
-	{
-		this.firstName = firstName;
-	}
-
-	/**
-	 * Returns the loginname assigned to user.
-	 * @hibernate.property name="loginName" type="string" column="LOGIN_NAME" length="50" 
-	 * not-null="true" unique="true"
-	 * @return Returns the loginName.
-	 */
-	public String getLoginName()
-	{
-		return loginName;
-	}
-
-	/**
-	 * @param loginName The loginName of user.
-	 */
-	public void setLoginName(String loginName)
-	{
-		this.loginName = loginName;
-	}
-
-	/**
-	 * Returns the password assigned to user.
-	 * @hibernate.property name="password" type="string" column="PASSWORD" length="50"
-	 * @return Returns the password.
-	 */
-	public String getPassword()
-	{
-		return password;
-	}
-
-	/**
-	 * @param password The password to set.
-	 */
-	public void setPassword(String password)
-	{
-		this.password = password;
-	}
-
-	/**
-	 * Returns the date when the user is added to the system.
-	 * @hibernate.property name="dateAdded" type="date" column="DATE_ADDED"
-	 * @return Returns the dateAdded.
-	 */
-	public Date getDateAdded()
-	{
-		return dateAdded;
-	}
-
-	/**
-	 * @param dateAdded The date when user is added to the system.
-	 */
-	public void setDateAdded(Date dateAdded)
-	{
-		this.dateAdded = dateAdded;
 	}
 
 	/**
@@ -296,7 +204,6 @@ public class User extends AbstractDomainObject implements Serializable
 	/**
 	 * @param institution The institution to set.
 	 */
-
 	public void setInstitution(Institution institution)
 	{
 		this.institution = institution;
@@ -410,22 +317,24 @@ public class User extends AbstractDomainObject implements Serializable
         {
             UserForm uform = (UserForm) abstractForm;
             this.systemIdentifier = new Long(uform.getSystemIdentifier());
-            this.loginName = uform.getLoginName();
-            this.lastName = uform.getLastName();
-            this.firstName = uform.getFirstName();
-            this.loginName = uform.getLoginName();
+            
+            this.user.setLoginName(uform.getLoginName());
+            this.user.setLastName(uform.getLastName());
+            this.user.setFirstName(uform.getFirstName());
+            this.user.setEmailId(uform.getEmailAddress());
             this.institution.setName(uform.getInstitution());
+            
             this.department.setName(uform.getDepartment());
             this.cancerResearchGroup.setName(uform.getCancerResearchGroup());
             
-            activityStatus = uform.getActivityStatus();
-            address.setStreet(uform.getStreet());
-            address.setCity(uform.getCity());
-            address.setState(uform.getState());
-            address.setCountry(uform.getCountry());
-            address.setZipCode(uform.getZipCode());
-            address.setPhoneNumber(uform.getPhoneNumber());
-            address.setFaxNumber(uform.getFaxNumber());
+            this.activityStatus = uform.getActivityStatus();
+            this.address.setStreet(uform.getStreet());
+            this.address.setCity(uform.getCity());
+            this.address.setState(uform.getState());
+            this.address.setCountry(uform.getCountry());
+            this.address.setZipCode(uform.getZipCode());
+            this.address.setPhoneNumber(uform.getPhoneNumber());
+            this.address.setFaxNumber(uform.getFaxNumber());
         }
         catch (Exception excp)
         {
