@@ -12,10 +12,11 @@
 	ugul[2]="(cc)";
 	ugul[3]="(mg)";
 
-	function changeUnit(listname)
+	function changeUnit(listname,unitspan)
 	{
 		var i = listname.selectedIndex;
-		unitspan.innerHTML =ugul[i];  
+		alert(ugul[i]);
+		unitspan.innerHTML = ugul[i];  
 	}
 //-->
 </SCRIPT>
@@ -211,11 +212,11 @@ function addDiv(div,adstr)
 						</td>
 						<td class="formField" colspan=2>
 							<html:select property="principalinvestigator" styleClass="formFieldSized" styleId="principalinvestigator" size="1">
-							 	<html:option value="Rakesh">Nagarajan,Rakesh</html:option>
-								<html:option value="Mark">Watson,Mark</html:option>
-								<html:option value="Kapil">Kaveeshwar,Kapil</html:option>
-								<html:option value="Srikant">Adiga,Srikant</html:option>
-								<html:option value="Mandar">Deshmukh,Mandar</html:option>
+							 	<html:option value="Rakesh">Nagarajan, Rakesh</html:option>
+								<html:option value="Mark">Watson, Mark</html:option>
+								<html:option value="Kapil">Kaveeshwar, Kapil</html:option>
+								<html:option value="Srikant">Adiga, Srikant</html:option>
+								<html:option value="Mandar">Deshmukh, Mandar</html:option>
 							</html:select>
 							<html:link page="User.do?operation=add">
 							 <bean:message key="collectionprotocol.addinvestigator" />
@@ -233,11 +234,11 @@ function addDiv(div,adstr)
 						</td>
 						<td class="formField" colspan=2>
 							<html:select property="protocolcoordinator" styleClass="formFieldSized" styleId="protocolcoordinator" size="4" multiple="true">
-							 	<html:option value="Rakesh">Nagarajan,Rakesh</html:option>
-								<html:option value="Mark">Watson,Mark</html:option>
-								<html:option value="Kapil">Kaveeshwar,Kapil</html:option>
-								<html:option value="Srikant">Adiga,Srikant</html:option>
-								<html:option value="Mandar">Deshmukh,Mandar</html:option>
+							 	<html:option value="Rakesh">Nagarajan, Rakesh</html:option>
+								<html:option value="Mark">Watson, Mark</html:option>
+								<html:option value="Kapil">Kaveeshwar, Kapil</html:option>
+								<html:option value="Srikant">Adiga, Srikant</html:option>
+								<html:option value="Mandar">Deshmukh, Mandar</html:option>
 							</html:select>
 							<html:link page="User.do?operation=add">
 							 <bean:message key="collectionprotocol.addcoordinator" />
@@ -464,16 +465,13 @@ function addDiv(div,adstr)
 			        <td class=formLeftSubTableTitle>
 			        	<bean:message key="collectionprotocol.quantity" />
 			        </td>
-<!--			        <td class=formLeftSubTableTitle>
-			        	<bean:message key="collectionprotocol.unit" />
-			        </td>
--->
+
 			    </TR><!-- SUB TITLES END -->
 				
 				<TR>	<!-- SPECIMEN REQ DATA -->
 			        <td class="tabrightmostcell">1.</td>
 			        <td class="formField">
-			           	<html:select property="specimenType" styleClass="formFieldSized10" styleId="specimenType" size="1" onchange="changeUnit(specimenType)">
+			           	<html:select property="specimenType" styleClass="formFieldSized10" styleId="specimenType" size="1" onchange="changeUnit(specimenType,unitspan)">
 							<html:option value="0">Fluid Specimen</html:option>
 							<html:option value="1">Tissue Specimen</html:option>
 							<html:option value="2">Cell Specimen</html:option>
@@ -515,7 +513,8 @@ function addDiv(div,adstr)
 			        </td>
 			        <td class="formField">
 			        	<html:text styleClass="formFieldSized5" styleId="enrollment" property="enrollment" readonly="<%=readOnlyValue%>" />        
-			        	<span id="unitspan">&nbsp;
+					       &nbsp;
+			          	<span id="unitspan">&nbsp;
 						</span>
 					</td>
 				</TR>	<!-- SPECIMEN REQ DATA END -->
@@ -640,7 +639,7 @@ function addDiv(div,adstr)
 				<TR>	<!-- SPECIMEN REQ DATA -->
 			        <td class="tabrightmostcell">1.</td>
 			        <td class="formField">
-			           	<select name="specimenType_`" size="1" onchange="changeUnit(specimenType)" class="formFieldSized10" id="specimenType"><option value="0">Fluid Specimen</option>
+			           	<select name="specimenType_`" size="1" onchange="changeUnit(specimenType_`,unitspan_`)" class="formFieldSized10" id="specimenType"><option value="0">Fluid Specimen</option>
 							<option value="1">Tissue Specimen</option>
 							<option value="2">Cell Specimen</option>
 							<option value="3">Molecular Specimen</option></select>
@@ -672,7 +671,7 @@ function addDiv(div,adstr)
 			        </td>
 			        <td class="formField">
 			        	<input type="text" name="enrollment" value="" class="formFieldSized5" id="enrollment">        
-			        	<span id="unitspan">&nbsp;
+			        	<span id="unitspan_`">&nbsp;
 						</span>
 					</td>
 				</TR>	<!-- SPECIMEN REQ DATA END -->

@@ -139,13 +139,13 @@
 						</td>
 						<td class="formField" colspan=2>
 							<html:select property="principalinvestigator" styleClass="formFieldSized" styleId="principalinvestigator" size="1">
-							 	<html:option value="Rakesh">Rakesh</html:option>
-								<html:option value="Mark">Mark</html:option>
-								<html:option value="Kapil">Kapil</html:option>
-								<html:option value="Srikant">Srikant</html:option>
-								<html:option value="Mandar">Mandar</html:option>
+							 	<html:option value="Rakesh">Nagarajan, Rakesh</html:option>
+								<html:option value="Mark">Watson, Mark</html:option>
+								<html:option value="Kapil">Kaveeshwar, Kapil</html:option>
+								<html:option value="Srikant">Adiga, Srikant</html:option>
+								<html:option value="Mandar">Deshmukh, Mandar</html:option>
 							</html:select>
-							<html:link page="User.do?operation=add">
+							<html:link page="/User.do?operation=add">
 							 <bean:message key="distributionprotocol.addinvestigator" />
 							 </html:link>
 						</td>
@@ -161,11 +161,11 @@
 						</td>
 						<td class="formField" colspan=2>
 							<html:select property="protocolcoordinator" styleClass="formFieldSized" styleId="protocolcoordinator" size="4" multiple="true">
-							 	<html:option value="Rakesh">Rakesh</html:option>
-								<html:option value="Mark">Mark</html:option>
-								<html:option value="Kapil">Kapil</html:option>
-								<html:option value="Srikant">Srikant</html:option>
-								<html:option value="Mandar">Mandar</html:option>
+							 	<html:option value="Rakesh">Nagarajan, Rakesh</html:option>
+								<html:option value="Mark">Watson, Mark</html:option>
+								<html:option value="Kapil">Kaveeshwar, Kapil</html:option>
+								<html:option value="Srikant">Adiga, Srikant</html:option>
+								<html:option value="Mandar">Deshmukh, Mandar</html:option>
 							</html:select>
 							<html:link page="User.do?operation=add">
 							 <bean:message key="distributionprotocol.addcoordinator" />
