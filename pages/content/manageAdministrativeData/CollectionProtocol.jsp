@@ -21,12 +21,12 @@
 </SCRIPT>
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 <SCRIPT LANGUAGE="JavaScript">
-	var search1='#';
+	var search1='`';
 	var insno=1;
 
 /* section for inner block start */
 var str = "";
-var search2='#';
+var search2='`';
 var insno1=1
 function setStr()
 {
@@ -565,14 +565,14 @@ function addDiv(div,adstr)
 <tr><td>
 <table summary="" cellpadding="3" cellspacing="0" border="0" >
 	<tr>
-		<td rowspan=2 class="tabrightmostcell">#</td>
+		<td rowspan=2 class="tabrightmostcell">`</td>
 		<td class="formField">
 			<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
 				<tr>
 					<td class="formRequiredNotice" width="5">*</td>
 					<td class="formRequiredLabel" width="32%">
 						<label for="clinicalstatus">
-					    	Clinical Status_#
+					    	Clinical Status_`
 						</label>
 					</td>
 				    <td class="formField" colspan=2>
@@ -607,7 +607,7 @@ function addDiv(div,adstr)
 			     	   <input type="button" name="addSpecimenReq" value="Add More" class="actionButton">
 			        </td>
 			    </tr>
-			    <div id="subdiv#">
+			    <div id="subdiv`">
 			    <TR> <!-- SUB TITLES -->
 			        <td class="formLeftSubTableTitle">
 		        		#
@@ -640,7 +640,7 @@ function addDiv(div,adstr)
 				<TR>	<!-- SPECIMEN REQ DATA -->
 			        <td class="tabrightmostcell">1.</td>
 			        <td class="formField">
-			           	<select name="specimenType_#" size="1" onchange="changeUnit(specimenType)" class="formFieldSized10" id="specimenType"><option value="0">Fluid Specimen</option>
+			           	<select name="specimenType_`" size="1" onchange="changeUnit(specimenType)" class="formFieldSized10" id="specimenType"><option value="0">Fluid Specimen</option>
 							<option value="1">Tissue Specimen</option>
 							<option value="2">Cell Specimen</option>
 							<option value="3">Molecular Specimen</option></select>
