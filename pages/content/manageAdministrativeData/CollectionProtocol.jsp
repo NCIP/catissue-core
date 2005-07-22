@@ -4,17 +4,13 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 
 <head>
-<SCRIPT LANGUAGE="JavaScript">
-	var search1='`';
-	var search2='~';
-	var insno=0;
-	var insno1=1;
 
+<SCRIPT LANGUAGE="JavaScript">
 	var ugul = new Array(4);
-	ugul[0]="ML";
-	ugul[1]="GM";
-	ugul[2]="CC";
-	ugul[3]="MG";
+	ugul[0]="(ml)";
+	ugul[1]="(gm)";
+	ugul[2]="(cc)";
+	ugul[3]="(mg)";
 
 	function changeUnit(listname)
 	{
@@ -23,20 +19,114 @@
 	}
 //-->
 </SCRIPT>
-<script type="text/javascript" language="javascript" src="../../../javaScript.js">
+
+<SCRIPT LANGUAGE="JavaScript">
+/* section for outer block start */
+var search1='`';
+var insno=1;
+
+function b1(div,d1,searchChar)
+{
+	var y = d1.innerHTML;
+	insno=insno+1;
+	var starpos = y.indexOf(searchChar); // pos of 1st `.  ie: No.
+	var adstr="";
+	var c=0;
+	for(c=0;c<starpos;c++)
+	{
+		adstr = y.replace(searchChar,insno);
+		starpos = y.indexOf(searchChar); 
+		y = adstr;
+	}
+	addDiv(div,adstr);
+}
+/* section for outer block end */
+
+/* section for inner block start */
+var str = "";
+var search2='`';
+var insno1=1
+function setStr()
+{
+		str="";
+		str = str + "	<TR>"	
+		str = str + "         <td class='tabrightmostcell'>" + insno1  + "</td>"
+		str = str + "         <td class='formField'>"
+		str = str + "            	<select name='specimenType' size='1' onchange='changeUnit(specimenType)' class='formFieldSized10' id='specimenType'><option value='0'>Fluid Specimen</option>"
+		str = str + " 				<option value='1'>Tissue Specimen</option>"
+		str = str + " 				<option value='2'>Cell Specimen</option>"
+		str = str + " 				<option value='3'>Molecular Specimen</option></select>"
+		str = str + "         </td>"
+		str = str + "         <td class='formField'>"
+		str = str + "            	<select name='specimenSubType' size='1' class='formFieldSized10' id='specimenSubType'><option value='0'>Select Specimen SubType</option>"
+		str = str + " 				<option value='Type1'>Blood</option>"
+		str = str + " 				<option value='Type2'>Cerum</option></select>"
+		str = str + "         </td>"
+		str = str + "         <td class='formField'>"
+		str = str + "            	<select name='tissueSite' size='1' class='formFieldSized10' id='tissueSite'><option value='Select Tissue Site'>Select Tissue Site</option>"
+		str = str + " 				<option value='Adrenal-Cortex'>Adrenal-Cortex</option>"
+		str = str + " 				<option value='Adrenal-Medulla'>Adrenal-Medulla</option>"
+		str = str + " 				<option value='Adrenal-NOS'>Adrenal-NOS</option></select>"
+		str = str + "         <a href='#'>"
+		str = str + " 		<img src='images/Tree.gif' border='0' width='26' height='22'></a>"
+		str = str + " 		</td>"
+		str = str + "         <td class='formField'>"
+		str = str + "           	<select name='tissueSide' size='1' class='formFieldSized10' id='tissueSide'><option value='Select Tissue Side'>Select Tissue Side</option>"
+		str = str + " 				<option value='Bilateral sites'>Bilateral sites</option>"
+		str = str + " 				<option value='Left'>Left</option>"
+		str = str + " 				<option value='Right'>Right</option></select>"
+		str = str + "         </td>"
+		str = str + "         <td class='formField'>"
+		str = str + "           	<select name='tissueType' size='1' class='formFieldSized10' id='tissueType'><option value='Select Tissue Type'>Select Tissue Type</option>"
+		str = str + " 				<option value='Primary Tumor'>Primary Tumor</option>"
+		str = str + " 				<option value='Metastatic Node'>Metastatic Node</option>"
+		str = str + " 				<option value='Non-Malignant Tissue'>Non-Malignant Tissue</option></select>"
+		str = str + "         </td>"
+		str = str + "         <td class='formField'>"
+		str = str + "         	<input type='text' name='enrollment' value='' class='formFieldSized5' id='enrollment'>        "
+		str = str + "         	<span id='unitspan'>&nbsp;"
+		str = str + " 			</span>"
+		str = str + " 		</td>"
+		str = str + " 	</TR>	"
+}
+function b21(subdiv,searchChar)
+{
+//	alert(subdiv);
+
+	newdiv = document.getElementById(subdiv);
+	insno1=insno1+1;
+	setStr();
+	y = str;
+	newdiv = document.getElementById(subdiv).innerHTML+str;
+} // b21
+
+
+
+/* section for inner block end */
+
+
+
+function addDiv(div,adstr)
+{
+	var x = div.innerHTML;
+	div.innerHTML = div.innerHTML +adstr;
+}
+
+
 </script>
+
 <style>
 	div#d1
 	{
 	 display:none;
 	}
-	div#d1_1
+	div#d999
 	{
 	 display:none;
 	}
 </style>
 </head>
-
+<body>
 
 <%
     String operation = (String) request.getAttribute(Constants.OPERATION);
@@ -311,14 +401,15 @@
 			<b><bean:message key="collectionprotocol.eventtitle" /></b>
 	</td>
 	<td align="right" class="formTitle">		
-			<html:button property="addCollectionProtocolEvents" styleClass="actionButton">Add More</html:button>
+			<html:button property="addCollectionProtocolEvents" styleClass="actionButton" onclick="b1(outerdiv,d1,search1)">Add More</html:button>
 	</td>
 	</tr>
 </table>
 </td></tr>
 </table>
 
-<!-- to insert the div tag -->
+<!--  outermostdiv start --><!-- outer div tag  for entire block -->
+<div id="outerdiv"> 
 <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="100%">
 <tr><td>
 <table summary="" cellpadding="3" cellspacing="0" border="0" >
@@ -367,7 +458,7 @@
 			     	   <html:button property="addSpecimenReq" styleClass="actionButton">Add More</html:button>
 			        </td>
 			    </tr>
-			    
+			    <div id="subdiv1">
 			    <TR> <!-- SUB TITLES -->
 			        <td class="formLeftSubTableTitle">
 		        		<bean:message key="collectionprotocol.specimennumber" />
@@ -446,12 +537,18 @@
 						</span>
 					</td>
 				</TR>	<!-- SPECIMEN REQ DATA END -->
+				</div>
+				
 			</TABLE>
 		</td>
 	</tr>
 </table> <!-- outer table for CPE ends -->
 </td></tr>
 </table>
+
+</div>	<!-- outermostdiv  -->
+
+
 <table width="95%">		
 	<!-- to keep -->
 		<tr>
@@ -480,3 +577,138 @@
 	<!-- NEW COLLECTIONPROTOCOL ENTRY ends-->
 </table>
 </html:form>
+
+<div id="d1">
+<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="100%">
+<tr><td>
+<table summary="" cellpadding="3" cellspacing="0" border="0" >
+	<tr>
+		<td rowspan=2 class="tabrightmostcell">`</td>
+		<td class="formField">
+			<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
+				<tr>
+					<td class="formRequiredNotice" width="5">*</td>
+					<td class="formRequiredLabel" width="32%">
+						<label for="clinicalstatus">
+					    	Clinical Status
+						</label>
+					</td>
+				    <td class="formField" colspan=2>
+				    	<select name="clinicalStatus" size="1" class="formField" id="clinicalStatus"><option value="Type1">Pre-Opt</option>
+							<option value="Type1">Pre-Opt</option>
+							<option value="Type2">Post-Opt</option></select>
+				    </td>
+				</tr>
+			    <tr>
+					<td class="formRequiredNotice" width="5">&nbsp;</td>
+			        <td colspan="1" class="formLabel">
+			        	Study Calendar Event Point
+			        </td>
+			        <td colspan="2" class="formField">
+			        	<input type="text" name="studycalendartitle" size="30" value="" class="formFieldSized5" id="studycalendartitle">
+			        	Days
+					</td>
+			    </tr>
+			</TABLE>
+		</td>
+	</tr>
+
+<!-- 2nd row -->
+	<tr>
+		<td class="formField">
+			<table summary="" cellpadding="3" cellspacing="0" border="0" width=100%>
+			    <tr>
+			        <td colspan="6" class="formTitle">
+			        	<b>SPECIMEN REQUIREMENTS</b>
+			        </td>
+			        <td class="formTitle">	
+			     	   <input type="button" name="addSpecimenReq" value="Add More" class="actionButton">
+			        </td>
+			    </tr>
+			    < div id="subdiv`">
+			    <TR> <!-- SUB TITLES -->
+			        <td class="formLeftSubTableTitle">
+		        		#
+			        </td>
+			        <td class="formLeftSubTableTitle">
+			        	Type
+			        </td>
+			        <td class="formLeftSubTableTitle">
+			        	SubType
+			        </td>
+			        
+			        <td class="formLeftSubTableTitle">
+			        	Tissue Site
+				    </td>
+			        <td class=formLeftSubTableTitle>
+				        Tissue Side
+				    </td>
+			        <td  class=formLeftSubTableTitle>
+			    		Pathology Status
+				    </td>
+			        <td class=formLeftSubTableTitle>
+			        	Quantity(Unit)
+			        </td>
+<!--			        <td class=formLeftSubTableTitle>
+			        	Unit
+			        </td>
+-->
+			    </TR><!-- SUB TITLES END -->
+				
+				<TR>	<!-- SPECIMEN REQ DATA -->
+			        <td class="tabrightmostcell">1.</td>
+			        <td class="formField">
+			           	<select name="specimenType" size="1" onchange="changeUnit(specimenType)" class="formFieldSized10" id="specimenType"><option value="0">Fluid Specimen</option>
+							<option value="1">Tissue Specimen</option>
+							<option value="2">Cell Specimen</option>
+							<option value="3">Molecular Specimen</option></select>
+			        </td>
+			        <td class="formField">
+			           	<select name="specimenSubType" size="1" class="formFieldSized10" id="specimenSubType"><option value="0">Select Specimen SubType</option>
+							<option value="Type1">Blood</option>
+							<option value="Type2">Cerum</option></select>
+			        </td>
+			        <td class="formField">
+			           	<select name="tissueSite" size="1" class="formFieldSized10" id="tissueSite"><option value="Select Tissue Site">Select Tissue Site</option>
+							<option value="Adrenal-Cortex">Adrenal-Cortex</option>
+							<option value="Adrenal-Medulla">Adrenal-Medulla</option>
+							<option value="Adrenal-NOS">Adrenal-NOS</option></select>
+			        <a href="#">
+					<img src="images/Tree.gif" border="0" width="26" height="22"></a>
+					</td>
+			        <td class="formField">
+			          	<select name="tissueSide" size="1" class="formFieldSized10" id="tissueSide"><option value="Select Tissue Side">Select Tissue Side</option>
+							<option value="Bilateral sites">Bilateral sites</option>
+							<option value="Left">Left</option>
+							<option value="Right">Right</option></select>
+			        </td>
+			        <td class="formField">
+			          	<select name="tissueType" size="1" class="formFieldSized10" id="tissueType"><option value="Select Tissue Type">Select Tissue Type</option>
+							<option value="Primary Tumor">Primary Tumor</option>
+							<option value="Metastatic Node">Metastatic Node</option>
+							<option value="Non-Malignant Tissue">Non-Malignant Tissue</option></select>
+			        </td>
+			        <td class="formField">
+			        	<input type="text" name="enrollment" value="" class="formFieldSized5" id="enrollment">        
+			        	<span id="unitspan">&nbsp;
+						</span>
+					</td>
+				</TR>	<!-- SPECIMEN REQ DATA END -->
+				</div>
+			</TABLE>
+		</td>
+	</tr>
+</table> <!-- outer table for CPE ends -->
+</td></tr>
+</table>
+</div>
+
+
+
+
+
+</body>
+
+
+
+
