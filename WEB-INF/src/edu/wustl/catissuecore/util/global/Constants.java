@@ -76,7 +76,7 @@ public class Constants
 	public static final String SITETYPELIST = "siteTypeList";
 	public static final String STORAGECONTAINERLIST="storageContainerList";
 	public static final String SITELIST="siteList";
-	
+	public static final String USERIDLIST = "userIdList";
 	//New Specimen lists.
 	public static final String SPECIMEN_COLLECTION_GROUP_LIST = "specimenCollectionGroupIdList";
 	public static final String SPECIMEN_TYPE_LIST = "specimenTypeList";
@@ -217,6 +217,7 @@ public class Constants
 	public static final int DISTRIBUTIONPROTOCOL_FORM_ID = 10;
 	public static final int STORAGE_CONTAINER_FORM_ID = 11;
 	public static final int STORAGE_TYPE_FORM_ID = 12;
+	public static final int SITE_FORM_ID = 13;
 	//Status message key Constants
 	public static final String STATUS_MESSAGE_KEY = "statusMessageKey";
 	
