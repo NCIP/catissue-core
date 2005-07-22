@@ -118,7 +118,7 @@ public class SiteForm extends AbstractActionForm
         {
             Site site = (Site) abstractDomain;
             
-            this.systemIdentifier		= site.getSystemIdentifier().longValue();
+            this.systemIdentifier= site.getSystemIdentifier().longValue();
             this.type			= site.getType();
             this.emailAddress 	= site.getEmailAddress();
             this.street 		= site.getAddress().getStreet();
@@ -432,7 +432,7 @@ public class SiteForm extends AbstractActionForm
      */
     public int getFormId()
     {
-        return Constants.USER_FORM_ID;
+        return Constants.SITE_FORM_ID;
     }
     
     /**
