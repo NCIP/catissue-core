@@ -22,8 +22,9 @@ public abstract class Logger
 	{
 		if(out==null)
 		{
-			out = org.apache.log4j.Logger.getLogger("");
-			PropertyConfigurator.configure(propertiesFile);
+//			out = org.apache.log4j.Logger.getLogger("");
+//			PropertyConfigurator.configure(propertiesFile);
+		    out=org.apache.log4j.Logger.getLogger("catissuecore.logger");
 		}
 		
 	}
