@@ -7156,3 +7156,592 @@ INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, confi
 INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
 INFO  [http8080-Processor25]  - Inside Login Action, Just before validation
 INFO  [http8080-Processor25]  - >>>>>>>>>>>>> SUCESSFUL LOGIN <<<<<<<<< 
+INFO  [main]  - Home for caTISSUECore Application: D:\tomcat\webapps\catissuecore
+INFO  [main]  - Logger Configuration file: D:\tomcat\webapps\catissuecore\WEB-INF\classes\ApplicationResources.properties
+INFO  [main] util.PropertyMessageResources - Initializing, config='org.apache.struts.util.LocalStrings', returnNull=true
+INFO  [main] util.PropertyMessageResources - Initializing, config='org.apache.struts.action.ActionResources', returnNull=true
+INFO  [main] util.PropertyMessageResources - Initializing, config='ApplicationResources', returnNull=true
+INFO  [main] tiles.TilesPlugin - Tiles definition factory loaded for module ''.
+INFO  [http8080-Processor25] tiles.TilesRequestProcessor - Tiles definition factory found for request processor ''.
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.actions.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.bean.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.util.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor24]  - Inside Login Action, Just before validation
+INFO  [http8080-Processor24]  - >>>>>>>>>>>>> SUCESSFUL LOGIN <<<<<<<<< 
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.logic.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.logic.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [main]  - Home for caTISSUECore Application: D:\tomcat\webapps\catissuecore
+INFO  [main]  - Logger Configuration file: D:\tomcat\webapps\catissuecore\WEB-INF\classes\ApplicationResources.properties
+INFO  [main] util.PropertyMessageResources - Initializing, config='org.apache.struts.util.LocalStrings', returnNull=true
+INFO  [main] util.PropertyMessageResources - Initializing, config='org.apache.struts.action.ActionResources', returnNull=true
+INFO  [main] util.PropertyMessageResources - Initializing, config='ApplicationResources', returnNull=true
+INFO  [main] tiles.TilesPlugin - Tiles definition factory loaded for module ''.
+INFO  [http8080-Processor25] tiles.TilesRequestProcessor - Tiles definition factory found for request processor ''.
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.actions.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.bean.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.util.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25]  - Inside Login Action, Just before validation
+INFO  [http8080-Processor25]  - >>>>>>>>>>>>> SUCESSFUL LOGIN <<<<<<<<< 
+INFO  [http8080-Processor24] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.logic.LocalStrings', returnNull=true
+INFO  [http8080-Processor24] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.logic.LocalStrings', returnNull=true
+INFO  [http8080-Processor24] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor24] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor24] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+ERROR [http8080-Processor24] action.RequestProcessor - No action instance for path /Institution could be created
+java.lang.ClassNotFoundException: edu.wustl.catissuecore.action.InstitutionAction
+	at org.apache.catalina.loader.WebappClassLoader.loadClass(WebappClassLoader.java:1383)
+	at org.apache.catalina.loader.WebappClassLoader.loadClass(WebappClassLoader.java:1230)
+	at org.apache.struts.util.RequestUtils.applicationClass(RequestUtils.java:207)
+	at org.apache.struts.util.RequestUtils.applicationInstance(RequestUtils.java:231)
+	at org.apache.struts.action.RequestProcessor.processActionCreate(RequestProcessor.java:326)
+	at org.apache.struts.action.RequestProcessor.process(RequestProcessor.java:268)
+	at org.apache.struts.action.ActionServlet.process(ActionServlet.java:1482)
+	at org.apache.struts.action.ActionServlet.doGet(ActionServlet.java:507)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:743)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:856)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:284)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:204)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:257)
+	at org.apache.catalina.core.StandardValveContext.invokeNext(StandardValveContext.java:151)
+	at org.apache.catalina.core.StandardPipeline.invoke(StandardPipeline.java:564)
+	at org.apache.catalina.core.StandardContextValve.invokeInternal(StandardContextValve.java:245)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:199)
+	at org.apache.catalina.core.StandardValveContext.invokeNext(StandardValveContext.java:151)
+	at org.apache.catalina.core.StandardPipeline.invoke(StandardPipeline.java:564)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:195)
+	at org.apache.catalina.core.StandardValveContext.invokeNext(StandardValveContext.java:151)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:164)
+	at org.apache.catalina.core.StandardValveContext.invokeNext(StandardValveContext.java:149)
+	at org.apache.catalina.core.StandardPipeline.invoke(StandardPipeline.java:564)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:156)
+	at org.apache.catalina.core.StandardValveContext.invokeNext(StandardValveContext.java:151)
+	at org.apache.catalina.core.StandardPipeline.invoke(StandardPipeline.java:564)
+	at org.apache.catalina.core.ContainerBase.invoke(ContainerBase.java:972)
+	at org.apache.coyote.tomcat5.CoyoteAdapter.service(CoyoteAdapter.java:206)
+	at org.apache.coyote.http11.Http11Processor.process(Http11Processor.java:828)
+	at org.apache.coyote.http11.Http11Protocol$Http11ConnectionHandler.processConnection(Http11Protocol.java:700)
+	at org.apache.tomcat.util.net.TcpWorkerThread.runIt(PoolTcpEndpoint.java:584)
+	at org.apache.tomcat.util.threads.ThreadPool$ControlRunnable.run(ThreadPool.java:683)
+	at java.lang.Thread.run(Thread.java:534)
+INFO  [main]  - Home for caTISSUECore Application: D:\tomcat\webapps\catissuecore
+INFO  [main]  - Logger Configuration file: D:\tomcat\webapps\catissuecore\WEB-INF\classes\ApplicationResources.properties
+INFO  [main] util.PropertyMessageResources - Initializing, config='org.apache.struts.util.LocalStrings', returnNull=true
+INFO  [main] util.PropertyMessageResources - Initializing, config='org.apache.struts.action.ActionResources', returnNull=true
+INFO  [main] util.PropertyMessageResources - Initializing, config='ApplicationResources', returnNull=true
+INFO  [main] tiles.TilesPlugin - Tiles definition factory loaded for module ''.
+INFO  [http8080-Processor25] tiles.TilesRequestProcessor - Tiles definition factory found for request processor ''.
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.actions.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.bean.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.util.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25]  - Inside Login Action, Just before validation
+INFO  [http8080-Processor25]  - >>>>>>>>>>>>> SUCESSFUL LOGIN <<<<<<<<< 
+INFO  [http8080-Processor24] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.logic.LocalStrings', returnNull=true
+INFO  [http8080-Processor24] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.logic.LocalStrings', returnNull=true
+INFO  [http8080-Processor24] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor24] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor24] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+ERROR [http8080-Processor23] compiler.Compiler - Javac exception 
+Compile failed; see the compiler error output for details.
+	at org.apache.tools.ant.taskdefs.Javac.compile(Javac.java:978)
+	at org.apache.tools.ant.taskdefs.Javac.execute(Javac.java:799)
+	at org.apache.jasper.compiler.Compiler.generateClass(Compiler.java:390)
+	at org.apache.jasper.compiler.Compiler.compile(Compiler.java:458)
+	at org.apache.jasper.compiler.Compiler.compile(Compiler.java:439)
+	at org.apache.jasper.JspCompilationContext.compile(JspCompilationContext.java:552)
+	at org.apache.jasper.servlet.JspServletWrapper.service(JspServletWrapper.java:291)
+	at org.apache.jasper.servlet.JspServlet.serviceJspFile(JspServlet.java:301)
+	at org.apache.jasper.servlet.JspServlet.service(JspServlet.java:248)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:856)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:284)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:204)
+	at org.apache.catalina.core.ApplicationDispatcher.invoke(ApplicationDispatcher.java:742)
+	at org.apache.catalina.core.ApplicationDispatcher.doInclude(ApplicationDispatcher.java:630)
+	at org.apache.catalina.core.ApplicationDispatcher.include(ApplicationDispatcher.java:542)
+	at org.apache.jasper.runtime.JspRuntimeLibrary.include(JspRuntimeLibrary.java:1002)
+	at org.apache.jasper.runtime.PageContextImpl.include(PageContextImpl.java:626)
+	at org.apache.struts.tiles.TilesUtilImpl.doInclude(TilesUtilImpl.java:137)
+	at org.apache.struts.tiles.TilesUtil.doInclude(TilesUtil.java:177)
+	at org.apache.struts.taglib.tiles.InsertTag.doInclude(InsertTag.java:756)
+	at org.apache.struts.taglib.tiles.InsertTag$InsertHandler.doEndTag(InsertTag.java:881)
+	at org.apache.struts.taglib.tiles.InsertTag.doEndTag(InsertTag.java:473)
+	at org.apache.jsp.pages.Layout_jsp._jspx_meth_tiles_insert_4(Layout_jsp.java:329)
+	at org.apache.jsp.pages.Layout_jsp._jspService(Layout_jsp.java:149)
+	at org.apache.jasper.runtime.HttpJspBase.service(HttpJspBase.java:133)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:856)
+	at org.apache.jasper.servlet.JspServletWrapper.service(JspServletWrapper.java:311)
+	at org.apache.jasper.servlet.JspServlet.serviceJspFile(JspServlet.java:301)
+	at org.apache.jasper.servlet.JspServlet.service(JspServlet.java:248)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:856)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:284)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:204)
+	at org.apache.catalina.core.ApplicationDispatcher.invoke(ApplicationDispatcher.java:742)
+	at org.apache.catalina.core.ApplicationDispatcher.processRequest(ApplicationDispatcher.java:506)
+	at org.apache.catalina.core.ApplicationDispatcher.doForward(ApplicationDispatcher.java:443)
+	at org.apache.catalina.core.ApplicationDispatcher.forward(ApplicationDispatcher.java:359)
+	at org.apache.struts.action.RequestProcessor.doForward(RequestProcessor.java:1069)
+	at org.apache.struts.tiles.TilesRequestProcessor.doForward(TilesRequestProcessor.java:274)
+	at org.apache.struts.tiles.TilesRequestProcessor.processTilesDefinition(TilesRequestProcessor.java:254)
+	at org.apache.struts.tiles.TilesRequestProcessor.processForwardConfig(TilesRequestProcessor.java:309)
+	at org.apache.struts.action.RequestProcessor.process(RequestProcessor.java:279)
+	at org.apache.struts.action.ActionServlet.process(ActionServlet.java:1482)
+	at org.apache.struts.action.ActionServlet.doGet(ActionServlet.java:507)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:743)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:856)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:284)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:204)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:257)
+	at org.apache.catalina.core.StandardValveContext.invokeNext(StandardValveContext.java:151)
+	at org.apache.catalina.core.StandardPipeline.invoke(StandardPipeline.java:564)
+	at org.apache.catalina.core.StandardContextValve.invokeInternal(StandardContextValve.java:245)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:199)
+	at org.apache.catalina.core.StandardValveContext.invokeNext(StandardValveContext.java:151)
+	at org.apache.catalina.core.StandardPipeline.invoke(StandardPipeline.java:564)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:195)
+	at org.apache.catalina.core.StandardValveContext.invokeNext(StandardValveContext.java:151)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:164)
+	at org.apache.catalina.core.StandardValveContext.invokeNext(StandardValveContext.java:149)
+	at org.apache.catalina.core.StandardPipeline.invoke(StandardPipeline.java:564)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:156)
+	at org.apache.catalina.core.StandardValveContext.invokeNext(StandardValveContext.java:151)
+	at org.apache.catalina.core.StandardPipeline.invoke(StandardPipeline.java:564)
+	at org.apache.catalina.core.ContainerBase.invoke(ContainerBase.java:972)
+	at org.apache.coyote.tomcat5.CoyoteAdapter.service(CoyoteAdapter.java:206)
+	at org.apache.coyote.http11.Http11Processor.process(Http11Processor.java:828)
+	at org.apache.coyote.http11.Http11Protocol$Http11ConnectionHandler.processConnection(Http11Protocol.java:700)
+	at org.apache.tomcat.util.net.TcpWorkerThread.runIt(PoolTcpEndpoint.java:584)
+	at org.apache.tomcat.util.threads.ThreadPool$ControlRunnable.run(ThreadPool.java:683)
+	at java.lang.Thread.run(Thread.java:534)
+ERROR [http8080-Processor23] compiler.Compiler - Env: Compile: javaFileName=/D:/tomcat/work/Catalina/localhost/catissuecore//org/apache/jsp/pages/content/manageAdministrativeData\CollectionProtocol_jsp.java
+    classpath=/D:/tomcat/webapps/catissuecore/WEB-INF/classes/;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/activation.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/ant-optional-1.5.3.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/c3p0-0.8.4.5.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/caBIO.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/caCOREClient.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/cglib-full-2.0.2.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/ciu.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/commons-beanutils.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/commons-collections-2.1.1.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/commons-dbcp.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/commons-digester.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/commons-fileupload.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/commons-lang.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/commons-logging-1.0.4.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/commons-pool.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/commons-validator.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/csmapi.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/dom4j.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/ehcache-0.9.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/hibernate2.1.7c.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/hibernate3.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/jaas.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/jakarta-oro-2.0.8.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/jakarta-oro.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/jcs-1.0-dev.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/jdbc2_0-stdext.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/jdom.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/jta.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/junit-3.8.1.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/log4j.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/mail.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/mysql-connector-java-3.0.16-ga-bin.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/namespace.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/odmg.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/oracleDriver.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/relaxngDatatype.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/smtp.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/struts-legacy.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/struts.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/xalan-2.4.0.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/xml-apis.jar;D:\tomcat\work\Catalina\localhost\catissuecore;/D:/tomcat/webapps/catissuecore/WEB-INF/classes/;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/activation.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/ant-optional-1.5.3.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/c3p0-0.8.4.5.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/caBIO.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/caCOREClient.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/cglib-full-2.0.2.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/ciu.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/commons-beanutils.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/commons-collections-2.1.1.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/commons-dbcp.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/commons-digester.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/commons-fileupload.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/commons-lang.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/commons-logging-1.0.4.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/commons-pool.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/commons-validator.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/csmapi.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/dom4j.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/ehcache-0.9.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/hibernate2.1.7c.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/hibernate3.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/jaas.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/jakarta-oro-2.0.8.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/jakarta-oro.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/jcs-1.0-dev.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/jdbc2_0-stdext.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/jdom.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/jta.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/junit-3.8.1.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/log4j.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/mail.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/mysql-connector-java-3.0.16-ga-bin.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/namespace.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/odmg.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/oracleDriver.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/relaxngDatatype.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/smtp.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/struts-legacy.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/struts.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/xalan-2.4.0.jar;/D:/tomcat/webapps/catissuecore/WEB-INF/lib/xml-apis.jar;D:/tomcat/shared/classes/;D:/tomcat/common/classes/;D:/tomcat/common/endorsed/xercesImpl.jar;D:/tomcat/common/endorsed/xmlParserAPIs.jar;D:/tomcat/common/lib/ant.jar;D:/tomcat/common/lib/commons-collections.jar;D:/tomcat/common/lib/commons-dbcp-1.1.jar;D:/tomcat/common/lib/commons-el.jar;D:/tomcat/common/lib/commons-pool-1.1.jar;D:/tomcat/common/lib/jasper-compiler.jar;D:/tomcat/common/lib/jasper-runtime.jar;D:/tomcat/common/lib/jmx-remote-tools.jar;D:/tomcat/common/lib/jmx-remote.jar;D:/tomcat/common/lib/jmx.jar;D:/tomcat/common/lib/jsp-api.jar;D:/tomcat/common/lib/naming-common.jar;D:/tomcat/common/lib/naming-factory.jar;D:/tomcat/common/lib/naming-java.jar;D:/tomcat/common/lib/naming-resources.jar;D:/tomcat/common/lib/servlet-api.jar;/C:/jdk1.4/lib/tools.jar;/D:/tomcat/bin/bootstrap.jar;/C:/jdk1.4/jre/lib/ext/dnsns.jar;/C:/jdk1.4/jre/lib/ext/ldapsec.jar;/C:/jdk1.4/jre/lib/ext/localedata.jar;/C:/jdk1.4/jre/lib/ext/sunjce_provider.jar
+    cp=C:\JDK1.4\lib\tools.jar;d:\TOMCAT\bin\bootstrap.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\classes
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\activation.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\ant-optional-1.5.3.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\c3p0-0.8.4.5.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\caBIO.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\caCOREClient.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\cglib-full-2.0.2.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\ciu.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\commons-beanutils.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\commons-collections-2.1.1.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\commons-dbcp.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\commons-digester.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\commons-fileupload.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\commons-lang.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\commons-logging-1.0.4.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\commons-pool.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\commons-validator.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\csmapi.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\dom4j.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\ehcache-0.9.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\hibernate2.1.7c.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\hibernate3.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\jaas.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\jakarta-oro-2.0.8.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\jakarta-oro.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\jcs-1.0-dev.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\jdbc2_0-stdext.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\jdom.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\jta.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\junit-3.8.1.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\log4j.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\mail.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\mysql-connector-java-3.0.16-ga-bin.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\namespace.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\odmg.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\oracleDriver.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\relaxngDatatype.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\smtp.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\struts-legacy.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\struts.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\xalan-2.4.0.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\xml-apis.jar
+    cp=D:\tomcat\work\Catalina\localhost\catissuecore
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\classes
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\activation.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\ant-optional-1.5.3.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\c3p0-0.8.4.5.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\caBIO.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\caCOREClient.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\cglib-full-2.0.2.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\ciu.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\commons-beanutils.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\commons-collections-2.1.1.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\commons-dbcp.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\commons-digester.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\commons-fileupload.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\commons-lang.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\commons-logging-1.0.4.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\commons-pool.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\commons-validator.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\csmapi.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\dom4j.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\ehcache-0.9.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\hibernate2.1.7c.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\hibernate3.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\jaas.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\jakarta-oro-2.0.8.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\jakarta-oro.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\jcs-1.0-dev.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\jdbc2_0-stdext.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\jdom.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\jta.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\junit-3.8.1.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\log4j.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\mail.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\mysql-connector-java-3.0.16-ga-bin.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\namespace.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\odmg.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\oracleDriver.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\relaxngDatatype.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\smtp.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\struts-legacy.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\struts.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\xalan-2.4.0.jar
+    cp=D:\tomcat\webapps\catissuecore\WEB-INF\lib\xml-apis.jar
+    cp=D:\tomcat\shared\classes
+    cp=D:\tomcat\common\classes
+    cp=D:\tomcat\common\endorsed\xercesImpl.jar
+    cp=D:\tomcat\common\endorsed\xmlParserAPIs.jar
+    cp=D:\tomcat\common\lib\ant.jar
+    cp=D:\tomcat\common\lib\commons-collections.jar
+    cp=D:\tomcat\common\lib\commons-dbcp-1.1.jar
+    cp=D:\tomcat\common\lib\commons-el.jar
+    cp=D:\tomcat\common\lib\commons-pool-1.1.jar
+    cp=D:\tomcat\common\lib\jasper-compiler.jar
+    cp=D:\tomcat\common\lib\jasper-runtime.jar
+    cp=D:\tomcat\common\lib\jmx-remote-tools.jar
+    cp=D:\tomcat\common\lib\jmx-remote.jar
+    cp=D:\tomcat\common\lib\jmx.jar
+    cp=D:\tomcat\common\lib\jsp-api.jar
+    cp=D:\tomcat\common\lib\naming-common.jar
+    cp=D:\tomcat\common\lib\naming-factory.jar
+    cp=D:\tomcat\common\lib\naming-java.jar
+    cp=D:\tomcat\common\lib\naming-resources.jar
+    cp=D:\tomcat\common\lib\servlet-api.jar
+    cp=C:\jdk1.4\lib\tools.jar
+    cp=D:\tomcat\bin\bootstrap.jar
+    cp=C:\jdk1.4\jre\lib\ext\dnsns.jar
+    cp=C:\jdk1.4\jre\lib\ext\ldapsec.jar
+    cp=C:\jdk1.4\jre\lib\ext\localedata.jar
+    cp=C:\jdk1.4\jre\lib\ext\sunjce_provider.jar
+    work dir=D:\tomcat\work\Catalina\localhost\catissuecore
+    extension dir=C:\JDK1.4\jre\lib\ext
+    srcDir=D:\tomcat\work\Catalina\localhost\catissuecore
+    include=org/apache/jsp/pages/content/manageAdministrativeData/CollectionProtocol_jsp.java
+
+ERROR [http8080-Processor23] compiler.Compiler - Error compiling file: /D:/tomcat/work/Catalina/localhost/catissuecore//org/apache/jsp/pages/content/manageAdministrativeData\CollectionProtocol_jsp.java     [javac] Compiling 1 source file
+
+D:\tomcat\work\Catalina\localhost\catissuecore\org\apache\jsp\pages\content\manageAdministrativeData\CollectionProtocol_jsp.java:152: cannot resolve symbol
+symbol  : variable readOnlyValue 
+location: class org.apache.jsp.pages.content.manageAdministrativeData.CollectionProtocol_jsp
+      _jspx_th_html_text_0.setReadonly(readOnlyValue);
+                                       ^
+D:\tomcat\work\Catalina\localhost\catissuecore\org\apache\jsp\pages\content\manageAdministrativeData\CollectionProtocol_jsp.java:283: cannot resolve symbol
+symbol  : variable readOnlyValue 
+location: class org.apache.jsp.pages.content.manageAdministrativeData.CollectionProtocol_jsp
+      _jspx_th_html_text_1.setReadonly(readOnlyValue);
+                                       ^
+2 errors
+
+INFO  [main]  - Home for caTISSUECore Application: D:\tomcat\webapps\catissuecore
+INFO  [main]  - Logger Configuration file: D:\tomcat\webapps\catissuecore\WEB-INF\classes\ApplicationResources.properties
+INFO  [main] util.PropertyMessageResources - Initializing, config='org.apache.struts.util.LocalStrings', returnNull=true
+INFO  [main] util.PropertyMessageResources - Initializing, config='org.apache.struts.action.ActionResources', returnNull=true
+INFO  [main] util.PropertyMessageResources - Initializing, config='ApplicationResources', returnNull=true
+INFO  [main] tiles.TilesPlugin - Tiles definition factory loaded for module ''.
+INFO  [http8080-Processor25] tiles.TilesRequestProcessor - Tiles definition factory found for request processor ''.
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.actions.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.bean.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.util.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25]  - Inside Login Action, Just before validation
+INFO  [http8080-Processor25]  - >>>>>>>>>>>>> SUCESSFUL LOGIN <<<<<<<<< 
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.logic.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.logic.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [main]  - Home for caTISSUECore Application: D:\tomcat\webapps\catissuecore
+INFO  [main]  - Logger Configuration file: D:\tomcat\webapps\catissuecore\WEB-INF\classes\ApplicationResources.properties
+INFO  [main] util.PropertyMessageResources - Initializing, config='org.apache.struts.util.LocalStrings', returnNull=true
+INFO  [main] util.PropertyMessageResources - Initializing, config='org.apache.struts.action.ActionResources', returnNull=true
+INFO  [main] util.PropertyMessageResources - Initializing, config='ApplicationResources', returnNull=true
+INFO  [main] tiles.TilesPlugin - Tiles definition factory loaded for module ''.
+INFO  [http8080-Processor25] tiles.TilesRequestProcessor - Tiles definition factory found for request processor ''.
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.actions.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.bean.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.util.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25]  - Inside Login Action, Just before validation
+INFO  [http8080-Processor25]  - >>>>>>>>>>>>> SUCESSFUL LOGIN <<<<<<<<< 
+INFO  [http8080-Processor24] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.logic.LocalStrings', returnNull=true
+INFO  [http8080-Processor24] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.logic.LocalStrings', returnNull=true
+INFO  [http8080-Processor24] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor24] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor24] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [main]  - Home for caTISSUECore Application: D:\tomcat\webapps\catissuecore
+INFO  [main]  - Logger Configuration file: D:\tomcat\webapps\catissuecore\WEB-INF\classes\ApplicationResources.properties
+INFO  [main] util.PropertyMessageResources - Initializing, config='org.apache.struts.util.LocalStrings', returnNull=true
+INFO  [main] util.PropertyMessageResources - Initializing, config='org.apache.struts.action.ActionResources', returnNull=true
+INFO  [main] util.PropertyMessageResources - Initializing, config='ApplicationResources', returnNull=true
+INFO  [main] tiles.TilesPlugin - Tiles definition factory loaded for module ''.
+INFO  [http8080-Processor25] tiles.TilesRequestProcessor - Tiles definition factory found for request processor ''.
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.actions.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.bean.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.util.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25]  - Inside Login Action, Just before validation
+INFO  [http8080-Processor25]  - Exception: null
+INFO  [http8080-Processor24]  - Inside Login Action, Just before validation
+INFO  [http8080-Processor24]  - Exception: null
+INFO  [http8080-Processor25]  - Inside Login Action, Just before validation
+INFO  [http8080-Processor25]  - Exception: null
+INFO  [http8080-Processor24]  - Inside Login Action, Just before validation
+INFO  [http8080-Processor24]  - Exception: null
+INFO  [http8080-Processor25]  - Inside Login Action, Just before validation
+INFO  [http8080-Processor25]  - Exception: null
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.logic.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.logic.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] cfg.Environment - Hibernate 2.1.7
+INFO  [http8080-Processor25] cfg.Environment - loaded properties from resource hibernate.properties: {hibernate.cglib.use_reflection_optimizer=true, hibernate.c3p0.timeout=300, hibernate.c3p0.min_size=5, hibernate.show_sql=false, hibernate.c3p0.max_size=20, hibernate.c3p0.idle_test_period=3000, hibernate.c3p0.max_statements=50}
+INFO  [http8080-Processor25] cfg.Environment - using CGLIB reflection optimizer
+INFO  [http8080-Processor25] cfg.Environment - using JDK 1.4 java.sql.Timestamp handling
+INFO  [http8080-Processor25] cfg.Configuration - configuring from resource: /hibernate.cfg.xml
+INFO  [http8080-Processor25] cfg.Configuration - Configuration resource: /hibernate.cfg.xml
+INFO  [http8080-Processor25] cfg.Configuration - Mapping resource: edu/wustl/catissuecore/hbm/Address.hbm.xml
+INFO  [http8080-Processor25] cfg.Binder - Mapping class: edu.wustl.catissuecore.domain.Address -> CATISSUE_ADDRESS
+INFO  [http8080-Processor25] cfg.Configuration - Mapping resource: edu/wustl/catissuecore/hbm/AuditEvent.hbm.xml
+INFO  [http8080-Processor25] cfg.Binder - Mapping class: edu.wustl.catissuecore.domain.AuditEvent -> CATISSUE_AUDIT_EVENT
+INFO  [http8080-Processor25] cfg.Configuration - Mapping resource: edu/wustl/catissuecore/hbm/AuditEventDetails.hbm.xml
+INFO  [http8080-Processor25] cfg.Binder - Mapping class: edu.wustl.catissuecore.domain.AuditEventDetails -> CATISSUE_AUDIT_EVENT_DETAILS
+INFO  [http8080-Processor25] cfg.Configuration - Mapping resource: edu/wustl/catissuecore/hbm/AuditEventLog.hbm.xml
+INFO  [http8080-Processor25] cfg.Binder - Mapping class: edu.wustl.catissuecore.domain.AuditEventLog -> CATISSUE_AUDIT_EVENT_LOG
+INFO  [http8080-Processor25] cfg.Configuration - Mapping resource: edu/wustl/catissuecore/hbm/Biohazard.hbm.xml
+INFO  [http8080-Processor25] cfg.Binder - Mapping class: edu.wustl.catissuecore.domain.Biohazard -> CATISSUE_BIOHAZARD
+INFO  [http8080-Processor25] cfg.Binder - Mapping collection: edu.wustl.catissuecore.domain.Biohazard.specimenCollection -> CATISSUE_SPECIMEN_BIOHAZARD_RELATIONSHIP
+INFO  [http8080-Processor25] cfg.Configuration - Mapping resource: edu/wustl/catissuecore/hbm/CancerResearchGroup.hbm.xml
+INFO  [http8080-Processor25] cfg.Binder - Mapping class: edu.wustl.catissuecore.domain.CancerResearchGroup -> CATISSUE_CANCER_RESEARCH_GROUP
+INFO  [http8080-Processor25] cfg.Configuration - Mapping resource: edu/wustl/catissuecore/hbm/ClinicalReport.hbm.xml
+INFO  [http8080-Processor25] cfg.Binder - Mapping class: edu.wustl.catissuecore.domain.ClinicalReport -> CATISSUE_CLINICAL_REPORT
+INFO  [http8080-Processor25] cfg.Configuration - Mapping resource: edu/wustl/catissuecore/hbm/CollectionProtocolEvent.hbm.xml
+INFO  [http8080-Processor25] cfg.Binder - Mapping class: edu.wustl.catissuecore.domain.CollectionProtocolEvent -> CATISSUE_COLLECTION_PROTOCOL_EVENT
+INFO  [http8080-Processor25] cfg.Binder - Mapping collection: edu.wustl.catissuecore.domain.CollectionProtocolEvent.specimenRequirementCollection -> CATISSUE_COLLECTION_SPECIMEN_REQUIREMENT
+INFO  [http8080-Processor25] cfg.Configuration - Mapping resource: edu/wustl/catissuecore/hbm/CollectionProtocolRegistration.hbm.xml
+INFO  [http8080-Processor25] cfg.Binder - Mapping class: edu.wustl.catissuecore.domain.CollectionProtocolRegistration -> CATISSUE_COLLECTION_PROTOCOL_REGISTRATION
+INFO  [http8080-Processor25] cfg.Configuration - Mapping resource: edu/wustl/catissuecore/hbm/Department.hbm.xml
+INFO  [http8080-Processor25] cfg.Binder - Mapping class: edu.wustl.catissuecore.domain.Department -> CATISSUE_DEPARTMENT
+INFO  [http8080-Processor25] cfg.Configuration - Mapping resource: edu/wustl/catissuecore/hbm/DistributedItem.hbm.xml
+INFO  [http8080-Processor25] cfg.Binder - Mapping class: edu.wustl.catissuecore.domain.DistributedItem -> CATISSUE_DISTRIBUTED_ITEM
+INFO  [http8080-Processor25] cfg.Configuration - Mapping resource: edu/wustl/catissuecore/hbm/ExternalIdentifier.hbm.xml
+INFO  [http8080-Processor25] cfg.Binder - Mapping class: edu.wustl.catissuecore.domain.ExternalIdentifier -> CATISSUE_EXTERNAL_IDENTIFIER
+INFO  [http8080-Processor25] cfg.Configuration - Mapping resource: edu/wustl/catissuecore/hbm/Institution.hbm.xml
+INFO  [http8080-Processor25] cfg.Binder - Mapping class: edu.wustl.catissuecore.domain.Institution -> CATISSUE_INSTITUTION
+INFO  [http8080-Processor25] cfg.Configuration - Mapping resource: edu/wustl/catissuecore/hbm/Participant.hbm.xml
+INFO  [http8080-Processor25] cfg.Binder - Mapping class: edu.wustl.catissuecore.domain.Participant -> CATISSUE_PARTICIPANT
+INFO  [http8080-Processor25] cfg.Configuration - Mapping resource: edu/wustl/catissuecore/hbm/ParticipantMedicalIdentifier.hbm.xml
+INFO  [http8080-Processor25] cfg.Binder - Mapping class: edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier -> CATISSUE_PARTICIPANT_MEDICAL_IDENTIFIER
+INFO  [http8080-Processor25] cfg.Configuration - Mapping resource: edu/wustl/catissuecore/hbm/ReportedProblem.hbm.xml
+INFO  [http8080-Processor25] cfg.Binder - Mapping class: edu.wustl.catissuecore.domain.ReportedProblem -> CATISSUE_REPORTED_PROBLEM
+INFO  [http8080-Processor25] cfg.Configuration - Mapping resource: edu/wustl/catissuecore/hbm/Site.hbm.xml
+INFO  [http8080-Processor25] cfg.Binder - Mapping class: edu.wustl.catissuecore.domain.Site -> CATISSUE_SITE
+INFO  [http8080-Processor25] cfg.Configuration - Mapping resource: edu/wustl/catissuecore/hbm/Specimen.hbm.xml
+INFO  [http8080-Processor25] cfg.Binder - Mapping class: edu.wustl.catissuecore.domain.Specimen -> CATISSUE_SPECIMEN
+INFO  [http8080-Processor25] cfg.Binder - Mapping collection: edu.wustl.catissuecore.domain.Specimen.biohazardCollection -> CATISSUE_SPECIMEN_BIOHAZARD_RELATIONSHIP
+INFO  [http8080-Processor25] cfg.Binder - Mapping joined-subclass: edu.wustl.catissuecore.domain.FluidSpecimen -> CATISSUE_FLUID_SPECIMEN
+INFO  [http8080-Processor25] cfg.Binder - Mapping joined-subclass: edu.wustl.catissuecore.domain.CellSpecimen -> CATISSUE_CELL_SPECIMEN
+INFO  [http8080-Processor25] cfg.Binder - Mapping joined-subclass: edu.wustl.catissuecore.domain.MolecularSpecimen -> CATISSUE_MOLECULAR_SPECIMEN
+INFO  [http8080-Processor25] cfg.Binder - Mapping joined-subclass: edu.wustl.catissuecore.domain.TissueSpecimen -> CATISSUE_TISSUE_SPECIMEN
+INFO  [http8080-Processor25] cfg.Configuration - Mapping resource: edu/wustl/catissuecore/hbm/SpecimenCharacteristics.hbm.xml
+INFO  [http8080-Processor25] cfg.Binder - Mapping class: edu.wustl.catissuecore.domain.SpecimenCharacteristics -> CATISSUE_SPECIMEN_CHARACTERISTICS
+INFO  [http8080-Processor25] cfg.Configuration - Mapping resource: edu/wustl/catissuecore/hbm/SpecimenCollectionGroup.hbm.xml
+INFO  [http8080-Processor25] cfg.Binder - Mapping class: edu.wustl.catissuecore.domain.SpecimenCollectionGroup -> CATISSUE_SPECIMEN_COLLECTION_GROUP
+INFO  [http8080-Processor25] cfg.Configuration - Mapping resource: edu/wustl/catissuecore/hbm/SpecimenEventParameters.hbm.xml
+INFO  [http8080-Processor25] cfg.Binder - Mapping class: edu.wustl.catissuecore.domain.SpecimenEventParameters -> CATISSUE_SPECIMEN_EVENT_PARAMETERS
+INFO  [http8080-Processor25] cfg.Binder - Mapping joined-subclass: edu.wustl.catissuecore.domain.FixedEventParameters -> CATISSUE_FIXED_EVENT_PARAMETERS
+INFO  [http8080-Processor25] cfg.Binder - Mapping joined-subclass: edu.wustl.catissuecore.domain.Distribution -> CATISSUE_DISTRIBUTION
+INFO  [http8080-Processor25] cfg.Binder - Mapping joined-subclass: edu.wustl.catissuecore.domain.FrozenEventParameters -> CATISSUE_FROZEN_EVENT_PARAMETERS
+INFO  [http8080-Processor25] cfg.Binder - Mapping joined-subclass: edu.wustl.catissuecore.domain.CheckInCheckOutEventParameter -> CATISSUE_CHECKIN_CHECKOUT_EVENT_PARAMETER
+INFO  [http8080-Processor25] cfg.Binder - Mapping joined-subclass: edu.wustl.catissuecore.domain.ProcedureEventParameters -> CATISSUE_PROCEDURE_EVENT_PARAMETERS
+INFO  [http8080-Processor25] cfg.Binder - Mapping joined-subclass: edu.wustl.catissuecore.domain.SpunEventParameters -> CATISSUE_SPUN_EVENT_PARAMETERS
+INFO  [http8080-Processor25] cfg.Binder - Mapping joined-subclass: edu.wustl.catissuecore.domain.TransferEventParameters -> CATISSUE_TRANSFER_EVENT_PARAMETER
+INFO  [http8080-Processor25] cfg.Binder - Mapping joined-subclass: edu.wustl.catissuecore.domain.CollectionEventParameters -> CATISSUE_COLLECTION_EVENT_PARAMETERS
+INFO  [http8080-Processor25] cfg.Binder - Mapping joined-subclass: edu.wustl.catissuecore.domain.ReceivedEventParameters -> CATISSUE_RECEIVED_EVENT_PARAMETERS
+INFO  [http8080-Processor25] cfg.Binder - Mapping joined-subclass: edu.wustl.catissuecore.domain.EmbeddedEventParameters -> CATISSUE_EMBEDDED_EVENT_PARAMETERS
+INFO  [http8080-Processor25] cfg.Binder - Mapping joined-subclass: edu.wustl.catissuecore.domain.ThawEventParameters -> CATISSUE_THAW_EVENT_PARAMETERS
+INFO  [http8080-Processor25] cfg.Binder - Mapping joined-subclass: edu.wustl.catissuecore.domain.ReviewEventParameters -> CATISSUE_REVIEW_EVENT_PARAMETERS
+INFO  [http8080-Processor25] cfg.Binder - Mapping joined-subclass: edu.wustl.catissuecore.domain.CellSpecimenReviewParameters -> CATISSUE_CELL_SPECIMEN_REVIEW_PARAMETERS
+INFO  [http8080-Processor25] cfg.Binder - Mapping joined-subclass: edu.wustl.catissuecore.domain.TissueSpecimenReviewEventParameters -> CATISSUE_TISSUE_SPECIMEN_REVIEW_EVENT_PARAMETERS
+INFO  [http8080-Processor25] cfg.Binder - Mapping joined-subclass: edu.wustl.catissuecore.domain.FluidSpecimenReviewEventParameters -> CATISSUE_FLUID_SPECIMEN_REVIEW_EVENT_PARAMETERS
+INFO  [http8080-Processor25] cfg.Binder - Mapping joined-subclass: edu.wustl.catissuecore.domain.MolecularSpecimenReviewParameters -> CATISSUE_MOLECULAR_SPECIMEN_REVIEW_PARAMETERS
+INFO  [http8080-Processor25] cfg.Binder - Mapping joined-subclass: edu.wustl.catissuecore.domain.DisposalEventParameters -> CATISSUE_DISPOSAL_EVENT_PARAMETERS
+INFO  [http8080-Processor25] cfg.Configuration - Mapping resource: edu/wustl/catissuecore/hbm/SpecimenProtocol.hbm.xml
+INFO  [http8080-Processor25] cfg.Binder - Mapping class: edu.wustl.catissuecore.domain.SpecimenProtocol -> CATISSUE_SPECIMEN_PROTOCOL
+INFO  [http8080-Processor25] cfg.Binder - Mapping joined-subclass: edu.wustl.catissuecore.domain.CollectionProtocol -> CATISSUE_COLLECTION_PROTOCOL
+INFO  [http8080-Processor25] cfg.Binder - Mapping collection: edu.wustl.catissuecore.domain.CollectionProtocol.distributionProtocolCollection -> CATISSUE_COLLECTION_DISTRIBUTION_RELATION
+INFO  [http8080-Processor25] cfg.Binder - Mapping collection: edu.wustl.catissuecore.domain.CollectionProtocol.userCollection -> CATISSUE_COLLECTION_COORDINATORS
+INFO  [http8080-Processor25] cfg.Binder - Mapping joined-subclass: edu.wustl.catissuecore.domain.DistributionProtocol -> CATISSUE_DISTRIBUTION_PROTOCOL
+INFO  [http8080-Processor25] cfg.Binder - Mapping collection: edu.wustl.catissuecore.domain.DistributionProtocol.specimenRequirementCollection -> CATISSUE_DISTRIBUTION_SPECIMEN_REQUIREMENT
+INFO  [http8080-Processor25] cfg.Binder - Mapping collection: edu.wustl.catissuecore.domain.DistributionProtocol.collectionProtocolCollection -> CATISSUE_COLLECTION_DISTRIBUTION_RELATION
+INFO  [http8080-Processor25] cfg.Configuration - Mapping resource: edu/wustl/catissuecore/hbm/SpecimenRequirement.hbm.xml
+INFO  [http8080-Processor25] cfg.Binder - Mapping class: edu.wustl.catissuecore.domain.SpecimenRequirement -> CATISSUE_SPECIMEN_REQUIREMENT
+INFO  [http8080-Processor25] cfg.Binder - Mapping collection: edu.wustl.catissuecore.domain.SpecimenRequirement.distributionProtocolCollection -> CATISSUE_DISTRIBUTION_SPECIMEN_REQUIREMENT
+INFO  [http8080-Processor25] cfg.Binder - Mapping collection: edu.wustl.catissuecore.domain.SpecimenRequirement.collectionProtocolEventCollection -> CATISSUE_COLLECTION_SPECIMEN_REQUIREMENT
+INFO  [http8080-Processor25] cfg.Binder - Mapping joined-subclass: edu.wustl.catissuecore.domain.FluidSpecimenRequirement -> CATISSUE_FLUID_SPECIMEN_REQUIREMENT
+INFO  [http8080-Processor25] cfg.Binder - Mapping joined-subclass: edu.wustl.catissuecore.domain.MolecularSpecimenRequirement -> CATISSUE_MOLECULAR_SPECIMEN_REQUIREMENT
+INFO  [http8080-Processor25] cfg.Binder - Mapping joined-subclass: edu.wustl.catissuecore.domain.CellSpecimenRequirement -> CATISSUE_CELL_SPECIMEN_REQUIREMENT
+INFO  [http8080-Processor25] cfg.Binder - Mapping joined-subclass: edu.wustl.catissuecore.domain.TissueSpecimenRequirement -> CATISSUE_TISSUE_SPECIMEN_REQUIREMENT
+INFO  [http8080-Processor25] cfg.Configuration - Mapping resource: edu/wustl/catissuecore/hbm/StorageContainer.hbm.xml
+INFO  [http8080-Processor25] cfg.Binder - Mapping class: edu.wustl.catissuecore.domain.StorageContainer -> CATISSUE_STORAGE_CONTAINER
+INFO  [http8080-Processor25] cfg.Configuration - Mapping resource: edu/wustl/catissuecore/hbm/StorageContainerCapacity.hbm.xml
+INFO  [http8080-Processor25] cfg.Binder - Mapping class: edu.wustl.catissuecore.domain.StorageContainerCapacity -> CATISSUE_STORAGE_CONTAINER_CAPACITY
+INFO  [http8080-Processor25] cfg.Configuration - Mapping resource: edu/wustl/catissuecore/hbm/StorageContainerDetails.hbm.xml
+INFO  [http8080-Processor25] cfg.Binder - Mapping class: edu.wustl.catissuecore.domain.StorageContainerDetails -> CATISSUE_STORAGE_CONTAINER_DETAILS
+INFO  [http8080-Processor25] cfg.Configuration - Mapping resource: edu/wustl/catissuecore/hbm/StorageType.hbm.xml
+INFO  [http8080-Processor25] cfg.Binder - Mapping class: edu.wustl.catissuecore.domain.StorageType -> CATISSUE_STORAGE_TYPE
+INFO  [http8080-Processor25] cfg.Configuration - Mapping resource: edu/wustl/catissuecore/hbm/User.hbm.xml
+INFO  [http8080-Processor25] cfg.Binder - Mapping class: edu.wustl.catissuecore.domain.User -> CATISSUE_USER
+INFO  [http8080-Processor25] cfg.Binder - Mapping collection: edu.wustl.catissuecore.domain.User.collectionProtocolCollection -> CATISSUE_COLLECTION_COORDINATORS
+INFO  [http8080-Processor25] cfg.Configuration - Configured SessionFactory: null
+INFO  [http8080-Processor25] cfg.Configuration - processing one-to-many association mappings
+INFO  [http8080-Processor25] cfg.Binder - Mapping collection: edu.wustl.catissuecore.domain.AuditEvent.auditEventLogCollection -> CATISSUE_AUDIT_EVENT_LOG
+INFO  [http8080-Processor25] cfg.Binder - Mapping collection: edu.wustl.catissuecore.domain.AuditEventLog.auditEventDetailsCollcetion -> CATISSUE_AUDIT_EVENT_DETAILS
+INFO  [http8080-Processor25] cfg.Binder - Mapping collection: edu.wustl.catissuecore.domain.Participant.participantMedicalIdentifierCollection -> CATISSUE_PARTICIPANT_MEDICAL_IDENTIFIER
+INFO  [http8080-Processor25] cfg.Binder - Mapping collection: edu.wustl.catissuecore.domain.Participant.collectionProtocolRegistrationCollection -> CATISSUE_COLLECTION_PROTOCOL_REGISTRATION
+INFO  [http8080-Processor25] cfg.Binder - Mapping collection: edu.wustl.catissuecore.domain.Specimen.specimenEventCollection -> CATISSUE_SPECIMEN_EVENT_PARAMETERS
+INFO  [http8080-Processor25] cfg.Binder - Mapping collection: edu.wustl.catissuecore.domain.Specimen.childrenSpecimen -> CATISSUE_SPECIMEN
+INFO  [http8080-Processor25] cfg.Binder - Mapping collection: edu.wustl.catissuecore.domain.Specimen.externalIdentifierCollection -> CATISSUE_EXTERNAL_IDENTIFIER
+INFO  [http8080-Processor25] cfg.Binder - Mapping collection: edu.wustl.catissuecore.domain.SpecimenCollectionGroup.specimenCollection -> CATISSUE_SPECIMEN
+INFO  [http8080-Processor25] cfg.Binder - Mapping collection: edu.wustl.catissuecore.domain.Distribution.distributedItemCollection -> CATISSUE_DISTRIBUTED_ITEM
+INFO  [http8080-Processor25] cfg.Binder - Mapping collection: edu.wustl.catissuecore.domain.CollectionProtocol.collectionProtocolEventCollection -> CATISSUE_COLLECTION_PROTOCOL_EVENT
+INFO  [http8080-Processor25] cfg.Binder - Mapping collection: edu.wustl.catissuecore.domain.StorageContainer.storageContainerDetailsCollection -> CATISSUE_STORAGE_CONTAINER_DETAILS
+INFO  [http8080-Processor25] cfg.Binder - Mapping collection: edu.wustl.catissuecore.domain.StorageContainer.childrenContainerCollection -> CATISSUE_STORAGE_CONTAINER
+INFO  [http8080-Processor25] cfg.Configuration - processing one-to-one association property references
+INFO  [http8080-Processor25] cfg.Configuration - processing foreign key constraints
+INFO  [http8080-Processor25] dialect.Dialect - Using dialect: net.sf.hibernate.dialect.MySQLDialect
+INFO  [http8080-Processor25] cfg.SettingsFactory - Maximim outer join fetch depth: 2
+INFO  [http8080-Processor25] cfg.SettingsFactory - Use outer join fetching: true
+INFO  [http8080-Processor25] connection.DriverManagerConnectionProvider - Using Hibernate built-in connection pool (not for production use!)
+INFO  [http8080-Processor25] connection.DriverManagerConnectionProvider - Hibernate connection pool size: 20
+INFO  [http8080-Processor25] connection.DriverManagerConnectionProvider - using driver: org.gjt.mm.mysql.Driver at URL: jdbc:mysql://ps0348:3306/catissuecore
+INFO  [http8080-Processor25] connection.DriverManagerConnectionProvider - connection properties: {user=catissue_core, password=catissue_core}
+INFO  [http8080-Processor25] transaction.TransactionFactoryFactory - Transaction strategy: net.sf.hibernate.transaction.JDBCTransactionFactory
+INFO  [http8080-Processor25] transaction.TransactionManagerLookupFactory - No TransactionManagerLookup configured (in JTA environment, use of process level read-write cache is not recommended)
+INFO  [http8080-Processor25] cfg.SettingsFactory - Use scrollable result sets: true
+INFO  [http8080-Processor25] cfg.SettingsFactory - Use JDBC3 getGeneratedKeys(): true
+INFO  [http8080-Processor25] cfg.SettingsFactory - Optimize cache for minimal puts: false
+INFO  [http8080-Processor25] cfg.SettingsFactory - echoing all SQL to stdout
+INFO  [http8080-Processor25] cfg.SettingsFactory - Query language substitutions: {}
+INFO  [http8080-Processor25] cfg.SettingsFactory - cache provider: net.sf.hibernate.cache.EhCacheProvider
+INFO  [http8080-Processor25] cfg.Configuration - instantiating and configuring caches
+INFO  [http8080-Processor25] impl.SessionFactoryImpl - building session factory
+INFO  [http8080-Processor25] impl.SessionFactoryObjectFactory - Not binding factory to JNDI, no JNDI name configured
+WARN  [http8080-Processor25] util.JDBCExceptionReporter - SQL Error: 1054, SQLState: S0022
+ERROR [http8080-Processor25] util.JDBCExceptionReporter - Column not found message from server: "Unknown column 'user0_.LAST_NAME' in 'field list'"
+WARN  [http8080-Processor25] util.JDBCExceptionReporter - SQL Error: 1054, SQLState: S0022
+ERROR [http8080-Processor25] util.JDBCExceptionReporter - Column not found message from server: "Unknown column 'user0_.LAST_NAME' in 'field list'"
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [main]  - Home for caTISSUECore Application: D:\tomcat\webapps\catissuecore
+INFO  [main]  - Logger Configuration file: D:\tomcat\webapps\catissuecore\WEB-INF\classes\ApplicationResources.properties
+INFO  [main] util.PropertyMessageResources - Initializing, config='org.apache.struts.util.LocalStrings', returnNull=true
+INFO  [main] util.PropertyMessageResources - Initializing, config='org.apache.struts.action.ActionResources', returnNull=true
+INFO  [main] util.PropertyMessageResources - Initializing, config='ApplicationResources', returnNull=true
+INFO  [main] tiles.TilesPlugin - Tiles definition factory loaded for module ''.
+INFO  [http8080-Processor25] tiles.TilesRequestProcessor - Tiles definition factory found for request processor ''.
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.actions.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.bean.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.util.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25]  - Inside Login Action, Just before validation
+INFO  [http8080-Processor25]  - Exception: null
+INFO  [http8080-Processor24] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.logic.LocalStrings', returnNull=true
+INFO  [http8080-Processor24] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.logic.LocalStrings', returnNull=true
+INFO  [http8080-Processor24] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor24] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor24] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [main]  - Home for caTISSUECore Application: D:\tomcat\webapps\catissuecore
+INFO  [main]  - Logger Configuration file: D:\tomcat\webapps\catissuecore\WEB-INF\classes\ApplicationResources.properties
+INFO  [main] util.PropertyMessageResources - Initializing, config='org.apache.struts.util.LocalStrings', returnNull=true
+INFO  [main] util.PropertyMessageResources - Initializing, config='org.apache.struts.action.ActionResources', returnNull=true
+INFO  [main] util.PropertyMessageResources - Initializing, config='ApplicationResources', returnNull=true
+INFO  [main] tiles.TilesPlugin - Tiles definition factory loaded for module ''.
+INFO  [http8080-Processor25] tiles.TilesRequestProcessor - Tiles definition factory found for request processor ''.
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.actions.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.bean.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.util.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor24] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.logic.LocalStrings', returnNull=true
+INFO  [http8080-Processor24] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.logic.LocalStrings', returnNull=true
+INFO  [http8080-Processor24] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor24] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor24] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [main]  - Home for caTISSUECore Application: D:\tomcat\webapps\catissuecore
+INFO  [main]  - Logger Configuration file: D:\tomcat\webapps\catissuecore\WEB-INF\classes\ApplicationResources.properties
+INFO  [main] util.PropertyMessageResources - Initializing, config='org.apache.struts.util.LocalStrings', returnNull=true
+INFO  [main] util.PropertyMessageResources - Initializing, config='org.apache.struts.action.ActionResources', returnNull=true
+INFO  [main] util.PropertyMessageResources - Initializing, config='ApplicationResources', returnNull=true
+INFO  [main] tiles.TilesPlugin - Tiles definition factory loaded for module ''.
+INFO  [http8080-Processor25] tiles.TilesRequestProcessor - Tiles definition factory found for request processor ''.
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.actions.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.bean.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.util.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor25] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor24] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor24] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor24] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.logic.LocalStrings', returnNull=true
+INFO  [http8080-Processor24] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.logic.LocalStrings', returnNull=true
+INFO  [http8080-Processor24] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor24] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor24] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor24] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
+INFO  [http8080-Processor24] util.PropertyMessageResources - Initializing, config='org.apache.struts.taglib.html.LocalStrings', returnNull=true
