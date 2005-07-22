@@ -13,17 +13,19 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 
+import edu.wustl.catissuecore.actionForm.AbstractActionForm;
+
 /**
  * An individual from whom a specimen is collected.
  * @hibernate.class table="CATISSUE_PARTICIPANT"
  * @author gautam_shetty
  */
-public class Participant implements java.io.Serializable
+public class Participant extends AbstractDomainObject implements java.io.Serializable
 {
 	private static final long serialVersionUID = 1234567890L;
 	
 	/**
-     * System generated unique identifier.
+     * System generated unique systemIdentifier.
      * */
 	protected Long systemIdentifier;
 	
@@ -48,7 +50,7 @@ public class Participant implements java.io.Serializable
 	protected Date birthDate;
 	
 	/**
-     * The gender of a participant as defined by their genotype.
+     * The genotypicGender of a participant as defined by their genotype.
      */
 	protected String genotypicGender;
 	
@@ -89,8 +91,8 @@ public class Participant implements java.io.Serializable
 	}
 	
 	/**
-     * Returns System generated unique identifier.
-     * @return Long System generated unique identifier.
+     * Returns System generated unique systemIdentifier.
+     * @return Long System generated unique systemIdentifier.
      * @see #setSystemIdentifier(Long)
      * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"
      * unsaved-value="null" generator-class="native" 
@@ -101,8 +103,8 @@ public class Participant implements java.io.Serializable
 	}
 
 	/**
-     * Sets system generated unique identifier.
-     * @param systemIdentifier System generated unique identifier.
+     * Sets system generated unique systemIdentifier.
+     * @param systemIdentifier System generated unique systemIdentifier.
      * @see #getSystemIdentifier()
      * */
 	public void setSystemIdentifier(Long systemIdentifier)
@@ -198,8 +200,8 @@ public class Participant implements java.io.Serializable
 	}
 
 	/**
-     * Returns the gender of a participant as defined by their genotype.
-     * @return String representing the gender of a participant as defined by their genotype.
+     * Returns the genotypicGender of a participant as defined by their genotype.
+     * @return String representing the genotypicGender of a participant as defined by their genotype.
      * @see #setGenotypicGender(String)
      * @hibernate.property name="genotypicGender" type="string" 
      * column="GENDER" length="20"
@@ -210,8 +212,8 @@ public class Participant implements java.io.Serializable
 	}
 
 	/**
-     * Sets the gender of a participant as defined by their genotype.
-     * @param genotypicGender the gender of a participant as defined by their genotype.
+     * Sets the genotypicGender of a participant as defined by their genotype.
+     * @param genotypicGender the genotypicGender of a participant as defined by their genotype.
      * @see #getGenotypicGender()
      */
 	public void setGenotypicGender(String genotypicGender)
@@ -277,7 +279,7 @@ public class Participant implements java.io.Serializable
 
 	/**
      * Sets the Social Security Number of the Participant.
-     * @param dateOfBirth String representing the Social Security Number of the Participant.
+     * @param birthDate String representing the Social Security Number of the Participant.
      * @see #getSocialSecurityNumber()
      */
 	public void setSocialSecurityNumber(String socialSecurityNumber)
@@ -354,4 +356,14 @@ public class Participant implements java.io.Serializable
 	{
 		this.collectionProtocolRegistrationCollection = collectionProtocolRegistrationCollection;
 	}
+	
+	
+    /**
+     * (non-Javadoc)
+     * @see edu.wustl.catissuecore.domain.AbstractDomainObject#setAllValues(edu.wustl.catissuecore.actionForm.AbstractActionForm)
+     */
+    public void setAllValues(AbstractActionForm abstractForm)
+    {
+
+    }
 }

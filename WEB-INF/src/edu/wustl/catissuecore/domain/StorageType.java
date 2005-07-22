@@ -26,7 +26,7 @@ public class StorageType extends AbstractDomainObject implements Serializable
 	private static final long serialVersionUID = 1234567890L;
 
 	/**
-     * System generated unique identifier.
+     * System generated unique systemIdentifier.
      */
 	protected Long systemIdentifier;
 	
@@ -57,8 +57,8 @@ public class StorageType extends AbstractDomainObject implements Serializable
 	}
 	
 	/**
-     * Returns System generated unique identifier.
-     * @return Integer System generated unique identifier.
+     * Returns System generated unique systemIdentifier.
+     * @return System generated unique systemIdentifier.
      * @see #setSystemIdentifier(Integer)
      * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"
      * unsaved-value="null" generator-class="native" 
@@ -69,8 +69,8 @@ public class StorageType extends AbstractDomainObject implements Serializable
 	}
 
 	/**
-     * Sets system generated unique identifier.
-     * @param systemIdentifier identifier of the Storagetype to be set.
+     * Sets system generated unique systemIdentifier.
+     * @param systemIdentifier systemIdentifier of the Storagetype to be set.
      * @see #getSystemIdentifier()
      * */
 	public void setSystemIdentifier(Long systemIdentifier)

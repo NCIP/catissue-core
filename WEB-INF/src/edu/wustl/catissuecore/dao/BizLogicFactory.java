@@ -28,9 +28,9 @@ public class BizLogicFactory
         
         switch(FORM_TYPE)
         {
-//            case Constants.USER_FORM_ID:
-//                abstractBizLogic = new UserBizLogic();
-//            	break;
+            case Constants.USER_FORM_ID:
+                abstractBizLogic = new UserBizLogic();
+            	break;
 ////            case Constants.ACCESSION_FORM_ID:
 ////                abstractBizLogic = new AccessionBizLogic();
 ////            	break;

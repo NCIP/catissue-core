@@ -17,6 +17,11 @@ package edu.wustl.catissuecore.util.global;
 
 public class Constants
 {	
+    
+    //Constants used for authentication module.
+    public static final String LOGIN = "login";
+    public static final String USER = "user";
+    
     public static final String AND_JOIN_CONDITION = "AND";
 	public static final String OR_JOIN_CONDITION = "OR";
 	
@@ -104,17 +109,17 @@ public class Constants
 	public static final String ACCESSION_ADD_ACTION = "AccessionAdd.do";
 	public static final String ACCESSION_EDIT_ACTION = "AccessionEdit.do";
 	
-//	Constants required in StorageType.jsp Page
+	//Constants required in StorageType.jsp Page
 	public static final String STORAGE_TYPE_SEARCH_ACTION = "StorageTypeSearch.do";
 	public static final String STORAGE_TYPE_ADD_ACTION = "StorageTypeAdd.do";
 	public static final String STORAGE_TYPE_EDIT_ACTION = "StorageTypeEdit.do";
 	
-//	Constants required in StorageContainer.jsp Page
+	//Constants required in StorageContainer.jsp Page
 	public static final String STORAGE_CONTAINER_SEARCH_ACTION = "StorageContainerSearch.do";
 	public static final String STORAGE_CONTAINER_ADD_ACTION = "StorageContainerAdd.do";
 	public static final String STORAGE_CONTAINER_EDIT_ACTION = "StorageContainerEdit.do";
 	
-//	Constants required in Site.jsp Page
+	//Constants required in Site.jsp Page
 	public static final String SITE_SEARCH_ACTION = "SiteSearch.do";
 	public static final String SITE_ADD_ACTION = "SiteAdd.do";
 	public static final String SITE_EDIT_ACTION = "SiteEdit.do";
@@ -129,7 +134,7 @@ public class Constants
 	public static final String INSTITUTION_ADD_ACTION = "InstitutionAdd.do";
 	public static final String INSTITUTION_EDIT_ACTION = "InstitutionEdit.do";
 
-//	Constants required in Department.jsp Page
+	//Constants required in Department.jsp Page
 	public static final String DEPARTMENT_SEARCH_ACTION = "DepartmentSearch.do";
 	public static final String DEPARTMENT_ADD_ACTION = "DepartmentAdd.do";
 	public static final String DEPARTMENT_EDIT_ACTION = "DepartmentEdit.do";
@@ -232,7 +237,7 @@ public class Constants
 	public static final String ACTIVITY_STATUS_PENDING = "Pending";
 	public static final String ACTIVITY_STATUS_CLOSED = "Closed";
 	
-	//Approve User Constants
+	//Approve ApplicationUser Constants
 	public static final int ZERO = 0;
 	public static final int START_PAGE = 1;
 	public static final int NUMBER_RESULTS_PER_PAGE = 5;
