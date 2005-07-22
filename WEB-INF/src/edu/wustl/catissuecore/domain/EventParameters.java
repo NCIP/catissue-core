@@ -10,7 +10,7 @@
 package edu.wustl.catissuecore.domain;
 
 import java.util.Date;
-import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.domain.ApplicationUser;
 
 /**
  * Attributes associated with a generic event.
@@ -22,7 +22,7 @@ public abstract class EventParameters implements java.io.Serializable
 	private static final long serialVersionUID = 1234567890L;
 
 	/**
-     * System generated unique identifier.
+     * System generated unique systemIdentifier.
      */
 	protected Long systemIdentifier;
 	
@@ -32,9 +32,9 @@ public abstract class EventParameters implements java.io.Serializable
 	protected Date timestamp;
 	
 	/**
-     * User who performs the event.
+     * ApplicationUser who performs the event.
      */
-	protected User user;
+	protected ApplicationUser user;
 	
 	/**
      * Text comments on event.
@@ -42,8 +42,8 @@ public abstract class EventParameters implements java.io.Serializable
 	protected String comments;
 
 	/**
-     * Returns System generated unique identifier.
-     * @return System generated unique identifier.
+     * Returns System generated unique systemIdentifier.
+     * @return System generated unique systemIdentifier.
      * @see #setSystemIdentifier(Integer)
      * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"
      * unsaved-value="null" generator-class="native" 
@@ -54,7 +54,7 @@ public abstract class EventParameters implements java.io.Serializable
 	}
 
 	/**
-     * Sets unique identifier.
+     * Sets unique systemIdentifier.
      * @param systemIdentifier Identifier to be set.
      * @see #getSystemIdentifier()
      */
@@ -88,11 +88,11 @@ public abstract class EventParameters implements java.io.Serializable
 	/**
      * Returns user who performs the event.
      * @hibernate.many-to-one column="USER_ID" 
-     * class="edu.wustl.catissuecore.domain.User" constrained="true"
+     * class="edu.wustl.catissuecore.domain.ApplicationUser" constrained="true"
      * @return The user who performs the event.
-     * @see #setUser(User)
+     * @see #setUser(ApplicationUser)
      */
-	public User getUser()
+	public ApplicationUser getUser()
 	{
 		return user;
 	}
@@ -102,7 +102,7 @@ public abstract class EventParameters implements java.io.Serializable
      * @param user user who performs the event.
      * @see #getUser()
      */
-	public void setUser(User user)
+	public void setUser(ApplicationUser user)
 	{
 		this.user = user;
 	}

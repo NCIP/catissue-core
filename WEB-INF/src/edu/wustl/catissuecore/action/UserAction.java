@@ -1,6 +1,6 @@
 /**
  * <p>Title: UserAction Class>
- * <p>Description:	This class initializes the fields in the User Add/Edit webpage.</p>
+ * <p>Description:	This class initializes the fields in the ApplicationUser Add/Edit webpage.</p>
  * Copyright:    Copyright (c) year
  * Company: Washington University, School of Medicine, St. Louis.
  * @author Gautam Shetty
@@ -24,7 +24,7 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.util.global.Constants;
 
 /**
- * This class initializes the fields in the User Add/Edit webpage.
+ * This class initializes the fields in the ApplicationUser Add/Edit webpage.
  * @author gautam_shetty
  */
 public class UserAction extends Action
@@ -32,7 +32,7 @@ public class UserAction extends Action
 
     /**
      * Overrides the execute method of Action class.
-     * Sets the various fields in User Add/Edit webpage.
+     * Sets the various fields in ApplicationUser Add/Edit webpage.
      * */
     public ActionForward execute(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
@@ -41,16 +41,16 @@ public class UserAction extends Action
         //Gets the value of the operation parameter.
         String operation = request.getParameter(Constants.OPERATION);
 
-        //Sets the operation attribute to be used in the Add/Edit User Page. 
+        //Sets the operation attribute to be used in the Add/Edit ApplicationUser Page. 
         request.setAttribute(Constants.OPERATION, operation);
 
-        //Sets the stateList attribute to be used in the Add/Edit User Page.
+        //Sets the stateList attribute to be used in the Add/Edit ApplicationUser Page.
         request.setAttribute(Constants.STATELIST, Constants.STATEARRAY);
 
-        //Sets the countryList attribute to be used in the Add/Edit User Page.
+        //Sets the countryList attribute to be used in the Add/Edit ApplicationUser Page.
         request.setAttribute(Constants.COUNTRYLIST, Constants.COUNTRYARRAY);
 
-        //Sets the cancerResearchGroupList attribute to be used in the Add/Edit User Page.
+        //Sets the cancerResearchGroupList attribute to be used in the Add/Edit ApplicationUser Page.
         request.setAttribute(Constants.CANCER_RESEARCH_GROUP_LIST, Constants.CANCER_RESEARCH_GROUP_VALUES);
         
         //Sets the pageOf attribute (for Add,Edit or Query Interface)
@@ -64,7 +64,7 @@ public class UserAction extends Action
 //            int i;
 //            if (operation.equals(Constants.EDIT))
 //            {
-//                //Sets the roleList attribute to be used in the Add/Edit User Page.
+//                //Sets the roleList attribute to be used in the Add/Edit ApplicationUser Page.
 //                List roleList = dao.retrieve(Role.class.getName());
 //                String[] roleArray = new String[roleList.size()];
 //                iterator = roleList.listIterator();
@@ -78,7 +78,7 @@ public class UserAction extends Action
                 request.setAttribute(Constants.ROLELIST, Constants.ROLE_VALUES);
 //            }
 
-//            //Sets the instituteList attribute to be used in the Add/Edit User Page.
+//            //Sets the instituteList attribute to be used in the Add/Edit ApplicationUser Page.
 //            List instituteList = dao.retrieve(Institution.class.getName());
 //            String[] instituteArray = new String[instituteList.size()];
 //            iterator = instituteList.listIterator();
@@ -91,7 +91,7 @@ public class UserAction extends Action
 //            }
             request.setAttribute(Constants.INSTITUTIONLIST, Constants.INSTITUTE_VALUES);
 
-//            //Sets the departmentList attribute to be used in the Add/Edit User Page.
+//            //Sets the departmentList attribute to be used in the Add/Edit ApplicationUser Page.
 //            List departmentList = dao.retrieve(Department.class.getName());
 //            String[] departmentArray = new String[departmentList.size()];
 //            iterator = departmentList.listIterator();

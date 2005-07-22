@@ -27,7 +27,7 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.actionForm.AbstractActionForm;
 import edu.wustl.catissuecore.dao.AbstractBizLogic;
 import edu.wustl.catissuecore.dao.BizLogicFactory;
-import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.domain.ApplicationUser;
 import edu.wustl.catissuecore.util.global.Constants;
 
 /**
@@ -66,7 +66,7 @@ public class DomainObjectListAction extends Action
         if (pageNum == Constants.START_PAGE)
         {
             //Only for showing UI.
-            User user = new User();
+            ApplicationUser user = new ApplicationUser();
             user.setSystemIdentifier(new Long(12));
             user.getUser().setLoginName("Srikanth");
             user.getUser().setLastName("Adiga");

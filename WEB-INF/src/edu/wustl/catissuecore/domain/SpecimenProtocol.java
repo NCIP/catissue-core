@@ -23,14 +23,14 @@ public abstract class SpecimenProtocol implements java.io.Serializable
 	private static final long serialVersionUID = 1234567890L;
 
 	/**
-	 * System generated unique identifier.
+	 * System generated unique systemIdentifier.
 	 */
 	protected Long systemIdentifier;
 	
 	/**
 	 * The current principal investigator of the protocol.
 	 */
-	protected User principalInvestigator;
+	protected ApplicationUser principalInvestigator;
 	
 	/**
 	 * Full title assigned to the protocol.
@@ -84,7 +84,7 @@ public abstract class SpecimenProtocol implements java.io.Serializable
 	}
 
 	/**
-	 * @param identifier The identifier to set.
+	 * @param systemIdentifier The systemIdentifier to set.
 	 */
 	public void setSystemIdentifier(Long systemIdentifier)
 	{
@@ -93,12 +93,12 @@ public abstract class SpecimenProtocol implements java.io.Serializable
 
 	/**
 	 * Returns the principal investigator of the protocol.
-	 * @hibernate.many-to-one column="PRINCIPAL_INVESTIGATOR_ID" class="edu.wustl.catissuecore.domain.User"
+	 * @hibernate.many-to-one column="PRINCIPAL_INVESTIGATOR_ID" class="edu.wustl.catissuecore.domain.ApplicationUser"
 	 * constrained="true"
 	 * @return the principal investigator of the protocol.
-	 * @see #setPrincipalInvestigator(User)
+	 * @see #setPrincipalInvestigator(ApplicationUser)
 	 */
-	public User getPrincipalInvestigator()
+	public ApplicationUser getPrincipalInvestigator()
 	{
 		return principalInvestigator;
 	}
@@ -106,7 +106,7 @@ public abstract class SpecimenProtocol implements java.io.Serializable
 	/**
 	 * @param principalInvestigator The principalInvestigator to set.
 	 */
-	public void setPrincipalInvestigator(User principalInvestigator)
+	public void setPrincipalInvestigator(ApplicationUser principalInvestigator)
 	{
 		this.principalInvestigator = principalInvestigator;
 	}
@@ -149,7 +149,7 @@ public abstract class SpecimenProtocol implements java.io.Serializable
 	}
 
 	/**
-	 * Returns the irb identifier of the protocol.
+	 * Returns the irb systemIdentifier of the protocol.
 	 * @hibernate.property name="irbIdentifier" type="string" column="IRB_IDENTIFIER" length="50"
 	 * @return Returns the irbIdentifier.
 	 */

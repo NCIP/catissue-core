@@ -1,5 +1,5 @@
 /**
- * <p>Title: User Class</p>
+ * <p>Title: ApplicationUser Class</p>
  * <p>Description: A person who interacts with the caTISSUE Core 
  * data system and/or participates in the process of biospecimen 
  * collection, processing, or utilization.</p>
@@ -28,7 +28,7 @@ import edu.wustl.common.util.logger.Logger;
  * processing, or utilization.
  * @hibernate.class table="CATISSUE_USER"
  */
-public class User extends AbstractDomainObject implements Serializable
+public class ApplicationUser extends AbstractDomainObject implements Serializable
 {
     /**
 	 * System generated unique systemIdentifier.
@@ -36,7 +36,7 @@ public class User extends AbstractDomainObject implements Serializable
 	protected Long systemIdentifier;
 	
 	/**
-	 * User object in the CSM.
+	 * ApplicationUser object in the CSM.
 	 */
 	protected gov.nih.nci.security.authorization.domainobjects.User user = 
 	    		new gov.nih.nci.security.authorization.domainobjects.User(); 
@@ -52,7 +52,7 @@ public class User extends AbstractDomainObject implements Serializable
     protected Department department = new Department();
 
     /**
-     * Contact address of the User.
+     * Contact address of the ApplicationUser.
      */
     protected Address address = new Address();
 
@@ -82,7 +82,7 @@ public class User extends AbstractDomainObject implements Serializable
     protected Collection collectionProtocolCollection = new HashSet();
     
     /**
-     * @hibernate.many-to-one column="CSM_USER_ID" class="gov.nih.nci.security.authorization.domainobjects.User"
+     * @hibernate.many-to-one column="CSM_USER_ID" class="gov.nih.nci.security.authorization.domainobjects.ApplicationUser"
 	 * constrained="true"
      * @return Returns the user.
      */
@@ -99,19 +99,19 @@ public class User extends AbstractDomainObject implements Serializable
         this.user = user;
     }
     /**
-     * Initialize a new User instance.
+     * Initialize a new ApplicationUser instance.
      * Note: Hibernate invokes this constructor through reflection API.  
      */
-    public User()
+    public ApplicationUser()
     {
         this.user.setStartDate(Calendar.getInstance().getTime());
     }
 
     /**
-     * This Constructor Copies the data from an UserForm object to a User object.
+     * This Constructor Copies the data from an UserForm object to a ApplicationUser object.
      * @param user An UserForm object containing the information about the user.  
      */
-    public User(UserForm uform)
+    public ApplicationUser(UserForm uform)
     {
     	this();
         setAllValues(uform);
@@ -310,7 +310,7 @@ public class User extends AbstractDomainObject implements Serializable
     }
     
     /**
-     * This function Copies the data from an UserForm object to a User object.
+     * This function Copies the data from an UserForm object to a ApplicationUser object.
      * @param user An UserForm object containing the information about the user.  
      * */
     public void setAllValues(AbstractActionForm abstractForm)

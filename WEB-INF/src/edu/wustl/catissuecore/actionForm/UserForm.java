@@ -1,7 +1,7 @@
 /**
  * <p>Title: UserForm Class>
  * <p>Description:  UserForm Class is used to encapsulate all the request parameters passed 
- * from User Add/Edit webpage. </p>
+ * from ApplicationUser Add/Edit webpage. </p>
  * Copyright:    Copyright (c) year
  * Company: Washington University, School of Medicine, St. Louis.
  * @author Gautam Shetty
@@ -18,7 +18,7 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
-import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.domain.ApplicationUser;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Validator;
@@ -26,14 +26,14 @@ import edu.wustl.common.util.logger.Logger;
 
 /**
  * UserForm Class is used to encapsulate all the request parameters passed 
- * from User Add/Edit webpage.
+ * from ApplicationUser Add/Edit webpage.
  * @author gautam_shetty
  * */
 public class UserForm extends AbstractActionForm
 {
 
     /**
-     * systemIdentifier is a unique id assigned to each User.
+     * systemIdentifier is a unique id assigned to each ApplicationUser.
      * */
     private long systemIdentifier;
 
@@ -143,7 +143,7 @@ public class UserForm extends AbstractActionForm
     {
         try
         {
-            User user = (User) abstractDomain;
+            ApplicationUser user = (ApplicationUser) abstractDomain;
             this.systemIdentifier = user.getSystemIdentifier().longValue();
             this.loginName = user.getUser().getLoginName();
             this.lastName = user.getUser().getLastName();
@@ -168,8 +168,8 @@ public class UserForm extends AbstractActionForm
     }
 
     /**
-     * Returns the systemIdentifier assigned to User.
-     * @return int representing the id assigned to User.
+     * Returns the systemIdentifier assigned to ApplicationUser.
+     * @return int representing the id assigned to ApplicationUser.
      * @see #setIdentifier(int)
      * */
     public long getSystemIdentifier()
@@ -178,8 +178,8 @@ public class UserForm extends AbstractActionForm
     }
 
     /**
-     * Sets an id for the User.
-     * @param systemIdentifier id to be assigned to the User.
+     * Sets an id for the ApplicationUser.
+     * @param systemIdentifier id to be assigned to the ApplicationUser.
      * @see #getIdentifier()
      * */
     public void setSystemIdentifier(long systemIdentifier)

@@ -15,6 +15,7 @@ import edu.wustl.catissuecore.actionForm.SiteForm;
 import edu.wustl.catissuecore.actionForm.StorageTypeForm;
 import edu.wustl.catissuecore.actionForm.UserForm;
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
+import edu.wustl.catissuecore.domain.ApplicationUser;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.domain.User;
@@ -40,7 +41,7 @@ public class DomainObjectFactory
         {
             case Constants.USER_FORM_ID:
                 UserForm userForm = (UserForm) form;
-                abstractDomain = new User(userForm);
+                abstractDomain = new ApplicationUser(userForm);
                 break;
 //            case Constants.PARTICIPANT_FORM_ID:
 //                ParticipantForm participantForm = (ParticipantForm) form;

@@ -2,7 +2,7 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <%@ taglib uri="/WEB-INF/PagenationTag.tld" prefix="custom"%>
-<%@ page import="edu.wustl.catissuecore.domain.User,edu.wustl.catissuecore.util.global.Constants,edu.wustl.catissuecore.domain.Address"%>
+<%@ page import="edu.wustl.catissuecore.util.global.Constants, edu.wustl.catissuecore.domain.Address, edu.wustl.catissuecore.domain.ApplicationUser"%>
 
 <html:errors/>
 
@@ -68,7 +68,7 @@
 						<logic:iterate id="currentUser" name="showDomainObjectList">
 							<tr class="dataRowLight">
 								<%
-        								User user = (User) currentUser;
+        								ApplicationUser user = (ApplicationUser) currentUser;
 										String identifier = user.getSystemIdentifier().toString();
 										//String userDetailsLink = Constants.USER_DETAILS_SHOW_ACTION+"?"+Constants.IDENTIFIER+"="+identifier;
 										String userDetailsLink = "User.do?operation=edit&amp;pageOf=query";
@@ -83,8 +83,8 @@
 									<bean:write name="currentUser" property="firstName" />
 								</td>
 								<td class="dataCellText">
-									<bean:define id="addr" name="currentUser" property="address"/>
-									<bean:write name="addr" property="emailAddress"/>
+									<bean:define id="csmUser" name="currentUser" property="user"/>
+									<bean:write name="csmUser" property="emailAddress"/>
 								</td>
 								<td class="dataCellText">
 									<bean:write name="currentUser" property="dateAdded" />

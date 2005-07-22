@@ -145,7 +145,7 @@
 						</td>
 						<td class="formField">
 							<html:select property="institution" styleClass="formFieldSized" styleId="institution" size="1">
-								<html:options name="instituteList" labelName="instituteList" />
+								<html:options name="institutionList" labelName="institutionList" />
 							</html:select>
 						</td>
 					</tr>
@@ -305,6 +305,19 @@
 							</html:select>
 						</td>
 					</tr>
+					<tr>
+			     		<td class="formRequiredNotice" width="5">
+				     		&nbsp;
+				    	</td>
+				    	<td class="formLabel">
+							<label for="comments">
+								<bean:message key="user.comments"/>
+							</label>
+						</td>
+				    	<td class="formField" colspan="4">
+				    		<html:textarea styleClass="formFieldSized" rows="3" styleId="comments" property="comments"/>
+				    	</td>
+				 	</tr>
 					</logic:equal>
 					
 					<tr>
