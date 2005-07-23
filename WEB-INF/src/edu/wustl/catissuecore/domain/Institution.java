@@ -12,7 +12,7 @@ package edu.wustl.catissuecore.domain;
 import java.io.Serializable;
 
 import edu.wustl.catissuecore.actionForm.AbstractActionForm;
-import edu.wustl.catissuecore.actionForm.InstituteForm;
+import edu.wustl.catissuecore.actionForm.InstitutionForm;
 
 /**
  * An institution to which a user belongs to.
@@ -95,7 +95,7 @@ public class Institution extends AbstractDomainObject implements Serializable
      */
     public void setAllValues(AbstractActionForm abstractForm)
     {
-		InstituteForm instituteForm = (InstituteForm)abstractForm;
+		InstitutionForm instituteForm = (InstitutionForm)abstractForm;
 		
 		this.systemIdentifier = new Long(instituteForm.getSystemIdentifier());
 		this.name = instituteForm.getName();

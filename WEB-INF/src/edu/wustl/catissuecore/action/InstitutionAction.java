@@ -1,5 +1,5 @@
 /**
- * <p>Title: InstituteAction Class>
+ * <p>Title: InstitutionAction Class>
  * <p>Description:	This class initializes the fields in the Institute.jsp Page</p>
  * Copyright:    Copyright (c) year
  * Company: Washington University, School of Medicine, St. Louis.
@@ -23,7 +23,7 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.util.global.Constants;
 
-public class InstituteAction extends Action
+public class InstitutionAction extends Action
 {
     /**
      * Overrides the execute method of Action class.
@@ -38,12 +38,6 @@ public class InstituteAction extends Action
         
         //Sets the operation attribute to be used in the Add/Edit Institute Page. 
         request.setAttribute(Constants.OPERATION, operation);
-        
-        //Sets the stateList attribute to be used in the Add/Edit Institute Page.
-        request.setAttribute(Constants.STATELIST, Constants.STATEARRAY);
-        
-        //Sets the countryList attribute to be used in the Add/Edit Institute Page.
-        request.setAttribute(Constants.COUNTRYLIST, Constants.COUNTRYARRAY);
         
         return mapping.findForward(Constants.SUCCESS);
     }
