@@ -23,16 +23,6 @@
             </generator>
         </id>
 
-        <many-to-one
-            name="user"
-            class="gov.nih.nci.security.authorization.domainobjects.User"
-            cascade="none"
-            outer-join="auto"
-            update="true"
-            insert="true"
-            column="CSM_USER_ID"
-        />
-
         <property
             name="activityStatus"
             type="string"
