@@ -27,7 +27,7 @@ import edu.wustl.common.util.logger.Logger;
  * UserHDAO is used to add user information into the database using Hibernate.
  * @author kapil_kaveeshwar
  */
-public class UserBizLogic extends AbstractBizLogic
+public class UserBizLogic extends DefaultBizLogic
 {
 
     /**
@@ -37,7 +37,7 @@ public class UserBizLogic extends AbstractBizLogic
      * @throws HibernateException Exception thrown during hibernate operations.
      * @throws DAOException 
      */
-    public void insert(Object obj) throws HibernateException, DAOException
+    public void insert(Object obj) throws DAOException
     {
         try
         {
@@ -97,7 +97,7 @@ public class UserBizLogic extends AbstractBizLogic
      * @throws HibernateException Exception thrown during hibernate operations.
      * @throws DAOException 
      */
-    public void update(Object obj) throws DAOException, HibernateException
+    public void update(Object obj) throws DAOException
     {
         User user = (User) obj;
         List list = null;

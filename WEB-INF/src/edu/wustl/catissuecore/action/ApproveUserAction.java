@@ -54,7 +54,7 @@ public class ApproveUserAction extends Action
         Collection col = approveUserForm.getAllValues();
         Iterator iterator = col.iterator();
 
-        AbstractBizLogic dao = BizLogicFactory.getDAO(Constants.USER_FORM_ID);
+        AbstractBizLogic bizLogic = BizLogicFactory.getBizLogic(Constants.USER_FORM_ID);
 
         List list = null;
         String activityStatus = null;
@@ -64,7 +64,7 @@ public class ApproveUserAction extends Action
             String identifier = (String) iterator.next();
             String objName = AbstractDomainObject
                     .getDomainObjectName(Constants.USER_FORM_ID);
-            list = dao.retrieve(objName, Constants.IDENTIFIER, new Long(
+            list = bizLogic.retrieve(objName, Constants.IDENTIFIER, new Long(
                     identifier));
 
             if (list.size() != 0)
@@ -122,7 +122,7 @@ public class ApproveUserAction extends Action
                 user.setActivityStatus(activityStatus);
 
                 //Updates user's information in the database.
-                dao.update(user);
+                bizLogic.update(user);
 
                 SendEmail email = new SendEmail();
 

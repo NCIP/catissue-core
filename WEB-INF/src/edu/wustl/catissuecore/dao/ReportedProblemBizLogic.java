@@ -18,13 +18,13 @@ import edu.wustl.common.util.dbManager.DAOException;
  * TODO To change the template for this generated type comment go to
  * Window - Preferences - Java - Code Style - Code Templates
  */
-public class ReportedProblemBizLogic extends AbstractBizLogic
+public class ReportedProblemBizLogic extends DefaultBizLogic
 {
 
     /* (non-Javadoc)
      * @see edu.wustl.catissuecore.dao.HibernateDAO#add(java.lang.Object)
      */
-    public void insert(Object obj) throws HibernateException, DAOException
+    public void insert(Object obj) throws DAOException
     {
         ReportedProblem reportedProblem = (ReportedProblem) obj;
         AbstractDAO dao = DAOFactory.getDAO(Constants.HIBERNATE_DAO);

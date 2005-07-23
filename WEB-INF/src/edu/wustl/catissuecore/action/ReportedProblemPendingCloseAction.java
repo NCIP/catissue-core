@@ -51,7 +51,7 @@ public class ReportedProblemPendingCloseAction extends Action
         
         Iterator iterator = col.iterator();
 
-        AbstractBizLogic dao = BizLogicFactory.getDAO(Constants.REPORTEDPROBLEM_FORM_ID);
+        AbstractBizLogic bizLogic = BizLogicFactory.getBizLogic(Constants.REPORTEDPROBLEM_FORM_ID);
 
         List list = null;
         String activityStatus = null;
@@ -60,7 +60,7 @@ public class ReportedProblemPendingCloseAction extends Action
         {
             String identifier = (String) iterator.next();
             String objName = AbstractDomainObject.getDomainObjectName(Constants.REPORTEDPROBLEM_FORM_ID);
-            list = dao.retrieve(objName, Constants.IDENTIFIER, new Long(identifier));
+            list = bizLogic.retrieve(objName, Constants.IDENTIFIER, new Long(identifier));
 
             if (list.size() != 0)
             {
@@ -93,7 +93,7 @@ public class ReportedProblemPendingCloseAction extends Action
                 reportedProblem.setActivityStatus(activityStatus);
 
                 //Updates reported problem's information in the database.
-                dao.update(reportedProblem);
+                bizLogic.update(reportedProblem);
                 
                 target = new String(Constants.SUCCESS);
             }

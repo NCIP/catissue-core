@@ -47,9 +47,6 @@ public class DepartmentForm extends AbstractActionForm
      */
     private String name;
     
-    
-    private String activityStatus;
-    
     /**
      * No argument constructor for UserForm class 
      */
@@ -66,11 +63,9 @@ public class DepartmentForm extends AbstractActionForm
     {
         try
         {
-        	
             Department department = (Department)abstractDomain;
             this.identifier = department.getSystemIdentifier().longValue();
             this.name = department.getName();
-
         }
         catch (Exception excp)
         {
@@ -84,7 +79,7 @@ public class DepartmentForm extends AbstractActionForm
      * @return int representing the id assigned to Department.
      * @see #setIdentifier(int)
      * */
-    public long getIdentifier()
+    public long getSystemIdentifier()
     {
         return (this.identifier);
     }
@@ -94,7 +89,7 @@ public class DepartmentForm extends AbstractActionForm
      * @param identifier id to be assigned to the Department.
      * @see #getIdentifier()
      * */
-    public void setIdentifier(long identifier)
+    public void setSystemIdentifier(long identifier)
     {
         this.identifier = identifier;
     }
@@ -135,21 +130,6 @@ public class DepartmentForm extends AbstractActionForm
         this.name = name;
     }
 
-    
-    /**
-     * @return Returns the activityStatus.
-     */
-    public String getActivityStatus()
-    {
-        return activityStatus;
-    }
-    /**
-     * @param activityStatus The activityStatus to set.
-     */
-    public void setActivityStatus(String activityStatus)
-    {
-        this.activityStatus = activityStatus;
-    }
     /**
      * Checks the operation to be performed is add operation.
      * @return Returns true if operation is equal to "add", else it returns false
@@ -185,7 +165,6 @@ public class DepartmentForm extends AbstractActionForm
         this.identifier = -1;
         this.operation = null;
         this.name = null;
-        this.activityStatus = Constants.ACTIVITY_STATUS_NEW;
     }
 
     /**
@@ -213,17 +192,8 @@ public class DepartmentForm extends AbstractActionForm
             {
                 if (validator.isEmpty(name))
                 {
-                  //  errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("department.name")));
+                	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("department.name")));
                 }
-                else
-                {
-                    if (!Character.isLetter(name.charAt(0)))
-                    {
-                        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("department.name")));
-                    }
-                }
-                
-                checkValidString(name,"department.name",errors, validator);
             }    
         }
         catch(Exception excp)
@@ -232,13 +202,4 @@ public class DepartmentForm extends AbstractActionForm
         }
         return errors;
      }
-    
-    public void setSystemIdentifier(long l)
-    {
-    	setIdentifier(l);
-    }
-    public long getSystemIdentifier()
-    {
-    	return getIdentifier();
-    }
 }

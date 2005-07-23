@@ -11,13 +11,17 @@
 package edu.wustl.catissuecore.dataModel;
 
 import edu.wustl.catissuecore.actionForm.AbstractActionForm;
+import edu.wustl.catissuecore.actionForm.DepartmentForm;
+import edu.wustl.catissuecore.actionForm.InstituteForm;
 import edu.wustl.catissuecore.actionForm.SiteForm;
 import edu.wustl.catissuecore.actionForm.StorageTypeForm;
 import edu.wustl.catissuecore.actionForm.UserForm;
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
-import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.domain.Department;
+import edu.wustl.catissuecore.domain.Institution;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.StorageType;
+import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 
 
@@ -46,14 +50,6 @@ public class DomainObjectFactory
 //                ParticipantForm participantForm = (ParticipantForm) form;
 //            	abstractDomain = new Participant(participantForm);
 //            	break;
-//            case Constants.ACCESSION_FORM_ID:
-//                AccessionForm accessionForm = (AccessionForm) form;
-//            	abstractDomain = new Accession(accessionForm);
-//            	break;
-//            case Constants.INSTITUTE_FORM_ID:
-//            	InstituteForm instituteForm = (InstituteForm) form;
-//            	abstractDomain = new Institute(instituteForm);
-//            	break;
             case Constants.STORAGE_TYPE_FORM_ID:
             	StorageTypeForm storageTypeForm = (StorageTypeForm) form;
             	abstractDomain = new StorageType(storageTypeForm);
@@ -62,6 +58,19 @@ public class DomainObjectFactory
             	SiteForm siteForm = (SiteForm) form;
             	abstractDomain = new Site(siteForm);
             	break;
+            case Constants.DEPARTMENT_FORM_ID:
+            	DepartmentForm departmentForm = (DepartmentForm) form;
+            	abstractDomain = new Department(departmentForm);
+            	break;
+            case Constants.INSTITUTION_FORM_ID:
+            	InstituteForm instituteForm = (InstituteForm) form;
+            	abstractDomain = new Institution(instituteForm);
+            	break;
+            	
+//              case Constants.INSTITUTE_FORM_ID:
+//            	InstituteForm instituteForm = (InstituteForm) form;
+//            	abstractDomain = new Institute(instituteForm);
+//            	break;
         }
         return abstractDomain;
     }

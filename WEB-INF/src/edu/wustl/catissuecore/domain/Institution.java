@@ -12,6 +12,7 @@ package edu.wustl.catissuecore.domain;
 import java.io.Serializable;
 
 import edu.wustl.catissuecore.actionForm.AbstractActionForm;
+import edu.wustl.catissuecore.actionForm.InstituteForm;
 
 /**
  * An institution to which a user belongs to.
@@ -31,6 +32,19 @@ public class Institution extends AbstractDomainObject implements Serializable
 	 */
 	protected String name;
 
+	/**
+	 * NOTE: Do not delete this constructor. Hibernet uses this by reflection API.
+	 * */
+	public Institution()
+	{
+		
+	}
+	
+	public Institution(AbstractActionForm form)
+	{
+		setAllValues(form);
+	}
+	
 	/**
 	 * Returns the unique systemIdentifier assigned to institution.
 	 * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long"
@@ -81,7 +95,9 @@ public class Institution extends AbstractDomainObject implements Serializable
      */
     public void setAllValues(AbstractActionForm abstractForm)
     {
-        // TODO Auto-generated method stub
-
+		InstituteForm instituteForm = (InstituteForm)abstractForm;
+		
+		this.systemIdentifier = new Long(instituteForm.getSystemIdentifier());
+		this.name = instituteForm.getName();
     }
 }

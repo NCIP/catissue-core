@@ -55,20 +55,20 @@ public class ForgotPasswordSearchAction extends Action
         try
         {
             UserForm uForm = (UserForm) form;
-            AbstractBizLogic dao = BizLogicFactory.getDAO(uForm.getFormId());
+            AbstractBizLogic bizLogic = BizLogicFactory.getBizLogic(uForm.getFormId());
             List list = null;
             Validator validator = new Validator();
 
             if (!validator.isEmpty(uForm.getLoginName()))
             {
                 //if loginName is entered retrieve password using loginName.
-                list = dao.retrieve(User.class.getName(), Constants.LOGINNAME,
+                list = bizLogic.retrieve(User.class.getName(), Constants.LOGINNAME,
                         uForm.getLoginName());
             }
             else
             {
                 //if loginName is not entered retrieve password using email address.
-                list = dao.retrieve(User.class.getName(), Constants.EMAIL,
+                list = bizLogic.retrieve(User.class.getName(), Constants.EMAIL,
                         uForm.getEmailAddress());
             }
             

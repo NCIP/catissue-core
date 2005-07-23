@@ -22,7 +22,7 @@ import edu.wustl.common.util.dbManager.DAOException;
  * SiteHDAO is used to add site type information into the database using Hibernate.
  * @author aniruddha_phadnis
  */
-public class SiteBizLogic extends AbstractBizLogic
+public class SiteBizLogic extends DefaultBizLogic
 {
 	/**
      * Saves the storageType object in the database.
@@ -31,7 +31,7 @@ public class SiteBizLogic extends AbstractBizLogic
      * @throws HibernateException Exception thrown during hibernate operations.
      * @throws DAOException 
      */
-	public void insert(Object obj) throws HibernateException,DAOException 
+	public void insert(Object obj) throws DAOException 
 	{
 		Site site = (Site)obj;
 
@@ -59,7 +59,7 @@ public class SiteBizLogic extends AbstractBizLogic
      * @throws HibernateException Exception thrown during hibernate operations.
      * @throws DAOException 
      */
-    public void update(Object obj) throws DAOException,HibernateException
+    public void update(Object obj) throws DAOException
     {
     }
 }

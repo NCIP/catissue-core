@@ -19,12 +19,12 @@ import edu.wustl.common.util.dbManager.DAOException;
  * This Class is used to Add institute information into the database using Hibernate.
  * @author kapil_kaveeshwar
  */
-public class InstituteBizLogic extends AbstractBizLogic
+public class InstituteBizLogic extends DefaultBizLogic
 {
 	/**
 	 * Override the add method of HibernateDAO class
 	 * */
-	public void insert(Object obj) throws HibernateException, DAOException
+	public void insert(Object obj) throws DAOException
 	{
 	    Institution institute = (Institution)obj;
         AbstractDAO dao = DAOFactory.getDAO(Constants.HIBERNATE_DAO);

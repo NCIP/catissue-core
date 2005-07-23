@@ -22,7 +22,7 @@ public class BizLogicFactory
      * @param FORM_TYPE The form bean type.
      * @return An AbstractDAO object.
      */
-    public static AbstractBizLogic getDAO(int FORM_TYPE)
+    public static AbstractBizLogic getBizLogic(int FORM_TYPE)
     {
         AbstractBizLogic abstractBizLogic = null;
         
@@ -31,12 +31,6 @@ public class BizLogicFactory
             case Constants.USER_FORM_ID:
                 abstractBizLogic = new UserBizLogic();
             	break;
-////            case Constants.ACCESSION_FORM_ID:
-////                abstractBizLogic = new AccessionBizLogic();
-////            	break;
-//            case Constants.INSTITUTION_FORM_ID:
-//                abstractBizLogic = new InstituteBizLogic();
-//            	break;
 //            case Constants.REPORTEDPROBLEM_FORM_ID:
 //                abstractBizLogic = new ReportedProblemBizLogic();
 //            	break;
@@ -47,7 +41,7 @@ public class BizLogicFactory
         		abstractBizLogic = new SiteBizLogic();
         		break;
             default:
-                abstractBizLogic = new AbstractBizLogic();
+                abstractBizLogic = new DefaultBizLogic();
             	break;
         }
         return abstractBizLogic;

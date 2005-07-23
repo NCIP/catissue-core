@@ -61,13 +61,13 @@ public class CommonSearchAction extends Action
 
         try
         {
-            AbstractBizLogic dao = BizLogicFactory.getDAO(abstractForm.getFormId());
+            AbstractBizLogic bizLogic = BizLogicFactory.getBizLogic(abstractForm.getFormId());
             AbstractDomainObject abstractDomain = null;
             List list = null;
             
             //Retrieves the information to be edited.
             String objName = AbstractDomainObject.getDomainObjectName(abstractForm.getFormId());
-            list= dao.retrieve(objName,Constants.IDENTIFIER, new Long(identifier).toString());
+            list= bizLogic.retrieve(objName,Constants.IDENTIFIER, new Long(identifier).toString());
 
             if (list.size() != 0)
             {

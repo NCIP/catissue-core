@@ -21,10 +21,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import edu.wustl.catissuecore.dao.AbstractBizLogic;
-import edu.wustl.catissuecore.dao.BizLogicFactory;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.util.logger.Logger;
 
 /**
  * This class initializes the fields in the User Add/Edit webpage.
@@ -47,16 +44,6 @@ public class DepartmentAction extends Action
         //Sets the operation attribute to be used in the Add/Edit User Page. 
         request.setAttribute(Constants.OPERATION,operation);
         
-        try
-        {
-        	AbstractBizLogic dao = BizLogicFactory.getDAO(Constants.DEPARTMENT_FORM_ID);
-    
-        }
-        catch(Exception exc)
-        {
-             Logger.out.error(exc.getMessage());
-        }
-
         return mapping.findForward(Constants.SUCCESS);
     }
 }

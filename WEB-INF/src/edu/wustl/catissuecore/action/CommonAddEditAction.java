@@ -17,8 +17,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.sf.hibernate.HibernateException;
-
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -53,14 +51,14 @@ public class CommonAddEditAction extends Action
         try
         {
             AbstractActionForm abstractForm = (AbstractActionForm) form;
-            AbstractBizLogic dao = BizLogicFactory.getDAO(abstractForm.getFormId());
+            AbstractBizLogic bizLogic = BizLogicFactory.getBizLogic(abstractForm.getFormId());
 
             if (abstractForm.isAddOperation())
             {
                 //If operation is add, add the data in the database.
                 AbstractDomainObject abstractDomain = DomainObjectFactory.getDomainObject(
                         abstractForm.getFormId(), abstractForm);
-                dao.insert(abstractDomain);
+                bizLogic.insert(abstractDomain);
                 target = new String(Constants.SUCCESS);
             }
             else
@@ -68,14 +66,14 @@ public class CommonAddEditAction extends Action
                 //If operation is edit, update the data in the database.
             	String objName = AbstractDomainObject.getDomainObjectName(abstractForm.getFormId());
             	
-                List list = dao.retrieve( objName, Constants.IDENTIFIER, 
+                List list = bizLogic.retrieve( objName, Constants.IDENTIFIER, 
 										  new Long(abstractForm.getSystemIdentifier()));
 
                 if (list.size() != 0)
                 {
                 	AbstractDomainObject abstractDomain = (AbstractDomainObject) list.get(0);
                     abstractDomain.setAllValues(abstractForm);
-                    dao.update(abstractDomain);
+                    bizLogic.update(abstractDomain);
                     target = new String(Constants.SUCCESS);
                 }
                 else
@@ -94,11 +92,6 @@ public class CommonAddEditAction extends Action
         {
             target = new String(Constants.FAILURE);
             Logger.out.error(excp.getMessage(), excp);
-        }
-        catch (HibernateException hibExp)
-        {
-            target = new String(Constants.FAILURE);
-            Logger.out.error(hibExp.getMessage(),hibExp);
         }
         return (mapping.findForward(target));
     }

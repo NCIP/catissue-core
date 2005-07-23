@@ -16,8 +16,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.sf.hibernate.HibernateException;
-
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -47,12 +45,12 @@ public class ReportedProblemAddAction extends Action
         String target = null;
         
         ReportedProblemForm reportedProblemForm = (ReportedProblemForm)form;
-        AbstractBizLogic dao = BizLogicFactory.getDAO(reportedProblemForm.getFormId());
+        AbstractBizLogic bizLogic = BizLogicFactory.getBizLogic(reportedProblemForm.getFormId());
         
         try
         {
             ReportedProblem reportedProblem = new ReportedProblem(reportedProblemForm);
-            dao.insert(reportedProblem);
+            bizLogic.insert(reportedProblem);
             
             SendEmail email = new SendEmail();
             boolean mailStatus = email.sendmail(Variables.toAddress,reportedProblem.getFrom(),
@@ -77,11 +75,11 @@ public class ReportedProblemAddAction extends Action
             target = new String(Constants.FAILURE);
             Logger.out.error(daoExp.getMessage(),daoExp);
         }
-        catch(HibernateException hibExp)
-        {
-            target = new String(Constants.FAILURE);
-            Logger.out.error(hibExp.getMessage(),hibExp);
-        }
+//        catch(HibernateException hibExp)
+//        {
+//            target = new String(Constants.FAILURE);
+//            Logger.out.error(hibExp.getMessage(),hibExp);
+//        }
         return (mapping.findForward(target));
     }    
 }

@@ -63,12 +63,12 @@ public class SiteAction extends Action
         
         try
 		{
-        	AbstractBizLogic dao = BizLogicFactory.getDAO(Constants.SITE_FORM_ID);
+        	AbstractBizLogic bizLogic = BizLogicFactory.getBizLogic(Constants.SITE_FORM_ID);
             ListIterator iterator = null;
             int i;
             
 //          Sets the roleList attribute to be used in the Site Add/Edit Page.
-            List userList = dao.retrieve(User.class.getName());
+            List userList = bizLogic.retrieve(User.class.getName());
             String[] userArray = new String[userList.size()];
             String[] userIdArray = new String[userList.size()];
             iterator = userList.listIterator();

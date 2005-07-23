@@ -19,7 +19,7 @@ import edu.wustl.common.util.dbManager.DAOException;
  * StorageTypeHDAO is used to add site type information into the database using Hibernate.
  * @author aniruddha_phadnis
  */
-public class StorageTypeBizLogic extends AbstractBizLogic
+public class StorageTypeBizLogic extends DefaultBizLogic
 {
 	/**
      * Saves the storageType object in the database.
@@ -28,7 +28,7 @@ public class StorageTypeBizLogic extends AbstractBizLogic
      * @throws HibernateException Exception thrown during hibernate operations.
      * @throws DAOException 
      */
-	public void insert(Object obj) throws HibernateException,DAOException 
+	public void insert(Object obj) throws DAOException 
 	{
 		StorageType type = (StorageType)obj;
 
@@ -48,7 +48,7 @@ public class StorageTypeBizLogic extends AbstractBizLogic
      * @throws HibernateException Exception thrown during hibernate operations.
      * @throws DAOException 
      */
-    public void update(Object obj) throws DAOException,HibernateException
+    public void update(Object obj) throws DAOException
     {
     }
 }
