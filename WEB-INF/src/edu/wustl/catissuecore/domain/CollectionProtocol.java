@@ -13,6 +13,11 @@ package edu.wustl.catissuecore.domain;
 import java.util.Collection;
 import java.util.HashSet;
 
+import edu.wustl.catissuecore.actionForm.AbstractActionForm;
+import edu.wustl.catissuecore.actionForm.UserForm;
+import edu.wustl.catissuecore.actionForm.CollectionProtocolForm;
+import edu.wustl.common.util.logger.Logger;
+
 /**
  * A set of written procedures that describe how a biospecimen is prospectively collected.
  * @hibernate.joined-subclass table="CATISSUE_COLLECTION_PROTOCOL"
@@ -103,4 +108,28 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 	{
 		this.collectionProtocolEventCollection = collectionProtocolEventCollection;
 	}
+	
+	   /**
+     * This function Copies the data from an CollectionProtocolForm object to a CollectionProtocol object.
+     * @param CollectionProtocol An CollectionProtocolForm object containing the information about the CollectionProtocol.  
+     * */
+    public void setAllValues(AbstractActionForm abstractForm)
+    {
+        try
+        {
+        	CollectionProtocolForm cpform = (CollectionProtocolForm) abstractForm;
+  
+        	this.systemIdentifier = new Long(cpform.getSystemIdentifier());
+//            this.cpform.setLoginName(uform.getLoginName());
+            this.principalInvestigator.setSystemIdentifier(new Long(cpform.getPrincipalinvestigator()));
+            this.userCollection.addAll(cpform.getProtocolcoordinator() ); 
+            
+        }
+        catch (Exception excp)
+        {
+            Logger.out.error(excp.getMessage());
+        }
+    }
+	
+	
 }
