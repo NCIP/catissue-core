@@ -13,6 +13,10 @@ package edu.wustl.catissuecore.domain;
 import java.util.Collection;
 import java.util.HashSet;
 
+import edu.wustl.catissuecore.actionForm.AbstractActionForm;
+import edu.wustl.catissuecore.actionForm.CollectionProtocolForm;
+import edu.wustl.common.util.logger.Logger;
+
 /**
  * An abbreviated set of written procedures that describe how a previously collected specimen will be utilized.  Note that specimen may be collected with one collection protocol and then later utilized by multiple different studies (Distribution protocol).
  * @hibernate.joined-subclass table="CATISSUE_DISTRIBUTION_PROTOCOL"
@@ -77,4 +81,20 @@ public class DistributionProtocol extends SpecimenProtocol implements java.io.Se
 	{
 		this.collectionProtocolCollection = protocolCollection;
 	}
+	
+	   /**
+     * This function Copies the data from an CollectionProtocolForm object to a CollectionProtocol object.
+     * @param CollectionProtocol An CollectionProtocolForm object containing the information about the CollectionProtocol.  
+     * */
+    public void setAllValues(AbstractActionForm abstractForm)
+    {
+        try
+        {
+            
+        }
+        catch (Exception excp)
+        {
+            Logger.out.error(excp.getMessage());
+        }
+    }
 }
