@@ -9,6 +9,8 @@
 package edu.wustl.common.security;
 
 
+import java.util.Vector;
+
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.SMTransactionException;
 import edu.wustl.common.util.logger.Logger;
@@ -36,6 +38,12 @@ public class SecurityManager
     private static AuthorizationManager authorizationManager = null;
     private Class requestingClass=null;
     private static final String CATISSUE_CORE_CONTEXT_NAME = "catissuecore";
+    private static final String ADMINISTRATOR_ROLE="1";
+    private static final String SUPERVISOR_ROLE="2";
+    private static final String TECHNICIAN_ROLE="3";
+    private static final String ADMINISTRATOR_GROUP="ADMINISTRATOR_GROUP";
+    private static final String SUPERVISOR_GROUP="SUPERVISOR_GROUP";
+    private static final String TECHNICIAN_GROUP="TECHNICIAN_GROUP";
     
     
     /**
@@ -149,6 +157,51 @@ public class SecurityManager
 	    catch (CSException e)
 	    {
 	        Logger.out.debug("Unable to create user: Exception: "+e);
+	    }
+	}
+	
+	public Vector getRoles()throws SMException
+	{
+	    Vector roles=new Vector();
+	    UserProvisioningManager userProvisioningManager=null;
+	    try
+	    {
+	        userProvisioningManager=getUserProvisioningManager();
+	        roles.add(userProvisioningManager.getRoleById(ADMINISTRATOR_ROLE));
+	        roles.add(userProvisioningManager.getRoleById(SUPERVISOR_ROLE));
+	        roles.add(userProvisioningManager.getRoleById(TECHNICIAN_ROLE));
+	    }
+	    catch (CSException e)
+	    {
+	        Logger.out.debug("Unable to get roles: Exception: "+e.getMessage());
+	        throw new SMException (e.getMessage(), e);
+	    }
+	    return roles;
+	}
+	
+	public void assignRoleToUser(String userName, String roleID) throws SMException
+	{
+	    UserProvisioningManager userProvisioningManager=null;
+	    try
+	    {
+	        userProvisioningManager=getUserProvisioningManager();
+	        if(roleID.equals(ADMINISTRATOR_ROLE))
+	        {
+	            userProvisioningManager.assignUserToGroup(userName,ADMINISTRATOR_GROUP);
+	        }
+	        else  if(roleID.equals(SUPERVISOR_ROLE))
+	        {
+	            userProvisioningManager.assignUserToGroup(userName,SUPERVISOR_GROUP);
+	        }
+	        else if(roleID.equals(TECHNICIAN_ROLE))
+	        {
+	            userProvisioningManager.assignUserToGroup(userName,TECHNICIAN_GROUP);
+	        }
+	    }
+	    catch (CSException e)
+	    {
+	        Logger.out.debug("UNABLE TO ASSIGN ROLE TO USER: Exception: "+e.getMessage());
+	        throw new SMException (e.getMessage(), e);
 	    }
 	}
 	
