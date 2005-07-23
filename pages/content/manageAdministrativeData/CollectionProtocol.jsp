@@ -68,6 +68,8 @@ var sname = subdivtag + "_" + (i+1);
 	r = document.getElementById(subdivtag).rows;
 	var q = r.length;
 	var x=document.getElementById(subdivtag).insertRow(q);
+	
+	
 setSubDivCount(subdivtag);
 var subdivname = ""+ subdivtag;
 // srno
@@ -84,7 +86,8 @@ sname="";
 objname = subdivname + "_specimenType_"+ rowno ;
 var objunit = subdivname + "_unitspan_"+ rowno ;
 
-sname ="<select name='"+ objname +"' size='1' onchange='changeUnit(" + objname + "," + objunit +") class='formFieldSized10' id='" + objname + "'>"
+//sname ="<select name='"+ objname + "' size='1' onchange='changeUnit(" + objname + "," + objunit +") class='formFieldSized10' id='" + objname + "'>"
+sname = "<select name='" + objname + "' size='1' onchange='changeUnit(" + objname + "," + objunit +")' class='formFieldSized10' id='" + objname + "'>"
 sname = sname + "<option value='0'>Fluid Specimen</option>"
 sname = sname + "<option value='1'>Tissue Specimen</option>"
 sname = sname + "<option value='2'>Cell Specimen</option>"
@@ -115,8 +118,8 @@ sname = sname + "<option value='Select Tissue Site'>Select Tissue Site</option>"
 sname = sname + "<option value='Adrenal-Cortex'>Adrenal-Cortex</option>"
 sname = sname + "<option value='Adrenal-Medulla'>Adrenal-Medulla</option>"
 sname = sname + "<option value='Adrenal-NOS'>Adrenal-NOS</option></select>"
-sname = sname + "<a href='#'>"
-sname = sname + "<img src='images/Tree.gif' border='0' width='26' height='22'></a>"
+//sname = sname + "<a href='#'>"
+//sname = sname + "<img src='images/Tree.gif' border='0' width='26' height='22'></a>"
 
 spreqtissuesite.innerHTML="" + sname;
 
