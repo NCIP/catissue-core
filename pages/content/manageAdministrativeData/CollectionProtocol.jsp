@@ -4,7 +4,6 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 
 <head>
-
 <SCRIPT LANGUAGE="JavaScript">
 	var ugul = new Array(4);
 	ugul[0]="(ml)";
@@ -15,79 +14,43 @@
 	function changeUnit(listname,unitspan)
 	{
 		var i = listname.selectedIndex;
-		alert(ugul[i]);
+		alert(i +" : " + ugul[i]);
 		unitspan.innerHTML = ugul[i];  
 	}
-//-->
+//-->   code for units end
 </SCRIPT>
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
+
 <SCRIPT LANGUAGE="JavaScript">
-	var search1='`';
-	var insno=1;
+<!--
+	// functions for add more
 
-/* section for inner block start */
-var str = "";
-var search2='`';
-var insno1=1
-function setStr()
+	
+var subDivRowCount = new Array(10);		// array to hold the row count of the inner block
+
+subDivRowCount[0] = 1;
+
+var i=1;			//tmp variable 
+
+
+// variable to count the oter blocks
+var insno=1;
+
+function addBlock(div,d0)
 {
-		str="";
-		str = str + "	<TR>"	
-		str = str + "         <td class='tabrightmostcell'>" + insno1  + "</td>"
-		str = str + "         <td class='formField'>"
-		str = str + "            	<select name='specimenType' size='1' onchange='changeUnit(specimenType)' class='formFieldSized10' id='specimenType'><option value='0'>Fluid Specimen</option>"
-		str = str + " 				<option value='1'>Tissue Specimen</option>"
-		str = str + " 				<option value='2'>Cell Specimen</option>"
-		str = str + " 				<option value='3'>Molecular Specimen</option></select>"
-		str = str + "         </td>"
-		str = str + "         <td class='formField'>"
-		str = str + "            	<select name='specimenSubType' size='1' class='formFieldSized10' id='specimenSubType'><option value='0'>Select Specimen SubType</option>"
-		str = str + " 				<option value='Type1'>Blood</option>"
-		str = str + " 				<option value='Type2'>Cerum</option></select>"
-		str = str + "         </td>"
-		str = str + "         <td class='formField'>"
-		str = str + "            	<select name='tissueSite' size='1' class='formFieldSized10' id='tissueSite'><option value='Select Tissue Site'>Select Tissue Site</option>"
-		str = str + " 				<option value='Adrenal-Cortex'>Adrenal-Cortex</option>"
-		str = str + " 				<option value='Adrenal-Medulla'>Adrenal-Medulla</option>"
-		str = str + " 				<option value='Adrenal-NOS'>Adrenal-NOS</option></select>"
-		str = str + "         <a href='#'>"
-		str = str + " 		<img src='images/Tree.gif' border='0' width='26' height='22'></a>"
-		str = str + " 		</td>"
-		str = str + "         <td class='formField'>"
-		str = str + "           	<select name='tissueSide' size='1' class='formFieldSized10' id='tissueSide'><option value='Select Tissue Side'>Select Tissue Side</option>"
-		str = str + " 				<option value='Bilateral sites'>Bilateral sites</option>"
-		str = str + " 				<option value='Left'>Left</option>"
-		str = str + " 				<option value='Right'>Right</option></select>"
-		str = str + "         </td>"
-		str = str + "         <td class='formField'>"
-		str = str + "           	<select name='tissueType' size='1' class='formFieldSized10' id='tissueType'><option value='Select Tissue Type'>Select Tissue Type</option>"
-		str = str + " 				<option value='Primary Tumor'>Primary Tumor</option>"
-		str = str + " 				<option value='Metastatic Node'>Metastatic Node</option>"
-		str = str + " 				<option value='Non-Malignant Tissue'>Non-Malignant Tissue</option></select>"
-		str = str + "         </td>"
-		str = str + "         <td class='formField'>"
-		str = str + "         	<input type='text' name='enrollment' value='' class='formFieldSized5' id='enrollment'>        "
-		str = str + "         	<span id='unitspan'>&nbsp;"
-		str = str + " 			</span>"
-		str = str + " 		</td>"
-		str = str + " 	</TR>	"
+	var y = div.innerHTML;
+	var z = d0.innerHTML;
+
+	subDivRowCount[insno] = 1;
+	insno =insno +1;
+	var mm = z.indexOf('`');
+	for(var cnt=0;cnt<mm;cnt++)
+	{
+		z = z.replace('`',insno);
+		mm = z.indexOf('`');
+	}
+	div.innerHTML = div.innerHTML +z;
 }
-function b21(subdiv,searchChar)
-{
-//	alert(subdiv);
-
-	newdiv = document.getElementById(subdiv);
-	insno1=insno1+1;
-	setStr();
-	y = str;
-	newdiv = document.getElementById(subdiv).innerHTML+str;
-} // b21
-
-
-
-/* section for inner block end */
-
-
 
 function addDiv(div,adstr)
 {
@@ -95,7 +58,144 @@ function addDiv(div,adstr)
 	div.innerHTML = div.innerHTML +adstr;
 }
 
+//  function to insert a row in the inner block
+function insRow(subdivtag)
+{
+i = getSubDivCount(subdivtag);
+var sname = subdivtag + "_" + (i+1);
 
+	var r = new Array(); 
+	r = document.getElementById(subdivtag).rows;
+	var q = r.length;
+	var x=document.getElementById(subdivtag).insertRow(q);
+setSubDivCount(subdivtag);
+var subdivname = ""+ subdivtag;
+// srno
+var spreqno=x.insertCell(0)
+spreqno.className="tabrightmostcell";
+sname=(i+1);
+var rowno=(i+1);
+spreqno.innerHTML="" + sname;
+
+//type
+var spreqtype=x.insertCell(1)
+spreqtype.className="formField";
+sname="";
+objname = subdivname + "_specimenType_"+ rowno ;
+var objunit = subdivname + "_unitspan_"+ rowno ;
+
+sname ="<select name='"+ objname +"' size='1' onchange='changeUnit(" + objname + "," + objunit +") class='formFieldSized10' id='" + objname + "'>"
+sname = sname + "<option value='0'>Fluid Specimen</option>"
+sname = sname + "<option value='1'>Tissue Specimen</option>"
+sname = sname + "<option value='2'>Cell Specimen</option>"
+sname = sname + "<option value='3'>Molecular Specimen</option></select>"
+ 
+spreqtype.innerHTML="" + sname;
+
+//subtype
+var spreqsubtype=x.insertCell(2)
+spreqsubtype.className="formField";
+sname="";
+objname = subdivtag + "_specimenSubType_"+ rowno ;
+
+sname= "<select name='" + objname + "' size='1' class='formFieldSized10' id='" + objname + "'>"
+sname = sname + "<option value='0'>Select Specimen SubType</option>"
+sname = sname + "<option value='Type1'>Blood</option>"
+sname = sname + "<option value='Type2'>Cerum</option></select>"
+spreqsubtype.innerHTML="" + sname;
+
+//tissuesite
+var spreqtissuesite=x.insertCell(3)
+spreqtissuesite.className="formField";
+sname="";
+objname = subdivtag + "_tissueSite_"+ rowno ;
+
+sname = "<select name='" + objname + "' size='1' class='formFieldSized10' id='" + objname + "'>"
+sname = sname + "<option value='Select Tissue Site'>Select Tissue Site</option>"
+sname = sname + "<option value='Adrenal-Cortex'>Adrenal-Cortex</option>"
+sname = sname + "<option value='Adrenal-Medulla'>Adrenal-Medulla</option>"
+sname = sname + "<option value='Adrenal-NOS'>Adrenal-NOS</option></select>"
+sname = sname + "<a href='#'>"
+sname = sname + "<img src='images/Tree.gif' border='0' width='26' height='22'></a>"
+
+spreqtissuesite.innerHTML="" + sname;
+
+//tissueside
+var spreqtissueside=x.insertCell(4)
+spreqtissueside.className="formField";
+sname="";
+objname = subdivtag + "_tissueSide_"+ rowno ;
+
+sname = "<select name='" + objname + "' size='1' class='formFieldSized10' id='" + objname + "'>"
+sname = sname + "<option value='Select Tissue Side'>Select Tissue Side</option>"
+sname = sname + "<option value='Bilateral sites'>Bilateral sites</option>"
+sname = sname + "<option value='Left'>Left</option>"
+sname = sname + "<option value='Right'>Right</option></select>"
+
+spreqtissueside.innerHTML="" + sname;
+
+
+//pathologystatus
+var spreqpathologystatus=x.insertCell(5)
+spreqpathologystatus.className="formField";
+
+sname="";
+objname = subdivtag + "_pathologyStatus_"+ rowno ;
+
+sname="<select name='" + objname + "' size='1' class='formFieldSized10' id='" + objname + "'>"
+sname = sname + "<option value='Select Tissue Type'>Select Tissue Type</option>"
+sname = sname + "<option value='Primary Tumor'>Primary Tumor</option>"
+sname = sname + "<option value='Metastatic Node'>Metastatic Node</option>"
+sname = sname + "<option value='Non-Malignant Tissue'>Non-Malignant Tissue</option></select>"
+	
+spreqpathologystatus.innerHTML="" + sname;
+
+
+//qty
+var spreqqty=x.insertCell(6)
+spreqqty.className="formField";
+sname="";
+objname = subdivtag + "_enrollment_"+ rowno ;
+
+sname="<input type='text' name='" + objname + "' value='' class='formFieldSized5' id='" + objname + "'>"        
+sname = sname + "<span id='" + objunit + "'>&nbsp;</span>"
+
+spreqqty.innerHTML="" + sname;
+
+}
+
+// function to set the row count in the array 
+function setSubDivCount(subdivtag)
+{
+	alert(subdivtag);
+	var ind = subdivtag.indexOf('_');
+	var x = subdivtag.substr(ind+1);
+	var p = parseInt(x);
+	subDivRowCount[p-1] = subDivRowCount[p-1]+1;
+}
+
+// function to get the row count of the inner block
+function getSubDivCount(subdivtag)
+{
+	var ind = subdivtag.indexOf('_');
+	
+	var x = subdivtag.substr(ind+1);
+//	alert("X: "+x);
+	var p = parseInt(x);
+//	alert(p);
+//	alert(subDivRowCount[p-1]);
+	return subDivRowCount[p-1];
+}
+
+
+
+
+//-->
+</SCRIPT>
+
+<SCRIPT LANGUAGE="JavaScript">
+	var search1='`';
+	var insno=1;
 </script>
 
 <style>
@@ -384,12 +484,13 @@ function addDiv(div,adstr)
 			<b><bean:message key="collectionprotocol.eventtitle" /></b>
 	</td>
 	<td align="right" class="formTitle">		
-			<html:button property="addCollectionProtocolEvents" styleClass="actionButton" onclick="replaceSpeChar(outerdiv,d1,search1)">Add More</html:button>
+			<html:button property="addCollectionProtocolEvents" styleClass="actionButton" onclick="addBlock(outerdiv,d1)">Add More</html:button>
 	</td>
 	</tr>
 </table>
 </td></tr>
 </table>
+
 
 <!--  outermostdiv start --><!-- outer div tag  for entire block -->
 <div id="outerdiv"> 
@@ -408,7 +509,7 @@ function addDiv(div,adstr)
 						</label>
 					</td>
 				    <td class="formField" colspan=2>
-				    	<html:select property="clinicalStatus" styleClass="formField" styleId="clinicalStatus" size="1">
+				    	<html:select property="value(clinicalStatus_1)" styleClass="formField" size="1">
 				        	<html:option value="Type1">Pre-Opt</html:option>
 							<html:option value="Type1">Pre-Opt</html:option>
 							<html:option value="Type2">Post-Opt</html:option>
@@ -421,7 +522,7 @@ function addDiv(div,adstr)
 			        	<bean:message key="collectionprotocol.studycalendartitle" />
 			        </td>
 			        <td colspan="2" class="formField">
-			        	<html:text styleClass="formFieldSized5" size="30" styleId="studycalendartitle" property="studycalendartitle" readonly="<%=readOnlyValue%>" />
+			        	<html:text styleClass="formFieldSized5" size="30" property="value(studycalendartitle_1)" readonly="<%=readOnlyValue%>" />
 			        	<bean:message key="collectionprotocol.studycalendarcomment" />
 					</td>
 			    </tr>
@@ -438,10 +539,10 @@ function addDiv(div,adstr)
 			        	<b><bean:message key="collectionprotocol.specimenreq" /></b>
 			        </td>
 			        <td class="formTitle">	
-			     	   <html:button property="addSpecimenReq" styleClass="actionButton">Add More</html:button>
+			     	   <html:button property="addSpecimenReq" styleClass="actionButton" onclick="insRow('subdiv_1')">Add More</html:button>
 			        </td>
 			    </tr>
-			    <div id="subdiv1">
+			    <TBODY id="subdiv_1">
 			    <TR> <!-- SUB TITLES -->
 			        <td class="formLeftSubTableTitle">
 		        		<bean:message key="collectionprotocol.specimennumber" />
@@ -471,7 +572,7 @@ function addDiv(div,adstr)
 				<TR>	<!-- SPECIMEN REQ DATA -->
 			        <td class="tabrightmostcell">1.</td>
 			        <td class="formField">
-			           	<html:select property="specimenType" styleClass="formFieldSized10" styleId="specimenType" size="1" onchange="changeUnit(specimenType,unitspan)">
+			           	<html:select property="value(subdiv_1_specimenType_1)" styleClass="formFieldSized10" size="1" onchange="changeUnit(subdiv_1_specimenType_1,subdiv_1_unitspan_1)">
 							<html:option value="0">Fluid Specimen</html:option>
 							<html:option value="1">Tissue Specimen</html:option>
 							<html:option value="2">Cell Specimen</html:option>
@@ -479,14 +580,14 @@ function addDiv(div,adstr)
 						</html:select>
 			        </td>
 			        <td class="formField">
-			           	<html:select property="specimenSubType" styleClass="formFieldSized10" styleId="specimenSubType" size="1">
+			           	<html:select property="value(subdiv_1_specimenSubType_1)" styleClass="formFieldSized10" size="1">
 				        	<html:option value="0">Select Specimen SubType</html:option>
 							<html:option value="Type1">Blood</html:option>
 							<html:option value="Type2">Cerum</html:option>
 						</html:select>
 			        </td>
 			        <td class="formField">
-			           	<html:select property="tissueSite" styleClass="formFieldSized10" styleId="tissueSite" size="1">
+			           	<html:select property="value(subdiv_1_tissueSite_1)" styleClass="formFieldSized10" size="1">
 				        	<html:option value="Select Tissue Site">Select Tissue Site</html:option>
 							<html:option value="Adrenal-Cortex">Adrenal-Cortex</html:option>
 							<html:option value="Adrenal-Medulla">Adrenal-Medulla</html:option>
@@ -496,7 +597,7 @@ function addDiv(div,adstr)
 					<img src="images/Tree.gif" border="0" width="26" height="22"></a>
 					</td>
 			        <td class="formField">
-			          	<html:select property="tissueSide" styleClass="formFieldSized10" styleId="tissueSide" size="1">
+			          	<html:select property="value(subdiv_1_tissueSide_1)" styleClass="formFieldSized10" size="1">
 				        	<html:option value="Select Tissue Side">Select Tissue Side</html:option>
 							<html:option value="Bilateral sites">Bilateral sites</html:option>
 							<html:option value="Left">Left</html:option>
@@ -504,7 +605,7 @@ function addDiv(div,adstr)
 						</html:select>
 			        </td>
 			        <td class="formField">
-			          	<html:select property="tissueType" styleClass="formFieldSized10" styleId="tissueType" size="1">
+			          	<html:select property="value(subdiv_1_pathologyStatus_1)" styleClass="formFieldSized10" size="1">
 				        	<html:option value="Select Tissue Type">Select Tissue Type</html:option>
 							<html:option value="Primary Tumor">Primary Tumor</html:option>
 							<html:option value="Metastatic Node">Metastatic Node</html:option>
@@ -512,13 +613,13 @@ function addDiv(div,adstr)
 						</html:select>
 			        </td>
 			        <td class="formField">
-			        	<html:text styleClass="formFieldSized5" styleId="enrollment" property="enrollment" readonly="<%=readOnlyValue%>" />        
+			        	<html:text styleClass="formFieldSized5" property="value(subdiv_1_enrollment_1)" readonly="<%=readOnlyValue%>" />        
 					       &nbsp;
-			          	<span id="unitspan">&nbsp;
+			          	<span id="value(subdiv_1_unitspan_1)">&nbsp;
 						</span>
 					</td>
 				</TR>	<!-- SPECIMEN REQ DATA END -->
-				</div>
+				</TBODY>
 				
 			</TABLE>
 		</td>
@@ -558,7 +659,7 @@ function addDiv(div,adstr)
 	<!-- NEW COLLECTIONPROTOCOL ENTRY ends-->
 </table>
 </html:form>
-
+<hr>
 <div id="d1">
 <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="100%">
 <tr><td>
@@ -571,11 +672,11 @@ function addDiv(div,adstr)
 					<td class="formRequiredNotice" width="5">*</td>
 					<td class="formRequiredLabel" width="32%">
 						<label for="clinicalstatus">
-					    	Clinical Status_`
+					    	Clinical Status
 						</label>
 					</td>
 				    <td class="formField" colspan=2>
-				    	<select name="clinicalStatus" size="1" class="formField" id="clinicalStatus"><option value="Type1">Pre-Opt</option>
+				    	<select name="clinicalStatus_`" size="1" class="formField" id="clinicalStatus_`"><option value="Type1">Pre-Opt</option>
 							<option value="Type1">Pre-Opt</option>
 							<option value="Type2">Post-Opt</option></select>
 				    </td>
@@ -586,7 +687,7 @@ function addDiv(div,adstr)
 			        	Study Calendar Event Point
 			        </td>
 			        <td colspan="2" class="formField">
-			        	<input type="text" name="studycalendartitle" size="30" value="" class="formFieldSized5" id="studycalendartitle">
+			        	<input type="text" name="studycalendartitle_`" size="30" value="" class="formFieldSized5" id="studycalendartitle_`">
 			        	Days
 					</td>
 			    </tr>
@@ -603,10 +704,10 @@ function addDiv(div,adstr)
 			        	<b>SPECIMEN REQUIREMENTS</b>
 			        </td>
 			        <td class="formTitle">	
-			     	   <input type="button" name="addSpecimenReq" value="Add More" class="actionButton">
+			     	   <input type="button" name="addSpecimenReq" value="Add More" class="actionButton" onclick="insRow('subdiv_`')">
 			        </td>
 			    </tr>
-			    <div id="subdiv`">
+			    <TBODY id="subdiv_`">
 			    <TR> <!-- SUB TITLES -->
 			        <td class="formLeftSubTableTitle">
 		        		#
@@ -628,7 +729,7 @@ function addDiv(div,adstr)
 			    		Pathology Status
 				    </td>
 			        <td class=formLeftSubTableTitle>
-			        	Quantity(Unit)
+			        	Quantity (Unit)
 			        </td>
 <!--			        <td class=formLeftSubTableTitle>
 			        	Unit
@@ -638,19 +739,19 @@ function addDiv(div,adstr)
 				
 				<TR>	<!-- SPECIMEN REQ DATA -->
 			        <td class="tabrightmostcell">1.</td>
-			        <td class="formField">
-			           	<select name="specimenType_`" size="1" onchange="changeUnit(specimenType_`,unitspan_`)" class="formFieldSized10" id="specimenType"><option value="0">Fluid Specimen</option>
+			        <td class="formField">			
+			           	<select name="subdiv_`_specimenType_1" size="1" onchange="changeUnit(subdiv_`_specimenType_1,subdiv_`_unitspan_1)" class="formFieldSized10" id="subdiv_`_specimenType_1"><option value="0">Fluid Specimen</option>
 							<option value="1">Tissue Specimen</option>
 							<option value="2">Cell Specimen</option>
 							<option value="3">Molecular Specimen</option></select>
 			        </td>
 			        <td class="formField">
-			           	<select name="specimenSubType" size="1" class="formFieldSized10" id="specimenSubType"><option value="0">Select Specimen SubType</option>
+			           	<select name="subdiv_`_specimenSubType_1" size="1" class="formFieldSized10" id="subdiv_`_specimenSubType_1"><option value="0">Select Specimen SubType</option>
 							<option value="Type1">Blood</option>
 							<option value="Type2">Cerum</option></select>
 			        </td>
 			        <td class="formField">
-			           	<select name="tissueSite" size="1" class="formFieldSized10" id="tissueSite"><option value="Select Tissue Site">Select Tissue Site</option>
+			           	<select name="subdiv_`_tissueSite_1" size="1" class="formFieldSized10" id="subdiv_`_tissueSite_1"><option value="Select Tissue Site">Select Tissue Site</option>
 							<option value="Adrenal-Cortex">Adrenal-Cortex</option>
 							<option value="Adrenal-Medulla">Adrenal-Medulla</option>
 							<option value="Adrenal-NOS">Adrenal-NOS</option></select>
@@ -658,24 +759,24 @@ function addDiv(div,adstr)
 					<img src="images/Tree.gif" border="0" width="26" height="22"></a>
 					</td>
 			        <td class="formField">
-			          	<select name="tissueSide" size="1" class="formFieldSized10" id="tissueSide"><option value="Select Tissue Side">Select Tissue Side</option>
+			          	<select name="subdiv_`_tissueSide_1" size="1" class="formFieldSized10" id="subdiv_`_tissueSide_1"><option value="Select Tissue Side">Select Tissue Side</option>
 							<option value="Bilateral sites">Bilateral sites</option>
 							<option value="Left">Left</option>
 							<option value="Right">Right</option></select>
 			        </td>
 			        <td class="formField">
-			          	<select name="tissueType" size="1" class="formFieldSized10" id="tissueType"><option value="Select Tissue Type">Select Tissue Type</option>
+			          	<select name="subdiv_`_pathologyStatus_1" size="1" class="formFieldSized10" id="subdiv_`_pathologyStatus_1"><option value="Select Tissue Type">Select Tissue Type</option>
 							<option value="Primary Tumor">Primary Tumor</option>
 							<option value="Metastatic Node">Metastatic Node</option>
 							<option value="Non-Malignant Tissue">Non-Malignant Tissue</option></select>
 			        </td>
 			        <td class="formField">
-			        	<input type="text" name="enrollment" value="" class="formFieldSized5" id="enrollment">        
-			        	<span id="unitspan_`">&nbsp;
+			        	<input type="text" name="subdiv_`_enrollment_1" value="" class="formFieldSized5" id="subdiv_`_enrollment_1">        
+			        	<span id="subdiv_`_unitspan_1">&nbsp;
 						</span>
 					</td>
 				</TR>	<!-- SPECIMEN REQ DATA END -->
-				</div>
+				</TBODY>
 			</TABLE>
 		</td>
 	</tr>
