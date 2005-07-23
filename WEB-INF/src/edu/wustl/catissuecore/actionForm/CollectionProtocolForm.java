@@ -20,8 +20,11 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
+import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Validator;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * CollectionProtocolForm Class is used to encapsulate all the request
@@ -42,9 +45,9 @@ public class CollectionProtocolForm extends AbstractActionForm {
 
 	private String activityStatus;
 
-	private String principalinvestigator;
+	private long principalinvestigator;
 
-	private String protocolcoordinator;
+	private long protocolcoordinators[];
 
 	private String irbid;
 
@@ -122,17 +125,21 @@ public class CollectionProtocolForm extends AbstractActionForm {
 	 * Copies the data from an AbstractDomain object to a CollectionProtocolForm
 	 * object.
 	 * 
-	 * @param user
+	 * @param abstractDomain
 	 *            An AbstractDomain object.
 	 */
-	public void setAllValues(AbstractDomainObject abstractDomain) {
-		try {
-			;
-		} catch (Exception excp) {
-			;
-		}
-	}
-
+	 public void setAllValues(AbstractDomainObject abstractDomain)
+	    {
+	        try
+	        {
+	            CollectionProtocol collectionProtocol = (CollectionProtocol) abstractDomain;
+	        }
+	        catch (Exception excp)
+	        {
+	            excp.printStackTrace();
+	            Logger.out.error(excp.getMessage());
+	        }
+	    }
 	/**
 	 * @return Returns the descriptionurl.
 	 */
@@ -196,7 +203,7 @@ public class CollectionProtocolForm extends AbstractActionForm {
 	/**
 	 * @return Returns the principalinvestigator.
 	 */
-	public String getPrincipalinvestigator() {
+	public long getPrincipalinvestigator() {
 		return principalinvestigator;
 	}
 
@@ -204,25 +211,24 @@ public class CollectionProtocolForm extends AbstractActionForm {
 	 * @param principalinvestigator
 	 *            The principalinvestigator to set.
 	 */
-	public void setPrincipalinvestigator(String principalinvestigator) {
+	public void setPrincipalinvestigator(long principalinvestigator) {
 		this.principalinvestigator = principalinvestigator;
 	}
 
-	/**
-	 * @return Returns the protocolcoordinator.
-	 */
-	public String getProtocolcoordinator() {
-		return protocolcoordinator;
-	}
+	
 
 	/**
-	 * @param protocolcoordinator
-	 *            The protocolcoordinator to set.
+	 * @return Returns the protocolcoordinators.
 	 */
-	public void setProtocolcoordinator(String protocolcoordinator) {
-		this.protocolcoordinator = protocolcoordinator;
+	public long[] getProtocolcoordinators() {
+		return protocolcoordinators;
 	}
-
+	/**
+	 * @param protocolcoordinators The protocolcoordinators to set.
+	 */
+	public void setProtocolcoordinators(long[] protocolcoordinators) {
+		this.protocolcoordinators = protocolcoordinators;
+	}
 	/**
 	 * @return Returns the shorttitle.
 	 */

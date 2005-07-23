@@ -11,14 +11,14 @@
 package edu.wustl.catissuecore.domain;
 
 import java.util.Date;
-
+import edu.wustl.catissuecore.domain.AbstractDomainObject ;
 /**
  *A set of procedures that govern the collection and/or distribution of biospecimens. 
  * @author mandar_deshmukh
  * 
  * @hibernate.class table="CATISSUE_SPECIMEN_PROTOCOL"
  */
-public abstract class SpecimenProtocol implements java.io.Serializable
+public abstract class SpecimenProtocol extends AbstractDomainObject implements java.io.Serializable
 {
 	private static final long serialVersionUID = 1234567890L;
 
