@@ -42,6 +42,17 @@
 						<bean:message key="app.edit" />
 					</a>
 		</div>
+
+		<div>
+			<img src="images/subMenuArrow.gif" width="7" height="7" alt="" /> 
+				<bean:message key="app.cancerResearchGroup" />
+					<a class="subMenuPrimary" href="CancerResearchGroup.do?operation=add">
+						<bean:message key="app.add" />
+					</a> | 
+					<a class="subMenuPrimary" href="CancerResearchGroup.do?operation=search">
+						<bean:message key="app.edit" />
+					</a>
+		</div>
 		
 		<div>
 			<img src="images/subMenuArrow.gif" width="7" height="7" alt="" /> 

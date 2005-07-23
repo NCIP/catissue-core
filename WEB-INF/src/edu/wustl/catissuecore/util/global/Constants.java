@@ -139,6 +139,11 @@ public class Constants
 	public static final String DEPARTMENT_ADD_ACTION = "DepartmentAdd.do";
 	public static final String DEPARTMENT_EDIT_ACTION = "DepartmentEdit.do";
 	
+	//Constants required in CancerResearchGroup.jsp Page
+	public static final String CANCER_RESEARCH_GROUP_SEARCH_ACTION = "CancerResearchGroupSearch.do";
+	public static final String CANCER_RESEARCH_GROUP_ADD_ACTION = "CancerResearchGroupAdd.do";
+	public static final String CANCER_RESEARCH_GROUP_EDIT_ACTION = "CancerResearchGroupEdit.do";
+	
 	//Constants required for Approve user
 	public static final String USER_DETAILS_SHOW_ACTION = "UserDetailsShow.do";
 	public static final String APPROVE_USER_SHOW_ACTION = "ApproveUserShow.do";
@@ -223,6 +228,7 @@ public class Constants
 	public static final int STORAGE_CONTAINER_FORM_ID = 11;
 	public static final int STORAGE_TYPE_FORM_ID = 12;
 	public static final int SITE_FORM_ID = 13;
+	public static final int CANCER_RESEARCH_GROUP_FORM_ID = 14;
 	//Status message key Constants
 	public static final String STATUS_MESSAGE_KEY = "statusMessageKey";
 	

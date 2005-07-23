@@ -12,6 +12,7 @@ package edu.wustl.catissuecore.domain;
 import java.io.Serializable;
 
 import edu.wustl.catissuecore.actionForm.AbstractActionForm;
+import edu.wustl.catissuecore.actionForm.CancerResearchGroupForm;
 
 /**
  * A collection of scientist and/or clinician users with a common research objective related to biospecimen collection and utilization.
@@ -31,6 +32,19 @@ public class CancerResearchGroup extends AbstractDomainObject implements Seriali
 	 */
 	protected String name;
 
+	/**
+	 * NOTE: Do not delete this constructor. Hibernet uses this by reflection API.
+	 * */
+	public CancerResearchGroup()
+	{
+		
+	}
+	
+	public CancerResearchGroup(AbstractActionForm form)
+	{
+		setAllValues(form);
+	}
+	
 	/**
 	 * Returns the unique systemIdentifier of the cancer research group.
 	 * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long"
@@ -79,5 +93,9 @@ public class CancerResearchGroup extends AbstractDomainObject implements Seriali
      */
     public void setAllValues(AbstractActionForm abstractForm)
     {
+    	CancerResearchGroupForm cancerResearchGroupForm = (CancerResearchGroupForm)abstractForm;
+		
+		this.systemIdentifier = new Long(cancerResearchGroupForm.getSystemIdentifier());
+		this.name = cancerResearchGroupForm.getName();
     }
 }

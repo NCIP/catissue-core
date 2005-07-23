@@ -154,6 +154,21 @@
 	</definition>
 
 
+
+	<definition name=".catissuecore.cancerResearchGroupDef" extends=".catissuecore.manageAdminDataHomeDef">
+		<put name="content" value="/pages/content/manageAdministrativeData/CancerResearchGroup.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.cancerResearchGroupAddSuccessDef" extends=".catissuecore.manageAdminDataHomeDef">
+		<put name="content" value="/pages/content/common/success.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.cancerResearchGroupEditSuccessDef" extends=".catissuecore.manageAdminDataHomeDef">
+		<put name="content" value="/pages/content/common/success.jsp" />
+	</definition>
+	
+
+
 	<definition name=".catissuecore.distributionProtocolDef" extends=".catissuecore.manageAdminDataHomeDef">
 		<put name="content" value="/pages/content/manageAdministrativeData/DistributionProtocol.jsp" />
 	</definition>

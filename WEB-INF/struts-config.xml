@@ -21,6 +21,7 @@ PUBLIC
 		<form-bean name="storageTypeForm" type="edu.wustl.catissuecore.actionForm.StorageTypeForm"/>
 		<form-bean name="storageContainerForm" type="edu.wustl.catissuecore.actionForm.StorageContainerForm"/>
 		<form-bean name="siteForm" type="edu.wustl.catissuecore.actionForm.SiteForm"/>
+		<form-bean name="cancerResearchGroupForm" type="edu.wustl.catissuecore.actionForm.CancerResearchGroupForm"/>
 	</form-beans>
 	
 	<action-mappings>
@@ -230,6 +231,43 @@ PUBLIC
 			<forward name="failure" path="/Department.do?operation=edit"/>
 		</action>    
 		<!-- Department Actions Ends-->
+
+		<!-- CancerResearchGroup Actions Begins-->
+		<action path="/CancerResearchGroup"
+			type="edu.wustl.catissuecore.action.CancerResearchGroupAction"
+			scope="request">
+			<forward name="success" path=".catissuecore.cancerResearchGroupDef" />
+			<forward name="failure" path=".catissuecore.cancerResearchGroupDef" />
+		</action>
+
+		<action path="/CancerResearchGroupAdd"
+			type="edu.wustl.catissuecore.action.CommonAddEditAction"
+			name="cancerResearchGroupForm"
+			validate="true"
+			input="/CancerResearchGroup.do?operation=add" scope="request">
+			<forward name="success" path=".catissuecore.cancerResearchGroupAddSuccessDef" />
+			<forward name="failure" path="/error.jsp" />
+		</action>
+
+		<action path="/CancerResearchGroupEdit"
+			type="edu.wustl.catissuecore.action.CommonAddEditAction"
+			name="cancerResearchGroupForm"
+			validate="true"
+			input="/CancerResearchGroup.do?operation=edit">
+			<forward name="success" path=".catissuecore.cancerResearchGroupEditSuccessDef" />
+			<forward name="failure" path="/error.jsp" />
+		</action>
+		
+		<action path="/CancerResearchGroupSearch"
+		    type="edu.wustl.catissuecore.action.CommonSearchAction"
+			name="cancerResearchGroupForm"
+			validate="true"
+			input="/CancerResearchGroup.do?operation=edit"
+			scope="session">
+			<forward name="success" path="/CancerResearchGroup.do?operation=edit"/>
+			<forward name="failure" path="/CancerResearchGroup.do?operation=edit"/>
+		</action>    
+		<!-- CancerResearchGroup Actions Ends-->
 		
 			<!-- CollectionProtocol Actions Begins-->
 		<action path="/CollectionProtocol"

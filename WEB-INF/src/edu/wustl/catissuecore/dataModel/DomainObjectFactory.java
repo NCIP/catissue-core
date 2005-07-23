@@ -11,12 +11,14 @@
 package edu.wustl.catissuecore.dataModel;
 
 import edu.wustl.catissuecore.actionForm.AbstractActionForm;
+import edu.wustl.catissuecore.actionForm.CancerResearchGroupForm;
 import edu.wustl.catissuecore.actionForm.DepartmentForm;
 import edu.wustl.catissuecore.actionForm.InstitutionForm;
 import edu.wustl.catissuecore.actionForm.SiteForm;
 import edu.wustl.catissuecore.actionForm.StorageTypeForm;
 import edu.wustl.catissuecore.actionForm.UserForm;
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
+import edu.wustl.catissuecore.domain.CancerResearchGroup;
 import edu.wustl.catissuecore.domain.Department;
 import edu.wustl.catissuecore.domain.Institution;
 import edu.wustl.catissuecore.domain.Site;
@@ -66,11 +68,10 @@ public class DomainObjectFactory
             	InstitutionForm instituteForm = (InstitutionForm) form;
             	abstractDomain = new Institution(instituteForm);
             	break;
-            	
-//              case Constants.INSTITUTE_FORM_ID:
-//            	InstitutionForm instituteForm = (InstitutionForm) form;
-//            	abstractDomain = new Institute(instituteForm);
-//            	break;
+            case Constants.CANCER_RESEARCH_GROUP_FORM_ID:
+            	CancerResearchGroupForm cancerResearchGroupForm = (CancerResearchGroupForm) form;
+            	abstractDomain = new CancerResearchGroup(cancerResearchGroupForm);
+            	break;
         }
         return abstractDomain;
     }
