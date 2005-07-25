@@ -283,8 +283,23 @@ public class SecurityManager
 	    }
 	}
 
-	
-
-   
+	/**
+	 * Returns the User object for the passed User id 
+	 * @param userId - The id of the User object which is to be obtained 
+	 * @return The User object from the database for the passed User id 
+	 * @throws SMException if the User object is not found for the given id
+	 */
+	public User getUserById(String userId) throws SMException
+	{
+	    try
+	    {
+	        return getUserProvisioningManager().getUserById(userId);
+	    }
+	    catch (CSException e)
+	    {
+	        Logger.out.debug("Unable to get user by Id: Exception: "+e.getMessage());
+	        throw new SMException (e.getMessage(), e);
+	    }
+	}
 	
 }
