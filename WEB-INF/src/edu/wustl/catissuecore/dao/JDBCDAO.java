@@ -163,8 +163,22 @@ public class JDBCDAO extends AbstractDAO
                     .toString());
             ResultSet resultSet = stmt.executeQuery();
 
+            
             list = new ArrayList();
-            list.add(resultSet);
+            
+            while (resultSet.next())
+            {
+                int i = 0;
+                String[] columnData = new String[resultSet.getFetchSize()];
+                
+                while (i < selectColumnName.length)
+                {
+                    columnData[i] = new String(resultSet.getString(selectColumnName[i]));
+                    i++;
+                }
+                list.add(columnData);
+            }
+            
         }
         catch (SQLException sqlExp)
         {
