@@ -47,9 +47,9 @@
       	<img src="images/ftrMenuSeparator.gif" width="1" height="16" alt="" />
       </td>
       
-      <td height="20" class="footerMenuItem" onmouseover="changeMenuStyle(this,'footerMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'footerMenuItem'),hideCursor()" onclick="document.location.href='#'">
+      <td height="20" class="footerMenuItem" onmouseover="changeMenuStyle(this,'footerMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'footerMenuItem'),hideCursor()" onclick="document.location.href='ReportProblem.do?operation=add'">
         &nbsp;&nbsp;
-        <a class="footerMenuLink" href="ReportProblem.do">
+        <a class="footerMenuLink" href="ReportProblem.do?operation=add">
         	<bean:message key="app.reportProblem" />
         </a>&nbsp;&nbsp;
       </td>
