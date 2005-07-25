@@ -143,6 +143,11 @@ public class SecurityManager
 		return loginSuccess;
 	}
 	
+	/**
+	 * This method creates a new User in the database based on the data passed
+	 * @param user user to be created
+	 * @throws SMTransactionException If there is any exception in creating the User
+	 */
 	public void createUser(User user) throws SMTransactionException
 	{
 	   try
@@ -160,6 +165,55 @@ public class SecurityManager
 	    }
 	}
 	
+	/**
+	 * This method returns the User object from the database for the passed User's Login Name. 
+	 * If no User is found then null is returned 
+	 * @param loginName Login name of the user
+	 * @return
+	 * @throws SMException
+	 */
+	public User getUser(String loginName) throws SMException
+	{
+	   try
+	    {
+	        return getAuthorizationManager().getUser(loginName);
+	    }
+	    catch (CSException e)
+	    {
+	        Logger.out.debug("Unable to get user: Exception: "+e.getMessage());
+	        throw new SMException (e.getMessage(), e);
+	    }
+	}
+	
+	/**
+	 * This method checks whether a user exists in the database or not
+	 * @param loginName Login name of the user
+	 * @return TRUE is returned if a user exists else FALSE is returned
+	 * @throws SMException
+	 */
+	public boolean userExists(String loginName) throws SMException
+	{
+	   boolean userExists=true;
+	   try
+	    {
+	        if(getUser(loginName)==null)
+	        {
+	            userExists = false;
+	        }
+	    }
+	    catch (SMException e)
+	    {
+	        Logger.out.debug("Unable to get user: Exception: "+e.getMessage());
+	        throw e;
+	    }
+    return userExists;
+	}
+	
+	/**
+	 * This method returns Vactor of all the role objects defined for the application from the database
+	 * @return
+	 * @throws SMException
+	 */
 	public Vector getRoles()throws SMException
 	{
 	    Vector roles=new Vector();
@@ -179,6 +233,12 @@ public class SecurityManager
 	    return roles;
 	}
 	
+	/**
+	 * Assigns a Role to a User
+	 * @param userName - the User Name to to whom the Role will be assigned
+	 * @param roleID - The id of the Role which is to be assigned to the user 
+	 * @throws SMException
+	 */
 	public void assignRoleToUser(String userName, String roleID) throws SMException
 	{
 	    UserProvisioningManager userProvisioningManager=null;
