@@ -54,6 +54,7 @@ public class Constants
 	public static final String COUNTRY = "country";
 	public static final String OPERATION = "operation";
 	public static final String ACTIVITY_STATUS = "activityStatus";
+	public static final String NEXT_CONTAINER_NO = "startNumber";
 	
 	public static final String INSTITUTIONLIST = "institutionList";
 	public static final String DEPARTMENTLIST = "departmentList";
@@ -79,9 +80,12 @@ public class Constants
 	public static final String ACTIVITYSTATUSLIST = "activityStatusList";
 	public static final String USERLIST = "userList";
 	public static final String SITETYPELIST = "siteTypeList";
+	public static final String STORAGETYPELIST="storageTypeList";
 	public static final String STORAGECONTAINERLIST="storageContainerList";
 	public static final String SITELIST="siteList";
+	public static final String SITEIDLIST="siteIdList";
 	public static final String USERIDLIST = "userIdList";
+	public static final String STORAGETYPEIDLIST="storageTypeIdList";
 	//New Specimen lists.
 	public static final String SPECIMEN_COLLECTION_GROUP_LIST = "specimenCollectionGroupIdList";
 	public static final String SPECIMEN_TYPE_LIST = "specimenTypeList";
