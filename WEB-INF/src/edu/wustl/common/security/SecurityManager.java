@@ -9,6 +9,7 @@
 package edu.wustl.common.security;
 
 
+import java.util.List;
 import java.util.Vector;
 
 import edu.wustl.common.security.exceptions.SMException;
@@ -19,6 +20,8 @@ import gov.nih.nci.security.AuthorizationManager;
 import gov.nih.nci.security.SecurityServiceProvider;
 import gov.nih.nci.security.UserProvisioningManager;
 import gov.nih.nci.security.authorization.domainobjects.User;
+import gov.nih.nci.security.dao.SearchCriteria;
+import gov.nih.nci.security.dao.UserSearchCriteria;
 import gov.nih.nci.security.exceptions.CSException;
 import gov.nih.nci.security.exceptions.CSTransactionException;
 
@@ -302,4 +305,25 @@ public class SecurityManager
 	    }
 	}
 	
+	/**
+	 * Returns list of the User objects for the passed email address
+	 * @param emailAddress - Email Address for which users need to be searched
+	 * @return
+	 * @throws SMException if there is any exception while querying the database 
+	 */
+	public List getUsersByEmail(String emailAddress) throws SMException
+	{
+	    try
+	    {
+	        User user = new User();
+	        user.setEmailId(emailAddress);
+	        SearchCriteria searchCriteria = new UserSearchCriteria(user);
+	        return getUserProvisioningManager().getObjects(searchCriteria);
+	    }
+	    catch (CSException e)
+	    {
+	        Logger.out.debug("Unable to get users by emailAddress: Exception: "+e.getMessage());
+	        throw new SMException (e.getMessage(), e);
+	    }
+	}
 }
