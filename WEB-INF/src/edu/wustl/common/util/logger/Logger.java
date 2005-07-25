@@ -12,8 +12,6 @@ package edu.wustl.common.util.logger;
 
 import java.util.ResourceBundle;
 
-import org.apache.log4j.PropertyConfigurator;
-
 public abstract class Logger
 {
 	public static org.apache.log4j.Logger out;

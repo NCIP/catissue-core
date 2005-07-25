@@ -18,6 +18,7 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
+import edu.wustl.catissuecore.domain.ReportedProblem;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Validator;
@@ -60,6 +61,8 @@ public class ReportedProblemForm extends AbstractActionForm
      * States the activity status of the reported problem.
      */
     private String activityStatus = new String();
+    
+    private String comments;
 
     /**
      * Initializes an empty problem.
@@ -211,6 +214,21 @@ public class ReportedProblemForm extends AbstractActionForm
         this.activityStatus = activityStatus;
     }
 
+    /**
+     * @return Returns the comments.
+     */
+    public String getComments()
+    {
+        return comments;
+    }
+    /**
+     * @param comments The comments to set.
+     */
+    public void setComments(String comments)
+    {
+        this.comments = comments;
+    }
+    
     /** 
      * Returns the form id.
      * @return the form id.
@@ -221,12 +239,13 @@ public class ReportedProblemForm extends AbstractActionForm
         return Constants.REPORTEDPROBLEM_FORM_ID;
     }
 
-    /* (non-Javadoc)
-     * @see edu.wustl.catissuecore.actionForm.AbstractForm#isAddOperation()
+    /**
+     * Returns true if the operation is add else returns false.
+     * @return true if the operation is add else returns false.
      */
     public boolean isAddOperation()
     {
-        return true;
+        return operation.equals(Constants.ADD);
     }
 
     /**
@@ -235,7 +254,11 @@ public class ReportedProblemForm extends AbstractActionForm
      */
     public void setAllValues(AbstractDomainObject abstractDomain)
     {
-
+        ReportedProblem reportedProblem = (ReportedProblem)abstractDomain; 
+        this.from = reportedProblem.getFrom();
+        this.subject = reportedProblem.getSubject();
+        this.messageBody = reportedProblem.getMessageBody();
+        this.comments = reportedProblem.getComments();
     }
 
     /**
@@ -263,7 +286,7 @@ public class ReportedProblemForm extends AbstractActionForm
                     {
                         errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
                                 "errors.item.format", ApplicationProperties
-                                        .getValue("user.email")
+                                        .getValue("user.emailAddress")
                                         + " in From Field"));
                     }
                 }
@@ -282,6 +305,16 @@ public class ReportedProblemForm extends AbstractActionForm
                                     .getValue("fields.message")));
                 }
             }
+            
+            if (operation.equals(Constants.EDIT))
+            {
+                if (activityStatus.trim().equals(Constants.SELECT_OPTION))
+                {
+                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+                            "errors.item.required", ApplicationProperties
+                                    .getValue("reportProblem.status")));
+                }
+            }
         }
         catch (Exception excp)
         {
@@ -289,4 +322,5 @@ public class ReportedProblemForm extends AbstractActionForm
         }
         return errors;
     }
+    
 }

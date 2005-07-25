@@ -103,7 +103,8 @@
 					 <table cellpadding="4" cellspacing="0" border="0">
 						 <tr>
 						    <td>
-						    	<html:submit styleClass="actionButton" value="Search" onclick="<%=changeAction%>"/></td>
+						    	<html:submit styleClass="actionButton" value="Search" onclick="<%=changeAction%>"/>
+						    </td>
 						 </tr>
 					 </table>
 				   </td>
@@ -120,7 +121,7 @@
 			  <!-- NEW SPECIMEN REGISTRATION BEGINS-->
 	    	  <tr>
 			    <td>
-			 	 <table summary="" cellpadding="3" cellspacing="0" border="0">
+			 	 <table summary="" cellpadding="3" cellspacing="0" border="0" width="600">
 				 <tr>
 					<td>
 						<html:hidden property="<%=Constants.OPERATION%>" value="<%=operation%>"/>
@@ -142,13 +143,13 @@
 				 		</tr>
 				 	</logic:notEqual>
 				 <tr>
-				     <td class="formTitle" height="20" colspan="3">
+				     <td class="formTitle" height="20" colspan="6">
 				     <%String title = "specimen."+pageView+".title";%>
 				     	<bean:message key="<%=title%>"/>
+				     	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				     	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				     	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				     </td>
-				     <td class="formTitle">
-		        		&nbsp;
-   					</td>
 				 </tr>
 				 <tr>
 			     	<td class="formRequiredNotice" width="5">&nbsp;</td>
@@ -157,7 +158,7 @@
 							<bean:message key="specimen.specimenCollectionGroupId"/>
 						</label>
 					</td>
-					<td class="formField" colspan="2">
+					<td class="formField" colspan="4">
 			     		<html:select property="specimenCollectionGroupId" styleClass="formFieldSmallSized" styleId="specimenCollectionGroupId" size="1" disabled="<%=readOnlyForAll%>">
 							<html:options name="specimenCollectionGroupIdList" labelName="specimenCollectionGroupIdList"/>		
 						</html:select>
@@ -173,7 +174,7 @@
 				     		<bean:message key="specimen.type"/>
 				     	</label>
 				    </td>
-				    <td class="formField" colspan="2">
+				    <td class="formField" colspan="4">
 				     	<html:select property="type" styleClass="formFieldSized" styleId="type" size="1" disabled="<%=readOnlyForAll%>">
 							<html:options name="specimenTypeList" labelName="specimenTypeList"/>		
 						</html:select>
@@ -186,7 +187,7 @@
 				     		<bean:message key="specimen.subType"/>
 				     	</label>
 				    </td>
-				    <td class="formField" colspan="2">
+				    <td class="formField" colspan="4">
 				     	<html:select property="subType" styleClass="formFieldSized" styleId="subType" size="1" disabled="<%=readOnlyForAll%>">
 							<html:options name="specimenSubTypeList" labelName="specimenSubTypeList"/>		
 						</html:select>
@@ -202,7 +203,7 @@
 							<bean:message key="specimen.tissueSite"/>
 						</label>
 					</td>
-				     <td class="formField" colspan="2">
+				     <td class="formField" colspan="4">
 				     	<html:select property="tissueSite" styleClass="formFieldSized" styleId="tissueSite" size="1" disabled="<%=readOnlyForAll%>">
 							<html:options name="tissueSiteList" labelName="tissueSiteList"/>		
 						</html:select>
@@ -218,7 +219,7 @@
 							<bean:message key="specimen.tissueSide"/>
 						</label>
 					</td>
-				     <td class="formField" colspan="2">
+				     <td class="formField" colspan="4">
 				     	<html:select property="tissueSide" styleClass="formFieldSized" styleId="tissueSide" size="1" disabled="<%=readOnlyForAll%>">
 							<html:options name="tissueSideList" labelName="tissueSideList"/>		
 						</html:select>
@@ -234,7 +235,7 @@
 							<bean:message key="specimen.pathologicalStatus"/>
 						</label>
 					</td>
-				    <td class="formField" colspan="2">
+				    <td class="formField" colspan="4">
 				     	<html:select property="pathologicalStatus" styleClass="formFieldSized" styleId="pathologicalStatus" size="1" disabled="<%=readOnlyForAll%>">
 							<html:options name="pathologicalStatusList" labelName="pathologicalStatusList"/>		
 						</html:select>
@@ -250,7 +251,7 @@
 							<bean:message key="specimen.concentration"/>
 						</label>
 					</td>
-				    <td class="formField" colspan="2">
+				    <td class="formField" colspan="4">
 				     	<html:text styleClass="formFieldSized" size="30" styleId="concentration" property="concentration" readonly="<%=readOnlyForAll%>"/>
 				    </td>
 				 </tr>
@@ -264,17 +265,43 @@
 							<bean:message key="specimen.quantity"/>
 						</label>
 					</td>
-				    <td class="formField" colspan="2">
+				    <td class="formField" colspan="4">
 				     	<html:text styleClass="formFieldSized" size="30" styleId="quantity" property="quantity" readonly="<%=readOnlyForAll%>"/>
 				    </td>
 				 </tr>
-
+				 
+				 <tr>
+			     	<td class="formRequiredNotice" width="5">
+				     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">*</logic:notEqual>
+				     	<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;</logic:equal>
+				    </td>
+				    <td class="formRequiredLabel">
+						<label for="comments">
+							<bean:message key="specimen.comments"/>
+						</label>
+					</td>
+				    <td class="formField" colspan="4">
+				    	<html:textarea styleClass="formFieldSized" rows="3" styleId="comments" property="comments" readonly="<%=readOnlyForAll%>"/>
+				    </td>
+				 </tr>
+				 </table>
+			    </td>
+			  </tr>
+			  <tr>
+    		    <td>
+			 	 <table summary="" cellpadding="3" cellspacing="0" border="0">
 				 <!-- Storage Begins here -->
 				 <tr>
-				     <td class="formSubTableTitle" height="20" colspan="2">
+				     <td class="formTitle" height="20" colspan="2">
 				     	<bean:message key="specimen.storage"/>
 				     </td>
-				     <td class="formButtonField" colspan="2">
+				     <td class="formButtonField" colspan="4">
+				     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				     	<html:submit styleClass="actionButton">
 							<bean:message key="buttons.showMap"/>
 						</html:submit>
@@ -323,10 +350,15 @@
 				    </td>
 				 </tr>
 				 <!-- Storage Ends here -->
-				 
+				 </table>
+			    </td>
+			  </tr>
+			  <tr>
+    		    <td>
+			 	 <table summary="" cellpadding="3" cellspacing="0" border="0">	 
 				 <!-- External Identifiers Begin here -->
 				 <tr>
-				     <td class="formSubTableTitle" height="20" colspan="2">
+				     <td class="formTitle" height="20" colspan="2">
 				     	<bean:message key="specimen.externalIdentifier"/>
 				     </td>
 				     <td class="formButtonField" colspan="2">
@@ -334,7 +366,9 @@
 							<bean:message key="buttons.addMore"/>
 						</html:submit>
 				    </td>
-				  </tr>
+				 </tr>
+				  
+				  
 				 <tr>
 				 	<td class="formSerialNumberLabel" width="5">
 				     	#
@@ -369,11 +403,16 @@
 				     	<html:text styleClass="formFieldSized" size="30" styleId="externalIdentifierValue" property="externalIdentifierName(2)" readonly="<%=readOnlyForAll%>"/>
 				    </td>
 				 </tr>
-				 <!-- External Identifiers End here -->				 
-				 
+				 <!-- External Identifiers End here -->
+				 </table>
+			    </td>
+			  </tr>
+			  <tr>
+    		    <td>
+			 	 <table summary="" cellpadding="3" cellspacing="0" border="0">			 
 				 <!-- Bio-hazards Begin here -->
 				 <tr>
-				     <td class="formSubTableTitle" height="20" colspan="2">
+				     <td class="formTitle" height="20" colspan="2">
 				     	<bean:message key="specimen.biohazards"/>
 				     </td>
 				     <td class="formButtonField" colspan="2">
@@ -424,22 +463,9 @@
 		        	</td>
 				 </tr>
 				 <!-- Bio-hazards End here -->	
-				 
-				 <tr>
-			     	<td class="formRequiredNotice" width="5">
-				     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">*</logic:notEqual>
-				     	<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;</logic:equal>
-				    </td>
-				    <td class="formRequiredLabel">
-						<label for="comments">
-							<bean:message key="specimen.comments"/>
-						</label>
-					</td>
-				    <td class="formField" colspan="2">
-				    	<html:textarea styleClass="formFieldSized" rows="3" styleId="comments" property="comments" readonly="<%=readOnlyForAll%>"/>
-				    </td>
-				 </tr>
-				 
+				 </table>
+			  </td>
+			 </tr>
  			   	 <logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">		
 				 	<tr>
 				  		<td align="right" colspan="4">
@@ -472,9 +498,7 @@
 				 </logic:notEqual>
 				 
 				</logic:notEqual>
-				</table>
-			  </td>
-			 </tr>
+				
 			 
 			 <!-- NEW SPECIMEN REGISTRATION ends-->
 			 </html:form>

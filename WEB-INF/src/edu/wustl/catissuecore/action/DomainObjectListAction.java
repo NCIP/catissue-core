@@ -12,7 +12,6 @@
 package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,8 +24,12 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.AbstractActionForm;
+import edu.wustl.catissuecore.dao.AbstractBizLogic;
+import edu.wustl.catissuecore.dao.BizLogicFactory;
+import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.security.SecurityManager;
 
 /**
  * DomainObjectListAction is used to show the list of all 
@@ -47,6 +50,8 @@ public class DomainObjectListAction extends Action
 
         AbstractActionForm abstractForm = (AbstractActionForm)form;
         
+        AbstractBizLogic abstractDAO = BizLogicFactory.getBizLogic(abstractForm.getFormId());
+        
         //Returns the page number to be shown.
         int pageNum = Integer.parseInt(request.getParameter(Constants.PAGE_NUMBER));
         
@@ -61,21 +66,26 @@ public class DomainObjectListAction extends Action
         
         if (pageNum == Constants.START_PAGE)
         {
-            //Only for showing UI.
-            User user = new User();
-            user.setSystemIdentifier(new Long(12));
-            user.getUser().setLoginName("Srikanth");
-            user.getUser().setLastName("Adiga");
-            user.getUser().setFirstName("Srikanth");
-            user.getAddress().setEmailAddress("srikanth@persistent.co.in");
-            user.getUser().setStartDate(Calendar.getInstance().getTime());
+            //If start page is to be shown retrieve the list from the database. 
+            list = abstractDAO.retrieve(AbstractDomainObject.getDomainObjectName(abstractForm.getFormId()),
+                    					"activityStatus",abstractForm.getActivityStatus());
             
-            list = new ArrayList();
-            list.add(user);
+            if (abstractForm.getFormId() == Constants.USER_FORM_ID)
+            {
+                List tempList = new ArrayList();
+                for (int i = 0; i < list.size() ;i++ )
+                {
+                    User user = (User)list.get(i);
+                    gov.nih.nci.security.authorization.domainobjects.User csmUser = 
+                        	SecurityManager.getInstance(DomainObjectListAction.class).
+                    				getUserById(String.valueOf(user.getSystemIdentifier()));
+                    user.setUser(csmUser);
+                    tempList.add(user);
+                }
+                
+                list = tempList;
+            }
             
-            
-            //If start page is to be shown retrieve the list of users from the database. 
-//            list = abstractDAO.retrieve(AbstractDomainObject.getDomainObjectName(abstractForm.getFormId()),"activityStatus.status",abstractForm.getActivityStatus());
             if (Constants.NUMBER_RESULTS_PER_PAGE > list.size())
             {
                 endIndex = list.size();

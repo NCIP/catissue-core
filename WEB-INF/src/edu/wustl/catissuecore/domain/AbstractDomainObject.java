@@ -30,21 +30,18 @@ public abstract class AbstractDomainObject
         String className = null;
         switch(FORM_TYPE)
         {
-//            case Constants.PARTICIPANT_FORM_ID:
-//                className = Participant.class.getName();
-//            	break;
-//            case Constants.ACCESSION_FORM_ID:
-//                className = Accession.class.getName();
-//            	break;
-//            case Constants.INSTITUTE_FORM_ID:
-//                className = Institute.class.getName();
-//            	break;
-//            case Constants.ACTIVITY_STATUS_FORM_ID:
-//                className = ActivityStatus.class.getName();
-//            	break;
-//            case Constants.REPORTEDPROBLEM_FORM_ID:
-//                className = ReportedProblem.class.getName();
-//            	break;
+            case Constants.PARTICIPANT_FORM_ID:
+                className = Participant.class.getName();
+            	break;
+            case Constants.INSTITUTION_FORM_ID:
+                className = Institution.class.getName();
+            	break;
+            case Constants.REPORTEDPROBLEM_FORM_ID:
+                className = ReportedProblem.class.getName();
+            	break;
+            case Constants.USER_FORM_ID:
+                className = User.class.getName();
+            	break;
         }
         return className;
     }

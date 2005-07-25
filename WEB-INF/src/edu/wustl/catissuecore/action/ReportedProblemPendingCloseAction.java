@@ -76,16 +76,12 @@ public class ReportedProblemPendingCloseAction extends Action
                 {
 
                     //Change the Activity Status for closed status.
-//                    list = dao.retrieve(AbstractDomainObject.getDomainObjectName(Constants.ACTIVITY_STATUS_FORM_ID),
-//                                    "status", Constants.ACTIVITY_STATUS_CLOSED);
                     activityStatus = Constants.ACTIVITY_STATUS_CLOSED;
 
                 }
                 else
                 {
                     //Change the Activity Status for pending status.
-//                    list = dao.retrieve(AbstractDomainObject.getDomainObjectName(Constants.ACTIVITY_STATUS_FORM_ID),
-//                                    "status", Constants.ACTIVITY_STATUS_PENDING);
                     activityStatus = Constants.ACTIVITY_STATUS_PENDING;
                 }
 

@@ -45,8 +45,25 @@ public class SendEmail
     public boolean sendmail(String to, String from, String host,
             String subject, String body)
     {
-
-        // create some properties and get the default Session
+        return sendmail(to,null,null,from,host,subject,body);
+    }
+    
+    /**
+     * Used to send the mail with given parameters.
+     * @param to "To" Address for sending the mail
+     * @param cc "CC" Address for sending the mail
+     * @param bcc "BCC" Address for sending the mail
+     * @param from "From" Address for sending the mail
+     * @param host "Host" from where to send the mail
+     * @param subject "Subject" of the mail
+     * @param body "Body" of the mail
+     * @return true if mail was successfully sent, false if it fails
+     */
+    public boolean sendmail(String to, String cc, String bcc, String from, String host,
+            String subject, String body)
+    {
+        
+        //create some properties and get the default Session
         Properties props = new Properties();
         props.put("mail.smtp.host", host);
  
@@ -58,10 +75,21 @@ public class SendEmail
             // create a message
             MimeMessage msg = new MimeMessage(session);
             msg.setFrom(new InternetAddress(from));
-            InternetAddress[] address = {new InternetAddress(to)};
+            InternetAddress[] toAddress = {new InternetAddress(to)};
+            
+            if (cc != null)
+            {
+                InternetAddress[] ccAddress = {new InternetAddress(cc)};
+                msg.setRecipients(Message.RecipientType.CC,ccAddress);
+            }
 
+            if (bcc != null)
+            {
+                InternetAddress[] bccAddress = {new InternetAddress(bcc)};
+                msg.setRecipients(Message.RecipientType.BCC,bccAddress);
+            }
             //set TO
-            msg.setRecipients(Message.RecipientType.TO, address);
+            msg.setRecipients(Message.RecipientType.TO, toAddress);
 
             //Set Subject
             msg.setSubject(subject);
@@ -97,7 +125,5 @@ public class SendEmail
         }
 
         return true;
-
     }
-
 }

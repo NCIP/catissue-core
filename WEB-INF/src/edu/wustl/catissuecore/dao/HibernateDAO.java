@@ -41,6 +41,12 @@ public class HibernateDAO extends AbstractDAO
         }
         catch (HibernateException dbex)
         {
+            Logger.out.error(dbex.getMessage(),dbex);
+            throw handleException(dbex, "Object can not be added.", tx);
+        }
+        catch (Exception dbex)
+        {
+            Logger.out.error(dbex.getMessage(),dbex);
             throw handleException(dbex, "Object can not be added.", tx);
         }
     }
@@ -53,7 +59,6 @@ public class HibernateDAO extends AbstractDAO
         }
         catch (HibernateException dbex)
         {
-            dbex.printStackTrace();
             throw handleException(dbex, "Object can not be added.", tx);
         }
         finally
@@ -277,8 +282,7 @@ public class HibernateDAO extends AbstractDAO
         }
         catch (HibernateException hibExp)
         {
-//            Logger.out.error(hibExp.getMessage(),hibExp);
-            hibExp.printStackTrace();
+            Logger.out.error(hibExp.getMessage(),hibExp);
         }
         return list;
     }

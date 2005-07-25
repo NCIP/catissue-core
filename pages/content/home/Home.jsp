@@ -14,7 +14,7 @@
                             
                               <!-- welcome begins -->
                               <table summary="" cellpadding="0" cellspacing="0" border="0" width="600" height="100%">
-                                <tr><td class="welcomeTitle" height="20">Welcome TO caTISSUE Core</td>
+                                <tr><td class="welcomeTitle" height="20">Welcome to caTISSUE Core</td>
                                 </tr>
                                 <tr>
                                   <td class="welcomeContent" valign="top">
@@ -108,36 +108,6 @@
                                   </td>
                                 </tr>
                                 <!-- login ends -->
-                                
-                                <!-- what's new begins -->
-                                <tr>
-                                  <td valign="top">
-                                    <table summary="" cellpadding="0" cellspacing="0" border="0" width="100%" class="sidebarSection">
-                                      <tr>
-                                        <td class="sidebarTitle" height="20">WHAT'S NEW</td>
-                                      </tr>
-                                      <tr>
-                                        <td class="sidebarContent">&lt;TBD&gt;</td>
-                                      </tr>
-                                    </table>
-                                  </td>
-                                </tr>
-                                <!-- what's new ends -->
-                                
-                                <!-- did you know? begins -->
-                                <tr>
-                                  <td valign="top">
-                                    <table summary="" cellpadding="0" cellspacing="0" border="0" width="100%" height="100%" class="sidebarSection">
-                                    <tr>
-                                      <td class="sidebarTitle" height="20">DID YOU KNOW?</td>
-                                    </tr>
-                                    <tr>
-                                      <td class="sidebarContent" valign="top">&lt;TBD&gt;</td>
-                                    </tr>
-                                    </table>
-                                  </td>
-                                </tr>
-                                <!-- did you know? ends -->
                                 
                                 <!-- spacer cell begins (keep for dynamic expanding)-->
                                 <tr>

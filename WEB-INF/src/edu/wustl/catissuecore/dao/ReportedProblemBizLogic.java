@@ -7,7 +7,6 @@
 
 package edu.wustl.catissuecore.dao;
 
-import net.sf.hibernate.HibernateException;
 import edu.wustl.catissuecore.domain.ReportedProblem;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -57,7 +56,7 @@ public class ReportedProblemBizLogic extends DefaultBizLogic
     /* (non-Javadoc)
      * @see edu.wustl.catissuecore.dao.AbstractBizLogic#update(java.lang.Object)
      */
-    public void update(Object obj) throws HibernateException, DAOException
+    public void update(Object obj) throws DAOException
     {
         ReportedProblem reportedProblem = (ReportedProblem) obj;
         AbstractDAO dao = DAOFactory.getDAO(Constants.HIBERNATE_DAO);

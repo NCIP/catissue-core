@@ -10,7 +10,6 @@
 	  int pageNum = Integer.parseInt((String)request.getAttribute(Constants.PAGE_NUMBER));
 	  int totalResults = Integer.parseInt((String)request.getAttribute(Constants.TOTAL_RESULTS));
 	  int numResultsPerPage = Integer.parseInt((String)request.getAttribute(Constants.RESULTS_PER_PAGE));
-		
 %>
 
 </br>
@@ -62,20 +61,23 @@
 						cellspacing="0" border="0" class="dataTable" width="100%">
 						
 						<tr>
-							<th class="dataTableHeader" scope="col" align="center">
+							<th class="formSerialNumberLabelForTable" scope="col">
+				     			#
+				    		</th>
+							<th class="dataTableHeader" scope="col" align="left">
 								<bean:message key="reportedProblem.pendingClose" />
 							</th>
-							<th class="dataTableHeader" scope="col" align="center">
+							<th class="dataTableHeader" scope="col" align="left">
 								<bean:message key="reportedProblem.from" />
 							</th>
-							<th class="dataTableHeader" scope="col" align="center">
+							<th class="dataTableHeader" scope="col" align="left">
 								<bean:message key="reportedProblem.title" />
 							</th>
-							<th class="dataTableHeader" scope="col" align="center">
+							<th class="dataTableHeader" scope="col" align="left">
 								<bean:message key="reportedProblem.reportedDate" />
 							</th>
 						</tr>
-						
+						<%int i=1;%>
 						<logic:iterate id="problem" name="showDomainObjectList">
 							<tr class="dataRowLight">
 								<%
@@ -84,6 +86,9 @@
         								String checkBoxName = "value(problem" + checkBoxValue + ")";
 										String problemDetailsLink = Constants.PROBLEM_DETAILS_ACTION+"?"+Constants.IDENTIFIER+"="+checkBoxValue;				
         						%>
+        						<td class="dataCellText">
+									<%=i%>
+								</td>
 								<td class="dataCellText">
 									<html:checkbox property="<%=checkBoxName%>" value="<%=checkBoxValue%>" />
 								</td>
@@ -99,6 +104,7 @@
 									<bean:write name="problem" property="reportedDate" />
 								</td>
 							</tr>
+							<%i++;%>
 						</logic:iterate>
 					 </table>
 					</td>

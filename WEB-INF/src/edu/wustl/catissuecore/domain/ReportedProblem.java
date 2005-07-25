@@ -88,6 +88,7 @@ public class ReportedProblem extends AbstractDomainObject
         this.from  = reportedProblemForm.getFrom();
         this.messageBody = reportedProblemForm.getMessageBody();
         this.activityStatus = reportedProblemForm.getActivityStatus();
+        this.comments = reportedProblemForm.getComments();
     }
     
     /**

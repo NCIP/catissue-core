@@ -51,6 +51,9 @@
 						cellspacing="0" border="0" class="dataTable" width="100%">
 						
 						<tr>
+							<th class="formSerialNumberLabelForTable" scope="col">
+				     			#
+				    		</th>
 							<th class="dataTableHeader" scope="col" align="center">
 								<bean:message key="user.loginName" />
 							</th>
@@ -64,32 +67,35 @@
 								<bean:message key="approveUser.registrationDate" />
 							</th>
 						</tr>
-						
+						<%int i=1;%>
 						<logic:iterate id="currentUser" name="showDomainObjectList">
 							<tr class="dataRowLight">
 								<%
         								User user = (User) currentUser;
 										String identifier = user.getSystemIdentifier().toString();
-										//String userDetailsLink = Constants.USER_DETAILS_SHOW_ACTION+"?"+Constants.IDENTIFIER+"="+identifier;
-										String userDetailsLink = "User.do?operation=edit&amp;pageOf=query";
+										String userDetailsLink = Constants.USER_DETAILS_SHOW_ACTION+"?"+Constants.IDENTIFIER+"="+identifier;
         						%>
 								<td class="dataCellText">
+									<%=i%>
+								</td>
+								<td class="dataCellText">
 									<a href="<%=userDetailsLink%>" >
-										<bean:write	name="currentUser" property="loginName" />
+										<bean:define id="csmUser" name="currentUser" property="user"/>
+										<bean:write	name="csmUser" property="loginName" />
 									</a>
 								</td>
 								<td class="dataCellText">
-									<bean:write name="currentUser" property="lastName" />,
-									<bean:write name="currentUser" property="firstName" />
+									<bean:write name="csmUser" property="lastName" />,
+									<bean:write name="csmUser" property="firstName" />
 								</td>
 								<td class="dataCellText">
-									<bean:define id="csmUser" name="currentUser" property="user"/>
-									<bean:write name="csmUser" property="emailAddress"/>
+									<bean:write name="csmUser" property="emailId"/>
 								</td>
 								<td class="dataCellText">
-									<bean:write name="currentUser" property="dateAdded" />
+									<bean:write name="csmUser" property="startDate" />
 								</td>
 							</tr>
+							<%i++;%>
 						</logic:iterate>
 					 </table>
 					</td>

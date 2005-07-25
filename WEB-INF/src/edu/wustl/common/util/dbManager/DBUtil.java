@@ -10,6 +10,7 @@ import net.sf.hibernate.Session;
 import net.sf.hibernate.SessionFactory;
 import net.sf.hibernate.cfg.Configuration;
 import edu.wustl.catissuecore.util.global.Variables;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * <p>Title: DBUtil Class>
@@ -33,9 +34,8 @@ public class DBUtil
 	
 		try
 		{
-		    System.out.println("USER DIR "+System.getProperty("user.home")+System.getProperty("user.dir"));
 			File file = new File(Variables.catissueHome+System.getProperty("file.separator")+"hibernate.properties");
-			System.out.println("File "+file);
+			Logger.out.info("File "+file);
 			BufferedInputStream stram = new BufferedInputStream(new FileInputStream(file));
 			Properties p = new Properties();
 			p.load(stram);
@@ -47,6 +47,7 @@ public class DBUtil
 		}
 		catch(Exception ex)
 		{
+		    Logger.out.debug("Exception: "+ex.getMessage(),ex);
 			throw new RuntimeException(ex.getMessage());
 		}
 	}

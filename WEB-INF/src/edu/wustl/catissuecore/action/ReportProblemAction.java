@@ -33,11 +33,27 @@ public class ReportProblemAction extends Action
     /**
      * Overrides the execute method of Action class.
      * Sets the various in ReportProblem webpage.
-     * */
+     */
     public ActionForward execute(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException
     {
+        //Gets the value of the operation parameter.
+        String operation = request.getParameter(Constants.OPERATION);
+
+        //Sets the operation attribute to be used in the Add/Edit Problem Page. 
+        request.setAttribute(Constants.OPERATION, operation);
+        
+        if (operation.equals(Constants.EDIT))
+        {
+            Long prevIdentifier = (Long)request.getAttribute(Constants.PREVIOUS_PAGE);
+            request.setAttribute(Constants.PREVIOUS_PAGE,prevIdentifier);
+            Long nextIdentifier = (Long)request.getAttribute(Constants.NEXT_PAGE);
+            request.setAttribute(Constants.NEXT_PAGE,nextIdentifier);
+        }
+        
+        request.setAttribute(Constants.ACTIVITYSTATUSLIST,
+                Constants.REPORTED_PROBLEM_ACTIVITY_STATUS_VALUES);
         return mapping.findForward(Constants.SUCCESS);
     }
 }

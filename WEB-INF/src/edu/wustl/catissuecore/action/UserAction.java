@@ -67,7 +67,7 @@ public class UserAction extends Action
 
         try
         {
-            AbstractBizLogic dao = BizLogicFactory.getDAO(Constants.USER_FORM_ID);
+            AbstractBizLogic dao = BizLogicFactory.getBizLogic(Constants.USER_FORM_ID);
             ListIterator iterator = null;
             int i;
             

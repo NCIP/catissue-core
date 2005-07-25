@@ -200,4 +200,25 @@ public class InstitutionForm extends AbstractActionForm
         }
         return errors;
      }
+    
+    
+    /* (non-Javadoc)
+     * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#getActivityStatus()
+     */
+    public String getActivityStatus()
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+    
+    
+    /* (non-Javadoc)
+     * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#setActivityStatus(java.lang.String)
+     */
+    public void setActivityStatus(String activityStatus)
+    {
+        // TODO Auto-generated method stub
+
+    }
+     
 }

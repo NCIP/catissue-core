@@ -14,12 +14,13 @@ package edu.wustl.catissuecore.domain;
 import java.io.Serializable;
 import java.sql.Clob;
 import java.sql.SQLException;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashSet;
 
 import edu.wustl.catissuecore.actionForm.AbstractActionForm;
 import edu.wustl.catissuecore.actionForm.UserForm;
+import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.GeneratePassword;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -76,6 +77,8 @@ public class User extends AbstractDomainObject implements Serializable
      */
     protected String comments;
     
+    private String roleId;
+    
     /**
      * Set of collection protocol.
      * */
@@ -103,7 +106,7 @@ public class User extends AbstractDomainObject implements Serializable
      */
     public User()
     {
-        this.user.setStartDate(Calendar.getInstance().getTime());
+//        this.user.setStartDate(Calendar.getInstance().getTime());
     }
 
     /**
@@ -309,6 +312,22 @@ public class User extends AbstractDomainObject implements Serializable
     }
     
     /**
+     * @return Returns the roleId.
+     */
+    public String getRoleId()
+    {
+        return roleId;
+    }
+    
+    /**
+     * @param roleId The roleId to set.
+     */
+    public void setRoleId(String roleId)
+    {
+        this.roleId = roleId;
+    }
+    
+    /**
      * This function Copies the data from an UserForm object to a User object.
      * @param user An UserForm object containing the information about the user.  
      * */
@@ -318,6 +337,9 @@ public class User extends AbstractDomainObject implements Serializable
         {
             UserForm uform = (UserForm) abstractForm;
             this.systemIdentifier = new Long(uform.getSystemIdentifier());
+
+            if (user != null)
+                user = new gov.nih.nci.security.authorization.domainobjects.User();
             
             this.user.setLoginName(uform.getLoginName());
             this.user.setLastName(uform.getLastName());
@@ -329,6 +351,14 @@ public class User extends AbstractDomainObject implements Serializable
             this.cancerResearchGroup.setName(uform.getCancerResearchGroup());
             
             this.activityStatus = uform.getActivityStatus();
+            if (activityStatus.equals(Constants.ACTIVITY_STATUS_ACTIVE))
+            {
+                this.user.setPassword(GeneratePassword.getPassword(this.user.getLoginName()));
+            }
+            
+            if (uform.getRole() != null)
+                this.roleId = uform.getRole();
+            
             this.address.setStreet(uform.getStreet());
             this.address.setCity(uform.getCity());
             this.address.setState(uform.getState());

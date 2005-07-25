@@ -149,7 +149,7 @@ public class UserForm extends AbstractActionForm
             this.lastName = user.getUser().getLastName();
             this.firstName = user.getUser().getFirstName();
             this.institution = user.getInstitution().getName();
-            this.emailAddress = user.getAddress().getEmailAddress();
+            this.emailAddress = user.getUser().getEmailId();
             this.department = user.getDepartment().getName();
             this.street = user.getAddress().getStreet();
             this.city = user.getAddress().getCity();
@@ -158,11 +158,10 @@ public class UserForm extends AbstractActionForm
             this.zipCode = user.getAddress().getZipCode();
             this.phoneNumber = user.getAddress().getPhoneNumber();
             this.faxNumber = user.getAddress().getFaxNumber();
-            //            this.role = user.getRole().getName();
+            this.cancerResearchGroup = user.getCancerResearchGroup().getName();
         }
         catch (Exception excp)
         {
-            excp.printStackTrace();
             Logger.out.error(excp.getMessage());
         }
     }
@@ -640,14 +639,32 @@ public class UserForm extends AbstractActionForm
                 {
                     errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
                             "errors.item.required", ApplicationProperties
-                                    .getValue("user.address")));
+                                    .getValue("user.street")));
+                }
+                
+                checkValidString(city, "user.city", errors, validator);
+                
+                if (state.trim().equals(Constants.SELECT_OPTION))
+                {
+                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+                            "errors.item.required", ApplicationProperties
+                                    .getValue("user.state")));
+                }
+                
+                checkValidNumber(zipCode, "user.zipCode", errors, validator);
+                
+                if (country.trim().equals(Constants.SELECT_OPTION))
+                {
+                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+                            "errors.item.required", ApplicationProperties
+                                    .getValue("user.country")));
                 }
 
                 if (validator.isEmpty(emailAddress))
                 {
                     errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
                             "errors.item.required", ApplicationProperties
-                                    .getValue("user.email")));
+                                    .getValue("user.emailAddress")));
                 }
                 else
                 {
@@ -655,20 +672,44 @@ public class UserForm extends AbstractActionForm
                     {
                         errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
                                 "errors.item.format", ApplicationProperties
-                                        .getValue("user.email")));
+                                        .getValue("user.emailAddress")));
                     }
                 }
 
-                checkValidString(city, "user.city", errors, validator);
-                checkValidNumber(zipCode, "user.zip", errors, validator);
+                if (institution.trim().equals(Constants.SELECT_OPTION))
+                {
+                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+                            "errors.item.required", ApplicationProperties
+                                    .getValue("user.institution")));
+                }
+                
+                if (department.trim().equals(Constants.SELECT_OPTION))
+                {
+                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+                            "errors.item.required", ApplicationProperties
+                                    .getValue("user.department")));
+                }
+                
+                if (cancerResearchGroup.trim().equals(Constants.SELECT_OPTION))
+                {
+                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+                            "errors.item.required", ApplicationProperties
+                                    .getValue("user.cancerResearchGroup")));
+                }
 
-//                if (role == null)
-//                {
-//                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-//                            "errors.item.required", ApplicationProperties
-//                                    .getValue("user.role")));
-//                }
             }
+            
+            if (operation.equals(Constants.EDIT))
+            {
+              if (validator.isEmpty(role))
+              {
+                  errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+                          "errors.item.required", ApplicationProperties
+                                  .getValue("user.role")));
+              }
+
+            }
+            
             if (operation.equals(Constants.FORGOT_PASSWORD))
             {
                 if ((validator.isEmpty(loginName))

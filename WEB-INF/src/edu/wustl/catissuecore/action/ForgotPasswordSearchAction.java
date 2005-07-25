@@ -33,6 +33,8 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.SendEmail;
 import edu.wustl.catissuecore.util.global.Validator;
 import edu.wustl.catissuecore.util.global.Variables;
+import edu.wustl.common.security.SecurityManager;
+import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
@@ -58,33 +60,55 @@ public class ForgotPasswordSearchAction extends Action
             AbstractBizLogic bizLogic = BizLogicFactory.getBizLogic(uForm.getFormId());
             List list = null;
             Validator validator = new Validator();
+            gov.nih.nci.security.authorization.domainobjects.User csmUser = null;
 
             if (!validator.isEmpty(uForm.getLoginName()))
             {
                 //if loginName is entered retrieve password using loginName.
-                list = bizLogic.retrieve(User.class.getName(), Constants.LOGINNAME,
-                        uForm.getLoginName());
+                csmUser = SecurityManager.getInstance(ForgotPasswordSearchAction.class)
+    			.getUser(uForm.getLoginName());
+                
             }
             else
             {
                 //if loginName is not entered retrieve password using email address.
-                list = bizLogic.retrieve(User.class.getName(), Constants.EMAIL,
-                        uForm.getEmailAddress());
+                List csmList = SecurityManager.getInstance(ForgotPasswordSearchAction.class)
+                								.getUsersByEmail(uForm.getEmailAddress());
+                
+                if (csmList.size() != 0)
+                {
+                    csmUser = (gov.nih.nci.security.authorization.domainobjects.User )
+                    				csmList.get(0);
+                }
+                 
             }
             
-            if (list.size() != 0)
+            if (csmUser != null)
+            {
+                list = bizLogic.retrieve(User.class.getName(), "systemIdentifier",
+                        String.valueOf(csmUser.getUserId()));
+            }
+                
+
+            if ((csmUser != null) && (list.size() != 0))
             {
                 User user = (User) list.get(0);
                 
+                user.setUser(csmUser);
+                
                 Logger.out.debug("Password successfully retrieved for user: "+user.getUser().getLoginName());
                 
-                if (user.getActivityStatus().equals(Constants.ACTIVITY_STATUS_APPROVE))
+                if (user.getActivityStatus().equals(Constants.ACTIVITY_STATUS_ACTIVE))
                 {
                     SendEmail email = new SendEmail();
                     
-                    String body = "\n User Name : " + user.getUser().getLoginName() + "\n Password : " + user.getUser().getPassword();
-                    boolean emailStatus = email.sendmail(user.getAddress().getEmailAddress(),
-                            Variables.toAddress, Variables.mailServer,
+                    String body = "Dear " + user.getUser().getFirstName()+ " " + user.getUser().getLastName() +
+                    			  "\n\n" + ApplicationProperties.getValue("forgotPassword.email.body.start") +
+                    			  "\n\t User Name : " + user.getUser().getLoginName() + "\n\t Password : " + 
+                    			  user.getUser().getPassword() +
+                    			  "\n\n" + ApplicationProperties.getValue("email.catissuecore.team");
+                    boolean emailStatus = email.sendmail(user.getUser().getEmailId(),
+                            Variables.emailAddress, Variables.mailServer,
                             Constants.YOUR_PASSWORD, body);
                     
                     /**
@@ -94,12 +118,15 @@ public class ForgotPasswordSearchAction extends Action
                     if (emailStatus == true)
                     {
                         
-                        Logger.out.debug("Password successfully sent to "+user.getUser().getLoginName()+" at "+user.getAddress().getEmailAddress());
+                        Logger.out.debug("Password successfully sent to "+user.getUser().getLoginName()+" at "+user.getUser().getEmailId());
+                        String statusMessageKey = "password.send.success";
+
+                        request.setAttribute(Constants.STATUS_MESSAGE_KEY,statusMessageKey);
                         target = new String(Constants.SUCCESS);
                     }
                     else
                     {
-                        Logger.out.error("Sending Password Failed to "+user.getUser().getLoginName()+" at "+user.getAddress().getEmailAddress());
+                        Logger.out.error("Sending Password Failed to "+user.getUser().getLoginName()+" at "+user.getUser().getEmailId());
                         target = new String(Constants.FAILURE);
                     }
                 }
@@ -135,6 +162,10 @@ public class ForgotPasswordSearchAction extends Action
         {
             target = new String(Constants.FAILURE);
             Logger.out.error(excp.getMessage());
+        }
+        catch(SMException exp)
+        {
+            Logger.out.error(exp.getMessage(),exp);
         }
         return (mapping.findForward(target));
     }

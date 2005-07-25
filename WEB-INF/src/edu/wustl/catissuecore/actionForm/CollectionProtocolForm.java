@@ -11,16 +11,16 @@
 
 package edu.wustl.catissuecore.actionForm;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Collection;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
-import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Validator;

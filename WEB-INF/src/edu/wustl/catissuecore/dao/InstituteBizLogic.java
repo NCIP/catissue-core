@@ -10,7 +10,6 @@
 
 package edu.wustl.catissuecore.dao;
 
-import net.sf.hibernate.HibernateException;
 import edu.wustl.catissuecore.domain.Institution;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.dbManager.DAOException;

@@ -1,8 +1,7 @@
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
-<%@ page import="edu.wustl.catissuecore.domain.ReportedProblem;
-import edu.wustl.catissuecore.util.global.C"%>
+<%@ page import="edu.wustl.catissuecore.domain.ReportedProblem,edu.wustl.catissuecore.util.global.Constants"%>
 
 <%
 	Long identifier = (Long)request.getAttribute(Constants.PREVIOUS_PAGE);
@@ -25,13 +24,13 @@ import edu.wustl.catissuecore.util.global.C"%>
 					</tr>
 					<tr>
 						<td>
-							<html:hidden property="identifier" />
+							<html:hidden property="systemIdentifier" />
 						</td>
 					</tr>
 					<tr>
 						<%
 							ReportedProblem reportedProblem = (ReportedProblem)request.getAttribute(Constants.CURRENT_RECORD);
-							String reportedProblemIdentifier = reportedProblem.getIdentifier().toString();
+							String reportedProblemIdentifier = reportedProblem.getSystemIdentifier().toString();
 							String propertyName = "value(problem" + reportedProblemIdentifier + ")";
 						%>
 						<td>

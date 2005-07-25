@@ -1,6 +1,7 @@
 /**
  * <p>Title: UserDetailsAction Class>
- * <p>Description:	UserDetailsAction is used to display details of user whose membership is to be approved/Rejected.</p>
+ * <p>Description:	UserDetailsAction is used to display details of user 
+ * whose membership is to be approved/Rejected.</p>
  * Copyright:    Copyright (c) year
  * Company: Washington University, School of Medicine, St. Louis.
  * @author Gautam Shetty
@@ -21,9 +22,9 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.actionForm.AbstractActionForm;
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.util.global.Constants;
-
 
 /**
  * UserDetailsAction is used to display details of user whose membership is to be approved/Rejected.
@@ -64,7 +65,10 @@ public class DomainObjectDetailsAction extends Action
             nextIdentifier = nextDomainObject.getSystemIdentifier();
         }
         
-        request.setAttribute(Constants.CURRENT_RECORD,currentDomainObject);
+        AbstractActionForm abstractActionForm = (AbstractActionForm)form;
+        abstractActionForm.setAllValues(currentDomainObject);
+        
+//        request.setAttribute(Constants.CURRENT_RECORD,currentDomainObject);
         
         request.setAttribute(Constants.PREVIOUS_PAGE,prevIdentifier);
         request.setAttribute(Constants.NEXT_PAGE,nextIdentifier);
