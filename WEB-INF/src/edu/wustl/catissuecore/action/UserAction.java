@@ -11,6 +11,9 @@
 package edu.wustl.catissuecore.action;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Vector;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -21,7 +24,15 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.dao.AbstractBizLogic;
+import edu.wustl.catissuecore.dao.BizLogicFactory;
+import edu.wustl.catissuecore.domain.CancerResearchGroup;
+import edu.wustl.catissuecore.domain.Department;
+import edu.wustl.catissuecore.domain.Institution;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.security.SecurityManager;
+import edu.wustl.common.util.logger.Logger;
+import gov.nih.nci.security.authorization.domainobjects.Role;
 
 /**
  * This class initializes the fields in the User Add/Edit webpage.
@@ -50,78 +61,91 @@ public class UserAction extends Action
         //Sets the countryList attribute to be used in the Add/Edit User Page.
         request.setAttribute(Constants.COUNTRYLIST, Constants.COUNTRYARRAY);
 
-        //Sets the cancerResearchGroupList attribute to be used in the Add/Edit User Page.
-        request.setAttribute(Constants.CANCER_RESEARCH_GROUP_LIST, Constants.CANCER_RESEARCH_GROUP_VALUES);
-        
         //Sets the pageOf attribute (for Add,Edit or Query Interface)
         String pageName  = request.getParameter(Constants.PAGEOF);
         request.setAttribute(Constants.PAGEOF,pageName);
 
-//        try
-//        {
-//            AbstractBizLogic dao = BizLogicFactory.getDAO(Constants.USER_FORM_ID);
-//            ListIterator iterator = null;
-//            int i;
-//            if (operation.equals(Constants.EDIT))
-//            {
-//                //Sets the roleList attribute to be used in the Add/Edit User Page.
-//                List roleList = dao.retrieve(Role.class.getName());
-//                String[] roleArray = new String[roleList.size()];
-//                iterator = roleList.listIterator();
-//                i = 0;
-//                while (iterator.hasNext())
-//                {
-//                    Role role = (Role) iterator.next();
-//                    roleArray[i] = role.getName();
-//                    i++;
-//                }
-                request.setAttribute(Constants.ROLELIST, Constants.ROLE_VALUES);
-//            }
+        try
+        {
+            AbstractBizLogic dao = BizLogicFactory.getDAO(Constants.USER_FORM_ID);
+            ListIterator iterator = null;
+            int i;
+            
+            //Sets the instituteList attribute to be used in the Add/Edit User Page.
+            List instituteList = dao.retrieve(Institution.class.getName());
+            String[] instituteArray = new String[instituteList.size()+1];
+            iterator = instituteList.listIterator();
+            i = 0;
+            instituteArray[i++] = Constants.SELECT_OPTION;
+            while (iterator.hasNext())
+            {
+                Institution institute = (Institution) iterator.next();
+                instituteArray[i] = institute.getName();
+                i++;
+            }
+            request.setAttribute(Constants.INSTITUTIONLIST, instituteArray);
 
-//            //Sets the instituteList attribute to be used in the Add/Edit User Page.
-//            List instituteList = dao.retrieve(Institution.class.getName());
-//            String[] instituteArray = new String[instituteList.size()];
-//            iterator = instituteList.listIterator();
-//            i = 0;
-//            while (iterator.hasNext())
-//            {
-//                Institution institute = (Institution) iterator.next();
-//                instituteArray[i] = institute.getName();
-//                i++;
-//            }
-            request.setAttribute(Constants.INSTITUTIONLIST, Constants.INSTITUTE_VALUES);
+            //Sets the departmentList attribute to be used in the Add/Edit User Page.
+            List departmentList = dao.retrieve(Department.class.getName());
+            String[] departmentArray = new String[departmentList.size()+1];
+            iterator = departmentList.listIterator();
+            i = 0;
+            departmentArray[i++] = Constants.SELECT_OPTION;
+            while (iterator.hasNext())
+            {
+                Department department = (Department) iterator.next();
+                departmentArray[i] = department.getName();
+                i++;
+            }
+            request.setAttribute(Constants.DEPARTMENTLIST, departmentArray);
 
-//            //Sets the departmentList attribute to be used in the Add/Edit User Page.
-//            List departmentList = dao.retrieve(Department.class.getName());
-//            String[] departmentArray = new String[departmentList.size()];
-//            iterator = departmentList.listIterator();
-//            i = 0;
-//            while (iterator.hasNext())
-//            {
-//                Department department = (Department) iterator.next();
-//                departmentArray[i] = department.getName();
-//                i++;
-//            }
-            request.setAttribute(Constants.DEPARTMENTLIST, Constants.DEPARTMENT_VALUES);
-
-//            departmentList = dao.retrieve(ActivityStatus.class.getName());
-//            String[] activityStatusArray = new String[departmentList.size()];
-//            iterator = departmentList.listIterator();
-//            i = 0;
-//            while (iterator.hasNext())
-//            {
-//                ActivityStatus activityStatus = (ActivityStatus) iterator
-//                        .next();
-//                activityStatusArray[i] = activityStatus.getStatus();
-//                i++;
-//            }
+            List cancerResearchGroupList = dao.retrieve(CancerResearchGroup.class.getName());
+            String[] cancerResearchGroupArray = new String[cancerResearchGroupList.size()+1];
+            iterator = cancerResearchGroupList.listIterator();
+            i = 0;
+            cancerResearchGroupArray[i++] = Constants.SELECT_OPTION;
+            while (iterator.hasNext())
+            {
+                CancerResearchGroup cancerResearchGroup = 
+                    				(CancerResearchGroup) iterator.next();
+                cancerResearchGroupArray[i] = cancerResearchGroup.getName();
+                i++;
+            }
+            
+            //Sets the cancerResearchGroupList attribute to be used in the Add/Edit User Page.
+            request.setAttribute(Constants.CANCER_RESEARCH_GROUP_LIST, 
+                    cancerResearchGroupArray);
+            
             request.setAttribute(Constants.ACTIVITYSTATUSLIST,
                     Constants.ACTIVITY_STATUS_VALUES);
-//        }
-//        catch (Exception exc)
-//        {
-//            Logger.out.error(exc.getMessage());
-//        }
+            
+            if (operation.equals(Constants.EDIT))
+            {
+                //Sets the roleList attribute to be used in the Add/Edit User Page.
+                Vector roleList = SecurityManager.getInstance(UserAction.class).getRoles();
+                
+                String[] roleNameArray = new String[roleList.size()];
+                String[] roleIdArray = new String[roleList.size()];
+                iterator = roleList.listIterator();
+                i = 0;
+                roleNameArray[i] = Constants.SELECT_OPTION;
+                roleIdArray[i] = String.valueOf(i);
+                i++;
+                while (iterator.hasNext())
+                {
+                    Role role = (Role) iterator.next();
+                    roleNameArray[i] = role.getName();
+                    roleIdArray[i] = String.valueOf(role.getId());
+                    i++;
+                }
+                request.setAttribute(Constants.ROLEIDLIST, roleIdArray);
+                request.setAttribute(Constants.ROLELIST, roleNameArray);
+            }
+        }
+        catch (Exception exc)
+        {
+            Logger.out.error(exc.getMessage());
+        }
 
         return mapping.findForward(Constants.SUCCESS);
     }
