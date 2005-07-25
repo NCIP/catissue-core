@@ -53,7 +53,7 @@ public class ReportedProblemAddAction extends Action
             bizLogic.insert(reportedProblem);
             
             SendEmail email = new SendEmail();
-            boolean mailStatus = email.sendmail(Variables.toAddress,reportedProblem.getFrom(),
+            boolean mailStatus = email.sendmail(Variables.emailAddress,reportedProblem.getFrom(),
                     							Variables.mailServer,reportedProblem.getSubject(),
                     							reportedProblem.getMessageBody());
             
@@ -75,11 +75,6 @@ public class ReportedProblemAddAction extends Action
             target = new String(Constants.FAILURE);
             Logger.out.error(daoExp.getMessage(),daoExp);
         }
-//        catch(HibernateException hibExp)
-//        {
-//            target = new String(Constants.FAILURE);
-//            Logger.out.error(hibExp.getMessage(),hibExp);
-//        }
         return (mapping.findForward(target));
     }    
 }

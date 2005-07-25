@@ -19,7 +19,11 @@
 			 	 <table summary="" cellpadding="3" cellspacing="0" border="0">
                  <br/>
 				 <tr> 
-		            <td colspan="3" class="formMessage"><bean:message  key="forgotpassword.subtitle" /></td>
+		            <td colspan="3" class="formMessage">
+						<font color="#000000" size="2" face="Verdana">
+							<bean:message  key="forgotpassword.subtitle" />
+						</font>
+					</td>
                  </tr>
 				 <tr>
 				     <td class="formTitle" height="20" colspan="3"><bean:message key="forgotpassword.title"/></td>

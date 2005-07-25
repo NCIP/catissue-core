@@ -13,12 +13,17 @@ package edu.wustl.catissuecore.dao;
 import java.util.List;
 
 import net.sf.hibernate.HibernateException;
+import edu.wustl.catissuecore.action.DomainObjectListAction;
 import edu.wustl.catissuecore.domain.CancerResearchGroup;
 import edu.wustl.catissuecore.domain.Department;
 import edu.wustl.catissuecore.domain.Institution;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.SendEmail;
+import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.security.SecurityManager;
+import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.SMTransactionException;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
@@ -44,12 +49,12 @@ public class UserBizLogic extends DefaultBizLogic
 
             User user = (User) obj;
 
+            AbstractDAO dao = DAOFactory.getDAO(Constants.HIBERNATE_DAO);
+            dao.openSession();
+
             Department department = null;
             Institution institution = null;
             CancerResearchGroup cancerResearchGroup = null;
-
-            AbstractDAO dao = DAOFactory.getDAO(Constants.HIBERNATE_DAO);
-            dao.openSession();
 
             List list = dao.retrieve(Department.class.getName(), "name", user
                     .getDepartment().getName());
@@ -78,15 +83,59 @@ public class UserBizLogic extends DefaultBizLogic
 
             SecurityManager.getInstance(UserBizLogic.class).createUser(
                     user.getUser());
+            
+            user.setSystemIdentifier(user.getUser().getUserId());
 
             dao.insert(user.getAddress());
             dao.insert(user);
 
             dao.closeSession();
+            
+            //Send email to administrator and cc it to the user registered.
+            SendEmail email = new SendEmail();
+            String separator = " : ";
+            
+            String subject = ApplicationProperties.getValue("userRegistration.request.subject");
+            String body = "Dear "+user.getUser().getFirstName()+" "+user.getUser().getLastName()+"\n\n"+
+            			  ApplicationProperties.getValue("userRegistration.request.body.start") +"\n"+
+            			  "\n\n" + ApplicationProperties.getValue("userRegistration.request.body.userDetailsTitle") +
+            			  "\n" + ApplicationProperties.getValue("user.loginName")+ separator + user.getUser().getLoginName() + 
+            			  "\n" + ApplicationProperties.getValue("user.lastName")+ separator + user.getUser().getLastName() +
+            			  "\n" + ApplicationProperties.getValue("user.firstName")+ separator + user.getUser().getFirstName() +
+            			  "\n" + ApplicationProperties.getValue("user.street")+ separator + user.getAddress().getStreet() +
+            			  "\n" + ApplicationProperties.getValue("user.city")+ separator + user.getAddress().getCity() +
+            			  "\n" + ApplicationProperties.getValue("user.zipCode")+ separator + user.getAddress().getZipCode() +
+            			  "\n" + ApplicationProperties.getValue("user.state")+ separator + user.getAddress().getState() +
+            			  "\n" + ApplicationProperties.getValue("user.country")+ separator + user.getAddress().getCountry() +
+            			  "\n" + ApplicationProperties.getValue("user.phoneNumber")+ separator + user.getAddress().getPhoneNumber() +
+            			  "\n" + ApplicationProperties.getValue("user.faxNumber")+ separator + user.getAddress().getFaxNumber() +
+            			  "\n" + ApplicationProperties.getValue("user.emailAddress")+ separator + user.getUser().getEmailId() +
+            			  "\n\n\t" + ApplicationProperties.getValue("userRegistration.request.body.end") + 
+            			  "\n\n" + ApplicationProperties.getValue("email.catissuecore.team");
+            
+            String adminEmailAddress = ApplicationProperties.getValue("email.administrative.emailAddress");
+            
+            boolean emailStatus  = email.sendmail(adminEmailAddress,user.getUser().getEmailId(),
+                    			   null,Variables.emailAddress,Variables.mailServer,subject,body);
+            
+            if (emailStatus)
+            {
+                Logger.out.info(ApplicationProperties.getValue("userRegistration.email.success") + 
+                        user.getUser().getFirstName() + " " + user.getUser().getLastName());
+            }
+            else
+            {
+                Logger.out.info(ApplicationProperties.getValue("userRegistration.email.failure") + 
+                        		user.getUser().getFirstName() + " " + user.getUser().getLastName());
+            }
         }
         catch (SMTransactionException smtExp)
         {
             Logger.out.error(smtExp.getMessage(), smtExp);
+        }
+        catch (NullPointerException exp)
+        {
+            exp.printStackTrace();
         }
     }
 
@@ -101,69 +150,65 @@ public class UserBizLogic extends DefaultBizLogic
     {
         User user = (User) obj;
         List list = null;
-
-        HibernateDAO dao = new HibernateDAO();
-        dao.openSession();
-
-        if (user.getComments() != null)
+        
+        try
         {
-            String comments = new String(user.getComments());
-            //	        try
-            //	        {
-            //	            
-            //	            CLOB clob = null;
-            //	            list = retrieveInSameSession(User.class.getName(),"systemIdentifier",user.getIdentifier());
-            //	            session.refresh(user,LockMode.UPGRADE);
-            //	            clob = (CLOB) user.getCommentClob();
-            //	            if (list.size() != 0)
-            //	            {
-            //	                user = (User)list.get(0);
-            //	                clob = (CLOB) user.getCommentClob();
-            //	            }
-            //		        Writer clobWriter = clob.getCharacterOutputStream();
-            //		        System.out.println("comments:::...................."+comments);
-            //		        clobWriter.write(comments);
-            //		        clobWriter.close();
-            //		        
-            //	        }
-            //	        catch(SQLException sqlExp)
-            //	        {
-            //	            Logger.out.error(sqlExp.getMessage(),sqlExp);
-            //	        }
-            //	        catch(IOException ioExp)
-            //	        {
-            //	            Logger.out.error(ioExp.getMessage(),ioExp);
-            //	        }
 
-            //	        CLOB newClob = CLOB.createTemporary(session.connection(),true,CLOB.D);
+	        HibernateDAO dao = new HibernateDAO();
+	        dao.openSession();
+	
+	        gov.nih.nci.security.authorization.domainobjects.User csmUser = 
+               	SecurityManager.getInstance(DomainObjectListAction.class).
+            		getUserById(String.valueOf(user.getSystemIdentifier()));
+	        
+	        csmUser.setLoginName(user.getUser().getLoginName());
+	        csmUser.setLastName(user.getUser().getLastName());
+	        csmUser.setFirstName(user.getUser().getFirstName());
+	        csmUser.setEmailId(user.getUser().getEmailId());
+	        csmUser.setPassword(user.getUser().getPassword());
+            
+//            user.setUser(csmUser);
+            
+	        SecurityManager.getInstance(UserBizLogic.class)
+	        	.modifyUser(csmUser);
+	        
+	        SecurityManager.getInstance(UserBizLogic.class)
+	        	.assignRoleToUser(csmUser.getLoginName(),user.getRoleId());
+	        
+	        dao.update(user);
+	        dao.closeSession();
+	        
+	        //Send email to administrator and cc it to the user registered.
+	        
+            SendEmail email = new SendEmail();
+            
+            String subject = ApplicationProperties.getValue("userRegistration.approve.subject");
+            
+            String body = "Dear "+user.getUser().getFirstName()+" "+user.getUser().getLastName()+"\n\n"+
+            			  ApplicationProperties.getValue("userRegistration.approved.body.start")+
+            			  ApplicationProperties.getValue("userRegistration.loginDetails") + "\n\tLogin Name : "
+                          + user.getUser().getLoginName() + "\n\tPassword : " + csmUser.getPassword() +
+                          "\n\n" + ApplicationProperties.getValue("email.catissuecore.team");
+            
+            String adminEmailAddress = ApplicationProperties.getValue("email.administrative.emailAddress");
+            
+            boolean emailStatus  = email.sendmail(adminEmailAddress,user.getUser().getEmailId(),
+                    			   null,Variables.emailAddress,Variables.mailServer,subject,body);
+            
+            if (emailStatus)
+            {
+                Logger.out.info(ApplicationProperties.getValue("userRegistration.email.success") + 
+                        user.getUser().getFirstName() + " " + user.getUser().getLastName());
+            }
+            else
+            {
+                Logger.out.info(ApplicationProperties.getValue("userRegistration.email.failure") + 
+                        		user.getUser().getFirstName() + " " + user.getUser().getLastName());
+            }
         }
-        dao.update(user);
-        dao.closeSession();
+        catch(SMException smExp)
+        {
+            Logger.out.error(smExp.getMessage(),smExp);
+        }
     }
-
-    //	public static void main(String[] args) throws Exception
-    //	{
-    //		UserBizLogic aUserHDAO = new UserBizLogic();
-    ////		String colName[] = {"name"};
-    ////		String colCondition[] = {"in"};
-    ////		Object colValue[] = {"Cardiology, Pathology"};
-    ////		
-    ////		List aList = aUserHDAO.retrieve(Department.class.getName(),colName,colCondition,colValue,Constants.OR_JOIN_CONDITION);
-    ////		//Object obj[]= aList.toArray();
-    ////		for (int i = 0; i < aList.size(); i++)
-    ////		{
-    ////			System.out.println(aList.get(i));
-    ////		}
-    //		User user = new User();
-    //		
-    //		user.setLoginName("abcd123");
-    //		user.setEmail("abcd@abcd.com");
-    //		user.getDepartment().setName("Cardiology");
-    //		user.getInstitute().setName("Washington University");
-    //		user.getRole().setName("Technician");
-    //		user.getActivityStatus().setStatus("New");
-    //		user.setCommentString("abcdefgh");
-    //		
-    //		aUserHDAO.update(user);
-    //	}
 }

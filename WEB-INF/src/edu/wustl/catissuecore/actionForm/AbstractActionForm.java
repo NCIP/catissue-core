@@ -60,13 +60,12 @@ public abstract class AbstractActionForm extends ActionForm
     /**
      * @return Returns the activityStatus.
      */
-//    public abstract String getActivityStatus();
+    public abstract String getActivityStatus();
     
     /**
-     *TODO why this method is in Abstract class.
      * @param activityStatus The activityStatus to set.
      */
-    //public abstract void setActivityStatus(String activityStatus);
+    public abstract void setActivityStatus(String activityStatus);
     
     /**
      * Checks the validity of string value of the component and adds an ActionError object in the ActionErrors object.

@@ -61,6 +61,7 @@ public class Constants
 	public static final String STATELIST = "stateList";
 	public static final String COUNTRYLIST = "countryList";
 	public static final String ROLELIST = "roleList";
+	public static final String ROLEIDLIST = "roleIdList";
 	public static final String CANCER_RESEARCH_GROUP_LIST = "cancerResearchGroupList";
 	public static final String GENOTYPIC_GENDER_LIST = "genotypicGenderList";
 	public static final String ETHNICITY_LIST = "ethnicityList";
@@ -153,6 +154,8 @@ public class Constants
 	public static final String APPROVE_USER_SHOW_ACTION = "ApproveUserShow.do";
 	
 	//Reported Problem Constants
+	public static final String REPORTED_PROBLEM_ADD_ACTION = "ReportedProblemAdd.do";
+	public static final String REPORTED_PROBLEM_EDIT_ACTION = "ReportedProblemEdit.do";
 	public static final String PROBLEM_DETAILS_ACTION = "ProblemDetails.do";
 	public static final String REPORTED_PROBLEM_SHOW_ACTION = "ReportedProblemShow.do";
 	
@@ -268,6 +271,7 @@ public class Constants
 	//Query Interface Results View Constants
 	public static final String PAGEOF = "pageOf";
 	public static final String QUERY = "query";
+	public static final String APPROVE_USER_PAGE = "approveUserPage";
 	
 	//Query results view temporary table name.
 	public static final String QUERY_RESULTS_TABLE = "CATISSUE_QUERY_RESULTS";
@@ -285,33 +289,41 @@ public class Constants
 	//URL paths for Applet in TreeView.jsp
 	public static final String QUERY_TREE_APPLET = "QueryTree.class";
 	public static final String APPLET_CODEBASE = "Applet";
+	
+	public static final String SELECT_OPTION = "-- Select --";
 
 	public static final String [] RECEIVEDMODEARRAY = {
+	        SELECT_OPTION,
 	        "by hand", "courier", "FedEX", "UPS"
 	};
 	public static final String [] GENOTYPIC_GENDER_ARRAY = {
+	        SELECT_OPTION,
 	        "Male",
 	        "Female"
 	};
 	
 	public static final String [] RACEARRAY = {
+	        SELECT_OPTION,
 	        "Asian",
 	        "American"
 	};
 	
 	public static final String [] PROTOCOLARRAY = {
+	        SELECT_OPTION,
 	        "aaaa",
 	        "bbbb",
 	        "cccc"
 	};
 	
 	public static final String [] RECEIVEDBYARRAY = {
+	        SELECT_OPTION,
 	        "xxxx",
 	        "yyyy",
 	        "zzzz"
 	};
 	
 	public static final String [] COLLECTEDBYARRAY = {
+	        SELECT_OPTION,
 	        "xxxx",
 	        "yyyy",
 	        "zzzz"
@@ -323,6 +335,7 @@ public class Constants
 	
 	public static final String [] STATEARRAY = 
 	{
+	        SELECT_OPTION,
 	        "Alabama",//Alabama 
             "Alaska",//Alaska 
             "Arizona",//Arizona 
@@ -379,6 +392,7 @@ public class Constants
 	
 	public static final String [] COUNTRYARRAY = 
 	{  
+	        SELECT_OPTION,
 	        "United States", 
             "Canada", 
             "Afghanistan", 
@@ -618,14 +632,15 @@ public class Constants
 	public static final String DISTRIBUTIONPROTOCOL_SEARCH_ACTION = "DistributionProtocolSearch.do";
 	public static final String DISTRIBUTIONPROTOCOL_ADD_ACTION = "DistributionProtocolAdd.do";
 	public static final String DISTRIBUTIONPROTOCOL_EDIT_ACTION = "DistributionProtocolEdit.do";
-
 	
 	public static final String [] CANCER_RESEARCH_GROUP_VALUES = {
+	        SELECT_OPTION,
 	        "Siteman Cancer Center",
 	        "Washington University"
 	};
 	
 	public static final String [] ACTIVITY_STATUS_VALUES = {
+	        SELECT_OPTION,
 	        "Active",
 	        "Disabled",
 	        "Closed",
@@ -633,27 +648,27 @@ public class Constants
 	        "Reject",
 	        "Pending"
 	};
-	
-	//Only for showing UI.
-	public static final String [] ROLE_VALUES = {
-	        "Administrator",
-	        "Clinician",
-	        "Technician",
-	        "Scientist",
-	        "Public",
-	        "Collector"
+
+	public static final String [] REPORTED_PROBLEM_ACTIVITY_STATUS_VALUES = {
+	        SELECT_OPTION,
+	        "Closed",
+	        "Pending"
 	};
-	
+
+	//Only for showing UI.
 	public static final String [] INSTITUTE_VALUES = {
+	        SELECT_OPTION,
 	        "Washington University"
 	};
 	
 	public static final String [] DEPARTMENT_VALUES = {
+	        SELECT_OPTION,
 	        "Cardiology",
 	        "Pathology"
 	};
 	
 	public static final String [] SPECIMEN_TYPE_VALUES = {
+	        SELECT_OPTION,
 	        "Tissue",
 	        "Fluid",
 	        "Cell",
@@ -661,63 +676,75 @@ public class Constants
 	};
 	
 	public static final String [] SPECIMEN_SUB_TYPE_VALUES = {
+	        SELECT_OPTION,
 	        "Blood",
 	        "Serum",
 	        "Plasma",
 	};
 	
 	public static final String [] TISSUE_SITE_VALUES = {
+	        SELECT_OPTION,
 	        "Adrenal-Cortex",
 	        "Adrenal-Medulla",
 	        "Adrenal-NOS"
 	};
 	
 	public static final String [] TISSUE_SIDE_VALUES = {
+	        SELECT_OPTION,
 	        "Lavage",
 	        "Metastatic Lesion",
 	};
 	
 	public static final String [] PATHOLOGICAL_STATUS_VALUES = {
+	        SELECT_OPTION,
 	        "Primary Tumor",
 	        "Metastatic Node",
 	        "Non-Maglignant Tissue",
 	};
 
 	public static final String [] BIOHAZARD_NAME_VALUES = {
+	        SELECT_OPTION,
 	        ""
 	};
 	
 	public static final String [] BIOHAZARD_TYPE_VALUES = {
+	        SELECT_OPTION,
 	        "Radioactive"
 	};
 	
 	public static final String [] ETHNICITY_VALUES = {
-	        "-- Select --"
+	        SELECT_OPTION
 	};
 	
 	public static final String [] PARTICIPANT_MEDICAL_RECORD_SOURCE_VALUES = {
-	        "-- Select --"
+	        SELECT_OPTION
 	};
 	
 	public static final String [] PROTOCOL_TITLE_ARRAY = {
+	        SELECT_OPTION,
 	        "Protocol-1"
 	};
 	        
 	public static final String [] PARTICIPANT_NAME_ARRAY = {
+	        SELECT_OPTION,
 	        "LastName,FirstName"
 	};
 	public static final String [] PROTOCOL_PARTICIPANT_NUMBER_ARRAY = {
+	        SELECT_OPTION,
 	        "1","2","3","4"
 	};
 	public static final String [] STUDY_CALENDAR_EVENT_POINT_ARRAY = {
+	        SELECT_OPTION,
 	        "30","60","90"
 	};
 	public static final String [] CLINICAL_STATUS_ARRAY = {
+	        SELECT_OPTION,
 	        "Pre-Opt",
 	        "Post-Opt"
 	};
 	
 	public static final String [] SITE_TYPE_ARRAY = {
+	        SELECT_OPTION,
 			"Collection",
 			"Laboratory",
 			"Repository"
