@@ -66,7 +66,7 @@ public class CommonAddEditAction extends Action
                 //If operation is edit, update the data in the database.
             	String objName = AbstractDomainObject.getDomainObjectName(abstractForm.getFormId());
             	
-                List list = dao.retrieve(objName, Constants.IDENTIFIER, 
+                List list = bizLogic.retrieve(objName, Constants.IDENTIFIER, 
 										  new Long(abstractForm.getSystemIdentifier()));
                 
                 if (list.size() != 0)
