@@ -12,7 +12,7 @@
     <property name="build.dir" value="${base.dir}/build"/>
 	<property name="hbm.dir" value="${src.dir}/edu/wustl/catissuecore/hbm"/>
 	<property name="tomcat.dir" value="CATALINA_HOME"/>
-	<property name="deploy.dir" value="E:/Program_Files/jboss-4.0.0/server/default/deploy"/>
+	<property name="deploy.dir" value="E:\temp"/>
 	
 	<property name="extra_lib.dir" value="${base.dir}/extra_lib"/>
     
@@ -67,11 +67,16 @@
 	
 	<target name="WarApp" depends="init">
 		<delete file="catissuecore.war"/>
-		<war destfile="catissuecore.war" webxml="WEB-INF/web.xml" excludes="**/catissuecore.war,**/build/*,**/servlet.jar,**/extra_lib/*">
-			<fileset dir="${base.dir}"/>
-		  	<lib dir="${lib.dir}">
+		<war destfile="e:\temp\catissuecore.war" webxml="WEB-INF/web.xml">
+			<dirset dir="${base.dir}">
+				<exclude name="**/*build*"/>
+				<exclude name="**/*WEB-INF*"/>
+			</dirset>
+			
+			<!--fileset dir="${base.dir}"/-->
+		  	<!--lib dir="${lib.dir}">
             	<include name="*.jar"/>
-        	</lib>
+        	</lib-->
 		</war>
 	</target>
 
