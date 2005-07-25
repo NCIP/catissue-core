@@ -181,7 +181,9 @@
 		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>
 
-
+	<definition name=".catissuecore.reportProblemEditDef" extends=".catissuecore.manageAdminDataHomeDef">
+		<put name="content" value="/pages/content/common/ReportProblem.jsp" />
+	</definition>
 
 	<!-- Manage Administrative Data tab pages definitions end -->
 
