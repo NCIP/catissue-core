@@ -10,10 +10,10 @@
 
 package edu.wustl.catissuecore.dao;
 
+import java.util.List;
+
 import net.sf.hibernate.HibernateException;
-import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.StorageContainer;
-import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.dbManager.DAOException;
 
@@ -62,4 +62,33 @@ public class StorageContainerBizLogic extends DefaultBizLogic
 //    	
 //    	return null;
 //    }
+    
+    public int getNextContainerNumber(long siteID, long typeID ) throws DAOException
+    {
+    	String sourceObjectName = "CATISSUE_STORAGE_CONTAINER";
+		String[] selectColumnName = {"max(NAME) MAX_NAME"};
+        String[] whereColumnName = {"STORAGE_TYPE_ID","SITE_ID"};
+		String[] whereColumnCondition = {"=","="};
+		Object[] whereColumnValue = {Long.toString(typeID),Long.toString(siteID)};
+		String joinCondition = Constants.AND_JOIN_CONDITION;
+		
+		AbstractDAO dao = DAOFactory.getDAO(Constants.JDBC_DAO);
+		
+		dao.openSession();
+		
+		List list = dao.retrieve(sourceObjectName,selectColumnName,whereColumnName,whereColumnCondition,
+				whereColumnValue,joinCondition);
+		
+		if(!list.isEmpty())
+		{
+			Object obj = list.get(0);
+			if(obj != null)
+			{
+				String str = (String)obj;
+				int no = Integer.parseInt(str);
+				return no+1; 
+			}
+		}
+		return 1;
+    }
 }

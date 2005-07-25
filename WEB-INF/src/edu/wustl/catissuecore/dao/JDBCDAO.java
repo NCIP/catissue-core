@@ -159,6 +159,7 @@ public class JDBCDAO extends AbstractDAO
             //Creates connection.
             createConnection();
 
+            System.out.println("query "+query);
             PreparedStatement stmt = connection.prepareStatement(query
                     .toString());
             ResultSet resultSet = stmt.executeQuery();
@@ -173,7 +174,7 @@ public class JDBCDAO extends AbstractDAO
                 
                 while (i < selectColumnName.length)
                 {
-                    columnData[i] = new String(resultSet.getString(selectColumnName[i]));
+                    columnData[i] = new String(resultSet.getObject(selectColumnName[i]).toString());
                     i++;
                 }
                 list.add(columnData);
