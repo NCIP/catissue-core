@@ -170,7 +170,7 @@ PUBLIC
 			validate="true"
 			input="/User.do?operation=add&amp;pageOf="
 			scope="request">
-			<forward name="success" path=".catissuecore.userAddSuccessDef" />
+			<forward name="success" path=".catissuecore.reportProblemSuccessDef" />
 			<forward name="failure" path="/error.jsp" />
 		</action>
 
@@ -357,16 +357,61 @@ PUBLIC
 			<forward name="failure" path=".catissuecore.reportProblemDef" />
 		</action>
 		
+		<action path="/AdminReportProblem"
+			type="edu.wustl.catissuecore.action.ReportProblemAction"
+			scope="request">
+			<forward name="success" path=".catissuecore.reportProblemEditDef" />
+			<forward name="failure" path=".catissuecore.reportProblemEditDef" />
+		</action>
+		
 		<action path="/ReportedProblemAdd"
-			type="edu.wustl.catissuecore.action.ReportedProblemAddAction"
+			type="edu.wustl.catissuecore.action.CommonAddEditAction"
 			name="reportedProblemForm"
 			validate="true"
-			input="/ReportProblem.do"
+			input="/ReportProblem.do?operation=add"
 			scope="request">
 			<forward name="success" path=".catissuecore.reportProblemSuccessDef" />
 			<forward name="failure" path="/error.jsp" />
 		</action>
-		<!--Report Problem Actions Ends-->
+
+		<action path="/ReportedProblemEdit"
+			type="edu.wustl.catissuecore.action.CommonAddEditAction"
+			name="reportedProblemForm"
+			validate="true"
+			input="/ReportProblem.do?operation=edit"
+			scope="request">
+			<forward name="success" path=".catissuecore.reportProblemSuccessDef" />
+			<forward name="failure" path="/error.jsp" />
+		</action>
+		
+		<action path="/ReportedProblemShow"
+			type="edu.wustl.catissuecore.action.DomainObjectListAction"
+			name="reportedProblemForm"
+			scope="request">
+			<forward name="success" path=".catissuecore.reportedProblemDef" />
+			<forward name="failure" path=".catissuecore.reportedProblemDef" />
+		</action>
+		
+		<action path="/ProblemPendingClose"
+			type="edu.wustl.catissuecore.action.ReportedProblemPendingCloseAction"
+			name="domainObjectListForm"
+			validate="true"
+			input="/ReportedProblemShow.do"
+			scope="request">
+			<forward name="success" path="/ReportedProblemShow.do?pageNum=1" />
+			<forward name="failure" path="/error.jsp" />
+		</action>
+		
+		<action path="/ProblemDetails"
+			type="edu.wustl.catissuecore.action.DomainObjectDetailsAction"
+			name="reportedProblemForm"
+			input="/ReportedProblemShow.do?pageNum=1"
+			scope="request">
+			<forward name="success" path="/AdminReportProblem.do?operation=edit" />
+			<forward name="failure" path="/error.jsp" />
+		</action>
+  		<!--Report Problem Actions Ends-->
+
 		
 		<!--Forgot Password Actions Begins-->
 		<action path="/ForgotPassword"
@@ -446,40 +491,13 @@ PUBLIC
 		
 		<action path="/UserDetailsShow"
 			type="edu.wustl.catissuecore.action.DomainObjectDetailsAction"
-			name="domainObjectListForm"
+			name="userForm"
 			input="/ApproveUserShow.do?pageNum=1"
 			scope="request">
-			<forward name="success" path=".catissuecore.userDetailsDef" />
+			<forward name="success" path="/User.do?operation=edit&amp;pageOf=approveUserPage" />
 			<forward name="failure" path="/error.jsp" />
 		</action>
 		<!--Approve User Actions End-->
-		
-		<!--Reported Problem Actions Begin-->
-		<action path="/ReportedProblemShow"
-			type="edu.wustl.catissuecore.action.DomainObjectListAction"
-			name="reportedProblemForm"
-			scope="request">
-			<forward name="success" path=".catissuecore.reportedProblemDef" />
-			<forward name="failure" path=".catissuecore.reportedProblemDef" />
-		</action>
-		<action path="/ProblemPendingClose"
-			type="edu.wustl.catissuecore.action.ReportedProblemPendingCloseAction"
-			name="domainObjectListForm"
-			validate="true"
-			input="/ReportedProblemShow.do"
-			scope="request">
-			<forward name="success" path="/ReportedProblemShow.do?pageNum=1" />
-			<forward name="failure" path="/error.jsp" />
-		</action>
-		<action path="/ProblemDetails"
-			type="edu.wustl.catissuecore.action.DomainObjectDetailsAction"
-			name="domainObjectListForm"
-			input="/ReportedProblemShow.do?pageNum=1"
-			scope="request">
-			<forward name="success" path=".catissuecore.problemDetailsDef" />
-			<forward name="failure" path="/error.jsp" />
-		</action>
-		<!--Reported Problem Actions End-->
 		
 		<!-- StorageType Actions Begins -->
         <action path="/StorageType"
