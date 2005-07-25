@@ -128,7 +128,7 @@ public class ApproveUserAction extends Action
 
                 //Sends the membership status email to the user.
                 boolean emailStatus = email.sendmail(user.getAddress()
-                        .getEmailAddress(), Variables.toAddress,
+                        .getEmailAddress(), Variables.emailAddress,
                         Variables.mailServer,
                         Constants.APPROVE_USER_EMAIL_SUBJECT, emailBody);
 
