@@ -246,6 +246,14 @@ FORM BEGINS
   border-left:1px solid #5C5C5C; /* constant: dark gray */
   border-bottom:1px solid #5C5C5C; /* constant: dark gray */
 }
+.formSerialNumberLabelForTable{ /* for the Serial Number cell */
+  font-family:arial,helvetica,verdana,sans-serif;
+  font-size:1em;
+  background-color:#CCCCCC; /* constant: light gray */
+  color:#000000; /* constant: black */
+  border-right:1px solid #5C5C5C; /* constant: dark gray */
+  border-bottom:1px solid #5C5C5C; /* constant: dark gray */
+}
 .formRequiredLabel{ /* for the required form labels */
   font-family:arial,helvetica,verdana,sans-serif;
   font-size:0.7em;
