@@ -265,6 +265,24 @@ public class SecurityManager
 	    }
 	}
 	
+	/**
+	 * Modifies an entry for an existing User in the database based on the data passed 
+	 * @param user - the User object that needs to be modified in the database 
+	 * @throws SMException if there is any exception in modifying the User in the database
+	 */
+	public void modifyUser(User user) throws SMException
+	{
+	    try
+	    {
+	        getUserProvisioningManager().modifyUser(user);
+	    }
+	    catch (CSException e)
+	    {
+	        Logger.out.debug("Unable to modify user: Exception: "+e.getMessage());
+	        throw new SMException (e.getMessage(), e);
+	    }
+	}
+
 	
 
    
