@@ -37,6 +37,9 @@ public class BizLogicFactory
         	case Constants.STORAGE_TYPE_FORM_ID :
         		abstractBizLogic = new StorageTypeBizLogic();
         		break;
+        	case Constants.STORAGE_CONTAINER_FORM_ID :
+        		abstractBizLogic = new StorageContainerBizLogic();
+        		break;
         	case Constants.SITE_FORM_ID:
         		abstractBizLogic = new SiteBizLogic();
         		break;

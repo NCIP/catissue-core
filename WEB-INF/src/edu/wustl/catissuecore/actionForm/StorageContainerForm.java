@@ -18,6 +18,7 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
+import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Validator;
@@ -40,19 +41,19 @@ public class StorageContainerForm extends AbstractActionForm
     private String operation;
     
     /**
-     * A string containing the type of the storage.
+     * An id which refers to the type of the storage.
      */
-    private String type;
+    private long typeId;
     
     /**
-     * Parent Container of this container.
+     * An id which refers to Parent Container of this container.
      */
-    private String parentContainer;
+    private long parentContainerId;
 
     /**
-     * Site of the container if it is parent container.
+     * An id which refers to the site of the container if it is parent container.
      */
-    private String site;
+    private long siteId;
     
     /**
      * A default temperature of the storage container.
@@ -82,7 +83,7 @@ public class StorageContainerForm extends AbstractActionForm
     /**
      * Starting Number.
      */
-    private int startNumber;
+    private String startNumber="1111";
 
     /**
      * No. of containers.
@@ -100,6 +101,21 @@ public class StorageContainerForm extends AbstractActionForm
     private String key;
     
     /**
+     * Radio button to choose site/parentContainer.
+     */
+    private int checkedButton=1;
+    
+    /**
+     * Tells whether this container is full or not.
+     */
+    private String isFull;
+    
+    /**
+	 * Defines whether this Storage Container record can be queried (ACTIVE) or not queried (INACTIVE) by any actor.
+	 */
+	private String activityStatus;
+    
+    /**
      * No argument constructor for StorageTypeForm class 
      */
     public StorageContainerForm()
@@ -113,21 +129,23 @@ public class StorageContainerForm extends AbstractActionForm
      */
     public void setAllValues(AbstractDomainObject abstractDomain)
     {
-//        try
-//        {
-//        	StorageContainer container = (StorageContainer) abstractDomain;
-//            this.systemIdentifier = container.getSystemIdentifier().longValue();
-//            this.type = container.getStorageType().getType();
-//            this.defaultTemperature = container.getTempratureInCentigrade().doubleValue();
-//            this.oneDimensionCapacity = container.getStorageContainerCapacity().getOneDimensionCapacity().intValue();
-//            this.twoDimensionCapacity = container.getStorageContainerCapacity().getTwoDimensionCapacity().intValue();
-//            this.oneDimensionLabel = container.getStorageContainerCapacity().getOneDimensionLabel();
-//            this.twoDimensionLabel = container.getStorageContainerCapacity().getTwoDimensionLabel();
-//        }
-//        catch (Exception excp)
-//        {
-//            Logger.out.error(excp.getMessage(),excp);
-//        }
+        try
+        {
+        	StorageContainer container = (StorageContainer) abstractDomain;
+            this.systemIdentifier = container.getSystemIdentifier().longValue();
+            this.typeId = container.getStorageType().getSystemIdentifier().longValue();
+            this.parentContainerId= container.getParentContainer().getSystemIdentifier().longValue();
+            this.siteId = container.getSite().getSystemIdentifier().longValue();
+            this.defaultTemperature = container.getTempratureInCentigrade().doubleValue();
+            this.oneDimensionCapacity = container.getStorageContainerCapacity().getOneDimensionCapacity().intValue();
+            this.twoDimensionCapacity = container.getStorageContainerCapacity().getTwoDimensionCapacity().intValue();
+            this.oneDimensionLabel = container.getStorageContainerCapacity().getOneDimensionLabel();
+            this.twoDimensionLabel = container.getStorageContainerCapacity().getTwoDimensionLabel();
+        }
+        catch (Exception excp)
+        {
+            Logger.out.error(excp.getMessage(),excp);
+        }
     }
 
     /**
@@ -171,23 +189,23 @@ public class StorageContainerForm extends AbstractActionForm
     }
     
     /**
-     * Returns the type of the storage.
-     * @return String the type of the storage.
-     * @see #setType(String)
+     * Returns an id which refers to the type of the storage.
+     * @return An id which refers to the type of the storage.
+     * @see #setTypeId(long)
      */
-    public String getType()
+    public long getTypeId()
     {
-        return this.type;
+        return this.typeId;
     }
 
     /**
-     * Sets the type of the storage container.
-     * @param type String type of the storage container to be set.
-     * @see #getType()
+     * Sets an id which refers to the type of the storage.
+     * @param typeId An id which refers to the type of the storage.
+     * @see #getTypeId()
      */
-    public void setType(String type)
+    public void setTypeId(long typeId)
     {
-        this.type = type;
+        this.typeId = typeId;
     }
 
     /**
@@ -291,63 +309,64 @@ public class StorageContainerForm extends AbstractActionForm
     }
 
     /**
-     * Returns the parent container.
-     * @return String the parent container.
-     * @see #setParentContainer(String)
+     * Returns an id which refers to Parent Container of this container.
+     * @return long An id which refers to Parent Container of this container.
+     * @see #setParentContainerId(long)
      */
-	public String getParentContainer()
+	public long getParentContainerId()
 	{
-		return parentContainer;
+		return parentContainerId;
 	}
 	
 	/**
-     * Sets the parent container.
-     * @param parentContainer the parent container.
-     * @see #getParentContainer()
+     * Sets an id which refers to Parent Container of this container.
+     * @param parentContainerId An id which refers to Parent Container of this container.
+     * @see #getParentContainerId()
      */
-	public void setParentContainer(String parentContainer)
+	public void setParentContainerId(long parentContainerId)
 	{
-		this.parentContainer = parentContainer;
+		this.parentContainerId = parentContainerId;
 	}
 	
 	/**
-     * Returns the site of the container.
-     * @return String the site of the container.
-     * @see #setSite(String)
+     * Returns an id which refers to the site of the container if it is parent container.
+     * @return long An id which refers to the site of the container if it is parent container.
+     * @see #setSiteId(long)
      */
-	public String getSite()
+	public long getSiteId()
 	{
-		return site;
+		return siteId;
 	}
 	
 	/**
-     * Sets the site of the container.
-     * @param parentContainer the site of the container.
-     * @see #getSite()
+     * Sets an id which refers to the site of the container if it is parent container.
+     * @param siteId An id which refers to the site of the container if it is parent container.
+     * @see #getSiteId()
      */
-	public void setSite(String site)
+	public void setSiteId(long siteId)
 	{
-		this.site = site;
+		this.siteId = siteId;
 	}   
     
-    /* (non-Javadoc)
-     * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#getActivityStatus()
+	/**
+     * Returns the activity status of the storage container. 
+     * @return The activity status of storage container.
+     * @see #setActivityStatus(String)
      */
-    public String getActivityStatus()
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
-    
-    
-    /* (non-Javadoc)
-     * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#setActivityStatus(java.lang.String)
-     */
-    public void setActivityStatus(String activityStatus)
-    {
-        // TODO Auto-generated method stub
+	public String getActivityStatus()
+	{
+		return activityStatus;
+	}
 
-    }
+	/**
+     * Sets the activity status.
+     * @param activityStatus the activity status of the storagecontainer to be set.
+     * @see #getActivityStatus()
+     */
+	public void setActivityStatus(String activityStatus)
+	{
+		this.activityStatus = activityStatus;
+	}
     
     /**
      * Checks the operation to be performed is add or not.
@@ -399,11 +418,15 @@ public class StorageContainerForm extends AbstractActionForm
             }
             if (operation.equals(Constants.ADD) || operation.equals(Constants.EDIT))
             {             
-                if (validator.isEmpty(type))
+               /*if (validator.isEmpty(String.valueOf(noOfContainers)))
                 {
-                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("storageType.type")));
-                }  
+                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("storageContainer.noOfContainers")));
+                }
                 
+                if (validator.isEmpty(String.valueOf(startNumber)))
+                {
+                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("storageContainer.startNumber")));
+                }*/
             }
         }
         catch(Exception excp)
@@ -429,14 +452,14 @@ public class StorageContainerForm extends AbstractActionForm
 	/**
 	 * @return Returns the startNumber.
 	 */
-	public int getStartNumber()
+	public String getStartNumber()
 	{
 		return startNumber;
 	}
 	/**
 	 * @param startNumber The startNumber to set.
 	 */
-	public void setStartNumber(int startNumber)
+	public void setStartNumber(String startNumber)
 	{
 		this.startNumber = startNumber;
 	}
@@ -467,5 +490,33 @@ public class StorageContainerForm extends AbstractActionForm
 	public void setKey(String key)
 	{
 		this.key = key;
+	}
+	/**
+	 * @return Returns the checkedButton.
+	 */
+	public int getCheckedButton()
+	{
+		return checkedButton;
+	}
+	/**
+	 * @param checkedButton The checkedButton to set.
+	 */
+	public void setCheckedButton(int checkedButton)
+	{
+		this.checkedButton = checkedButton;
+	}
+	/**
+	 * @return Returns the isFull.
+	 */
+	public String getIsFull()
+	{
+		return isFull;
+	}
+	/**
+	 * @param isFull The isFull to set.
+	 */
+	public void setIsFull(String isFull)
+	{
+		this.isFull = isFull;
 	}
 }

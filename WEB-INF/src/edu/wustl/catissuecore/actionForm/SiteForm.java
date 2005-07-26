@@ -470,12 +470,42 @@ public class SiteForm extends AbstractActionForm
              }
              if (operation.equals(Constants.ADD) || operation.equals(Constants.EDIT))
              {             
-                 if (validator.isEmpty(type))
-                 {
-                     errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("storageType.type")));
-                 }  
+             	if (validator.isEmpty(name))
+                {
+                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("site.name")));
+                }
+             	
+             	if (validator.isEmpty(type))
+                {
+                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("site.type")));
+                }
                  
+                 if (validator.isEmpty(emailAddress))
+                 {
+                     errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+                             "errors.item.required", ApplicationProperties
+                                     .getValue("site.emailAddress")));
+                 }
+                 else
+                 {
+                     if (!validator.isValidEmailAddress(emailAddress))
+                     {
+                         errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+                                 "errors.item.format", ApplicationProperties
+                                         .getValue("site.emailAddress")));
+                     }
+                 }
+                 
+                 if (validator.isEmpty(street))
+                 {
+                     errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+                             "errors.item.required", ApplicationProperties
+                                     .getValue("site.street")));
+                 }                 
              }
+                     
+             checkValidString(city, "site.city", errors, validator);
+             checkValidNumber(zipCode, "site.zipCode", errors, validator);
          }
          catch(Exception excp)
          {

@@ -14,6 +14,8 @@ import java.util.List;
 
 import net.sf.hibernate.HibernateException;
 import edu.wustl.catissuecore.domain.StorageContainer;
+import edu.wustl.catissuecore.domain.StorageType;
+import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.dbManager.DAOException;
 
@@ -24,7 +26,7 @@ import edu.wustl.common.util.dbManager.DAOException;
 public class StorageContainerBizLogic extends DefaultBizLogic
 {
 	/**
-     * Saves the storageType object in the database.
+     * Saves the storageContainer object in the database.
      * @param session The session in which the object is saved.
      * @param obj The storageType object to be saved.
      * @throws HibernateException Exception thrown during hibernate operations.
@@ -37,8 +39,34 @@ public class StorageContainerBizLogic extends DefaultBizLogic
         AbstractDAO dao = DAOFactory.getDAO(Constants.HIBERNATE_DAO);
 		dao.openSession();
 		
+		List list = dao.retrieve(StorageType.class.getName(), "systemIdentifier", container.getStorageType().getSystemIdentifier());
+		if (list.size() != 0)
+		{
+		    StorageType type = (StorageType) list.get(0);
+		    container.setStorageType(type);
+		}
 		
-	    
+		list = dao.retrieve(Site.class.getName(), "systemIdentifier", container.getSite().getSystemIdentifier());
+		if (list.size() != 0)
+		{
+		    Site site = (Site) list.get(0);
+		    container.setSite(site);
+		}
+		
+		if(container.getParentContainer() != null)
+		{
+			list = dao.retrieve(StorageContainer.class.getName(), "systemIdentifier", container.getParentContainer().getSystemIdentifier());
+			if (list.size() != 0)
+			{
+			    StorageContainer pc = (StorageContainer) list.get(0);
+			    container.setParentContainer(pc);
+			    pc.getChildrenContainerCollection().add(container);
+			}
+		}
+		
+		dao.insert(container.getStorageContainerCapacity());
+		dao.insert(container);
+		//dao.update(pc);		
 	    dao.closeSession();
 	}
 	

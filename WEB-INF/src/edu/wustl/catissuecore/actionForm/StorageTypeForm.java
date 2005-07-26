@@ -338,7 +338,37 @@ public class StorageTypeForm extends AbstractActionForm
                 {
                     errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("storageType.type")));
                 }  
+                if (validator.isEmpty(String.valueOf(oneDimensionCapacity)))
+                {
+                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("storageType.oneDimensionCapacity")));
+                }
+                else
+                {
+                	if(!validator.isNumeric(String.valueOf(oneDimensionCapacity)))
+                	{
+                		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("storageType.oneDimensionCapacity")));
+                	}
+                }
+                if (validator.isEmpty(String.valueOf(twoDimensionCapacity)))
+                {
+                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("storageType.twoDimensionCapacity")));
+                }
+                else
+                {
+                	if(!validator.isNumeric(String.valueOf(twoDimensionCapacity)))
+                	{
+                		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("storageType.twoDimensionCapacity")));
+                	}
+                }
                 
+                if (validator.isEmpty(oneDimensionLabel))
+                {
+                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("storageType.oneDimensionLabel")));
+                }
+                if (validator.isEmpty(twoDimensionLabel))
+                {
+                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("storageType.twoDimensionLabel")));
+                }
             }
         }
         catch(Exception excp)

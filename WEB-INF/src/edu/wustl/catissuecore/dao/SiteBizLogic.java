@@ -38,7 +38,6 @@ public class SiteBizLogic extends DefaultBizLogic
         AbstractDAO dao = DAOFactory.getDAO(Constants.HIBERNATE_DAO);
 		dao.openSession();
 		
-		System.out.println("HERE...");
 		List list = dao.retrieve(User.class.getName(), "systemIdentifier", site.getCoordinator().getSystemIdentifier());
 		if (list.size() != 0)
 		{

@@ -67,12 +67,16 @@ public class SiteAction extends Action
             ListIterator iterator = null;
             int i;
             
-//          Sets the roleList attribute to be used in the Site Add/Edit Page.
+//          Sets the roleList attribute to be used in the Site Add/Edit Page.Constants.SELECT_OPTION;
             List userList = bizLogic.retrieve(User.class.getName());
-            String[] userArray = new String[userList.size()];
-            String[] userIdArray = new String[userList.size()];
+            String[] userArray = new String[userList.size() + 1];
+            String[] userIdArray = new String[userList.size() + 1];
             iterator = userList.listIterator();
-            i = 0;
+            
+            userArray[0]	= Constants.SELECT_OPTION;
+            userIdArray[0]	= "-1";
+            
+            i = 1;
             while (iterator.hasNext())
             {
                 User user = (User) iterator.next();

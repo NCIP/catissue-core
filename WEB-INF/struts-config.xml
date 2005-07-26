@@ -542,6 +542,7 @@ PUBLIC
 		<!-- StorageContainer Actions Begins -->
         <action path="/StorageContainer"
 			type="edu.wustl.catissuecore.action.StorageContainerAction"
+			name="storageContainerForm"
 			scope="request">
 			<forward name="success" path=".catissuecore.storageContainerDef" />
 			<forward name="failure" path=".catissuecore.storageContainerDef" />

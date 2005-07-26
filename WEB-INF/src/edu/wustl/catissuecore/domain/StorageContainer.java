@@ -13,13 +13,16 @@ import edu.wustl.catissuecore.domain.Site;
 import java.util.Collection;
 import java.util.HashSet;
 import edu.wustl.catissuecore.domain.StorageContainerCapacity;
+import edu.wustl.catissuecore.actionForm.AbstractActionForm;
+import edu.wustl.catissuecore.actionForm.StorageContainerForm;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * A physically discreet container that is used to store a specimen  e.g. Box, Freezer etc.
  * @hibernate.class table="CATISSUE_STORAGE_CONTAINER"
  * @author Aniruddha Phadnis
  */
-public class StorageContainer implements java.io.Serializable
+public class StorageContainer extends AbstractDomainObject implements java.io.Serializable
 {
 	private static final long serialVersionUID = 1234567890L;
 
@@ -56,17 +59,17 @@ public class StorageContainer implements java.io.Serializable
 	/**
 	 * Type of the storage container e.g. Freezer, Box etc.
 	 */
-	private StorageType storageType;
+	private StorageType storageType = new StorageType();
 	
 	/**
 	 * A physical location of storage container
 	 */
-	private Site site;
+	private Site site = new Site();
 	
 	/**
 	 * Parent container of this container.
 	 */
-	private StorageContainer parentContainer;
+	private StorageContainer parentContainer = null;
 	
 	/**
 	 * A collection of storage container details
@@ -76,13 +79,23 @@ public class StorageContainer implements java.io.Serializable
 	/**
 	 * A capacity of storage container
 	 */
-	private StorageContainerCapacity storageContainerCapacity;
+	private StorageContainerCapacity storageContainerCapacity = new StorageContainerCapacity();
 	
 	/**
 	 * A collection of sub containers under this container
 	 */
 	private Collection childrenContainerCollection = new HashSet();
 
+	//Default Constructor
+	public StorageContainer()
+	{
+	}
+	
+	public StorageContainer(AbstractActionForm form)
+	{
+		setAllValues(form);
+	}
+	
 	/**
      * Returns System generated unique systemIdentifier.
      * @return System generated unique systemIdentifier.
@@ -348,5 +361,41 @@ public class StorageContainer implements java.io.Serializable
 	public void setChildrenContainerCollection(Collection childrenContainerCollection)
 	{
 		this.childrenContainerCollection = childrenContainerCollection;
+	}
+	
+	/**
+	 * This function Copies the data from a StorageTypeForm object to a StorageType object.
+	 * @param storageTypeForm A StorageTypeForm object containing the information about the StorageType.  
+	 * */
+	public void setAllValues(AbstractActionForm abstractForm)
+	{
+	    try
+	    {
+	        StorageContainerForm form = (StorageContainerForm) abstractForm;
+	        this.systemIdentifier 		= new Long(form.getSystemIdentifier());
+	        this.name					= form.getStartNumber();
+	        this.tempratureInCentigrade	= new Double(form.getDefaultTemperature());
+	        this.barcode				= form.getBarcode();
+	        this.isFull					= new Boolean(form.getIsFull());
+	        this.activityStatus			= form.getActivityStatus();
+	        
+	        storageType.systemIdentifier = new Long(form.getTypeId());
+	        site.setSystemIdentifier(new Long(form.getSiteId()));
+	        
+	        storageContainerCapacity.setOneDimensionCapacity(new Integer(form.getOneDimensionCapacity()));
+	        storageContainerCapacity.setTwoDimensionCapacity(new Integer(form.getTwoDimensionCapacity()));
+	        storageContainerCapacity.setOneDimensionLabel(form.getOneDimensionLabel());
+	        storageContainerCapacity.setTwoDimensionLabel(form.getTwoDimensionLabel());
+	        
+	        if(form.getCheckedButton() == 2)
+			{
+				parentContainer = new StorageContainer();
+				parentContainer.setSystemIdentifier(new Long(form.getParentContainerId()));
+			}
+	    }
+	    catch(Exception excp)
+	    {
+	        Logger.out.error(excp.getMessage());
+	    }
 	}
 }
