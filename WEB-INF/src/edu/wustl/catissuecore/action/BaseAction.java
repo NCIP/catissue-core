@@ -6,6 +6,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -43,6 +45,7 @@ public abstract class BaseAction extends Action  {
 			throws Exception {
 		if (request.getSession().getAttribute(Constants.USER) == null) {
 			//Forward to the Login
+		   
 			throw new UserNotAuthenticatedException();
 		}
 		return executeAction(mapping, form, request, response);
