@@ -35,38 +35,48 @@ public class StorageContainerBizLogic extends DefaultBizLogic
 	public void insert(Object obj) throws DAOException 
 	{
 		StorageContainer container = (StorageContainer)obj;
-
-        AbstractDAO dao = DAOFactory.getDAO(Constants.HIBERNATE_DAO);
+        
+		AbstractDAO dao = DAOFactory.getDAO(Constants.HIBERNATE_DAO);
 		dao.openSession();
 		
-		List list = dao.retrieve(StorageType.class.getName(), "systemIdentifier", container.getStorageType().getSystemIdentifier());
-		if (list.size() != 0)
-		{
-		    StorageType type = (StorageType) list.get(0);
-		    container.setStorageType(type);
-		}
+		int noOfContainers = container.getNoOfContainers().intValue();
 		
-		list = dao.retrieve(Site.class.getName(), "systemIdentifier", container.getSite().getSystemIdentifier());
-		if (list.size() != 0)
-		{
-		    Site site = (Site) list.get(0);
-		    container.setSite(site);
-		}
-		
-		if(container.getParentContainer() != null)
-		{
-			list = dao.retrieve(StorageContainer.class.getName(), "systemIdentifier", container.getParentContainer().getSystemIdentifier());
+			List list = dao.retrieve(StorageType.class.getName(), "systemIdentifier", container.getStorageType().getSystemIdentifier());
 			if (list.size() != 0)
 			{
-			    StorageContainer pc = (StorageContainer) list.get(0);
-			    container.setParentContainer(pc);
-			    pc.getChildrenContainerCollection().add(container);
+				StorageType type = (StorageType) list.get(0);
+				container.setStorageType(type);
 			}
-		}
+
+			if(container.getSite() != null)
+			{
+				list = dao.retrieve(Site.class.getName(), "systemIdentifier", container.getSite().getSystemIdentifier());
+				if (list.size() != 0)
+				{
+					Site site = (Site) list.get(0);
+					container.setSite(site);
+				}
+			}
 		
-		dao.insert(container.getStorageContainerCapacity());
-		dao.insert(container);
-		//dao.update(pc);		
+			if(container.getParentContainer() != null)
+			{
+				list = dao.retrieve(StorageContainer.class.getName(), "systemIdentifier", container.getParentContainer().getSystemIdentifier());
+				if (list.size() != 0)
+				{
+					StorageContainer pc = (StorageContainer) list.get(0);
+					container.setParentContainer(pc);
+					pc.getChildrenContainerCollection().add(container);
+				}
+			}
+			
+			for(int i=0;i<noOfContainers;i++)
+			{
+				StorageContainer cont = getCopy(container); 
+				cont.setName(String.valueOf(i + container.getStartNo().intValue()));
+				dao.insert(cont.getStorageContainerCapacity());
+				dao.insert(cont);
+				System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&="+i);
+			}
 	    dao.closeSession();
 	}
 	
@@ -118,5 +128,17 @@ public class StorageContainerBizLogic extends DefaultBizLogic
 			}
 		}
 		return 1;
+    }
+    
+    private StorageContainer getCopy(StorageContainer oldContainer)
+    {
+    	StorageContainer newContainer = new StorageContainer();
+    	newContainer.setActivityStatus(oldContainer.getActivityStatus());
+    	newContainer.setParentContainer(oldContainer.getParentContainer());
+    	newContainer.setSite(oldContainer.getSite());
+    	newContainer.setStorageContainerCapacity(oldContainer.getStorageContainerCapacity());
+    	newContainer.setStorageType(oldContainer.getStorageType());
+    	newContainer.setTempratureInCentigrade(oldContainer.getTempratureInCentigrade());
+    	return newContainer;
     }
 }
