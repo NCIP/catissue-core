@@ -17,6 +17,7 @@ import edu.wustl.catissuecore.actionForm.DepartmentForm;
 import edu.wustl.catissuecore.actionForm.InstitutionForm;
 import edu.wustl.catissuecore.actionForm.SiteForm;
 import edu.wustl.catissuecore.actionForm.StorageTypeForm;
+import edu.wustl.catissuecore.actionForm.StorageContainerForm;
 import edu.wustl.catissuecore.actionForm.UserForm;
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.domain.ReportedProblem;
@@ -26,6 +27,7 @@ import edu.wustl.catissuecore.domain.Department;
 import edu.wustl.catissuecore.domain.Institution;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.StorageType;
+import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 
@@ -58,6 +60,10 @@ public class DomainObjectFactory
             case Constants.STORAGE_TYPE_FORM_ID:
             	StorageTypeForm storageTypeForm = (StorageTypeForm) form;
             	abstractDomain = new StorageType(storageTypeForm);
+            	break;
+            case Constants.STORAGE_CONTAINER_FORM_ID:
+            	//StorageContainerForm storageContainerForm = (StorageContainerForm) form;
+            	abstractDomain = new StorageContainer(form);
             	break;
             case Constants.SITE_FORM_ID:
             	SiteForm siteForm = (SiteForm) form;

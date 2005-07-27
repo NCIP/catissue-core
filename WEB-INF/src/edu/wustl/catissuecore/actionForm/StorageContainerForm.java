@@ -132,15 +132,18 @@ public class StorageContainerForm extends AbstractActionForm
         try
         {
         	StorageContainer container = (StorageContainer) abstractDomain;
+        	
             this.systemIdentifier = container.getSystemIdentifier().longValue();
             this.typeId = container.getStorageType().getSystemIdentifier().longValue();
             this.parentContainerId= container.getParentContainer().getSystemIdentifier().longValue();
             this.siteId = container.getSite().getSystemIdentifier().longValue();
-            this.defaultTemperature = container.getTempratureInCentigrade().doubleValue();
-            this.oneDimensionCapacity = container.getStorageContainerCapacity().getOneDimensionCapacity().intValue();
-            this.twoDimensionCapacity = container.getStorageContainerCapacity().getTwoDimensionCapacity().intValue();
-            this.oneDimensionLabel = container.getStorageContainerCapacity().getOneDimensionLabel();
-            this.twoDimensionLabel = container.getStorageContainerCapacity().getTwoDimensionLabel();
+            this.defaultTemperature		= container.getTempratureInCentigrade().doubleValue();
+            this.oneDimensionCapacity	= container.getStorageContainerCapacity().getOneDimensionCapacity().intValue();
+            this.twoDimensionCapacity	= container.getStorageContainerCapacity().getTwoDimensionCapacity().intValue();
+            this.oneDimensionLabel		= container.getStorageContainerCapacity().getOneDimensionLabel();
+            this.twoDimensionLabel		= container.getStorageContainerCapacity().getTwoDimensionLabel();
+            this.noOfContainers			= container.getNoOfContainers().intValue();
+            this.startNumber			= String.valueOf(container.getStartNo().intValue());
         }
         catch (Exception excp)
         {
@@ -475,7 +478,7 @@ public class StorageContainerForm extends AbstractActionForm
 	 */
 	public void setBarcode(String barcode)
 	{
-		this.barcode = barcode;
+		this.barcode = null;
 	}
 	/**
 	 * @return Returns the key.
