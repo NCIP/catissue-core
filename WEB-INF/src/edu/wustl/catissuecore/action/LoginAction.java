@@ -18,6 +18,7 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.actionForm.LoginForm;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.security.SecurityManager;
+import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -39,7 +40,47 @@ public class LoginAction extends Action
     public ActionForward execute(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException
-    {
+
+    {		
+//        User user = new User();
+//		user.setLoginName("gautam");
+//		user.setLastName("shetty");
+//		user.setFirstName("gautam");
+//		user.setEmailId("abc");
+//		user.setOrganization("abc");
+//		user.setPassword("gautam");
+//		user.setPhoneNumber("1222");
+//		user.setDepartment("abc");
+//		
+//		try
+//        {
+//            SecurityManager.getInstance(LoginAction.class).createUser(user);
+//        }
+//        catch (SMTransactionException e1)
+//        {
+//            Logger.out.info("Exception: ",e1);
+//        }
+        
+        
+        try
+        {
+            Logger.out.debug(SecurityManager.getInstance(LoginAction.class).getRoles().toString());
+        }
+        catch (SMException e1)
+        {
+            Logger.out.debug("Exception: "+e1.getMessage(),e1);
+        }
+        
+        try
+        {
+           SecurityManager.getInstance(LoginAction.class).assignRoleToUser("aarti","1");
+        }
+        catch (SMException e1)
+        {
+            Logger.out.debug("Exception: "+e1.getMessage(),e1);
+        }
+        
+        
 
         String loginName = null;
         String password = null;
@@ -66,7 +107,7 @@ public class LoginAction extends Action
             {
                 Logger.out.info(">>>>>>>>>>>>> SUCESSFUL LOGIN <<<<<<<<< ");
                 session = request.getSession(true);
-                //          session.setAttribute(Constants.USER,loginName);
+                session.setAttribute(Constants.USER,loginName);
                 return mapping.findForward(Constants.SUCCESS);
             }
             else
