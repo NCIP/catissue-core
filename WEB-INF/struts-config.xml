@@ -84,6 +84,16 @@ PUBLIC
 			<forward name="failure" path=".catissuecore.userSignUpDef" />
 		</action>
 		
+		<action path="/SignUpUserAdd"
+			type="edu.wustl.catissuecore.action.CommonAddEditAction"
+			name="userForm"
+			validate="true"
+			input="/SignUp.do?operation=add&amp;pageOf=pageOfSignUp"
+			scope="request">
+			<forward name="success" path=".catissuecore.reportProblemSuccessDef" />
+			<forward name="failure" path="/error.jsp" />
+		</action>
+
 		<action path="/Logout"
 			type="edu.wustl.catissuecore.action.LogoutAction">
 			<forward name="success" path="/Home.do" />
@@ -183,7 +193,7 @@ PUBLIC
 			validate="true"
 			input="/User.do?operation=add&amp;pageOf="
 			scope="request">
-			<forward name="success" path=".catissuecore.reportProblemSuccessDef" />
+			<forward name="success" path=".catissuecore.userAddSuccessDef" />
 			<forward name="failure" path="/error.jsp" />
 		</action>
 
