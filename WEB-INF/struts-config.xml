@@ -84,6 +84,11 @@ PUBLIC
 			<forward name="failure" path=".catissuecore.userSignUpDef" />
 		</action>
 		
+		<action path="/Logout"
+			type="edu.wustl.catissuecore.action.LogoutAction">
+			<forward name="success" path="/Home.do" />
+		</action>
+		
         <!-- Login Module Actions End -->
             
         <!-- Participant Actions Begins -->
