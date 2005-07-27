@@ -11,20 +11,19 @@
 package edu.wustl.catissuecore.dataModel;
 
 import edu.wustl.catissuecore.actionForm.AbstractActionForm;
-import edu.wustl.catissuecore.actionForm.ReportedProblemForm;
 import edu.wustl.catissuecore.actionForm.CancerResearchGroupForm;
 import edu.wustl.catissuecore.actionForm.DepartmentForm;
 import edu.wustl.catissuecore.actionForm.InstitutionForm;
+import edu.wustl.catissuecore.actionForm.ReportedProblemForm;
 import edu.wustl.catissuecore.actionForm.SiteForm;
 import edu.wustl.catissuecore.actionForm.StorageTypeForm;
 import edu.wustl.catissuecore.actionForm.StorageContainerForm;
 import edu.wustl.catissuecore.actionForm.UserForm;
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
-import edu.wustl.catissuecore.domain.ReportedProblem;
-import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.domain.CancerResearchGroup;
 import edu.wustl.catissuecore.domain.Department;
 import edu.wustl.catissuecore.domain.Institution;
+import edu.wustl.catissuecore.domain.ReportedProblem;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.domain.StorageContainer;
