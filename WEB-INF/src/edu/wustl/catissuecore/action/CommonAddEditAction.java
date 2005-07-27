@@ -58,6 +58,7 @@ public class CommonAddEditAction extends Action
                 //If operation is add, add the data in the database.
                 AbstractDomainObject abstractDomain = DomainObjectFactory.getDomainObject(
                         abstractForm.getFormId(), abstractForm);
+                
                 bizLogic.insert(abstractDomain);
                 target = new String(Constants.SUCCESS);
             }
