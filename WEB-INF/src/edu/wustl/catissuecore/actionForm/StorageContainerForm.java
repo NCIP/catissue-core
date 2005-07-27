@@ -420,8 +420,21 @@ public class StorageContainerForm extends AbstractActionForm
                 checkValidNumber(new Long(systemIdentifier).toString(),"storageContainer.identifier",errors,validator);
             }
             if (operation.equals(Constants.ADD) || operation.equals(Constants.EDIT))
-            {             
-               /*if (validator.isEmpty(String.valueOf(noOfContainers)))
+            {
+				if(this.typeId == -1)
+				{
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("storageContainer.type")));
+				}
+				if(checkedButton == 1 && siteId == -1)
+				{
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("storageContainer.site")));
+				}
+				else if(checkedButton == 2 && parentContainerId == 0)
+				{
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("storageContainer.parentContainer")));
+				}
+            	
+            	/* if (validator.isEmpty(String.valueOf(noOfContainers)))
                 {
                     errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("storageContainer.noOfContainers")));
                 }

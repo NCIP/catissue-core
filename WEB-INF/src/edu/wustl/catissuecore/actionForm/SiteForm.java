@@ -129,6 +129,7 @@ public class SiteForm extends AbstractActionForm
             this.phoneNumber 	= site.getAddress().getPhoneNumber();
             this.faxNumber 		= site.getAddress().getFaxNumber();
             this.activityStatus = site.getActivityStatus();
+            this.coordinatorId	= site.getCoordinator().getSystemIdentifier().longValue();
         }
         catch (Exception excp)
         {
@@ -501,7 +502,25 @@ public class SiteForm extends AbstractActionForm
                      errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
                              "errors.item.required", ApplicationProperties
                                      .getValue("site.street")));
-                 }                 
+                 }
+                 
+                 if(type.equals(Constants.SELECT_OPTION))
+                 {
+                 	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("site.type")));
+                 }
+//                 System.out.println("CO****************" + coordinatorId);
+//                 if(coordinatorId == -1L)
+//                 {
+//                 	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("site.coordinator")));
+//                 }
+                 if(type.equals(Constants.SELECT_OPTION))
+                 {
+                 	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("site.state")));
+                 }
+                 if(type.equals(Constants.SELECT_OPTION))
+                 {
+                 	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("site.country")));
+                 }
              }
                      
              checkValidString(city, "site.city", errors, validator);

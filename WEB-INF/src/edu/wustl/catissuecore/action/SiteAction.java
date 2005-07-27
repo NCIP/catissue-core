@@ -22,7 +22,7 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import edu.wustl.catissuecore.dao.AbstractBizLogic;
+import edu.wustl.catissuecore.dao.SiteBizLogic;
 import edu.wustl.catissuecore.dao.BizLogicFactory;
 import edu.wustl.catissuecore.domain.User;
 
@@ -63,7 +63,7 @@ public class SiteAction extends Action
         
         try
 		{
-        	AbstractBizLogic bizLogic = BizLogicFactory.getBizLogic(Constants.SITE_FORM_ID);
+        	SiteBizLogic bizLogic = (SiteBizLogic)BizLogicFactory.getBizLogic(Constants.SITE_FORM_ID);
             ListIterator iterator = null;
             int i;
             
