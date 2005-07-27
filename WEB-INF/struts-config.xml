@@ -24,6 +24,14 @@ PUBLIC
 		<form-bean name="cancerResearchGroupForm" type="edu.wustl.catissuecore.actionForm.CancerResearchGroupForm"/>
 	</form-beans>
 	
+	<!-- Global Exception Definitions -->
+	<global-exceptions>
+		<exception
+			type="edu.wustl.catissuecore.exception.UserNotAuthenticatedException"
+			key="" scope="request" path=".catissuecore.homePageDef" />
+	</global-exceptions>
+	
+	
 	<action-mappings>
 		<action path="/ManageAdministrativeData"
                     type="org.apache.struts.actions.ForwardAction"
