@@ -8,11 +8,9 @@
  * Created on Apr 7, 2005
  */
 package edu.wustl.catissuecore.domain;
-import edu.wustl.catissuecore.domain.StorageType;
-import edu.wustl.catissuecore.domain.Site;
 import java.util.Collection;
 import java.util.HashSet;
-import edu.wustl.catissuecore.domain.StorageContainerCapacity;
+
 import edu.wustl.catissuecore.actionForm.AbstractActionForm;
 import edu.wustl.catissuecore.actionForm.StorageContainerForm;
 import edu.wustl.common.util.logger.Logger;
@@ -59,12 +57,12 @@ public class StorageContainer extends AbstractDomainObject implements java.io.Se
 	/**
 	 * Type of the storage container e.g. Freezer, Box etc.
 	 */
-	private StorageType storageType = new StorageType();
+	private StorageType storageType;
 	
 	/**
 	 * A physical location of storage container
 	 */
-	private Site site = new Site();
+	private Site site;
 	
 	/**
 	 * Parent container of this container.
@@ -85,6 +83,16 @@ public class StorageContainer extends AbstractDomainObject implements java.io.Se
 	 * A collection of sub containers under this container
 	 */
 	private Collection childrenContainerCollection = new HashSet();
+	
+	/**
+	 * Number of containers
+	 */
+	private transient Integer noOfContainers;
+	
+	/**
+	 * Number of containers
+	 */
+	private transient Integer startNo;
 
 	//Default Constructor
 	public StorageContainer()
@@ -302,7 +310,7 @@ public class StorageContainer extends AbstractDomainObject implements java.io.Se
 	 * @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.StorageContainerDetails"
 	 * @see setStorageContainerDetailsCollection(Collection)
 	 */
-	public java.util.Collection getStorageContainerDetailsCollection()
+	public Collection getStorageContainerDetailsCollection()
 	{
 		return storageContainerDetailsCollection;
 	}
@@ -378,9 +386,11 @@ public class StorageContainer extends AbstractDomainObject implements java.io.Se
 	        this.barcode				= form.getBarcode();
 	        this.isFull					= new Boolean(form.getIsFull());
 	        this.activityStatus			= form.getActivityStatus();
+	        this.noOfContainers			= new Integer(form.getNoOfContainers());
+	        this.startNo				= new Integer(form.getStartNumber());
 	        
+	        storageType = new StorageType();
 	        storageType.systemIdentifier = new Long(form.getTypeId());
-	        site.setSystemIdentifier(new Long(form.getSiteId()));
 	        
 	        storageContainerCapacity.setOneDimensionCapacity(new Integer(form.getOneDimensionCapacity()));
 	        storageContainerCapacity.setTwoDimensionCapacity(new Integer(form.getTwoDimensionCapacity()));
@@ -392,10 +402,43 @@ public class StorageContainer extends AbstractDomainObject implements java.io.Se
 				parentContainer = new StorageContainer();
 				parentContainer.setSystemIdentifier(new Long(form.getParentContainerId()));
 			}
+	        else
+	        {
+		        site = new Site();
+		        site.setSystemIdentifier(new Long(form.getSiteId()));
+	        }
 	    }
 	    catch(Exception excp)
 	    {
 	        Logger.out.error(excp.getMessage());
 	    }
+	}
+	/**
+	 * @return Returns the noOfContainers.
+	 */
+	public Integer getNoOfContainers()
+	{
+		return noOfContainers;
+	}
+	/**
+	 * @param noOfContainers The noOfContainers to set.
+	 */
+	public void setNoOfContainers(Integer noOfContainers)
+	{
+		this.noOfContainers = noOfContainers;
+	}
+	/**
+	 * @return Returns the startNo.
+	 */
+	public Integer getStartNo()
+	{
+		return startNo;
+	}
+	/**
+	 * @param startNo The startNo to set.
+	 */
+	public void setStartNo(Integer startNo)
+	{
+		this.startNo = startNo;
 	}
 }
