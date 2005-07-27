@@ -75,7 +75,6 @@ public class StorageContainerBizLogic extends DefaultBizLogic
 				cont.setName(String.valueOf(i + container.getStartNo().intValue()));
 				dao.insert(cont.getStorageContainerCapacity());
 				dao.insert(cont);
-				System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&="+i);
 			}
 	    dao.closeSession();
 	}
