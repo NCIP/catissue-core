@@ -10,17 +10,20 @@
 
 package edu.wustl.catissuecore.dao;
 
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 import net.sf.hibernate.HibernateException;
 import edu.wustl.catissuecore.domain.StorageContainer;
+import edu.wustl.catissuecore.domain.StorageContainerDetails;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.dbManager.DAOException;
 
 /**
- * StorageContainerHDAO is used to add site type information into the database using Hibernate.
+ * StorageContainerHDAO is used to add Storage Container information into the database using Hibernate.
  * @author aniruddha_phadnis
  */
 public class StorageContainerBizLogic extends DefaultBizLogic
@@ -75,6 +78,15 @@ public class StorageContainerBizLogic extends DefaultBizLogic
 				cont.setName(String.valueOf(i + container.getStartNo().intValue()));
 				dao.insert(cont.getStorageContainerCapacity());
 				dao.insert(cont);
+				
+				Collection storageContainerDetailsCollection = cont.getStorageContainerDetailsCollection();
+				Iterator it = storageContainerDetailsCollection.iterator();
+				while(it.hasNext())
+				{
+					StorageContainerDetails storageContainerDetails = (StorageContainerDetails)it.next();
+					dao.insert(storageContainerDetails);
+				}
+				
 			}
 	    dao.closeSession();
 	}

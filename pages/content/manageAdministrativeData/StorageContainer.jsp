@@ -52,9 +52,14 @@ function insRow(subdivtag)
 	var spreqtype=x.insertCell(1);
 	spreqtype.className="formField";
 	sname="";
+	
+	
 
-	sname = "<input type='text' class='formFieldSized10' name='value(txtkey" + (q+1) +")'>";
- 
+	var name = "value(StorageContainerDetails:" + (q+1) +".parameterName)";
+	alert(name);
+	sname="<input type='text' name='" + name + "' class='formFieldSized10' id='" + name + "'>"        
+
+ alert(sname);
 	spreqtype.innerHTML="" + sname;
 
 	//Third Cell
@@ -62,8 +67,13 @@ function insRow(subdivtag)
 	spreqsubtype.className="formField";
 	sname="";
 
+	name = "value(StorageContainerDetails:" + (q+1) +".parameterValue)";
 	sname= "";
-	sname = "<input type='text' class='formFieldSized10' name='value(txtval" + (q+1) +")'>";
+
+	var name = "value(StorageContainerDetails:" + (q+1) +".parameterValue)";
+	alert(name);
+	sname="<input type='text' name='" + name + "' class='formFieldSized10' id='" + name + "'>"        
+	 alert(sname);
 	spreqsubtype.innerHTML="" + sname;
 }
 	</script>
@@ -94,7 +104,7 @@ function insRow(subdivtag)
 
 <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
 	
-	<html:form action="<%=Constants.STORAGE_CONTAINER_ADD_ACTION%>">
+	<html:form action="<%=Constants.STORAGE_CONTAINER_ADD_ACTION%>" method="GET">
 		<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>">
 			<!-- ENTER IDENTIFIER BEGINS-->
 			<br />
