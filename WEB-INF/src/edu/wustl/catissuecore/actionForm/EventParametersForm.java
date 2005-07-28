@@ -158,38 +158,6 @@ public abstract class EventParametersForm extends AbstractActionForm
 		this.systemIdentifier = systemIdentifier ; 
 	}
 
-//	/*
-//	 * (non-Javadoc)
-//	 * 
-//	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#getFormId()
-//	 */
-//	public int getFormId()
-//	{
-//		// TODO Auto-generated method stub
-//		return 0;
-//	}
-//
-//	/*
-//	 * (non-Javadoc)
-//	 * 
-//	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#setAllValues(edu.wustl.catissuecore.domain.AbstractDomainObject)
-//	 */
-//	public void setAllValues(AbstractDomainObject abstractDomain)
-//	{
-//		// TODO Auto-generated method stub
-//
-//	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#isAddOperation()
-	 */
-	public boolean isAddOperation()
-	{
-		// TODO Auto-generated method stub
-		return false;
-	}
 
 	/*
 	 * (non-Javadoc)

@@ -17,7 +17,7 @@ import edu.wustl.catissuecore.domain.User;
  * 
  * @author Aniruddha Phadnis
  */
-public abstract class EventParameters implements java.io.Serializable
+public abstract class EventParameters extends AbstractDomainObject implements java.io.Serializable
 {
 	private static final long serialVersionUID = 1234567890L;
 
