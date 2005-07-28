@@ -28,6 +28,11 @@ public class FrozenEventParametersForm extends EventParametersForm
      */
 	private String method;
 	
+	 /**
+     * A String containing the operation(Add/Edit) to be performed.
+     * */
+    private String operation = null;
+
 	
 
 	/**
@@ -45,7 +50,26 @@ public class FrozenEventParametersForm extends EventParametersForm
 	{
 		this.method = method;
 	}
-	
+
+	/**
+     * Returns the operation(Add/Edit) to be performed.
+     * @return Returns the operation.
+     * @see #setOperation(String)
+     */
+    public String getOperation()
+    {
+        return operation;
+    }
+    
+    /**
+     * Sets the operation to be performed.
+     * @param operation The operation to set.
+     * @see #getOperation()
+     */
+    public void setOperation(String operation)
+    {
+        this.operation = operation;
+    }
 	
 	// ----- SUPERCLASS METHODS
 	/* (non-Javadoc)
@@ -66,10 +90,21 @@ public class FrozenEventParametersForm extends EventParametersForm
 
 		this.comments  = frozenEventParametersObject.getComments();
 		this.systemIdentifier = frozenEventParametersObject.getSystemIdentifier().longValue() ;
-		this.time_InHours = ""+frozenEventParametersObject.getTimestamp().getHours();
-		this.time_InMinutes = "" + frozenEventParametersObject.getTimestamp().getMinutes();
+		this.timeInHours = ""+frozenEventParametersObject.getTimestamp().getHours();
+		this.timeInMinutes = "" + frozenEventParametersObject.getTimestamp().getMinutes();
 		this.userId = frozenEventParametersObject.getUser().getSystemIdentifier().longValue() ;
 		this.dateOfEvent = frozenEventParametersObject.getTimestamp().getMonth()+"-"+frozenEventParametersObject.getTimestamp().getDay()+"-"+frozenEventParametersObject.getTimestamp().getYear() ;     
 	}
 
+	/**
+     * Checks the operation to be performed is add operation.
+     * @return Returns true if operation is equal to "add", else it returns false
+     * */
+    public boolean isAddOperation()
+    {
+        return(getOperation().equals(Constants.ADD));
+    }
+    
+	
+	
 }

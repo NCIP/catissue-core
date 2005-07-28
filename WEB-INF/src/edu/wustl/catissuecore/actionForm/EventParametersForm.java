@@ -27,12 +27,12 @@ public abstract class EventParametersForm extends AbstractActionForm
     /**
      * Time in hours for the Event Parameter.
      * */
-    protected String time_InHours;
+    protected String timeInHours;
 
     /**
      * Time in minutes for the Event Parameter.
      * */
-    protected String time_InMinutes;
+    protected String timeInMinutes;
 
     /**
      * Date of the Event Parameter.
@@ -91,33 +91,33 @@ public abstract class EventParametersForm extends AbstractActionForm
 	/**
 	 * @return Returns the time_InMinutes.
 	 */
-	public String getTime_InMinutes()
+	public String getTimeInMinutes()
 	{
-		return time_InMinutes;
+		return timeInMinutes;
 	}
 	
 	/**
 	 * @param time_InMinutes The time_InMinutes to set.
 	 */
-	public void setTime_InMinutes(String time_InMinutes)
+	public void setTimeInMinutes(String time_InMinutes)
 	{
-		this.time_InMinutes = time_InMinutes;
+		this.timeInMinutes = time_InMinutes;
 	}
 		
 	/**
 	 * @return Returns the timeStamp.
 	 */
-	public String getTime_InHours()
+	public String getTimeInHours()
 	{
-		return time_InHours;
+		return timeInHours;
 	}
 	
 	/**
 	 * @param timeStamp The timeStamp to set.
 	 */
-	public void setTime_InHours(String timeStamp)
+	public void setTimeInHours(String timeStamp)
 	{
-		this.time_InHours = timeStamp;
+		this.timeInHours = timeStamp;
 	}
 	
 	/**
