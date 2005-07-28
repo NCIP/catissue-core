@@ -239,6 +239,8 @@ public class Constants
 	public static final int STORAGE_TYPE_FORM_ID = 12;
 	public static final int SITE_FORM_ID = 13;
 	public static final int CANCER_RESEARCH_GROUP_FORM_ID = 14;
+	public static final int FROZEN_EVENT_PARAMETERS_FORM_ID = 15;
+	
 	//Status message key Constants
 	public static final String STATUS_MESSAGE_KEY = "statusMessageKey";
 	
