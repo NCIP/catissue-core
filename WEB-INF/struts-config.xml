@@ -21,6 +21,7 @@ PUBLIC
 		<form-bean name="storageTypeForm" type="edu.wustl.catissuecore.actionForm.StorageTypeForm"/>
 		<form-bean name="storageContainerForm" type="edu.wustl.catissuecore.actionForm.StorageContainerForm"/>
 		<form-bean name="siteForm" type="edu.wustl.catissuecore.actionForm.SiteForm"/>
+		<form-bean name="biohazardForm" type="edu.wustl.catissuecore.actionForm.BiohazardForm"/>
 		<form-bean name="cancerResearchGroupForm" type="edu.wustl.catissuecore.actionForm.CancerResearchGroupForm"/>
 		<form-bean name="frozenEventParametersForm" type="edu.wustl.catissuecore.actionForm.FrozenEventParametersForm"/>
 	</form-beans>
@@ -643,8 +644,48 @@ PUBLIC
 			<forward name="failure" path="/Site.do?operation=edit"/>
 		</action>    
 		<!-- Site Actions Ends -->
+		
+		<!-- Biohazard Actions Begins -->
+        <action path="/Biohazard"
+			type="edu.wustl.catissuecore.action.BiohazardAction"
+			scope="request">
+			<forward name="success" path=".catissuecore.biohazardDef" />
+			<forward name="failure" path=".catissuecore.biohazardDef" />
+		</action>
+		
+		<action path="/BiohazardAdd"
+			type="edu.wustl.catissuecore.action.CommonAddEditAction"
+			name="biohazardForm"
+			validate="true"
+			input="/Biohazard.do?operation=add"
+			scope="request">
+			<forward name="success" path=".catissuecore.biohazardAddSuccessDef" />
+			<forward name="failure" path="/error.jsp" />
+		</action>
+		
+		<action path="/BiohazardEdit"
+			type="edu.wustl.catissuecore.action.CommonAddEditAction"
+			name="biohazardForm"
+			validate="true"
+			input="/Biohazard.do?operation=edit"
+			scope="request">
+			<forward name="success" path=".catissuecore.biohazardEditSuccessDef" />
+			<forward name="failure" path="/error.jsp" />
+		</action>
+		
+		<action path="/BiohazardSearch"
+		    type="edu.wustl.catissuecore.action.CommonSearchAction"
+			name="biohazardForm"
+			validate="true"
+			input="/Biohazard.do?operation=edit"
+			scope="request">
+			<forward name="success" path="/Biohazard.do?operation=edit"/>
+			<forward name="failure" path="/Biohazard.do?operation=edit"/>
+		</action>    
+		<!-- Biohazard Actions Ends -->
+		
 
-		<!-- FrozenEventParameters Actions Begins -->
+	<!-- FrozenEventParameters Actions Begins -->
         <action path="/FrozenEventParameters"
 			type="edu.wustl.catissuecore.action.FrozenEventParametersAction"
 			scope="request">
@@ -682,9 +723,6 @@ PUBLIC
 			<forward name="failure" path="/FrozenEventParameters.do?operation=edit"/>
 		</action>    
 		<!-- FrozenEventParameters Actions Ends -->
-
-
-
 		<!--Query Result View Actions Begin-->
 		<action path="/QueryResults"
 			type="edu.wustl.catissuecore.action.QueryResultsAction">

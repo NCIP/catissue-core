@@ -129,6 +129,20 @@
 	</definition>
 	<!-- Site -->
 	
+	<!-- Biohazard -->
+	<definition name=".catissuecore.biohazardDef" extends=".catissuecore.manageAdminDataHomeDef">
+		<put name="content" value="/pages/content/manageAdministrativeData/Biohazard.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.biohazardAddSuccessDef" extends=".catissuecore.manageAdminDataHomeDef">
+		<put name="content" value="/pages/content/common/success.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.biohazardEditSuccessDef" extends=".catissuecore.manageAdminDataHomeDef">
+		<put name="content" value="/pages/content/common/success.jsp" />
+	</definition>
+	<!-- Biohazard -->
+	
 	<definition name=".catissuecore.collectionProtocolDef" extends=".catissuecore.manageAdminDataHomeDef">
 		<put name="content" value="/pages/content/manageAdministrativeData/CollectionProtocol.jsp" />
 	</definition>

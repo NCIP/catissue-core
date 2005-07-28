@@ -132,6 +132,11 @@ public class Constants
 	public static final String SITE_ADD_ACTION = "SiteAdd.do";
 	public static final String SITE_EDIT_ACTION = "SiteEdit.do";
 	
+//	Constants required in Site.jsp Page
+	public static final String BIOHAZARD_SEARCH_ACTION = "BiohazardSearch.do";
+	public static final String BIOHAZARD_ADD_ACTION = "BiohazardAdd.do";
+	public static final String BIOHAZARD_EDIT_ACTION = "BiohazardEdit.do";
+	
 	//Constants required in Partcipant.jsp Page
 	public static final String PARTICIPANT_SEARCH_ACTION = "ParticipantSearch.do";
 	public static final String PARTICIPANT_ADD_ACTION = "ParticipantAdd.do";
@@ -245,8 +250,8 @@ public class Constants
 	public static final int STORAGE_TYPE_FORM_ID = 12;
 	public static final int SITE_FORM_ID = 13;
 	public static final int CANCER_RESEARCH_GROUP_FORM_ID = 14;
-	public static final int FROZEN_EVENT_PARAMETERS_FORM_ID = 15;
-	
+	public static final int BIOHAZARD_FORM_ID = 15;
+	public static final int FROZEN_EVENT_PARAMETERS_FORM_ID = 16;
 	//Status message key Constants
 	public static final String STATUS_MESSAGE_KEY = "statusMessageKey";
 	
@@ -764,6 +769,15 @@ public class Constants
 			"Repository"
 	};
 	
+	public static final String [] BIOHAZARD_TYPE_ARRAY = {
+	        SELECT_OPTION, 
+			"Carcinogen",
+			"Infectious",
+			"Mutagen",
+			"Radioactive",
+			"Toxic"
+	};
+	
 	public static final String [] HOURARRAY = {
 	        SELECT_OPTION,
 	        "00",
@@ -856,5 +870,4 @@ public class Constants
 			"58",
 			"59",
 	};
-	
 }
