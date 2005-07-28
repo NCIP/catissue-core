@@ -513,11 +513,12 @@ public class SiteForm extends AbstractActionForm
 //                 {
 //                 	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("site.coordinator")));
 //                 }
-                 if(type.equals(Constants.SELECT_OPTION))
+                 
+                 if(state.equals(Constants.SELECT_OPTION))
                  {
                  	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("site.state")));
                  }
-                 if(type.equals(Constants.SELECT_OPTION))
+                 if(country.equals(Constants.SELECT_OPTION))
                  {
                  	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("site.country")));
                  }
