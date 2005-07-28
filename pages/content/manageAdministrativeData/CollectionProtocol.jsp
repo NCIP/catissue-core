@@ -309,12 +309,12 @@ function getSubDivCount(subdivtag)
 					<tr>
 						<td class="formRequiredNotice" width="5">*</td>
 						<td class="formRequiredLabel">
-							<label for="principalinvestigator">
+							<label for="principalInvestigatorId">
 								<bean:message key="collectionprotocol.principalinvestigator" />
 							</label>
 						</td>
 						<td class="formField" colspan=2>
-							<html:select property="principalinvestigator" styleClass="formFieldSized" styleId="principalinvestigator" size="1">
+							<html:select property="principalInvestigatorId" styleClass="formFieldSized" styleId="principalinvestigator" size="1">
 							 	<html:option value="1">Nagarajan, Rakesh</html:option>
 								<html:option value="2">Watson, Mark</html:option>
 								<html:option value="3">Kaveeshwar, Kapil</html:option>
@@ -331,12 +331,12 @@ function getSubDivCount(subdivtag)
 					<tr>
 						<td class="formRequiredNotice" width="5">&nbsp;</td>
 						<td class="formLabel">
-							<label for="protocolcoordinator">
+							<label for="protocolCoordinatorIds">
 								<bean:message key="collectionprotocol.protocolcoordinator" />
 							</label>
 						</td>
 						<td class="formField" colspan=2>
-							<html:select property="protocolcoordinator" styleClass="formFieldSized" styleId="protocolcoordinator" size="4" multiple="true">
+							<html:select property="protocolCoordinatorIds" styleClass="formFieldSized" styleId="protocolcoordinator" size="4" multiple="true">
 							 	<html:option value="1">Nagarajan, Rakesh</html:option>
 								<html:option value="2">Watson, Mark</html:option>
 								<html:option value="3">Kaveeshwar, Kapil</html:option>
@@ -428,12 +428,12 @@ function getSubDivCount(subdivtag)
 					<tr>
 						<td class="formRequiredNotice" width="5">&nbsp;</td>
 						<td class="formLabel">
-							<label for="participants">
+							<label for="enrollment">
 								<bean:message key="collectionprotocol.participants" />
 							</label>
 						</td>
 						<td class="formField" colspan=2>
-							<html:text styleClass="formFieldSized" size="30" styleId="participants" property="participants" readonly="<%=readOnlyValue%>" />
+							<html:text styleClass="formFieldSized" size="30" styleId="participants" property="enrollment" readonly="<%=readOnlyValue%>" />
 						</td>
 					</tr>
 

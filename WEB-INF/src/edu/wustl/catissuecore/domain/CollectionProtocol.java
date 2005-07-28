@@ -120,7 +120,7 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
   
         	this.systemIdentifier = new Long(cpform.getSystemIdentifier());
 //            this.cpform.setLoginName(uform.getLoginName());
-            this.principalInvestigator.setSystemIdentifier(new Long(cpform.getPrincipalinvestigator()));
+            this.principalInvestigator.setSystemIdentifier(new Long(cpform.getPrincipalInvestigatorId()));
 //            this.userCollection.addAll(cpform.getProtocolcoordinators()); 
             
         }

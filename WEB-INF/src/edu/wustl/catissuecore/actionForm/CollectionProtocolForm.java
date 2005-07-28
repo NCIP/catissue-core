@@ -11,16 +11,16 @@
 
 package edu.wustl.catissuecore.actionForm;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-
+import java.util.Collection;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
+//import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Validator;
@@ -36,18 +36,18 @@ public class CollectionProtocolForm extends AbstractActionForm {
 	/**
 	 * identifier is a unique id assigned to each User.
 	 */
-	private long identifier;
+	private long systemIdentifier;
 
 	/**
 	 * Represents the operation(Add/Edit) to be performed.
 	 */
-	private String operation;
+	private String operation ;
 
 	private String activityStatus;
 
-	private long principalinvestigator;
+	private long principalInvestigatorId;
 
-	private long protocolcoordinators[];
+	private long protocolCoordinatorIds[];
 
 	private String irbid;
 
@@ -57,11 +57,14 @@ public class CollectionProtocolForm extends AbstractActionForm {
 
 	private String shorttitle;
 
-	private java.util.Date startDate;
-
-	private java.util.Date endDate;
-
-	private String participants;
+//	private java.util.Date startDate;
+	private String startDate;
+	
+//	private java.util.Date endDate;
+	
+	private String endDate;
+	
+	private String enrollment;
 
 	/*
 	 * private String clinicalStatus; private String studycalendartitle; private
@@ -75,32 +78,33 @@ public class CollectionProtocolForm extends AbstractActionForm {
 	 */
 	protected Map values = new HashMap();
 
-    /**
-     * Associates the specified object with the specified key in the map.
-     * @param key the key to which the object is mapped.
-     * @param value the object which is mapped.
-     */
-    public void setValue(String key, Object value) 
-    {
-            values.put(key, value);
-    }
+	/**
+	 * Associates the specified object with the specified key in the map.
+	 * 
+	 * @param key
+	 *            the key to which the object is mapped.
+	 * @param value
+	 *            the object which is mapped.
+	 */
+	public void setValue(String key, Object value) {
+		values.put(key, value);
+	}
 
-    /**
-     * Returns the object to which this map maps the specified key.
-     * @param key the required key.
-     * @return the object to which this map maps the specified key.
-     */
-    public Object getValue(String key) 
-    {
-        return values.get(key);
-    }
-    
-	
+	/**
+	 * Returns the object to which this map maps the specified key.
+	 * 
+	 * @param key
+	 *            the required key.
+	 * @return the object to which this map maps the specified key.
+	 */
+	public Object getValue(String key) {
+		return values.get(key);
+	}
+
 	/**
 	 * @return Returns the values.
 	 */
-	public Collection getAllValues() 
-	{
+	public Collection getAllValues() {
 		return values.values();
 	}
 
@@ -108,12 +112,10 @@ public class CollectionProtocolForm extends AbstractActionForm {
 	 * @param values
 	 *            The values to set.
 	 */
-	public void setValues(Map values)
-	{
+	public void setValues(Map values) {
 		this.values = values;
 	}
 
-	
 	/**
 	 * No argument constructor for CollectionProtocolForm class.
 	 */
@@ -128,18 +130,25 @@ public class CollectionProtocolForm extends AbstractActionForm {
 	 * @param abstractDomain
 	 *            An AbstractDomain object.
 	 */
-	 public void setAllValues(AbstractDomainObject abstractDomain)
-	    {
-	        try
-	        {
-	            CollectionProtocol collectionProtocol = (CollectionProtocol) abstractDomain;
-	        }
-	        catch (Exception excp)
-	        {
-	            excp.printStackTrace();
-	            Logger.out.error(excp.getMessage());
-	        }
-	    }
+	public void setAllValues(AbstractDomainObject abstractDomain) {
+		try {
+			CollectionProtocol collectionProtocol = (CollectionProtocol) abstractDomain;
+			this.systemIdentifier =  collectionProtocol.getSystemIdentifier().longValue() ;
+			this.activityStatus = collectionProtocol.getActivityStatus();
+			this.principalInvestigatorId = collectionProtocol.getPrincipalInvestigator().getSystemIdentifier().longValue() ;
+			this.title = collectionProtocol.getTitle();
+			this.shorttitle = collectionProtocol.getShortTitle() ;
+			this.startDate  = collectionProtocol.getStartDate().toString();
+			this.endDate = collectionProtocol.getEndDate().toString();
+			
+			
+			
+		} catch (Exception excp) {
+			excp.printStackTrace();
+			Logger.out.error(excp.getMessage());
+		}
+	}
+
 	/**
 	 * @return Returns the descriptionurl.
 	 */
@@ -158,7 +167,7 @@ public class CollectionProtocolForm extends AbstractActionForm {
 	/**
 	 * @return Returns the endDate.
 	 */
-	public java.util.Date getEndDate() {
+	public String getEndDate() {
 		return endDate;
 	}
 
@@ -166,7 +175,7 @@ public class CollectionProtocolForm extends AbstractActionForm {
 	 * @param endDate
 	 *            The endDate to set.
 	 */
-	public void setEndDate(java.util.Date endDate) {
+	public void setEndDate(String endDate) {
 		this.endDate = endDate;
 	}
 
@@ -188,47 +197,48 @@ public class CollectionProtocolForm extends AbstractActionForm {
 	/**
 	 * @return Returns the participants.
 	 */
-	public String getParticipants() {
-		return participants;
+	public String getEnrollment() {
+		return enrollment;
 	}
 
 	/**
 	 * @param participants
 	 *            The participants to set.
 	 */
-	public void setParticipants(String participants) {
-		this.participants = participants;
+	public void setEnrollment(String participants) {
+		this.enrollment = participants;
 	}
 
 	/**
-	 * @return Returns the principalinvestigator.
+	 * @return Returns the principalinvestigatorid.
 	 */
-	public long getPrincipalinvestigator() {
-		return principalinvestigator;
+	public long getPrincipalInvestigatorId() {
+		return principalInvestigatorId;
 	}
 
 	/**
 	 * @param principalinvestigator
 	 *            The principalinvestigator to set.
 	 */
-	public void setPrincipalinvestigator(long principalinvestigator) {
-		this.principalinvestigator = principalinvestigator;
+	public void setPrincipalInvestigatorId(long principalInvestigatorId) {
+		this.principalInvestigatorId = principalInvestigatorId;
 	}
 
-	
+	/**
+	 * @return Returns the protocolcoordinator ids.
+	 */
+	public long[] getProtocolCoordinatorIds() {
+		return protocolCoordinatorIds;
+	}
 
 	/**
-	 * @return Returns the protocolcoordinators.
+	 * @param protocolcoordinators
+	 *            The protocolcoordinators to set.
 	 */
-	public long[] getProtocolcoordinators() {
-		return protocolcoordinators;
+	public void setProtocolcoordinators(long[] protocolCoordinatorIds) {
+		this.protocolCoordinatorIds = protocolCoordinatorIds;
 	}
-	/**
-	 * @param protocolcoordinators The protocolcoordinators to set.
-	 */
-	public void setProtocolcoordinators(long[] protocolcoordinators) {
-		this.protocolcoordinators = protocolcoordinators;
-	}
+
 	/**
 	 * @return Returns the shorttitle.
 	 */
@@ -247,7 +257,7 @@ public class CollectionProtocolForm extends AbstractActionForm {
 	/**
 	 * @return Returns the startDate.
 	 */
-	public java.util.Date getStartDate() {
+	public String getStartDate() {
 		return startDate;
 	}
 
@@ -255,7 +265,7 @@ public class CollectionProtocolForm extends AbstractActionForm {
 	 * @param startDate
 	 *            The startDate to set.
 	 */
-	public void setStartDate(java.util.Date startDate) {
+	public void setStartDate(String startDate) {
 		this.startDate = startDate;
 	}
 
@@ -280,27 +290,6 @@ public class CollectionProtocolForm extends AbstractActionForm {
 	 */
 	public void setOperation(String operation) {
 		this.operation = operation;
-	}
-
-	/**
-	 * Returns the identifier assigned to User.
-	 * 
-	 * @return int representing the id assigned to User.
-	 * @see #setIdentifier(int)
-	 */
-	public long getIdentifier() {
-		return (this.identifier);
-	}
-
-	/**
-	 * Sets an id for the User.
-	 * 
-	 * @param identifier
-	 *            id to be assigned to the User.
-	 * @see #getIdentifier()
-	 */
-	public void setIdentifier(long identifier) {
-		this.identifier = identifier;
 	}
 
 	/**
@@ -365,20 +354,63 @@ public class CollectionProtocolForm extends AbstractActionForm {
 	 */
 	public ActionErrors validate(ActionMapping mapping,
 			HttpServletRequest request) {
-		ActionErrors errors = new ActionErrors();
+		ActionErrors errors = null;
 		Validator validator = new Validator();
-		try {
-		} catch (Exception excp) {
+		try 
+		{
+			System.out.println("\n------------------------");
+			
+			
+			System.out.println(this.getPrincipalInvestigatorId());
+			if (this.getProtocolCoordinatorIds() != null)
+			{
+				System.out.println(this.getProtocolCoordinatorIds());
+			}
+			System.out.println(this.getTitle());
+			System.out.println(this.getStartDate());
+			java.util.Iterator i = this.values.keySet().iterator() ;
+			
+			while(i.hasNext() )
+			{
+				Object o = i.next();
+				System.out.print(o);
+				System.out.println(" : "+this.getValue(o.toString() )); 
+			}
+			System.out.println("\n===============\n");
+		}
+		catch (Exception excp)
+		{
+			errors = new ActionErrors();
 		}
 		return errors;
 	}
 
-	public void setSystemIdentifier(long l) {
-		setIdentifier(l);
+	/**
+	 * @return Returns the values.
+	 */
+	public Map getValues() {
+		return values;
 	}
-
+	/**
+	 * @param protocolCoordinatorIds The protocolCoordinatorIds to set.
+	 */
+	public void setProtocolCoordinatorIds(long[] protocolCoordinatorIds) {
+		this.protocolCoordinatorIds = protocolCoordinatorIds;
+	}
+	
+	
+	
+	
+	/**
+	 * @return Returns the systemIdentifier.
+	 */
 	public long getSystemIdentifier() {
-		return getIdentifier();
+		return systemIdentifier;
 	}
-
+	/**
+	 * @param systemIdentifier The systemIdentifier to set.
+	 */
+	public void setSystemIdentifier(long systemIdentifier) {
+		this.systemIdentifier = systemIdentifier;
+	}
 }
