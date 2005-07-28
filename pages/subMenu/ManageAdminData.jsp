@@ -88,6 +88,17 @@
 		</div>
 		
 		<div>
+			<img src="images/subMenuArrow.gif" width="7" height="7" alt="" /> 
+				<bean:message key="app.biohazard" />
+					<a class="subMenuPrimary" href="Biohazard.do?operation=add">
+						<bean:message key="app.add" />
+					</a> | 
+					<a class="subMenuPrimary" href="Biohazard.do?operation=search">
+						<bean:message key="app.edit" />
+					</a>
+		</div>
+		
+		<div>
 			<img src="images/subMenuArrow.gif" width="7" height="7" alt=""/> 
 				<bean:message key="app.collectionProtocol" />
 		</div>

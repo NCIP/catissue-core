@@ -5,10 +5,15 @@
  * Copyright:    Copyright (c) year
  * Company: Washington University, School of Medicine, St. Louis.
  * @author Gautam Shetty
+ * @author Aniruddha Phadnis
  * @version 1.00
  */
 
 package edu.wustl.catissuecore.domain;
+
+import edu.wustl.catissuecore.actionForm.AbstractActionForm;
+import edu.wustl.catissuecore.actionForm.BiohazardForm;
+import edu.wustl.common.util.logger.Logger;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -20,7 +25,7 @@ import java.util.HashSet;
  * @hibernate.class table="CATISSUE_BIOHAZARD"
  * @author gautam_shetty
  */
-public class Biohazard implements Serializable
+public class Biohazard extends AbstractDomainObject implements Serializable
 {
     private static final long serialVersionUID = 1234567890L;
 
@@ -46,6 +51,16 @@ public class Biohazard implements Serializable
     
     protected Collection specimenCollection = new HashSet();
 
+    //Default Constructor
+    public Biohazard()
+    {    	
+    }
+    
+    public Biohazard(AbstractActionForm form)
+    {
+    	setAllValues(form);
+    }
+    
     /**
      * Returns the system generated unique systemIdentifier.
      * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"
@@ -157,4 +172,24 @@ public class Biohazard implements Serializable
 	{
 		this.specimenCollection = specimenCollection;
 	}
+	
+	/**
+     * This function Copies the data from an BiohazardForm object to a Biohazard object.
+     * @param siteForm An SiteForm object containing the information about the site.  
+     * */
+    public void setAllValues(AbstractActionForm abstractForm)
+    {
+        try
+        {
+            BiohazardForm form 	= (BiohazardForm) abstractForm;
+            this.systemIdentifier = new Long(form.getSystemIdentifier());
+            this.comments = form.getComments();
+            this.name = form.getName();
+            this.type = form.getType();
+        }
+        catch (Exception excp)
+        {
+            Logger.out.error(excp.getMessage());
+        }
+    }
 }
