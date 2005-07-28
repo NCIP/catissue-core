@@ -53,61 +53,6 @@ public class Utility
 	    return d;
 	}
 	
-	public static Date parseDate(String date) throws ParseException
-	{
-		try
-		{
-			StringTokenizer tokenizer = new StringTokenizer(date,"-");
-			int yyyy =  Integer.parseInt(tokenizer.nextToken());
-			int mm =  Integer.parseInt(tokenizer.nextToken());
-			int dd =  Integer.parseInt(tokenizer.nextToken());
-			
-			Calendar cal = Calendar.getInstance();
-			cal.set(yyyy,mm-1,dd);
-			return cal.getTime();
-		}
-		catch(Exception e)
-		{
-			throw new ParseException("Date '"+date+"' is not in format of YYYY-MM-DD",0);
-		}
-	}
-	
-	public static String parseDateToString(Date date) 
-	{
-	    String str = new String();
-	    try
-	    {
-	        Calendar cal = Calendar.getInstance();
-	        cal.setTime(date);
-	        
-	        str = cal.get(Calendar.YEAR)+"-"+(cal.get(Calendar.MONTH)+1)+"-"+cal.get(Calendar.DATE);
-	        
-	    }
-	    catch(Exception excp)
-	    {
-	        Logger.out.error(excp.getMessage());
-	    }
-	    return str;
-	}
-	
-	public static Date parseTime(String date,int hours,int minutes,String AMPM) throws ParseException
-	{
-	    try
-	    {
-	        Calendar cal = Calendar.getInstance();
-	        cal.setTime(parseDate(date));
-			cal.set(Calendar.HOUR,hours);
-			cal.set(Calendar.MINUTE,minutes);
-			cal.set(Calendar.AM_PM,(AMPM.equals("AM")?0:1));
-			
-	        return cal.getTime();
-	    }
-	    catch(Exception excp)
-	    {
-	        throw new ParseException("Date '"+date+"' is not in format of YYYY-MM-DD",0);	
-	    }
-	}
-
 	public static void main(String[] args)
     {
 	    try{

@@ -3,6 +3,7 @@
  * <p>Description:  An individual from whom a specimen is collected. </p>
  * Copyright:    Copyright (c) year
  * Company: Washington University, School of Medicine, St. Louis.
+ * @author Aniruddha Phadnis
  * @author Gautam Shetty
  * @version 1.00
  * Created on Apr 7, 2005
@@ -14,10 +15,15 @@ import java.util.Date;
 import java.util.HashSet;
 
 import edu.wustl.catissuecore.actionForm.AbstractActionForm;
+import edu.wustl.catissuecore.actionForm.ParticipantForm;
+import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * An individual from whom a specimen is collected.
  * @hibernate.class table="CATISSUE_PARTICIPANT"
+ * @author aniruddha_phadnis
  * @author gautam_shetty
  */
 public class Participant extends AbstractDomainObject implements java.io.Serializable
@@ -84,10 +90,14 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
      * */
 	protected Collection collectionProtocolRegistrationCollection = new HashSet();
 	
-	
+	//Default Constructor
 	public Participant()
+	{		
+	}
+	
+	public Participant(AbstractActionForm form)
 	{
-		
+		setAllValues(form);
 	}
 	
 	/**
@@ -357,13 +367,30 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 		this.collectionProtocolRegistrationCollection = collectionProtocolRegistrationCollection;
 	}
 	
-	
-    /**
-     * (non-Javadoc)
-     * @see edu.wustl.catissuecore.domain.AbstractDomainObject#setAllValues(edu.wustl.catissuecore.actionForm.AbstractActionForm)
-     */
-    public void setAllValues(AbstractActionForm abstractForm)
-    {
-
-    }
+	/**
+	 * This function Copies the data from a StorageTypeForm object to a StorageType object.
+	 * @param storageTypeForm A StorageTypeForm object containing the information about the StorageType.  
+	 * */
+	public void setAllValues(AbstractActionForm abstractForm)
+	{
+	    try
+	    {
+	        ParticipantForm form = (ParticipantForm) abstractForm;
+	        
+	        this.systemIdentifier	= new Long(form.getSystemIdentifier());
+	        this.activityStatus		= form.getActivityStatus();
+	        this.ethnicity			= form.getEthnicity();
+	        this.firstName			= form.getFirstName();
+	        this.middleName			= form.getMiddleName();
+	        this.lastName			= form.getLastName();
+	        this.genotypicGender	= form.getGenotypicGender();
+	        this.race				= form.getRace();
+	        this.socialSecurityNumber=form.getSocialSecurityNumber();
+	        this.birthDate			= Utility.parseDate(form.getBirthDate(),Constants.DATE_PATTERN_YYYY_MM_DD);
+	    }
+	    catch(Exception excp)
+	    {
+	        Logger.out.error(excp.getMessage());
+	    }
+	}
 }

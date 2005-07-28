@@ -4,6 +4,41 @@
 
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 
+<head>
+	<script language="JavaScript">
+		//function to insert a row in the inner block
+		function insRow(subdivtag)
+		{
+			var r = new Array(); 
+			r = document.getElementById(subdivtag).rows;
+			var q = r.length;
+			var x=document.getElementById(subdivtag).insertRow(q);
+			
+			// First Cell
+			var spreqno=x.insertCell(0);
+			spreqno.className="formSerialNumberField";
+			sname=(q+1);
+			spreqno.innerHTML="" + sname;
+		
+			//Second Cell
+			var spreqtype=x.insertCell(1);
+			spreqtype.className="formField";
+			sname="";
+
+			sname = "<input type='text' class='formFieldSized15' name='value(txtkey" + (q+1) +")'>";
+			spreqtype.innerHTML="" + sname;
+		
+			//Third Cell
+			var spreqsubtype=x.insertCell(2);
+			spreqsubtype.className="formField";
+			sname="";
+		
+			sname= "";
+			sname = "<input type='text' class='formFieldSized15' name='value(txtval" + (q+1) +")'>";
+			spreqsubtype.innerHTML="" + sname;
+		}
+	</script>
+</head>
 <% 
 		String operation = (String)request.getAttribute(Constants.OPERATION);
 		String formName,pageView=operation,editViewButton="buttons."+Constants.EDIT;
@@ -245,13 +280,16 @@
 				 
 				 <!-- Medical Identifiers Begin here -->
 				 <tr>
-				     <td class="formSubTableTitle" height="20" colspan="2">
+				     <td class="formTitle" height="20" colspan="2">
 				     	<bean:message key="participant.medicalIdentifier"/>
 				     </td>
 				     <td class="formButtonField">
-				     	<html:submit styleClass="actionButton">
+				     	<%--<html:button styleClass="actionButton" onclick="insRow('addMore')">
 							<bean:message key="buttons.addMore"/>
-						</html:submit>
+						</html:button>--%>
+						<html:button property="addKeyValue" styleClass="actionButton" onclick="insRow('addMore')">
+						<bean:message key="buttons.addMore"/>
+						</html:button>
 				    </td>
 				  </tr>
 				 <tr>
@@ -265,12 +303,12 @@
 						<bean:message key="medicalrecord.number"/>
 					</td>
 				 </tr>
+				 
+				 <tbody id="addMore">
 				 <tr>
-				 	<td class="formSerialNumberField" width="5">
-				     	1
-				     </td>
+				 	<td class="formSerialNumberField" width="5">1.</td>
 				    <td class="formField">
-						<html:select property="participantMedicalRecordSource(1)" styleClass="formFieldSized" styleId="participantMedicalRecordSource" size="1" disabled="<%=readOnlyForAll%>">
+						<html:select property="participantMedicalRecordSource(1)" styleClass="formFieldSized15" styleId="participantMedicalRecordSource" size="1" disabled="<%=readOnlyForAll%>">
 							<html:options name="participantMedicalRecordSourceList" labelName="participantMedicalRecordSourceList"/>		
 						</html:select>
 					</td>
@@ -278,20 +316,7 @@
 				     	<html:text styleClass="formFieldSized" size="30" styleId="participantMedicalRecordNumber" property="participantMedicalRecordNumber(1)" readonly="<%=readOnlyForAll%>"/>
 				    </td>
 				 </tr>	
-				 			 
-				 <tr>
-			     	<td class="formSerialNumberField" width="5">
-				     	2
-				     </td>
-				    <td class="formField">
-						<html:select property="participantMedicalRecordSource(2)" styleClass="formFieldSized" styleId="participantMedicalRecordSource" size="1" disabled="<%=readOnlyForAll%>">
-							<html:options name="participantMedicalRecordSourceList" labelName="participantMedicalRecordSourceList"/>		
-						</html:select>
-					</td>
-				    <td class="formField">
-				     	<html:text styleClass="formFieldSized" size="30" styleId="participantMedicalRecordNumber" property="participantMedicalRecordNumber(2)" readonly="<%=readOnlyForAll%>"/>
-				    </td>
-				 </tr>
+				 </tbody>
 				 
 				 <!-- Medical Identifiers End here -->
  			   	 <logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">		

@@ -25,6 +25,9 @@ public class Constants
     public static final String AND_JOIN_CONDITION = "AND";
 	public static final String OR_JOIN_CONDITION = "OR";
 	
+	public static final String DATE_PATTERN = "yyyy-MM-dd HH:mm aa";
+	public static final String DATE_PATTERN_YYYY_MM_DD = "yyyy-MM-dd";
+	
 	//DAO Constants.
 	public static final int HIBERNATE_DAO = 1;
 	public static final int JDBC_DAO = 2;
@@ -713,7 +716,10 @@ public class Constants
 	};
 	
 	public static final String [] ETHNICITY_VALUES = {
-	        SELECT_OPTION
+	        SELECT_OPTION,
+			"Ethnicity1",
+			"Ethnicity2",
+			"Ethnicity3",
 	};
 	
 	public static final String [] PARTICIPANT_MEDICAL_RECORD_SOURCE_VALUES = {

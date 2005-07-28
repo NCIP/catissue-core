@@ -10,9 +10,11 @@
 package edu.wustl.catissuecore.domain;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Map;
 
 import edu.wustl.catissuecore.actionForm.AbstractActionForm;
 import edu.wustl.catissuecore.actionForm.StorageContainerForm;
+import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -407,6 +409,13 @@ public class StorageContainer extends AbstractDomainObject implements java.io.Se
 		        site = new Site();
 		        site.setSystemIdentifier(new Long(form.getSiteId()));
 	        }
+	        
+	        Map map = form.getValues();
+	        System.out.println("MAP "+map);
+	        MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.domain");
+	        Collection storageContainerDetailsCollection = parser.generateData(map);
+	        System.out.println("storageContainerDetailsCollection "+storageContainerDetailsCollection);
+	        this.setStorageContainerDetailsCollection(storageContainerDetailsCollection);
 	    }
 	    catch(Exception excp)
 	    {

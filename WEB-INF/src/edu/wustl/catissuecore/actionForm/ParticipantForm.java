@@ -17,11 +17,15 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
+import edu.wustl.catissuecore.domain.Participant;
+import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.catissuecore.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
@@ -109,15 +113,17 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
      */
     public void setAllValues(AbstractDomainObject abstractDomain)
     {
-//    	Participant participant = (Participant) abstractDomain;
-//        this.systemIdentifier = participant.getSystemIdentifier().longValue();
-//        this.lastName = participant.getLastName();
-//        this.firstName = participant.getFirstName();
-//        this.middleName = participant.getMiddleName();
-//        this.birthDate = Utility.parseDateToString(participant.getBirthDate()); 
-//        this.genotypicGender = participant.getGenotypicGender();
-//        this.socialSecurityNumber = participant.getSocialSecurityNumber();
-//        this.race = participant.getRace();
+    	Participant participant = (Participant) abstractDomain;
+        this.systemIdentifier = participant.getSystemIdentifier().longValue();
+        this.lastName = participant.getLastName();
+        this.firstName = participant.getFirstName();
+        this.middleName = participant.getMiddleName();
+        this.birthDate = Utility.parseDateToString(participant.getBirthDate(),Constants.DATE_PATTERN); 
+        this.genotypicGender = participant.getGenotypicGender();
+        this.socialSecurityNumber = participant.getSocialSecurityNumber();
+        this.race = participant.getRace();
+        this.activityStatus = participant.getActivityStatus();
+        this.ethnicity = participant.getEthnicity();
    }
     
     /**
@@ -406,7 +412,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
      public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
      {
          ActionErrors errors = new ActionErrors();
-         Validator validator = new Validator(); 
+         Validator validator = new Validator();
 
          try
          {
@@ -416,7 +422,27 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
              }
              if (operation.equals(Constants.ADD) || operation.equals(Constants.EDIT))
              {
-                 checkValidNumber(socialSecurityNumber,"participant.socialSecurityNumber",errors,validator);
+             	if (validator.isEmpty(birthDate))
+                {
+                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("participant.birthDate")));
+                }
+             	
+             	if(genotypicGender.equals(Constants.SELECT_OPTION))
+                {
+                	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("participant.gender")));
+                }
+             	
+             	if(race.equals(Constants.SELECT_OPTION))
+                {
+                	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("participant.race")));
+                }
+             	
+             	if(ethnicity.equals(Constants.SELECT_OPTION))
+                {
+                	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("participant.ethnicity")));
+                }
+             	
+                checkValidNumber(socialSecurityNumber,"participant.socialSecurityNumber",errors,validator);
              }
          }
          catch(Exception excp)

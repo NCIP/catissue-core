@@ -31,7 +31,7 @@ public class StorageContainerDetails implements java.io.Serializable
 	/**
      * Value assigned to the parameter.
      */
-	protected String value;
+	protected String parameterValue;
 	
 	/**
      * Returns System generated unique identifier.
@@ -81,12 +81,12 @@ public class StorageContainerDetails implements java.io.Serializable
      * Returns the value of parameter. 
      * @return The value of parameter.
      * @see #setValue(String)
-     * @hibernate.property name="value" type="string" 
+     * @hibernate.property name="parameterValue" type="string" 
      * column="VALUE" length="50"
      */
-	public String getValue()
+	public String getParameterValue()
 	{
-		return value;
+		return parameterValue;
 	}
 
 	/**
@@ -94,8 +94,8 @@ public class StorageContainerDetails implements java.io.Serializable
      * @param value the value of parameter.
      * @see #getValue()
      */
-	public void setValue(String value)
+	public void setParameterValue(String value)
 	{
-		this.value = value;
+		this.parameterValue = value;
 	}
 }

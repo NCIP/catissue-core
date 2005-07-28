@@ -17,12 +17,12 @@ import edu.wustl.catissuecore.actionForm.InstitutionForm;
 import edu.wustl.catissuecore.actionForm.ReportedProblemForm;
 import edu.wustl.catissuecore.actionForm.SiteForm;
 import edu.wustl.catissuecore.actionForm.StorageTypeForm;
-import edu.wustl.catissuecore.actionForm.StorageContainerForm;
 import edu.wustl.catissuecore.actionForm.UserForm;
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.domain.CancerResearchGroup;
 import edu.wustl.catissuecore.domain.Department;
 import edu.wustl.catissuecore.domain.Institution;
+import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ReportedProblem;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.StorageType;
@@ -52,17 +52,17 @@ public class DomainObjectFactory
                 UserForm userForm = (UserForm) form;
                 abstractDomain = new User(userForm);
                 break;
-//            case Constants.PARTICIPANT_FORM_ID:
-//                ParticipantForm participantForm = (ParticipantForm) form;
-//            	abstractDomain = new Participant(participantForm);
-//            	break;
+            case Constants.PARTICIPANT_FORM_ID:
+                //ParticipantForm participantForm = (ParticipantForm) form;
+            	abstractDomain = new Participant(form);
+            	break;
             case Constants.STORAGE_TYPE_FORM_ID:
             	StorageTypeForm storageTypeForm = (StorageTypeForm) form;
             	abstractDomain = new StorageType(storageTypeForm);
             	break;
             case Constants.STORAGE_CONTAINER_FORM_ID:
             	//StorageContainerForm storageContainerForm = (StorageContainerForm) form;
-            	abstractDomain = new StorageContainer(form);
+            	abstractDomain = new StorageContainer(form);            	
             	break;
             case Constants.SITE_FORM_ID:
             	SiteForm siteForm = (SiteForm) form;

@@ -43,6 +43,9 @@ public class BizLogicFactory
         	case Constants.SITE_FORM_ID:
         		abstractBizLogic = new SiteBizLogic();
         		break;
+        	case Constants.PARTICIPANT_FORM_ID:
+        		abstractBizLogic = new ParticipantBizLogic();
+        		break;
             default:
                 abstractBizLogic = new DefaultBizLogic();
             	break;
