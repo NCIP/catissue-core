@@ -35,7 +35,7 @@ public abstract class SpecimenRequirement implements java.io.Serializable
 	/**
 	 * Anatomic site from which the specimen was derived.
 	 */
-	protected String tissueSite;
+	public String tissueSite;
 	
 	/**
 	 * For bilateral sites, left or right.
@@ -191,5 +191,10 @@ public abstract class SpecimenRequirement implements java.io.Serializable
 	public void setCollectionProtocolEventCollection(Collection collectionProtocolEventCollection) 
 	{
 		this.collectionProtocolEventCollection = collectionProtocolEventCollection;
+	}
+	
+	public String toString()
+	{
+		return "SR "+this.getClass().getName()+" : "+specimenType+" | "+ tissueSite;
 	}
 }
