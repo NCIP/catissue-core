@@ -84,6 +84,7 @@ var spreqtype=x.insertCell(1)
 spreqtype.className="formField";
 sname="";
 objname = subdivname + "_specimenType_"+ rowno ;
+alert(objname);
 var objunit = subdivname + "_unitspan_"+ rowno ;
 
 //sname ="<select name='"+ objname + "' size='1' onchange='changeUnit(" + objname + "," + objunit +") class='formFieldSized10' id='" + objname + "'>"
