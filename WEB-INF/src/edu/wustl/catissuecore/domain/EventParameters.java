@@ -10,6 +10,8 @@
 package edu.wustl.catissuecore.domain;
 
 import java.util.Date;
+
+import edu.wustl.catissuecore.actionForm.AbstractActionForm;
 import edu.wustl.catissuecore.domain.User;
 
 /**
@@ -19,6 +21,14 @@ import edu.wustl.catissuecore.domain.User;
  */
 public abstract class EventParameters extends AbstractDomainObject implements java.io.Serializable
 {
+	/* (non-Javadoc)
+	 * @see edu.wustl.catissuecore.domain.AbstractDomainObject#setAllValues(edu.wustl.catissuecore.actionForm.AbstractActionForm)
+	 */
+	public void setAllValues(AbstractActionForm abstractForm)
+	{
+		// TODO Auto-generated method stub
+
+	}
 	private static final long serialVersionUID = 1234567890L;
 
 	/**
