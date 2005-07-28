@@ -22,6 +22,7 @@ PUBLIC
 		<form-bean name="storageContainerForm" type="edu.wustl.catissuecore.actionForm.StorageContainerForm"/>
 		<form-bean name="siteForm" type="edu.wustl.catissuecore.actionForm.SiteForm"/>
 		<form-bean name="cancerResearchGroupForm" type="edu.wustl.catissuecore.actionForm.CancerResearchGroupForm"/>
+		<form-bean name="frozenEventParametersForm" type="edu.wustl.catissuecore.actionForm.FrozenEventParametersForm"/>
 	</form-beans>
 	
 	<!-- Global Exception Definitions -->
@@ -642,6 +643,48 @@ PUBLIC
 			<forward name="failure" path="/Site.do?operation=edit"/>
 		</action>    
 		<!-- Site Actions Ends -->
+
+		<!-- FrozenEventParameters Actions Begins -->
+        <action path="/FrozenEventParameters"
+			type="edu.wustl.catissuecore.action.FrozenEventParametersAction"
+			scope="request">
+			<forward name="success" path=".catissuecore.frozenEventParametersDef" />
+			<forward name="failure" path=".catissuecore.frozenEventParametersDef" />
+		</action>
+		
+		<action path="/FrozenEventParametersAdd"
+			type="edu.wustl.catissuecore.action.CommonAddEditAction"
+			name="frozenEventParametersForm"
+			validate="true"
+			input="/FrozenEventParameters.do?operation=add"
+			scope="request">
+			<forward name="success" path=".catissuecore.frozenEventParametersAddSuccessDef" />
+			<forward name="failure" path="/error.jsp" />
+		</action>
+		
+		<action path="/FrozenEventParametersEdit"
+			type="edu.wustl.catissuecore.action.CommonAddEditAction"
+			name="frozenEventParametersForm"
+			validate="true"
+			input="/FrozenEventParameters.do?operation=edit"
+			scope="request">
+			<forward name="success" path=".catissuecore.frozenEventParametersEditSuccessDef" />
+			<forward name="failure" path="/error.jsp" />
+		</action>
+		
+		<action path="/FrozenEventParametersSearch"
+		    type="edu.wustl.catissuecore.action.CommonSearchAction"
+			name="frozenEventParametersForm"
+			validate="true"
+			input="/FrozenEventParameters.do?operation=edit"
+			scope="request">
+			<forward name="success" path="/FrozenEventParameters.do?operation=edit"/>
+			<forward name="failure" path="/FrozenEventParameters.do?operation=edit"/>
+		</action>    
+		<!-- FrozenEventParameters Actions Ends -->
+
+
+
 		<!--Query Result View Actions Begin-->
 		<action path="/QueryResults"
 			type="edu.wustl.catissuecore.action.QueryResultsAction">
