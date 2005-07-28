@@ -27,25 +27,27 @@ public class MapDataParser
 	{
 		Map map = new TreeMap();
 
-		map.put("CollectionProtocolEvent:1.clinicalStatus", "Pre-Opt");
-		map.put("CollectionProtocolEvent:1.studyCalendarEventPoint", "11.0");
-		map.put("CollectionProtocolEvent:1.SpecimenRequirement:1.tissueSite", "Lung");
-		map.put("CollectionProtocolEvent:1.SpecimenRequirement:1.specimenType", "Blood");
-		map.put("CollectionProtocolEvent:1.SpecimenRequirement:1.specimenClass", "Tissue");
-		
-		map.put("CollectionProtocolEvent:2.studyCalendarEventPoint", "10.0");
-		map.put("CollectionProtocolEvent:2.clinicalStatus", "Pre-Opt");
-		map.put("CollectionProtocolEvent:2.SpecimenRequirement:1.specimenType", "Blood");
-		map.put("CollectionProtocolEvent:2.SpecimenRequirement:1.tissueSite", "Kidney");
-		map.put("CollectionProtocolEvent:2.SpecimenRequirement:1.specimenClass", "Fluid");
-		
-		map.put("CollectionProtocolEvent:2.SpecimenRequirement:2.tissueSite", "Brain");
-		map.put("CollectionProtocolEvent:2.SpecimenRequirement:2.specimenType", "Gel");
-		map.put("CollectionProtocolEvent:2.SpecimenRequirement:2.specimenClass", "Cell");
-		
-		map.put("CollectionProtocolEvent:2.SpecimenRequirement:3.tissueSite", "Lever");
-		map.put("CollectionProtocolEvent:2.SpecimenRequirement:3.specimenType", "Cell");
-		map.put("CollectionProtocolEvent:2.SpecimenRequirement:3.specimenClass", "Molecular");
+		map.put("CollectionProtocolEvent:1_clinicalStatus", "Pre-Opt");                       
+		map.put("CollectionProtocolEvent:1_studyCalendarEventPoint", "11.0");                 
+		map.put("CollectionProtocolEvent:1_SpecimenRequirement:1_tissueSite", "Lung");        
+		map.put("CollectionProtocolEvent:1_SpecimenRequirement:1_specimenType", "Blood");     
+		map.put("CollectionProtocolEvent:1_SpecimenRequirement:1_specimenClass", "Tissue");
+		map.put("CollectionProtocolEvent:1_SpecimenRequirement:1_quantityIn", "6");
+		                                                                                      
+		map.put("CollectionProtocolEvent:2_studyCalendarEventPoint", "10.0");                 
+		map.put("CollectionProtocolEvent:2_clinicalStatus", "Pre-Opt");                       
+		map.put("CollectionProtocolEvent:2_SpecimenRequirement:1_specimenType", "Blood");     
+		map.put("CollectionProtocolEvent:2_SpecimenRequirement:1_tissueSite", "Kidney");      
+		map.put("CollectionProtocolEvent:2_SpecimenRequirement:1_specimenClass", "Fluid");    
+		                                                                                      
+		map.put("CollectionProtocolEvent:2_SpecimenRequirement:2_tissueSite", "Brain");       
+		map.put("CollectionProtocolEvent:2_SpecimenRequirement:2_specimenType", "Gel");       
+		map.put("CollectionProtocolEvent:2_SpecimenRequirement:2_specimenClass", "Cell");     
+		                                                                                      
+		map.put("CollectionProtocolEvent:2_SpecimenRequirement:3_tissueSite", "Lever");       
+		map.put("CollectionProtocolEvent:2_SpecimenRequirement:3_specimenType", "Cell");      
+		map.put("CollectionProtocolEvent:2_SpecimenRequirement:3_specimenClass", "Molecular");
+
 		return map; 
 	} // createmap
 	
@@ -82,13 +84,13 @@ public class MapDataParser
 	//CollectionProtocolEvent:1.studyCalendarEventPoint, new Double(11)
 	private void parstData(Object parentObj, String str,String value,String parentKey) throws Exception
 	{
-		StringTokenizer st = new StringTokenizer(str, ".");
+		StringTokenizer st = new StringTokenizer(str, "_");
 		
 		int tokenCount = st.countTokens();
 		if(tokenCount>1)
 		{
 			String className = st.nextToken();
-			String mapKey = parentKey+"_"+str.substring(0,str.indexOf("."));
+			String mapKey = parentKey+"-"+str.substring(0,str.indexOf("_"));
 			Object obj = parseClassAndGetInstance(parentObj,className,mapKey);
 			
 			if(tokenCount==2)
@@ -105,7 +107,7 @@ public class MapDataParser
 			}
 			else
 			{
-				int firstIndex = str.indexOf(".");
+				int firstIndex = str.indexOf("_");
 				className = str.substring(firstIndex+1);
 				parstData(obj,className,value,mapKey);
 			}
@@ -212,6 +214,7 @@ public class MapDataParser
 		MapDataParser aMapDataParser = new MapDataParser("edu.wustl.catissuecore.domain");
 		Map map = aMapDataParser.createMap();
 		map = aMapDataParser.fixMap(map);
+		System.out.println(map);
 		Collection dataCollection = aMapDataParser.generateData(map);
 		System.out.println("Data: "+dataCollection);
 	}
@@ -220,6 +223,11 @@ public class MapDataParser
 	private Map fixMap(Map orgMap)
 	{
 		Map replaceMap = new HashMap();
+		Map unitMap = new HashMap();
+		unitMap.put("Cell","CellCount");
+		unitMap.put("Fluid","MiliLiter");
+		unitMap.put("Tissue","Gram");
+		unitMap.put("Molecular","MicroGram");
 		
 		Iterator it = orgMap.keySet().iterator();
 		while(it.hasNext())
@@ -230,7 +238,7 @@ public class MapDataParser
 				String value = (String)orgMap.get(key);
 				String replaceWith = "SpecimenRequirement"+"#"+value+"SpecimenRequirement";
 				
-				key = key.substring(0,key.lastIndexOf("."));
+				key = key.substring(0,key.lastIndexOf("_"));
 				String newKey = key.replaceFirst("SpecimenRequirement",replaceWith);
 				
 				replaceMap.put(key,newKey);
@@ -251,10 +259,32 @@ public class MapDataParser
 			{
 				if(key.indexOf("specimenClass")==-1)
 				{
-					String keyPart = key.substring(0,key.lastIndexOf("."));
-					String newKeyPart = (String)replaceMap.get(keyPart);
-					key = key.replaceFirst(keyPart,newKeyPart);
-					newMap.put(key,value);
+					if(key.indexOf("quantityIn")!=-1)
+					{
+						String keyPart = "quantityIn";
+						
+						String searchKey = key.substring(0,key.lastIndexOf("_"))+"_specimenClass";
+						String specimenClass = (String)orgMap.get(searchKey);
+						String unit = (String)unitMap.get(specimenClass);
+						String newKeyPart = keyPart+unit;
+						
+						key = key.replaceFirst(keyPart,newKeyPart);
+						
+						//Rplace # and class name
+						keyPart = key.substring(0,key.lastIndexOf("_"));
+						newKeyPart = (String)replaceMap.get(keyPart);
+						key = key.replaceFirst(keyPart,newKeyPart);
+						newMap.put(key,value);
+						
+						//newMap.put(key,value);
+					}
+					else
+					{
+						String keyPart = key.substring(0,key.lastIndexOf("_"));
+						String newKeyPart = (String)replaceMap.get(keyPart);
+						key = key.replaceFirst(keyPart,newKeyPart);
+						newMap.put(key,value);
+					}
 				}
 			}
 		}		
