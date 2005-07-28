@@ -234,7 +234,9 @@ function getSubDivCount(subdivtag)
 %>
         
 <html:errors />
-<html:form action="<%=Constants.COLLECTIONPROTOCOL_ADD_ACTION%>">
+<html:form action="<%=Constants.COLLECTIONPROTOCOL_ADD_ACTION%>" method="get">
+
+
 
 <!-- table 1 -->
 <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="810">
