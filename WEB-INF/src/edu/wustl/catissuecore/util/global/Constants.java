@@ -172,6 +172,12 @@ public class Constants
 	public static final String SPECIMEN_COLLECTION_GROUP_ADD_ACTION = "SpecimenCollectionGroupAdd.do";
 	public static final String SPECIMEN_COLLECTION_GROUP_EDIT_ACTION = "SpecimenCollectionGroupEdit.do";
 
+//	Constants required in FrozenEventParameters.jsp Page
+	public static final String FROZEN_EVENT_PARAMETERS_SEARCH_ACTION = "FrozenEventParametersSearch.do";
+	public static final String FROZEN_EVENT_PARAMETERS_ADD_ACTION = "FrozenEventParametersAdd.do";
+	public static final String FROZEN_EVENT_PARAMETERS_EDIT_ACTION = "FrozenEventParametersEdit.do";
+	
+	
 	//Levels of nodes in query results tree.
 	public static final int MAX_LEVEL = 5;
 	public static final int MIN_LEVEL = 1;
