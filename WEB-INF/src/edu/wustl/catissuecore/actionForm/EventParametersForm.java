@@ -36,6 +36,12 @@ public abstract class EventParametersForm extends AbstractActionForm
      * */
     protected long systemIdentifier;
     
+	 /**
+     * A String containing the operation(Add/Edit) to be performed.
+     * */
+    protected String operation = null;
+
+    
     /**
      * Time in hours for the Event Parameter.
      * */
@@ -66,8 +72,6 @@ public abstract class EventParametersForm extends AbstractActionForm
     
     
 // ------ GET SET methods
-    
-
 	/**
 	 * @return Returns the comments.
 	 */
@@ -192,6 +196,35 @@ public abstract class EventParametersForm extends AbstractActionForm
 		// TODO Auto-generated method stub
 	}
 
+	/**
+     * Returns the operation(Add/Edit) to be performed.
+     * @return Returns the operation.
+     * @see #setOperation(String)
+     */
+    public String getOperation()
+    {
+        return operation;
+    }
+    
+    /**
+     * Sets the operation to be performed.
+     * @param operation The operation to set.
+     * @see #getOperation()
+     */
+    public void setOperation(String operation)
+    {
+        this.operation = operation;
+    }
+    
+    /**
+     * Checks the operation to be performed is add operation.
+     * @return Returns true if operation is equal to "add", else it returns false
+     * */
+    public boolean isAddOperation()
+    {
+        return(getOperation().equals(Constants.ADD));
+    }
+    
 	private void reset()
 	{
 		this.systemIdentifier = -1;
@@ -233,10 +266,12 @@ public abstract class EventParametersForm extends AbstractActionForm
  		EventParameters eventParametersObject = (EventParameters)abstractDomain ;
   		this.comments  = eventParametersObject.getComments();
  		this.systemIdentifier = eventParametersObject.getSystemIdentifier().longValue() ;
+ 		
+ 		System.out.println("\n\n\t\tDate IN epf: "+ getDateOfEvent());
+ 		
  		this.timeInHours = ""+eventParametersObject.getTimestamp().getHours();
  		this.timeInMinutes = "" + eventParametersObject.getTimestamp().getMinutes();
  		this.userId = eventParametersObject.getUser().getSystemIdentifier().longValue() ;
- 		this.dateOfEvent = eventParametersObject.getTimestamp().getMonth()+"-"+eventParametersObject.getTimestamp().getDay()+"-"+eventParametersObject.getTimestamp().getYear() ;     
+ 		this.dateOfEvent = eventParametersObject.getTimestamp().getMonth()+"-"+eventParametersObject.getTimestamp().getDay()+"-"+eventParametersObject.getTimestamp().getYear() ;
  	}
-
 } // class

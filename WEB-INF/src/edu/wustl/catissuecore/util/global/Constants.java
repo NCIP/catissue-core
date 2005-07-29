@@ -106,6 +106,11 @@ public class Constants
 	public static final String PROTOCOL_PARTICIPANT_NUMBER_LIST = "protocolParticipantNumberList";
 	public static final String STUDY_CALENDAR_EVENT_POINT_LIST = "studyCalendarEventPointList";
 	public static final String CLINICAL_STATUS_LIST = "cinicalStatusList";
+	//event parameters lists
+	public static final String METHODLIST = "methodList";
+	public static final String HOURLIST = "hourList";
+	public static final String MINUTESLIST = "minutesList";
+	
 	
 	//Constants required in User.jsp Page
 	public static final String USER_SEARCH_ACTION = "UserSearch.do";
@@ -779,7 +784,6 @@ public class Constants
 	};
 	
 	public static final String [] HOURARRAY = {
-	        SELECT_OPTION,
 	        "00",
 	        "01",
 	        "02",
@@ -808,8 +812,7 @@ public class Constants
 
 	
 	public static final String [] MINUTESARRAY = {
-	        SELECT_OPTION,
-			"00",
+	 		"00",
 			"01",
 			"02",
 			"03",

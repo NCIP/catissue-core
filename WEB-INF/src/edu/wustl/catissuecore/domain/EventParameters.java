@@ -141,11 +141,11 @@ public abstract class EventParameters extends AbstractDomainObject implements ja
 	{
 		try
 		{
-			
 			EventParametersForm form = (EventParametersForm)abstractForm ;
 			this.systemIdentifier = new Long(form.getSystemIdentifier());
 			this.comments = form.getComments();
 			this.user.setSystemIdentifier(new Long(form.getUserId()));
+			System.out.println("\n\n\t\tDate IN ep: "+ form.getDateOfEvent());
 			this.timestamp = new Date (form.getDateOfEvent());
 			this.timestamp.setHours(Integer.parseInt(form.getTimeInHours() ));
 			this.timestamp.setMinutes(Integer.parseInt(form.getTimeInMinutes()) );

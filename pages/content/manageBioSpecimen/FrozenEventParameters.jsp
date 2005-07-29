@@ -110,43 +110,43 @@
 			</td>
 			<td class="formField">
 				<html:select property="userId" styleClass="formFieldSized" styleId="userId" size="1">
-					<html:options name="userList" labelName="userList" />
+					<html:options name="<%=Constants.USERIDLIST%>" labelName="<%=Constants.USERLIST%>" />
 				</html:select>
 			</td>
 		</tr>
 
 <!-- date -->		
 		<tr>
-			<td class="formRequiredNotice" width="5">*</td>
-			<td class="formRequiredLabel">
+			<td class="formRequiredNotice" width="5">&nbsp;</td>
+			<td class="formLabel">
 				<label for="type">
 					<bean:message key="frozenEventParameters.dateofevent"/> 
 				</label>
 			</td>
 			<td class="formField">
-				<div id="dateOfEvent" style="position:absolute; visibility:hidden; z-index:1000;"></div>
-				<html:text styleClass="formDateSized" size="35" styleId="dateOfEvent" property="dateOfEvent" readonly="true"/>
-				<a href="javascript:show_calendar('dateOfEvent','','','MM-DD-YYYY');">
-					<img src="images\calendar.gif" width=24 height=22 border=0>
-				</a>
+				 <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
+					<html:text styleClass="formDateSized" size="35" styleId="dateOfEvent" property="dateOfEvent" readonly="true"/>
+						<a href="javascript:show_calendar('frozenEventParametersForm.dateOfEvent','','','MM-DD-YYYY');">
+							<img src="images\calendar.gif" width=24 height=22 border=0>
+						</a>
 			</td>
 		</tr>
 
 <!-- hours & minutes -->		
 		<tr>
 			<td class="formRequiredNotice" width="5">&nbsp;</td>
-			<td class="formRequiredLabel">
+			<td class="formLabel">
 				<label for="type">
 					<bean:message key="frozenEventParameters.timeinhours"/>&nbsp; 
 					<bean:message key="frozenEventParameters.timeinminutes"/> 
 				</label>
 			</td>
 			<td class="formField">
-				<html:select property="timeInHours" styleClass="formFieldSized" styleId="timeInHours" size="1">
-					<html:options name="hourList" labelName="hourList" />
+				<html:select property="timeInHours" styleClass="formFieldSized5" styleId="timeInHours" size="1">
+					<html:options name="<%=Constants.HOURLIST%>" labelName="<%=Constants.HOURLIST%>" />
 				</html:select>&nbsp;
-				<html:select property="timeInMinutes" styleClass="formFieldSized" styleId="timeInMinutes" size="1">
-					<html:options name="minutesList" labelName="minutesList" />
+				<html:select property="timeInMinutes" styleClass="formFieldSized5" styleId="timeInMinutes" size="1">
+					<html:options name="<%=Constants.MINUTESLIST%>" labelName="<%=Constants.MINUTESLIST%>" />
 				</html:select>
 			</td>
 		</tr>
@@ -160,20 +160,23 @@
 				</label>
 			</td>
 			<td class="formField">
-				<html:text styleClass="formDateSized" size="35" styleId="method" property="method" readonly="true"/>
+				<html:select property="method" styleClass="formFieldSized" styleId="method" size="1">
+					<html:options name="methodList" labelName="methodList" />
+				</html:select>
+
 			</td>
 		</tr>
 
 <!-- comments -->		
 		<tr>
-			<td class="formRequiredNotice" width="5">*</td>
-			<td class="formRequiredLabel">
+			<td class="formRequiredNotice" width="5">&nbsp;</td>
+			<td class="formLabel">
 				<label for="type">
 					<bean:message key="frozenEventParameters.comments"/> 
 				</label>
 			</td>
 			<td class="formField">
-				<html:text styleClass="formDateSized" size="35" styleId="comments" property="comments" readonly="true"/>
+				<html:textarea styleClass="formFieldSized"  styleId="comments" property="comments" />
 			</td>
 		</tr>
 

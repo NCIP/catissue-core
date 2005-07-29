@@ -22,18 +22,10 @@ import edu.wustl.catissuecore.util.global.Constants;
  */
 public class FrozenEventParametersForm extends EventParametersForm
 {
-	
 	/**
      * Method applied on specimen to freeze it.
      */
 	private String method;
-	
-	 /**
-     * A String containing the operation(Add/Edit) to be performed.
-     * */
-    private String operation = null;
-
-	
 
 	/**
 	 * @return Returns the method applied on specimen to freeze it.
@@ -51,26 +43,6 @@ public class FrozenEventParametersForm extends EventParametersForm
 		this.method = method;
 	}
 
-	/**
-     * Returns the operation(Add/Edit) to be performed.
-     * @return Returns the operation.
-     * @see #setOperation(String)
-     */
-    public String getOperation()
-    {
-        return operation;
-    }
-    
-    /**
-     * Sets the operation to be performed.
-     * @param operation The operation to set.
-     * @see #getOperation()
-     */
-    public void setOperation(String operation)
-    {
-        this.operation = operation;
-    }
-	
 	// ----- SUPERCLASS METHODS
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#getFormId()
@@ -85,26 +57,16 @@ public class FrozenEventParametersForm extends EventParametersForm
 	 */
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
+		super.setAllValues(abstractDomain);
 		FrozenEventParameters frozenEventParametersObject = (FrozenEventParameters)abstractDomain ;
 		this.method = frozenEventParametersObject.getMethod();
+		
+		//test
+		/*System.out.println("\n\n\t\tDate IN fepform: "+ .getDateOfEvent());
+		form.getDateOfEvent();
+		form.getTimeInHours() ;
+		Integer.parseInt(form.getTimeInMinutes()) );*/
 
-		this.comments  = frozenEventParametersObject.getComments();
-		this.systemIdentifier = frozenEventParametersObject.getSystemIdentifier().longValue() ;
-		this.timeInHours = ""+frozenEventParametersObject.getTimestamp().getHours();
-		this.timeInMinutes = "" + frozenEventParametersObject.getTimestamp().getMinutes();
-		this.userId = frozenEventParametersObject.getUser().getSystemIdentifier().longValue() ;
-		this.dateOfEvent = frozenEventParametersObject.getTimestamp().getMonth()+"-"+frozenEventParametersObject.getTimestamp().getDay()+"-"+frozenEventParametersObject.getTimestamp().getYear() ;     
+		
 	}
-
-	/**
-     * Checks the operation to be performed is add operation.
-     * @return Returns true if operation is equal to "add", else it returns false
-     * */
-    public boolean isAddOperation()
-    {
-        return(getOperation().equals(Constants.ADD));
-    }
-    
-	
-	
 }
