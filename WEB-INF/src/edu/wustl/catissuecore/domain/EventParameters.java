@@ -150,14 +150,17 @@ public abstract class EventParameters extends AbstractDomainObject implements ja
 			u.setSystemIdentifier(new Long(form.getUserId()));
 			this.user = u;
 //System.out.println("Done");
-			this.timestamp = Utility.parseDate(form.getDateOfEvent(),Constants.DATE_PATTERN_MM_DD_YYYY);
-			this.timestamp.setHours(Integer.parseInt(form.getTimeInHours() ));
-			this.timestamp.setMinutes(Integer.parseInt(form.getTimeInMinutes()) );
+			if (form.getDateOfEvent().trim().length()!=0  )
+			{
+				this.timestamp = Utility.parseDate(form.getDateOfEvent(),Constants.DATE_PATTERN_MM_DD_YYYY);
+				this.timestamp.setHours(Integer.parseInt(form.getTimeInHours() ));
+				this.timestamp.setMinutes(Integer.parseInt(form.getTimeInMinutes()) );
+			}
 		}
         catch (Exception excp)
         {
-        	excp.printStackTrace();
-//            Logger.out.error(excp.getMessage());
+//        	excp.printStackTrace();
+            Logger.out.error(excp.getMessage());
         }
 	}
 	
