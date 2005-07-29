@@ -36,12 +36,12 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
         AbstractDAO dao = DAOFactory.getDAO(Constants.HIBERNATE_DAO);
 		dao.openSession();
 		
-		List list = dao.retrieve(User.class.getName(), "systemIdentifier", specimenEventParametersObject.getUser().getSystemIdentifier()  );
-		if (list.size() != 0)
-		{
-		    User user = (User) list.get(0);
-		    specimenEventParametersObject.setUser(user);
-		}
+//		List list = dao.retrieve(User.class.getName(), "systemIdentifier", specimenEventParametersObject.getUser().getSystemIdentifier()  );
+//		if (list.size() != 0)
+//		{
+//		    User user = (User) list.get(0);
+//		    specimenEventParametersObject.setUser(user);
+//		}
 		
 		dao.insert(specimenEventParametersObject);
 	    
