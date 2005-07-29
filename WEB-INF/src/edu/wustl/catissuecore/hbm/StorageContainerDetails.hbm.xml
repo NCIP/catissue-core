@@ -33,7 +33,7 @@
         />
 
         <property
-            name="value"
+            name="parameterValue"
             type="string"
             update="true"
             insert="true"
