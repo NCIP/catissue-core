@@ -192,6 +192,11 @@ public class Constants
 	public static final String CHECKIN_CHECKOUT_EVENT_PARAMETERS_ADD_ACTION = "CheckInCheckOutEventParametersAdd.do";
 	public static final String CHECKIN_CHECKOUT_EVENT_PARAMETERS_EDIT_ACTION = "CheckInCheckOutEventParametersEdit.do";
 
+//	Constants required in ReceivedEventParameters.jsp Page
+	public static final String RECEIVED_EVENT_PARAMETERS_SEARCH_ACTION = "ReceivedEventParametersSearch.do";
+	public static final String RECEIVED_EVENT_PARAMETERS_ADD_ACTION = "ReceivedEventParametersAdd.do";
+	public static final String RECEIVED_EVENT_PARAMETERS_EDIT_ACTION = "ReceivedEventParametersEdit.do";
+
 	
 	//Levels of nodes in query results tree.
 	public static final int MAX_LEVEL = 5;
@@ -263,6 +268,8 @@ public class Constants
 	public static final int BIOHAZARD_FORM_ID = 15;
 	public static final int FROZEN_EVENT_PARAMETERS_FORM_ID = 16;
 	public static final int CHECKIN_CHECKOUT_EVENT_PARAMETERS_FORM_ID = 17;
+	public static final int RECEIVED_EVENT_PARAMETERS_FORM_ID = 18;
+
 	//Status message key Constants
 	public static final String STATUS_MESSAGE_KEY = "statusMessageKey";
 	
