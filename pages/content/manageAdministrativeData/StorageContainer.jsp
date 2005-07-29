@@ -53,13 +53,10 @@ function insRow(subdivtag)
 	spreqtype.className="formField";
 	sname="";
 	
-	
-
-	var name = "value(StorageContainerDetails:" + (q+1) +".parameterName)";
-	alert(name);
+	var name = "value(StorageContainerDetails:" + (q+1) +"_parameterName)";
 	sname="<input type='text' name='" + name + "' class='formFieldSized10' id='" + name + "'>"        
 
- alert(sname);
+
 	spreqtype.innerHTML="" + sname;
 
 	//Third Cell
@@ -67,13 +64,13 @@ function insRow(subdivtag)
 	spreqsubtype.className="formField";
 	sname="";
 
-	name = "value(StorageContainerDetails:" + (q+1) +".parameterValue)";
+	name = "value(StorageContainerDetails:" + (q+1) +"_parameterValue)";
 	sname= "";
 
-	var name = "value(StorageContainerDetails:" + (q+1) +".parameterValue)";
-	alert(name);
+	var name = "value(StorageContainerDetails:" + (q+1) +"_parameterValue)";
+
 	sname="<input type='text' name='" + name + "' class='formFieldSized10' id='" + name + "'>"        
-	 alert(sname);
+
 	spreqsubtype.innerHTML="" + sname;
 }
 	</script>
@@ -104,7 +101,7 @@ function insRow(subdivtag)
 
 <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
 	
-	<html:form action="<%=Constants.STORAGE_CONTAINER_ADD_ACTION%>" method="GET">
+	<html:form action="<%=Constants.STORAGE_CONTAINER_ADD_ACTION%>">
 		<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>">
 			<!-- ENTER IDENTIFIER BEGINS-->
 			<br />
@@ -333,10 +330,10 @@ function insRow(subdivtag)
 					<tr>
 						<td class="formSerialNumberField" width="5">1.</td>
 						<td class="formField" >
-							<html:text styleClass="formFieldSized10" size="30" styleId="key" property="key" readonly="<%=readOnlyValue%>" />
+							<html:text styleClass="formFieldSized10" size="30" styleId="key" property="value(StorageContainerDetails:1_parameterName)" readonly="<%=readOnlyValue%>" />
 						</td>
 						<td class="formField" colspan="1">
-							<html:text styleClass="formFieldSized10" size="30" styleId="typeId" property="typeId" value="" readonly="<%=readOnlyValue%>" />
+							<html:text styleClass="formFieldSized10" size="30" styleId="typeId" property="value(StorageContainerDetails:1_parameterValue)" value="" readonly="<%=readOnlyValue%>" />
 						</td>
 					</tr>
 					</tbody>
