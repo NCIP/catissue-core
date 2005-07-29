@@ -11,9 +11,18 @@
 
 package edu.wustl.catissuecore.actionForm;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMapping;
+
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.domain.FrozenEventParameters;
+import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Validator;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * @author mandar_deshmukh
@@ -60,13 +69,31 @@ public class FrozenEventParametersForm extends EventParametersForm
 		super.setAllValues(abstractDomain);
 		FrozenEventParameters frozenEventParametersObject = (FrozenEventParameters)abstractDomain ;
 		this.method = frozenEventParametersObject.getMethod();
-		
-		//test
-		/*System.out.println("\n\n\t\tDate IN fepform: "+ .getDateOfEvent());
-		form.getDateOfEvent();
-		form.getTimeInHours() ;
-		Integer.parseInt(form.getTimeInMinutes()) );*/
-
-		
 	}
+	
+	/**
+     * Overrides the validate method of ActionForm.
+     * */
+     public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
+     {
+         ActionErrors errors = new ActionErrors();
+         Validator validator = new Validator();
+         
+         try
+         {
+         	System.out.println(method);
+         	System.out.println(method.equals(Constants.SELECT_OPTION));
+         	// checks the method
+           	if (method.equals(Constants.SELECT_OPTION))
+            {
+           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("frozenEventParameters.method")));
+            }
+         }
+         catch(Exception excp)
+         {
+             Logger.out.error(excp.getMessage());
+         }
+         return errors;
+      }
+	
 }

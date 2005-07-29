@@ -14,6 +14,8 @@ import java.util.Date;
 import edu.wustl.catissuecore.actionForm.AbstractActionForm;
 import edu.wustl.catissuecore.actionForm.EventParametersForm;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -144,15 +146,18 @@ public abstract class EventParameters extends AbstractDomainObject implements ja
 			EventParametersForm form = (EventParametersForm)abstractForm ;
 			this.systemIdentifier = new Long(form.getSystemIdentifier());
 			this.comments = form.getComments();
-			this.user.setSystemIdentifier(new Long(form.getUserId()));
-			System.out.println("\n\n\t\tDate IN ep: "+ form.getDateOfEvent());
-			this.timestamp = new Date (form.getDateOfEvent());
+			User u = new User();
+			u.setSystemIdentifier(new Long(form.getUserId()));
+			this.user = u;
+//System.out.println("Done");
+			this.timestamp = Utility.parseDate(form.getDateOfEvent(),Constants.DATE_PATTERN_MM_DD_YYYY);
 			this.timestamp.setHours(Integer.parseInt(form.getTimeInHours() ));
 			this.timestamp.setMinutes(Integer.parseInt(form.getTimeInMinutes()) );
 		}
         catch (Exception excp)
         {
-            Logger.out.error(excp.getMessage());
+        	excp.printStackTrace();
+//            Logger.out.error(excp.getMessage());
         }
 	}
 	

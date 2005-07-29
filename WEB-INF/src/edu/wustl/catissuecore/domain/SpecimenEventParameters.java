@@ -9,6 +9,8 @@
  */
 package edu.wustl.catissuecore.domain;
 
+import edu.wustl.catissuecore.actionForm.AbstractActionForm;
+
 /**
  * Attributes associated with a specific specimen event.
  * @hibernate.class table="CATISSUE_SPECIMEN_EVENT_PARAMETERS"
@@ -38,4 +40,13 @@ public abstract class SpecimenEventParameters extends EventParameters
 	{
 		this.specimen = specimen;
 	}
+	
+	
+//	/* (non-Javadoc)
+//	 * @see edu.wustl.catissuecore.domain.EventParameters#setAllValues(edu.wustl.catissuecore.actionForm.AbstractActionForm)
+//	 */
+//	public void setAllValues(AbstractActionForm abstractForm)
+//	{
+//		super.setAllValues(abstractForm);
+//	}
 }

@@ -27,5 +27,6 @@ public class FrozenEventParametersAction extends SpecimenEventParametersAction
 		//set array of methods
         //Sets the hourList attribute to be used in the Add/Edit FrozenEventParameters Page.
         request.setAttribute("methodList", Constants.METHODARRAY);
+        
 	}
 }

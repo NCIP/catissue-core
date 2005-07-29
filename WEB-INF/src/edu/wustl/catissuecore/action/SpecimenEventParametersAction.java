@@ -76,9 +76,6 @@ public class SpecimenEventParametersAction extends Action
             
         	request.setAttribute(Constants.USERLIST, userArray);
         	request.setAttribute(Constants.USERIDLIST, userIdArray);
-        	System.out.println(userIdArray[0] + "**************" + userIdArray[1]);
-        	System.out.println(userArray[0] + "**************" + userArray[1]);
-
         }
         catch (Exception exc)
         {

@@ -56,8 +56,9 @@ public class Utility
 	public static void main(String[] args)
     {
 	    try{
-	      String date = "2005-10-22 09:42 AM";  
-	      String pattern = "yyyy-MM-dd HH:mm aa";
+	      String date = "10-22-2005";  
+//	      String pattern = "yyyy-MM-dd";
+	      String pattern = "MM-dd-yyyy";
 	      Date d = parseDate(date,pattern);
 	      String dd = parseDateToString(d,pattern);
 	      System.out.println("Date........."+d);
