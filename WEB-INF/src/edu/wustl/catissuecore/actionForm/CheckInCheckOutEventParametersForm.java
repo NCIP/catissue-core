@@ -1,0 +1,101 @@
+/*
+ * Created on Jul 29, 2005
+ *
+ * TODO To change the template for this generated file go to
+ * Window - Preferences - Java - Code Style - Code Templates
+ */
+package edu.wustl.catissuecore.actionForm;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMapping;
+
+import edu.wustl.catissuecore.domain.AbstractDomainObject;
+import edu.wustl.catissuecore.domain.CheckInCheckOutEventParameter;
+import edu.wustl.catissuecore.util.global.ApplicationProperties;
+import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Validator;
+import edu.wustl.common.util.logger.Logger;
+
+
+/**
+ * @author mandar_deshmukh
+ *
+ * TODO To change the template for this generated type comment go to
+ * Window - Preferences - Java - Code Style - Code Templates
+ */
+public class CheckInCheckOutEventParametersForm extends EventParametersForm
+{
+	/**
+	 * Type of the movement e.g. Check-in or Check-out.
+	 */
+	protected String storageStatus;
+	
+	
+	
+	/**
+	 * @return Returns the storageStatus.
+	 * Type of the movement e.g. Check-in or Check-out.
+	 */
+	public String getStorageStatus()
+	{
+		return storageStatus;
+	}
+	/**
+	 * @param storageStatus The storageStatus to set.
+	 */
+	public void setStorageStatus(String storageStatus)
+	{
+		this.storageStatus = storageStatus;
+	}
+	
+	
+// ---- super class methods
+	// ----- SUPERCLASS METHODS
+	/* (non-Javadoc)
+	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#getFormId()
+	 */
+	public int getFormId()
+	{
+		return Constants.CHECKIN_CHECKOUT_EVENT_PARAMETERS_FORM_ID;
+	}
+
+	/* (non-Javadoc)
+	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#setAllValues(edu.wustl.catissuecore.domain.AbstractDomainObject)
+	 */
+	public void setAllValues(AbstractDomainObject abstractDomain)
+	{
+		super.setAllValues(abstractDomain);
+		CheckInCheckOutEventParameter checkInCheckOutEventParameterObject = (CheckInCheckOutEventParameter)abstractDomain ;
+		this.storageStatus = checkInCheckOutEventParameterObject.getStorageStatus(); 
+	}
+	
+	/**
+	 * Overrides the validate method of ActionForm.
+     * */
+     public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
+     {
+         ActionErrors errors = new ActionErrors();
+         Validator validator = new Validator();
+         
+         try
+         {
+         	// checks the storageStatus
+
+           	if ( validator.isEmpty( storageStatus  ))
+            {
+           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("checkincheckouteventparameters.storagestatus")));
+            }
+         }
+         catch(Exception excp)
+         {
+             Logger.out.error(excp.getMessage());
+         }
+         return errors;
+      }
+	
+	
+	
+}

@@ -254,6 +254,20 @@
 	</definition>
 	<!-- FrozenEventParameters end -->
 
+	<!-- CheckInCheckOutEventParameters -->
+	<definition name=".catissuecore.checkInCheckOutEventParametersDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/CheckInCheckOutEventParameters.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.checkInCheckOutEventParametersAddSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/common/success.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.checkInCheckOutEventParametersEditSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/common/success.jsp" />
+	</definition>
+	<!-- CheckInCheckOut EventParameters end -->
+
 
 	<!-- BioSpecimen tab pages definitions end -->
 

@@ -9,6 +9,10 @@
 
 package edu.wustl.catissuecore.domain;
 
+import edu.wustl.catissuecore.actionForm.AbstractActionForm;
+import edu.wustl.catissuecore.actionForm.CheckInCheckOutEventParametersForm;
+import edu.wustl.common.util.logger.Logger;
+
 /**
  * A binary event to indicate whether a specimen has been removed from or returned to its recorded storage location.
  * @hibernate.joined-subclass table="CATISSUE_CHECKIN_CHECKOUT_EVENT_PARAMETER"
@@ -43,4 +47,36 @@ public class CheckInCheckOutEventParameter extends SpecimenEventParameters
 	{
 		this.storageStatus = storageStatus;
 	}
+	
+	CheckInCheckOutEventParameter()
+	{
+		
+	}
+//	Parameterized constructor
+	public CheckInCheckOutEventParameter(AbstractActionForm abstractForm)
+	{
+		setAllValues(abstractForm);
+	}
+	
+	/**
+     * This function Copies the data from an CheckInCheckOutEventParameterForm object to a CheckInCheckOutEventParameter object.
+     * @param checkInCheckOutEventParameterForm An CheckInCheckOutEventParameterForm object containing the information about the CheckInCheckOutEventParameter.  
+     * */
+    public void setAllValues(AbstractActionForm abstractForm)
+    {
+        try
+        {
+//        	//call to event parameters setallvalue method
+//        	super.setAllValues(abstractForm);
+        	CheckInCheckOutEventParametersForm form = (CheckInCheckOutEventParametersForm) abstractForm;
+            this.storageStatus = form.getStorageStatus(); 
+           	super.setAllValues(form);
+        }
+        catch (Exception excp)
+        {
+            Logger.out.error(excp.getMessage());
+        }
+    }
+	
+	
 }

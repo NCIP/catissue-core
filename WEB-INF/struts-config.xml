@@ -24,6 +24,7 @@ PUBLIC
 		<form-bean name="biohazardForm" type="edu.wustl.catissuecore.actionForm.BiohazardForm"/>
 		<form-bean name="cancerResearchGroupForm" type="edu.wustl.catissuecore.actionForm.CancerResearchGroupForm"/>
 		<form-bean name="frozenEventParametersForm" type="edu.wustl.catissuecore.actionForm.FrozenEventParametersForm"/>
+		<form-bean name="checkInCheckOutEventParametersForm" type="edu.wustl.catissuecore.actionForm.CheckInCheckOutEventParametersForm"/>
 	</form-beans>
 	
 	<!-- Global Exception Definitions -->
@@ -723,6 +724,46 @@ PUBLIC
 			<forward name="failure" path="/FrozenEventParameters.do?operation=edit"/>
 		</action>    
 		<!-- FrozenEventParameters Actions Ends -->
+
+	<!-- CheckInCheckOutEventParameters Actions Begins -->
+        <action path="/CheckInCheckOutEventParameters"
+			type="edu.wustl.catissuecore.action.CheckInCheckOutEventParametersAction"
+			scope="request">
+			<forward name="success" path=".catissuecore.checkInCheckOutEventParametersDef" />
+			<forward name="failure" path=".catissuecore.checkInCheckOutEventParametersDef" />
+		</action>
+		
+		<action path="/CheckInCheckOutEventParametersAdd"
+			type="edu.wustl.catissuecore.action.CommonAddEditAction"
+			name="checkInCheckOutEventParametersForm"
+			validate="true"
+			input="/CheckInCheckOutEventParameters.do?operation=add"
+			scope="request">
+			<forward name="success" path=".catissuecore.checkInCheckOutEventParametersAddSuccessDef" />
+			<forward name="failure" path="/error.jsp" />
+		</action>
+		
+		<action path="/checkInCheckOutEventParametersEdit"
+			type="edu.wustl.catissuecore.action.CommonAddEditAction"
+			name="checkInCheckOutEventParametersForm"
+			validate="true"
+			input="/checkInCheckOutEventParameters.do?operation=edit"
+			scope="request">
+			<forward name="success" path=".catissuecore.checkInCheckOutEventParametersEditSuccessDef" />
+			<forward name="failure" path="/error.jsp" />
+		</action>
+		
+		<action path="/checkInCheckOutEventParametersSearch"
+		    type="edu.wustl.catissuecore.action.CommonSearchAction"
+			name="checkInCheckOutEventParametersForm"
+			validate="true"
+			input="/CheckInCheckOutEventParameters.do?operation=edit"
+			scope="request">
+			<forward name="success" path="/CheckInCheckOutEventParameters.do?operation=edit"/>
+			<forward name="failure" path="/CheckInCheckOutEventParameters.do?operation=edit"/>
+		</action>    
+		<!-- CheckInCheckOutEventParameters Actions Ends -->
+
 		
 		<!--Query Result View Actions Begin-->
 		<action path="/QueryResults"

@@ -54,6 +54,9 @@ public class BizLogicFactory
         		abstractBizLogic = new SpecimenEventParametersBizLogic();
         		break;		
         		
+          	case Constants.CHECKIN_CHECKOUT_EVENT_PARAMETERS_FORM_ID:
+        		abstractBizLogic = new SpecimenEventParametersBizLogic();
+        		break;		
         		
             default:
                 abstractBizLogic = new DefaultBizLogic();
