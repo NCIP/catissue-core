@@ -39,15 +39,18 @@ public class MapDataParser
 		map.put("CollectionProtocolEvent:2_SpecimenRequirement:1_specimenType", "Blood");     
 		map.put("CollectionProtocolEvent:2_SpecimenRequirement:1_tissueSite", "Kidney");      
 		map.put("CollectionProtocolEvent:2_SpecimenRequirement:1_specimenClass", "Fluid");    
-		                                                                                      
+		map.put("CollectionProtocolEvent:2_SpecimenRequirement:1_quantityIn", "7");
+		
 		map.put("CollectionProtocolEvent:2_SpecimenRequirement:2_tissueSite", "Brain");       
 		map.put("CollectionProtocolEvent:2_SpecimenRequirement:2_specimenType", "Gel");       
 		map.put("CollectionProtocolEvent:2_SpecimenRequirement:2_specimenClass", "Cell");     
-		                                                                                      
+		map.put("CollectionProtocolEvent:2_SpecimenRequirement:2_quantityIn", "8");
+		
 		map.put("CollectionProtocolEvent:2_SpecimenRequirement:3_tissueSite", "Lever");       
 		map.put("CollectionProtocolEvent:2_SpecimenRequirement:3_specimenType", "Cell");      
 		map.put("CollectionProtocolEvent:2_SpecimenRequirement:3_specimenClass", "Molecular");
-
+		map.put("CollectionProtocolEvent:2_SpecimenRequirement:3_quantityIn", "9");
+		
 		return map; 
 	} // createmap
 	
@@ -213,81 +216,9 @@ public class MapDataParser
 	{
 		MapDataParser aMapDataParser = new MapDataParser("edu.wustl.catissuecore.domain");
 		Map map = aMapDataParser.createMap();
-		map = aMapDataParser.fixMap(map);
+//		map = aMapDataParser.fixMap(map);
 		System.out.println(map);
 		Collection dataCollection = aMapDataParser.generateData(map);
 		System.out.println("Data: "+dataCollection);
-	}
-	
-	//SpecimenRequirement#FluidSpecimenRequirement:1.specimenType", "Blood");
-	private Map fixMap(Map orgMap)
-	{
-		Map replaceMap = new HashMap();
-		Map unitMap = new HashMap();
-		unitMap.put("Cell","CellCount");
-		unitMap.put("Fluid","MiliLiter");
-		unitMap.put("Tissue","Gram");
-		unitMap.put("Molecular","MicroGram");
-		
-		Iterator it = orgMap.keySet().iterator();
-		while(it.hasNext())
-		{
-			String key = (String)it.next();
-			if(key.indexOf("specimenClass")!=-1)
-			{
-				String value = (String)orgMap.get(key);
-				String replaceWith = "SpecimenRequirement"+"#"+value+"SpecimenRequirement";
-				
-				key = key.substring(0,key.lastIndexOf("_"));
-				String newKey = key.replaceFirst("SpecimenRequirement",replaceWith);
-				
-				replaceMap.put(key,newKey);
-			}
-		}
-		
-		Map newMap = new HashMap();
-		it = orgMap.keySet().iterator();
-		while(it.hasNext())
-		{
-			String key = (String)it.next();
-			String value = (String)orgMap.get(key);
-			if(key.indexOf("SpecimenRequirement")==-1)
-			{
-				newMap.put(key,value);
-			}
-			else
-			{
-				if(key.indexOf("specimenClass")==-1)
-				{
-					if(key.indexOf("quantityIn")!=-1)
-					{
-						String keyPart = "quantityIn";
-						
-						String searchKey = key.substring(0,key.lastIndexOf("_"))+"_specimenClass";
-						String specimenClass = (String)orgMap.get(searchKey);
-						String unit = (String)unitMap.get(specimenClass);
-						String newKeyPart = keyPart+unit;
-						
-						key = key.replaceFirst(keyPart,newKeyPart);
-						
-						//Rplace # and class name
-						keyPart = key.substring(0,key.lastIndexOf("_"));
-						newKeyPart = (String)replaceMap.get(keyPart);
-						key = key.replaceFirst(keyPart,newKeyPart);
-						newMap.put(key,value);
-						
-						//newMap.put(key,value);
-					}
-					else
-					{
-						String keyPart = key.substring(0,key.lastIndexOf("_"));
-						String newKeyPart = (String)replaceMap.get(keyPart);
-						key = key.replaceFirst(keyPart,newKeyPart);
-						newMap.put(key,value);
-					}
-				}
-			}
-		}		
-		return newMap;
 	}
 } // class
