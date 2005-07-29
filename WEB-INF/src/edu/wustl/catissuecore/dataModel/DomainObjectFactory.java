@@ -22,6 +22,7 @@ import edu.wustl.catissuecore.domain.CancerResearchGroup;
 import edu.wustl.catissuecore.domain.Department;
 import edu.wustl.catissuecore.domain.FrozenEventParameters;
 import edu.wustl.catissuecore.domain.CheckInCheckOutEventParameter;
+import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.Institution;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ReportedProblem;
@@ -96,7 +97,11 @@ public class DomainObjectFactory
             	//StorageContainerForm storageContainerForm = (StorageContainerForm) form;
             	abstractDomain = new CheckInCheckOutEventParameter(form);            	
             	break;
-
+            	
+            case Constants.RECEIVED_EVENT_PARAMETERS_FORM_ID:
+            	//StorageContainerForm storageContainerForm = (StorageContainerForm) form;
+            	abstractDomain = new ReceivedEventParameters(form);            	
+            	break;
             	
         }
         return abstractDomain;

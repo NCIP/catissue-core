@@ -25,6 +25,7 @@ PUBLIC
 		<form-bean name="cancerResearchGroupForm" type="edu.wustl.catissuecore.actionForm.CancerResearchGroupForm"/>
 		<form-bean name="frozenEventParametersForm" type="edu.wustl.catissuecore.actionForm.FrozenEventParametersForm"/>
 		<form-bean name="checkInCheckOutEventParametersForm" type="edu.wustl.catissuecore.actionForm.CheckInCheckOutEventParametersForm"/>
+		<form-bean name="receivedEventParametersForm" type="edu.wustl.catissuecore.actionForm.ReceivedEventParametersForm"/>
 	</form-beans>
 	
 	<!-- Global Exception Definitions -->
@@ -763,6 +764,46 @@ PUBLIC
 			<forward name="failure" path="/CheckInCheckOutEventParameters.do?operation=edit"/>
 		</action>    
 		<!-- CheckInCheckOutEventParameters Actions Ends -->
+
+	<!-- ReceivedEventParameters Actions Begins -->
+        <action path="/ReceivedEventParameters"
+			type="edu.wustl.catissuecore.action.ReceivedEventParametersAction"
+			scope="request">
+			<forward name="success" path=".catissuecore.receivedEventParametersDef" />
+			<forward name="failure" path=".catissuecore.receivedEventParametersDef" />
+		</action>
+		
+		<action path="/ReceivedEventParametersAdd"
+			type="edu.wustl.catissuecore.action.CommonAddEditAction"
+			name="receivedEventParametersForm"
+			validate="true"
+			input="/ReceivedEventParameters.do?operation=add"
+			scope="request">
+			<forward name="success" path=".catissuecore.receivedEventParametersAddSuccessDef" />
+			<forward name="failure" path="/error.jsp" />
+		</action>
+		
+		<action path="/receivedEventParametersEdit"
+			type="edu.wustl.catissuecore.action.CommonAddEditAction"
+			name="receivedEventParametersForm"
+			validate="true"
+			input="/receivedEventParameters.do?operation=edit"
+			scope="request">
+			<forward name="success" path=".catissuecore.receivedEventParametersEditSuccessDef" />
+			<forward name="failure" path="/error.jsp" />
+		</action>
+		
+		<action path="/receivedEventParametersSearch"
+		    type="edu.wustl.catissuecore.action.CommonSearchAction"
+			name="receivedEventParametersForm"
+			validate="true"
+			input="/ReceivedEventParameters.do?operation=edit"
+			scope="request">
+			<forward name="success" path="/ReceivedEventParameters.do?operation=edit"/>
+			<forward name="failure" path="/CheckInCheckOutEventParameters.do?operation=edit"/>
+		</action>    
+		<!-- ReceivedEventParameters Actions Ends -->
+
 
 		
 		<!--Query Result View Actions Begin-->

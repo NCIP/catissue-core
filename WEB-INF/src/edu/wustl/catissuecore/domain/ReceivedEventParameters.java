@@ -9,6 +9,10 @@
 
 package edu.wustl.catissuecore.domain;
 
+import edu.wustl.catissuecore.actionForm.AbstractActionForm;
+import edu.wustl.catissuecore.actionForm.ReceivedEventParametersForm;
+import edu.wustl.common.util.logger.Logger;
+
 /**
  * Attributes associated with the received event of a specimen.
  * @hibernate.joined-subclass table="CATISSUE_RECEIVED_EVENT_PARAMETERS"
@@ -42,4 +46,37 @@ public class ReceivedEventParameters extends SpecimenEventParameters
 	{
 		this.receivedQuality = receivedQuality;
 	}
+	
+	ReceivedEventParameters()
+	{
+		
+	}
+//	Parameterized constructor
+	public ReceivedEventParameters(AbstractActionForm abstractForm)
+	{
+		setAllValues(abstractForm);
+	}
+	
+	/**
+     * This function Copies the data from an ReceivedEventParametersForm object to a ReceivedEventParameters object.
+     * @param receivedEventParametersForm An ReceivedEventParametersForm object containing the information about the ReceivedEventParameters.  
+     */
+    public void setAllValues(AbstractActionForm abstractForm)
+    {
+        try
+        {
+//        	//call to event parameters setallvalue method
+//        	super.setAllValues(abstractForm);
+        	ReceivedEventParametersForm form = (ReceivedEventParametersForm) abstractForm;
+            this.receivedQuality = form.getReceivedQuality();  
+           	super.setAllValues(form);
+        }
+        catch (Exception excp)
+        {
+            Logger.out.error(excp.getMessage());
+        }
+    }
+	
+	
+	
 }
