@@ -9,6 +9,10 @@
  */
 package edu.wustl.catissuecore.domain;
 
+import edu.wustl.catissuecore.actionForm.AbstractActionForm;
+import edu.wustl.catissuecore.actionForm.FrozenEventParametersForm;
+import edu.wustl.common.util.logger.Logger;
+
 /**
  * Attributes associated with a freezing event of a specimen.
  * @hibernate.joined-subclass table="CATISSUE_FROZEN_EVENT_PARAMETERS"
@@ -45,4 +49,38 @@ public class FrozenEventParameters extends SpecimenEventParameters implements ja
 	{
 		this.method = method;
 	}
-}
+
+	FrozenEventParameters()
+	{
+		
+	}
+//	Parameterized constructor
+	public FrozenEventParameters(AbstractActionForm abstractForm)
+	{
+		setAllValues(abstractForm);
+	}
+	
+	/**
+     * This function Copies the data from an FrozenEventParametersForm object to a FrozenEventParameters object.
+     * @param frozenEventParametersForm An FrozenEventParametersForm object containing the information about the frozenEventParameters.  
+     * */
+    public void setAllValues(AbstractActionForm abstractForm)
+    {
+        try
+        {
+        	FrozenEventParametersForm form 	= (FrozenEventParametersForm) abstractForm;
+            this.method = form.getMethod();
+
+            // call to event parameters setallvalue method	
+            super.setAllValues(form );
+            
+        }
+        catch (Exception excp)
+        {
+            Logger.out.error(excp.getMessage());
+        }
+    }
+	
+	
+} //class
+

@@ -11,7 +11,19 @@
 
 package edu.wustl.catissuecore.actionForm;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMapping;
+
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
+import edu.wustl.catissuecore.domain.EventParameters;
+import edu.wustl.catissuecore.util.global.ApplicationProperties;
+import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Validator;
+import edu.wustl.common.util.logger.Logger;
+
 
 /**
  * @author mandar_deshmukh
@@ -180,8 +192,51 @@ public abstract class EventParametersForm extends AbstractActionForm
 		// TODO Auto-generated method stub
 	}
 
+	private void reset()
+	{
+		this.systemIdentifier = -1;
+		this.comments = null;
+		this.dateOfEvent =null;
+		this.timeInHours = null;
+		this.timeInMinutes = null;
+		this.userId = -1;
+	}
+
+	/**
+     * Overrides the validate method of ActionForm.
+     * */
+     public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
+     {
+         ActionErrors errors = new ActionErrors();
+         Validator validator = new Validator();
+         
+         try
+         {
+         	// checks the userid
+           	if ((userId) == -1)
+            {
+           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("eventParameters.user")));
+            }
+         }
+         catch(Exception excp)
+         {
+             Logger.out.error(excp.getMessage());
+         }
+         return errors;
+      }
 	
-	
-	
+     /* (non-Javadoc)
+ 	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#setAllValues(edu.wustl.catissuecore.domain.AbstractDomainObject)
+ 	 */
+ 	public void setAllValues(AbstractDomainObject abstractDomain)
+ 	{
+ 		EventParameters eventParametersObject = (EventParameters)abstractDomain ;
+  		this.comments  = eventParametersObject.getComments();
+ 		this.systemIdentifier = eventParametersObject.getSystemIdentifier().longValue() ;
+ 		this.timeInHours = ""+eventParametersObject.getTimestamp().getHours();
+ 		this.timeInMinutes = "" + eventParametersObject.getTimestamp().getMinutes();
+ 		this.userId = eventParametersObject.getUser().getSystemIdentifier().longValue() ;
+ 		this.dateOfEvent = eventParametersObject.getTimestamp().getMonth()+"-"+eventParametersObject.getTimestamp().getDay()+"-"+eventParametersObject.getTimestamp().getYear() ;     
+ 	}
 
 } // class

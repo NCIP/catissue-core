@@ -723,6 +723,7 @@ PUBLIC
 			<forward name="failure" path="/FrozenEventParameters.do?operation=edit"/>
 		</action>    
 		<!-- FrozenEventParameters Actions Ends -->
+		
 		<!--Query Result View Actions Begin-->
 		<action path="/QueryResults"
 			type="edu.wustl.catissuecore.action.QueryResultsAction">

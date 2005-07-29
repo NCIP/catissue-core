@@ -12,7 +12,9 @@ package edu.wustl.catissuecore.domain;
 import java.util.Date;
 
 import edu.wustl.catissuecore.actionForm.AbstractActionForm;
+import edu.wustl.catissuecore.actionForm.EventParametersForm;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * Attributes associated with a generic event.
@@ -21,14 +23,7 @@ import edu.wustl.catissuecore.domain.User;
  */
 public abstract class EventParameters extends AbstractDomainObject implements java.io.Serializable
 {
-	/* (non-Javadoc)
-	 * @see edu.wustl.catissuecore.domain.AbstractDomainObject#setAllValues(edu.wustl.catissuecore.actionForm.AbstractActionForm)
-	 */
-	public void setAllValues(AbstractActionForm abstractForm)
-	{
-		// TODO Auto-generated method stub
-
-	}
+	
 	private static final long serialVersionUID = 1234567890L;
 
 	/**
@@ -138,4 +133,27 @@ public abstract class EventParameters extends AbstractDomainObject implements ja
 	{
 		this.comments = comments;
 	}
+	
+	/* (non-Javadoc)
+	 * @see edu.wustl.catissuecore.domain.AbstractDomainObject#setAllValues(edu.wustl.catissuecore.actionForm.AbstractActionForm)
+	 */
+	public void setAllValues(AbstractActionForm abstractForm)
+	{
+		try
+		{
+			
+			EventParametersForm form = (EventParametersForm)abstractForm ;
+			this.systemIdentifier = new Long(form.getSystemIdentifier());
+			this.comments = form.getComments();
+			this.user.setSystemIdentifier(new Long(form.getUserId()));
+			this.timestamp = new Date (form.getDateOfEvent());
+			this.timestamp.setHours(Integer.parseInt(form.getTimeInHours() ));
+			this.timestamp.setMinutes(Integer.parseInt(form.getTimeInMinutes()) );
+		}
+        catch (Exception excp)
+        {
+            Logger.out.error(excp.getMessage());
+        }
+	}
+	
 }

@@ -868,6 +868,14 @@ public class Constants
 			"56",
 			"57",
 			"58",
-			"59",
+			"59"
 	};
+	
+	public static final String [] METHODARRAY = {
+	        SELECT_OPTION,
+			"LN2",
+			"Dry Ice",
+			"Iso pentane"
+	};
+
 }

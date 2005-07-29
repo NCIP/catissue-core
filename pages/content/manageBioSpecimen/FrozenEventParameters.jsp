@@ -25,6 +25,7 @@
             formName = Constants.FROZEN_EVENT_PARAMETERS_ADD_ACTION;
             readOnlyValue = false;
         }
+		
 %>	
 			
 <html:errors/>

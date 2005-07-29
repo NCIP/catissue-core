@@ -20,6 +20,7 @@ import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.CancerResearchGroup;
 import edu.wustl.catissuecore.domain.Department;
+import edu.wustl.catissuecore.domain.FrozenEventParameters;
 import edu.wustl.catissuecore.domain.Institution;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ReportedProblem;
@@ -84,6 +85,12 @@ public class DomainObjectFactory
             	CancerResearchGroupForm cancerResearchGroupForm = (CancerResearchGroupForm) form;
             	abstractDomain = new CancerResearchGroup(cancerResearchGroupForm);
             	break;
+            	
+            case Constants.FROZEN_EVENT_PARAMETERS_FORM_ID:
+            	//StorageContainerForm storageContainerForm = (StorageContainerForm) form;
+            	abstractDomain = new FrozenEventParameters(form);            	
+            	break;
+            	
         }
         return abstractDomain;
     }

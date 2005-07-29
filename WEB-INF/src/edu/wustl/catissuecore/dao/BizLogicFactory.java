@@ -49,6 +49,12 @@ public class BizLogicFactory
         	case Constants.PARTICIPANT_FORM_ID:
         		abstractBizLogic = new ParticipantBizLogic();
         		break;
+        	// for all event parameters same object will be returned	
+          	case Constants.FROZEN_EVENT_PARAMETERS_FORM_ID:
+        		abstractBizLogic = new SpecimenEventParametersBizLogic();
+        		break;		
+        		
+        		
             default:
                 abstractBizLogic = new DefaultBizLogic();
             	break;

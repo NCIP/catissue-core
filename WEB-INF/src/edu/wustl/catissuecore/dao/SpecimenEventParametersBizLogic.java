@@ -1,27 +1,26 @@
 /*
- * Created on Jul 28, 2005
- *
- * TODO To change the template for this generated file go to
- * Window - Preferences - Java - Code Style - Code Templates
+ * Created on Jul 29, 2005
+ *<p>SpecimenEventParametersBizLogic Class</p>
+ * This class contains the Biz Logic for all EventParameters Classes.
+ * This will be the class which will be used for datatransactions of the EventParameters. 
  */
 package edu.wustl.catissuecore.dao;
 
 import java.util.List;
 
 import net.sf.hibernate.HibernateException;
+import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.User;
-import edu.wustl.catissuecore.domain.FrozenEventParameters;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.dbManager.DAOException;
 
 
 /**
- * @author mandar_deshmukh
- *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Style - Code Templates
+ * @author mandar_deshmukh</p>
+ * This class contains the Business Logic for all EventParameters Classes.
+ * This will be the class which will be used for data transactions of the EventParameters. 
  */
-public class FrozenEventParametersBizLogic extends DefaultBizLogic
+public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 {
 	/**
      * Saves the FrozenEventParameters object in the database.
@@ -32,19 +31,19 @@ public class FrozenEventParametersBizLogic extends DefaultBizLogic
      */
 	public void insert(Object obj) throws DAOException 
 	{
-		FrozenEventParameters frozenEventParametersObject = (FrozenEventParameters)obj;
+		SpecimenEventParameters specimenEventParametersObject = (SpecimenEventParameters)obj;
 
         AbstractDAO dao = DAOFactory.getDAO(Constants.HIBERNATE_DAO);
 		dao.openSession();
 		
-		List list = dao.retrieve(User.class.getName(), "systemIdentifier", frozenEventParametersObject.getUser().getSystemIdentifier()  );
+		List list = dao.retrieve(User.class.getName(), "systemIdentifier", specimenEventParametersObject.getUser().getSystemIdentifier()  );
 		if (list.size() != 0)
 		{
 		    User user = (User) list.get(0);
-		    frozenEventParametersObject.setUser(user);
+		    specimenEventParametersObject.setUser(user);
 		}
 		
-		dao.insert(frozenEventParametersObject);
+		dao.insert(specimenEventParametersObject);
 	    
 	    dao.closeSession();
 	}

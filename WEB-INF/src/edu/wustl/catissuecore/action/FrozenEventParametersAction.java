@@ -26,7 +26,7 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.dao.AbstractBizLogic;
 import edu.wustl.catissuecore.dao.BizLogicFactory;
-import edu.wustl.catissuecore.dao.FrozenEventParametersBizLogic;
+import edu.wustl.catissuecore.dao.SpecimenEventParametersBizLogic;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.security.SecurityManager;
@@ -63,32 +63,39 @@ public class FrozenEventParametersAction extends Action
 
         try
         {
-            AbstractBizLogic dao = BizLogicFactory.getBizLogic(Constants.FROZEN_EVENT_PARAMETERS_FORM_ID);
-            ListIterator iterator = null;
-            int i;
 
-            FrozenEventParametersBizLogic bizLogic = (FrozenEventParametersBizLogic)BizLogicFactory.getBizLogic(Constants.SITE_FORM_ID);
+//            ListIterator iterator = null;
+//            int i;
+//
+//            SpecimenEventParametersBizLogic bizLogic = (SpecimenEventParametersBizLogic)BizLogicFactory.getBizLogic(Constants.FROZEN_EVENT_PARAMETERS_FORM_ID);
             
-      
-        	List userList = bizLogic.retrieve(User.class.getName());
-            String[] userArray = new String[userList.size() + 1];
-            String[] userIdArray = new String[userList.size() + 1];
-            iterator = userList.listIterator();
+//       	List userList = bizLogic.retrieve(User.class.getName());
+        	
+//           String[] userArray = new String[userList.size() + 1];
+//           String[] userIdArray = new String[userList.size() + 1];
+            String[] userArray = new String[2];
+            String[] userIdArray = new String[2];
+//            iterator = userList.listIterator();
             
             userArray[0]	= Constants.SELECT_OPTION;
             userIdArray[0]	= "-1";
             
-            i = 1;
-            while (iterator.hasNext())
-            {
-                User user = (User) iterator.next();
-                userArray[i] = user.getUser().getLastName() + ", " + user.getUser().getFirstName();
-                userIdArray[i] = user.getSystemIdentifier().toString();
-                i++;
-            }
-        	
+//            i = 1;
+//            while (iterator.hasNext())
+//            {
+//                User user = (User) iterator.next();
+//                userArray[i] = user.getUser().getLastName() + ", " + user.getUser().getFirstName();
+//                userIdArray[i] = user.getSystemIdentifier().toString();
+//                i++;
+//            }
+
+            userArray[1]="Mandar";
+            userIdArray[1]="0";
+            
         	request.setAttribute(Constants.USERLIST, userArray);
         	request.setAttribute(Constants.USERIDLIST, userIdArray);
+        	System.out.println(userIdArray[0] + "**************" + userIdArray[1]);
+        	System.out.println(userArray[0] + "**************" + userArray[1]);
 
         }
         catch (Exception exc)
