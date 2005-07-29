@@ -411,11 +411,13 @@ public class StorageContainer extends AbstractDomainObject implements java.io.Se
 	        }
 	        
 	        Map map = form.getValues();
+	        
 	        System.out.println("MAP "+map);
+	        
 	        MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.domain");
-	        Collection storageContainerDetailsCollection = parser.generateData(map);
-	        System.out.println("storageContainerDetailsCollection "+storageContainerDetailsCollection);
-	        this.setStorageContainerDetailsCollection(storageContainerDetailsCollection);
+	        
+	        Collection storageContainerDetailsCollectionTemp = parser.generateData(map); 
+	        this.storageContainerDetailsCollection.addAll(storageContainerDetailsCollectionTemp);
 	    }
 	    catch(Exception excp)
 	    {

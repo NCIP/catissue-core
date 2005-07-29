@@ -33,6 +33,7 @@ public class StorageContainerDetails implements java.io.Serializable
      */
 	protected String parameterValue;
 	
+	protected StorageContainer storageContainer; 
 	/**
      * Returns System generated unique identifier.
      * @return Long System generated unique identifier.
@@ -97,5 +98,20 @@ public class StorageContainerDetails implements java.io.Serializable
 	public void setParameterValue(String value)
 	{
 		this.parameterValue = value;
+	}
+	
+	/**
+	 * @return Returns the storageContainer.
+	 */
+	public StorageContainer getStorageContainer()
+	{
+		return storageContainer;
+	}
+	/**
+	 * @param storageContainer The storageContainer to set.
+	 */
+	public void setStorageContainer(StorageContainer storageContainer)
+	{
+		this.storageContainer = storageContainer;
 	}
 }

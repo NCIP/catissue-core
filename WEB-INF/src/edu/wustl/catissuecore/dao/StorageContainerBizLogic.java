@@ -11,6 +11,7 @@
 package edu.wustl.catissuecore.dao;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
@@ -80,10 +81,13 @@ public class StorageContainerBizLogic extends DefaultBizLogic
 				dao.insert(cont);
 				
 				Collection storageContainerDetailsCollection = cont.getStorageContainerDetailsCollection();
+				System.out.println("SIZE "+storageContainerDetailsCollection.size());
 				Iterator it = storageContainerDetailsCollection.iterator();
 				while(it.hasNext())
 				{
 					StorageContainerDetails storageContainerDetails = (StorageContainerDetails)it.next();
+					System.out.println("Here "+storageContainerDetails.getParameterName()+" : "+storageContainerDetails.getParameterValue());
+					storageContainerDetails.setStorageContainer(cont);
 					dao.insert(storageContainerDetails);
 				}
 				
@@ -150,6 +154,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic
     	newContainer.setStorageContainerCapacity(oldContainer.getStorageContainerCapacity());
     	newContainer.setStorageType(oldContainer.getStorageType());
     	newContainer.setTempratureInCentigrade(oldContainer.getTempratureInCentigrade());
+    	newContainer.setStorageContainerDetailsCollection(new HashSet(oldContainer.getStorageContainerDetailsCollection()));
     	return newContainer;
     }
 }

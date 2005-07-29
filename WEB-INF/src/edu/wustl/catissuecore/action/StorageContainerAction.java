@@ -33,6 +33,7 @@ import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.util.global.Constants;
 
+//public class StorageContainerAction extends BaseAction
 public class StorageContainerAction extends Action
 {
     /**
