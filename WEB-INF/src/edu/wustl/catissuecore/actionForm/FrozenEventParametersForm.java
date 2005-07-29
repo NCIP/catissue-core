@@ -76,14 +76,14 @@ public class FrozenEventParametersForm extends EventParametersForm
      * */
      public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
      {
-         ActionErrors errors = new ActionErrors();
+     	ActionErrors errors = super.validate(mapping, request);
          Validator validator = new Validator();
          
          try
          {
-         	System.out.println(method);
-         	System.out.println(method.equals(Constants.SELECT_OPTION));
-         	// checks the method
+//         	System.out.println(method);
+//         	System.out.println(method.equals(Constants.SELECT_OPTION));
+//         	// checks the method
            	if (method.equals(Constants.SELECT_OPTION))
             {
            		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("frozenEventParameters.method")));

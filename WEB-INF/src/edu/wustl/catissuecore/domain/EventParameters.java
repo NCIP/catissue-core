@@ -159,7 +159,7 @@ public abstract class EventParameters extends AbstractDomainObject implements ja
 		}
         catch (Exception excp)
         {
-//        	excp.printStackTrace();
+        	excp.printStackTrace();
             Logger.out.error(excp.getMessage());
         }
 	}

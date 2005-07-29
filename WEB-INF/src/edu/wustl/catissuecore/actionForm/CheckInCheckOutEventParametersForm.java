@@ -77,7 +77,8 @@ public class CheckInCheckOutEventParametersForm extends EventParametersForm
      * */
      public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
      {
-         ActionErrors errors = new ActionErrors();
+     	 
+         ActionErrors errors = super.validate(mapping, request);
          Validator validator = new Validator();
          
          try
@@ -86,7 +87,7 @@ public class CheckInCheckOutEventParametersForm extends EventParametersForm
 
            	if ( validator.isEmpty( storageStatus  ))
             {
-           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("checkincheckouteventparameters.storagestatus")));
+           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("checkincheckouteventparameter.storagestatus")));
             }
          }
          catch(Exception excp)

@@ -240,13 +240,16 @@ public abstract class EventParametersForm extends AbstractActionForm
      * */
      public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
      {
+     	
          ActionErrors errors = new ActionErrors();
          Validator validator = new Validator();
          
          try
          {
          	// checks the userid
-           	if ((userId) == -1)
+//         	System.out.println(userId);
+//         	System.out.println("Long: "+((userId) == -1L));
+           	if ((userId) == -1L)
             {
            		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("eventParameters.user")));
             }
@@ -271,7 +274,7 @@ public abstract class EventParametersForm extends AbstractActionForm
   		this.comments  = eventParametersObject.getComments();
  		this.systemIdentifier = eventParametersObject.getSystemIdentifier().longValue() ;
  		
- 		System.out.println("\n\n\t\tDate IN epf: "+ getDateOfEvent());
+// 		System.out.println("\n\n\t\tDate IN epf: "+ getDateOfEvent());
  		
  		this.timeInHours = ""+eventParametersObject.getTimestamp().getHours();
  		this.timeInMinutes = "" + eventParametersObject.getTimestamp().getMinutes();
