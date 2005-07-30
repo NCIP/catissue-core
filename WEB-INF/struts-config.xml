@@ -27,6 +27,7 @@ PUBLIC
 		<form-bean name="frozenEventParametersForm" type="edu.wustl.catissuecore.actionForm.FrozenEventParametersForm"/>
 		<form-bean name="checkInCheckOutEventParametersForm" type="edu.wustl.catissuecore.actionForm.CheckInCheckOutEventParametersForm"/>
 		<form-bean name="receivedEventParametersForm" type="edu.wustl.catissuecore.actionForm.ReceivedEventParametersForm"/>
+		<form-bean name="fluidSpecimenReviewEventParametersForm" type="edu.wustl.catissuecore.actionForm.FluidSpecimenReviewEventParametersForm"/>
 	</form-beans>
 	
 	<!-- Global Exception Definitions -->
@@ -845,7 +846,44 @@ PUBLIC
 		</action>    
 		<!-- ReceivedEventParameters Actions Ends -->
 
-
+	<!-- FluidSpecimenReviewEventParameters Actions Begins -->
+        <action path="/FluidSpecimenReviewEventParameters"
+			type="edu.wustl.catissuecore.action.FluidSpecimenReviewEventParametersAction"
+			scope="request">
+			<forward name="success" path=".catissuecore.fluidSpecimenReviewEventParametersDef" />
+			<forward name="failure" path=".catissuecore.fluidSpecimenReviewEventParametersDef" />
+		</action>
+		
+		<action path="/FluidSpecimenReviewEventParametersAdd"
+			type="edu.wustl.catissuecore.action.CommonAddEditAction"
+			name="fluidSpecimenReviewEventParametersForm"
+			validate="true"
+			input="/FluidSpecimenReviewEventParameters.do?operation=add"
+			scope="request">
+			<forward name="success" path=".catissuecore.fluidSpecimenReviewEventParametersAddSuccessDef" />
+			<forward name="failure" path="/error.jsp" />
+		</action>
+		
+		<action path="/FluidSpecimenReviewEventParametersEdit"
+			type="edu.wustl.catissuecore.action.CommonAddEditAction"
+			name="fluidSpecimenReviewEventParametersForm"
+			validate="true"
+			input="/FluidSpecimenReviewEventParameters.do?operation=edit"
+			scope="request">
+			<forward name="success" path=".catissuecore.fluidSpecimenReviewEventParametersEditSuccessDef" />
+			<forward name="failure" path="/error.jsp" />
+		</action>
+		
+		<action path="/FluidSpecimenReviewEventParametersSearch"
+		    type="edu.wustl.catissuecore.action.CommonSearchAction"
+			name="fluidSpecimenReviewEventParametersForm"
+			validate="true"
+			input="/FluidSpecimenReviewEventParameters.do?operation=edit"
+			scope="request">
+			<forward name="success" path="/FluidSpecimenReviewEventParameters.do?operation=edit"/>
+			<forward name="failure" path="/FluidSpecimenReviewEventParameters.do?operation=edit"/>
+		</action>    
+		<!-- FluidSpecimenReviewEventParameters Actions Ends -->
 		
 		<!--Query Result View Actions Begin-->
 		<action path="/QueryResults"

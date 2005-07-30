@@ -9,6 +9,10 @@
  */
 package edu.wustl.catissuecore.domain;
 
+import edu.wustl.catissuecore.actionForm.AbstractActionForm;
+import edu.wustl.catissuecore.actionForm.FluidSpecimenReviewEventParametersForm;
+import edu.wustl.common.util.logger.Logger;
+
 /**
  * Attributes associated with a review event of a fluid specimen.
  * @hibernate.joined-subclass table="CATISSUE_FLUID_SPECIMEN_REVIEW_EVENT_PARAMETERS"
@@ -49,4 +53,35 @@ public class FluidSpecimenReviewEventParameters extends ReviewEventParameters
 		this.cellCount = cellCount;
 	}
 
+	FluidSpecimenReviewEventParameters()
+	{
+		
+	}
+//	Parameterized constructor
+	public FluidSpecimenReviewEventParameters(AbstractActionForm abstractForm)
+	{
+		setAllValues(abstractForm);
+	}
+	
+	/**
+     * This function Copies the data from an FluidSpecimenReviewEventParametersForm object to a FluidSpecimenReviewEventParameters object.
+     * @param fluidSpecimenReviewEventParametersForm An FluidSpecimenReviewEventParametersForm object containing the information about the fluidSpecimenReviewEventParameters.  
+     * */
+    public void setAllValues(AbstractActionForm abstractForm)
+    {
+        try
+        {
+        	FluidSpecimenReviewEventParametersForm form = (FluidSpecimenReviewEventParametersForm) abstractForm;
+            this.cellCount = new Double(form.getCellCount()); 
+           	super.setAllValues(form);
+        }
+        catch (Exception excp)
+        {
+            Logger.out.error(excp.getMessage());
+        }
+    }
+	
+		
+	
+	
 }

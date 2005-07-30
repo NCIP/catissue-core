@@ -70,7 +70,12 @@ public class BizLogicFactory
 			
 			case Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID:
 				abstractBizLogic = new SpecimenCollectionGroupBizLogic();
-				break;				
+				break;
+			
+          	case Constants.FLUID_SPECIMEN_REVIEW_EVENT_PARAMETERS_FORM_ID:
+        		abstractBizLogic = new SpecimenEventParametersBizLogic();
+        		break;
+				
             default:
                 abstractBizLogic = new DefaultBizLogic();
             	break;

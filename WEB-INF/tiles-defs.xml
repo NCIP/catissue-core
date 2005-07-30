@@ -295,6 +295,20 @@
 		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>
 	<!-- Received EventParameters end -->
+	
+	<!-- FluidSpecimenReviewEventParameters -->
+	<definition name=".catissuecore.fluidSpecimenReviewEventParametersDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/FluidSpecimenReviewEventParameters.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.fluidSpecimenReviewEventParametersAddSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/common/success.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.fluidSpecimenReviewEventParametersEditSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/common/success.jsp" />
+	</definition>
+	<!-- FluidSpecimenReviewEventParameters end -->
 
 	<!-- BioSpecimen tab pages definitions end -->
 

@@ -208,6 +208,10 @@ public class Constants
 	public static final String RECEIVED_EVENT_PARAMETERS_ADD_ACTION = "ReceivedEventParametersAdd.do";
 	public static final String RECEIVED_EVENT_PARAMETERS_EDIT_ACTION = "ReceivedEventParametersEdit.do";
 
+//	Constants required in FluidSpecimenReviewEventParameters.jsp Page
+	public static final String FLUID_SPECIMEN_REVIEW_EVENT_PARAMETERS_SEARCH_ACTION = "FluidSpecimenReviewEventParametersSearch.do";
+	public static final String FLUID_SPECIMEN_REVIEW_EVENT_PARAMETERS_ADD_ACTION = "FluidSpecimenReviewEventParametersAdd.do";
+	public static final String FLUID_SPECIMEN_REVIEW_EVENT_PARAMETERS_EDIT_ACTION = "FluidSpecimenReviewEventParametersEdit.do";
 	
 	//Levels of nodes in query results tree.
 	public static final int MAX_LEVEL = 5;
@@ -282,7 +286,7 @@ public class Constants
 	public static final int RECEIVED_EVENT_PARAMETERS_FORM_ID = 18;
 	public static final int COLLECTION_PROTOCOL_REGISTRATION_FORM_ID = 19;
 	public static final int SPECIMEN_COLLECTION_GROUP_FORM_ID = 20;
-	
+	public static final int FLUID_SPECIMEN_REVIEW_EVENT_PARAMETERS_FORM_ID = 21;
 	
 	
 	//Status message key Constants

@@ -68,13 +68,9 @@ public class FrozenEventParameters extends SpecimenEventParameters implements ja
     {
         try
         {
-//        	//call to event parameters setallvalue method
-//        	super.setAllValues(abstractForm);
         	FrozenEventParametersForm form 	= (FrozenEventParametersForm) abstractForm;
             this.method = form.getMethod();
            	super.setAllValues(form);
-//            System.out.println("AA: "+form.getDateOfEvent()); 
-//            System.out.println("Au: "+form.getUserId());
         }
         catch (Exception excp)
         {

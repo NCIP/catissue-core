@@ -19,6 +19,7 @@ import edu.wustl.catissuecore.domain.CancerResearchGroup;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Department;
+import edu.wustl.catissuecore.domain.FluidSpecimenReviewEventParameters;
 import edu.wustl.catissuecore.domain.FrozenEventParameters;
 import edu.wustl.catissuecore.domain.CheckInCheckOutEventParameter;
 import edu.wustl.catissuecore.domain.ReceivedEventParameters;
@@ -86,22 +87,25 @@ public class DomainObjectFactory
             	break;
             	
             case Constants.FROZEN_EVENT_PARAMETERS_FORM_ID:
-            	//StorageContainerForm storageContainerForm = (StorageContainerForm) form;
             	abstractDomain = new FrozenEventParameters(form);            	
             	break;
 
             case Constants.CHECKIN_CHECKOUT_EVENT_PARAMETERS_FORM_ID:
-            	//StorageContainerForm storageContainerForm = (StorageContainerForm) form;
             	abstractDomain = new CheckInCheckOutEventParameter(form);            	
             	break;
             	
             case Constants.RECEIVED_EVENT_PARAMETERS_FORM_ID:
-            	//StorageContainerForm storageContainerForm = (StorageContainerForm) form;
             	abstractDomain = new ReceivedEventParameters(form);            	
             	break;
             case Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID:
 			   abstractDomain = new CollectionProtocolRegistration(form);
 			   break;
+			  
+            case Constants.FLUID_SPECIMEN_REVIEW_EVENT_PARAMETERS_FORM_ID:
+            	abstractDomain = new FluidSpecimenReviewEventParameters (form);            	
+            	break; 
+			   
+			   
         }
         return abstractDomain;
     }
