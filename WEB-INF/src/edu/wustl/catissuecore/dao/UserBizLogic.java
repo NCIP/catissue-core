@@ -11,6 +11,7 @@
 package edu.wustl.catissuecore.dao;
 
 import java.util.List;
+import java.util.Vector;
 
 import net.sf.hibernate.HibernateException;
 import edu.wustl.catissuecore.action.DomainObjectListAction;
@@ -22,6 +23,7 @@ import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.SendEmail;
 import edu.wustl.catissuecore.util.global.Variables;
+import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.SMTransactionException;
@@ -211,4 +213,102 @@ public class UserBizLogic extends DefaultBizLogic
             Logger.out.error(smExp.getMessage(),smExp);
         }
     }
+
+    
+//    public Vector getList(String sourceObjectName, String[] displayNameFields, String valueField, String[] whereColumnName,
+//            String[] whereColumnCondition, Object[] whereColumnValue,
+//            String joinCondition, String separatorBetweenFields) throws DAOException
+//            {
+//        		AbstractDAO dao = DAOFactory.getDAO(Constants.HIBERNATE_DAO);
+//        		List users = dao.retrieve(User.class.getName());
+//        		Vector nameValuePairs = new Vector();
+//        		List csmUsers;
+//        		try
+//                {
+//                     csmUsers=SecurityManager.getInstance(UserBizLogic.class).getUsers();
+//                }
+//                catch (SMException e)
+//                {
+//                    Logger.out.debug("Unable to get all users: Exception: "+e.getMessage());
+//        	        throw new DAOException (e.getMessage(), e);
+//                }
+//                
+//                // Set CSM users for the user objects retrieved
+//                User user;
+//                gov.nih.nci.security.authorization.domainobjects.User csmUser;
+//                for(int i=0;i<users.size();i++)
+//                {
+//                    user = (User) users.get(i);
+//                    for(int j=0; j<csmUsers.size();j++)
+//                    {
+//                        csmUser =  (gov.nih.nci.security.authorization.domainobjects.User) csmUsers.get(j);
+//                        if(csmUser.getUserId() == user.getSystemIdentifier())
+//                        {
+//                            user.setUser(csmUser);
+//                            break;
+//                        }
+//                    }
+//                }
+//                
+//                
+//                return nameValuePairs;
+//            }
+    
+    		public Vector getUsers(String ActivityStatus) throws DAOException
+            {
+        		AbstractDAO dao = DAOFactory.getDAO(Constants.HIBERNATE_DAO);
+        		List users = dao.retrieve(User.class.getName());
+        		Vector nameValuePairs = new Vector();
+        		List csmUsers;
+        		try
+                {
+                     csmUsers=SecurityManager.getInstance(UserBizLogic.class).getUsers();
+                }
+                catch (SMException e)
+                {
+                    Logger.out.debug("Unable to get all users: Exception: "+e.getMessage());
+        	        throw new DAOException (e.getMessage(), e);
+                }
+                
+                // Set CSM users for the user objects retrieved
+                User user;
+                gov.nih.nci.security.authorization.domainobjects.User csmUser;
+                if(users != null && csmUsers != null)
+                {
+	                for(int i=0;i<users.size();i++)
+	                {
+	                    user = (User) users.get(i);
+	                    for(int j=0; j<csmUsers.size();j++)
+	                    {
+	                        csmUser =  (gov.nih.nci.security.authorization.domainobjects.User) csmUsers.get(j);
+	                        if(csmUser.getUserId() == user.getSystemIdentifier())
+	                        {
+	                            user.setUser(csmUser);
+	                            break;
+	                        }
+	                    }
+	                }
+                
+                
+                // Creating name value beans based on Activity Status passed 
+                NameValueBean nameValueBean; 
+                
+                for(int i=0;i<users.size();i++)
+                {
+                    user = (User) users.get(i);
+                    if(user.getActivityStatus().equals(ActivityStatus))
+                    {
+                        nameValueBean = new NameValueBean();
+                        nameValueBean.setName(user.getUser().getLastName()+", "+user.getUser().getFirstName());
+                        nameValueBean.setValue(String.valueOf(user.getSystemIdentifier()));
+                        Logger.out.debug(nameValueBean.toString());
+                        nameValuePairs.add(nameValueBean);
+                    }
+                }
+                
+                }
+                
+                return nameValuePairs;
+            }
+    
 }
