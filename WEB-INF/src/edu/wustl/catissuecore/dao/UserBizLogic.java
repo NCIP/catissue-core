@@ -256,58 +256,40 @@ public class UserBizLogic extends DefaultBizLogic
     
     		public Vector getUsers(String ActivityStatus) throws DAOException
             {
-        		AbstractDAO dao = DAOFactory.getDAO(Constants.HIBERNATE_DAO);
-        		List users = dao.retrieve(User.class.getName());
+        		List users = retrieve(User.class.getName(),"activityStatus",ActivityStatus);
         		Vector nameValuePairs = new Vector();
-        		List csmUsers;
-        		try
-                {
-                     csmUsers=SecurityManager.getInstance(UserBizLogic.class).getUsers();
-                }
-                catch (SMException e)
-                {
-                    Logger.out.debug("Unable to get all users: Exception: "+e.getMessage());
-        	        throw new DAOException (e.getMessage(), e);
-                }
                 
                 // Set CSM users for the user objects retrieved
-                User user;
-                gov.nih.nci.security.authorization.domainobjects.User csmUser;
-                if(users != null && csmUsers != null)
+                User user=null;
+                gov.nih.nci.security.authorization.domainobjects.User csmUser = null;
+                if(users != null)
                 {
+	                                
+	                // Creating name value beans based on Activity Status passed 
+	                NameValueBean nameValueBean; 
+                
 	                for(int i=0;i<users.size();i++)
 	                {
 	                    user = (User) users.get(i);
-	                    for(int j=0; j<csmUsers.size();j++)
+	                    try
 	                    {
-	                        csmUser =  (gov.nih.nci.security.authorization.domainobjects.User) csmUsers.get(j);
-	                        if(csmUser.getUserId() == user.getSystemIdentifier())
-	                        {
-	                            user.setUser(csmUser);
-	                            break;
-	                        }
+	                        csmUser = SecurityManager.getInstance(UserBizLogic.class).getUserById(String.valueOf(user.getSystemIdentifier()));
 	                    }
+	                    catch (SMException e)
+	                    {
+	                        Logger.out.debug("Unable to get user : "+e.getMessage());
+	                        throw new DAOException(e);
+	                    }
+	                    nameValueBean = new NameValueBean();
+	                    nameValueBean.setName(csmUser.getLastName()+", "+csmUser.getFirstName());
+	                    nameValueBean.setValue(String.valueOf(user.getSystemIdentifier()));
+	                    Logger.out.debug(nameValueBean.toString());
+	                    nameValuePairs.add(nameValueBean);
+	                    
 	                }
                 
                 
-                // Creating name value beans based on Activity Status passed 
-                NameValueBean nameValueBean; 
-                
-                for(int i=0;i<users.size();i++)
-                {
-                    user = (User) users.get(i);
-                    if(user.getActivityStatus().equals(ActivityStatus))
-                    {
-                        nameValueBean = new NameValueBean();
-                        nameValueBean.setName(user.getUser().getLastName()+", "+user.getUser().getFirstName());
-                        nameValueBean.setValue(String.valueOf(user.getSystemIdentifier()));
-                        Logger.out.debug(nameValueBean.toString());
-                        nameValuePairs.add(nameValueBean);
-                    }
                 }
-                
-                }
-                
                 return nameValuePairs;
             }
     
