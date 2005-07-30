@@ -144,6 +144,24 @@
               />
         </set>
 
+        <property
+            name="positionDimensionOne"
+            type="int"
+            update="true"
+            insert="true"
+            column="POSITION_DIMENSION_ONE"
+            length="30"
+        />
+
+        <property
+            name="positionDimensionTwo"
+            type="int"
+            update="true"
+            insert="true"
+            column="POSITION_DIMENSION_TWO"
+            length="50"
+        />
+
         <!--
             To add non XDoclet property mappings, create a file named
                 hibernate-properties-StorageContainer.xml

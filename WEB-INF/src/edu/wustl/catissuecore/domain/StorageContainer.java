@@ -95,6 +95,10 @@ public class StorageContainer extends AbstractDomainObject implements java.io.Se
 	 * Number of containers
 	 */
 	private transient Integer startNo;
+	
+    private Integer positionDimensionOne;
+
+    private Integer positionDimensionTwo;
 
 	//Default Constructor
 	public StorageContainer()
@@ -372,6 +376,50 @@ public class StorageContainer extends AbstractDomainObject implements java.io.Se
 	{
 		this.childrenContainerCollection = childrenContainerCollection;
 	}
+	
+	/**
+     * Returns the reference to dimensional position one of the specimen in Storage Container.
+     * @hibernate.property name="positionDimensionOne" type="int" column="POSITION_DIMENSION_ONE" length="30"  
+     * @return the reference to dimensional position one of the specimen in Storage Container.
+     * @see #setPositionDimensionOne(Integer)
+     */
+    public Integer getPositionDimensionOne()
+    {
+        return positionDimensionOne;
+    }
+
+    /**
+     * Sets the reference to dimensional position one of the specimen in Storage Container.
+     * @param positionDimensionOne the reference to dimensional position one of the specimen 
+     * in Storage Container.
+     * @see #getPositionDimensionOne()
+     */
+    public void setPositionDimensionOne(Integer positionDimensionOne)
+    {
+        this.positionDimensionOne = positionDimensionOne;
+    }
+
+    /**
+     * Returns the reference to dimensional position two of the specimen in Storage Container.
+     * @hibernate.property name="positionDimensionTwo" type="int" column="POSITION_DIMENSION_TWO" length="50"  
+     * @return the reference to dimensional position two of the specimen in Storage Container.
+     * @see #setPositionDimensionOne(Integer)
+     */
+    public Integer getPositionDimensionTwo()
+    {
+        return positionDimensionTwo;
+    }
+
+    /**
+     * Sets the reference to dimensional position two of the specimen in Storage Container.
+     * @param positionDimensionTwo the reference to dimensional position two of the specimen 
+     * in Storage Container.
+     * @see #getPositionDimensionTwo()
+     */
+    public void setPositionDimensionTwo(Integer positionDimensionTwo)
+    {
+        this.positionDimensionTwo = positionDimensionTwo;
+    }
 	
 	/**
 	 * This function Copies the data from a StorageTypeForm object to a StorageType object.
