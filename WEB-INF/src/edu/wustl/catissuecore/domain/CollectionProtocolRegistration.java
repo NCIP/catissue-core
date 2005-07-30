@@ -197,7 +197,7 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 		try
 		{
 			this.systemIdentifier = new Long(form.getSystemIdentifier());
-			this.registrationDate = Utility.parseDate(form.getRegistrationDate(),Constants.DATE_PATTERN_YYYY_MM_DD);
+			this.registrationDate = Utility.parseDate(form.getRegistrationDate(),Constants.DATE_PATTERN_MM_DD_YYYY);
 			this.protocolParticipantIdentifier = form.getParticipantProtocolID();
 			this.participant.setSystemIdentifier(new Long(form.getParticipantID()));
 			this.collectionProtocol.setSystemIdentifier(new Long(form.getCollectionProtocolID()));

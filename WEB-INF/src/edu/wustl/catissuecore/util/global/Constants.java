@@ -28,8 +28,6 @@ public class Constants
 	public static final String DATE_PATTERN = "yyyy-MM-dd HH:mm aa";
 	public static final String DATE_PATTERN_YYYY_MM_DD = "yyyy-MM-dd";
 	
-	public static final String DATE_PATTERN = "yyyy-MM-dd HH:mm aa";
-	public static final String DATE_PATTERN_YYYY_MM_DD = "yyyy-MM-dd";
 	public static final String DATE_PATTERN_MM_DD_YYYY = "MM-dd-yyyy";
 	//DAO Constants.
 	public static final int HIBERNATE_DAO = 1;
