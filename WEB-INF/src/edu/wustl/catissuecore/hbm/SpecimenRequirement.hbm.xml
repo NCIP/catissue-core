@@ -42,15 +42,6 @@
         />
 
         <property
-            name="tissueSide"
-            type="string"
-            update="true"
-            insert="true"
-            column="TISSUE_SIDE"
-            length="50"
-        />
-
-        <property
             name="pathologyStatus"
             type="string"
             update="true"
