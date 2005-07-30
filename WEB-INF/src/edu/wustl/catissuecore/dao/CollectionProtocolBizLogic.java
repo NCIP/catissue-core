@@ -19,7 +19,6 @@ import net.sf.hibernate.HibernateException;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
-import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.dbManager.DAOException;
@@ -56,15 +55,18 @@ public class CollectionProtocolBizLogic extends DefaultBizLogic
 		while(it.hasNext())
 		{
 			User aUser  =(User)it.next();
-			list = dao.retrieve(StorageType.class.getName(), "systemIdentifier", aUser.getSystemIdentifier());
+			list = dao.retrieve(User.class.getName(), "systemIdentifier", aUser.getSystemIdentifier());
 			if (list.size() != 0)
 			{
 				User coordinator = (User) list.get(0);
+				System.out.println("coordinator "+coordinator.getSystemIdentifier());
 				coordinatorColl.add(coordinator);
+				coordinator.getCollectionProtocolCollection().add(coordinator);
+				dao.update(coordinator);
 			}
 		}
 		collectionProtocol.setUserCollection(coordinatorColl);
-
+		
 		dao.insert(collectionProtocol);
 		it = collectionProtocol.getCollectionProtocolEventCollection().iterator();
 		while(it.hasNext())

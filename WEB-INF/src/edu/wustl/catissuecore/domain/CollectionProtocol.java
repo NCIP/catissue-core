@@ -18,6 +18,8 @@ import java.util.Map;
 
 import edu.wustl.catissuecore.actionForm.AbstractActionForm;
 import edu.wustl.catissuecore.actionForm.CollectionProtocolForm;
+import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.util.MapDataParser;
 
 /**
@@ -139,8 +141,8 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
         	this.shortTitle = cpForm.getShortTitle();
         	this.irbIdentifier = cpForm.getIrbID();
         	
-//        	this.startDate = Utility.parseDate(cpForm.getStartDate(),"MM-DD-YYYY");
-//        	this.endDate = Utility.parseDate(cpForm.getEndDate(),"MM-DD-YYYY");
+        	this.startDate = Utility.parseDate(cpForm.getStartDate(),Constants.DATE_PATTERN_MM_DD_YYYY);
+        	this.endDate = Utility.parseDate(cpForm.getEndDate(),Constants.DATE_PATTERN_MM_DD_YYYY);
 
         	System.out.println("cpForm.getStartDate() "+startDate);
         	System.out.println("cpForm.getEndDate() "+endDate);
