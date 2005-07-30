@@ -326,4 +326,23 @@ public class SecurityManager
 	        throw new SMException (e.getMessage(), e);
 	    }
 	}
+
+    /**
+     * @throws SMException
+     * 
+     */
+    public List getUsers() throws SMException
+    {
+        try
+	    {
+	        User user = new User();
+	        SearchCriteria searchCriteria = new UserSearchCriteria(user);
+	        return getUserProvisioningManager().getObjects(searchCriteria);
+	    }
+	    catch (CSException e)
+	    {
+	        Logger.out.debug("Unable to get all users: Exception: "+e.getMessage());
+	        throw new SMException (e.getMessage(), e);
+	    }
+    }
 }
