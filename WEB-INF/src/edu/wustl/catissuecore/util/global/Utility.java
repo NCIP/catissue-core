@@ -32,7 +32,7 @@ public class Utility
 		}
 		catch(Exception e)
 		{
-			throw new ParseException("Date '"+date+"' is not in format of YYYY-MM-DD",0);
+			throw new ParseException("Date '"+date+"' is not in format of "+pattern,0);
 		}
 	}
 	

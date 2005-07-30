@@ -11,6 +11,8 @@
 package edu.wustl.catissuecore.domain;
 
 import java.util.Date;
+
+import edu.wustl.catissuecore.actionForm.AbstractActionForm;
 import edu.wustl.catissuecore.domain.AbstractDomainObject ;
 /**
  *A set of procedures that govern the collection and/or distribution of biospecimens. 
@@ -72,6 +74,20 @@ public abstract class SpecimenProtocol extends AbstractDomainObject implements j
 	 */
 	protected String activityStatus;
 
+	
+	/**
+	 * NOTE: Do not delete this constructor. Hibernet uses this by reflection API.
+	 * */
+	public SpecimenProtocol()
+	{
+		super();
+	}
+	
+	public SpecimenProtocol(AbstractActionForm form)
+	{
+		setAllValues(form);
+	}
+	
 	/**
 	 * Returns the systemidentifier of the protocol.
 	 * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"

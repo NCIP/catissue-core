@@ -38,11 +38,6 @@ public abstract class SpecimenRequirement implements java.io.Serializable
 	public String tissueSite;
 	
 	/**
-	 * For bilateral sites, left or right.
-	 */
-	protected String tissueSide;
-	
-	/**
 	 * Histopathological character of the specimen e.g. Non-Malignant, Malignant, Non-Malignant Diseased, Pre-Malignant.
 	 */
 	protected String pathologyStatus;
@@ -57,6 +52,10 @@ public abstract class SpecimenRequirement implements java.io.Serializable
 	 */
 	protected Collection collectionProtocolEventCollection = new HashSet();
 	
+	public SpecimenRequirement()
+	{
+		
+	}
 	/**
 	 * Returns the systemIdentifier.
 	 * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"
@@ -112,25 +111,6 @@ public abstract class SpecimenRequirement implements java.io.Serializable
 	public void setTissueSite(String tissueSite)
 	{
 		this.tissueSite = tissueSite;
-	}
-
-	/**
-	 * Returns the tissueSide.
-	 * @hibernate.property name="tissueSide" type="string"
-	 * column="TISSUE_SIDE" length="50"
-	 * @return Returns the tissueSide.
-	 */
-	public String getTissueSide()
-	{
-		return tissueSide;
-	}
-
-	/**
-	 * @param tissueSide The tissueSide to set.
-	 */
-	public void setTissueSide(String tissueSide)
-	{
-		this.tissueSide = tissueSide;
 	}
 
 	/**

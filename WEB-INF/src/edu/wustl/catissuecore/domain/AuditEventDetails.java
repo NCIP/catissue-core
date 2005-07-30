@@ -87,4 +87,43 @@ public class AuditEventDetails implements java.io.Serializable
 	{
 		this.auditEventLog = auditEventLog;
 	}
+	
+	public int hashCode()
+	{
+		int hashCode = 0;
+	
+		if(systemIdentifier!=null)
+			hashCode += systemIdentifier.intValue(); 
+		if(elementName!=null)	
+			hashCode += elementName.hashCode(); 
+		if(previousValue!=null)		
+			hashCode +=  previousValue.hashCode();
+		if(currentValue!=null)	
+			hashCode +=  currentValue.hashCode();
+
+		return hashCode;
+	}
+	
+	public String toString()
+	{
+		return 
+			"SystemIdentifier "+systemIdentifier+"\t"+
+			"ElementName "+elementName +"\t"+
+			"PreviousValue "+previousValue+"\t"+
+			"CurrentValue "+currentValue;
+	}
+	
+	public boolean equals(Object obj)
+	{
+		if(obj instanceof AuditEventDetails)
+		{
+			AuditEventDetails auditEventDetails = (AuditEventDetails)obj;
+			if(this.systemIdentifier.equals(auditEventDetails.systemIdentifier) && 
+					this.elementName.equals(auditEventDetails.elementName) &&
+					this.previousValue.equals(auditEventDetails.previousValue) &&
+					this.currentValue.equals(auditEventDetails.currentValue))
+				return true;
+		}
+		return false;
+	}
 }

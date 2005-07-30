@@ -146,4 +146,9 @@ public class CollectionProtocolEvent implements java.io.Serializable
 	{
 		this.collectionProtocol = collectionProtocol;
 	}
+	
+	public String toString()
+	{
+		return "CPE: "+clinicalStatus+" | "+studyCalendarEventPoint +" | "+ specimenRequirementCollection.toString();
+	}
 }

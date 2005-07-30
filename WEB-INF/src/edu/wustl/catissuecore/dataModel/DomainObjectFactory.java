@@ -11,14 +11,12 @@
 package edu.wustl.catissuecore.dataModel;
 
 import edu.wustl.catissuecore.actionForm.AbstractActionForm;
-import edu.wustl.catissuecore.actionForm.CancerResearchGroupForm;
-import edu.wustl.catissuecore.actionForm.DepartmentForm;
-import edu.wustl.catissuecore.actionForm.InstitutionForm;
 import edu.wustl.catissuecore.actionForm.ReportedProblemForm;
 import edu.wustl.catissuecore.actionForm.UserForm;
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.CancerResearchGroup;
+import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.Department;
 import edu.wustl.catissuecore.domain.FrozenEventParameters;
 import edu.wustl.catissuecore.domain.CheckInCheckOutEventParameter;
@@ -27,8 +25,8 @@ import edu.wustl.catissuecore.domain.Institution;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ReportedProblem;
 import edu.wustl.catissuecore.domain.Site;
-import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.domain.StorageContainer;
+import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 
@@ -61,14 +59,12 @@ public class DomainObjectFactory
             	abstractDomain = new Biohazard(form);
             	break;
             case Constants.STORAGE_TYPE_FORM_ID:
-//            	StorageTypeForm storageTypeForm = (StorageTypeForm) form;
             	abstractDomain = new StorageType(form);
             	break;
             case Constants.STORAGE_CONTAINER_FORM_ID:
             	abstractDomain = new StorageContainer(form);            	
             	break;
             case Constants.SITE_FORM_ID:
-//            	SiteForm siteForm = (SiteForm) form;
             	abstractDomain = new Site(form);
             	break;
             case Constants.REPORTEDPROBLEM_FORM_ID:
@@ -76,16 +72,16 @@ public class DomainObjectFactory
             	abstractDomain = new ReportedProblem(reportedProblemForm);
             	break;
             case Constants.DEPARTMENT_FORM_ID:
-            	DepartmentForm departmentForm = (DepartmentForm) form;
-            	abstractDomain = new Department(departmentForm);
+            	abstractDomain = new Department(form);
             	break;
             case Constants.INSTITUTION_FORM_ID:
-            	InstitutionForm instituteForm = (InstitutionForm) form;
-            	abstractDomain = new Institution(instituteForm);
+            	abstractDomain = new Institution(form);
             	break;
             case Constants.CANCER_RESEARCH_GROUP_FORM_ID:
-            	CancerResearchGroupForm cancerResearchGroupForm = (CancerResearchGroupForm) form;
-            	abstractDomain = new CancerResearchGroup(cancerResearchGroupForm);
+            	abstractDomain = new CancerResearchGroup(form);
+            	break;
+            case Constants.COLLECTION_PROTOCOL_FORM_ID:
+            	abstractDomain = new CollectionProtocol(form);
             	break;
             	
             case Constants.FROZEN_EVENT_PARAMETERS_FORM_ID:

@@ -128,7 +128,6 @@
 						<td class="formField">
 							<html:select property="coordinatorId" styleClass="formFieldSized" styleId="coordinatorId" size="1">
 								<html:options name="userIdList" labelName="userList" />
-								<%-- <html:options name="userList" labelName="userList" /> --%>
 							</html:select>
 							&nbsp;
 							<html:link page="/User.do?operation=add&amp;pageOf=">

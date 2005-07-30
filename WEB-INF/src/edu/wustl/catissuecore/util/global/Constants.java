@@ -106,11 +106,13 @@ public class Constants
 	public static final String PROTOCOL_PARTICIPANT_NUMBER_LIST = "protocolParticipantNumberList";
 	public static final String STUDY_CALENDAR_EVENT_POINT_LIST = "studyCalendarEventPointList";
 	public static final String CLINICAL_STATUS_LIST = "cinicalStatusList";
+	public static final String SPECIMEN_CLASS_LIST = "specimenClassList";
+	public static final String SPECIMEN_CLASS_ID_LIST = "specimenClassIdList";
+	
 	//event parameters lists
 	public static final String METHODLIST = "methodList";
 	public static final String HOURLIST = "hourList";
 	public static final String MINUTESLIST = "minutesList";
-	
 	
 	//Constants required in User.jsp Page
 	public static final String USER_SEARCH_ACTION = "UserSearch.do";
@@ -259,7 +261,7 @@ public class Constants
 	public static final int APPROVE_USER_FORM_ID = 6;
 	public static final int ACTIVITY_STATUS_FORM_ID = 7;
 	public static final int DEPARTMENT_FORM_ID = 8;
-	public static final int COLLECTIONPROTOCOL_FORM_ID = 9;
+	public static final int COLLECTION_PROTOCOL_FORM_ID = 9;
 	public static final int DISTRIBUTIONPROTOCOL_FORM_ID = 10;
 	public static final int STORAGE_CONTAINER_FORM_ID = 11;
 	public static final int STORAGE_TYPE_FORM_ID = 12;
@@ -893,5 +895,11 @@ public class Constants
 			"Dry Ice",
 			"Iso pentane"
 	};
-
+	
+	public static final String UNIT_GM = "gm";
+	public static final String UNIT_ML = "ml";
+	public static final String UNIT_CC = "cc";
+	public static final String UNIT_MG = "mg";
+	
+	
 }

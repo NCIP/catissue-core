@@ -60,8 +60,10 @@ public class BizLogicFactory
         
          	case Constants.RECEIVED_EVENT_PARAMETERS_FORM_ID:
         		abstractBizLogic = new SpecimenEventParametersBizLogic();
-        		break;		
-        		
+        		break;	
+        	case Constants.COLLECTION_PROTOCOL_FORM_ID:
+        		abstractBizLogic = new CollectionProtocolBizLogic();
+        		break;
             default:
                 abstractBizLogic = new DefaultBizLogic();
             	break;
