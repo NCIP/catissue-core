@@ -4,41 +4,14 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 
 <head>
-<SCRIPT LANGUAGE="JavaScript">
-	var search1='`';
-	var search2='~';
-	var insno=0;
-	var insno1=1;
-
-	var ugul = new Array(4);
-	ugul[0]="ML";
-	ugul[1]="GM";
-	ugul[2]="CC";
-	ugul[3]="MG";
-
-	function changeUnit(listname)
-	{
-		var i = listname.selectedIndex;
-		unitspan.innerHTML =ugul[i];  
-	}
-//-->
-</SCRIPT>
-<script type="text/javascript" language="javascript" src="../../../javaScript.js">
-</script>
-<style>
-	div#d1
-	{
-	 display:none;
-	}
-	div#d1_1
-	{
-	 display:none;
-	}
-</style>
-</head>
-
 
 <%
+	String specimenClassArry[] = (String[]) request.getAttribute(Constants.SPECIMEN_CLASS_LIST);
+	String specimenClassIdArry[] = (String[]) request.getAttribute(Constants.SPECIMEN_CLASS_ID_LIST);
+	String specimenTypeArry[] = (String[]) request.getAttribute(Constants.SPECIMEN_TYPE_LIST);
+	String tissueSiteArry[] = (String[]) request.getAttribute(Constants.TISSUE_SITE_LIST);
+	String pathologyStatusArry[] = (String[]) request.getAttribute(Constants.PATHOLOGICAL_STATUS_LIST);
+	
     String operation = (String) request.getAttribute(Constants.OPERATION);
     String formName;
     String searchFormName = new String(Constants.DISTRIBUTIONPROTOCOL_SEARCH_ACTION);
@@ -55,12 +28,80 @@
         readOnlyValue = false;
     }
 %>
-        
+
+<SCRIPT LANGUAGE="JavaScript">
+	var ugul = new Array(4);
+	ugul[0]="";
+	ugul[1]="<%=Constants.UNIT_ML%>";
+	ugul[2]="<%=Constants.UNIT_GM%>";
+	ugul[3]="<%=Constants.UNIT_CC%>";
+	ugul[4]="<%=Constants.UNIT_MG%>";
+
+	function changeUnit(listname,unitspan)
+	{
+		var i = document.getElementById(listname).selectedIndex;
+		document.getElementById(unitspan).innerHTML = ugul[i];
+	}
+//code for units end
+</SCRIPT>
+
+<SCRIPT LANGUAGE="JavaScript">
+	var search1='`';
+	var insno=0;
+</script>
+<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
+
+<SCRIPT LANGUAGE="JavaScript">
+<!--
+	// functions for add more
+
+	
+var subDivRowCount = new Array(10);		// array to hold the row count of the inner block
+
+subDivRowCount[0] = 1;
+
+// variable to count the oter blocks
+var insno=0;
+
+function addBlock(div,d0)
+{
+	//alert("Here "+insno);
+	var y = div.innerHTML;
+	var z = d0.innerHTML;
+
+	subDivRowCount[insno] = 1;
+	insno =insno + 1;
+
+	//alert("insno "+z);
+	var mm = z.indexOf('`');
+	for(var cnt=0;cnt<mm;cnt++)
+	{
+		z = z.replace('`',insno);
+		mm = z.indexOf('`');
+	}
+	div.innerHTML = div.innerHTML +z;
+}
+//-->
+</SCRIPT>
+
+<style>
+	div#d1
+	{
+		display:none;
+	}
+	div#d999
+	{
+	 	display:none;
+	}
+</style>
+</head>
+<body>
+
 <html:errors />
 <html:form action="<%=Constants.DISTRIBUTIONPROTOCOL_ADD_ACTION%>">
 
 <!-- table 1 -->
-<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="875">
+<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="100%">
 	<logic:notEqual name="operation" value="<%=Constants.ADD%>">
 		<!-- ENTER IDENTIFIER BEGINS-->
 		<br />
@@ -133,43 +174,19 @@
 					<tr>
 						<td class="formRequiredNotice" width="5">*</td>
 						<td class="formRequiredLabel">
-							<label for="principalinvestigator">
+							<label for="principalInvestigatorId">
 								<bean:message key="distributionprotocol.principalinvestigator" />
 							</label>
 						</td>
-						<td class="formField" colspan=2>
-							<html:select property="principalinvestigator" styleClass="formFieldSized" styleId="principalinvestigator" size="1">
-							 	<html:option value="Rakesh">Nagarajan, Rakesh</html:option>
-								<html:option value="Mark">Watson, Mark</html:option>
-								<html:option value="Kapil">Kaveeshwar, Kapil</html:option>
-								<html:option value="Srikant">Adiga, Srikant</html:option>
-								<html:option value="Mandar">Deshmukh, Mandar</html:option>
+						
+						<td class="formField">
+							<html:select property="principalInvestigatorId" styleClass="formFieldSized" styleId="principalInvestigatorId" size="1">
+								<html:options name="<%=Constants.USERIDLIST%>" labelName="<%=Constants.USERLIST%>" />
 							</html:select>
+							&nbsp;
 							<html:link page="/User.do?operation=add">
-							 <bean:message key="distributionprotocol.addinvestigator" />
-							 </html:link>
-						</td>
-					</tr>
-					
-<!-- protocol coordinators -->	
-					<tr>
-						<td class="formRequiredNotice" width="5">&nbsp;</td>
-						<td class="formRequiredLabel">
-							<label for="protocolcoordinator">
-								<bean:message key="distributionprotocol.protocolcoordinator" />
-							</label>
-						</td>
-						<td class="formField" colspan=2>
-							<html:select property="protocolcoordinator" styleClass="formFieldSized" styleId="protocolcoordinator" size="4" multiple="true">
-							 	<html:option value="Rakesh">Nagarajan, Rakesh</html:option>
-								<html:option value="Mark">Watson, Mark</html:option>
-								<html:option value="Kapil">Kaveeshwar, Kapil</html:option>
-								<html:option value="Srikant">Adiga, Srikant</html:option>
-								<html:option value="Mandar">Deshmukh, Mandar</html:option>
-							</html:select>
-							<html:link page="User.do?operation=add">
-							 <bean:message key="distributionprotocol.addcoordinator" />
-							 </html:link>
+		 						<bean:message key="buttons.addNew" />
+	 						</html:link>
 						</td>
 					</tr>
 
@@ -177,7 +194,7 @@
 					<tr>
 						<td class="formRequiredNotice" width="5">*</td>
 						<td class="formRequiredLabel">
-							<label for="protocoltitle">
+							<label for="title">
 								<bean:message key="distributionprotocol.protocoltitle" />
 							</label>
 						</td>
@@ -189,58 +206,58 @@
 <!-- short title -->						
 					<tr>
 						<td class="formRequiredNotice" width="5">&nbsp;</td>
-						<td class="formRequiredLabel">
-							<label for="shorttitle">
+						<td class="formLabel">
+							<label for="shortTitle">
 								<bean:message key="distributionprotocol.shorttitle" />
 							</label>
 						</td>
 						<td class="formField" colspan=2>
-							<html:text styleClass="formFieldSized" size="30" styleId="shorttitle" property="shorttitle" readonly="<%=readOnlyValue%>" />
+							<html:text styleClass="formFieldSized" size="30" styleId="shortTitle" property="shortTitle" readonly="<%=readOnlyValue%>" />
 						</td>
 					</tr>
-
+					
 <!-- irb id -->						
 					<tr>
 						<td class="formRequiredNotice" width="5">&nbsp;</td>
-						<td class="formRequiredLabel">
-							<label for="irbid">
+						<td class="formLabel">
+							<label for="irbID">
 								<bean:message key="distributionprotocol.irbid" />
 							</label>
 						</td>
 						<td class="formField" colspan=2>
-							<html:text styleClass="formFieldSized" size="30" styleId="irbid" property="irbid" readonly="<%=readOnlyValue%>" />
+							<html:text styleClass="formFieldSized" size="30" styleId="irbID" property="irbID" readonly="<%=readOnlyValue%>" />
 						</td>
 					</tr>
 
 <!-- startdate -->						
 					<tr>
 						<td class="formRequiredNotice" width="5">&nbsp;</td>
-						<td class="formRequiredLabel">
-							<label for="startdate">
+						<td class="formLabel">
+							<label for="startDate">
 								<bean:message key="distributionprotocol.startdate" />
 							</label>
 						</td>
 			
-						 <td class="formField" colspan=2>
-						 <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
-						 <html:text styleClass="formDateSized" size="35" styleId="startDate" property="startDate" readonly="true"/>
+						<td class="formField" colspan=2>
+							<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
+						 	<html:text styleClass="formDateSized" size="35" styleId="startDate" property="startDate" readonly="true"/>
 							<a href="javascript:show_calendar('distributionProtocolForm.startDate','','','MM-DD-YYYY');">
 								<img src="images\calendar.gif" width=24 height=22 border=0>
 							</a>
-						 </td>
+						</td>
 					</tr>
 
 <!-- enddate -->						
 					<tr>
 						<td class="formRequiredNotice" width="5">&nbsp;</td>
-						<td class="formRequiredLabel">
-							<label for="enddate">
+						<td class="formLabel">
+							<label for="endDate">
 								<bean:message key="distributionprotocol.enddate" />
 							</label>
 						</td>
 			
 						 <td class="formField" colspan=2>
-						 <div id="overDiv1" style="position:absolute; visibility:hidden; z-index:1000;"></div>
+						 <div id="enddateDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
 						 <html:text styleClass="formDateSized" size="35" styleId="endDate" property="endDate" readonly="true"/>
 							<a href="javascript:show_calendar('distributionProtocolForm.endDate','','','MM-DD-YYYY');">
 								<img src="images\calendar.gif" width=24 height=22 border=0>
@@ -251,28 +268,30 @@
 <!-- no of participants -->						
 					<tr>
 						<td class="formRequiredNotice" width="5">&nbsp;</td>
-						<td class="formRequiredLabel">
-							<label for="participants">
+						<td class="formLabel">
+							<label for="enrollment">
 								<bean:message key="distributionprotocol.participants" />
 							</label>
 						</td>
 						<td class="formField" colspan=2>
-							<html:text styleClass="formFieldSized" size="30" styleId="participants" property="participants" readonly="<%=readOnlyValue%>" />
+							<html:text styleClass="formFieldSized" size="30" styleId="enrollment" property="enrollment" readonly="<%=readOnlyValue%>" />
 						</td>
 					</tr>
 
 <!-- descriptionurl -->						
 					<tr>
 						<td class="formRequiredNotice" width="5">&nbsp;</td>
-						<td class="formRequiredLabel">
-							<label for="descriptionurl">
+						<td class="formLabel">
+							<label for="descriptionURL">
 								<bean:message key="distributionprotocol.descriptionurl" />
 							</label>
 						</td>
 						<td class="formField" colspan=2>
-							<html:text styleClass="formFieldSized" size="30" styleId="descriptionurl" property="descriptionurl" readonly="<%=readOnlyValue%>" />
+							<html:text styleClass="formFieldSized" size="30" styleId="descriptionURL" property="descriptionURL" readonly="<%=readOnlyValue%>" />
 						</td>
 					</tr>
+
+
 
 <!-- activitystatus -->	
 					<%
@@ -281,7 +300,7 @@
 					%>
 							<tr>
 								<td class="formRequiredNotice" width="5">&nbsp;</td>
-								<td class="formRequiredLabel">
+								<td class="formLabel">
 									<label for="activityStatus">
 										<bean:message key="distributionprotocol.activitystatus" />
 									</label>
@@ -302,105 +321,48 @@
 		<tr><td>&nbsp;</td></tr> <!-- SEPARATOR -->
 </table>
 
-<!--  outer table for CPE -->
 
-<!-- to insert the div tag -->
-<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="96%">
-	<tr>
-		<td>
-			<table summary="" cellpadding="3" cellspacing="0" border="0" width=100%>
-			    <tr>
-			        <td colspan="6" class="formTitle">
-			        	<b><bean:message key="distributionprotocol.specimenreq" /></b>
-			        </td>
-			        <td class="formTitle">	
-			     	   <html:button property="addSpecimenReq" styleClass="actionButton">Add More</html:button>
-			        </td>
-			    </tr>
-			    
-			    <TR> <!-- SUB TITLES -->
-			        <td class="formLeftSubTableTitle">
-		        		<bean:message key="distributionprotocol.specimennumber" />
-			        </td>
-			        <td class="formLeftSubTableTitle">
-			        	<bean:message key="distributionprotocol.specimentype" />
-			        </td>
-			        <td class="formLeftSubTableTitle">
-			        	<bean:message key="distributionprotocol.specimensubtype" />
-			        </td>
-			        
-			        <td class="formLeftSubTableTitle">
-			        	<bean:message key="distributionprotocol.specimensite" />
-				    </td>
-			        <td class=formLeftSubTableTitle>
-				        <bean:message key="distributionprotocol.specimenside" />
-				    </td>
-			        <td  class=formLeftSubTableTitle>
-			    		<bean:message key="distributionprotocol.specimenstatus" />
-				    </td>
-			        <td class=formLeftSubTableTitle>
-			        	<bean:message key="distributionprotocol.quantity" />
-			        </td>
-			    </TR><!-- SUB TITLES END -->
-				
-				<TR>	<!-- SPECIMEN REQ DATA -->
-			        <td class="tabrightmostcell">1.</td>
-			        <td class="formField">
-			           	<html:select property="specimenType" styleClass="formFieldSized10" styleId="specimenType" size="1" onchange="changeUnit(specimenType)">
-							<html:option value="0">Fluid Specimen</html:option>
-							<html:option value="1">Tissue Specimen</html:option>
-							<html:option value="2">Cell Specimen</html:option>
-							<html:option value="3">Molecular Specimen</html:option>
-						</html:select>
-			        </td>
-			        <td class="formField">
-			           	<html:select property="specimenSubType" styleClass="formFieldSized10" styleId="specimenSubType" size="1">
-				        	<html:option value="0">Select Specimen SubType</html:option>
-							<html:option value="Type1">Blood</html:option>
-							<html:option value="Type2">Cerum</html:option>
-						</html:select>
-			        </td>
-			        <td class="formField">
-			           	<html:select property="tissueSite" styleClass="formFieldSized10" styleId="tissueSite" size="1">
-				        	<html:option value="Select Tissue Site">Select Tissue Site</html:option>
-							<html:option value="Adrenal-Cortex">Adrenal-Cortex</html:option>
-							<html:option value="Adrenal-Medulla">Adrenal-Medulla</html:option>
-							<html:option value="Adrenal-NOS">Adrenal-NOS</html:option>
-						</html:select>
-			        <a href="#">
-					<img src="images/Tree.gif" border="0" width="26" height="22"></a>
-					</td>
-			        <td class="formField">
-			          	<html:select property="tissueSide" styleClass="formFieldSized10" styleId="tissueSide" size="1">
-				        	<html:option value="Select Tissue Side">Select Tissue Side</html:option>
-							<html:option value="Bilateral sites">Bilateral sites</html:option>
-							<html:option value="Left">Left</html:option>
-							<html:option value="Right">Right</html:option>
-						</html:select>
-			        </td>
-			        <td class="formField">
-			          	<html:select property="tissueType" styleClass="formFieldSized10" styleId="tissueType" size="1">
-				        	<html:option value="Select Tissue Type">Select Tissue Type</html:option>
-							<html:option value="Primary Tumor">Primary Tumor</html:option>
-							<html:option value="Metastatic Node">Metastatic Node</html:option>
-							<html:option value="Non-Malignant Tissue">Non-Malignant Tissue</html:option>
-						</html:select>
-			        </td>
-			        <td class="formField">
-			        	<html:text styleClass="formFieldSized5" styleId="enrollment" property="enrollment" readonly="<%=readOnlyValue%>" />        
-			        	&nbsp;
-			          	<span id="unitspan">&nbsp;
-						</span>
-					</td>
-				</TR>	<!-- SPECIMEN REQ DATA END -->
-			</TABLE>
-		</td>
-	</tr>
-</table> <!-- outer table for CPE ends -->
+<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="100%">
+	<tr><td>
+		<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
+			<tr>
+				<td class="formTitle">
+						<b>SPECIMEN REQUIREMENTS</b>
+				</td>
+				<td align="right" class="formTitle">		
+						<html:button property="addDistributionProtocolEvents" styleClass="actionButton" onclick="addBlock(outerdiv,d1)">Add More</html:button>
+				</td>
+			</tr>
+			<TR> <!-- SUB TITLES -->
+		        <td class="formLeftSubTableTitle">
+		    		<bean:message key="distributionprotocol.specimennumber" />
+		        </td>
+		        <td class="formLeftSubTableTitle">
+		        	<bean:message key="distributionprotocol.specimenclass" />
+		        </td>
+		        <td class="formLeftSubTableTitle">
+		        	<bean:message key="distributionprotocol.specimentype" />
+		        </td>
+		        <td class="formLeftSubTableTitle">
+		        	<bean:message key="distributionprotocol.specimensite" />
+			    </td>
+		        <td  class=formLeftSubTableTitle>
+		    		<bean:message key="distributionprotocol.pathologystatus" />
+			    </td>
+		        <td class=formLeftSubTableTitle>
+		        	<bean:message key="distributionprotocol.quantity" />
+		        </td>
+			</TR><!-- SUB TITLES END -->		 
+		</table>
+	</td></tr>
+</table>
 
+<!--  outermostdiv start --><!-- outer div tag  for entire block -->
+<div id="outerdiv"> 
+	
+</div>	<!-- outermostdiv  -->
 
-
-<table width="96%">		
+<table width="100%">		
 	<!-- to keep -->
 		<tr>
 			<td align="right" colspan="3">
@@ -425,6 +387,77 @@
 		</tr>
 	</logic:notEqual>
 
-	<!-- NEW DISTRIBUTIONPROTOCOL ENTRY ends-->
 </table>
 </html:form>
+<hr>
+
+
+
+<html:form action="ApproveUser.do">
+<div id="d1">
+
+	<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="100%">
+		<tr><td>
+			<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
+				<TR>	<!-- SPECIMEN REQ DATA -->
+				    <td class="tabrightmostcell">`.</td>
+				    <td class="formField">		
+				    	<html:select property="value(SpecimenRequirement:`_specimenClass)" 
+										styleClass="formFieldSized10" 
+										styleId="value(SpecimenRequirement:`_specimenClass)" size="1"
+										onchange="changeUnit('value(SpecimenRequirement:`_specimenClass)',
+				       						'value(SpecimenRequirement:`_unitspan)')">
+							<html:options name="<%=Constants.SPECIMEN_CLASS_ID_LIST%>" labelName="<%=Constants.SPECIMEN_CLASS_LIST%>"/>
+						</html:select>
+				    </td>
+				    
+				    <td class="formField">
+				    	<html:select property="value(SpecimenRequirement:`_specimenType)" 
+										styleClass="formFieldSized10" 
+										styleId="value(SpecimenRequirement:`_specimenType)" size="1">
+							<html:options name="<%=Constants.SPECIMEN_TYPE_LIST%>" labelName="<%=Constants.SPECIMEN_TYPE_LIST%>"/>
+						</html:select>
+				    </td>
+				    
+				    <td class="formField">
+				    	<html:select property="value(SpecimenRequirement:`_tissueSite)" 
+										styleClass="formFieldSized10" 
+										styleId="value(SpecimenRequirement:`_tissueSite)" size="1">
+							<html:options name="<%=Constants.TISSUE_SITE_LIST%>" labelName="<%=Constants.TISSUE_SITE_LIST%>"/>
+						</html:select>
+				    
+				        <a href="#">
+							<img src="images\Tree.gif" border="0" width="26" height="22"></a>
+					</td>
+					
+				    <td class="formField">
+				    	<html:select property="value(SpecimenRequirement:`_pathologyStatus)" 
+										styleClass="formFieldSized10" 
+										styleId="value(SpecimenRequirement:`_pathologyStatus)" size="1">
+							<html:options name="<%=Constants.PATHOLOGICAL_STATUS_LIST%>" labelName="<%=Constants.PATHOLOGICAL_STATUS_LIST%>"/>
+						</html:select>
+				    </td>
+				    
+				    <td class="formField">
+				    	<html:text styleClass="formFieldSized5" size="30" 
+				    			styleId="value(SpecimenRequirement:`_quantityIn)" 
+				    			property="value(SpecimenRequirement:`_quantityIn)" 
+				    			readonly="<%=readOnlyValue%>" />
+				    	<span id="value(SpecimenRequirement:`_unitspan)">
+				    		&nbsp;
+						</span>
+					</td>
+				</TR>	<!-- SPECIMEN REQ DATA END -->
+				</table>
+		</td></tr>
+	</table>
+
+
+</div>
+</html:form>
+
+<SCRIPT LANGUAGE="JavaScript">
+	addBlock(outerdiv,d1);
+</Script>
+
+</body>

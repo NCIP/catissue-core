@@ -73,7 +73,7 @@ function addBlock(div,d0)
 
 	subDivRowCount[insno] = 1;
 	insno =insno + 1;
-	//alert("insno "+insno);
+	alert("insno "+z);
 	var mm = z.indexOf('`');
 	for(var cnt=0;cnt<mm;cnt++)
 	{
@@ -462,7 +462,7 @@ function getSubDivCount(subdivtag)
 		<tr><td>&nbsp;</td></tr> <!-- SEPARATOR -->
 </table>
 
-<!--  outer table for CPE -->
+
 <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="100%">
 <tr><td>
 <table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
