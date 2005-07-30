@@ -14,6 +14,7 @@ package edu.wustl.catissuecore.domain;
 import java.io.Serializable;
 import java.sql.Clob;
 import java.sql.SQLException;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -84,7 +85,7 @@ public class User extends AbstractDomainObject implements Serializable
      * */
     protected Collection collectionProtocolCollection = new HashSet();
     
-    /**
+    /*
      * @hibernate.many-to-one column="CSM_USER_ID" class="gov.nih.nci.security.authorization.domainobjects.User"
 	 * constrained="true"
 	 * */
@@ -106,7 +107,6 @@ public class User extends AbstractDomainObject implements Serializable
      */
     public User()
     {
-//        this.user.setStartDate(Calendar.getInstance().getTime());
     }
 
     /**
@@ -337,9 +337,14 @@ public class User extends AbstractDomainObject implements Serializable
         {
             UserForm uform = (UserForm) abstractForm;
             this.systemIdentifier = new Long(uform.getSystemIdentifier());
-
+            
             if (user != null)
                 user = new gov.nih.nci.security.authorization.domainobjects.User();
+            
+            if (this.systemIdentifier.intValue() == -1)
+            {
+                this.user.setStartDate(Calendar.getInstance().getTime());
+            }
             
             this.user.setLoginName(uform.getLoginName());
             this.user.setLastName(uform.getLastName());

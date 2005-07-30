@@ -9,7 +9,6 @@
  */
 package edu.wustl.catissuecore.domain;
 
-import edu.wustl.catissuecore.actionForm.AbstractActionForm;
 
 /**
  * Attributes associated with a specific specimen event.

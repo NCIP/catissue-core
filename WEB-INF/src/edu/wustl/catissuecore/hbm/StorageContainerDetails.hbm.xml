@@ -28,7 +28,7 @@
             type="string"
             update="true"
             insert="true"
-            column="ARAMETER_NAME"
+            column="PARAMETER_NAME"
             length="50"
         />
 

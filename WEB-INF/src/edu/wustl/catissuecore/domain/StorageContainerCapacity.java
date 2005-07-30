@@ -9,12 +9,14 @@
  */
 package edu.wustl.catissuecore.domain;
 
+import java.io.Serializable;
+
 /**
  * Capacity defined for a storage container.
  * @hibernate.class table="CATISSUE_STORAGE_CONTAINER_CAPACITY"
  * @author Aniruddha Phadnis
  */
-public class StorageContainerCapacity implements java.io.Serializable
+public class StorageContainerCapacity implements Serializable
 {
 	private static final long serialVersionUID = 1234567890L;
 

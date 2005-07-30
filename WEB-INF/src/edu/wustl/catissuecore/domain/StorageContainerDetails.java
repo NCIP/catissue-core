@@ -61,7 +61,7 @@ public class StorageContainerDetails implements java.io.Serializable
      * @return Name of parameter.
      * @see #setParameterName(String)
      * @hibernate.property name="parameterName" type="string" 
-     * column="ARAMETER_NAME" length="50"
+     * column="PARAMETER_NAME" length="50"
      */
 	public String getParameterName()
 	{
