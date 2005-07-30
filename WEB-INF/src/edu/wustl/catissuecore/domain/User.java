@@ -122,7 +122,7 @@ public class User extends AbstractDomainObject implements Serializable
     /**
 	 * Returns the systemIdentifier assigned to user.
 	 * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"
-	 * unsaved-value="null" generator-class="native"
+	 * unsaved-value="null" generator-class="assigned"
 	 * @return Returns the systemIdentifier.
 	 */
 	public Long getSystemIdentifier()
