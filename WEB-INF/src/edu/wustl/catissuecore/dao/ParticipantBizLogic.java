@@ -10,10 +10,14 @@
 
 package edu.wustl.catissuecore.dao;
 
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 import net.sf.hibernate.HibernateException;
 import edu.wustl.catissuecore.domain.Participant;
+import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
+import edu.wustl.catissuecore.domain.StorageContainerDetails;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.dbManager.DAOException;
 
@@ -37,7 +41,20 @@ public class ParticipantBizLogic extends DefaultBizLogic
 		AbstractDAO dao = DAOFactory.getDAO(Constants.HIBERNATE_DAO);
 		dao.openSession();
 
-	    dao.insert(participant);
+		dao.insert(participant);
+		
+		Collection participantMedicalIdentifierCollection = participant.getParticipantMedicalIdentifierCollection();		
+		Iterator it = participantMedicalIdentifierCollection.iterator();
+		System.out.println("&&&&&&&&&&&&&&&&&&&&&& : "+ participantMedicalIdentifierCollection.size());
+		while(it.hasNext())
+		{
+			ParticipantMedicalIdentifier pmIdentifier = (ParticipantMedicalIdentifier)it.next();
+			pmIdentifier.setParticipant(participant);
+			System.out.println("****************" + pmIdentifier.getMedicalRecordNumber());
+			System.out.println("****************" + pmIdentifier.getParticipant().getSystemIdentifier());
+			System.out.println("****************" + pmIdentifier.getSite().getSystemIdentifier());
+			dao.insert(pmIdentifier);
+		}
 	    
 		dao.closeSession();
 	}

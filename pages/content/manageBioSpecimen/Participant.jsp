@@ -19,22 +19,24 @@
 			spreqno.className="formSerialNumberField";
 			sname=(q+1);
 			spreqno.innerHTML="" + sname;
-		
+
 			//Second Cell
 			var spreqtype=x.insertCell(1);
 			spreqtype.className="formField";
 			sname="";
 
-			sname = "<input type='text' class='formFieldSized15' name='value(txtkey" + (q+1) +")'>";
+			var abc = "value(ParticipantMedicalIdentifier:" + (q+1) + "_site)";
+			sname="<select name='" + abc + "' size='1' class='formFieldSized15' id='participantMedicalRecordSource" + (q+1) + "'><option value='-- Select --'>-- Select --</option></select>";
 			spreqtype.innerHTML="" + sname;
 		
-			//Third Cell
+			//Third Cellvalue(ParticipantMedicalIdentifier:1_medicalRecordNumber)
 			var spreqsubtype=x.insertCell(2);
 			spreqsubtype.className="formField";
 			sname="";
 		
 			sname= "";
-			sname = "<input type='text' class='formFieldSized15' name='value(txtval" + (q+1) +")'>";
+			//sname = "<input type='text' class='formFieldSized15' name='value(txtval" + (q+1) +")'>";
+			sname="<input type='text' name='value(ParticipantMedicalIdentifier:" + (q+1) + "_medicalRecordNumber)' size='30' value='' class='formFieldSized15' id='participantMedicalRecordNumber'>";
 			spreqsubtype.innerHTML="" + sname;
 		}
 	</script>
@@ -218,7 +220,7 @@
 					 <td class="formField">
 					 <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
 					 <html:text styleClass="formDateSized" size="25" styleId="birthDate" property="birthDate" readonly="true"/>
-						<a href="javascript:show_calendar('participantForm.birthDate');">
+						<a href="javascript:show_calendar('participantForm.birthDate','','','MM-DD-YYYY');">
 							<img src="images\calendar.gif" width=24 height=22 border=0>
 						</a>
 					 </td>
@@ -308,12 +310,12 @@
 				 <tr>
 				 	<td class="formSerialNumberField" width="5">1.</td>
 				    <td class="formField">
-						<html:select property="participantMedicalRecordSource(1)" styleClass="formFieldSized15" styleId="participantMedicalRecordSource" size="1" disabled="<%=readOnlyForAll%>">
-							<html:options name="participantMedicalRecordSourceList" labelName="participantMedicalRecordSourceList"/>		
+						<html:select property="value(ParticipantMedicalIdentifier:1_site)" styleClass="formFieldSized15" styleId="participantMedicalRecordSource" size="1" disabled="<%=readOnlyForAll%>">
+							<html:options name="siteIdList" labelName="siteList"/>		
 						</html:select>
 					</td>
 				    <td class="formField">
-				     	<html:text styleClass="formFieldSized" size="30" styleId="participantMedicalRecordNumber" property="participantMedicalRecordNumber(1)" readonly="<%=readOnlyForAll%>"/>
+				     	<html:text styleClass="formFieldSized15" size="30" styleId="participantMedicalRecordNumber" property="value(ParticipantMedicalIdentifier:1_medicalRecordNumber)" readonly="<%=readOnlyForAll%>"/>
 				    </td>
 				 </tr>	
 				 </tbody>

@@ -13,11 +13,13 @@ package edu.wustl.catissuecore.domain;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Map;
 
 import edu.wustl.catissuecore.actionForm.AbstractActionForm;
 import edu.wustl.catissuecore.actionForm.ParticipantForm;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -386,7 +388,15 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 	        this.genotypicGender	= form.getGenotypicGender();
 	        this.race				= form.getRace();
 	        this.socialSecurityNumber=form.getSocialSecurityNumber();
-	        this.birthDate			= Utility.parseDate(form.getBirthDate(),Constants.DATE_PATTERN_YYYY_MM_DD);
+	        this.birthDate			= Utility.parseDate(form.getBirthDate(),Constants.DATE_PATTERN_MM_DD_YYYY);
+	        
+	        Map map = form.getValues();
+	        System.out.println("MAP "+map);
+	        MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.domain");
+	        Collection pmiCollection = parser.generateData(map);
+	        //System.out.println("COLLECTION *******    "+pmiCollection.size());
+	        this.setParticipantMedicalIdentifierCollection(pmiCollection);
+	        System.out.println("@@@@@@@@@@@MAP: "+this.getParticipantMedicalIdentifierCollection());
 	    }
 	    catch(Exception excp)
 	    {

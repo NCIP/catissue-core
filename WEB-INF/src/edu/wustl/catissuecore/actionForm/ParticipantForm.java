@@ -12,6 +12,7 @@
 package edu.wustl.catissuecore.actionForm;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -95,9 +96,14 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
      */
     protected String activityStatus = "";
 
-    private Map participantMedicalRecordSources = new HashMap();
+//    private Map participantMedicalRecordSources = new HashMap();
+//    
+//    private Map participantMedicalRecordNumbers = new HashMap();
     
-    private Map participantMedicalRecordNumbers = new HashMap();
+    /**
+	 * Map to handle values of all the CollectionProtocol Events
+	 */
+	protected Map values = new HashMap();
     
     /**
      * Initializes an empty ParticipantForm object. 
@@ -118,7 +124,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
         this.lastName = participant.getLastName();
         this.firstName = participant.getFirstName();
         this.middleName = participant.getMiddleName();
-        this.birthDate = Utility.parseDateToString(participant.getBirthDate(),Constants.DATE_PATTERN); 
+        this.birthDate = Utility.parseDateToString(participant.getBirthDate(),Constants.DATE_PATTERN_MM_DD_YYYY);
         this.genotypicGender = participant.getGenotypicGender();
         this.socialSecurityNumber = participant.getSocialSecurityNumber();
         this.race = participant.getRace();
@@ -344,25 +350,25 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 		this.ethnicity = ethnicity;
 	}
     
-    public void setParticipantMedicalRecordSource(String key, Object value)
-    {
-        participantMedicalRecordSources.put(key, value);
-    }
-    
-    public Object getParticipantMedicalRecordSource(String key)
-    {
-        return participantMedicalRecordSources.get(key);
-    }
-    
-    public void setParticipantMedicalRecordNumber(String key, Object value)
-    {
-        participantMedicalRecordNumbers.put(key,value);
-    }
-    
-    public Object getParticipantMedicalRecordNumber(String key)
-    {
-        return participantMedicalRecordNumbers.get(key);
-    }
+//    public void setParticipantMedicalRecordSource(String key, Object value)
+//    {
+//        participantMedicalRecordSources.put(key, value);
+//    }
+//    
+//    public Object getParticipantMedicalRecordSource(String key)
+//    {
+//        return participantMedicalRecordSources.get(key);
+//    }
+//    
+//    public void setParticipantMedicalRecordNumber(String key, Object value)
+//    {
+//        participantMedicalRecordNumbers.put(key,value);
+//    }
+//    
+//    public Object getParticipantMedicalRecordNumber(String key)
+//    {
+//        return participantMedicalRecordNumbers.get(key);
+//    }
     
     /**
      * Checks the operation to be performed is add operation or not.
@@ -451,4 +457,52 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
          }
         return errors;
      }
+     
+     
+     /**
+      * Associates the specified object with the specified key in the map.
+      * @param key the key to which the object is mapped.
+      * @param value the object which is mapped.
+      */
+     public void setValue(String key, Object value) 
+     {
+             values.put(key, value);
+     }
+
+     /**
+      * Returns the object to which this map maps the specified key.
+      * @param key the required key.
+      * @return the object to which this map maps the specified key.
+      */
+     public Object getValue(String key) 
+     {
+         return values.get(key);
+     }
+     
+ 	
+ 	/**
+ 	 * @return Returns the values.
+ 	 */
+ 	public Collection getAllValues() 
+ 	{
+ 		return values.values();
+ 	}
+
+ 	/**
+ 	 * @param values
+ 	 *            The values to set.
+ 	 */
+ 	public void setValues(Map values)
+ 	{
+ 		this.values = values;
+ 	}
+ 	
+ 	/**
+ 	 * @param values
+ 	 *            The values to set.
+ 	 */
+ 	public Map getValues()
+ 	{
+ 		return this.values;
+ 	}
  }
