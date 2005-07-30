@@ -3,7 +3,7 @@
  * <p>Description:  A registration of a Participant to a Collection Protocol.</p>
  * Copyright:    Copyright (c) year
  * Company: Washington University, School of Medicine, St. Louis.
- * @author Gautam Shetty
+ * @author Ajay Sharma
  * @version 1.00
  */
 
@@ -12,12 +12,18 @@ package edu.wustl.catissuecore.domain;
 import java.io.Serializable;
 import java.util.Date;
 
+import edu.wustl.catissuecore.actionForm.AbstractActionForm;
+import edu.wustl.catissuecore.actionForm.CollectionProtocolRegistrationForm;
+import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.common.util.logger.Logger;
+
 /**
  * A registration of a Participant to a Collection Protocol.
  * @hibernate.class table="CATISSUE_COLLECTION_PROTOCOL_REGISTRATION"
  * @author gautam_shetty
  */
-public class CollectionProtocolRegistration implements Serializable
+public class CollectionProtocolRegistration extends AbstractDomainObject implements Serializable
 {
     private static final long serialVersionUID = 1234567890L;
 
@@ -35,18 +41,29 @@ public class CollectionProtocolRegistration implements Serializable
     /**
      * Date on which the Participant is registered to the Collection Protocol.
      */
-    protected Date registrationDate;
+    protected Date registrationDate= new Date();
 
     /**
      * An individual from whom a specimen is to be collected.
      */
-    private Participant participant;
+    private Participant participant=new Participant();
 
     /**
      * A set of written procedures that describe how a 
      * biospecimen is prospectively collected.
      */
-    private CollectionProtocol collectionProtocol;
+    private CollectionProtocol collectionProtocol=new CollectionProtocol();
+
+	public CollectionProtocolRegistration()
+	{
+		
+	}
+	
+	public CollectionProtocolRegistration(AbstractActionForm form)
+	{
+		setAllValues(form);
+	}
+
 
     /**
      * Returns the system generated unique systemIdentifier.
@@ -170,4 +187,27 @@ public class CollectionProtocolRegistration implements Serializable
     {
         this.collectionProtocol = collectionProtocol;
     }
+
+	/* (non-Javadoc)
+	 * @see edu.wustl.catissuecore.domain.AbstractDomainObject#setAllValues(edu.wustl.catissuecore.actionForm.AbstractActionForm)
+	 */
+	public void setAllValues(AbstractActionForm abstractForm) {
+		                  
+		CollectionProtocolRegistrationForm form = (CollectionProtocolRegistrationForm)abstractForm;
+		try
+		{
+			this.systemIdentifier = new Long(form.getSystemIdentifier());
+			this.registrationDate = Utility.parseDate(form.getRegistrationDate(),Constants.DATE_PATTERN_YYYY_MM_DD);
+			this.protocolParticipantIdentifier = form.getParticipantProtocolID();
+			this.participant.setSystemIdentifier(new Long(form.getParticipantID()));
+			this.collectionProtocol.setSystemIdentifier(new Long(form.getCollectionProtocolID()));
+
+		}catch(Exception e){
+
+			Logger.out.error(e.getMessage());
+		}
+		
+		// TODO Auto-generated method stub
+		
+	}
 }

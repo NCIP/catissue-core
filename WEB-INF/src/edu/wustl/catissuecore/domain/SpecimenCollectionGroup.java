@@ -14,20 +14,22 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
 
+import edu.wustl.catissuecore.actionForm.AbstractActionForm;
+
 /**
  * An event that results in the collection 
  * of one or more specimen from a participant.
  * @hibernate.class table="CATISSUE_SPECIMEN_COLLECTION_GROUP"
  * @author gautam_shetty
  */
-public class SpecimenCollectionGroup implements Serializable
+public class SpecimenCollectionGroup extends AbstractDomainObject implements Serializable
 {
     private static final long serialVersionUID = 1234567890L;
 
-    /**
+     /**
      * System generated unique systemIdentifier.
      */
-    protected Integer systemIdentifier;
+    protected Long systemIdentifier;
 
     /**
      * Participant's clinical diagnosis at 
@@ -74,28 +76,7 @@ public class SpecimenCollectionGroup implements Serializable
      */
     protected CollectionProtocolRegistration collectionProtocolRegistration;
 
-    /**
-     * Returns the system generated unique systemIdentifier.
-     * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"
-     * unsaved-value="null" generator-class="native"
-     * @return the system generated unique systemIdentifier.
-     * @see #setSystemIdentifier(Long)
-     * */
-    public Integer getSystemIdentifier()
-    {
-        return systemIdentifier;
-    }
-
-    /**
-     * Sets the system generated unique systemIdentifier.
-     * @param systemIdentifier the system generated unique systemIdentifier.
-     * @see #getSystemIdentifier()
-     * */
-    public void setSystemIdentifier(Integer systemIdentifier)
-    {
-        this.systemIdentifier = systemIdentifier;
-    }
-
+    
     /**
      * Returns the participant's clinical diagnosis at 
      * this collection event (e.g. Prostate Adenocarcinoma).
@@ -295,4 +276,27 @@ public class SpecimenCollectionGroup implements Serializable
     {
         this.collectionProtocolRegistration = collectionProtocolRegistration;
     }
+
+	/* (non-Javadoc)
+	 * @see edu.wustl.catissuecore.domain.AbstractDomainObject#setAllValues(edu.wustl.catissuecore.actionForm.AbstractActionForm)
+	 */
+	public void setAllValues(AbstractActionForm abstractForm) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	/**
+	 * @return
+	 */
+	public Long getSystemIdentifier() {
+		return systemIdentifier;
+	}
+
+	/**
+	 * @param systemIdentifier
+	 */
+	public void setSystemIdentifier(Long systemIdentifier) {
+		this.systemIdentifier = systemIdentifier;
+	}
+
 }

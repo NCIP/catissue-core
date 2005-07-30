@@ -14,6 +14,7 @@ PUBLIC
 		<form-bean name="loginForm" type="edu.wustl.catissuecore.actionForm.LoginForm"/>
 		<form-bean name="newSpecimenForm" type="edu.wustl.catissuecore.actionForm.NewSpecimenForm"/>
 		<form-bean name="participantForm" type="edu.wustl.catissuecore.actionForm.ParticipantForm"/>
+		<form-bean name="collectionProtocolRegistrationForm" type="edu.wustl.catissuecore.actionForm.CollectionProtocolRegistrationForm"/>
 		<form-bean name="specimenCollectionGroupForm" type="edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm"/>
 		<form-bean name="institutionForm" type="edu.wustl.catissuecore.actionForm.InstitutionForm"/>
 		<form-bean name="collectionProtocolForm" type="edu.wustl.catissuecore.actionForm.CollectionProtocolForm"/>
@@ -143,6 +144,46 @@ PUBLIC
 			<forward name="failure" path="/Participant.do?operation=edit&amp;pageOf="/>
 		</action>    
 		<!-- Participant Actions Ends -->
+		
+		<!-- Collection Protocol Registration Actions Begins -->
+		
+        <action path="/CollectionProtocolRegistration"
+			type="edu.wustl.catissuecore.action.CollectionProtocolRegistrationAction"
+			scope="request">
+			<forward name="success" path=".catissuecore.collectionProtocolRegistrationDef" />
+			<forward name="failure" path=".catissuecore.collectionProtocolRegistrationDef" />
+		</action>
+
+		<action path="/CollectionProtocolRegistrationAdd"
+			type="edu.wustl.catissuecore.action.CommonAddEditAction"
+			name="collectionProtocolRegistrationForm"
+			validate="true"
+			input="/CollectionProtocolRegistration.do?operation=add"
+			scope="request">
+			<forward name="success" path=".catissuecore.collectionProtocolRegistrationAddSuccessDef" />
+			<forward name="failure" path="/error.jsp" />
+		</action>
+		
+		<action path="/CollectionProtocolRegistrationEdit"
+			type="edu.wustl.catissuecore.action.CommonAddEditAction"
+			name="collectionProtocolRegistrationForm"
+			validate="true"
+			input="/CollectionProtocolRegistration.do?operation=edit"
+			scope="request">
+			<forward name="success" path=".catissuecore.collectionProtocolRegistrationEditSuccessDef" />
+			<forward name="failure" path="/error.jsp" />
+		</action>
+		
+		<action path="/CollectionProtocolRegistrationSearch"
+		    type="edu.wustl.catissuecore.action.CommonSearchAction"
+			name="collectionProtocolRegistrationForm"
+			validate="true"
+			input="/CollectionProtocolRegistrationSearch.do?operation=edit"
+			scope="request">
+			<forward name="success" path="/CollectionProtocolRegistration.do?operation=edit"/>
+			<forward name="failure" path="/CollectionProtocolRegistration.do?operation=edit"/>
+		</action>    
+		<!-- Collection Protocol Registration Actions Ends -->
 		
 		<!-- Institution Actions Begins-->
 		<action path="/Institution"

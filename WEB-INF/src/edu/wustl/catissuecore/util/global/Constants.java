@@ -27,6 +27,9 @@ public class Constants
 	
 	public static final String DATE_PATTERN = "yyyy-MM-dd HH:mm aa";
 	public static final String DATE_PATTERN_YYYY_MM_DD = "yyyy-MM-dd";
+	
+	public static final String DATE_PATTERN = "yyyy-MM-dd HH:mm aa";
+	public static final String DATE_PATTERN_YYYY_MM_DD = "yyyy-MM-dd";
 	public static final String DATE_PATTERN_MM_DD_YYYY = "MM-dd-yyyy";
 	//DAO Constants.
 	public static final int HIBERNATE_DAO = 1;
@@ -73,6 +76,7 @@ public class Constants
 	public static final String PARTICIPANTLIST = "participantList";
 	public static final String PARTICIPANTIDLIST = "participantIdList";
 	public static final String PROTOCOLLIST = "protocolList";
+	public static final String PROTOCOLIDLIST = "protocolIdList";
 	public static final String TIMEHOURLIST = "timeHourList";
 	public static final String TIMEMINUTESLIST = "timeMinutesList";
 	public static final String TIMEAMPMLIST = "timeAMPMList";
@@ -90,6 +94,7 @@ public class Constants
 	public static final String SITEIDLIST="siteIdList";
 	public static final String USERIDLIST = "userIdList";
 	public static final String STORAGETYPEIDLIST="storageTypeIdList";
+
 	//New Specimen lists.
 	public static final String SPECIMEN_COLLECTION_GROUP_LIST = "specimenCollectionGroupIdList";
 	public static final String SPECIMEN_TYPE_LIST = "specimenTypeList";
@@ -104,6 +109,7 @@ public class Constants
 	public static final String PROTOCOL_TITLE_LIST = "protocolTitleList";
 	public static final String PARTICIPANT_NAME_LIST = "participantNameList";
 	public static final String PROTOCOL_PARTICIPANT_NUMBER_LIST = "protocolParticipantNumberList";
+	public static final String PROTOCOL_PARTICIPANT_NUMBER_ID_LIST = "protocolParticipantNumberIdList";
 	public static final String STUDY_CALENDAR_EVENT_POINT_LIST = "studyCalendarEventPointList";
 	public static final String CLINICAL_STATUS_LIST = "cinicalStatusList";
 	public static final String SPECIMEN_CLASS_LIST = "specimenClassList";
@@ -158,6 +164,11 @@ public class Constants
 	public static final String DEPARTMENT_SEARCH_ACTION = "DepartmentSearch.do";
 	public static final String DEPARTMENT_ADD_ACTION = "DepartmentAdd.do";
 	public static final String DEPARTMENT_EDIT_ACTION = "DepartmentEdit.do";
+	
+    //Constants required in CollectionProtocolRegistration.jsp Page
+	public static final String COLLECTION_PROTOCOL_REGISTRATION_SEARCH_ACTION = "CollectionProtocolRegistrationSearch.do";
+	public static final String COLLECTIONP_ROTOCOL_REGISTRATION_ADD_ACTION = "CollectionProtocolRegistrationAdd.do";
+	public static final String COLLECTION_PROTOCOL_REGISTRATION_EDIT_ACTION = "CollectionProtocolRegistrationEdit.do";
 	
 	//Constants required in CancerResearchGroup.jsp Page
 	public static final String CANCER_RESEARCH_GROUP_SEARCH_ACTION = "CancerResearchGroupSearch.do";
@@ -271,7 +282,11 @@ public class Constants
 	public static final int FROZEN_EVENT_PARAMETERS_FORM_ID = 16;
 	public static final int CHECKIN_CHECKOUT_EVENT_PARAMETERS_FORM_ID = 17;
 	public static final int RECEIVED_EVENT_PARAMETERS_FORM_ID = 18;
-
+	public static final int COLLECTION_PROTOCOL_REGISTRATION_FORM_ID = 19;
+	public static final int SPECIMEN_COLLECTION_GROUP_FORM_ID = 20;
+	
+	
+	
 	//Status message key Constants
 	public static final String STATUS_MESSAGE_KEY = "statusMessageKey";
 	

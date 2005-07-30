@@ -115,9 +115,10 @@
 							<bean:message key="specimenCollectionGroup.protocolTitle"/>
 						</label>
 					</td>
+					
 					<td class="formField">
 				     	<html:select property="protocolTitle" styleClass="formFieldSized" styleId="protocolTitle" size="1" disabled="<%=readOnlyForAll%>">
-							<html:options name="protocolTitleList" labelName="protocolTitleList"/>		
+							<html:options name="protocolIdList" labelName="protocolList"/>		
 						</html:select>
 		        	</td>
 				 </tr>
@@ -128,9 +129,10 @@
 				     		<bean:message key="specimenCollectionGroup.collectedByParticipant"/>
 				     	</html:radio>
 				    </td>
+				    
 				    <td class="formField">
 				     	<html:select property="participantName" styleClass="formFieldSized" styleId="participantName" size="1" disabled="<%=readOnlyForAll%>">
-							<html:options name="participantNameList" labelName="participantNameList"/>		
+							<html:options name="participantIdList" labelName="participantList"/>		
 						</html:select>
 		        	</td>
 				 </tr>
@@ -143,7 +145,7 @@
 				    </td>
 				    <td class="formField">
 				     	<html:select property="protocolParticipantNumber" styleClass="formFieldSized" styleId="protocolParticipantNumber" size="1" disabled="<%=readOnlyForAll%>">
-							<html:options name="protocolParticipantNumberList" labelName="protocolParticipantNumberList"/>		
+							<html:options name='<%= Constants.PROTOCOL_PARTICIPANT_NUMBER_LIST%>' labelName="protocolParticipantNumberList"/>		
 						</html:select>
 		        	</td>
 				 </tr>

@@ -98,7 +98,9 @@ public class DomainObjectFactory
             	//StorageContainerForm storageContainerForm = (StorageContainerForm) form;
             	abstractDomain = new ReceivedEventParameters(form);            	
             	break;
-            	
+            case Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID:
+			   abstractDomain = new CollectionProtocolRegistration(form);
+			   break;
         }
         return abstractDomain;
     }

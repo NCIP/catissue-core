@@ -219,6 +219,20 @@
 	<definition name=".catissuecore.participantEditSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
 		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>
+
+	<!--Ajay For collection protocol reg-->
+	<definition name=".catissuecore.collectionProtocolRegistrationDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/CollectionProtocolRegistration.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.collectionProtocolRegistrationAddSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/common/success.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.collectionProtocolRegistrationEditSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/common/success.jsp" />
+	</definition>
+	
 	
 	<definition name=".catissuecore.accessionDef" extends=".catissuecore.manageBioSpecimenHomeDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/Accession.jsp" />

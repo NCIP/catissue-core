@@ -12,6 +12,8 @@ package edu.wustl.catissuecore.actionForm;
 
 import org.apache.struts.action.ActionForm;
 
+import edu.wustl.catissuecore.domain.Participant;
+
 
 /**
  * SpecimenCollectionGroupForm Class is used to encapsulate 
@@ -27,7 +29,7 @@ public class SpecimenCollectionGroupForm extends ActionForm
     
     private String collectedByParticipant = "";
     
-    private String participantName = "";
+    private Participant participantName = new Participant();;
     
     private String collectedByProtocolParticipantNumber = "";
     
@@ -128,20 +130,7 @@ public class SpecimenCollectionGroupForm extends ActionForm
     {
         this.medicalRecordNumber = medicalRecordNumber;
     }
-    /**
-     * @return Returns the participantName.
-     */
-    public String getParticipantName()
-    {
-        return participantName;
-    }
-    /**
-     * @param participantName The participantName to set.
-     */
-    public void setParticipantName(String participantName)
-    {
-        this.participantName = participantName;
-    }
+   
     /**
      * @return Returns the protocolParticipantNumber.
      */
@@ -198,4 +187,18 @@ public class SpecimenCollectionGroupForm extends ActionForm
     {
         this.systemIdentifier = systemIdentifier;
     }
+	/**
+	 * @return
+	 */
+	public Participant getParticipantName() {
+		return participantName;
+	}
+
+	/**
+	 * @param participantName
+	 */
+	public void setParticipantName(Participant participantName) {
+		this.participantName = participantName;
+	}
+
 }
