@@ -43,7 +43,7 @@ public class BizLogicFactory
         	case Constants.SITE_FORM_ID:
         		abstractBizLogic = new SiteBizLogic();
         		break;
-        	case Constants.BIOHAZARD_FORM_ID:
+			case Constants.BIOHAZARD_FORM_ID:
         		abstractBizLogic = new BiohazardBizLogic();
         		break;
         	case Constants.PARTICIPANT_FORM_ID:
@@ -64,9 +64,17 @@ public class BizLogicFactory
         	case Constants.COLLECTION_PROTOCOL_FORM_ID:
         		abstractBizLogic = new CollectionProtocolBizLogic();
         		break;
+			case Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID:
+				abstractBizLogic = new CollectionProtocolRegistrationBizLogic();
+				break;	
+			
+			case Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID:
+				abstractBizLogic = new SpecimenCollectionGroupBizLogic();
+				break;				
             default:
                 abstractBizLogic = new DefaultBizLogic();
             	break;
+            	
         }
         return abstractBizLogic;
     }
