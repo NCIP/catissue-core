@@ -11,12 +11,17 @@
 package edu.wustl.catissuecore.dao;
 
 import java.util.List;
+import java.util.Vector;
+
+import sun.security.action.GetLongAction;
 
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.Transaction;
+import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.dbManager.DBUtil;
 import edu.wustl.common.util.logger.Logger;
@@ -238,10 +243,29 @@ public class HibernateDAO extends AbstractDAO
         List list = null;
         try
         {
-
+            StringBuffer sqlBuff = new StringBuffer();
+            
+            String className = parseClassName(sourceObjectName);
+            
+            if(selectColumnName != null && selectColumnName.length>0)
+            {
+                sqlBuff.append("Select ");
+                for(int i = 0; i< selectColumnName.length;i++)
+                {
+                    sqlBuff.append(className+"."+selectColumnName[i]);
+                    if(i != selectColumnName.length-1)
+                    {
+                        sqlBuff.append(", ");
+                    }
+                }
+                sqlBuff.append(" ");
+            }
+            Logger.out.debug(" String : "+sqlBuff.toString());
+            
             Query query = null;
-            StringBuffer sqlBuff = new StringBuffer("from " + sourceObjectName
-                    + " ");
+            sqlBuff.append("from " + sourceObjectName
+                    + " " + className);
+            Logger.out.debug(" String : "+sqlBuff.toString());
 
             if ((whereColumnName != null && whereColumnName.length > 0)
                     && (whereColumnCondition != null && whereColumnCondition.length == whereColumnName.length)
@@ -250,8 +274,8 @@ public class HibernateDAO extends AbstractDAO
                 if (joinCondition == null)
                     joinCondition = Constants.AND_JOIN_CONDITION;
 
-                String className = parseClassName(sourceObjectName);
-                sqlBuff.append(className + " where ");
+                
+                sqlBuff.append(" where ");
 
                 //Adds the column name and search condition in where clause. 
                 for (int i = 0; i < whereColumnName.length; i++)
@@ -262,14 +286,14 @@ public class HibernateDAO extends AbstractDAO
                         sqlBuff.append(" " + joinCondition + " ");
                 }
 
-                Logger.out.debug(sqlBuff);
+                System.out.println(sqlBuff.toString());
 
                 query = session.createQuery(sqlBuff.toString());
 
                 //Adds the column values in where clause
                 for (int i = 0; i < whereColumnValue.length; i++)
                 {
-                    Logger.out.debug("whereColumnValue[i]. "
+                    System.out.println("whereColumnValue[i]. "
                             + whereColumnValue[i]);
                     query.setParameter(i, whereColumnValue[i]);
                 }
@@ -278,14 +302,77 @@ public class HibernateDAO extends AbstractDAO
             {
                 query = session.createQuery(sqlBuff.toString());
             }
+            
+            
             list = query.list();
+            
+            Logger.out.debug(" String : "+sqlBuff.toString());
         }
-        catch (HibernateException hibExp)
+        catch (Exception hibExp)
         {
-            Logger.out.error(hibExp.getMessage(),hibExp);
+            Logger.out.debug(hibExp.getMessage(),hibExp);
         }
         return list;
     }
+    
+    
+//    public static void main(String[] args)
+//    {
+//        DefaultBizLogic bizLogic = new DefaultBizLogic();
+//        String[] dispNames ={"firstName","lastName"};
+//        String value = new String("systemIdentifier");
+//        String separator = new String(",");
+//        try
+//        {
+//            List list = new HibernateDAO().getList(Participant.class.getName(), dispNames, value,separator );
+//        }
+//        catch (DAOException e1)
+//        {
+//            Logger.out.debug("Exception:"+e1.getMessage(),e1);
+//        }
+//    }
+    
+//    public Vector getList(String sourceObjectName, String[] displayNameFields, String valueField, String separatorBetweenFields) throws DAOException
+//    {
+//        Vector nameValuePairs = new Vector();
+//        
+//        String[] selectColumnName = new String[displayNameFields.length+1];
+//        for(int i=0;i<displayNameFields.length;i++)
+//        {
+//            selectColumnName[i]=displayNameFields[i];
+//        }
+//        selectColumnName[displayNameFields.length]=valueField;
+//        List results = retrieve(sourceObjectName, selectColumnName, null, null, null, null);
+//        
+//        NameValueBean nameValueBean = new NameValueBean();
+//        Object[] objects = null;
+//        StringBuffer nameBuff=new StringBuffer();
+//        if(results != null)
+//        {
+//            for(int i=0; i<results.size();i++)
+//            {
+//                objects = (Object[]) results.get(i);
+//                if(objects != null)
+//                {
+//                    for(int j=0 ; i<objects.length -1 ; j++)
+//                    {
+//                        nameBuff.append(objects[i]);
+//                        if(j<objects.length-2)
+//                        {
+//                            nameBuff.append(separatorBetweenFields);
+//                        }
+//                    }
+//                    nameValueBean = new NameValueBean();
+//                    nameValueBean.setName(nameBuff.toString());
+//                    nameValueBean.setValue(objects[objects.length-1].toString());
+//                    Logger.out.debug(nameValueBean.toString());
+//                    nameValuePairs.add(nameValueBean);
+//                }
+//            }
+//        }
+//        
+//        return nameValuePairs;
+//    }
     
     
     /* (non-Javadoc)
