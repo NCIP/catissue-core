@@ -83,7 +83,7 @@
 										    <tr>
 										      <td>
 										      	<div>
-										      		<a class="loginSignup" href="SignUp.do?operation=add&amp;pageOf=">
+										      		<a class="loginSignup" href="SignUp.do?operation=add&amp;pageOf=pageOfSignUp">
 										      			<bean:message key="app.signup"/>
 										      		</a>
 										      	</div>
