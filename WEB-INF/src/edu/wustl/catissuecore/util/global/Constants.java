@@ -43,7 +43,6 @@ public class Constants
 
 	//Constants required for Forgot Password
 	public static final String FORGOT_PASSWORD = "forgotpassword";
-	public static final String YOUR_PASSWORD = "Your Password";
 	
 	public static final String IDENTIFIER = "systemIdentifier";
 	public static final String LOGINNAME = "loginName";
@@ -92,7 +91,7 @@ public class Constants
 	public static final String SITEIDLIST="siteIdList";
 	public static final String USERIDLIST = "userIdList";
 	public static final String STORAGETYPEIDLIST="storageTypeIdList";
-
+	
 	//New Specimen lists.
 	public static final String SPECIMEN_COLLECTION_GROUP_LIST = "specimenCollectionGroupIdList";
 	public static final String SPECIMEN_TYPE_LIST = "specimenTypeList";
@@ -113,6 +112,9 @@ public class Constants
 	public static final String SPECIMEN_CLASS_LIST = "specimenClassList";
 	public static final String SPECIMEN_CLASS_ID_LIST = "specimenClassIdList";
 	
+	public static final String STORAGE_CONTAINER_GRID_OBJECT = "storageContainerGridObject";
+	public static final String STORAGE_CONTAINER_CHILDREN_STATUS = "storageContainerChildrenStatus";
+	
 	//event parameters lists
 	public static final String METHODLIST = "methodList";
 	public static final String HOURLIST = "hourList";
@@ -122,6 +124,7 @@ public class Constants
 	public static final String USER_SEARCH_ACTION = "UserSearch.do";
 	public static final String USER_ADD_ACTION = "UserAdd.do";
 	public static final String USER_EDIT_ACTION = "UserEdit.do";
+	public static final String SIGNUP_USER_ADD_ACTION = "SignUpUserAdd.do";
 
 	//Constants required in Accession.jsp Page
 	public static final String ACCESSION_SEARCH_ACTION = "AccessionSearch.do";
@@ -137,6 +140,8 @@ public class Constants
 	public static final String STORAGE_CONTAINER_SEARCH_ACTION = "StorageContainerSearch.do";
 	public static final String STORAGE_CONTAINER_ADD_ACTION = "StorageContainerAdd.do";
 	public static final String STORAGE_CONTAINER_EDIT_ACTION = "StorageContainerEdit.do";
+	
+	public static final String SHOW_STORAGE_CONTAINER_GRID_VIEW_ACTION = "/catissuecore/ShowStorageGridView.do";
 	
 	//Constants required in Site.jsp Page
 	public static final String SITE_SEARCH_ACTION = "SiteSearch.do";
@@ -324,7 +329,14 @@ public class Constants
 	//Query Interface Results View Constants
 	public static final String PAGEOF = "pageOf";
 	public static final String QUERY = "query";
-	public static final String APPROVE_USER_PAGE = "approveUserPage";
+	public static final String PAGEOF_APPROVE_USER = "pageOfApproveUser";
+	public static final String PAGEOF_SIGNUP = "pageOfSignUp";
+	public static final String PAGEOF_USERADD = "pageOfUserAdd";
+	
+	//For Tree Applet
+	public static final String PAGEOF_QUERY_RESULTS = "pageOfQueryResults";
+	public static final String PAGEOF_STORAGE_LOCATION = "pageOfStorageLocation";
+	public static final String PAGEOF_SPECIMEN = "pageOfSpecimen";
 	
 	//Query results view temporary table name.
 	public static final String QUERY_RESULTS_TABLE = "CATISSUE_QUERY_RESULTS";
@@ -696,10 +708,15 @@ public class Constants
 	        SELECT_OPTION,
 	        "Active",
 	        "Disabled",
+	        "Closed"
+	};
+
+	public static final String [] NEW_USER_ACTIVITY_STATUS_VALUES = {
+	        SELECT_OPTION,
+	        "Active",
+	        "Disabled",
 	        "Closed",
-	        "New",
-	        "Reject",
-	        "Pending"
+	        "New"
 	};
 
 	public static final String [] REPORTED_PROBLEM_ACTIVITY_STATUS_VALUES = {
