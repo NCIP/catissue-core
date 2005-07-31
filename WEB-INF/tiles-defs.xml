@@ -167,8 +167,6 @@
 		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>
 
-
-
 	<definition name=".catissuecore.cancerResearchGroupDef" extends=".catissuecore.manageAdminDataHomeDef">
 		<put name="content" value="/pages/content/manageAdministrativeData/CancerResearchGroup.jsp" />
 	</definition>
@@ -180,8 +178,6 @@
 	<definition name=".catissuecore.cancerResearchGroupEditSuccessDef" extends=".catissuecore.manageAdminDataHomeDef">
 		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>
-	
-
 
 	<definition name=".catissuecore.distributionProtocolDef" extends=".catissuecore.manageAdminDataHomeDef">
 		<put name="content" value="/pages/content/manageAdministrativeData/DistributionProtocol.jsp" />
@@ -198,7 +194,7 @@
 	<definition name=".catissuecore.reportProblemEditDef" extends=".catissuecore.manageAdminDataHomeDef">
 		<put name="content" value="/pages/content/common/ReportProblem.jsp" />
 	</definition>
-
+	
 	<!-- Manage Administrative Data tab pages definitions end -->
 
 	<!-- Manage BioSpecimen tab pages definitions start -->
@@ -341,6 +337,15 @@
 	
 	<definition name=".catissuecore.queryResultsSpreadsheetViewDef" extends=".catissuecore.queryDataViewDef">
 		<put name="content" value="/pages/content/search/DataView.jsp"/>
+	</definition>
+	
+	<definition name=".catissuecore.storageLocationViewDef" extends=".catissuecore.queryDataViewDef">
+		<put name="content" value="/pages/content/manageAdministrativeData/StorageContainerLocationView.jsp" />
+	</definition>
+	
+	
+	<definition name=".catissuecore.storageLocationGridViewDef" extends=".catissuecore.queryDataViewDef">
+		<put name="content" value="/pages/content/manageAdministrativeData/StorageContainerGridView.jsp" />
 	</definition>
 	
 	<!-- Query edit pages definitions end -->
