@@ -8,6 +8,18 @@
 
 <head>
 	<script language="JavaScript">
+		var win = null;
+		function NewWindow(mypage,myname,w,h,scroll)
+		{
+			LeftPosition = (screen.width) ? (screen.width-w)/2 : 0;
+			TopPosition = (screen.height) ? (screen.height-h)/2 : 0;
+			settings =
+				'height='+h+',width='+w+',top='+TopPosition+',left='+LeftPosition+',scrollbars='+scroll+',resizable'
+			win = open(mypage,myname,settings)
+			if (win.opener == null)
+				win.opener = self;
+		}
+
 		function onRadioButtonClick(element)
 		{
 			if(element.value == 1)
@@ -211,9 +223,10 @@ function insRow(subdivtag)
 	 						
 							<html:text styleClass="formFieldSized" size="30" styleId="parentContainerId" property="parentContainerId" readonly="<%=readOnlyValue%>" disabled="true"/>
 							&nbsp;
-							<html:submit styleClass="actionButton" styleId="Map" onclick="" disabled="true">
+							<html:button property="mapButton" styleClass="actionButton" styleId="Map" 
+								onclick="javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfStorageLocation','name','810','320','yes');return false" disabled="true">
 								<bean:message key="buttons.map"/>
-							</html:submit>							
+							</html:button>							
 						</td>
 					</tr>
 					<tr>
