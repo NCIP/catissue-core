@@ -11,8 +11,7 @@
 package edu.wustl.catissuecore.action;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.Collection;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -23,17 +22,15 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import edu.wustl.catissuecore.dao.SiteBizLogic;
 import edu.wustl.catissuecore.dao.BizLogicFactory;
-import edu.wustl.catissuecore.domain.User;
-
+import edu.wustl.catissuecore.dao.UserBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
 
 /**
  * This class initializes the fields of the Site Add/Edit webpage.
  * @author aniruddha_phadnis
  */
-public class SiteAction extends Action//BaseAction
+public class SiteAction extends Action
 {
 
     /**
@@ -64,30 +61,9 @@ public class SiteAction extends Action//BaseAction
         
         try
 		{
-        	SiteBizLogic bizLogic = (SiteBizLogic)BizLogicFactory.getBizLogic(Constants.SITE_FORM_ID);
-            ListIterator iterator = null;
-            int i;
-            
-//          Sets the roleList attribute to be used in the Site Add/Edit Page.Constants.SELECT_OPTION;
-            List userList = bizLogic.retrieve(User.class.getName());
-            String[] userArray = new String[userList.size() + 1];
-            String[] userIdArray = new String[userList.size() + 1];
-            iterator = userList.listIterator();
-            
-            userArray[0]	= Constants.SELECT_OPTION;
-            userIdArray[0]	= "-1";
-            
-            i = 1;
-            while (iterator.hasNext())
-            {
-                User user = (User) iterator.next();
-                userArray[i] = user.getUser().getLastName() + ", " + user.getUser().getFirstName();
-                userIdArray[i] = user.getSystemIdentifier().toString();
-                i++;
-            }
-        	
-        	request.setAttribute(Constants.USERLIST, userArray);
-        	request.setAttribute(Constants.USERIDLIST, userIdArray);
+        	UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getBizLogic(Constants.USER_FORM_ID);
+        	Collection coll =  userBizLogic.getUsers(Constants.ACTIVITY_STATUS_ACTIVE);
+        	request.setAttribute(Constants.USERLIST, coll);
 		}
         catch(Exception e)
 		{
