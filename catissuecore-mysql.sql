@@ -196,7 +196,7 @@ create table CATISSUE_SITE (
    IDENTIFIER bigint not null auto_increment,
    NAME varchar(50),
    TYPE varchar(50),
-   EMAIL_ADDRESS varchar(150) not null unique,
+   EMAIL_ADDRESS varchar(150),
    USER_ID bigint,
    ACTIVITY_STATUS varchar(50),
    ADDRESS_ID bigint,
@@ -221,7 +221,6 @@ create table CATISSUE_SPECIMEN_REQUIREMENT (
    IDENTIFIER bigint not null auto_increment,
    SPECIMEN_TYPE varchar(50),
    TISSUE_SITE varchar(50),
-   TISSUE_SIDE varchar(50),
    PATHOLOGY_STATUS varchar(50),
    primary key (IDENTIFIER)
 );
@@ -407,7 +406,7 @@ create table CATISSUE_PARTICIPANT_MEDICAL_IDENTIFIER (
 );
 create table CATISSUE_STORAGE_CONTAINER_DETAILS (
    IDENTIFIER bigint not null auto_increment,
-   ARAMETER_NAME varchar(50),
+   PARAMETER_NAME varchar(50),
    VALUE varchar(50),
    STORAGE_CONTAINER_ID bigint,
    primary key (IDENTIFIER)
@@ -435,6 +434,8 @@ create table CATISSUE_STORAGE_CONTAINER (
    SITE_ID bigint,
    PARENT_CONTAINER_ID bigint,
    STORAGE_CONTAINER_CAPACITY_ID bigint,
+   POSITION_DIMENSION_ONE integer,
+   POSITION_DIMENSION_TWO integer,
    primary key (IDENTIFIER)
 );
 create table CATISSUE_DISTRIBUTION (
@@ -516,7 +517,7 @@ create table CATISSUE_SPECIMEN (
    primary key (IDENTIFIER)
 );
 create table CATISSUE_USER (
-   IDENTIFIER bigint not null auto_increment,
+   IDENTIFIER bigint not null,
    ACTIVITY_STATUS varchar(50),
    DEPARTMENT_ID bigint,
    CANCER_RESEARCH_GROUP_ID bigint,
@@ -635,6 +636,3 @@ alter table CATISSUE_TISSUE_SPECIMEN_REQUIREMENT add index FK67C6950ABC7298A9 (I
 alter table CATISSUE_COLLECTION_EVENT_PARAMETERS add index FKFB1108D4BC7298A9 (IDENTIFIER), add constraint FKFB1108D4BC7298A9 foreign key (IDENTIFIER) references CATISSUE_SPECIMEN_EVENT_PARAMETERS (IDENTIFIER);
 alter table CATISSUE_SPECIMEN_EVENT_PARAMETERS add index FK2C72A2AA60773DB2 (SPECIMEN_ID), add constraint FK2C72A2AA60773DB2 foreign key (SPECIMEN_ID) references CATISSUE_SPECIMEN (IDENTIFIER);
 alter table CATISSUE_SPECIMEN_EVENT_PARAMETERS add index FK2C72A2AA2206F20F (USER_ID), add constraint FK2C72A2AA2206F20F foreign key (USER_ID) references CATISSUE_USER (IDENTIFIER);
-
-alter table CATISSUE_USER add(CSM_USER_ID bigint);
-alter table CATISSUE_USER add index FK_CSM_USER (CSM_USER_ID), add constraint FK_CSM_USER foreign key (CSM_USER_ID) references USER (USER_ID);
