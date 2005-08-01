@@ -77,22 +77,22 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			
 			for(int i=0;i<noOfContainers;i++)
 			{
-				StorageContainer cont = getCopy(container); 
+				StorageContainer cont = new StorageContainer(container); 
 				cont.setName(String.valueOf(i + container.getStartNo().intValue()));
 				dao.insert(cont.getStorageContainerCapacity());
 				dao.insert(cont);
 				
 				Collection storageContainerDetailsCollection = cont.getStorageContainerDetailsCollection();
-				System.out.println("SIZE "+storageContainerDetailsCollection.size());
-				Iterator it = storageContainerDetailsCollection.iterator();
-				while(it.hasNext())
+				if(storageContainerDetailsCollection.size() > 0)
 				{
-					StorageContainerDetails storageContainerDetails = (StorageContainerDetails)it.next();
-					System.out.println("Here "+storageContainerDetails.getParameterName()+" : "+storageContainerDetails.getParameterValue());
-					storageContainerDetails.setStorageContainer(cont);
-					dao.insert(storageContainerDetails);
+					Iterator it = storageContainerDetailsCollection.iterator();
+					while(it.hasNext())
+					{
+						StorageContainerDetails storageContainerDetails = (StorageContainerDetails)it.next();
+						storageContainerDetails.setStorageContainer(cont);
+						dao.insert(storageContainerDetails);
+					}
 				}
-				
 			}
 	    dao.closeSession();
 	}
@@ -121,7 +121,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
     public int getNextContainerNumber(long siteID, long typeID ) throws DAOException
     {
     	String sourceObjectName = "CATISSUE_STORAGE_CONTAINER";
-		String[] selectColumnName = {"max(NAME) MAX_NAME"};
+		String[] selectColumnName = {"max(NAME) as MAX_NAME"};
         String[] whereColumnName = {"STORAGE_TYPE_ID","SITE_ID"};
 		String[] whereColumnCondition = {"=","="};
 		Object[] whereColumnValue = {Long.toString(typeID),Long.toString(siteID)};
@@ -147,20 +147,8 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		return 1;
     }
     
-    private StorageContainer getCopy(StorageContainer oldContainer)
-    {
-    	StorageContainer newContainer = new StorageContainer();
-    	newContainer.setActivityStatus(oldContainer.getActivityStatus());
-    	newContainer.setParentContainer(oldContainer.getParentContainer());
-    	newContainer.setSite(oldContainer.getSite());
-    	newContainer.setStorageContainerCapacity(oldContainer.getStorageContainerCapacity());
-    	newContainer.setStorageType(oldContainer.getStorageType());
-    	newContainer.setTempratureInCentigrade(oldContainer.getTempratureInCentigrade());
-    	newContainer.setStorageContainerDetailsCollection(new HashSet(oldContainer.getStorageContainerDetailsCollection()));
-    	return newContainer;
-    }
-    
-    public Vector getTreeViewData() throws DAOException
+
+public Vector getTreeViewData() throws DAOException
     {
         AbstractDAO dao = DAOFactory.getDAO(Constants.HIBERNATE_DAO);
         dao.openSession();
