@@ -12,6 +12,10 @@ package edu.wustl.catissuecore.domain;
 
 import java.io.Serializable;
 
+import edu.wustl.catissuecore.actionForm.AbstractActionForm;
+import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
+import edu.wustl.common.util.logger.Logger;
+
 /**
  * A molecular derivative (I.e. RNA / DNA / Protein Lysate) 
  * obtained from a specimen.
@@ -39,6 +43,13 @@ public class MolecularSpecimen extends Specimen implements Serializable
      */
     protected Double availableQuantityInMicroGram;
 
+//  Constructor
+    public MolecularSpecimen(AbstractActionForm form)
+    {
+    	super(form);
+    	setAllValues(form);
+    }
+    
     /**
      * Returns the concentration of liquid molecular specimen measured 
      * in microgram per microlitter.
@@ -111,5 +122,25 @@ public class MolecularSpecimen extends Specimen implements Serializable
     public void setAvailableQuantityInMicroGram(Double availableQuantityInMicroGram)
     {
         this.availableQuantityInMicroGram = availableQuantityInMicroGram;
+    }
+    
+    /**
+     * This function Copies the data from an NewSpecimenForm object to a MolecularSpecimen object.
+     * @param siteForm An SiteForm object containing the information about the site.  
+     * */
+    public void setAllValues(AbstractActionForm abstractForm)
+    {
+        try
+        {
+        	super.setAllValues(abstractForm);
+        	NewSpecimenForm form = (NewSpecimenForm) abstractForm;
+        	
+        	this.quantityInMicroGram = new Double(form.getQuantity());
+        	//this.availableQuantityInMicroGram=
+        }
+        catch (Exception excp)
+        {
+            Logger.out.error(excp.getMessage());
+        }
     }
 }

@@ -12,6 +12,10 @@ package edu.wustl.catissuecore.domain;
 
 import java.io.Serializable;
 
+import edu.wustl.catissuecore.actionForm.AbstractActionForm;
+import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
+import edu.wustl.common.util.logger.Logger;
+
 /**
  * A single unit of body fluid specimen that is 
  * collected or created from a Participant.
@@ -34,6 +38,13 @@ public class FluidSpecimen extends Specimen implements Serializable
      */
     protected Double availableQuantityInMiliLiter;
 
+//  Constructor
+    public FluidSpecimen(AbstractActionForm form)
+    {
+    	super(form);
+    	setAllValues(form);
+    }
+    
     /**
      * Returns the initial amount of specimen either 
      * directly collected from participant or created from another specimen.
@@ -80,5 +91,25 @@ public class FluidSpecimen extends Specimen implements Serializable
     public void setAvailableQuantityInMiliLiter(Double availableQuantityInMiliLiter)
     {
         this.availableQuantityInMiliLiter = availableQuantityInMiliLiter;
+    }
+    
+    /**
+     * This function Copies the data from an NewSpecimenForm object to a TissueSpecimen object.
+     * @param siteForm An SiteForm object containing the information about the site.  
+     * */
+    public void setAllValues(AbstractActionForm abstractForm)
+    {
+        try
+        {
+        	super.setAllValues(abstractForm);
+        	NewSpecimenForm form = (NewSpecimenForm) abstractForm;
+        	
+        	this.quantityInMiliLiter = new Double(form.getQuantity());
+        	//this.availableQuantityInMiliLiter =
+        }
+        catch (Exception excp)
+        {
+            Logger.out.error(excp.getMessage());
+        }
     }
 }

@@ -12,6 +12,10 @@ package edu.wustl.catissuecore.domain;
 
 import java.io.Serializable;
 
+import edu.wustl.catissuecore.actionForm.AbstractActionForm;
+import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
+import edu.wustl.common.util.logger.Logger;
+
 /**
  * A biospecimen composed of purified single cells not in the 
  * context of a tissue or other biospecimen fluid.
@@ -34,6 +38,13 @@ public class CellSpecimen extends Specimen implements Serializable
      */
     protected Integer availableQuantityInCellCount;
 
+    //Constructor
+    public CellSpecimen(AbstractActionForm form)
+    {
+    	super(form);
+    	setAllValues(form);
+    }
+    
     /**
      * Returns the absolute number of cells contained in the biospecimen
      * at the time of its generation.
@@ -78,5 +89,25 @@ public class CellSpecimen extends Specimen implements Serializable
     public void setAvailableQuantityInCellCount(Integer availableQuantityInCellCount)
     {
         this.availableQuantityInCellCount = availableQuantityInCellCount;
+    }
+    
+    /**
+     * This function Copies the data from an NewSpecimenForm object to a CellSpecimen object.
+     * @param siteForm An SiteForm object containing the information about the site.  
+     * */
+    public void setAllValues(AbstractActionForm abstractForm)
+    {
+        try
+        {
+        	super.setAllValues(abstractForm);
+        	NewSpecimenForm form = (NewSpecimenForm) abstractForm;
+        	
+        	this.quantityInCellCount = new Integer(form.getQuantity());
+        	//this.availableQuantityInCellCount
+        }
+        catch (Exception excp)
+        {
+            Logger.out.error(excp.getMessage());
+        }
     }
 }
