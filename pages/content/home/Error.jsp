@@ -1,5 +1,8 @@
-<table width="700" border="0" cellspacing="0" cellpadding="0" align="center">
+<%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
+<br>
+  <table width="700" border="0" cellspacing="0" cellpadding="0" align="center">
     
+
     <tr>
       <td>&nbsp;</td>
      </tr>
@@ -8,7 +11,7 @@
        </tr>
        <tr>
           <td align="center">
-            <b>500 Error - The server has encountered a severe error.&nbsp;&nbsp;Please try again.</b>
+            <b>The server has encountered a severe error.&nbsp;&nbsp;Please try again.</b>
             <BR>
           </td>
         </tr>
