@@ -65,57 +65,31 @@ public class UserAction extends Action
         String pageName  = request.getParameter(Constants.PAGEOF);
         request.setAttribute(Constants.PAGEOF,pageName);
 
+        
         try
         {
             AbstractBizLogic dao = BizLogicFactory.getBizLogic(Constants.USER_FORM_ID);
             ListIterator iterator = null;
             int i;
             
-            //Sets the instituteList attribute to be used in the Add/Edit User Page.
-            List instituteList = dao.retrieve(Institution.class.getName());
-            String[] instituteArray = new String[instituteList.size()+1];
-            iterator = instituteList.listIterator();
-            i = 0;
-            instituteArray[i++] = Constants.SELECT_OPTION;
-            while (iterator.hasNext())
-            {
-                Institution institute = (Institution) iterator.next();
-                instituteArray[i] = institute.getName();
-                i++;
-            }
-            request.setAttribute(Constants.INSTITUTIONLIST, instituteArray);
-
+            
+            String sourceObjectName = Institution.class.getName();
+            String[] displayNameFields = {"name"};
+            String valueField = "systemIdentifier";
+            
+            List instituteList = dao.getList(sourceObjectName, displayNameFields, valueField);
+            request.setAttribute(Constants.INSTITUTIONLIST, instituteList);
+            
             //Sets the departmentList attribute to be used in the Add/Edit User Page.
-            List departmentList = dao.retrieve(Department.class.getName());
-            String[] departmentArray = new String[departmentList.size()+1];
-            iterator = departmentList.listIterator();
-            i = 0;
-            departmentArray[i++] = Constants.SELECT_OPTION;
-            while (iterator.hasNext())
-            {
-                Department department = (Department) iterator.next();
-                departmentArray[i] = department.getName();
-                i++;
-            }
-            request.setAttribute(Constants.DEPARTMENTLIST, departmentArray);
-
-            List cancerResearchGroupList = dao.retrieve(CancerResearchGroup.class.getName());
-            String[] cancerResearchGroupArray = new String[cancerResearchGroupList.size()+1];
-            iterator = cancerResearchGroupList.listIterator();
-            i = 0;
-            cancerResearchGroupArray[i++] = Constants.SELECT_OPTION;
-            while (iterator.hasNext())
-            {
-                CancerResearchGroup cancerResearchGroup = 
-                    				(CancerResearchGroup) iterator.next();
-                cancerResearchGroupArray[i] = cancerResearchGroup.getName();
-                i++;
-            }
-            
+            sourceObjectName = Department.class.getName();
+            List departmentList = dao.getList(sourceObjectName, displayNameFields, valueField);
+            request.setAttribute(Constants.DEPARTMENTLIST, departmentList);
+            	
             //Sets the cancerResearchGroupList attribute to be used in the Add/Edit User Page.
-            request.setAttribute(Constants.CANCER_RESEARCH_GROUP_LIST, 
-                    cancerResearchGroupArray);
-            
+            sourceObjectName = CancerResearchGroup.class.getName();
+            List cancerResearchGroupList = dao.getList(sourceObjectName, displayNameFields, valueField);
+            request.setAttribute(Constants.CANCER_RESEARCH_GROUP_LIST, cancerResearchGroupList);
+
             request.setAttribute(Constants.ACTIVITYSTATUSLIST,
                     Constants.ACTIVITY_STATUS_VALUES);
             

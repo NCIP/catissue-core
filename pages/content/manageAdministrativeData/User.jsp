@@ -290,7 +290,7 @@
 						</td>
 						<td class="formField">
 							<html:select property="institution" styleClass="formFieldSized" styleId="institution" size="1">
-								<html:options name="institutionList" labelName="institutionList" />
+								<html:options collection="institutionList" labelProperty="name" property="value"/>
 							</html:select>
 						</td>
 					</tr>
@@ -304,7 +304,7 @@
 						</td>
 						<td class="formField">
 							<html:select property="department" styleClass="formFieldSized" styleId="department" size="1">
-								<html:options name="departmentList" labelName="departmentList" />
+								<html:options collection="departmentList" labelProperty="name" property="value"/>
 							</html:select>
 						</td>
 					</tr>
@@ -318,7 +318,7 @@
 						</td>
 						<td class="formField">
 							<html:select property="cancerResearchGroup" styleClass="formFieldSized" styleId="cancerResearchGroup" size="1">
-								<html:options name="cancerResearchGroupList" labelName="cancerResearchGroupList" />
+								<html:options collection="cancerResearchGroupList" labelProperty="name" property="value"/>
 							</html:select>
 						</td>
 					</tr>
