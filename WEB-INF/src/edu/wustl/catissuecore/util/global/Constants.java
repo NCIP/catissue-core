@@ -17,7 +17,8 @@ package edu.wustl.catissuecore.util.global;
 
 public class Constants
 {	
-    
+	public static final String YOUR_PASSWORD="TMP";
+	
     //Constants used for authentication module.
     public static final String LOGIN = "login";
     public static final String USER = "user";
@@ -217,7 +218,13 @@ public class Constants
 	public static final String FLUID_SPECIMEN_REVIEW_EVENT_PARAMETERS_SEARCH_ACTION = "FluidSpecimenReviewEventParametersSearch.do";
 	public static final String FLUID_SPECIMEN_REVIEW_EVENT_PARAMETERS_ADD_ACTION = "FluidSpecimenReviewEventParametersAdd.do";
 	public static final String FLUID_SPECIMEN_REVIEW_EVENT_PARAMETERS_EDIT_ACTION = "FluidSpecimenReviewEventParametersEdit.do";
-	
+
+//	Constants required in CELLSPECIMENREVIEWParameters.jsp Page
+	public static final String CELL_SPECIMEN_REVIEW_PARAMETERS_SEARCH_ACTION = "CellSpecimenReviewParametersSearch.do";
+	public static final String CELL_SPECIMEN_REVIEW_PARAMETERS_ADD_ACTION = "CellSpecimenReviewParametersAdd.do";
+	public static final String CELL_SPECIMEN_REVIEW_PARAMETERS_EDIT_ACTION = "CellSpecimenReviewParametersEdit.do";
+
+
 	//Levels of nodes in query results tree.
 	public static final int MAX_LEVEL = 5;
 	public static final int MIN_LEVEL = 1;
@@ -292,7 +299,7 @@ public class Constants
 	public static final int COLLECTION_PROTOCOL_REGISTRATION_FORM_ID = 19;
 	public static final int SPECIMEN_COLLECTION_GROUP_FORM_ID = 20;
 	public static final int FLUID_SPECIMEN_REVIEW_EVENT_PARAMETERS_FORM_ID = 21;
-	
+	public static final int CELL_SPECIMEN_REVIEW_EVENT_PARAMETERS_FORM_ID =22;
 	
 	//Status message key Constants
 	public static final String STATUS_MESSAGE_KEY = "statusMessageKey";
