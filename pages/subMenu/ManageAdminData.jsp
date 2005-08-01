@@ -13,98 +13,118 @@
 		<div>
 			<img src="images/subMenuArrow.gif" width="7" height="7" alt="" /> 
 				<bean:message key="app.user" />
-					<a class="subMenuPrimary" href="User.do?operation=add&amp;pageOf=">
-						<bean:message key="app.add" />
-					</a> | 
-					<a class="subMenuPrimary" href="User.do?operation=search&amp;pageOf=">
-						<bean:message key="app.edit" />
-					</a>
+		</div>		
+		<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<a class="subMenuPrimary" href="User.do?operation=add&amp;pageOf=">
+				<bean:message key="app.add" />
+			</a> 
+			<a class="subMenuPrimary" href="User.do?operation=search&amp;pageOf=">
+				<bean:message key="app.edit" />
+			</a>
 		</div>
+		
 		
 		<div>
 			<img src="images/subMenuArrow.gif" width="7" height="7" alt="" /> 
-				<bean:message key="app.institution" />
-					<a class="subMenuPrimary" href="Institution.do?operation=add">
-						<bean:message key="app.add" />
-					</a> | 
-					<a class="subMenuPrimary" href="Institution.do?operation=search">
-						<bean:message key="app.edit" />
-					</a>
+				<bean:message key="app.institution" />					
 		</div>
+		<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<a class="subMenuPrimary" href="Institution.do?operation=add">
+				<bean:message key="app.add" />
+			</a>
+			<a class="subMenuPrimary" href="Institution.do?operation=search">
+				<bean:message key="app.edit" />
+			</a>
+		</div>
+		
 		
 		<div>
 			<img src="images/subMenuArrow.gif" width="7" height="7" alt="" /> 
-				<bean:message key="app.department" />
-					<a class="subMenuPrimary" href="Department.do?operation=add">
-						<bean:message key="app.add" />
-					</a> | 
-					<a class="subMenuPrimary" href="Department.do?operation=search">
-						<bean:message key="app.edit" />
-					</a>
+				<bean:message key="app.department" />					
 		</div>
+		<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<a class="subMenuPrimary" href="Department.do?operation=add">
+			<bean:message key="app.add" />
+		</a>
+		<a class="subMenuPrimary" href="Department.do?operation=search">
+			<bean:message key="app.edit" />
+		</a>
+		</div>
+
 
 		<div>
 			<img src="images/subMenuArrow.gif" width="7" height="7" alt="" /> 
 				<bean:message key="app.cancerResearchGroup" />
-					<a class="subMenuPrimary" href="CancerResearchGroup.do?operation=add">
-						<bean:message key="app.add" />
-					</a> | 
-					<a class="subMenuPrimary" href="CancerResearchGroup.do?operation=search">
-						<bean:message key="app.edit" />
-					</a>
+		</div>
+		<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<a class="subMenuPrimary" href="CancerResearchGroup.do?operation=add">
+				<bean:message key="app.add" />
+			</a>
+			<a class="subMenuPrimary" href="CancerResearchGroup.do?operation=search">
+				<bean:message key="app.edit" />
+			</a>
 		</div>
 		
 		<div>
 			<img src="images/subMenuArrow.gif" width="7" height="7" alt="" /> 
 				<bean:message key="app.site" />
-					<a class="subMenuPrimary" href="Site.do?operation=add">
-						<bean:message key="app.add" />
-					</a> | 
-					<a class="subMenuPrimary" href="Site.do?operation=search">
-						<bean:message key="app.edit" />
-					</a>
 		</div>
+		<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<a class="subMenuPrimary" href="Site.do?operation=add">
+				<bean:message key="app.add" />
+			</a> 
+			<a class="subMenuPrimary" href="Site.do?operation=search">
+				<bean:message key="app.edit" />
+			</a>
+		</div>
+		
 		
 		<div>
 			<img src="images/subMenuArrow.gif" width="7" height="7" alt="" /> 
 				<bean:message key="app.storagetype" />
-					<a class="subMenuPrimary" href="StorageType.do?operation=add">
-						<bean:message key="app.add" />
-					</a> | 
-					<a class="subMenuPrimary" href="StorageType.do?operation=search">
-						<bean:message key="app.edit" />
-					</a>
 		</div>
+		<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<a class="subMenuPrimary" href="StorageType.do?operation=add">
+						<bean:message key="app.add" />
+			</a>
+			<a class="subMenuPrimary" href="StorageType.do?operation=search">
+				<bean:message key="app.edit" />
+			</a>
+		</div>
+		
 
 		<div>
 			<img src="images/subMenuArrow.gif" width="7" height="7" alt="" /> 
 				<bean:message key="app.storageContainer" />
-					<a class="subMenuPrimary" href="StorageContainer.do?operation=add">
-						<bean:message key="app.add" />
-					</a> | 
-					<a class="subMenuPrimary" href="StorageContainer.do?operation=search">
-						<bean:message key="app.edit" />
-					</a>
 		</div>
+		<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<a class="subMenuPrimary" href="StorageContainer.do?operation=add">
+				<bean:message key="app.add" />
+			</a>
+			<a class="subMenuPrimary" href="StorageContainer.do?operation=search">
+				<bean:message key="app.edit" />
+			</a>
+		</div>
+		
 		
 		<div>
 			<img src="images/subMenuArrow.gif" width="7" height="7" alt="" /> 
 				<bean:message key="app.biohazard" />
-					<a class="subMenuPrimary" href="Biohazard.do?operation=add">
-						<bean:message key="app.add" />
-					</a> | 
-					<a class="subMenuPrimary" href="Biohazard.do?operation=search">
-						<bean:message key="app.edit" />
-					</a>
+		</div>
+		<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<a class="subMenuPrimary" href="Biohazard.do?operation=add">
+				<bean:message key="app.add" />
+			</a>
+			<a class="subMenuPrimary" href="Biohazard.do?operation=search">
+				<bean:message key="app.edit" />
+			</a>
 		</div>
 		
 		<div>
 			<img src="images/subMenuArrow.gif" width="7" height="7" alt=""/> 
 				<bean:message key="app.collectionProtocol" />
 		</div>
-
-		<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 					<a class="subMenuPrimary" href="CollectionProtocol.do?operation=add">
 						<bean:message key="app.add" /> 
 					</a> | 
@@ -118,8 +138,7 @@
 			<img src="images/subMenuArrow.gif" width="7" height="7" alt=""/> 
 				<bean:message key="app.distributionProtocol" />
 		</div>
-		<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 					<a class="subMenuPrimary" href="DistributionProtocol.do?operation=add">
 						<bean:message key="app.add" /> 
 					</a> | 
