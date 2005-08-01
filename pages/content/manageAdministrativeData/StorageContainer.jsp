@@ -46,6 +46,19 @@
 			document.forms[0].submit();
 		}
 		
+		function onSiteChange(element)
+		{
+			var list = document.getElementById('typeId');
+			var type = list.options[list.selectedIndex].value;
+			var action = "/catissuecore/StorageContainer.do?operation=add&typeSelected=" + type;
+			document.forms[0].action = action;
+			document.forms[0].submit();
+		}
+		
+		function onContainerChange(element)
+		{
+		}
+		
 //  function to insert a row in the inner block
 function insRow(subdivtag)
 {
@@ -63,6 +76,7 @@ function insRow(subdivtag)
 	//Second Cell
 	var spreqtype=x.insertCell(1);
 	spreqtype.className="formField";
+	spreqtype.colSpan=2;
 	sname="";
 	
 	var name = "value(StorageContainerDetails:" + (q+1) +"_parameterName)";
@@ -170,23 +184,23 @@ function insRow(subdivtag)
 
 				<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.SEARCH%>">
 					<tr>
-						<td class="formMessage" colspan="3">* indicates a required field</td>
+						<td class="formMessage" colspan="4">* indicates a required field</td>
 					</tr>
 					
 					<tr>
-						<td class="formTitle" height="20" colspan="3">
+						<td class="formTitle" height="20" colspan="4">
 							<bean:message key="storageContainer.title" />
 						</td>
 					</tr>
 					
 					<tr>
 						<td class="formRequiredNotice" width="5">*</td>
-						<td class="formRequiredLabel">
+						<td class="formRequiredLabel" colspan="2">
 							<label for="type">
 								<bean:message key="storageContainer.type" />
 							</label>
 						</td>
-						<td class="formField" nowrap>
+						<td class="formField">
 							<html:select property="typeId" styleClass="formFieldSized" styleId="typeId" size="1" onchange="onTypeChange(this)">
 								<html:options name="storageTypeIdList" labelName="storageTypeList" />
 							</html:select>
@@ -196,90 +210,119 @@ function insRow(subdivtag)
 	 						</html:link>
 						</td>
 					</tr>
-				
+
 					<tr>
 						<td class="formRequiredNotice" width="5">&nbsp;</td>
-						<td class="formLabel" nowrap>
+						<td class="formRequiredRadio">
 							<html:radio styleClass="" styleId="checkedButton" property="checkedButton" value="1" onclick="onRadioButtonClick(this)">
 								<label for="siteId">
-									<bean:message key="storageContainer.site" />
+									<%--<bean:message key="storageContainer.site" />--%>
 								</label>
 							</html:radio>
 							<br>
 							<html:radio styleClass="" styleId="checkedButton" property="checkedButton" value="2" onclick="onRadioButtonClick(this)">
 								<label for="site">
-									<bean:message key="storageContainer.parentContainer" />
+									<%--<bean:message key="storageContainer.parentContainer" />--%>
 								</label>
 							</html:radio>							
 						</td>
+						<td class="formLabel">
+							<label for="siteId">
+								<bean:message key="storageContainer.site" />
+							</label>
+							<br>
+							<label for="site">
+								<bean:message key="storageContainer.parentContainer" />
+							</label>
+						</td>
 						<td class="formField">
-							<html:select property="siteId" styleClass="formFieldSized" styleId="siteId" size="1">
+							<logic:equal name="storageContainerForm" property="checkedButton" value="1">
+							<html:select property="siteId" styleClass="formFieldSized" styleId="siteId" size="1" onchange="onSiteChange(this)">
 								<html:options name="siteIdList" labelName="siteList" />
 							</html:select>
+							</logic:equal>
+							<logic:equal name="storageContainerForm" property="checkedButton" value="2">
+							<html:select property="siteId" styleClass="formFieldSized" styleId="siteId" size="1" onchange="onSiteChange(this)" disabled="true">
+								<html:options name="siteIdList" labelName="siteList" />
+							</html:select>
+							</logic:equal>
 							&nbsp;
 							<html:link page="/Site.do?operation=add" styleId="newSite">
 		 						<bean:message key="buttons.addNew" />
 	 						</html:link>
 	 						
+	 						<%-- LOGIC TAG TO ENABLE/DISABLE THE FIELDS OF PARENT CONTAINER --%>
+	 						<logic:equal name="storageContainerForm" property="checkedButton" value="1">							
 							<html:text styleClass="formFieldSized" size="30" styleId="parentContainerId" property="parentContainerId" readonly="<%=readOnlyValue%>" disabled="true"/>
 							&nbsp;
 							<html:button property="mapButton" styleClass="actionButton" styleId="Map" 
 								onclick="javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfStorageLocation','name','810','320','yes');return false" disabled="true">
 								<bean:message key="buttons.map"/>
 							</html:button>							
+							</logic:equal>
+							
+							<logic:equal name="storageContainerForm" property="checkedButton" value="2">
+
+							<html:text styleClass="formFieldSized" size="30" styleId="parentContainerId" property="parentContainerId" readonly="<%=readOnlyValue%>"/>
+							&nbsp;
+							<html:submit styleClass="actionButton" styleId="Map" onclick="">
+								<bean:message key="buttons.map"/>
+							</html:submit>
+							
+							</logic:equal>
 						</td>
 					</tr>
 					<tr>
 						<td class="formRequiredNotice" width="5">&nbsp;</td>
-						<td class="formLabel">
+						<td class="formLabel" colspan="2">
 							<label for="noOfContainers">
 								<bean:message key="storageContainer.noOfContainers" />
 							</label>
 						</td>
 						<td class="formField">
-							<html:text styleClass="formFieldSized10" size="30" styleId="noOfContainers" property="noOfContainers" readonly="<%=readOnlyValue%>" />
+							<html:text styleClass="formFieldSized10" size="30" styleId="noOfContainers" property="noOfContainers" readonly="<%=readOnlyValue%>" onchange="onContainerChange(this)"/>
 						</td>
 					</tr>
 					
 					<tr>
 						<td class="formRequiredNotice" width="5">&nbsp;</td>
-						<td class="formLabel">
+						<td class="formLabel" colspan="2">
 							<label for="startNumber">
 								<bean:message key="storageContainer.startNumber" />
 							</label>
 						</td>
 						<td class="formField">
-							<html:text styleClass="formFieldSized10" size="30" styleId="startNumber" property="startNumber" value="<%=number%>" readonly="<%=readOnlyValue%>"/>
+							<html:text styleClass="formFieldSized10" size="30" styleId="startNumber" property="startNumber" value="<%=number%>" readonly="TRUE"/>
 						</td>
 					</tr>
 					
 					<tr>
 						<td class="formRequiredNotice" width="5">&nbsp;</td>
-						<td class="formLabel">
+						<td class="formLabel" colspan="2">
 							<label for="startNumber">
 								<bean:message key="storageContainer.barcode" />
 							</label>
 						</td>
-						<td class="formField" colspan="1">
+						<td class="formField">
 							<html:text styleClass="formFieldSized10" size="30" styleId="barcode" property="barcode" readonly="<%=readOnlyValue%>" />
 						</td>
 					</tr>
 
 					<tr>
 						<td class="formRequiredNotice" width="5">&nbsp;</td>
-						<td class="formLabel">
+						<td class="formLabel" colspan="2">
 							<label for="defaultTemperature">
 								<bean:message key="storageContainer.temperature" />
 							</label>
 						</td>
-						<td class="formField" colspan="1">
+						<td class="formField">
 							<html:text styleClass="formFieldSized10" size="30" styleId="defaultTemperature" property="defaultTemperature" readonly="<%=readOnlyValue%>" />
 							°C
 						</td>
 					</tr>
 					
 					<tr>
-						<td class="formTitle" colspan="3">
+						<td class="formTitle" colspan="4">
 							<label for="capacity">
 								<bean:message key="storageContainer.capacity" />
 							</label>
@@ -288,32 +331,32 @@ function insRow(subdivtag)
 					
 					<tr>
 						<td class="formRequiredNotice" width="5">&nbsp;</td>
-						<td class="formLabel">
+						<td class="formLabel" colspan="2">
 							<label for="oneDimensionLabel">
 								<%--<bean:message key="storageContainer.oneDimensionLabel" />--%>
 								<bean:write name="storageContainerForm" property="oneDimensionLabel"/>
 							</label>
 						</td>
-						<td class="formField" colspan="1">
+						<td class="formField">
 							<html:text styleClass="formFieldSized10" size="30" styleId="oneDimensionCapacity" property="oneDimensionCapacity" readonly="<%=readOnlyValue%>" />
 						</td>
 					</tr>
 					
 					<tr>
 						<td class="formRequiredNotice" width="5">&nbsp;</td>
-						<td class="formLabel" nowrap>
+						<td class="formLabel" colspan="2">
 							<label for="twoDimensionLabel">
 								<%--<bean:message key="storageContainer.twoDimensionLabel" />--%>								
 								<bean:write name="storageContainerForm" property="twoDimensionLabel"/>
 							</label>
 						</td>
-						<td class="formField" colspan="1">
+						<td class="formField">
 							<html:text styleClass="formFieldSized10" size="30" styleId="twoDimensionCapacity" property="twoDimensionCapacity" readonly="<%=readOnlyValue%>" />
 						</td>
 					</tr>
 					
 					<tr>
-						<td class="formTitle" colspan="2" nowrap>
+						<td class="formTitle" colspan="3" nowrap>
 							<label for="details">
 								<bean:message key="storageContainer.details" />
 							</label>
@@ -327,12 +370,12 @@ function insRow(subdivtag)
 									
 					<tr>
 						<td class="formLeftSubTableTitle" width="5">#</td>
-						<td class="formRightSubTableTitle" nowrap>
+						<td class="formRightSubTableTitle" colspan="2">
 							<label for="key">
 								<bean:message key="storageContainer.key" />
 							</label>
 						</td>
-						<td class="formRightSubTableTitle" nowrap>
+						<td class="formRightSubTableTitle">
 							<label for="value">
 								<bean:message key="storageContainer.value" />
 							</label>
@@ -342,15 +385,15 @@ function insRow(subdivtag)
 					<tbody id="addMore">
 					<tr>
 						<td class="formSerialNumberField" width="5">1.</td>
-						<td class="formField" >
+						<td class="formField" colspan="2">
 							<html:text styleClass="formFieldSized10" size="30" styleId="key" property="value(StorageContainerDetails:1_parameterName)" readonly="<%=readOnlyValue%>" />
 						</td>
-						<td class="formField" colspan="1">
+						<td class="formField">
 							<html:text styleClass="formFieldSized10" size="30" styleId="typeId" property="value(StorageContainerDetails:1_parameterValue)" value="" readonly="<%=readOnlyValue%>" />
 						</td>
 					</tr>
 					</tbody>
-					</logic:equal>
+				<%--	</logic:equal> --%>
 				</table>
 				
 				<table summary="" cellpadding="3" cellspacing="0" border="0" width="500">	
