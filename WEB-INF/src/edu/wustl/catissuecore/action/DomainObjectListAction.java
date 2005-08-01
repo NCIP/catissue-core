@@ -13,6 +13,7 @@ package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,10 +27,12 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.actionForm.AbstractActionForm;
 import edu.wustl.catissuecore.dao.AbstractBizLogic;
 import edu.wustl.catissuecore.dao.BizLogicFactory;
+import edu.wustl.catissuecore.dao.UserBizLogic;
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.security.SecurityManager;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * DomainObjectListAction is used to show the list of all 
@@ -70,17 +73,25 @@ public class DomainObjectListAction extends Action
             list = abstractDAO.retrieve(AbstractDomainObject.getDomainObjectName(abstractForm.getFormId()),
                     					"activityStatus",abstractForm.getActivityStatus());
             
+            UserBizLogic bizLogic = new UserBizLogic();
+            Vector vector = bizLogic.getUsers("ACTIVE");
+            Logger.out.debug("Vector..................."+vector.toString());
+            
+            
             if (abstractForm.getFormId() == Constants.USER_FORM_ID)
             {
                 List tempList = new ArrayList();
-                for (int i = 0; i < list.size() ;i++ )
+                if (list != null)
                 {
-                    User user = (User)list.get(i);
-                    gov.nih.nci.security.authorization.domainobjects.User csmUser = 
-                        	SecurityManager.getInstance(DomainObjectListAction.class).
-                    				getUserById(String.valueOf(user.getSystemIdentifier()));
-                    user.setUser(csmUser);
-                    tempList.add(user);
+                    for (int i = 0; i < list.size() ;i++ )
+                    {
+                        User user = (User)list.get(i);
+                        gov.nih.nci.security.authorization.domainobjects.User csmUser = 
+                            	SecurityManager.getInstance(DomainObjectListAction.class).
+                        				getUserById(String.valueOf(user.getSystemIdentifier()));
+                        user.setUser(csmUser);
+                        tempList.add(user);
+                    }
                 }
                 
                 list = tempList;
