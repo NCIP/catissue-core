@@ -10,6 +10,7 @@
 package edu.wustl.catissuecore.dao;
 
 import java.util.List;
+import java.util.Vector;
 
 import edu.wustl.common.util.dbManager.DAOException;
 
@@ -56,4 +57,11 @@ public abstract class AbstractBizLogic
      * @param sourceObjectName Contains the classname whose records are to be retrieved.
      */
     public abstract List retrieve(String sourceObjectName) throws DAOException;
+    
+    public abstract Vector getList(String sourceObjectName, String[] displayNameFields, String valueField, String[] whereColumnName,
+            String[] whereColumnCondition, Object[] whereColumnValue,
+            String joinCondition, String separatorBetweenFields) throws DAOException;
+    
+    public abstract Vector getList(String sourceObjectName, String[] displayNameFields, String valueField) 
+    			throws DAOException;
 }

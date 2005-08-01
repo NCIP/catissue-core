@@ -158,6 +158,18 @@ public class DefaultBizLogic extends AbstractBizLogic
         return retrieve(sourceObjectName, selectColumnName, null, null, null, null);
     }
     
+    
+    public Vector getList(String sourceObjectName, String[] displayNameFields, String valueField) throws DAOException
+    {
+        String[] whereColumnName = null;
+        String[] whereColumnCondition = null;
+        Object[] whereColumnValue = null;
+        String joinCondition = null;
+        String separatorBetweenFields = ",";            
+        
+        return getList(sourceObjectName, displayNameFields, valueField, whereColumnName,
+                whereColumnCondition, whereColumnValue,joinCondition, separatorBetweenFields);
+    }
    /**
     * Returns collection of name value pairs.
     * @param sourceObjectName
@@ -177,6 +189,8 @@ public class DefaultBizLogic extends AbstractBizLogic
     {
         Logger.out.debug("in get list");
         Vector nameValuePairs = new Vector();
+          
+        nameValuePairs.add(new NameValueBean(Constants.SELECT_OPTION,"-1"));
         
         String[] selectColumnName = new String[displayNameFields.length+1];
         for(int i=0;i<displayNameFields.length;i++)
