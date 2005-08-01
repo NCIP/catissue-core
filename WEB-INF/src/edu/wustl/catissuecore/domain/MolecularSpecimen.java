@@ -43,6 +43,10 @@ public class MolecularSpecimen extends Specimen implements Serializable
      */
     protected Double availableQuantityInMicroGram;
 
+    public MolecularSpecimen()
+	{
+    	
+	}
 //  Constructor
     public MolecularSpecimen(AbstractActionForm form)
     {

@@ -38,6 +38,10 @@ public class CellSpecimen extends Specimen implements Serializable
      */
     protected Integer availableQuantityInCellCount;
 
+    public CellSpecimen()
+    {
+    	
+    }
     //Constructor
     public CellSpecimen(AbstractActionForm form)
     {

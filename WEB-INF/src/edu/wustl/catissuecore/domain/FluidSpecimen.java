@@ -38,6 +38,10 @@ public class FluidSpecimen extends Specimen implements Serializable
      */
     protected Double availableQuantityInMiliLiter;
 
+    public FluidSpecimen()
+    {
+    	
+    }
 //  Constructor
     public FluidSpecimen(AbstractActionForm form)
     {

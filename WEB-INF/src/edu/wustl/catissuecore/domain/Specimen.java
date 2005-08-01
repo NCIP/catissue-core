@@ -110,6 +110,10 @@ public abstract class Specimen extends AbstractDomainObject implements Serializa
      */
     protected SpecimenCharacteristics specimenCharacteristics;
 
+    public Specimen()
+    {
+    	
+    }
     //Constructor
     public Specimen(AbstractActionForm form)
     {

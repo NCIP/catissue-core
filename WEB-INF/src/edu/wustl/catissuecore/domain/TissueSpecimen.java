@@ -38,6 +38,10 @@ public class TissueSpecimen extends Specimen implements Serializable
      */
     protected Double availableQuantityInGram;
 
+    public TissueSpecimen()
+    {
+    	
+    }
 //  Constructor
     public TissueSpecimen(AbstractActionForm form)
     {
