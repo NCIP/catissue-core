@@ -10,7 +10,6 @@
 
 package edu.wustl.catissuecore.dao;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
@@ -23,7 +22,6 @@ import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.SendEmail;
-import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
@@ -67,22 +65,22 @@ public class UserBizLogic extends DefaultBizLogic
                 Institution institution = null;
                 CancerResearchGroup cancerResearchGroup = null;
                 
-                List list = dao.retrieve(Department.class.getName(), "name", user
-                        .getDepartment().getName());
+                List list = dao.retrieve(Department.class.getName(), "systemIdentifier", user
+                        .getDepartment().getSystemIdentifier());
                 if (list.size() != 0)
                 {
                     department = (Department) list.get(0);
                 }
                 
-                list = dao.retrieve(Institution.class.getName(), "name", user
-                        .getInstitution().getName());
+                list = dao.retrieve(Institution.class.getName(), "systemIdentifier", user
+                        .getInstitution().getSystemIdentifier());
                 if (list.size() != 0)
                 {
                     institution = (Institution) list.get(0);
                 }
                 
-                list = dao.retrieve(CancerResearchGroup.class.getName(), "name",
-                        user.getCancerResearchGroup().getName());
+                list = dao.retrieve(CancerResearchGroup.class.getName(), "systemIdentifier",
+                        user.getCancerResearchGroup().getSystemIdentifier());
                 if (list.size() != 0)
                 {
                     cancerResearchGroup = (CancerResearchGroup) list.get(0);
@@ -267,43 +265,40 @@ public class UserBizLogic extends DefaultBizLogic
 //                return nameValuePairs;
 //            }
     
-    		public Vector getUsers(String ActivityStatus) throws DAOException
+	public Vector getUsers(String ActivityStatus) throws DAOException
+    {
+		List users = retrieve(User.class.getName(),"activityStatus",ActivityStatus);
+		Vector nameValuePairs = new Vector();
+		nameValuePairs.add(new NameValueBean(Constants.SELECT_OPTION,"-1"));
+		
+        // Set CSM users for the user objects retrieved
+        User user=null;
+        gov.nih.nci.security.authorization.domainobjects.User csmUser = null;
+        if(users != null)
+        {
+                            
+            // Creating name value beans based on Activity Status passed 
+            NameValueBean nameValueBean; 
+        
+            for(int i=0;i<users.size();i++)
             {
-        		List users = retrieve(User.class.getName(),"activityStatus",ActivityStatus);
-        		Vector nameValuePairs = new Vector();
-                
-                // Set CSM users for the user objects retrieved
-                User user=null;
-                gov.nih.nci.security.authorization.domainobjects.User csmUser = null;
-                if(users != null)
+                user = (User) users.get(i);
+                try
                 {
-	                                
-	                // Creating name value beans based on Activity Status passed 
-	                NameValueBean nameValueBean; 
-                
-	                for(int i=0;i<users.size();i++)
-	                {
-	                    user = (User) users.get(i);
-	                    try
-	                    {
-	                        csmUser = SecurityManager.getInstance(UserBizLogic.class).getUserById(String.valueOf(user.getSystemIdentifier()));
-	                    }
-	                    catch (SMException e)
-	                    {
-	                        Logger.out.debug("Unable to get user : "+e.getMessage());
-	                        throw new DAOException(e);
-	                    }
-	                    nameValueBean = new NameValueBean();
-	                    nameValueBean.setName(csmUser.getLastName()+", "+csmUser.getFirstName());
-	                    nameValueBean.setValue(String.valueOf(user.getSystemIdentifier()));
-	                    Logger.out.debug(nameValueBean.toString());
-	                    nameValuePairs.add(nameValueBean);
-	                    
-	                }
-                
-                
+                    csmUser = SecurityManager.getInstance(UserBizLogic.class).getUserById(String.valueOf(user.getSystemIdentifier()));
                 }
-                return nameValuePairs;
+                catch (SMException e)
+                {
+                    Logger.out.debug("Unable to get user : "+e.getMessage());
+                    throw new DAOException(e);
+                }
+                nameValueBean = new NameValueBean();
+                nameValueBean.setName(csmUser.getLastName()+", "+csmUser.getFirstName());
+                nameValueBean.setValue(String.valueOf(user.getSystemIdentifier()));
+                Logger.out.debug(nameValueBean.toString());
+                nameValuePairs.add(nameValueBean);
             }
-    
+        }
+        return nameValuePairs;
+    }
 }
