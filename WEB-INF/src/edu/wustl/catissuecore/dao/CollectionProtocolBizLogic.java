@@ -43,8 +43,6 @@ public class CollectionProtocolBizLogic extends DefaultBizLogic
 		try
 		{
 			CollectionProtocol collectionProtocol = (CollectionProtocol)obj;
-	        
-//			AbstractDAO dao = DAOFactory.getDAO(Constants.HIBERNATE_DAO);
 			dao.openSession();
 			
 			List list = dao.retrieve(User.class.getName(), "systemIdentifier", collectionProtocol.getPrincipalInvestigator().getSystemIdentifier());
@@ -65,15 +63,11 @@ public class CollectionProtocolBizLogic extends DefaultBizLogic
 					User coordinator = (User) list.get(0);
 					System.out.println("coordinator "+coordinator.getSystemIdentifier());
 					coordinatorColl.add(coordinator);
-					coordinator.getCollectionProtocolCollection().add(coordinator);
+					coordinator.getCollectionProtocolCollection().add(collectionProtocol);
 					dao.update(coordinator);
 				}
 			}
 			collectionProtocol.setUserCollection(coordinatorColl);
-			
-//			SpecimenProtocol p = new SpecimenProtocol();
-//			p.setTitle("AAABBBA");
-//			dao.insert(p);
 			
 			dao.insert(collectionProtocol);
 			it = collectionProtocol.getCollectionProtocolEventCollection().iterator();
@@ -92,7 +86,7 @@ public class CollectionProtocolBizLogic extends DefaultBizLogic
 				}
 			}
 		}
-		catch(DAOException ex)
+		catch(Exception ex)
 		{
 			Logger.out.error("",ex);
 		}
