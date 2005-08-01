@@ -66,8 +66,8 @@
 	</target> 
 	
 	<target name="WarApp" depends="init">
-		<delete file="E:\Program_Files\jboss-4.0.0\server\default\deploy\catissuecore.war"/>
-		<war destfile="E:\Program_Files\jboss-4.0.0\server\default\deploy\catissuecore.war" webxml="WEB-INF/web.xml">
+		<delete file="catissuecore.war"/>
+		<war destfile="catissuecore.war" webxml="WEB-INF/web.xml">
 			<fileset dir="${base.dir}">
 				<exclude name="**/*build*"/>
 				<exclude name="**/*WEB-INF*"/>
@@ -82,6 +82,10 @@
             	<include name="*.jar"/>
         	</lib-->
 		</war>
+		<delete file="E:\Program_Files\jboss-4.0.0RC\server\default\deploy\catissuecore.war"/>
+		 
+		<copy file="catissuecore.war" todir="E:\Program_Files\jboss-4.0.0RC\server\default\deploy"/>
+		<sleep seconds="1"/>
 	</target>
 
 
