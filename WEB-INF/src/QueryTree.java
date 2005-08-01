@@ -8,10 +8,9 @@
  * @version 1.00
  */
 
+import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -27,7 +26,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
 
-import edu.wustl.catissuecore.query.GenerateTree;
+import edu.wustl.catissuecore.storage.GenerateStorageTree;
 import edu.wustl.catissuecore.util.global.Constants;
 
 /**
@@ -51,43 +50,60 @@ public class QueryTree extends JApplet
             String protocol = codeBase.getProtocol();
             String host = codeBase.getHost();
             int port = codeBase.getPort();
-            String urlSuffix = Constants.TREE_DATA_ACTION;
+            
+            String pageOf = this.getParameter(Constants.PAGEOF);
+            
+            String urlSuffix = Constants.TREE_DATA_ACTION+"?"+Constants.PAGEOF+"="+pageOf;
 
             URL dataURL = new URL(protocol, host, port, urlSuffix);
-
+            
             //Establish connection with the TreeDataAction and get the JTree object. 
             URLConnection connection = dataURL.openConnection();
             connection.setUseCaches(false);
             
             in = new ObjectInputStream(connection.getInputStream());
-
+            
             Vector dataList = (Vector) in.readObject();
 
-            //Creates tree.
-            GenerateTree generateTree = new GenerateTree();
-            JTree tree = generateTree.createTreeView(dataList);
+//            //Creates tree.
+//            GenerateTree generateTree = new GenerateTree();
+//            JTree tree = generateTree.createTreeView(dataList);
             
-            //Preparing radio buttons for configuring different views.
-            JPanel radioButtonPanel = new JPanel(new GridLayout(2, 1));
-            radioButtonPanel.setPreferredSize(new Dimension(200, 100));
+            GenerateStorageTree generateTree = new GenerateStorageTree();
+            JTree tree = generateTree.createTree(dataList);
+            
+            Container contentPane = getContentPane();
+            contentPane.setLayout(new BorderLayout());
+            
+            if (pageOf.equals(Constants.PAGEOF_QUERY_RESULTS))
+            {
+                //Preparing radio buttons for configuring different views.
+                JPanel radioButtonPanel = new JPanel(new GridLayout(2, 1));
 
-            JRadioButton spreadsheetViewRadioButton = new JRadioButton(
-                    Constants.SPREADSHEET_VIEW);
-            spreadsheetViewRadioButton
-                    .setActionCommand(Constants.SPREADSHEET_VIEW);
-            spreadsheetViewRadioButton.setSelected(true);
+                JRadioButton spreadsheetViewRadioButton = new JRadioButton(
+                        Constants.SPREADSHEET_VIEW);
+                spreadsheetViewRadioButton
+                        .setActionCommand(Constants.SPREADSHEET_VIEW);
+                spreadsheetViewRadioButton.setSelected(true);
+                spreadsheetViewRadioButton.setPreferredSize(new Dimension(80, 40));
 
-            JRadioButton individualViewRadioButton = new JRadioButton(
-                    Constants.OBJECT_VIEW);
-            individualViewRadioButton.setActionCommand(Constants.OBJECT_VIEW);
+                JRadioButton individualViewRadioButton = new JRadioButton(
+                        Constants.OBJECT_VIEW);
+                individualViewRadioButton.setActionCommand(Constants.OBJECT_VIEW);
+                individualViewRadioButton.setPreferredSize(new Dimension(80, 40));
 
-            ButtonGroup radioButtonGroup = new ButtonGroup();
-            radioButtonGroup.add(spreadsheetViewRadioButton);
-            radioButtonGroup.add(individualViewRadioButton);
+                ButtonGroup radioButtonGroup = new ButtonGroup();
+                radioButtonGroup.add(spreadsheetViewRadioButton);
+                radioButtonGroup.add(individualViewRadioButton);
 
-            radioButtonPanel.add(spreadsheetViewRadioButton);
-            radioButtonPanel.add(individualViewRadioButton);
-
+                radioButtonPanel.add(spreadsheetViewRadioButton);
+                radioButtonPanel.add(individualViewRadioButton);
+                //Radio buttons finish.
+                
+                //Put the radioButton panel on the Applet.
+                contentPane.add(radioButtonPanel,BorderLayout.PAGE_START);
+            }
+            
             JPanel treePanel = new JPanel(new GridLayout(1, 0));
             JScrollPane scroll = new JScrollPane(tree);
             treePanel.add(scroll);
@@ -95,43 +111,34 @@ public class QueryTree extends JApplet
             treePanel.setVisible(true);
 
             //Add listeners for the tree.
-            NodeSelectionListener nodeSelectionListener = new NodeSelectionListener(
-                    this.getCodeBase(), this.getAppletContext());
-            tree.addTreeSelectionListener(nodeSelectionListener);
+//            NodeSelectionListener nodeSelectionListener = new NodeSelectionListener(
+//                    this.getCodeBase(), this.getAppletContext());
+            StorageLocationViewListener viewListener 
+            		= new StorageLocationViewListener(this.getCodeBase(), this.getAppletContext()); 
+            tree.addTreeSelectionListener(viewListener);
 
             //Add listeners for the radio buttons.
-            spreadsheetViewRadioButton.addActionListener(nodeSelectionListener);
-            individualViewRadioButton.addActionListener(nodeSelectionListener);
-
-            //Put the radioButton panel and tree panel on the Applet.
-            Container contentPane = getContentPane();
-            contentPane.setLayout(new GridBagLayout());
-            GridBagConstraints c = new GridBagConstraints();
-            c.fill = GridBagConstraints.HORIZONTAL;
-
-            c.weightx = 0.5;
-            c.gridx = 0;
-            c.gridy = 0;
-            contentPane.add(radioButtonPanel, c);
-
-            c.ipady = 230;
-            c.weightx = 0.0;
-            c.gridwidth = 15;
-            c.gridx = 0;
-            c.gridy = 1;
-            contentPane.add(treePanel, c);
+//            spreadsheetViewRadioButton.addActionListener(nodeSelectionListener);
+//            individualViewRadioButton.addActionListener(nodeSelectionListener);
+            
+            //Put the tree panel on the Applet.
+            contentPane.add(treePanel, BorderLayout.CENTER);
         }
         catch (MalformedURLException malExp)
         {
+            malExp.printStackTrace();
         }
         catch (IOException ioExp)
         {
+            ioExp.printStackTrace();
         }
         catch (ClassNotFoundException classNotExp)
         {
+            classNotExp.printStackTrace();
         }
         catch (Exception excp)
         {
+            excp.printStackTrace();
         }
         finally
         {
@@ -141,7 +148,7 @@ public class QueryTree extends JApplet
             }
             catch (IOException ioExp)
             {
-
+                ioExp.printStackTrace();
             }
         }
     }

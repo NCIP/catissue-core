@@ -1,0 +1,93 @@
+/*
+ * Created on Jul 29, 2005
+ *
+ * TODO To change the template for this generated file go to
+ * Window - Preferences - Java - Code Style - Code Templates
+ */
+import java.applet.AppletContext;
+import java.net.MalformedURLException;
+import java.net.URL;
+
+import javax.swing.JTree;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
+import javax.swing.tree.DefaultMutableTreeNode;
+
+import edu.wustl.catissuecore.storage.TreeNode;
+import edu.wustl.catissuecore.util.global.Constants;
+
+/**
+ * @author gautam_shetty
+ */
+public class StorageLocationViewListener implements TreeSelectionListener
+{
+    
+    /**
+     * The URL of the host from which the applet is loaded.
+     */
+    private URL codeBase = null;
+    
+    /**
+     * Corresponds to an applet environment.
+     */
+    private AppletContext appletContext = null;
+    
+    /**
+     * Initializes an empty NodeSelectionListener.
+     */
+    public StorageLocationViewListener()
+    {
+    }
+    
+    /**
+     * Creates and initializes a NodeSelectionListener with the codeBase and appletContext.
+     * @param codeBase2
+     * @param appletContext2
+     */
+    public StorageLocationViewListener(URL codeBase, AppletContext appletContext)
+    {
+        this.codeBase = codeBase;
+        this.appletContext = appletContext;
+    }
+    
+    /**
+     * (non-Javadoc)
+     * @see javax.swing.event.TreeSelectionListener#valueChanged(javax.swing.event.TreeSelectionEvent)
+     */
+    public void valueChanged(TreeSelectionEvent event)
+    {
+        Object object = event.getSource();
+        JTree tree = null;
+        
+        if (object instanceof JTree)
+        {
+            tree = (JTree) object;
+            DefaultMutableTreeNode node = (DefaultMutableTreeNode)
+            					tree.getLastSelectedPathComponent();
+            TreeNode treeNode = (TreeNode) node.getUserObject();
+            
+            try
+            {
+                String urlSuffix = null;
+                
+                if ((!treeNode.getStorageContainerName().equals(Constants.ROOT)) 
+                        			&& (treeNode.getStorageContainerType() != null))
+                {
+                    String protocol = codeBase.getProtocol();
+                	String host = codeBase.getHost();
+                    int port = codeBase.getPort();
+
+                    urlSuffix = Constants.SHOW_STORAGE_CONTAINER_GRID_VIEW_ACTION
+                    			+"?"+Constants.IDENTIFIER+"="+treeNode.getStorageContainerIdentifier();
+                    
+                    URL dataURL = new URL(protocol,host,port,urlSuffix);
+                    appletContext.showDocument(dataURL,Constants.DATA_VIEW_FRAME);
+                }
+            }
+            catch (MalformedURLException malExp)
+            {
+            } 
+
+        }
+    }
+}

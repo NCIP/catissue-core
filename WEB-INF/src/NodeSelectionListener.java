@@ -13,7 +13,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLEncoder;
 
 import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
@@ -121,8 +120,8 @@ public class NodeSelectionListener implements TreeSelectionListener, ActionListe
     	String host = codeBase.getHost();
         int port = codeBase.getPort();
 
-        String urlSuffix = Constants.DATA_VIEW_ACTION + URLEncoder.encode(nodeName) + 
-        			   "&"+ Constants.VIEW_TYPE + "=" + URLEncoder.encode(viewType);
+        String urlSuffix = Constants.DATA_VIEW_ACTION + nodeName + 
+        			   "&"+ Constants.VIEW_TYPE + "=" + viewType;
         
         URL dataURL = new URL(protocol,host,port,urlSuffix);
         appletContext.showDocument(dataURL,Constants.DATA_VIEW_FRAME);
