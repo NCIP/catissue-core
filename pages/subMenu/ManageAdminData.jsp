@@ -15,7 +15,7 @@
 				<bean:message key="app.user" />
 		</div>		
 		<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			<a class="subMenuPrimary" href="User.do?operation=add&amp;pageOf=">
+			<a class="subMenuPrimary" href="User.do?operation=add&amp;pageOf=pageOfUserAdmin">
 				<bean:message key="app.add" />
 			</a> 
 			<a class="subMenuPrimary" href="User.do?operation=search&amp;pageOf=">
