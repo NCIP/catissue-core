@@ -15,9 +15,9 @@
 				<bean:message key="app.user" />
 		</div>		
 		<div>&nbsp;&nbsp;
-			<a class="subMenuPrimary" href="User.do?operation=add&amp;pageOf=pageOfUserAdmin">
+			<a class="subMenuPrimary" href="User.do?operation=add&amp;pageOf=">
 				<bean:message key="app.add" />
-			</a> 
+			</a> &nbsp;
 			<a class="subMenuPrimary" href="User.do?operation=search&amp;pageOf=">
 				<bean:message key="app.edit" />
 			</a>
@@ -38,7 +38,7 @@
 		<div>&nbsp;&nbsp;
 			<a class="subMenuPrimary" href="Institution.do?operation=add">
 				<bean:message key="app.add" />
-			</a>
+			</a> &nbsp;
 			<a class="subMenuPrimary" href="Institution.do?operation=search">
 				<bean:message key="app.edit" />
 			</a>
@@ -52,7 +52,7 @@
 		<div>&nbsp;&nbsp;
 		<a class="subMenuPrimary" href="Department.do?operation=add">
 			<bean:message key="app.add" />
-		</a>
+		</a> &nbsp;
 		<a class="subMenuPrimary" href="Department.do?operation=search">
 			<bean:message key="app.edit" />
 		</a>
@@ -66,7 +66,7 @@
 		<div>&nbsp;&nbsp;
 			<a class="subMenuPrimary" href="CancerResearchGroup.do?operation=add">
 				<bean:message key="app.add" />
-			</a>
+			</a> &nbsp;
 			<a class="subMenuPrimary" href="CancerResearchGroup.do?operation=search">
 				<bean:message key="app.edit" />
 			</a>
@@ -79,7 +79,7 @@
 		<div>&nbsp;&nbsp;
 			<a class="subMenuPrimary" href="Site.do?operation=add">
 				<bean:message key="app.add" />
-			</a> 
+			</a> &nbsp;
 			<a class="subMenuPrimary" href="Site.do?operation=search">
 				<bean:message key="app.edit" />
 			</a>
@@ -93,7 +93,7 @@
 		<div>&nbsp;&nbsp;
 			<a class="subMenuPrimary" href="StorageType.do?operation=add">
 						<bean:message key="app.add" />
-			</a>
+			</a> &nbsp;
 			<a class="subMenuPrimary" href="StorageType.do?operation=search">
 				<bean:message key="app.edit" />
 			</a>
@@ -107,7 +107,7 @@
 		<div>&nbsp;&nbsp;
 			<a class="subMenuPrimary" href="StorageContainer.do?operation=add">
 				<bean:message key="app.add" />
-			</a>
+			</a> &nbsp;
 			<a class="subMenuPrimary" href="StorageContainer.do?operation=search">
 				<bean:message key="app.edit" />
 			</a>
@@ -121,7 +121,7 @@
 		<div>&nbsp;&nbsp;
 			<a class="subMenuPrimary" href="Biohazard.do?operation=add">
 				<bean:message key="app.add" />
-			</a>
+			</a> &nbsp;
 			<a class="subMenuPrimary" href="Biohazard.do?operation=search">
 				<bean:message key="app.edit" />
 			</a>
@@ -134,7 +134,7 @@
 		<div>&nbsp;&nbsp;
 					<a class="subMenuPrimary" href="CollectionProtocol.do?operation=add">
 						<bean:message key="app.add" /> 
-					</a> | 
+					</a> &nbsp;
 					<a class="subMenuPrimary" href="CollectionProtocol.do?operation=search">
 						<bean:message key="app.edit" /> 
 					</a>
@@ -148,7 +148,7 @@
 		<div>&nbsp;&nbsp;
 					<a class="subMenuPrimary" href="DistributionProtocol.do?operation=add">
 						<bean:message key="app.add" /> 
-					</a> | 
+					</a> &nbsp;
 					<a class="subMenuPrimary" href="DistributionProtocol.do?operation=search">
 						<bean:message key="app.edit" /> 
 					</a>
