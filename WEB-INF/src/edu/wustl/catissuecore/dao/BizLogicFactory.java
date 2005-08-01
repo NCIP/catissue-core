@@ -75,6 +75,10 @@ public class BizLogicFactory
           	case Constants.FLUID_SPECIMEN_REVIEW_EVENT_PARAMETERS_FORM_ID:
         		abstractBizLogic = new SpecimenEventParametersBizLogic();
         		break;
+        	
+         	case Constants.CELL_SPECIMEN_REVIEW_PARAMETERS_FORM_ID:
+        		abstractBizLogic = new SpecimenEventParametersBizLogic();
+        		break;	
 				
             default:
                 abstractBizLogic = new DefaultBizLogic();

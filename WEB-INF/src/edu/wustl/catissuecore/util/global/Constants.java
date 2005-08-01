@@ -299,7 +299,7 @@ public class Constants
 	public static final int COLLECTION_PROTOCOL_REGISTRATION_FORM_ID = 19;
 	public static final int SPECIMEN_COLLECTION_GROUP_FORM_ID = 20;
 	public static final int FLUID_SPECIMEN_REVIEW_EVENT_PARAMETERS_FORM_ID = 21;
-	public static final int CELL_SPECIMEN_REVIEW_EVENT_PARAMETERS_FORM_ID =22;
+	public static final int CELL_SPECIMEN_REVIEW_PARAMETERS_FORM_ID =22;
 	
 	//Status message key Constants
 	public static final String STATUS_MESSAGE_KEY = "statusMessageKey";

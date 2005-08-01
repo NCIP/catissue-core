@@ -20,6 +20,7 @@ import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Department;
 import edu.wustl.catissuecore.domain.FluidSpecimenReviewEventParameters;
+import edu.wustl.catissuecore.domain.CellSpecimenReviewParameters;
 import edu.wustl.catissuecore.domain.FrozenEventParameters;
 import edu.wustl.catissuecore.domain.CheckInCheckOutEventParameter;
 import edu.wustl.catissuecore.domain.ReceivedEventParameters;
@@ -104,7 +105,10 @@ public class DomainObjectFactory
             case Constants.FLUID_SPECIMEN_REVIEW_EVENT_PARAMETERS_FORM_ID:
             	abstractDomain = new FluidSpecimenReviewEventParameters (form);            	
             	break; 
-			   
+			
+            case Constants.CELL_SPECIMEN_REVIEW_PARAMETERS_FORM_ID:
+            	abstractDomain = new CellSpecimenReviewParameters (form);            	
+            	break; 
 			   
         }
         return abstractDomain;

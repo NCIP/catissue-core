@@ -9,6 +9,10 @@
  */
 package edu.wustl.catissuecore.domain;
 
+import edu.wustl.catissuecore.actionForm.AbstractActionForm;
+import edu.wustl.catissuecore.actionForm.CellSpecimenReviewParametersForm;
+import edu.wustl.common.util.logger.Logger;
+
 /**
  * Attributes associated with a review event of a cell specimen.
  * @hibernate.joined-subclass table="CATISSUE_CELL_SPECIMEN_REVIEW_PARAMETERS"
@@ -72,4 +76,35 @@ public class CellSpecimenReviewParameters extends ReviewEventParameters	implemen
 	{
 		this.viableCellPercentage = viableCellPercentage;
 	}
+	
+	CellSpecimenReviewParameters()
+	{
+		
+	}
+//	Parameterized constructor
+	public CellSpecimenReviewParameters(AbstractActionForm abstractForm)
+	{
+		setAllValues(abstractForm);
+	}
+	
+	/**
+     * This function Copies the data from an CellSpecimenReviewParametersForm object to a CellSpecimenReviewParameters object.
+     * @param cellSpecimenReviewParametersForm An CellSpecimenReviewParametersForm object containing the information about the cellSpecimenReviewParameters.  
+     * */
+    public void setAllValues(AbstractActionForm abstractForm)
+    {
+        try
+        {
+        	CellSpecimenReviewParametersForm form = (CellSpecimenReviewParametersForm) abstractForm;
+        	this.neoplasticCellularityPercentage = new Double(form.getNeoplasticCellularityPercentage());  
+        	this.viableCellPercentage = new Double(form.getViableCellPercentage());
+           	super.setAllValues(form);
+        }
+        catch (Exception excp)
+        {
+            Logger.out.error(excp.getMessage());
+        }
+    }
+	
+		
 }

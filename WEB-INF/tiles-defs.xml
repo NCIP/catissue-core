@@ -305,6 +305,20 @@
 		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>
 	<!-- FluidSpecimenReviewEventParameters end -->
+	
+	<!-- CellSpecimenReviewParameters -->
+	<definition name=".catissuecore.cellSpecimenReviewParametersDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/CellSpecimenReviewParameters.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.cellSpecimenReviewParametersAddSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/common/success.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.cellSpecimenReviewParametersEditSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/common/success.jsp" />
+	</definition>
+	<!-- CellSpecimenReviewParameters end -->
 
 	<!-- BioSpecimen tab pages definitions end -->
 

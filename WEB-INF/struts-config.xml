@@ -28,6 +28,7 @@ PUBLIC
 		<form-bean name="checkInCheckOutEventParametersForm" type="edu.wustl.catissuecore.actionForm.CheckInCheckOutEventParametersForm"/>
 		<form-bean name="receivedEventParametersForm" type="edu.wustl.catissuecore.actionForm.ReceivedEventParametersForm"/>
 		<form-bean name="fluidSpecimenReviewEventParametersForm" type="edu.wustl.catissuecore.actionForm.FluidSpecimenReviewEventParametersForm"/>
+		<form-bean name="cellSpecimenReviewParametersForm" type="edu.wustl.catissuecore.actionForm.CellSpecimenReviewParametersForm"/>
 	</form-beans>
 	
 	<!-- Global Exception Definitions -->
@@ -884,6 +885,46 @@ PUBLIC
 			<forward name="failure" path="/FluidSpecimenReviewEventParameters.do?operation=edit"/>
 		</action>    
 		<!-- FluidSpecimenReviewEventParameters Actions Ends -->
+
+	<!-- CellSpecimenReviewParameters Actions Begins -->
+        <action path="/CellSpecimenReviewParameters"
+			type="edu.wustl.catissuecore.action.CellSpecimenReviewParametersAction"
+			scope="request">
+			<forward name="success" path=".catissuecore.cellSpecimenReviewParametersDef" />
+			<forward name="failure" path=".catissuecore.cellSpecimenReviewParametersDef" />
+		</action>
+		
+		<action path="/CellSpecimenReviewParametersAdd"
+			type="edu.wustl.catissuecore.action.CommonAddEditAction"
+			name="cellSpecimenReviewParametersForm"
+			validate="true"
+			input="/CellSpecimenReviewParameters.do?operation=add"
+			scope="request">
+			<forward name="success" path=".catissuecore.cellSpecimenReviewParametersAddSuccessDef" />
+			<forward name="failure" path="/error.jsp" />
+		</action>
+		
+		<action path="/CellSpecimenReviewParametersEdit"
+			type="edu.wustl.catissuecore.action.CommonAddEditAction"
+			name="cellSpecimenReviewParametersForm"
+			validate="true"
+			input="/CellSpecimenReviewParameters.do?operation=edit"
+			scope="request">
+			<forward name="success" path=".catissuecore.cellSpecimenReviewParametersEditSuccessDef" />
+			<forward name="failure" path="/error.jsp" />
+		</action>
+		
+		<action path="/CellSpecimenReviewParametersSearch"
+		    type="edu.wustl.catissuecore.action.CommonSearchAction"
+			name="cellSpecimenReviewParametersForm"
+			validate="true"
+			input="/CellSpecimenReviewParameters.do?operation=edit"
+			scope="request">
+			<forward name="success" path="/CellSpecimenReviewParameters.do?operation=edit"/>
+			<forward name="failure" path="/CellSpecimenReviewParameters.do?operation=edit"/>
+		</action>    
+		<!-- CellSpecimenReviewParameters Actions Ends -->
+
 		
 		<!--Query Result View Actions Begin-->
 		<action path="/ShowFramedPage"
