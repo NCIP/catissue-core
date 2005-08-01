@@ -10,6 +10,8 @@
 		//Change this to Constants.USER_EDIT_ACTION
         String searchFormName = new String(Constants.USER_EDIT_ACTION);
 
+		String pageOf = (String)request.getAttribute(Constants.PAGEOF);        
+
         boolean readOnlyValue;
         if (operation.equals(Constants.EDIT))
         {
@@ -23,9 +25,13 @@
         else
         {
             formName = Constants.USER_ADD_ACTION;
+
+			if (pageOf.equals(Constants.PAGEOF_SIGNUP))
+			{
+				formName = Constants.SIGNUP_USER_ADD_ACTION;
+			}
             readOnlyValue = false;
         }
-		String pageOf = (String)request.getAttribute(Constants.PAGEOF);        
 %>
 
 <html:errors />
@@ -34,7 +40,7 @@
 	
 	<html:form action="<%=Constants.USER_ADD_ACTION%>">
 	
-	   <logic:equal name="<%=Constants.PAGEOF%>" value="<%=Constants.APPROVE_USER_PAGE%>">
+	   <logic:equal name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGEOF_APPROVE_USER%>">
   	    	  <tr>
 			  	<td align="right" colspan="3">
 
@@ -69,8 +75,7 @@
 		</logic:equal>
 		
 		<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>">
-			<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
-				<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.APPROVE_USER_PAGE%>">
+			<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGEOF_APPROVE_USER%>">
 			<!-- ENTER IDENTIFIER BEGINS-->
 			<br />
 			<tr>
@@ -110,26 +115,32 @@
 					</tr>
 
 				</table>
-				</td>
+			  </td>
 			</tr>
 			<!-- ENTER IDENTIFIER ENDS-->
-				</logic:notEqual>
 			</logic:notEqual>
 		</logic:notEqual>
 
 
 		<!-- NEW USER REGISTRATION BEGINS-->
 		<tr>
-		<td>
+		  <td>
 			<table summary="" cellpadding="3" cellspacing="0" border="0">
 				<tr>
 					<td>
 						<html:hidden property="operation" value="<%=operation%>" />
 					</td>
 				</tr>
+				
 				<tr>
 					<td>
 						<html:hidden property="systemIdentifier" />
+					</td>
+				</tr>
+				
+				<tr>
+					<td>
+						<html:hidden property="<%=Constants.PAGEOF%>" value="<%=pageOf%>" />
 					</td>
 				</tr>
 
@@ -181,8 +192,8 @@
 					</tr>
 					
 					<tr>
-						<td class="formRequiredNotice" width="5">*</td>
-						<td class="formRequiredLabel">
+						<td class="formRequiredNotice" width="5">&nbsp;</td>
+						<td class="formLabel">
 							<label for="street">
 								<bean:message key="user.street" />
 							</label>
@@ -246,8 +257,8 @@
 					</tr>
 					
 					<tr>
-						<td class="formRequiredNotice" width="5">&nbsp;</td>
-						<td class="formLabel">
+						<td class="formRequiredNotice" width="5">*</td>
+						<td class="formRequiredLabel">
 							<label for="phoneNumber">
 								<bean:message key="user.phoneNumber" />
 							</label>
@@ -284,12 +295,12 @@
 					<tr>
 						<td class="formRequiredNotice" width="5">*</td>
 						<td class="formRequiredLabel">
-							<label for="institution">
+							<label for="institutionId">
 								<bean:message key="user.institution" />
 							</label>
 						</td>
 						<td class="formField">
-							<html:select property="institution" styleClass="formFieldSized" styleId="institution" size="1">
+							<html:select property="institutionId" styleClass="formFieldSized" styleId="institutionId" size="1">
 								<html:options collection="institutionList" labelProperty="name" property="value"/>
 							</html:select>
 						</td>
@@ -298,12 +309,12 @@
 					<tr>
 						<td class="formRequiredNotice" width="5">*</td>
 						<td class="formRequiredLabel">
-							<label for="state">
+							<label for="departmentId">
 								<bean:message key="user.department" />
 							</label>
 						</td>
 						<td class="formField">
-							<html:select property="department" styleClass="formFieldSized" styleId="department" size="1">
+							<html:select property="departmentId" styleClass="formFieldSized" styleId="departmentId" size="1">
 								<html:options collection="departmentList" labelProperty="name" property="value"/>
 							</html:select>
 						</td>
@@ -312,18 +323,49 @@
 					<tr>
 						<td class="formRequiredNotice" width="5">*</td>
 						<td class="formRequiredLabel">
-							<label for="cancerResearchGroup">
+							<label for="cancerResearchGroupId">
 								<bean:message key="user.cancerResearchGroup" />
 							</label>
 						</td>
 						<td class="formField">
-							<html:select property="cancerResearchGroup" styleClass="formFieldSized" styleId="cancerResearchGroup" size="1">
+							<html:select property="cancerResearchGroupId" styleClass="formFieldSized" styleId="cancerResearchGroupId" size="1">
 								<html:options collection="cancerResearchGroupList" labelProperty="name" property="value"/>
 							</html:select>
 						</td>
 					</tr>
+					</logic:notEqual>
+					</table>
+				</td>
+			</tr>
+			
+		 	<tr>
+			  <td>
+			    <br>
+				<table summary="" cellpadding="3" cellspacing="0" border="0" width="440">
 					
-					<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">					
+					<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGEOF_SIGNUP%>">
+					<tr>
+						<td class="formTitle" height="20" colspan="3">
+							<bean:message key="user.administrativeDetails.title" />
+						</td>
+					</tr>
+					
+					<logic:equal name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGEOF_APPROVE_USER%>">
+					<tr>
+						<td class="formRequiredNotice" width="5">*</td>
+							<td class="formRequiredLabel">
+								<label for="status">
+									<bean:message key="user.approveOperation" />
+								</label>
+							</td>
+						<td class="formField">
+							<html:select property="status" styleClass="formFieldSized" styleId="status" size="1">
+								<html:options name="statusList" labelName="statusList" />
+							</html:select>
+						</td>
+					</tr>
+					</logic:equal>
+										
 					<tr>
 						<td class="formRequiredNotice" width="5">*</td>
 						<td class="formRequiredLabel">
@@ -337,6 +379,22 @@
 							</html:select>
 						</td>
 					</tr>
+					
+    				 <tr>
+			     		<td class="formRequiredNotice" width="5">&nbsp;</td>
+				    	<td class="formLabel">
+							<label for="comments">
+								<bean:message key="user.comments"/>
+							</label>
+						</td>
+				    	<td class="formField" colspan="4">
+				    		<html:textarea styleClass="formFieldSized" rows="3" styleId="comments" property="comments"/>
+				    	</td>
+				 	 </tr>
+					</logic:notEqual>
+					
+					<logic:equal name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGEOF_USER_ADMIN%>">
+					<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
 					<tr>
 						<td class="formRequiredNotice" width="5">*</td>
 							<td class="formRequiredLabel">
@@ -350,26 +408,14 @@
 							</html:select>
 						</td>
 					</tr>
-					<tr>
-			     		<td class="formRequiredNotice" width="5">
-				     		&nbsp;
-				    	</td>
-				    	<td class="formLabel">
-							<label for="comments">
-								<bean:message key="user.comments"/>
-							</label>
-						</td>
-				    	<td class="formField" colspan="4">
-				    		<html:textarea styleClass="formFieldSized" rows="3" styleId="comments" property="comments"/>
-				    	</td>
-				 	</tr>
+					</logic:equal>
 					</logic:equal>
 					
 					<tr>
 						<td align="right" colspan="3">
 						<%
         					String changeAction = "setFormAction('" + formName + "');";
-				        %> 
+				        %>
 						
 						<!-- action buttons begins -->
 						<table cellpadding="4" cellspacing="0" border="0">
@@ -386,13 +432,11 @@
 								</td>
 							</tr>
 						</table>
+						
 						<!-- action buttons end -->
 						</td>
 					</tr>
-					
-				</logic:notEqual>
-			</table>
-
+				</table>
 			</td>
 		</tr>
 
