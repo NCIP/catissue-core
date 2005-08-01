@@ -32,6 +32,10 @@ public class TreeViewAction extends Action
     public ActionForward execute(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response) throws Exception
     {
+        //Sets the pageOf attribute (for Add,Edit or Query Interface)
+        String pageOf  = request.getParameter(Constants.PAGEOF);
+        request.setAttribute(Constants.PAGEOF,pageOf);
+        
         return mapping.findForward(Constants.SUCCESS);
     }
 
