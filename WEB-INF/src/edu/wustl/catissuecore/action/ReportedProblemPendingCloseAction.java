@@ -82,7 +82,7 @@ public class ReportedProblemPendingCloseAction extends Action
                 else
                 {
                     //Change the Activity Status for pending status.
-                    activityStatus = Constants.ACTIVITY_STATUS_PENDING;
+                    activityStatus = Constants.APPROVE_USER_PENDING_STATUS;
                 }
 
                 //Sets the activity status.

@@ -25,9 +25,9 @@ import edu.wustl.catissuecore.actionForm.ReportedProblemForm;
 import edu.wustl.catissuecore.dao.AbstractBizLogic;
 import edu.wustl.catissuecore.dao.BizLogicFactory;
 import edu.wustl.catissuecore.domain.ReportedProblem;
+import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.SendEmail;
-import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
@@ -52,9 +52,13 @@ public class ReportedProblemAddAction extends Action
             ReportedProblem reportedProblem = new ReportedProblem(reportedProblemForm);
             bizLogic.insert(reportedProblem);
             
+            String adminEmailAddress = ApplicationProperties.getValue("email.administrative.emailAddress");
+            String technicalSupportEmailAddress = ApplicationProperties.getValue("email.technicalSupport.emailAddress");
+            String mailServer = ApplicationProperties.getValue("email.mailServer");
+            
             SendEmail email = new SendEmail();
-            boolean mailStatus = email.sendmail(Variables.emailAddress,reportedProblem.getFrom(),
-                    							Variables.mailServer,reportedProblem.getSubject(),
+            boolean mailStatus = email.sendmail(adminEmailAddress,reportedProblem.getFrom(),
+                    							mailServer,reportedProblem.getSubject(),
                     							reportedProblem.getMessageBody());
             
             if(mailStatus == true)
