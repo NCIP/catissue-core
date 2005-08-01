@@ -15,13 +15,17 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import edu.wustl.catissuecore.actionForm.AbstractActionForm;
+import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
+import edu.wustl.common.util.logger.Logger;
+
 /**
  * A single unit of tissue, body fluid, or derivative biological macromolecule 
  * that is collected or created from a Participant
  * @hibernate.class table="CATISSUE_SPECIMEN"
  * @author gautam_shetty
  */
-public abstract class Specimen implements Serializable
+public abstract class Specimen extends AbstractDomainObject implements Serializable
 {
     private static final long serialVersionUID = 1234567890L;
 
@@ -106,6 +110,12 @@ public abstract class Specimen implements Serializable
      */
     protected SpecimenCharacteristics specimenCharacteristics;
 
+    //Constructor
+    public Specimen(AbstractActionForm form)
+    {
+    	setAllValues(form);
+    }
+    
     /**
      * Returns the system generated unique systemIdentifier.
      * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"
@@ -474,5 +484,29 @@ public abstract class Specimen implements Serializable
     public void setSpecimenCharacteristics(SpecimenCharacteristics specimenCharacteristics)
     {
         this.specimenCharacteristics = specimenCharacteristics;
+    }
+    
+    /**
+     * This function Copies the data from an NewSpecimenForm object to a Specimen object.
+     * @param siteForm An SiteForm object containing the information about the site.  
+     * */
+    public void setAllValues(AbstractActionForm abstractForm)
+    {
+        try
+        {
+            NewSpecimenForm form = (NewSpecimenForm) abstractForm;
+            
+            this.systemIdentifier = new Long(form.getSystemIdentifier());
+            this.activityStatus = form.getActivityStatus();
+            //this.barcode = form.
+            this.comments = form.getComments();
+            this.positionDimensionOne = new Integer(form.getPositionDimensionOne());
+            this.positionDimensionTwo = new Integer(form.getPositionDimensionTwo());
+            this.type = form.getClassName();
+        }
+        catch (Exception excp)
+        {
+            Logger.out.error(excp.getMessage());
+        }
     }
 }

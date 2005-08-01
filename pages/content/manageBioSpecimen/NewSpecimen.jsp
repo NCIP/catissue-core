@@ -90,7 +90,7 @@
 							</label>
 						</td>
 					    <td class="formField">
-					    	<html:text styleClass="formFieldSized" size="30" styleId="identifier" property="identifier" readonly="<%=readOnlyForAll%>"/>
+					    	<html:text styleClass="formFieldSized15" size="30" styleId="identifier" property="identifier" readonly="<%=readOnlyForAll%>"/>
 					    </td>
 				  </tr>	
 
@@ -146,9 +146,6 @@
 				     <td class="formTitle" height="20" colspan="6">
 				     <%String title = "specimen."+pageView+".title";%>
 				     	<bean:message key="<%=title%>"/>
-				     	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				     	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				     	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				     </td>
 				 </tr>
 				 <tr>
@@ -159,7 +156,7 @@
 						</label>
 					</td>
 					<td class="formField" colspan="4">
-			     		<html:select property="specimenCollectionGroupId" styleClass="formFieldSmallSized" styleId="specimenCollectionGroupId" size="1" disabled="<%=readOnlyForAll%>">
+			     		<html:select property="specimenCollectionGroupId" styleClass="formFieldSized15" styleId="specimenCollectionGroupId" size="1" disabled="<%=readOnlyForAll%>">
 							<html:options name="specimenCollectionGroupIdList" labelName="specimenCollectionGroupIdList"/>		
 						</html:select>
 		        		<a href="SpecimenCollectionGroup.do?operation=add">
@@ -175,7 +172,7 @@
 				     	</label>
 				    </td>
 				    <td class="formField" colspan="4">
-				     	<html:select property="type" styleClass="formFieldSized" styleId="type" size="1" disabled="<%=readOnlyForAll%>">
+				     	<html:select property="type" styleClass="formFieldSized15" styleId="type" size="1" disabled="<%=readOnlyForAll%>">
 							<html:options name="specimenTypeList" labelName="specimenTypeList"/>		
 						</html:select>
 		        	</td>
@@ -188,7 +185,7 @@
 				     	</label>
 				    </td>
 				    <td class="formField" colspan="4">
-				     	<html:select property="subType" styleClass="formFieldSized" styleId="subType" size="1" disabled="<%=readOnlyForAll%>">
+				     	<html:select property="subType" styleClass="formFieldSized15" styleId="subType" size="1" disabled="<%=readOnlyForAll%>">
 							<html:options name="specimenSubTypeList" labelName="specimenSubTypeList"/>		
 						</html:select>
 		        	</td>
@@ -204,7 +201,7 @@
 						</label>
 					</td>
 				     <td class="formField" colspan="4">
-				     	<html:select property="tissueSite" styleClass="formFieldSized" styleId="tissueSite" size="1" disabled="<%=readOnlyForAll%>">
+				     	<html:select property="tissueSite" styleClass="formFieldSized15" styleId="tissueSite" size="1" disabled="<%=readOnlyForAll%>">
 							<html:options name="tissueSiteList" labelName="tissueSiteList"/>		
 						</html:select>
 		        	  </td>
@@ -220,7 +217,7 @@
 						</label>
 					</td>
 				     <td class="formField" colspan="4">
-				     	<html:select property="tissueSide" styleClass="formFieldSized" styleId="tissueSide" size="1" disabled="<%=readOnlyForAll%>">
+				     	<html:select property="tissueSide" styleClass="formFieldSized15" styleId="tissueSide" size="1" disabled="<%=readOnlyForAll%>">
 							<html:options name="tissueSideList" labelName="tissueSideList"/>		
 						</html:select>
 		        	  </td>
@@ -236,7 +233,7 @@
 						</label>
 					</td>
 				    <td class="formField" colspan="4">
-				     	<html:select property="pathologicalStatus" styleClass="formFieldSized" styleId="pathologicalStatus" size="1" disabled="<%=readOnlyForAll%>">
+				     	<html:select property="pathologicalStatus" styleClass="formFieldSized15" styleId="pathologicalStatus" size="1" disabled="<%=readOnlyForAll%>">
 							<html:options name="pathologicalStatusList" labelName="pathologicalStatusList"/>		
 						</html:select>
 		        	</td>
@@ -252,7 +249,7 @@
 						</label>
 					</td>
 				    <td class="formField" colspan="4">
-				     	<html:text styleClass="formFieldSized" size="30" styleId="concentration" property="concentration" readonly="<%=readOnlyForAll%>"/>
+				     	<html:text styleClass="formFieldSized15" size="30" styleId="concentration" property="concentration" readonly="<%=readOnlyForAll%>"/>
 				    </td>
 				 </tr>
 				 <tr>
@@ -266,7 +263,7 @@
 						</label>
 					</td>
 				    <td class="formField" colspan="4">
-				     	<html:text styleClass="formFieldSized" size="30" styleId="quantity" property="quantity" readonly="<%=readOnlyForAll%>"/>
+				     	<html:text styleClass="formFieldSized15" size="30" styleId="quantity" property="quantity" readonly="<%=readOnlyForAll%>"/>
 				    </td>
 				 </tr>
 				 
@@ -281,27 +278,15 @@
 						</label>
 					</td>
 				    <td class="formField" colspan="4">
-				    	<html:textarea styleClass="formFieldSized" rows="3" styleId="comments" property="comments" readonly="<%=readOnlyForAll%>"/>
+				    	<html:textarea styleClass="formFieldSized15" rows="3" styleId="comments" property="comments" readonly="<%=readOnlyForAll%>"/>
 				    </td>
 				 </tr>
-				 </table>
-			    </td>
-			  </tr>
-			  <tr>
-    		    <td>
-			 	 <table summary="" cellpadding="3" cellspacing="0" border="0">
-				 <!-- Storage Begins here -->
+				 
 				 <tr>
 				     <td class="formTitle" height="20" colspan="2">
 				     	<bean:message key="specimen.storage"/>
 				     </td>
 				     <td class="formButtonField" colspan="4">
-				     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				     	<html:submit styleClass="actionButton">
 							<bean:message key="buttons.showMap"/>
 						</html:submit>
@@ -318,7 +303,7 @@
 						</label>
 					</td>
 				    <td class="formField" colspan="2">
-				     	<html:text styleClass="formFieldSized" size="30" styleId="storageContainer" property="storageContainer" readonly="<%=readOnlyForAll%>"/>
+				     	<html:text styleClass="formFieldSized15" size="30" styleId="storageContainer" property="storageContainer" readonly="<%=readOnlyForAll%>"/>
 				    </td>
 				 </tr>
 				 <tr>
@@ -332,7 +317,7 @@
 						</label>
 					</td>
 				    <td class="formField" colspan="2">
-				     	<html:text styleClass="formFieldSized" size="30" styleId="positionDimensionOne" property="positionDimensionOne" readonly="<%=readOnlyForAll%>"/>
+				     	<html:text styleClass="formFieldSized15" size="30" styleId="positionDimensionOne" property="positionDimensionOne" readonly="<%=readOnlyForAll%>"/>
 				    </td>
 				 </tr>
 				 <tr>
@@ -346,17 +331,10 @@
 						</label>
 					</td>
 				    <td class="formField" colspan="2">
-				     	<html:text styleClass="formFieldSized" size="30" styleId="positionDimensionTwo" property="positionDimensionTwo" readonly="<%=readOnlyForAll%>"/>
+				     	<html:text styleClass="formFieldSized15" size="30" styleId="positionDimensionTwo" property="positionDimensionTwo" readonly="<%=readOnlyForAll%>"/>
 				    </td>
 				 </tr>
-				 <!-- Storage Ends here -->
-				 </table>
-			    </td>
-			  </tr>
-			  <tr>
-    		    <td>
-			 	 <table summary="" cellpadding="3" cellspacing="0" border="0">	 
-				 <!-- External Identifiers Begin here -->
+				 
 				 <tr>
 				     <td class="formTitle" height="20" colspan="2">
 				     	<bean:message key="specimen.externalIdentifier"/>
@@ -385,32 +363,13 @@
 				     	1
 				     </td>
 				    <td class="formField">
-						<html:text styleClass="formFieldSized" size="30" styleId="externalIdentifierName" property="externalIdentifierType(1)" readonly="<%=readOnlyForAll%>"/>
+						<html:text styleClass="formFieldSized15" size="30" styleId="externalIdentifierName" property="externalIdentifierType(1)" readonly="<%=readOnlyForAll%>"/>
 					</td>
 				    <td class="formField" colspan="2">
-				     	<html:text styleClass="formFieldSized" size="30" styleId="externalIdentifierValue" property="externalIdentifierName(1)" readonly="<%=readOnlyForAll%>"/>
-				    </td>
-				 </tr>	
-				 			 
-				 <tr>
-			     	<td class="formSerialNumberField" width="5">
-				     	2
-				     </td>
-				    <td class="formField">
-						<html:text styleClass="formFieldSized" size="30" styleId="externalIdentifierName" property="externalIdentifierType(2)" readonly="<%=readOnlyForAll%>"/>
-					</td>
-				    <td class="formField" colspan="2">
-				     	<html:text styleClass="formFieldSized" size="30" styleId="externalIdentifierValue" property="externalIdentifierName(2)" readonly="<%=readOnlyForAll%>"/>
+				     	<html:text styleClass="formFieldSized15" size="30" styleId="externalIdentifierValue" property="externalIdentifierName(1)" readonly="<%=readOnlyForAll%>"/>
 				    </td>
 				 </tr>
-				 <!-- External Identifiers End here -->
-				 </table>
-			    </td>
-			  </tr>
-			  <tr>
-    		    <td>
-			 	 <table summary="" cellpadding="3" cellspacing="0" border="0">			 
-				 <!-- Bio-hazards Begin here -->
+				 
 				 <tr>
 				     <td class="formTitle" height="20" colspan="2">
 				     	<bean:message key="specimen.biohazards"/>
@@ -437,35 +396,20 @@
 				     	1
 				     </td>
 				     <td class="formField">
-				     	<html:select property="biohazard(1)" styleClass="formFieldSized" styleId="race" size="1" disabled="<%=readOnlyForAll%>">
+				     	<html:select property="biohazard(1)" styleClass="formFieldSized15" styleId="race" size="1" disabled="<%=readOnlyForAll%>">
 							<html:options name="biohazardTypeList" labelName="biohazardTypeList"/>		
 						</html:select>
 					 </td>
 				     <td class="formField" colspan="2">
-				     	<html:select property="biohazard(1)" styleClass="formFieldSized" styleId="race" size="1" disabled="<%=readOnlyForAll%>">
+				     	<html:select property="biohazard(1)" styleClass="formFieldSized15" styleId="race" size="1" disabled="<%=readOnlyForAll%>">
 							<html:options name="biohazardNameList" labelName="biohazardNameList"/>		
 						</html:select>
 		        	 </td>
 				 </tr>
-				 <tr>
-				    <td class="formSerialNumberField" width="5">
-				     	2
-				     </td>
-				    <td class="formField">
-				    	<html:select property="biohazard(2)" styleClass="formFieldSized" styleId="gender" size="1" disabled="<%=readOnlyForAll%>">
-							<html:options name="biohazardTypeList" labelName="biohazardTypeList"/>		
-						</html:select>
-				    </td>
-				    <td class="formField" colspan="2">
-				     	<html:select property="biohazard(2)" styleClass="formFieldSized" styleId="gender" size="1" disabled="<%=readOnlyForAll%>">
-							<html:options name="biohazardNameList" labelName="biohazardNameList"/>		
-						</html:select>
-		        	</td>
-				 </tr>
 				 <!-- Bio-hazards End here -->	
 				 </table>
-			  </td>
-			 </tr>
+			   
+
  			   	 <logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">		
 				 	<tr>
 				  		<td align="right" colspan="4">

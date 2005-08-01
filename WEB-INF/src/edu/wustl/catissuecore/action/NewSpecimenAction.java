@@ -9,6 +9,8 @@
 
 package edu.wustl.catissuecore.action;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -17,6 +19,10 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.dao.AbstractBizLogic;
+import edu.wustl.catissuecore.dao.BizLogicFactory;
+import edu.wustl.catissuecore.domain.Biohazard;
+import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.util.global.Constants;
 
 
@@ -43,7 +49,24 @@ public class NewSpecimenAction extends Action
         
         request.setAttribute(Constants.PAGEOF,pageOf);
         
-        String [] specimenCollectionGroupArray = {"1","2","3","4"}; 
+        AbstractBizLogic dao = BizLogicFactory.getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
+        
+        String sourceObjectName = SpecimenCollectionGroup.class.getName();
+        String[] displayNameFields = {"systemIdentifier"};
+        String valueField = "systemIdentifier";
+        
+        List specimenList = dao.getList(sourceObjectName, displayNameFields, valueField);
+        request.setAttribute(Constants.SPECIMENCOLLECTIONLIST, specimenList);
+        
+        sourceObjectName = Biohazard.class.getName();
+        String [] displayNameFields1 = {"name"};
+        valueField = "systemIdentifier";
+        
+        List biohazardList = dao.getList(sourceObjectName, displayNameFields1, valueField);
+        request.setAttribute(Constants.SPECIMENCOLLECTIONLIST, biohazardList);
+        
+        String [] specimenCollectionGroupArray = {"1","2","3","4"};
+        
         request.setAttribute(Constants.SPECIMEN_COLLECTION_GROUP_LIST,specimenCollectionGroupArray);
         
         request.setAttribute(Constants.SPECIMEN_TYPE_LIST, Constants.SPECIMEN_TYPE_VALUES);
@@ -58,7 +81,7 @@ public class NewSpecimenAction extends Action
         
         request.setAttribute(Constants.BIOHAZARD_NAME_LIST, Constants.BIOHAZARD_NAME_VALUES);
         
-        request.setAttribute(Constants.BIOHAZARD_TYPE_LIST, Constants.BIOHAZARD_TYPE_VALUES);
+        request.setAttribute(Constants.BIOHAZARD_TYPE_LIST, Constants.BIOHAZARD_TYPE_ARRAY);
         
         return mapping.findForward(Constants.SUCCESS);
     }
