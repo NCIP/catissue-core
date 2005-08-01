@@ -67,8 +67,16 @@
 								<bean:message key="approveUser.registrationDate" />
 							</th>
 						</tr>
+						<logic:empty name="showDomainObjectList">
+						<tr>
+							<td class="dataTableWhiteCenterHeader" colspan="5">  
+								<bean:message key="approveUser.newUsersNotFound" />
+							</td>
+						</tr>
+						</logic:empty>
 						<%int i=1;%>
 						<logic:iterate id="currentUser" name="showDomainObjectList">
+						
 							<tr class="dataRowLight">
 								<%
         								User user = (User) currentUser;

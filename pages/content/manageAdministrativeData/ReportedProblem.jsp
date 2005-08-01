@@ -73,10 +73,17 @@
 							<th class="dataTableHeader" scope="col" align="left">
 								<bean:message key="reportedProblem.title" />
 							</th>
-							<th class="dataTableHeader" scope="col" align="left">
+							<th class ="dataTableHeader" scope="col" align="left">
 								<bean:message key="reportedProblem.reportedDate" />
 							</th>
 						</tr>
+						<logic:empty name="showDomainObjectList">
+							<tr>
+								<td class="dataTableWhiteCenterHeader" colspan="5">  
+									<bean:message key="reportedProblem.noNewProblemFound" />
+								</td>
+							</tr>
+						</logic:empty>
 						<%int i=1;%>
 						<logic:iterate id="problem" name="showDomainObjectList">
 							<tr class="dataRowLight">
@@ -127,7 +134,7 @@
 							</td>
 							<td>
 								<%
-									setOperation = "setOperation('"+Constants.ACTIVITY_STATUS_PENDING+"')";
+									setOperation = "setOperation('"+Constants.APPROVE_USER_PENDING_STATUS+"')";
 								%>
 								<html:submit styleClass="actionButton" onclick="<%=setOperation%>">
 									<bean:message  key="buttons.pending" />
