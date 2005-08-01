@@ -24,12 +24,9 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.StorageContainerForm;
-import edu.wustl.catissuecore.dao.AbstractDAO;
 import edu.wustl.catissuecore.dao.BizLogicFactory;
-import edu.wustl.catissuecore.dao.DAOFactory;
 import edu.wustl.catissuecore.dao.StorageContainerBizLogic;
 import edu.wustl.catissuecore.domain.Site;
-import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.util.global.Constants;
 
@@ -45,8 +42,6 @@ public class StorageContainerAction extends Action
             throws IOException, ServletException
     {
     	StorageContainerForm storageContainerForm = (StorageContainerForm) form;
-    	
-    	System.out.println("storageContainerForm "+storageContainerForm.getFormId());
     	
         //Gets the value of the operation parameter.
         String operation = request.getParameter(Constants.OPERATION);
@@ -64,6 +59,7 @@ public class StorageContainerAction extends Action
             List typeList = bizLogic.retrieve(StorageType.class.getName());
             String[] storageTypeArray	= new String[typeList.size() + 1];
             String[] storageTypeIdArray = new String[typeList.size() + 1];
+
             iterator = typeList.listIterator();
             
             storageTypeArray[0]	 = Constants.SELECT_OPTION;
@@ -138,7 +134,10 @@ public class StorageContainerAction extends Action
         	request.setAttribute(Constants.SITELIST,siteArray);
         	request.setAttribute(Constants.SITEIDLIST,siteIdArray);
         	
-        	request.setAttribute("startNumber",String.valueOf(bizLogic.getNextContainerNumber(1,1)));
+        	request.setAttribute("startNumber",String.valueOf(bizLogic.getNextContainerNumber(storageContainerForm.getSiteId(),storageContainerForm.getTypeId())));
+        	
+        	System.out.println(storageContainerForm.getSiteId()+"*************************" + storageContainerForm.getTypeId());
+        
 		}
         catch(Exception e)
 		{

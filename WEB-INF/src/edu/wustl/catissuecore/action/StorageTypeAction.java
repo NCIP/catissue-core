@@ -16,20 +16,20 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-//import org.apache.struts.action.Action;
+import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.util.global.Constants;
 
-public class StorageTypeAction extends BaseAction
+public class StorageTypeAction extends Action//BaseAction
 {
     /**
      * Overrides the execute method of Action class.
      * Initializes the various fields in StorageType.jsp Page.
      * */
-    public ActionForward executeAction(ActionMapping mapping, ActionForm form,
+    public ActionForward execute(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException
     {

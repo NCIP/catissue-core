@@ -13,6 +13,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -163,23 +164,32 @@ public class JDBCDAO extends AbstractDAO
             PreparedStatement stmt = connection.prepareStatement(query
                     .toString());
             ResultSet resultSet = stmt.executeQuery();
-
-            
+           
             list = new ArrayList();
+            
+            ResultSetMetaData metaData = resultSet.getMetaData();
+            int columnCount = metaData.getColumnCount();
+            
+            List aList= new ArrayList();
             
             while (resultSet.next())
             {
-                int i = 0;
-                String[] columnData = new String[resultSet.getFetchSize()];
-                
-                while (i < selectColumnName.length)
+                int i = 1;
+                                   
+                while (i <= columnCount)
                 {
-                    columnData[i] = new String(resultSet.getObject(selectColumnName[i]).toString());
-                    i++;
+                	if(resultSet.getObject(i) != null)
+                	{
+                		aList.add(new String(resultSet.getObject(i).toString()));
+                	}
+                	i++;
                 }
-                list.add(columnData);
+                
+                for(i=0;i<aList.size();i++)
+                {
+                	list.add(aList.get(0));
+                }
             }
-            
         }
         catch (SQLException sqlExp)
         {

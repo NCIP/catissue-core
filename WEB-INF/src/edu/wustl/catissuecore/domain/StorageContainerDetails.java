@@ -34,6 +34,7 @@ public class StorageContainerDetails implements java.io.Serializable
 	protected String parameterValue;
 	
 	protected StorageContainer storageContainer; 
+	
 	/**
      * Returns System generated unique identifier.
      * @return Long System generated unique identifier.

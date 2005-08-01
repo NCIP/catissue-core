@@ -110,6 +110,17 @@ public class StorageContainer extends AbstractDomainObject implements java.io.Se
 		setAllValues(form);
 	}
 	
+	public StorageContainer(StorageContainer oldContainer)
+	{
+		this.setActivityStatus(oldContainer.getActivityStatus());
+		this.setParentContainer(oldContainer.getParentContainer());
+		this.setSite(oldContainer.getSite());
+		this.setStorageContainerCapacity(oldContainer.getStorageContainerCapacity());
+		this.setStorageType(oldContainer.getStorageType());
+		this.setTempratureInCentigrade(oldContainer.getTempratureInCentigrade());
+		this.setStorageContainerDetailsCollection(new HashSet(oldContainer.getStorageContainerDetailsCollection()));
+	}
+	
 	/**
      * Returns System generated unique systemIdentifier.
      * @return System generated unique systemIdentifier.
@@ -464,7 +475,7 @@ public class StorageContainer extends AbstractDomainObject implements java.io.Se
 	        
 	        MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.domain");
 	        
-	        Collection storageContainerDetailsCollectionTemp = parser.generateData(map); 
+	        Collection storageContainerDetailsCollectionTemp = parser.generateData(map);
 	        this.storageContainerDetailsCollection.addAll(storageContainerDetailsCollectionTemp);
 	    }
 	    catch(Exception excp)

@@ -22,6 +22,7 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+
 import edu.wustl.catissuecore.dao.SiteBizLogic;
 import edu.wustl.catissuecore.dao.BizLogicFactory;
 import edu.wustl.catissuecore.domain.User;
@@ -32,7 +33,7 @@ import edu.wustl.catissuecore.util.global.Constants;
  * This class initializes the fields of the Site Add/Edit webpage.
  * @author aniruddha_phadnis
  */
-public class SiteAction extends Action
+public class SiteAction extends Action//BaseAction
 {
 
     /**
@@ -84,8 +85,6 @@ public class SiteAction extends Action
                 userIdArray[i] = user.getSystemIdentifier().toString();
                 i++;
             }
-            
-        	//String [] userArray = {"Phadnis, Aniruddha","Kaveeshwar, Kapil"};
         	
         	request.setAttribute(Constants.USERLIST, userArray);
         	request.setAttribute(Constants.USERIDLIST, userIdArray);
