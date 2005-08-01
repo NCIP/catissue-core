@@ -137,9 +137,12 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
         	long [] coordinatorsArr = cpForm.getProtocolCoordinatorIds();
         	for (int i = 0; i < coordinatorsArr.length; i++)
 			{
-        		User coordinators = new User();
-        		coordinators.setSystemIdentifier(new Long(coordinatorsArr[i]));
-        		userCollection.add(coordinators);
+        		if(coordinatorsArr[i]!=-1)
+        		{
+	        		User coordinator = new User();
+	        		coordinator.setSystemIdentifier(new Long(coordinatorsArr[i]));
+	        		userCollection.add(coordinator);
+        		}
 			}
         	
 	        Map map = cpForm.getValues();

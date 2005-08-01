@@ -133,4 +133,11 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 		return errors;
 	}
 	
+	/**
+	 * Returns the id assigned to form bean
+	 */
+	public int getFormId()
+	{
+		return Constants.COLLECTION_PROTOCOL_FORM_ID;
+	}
 }

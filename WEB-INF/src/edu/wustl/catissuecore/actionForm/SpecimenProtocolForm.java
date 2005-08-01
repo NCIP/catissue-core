@@ -26,7 +26,7 @@ import edu.wustl.common.util.logger.Logger;
  * TODO To change the template for this generated type comment go to
  * Window - Preferences - Java - Code Style - Code Templates
  */
-public class SpecimenProtocolForm extends AbstractActionForm
+public abstract class SpecimenProtocolForm extends AbstractActionForm
 {
 	/**
 	 * identifier is a unique id assigned to each User.
@@ -251,14 +251,6 @@ public class SpecimenProtocolForm extends AbstractActionForm
 	public void setOperation(String operation)
 	{
 		this.operation = operation;
-	}
-
-	/**
-	 * Returns the id assigned to form bean
-	 */
-	public int getFormId()
-	{
-		return Constants.COLLECTION_PROTOCOL_FORM_ID;
 	}
 
 	/**

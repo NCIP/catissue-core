@@ -102,4 +102,12 @@ public class DistributionProtocolForm extends SpecimenProtocolForm
 		}
 		return errors;
 	}
+	
+	/**
+	 * Returns the id assigned to form bean
+	 */
+	public int getFormId()
+	{
+		return Constants.DISTRIBUTIONPROTOCOL_FORM_ID;
+	}
 }
