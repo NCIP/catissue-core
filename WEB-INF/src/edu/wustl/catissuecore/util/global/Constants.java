@@ -17,8 +17,7 @@ package edu.wustl.catissuecore.util.global;
 
 public class Constants
 {	
-	public static final String APPROVE_USER_PAGE = "approveUserPage";
-	public static final String YOUR_PASSWORD="TMP";
+    
     //Constants used for authentication module.
     public static final String LOGIN = "login";
     public static final String USER = "user";
@@ -93,6 +92,7 @@ public class Constants
 	public static final String SITEIDLIST="siteIdList";
 	public static final String USERIDLIST = "userIdList";
 	public static final String STORAGETYPEIDLIST="storageTypeIdList";
+	public static final String APPROVE_USER_STATUS_LIST = "statusList";
 	
 	//New Specimen lists.
 	public static final String SPECIMEN_COLLECTION_GROUP_LIST = "specimenCollectionGroupIdList";
@@ -150,7 +150,7 @@ public class Constants
 	public static final String SITE_ADD_ACTION = "SiteAdd.do";
 	public static final String SITE_EDIT_ACTION = "SiteEdit.do";
 	
-//	Constants required in Site.jsp Page
+	//Constants required in Site.jsp Page
 	public static final String BIOHAZARD_SEARCH_ACTION = "BiohazardSearch.do";
 	public static final String BIOHAZARD_ADD_ACTION = "BiohazardAdd.do";
 	public static final String BIOHAZARD_EDIT_ACTION = "BiohazardEdit.do";
@@ -200,22 +200,22 @@ public class Constants
 	public static final String SPECIMEN_COLLECTION_GROUP_ADD_ACTION = "SpecimenCollectionGroupAdd.do";
 	public static final String SPECIMEN_COLLECTION_GROUP_EDIT_ACTION = "SpecimenCollectionGroupEdit.do";
 
-//	Constants required in FrozenEventParameters.jsp Page
+	//Constants required in FrozenEventParameters.jsp Page
 	public static final String FROZEN_EVENT_PARAMETERS_SEARCH_ACTION = "FrozenEventParametersSearch.do";
 	public static final String FROZEN_EVENT_PARAMETERS_ADD_ACTION = "FrozenEventParametersAdd.do";
 	public static final String FROZEN_EVENT_PARAMETERS_EDIT_ACTION = "FrozenEventParametersEdit.do";
 
-//	Constants required in CheckInCheckOutEventParameters.jsp Page
+	//Constants required in CheckInCheckOutEventParameters.jsp Page
 	public static final String CHECKIN_CHECKOUT_EVENT_PARAMETERS_SEARCH_ACTION = "CheckInCheckOutEventParametersSearch.do";
 	public static final String CHECKIN_CHECKOUT_EVENT_PARAMETERS_ADD_ACTION = "CheckInCheckOutEventParametersAdd.do";
 	public static final String CHECKIN_CHECKOUT_EVENT_PARAMETERS_EDIT_ACTION = "CheckInCheckOutEventParametersEdit.do";
 
-//	Constants required in ReceivedEventParameters.jsp Page
+	//Constants required in ReceivedEventParameters.jsp Page
 	public static final String RECEIVED_EVENT_PARAMETERS_SEARCH_ACTION = "ReceivedEventParametersSearch.do";
 	public static final String RECEIVED_EVENT_PARAMETERS_ADD_ACTION = "ReceivedEventParametersAdd.do";
 	public static final String RECEIVED_EVENT_PARAMETERS_EDIT_ACTION = "ReceivedEventParametersEdit.do";
 
-//	Constants required in FluidSpecimenReviewEventParameters.jsp Page
+	//Constants required in FluidSpecimenReviewEventParameters.jsp Page
 	public static final String FLUID_SPECIMEN_REVIEW_EVENT_PARAMETERS_SEARCH_ACTION = "FluidSpecimenReviewEventParametersSearch.do";
 	public static final String FLUID_SPECIMEN_REVIEW_EVENT_PARAMETERS_ADD_ACTION = "FluidSpecimenReviewEventParametersAdd.do";
 	public static final String FLUID_SPECIMEN_REVIEW_EVENT_PARAMETERS_EDIT_ACTION = "FluidSpecimenReviewEventParametersEdit.do";
@@ -307,6 +307,8 @@ public class Constants
 	public static final int CELL_SPECIMEN_REVIEW_PARAMETERS_FORM_ID =22;
 	public static final int TISSUE_SPECIMEN_REVIEW_EVENT_PARAMETERS_FORM_ID = 23;
 	
+	//Misc
+	public static final String SEPARATOR = " : ";
 	//Status message key Constants
 	public static final String STATUS_MESSAGE_KEY = "statusMessageKey";
 	
@@ -315,11 +317,13 @@ public class Constants
 	
 	//Activity Status values
 	public static final String ACTIVITY_STATUS_ACTIVE = "Active";
-	public static final String ACTIVITY_STATUS_APPROVE = "Approve";
-	public static final String ACTIVITY_STATUS_REJECT = "Reject";
 	public static final String ACTIVITY_STATUS_NEW = "New";
-	public static final String ACTIVITY_STATUS_PENDING = "Pending";
 	public static final String ACTIVITY_STATUS_CLOSED = "Closed";
+	
+	//Approve User status values.
+	public static final String APPROVE_USER_APPROVE_STATUS = "Approve";
+	public static final String APPROVE_USER_REJECT_STATUS = "Reject";
+	public static final String APPROVE_USER_PENDING_STATUS = "Pending";
 	
 	//Approve User Constants
 	public static final int ZERO = 0;
@@ -344,7 +348,7 @@ public class Constants
 	public static final String QUERY = "query";
 	public static final String PAGEOF_APPROVE_USER = "pageOfApproveUser";
 	public static final String PAGEOF_SIGNUP = "pageOfSignUp";
-	public static final String PAGEOF_USERADD = "pageOfUserAdd";
+	public static final String PAGEOF_USER_ADMIN = "pageOfUserAdmin";
 	
 	//For Tree Applet
 	public static final String PAGEOF_QUERY_RESULTS = "pageOfQueryResults";
@@ -701,12 +705,12 @@ public class Constants
             "Zimbabwe",//Zimbabwe  
 	};
 	
-//	Constants required in CollectionProtocol.jsp Page
+	//Constants required in CollectionProtocol.jsp Page
 	public static final String COLLECTIONPROTOCOL_SEARCH_ACTION = "CollectionProtocolSearch.do";
 	public static final String COLLECTIONPROTOCOL_ADD_ACTION = "CollectionProtocolAdd.do";
 	public static final String COLLECTIONPROTOCOL_EDIT_ACTION = "CollectionProtocolEdit.do";
 
-//	Constants required in DistributionProtocol.jsp Page
+	//Constants required in DistributionProtocol.jsp Page
 	public static final String DISTRIBUTIONPROTOCOL_SEARCH_ACTION = "DistributionProtocolSearch.do";
 	public static final String DISTRIBUTIONPROTOCOL_ADD_ACTION = "DistributionProtocolAdd.do";
 	public static final String DISTRIBUTIONPROTOCOL_EDIT_ACTION = "DistributionProtocolEdit.do";
@@ -724,12 +728,11 @@ public class Constants
 	        "Closed"
 	};
 
-	public static final String [] NEW_USER_ACTIVITY_STATUS_VALUES = {
+	public static final String [] APPROVE_USER_STATUS_VALUES = {
 	        SELECT_OPTION,
-	        "Active",
-	        "Disabled",
-	        "Closed",
-	        "New"
+	        APPROVE_USER_APPROVE_STATUS,
+	        APPROVE_USER_REJECT_STATUS,
+	        APPROVE_USER_PENDING_STATUS,
 	};
 
 	public static final String [] REPORTED_PROBLEM_ACTIVITY_STATUS_VALUES = {
