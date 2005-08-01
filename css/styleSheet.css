@@ -1,3 +1,4 @@
+
 /*########## INSTRUCTIONS ##########
 1. comments that start with constant: indicate colors that don't change among the color schemes
 2. comments with the words lighter or darker indicate the colors that do change depending on the color scheme
@@ -532,6 +533,16 @@ DATA TABLE BEGINS
   font-size:0.8em;
   border-right:1px solid #5C5C5C; /* constant: dark gray */
   border-bottom:1px solid #5C5C5C; /* constant: dark gray */
+}
+.dataTableWhiteCenterHeader{ /* for the horizontal column with white color*/
+  font-family:arial,helvetica,verdana,sans-serif;
+  background-color:#FFFFFF; /* constant: white */
+  color:#000000; /* constant: Black */
+  font-weight:bold;
+  font-size:0.9em;
+  border-right:1px solid #5C5C5C; /* constant: dark gray */
+  border-bottom:1px solid #5C5C5C; /* constant: dark gray */
+  text-align:center;
 }
 .dataTable{ /* for the main table below the labels */
   font-family:arial,helvetica,verdana,sans-serif;
