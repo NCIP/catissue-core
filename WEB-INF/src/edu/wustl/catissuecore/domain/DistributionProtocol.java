@@ -12,9 +12,11 @@ package edu.wustl.catissuecore.domain;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Map;
 
 import edu.wustl.catissuecore.actionForm.AbstractActionForm;
-import edu.wustl.common.util.logger.Logger;
+import edu.wustl.catissuecore.actionForm.DistributionProtocolForm;
+import edu.wustl.common.util.MapDataParser;
 
 /**
  * An abbreviated set of written procedures that describe how a previously collected specimen will be utilized.  Note that specimen may be collected with one collection protocol and then later utilized by multiple different studies (Distribution protocol).
@@ -36,6 +38,14 @@ public class DistributionProtocol extends SpecimenProtocol implements java.io.Se
 	 */
 	protected Collection collectionProtocolCollection = new HashSet();
 	
+	public DistributionProtocol()
+	{
+	}
+	
+	public DistributionProtocol(AbstractActionForm form)
+	{
+		super(form);	
+	}
 	// ---- Method section
 	/**
 	 * Returns the collection of SpecimenRequirements for this Protocol.
@@ -89,11 +99,20 @@ public class DistributionProtocol extends SpecimenProtocol implements java.io.Se
     {
         try
         {
-            
+        	super.setAllValues(abstractForm);
+        	
+	    	DistributionProtocolForm cpForm = (DistributionProtocolForm) abstractForm;
+	    	
+	    	Map map = cpForm.getValues();
+	        map = fixMap(map);
+	        System.out.println("MAP "+map);
+	        MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.domain");
+	        this.specimenRequirementCollection = parser.generateData(map);
+	        System.out.println("specimenRequirementCollection "+this.specimenRequirementCollection);
         }
         catch (Exception excp)
         {
-            Logger.out.error(excp.getMessage());
+        	excp.printStackTrace();
         }
     }
 }

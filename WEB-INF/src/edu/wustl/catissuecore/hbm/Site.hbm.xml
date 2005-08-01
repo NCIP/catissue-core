@@ -48,8 +48,6 @@
             insert="true"
             column="EMAIL_ADDRESS"
             length="150"
-            not-null="true"
-            unique="true"
         />
 
         <many-to-one

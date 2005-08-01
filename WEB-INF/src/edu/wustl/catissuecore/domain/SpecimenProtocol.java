@@ -11,9 +11,14 @@
 package edu.wustl.catissuecore.domain;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 import edu.wustl.catissuecore.actionForm.AbstractActionForm;
-import edu.wustl.catissuecore.domain.AbstractDomainObject ;
+import edu.wustl.catissuecore.actionForm.SpecimenProtocolForm;
+import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 /**
  *A set of procedures that govern the collection and/or distribution of biospecimens. 
  * @author mandar_deshmukh
@@ -27,7 +32,7 @@ public abstract class SpecimenProtocol extends AbstractDomainObject implements j
 	/**
 	 * System generated unique systemIdentifier.
 	 */
-	protected Long systemIdentifier;
+	protected Long systemIdentifier = new Long("1");
 	
 	/**
 	 * The current principal investigator of the protocol.
@@ -270,5 +275,93 @@ public abstract class SpecimenProtocol extends AbstractDomainObject implements j
 	public void setActivityStatus(String activityStatus)
 	{
 		this.activityStatus = activityStatus;
+	}
+	
+	public void setAllValues(AbstractActionForm abstractForm)
+	{
+		System.out.println("setAllValues ");
+        try
+        {
+        	SpecimenProtocolForm spForm = (SpecimenProtocolForm) abstractForm;
+        	this.systemIdentifier = new Long(spForm.getSystemIdentifier());
+        	this.title = spForm.getTitle();
+        	this.shortTitle = spForm.getShortTitle();
+        	this.irbIdentifier = spForm.getIrbID();
+        	
+        	this.startDate = Utility.parseDate(spForm.getStartDate(),Constants.DATE_PATTERN_MM_DD_YYYY);
+        	this.endDate = Utility.parseDate(spForm.getEndDate(),Constants.DATE_PATTERN_MM_DD_YYYY);
+
+        	this.enrollment = new Integer(spForm.getEnrollment());
+        	this.descriptionURL = spForm.getDescriptionURL();
+        	
+        	principalInvestigator  =new User();
+        	this.principalInvestigator.setSystemIdentifier(new Long(spForm.getPrincipalInvestigatorId()));
+        }
+        catch (Exception excp)
+        {
+        	excp.printStackTrace();
+        }
+	}
+	//SpecimenRequirement#FluidSpecimenRequirement:1.specimenType", "Blood");
+	protected Map fixMap(Map orgMap)
+	{
+		Map replaceMap = new HashMap();
+		Map unitMap = new HashMap();
+		unitMap.put("Cell","CellCount");
+		unitMap.put("Fluid","MiliLiter");
+		unitMap.put("Tissue","Gram");
+		unitMap.put("Molecular","MicroGram");
+		
+		Iterator it = orgMap.keySet().iterator();
+		while(it.hasNext())
+		{
+			String key = (String)it.next();
+			if(key.indexOf("specimenClass")!=-1)
+			{
+				String value = (String)orgMap.get(key);
+				String replaceWith = "SpecimenRequirement"+"#"+value+"SpecimenRequirement";
+				
+				key = key.substring(0,key.lastIndexOf("_"));
+				String newKey = key.replaceFirst("SpecimenRequirement",replaceWith);
+				
+				replaceMap.put(key,newKey);
+			}
+		}
+		
+		Map newMap = new HashMap();
+		it = orgMap.keySet().iterator();
+		while(it.hasNext())
+		{
+			String key = (String)it.next();
+			String value = (String)orgMap.get(key);
+			if(key.indexOf("SpecimenRequirement")==-1)
+			{
+				newMap.put(key,value);
+			}
+			else
+			{
+				if(key.indexOf("specimenClass")==-1)
+				{
+					String keyPart, newKeyPart;
+					if(key.indexOf("quantityIn")!=-1)
+					{
+						keyPart = "quantityIn";
+						
+						String searchKey = key.substring(0,key.lastIndexOf("_"))+"_specimenClass";
+						String specimenClass = (String)orgMap.get(searchKey);
+						String unit = (String)unitMap.get(specimenClass);
+						newKeyPart = keyPart + unit;
+						
+						key = key.replaceFirst(keyPart,newKeyPart);
+					}
+					//Replace # and class name and FIX for abstract class
+					keyPart = key.substring(0,key.lastIndexOf("_"));
+					newKeyPart = (String)replaceMap.get(keyPart);
+					key = key.replaceFirst(keyPart,newKeyPart);
+					newMap.put(key,value);
+				}
+			}
+		}		
+		return newMap;
 	}
 }

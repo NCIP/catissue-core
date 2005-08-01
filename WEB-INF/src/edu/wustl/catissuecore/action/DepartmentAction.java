@@ -16,7 +16,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -28,16 +27,22 @@ import edu.wustl.catissuecore.util.global.Constants;
  * @author gautam_shetty
  */
 
-public class DepartmentAction extends Action
+public class DepartmentAction extends BaseAction
 {
     /**
      * Overrides the execute method of Action class.
      * Sets the various fields in Department Add/Edit webpage.
      * */
-    public ActionForward execute(ActionMapping mapping, ActionForm form,
+    public ActionForward executeAction(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException
     {
+    	/*System.out.println("heree rerere rere...............");
+    	Logger.out.info("heree rerere rere...............");
+    	CDE cde = CDEManager.cdeManager.getCDE("Sex");
+    	System.out.println("CDE>> "+cde.getPublicId()+" : "+cde.getLongName());
+    	Logger.out.info("After heree rerere rere...............");*/
+    	
         //Gets the value of the operation parameter.
         String operation = request.getParameter(Constants.OPERATION);
         

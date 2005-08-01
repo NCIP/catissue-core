@@ -281,4 +281,4 @@ public abstract class EventParametersForm extends AbstractActionForm
  		this.userId = eventParametersObject.getUser().getSystemIdentifier().longValue() ;
  		this.dateOfEvent = eventParametersObject.getTimestamp().getMonth()+"-"+eventParametersObject.getTimestamp().getDay()+"-"+eventParametersObject.getTimestamp().getYear() ;
  	}
-} // class
+}

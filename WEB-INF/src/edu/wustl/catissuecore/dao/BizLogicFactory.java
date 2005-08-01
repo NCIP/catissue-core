@@ -64,6 +64,9 @@ public class BizLogicFactory
         	case Constants.COLLECTION_PROTOCOL_FORM_ID:
         		abstractBizLogic = new CollectionProtocolBizLogic();
         		break;
+        	case Constants.DISTRIBUTIONPROTOCOL_FORM_ID:
+        		abstractBizLogic = new DistributionProtocolBizLogic();
+        		break;
 			case Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID:
 				abstractBizLogic = new CollectionProtocolRegistrationBizLogic();
 				break;	

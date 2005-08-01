@@ -11,6 +11,7 @@
 package edu.wustl.catissuecore.action;
 
 import java.io.IOException;
+import java.util.Collection;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -21,6 +22,8 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.dao.BizLogicFactory;
+import edu.wustl.catissuecore.dao.UserBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
 
 /**
@@ -46,16 +49,15 @@ public class SpecimenProtocolAction extends Action
   
         try
 		{
-	    	String [] userArray = {Constants.SELECT_OPTION, "Phadnis, Aniruddha","Kaveeshwar, Kapil","ABC","BBC","CCC"};
-	    	String [] userIdArray = {"-1","47","48","47","48","5"};
-	    	
-	    	request.setAttribute(Constants.USERLIST, userArray);
-	    	request.setAttribute(Constants.USERIDLIST, userIdArray);
-	    	
-	    	
-	    	String [] clinicalStatusArry = {Constants.SELECT_OPTION, "Pre-Opt","Post-Opt"};
-	    	request.setAttribute(Constants.CLINICAL_STATUS_LIST, clinicalStatusArry);
-	    	
+        	UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getBizLogic(Constants.USER_FORM_ID);
+        	Collection coll =  userBizLogic.getUsers(Constants.ACTIVITY_STATUS_ACTIVE);
+        	request.setAttribute(Constants.USERLIST, coll);
+        	
+//        	Collection coll =  new Vector();
+//        	coll.add(new NameValueBean("A, B","47"));
+//        	request.setAttribute(Constants.USERLIST, coll);
+
+        	
 	    	String [] specimenClassArry = {Constants.SELECT_OPTION, "Fluid Specimen","Tissue Specimen","Cell Specimen","Molecular Specimen"};
 	    	String [] specimenClassIdArry = {Constants.SELECT_OPTION, "Fluid","Tissue","Cell","Molecular"};
 	    	request.setAttribute(Constants.SPECIMEN_CLASS_LIST, specimenClassArry);

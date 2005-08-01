@@ -34,434 +34,444 @@ import edu.wustl.common.util.logger.Logger;
  * */
 public class StorageContainerForm extends AbstractActionForm
 {
-    /**
-     * identifier is a unique id assigned to each Storage Container.
-     * */
-    private long systemIdentifier;
 
-    /**
-     * A String containing the operation(Add/Edit) to be performed.
-     * */
-    private String operation;
-    
-    /**
-     * An id which refers to the type of the storage.
-     */
-    private long typeId;
-    
-    /**
-     * An id which refers to Parent Container of this container.
-     */
-    private long parentContainerId;
+	/**
+	 * identifier is a unique id assigned to each Storage Container.
+	 * */
+	private long systemIdentifier;
 
-    /**
-     * An id which refers to the site of the container if it is parent container.
-     */
-    private long siteId;
-    
-    /**
-     * A default temperature of the storage container.
-     */
-    private double defaultTemperature;
-    
-    /**
-     * Capacity in dimension one.
-     */
-    private int oneDimensionCapacity;
+	/**
+	 * A String containing the operation(Add/Edit) to be performed.
+	 * */
+	private String operation;
 
-    /**
-     * Capacity in dimension two.
-     */
-    private int twoDimensionCapacity;
+	/**
+	 * An id which refers to the type of the storage.
+	 */
+	private long typeId;
 
-    /**
-     * Text label for dimension one.
-     */
-    private String oneDimensionLabel;
+	/**
+	 * An id which refers to Parent Container of this container.
+	 */
+	private long parentContainerId;
 
-    /**
-     * Text label for dimension two.
-     */
-    private String twoDimensionLabel;
-    
-    /**
-     * Starting Number.
-     */
-    private String startNumber="1111";
+	/**
+	 * An id which refers to the site of the container if it is parent container.
+	 */
+	private long siteId;
 
-    /**
-     * No. of containers.
-     */
-    private int noOfContainers=1;
-    
-    /**
-     * Text label for dimension two.
-     */
-    private String barcode;
-    
-    /**
-     * Key.
-     */
-    private String key;
-    
-    /**
-     * Radio button to choose site/parentContainer.
-     */
-    private int checkedButton=1;
-    
-    /**
-     * Tells whether this container is full or not.
-     */
-    private String isFull;
-    
-    /**
+	/**
+	 * A default temperature of the storage container.
+	 */
+	private double defaultTemperature;
+
+	/**
+	 * Capacity in dimension one.
+	 */
+	private int oneDimensionCapacity;
+
+	/**
+	 * Capacity in dimension two.
+	 */
+	private int twoDimensionCapacity;
+
+	/**
+	 * Text label for dimension one.
+	 */
+	private String oneDimensionLabel;
+
+	/**
+	 * Text label for dimension two.
+	 */
+	private String twoDimensionLabel;
+
+	/**
+	 * Starting Number.
+	 */
+	private String startNumber = "1111";
+
+	/**
+	 * No. of containers.
+	 */
+	private int noOfContainers = 1;
+
+	/**
+	 * Text label for dimension two.
+	 */
+	private String barcode;
+
+	/**
+	 * Key.
+	 */
+	private String key;
+
+	/**
+	 * Radio button to choose site/parentContainer.
+	 */
+	private int checkedButton = 1;
+
+	/**
+	 * Tells whether this container is full or not.
+	 */
+	private String isFull;
+
+	/**
 	 * Defines whether this Storage Container record can be queried (ACTIVE) or not queried (INACTIVE) by any actor.
 	 */
 	private String activityStatus;
-    
+
 	/**
 	 * Map to handle values of all the CollectionProtocol Events
 	 */
 	protected Map values = new HashMap();
-	
-    /**
-     * No argument constructor for StorageTypeForm class 
-     */
-    public StorageContainerForm()
-    {
-        reset();
-    }
 
-    /**
-     * This function Copies the data from an storage type object to a StorageTypeForm object.
-     * @param storageType A StorageType object containing the information about storage type of the container.  
-     */
-    public void setAllValues(AbstractDomainObject abstractDomain)
-    {
-        try
-        {
-        	StorageContainer container = (StorageContainer) abstractDomain;
-        	
-            this.systemIdentifier = container.getSystemIdentifier().longValue();
-            this.typeId = container.getStorageType().getSystemIdentifier().longValue();
-            this.parentContainerId= container.getParentContainer().getSystemIdentifier().longValue();
-            this.siteId = container.getSite().getSystemIdentifier().longValue();
-            this.defaultTemperature		= container.getTempratureInCentigrade().doubleValue();
-            this.oneDimensionCapacity	= container.getStorageContainerCapacity().getOneDimensionCapacity().intValue();
-            this.twoDimensionCapacity	= container.getStorageContainerCapacity().getTwoDimensionCapacity().intValue();
-            this.oneDimensionLabel		= container.getStorageContainerCapacity().getOneDimensionLabel();
-            this.twoDimensionLabel		= container.getStorageContainerCapacity().getTwoDimensionLabel();
-            this.noOfContainers			= container.getNoOfContainers().intValue();
-            this.startNumber			= String.valueOf(container.getStartNo().intValue());
-        }
-        catch (Exception excp)
-        {
-            Logger.out.error(excp.getMessage(),excp);
-        }
-    }
+	/**
+	 * No argument constructor for StorageTypeForm class 
+	 */
+	public StorageContainerForm()
+	{
+		reset();
+	}
 
-    /**
-     * Returns the identifier assigned to Storage Container.
-     * @return long identifier assigned to Storage Container.
-     * @see #setIdentifier(long)
-     * */
-    public long getSystemIdentifier()
-    {
-        return (this.systemIdentifier);
-    }
+	/**
+	 * This function Copies the data from an storage type object to a StorageTypeForm object.
+	 * @param storageType A StorageType object containing the information about storage type of the container.  
+	 */
+	public void setAllValues(AbstractDomainObject abstractDomain)
+	{
+		try
+		{
+			StorageContainer container = (StorageContainer) abstractDomain;
 
-    /**
-     * Sets an the identifier for a Storage Container.
-     * @param systemIdentifier identifier to be assigned to Storage Container.
-     * @see #getIdentifier()
-     * */
-    public void setSystemIdentifier(long systemIdentifier)
-    {
-        this.systemIdentifier = systemIdentifier;
-    }
-    
-    /**
-     * Returns the operation(Add/Edit) to be performed.
-     * @return Returns the operation.
-     * @see #setOperation(String)
-     */
-    public String getOperation()
-    {
-        return operation;
-    }
-    
-    /**
-     * Sets the operation to be performed.
-     * @param operation The operation to set.
-     * @see #getOperation()
-     */
-    public void setOperation(String operation)
-    {
-        this.operation = operation;
-    }
-    
-    /**
-     * Returns an id which refers to the type of the storage.
-     * @return An id which refers to the type of the storage.
-     * @see #setTypeId(long)
-     */
-    public long getTypeId()
-    {
-        return this.typeId;
-    }
+			this.systemIdentifier = container.getSystemIdentifier().longValue();
+			this.typeId = container.getStorageType().getSystemIdentifier().longValue();
+			this.parentContainerId = container.getParentContainer().getSystemIdentifier()
+					.longValue();
+			this.siteId = container.getSite().getSystemIdentifier().longValue();
+			this.defaultTemperature = container.getTempratureInCentigrade().doubleValue();
+			this.oneDimensionCapacity = container.getStorageContainerCapacity()
+					.getOneDimensionCapacity().intValue();
+			this.twoDimensionCapacity = container.getStorageContainerCapacity()
+					.getTwoDimensionCapacity().intValue();
+			this.oneDimensionLabel = container.getStorageContainerCapacity().getOneDimensionLabel();
+			this.twoDimensionLabel = container.getStorageContainerCapacity().getTwoDimensionLabel();
+			this.noOfContainers = container.getNoOfContainers().intValue();
+			this.startNumber = String.valueOf(container.getStartNo().intValue());
+		}
+		catch (Exception excp)
+		{
+			Logger.out.error(excp.getMessage(), excp);
+		}
+	}
 
-    /**
-     * Sets an id which refers to the type of the storage.
-     * @param typeId An id which refers to the type of the storage.
-     * @see #getTypeId()
-     */
-    public void setTypeId(long typeId)
-    {
-        this.typeId = typeId;
-    }
+	/**
+	 * Returns the identifier assigned to Storage Container.
+	 * @return long identifier assigned to Storage Container.
+	 * @see #setIdentifier(long)
+	 * */
+	public long getSystemIdentifier()
+	{
+		return (this.systemIdentifier);
+	}
 
-    /**
-     * Returns the default temperature of the storage container.
-     * @return double the default temperature of the storage container to be set.
-     * @see #setDefaultTemperature(double)
-     */
-    public double getDefaultTemperature()
-    {
-        return this.defaultTemperature;
-    }
+	/**
+	 * Sets an the identifier for a Storage Container.
+	 * @param systemIdentifier identifier to be assigned to Storage Container.
+	 * @see #getIdentifier()
+	 * */
+	public void setSystemIdentifier(long systemIdentifier)
+	{
+		this.systemIdentifier = systemIdentifier;
+	}
 
-    /**
-     * Sets the default temperature of the storage container.
-     * @param defaultTemperature the default temperature of the storage container to be set.
-     * @see #getDefaultTemperature()
-     */
-    public void setDefaultTemperature(double defaultTemperature)
-    {
-        this.defaultTemperature = defaultTemperature;
-    }
-   
-    /**
-     * Returns the capacity of dimension one.
-     * @return int the capacity of dimension one.
-     * @see #setOneDimensionCapacity(int)
-     */
-    public int getOneDimensionCapacity()
-    {
-        return this.oneDimensionCapacity;
-    }
+	/**
+	 * Returns the operation(Add/Edit) to be performed.
+	 * @return Returns the operation.
+	 * @see #setOperation(String)
+	 */
+	public String getOperation()
+	{
+		return operation;
+	}
 
-    /**
-     * Sets the capacity of dimension one.
-     * @param oneDimensionCapacity the capacity of dimension one to be set.
-     * @see #getOneDimensionCapacity()
-     */
-    public void setOneDimensionCapacity(int oneDimensionCapacity)
-    {
-        this.oneDimensionCapacity = oneDimensionCapacity;
-    }
+	/**
+	 * Sets the operation to be performed.
+	 * @param operation The operation to set.
+	 * @see #getOperation()
+	 */
+	public void setOperation(String operation)
+	{
+		this.operation = operation;
+	}
 
-    /**
-     * Returns the capacity of dimension two.
-     * @return int the capacity of dimension two.
-     * @see #setTwoDimensionCapacity(int)
-     */
-    public int getTwoDimensionCapacity()
-    {
-        return this.twoDimensionCapacity;
-    }
+	/**
+	 * Returns an id which refers to the type of the storage.
+	 * @return An id which refers to the type of the storage.
+	 * @see #setTypeId(long)
+	 */
+	public long getTypeId()
+	{
+		return this.typeId;
+	}
 
-    /**
-     * Sets the capacity of dimension two.
-     * @param twoDimensionCapacity the capacity of dimension two to be set.
-     * @see #getTwoDimensionCapacity()
-     */
-    public void setTwoDimensionCapacity(int twoDimensionCapacity)
-    {
-        this.twoDimensionCapacity = twoDimensionCapacity;
-    }
+	/**
+	 * Sets an id which refers to the type of the storage.
+	 * @param typeId An id which refers to the type of the storage.
+	 * @see #getTypeId()
+	 */
+	public void setTypeId(long typeId)
+	{
+		this.typeId = typeId;
+	}
 
-    /**
-     * Returns the label of dimension one.
-     * @return String the label of dimension one.
-     * @see #setOneDimensionLabel(String)
-     */
-    public String getOneDimensionLabel()
-    {
-        return this.oneDimensionLabel;
-    }
+	/**
+	 * Returns the default temperature of the storage container.
+	 * @return double the default temperature of the storage container to be set.
+	 * @see #setDefaultTemperature(double)
+	 */
+	public double getDefaultTemperature()
+	{
+		return this.defaultTemperature;
+	}
 
-    /**
-     * Sets the label of dimension one.
-     * @param oneDimensionLabel the label of dimension one to be set.
-     * @see #getOneDimensionLabel()
-     */
-    public void setOneDimensionLabel(String oneDimensionLabel)
-    {
-        this.oneDimensionLabel = oneDimensionLabel;
-    }
+	/**
+	 * Sets the default temperature of the storage container.
+	 * @param defaultTemperature the default temperature of the storage container to be set.
+	 * @see #getDefaultTemperature()
+	 */
+	public void setDefaultTemperature(double defaultTemperature)
+	{
+		this.defaultTemperature = defaultTemperature;
+	}
 
-    /**
-     * Returns the label of dimension two.
-     * @return String the label of dimension two.
-     * @see #setTwoDimensionLabel(String)
-     */
-    public String getTwoDimensionLabel()
-    {
-        return this.twoDimensionLabel;
-    }
+	/**
+	 * Returns the capacity of dimension one.
+	 * @return int the capacity of dimension one.
+	 * @see #setOneDimensionCapacity(int)
+	 */
+	public int getOneDimensionCapacity()
+	{
+		return this.oneDimensionCapacity;
+	}
 
-    /**
-     * Sets the label of dimension two.
-     * @param twoDimensionLabel the label of dimension two to be set.
-     * @see #getTwoDimensionLabel()
-     */
-    public void setTwoDimensionLabel(String twoDimensionLabel)
-    {
-        this.twoDimensionLabel = twoDimensionLabel;
-    }
+	/**
+	 * Sets the capacity of dimension one.
+	 * @param oneDimensionCapacity the capacity of dimension one to be set.
+	 * @see #getOneDimensionCapacity()
+	 */
+	public void setOneDimensionCapacity(int oneDimensionCapacity)
+	{
+		this.oneDimensionCapacity = oneDimensionCapacity;
+	}
 
-    /**
-     * Returns an id which refers to Parent Container of this container.
-     * @return long An id which refers to Parent Container of this container.
-     * @see #setParentContainerId(long)
-     */
+	/**
+	 * Returns the capacity of dimension two.
+	 * @return int the capacity of dimension two.
+	 * @see #setTwoDimensionCapacity(int)
+	 */
+	public int getTwoDimensionCapacity()
+	{
+		return this.twoDimensionCapacity;
+	}
+
+	/**
+	 * Sets the capacity of dimension two.
+	 * @param twoDimensionCapacity the capacity of dimension two to be set.
+	 * @see #getTwoDimensionCapacity()
+	 */
+	public void setTwoDimensionCapacity(int twoDimensionCapacity)
+	{
+		this.twoDimensionCapacity = twoDimensionCapacity;
+	}
+
+	/**
+	 * Returns the label of dimension one.
+	 * @return String the label of dimension one.
+	 * @see #setOneDimensionLabel(String)
+	 */
+	public String getOneDimensionLabel()
+	{
+		return this.oneDimensionLabel;
+	}
+
+	/**
+	 * Sets the label of dimension one.
+	 * @param oneDimensionLabel the label of dimension one to be set.
+	 * @see #getOneDimensionLabel()
+	 */
+	public void setOneDimensionLabel(String oneDimensionLabel)
+	{
+		this.oneDimensionLabel = oneDimensionLabel;
+	}
+
+	/**
+	 * Returns the label of dimension two.
+	 * @return String the label of dimension two.
+	 * @see #setTwoDimensionLabel(String)
+	 */
+	public String getTwoDimensionLabel()
+	{
+		return this.twoDimensionLabel;
+	}
+
+	/**
+	 * Sets the label of dimension two.
+	 * @param twoDimensionLabel the label of dimension two to be set.
+	 * @see #getTwoDimensionLabel()
+	 */
+	public void setTwoDimensionLabel(String twoDimensionLabel)
+	{
+		this.twoDimensionLabel = twoDimensionLabel;
+	}
+
+	/**
+	 * Returns an id which refers to Parent Container of this container.
+	 * @return long An id which refers to Parent Container of this container.
+	 * @see #setParentContainerId(long)
+	 */
 	public long getParentContainerId()
 	{
 		return parentContainerId;
 	}
-	
+
 	/**
-     * Sets an id which refers to Parent Container of this container.
-     * @param parentContainerId An id which refers to Parent Container of this container.
-     * @see #getParentContainerId()
-     */
+	 * Sets an id which refers to Parent Container of this container.
+	 * @param parentContainerId An id which refers to Parent Container of this container.
+	 * @see #getParentContainerId()
+	 */
 	public void setParentContainerId(long parentContainerId)
 	{
 		this.parentContainerId = parentContainerId;
 	}
-	
+
 	/**
-     * Returns an id which refers to the site of the container if it is parent container.
-     * @return long An id which refers to the site of the container if it is parent container.
-     * @see #setSiteId(long)
-     */
+	 * Returns an id which refers to the site of the container if it is parent container.
+	 * @return long An id which refers to the site of the container if it is parent container.
+	 * @see #setSiteId(long)
+	 */
 	public long getSiteId()
 	{
 		return siteId;
 	}
-	
+
 	/**
-     * Sets an id which refers to the site of the container if it is parent container.
-     * @param siteId An id which refers to the site of the container if it is parent container.
-     * @see #getSiteId()
-     */
+	 * Sets an id which refers to the site of the container if it is parent container.
+	 * @param siteId An id which refers to the site of the container if it is parent container.
+	 * @see #getSiteId()
+	 */
 	public void setSiteId(long siteId)
 	{
 		this.siteId = siteId;
-	}   
-    
+	}
+
 	/**
-     * Returns the activity status of the storage container. 
-     * @return The activity status of storage container.
-     * @see #setActivityStatus(String)
-     */
+	 * Returns the activity status of the storage container. 
+	 * @return The activity status of storage container.
+	 * @see #setActivityStatus(String)
+	 */
 	public String getActivityStatus()
 	{
 		return activityStatus;
 	}
 
 	/**
-     * Sets the activity status.
-     * @param activityStatus the activity status of the storagecontainer to be set.
-     * @see #getActivityStatus()
-     */
+	 * Sets the activity status.
+	 * @param activityStatus the activity status of the storagecontainer to be set.
+	 * @see #getActivityStatus()
+	 */
 	public void setActivityStatus(String activityStatus)
 	{
 		this.activityStatus = activityStatus;
 	}
-    
-    /**
-     * Checks the operation to be performed is add or not.
-     * @return Returns true if operation is equal to "add", else it returns false
-     * */
-    public boolean isAddOperation()
-    {
-        return(getOperation().equals(Constants.ADD));
-    }
-    
-    /**
-     * Returns the id assigned to form bean
-     */
-    public int getFormId()
-    {
-        return Constants.STORAGE_CONTAINER_FORM_ID;
-    }
-    
-    /**
-     * Resets the values of all the fields.
-     * This method defined in ActionForm is overridden in this class.
-     */
-    public void reset(ActionMapping mapping, HttpServletRequest request)
-    {
-        reset();
-    }
-    
-    /**
-     * Resets the values of all the fields.
-     * Is called by the overridden reset method defined in ActionForm.  
-     * */
-    private void reset()
-    {
-    }
 
-    /**
-    * Overrides the validate method of ActionForm.
-    * */
-    public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
-    {
-        ActionErrors errors = new ActionErrors();
-        Validator validator = new Validator();
-        
-        try
-        {
-            if (operation.equals(Constants.SEARCH))
-            {
-                checkValidNumber(new Long(systemIdentifier).toString(),"storageContainer.identifier",errors,validator);
-            }
-            if (operation.equals(Constants.ADD) || operation.equals(Constants.EDIT))
-            {
-				if(this.typeId == -1)
+	/**
+	 * Checks the operation to be performed is add or not.
+	 * @return Returns true if operation is equal to "add", else it returns false
+	 * */
+	public boolean isAddOperation()
+	{
+		return (getOperation().equals(Constants.ADD));
+	}
+
+	/**
+	 * Returns the id assigned to form bean
+	 */
+	public int getFormId()
+	{
+		return Constants.STORAGE_CONTAINER_FORM_ID;
+	}
+
+	/**
+	 * Resets the values of all the fields.
+	 * This method defined in ActionForm is overridden in this class.
+	 */
+	public void reset(ActionMapping mapping, HttpServletRequest request)
+	{
+		reset();
+	}
+
+	/**
+	 * Resets the values of all the fields.
+	 * Is called by the overridden reset method defined in ActionForm.  
+	 * */
+	private void reset()
+	{
+	}
+
+	/**
+	 * Overrides the validate method of ActionForm.
+	 * */
+	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
+	{
+		ActionErrors errors = new ActionErrors();
+		Validator validator = new Validator();
+
+		try
+		{
+			if (operation.equals(Constants.SEARCH))
+			{
+				checkValidNumber(new Long(systemIdentifier).toString(),
+						"storageContainer.identifier", errors, validator);
+			}
+			if (operation.equals(Constants.ADD) || operation.equals(Constants.EDIT))
+			{
+				if (this.typeId == -1)
 				{
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("storageContainer.type")));
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",
+							ApplicationProperties.getValue("storageContainer.type")));
 				}
-				if(checkedButton == 1 && siteId == -1)
+				if (checkedButton == 1 && siteId == -1)
 				{
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("storageContainer.site")));
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",
+							ApplicationProperties.getValue("storageContainer.site")));
 				}
-				else if(checkedButton == 2 && parentContainerId == 0)
+				else if (checkedButton == 2 && parentContainerId == 0)
 				{
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("storageContainer.parentContainer")));
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",
+							ApplicationProperties.getValue("storageContainer.parentContainer")));
 				}
-				
-				checkValidNumber(String.valueOf(noOfContainers), "storageContainer.noOfContainers", errors, validator);
-				
-//            	if (validator.isEmpty(String.valueOf(noOfContainers)))
-//                {
-//                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("storageContainer.noOfContainers")));
-//                }
-//                
-//                if (validator.isEmpty(String.valueOf(startNumber)))
-//                {
-//                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("storageContainer.startNumber")));
-//                }
-            }
-        }
-        catch(Exception excp)
-        {
-            Logger.out.error(excp.getMessage());
-        }
-        return errors;
-     }
+
+				checkValidNumber(String.valueOf(noOfContainers), "storageContainer.noOfContainers",
+						errors, validator);
+
+				//            	if (validator.isEmpty(String.valueOf(noOfContainers)))
+				//                {
+				//                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("storageContainer.noOfContainers")));
+				//                }
+				//                
+				//                if (validator.isEmpty(String.valueOf(startNumber)))
+				//                {
+				//                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("storageContainer.startNumber")));
+				//                }
+			}
+		}
+		catch (Exception excp)
+		{
+			Logger.out.error(excp.getMessage());
+		}
+		return errors;
+	}
+
 	/**
 	 * @return Returns the noOfContainers.
 	 */
@@ -469,6 +479,7 @@ public class StorageContainerForm extends AbstractActionForm
 	{
 		return noOfContainers;
 	}
+
 	/**
 	 * @param noOfContainers The noOfContainers to set.
 	 */
@@ -476,6 +487,7 @@ public class StorageContainerForm extends AbstractActionForm
 	{
 		this.noOfContainers = noOfContainers;
 	}
+
 	/**
 	 * @return Returns the startNumber.
 	 */
@@ -483,6 +495,7 @@ public class StorageContainerForm extends AbstractActionForm
 	{
 		return startNumber;
 	}
+
 	/**
 	 * @param startNumber The startNumber to set.
 	 */
@@ -490,6 +503,7 @@ public class StorageContainerForm extends AbstractActionForm
 	{
 		this.startNumber = startNumber;
 	}
+
 	/**
 	 * @return Returns the barcode.
 	 */
@@ -497,6 +511,7 @@ public class StorageContainerForm extends AbstractActionForm
 	{
 		return barcode;
 	}
+
 	/**
 	 * @param barcode The barcode to set.
 	 */
@@ -504,6 +519,7 @@ public class StorageContainerForm extends AbstractActionForm
 	{
 		this.barcode = null;
 	}
+
 	/**
 	 * @return Returns the key.
 	 */
@@ -511,6 +527,7 @@ public class StorageContainerForm extends AbstractActionForm
 	{
 		return key;
 	}
+
 	/**
 	 * @param key The key to set.
 	 */
@@ -518,6 +535,7 @@ public class StorageContainerForm extends AbstractActionForm
 	{
 		this.key = key;
 	}
+
 	/**
 	 * @return Returns the checkedButton.
 	 */
@@ -525,6 +543,7 @@ public class StorageContainerForm extends AbstractActionForm
 	{
 		return checkedButton;
 	}
+
 	/**
 	 * @param checkedButton The checkedButton to set.
 	 */
@@ -532,6 +551,7 @@ public class StorageContainerForm extends AbstractActionForm
 	{
 		this.checkedButton = checkedButton;
 	}
+
 	/**
 	 * @return Returns the isFull.
 	 */
@@ -539,6 +559,7 @@ public class StorageContainerForm extends AbstractActionForm
 	{
 		return isFull;
 	}
+
 	/**
 	 * @param isFull The isFull to set.
 	 */
@@ -546,32 +567,31 @@ public class StorageContainerForm extends AbstractActionForm
 	{
 		this.isFull = isFull;
 	}
-	
-	/**
-     * Associates the specified object with the specified key in the map.
-     * @param key the key to which the object is mapped.
-     * @param value the object which is mapped.
-     */
-    public void setValue(String key, Object value) 
-    {
-            values.put(key, value);
-    }
 
-    /**
-     * Returns the object to which this map maps the specified key.
-     * @param key the required key.
-     * @return the object to which this map maps the specified key.
-     */
-    public Object getValue(String key) 
-    {
-        return values.get(key);
-    }
-    
-	
+	/**
+	 * Associates the specified object with the specified key in the map.
+	 * @param key the key to which the object is mapped.
+	 * @param value the object which is mapped.
+	 */
+	public void setValue(String key, Object value)
+	{
+		values.put(key, value);
+	}
+
+	/**
+	 * Returns the object to which this map maps the specified key.
+	 * @param key the required key.
+	 * @return the object to which this map maps the specified key.
+	 */
+	public Object getValue(String key)
+	{
+		return values.get(key);
+	}
+
 	/**
 	 * @return Returns the values.
 	 */
-	public Collection getAllValues() 
+	public Collection getAllValues()
 	{
 		return values.values();
 	}
@@ -584,7 +604,7 @@ public class StorageContainerForm extends AbstractActionForm
 	{
 		this.values = values;
 	}
-	
+
 	/**
 	 * @param values
 	 *            The values to set.

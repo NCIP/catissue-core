@@ -11,15 +11,11 @@
 package edu.wustl.catissuecore.domain;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
 
 import edu.wustl.catissuecore.actionForm.AbstractActionForm;
 import edu.wustl.catissuecore.actionForm.CollectionProtocolForm;
-import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.util.MapDataParser;
 
 /**
@@ -132,27 +128,11 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
      * */
     public void setAllValues(AbstractActionForm abstractForm)
     {
-    	System.out.println("setAllValues ");
         try
         {
+        	super.setAllValues(abstractForm);
+        	
         	CollectionProtocolForm cpForm = (CollectionProtocolForm) abstractForm;
-        	this.systemIdentifier = new Long(cpForm.getSystemIdentifier());
-        	this.title = cpForm.getTitle();
-        	this.shortTitle = cpForm.getShortTitle();
-        	this.irbIdentifier = cpForm.getIrbID();
-        	
-        	this.startDate = Utility.parseDate(cpForm.getStartDate(),Constants.DATE_PATTERN_MM_DD_YYYY);
-        	this.endDate = Utility.parseDate(cpForm.getEndDate(),Constants.DATE_PATTERN_MM_DD_YYYY);
-
-        	System.out.println("cpForm.getStartDate() "+startDate);
-        	System.out.println("cpForm.getEndDate() "+endDate);
-        	
-        	this.enrollment = new Integer(cpForm.getEnrollment());
-        	this.descriptionURL = cpForm.getDescriptionURL();
-        	
-        	System.out.println("cpForm.getPrincipalInvestigatorId() "+cpForm.getPrincipalInvestigatorId());
-        	principalInvestigator  =new User();
-        	this.principalInvestigator.setSystemIdentifier(new Long(cpForm.getPrincipalInvestigatorId()));
         	
         	long [] coordinatorsArr = cpForm.getProtocolCoordinatorIds();
         	for (int i = 0; i < coordinatorsArr.length; i++)
@@ -172,71 +152,6 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
         catch (Exception excp)
         {
         	excp.printStackTrace();
-            //Logger.out.error(excp.getMessage());
         }
     }
-    
-    
-	//SpecimenRequirement#FluidSpecimenRequirement:1.specimenType", "Blood");
-	private Map fixMap(Map orgMap)
-	{
-		Map replaceMap = new HashMap();
-		Map unitMap = new HashMap();
-		unitMap.put("Cell","CellCount");
-		unitMap.put("Fluid","MiliLiter");
-		unitMap.put("Tissue","Gram");
-		unitMap.put("Molecular","MicroGram");
-		
-		Iterator it = orgMap.keySet().iterator();
-		while(it.hasNext())
-		{
-			String key = (String)it.next();
-			if(key.indexOf("specimenClass")!=-1)
-			{
-				String value = (String)orgMap.get(key);
-				String replaceWith = "SpecimenRequirement"+"#"+value+"SpecimenRequirement";
-				
-				key = key.substring(0,key.lastIndexOf("_"));
-				String newKey = key.replaceFirst("SpecimenRequirement",replaceWith);
-				
-				replaceMap.put(key,newKey);
-			}
-		}
-		
-		Map newMap = new HashMap();
-		it = orgMap.keySet().iterator();
-		while(it.hasNext())
-		{
-			String key = (String)it.next();
-			String value = (String)orgMap.get(key);
-			if(key.indexOf("SpecimenRequirement")==-1)
-			{
-				newMap.put(key,value);
-			}
-			else
-			{
-				if(key.indexOf("specimenClass")==-1)
-				{
-					String keyPart, newKeyPart;
-					if(key.indexOf("quantityIn")!=-1)
-					{
-						keyPart = "quantityIn";
-						
-						String searchKey = key.substring(0,key.lastIndexOf("_"))+"_specimenClass";
-						String specimenClass = (String)orgMap.get(searchKey);
-						String unit = (String)unitMap.get(specimenClass);
-						newKeyPart = keyPart + unit;
-						
-						key = key.replaceFirst(keyPart,newKeyPart);
-					}
-					//Replace # and class name and FIX for abstract class
-					keyPart = key.substring(0,key.lastIndexOf("_"));
-					newKeyPart = (String)replaceMap.get(keyPart);
-					key = key.replaceFirst(keyPart,newKeyPart);
-					newMap.put(key,value);
-				}
-			}
-		}		
-		return newMap;
-	}
 }

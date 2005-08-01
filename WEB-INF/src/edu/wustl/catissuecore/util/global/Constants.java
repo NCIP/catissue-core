@@ -17,8 +17,8 @@ package edu.wustl.catissuecore.util.global;
 
 public class Constants
 {	
+	public static final String APPROVE_USER_PAGE = "approveUserPage";
 	public static final String YOUR_PASSWORD="TMP";
-	
     //Constants used for authentication module.
     public static final String LOGIN = "login";
     public static final String USER = "user";

@@ -221,4 +221,4 @@ public class MapDataParser
 		Collection dataCollection = aMapDataParser.generateData(map);
 		System.out.println("Data: "+dataCollection);
 	}
-} // class
+}

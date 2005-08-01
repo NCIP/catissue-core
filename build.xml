@@ -173,28 +173,35 @@
 		<hibernatedoclet destdir="${src.dir}" excludedtags="@version,@author,@todo"
 					     force="${generateforce}" mergedir="${src.dir}" verbose="false">
 			<fileset dir="${src.dir}">
-				<!--include name="**/promoterAna/*.java"/-->
 				<include name="**/domain/*.java"/>
+				<!--include name="**/cde/*.java"/-->
 			</fileset>
     		<hibernate version="2.0"/>
 		</hibernatedoclet>	
 		
 		<!-- Upgrade grammar from Hibernate1 to Hibernate2 -->
 	    <replace dir="${src.dir}">
-	        <include name="**/domain/*.hbm.xml"/>
+	    	<include name="**/domain/*.hbm.xml"/>
+	        <!--include name="**/cde/*.hbm.xml"/-->
 	        <replacefilter token="readonly=" value="inverse="/>
 	        <replacefilter token="role=" value="name="/>
 	        <replacefilter token="hibernate-mapping.dtd" value="hibernate-mapping-2.0.dtd"/>
 	    </replace>
 	    
 	    <copy todir="${hbm.dir}">
-        	<fileset dir="${src.dir}/edu/wustl/catissuecore/domain">
+        	<!--fileset dir="${src.dir}/edu/wustl/catissuecore/domain">
             	<include name="*.hbm.xml"/>
-        	</fileset>
+        	</fileset-->
+	    	<fileset dir="${src.dir}/edu/wustl/catissuecore/domain">
+	    	            	<include name="*.hbm.xml"/>
+	    	<!--fileset dir="${src.dir}/edu/wustl/common/cde">
+	    	            	<include name="*.hbm.xml"/-->
+	       	</fileset>
 	    </copy>
     	
     	<delete>
             <fileset dir="${src.dir}/edu/wustl/catissuecore/domain" includes="*.hbm.xml"/>
+    		<!--fileset dir="${src.dir}/edu/wustl/common/cde" includes="*.hbm.xml"/-->
         </delete>
     </target>
 
@@ -202,7 +209,6 @@
 	<!--target name="Genrate-Schema" depends="buildjar, generateHBM"-->
 	<target name="Genrate-Schema" depends="buildjar">
     	<java classname="edu.wustl.common.util.dbManager.GenerateSchema">
-	    	<arg value="true"/>		
 				
             <classpath>
 	            <pathelement location="${build.dir}/catissuecore.jar"/>

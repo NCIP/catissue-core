@@ -181,7 +181,7 @@ function addBlock(div,d0)
 						
 						<td class="formField">
 							<html:select property="principalInvestigatorId" styleClass="formFieldSized" styleId="principalInvestigatorId" size="1">
-								<html:options name="<%=Constants.USERIDLIST%>" labelName="<%=Constants.USERLIST%>" />
+								<html:options collection="userList" labelProperty="name" property="value"/>
 							</html:select>
 							&nbsp;
 							<html:link page="/User.do?operation=add">

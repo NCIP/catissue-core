@@ -17,6 +17,7 @@ import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * SiteHDAO is used to add site type information into the database using Hibernate.
@@ -38,7 +39,9 @@ public class SiteBizLogic extends DefaultBizLogic
         AbstractDAO dao = DAOFactory.getDAO(Constants.HIBERNATE_DAO);
 		dao.openSession();
 		
+		Logger.out.debug("site.getCoordinator().getSystemIdentifier() "+site.getCoordinator().getSystemIdentifier());
 		List list = dao.retrieve(User.class.getName(), "systemIdentifier", site.getCoordinator().getSystemIdentifier());
+		Logger.out.debug("list "+list.size());
 		if (list.size() != 0)
 		{
 		    User user = (User) list.get(0);

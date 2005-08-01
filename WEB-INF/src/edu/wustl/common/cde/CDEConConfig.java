@@ -69,4 +69,4 @@ public class CDEConConfig
 		this.dbserver = dbserver;
 	} // CDEConConfig constructor
 
-} // CDEConConfig
+}

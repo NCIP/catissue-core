@@ -50,6 +50,7 @@ public class CommonAddEditAction extends Action
 
         try
         {
+        	Logger.out.debug("CommonAddEditAction....");
             AbstractActionForm abstractForm = (AbstractActionForm) form;
             AbstractBizLogic bizLogic = BizLogicFactory.getBizLogic(abstractForm.getFormId());
 
@@ -93,7 +94,9 @@ public class CommonAddEditAction extends Action
         catch (DAOException excp)
         {
             target = new String(Constants.FAILURE);
+            Logger.out.debug("excp "+excp.getMessage());
             Logger.out.error(excp.getMessage(), excp);
+            //Logger.out.error(excp.getMessage(), excp);
         }
         return (mapping.findForward(target));
     }

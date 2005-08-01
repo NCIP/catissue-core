@@ -136,7 +136,7 @@ public class Site extends AbstractDomainObject implements java.io.Serializable
 	/**
 	 * Returns the emailAddress Address of the site.	
 	 * @hibernate.property name="emailAddress" type="string" 
-     * column="EMAIL_ADDRESS" length="150" not-null="true" unique="true"
+     * column="EMAIL_ADDRESS" length="150"
      * @return String representing the emailAddress address of the site.
      */
     public String getEmailAddress()
@@ -233,6 +233,7 @@ public class Site extends AbstractDomainObject implements java.io.Serializable
             this.type 		= form.getType();
             this.emailAddress = form.getEmailAddress();            
             this.activityStatus = form.getActivityStatus();
+            Logger.out.debug("form.getCoordinatorId() "+form.getCoordinatorId());
             coordinator.setSystemIdentifier(new Long(form.getCoordinatorId()));
             
             address.setStreet(form.getStreet());

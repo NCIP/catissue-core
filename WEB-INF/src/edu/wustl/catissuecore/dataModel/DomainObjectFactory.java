@@ -19,6 +19,7 @@ import edu.wustl.catissuecore.domain.CancerResearchGroup;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Department;
+import edu.wustl.catissuecore.domain.DistributionProtocol;
 import edu.wustl.catissuecore.domain.FluidSpecimenReviewEventParameters;
 import edu.wustl.catissuecore.domain.TissueSpecimenReviewEventParameters;
 import edu.wustl.catissuecore.domain.CellSpecimenReviewParameters;
@@ -86,6 +87,9 @@ public class DomainObjectFactory
             	break;
             case Constants.COLLECTION_PROTOCOL_FORM_ID:
             	abstractDomain = new CollectionProtocol(form);
+            	break;
+            case Constants.DISTRIBUTIONPROTOCOL_FORM_ID:
+            	abstractDomain = new DistributionProtocol(form);
             	break;
             	
             case Constants.FROZEN_EVENT_PARAMETERS_FORM_ID:

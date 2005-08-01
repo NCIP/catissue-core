@@ -73,7 +73,7 @@ function addBlock(div,d0)
 
 	subDivRowCount[insno] = 1;
 	insno =insno + 1;
-	alert("insno "+z);
+	//alert("insno "+z);
 	var mm = z.indexOf('`');
 	for(var cnt=0;cnt<mm;cnt++)
 	{
@@ -304,7 +304,7 @@ function getSubDivCount(subdivtag)
 						
 						<td class="formField">
 							<html:select property="principalInvestigatorId" styleClass="formFieldSized" styleId="principalInvestigatorId" size="1">
-								<html:options name="<%=Constants.USERIDLIST%>" labelName="<%=Constants.USERLIST%>" />
+								<html:options collection="userList" labelProperty="name" property="value"/>
 							</html:select>
 							&nbsp;
 							<html:link page="/User.do?operation=add">
@@ -324,7 +324,7 @@ function getSubDivCount(subdivtag)
 						
 						<td class="formField">
 							<html:select property="protocolCoordinatorIds" styleClass="formFieldSized" styleId="protocolCoordinatorIds" size="4" multiple="true">
-								<html:options name="<%=Constants.USERIDLIST%>" labelName="<%=Constants.USERLIST%>" />
+								<html:options collection="userList" labelProperty="name" property="value"/>
 							</html:select>
 							&nbsp;
 							<html:link page="/User.do?operation=add">

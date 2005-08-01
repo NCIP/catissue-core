@@ -244,12 +244,11 @@ public class SiteForm extends AbstractActionForm
 	{
 		return coordinatorId;
 	}
+	
 	/**
-	 * Sets the id of the coordinator.
-	 * @param coordinator the id of the coordinator.
-	 * @see #getCoordinator()
+	 * @param coordinatorId The coordinatorId to set.
 	 */
-	public void setCoordinator(long coordinatorId)
+	public void setCoordinatorId(long coordinatorId)
 	{
 		this.coordinatorId = coordinatorId;
 	}
@@ -508,11 +507,10 @@ public class SiteForm extends AbstractActionForm
                  {
                  	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("site.type")));
                  }
-//                 System.out.println("CO****************" + coordinatorId);
-//                 if(coordinatorId == -1L)
-//                 {
-//                 	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("site.coordinator")));
-//                 }
+                 if(coordinatorId == -1L)
+                 {
+                 	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("site.coordinator")));
+                 }
                  
                  if(state.equals(Constants.SELECT_OPTION))
                  {

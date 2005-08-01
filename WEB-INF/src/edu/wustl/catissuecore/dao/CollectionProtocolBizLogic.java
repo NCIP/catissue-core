@@ -22,6 +22,7 @@ import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * StorageContainerHDAO is used to add Storage Container information into the database using Hibernate.
@@ -38,53 +39,67 @@ public class CollectionProtocolBizLogic extends DefaultBizLogic
      */
 	public void insert(Object obj) throws DAOException 
 	{
-		CollectionProtocol collectionProtocol = (CollectionProtocol)obj;
-        
 		AbstractDAO dao = DAOFactory.getDAO(Constants.HIBERNATE_DAO);
-		dao.openSession();
-		
-		List list = dao.retrieve(User.class.getName(), "systemIdentifier", collectionProtocol.getPrincipalInvestigator().getSystemIdentifier());
-		if (list.size() != 0)
+		try
 		{
-			User pi = (User) list.get(0);
-			collectionProtocol.setPrincipalInvestigator(pi);
-		}
-		
-		Collection coordinatorColl = new HashSet();
-		Iterator it = collectionProtocol.getUserCollection().iterator();
-		while(it.hasNext())
-		{
-			User aUser  =(User)it.next();
-			list = dao.retrieve(User.class.getName(), "systemIdentifier", aUser.getSystemIdentifier());
+			CollectionProtocol collectionProtocol = (CollectionProtocol)obj;
+	        
+//			AbstractDAO dao = DAOFactory.getDAO(Constants.HIBERNATE_DAO);
+			dao.openSession();
+			
+			List list = dao.retrieve(User.class.getName(), "systemIdentifier", collectionProtocol.getPrincipalInvestigator().getSystemIdentifier());
 			if (list.size() != 0)
 			{
-				User coordinator = (User) list.get(0);
-				System.out.println("coordinator "+coordinator.getSystemIdentifier());
-				coordinatorColl.add(coordinator);
-				coordinator.getCollectionProtocolCollection().add(coordinator);
-				dao.update(coordinator);
+				User pi = (User) list.get(0);
+				collectionProtocol.setPrincipalInvestigator(pi);
 			}
-		}
-		collectionProtocol.setUserCollection(coordinatorColl);
-		
-		dao.insert(collectionProtocol);
-		it = collectionProtocol.getCollectionProtocolEventCollection().iterator();
-		while(it.hasNext())
-		{
-			CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent)it.next();
-			collectionProtocolEvent.setCollectionProtocol(collectionProtocol);
-			dao.insert(collectionProtocolEvent);
 			
-			Iterator srIt = collectionProtocolEvent.getSpecimenRequirementCollection().iterator();
-			while(srIt.hasNext())
+			Collection coordinatorColl = new HashSet();
+			Iterator it = collectionProtocol.getUserCollection().iterator();
+			while(it.hasNext())
 			{
-				SpecimenRequirement specimenRequirement = (SpecimenRequirement)srIt.next();
-				specimenRequirement.getCollectionProtocolEventCollection().add(collectionProtocolEvent);
-				dao.insert(specimenRequirement);
+				User aUser  =(User)it.next();
+				list = dao.retrieve(User.class.getName(), "systemIdentifier", aUser.getSystemIdentifier());
+				if (list.size() != 0)
+				{
+					User coordinator = (User) list.get(0);
+					System.out.println("coordinator "+coordinator.getSystemIdentifier());
+					coordinatorColl.add(coordinator);
+					coordinator.getCollectionProtocolCollection().add(coordinator);
+					dao.update(coordinator);
+				}
+			}
+			collectionProtocol.setUserCollection(coordinatorColl);
+			
+//			SpecimenProtocol p = new SpecimenProtocol();
+//			p.setTitle("AAABBBA");
+//			dao.insert(p);
+			
+			dao.insert(collectionProtocol);
+			it = collectionProtocol.getCollectionProtocolEventCollection().iterator();
+			while(it.hasNext())
+			{
+				CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent)it.next();
+				collectionProtocolEvent.setCollectionProtocol(collectionProtocol);
+				dao.insert(collectionProtocolEvent);
+				
+				Iterator srIt = collectionProtocolEvent.getSpecimenRequirementCollection().iterator();
+				while(srIt.hasNext())
+				{
+					SpecimenRequirement specimenRequirement = (SpecimenRequirement)srIt.next();
+					specimenRequirement.getCollectionProtocolEventCollection().add(collectionProtocolEvent);
+					dao.insert(specimenRequirement);
+				}
 			}
 		}
-				
-	    dao.closeSession();
+		catch(DAOException ex)
+		{
+			Logger.out.error("",ex);
+		}
+		finally
+		{
+			dao.closeSession();
+		}
 	}
 	
 	/**

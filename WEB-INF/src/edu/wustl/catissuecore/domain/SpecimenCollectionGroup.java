@@ -286,7 +286,11 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
 	}
 	
 	/**
-	 * @return
+     * Returns the system generated unique systemIdentifier.
+     * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"
+     * unsaved-value="null" generator-class="native"
+     * @return the system generated unique systemIdentifier.
+     * @see #setSystemIdentifier(Long)
 	 */
 	public Long getSystemIdentifier() {
 		return systemIdentifier;
