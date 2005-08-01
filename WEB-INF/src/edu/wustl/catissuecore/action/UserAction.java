@@ -62,17 +62,16 @@ public class UserAction extends Action
         request.setAttribute(Constants.COUNTRYLIST, Constants.COUNTRYARRAY);
 
         //Sets the pageOf attribute (for Add,Edit or Query Interface)
-        String pageName  = request.getParameter(Constants.PAGEOF);
-        request.setAttribute(Constants.PAGEOF,pageName);
+        String pageOf  = request.getParameter(Constants.PAGEOF);
+        request.setAttribute(Constants.PAGEOF,pageOf);
 
-        
         try
         {
             AbstractBizLogic dao = BizLogicFactory.getBizLogic(Constants.USER_FORM_ID);
             ListIterator iterator = null;
             int i;
             
-            
+            //Sets the instituteList attribute to be used in the Add/Edit User Page.
             String sourceObjectName = Institution.class.getName();
             String[] displayNameFields = {"name"};
             String valueField = "systemIdentifier";
@@ -90,16 +89,19 @@ public class UserAction extends Action
             List cancerResearchGroupList = dao.getList(sourceObjectName, displayNameFields, valueField);
             request.setAttribute(Constants.CANCER_RESEARCH_GROUP_LIST, cancerResearchGroupList);
 
-            request.setAttribute(Constants.ACTIVITYSTATUSLIST,
-                    Constants.ACTIVITY_STATUS_VALUES);
-            
             if (operation.equals(Constants.EDIT))
+            {
+                request.setAttribute(Constants.ACTIVITYSTATUSLIST,
+                        Constants.ACTIVITY_STATUS_VALUES);
+            }
+            
+            if (!pageOf.equals(Constants.PAGEOF_SIGNUP))
             {
                 //Sets the roleList attribute to be used in the Add/Edit User Page.
                 Vector roleList = SecurityManager.getInstance(UserAction.class).getRoles();
                 
-                String[] roleNameArray = new String[roleList.size()];
-                String[] roleIdArray = new String[roleList.size()];
+                String[] roleNameArray = new String[roleList.size()+1];
+                String[] roleIdArray = new String[roleList.size()+1];
                 iterator = roleList.listIterator();
                 i = 0;
                 roleNameArray[i] = Constants.SELECT_OPTION;
@@ -112,8 +114,14 @@ public class UserAction extends Action
                     roleIdArray[i] = String.valueOf(role.getId());
                     i++;
                 }
+                
                 request.setAttribute(Constants.ROLEIDLIST, roleIdArray);
                 request.setAttribute(Constants.ROLELIST, roleNameArray);
+            }
+            
+            if (pageOf.equals(Constants.PAGEOF_APPROVE_USER))
+            {
+                request.setAttribute(Constants.APPROVE_USER_STATUS_LIST,Constants.APPROVE_USER_STATUS_VALUES);
             }
         }
         catch (Exception exc)
