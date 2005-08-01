@@ -1,0 +1,2 @@
+GRANT ALL PRIVILEGES ON *.* TO 'catissue_core'@'localhost' IDENTIFIED BY 'catissue_core' WITH GRANT OPTION;
+GRANT ALL PRIVILEGES ON *.* TO 'catissue_core'@'%' IDENTIFIED BY 'catissue_core' WITH GRANT OPTION;
