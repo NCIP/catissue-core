@@ -32,7 +32,6 @@ import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.SendEmail;
 import edu.wustl.catissuecore.util.global.Validator;
-import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.util.dbManager.DAOException;
@@ -102,19 +101,19 @@ public class ForgotPasswordSearchAction extends Action
                 {
                     SendEmail email = new SendEmail();
                     
+                    String mailServer = ApplicationProperties.getValue("email.mailServer");
+                    String technicalSupportEmailAddress = ApplicationProperties.getValue("email.technicalSupport.emailAddress");
+                    String subject = ApplicationProperties.getValue("forgotPassword.email.subject");
+                    
                     String body = "Dear " + user.getUser().getFirstName()+ " " + user.getUser().getLastName() +
                     			  "\n\n" + ApplicationProperties.getValue("forgotPassword.email.body.start") +
                     			  "\n\t User Name : " + user.getUser().getLoginName() + "\n\t Password : " + 
                     			  user.getUser().getPassword() +
                     			  "\n\n" + ApplicationProperties.getValue("email.catissuecore.team");
                     boolean emailStatus = email.sendmail(user.getUser().getEmailId(),
-                            Variables.emailAddress, Variables.mailServer,
-                            Constants.YOUR_PASSWORD, body);
+                            technicalSupportEmailAddress, mailServer,
+                            subject, body);
                     
-                    /**
-                     *TODO Body of Email.
-                     */
-
                     if (emailStatus == true)
                     {
                         
