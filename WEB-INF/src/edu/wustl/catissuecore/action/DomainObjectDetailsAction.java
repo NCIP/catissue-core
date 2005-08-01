@@ -68,8 +68,6 @@ public class DomainObjectDetailsAction extends Action
         AbstractActionForm abstractActionForm = (AbstractActionForm)form;
         abstractActionForm.setAllValues(currentDomainObject);
         
-//        request.setAttribute(Constants.CURRENT_RECORD,currentDomainObject);
-        
         request.setAttribute(Constants.PREVIOUS_PAGE,prevIdentifier);
         request.setAttribute(Constants.NEXT_PAGE,nextIdentifier);
         
