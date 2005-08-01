@@ -43,6 +43,11 @@ public class UserForm extends AbstractActionForm
     private String operation;
 
     /**
+     * Represents the page the user has submitted the form from.
+     */
+    private String pageOf;
+
+    /**
      * login name of the user.
      */
     private String loginName;
@@ -60,7 +65,7 @@ public class UserForm extends AbstractActionForm
     /**
      * Institution name of the user.
      */
-    private String institution;
+    private long institutionId;
 
     /**
      * EmailAddress Address of the user.
@@ -70,7 +75,7 @@ public class UserForm extends AbstractActionForm
     /**
      * Department name of the user.
      */
-    private String department;
+    private long departmentId;
 
     /**
      * Street Address of the user.
@@ -115,7 +120,7 @@ public class UserForm extends AbstractActionForm
     /**
      * Cancer Research Group of the user.  
      */
-    private String cancerResearchGroup;
+    private long cancerResearchGroupId;
 
     /**
      * Activity status of the user.
@@ -126,6 +131,8 @@ public class UserForm extends AbstractActionForm
      * Comments given by user.
      */
     private String comments;
+
+    private String status;
 
     /**
      * No argument constructor for UserForm class. 
@@ -148,9 +155,11 @@ public class UserForm extends AbstractActionForm
             this.loginName = user.getUser().getLoginName();
             this.lastName = user.getUser().getLastName();
             this.firstName = user.getUser().getFirstName();
-            this.institution = user.getInstitution().getName();
+            this.institutionId = user.getInstitution().getSystemIdentifier()
+                    .longValue();
             this.emailAddress = user.getUser().getEmailId();
-            this.department = user.getDepartment().getName();
+            this.departmentId = user.getDepartment().getSystemIdentifier()
+                    .longValue();
             this.street = user.getAddress().getStreet();
             this.city = user.getAddress().getCity();
             this.state = user.getAddress().getState();
@@ -158,7 +167,24 @@ public class UserForm extends AbstractActionForm
             this.zipCode = user.getAddress().getZipCode();
             this.phoneNumber = user.getAddress().getPhoneNumber();
             this.faxNumber = user.getAddress().getFaxNumber();
-            this.cancerResearchGroup = user.getCancerResearchGroup().getName();
+            this.cancerResearchGroupId = user.getCancerResearchGroup()
+                    .getSystemIdentifier().longValue();
+            this.activityStatus = user.getActivityStatus();
+            if (activityStatus.equals(Constants.ACTIVITY_STATUS_ACTIVE))
+            {
+                this.status = Constants.APPROVE_USER_APPROVE_STATUS;
+            }
+            else if (activityStatus.equals(Constants.ACTIVITY_STATUS_NEW))
+            {
+                this.status = Constants.APPROVE_USER_PENDING_STATUS;
+            }
+            else if (activityStatus.equals(Constants.ACTIVITY_STATUS_CLOSED))
+            {
+                this.status = Constants.APPROVE_USER_REJECT_STATUS;
+            }
+            
+            this.role = user.getRoleId();
+            this.comments = user.getComments(); 
         }
         catch (Exception excp)
         {
@@ -202,6 +228,22 @@ public class UserForm extends AbstractActionForm
     public void setOperation(String operation)
     {
         this.operation = operation;
+    }
+
+    /**
+     * @return Returns the pageOf.
+     */
+    public String getPageOf()
+    {
+        return pageOf;
+    }
+
+    /**
+     * @param pageOf The pageOf to set.
+     */
+    public void setPageOf(String pageOf)
+    {
+        this.pageOf = pageOf;
     }
 
     /**
@@ -265,23 +307,23 @@ public class UserForm extends AbstractActionForm
     }
 
     /**
-     * Returns the institution name of the user.
-     * @return String representing the institution of the user. 
+     * Returns the institutionId name of the user.
+     * @return String representing the institutionId of the user. 
      * @see #setinstitution(String)
      */
-    public String getInstitution()
+    public long getInstitutionId()
     {
-        return (this.institution);
+        return (this.institutionId);
     }
 
     /**
-     * Sets the institution name of the user.
-     * @param institution String representing the institution of the user.
+     * Sets the institutionId name of the user.
+     * @param institutionId String representing the institutionId of the user.
      * @see #getinstitution()
      */
-    public void setInstitution(String institution)
+    public void setInstitutionId(long institution)
     {
-        this.institution = institution;
+        this.institutionId = institution;
     }
 
     /**
@@ -305,42 +347,42 @@ public class UserForm extends AbstractActionForm
 
     /**
      * Returns the Department Name of the user.
-     * @return String representing department of the user.
-     * @see #getDepartment()
+     * @return String representing departmentId of the user.
+     * @see #getDepartmentId()
      */
-    public String getDepartment()
+    public long getDepartmentId()
     {
-        return (this.department);
+        return (this.departmentId);
     }
 
     /**
      * Sets the Department Name of the user.
-     * @param department String representing department of the user.
-     * @see #getDepartment()
+     * @param departmentId String representing departmentId of the user.
+     * @see #getDepartmentId()
      */
-    public void setDepartment(String department)
+    public void setDepartmentId(long department)
     {
-        this.department = department;
+        this.departmentId = department;
     }
 
     /**
      * Returns the cancer research group the user belongs.
-     * @return Returns the cancerResearchGroup.
-     * @see #setCancerResearchGroup(String)
+     * @return Returns the cancerResearchGroupId.
+     * @see #setCancerResearchGroupId(String)
      */
-    public String getCancerResearchGroup()
+    public long getCancerResearchGroupId()
     {
-        return cancerResearchGroup;
+        return cancerResearchGroupId;
     }
 
     /**
      * Sets the cancer research group the user belongs.
-     * @param cancerResearchGroup The cancerResearchGroup to set.
-     * @see #getCancerResearchGroup()
+     * @param cancerResearchGroupId The cancerResearchGroupId to set.
+     * @see #getCancerResearchGroupId()
      */
-    public void setCancerResearchGroup(String cancerResearchGroup)
+    public void setCancerResearchGroupId(long cancerResearchGroup)
     {
-        this.cancerResearchGroup = cancerResearchGroup;
+        this.cancerResearchGroupId = cancerResearchGroup;
     }
 
     /**
@@ -553,6 +595,22 @@ public class UserForm extends AbstractActionForm
     }
 
     /**
+     * @return Returns the status.
+     */
+    public String getStatus()
+    {
+        return status;
+    }
+
+    /**
+     * @param status The status to set.
+     */
+    public void setStatus(String status)
+    {
+        this.status = status;
+    }
+
+    /**
      * Resets the values of all the fields.
      * This method defined in ActionForm is overridden in this class.
      */
@@ -569,12 +627,11 @@ public class UserForm extends AbstractActionForm
     {
         this.systemIdentifier = -1;
         this.operation = null;
-        this.loginName = null;
         this.lastName = null;
         this.firstName = null;
-        this.institution = null;
+        this.institutionId = -1;
         this.emailAddress = null;
-        this.department = null;
+        this.departmentId = -1;
         this.street = null;
         this.city = null;
         this.state = null;
@@ -583,7 +640,7 @@ public class UserForm extends AbstractActionForm
         this.phoneNumber = null;
         this.faxNumber = null;
         this.role = null;
-        this.cancerResearchGroup = null;
+        this.cancerResearchGroupId = -1;
         this.activityStatus = Constants.ACTIVITY_STATUS_NEW;
     }
 
@@ -597,135 +654,152 @@ public class UserForm extends AbstractActionForm
         Validator validator = new Validator();
         try
         {
-            if (operation.equals(Constants.SEARCH))
+            if (operation != null)
             {
-                checkValidNumber(new Long(systemIdentifier).toString(),
-                        "user.systemIdentifier", errors, validator);
-            }
-            if (operation.equals(Constants.ADD)
-                    || operation.equals(Constants.EDIT))
-            {
-                if (validator.isEmpty(loginName))
+                if (operation.equals(Constants.SEARCH))
                 {
-                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-                            "errors.item.required", ApplicationProperties
-                                    .getValue("user.loginName")));
+                    checkValidNumber(new Long(systemIdentifier).toString(),
+                            "user.systemIdentifier", errors, validator);
                 }
-                else
+                if (operation.equals(Constants.ADD)
+                        || operation.equals(Constants.EDIT))
                 {
-                    if (!Character.isLetter(loginName.charAt(0)))
+                    if (validator.isEmpty(loginName))
                     {
                         errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-                                "errors.item.format", ApplicationProperties
+                                "errors.item.required", ApplicationProperties
                                         .getValue("user.loginName")));
                     }
-                }
+                    else
+                    {
+                        if (!Character.isLetter(loginName.charAt(0)))
+                        {
+                            errors
+                                    .add(
+                                            ActionErrors.GLOBAL_ERROR,
+                                            new ActionError(
+                                                    "errors.item.format",
+                                                    ApplicationProperties
+                                                            .getValue("user.loginName")));
+                        }
+                    }
 
-                if (validator.isEmpty(lastName))
-                {
-                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-                            "errors.item.required", ApplicationProperties
-                                    .getValue("user.lastName")));
-                }
-
-                if (validator.isEmpty(firstName))
-                {
-                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-                            "errors.item.required", ApplicationProperties
-                                    .getValue("user.firstName")));
-                }
-
-                if (validator.isEmpty(street))
-                {
-                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-                            "errors.item.required", ApplicationProperties
-                                    .getValue("user.street")));
-                }
-                
-                checkValidString(city, "user.city", errors, validator);
-                
-                if (state.trim().equals(Constants.SELECT_OPTION))
-                {
-                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-                            "errors.item.required", ApplicationProperties
-                                    .getValue("user.state")));
-                }
-                
-                checkValidNumber(zipCode, "user.zipCode", errors, validator);
-                
-                if (country.trim().equals(Constants.SELECT_OPTION))
-                {
-                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-                            "errors.item.required", ApplicationProperties
-                                    .getValue("user.country")));
-                }
-
-                if (validator.isEmpty(emailAddress))
-                {
-                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-                            "errors.item.required", ApplicationProperties
-                                    .getValue("user.emailAddress")));
-                }
-                else
-                {
-                    if (!validator.isValidEmailAddress(emailAddress))
+                    if (validator.isEmpty(lastName))
                     {
                         errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-                                "errors.item.format", ApplicationProperties
+                                "errors.item.required", ApplicationProperties
+                                        .getValue("user.lastName")));
+                    }
+
+                    if (validator.isEmpty(firstName))
+                    {
+                        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+                                "errors.item.required", ApplicationProperties
+                                        .getValue("user.firstName")));
+                    }
+
+                    if (validator.isEmpty(city))
+                    {
+                        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+                                "errors.item.required", ApplicationProperties
+                                        .getValue("user.city")));
+                    }
+
+                    if (state.trim().equals(Constants.SELECT_OPTION))
+                    {
+                        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+                                "errors.item.required", ApplicationProperties
+                                        .getValue("user.state")));
+                    }
+
+                    if (validator.isEmpty(zipCode))
+                    {
+                        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+                                "errors.item.required", ApplicationProperties
+                                        .getValue("user.zipCode")));
+                    }
+
+                    if (country.trim().equals(Constants.SELECT_OPTION))
+                    {
+                        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+                                "errors.item.required", ApplicationProperties
+                                        .getValue("user.country")));
+                    }
+                    
+                    if (validator.isEmpty(phoneNumber))
+                    {
+                        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+                                "errors.item.required", ApplicationProperties
+                                        .getValue("user.phoneNumber")));
+                    }
+
+                    if (validator.isEmpty(emailAddress))
+                    {
+                        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+                                "errors.item.required", ApplicationProperties
                                         .getValue("user.emailAddress")));
                     }
-                }
+                    else
+                    {
+                        if (!validator.isValidEmailAddress(emailAddress))
+                        {
+                            errors.add(ActionErrors.GLOBAL_ERROR,
+                                            new ActionError("errors.item.format",
+                                                    ApplicationProperties.getValue("user.emailAddress")));
+                        }
+                    }
 
-                if (institution.trim().equals(Constants.SELECT_OPTION))
-                {
-                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-                            "errors.item.required", ApplicationProperties
-                                    .getValue("user.institution")));
-                }
-                
-                if (department.trim().equals(Constants.SELECT_OPTION))
-                {
-                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-                            "errors.item.required", ApplicationProperties
-                                    .getValue("user.department")));
-                }
-                
-                if (cancerResearchGroup.trim().equals(Constants.SELECT_OPTION))
-                {
-                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-                            "errors.item.required", ApplicationProperties
-                                    .getValue("user.cancerResearchGroup")));
-                }
-
-            }
-            
-            if (operation.equals(Constants.EDIT))
-            {
-              if (validator.isEmpty(role))
-              {
-                  errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-                          "errors.item.required", ApplicationProperties
-                                  .getValue("user.role")));
-              }
-
-            }
-            
-            if (operation.equals(Constants.FORGOT_PASSWORD))
-            {
-                if ((validator.isEmpty(loginName))
-                        && (validator.isEmpty(emailAddress)))
-                {
-                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-                            "errors.forgotpassword.required"));
-                }
-                else
-                {
-                    if (!validator.isValidEmailAddress(emailAddress)
-                            && (!validator.isEmpty(emailAddress)))
+                    if (institutionId == -1)
                     {
                         errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-                                "errors.item.format", ApplicationProperties
-                                        .getValue("user.emailAddress")));
+                                "errors.item.required", ApplicationProperties
+                                        .getValue("user.institutionId")));
+                    }
+
+                    if (departmentId == -1)
+                    {
+                        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+                                "errors.item.required", ApplicationProperties
+                                        .getValue("user.departmentId")));
+                    }
+
+                    if (cancerResearchGroupId == -1)
+                    {
+                        errors.add(ActionErrors.GLOBAL_ERROR,
+                                        new ActionError("errors.item.required",
+                                                ApplicationProperties.getValue("user.cancerResearchGroupId")));
+                    }
+
+                }
+
+                if (operation.equals(Constants.EDIT))
+                {
+                    if (validator.isEmpty(role))
+                    {
+                        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+                                "errors.item.required", ApplicationProperties
+                                        .getValue("user.role")));
+                    }
+
+                }
+
+                if (operation.equals(Constants.FORGOT_PASSWORD))
+                {
+                    if ((validator.isEmpty(loginName))
+                            && (validator.isEmpty(emailAddress)))
+                    {
+                        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+                                "errors.forgotpassword.required"));
+                    }
+                    else
+                    {
+                        if (!validator.isValidEmailAddress(emailAddress)
+                                && (!validator.isEmpty(emailAddress)))
+                        {
+                            errors.add(ActionErrors.GLOBAL_ERROR,
+                                            new ActionError("errors.item.format",
+                                                    ApplicationProperties.getValue("user.emailAddress")));
+                        }
                     }
                 }
             }
@@ -736,4 +810,5 @@ public class UserForm extends AbstractActionForm
         }
         return errors;
     }
+
 }
