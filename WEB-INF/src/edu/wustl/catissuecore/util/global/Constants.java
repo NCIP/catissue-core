@@ -92,6 +92,7 @@ public class Constants
 	public static final String SITEIDLIST="siteIdList";
 	public static final String USERIDLIST = "userIdList";
 	public static final String STORAGETYPEIDLIST="storageTypeIdList";
+	public static final String SPECIMENCOLLECTIONLIST="specimentCollectionList";
 	public static final String APPROVE_USER_STATUS_LIST = "statusList";
 	
 	//New Specimen lists.
@@ -304,8 +305,9 @@ public class Constants
 	public static final int COLLECTION_PROTOCOL_REGISTRATION_FORM_ID = 19;
 	public static final int SPECIMEN_COLLECTION_GROUP_FORM_ID = 20;
 	public static final int FLUID_SPECIMEN_REVIEW_EVENT_PARAMETERS_FORM_ID = 21;
-	public static final int CELL_SPECIMEN_REVIEW_PARAMETERS_FORM_ID =22;
-	public static final int TISSUE_SPECIMEN_REVIEW_EVENT_PARAMETERS_FORM_ID = 23;
+	public static final int NEW_SPECIMEN_FORM_ID = 22;
+	public static final int CELL_SPECIMEN_REVIEW_PARAMETERS_FORM_ID =23;
+	public static final int TISSUE_SPECIMEN_REVIEW_EVENT_PARAMETERS_FORM_ID = 24;
 	
 	//Misc
 	public static final String SEPARATOR = " : ";
@@ -317,7 +319,10 @@ public class Constants
 	
 	//Activity Status values
 	public static final String ACTIVITY_STATUS_ACTIVE = "Active";
+	public static final String ACTIVITY_STATUS_APPROVE = "Approve";
+	public static final String ACTIVITY_STATUS_REJECT = "Reject";
 	public static final String ACTIVITY_STATUS_NEW = "New";
+	public static final String ACTIVITY_STATUS_PENDING = "Pending";
 	public static final String ACTIVITY_STATUS_CLOSED = "Closed";
 	
 	//Approve User status values.
@@ -348,6 +353,7 @@ public class Constants
 	public static final String QUERY = "query";
 	public static final String PAGEOF_APPROVE_USER = "pageOfApproveUser";
 	public static final String PAGEOF_SIGNUP = "pageOfSignUp";
+	public static final String PAGEOF_USERADD = "pageOfUserAdd";
 	public static final String PAGEOF_USER_ADMIN = "pageOfUserAdmin";
 	
 	//For Tree Applet
