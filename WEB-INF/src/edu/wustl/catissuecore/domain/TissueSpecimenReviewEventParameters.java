@@ -9,6 +9,10 @@
  */
 package edu.wustl.catissuecore.domain;
 
+import edu.wustl.catissuecore.actionForm.AbstractActionForm;
+import edu.wustl.catissuecore.actionForm.TissueSpecimenReviewEventParametersForm;
+import edu.wustl.common.util.logger.Logger;
+
 /**
  * Attributes associated with a review event of a tissue specimen.
  * @hibernate.joined-subclass table="CATISSUE_TISSUE_SPECIMEN_REVIEW_EVENT_PARAMETERS"
@@ -156,4 +160,38 @@ public class TissueSpecimenReviewEventParameters extends ReviewEventParameters
 	{
 		this.histologicalQuality = histologicalQuality;
 	}
+	
+	TissueSpecimenReviewEventParameters()
+	{
+		
+	}
+//	Parameterized constructor
+	public TissueSpecimenReviewEventParameters(AbstractActionForm abstractForm)
+	{
+		setAllValues(abstractForm);
+	}
+	
+	/**
+     * This function Copies the data from an TissueSpecimenReviewEventParametersForm object to a TissueSpecimenReviewEventParameters object.
+     * @param tissueSpecimenReviewEventParametersForm An TissueSpecimenReviewEventParametersForm object containing the information about the TissueSpecimenReviewEventParameters.  
+     * */
+    public void setAllValues(AbstractActionForm abstractForm)
+    {
+        try
+        {
+        	TissueSpecimenReviewEventParametersForm form = (TissueSpecimenReviewEventParametersForm) abstractForm;
+        	this.neoplasticCellularityPercentage = new Double(form.getNeoplasticCellularityPercentage());  
+        	this.necrosisPercentage = new Double (form.getNecrosisPercentage());
+        	this.totalCellularityPercentage = new Double(form.getTotalCellularityPercentage());
+        	this.lymphocyticPercentage = new Double(form.getLymphocyticPercentage());
+        	this.histologicalQuality = form.getHistologicalQuality() ;
+           	super.setAllValues(form);
+        }
+        catch (Exception excp)
+        {
+            Logger.out.error(excp.getMessage());
+        }
+    }
+	
+			
 }

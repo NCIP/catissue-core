@@ -324,6 +324,20 @@
 	</definition>
 	<!-- CellSpecimenReviewParameters end -->
 
+	<!-- TissueSpecimenReviewEventParameters -->
+	<definition name=".catissuecore.tissueSpecimenReviewEventParametersDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/TissueSpecimenReviewEventParameters.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.tissueSpecimenReviewEventParametersAddSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/common/success.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.tissueSpecimenReviewEventParametersEditSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/common/success.jsp" />
+	</definition>
+	<!-- TissueSpecimenReviewEventParameters end -->
+
 	<!-- BioSpecimen tab pages definitions end -->
 
 	<!-- Search tab pages definitions start -->

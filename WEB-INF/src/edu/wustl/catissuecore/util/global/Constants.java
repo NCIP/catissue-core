@@ -224,6 +224,10 @@ public class Constants
 	public static final String CELL_SPECIMEN_REVIEW_PARAMETERS_ADD_ACTION = "CellSpecimenReviewParametersAdd.do";
 	public static final String CELL_SPECIMEN_REVIEW_PARAMETERS_EDIT_ACTION = "CellSpecimenReviewParametersEdit.do";
 
+//	Constants required in tissue SPECIMEN REVIEW event Parameters.jsp Page
+	public static final String TISSUE_SPECIMEN_REVIEW_EVENT_PARAMETERS_SEARCH_ACTION = "TissueSpecimenReviewEventParametersSearch.do";
+	public static final String TISSUE_SPECIMEN_REVIEW_EVENT_PARAMETERS_ADD_ACTION = "TissueSpecimenReviewEventParametersAdd.do";
+	public static final String TISSUE_SPECIMEN_REVIEW_EVENT_PARAMETERS_EDIT_ACTION = "TissueSpecimenReviewEventParametersEdit.do";
 
 	//Levels of nodes in query results tree.
 	public static final int MAX_LEVEL = 5;
@@ -300,6 +304,7 @@ public class Constants
 	public static final int SPECIMEN_COLLECTION_GROUP_FORM_ID = 20;
 	public static final int FLUID_SPECIMEN_REVIEW_EVENT_PARAMETERS_FORM_ID = 21;
 	public static final int CELL_SPECIMEN_REVIEW_PARAMETERS_FORM_ID =22;
+	public static final int TISSUE_SPECIMEN_REVIEW_EVENT_PARAMETERS_FORM_ID = 23;
 	
 	//Status message key Constants
 	public static final String STATUS_MESSAGE_KEY = "statusMessageKey";

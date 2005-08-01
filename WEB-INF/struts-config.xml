@@ -29,6 +29,7 @@ PUBLIC
 		<form-bean name="receivedEventParametersForm" type="edu.wustl.catissuecore.actionForm.ReceivedEventParametersForm"/>
 		<form-bean name="fluidSpecimenReviewEventParametersForm" type="edu.wustl.catissuecore.actionForm.FluidSpecimenReviewEventParametersForm"/>
 		<form-bean name="cellSpecimenReviewParametersForm" type="edu.wustl.catissuecore.actionForm.CellSpecimenReviewParametersForm"/>
+		<form-bean name="tissueSpecimenReviewEventParametersForm" type="edu.wustl.catissuecore.actionForm.TissueSpecimenReviewEventParametersForm"/>
 	</form-beans>
 	
 	<!-- Global Exception Definitions -->
@@ -925,6 +926,44 @@ PUBLIC
 		</action>    
 		<!-- CellSpecimenReviewParameters Actions Ends -->
 
+	<!-- TissueSpecimenReviewEventParameters Actions Begins -->
+        <action path="/TissueSpecimenReviewEventParameters"
+			type="edu.wustl.catissuecore.action.TissueSpecimenReviewEventParametersAction"
+			scope="request">
+			<forward name="success" path=".catissuecore.tissueSpecimenReviewEventParametersDef" />
+			<forward name="failure" path=".catissuecore.tissueSpecimenReviewEventParametersDef" />
+		</action>
+		
+		<action path="/TissueSpecimenReviewEventParametersAdd"
+			type="edu.wustl.catissuecore.action.CommonAddEditAction"
+			name="tissueSpecimenReviewEventParametersForm"
+			validate="true"
+			input="/TissueSpecimenReviewEventParameters.do?operation=add"
+			scope="request">
+			<forward name="success" path=".catissuecore.tissueSpecimenReviewEventParametersAddSuccessDef" />
+			<forward name="failure" path="/error.jsp" />
+		</action>
+		
+		<action path="/TissueSpecimenReviewEventParametersEdit"
+			type="edu.wustl.catissuecore.action.CommonAddEditAction"
+			name="tissueSpecimenReviewEventParametersForm"
+			validate="true"
+			input="/TissueSpecimenReviewEventParameters.do?operation=edit"
+			scope="request">
+			<forward name="success" path=".catissuecore.tissueSpecimenReviewEventParametersEditSuccessDef" />
+			<forward name="failure" path="/error.jsp" />
+		</action>
+		
+		<action path="/TissueSpecimenReviewEventParametersSearch"
+		    type="edu.wustl.catissuecore.action.CommonSearchAction"
+			name="tissueSpecimenReviewEventParametersForm"
+			validate="true"
+			input="/TissueSpecimenReviewEventParameters.do?operation=edit"
+			scope="request">
+			<forward name="success" path="/TissueSpecimenReviewEventParameters.do?operation=edit"/>
+			<forward name="failure" path="/TissueSpecimenReviewEventParameters.do?operation=edit"/>
+		</action>    
+		<!-- TissueSpecimenReviewEventParameters Actions Ends -->
 		
 		<!--Query Result View Actions Begin-->
 		<action path="/ShowFramedPage"

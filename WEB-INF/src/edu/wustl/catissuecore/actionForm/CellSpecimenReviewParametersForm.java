@@ -110,14 +110,14 @@ public class CellSpecimenReviewParametersForm extends EventParametersForm
          
          try
          {
-         	System.out.println("Neo: "+ neoplasticCellularityPercentage);
+//         	System.out.println("Neo: "+ neoplasticCellularityPercentage);
 //         	// checks the neoplasticCellularityPercentage
            	if (neoplasticCellularityPercentage <= 0  || Double.isNaN(neoplasticCellularityPercentage) )
             {
            		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("cellspecimenreviewparameters.neoplasticcellularitypercentage")));
             }
 
-         	System.out.println("Via: "+ viableCellPercentage);
+//         	System.out.println("Via: "+ viableCellPercentage);
 //         	// checks the viableCellPercentage
            	if (viableCellPercentage <= 0  || Double.isNaN(viableCellPercentage) )
             {
