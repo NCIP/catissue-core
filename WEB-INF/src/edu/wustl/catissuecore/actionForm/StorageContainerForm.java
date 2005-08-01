@@ -92,7 +92,7 @@ public class StorageContainerForm extends AbstractActionForm
     /**
      * No. of containers.
      */
-    private int noOfContainers;
+    private int noOfContainers=1;
     
     /**
      * Text label for dimension two.
@@ -442,16 +442,18 @@ public class StorageContainerForm extends AbstractActionForm
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("storageContainer.parentContainer")));
 				}
-            	
-            	/* if (validator.isEmpty(String.valueOf(noOfContainers)))
-                {
-                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("storageContainer.noOfContainers")));
-                }
-                
-                if (validator.isEmpty(String.valueOf(startNumber)))
-                {
-                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("storageContainer.startNumber")));
-                }*/
+				
+				checkValidNumber(String.valueOf(noOfContainers), "storageContainer.noOfContainers", errors, validator);
+				
+//            	if (validator.isEmpty(String.valueOf(noOfContainers)))
+//                {
+//                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("storageContainer.noOfContainers")));
+//                }
+//                
+//                if (validator.isEmpty(String.valueOf(startNumber)))
+//                {
+//                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("storageContainer.startNumber")));
+//                }
             }
         }
         catch(Exception excp)
