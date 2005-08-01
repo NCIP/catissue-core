@@ -11,20 +11,24 @@
 package edu.wustl.catissuecore.dataModel;
 
 import edu.wustl.catissuecore.actionForm.AbstractActionForm;
+import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.actionForm.ReportedProblemForm;
 import edu.wustl.catissuecore.actionForm.UserForm;
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.CancerResearchGroup;
+import edu.wustl.catissuecore.domain.CellSpecimen;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Department;
 import edu.wustl.catissuecore.domain.DistributionProtocol;
+import edu.wustl.catissuecore.domain.FluidSpecimen;
 import edu.wustl.catissuecore.domain.FluidSpecimenReviewEventParameters;
 import edu.wustl.catissuecore.domain.TissueSpecimenReviewEventParameters;
 import edu.wustl.catissuecore.domain.CellSpecimenReviewParameters;
 import edu.wustl.catissuecore.domain.FrozenEventParameters;
 import edu.wustl.catissuecore.domain.CheckInCheckOutEventParameter;
+import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.Institution;
 import edu.wustl.catissuecore.domain.Participant;
@@ -32,6 +36,7 @@ import edu.wustl.catissuecore.domain.ReportedProblem;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.StorageType;
+import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 
@@ -109,15 +114,36 @@ public class DomainObjectFactory
 			  
             case Constants.FLUID_SPECIMEN_REVIEW_EVENT_PARAMETERS_FORM_ID:
             	abstractDomain = new FluidSpecimenReviewEventParameters (form);            	
-            	break; 
-			
+            	break;
+            	
             case Constants.CELL_SPECIMEN_REVIEW_PARAMETERS_FORM_ID:
             	abstractDomain = new CellSpecimenReviewParameters (form);            	
             	break; 
 			
             case Constants.TISSUE_SPECIMEN_REVIEW_EVENT_PARAMETERS_FORM_ID:
             	abstractDomain = new TissueSpecimenReviewEventParameters (form);            	
-            	break; 
+            	break;
+            case Constants.NEW_SPECIMEN_FORM_ID:
+            	NewSpecimenForm newForm = (NewSpecimenForm) form;
+            	String type = newForm.getClassName();
+            	
+            	if(type.equals("Tissue"))
+            	{
+            		abstractDomain = new TissueSpecimen(newForm);
+            	}
+            	else if(type.equals("Fluid"))
+            	{
+            		abstractDomain = new FluidSpecimen(newForm);
+            	}
+            	else if(type.equals("Cell"))
+            	{
+            		abstractDomain = new CellSpecimen(newForm);
+            	}
+            	else if(type.equals("Molecular"))
+            	{
+            		abstractDomain = new MolecularSpecimen(newForm);
+            	}
+            	break;
         }
         return abstractDomain;
     }

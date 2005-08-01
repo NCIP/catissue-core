@@ -87,6 +87,10 @@ public class BizLogicFactory
         		abstractBizLogic = new SpecimenEventParametersBizLogic();
         		break;
 				
+          	case Constants.NEW_SPECIMEN_FORM_ID:
+        		abstractBizLogic = new NewSpecimenBizLogic();
+        		break;
+        	
             default:
                 abstractBizLogic = new DefaultBizLogic();
             	break;
