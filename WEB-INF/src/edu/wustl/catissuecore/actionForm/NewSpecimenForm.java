@@ -4,7 +4,7 @@
  * from New Specimen webpage. </p>
  * Copyright:    Copyright (c) year
  * Company: Washington University, School of Medicine, St. Louis.
- * @author Gautam Shetty
+ * @author Aniruddha Phadnis
  * @version 1.00
  */
 
@@ -15,15 +15,19 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
+
+import edu.wustl.catissuecore.domain.AbstractDomainObject;
+import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * NewSpecimenForm Class is used to encapsulate all the request parameters passed 
  * from New Specimen webpage.
  * @author gautam_shetty
  */
-public class NewSpecimenForm extends ActionForm
+public class NewSpecimenForm extends AbstractActionForm
 {
     private long specimenCollectionGroupId;
     
@@ -31,13 +35,23 @@ public class NewSpecimenForm extends ActionForm
      * systemIdentifier is a unique id assigned to each User.
      * */
     private long systemIdentifier;
+    
+    /**
+     * A String containing the operation(Add/Edit) to be performed.
+     * */
+    private String operation = null;
 
+    /**
+     * Activity Status
+     */
+    private String activityStatus;
+    
     /**
      * Type of specimen. e.g. Serum, Plasma, Blood, Fresh Tissue etc.
      */
-    private String type = "";
+    private String className = "";
 
-    private String subType = "";
+    private String type = "";
 
     /**
      * Anatomic site from which the specimen was derived.
@@ -111,6 +125,45 @@ public class NewSpecimenForm extends ActionForm
     {
         this.systemIdentifier = systemIdentifier;
     }
+    
+    /**
+     * Returns the operation(Add/Edit) to be performed.
+     * @return Returns the operation.
+     * @see #setOperation(String)
+     */
+    public String getOperation()
+    {
+        return operation;
+    }
+    
+    /**
+     * Sets the operation to be performed.
+     * @param operation The operation to set.
+     * @see #getOperation()
+     */
+    public void setOperation(String operation)
+    {
+        this.operation = operation;
+    }
+    
+    /**
+	 * Returns the activity status
+	 * @return the activityStatus.
+	 * @see #setActivityStatus(String)
+	 */
+    public String getActivityStatus()
+	{
+		return activityStatus;
+	}
+	/**
+	 * Sets the activity status.
+	 * @param activityStatus activity status.
+	 * @see #getActivityStatus()
+	 */
+	public void setActivityStatus(String activityStatus)
+	{
+		this.activityStatus = activityStatus;
+	}
 
     /**
      * @return Returns the biohazards.
@@ -291,17 +344,17 @@ public class NewSpecimenForm extends ActionForm
     /**
      * @return Returns the subType.
      */
-    public String getSubType()
+    public String getType()
     {
-        return subType;
+        return type;
     }
 
     /**
      * @param subType The subType to set.
      */
-    public void setSubType(String subType)
+    public void setType(String subType)
     {
-        this.subType = subType;
+        this.type = subType;
     }
 
     /**
@@ -339,32 +392,27 @@ public class NewSpecimenForm extends ActionForm
     /**
      * @return Returns the type.
      */
-    public String getType()
+    public String getClassName()
     {
-        return type;
+        return className;
     }
 
     /**
      * @param type The type to set.
      */
-    public void setType(String type)
+    public void setClassName(String type)
     {
-        this.type = type;
+        this.className = type;
     }
     
     private void reset()
     {
-//        this.systemIdentifier = -1;
+        this.className = null;
         this.type = null;
-        this.subType = null;
         this.tissueSite = null;
         this.tissueSide = null;
         this.pathologicalStatus = null;
-//        this.concentration = -1;
-//        this.quantity = -1;
         this.storageContainer = null;
-//        this.positionDimensionOne = -1;
-//        this.positionDimensionTwo = -1;
         this.comments = null;
         this.externalIdentifierTypes = new HashMap();
         this.externalIdentifierNames = new HashMap();
@@ -377,5 +425,41 @@ public class NewSpecimenForm extends ActionForm
     public void reset(ActionMapping mapping, HttpServletRequest request)
     {
         reset();
+    }
+    
+    /**
+     * Checks the operation to be performed is add operation.
+     * @return Returns true if operation is equal to "add", else returns false.
+     * */
+    public boolean isAddOperation()
+    {
+        return(getOperation().equals(Constants.ADD));
+    }
+    
+    /**
+     * Returns the id assigned to form bean.
+     */
+    public int getFormId()
+    {
+        return Constants.SITE_FORM_ID;
+    }
+    
+    /**
+     * This function Copies the data from an site object to a SiteForm object.
+     * @param site An object containing the information about site.  
+     */
+    public void setAllValues(AbstractDomainObject abstractDomain)
+    {
+        try
+        {
+            Specimen specimen = (Specimen) abstractDomain;
+            
+            this.systemIdentifier= specimen.getSystemIdentifier().longValue();
+            this.className			= specimen.getType();
+        }
+        catch (Exception excp)
+        {
+            Logger.out.error(excp.getMessage(),excp);
+        }
     }
 }
