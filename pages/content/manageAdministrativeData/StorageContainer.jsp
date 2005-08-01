@@ -182,7 +182,12 @@ function insRow(subdivtag)
 				<tr>
 					<td><html:hidden property="operation" value="<%=operation%>" /></td>
 				</tr>
-
+				<tr>
+					<td><html:hidden property="positionDimensionOne" /></td>
+				</tr>
+				<tr>
+					<td><html:hidden property="positionDimensionTwo" /></td>
+				</tr>
 				<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.SEARCH%>">
 					<tr>
 						<td class="formMessage" colspan="4">* indicates a required field</td>

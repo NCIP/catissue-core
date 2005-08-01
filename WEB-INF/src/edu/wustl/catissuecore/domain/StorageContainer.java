@@ -462,6 +462,8 @@ public class StorageContainer extends AbstractDomainObject implements java.io.Se
 			{
 				parentContainer = new StorageContainer();
 				parentContainer.setSystemIdentifier(new Long(form.getParentContainerId()));
+				this.setPositionDimensionOne(new Integer(form.getPositionDimensionOne()));
+		        this.setPositionDimensionTwo(new Integer(form.getPositionDimensionTwo()));
 			}
 	        else
 	        {
@@ -477,6 +479,7 @@ public class StorageContainer extends AbstractDomainObject implements java.io.Se
 	        
 	        Collection storageContainerDetailsCollectionTemp = parser.generateData(map);
 	        this.storageContainerDetailsCollection.addAll(storageContainerDetailsCollectionTemp);
+	        
 	    }
 	    catch(Exception excp)
 	    {

@@ -124,6 +124,10 @@ public class StorageContainerForm extends AbstractActionForm
 	 * Map to handle values of all the CollectionProtocol Events
 	 */
 	protected Map values = new HashMap();
+	
+	private int positionDimensionOne;
+
+    private int positionDimensionTwo;
 
 	/**
 	 * No argument constructor for StorageTypeForm class 
@@ -613,4 +617,32 @@ public class StorageContainerForm extends AbstractActionForm
 	{
 		return this.values;
 	}
+    /**
+     * @return Returns the positionDimensionOne.
+     */
+    public int getPositionDimensionOne()
+    {
+        return positionDimensionOne;
+    }
+    /**
+     * @param positionDimensionOne The positionDimensionOne to set.
+     */
+    public void setPositionDimensionOne(int positionDimensionOne)
+    {
+        this.positionDimensionOne = positionDimensionOne;
+    }
+    /**
+     * @return Returns the positionDimensionTwo.
+     */
+    public int getPositionDimensionTwo()
+    {
+        return positionDimensionTwo;
+    }
+    /**
+     * @param positionDimensionTwo The positionDimensionTwo to set.
+     */
+    public void setPositionDimensionTwo(int positionDimensionTwo)
+    {
+        this.positionDimensionTwo = positionDimensionTwo;
+    }
 }

@@ -52,7 +52,9 @@ function closeFramedWindow()
 						{ 
 							String setParentWindowContainer = "javascript:setParentWindowValue('parentContainerId','"+
 															  + storageContainerGridObject.getSystemIdentifier()
-															  + "');closeFramedWindow()";
+															  + "');"+"javascript:setParentWindowValue('positionDimensionOne','"+
+															  + i + "');"+"javascript:setParentWindowValue('positionDimensionTwo','"+
+															  + j + "');closeFramedWindow()";
 						%>
 						<td class="dataCellText">
 						 	<a href="<%=setParentWindowContainer%>">
