@@ -49,6 +49,7 @@ public class Constants
 	public static final String LOGINNAME = "loginName";
 	public static final String LASTNAME = "lastName";
 	public static final String FIRSTNAME = "firstName";
+    public static final String ERROR_DETAIL = "Error Detail";
 	public static final String INSTITUTION = "institution";
 	public static final String EMAIL = "email";
 	public static final String DEPARTMENT = "department";
