@@ -88,6 +88,7 @@ public class HibernateDAO extends AbstractDAO
         catch(HibernateException hibExp)
         {
             Logger.out.error(hibExp.getMessage(),hibExp);
+            throw new DAOException(hibExp);
         }
     }
 
