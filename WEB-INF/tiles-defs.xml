@@ -40,6 +40,10 @@
 		<put name="content" value="/pages/content/manageAdministrativeData/User.jsp" />
 	</definition>
 	
+	<definition name=".catissuecore.errorPageDef" extends=".catissuecore.homePageDef">
+		<put name="content" value="/pages/content/home/Error.jsp" />
+	</definition>
+	
 	<!-- Home tab pages definitions end -->
 
 	<!-- Manage Administrative Data tab pages definitions start -->
