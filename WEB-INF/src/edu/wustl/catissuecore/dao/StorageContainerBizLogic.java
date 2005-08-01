@@ -11,14 +11,17 @@
 package edu.wustl.catissuecore.dao;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Vector;
 
 import net.sf.hibernate.HibernateException;
-import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.StorageContainerDetails;
 import edu.wustl.catissuecore.domain.StorageType;
+import edu.wustl.catissuecore.domain.Site;
+import edu.wustl.catissuecore.storage.TreeNode;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.dbManager.DAOException;
 
@@ -26,7 +29,7 @@ import edu.wustl.common.util.dbManager.DAOException;
  * StorageContainerHDAO is used to add Storage Container information into the database using Hibernate.
  * @author aniruddha_phadnis
  */
-public class StorageContainerBizLogic extends DefaultBizLogic //implements TreeDataInterface
+public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDataInterface
 {
 	/**
      * Saves the storageContainer object in the database.
@@ -144,42 +147,54 @@ public class StorageContainerBizLogic extends DefaultBizLogic //implements TreeD
 		return 1;
     }
     
-
-//public Vector getTreeViewData() throws DAOException
-//    {
-//        AbstractDAO dao = DAOFactory.getDAO(Constants.HIBERNATE_DAO);
-//        dao.openSession();
-//        
-//        List list = (List)dao.retrieve(StorageContainer.class.getName());
-//        
-//        dao.closeSession();
-//        Vector vector = new Vector();
-//        if (list != null)
-//        {
-//            for (int i = 0;i < list.size(); i++)
-//            {
-//                StorageContainer storageContainer = (StorageContainer) list.get(i);
-//                TreeNode treeNode = new TreeNode();
-//                treeNode.setStorageContainerIdentifier(storageContainer.getSystemIdentifier());
-//                treeNode.setStorageContainerName(storageContainer.getName());
-//                treeNode.setStorageContainerType(storageContainer.getStorageType().getType());
-//                if (storageContainer.getParentContainer() != null)
-//                {
-//                    treeNode.setParentStorageContainerIdentifier(storageContainer.getParentContainer()
-//                			.getSystemIdentifier());
-//                }
-//                if (storageContainer.getSite() != null)
-//                {
-//                    Site site = storageContainer.getSite(); 
-//                    treeNode.setSiteSystemIdentifier(site.getSystemIdentifier());
-//                    treeNode.setSiteName(site.getName());
-//                    treeNode.setSiteType(site.getType()); 
-//                }
-//                
-//                vector.add(treeNode);
-//             }
-//        }
-//            
-//        return vector;
-//    }
+    private StorageContainer getCopy(StorageContainer oldContainer)
+    {
+    	StorageContainer newContainer = new StorageContainer();
+    	newContainer.setActivityStatus(oldContainer.getActivityStatus());
+    	newContainer.setParentContainer(oldContainer.getParentContainer());
+    	newContainer.setSite(oldContainer.getSite());
+    	newContainer.setStorageContainerCapacity(oldContainer.getStorageContainerCapacity());
+    	newContainer.setStorageType(oldContainer.getStorageType());
+    	newContainer.setTempratureInCentigrade(oldContainer.getTempratureInCentigrade());
+    	newContainer.setStorageContainerDetailsCollection(new HashSet(oldContainer.getStorageContainerDetailsCollection()));
+    	return newContainer;
+    }
+    
+    public Vector getTreeViewData() throws DAOException
+    {
+        AbstractDAO dao = DAOFactory.getDAO(Constants.HIBERNATE_DAO);
+        dao.openSession();
+        
+        List list = (List)dao.retrieve(StorageContainer.class.getName());
+        
+        dao.closeSession();
+        Vector vector = new Vector();
+        if (list != null)
+        {
+            for (int i = 0;i < list.size(); i++)
+            {
+                StorageContainer storageContainer = (StorageContainer) list.get(i);
+                TreeNode treeNode = new TreeNode();
+                treeNode.setStorageContainerIdentifier(storageContainer.getSystemIdentifier());
+                treeNode.setStorageContainerName(storageContainer.getName());
+                treeNode.setStorageContainerType(storageContainer.getStorageType().getType());
+                if (storageContainer.getParentContainer() != null)
+                {
+                    treeNode.setParentStorageContainerIdentifier(storageContainer.getParentContainer()
+                			.getSystemIdentifier());
+                }
+                if (storageContainer.getSite() != null)
+                {
+                    Site site = storageContainer.getSite(); 
+                    treeNode.setSiteSystemIdentifier(site.getSystemIdentifier());
+                    treeNode.setSiteName(site.getName());
+                    treeNode.setSiteType(site.getType()); 
+                }
+                
+                vector.add(treeNode);
+             }
+        }
+            
+        return vector;
+    }
 }

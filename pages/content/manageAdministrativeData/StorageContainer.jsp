@@ -8,6 +8,7 @@
 
 <head>
 	<script language="JavaScript">
+		
 		var win = null;
 		function NewWindow(mypage,myname,w,h,scroll)
 		{
@@ -256,9 +257,10 @@ function insRow(subdivtag)
 							<html:text styleClass="formFieldSized" size="30" styleId="parentContainerId" property="parentContainerId" readonly="<%=readOnlyValue%>" disabled="true"/>
 							&nbsp;
 							<html:button property="mapButton" styleClass="actionButton" styleId="Map" 
-								onclick="javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfStorageLocation','name','810','320','yes');return false" disabled="true">
+								onclick="NewWindow('ShowFramedPage.do?pageOf=pageOfStorageLocation','name','810','320','yes');return false" disabled="true">
 								<bean:message key="buttons.map"/>
-							</html:button>							
+							</html:button>
+							
 							</logic:equal>
 							
 							<logic:equal name="storageContainerForm" property="checkedButton" value="2">

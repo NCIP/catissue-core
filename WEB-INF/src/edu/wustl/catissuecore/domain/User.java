@@ -64,7 +64,7 @@ public class User extends AbstractDomainObject implements Serializable
 	private CancerResearchGroup cancerResearchGroup = new CancerResearchGroup();
 	
 	/**
-     * Activity Status of user, it could be CLOSED, ACTIVE, DISABLED
+     * Activity Status of user, it could be CLOSED, ACTIVE, DISABLED.
      */
     protected String activityStatus;
     
@@ -78,7 +78,10 @@ public class User extends AbstractDomainObject implements Serializable
      */
     protected String comments;
     
-    private String roleId;
+    /**
+     * Role id of the user.
+     */
+    private String roleId = null;
     
     /**
      * Set of collection protocol.
@@ -350,15 +353,34 @@ public class User extends AbstractDomainObject implements Serializable
             this.user.setLastName(uform.getLastName());
             this.user.setFirstName(uform.getFirstName());
             this.user.setEmailId(uform.getEmailAddress());
-            this.institution.setName(uform.getInstitution());
+            this.institution.setSystemIdentifier(new Long(uform.getInstitutionId()));
             
-            this.department.setName(uform.getDepartment());
-            this.cancerResearchGroup.setName(uform.getCancerResearchGroup());
+            this.department.setSystemIdentifier(new Long(uform.getDepartmentId()));
+            this.cancerResearchGroup.setSystemIdentifier(new Long(uform.getCancerResearchGroupId()));
             
             this.activityStatus = uform.getActivityStatus();
-            if (activityStatus.equals(Constants.ACTIVITY_STATUS_ACTIVE))
+            
+            if (uform.getPageOf().equals(Constants.PAGEOF_USER_ADMIN) && uform.getOperation().equals(Constants.ADD))
             {
-                this.user.setPassword(GeneratePassword.getPassword(this.user.getLoginName()));
+                this.activityStatus = Constants.ACTIVITY_STATUS_ACTIVE;
+            }
+            
+            if (uform.getPageOf().equals(Constants.PAGEOF_APPROVE_USER))
+            {
+                if (uform.getStatus().equals(Constants.APPROVE_USER_APPROVE_STATUS))
+                {
+                    this.activityStatus = Constants.ACTIVITY_STATUS_ACTIVE;
+                    this.user.setPassword(GeneratePassword.getPassword(this.user.getLoginName()));
+                }
+                else if (uform.getStatus().equals(Constants.APPROVE_USER_REJECT_STATUS))
+                {
+                    this.activityStatus = Constants.ACTIVITY_STATUS_CLOSED;
+                }
+                else if (uform.getStatus().equals(Constants.APPROVE_USER_PENDING_STATUS))
+                {
+                    this.activityStatus = Constants.ACTIVITY_STATUS_NEW;
+                }
+                
             }
             
             if (uform.getRole() != null)
@@ -371,6 +393,7 @@ public class User extends AbstractDomainObject implements Serializable
             this.address.setZipCode(uform.getZipCode());
             this.address.setPhoneNumber(uform.getPhoneNumber());
             this.address.setFaxNumber(uform.getFaxNumber());
+            this.comments = uform.getComments();
         }
         catch (Exception excp)
         {

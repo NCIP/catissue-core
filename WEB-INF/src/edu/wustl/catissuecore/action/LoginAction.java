@@ -18,7 +18,6 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.actionForm.LoginForm;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.security.SecurityManager;
-import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.util.logger.Logger;
 
 /**

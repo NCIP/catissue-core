@@ -24,7 +24,4 @@ public class Variables
     public static Vector databaseDefinitions=new Vector();
     public static String databaseDriver=new String();
     public static String[] databasenames;
-    public static String emailAddress = "gautam_shetty@persistent.co.in";
-    public static String mailServer = "www.persistent.co.in";
-
 }

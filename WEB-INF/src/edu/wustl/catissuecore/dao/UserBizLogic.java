@@ -93,6 +93,10 @@ public class UserBizLogic extends DefaultBizLogic
                 SecurityManager.getInstance(UserBizLogic.class).createUser(
                         user.getUser());
                 
+                if (user.getRoleId() != null)
+                    SecurityManager.getInstance(UserBizLogic.class)
+    	        			.assignRoleToUser(user.getUser().getLoginName(),user.getRoleId());
+                
                 user.setSystemIdentifier(user.getUser().getUserId());
                 
                 dao.insert(user.getAddress());
@@ -102,26 +106,25 @@ public class UserBizLogic extends DefaultBizLogic
                 
                 //Send email to administrator and cc it to the user registered.
                 SendEmail email = new SendEmail();
-                String separator = " : ";
                 
                 String subject = ApplicationProperties.getValue("userRegistration.request.subject");
                 String body = "Dear "+user.getUser().getFirstName()+" "+user.getUser().getLastName()+"\n\n"+
                 			  ApplicationProperties.getValue("userRegistration.request.body.start") +"\n"+
                 			  "\n\n" + ApplicationProperties.getValue("userRegistration.request.body.userDetailsTitle") +
-                			  "\n" + ApplicationProperties.getValue("user.loginName")+ separator + user.getUser().getLoginName() + 
-                			  "\n" + ApplicationProperties.getValue("user.lastName")+ separator + user.getUser().getLastName() +
-                			  "\n" + ApplicationProperties.getValue("user.firstName")+ separator + user.getUser().getFirstName() +
-                			  "\n" + ApplicationProperties.getValue("user.street")+ separator + user.getAddress().getStreet() +
-                			  "\n" + ApplicationProperties.getValue("user.city")+ separator + user.getAddress().getCity() +
-                			  "\n" + ApplicationProperties.getValue("user.zipCode")+ separator + user.getAddress().getZipCode() +
-                			  "\n" + ApplicationProperties.getValue("user.state")+ separator + user.getAddress().getState() +
-                			  "\n" + ApplicationProperties.getValue("user.country")+ separator + user.getAddress().getCountry() +
-                			  "\n" + ApplicationProperties.getValue("user.phoneNumber")+ separator + user.getAddress().getPhoneNumber() +
-                			  "\n" + ApplicationProperties.getValue("user.faxNumber")+ separator + user.getAddress().getFaxNumber() +
-                			  "\n" + ApplicationProperties.getValue("user.emailAddress")+ separator + user.getUser().getEmailId() +
-                			  "\n" + ApplicationProperties.getValue("user.institution")+ separator + user.getInstitution().getName() +
-                			  "\n" + ApplicationProperties.getValue("user.department")+ separator + user.getDepartment().getName() +
-                			  "\n" + ApplicationProperties.getValue("user.cancerResearchGroup")+ separator + user.getCancerResearchGroup().getName() +
+                			  "\n" + ApplicationProperties.getValue("user.loginName")+ Constants.SEPARATOR + user.getUser().getLoginName() + 
+                			  "\n" + ApplicationProperties.getValue("user.lastName")+ Constants.SEPARATOR + user.getUser().getLastName() +
+                			  "\n" + ApplicationProperties.getValue("user.firstName")+ Constants.SEPARATOR + user.getUser().getFirstName() +
+                			  "\n" + ApplicationProperties.getValue("user.street")+ Constants.SEPARATOR + user.getAddress().getStreet() +
+                			  "\n" + ApplicationProperties.getValue("user.city")+ Constants.SEPARATOR + user.getAddress().getCity() +
+                			  "\n" + ApplicationProperties.getValue("user.zipCode")+ Constants.SEPARATOR + user.getAddress().getZipCode() +
+                			  "\n" + ApplicationProperties.getValue("user.state")+ Constants.SEPARATOR + user.getAddress().getState() +
+                			  "\n" + ApplicationProperties.getValue("user.country")+ Constants.SEPARATOR + user.getAddress().getCountry() +
+                			  "\n" + ApplicationProperties.getValue("user.phoneNumber")+ Constants.SEPARATOR + user.getAddress().getPhoneNumber() +
+                			  "\n" + ApplicationProperties.getValue("user.faxNumber")+ Constants.SEPARATOR + user.getAddress().getFaxNumber() +
+                			  "\n" + ApplicationProperties.getValue("user.emailAddress")+ Constants.SEPARATOR + user.getUser().getEmailId() +
+                			  "\n" + ApplicationProperties.getValue("user.institution")+ Constants.SEPARATOR + institution.getName() +
+                			  "\n" + ApplicationProperties.getValue("user.department")+ Constants.SEPARATOR + department.getName() +
+                			  "\n" + ApplicationProperties.getValue("user.cancerResearchGroup")+ Constants.SEPARATOR + cancerResearchGroup.getName() +
                 			  "\n\n\t" + ApplicationProperties.getValue("userRegistration.request.body.end") + 
                 			  "\n\n" + ApplicationProperties.getValue("email.catissuecore.team");
                 
