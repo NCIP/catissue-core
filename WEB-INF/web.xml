@@ -52,7 +52,7 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
 	
  <!--Usual Welcome-file-list-->
   <welcome-file-list>
-	 <welcome-file>index.jsp</welcome-file>
+	 <welcome-file>/pages/index.jsp</welcome-file>
   </welcome-file-list>
 
   <taglib>
