@@ -11,7 +11,6 @@ import edu.wustl.catissuecore.domain.ReportedProblem;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.SendEmail;
-import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.util.dbManager.DAOException;
 
 /**
@@ -44,12 +43,14 @@ public class ReportedProblemBizLogic extends DefaultBizLogic
         			  "\n " + ApplicationProperties.getValue("reportedProblem.message") + " : " + reportedProblem.getMessageBody() +
         			  "\n\n" + ApplicationProperties.getValue("email.catissuecore.team");
         
+        String adminEmailAddress = ApplicationProperties.getValue("email.administrative.emailAddress");
         String subject = ApplicationProperties.getValue("email.reportProblem.subject");
+        String technicalSupportEmailAddress = ApplicationProperties.getValue("email.technicalSupport.emailAddress");
+        String mailServer = ApplicationProperties.getValue("email.mailServer");
         
-        boolean mailStatus = email.sendmail(Variables.emailAddress,reportedProblem.getFrom(),null,
-                			 reportedProblem.getFrom(),Variables.mailServer,subject,
+        boolean mailStatus = email.sendmail(adminEmailAddress,reportedProblem.getFrom(),null,
+                			 technicalSupportEmailAddress,mailServer,subject,
                 			 body);
-        
     }
     
     
