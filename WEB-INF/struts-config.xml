@@ -37,10 +37,19 @@ PUBLIC
 		<exception
 			type="edu.wustl.catissuecore.exception.UserNotAuthenticatedException"
 			key="" scope="request" path=".catissuecore.homePageDef" />
+		<exception
+			handler="edu.wustl.catissuecore.util.CommonExceptionHandler"
+			key="" scope="request" type="java.lang.Exception"
+			path=".catissuecore.errorPageDef" />
+		
 	</global-exceptions>
 	
 	
 	<action-mappings>
+	
+		<action path="/viewErrorDetails" forward=".catissuecore.error.details"
+			validate="false" />
+		
 		<action path="/ManageAdministrativeData"
                     type="org.apache.struts.actions.ForwardAction"
                     parameter=".catissuecore.manageAdminDataHomeDef" />
