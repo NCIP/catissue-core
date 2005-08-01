@@ -86,7 +86,7 @@ public class CellSpecimenReviewParametersForm extends EventParametersForm
 	 */
 	public int getFormId()
 	{
-		return Constants.CELL_SPECIMEN_REVIEW_EVENT_PARAMETERS_FORM_ID;
+		return Constants.CELL_SPECIMEN_REVIEW_PARAMETERS_FORM_ID;
 	}
 
 	/* (non-Javadoc)
