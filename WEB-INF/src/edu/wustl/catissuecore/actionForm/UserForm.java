@@ -661,6 +661,7 @@ public class UserForm extends AbstractActionForm
                     checkValidNumber(new Long(systemIdentifier).toString(),
                             "user.systemIdentifier", errors, validator);
                 }
+                
                 if (operation.equals(Constants.ADD)
                         || operation.equals(Constants.EDIT))
                 {
@@ -800,6 +801,16 @@ public class UserForm extends AbstractActionForm
                                             new ActionError("errors.item.format",
                                                     ApplicationProperties.getValue("user.emailAddress")));
                         }
+                    }
+                }
+                
+                if (pageOf.equals(Constants.PAGEOF_APPROVE_USER))
+                {
+                    if (status.trim().equals(Constants.SELECT_OPTION))
+                    {
+                        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+                                "errors.item.required", ApplicationProperties
+                                        .getValue("user.approveOperation")));
                     }
                 }
             }
