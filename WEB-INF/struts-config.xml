@@ -92,7 +92,7 @@ PUBLIC
 			validate="true"
 			input="/Home.do"
 			scope="request">
-			<forward name="success" path="/ManageAdministrativeData.do" />
+			<forward name="success" path="/Home.do" />
 			<forward name="failure" path=".catissuecore.homePageDef" />
 		</action>
         
