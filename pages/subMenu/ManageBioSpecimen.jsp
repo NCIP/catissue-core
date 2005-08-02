@@ -12,21 +12,26 @@
       <div>
       	<img src="images/subMenuArrow.gif" width="7" height="7" alt="" /> 
       		<bean:message key="app.participant" />
-      		<a class="subMenuPrimary" href="Participant.do?operation=add">
-      			<bean:message key="app.add" /> 
-      		</a> | 
-      		<a class="subMenuPrimary" href="Participant.do?operation=search">
-      			<bean:message key="app.edit" /> 
-      		</a>
       </div>
+      <div>&nbsp;&nbsp;
+      	<a class="subMenuPrimary" href="Participant.do?operation=add"><bean:message key="app.add" /></a> | 
+      	<a class="subMenuPrimary" <%--href="Participant.do?operation=search"--%> >
+      		<bean:message key="app.edit" /> 
+      	</a>
+      </div>
+      
       <div>
       	<img src="images/subMenuArrow.gif" width="7" height="7" alt="" />
-      		<a class="subMenuPrimary" href="NewSpecimen.do?operation=add&amp;pageOf=">
-      			<bean:message key="app.newSpecimen" />
-      		</a>
+   			<bean:message key="app.newSpecimen" />
       </div>
-      <div>
-      	<img src="images/subMenuArrow.gif" width="7" height="7" alt="" />
+      <div>&nbsp;&nbsp;
+      	<a class="subMenuPrimary" href="NewSpecimen.do?operation=add&amp;pageOf="><bean:message key="app.add" /></a> | 
+      	<a class="subMenuPrimary" <%--href="NewSpecimen.do?operation=search&amp;pageOf="--%> >
+      		<bean:message key="app.edit" /> 
+      	</a>
+      </div>      
+      <div>&nbsp;&nbsp;
+      	<%--<img src="images/subMenuArrow.gif" width="7" height="7" alt="" />--%>
       		<a class="subMenuPrimary" href="#">
       			<bean:message key="app.createSpecimen" />
       		</a>
