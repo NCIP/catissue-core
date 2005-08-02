@@ -19,6 +19,11 @@
 			win = open(mypage,myname,settings)
 			if (win.opener == null)
 				win.opener = self;
+			var list = document.getElementById('typeId');
+			var type = list.options[list.selectedIndex].value;
+			var action = "/catissuecore/StorageContainer.do?operation=add&typeSelected=" + type;
+			document.forms[0].action = action;
+			document.forms[0].submit();
 		}
 
 		function onRadioButtonClick(element)
