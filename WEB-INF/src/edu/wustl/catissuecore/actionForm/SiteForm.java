@@ -521,8 +521,14 @@ public class SiteForm extends AbstractActionForm
                  	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("site.country")));
                  }
              }
-                     
-             checkValidString(city, "site.city", errors, validator);
+              
+             if (validator.isEmpty(city))
+             {
+                 errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+                         "errors.item.required", ApplicationProperties
+                                 .getValue("site.city")));
+             }
+             
              checkValidNumber(zipCode, "site.zipCode", errors, validator);
          }
          catch(Exception excp)
