@@ -1,5 +1,7 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
+<%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
+<%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 
 <table summary="" cellpadding="0" cellspacing="0" border="0" width="100%" height="100%">
                     
@@ -46,6 +48,7 @@
                                         <td class="sidebarContent">
                                           <table cellpadding="2" cellspacing="0" border="0">
                                           <html:errors />
+										  <logic:empty scope="session" name="<%=Constants.USER%>">	
 										   <html:form action="Login.do">
 									
                                             <tr>
@@ -100,6 +103,12 @@
 						
 
 										</html:form>
+										</logic:empty>
+										<logic:notEmpty scope="session"	name="<%=Constants.USER%>">
+												<tr>
+													<TD class="welcomeContent"><bean:message key="app.welcomeNote"/></TD>
+												</tr>			
+										</logic:notEmpty>
                                           </table>
                                         </td>
                                       </tr>
