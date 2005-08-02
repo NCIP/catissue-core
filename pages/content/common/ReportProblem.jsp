@@ -120,7 +120,7 @@
 				     	</label>
 				     </td>
 				     <td class="formField">
-				     	<html:textarea styleClass="formFieldSized" property="messageBody" styleId="messageBody" cols="32" rows="2" readonly="<%=readOnlyValue%>"/>
+				     	<html:textarea styleClass="formFieldSized" property="messageBody" styleId="messageBody" cols="150" rows="7" readonly="<%=readOnlyValue%>"/>
 				     </td>
 				 </tr>
 				 <logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
