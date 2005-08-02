@@ -117,7 +117,7 @@
 				     <td class="formRequiredLabel">
 				     	<label for="messageBody">
 				     		<bean:message key="fields.message" />
-				     	:</label>
+				     	</label>
 				     </td>
 				     <td class="formField">
 				     	<html:textarea styleClass="formFieldSized" property="messageBody" styleId="messageBody" cols="32" rows="2" readonly="<%=readOnlyValue%>"/>
@@ -145,7 +145,7 @@
 						</label>
 					</td>
 					<td class="formField">
-						<html:textarea styleClass="formFieldSized" rows="3" styleId="comments" property="comments" />
+						<html:textarea styleClass="formFieldSized" rows="10" styleId="comments" property="comments" />
 					</td>
 				</tr>
 				</logic:equal>
