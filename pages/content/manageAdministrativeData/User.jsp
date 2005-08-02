@@ -51,7 +51,7 @@
 								String backPage = Constants.APPROVE_USER_SHOW_ACTION+"?"+Constants.PAGE_NUMBER+"="+Constants.START_PAGE; 
 							%>
 							<td>
-								<a class="contentLink" href="<%=backPage%>">Reported Problem Home</a>
+								<a class="contentLink" href="<%=backPage%>">Approve User Home</a>
 							</td>
 							
 							<td>
