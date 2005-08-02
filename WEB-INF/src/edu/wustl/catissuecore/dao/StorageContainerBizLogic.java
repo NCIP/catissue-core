@@ -11,7 +11,6 @@
 package edu.wustl.catissuecore.dao;
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
@@ -117,13 +116,20 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 //    	return null;
 //    }
     
-    public int getNextContainerNumber(long siteID, long typeID ) throws DAOException
+    public int getNextContainerNumber(long parentID, long typeID,boolean isInSite) throws DAOException
     {
     	String sourceObjectName = "CATISSUE_STORAGE_CONTAINER";
 		String[] selectColumnName = {"max(NAME) as MAX_NAME"};
-        String[] whereColumnName = {"STORAGE_TYPE_ID","SITE_ID"};
+		String[] whereColumnName = new String[2];
+		
+		whereColumnName[0] = "STORAGE_TYPE_ID";
+		if(isInSite)
+			whereColumnName[1] = "SITE_ID";
+		else
+			whereColumnName[1] = "PARENT_CONTAINER_ID";
+		
 		String[] whereColumnCondition = {"=","="};
-		Object[] whereColumnValue = {Long.toString(typeID),Long.toString(siteID)};
+		Object[] whereColumnValue = {Long.toString(typeID),Long.toString(parentID)};
 		String joinCondition = Constants.AND_JOIN_CONDITION;
 		
 		AbstractDAO dao = DAOFactory.getDAO(Constants.JDBC_DAO);
@@ -146,18 +152,18 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		return 1;
     }
     
-    private StorageContainer getCopy(StorageContainer oldContainer)
-    {
-    	StorageContainer newContainer = new StorageContainer();
-    	newContainer.setActivityStatus(oldContainer.getActivityStatus());
-    	newContainer.setParentContainer(oldContainer.getParentContainer());
-    	newContainer.setSite(oldContainer.getSite());
-    	newContainer.setStorageContainerCapacity(oldContainer.getStorageContainerCapacity());
-    	newContainer.setStorageType(oldContainer.getStorageType());
-    	newContainer.setTempratureInCentigrade(oldContainer.getTempratureInCentigrade());
-    	newContainer.setStorageContainerDetailsCollection(new HashSet(oldContainer.getStorageContainerDetailsCollection()));
-    	return newContainer;
-    }
+//    private StorageContainer getCopy(StorageContainer oldContainer)
+//    {
+//    	StorageContainer newContainer = new StorageContainer();
+//    	newContainer.setActivityStatus(oldContainer.getActivityStatus());
+//    	newContainer.setParentContainer(oldContainer.getParentContainer());
+//    	newContainer.setSite(oldContainer.getSite());
+//    	newContainer.setStorageContainerCapacity(oldContainer.getStorageContainerCapacity());
+//    	newContainer.setStorageType(oldContainer.getStorageType());
+//    	newContainer.setTempratureInCentigrade(oldContainer.getTempratureInCentigrade());
+//    	newContainer.setStorageContainerDetailsCollection(new HashSet(oldContainer.getStorageContainerDetailsCollection()));
+//    	return newContainer;
+//    }
     
     public Vector getTreeViewData() throws DAOException
     {
