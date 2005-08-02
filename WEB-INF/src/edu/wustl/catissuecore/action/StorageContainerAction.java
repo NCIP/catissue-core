@@ -142,8 +142,6 @@ public class StorageContainerAction extends Action
         	{
         		request.setAttribute("startNumber",String.valueOf(bizLogic.getNextContainerNumber(Long.parseLong(request.getParameter("parentContainerId")),storageContainerForm.getTypeId(),false)));
         	}
-        	
-        	System.out.println(storageContainerForm.getSiteId()+"*************************" + storageContainerForm.getTypeId());
         
 		}
         catch(Exception e)
