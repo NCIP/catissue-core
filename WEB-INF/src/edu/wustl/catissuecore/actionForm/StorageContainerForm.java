@@ -54,6 +54,11 @@ public class StorageContainerForm extends AbstractActionForm
 	 * An id which refers to Parent Container of this container.
 	 */
 	private long parentContainerId;
+	
+	/**
+	 * Position label shown after selecting from storage container map viewer.
+	 */
+	private String positionInParentContainer;
 
 	/**
 	 * An id which refers to the site of the container if it is parent container.
@@ -348,6 +353,22 @@ public class StorageContainerForm extends AbstractActionForm
 		this.parentContainerId = parentContainerId;
 	}
 
+    /**
+     * @return Returns the positionInParentContainer.
+     */
+    public String getPositionInParentContainer()
+    {
+        return positionInParentContainer;
+    }
+    
+    /**
+     * @param positionInParentContainer The positionInParentContainer to set.
+     */
+    public void setPositionInParentContainer(String positionInParentContainer)
+    {
+        this.positionInParentContainer = positionInParentContainer;
+    }
+    
 	/**
 	 * Returns an id which refers to the site of the container if it is parent container.
 	 * @return long An id which refers to the site of the container if it is parent container.
@@ -420,6 +441,7 @@ public class StorageContainerForm extends AbstractActionForm
 	 * */
 	private void reset()
 	{
+	    
 	}
 
 	/**

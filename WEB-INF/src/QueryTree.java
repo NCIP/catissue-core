@@ -126,19 +126,19 @@ public class QueryTree extends JApplet
         }
         catch (MalformedURLException malExp)
         {
-            malExp.printStackTrace();
+//            malExp.printStackTrace();
         }
         catch (IOException ioExp)
         {
-            ioExp.printStackTrace();
+//            ioExp.printStackTrace();
         }
         catch (ClassNotFoundException classNotExp)
         {
-            classNotExp.printStackTrace();
+//            classNotExp.printStackTrace();
         }
         catch (Exception excp)
         {
-            excp.printStackTrace();
+//            excp.printStackTrace();
         }
         finally
         {

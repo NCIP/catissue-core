@@ -26,13 +26,12 @@
 			if(element.value == 1)
 			{
 				document.forms[0].siteId.disabled = false;
-				
-				document.forms[0].parentContainerId.disabled = true;
+				document.forms[0].positionInParentContainer.disabled = true;
 				document.forms[0].Map.disabled = true;
 			}
 			else
 			{
-				document.forms[0].parentContainerId.disabled = false;
+				document.forms[0].positionInParentContainer.disabled = false;
 				document.forms[0].Map.disabled = false;
 
 				document.forms[0].siteId.disabled = true;
@@ -188,6 +187,9 @@ function insRow(subdivtag)
 				<tr>
 					<td><html:hidden property="positionDimensionTwo" /></td>
 				</tr>
+				<tr>
+					<td><html:hidden property="parentContainerId" /></td>
+				</tr>
 				<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.SEARCH%>">
 					<tr>
 						<td class="formMessage" colspan="4">* indicates a required field</td>
@@ -259,7 +261,7 @@ function insRow(subdivtag)
 	 						
 	 						<%-- LOGIC TAG TO ENABLE/DISABLE THE FIELDS OF PARENT CONTAINER --%>
 	 						<logic:equal name="storageContainerForm" property="checkedButton" value="1">							
-							<html:text styleClass="formFieldSized" size="30" styleId="parentContainerId" property="parentContainerId" readonly="<%=readOnlyValue%>" disabled="true"/>
+							<html:text styleClass="formFieldSized" size="30" styleId="positionInParentContainer" property="positionInParentContainer" readonly="true" disabled="true"/>
 							&nbsp;
 							<html:button property="mapButton" styleClass="actionButton" styleId="Map" 
 								onclick="NewWindow('ShowFramedPage.do?pageOf=pageOfStorageLocation','name','810','320','yes');return false" disabled="true">
@@ -269,12 +271,13 @@ function insRow(subdivtag)
 							</logic:equal>
 							
 							<logic:equal name="storageContainerForm" property="checkedButton" value="2">
-
-							<html:text styleClass="formFieldSized" size="30" styleId="parentContainerId" property="parentContainerId" readonly="<%=readOnlyValue%>"/>
+							
+							<html:text styleClass="formFieldSized" size="30" styleId="positionInParentContainer" property="positionInParentContainer" readonly="true"/>
 							&nbsp;
-							<html:submit styleClass="actionButton" styleId="Map" onclick="">
+							<html:button property="mapButton" styleClass="actionButton" styleId="Map" 
+								onclick="NewWindow('ShowFramedPage.do?pageOf=pageOfStorageLocation','name','810','320','yes');return false" >
 								<bean:message key="buttons.map"/>
-							</html:submit>
+							</html:button>
 							
 							</logic:equal>
 						</td>

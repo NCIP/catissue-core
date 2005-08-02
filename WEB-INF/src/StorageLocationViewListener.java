@@ -70,7 +70,7 @@ public class StorageLocationViewListener implements TreeSelectionListener
             {
                 String urlSuffix = null;
                 
-                if ((!treeNode.getStorageContainerName().equals(Constants.ROOT)) 
+                if ((!treeNode.getStorageContainerName().equals(Constants.CATISSUE_CORE)) 
                         			&& (treeNode.getStorageContainerType() != null))
                 {
                     String protocol = codeBase.getProtocol();
@@ -81,6 +81,7 @@ public class StorageLocationViewListener implements TreeSelectionListener
                     			+"?"+Constants.IDENTIFIER+"="+treeNode.getStorageContainerIdentifier();
                     
                     URL dataURL = new URL(protocol,host,port,urlSuffix);
+                    System.out.println("Container Identifier......."+dataURL);
                     appletContext.showDocument(dataURL,Constants.DATA_VIEW_FRAME);
                 }
             }
