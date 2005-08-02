@@ -772,7 +772,7 @@ public class UserForm extends AbstractActionForm
 
                 }
 
-                if (operation.equals(Constants.EDIT))
+                if (pageOf.equals(Constants.PAGEOF_USER_ADMIN))
                 {
                     if (validator.isEmpty(role))
                     {
