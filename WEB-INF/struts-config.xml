@@ -30,6 +30,8 @@ PUBLIC
 		<form-bean name="fluidSpecimenReviewEventParametersForm" type="edu.wustl.catissuecore.actionForm.FluidSpecimenReviewEventParametersForm"/>
 		<form-bean name="cellSpecimenReviewParametersForm" type="edu.wustl.catissuecore.actionForm.CellSpecimenReviewParametersForm"/>
 		<form-bean name="tissueSpecimenReviewEventParametersForm" type="edu.wustl.catissuecore.actionForm.TissueSpecimenReviewEventParametersForm"/>
+		<form-bean name="DisposalEventParametersForm" type="edu.wustl.catissuecore.actionForm.DisposalEventParametersForm"/>
+		<form-bean name="ThawEventParametersForm" type="edu.wustl.catissuecore.actionForm.ThawEventParametersForm"/>
 	</form-beans>
 	
 	<!-- Global Exception Definitions -->
@@ -739,7 +741,6 @@ PUBLIC
 		</action>    
 		<!-- Biohazard Actions Ends -->
 		
-
 	<!-- FrozenEventParameters Actions Begins -->
         <action path="/FrozenEventParameters"
 			type="edu.wustl.catissuecore.action.FrozenEventParametersAction"
@@ -973,6 +974,86 @@ PUBLIC
 			<forward name="failure" path="/TissueSpecimenReviewEventParameters.do?operation=edit"/>
 		</action>    
 		<!-- TissueSpecimenReviewEventParameters Actions Ends -->
+		
+
+
+	<!-- DisposalEventParameters Actions Begins -->
+        <action path="/DisposalEventParameters"
+			type="edu.wustl.catissuecore.action.DisposalEventParametersAction"
+			scope="request">
+			<forward name="success" path=".catissuecore.DisposalEventParametersDef" />
+			<forward name="failure" path=".catissuecore.DisposalEventParametersDef" />
+		</action>
+		
+		<action path="/DisposalEventParametersAdd"
+			type="edu.wustl.catissuecore.action.CommonAddEditAction"
+			name="DisposalEventParametersForm"
+			validate="true"
+			input="/DisposalEventParameters.do?operation=add"
+			scope="request">
+			<forward name="success" path=".catissuecore.DisposalEventParametersAddSuccessDef" />
+			<forward name="failure" path="/error.jsp" />
+		</action>
+		
+		<action path="/DisposalEventParametersEdit"
+			type="edu.wustl.catissuecore.action.CommonAddEditAction"
+			name="DisposalEventParametersForm"
+			validate="true"
+			input="/DisposalEventParameters.do?operation=edit"
+			scope="request">
+			<forward name="success" path=".catissuecore.DisposalEventParametersEditSuccessDef" />
+			<forward name="failure" path="/error.jsp" />
+		</action>
+		
+		<action path="/DisposalEventParametersSearch"
+		    type="edu.wustl.catissuecore.action.CommonSearchAction"
+			name="DisposalEventParametersForm"
+			validate="true"
+			input="/DisposalEventParameters.do?operation=edit"
+			scope="request">
+			<forward name="success" path="/DisposalEventParameters.do?operation=edit"/>
+			<forward name="failure" path="/DisposalEventParameters.do?operation=edit"/>
+		</action>    
+		<!-- DisposalEventParameters Actions Ends -->
+		
+			<!--ThawEventParameters Actions Begins -->
+        <action path="/ThawEventParameters"
+			type="edu.wustl.catissuecore.action.ThawEventParametersAction"
+			scope="request">
+			<forward name="success" path=".catissuecore.ThawEventParametersDef" />
+			<forward name="failure" path=".catissuecore.ThawEventParametersDef" />
+		</action>
+		
+		<action path="/ThawEventParametersAdd"
+			type="edu.wustl.catissuecore.action.CommonAddEditAction"
+			name="ThawEventParametersForm"
+			validate="true"
+			input="/ThawEventParameters.do?operation=add"
+			scope="request">
+			<forward name="success" path=".catissuecore.ThawEventParametersAddSuccessDef" />
+			<forward name="failure" path="/error.jsp" />
+		</action>
+		
+		<action path="/ThawEventParametersEdit"
+			type="edu.wustl.catissuecore.action.CommonAddEditAction"
+			name="ThawEventParametersForm"
+			validate="true"
+			input="/ThawEventParameters.do?operation=edit"
+			scope="request">
+			<forward name="success" path=".catissuecore.ThawEventParametersEditSuccessDef" />
+			<forward name="failure" path="/error.jsp" />
+		</action>
+		
+		<action path="/ThawEventParametersSearch"
+		    type="edu.wustl.catissuecore.action.CommonSearchAction"
+			name="ThawEventParametersForm"
+			validate="true"
+			input="/ThawEventParameters.do?operation=edit"
+			scope="request">
+			<forward name="success" path="/ThawEventParameters.do?operation=edit"/>
+			<forward name="failure" path="/ThawEventParameters.do?operation=edit"/>
+		</action>    
+		<!-- ThawEventParameters Actions Ends -->
 		
 		<!--Query Result View Actions Begin-->
 		<action path="/ShowFramedPage"
