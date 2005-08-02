@@ -5,5 +5,9 @@
           		<img class=logo alt="Cancer Biomedical Informatics Center" src="images/logotype.jpg" width="725" height="45" border="0">
 			</a>
 		  </td>
-        </tr>
+		  <td height="37" align="right">
+          	<a href="#">
+          		<img class=logo alt="Cancer Biomedical Informatics Center" src="images/sccLogo.gif" width="259" height="45" border="0">
+			</a>
+		  </td>
 </table>
