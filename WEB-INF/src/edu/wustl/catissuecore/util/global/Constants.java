@@ -356,6 +356,9 @@ public class Constants
 	public static final String CURRENT_RECORD = "currentRecord";
 	public static final String APPROVE_USER_EMAIL_SUBJECT = "Your membership status in caTISSUE Core.";
 	
+	//Misc
+	public static final String SEPARATOR = " : ";
+	  
 	//Query Interface Tree View Constants.
 	public static final String ROOT = "Root";
 	
