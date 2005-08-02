@@ -121,11 +121,11 @@ public class TreeNode implements Serializable
     
     public String toString()
     {
-        String nodeName = this.storageContainerType + ":" + this.storageContainerName; 
+        String nodeName = this.storageContainerType + ":" + this.storageContainerIdentifier; 
         if (storageContainerIdentifier == null)
             nodeName = this.siteType + ":" + this.siteName;
-        else if (storageContainerName.equals(Constants.ROOT))
-            nodeName = Constants.ROOT;
+        else if (storageContainerName.equals(Constants.CATISSUE_CORE))
+            nodeName = Constants.CATISSUE_CORE;
         return nodeName; 
     }
     /**

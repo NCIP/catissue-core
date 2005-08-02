@@ -321,7 +321,9 @@ public class Constants
 	public static final int TISSUE_SPECIMEN_REVIEW_EVENT_PARAMETERS_FORM_ID = 24;
 	public static final int DISPOSAL_EVENT_PARAMETERS_FORM_ID = 25;
 	public static final int THAW_EVENT_PARAMETERS_FORM_ID = 26;
-		
+	
+	//Misc
+	public static final String SEPARATOR = " : ";
 	//Status message key Constants
 	public static final String STATUS_MESSAGE_KEY = "statusMessageKey";
 	
@@ -356,11 +358,9 @@ public class Constants
 	public static final String CURRENT_RECORD = "currentRecord";
 	public static final String APPROVE_USER_EMAIL_SUBJECT = "Your membership status in caTISSUE Core.";
 	
-	//Misc
-	public static final String SEPARATOR = " : ";
-	  
-	//Query Interface Tree View Constants.
+	//Tree View Constants.
 	public static final String ROOT = "Root";
+	public static final String CATISSUE_CORE = "caTISSUE Core";
 	
 	//Query Interface Results View Constants
 	public static final String PAGEOF = "pageOf";

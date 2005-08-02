@@ -114,11 +114,14 @@ public class StorageContainer extends AbstractDomainObject implements java.io.Se
 	{
 		this.setActivityStatus(oldContainer.getActivityStatus());
 		this.setParentContainer(oldContainer.getParentContainer());
+		oldContainer.getParentContainer().getChildrenContainerCollection().add(this);
 		this.setSite(oldContainer.getSite());
 		this.setStorageContainerCapacity(oldContainer.getStorageContainerCapacity());
 		this.setStorageType(oldContainer.getStorageType());
 		this.setTempratureInCentigrade(oldContainer.getTempratureInCentigrade());
 		this.setStorageContainerDetailsCollection(new HashSet(oldContainer.getStorageContainerDetailsCollection()));
+		this.positionDimensionOne = oldContainer.getPositionDimensionOne();
+		this.positionDimensionTwo = oldContainer.getPositionDimensionTwo();
 	}
 	
 	/**

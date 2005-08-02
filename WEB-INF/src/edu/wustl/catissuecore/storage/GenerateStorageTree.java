@@ -26,7 +26,7 @@ public class GenerateStorageTree
 {
     public JTree createTree(Vector dataVector)
     {
-        TreeNode rootNode = new TreeNode(new Long(0),Constants.ROOT,"0",new Long(0));
+        TreeNode rootNode = new TreeNode(new Long(0),Constants.CATISSUE_CORE,"0",new Long(0));
         DefaultMutableTreeNode root = new DefaultMutableTreeNode(rootNode);
         DefaultMutableTreeNode parentNode;
         
@@ -95,22 +95,27 @@ public class GenerateStorageTree
     private DefaultMutableTreeNode getChildNode(
             DefaultMutableTreeNode parentNode, TreeNode treeNode)
     {
+        DefaultMutableTreeNode returnNode = null;
         if (parentNode != null)
         {
+            boolean flag = false;
             for (int i = 0; i < parentNode.getChildCount();i++)
             {
                 DefaultMutableTreeNode node = (DefaultMutableTreeNode) parentNode.getChildAt(i);
                 TreeNode nodeData = (TreeNode) node.getUserObject();
                 if (nodeData.getStorageContainerIdentifier().equals(treeNode.getParentStorageContainerIdentifier()))
                 {
-                    return node;
+                    returnNode = node;
+                    flag = true;
+                    break;
                 }
-                    
-                return getChildNode(node,treeNode);
+                returnNode = getChildNode(node,treeNode);
+                if (returnNode != null)
+                    break;
             }
+            
         }
         
-        return null;
-        
+        return returnNode;
     }
 }

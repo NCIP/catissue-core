@@ -17,10 +17,10 @@ import java.util.List;
 import java.util.Vector;
 
 import net.sf.hibernate.HibernateException;
+import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.StorageContainerDetails;
 import edu.wustl.catissuecore.domain.StorageType;
-import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.storage.TreeNode;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.dbManager.DAOException;
@@ -66,12 +66,11 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		
 			if(container.getParentContainer() != null)
 			{
-				list = dao.retrieve(StorageContainer.class.getName(), "systemIdentifier", container.getParentContainer().getSystemIdentifier());
+			    list = dao.retrieve(StorageContainer.class.getName(), "systemIdentifier", container.getParentContainer().getSystemIdentifier());
 				if (list.size() != 0)
 				{
 					StorageContainer pc = (StorageContainer) list.get(0);
 					container.setParentContainer(pc);
-					pc.getChildrenContainerCollection().add(container);
 				}
 			}
 			
@@ -94,7 +93,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 					}
 				}
 			}
-	    dao.closeSession();
+			dao.closeSession();
 	}
 	
 	/**
