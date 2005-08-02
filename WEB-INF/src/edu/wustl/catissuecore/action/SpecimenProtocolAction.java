@@ -53,11 +53,6 @@ public class SpecimenProtocolAction extends Action
         	Collection coll =  userBizLogic.getUsers(Constants.ACTIVITY_STATUS_ACTIVE);
         	request.setAttribute(Constants.USERLIST, coll);
         	
-//        	Collection coll =  new Vector();
-//        	coll.add(new NameValueBean("A, B","47"));
-//        	request.setAttribute(Constants.USERLIST, coll);
-
-        	
 	    	String [] specimenClassArry = {Constants.SELECT_OPTION, "Fluid Specimen","Tissue Specimen","Cell Specimen","Molecular Specimen"};
 	    	String [] specimenClassIdArry = {Constants.SELECT_OPTION, "Fluid","Tissue","Cell","Molecular"};
 	    	request.setAttribute(Constants.SPECIMEN_CLASS_LIST, specimenClassArry);

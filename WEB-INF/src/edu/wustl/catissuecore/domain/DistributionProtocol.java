@@ -17,6 +17,7 @@ import java.util.Map;
 import edu.wustl.catissuecore.actionForm.AbstractActionForm;
 import edu.wustl.catissuecore.actionForm.DistributionProtocolForm;
 import edu.wustl.common.util.MapDataParser;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * An abbreviated set of written procedures that describe how a previously collected specimen will be utilized.  Note that specimen may be collected with one collection protocol and then later utilized by multiple different studies (Distribution protocol).
@@ -44,8 +45,9 @@ public class DistributionProtocol extends SpecimenProtocol implements java.io.Se
 	
 	public DistributionProtocol(AbstractActionForm form)
 	{
-		super(form);	
+		setAllValues(form);
 	}
+	
 	// ---- Method section
 	/**
 	 * Returns the collection of SpecimenRequirements for this Protocol.
@@ -101,18 +103,23 @@ public class DistributionProtocol extends SpecimenProtocol implements java.io.Se
         {
         	super.setAllValues(abstractForm);
         	
-	    	DistributionProtocolForm cpForm = (DistributionProtocolForm) abstractForm;
-	    	
-	    	Map map = cpForm.getValues();
+	    	DistributionProtocolForm dpForm = (DistributionProtocolForm) abstractForm;
+
+	    	Map map = dpForm.getValues();
 	        map = fixMap(map);
-	        System.out.println("MAP "+map);
+	        Logger.out.debug("MAP "+map);
 	        MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.domain");
-	        this.specimenRequirementCollection = parser.generateData(map);
-	        System.out.println("specimenRequirementCollection "+this.specimenRequirementCollection);
+	        this.specimenRequirementCollection = new HashSet(parser.generateData(map));
+	        Logger.out.debug("specimenRequirementCollection "+this.specimenRequirementCollection);
         }
         catch (Exception excp)
         {
-        	excp.printStackTrace();
+        	Logger.out.error(excp.getMessage(),excp);
         }
+    }
+    
+    public String toString()
+    {
+    	return title+" "+specimenRequirementCollection ;
     }
 }

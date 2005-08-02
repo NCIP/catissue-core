@@ -13,12 +13,14 @@ package edu.wustl.catissuecore.dao;
 import java.util.Iterator;
 import java.util.List;
 
+
 import net.sf.hibernate.HibernateException;
 import edu.wustl.catissuecore.domain.DistributionProtocol;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * StorageContainerHDAO is used to add Storage Container information into the database using Hibernate.
@@ -36,7 +38,6 @@ public class DistributionProtocolBizLogic extends DefaultBizLogic
 	public void insert(Object obj) throws DAOException 
 	{
 		DistributionProtocol distributionProtocol = (DistributionProtocol)obj;
-        
 		AbstractDAO dao = DAOFactory.getDAO(Constants.HIBERNATE_DAO);
 		dao.openSession();
 		
@@ -47,11 +48,14 @@ public class DistributionProtocolBizLogic extends DefaultBizLogic
 			distributionProtocol.setPrincipalInvestigator(pi);
 		}
 		
+		Logger.out.debug("SIZE "+distributionProtocol.getSpecimenRequirementCollection().size());
 		dao.insert(distributionProtocol);
+		Logger.out.debug("SIZE "+distributionProtocol.getSpecimenRequirementCollection().size());
 		Iterator it = distributionProtocol.getSpecimenRequirementCollection().iterator();
 		while(it.hasNext())
 		{
 			SpecimenRequirement specimenRequirement = (SpecimenRequirement)it.next();
+			Logger.out.debug("specimenRequirement "+specimenRequirement);
 			specimenRequirement.getDistributionProtocolCollection().add(distributionProtocol);
 			dao.insert(specimenRequirement);
 		}

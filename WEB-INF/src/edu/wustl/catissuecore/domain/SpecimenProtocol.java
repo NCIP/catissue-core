@@ -32,7 +32,7 @@ public abstract class SpecimenProtocol extends AbstractDomainObject implements j
 	/**
 	 * System generated unique systemIdentifier.
 	 */
-	protected Long systemIdentifier = new Long("1");
+	protected Long systemIdentifier = null;
 	
 	/**
 	 * The current principal investigator of the protocol.
@@ -86,11 +86,6 @@ public abstract class SpecimenProtocol extends AbstractDomainObject implements j
 	public SpecimenProtocol()
 	{
 		super();
-	}
-	
-	public SpecimenProtocol(AbstractActionForm form)
-	{
-		setAllValues(form);
 	}
 	
 	/**
@@ -283,7 +278,7 @@ public abstract class SpecimenProtocol extends AbstractDomainObject implements j
         try
         {
         	SpecimenProtocolForm spForm = (SpecimenProtocolForm) abstractForm;
-        	this.systemIdentifier = new Long(spForm.getSystemIdentifier());
+        	
         	this.title = spForm.getTitle();
         	this.shortTitle = spForm.getShortTitle();
         	this.irbIdentifier = spForm.getIrbID();
@@ -294,7 +289,7 @@ public abstract class SpecimenProtocol extends AbstractDomainObject implements j
         	this.enrollment = new Integer(spForm.getEnrollment());
         	this.descriptionURL = spForm.getDescriptionURL();
         	
-        	principalInvestigator  =new User();
+        	principalInvestigator  = new User();
         	this.principalInvestigator.setSystemIdentifier(new Long(spForm.getPrincipalInvestigatorId()));
         }
         catch (Exception excp)
@@ -302,6 +297,7 @@ public abstract class SpecimenProtocol extends AbstractDomainObject implements j
         	excp.printStackTrace();
         }
 	}
+	
 	//SpecimenRequirement#FluidSpecimenRequirement:1.specimenType", "Blood");
 	protected Map fixMap(Map orgMap)
 	{

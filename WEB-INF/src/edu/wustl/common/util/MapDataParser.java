@@ -27,29 +27,34 @@ public class MapDataParser
 	{
 		Map map = new TreeMap();
 
-		map.put("CollectionProtocolEvent:1_clinicalStatus", "Pre-Opt");                       
-		map.put("CollectionProtocolEvent:1_studyCalendarEventPoint", "11.0");                 
-		map.put("CollectionProtocolEvent:1_SpecimenRequirement:1_tissueSite", "Lung");        
-		map.put("CollectionProtocolEvent:1_SpecimenRequirement:1_specimenType", "Blood");     
-		map.put("CollectionProtocolEvent:1_SpecimenRequirement:1_specimenClass", "Tissue");
-		map.put("CollectionProtocolEvent:1_SpecimenRequirement:1_quantityIn", "6");
-		                                                                                      
-		map.put("CollectionProtocolEvent:2_studyCalendarEventPoint", "10.0");                 
-		map.put("CollectionProtocolEvent:2_clinicalStatus", "Pre-Opt");                       
-		map.put("CollectionProtocolEvent:2_SpecimenRequirement:1_specimenType", "Blood");     
-		map.put("CollectionProtocolEvent:2_SpecimenRequirement:1_tissueSite", "Kidney");      
-		map.put("CollectionProtocolEvent:2_SpecimenRequirement:1_specimenClass", "Fluid");    
-		map.put("CollectionProtocolEvent:2_SpecimenRequirement:1_quantityIn", "7");
+		map.put("SpecimenRequirement#FluidSpecimenRequirement:1_pathologyStatus","Primary Tumor");
+		map.put("SpecimenRequirement#FluidSpecimenRequirement:1_specimenType","Blood");
+		map.put("SpecimenRequirement#FluidSpecimenRequirement:1_tissueSite","Adrenal-Cortex");
+		map.put("SpecimenRequirement#FluidSpecimenRequirement:1_quantityInMiliLiter","20");
 		
-		map.put("CollectionProtocolEvent:2_SpecimenRequirement:2_tissueSite", "Brain");       
-		map.put("CollectionProtocolEvent:2_SpecimenRequirement:2_specimenType", "Gel");       
-		map.put("CollectionProtocolEvent:2_SpecimenRequirement:2_specimenClass", "Cell");     
-		map.put("CollectionProtocolEvent:2_SpecimenRequirement:2_quantityIn", "8");
-		
-		map.put("CollectionProtocolEvent:2_SpecimenRequirement:3_tissueSite", "Lever");       
-		map.put("CollectionProtocolEvent:2_SpecimenRequirement:3_specimenType", "Cell");      
-		map.put("CollectionProtocolEvent:2_SpecimenRequirement:3_specimenClass", "Molecular");
-		map.put("CollectionProtocolEvent:2_SpecimenRequirement:3_quantityIn", "9");
+//		map.put("CollectionProtocolEvent:1_clinicalStatus", "Pre-Opt");                       
+//		map.put("CollectionProtocolEvent:1_studyCalendarEventPoint", "11.0");                 
+//		map.put("CollectionProtocolEvent:1_SpecimenRequirement:1_tissueSite", "Lung");        
+//		map.put("CollectionProtocolEvent:1_SpecimenRequirement:1_specimenType", "Blood");     
+//		map.put("CollectionProtocolEvent:1_SpecimenRequirement:1_specimenClass", "Tissue");
+//		map.put("CollectionProtocolEvent:1_SpecimenRequirement:1_quantityIn", "6");
+//		                                                                                      
+//		map.put("CollectionProtocolEvent:2_studyCalendarEventPoint", "10.0");                 
+//		map.put("CollectionProtocolEvent:2_clinicalStatus", "Pre-Opt");                       
+//		map.put("CollectionProtocolEvent:2_SpecimenRequirement:1_specimenType", "Blood");     
+//		map.put("CollectionProtocolEvent:2_SpecimenRequirement:1_tissueSite", "Kidney");      
+//		map.put("CollectionProtocolEvent:2_SpecimenRequirement:1_specimenClass", "Fluid");    
+//		map.put("CollectionProtocolEvent:2_SpecimenRequirement:1_quantityIn", "7");
+//		
+//		map.put("CollectionProtocolEvent:2_SpecimenRequirement:2_tissueSite", "Brain");       
+//		map.put("CollectionProtocolEvent:2_SpecimenRequirement:2_specimenType", "Gel");       
+//		map.put("CollectionProtocolEvent:2_SpecimenRequirement:2_specimenClass", "Cell");     
+//		map.put("CollectionProtocolEvent:2_SpecimenRequirement:2_quantityIn", "8");
+//		
+//		map.put("CollectionProtocolEvent:2_SpecimenRequirement:3_tissueSite", "Lever");       
+//		map.put("CollectionProtocolEvent:2_SpecimenRequirement:3_specimenType", "Cell");      
+//		map.put("CollectionProtocolEvent:2_SpecimenRequirement:3_specimenClass", "Molecular");
+//		map.put("CollectionProtocolEvent:2_SpecimenRequirement:3_quantityIn", "9");
 		
 		return map; 
 	} // createmap
@@ -143,7 +148,16 @@ public class MapDataParser
 			Collection collection = null;
 			
 			if(parentObj == null)
+			{
 				collection = dataList;
+				
+				StringTokenizer st = new StringTokenizer(className,"#");
+				if(st.countTokens()>1)
+				{
+					st.nextToken();
+					className = st.nextToken();
+				}
+			}
 			else//SpecimenRequirement:1.specimenType", "Blood");
 			{
 				String collectionName = className;
