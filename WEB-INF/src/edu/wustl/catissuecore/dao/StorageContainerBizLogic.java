@@ -136,8 +136,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		
 		dao.openSession();
 		
-		List list = dao.retrieve(sourceObjectName,selectColumnName,whereColumnName,whereColumnCondition,
-				whereColumnValue,joinCondition);
+		List list = dao.retrieve(sourceObjectName,selectColumnName,whereColumnName,whereColumnCondition,whereColumnValue,joinCondition);
 		
 		if(!list.isEmpty())
 		{
