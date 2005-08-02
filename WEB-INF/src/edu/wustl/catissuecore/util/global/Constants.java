@@ -221,16 +221,27 @@ public class Constants
 	public static final String FLUID_SPECIMEN_REVIEW_EVENT_PARAMETERS_ADD_ACTION = "FluidSpecimenReviewEventParametersAdd.do";
 	public static final String FLUID_SPECIMEN_REVIEW_EVENT_PARAMETERS_EDIT_ACTION = "FluidSpecimenReviewEventParametersEdit.do";
 
-//	Constants required in CELLSPECIMENREVIEWParameters.jsp Page
+	//	Constants required in CELLSPECIMENREVIEWParameters.jsp Page
 	public static final String CELL_SPECIMEN_REVIEW_PARAMETERS_SEARCH_ACTION = "CellSpecimenReviewParametersSearch.do";
 	public static final String CELL_SPECIMEN_REVIEW_PARAMETERS_ADD_ACTION = "CellSpecimenReviewParametersAdd.do";
 	public static final String CELL_SPECIMEN_REVIEW_PARAMETERS_EDIT_ACTION = "CellSpecimenReviewParametersEdit.do";
 
-//	Constants required in tissue SPECIMEN REVIEW event Parameters.jsp Page
+	//	Constants required in tissue SPECIMEN REVIEW event Parameters.jsp Page
 	public static final String TISSUE_SPECIMEN_REVIEW_EVENT_PARAMETERS_SEARCH_ACTION = "TissueSpecimenReviewEventParametersSearch.do";
 	public static final String TISSUE_SPECIMEN_REVIEW_EVENT_PARAMETERS_ADD_ACTION = "TissueSpecimenReviewEventParametersAdd.do";
 	public static final String TISSUE_SPECIMEN_REVIEW_EVENT_PARAMETERS_EDIT_ACTION = "TissueSpecimenReviewEventParametersEdit.do";
 
+	//	Constants required in DisposalEventParameters.jsp Page	
+	public static final String DISPOSAL_EVENT_PARAMETERS_SEARCH_ACTION = "DisposalEventParametersSearch.do";
+	public static final String DISPOSAL_EVENT_PARAMETERS_ADD_ACTION = "DisposalEventParametersAdd.do";
+	public static final String DISPOSAL_EVENT_PARAMETERS_EDIT_ACTION = "DisposalEventParametersEdit.do";
+	
+	//	Constants required in ThawEventParameters.jsp Page
+	public static final String THAW_EVENT_PARAMETERS_SEARCH_ACTION = "ThawEventParametersSearch.do";
+	public static final String THAW_EVENT_PARAMETERS_ADD_ACTION = "ThawEventParametersAdd.do";
+	public static final String THAW_EVENT_PARAMETERS_EDIT_ACTION = "ThawEventParametersEdit.do";
+	
+	
 	//Levels of nodes in query results tree.
 	public static final int MAX_LEVEL = 5;
 	public static final int MIN_LEVEL = 1;
@@ -308,9 +319,9 @@ public class Constants
 	public static final int NEW_SPECIMEN_FORM_ID = 22;
 	public static final int CELL_SPECIMEN_REVIEW_PARAMETERS_FORM_ID =23;
 	public static final int TISSUE_SPECIMEN_REVIEW_EVENT_PARAMETERS_FORM_ID = 24;
-	
-	//Misc
-	public static final String SEPARATOR = " : ";
+	public static final int DISPOSAL_EVENT_PARAMETERS_FORM_ID = 25;
+	public static final int THAW_EVENT_PARAMETERS_FORM_ID = 26;
+		
 	//Status message key Constants
 	public static final String STATUS_MESSAGE_KEY = "statusMessageKey";
 	
