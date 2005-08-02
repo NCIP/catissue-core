@@ -342,6 +342,33 @@
 	</definition>
 	<!-- TissueSpecimenReviewEventParameters end -->
 
+	<!-- DisposalEventParameters -->
+	<definition name=".catissuecore.DisposalEventParametersDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/DisposalEventParameters.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.DisposalEventParametersAddSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/common/success.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.DisposalEventParametersEditSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/common/success.jsp" />
+	</definition>
+	<!-- DisposalEventParameters end -->
+	<!-- ThawEventParameters -->
+	<definition name=".catissuecore.ThawEventParametersDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/ThawEventParameters.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.ThawEventParametersAddSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/common/success.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.ThawEventParametersEditSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/common/success.jsp" />
+	</definition>
+	<!-- ThawEventParameters end -->
+
 	<!-- BioSpecimen tab pages definitions end -->
 
 	<!-- Search tab pages definitions start -->
