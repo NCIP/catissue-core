@@ -92,5 +92,5 @@ public abstract class AbstractDAO
      * Deletes the persistent object from the database.
      * @param obj The object to be deleted.
      */
-	public abstract boolean delete (Object obj)throws DAOException;	
+	public abstract void delete (Object obj)throws DAOException;	
 }

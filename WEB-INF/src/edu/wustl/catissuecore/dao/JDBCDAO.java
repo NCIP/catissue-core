@@ -273,10 +273,10 @@ public class JDBCDAO extends AbstractDAO
     /* (non-Javadoc)
      * @see edu.wustl.catissuecore.dao.AbstractDAO#delete(java.lang.Object)
      */
-    public boolean delete(Object obj) throws DAOException
+    public void delete(Object obj) throws DAOException
     {
         // TODO Auto-generated method stub
-        return false;
+        //return false;
     }
     
 //    private 
