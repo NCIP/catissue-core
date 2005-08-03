@@ -14,12 +14,21 @@ package edu.wustl.common.cde.xml;
  * Window - Preferences - Java - Code Style - Code Templates
  */
 //JAXP packages
-import javax.xml.parsers.*;
-import org.xml.sax.*;
-import org.xml.sax.helpers.*;
-import org.w3c.dom.*;
+import java.io.File;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 
-import java.io.*;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.DocumentType;
+import org.w3c.dom.Entity;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.xml.sax.ErrorHandler;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
 public class MDParsXML {
     /** All output will use this encoding */

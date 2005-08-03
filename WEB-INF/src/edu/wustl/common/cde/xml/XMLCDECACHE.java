@@ -5,8 +5,8 @@
  * Window - Preferences - Java - Code Style - Code Templates
  */
 package edu.wustl.common.cde.xml;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**

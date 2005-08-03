@@ -8,18 +8,11 @@ package edu.wustl.catissuecore.audit;
 
 import java.awt.Rectangle;
 import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
-import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.domain.AuditEventDetails;
-import edu.wustl.catissuecore.domain.AuditEventLog;
 import edu.wustl.catissuecore.domain.CellSpecimenRequirement;
-import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
-import edu.wustl.catissuecore.domain.Department;
-import edu.wustl.catissuecore.domain.User;
 
 /**
  * @author kapil_kaveeshwar

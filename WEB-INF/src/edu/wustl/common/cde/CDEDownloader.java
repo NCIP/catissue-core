@@ -17,21 +17,22 @@ import gov.nih.nci.cadsr.domain.PermissibleValue;
 import gov.nih.nci.cadsr.domain.ValueDomainPermissibleValue;
 import gov.nih.nci.cadsr.domain.impl.DataElementImpl;
 import gov.nih.nci.cadsr.domain.impl.ValueDomainImpl;
-import gov.nih.nci.system.applicationservice.ApplicationService;
+import gov.nih.nci.evs.domain.DescLogicConcept;
 import gov.nih.nci.evs.query.EVSQuery;
 import gov.nih.nci.evs.query.EVSQueryImpl;
-import gov.nih.nci.evs.domain.DescLogicConcept;
+import gov.nih.nci.system.applicationservice.ApplicationService;
+
 import java.net.Authenticator;
 import java.net.PasswordAuthentication;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
-import javax.swing.tree.*;
-import java.util.Enumeration;
+import javax.swing.tree.DefaultMutableTreeNode;
 
 public class CDEDownloader
 {
