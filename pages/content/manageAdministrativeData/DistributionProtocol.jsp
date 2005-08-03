@@ -55,32 +55,6 @@
 <!--
 	// functions for add more
 
-	
-var subDivRowCount = new Array(10);		// array to hold the row count of the inner block
-
-subDivRowCount[0] = 1;
-
-// variable to count the oter blocks
-var insno=0;
-
-function addBlock(div,d0)
-{
-	//alert("Here "+insno);
-	var y = div.innerHTML;
-	var z = d0.innerHTML;
-
-	subDivRowCount[insno] = 1;
-	insno =insno + 1;
-
-	//alert("insno "+z);
-	var mm = z.indexOf('`');
-	for(var cnt=0;cnt<mm;cnt++)
-	{
-		z = z.replace('`',insno);
-		mm = z.indexOf('`');
-	}
-	div.innerHTML = div.innerHTML +z;
-}
 
 //  function to insert a row in the inner block
 function insRow(subdivtag)
@@ -427,7 +401,7 @@ function insRow(subdivtag)
 				</td>
 				<td align="right" class="formTitle">		
 						<html:button property="addDistributionProtocolEvents" styleClass="actionButton" onclick="insRow('SpecimenRequirementData')">Add More</html:button>
-				</td>  <!-- addBlock(outerdiv,d1)-->
+				</td> 
 			</tr>
 		</table>	
 			<!-- SUB TITLES -->
@@ -435,28 +409,28 @@ function insRow(subdivtag)
 			<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
 			<tbody id="SpecimenRequirementData">			
 			<TR> 
-				<td class="formRequiredLabel" width="14">
+				<td class="formRequiredLabelLeft" ><!-- width="14" -->
 					<bean:message key="distributionprotocol.specimennumber" />
 		        </td>
 				
-				<td class="formRequiredLabel" width="182">
+				<td class="formRequiredLabelLeft"><!--  width="182" -->
 					<bean:message key="distributionprotocol.specimenclass" />
 		        </td>
 		        
-		        <td class="formRequiredLabel" width="180">
+		        <td class="formRequiredLabelLeft"><!-- width="180" -->
 			        <bean:message key="distributionprotocol.specimentype" />
 		        </td>
 		        
-		        <td class="formRequiredLabel" width="211">
+		        <td class="formRequiredLabelLeft"><!--  width="211" -->
 		        	<bean:message key="distributionprotocol.specimensite" />
 			    </td>
 		        
-		        <td class="formRequiredLabel" width="208">
+		        <td class="formRequiredLabelLeft"><!--  width="208" -->
 			        <bean:message key="distributionprotocol.pathologystatus" />
 			    </td>
 			    
-			    <td class="formRequiredLabel" width="117">
-			    	<bean:message key="distributionprotocol.quantity" />
+			    <td class="formFieldAllBorders"><!--  width="117" -->
+			    	<b><bean:message key="distributionprotocol.quantity" /></b>
 		        </td>
 			</tr>				
 			</tbody>
@@ -466,12 +440,6 @@ function insRow(subdivtag)
 </table>
 
 
-<!--  outermostdiv start --><!-- outer div tag  for entire block -->
-<div id="outerdiv"> 
-
-</div>			
-
-	<!-- outermostdiv  -->
 <SCRIPT LANGUAGE="JavaScript">
 	insRow('SpecimenRequirementData');
 </Script>
@@ -503,73 +471,4 @@ function insRow(subdivtag)
 
 </table>
 </html:form>
-<hr>
-
-
-<html:form action="ApproveUser.do">
-<div id="d1">
-	<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="97%"> 
-		<tr><td>
-			<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
-				<TR>	<!-- SPECIMEN REQ DATA -->
-				    <td class="tabrightmostcell">`.</td>
-				    <td class="formField">		
-				    	<html:select property="value(SpecimenRequirement:`_specimenClass)" 
-										styleClass="formFieldSized10" 
-										styleId="value(SpecimenRequirement:`_specimenClass)" size="1"
-										onchange="changeUnit('value(SpecimenRequirement:`_specimenClass)',
-				       						'value(SpecimenRequirement:`_unitspan)')">
-							<html:options name="<%=Constants.SPECIMEN_CLASS_ID_LIST%>" labelName="<%=Constants.SPECIMEN_CLASS_LIST%>"/>
-						</html:select>
-				    </td>
-				    
-				    <td class="formField">
-				    	<html:select property="value(SpecimenRequirement:`_specimenType)" 
-										styleClass="formFieldSized10" 
-										styleId="value(SpecimenRequirement:`_specimenType)" size="1">
-							<html:options name="<%=Constants.SPECIMEN_TYPE_LIST%>" labelName="<%=Constants.SPECIMEN_TYPE_LIST%>"/>
-						</html:select>
-				    </td>
-				    
-				    <td class="formField">
-				    	<html:select property="value(SpecimenRequirement:`_tissueSite)" 
-										styleClass="formFieldSized10" 
-										styleId="value(SpecimenRequirement:`_tissueSite)" size="1">
-							<html:options name="<%=Constants.TISSUE_SITE_LIST%>" labelName="<%=Constants.TISSUE_SITE_LIST%>"/>
-						</html:select>
-				    
-				        <a href="#">
-							<img src="images\Tree.gif" border="0" width="26" height="22"></a>
-					</td>
-					
-				    <td class="formField">
-				    	<html:select property="value(SpecimenRequirement:`_pathologyStatus)" 
-										styleClass="formFieldSized10" 
-										styleId="value(SpecimenRequirement:`_pathologyStatus)" size="1">
-							<html:options name="<%=Constants.PATHOLOGICAL_STATUS_LIST%>" labelName="<%=Constants.PATHOLOGICAL_STATUS_LIST%>"/>
-						</html:select>
-				    </td>
-				    
-				    <td class="formField">
-				    	<html:text styleClass="formFieldSized5" size="30" 
-				    			styleId="value(SpecimenRequirement:`_quantityIn)" 
-				    			property="value(SpecimenRequirement:`_quantityIn)" 
-				    			readonly="<%=readOnlyValue%>" />
-				    	<span id="value(SpecimenRequirement:`_unitspan)">
-				    		&nbsp;&nbsp;&nbsp;
-						</span>
-					</td>
-				</TR>	<!-- SPECIMEN REQ DATA END -->
-				</table>
-		</td></tr>
-	</table>  
-
-
-</div>
-</html:form>
-<!--
-<SCRIPT LANGUAGE="JavaScript">
-	addBlock(outerdiv,d1);
-</Script>
--->
 </body>
