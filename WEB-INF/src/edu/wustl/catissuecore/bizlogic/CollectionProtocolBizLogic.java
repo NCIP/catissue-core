@@ -8,7 +8,7 @@
  * Created on Jul 23, 2005
  */
 
-package edu.wustl.catissuecore.dao;
+package edu.wustl.catissuecore.bizlogic;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -16,6 +16,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import net.sf.hibernate.HibernateException;
+import edu.wustl.catissuecore.dao.AbstractDAO;
+import edu.wustl.catissuecore.dao.DAOFactory;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;

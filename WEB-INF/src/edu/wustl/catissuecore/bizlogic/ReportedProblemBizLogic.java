@@ -5,8 +5,10 @@
  * Window - Preferences - Java - Code Style - Code Templates
  */
 
-package edu.wustl.catissuecore.dao;
+package edu.wustl.catissuecore.bizlogic;
 
+import edu.wustl.catissuecore.dao.AbstractDAO;
+import edu.wustl.catissuecore.dao.DAOFactory;
 import edu.wustl.catissuecore.domain.ReportedProblem;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;

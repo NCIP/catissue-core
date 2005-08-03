@@ -8,10 +8,12 @@
  * Created on Apr 13, 2005
  */
 
-package edu.wustl.catissuecore.dao;
+package edu.wustl.catissuecore.bizlogic;
 
 import java.util.List;
 
+import edu.wustl.catissuecore.dao.AbstractDAO;
+import edu.wustl.catissuecore.dao.DAOFactory;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Participant;

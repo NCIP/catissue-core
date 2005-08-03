@@ -4,11 +4,13 @@
  * TODO To change the template for this generated file go to
  * Window - Preferences - Java - Code Style - Code Templates
  */
-package edu.wustl.catissuecore.dao;
+package edu.wustl.catissuecore.bizlogic;
 
 import java.util.List;
 import java.util.Vector;
 
+import edu.wustl.catissuecore.dao.AbstractDAO;
+import edu.wustl.catissuecore.dao.DAOFactory;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.util.dbManager.DAOException;

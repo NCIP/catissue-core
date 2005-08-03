@@ -21,8 +21,8 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import edu.wustl.catissuecore.dao.StorageContainerBizLogic;
-import edu.wustl.catissuecore.dao.TreeDataInterface;
+import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
+import edu.wustl.catissuecore.bizlogic.TreeDataInterface;
 import edu.wustl.catissuecore.util.global.Constants;
 
 /**

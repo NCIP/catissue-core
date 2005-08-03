@@ -7,7 +7,7 @@
  * @version 1.00
  * Created on Apr 26, 2005
  */
-package edu.wustl.catissuecore.dao;
+package edu.wustl.catissuecore.bizlogic;
 
 import java.util.List;
 import java.util.Vector;

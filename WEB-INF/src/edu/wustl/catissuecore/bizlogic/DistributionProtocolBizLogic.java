@@ -8,13 +8,15 @@
  * Created on Jul 23, 2005
  */
 
-package edu.wustl.catissuecore.dao;
+package edu.wustl.catissuecore.bizlogic;
 
 import java.util.Iterator;
 import java.util.List;
 
 
 import net.sf.hibernate.HibernateException;
+import edu.wustl.catissuecore.dao.AbstractDAO;
+import edu.wustl.catissuecore.dao.DAOFactory;
 import edu.wustl.catissuecore.domain.DistributionProtocol;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.User;

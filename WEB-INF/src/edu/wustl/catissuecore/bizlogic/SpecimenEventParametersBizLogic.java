@@ -4,13 +4,12 @@
  * This class contains the Biz Logic for all EventParameters Classes.
  * This will be the class which will be used for datatransactions of the EventParameters. 
  */
-package edu.wustl.catissuecore.dao;
-
-import java.util.List;
+package edu.wustl.catissuecore.bizlogic;
 
 import net.sf.hibernate.HibernateException;
+import edu.wustl.catissuecore.dao.AbstractDAO;
+import edu.wustl.catissuecore.dao.DAOFactory;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
-import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.dbManager.DAOException;
 

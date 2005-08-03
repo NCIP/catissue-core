@@ -22,13 +22,9 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import edu.wustl.catissuecore.dao.AbstractDAO;
-import edu.wustl.catissuecore.dao.BizLogicFactory;
-import edu.wustl.catissuecore.dao.DAOFactory;
-import edu.wustl.catissuecore.dao.ParticipantBizLogic;
-import edu.wustl.catissuecore.dao.SiteBizLogic;
+import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
+import edu.wustl.catissuecore.bizlogic.ParticipantBizLogic;
 import edu.wustl.catissuecore.domain.Site;
-import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 
 

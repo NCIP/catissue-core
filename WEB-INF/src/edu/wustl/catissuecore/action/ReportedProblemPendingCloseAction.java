@@ -22,8 +22,8 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.DomainObjectListForm;
-import edu.wustl.catissuecore.dao.AbstractBizLogic;
-import edu.wustl.catissuecore.dao.BizLogicFactory;
+import edu.wustl.catissuecore.bizlogic.AbstractBizLogic;
+import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.domain.ReportedProblem;
 import edu.wustl.catissuecore.util.global.Constants;

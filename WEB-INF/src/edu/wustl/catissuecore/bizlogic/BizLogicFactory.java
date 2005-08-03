@@ -7,7 +7,7 @@
  * @version 1.00
  */
 
-package edu.wustl.catissuecore.dao;
+package edu.wustl.catissuecore.bizlogic;
 
 import edu.wustl.catissuecore.util.global.Constants;
 

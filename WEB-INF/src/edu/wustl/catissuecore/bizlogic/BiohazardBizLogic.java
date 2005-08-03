@@ -1,6 +1,6 @@
 /**
- * <p>Title: SiteHDAO Class>
- * <p>Description:	SiteHDAO is used to add site type information into the database using Hibernate.</p>
+ * <p>Title: BiohazardHDAO Class>
+ * <p>Description:	StorageTypeHDAO is used to add site type information into the database using Hibernate.</p>
  * Copyright:    Copyright (c) year
  * Company: Washington University, School of Medicine, St. Louis.
  * @author Aniruddha Phadnis
@@ -8,22 +8,20 @@
  * Created on Jul 21, 2005
  */
 
-package edu.wustl.catissuecore.dao;
-
-import java.util.List;
+package edu.wustl.catissuecore.bizlogic;
 
 import net.sf.hibernate.HibernateException;
-import edu.wustl.catissuecore.domain.Site;
-import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.dao.AbstractDAO;
+import edu.wustl.catissuecore.dao.DAOFactory;
+import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.dbManager.DAOException;
-import edu.wustl.common.util.logger.Logger;
 
 /**
- * SiteHDAO is used to add site type information into the database using Hibernate.
+ * StorageTypeHDAO is used to add site type information into the database using Hibernate.
  * @author aniruddha_phadnis
  */
-public class SiteBizLogic extends DefaultBizLogic
+public class BiohazardBizLogic extends DefaultBizLogic
 {
 	/**
      * Saves the storageType object in the database.
@@ -34,22 +32,12 @@ public class SiteBizLogic extends DefaultBizLogic
      */
 	public void insert(Object obj) throws DAOException 
 	{
-		Site site = (Site)obj;
+		Biohazard hazard = (Biohazard)obj;
 
         AbstractDAO dao = DAOFactory.getDAO(Constants.HIBERNATE_DAO);
 		dao.openSession();
-		
-		Logger.out.debug("site.getCoordinator().getSystemIdentifier() "+site.getCoordinator().getSystemIdentifier());
-		List list = dao.retrieve(User.class.getName(), "systemIdentifier", site.getCoordinator().getSystemIdentifier());
-		Logger.out.debug("list "+list.size());
-		if (list.size() != 0)
-		{
-		    User user = (User) list.get(0);
-		    site.setCoordinator(user);
-		}
-		
-		dao.insert(site.getAddress());
-	    dao.insert(site);
+	    
+		dao.insert(hazard);
 	    
 	    dao.closeSession();
 	}
