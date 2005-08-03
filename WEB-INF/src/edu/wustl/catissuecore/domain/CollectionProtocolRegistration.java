@@ -46,7 +46,7 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
     /**
      * An individual from whom a specimen is to be collected.
      */
-    private Participant participant=new Participant();
+    private Participant participant = null;
 
     /**
      * A set of written procedures that describe how a 
@@ -199,6 +199,7 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 			this.systemIdentifier = new Long(form.getSystemIdentifier());
 			this.registrationDate = Utility.parseDate(form.getRegistrationDate(),Constants.DATE_PATTERN_MM_DD_YYYY);
 			this.protocolParticipantIdentifier = form.getParticipantProtocolID();
+			this.participant = new Participant();
 			this.participant.setSystemIdentifier(new Long(form.getParticipantID()));
 			this.collectionProtocol.setSystemIdentifier(new Long(form.getCollectionProtocolID()));
 

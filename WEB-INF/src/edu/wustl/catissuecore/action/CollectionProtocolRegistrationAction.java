@@ -60,6 +60,7 @@ public class CollectionProtocolRegistrationAction extends Action
             
 			//Sets the instituteList attribute to be used in the Add/Edit User Page.
 			List protocolList = dao.retrieve(CollectionProtocol.class.getName());
+			System.out.println("1: "+protocolList.size());
 			String[] protocolArray = new String[protocolList.size()+1];
 			String[] protocolIdArray = new String[protocolList.size() + 1];
 			iterator = protocolList.listIterator();
@@ -79,7 +80,7 @@ public class CollectionProtocolRegistrationAction extends Action
 			
 			//get list of Participant's names
 			List participantList = dao.retrieve(Participant.class.getName());
-					
+			System.out.println("2: "+protocolList.size());		
 			String[] participantArray = new String[participantList.size()+1];
 			String[] participantIdArray = new String[participantList.size()+1];
 			iterator = participantList.listIterator();

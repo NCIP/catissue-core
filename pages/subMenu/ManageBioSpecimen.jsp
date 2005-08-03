@@ -20,10 +20,6 @@
       	</a>
       </div>
       
-      <div>
-      	<img src="images/subMenuArrow.gif" width="7" height="7" alt="" />
-   			<bean:message key="app.newSpecimen" />
-      </div>
       <div>&nbsp;&nbsp;
       	<a class="subMenuPrimary" href="NewSpecimen.do?operation=add&amp;pageOf="><bean:message key="app.add" /></a> | 
       	<a class="subMenuPrimary" <%--href="NewSpecimen.do?operation=search&amp;pageOf="--%> >
@@ -36,11 +32,24 @@
       			<bean:message key="app.createSpecimen" />
       		</a>
       </div>
+           
+
       <div>
       	<img src="images/subMenuArrow.gif" width="7" height="7" alt="" />
-      		<a class="subMenuPrimary" href="SpecimenCollectionGroup.do?operation=add">
+      		<a class="subMenuPrimary" href="#">
       			<bean:message key="app.specimenCollectionGroup" />
       		</a>
       </div>
+            
+	  <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					<a class="subMenuPrimary" href="SpecimenCollectionGroup.do?operation=add">
+						<bean:message key="app.add" /> 
+					</a> | 
+					<a class="subMenuPrimary" href="SpecimenCollectionGroup.do.do?operation=search">
+						<bean:message key="app.edit" /> 
+					</a>
+	  </div>
+	  
     </td>
   </tr>

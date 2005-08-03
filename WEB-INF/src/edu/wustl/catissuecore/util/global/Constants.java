@@ -111,6 +111,7 @@ public class Constants
 	public static final String PROTOCOL_PARTICIPANT_NUMBER_LIST = "protocolParticipantNumberList";
 	public static final String PROTOCOL_PARTICIPANT_NUMBER_ID_LIST = "protocolParticipantNumberIdList";
 	public static final String STUDY_CALENDAR_EVENT_POINT_LIST = "studyCalendarEventPointList";
+	public static final String STUDY_CALENDAR_EVENT_POINT_ID_LIST="studyCalendarEventPointIdList";
 	public static final String CLINICAL_STATUS_LIST = "cinicalStatusList";
 	public static final String SPECIMEN_CLASS_LIST = "specimenClassList";
 	public static final String SPECIMEN_CLASS_ID_LIST = "specimenClassIdList";
@@ -830,25 +831,11 @@ public class Constants
 	        SELECT_OPTION
 	};
 	
-	public static final String [] PROTOCOL_TITLE_ARRAY = {
-	        SELECT_OPTION,
-	        "Protocol-1"
-	};
-	        
-	public static final String [] PARTICIPANT_NAME_ARRAY = {
-	        SELECT_OPTION,
-	        "LastName,FirstName"
-	};
-	public static final String [] PROTOCOL_PARTICIPANT_NUMBER_ARRAY = {
-	        SELECT_OPTION,
-	        "1","2","3","4"
-	};
 	public static final String [] STUDY_CALENDAR_EVENT_POINT_ARRAY = {
 	        SELECT_OPTION,
 	        "30","60","90"
 	};
 	public static final String [] CLINICAL_STATUS_ARRAY = {
-	        SELECT_OPTION,
 	        "Pre-Opt",
 	        "Post-Opt"
 	};

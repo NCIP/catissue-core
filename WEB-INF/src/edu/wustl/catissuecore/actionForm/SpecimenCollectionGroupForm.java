@@ -4,90 +4,61 @@
  * all the request parameters passed from New SpecimenCollectionGroup webpage. </p>
  * Copyright:    Copyright (c) year
  * Company: Washington University, School of Medicine, St. Louis.
- * @author Gautam Shetty
+ * @author Ajay Sharma
  * @version 1.00
  */
 
 package edu.wustl.catissuecore.actionForm;
-
-import org.apache.struts.action.ActionForm;
-
-import edu.wustl.catissuecore.domain.Participant;
-
+import edu.wustl.catissuecore.domain.AbstractDomainObject;
+import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 
 /**
  * SpecimenCollectionGroupForm Class is used to encapsulate 
  * all the request parameters passed from New SpecimenCollectionGroup webpage.
- * @author gautam_shetty
+ * @author ajay_sharma
  */
-public class SpecimenCollectionGroupForm extends ActionForm
+public class SpecimenCollectionGroupForm extends AbstractActionForm
 {
-
     private long systemIdentifier;
     
-    private String protocolTitle = "";
+	private String clinicalDiagnosis = "";
     
-    private String collectedByParticipant = "";
-    
-    private Participant participantName = new Participant();;
-    
-    private String collectedByProtocolParticipantNumber = "";
-    
-    private String protocolParticipantNumber= "";
-    
-    private String studyCalendarEventPoint = "";
-    
-    private String clinicalDiagnosis = "";
-    
-    private String clinicalStatus  = "";
-    
-    private String medicalRecordNumber = "";
-    
-    private String surgicalPathologyNumber = "";
+	private String clinicalStatus;
+	
+	private String activityStatus = "";
+	
+	private String surgicalPathologyNumber = "";
+	private long participantsMedicalIdentifierId;
+	
+	/**
+	 * An id which refers to the site of the container if it is parent container.
+	 */
+	private long siteId;
+	
+	private long  collectionProtocolId;
+	private long collectionProtocolEventId;
+		
+	private String radioProperty;
+	
+	private long participantId;
+	private String protocolParticipantIdentifier;
+	
+	/**
+     * @return Returns the systemIdentifier.
+     */
+    public long getSystemIdentifier()
+    {
+	    return systemIdentifier;
+    }
     
     /**
-     * @return Returns the protocolTitle.
-     */
-    public String getProtocolTitle()
+    * @param systemIdentifier The systemIdentifier to set.
+    */
+    public void setSystemIdentifier(long systemIdentifier)
     {
-        return protocolTitle;
-    }
-    /**
-     * @param protocolTitle The protocolTitle to set.
-     */
-    public void setProtocolTitle(String protocolTitle)
-    {
-        this.protocolTitle = protocolTitle;
-    }
-    /**
-     * @return Returns the collectedByParticipant.
-     */
-    public String getCollectedByParticipant()
-    {
-        return collectedByParticipant;
-    }
-    /**
-     * @param collectedByParticipant The collectedByParticipant to set.
-     */
-    public void setCollectedByParticipant(String collectedByParticipant)
-    {
-        this.collectedByParticipant = collectedByParticipant;
-    }
-    /**
-     * @return Returns the collectedByProtocolParticipantNumber.
-     */
-    public String getCollectedByProtocolParticipantNumber()
-    {
-        return collectedByProtocolParticipantNumber;
-    }
-    /**
-     * @param collectedByProtocolParticipantNumber The collectedByProtocolParticipantNumber to set.
-     */
-    public void setCollectedByProtocolParticipantNumber(
-            String collectedByProtocolParticipantNumber)
-    {
-        this.collectedByProtocolParticipantNumber = collectedByProtocolParticipantNumber;
-    }
+	    this.systemIdentifier = systemIdentifier;
+    }    
+    
     /**
      * @return Returns the clinicalDiagnosis.
      */
@@ -102,63 +73,7 @@ public class SpecimenCollectionGroupForm extends ActionForm
     {
         this.clinicalDiagnosis = cinicalDiagnosis;
     }
-    /**
-     * @return Returns the clinicalStatus.
-     */
-    public String getClinicalStatus()
-    {
-        return clinicalStatus;
-    }
-    /**
-     * @param clinicalStatus The clinicalStatus to set.
-     */
-    public void setClinicalStatus(String clinicalStatus)
-    {
-        this.clinicalStatus = clinicalStatus;
-    }
-    /**
-     * @return Returns the medicalRecordNumber.
-     */
-    public String getMedicalRecordNumber()
-    {
-        return medicalRecordNumber;
-    }
-    /**
-     * @param medicalRecordNumber The medicalRecordNumber to set.
-     */
-    public void setMedicalRecordNumber(String medicalRecordNumber)
-    {
-        this.medicalRecordNumber = medicalRecordNumber;
-    }
-   
-    /**
-     * @return Returns the protocolParticipantNumber.
-     */
-    public String getProtocolParticipantNumber()
-    {
-        return protocolParticipantNumber;
-    }
-    /**
-     * @param protocolParticipantNumber The protocolParticipantNumber to set.
-     */
-    public void setProtocolParticipantNumber(String protocolParticipantNumber)
-    {
-        this.protocolParticipantNumber = protocolParticipantNumber;
-    }
-    /**
-     * @return Returns the studyCalendarEventPoint.
-     */
-    public String getStudyCalendarEventPoint()
-    {
-        return studyCalendarEventPoint;
-    }
-    /**
-     * @param studyCalendarEventPoint The studyCalendarEventPoint to set.
-     */
-    public void setStudyCalendarEventPoint(String studyCalendarEventPoint)
-    {
-        this.studyCalendarEventPoint = studyCalendarEventPoint;
-    }
+           
     /**
      * @return Returns the surgicalPathologyNumber.
      */
@@ -173,32 +88,165 @@ public class SpecimenCollectionGroupForm extends ActionForm
     {
         this.surgicalPathologyNumber = surgicalPathologyNumber;
     }
-    /**
-     * @return Returns the systemIdentifier.
-     */
-    public long getSystemIdentifier()
-    {
-        return systemIdentifier;
-    }
-    /**
-     * @param systemIdentifier The systemIdentifier to set.
-     */
-    public void setSystemIdentifier(long systemIdentifier)
-    {
-        this.systemIdentifier = systemIdentifier;
-    }
+  
+		
 	/**
 	 * @return
 	 */
-	public Participant getParticipantName() {
-		return participantName;
+	public long getParticipantId() {
+		return participantId;
 	}
 
 	/**
-	 * @param participantName
+	 * @param participantId
 	 */
-	public void setParticipantName(Participant participantName) {
-		this.participantName = participantName;
+	public void setParticipantId(long participantId) {
+		this.participantId = participantId;
+	}
+
+	/**
+	 * @return
+	 */
+	public String getRadioProperty() {
+		return radioProperty;
+	}
+
+	/**
+	 * @param radioProperty
+	 */
+	public void setRadioProperty(String radioProperty) {
+		this.radioProperty = radioProperty;
+	}
+
+	/**
+	   * This function Copies the data from an storage type object to a StorageTypeForm object.
+	   * @param storageType A StorageType object containing the information about storage type of the container.  
+	   */
+	  public void setAllValues(AbstractDomainObject abstractDomain)
+	  {
+		  try
+		  {
+			  SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) abstractDomain;
+        	  
+		  }
+		  catch (Exception excp)
+		  {
+			  excp.printStackTrace();
+
+		  }
+	  }
+	  
+	/* (non-Javadoc)
+	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#getFormId()
+	 */
+	public int getFormId() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	/* (non-Javadoc)
+	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#isAddOperation()
+	 */
+	public boolean isAddOperation() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	/* (non-Javadoc)
+	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#getActivityStatus()
+	 */
+	public String getActivityStatus() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	/* (non-Javadoc)
+	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#setActivityStatus(java.lang.String)
+	 */
+	public void setActivityStatus(String activityStatus) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/**
+	 * @return
+	 */
+	public long getSiteId() {
+		return siteId;
+	}
+
+	/**
+	 * @param siteId
+	 */
+	public void setSiteId(long siteId) {
+		this.siteId = siteId;
+	}
+
+	/**
+	 * @return
+	 */
+	public String getClinicalStatus() {
+		return clinicalStatus;
+	}
+
+	/**
+	 * @param clinicalStatus
+	 */
+	public void setClinicalStatus(String clinicalStatus) {
+		this.clinicalStatus = clinicalStatus;
+	}
+
+	/**
+	 * @return
+	 */
+	public long getCollectionProtocolEventId() {
+		return collectionProtocolEventId;
+	}
+
+	/**
+	 * @param collectionProtocolEventId
+	 */
+	public void setCollectionProtocolEventId(long collectionProtocolEventId) {
+		this.collectionProtocolEventId = collectionProtocolEventId;
+	}
+
+	/**
+	 * @return
+	 */
+	public long getCollectionProtocolId() {
+		return collectionProtocolId;
+	}
+
+	/**
+	 * @param collectionProtocolId
+	 */
+	public void setCollectionProtocolId(long collectionProtocolId) {
+		this.collectionProtocolId = collectionProtocolId;
+	}
+
+	/**
+	 * @return
+	 */
+	public long getParticipantsMedicalIdentifierId() {
+		return participantsMedicalIdentifierId;
+	}
+
+	/**
+	 * @param participantsMedicalIdentifierId
+	 */
+	public void setParticipantsMedicalIdentifierId(long participantsMedicalIdentifierId) {
+		this.participantsMedicalIdentifierId = participantsMedicalIdentifierId;
+	}
+
+	/**
+	 * @return
+	 */
+	public String getProtocolParticipantIdentifier() {
+		return protocolParticipantIdentifier;
+	}
+
+	/**
+	 * @param protocolParticipantIdentifier
+	 */
+	public void setProtocolParticipantIdentifier(String protocolParticipantIdentifier) {
+		this.protocolParticipantIdentifier = protocolParticipantIdentifier;
 	}
 
 }

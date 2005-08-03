@@ -536,6 +536,7 @@ PUBLIC
 		<!--SpecimenCollectonGroup Actions Begin-->
 		<action path="/SpecimenCollectionGroup"
 			type="edu.wustl.catissuecore.action.SpecimenCollectionGroupAction"
+			name="specimenCollectionGroupForm"
 			scope="request">
 			<forward name="success" path=".catissuecore.specimenCollectionGroupDef" />
 			<forward name="failure" path=".catissuecore.specimenCollectionGroupDef" />

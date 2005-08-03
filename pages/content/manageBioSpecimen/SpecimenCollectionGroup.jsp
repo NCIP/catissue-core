@@ -3,7 +3,33 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
+<head>
+     <script language="JavaScript">
+        function onTypeChange(element)
+		{
+			var action = "/catissuecore/SpecimenCollectionGroup.do?operation=add&typeSelected=" + element.value;
+			document.forms[0].action = action;
+			document.forms[0].submit();
+		}
+		
 
+		function participantNameButton(element)
+		{
+		     document.forms[0].participantId.disabled = false;
+		      document.forms[0].protocolParticipantNumber.disabled = true;
+		}
+		
+		
+		function participantNumberListButton(element)
+		{
+		      document.forms[0].participantId.disabled = true;
+		      document.forms[0].protocolParticipantNumber.disabled = false;
+
+		}
+		
+		
+	</script>
+</head>
 <% 
 		String operation = (String)request.getAttribute(Constants.OPERATION);
 		String formName,pageView=operation;
@@ -117,21 +143,37 @@
 					</td>
 					
 					<td class="formField">
-				     	<html:select property="protocolTitle" styleClass="formFieldSized" styleId="protocolTitle" size="1" disabled="<%=readOnlyForAll%>">
+				     	<html:select property="collectionProtocolId" styleClass="formFieldSized" styleId="collectionProtocolId" size="1" disabled="<%=readOnlyForAll%>" onchange="onTypeChange(this)">
 							<html:options name="protocolIdList" labelName="protocolList"/>		
 						</html:select>
 		        	</td>
 				 </tr>
+
+				 <tr>
+			     	<td class="formRequiredNotice" width="5">&nbsp;</td>
+				    <td class="formLabel">
+						<label for="protocolTitle">
+							<bean:message key="specimenCollectionGroup.site"/>
+						</label>
+					</td>
+					
+					<td class="formField">
+				     	<html:select property="siteId" styleClass="formFieldSized" styleId="siteId" size="1" disabled="<%=readOnlyForAll%>" onchange="onTypeChange(this)">
+							<html:options name="siteIdList" labelName="protocolList"/>		
+						</html:select>
+		        	</td>
+				 </tr>
+				 
 				 <tr>
 				 	<td class="formRequiredNotice" width="5">&nbsp;</td>
 				    <td class="formField">
-				     	<html:radio property="collectedByParticipant" value="123">
+				     	<html:radio property="radioProperty" value="123" onclick="participantNameButton(this)">
 				     		<bean:message key="specimenCollectionGroup.collectedByParticipant"/>
 				     	</html:radio>
 				    </td>
 				    
 				    <td class="formField">
-				     	<html:select property="participantName" styleClass="formFieldSized" styleId="participantName" size="1" disabled="<%=readOnlyForAll%>">
+				     	<html:select property="participantId" styleClass="formFieldSized" styleId="ParticipantId" size="1" disabled="true">
 							<html:options name="participantIdList" labelName="participantList"/>		
 						</html:select>
 		        	</td>
@@ -139,13 +181,13 @@
 				 <tr>
 				    <td class="formRequiredNotice" width="5">&nbsp;</td>
 				    <td class="formField">
-				     	<html:radio property="collectedByProtocolParticipantNumber" value="122">
+				     	<html:radio property="radioProperty" value="123" onclick="participantNumberListButton(this)">
 				     		<bean:message key="specimenCollectionGroup.collectedByProtocolParticipantNumber"/>
 				     	</html:radio>
 				    </td>
 				    <td class="formField">
-				     	<html:select property="protocolParticipantNumber" styleClass="formFieldSized" styleId="protocolParticipantNumber" size="1" disabled="<%=readOnlyForAll%>">
-							<html:options name='<%= Constants.PROTOCOL_PARTICIPANT_NUMBER_LIST%>' labelName="protocolParticipantNumberList"/>		
+				     	<html:select property="protocolParticipantIdentifier" styleClass="formFieldSized" styleId="protocolParticipantIdentifier" size="1" disabled="true">
+							<html:options name="protocolParticipantNumberIdList" labelName="protocolParticipantNumberList"/>		
 						</html:select>
 		        	</td>
 				 </tr>
@@ -160,8 +202,8 @@
 						</label>
 					</td>
 				     <td class="formField">
-				     	<html:select property="studyCalendarEventPoint" styleClass="formFieldSized" styleId="studyCalendarEventPoint" size="1" disabled="<%=readOnlyForAll%>">
-							<html:options name="studyCalendarEventPointList" labelName="studyCalendarEventPointList"/>		
+				     	<html:select property="collectionProtocolEventId" styleClass="formFieldSized" styleId="collectionProtocolEventId" size="1">
+							<html:options name="studyCalendarEventPointIdList" labelName="studyCalendarEventPointList"/>		
 						</html:select>
 		        	  </td>
 				 </tr>
@@ -176,7 +218,7 @@
 						</label>
 					</td>
 				     <td class="formField">
-				     	<html:text styleClass="formFieldSized" size="30" styleId="clinicalDiagnosis" property="clinicalDiagnosis" readonly="<%=readOnlyForAll%>"/>
+				     	<html:text property="clinicalDiagnosis" styleClass="formFieldSized" size="30" styleId="clinicalDiagnosis"  readonly="<%=readOnlyForAll%>"/>
 		        	  </td>
 				 </tr>
 				 <tr>
@@ -206,7 +248,7 @@
 						</label>
 					</td>
 				    <td class="formField">
-				     	<html:text styleClass="formFieldSized" size="30" styleId="medicalRecordNumber" property="medicalRecordNumber" readonly="<%=readOnlyForAll%>"/>
+				     	<html:text styleClass="formFieldSized" size="30" styleId="participantsMedicalIdentifierId" property="participantsMedicalIdentifierId" readonly="<%=readOnlyForAll%>"/>
 				    </td>
 				 </tr>
 				 <tr>

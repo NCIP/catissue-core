@@ -15,6 +15,8 @@ import java.util.Collection;
 import java.util.HashSet;
 
 import edu.wustl.catissuecore.actionForm.AbstractActionForm;
+import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * An event that results in the collection 
@@ -30,7 +32,7 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
      * System generated unique systemIdentifier.
      */
     protected Long systemIdentifier;
-
+    
     /**
      * Participant's clinical diagnosis at 
      * this collection event (e.g. Prostate Adenocarcinoma).
@@ -48,12 +50,12 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
      * or not queried (Inactive) by any actor.
      */
     protected String activityStatus;
-
+    
     /**
      * A physical location associated with biospecimen collection, 
      * storage, processing, or utilization.
      */
-    protected Site site;
+	protected Site site;
 
     /**
      * A required specimen collection event associated with a Collection Protocol.
@@ -76,7 +78,31 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
      */
     protected CollectionProtocolRegistration collectionProtocolRegistration;
 
+    public SpecimenCollectionGroup(){
     
+    }
+    
+	public SpecimenCollectionGroup(AbstractActionForm form)
+	{
+			setAllValues(form);
+	}
+
+	/**
+	 * @return
+	 */
+	public Long getSystemIdentifier() {
+		return systemIdentifier;
+	}
+
+	/**
+	 * @param systemIdentifier
+	 */
+	public void setSystemIdentifier(Long systemIdentifier) {
+		this.systemIdentifier = systemIdentifier;
+	}
+	
+	
+	
     /**
      * Returns the participant's clinical diagnosis at 
      * this collection event (e.g. Prostate Adenocarcinoma).
@@ -281,7 +307,46 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
 	 * @see edu.wustl.catissuecore.domain.AbstractDomainObject#setAllValues(edu.wustl.catissuecore.actionForm.AbstractActionForm)
 	 */
 	public void setAllValues(AbstractActionForm abstractForm) {
-		// TODO Auto-generated method stub
+		
+		SpecimenCollectionGroupForm form = (SpecimenCollectionGroupForm)abstractForm;
+		try
+			{
+				this.systemIdentifier = new Long(form.getSystemIdentifier());
+				this.setClinicalDiagnosis(form.getClinicalDiagnosis());
+		        this.setClinicalStatus(form.getClinicalStatus());
+		        this.setActivityStatus(form.getActivityStatus());
+				
+				
+				clinicalReport = new ClinicalReport();
+				clinicalReport.setSurgicalPathologyNumber(form.getSurgicalPathologyNumber());
+				ParticipantMedicalIdentifier participantMedicalIdentifier = new ParticipantMedicalIdentifier();
+				participantMedicalIdentifier.setSystemIdentifier(new Long(form.getParticipantsMedicalIdentifierId()));
+				clinicalReport.setParticipantMedicalIdentifier(participantMedicalIdentifier);
+				
+				site = new Site();
+				site.setSystemIdentifier(new Long(form.getSiteId()));
+				
+				collectionProtocolEvent= new CollectionProtocolEvent();
+				collectionProtocolEvent.setSystemIdentifier(new Long(form.getCollectionProtocolEventId()));
+				
+				
+				collectionProtocolRegistration = new CollectionProtocolRegistration();
+				
+				Participant participant = new Participant();
+				participant.setSystemIdentifier(new Long(form.getParticipantId()));
+				collectionProtocolRegistration.setParticipant(participant);
+				
+				CollectionProtocol collectionProtocol = new CollectionProtocol();
+				collectionProtocol.setSystemIdentifier(new Long(form.getCollectionProtocolId()));
+				collectionProtocolRegistration.setCollectionProtocol(collectionProtocol);
+				
+				collectionProtocolRegistration.setProtocolParticipantIdentifier(form.getProtocolParticipantIdentifier());
+			}
+			catch(Exception e)
+			{
+				Logger.out.error(e.getMessage());
+				e.printStackTrace();
+			}
 		
 	}
 	

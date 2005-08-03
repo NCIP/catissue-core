@@ -12,10 +12,11 @@ package edu.wustl.catissuecore.dao;
 
 import java.util.List;
 
-import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
-import edu.wustl.catissuecore.domain.CollectionProtocol;
+import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
-import edu.wustl.catissuecore.domain.Participant;
+import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
+import edu.wustl.catissuecore.domain.Site;
+import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.dbManager.DAOException;
 
@@ -23,57 +24,86 @@ import edu.wustl.common.util.dbManager.DAOException;
  * UserHDAO is used to add user information into the database using Hibernate.
  * @author kapil_kaveeshwar
  */
-public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
-{
+public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic {
 
-    /**
-     * Saves the user object in the database.
-     * @param session The session in which the object is saved.
-     * @param obj The user object to be saved.
-     * @throws HibernateException Exception thrown during hibernate operations.
-     * @throws DAOException 
-     */
-    public void insert(Object obj) throws DAOException
-    {
-		SpecimenCollectionGroupForm specimenCollectionGroupForm = (SpecimenCollectionGroupForm) obj; 
-        AbstractDAO dao = DAOFactory.getDAO(Constants.HIBERNATE_DAO);
-        dao.openSession();
-
-        Participant participant = null;
-        
-        List list = dao.retrieve(Participant.class.getName(), "systemIdentifier", 
-		specimenCollectionGroupForm.getParticipantName().getSystemIdentifier());
-        if (list.size() != 0)
-        {
-			participant = (Participant) list.get(0);
-        }
-        System.out.println("participant "+participant.getFirstName());
-
-		/*CollectionProtocol collectionProtocol = null;
-		list = dao.retrieve(CollectionProtocol.class.getName(), "systemIdentifier", 
-			collectionProtocolRegistration.getCollectionProtocol().getSystemIdentifier());
-		if (list.size() != 0)
+	/**
+	 * Saves the user object in the database.
+	 * @param session The session in which the object is saved.
+	 * @param obj The user object to be saved.
+	 * @throws HibernateException Exception thrown during hibernate operations.
+	 * @throws DAOException 
+	 */
+	public void insert(Object obj) throws DAOException {
+		SpecimenCollectionGroup specimenCollectionGroup =
+			(SpecimenCollectionGroup) obj;
+		AbstractDAO dao = DAOFactory.getDAO(Constants.HIBERNATE_DAO);
+		dao.openSession();
+		
+		
+		List list = dao.retrieve(Site.class.getName(), "systemIdentifier", specimenCollectionGroup.getSite().getSystemIdentifier());
+		if (!list.isEmpty())
 		{
-			collectionProtocol = (CollectionProtocol)list.get(0);
+			specimenCollectionGroup.setSite((Site)list.get(0));
 		}
-		System.out.println("participant "+collectionProtocol.getTitle());
+		
+		list  =  dao.retrieve(CollectionProtocolEvent.class.getName(), "systemIdentifier", specimenCollectionGroup.getCollectionProtocolEvent().getSystemIdentifier());
+		if(!list.isEmpty())
+		{
+  			   specimenCollectionGroup.setCollectionProtocolEvent((CollectionProtocolEvent)list.get(0));
+		}
+		
+		list  =  dao.retrieve(ParticipantMedicalIdentifier.class.getName(), "systemIdentifier", specimenCollectionGroup.getClinicalReport().getParticipantMedicalIdentifier().getSystemIdentifier());
+		if(!list.isEmpty())
+		{
+		   specimenCollectionGroup.getClinicalReport().setParticipantMedicalIdentifier((ParticipantMedicalIdentifier)list.get(0));
+		}
+		
+		
+		String sourceObjectName = CollectionProtocolRegistration.class.getName();
+		String[] selectColumnName = null;
+		String[] whereColumnName = new String[2];
+		String[] whereColumnCondition = {"=","="};
+		Object[] whereColumnValue = new String[2];
+		String joinCondition = Constants.AND_JOIN_CONDITION;
+		
+		whereColumnName[0]="collectionProtocol.systemIdentifier";
+		whereColumnValue[0]=specimenCollectionGroup.getCollectionProtocolRegistration().getCollectionProtocol().getSystemIdentifier();
+		
+		if(specimenCollectionGroup.getCollectionProtocolRegistration().getParticipant()!=null)
+		{
+			whereColumnName[1]="participant.systemIdentifier";
+			whereColumnValue[1]=specimenCollectionGroup.getCollectionProtocolRegistration().getParticipant().getSystemIdentifier();
+		}
+		else
+		{
+			whereColumnName[1] = "protocolParticipantIdentifier";
+			whereColumnValue[1] = specimenCollectionGroup.getCollectionProtocolRegistration().getProtocolParticipantIdentifier();
+		}
+		
+		
+		list = dao.retrieve( sourceObjectName, selectColumnName,
+						whereColumnName, whereColumnCondition, 
+						whereColumnValue, joinCondition);
+		
+		if(!list.isEmpty())
+		{
+		   specimenCollectionGroup.setCollectionProtocolRegistration((CollectionProtocolRegistration)list.get(0));
+		}
+		
+		dao.insert(specimenCollectionGroup);
+		dao.insert(specimenCollectionGroup.getClinicalReport());
+		
+		dao.closeSession();
+	}
 
-		collectionProtocolRegistration.setCollectionProtocol(collectionProtocol);
-		collectionProtocolRegistration.setParticipant(participant);
+	/**
+	 * Updates the persistent object in the database.
+	 * @param session The session in which the object is saved.
+	 * @param obj The object to be updated.
+	 * @throws HibernateException Exception thrown during hibernate operations.
+	 * @throws DAOException 
+	 */
+	public void update(Object obj) throws DAOException {
 
-        dao.insert(collectionProtocolRegistration);*/
-
-        dao.closeSession();
-    }
-
-    /**
-     * Updates the persistent object in the database.
-     * @param session The session in which the object is saved.
-     * @param obj The object to be updated.
-     * @throws HibernateException Exception thrown during hibernate operations.
-     * @throws DAOException 
-     */
-    public void update(Object obj) throws DAOException
-    {
-    }
+	}
 }

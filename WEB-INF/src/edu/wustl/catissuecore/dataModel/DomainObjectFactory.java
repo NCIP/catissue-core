@@ -34,6 +34,7 @@ import edu.wustl.catissuecore.domain.Institution;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ReportedProblem;
 import edu.wustl.catissuecore.domain.Site;
+import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
@@ -111,8 +112,7 @@ public class DomainObjectFactory
             case Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID:
 			   abstractDomain = new CollectionProtocolRegistration(form);
 			   break;
-			  
-            case Constants.FLUID_SPECIMEN_REVIEW_EVENT_PARAMETERS_FORM_ID:
+			case Constants.FLUID_SPECIMEN_REVIEW_EVENT_PARAMETERS_FORM_ID:
             	abstractDomain = new FluidSpecimenReviewEventParameters (form);            	
             	break;
             	
@@ -144,6 +144,11 @@ public class DomainObjectFactory
             		abstractDomain = new MolecularSpecimen(newForm);
             	}
             	break;
+			case Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID:
+			   abstractDomain = new SpecimenCollectionGroup(form);
+			   break;
+				   
+			   
         }
         return abstractDomain;
     }
