@@ -31,7 +31,7 @@
 
 <SCRIPT LANGUAGE="JavaScript">
 	var ugul = new Array(4);
-	ugul[0]="";
+	ugul[0]=" ";
 	ugul[1]="<%=Constants.UNIT_ML%>";
 	ugul[2]="<%=Constants.UNIT_GM%>";
 	ugul[3]="<%=Constants.UNIT_CC%>";
@@ -81,6 +81,102 @@ function addBlock(div,d0)
 	}
 	div.innerHTML = div.innerHTML +z;
 }
+
+//  function to insert a row in the inner block
+function insRow(subdivtag)
+{
+	var sname = "";
+
+	var r = new Array(); 
+	r = document.getElementById(subdivtag).rows;
+	var q = r.length;
+	var x=document.getElementById(subdivtag).insertRow(q);
+	
+	var subdivname = ""+ subdivtag;
+
+	// srno
+	var spreqno=x.insertCell(0)
+	spreqno.className="tabrightmostcell";
+	var rowno=(q);
+	spreqno.innerHTML="" + rowno+".";
+	
+	//type
+	var spreqtype=x.insertCell(1)
+	spreqtype.className="formField";
+	sname="";
+	objname = "value(SpecimenRequirement:" + rowno + "_specimenClass)";
+//value(SpecimenRequirement:`_quantityIn)	
+	
+	var objunit = "value(SpecimenRequirement:"+rowno+"_unitspan)";
+	
+	sname = "<select name='" + objname + "' size='1' onchange=changeUnit('" + objname + "','" + objunit +"') class='formFieldSized10' id='" + objname + "'>";
+	<%for(int i=0;i<specimenClassIdArry.length;i++)
+	{%>
+		sname = sname + "<option value='<%=specimenClassIdArry[i]%>'><%=specimenClassArry[i]%></option>";
+	<%}%>
+	sname = sname + "</select>";
+	 
+	spreqtype.innerHTML="" + sname;
+	
+	//subtype
+	var spreqsubtype=x.insertCell(2)
+	spreqsubtype.className="formField";
+	sname="";
+	objname = "value(SpecimenRequirement:"+rowno+"_specimenType)";
+	
+	sname= "<select name='" + objname + "' size='1' class='formFieldSized10' id='" + objname + "'>";
+	<%for(int i=0;i<specimenTypeArry.length;i++)
+	{%>
+		sname = sname + "<option value='<%=specimenTypeArry[i]%>'><%=specimenTypeArry[i]%></option>";
+	<%}%>
+	sname = sname + "</select>"
+	
+	spreqsubtype.innerHTML="" + sname;
+	
+	//tissuesite
+	var spreqtissuesite=x.insertCell(3)
+	spreqtissuesite.className="formField";
+	sname="";
+	objname = "value(SpecimenRequirement:"+rowno+"_tissueSite)";
+	
+	sname = "<select name='" + objname + "' size='1' class='formFieldSized10' id='" + objname + "'>";
+	<%for(int i=0;i<tissueSiteArry.length;i++)
+	{%>
+		sname = sname + "<option value='<%=tissueSiteArry[i]%>'><%=tissueSiteArry[i]%></option>";
+	<%}%>
+	sname = sname + "</select>"
+	sname = sname + "<a href='#'><img src='images\Tree.gif' border='0' width='26' height='22'></a>"
+	
+	spreqtissuesite.innerHTML="" + sname;
+	
+	//pathologystatus
+	var spreqpathologystatus=x.insertCell(4)
+	spreqpathologystatus.className="formField";
+	
+	sname="";
+	objname = "value(SpecimenRequirement:"+rowno+"_pathologyStatus)";
+	
+	sname="<select name='" + objname + "' size='1' class='formFieldSized10' id='" + objname + "'>";
+	<%for(int i=0;i<pathologyStatusArry.length;i++)
+	{%>
+		sname = sname + "<option value='<%=pathologyStatusArry[i]%>'><%=pathologyStatusArry[i]%></option>";
+	<%}%>
+	sname = sname + "</select>";
+	
+	spreqpathologystatus.innerHTML="" + sname;
+	
+	//qty
+	var spreqqty=x.insertCell(5)
+	spreqqty.className="formField";
+	sname="";
+	objname = "value(SpecimenRequirement:"+rowno+"_quantityIn)";
+
+	sname="<input type='text' name='" + objname + "' value='' class='formFieldSized5' id='" + objname + "'>"        	
+	sname = sname + "&nbsp;<span id='" + objunit + "'>&nbsp;</span>"
+					
+	spreqqty.innerHTML="" + sname;
+}
+
 //-->
 </SCRIPT>
 
@@ -322,7 +418,7 @@ function addBlock(div,d0)
 </table>
 
 
-<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="100%">
+<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="97%">
 	<tr><td>
 		<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
 			<tr>
@@ -330,37 +426,55 @@ function addBlock(div,d0)
 						<b>SPECIMEN REQUIREMENTS</b>
 				</td>
 				<td align="right" class="formTitle">		
-						<html:button property="addDistributionProtocolEvents" styleClass="actionButton" onclick="addBlock(outerdiv,d1)">Add More</html:button>
-				</td>
+						<html:button property="addDistributionProtocolEvents" styleClass="actionButton" onclick="insRow('SpecimenRequirementData')">Add More</html:button>
+				</td>  <!-- addBlock(outerdiv,d1)-->
 			</tr>
-			<TR> <!-- SUB TITLES -->
-		        <td class="formLeftSubTableTitle">
-		    		<bean:message key="distributionprotocol.specimennumber" />
+		</table>	
+			<!-- SUB TITLES -->
+	<tr><td>
+			<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
+			<tbody id="SpecimenRequirementData">			
+			<TR> 
+				<td class="formRequiredLabel" width="14">
+					<bean:message key="distributionprotocol.specimennumber" />
 		        </td>
-		        <td class="formLeftSubTableTitle">
-		        	<bean:message key="distributionprotocol.specimenclass" />
+				
+				<td class="formRequiredLabel" width="182">
+					<bean:message key="distributionprotocol.specimenclass" />
 		        </td>
-		        <td class="formLeftSubTableTitle">
-		        	<bean:message key="distributionprotocol.specimentype" />
+		        
+		        <td class="formRequiredLabel" width="180">
+			        <bean:message key="distributionprotocol.specimentype" />
 		        </td>
-		        <td class="formLeftSubTableTitle">
+		        
+		        <td class="formRequiredLabel" width="211">
 		        	<bean:message key="distributionprotocol.specimensite" />
 			    </td>
-		        <td  class=formLeftSubTableTitle>
-		    		<bean:message key="distributionprotocol.pathologystatus" />
+		        
+		        <td class="formRequiredLabel" width="208">
+			        <bean:message key="distributionprotocol.pathologystatus" />
 			    </td>
-		        <td class=formLeftSubTableTitle>
-		        	<bean:message key="distributionprotocol.quantity" />
+			    
+			    <td class="formRequiredLabel" width="117">
+			    	<bean:message key="distributionprotocol.quantity" />
 		        </td>
-			</TR><!-- SUB TITLES END -->		 
+			</tr>				
+			</tbody>
+			<!-- SUB TITLES END -->		 
 		</table>
 	</td></tr>
 </table>
 
+
 <!--  outermostdiv start --><!-- outer div tag  for entire block -->
 <div id="outerdiv"> 
-	
-</div>	<!-- outermostdiv  -->
+
+</div>			
+
+	<!-- outermostdiv  -->
+<SCRIPT LANGUAGE="JavaScript">
+	insRow('SpecimenRequirementData');
+</Script>
 
 <table width="100%">		
 	<!-- to keep -->
@@ -392,11 +506,9 @@ function addBlock(div,d0)
 <hr>
 
 
-
 <html:form action="ApproveUser.do">
 <div id="d1">
-
-	<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="100%">
+	<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="97%"> 
 		<tr><td>
 			<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
 				<TR>	<!-- SPECIMEN REQ DATA -->
@@ -444,20 +556,20 @@ function addBlock(div,d0)
 				    			property="value(SpecimenRequirement:`_quantityIn)" 
 				    			readonly="<%=readOnlyValue%>" />
 				    	<span id="value(SpecimenRequirement:`_unitspan)">
-				    		&nbsp;
+				    		&nbsp;&nbsp;&nbsp;
 						</span>
 					</td>
 				</TR>	<!-- SPECIMEN REQ DATA END -->
 				</table>
 		</td></tr>
-	</table>
+	</table>  
 
 
 </div>
 </html:form>
-
+<!--
 <SCRIPT LANGUAGE="JavaScript">
 	addBlock(outerdiv,d1);
 </Script>
-
+-->
 </body>

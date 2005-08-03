@@ -31,7 +31,7 @@ import edu.wustl.catissuecore.util.global.Validator;
 public class DistributionProtocolForm extends SpecimenProtocolForm
 {
 	/**
-	 * No argument constructor for CollectionProtocolForm class.
+	 * No argument constructor for DistributionProtocolForm class.
 	 */
 	public DistributionProtocolForm()
 	{
