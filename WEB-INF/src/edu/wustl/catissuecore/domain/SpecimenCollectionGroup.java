@@ -88,7 +88,11 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
 	}
 
 	/**
-	 * @return
+	 * Returns the system generated unique systemIdentifier.
+	 * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"
+	 * unsaved-value="null" generator-class="native"
+	 * @return the system generated unique systemIdentifier.
+	 * @see #setSystemIdentifier(Long)
 	 */
 	public Long getSystemIdentifier() {
 		return systemIdentifier;
@@ -100,8 +104,6 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
 	public void setSystemIdentifier(Long systemIdentifier) {
 		this.systemIdentifier = systemIdentifier;
 	}
-	
-	
 	
     /**
      * Returns the participant's clinical diagnosis at 
@@ -349,23 +351,4 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
 			}
 		
 	}
-	
-	/**
-     * Returns the system generated unique systemIdentifier.
-     * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"
-     * unsaved-value="null" generator-class="native"
-     * @return the system generated unique systemIdentifier.
-     * @see #setSystemIdentifier(Long)
-	 */
-	public Long getSystemIdentifier() {
-		return systemIdentifier;
-	}
-
-	/**
-	 * @param systemIdentifier
-	 */
-	public void setSystemIdentifier(Long systemIdentifier) {
-		this.systemIdentifier = systemIdentifier;
-	}
-
 }
