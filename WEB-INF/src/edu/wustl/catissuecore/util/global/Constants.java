@@ -17,7 +17,7 @@ package edu.wustl.catissuecore.util.global;
 
 public class Constants
 {	
-    
+ 
     //Constants used for authentication module.
     public static final String LOGIN = "login";
     public static final String USER = "user";
@@ -151,7 +151,7 @@ public class Constants
 	public static final String SITE_ADD_ACTION = "SiteAdd.do";
 	public static final String SITE_EDIT_ACTION = "SiteEdit.do";
 	
-	//Constants required in Site.jsp Page
+//	Constants required in Site.jsp Page
 	public static final String BIOHAZARD_SEARCH_ACTION = "BiohazardSearch.do";
 	public static final String BIOHAZARD_ADD_ACTION = "BiohazardAdd.do";
 	public static final String BIOHAZARD_EDIT_ACTION = "BiohazardEdit.do";
@@ -201,32 +201,32 @@ public class Constants
 	public static final String SPECIMEN_COLLECTION_GROUP_ADD_ACTION = "SpecimenCollectionGroupAdd.do";
 	public static final String SPECIMEN_COLLECTION_GROUP_EDIT_ACTION = "SpecimenCollectionGroupEdit.do";
 
-	//Constants required in FrozenEventParameters.jsp Page
+//	Constants required in FrozenEventParameters.jsp Page
 	public static final String FROZEN_EVENT_PARAMETERS_SEARCH_ACTION = "FrozenEventParametersSearch.do";
 	public static final String FROZEN_EVENT_PARAMETERS_ADD_ACTION = "FrozenEventParametersAdd.do";
 	public static final String FROZEN_EVENT_PARAMETERS_EDIT_ACTION = "FrozenEventParametersEdit.do";
 
-	//Constants required in CheckInCheckOutEventParameters.jsp Page
+//	Constants required in CheckInCheckOutEventParameters.jsp Page
 	public static final String CHECKIN_CHECKOUT_EVENT_PARAMETERS_SEARCH_ACTION = "CheckInCheckOutEventParametersSearch.do";
 	public static final String CHECKIN_CHECKOUT_EVENT_PARAMETERS_ADD_ACTION = "CheckInCheckOutEventParametersAdd.do";
 	public static final String CHECKIN_CHECKOUT_EVENT_PARAMETERS_EDIT_ACTION = "CheckInCheckOutEventParametersEdit.do";
 
-	//Constants required in ReceivedEventParameters.jsp Page
+//	Constants required in ReceivedEventParameters.jsp Page
 	public static final String RECEIVED_EVENT_PARAMETERS_SEARCH_ACTION = "ReceivedEventParametersSearch.do";
 	public static final String RECEIVED_EVENT_PARAMETERS_ADD_ACTION = "ReceivedEventParametersAdd.do";
 	public static final String RECEIVED_EVENT_PARAMETERS_EDIT_ACTION = "ReceivedEventParametersEdit.do";
 
-	//Constants required in FluidSpecimenReviewEventParameters.jsp Page
+//	Constants required in FluidSpecimenReviewEventParameters.jsp Page
 	public static final String FLUID_SPECIMEN_REVIEW_EVENT_PARAMETERS_SEARCH_ACTION = "FluidSpecimenReviewEventParametersSearch.do";
 	public static final String FLUID_SPECIMEN_REVIEW_EVENT_PARAMETERS_ADD_ACTION = "FluidSpecimenReviewEventParametersAdd.do";
 	public static final String FLUID_SPECIMEN_REVIEW_EVENT_PARAMETERS_EDIT_ACTION = "FluidSpecimenReviewEventParametersEdit.do";
 
-	//	Constants required in CELLSPECIMENREVIEWParameters.jsp Page
+//	Constants required in CELLSPECIMENREVIEWParameters.jsp Page
 	public static final String CELL_SPECIMEN_REVIEW_PARAMETERS_SEARCH_ACTION = "CellSpecimenReviewParametersSearch.do";
 	public static final String CELL_SPECIMEN_REVIEW_PARAMETERS_ADD_ACTION = "CellSpecimenReviewParametersAdd.do";
 	public static final String CELL_SPECIMEN_REVIEW_PARAMETERS_EDIT_ACTION = "CellSpecimenReviewParametersEdit.do";
 
-	//	Constants required in tissue SPECIMEN REVIEW event Parameters.jsp Page
+//	Constants required in tissue SPECIMEN REVIEW event Parameters.jsp Page
 	public static final String TISSUE_SPECIMEN_REVIEW_EVENT_PARAMETERS_SEARCH_ACTION = "TissueSpecimenReviewEventParametersSearch.do";
 	public static final String TISSUE_SPECIMEN_REVIEW_EVENT_PARAMETERS_ADD_ACTION = "TissueSpecimenReviewEventParametersAdd.do";
 	public static final String TISSUE_SPECIMEN_REVIEW_EVENT_PARAMETERS_EDIT_ACTION = "TissueSpecimenReviewEventParametersEdit.do";
@@ -321,6 +321,7 @@ public class Constants
 	public static final int TISSUE_SPECIMEN_REVIEW_EVENT_PARAMETERS_FORM_ID = 24;
 	public static final int DISPOSAL_EVENT_PARAMETERS_FORM_ID = 25;
 	public static final int THAW_EVENT_PARAMETERS_FORM_ID = 26;
+	public static final int MOLECULAR_SPECIMEN_REVIEW_PARAMETERS_FORM_ID = 27;
 	
 	//Misc
 	public static final String SEPARATOR = " : ";
@@ -725,12 +726,12 @@ public class Constants
             "Zimbabwe",//Zimbabwe  
 	};
 	
-	//Constants required in CollectionProtocol.jsp Page
+//	Constants required in CollectionProtocol.jsp Page
 	public static final String COLLECTIONPROTOCOL_SEARCH_ACTION = "CollectionProtocolSearch.do";
 	public static final String COLLECTIONPROTOCOL_ADD_ACTION = "CollectionProtocolAdd.do";
 	public static final String COLLECTIONPROTOCOL_EDIT_ACTION = "CollectionProtocolEdit.do";
 
-	//Constants required in DistributionProtocol.jsp Page
+//	Constants required in DistributionProtocol.jsp Page
 	public static final String DISTRIBUTIONPROTOCOL_SEARCH_ACTION = "DistributionProtocolSearch.do";
 	public static final String DISTRIBUTIONPROTOCOL_ADD_ACTION = "DistributionProtocolAdd.do";
 	public static final String DISTRIBUTIONPROTOCOL_EDIT_ACTION = "DistributionProtocolEdit.do";
