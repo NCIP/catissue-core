@@ -70,7 +70,6 @@ public class ReportedProblemForm extends AbstractActionForm
     public ReportedProblemForm()
     {
         reset();
-        activityStatus = Constants.APPROVE_USER_PENDING_STATUS;
     }
 
     /**
@@ -83,6 +82,7 @@ public class ReportedProblemForm extends AbstractActionForm
         this.from = null;
         this.subject = null;
         this.messageBody = null;
+        this.activityStatus = Constants.APPROVE_USER_PENDING_STATUS;
     }
 
     /**
@@ -259,6 +259,7 @@ public class ReportedProblemForm extends AbstractActionForm
         this.subject = reportedProblem.getSubject();
         this.messageBody = reportedProblem.getMessageBody();
         this.comments = reportedProblem.getComments();
+        this.activityStatus = reportedProblem.getActivityStatus();
     }
 
     /**
@@ -272,47 +273,50 @@ public class ReportedProblemForm extends AbstractActionForm
 
         try
         {
-            if (operation.equals(Constants.ADD))
+            if (operation != null)
             {
-                if (validator.isEmpty(from))
+                if (operation.equals(Constants.ADD))
                 {
-                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-                            "errors.item.required", ApplicationProperties
-                                    .getValue("fields.from")));
-                }
-                else
-                {
-                    if (!validator.isValidEmailAddress(from))
+                    if (validator.isEmpty(from))
                     {
                         errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-                                "errors.item.format", ApplicationProperties
-                                        .getValue("user.emailAddress")
-                                        + " in From Field"));
+                                "errors.item.required", ApplicationProperties
+                                        .getValue("fields.from")));
+                    }
+                    else
+                    {
+                        if (!validator.isValidEmailAddress(from))
+                        {
+                            errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+                                    "errors.item.format", ApplicationProperties
+                                            .getValue("user.emailAddress")
+                                            + " in From Field"));
+                        }
+                    }
+
+                    if (validator.isEmpty(subject))
+                    {
+                        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+                                "errors.item.required", ApplicationProperties
+                                        .getValue("fields.title")));
+                    }
+
+                    if (validator.isEmpty(messageBody))
+                    {
+                        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+                                "errors.item.required", ApplicationProperties
+                                        .getValue("fields.message")));
                     }
                 }
-
-                if (validator.isEmpty(subject))
+                
+                if (operation.equals(Constants.EDIT))
                 {
-                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-                            "errors.item.required", ApplicationProperties
-                                    .getValue("fields.title")));
-                }
-
-                if (validator.isEmpty(messageBody))
-                {
-                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-                            "errors.item.required", ApplicationProperties
-                                    .getValue("fields.message")));
-                }
-            }
-            
-            if (operation.equals(Constants.EDIT))
-            {
-                if (activityStatus.trim().equals(Constants.SELECT_OPTION))
-                {
-                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-                            "errors.item.required", ApplicationProperties
-                                    .getValue("reportProblem.status")));
+                    if (activityStatus.trim().equals(Constants.SELECT_OPTION))
+                    {
+                        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+                                "errors.item.required", ApplicationProperties
+                                        .getValue("reportProblem.status")));
+                    }
                 }
             }
         }

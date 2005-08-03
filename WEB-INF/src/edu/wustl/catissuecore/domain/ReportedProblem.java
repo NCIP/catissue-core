@@ -9,6 +9,7 @@
  */
 package edu.wustl.catissuecore.domain;
 
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -21,7 +22,7 @@ import edu.wustl.catissuecore.actionForm.ReportedProblemForm;
  * @hibernate.class table="CATISSUE_REPORTED_PROBLEM"
  * @author gautam_shetty
  */
-public class ReportedProblem extends AbstractDomainObject
+public class ReportedProblem extends AbstractDomainObject implements Serializable
 {
     /**
      * systemIdentifier is a unique id assigned to each reported problem.
@@ -81,8 +82,9 @@ public class ReportedProblem extends AbstractDomainObject
      * Sets all values from the reportedProblemForm object.
      * @param reportedProblemForm The reportedProblemForm object.
      */
-    private void setAllValues(ReportedProblemForm reportedProblemForm)
+    public void setAllValues(AbstractActionForm abstractActionForm)
     {
+        ReportedProblemForm reportedProblemForm = (ReportedProblemForm)abstractActionForm;
         this.systemIdentifier = new Long(reportedProblemForm.getSystemIdentifier());
         this.subject = reportedProblemForm.getSubject();
         this.from  = reportedProblemForm.getFrom();
@@ -242,14 +244,6 @@ public class ReportedProblem extends AbstractDomainObject
     public void setComments(String comments)
     {
         this.comments = comments;
-    }
-	
-    /* (non-Javadoc)
-     * @see edu.wustl.catissuecore.domain.AbstractDomainObject#setAllValues(edu.wustl.catissuecore.actionForm.AbstractActionForm)
-     */
-    public void setAllValues(AbstractActionForm abstractForm)
-    {
-
     }
 }
 

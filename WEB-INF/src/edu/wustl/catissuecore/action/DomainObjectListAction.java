@@ -13,7 +13,6 @@ package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,14 +24,12 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.AbstractActionForm;
-import edu.wustl.catissuecore.bizlogic.AbstractBizLogic;
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
-import edu.wustl.catissuecore.bizlogic.UserBizLogic;
+import edu.wustl.catissuecore.dao.AbstractBizLogic;
+import edu.wustl.catissuecore.dao.BizLogicFactory;
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.security.SecurityManager;
-import edu.wustl.common.util.logger.Logger;
 
 /**
  * DomainObjectListAction is used to show the list of all 
@@ -69,14 +66,9 @@ public class DomainObjectListAction extends Action
         
         if (pageNum == Constants.START_PAGE)
         {
-            //If start page is to be shown retrieve the list from the database. 
+            //If start page is to be shown retrieve the list from the database.
             list = abstractDAO.retrieve(AbstractDomainObject.getDomainObjectName(abstractForm.getFormId()),
                     					"activityStatus",abstractForm.getActivityStatus());
-            
-            UserBizLogic bizLogic = new UserBizLogic();
-            Vector vector = bizLogic.getUsers("ACTIVE");
-            Logger.out.debug("Vector..................."+vector.toString());
-            
             
             if (abstractForm.getFormId() == Constants.USER_FORM_ID)
             {
