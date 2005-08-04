@@ -121,6 +121,28 @@ td.subMenuPrimaryItems{ /* for the items under the sub-menu title elements */
   padding-left:0.3em;
   border-right:1px solid #CCCCCC; /* constant: medium gray */
 }
+td.subMenuPrimaryItemsWithBorder{ /* for the items under the sub-menu title elements */
+  font-size:0.6em;
+  background-color:#6E81A6; /* constant: white */
+  color:#FFFFFF;
+  font-weight:normal;
+  padding-top:0.3em;
+  padding-bottom:0.3em;
+  padding-left:0.8em;
+  border-right:1px solid #CCCCCC; /* constant: medium gray */
+  border-bottom:1px solid #CCCCCC; /* constant: medium gray */
+}
+td.subMenuPrimaryItemsWithBorderOver{ /* for the items under the sub-menu title elements */
+  font-size:0.6em;
+  background-color:#475B82; /* constant: white */
+  color:#FFFFFF;
+  font-weight:normal;
+  padding-top:0.3em;
+  padding-bottom:0.3em;
+  padding-left:0.8em;
+  border-right:1px solid #CCCCCC; /* constant: medium gray */
+  border-bottom:1px solid #CCCCCC; /* constant: medium gray */
+}
 td.subMenuSecondaryTitle{ /* for the off state of the cell for the elements (usually common among pages) below the primary items */
   font-size:0.6em;
   font-weight:bold;

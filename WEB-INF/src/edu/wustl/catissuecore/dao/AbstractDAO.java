@@ -31,7 +31,7 @@ public abstract class AbstractDAO
      * 
      * @throws DAOException
      */
-    public abstract void closeSession();
+    public abstract void closeSession() throws DAOException;
     
     public abstract void commit() throws DAOException;
     

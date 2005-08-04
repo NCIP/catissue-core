@@ -81,7 +81,6 @@ public class StorageLocationViewListener implements TreeSelectionListener
                     			+"?"+Constants.IDENTIFIER+"="+treeNode.getStorageContainerIdentifier();
                     
                     URL dataURL = new URL(protocol,host,port,urlSuffix);
-                    System.out.println("Container Identifier......."+dataURL);
                     appletContext.showDocument(dataURL,Constants.DATA_VIEW_FRAME);
                 }
             }

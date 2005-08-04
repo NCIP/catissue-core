@@ -47,18 +47,56 @@ public class HibernateDAO extends AbstractDAO
         }
     }
 
-    public void closeSession()
+//    public void closeSession()
+//    {
+//    	try
+//		{
+//	        DBUtil.closeSession();
+//		}
+//    	catch(Exception dx)
+//		{
+//    		Logger.out.error(dx.getMessage(),dx);
+//		}
+//        session = null;
+//        transaction = null;
+//    }
+    
+    public void closeSession() throws DAOException
     {
-    	try
-		{
-	        DBUtil.closeSession();
-		}
-    	catch(Exception dx)
-		{
-    		Logger.out.error(dx.getMessage(),dx);
-		}
-        session = null;
-        transaction = null;
+        try
+        {
+            transaction.commit();
+        }
+        catch (HibernateException dbex)
+        {
+            throw handleException(dbex, "Object can not be added.", transaction);
+        }
+        finally
+        {
+            DBUtil.closeSession();
+        }
+    }
+    
+    /**
+     * Handles Hibernate exceptions.
+     * @param dbex The exception that has occured.
+     * @param message The message which is to be printed.
+     * @param tx The transaction in which the exception has occured.	 
+     */
+    private DAOException handleException(Exception dbex, String message,
+            Transaction tx)
+    {
+        try
+        {
+            dbex.printStackTrace();
+            if (tx != null)
+                tx.rollback();
+            return new DAOException(message, dbex);
+        }
+        catch (HibernateException hbe)
+        {
+            return new DAOException("Hibernate Error", hbe);
+        }
     }
     
     public void commit() throws DAOException
@@ -303,7 +341,7 @@ public class HibernateDAO extends AbstractDAO
     		
 		}
     }
-    public static void main(String[] args) //throws Exception
+    public static void main(String[] args) throws Exception
 	{
 		Variables.catissueHome = System.getProperty("user.dir");
 		Logger.configure("Application.properties");
@@ -314,9 +352,9 @@ public class HibernateDAO extends AbstractDAO
 		{
     		dao.openSession();
 	    	Department dept = new Department();
-	    	dept.setName("AAAAA");
+	    	dept.setName("A1");
 	    	dao.insert(dept);
-	    	dao.commit();
+	    	//dao.commit();
 		}
     	catch(DAOException ex)
 		{

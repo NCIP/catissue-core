@@ -30,9 +30,9 @@ public class InstituteBizLogic extends DefaultBizLogic
 	    Institution institute = (Institution)obj;
         AbstractDAO dao = DAOFactory.getDAO(Constants.HIBERNATE_DAO);
 		dao.openSession();
-		
-	    dao.insert(institute);
-	    
-	    dao.closeSession();
+			
+		dao.insert(institute);
+		    
+        dao.closeSession();
 	}
 }
