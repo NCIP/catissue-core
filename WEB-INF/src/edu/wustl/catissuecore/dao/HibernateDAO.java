@@ -16,7 +16,9 @@ import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.Transaction;
+import edu.wustl.catissuecore.domain.Department;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.dbManager.DBUtil;
 import edu.wustl.common.util.logger.Logger;
@@ -35,55 +37,58 @@ public class HibernateDAO extends AbstractDAO
         try
         {
             session = DBUtil.currentSession();
+            //System.out.println("Auto Commit "+session.connection().getAutoCommit());
             transaction = session.beginTransaction();
         }
         catch (HibernateException dbex)
         {
             Logger.out.error(dbex.getMessage(),dbex);
-            throw handleException("Error in opening session", dbex);
+            new DAOException("Error in open connection", dbex);
         }
     }
 
-    public void closeSession() throws DAOException
+    public void closeSession()
+    {
+    	try
+		{
+	        DBUtil.closeSession();
+		}
+    	catch(Exception dx)
+		{
+    		Logger.out.error(dx.getMessage(),dx);
+		}
+        session = null;
+        transaction = null;
+    }
+    
+    public void commit() throws DAOException
     {
         try
         {
-            transaction.commit();
+        	if (transaction != null)
+        		transaction.commit();
         }
         catch (HibernateException dbex)
         {
         	Logger.out.error(dbex.getMessage(),dbex);
-            throw handleException("Error in commit." , dbex);
-        }
-        finally
-        {
-            DBUtil.closeSession();
-            session = null;
-            transaction = null;
-        }
-    }
-
-    /**
-     * Handles Hibernate exceptions.
-     * @param dbex The exception that has occured.
-     * @param message The message which is to be printed.
-     * @param transaction The transaction in which the exception has occured.	 
-     */
-    private DAOException handleException(String message, Exception dbex)
-    {
-        try
-        {
-            if (transaction != null)
-                transaction.rollback();
-            return new DAOException(message, dbex);
-        }
-        catch (HibernateException hbe)
-        {
-        	Logger.out.error(hbe.getMessage(),hbe);
-            return new DAOException("Hibernate Error", hbe);
+        	new DAOException("Error in commit", dbex);
         }
     }
     
+    public void rollback() throws DAOException
+    {
+        try
+        {
+        	if (transaction != null)
+                transaction.rollback();
+        }
+        catch (HibernateException dbex)
+        {
+        	Logger.out.error(dbex.getMessage(),dbex);
+        	new DAOException("Error in rollback", dbex);
+        }
+    }
+
     /**
      * Saves the persistent object in the database.
      * @param session The session in which the object is saved.
@@ -99,6 +104,7 @@ public class HibernateDAO extends AbstractDAO
         }
         catch(HibernateException hibExp)
         {
+        	generateExceptionMessage(hibExp,obj);
             Logger.out.error(hibExp.getMessage(),hibExp);
             throw new DAOException("Error in insert",hibExp);
         }
@@ -285,4 +291,45 @@ public class HibernateDAO extends AbstractDAO
             return fullyQualifiedName;
         }
     }
+    
+    private void generateExceptionMessage(HibernateException dbex,Object obj)
+    {
+    	Throwable t = dbex.getCause();
+    	System.out.println("Cause "+t.getMessage());
+    	String msg[] = dbex.getMessages();
+    	for (int i = 0; i < msg.length; i++)
+		{
+    		System.out.println(i+" : "+msg[i]);
+    		
+		}
+    }
+    public static void main(String[] args) //throws Exception
+	{
+		Variables.catissueHome = System.getProperty("user.dir");
+		Logger.configure("Application.properties");
+		
+    	HibernateDAO dao = new HibernateDAO();
+    	
+    	try
+		{
+    		dao.openSession();
+	    	Department dept = new Department();
+	    	dept.setName("AAAAA");
+	    	dao.insert(dept);
+	    	dao.commit();
+		}
+    	catch(DAOException ex)
+		{
+    		ex.printStackTrace();
+    		try
+			{
+    			dao.rollback();
+			}
+    		catch(DAOException sex)
+			{
+    			
+			}
+		}
+    	dao.closeSession();
+	}
 }

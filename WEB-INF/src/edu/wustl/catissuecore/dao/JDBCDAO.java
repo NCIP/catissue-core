@@ -39,9 +39,37 @@ public class JDBCDAO extends AbstractDAO
         
     }
     
-    public void closeSession() throws DAOException
+    public void closeSession()
     {
         
+    }
+    
+    public void commit() throws DAOException
+    {
+        try
+        {
+        	if (connection != null)
+        		connection.commit();
+        }
+        catch (SQLException dbex)
+        {
+        	Logger.out.error(dbex.getMessage(),dbex);
+        	new DAOException("Error in commit", dbex);
+        }
+    }
+    
+    public void rollback() throws DAOException
+    {
+        try
+        {
+        	if (connection != null)
+        		connection.rollback();
+        }
+        catch (SQLException dbex)
+        {
+        	Logger.out.error(dbex.getMessage(),dbex);
+        	new DAOException("Error in rollback", dbex);
+        }
     }
     
     /**

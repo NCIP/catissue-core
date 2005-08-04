@@ -31,7 +31,11 @@ public abstract class AbstractDAO
      * 
      * @throws DAOException
      */
-    public abstract void closeSession() throws DAOException;
+    public abstract void closeSession();
+    
+    public abstract void commit() throws DAOException;
+    
+    public abstract void rollback() throws DAOException;
     
 	/**
 	 * Insert the Object in the database.
