@@ -369,6 +369,20 @@
 	</definition>
 	<!-- ThawEventParameters end -->
 
+	<!-- MolecularSpecimenReviewParameters -->
+	<definition name=".catissuecore.molecularSpecimenReviewParametersDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/MolecularSpecimenReviewParameters.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.molecularSpecimenReviewParametersAddSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/common/success.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.molecularSpecimenReviewParametersEditSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/common/success.jsp" />
+	</definition>
+	<!-- MolecularSpecimenReviewParameters end -->
+
 	<!-- BioSpecimen tab pages definitions end -->
 
 	<!-- Search tab pages definitions start -->

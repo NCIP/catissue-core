@@ -90,7 +90,11 @@ public class BizLogicFactory
           	case Constants.NEW_SPECIMEN_FORM_ID:
         		abstractBizLogic = new NewSpecimenBizLogic();
         		break;
-        	
+        		
+          	case Constants.MOLECULAR_SPECIMEN_REVIEW_PARAMETERS_FORM_ID:
+        		abstractBizLogic = new SpecimenEventParametersBizLogic();
+        		break;	
+        		
             default:
                 abstractBizLogic = new DefaultBizLogic();
             	break;

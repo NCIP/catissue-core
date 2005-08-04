@@ -112,6 +112,34 @@ public class Validator
         }
     }
     
+    
+    /**
+     * Checks the given String for double value.
+     * 
+     * @param dblString
+     * @return boolean True if the string contains double number or false if any non numeric character is present.
+     */
+    public boolean isDouble(String dblString)
+    {
+        try
+        {
+            double dblValue = Double.parseDouble(dblString);
+
+            if (dblValue <= 0  || Double.isNaN(dblValue)) 
+            {
+                return false;
+            }
+            
+            return true;
+        }
+        catch(NumberFormatException exp)
+        {
+            return false;
+        }
+    	
+    }
+    
+    
     public static void main(String[] args)
     {
         Validator validator = new Validator();

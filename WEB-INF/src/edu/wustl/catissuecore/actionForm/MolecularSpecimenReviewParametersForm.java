@@ -12,11 +12,13 @@ package edu.wustl.catissuecore.actionForm;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.domain.MolecularSpecimenReviewParameters;
+import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
@@ -220,15 +222,22 @@ public class MolecularSpecimenReviewParametersForm extends EventParametersForm
 
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
-		super.setAllValues(abstractDomain);
-		MolecularSpecimenReviewParameters molecularSpecimenReviewParametersObject = (MolecularSpecimenReviewParameters)abstractDomain ;
-		this.gelImageURL = molecularSpecimenReviewParametersObject.getGelImageURL() ;
-		this.qualityIndex = molecularSpecimenReviewParametersObject.getQualityIndex();
-		this.laneNumber = molecularSpecimenReviewParametersObject.getLaneNumber() ;
-		this.gelNumber = molecularSpecimenReviewParametersObject.getGelNumber().intValue() ;
-		this.absorbanceAt260 = molecularSpecimenReviewParametersObject.getAbsorbanceAt260().doubleValue() ;
-		this.absorbanceAt280 = molecularSpecimenReviewParametersObject.getAbsorbanceAt280().doubleValue();  
-		
+	    try
+        {
+			super.setAllValues(abstractDomain);
+			MolecularSpecimenReviewParameters molecularSpecimenReviewParametersObject = (MolecularSpecimenReviewParameters)abstractDomain ;
+			this.gelImageURL = molecularSpecimenReviewParametersObject.getGelImageURL() ;
+			this.qualityIndex = molecularSpecimenReviewParametersObject.getQualityIndex();
+			this.laneNumber = molecularSpecimenReviewParametersObject.getLaneNumber() ;
+			this.gelNumber = molecularSpecimenReviewParametersObject.getGelNumber().intValue() ;
+			this.absorbanceAt260 = molecularSpecimenReviewParametersObject.getAbsorbanceAt260().doubleValue() ;
+			this.absorbanceAt280 = molecularSpecimenReviewParametersObject.getAbsorbanceAt280().doubleValue();  
+			this.ratio28STo18S = molecularSpecimenReviewParametersObject.getRatio28STo18S().doubleValue() ; 
+	    }
+	    catch(Exception excp)
+	    {
+	        Logger.out.error(excp.getMessage());
+	    }
 	}
 	
 	/**
@@ -241,22 +250,57 @@ public class MolecularSpecimenReviewParametersForm extends EventParametersForm
          
          try
          {
-         	//TO DO
-////         	System.out.println("Neo: "+ neoplasticCellularityPercentage);
-////         	// checks the neoplasticCellularityPercentage
-//           	if (neoplasticCellularityPercentage <= 0  || Double.isNaN(neoplasticCellularityPercentage) )
-//            {
-//           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("cellspecimenreviewparameters.neoplasticcellularitypercentage")));
-//            }
-//
-////         	System.out.println("Via: "+ viableCellPercentage);
-////         	// checks the viableCellPercentage
-//           	if (viableCellPercentage <= 0  || Double.isNaN(viableCellPercentage) )
-//            {
-//           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("cellspecimenreviewparameters.viablecellpercentage")));
-//            }
-//
-//         
+
+         	Logger.out.info("GelImageUrl: "+ gelImageURL );
+         //	 checks the gelImageURL
+          	if (validator.isEmpty(gelImageURL))
+            {
+           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("molecularspecimenreviewparameters.gelimageurl")));
+            }
+
+          	Logger.out.info("qualityIndex: "+ qualityIndex );
+            //	 checks the qualityIndex
+         	if (validator.isEmpty(qualityIndex ))
+            {
+           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("molecularspecimenreviewparameters.qualityindex")));
+            }
+
+          	Logger.out.info("laneNumber: "+ laneNumber );
+            //	 checks the laneNumber
+         	if (validator.isEmpty(laneNumber))
+            {
+           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("molecularspecimenreviewparameters.lanenumber")));
+            }
+
+          	Logger.out.info("gelNumber: "+ gelNumber  );
+            //	 checks the gelNumber
+         	if (gelNumber <= 0 )
+            {
+           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("molecularspecimenreviewparameters.gelnumber")));
+            }
+
+          	Logger.out.info("absorbanceAt260: "+ absorbanceAt260  );
+            //	 checks the absorbanceAt260
+         	if (!validator.isDouble(""+absorbanceAt260))
+            {
+           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("molecularspecimenreviewparameters.absorbanceat260")));
+            }
+
+          	Logger.out.info("absorbanceAt280: "+ absorbanceAt280  );
+            //	 checks the absorbanceAt280
+         	if (!validator.isDouble(""+absorbanceAt280))
+            {
+           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("molecularspecimenreviewparameters.absorbanceat280")));
+            }
+
+         	Logger.out.info("ratio28STo18S : "+ ratio28STo18S   );
+            //	 checks the ratio28STo18S 
+         	if (!validator.isDouble(""+ratio28STo18S ))
+            {
+           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("molecularspecimenreviewparameters.ratio28STo18S")));
+            }
+         	
+         	
          }
          catch(Exception excp)
          {

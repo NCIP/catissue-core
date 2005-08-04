@@ -53,11 +53,18 @@ public class FluidSpecimenReviewEventParameters extends ReviewEventParameters
 		this.cellCount = cellCount;
 	}
 
+	/**
+	 * NOTE: Do not delete this constructor. Hibernet uses this by reflection API.
+	 * */
 	public FluidSpecimenReviewEventParameters()
 	{
 		
 	}
-//	Parameterized constructor
+
+	/**
+	 *  Parameterised constructor 
+	 * @param abstractForm
+	 */
 	public FluidSpecimenReviewEventParameters(AbstractActionForm abstractForm)
 	{
 		setAllValues(abstractForm);

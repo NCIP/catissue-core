@@ -9,6 +9,10 @@
  */
 package edu.wustl.catissuecore.domain;
 
+import edu.wustl.catissuecore.actionForm.AbstractActionForm;
+import edu.wustl.catissuecore.actionForm.MolecularSpecimenReviewParametersForm;
+import edu.wustl.common.util.logger.Logger;
+
 /**
  * Attributes associated with a review event of a molecular specimen.
  * @hibernate.joined-subclass table="CATISSUE_MOLECULAR_SPECIMEN_REVIEW_PARAMETERS"
@@ -213,4 +217,52 @@ public class MolecularSpecimenReviewParameters extends ReviewEventParameters
 	{
 		this.ratio28STo18S = ratio28STo18S;
 	}
+	
+	
+	/**
+	 * NOTE: Do not delete this constructor. Hibernet uses this by reflection API.
+	 * */
+	public MolecularSpecimenReviewParameters()
+	{
+		
+	}
+
+	/**
+	 *  Parameterised constructor 
+	 * @param abstractForm
+	 */
+	public MolecularSpecimenReviewParameters(AbstractActionForm abstractForm)
+	{
+		setAllValues(abstractForm);
+	}
+	
+	/**
+     * This function Copies the data from an FluidSpecimenReviewEventParametersForm object to a FluidSpecimenReviewEventParameters object.
+     * @param fluidSpecimenReviewEventParametersForm An FluidSpecimenReviewEventParametersForm object containing the information about the fluidSpecimenReviewEventParameters.  
+     * */
+    public void setAllValues(AbstractActionForm abstractForm)
+    {
+        try
+        {
+        	MolecularSpecimenReviewParametersForm form = (MolecularSpecimenReviewParametersForm) abstractForm;
+        	this.gelImageURL = form.getGelImageURL();
+        	this.qualityIndex = form.getQualityIndex() ;
+        	this.laneNumber =form.getLaneNumber();
+        	this.gelNumber = new Integer(form.getGelNumber());
+        	this.absorbanceAt260 = new Double(form.getAbsorbanceAt260());
+        	this.absorbanceAt280 = new Double(form.getAbsorbanceAt280());
+        	this.ratio28STo18S = new Double(form.getRatio28STo18S());
+
+        	super.setAllValues(form);
+        }
+        catch (Exception excp)
+        {
+            Logger.out.error(excp.getMessage());
+        }
+    }
+	
+		
+	
+	
+	
 }

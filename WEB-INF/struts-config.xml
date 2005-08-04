@@ -32,6 +32,7 @@ PUBLIC
 		<form-bean name="tissueSpecimenReviewEventParametersForm" type="edu.wustl.catissuecore.actionForm.TissueSpecimenReviewEventParametersForm"/>
 		<form-bean name="DisposalEventParametersForm" type="edu.wustl.catissuecore.actionForm.DisposalEventParametersForm"/>
 		<form-bean name="ThawEventParametersForm" type="edu.wustl.catissuecore.actionForm.ThawEventParametersForm"/>
+		<form-bean name="molecularSpecimenReviewParametersForm" type="edu.wustl.catissuecore.actionForm.MolecularSpecimenReviewParametersForm"/>
 	</form-beans>
 	
 	<!-- Global Exception Definitions -->
@@ -1055,6 +1056,45 @@ PUBLIC
 			<forward name="failure" path="/ThawEventParameters.do?operation=edit"/>
 		</action>    
 		<!-- ThawEventParameters Actions Ends -->
+		
+		<!-- MolecularSpecimenReviewParameters Actions Begins -->
+        <action path="/MolecularSpecimenReviewParameters"
+			type="edu.wustl.catissuecore.action.MolecularSpecimenReviewParametersAction"
+			scope="request">
+			<forward name="success" path=".catissuecore.molecularSpecimenReviewParametersDef" />
+			<forward name="failure" path=".catissuecore.molecularSpecimenReviewParametersDef" />
+		</action>
+		
+		<action path="/MolecularSpecimenReviewParametersAdd"
+			type="edu.wustl.catissuecore.action.CommonAddEditAction"
+			name="molecularSpecimenReviewParametersForm"
+			validate="true"
+			input="/MolecularSpecimenReviewParameters.do?operation=add"
+			scope="request">
+			<forward name="success" path=".catissuecore.molecularSpecimenReviewParametersAddSuccessDef" />
+			<forward name="failure" path="/error.jsp" />
+		</action>
+		
+		<action path="/MolecularSpecimenReviewParametersEdit"
+			type="edu.wustl.catissuecore.action.CommonAddEditAction"
+			name="molecularSpecimenReviewParametersForm"
+			validate="true"
+			input="/MolecularSpecimenReviewParameters.do?operation=edit"
+			scope="request">
+			<forward name="success" path=".catissuecore.molecularSpecimenReviewParametersEditSuccessDef" />
+			<forward name="failure" path="/error.jsp" />
+		</action>
+		
+		<action path="/MolecularSpecimenReviewParametersSearch"
+		    type="edu.wustl.catissuecore.action.CommonSearchAction"
+			name="molecularSpecimenReviewParametersForm"
+			validate="true"
+			input="/MolecularSpecimenReviewParameters.do?operation=edit"
+			scope="request">
+			<forward name="success" path="/MolecularSpecimenReviewParameters.do?operation=edit"/>
+			<forward name="failure" path="/MolecularSpecimenReviewParameters.do?operation=edit"/>
+		</action>    
+		<!-- MolecularSpecimenReviewParameters Actions Ends -->
 		
 		<!--Query Result View Actions Begin-->
 		<action path="/ShowFramedPage"
