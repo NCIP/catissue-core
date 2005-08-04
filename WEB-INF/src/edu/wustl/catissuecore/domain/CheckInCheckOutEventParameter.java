@@ -48,11 +48,18 @@ public class CheckInCheckOutEventParameter extends SpecimenEventParameters
 		this.storageStatus = storageStatus;
 	}
 	
-	CheckInCheckOutEventParameter()
+	/**
+	 * NOTE: Do not delete this constructor. Hibernet uses this by reflection API.
+	 * */
+	public CheckInCheckOutEventParameter()
 	{
 		
 	}
-//	Parameterized constructor
+	
+	/**	
+	 * Parameterized constructor
+	 * @param abstractForm
+	 */
 	public CheckInCheckOutEventParameter(AbstractActionForm abstractForm)
 	{
 		setAllValues(abstractForm);

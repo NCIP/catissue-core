@@ -53,7 +53,7 @@ public class FluidSpecimenReviewEventParameters extends ReviewEventParameters
 		this.cellCount = cellCount;
 	}
 
-	FluidSpecimenReviewEventParameters()
+	public FluidSpecimenReviewEventParameters()
 	{
 		
 	}
