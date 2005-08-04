@@ -86,13 +86,4 @@ public class DBUtil
 			throw new DAOException("Hibernate Error: Error in closing session",ex);
 		}
 	}
-	
-//	public static DBException handleException(Exception dbex,String message,Transaction tx) throws Exception
-//	{
-//		dbex.printStackTrace();
-//		if(tx!=null)
-//			tx.rollback();
-//		throw new DBException(message,dbex);
-//	}
-	
 }
