@@ -12,8 +12,6 @@ package edu.wustl.catissuecore.action;
 
 import javax.servlet.http.HttpServletRequest;
 
-import edu.wustl.catissuecore.util.global.Constants;
-
 /**
  * This class initializes the fields in the FrozenEventParameters Add/Edit webpage.
  * @author mandar deshmukh

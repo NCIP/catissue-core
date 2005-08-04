@@ -11,8 +11,6 @@ package edu.wustl.catissuecore.action;
 
 import javax.servlet.http.HttpServletRequest;
 
-import edu.wustl.catissuecore.util.global.Constants;
-
 
 /**
  * @author mandar_deshmukh
