@@ -49,18 +49,18 @@ public class BizLogicFactory
         	case Constants.PARTICIPANT_FORM_ID:
         		abstractBizLogic = new ParticipantBizLogic();
         		break;
+        		
         	// for all event parameters same object will be returned	
           	case Constants.FROZEN_EVENT_PARAMETERS_FORM_ID:
-        		abstractBizLogic = new SpecimenEventParametersBizLogic();
+          	case Constants.CHECKIN_CHECKOUT_EVENT_PARAMETERS_FORM_ID:
+          	case Constants.FLUID_SPECIMEN_REVIEW_EVENT_PARAMETERS_FORM_ID:
+         	case Constants.CELL_SPECIMEN_REVIEW_PARAMETERS_FORM_ID:
+         	case Constants.TISSUE_SPECIMEN_REVIEW_EVENT_PARAMETERS_FORM_ID:
+          	case Constants.MOLECULAR_SPECIMEN_REVIEW_PARAMETERS_FORM_ID:
+         	case Constants.RECEIVED_EVENT_PARAMETERS_FORM_ID:
+          		abstractBizLogic = new SpecimenEventParametersBizLogic();
         		break;		
         		
-          	case Constants.CHECKIN_CHECKOUT_EVENT_PARAMETERS_FORM_ID:
-        		abstractBizLogic = new SpecimenEventParametersBizLogic();
-        		break;		
-        
-         	case Constants.RECEIVED_EVENT_PARAMETERS_FORM_ID:
-        		abstractBizLogic = new SpecimenEventParametersBizLogic();
-        		break;	
         	case Constants.COLLECTION_PROTOCOL_FORM_ID:
         		abstractBizLogic = new CollectionProtocolBizLogic();
         		break;
@@ -74,26 +74,11 @@ public class BizLogicFactory
 			case Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID:
 				abstractBizLogic = new SpecimenCollectionGroupBizLogic();
 				break;
-			
-          	case Constants.FLUID_SPECIMEN_REVIEW_EVENT_PARAMETERS_FORM_ID:
-        		abstractBizLogic = new SpecimenEventParametersBizLogic();
-        		break;
-        	
-         	case Constants.CELL_SPECIMEN_REVIEW_PARAMETERS_FORM_ID:
-        		abstractBizLogic = new SpecimenEventParametersBizLogic();
-        		break;	
-        		
-         	case Constants.TISSUE_SPECIMEN_REVIEW_EVENT_PARAMETERS_FORM_ID:
-        		abstractBizLogic = new SpecimenEventParametersBizLogic();
-        		break;
 				
           	case Constants.NEW_SPECIMEN_FORM_ID:
         		abstractBizLogic = new NewSpecimenBizLogic();
         		break;
         		
-          	case Constants.MOLECULAR_SPECIMEN_REVIEW_PARAMETERS_FORM_ID:
-        		abstractBizLogic = new SpecimenEventParametersBizLogic();
-        		break;	
         		
             default:
                 abstractBizLogic = new DefaultBizLogic();
