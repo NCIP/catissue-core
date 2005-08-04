@@ -784,7 +784,7 @@ PUBLIC
 
 	<!-- CheckInCheckOutEventParameters Actions Begins -->
         <action path="/CheckInCheckOutEventParameters"
-			type="edu.wustl.catissuecore.action.CheckInCheckOutEventParametersAction"
+			type="edu.wustl.catissuecore.action.SpecimenEventParametersAction"
 			scope="request">
 			<forward name="success" path=".catissuecore.checkInCheckOutEventParametersDef" />
 			<forward name="failure" path=".catissuecore.checkInCheckOutEventParametersDef" />
@@ -823,7 +823,7 @@ PUBLIC
 
 	<!-- ReceivedEventParameters Actions Begins -->
         <action path="/ReceivedEventParameters"
-			type="edu.wustl.catissuecore.action.ReceivedEventParametersAction"
+			type="edu.wustl.catissuecore.action.SpecimenEventParametersAction"
 			scope="request">
 			<forward name="success" path=".catissuecore.receivedEventParametersDef" />
 			<forward name="failure" path=".catissuecore.receivedEventParametersDef" />
@@ -856,13 +856,13 @@ PUBLIC
 			input="/ReceivedEventParameters.do?operation=edit"
 			scope="request">
 			<forward name="success" path="/ReceivedEventParameters.do?operation=edit"/>
-			<forward name="failure" path="/CheckInCheckOutEventParameters.do?operation=edit"/>
+			<forward name="failure" path="/ReceivedEventParameters.do?operation=edit"/>
 		</action>    
 		<!-- ReceivedEventParameters Actions Ends -->
 
 	<!-- FluidSpecimenReviewEventParameters Actions Begins -->
         <action path="/FluidSpecimenReviewEventParameters"
-			type="edu.wustl.catissuecore.action.FluidSpecimenReviewEventParametersAction"
+			type="edu.wustl.catissuecore.action.SpecimenEventParametersAction"
 			scope="request">
 			<forward name="success" path=".catissuecore.fluidSpecimenReviewEventParametersDef" />
 			<forward name="failure" path=".catissuecore.fluidSpecimenReviewEventParametersDef" />
@@ -901,7 +901,7 @@ PUBLIC
 
 	<!-- CellSpecimenReviewParameters Actions Begins -->
         <action path="/CellSpecimenReviewParameters"
-			type="edu.wustl.catissuecore.action.CellSpecimenReviewParametersAction"
+			type="edu.wustl.catissuecore.action.SpecimenEventParametersAction"
 			scope="request">
 			<forward name="success" path=".catissuecore.cellSpecimenReviewParametersDef" />
 			<forward name="failure" path=".catissuecore.cellSpecimenReviewParametersDef" />
@@ -940,7 +940,7 @@ PUBLIC
 
 	<!-- TissueSpecimenReviewEventParameters Actions Begins -->
         <action path="/TissueSpecimenReviewEventParameters"
-			type="edu.wustl.catissuecore.action.TissueSpecimenReviewEventParametersAction"
+			type="edu.wustl.catissuecore.action.SpecimenEventParametersAction"
 			scope="request">
 			<forward name="success" path=".catissuecore.tissueSpecimenReviewEventParametersDef" />
 			<forward name="failure" path=".catissuecore.tissueSpecimenReviewEventParametersDef" />
@@ -1020,7 +1020,7 @@ PUBLIC
 		
 			<!--ThawEventParameters Actions Begins -->
         <action path="/ThawEventParameters"
-			type="edu.wustl.catissuecore.action.ThawEventParametersAction"
+			type="edu.wustl.catissuecore.action.SpecimenEventParametersAction"
 			scope="request">
 			<forward name="success" path=".catissuecore.ThawEventParametersDef" />
 			<forward name="failure" path=".catissuecore.ThawEventParametersDef" />
@@ -1059,7 +1059,7 @@ PUBLIC
 		
 		<!-- MolecularSpecimenReviewParameters Actions Begins -->
         <action path="/MolecularSpecimenReviewParameters"
-			type="edu.wustl.catissuecore.action.MolecularSpecimenReviewParametersAction"
+			type="edu.wustl.catissuecore.action.SpecimenEventParametersAction"
 			scope="request">
 			<forward name="success" path=".catissuecore.molecularSpecimenReviewParametersDef" />
 			<forward name="failure" path=".catissuecore.molecularSpecimenReviewParametersDef" />
