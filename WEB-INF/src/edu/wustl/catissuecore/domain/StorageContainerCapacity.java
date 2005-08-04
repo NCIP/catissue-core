@@ -15,6 +15,7 @@ import java.io.Serializable;
  * Capacity defined for a storage container.
  * @hibernate.class table="CATISSUE_STORAGE_CONTAINER_CAPACITY"
  * @author Aniruddha Phadnis
+ * TODO Need to shift oneDimensionLabel and twoDimensionLabel to StorageType class
  */
 public class StorageContainerCapacity implements Serializable
 {

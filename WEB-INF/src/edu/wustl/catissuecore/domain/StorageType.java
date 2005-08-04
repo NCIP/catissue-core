@@ -20,6 +20,7 @@ import edu.wustl.common.util.logger.Logger;
 /**
  * Type of the storage container e.g. Freezer, Box etc.
  * @hibernate.class table="CATISSUE_STORAGE_TYPE"
+ * TODO TODO Need to shift oneDimensionLabel and twoDimensionLabel to StorageType class
  */
 public class StorageType extends AbstractDomainObject implements Serializable
 {
