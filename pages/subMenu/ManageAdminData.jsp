@@ -1,3 +1,4 @@
+<td class="subMenuPrimaryItemsWithBorder" onmouseover="changeMenuStyle(this,'subMenuPrimaryItemsWithBorderOver')" onmouseout="changeMenuStyle(this,'subMenuPrimaryItemsWithBorder')">		
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 
 <tr>
@@ -9,7 +10,7 @@
 </tr>
 
 <tr>
-	<td class="subMenuPrimaryItemsWithBorder">		
+	<td class="subMenuPrimaryItemsWithBorder" onmouseover="changeMenuStyle(this,'subMenuPrimaryItemsWithBorderOver')" onmouseout="changeMenuStyle(this,'subMenuPrimaryItemsWithBorder')">				
 		<div>
 			<!--img src="images/subMenuArrow.gif" width="7" height="7" alt="" /--> 
 				<b> <bean:message key="app.user" /> </b>
@@ -26,7 +27,7 @@
 	</td>
 </tr>
 <tr>
-	<td class="subMenuPrimaryItemsWithBorder">		
+	<td class="subMenuPrimaryItemsWithBorder" onmouseover="changeMenuStyle(this,'subMenuPrimaryItemsWithBorderOver')" onmouseout="changeMenuStyle(this,'subMenuPrimaryItemsWithBorder')">				
 		<div>
 			<!--img src="images/subMenuArrow.gif" width="7" height="7" alt="" /--> 
 				<b> <bean:message key="app.institution" /> </b>
@@ -41,7 +42,7 @@
 </tr>
 </tr>
 <tr>
-	<td class="subMenuPrimaryItemsWithBorder">		
+	<td class="subMenuPrimaryItemsWithBorder" onmouseover="changeMenuStyle(this,'subMenuPrimaryItemsWithBorderOver')" onmouseout="changeMenuStyle(this,'subMenuPrimaryItemsWithBorder')">				
 		<div>
 			<!--img src="images/subMenuArrow.gif" width="7" height="7" alt="" /--> 
 				<b> <bean:message key="app.department" /></b>
@@ -55,7 +56,7 @@
 	</td>
 </tr>
 <tr>
-	<td class="subMenuPrimaryItemsWithBorder">
+	<td class="subMenuPrimaryItemsWithBorder" onmouseover="changeMenuStyle(this,'subMenuPrimaryItemsWithBorderOver')" onmouseout="changeMenuStyle(this,'subMenuPrimaryItemsWithBorder')">		
 
 		<div>
 			<!--img src="images/subMenuArrow.gif" width="7" height="7" alt="" /--> 
@@ -70,7 +71,7 @@
 	</td>
 </tr>
 <tr>
-	<td class="subMenuPrimaryItemsWithBorder">		
+	<td class="subMenuPrimaryItemsWithBorder" onmouseover="changeMenuStyle(this,'subMenuPrimaryItemsWithBorderOver')" onmouseout="changeMenuStyle(this,'subMenuPrimaryItemsWithBorder')">				
 		
 		<div>
 			<!--img src="images/subMenuArrow.gif" width="7" height="7" alt="" /--> 
@@ -85,7 +86,7 @@
 	</td>
 </tr>
 <tr>
-	<td class="subMenuPrimaryItemsWithBorder">		
+	<td class="subMenuPrimaryItemsWithBorder" onmouseover="changeMenuStyle(this,'subMenuPrimaryItemsWithBorderOver')" onmouseout="changeMenuStyle(this,'subMenuPrimaryItemsWithBorder')">				
 		
 		<div>
 			<!--img src="images/subMenuArrow.gif" width="7" height="7" alt="" /--> 
@@ -100,7 +101,7 @@
 	</td>
 </tr>
 <tr>
-	<td class="subMenuPrimaryItemsWithBorder">		
+	<td class="subMenuPrimaryItemsWithBorder" onmouseover="changeMenuStyle(this,'subMenuPrimaryItemsWithBorderOver')" onmouseout="changeMenuStyle(this,'subMenuPrimaryItemsWithBorder')">				
 
 		<div>
 			<!--img src="images/subMenuArrow.gif" width="7" height="7" alt="" /--> 
@@ -115,7 +116,7 @@
 	</td>
 </tr>
 <tr>
-	<td class="subMenuPrimaryItemsWithBorder">		
+	<td class="subMenuPrimaryItemsWithBorder" onmouseover="changeMenuStyle(this,'subMenuPrimaryItemsWithBorderOver')" onmouseout="changeMenuStyle(this,'subMenuPrimaryItemsWithBorder')">				
 		
 		<div>
 			<!--img src="images/subMenuArrow.gif" width="7" height="7" alt="" /--> 
@@ -130,7 +131,7 @@
 	</td>
 </tr>
 <tr>
-	<td class="subMenuPrimaryItemsWithBorder">		
+	<td class="subMenuPrimaryItemsWithBorder" onmouseover="changeMenuStyle(this,'subMenuPrimaryItemsWithBorderOver')" onmouseout="changeMenuStyle(this,'subMenuPrimaryItemsWithBorder')">				
 		<div>
 			<!--img src="images/subMenuArrow.gif" width="7" height="7" alt="" /-->  
 				<b><bean:message key="app.collectionProtocol" /></b>
@@ -144,7 +145,7 @@
 	</td>
 </tr>
 <tr>
-	<td class="subMenuPrimaryItemsWithBorder">		
+	<td class="subMenuPrimaryItemsWithBorder" onmouseover="changeMenuStyle(this,'subMenuPrimaryItemsWithBorderOver')" onmouseout="changeMenuStyle(this,'subMenuPrimaryItemsWithBorder')">				
 		<div>
 			
 			<!--img src="images/subMenuArrow.gif" width="7" height="7" alt="" /-->  
@@ -159,7 +160,7 @@
 	</td>
 </tr>
 <tr>
-	<td class="subMenuPrimaryItemsWithBorder">		
+	<td class="subMenuPrimaryItemsWithBorder" onmouseover="changeMenuStyle(this,'subMenuPrimaryItemsWithBorderOver')" onmouseout="changeMenuStyle(this,'subMenuPrimaryItemsWithBorder')">				
 		<div>
 			
 			<!--img src="images/subMenuArrow.gif" width="7" height="7" alt="" /-->  

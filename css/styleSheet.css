@@ -193,7 +193,7 @@ a:link.subMenuPrimary,a:visited.subMenuPrimary,a:active.subMenuPrimary{ /* for t
 	
 }
 a:hover.subMenuPrimary{
-	color:#A90101; /* constant: red */
+	color:#FFFFFF; /* constant: red */
 }
 a:link.loginSignup,a:visited.loginSignup,a:active.loginSignup{ /* for the text links in the primary submenu */
 	color:#5C5C5C; /* constant: dark gray */
