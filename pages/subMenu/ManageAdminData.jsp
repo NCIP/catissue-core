@@ -12,7 +12,7 @@
 	<td class="subMenuPrimaryItemsWithBorder">		
 		<div>
 			<!--img src="images/subMenuArrow.gif" width="7" height="7" alt="" /--> 
-				<bean:message key="app.user" />
+				<b> <bean:message key="app.user" /> </b>
 		</div>		
 		<div>
 			<a class="subMenuPrimary" href="User.do?operation=add&amp;pageOf=pageOfUserAdmin"><bean:message key="app.add" /></a> | 
@@ -29,7 +29,7 @@
 	<td class="subMenuPrimaryItemsWithBorder">		
 		<div>
 			<!--img src="images/subMenuArrow.gif" width="7" height="7" alt="" /--> 
-				<bean:message key="app.institution" />					
+				<b> <bean:message key="app.institution" /> </b>
 		</div>
 		<div>
 			<a class="subMenuPrimary" href="Institution.do?operation=add"><bean:message key="app.add" /></a> | 
@@ -44,7 +44,7 @@
 	<td class="subMenuPrimaryItemsWithBorder">		
 		<div>
 			<!--img src="images/subMenuArrow.gif" width="7" height="7" alt="" /--> 
-				<bean:message key="app.department" />					
+				<b> <bean:message key="app.department" /></b>
 		</div>
 		<div>
 		<a class="subMenuPrimary" href="Department.do?operation=add"><bean:message key="app.add" /></a> | 
@@ -59,7 +59,7 @@
 
 		<div>
 			<!--img src="images/subMenuArrow.gif" width="7" height="7" alt="" /--> 
-				<bean:message key="app.cancerResearchGroup" />
+				<b><bean:message key="app.cancerResearchGroup" /> </b>
 		</div>
 		<div>
 			<a class="subMenuPrimary" href="CancerResearchGroup.do?operation=add">
@@ -74,7 +74,7 @@
 		
 		<div>
 			<!--img src="images/subMenuArrow.gif" width="7" height="7" alt="" /--> 
-				<bean:message key="app.site" />
+				<b><bean:message key="app.site" /></b>
 		</div>
 		<div>
 			<a class="subMenuPrimary" href="Site.do?operation=add"><bean:message key="app.add" /></a> | 
@@ -89,7 +89,7 @@
 		
 		<div>
 			<!--img src="images/subMenuArrow.gif" width="7" height="7" alt="" /--> 
-				<bean:message key="app.storagetype" />
+				<b><bean:message key="app.storagetype" /></b>
 		</div>
 		<div>
 			<a class="subMenuPrimary" href="StorageType.do?operation=add"><bean:message key="app.add" /></a> | 
@@ -104,7 +104,7 @@
 
 		<div>
 			<!--img src="images/subMenuArrow.gif" width="7" height="7" alt="" /--> 
-				<bean:message key="app.storageContainer" />
+				<b><bean:message key="app.storageContainer" /></b>
 		</div>
 		<div>
 			<a class="subMenuPrimary" href="StorageContainer.do?operation=add"><bean:message key="app.add" /></a> | 
@@ -119,7 +119,7 @@
 		
 		<div>
 			<!--img src="images/subMenuArrow.gif" width="7" height="7" alt="" /--> 
-				<bean:message key="app.biohazard" />
+				<b><bean:message key="app.biohazard" /></b>
 		</div>
 		<div>
 			<a class="subMenuPrimary" href="Biohazard.do?operation=add"><bean:message key="app.add" /></a> | 
@@ -133,7 +133,7 @@
 	<td class="subMenuPrimaryItemsWithBorder">		
 		<div>
 			<!--img src="images/subMenuArrow.gif" width="7" height="7" alt="" /-->  
-				<bean:message key="app.collectionProtocol" />
+				<b><bean:message key="app.collectionProtocol" /></b>
 		</div>
 		<div>
 			<a class="subMenuPrimary" href="CollectionProtocol.do?operation=add"><bean:message key="app.add" /></a> | 
@@ -163,7 +163,7 @@
 		<div>
 			
 			<!--img src="images/subMenuArrow.gif" width="7" height="7" alt="" /-->  
-				<bean:message key="app.reportedProblems" />
+				<b><bean:message key="app.reportedProblems" /></b>
 		</div>
 		<div>
 			<a class="subMenuPrimary" href="ReportedProblemShow.do?pageNum=1">

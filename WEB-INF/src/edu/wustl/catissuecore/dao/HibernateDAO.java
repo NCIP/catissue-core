@@ -16,9 +16,7 @@ import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.Transaction;
-import edu.wustl.catissuecore.domain.Department;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.dbManager.DBUtil;
 import edu.wustl.common.util.logger.Logger;
@@ -142,7 +140,7 @@ public class HibernateDAO extends AbstractDAO
         }
         catch(HibernateException hibExp)
         {
-        	generateExceptionMessage(hibExp,obj);
+//        	generateExceptionMessage(hibExp,obj);
             Logger.out.error(hibExp.getMessage(),hibExp);
             throw new DAOException("Error in insert",hibExp);
         }
@@ -330,44 +328,44 @@ public class HibernateDAO extends AbstractDAO
         }
     }
     
-    private void generateExceptionMessage(HibernateException dbex,Object obj)
-    {
-    	Throwable t = dbex.getCause();
-    	System.out.println("Cause "+t.getMessage());
-    	String msg[] = dbex.getMessages();
-    	for (int i = 0; i < msg.length; i++)
-		{
-    		System.out.println(i+" : "+msg[i]);
-    		
-		}
-    }
-    public static void main(String[] args) throws Exception
-	{
-		Variables.catissueHome = System.getProperty("user.dir");
-		Logger.configure("Application.properties");
-		
-    	HibernateDAO dao = new HibernateDAO();
-    	
-    	try
-		{
-    		dao.openSession();
-	    	Department dept = new Department();
-	    	dept.setName("A1");
-	    	dao.insert(dept);
-	    	//dao.commit();
-		}
-    	catch(DAOException ex)
-		{
-    		ex.printStackTrace();
-    		try
-			{
-    			dao.rollback();
-			}
-    		catch(DAOException sex)
-			{
-    			
-			}
-		}
-    	dao.closeSession();
-	}
+//    private void generateExceptionMessage(HibernateException dbex,Object obj)
+//    {
+//    	Throwable t = dbex.getCause();
+//    	System.out.println("Cause "+t.getMessage());
+//    	String msg[] = dbex.getMessages();
+//    	for (int i = 0; i < msg.length; i++)
+//		{
+//    		System.out.println(i+" : "+msg[i]);
+//    		
+//		}
+//    }
+//    public static void main(String[] args) throws Exception
+//	{
+//		Variables.catissueHome = System.getProperty("user.dir");
+//		Logger.configure("Application.properties");
+//		
+//    	HibernateDAO dao = new HibernateDAO();
+//    	
+//    	try
+//		{
+//    		dao.openSession();
+//	    	Department dept = new Department();
+//	    	dept.setName("A1");
+//	    	dao.insert(dept);
+//	    	//dao.commit();
+//		}
+//    	catch(DAOException ex)
+//		{
+//    		ex.printStackTrace();
+//    		try
+//			{
+//    			dao.rollback();
+//			}
+//    		catch(DAOException sex)
+//			{
+//    			
+//			}
+//		}
+//    	dao.closeSession();
+//	}
 }

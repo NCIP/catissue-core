@@ -40,7 +40,6 @@
 									
                                       <tr>
                                         <td class="sidebarTitle" height="20">
-                                        	<bean:message key="app.login.title"/>
                                         </td>
                                       </tr>
 
