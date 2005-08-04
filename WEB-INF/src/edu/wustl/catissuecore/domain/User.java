@@ -12,8 +12,6 @@
 package edu.wustl.catissuecore.domain;
 
 import java.io.Serializable;
-import java.sql.Clob;
-import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashSet;
@@ -67,11 +65,6 @@ public class User extends AbstractDomainObject implements Serializable
      * Activity Status of user, it could be CLOSED, ACTIVE, DISABLED.
      */
     protected String activityStatus;
-    
-    /**
-     * Comments given by the approver.
-     */
-    protected Clob commentClob;
     
     /**
      * Comments given by the approver. 
@@ -256,34 +249,34 @@ public class User extends AbstractDomainObject implements Serializable
 		this.collectionProtocolCollection = collectionProtocolCollection;
 	}
 	
-	/**
-     * Returns the comments given by the approver. 
-     * @return the comments given by the approver.
-     * @see #setCommentClob(String)
-     */
-    public Clob getCommentClob()
-    {
-        return commentClob;
-    }
-    
-    /**
-     * Sets the comments given by the approver.
-     * @param comments the comments given by the approver.
-     * @see #getCommentClob() 
-     */
-    public void setCommentClob(Clob commentClob) throws SQLException
-    {
-        if (commentClob == null)
-        {
-            comments = "";
-            commentClob = null;
-        }
-        else
-        {
-            this.commentClob = commentClob;
-            this.comments = commentClob.getSubString(1L,(int)commentClob.length());
-        }
-    }
+//	/**
+//     * Returns the comments given by the approver. 
+//     * @return the comments given by the approver.
+//     * @see #setCommentClob(String)
+//     */
+//    public Clob getCommentClob()
+//    {
+//        return commentClob;
+//    }
+//    
+//    /**
+//     * Sets the comments given by the approver.
+//     * @param comments the comments given by the approver.
+//     * @see #getCommentClob() 
+//     */
+//    public void setCommentClob(Clob commentClob) throws SQLException
+//    {
+//        if (commentClob == null)
+//        {
+//            comments = "";
+//            commentClob = null;
+//        }
+//        else
+//        {
+//            this.commentClob = commentClob;
+//            this.comments = commentClob.getSubString(1L,(int)commentClob.length());
+//        }
+//    }
     
     /**
      * Returns the comments given by the approver. 
