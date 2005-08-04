@@ -21,8 +21,6 @@ public class CellSpecimenReviewParametersAction extends SpecimenEventParametersA
 	protected void setRequestParameters(HttpServletRequest request)
 	{
 		super.setRequestParameters(request);
-		
-		// class specific code goes here.
-        
+	
 	}
 }

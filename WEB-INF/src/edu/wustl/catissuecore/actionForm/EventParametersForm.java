@@ -225,7 +225,7 @@ public abstract class EventParametersForm extends AbstractActionForm
         return(getOperation().equals(Constants.ADD));
     }
     
-	private void reset()
+	protected void reset()
 	{
 		this.systemIdentifier = -1;
 		this.comments = null;
@@ -247,8 +247,7 @@ public abstract class EventParametersForm extends AbstractActionForm
          try
          {
          	// checks the userid
-//         	System.out.println(userId);
-//         	System.out.println("Long: "+((userId) == -1L));
+
            	if ((userId) == -1L)
             {
            		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("eventParameters.user")));
@@ -273,9 +272,7 @@ public abstract class EventParametersForm extends AbstractActionForm
  		EventParameters eventParametersObject = (EventParameters)abstractDomain ;
   		this.comments  = eventParametersObject.getComments();
  		this.systemIdentifier = eventParametersObject.getSystemIdentifier().longValue() ;
- 		
-// 		System.out.println("\n\n\t\tDate IN epf: "+ getDateOfEvent());
- 		
+		
  		this.timeInHours = ""+eventParametersObject.getTimestamp().getHours();
  		this.timeInMinutes = "" + eventParametersObject.getTimestamp().getMinutes();
  		this.userId = eventParametersObject.getUser().getSystemIdentifier().longValue() ;

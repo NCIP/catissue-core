@@ -20,9 +20,5 @@ public class ThawEventParametersAction extends SpecimenEventParametersAction
 	protected void setRequestParameters(HttpServletRequest request)
 	{
 		super.setRequestParameters(request);
-		
-		//set array of methods
-		//Sets the hourList attribute to be used in the Add/Edit ThawEventParameters Page.
-		//request.setAttribute("methodList", Constants.METHODARRAY);
 	}
 }

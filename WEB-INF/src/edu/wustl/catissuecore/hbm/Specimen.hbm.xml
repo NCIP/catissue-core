@@ -216,7 +216,7 @@
             column="IDENTIFIER"
         />
         <property
-            name="quantityInMiliLiter"
+            name="quantityInMilliliter"
             type="double"
             update="true"
             insert="true"
@@ -225,7 +225,7 @@
         />
 
         <property
-            name="availableQuantityInMiliLiter"
+            name="availableQuantityInMilliliter"
             type="double"
             update="true"
             insert="true"
@@ -272,7 +272,7 @@
             column="IDENTIFIER"
         />
         <property
-            name="concentrationInMicrogramPerMicroLiter"
+            name="concentrationInMicrogramPerMicroliter"
             type="double"
             update="true"
             insert="true"
@@ -281,7 +281,7 @@
         />
 
         <property
-            name="quantityInMicroGram"
+            name="quantityInMicrogram"
             type="double"
             update="true"
             insert="true"
@@ -290,7 +290,7 @@
         />
 
         <property
-            name="availableQuantityInMicroGram"
+            name="availableQuantityInMicrogram"
             type="double"
             update="true"
             insert="true"

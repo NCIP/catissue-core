@@ -11,6 +11,7 @@
 package edu.wustl.catissuecore.action;
 
 import java.io.IOException;
+import java.util.Collection;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -21,6 +22,8 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
+import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
 
@@ -44,38 +47,13 @@ public class SpecimenEventParametersAction extends Action
         //Sets the hourList attribute to be used in the Add/Edit FrozenEventParameters Page.
         request.setAttribute(Constants.HOURLIST, Constants.HOURARRAY);
         
-        try
-        {
-//            ListIterator iterator = null;
-//            int i;
-//
-//            SpecimenEventParametersBizLogic bizLogic = (SpecimenEventParametersBizLogic)BizLogicFactory.getBizLogic(Constants.FROZEN_EVENT_PARAMETERS_FORM_ID);
-            
-//       	List userList = bizLogic.retrieve(User.class.getName());
+       try
+       {
         	
-//           String[] userArray = new String[userList.size() + 1];
-//           String[] userIdArray = new String[userList.size() + 1];
-            String[] userArray = new String[2];
-            String[] userIdArray = new String[2];
-//            iterator = userList.listIterator();
+        	UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getBizLogic(Constants.USER_FORM_ID);
+        	Collection coll =  userBizLogic.getUsers(Constants.ACTIVITY_STATUS_ACTIVE);
+        	request.setAttribute(Constants.USERLIST, coll);
             
-            userArray[0]	= Constants.SELECT_OPTION;
-            userIdArray[0]	= "-1";
-            
-//            i = 1;
-//            while (iterator.hasNext())
-//            {
-//                User user = (User) iterator.next();
-//                userArray[i] = user.getUser().getLastName() + ", " + user.getUser().getFirstName();
-//                userIdArray[i] = user.getSystemIdentifier().toString();
-//                i++;
-//            }
-
-            userArray[1]="Mandar";
-            userIdArray[1]="1";
-            
-        	request.setAttribute(Constants.USERLIST, userArray);
-        	request.setAttribute(Constants.USERIDLIST, userIdArray);
         }
         catch (Exception exc)
         {

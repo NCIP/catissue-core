@@ -110,15 +110,14 @@ public class CellSpecimenReviewParametersForm extends EventParametersForm
          
          try
          {
-//         	System.out.println("Neo: "+ neoplasticCellularityPercentage);
-//         	// checks the neoplasticCellularityPercentage
+         	// checks the neoplasticCellularityPercentage
            	if (neoplasticCellularityPercentage <= 0  || Double.isNaN(neoplasticCellularityPercentage) )
             {
            		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("cellspecimenreviewparameters.neoplasticcellularitypercentage")));
             }
 
-//         	System.out.println("Via: "+ viableCellPercentage);
-//         	// checks the viableCellPercentage
+
+         	// checks the viableCellPercentage
            	if (viableCellPercentage <= 0  || Double.isNaN(viableCellPercentage) )
             {
            		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("cellspecimenreviewparameters.viablecellpercentage")));
@@ -133,5 +132,17 @@ public class CellSpecimenReviewParametersForm extends EventParametersForm
          return errors;
       }
 	
+     
+     /**
+      * Resets the values of all the fields.
+      * This method defined in ActionForm is overridden in this class.
+      */
+     public void reset(ActionMapping mapping, HttpServletRequest request)
+     {
+         reset();
+         this.neoplasticCellularityPercentage = 0.0;
+         this.viableCellPercentage =0.0;
+     }
+     
 	
 }

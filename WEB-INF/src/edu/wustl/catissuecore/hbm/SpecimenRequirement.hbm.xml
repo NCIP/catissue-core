@@ -108,7 +108,7 @@
             column="IDENTIFIER"
         />
         <property
-            name="quantityInMiliLiter"
+            name="quantityInMilliliter"
             type="double"
             update="true"
             insert="true"
@@ -127,20 +127,11 @@
             column="IDENTIFIER"
         />
         <property
-            name="quantityInMicroGram"
+            name="quantityInMicrogram"
             type="double"
             update="true"
             insert="true"
             column="QUANTITY_IN_MICRO_GRAM"
-            length="50"
-        />
-
-        <property
-            name="concentrationInMicroGramPerMicroLiter"
-            type="double"
-            update="true"
-            insert="true"
-            column="CONCENTRATION_IN_MICROGRAM_PER_MICROLITER"
             length="50"
         />
 

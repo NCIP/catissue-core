@@ -23,6 +23,6 @@ public class CheckInCheckOutEventParametersAction extends SpecimenEventParameter
 	protected void setRequestParameters(HttpServletRequest request)
 	{
 		super.setRequestParameters(request);
-	    // class specific code 
+
 	}
 }

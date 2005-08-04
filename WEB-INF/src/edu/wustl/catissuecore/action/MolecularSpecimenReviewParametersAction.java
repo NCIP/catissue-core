@@ -22,8 +22,6 @@ public class MolecularSpecimenReviewParametersAction extends SpecimenEventParame
 	protected void setRequestParameters(HttpServletRequest request)
 	{
 		super.setRequestParameters(request);
-		
-		// class specific code goes here.
-        
+	
 	}
 }

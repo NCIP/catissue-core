@@ -97,6 +97,16 @@ public class CheckInCheckOutEventParametersForm extends EventParametersForm
          return errors;
       }
 	
-	
+     /**
+      * Resets the values of all the fields.
+      * This method defined in ActionForm is overridden in this class.
+      */
+     public void reset(ActionMapping mapping, HttpServletRequest request)
+     {
+         reset();
+         this.storageStatus = null;
+     }
+     
+
 	
 }

@@ -22,6 +22,6 @@ public class ReceivedEventParametersAction extends SpecimenEventParametersAction
 	protected void setRequestParameters(HttpServletRequest request)
 	{
 		super.setRequestParameters(request);
-	    // class specific code 
+	
 	}
 }

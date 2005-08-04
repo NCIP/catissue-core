@@ -106,12 +106,14 @@
 			<td class="formRequiredLabel">
 				<label for="type">
 					<bean:message key="thawEventParameters.user"/> 
+				</label>	
+			</td>	
 		<td class="formField">
 				<html:select property="userId" styleClass="formFieldSized" styleId="userId" size="1">
-					<html:options name="<%=Constants.USERIDLIST%>" labelName="<%=Constants.USERLIST%>" />
+					<html:options collection="<%=Constants.USERLIST%>" labelProperty="name" property="value"/>
 				</html:select>
-			</td>		</label>
-			</td>
+			</td>	
+			
 					
 	
 			

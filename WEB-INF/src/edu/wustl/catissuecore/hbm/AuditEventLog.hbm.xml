@@ -51,7 +51,7 @@
         />
 
         <many-to-one
-            name="audit"
+            name="auditEvent"
             class="edu.wustl.catissuecore.domain.AuditEvent"
             cascade="none"
             outer-join="auto"

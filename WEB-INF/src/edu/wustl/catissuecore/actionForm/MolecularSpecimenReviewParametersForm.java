@@ -309,5 +309,23 @@ public class MolecularSpecimenReviewParametersForm extends EventParametersForm
          return errors;
       }
 	
+
+     /**
+      * Resets the values of all the fields.
+      * This method defined in ActionForm is overridden in this class.
+      */
+     public void reset(ActionMapping mapping, HttpServletRequest request)
+     {
+         reset();
+         this.gelImageURL = null;
+         this.qualityIndex = null;
+         this.laneNumber = null;
+         this.gelNumber = 0;
+         this.absorbanceAt260 = 0.0;
+         this.absorbanceAt280 = 0.0;
+         this.ratio28STo18S = 0.0;
+         
+     }
+     
 	
 }

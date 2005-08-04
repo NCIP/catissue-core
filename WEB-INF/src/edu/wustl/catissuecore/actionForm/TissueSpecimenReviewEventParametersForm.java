@@ -192,42 +192,41 @@ public class TissueSpecimenReviewEventParametersForm extends EventParametersForm
          
          try
          {
-         	System.out.println("NeoPlastic: "+ neoplasticCellularityPercentage);
+ 
 //         	// checks the neoplasticCellularityPercentage
            	if (neoplasticCellularityPercentage <= 0  || Double.isNaN(neoplasticCellularityPercentage) )
             {
            		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("tissuespecimenrevieweventparameters.neoplasticcellularitypercentage")));
             }
 
-         	System.out.println("neocri: "+ necrosisPercentage);
+ 
 //         	// checks the necrosisPercentage
            	if (necrosisPercentage <= 0  || Double.isNaN(necrosisPercentage) )
             {
            		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("tissuespecimenrevieweventparameters.necrosispercentage")));
             }
 
-         	System.out.println("lymp: "+ lymphocyticPercentage);
+ 
 //         	// checks the lymphocyticPercentage
            	if (lymphocyticPercentage <= 0  || Double.isNaN(lymphocyticPercentage) )
             {
            		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("tissuespecimenrevieweventparameters.lymphocyticpercentage")));
             }
 
-         	System.out.println("totalcp: "+ totalCellularityPercentage);
+ 
 //         	// checks the totalCellularityPercentage
            	if (totalCellularityPercentage <= 0  || Double.isNaN(totalCellularityPercentage) )
             {
            		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("tissuespecimenrevieweventparameters.totalcellularitypercentage")));
             }
 
-         	System.out.println("hq: "+ histologicalQuality);
+ 
 //         	// checks the histologicalQuality
            	if (validator.isEmpty(histologicalQuality)  || validator.isAlpha(histologicalQuality) )
             {
            		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("tissuespecimenrevieweventparameters.histologicalquality")));
             }
-
-         
+        
          }
          catch(Exception excp)
          {
@@ -235,6 +234,23 @@ public class TissueSpecimenReviewEventParametersForm extends EventParametersForm
          }
          return errors;
       }
-	
+
+
+     /**
+      * Resets the values of all the fields.
+      * This method defined in ActionForm is overridden in this class.
+      */
+     public void reset(ActionMapping mapping, HttpServletRequest request)
+     {
+         reset();
+         this.necrosisPercentage = 0.0;
+         this.neoplasticCellularityPercentage = 0.0;
+         this.lymphocyticPercentage = 0.0;
+         this.totalCellularityPercentage = 0.0;
+         this.histologicalQuality = null;
+         
+         
+     }
+     
 	
 }

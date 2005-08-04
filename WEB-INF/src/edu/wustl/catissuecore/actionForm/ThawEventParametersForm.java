@@ -11,6 +11,10 @@
 
 package edu.wustl.catissuecore.actionForm;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.struts.action.ActionMapping;
+
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.domain.ThawEventParameters;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -35,12 +39,15 @@ public class ThawEventParametersForm extends EventParametersForm
 	{
 		super.setAllValues(abstractDomain);
 		ThawEventParameters ThawEventParametersObject = (ThawEventParameters)abstractDomain ;
-				//test
-		/*System.out.println("\n\n\t\tDate IN fepform: "+ .getDateOfEvent());
-		form.getDateOfEvent();
-		form.getTimeInHours() ;
-		Integer.parseInt(form.getTimeInMinutes()) );*/
-
-		
 	}
+
+    /**
+     * Resets the values of all the fields.
+     * This method defined in ActionForm is overridden in this class.
+     */
+    public void reset(ActionMapping mapping, HttpServletRequest request)
+    {
+        reset();
+    }
+    
 }

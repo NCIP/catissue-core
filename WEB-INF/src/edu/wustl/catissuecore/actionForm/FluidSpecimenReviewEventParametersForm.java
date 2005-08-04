@@ -85,7 +85,7 @@ public class FluidSpecimenReviewEventParametersForm extends EventParametersForm
          
          try
          {
-         	System.out.println(cellCount);
+ 
 //         	// checks the cellCount
            	if (cellCount <= 0  || Double.isNaN(cellCount) )
             {
@@ -99,5 +99,16 @@ public class FluidSpecimenReviewEventParametersForm extends EventParametersForm
          return errors;
       }
 	
+     /**
+      * Resets the values of all the fields.
+      * This method defined in ActionForm is overridden in this class.
+      */
+     public void reset(ActionMapping mapping, HttpServletRequest request)
+     {
+         reset();
+         this.cellCount = 0.0;
+     }
+     
+
 	
 }
