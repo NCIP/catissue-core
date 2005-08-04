@@ -26,50 +26,25 @@ public class MolecularSpecimenRequirement extends SpecimenRequirement implements
 	/**
 	 * Amount of specimen required.
 	 */
-	protected Double quantityInMicroGram;
+	protected Double quantityInMicrogram;
 	
 	/**
-	 * Required concentration of molecular specimen.
-	 */
-	protected Double concentrationInMicroGramPerMicroLiter;
-
-	/**
 	 * Returns the quantity in Micro Gram.
-	 * @hibernate.property name="quantityInMicroGram" type="double"
+	 * @hibernate.property name="quantityInMicrogram" type="double"
 	 * column="QUANTITY_IN_MICRO_GRAM" length="50"
 	 * @return Returns the quantity in Micro Gram.
 	 */
-	public Double getQuantityInMicroGram()
+	public Double getQuantityInMicrogram()
 	{
-		return quantityInMicroGram;
+		return quantityInMicrogram;
 	}
 
 	/**
 	 * @param quantityInMicroGram
 	 * Quantity to set.
 	 */
-	public void setQuantityInMicroGram(Double quantityInMicroGram)
+	public void setQuantityInMicrogram(Double quantityInMicrogram)
 	{
-		this.quantityInMicroGram = quantityInMicroGram;
-	}
-
-	/**
-	 * Returns the concentration in Micro Gram per MicroLiter.
-	 * @hibernate.property name="concentrationInMicroGramPerMicroLiter" type="double"
-	 * column="CONCENTRATION_IN_MICROGRAM_PER_MICROLITER" length="50"
-	 * @return Returns the concentration in Micro Gram.
-	 */
-	public Double getConcentrationInMicroGramPerMicroLiter()
-	{
-		return concentrationInMicroGramPerMicroLiter;
-	}
-
-	/**
-	 * @param concentrationInMicroGramPerMicroLiter
-	 * Concentration to set.
-	 */
-	public void setConcentrationInMicroGramPerMicroLiter(Double concentrationInMicroGramPerMicroLiter)
-	{
-		this.concentrationInMicroGramPerMicroLiter = concentrationInMicroGramPerMicroLiter;
+		this.quantityInMicrogram = quantityInMicrogram;
 	}
 }

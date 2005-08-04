@@ -31,12 +31,12 @@ public class FluidSpecimen extends Specimen implements Serializable
      * Initial amount of specimen either 
      * directly collected from participant or created from another specimen.
      */
-    protected Double quantityInMiliLiter;
+    protected Double quantityInMilliliter;
 
     /**
      * Current available quantity of the specimen.
      */
-    protected Double availableQuantityInMiliLiter;
+    protected Double availableQuantityInMilliliter;
 
     public FluidSpecimen()
     {
@@ -52,15 +52,15 @@ public class FluidSpecimen extends Specimen implements Serializable
     /**
      * Returns the initial amount of specimen either 
      * directly collected from participant or created from another specimen.
-     * @hibernate.property name="quantityInMiliLiter" type="double" 
+     * @hibernate.property name="quantityInMilliliter" type="double" 
 	 * column="QUANTITY_IN_MILILITER" length="50"
      * @return the initial amount of specimen either 
      * directly collected from participant or created from another specimen.
      * @see #setQuantityInMiliLiter(Double)
      */
-    public Double getQuantityInMiliLiter()
+    public Double getQuantityInMilliliter()
     {
-        return quantityInMiliLiter;
+        return quantityInMilliliter;
     }
 
     /**
@@ -70,21 +70,21 @@ public class FluidSpecimen extends Specimen implements Serializable
      * directly collected from participant or created from another specimen.
      * @see #getQuantityInMiliLiter()
      */
-    public void setQuantityInMiliLiter(Double quantityInMiliLiter)
+    public void setQuantityInMilliliter(Double quantityInMilliliter)
     {
-        this.quantityInMiliLiter = quantityInMiliLiter;
+        this.quantityInMilliliter = quantityInMilliliter;
     }
 
     /**
      * Returns the current available quantity of the specimen.
-     * @hibernate.property name="availableQuantityInMiliLiter" type="double" 
+     * @hibernate.property name="availableQuantityInMilliliter" type="double" 
 	 * column="AVAILABLE_QUANTITY_IN_MILILITER" length="50"
      * @return the current available quantity of the specimen.
      * @see #setAvailableQuantityInMiliLiter(Double)
      */
-    public Double getAvailableQuantityInMiliLiter()
+    public Double getAvailableQuantityInMilliliter()
     {
-        return availableQuantityInMiliLiter;
+        return availableQuantityInMilliliter;
     }
 
     /**
@@ -92,9 +92,9 @@ public class FluidSpecimen extends Specimen implements Serializable
      * @param availableQuantityInMiliLiter the current available quantity of the specimen.
      * @see #getAvailableQuantityInMiliLiter()
      */
-    public void setAvailableQuantityInMiliLiter(Double availableQuantityInMiliLiter)
+    public void setAvailableQuantityInMilliliter(Double availableQuantityInMilliliter)
     {
-        this.availableQuantityInMiliLiter = availableQuantityInMiliLiter;
+        this.availableQuantityInMilliliter = availableQuantityInMilliliter;
     }
     
     /**
@@ -108,7 +108,7 @@ public class FluidSpecimen extends Specimen implements Serializable
         	super.setAllValues(abstractForm);
         	NewSpecimenForm form = (NewSpecimenForm) abstractForm;
         	
-        	this.quantityInMiliLiter = new Double(form.getQuantity());
+        	this.quantityInMilliliter = new Double(form.getQuantity());
         	//this.availableQuantityInMiliLiter =
         }
         catch (Exception excp)

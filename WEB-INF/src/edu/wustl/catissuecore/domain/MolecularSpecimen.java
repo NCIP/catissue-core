@@ -30,18 +30,18 @@ public class MolecularSpecimen extends Specimen implements Serializable
     /**
      * Concentration of liquid molecular specimen measured in microgram per microlitter.
      */
-    protected Double concentrationInMicrogramPerMicroLiter;
+    protected Double concentrationInMicrogramPerMicroliter;
 
     /**
      * Initial amount of specimen created from another specimen.
      */
-    protected Double quantityInMicroGram;
+    protected Double quantityInMicrogram;
 
     /**
      * Current available quantity of the specimen. 
      * Available mass of the molecular specimen in tissue bank.
      */
-    protected Double availableQuantityInMicroGram;
+    protected Double availableQuantityInMicrogram;
 
     public MolecularSpecimen()
 	{
@@ -57,16 +57,16 @@ public class MolecularSpecimen extends Specimen implements Serializable
     /**
      * Returns the concentration of liquid molecular specimen measured 
      * in microgram per microlitter.
-     * @hibernate.property name="concentrationInMicrogramPerMicroLiter" type="double" 
+     * @hibernate.property name="concentrationInMicrogramPerMicroliter" type="double" 
      * column="CONCENTRATION_IN_MICROGRAM_PER_MICROLITER" length="50"
      * @return the concentration of liquid molecular specimen measured 
      * in microgram per microlitter. 
      * directly collected from participant or created from another specimen.
      * @see #setConcentrationInMicrogramPerMicroLiter(Double)
      */
-    public Double getConcentrationInMicrogramPerMicroLiter()
+    public Double getConcentrationInMicrogramPerMicroliter()
     {
-        return concentrationInMicrogramPerMicroLiter;
+        return concentrationInMicrogramPerMicroliter;
     }
 
     /**
@@ -76,21 +76,21 @@ public class MolecularSpecimen extends Specimen implements Serializable
      * liquid molecular specimen measuredin microgram per microlitter.
      * @see #getConcentrationInMicrogramPerMicroLiter()
      */
-    public void setConcentrationInMicrogramPerMicroLiter(Double concentrationInMicrogramPerMicroLiter)
+    public void setConcentrationInMicrogramPerMicroliter(Double concentrationInMicrogramPerMicroliter)
     {
-        this.concentrationInMicrogramPerMicroLiter = concentrationInMicrogramPerMicroLiter;
+        this.concentrationInMicrogramPerMicroliter = concentrationInMicrogramPerMicroliter;
     }
 
     /**
      * Returns the initial amount of specimen created from another specimen.
-     * @hibernate.property name="quantityInMicroGram" type="double" 
+     * @hibernate.property name="quantityInMicrogram" type="double" 
      * column="QUANTITY_IN_MICROGRAM" length="50"
      * @return the initial amount of specimen created from another specimen.
      * @see #setQuantityInMicroGram(Double)
      */
-    public Double getQuantityInMicroGram()
+    public Double getQuantityInMicrogram()
     {
-        return quantityInMicroGram;
+        return quantityInMicrogram;
     }
 
     /**
@@ -98,22 +98,22 @@ public class MolecularSpecimen extends Specimen implements Serializable
      * @param quantityInMicroGram the initial amount of specimen created from another specimen.
      * @see #getQuantityInMicroGram()
      */
-    public void setQuantityInMicroGram(Double quantityInMicroGram)
+    public void setQuantityInMicrogram(Double quantityInMicrogram)
     {
-        this.quantityInMicroGram = quantityInMicroGram;
+        this.quantityInMicrogram = quantityInMicrogram;
     }
 
     /**
      * Returns the current available quantity of the specimen. 
      * Available mass of the molecular specimen in tissue bank.
-     * @hibernate.property name="availableQuantityInMicroGram" type="double" 
+     * @hibernate.property name="availableQuantityInMicrogram" type="double" 
      * column="AVAILABLE_QUANTITY_IN_MICROGRAM" length="50"
      * @return the current available quantity of the specimen.
      * @see #setAvailableQuantityInMicroGram(Double)
      */
-    public Double getAvailableQuantityInMicroGram()
+    public Double getAvailableQuantityInMicrogram()
     {
-        return availableQuantityInMicroGram;
+        return availableQuantityInMicrogram;
     }
 
     /**
@@ -123,9 +123,9 @@ public class MolecularSpecimen extends Specimen implements Serializable
      * mass of the molecular specimen in tissue bank. 
      * @see #getAvailableQuantityInMicroGram()
      */
-    public void setAvailableQuantityInMicroGram(Double availableQuantityInMicroGram)
+    public void setAvailableQuantityInMicrogram(Double availableQuantityInMicrogram)
     {
-        this.availableQuantityInMicroGram = availableQuantityInMicroGram;
+        this.availableQuantityInMicrogram = availableQuantityInMicrogram;
     }
     
     /**
@@ -139,7 +139,7 @@ public class MolecularSpecimen extends Specimen implements Serializable
         	super.setAllValues(abstractForm);
         	NewSpecimenForm form = (NewSpecimenForm) abstractForm;
         	
-        	this.quantityInMicroGram = new Double(form.getQuantity());
+        	this.quantityInMicrogram = new Double(form.getQuantity());
         	//this.availableQuantityInMicroGram=
         }
         catch (Exception excp)

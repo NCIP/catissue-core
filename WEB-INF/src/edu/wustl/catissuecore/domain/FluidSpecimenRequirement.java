@@ -23,25 +23,25 @@ public class FluidSpecimenRequirement extends SpecimenRequirement implements jav
 	/**
 	 * Amount of fluid specimen required.
 	 */
-	protected Double quantityInMiliLiter;
+	protected Double quantityInMilliliter;
 
 	/**
 	 * Returns the quantity In MiliLiter.
-	 * @hibernate.property name="quantityInMiliLiter" type="double"
+	 * @hibernate.property name="quantityInMilliliter" type="double"
 	 * column="QUANTITY_IN_MILILITER" length="50"
 	 * @return Returns the quantity In MiliLiter.
 	 */
-	public Double getQuantityInMiliLiter()
+	public Double getQuantityInMilliliter()
 	{
-		return quantityInMiliLiter;
+		return quantityInMilliliter;
 	}
 
 	/**
 	 * @param quantityInMiliLiter
 	 * Quantity to set.
 	 */
-	public void setQuantityInMiliLiter(Double quantityInMiliLiter)
+	public void setQuantityInMilliliter(Double quantityInMiliLiter)
 	{
-		this.quantityInMiliLiter = quantityInMiliLiter;
+		this.quantityInMilliliter = quantityInMiliLiter;
 	}
 }
