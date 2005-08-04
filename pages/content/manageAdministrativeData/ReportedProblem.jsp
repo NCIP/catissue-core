@@ -117,6 +117,7 @@
 					</td>
 				</tr>
 				
+				<logic:notEmpty name="showDomainObjectList">
 				<tr>
 					<td align="right" class="actionSection">
 					<!-- action buttons begins -->
@@ -145,6 +146,7 @@
 					<!-- action buttons end -->
 					</td>
 				</tr>
+				</logic:notEmpty>
 			</html:form>
 		</table>
 		</td>
