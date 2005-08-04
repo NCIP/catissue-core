@@ -15,8 +15,8 @@ public class AuditEventLog implements java.io.Serializable
 	protected Long objectIdentifier;
 	protected String ObjectName;
 	protected String eventType;
-	private AuditEvent audit;
-	private Collection auditEventDetailsCollcetion = new HashSet();
+	protected AuditEvent auditEvent;
+	protected Collection auditEventDetailsCollcetion = new HashSet();
 
 	/**
      * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"
@@ -78,14 +78,14 @@ public class AuditEventLog implements java.io.Serializable
      * @hibernate.many-to-one column="AUDIT_EVENT_ID"  class="edu.wustl.catissuecore.domain.AuditEvent" constrained="true"
 	 * @see #setParticipant(Site)
      */
-	public AuditEvent getAudit()
+	public AuditEvent getAuditEvent()
 	{
-		return audit;
+		return auditEvent;
 	}
 
-	public void setAudit(edu.wustl.catissuecore.domain.AuditEvent audit)
+	public void setAuditEvent(edu.wustl.catissuecore.domain.AuditEvent auditEvent)
 	{
-		this.audit = audit;
+		this.auditEvent = auditEvent;
 	}
 
 	/**
