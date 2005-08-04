@@ -59,46 +59,46 @@ public class StorageContainer extends AbstractDomainObject implements java.io.Se
 	/**
 	 * Type of the storage container e.g. Freezer, Box etc.
 	 */
-	private StorageType storageType;
+	protected StorageType storageType;
 	
 	/**
 	 * A physical location of storage container
 	 */
-	private Site site;
+	protected Site site;
 	
 	/**
 	 * Parent container of this container.
 	 */
-	private StorageContainer parentContainer = null;
+	protected StorageContainer parentContainer = null;
 	
 	/**
 	 * A collection of storage container details
 	 */
-	private Collection storageContainerDetailsCollection = new HashSet();
+	protected Collection storageContainerDetailsCollection = new HashSet();
 	
 	/**
 	 * A capacity of storage container
 	 */
-	private StorageContainerCapacity storageContainerCapacity = new StorageContainerCapacity();
+	protected StorageContainerCapacity storageContainerCapacity = new StorageContainerCapacity();
 	
 	/**
 	 * A collection of sub containers under this container
 	 */
-	private Collection childrenContainerCollection = new HashSet();
+	protected Collection childrenContainerCollection = new HashSet();
 	
 	/**
 	 * Number of containers
 	 */
-	private transient Integer noOfContainers;
+	protected transient Integer noOfContainers;
 	
 	/**
 	 * Number of containers
 	 */
-	private transient Integer startNo;
+	protected transient Integer startNo;
 	
-    private Integer positionDimensionOne;
+	protected Integer positionDimensionOne;
 
-    private Integer positionDimensionTwo;
+	protected Integer positionDimensionTwo;
 
 	//Default Constructor
 	public StorageContainer()

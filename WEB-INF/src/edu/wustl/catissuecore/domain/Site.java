@@ -39,18 +39,18 @@ public class Site extends AbstractDomainObject implements java.io.Serializable
 	/**
      * EmailAddress Address of the site.
      */
-    private String emailAddress;
-	
-	/**
-     * The User who currently coordinates operations at the Site.
-     */
-	protected User coordinator = new User();
+	protected String emailAddress;
 	
 	/**
      * Defines whether this Site record can be queried (Active) or not queried (Inactive) by any actor.
      */
 	protected String activityStatus;
 	
+	/**
+     * The User who currently coordinates operations at the Site.
+     */
+	protected User coordinator = new User();
+
 	/**
      * The address of the site.
      */

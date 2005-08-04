@@ -46,13 +46,13 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
     /**
      * An individual from whom a specimen is to be collected.
      */
-    private Participant participant = null;
+    protected Participant participant = null;
 
     /**
      * A set of written procedures that describe how a 
      * biospecimen is prospectively collected.
      */
-    private CollectionProtocol collectionProtocol=new CollectionProtocol();
+    protected CollectionProtocol collectionProtocol = new CollectionProtocol();
 
 	public CollectionProtocolRegistration()
 	{
