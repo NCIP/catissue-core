@@ -84,7 +84,7 @@ public class ReceivedEventParametersForm extends EventParametersForm
          
          try
          {
-         	// checks the storageStatus
+         	// checks the receivedQuality
 
            	if ( validator.isEmpty( receivedQuality ))
             {

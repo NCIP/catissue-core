@@ -1,8 +1,12 @@
-/*
- * Created on Jul 29, 2005
- *
- * TODO To change the template for this generated file go to
- * Window - Preferences - Java - Code Style - Code Templates
+/**
+ * <p>Title: CheckInCheckOutEventParametersForm Class</p>
+ * <p>Description:  This Class handles the CheckIn CheckOut Event Parameters. 
+ * <p> It extends the EventParametersForm class.    
+ * Copyright:    Copyright (c) 2005
+ * Company: Washington University, School of Medicine, St. Louis.
+ * @author Mandar Deshmukh
+ * @version 1.00
+ * Created on July 28th, 2005
  */
 package edu.wustl.catissuecore.actionForm;
 
@@ -19,13 +23,9 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
-
 /**
- * @author mandar_deshmukh
- *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Style - Code Templates
- */
+* This Class handles the CheckIn CheckOut Event Parameters.
+*/
 public class CheckInCheckOutEventParametersForm extends EventParametersForm
 {
 	/**

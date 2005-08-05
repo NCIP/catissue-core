@@ -9,6 +9,10 @@
 
 package edu.wustl.catissuecore.domain;
 
+import edu.wustl.catissuecore.actionForm.AbstractActionForm;
+import edu.wustl.catissuecore.actionForm.CollectionEventParametersForm;
+import edu.wustl.common.util.logger.Logger;
+
 /**
  * Attributes associated with the collection event of a specimen from participant.
  * @hibernate.joined-subclass table="CATISSUE_COLLECTION_EVENT_PARAMETERS"
@@ -66,4 +70,44 @@ public class CollectionEventParameters extends SpecimenEventParameters
 	{
 		this.container = container;
 	}
+	
+	/**
+	 * NOTE: Do not delete this constructor. Hibernet uses this by reflection API.
+	 * */
+	public CollectionEventParameters()
+	{
+		
+	}
+
+	/**
+	 *  Parameterised constructor 
+	 * @param abstractForm
+	 */
+	public CollectionEventParameters(AbstractActionForm abstractForm)
+	{
+		setAllValues(abstractForm);
+	}
+	
+	/**
+     * This function Copies the data from an CollectionEventParameters object.
+     * @param CollectionEventParametersForm An CollectionEventParametersForm object containing the information about the CollectionEventParameters.  
+     * */
+    public void setAllValues(AbstractActionForm abstractForm)
+    {
+        try
+        {
+        	CollectionEventParametersForm form = (CollectionEventParametersForm) abstractForm;
+        	this.container = form.getContainer();
+        	this.collectionProcedure = form.getCollectionProcedure() ;
+        	
+        	super.setAllValues(form);
+        }
+        catch (Exception excp)
+        {
+            Logger.out.error(excp.getMessage());
+        }
+    }
+	
+		
+	
 }

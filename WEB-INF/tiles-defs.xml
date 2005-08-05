@@ -382,6 +382,20 @@
 		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>
 	<!-- MolecularSpecimenReviewParameters end -->
+	
+	<!-- collectionEventParameters -->
+	<definition name=".catissuecore.collectionEventParametersDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/CollectionEventParameters.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.collectionEventParametersAddSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/common/success.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.collectionEventParametersEditSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/common/success.jsp" />
+	</definition>
+	<!-- collectionEventParameters end -->
 
 	<!-- BioSpecimen tab pages definitions end -->
 
