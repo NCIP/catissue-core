@@ -127,7 +127,8 @@ public class Constants
 	public static final String PROCEDUREIDLIST = "procedureIdList";
 	public static final String CONTAINERLIST = "containerList";
 	public static final String CONTAINERIDLIST = "containerIdList";
-	
+	public static final String FROMCONTAINERLIST="fromContainerList";
+	public static final String TOCONTAINERLIST="toContainerList";
 	
 			
 	//Constants required in User.jsp Page
@@ -258,7 +259,11 @@ public class Constants
 	public static final String COLLECTION_EVENT_PARAMETERS_ADD_ACTION = "CollectionEventParametersAdd.do";
 	public static final String COLLECTION_EVENT_PARAMETERS_EDIT_ACTION = "CollectionEventParametersEdit.do";
 	
-	
+//	Constants required in TransferEventParameters.jsp Page
+	public static final String TRANSFER_EVENT_PARAMETERS_SEARCH_ACTION = "TransferEventParametersSearch.do";
+	public static final String TRANSFER_EVENT_PARAMETERS_ADD_ACTION = "TransferEventParametersAdd.do";
+	public static final String TRANSFER_EVENT_PARAMETERS_EDIT_ACTION = "TransferEventParametersEdit.do";
+		
 	//Levels of nodes in query results tree.
 	public static final int MAX_LEVEL = 5;
 	public static final int MIN_LEVEL = 1;
@@ -340,6 +345,7 @@ public class Constants
 	public static final int THAW_EVENT_PARAMETERS_FORM_ID = 26;
 	public static final int MOLECULAR_SPECIMEN_REVIEW_PARAMETERS_FORM_ID = 27;
 	public static final int COLLECTION_EVENT_PARAMETERS_FORM_ID = 28;
+	public static final int TRANSFER_EVENT_PARAMETERS_FORM_ID = 29;
 	//Misc
 	public static final String SEPARATOR = " : ";
 	//Status message key Constants
