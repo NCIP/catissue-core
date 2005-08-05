@@ -34,6 +34,7 @@ PUBLIC
 		<form-bean name="ThawEventParametersForm" type="edu.wustl.catissuecore.actionForm.ThawEventParametersForm"/>
 		<form-bean name="molecularSpecimenReviewParametersForm" type="edu.wustl.catissuecore.actionForm.MolecularSpecimenReviewParametersForm"/>
 		<form-bean name="collectionEventParametersForm" type="edu.wustl.catissuecore.actionForm.CollectionEventParametersForm"/>
+		<form-bean name="transferEventParametersForm" type="edu.wustl.catissuecore.actionForm.TransferEventParametersForm"/>
 	</form-beans>
 	
 	<!-- Global Exception Definitions -->
@@ -1135,6 +1136,45 @@ PUBLIC
 			<forward name="failure" path="/CollectionEventParameters.do?operation=edit"/>
 		</action>    
 		<!-- CollectionEventParameters Actions Ends -->
+		
+		<!-- TransferEventParameters Actions Begins -->
+        <action path="/TransferEventParameters"
+			type="edu.wustl.catissuecore.action.TransferEventParametersAction"
+			scope="request">
+			<forward name="success" path=".catissuecore.transferEventParametersDef" />
+			<forward name="failure" path=".catissuecore.transferEventParametersDef" />
+		</action>
+		
+		<action path="/TransferEventParametersAdd"
+			type="edu.wustl.catissuecore.action.CommonAddEditAction"
+			name="transferEventParametersForm"
+			validate="true"
+			input="/TransferEventParameters.do?operation=add"
+			scope="request">
+			<forward name="success" path=".catissuecore.transferEventParametersAddSuccessDef" />
+			<forward name="failure" path="/error.jsp" />
+		</action>
+		
+		<action path="/TransferEventParametersEdit"
+			type="edu.wustl.catissuecore.action.CommonAddEditAction"
+			name="transferEventParametersForm"
+			validate="true"
+			input="/TransferEventParameters.do?operation=edit"
+			scope="request">
+			<forward name="success" path=".catissuecore.transferEventParametersEditSuccessDef" />
+			<forward name="failure" path="/error.jsp" />
+		</action>
+		
+		<action path="/TransferEventParametersSearch"
+		    type="edu.wustl.catissuecore.action.CommonSearchAction"
+			name="transferEventParametersForm"
+			validate="true"
+			input="/TransferEventParameters.do?operation=edit"
+			scope="request">
+			<forward name="success" path="/TransferEventParameters.do?operation=edit"/>
+			<forward name="failure" path="/TransferEventParameters.do?operation=edit"/>
+		</action>    
+		<!-- TransferEventParameters Actions Ends -->
 		
 		<!--Query Result View Actions Begin-->
 		<action path="/ShowFramedPage"

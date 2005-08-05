@@ -9,6 +9,10 @@
 
 package edu.wustl.catissuecore.domain;
 
+import edu.wustl.catissuecore.actionForm.AbstractActionForm;
+import edu.wustl.catissuecore.actionForm.TransferEventParametersForm;
+import edu.wustl.common.util.logger.Logger;
+
 /**
  * Attributes associated with moving specimen from one storage location to another.
  * @hibernate.joined-subclass table="CATISSUE_TRANSFER_EVENT_PARAMETER"
@@ -173,4 +177,55 @@ public class TransferEventParameters extends SpecimenEventParameters implements 
 		this.fromStorageContainer = fromStorageContainer;
 	}
 
+	
+	/**
+	 * NOTE: Do not delete this constructor. Hibernet uses this by reflection API.
+	 * */
+	public TransferEventParameters()
+	{
+		
+	}
+
+	/**
+	 *  Parameterised constructor 
+	 * @param abstractForm
+	 */
+	public TransferEventParameters(AbstractActionForm abstractForm)
+	{
+		setAllValues(abstractForm);
+	}
+	
+	/**
+     * This function Copies the data from an TransferEventParametersForm object to a TransferEventParameters object.
+     * @param TransferEventParametersForm An TransferEventParametersForm object containing the information about the TransferEventParameters.  
+     * */
+    public void setAllValues(AbstractActionForm abstractForm)
+    {
+        try
+        {
+        	TransferEventParametersForm form = (TransferEventParametersForm) abstractForm;
+        	this.fromPositionDimensionOne = new Integer(form.getFromPositionDimensionOne());
+        	this.fromPositionDimensionTwo = new Integer(form.getFromPositionDimensionTwo());
+        	this.toPositionDimensionOne = new Integer(form.getToPositionDimensionOne());
+        	this.toPositionDimensionTwo = new Integer(form.getToPositionDimensionTwo());
+        	
+			StorageContainer fromObj = new StorageContainer(); 
+        	fromObj.setSystemIdentifier(new Long(form.getFromStorageContainerId()));
+        	this.fromStorageContainer = fromObj;
+
+			StorageContainer toObj = new StorageContainer(); 
+        	toObj.setSystemIdentifier(new Long(form.getToStorageContainerId()));
+        	this.toStorageContainer = toObj;
+        	
+        	super.setAllValues(form);
+        }
+        catch (Exception excp)
+        {
+            Logger.out.error(excp.getMessage());
+        }
+    }
+	
+		
+	
+	
 }

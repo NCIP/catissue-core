@@ -27,6 +27,7 @@ import edu.wustl.catissuecore.domain.FluidSpecimenReviewEventParameters;
 import edu.wustl.catissuecore.domain.TissueSpecimenReviewEventParameters;
 import edu.wustl.catissuecore.domain.CellSpecimenReviewParameters;
 import edu.wustl.catissuecore.domain.MolecularSpecimenReviewParameters;
+import edu.wustl.catissuecore.domain.TransferEventParameters;
 import edu.wustl.catissuecore.domain.FrozenEventParameters;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CheckInCheckOutEventParameter;
@@ -157,7 +158,11 @@ public class DomainObjectFactory
             	
 			 case Constants.COLLECTION_EVENT_PARAMETERS_FORM_ID :
             	abstractDomain = new CollectionEventParameters(form);            	
-            	break;			   
+            	break;
+            	
+			 case Constants.TRANSFER_EVENT_PARAMETERS_FORM_ID:
+            	abstractDomain = new TransferEventParameters(form);            	
+            	break;
         }
         return abstractDomain;
     }

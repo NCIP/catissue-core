@@ -396,6 +396,20 @@
 		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>
 	<!-- collectionEventParameters end -->
+	
+	<!-- TransferEventParameters -->
+	<definition name=".catissuecore.transferEventParametersDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/TransferEventParameters.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.transferEventParametersAddSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/common/success.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.transferEventParametersEditSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/common/success.jsp" />
+	</definition>
+	<!-- transferEventParameters end -->
 
 	<!-- BioSpecimen tab pages definitions end -->
 
