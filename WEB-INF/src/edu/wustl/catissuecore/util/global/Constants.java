@@ -123,6 +123,7 @@ public class Constants
 	public static final String METHODLIST = "methodList";
 	public static final String HOURLIST = "hourList";
 	public static final String MINUTESLIST = "minutesList";
+	public static final String EMBEDDINGMEDIUMLIST = "embeddingMediumList";
 	public static final String PROCEDURELIST = "procedureList";
 	public static final String PROCEDUREIDLIST = "procedureIdList";
 	public static final String CONTAINERLIST = "containerList";
@@ -259,11 +260,21 @@ public class Constants
 	public static final String COLLECTION_EVENT_PARAMETERS_ADD_ACTION = "CollectionEventParametersAdd.do";
 	public static final String COLLECTION_EVENT_PARAMETERS_EDIT_ACTION = "CollectionEventParametersEdit.do";
 	
-//	Constants required in TransferEventParameters.jsp Page
+	//	Constants required in SpunEventParameters.jsp Page
+	public static final String SPUN_EVENT_PARAMETERS_SEARCH_ACTION = "SpunEventParametersSearch.do";
+	public static final String SPUN_EVENT_PARAMETERS_ADD_ACTION = "SpunEventParametersAdd.do";
+	public static final String SPUN_EVENT_PARAMETERS_EDIT_ACTION = "SpunEventParametersEdit.do";
+	
+	//	Constants required in SpunEventParameters.jsp Page
+	public static final String EMBEDDED_EVENT_PARAMETERS_SEARCH_ACTION = "EmbeddedEventParametersSearch.do";
+	public static final String EMBEDDED_EVENT_PARAMETERS_ADD_ACTION = "EmbeddedEventParametersAdd.do";
+	public static final String EMBEDDED_EVENT_PARAMETERS_EDIT_ACTION = "EmbeddedEventParametersEdit.do";
+	
+	//	Constants required in TransferEventParameters.jsp Page
 	public static final String TRANSFER_EVENT_PARAMETERS_SEARCH_ACTION = "TransferEventParametersSearch.do";
 	public static final String TRANSFER_EVENT_PARAMETERS_ADD_ACTION = "TransferEventParametersAdd.do";
 	public static final String TRANSFER_EVENT_PARAMETERS_EDIT_ACTION = "TransferEventParametersEdit.do";
-		
+	
 	//Levels of nodes in query results tree.
 	public static final int MAX_LEVEL = 5;
 	public static final int MIN_LEVEL = 1;
@@ -348,6 +359,11 @@ public class Constants
 	public static final int TRANSFER_EVENT_PARAMETERS_FORM_ID = 29;
 	//Misc
 	public static final String SEPARATOR = " : ";
+	
+	public static final int SPUN_EVENT_PARAMETERS_FORM_ID = 30;
+	public static final int EMBEDDED_EVENT_PARAMETERS_FORM_ID = 31;
+	
+		
 	//Status message key Constants
 	public static final String STATUS_MESSAGE_KEY = "statusMessageKey";
 	
@@ -975,6 +991,13 @@ public class Constants
 			"Dry Ice",
 			"Iso pentane"
 	};
+	
+	public static final String [] EMBEDDINGMEDIUMARRAY = {
+				SELECT_OPTION,
+				"Plastic",
+				"Glass",
+				
+		};
 	
 	public static final String UNIT_GM = "gm";
 	public static final String UNIT_ML = "ml";
