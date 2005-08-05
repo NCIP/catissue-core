@@ -11,9 +11,18 @@
 
 package edu.wustl.catissuecore.actionForm;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMapping;
+
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.domain.DisposalEventParameters;
+import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Validator;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * @author Jyoti_Singh
@@ -57,15 +66,43 @@ public class DisposalEventParametersForm extends EventParametersForm
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
 		super.setAllValues(abstractDomain);
-		DisposalEventParameters DisposalEventParametersObject = (DisposalEventParameters)abstractDomain ;
-		this.reason = DisposalEventParametersObject.getReason();
-		
-		//test
-		/*System.out.println("\n\n\t\tDate IN fepform: "+ .getDateOfEvent());
-		form.getDateOfEvent();
-		form.getTimeInHours() ;
-		Integer.parseInt(form.getTimeInMinutes()) );*/
-
-		
+		DisposalEventParameters disposalEventParametersObject = (DisposalEventParameters)abstractDomain ;
+		this.reason = disposalEventParametersObject.getReason();
 	}
+	
+	/**
+     * Overrides the validate method of ActionForm.
+     * */
+     public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
+     {
+     	ActionErrors errors = super.validate(mapping, request);
+         Validator validator = new Validator();
+         
+         try
+         {
+ 
+         	// checks the reason
+           	if (validator.isEmpty(reason ) )
+            {
+           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("disposaleventparameters.reason")));
+            }
+         }
+         catch(Exception excp)
+         {
+             Logger.out.error(excp.getMessage());
+         }
+         return errors;
+      }
+	
+     /**
+      * Resets the values of all the fields.
+      * This method defined in ActionForm is overridden in this class.
+      */
+     public void reset(ActionMapping mapping, HttpServletRequest request)
+     {
+         reset();
+         this.reason = null;
+     }
+     
+	
 }

@@ -60,6 +60,8 @@ public class BizLogicFactory
          	case Constants.RECEIVED_EVENT_PARAMETERS_FORM_ID:
          	case Constants.COLLECTION_EVENT_PARAMETERS_FORM_ID:
          	case Constants.TRANSFER_EVENT_PARAMETERS_FORM_ID:
+         	case Constants.THAW_EVENT_PARAMETERS_FORM_ID:
+         	case Constants.DISPOSAL_EVENT_PARAMETERS_FORM_ID:
           		abstractBizLogic = new SpecimenEventParametersBizLogic();
         		break;		
         		

@@ -9,6 +9,10 @@
 
 package edu.wustl.catissuecore.domain;
 
+import edu.wustl.catissuecore.actionForm.AbstractActionForm;
+import edu.wustl.catissuecore.actionForm.DisposalEventParametersForm;
+import edu.wustl.common.util.logger.Logger;
+
 /**
  * Attributes related to disposal event of a specimen.
  * @hibernate.joined-subclass table="CATISSUE_DISPOSAL_EVENT_PARAMETERS"
@@ -43,4 +47,41 @@ public class DisposalEventParameters extends SpecimenEventParameters
 	{
 		this.reason = reason;
 	}
+	
+
+	/**
+	 * NOTE: Do not delete this constructor. Hibernet uses this by reflection API.
+	 * */
+	public DisposalEventParameters()
+	{
+		
+	}
+
+	/**
+	 *  Parameterised constructor 
+	 * @param abstractForm
+	 */
+	public DisposalEventParameters(AbstractActionForm abstractForm)
+	{
+		setAllValues(abstractForm);
+	}
+	
+	/**
+     * This function Copies the data from an DisposalEventParametersForm object to a DisposalEventParameters object.
+     * @param DisposalEventParametersForm An DisposalEventParametersForm object containing the information about the DisposalEventParameters.  
+     * */
+    public void setAllValues(AbstractActionForm abstractForm)
+    {
+        try
+        {
+        	DisposalEventParametersForm form = (DisposalEventParametersForm) abstractForm;
+        	this.reason = form.getReason(); 
+        	super.setAllValues(form);
+        }
+        catch (Exception excp)
+        {
+            Logger.out.error(excp.getMessage());
+        }
+    }
+	
 }

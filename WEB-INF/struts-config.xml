@@ -985,7 +985,7 @@ PUBLIC
 
 	<!-- DisposalEventParameters Actions Begins -->
         <action path="/DisposalEventParameters"
-			type="edu.wustl.catissuecore.action.DisposalEventParametersAction"
+			type="edu.wustl.catissuecore.action.SpecimenEventParametersAction"
 			scope="request">
 			<forward name="success" path=".catissuecore.disposalEventParametersDef" />
 			<forward name="failure" path=".catissuecore.disposalEventParametersDef" />

@@ -105,16 +105,14 @@
 			<td class="formRequiredNotice" width="5">*</td>
 			<td class="formRequiredLabel">
 				<label for="type">
-					<bean:message key="disposaleventparameters.user"/> 
-		<td class="formField">
-				<html:select property="userId" styleClass="formFieldSized" styleId="userId" size="1">
-					<html:options name="<%=Constants.USERIDLIST%>" labelName="<%=Constants.USERLIST%>" />
-				</html:select>
-			</td>		</label>
+					<bean:message key="eventparameters.user"/> 
+				</label>
 			</td>
-					
-	
-			
+			<td class="formField">
+				<html:select property="userId" styleClass="formFieldSized" styleId="userId" size="1">
+					<html:options collection="<%=Constants.USERLIST%>" labelProperty="name" property="value"/>
+				</html:select>
+			</td>
 		</tr>
 
 <!-- date -->		
