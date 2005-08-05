@@ -453,6 +453,20 @@
 	</definition>
 	<!-- fixedEventParameters end -->
 
+	<!-- procedureEventParameters -->
+	<definition name=".catissuecore.procedureEventParametersDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/ProcedureEventParameters.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.procedureEventParametersAddSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/common/success.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.procedureEventParametersEditSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/common/success.jsp" />
+	</definition>
+	<!-- procedureEventParameters end -->
+
 	<!-- BioSpecimen tab pages definitions end -->
 
 	<!-- Search tab pages definitions start -->

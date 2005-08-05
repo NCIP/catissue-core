@@ -9,6 +9,10 @@
 
 package edu.wustl.catissuecore.domain;
 
+import edu.wustl.catissuecore.actionForm.AbstractActionForm;
+import edu.wustl.catissuecore.actionForm.ProcedureEventParametersForm;
+import edu.wustl.common.util.logger.Logger;
+
 /**
  * Attributes associated with a customized procedure that is applied on a specimen to process it.
  * @hibernate.joined-subclass table="CATISSUE_PROCEDURE_EVENT_PARAMETERS"
@@ -68,4 +72,47 @@ public class ProcedureEventParameters extends SpecimenEventParameters
 	{
 		this.name = name;
 	}
+	
+	
+	/**
+	 * NOTE: Do not delete this constructor. Hibernet uses this by reflection API.
+	 * */
+	public ProcedureEventParameters()
+	{
+		
+	}
+
+	/**
+	 *  Parameterised constructor 
+	 * @param abstractForm
+	 */
+	public ProcedureEventParameters(AbstractActionForm abstractForm)
+	{
+		setAllValues(abstractForm);
+	}
+	
+	/**
+     * This function Copies the data from an ProcedureEventParametersForm object to a ProcedureEventParameters object.
+     * @param ProcedureEventParametersForm An ProcedureEventParametersForm object containing the information about the ProcedureEventParameters.  
+     * */
+    public void setAllValues(AbstractActionForm abstractForm)
+    {
+        try
+        {
+        	ProcedureEventParametersForm form = (ProcedureEventParametersForm) abstractForm;
+        	
+        	this.url = form.getUrl();
+        	this.name = form.getName();
+        	
+        	super.setAllValues(form);
+        }
+        catch (Exception excp)
+        {
+            Logger.out.error(excp.getMessage());
+        }
+    }
+	
+		
+	
+	
 }

@@ -126,7 +126,7 @@
 			<td class="formField">
 				 <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
 					<html:text styleClass="formDateSized" size="35" styleId="dateOfEvent" property="dateOfEvent" readonly="true"/>
-						<a href="javascript:show_calendar('ProcedureEventParametersForm.dateOfEvent','','','MM-DD-YYYY');">
+						<a href="javascript:show_calendar('procedureEventParametersForm.dateOfEvent','','','MM-DD-YYYY');">
 							<img src="images\calendar.gif" width=24 height=22 border=0>
 						</a>
 			</td>
@@ -171,7 +171,7 @@
 			<td class="formRequiredNotice" width="5">*</td>
 			<td class="formRequiredLabel">
 				<label for="type">
-					<bean:message key="procedureeventparameters.name"/> 
+					<bean:message key="procedureeventparameters.entername"/> 
 				</label>
 			</td>
 			<td class="formField">

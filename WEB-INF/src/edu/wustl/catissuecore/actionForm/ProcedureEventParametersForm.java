@@ -1,6 +1,6 @@
 /**
- * <p>Title: DisposalEventParametersForm Class</p>
- * <p>Description:  This Class handles the disposal event parameters..
+ * <p>Title: ProcedureEventParametersForm Class</p>
+ * <p>Description:  This Class handles the Procedure event parameters..
  * <p> It extends the EventParametersForm class.    
  * Copyright:    Copyright (c) 2005
  * Company: Washington University, School of Medicine, St. Louis.
@@ -27,7 +27,7 @@ import edu.wustl.common.util.logger.Logger;
 /**
  * @author Jyoti_Singh
  *
- * Description:  This Class handles the Disposal event parameters..
+ * Description:  This Class handles the Procedure event parameters..
  */
 public class ProcedureEventParametersForm extends EventParametersForm {
 	
@@ -62,23 +62,6 @@ public class ProcedureEventParametersForm extends EventParametersForm {
 			this.url = url;
 		}
 		
-//	public String getUrl() {
-//		return url;
-//	}
-//	public String getName() {
-//			return name;
-//		}
-//
-//
-//	/**
-//	 * @param reason The reason to set.
-//	 */
-//	public void setUrl(String url) {
-//		this.reason = url;
-//	}
-//	public void setName(String name) {
-//		this.reason = name;
-//	}
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#getFormId()
 	 */
@@ -91,8 +74,7 @@ public class ProcedureEventParametersForm extends EventParametersForm {
 	 */
 	public void setAllValues(AbstractDomainObject abstractDomain) {
 	super.setAllValues(abstractDomain);
-	ProcedureEventParameters procedureEventParametersObject =
-	(ProcedureEventParameters) abstractDomain;
+	ProcedureEventParameters procedureEventParametersObject = (ProcedureEventParameters) abstractDomain;
 	this.url = procedureEventParametersObject.getUrl();
 	this.name = procedureEventParametersObject.getName();
 	}
@@ -108,14 +90,10 @@ public class ProcedureEventParametersForm extends EventParametersForm {
 
 		try {
 
-			// checks the reason
+			// checks the URL
 			if (validator.isEmpty(url)) {
-				errors.add(
-					ActionErrors.GLOBAL_ERROR,
-					new ActionError(
-						"errors.item.required",
-						ApplicationProperties.getValue(
-							"procedureeventparameters.url")));
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue(
+						"procedureeventparameters.url")));
 			}
 
 			if (validator.isEmpty(name)) {

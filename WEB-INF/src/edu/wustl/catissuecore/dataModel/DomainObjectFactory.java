@@ -35,6 +35,7 @@ import edu.wustl.catissuecore.domain.Institution;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.MolecularSpecimenReviewParameters;
 import edu.wustl.catissuecore.domain.Participant;
+import edu.wustl.catissuecore.domain.ProcedureEventParameters;
 import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.ReportedProblem;
 import edu.wustl.catissuecore.domain.Site;
@@ -188,6 +189,10 @@ public class DomainObjectFactory
             	
 			 case Constants.FIXED_EVENT_PARAMETERS_FORM_ID:
             	abstractDomain = new FixedEventParameters(form);            	
+            	break;
+            	
+			 case Constants.PROCEDURE_EVENT_PARAMETERS_FORM_ID:
+            	abstractDomain = new ProcedureEventParameters(form);            	
             	break;
         }
         return abstractDomain;
