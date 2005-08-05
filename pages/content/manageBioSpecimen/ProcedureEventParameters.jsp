@@ -12,17 +12,17 @@
 <%
         String operation = (String) request.getAttribute(Constants.OPERATION);
         String formName;
-        String searchFormName = new String(Constants.DISPOSAL_EVENT_PARAMETERS_SEARCH_ACTION);
+        String searchFormName = new String(Constants.PROCEDURE_EVENT_PARAMETERS_SEARCH_ACTION);
 
         boolean readOnlyValue;
         if (operation.equals(Constants.EDIT))
         {
-            formName = Constants.DISPOSAL_EVENT_PARAMETERS_EDIT_ACTION;
+            formName = Constants.PROCEDURE_EVENT_PARAMETERS_EDIT_ACTION;
             readOnlyValue = true;
         }
         else
         {
-            formName = Constants.DISPOSAL_EVENT_PARAMETERS_ADD_ACTION;
+            formName = Constants.PROCEDURE_EVENT_PARAMETERS_ADD_ACTION;
             readOnlyValue = false;
         }
 		
@@ -32,7 +32,7 @@
     
 <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
 
-<html:form action="<%=Constants.DISPOSAL_EVENT_PARAMETERS_ADD_ACTION%>">
+<html:form action="<%=Constants.PROCEDURE_EVENT_PARAMETERS_ADD_ACTION%>">
 
 	<logic:notEqual name="operation" value="<%=Constants.ADD%>"> 
 	<!-- ENTER IDENTIFIER BEGINS-->	
@@ -42,7 +42,7 @@
 			<table summary="" cellpadding="3" cellspacing="0" border="0">
 				<tr>
 					<td class="formTitle" height="20" colspan="3">
-						<bean:message key="disposaleventparameters.searchTitle"/>
+						<bean:message key="procedureeventparameters.searchTitle"/>
 					</td>
 				</tr>	
 		  
@@ -50,7 +50,7 @@
 					<td class="formRequiredNotice" width="5">*</td>
 					<td class="formRequiredLabel">
 						<label for="systemIdentifier">
-							<bean:message key="eventparameters.systemIdentifier"/>
+							<bean:message key="procedureeventparameters.systemIdentifier"/>
 						</label>
 					</td>
 					<td class="formField">
@@ -79,7 +79,7 @@
 	</logic:notEqual> 
 	
 
-	<!-- NEW disposalEventParameter REGISTRATION BEGINS-->
+	<!-- NEW procedureEventParameter REGISTRATION BEGINS-->
 	<tr>
 	<td>
 	
@@ -95,11 +95,11 @@
 
 		<tr>
 			 <td class="formTitle" height="20" colspan="3">
-				<bean:message key="disposaleventparameters.title"/>
+				<bean:message key="procedureeventparameters.title"/>
 			 </td>
 		</tr>
 
-		<!-- Name of the disposalEventParameters -->
+		<!-- Name of the ProcedureEventParameters -->
 <!-- User -->		
 		<tr>
 			<td class="formRequiredNotice" width="5">*</td>
@@ -126,7 +126,7 @@
 			<td class="formField">
 				 <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
 					<html:text styleClass="formDateSized" size="35" styleId="dateOfEvent" property="dateOfEvent" readonly="true"/>
-						<a href="javascript:show_calendar('disposalEventParametersForm.dateOfEvent','','','MM-DD-YYYY');">
+						<a href="javascript:show_calendar('ProcedureEventParametersForm.dateOfEvent','','','MM-DD-YYYY');">
 							<img src="images\calendar.gif" width=24 height=22 border=0>
 						</a>
 			</td>
@@ -151,21 +151,34 @@
 			</td>
 		</tr>
 		
-<!-- Reason -->		
+<!-- url-->		
 		<tr>
 		
 			<td class="formRequiredNotice" width="5">*</td>
 			<td class="formRequiredLabel">
 				<label for="type">
-					<bean:message key="disposaleventparameters.reason"/> 
+					<bean:message key="procedureeventparameters.url"/> 
 				</label>
 			</td>
 			<td class="formField">
-				<html:text styleClass="formFieldSized"  styleId="reason" property="reason" />
+				<html:text styleClass="formFieldSized"  styleId="url" property="url" />
 			</td>
 		</tr>
 	
-
+<!-- name -->		
+		<tr>
+		
+			<td class="formRequiredNotice" width="5">*</td>
+			<td class="formRequiredLabel">
+				<label for="type">
+					<bean:message key="procedureeventparameters.name"/> 
+				</label>
+			</td>
+			<td class="formField">
+				<html:text styleClass="formFieldSized"  styleId="name" property="name" />
+			</td>
+		</tr>
+	
 <!-- comments -->		
 		<tr>
 			<td class="formRequiredNotice" width="5">&nbsp;</td>
@@ -204,7 +217,7 @@
 	  </td>
 	 </tr>
 
-	 <!-- NEW disposalEventParameters ends-->
+	 <!-- procedureeventParameters ends-->
 	 
 	 </html:form>
  </table>

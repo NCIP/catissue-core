@@ -1,0 +1,147 @@
+/**
+ * <p>Title: DisposalEventParametersForm Class</p>
+ * <p>Description:  This Class handles the disposal event parameters..
+ * <p> It extends the EventParametersForm class.    
+ * Copyright:    Copyright (c) 2005
+ * Company: Washington University, School of Medicine, St. Louis.
+ * @author Jyoti Singh
+ * @version 1.00
+ * Created on July 28th, 2005
+ */
+
+package edu.wustl.catissuecore.actionForm;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMapping;
+
+import edu.wustl.catissuecore.domain.AbstractDomainObject;
+import edu.wustl.catissuecore.domain.ProcedureEventParameters;
+import edu.wustl.catissuecore.util.global.ApplicationProperties;
+import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Validator;
+import edu.wustl.common.util.logger.Logger;
+
+/**
+ * @author Jyoti_Singh
+ *
+ * Description:  This Class handles the Disposal event parameters..
+ */
+public class ProcedureEventParametersForm extends EventParametersForm {
+	
+	private String url;
+	private String name;
+
+	/**
+		 * @return
+		 */
+		public String getName() {
+			return name;
+		}
+
+		/**
+		 * @param name
+		 */
+		public void setName(String name) {
+			this.name = name;
+		}
+
+		/**
+		 * @return
+		 */
+		public String getUrl() {
+			return url;
+		}
+
+		/**
+		 * @param url
+		 */
+		public void setUrl(String url) {
+			this.url = url;
+		}
+		
+//	public String getUrl() {
+//		return url;
+//	}
+//	public String getName() {
+//			return name;
+//		}
+//
+//
+//	/**
+//	 * @param reason The reason to set.
+//	 */
+//	public void setUrl(String url) {
+//		this.reason = url;
+//	}
+//	public void setName(String name) {
+//		this.reason = name;
+//	}
+	/* (non-Javadoc)
+	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#getFormId()
+	 */
+	public int getFormId() {
+		return Constants.PROCEDURE_EVENT_PARAMETERS_FORM_ID;
+	}
+
+	/* (non-Javadoc)
+	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#setAllValues(edu.wustl.catissuecore.domain.AbstractDomainObject)
+	 */
+	public void setAllValues(AbstractDomainObject abstractDomain) {
+	super.setAllValues(abstractDomain);
+	ProcedureEventParameters procedureEventParametersObject =
+	(ProcedureEventParameters) abstractDomain;
+	this.url = procedureEventParametersObject.getUrl();
+	this.name = procedureEventParametersObject.getName();
+	}
+
+	/**
+	 * Overrides the validate method of ActionForm.
+	 * */
+	public ActionErrors validate(
+		ActionMapping mapping,
+		HttpServletRequest request) {
+		ActionErrors errors = super.validate(mapping, request);
+		Validator validator = new Validator();
+
+		try {
+
+			// checks the reason
+			if (validator.isEmpty(url)) {
+				errors.add(
+					ActionErrors.GLOBAL_ERROR,
+					new ActionError(
+						"errors.item.required",
+						ApplicationProperties.getValue(
+							"procedureeventparameters.url")));
+			}
+
+			if (validator.isEmpty(name)) {
+				errors.add(
+					ActionErrors.GLOBAL_ERROR,
+					new ActionError(
+						"errors.item.required",
+						ApplicationProperties.getValue(
+							"procedureeventparameters.name")));
+			}
+		} catch (Exception excp) {
+			Logger.out.error(excp.getMessage());
+		}
+		return errors;
+	}
+
+	/**
+	 * Resets the values of all the fields.
+	 * This method defined in ActionForm is overridden in this class.
+	 */
+	public void reset(ActionMapping mapping, HttpServletRequest request) {
+		reset();
+		this.url = null;
+		this.name = null;
+	}
+
+	
+
+}
