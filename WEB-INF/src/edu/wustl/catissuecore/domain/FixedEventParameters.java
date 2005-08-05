@@ -9,6 +9,10 @@
 
 package edu.wustl.catissuecore.domain;
 
+import edu.wustl.catissuecore.actionForm.AbstractActionForm;
+import edu.wustl.catissuecore.actionForm.FixedEventParametersForm;
+import edu.wustl.common.util.logger.Logger;
+
 /**
  * Attributes associated with a fixation event of a specimen.
  * @hibernate.joined-subclass table="CATISSUE_FIXED_EVENT_PARAMETERS"
@@ -66,4 +70,45 @@ public class FixedEventParameters extends SpecimenEventParameters implements jav
 	{
 		this.durationInMinutes = durationInMinutes;
 	}
+	
+	/**
+	 * NOTE: Do not delete this constructor. Hibernet uses this by reflection API.
+	 * */
+	public FixedEventParameters()
+	{
+		
+	}
+
+	/**
+	 *  Parameterised constructor 
+	 * @param abstractForm
+	 */
+	public FixedEventParameters(AbstractActionForm abstractForm)
+	{
+		setAllValues(abstractForm);
+	}
+	
+	/**
+     * This function Copies the data from an FixedEventParametersForm object to a FixedEventParameters object.
+     * @param FixedEventParametersForm An FixedEventParametersForm object containing the information about the FixedEventParameters.  
+     * */
+    public void setAllValues(AbstractActionForm abstractForm)
+    {
+        try
+        {
+        	FixedEventParametersForm form = (FixedEventParametersForm) abstractForm;
+        	this.fixationType = form.getFixationType();
+        	this.durationInMinutes = new Integer(form.getDurationInMinutes() );
+        	super.setAllValues(form);
+        }
+        catch (Exception excp)
+        {
+            Logger.out.error(excp.getMessage());
+        }
+    }
+	
+		
+	
+	
+	
 }

@@ -237,8 +237,8 @@ public class MolecularSpecimenReviewParameters extends ReviewEventParameters
 	}
 	
 	/**
-     * This function Copies the data from an FluidSpecimenReviewEventParametersForm object to a FluidSpecimenReviewEventParameters object.
-     * @param fluidSpecimenReviewEventParametersForm An FluidSpecimenReviewEventParametersForm object containing the information about the fluidSpecimenReviewEventParameters.  
+     * This function Copies the data from an MolecularSpecimenReviewParametersForm object to a MolecularSpecimenReviewParameters object.
+     * @param MolecularSpecimenReviewParametersForm An MolecularSpecimenReviewParametersForm object containing the information about the MolecularSpecimenReviewParameters.  
      * */
     public void setAllValues(AbstractActionForm abstractForm)
     {
