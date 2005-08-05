@@ -94,7 +94,7 @@ public class Constants
 	public static final String STORAGETYPEIDLIST="storageTypeIdList";
 	public static final String SPECIMENCOLLECTIONLIST="specimentCollectionList";
 	public static final String APPROVE_USER_STATUS_LIST = "statusList";
-	
+		
 	//New Specimen lists.
 	public static final String SPECIMEN_COLLECTION_GROUP_LIST = "specimenCollectionGroupIdList";
 	public static final String SPECIMEN_TYPE_LIST = "specimenTypeList";
@@ -123,7 +123,13 @@ public class Constants
 	public static final String METHODLIST = "methodList";
 	public static final String HOURLIST = "hourList";
 	public static final String MINUTESLIST = "minutesList";
+	public static final String PROCEDURELIST = "procedureList";
+	public static final String PROCEDUREIDLIST = "procedureIdList";
+	public static final String CONTAINERLIST = "containerList";
+	public static final String CONTAINERIDLIST = "containerIdList";
 	
+	
+			
 	//Constants required in User.jsp Page
 	public static final String USER_SEARCH_ACTION = "UserSearch.do";
 	public static final String USER_ADD_ACTION = "UserAdd.do";
@@ -328,7 +334,7 @@ public class Constants
 	public static final int DISPOSAL_EVENT_PARAMETERS_FORM_ID = 25;
 	public static final int THAW_EVENT_PARAMETERS_FORM_ID = 26;
 	public static final int MOLECULAR_SPECIMEN_REVIEW_PARAMETERS_FORM_ID = 27;
-	
+	public static final int COLLECTION_EVENT_PARAMETERS_FORM_ID = 28;
 	//Misc
 	public static final String SEPARATOR = " : ";
 	//Status message key Constants
@@ -964,5 +970,32 @@ public class Constants
 	public static final String UNIT_CC = "cc";
 	public static final String UNIT_MG = "mg";
 	
+	public static final String [] PROCEDUREARRAY = {
+	        SELECT_OPTION,
+			"Procedure 1",
+			"Procedure 2",
+			"Procedure 3"
+	};
 	
+	public static final int [] PROCEDUREIDARRAY = {
+	        -1,
+			1,
+			2,
+			3
+	};
+	
+	public static final String [] CONTAINERARRAY = {
+	        SELECT_OPTION,
+			"Container 1",
+			"Container 2",
+			"Container 3"
+	};
+
+	public static final int [] CONTAINERIDARRAY = {
+	        -1,
+			1,
+			2,
+			3
+	};
+
 }
