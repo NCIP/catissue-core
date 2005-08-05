@@ -155,7 +155,8 @@
 		
 <!-- Reason -->		
 		<tr>
-			<td class="formRequiredNotice" width="5">&nbsp;</td>
+		
+			<td class="formRequiredNotice" width="5">*</td>
 			<td class="formRequiredLabel">
 				<label for="type">
 					<bean:message key="disposaleventparameters.reason"/> 
