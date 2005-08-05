@@ -11,9 +11,18 @@
 
 package edu.wustl.catissuecore.actionForm;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMapping;
+
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.domain.SpunEventParameters;
+import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Validator;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * @author Jyoti_Singh
@@ -23,28 +32,41 @@ import edu.wustl.catissuecore.util.global.Constants;
 public class SpunEventParametersForm extends EventParametersForm
 {
 	
-	private Double gForce;
-	private Integer durationInMinutes;
+	private double gForce;
+	private int durationInMinutes;
 
-	public Double getgForce()
-	{
-		return gForce;
-	}
-	public Integer getdurationInMinutes()
+
+	
+	
+	
+	/**
+	 * @return Returns the durationInMinutes.
+	 */
+	public int getDurationInMinutes()
 	{
 		return durationInMinutes;
 	}
-	
-	
-	public void setGForce(Double gForce)
+	/**
+	 * @param durationInMinutes The durationInMinutes to set.
+	 */
+	public void setDurationInMinutes(int durationInMinutes)
+	{
+		this.durationInMinutes = durationInMinutes;
+	}
+	/**
+	 * @return Returns the gForce.
+	 */
+	public double getGForce()
+	{
+		return gForce;
+	}
+	/**
+	 * @param force The gForce to set.
+	 */
+	public void setGForce(double gForce)
 	{
 		this.gForce = gForce;
 	}
-	public void setDurationInMinutes(Integer durationInMinutes)
-		{
-			this.durationInMinutes = durationInMinutes;
-		}
-
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#getFormId()
 	 */
@@ -58,17 +80,59 @@ public class SpunEventParametersForm extends EventParametersForm
 	 */
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
-		super.setAllValues(abstractDomain);
-		SpunEventParameters SpunEventParametersObject = (SpunEventParameters)abstractDomain ;
-		this.gForce = SpunEventParametersObject.getGForce();
-		this.durationInMinutes = SpunEventParametersObject.getDurationInMinutes();
-		
-		//test
-		/*System.out.println("\n\n\t\tDate IN fepform: "+ .getDateOfEvent());
-		form.getDateOfEvent();
-		form.getTimeInHours() ;
-		Integer.parseInt(form.getTimeInMinutes()) );*/
-
-		
+		try
+		{
+			super.setAllValues(abstractDomain);
+			SpunEventParameters SpunEventParametersObject = (SpunEventParameters)abstractDomain ;
+			this.gForce = SpunEventParametersObject.getGForce().doubleValue() ;
+			this.durationInMinutes = SpunEventParametersObject.getDurationInMinutes().intValue();
+	    }
+	    catch(Exception excp)
+	    {
+	        Logger.out.error(excp.getMessage());
+	    }
 	}
+
+	/**
+     * Overrides the validate method of ActionForm.
+     * */
+     public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
+     {
+     	ActionErrors errors = super.validate(mapping, request);
+         Validator validator = new Validator();
+         
+         try
+         {
+
+            //	 checks the durationInMinutes
+         	if (durationInMinutes  <= 0)
+            {
+           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("spuneventparameters.durationinminutes")));
+            }
+
+         	if (gForce <= 0 || Double.isNaN(gForce))
+            {
+           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("spuneventparameters.gforce")));
+            }
+         	
+         }
+         catch(Exception excp)
+         {
+             Logger.out.error(excp.getMessage());
+         }
+         return errors;
+      }
+	
+
+     /**
+      * Resets the values of all the fields.
+      * This method defined in ActionForm is overridden in this class.
+      */
+     public void reset(ActionMapping mapping, HttpServletRequest request)
+     {
+         reset();
+         this.gForce = 0.0;
+         this.durationInMinutes = 0;
+     }
+     
 }

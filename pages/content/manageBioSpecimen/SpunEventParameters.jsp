@@ -158,7 +158,7 @@
 			<td class="formRequiredNotice" width="5">*</td>
 			<td class="formRequiredLabel">
 				<label for="type">
-					<bean:message key="spuneventparameters.gForce"/> 
+					<bean:message key="spuneventparameters.gforce"/> 
 				</label>
 			</td>
 			<td class="formField">
@@ -171,7 +171,7 @@
 			<td class="formRequiredNotice" width="5">*</td>
 			<td class="formRequiredLabel">
 				<label for="type">
-					<bean:message key="spuneventparameters.durationInMinutes"/> 
+					<bean:message key="spuneventparameters.durationinminutes"/> 
 				</label>
 			</td>
 			<td class="formField">

@@ -123,6 +123,7 @@ public class Validator
     {
         try
         {
+        	System.out.println(dblString);
             double dblValue = Double.parseDouble(dblString);
 
             if (dblValue <= 0  || Double.isNaN(dblValue)) 
@@ -134,6 +135,7 @@ public class Validator
         }
         catch(NumberFormatException exp)
         {
+        	System.out.println("Error : "+exp);
             return false;
         }
     	

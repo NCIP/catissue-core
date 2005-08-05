@@ -9,6 +9,10 @@
  */
 package edu.wustl.catissuecore.domain;
 
+import edu.wustl.catissuecore.actionForm.AbstractActionForm;
+import edu.wustl.catissuecore.actionForm.SpunEventParametersForm;
+import edu.wustl.common.util.logger.Logger;
+
 /**
  * Attributes associated with a spinning event of a specimen.
  * @hibernate.joined-subclass table="CATISSUE_SPUN_EVENT_PARAMETERS"
@@ -72,4 +76,45 @@ public class SpunEventParameters extends SpecimenEventParameters implements java
 	{
 		this.durationInMinutes = durationInMinutes;
 	}
+	
+	
+	/**
+	 * NOTE: Do not delete this constructor. Hibernet uses this by reflection API.
+	 * */
+	public SpunEventParameters()
+	{
+		
+	}
+
+	/**
+	 *  Parameterised constructor 
+	 * @param abstractForm
+	 */
+	public SpunEventParameters(AbstractActionForm abstractForm)
+	{
+		setAllValues(abstractForm);
+	}
+	
+	/**
+     * This function Copies the data from an SpunEventParametersForm object to a SpunEventParameters object.
+     * @param SpunEventParametersForm An SpunEventParametersForm object containing the information about the SpunEventParameters.  
+     * */
+    public void setAllValues(AbstractActionForm abstractForm)
+    {
+        try
+        {
+        	SpunEventParametersForm form = (SpunEventParametersForm) abstractForm;
+        	
+        	this.gForce = new Double(form.getGForce() );
+        	this.durationInMinutes = new Integer(form.getDurationInMinutes());
+
+        	super.setAllValues(form);
+        }
+        catch (Exception excp)
+        {
+            Logger.out.error(excp.getMessage());
+        }
+    }
+	
+		
 }

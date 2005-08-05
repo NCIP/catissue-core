@@ -37,6 +37,7 @@ import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.ReportedProblem;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.domain.SpunEventParameters;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.domain.ThawEventParameters;
@@ -173,6 +174,10 @@ public class DomainObjectFactory
             	
 			 case Constants.DISPOSAL_EVENT_PARAMETERS_FORM_ID:
             	abstractDomain = new DisposalEventParameters(form);            	
+            	break;
+            	
+			 case Constants.SPUN_EVENT_PARAMETERS_FORM_ID:
+            	abstractDomain = new SpunEventParameters(form);            	
             	break;
 
         }
