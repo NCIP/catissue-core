@@ -11,6 +11,10 @@
  */
 package edu.wustl.catissuecore.domain;
 
+import edu.wustl.catissuecore.actionForm.AbstractActionForm;
+import edu.wustl.catissuecore.actionForm.EmbeddedEventParametersForm;
+import edu.wustl.common.util.logger.Logger;
+
 /**
  * An abbreviated set of written procedures that describe how a previously collected specimen will be 
  * utilized.  Note that specimen may be collected with one collection protocol and then later utilized 
@@ -50,4 +54,43 @@ public class EmbeddedEventParameters extends SpecimenEventParameters
 	{
 		this.embeddingMedium = embeddingMedium;
 	}
+	
+
+	/**
+	 * NOTE: Do not delete this constructor. Hibernet uses this by reflection API.
+	 * */
+	public EmbeddedEventParameters()
+	{
+		
+	}
+
+	/**
+	 *  Parameterised constructor 
+	 * @param abstractForm
+	 */
+	public EmbeddedEventParameters(AbstractActionForm abstractForm)
+	{
+		setAllValues(abstractForm);
+	}
+	
+	/**
+     * This function Copies the data from an EmbeddedEventParametersForm object to a EmbeddedEventParameters object.
+     * @param EmbeddedEventParametersForm An EmbeddedEventParametersForm object containing the information about the EmbeddedEventParameters.  
+     * */
+    public void setAllValues(AbstractActionForm abstractForm)
+    {
+        try
+        {
+        	EmbeddedEventParametersForm form = (EmbeddedEventParametersForm) abstractForm;
+        	this.embeddingMedium = form.getEmbeddingMedium(); 
+        	super.setAllValues(form);
+        }
+        catch (Exception excp)
+        {
+            Logger.out.error(excp.getMessage());
+        }
+    }
+	
+		
+	
 }

@@ -74,12 +74,9 @@ public class EmbeddedEventParametersForm extends EventParametersForm
          
 		 try
 		 {
-//			System.out.println(method);
-//			System.out.println(method.equals(Constants.SELECT_OPTION));
-//			// checks the method
 			if (embeddingMedium.equals(Constants.SELECT_OPTION))
 			{
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("embeddedEventParameters.embeddingMedium")));
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("embeddedeventparameters.embeddingMedium")));
 			}
 		 }
 		 catch(Exception excp)
@@ -88,5 +85,14 @@ public class EmbeddedEventParametersForm extends EventParametersForm
 		 }
 		 return errors;
 	  }
-	
+	 /**
+      * Resets the values of all the fields.
+      * This method defined in ActionForm is overridden in this class.
+      */
+     public void reset(ActionMapping mapping, HttpServletRequest request)
+     {
+         reset();
+         this.embeddingMedium = null;
+     }
+     
 }

@@ -26,6 +26,7 @@ import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Department;
 import edu.wustl.catissuecore.domain.DisposalEventParameters;
 import edu.wustl.catissuecore.domain.DistributionProtocol;
+import edu.wustl.catissuecore.domain.EmbeddedEventParameters;
 import edu.wustl.catissuecore.domain.FluidSpecimen;
 import edu.wustl.catissuecore.domain.FluidSpecimenReviewEventParameters;
 import edu.wustl.catissuecore.domain.FrozenEventParameters;
@@ -179,7 +180,10 @@ public class DomainObjectFactory
 			 case Constants.SPUN_EVENT_PARAMETERS_FORM_ID:
             	abstractDomain = new SpunEventParameters(form);            	
             	break;
-
+            	
+			 case Constants.EMBEDDED_EVENT_PARAMETERS_FORM_ID:
+            	abstractDomain = new EmbeddedEventParameters(form);            	
+            	break;
         }
         return abstractDomain;
     }

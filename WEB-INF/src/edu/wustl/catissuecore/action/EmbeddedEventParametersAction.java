@@ -1,11 +1,11 @@
 /**
- * <p>Title: FrozenEventParametersAction Class>
- * <p>Description:	This class initializes the fields in the FrozenEventParameters Add/Edit webpage.</p>
+ * <p>Title: EmbeddedEventParametersAction Class>
+ * <p>Description:	This class initializes the fields in the EmbeddedEventParameters Add/Edit webpage.</p>
  * Copyright:    Copyright (c) year
  * Company: Washington University, School of Medicine, St. Louis.
- * @author Jyoti Singh
+ * @author Mandar Deshmukh
  * @version 1.00
- * Created on Aug 2, 2005
+ * Created on Aug 5, 2005
  */
 
 package edu.wustl.catissuecore.action;
@@ -25,7 +25,6 @@ public class EmbeddedEventParametersAction extends SpecimenEventParametersAction
 		super.setRequestParameters(request);
 		
 		//set array of EmbeddingMedium
-		//Sets the hourList attribute to be used in the Add/Edit EmbeddedEventParameters Page.
 		request.setAttribute(Constants.EMBEDDINGMEDIUMLIST, Constants.EMBEDDINGMEDIUMARRAY);
         
 	}
