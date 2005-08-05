@@ -37,6 +37,7 @@ PUBLIC
 		<form-bean name="thawEventParametersForm" type="edu.wustl.catissuecore.actionForm.ThawEventParametersForm"/>
 		<form-bean name="spunEventParametersForm" type="edu.wustl.catissuecore.actionForm.SpunEventParametersForm"/>
 		<form-bean name="embeddedEventParametersForm" type="edu.wustl.catissuecore.actionForm.EmbeddedEventParametersForm"/>
+		<form-bean name="fixedEventParametersForm" type="edu.wustl.catissuecore.actionForm.FixedEventParametersForm"/>
 	</form-beans>
 	
 	<!-- Global Exception Definitions -->
@@ -1256,7 +1257,46 @@ PUBLIC
 			<forward name="failure" path="/EmbeddedEventParameters.do?operation=edit"/>
 		</action>    
 		<!--EmbeddedEventParameters Actions Ends -->
+	
+		<!-- FixedEventParameters Actions Begins -->
+        <action path="/FixedEventParameters"
+			type="edu.wustl.catissuecore.action.FixedEventParametersAction"
+			scope="request">
+			<forward name="success" path=".catissuecore.fixedEventParametersDef" />
+			<forward name="failure" path=".catissuecore.fixedEventParametersDef" />
+		</action>
 		
+		<action path="/FixedEventParametersAdd"
+			type="edu.wustl.catissuecore.action.CommonAddEditAction"
+			name="fixedEventParametersForm"
+			validate="true"
+			input="/FixedEventParameters.do?operation=add"
+			scope="request">
+			<forward name="success" path=".catissuecore.fixedEventParametersAddSuccessDef" />
+			<forward name="failure" path="/error.jsp" />
+		</action>
+		
+		<action path="/FixedEventParametersEdit"
+			type="edu.wustl.catissuecore.action.CommonAddEditAction"
+			name="fixedEventParametersForm"
+			validate="true"
+			input="/FixedEventParameters.do?operation=edit"
+			scope="request">
+			<forward name="success" path=".catissuecore.fixedEventParametersEditSuccessDef" />
+			<forward name="failure" path="/error.jsp" />
+		</action>
+		
+		<action path="/FixedEventParametersSearch"
+		    type="edu.wustl.catissuecore.action.CommonSearchAction"
+			name="fixedEventParametersForm"
+			validate="true"
+			input="/FixedEventParameters.do?operation=edit"
+			scope="request">
+			<forward name="success" path="/FixedEventParameters.do?operation=edit"/>
+			<forward name="failure" path="/FixedEventParameters.do?operation=edit"/>
+		</action>    
+		<!-- FixedEventParameters Actions Ends -->
+			
 		
 		<!--Query Result View Actions Begin-->
 		<action path="/ShowFramedPage"

@@ -355,6 +355,7 @@
 		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>
 	<!-- DisposalEventParameters end -->
+	
 	<!-- ThawEventParameters -->
 	<definition name=".catissuecore.thawEventParametersDef" extends=".catissuecore.manageBioSpecimenHomeDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/ThawEventParameters.jsp" />
@@ -438,7 +439,19 @@
 	</definition>
 	<!-- EmbeddedEventParameters end -->
 	
-	
+		<!-- fixedEventParameters -->
+	<definition name=".catissuecore.fixedEventParametersDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/FixedEventParameters.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.fixedEventParametersAddSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/common/success.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.fixedEventParametersEditSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/common/success.jsp" />
+	</definition>
+	<!-- fixedEventParameters end -->
 
 	<!-- BioSpecimen tab pages definitions end -->
 
