@@ -1,12 +1,12 @@
 /**
- * <p>Title: FrozenEventParametersForm Class</p>
- * <p>Description:  This Class handles the frozen event parameters..
+ * <p>Title: ThawEventParametersForm Class</p>
+ * <p>Description:  This Class handles the thaw event parameters..
  * <p> It extends the EventParametersForm class.    
  * Copyright:    Copyright (c) 2005
  * Company: Washington University, School of Medicine, St. Louis.
- * @author Mandar Deshmukh
+ * @author Jyoti Singh
  * @version 1.00
- * Created on July 28th, 2005
+ * Created on Aug 1, 2005
  */
 
 package edu.wustl.catissuecore.actionForm;
@@ -20,9 +20,8 @@ import edu.wustl.catissuecore.domain.ThawEventParameters;
 import edu.wustl.catissuecore.util.global.Constants;
 
 /**
- * @author mandar_deshmukh
  *
- * Description:  This Class handles the frozen event parameters..
+ * Description:  This Class handles the thaw event parameters..
  */
 public class ThawEventParametersForm extends EventParametersForm
 {
