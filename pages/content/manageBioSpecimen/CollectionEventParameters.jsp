@@ -12,17 +12,17 @@
 <%
         String operation = (String) request.getAttribute(Constants.OPERATION);
         String formName;
-        String searchFormName = new String(Constants.FLUID_SPECIMEN_REVIEW_EVENT_PARAMETERS_SEARCH_ACTION);
+        String searchFormName = new String(Constants.COLLECTION_EVENT_PARAMETERS_SEARCH_ACTION);
 
         boolean readOnlyValue;
         if (operation.equals(Constants.EDIT))
         {
-            formName = Constants.FLUID_SPECIMEN_REVIEW_EVENT_PARAMETERS_EDIT_ACTION;
+            formName = Constants.COLLECTION_EVENT_PARAMETERS_EDIT_ACTION;
             readOnlyValue = true;
         }
         else
         {
-            formName = Constants.FLUID_SPECIMEN_REVIEW_EVENT_PARAMETERS_ADD_ACTION;
+            formName = Constants.COLLECTION_EVENT_PARAMETERS_ADD_ACTION;
             readOnlyValue = false;
         }
 		
@@ -32,7 +32,7 @@
     
 <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
 
-<html:form action="<%=Constants.FLUID_SPECIMEN_REVIEW_EVENT_PARAMETERS_ADD_ACTION%>">
+<html:form action="<%=Constants.COLLECTION_EVENT_PARAMETERS_ADD_ACTION%>">
 
 	<logic:notEqual name="operation" value="<%=Constants.ADD%>"> 
 	<!-- ENTER IDENTIFIER BEGINS-->	
@@ -42,7 +42,7 @@
 			<table summary="" cellpadding="3" cellspacing="0" border="0">
 				<tr>
 					<td class="formTitle" height="20" colspan="3">
-						<bean:message key="fluidspecimenrevieweventparameters.searchTitle"/>
+						<bean:message key="collectioneventparameters.searchTitle"/>
 					</td>
 				</tr>	
 		  
@@ -79,7 +79,7 @@
 	</logic:notEqual> 
 	
 
-	<!-- NEW FLUID_SPECIMEN_REVIEW_EVENT_PARAMETERS REGISTRATION BEGINS-->
+	<!-- NEW FrozenEventParameter REGISTRATION BEGINS-->
 	<tr>
 	<td>
 	
@@ -95,11 +95,11 @@
 
 		<tr>
 			 <td class="formTitle" height="20" colspan="3">
-				<bean:message key="fluidspecimenrevieweventparameters.title"/>
+				<bean:message key="collectioneventparameters.title"/>
 			 </td>
 		</tr>
 
-		<!-- Name of the fluidspecimenrevieweventparameters -->
+		<!-- Name of the collectionEventParameters -->
 <!-- User -->		
 		<tr>
 			<td class="formRequiredNotice" width="5">*</td>
@@ -126,7 +126,7 @@
 			<td class="formField">
 				 <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
 					<html:text styleClass="formDateSized" size="35" styleId="dateOfEvent" property="dateOfEvent" readonly="true"/>
-						<a href="javascript:show_calendar('fluidSpecimenReviewEventParametersForm.dateOfEvent','','','MM-DD-YYYY');">
+						<a href="javascript:show_calendar('collectionEventParametersForm.dateOfEvent','','','MM-DD-YYYY');">
 							<img src="images\calendar.gif" width=24 height=22 border=0>
 						</a>
 			</td>
@@ -151,24 +151,42 @@
 			</td>
 		</tr>
 
-<!-- cellCount -->		
+<!-- collectionProcedure -->		
 		<tr>
 			<td class="formRequiredNotice" width="5">*</td>
 			<td class="formRequiredLabel">
-				<label for="cellCount">
-					<bean:message key="fluidspecimenrevieweventparameters.cellcount"/> 
+				<label for="type">
+					<bean:message key="collectioneventparameters.collectionprocedure"/> 
 				</label>
 			</td>
 			<td class="formField">
-				<html:text styleClass="formDateSized" size="35" styleId="cellCount" property="cellCount" />
+				<html:select property="collectionProcedure" styleClass="formFieldSized" styleId="collectionProcedure" size="1">
+					<html:options name="<%=Constants.PROCEDUREIDLIST%>" labelName="<%=Constants.PROCEDURELIST%>" />
+				</html:select>
 			</td>
 		</tr>
+
+<!-- container -->		
+		<tr>
+			<td class="formRequiredNotice" width="5">*</td>
+			<td class="formRequiredLabel">
+				<label for="type">
+					<bean:message key="collectioneventparameters.container"/> 
+				</label>
+			</td>
+			<td class="formField">
+				<html:select property="container" styleClass="formFieldSized" styleId="container" size="1">
+					<html:options name="<%=Constants.CONTAINERIDLIST%>" labelName="<%=Constants.CONTAINERLIST%>" />
+				</html:select>
+			</td>
+		</tr>
+
 
 <!-- comments -->		
 		<tr>
 			<td class="formRequiredNotice" width="5">&nbsp;</td>
 			<td class="formLabel">
-				<label for="comments">
+				<label for="type">
 					<bean:message key="eventparameters.comments"/> 
 				</label>
 			</td>
@@ -202,7 +220,7 @@
 	  </td>
 	 </tr>
 
-	 <!-- NEW fluidspecimenrevieweventparameters ends-->
+	 <!-- NEW FrozenEventParameters ends-->
 	 
 	 </html:form>
  </table>
