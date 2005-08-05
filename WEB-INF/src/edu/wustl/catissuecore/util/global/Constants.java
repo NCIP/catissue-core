@@ -130,7 +130,7 @@ public class Constants
 	public static final String CONTAINERIDLIST = "containerIdList";
 	public static final String FROMCONTAINERLIST="fromContainerList";
 	public static final String TOCONTAINERLIST="toContainerList";
-	
+	public static final String FIXATIONLIST = "fixationList";
 			
 	//Constants required in User.jsp Page
 	public static final String USER_SEARCH_ACTION = "UserSearch.do";
@@ -274,7 +274,12 @@ public class Constants
 	public static final String TRANSFER_EVENT_PARAMETERS_SEARCH_ACTION = "TransferEventParametersSearch.do";
 	public static final String TRANSFER_EVENT_PARAMETERS_ADD_ACTION = "TransferEventParametersAdd.do";
 	public static final String TRANSFER_EVENT_PARAMETERS_EDIT_ACTION = "TransferEventParametersEdit.do";
-	
+
+//	Constants required in FixedEventParameters.jsp Page
+	public static final String FIXED_EVENT_PARAMETERS_SEARCH_ACTION = "FixedEventParametersSearch.do";
+	public static final String FIXED_EVENT_PARAMETERS_ADD_ACTION = "FixedEventParametersAdd.do";
+	public static final String FIXED_EVENT_PARAMETERS_EDIT_ACTION = "FixedEventParametersEdit.do";
+
 	//Levels of nodes in query results tree.
 	public static final int MAX_LEVEL = 5;
 	public static final int MIN_LEVEL = 1;
@@ -357,6 +362,7 @@ public class Constants
 	public static final int MOLECULAR_SPECIMEN_REVIEW_PARAMETERS_FORM_ID = 27;
 	public static final int COLLECTION_EVENT_PARAMETERS_FORM_ID = 28;
 	public static final int TRANSFER_EVENT_PARAMETERS_FORM_ID = 29;
+	public static final int FIXED_EVENT_PARAMETERS_FORM_ID = 32;	
 	//Misc
 	public static final String SEPARATOR = " : ";
 	
@@ -1031,5 +1037,13 @@ public class Constants
 			2,
 			3
 	};
+
+	public static final String [] FIXATIONARRAY = {
+	        SELECT_OPTION,
+			"FIXATION 1",
+			"FIXATION 2",
+			"FIXATION 3"
+	};
+
 
 }
