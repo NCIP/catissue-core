@@ -42,7 +42,7 @@
 			<table summary="" cellpadding="3" cellspacing="0" border="0">
 				<tr>
 					<td class="formTitle" height="20" colspan="3">
-						<bean:message key="disposalEventParameters.searchTitle"/>
+						<bean:message key="disposaleventparameters.searchTitle"/>
 					</td>
 				</tr>	
 		  
@@ -50,7 +50,7 @@
 					<td class="formRequiredNotice" width="5">*</td>
 					<td class="formRequiredLabel">
 						<label for="systemIdentifier">
-							<bean:message key="disposalEventParameters.systemIdentifier"/>
+							<bean:message key="disposaleventparameters.systemIdentifier"/>
 						</label>
 					</td>
 					<td class="formField">
@@ -95,7 +95,7 @@
 
 		<tr>
 			 <td class="formTitle" height="20" colspan="3">
-				<bean:message key="disposalEventParameters.title"/>
+				<bean:message key="disposaleventparameters.title"/>
 			 </td>
 		</tr>
 
@@ -105,7 +105,7 @@
 			<td class="formRequiredNotice" width="5">*</td>
 			<td class="formRequiredLabel">
 				<label for="type">
-					<bean:message key="disposalEventParameters.user"/> 
+					<bean:message key="disposaleventparameters.user"/> 
 		<td class="formField">
 				<html:select property="userId" styleClass="formFieldSized" styleId="userId" size="1">
 					<html:options name="<%=Constants.USERIDLIST%>" labelName="<%=Constants.USERLIST%>" />
@@ -122,7 +122,7 @@
 			<td class="formRequiredNotice" width="5">&nbsp;</td>
 			<td class="formLabel">
 				<label for="type">
-					<bean:message key="disposalEventParameters.dateofevent"/> 
+					<bean:message key="disposaleventparameters.dateofevent"/> 
 				</label>
 			</td>
 			<td class="formField">
@@ -139,8 +139,8 @@
 			<td class="formRequiredNotice" width="5">&nbsp;</td>
 			<td class="formLabel">
 				<label for="type">
-					<bean:message key="disposalEventParameters.timeinhours"/>&nbsp; 
-					<bean:message key="disposalEventParameters.timeinminutes"/> 
+					<bean:message key="disposaleventparameters.timeinhours"/>&nbsp; 
+					<bean:message key="disposaleventparameters.timeinminutes"/> 
 				</label>
 			</td>
 			<td class="formField">
@@ -158,7 +158,7 @@
 			<td class="formRequiredNotice" width="5">&nbsp;</td>
 			<td class="formRequiredLabel">
 				<label for="type">
-					<bean:message key="disposalEventParameters.reason"/> 
+					<bean:message key="disposaleventparameters.reason"/> 
 				</label>
 			</td>
 			<td class="formField">
@@ -172,7 +172,7 @@
 			<td class="formRequiredNotice" width="5">&nbsp;</td>
 			<td class="formLabel">
 				<label for="type">
-					<bean:message key="disposalEventParameters.comments"/> 
+					<bean:message key="disposaleventparameters.comments"/> 
 				</label>
 			</td>
 			<td class="formField">

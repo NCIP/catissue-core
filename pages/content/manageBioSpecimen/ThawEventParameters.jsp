@@ -42,7 +42,7 @@
 			<table summary="" cellpadding="3" cellspacing="0" border="0">
 				<tr>
 					<td class="formTitle" height="20" colspan="3">
-						<bean:message key="thawEventParameters.searchTitle"/>
+						<bean:message key="thaweventparameters.searchTitle"/>
 					</td>
 				</tr>	
 		  
@@ -50,7 +50,7 @@
 					<td class="formRequiredNotice" width="5">*</td>
 					<td class="formRequiredLabel">
 						<label for="systemIdentifier">
-							<bean:message key="thawEventParameters.systemIdentifier"/>
+							<bean:message key="thaweventparameters.systemIdentifier"/>
 						</label>
 					</td>
 					<td class="formField">
@@ -95,17 +95,17 @@
 
 		<tr>
 			 <td class="formTitle" height="20" colspan="3">
-				<bean:message key="thawEventParameters.title"/>
+				<bean:message key="thaweventparameters.title"/>
 			 </td>
 		</tr>
 
-		<!-- Name of the thawEventParameters -->
+		<!-- Name of the thaweventparameters -->
 <!-- User -->		
 		<tr>
 			<td class="formRequiredNotice" width="5">*</td>
 			<td class="formRequiredLabel">
 				<label for="type">
-					<bean:message key="thawEventParameters.user"/> 
+					<bean:message key="thaweventparameters.user"/> 
 				</label>	
 			</td>	
 		<td class="formField">
@@ -124,7 +124,7 @@
 			<td class="formRequiredNotice" width="5">&nbsp;</td>
 			<td class="formLabel">
 				<label for="type">
-					<bean:message key="thawEventParameters.dateofevent"/> 
+					<bean:message key="thaweventparameters.dateofevent"/> 
 				</label>
 			</td>
 			<td class="formField">
@@ -141,8 +141,8 @@
 			<td class="formRequiredNotice" width="5">&nbsp;</td>
 			<td class="formLabel">
 				<label for="type">
-					<bean:message key="thawEventParameters.timeinhours"/>&nbsp; 
-					<bean:message key="thawEventParameters.timeinminutes"/> 
+					<bean:message key="thaweventparameters.timeinhours"/>&nbsp; 
+					<bean:message key="thaweventparameters.timeinminutes"/> 
 				</label>
 			</td>
 			<td class="formField">
@@ -161,7 +161,7 @@
 			<td class="formRequiredNotice" width="5">&nbsp;</td>
 			<td class="formLabel">
 				<label for="type">
-					<bean:message key="thawEventParameters.comments"/> 
+					<bean:message key="thaweventparameters.comments"/> 
 				</label>
 			</td>
 			<td class="formField">
@@ -194,7 +194,7 @@
 	  </td>
 	 </tr>
 
-	 <!-- NEW thawEventParameters ends-->
+	 <!-- NEW thaweventparameters ends-->
 	 
 	 </html:form>
  </table>

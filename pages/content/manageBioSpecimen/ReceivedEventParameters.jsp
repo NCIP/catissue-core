@@ -50,7 +50,7 @@
 					<td class="formRequiredNotice" width="5">*</td>
 					<td class="formRequiredLabel">
 						<label for="systemIdentifier">
-							<bean:message key="eventParameters.systemIdentifier"/>
+							<bean:message key=".systemIdentifier"/>
 						</label>
 					</td>
 					<td class="formField">
@@ -105,7 +105,7 @@
 			<td class="formRequiredNotice" width="5">*</td>
 			<td class="formRequiredLabel">
 				<label for="type">
-					<bean:message key="eventParameters.user"/> 
+					<bean:message key=".user"/> 
 				</label>
 			</td>
 			<td class="formField">
@@ -120,7 +120,7 @@
 			<td class="formRequiredNotice" width="5">&nbsp;</td>
 			<td class="formLabel">
 				<label for="type">
-					<bean:message key="eventParameters.dateofevent"/> 
+					<bean:message key=".dateofevent"/> 
 				</label>
 			</td>
 			<td class="formField">
@@ -138,8 +138,8 @@
 			<td class="formRequiredNotice" width="5">&nbsp;</td>
 			<td class="formLabel">
 				<label for="type">
-					<bean:message key="eventParameters.timeinhours"/>&nbsp; 
-					<bean:message key="eventParameters.timeinminutes"/> 
+					<bean:message key=".timeinhours"/>&nbsp; 
+					<bean:message key=".timeinminutes"/> 
 				</label>
 			</td>
 			<td class="formField">
@@ -170,7 +170,7 @@
 			<td class="formRequiredNotice" width="5">&nbsp;</td>
 			<td class="formLabel">
 				<label for="type">
-					<bean:message key="eventParameters.comments"/> 
+					<bean:message key=".comments"/> 
 				</label>
 			</td>
 			<td class="formField">

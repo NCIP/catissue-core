@@ -84,7 +84,7 @@ public class FrozenEventParametersForm extends EventParametersForm
 //         	// checks the method
            	if (method.equals(Constants.SELECT_OPTION))
             {
-           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("frozenEventParameters.method")));
+           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("frozeneventparameters.method")));
             }
          }
          catch(Exception excp)

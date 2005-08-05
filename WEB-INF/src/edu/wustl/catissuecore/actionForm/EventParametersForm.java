@@ -250,7 +250,7 @@ public abstract class EventParametersForm extends AbstractActionForm
 
            	if ((userId) == -1L)
             {
-           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("eventParameters.user")));
+           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("eventparameters.user")));
             }
            	if (dateOfEvent==null || dateOfEvent.trim().length()==0   )
            	{

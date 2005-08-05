@@ -42,7 +42,7 @@
 			<table summary="" cellpadding="3" cellspacing="0" border="0">
 				<tr>
 					<td class="formTitle" height="20" colspan="3">
-						<bean:message key="frozenEventParameters.searchTitle"/>
+						<bean:message key="frozeneventparameters.searchTitle"/>
 					</td>
 				</tr>	
 		  
@@ -50,7 +50,7 @@
 					<td class="formRequiredNotice" width="5">*</td>
 					<td class="formRequiredLabel">
 						<label for="systemIdentifier">
-							<bean:message key="eventParameters.systemIdentifier"/>
+							<bean:message key="eventparameters.systemIdentifier"/>
 						</label>
 					</td>
 					<td class="formField">
@@ -95,7 +95,7 @@
 
 		<tr>
 			 <td class="formTitle" height="20" colspan="3">
-				<bean:message key="frozenEventParameters.title"/>
+				<bean:message key="frozeneventparameters.title"/>
 			 </td>
 		</tr>
 
@@ -105,7 +105,7 @@
 			<td class="formRequiredNotice" width="5">*</td>
 			<td class="formRequiredLabel">
 				<label for="type">
-					<bean:message key="eventParameters.user"/> 
+					<bean:message key="eventparameters.user"/> 
 				</label>
 			</td>
 			<td class="formField">
@@ -120,7 +120,7 @@
 			<td class="formRequiredNotice" width="5">&nbsp;</td>
 			<td class="formLabel">
 				<label for="type">
-					<bean:message key="eventParameters.dateofevent"/> 
+					<bean:message key="eventparameters.dateofevent"/> 
 				</label>
 			</td>
 			<td class="formField">
@@ -137,8 +137,8 @@
 			<td class="formRequiredNotice" width="5">&nbsp;</td>
 			<td class="formLabel">
 				<label for="type">
-					<bean:message key="eventParameters.timeinhours"/>&nbsp; 
-					<bean:message key="eventParameters.timeinminutes"/> 
+					<bean:message key="eventparameters.timeinhours"/>&nbsp; 
+					<bean:message key="eventparameters.timeinminutes"/> 
 				</label>
 			</td>
 			<td class="formField">
@@ -156,7 +156,7 @@
 			<td class="formRequiredNotice" width="5">*</td>
 			<td class="formRequiredLabel">
 				<label for="type">
-					<bean:message key="frozenEventParameters.method"/> 
+					<bean:message key="frozeneventparameters.method"/> 
 				</label>
 			</td>
 			<td class="formField">
@@ -172,7 +172,7 @@
 			<td class="formRequiredNotice" width="5">&nbsp;</td>
 			<td class="formLabel">
 				<label for="type">
-					<bean:message key="eventParameters.comments"/> 
+					<bean:message key="eventparameters.comments"/> 
 				</label>
 			</td>
 			<td class="formField">
