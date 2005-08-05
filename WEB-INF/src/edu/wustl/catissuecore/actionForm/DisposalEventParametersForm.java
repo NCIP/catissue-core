@@ -1,6 +1,6 @@
 /**
  * <p>Title: DisposalEventParametersForm Class</p>
- * <p>Description:  This Class handles the frozen event parameters..
+ * <p>Description:  This Class handles the disposal event parameters..
  * <p> It extends the EventParametersForm class.    
  * Copyright:    Copyright (c) 2005
  * Company: Washington University, School of Medicine, St. Louis.
