@@ -1,0 +1,72 @@
+
+
+insert into CATISSUE_CDE values(
+   'p1',
+   'Sex',
+   'Def1',
+   'v1'
+);
+
+insert into CATISSUE_CDE values(
+   'p2',
+   'Tissue',
+   'Def2',
+   'v2'
+);
+
+
+
+insert into CATISSUE_PERMISSIBLE_VALUE values (
+   1,
+   'C0001',
+   'Def1',
+   'EVS1',
+   null,
+   'male',
+   'p1'
+);
+
+
+insert into CATISSUE_PERMISSIBLE_VALUE values (
+   2,
+   'C0002',
+   'Def2',
+   'EVS2',
+   null,
+   'female',
+   'p1'
+);
+
+
+
+insert into CATISSUE_PERMISSIBLE_VALUE values (
+   3,
+   'C0003',
+   'Def3',
+   'EVS3',
+   null,
+   'kidney',
+   'p2'
+);
+
+
+
+insert into CATISSUE_PERMISSIBLE_VALUE values (
+   4,
+   'C0004',
+   'Def4',
+   'EVS4',
+   3,
+   'Left kidney',
+   'p2'
+);
+
+insert into CATISSUE_PERMISSIBLE_VALUE values (
+   5,
+   'C0005',
+   'Def5',
+   'EVS5',
+   3,
+   'Right kidney',
+   'p2'
+);
