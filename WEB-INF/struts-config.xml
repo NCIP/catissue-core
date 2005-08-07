@@ -298,7 +298,7 @@ PUBLIC
 			validate="true"
 			input="/Department.do?operation=add">
 			<forward name="success" path=".catissuecore.departmentAddSuccessDef" />
-			<forward name="failure" path="/error.jsp" />
+			<forward name="failure" path="/Department.do?operation=add" />
 		</action>
 
 		<action path="/DepartmentEdit"
