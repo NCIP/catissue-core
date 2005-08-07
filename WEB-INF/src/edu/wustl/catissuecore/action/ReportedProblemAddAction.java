@@ -25,6 +25,7 @@ import edu.wustl.catissuecore.actionForm.ReportedProblemForm;
 import edu.wustl.catissuecore.bizlogic.AbstractBizLogic;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.domain.ReportedProblem;
+import edu.wustl.catissuecore.exception.BizLogicException;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.SendEmail;
@@ -50,7 +51,7 @@ public class ReportedProblemAddAction extends Action
         try
         {
             ReportedProblem reportedProblem = new ReportedProblem(reportedProblemForm);
-            bizLogic.insert(reportedProblem);
+            bizLogic.insert(reportedProblem,Constants.HIBERNATE_DAO);
             
             String adminEmailAddress = ApplicationProperties.getValue("email.administrative.emailAddress");
             String technicalSupportEmailAddress = ApplicationProperties.getValue("email.technicalSupport.emailAddress");
@@ -74,7 +75,7 @@ public class ReportedProblemAddAction extends Action
                 target = new String(Constants.FAILURE);
             }
         }
-        catch(DAOException daoExp)
+        catch(BizLogicException daoExp)
         {
             target = new String(Constants.FAILURE);
             Logger.out.error(daoExp.getMessage(),daoExp);
