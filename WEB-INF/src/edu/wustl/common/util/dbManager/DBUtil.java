@@ -9,6 +9,8 @@ import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.SessionFactory;
 import net.sf.hibernate.cfg.Configuration;
+import net.sf.hibernate.metadata.ClassMetadata;
+import edu.wustl.catissuecore.domain.Department;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.util.logger.Logger;
 
@@ -31,7 +33,6 @@ public class DBUtil
 	//Initialize the session Factory in the Static block.
 	static 
 	{
-	
 		try
 		{
 			File file = new File(Variables.catissueHome+System.getProperty("file.separator")+"hibernate.properties");
@@ -72,18 +73,11 @@ public class DBUtil
 	/**
 	 * Close the currently opened session.
 	 * */
-	public static void closeSession() throws DAOException
+	public static void closeSession() throws HibernateException
 	{
-		try
-		{
-			Session s = (Session) session.get(); 
-			session.set(null);
-			if (s != null)
-				s.close();
-		}
-		catch(HibernateException ex)
-		{
-			throw new DAOException("Hibernate Error: Error in closing session",ex);
-		}
+		Session s = (Session) session.get(); 
+		session.set(null);
+		if (s != null)
+			s.close();
 	}
 }
