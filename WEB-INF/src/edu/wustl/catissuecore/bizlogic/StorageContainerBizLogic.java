@@ -17,6 +17,7 @@ import java.util.Vector;
 
 import net.sf.hibernate.HibernateException;
 import edu.wustl.catissuecore.dao.AbstractDAO;
+import edu.wustl.catissuecore.dao.DAO;
 import edu.wustl.catissuecore.dao.DAOFactory;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.StorageContainer;
@@ -39,62 +40,58 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
      * @throws HibernateException Exception thrown during hibernate operations.
      * @throws DAOException 
      */
-	public void insert(Object obj) throws DAOException 
+	protected void insert(DAO dao, Object obj) throws DAOException 
 	{
 		StorageContainer container = (StorageContainer)obj;
         
-		AbstractDAO dao = DAOFactory.getDAO(Constants.HIBERNATE_DAO);
-		dao.openSession();
-		
 		int noOfContainers = container.getNoOfContainers().intValue();
 		
-			List list = dao.retrieve(StorageType.class.getName(), "systemIdentifier", container.getStorageType().getSystemIdentifier());
+		List list = dao.retrieve(StorageType.class.getName(), "systemIdentifier", container.getStorageType().getSystemIdentifier());
+		if (list.size() != 0)
+		{
+			StorageType type = (StorageType) list.get(0);
+			container.setStorageType(type);
+		}
+
+		if(container.getSite() != null)
+		{
+			list = dao.retrieve(Site.class.getName(), "systemIdentifier", container.getSite().getSystemIdentifier());
 			if (list.size() != 0)
 			{
-				StorageType type = (StorageType) list.get(0);
-				container.setStorageType(type);
+				Site site = (Site) list.get(0);
+				container.setSite(site);
 			}
-
-			if(container.getSite() != null)
+		}
+	
+		if(container.getParentContainer() != null)
+		{
+		    list = dao.retrieve(StorageContainer.class.getName(), "systemIdentifier", container.getParentContainer().getSystemIdentifier());
+			if (list.size() != 0)
 			{
-				list = dao.retrieve(Site.class.getName(), "systemIdentifier", container.getSite().getSystemIdentifier());
-				if (list.size() != 0)
-				{
-					Site site = (Site) list.get(0);
-					container.setSite(site);
-				}
+				StorageContainer pc = (StorageContainer) list.get(0);
+				container.setParentContainer(pc);
 			}
+		}
 		
-			if(container.getParentContainer() != null)
-			{
-			    list = dao.retrieve(StorageContainer.class.getName(), "systemIdentifier", container.getParentContainer().getSystemIdentifier());
-				if (list.size() != 0)
-				{
-					StorageContainer pc = (StorageContainer) list.get(0);
-					container.setParentContainer(pc);
-				}
-			}
+		for(int i=0;i<noOfContainers;i++)
+		{
+			StorageContainer cont = new StorageContainer(container); 
+			cont.setName(String.valueOf(i + container.getStartNo().intValue()));
+			dao.insert(cont.getStorageContainerCapacity());
+			dao.insert(cont);
 			
-			for(int i=0;i<noOfContainers;i++)
+			Collection storageContainerDetailsCollection = cont.getStorageContainerDetailsCollection();
+			if(storageContainerDetailsCollection.size() > 0)
 			{
-				StorageContainer cont = new StorageContainer(container); 
-				cont.setName(String.valueOf(i + container.getStartNo().intValue()));
-				dao.insert(cont.getStorageContainerCapacity());
-				dao.insert(cont);
-				
-				Collection storageContainerDetailsCollection = cont.getStorageContainerDetailsCollection();
-				if(storageContainerDetailsCollection.size() > 0)
+				Iterator it = storageContainerDetailsCollection.iterator();
+				while(it.hasNext())
 				{
-					Iterator it = storageContainerDetailsCollection.iterator();
-					while(it.hasNext())
-					{
-						StorageContainerDetails storageContainerDetails = (StorageContainerDetails)it.next();
-						storageContainerDetails.setStorageContainer(cont);
-						dao.insert(storageContainerDetails);
-					}
+					StorageContainerDetails storageContainerDetails = (StorageContainerDetails)it.next();
+					storageContainerDetails.setStorageContainer(cont);
+					dao.insert(storageContainerDetails);
 				}
 			}
-			dao.closeSession();
+		}
 	}
 	
 	/**
@@ -104,19 +101,9 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
      * @throws HibernateException Exception thrown during hibernate operations.
      * @throws DAOException 
      */
-    public void update(Object obj) throws DAOException
+	protected void update(DAO dao, Object obj) throws DAOException
     {
     }
-    
-//    public String getNextStorageContainerNo(Site site, StorageType type )
-//    {
-//    	AbstractDAO dao = DAOFactory.getDAO(Constants.HIBERNATE_DAO);
-//    	
-//    	String whereColNames = {}
-//    	dao.retrieve(StorageContainer.class.getName(),)
-//    	
-//    	return null;
-//    }
     
     public int getNextContainerNumber(long parentID, long typeID,boolean isInSite) throws DAOException
     {

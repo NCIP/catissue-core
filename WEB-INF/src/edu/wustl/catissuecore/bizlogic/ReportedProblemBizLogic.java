@@ -7,11 +7,9 @@
 
 package edu.wustl.catissuecore.bizlogic;
 
-import edu.wustl.catissuecore.dao.AbstractDAO;
-import edu.wustl.catissuecore.dao.DAOFactory;
+import edu.wustl.catissuecore.dao.DAO;
 import edu.wustl.catissuecore.domain.ReportedProblem;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.SendEmail;
 import edu.wustl.common.util.dbManager.DAOException;
 
@@ -27,16 +25,12 @@ public class ReportedProblemBizLogic extends DefaultBizLogic
     /* (non-Javadoc)
      * @see edu.wustl.catissuecore.dao.HibernateDAO#add(java.lang.Object)
      */
-    public void insert(Object obj) throws DAOException
+	protected void insert(DAO dao, Object obj) throws DAOException
     {
         ReportedProblem reportedProblem = (ReportedProblem) obj;
-        AbstractDAO dao = DAOFactory.getDAO(Constants.HIBERNATE_DAO);
-        dao.openSession();
 
         dao.insert(obj);
 
-        dao.closeSession();
-        
         //Send the reported problem to administrator and the user who reported it.
         SendEmail email = new SendEmail();
         String body = ApplicationProperties.getValue("email.reportProblem.body.start") + 
@@ -59,15 +53,9 @@ public class ReportedProblemBizLogic extends DefaultBizLogic
     /* (non-Javadoc)
      * @see edu.wustl.catissuecore.dao.AbstractBizLogic#update(java.lang.Object)
      */
-    public void update(Object obj) throws DAOException
+	protected void update(DAO dao, Object obj) throws DAOException
     {
         ReportedProblem reportedProblem = (ReportedProblem) obj;
-        AbstractDAO dao = DAOFactory.getDAO(Constants.HIBERNATE_DAO);
-        
-        dao.openSession();
-
         dao.update(obj);
-
-        dao.closeSession();
     }
 }

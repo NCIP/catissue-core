@@ -37,14 +37,11 @@ public class BizLogicFactory
         	case Constants.STORAGE_TYPE_FORM_ID :
         		abstractBizLogic = new StorageTypeBizLogic();
         		break;
-        	case Constants.STORAGE_CONTAINER_FORM_ID :
+        	case Constants.STORAGE_CONTAINER_FORM_ID:
         		abstractBizLogic = new StorageContainerBizLogic();
         		break;
         	case Constants.SITE_FORM_ID:
         		abstractBizLogic = new SiteBizLogic();
-        		break;
-			case Constants.BIOHAZARD_FORM_ID:
-        		abstractBizLogic = new BiohazardBizLogic();
         		break;
         	case Constants.PARTICIPANT_FORM_ID:
         		abstractBizLogic = new ParticipantBizLogic();
@@ -86,7 +83,6 @@ public class BizLogicFactory
           	case Constants.NEW_SPECIMEN_FORM_ID:
         		abstractBizLogic = new NewSpecimenBizLogic();
         		break;
-        		
         		
             default:
                 abstractBizLogic = new DefaultBizLogic();

@@ -13,14 +13,11 @@ package edu.wustl.catissuecore.bizlogic;
 import java.util.Iterator;
 import java.util.List;
 
-
 import net.sf.hibernate.HibernateException;
-import edu.wustl.catissuecore.dao.AbstractDAO;
-import edu.wustl.catissuecore.dao.DAOFactory;
+import edu.wustl.catissuecore.dao.DAO;
 import edu.wustl.catissuecore.domain.DistributionProtocol;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.User;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
@@ -37,11 +34,9 @@ public class DistributionProtocolBizLogic extends DefaultBizLogic
      * @throws HibernateException Exception thrown during hibernate operations.
      * @throws DAOException 
      */
-	public void insert(Object obj) throws DAOException 
+	protected void insert(DAO dao, Object obj) throws DAOException 
 	{
 		DistributionProtocol distributionProtocol = (DistributionProtocol)obj;
-		AbstractDAO dao = DAOFactory.getDAO(Constants.HIBERNATE_DAO);
-		dao.openSession();
 		
 		List list = dao.retrieve(User.class.getName(), "systemIdentifier", distributionProtocol.getPrincipalInvestigator().getSystemIdentifier());
 		if (list.size() != 0)
@@ -61,8 +56,6 @@ public class DistributionProtocolBizLogic extends DefaultBizLogic
 			specimenRequirement.getDistributionProtocolCollection().add(distributionProtocol);
 			dao.insert(specimenRequirement);
 		}
-				
-	    dao.closeSession();
 	}
 	
 	/**
@@ -72,7 +65,7 @@ public class DistributionProtocolBizLogic extends DefaultBizLogic
      * @throws HibernateException Exception thrown during hibernate operations.
      * @throws DAOException 
      */
-    public void update(Object obj) throws DAOException
+	protected void update(DAO dao, Object obj) throws DAOException
     {
     }
 }

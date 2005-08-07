@@ -10,8 +10,11 @@
 package edu.wustl.catissuecore.bizlogic;
 
 import java.util.List;
-import java.util.Vector;
 
+import edu.wustl.catissuecore.dao.AbstractDAO;
+import edu.wustl.catissuecore.dao.DAO;
+import edu.wustl.catissuecore.dao.DAOFactory;
+import edu.wustl.catissuecore.exception.BizLogicException;
 import edu.wustl.common.util.dbManager.DAOException;
 
 
@@ -26,14 +29,14 @@ public abstract class AbstractBizLogic
      * @param obj The object to be inserted.
      * @throws DAOException
      */
-    public abstract void insert(Object obj) throws DAOException;    
+    protected abstract void insert(DAO dao, Object obj) throws DAOException;    
 
     /**
      * Updates an objects into the database.
      * @param obj The object to be updated into the database. 
      * @throws DAOException
      */
-    public abstract void update(Object obj) throws DAOException;
+    protected abstract void update(DAO dao, Object obj) throws DAOException;
     
     /**
      * Retrieves the records for class name in sourceObjectName according to field values passed.
@@ -58,10 +61,85 @@ public abstract class AbstractBizLogic
      */
     public abstract List retrieve(String sourceObjectName) throws DAOException;
     
-    public abstract Vector getList(String sourceObjectName, String[] displayNameFields, String valueField, String[] whereColumnName,
+    public abstract List getList(String sourceObjectName, String[] displayNameFields, String valueField, String[] whereColumnName,
             String[] whereColumnCondition, Object[] whereColumnValue,
             String joinCondition, String separatorBetweenFields) throws DAOException;
     
-    public abstract Vector getList(String sourceObjectName, String[] displayNameFields, String valueField) 
+    public abstract List getList(String sourceObjectName, String[] displayNameFields, String valueField) 
     			throws DAOException;
+    
+    public final void insert(Object obj,int daoType) throws BizLogicException
+	{
+		AbstractDAO dao = DAOFactory.getDAO(daoType);
+		try
+		{
+	        dao.openSession();
+	        insert(dao, obj);
+	        dao.commit();
+		}
+		catch(DAOException ex)
+		{
+			try
+			{
+				dao.rollback();
+			}
+			catch(DAOException daoEx)
+			{
+				//TODO ERROR Handling
+				throw new BizLogicException();
+			}
+			//TODO ERROR Handling
+			throw new BizLogicException(ex.getMessage(), ex);
+		}
+		finally
+		{
+			try
+			{
+				dao.closeSession();
+			}
+			catch(DAOException daoEx)
+			{
+				//TODO ERROR Handling
+				throw new BizLogicException();
+			}
+		}
+	}
+    
+    public final void update(Object obj,int daoType) throws BizLogicException
+	{
+		AbstractDAO dao = DAOFactory.getDAO(daoType);
+		try
+		{
+	        dao.openSession();
+	        update(dao, obj);
+	        dao.commit();
+		}
+		catch(DAOException ex)
+		{
+			try
+			{
+				dao.rollback();
+			}
+			catch(DAOException daoEx)
+			{
+				//TODO ERROR Handling
+				throw new BizLogicException();
+				//throw new BizLogicException(ex.getMessage(), ex);
+			}
+			//TODO ERROR Handling
+			throw new BizLogicException(ex.getMessage(), ex);
+		}
+		finally
+		{
+			try
+			{
+				dao.closeSession();
+			}
+			catch(DAOException daoEx)
+			{
+				//TODO ERROR Handling
+				throw new BizLogicException();
+			}
+		}
+	}
 }

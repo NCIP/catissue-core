@@ -11,10 +11,8 @@
 package edu.wustl.catissuecore.bizlogic;
 
 import net.sf.hibernate.HibernateException;
-import edu.wustl.catissuecore.dao.AbstractDAO;
-import edu.wustl.catissuecore.dao.DAOFactory;
+import edu.wustl.catissuecore.dao.DAO;
 import edu.wustl.catissuecore.domain.Specimen;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.dbManager.DAOException;
 
 /**
@@ -30,14 +28,9 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
      * @throws HibernateException Exception thrown during hibernate operations.
      * @throws DAOException 
      */
-	public void insert(Object obj) throws DAOException 
+	protected void insert(DAO dao, Object obj) throws DAOException
 	{
 		Specimen type = (Specimen)obj;
-
-        AbstractDAO dao = DAOFactory.getDAO(Constants.HIBERNATE_DAO);
-		dao.openSession();		
-	    
-	    //dao.closeSession();
 	}
 	
 	/**
@@ -47,7 +40,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
      * @throws HibernateException Exception thrown during hibernate operations.
      * @throws DAOException 
      */
-    public void update(Object obj) throws DAOException
+	protected void update(DAO dao, Object obj) throws DAOException
     {
     }
 }

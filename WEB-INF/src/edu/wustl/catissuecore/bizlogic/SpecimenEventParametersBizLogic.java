@@ -6,11 +6,12 @@
  */
 package edu.wustl.catissuecore.bizlogic;
 
+import java.util.List;
+
 import net.sf.hibernate.HibernateException;
-import edu.wustl.catissuecore.dao.AbstractDAO;
-import edu.wustl.catissuecore.dao.DAOFactory;
+import edu.wustl.catissuecore.dao.DAO;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
-import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.domain.User;
 import edu.wustl.common.util.dbManager.DAOException;
 
 
@@ -28,33 +29,27 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
      * @throws HibernateException Exception thrown during hibernate operations.
      * @throws DAOException 
      */
-	public void insert(Object obj) throws DAOException 
+	protected void insert(DAO dao, Object obj) throws DAOException 
 	{
 		SpecimenEventParameters specimenEventParametersObject = (SpecimenEventParameters)obj;
 
-        AbstractDAO dao = DAOFactory.getDAO(Constants.HIBERNATE_DAO);
-		dao.openSession();
-		
-//		List list = dao.retrieve(User.class.getName(), "systemIdentifier", specimenEventParametersObject.getUser().getSystemIdentifier()  );
-//		if (list.size() != 0)
-//		{
-//		    User user = (User) list.get(0);
-//		    specimenEventParametersObject.setUser(user);
-//		}
+		List list = dao.retrieve(User.class.getName(), "systemIdentifier", specimenEventParametersObject.getUser().getSystemIdentifier()  );
+		if (list.size() != 0)
+		{
+		    User user = (User) list.get(0);
+		    specimenEventParametersObject.setUser(user);
+		}
 		
 		dao.insert(specimenEventParametersObject);
-	    
-	    dao.closeSession();
 	}
 	
 	/**
      * Updates the persistent object in the database.
      * @param session The session in which the object is saved.
      * @param obj The object to be updated.
-     * @throws HibernateException Exception thrown during hibernate operations.
      * @throws DAOException 
      */
-    public void update(Object obj) throws DAOException
+	protected void update(DAO dao, Object obj) throws DAOException
     {
     }
 }

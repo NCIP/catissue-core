@@ -13,11 +13,9 @@ package edu.wustl.catissuecore.bizlogic;
 import java.util.List;
 
 import net.sf.hibernate.HibernateException;
-import edu.wustl.catissuecore.dao.AbstractDAO;
-import edu.wustl.catissuecore.dao.DAOFactory;
+import edu.wustl.catissuecore.dao.DAO;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.User;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
@@ -34,13 +32,10 @@ public class SiteBizLogic extends DefaultBizLogic
      * @throws HibernateException Exception thrown during hibernate operations.
      * @throws DAOException 
      */
-	public void insert(Object obj) throws DAOException 
+	protected void insert(DAO dao, Object obj) throws DAOException
 	{
 		Site site = (Site)obj;
 
-        AbstractDAO dao = DAOFactory.getDAO(Constants.HIBERNATE_DAO);
-		dao.openSession();
-		
 		Logger.out.debug("site.getCoordinator().getSystemIdentifier() "+site.getCoordinator().getSystemIdentifier());
 		List list = dao.retrieve(User.class.getName(), "systemIdentifier", site.getCoordinator().getSystemIdentifier());
 		Logger.out.debug("list "+list.size());
@@ -52,8 +47,6 @@ public class SiteBizLogic extends DefaultBizLogic
 		
 		dao.insert(site.getAddress());
 	    dao.insert(site);
-	    
-	    dao.closeSession();
 	}
 	
 	/**
@@ -63,7 +56,7 @@ public class SiteBizLogic extends DefaultBizLogic
      * @throws HibernateException Exception thrown during hibernate operations.
      * @throws DAOException 
      */
-    public void update(Object obj) throws DAOException
+	protected void update(DAO dao, Object obj) throws DAOException
     {
     }
 }

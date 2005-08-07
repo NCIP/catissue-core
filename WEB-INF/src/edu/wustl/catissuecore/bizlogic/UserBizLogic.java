@@ -15,9 +15,7 @@ import java.util.Vector;
 
 import net.sf.hibernate.HibernateException;
 import edu.wustl.catissuecore.action.DomainObjectListAction;
-import edu.wustl.catissuecore.dao.AbstractDAO;
-import edu.wustl.catissuecore.dao.DAOFactory;
-import edu.wustl.catissuecore.dao.HibernateDAO;
+import edu.wustl.catissuecore.dao.DAO;
 import edu.wustl.catissuecore.domain.CancerResearchGroup;
 import edu.wustl.catissuecore.domain.Department;
 import edu.wustl.catissuecore.domain.Institution;
@@ -45,7 +43,7 @@ public class UserBizLogic extends DefaultBizLogic
      * @throws HibernateException Exception thrown during hibernate operations.
      * @throws DAOException
      */
-    public void insert(Object obj) throws DAOException
+	protected void insert(DAO dao, Object obj) throws DAOException
     {
         try
         {
@@ -61,8 +59,9 @@ public class UserBizLogic extends DefaultBizLogic
 //            }
 //            else
 //            {
-                AbstractDAO dao = DAOFactory.getDAO(Constants.HIBERNATE_DAO);
-                dao.openSession();
+            
+//                AbstractDAO dao = DAOFactory.getDAO(Constants.HIBERNATE_DAO);
+//                dao.openSession();
                 
                 Department department = null;
                 Institution institution = null;
@@ -105,7 +104,7 @@ public class UserBizLogic extends DefaultBizLogic
                 dao.insert(user.getAddress());
                 dao.insert(user);
                 
-                dao.closeSession();
+//                dao.closeSession();
                 
                 //Send email to administrator and cc it to the user registered.
                 SendEmail email = new SendEmail();
@@ -165,17 +164,13 @@ public class UserBizLogic extends DefaultBizLogic
      * @throws HibernateException Exception thrown during hibernate operations.
      * @throws DAOException 
      */
-    public void update(Object obj) throws DAOException
+	protected void update(DAO dao, Object obj) throws DAOException
     {
         User user = (User) obj;
         List list = null;
         
         try
         {
-            
-	        HibernateDAO dao = new HibernateDAO();
-	        dao.openSession();
-	        
 	        gov.nih.nci.security.authorization.domainobjects.User csmUser = 
                	SecurityManager.getInstance(DomainObjectListAction.class).
             		getUserById(String.valueOf(user.getSystemIdentifier()));
@@ -193,7 +188,6 @@ public class UserBizLogic extends DefaultBizLogic
 	        	.assignRoleToUser(csmUser.getLoginName(),user.getRoleId());
 	        
 	        dao.update(user);
-	        dao.closeSession();
 	        
 	        //Send email to administrator and cc it to the user registered.
             SendEmail email = new SendEmail();

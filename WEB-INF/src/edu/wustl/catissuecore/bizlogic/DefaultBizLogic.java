@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Vector;
 
 import edu.wustl.catissuecore.dao.AbstractDAO;
+import edu.wustl.catissuecore.dao.DAO;
 import edu.wustl.catissuecore.dao.DAOFactory;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
@@ -22,19 +23,16 @@ import edu.wustl.common.util.logger.Logger;
  * TODO To change the template for this generated type comment go to
  * Window - Preferences - Java - Code Style - Code Templates
  */
-public class DefaultBizLogic extends AbstractBizLogic 
+public class  DefaultBizLogic extends AbstractBizLogic 
 {
 	/**
      * Inserts an object into the database.
      * @param obj The object to be inserted.
      * @throws DAOException
      */
-    public void insert(Object obj) throws DAOException
+    protected void insert(DAO dao, Object obj) throws DAOException
     {
-        AbstractDAO dao = DAOFactory.getDAO(Constants.HIBERNATE_DAO);
-        dao.openSession();
         dao.insert(obj);
-        dao.closeSession();
     }
     
     /**
@@ -42,12 +40,9 @@ public class DefaultBizLogic extends AbstractBizLogic
      * @param obj The object to be updated into the database. 
      * @throws DAOException
      */
-    public void update(Object obj) throws DAOException
+    protected void update(DAO dao, Object obj) throws DAOException
     {
-        AbstractDAO dao = DAOFactory.getDAO(Constants.HIBERNATE_DAO);
-        dao.openSession();
-        dao.update(obj);
-        dao.closeSession();
+        dao.insert(obj);
     }
     
     /**
@@ -63,7 +58,6 @@ public class DefaultBizLogic extends AbstractBizLogic
             String[] whereColumnCondition, Object[] whereColumnValue,
             String joinCondition) throws DAOException
     {
-        
         AbstractDAO dao = DAOFactory.getDAO(Constants.HIBERNATE_DAO);
         
         List list = null;
@@ -161,7 +155,7 @@ public class DefaultBizLogic extends AbstractBizLogic
     }
     
     
-    public Vector getList(String sourceObjectName, String[] displayNameFields, String valueField) throws DAOException
+    public List getList(String sourceObjectName, String[] displayNameFields, String valueField) throws DAOException
     {
         String[] whereColumnName = null;
         String[] whereColumnCondition = null;
@@ -185,7 +179,7 @@ public class DefaultBizLogic extends AbstractBizLogic
     * @return
     * @throws DAOException
     */
-    public Vector getList(String sourceObjectName, String[] displayNameFields, String valueField, String[] whereColumnName,
+    public List getList(String sourceObjectName, String[] displayNameFields, String valueField, String[] whereColumnName,
             String[] whereColumnCondition, Object[] whereColumnValue,
             String joinCondition, String separatorBetweenFields) throws DAOException
     {
@@ -230,8 +224,6 @@ public class DefaultBizLogic extends AbstractBizLogic
                 }
             }
         }
-        
         return nameValuePairs;
     }
-    
 }

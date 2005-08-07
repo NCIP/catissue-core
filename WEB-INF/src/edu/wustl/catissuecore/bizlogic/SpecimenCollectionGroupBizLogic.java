@@ -12,8 +12,7 @@ package edu.wustl.catissuecore.bizlogic;
 
 import java.util.List;
 
-import edu.wustl.catissuecore.dao.AbstractDAO;
-import edu.wustl.catissuecore.dao.DAOFactory;
+import edu.wustl.catissuecore.dao.DAO;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
@@ -32,16 +31,13 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic {
 	 * Saves the user object in the database.
 	 * @param session The session in which the object is saved.
 	 * @param obj The user object to be saved.
-	 * @throws HibernateException Exception thrown during hibernate operations.
 	 * @throws DAOException 
 	 */
-	public void insert(Object obj) throws DAOException {
+	protected void insert(DAO dao, Object obj) throws DAOException
+	{
 		SpecimenCollectionGroup specimenCollectionGroup =
 			(SpecimenCollectionGroup) obj;
-		AbstractDAO dao = DAOFactory.getDAO(Constants.HIBERNATE_DAO);
-		dao.openSession();
-		
-		
+
 		List list = dao.retrieve(Site.class.getName(), "systemIdentifier", specimenCollectionGroup.getSite().getSystemIdentifier());
 		if (!list.isEmpty())
 		{
@@ -94,18 +90,16 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic {
 		
 		dao.insert(specimenCollectionGroup);
 		dao.insert(specimenCollectionGroup.getClinicalReport());
-		
-		dao.closeSession();
 	}
 
 	/**
 	 * Updates the persistent object in the database.
 	 * @param session The session in which the object is saved.
 	 * @param obj The object to be updated.
-	 * @throws HibernateException Exception thrown during hibernate operations.
 	 * @throws DAOException 
 	 */
-	public void update(Object obj) throws DAOException {
+	protected void update(DAO dao, Object obj) throws DAOException
+	{
 
 	}
 }

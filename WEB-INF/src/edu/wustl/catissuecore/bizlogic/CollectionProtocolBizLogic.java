@@ -16,15 +16,12 @@ import java.util.Iterator;
 import java.util.List;
 
 import net.sf.hibernate.HibernateException;
-import edu.wustl.catissuecore.dao.AbstractDAO;
-import edu.wustl.catissuecore.dao.DAOFactory;
+import edu.wustl.catissuecore.dao.DAO;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.User;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.dbManager.DAOException;
-import edu.wustl.common.util.logger.Logger;
 
 /**
  * StorageContainerHDAO is used to add Storage Container information into the database using Hibernate.
@@ -39,62 +36,49 @@ public class CollectionProtocolBizLogic extends DefaultBizLogic
      * @throws HibernateException Exception thrown during hibernate operations.
      * @throws DAOException 
      */
-	public void insert(Object obj) throws DAOException 
+	protected void insert(DAO dao, Object obj) throws DAOException
 	{
-		AbstractDAO dao = DAOFactory.getDAO(Constants.HIBERNATE_DAO);
-		try
+		CollectionProtocol collectionProtocol = (CollectionProtocol)obj;
+		
+		List list = dao.retrieve(User.class.getName(), "systemIdentifier", collectionProtocol.getPrincipalInvestigator().getSystemIdentifier());
+		if (list.size() != 0)
 		{
-			CollectionProtocol collectionProtocol = (CollectionProtocol)obj;
-			dao.openSession();
-			
-			List list = dao.retrieve(User.class.getName(), "systemIdentifier", collectionProtocol.getPrincipalInvestigator().getSystemIdentifier());
+			User pi = (User) list.get(0);
+			collectionProtocol.setPrincipalInvestigator(pi);
+		}
+		
+		Collection coordinatorColl = new HashSet();
+		Iterator it = collectionProtocol.getUserCollection().iterator();
+		while(it.hasNext())
+		{
+			User aUser  =(User)it.next();
+			list = dao.retrieve(User.class.getName(), "systemIdentifier", aUser.getSystemIdentifier());
 			if (list.size() != 0)
 			{
-				User pi = (User) list.get(0);
-				collectionProtocol.setPrincipalInvestigator(pi);
-			}
-			
-			Collection coordinatorColl = new HashSet();
-			Iterator it = collectionProtocol.getUserCollection().iterator();
-			while(it.hasNext())
-			{
-				User aUser  =(User)it.next();
-				list = dao.retrieve(User.class.getName(), "systemIdentifier", aUser.getSystemIdentifier());
-				if (list.size() != 0)
-				{
-					User coordinator = (User) list.get(0);
-					System.out.println("coordinator "+coordinator.getSystemIdentifier());
-					coordinatorColl.add(coordinator);
-					coordinator.getCollectionProtocolCollection().add(collectionProtocol);
-					dao.update(coordinator);
-				}
-			}
-			collectionProtocol.setUserCollection(coordinatorColl);
-			
-			dao.insert(collectionProtocol);
-			it = collectionProtocol.getCollectionProtocolEventCollection().iterator();
-			while(it.hasNext())
-			{
-				CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent)it.next();
-				collectionProtocolEvent.setCollectionProtocol(collectionProtocol);
-				dao.insert(collectionProtocolEvent);
-				
-				Iterator srIt = collectionProtocolEvent.getSpecimenRequirementCollection().iterator();
-				while(srIt.hasNext())
-				{
-					SpecimenRequirement specimenRequirement = (SpecimenRequirement)srIt.next();
-					specimenRequirement.getCollectionProtocolEventCollection().add(collectionProtocolEvent);
-					dao.insert(specimenRequirement);
-				}
+				User coordinator = (User) list.get(0);
+				System.out.println("coordinator "+coordinator.getSystemIdentifier());
+				coordinatorColl.add(coordinator);
+				coordinator.getCollectionProtocolCollection().add(collectionProtocol);
+				dao.update(coordinator);
 			}
 		}
-		catch(Exception ex)
+		collectionProtocol.setUserCollection(coordinatorColl);
+		
+		dao.insert(collectionProtocol);
+		it = collectionProtocol.getCollectionProtocolEventCollection().iterator();
+		while(it.hasNext())
 		{
-			Logger.out.error("",ex);
-		}
-		finally
-		{
-			dao.closeSession();
+			CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent)it.next();
+			collectionProtocolEvent.setCollectionProtocol(collectionProtocol);
+			dao.insert(collectionProtocolEvent);
+			
+			Iterator srIt = collectionProtocolEvent.getSpecimenRequirementCollection().iterator();
+			while(srIt.hasNext())
+			{
+				SpecimenRequirement specimenRequirement = (SpecimenRequirement)srIt.next();
+				specimenRequirement.getCollectionProtocolEventCollection().add(collectionProtocolEvent);
+				dao.insert(specimenRequirement);
+			}
 		}
 	}
 	
@@ -105,7 +89,8 @@ public class CollectionProtocolBizLogic extends DefaultBizLogic
      * @throws HibernateException Exception thrown during hibernate operations.
      * @throws DAOException 
      */
-    public void update(Object obj) throws DAOException
+    protected void update(DAO dao,Object obj) throws DAOException
     {
+    	
     }
 }
