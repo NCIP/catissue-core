@@ -16,7 +16,9 @@ import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.Transaction;
+import edu.wustl.catissuecore.domain.Department;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.dbManager.DBUtil;
 import edu.wustl.common.util.logger.Logger;
@@ -35,66 +37,28 @@ public class HibernateDAO extends AbstractDAO
         try
         {
             session = DBUtil.currentSession();
-            //System.out.println("Auto Commit "+session.connection().getAutoCommit());
             transaction = session.beginTransaction();
         }
         catch (HibernateException dbex)
         {
             Logger.out.error(dbex.getMessage(),dbex);
-            new DAOException("Error in open connection", dbex);
+            new DAOException("Error in opening connection", dbex);
         }
     }
 
-//    public void closeSession()
-//    {
-//    	try
-//		{
-//	        DBUtil.closeSession();
-//		}
-//    	catch(Exception dx)
-//		{
-//    		Logger.out.error(dx.getMessage(),dx);
-//		}
-//        session = null;
-//        transaction = null;
-//    }
-    
     public void closeSession() throws DAOException
     {
-        try
-        {
-            transaction.commit();
-        }
-        catch (HibernateException dbex)
-        {
-            throw handleException(dbex, "Object can not be added.", transaction);
-        }
-        finally
-        {
-            DBUtil.closeSession();
-        }
-    }
-    
-    /**
-     * Handles Hibernate exceptions.
-     * @param dbex The exception that has occured.
-     * @param message The message which is to be printed.
-     * @param tx The transaction in which the exception has occured.	 
-     */
-    private DAOException handleException(Exception dbex, String message,
-            Transaction tx)
-    {
-        try
-        {
-            dbex.printStackTrace();
-            if (tx != null)
-                tx.rollback();
-            return new DAOException(message, dbex);
-        }
-        catch (HibernateException hbe)
-        {
-            return new DAOException("Hibernate Error", hbe);
-        }
+    	try
+		{
+	        DBUtil.closeSession();
+		}
+    	catch(HibernateException dx)
+		{
+    		Logger.out.error(dx.getMessage(),dx);
+    		new DAOException("Error in closing connection", dx);
+		}
+        session = null;
+        transaction = null;
     }
     
     public void commit() throws DAOException
@@ -140,11 +104,35 @@ public class HibernateDAO extends AbstractDAO
         }
         catch(HibernateException hibExp)
         {
-//        	generateExceptionMessage(hibExp,obj);
-            Logger.out.error(hibExp.getMessage(),hibExp);
-            throw new DAOException("Error in insert",hibExp);
+        	throw handleError(hibExp);
         }
     }
+    
+    private DAOException handleError(HibernateException hibExp)
+    {
+        Logger.out.error(hibExp.getMessage(),hibExp);
+        String msg = generateErrorMessage(hibExp);
+        return new DAOException(msg , hibExp);
+    }
+    
+    private String generateErrorMessage(HibernateException ex)
+    {
+	  	StringBuffer message = new StringBuffer();
+	  	String str[] = ex.getMessages();
+	  	if(message!=null)
+	  	{
+	    	for (int i = 0; i < str.length; i++)
+			{
+	    		message.append(str[i]+" ");
+			}
+		}
+		else
+		{
+			return "Unknown Error";
+	  	}
+	  	return message.toString();
+    }
+
 
     /**
      * Updates the persistent object in the database.
@@ -162,7 +150,7 @@ public class HibernateDAO extends AbstractDAO
         catch (HibernateException hibExp)
         {
             Logger.out.error(hibExp.getMessage(),hibExp);
-            throw new DAOException(hibExp.getMessage(),hibExp);
+            throw new DAOException("Error in update",hibExp);
         }
     }
 
@@ -179,7 +167,7 @@ public class HibernateDAO extends AbstractDAO
         catch (HibernateException hibExp)
         {
             Logger.out.error(hibExp.getMessage(),hibExp);
-            throw new DAOException(hibExp.getMessage(),hibExp);
+            throw new DAOException("Error in delete",hibExp);
         }
     }
     
@@ -339,33 +327,56 @@ public class HibernateDAO extends AbstractDAO
 //    		
 //		}
 //    }
-//    public static void main(String[] args) throws Exception
-//	{
-//		Variables.catissueHome = System.getProperty("user.dir");
-//		Logger.configure("Application.properties");
-//		
-//    	HibernateDAO dao = new HibernateDAO();
-//    	
-//    	try
-//		{
-//    		dao.openSession();
-//	    	Department dept = new Department();
-//	    	dept.setName("A1");
-//	    	dao.insert(dept);
-//	    	//dao.commit();
-//		}
-//    	catch(DAOException ex)
-//		{
-//    		ex.printStackTrace();
-//    		try
-//			{
-//    			dao.rollback();
-//			}
-//    		catch(DAOException sex)
-//			{
-//    			
-//			}
-//		}
-//    	dao.closeSession();
-//	}
+
+//    /**
+//     * Handles Hibernate exceptions.
+//     * @param dbex The exception that has occured.
+//     * @param message The message which is to be printed.
+//     * @param tx The transaction in which the exception has occured.	 
+//     */
+//    private DAOException handleException(Exception dbex, String message,
+//            Transaction tx)
+//    {
+//        try
+//        {
+//            if (tx != null)
+//                tx.rollback();
+//            return new DAOException(message, dbex);
+//        }
+//        catch (HibernateException hbe)
+//        {
+//            return new DAOException("Hibernate Error", hbe);
+//        }
+//    }
+
+  public static void main(String[] args) throws Exception
+	{
+		Variables.catissueHome = System.getProperty("user.dir");
+		Logger.configure("Application.properties");
+		
+    	HibernateDAO dao = new HibernateDAO();
+    	
+    	try
+		{
+    		dao.openSession();
+	    	Department dept = new Department();
+	    	dept.setName("A2");
+	    	dao.insert(dept);
+	    	dao.commit();
+		}
+    	catch(DAOException ex)
+		{
+    		ex.printStackTrace();
+    		try
+			{
+    			dao.rollback();
+			}
+    		catch(DAOException sex)
+			{
+    			
+			}
+		}
+    	
+    	dao.closeSession();
+	}
 }

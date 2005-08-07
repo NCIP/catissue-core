@@ -18,6 +18,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -27,6 +29,7 @@ import edu.wustl.catissuecore.bizlogic.AbstractBizLogic;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.dataModel.DomainObjectFactory;
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
+import edu.wustl.catissuecore.exception.BizLogicException;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
@@ -60,7 +63,7 @@ public class CommonAddEditAction extends Action
                 AbstractDomainObject abstractDomain = DomainObjectFactory.getDomainObject(
                         abstractForm.getFormId(), abstractForm);
                 
-                bizLogic.insert(abstractDomain);
+                bizLogic.insert(abstractDomain, Constants.HIBERNATE_DAO);
                 target = new String(Constants.SUCCESS);
             }
             else
@@ -76,7 +79,7 @@ public class CommonAddEditAction extends Action
                 	AbstractDomainObject abstractDomain = (AbstractDomainObject) list.get(0);
                     
                     abstractDomain.setAllValues(abstractForm);
-                    bizLogic.update(abstractDomain);
+                    bizLogic.update(abstractDomain,Constants.HIBERNATE_DAO);
                     target = new String(Constants.SUCCESS);
                 }
                 else
@@ -90,6 +93,19 @@ public class CommonAddEditAction extends Action
 					"."+String.valueOf(abstractForm.isAddOperation()));
 
             request.setAttribute(Constants.STATUS_MESSAGE_KEY,statusMessageKey);
+        }
+        catch (BizLogicException excp)
+        {
+        	ActionErrors errors = new ActionErrors();
+        	
+        	ActionError error = new ActionError("errors.item.required","Error "+excp.getMessage());
+        	errors.add(ActionErrors.GLOBAL_ERROR,error);
+        	saveErrors(request,errors);
+            target = new String(Constants.FAILURE);
+            
+            Logger.out.debug("excp "+excp.getMessage());
+            Logger.out.error(excp.getMessage(), excp);
+            //Logger.out.error(excp.getMessage(), excp);
         }
         catch (DAOException excp)
         {
