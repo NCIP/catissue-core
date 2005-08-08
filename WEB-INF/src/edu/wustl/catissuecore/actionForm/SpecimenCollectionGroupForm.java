@@ -9,8 +9,17 @@
  */
 
 package edu.wustl.catissuecore.actionForm;
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMapping;
+
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.util.global.ApplicationProperties;
+import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Validator;
 
 /**
  * SpecimenCollectionGroupForm Class is used to encapsulate 
@@ -19,15 +28,24 @@ import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
  */
 public class SpecimenCollectionGroupForm extends AbstractActionForm
 {
+   
+	/**
+	 * Represents the operation(Add/Edit) to be performed.
+	 * */
+	private String operation;
+	
+	
     private long systemIdentifier;
     
-	private String clinicalDiagnosis = "";
+	private String clinicalDiagnosis;
     
 	private String clinicalStatus;
 	
-	private String activityStatus = "";
 	
-	private String surgicalPathologyNumber = "";
+	private String activityStatus;
+	
+	private String surgicalPathologyNumber;
+	
 	private long participantsMedicalIdentifierId;
 	
 	/**
@@ -36,12 +54,27 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	private long siteId;
 	
 	private long  collectionProtocolId;
+	
 	private long collectionProtocolEventId;
 		
-	private String radioProperty;
+	/**
+     * Radio button to choose participantName/participantNumber.
+     */
+     private int checkedButton = 1;
 	
 	private long participantId;
+	
+	
 	private String protocolParticipantIdentifier;
+	
+	/**
+	 * No argument constructor for SpecimenCollectionGroupForm class 
+	 */
+	public SpecimenCollectionGroupForm()
+	{
+		reset();
+	}
+	
 	
 	/**
      * @return Returns the systemIdentifier.
@@ -105,19 +138,32 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
-	 * @return
+	 * @return Returns the checkedButton.
 	 */
-	public String getRadioProperty() {
-		return radioProperty;
+	public int getCheckedButton()
+	{
+		return checkedButton;
 	}
 
 	/**
-	 * @param radioProperty
+	 * @param checkedButton The checkedButton to set.
 	 */
-	public void setRadioProperty(String radioProperty) {
-		this.radioProperty = radioProperty;
+	public void setCheckedButton(int checkedButton)
+	{
+		this.checkedButton = checkedButton;
 	}
 
+
+
+
+	/**
+	 * Resets the values of all the fields.
+	 * Is called by the overridden reset method defined in ActionForm.  
+	 * */
+	private void reset()
+	{
+    
+	}
 	/**
 	   * This function Copies the data from an storage type object to a StorageTypeForm object.
 	   * @param storageType A StorageType object containing the information about storage type of the container.  
@@ -140,15 +186,15 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#getFormId()
 	 */
 	public int getFormId() {
-		// TODO Auto-generated method stub
-		return 0;
+		return Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID;
+
 	}
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#isAddOperation()
 	 */
 	public boolean isAddOperation() {
 		// TODO Auto-generated method stub
-		return false;
+		return (getOperation().equals(Constants.ADD));
 	}
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#getActivityStatus()
@@ -248,5 +294,112 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	public void setProtocolParticipantIdentifier(String protocolParticipantIdentifier) {
 		this.protocolParticipantIdentifier = protocolParticipantIdentifier;
 	}
+
+	/**
+	 * @return
+	 */
+	public String getOperation() {
+		return operation;
+	}
+
+	/**
+	 * @param operation
+	 */
+	public void setOperation(String operation) {
+		this.operation = operation;
+	}
+
+	/**
+	 * Overrides the validate method of ActionForm.
+	 */
+	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
+	{
+		ActionErrors errors = new ActionErrors();
+		Validator validator = new Validator();
+		try
+		{
+			if (operation.equals(Constants.SEARCH))
+			{
+				checkValidNumber(new Long(systemIdentifier).toString(),
+							"storageContainer.identifier", errors, validator);
+			}
+			if (operation.equals(Constants.ADD) || operation.equals(Constants.EDIT))
+			{
+				if(this.collectionProtocolId == -1){
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",
+									ApplicationProperties.getValue("specimenCollectionGroup.protocolTitle")));
+				}
+				
+				if(this.siteId == -1){
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",
+									ApplicationProperties.getValue("specimenCollectionGroup.site")));
+				}
+				
+				
+				// Check what user has selected Participant Name / Participant Number
+				if(this.checkedButton == 1 ){   //if participant name field is checked.
+					if(this.siteId == -1){
+							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",
+										ApplicationProperties.getValue("specimenCollectionGroup.collectedByParticipant")));
+					}
+					
+				}
+				else{
+					if(this.siteId == -1){
+							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",
+										ApplicationProperties.getValue("specimenCollectionGroup.collectedByProtocolParticipantNumber")));
+					}
+				}
+				 
+                // Mandatory Field : Study Calendar event point
+				if(this.collectionProtocolEventId == -1){
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",
+									ApplicationProperties.getValue("specimenCollectionGroup.studyCalendarEventPoint")));
+				}
+				
+				// Mandatory Field : clinical Diagnosis
+				if(validator.isEmpty(this.clinicalDiagnosis)){
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",
+									ApplicationProperties.getValue("specimenCollectionGroup.clinicalDiagnosis")));
+				}
+				
+				// Mandatory Field : clinical Status
+				if(!this.clinicalStatus.equals(Constants.SELECT_OPTION)){
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",
+									ApplicationProperties.getValue("specimenCollectionGroup.clinicalStatus")));
+				}
+				
+				//Condition for medical Record Number.
+				if(this.checkedButton == 1 ){   //if participant name field is checked.
+					// here medical record number field should be enabled and must have some value selected.
+					
+					if(this.participantsMedicalIdentifierId == -1){
+						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",
+										ApplicationProperties.getValue("specimenCollectionGroup.medicalRecordNumber")));
+					}
+								
+				}
+				else{
+					// here this field will be alltogether disabled
+					// No need of any condition.
+				      
+				}
+				// Mandatory Field : surgical Pathological number
+				if(validator.isEmpty(this.surgicalPathologyNumber)){
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",
+								ApplicationProperties.getValue("specimenCollectionGroup.surgicalPathologyNumber")));
+				}
+				
+			}
+
+		}
+		catch (Exception excp)
+		{
+			excp.printStackTrace();
+			errors = new ActionErrors();
+		}
+		return errors;
+	}
+
 
 }

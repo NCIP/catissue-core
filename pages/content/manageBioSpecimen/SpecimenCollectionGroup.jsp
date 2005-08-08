@@ -1,32 +1,40 @@
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
-
+<%@ page import="edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
+
 <head>
      <script language="JavaScript">
-        function onTypeChange(element)
+     
+     
+    	function onRadioButtonClick(element)
 		{
-			var action = "/catissuecore/SpecimenCollectionGroup.do?operation=add&typeSelected=" + element.value;
+			if(element.value == 1)
+			{
+				document.forms[0].participantId.disabled = false;
+				document.forms[0].protocolParticipantIdentifier.disabled = true;
+				document.forms[0].participantsMedicalIdentifierId.disabled = false;
+			}
+			else
+			{
+				document.forms[0].participantId.disabled = true;
+				document.forms[0].protocolParticipantIdentifier.disabled = false;
+
+				
+				//disable Medical Record number field.
+				document.forms[0].participantsMedicalIdentifierId.disabled = true;
+			}
+		} 
+		
+		
+        function onChangeEvent(element)
+		{
+
+			var action = "/catissuecore/SpecimenCollectionGroup.do?operation=add";
 			document.forms[0].action = action;
 			document.forms[0].submit();
 		}
-		
-
-		function participantNameButton(element)
-		{
-		     document.forms[0].participantId.disabled = false;
-		      document.forms[0].protocolParticipantNumber.disabled = true;
-		}
-		
-		
-		function participantNumberListButton(element)
-		{
-		      document.forms[0].participantId.disabled = true;
-		      document.forms[0].protocolParticipantNumber.disabled = false;
-
-		}
-		
 		
 	</script>
 </head>
@@ -37,12 +45,12 @@
 
 		if(operation.equals(Constants.EDIT))
 		{
-			formName = Constants.SPECIMEN_EDIT_ACTION;
+			formName = Constants.SPECIMEN_COLLECTION_GROUP_EDIT_ACTION;
 			readOnlyValue=true;
 		}
 		else
 		{
-			formName = Constants.SPECIMEN_ADD_ACTION;
+			formName = Constants.SPECIMEN_COLLECTION_GROUP_ADD_ACTION;
 			readOnlyValue=false;
 		}
 
@@ -126,84 +134,116 @@
 
 				<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.SEARCH%>">
 				 <tr>
-				 	<td class="formMessage" colspan="3">* indicates a required field</td>
+				 	<td class="formMessage" colspan="4">* indicates a required field</td>
 				 </tr>
 				 <tr>
-				    <td class="formTitle" height="20" colspan="3">
+				    <td class="formTitle" height="5" colspan="4">
 				    <%String title = "specimenCollectionGroup."+operation+".title";%>
 				    	<bean:message key="<%=title%>"/>
 				    </td>
 				 </tr>
 				 <tr>
-			     	<td class="formRequiredNotice" width="5">&nbsp;</td>
-				    <td class="formLabel">
+			     	<td class="formRequiredNotice" width="5">*</td>
+				    <td class="formRequiredLabel">
 						<label for="protocolTitle">
 							<bean:message key="specimenCollectionGroup.protocolTitle"/>
 						</label>
 					</td>
 					
 					<td class="formField">
-				     	<html:select property="collectionProtocolId" styleClass="formFieldSized" styleId="collectionProtocolId" size="1" disabled="<%=readOnlyForAll%>" onchange="onTypeChange(this)">
-							<html:options name="protocolIdList" labelName="protocolList"/>		
+				     	<html:select property="collectionProtocolId" styleClass="formFieldSized" styleId="collectionProtocolId" size="1" disabled="<%=readOnlyForAll%>" onchange="onChangeEvent(this)">
+							<html:options collection="<%=Constants.PROTOCOL_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
 		        	</td>
 				 </tr>
 
 				 <tr>
-			     	<td class="formRequiredNotice" width="5">&nbsp;</td>
-				    <td class="formLabel">
-						<label for="protocolTitle">
+ 			     	<td class="formRequiredNotice" width="5">*</td>
+				    <td class="formRequiredLabel">
+						<label for="siteId">
 							<bean:message key="specimenCollectionGroup.site"/>
 						</label>
 					</td>
 					
 					<td class="formField">
-				     	<html:select property="siteId" styleClass="formFieldSized" styleId="siteId" size="1" disabled="<%=readOnlyForAll%>" onchange="onTypeChange(this)">
-							<html:options name="siteIdList" labelName="protocolList"/>		
+				     	<html:select property="siteId" styleClass="formFieldSized" styleId="siteId" size="1" disabled="<%=readOnlyForAll%>">
+  							<html:options collection="<%=Constants.SITELIST%>" labelProperty="name" property="value"/>
 						</html:select>
 		        	</td>
 				 </tr>
 				 
 				 <tr>
-				 	<td class="formRequiredNotice" width="5">&nbsp;</td>
-				    <td class="formField">
-				     	<html:radio property="radioProperty" value="123" onclick="participantNameButton(this)">
-				     		<bean:message key="specimenCollectionGroup.collectedByParticipant"/>
+				    <td class="formRequiredNotice" >
+				     	<html:radio styleClass=""  property="checkedButton" value="1" onclick="onRadioButtonClick(this)">
+  				     	    <label for="participantId">
+								<%--<bean:message key="specimenCollectionGroup.collectedByParticipant" />--%>
+							</label>
+				     	</html:radio>
+				        <br>
+				       	<html:radio styleClass="" property="checkedButton" value="2" onclick="onRadioButtonClick(this)">
+  				       	    <label for="protocolParticipantIdentifier">
+								<%--<bean:message key="specimenCollectionGroup.collectedByProtocolParticipantNumber" />--%>
+							</label>
 				     	</html:radio>
 				    </td>
-				    
-				    <td class="formField">
-				     	<html:select property="participantId" styleClass="formFieldSized" styleId="ParticipantId" size="1" disabled="true">
-							<html:options name="participantIdList" labelName="participantList"/>		
-						</html:select>
+				    <td class="formRequiredLabel">
+						<label for="participantId">
+					        <bean:message key="specimenCollectionGroup.collectedByParticipant" />
+						</label>
+  					    <br>
+						<label for="protocolParticipantIdentifier">
+							<bean:message key="specimenCollectionGroup.collectedByProtocolParticipantNumber" />
+						</label>
+					</td>
+  			        <td class="formField">
+  						<logic:equal name="specimenCollectionGroupForm" property="checkedButton" value="1">
+				     	     <html:select property="participantId" styleClass="formFieldSized" styleId="ParticipantId" size="1" onchange="onChangeEvent(this)">
+                         	     <html:options collection="<%=Constants.PARTICIPANT_LIST%>" labelProperty="name" property="value"/>				     	
+  						     </html:select>
+  						</logic:equal>     
+						<logic:equal name="specimenCollectionGroupForm" property="checkedButton" value="2">
+				     	     <html:select property="participantId" styleClass="formFieldSized" styleId="ParticipantId" size="1" onchange="onChangeEvent(this)" disabled="true">
+                         	     <html:options collection="<%=Constants.PARTICIPANT_LIST%>" labelProperty="name" property="value"/>				     	
+  						     </html:select>
+  						</logic:equal>     
+				  		   <html:link page="/Participant.do?operation=add" styleId="newParticipant">
+		 						<bean:message key="buttons.addNew" />
+	 						</html:link>
+					
+                        <%-- LOGIC TAG FOR PARTICPANT NUMBER --%> 												
+                        <logic:equal name="specimenCollectionGroupForm" property="checkedButton" value="1">						
+   						 	<html:select property="protocolParticipantIdentifier" styleClass="formFieldSized" styleId="protocolParticipantIdentifier" size="1" disabled="true">
+                         		<html:options collection="<%=Constants.PROTOCOL_PARTICIPANT_NUMBER_LIST%>" labelProperty="name" property="value"/>				     					     	
+							</html:select>
+ 						</logic:equal>
+ 						<logic:equal name="specimenCollectionGroupForm" property="checkedButton" value="2">						
+   						 	<html:select property="protocolParticipantIdentifier" styleClass="formFieldSized" styleId="protocolParticipantIdentifier" size="1" >
+                         		<html:options collection="<%=Constants.PROTOCOL_PARTICIPANT_NUMBER_LIST%>" labelProperty="name" property="value"/>				     					     	
+							</html:select>
+ 						</logic:equal>
+ 						   <html:link page="/CollectionProtocolRegistration.do?operation=add" styleId="newParticpantRegistration">
+		 						<bean:message key="buttons.addNew" />
+	 						</html:link>
+ 						
 		        	</td>
 				 </tr>
+				 
 				 <tr>
-				    <td class="formRequiredNotice" width="5">&nbsp;</td>
-				    <td class="formField">
-				     	<html:radio property="radioProperty" value="123" onclick="participantNumberListButton(this)">
-				     		<bean:message key="specimenCollectionGroup.collectedByProtocolParticipantNumber"/>
-				     	</html:radio>
-				    </td>
-				    <td class="formField">
-				     	<html:select property="protocolParticipantIdentifier" styleClass="formFieldSized" styleId="protocolParticipantIdentifier" size="1" disabled="true">
-							<html:options name="protocolParticipantNumberIdList" labelName="protocolParticipantNumberList"/>		
-						</html:select>
-		        	</td>
-				 </tr>
-				 <tr>
-				     <td class="formRequiredNotice" width="5">
-				     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">*</logic:notEqual>
-				     	<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;</logic:equal>
-				     </td>
+				 
+				      <td class="formRequiredNotice" width="5">
+				        	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">*</logic:notEqual>
+				     	   <logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;</logic:equal>
+				      </td>
+				      
 				     <td class="formRequiredLabel">
 						<label for="studyCalendarEventPoint">
 							<bean:message key="specimenCollectionGroup.studyCalendarEventPoint"/>
 						</label>
 					</td>
 				     <td class="formField">
-				     	<html:select property="collectionProtocolEventId" styleClass="formFieldSized" styleId="collectionProtocolEventId" size="1">
-							<html:options name="studyCalendarEventPointIdList" labelName="studyCalendarEventPointList"/>		
+				     	<html:select property="collectionProtocolEventId" styleClass="formFieldSized" styleId="collectionProtocolEventId" size="1" onchange="onChangeEvent(this)" >
+                         	<html:options collection="<%=Constants.STUDY_CALENDAR_EVENT_POINT_LIST%>" labelProperty="name" property="value"/>				     					     					     	
+					<%--	<html:options name="<%=Constants.STUDY_CALENDAR_EVENT_POINT_ID_LIST%>" labelName="<%=Constants.STUDY_CALENDAR_EVENT_POINT_LIST%>"/>		--%>
 						</html:select>
 		        	  </td>
 				 </tr>
@@ -233,7 +273,7 @@
 					 </td>
 				     <td class="formField">
 				     	<html:select property="clinicalStatus" styleClass="formFieldSized" styleId="clinicalStatus" size="1" disabled="<%=readOnlyForAll%>">
-							<html:options name="cinicalStatusList" labelName="cinicalStatusList"/>		
+							<html:options name="<%=Constants.CLINICAL_STATUS_LIST%>" labelName="<%=Constants.CLINICAL_STATUS_LIST%>"/>		
 						</html:select>
 		        	  </td>
 				 </tr>
@@ -247,9 +287,26 @@
 							<bean:message key="specimenCollectionGroup.medicalRecordNumber"/>
 						</label>
 					</td>
+                       <td class="formField">
+   						<logic:equal name="specimenCollectionGroupForm" property="checkedButton" value="1">
+				     		<html:select property="participantsMedicalIdentifierId" styleClass="formFieldSized" styleId="participantsMedicalIdentifierId" size="1" disabled="<%=readOnlyForAll%>">
+                         		<html:options collection="<%=Constants.PARTICIPANT_MEDICAL_IDNETIFIER_LIST%>" labelProperty="name" property="value"/>				     					     					     					     	
+							<%--<html:options name="<%=Constants.PARTICIPANT_MEDICAL_IDNETIFIER_ID_LIST%>" labelName="<%=Constants.PARTICIPANT_MEDICAL_IDNETIFIER_LIST%>"/>		--%>
+							</html:select>
+						</logic:equal>
+						<logic:equal name="specimenCollectionGroupForm" property="checkedButton" value="2">
+					     	<html:select property="participantsMedicalIdentifierId" styleClass="formFieldSized" styleId="participantsMedicalIdentifierId" size="1" disabled="true">
+                	         	<html:options collection="<%=Constants.PARTICIPANT_MEDICAL_IDNETIFIER_LIST%>" labelProperty="name" property="value"/>				     					     					     					     	
+							<%--<html:options name="<%=Constants.PARTICIPANT_MEDICAL_IDNETIFIER_ID_LIST%>" labelName="<%=Constants.PARTICIPANT_MEDICAL_IDNETIFIER_LIST%>"/>		--%>
+							</html:select>
+						</logic:equal>
+		        	  </td>					
+					<!--
+					
 				    <td class="formField">
 				     	<html:text styleClass="formFieldSized" size="30" styleId="participantsMedicalIdentifierId" property="participantsMedicalIdentifierId" readonly="<%=readOnlyForAll%>"/>
 				    </td>
+				    -->
 				 </tr>
 				 <tr>
 			     	<td class="formRequiredNotice" width="5">

@@ -108,21 +108,27 @@
 					</tr>
 					
 					<tr>
-		
-						<td class="formRequiredLabel">
-						    
+  			     	   <td class="formRequiredNotice" width="5">*</td>					
+					   <td class="formRequiredLabel">
 							<label for="name">
 								<bean:message key="collectionProtocolReg.protocolTitle" />
 							</label>
-						</td>
-						<td class="formField">
+					   </td>
+					   <td class="formField">
 							<html:select property="collectionProtocolID" styleClass="formFieldSized" styleId="collectionProtocolID" size="1">
-								<html:options name='<%= Constants.PROTOCOLIDLIST%>' labelName="protocolList" />
-							</html:select>
-						</td>
+								<%-- <html:options name='<%= Constants.PROTOCOL_ID_LIST%>' labelName="protocolList" /> --%>
+ 							    <html:options collection="<%=Constants.PROTOCOL_LIST%>" labelProperty="name" property="value"/>															
+						    </html:select>
+						    
+					    	<html:link page="CollectionProtocol.do?operation=add" styleId="newSite">
+		 						<bean:message key="buttons.addNew" />
+	 						</html:link>					   
+					   </td>
+					
 					</tr>
 					
 					<tr>
+					   <td class="formRequiredNotice" width="5">&nbsp;</td>					
       	 	           <td class="formRequiredLabel" nowrap>
                     		<html:checkbox property="checkedButton" onclick="onCheckboxButtonClick(this)">
 								<label for="participantID">
@@ -132,13 +138,18 @@
 						</td>
 						<td class="formField">
 							<html:select property="participantID" styleClass="formFieldSized" styleId="participantID" size="1" disabled="true">
-								<html:options name='<%= Constants.PARTICIPANTIDLIST%>' labelName="participantList" />
+							<%--	<html:options name='<%= Constants.PARTICIPANT_ID_LIST%>' labelName="participantList" /> --%>
+ 							    <html:options collection="<%=Constants.PARTICIPANT_LIST%>" labelProperty="name" property="value"/>							
 							</html:select>
+							<html:link page="Participant.do?operation=add" styleId="newParticipant" >
+		 						<bean:message key="buttons.addNew" />
+	 						</html:link>					   
+							
 						</td>
 					</tr>
 
 					<tr>
-		
+             		    <td class="formRequiredNotice" width="5">*</td>					
 						<td class="formRequiredLabel">
 							<label for="name">
 								<bean:message key="collectionProtocolReg.participantProtocolID" />
@@ -150,7 +161,7 @@
 					</tr>
 	
      				<tr>
-		
+                		<td class="formRequiredNotice" width="5">*</td>					
 						<td class="formRequiredLabel">
 						    
 							<label for="name">

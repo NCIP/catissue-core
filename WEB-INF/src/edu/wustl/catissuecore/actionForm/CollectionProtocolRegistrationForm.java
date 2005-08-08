@@ -8,13 +8,10 @@
  */
 
 package edu.wustl.catissuecore.actionForm;
-
 import javax.servlet.http.HttpServletRequest;
-
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
-
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -29,14 +26,18 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
      */
     protected long systemIdentifier;
 	
-	
+	/**
+	 * System generated unique collection protocol Identifier
+	 */
 	private long collectionProtocolID;
     
-	
+	/**
+	 * System generated unique participant Identifier
+	 */	
 	private long participantID;
 
 	/**
-	 * System generated unique participant name.
+	 * System generated unique participant protocol Identifier.
 	 */	
 	protected String participantProtocolID;
 
@@ -51,10 +52,17 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 	 */
 	private String operation;
     
-    	
+	/**
+	 * Represents the weather participant Name is selected or not.
+	 *
+	 */    	
 	boolean checkedButton; 	
 	
 	
+	/**
+	 * It will set all values of member variables from Domain Object
+	 * @param CollectionProtocolRegistration domain object
+	 */	
     public void setAllValues(AbstractDomainObject abstractDomain)
     {
 	  try
@@ -89,21 +97,22 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 	/**
 	 * Returns the operation(Add/Edit) to be performed.
 	 * @return Returns the operation.
+	 * @see #setOperation(String)
 	 */
 	public String getOperation()
 	{
 		return operation;
-	}		
-	
+	}
+
 	/**
 	 * Sets the operation to be performed.
 	 * @param operation The operation to set.
+	 * @see #getOperation()
 	 */
 	public void setOperation(String operation)
 	{
 		this.operation = operation;
 	}
-	
 
     /**
      * Returns the date on which the Participant is 
@@ -130,24 +139,17 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
     }
 
            
-	/* (non-Javadoc)
-		 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#getActivityStatus()
-		 */
-		public String getActivityStatus()
-		{
-			// TODO Auto-generated method stub
-			return null;
-		}
+	public String getActivityStatus()
+	{
+		return null;
+	}
     
-    
-		/* (non-Javadoc)
-		 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#setActivityStatus(java.lang.String)
-		 */
-		public void setActivityStatus(String activityStatus)
-		{
-			// TODO Auto-generated method stub
 
-		}
+	public void setActivityStatus(String activityStatus)
+	{
+		// TODO Auto-generated method stub
+	}
+	
 	/**
 	 * @return
 	 */
@@ -177,16 +179,22 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 	}
 
 	/**
-	 * @return returns systemIdentifier
-	 */
-	public long getSystemIdentifier() {
-		return systemIdentifier;
+	 * Returns the identifier assigned to Participant Registration.
+	 * @return long identifier assigned to Participant Registration.
+	 * @see #setIdentifier(long)
+	 * */
+	public long getSystemIdentifier()
+	{
+		return (this.systemIdentifier);
 	}
 
 	/**
-	 * @param systemIdentifier sets systemIdentifier
-	 */
-	public void setSystemIdentifier(long systemIdentifier) {
+	 * Sets an the identifier for a Participant Registration.
+	 * @param systemIdentifier identifier to be assigned to Participant Registration.
+	 * @see #getIdentifier()
+	 * */
+	public void setSystemIdentifier(long systemIdentifier)
+	{
 		this.systemIdentifier = systemIdentifier;
 	}
 
