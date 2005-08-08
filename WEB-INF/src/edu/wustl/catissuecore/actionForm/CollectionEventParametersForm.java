@@ -112,12 +112,12 @@ public class CollectionEventParametersForm extends EventParametersForm
          try
          {
          	// checks the container
-           	if ( validator.isEmpty( container ) || container.equals(Constants.SELECT_OPTION) || validator.isNumeric( container ) )
+           	if ( validator.isEmpty( container ) || container.equals(Constants.SELECT_OPTION) )
             {
            		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectioneventparameters.container")));
             }
          	// checks the collectionProcedure
-          	if (validator.isEmpty( collectionProcedure ) || collectionProcedure.equals(Constants.SELECT_OPTION) || validator.isNumeric(collectionProcedure)  )
+          	if (validator.isEmpty( collectionProcedure ) || collectionProcedure.equals(Constants.SELECT_OPTION) )
             {
            		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectioneventparameters.collectionprocedure")));
             }
