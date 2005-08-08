@@ -3,11 +3,11 @@ function changeMenuStyle(obj, new_style) {
 }
 
 function showCursor(){
-	document.body.style.cursor='hand'
+	document.body.style.cursor='hand';
 }
 
 function hideCursor(){
-	document.body.style.cursor='default'
+	document.body.style.cursor='default';
 }
 
 function confirmDelete(){
