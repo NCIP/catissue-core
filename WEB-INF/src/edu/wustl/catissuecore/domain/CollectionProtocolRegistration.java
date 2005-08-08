@@ -8,15 +8,14 @@
  */
 
 package edu.wustl.catissuecore.domain;
-
 import java.io.Serializable;
 import java.util.Date;
-
 import edu.wustl.catissuecore.actionForm.AbstractActionForm;
 import edu.wustl.catissuecore.actionForm.CollectionProtocolRegistrationForm;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.util.logger.Logger;
+
 
 /**
  * A registration of a Participant to a Collection Protocol.
@@ -58,7 +57,11 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 	{
 		
 	}
-	
+
+	/**
+	 * one argument constructor
+	 * @param CollectionProtocolRegistrationFrom object 
+	 */
 	public CollectionProtocolRegistration(AbstractActionForm form)
 	{
 		setAllValues(form);
@@ -188,8 +191,9 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
         this.collectionProtocol = collectionProtocol;
     }
 
-	/* (non-Javadoc)
-	 * @see edu.wustl.catissuecore.domain.AbstractDomainObject#setAllValues(edu.wustl.catissuecore.actionForm.AbstractActionForm)
+	/** 
+	 * Set all values from CollectionProtocolRegistrationForm to the member variables of class
+	 * @param CollectionProtocolRegistrationForm object  
 	 */
 	public void setAllValues(AbstractActionForm abstractForm) {
 		                  
@@ -207,8 +211,5 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 
 			Logger.out.error(e.getMessage());
 		}
-		
-		// TODO Auto-generated method stub
-		
 	}
 }

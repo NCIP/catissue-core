@@ -12,7 +12,8 @@ package edu.wustl.catissuecore.bizlogic;
 
 import java.util.List;
 
-import edu.wustl.catissuecore.dao.DAO;
+import edu.wustl.catissuecore.dao.AbstractDAO;
+import edu.wustl.catissuecore.dao.DAOFactory;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
@@ -31,13 +32,19 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic {
 	 * Saves the user object in the database.
 	 * @param session The session in which the object is saved.
 	 * @param obj The user object to be saved.
+	 * @throws HibernateException Exception thrown during hibernate operations.
 	 * @throws DAOException 
 	 */
-	protected void insert(DAO dao, Object obj) throws DAOException
+	public void insert(Object obj) throws DAOException 
 	{
+		System.out.println("<<<<<<<<<<<1 :Inside insert method.>>>>>>>>");
 		SpecimenCollectionGroup specimenCollectionGroup =
 			(SpecimenCollectionGroup) obj;
-
+		System.out.println("<<<<<<<<<<<2 :Inside insert method.>>>>>>>>");			
+		AbstractDAO dao = DAOFactory.getDAO(Constants.HIBERNATE_DAO);
+ 		dao.openSession();
+		
+		
 		List list = dao.retrieve(Site.class.getName(), "systemIdentifier", specimenCollectionGroup.getSite().getSystemIdentifier());
 		if (!list.isEmpty())
 		{
@@ -61,8 +68,9 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic {
 		String[] selectColumnName = null;
 		String[] whereColumnName = new String[2];
 		String[] whereColumnCondition = {"=","="};
-		Object[] whereColumnValue = new String[2];
+		Object[] whereColumnValue = new Object[2];
 		String joinCondition = Constants.AND_JOIN_CONDITION;
+		
 		
 		whereColumnName[0]="collectionProtocol.systemIdentifier";
 		whereColumnValue[0]=specimenCollectionGroup.getCollectionProtocolRegistration().getCollectionProtocol().getSystemIdentifier();
@@ -76,30 +84,30 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic {
 		{
 			whereColumnName[1] = "protocolParticipantIdentifier";
 			whereColumnValue[1] = specimenCollectionGroup.getCollectionProtocolRegistration().getProtocolParticipantIdentifier();
+			System.out.println("Value returned:"+whereColumnValue[1]);
 		}
-		
 		
 		list = dao.retrieve( sourceObjectName, selectColumnName,
 						whereColumnName, whereColumnCondition, 
 						whereColumnValue, joinCondition);
-		
 		if(!list.isEmpty())
 		{
 		   specimenCollectionGroup.setCollectionProtocolRegistration((CollectionProtocolRegistration)list.get(0));
 		}
-		
 		dao.insert(specimenCollectionGroup);
 		dao.insert(specimenCollectionGroup.getClinicalReport());
+		
+		dao.closeSession();
 	}
 
 	/**
 	 * Updates the persistent object in the database.
 	 * @param session The session in which the object is saved.
 	 * @param obj The object to be updated.
+	 * @throws HibernateException Exception thrown during hibernate operations.
 	 * @throws DAOException 
 	 */
-	protected void update(DAO dao, Object obj) throws DAOException
-	{
+	public void update(Object obj) throws DAOException {
 
 	}
 }

@@ -544,20 +544,42 @@ PUBLIC
 		<action path="/SpecimenCollectionGroup"
 			type="edu.wustl.catissuecore.action.SpecimenCollectionGroupAction"
 			name="specimenCollectionGroupForm"
+			validate="false"
 			scope="request">
 			<forward name="success" path=".catissuecore.specimenCollectionGroupDef" />
 			<forward name="failure" path=".catissuecore.specimenCollectionGroupDef" />
 		</action>
-		
+
 		<action path="/SpecimenCollectionGroupAdd"
 			type="edu.wustl.catissuecore.action.CommonAddEditAction"
 			name="specimenCollectionGroupForm"
 			validate="true"
 			input="/SpecimenCollectionGroup.do?operation=add"
 			scope="request">
-			<forward name="success" path=".catissuecore.instituteAddSuccessDef" />
+			<forward name="success" path=".catissuecore.specimenCollectionGroupAddSuccessDef" />
 			<forward name="failure" path="/error.jsp" />
 		</action>
+
+		<action path="/SpecimenCollectionGroupEdit"
+			type="edu.wustl.catissuecore.action.CommonAddEditAction"
+			name="specimenCollectionGroupForm"
+			validate="true"
+			input="/SpecimenCollectionGroup.do?operation=edit"
+			scope="request">
+			<forward name="success" path=".catissuecore.specimenCollectionGroupEditSuccessDef" />
+			<forward name="failure" path="/error.jsp" />
+		</action>
+
+		<action path="/SpecimenCollectionGroupSearch"
+		    type="edu.wustl.catissuecore.action.CommonSearchAction"
+			name="specimenCollectionGroupForm"
+			validate="true"
+			input="/SpecimenCollectionGroup.do?operation=search"
+			scope="request">
+			<forward name="success" path="/SpecimenCollectionGroup.do?operation=edit"/>
+			<forward name="failure" path="/SpecimenCollectionGroup.do?operation=search"/>
+		</action>    
+	
 		<!--SpecimenCollectonGroup Actions Begin-->
 
 		<!--Approve User Actions Begin-->

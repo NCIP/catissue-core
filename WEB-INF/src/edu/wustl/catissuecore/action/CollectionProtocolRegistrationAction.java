@@ -26,7 +26,6 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.bizlogic.AbstractBizLogic;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
-import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.util.global.Constants;
 
 /**
@@ -52,50 +51,23 @@ public class CollectionProtocolRegistrationAction extends Action
 		        
 		try
 		{
-			
-			// get list of Protocol title.
-			AbstractBizLogic dao = BizLogicFactory.getBizLogic(Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
+			// 
+			AbstractBizLogic bizLogic = BizLogicFactory.getBizLogic(Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
 			ListIterator iterator = null;
-			int i;
-            
-			//Sets the instituteList attribute to be used in the Add/Edit User Page.
-			List protocolList = dao.retrieve(CollectionProtocol.class.getName());
-			System.out.println("1: "+protocolList.size());
-			String[] protocolArray = new String[protocolList.size()+1];
-			String[] protocolIdArray = new String[protocolList.size() + 1];
-			iterator = protocolList.listIterator();
-			
-			protocolArray[0] = Constants.SELECT_OPTION;
-			protocolIdArray[0]	= "-1";
-			i = 1;
-			while (iterator.hasNext())
-			{
-				CollectionProtocol collectionProtocol = (CollectionProtocol) iterator.next();
-				protocolArray[i] = collectionProtocol.getTitle();
-				protocolIdArray[i] = collectionProtocol.getSystemIdentifier().toString();
-				i++;
-			}
-			request.setAttribute(Constants.PROTOCOLLIST, protocolArray);
-			request.setAttribute(Constants.PROTOCOLIDLIST, protocolIdArray);
+
+			//get list of Protocol title.
+			String sourceObjectName = CollectionProtocol.class.getName();
+			String [] displayNameFields = {"title"};
+			String valueField = "systemIdentifier";
+			List list = bizLogic.getList(sourceObjectName,displayNameFields,valueField);
+			request.setAttribute(Constants.PROTOCOL_LIST, list);
+
 			
 			//get list of Participant's names
-			List participantList = dao.retrieve(Participant.class.getName());
-			System.out.println("2: "+protocolList.size());		
-			String[] participantArray = new String[participantList.size()+1];
-			String[] participantIdArray = new String[participantList.size()+1];
-			iterator = participantList.listIterator();
-			participantArray[0] = Constants.SELECT_OPTION;
-			participantIdArray[0] = "-1";
-			i = 1;
-			while (iterator.hasNext())
-			{
-				Participant participant = (Participant) iterator.next();
-				participantArray[i] = participant.getLastName()+", "+participant.getFirstName();
-				participantIdArray[i] = participant.getSystemIdentifier().toString();
-				i++;
-			}
-			request.setAttribute(Constants.PARTICIPANTLIST, participantArray);
-			request.setAttribute(Constants.PARTICIPANTIDLIST, participantIdArray);
+			sourceObjectName = CollectionProtocol.class.getName();
+			String[] participantsFields = {"title"};
+			list = bizLogic.getList(sourceObjectName,participantsFields,valueField);
+			request.setAttribute(Constants.PARTICIPANT_LIST, list);
 		} 
 		catch (Exception exc)
 		{
