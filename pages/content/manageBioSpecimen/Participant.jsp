@@ -2,13 +2,24 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 
+<%@ page import="java.util.List,java.util.ListIterator"%>
+<%@ page import="edu.wustl.common.beans.NameValueBean"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
+<%@ page import="edu.wustl.catissuecore.actionForm.ParticipantForm"%>
 
+<%
+	List siteList = (List)request.getAttribute(Constants.SITELIST);
+	ListIterator iterator=null;
+%>
 <head>
 	<script language="JavaScript">
 		//function to insert a row in the inner block
 		function insRow(subdivtag)
 		{
+			var val = parseInt(document.forms[0].counter.value);
+			val = val + 1;
+			document.forms[0].counter.value = val;
+			
 			var r = new Array(); 
 			r = document.getElementById(subdivtag).rows;
 			var q = r.length;
@@ -25,8 +36,21 @@
 			spreqtype.className="formField";
 			sname="";
 
-			var abc = "value(ParticipantMedicalIdentifier:" + (q+1) + "_site)";
-			sname="<select name='" + abc + "' size='1' class='formFieldSized15' id='participantMedicalRecordSource" + (q+1) + "'><option value='-- Select --'>-- Select --</option></select>";
+			var name = "value(ParticipantMedicalIdentifier:" + (q+1) + "_Site_systemIdentifier)";
+			sname="<select name='" + name + "' size='1' class='formFieldSized15' id='" + name + "'>";
+			<%
+				if(siteList!=null)
+				{
+					iterator = siteList.listIterator();
+					while(iterator.hasNext())
+					{
+						NameValueBean bean = (NameValueBean)iterator.next();
+			%>
+						sname = sname + "<option value='<%=bean.getValue()%>'><%=bean.getName()%></option>";
+			<%		}
+				}
+			%>
+			sname = sname + "</select>";
 			spreqtype.innerHTML="" + sname;
 		
 			//Third Cellvalue(ParticipantMedicalIdentifier:1_medicalRecordNumber)
@@ -34,9 +58,9 @@
 			spreqsubtype.className="formField";
 			sname="";
 		
+			name = "value(ParticipantMedicalIdentifier:" + (q+1) + "_medicalRecordNumber)";
 			sname= "";
-			//sname = "<input type='text' class='formFieldSized15' name='value(txtval" + (q+1) +")'>";
-			sname="<input type='text' name='value(ParticipantMedicalIdentifier:" + (q+1) + "_medicalRecordNumber)' size='30' value='' class='formFieldSized15' id='participantMedicalRecordNumber'>";
+			sname="<input type='text' name='" + name + "' size='30'  class='formFieldSized15' id='" + name + "'>";
 			spreqsubtype.innerHTML="" + sname;
 		}
 	</script>
@@ -64,14 +88,24 @@
 		}
 
 		String pageOf = (String)request.getAttribute(Constants.PAGEOF);
+
+		Object obj = request.getAttribute("participantForm");
+		int noOfRows=0;
+
+		if(obj != null && obj instanceof ParticipantForm)
+		{
+			ParticipantForm form = (ParticipantForm)obj;
+			noOfRows = form.getCounter();
+		}
 %>
+
 
 	<html:errors />
 
 		<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
 			
 		   <html:form action="<%=Constants.PARTICIPANT_ADD_ACTION%>">
-		   
+		   		   
 		   <logic:equal name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
 		   	<tr>
     		    <td>
@@ -160,6 +194,7 @@
 			 	 <table summary="" cellpadding="3" cellspacing="0" border="0">
 				 <tr>
 					<td><html:hidden property="<%=Constants.OPERATION%>" value="<%=operation%>"/></td>
+					<td><html:hidden property="counter"/></td>
 				 </tr>
 				 
 				<logic:equal name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
@@ -232,8 +267,20 @@
 				     </td>
 				     <td class="formRequiredLabel"><label for="state"><bean:message key="participant.gender"/></label></td>
 				     <td class="formField">
-				     	<html:select property="genotypicGender" styleClass="formFieldSized" styleId="genotypicGender" size="1" disabled="<%=readOnlyForAll%>">
-							<html:options name="genotypicGenderList" labelName="genotypicGenderList"/>		
+				     	<html:select property="gender" styleClass="formFieldSized" styleId="gender" size="1" disabled="<%=readOnlyForAll%>">
+							<html:options name="genderList" labelName="genderList"/>		
+						</html:select>
+		        	  </td>
+				 </tr>
+				 <tr>
+				     <td class="formRequiredNotice" width="5">
+				     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">*</logic:notEqual>
+				     	<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;</logic:equal>
+				     </td>
+				     <td class="formRequiredLabel"><label for="state"><bean:message key="participant.genotype"/></label></td>
+				     <td class="formField">
+				     	<html:select property="genotype" styleClass="formFieldSized" styleId="genotype" size="1" disabled="<%=readOnlyForAll%>">
+							<html:options name="genotypeList" labelName="genotypeList"/>
 						</html:select>
 		        	  </td>
 				 </tr>
@@ -286,9 +333,6 @@
 				     	<bean:message key="participant.medicalIdentifier"/>
 				     </td>
 				     <td class="formButtonField">
-				     	<%--<html:button styleClass="actionButton" onclick="insRow('addMore')">
-							<bean:message key="buttons.addMore"/>
-						</html:button>--%>
 						<html:button property="addKeyValue" styleClass="actionButton" onclick="insRow('addMore')">
 						<bean:message key="buttons.addMore"/>
 						</html:button>
@@ -307,21 +351,30 @@
 				 </tr>
 				 
 				 <tbody id="addMore">
+				<%
+				for(int i=1;i<=noOfRows;i++)
+				{
+					String siteName = "value(ParticipantMedicalIdentifier:"+i+"_Site_systemIdentifier)";
+					String medicalRecordNumber = "value(ParticipantMedicalIdentifier:"+i+"_medicalRecordNumber)";
+				%>
 				 <tr>
-				 	<td class="formSerialNumberField" width="5">1.</td>
+				 	<td class="formSerialNumberField" width="5"><%=i%>.</td>
 				    <td class="formField">
-						<html:select property="value(ParticipantMedicalIdentifier:1_site)" styleClass="formFieldSized15" styleId="participantMedicalRecordSource" size="1" disabled="<%=readOnlyForAll%>">
-							<html:options name="siteIdList" labelName="siteList"/>		
+						<html:select property="<%=siteName%>" styleClass="formFieldSized15" styleId="<%=siteName%>" size="1" disabled="<%=readOnlyForAll%>">
+							<html:options collection="<%=Constants.SITELIST%>" labelProperty="name" property="value"/>		
 						</html:select>
 					</td>
 				    <td class="formField">
-				     	<html:text styleClass="formFieldSized15" size="30" styleId="participantMedicalRecordNumber" property="value(ParticipantMedicalIdentifier:1_medicalRecordNumber)" readonly="<%=readOnlyForAll%>"/>
+				     	<html:text styleClass="formFieldSized15" size="30" styleId="<%=medicalRecordNumber%>" property="<%=medicalRecordNumber%>" readonly="<%=readOnlyForAll%>"/>
 				    </td>
-				 </tr>	
+				 </tr>
+				 <%
+				}
+				%>
 				 </tbody>
 				 
 				 <!-- Medical Identifiers End here -->
- 			   	 <logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">		
+ 			   	 <logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">
 				 	<tr>
 				  		<td align="right" colspan="3">
 							<%
