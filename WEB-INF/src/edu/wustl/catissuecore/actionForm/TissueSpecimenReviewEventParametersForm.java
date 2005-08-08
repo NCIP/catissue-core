@@ -222,7 +222,7 @@ public class TissueSpecimenReviewEventParametersForm extends EventParametersForm
 
  
 //         	// checks the histologicalQuality
-           	if (validator.isEmpty(histologicalQuality)  || validator.isAlpha(histologicalQuality) )
+           	if (validator.isEmpty(histologicalQuality) )
             {
            		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("tissuespecimenrevieweventparameters.histologicalquality")));
             }
