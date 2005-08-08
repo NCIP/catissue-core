@@ -18,7 +18,6 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.domain.TransferEventParameters;
-import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Validator;
@@ -152,7 +151,7 @@ public class TransferEventParametersForm extends EventParametersForm
 	 * @param toStorageContainerId
 	 *            The to StorageContainerId to set.
 	 */
-	public void setToStorageContainer(long toStorageContainerId)
+	public void setToStorageContainerId(long toStorageContainerId)
 	{
 		this.toStorageContainerId = toStorageContainerId;
 	}
@@ -171,7 +170,7 @@ public class TransferEventParametersForm extends EventParametersForm
 	 * @param fromStorageContainer
 	 *            The from StorageContainer to set.
 	 */
-	public void setFromStorageContainer(long fromStorageContainerId)
+	public void setFromStorageContainerId(long fromStorageContainerId)
 	{
 		this.fromStorageContainerId = fromStorageContainerId;
 	}
@@ -238,12 +237,12 @@ public class TransferEventParametersForm extends EventParametersForm
             {
            		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("transfereventparameters.topositiondimensiontwo")));
             }
-            //	 checks the fromStorageContainerId 
+             //	 checks the fromStorageContainerId 
          	if (fromStorageContainerId <= 0 )
             {
            		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("transfereventparameters.fromstoragecontainerid")));
             }
-            //	 checks the toStorageContainerId 
+            //	 checks the toStorageContainerId
          	if (toStorageContainerId  <= 0 )
             {
            		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("transfereventparameters.tostoragecontainerid")));
@@ -264,7 +263,7 @@ public class TransferEventParametersForm extends EventParametersForm
       */
      public void reset(ActionMapping mapping, HttpServletRequest request)
      {
-         reset();
+         super.reset();
          this.fromPositionDimensionOne = 0;
          this.fromPositionDimensionTwo = 0;
          this.toPositionDimensionOne = 0;
