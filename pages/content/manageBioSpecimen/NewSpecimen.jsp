@@ -2,7 +2,152 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 
+<%@ page import="java.util.List,java.util.ListIterator"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
+<%@ page import="edu.wustl.catissuecore.actionForm.NewSpecimenForm"%>
+
+<%
+String bhIdArray [] = (String []) request.getAttribute(Constants.BIOHAZARD_ID_LIST);
+String bhNameArray [] = (String []) request.getAttribute(Constants.BIOHAZARD_NAME_LIST);
+String bhTypeArray [] = (String []) request.getAttribute(Constants.BIOHAZARD_TYPES_LIST);
+%>
+<head>
+	<script language="JavaScript">
+	
+		var idArray = new Array();
+		var nameArray = new Array();
+		var typeArray = new Array();
+		
+		<%
+			if(bhIdArray != null && bhTypeArray != null && bhNameArray !=null)
+			{
+				for(int i=0;i<bhIdArray.length;i++)
+				{
+		%>
+					idArray[<%=i%>] = "<%=bhIdArray[i]%>";
+					nameArray[<%=i%>] = "<%=bhNameArray[i]%>";
+					typeArray[<%=i%>] = "<%=bhTypeArray[i]%>";
+		<%
+				}
+			}
+		%>
+		
+		function onBiohazardTypeSelected(element)
+		{ 
+			var i = (element.name).indexOf("_");
+			var comboNo = (element.name).substring(i-1,i);
+			var comboToRefresh = "bhId" + comboNo;
+			ele = document.getElementById(comboToRefresh);
+			//To Clear the Combo Box
+			ele.options.length = 0;
+			
+			ele.options[0] = new Option('-- Select --','-1');
+			var j=1;
+			//Populating the corresponding Combo Box
+			for(i=0;i<idArray.length;i++)
+			{
+				if(typeArray[i] == element.value)
+				{
+					ele.options[j++] = new Option(nameArray[i],idArray[i]);
+				}
+			}
+		}
+	
+		//ADD MORE -------- EXTERNAL IDENTIFIER
+		function insExIdRow(subdivtag)
+		{
+			var val = parseInt(document.forms[0].exIdCounter.value);
+			val = val + 1;
+			document.forms[0].exIdCounter.value = val;
+			
+			var r = new Array(); 
+			r = document.getElementById(subdivtag).rows;
+			var q = r.length;
+			var rowno = q + 1;
+			var x=document.getElementById(subdivtag).insertRow(q);
+		
+			// First Cell
+			var spreqno=x.insertCell(0);
+			spreqno.className="formSerialNumberField";
+			sname=(q+1);
+			spreqno.innerHTML="" + rowno + ".";
+		
+			//Second Cell
+			var spreqtype=x.insertCell(1);
+			spreqtype.className="formField";
+			spreqtype.colSpan=1;
+			sname="";
+			
+			var name = "externalIdentifierValue(ExternalIdentifier:" + rowno +"_name)";
+			sname="<input type='text' name='" + name + "' class='formFieldSized15' id='" + name + "'>";      
+		
+		
+			spreqtype.innerHTML="" + sname;
+		
+			//Third Cell
+			var spreqsubtype=x.insertCell(2);
+			spreqsubtype.className="formField";
+			sname="";
+		
+			name = "externalIdentifierValue(ExternalIdentifier:" + rowno +"_value)";
+			sname= "";
+			
+			sname="<input type='text' name='" + name + "' class='formFieldSized15' id='" + name + "'>"   
+		
+			spreqsubtype.innerHTML="" + sname;
+		}
+		
+		
+		//ADD MORE FUNCTIONALITY FOR BIOHAZARDS
+		function insBhRow(subdivtag)
+		{
+			var val = parseInt(document.forms[0].bhCounter.value);
+			val = val + 1;
+			document.forms[0].bhCounter.value = val;
+			
+			var r = new Array(); 
+			r = document.getElementById(subdivtag).rows;
+			var q = r.length;
+			var x=document.getElementById(subdivtag).insertRow(q);
+			
+			// First Cell
+			var spreqno=x.insertCell(0);
+			spreqno.className="formSerialNumberField";
+			sname=(q+1);
+			spreqno.innerHTML="" + sname;
+
+			//Second Cell
+			var spreqtype=x.insertCell(1);
+			spreqtype.className="formField";
+			sname="";
+
+			var name = "biohazardValue(Biohazard:" + (q+1) + "_type)";
+			sname="<select name='" + name + "' size='1' class='formFieldSized15' id='" + name + "' onchange=onBiohazardTypeSelected(this)>";
+			<%
+					for(int i=0;i<Constants.BIOHAZARD_TYPE_ARRAY.length;i++)
+					{
+			%>
+						sname = sname + "<option value='<%=Constants.BIOHAZARD_TYPE_ARRAY[i]%>'><%=Constants.BIOHAZARD_TYPE_ARRAY[i]%></option>";
+			<%		}
+			%>
+			sname = sname + "</select>";
+			spreqtype.innerHTML="" + sname;
+		
+			//Third Cellvalue()
+			var spreqsubtype=x.insertCell(2);
+			spreqsubtype.className="formField";
+			sname="";
+
+			name = "biohazardValue(Biohazard:" + (q+1) + "_systemIdentifier)";
+			sname= "";
+			sname="<select name='" + name + "' size='1' class='formFieldSized15' id='bhId" + (q+1) + "'>";
+			sname = sname + "<option value='-1'><%=Constants.SELECT_OPTION%></option>";			
+			sname = sname + "</select>";
+			spreqsubtype.innerHTML="" + sname;
+		}
+	
+	</script>
+</head>
 
 <% 
 		String operation = (String)request.getAttribute(Constants.OPERATION);
@@ -27,6 +172,17 @@
 		}
 
 		String pageOf = (String)request.getAttribute(Constants.PAGEOF);
+
+		Object obj = request.getAttribute("newSpecimenForm");
+		int exIdRows=1;
+		int bhRows=1;
+
+		if(obj != null && obj instanceof NewSpecimenForm)
+		{
+			NewSpecimenForm form = (NewSpecimenForm)obj;
+			exIdRows = form.getExIdCounter();
+			bhRows	 = form.getBhCounter();
+		}
 %>
 
 	<html:errors />
@@ -125,6 +281,8 @@
 				 <tr>
 					<td>
 						<html:hidden property="<%=Constants.OPERATION%>" value="<%=operation%>"/>
+						<td><html:hidden property="exIdCounter"/></td>
+						<td><html:hidden property="bhCounter"/></td>
 					</td>
 				 </tr>
 				 
@@ -167,12 +325,12 @@
 				 <tr>
 				 	<td class="formRequiredNotice" width="5">&nbsp;</td>
 				    <td class="formLabel">
-				     	<label for="type">
+				     	<label for="className">
 				     		<bean:message key="specimen.type"/>
 				     	</label>
 				    </td>
 				    <td class="formField" colspan="4">
-				     	<html:select property="type" styleClass="formFieldSized15" styleId="type" size="1" disabled="<%=readOnlyForAll%>">
+				     	<html:select property="className" styleClass="formFieldSized15" styleId="className" size="1" disabled="<%=readOnlyForAll%>">
 							<html:options name="specimenTypeList" labelName="specimenTypeList"/>		
 						</html:select>
 		        	</td>
@@ -180,12 +338,12 @@
 				 <tr>
 				    <td class="formRequiredNotice" width="5">&nbsp;</td>
 				    <td class="formLabel">
-				     	<label for="subType">
+				     	<label for="type">
 				     		<bean:message key="specimen.subType"/>
 				     	</label>
 				    </td>
 				    <td class="formField" colspan="4">
-				     	<html:select property="subType" styleClass="formFieldSized15" styleId="subType" size="1" disabled="<%=readOnlyForAll%>">
+				     	<html:select property="type" styleClass="formFieldSized15" styleId="type" size="1" disabled="<%=readOnlyForAll%>">
 							<html:options name="specimenSubTypeList" labelName="specimenSubTypeList"/>		
 						</html:select>
 		        	</td>
@@ -240,10 +398,9 @@
 				 </tr>
 				 <tr>
 			     	<td class="formRequiredNotice" width="5">
-				     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">*</logic:notEqual>
-				     	<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;</logic:equal>
+				     	&nbsp;
 				    </td>
-				    <td class="formRequiredLabel">
+				    <td class="formLabel">
 						<label for="concentration">
 							<bean:message key="specimen.concentration"/>
 						</label>
@@ -320,6 +477,7 @@
 				     	<html:text styleClass="formFieldSized15" size="30" styleId="positionDimensionOne" property="positionDimensionOne" readonly="<%=readOnlyForAll%>"/>
 				    </td>
 				 </tr>
+			 
 				 <tr>
 			     	<td class="formRequiredNotice" width="5">
 				     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">*</logic:notEqual>
@@ -334,52 +492,62 @@
 				     	<html:text styleClass="formFieldSized15" size="30" styleId="positionDimensionTwo" property="positionDimensionTwo" readonly="<%=readOnlyForAll%>"/>
 				    </td>
 				 </tr>
-				 
+		 
 				 <tr>
 				     <td class="formTitle" height="20" colspan="2">
 				     	<bean:message key="specimen.externalIdentifier"/>
 				     </td>
 				     <td class="formButtonField" colspan="2">
-				     	<html:submit styleClass="actionButton">
-							<bean:message key="buttons.addMore"/>
-						</html:submit>
+				     	<html:button property="addExId" styleClass="actionButton" onclick="insExIdRow('addExternalIdentifier')">
+				     		<bean:message key="buttons.addMore"/>
+				     	</html:button>
 				    </td>
 				 </tr>
-				  
-				  
-				 <tr>
-				 	<td class="formSerialNumberLabel" width="5">
-				     	#
-				    </td>
-				    <td class="formLeftSubTableTitle">
-						<bean:message key="externalIdentifier.name"/>
-					</td>
-				    <td class="formRightSubTableTitle" colspan="2">
-						<bean:message key="externalIdentifier.value"/>
-					</td>
-				 </tr>
-				 <tr>
-				 	<td class="formSerialNumberField" width="5">
-				     	1
-				     </td>
-				    <td class="formField">
-						<html:text styleClass="formFieldSized15" size="30" styleId="externalIdentifierName" property="externalIdentifierType(1)" readonly="<%=readOnlyForAll%>"/>
-					</td>
-				    <td class="formField" colspan="2">
-				     	<html:text styleClass="formFieldSized15" size="30" styleId="externalIdentifierValue" property="externalIdentifierName(1)" readonly="<%=readOnlyForAll%>"/>
-				    </td>
-				 </tr>
+				 
+				 	<tr>
+					 	<td class="formSerialNumberLabel" width="5">
+					     	#
+					    </td>
+					    <td class="formLeftSubTableTitle">
+							<bean:message key="externalIdentifier.name"/>
+						</td>
+					    <td class="formRightSubTableTitle" colspan="2">
+							<bean:message key="externalIdentifier.value"/>
+						</td>
+					 </tr>
+				  <tbody id="addExternalIdentifier">
+				  <%
+				  	for(int i=1;i<=exIdRows;i++)
+				  	{
+						String exName = "externalIdentifierValue(ExternalIdentifier:" + i + "_name)";
+						String exValue = "externalIdentifierValue(ExternalIdentifier:" + i + "_value)";
+				  %>
+					<tr>
+					 	<td class="formSerialNumberField" width="5"><%=i%>.</td>
+					    <td class="formField">
+				     		<html:text styleClass="formFieldSized15" styleId="<%=exName%>" property="<%=exName%>" readonly="<%=readOnlyForAll%>"/>
+				    	</td>
+				    	<td class="formField">
+				     		<html:text styleClass="formFieldSized15" styleId="<%=exValue%>" property="<%=exValue%>" readonly="<%=readOnlyForAll%>"/>
+				    	</td>
+					 </tr>
+				  <% } %>
+				 </tbody>
+				 </table>		
+				 
+				 <table summary="" cellpadding="3" cellspacing="0" border="0" width="600">
 				 
 				 <tr>
 				     <td class="formTitle" height="20" colspan="2">
 				     	<bean:message key="specimen.biohazards"/>
 				     </td>
 				     <td class="formButtonField" colspan="2">
-				     	<html:submit styleClass="actionButton">
-							<bean:message key="buttons.addMore"/>
-						</html:submit>
+				     	<html:button property="addBiohazard" styleClass="actionButton" onclick="insBhRow('addBiohazardRow')">
+				     		<bean:message key="buttons.addMore"/>
+				     	</html:button>
 				    </td>
 				  </tr>
+				  
 				  <tr>
 				 	<td class="formSerialNumberLabel" width="5">
 				     	#
@@ -391,21 +559,41 @@
 						<bean:message key="biohazards.name"/>
 					</td>
 				 </tr>
-				 <tr>
-				     <td class="formSerialNumberField" width="5">
-				     	1
-				     </td>
-				     <td class="formField">
-				     	<html:select property="biohazard(1)" styleClass="formFieldSized15" styleId="race" size="1" disabled="<%=readOnlyForAll%>">
-							<html:options name="biohazardTypeList" labelName="biohazardTypeList"/>		
-						</html:select>
-					 </td>
-				     <td class="formField" colspan="2">
-				     	<html:select property="biohazard(1)" styleClass="formFieldSized15" styleId="race" size="1" disabled="<%=readOnlyForAll%>">
-							<html:options name="biohazardNameList" labelName="biohazardNameList"/>		
-						</html:select>
-		        	 </td>
-				 </tr>
+				 
+				 <tbody id="addBiohazardRow">
+				 	<%
+				  	for(int i=1;i<=bhRows;i++)
+				  	{
+						String bhType = "biohazardValue(Biohazard:" + i + "_type)";
+						String bhId	  = "biohazardValue(Biohazard:" + i + "_systemIdentifier)";
+				  %>
+					<tr>
+					 	<td class="formSerialNumberField" width="5"><%=i%>.</td>
+					    <td class="formField">
+				     		<html:select property="<%=bhType%>" styleClass="formFieldSized15" styleId="<%=bhType%>" size="1" onchange="onBiohazardTypeSelected(this)">
+								<html:options name="<%=Constants.BIOHAZARD_TYPE_LIST%>" labelName="<%=Constants.BIOHAZARD_TYPE_LIST%>" />
+							</html:select>
+				    	</td>
+				    	<td class="formField">
+				     		<html:select property="<%=bhId%>" styleClass="formFieldSized15" styleId="<%="bhId" + i%>" size="1">
+								<html:option value="-1"><%=Constants.SELECT_OPTION%></html:option>
+								<%
+									String type = (String)request.getParameter(bhType);
+									for(int x=0;x<bhIdArray.length;x++)
+									{
+										if(type!=null && type.equals(bhTypeArray[x]))
+										{											
+								%>
+											<html:option value="<%=bhIdArray[x]%>"><%=bhNameArray[x]%></html:option>
+								<%
+										}
+									}
+								%>
+							</html:select>
+				    	</td>
+					 </tr>
+				  <% } %>
+				 </tbody>
 				 <!-- Bio-hazards End here -->	
 				 </table>
 			   
@@ -446,4 +634,4 @@
 			 
 			 <!-- NEW SPECIMEN REGISTRATION ends-->
 			 </html:form>
-		</table>
+</table>
