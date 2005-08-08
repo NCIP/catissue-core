@@ -27,11 +27,8 @@ public class CollectionEventParametersAction extends SpecimenEventParametersActi
 		
 		// set the procedure lists
 	    request.setAttribute(Constants.PROCEDURELIST, Constants.PROCEDUREARRAY);
-	    request.setAttribute(Constants.PROCEDUREIDLIST, Constants.PROCEDUREIDARRAY );
 	    
 	    // set the container lists
 	    request.setAttribute(Constants.CONTAINERLIST, Constants.CONTAINERARRAY);
-	    request.setAttribute(Constants.CONTAINERIDLIST, Constants.CONTAINERIDARRAY );
-
 	}
 }

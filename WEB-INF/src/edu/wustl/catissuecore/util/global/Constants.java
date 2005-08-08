@@ -1028,13 +1028,6 @@ public class Constants
 			"Procedure 3"
 	};
 	
-	public static final int [] PROCEDUREIDARRAY = {
-	        -1,
-			1,
-			2,
-			3
-	};
-	
 	public static final String [] CONTAINERARRAY = {
 	        SELECT_OPTION,
 			"Container 1",
@@ -1042,12 +1035,6 @@ public class Constants
 			"Container 3"
 	};
 
-	public static final int [] CONTAINERIDARRAY = {
-	        -1,
-			1,
-			2,
-			3
-	};
 
 	public static final String [] FIXATIONARRAY = {
 	        SELECT_OPTION,

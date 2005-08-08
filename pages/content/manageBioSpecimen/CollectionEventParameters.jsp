@@ -79,7 +79,7 @@
 	</logic:notEqual> 
 	
 
-	<!-- NEW FrozenEventParameter REGISTRATION BEGINS-->
+	<!-- NEW CollectionEventParameter REGISTRATION BEGINS-->
 	<tr>
 	<td>
 	
@@ -161,7 +161,7 @@
 			</td>
 			<td class="formField">
 				<html:select property="collectionProcedure" styleClass="formFieldSized" styleId="collectionProcedure" size="1">
-					<html:options name="<%=Constants.PROCEDUREIDLIST%>" labelName="<%=Constants.PROCEDURELIST%>" />
+					<html:options name="<%=Constants.PROCEDURELIST%>" labelName="<%=Constants.PROCEDURELIST%>" />
 				</html:select>
 			</td>
 		</tr>
@@ -176,7 +176,7 @@
 			</td>
 			<td class="formField">
 				<html:select property="container" styleClass="formFieldSized" styleId="container" size="1">
-					<html:options name="<%=Constants.CONTAINERIDLIST%>" labelName="<%=Constants.CONTAINERLIST%>" />
+					<html:options name="<%=Constants.CONTAINERLIST%>" labelName="<%=Constants.CONTAINERLIST%>" />
 				</html:select>
 			</td>
 		</tr>

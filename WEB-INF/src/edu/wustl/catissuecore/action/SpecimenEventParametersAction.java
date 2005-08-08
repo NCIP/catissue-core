@@ -57,7 +57,7 @@ public class SpecimenEventParametersAction extends Action
 //			aNameValueBean.setName(Constants.SELECT_OPTION);
 //			aNameValueBean.setValue("-1");
 //			coll.add(aNameValueBean);
-		
+//		
         	request.setAttribute(Constants.USERLIST, coll);
             
         }
