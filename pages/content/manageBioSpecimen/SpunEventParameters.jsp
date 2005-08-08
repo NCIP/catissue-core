@@ -42,7 +42,7 @@
 			<table summary="" cellpadding="3" cellspacing="0" border="0">
 				<tr>
 					<td class="formTitle" height="20" colspan="3">
-						<bean:message key="spuneventparameters.searchTitle"/>
+						<bean:message key="spuneventparameters.searchtitle"/>
 					</td>
 				</tr>	
 		  
@@ -157,12 +157,12 @@
 		<tr>
 			<td class="formRequiredNotice" width="5">*</td>
 			<td class="formRequiredLabel">
-				<label for="type">
-					<bean:message key="spuneventparameters.gForce"/> 
+				<label for="gravityForce">
+					<bean:message key="spuneventparameters.gforce"/> 
 				</label>
 			</td>
 			<td class="formField">
-				<html:text styleClass="formFieldSized"  styleId="gForce" property="gForce" />
+				<html:text styleClass="formFieldSized"  styleId="gravityForce" property="gravityForce" />
 			</td>
 		</tr>
 
@@ -170,8 +170,8 @@
 		<tr>
 			<td class="formRequiredNotice" width="5">*</td>
 			<td class="formRequiredLabel">
-				<label for="type">
-					<bean:message key="spuneventparameters.durationInMinutes"/> 
+				<label for="durationInMinutes">
+					<bean:message key="spuneventparameters.durationinminutes"/> 
 				</label>
 			</td>
 			<td class="formField">
