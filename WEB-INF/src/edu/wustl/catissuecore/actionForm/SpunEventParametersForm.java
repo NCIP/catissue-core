@@ -4,9 +4,9 @@
  * <p> It extends the EventParametersForm class.    
  * Copyright:    Copyright (c) 2005
  * Company: Washington University, School of Medicine, St. Louis.
- * @author Jyoti Singh
+ * @author Mandar Deshmukh
  * @version 1.00
- * Created on July 28th, 2005
+ * Created on August 8th, 2005
  */
 
 package edu.wustl.catissuecore.actionForm;
@@ -25,114 +25,148 @@ import edu.wustl.catissuecore.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
 /**
- * @author Jyoti_Singh
+ * @author Mandar Deshmukh
  *
  * Description:  This Class handles the Spun event parameters..
  */
 public class SpunEventParametersForm extends EventParametersForm
 {
-	
-	private double gForce;
-	private int durationInMinutes;
-
-
-	
-	
+	/**
+     * Rotational force applied to specimen.
+     */
+	protected double gravityForce;
 	
 	/**
-	 * @return Returns the durationInMinutes.
-	 */
+     * Duration for which specimen is spun.
+     */
+	protected int durationInMinutes;
+
+//	/**
+//     * Returns the rotational force applied to specimen. 
+//     * @return The rotational force applied to specimen.
+//     * @see #setGForce(double)
+//     */
+//	public double getGForce()
+//	{
+//		return gForce;
+//	}
+//
+//	/**
+//     * Sets the rotational force applied to specimen.
+//     * @param gForce the rotational force applied to specimen.
+//     * @see #getGForce()
+//     */
+//	public void setGForce(double gForce)
+//	{
+//		this.gForce = gForce;
+//	}
+
+	/**
+     * Returns duration for which specimen is spun. 
+     * @return Duration for which specimen is spun.
+     * @see #setDurationInMinutes(int)
+     */
 	public int getDurationInMinutes()
 	{
 		return durationInMinutes;
 	}
+
 	/**
-	 * @param durationInMinutes The durationInMinutes to set.
-	 */
+     * Sets the duration for which specimen is spun.
+     * @param durationInMinutes duration for which specimen is spun.
+     * @see #getDurationInMinutes()
+     */
 	public void setDurationInMinutes(int durationInMinutes)
 	{
 		this.durationInMinutes = durationInMinutes;
 	}
-	/**
-	 * @return Returns the gForce.
-	 */
-	public double getGForce()
-	{
-		return gForce;
-	}
-	/**
-	 * @param force The gForce to set.
-	 */
-	public void setGForce(double gForce)
-	{
-		this.gForce = gForce;
-	}
+	
+	
+	
+//	 ----- SUPERCLASS METHODS
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#getFormId()
 	 */
 	public int getFormId()
 	{
-		return Constants.SPUN_EVENT_PARAMETERS_FORM_ID;
+		return Constants.SPUN_EVENT_PARAMETERS_FORM_ID ;
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#setAllValues(edu.wustl.catissuecore.domain.AbstractDomainObject)
-	 */
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
-		try
-		{
+	    try
+       {
 			super.setAllValues(abstractDomain);
-			SpunEventParameters SpunEventParametersObject = (SpunEventParameters)abstractDomain ;
-			this.gForce = SpunEventParametersObject.getGForce().doubleValue() ;
-			this.durationInMinutes = SpunEventParametersObject.getDurationInMinutes().intValue();
+			SpunEventParameters spunEventParametersObject = (SpunEventParameters)abstractDomain ;
+			this.gravityForce = spunEventParametersObject.getGForce().doubleValue() ;
+			this.durationInMinutes = spunEventParametersObject.getDurationInMinutes().intValue() ; 
 	    }
 	    catch(Exception excp)
 	    {
 	        Logger.out.error(excp.getMessage());
 	    }
 	}
-
+	
 	/**
-     * Overrides the validate method of ActionForm.
-     * */
-     public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
-     {
-     	ActionErrors errors = super.validate(mapping, request);
-         Validator validator = new Validator();
-         
-         try
-         {
+    * Overrides the validate method of ActionForm.
+    * */
+    public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
+    {
+    	ActionErrors errors = super.validate(mapping, request);
+        Validator validator = new Validator();
+        
+        try
+        {
 
-            //	 checks the durationInMinutes
-         	if (durationInMinutes  <= 0)
-            {
-           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("spuneventparameters.durationinminutes")));
-            }
 
-         	if (gForce <= 0 || Double.isNaN(gForce))
-            {
-           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("spuneventparameters.gforce")));
-            }
-         	
-         }
-         catch(Exception excp)
-         {
-             Logger.out.error(excp.getMessage());
-         }
-         return errors;
-      }
+         	Logger.out.info("durationInMinutes: "+ durationInMinutes  );
+           //	 checks the durationInMinutes
+        	if (durationInMinutes <= 0 )
+           {
+          		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("spuneventparameters.durationinminutes")));
+           }
+        	
+           //	 checks the gForce
+        	if (!validator.isDouble(""+gravityForce ))
+           {
+          		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("spuneventparameters.gforce")));
+           }
+        	
+        	
+        }
+        catch(Exception excp)
+        {
+            Logger.out.error(excp.getMessage());
+        }
+        return errors;
+     }
 	
 
-     /**
-      * Resets the values of all the fields.
-      * This method defined in ActionForm is overridden in this class.
-      */
-     public void reset(ActionMapping mapping, HttpServletRequest request)
-     {
-         reset();
-         this.gForce = 0.0;
-         this.durationInMinutes = 0;
-     }
-     
+    /**
+     * Resets the values of all the fields.
+     * This method defined in ActionForm is overridden in this class.
+     */
+    public void reset(ActionMapping mapping, HttpServletRequest request)
+    {
+        reset();
+        this.gravityForce = 0;
+        this.durationInMinutes = 0;
+    }
+    
+	
+    
+	/**
+	 * @return Returns the gravityForce.
+	 */
+	public double getGravityForce()
+	{
+		return gravityForce;
+	}
+	/**
+	 * @param gravityForce The gravityForce to set.
+	 */
+	public void setGravityForce(double gravityForce)
+	{
+		this.gravityForce = gravityForce;
+	}
 }

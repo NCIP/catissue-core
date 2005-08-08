@@ -105,8 +105,8 @@ public class SpunEventParameters extends SpecimenEventParameters implements java
         {
         	SpunEventParametersForm form = (SpunEventParametersForm) abstractForm;
         	
-        	this.gForce = new Double(form.getGForce() );
-        	this.durationInMinutes = new Integer(form.getDurationInMinutes());
+        	this.gForce = new Double(form.getGravityForce() );
+        	this.durationInMinutes = new Integer(form.getDurationInMinutes() );
 
         	super.setAllValues(form);
         }
