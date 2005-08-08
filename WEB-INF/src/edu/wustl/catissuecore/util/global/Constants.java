@@ -71,10 +71,10 @@ public class Constants
 	public static final String ETHNICITY_LIST = "ethnicityList";
 	public static final String PARTICIPANT_MEDICAL_RECORD_SOURCE_LIST = "participantMedicalRecordSourceList";
 	public static final String RACELIST = "raceList";
-	public static final String PARTICIPANTLIST = "participantList";
-	public static final String PARTICIPANTIDLIST = "participantIdList";
-	public static final String PROTOCOLLIST = "protocolList";
-	public static final String PROTOCOLIDLIST = "protocolIdList";
+	public static final String PARTICIPANT_LIST = "participantList";
+	public static final String PARTICIPANT_ID_LIST = "participantIdList";
+	public static final String PROTOCOL_LIST = "protocolList";
+	public static final String PROTOCOL_ID_LIST = "protocolIdList";
 	public static final String TIMEHOURLIST = "timeHourList";
 	public static final String TIMEMINUTESLIST = "timeMinutesList";
 	public static final String TIMEAMPMLIST = "timeAMPMList";
@@ -109,9 +109,12 @@ public class Constants
 	public static final String PROTOCOL_TITLE_LIST = "protocolTitleList";
 	public static final String PARTICIPANT_NAME_LIST = "participantNameList";
 	public static final String PROTOCOL_PARTICIPANT_NUMBER_LIST = "protocolParticipantNumberList";
-	public static final String PROTOCOL_PARTICIPANT_NUMBER_ID_LIST = "protocolParticipantNumberIdList";
+	//public static final String PROTOCOL_PARTICIPANT_NUMBER_ID_LIST = "protocolParticipantNumberIdList";
 	public static final String STUDY_CALENDAR_EVENT_POINT_LIST = "studyCalendarEventPointList";
-	public static final String STUDY_CALENDAR_EVENT_POINT_ID_LIST="studyCalendarEventPointIdList";
+	//public static final String STUDY_CALENDAR_EVENT_POINT_ID_LIST="studyCalendarEventPointIdList";
+	public static final String PARTICIPANT_MEDICAL_IDNETIFIER_LIST = "participantMedicalIdentifierArray";
+	//public static final String PARTICIPANT_MEDICAL_IDNETIFIER_ID_LIST = "participantMedicalIdentifierIdArray";
+	
 	public static final String CLINICAL_STATUS_LIST = "cinicalStatusList";
 	public static final String SPECIMEN_CLASS_LIST = "specimenClassList";
 	public static final String SPECIMEN_CLASS_ID_LIST = "specimenClassIdList";
@@ -207,6 +210,7 @@ public class Constants
 	public static final String SPECIMEN_ADD_ACTION = "SpecimenAdd.do";
 	public static final String SPECIMEN_EDIT_ACTION = "SpecimenEdit.do";
 
+	public static final String SPECIMEN_COLLECTION_GROUP_SEARCH_ACTION = "SpecimenCollectionGroup.do";
 	public static final String SPECIMEN_COLLECTION_GROUP_ADD_ACTION = "SpecimenCollectionGroupAdd.do";
 	public static final String SPECIMEN_COLLECTION_GROUP_EDIT_ACTION = "SpecimenCollectionGroupEdit.do";
 
@@ -886,6 +890,7 @@ public class Constants
 	        "30","60","90"
 	};
 	public static final String [] CLINICAL_STATUS_ARRAY = {
+		    SELECT_OPTION,
 	        "Pre-Opt",
 	        "Post-Opt"
 	};
