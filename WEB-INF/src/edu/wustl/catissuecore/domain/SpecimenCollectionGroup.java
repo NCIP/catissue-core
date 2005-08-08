@@ -44,7 +44,7 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
      * (e.g. New DX, pre-RX, pre-OP, post-OP, remission, relapse)
      */
     protected String clinicalStatus;
-
+     
     /**
      * Defines whether this  record can be queried (Active) 
      * or not queried (Inactive) by any actor.
@@ -84,6 +84,7 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
     
 	public SpecimenCollectionGroup(AbstractActionForm form)
 	{
+		    System.out.println("<<< Before setting Values >>>");
 			setAllValues(form);
 	}
 
@@ -313,6 +314,7 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
 		SpecimenCollectionGroupForm form = (SpecimenCollectionGroupForm)abstractForm;
 		try
 			{
+				System.out.println("Inside SEtallValues method....");
 				this.systemIdentifier = new Long(form.getSystemIdentifier());
 				this.setClinicalDiagnosis(form.getClinicalDiagnosis());
 		        this.setClinicalStatus(form.getClinicalStatus());
@@ -333,16 +335,23 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
 				
 				
 				collectionProtocolRegistration = new CollectionProtocolRegistration();
+				if(form.getCheckedButton() == 1){    //value of radio button is 2 when participant name is selected
+					Participant participant = new Participant();
+					participant.setSystemIdentifier(new Long(form.getParticipantId()));
+					collectionProtocolRegistration.setParticipant(participant);
+					System.out.println("INSIDE IF PART (PARTICIPANTNAME)");
+				}else{
+					collectionProtocolRegistration.setProtocolParticipantIdentifier(form.getProtocolParticipantIdentifier());
+					System.out.println("INSIDE ELSE PART (PARTICIPANTNUMBER)");
+				}
 				
-				Participant participant = new Participant();
-				participant.setSystemIdentifier(new Long(form.getParticipantId()));
-				collectionProtocolRegistration.setParticipant(participant);
 				
 				CollectionProtocol collectionProtocol = new CollectionProtocol();
 				collectionProtocol.setSystemIdentifier(new Long(form.getCollectionProtocolId()));
 				collectionProtocolRegistration.setCollectionProtocol(collectionProtocol);
 				
-				collectionProtocolRegistration.setProtocolParticipantIdentifier(form.getProtocolParticipantIdentifier());
+				
+				System.out.println("<<<<<END OF SETALLVALUES METHOD>>>");
 			}
 			catch(Exception e)
 			{
@@ -351,4 +360,5 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
 			}
 		
 	}
+	
 }
