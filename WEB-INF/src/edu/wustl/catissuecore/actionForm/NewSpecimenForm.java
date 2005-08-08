@@ -10,22 +10,28 @@
 
 package edu.wustl.catissuecore.actionForm;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
+import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
 /**
  * NewSpecimenForm Class is used to encapsulate all the request parameters passed 
  * from New Specimen webpage.
- * @author gautam_shetty
+ * @author aniruddha_phadnis
  */
 public class NewSpecimenForm extends AbstractActionForm
 {
@@ -99,12 +105,30 @@ public class NewSpecimenForm extends AbstractActionForm
      * Comments on specimen.
      */
     private String comments = "";
-
-    private Map externalIdentifierTypes = new HashMap();
     
-    private Map externalIdentifierNames = new HashMap();
+    /**
+     * Type of the biohazard.
+     */
+    private String biohazardType;
+    
+    /**
+     * Name of the biohazard.
+     */
+    private String biohazardName;
 
-    private Map biohazards = new HashMap();
+    /**
+     * Number of external identifier rows.
+     */
+    private int exIdCounter=1;
+    
+    /**
+     * Number of biohazard rows.
+     */
+    private int bhCounter=1;
+    
+    private Map externalIdentifier = new HashMap();
+
+    private Map biohazard = new HashMap();
     
     /**
      * Returns the systemIdentifier assigned to User.
@@ -165,21 +189,21 @@ public class NewSpecimenForm extends AbstractActionForm
 		this.activityStatus = activityStatus;
 	}
 
-    /**
-     * @return Returns the biohazards.
-     */
-    public Object getBiohazard(String key)
-    {
-        return biohazards.get(key);
-    }
-
-    /**
-     * @param biohazards The biohazards to set.
-     */
-    public void setBiohazard(String key, Object value)
-    {
-        biohazards.put(key, value);
-    }
+//    /**
+//     * @return Returns the biohazards.
+//     */
+//    public Object getBiohazard(String key)
+//    {
+//        return biohazards.get(key);
+//    }
+//
+//    /**
+//     * @param biohazards The biohazards to set.
+//     */
+//    public void setBiohazard(String key, Object value)
+//    {
+//        biohazards.put(key, value);
+//    }
 
     /**
      * @return Returns the concentration.
@@ -196,38 +220,98 @@ public class NewSpecimenForm extends AbstractActionForm
     {
         this.concentration = concentration;
     }
-
+    
     /**
-     * @return Returns the externalIdentifierTypes.
-     */
-    public Object getExternalIdentifierType(String key)
-    {
-        return externalIdentifierTypes.get(key);
-    }
+	 * Associates the specified object with the specified key in the map.
+	 * @param key the key to which the object is mapped.
+	 * @param value the object which is mapped.
+	 */
+	public void setExternalIdentifierValue(String key, Object value)
+	{
+		externalIdentifier.put(key, value);
+	}
 
-    /**
-     * @param externalIdentifierTypes The externalIdentifierTypes to set.
-     */
-    public void setExternalIdentifierType(String key, Object value)
-    {
-        externalIdentifierTypes.put(key, value);
-    }
+	/**
+	 * Returns the object to which this map maps the specified key.
+	 * @param key the required key.
+	 * @return the object to which this map maps the specified key.
+	 */
+	public Object getExternalIdentifierValue(String key)
+	{
+		return externalIdentifier.get(key);
+	}
 
-    /**
-     * @return Returns the externalIdentifierTypes.
-     */
-    public Object getExternalIdentifierName(String key)
-    {
-        return externalIdentifierNames.get(key);
-    }
+	/**
+	 * @return Returns the values.
+	 */
+	public Collection getAllExternalIdentifiers()
+	{
+		return externalIdentifier.values();
+	}
 
-    /**
-     * @param externalIdentifierTypes The externalIdentifierTypes to set.
-     */
-    public void setExternalIdentifierName(String key, Object value)
-    {
-        externalIdentifierNames.put(key, value);
-    }
+	/**
+	 * @param values
+	 * The values to set.
+	 */
+	public void setExternalIdentifier(Map externalIdentifier)
+	{
+		this.externalIdentifier = externalIdentifier;
+	}
+
+	/**
+	 * @param values
+	 * Returns the map.
+	 */
+	public Map getExternalIdentifier()
+	{
+		return this.externalIdentifier;
+	}
+
+	/**
+	 * Associates the specified object with the specified key in the map.
+	 * @param key the key to which the object is mapped.
+	 * @param value the object which is mapped.
+	 */
+	public void setBiohazardValue(String key, Object value)
+	{
+		biohazard.put(key, value);
+	}
+
+	/**
+	 * Returns the object to which this map maps the specified key.
+	 * @param key the required key.
+	 * @return the object to which this map maps the specified key.
+	 */
+	public Object getBiohazardValue(String key)
+	{
+		return biohazard.get(key);
+	}
+
+	/**
+	 * @return Returns the values.
+	 */
+	public Collection getAllBiohazards()
+	{
+		return biohazard.values();
+	}
+
+	/**
+	 * @param values
+	 * The values to set.
+	 */
+	public void setBiohazard(Map biohazard)
+	{
+		this.biohazard = biohazard;
+	}
+
+	/**
+	 * @param values
+	 * Returns the map.
+	 */
+	public Map getBiohazard()
+	{
+		return this.biohazard;
+	}	
     
     /**
      * @return Returns the comments.
@@ -414,9 +498,9 @@ public class NewSpecimenForm extends AbstractActionForm
         this.pathologicalStatus = null;
         this.storageContainer = null;
         this.comments = null;
-        this.externalIdentifierTypes = new HashMap();
-        this.externalIdentifierNames = new HashMap();
-        this.biohazards = new HashMap();
+        this.externalIdentifier = new HashMap();
+//        this.externalIdentifierNames = new HashMap();
+//        this.biohazards = new HashMap();
     }
     
     /**
@@ -455,11 +539,117 @@ public class NewSpecimenForm extends AbstractActionForm
             Specimen specimen = (Specimen) abstractDomain;
             
             this.systemIdentifier= specimen.getSystemIdentifier().longValue();
-            this.className			= specimen.getType();
+            this.className = specimen.getType();
+            
+            SpecimenCharacteristics characteristic = specimen.getSpecimenCharacteristics();
+            this.pathologicalStatus = characteristic.getPathologicalStatus();
+            this.tissueSide = characteristic.getTissueSide();
+            this.tissueSite = characteristic.getTissueSite();
         }
         catch (Exception excp)
         {
             Logger.out.error(excp.getMessage(),excp);
         }
     }
+    
+	/**
+	 * @return Returns the biohazardType.
+	 */
+	public String getBiohazardType()
+	{
+		return biohazardType;
+	}
+	/**
+	 * @param biohazardType The biohazardType to set.
+	 */
+	public void setBiohazardType(String biohazardType)
+	{
+		this.biohazardType = biohazardType;
+	}
+	
+	/**
+	 * @return Returns the biohazardName.
+	 */
+	public String getBiohazardName()
+	{
+		return biohazardName;
+	}
+	/**
+	 * @param biohazardName The biohazardName to set.
+	 */
+	public void setBiohazardName(String biohazardName)
+	{
+		this.biohazardName = biohazardName;
+	}	
+	
+	/**
+     * Overrides the validate method of ActionForm.
+     * */
+     public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
+     {
+         ActionErrors errors = new ActionErrors();
+         Validator validator = new Validator();
+         
+         try
+         {
+             if (operation.equals(Constants.SEARCH))
+             {
+                 checkValidNumber(new Long(systemIdentifier).toString(),"site.identifier",errors,validator);
+             }
+             if (operation.equals(Constants.ADD) || operation.equals(Constants.EDIT))
+             {             
+             	if (tissueSite.equals(Constants.SELECT_OPTION))
+                {
+                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("specimen.tissueSite")));
+                }
+             	
+             	if (tissueSide.equals(Constants.SELECT_OPTION))
+                {
+                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("specimen.tissueSide")));
+                }
+             	
+             	if (pathologicalStatus.equals(Constants.SELECT_OPTION))
+                {
+                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("specimen.pathologicalStatus")));
+                }
+             }
+         }
+         catch(Exception excp)
+         {
+             Logger.out.error(excp.getMessage());
+         }
+         return errors;
+      }
+     
+	/**
+	 * @return Returns the bhCounter.
+	 */
+	public int getBhCounter()
+	{
+		return bhCounter;
+	}
+	
+	/**
+	 * @param bhCounter The bhCounter to set.
+	 */
+	public void setBhCounter(int bhCounter)
+	{
+		this.bhCounter = bhCounter;
+	}
+	
+	/**
+	 * @return Returns the exIdCounter.
+	 */
+	public int getExIdCounter()
+	{
+		return exIdCounter;
+	}
+	
+	/**
+	 * @param exIdCounter The exIdCounter to set.
+	 */
+	public void setExIdCounter(int exIdCounter)
+	{
+		this.exIdCounter = exIdCounter;
+	}
 }

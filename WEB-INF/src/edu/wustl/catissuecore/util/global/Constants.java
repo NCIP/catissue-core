@@ -67,7 +67,8 @@ public class Constants
 	public static final String ROLELIST = "roleList";
 	public static final String ROLEIDLIST = "roleIdList";
 	public static final String CANCER_RESEARCH_GROUP_LIST = "cancerResearchGroupList";
-	public static final String GENOTYPIC_GENDER_LIST = "genotypicGenderList";
+	public static final String GENDER_LIST = "genderList";
+	public static final String GENOTYPE_LIST = "genotypeList";
 	public static final String ETHNICITY_LIST = "ethnicityList";
 	public static final String PARTICIPANT_MEDICAL_RECORD_SOURCE_LIST = "participantMedicalRecordSourceList";
 	public static final String RACELIST = "raceList";
@@ -104,6 +105,8 @@ public class Constants
 	public static final String PATHOLOGICAL_STATUS_LIST = "pathologicalStatusList";
 	public static final String BIOHAZARD_TYPE_LIST = "biohazardTypeList";
 	public static final String BIOHAZARD_NAME_LIST = "biohazardNameList";
+	public static final String BIOHAZARD_ID_LIST = "biohazardIdList";
+	public static final String BIOHAZARD_TYPES_LIST = "biohazardTypesList";
 	
 	//SpecimenCollecionGroup lists.
 	public static final String PROTOCOL_TITLE_LIST = "protocolTitleList";
@@ -207,8 +210,8 @@ public class Constants
 	public static final String TREE_VIEW_ACTION = "TreeView.do";
 	
 	//New Specimen Data Actions.
-	public static final String SPECIMEN_ADD_ACTION = "SpecimenAdd.do";
-	public static final String SPECIMEN_EDIT_ACTION = "SpecimenEdit.do";
+	public static final String SPECIMEN_ADD_ACTION = "NewSpecimenAdd.do";
+	public static final String SPECIMEN_EDIT_ACTION = "NewSpecimenEdit.do";
 
 	public static final String SPECIMEN_COLLECTION_GROUP_SEARCH_ACTION = "SpecimenCollectionGroup.do";
 	public static final String SPECIMEN_COLLECTION_GROUP_ADD_ACTION = "SpecimenCollectionGroupAdd.do";
@@ -454,10 +457,16 @@ public class Constants
 	        SELECT_OPTION,
 	        "by hand", "courier", "FedEX", "UPS"
 	};
-	public static final String [] GENOTYPIC_GENDER_ARRAY = {
+	public static final String [] GENDER_ARRAY = {
 	        SELECT_OPTION,
 	        "Male",
 	        "Female"
+	};
+	
+	public static final String [] GENOTYPE_ARRAY = {
+	        SELECT_OPTION,
+	        "XX",
+	        "XY"
 	};
 	
 	public static final String [] RACEARRAY = {
@@ -864,10 +873,10 @@ public class Constants
 	        "Non-Maglignant Tissue",
 	};
 
-	public static final String [] BIOHAZARD_NAME_VALUES = {
-	        SELECT_OPTION,
-	        ""
-	};
+//	public static final String [] BIOHAZARD_NAME_VALUES = {
+//	        SELECT_OPTION,
+//	        ""
+//	};
 	
 	public static final String [] BIOHAZARD_TYPE_VALUES = {
 	        SELECT_OPTION,

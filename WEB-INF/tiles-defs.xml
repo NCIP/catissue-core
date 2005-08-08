@@ -250,9 +250,20 @@
 		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>
 
+	<!-- NEW SPECIMEN -->
 	<definition name=".catissuecore.newSpecimenDef" extends=".catissuecore.manageBioSpecimenHomeDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/NewSpecimen.jsp" />
 	</definition>
+
+	<definition name=".catissuecore.newSpecimenAddSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/common/success.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.newSpecimenEditSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/common/success.jsp" />
+	</definition>
+	<!-- NEW SPECIMEN -->
+	
 	
 	<!-- SpecimenCollectionGroup Parameters -->
 	<definition name=".catissuecore.specimenCollectionGroupDef" extends=".catissuecore.manageBioSpecimenHomeDef">

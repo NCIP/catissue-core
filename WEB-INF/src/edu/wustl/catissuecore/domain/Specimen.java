@@ -13,10 +13,12 @@ package edu.wustl.catissuecore.domain;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import edu.wustl.catissuecore.actionForm.AbstractActionForm;
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
+import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -108,7 +110,7 @@ public abstract class Specimen extends AbstractDomainObject implements Serializa
     /**
      * The combined anatomic state and pathological disease classification of a specimen.
      */
-    protected SpecimenCharacteristics specimenCharacteristics;
+    protected SpecimenCharacteristics specimenCharacteristics = new SpecimenCharacteristics();
 
     public Specimen()
     {
@@ -507,6 +509,26 @@ public abstract class Specimen extends AbstractDomainObject implements Serializa
             this.positionDimensionOne = new Integer(form.getPositionDimensionOne());
             this.positionDimensionTwo = new Integer(form.getPositionDimensionTwo());
             this.type = form.getClassName();
+            
+            //Setting the SpecimenCharacteristics
+            specimenCharacteristics.pathologicalStatus = form.getPathologicalStatus();
+            specimenCharacteristics.tissueSide = form.getTissueSide();
+            specimenCharacteristics.tissueSite = form.getTissueSite();
+            
+            //Getting the Map of External Identifiers
+            Map extMap = form.getExternalIdentifier();
+	        System.out.println("********MAP******* "+extMap);
+	        
+	        MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.domain");
+	        
+	        Collection extCollection = parser.generateData(extMap);
+	        this.externalIdentifierCollection.addAll(extCollection);
+	        
+	        //Getting the Map of Biohazards
+	        Map bioMap = form.getBiohazard();
+	        
+	        Collection bioCollection = parser.generateData(bioMap);
+	        this.biohazardCollection.addAll(bioCollection);
         }
         catch (Exception excp)
         {

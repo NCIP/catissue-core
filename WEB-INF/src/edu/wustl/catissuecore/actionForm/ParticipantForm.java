@@ -67,9 +67,14 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
     protected String middleName = "";
 
     /**
-     * The genotypicGender of a participant as defined by their genotype.
+     * The gender of a participant.
      */
-    protected String genotypicGender = "";
+    protected String gender;
+    
+    /**
+     * The genotype of a participant.
+     */
+    protected String genotype;
 
     /**
      * Social Security Number of the Participant.
@@ -96,15 +101,17 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
      */
     protected String activityStatus = "";
 
-//    private Map participantMedicalRecordSources = new HashMap();
-//    
-//    private Map participantMedicalRecordNumbers = new HashMap();
-    
     /**
 	 * Map to handle values of all the CollectionProtocol Events
 	 */
 	protected Map values = new HashMap();
     
+	/**
+	 * Counter that contains number of rows in the 'Add More' functionality.
+	 */
+	private int counter=1;
+	
+	
     /**
      * Initializes an empty ParticipantForm object. 
      */
@@ -125,7 +132,8 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
         this.firstName = participant.getFirstName();
         this.middleName = participant.getMiddleName();
         this.birthDate = Utility.parseDateToString(participant.getBirthDate(),Constants.DATE_PATTERN_MM_DD_YYYY);
-        this.genotypicGender = participant.getGenotypicGender();
+        this.gender = participant.getGender();
+        this.genotype = participant.getGenotype();
         this.socialSecurityNumber = participant.getSocialSecurityNumber();
         this.race = participant.getRace();
         this.activityStatus = participant.getActivityStatus();
@@ -251,23 +259,43 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
     }
 
     /**
-     * Returns the genotypicGender of the Participant.
-     * @return String the genotypicGender of the Participant.
-     * @see #setGenotypicGender(String)
+     * Returns the genotype of the Participant.
+     * @return String the genotype of the Participant.
+     * @see #setGenotype(String)
      */
-    public String getGenotypicGender()
+    public String getGenotype()
     {
-        return genotypicGender;
+        return genotype;
     }
 
     /**
-     * Sets the genotypicGender of the Participant.
-     * @param birthDate String the genotypicGender of the Participant.
-     * @see #getGenotypicGender()
+     * Sets the genotype of the Participant.
+     * @param genotype String the genotype of the Participant.
+     * @see #getGenotype()
      */
-    public void setGenotypicGender(String gender)
+    public void setGenotype(String genotype)
     {
-        this.genotypicGender = gender;
+        this.genotype = genotype;
+    }
+    
+    /**
+     * Returns the gender of the Participant.
+     * @return String the gender of the Participant.
+     * @see #setGender(String)
+     */
+    public String getGender()
+    {
+        return gender;
+    }
+
+    /**
+     * Sets the gender of the Participant.
+     * @param gender String the gender of the Participant.
+     * @see #getGender()
+     */
+    public void setGender(String gender)
+    {
+        this.gender = gender;
     }
 
     /**
@@ -350,26 +378,6 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 		this.ethnicity = ethnicity;
 	}
     
-//    public void setParticipantMedicalRecordSource(String key, Object value)
-//    {
-//        participantMedicalRecordSources.put(key, value);
-//    }
-//    
-//    public Object getParticipantMedicalRecordSource(String key)
-//    {
-//        return participantMedicalRecordSources.get(key);
-//    }
-//    
-//    public void setParticipantMedicalRecordNumber(String key, Object value)
-//    {
-//        participantMedicalRecordNumbers.put(key,value);
-//    }
-//    
-//    public Object getParticipantMedicalRecordNumber(String key)
-//    {
-//        return participantMedicalRecordNumbers.get(key);
-//    }
-    
     /**
      * Checks the operation to be performed is add operation or not.
      * @return Returns true if operation is equal to "add", else it returns false
@@ -398,7 +406,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
         this.firstName = null;
         this.middleName = null;
         this.birthDate=null;
-        this.genotypicGender = null;
+        this.genotype = null;
         this.socialSecurityNumber = null;
         this.race = null;
     }
@@ -433,7 +441,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
                     errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("participant.birthDate")));
                 }
              	
-             	if(genotypicGender.equals(Constants.SELECT_OPTION))
+             	if(genotype.equals(Constants.SELECT_OPTION))
                 {
                 	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("participant.gender")));
                 }
@@ -490,7 +498,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 
  	/**
  	 * @param values
- 	 *            The values to set.
+ 	 * The values to set.
  	 */
  	public void setValues(Map values)
  	{
@@ -499,10 +507,26 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
  	
  	/**
  	 * @param values
- 	 *            The values to set.
+ 	 * The values to set.
  	 */
  	public Map getValues()
  	{
  		return this.values;
  	}
+ 	
+	/**
+	 * @return Returns the counter.
+	 */
+	public int getCounter()
+	{
+		return counter;
+	}
+	
+	/**
+	 * @param counter The counter to set.
+	 */
+	public void setCounter(int counter)
+	{
+		this.counter = counter;
+	}
  }

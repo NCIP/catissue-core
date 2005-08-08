@@ -130,6 +130,8 @@ PUBLIC
         <!-- Participant Actions Begins -->
         <action path="/Participant"
 			type="edu.wustl.catissuecore.action.ParticipantAction"
+			name="participantForm"
+			validate="false"
 			scope="request">
 			<forward name="success" path=".catissuecore.participantDef" />
 			<forward name="failure" path=".catissuecore.participantDef" />
@@ -520,25 +522,6 @@ PUBLIC
 			<forward name="failure" path=".catissuecore.forgotPasswordDef" />
 		</action>
 		<!--Forgot Password Actions Ends-->
-
-		<!--New Specimen Actions Begin-->
-		<action path="/NewSpecimen"
-			type="edu.wustl.catissuecore.action.NewSpecimenAction"
-			scope="request">
-			<forward name="success" path=".catissuecore.newSpecimenDef" />
-			<forward name="failure" path=".catissuecore.newSpecimenDef" />
-		</action>
-		
-		<action path="/SpecimenAdd"
-			type="edu.wustl.catissuecore.action.CommonAddEditAction"
-			name="newSpecimenForm"
-			validate="true"
-			input="/NewSpecimen.do?operation=add"
-			scope="request">
-			<forward name="success" path=".catissuecore.instituteAddSuccessDef" />
-			<forward name="failure" path="/error.jsp" />
-		</action>
-		<!--New Specimen Actions Begin-->
 		
 		<!--SpecimenCollectonGroup Actions Begin-->
 		<action path="/SpecimenCollectionGroup"
@@ -610,6 +593,47 @@ PUBLIC
 			<forward name="failure" path="/error.jsp" />
 		</action>
 		<!--Approve User Actions End-->
+		
+		<!--New Specimen Actions Begin-->
+		<action path="/NewSpecimen"
+			type="edu.wustl.catissuecore.action.NewSpecimenAction"
+			name="newSpecimenForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path=".catissuecore.newSpecimenDef" />
+			<forward name="failure" path=".catissuecore.newSpecimenDef" />
+		</action>
+		
+		<action path="/NewSpecimenAdd"
+			type="edu.wustl.catissuecore.action.CommonAddEditAction"
+			name="newSpecimenForm"
+			validate="true"
+			input="/NewSpecimen.do?operation=add&amp;pageOf="
+			scope="request">
+			<forward name="success" path=".catissuecore.newSpecimenAddSuccessDef" />
+			<forward name="failure" path="/error.jsp" />
+		</action>
+		
+		<action path="/NewSpecimenEdit"
+			type="edu.wustl.catissuecore.action.CommonAddEditAction"
+			name="newSpecimenForm"
+			validate="true"
+			input="/NewSpecimen.do?operation=edit&amp;pageOf="
+			scope="request">
+			<forward name="success" path=".catissuecore.newSpecimenEditSuccessDef" />
+			<forward name="failure" path="/error.jsp" />
+		</action>
+		
+		<action path="/NewSpecimenSearch"
+		    type="edu.wustl.catissuecore.action.CommonSearchAction"
+			name="newSpecimenForm"
+			validate="true"
+			input="/NewSpecimen.do?operation=edit"
+			scope="request">
+			<forward name="success" path="/NewSpecimen.do?operation=edit&amp;pageOf="/>
+			<forward name="failure" path="/NewSpecimen.do?operation=edit&amp;pageOf="/>
+		</action>
+		<!--New Specimen Actions Begin-->
 		
 		<!-- StorageType Actions Begins -->
         <action path="/StorageType"

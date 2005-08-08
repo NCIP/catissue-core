@@ -58,10 +58,15 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 	protected Date birthDate;
 	
 	/**
-     * The genotypicGender of a participant as defined by their genotype.
+     * The gender of the participant.
      */
-	protected String genotypicGender;
+	protected String gender;
 	
+	/**
+     * The genetic constitution of the individual.
+     */
+	protected String genotype;
+
 	/**
      * Participant's racial origination.
      */
@@ -85,7 +90,7 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 	/**
      * A collection of medical record identification number that refers to a Participant. 
      * */
-	protected Collection participantMedicalIdentifierCollection = new HashSet();
+	protected Collection participantMedicalIdentifierCollection;// = new HashSet();
 	
 	/**
      * A collection of registration of a Participant to a Collection Protocol. 
@@ -212,25 +217,47 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 	}
 
 	/**
-     * Returns the genotypicGender of a participant as defined by their genotype.
-     * @return String representing the genotypicGender of a participant as defined by their genotype.
-     * @see #setGenotypicGender(String)
-     * @hibernate.property name="genotypicGender" type="string" 
+     * Returns the gender of a participant.
+     * @return String representing the gender of a participant.
+     * @see #setGender(String)
+     * @hibernate.property name="gender" type="string" 
      * column="GENDER" length="20"
      */
-	public String getGenotypicGender()
+	public String getGender()
 	{
-		return genotypicGender;
+		return gender;
 	}
 
 	/**
-     * Sets the genotypicGender of a participant as defined by their genotype.
-     * @param genotypicGender the genotypicGender of a participant as defined by their genotype.
-     * @see #getGenotypicGender()
+     * Sets the gender of a participant.
+     * @param gender the gender of a participant.
+     * @see #getGender()
      */
-	public void setGenotypicGender(String genotypicGender)
+	public void setGender(String gender)
 	{
-		this.genotypicGender = genotypicGender;
+		this.gender = gender;
+	}
+	
+	/**
+     * Returns the genotype of a participant.
+     * @return String representing the genotype of a participant.
+     * @see #setGender(String)
+     * @hibernate.property name="genotype" type="string" 
+     * column="GENOTYPE" length="20"
+     */
+	public String getGenotype()
+	{
+		return genotype;
+	}
+	
+	/**
+     * Sets the genotype of a participant.
+     * @param genotype the genotype of a participant.
+     * @see #getGender()
+     */
+	public void setGenotype(String genotype)
+	{
+		this.genotype = genotype;
 	}
 
 	/**
@@ -385,21 +412,21 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 	        this.firstName			= form.getFirstName();
 	        this.middleName			= form.getMiddleName();
 	        this.lastName			= form.getLastName();
-	        this.genotypicGender	= form.getGenotypicGender();
+	        this.gender				= form.getGender();
+	        this.genotype			= form.getGenotype();
 	        this.race				= form.getRace();
 	        this.socialSecurityNumber=form.getSocialSecurityNumber();
 	        this.birthDate			= Utility.parseDate(form.getBirthDate(),Constants.DATE_PATTERN_MM_DD_YYYY);
 	        
 	        Map map = form.getValues();
-	        System.out.println("MAP "+map);
+	        System.out.println("Map "+map);
 	        MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.domain");
-	        Collection pmiCollection = parser.generateData(map);
-	        //System.out.println("COLLECTION *******    "+pmiCollection.size());
-	        this.setParticipantMedicalIdentifierCollection(pmiCollection);
-	        System.out.println("@@@@@@@@@@@MAP: "+this.getParticipantMedicalIdentifierCollection());
+	        participantMedicalIdentifierCollection = parser.generateData(map);
+	        System.out.println("ParticipantMedicalIdentifierCollection "+participantMedicalIdentifierCollection);
 	    }
 	    catch(Exception excp)
 	    {
+	    	excp.printStackTrace();
 	        Logger.out.error(excp.getMessage());
 	    }
 	}

@@ -27,10 +27,14 @@ public class MapDataParser
 	{
 		Map map = new TreeMap();
 
-		map.put("SpecimenRequirement#FluidSpecimenRequirement:1_pathologyStatus","Primary Tumor");
-		map.put("SpecimenRequirement#FluidSpecimenRequirement:1_specimenType","Blood");
-		map.put("SpecimenRequirement#FluidSpecimenRequirement:1_tissueSite","Adrenal-Cortex");
-		map.put("SpecimenRequirement#FluidSpecimenRequirement:1_quantityInMiliLiter","20");
+		map.put("ParticipantMedicalIdentifier:1_medicalRecordNumber","AAA");
+		map.put("ParticipantMedicalIdentifier:1_Site_systemIdentifier","1");
+		
+		
+//		map.put("SpecimenRequirement#FluidSpecimenRequirement:1_pathologyStatus","Primary Tumor");
+//		map.put("SpecimenRequirement#FluidSpecimenRequirement:1_specimenType","Blood");
+//		map.put("SpecimenRequirement#FluidSpecimenRequirement:1_tissueSite","Adrenal-Cortex");
+//		map.put("SpecimenRequirement#FluidSpecimenRequirement:1_quantityInMiliLiter","20");
 		
 //		map.put("CollectionProtocolEvent:1_clinicalStatus", "Pre-Opt");                       
 //		map.put("CollectionProtocolEvent:1_studyCalendarEventPoint", "11.0");                 

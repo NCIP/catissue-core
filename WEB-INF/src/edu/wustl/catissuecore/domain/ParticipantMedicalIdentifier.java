@@ -30,7 +30,7 @@ public class ParticipantMedicalIdentifier implements java.io.Serializable
 	/**
      * Source of medical record number.
      */
-	protected Site site;
+	protected Site site = new Site();
 	
 	/**
      * 
