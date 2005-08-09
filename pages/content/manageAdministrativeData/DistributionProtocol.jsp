@@ -2,7 +2,7 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
-
+<%@ page import="edu.wustl.catissuecore.actionForm.DistributionProtocolForm"%>
 <head>
 
 <%
@@ -27,6 +27,15 @@
         formName = Constants.DISTRIBUTIONPROTOCOL_ADD_ACTION;
         readOnlyValue = false;
     }
+    
+		Object obj = request.getAttribute("distributionProtocolForm");
+		int noOfRows=0;
+
+		if(obj != null && obj instanceof DistributionProtocolForm)
+		{
+			DistributionProtocolForm form = (DistributionProtocolForm)obj;
+			noOfRows = form.getCounter();
+		}
 %>
 
 <SCRIPT LANGUAGE="JavaScript">
@@ -59,6 +68,9 @@
 //  function to insert a row in the inner block
 function insRow(subdivtag)
 {
+		var val = parseInt(document.forms[0].counter.value);
+		val = val + 1;
+		document.forms[0].counter.value = val;
 	var sname = "";
 
 	var r = new Array(); 
@@ -398,6 +410,7 @@ function insRow(subdivtag)
 			<tr>
 				<td class="formTitle">
 						<b>SPECIMEN REQUIREMENTS</b>
+						<html:hidden property="counter"/>
 				</td>
 				<td align="right" class="formTitle">		
 						<html:button property="addDistributionProtocolEvents" styleClass="actionButton" onclick="insRow('SpecimenRequirementData')">Add More</html:button>
@@ -432,17 +445,77 @@ function insRow(subdivtag)
 			    <td class="formFieldAllBorders"><!--  width="117" -->
 			    	<b><bean:message key="distributionprotocol.quantity" /></b>
 		        </td>
-			</tr>				
+			</tr>	
+
+			<%
+				int maxcount=1;
+				for(int counter=1;counter<=noOfRows;counter++)
+				{		
+					String objname = "value(SpecimenRequirement:" + counter + "_specimenClass)";
+					String objunit = "value(SpecimenRequirement:"+ counter +"_unitspan)";	
+			%>
+			<TR> 
+				<td class="tabrightmostcell">
+					<%=counter%>					
+		        </td>
+			<% String functionName ="changeUnit('" + objname + "',' " + objunit + "')"; %>	
+				<td class="formField">
+					<html:select property="<%=objname%>" styleClass="formFieldSized10" styleId="<%=objname%>" size="1" onchange="<%=functionName%>" >
+						<html:options name="<%=Constants.SPECIMEN_CLASS_ID_LIST%>" labelName="<%=Constants.SPECIMEN_CLASS_LIST%>" />
+					</html:select>
+		        </td>
+		        
+		        <td class="formField">
+					<%
+						objname="";
+						objname = "value(SpecimenRequirement:" + counter + "_specimenType)";
+					%>
+					<html:select property="<%=objname%>" styleClass="formFieldSized10" styleId="<%=objname%>" size="1" >
+						<html:options name="<%=Constants.SPECIMEN_TYPE_LIST%>" labelName="<%=Constants.SPECIMEN_TYPE_LIST%>" />
+					</html:select>
+		        </td>
+		        
+		        <td class="formField">
+					<%
+						objname="";
+						objname = "value(SpecimenRequirement:" + counter + "_tissueSite)";
+					%>
+					<html:select property="<%=objname%>" styleClass="formFieldSized10" styleId="<%=objname%>" size="1" >
+						<html:options name="<%=Constants.TISSUE_SITE_LIST%>" labelName="<%=Constants.TISSUE_SITE_LIST%>" />
+					</html:select>
+			    </td>
+		        
+		        <td class="formField">
+					<%
+						objname="";
+						objname = "value(SpecimenRequirement:" + counter + "_pathologyStatus)";
+					%>
+					<html:select property="<%=objname%>" styleClass="formFieldSized10" styleId="<%=objname%>" size="1" >
+						<html:options name="<%=Constants.PATHOLOGICAL_STATUS_LIST%>" labelName="<%=Constants.PATHOLOGICAL_STATUS_LIST%>" />
+					</html:select>
+			    </td>
+			    
+			    <td class="formField">
+			    	<%
+						objname="";
+						objname = "value(SpecimenRequirement:"+ counter +"_quantityIn)";
+					%>
+			    
+					<html:text styleClass="formFieldSized5" styleId="<%=objname%>" property="<%=objname%>" readonly="<%=readOnlyValue%>" />
+						&nbsp;<span id=' <%= objunit %>'>&nbsp;</span>
+		        </td>
+			</tr>	
+							
+			<%
+				} // for 
+			%>
+			
 			</tbody>
 			<!-- SUB TITLES END -->		 
 		</table>
 	</td></tr>
 </table>
 
-
-<SCRIPT LANGUAGE="JavaScript">
-	insRow('SpecimenRequirementData');
-</Script>
 
 <table width="100%">		
 	<!-- to keep -->

@@ -59,11 +59,20 @@
         />
 
         <property
-            name="genotypicGender"
+            name="gender"
             type="string"
             update="true"
             insert="true"
             column="GENDER"
+            length="20"
+        />
+
+        <property
+            name="genotype"
+            type="string"
+            update="true"
+            insert="true"
+            column="GENOTYPE"
             length="20"
         />
 

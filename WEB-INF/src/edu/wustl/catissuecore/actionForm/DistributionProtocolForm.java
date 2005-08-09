@@ -30,6 +30,30 @@ import edu.wustl.catissuecore.util.global.Validator;
  * */
 public class DistributionProtocolForm extends SpecimenProtocolForm
 {
+	
+	/**
+	 * Counter that contains number of rows in the 'Add More' functionality.
+	 */
+	private int counter=1;
+	
+	
+	
+	
+	/**
+	 * @return Returns the counter.
+	 */
+	public int getCounter()
+	{
+		return counter;
+	}
+	/**
+	 * @param counter The counter to set.
+	 */
+	public void setCounter(int counter)
+	{
+		this.counter = counter;
+	}
+	
 	/**
 	 * No argument constructor for DistributionProtocolForm class.
 	 */

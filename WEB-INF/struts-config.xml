@@ -401,8 +401,10 @@ PUBLIC
 		
 		
 		<!-- DistributionProtocol Actions Begins-->
-		<action path="/DistributionProtocol"
-			type="edu.wustl.catissuecore.action.DistributionProtocolAction"
+       <action path="/DistributionProtocol"
+			type="edu.wustl.catissuecore.action.SpecimenProtocolAction"
+			name="distributionProtocolForm"
+			validate="false"
 			scope="request">
 			<forward name="success" path=".catissuecore.distributionProtocolDef" />
 			<forward name="failure" path=".catissuecore.distributionProtocolDef" />
