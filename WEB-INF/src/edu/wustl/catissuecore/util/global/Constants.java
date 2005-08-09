@@ -40,6 +40,7 @@ public class Constants
 	public static final String VIEW = "view";
 	public static final String SEARCH = "search";
 	public static final String NEWUSERFORM = "newUserForm";
+	public static final String ACCESS_DENIED = "access_denied";
 
 	//Constants required for Forgot Password
 	public static final String FORGOT_PASSWORD = "forgotpassword";
