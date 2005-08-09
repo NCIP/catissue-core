@@ -12,6 +12,9 @@ package edu.wustl.common.security;
 import java.util.List;
 import java.util.Vector;
 
+import javax.servlet.http.HttpServletRequest;
+
+import edu.wustl.catissuecore.util.Permissions;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.SMTransactionException;
 import edu.wustl.common.util.logger.Logger;
@@ -35,7 +38,7 @@ import gov.nih.nci.security.exceptions.CSTransactionException;
  *@version 1.0
  */
 
-public class SecurityManager
+public class SecurityManager implements Permissions
 {
     private static AuthenticationManager authenticationManager = null;
     private static AuthorizationManager authorizationManager = null;
@@ -345,4 +348,46 @@ public class SecurityManager
 	        throw new SMException (e.getMessage(), e);
 	    }
     }
+
+    /**
+	 * Checks wether the user has EXECUTE privilege on the Action subclass of
+	 * SecureAction.
+	 * 
+	 * @param string
+	 * @return
+	 * @throws CSException
+	 */
+	public boolean isAuthorizedToExecuteAction(String loginName) throws Exception {
+		User user = getUser(loginName);
+		String objectId = getObjectIdForSecureMethodAccess();
+
+		Logger.out.debug("The User name is: " + user.getName());
+		Logger.out.debug("The Object ID is: " + objectId);
+
+		boolean isAuthorized = false;
+		try {
+			isAuthorized = getAuthorizationManager().checkPermission(
+					user.getName(), objectId, EXECUTE);
+
+		} catch (CSException ex) {
+			Logger.out.fatal("The Security Service encountered "
+					+ "a fatal exception.", ex);
+			throw new Exception(
+					"The Security Service encountered a fatal exception.", ex);
+		}
+
+		return isAuthorized;
+
+	}
+	
+	/**
+	 * Returns the object id of the protection element that represents
+	 * the Action that is being requested for invocation.
+	 * @param clazz
+	 * @return
+	 */
+	private String getObjectIdForSecureMethodAccess() {
+		return requestingClass.getName();
+	}
+
 }
