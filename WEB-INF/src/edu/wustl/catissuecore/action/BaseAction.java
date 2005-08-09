@@ -13,6 +13,7 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.exception.UserNotAuthenticatedException;
 import edu.wustl.catissuecore.util.global.Constants;
 
+
 /**
  * This is the base class for all other Actions. The class provides generic
  * methods that are resuable by all subclasses. In addition, this class ensures
@@ -48,6 +49,15 @@ public abstract class BaseAction extends Action  {
 		return executeAction(mapping, form, request, response);
 	}
 
+	/**
+	 * Returns the current User authenticated by CSM Authentication.
+	 * 
+	 * @param request
+	 * @return
+	 */
+	protected String getUserLoginName(HttpServletRequest request) {
+		return  (String) request.getSession().getAttribute(Constants.USER);
+	}
 	
 	/**
 	 * Subclasses should implement the action's business logic in this method
