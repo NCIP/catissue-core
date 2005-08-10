@@ -11,8 +11,10 @@
 package edu.wustl.catissuecore.bizlogic;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import net.sf.hibernate.HibernateException;
 import edu.wustl.catissuecore.dao.DAO;
@@ -21,6 +23,8 @@ import edu.wustl.catissuecore.domain.ExternalIdentifier;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.StorageContainer;
+import edu.wustl.catissuecore.domain.TissueSpecimen;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.dbManager.DAOException;
 
 /**
@@ -36,32 +40,58 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
      * @throws HibernateException Exception thrown during hibernate operations.
      * @throws DAOException 
      */
-	protected void insert(DAO dao, Object obj) throws DAOException 
+	protected void insert(DAO dao, Object obj) throws DAOException
 	{
-		Specimen type = (Specimen)obj;
-
-		//Load & set Specimen Collection Group
-		List list = dao.retrieve(SpecimenCollectionGroup.class.getName(), "systemIdentifier", type.getSpecimenCollectionGroup().getSystemIdentifier());
+		Specimen specimen = (Specimen)obj;
+		
+		//specimen.setSpecimenCollectionGroup(null);
+		
+        //Load & set Specimen Collection Group
+		List list = dao.retrieve(SpecimenCollectionGroup.class.getName(), "systemIdentifier", specimen.getSpecimenCollectionGroup().getSystemIdentifier());
 		
 		if(list!=null && list.size()!=0)
 		{
 			SpecimenCollectionGroup spg = (SpecimenCollectionGroup)list.get(0);
-			type.setSpecimenCollectionGroup(spg);
+			specimen.setSpecimenCollectionGroup(spg);
 		}
-		
+
 		//Load & set Storage Container
-		List scList = dao.retrieve(StorageContainer.class.getName(), "systemIdentifier", type.getStorageContainer().getSystemIdentifier());
+		List scList = dao.retrieve(StorageContainer.class.getName(), "systemIdentifier", specimen.getStorageContainer().getSystemIdentifier());
 		
-		if(list!=null && list.size()!=0)
+		if(scList!=null && scList.size()!=0)
 		{
 			StorageContainer container = (StorageContainer)scList.get(0);
-			type.setStorageContainer(container);
+			specimen.setStorageContainer(container);
 		}
+
+		Set set = new HashSet();
 		
-		dao.insert(type.getSpecimenCharacteristics(),true);
-		dao.insert(type,true);
+		Collection biohazardCollection = specimen.getBiohazardCollection();
+		if(biohazardCollection != null && biohazardCollection.size() > 0)
+		{
+			Iterator it = biohazardCollection.iterator();
+
+			while(it.hasNext())
+			{
+				Biohazard hazard = (Biohazard)it.next();
+				System.out.println("hazard.getSystemIdentifier() "+hazard.getSystemIdentifier());
+				Object bioObj = dao.retrieve(Biohazard.class.getName(), hazard.getSystemIdentifier());
+				if(bioObj!=null)
+				{
+					Biohazard hazardObj = (Biohazard)bioObj;
+					System.out.println("hazard.getSystemIdentifier() "+hazardObj.getSystemIdentifier());
+					set.add(hazardObj);
+				}
+			}
+		}
+
+		specimen.setBiohazardCollection(set);
 		
-		Collection externalIdentifierCollection = type.getExternalIdentifierCollection();
+		dao.insert(specimen.getSpecimenCharacteristics());
+		specimen.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
+		dao.insert(specimen);
+		
+		Collection externalIdentifierCollection = specimen.getExternalIdentifierCollection();
 		if(externalIdentifierCollection != null && externalIdentifierCollection.size() > 0)
 		{
 			Iterator it = externalIdentifierCollection.iterator();
@@ -69,21 +99,8 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			while(it.hasNext())
 			{
 				ExternalIdentifier exId = (ExternalIdentifier)it.next();
-				exId.setSpecimen(type);
-				dao.insert(exId,true);
-			}
-		}
-		
-		Collection biohazardCollection = type.getBiohazardCollection();
-		if(biohazardCollection != null && biohazardCollection.size() > 0)
-		{
-			Iterator it = biohazardCollection.iterator();
-			
-			while(it.hasNext())
-			{
-				Biohazard hazard = (Biohazard)it.next();
-				hazard.getSpecimenCollection().add(type);
-				dao.insert(hazard,true);
+				exId.setSpecimen(specimen);
+				dao.insert(exId);
 			}
 		}
 	}
