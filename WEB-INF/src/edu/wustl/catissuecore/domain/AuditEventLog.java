@@ -11,7 +11,7 @@ public class AuditEventLog implements java.io.Serializable
 {
 	private static final long serialVersionUID = 1234567890L;
 
-	protected Integer systemIdentifier;
+	protected Long systemIdentifier;
 	protected Long objectIdentifier;
 	protected String ObjectName;
 	protected String eventType;
@@ -22,12 +22,12 @@ public class AuditEventLog implements java.io.Serializable
      * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"
      * unsaved-value="null" generator-class="native" 
      */
-	public Integer getSystemIdentifier()
+	public Long getSystemIdentifier()
 	{
 		return systemIdentifier;
 	}
 
-	public void setSystemIdentifier(Integer systemIdentifier)
+	public void setSystemIdentifier(Long systemIdentifier)
 	{
 		this.systemIdentifier = systemIdentifier;
 	}
