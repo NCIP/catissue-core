@@ -3,7 +3,7 @@
  * <p>Description:	NewSpecimenAction initializes the fields in the New Specimen page.</p>
  * Copyright:    Copyright (c) year
  * Company: Washington University, School of Medicine, St. Louis.
- * @author Gautam Shetty
+ * @author Aniruddha Phadnis
  * @version 1.00
  */
 
@@ -24,12 +24,13 @@ import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.domain.Biohazard;
+import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.util.global.Constants;
 
 
 /**
  * NewSpecimenAction initializes the fields in the New Specimen page.
- * @author gautam_shetty
+ * @author aniruddha_phadnis
  */
 public class NewSpecimenAction extends Action
 {
@@ -78,7 +79,9 @@ public class NewSpecimenAction extends Action
 //        	request.setAttribute(Constants.BIOHAZARD_NAME_LIST, map);
         	request.setAttribute(Constants.BIOHAZARD_TYPE_LIST, Constants.BIOHAZARD_TYPE_ARRAY);
         	
-           	List biohazardList = dao.retrieve(Biohazard.class.getName());
+           	//List biohazardList = dao.retrieve(Biohazard.class.getName());
+        	String selectColNames[] = {"systemIdentifier","name","type"}; 
+        	List biohazardList = dao.retrieve(Biohazard.class.getName(),selectColNames);
         	Iterator iterator = biohazardList.iterator();
         	if(biohazardList!=null && biohazardList.size()>0)
         	{
@@ -89,10 +92,11 @@ public class NewSpecimenAction extends Action
 	        	
 	        	while(iterator.hasNext())
 	        	{
-	        		Biohazard hazard = (Biohazard)iterator.next();
-	        		bhIdArray[i] = String.valueOf(hazard.getSystemIdentifier());
-	        		bhNameArray[i] = hazard.getName();
-	        		bhTypeArray[i] = hazard.getType();
+	        		//Biohazard hazard = (Biohazard)iterator.next();
+	        		Object hazard[] = (Object[])iterator.next();
+	        		bhIdArray[i] = String.valueOf(hazard[0]);//.getSystemIdentifier());
+	        		bhNameArray[i] = (String)hazard[1];//.getName();
+	        		bhTypeArray[i] = (String)hazard[2];//.getType();
 	        		i++;
 	        	}
 	        	
@@ -106,7 +110,28 @@ public class NewSpecimenAction extends Action
         	e.printStackTrace();
 		}
         
-        String [] specimenCollectionGroupArray = {Constants.SELECT_OPTION,"1","2","3","4"};
+        String [] specimenCollectionGroupArray = null;
+
+     	List specimenCollectionList = dao.retrieve(SpecimenCollectionGroup.class.getName());
+     	if(specimenCollectionList!=null && specimenCollectionList.size()>0)
+    	{
+    		Iterator it = specimenCollectionList.iterator();
+    		specimenCollectionGroupArray = new String[specimenCollectionList.size() + 1];
+    		specimenCollectionGroupArray[0] = Constants.SELECT_OPTION;
+    		int i=1;
+    		
+    		while(it.hasNext())
+    		{
+    			SpecimenCollectionGroup scg = (SpecimenCollectionGroup)it.next();
+    			specimenCollectionGroupArray[i] = String.valueOf(scg.getSystemIdentifier());
+    			i++;
+    		}
+    	}
+     	else
+     	{
+     		specimenCollectionGroupArray = new String[1];
+    		specimenCollectionGroupArray[0] = Constants.SELECT_OPTION;
+     	}
         
         request.setAttribute(Constants.SPECIMEN_COLLECTION_GROUP_LIST,specimenCollectionGroupArray);
         
