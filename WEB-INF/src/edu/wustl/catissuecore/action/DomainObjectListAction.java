@@ -11,7 +11,6 @@
 
 package edu.wustl.catissuecore.action;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,9 +26,7 @@ import edu.wustl.catissuecore.actionForm.AbstractActionForm;
 import edu.wustl.catissuecore.bizlogic.AbstractBizLogic;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
-import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.security.SecurityManager;
 
 /**
  * DomainObjectListAction is used to show the list of all 
@@ -49,7 +46,8 @@ public class DomainObjectListAction extends Action
         List list = null,showList = null;
 
         AbstractActionForm abstractForm = (AbstractActionForm)form;
-        
+        System.out.println("abstractForm****************"+abstractForm);
+        System.out.println("abstractForm.getFormId()***************"+abstractForm.getFormId());
         AbstractBizLogic abstractDAO = BizLogicFactory.getBizLogic(abstractForm.getFormId());
         
         //Returns the page number to be shown.
@@ -69,25 +67,6 @@ public class DomainObjectListAction extends Action
             //If start page is to be shown retrieve the list from the database.
             list = abstractDAO.retrieve(AbstractDomainObject.getDomainObjectName(abstractForm.getFormId()),
                     					"activityStatus",abstractForm.getActivityStatus());
-            
-            if (abstractForm.getFormId() == Constants.USER_FORM_ID)
-            {
-                List tempList = new ArrayList();
-                if (list != null)
-                {
-                    for (int i = 0; i < list.size() ;i++ )
-                    {
-                        User user = (User)list.get(i);
-                        gov.nih.nci.security.authorization.domainobjects.User csmUser = 
-                            	SecurityManager.getInstance(DomainObjectListAction.class).
-                        				getUserById(String.valueOf(user.getSystemIdentifier()));
-                        user.setUser(csmUser);
-                        tempList.add(user);
-                    }
-                }
-                
-                list = tempList;
-            }
             
             if (Constants.NUMBER_RESULTS_PER_PAGE > list.size())
             {

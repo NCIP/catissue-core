@@ -158,18 +158,6 @@
 					<tr>
 						<td class="formRequiredNotice" width="5">*</td>
 						<td class="formRequiredLabel">
-							<label for="loginName">
-								<bean:message key="user.loginName" />
-							</label>
-						</td>
-						<td class="formField">
-							<html:text styleClass="formFieldSized" size="30" styleId="loginName" property="loginName" readonly="<%=readOnlyValue%>" />
-						</td>
-					</tr>
-					
-					<tr>
-						<td class="formRequiredNotice" width="5">*</td>
-						<td class="formRequiredLabel">
 							<label for="lastName">
 								<bean:message key="user.lastName" />
 							</label>
@@ -353,7 +341,7 @@
 					<logic:equal name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGEOF_APPROVE_USER%>">
 					<tr>
 						<td class="formRequiredNotice" width="5">*</td>
-							<td class="formRequiredLabel">
+							<td class="formRequiredLabel" width>
 								<label for="status">
 									<bean:message key="user.approveOperation" />
 								</label>

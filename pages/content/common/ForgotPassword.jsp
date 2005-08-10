@@ -3,17 +3,11 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 
-<%
-	String operation = (String)request.getAttribute(Constants.OPERATION);
-%>
 	<html:errors/>
     
 		<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
 			
 		   <html:form action="/ForgotPasswordSearch">	
-			 <tr>
-				 <td> <html:hidden property="<%=Constants.OPERATION%>"  value="<%=operation%>"/></td>
-			 </tr>		
 	    	  <tr>
 			    <td>
 			 	 <table summary="" cellpadding="3" cellspacing="0" border="0">
@@ -31,13 +25,14 @@
 				 
 				 <tr>
 				     <td class="formRequiredNotice" width="5">&nbsp;</td>
-				     <td class="formLabel"><label for="loginName"><bean:message key="user.loginName"/></label></td>
-				     <td class="formField"><html:text styleClass="formFieldSized" size="30" styleId="loginName" property="loginName"/></td>
-				 </tr>
-				 <tr>
-				     <td class="formRequiredNotice" width="5">&nbsp;</td>
-				     <td class="formLabel"><label for="emailAddress"><bean:message key="user.emailAddress"/></label></td>
-				     <td class="formField"><html:text styleClass="formFieldSized" size="30" styleId="emailAddress" property="emailAddress"/></td>
+				     <td class="formLabel">
+						<label for="emailAddress">
+							<bean:message key="user.emailAddress"/>
+						</label>
+					 </td>
+				     <td class="formField">
+					 	<html:text styleClass="formFieldSized" size="30" styleId="emailAddress" property="emailAddress"/>
+					 </td>
 				 </tr>
 				 <tr>
 				  <td align="right" colspan="3">

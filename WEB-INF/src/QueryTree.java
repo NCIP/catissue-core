@@ -52,7 +52,16 @@ public class QueryTree extends JApplet
             int port = codeBase.getPort();
             
             String pageOf = this.getParameter(Constants.PAGEOF);
+            String storageContainerType = null;
+            int treeType = Constants.TISSUE_SITE_TREE_ID;
             
+            if (pageOf.equals(Constants.PAGEOF_STORAGE_LOCATION))
+            {
+                storageContainerType = this.getParameter(Constants.STORAGE_CONTAINER_TYPE);
+                treeType = Constants.STORAGE_CONTAINER_TREE_ID;
+            }
+            
+//            codeBase.
             String urlSuffix = Constants.TREE_DATA_ACTION+"?"+Constants.PAGEOF+"="+pageOf;
 
             URL dataURL = new URL(protocol, host, port, urlSuffix);
@@ -63,14 +72,14 @@ public class QueryTree extends JApplet
             
             in = new ObjectInputStream(connection.getInputStream());
             
-            Vector dataList = (Vector) in.readObject();
+            Vector treeDataVector = (Vector) in.readObject();
 
 //            //Creates tree.
 //            GenerateTree generateTree = new GenerateTree();
 //            JTree tree = generateTree.createTreeView(dataList);
             
             GenerateStorageTree generateTree = new GenerateStorageTree();
-            JTree tree = generateTree.createTree(dataList);
+            JTree tree = generateTree.createTree(treeDataVector, treeType);
             
             Container contentPane = getContentPane();
             contentPane.setLayout(new BorderLayout());
@@ -109,12 +118,13 @@ public class QueryTree extends JApplet
             treePanel.add(scroll);
             treePanel.setOpaque(true);
             treePanel.setVisible(true);
-
+            
             //Add listeners for the tree.
 //            NodeSelectionListener nodeSelectionListener = new NodeSelectionListener(
 //                    this.getCodeBase(), this.getAppletContext());
             StorageLocationViewListener viewListener 
             		= new StorageLocationViewListener(this.getCodeBase(), this.getAppletContext()); 
+            viewListener.setStorageContainerType(storageContainerType);
             tree.addTreeSelectionListener(viewListener);
 
             //Add listeners for the radio buttons.
@@ -148,7 +158,7 @@ public class QueryTree extends JApplet
             }
             catch (IOException ioExp)
             {
-                ioExp.printStackTrace();
+//                ioExp.printStackTrace();
             }
         }
     }

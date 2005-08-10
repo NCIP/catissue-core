@@ -13,7 +13,7 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 
-import edu.wustl.catissuecore.storage.TreeNode;
+import edu.wustl.catissuecore.storage.StorageContainerTreeNode;
 import edu.wustl.catissuecore.util.global.Constants;
 
 /**
@@ -32,11 +32,30 @@ public class StorageLocationViewListener implements TreeSelectionListener
      */
     private AppletContext appletContext = null;
     
+    private String storageContainerType = null;
+    
+    
     /**
      * Initializes an empty NodeSelectionListener.
      */
     public StorageLocationViewListener()
     {
+    }
+    
+    /**
+     * @return Returns the storageContainerType.
+     */
+    public String getStorageContainerType()
+    {
+        return storageContainerType;
+    }
+    
+    /**
+     * @param storageContainerType The storageContainerType to set.
+     */
+    public void setStorageContainerType(String storageContainerType)
+    {
+        this.storageContainerType = storageContainerType;
     }
     
     /**
@@ -64,7 +83,7 @@ public class StorageLocationViewListener implements TreeSelectionListener
             tree = (JTree) object;
             DefaultMutableTreeNode node = (DefaultMutableTreeNode)
             					tree.getLastSelectedPathComponent();
-            TreeNode treeNode = (TreeNode) node.getUserObject();
+            StorageContainerTreeNode treeNode = (StorageContainerTreeNode) node.getUserObject();
             
             try
             {
@@ -78,7 +97,8 @@ public class StorageLocationViewListener implements TreeSelectionListener
                     int port = codeBase.getPort();
 
                     urlSuffix = Constants.SHOW_STORAGE_CONTAINER_GRID_VIEW_ACTION
-                    			+"?"+Constants.IDENTIFIER+"="+treeNode.getStorageContainerIdentifier();
+                    			+ "?" + Constants.IDENTIFIER+"="+treeNode.getStorageContainerIdentifier()
+                    			+ "&" + Constants.STORAGE_CONTAINER_TYPE + "=" + this.getStorageContainerType();
                     
                     URL dataURL = new URL(protocol,host,port,urlSuffix);
                     appletContext.showDocument(dataURL,Constants.DATA_VIEW_FRAME);

@@ -39,6 +39,7 @@ PUBLIC
 		<form-bean name="embeddedEventParametersForm" type="edu.wustl.catissuecore.actionForm.EmbeddedEventParametersForm"/>
 		<form-bean name="fixedEventParametersForm" type="edu.wustl.catissuecore.actionForm.FixedEventParametersForm"/>
 		<form-bean name="procedureEventParametersForm" type="edu.wustl.catissuecore.actionForm.ProcedureEventParametersForm"/>
+		<form-bean name="forgotPasswordForm" type="edu.wustl.catissuecore.actionForm.ForgotPasswordForm"/>
 	</form-beans>
 	
 	<!-- Global Exception Definitions -->
@@ -516,7 +517,7 @@ PUBLIC
 		
 		<action path="/ForgotPasswordSearch"
 			type="edu.wustl.catissuecore.action.ForgotPasswordSearchAction"
-			name="userForm"
+			name="forgotPasswordForm"
 			validate="true"
 			input="/ForgotPassword.do"
 			scope="request">
@@ -571,6 +572,7 @@ PUBLIC
 		<action path="/ApproveUserShow"
 			type="edu.wustl.catissuecore.action.DomainObjectListAction"
 			name="userForm"
+			validate="false"
 			scope="request">
 			<forward name="success" path=".catissuecore.approveUserDef" />
 			<forward name="failure" path=".catissuecore.approveUserDef" />
@@ -591,7 +593,7 @@ PUBLIC
 			name="userForm"
 			input="/ApproveUserShow.do?pageNum=1"
 			scope="request">
-			<forward name="success" path="/User.do?operation=edit&amp;pageOf=pageOfApproveUser" />
+			<forward name="success" path="/User.do?operation=add&amp;pageOf=pageOfApproveUser" />
 			<forward name="failure" path="/error.jsp" />
 		</action>
 		<!--Approve User Actions End-->
@@ -1390,6 +1392,7 @@ PUBLIC
 			type="edu.wustl.catissuecore.action.ShowFramedPageAction">
 			<forward name="pageOfQueryResults" path=".catissuecore.queryResultsDef"/>
 			<forward name="pageOfStorageLocation" path=".catissuecore.storageLocationViewDef"/>
+			<forward name="pageOfTissueSite" path=".catissuecore.queryResultsTreeViewDef"/>
 		</action>
 		<action path="/Data"
 			type="edu.wustl.catissuecore.action.TreeDataAction">

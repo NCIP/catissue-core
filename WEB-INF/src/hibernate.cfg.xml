@@ -38,6 +38,9 @@
 		<mapping resource="edu/wustl/catissuecore/hbm/StorageContainerDetails.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/StorageType.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/User.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/CDEImpl.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/PermissibleValueImpl.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/SignUpUser.hbm.xml"/>
     </session-factory>
     
 </hibernate-configuration>

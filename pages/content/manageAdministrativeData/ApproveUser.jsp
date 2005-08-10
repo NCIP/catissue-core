@@ -2,7 +2,7 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <%@ taglib uri="/WEB-INF/PagenationTag.tld" prefix="custom"%>
-<%@ page import="edu.wustl.catissuecore.util.global.Constants, edu.wustl.catissuecore.domain.Address, edu.wustl.catissuecore.domain.User"%>
+<%@ page import="edu.wustl.catissuecore.util.global.Constants, edu.wustl.catissuecore.domain.Address, edu.wustl.catissuecore.domain.SignUpUser"%>
 
 <html:errors/>
 
@@ -79,7 +79,7 @@
 						
 							<tr class="dataRowLight">
 								<%
-        								User user = (User) currentUser;
+        								SignUpUser user = (SignUpUser) currentUser;
 										String identifier = user.getSystemIdentifier().toString();
 										String userDetailsLink = Constants.USER_DETAILS_SHOW_ACTION+"?"+Constants.IDENTIFIER+"="+identifier;
         						%>
@@ -88,19 +88,18 @@
 								</td>
 								<td class="dataCellText">
 									<a href="<%=userDetailsLink%>" >
-										<bean:define id="csmUser" name="currentUser" property="user"/>
-										<bean:write	name="csmUser" property="loginName" />
+										<bean:write	name="currentUser" property="loginName" />
 									</a>
 								</td>
 								<td class="dataCellText">
-									<bean:write name="csmUser" property="lastName" />,
-									<bean:write name="csmUser" property="firstName" />
+									<bean:write name="currentUser" property="lastName" />,
+									<bean:write name="currentUser" property="firstName" />
 								</td>
 								<td class="dataCellText">
-									<bean:write name="csmUser" property="emailId"/>
+									<bean:write name="currentUser" property="emailAddress"/>
 								</td>
 								<td class="dataCellText">
-									<bean:write name="csmUser" property="startDate" />
+									<bean:write name="currentUser" property="startDate" />
 								</td>
 							</tr>
 							<%i++;%>

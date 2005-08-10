@@ -37,9 +37,6 @@ public class ForgotPasswordAction extends Action
             HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException
     {
-        //Sets the operation field in the ForgotPassword.jsp page to "forgotpassword".
-        request.setAttribute(Constants.OPERATION,Constants.FORGOT_PASSWORD);
-        
         return mapping.findForward(Constants.SUCCESS);
     }
 }
