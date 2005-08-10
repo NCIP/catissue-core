@@ -392,6 +392,90 @@
 	</definition>
 	<!-- ThawEventParameters end -->
 
+		<!-- collectionEventParameters -->
+	<definition name=".catissuecore.collectionEventParametersDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/CollectionEventParameters.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.collectionEventParametersAddSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/common/success.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.collectionEventParametersEditSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/common/success.jsp" />
+	</definition>
+	<!-- collectionEventParameters end -->
+	
+	<!-- TransferEventParameters -->
+	<definition name=".catissuecore.transferEventParametersDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/TransferEventParameters.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.transferEventParametersAddSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/common/success.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.transferEventParametersEditSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/common/success.jsp" />
+	</definition>
+	<!-- transferEventParameters end -->
+
+	<!-- SpunEventParameters -->
+	<definition name=".catissuecore.spunEventParametersDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/SpunEventParameters.jsp" />
+	</definition>
+	
+	<definition name=".catissuecore.spunEventParametersAddSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/common/success.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.spunEventParametersEditSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/common/success.jsp" />
+	</definition>
+	<!-- SpunEventParameters end -->
+	<!-- EmbeddedEventParameters -->
+	<definition name=".catissuecore.embeddedEventParametersDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/EmbeddedEventParameters.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.embeddedEventParametersAddSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/common/success.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.embeddedEventParametersEditSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/common/success.jsp" />
+	</definition>
+	<!-- EmbeddedEventParameters end -->
+	
+		<!-- fixedEventParameters -->
+	<definition name=".catissuecore.fixedEventParametersDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/FixedEventParameters.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.fixedEventParametersAddSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/common/success.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.fixedEventParametersEditSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/common/success.jsp" />
+	</definition>
+	<!-- fixedEventParameters end -->
+
+	<!-- procedureEventParameters -->
+	<definition name=".catissuecore.procedureEventParametersDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/ProcedureEventParameters.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.procedureEventParametersAddSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/common/success.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.procedureEventParametersEditSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/common/success.jsp" />
+	</definition>
+	<!-- procedureEventParameters end -->
+	
+	
 	<!-- Distribution -->
 	<definition name=".catissuecore.distributionDef" extends=".catissuecore.manageBioSpecimenHomeDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/Distribution.jsp" />
