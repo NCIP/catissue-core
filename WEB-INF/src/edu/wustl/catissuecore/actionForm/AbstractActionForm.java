@@ -10,9 +10,12 @@
 
 package edu.wustl.catissuecore.actionForm;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
@@ -108,4 +111,14 @@ public abstract class AbstractActionForm extends ActionForm
             }
         }
     }
+    
+    /**
+     * Resets the values of all the fields.
+     * This method defined in ActionForm is overridden in this class.
+     */
+    public void reset(ActionMapping mapping, HttpServletRequest request)
+    {
+        reset();
+    }
+    protected abstract void reset();
 }

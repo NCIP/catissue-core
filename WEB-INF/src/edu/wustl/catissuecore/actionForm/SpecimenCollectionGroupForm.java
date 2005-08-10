@@ -160,7 +160,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	 * Resets the values of all the fields.
 	 * Is called by the overridden reset method defined in ActionForm.  
 	 * */
-	private void reset()
+	protected void reset()
 	{
     
 	}

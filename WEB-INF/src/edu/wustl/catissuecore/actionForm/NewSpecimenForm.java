@@ -489,7 +489,7 @@ public class NewSpecimenForm extends AbstractActionForm
         this.className = type;
     }
     
-    private void reset()
+    protected void reset()
     {
         this.className = null;
         this.type = null;

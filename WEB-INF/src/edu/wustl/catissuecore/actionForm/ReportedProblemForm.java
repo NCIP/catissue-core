@@ -75,7 +75,7 @@ public class ReportedProblemForm extends AbstractActionForm
     /**
      * Resets all the fields.
      */
-    private void reset()
+    protected void reset()
     {
         this.systemIdentifier = -1;
         this.operation = null;

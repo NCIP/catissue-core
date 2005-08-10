@@ -132,4 +132,12 @@ public class ForgotPasswordForm extends AbstractActionForm
 
         return errors;
     }
+    
+	/* (non-Javadoc)
+	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#reset()
+	 */
+	protected void reset()
+	{
+		
+	}
 }

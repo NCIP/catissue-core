@@ -159,7 +159,7 @@ public class InstitutionForm extends AbstractActionForm
      * Resets the values of all the fields.
      * Is called by the overridden reset method defined in ActionForm.  
      * */
-    private void reset()
+    protected void reset()
     {
         this.systemIdentifier = -1;
         this.name = null;

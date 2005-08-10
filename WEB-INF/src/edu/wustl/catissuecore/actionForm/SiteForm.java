@@ -439,7 +439,7 @@ public class SiteForm extends AbstractActionForm
      * Resets the values of all the fields.
      * Is called by the overridden reset method defined in ActionForm.  
      * */
-    private void reset()
+    protected void reset()
     {
         this.name			= null;
         this.type			= null;

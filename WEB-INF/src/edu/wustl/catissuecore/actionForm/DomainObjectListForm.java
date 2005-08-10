@@ -104,7 +104,7 @@ public class DomainObjectListForm extends AbstractActionForm
     /**
      * Resets all the values.
      */
-    private void reset()
+    protected void reset()
     {
         systemIdentifier = -1;
         operation = null;

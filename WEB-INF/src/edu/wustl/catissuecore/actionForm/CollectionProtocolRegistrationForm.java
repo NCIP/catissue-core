@@ -9,9 +9,11 @@
 
 package edu.wustl.catissuecore.actionForm;
 import javax.servlet.http.HttpServletRequest;
+
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
+
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -56,8 +58,12 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 	 * Represents the weather participant Name is selected or not.
 	 *
 	 */    	
-	boolean checkedButton; 	
+	protected boolean checkedButton; 	
 	
+	public CollectionProtocolRegistrationForm()
+	{
+		reset();
+	}
 	
 	/**
 	 * It will set all values of member variables from Domain Object
@@ -67,7 +73,7 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
     {
 	  try
 	  {
-	  
+	  	//FIXME for edit page 
 	  }
 	  catch (Exception excp)
 	  {
@@ -119,7 +125,7 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
      * registered to the Collection Protocol.
      * @return the date on which the Participant is 
      * registered to the Collection Protocol.
-     * @see #setRegistrationDate(Date)
+     * @see #setRegistrationDate(String)
      */
     public String getRegistrationDate()
     {
@@ -252,7 +258,7 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 	* Resets the values of all the fields.
 	* Is called by the overridden reset method defined in ActionForm.  
 	* */
-   private void reset()
+   protected void reset()
    {
 	   this.collectionProtocolID = 0;
 	   this.participantID = 0;
