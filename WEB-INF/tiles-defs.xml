@@ -392,6 +392,20 @@
 	</definition>
 	<!-- ThawEventParameters end -->
 
+	<!-- Distribution -->
+	<definition name=".catissuecore.distributionDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/Distribution.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.distributionAddSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/common/success.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.distributionEditSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/common/success.jsp" />
+	</definition>
+	<!-- Distribution end -->
+	
 	<!-- BioSpecimen tab pages definitions end -->
 
 	<!-- Search tab pages definitions start -->
