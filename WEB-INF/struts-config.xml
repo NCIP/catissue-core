@@ -837,7 +837,7 @@ PUBLIC
 			input="/FrozenEventParameters.do?operation=edit"
 			scope="request">
 			<forward name="success" path=".catissuecore.frozenEventParametersEditSuccessDef" />
-			<forward name="failure" path="/error.jsp" />
+			<forward name="failure" path="/FrozenEventParameters.do?operation=edit" />
 		</action>
 		
 		<action path="/FrozenEventParametersSearch"
@@ -866,7 +866,7 @@ PUBLIC
 			input="/CheckInCheckOutEventParameters.do?operation=add"
 			scope="request">
 			<forward name="success" path=".catissuecore.checkInCheckOutEventParametersAddSuccessDef" />
-			<forward name="failure" path="/error.jsp" />
+			<forward name="failure" path="/CheckInCheckOutEventParameters.do?operation=add" />
 		</action>
 		
 		<action path="/checkInCheckOutEventParametersEdit"
@@ -876,7 +876,7 @@ PUBLIC
 			input="/checkInCheckOutEventParameters.do?operation=edit"
 			scope="request">
 			<forward name="success" path=".catissuecore.checkInCheckOutEventParametersEditSuccessDef" />
-			<forward name="failure" path="/error.jsp" />
+			<forward name="failure" path="/checkInCheckOutEventParameters.do?operation=edit" />
 		</action>
 		
 		<action path="/checkInCheckOutEventParametersSearch"
@@ -905,7 +905,7 @@ PUBLIC
 			input="/ReceivedEventParameters.do?operation=add"
 			scope="request">
 			<forward name="success" path=".catissuecore.receivedEventParametersAddSuccessDef" />
-			<forward name="failure" path="/error.jsp" />
+			<forward name="failure" path="/ReceivedEventParameters.do?operation=add" />
 		</action>
 		
 		<action path="/receivedEventParametersEdit"
@@ -915,7 +915,7 @@ PUBLIC
 			input="/receivedEventParameters.do?operation=edit"
 			scope="request">
 			<forward name="success" path=".catissuecore.receivedEventParametersEditSuccessDef" />
-			<forward name="failure" path="/error.jsp" />
+			<forward name="failure" path="/receivedEventParameters.do?operation=edit" />
 		</action>
 		
 		<action path="/receivedEventParametersSearch"
@@ -944,7 +944,7 @@ PUBLIC
 			input="/FluidSpecimenReviewEventParameters.do?operation=add"
 			scope="request">
 			<forward name="success" path=".catissuecore.fluidSpecimenReviewEventParametersAddSuccessDef" />
-			<forward name="failure" path="/error.jsp" />
+			<forward name="failure" path="/FluidSpecimenReviewEventParameters.do?operation=add" />
 		</action>
 		
 		<action path="/FluidSpecimenReviewEventParametersEdit"
@@ -954,7 +954,7 @@ PUBLIC
 			input="/FluidSpecimenReviewEventParameters.do?operation=edit"
 			scope="request">
 			<forward name="success" path=".catissuecore.fluidSpecimenReviewEventParametersEditSuccessDef" />
-			<forward name="failure" path="/error.jsp" />
+			<forward name="failure" path="/FluidSpecimenReviewEventParameters.do?operation=edit" />
 		</action>
 		
 		<action path="/FluidSpecimenReviewEventParametersSearch"
@@ -983,7 +983,7 @@ PUBLIC
 			input="/CellSpecimenReviewParameters.do?operation=add"
 			scope="request">
 			<forward name="success" path=".catissuecore.cellSpecimenReviewParametersAddSuccessDef" />
-			<forward name="failure" path="/error.jsp" />
+			<forward name="failure" path="/CellSpecimenReviewParameters.do?operation=add" />
 		</action>
 		
 		<action path="/CellSpecimenReviewParametersEdit"
@@ -993,7 +993,7 @@ PUBLIC
 			input="/CellSpecimenReviewParameters.do?operation=edit"
 			scope="request">
 			<forward name="success" path=".catissuecore.cellSpecimenReviewParametersEditSuccessDef" />
-			<forward name="failure" path="/error.jsp" />
+			<forward name="failure" path="/CellSpecimenReviewParameters.do?operation=edit" />
 		</action>
 		
 		<action path="/CellSpecimenReviewParametersSearch"
@@ -1022,7 +1022,7 @@ PUBLIC
 			input="/TissueSpecimenReviewEventParameters.do?operation=add"
 			scope="request">
 			<forward name="success" path=".catissuecore.tissueSpecimenReviewEventParametersAddSuccessDef" />
-			<forward name="failure" path="/error.jsp" />
+			<forward name="failure" path="/TissueSpecimenReviewEventParameters.do?operation=add" />
 		</action>
 		
 		<action path="/TissueSpecimenReviewEventParametersEdit"
@@ -1032,7 +1032,7 @@ PUBLIC
 			input="/TissueSpecimenReviewEventParameters.do?operation=edit"
 			scope="request">
 			<forward name="success" path=".catissuecore.tissueSpecimenReviewEventParametersEditSuccessDef" />
-			<forward name="failure" path="/error.jsp" />
+			<forward name="failure" path="/TissueSpecimenReviewEventParameters.do?operation=edit" />
 		</action>
 		
 		<action path="/TissueSpecimenReviewEventParametersSearch"
@@ -1063,7 +1063,7 @@ PUBLIC
 			input="/DisposalEventParameters.do?operation=add"
 			scope="request">
 			<forward name="success" path=".catissuecore.disposalEventParametersAddSuccessDef" />
-			<forward name="failure" path="/error.jsp" />
+			<forward name="failure" path="/DisposalEventParameters.do?operation=add" />
 		</action>
 		
 		<action path="/DisposalEventParametersEdit"
@@ -1073,7 +1073,7 @@ PUBLIC
 			input="/DisposalEventParameters.do?operation=edit"
 			scope="request">
 			<forward name="success" path=".catissuecore.disposalEventParametersEditSuccessDef" />
-			<forward name="failure" path="/error.jsp" />
+			<forward name="failure" path="/DisposalEventParameters.do?operation=edit" />
 		</action>
 		
 		<action path="/DisposalEventParametersSearch"
@@ -1103,7 +1103,7 @@ PUBLIC
 			input="/ThawEventParameters.do?operation=add"
 			scope="request">
 			<forward name="success" path=".catissuecore.thawEventParametersAddSuccessDef" />
-			<forward name="failure" path="/error.jsp" />
+			<forward name="failure" path="/ThawEventParameters.do?operation=add" />
 		</action>
 		
 		<action path="/ThawEventParametersEdit"
@@ -1113,7 +1113,7 @@ PUBLIC
 			input="/ThawEventParameters.do?operation=edit"
 			scope="request">
 			<forward name="success" path=".catissuecore.thawEventParametersEditSuccessDef" />
-			<forward name="failure" path="/error.jsp" />
+			<forward name="failure" path="/ThawEventParameters.do?operation=edit" />
 		</action>
 		
 		<action path="/ThawEventParametersSearch"
@@ -1142,7 +1142,7 @@ PUBLIC
 			input="/MolecularSpecimenReviewParameters.do?operation=add"
 			scope="request">
 			<forward name="success" path=".catissuecore.molecularSpecimenReviewParametersAddSuccessDef" />
-			<forward name="failure" path="/error.jsp" />
+			<forward name="failure" path="/MolecularSpecimenReviewParameters.do?operation=add" />
 		</action>
 		
 		<action path="/MolecularSpecimenReviewParametersEdit"
@@ -1152,7 +1152,7 @@ PUBLIC
 			input="/MolecularSpecimenReviewParameters.do?operation=edit"
 			scope="request">
 			<forward name="success" path=".catissuecore.molecularSpecimenReviewParametersEditSuccessDef" />
-			<forward name="failure" path="/error.jsp" />
+			<forward name="failure" path="/MolecularSpecimenReviewParameters.do?operation=edit" />
 		</action>
 		
 		<action path="/MolecularSpecimenReviewParametersSearch"
@@ -1181,7 +1181,7 @@ PUBLIC
 			input="/CollectionEventParameters.do?operation=add"
 			scope="request">
 			<forward name="success" path=".catissuecore.collectionEventParametersAddSuccessDef" />
-			<forward name="failure" path="/error.jsp" />
+			<forward name="failure" path="/CollectionEventParameters.do?operation=add" />
 		</action>
 		
 		<action path="/CollectionEventParametersEdit"
@@ -1191,7 +1191,7 @@ PUBLIC
 			input="/CollectionEventParameters.do?operation=edit"
 			scope="request">
 			<forward name="success" path=".catissuecore.collectionEventParametersEditSuccessDef" />
-			<forward name="failure" path="/error.jsp" />
+			<forward name="failure" path="/CollectionEventParameters.do?operation=edit" />
 		</action>
 		
 		<action path="/CollectionEventParametersSearch"
@@ -1220,7 +1220,7 @@ PUBLIC
 			input="/TransferEventParameters.do?operation=add"
 			scope="request">
 			<forward name="success" path=".catissuecore.transferEventParametersAddSuccessDef" />
-			<forward name="failure" path="/error.jsp" />
+			<forward name="failure" path="/TransferEventParameters.do?operation=add" />
 		</action>
 		
 		<action path="/TransferEventParametersEdit"
@@ -1230,7 +1230,7 @@ PUBLIC
 			input="/TransferEventParameters.do?operation=edit"
 			scope="request">
 			<forward name="success" path=".catissuecore.transferEventParametersEditSuccessDef" />
-			<forward name="failure" path="/error.jsp" />
+			<forward name="failure" path="/TransferEventParameters.do?operation=edit" />
 		</action>
 		
 		<action path="/TransferEventParametersSearch"
@@ -1259,7 +1259,7 @@ PUBLIC
 			input="/SpunEventParameters.do?operation=add"
 			scope="request">
 			<forward name="success" path=".catissuecore.spunEventParametersAddSuccessDef" />
-			<forward name="failure" path="/error.jsp" />
+			<forward name="failure" path="/SpunEventParameters.do?operation=add" />
 		</action>
 		
 		<action path="/SpunEventParametersEdit"
@@ -1269,7 +1269,7 @@ PUBLIC
 			input="/SpunEventParameters.do?operation=edit"
 			scope="request">
 			<forward name="success" path=".catissuecore.spunEventParametersEditSuccessDef" />
-			<forward name="failure" path="/error.jsp" />
+			<forward name="failure" path="/SpunEventParameters.do?operation=edit" />
 		</action>
 		
 		<action path="/SpunEventParametersSearch"
@@ -1298,7 +1298,7 @@ PUBLIC
 			input="/EmbeddedEventParameters.do?operation=add"
 			scope="request">
 			<forward name="success" path=".catissuecore.embeddedEventParametersAddSuccessDef" />
-			<forward name="failure" path="/error.jsp" />
+			<forward name="failure" path="/EmbeddedEventParameters.do?operation=add" />
 		</action>
 		
 		<action path="/EmbeddedEventParametersEdit"
@@ -1308,7 +1308,7 @@ PUBLIC
 			input="/EmbeddedEventParameters.do?operation=edit"
 			scope="request">
 			<forward name="success" path=".catissuecore.embeddedEventParametersEditSuccessDef" />
-			<forward name="failure" path="/error.jsp" />
+			<forward name="failure" path="/EmbeddedEventParameters.do?operation=edit" />
 		</action>
 		
 		<action path="/EmbeddedEventParametersSearch"
@@ -1337,7 +1337,7 @@ PUBLIC
 			input="/FixedEventParameters.do?operation=add"
 			scope="request">
 			<forward name="success" path=".catissuecore.fixedEventParametersAddSuccessDef" />
-			<forward name="failure" path="/error.jsp" />
+			<forward name="failure" path="/FixedEventParameters.do?operation=add" />
 		</action>
 		
 		<action path="/FixedEventParametersEdit"
@@ -1347,7 +1347,7 @@ PUBLIC
 			input="/FixedEventParameters.do?operation=edit"
 			scope="request">
 			<forward name="success" path=".catissuecore.fixedEventParametersEditSuccessDef" />
-			<forward name="failure" path="/error.jsp" />
+			<forward name="failure" path="/FixedEventParameters.do?operation=edit" />
 		</action>
 		
 		<action path="/FixedEventParametersSearch"
@@ -1376,7 +1376,7 @@ PUBLIC
 			input="/ProcedureEventParameters.do?operation=add"
 			scope="request">
 			<forward name="success" path=".catissuecore.procedureEventParametersAddSuccessDef" />
-			<forward name="failure" path="/error.jsp" />
+			<forward name="failure" path="/ProcedureEventParameters.do?operation=add" />
 		</action>
 		
 		<action path="/ProcedureEventParametersEdit"
@@ -1386,7 +1386,7 @@ PUBLIC
 			input="/ProcedureEventParameters.do?operation=edit"
 			scope="request">
 			<forward name="success" path=".catissuecore.procedureEventParametersEditSuccessDef" />
-			<forward name="failure" path="/error.jsp" />
+			<forward name="failure" path="/ProcedureEventParameters.do?operation=edit" />
 		</action>
 		
 		<action path="/ProcedureEventParametersSearch"
@@ -1415,7 +1415,7 @@ PUBLIC
 			input="/Distribution.do?operation=add"
 			scope="request">
 			<forward name="success" path=".catissuecore.distributionAddSuccessDef" />
-			<forward name="failure" path="/error.jsp" />
+			<forward name="failure" path="/Distribution.do?operation=add" />
 		</action>
 		
 		<action path="/DistributionEdit"
@@ -1425,7 +1425,7 @@ PUBLIC
 			input="/Distribution.do?operation=edit"
 			scope="request">
 			<forward name="success" path=".catissuecore.distributionEditSuccessDef" />
-			<forward name="failure" path="/error.jsp" />
+			<forward name="failure" path="/Distribution.do?operation=edit" />
 		</action>
 		
 		<action path="/DistributionSearch"
