@@ -70,7 +70,7 @@ public class BizLogicFactory
          	case Constants.FIXED_EVENT_PARAMETERS_FORM_ID:
          	case Constants.PROCEDURE_EVENT_PARAMETERS_FORM_ID:	
          		abstractBizLogic = new SpecimenEventParametersBizLogic();
-        		break;		
+        		break;
         		
         	case Constants.COLLECTION_PROTOCOL_FORM_ID:
         		abstractBizLogic = new CollectionProtocolBizLogic();
@@ -81,12 +81,19 @@ public class BizLogicFactory
 			case Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID:
 				abstractBizLogic = new CollectionProtocolRegistrationBizLogic();
 				break;	
+			
 			case Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID:
 				abstractBizLogic = new SpecimenCollectionGroupBizLogic();
 				break;
+				
           	case Constants.NEW_SPECIMEN_FORM_ID:
         		abstractBizLogic = new NewSpecimenBizLogic();
         		break;
+
+          	case Constants.CREATE_SPECIMEN_FORM_ID:
+        		abstractBizLogic = new CreateSpecimenBizLogic();
+        		break;
+        		
             default:
                 abstractBizLogic = new DefaultBizLogic();
             	break;
