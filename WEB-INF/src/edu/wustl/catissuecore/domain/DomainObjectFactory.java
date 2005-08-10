@@ -11,6 +11,7 @@
 package edu.wustl.catissuecore.domain;
 
 import edu.wustl.catissuecore.actionForm.AbstractActionForm;
+import edu.wustl.catissuecore.actionForm.CreateSpecimenForm;
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.actionForm.ReportedProblemForm;
 import edu.wustl.catissuecore.actionForm.UserForm;
@@ -110,7 +111,6 @@ public class DomainObjectFactory
             case Constants.NEW_SPECIMEN_FORM_ID:
             	NewSpecimenForm newForm = (NewSpecimenForm) form;
             	String type = newForm.getClassName();
-            	
             	if(type.equals("Tissue"))
             	{
             		abstractDomain = new TissueSpecimen(newForm);
@@ -129,6 +129,27 @@ public class DomainObjectFactory
             	}
             	break;
             	
+            case Constants.CREATE_SPECIMEN_FORM_ID:
+            	CreateSpecimenForm crForm = (CreateSpecimenForm)form;
+            	String sType = crForm.getClassName();
+            	
+            	if(sType.equals("Tissue"))
+            	{
+            		abstractDomain = new TissueSpecimen(crForm);
+            	}
+            	else if(sType.equals("Fluid"))
+            	{
+            		abstractDomain = new FluidSpecimen(crForm);
+            	}
+            	else if(sType.equals("Cell"))
+            	{
+            		abstractDomain = new CellSpecimen(crForm);
+            	}
+            	else if(sType.equals("Molecular"))
+            	{
+            		abstractDomain = new MolecularSpecimen(crForm);
+            	}
+            	break;
 			case Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID:
 			   abstractDomain = new SpecimenCollectionGroup(form);
 			   break;
