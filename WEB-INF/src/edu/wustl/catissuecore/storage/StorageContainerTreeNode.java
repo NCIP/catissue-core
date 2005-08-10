@@ -10,6 +10,7 @@ package edu.wustl.catissuecore.storage;
 import java.io.Serializable;
 
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.vo.TreeNode;
 
 /**
  * @author gautam_shetty
@@ -17,7 +18,7 @@ import edu.wustl.catissuecore.util.global.Constants;
  * TODO To change the template for this generated storageContainerType comment go to
  * Window - Preferences - Java - Code Style - Code Templates
  */
-public class TreeNode implements Serializable
+public class StorageContainerTreeNode implements Serializable, TreeNode
 {
 
     private Long storageContainerIdentifier;
@@ -37,7 +38,7 @@ public class TreeNode implements Serializable
     /**
      * 
      */
-    public TreeNode()
+    public StorageContainerTreeNode()
     {
         storageContainerIdentifier = null;
         storageContainerName = null;
@@ -48,7 +49,7 @@ public class TreeNode implements Serializable
         siteType = null;
     }
 
-    public TreeNode(Long identifier, String name, String type, Long parentIdentifier)
+    public StorageContainerTreeNode(Long identifier, String name, String type, Long parentIdentifier)
     {
         this.storageContainerIdentifier = identifier;
         this.storageContainerName = name;
@@ -169,5 +170,40 @@ public class TreeNode implements Serializable
     public void setSiteType(String siteType)
     {
         this.siteType = siteType;
+    }
+    
+    public void initialiseRoot()
+    {
+        this.setStorageContainerIdentifier(new Long(0));
+        this.setStorageContainerName(Constants.CATISSUE_CORE);
+        this.setStorageContainerType("0");
+        this.setParentStorageContainerIdentifier(new Long(0));
+    }
+    
+    public TreeNode getParentTreeNode()
+    {
+        StorageContainerTreeNode treeNode = new StorageContainerTreeNode();
+        treeNode.setSiteSystemIdentifier(this.getSiteSystemIdentifier());
+        treeNode.setSiteName(this.getSiteName());
+        treeNode.setSiteType(this.getSiteType());
+        
+        return treeNode;
+    }
+    
+    public boolean isChildOf(TreeNode treeNode)
+    {
+        StorageContainerTreeNode storageContainerTreeNode = (StorageContainerTreeNode) treeNode;
+        return this.getParentStorageContainerIdentifier().equals(storageContainerTreeNode.getStorageContainerIdentifier());
+    }
+    
+    public boolean hasEqualParents(TreeNode treeNode)
+    {
+        StorageContainerTreeNode storageContainerTreeNode = (StorageContainerTreeNode) treeNode; 
+        return this.getSiteSystemIdentifier().equals(storageContainerTreeNode.getSiteSystemIdentifier());
+    }
+    
+    public Long getParentIdentifier()
+    {
+        return this.getParentStorageContainerIdentifier();
     }
 }

@@ -1,11 +1,11 @@
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
-<%@ page import="edu.wustl.catissuecore.util.global.Constants,edu.wustl.catissuecore.storage.StorageContainerGridObject,java.lang.String"%>
+<%@ page import="edu.wustl.catissuecore.util.global.Constants,edu.wustl.catissuecore.storage.StorageContainerGridObject"%>
 
 <script>
-
-function setParentWindowValue(elementName,elementValue) { 
+function setParentWindowValue(elementName,elementValue)
+{ 
 	for (var i=0;i < top.opener.document.forms[0].elements.length;i++)
     {
     	if (top.opener.document.forms[0].elements[i].name == elementName)
@@ -25,6 +25,9 @@ function closeFramedWindow()
 	StorageContainerGridObject storageContainerGridObject 
 			= (StorageContainerGridObject)request.getAttribute(Constants.STORAGE_CONTAINER_GRID_OBJECT);
 	boolean [][]fullStatus = (boolean [][])request.getAttribute(Constants.STORAGE_CONTAINER_CHILDREN_STATUS);
+	Integer startNumber = (Integer)request.getAttribute(Constants.START_NUMBER);
+	int [] childContainerSystemIdentifiers = (int [])request.getAttribute(Constants.CHILD_CONTAINER_SYSTEM_IDENTIFIERS);
+	String storageContainerType = (String)request.getAttribute(Constants.STORAGE_CONTAINER_TYPE);
 %>
 
 <html:errors/>
@@ -39,13 +42,18 @@ function closeFramedWindow()
 					<td>
 					<table summary="Enter summary of data here" cellpadding="3" 
 							cellspacing="0" border="0" class="dataTable" width="100%">
-					<% for (int i=0;i<storageContainerGridObject.getOneDimensionCapacity().intValue();i++){%>
+					<% for (int i=0,k=0;i<storageContainerGridObject.getOneDimensionCapacity().intValue();i++){%>
 						<tr class="dataRowLight">	
 					<% for (int j=0;j<storageContainerGridObject.getTwoDimensionCapacity().intValue();j++){
 						if (fullStatus[i][j] == true){
-					   %>
+					   			String openStorageContainer = Constants.SHOW_STORAGE_CONTAINER_GRID_VIEW_ACTION
+                    			+ "?" + Constants.IDENTIFIER + "=" + childContainerSystemIdentifiers[k++]
+                    			+ "&" + Constants.STORAGE_CONTAINER_TYPE + "=" + storageContainerType;%>
+
 						<td class="dataCellText">
-							<img src="images/redbox.gif" width="40" height="40" border="0">
+							<a href="<%=openStorageContainer%>">
+								<img src="images/redbox.gif" width="40" height="40" border="0">
+							</a>
  						</td>
 						<%}
 						else
@@ -58,7 +66,9 @@ function closeFramedWindow()
 															  + i + "');"+"javascript:setParentWindowValue('positionDimensionTwo','"+
 															  + j + "');"
 															  + "javascript:setParentWindowValue('parentContainerId','"+
-															  + storageContainerGridObject.getSystemIdentifier() + "');closeFramedWindow()";
+															  + storageContainerGridObject.getSystemIdentifier() + "');"
+															  + "javascript:setParentWindowValue('startNumber','"+
+															  + startNumber.intValue() + "');closeFramedWindow()";
 						%>
 						<td class="dataCellText">
 						 	<a href="<%=setParentWindowContainer%>">

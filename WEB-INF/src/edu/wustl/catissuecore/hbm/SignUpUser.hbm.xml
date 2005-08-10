@@ -1,0 +1,193 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 2.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+    <class
+        name="edu.wustl.catissuecore.domain.SignUpUser"
+        table="CATISSUE_SIGNUP_USER"
+        dynamic-update="false"
+        dynamic-insert="false"
+    >
+
+        <id
+            name="systemIdentifier"
+            column="IDENTIFIER"
+            type="long"
+            length="30"
+            unsaved-value="null"
+        >
+            <generator class="native">
+            </generator>
+        </id>
+
+        <property
+            name="firstName"
+            type="string"
+            update="true"
+            insert="true"
+            column="FIRST_NAME"
+            length="50"
+        />
+
+        <property
+            name="lastName"
+            type="string"
+            update="true"
+            insert="true"
+            column="LAST_NAME"
+            length="50"
+        />
+
+        <property
+            name="loginName"
+            type="string"
+            update="true"
+            insert="true"
+            column="LOGIN_NAME"
+            length="50"
+            not-null="true"
+            unique="true"
+        />
+
+        <property
+            name="emailAddress"
+            type="string"
+            update="true"
+            insert="true"
+            column="EMAIL_ADDRESS"
+            length="50"
+            not-null="true"
+            unique="true"
+        />
+
+        <property
+            name="startDate"
+            type="date"
+            update="true"
+            insert="true"
+            column="START_DATE"
+        />
+
+        <property
+            name="activityStatus"
+            type="string"
+            update="true"
+            insert="true"
+            column="ACTIVITY_STATUS"
+            length="50"
+        />
+
+        <many-to-one
+            name="department"
+            class="edu.wustl.catissuecore.domain.Department"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="DEPARTMENT_ID"
+        />
+
+        <property
+            name="street"
+            type="string"
+            update="true"
+            insert="true"
+            column="STREET"
+            length="50"
+        />
+
+        <property
+            name="city"
+            type="string"
+            update="true"
+            insert="true"
+            column="CITY"
+            length="50"
+        />
+
+        <property
+            name="state"
+            type="string"
+            update="true"
+            insert="true"
+            column="STATE"
+            length="50"
+        />
+
+        <property
+            name="country"
+            type="string"
+            update="true"
+            insert="true"
+            column="COUNTRY"
+            length="50"
+        />
+
+        <property
+            name="zipCode"
+            type="string"
+            update="true"
+            insert="true"
+            column="ZIPCODE"
+            length="30"
+        />
+
+        <property
+            name="phoneNumber"
+            type="string"
+            update="true"
+            insert="true"
+            column="PHONE_NUMBER"
+            length="50"
+        />
+
+        <property
+            name="faxNumber"
+            type="string"
+            update="true"
+            insert="true"
+            column="FAX_NUMBER"
+            length="50"
+        />
+
+        <many-to-one
+            name="cancerResearchGroup"
+            class="edu.wustl.catissuecore.domain.CancerResearchGroup"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="CANCER_RESEARCH_GROUP_ID"
+        />
+
+        <many-to-one
+            name="institution"
+            class="edu.wustl.catissuecore.domain.Institution"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="INSTITUTION_ID"
+        />
+
+        <property
+            name="comments"
+            type="string"
+            update="true"
+            insert="true"
+            column="STATUS_COMMENT"
+            length="2000"
+        />
+
+        <!--
+            To add non XDoclet property mappings, create a file named
+                hibernate-properties-SignUpUser.xml
+            containing the additional properties and place it in your merge dir.
+        -->
+
+    </class>
+
+</hibernate-mapping>

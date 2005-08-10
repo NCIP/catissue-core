@@ -62,3 +62,4 @@ function send(pageNum,numresultsPerPage,prevPage,pageName)
 	document.forms[0].action = pageName+'?pageNum='+pageNum;
 	document.forms[0].submit();
 }
+

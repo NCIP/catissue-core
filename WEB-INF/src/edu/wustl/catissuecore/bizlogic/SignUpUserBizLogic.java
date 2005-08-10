@@ -64,7 +64,7 @@ public class SignUpUserBizLogic extends DefaultBizLogic
         user.setInstitution(institution);
         user.setCancerResearchGroup(cancerResearchGroup);
         
-        dao.insert(user);
+        dao.insert(user,true);
     }
 
 }

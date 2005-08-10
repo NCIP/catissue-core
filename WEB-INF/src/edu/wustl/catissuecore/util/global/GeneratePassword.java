@@ -21,9 +21,9 @@ public class GeneratePassword
      * @param loginName the loginName of a user.
      * @return the password for a user.
      */
-    public static String getPassword(String loginName)
+    public static String getPassword()
     {
-        return (loginName+"123");
+        return ("loginName"+"123");
     }
 
 }

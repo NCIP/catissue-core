@@ -95,8 +95,8 @@ public class ApproveUserBizLogic extends DefaultBizLogic
             user.setInstitution(institution);
             user.setCancerResearchGroup(cancerResearchGroup);
             
-            dao.insert(user.getAddress());
-            dao.insert(user);
+            dao.insert(user.getAddress(),true);
+            dao.insert(user,true);
             
             list = dao.retrieve(SignUpUser.class.getName(),
                     "emailAddress", user.getEmailAddress());

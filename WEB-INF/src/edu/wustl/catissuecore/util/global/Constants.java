@@ -123,8 +123,12 @@ public class Constants
 	public static final String SPECIMEN_CLASS_LIST = "specimenClassList";
 	public static final String SPECIMEN_CLASS_ID_LIST = "specimenClassIdList";
 	
+	//Constants for Storage Container.
+	public static final String STORAGE_CONTAINER_TYPE = "storageType";
 	public static final String STORAGE_CONTAINER_GRID_OBJECT = "storageContainerGridObject";
 	public static final String STORAGE_CONTAINER_CHILDREN_STATUS = "storageContainerChildrenStatus";
+	public static final String START_NUMBER = "startNumber";
+	public static final String CHILD_CONTAINER_SYSTEM_IDENTIFIERS = "childContainerSystemIdentifiers";
 	
 	//event parameters lists
 	public static final String METHODLIST = "methodList";
@@ -379,11 +383,12 @@ public class Constants
 	public static final int EMBEDDED_EVENT_PARAMETERS_FORM_ID = 31;
 	public static final int FIXED_EVENT_PARAMETERS_FORM_ID = 32;	
 	public static final int PROCEDURE_EVENT_PARAMETERS_FORM_ID = 33;
+	public static final int FORGOT_PASSWORD_FORM_ID = 34;
+	public static final int SIGNUP_FORM_ID = 35;
+	
 	//Misc
 	public static final String SEPARATOR = " : ";
-	
-	
-		
+
 	//Status message key Constants
 	public static final String STATUS_MESSAGE_KEY = "statusMessageKey";
 	
@@ -421,6 +426,9 @@ public class Constants
 	//Tree View Constants.
 	public static final String ROOT = "Root";
 	public static final String CATISSUE_CORE = "caTISSUE Core";
+	public static final String TISSUE_SITE = "Tissue Site";
+	public static final int TISSUE_SITE_TREE_ID = 1;
+	public static final int STORAGE_CONTAINER_TREE_ID = 2;
 	
 	//Query Interface Results View Constants
 	public static final String PAGEOF = "pageOf";
@@ -433,7 +441,7 @@ public class Constants
 	//For Tree Applet
 	public static final String PAGEOF_QUERY_RESULTS = "pageOfQueryResults";
 	public static final String PAGEOF_STORAGE_LOCATION = "pageOfStorageLocation";
-	public static final String PAGEOF_SPECIMEN = "pageOfSpecimen";
+	public static final String PAGEOF_TISSUE_SITE = "pageOfTissueSite";
 	
 	//Query results view temporary table name.
 	public static final String QUERY_RESULTS_TABLE = "CATISSUE_QUERY_RESULTS";

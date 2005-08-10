@@ -7,8 +7,6 @@
 
 package edu.wustl.catissuecore.storage;
 
-import java.util.Collection;
-import java.util.HashSet;
 
 /**
  * @author gautam_shetty
@@ -26,8 +24,6 @@ public class StorageContainerGridObject
     private Integer oneDimensionCapacity;
 
     private Integer twoDimensionCapacity;
-
-    private Collection childrenContainerCollection = new HashSet();
 
     /**
      * @return Returns the oneDimensionCapacity.
@@ -59,23 +55,6 @@ public class StorageContainerGridObject
     public void setTwoDimensionCapacity(Integer twoDimensionCapacity)
     {
         this.twoDimensionCapacity = twoDimensionCapacity;
-    }
-
-    /**
-     * @return Returns the childrenContainerCollection.
-     */
-    public Collection getChildrenContainerCollection()
-    {
-        return childrenContainerCollection;
-    }
-
-    /**
-     * @param childrenContainerCollection The childrenContainerCollection to set.
-     */
-    public void setChildrenContainerCollection(
-            Collection childrenContainerCollection)
-    {
-        this.childrenContainerCollection = childrenContainerCollection;
     }
 
     /**

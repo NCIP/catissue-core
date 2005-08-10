@@ -39,6 +39,14 @@ public class DomainObjectFactory
                 UserForm userForm = (UserForm) form;
                 abstractDomain = new User(userForm);
                 break;
+            case Constants.SIGNUP_FORM_ID:
+                UserForm signUpForm = (UserForm)form;
+            	abstractDomain = new SignUpUser(signUpForm);
+            	break;
+            case Constants.APPROVE_USER_FORM_ID:
+                UserForm approveUserForm = (UserForm)form;
+            	abstractDomain = new User(approveUserForm);
+            	break;
             case Constants.PARTICIPANT_FORM_ID:
             	abstractDomain = new Participant(form);
             	break;

@@ -15,7 +15,8 @@ import java.util.Vector;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 
-import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.vo.TreeNode;
+import edu.wustl.catissuecore.vo.TreeNodeFactory;
 
 
 /**
@@ -24,16 +25,16 @@ import edu.wustl.catissuecore.util.global.Constants;
  */
 public class GenerateStorageTree
 {
-    public JTree createTree(Vector dataVector)
+    public JTree createTree(Vector dataVector, int treeType)
     {
-        TreeNode rootNode = new TreeNode(new Long(0),Constants.CATISSUE_CORE,"0",new Long(0));
+        TreeNode rootNode = TreeNodeFactory.getTreeNode(treeType);
+        rootNode.initialiseRoot();
         DefaultMutableTreeNode root = new DefaultMutableTreeNode(rootNode);
         DefaultMutableTreeNode parentNode;
         
         synchronized (dataVector)
         {
             Iterator iterator = dataVector.iterator();
-
             while (iterator.hasNext())
             {
                 parentNode = root;
@@ -41,7 +42,7 @@ public class GenerateStorageTree
 
                 TreeNode treeNode = (TreeNode) iterator.next();
                 
-                if (treeNode.getParentStorageContainerIdentifier() == null)
+                if (treeNode.getParentIdentifier() == null)
                 {
                     boolean found = false;
                     for (int i = 0; i < parentNode.getChildCount(); i++)
@@ -49,21 +50,19 @@ public class GenerateStorageTree
                         DefaultMutableTreeNode childNode = (DefaultMutableTreeNode) parentNode.getChildAt(i);
                         TreeNode childDataNode = (TreeNode) childNode.getUserObject();
                         
-                        if (childDataNode.getSiteSystemIdentifier().equals(treeNode.getSiteSystemIdentifier()))
+                        if (childDataNode.hasEqualParents(treeNode))
                         {
                             found = true;
                             DefaultMutableTreeNode containerNode = new DefaultMutableTreeNode(treeNode);
                             childNode.add(containerNode);
+                            break;
                         }
                     }
                     
                     if (!found)
                     {
-                        TreeNode siteNode = new TreeNode();
-                        siteNode.setSiteSystemIdentifier(treeNode.getSiteSystemIdentifier());
-                        siteNode.setSiteName(treeNode.getSiteName());
-                        siteNode.setSiteType(treeNode.getSiteType());
-      
+                        TreeNode siteNode = treeNode.getParentTreeNode();
+                        
                        	DefaultMutableTreeNode siteTreeNode = new DefaultMutableTreeNode(siteNode);
                        	DefaultMutableTreeNode childContainerNode = new DefaultMutableTreeNode(treeNode);
                        	siteTreeNode.add(childContainerNode);
@@ -87,7 +86,7 @@ public class GenerateStorageTree
                 }
             }
         }
-
+        
         JTree tree = new JTree(root);
         return tree;
     }
@@ -103,7 +102,7 @@ public class GenerateStorageTree
             {
                 DefaultMutableTreeNode node = (DefaultMutableTreeNode) parentNode.getChildAt(i);
                 TreeNode nodeData = (TreeNode) node.getUserObject();
-                if (nodeData.getStorageContainerIdentifier().equals(treeNode.getParentStorageContainerIdentifier()))
+                if (treeNode.isChildOf(nodeData) )
                 {
                     returnNode = node;
                     flag = true;
@@ -113,7 +112,6 @@ public class GenerateStorageTree
                 if (returnNode != null)
                     break;
             }
-            
         }
         
         return returnNode;

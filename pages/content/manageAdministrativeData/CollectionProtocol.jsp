@@ -44,6 +44,19 @@
 		var i = document.getElementById(listname).selectedIndex;
 		document.getElementById(unitspan).innerHTML = ugul[i];
 	}
+
+		var win = null;
+		function NewWindow(mypage,myname,w,h,scroll)
+		{
+			LeftPosition = (screen.width) ? (screen.width-w)/2 : 0;
+			TopPosition = (screen.height) ? (screen.height-h)/2 : 0;
+
+			settings =
+				'height='+h+',width='+w+',top='+TopPosition+',left='+LeftPosition+',scrollbars='+scroll+',resizable'
+			win = open(mypage,myname,settings)
+			if (win.opener == null)
+				win.opener = self;
+		}
 //code for units end
 </SCRIPT>
 
@@ -623,7 +636,7 @@ function getSubDivCount(subdivtag)
 							<html:options name="<%=Constants.TISSUE_SITE_LIST%>" labelName="<%=Constants.TISSUE_SITE_LIST%>"/>
 						</html:select>
 			        
-				        <a href="#">
+				        <a href="#" onclick="javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfTissueSite','name','290','330','no');return false">
 							<img src="images\Tree.gif" border="0" width="26" height="22"></a>
 					</td>
 					

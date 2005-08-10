@@ -42,6 +42,9 @@ public abstract class AbstractDomainObject
             case Constants.USER_FORM_ID:
                 className = User.class.getName();
             	break;
+            case Constants.SIGNUP_FORM_ID:
+                className = SignUpUser.class.getName();
+            	break;	
         }
         return className;
     }
