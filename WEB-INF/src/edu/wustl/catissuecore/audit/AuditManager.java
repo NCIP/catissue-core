@@ -6,13 +6,20 @@
  */
 package edu.wustl.catissuecore.audit;
 
-import java.awt.Rectangle;
 import java.lang.reflect.Field;
+import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
+import edu.wustl.catissuecore.dao.DAO;
+import edu.wustl.catissuecore.domain.AbstractDomainObject;
+import edu.wustl.catissuecore.domain.AuditEvent;
 import edu.wustl.catissuecore.domain.AuditEventDetails;
-import edu.wustl.catissuecore.domain.CellSpecimenRequirement;
+import edu.wustl.catissuecore.domain.AuditEventLog;
+import edu.wustl.catissuecore.domain.Department;
+import edu.wustl.catissuecore.exception.AuditException;
+import edu.wustl.common.util.dbManager.DAOException;
 
 /**
  * @author kapil_kaveeshwar
@@ -22,60 +29,169 @@ import edu.wustl.catissuecore.domain.CellSpecimenRequirement;
  */
 public class AuditManager 
 {
-//	String str = {"Long","Double","In"}
-//	List list = new
-	public Set compare(Object previousObj, Object currentObj) throws IllegalAccessException, Exception
+	private AuditEvent auditEvent;  
+	private final Set dataSet = new HashSet(); 
+	public AuditManager()
 	{
-		Set auditEventDetailsCollection = new HashSet(); 
+		dataSet.add(Byte.class);
+		dataSet.add(Double.class);
+		dataSet.add(Float.class);
+		dataSet.add(Integer.class);
+		dataSet.add(Long.class);
+		dataSet.add(Short.class);
 		
-		Class previousObjClass = previousObj.getClass();
-		Class currentObjClass = previousObj.getClass();
+		dataSet.add(String.class);
+		dataSet.add(Boolean.class);
+		dataSet.add(Character.class);
 		
-		if(previousObjClass.equals(currentObjClass))
+		dataSet.add(Date.class);
+		
+		
+		auditEvent = new AuditEvent();
+		auditEvent.setIpAddress("10.10.10.10");
+		auditEvent.setUser(null);
+	}
+	
+	private boolean isVariable(Field filed)
+	{
+		return dataSet.contains(filed.getType());
+	}
+
+	public void compare(AbstractDomainObject currentObj, AbstractDomainObject previousObj,String eventType) throws AuditException
+	{
+		try
 		{
-			Field[] fields = previousObjClass.getDeclaredFields();
-			//previousObjClass.getDeclaredField("specimenRequirementCollection");
+			AuditEventLog auditEventLog = new AuditEventLog();
 			
-			for (int i = 0; i < fields.length; i++)
+			auditEventLog.setObjectIdentifier(currentObj.getSystemIdentifier());
+			auditEventLog.setObjectName(currentObj.getClass().getName());	
+			auditEventLog.setEventType(eventType);
+			
+			auditEvent.getAuditEventLogCollection().add(auditEventLog);
+			
+			Set auditEventDetailsCollection = new HashSet(); 
+			
+			Class currentObjClass = currentObj.getClass();
+			Class previousObjClass = currentObjClass; 
+			if(previousObj!=null)
+				previousObjClass = previousObj.getClass();
+			
+			if(previousObjClass.equals(currentObjClass))
 			{
-				fields[i].setAccessible(true);
-				System.out.println(fields[i].getName()+": "+fields[i].getType());
+				Field[] fields = previousObjClass.getDeclaredFields();
 				
-				
-				Object prevVal = fields[i].get(previousObj);
-				Object currVal = fields[i].get(currentObj);
-				
-				if(prevVal!=null && currVal!=null)
+				for (int i = 0; i < fields.length; i++)
 				{
-					if(!prevVal.equals(currVal))
-					{
-						AuditEventDetails auditEventDetails = new AuditEventDetails();
-						auditEventDetails.setElementName(fields[i].getName());
-						auditEventDetails.setPreviousValue(prevVal.toString());
-						auditEventDetails.setCurrentValue(currVal.toString());
-						
+					AuditEventDetails auditEventDetails = processField(fields[i], previousObj, currentObj);
+					if(auditEventDetails!=null)
 						auditEventDetailsCollection.add(auditEventDetails);
-					}
 				}
 			}
+			auditEventLog.setAuditEventDetailsCollcetion(auditEventDetailsCollection);
 		}
-		return auditEventDetailsCollection;
+		catch(Exception ex)
+		{
+			throw new AuditException();
+		}
 	}
+	
+	private AuditEventDetails processField(Field field, Object previousObj, Object currentObj) throws Exception
+	{
+		if(isVariable(field))
+		{
+			System.out.println(field.getName()+": "+field.getType());
+			
+			field.setAccessible(true);
+			
+			Object prevVal = null;
+			if(previousObj!=null)
+				prevVal = field.get(previousObj);
+			Object currVal = field.get(currentObj);
+			
+			System.out.println("prevVal "+prevVal);
+			System.out.println("currVal "+currVal);
+			
+			AuditEventDetails auditEventDetails = compareValue(prevVal, currVal);
+			if(auditEventDetails!=null)
+			{
+				auditEventDetails.setElementName(field.getName());
+				return auditEventDetails;
+			}
+		}
+		return null;
+	}
+	
+	private AuditEventDetails compareValue(Object prevVal, Object currVal) 
+	{
+		AuditEventDetails auditEventDetails = new AuditEventDetails();
+		
+		if(prevVal==null || currVal==null )
+		{
+			if(prevVal==null && currVal!=null)
+			{
+				auditEventDetails.setPreviousValue(null);
+				auditEventDetails.setCurrentValue(currVal.toString());
+			}
+			else if(prevVal!=null && currVal==null)
+			{
+				auditEventDetails.setPreviousValue(prevVal.toString());
+				auditEventDetails.setCurrentValue(null);
+			}
+			else 
+				return null;
+		}
+		else if(!prevVal.equals(currVal))
+		{
+			auditEventDetails.setPreviousValue(prevVal.toString());
+			auditEventDetails.setCurrentValue(currVal.toString());
+		}
+		System.out.println("auditEventDetails "+auditEventDetails);
+		return auditEventDetails;
+	}
+	
 	
 	public static void main(String[] args)  throws IllegalAccessException, Exception
 	{
-		CellSpecimenRequirement dept1 = new CellSpecimenRequirement();
-		//dept1.setActivityStatus("dept1aas");
-		
-		
-		CellSpecimenRequirement dept2 = new CellSpecimenRequirement();
-//		dept2.setActivityStatus("dept2");
-		
 		AuditManager aAuditManager = new AuditManager();
 		
-		Rectangle r = new Rectangle(100, 325);
-
-		Set aSet = aAuditManager.compare(dept1,dept2);
-		System.out.println(aSet);
+		Department dept1 = null;
+		Department dept2 = new Department();
+		dept2.setName("DA");
+		
+//		User part1 = new User();
+//		part1.setActivityStatus(null);
+//		part1.setDepartment(new Department());
+//		
+//		
+//		User part2 = new User();
+//		part2.setActivityStatus("part2");
+//		part2.setDepartment(null);
+		
+		aAuditManager.compare(dept2,dept1,"");
+		System.out.println(aAuditManager.auditEvent.getAuditEventLogCollection());
+	}
+	
+	public void insert(DAO dao) throws DAOException 
+	{
+		if(auditEvent.getAuditEventLogCollection().isEmpty())
+			return;
+		
+		dao.insert(auditEvent,false);
+		Iterator auditLogIterator = auditEvent.getAuditEventLogCollection().iterator();
+		while(auditLogIterator.hasNext())
+		{
+			AuditEventLog auditEventLog = (AuditEventLog)auditLogIterator.next();
+			auditEventLog.setAuditEvent(auditEvent);
+			dao.insert(auditEventLog,false);
+			
+  			Iterator auditEventDetailsIterator = auditEventLog.getAuditEventDetailsCollcetion().iterator();
+  			while(auditEventDetailsIterator.hasNext())
+  			{
+  				AuditEventDetails auditEventDetails = (AuditEventDetails)auditEventDetailsIterator.next();
+  				auditEventDetails.setAuditEventLog(auditEventLog);
+  				dao.insert(auditEventDetails,false);
+  			}
+		}
+		auditEvent = new AuditEvent();
 	}
 }
