@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.Set;
 
 import edu.wustl.catissuecore.actionForm.AbstractActionForm;
+import edu.wustl.catissuecore.actionForm.CreateSpecimenForm;
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.logger.Logger;
@@ -85,7 +86,7 @@ public abstract class Specimen extends AbstractDomainObject implements Serializa
     /**
      * A physically discreet container that is used to store a specimen  e.g. Box, Freezer etc.
      */
-    protected StorageContainer storageContainer;
+    protected StorageContainer storageContainer = new StorageContainer();
 
     /**
      * Collection of Specimen Event Parameters associated with this specimen. 
@@ -105,7 +106,7 @@ public abstract class Specimen extends AbstractDomainObject implements Serializa
     /**
      * An event that results in the collection of one or more specimen from a participant.
      */
-    protected SpecimenCollectionGroup specimenCollectionGroup;
+    protected SpecimenCollectionGroup specimenCollectionGroup = new SpecimenCollectionGroup();
 
     /**
      * The combined anatomic state and pathological disease classification of a specimen.
@@ -113,9 +114,9 @@ public abstract class Specimen extends AbstractDomainObject implements Serializa
     protected SpecimenCharacteristics specimenCharacteristics = new SpecimenCharacteristics();
 
     public Specimen()
-    {
-    	
+    {    	
     }
+    
     //Constructor
     public Specimen(AbstractActionForm form)
     {
@@ -500,35 +501,64 @@ public abstract class Specimen extends AbstractDomainObject implements Serializa
     {
         try
         {
-            NewSpecimenForm form = (NewSpecimenForm) abstractForm;
-            
-            this.systemIdentifier = new Long(form.getSystemIdentifier());
-            this.activityStatus = form.getActivityStatus();
-            //this.barcode = form.
-            this.comments = form.getComments();
-            this.positionDimensionOne = new Integer(form.getPositionDimensionOne());
-            this.positionDimensionTwo = new Integer(form.getPositionDimensionTwo());
-            this.type = form.getClassName();
-            
-            //Setting the SpecimenCharacteristics
-            specimenCharacteristics.pathologicalStatus = form.getPathologicalStatus();
-            specimenCharacteristics.tissueSide = form.getTissueSide();
-            specimenCharacteristics.tissueSite = form.getTissueSite();
-            
-            //Getting the Map of External Identifiers
-            Map extMap = form.getExternalIdentifier();
-	        System.out.println("********MAP******* "+extMap);
-	        
-	        MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.domain");
-	        
-	        Collection extCollection = parser.generateData(extMap);
-	        this.externalIdentifierCollection.addAll(extCollection);
-	        
-	        //Getting the Map of Biohazards
-	        Map bioMap = form.getBiohazard();
-	        
-	        Collection bioCollection = parser.generateData(bioMap);
-	        this.biohazardCollection.addAll(bioCollection);
+        	if(abstractForm instanceof NewSpecimenForm)
+            {
+	        	NewSpecimenForm form = (NewSpecimenForm) abstractForm;
+	            
+	            this.systemIdentifier = new Long(form.getSystemIdentifier());
+	            this.activityStatus = form.getActivityStatus();
+	            //this.barcode = form.
+	            this.comments = form.getComments();
+	            this.positionDimensionOne = new Integer(form.getPositionDimensionOne());
+	            this.positionDimensionTwo = new Integer(form.getPositionDimensionTwo());
+	            this.type = form.getType();
+	            
+	            this.specimenCollectionGroup.setSystemIdentifier(new Long(form.getSpecimenCollectionGroupId()));
+	            this.storageContainer.setSystemIdentifier(new Long(form.getStorageContainer()));
+	            
+	            //Setting the SpecimenCharacteristics
+	            specimenCharacteristics.pathologicalStatus = form.getPathologicalStatus();
+	            specimenCharacteristics.tissueSide = form.getTissueSide();
+	            specimenCharacteristics.tissueSite = form.getTissueSite();
+	            
+	            //Getting the Map of External Identifiers
+	            Map extMap = form.getExternalIdentifier();
+		        
+		        MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.domain");
+		        
+		        Collection extCollection = parser.generateData(extMap);
+		        this.externalIdentifierCollection = extCollection;
+		        
+		        //Getting the Map of Biohazards
+		        parser = new MapDataParser("edu.wustl.catissuecore.domain");
+		        Map bioMap = form.getBiohazard();
+		        Collection bioCollection = parser.generateData(bioMap);
+		        this.biohazardCollection = bioCollection;
+            }
+            else if(abstractForm instanceof CreateSpecimenForm)
+            {
+            	CreateSpecimenForm form = (CreateSpecimenForm)abstractForm;
+            	
+            	this.systemIdentifier = new Long(form.getSystemIdentifier());
+            	this.activityStatus = form.getActivityStatus();
+            	this.comments = form.getComments();
+            	this.positionDimensionOne = new Integer(form.getPositionDimensionOne());
+	            this.positionDimensionTwo = new Integer(form.getPositionDimensionTwo());
+            	this.type = form.getType();
+            	
+            	this.storageContainer.setSystemIdentifier(new Long(form.getStorageContainer()));
+            	this.parentSpecimen = new CellSpecimen();
+            	
+            	this.parentSpecimen.setSystemIdentifier(new Long(form.getParentSpecimenId()));
+            	
+            	//Getting the Map of External Identifiers
+	            Map extMap = form.getExternalIdentifier();
+		        
+		        MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.domain");
+		        
+		        Collection extCollection = parser.generateData(extMap);
+		        this.externalIdentifierCollection = extCollection;
+            }
         }
         catch (Exception excp)
         {

@@ -13,7 +13,7 @@ package edu.wustl.catissuecore.domain;
 import java.io.Serializable;
 
 import edu.wustl.catissuecore.actionForm.AbstractActionForm;
-import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
+import edu.wustl.catissuecore.actionForm.SpecimenForm;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -137,7 +137,7 @@ public class MolecularSpecimen extends Specimen implements Serializable
         try
         {
         	super.setAllValues(abstractForm);
-        	NewSpecimenForm form = (NewSpecimenForm) abstractForm;
+        	SpecimenForm form = (SpecimenForm) abstractForm;
         	
         	this.quantityInMicrogram = new Double(form.getQuantity());
         	//this.availableQuantityInMicroGram=
