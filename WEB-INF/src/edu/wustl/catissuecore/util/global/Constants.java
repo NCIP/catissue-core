@@ -141,7 +141,9 @@ public class Constants
 	public static final String CONTAINERIDLIST = "containerIdList";
 	public static final String FROMCONTAINERLIST="fromContainerList";
 	public static final String TOCONTAINERLIST="toContainerList";
-	public static final String FIXATIONLIST = "fixationList";
+	public static final String FIXATIONLIST = "fixationList";	
+	public static final String FROMSITELIST="fromsiteList";
+	public static final String TOSITELIST="tositeList";	
 			
 	//Constants required in User.jsp Page
 	public static final String USER_SEARCH_ACTION = "UserSearch.do";
@@ -262,12 +264,12 @@ public class Constants
 	public static final String THAW_EVENT_PARAMETERS_ADD_ACTION = "ThawEventParametersAdd.do";
 	public static final String THAW_EVENT_PARAMETERS_EDIT_ACTION = "ThawEventParametersEdit.do";
 
-//	Constants required in MOLECULARSPECIMENREVIEWParameters.jsp Page
+	//	Constants required in MOLECULARSPECIMENREVIEWParameters.jsp Page
 	public static final String MOLECULAR_SPECIMEN_REVIEW_PARAMETERS_SEARCH_ACTION = "MolecularSpecimenReviewParametersSearch.do";
 	public static final String MOLECULAR_SPECIMEN_REVIEW_PARAMETERS_ADD_ACTION = "MolecularSpecimenReviewParametersAdd.do";
 	public static final String MOLECULAR_SPECIMEN_REVIEW_PARAMETERS_EDIT_ACTION = "MolecularSpecimenReviewParametersEdit.do";
 
-//	Constants required in CollectionEventParameters.jsp Page
+	//	Constants required in CollectionEventParameters.jsp Page
 	public static final String COLLECTION_EVENT_PARAMETERS_SEARCH_ACTION = "CollectionEventParametersSearch.do";
 	public static final String COLLECTION_EVENT_PARAMETERS_ADD_ACTION = "CollectionEventParametersAdd.do";
 	public static final String COLLECTION_EVENT_PARAMETERS_EDIT_ACTION = "CollectionEventParametersEdit.do";
@@ -277,7 +279,7 @@ public class Constants
 	public static final String SPUN_EVENT_PARAMETERS_ADD_ACTION = "SpunEventParametersAdd.do";
 	public static final String SPUN_EVENT_PARAMETERS_EDIT_ACTION = "SpunEventParametersEdit.do";
 	
-	//	Constants required in SpunEventParameters.jsp Page
+	//	Constants required in EmbeddedEventParameters.jsp Page
 	public static final String EMBEDDED_EVENT_PARAMETERS_SEARCH_ACTION = "EmbeddedEventParametersSearch.do";
 	public static final String EMBEDDED_EVENT_PARAMETERS_ADD_ACTION = "EmbeddedEventParametersAdd.do";
 	public static final String EMBEDDED_EVENT_PARAMETERS_EDIT_ACTION = "EmbeddedEventParametersEdit.do";
@@ -296,6 +298,16 @@ public class Constants
 	public static final String PROCEDURE_EVENT_PARAMETERS_SEARCH_ACTION = "ProcedureEventParametersSearch.do";
 	public static final String PROCEDURE_EVENT_PARAMETERS_ADD_ACTION = "ProcedureEventParametersAdd.do";
 	public static final String PROCEDURE_EVENT_PARAMETERS_EDIT_ACTION = "ProcedureEventParametersEdit.do";
+	
+	//	Constants required in ProcedureEventParameters.jsp Page
+	public static final String PROCEDURE_EVENT_PARAMETERS_SEARCH_ACTION = "ProcedureEventParametersSearch.do";
+	public static final String PROCEDURE_EVENT_PARAMETERS_ADD_ACTION = "ProcedureEventParametersAdd.do";
+	public static final String PROCEDURE_EVENT_PARAMETERS_EDIT_ACTION = "ProcedureEventParametersEdit.do";
+	
+	//	Constants required in Distribution.jsp Page
+	public static final String DISTRIBUTION_SEARCH_ACTION = "DistributionSearch.do";
+	public static final String DISTRIBUTION_ADD_ACTION = "DistributionAdd.do";
+	public static final String DISTRIBUTION_EDIT_ACTION = "DistributionEdit.do";
 	
 	//Levels of nodes in query results tree.
 	public static final int MAX_LEVEL = 5;
@@ -381,10 +393,14 @@ public class Constants
 	public static final int TRANSFER_EVENT_PARAMETERS_FORM_ID = 29;
 	public static final int SPUN_EVENT_PARAMETERS_FORM_ID = 30;
 	public static final int EMBEDDED_EVENT_PARAMETERS_FORM_ID = 31;
+	public static final int PROCEDURE_EVENT_PARAMETERS_FORM_ID = 32;
+	public static final int SPUN_EVENT_PARAMETERS_FORM_ID = 30;
+	public static final int EMBEDDED_EVENT_PARAMETERS_FORM_ID = 31;
 	public static final int FIXED_EVENT_PARAMETERS_FORM_ID = 32;	
 	public static final int PROCEDURE_EVENT_PARAMETERS_FORM_ID = 33;
 	public static final int FORGOT_PASSWORD_FORM_ID = 34;
 	public static final int SIGNUP_FORM_ID = 35;
+	public static final int DISTRIBUTION_FORM_ID = 36;
 	
 	//Misc
 	public static final String SEPARATOR = " : ";
@@ -1033,6 +1049,20 @@ public class Constants
 				"Glass",
 				
 		};
+	
+	public static final String [] FROMSITEARRAY = {
+					SELECT_OPTION,
+					"site1",
+					"site2",
+				
+			};
+	
+	public static final String [] TOSITEARRAY = {
+						SELECT_OPTION,
+						"site1",
+						"site2",
+				
+				};
 	
 	public static final String UNIT_GM = "gm";
 	public static final String UNIT_ML = "ml";
