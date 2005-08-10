@@ -35,6 +35,12 @@ public class ShowFramedPageAction extends Action
         String pageOf  = request.getParameter(Constants.PAGEOF);
         request.setAttribute(Constants.PAGEOF,pageOf);
         
+        if (pageOf.equals(Constants.PAGEOF_STORAGE_LOCATION))
+        {
+            String storageContainerType = request.getParameter(Constants.STORAGE_CONTAINER_TYPE);
+            request.setAttribute(Constants.STORAGE_CONTAINER_TYPE,storageContainerType);
+        }
+        
         return mapping.findForward(pageOf);
     }
 }

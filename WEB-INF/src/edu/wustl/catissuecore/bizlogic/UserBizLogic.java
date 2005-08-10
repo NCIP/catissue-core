@@ -1,5 +1,5 @@
 /**
- * <p>Title: UserHDAO Class>
+ * <p>Title: UserBizLogic Class>
  * <p>Description:	UserHDAO is used to add user information into the database using Hibernate.</p>
  * Copyright:    Copyright (c) year
  * Company: Washington University, School of Medicine, St. Louis.
@@ -22,6 +22,7 @@ import edu.wustl.catissuecore.domain.Institution;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.GeneratePassword;
 import edu.wustl.catissuecore.util.global.SendEmail;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.security.SecurityManager;
@@ -35,7 +36,7 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class UserBizLogic extends DefaultBizLogic
 {
-    
+
     /**
      * Saves the user object in the database.
      * @param session The session in which the object is saved.
@@ -43,117 +44,118 @@ public class UserBizLogic extends DefaultBizLogic
      * @throws HibernateException Exception thrown during hibernate operations.
      * @throws DAOException
      */
-	protected void insert(DAO dao, Object obj) throws DAOException
+    protected void insert(DAO dao, Object obj) throws DAOException
     {
         try
         {
-            
             User user = (User) obj;
             
-//            boolean userExistsStatus = SecurityManager.
-//            		getInstance(UserBizLogic.class).userExists(user.getUser().getLoginName());
+            Department department = null;
+            Institution institution = null;
+            CancerResearchGroup cancerResearchGroup = null;
+
+            List list = dao.retrieve(Department.class.getName(),
+                    "systemIdentifier", user.getDepartment()
+                            .getSystemIdentifier());
+            if (list.size() != 0)
+            {
+                department = (Department) list.get(0);
+            }
+
+            list = dao.retrieve(Institution.class.getName(),
+                    "systemIdentifier", user.getInstitution()
+                            .getSystemIdentifier());
+            if (list.size() != 0)
+            {
+                institution = (Institution) list.get(0);
+            }
+
+            list = dao.retrieve(CancerResearchGroup.class.getName(),
+                    "systemIdentifier", user.getCancerResearchGroup()
+                            .getSystemIdentifier());
+            if (list.size() != 0)
+            {
+                cancerResearchGroup = (CancerResearchGroup) list.get(0);
+            }
+
+            user.setDepartment(department);
+            user.setInstitution(institution);
+            user.setCancerResearchGroup(cancerResearchGroup);
             
-//            if (userExistsStatus)
-//            {
-//                return false;
-//            }
-//            else
-//            {
+            gov.nih.nci.security.authorization.domainobjects.User csmUser 
+            					= new gov.nih.nci.security.authorization.domainobjects.User();
             
-//                AbstractDAO dao = DAOFactory.getDAO(Constants.HIBERNATE_DAO);
-//                dao.openSession();
-                
-                Department department = null;
-                Institution institution = null;
-                CancerResearchGroup cancerResearchGroup = null;
-                
-                List list = dao.retrieve(Department.class.getName(), "systemIdentifier", user
-                        .getDepartment().getSystemIdentifier());
-                if (list.size() != 0)
-                {
-                    department = (Department) list.get(0);
-                }
-                
-                list = dao.retrieve(Institution.class.getName(), "systemIdentifier", user
-                        .getInstitution().getSystemIdentifier());
-                if (list.size() != 0)
-                {
-                    institution = (Institution) list.get(0);
-                }
-                
-                list = dao.retrieve(CancerResearchGroup.class.getName(), "systemIdentifier",
-                        user.getCancerResearchGroup().getSystemIdentifier());
-                if (list.size() != 0)
-                {
-                    cancerResearchGroup = (CancerResearchGroup) list.get(0);
-                }
-                
-                user.setDepartment(department);
-                user.setInstitution(institution);
-                user.setCancerResearchGroup(cancerResearchGroup);
-                
-                SecurityManager.getInstance(UserBizLogic.class).createUser(
-                        user.getUser());
-                
-                if (user.getRoleId() != null)
-                    SecurityManager.getInstance(UserBizLogic.class)
-    	        			.assignRoleToUser(user.getUser().getLoginName(),user.getRoleId());
-                
-                user.setSystemIdentifier(user.getUser().getUserId());
-                
-                dao.insert(user.getAddress(), true);
-                dao.insert(user, true);
-                
-//                dao.closeSession();
-                
-                //Send email to administrator and cc it to the user registered.
-                SendEmail email = new SendEmail();
-                
-                String subject = ApplicationProperties.getValue("userRegistration.request.subject");
-                String body = "Dear "+user.getUser().getFirstName()+" "+user.getUser().getLastName()+"\n\n"+
-                			  ApplicationProperties.getValue("userRegistration.request.body.start") +"\n"+
-                			  "\n\n" + ApplicationProperties.getValue("userRegistration.request.body.userDetailsTitle") +
-                			  "\n" + ApplicationProperties.getValue("user.loginName")+ Constants.SEPARATOR + user.getUser().getLoginName() + 
-                			  "\n" + ApplicationProperties.getValue("user.lastName")+ Constants.SEPARATOR + user.getUser().getLastName() +
-                			  "\n" + ApplicationProperties.getValue("user.firstName")+ Constants.SEPARATOR + user.getUser().getFirstName() +
-                			  "\n" + ApplicationProperties.getValue("user.street")+ Constants.SEPARATOR + user.getAddress().getStreet() +
-                			  "\n" + ApplicationProperties.getValue("user.city")+ Constants.SEPARATOR + user.getAddress().getCity() +
-                			  "\n" + ApplicationProperties.getValue("user.zipCode")+ Constants.SEPARATOR + user.getAddress().getZipCode() +
-                			  "\n" + ApplicationProperties.getValue("user.state")+ Constants.SEPARATOR + user.getAddress().getState() +
-                			  "\n" + ApplicationProperties.getValue("user.country")+ Constants.SEPARATOR + user.getAddress().getCountry() +
-                			  "\n" + ApplicationProperties.getValue("user.phoneNumber")+ Constants.SEPARATOR + user.getAddress().getPhoneNumber() +
-                			  "\n" + ApplicationProperties.getValue("user.faxNumber")+ Constants.SEPARATOR + user.getAddress().getFaxNumber() +
-                			  "\n" + ApplicationProperties.getValue("user.emailAddress")+ Constants.SEPARATOR + user.getUser().getEmailId() +
-                			  "\n" + ApplicationProperties.getValue("user.institution")+ Constants.SEPARATOR + institution.getName() +
-                			  "\n" + ApplicationProperties.getValue("user.department")+ Constants.SEPARATOR + department.getName() +
-                			  "\n" + ApplicationProperties.getValue("user.cancerResearchGroup")+ Constants.SEPARATOR + cancerResearchGroup.getName() +
-                			  "\n\n\t" + ApplicationProperties.getValue("userRegistration.request.body.end") + 
-                			  "\n\n" + ApplicationProperties.getValue("email.catissuecore.team");
-                
-                String adminEmailAddress = ApplicationProperties.getValue("email.administrative.emailAddress");
-                String technicalSupportEmailAddress = ApplicationProperties.getValue("email.technicalSupport.emailAddress");
-                String mailServer = ApplicationProperties.getValue("email.mailServer");
-                
-                boolean emailStatus  = email.sendmail(adminEmailAddress,user.getUser().getEmailId(),
-                        			   null,technicalSupportEmailAddress,mailServer,subject,body);
-                
-                if (emailStatus)
-                {
-                    Logger.out.info(ApplicationProperties.getValue("userRegistration.email.success") + 
-                            user.getUser().getFirstName() + " " + user.getUser().getLastName());
-                }
-                else
-                {
-                    Logger.out.info(ApplicationProperties.getValue("userRegistration.email.failure") + 
-                            		user.getUser().getFirstName() + " " + user.getUser().getLastName());
-                }
-                
-//            }
+            csmUser.setLoginName(user.getLoginName());
+            csmUser.setLastName(user.getLastName());
+            csmUser.setFirstName(user.getFirstName());
+            csmUser.setEmailId(user.getEmailAddress());
+            csmUser.setStartDate(user.getStartDate());
+
+            SecurityManager.getInstance(UserBizLogic.class).createUser(csmUser);
+
+            if (user.getRoleId() != null)
+                SecurityManager.getInstance(UserBizLogic.class)
+                        .assignRoleToUser(csmUser.getLoginName(),
+                                user.getRoleId());
+            
+            user.setSystemIdentifier(csmUser.getUserId());
+
+            dao.insert(user.getAddress());
+            dao.insert(user);
+
+            //Send email to administrator and cc it to the user registered.
+            SendEmail email = new SendEmail();
+
+            String adminEmailAddress = ApplicationProperties
+                    .getValue("email.administrative.emailAddress");
+            String technicalSupportEmailAddress = ApplicationProperties
+                    .getValue("email.technicalSupport.emailAddress");
+            String mailServer = ApplicationProperties
+                    .getValue("email.mailServer");
+
+            String subject = ApplicationProperties.getValue("userRegistration.request.subject");
+            String body = "Dear "+ csmUser.getFirstName()+" "+ csmUser.getLastName()+"\n\n"+
+            			  ApplicationProperties.getValue("userRegistration.request.body.start") +"\n"+
+            			  "\n\n" + ApplicationProperties.getValue("userRegistration.request.body.userDetailsTitle") +
+            			  "\n" + ApplicationProperties.getValue("user.loginName")+ Constants.SEPARATOR + csmUser.getLoginName() + 
+            			  "\n" + ApplicationProperties.getValue("user.lastName")+ Constants.SEPARATOR + csmUser.getLastName() +
+            			  "\n" + ApplicationProperties.getValue("user.firstName")+ Constants.SEPARATOR + csmUser.getFirstName() +
+            			  "\n" + ApplicationProperties.getValue("user.street")+ Constants.SEPARATOR + user.getAddress().getStreet() +
+            			  "\n" + ApplicationProperties.getValue("user.city")+ Constants.SEPARATOR + user.getAddress().getCity() +
+            			  "\n" + ApplicationProperties.getValue("user.zipCode")+ Constants.SEPARATOR + user.getAddress().getZipCode() +
+            			  "\n" + ApplicationProperties.getValue("user.state")+ Constants.SEPARATOR + user.getAddress().getState() +
+            			  "\n" + ApplicationProperties.getValue("user.country")+ Constants.SEPARATOR + user.getAddress().getCountry() +
+            			  "\n" + ApplicationProperties.getValue("user.phoneNumber")+ Constants.SEPARATOR + user.getAddress().getPhoneNumber() +
+            			  "\n" + ApplicationProperties.getValue("user.faxNumber")+ Constants.SEPARATOR + user.getAddress().getFaxNumber() +
+            			  "\n" + ApplicationProperties.getValue("user.emailAddress")+ Constants.SEPARATOR + csmUser.getEmailId() +
+            			  "\n" + ApplicationProperties.getValue("user.institution")+ Constants.SEPARATOR + institution.getName() +
+            			  "\n" + ApplicationProperties.getValue("user.department")+ Constants.SEPARATOR + department.getName() +
+            			  "\n" + ApplicationProperties.getValue("user.cancerResearchGroup")+ Constants.SEPARATOR + cancerResearchGroup.getName() +
+            			  "\n\n\t" + ApplicationProperties.getValue("userRegistration.request.body.end") + 
+            			  "\n\n" + ApplicationProperties.getValue("email.catissuecore.team");
+            
+            boolean emailStatus = email.sendmail(adminEmailAddress, csmUser.getEmailId(), null,
+                    technicalSupportEmailAddress, mailServer, subject, body);
+
+            if (emailStatus)
+            {
+                Logger.out.info(ApplicationProperties
+                        .getValue("userRegistration.email.success")
+                        + csmUser.getFirstName()
+                        + " " + csmUser.getLastName());
+            }
+            else
+            {
+                Logger.out.info(ApplicationProperties
+                        .getValue("userRegistration.email.failure")
+                        + csmUser.getFirstName()
+                        + " " + csmUser.getLastName());
+            }
         }
         catch (SMException smExp)
         {
-            throw new DAOException(smExp);
-//            smExp.printStackTrace();
+//            throw new DAOException(smExp);
+            smExp.printStackTrace();
         }
     }
 
@@ -164,137 +166,156 @@ public class UserBizLogic extends DefaultBizLogic
      * @throws HibernateException Exception thrown during hibernate operations.
      * @throws DAOException 
      */
-	protected void update(DAO dao, Object obj) throws DAOException
+    protected void update(DAO dao, Object obj) throws DAOException
     {
         User user = (User) obj;
         List list = null;
-        
+
         try
         {
-	        gov.nih.nci.security.authorization.domainobjects.User csmUser = 
-               	SecurityManager.getInstance(DomainObjectListAction.class).
-            		getUserById(String.valueOf(user.getSystemIdentifier()));
-	        
-	        csmUser.setLoginName(user.getUser().getLoginName());
-	        csmUser.setLastName(user.getUser().getLastName());
-	        csmUser.setFirstName(user.getUser().getFirstName());
-	        csmUser.setEmailId(user.getUser().getEmailId());
-	        csmUser.setPassword(user.getUser().getPassword());
-            
-	        SecurityManager.getInstance(UserBizLogic.class)
-	        	.modifyUser(csmUser);
-	        
-	        SecurityManager.getInstance(UserBizLogic.class)
-	        	.assignRoleToUser(csmUser.getLoginName(),user.getRoleId());
-	        
-	        dao.update(user);
-	        
-	        //Send email to administrator and cc it to the user registered.
+            gov.nih.nci.security.authorization.domainobjects.User csmUser = SecurityManager
+                    .getInstance(DomainObjectListAction.class).getUserById(
+                            String.valueOf(user.getSystemIdentifier()));
+
+            csmUser.setLoginName(user.getLoginName());
+            csmUser.setLastName(user.getLastName());
+            csmUser.setFirstName(user.getFirstName());
+            csmUser.setEmailId(user.getEmailAddress());
+            csmUser.setPassword(GeneratePassword.getPassword());
+
+            SecurityManager.getInstance(UserBizLogic.class).modifyUser(csmUser);
+
+            SecurityManager.getInstance(UserBizLogic.class).assignRoleToUser(
+                    csmUser.getLoginName(), user.getRoleId());
+
+            dao.update(user);
+
+            //Send email to administrator and cc it to the user registered.
             SendEmail email = new SendEmail();
-            
-            String subject = ApplicationProperties.getValue("userRegistration.approve.subject");
-            
-            String body = "Dear "+user.getUser().getFirstName()+" "+user.getUser().getLastName()+"\n\n"+
-            			  ApplicationProperties.getValue("userRegistration.approved.body.start")+
-            			  ApplicationProperties.getValue("userRegistration.loginDetails") + "\n\tLogin Name : "
-                          + user.getUser().getLoginName() + "\n\tPassword : " + csmUser.getPassword() +
-                          "\n\n" + ApplicationProperties.getValue("email.catissuecore.team");
-            
-            String adminEmailAddress = ApplicationProperties.getValue("email.administrative.emailAddress");
-            String technicalSupportEmailAddress = ApplicationProperties.getValue("email.technicalSupport.emailAddress");
-            String mailServer = ApplicationProperties.getValue("email.mailServer");
-            
-            boolean emailStatus  = email.sendmail(adminEmailAddress,user.getUser().getEmailId(),
-                    			   null,technicalSupportEmailAddress,mailServer,subject,body);
-            
+
+            String subject = ApplicationProperties
+                    .getValue("userRegistration.approve.subject");
+
+            String body = "Dear "
+                    + csmUser.getFirstName()
+                    + " "
+                    + csmUser.getLastName()
+                    + "\n\n"
+                    + ApplicationProperties
+                            .getValue("userRegistration.approved.body.start")
+                    + ApplicationProperties
+                            .getValue("userRegistration.loginDetails")
+                    + "\n\tLogin Name : " + csmUser.getLoginName()
+                    + "\n\tPassword : " + csmUser.getPassword() + "\n\n"
+                    + ApplicationProperties.getValue("email.catissuecore.team");
+
+            String adminEmailAddress = ApplicationProperties
+                    .getValue("email.administrative.emailAddress");
+            String technicalSupportEmailAddress = ApplicationProperties
+                    .getValue("email.technicalSupport.emailAddress");
+            String mailServer = ApplicationProperties
+                    .getValue("email.mailServer");
+
+            boolean emailStatus = email.sendmail(adminEmailAddress, csmUser.getEmailId(), null,
+                    technicalSupportEmailAddress, mailServer, subject, body);
+
             if (emailStatus)
             {
-                Logger.out.info(ApplicationProperties.getValue("userRegistration.email.success") + 
-                        user.getUser().getFirstName() + " " + user.getUser().getLastName());
+                Logger.out.info(ApplicationProperties
+                        .getValue("userRegistration.email.success")
+                        + csmUser.getFirstName()
+                        + " "
+                        + csmUser.getLastName());
             }
             else
             {
-                Logger.out.info(ApplicationProperties.getValue("userRegistration.email.failure") + 
-                        		user.getUser().getFirstName() + " " + user.getUser().getLastName());
+                Logger.out.info(ApplicationProperties
+                        .getValue("userRegistration.email.failure")
+                        + csmUser.getFirstName()
+                        + " "
+                        + csmUser.getLastName());
             }
         }
-        catch(SMException smExp)
+        catch (SMException smExp)
         {
-            Logger.out.error(smExp.getMessage(),smExp);
+            Logger.out.error(smExp.getMessage(), smExp);
         }
     }
-   
 
-    
-//    public Vector getList(String sourceObjectName, String[] displayNameFields, String valueField, String[] whereColumnName,
-//            String[] whereColumnCondition, Object[] whereColumnValue,
-//            String joinCondition, String separatorBetweenFields) throws DAOException
-//            {
-//        		AbstractDAO dao = DAOFactory.getDAO(Constants.HIBERNATE_DAO);
-//        		List users = dao.retrieve(User.class.getName());
-//        		Vector nameValuePairs = new Vector();
-//        		List csmUsers;
-//        		try
-//                {
-//                     csmUsers=SecurityManager.getInstance(UserBizLogic.class).getUsers();
-//                }
-//                catch (SMException e)
-//                {
-//                    Logger.out.debug("Unable to get all users: Exception: "+e.getMessage());
-//        	        throw new DAOException (e.getMessage(), e);
-//                }
-//                
-//                // Set CSM users for the user objects retrieved
-//                User user;
-//                gov.nih.nci.security.authorization.domainobjects.User csmUser;
-//                for(int i=0;i<users.size();i++)
-//                {
-//                    user = (User) users.get(i);
-//                    for(int j=0; j<csmUsers.size();j++)
-//                    {
-//                        csmUser =  (gov.nih.nci.security.authorization.domainobjects.User) csmUsers.get(j);
-//                        if(csmUser.getUserId() == user.getSystemIdentifier())
-//                        {
-//                            user.setUser(csmUser);
-//                            break;
-//                        }
-//                    }
-//                }
-//                
-//                
-//                return nameValuePairs;
-//            }
-    
-	public Vector getUsers(String ActivityStatus) throws DAOException
+    //    public Vector getList(String sourceObjectName, String[] displayNameFields, String valueField, String[] whereColumnName,
+    //            String[] whereColumnCondition, Object[] whereColumnValue,
+    //            String joinCondition, String separatorBetweenFields) throws DAOException
+    //            {
+    //        		AbstractDAO dao = DAOFactory.getDAO(Constants.HIBERNATE_DAO);
+    //        		List users = dao.retrieve(User.class.getName());
+    //        		Vector nameValuePairs = new Vector();
+    //        		List csmUsers;
+    //        		try
+    //                {
+    //                     csmUsers=SecurityManager.getInstance(UserBizLogic.class).getUsers();
+    //                }
+    //                catch (SMException e)
+    //                {
+    //                    Logger.out.debug("Unable to get all users: Exception: "+e.getMessage());
+    //        	        throw new DAOException (e.getMessage(), e);
+    //                }
+    //                
+    //                // Set CSM users for the user objects retrieved
+    //                User user;
+    //                gov.nih.nci.security.authorization.domainobjects.User csmUser;
+    //                for(int i=0;i<users.size();i++)
+    //                {
+    //                    user = (User) users.get(i);
+    //                    for(int j=0; j<csmUsers.size();j++)
+    //                    {
+    //                        csmUser =  (gov.nih.nci.security.authorization.domainobjects.User) csmUsers.get(j);
+    //                        if(csmUser.getUserId() == user.getSystemIdentifier())
+    //                        {
+    //                            user.setUser(csmUser);
+    //                            break;
+    //                        }
+    //                    }
+    //                }
+    //                
+    //                
+    //                return nameValuePairs;
+    //            }
+
+    public Vector getUsers(String ActivityStatus) throws DAOException
     {
-		List users = retrieve(User.class.getName(),"activityStatus",ActivityStatus);
-		Vector nameValuePairs = new Vector();
-		nameValuePairs.add(new NameValueBean(Constants.SELECT_OPTION,"-1"));
-		
+        List users = retrieve(User.class.getName(), "activityStatus",
+                ActivityStatus);
+        Vector nameValuePairs = new Vector();
+        nameValuePairs.add(new NameValueBean(Constants.SELECT_OPTION, "-1"));
+
         // Set CSM users for the user objects retrieved
-        User user=null;
+        User user = null;
         gov.nih.nci.security.authorization.domainobjects.User csmUser = null;
-        if(users != null)
+        if (users != null)
         {
-                            
+
             // Creating name value beans based on Activity Status passed 
-            NameValueBean nameValueBean; 
-        
-            for(int i=0;i<users.size();i++)
+            NameValueBean nameValueBean;
+
+            for (int i = 0; i < users.size(); i++)
             {
                 user = (User) users.get(i);
                 try
                 {
-                    csmUser = SecurityManager.getInstance(UserBizLogic.class).getUserById(String.valueOf(user.getSystemIdentifier()));
+                    csmUser = SecurityManager.getInstance(UserBizLogic.class)
+                            .getUserById(
+                                    String.valueOf(user.getSystemIdentifier()));
                 }
                 catch (SMException e)
                 {
-                    Logger.out.debug("Unable to get user : "+e.getMessage());
+                    Logger.out.debug("Unable to get user : " + e.getMessage());
                     throw new DAOException(e);
                 }
                 nameValueBean = new NameValueBean();
-                nameValueBean.setName(csmUser.getLastName()+", "+csmUser.getFirstName());
-                nameValueBean.setValue(String.valueOf(user.getSystemIdentifier()));
+                nameValueBean.setName(csmUser.getLastName() + ", "
+                        + csmUser.getFirstName());
+                nameValueBean.setValue(String.valueOf(user
+                        .getSystemIdentifier()));
                 Logger.out.debug(nameValueBean.toString());
                 nameValuePairs.add(nameValueBean);
             }

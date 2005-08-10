@@ -1,9 +1,8 @@
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
-<%@ page import="edu.wustl.catissuecore.domain.StorageType"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
-<%@ page import="edu.wustl.catissuecore.actionForm.StorageContainerForm"%>
+
 
 
 <head>
@@ -14,16 +13,13 @@
 		{
 			LeftPosition = (screen.width) ? (screen.width-w)/2 : 0;
 			TopPosition = (screen.height) ? (screen.height-h)/2 : 0;
+
+			mypage=mypage+document.forms[0].startNumber.value;
 			settings =
 				'height='+h+',width='+w+',top='+TopPosition+',left='+LeftPosition+',scrollbars='+scroll+',resizable'
 			win = open(mypage,myname,settings)
 			if (win.opener == null)
 				win.opener = self;
-			var list = document.getElementById('typeId');
-			var type = list.options[list.selectedIndex].value;
-			var action = "/catissuecore/StorageContainer.do?operation=add&typeSelected=" + type;
-			document.forms[0].action = action;
-			document.forms[0].submit();
 		}
 
 		function onRadioButtonClick(element)
@@ -269,7 +265,7 @@ function insRow(subdivtag)
 							<html:text styleClass="formFieldSized" size="30" styleId="positionInParentContainer" property="positionInParentContainer" readonly="true" disabled="true"/>
 							&nbsp;
 							<html:button property="mapButton" styleClass="actionButton" styleId="Map" 
-								onclick="NewWindow('ShowFramedPage.do?pageOf=pageOfStorageLocation','name','810','320','yes');return false" disabled="true">
+								onclick="NewWindow('ShowFramedPage.do?pageOf=pageOfStorageLocation&amp;storageType=','name','810','320','yes');return false" disabled="true">
 								<bean:message key="buttons.map"/>
 							</html:button>
 							
@@ -280,7 +276,7 @@ function insRow(subdivtag)
 							<html:text styleClass="formFieldSized" size="30" styleId="positionInParentContainer" property="positionInParentContainer" readonly="true"/>
 							&nbsp;
 							<html:button property="mapButton" styleClass="actionButton" styleId="Map" 
-								onclick="NewWindow('ShowFramedPage.do?pageOf=pageOfStorageLocation','name','810','320','yes');return false" >
+								onclick="NewWindow('ShowFramedPage.do?pageOf=pageOfStorageLocation&amp;storageType=','name','810','320','yes');return false" >
 								<bean:message key="buttons.map"/>
 							</html:button>
 							

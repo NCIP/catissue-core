@@ -1,8 +1,11 @@
-/*
- * Created on Jul 29, 2005
- *
- * TODO To change the template for this generated file go to
- * Window - Preferences - Java - Code Style - Code Templates
+/**
+ * <p>Title: ShowStorageGridViewAction Class>
+ * <p>Description:	ShowStorageGridViewAction shows the grid view of the map 
+ * according to the storage container selected from the tree view.</p>
+ * Copyright:    Copyright (c) year
+ * Company: Washington University, School of Medicine, St. Louis.
+ * @author Gautam Shetty
+ * @version 1.00
  */
 
 package edu.wustl.catissuecore.action;
@@ -18,76 +21,84 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import edu.wustl.catissuecore.bizlogic.AbstractBizLogic;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
+import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.storage.StorageContainerGridObject;
 import edu.wustl.catissuecore.util.global.Constants;
 
 /**
+ * ShowStorageGridViewAction shows the grid view of the map 
+ * according to the storage container selected from the tree view.
  * @author gautam_shetty
- *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Style - Code Templates
  */
 public class ShowStorageGridViewAction extends Action
 {
 
     /**
-     * (non-Javadoc)
-     * @see org.apache.struts.action.Action#execute(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
+     * Overrides the execute method of Action class.
      */
     public ActionForward execute(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
             throws Exception
     {
         String systemIdentifier = request.getParameter(Constants.IDENTIFIER);
-
-        AbstractBizLogic bizLogic = BizLogicFactory
+        
+        StorageContainerBizLogic bizLogic = (StorageContainerBizLogic)BizLogicFactory
                 .getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
         List list = bizLogic.retrieve(StorageContainer.class.getName(),
                 "systemIdentifier", systemIdentifier);
-        StorageContainerGridObject storageContainerGridObject 	
+        StorageContainerGridObject storageContainerGridObject
         		= new StorageContainerGridObject();
         boolean [][]fullStatus = null;
+        int [] childContainerSystemIdentifiers = null;
 
         if (list != null)
         {
             StorageContainer storageContainer = (StorageContainer) list.get(0);
-            storageContainerGridObject.setSystemIdentifier(storageContainer.getSystemIdentifier().longValue());
+            childContainerSystemIdentifiers = new int[storageContainer.getChildrenContainerCollection().size()];
             
+            storageContainerGridObject.setSystemIdentifier(storageContainer.getSystemIdentifier().longValue());
             storageContainerGridObject.setType(storageContainer.getStorageType().getType());
             
             Integer oneDimensionCapacity = storageContainer
-            								.getStorageContainerCapacity().getOneDimensionCapacity();
+            				.getStorageContainerCapacity().getOneDimensionCapacity();
             Integer twoDimensionCapacity = storageContainer
             								.getStorageContainerCapacity().getTwoDimensionCapacity();
             
             System.out.println(storageContainer.getStorageType().getType()+storageContainer.getName());
             storageContainerGridObject.setOneDimensionCapacity(oneDimensionCapacity);
             storageContainerGridObject.setTwoDimensionCapacity(storageContainer
-                    .getStorageContainerCapacity().getTwoDimensionCapacity());
+                    						.getStorageContainerCapacity().getTwoDimensionCapacity());
             
             fullStatus = new boolean[oneDimensionCapacity.intValue()][twoDimensionCapacity.intValue()];
-            
-            storageContainer.getChildrenContainerCollection();
             
             if (storageContainer.getChildrenContainerCollection() != null)
             {
                 Iterator iterator = storageContainer.getChildrenContainerCollection().iterator();
+                int i = 0;
                 while(iterator.hasNext())
                 {
                     StorageContainer childStorageContainer = (StorageContainer)iterator.next();
                     Integer positionDimensionOne = childStorageContainer.getPositionDimensionOne();
                     Integer positionDimensionTwo = childStorageContainer.getPositionDimensionTwo();
                     fullStatus[positionDimensionOne.intValue()][positionDimensionTwo.intValue()] = true;
+                    childContainerSystemIdentifiers[i++] = childStorageContainer.getSystemIdentifier().intValue();
                 }
             }            
         }
-
+        
+        String storageContainerType = request.getParameter(Constants.STORAGE_CONTAINER_TYPE);
+        int startNumber = bizLogic.getNextContainerNumber(Long.parseLong(systemIdentifier),
+                								Long.parseLong(storageContainerType),false);
+        
+        request.setAttribute(Constants.STORAGE_CONTAINER_TYPE,storageContainerType); 
+        request.setAttribute(Constants.CHILD_CONTAINER_SYSTEM_IDENTIFIERS, childContainerSystemIdentifiers);
+        request.setAttribute(Constants.START_NUMBER,new Integer(startNumber));
         request.setAttribute(Constants.STORAGE_CONTAINER_CHILDREN_STATUS,fullStatus);
         request.setAttribute(Constants.STORAGE_CONTAINER_GRID_OBJECT,
                 storageContainerGridObject);
+        
         return mapping.findForward(Constants.SUCCESS);
     }
 

@@ -18,6 +18,7 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
+import edu.wustl.catissuecore.domain.SignUpUser;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -46,11 +47,6 @@ public class UserForm extends AbstractActionForm
      * Represents the page the user has submitted the form from.
      */
     private String pageOf;
-
-    /**
-     * login name of the user.
-     */
-    private String loginName;
 
     /**
      * Last Name of the user.
@@ -132,6 +128,9 @@ public class UserForm extends AbstractActionForm
      */
     private String comments;
 
+    /**
+     * Status of user in the system.
+     */
     private String status;
 
     /**
@@ -140,56 +139,6 @@ public class UserForm extends AbstractActionForm
     public UserForm()
     {
         reset();
-    }
-
-    /**
-     * Copies the data from an AbstractDomain object to a UserForm object.
-     * @param user An AbstractDomain object.  
-     */
-    public void setAllValues(AbstractDomainObject abstractDomain)
-    {
-        try
-        {
-            User user = (User) abstractDomain;
-            this.systemIdentifier = user.getSystemIdentifier().longValue();
-            this.loginName = user.getUser().getLoginName();
-            this.lastName = user.getUser().getLastName();
-            this.firstName = user.getUser().getFirstName();
-            this.institutionId = user.getInstitution().getSystemIdentifier()
-                    .longValue();
-            this.emailAddress = user.getUser().getEmailId();
-            this.departmentId = user.getDepartment().getSystemIdentifier()
-                    .longValue();
-            this.street = user.getAddress().getStreet();
-            this.city = user.getAddress().getCity();
-            this.state = user.getAddress().getState();
-            this.country = user.getAddress().getCountry();
-            this.zipCode = user.getAddress().getZipCode();
-            this.phoneNumber = user.getAddress().getPhoneNumber();
-            this.faxNumber = user.getAddress().getFaxNumber();
-            this.cancerResearchGroupId = user.getCancerResearchGroup()
-                    .getSystemIdentifier().longValue();
-            this.activityStatus = user.getActivityStatus();
-            if (activityStatus.equals(Constants.ACTIVITY_STATUS_ACTIVE))
-            {
-                this.status = Constants.APPROVE_USER_APPROVE_STATUS;
-            }
-            else if (activityStatus.equals(Constants.ACTIVITY_STATUS_NEW))
-            {
-                this.status = Constants.APPROVE_USER_PENDING_STATUS;
-            }
-            else if (activityStatus.equals(Constants.ACTIVITY_STATUS_CLOSED))
-            {
-                this.status = Constants.APPROVE_USER_REJECT_STATUS;
-            }
-            
-            this.role = user.getRoleId();
-            this.comments = user.getComments(); 
-        }
-        catch (Exception excp)
-        {
-            Logger.out.error(excp.getMessage());
-        }
     }
 
     /**
@@ -244,26 +193,6 @@ public class UserForm extends AbstractActionForm
     public void setPageOf(String pageOf)
     {
         this.pageOf = pageOf;
-    }
-
-    /**
-     * Returns the login name of the user.
-     * @return String representing the login name of the user
-     * @see #setLoginName(String)
-     */
-    public String getLoginName()
-    {
-        return (this.loginName);
-    }
-
-    /**
-     * Sets the login name of this user
-     * @param loginName login name of the user.
-     * @see #getLoginName()
-     */
-    public void setLoginName(String loginName)
-    {
-        this.loginName = loginName;
     }
 
     /**
@@ -591,7 +520,16 @@ public class UserForm extends AbstractActionForm
      */
     public int getFormId()
     {
-        return Constants.USER_FORM_ID;
+        int formId = Constants.SIGNUP_FORM_ID;
+        if (pageOf != null)
+        {
+            if (pageOf.equals(Constants.PAGEOF_APPROVE_USER))
+                formId = Constants.APPROVE_USER_FORM_ID;
+            else if (pageOf.equals(Constants.PAGEOF_USER_ADMIN))
+                formId = Constants.USER_FORM_ID;
+        }
+        
+        return formId;
     }
 
     /**
@@ -643,6 +581,85 @@ public class UserForm extends AbstractActionForm
         this.cancerResearchGroupId = -1;
         this.activityStatus = Constants.ACTIVITY_STATUS_NEW;
     }
+    
+    /**
+     * Copies the data from an AbstractDomain object to a UserForm object.
+     * @param user An AbstractDomain object.  
+     */
+    public void setAllValues(AbstractDomainObject abstractDomain)
+    {
+        try
+        {
+            if (getFormId() == Constants.SIGNUP_FORM_ID)
+            {
+                SignUpUser signUpUser = (SignUpUser)abstractDomain;
+                
+                this.systemIdentifier = signUpUser
+                			.getSystemIdentifier().longValue();
+                this.lastName = signUpUser.getLastName();
+                this.firstName = signUpUser.getFirstName();
+                this.institutionId = signUpUser.getInstitution()
+                			.getSystemIdentifier().longValue();
+                this.emailAddress = signUpUser.getEmailAddress();
+                this.departmentId = signUpUser.getDepartment()
+                			.getSystemIdentifier().longValue();
+                this.cancerResearchGroupId = signUpUser.getCancerResearchGroup()
+                			.getSystemIdentifier().longValue();
+
+                this.street = signUpUser.getStreet();
+                this.city = signUpUser.getCity();
+                this.state = signUpUser.getState();
+                this.country = signUpUser.getCountry();
+                this.zipCode = signUpUser.getZipCode();
+                this.phoneNumber = signUpUser.getPhoneNumber();
+                this.faxNumber = signUpUser.getFaxNumber();
+            }
+            else
+            {
+                User user = (User) abstractDomain;
+                
+                this.systemIdentifier = user.getSystemIdentifier().longValue();
+                this.lastName = user.getLastName();
+                this.firstName = user.getFirstName();
+                this.institutionId = user.getInstitution().getSystemIdentifier()
+                        .longValue();
+                this.emailAddress = user.getEmailAddress();
+                this.departmentId = user.getDepartment().getSystemIdentifier()
+                        .longValue();
+                this.cancerResearchGroupId = user.getCancerResearchGroup()
+                .getSystemIdentifier().longValue();
+                
+                this.street = user.getAddress().getStreet();
+                this.city = user.getAddress().getCity();
+                this.state = user.getAddress().getState();
+                this.country = user.getAddress().getCountry();
+                this.zipCode = user.getAddress().getZipCode();
+                this.phoneNumber = user.getAddress().getPhoneNumber();
+                this.faxNumber = user.getAddress().getFaxNumber();
+                
+                this.activityStatus = user.getActivityStatus();
+                if (activityStatus.equals(Constants.ACTIVITY_STATUS_ACTIVE))
+                {
+                    this.status = Constants.APPROVE_USER_APPROVE_STATUS;
+                }
+                else if (activityStatus.equals(Constants.ACTIVITY_STATUS_NEW))
+                {
+                    this.status = Constants.APPROVE_USER_PENDING_STATUS;
+                }
+                else if (activityStatus.equals(Constants.ACTIVITY_STATUS_CLOSED))
+                {
+                    this.status = Constants.APPROVE_USER_REJECT_STATUS;
+                }
+                
+                this.role = user.getRoleId();
+                this.comments = user.getComments();
+            }
+        }
+        catch (Exception excp)
+        {
+            Logger.out.error(excp.getMessage());
+        }
+    }
 
     /**
      * Overrides the validate method of ActionForm.
@@ -665,26 +682,6 @@ public class UserForm extends AbstractActionForm
                 if (operation.equals(Constants.ADD)
                         || operation.equals(Constants.EDIT))
                 {
-                    if (validator.isEmpty(loginName))
-                    {
-                        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-                                "errors.item.required", ApplicationProperties
-                                        .getValue("user.loginName")));
-                    }
-                    else
-                    {
-                        if (!Character.isLetter(loginName.charAt(0)))
-                        {
-                            errors
-                                    .add(
-                                            ActionErrors.GLOBAL_ERROR,
-                                            new ActionError(
-                                                    "errors.item.format",
-                                                    ApplicationProperties
-                                                            .getValue("user.loginName")));
-                        }
-                    }
-
                     if (validator.isEmpty(lastName))
                     {
                         errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
@@ -775,7 +772,7 @@ public class UserForm extends AbstractActionForm
 
                 if (pageOf.equals(Constants.PAGEOF_USER_ADMIN))
                 {
-                    if (validator.isEmpty(role))
+                    if (role.trim().equals(Constants.SELECT_OPTION))
                     {
                         errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
                                 "errors.item.required", ApplicationProperties
@@ -784,26 +781,6 @@ public class UserForm extends AbstractActionForm
 
                 }
 
-                if (operation.equals(Constants.FORGOT_PASSWORD))
-                {
-                    if ((validator.isEmpty(loginName))
-                            && (validator.isEmpty(emailAddress)))
-                    {
-                        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-                                "errors.forgotpassword.required"));
-                    }
-                    else
-                    {
-                        if (!validator.isValidEmailAddress(emailAddress)
-                                && (!validator.isEmpty(emailAddress)))
-                        {
-                            errors.add(ActionErrors.GLOBAL_ERROR,
-                                            new ActionError("errors.item.format",
-                                                    ApplicationProperties.getValue("user.emailAddress")));
-                        }
-                    }
-                }
-                
                 if (pageOf.equals(Constants.PAGEOF_APPROVE_USER))
                 {
                     if (status.trim().equals(Constants.SELECT_OPTION))
@@ -821,5 +798,4 @@ public class UserForm extends AbstractActionForm
         }
         return errors;
     }
-
 }

@@ -36,6 +36,9 @@ public class TreeViewAction extends Action
         String pageOf  = request.getParameter(Constants.PAGEOF);
         request.setAttribute(Constants.PAGEOF,pageOf);
         
+        String storageContainerType = request.getParameter(Constants.STORAGE_CONTAINER_TYPE);
+        request.setAttribute(Constants.STORAGE_CONTAINER_TYPE,storageContainerType);
+        
         return mapping.findForward(Constants.SUCCESS);
     }
 

@@ -31,6 +31,12 @@ public class BizLogicFactory
             case Constants.USER_FORM_ID:
                 abstractBizLogic = new UserBizLogic();
             	break;
+            case Constants.SIGNUP_FORM_ID:
+                abstractBizLogic = new SignUpUserBizLogic();
+            	break;
+            case Constants.APPROVE_USER_FORM_ID:
+                abstractBizLogic = new ApproveUserBizLogic();
+            	break;
             case Constants.REPORTEDPROBLEM_FORM_ID:
                 abstractBizLogic = new ReportedProblemBizLogic();
             	break;
@@ -75,15 +81,12 @@ public class BizLogicFactory
 			case Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID:
 				abstractBizLogic = new CollectionProtocolRegistrationBizLogic();
 				break;	
-			
 			case Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID:
 				abstractBizLogic = new SpecimenCollectionGroupBizLogic();
 				break;
-				
           	case Constants.NEW_SPECIMEN_FORM_ID:
         		abstractBizLogic = new NewSpecimenBizLogic();
         		break;
-        		
             default:
                 abstractBizLogic = new DefaultBizLogic();
             	break;

@@ -21,9 +21,11 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.bizlogic.CDEBizLogic;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.bizlogic.TreeDataInterface;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * TreeDataAction creates a tree from the temporary query results table 
@@ -57,7 +59,10 @@ public class TreeDataAction extends Action
             {
                 bizLogic = new StorageContainerBizLogic();
             }
-//            else if (pageOf.equals(Constants.PAGEOF_SPECIMEN))
+            else if (pageOf.equals(Constants.PAGEOF_TISSUE_SITE))
+            {
+                bizLogic = new CDEBizLogic();
+            }
             
             Vector dataList = bizLogic.getTreeViewData();
             
@@ -68,8 +73,7 @@ public class TreeDataAction extends Action
         }
         catch (Exception exp)
         {
-            exp.printStackTrace();
-//            Logger.out.error(exp.getMessage(), exp);
+            Logger.out.error(exp.getMessage(), exp);
         }
         finally
         {
