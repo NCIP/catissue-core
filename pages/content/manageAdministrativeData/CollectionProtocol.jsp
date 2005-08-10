@@ -396,7 +396,7 @@ function getSubDivCount(subdivtag)
 						<td class="formField" colspan=2>
 							<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
 						 	<html:text styleClass="formDateSized" size="35" styleId="startDate" property="startDate" readonly="true"/>
-							<a href="javascript:show_calendar('collectionProtocolForm.startDate','','','MM-DD-YYYY');">
+							<a href="javascript:show_calendar('collectionProtocolForm.startDate',null,null,'MM-DD-YYYY');">
 								<img src="images\calendar.gif" width=24 height=22 border=0>
 							</a>
 						</td>
@@ -414,7 +414,7 @@ function getSubDivCount(subdivtag)
 						 <td class="formField" colspan=2>
 						 <div id="enddateDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
 						 <html:text styleClass="formDateSized" size="35" styleId="endDate" property="endDate" readonly="true"/>
-							<a href="javascript:show_calendar('collectionProtocolForm.endDate','','','MM-DD-YYYY');">
+							<a href="javascript:show_calendar('collectionProtocolForm.endDate',null,null,'MM-DD-YYYY');">
 								<img src="images\calendar.gif" width=24 height=22 border=0>
 							</a>
 						 </td>
@@ -498,14 +498,14 @@ function getSubDivCount(subdivtag)
 		int maxCount=1;
 		int maxIntCount=1;
 				
-		CollectionProtocolForm collectionProtocolForm = null;
+		CollectionProtocolForm colForm = null;
 		
 		Object obj = request.getAttribute("collectionProtocolForm");
 		
 		if(obj != null && obj instanceof CollectionProtocolForm)
 		{
-			collectionProtocolForm = (CollectionProtocolForm)obj;
-			maxCount = collectionProtocolForm.getOuterCounter();
+			colForm = (CollectionProtocolForm)obj;
+			maxCount = colForm.getOuterCounter();
 		}
 	
 		for(int counter=1;counter<=maxCount;counter++)
@@ -517,9 +517,9 @@ function getSubDivCount(subdivtag)
 		
 			System.out.println("\n\n\n************\n\n CID : "+ cid +"\n\n\n\n*****************");
 			System.out.println("\n\n\n************\n\n FunctionName : "+ functionName +"\n\n\n\n*****************");
-			if(collectionProtocolForm!=null)
+			if(colForm!=null)
 			{
-				Object o = collectionProtocolForm.getIvl(""+counter);
+				Object o = colForm.getIvl(""+counter);
 				if(o!=null)
 					maxIntCount = Integer.parseInt(o.toString());
 			}
@@ -617,18 +617,18 @@ function getSubDivCount(subdivtag)
 				
 				<%
 				
-	/*				Object obj1 = request.getAttribute("collectionProtocolForm");
+	/*				Object obj1 = request.getAttribute("colForm");
 					int maxIntCount=1;
 					
 					if(obj1 != null && obj1 instanceof CollectionProtocolForm)
 					{
-						collectionProtocolForm = (CollectionProtocolForm)obj1;
+						colForm = (CollectionProtocolForm)obj1;
 				
-						Map imap = collectionProtocolForm.getInnerLoopValues();
-						Object o = collectionProtocolForm.getIvl(cid);
+						Map imap = colForm.getInnerLoopValues();
+						Object o = colForm.getIvl(cid);
 						
 						maxIntCount = Integer.parseInt(o.toString());
-					} // collectionProtocolForm exist
+					} // colForm exist
 					int maxIntCount=1;
 		*/			
 					for(int innerCounter=1;innerCounter<=maxIntCount;innerCounter++)

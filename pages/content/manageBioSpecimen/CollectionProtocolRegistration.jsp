@@ -169,7 +169,7 @@
 						<td class="formField">
 					           <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
 					           <html:text styleClass="formDateSized" size="25" styleId="registrationDate" property="registrationDate" readonly="true"/>
-						       <a href="javascript:show_calendar('collectionProtocolRegistrationForm.registrationDate');">
+						       <a href="javascript:show_calendar('collectionProtocolRegistrationForm.registrationDate',null,null,'MM-DD-YYYY');">
 							         <img src="images\calendar.gif" width=24 height=22 border=0>
 						      </a>
 					 </td>
