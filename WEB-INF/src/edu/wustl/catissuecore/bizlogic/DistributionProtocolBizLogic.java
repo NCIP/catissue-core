@@ -46,7 +46,7 @@ public class DistributionProtocolBizLogic extends DefaultBizLogic
 		}
 		
 		Logger.out.debug("SIZE "+distributionProtocol.getSpecimenRequirementCollection().size());
-		dao.insert(distributionProtocol);
+		dao.insert(distributionProtocol,true);
 		Logger.out.debug("SIZE "+distributionProtocol.getSpecimenRequirementCollection().size());
 		Iterator it = distributionProtocol.getSpecimenRequirementCollection().iterator();
 		while(it.hasNext())
@@ -54,7 +54,7 @@ public class DistributionProtocolBizLogic extends DefaultBizLogic
 			SpecimenRequirement specimenRequirement = (SpecimenRequirement)it.next();
 			Logger.out.debug("specimenRequirement "+specimenRequirement);
 			specimenRequirement.getDistributionProtocolCollection().add(distributionProtocol);
-			dao.insert(specimenRequirement);
+			dao.insert(specimenRequirement,true);
 		}
 	}
 	
