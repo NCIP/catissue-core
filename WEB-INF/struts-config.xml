@@ -148,7 +148,7 @@ PUBLIC
 			input="/Participant.do?operation=add&amp;pageOf="
 			scope="request">
 			<forward name="success" path=".catissuecore.participantAddSuccessDef" />
-			<forward name="failure" path="/error.jsp" />
+			<forward name="failure" path="/Participant.do?operation=add&amp;pageOf=" />
 		</action>
 		
 		<action path="/ParticipantEdit"
@@ -158,7 +158,7 @@ PUBLIC
 			input="/Participant.do?operation=edit&amp;pageOf="
 			scope="request">
 			<forward name="success" path=".catissuecore.participantEditSuccessDef" />
-			<forward name="failure" path="/error.jsp" />
+			<forward name="failure" path="/Participant.do?operation=edit&amp;pageOf=" />
 		</action>
 		
 		<action path="/ParticipantSearch"
@@ -188,7 +188,7 @@ PUBLIC
 			input="/CollectionProtocolRegistration.do?operation=add"
 			scope="request">
 			<forward name="success" path=".catissuecore.collectionProtocolRegistrationAddSuccessDef" />
-			<forward name="failure" path="/error.jsp" />
+			<forward name="failure" path="/CollectionProtocolRegistration.do?operation=add" />
 		</action>
 		
 		<action path="/CollectionProtocolRegistrationEdit"
@@ -198,7 +198,7 @@ PUBLIC
 			input="/CollectionProtocolRegistration.do?operation=edit"
 			scope="request">
 			<forward name="success" path=".catissuecore.collectionProtocolRegistrationEditSuccessDef" />
-			<forward name="failure" path="/error.jsp" />
+			<forward name="failure" path="/CollectionProtocolRegistration.do?operation=edit" />
 		</action>
 		
 		<action path="/CollectionProtocolRegistrationSearch"
@@ -227,7 +227,7 @@ PUBLIC
 			input="/Institution.do?operation=add"
 			scope="request">
 			<forward name="success" path=".catissuecore.institutionAddSuccessDef" />
-			<forward name="failure" path="/error.jsp" />
+			<forward name="failure" path="/Institution.do?operation=add" />
 		</action>
 
 		<action path="/InstitutionEdit"
@@ -237,7 +237,7 @@ PUBLIC
 			input="/Institution.do?operation=edit"
 			scope="request">
 			<forward name="success" path=".catissuecore.institutionEditSuccessDef" />
-			<forward name="failure" path="/error.jsp" />
+			<forward name="failure" path="/Institution.do?operation=edit" />
 		</action>
 
 		<action path="/InstitutionSearch"
@@ -266,7 +266,7 @@ PUBLIC
 			input="/User.do?operation=add&amp;pageOf=pageOfUserAdmin"
 			scope="request">
 			<forward name="success" path=".catissuecore.userAddSuccessDef" />
-			<forward name="failure" path="/error.jsp" />
+			<forward name="failure" path="/User.do?operation=add&amp;pageOf=pageOfUserAdmin" />
 		</action>
 
 		<action path="/UserEdit"
@@ -276,7 +276,7 @@ PUBLIC
 			input="/User.do?operation=edit&amp;pageOf=pageOfApproveUser"
 			scope="request">
 			<forward name="success" path=".catissuecore.userEditSuccessDef" />
-			<forward name="failure" path="/error.jsp" />
+			<forward name="failure" path="/User.do?operation=edit&amp;pageOf=pageOfApproveUser" />
 		</action>
 		
 		<action path="/UserSearch"
@@ -341,7 +341,7 @@ PUBLIC
 			validate="true"
 			input="/CancerResearchGroup.do?operation=add" scope="request">
 			<forward name="success" path=".catissuecore.cancerResearchGroupAddSuccessDef" />
-			<forward name="failure" path="/error.jsp" />
+			<forward name="failure" path="/CancerResearchGroup.do?operation=add" />
 		</action>
 
 		<action path="/CancerResearchGroupEdit"
@@ -350,7 +350,7 @@ PUBLIC
 			validate="true"
 			input="/CancerResearchGroup.do?operation=edit">
 			<forward name="success" path=".catissuecore.cancerResearchGroupEditSuccessDef" />
-			<forward name="failure" path="/error.jsp" />
+			<forward name="failure" path="/CancerResearchGroup.do?operation=edit" />
 		</action>
 		
 		<action path="/CancerResearchGroupSearch"
@@ -389,7 +389,7 @@ PUBLIC
 			input="/CollectionProtocol.do?operation=add"
 			scope="request">
 			<forward name="success" path=".catissuecore.collectionProtocolAddSuccessDef" />
-			<forward name="failure" path="/error.jsp" />
+			<forward name="failure" path="/CollectionProtocol.do?operation=add" />
 		</action>
 
 		<action path="/CollectionProtocolEdit"
@@ -399,7 +399,7 @@ PUBLIC
 			input="/CollectionProtocol.do?operation=edit"
 			scope="request">
 			<forward name="success" path=".catissuecore.collectionProtocolEditSuccessDef" />
-			<forward name="failure" path="/error.jsp" />
+			<forward name="failure" path="/CollectionProtocol.do?operation=edit" />
 		</action>
 
 		<action path="/CollectionProtocolSearch"
@@ -431,7 +431,7 @@ PUBLIC
 			input="/DistributionProtocol.do?operation=add"
 			scope="request">
 			<forward name="success" path=".catissuecore.distributionProtocolAddSuccessDef" />
-			<forward name="failure" path="/error.jsp" />
+			<forward name="failure" path="/DistributionProtocol.do?operation=add" />
 		</action>
 
 		<action path="/DistributionProtocolEdit"
@@ -441,7 +441,7 @@ PUBLIC
 			input="/DistributionProtocol.do?operation=edit"
 			scope="request">
 			<forward name="success" path=".catissuecore.distributionProtocolEditSuccessDef" />
-			<forward name="failure" path="/error.jsp" />
+			<forward name="failure" path="/DistributionProtocol.do?operation=edit" />
 		</action>
 
 		<action path="/DistributionProtocolSearch"
