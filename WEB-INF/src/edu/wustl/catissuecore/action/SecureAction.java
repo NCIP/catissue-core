@@ -7,6 +7,7 @@ import edu.wustl.common.util.logger.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -40,6 +41,8 @@ public abstract class SecureAction extends BaseAction {
 	public ActionForward executeAction(ActionMapping mapping,
 			ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
+	    
+	    Logger.out.debug("********"+request.getPathInfo());
 
 		if (SecurityManager.getInstance(this.getClass()).isAuthorizedToExecuteAction(getUserLoginName(request))) {
 
@@ -49,14 +52,14 @@ public abstract class SecureAction extends BaseAction {
 
 		Logger.out.debug("The Access was denied for the User "
 				+ "to Execute this Action.");
-
-		ActionErrors messages = new ActionErrors();
-		messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
-				"access.execute.action.denied", new String[] {
-						getUserLoginName(request),
-						", " + this.getClass().getName() }));
-
-		saveErrors(request, messages);
+		
+		ActionErrors errors = new ActionErrors();
+    	
+    	ActionError error = new ActionError("access.execute.action.denied",new String[] {
+				getUserLoginName(request),
+				", " + this.getClass().getName() });
+    	errors.add(ActionErrors.GLOBAL_ERROR,error);
+    	saveErrors(request,errors);
 
 		return mapping.findForward(Constants.ACCESS_DENIED);
 

@@ -358,6 +358,7 @@ public class SecurityManager implements Permissions
 	 * @throws CSException
 	 */
 	public boolean isAuthorizedToExecuteAction(String loginName) throws Exception {
+	    Logger.out.debug("Login Name: "+loginName);
 		User user = getUser(loginName);
 		String objectId = getObjectIdForSecureMethodAccess();
 
