@@ -41,6 +41,8 @@ PUBLIC
 		<form-bean name="procedureEventParametersForm" type="edu.wustl.catissuecore.actionForm.ProcedureEventParametersForm"/>
 		<form-bean name="forgotPasswordForm" type="edu.wustl.catissuecore.actionForm.ForgotPasswordForm"/>
 		<form-bean name="distributionForm" type="edu.wustl.catissuecore.actionForm.DistributionForm"/>
+		
+		<form-bean name="dummyCollectionProtocolForm" type="edu.wustl.catissuecore.actionForm.CollectionProtocolForm"/>
 	</form-beans>
 	
 	<!-- Global Exception Definitions -->
@@ -311,7 +313,7 @@ PUBLIC
 			validate="true"
 			input="/Department.do?operation=edit">
 			<forward name="success" path=".catissuecore.departmentEditSuccessDef" />
-			<forward name="failure" path="/error.jsp" />
+			<forward name="failure" path="/Department.do?operation=edit" />
 		</action>
 		
 		<action path="/DepartmentSearch"
@@ -361,6 +363,14 @@ PUBLIC
 			<forward name="failure" path="/CancerResearchGroup.do?operation=edit"/>
 		</action>    
 		<!-- CancerResearchGroup Actions Ends-->
+
+			<!-- CollectionProtocol Actions Begins-->
+	    <action path="/DummyCollectionProtocol"
+			type="edu.wustl.catissuecore.action.CollectionProtocolAction"
+			name="dummyCollectionProtocolForm"
+			validate="false"
+			scope="request">
+		</action>
 		
 			<!-- CollectionProtocol Actions Begins-->
 	    <action path="/CollectionProtocol"
