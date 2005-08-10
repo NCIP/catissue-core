@@ -647,10 +647,13 @@ function getSubDivCount(subdivtag)
 					%>
 			        
 			        <td class="formField">		
+			        <%
+			        	String onChangeFun = "changeUnit('" + fName + "','" + sName + "')";
+			        %>
 			        	<html:select property="<%=fName%>" 
 										styleClass="formFieldSized10" 
 										styleId="<%=fName%>" size="1"
-										onchange="changeUnit('<%=fName%>','<%=sName%>')">
+										onchange="<%=onChangeFun%>">
 							<html:options name="<%=Constants.SPECIMEN_CLASS_ID_LIST%>" labelName="<%=Constants.SPECIMEN_CLASS_LIST%>"/>
 						</html:select>
 			        </td>
