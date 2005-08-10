@@ -23,7 +23,6 @@ import edu.wustl.catissuecore.domain.ExternalIdentifier;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.StorageContainer;
-import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.dbManager.DAOException;
 
@@ -87,9 +86,9 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 
 		specimen.setBiohazardCollection(set);
 		
-		dao.insert(specimen.getSpecimenCharacteristics());
+		dao.insert(specimen.getSpecimenCharacteristics(),true);
 		specimen.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
-		dao.insert(specimen);
+		dao.insert(specimen,true);
 		
 		Collection externalIdentifierCollection = specimen.getExternalIdentifierCollection();
 		if(externalIdentifierCollection != null && externalIdentifierCollection.size() > 0)
@@ -100,7 +99,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			{
 				ExternalIdentifier exId = (ExternalIdentifier)it.next();
 				exId.setSpecimen(specimen);
-				dao.insert(exId);
+				dao.insert(exId,true);
 			}
 		}
 	}

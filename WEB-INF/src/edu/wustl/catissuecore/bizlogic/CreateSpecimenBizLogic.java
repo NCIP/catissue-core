@@ -61,9 +61,9 @@ public class CreateSpecimenBizLogic extends DefaultBizLogic
 			specimen.setStorageContainer(container);
 		}
 
-		dao.insert(specimen.getSpecimenCharacteristics());
+		dao.insert(specimen.getSpecimenCharacteristics(),true);
 		specimen.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
-		dao.insert(specimen);
+		dao.insert(specimen,true);
 		
 		Collection externalIdentifierCollection = specimen.getExternalIdentifierCollection();
 		if(externalIdentifierCollection != null && externalIdentifierCollection.size() > 0)
@@ -74,7 +74,7 @@ public class CreateSpecimenBizLogic extends DefaultBizLogic
 			{
 				ExternalIdentifier exId = (ExternalIdentifier)it.next();
 				exId.setSpecimen(specimen);
-				dao.insert(exId);
+				dao.insert(exId,true);
 			}
 		}
 	}
