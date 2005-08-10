@@ -478,7 +478,7 @@ PUBLIC
 			input="/ReportProblem.do?operation=add"
 			scope="request">
 			<forward name="success" path=".catissuecore.reportProblemSuccessDef" />
-			<forward name="failure" path="/error.jsp" />
+			<forward name="failure" path="/ReportProblem.do?operation=add" />
 		</action>
 
 		<action path="/ReportedProblemEdit"
@@ -488,7 +488,7 @@ PUBLIC
 			input="/ReportProblem.do?operation=edit"
 			scope="request">
 			<forward name="success" path=".catissuecore.reportProblemSuccessDef" />
-			<forward name="failure" path="/error.jsp" />
+			<forward name="failure" path="/ReportProblem.do?operation=edit" />
 		</action>
 		
 		<action path="/ReportedProblemShow"
@@ -556,7 +556,7 @@ PUBLIC
 			input="/SpecimenCollectionGroup.do?operation=add"
 			scope="request">
 			<forward name="success" path=".catissuecore.specimenCollectionGroupAddSuccessDef" />
-			<forward name="failure" path="/error.jsp" />
+			<forward name="failure" path="/SpecimenCollectionGroup.do?operation=add" />
 		</action>
 
 		<action path="/SpecimenCollectionGroupEdit"
@@ -566,7 +566,7 @@ PUBLIC
 			input="/SpecimenCollectionGroup.do?operation=edit"
 			scope="request">
 			<forward name="success" path=".catissuecore.specimenCollectionGroupEditSuccessDef" />
-			<forward name="failure" path="/error.jsp" />
+			<forward name="failure" path="/SpecimenCollectionGroup.do?operation=edit" />
 		</action>
 
 		<action path="/SpecimenCollectionGroupSearch"
@@ -628,7 +628,7 @@ PUBLIC
 			input="/NewSpecimen.do?operation=add&amp;pageOf="
 			scope="request">
 			<forward name="success" path=".catissuecore.newSpecimenAddSuccessDef" />
-			<forward name="failure" path="/error.jsp" />
+			<forward name="failure" path="/NewSpecimen.do?operation=add&amp;pageOf=" />
 		</action>
 		
 		<action path="/NewSpecimenEdit"
@@ -638,7 +638,7 @@ PUBLIC
 			input="/NewSpecimen.do?operation=edit&amp;pageOf="
 			scope="request">
 			<forward name="success" path=".catissuecore.newSpecimenEditSuccessDef" />
-			<forward name="failure" path="/error.jsp" />
+			<forward name="failure" path="/NewSpecimen.do?operation=edit&amp;pageOf=" />
 		</action>
 		
 		<action path="/NewSpecimenSearch"
@@ -667,7 +667,7 @@ PUBLIC
 			input="/StorageType.do?operation=add"
 			scope="request">
 			<forward name="success" path=".catissuecore.storageTypeAddSuccessDef" />
-			<forward name="failure" path="/error.jsp" />
+			<forward name="failure" path="/StorageType.do?operation=add" />
 		</action>
 		
 		<action path="/StorageTypeEdit"
@@ -677,7 +677,7 @@ PUBLIC
 			input="/StorageType.do?operation=edit"
 			scope="request">
 			<forward name="success" path=".catissuecore.storageTypeEditSuccessDef" />
-			<forward name="failure" path="/error.jsp" />
+			<forward name="failure" path="/StorageType.do?operation=edit" />
 		</action>
 		
 		<action path="/StorageTypeSearch"
@@ -709,7 +709,7 @@ PUBLIC
 			input="/StorageContainer.do?operation=add"
 			scope="request">
 			<forward name="success" path=".catissuecore.storageContainerAddSuccessDef" />
-			<forward name="failure" path="/error.jsp" />
+			<forward name="failure" path="/StorageContainer.do?operation=add" />
 		</action>
 		
 		<action path="/StorageContainerEdit"
@@ -719,7 +719,7 @@ PUBLIC
 			input="/StorageContainer.do?operation=edit"
 			scope="request">
 			<forward name="success" path=".catissuecore.storageContainerEditSuccessDef" />
-			<forward name="failure" path="/error.jsp" />
+			<forward name="failure" path="/StorageContainer.do?operation=edit" />
 		</action>
 		
 		<action path="/StorageContainerSearch"
@@ -749,7 +749,7 @@ PUBLIC
 			input="/Site.do?operation=add"
 			scope="request">
 			<forward name="success" path=".catissuecore.siteAddSuccessDef" />
-			<forward name="failure" path="/error.jsp" />
+			<forward name="failure" path="/Site.do?operation=add" />
 		</action>
 		
 		<action path="/SiteEdit"
@@ -759,7 +759,7 @@ PUBLIC
 			input="/Site.do?operation=edit"
 			scope="request">
 			<forward name="success" path=".catissuecore.siteEditSuccessDef" />
-			<forward name="failure" path="/error.jsp" />
+			<forward name="failure" path="/Site.do?operation=edit" />
 		</action>
 		
 		<action path="/SiteSearch"
@@ -788,7 +788,7 @@ PUBLIC
 			input="/Biohazard.do?operation=add"
 			scope="request">
 			<forward name="success" path=".catissuecore.biohazardAddSuccessDef" />
-			<forward name="failure" path="/error.jsp" />
+			<forward name="failure" path="/Biohazard.do?operation=add" />
 		</action>
 		
 		<action path="/BiohazardEdit"
@@ -798,7 +798,7 @@ PUBLIC
 			input="/Biohazard.do?operation=edit"
 			scope="request">
 			<forward name="success" path=".catissuecore.biohazardEditSuccessDef" />
-			<forward name="failure" path="/error.jsp" />
+			<forward name="failure" path="/Biohazard.do?operation=edit" />
 		</action>
 		
 		<action path="/BiohazardSearch"
@@ -827,7 +827,7 @@ PUBLIC
 			input="/FrozenEventParameters.do?operation=add"
 			scope="request">
 			<forward name="success" path=".catissuecore.frozenEventParametersAddSuccessDef" />
-			<forward name="failure" path="/error.jsp" />
+			<forward name="failure" path="/FrozenEventParameters.do?operation=add" />
 		</action>
 		
 		<action path="/FrozenEventParametersEdit"
