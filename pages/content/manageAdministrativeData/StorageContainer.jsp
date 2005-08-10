@@ -2,7 +2,7 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
-
+<%@ page import="edu.wustl.catissuecore.actionForm.StorageContainerForm"%>
 
 
 <head>
@@ -63,6 +63,11 @@
 //  function to insert a row in the inner block
 function insRow(subdivtag)
 {
+
+		var val = parseInt(document.forms[0].counter.value);
+		val = val + 1;
+		document.forms[0].counter.value = val;
+
 	var r = new Array(); 
 	r = document.getElementById(subdivtag).rows;
 	var q = r.length;
@@ -119,7 +124,14 @@ function insRow(subdivtag)
             formName = Constants.STORAGE_CONTAINER_ADD_ACTION;
             readOnlyValue = false;
         }
-
+	
+		Object obj = request.getAttribute("storageContainerForm");
+		int noOfRows=1;
+		if(obj != null && obj instanceof StorageContainerForm)
+		{
+			StorageContainerForm form = (StorageContainerForm)obj;
+			noOfRows = form.getCounter();
+		}
 		String number = (String)request.getAttribute("startNumber");
 %>
 
@@ -376,6 +388,7 @@ function insRow(subdivtag)
 						<html:button property="addKeyValue" styleClass="actionButton" onclick="insRow('addMore')">
 						<bean:message key="buttons.addMore"/>
 						</html:button>
+						<html:hidden property="counter"/>
 						</td>
 					</tr>
 									
@@ -394,15 +407,26 @@ function insRow(subdivtag)
 					</tr>
 					
 					<tbody id="addMore">
+						<%
+						
+							for(int rowCount=1;rowCount<=noOfRows;rowCount++)
+							{
+								String keyName = "value(StorageContainerDetails:" + rowCount +"_parameterName)";
+								String valueName = "value(StorageContainerDetails:" + rowCount +"_parameterValue)";
+						%>
 					<tr>
-						<td class="formSerialNumberField" width="5">1.</td>
+						<td class="formSerialNumberField" width="5"><%=rowCount%>.</td>
 						<td class="formField" colspan="2">
-							<html:text styleClass="formFieldSized10" size="30" styleId="key" property="value(StorageContainerDetails:1_parameterName)" readonly="<%=readOnlyValue%>" />
+							<html:text styleClass="formFieldSized10" size="30" styleId="<%=keyName%>" property="<%=keyName%>" readonly="<%=readOnlyValue%>" />
 						</td>
 						<td class="formField">
-							<html:text styleClass="formFieldSized10" size="30" styleId="typeId" property="value(StorageContainerDetails:1_parameterValue)" value="" readonly="<%=readOnlyValue%>" />
+							<html:text styleClass="formFieldSized10" size="30" styleId="<%=valueName%>" property="<%=valueName%>" readonly="<%=readOnlyValue%>" />
 						</td>
 					</tr>
+						<%
+							} // for
+						%>
+
 					</tbody>
 				<%--	</logic:equal> --%>
 				</table>
