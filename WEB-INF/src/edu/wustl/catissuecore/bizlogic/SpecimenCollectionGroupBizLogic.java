@@ -12,8 +12,7 @@ package edu.wustl.catissuecore.bizlogic;
 
 import java.util.List;
 
-import edu.wustl.catissuecore.dao.AbstractDAO;
-import edu.wustl.catissuecore.dao.DAOFactory;
+import edu.wustl.catissuecore.dao.DAO;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
@@ -26,24 +25,17 @@ import edu.wustl.common.util.dbManager.DAOException;
  * UserHDAO is used to add user information into the database using Hibernate.
  * @author kapil_kaveeshwar
  */
-public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic {
-
+public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic 
+{
 	/**
 	 * Saves the user object in the database.
 	 * @param session The session in which the object is saved.
 	 * @param obj The user object to be saved.
-	 * @throws HibernateException Exception thrown during hibernate operations.
 	 * @throws DAOException 
 	 */
-	public void insert(Object obj) throws DAOException 
+	protected void insert(DAO dao, Object obj) throws DAOException
 	{
-		System.out.println("<<<<<<<<<<<1 :Inside insert method.>>>>>>>>");
-		SpecimenCollectionGroup specimenCollectionGroup =
-			(SpecimenCollectionGroup) obj;
-		System.out.println("<<<<<<<<<<<2 :Inside insert method.>>>>>>>>");			
-		AbstractDAO dao = DAOFactory.getDAO(Constants.HIBERNATE_DAO);
- 		dao.openSession();
-		
+		SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) obj;
 		
 		List list = dao.retrieve(Site.class.getName(), "systemIdentifier", specimenCollectionGroup.getSite().getSystemIdentifier());
 		if (!list.isEmpty())
@@ -94,20 +86,17 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic {
 		{
 		   specimenCollectionGroup.setCollectionProtocolRegistration((CollectionProtocolRegistration)list.get(0));
 		}
-		dao.insert(specimenCollectionGroup);
-		dao.insert(specimenCollectionGroup.getClinicalReport());
-		
-		dao.closeSession();
+		dao.insert(specimenCollectionGroup,true);
+		dao.insert(specimenCollectionGroup.getClinicalReport(),true);
 	}
 
 	/**
 	 * Updates the persistent object in the database.
 	 * @param session The session in which the object is saved.
 	 * @param obj The object to be updated.
-	 * @throws HibernateException Exception thrown during hibernate operations.
 	 * @throws DAOException 
 	 */
-	public void update(Object obj) throws DAOException {
-
+	protected void update(DAO dao, Object obj) throws DAOException 
+	{
 	}
 }

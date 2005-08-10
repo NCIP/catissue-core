@@ -45,8 +45,8 @@ public class SiteBizLogic extends DefaultBizLogic
 		    site.setCoordinator(user);
 		}
 		
-		dao.insert(site.getAddress());
-	    dao.insert(site);
+		dao.insert(site.getAddress(),true);
+	    dao.insert(site,true);
 	}
 	
 	/**

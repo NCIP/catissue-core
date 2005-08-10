@@ -57,7 +57,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 		collectionProtocolRegistration.setCollectionProtocol(collectionProtocol);
 		collectionProtocolRegistration.setParticipant(participant);
 
-        dao.insert(collectionProtocolRegistration);
+        dao.insert(collectionProtocolRegistration,true);
     }
 
     /**

@@ -101,8 +101,8 @@ public class UserBizLogic extends DefaultBizLogic
                 
                 user.setSystemIdentifier(user.getUser().getUserId());
                 
-                dao.insert(user.getAddress());
-                dao.insert(user);
+                dao.insert(user.getAddress(), true);
+                dao.insert(user, true);
                 
 //                dao.closeSession();
                 

@@ -29,7 +29,7 @@ public class ReportedProblemBizLogic extends DefaultBizLogic
     {
         ReportedProblem reportedProblem = (ReportedProblem) obj;
 
-        dao.insert(obj);
+        dao.insert(obj,true);
 
         //Send the reported problem to administrator and the user who reported it.
         SendEmail email = new SendEmail();

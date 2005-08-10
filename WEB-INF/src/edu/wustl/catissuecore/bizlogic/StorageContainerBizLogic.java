@@ -77,8 +77,8 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		{
 			StorageContainer cont = new StorageContainer(container); 
 			cont.setName(String.valueOf(i + container.getStartNo().intValue()));
-			dao.insert(cont.getStorageContainerCapacity());
-			dao.insert(cont);
+			dao.insert(cont.getStorageContainerCapacity(),true);
+			dao.insert(cont,true);
 			
 			Collection storageContainerDetailsCollection = cont.getStorageContainerDetailsCollection();
 			if(storageContainerDetailsCollection.size() > 0)
@@ -88,7 +88,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 				{
 					StorageContainerDetails storageContainerDetails = (StorageContainerDetails)it.next();
 					storageContainerDetails.setStorageContainer(cont);
-					dao.insert(storageContainerDetails);
+					dao.insert(storageContainerDetails,true);
 				}
 			}
 		}

@@ -32,7 +32,7 @@ public class  DefaultBizLogic extends AbstractBizLogic
      */
     protected void insert(DAO dao, Object obj) throws DAOException
     {
-        dao.insert(obj);
+        dao.insert(obj,true);
     }
     
     /**
@@ -42,7 +42,7 @@ public class  DefaultBizLogic extends AbstractBizLogic
      */
     protected void update(DAO dao, Object obj) throws DAOException
     {
-        dao.insert(obj);
+        dao.update(obj);
     }
     
     /**
@@ -68,6 +68,7 @@ public class  DefaultBizLogic extends AbstractBizLogic
             
             list = dao.retrieve(sourceObjectName, selectColumnName,
                     whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);
+            dao.commit();
         }
         catch(DAOException daoExp)
         {
@@ -105,6 +106,7 @@ public class  DefaultBizLogic extends AbstractBizLogic
             
             list = dao.retrieve(sourceObjectName, null,
                     whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);
+            dao.commit();
         }
         catch(DAOException daoExp)
         {
@@ -115,7 +117,6 @@ public class  DefaultBizLogic extends AbstractBizLogic
         {
             dao.closeSession();
         }
-        
         return list;
     }
     

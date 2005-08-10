@@ -23,7 +23,7 @@ public interface DAO
 	 * Insert the Object in the database.
 	 * @param obj Object to be inserted in database
 	 */
-	public abstract void insert (Object obj) throws DAOException;
+	public abstract void insert (Object obj, boolean isAuditable) throws DAOException;
 	
 	/**
 	 * updates the persisted object in the database.
@@ -79,4 +79,6 @@ public interface DAO
 	 * @throws DAOException
 	 */
 	public abstract List retrieve (String sourceObjectName, String[] selectColumnName) throws DAOException;
+	
+	public Object retrieve (String sourceObjectName, Long systemIdentifier) throws DAOException;
 }

@@ -32,8 +32,8 @@ public class StorageTypeBizLogic extends DefaultBizLogic
 	{
 		StorageType type = (StorageType)obj;
 
-		dao.insert(type.getDefaultStorageCapacity());
-	    dao.insert(type);
+		dao.insert(type.getDefaultStorageCapacity(),true);
+	    dao.insert(type,true);
 	}
 	
 	/**

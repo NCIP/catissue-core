@@ -14,8 +14,7 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import net.sf.hibernate.HibernateException;
-import edu.wustl.catissuecore.dao.AbstractDAO;
-import edu.wustl.catissuecore.dao.DAOFactory;
+import edu.wustl.catissuecore.dao.DAO;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -34,15 +33,12 @@ public class ParticipantBizLogic extends DefaultBizLogic
      * @throws HibernateException Exception thrown during hibernate operations.
      * @throws DAOException 
      */
-	public void insert(Object obj) throws DAOException 
+	protected void insert(DAO dao, Object obj) throws DAOException 
 	{
 		Participant participant = (Participant)obj;
         
-		AbstractDAO dao = DAOFactory.getDAO(Constants.HIBERNATE_DAO);
-		dao.openSession();
-
 		participant.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
-		dao.insert(participant);
+		dao.insert(participant,true);
 		
 		Collection participantMedicalIdentifierCollection = participant.getParticipantMedicalIdentifierCollection();		
 		Iterator it = participantMedicalIdentifierCollection.iterator();
@@ -51,10 +47,8 @@ public class ParticipantBizLogic extends DefaultBizLogic
 		{
 			ParticipantMedicalIdentifier pmIdentifier = (ParticipantMedicalIdentifier)it.next();
 			pmIdentifier.setParticipant(participant);
-			dao.insert(pmIdentifier);
+			dao.insert(pmIdentifier,true);
 		}
-	    
-		dao.closeSession();
 	}
 	
 	/**
@@ -64,18 +58,7 @@ public class ParticipantBizLogic extends DefaultBizLogic
      * @throws HibernateException Exception thrown during hibernate operations.
      * @throws DAOException 
      */
-    public void update(Object obj) throws DAOException
+	protected void update(DAO dao, Object obj) throws DAOException 
     {
     }
-    
-//    public String getNextStorageContainerNo(Site site, StorageType type )
-//    {
-//    	AbstractDAO dao = DAOFactory.getDAO(Constants.HIBERNATE_DAO);
-//    	
-//    	String whereColNames = {}
-//    	dao.retrieve(StorageContainer.class.getName(),)
-//    	
-//    	return null;
-//    }
-    
 }

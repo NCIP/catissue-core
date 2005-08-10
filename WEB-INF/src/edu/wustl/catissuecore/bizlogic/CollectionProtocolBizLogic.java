@@ -64,20 +64,20 @@ public class CollectionProtocolBizLogic extends DefaultBizLogic
 		}
 		collectionProtocol.setUserCollection(coordinatorColl);
 		
-		dao.insert(collectionProtocol);
+		dao.insert(collectionProtocol,true);
 		it = collectionProtocol.getCollectionProtocolEventCollection().iterator();
 		while(it.hasNext())
 		{
 			CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent)it.next();
 			collectionProtocolEvent.setCollectionProtocol(collectionProtocol);
-			dao.insert(collectionProtocolEvent);
+			dao.insert(collectionProtocolEvent,true);
 			
 			Iterator srIt = collectionProtocolEvent.getSpecimenRequirementCollection().iterator();
 			while(srIt.hasNext())
 			{
 				SpecimenRequirement specimenRequirement = (SpecimenRequirement)srIt.next();
 				specimenRequirement.getCollectionProtocolEventCollection().add(collectionProtocolEvent);
-				dao.insert(specimenRequirement);
+				dao.insert(specimenRequirement,true);
 			}
 		}
 	}

@@ -15,14 +15,12 @@ import java.util.Iterator;
 import java.util.List;
 
 import net.sf.hibernate.HibernateException;
-import edu.wustl.catissuecore.dao.AbstractDAO;
-import edu.wustl.catissuecore.dao.DAOFactory;
+import edu.wustl.catissuecore.dao.DAO;
 import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.ExternalIdentifier;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.StorageContainer;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.dbManager.DAOException;
 
 /**
@@ -38,13 +36,10 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
      * @throws HibernateException Exception thrown during hibernate operations.
      * @throws DAOException 
      */
-	public void insert(Object obj) throws DAOException 
+	protected void insert(DAO dao, Object obj) throws DAOException 
 	{
 		Specimen type = (Specimen)obj;
 
-        AbstractDAO dao = DAOFactory.getDAO(Constants.HIBERNATE_DAO);
-		dao.openSession();		
-	    
 		//Load & set Specimen Collection Group
 		List list = dao.retrieve(SpecimenCollectionGroup.class.getName(), "systemIdentifier", type.getSpecimenCollectionGroup().getSystemIdentifier());
 		
@@ -63,8 +58,8 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			type.setStorageContainer(container);
 		}
 		
-		dao.insert(type.getSpecimenCharacteristics());
-		dao.insert(type);
+		dao.insert(type.getSpecimenCharacteristics(),true);
+		dao.insert(type,true);
 		
 		Collection externalIdentifierCollection = type.getExternalIdentifierCollection();
 		if(externalIdentifierCollection != null && externalIdentifierCollection.size() > 0)
@@ -75,7 +70,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			{
 				ExternalIdentifier exId = (ExternalIdentifier)it.next();
 				exId.setSpecimen(type);
-				dao.insert(exId);
+				dao.insert(exId,true);
 			}
 		}
 		
@@ -88,11 +83,9 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			{
 				Biohazard hazard = (Biohazard)it.next();
 				hazard.getSpecimenCollection().add(type);
-				dao.insert(hazard);
+				dao.insert(hazard,true);
 			}
 		}
-		
-	    dao.closeSession();
 	}
 	
 	/**

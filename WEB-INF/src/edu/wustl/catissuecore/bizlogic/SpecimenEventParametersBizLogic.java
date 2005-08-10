@@ -40,7 +40,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 		    specimenEventParametersObject.setUser(user);
 		}
 		
-		dao.insert(specimenEventParametersObject);
+		dao.insert(specimenEventParametersObject,true);
 	}
 	
 	/**
