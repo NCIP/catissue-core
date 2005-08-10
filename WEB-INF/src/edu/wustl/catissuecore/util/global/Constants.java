@@ -74,7 +74,9 @@ public class Constants
 	public static final String PARTICIPANT_MEDICAL_RECORD_SOURCE_LIST = "participantMedicalRecordSourceList";
 	public static final String RACELIST = "raceList";
 	public static final String PARTICIPANT_LIST = "participantList";
+	public static final String PARTICIPANT_ID_LIST = "participantIdList";
 	public static final String PROTOCOL_LIST = "protocolList";
+	public static final String PROTOCOL_ID_LIST = "protocolIdList";
 	public static final String TIMEHOURLIST = "timeHourList";
 	public static final String TIMEMINUTESLIST = "timeMinutesList";
 	public static final String TIMEAMPMLIST = "timeAMPMList";
@@ -106,6 +108,7 @@ public class Constants
 	public static final String BIOHAZARD_NAME_LIST = "biohazardNameList";
 	public static final String BIOHAZARD_ID_LIST = "biohazardIdList";
 	public static final String BIOHAZARD_TYPES_LIST = "biohazardTypesList";
+	public static final String PARENT_SPECIMEN_ID_LIST = "parentSpecimenIdList";
 	
 	//SpecimenCollecionGroup lists.
 	public static final String PROTOCOL_TITLE_LIST = "protocolTitleList";
@@ -217,6 +220,12 @@ public class Constants
 	//New Specimen Data Actions.
 	public static final String SPECIMEN_ADD_ACTION = "NewSpecimenAdd.do";
 	public static final String SPECIMEN_EDIT_ACTION = "NewSpecimenEdit.do";
+	public static final String SPECIMEN_SEARCH_ACTION = "NewSpecimenSearch.do";
+	
+	//Create Specimen Data Actions.
+	public static final String CREATE_SPECIMEN_ADD_ACTION = "CreateSpecimenAdd.do";
+	public static final String CREATE_SPECIMEN_EDIT_ACTION = "CreateSpecimenEdit.do";
+	public static final String CREATE_SPECIMEN_SEARCH_ACTION = "CreateSpecimenSearch.do";
 
 	public static final String SPECIMEN_COLLECTION_GROUP_SEARCH_ACTION = "SpecimenCollectionGroup.do";
 	public static final String SPECIMEN_COLLECTION_GROUP_ADD_ACTION = "SpecimenCollectionGroupAdd.do";
@@ -388,13 +397,15 @@ public class Constants
 	public static final int EMBEDDED_EVENT_PARAMETERS_FORM_ID = 31;
 	public static final int FIXED_EVENT_PARAMETERS_FORM_ID = 32;	
 	public static final int PROCEDURE_EVENT_PARAMETERS_FORM_ID = 33;
-	public static final int FORGOT_PASSWORD_FORM_ID = 34;
-	public static final int SIGNUP_FORM_ID = 35;
-	public static final int DISTRIBUTION_FORM_ID = 36;
-	
+	public static final int CREATE_SPECIMEN_FORM_ID = 34;
+	public static final int FORGOT_PASSWORD_FORM_ID = 35;
+	public static final int SIGNUP_FORM_ID = 36;
+	public static final int DISTRIBUTION_FORM_ID = 37;
 	//Misc
 	public static final String SEPARATOR = " : ";
-
+	
+	
+		
 	//Status message key Constants
 	public static final String STATUS_MESSAGE_KEY = "statusMessageKey";
 	
