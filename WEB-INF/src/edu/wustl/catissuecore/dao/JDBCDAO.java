@@ -18,6 +18,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.wustl.catissuecore.audit.AuditManager;
+import edu.wustl.catissuecore.domain.AbstractDomainObject;
+import edu.wustl.catissuecore.exception.AuditException;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.dbManager.DAOException;
@@ -29,25 +32,26 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class JDBCDAO extends AbstractDAO
 {
-    
     private PreparedStatement stmt = null;
-    
     private Connection connection = null;
+    protected AuditManager auditManager;
     
     public void openSession() throws DAOException
     {
-        
+    	auditManager = new AuditManager();
     }
     
     public void closeSession()
     {
-        
+    	auditManager = null;
     }
     
     public void commit() throws DAOException
     {
         try
         {
+        	auditManager.insert(this);
+        	
         	if (connection != null)
         		connection.commit();
         }
@@ -285,9 +289,19 @@ public class JDBCDAO extends AbstractDAO
     /* (non-Javadoc)
      * @see edu.wustl.catissuecore.dao.AbstractDAO#insert(java.lang.Object)
      */
-    public void insert(Object obj) throws DAOException
+    public void insert(Object obj,boolean isAuditable) throws DAOException
     {
         // TODO Auto-generated method stub
+    	try
+        {
+    		if(isAuditable)
+        		auditManager.compare((AbstractDomainObject)obj,null,"INSERT");
+        }
+        catch(AuditException hibExp)
+        {
+        	//throw handleError(hibExp);
+        }
+    	
     }
     
     /* (non-Javadoc)
@@ -307,5 +321,17 @@ public class JDBCDAO extends AbstractDAO
         //return false;
     }
     
+    public Object retrieve (String sourceObjectName, Long systemIdentifier) throws DAOException
+	{
+		try
+		{
+			return null;
+		}
+	    catch (Exception hibExp)
+	    {
+	        Logger.out.error(hibExp.getMessage(),hibExp);
+	        throw new DAOException("Error in retrieve " + hibExp.getMessage(),hibExp);
+	    }
+	}
 //    private 
 }

@@ -16,7 +16,12 @@ import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.Transaction;
-import edu.wustl.catissuecore.domain.Department;
+import edu.wustl.catissuecore.audit.AuditManager;
+import edu.wustl.catissuecore.domain.AbstractDomainObject;
+import edu.wustl.catissuecore.domain.Biohazard;
+import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.domain.TissueSpecimen;
+import edu.wustl.catissuecore.exception.AuditException;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.util.dbManager.DAOException;
@@ -31,6 +36,7 @@ public class HibernateDAO extends AbstractDAO
 {
     protected Session session = null;
     protected Transaction transaction = null;
+    protected AuditManager auditManager;
     
     public void openSession() throws DAOException
     {
@@ -38,6 +44,8 @@ public class HibernateDAO extends AbstractDAO
         {
             session = DBUtil.currentSession();
             transaction = session.beginTransaction();
+            
+            auditManager = new AuditManager();
         }
         catch (HibernateException dbex)
         {
@@ -59,12 +67,15 @@ public class HibernateDAO extends AbstractDAO
 		}
         session = null;
         transaction = null;
+        auditManager = null;
     }
     
     public void commit() throws DAOException
     {
         try
         {
+        	auditManager.insert(this);
+        	
         	if (transaction != null)
         		transaction.commit();
         }
@@ -96,41 +107,56 @@ public class HibernateDAO extends AbstractDAO
      * @throws HibernateException Exception thrown during hibernate operations.
      * @throws DAOException
      */
-    public void insert(Object obj) throws DAOException
+    public void insert(Object obj,boolean isAuditable) throws DAOException
     {
         try
         {
-            session.save(obj);
+        	session.save(obj);
+        	
+        	if(isAuditable)
+        		auditManager.compare((AbstractDomainObject)obj,null,"INSERT");
         }
         catch(HibernateException hibExp)
         {
         	throw handleError(hibExp);
         }
+        catch(AuditException hibExp)
+        {
+        	throw handleError(hibExp);
+        }
     }
     
-    private DAOException handleError(HibernateException hibExp)
+    private DAOException handleError(Exception hibExp)
     {
         Logger.out.error(hibExp.getMessage(),hibExp);
         String msg = generateErrorMessage(hibExp);
         return new DAOException(msg , hibExp);
     }
     
-    private String generateErrorMessage(HibernateException ex)
+    private String generateErrorMessage(Exception ex)
     {
-	  	StringBuffer message = new StringBuffer();
-	  	String str[] = ex.getMessages();
-	  	if(message!=null)
-	  	{
-	    	for (int i = 0; i < str.length; i++)
-			{
-	    		message.append(str[i]+" ");
+    	if(ex instanceof HibernateException)
+    	{
+    		HibernateException hibernateException = (HibernateException)ex;
+		  	StringBuffer message = new StringBuffer();
+		  	String str[] = hibernateException.getMessages();
+		  	if(message!=null)
+		  	{
+		    	for (int i = 0; i < str.length; i++)
+				{
+		    		message.append(str[i]+" ");
+				}
 			}
-		}
-		else
-		{
-			return "Unknown Error";
+			else
+			{
+				return "Unknown Error";
+		  	}
+		  	return message.toString();
+    	}
+	  	else
+	  	{
+	  		return ex.getMessage();
 	  	}
-	  	return message.toString();
     }
 
 
@@ -146,6 +172,9 @@ public class HibernateDAO extends AbstractDAO
         try
         {
             session.update(obj);
+            
+//            if(isAuditable)
+//        		auditManager.compare((AbstractDomainObject)obj,null,"INSERT");
         }
         catch (HibernateException hibExp)
         {
@@ -163,6 +192,9 @@ public class HibernateDAO extends AbstractDAO
         try
         {
             session.delete(obj);
+            
+//            if(isAuditable)
+//        		auditManager.compare((AbstractDomainObject)obj,null,"INSERT");
         }
         catch (HibernateException hibExp)
         {
@@ -316,40 +348,25 @@ public class HibernateDAO extends AbstractDAO
         }
     }
     
-//    private void generateExceptionMessage(HibernateException dbex,Object obj)
-//    {
-//    	Throwable t = dbex.getCause();
-//    	System.out.println("Cause "+t.getMessage());
-//    	String msg[] = dbex.getMessages();
-//    	for (int i = 0; i < msg.length; i++)
-//		{
-//    		System.out.println(i+" : "+msg[i]);
-//    		
-//		}
-//    }
-
-//    /**
-//     * Handles Hibernate exceptions.
-//     * @param dbex The exception that has occured.
-//     * @param message The message which is to be printed.
-//     * @param tx The transaction in which the exception has occured.	 
-//     */
-//    private DAOException handleException(Exception dbex, String message,
-//            Transaction tx)
-//    {
-//        try
-//        {
-//            if (tx != null)
-//                tx.rollback();
-//            return new DAOException(message, dbex);
-//        }
-//        catch (HibernateException hbe)
-//        {
-//            return new DAOException("Hibernate Error", hbe);
-//        }
-//    }
-
-  public static void main(String[] args) throws Exception
+	public Object retrieve (String sourceObjectName, Long systemIdentifier) throws DAOException
+	{
+		try
+		{
+			return session.load(Class.forName(sourceObjectName), systemIdentifier);
+		}
+		catch (ClassNotFoundException cnFoundExp)
+	    {
+	        Logger.out.error(cnFoundExp.getMessage(),cnFoundExp);
+	        throw new DAOException("Error in retrieve " + cnFoundExp.getMessage(),cnFoundExp);
+	    }
+	    catch (HibernateException hibExp)
+	    {
+	        Logger.out.error(hibExp.getMessage(),hibExp);
+	        throw new DAOException("Error in retrieve " + hibExp.getMessage(),hibExp);
+	    }
+	}
+	
+	public static void main(String[] args) throws Exception
 	{
 		Variables.catissueHome = System.getProperty("user.dir");
 		Logger.configure("Application.properties");
@@ -359,9 +376,15 @@ public class HibernateDAO extends AbstractDAO
     	try
 		{
     		dao.openSession();
-	    	Department dept = new Department();
-	    	dept.setName("A2");
-	    	dao.insert(dept);
+    		
+    		Specimen specimen = new TissueSpecimen();
+    		Biohazard biohazard1 = (Biohazard)dao.retrieve(Biohazard.class.getName(),new Long(1));
+    		Biohazard biohazard2 = (Biohazard)dao.retrieve(Biohazard.class.getName(),new Long(2));
+    		
+    		specimen.getBiohazardCollection().add(biohazard1);
+    		specimen.getBiohazardCollection().add(biohazard2);
+    		
+	    	dao.insert(specimen,false);
 	    	dao.commit();
 		}
     	catch(DAOException ex)
