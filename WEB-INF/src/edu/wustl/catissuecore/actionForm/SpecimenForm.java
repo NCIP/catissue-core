@@ -332,7 +332,7 @@ public class SpecimenForm extends AbstractActionForm
         this.className = type;
     }
     
-    public void reset()
+    protected void reset()
     {
         this.className = null;
         this.type = null;
