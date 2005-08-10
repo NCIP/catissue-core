@@ -1389,6 +1389,45 @@ PUBLIC
 		</action>    
 		<!-- ProcedureEventParameters Actions Ends -->
 		
+		<!--Distribution Actions Begins -->
+        <action path="/Distribution"
+			type="edu.wustl.catissuecore.action.DistributionAction"
+			scope="request">
+			<forward name="success" path=".catissuecore.distributionDef" />
+			<forward name="failure" path=".catissuecore.distributionDef" />
+		</action>
+		
+		<action path="/DistributionAdd"
+			type="edu.wustl.catissuecore.action.CommonAddEditAction"
+			name="distributionForm"
+			validate="true"
+			input="/Distribution.do?operation=add"
+			scope="request">
+			<forward name="success" path=".catissuecore.distributionAddSuccessDef" />
+			<forward name="failure" path="/error.jsp" />
+		</action>
+		
+		<action path="/DistributionEdit"
+			type="edu.wustl.catissuecore.action.CommonAddEditAction"
+			name="distributionForm"
+			validate="true"
+			input="/Distribution.do?operation=edit"
+			scope="request">
+			<forward name="success" path=".catissuecore.distributionEditSuccessDef" />
+			<forward name="failure" path="/error.jsp" />
+		</action>
+		
+		<action path="/DistributionSearch"
+		    type="edu.wustl.catissuecore.action.CommonSearchAction"
+			name="distributionForm"
+			validate="true"
+			input="/Distribution.do?operation=edit"
+			scope="request">
+			<forward name="success" path="/Distribution.do?operation=edit"/>
+			<forward name="failure" path="/Distribution.do?operation=edit"/>
+		</action>    
+		<!-- Distribution Actions Ends -->
+		
 		<!--Query Result View Actions Begin-->
 		<action path="/ShowFramedPage"
 			type="edu.wustl.catissuecore.action.ShowFramedPageAction">
