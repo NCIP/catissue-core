@@ -12,7 +12,6 @@ package edu.wustl.catissuecore.action;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.ListIterator;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -35,45 +34,44 @@ import edu.wustl.catissuecore.util.global.Constants;
 
 public class CollectionProtocolRegistrationAction extends Action
 {
-    /**
-     * Overrides the execute method of Action class.
-     * Sets the various fields in Participant Registration Add/Edit webpage.
-     * */
-    public ActionForward execute(ActionMapping mapping, ActionForm form,
-            HttpServletRequest request, HttpServletResponse response)
-            throws IOException, ServletException
-    {
-        //Gets the value of the operation parameter.
-        String operation = request.getParameter(Constants.OPERATION);
-        
-        //Sets the operation attribute to be used in the Add/Edit User Page. 
-        request.setAttribute(Constants.OPERATION,operation);
-		        
+
+	/**
+	 * Overrides the execute method of Action class.
+	 * Sets the various fields in Participant Registration Add/Edit webpage.
+	 * */
+	public ActionForward execute(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response) throws IOException,
+			ServletException
+	{
+		//Gets the value of the operation parameter.
+		String operation = request.getParameter(Constants.OPERATION);
+
+		//Sets the operation attribute to be used in the Add/Edit User Page. 
+		request.setAttribute(Constants.OPERATION, operation);
+
 		try
 		{
-			// 
-			AbstractBizLogic bizLogic = BizLogicFactory.getBizLogic(Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
-			ListIterator iterator = null;
+			AbstractBizLogic bizLogic = BizLogicFactory
+					.getBizLogic(Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
 
 			//get list of Protocol title.
 			String sourceObjectName = CollectionProtocol.class.getName();
-			String [] displayNameFields = {"title"};
+			String[] displayNameFields = {"title"};
 			String valueField = "systemIdentifier";
-			List list = bizLogic.getList(sourceObjectName,displayNameFields,valueField);
+			List list = bizLogic.getList(sourceObjectName, displayNameFields, valueField);
 			request.setAttribute(Constants.PROTOCOL_LIST, list);
 
-			
 			//get list of Participant's names
 			sourceObjectName = CollectionProtocol.class.getName();
 			String[] participantsFields = {"title"};
-			list = bizLogic.getList(sourceObjectName,participantsFields,valueField);
+			list = bizLogic.getList(sourceObjectName, participantsFields, valueField);
 			request.setAttribute(Constants.PARTICIPANT_LIST, list);
-		} 
+		}
 		catch (Exception exc)
 		{
 			exc.printStackTrace();
 		}
-        
-        return mapping.findForward(Constants.SUCCESS);
-    }
+
+		return mapping.findForward(Constants.SUCCESS);
+	}
 }

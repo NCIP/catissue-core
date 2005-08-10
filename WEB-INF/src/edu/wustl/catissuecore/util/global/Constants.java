@@ -74,9 +74,7 @@ public class Constants
 	public static final String PARTICIPANT_MEDICAL_RECORD_SOURCE_LIST = "participantMedicalRecordSourceList";
 	public static final String RACELIST = "raceList";
 	public static final String PARTICIPANT_LIST = "participantList";
-	public static final String PARTICIPANT_ID_LIST = "participantIdList";
 	public static final String PROTOCOL_LIST = "protocolList";
-	public static final String PROTOCOL_ID_LIST = "protocolIdList";
 	public static final String TIMEHOURLIST = "timeHourList";
 	public static final String TIMEMINUTESLIST = "timeMinutesList";
 	public static final String TIMEAMPMLIST = "timeAMPMList";

@@ -116,7 +116,6 @@
 					   </td>
 					   <td class="formField">
 							<html:select property="collectionProtocolID" styleClass="formFieldSized" styleId="collectionProtocolID" size="1">
-								<%-- <html:options name='<%= Constants.PROTOCOL_ID_LIST%>' labelName="protocolList" /> --%>
  							    <html:options collection="<%=Constants.PROTOCOL_LIST%>" labelProperty="name" property="value"/>															
 						    </html:select>
 						    
@@ -138,7 +137,6 @@
 						</td>
 						<td class="formField">
 							<html:select property="participantID" styleClass="formFieldSized" styleId="participantID" size="1" disabled="true">
-							<%--	<html:options name='<%= Constants.PARTICIPANT_ID_LIST%>' labelName="participantList" /> --%>
  							    <html:options collection="<%=Constants.PARTICIPANT_LIST%>" labelProperty="name" property="value"/>							
 							</html:select>
 							<html:link page="Participant.do?operation=add" styleId="newParticipant" >
