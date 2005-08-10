@@ -265,6 +265,21 @@
 	<!-- NEW SPECIMEN -->
 	
 	
+	<!-- CREATE SPECIMEN -->
+	<definition name=".catissuecore.createSpecimenDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/CreateSpecimen.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.createSpecimenAddSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/common/success.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.createSpecimenEditSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/common/success.jsp" />
+	</definition>
+	<!-- CREATE SPECIMEN -->
+	
+	
 	<!-- SpecimenCollectionGroup Parameters -->
 	<definition name=".catissuecore.specimenCollectionGroupDef" extends=".catissuecore.manageBioSpecimenHomeDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/SpecimenCollectionGroup.jsp" />

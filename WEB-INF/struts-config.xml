@@ -13,6 +13,7 @@ PUBLIC
 		<form-bean name="departmentForm" type="edu.wustl.catissuecore.actionForm.DepartmentForm"/>
 		<form-bean name="loginForm" type="edu.wustl.catissuecore.actionForm.LoginForm"/>
 		<form-bean name="newSpecimenForm" type="edu.wustl.catissuecore.actionForm.NewSpecimenForm"/>
+		<form-bean name="createSpecimenForm" type="edu.wustl.catissuecore.actionForm.CreateSpecimenForm"/>
 		<form-bean name="participantForm" type="edu.wustl.catissuecore.actionForm.ParticipantForm"/>
 		<form-bean name="collectionProtocolRegistrationForm" type="edu.wustl.catissuecore.actionForm.CollectionProtocolRegistrationForm"/>
 		<form-bean name="specimenCollectionGroupForm" type="edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm"/>
@@ -650,7 +651,49 @@ PUBLIC
 			<forward name="success" path="/NewSpecimen.do?operation=edit&amp;pageOf="/>
 			<forward name="failure" path="/NewSpecimen.do?operation=edit&amp;pageOf="/>
 		</action>
-		<!--New Specimen Actions Begin-->
+		<!--New Specimen Actions Ends-->
+		
+		<!--Create Specimen Actions Begin-->
+		<action path="/CreateSpecimen"
+			type="edu.wustl.catissuecore.action.CreateSpecimenAction"
+			name="createSpecimenForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path=".catissuecore.createSpecimenDef" />
+			<forward name="failure" path=".catissuecore.createSpecimenDef" />
+		</action>
+		
+		<action path="/CreateSpecimenAdd"
+			type="edu.wustl.catissuecore.action.CommonAddEditAction"
+			name="createSpecimenForm"
+			validate="true"
+			input="/CreateSpecimen.do?operation=add&amp;pageOf="
+			scope="request">
+			<forward name="success" path=".catissuecore.createSpecimenAddSuccessDef" />
+			<forward name="failure" path="/error.jsp" />
+		</action>
+		
+		<action path="/CreateSpecimenEdit"
+			type="edu.wustl.catissuecore.action.CommonAddEditAction"
+			name="createSpecimenForm"
+			validate="true"
+			input="/CreateSpecimen.do?operation=edit&amp;pageOf="
+			scope="request">
+			<forward name="success" path=".catissuecore.createSpecimenEditSuccessDef" />
+			<forward name="failure" path="/error.jsp" />
+		</action>
+		
+		<action path="/CreateSpecimenSearch"
+		    type="edu.wustl.catissuecore.action.CommonSearchAction"
+			name="createSpecimenForm"
+			validate="true"
+			input="/CreateSpecimen.do?operation=edit"
+			scope="request">
+			<forward name="success" path="/CreateSpecimen.do?operation=edit&amp;pageOf="/>
+			<forward name="failure" path="/CreateSpecimen.do?operation=edit&amp;pageOf="/>
+		</action>
+		<!--Create Specimen Actions Ends-->
+		
 		
 		<!-- StorageType Actions Begins -->
         <action path="/StorageType"
