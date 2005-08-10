@@ -1,11 +1,11 @@
 /**
- * <p>Title: StorageContainerHDAO Class>
- * <p>Description:	StorageContainerHDAO is used to add Storage Container information into the database using Hibernate.</p>
+ * <p>Title: DistributionProtocolBizLogic Class>
+ * <p>Description:	DistributionProtocolBizLogic is used to add DistributionProtocol information into the database using Hibernate.</p>
  * Copyright:    Copyright (c) year
  * Company: Washington University, School of Medicine, St. Louis.
- * @author Aniruddha Phadnis
+ * @author Mandar Deshmukh
  * @version 1.00
- * Created on Jul 23, 2005
+ * Created on August 9 2005
  */
 
 package edu.wustl.catissuecore.bizlogic;
@@ -22,15 +22,15 @@ import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
 /**
- * StorageContainerHDAO is used to add Storage Container information into the database using Hibernate.
- * @author aniruddha_phadnis
+ * DistributionProtocolBizLogic is used to add DistributionProtocol information into the database using Hibernate.
+ * @author Mandar Deshmukh
  */
 public class DistributionProtocolBizLogic extends DefaultBizLogic
 {
 	/**
-     * Saves the storageContainer object in the database.
+     * Saves the DistributionProtocol object in the database.
      * @param session The session in which the object is saved.
-     * @param obj The storageType object to be saved.
+     * @param obj The DistributionProtocol object to be saved.
      * @throws HibernateException Exception thrown during hibernate operations.
      * @throws DAOException 
      */
@@ -46,7 +46,7 @@ public class DistributionProtocolBizLogic extends DefaultBizLogic
 		}
 		
 		Logger.out.debug("SIZE "+distributionProtocol.getSpecimenRequirementCollection().size());
-		dao.insert(distributionProtocol,true);
+		dao.insert(distributionProtocol);
 		Logger.out.debug("SIZE "+distributionProtocol.getSpecimenRequirementCollection().size());
 		Iterator it = distributionProtocol.getSpecimenRequirementCollection().iterator();
 		while(it.hasNext())
@@ -54,7 +54,7 @@ public class DistributionProtocolBizLogic extends DefaultBizLogic
 			SpecimenRequirement specimenRequirement = (SpecimenRequirement)it.next();
 			Logger.out.debug("specimenRequirement "+specimenRequirement);
 			specimenRequirement.getDistributionProtocolCollection().add(distributionProtocol);
-			dao.insert(specimenRequirement,true);
+			dao.insert(specimenRequirement);
 		}
 	}
 	

@@ -2,6 +2,8 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
+<%@ page import="edu.wustl.catissuecore.actionForm.CollectionProtocolForm"%>
+<%@ page import="java.util.*"%>
 
 <head>
 <%
@@ -44,25 +46,11 @@
 		var i = document.getElementById(listname).selectedIndex;
 		document.getElementById(unitspan).innerHTML = ugul[i];
 	}
-
-		var win = null;
-		function NewWindow(mypage,myname,w,h,scroll)
-		{
-			LeftPosition = (screen.width) ? (screen.width-w)/2 : 0;
-			TopPosition = (screen.height) ? (screen.height-h)/2 : 0;
-
-			settings =
-				'height='+h+',width='+w+',top='+TopPosition+',left='+LeftPosition+',scrollbars='+scroll+',resizable'
-			win = open(mypage,myname,settings)
-			if (win.opener == null)
-				win.opener = self;
-		}
 //code for units end
 </SCRIPT>
 
 <SCRIPT LANGUAGE="JavaScript">
 	var search1='`';
-	var insno=0;
 </script>
 
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
@@ -77,10 +65,14 @@ var subDivRowCount = new Array(10);		// array to hold the row count of the inner
 subDivRowCount[0] = 1;
 
 // variable to count the oter blocks
-var insno=0;
+var insno=1;
 
 function addBlock(div,d0)
 {
+var val = parseInt(document.forms[0].outerCounter.value);
+		val = val + 1;
+		document.forms[0].outerCounter.value = val;
+		
 	var y = div.innerHTML;
 	var z = d0.innerHTML;
 
@@ -98,13 +90,20 @@ function addBlock(div,d0)
 
 function addDiv(div,adstr)
 {
+	
+		
 	var x = div.innerHTML;
 	div.innerHTML = div.innerHTML +adstr;
 }
 
 //  function to insert a row in the inner block
-function insRow(subdivtag)
+function insRow(subdivtag,iCounter)
 {
+		var cnt = document.getElementById(iCounter);
+		var val = parseInt(cnt.value);
+		val = val + 1;
+		cnt.value = val;
+alert(cnt.value);
 	var sname = "";
 	
 	var r = new Array(); 
@@ -485,6 +484,7 @@ function getSubDivCount(subdivtag)
 	</td>
 	<td align="right" class="formTitle">		
 			<html:button property="addCollectionProtocolEvents" styleClass="actionButton" onclick="addBlock(outerdiv,d1)">Add More</html:button>
+			<html:hidden property="outerCounter"/>	
 	</td>
 	</tr>
 </table>
@@ -494,7 +494,237 @@ function getSubDivCount(subdivtag)
 
 <!--  outermostdiv start --><!-- outer div tag  for entire block -->
 <div id="outerdiv"> 
+<%
+		int maxCount=1;
+		int maxIntCount=1;
+				
+		CollectionProtocolForm collectionProtocolForm = null;
+		
+		Object obj = request.getAttribute("collectionProtocolForm");
+		
+		if(obj != null && obj instanceof CollectionProtocolForm)
+		{
+			collectionProtocolForm = (CollectionProtocolForm)obj;
+			maxCount = collectionProtocolForm.getOuterCounter();
+		}
+	
+		for(int counter=1;counter<=maxCount;counter++)
+		{
+			String commonLabel = "value(CollectionProtocolEvent:" + counter;
+			
+			String cid = "ivl(" + counter + ")";
+			String functionName = "insRow('" + commonLabel + "','" + cid +"')";
+		
+			System.out.println("\n\n\n************\n\n CID : "+ cid +"\n\n\n\n*****************");
+			System.out.println("\n\n\n************\n\n FunctionName : "+ functionName +"\n\n\n\n*****************");
+			if(collectionProtocolForm!=null)
+			{
+				Object o = collectionProtocolForm.getIvl(""+counter);
+				if(o!=null)
+					maxIntCount = Integer.parseInt(o.toString());
+			}
+			System.out.println("\n\n\n************\n\n maxIntCount : "+ maxIntCount +"\n\n\n\n*****************");
+						
+%>
+<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="100%">
+<tr><td>
+<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
+	<tr>
+		<td rowspan=2 class="tabrightmostcell"><%=counter%></td>
+		<td class="formField">
+			<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
+				<tr>
+					<td class="formRequiredNotice" width="5">*</td>
+					<td class="formRequiredLabel" width="32%">
+					<%
+						String fldName = commonLabel + "_clinicalStatus)";
+					%>
+						<label for="<%=fldName%>">
+							<bean:message key="collectionprotocol.clinicalstatus" />
+						</label>
+					</td>
+					
+					<td class="formField" colspan=2>
+						<html:select property="<%=fldName%>" 
+										styleClass="formField" styleId="<%=fldName%>" size="1">
+							<html:options name="<%=Constants.CLINICAL_STATUS_LIST%>" labelName="<%=Constants.CLINICAL_STATUS_LIST%>" />
+						</html:select>
+					</td>
+				</tr>
+				
+			    <tr>
+					<td class="formRequiredNotice" width="5">&nbsp;</td>
+					<%
+						fldName="";
+						fldName = commonLabel + "_studyCalendarEventPoint)";
+					%>
 
+			        <td colspan="1" class="formLabel">
+			        	<label for="<%=fldName%>">
+							<bean:message key="collectionprotocol.studycalendartitle" />
+						</label>
+			        </td>
+			        
+			        <td colspan="2" class="formField">
+			        	<html:text styleClass="formFieldSized5" size="30" 
+			        			styleId="<%=fldName%>" 
+			        			property="<%=fldName%>" 
+			        			readonly="<%=readOnlyValue%>" /> 
+			        	<bean:message key="collectionprotocol.studycalendarcomment"/>
+					</td>
+			    </tr>
+			</TABLE>
+		</td>
+	</tr>
+
+	<!-- 2nd row -->
+	<tr>
+		<td class="formField">
+			<table summary="" cellpadding="3" cellspacing="0" border="0" width=100%>
+			    <tr>
+			        <td colspan="5" class="formTitle">
+			        	<b>SPECIMEN REQUIREMENTS</b>
+			        </td>
+			        <td class="formTitle">	
+			     		<html:button property="addSpecimenReq" styleClass="actionButton" value="Add More" onclick="<%=functionName%>"/>
+			     		
+			     		<html:hidden styleId="<%=cid%>" property="<%=cid%>" value="<%=""+maxIntCount%>"/>
+			        </td>
+			    </tr>
+			    
+			    <TBODY id="<%=commonLabel%>">
+			    <TR> <!-- SUB TITLES -->
+			        <td class="formLeftSubTableTitle">
+		        		<bean:message key="collectionprotocol.specimennumber" />
+			        </td>
+			        <td class="formLeftSubTableTitle">
+			        	<bean:message key="collectionprotocol.specimenclass" />
+			        </td>
+			        <td class="formLeftSubTableTitle">
+			        	<bean:message key="collectionprotocol.specimetype" />
+			        </td>
+			        
+			        <td class="formLeftSubTableTitle">
+			        	<bean:message key="collectionprotocol.specimensite" />
+				    </td>
+			        <td  class=formLeftSubTableTitle>
+			    		<bean:message key="collectionprotocol.specimenstatus" />
+				    </td>
+			        <td class=formLeftSubTableTitle>
+			        	<bean:message key="collectionprotocol.quantity" />
+			        </td>
+			    </TR><!-- SUB TITLES END -->
+				
+				<%
+				
+	/*				Object obj1 = request.getAttribute("collectionProtocolForm");
+					int maxIntCount=1;
+					
+					if(obj1 != null && obj1 instanceof CollectionProtocolForm)
+					{
+						collectionProtocolForm = (CollectionProtocolForm)obj1;
+				
+						Map imap = collectionProtocolForm.getInnerLoopValues();
+						Object o = collectionProtocolForm.getIvl(cid);
+						
+						maxIntCount = Integer.parseInt(o.toString());
+					} // collectionProtocolForm exist
+					int maxIntCount=1;
+		*/			
+					for(int innerCounter=1;innerCounter<=maxIntCount;innerCounter++)
+					{
+				%>
+				
+				
+				<TR>	<!-- SPECIMEN REQ DATA -->
+			        <td class="tabrightmostcell"><%=innerCounter%>.</td>
+			        <%
+						String cName="";
+						int iCnt = innerCounter;
+						cName = commonLabel + "_SpecimenRequirement:" + iCnt ;
+						String fName = cName + "_specimenClass)";
+						String sName = cName + "_unitspan)";
+					%>
+			        
+			        <td class="formField">		
+			        	<html:select property="<%=fName%>" 
+										styleClass="formFieldSized10" 
+										styleId="<%=fName%>" size="1"
+										onchange="changeUnit('<%=fName%>','<%=sName%>')">
+							<html:options name="<%=Constants.SPECIMEN_CLASS_ID_LIST%>" labelName="<%=Constants.SPECIMEN_CLASS_LIST%>"/>
+						</html:select>
+			        </td>
+			        
+			        <td class="formField">
+						<%
+								fName="";
+								 fName = cName + "_specimenType)";
+						%>
+			        	<html:select property="<%=fName%>" 
+										styleClass="formFieldSized10" 
+										styleId="<%=fName%>" size="1">
+							<html:options name="<%=Constants.SPECIMEN_TYPE_LIST%>" labelName="<%=Constants.SPECIMEN_TYPE_LIST%>"/>
+						</html:select>
+			        </td>
+			        
+			        <td class="formField">
+						<%
+								fName="";
+								 fName = cName + "_tissueSite)";
+						%>
+
+			        	<html:select property="<%=fName%>" 
+										styleClass="formFieldSized10" 
+										styleId="<%=fName%>" size="1">
+							<html:options name="<%=Constants.TISSUE_SITE_LIST%>" labelName="<%=Constants.TISSUE_SITE_LIST%>"/>
+						</html:select>
+			        
+				        <a href="#">
+							<img src="images\Tree.gif" border="0" width="26" height="22"></a>
+					</td>
+					
+			        <td class="formField">
+						<%
+								fName="";
+								 fName = cName + "_pathologyStatus)";
+						%>
+
+			        	<html:select property="<%=fName%>" 
+										styleClass="formFieldSized10" 
+										styleId="<%=fName%>" size="1">
+							<html:options name="<%=Constants.PATHOLOGICAL_STATUS_LIST%>" labelName="<%=Constants.PATHOLOGICAL_STATUS_LIST%>"/>
+						</html:select>
+			        </td>
+			        
+			        <td class="formField">
+						<%
+								fName="";
+								 fName = cName + "_quantityIn)";
+						%>
+
+			        	<html:text styleClass="formFieldSized5" size="30" 
+			        			styleId="<%=fName%>" 
+			        			property="<%=fName%>" 
+			        			readonly="<%=readOnlyValue%>" />
+			        	<span id="<%=sName%>">
+			        		&nbsp;
+						</span>
+					</td>
+				</TR>	<!-- SPECIMEN REQ DATA END -->
+				<%
+					} // inner for block
+				%>
+				</TBODY>
+			</TABLE>
+		</td>
+	</tr>
+</table> <!-- outer table for CPE ends -->
+</td></tr>
+</table>
+
+<%
+} // outer for
+%>
 </div>	<!-- outermostdiv  -->
 
 <table width="100%">		
@@ -528,7 +758,7 @@ function getSubDivCount(subdivtag)
 <hr>
 
 
-<html:form action="ApproveUser.do">
+<html:form action="CollectionProtocol.do">
 <div id="d1">
 <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="100%">
 <tr><td>
@@ -582,7 +812,12 @@ function getSubDivCount(subdivtag)
 			        	<b>SPECIMEN REQUIREMENTS</b>
 			        </td>
 			        <td class="formTitle">	
-			     		<html:button property="addSpecimenReq" styleClass="actionButton" value="Add More" onclick="insRow('CollectionProtocolEvent:`')"/>
+			        <%
+				        String hiddenCounter = "ivl(`)";
+			        %>
+			     		<html:button property="addSpecimenReq" styleClass="actionButton" value="Add More" onclick="insRow('CollectionProtocolEvent:`','ivl(`)')"/>
+			     		
+			     		<html:hidden styleId="<%=hiddenCounter%>" property="<%=hiddenCounter%>" value="1"/>
 			        </td>
 			    </tr>
 			    
@@ -636,7 +871,7 @@ function getSubDivCount(subdivtag)
 							<html:options name="<%=Constants.TISSUE_SITE_LIST%>" labelName="<%=Constants.TISSUE_SITE_LIST%>"/>
 						</html:select>
 			        
-				        <a href="#" onclick="javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfTissueSite','name','290','330','no');return false">
+				        <a href="#">
 							<img src="images\Tree.gif" border="0" width="26" height="22"></a>
 					</td>
 					
@@ -668,8 +903,5 @@ function getSubDivCount(subdivtag)
 </div>
 </html:form>
 
-<SCRIPT LANGUAGE="JavaScript">
-	addBlock(outerdiv,d1);
-</Script>
 
 </body>

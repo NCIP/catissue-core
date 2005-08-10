@@ -1,11 +1,11 @@
 /**
- * <p>Title: StorageContainerHDAO Class>
- * <p>Description:	StorageContainerHDAO is used to add Storage Container information into the database using Hibernate.</p>
+ * <p>Title: CollectionProtocolBizLogic Class>
+ * <p>Description:	CollectionProtocolBizLogic is used to add CollectionProtocol information into the database using Hibernate.</p>
  * Copyright:    Copyright (c) year
  * Company: Washington University, School of Medicine, St. Louis.
- * @author Aniruddha Phadnis
+ * @author Mandar Deshmukh
  * @version 1.00
- * Created on Jul 23, 2005
+ * Created on Aug 09, 2005
  */
 
 package edu.wustl.catissuecore.bizlogic;
@@ -24,15 +24,15 @@ import edu.wustl.catissuecore.domain.User;
 import edu.wustl.common.util.dbManager.DAOException;
 
 /**
- * StorageContainerHDAO is used to add Storage Container information into the database using Hibernate.
- * @author aniruddha_phadnis
+ * CollectionProtocolBizLogic is used to add CollectionProtocol information into the database using Hibernate.
+ * @author Mandar Deshmukh
  */
 public class CollectionProtocolBizLogic extends DefaultBizLogic
 {
 	/**
-     * Saves the storageContainer object in the database.
+     * Saves the CollectionProtocol object in the database.
      * @param session The session in which the object is saved.
-     * @param obj The storageType object to be saved.
+     * @param obj The CollectionProtocol object to be saved.
      * @throws HibernateException Exception thrown during hibernate operations.
      * @throws DAOException 
      */
@@ -56,7 +56,6 @@ public class CollectionProtocolBizLogic extends DefaultBizLogic
 			if (list.size() != 0)
 			{
 				User coordinator = (User) list.get(0);
-				System.out.println("coordinator "+coordinator.getSystemIdentifier());
 				coordinatorColl.add(coordinator);
 				coordinator.getCollectionProtocolCollection().add(collectionProtocol);
 				dao.update(coordinator);
@@ -64,20 +63,20 @@ public class CollectionProtocolBizLogic extends DefaultBizLogic
 		}
 		collectionProtocol.setUserCollection(coordinatorColl);
 		
-		dao.insert(collectionProtocol,true);
+		dao.insert(collectionProtocol);
 		it = collectionProtocol.getCollectionProtocolEventCollection().iterator();
 		while(it.hasNext())
 		{
 			CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent)it.next();
 			collectionProtocolEvent.setCollectionProtocol(collectionProtocol);
-			dao.insert(collectionProtocolEvent,true);
+			dao.insert(collectionProtocolEvent);
 			
 			Iterator srIt = collectionProtocolEvent.getSpecimenRequirementCollection().iterator();
 			while(srIt.hasNext())
 			{
 				SpecimenRequirement specimenRequirement = (SpecimenRequirement)srIt.next();
 				specimenRequirement.getCollectionProtocolEventCollection().add(collectionProtocolEvent);
-				dao.insert(specimenRequirement,true);
+				dao.insert(specimenRequirement);
 			}
 		}
 	}

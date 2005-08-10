@@ -1,14 +1,9 @@
-/**
- * <p>Title: CollectionProtocolForm Class>
- * <p>Description:  CollectionProtocolForm Class is used to encapsulate all the request parameters passed 
- * from User Add/Edit webpage. </p>
- * Copyright:    Copyright (c) year
- * Company: Washington University, School of Medicine, St. Louis.
- * @author Gautam Shetty
- * @version 1.00
- * Created on Mar 3, 2005
+/*
+ * Created on Aug 9, 2005
+ *
+ * TODO To change the template for this generated file go to
+ * Window - Preferences - Java - Code Style - Code Templates
  */
-
 package edu.wustl.catissuecore.actionForm;
 
 import java.util.HashMap;
@@ -25,13 +20,14 @@ import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Validator;
 
+
 /**
- * CollectionProtocolForm Class is used to encapsulate all the request
- * parameters passed from User Add/Edit webpage.
- * 
- * @author gautam_shetty
+ * @author mandar_deshmukh
+ *
+ * TODO To change the template for this generated type comment go to
+ * Window - Preferences - Java - Code Style - Code Templates
  */
-public class CollectionProtocolForm extends SpecimenProtocolForm
+public class TmpForm extends SpecimenProtocolForm
 {
 	protected long protocolCoordinatorIds[];
 
@@ -88,6 +84,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 		return innerLoopValues.get(key);
 	}
 
+	
 	/**
 	 * @return Returns the outerCounter.
 	 */
@@ -105,11 +102,10 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	
 	
 	
-	
 	/**
-	 * No argument constructor for CollectionProtocolForm class.
+	 * No argument constructor for TmpForm class.
 	 */
-	public CollectionProtocolForm()
+	public TmpForm()
 	{
 		super();
 	}
@@ -212,36 +208,5 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	public int getFormId()
 	{
 		return Constants.COLLECTION_PROTOCOL_FORM_ID;
-	}
-	
-	public static void main(String[] args)
-	{
-		int maxCount=1;
-		int maxIntCount=1;
-		
-		CollectionProtocolForm collectionProtocolForm = null;
-		
-		Object obj = new Object();//request.getAttribute("collectionProtocolForm");
-		
-		if(obj != null && obj instanceof CollectionProtocolForm)
-		{
-			collectionProtocolForm = (CollectionProtocolForm)obj;
-			maxCount = collectionProtocolForm.getOuterCounter();
-		}
-	
-		for(int counter=1;counter<=maxCount;counter++)
-		{
-			String commonLabel = "value(CollectionProtocolEvent:" + counter;
-			
-			String cid = "ivl(" + counter + ")";
-			String functionName = "insRow('" + commonLabel + "','" + cid +"')";
-			
-			if(collectionProtocolForm!=null)
-			{
-				Object o = collectionProtocolForm.getIvl(cid);
-				maxIntCount = Integer.parseInt(o.toString());
-			}
-		}
-
 	}
 }
