@@ -8,46 +8,12 @@
  * Created on Apr 21, 2005
  * */
 
-package edu.wustl.catissuecore.dataModel;
+package edu.wustl.catissuecore.domain;
 
 import edu.wustl.catissuecore.actionForm.AbstractActionForm;
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.actionForm.ReportedProblemForm;
 import edu.wustl.catissuecore.actionForm.UserForm;
-import edu.wustl.catissuecore.domain.AbstractDomainObject;
-import edu.wustl.catissuecore.domain.Biohazard;
-import edu.wustl.catissuecore.domain.CancerResearchGroup;
-import edu.wustl.catissuecore.domain.CellSpecimen;
-import edu.wustl.catissuecore.domain.CellSpecimenReviewParameters;
-import edu.wustl.catissuecore.domain.CheckInCheckOutEventParameter;
-import edu.wustl.catissuecore.domain.CollectionEventParameters;
-import edu.wustl.catissuecore.domain.CollectionProtocol;
-import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
-import edu.wustl.catissuecore.domain.Department;
-import edu.wustl.catissuecore.domain.DisposalEventParameters;
-import edu.wustl.catissuecore.domain.DistributionProtocol;
-import edu.wustl.catissuecore.domain.EmbeddedEventParameters;
-import edu.wustl.catissuecore.domain.FixedEventParameters;
-import edu.wustl.catissuecore.domain.FluidSpecimen;
-import edu.wustl.catissuecore.domain.FluidSpecimenReviewEventParameters;
-import edu.wustl.catissuecore.domain.FrozenEventParameters;
-import edu.wustl.catissuecore.domain.Institution;
-import edu.wustl.catissuecore.domain.MolecularSpecimen;
-import edu.wustl.catissuecore.domain.MolecularSpecimenReviewParameters;
-import edu.wustl.catissuecore.domain.Participant;
-import edu.wustl.catissuecore.domain.ProcedureEventParameters;
-import edu.wustl.catissuecore.domain.ReceivedEventParameters;
-import edu.wustl.catissuecore.domain.ReportedProblem;
-import edu.wustl.catissuecore.domain.Site;
-import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
-import edu.wustl.catissuecore.domain.SpunEventParameters;
-import edu.wustl.catissuecore.domain.StorageContainer;
-import edu.wustl.catissuecore.domain.StorageType;
-import edu.wustl.catissuecore.domain.ThawEventParameters;
-import edu.wustl.catissuecore.domain.TissueSpecimen;
-import edu.wustl.catissuecore.domain.TissueSpecimenReviewEventParameters;
-import edu.wustl.catissuecore.domain.TransferEventParameters;
-import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 
 
