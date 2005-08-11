@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import edu.wustl.catissuecore.bizlogic.AbstractBizLogic;
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.util.Permissions;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.UserGroupRoleProtectionGroupBean;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.SMTransactionException;
@@ -35,6 +36,7 @@ import gov.nih.nci.security.authorization.domainobjects.ProtectionGroup;
 import gov.nih.nci.security.authorization.domainobjects.Role;
 import gov.nih.nci.security.authorization.domainobjects.User;
 import gov.nih.nci.security.dao.ApplicationSearchCriteria;
+import gov.nih.nci.security.dao.ProtectionGroupSearchCriteria;
 import gov.nih.nci.security.dao.RoleSearchCriteria;
 import gov.nih.nci.security.dao.SearchCriteria;
 import gov.nih.nci.security.dao.UserSearchCriteria;
@@ -322,9 +324,12 @@ public class SecurityManager implements Permissions
 	 */
 	public User getUserById(String userId) throws SMException
 	{
+	    Logger.out.debug("user Id: "+userId);
 	    try
 	    {
-	        return getUserProvisioningManager().getUserById(userId);
+	        User user =  getUserProvisioningManager().getUserById(userId);
+	        Logger.out.debug("User returned: "+user.getLoginName());
+	        return user;
 	    }
 	    catch (CSException e)
 	    {
@@ -420,41 +425,69 @@ public class SecurityManager implements Permissions
 	{
 	    Logger.out.debug("************** Inserting authorization Data ***************");
 	    Vector authorizationData = bizlogic.getAuthorizationData(obj);
-	    ProtectionElement protectionElement = new ProtectionElement();
+	    ProtectionElement protectionElement;
+        UserGroupRoleProtectionGroupBean userGroupRoleProtectionGroupBean;
+        Group group;
+        ProtectionGroup protectionGroup;
+        RoleSearchCriteria roleSearchCriteria;
+        Role role;
+        List roles;
+        String[] roleIds;
+        Set protectionElements = new HashSet();
+        Set protectionObjects;
+        AbstractDomainObject protectionObject;
+        String[] staticGroups;
+        Set protectionGroups = null;
+        UserProvisioningManager userProvisioningManager;
+        ProtectionGroupSearchCriteria protectionGroupSearchCriteria;
+        Set userGroup;
+        User user;
 	   
 	    try
         {
-	        Set protectionElements = new HashSet();
-            UserProvisioningManager userProvisioningManager = getUserProvisioningManager();
-            
-            Set protectionObjects;
-            AbstractDomainObject protectionObject;
-           
+	       
+	        userProvisioningManager = getUserProvisioningManager();
             protectionObjects = bizlogic.getProtectionObjects(obj);
             if(protectionObjects != null)
             {
                 for(Iterator it = protectionObjects.iterator(); it.hasNext(); )
                 {
+                    protectionElement = new ProtectionElement();
                     protectionObject = (AbstractDomainObject) it.next();
                     protectionElement.setApplication(getApplication(CATISSUE_CORE_CONTEXT_NAME));
                     protectionElement.setObjectId(protectionObject.getClass().getName()+"_"+protectionObject.getSystemIdentifier());
                     protectionElement.setProtectionElementDescription(protectionObject.getClass().getName()+" object");
                     protectionElement.setProtectionElementName(protectionObject.getClass().getName()+"_"+protectionObject.getSystemIdentifier());
+                    
+                    /**
+                     * Adding protection elements to static groups they shouldbe added to
+                     */
+                    staticGroups=(String[]) Constants.STATIC_PROTECTION_GROUPS_FOR_OBJECT_TYPES.get(protectionObject.getClass().getName());
+                    
+                    if(staticGroups != null)
+                    {
+                        protectionGroups = new HashSet();
+                        for(int i = 0; i<staticGroups.length; i++)
+                        {
+                            Logger.out.debug(" group name " +i+" "+staticGroups[i]);
+                            protectionGroup = new ProtectionGroup();
+                            protectionGroup.setProtectionGroupName(staticGroups[i]);
+                            protectionGroupSearchCriteria = new ProtectionGroupSearchCriteria(protectionGroup);
+                            protectionGroup = (ProtectionGroup) userProvisioningManager.getObjects(protectionGroupSearchCriteria).get(0);
+                            Logger.out.debug(" From Database: "+protectionGroup.toString());
+                            protectionGroups.add(protectionGroup);
+                        }
+                        protectionElement.setProtectionGroups(protectionGroups);
+                    }
+                    
                     userProvisioningManager.createProtectionElement(protectionElement);
                     Logger.out.debug("Protection element created: "+protectionElement.toString());
+                    Logger.out.debug("Protection element added to groups : "+protectionGroups);
                     protectionElements.add(protectionElement);
                 }
             }
            
-            
-            
-            UserGroupRoleProtectionGroupBean userGroupRoleProtectionGroupBean;
-            Group group;
-            ProtectionGroup protectionGroup;
-            RoleSearchCriteria roleSearchCriteria;
-            Role role;
-            List roles;
-            String[] roleIds;
+          
            
             for(int i=0;i<authorizationData.size();i++)
             {
@@ -467,6 +500,14 @@ public class SecurityManager implements Permissions
                 group.setUsers(userGroupRoleProtectionGroupBean.getGroup());
                 userProvisioningManager.createGroup(group);
                 Logger.out.debug("User group created: "+group.toString());
+                userGroup = userGroupRoleProtectionGroupBean.getGroup();
+                for(Iterator it = userGroup.iterator(); it.hasNext(); )
+                {
+                    user = (User) it.next();
+//                    userProvisioningManager.assignGroupsToUser(String.valueOf(user.getUserId()),new String[] {String.valueOf(group.getGroupId())});
+                    userProvisioningManager.assignUserToGroup(user.getLoginName(),group.getGroupName());
+                }
+                
                 
                 protectionGroup = new ProtectionGroup();
                 protectionGroup.setApplication(getApplication(CATISSUE_CORE_CONTEXT_NAME));

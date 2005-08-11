@@ -20,7 +20,7 @@ package edu.wustl.catissuecore.util;
 
 public interface ProtectionGroups
 {
-    public static final String ADMINISTRATIVE_DATA_GROUP = "ADMINISTRATIVE_DATA_GROUP";
+    public static final String ADMINISTRATORS_DATA_GROUP = "ADMINISTRATORS_DATA_GROUP";
     public static final String SUPERVISORS_DATA_GROUP = "SUPERVISORS_DATA_GROUP";
     public static final String TECHNICIANS_DATA_GROUP = "TECHNICIANS_DATA_GROUP";
     public static final String PUBLIC_DATA_GROUP = "PUBLIC_DATA_GROUP";

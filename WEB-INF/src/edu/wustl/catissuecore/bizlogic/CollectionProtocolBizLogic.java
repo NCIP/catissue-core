@@ -121,14 +121,19 @@ public class CollectionProtocolBizLogic extends DefaultBizLogic implements Roles
     {
         Logger.out.debug("--------------- In here ---------------");
         Vector authorizationData = new Vector();
-        HashSet group = new HashSet();
+        Set group = new HashSet();
        
         
         CollectionProtocol collectionProtocol = (CollectionProtocol)obj;
-        
+        String userId = new String();
         try
         {
-            group.add(SecurityManager.getInstance(this.getClass()).getUserById(String.valueOf(collectionProtocol.getPrincipalInvestigator().getSystemIdentifier())));
+            gov.nih.nci.security.authorization.domainobjects.User user = new gov.nih.nci.security.authorization.domainobjects.User();
+            userId = String.valueOf(collectionProtocol.getPrincipalInvestigator().getSystemIdentifier());
+            Logger.out.debug(" PI ID: "+userId);
+            user = SecurityManager.getInstance(this.getClass()).getUserById(userId);
+            Logger.out.debug(" PI: "+user.getLoginName());
+            group.add(user);
         }
         catch (SMException e)
         {
@@ -136,7 +141,7 @@ public class CollectionProtocolBizLogic extends DefaultBizLogic implements Roles
         }
         String protectionGroupName = new String("COLLECTION_PROTOCOL_"+collectionProtocol.getSystemIdentifier());
         UserGroupRoleProtectionGroupBean userGroupRoleProtectionGroupBean = new UserGroupRoleProtectionGroupBean();
-        userGroupRoleProtectionGroupBean.setUser(String.valueOf(collectionProtocol.getPrincipalInvestigator().getSystemIdentifier()));
+        userGroupRoleProtectionGroupBean.setUser(userId);
         userGroupRoleProtectionGroupBean.setRoleName(PI);
         userGroupRoleProtectionGroupBean.setGroupName("PI_"+collectionProtocol.getPrincipalInvestigator().getSystemIdentifier()+"COLLECTION_PROTOCOL_"+collectionProtocol.getSystemIdentifier());
         userGroupRoleProtectionGroupBean.setProtectionGroupName(protectionGroupName);

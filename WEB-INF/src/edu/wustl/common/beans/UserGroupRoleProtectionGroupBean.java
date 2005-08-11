@@ -68,7 +68,7 @@ public class UserGroupRoleProtectionGroupBean
     /**
      * @param userGroup The userGroup to set.
      */
-    public void setGroup(HashSet group)
+    public void setGroup(Set group)
     {
         this.group = group;
     }
@@ -105,7 +105,7 @@ public class UserGroupRoleProtectionGroupBean
      */
     public String toString()
     {
-        return new String(" user:"+user+" groupName:"+groupName+" group:"+group+" role:"+roleName+" protectionGroup:"+protectionGroupName);
+        return new String(" user:"+user+" groupName:"+groupName+" group:"+group.size()+" role:"+roleName+" protectionGroup:"+protectionGroupName);
     }
     
 }
