@@ -161,7 +161,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
     			{
     				String key = (String)it.next();
     				String value = (String)values.get(key);
-    				System.out.println(key+ " : " + value);
+//    				System.out.println(key+ " : " + value);
     				
     				if(key.indexOf("clinicalStatus")!=-1 && value.equals(Constants.SELECT_OPTION))
     				{

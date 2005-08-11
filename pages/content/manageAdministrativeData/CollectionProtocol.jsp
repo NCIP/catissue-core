@@ -73,9 +73,9 @@
 	// functions for add more
 
 	
-var subDivRowCount = new Array(10);		// array to hold the row count of the inner block
+//var subDivRowCount = new Array(10);		// array to hold the row count of the inner block
 
-subDivRowCount[0] = 1;
+//subDivRowCount[0] = 1;
 
 // variable to count the oter blocks
 var insno=1;
@@ -89,7 +89,7 @@ var val = parseInt(document.forms[0].outerCounter.value);
 	var y = div.innerHTML;
 	var z = d0.innerHTML;
 
-	subDivRowCount[insno] = 1;
+	//subDivRowCount[insno] = 1;
 	insno =insno + 1;
 	//alert("insno "+z);
 	var mm = z.indexOf('`');
@@ -104,7 +104,6 @@ var val = parseInt(document.forms[0].outerCounter.value);
 function addDiv(div,adstr)
 {
 	
-		
 	var x = div.innerHTML;
 	div.innerHTML = div.innerHTML +adstr;
 }
@@ -115,7 +114,7 @@ function insRow(subdivtag,iCounter)
 	var cnt = document.getElementById(iCounter);
 	var val = parseInt(cnt.value);
 	val = val + 1;
-	cnt.value = val;	
+	cnt.value = val;
 
 	var sname = "";
 	
@@ -124,7 +123,7 @@ function insRow(subdivtag,iCounter)
 	var q = r.length;
 	var x=document.getElementById(subdivtag).insertRow(q);
 	
-	setSubDivCount(subdivtag);
+//	setSubDivCount(subdivtag);
 	var subdivname = ""+ subdivtag;
 
 	// srno
@@ -207,7 +206,7 @@ function insRow(subdivtag,iCounter)
 					
 	spreqqty.innerHTML="" + sname;
 }
-
+/*
 
 // function to set the row count in the array 
 function setSubDivCount(subdivtag)
@@ -226,7 +225,7 @@ function getSubDivCount(subdivtag)
 	var p = parseInt(x);
 	return subDivRowCount[p-1];
 }
-
+*/
 //-->
 </SCRIPT>
 
@@ -528,15 +527,13 @@ function getSubDivCount(subdivtag)
 			String cid = "ivl(" + counter + ")";
 			String functionName = "insRow('" + commonLabel + "','" + cid +"')";
 		
-			System.out.println("\n\n\n************\n\n CID : "+ cid +"\n\n\n\n*****************");
-			System.out.println("\n\n\n************\n\n FunctionName : "+ functionName +"\n\n\n\n*****************");
 			if(colForm!=null)
 			{
 				Object o = colForm.getIvl(""+counter);
 				if(o!=null)
 					maxIntCount = Integer.parseInt(o.toString());
 			}
-			System.out.println("\n\n\n************\n\n maxIntCount : "+ maxIntCount +"\n\n\n\n*****************");
+
 						
 %>
 <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="100%">
@@ -822,7 +819,7 @@ function getSubDivCount(subdivtag)
 			        </td>
 			    </tr>
 			    
-			    <TBODY id="CollectionProtocolEvent:`">
+			    <TBODY id="value(CollectionProtocolEvent:`">
 			    <TR> <!-- SUB TITLES -->
 			        <td class="formLeftSubTableTitle">
 		        		<bean:message key="collectionprotocol.specimennumber" />
