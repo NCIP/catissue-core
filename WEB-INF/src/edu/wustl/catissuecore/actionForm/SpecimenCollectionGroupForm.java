@@ -364,7 +364,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 				}
 				
 				// Mandatory Field : clinical Status
-				if(!this.clinicalStatus.equals(Constants.SELECT_OPTION)){
+				if(this.clinicalStatus.equals(Constants.SELECT_OPTION)){
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",
 									ApplicationProperties.getValue("specimenCollectionGroup.clinicalStatus")));
 				}

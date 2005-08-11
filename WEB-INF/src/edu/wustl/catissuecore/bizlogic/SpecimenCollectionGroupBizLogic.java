@@ -46,13 +46,17 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		list  =  dao.retrieve(CollectionProtocolEvent.class.getName(), "systemIdentifier", specimenCollectionGroup.getCollectionProtocolEvent().getSystemIdentifier());
 		if(!list.isEmpty())
 		{
-  			   specimenCollectionGroup.setCollectionProtocolEvent((CollectionProtocolEvent)list.get(0));
+			specimenCollectionGroup.setCollectionProtocolEvent((CollectionProtocolEvent)list.get(0));
 		}
 		
-		list  =  dao.retrieve(ParticipantMedicalIdentifier.class.getName(), "systemIdentifier", specimenCollectionGroup.getClinicalReport().getParticipantMedicalIdentifier().getSystemIdentifier());
-		if(!list.isEmpty())
+		ParticipantMedicalIdentifier participantMedicalIdentifier = specimenCollectionGroup.getClinicalReport().getParticipantMedicalIdentifier();
+		if(participantMedicalIdentifier!=null)
 		{
-		   specimenCollectionGroup.getClinicalReport().setParticipantMedicalIdentifier((ParticipantMedicalIdentifier)list.get(0));
+			list  =  dao.retrieve(ParticipantMedicalIdentifier.class.getName(), "systemIdentifier", participantMedicalIdentifier.getSystemIdentifier());
+			if(!list.isEmpty())
+			{
+			   specimenCollectionGroup.getClinicalReport().setParticipantMedicalIdentifier((ParticipantMedicalIdentifier)list.get(0));
+			}
 		}
 		
 		
@@ -62,8 +66,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		String[] whereColumnCondition = {"=","="};
 		Object[] whereColumnValue = new Object[2];
 		String joinCondition = Constants.AND_JOIN_CONDITION;
-		
-		
+			
 		whereColumnName[0]="collectionProtocol.systemIdentifier";
 		whereColumnValue[0]=specimenCollectionGroup.getCollectionProtocolRegistration().getCollectionProtocol().getSystemIdentifier();
 		
@@ -79,13 +82,13 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 			System.out.println("Value returned:"+whereColumnValue[1]);
 		}
 		
-		list = dao.retrieve( sourceObjectName, selectColumnName,
-						whereColumnName, whereColumnCondition, 
-						whereColumnValue, joinCondition);
+		list = dao.retrieve( sourceObjectName, selectColumnName, whereColumnName, 
+							 whereColumnCondition, whereColumnValue, joinCondition);
 		if(!list.isEmpty())
 		{
 		   specimenCollectionGroup.setCollectionProtocolRegistration((CollectionProtocolRegistration)list.get(0));
 		}
+		
 		dao.insert(specimenCollectionGroup,true);
 		dao.insert(specimenCollectionGroup.getClinicalReport(),true);
 	}
