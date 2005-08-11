@@ -7,7 +7,39 @@
 <%@ page import="edu.wustl.catissuecore.actionForm.CreateSpecimenForm"%>
 
 <head>
-	<script language="JavaScript">	
+	<script language="JavaScript">
+	
+		function onTypeChange(element)
+		{
+			var unit = document.getElementById("unitSpan");
+			var unitSpecimen = "";
+			document.forms[0].concentration.disabled = true;
+			
+			if(element.value == "Tissue")
+			{
+				unitSpecimen = "<%=Constants.UNIT_GM%>";
+				document.forms[0].unit.value = "<%=Constants.UNIT_GM%>";
+			}
+			else if(element.value == "Fluid")
+			{
+				unitSpecimen = "<%=Constants.UNIT_ML%>";
+				document.forms[0].unit.value = "<%=Constants.UNIT_ML%>";
+			}
+			else if(element.value == "Cell")
+			{
+				unitSpecimen = "<%=Constants.UNIT_CC%>";
+				document.forms[0].unit.value = "<%=Constants.UNIT_CC%>";
+			}
+			else if(element.value == "Molecular")
+			{
+				unitSpecimen = "<%=Constants.UNIT_MG%>";
+				document.forms[0].unit.value = "<%=Constants.UNIT_MG%>";
+				document.forms[0].concentration.disabled = false;
+			}
+			
+			unit.innerHTML = unitSpecimen;
+		}
+		
 		function onBiohazardTypeSelected(element)
 		{ 
 			var i = (element.name).indexOf("_");
@@ -103,10 +135,13 @@
 		Object obj = request.getAttribute("createSpecimenForm");
 		int exIdRows=1;
 
+		String unitSpecimen = "";
 		if(obj != null && obj instanceof CreateSpecimenForm)
 		{
 			CreateSpecimenForm form = (CreateSpecimenForm)obj;
 			exIdRows = form.getExIdCounter();
+			if(form.getUnit() != null)
+				unitSpecimen = form.getUnit();
 		}
 %>
 
@@ -231,8 +266,8 @@
 				     </td>
 				 </tr>
 				 <tr>
-			     	<td class="formRequiredNotice" width="5">&nbsp;</td>
-				    <td class="formLabel">
+			     	<td class="formRequiredNotice" width="5">*</td>
+				    <td class="formRequiredLabel">
 						<label for="specimenCollectionGroupId">
 							<bean:message key="createSpecimen.parent"/>
 						</label>
@@ -245,22 +280,22 @@
 				 </tr>
 				 
 				 <tr>
-				 	<td class="formRequiredNotice" width="5">&nbsp;</td>
-				    <td class="formLabel">
+				 	<td class="formRequiredNotice" width="5">*</td>
+				    <td class="formRequiredLabel">
 				     	<label for="className">
 				     		<bean:message key="specimen.type"/>
 				     	</label>
 				    </td>
 				    <td class="formField" colspan="4">
-				     	<html:select property="className" styleClass="formFieldSized15" styleId="className" size="1" disabled="<%=readOnlyForAll%>">
+				     	<html:select property="className" styleClass="formFieldSized15" styleId="className" size="1" disabled="<%=readOnlyForAll%>" onchange="onTypeChange(this)">
 							<html:options name="specimenTypeList" labelName="specimenTypeList"/>		
 						</html:select>
 		        	</td>
 				 </tr>
 				 
 				 <tr>
-				    <td class="formRequiredNotice" width="5">&nbsp;</td>
-				    <td class="formLabel">
+				    <td class="formRequiredNotice" width="5">*</td>
+				    <td class="formRequiredLabel">
 				     	<label for="type">
 				     		<bean:message key="specimen.subType"/>
 				     	</label>
@@ -281,9 +316,24 @@
 							<bean:message key="specimen.concentration"/>
 						</label>
 					</td>
-				    <td class="formField" colspan="4">
-				     	<html:text styleClass="formFieldSized15" size="30" styleId="concentration" property="concentration" readonly="<%=readOnlyForAll%>"/>
-				    </td>
+				    <%
+						if(unitSpecimen.equals(Constants.UNIT_MG))
+						{
+					%>
+				    		<td class="formField" colspan="4">
+				     			<html:text styleClass="formFieldSized15" size="30" styleId="concentration" property="concentration" readonly="<%=readOnlyForAll%>" disabled="false"/>
+				   			</td>
+				    <%
+						}
+						else
+						{
+					%>
+							<td class="formField" colspan="4">
+				     			<html:text styleClass="formFieldSized15" size="30" styleId="concentration" property="concentration" readonly="<%=readOnlyForAll%>" disabled="true"/>
+				    		</td>
+					<%
+						}
+					%>
 				 </tr>
 				 <tr>
 			     	<td class="formRequiredNotice" width="5">
@@ -297,6 +347,8 @@
 					</td>
 				    <td class="formField" colspan="4">
 				     	<html:text styleClass="formFieldSized15" size="30" styleId="quantity" property="quantity" readonly="<%=readOnlyForAll%>"/>
+				     	<span id="unitSpan"><%=unitSpecimen%></span>
+				     	<html:hidden property="unit"/>
 				    </td>
 				 </tr>
 				 

@@ -32,6 +32,37 @@ String bhTypeArray [] = (String []) request.getAttribute(Constants.BIOHAZARD_TYP
 			}
 		%>
 		
+		function onTypeChange(element)
+		{
+			var unit = document.getElementById("unitSpan");
+			var unitSpecimen = "";
+			document.forms[0].concentration.disabled = true;
+			
+			if(element.value == "Tissue")
+			{
+				unitSpecimen = "<%=Constants.UNIT_GM%>";
+				document.forms[0].unit.value = "<%=Constants.UNIT_GM%>";
+			}
+			else if(element.value == "Fluid")
+			{
+				unitSpecimen = "<%=Constants.UNIT_ML%>";
+				document.forms[0].unit.value = "<%=Constants.UNIT_ML%>";
+			}
+			else if(element.value == "Cell")
+			{
+				unitSpecimen = "<%=Constants.UNIT_CC%>";
+				document.forms[0].unit.value = "<%=Constants.UNIT_CC%>";
+			}
+			else if(element.value == "Molecular")
+			{
+				unitSpecimen = "<%=Constants.UNIT_MG%>";
+				document.forms[0].unit.value = "<%=Constants.UNIT_MG%>";
+				document.forms[0].concentration.disabled = false;
+			}
+			
+			unit.innerHTML = unitSpecimen;
+		}
+		
 		function onBiohazardTypeSelected(element)
 		{ 
 			var i = (element.name).indexOf("_");
@@ -177,11 +208,14 @@ String bhTypeArray [] = (String []) request.getAttribute(Constants.BIOHAZARD_TYP
 		int exIdRows=1;
 		int bhRows=1;
 
+		String unitSpecimen = "";
 		if(obj != null && obj instanceof NewSpecimenForm)
 		{
 			NewSpecimenForm form = (NewSpecimenForm)obj;
 			exIdRows = form.getExIdCounter();
 			bhRows	 = form.getBhCounter();
+			if(form.getUnit() != null)
+				unitSpecimen = form.getUnit();
 		}
 %>
 
@@ -307,8 +341,8 @@ String bhTypeArray [] = (String []) request.getAttribute(Constants.BIOHAZARD_TYP
 				     </td>
 				 </tr>
 				 <tr>
-			     	<td class="formRequiredNotice" width="5">&nbsp;</td>
-				    <td class="formLabel">
+			     	<td class="formRequiredNotice" width="5">*</td>
+				    <td class="formRequiredLabel">
 						<label for="specimenCollectionGroupId">
 							<bean:message key="specimen.specimenCollectionGroupId"/>
 						</label>
@@ -323,21 +357,21 @@ String bhTypeArray [] = (String []) request.getAttribute(Constants.BIOHAZARD_TYP
 		        	</td>
 				 </tr>
 				 <tr>
-				 	<td class="formRequiredNotice" width="5">&nbsp;</td>
-				    <td class="formLabel">
+				 	<td class="formRequiredNotice" width="5">*</td>
+				    <td class="formRequiredLabel">
 				     	<label for="className">
 				     		<bean:message key="specimen.type"/>
 				     	</label>
 				    </td>
 				    <td class="formField" colspan="4">
-				     	<html:select property="className" styleClass="formFieldSized15" styleId="className" size="1" disabled="<%=readOnlyForAll%>">
-							<html:options name="specimenTypeList" labelName="specimenTypeList"/>		
+				     	<html:select property="className" styleClass="formFieldSized15" styleId="className" size="1" disabled="<%=readOnlyForAll%>" onchange="onTypeChange(this)">
+							<html:options name="specimenTypeList" labelName="specimenTypeList"/>	
 						</html:select>
 		        	</td>
 				 </tr>
 				 <tr>
-				    <td class="formRequiredNotice" width="5">&nbsp;</td>
-				    <td class="formLabel">
+				    <td class="formRequiredNotice" width="5">*</td>
+				    <td class="formRequiredLabel">
 				     	<label for="type">
 				     		<bean:message key="specimen.subType"/>
 				     	</label>
@@ -362,6 +396,7 @@ String bhTypeArray [] = (String []) request.getAttribute(Constants.BIOHAZARD_TYP
 				     	<html:select property="tissueSite" styleClass="formFieldSized15" styleId="tissueSite" size="1" disabled="<%=readOnlyForAll%>">
 							<html:options name="tissueSiteList" labelName="tissueSiteList"/>		
 						</html:select>
+						<a href="#"><img src="images\Tree.gif" border="0" width="24" height="18"></a>
 		        	  </td>
 				 </tr>
 				 <tr>
@@ -405,9 +440,24 @@ String bhTypeArray [] = (String []) request.getAttribute(Constants.BIOHAZARD_TYP
 							<bean:message key="specimen.concentration"/>
 						</label>
 					</td>
-				    <td class="formField" colspan="4">
-				     	<html:text styleClass="formFieldSized15" size="30" styleId="concentration" property="concentration" readonly="<%=readOnlyForAll%>"/>
-				    </td>
+					<%
+						if(unitSpecimen.equals(Constants.UNIT_MG))
+						{
+					%>
+				    		<td class="formField" colspan="4">
+				     			<html:text styleClass="formFieldSized15" size="30" styleId="concentration" property="concentration" readonly="<%=readOnlyForAll%>" disabled="false"/>
+				   			</td>
+				    <%
+						}
+						else
+						{
+					%>
+							<td class="formField" colspan="4">
+				     			<html:text styleClass="formFieldSized15" size="30" styleId="concentration" property="concentration" readonly="<%=readOnlyForAll%>" disabled="true"/>
+				    		</td>
+					<%
+						}
+					%>
 				 </tr>
 				 <tr>
 			     	<td class="formRequiredNotice" width="5">
@@ -421,6 +471,8 @@ String bhTypeArray [] = (String []) request.getAttribute(Constants.BIOHAZARD_TYP
 					</td>
 				    <td class="formField" colspan="4">
 				     	<html:text styleClass="formFieldSized15" size="30" styleId="quantity" property="quantity" readonly="<%=readOnlyForAll%>"/>
+				     	<span id="unitSpan"><%=unitSpecimen%></span>
+				     	<html:hidden property="unit"/>
 				    </td>
 				 </tr>
 				 
@@ -533,9 +585,6 @@ String bhTypeArray [] = (String []) request.getAttribute(Constants.BIOHAZARD_TYP
 					 </tr>
 				  <% } %>
 				 </tbody>
-				 </table>		
-				 
-				 <table summary="" cellpadding="3" cellspacing="0" border="0" width="600">
 				 
 				 <tr>
 				     <td class="formTitle" height="20" colspan="2">
@@ -595,7 +644,9 @@ String bhTypeArray [] = (String []) request.getAttribute(Constants.BIOHAZARD_TYP
 				  <% } %>
 				 </tbody>
 				 <!-- Bio-hazards End here -->	
-				 </table>
+				 
+			 </table>		
+		
 			   
 
  			   	 <logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">		
