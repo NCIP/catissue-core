@@ -525,7 +525,7 @@ String bhTypeArray [] = (String []) request.getAttribute(Constants.BIOHAZARD_TYP
 						</label>
 					</td>
 				    <td class="formField" colspan="2">
-				     	<html:text styleClass="formFieldSized15" size="30" styleId="storageContainer" property="storageContainer" readonly="<%=readOnlyForAll%>"/>
+				     	<html:text styleClass="formFieldSized15" size="30" styleId="storageContainer" property="storageContainer" readonly="true"/>
 				    </td>
 				 </tr>
 				 <tr>
@@ -539,7 +539,7 @@ String bhTypeArray [] = (String []) request.getAttribute(Constants.BIOHAZARD_TYP
 						</label>
 					</td>
 				    <td class="formField" colspan="2">
-				     	<html:text styleClass="formFieldSized15" size="30" styleId="positionDimensionOne" property="positionDimensionOne" readonly="<%=readOnlyForAll%>"/>
+				     	<html:text styleClass="formFieldSized15" size="30" styleId="positionDimensionOne" property="positionDimensionOne" readonly="true"/>
 				    </td>
 				 </tr>
 			 
@@ -554,7 +554,7 @@ String bhTypeArray [] = (String []) request.getAttribute(Constants.BIOHAZARD_TYP
 						</label>
 					</td>
 				    <td class="formField" colspan="2">
-				     	<html:text styleClass="formFieldSized15" size="30" styleId="positionDimensionTwo" property="positionDimensionTwo" readonly="<%=readOnlyForAll%>"/>
+				     	<html:text styleClass="formFieldSized15" size="30" styleId="positionDimensionTwo" property="positionDimensionTwo" readonly="true"/>
 				    </td>
 				 </tr>
 		 
