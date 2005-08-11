@@ -1487,6 +1487,7 @@ PUBLIC
 			type="edu.wustl.catissuecore.action.ShowFramedPageAction">
 			<forward name="pageOfQueryResults" path=".catissuecore.queryResultsDef"/>
 			<forward name="pageOfStorageLocation" path=".catissuecore.storageLocationViewDef"/>
+			<forward name="pageOfSpecimen" path=".catissuecore.storageLocationViewDef"/>
 		</action>
 		<action path="/Data"
 			type="edu.wustl.catissuecore.action.TreeDataAction">

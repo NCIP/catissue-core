@@ -20,7 +20,6 @@ String bhTypeArray [] = (String []) request.getAttribute(Constants.BIOHAZARD_TYP
 			LeftPosition = (screen.width) ? (screen.width-w)/2 : 0;
 			TopPosition = (screen.height) ? (screen.height-h)/2 : 0;
 
-			mypage=mypage+document.forms[0].startNumber.value;
 			settings =
 				'height='+h+',width='+w+',top='+TopPosition+',left='+LeftPosition+',scrollbars='+scroll+',resizable'
 			win = open(mypage,myname,settings)
@@ -510,7 +509,7 @@ String bhTypeArray [] = (String []) request.getAttribute(Constants.BIOHAZARD_TYP
 				     	<bean:message key="specimen.storage"/>
 				     </td>
 				     <td class="formButtonField" colspan="4">
-				     	<html:button property="mapButton" styleClass="actionButton" onclick="NewWindow('ShowFramedPage.do?pageOf=pageOfSpecimen&amp;storageType=','name','810','320','yes');return false">
+				     	<html:button property="mapButton" styleClass="actionButton" onclick="javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfSpecimen','name','810','320','yes');return false">
 							<bean:message key="buttons.showMap"/>
 						</html:button>
 				    </td>

@@ -61,8 +61,9 @@ public class QueryTree extends JApplet
                 treeType = Constants.STORAGE_CONTAINER_TREE_ID;
             }
             
+            if(pageOf.equals(Constants.PAGEOF_SPECIMEN))
+            	treeType = Constants.STORAGE_CONTAINER_TREE_ID;
             String urlSuffix = Constants.TREE_DATA_ACTION+"?"+Constants.PAGEOF+"="+pageOf;
-
             URL dataURL = new URL(protocol, host, port, urlSuffix);
             
             //Establish connection with the TreeDataAction and get the JTree object. 
@@ -136,19 +137,19 @@ public class QueryTree extends JApplet
         }
         catch (MalformedURLException malExp)
         {
-//            malExp.printStackTrace();
+            malExp.printStackTrace();
         }
         catch (IOException ioExp)
         {
-//            ioExp.printStackTrace();
+            ioExp.printStackTrace();
         }
         catch (ClassNotFoundException classNotExp)
         {
-//            classNotExp.printStackTrace();
+            classNotExp.printStackTrace();
         }
         catch (Exception excp)
         {
-//            excp.printStackTrace();
+            excp.printStackTrace();
         }
         finally
         {
@@ -158,7 +159,7 @@ public class QueryTree extends JApplet
             }
             catch (IOException ioExp)
             {
-//                ioExp.printStackTrace();
+                ioExp.printStackTrace();
             }
         }
     }

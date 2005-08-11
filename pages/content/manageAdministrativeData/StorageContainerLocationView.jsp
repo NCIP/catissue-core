@@ -1,14 +1,15 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 
 <%
-	String treeViewAction = Constants.TREE_VIEW_ACTION + "?" + Constants.PAGEOF + "=" + Constants.PAGEOF_STORAGE_LOCATION;
+	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
+	String treeViewAction = Constants.TREE_VIEW_ACTION + "?" + Constants.PAGEOF + "=" + pageOf;
 	
 	//Get the storage type.
 	String storageContainerType = (String)request.getAttribute(Constants.STORAGE_CONTAINER_TYPE);
 	if (storageContainerType != null)
 	{
 		treeViewAction = Constants.TREE_VIEW_ACTION +
-						 "?" + Constants.PAGEOF + "=" + Constants.PAGEOF_STORAGE_LOCATION +
+						 "?" + Constants.PAGEOF + "=" + pageOf +
 						 "&"+ Constants.STORAGE_CONTAINER_TYPE + "=" + storageContainerType;
 	}
 %>

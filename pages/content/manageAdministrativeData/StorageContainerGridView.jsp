@@ -25,10 +25,15 @@ function closeFramedWindow()
 	StorageContainerGridObject storageContainerGridObject 
 			= (StorageContainerGridObject)request.getAttribute(Constants.STORAGE_CONTAINER_GRID_OBJECT);
 	boolean [][]fullStatus = (boolean [][])request.getAttribute(Constants.STORAGE_CONTAINER_CHILDREN_STATUS);
-	Integer startNumber = (Integer)request.getAttribute(Constants.START_NUMBER);
 	int [][] childContainerSystemIdentifiers = (int [][])request.getAttribute(Constants.CHILD_CONTAINER_SYSTEM_IDENTIFIERS);
-	String storageContainerType = (String)request.getAttribute(Constants.STORAGE_CONTAINER_TYPE);
 	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
+	String storageContainerType = null;
+	Integer startNumber = null;
+	if (pageOf.equals(Constants.PAGEOF_STORAGE_LOCATION))
+	{
+		storageContainerType = (String)request.getAttribute(Constants.STORAGE_CONTAINER_TYPE);
+		startNumber = (Integer)request.getAttribute(Constants.START_NUMBER);
+	}
 %>
 
 <html:errors/>
@@ -49,7 +54,21 @@ function closeFramedWindow()
 						if (fullStatus[i][j] == true){
 					   			String openStorageContainer = Constants.SHOW_STORAGE_CONTAINER_GRID_VIEW_ACTION
                     			+ "?" + Constants.IDENTIFIER + "=" + childContainerSystemIdentifiers[i][j]
-                    			+ "&" + Constants.STORAGE_CONTAINER_TYPE + "=" + storageContainerType;%>
+                    			+ "&" + Constants.STORAGE_CONTAINER_TYPE + "=" + storageContainerType;
+
+								if (pageOf.equals(Constants.PAGEOF_SPECIMEN))
+								{
+									openStorageContainer = Constants.SHOW_STORAGE_CONTAINER_GRID_VIEW_ACTION
+                    				+ "?" + Constants.IDENTIFIER + "=" + childContainerSystemIdentifiers[i][j]
+                    				+ "&" + Constants.PAGEOF + "=" + pageOf;
+								}
+								else
+								{
+									openStorageContainer = Constants.SHOW_STORAGE_CONTAINER_GRID_VIEW_ACTION
+                    				+ "?" + Constants.IDENTIFIER + "=" + childContainerSystemIdentifiers[i][j]
+                    				+ "&" + Constants.STORAGE_CONTAINER_TYPE + "=" + storageContainerType
+									+ "&" + Constants.PAGEOF + "=" + pageOf;
+								}%>
 
 						<td class="dataCellText">
 							<a href="<%=openStorageContainer%>">
@@ -59,7 +78,17 @@ function closeFramedWindow()
 						<%}
 						else
 						{ 
-							String setParentWindowContainer = "javascript:setParentWindowValue('positionInParentContainer','"
+							String setParentWindowContainer = null;
+							if (pageOf.equals(Constants.PAGEOF_SPECIMEN))
+							{
+								setParentWindowContainer = "javascript:setParentWindowValue('positionDimensionOne','"+
+															  + i + "');"+"javascript:setParentWindowValue('positionDimensionTwo','"+
+															  + j + "');"+"javascript:setParentWindowValue('storageContainer','"+
+															  + storageContainerGridObject.getSystemIdentifier() + "');closeFramedWindow()";
+							}
+							else
+							{
+								setParentWindowContainer = "javascript:setParentWindowValue('positionInParentContainer','"
 															  + storageContainerGridObject.getType() + " : " 
 															  + storageContainerGridObject.getSystemIdentifier()
 															  + " Pos (" + i + "," + j + ")');"
@@ -70,14 +99,7 @@ function closeFramedWindow()
 															  + storageContainerGridObject.getSystemIdentifier() + "');"
 															  + "javascript:setParentWindowValue('startNumber','"+
 															  + startNumber.intValue() + "');closeFramedWindow()";
-							if (pageOf.equals(Constants.PAGEOF_SPECIMEN))
-							{
-								setParentWindowContainer = "javascript:setParentWindowValue('positionDimensionOne','"+
-															  + i + "');"+"javascript:setParentWindowValue('positionDimensionTwo','"+
-															  + j + "');"+"javascript:setParentWindowValue('storageContainer','"+
-															  + storageContainerGridObject.getSystemIdentifier() + "');closeFramedWindow()";
 							}
-							System.out.println("setParentWindowContainer.........................."+setParentWindowContainer);
 						%>
 						<td class="dataCellText">
 						 	<a href="<%=setParentWindowContainer%>">

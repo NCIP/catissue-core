@@ -87,14 +87,18 @@ public class ShowStorageGridViewAction extends Action
             }            
         }
         
-        String storageContainerType = request.getParameter(Constants.STORAGE_CONTAINER_TYPE);
-        int startNumber = bizLogic.getNextContainerNumber(Long.parseLong(systemIdentifier),
-                								Long.parseLong(storageContainerType),false);
-        
-        request.setAttribute(Constants.STORAGE_CONTAINER_TYPE,storageContainerType); 
+        if (pageOf.equals(Constants.PAGEOF_STORAGE_LOCATION))
+        {
+        	String storageContainerType = request.getParameter(Constants.STORAGE_CONTAINER_TYPE);
+            int startNumber = bizLogic.getNextContainerNumber(Long.parseLong(systemIdentifier),
+                    								Long.parseLong(storageContainerType),false);
+            
+            request.setAttribute(Constants.STORAGE_CONTAINER_TYPE,storageContainerType);
+            request.setAttribute(Constants.START_NUMBER,new Integer(startNumber));
+        }
+         
         request.setAttribute(Constants.PAGEOF, pageOf);
         request.setAttribute(Constants.CHILD_CONTAINER_SYSTEM_IDENTIFIERS, childContainerSystemIdentifiers);
-        request.setAttribute(Constants.START_NUMBER,new Integer(startNumber));
         request.setAttribute(Constants.STORAGE_CONTAINER_CHILDREN_STATUS,fullStatus);
         request.setAttribute(Constants.STORAGE_CONTAINER_GRID_OBJECT,
                 storageContainerGridObject);

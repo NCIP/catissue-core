@@ -119,6 +119,13 @@ public class StorageLocationViewListener implements TreeSelectionListener
                             + "?" + Constants.IDENTIFIER + "=" + treeNode.getStorageContainerIdentifier()
                             + "&" + Constants.STORAGE_CONTAINER_TYPE + "=" + this.getStorageContainerType()
                             + "&" + Constants.PAGEOF + "=" + this.pageOf;
+                    
+                    if (pageOf.equals(Constants.PAGEOF_SPECIMEN))
+                    {
+                    	urlSuffix = Constants.SHOW_STORAGE_CONTAINER_GRID_VIEW_ACTION
+                        + "?" + Constants.IDENTIFIER + "=" + treeNode.getStorageContainerIdentifier()
+                        + "&" + Constants.PAGEOF + "=" + this.pageOf;
+                    }
 
                     URL dataURL = new URL(protocol, host, port, urlSuffix);
                     appletContext.showDocument(dataURL,

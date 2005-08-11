@@ -8,7 +8,19 @@
 
 <head>
 	<script language="JavaScript">
-	
+		var win = null;
+		function NewWindow(mypage,myname,w,h,scroll)
+		{
+			LeftPosition = (screen.width) ? (screen.width-w)/2 : 0;
+			TopPosition = (screen.height) ? (screen.height-h)/2 : 0;
+
+			settings =
+				'height='+h+',width='+w+',top='+TopPosition+',left='+LeftPosition+',scrollbars='+scroll+',resizable'
+			win = open(mypage,myname,settings)
+			if (win.opener == null)
+				win.opener = self;
+		}
+		
 		function onTypeChange(element)
 		{
 			var unit = document.getElementById("unitSpan");
@@ -372,9 +384,9 @@
 				     	<bean:message key="specimen.storage"/>
 				     </td>
 				     <td class="formButtonField" colspan="4">
-				     	<html:submit styleClass="actionButton">
+				     	<html:button property="mapButton" styleClass="actionButton" onclick="javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfSpecimen','name','810','320','yes');return false">
 							<bean:message key="buttons.showMap"/>
-						</html:submit>
+						</html:button>
 				    </td>
 				  </tr>
  				  <tr>

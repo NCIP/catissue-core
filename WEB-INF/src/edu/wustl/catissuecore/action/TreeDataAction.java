@@ -53,19 +53,13 @@ public class TreeDataAction extends Action
 //            AbstractBizLogic bizlLogic = BizLogicFactory.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
             
             String pageOf = request.getParameter(Constants.PAGEOF);
-            TreeDataInterface bizLogic = null; 
+            TreeDataInterface bizLogic = new StorageContainerBizLogic();
             
-            if (pageOf.equals(Constants.PAGEOF_STORAGE_LOCATION))
-            {
-                bizLogic = new StorageContainerBizLogic();
-            }
-            else if (pageOf.equals(Constants.PAGEOF_TISSUE_SITE))
+            if (pageOf.equals(Constants.PAGEOF_TISSUE_SITE))
             {
                 bizLogic = new CDEBizLogic();
             }
-            
             Vector dataList = bizLogic.getTreeViewData();
-            
             String contentType = "application/x-java-serialized-object";
             response.setContentType(contentType);
             out = new ObjectOutputStream(response.getOutputStream());
