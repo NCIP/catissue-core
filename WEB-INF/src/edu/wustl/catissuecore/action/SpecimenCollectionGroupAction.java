@@ -10,7 +10,6 @@
 
 package edu.wustl.catissuecore.action;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -30,7 +29,6 @@ import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.beans.NameValueBean;
 
 
 /**
@@ -54,15 +52,10 @@ public class SpecimenCollectionGroupAction extends Action
 
         //Sets the operation attribute to be used in the Add/Edit SpecimenCollectionGroup Page. 
         request.setAttribute(Constants.OPERATION, operation);
-		
-		//this will contain --SELECT OPTION -- only
-		List defaultList = new ArrayList();
-		NameValueBean aNameValueBean = new NameValueBean();
-		aNameValueBean.setName(Constants.SELECT_OPTION);
-		aNameValueBean.setValue("-1");
-		defaultList.add(aNameValueBean);
-		
-		
+
+		// populating clinical Status field from constant array
+		request.setAttribute(Constants.CLINICAL_STATUS_LIST,Constants.CLINICAL_STATUS_ARRAY);
+
 		try
 		{
 			// get list of Protocol title.
@@ -72,53 +65,39 @@ public class SpecimenCollectionGroupAction extends Action
 			String sourceObjectName = CollectionProtocol.class.getName();
 			String [] displayNameFields = {"title"};
 			String valueField = "systemIdentifier";
-					
 		  	List list = bizLogic.getList(sourceObjectName,displayNameFields,valueField);
 			request.setAttribute(Constants.PROTOCOL_LIST, list);
 		
            	//Populating the Site Type bean
 		   	sourceObjectName = Site.class.getName();
 		   	String siteDisplaySiteFields[] = {"name"};
-		
 		   	list = bizLogic.getList(sourceObjectName,siteDisplaySiteFields,valueField);
 		   	request.setAttribute(Constants.SITELIST, list);
 
-            //get list of Participant's names
-//			sourceObjectName = Participant.class.getName();
-//			String [] displayParticipantFields = {"lastName","firstName"};
-//
-//		    list = bizLogic.getList(sourceObjectName,displayParticipantFields,valueField);
-//		    request.setAttribute(Constants.PARTICIPANT_LIST, list);
+		   	//Populating the participants registered to a given protocol
 			loadPaticipants(specimenCollectionGroupForm.getCollectionProtocolId(),bizLogic,request);
 			
-			
-			
-            //getting participant number list.
-//			sourceObjectName = CollectionProtocolRegistration.class.getName();
-//			String displayParticipantNumberFields[] = {"protocolParticipantIdentifier"};
-//
-//			list = bizLogic.getList(sourceObjectName,displayParticipantNumberFields,valueField);
-//			request.setAttribute(Constants.PROTOCOL_PARTICIPANT_NUMBER_LIST, list);
-//			
-			
+			//Populating the protocol participants id registered to a given protocol
 			loadPaticipantNumberList(specimenCollectionGroupForm.getCollectionProtocolId(),bizLogic,request);
 			
-			// populating clinical Status field from constant array
-			request.setAttribute(Constants.CLINICAL_STATUS_LIST,Constants.CLINICAL_STATUS_ARRAY);
-			
+			//Populating the Collection Protocol Events
 			loadCollectionProtocolEvent(specimenCollectionGroupForm.getCollectionProtocolId(),bizLogic,request);
-			loadParticipantMedicalIdentifier(specimenCollectionGroupForm.getParticipantId(),bizLogic, request);	
+			
+			//Populating the participants Medical Identifier for a given participant
+			loadParticipantMedicalIdentifier(specimenCollectionGroupForm.getParticipantId(),bizLogic, request);
+			
+			//Load Clinical status for a given study calander event point
 			List calendarEventPointList = bizLogic.retrieve(CollectionProtocolEvent.class.getName(),
 											"systemIdentifier",
 											new Long(specimenCollectionGroupForm.getCollectionProtocolEventId()));
-				
 			if(!calendarEventPointList.isEmpty())
 			{
 				CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent)calendarEventPointList.get(0);
 				specimenCollectionGroupForm.setClinicalStatus(collectionProtocolEvent.getClinicalStatus());
 			}
 		}
-		catch(Exception exc){
+		catch(Exception exc)
+		{
 			exc.printStackTrace();
 		}
         return mapping.findForward(Constants.SUCCESS);
@@ -127,23 +106,7 @@ public class SpecimenCollectionGroupAction extends Action
     
 	private void loadPaticipants(long protocolID, AbstractBizLogic bizLogic, HttpServletRequest request) throws Exception
 	{
-//		//get list of Participant's names
-//		String sourceObjectName = Participant.class.getName();
-//		String [] displayParticipantFields = {"lastName","firstName"};
-//		String valueField = "systemIdentifier";
-//		String whereColumnName[] = {"collectionProtocol.systemIdentifier"};
-//		String whereColumnCondition[] = {"="};
-//		Object[] whereColumnValue = {new Long(protocolID)};
-//		String joinCondition = Constants.AND_JOIN_CONDITION;
-//		String separatorBetweenFields = "";
-//				
-//		List list = bizLogic.getList(sourceObjectName, displayParticipantFields, valueField, whereColumnName,
-//					whereColumnCondition, whereColumnValue, joinCondition, separatorBetweenFields);
-//	
-//		request.setAttribute(Constants.PARTICIPANT_LIST, list);
-
-
-//		get list of Participant's names
+		//get list of Participant's names
 		String sourceObjectName = CollectionProtocolRegistration.class.getName();
 	  	String [] displayParticipantFields = {"participant.lastName","participant.firstName"};
 	  	String valueField = "participant.systemIdentifier";
@@ -151,14 +114,12 @@ public class SpecimenCollectionGroupAction extends Action
 	  	String whereColumnCondition[] = {"="};
 	  	Object[] whereColumnValue = {new Long(protocolID)};
 	  	String joinCondition = Constants.AND_JOIN_CONDITION;
-	  	String separatorBetweenFields = "";
-		System.out.println("VALUES ARE : ");
-		
+	  	String separatorBetweenFields = ", ";
+	  	
 	  	List list = bizLogic.getList(sourceObjectName, displayParticipantFields, valueField, whereColumnName,
 				  whereColumnCondition, whereColumnValue, joinCondition, separatorBetweenFields);
 	
 	  	request.setAttribute(Constants.PARTICIPANT_LIST, list);
-
 	}
     
     
@@ -167,7 +128,7 @@ public class SpecimenCollectionGroupAction extends Action
 		//get list of Participant's names
 		String sourceObjectName = CollectionProtocolRegistration.class.getName();
 		String displayParticipantNumberFields[] = {"protocolParticipantIdentifier"};
-		String valueField = "systemIdentifier";
+		String valueField = "protocolParticipantIdentifier";
 		String whereColumnName[] = {"collectionProtocol.systemIdentifier"};
 		String whereColumnCondition[] = {"="};
 		Object[] whereColumnValue = {new Long(protocolID)};
