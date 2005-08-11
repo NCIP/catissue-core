@@ -13,13 +13,16 @@ package edu.wustl.catissuecore.domain;
 import java.util.Collection;
 import java.util.HashSet;
 
+import edu.wustl.catissuecore.actionForm.AbstractActionForm;
+import edu.wustl.catissuecore.exception.AssignDataException;
+
 /**
  * A required specimen collection event associated with a Collection Protocol.
  * 
  * @hibernate.class table="CATISSUE_COLLECTION_PROTOCOL_EVENT"
  * @author Mandar Deshmukh
  */
-public class CollectionProtocolEvent implements java.io.Serializable
+public class CollectionProtocolEvent extends AbstractDomainObject implements java.io.Serializable
 {
 	private static final long serialVersionUID = 1234567890L;
 	
@@ -151,4 +154,12 @@ public class CollectionProtocolEvent implements java.io.Serializable
 	{
 		return "CPE: "+clinicalStatus+" | "+studyCalendarEventPoint +" | "+ specimenRequirementCollection.toString();
 	}
+
+    /* (non-Javadoc)
+     * @see edu.wustl.catissuecore.domain.AbstractDomainObject#setAllValues(edu.wustl.catissuecore.actionForm.AbstractActionForm)
+     */
+    public void setAllValues(AbstractActionForm abstractForm) throws AssignDataException
+    {
+        
+    }
 }
