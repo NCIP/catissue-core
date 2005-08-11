@@ -1,11 +1,15 @@
 package edu.wustl.catissuecore.util.listener;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
+import edu.wustl.catissuecore.util.ProtectionGroups;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.util.logger.Logger;
 
@@ -16,7 +20,7 @@ import edu.wustl.common.util.logger.Logger;
  * */
 public class CatissueCoreServletContextListener
         implements
-            ServletContextListener
+            ServletContextListener, ProtectionGroups
 {
 
     /* (non-Javadoc)
@@ -67,6 +71,10 @@ public class CatissueCoreServletContextListener
             ;
         }
         
+        Map protectionGroupsForObjectTypes = new HashMap();
+        protectionGroupsForObjectTypes.put("edu.wustl.catissuecore.domain.CollectionProtocol",
+                new String[] {ADMINISTRATIVE_DATA_GROUP,PUBLIC_DATA_GROUP});
+        Constants.STATIC_PROTECTION_GROUPS_FOR_OBJECT_TYPES.putAll(protectionGroupsForObjectTypes);
         
         /**
          * setting system property catissue.home which can be ustilized 

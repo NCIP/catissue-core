@@ -10,6 +10,8 @@
 
 package edu.wustl.catissuecore.util.global;
 
+import java.util.HashMap;
+
 /**
  * This class stores the constants used in the operations in the application.
  * @author gautam_shetty
@@ -1091,6 +1093,8 @@ public class Constants
 			"FIXATION 2",
 			"FIXATION 3"
 	};
+	
+	public static final  HashMap STATIC_PROTECTION_GROUPS_FOR_OBJECT_TYPES = new HashMap();
 
 
 }
