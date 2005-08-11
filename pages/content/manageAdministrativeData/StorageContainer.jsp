@@ -9,7 +9,6 @@
 	<script language="JavaScript">
 		
 		var win = null;
-		
 		function NewWindow(mypage,myname,w,h,scroll)
 		{
 			LeftPosition = (screen.width) ? (screen.width-w)/2 : 0;
@@ -153,7 +152,7 @@ function insRow(subdivtag)
 							<bean:message key="storageContainer.searchTitle" />
 						</td>
 					</tr>
-
+						
 					<tr>
 						<td class="formRequiredNotice" width="5">*</td>
 						<td class="formRequiredLabel">

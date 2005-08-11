@@ -26,8 +26,9 @@ function closeFramedWindow()
 			= (StorageContainerGridObject)request.getAttribute(Constants.STORAGE_CONTAINER_GRID_OBJECT);
 	boolean [][]fullStatus = (boolean [][])request.getAttribute(Constants.STORAGE_CONTAINER_CHILDREN_STATUS);
 	Integer startNumber = (Integer)request.getAttribute(Constants.START_NUMBER);
-	int [] childContainerSystemIdentifiers = (int [])request.getAttribute(Constants.CHILD_CONTAINER_SYSTEM_IDENTIFIERS);
+	int [][] childContainerSystemIdentifiers = (int [][])request.getAttribute(Constants.CHILD_CONTAINER_SYSTEM_IDENTIFIERS);
 	String storageContainerType = (String)request.getAttribute(Constants.STORAGE_CONTAINER_TYPE);
+	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
 %>
 
 <html:errors/>
@@ -42,12 +43,12 @@ function closeFramedWindow()
 					<td>
 					<table summary="Enter summary of data here" cellpadding="3" 
 							cellspacing="0" border="0" class="dataTable" width="100%">
-					<% for (int i=0,k=0;i<storageContainerGridObject.getOneDimensionCapacity().intValue();i++){%>
+					<% for (int i=0;i<storageContainerGridObject.getOneDimensionCapacity().intValue();i++){%>
 						<tr class="dataRowLight">	
 					<% for (int j=0;j<storageContainerGridObject.getTwoDimensionCapacity().intValue();j++){
 						if (fullStatus[i][j] == true){
 					   			String openStorageContainer = Constants.SHOW_STORAGE_CONTAINER_GRID_VIEW_ACTION
-                    			+ "?" + Constants.IDENTIFIER + "=" + childContainerSystemIdentifiers[k++]
+                    			+ "?" + Constants.IDENTIFIER + "=" + childContainerSystemIdentifiers[i][j]
                     			+ "&" + Constants.STORAGE_CONTAINER_TYPE + "=" + storageContainerType;%>
 
 						<td class="dataCellText">
@@ -69,6 +70,14 @@ function closeFramedWindow()
 															  + storageContainerGridObject.getSystemIdentifier() + "');"
 															  + "javascript:setParentWindowValue('startNumber','"+
 															  + startNumber.intValue() + "');closeFramedWindow()";
+							if (pageOf.equals(Constants.PAGEOF_SPECIMEN))
+							{
+								setParentWindowContainer = "javascript:setParentWindowValue('positionDimensionOne','"+
+															  + i + "');"+"javascript:setParentWindowValue('positionDimensionTwo','"+
+															  + j + "');"+"javascript:setParentWindowValue('storageContainer','"+
+															  + storageContainerGridObject.getSystemIdentifier() + "');closeFramedWindow()";
+							}
+							System.out.println("setParentWindowContainer.........................."+setParentWindowContainer);
 						%>
 						<td class="dataCellText">
 						 	<a href="<%=setParentWindowContainer%>">

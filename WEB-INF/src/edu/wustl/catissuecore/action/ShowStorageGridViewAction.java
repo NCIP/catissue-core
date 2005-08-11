@@ -43,7 +43,7 @@ public class ShowStorageGridViewAction extends Action
             throws Exception
     {
         String systemIdentifier = request.getParameter(Constants.IDENTIFIER);
-        
+        String pageOf = request.getParameter(Constants.PAGEOF);
         StorageContainerBizLogic bizLogic = (StorageContainerBizLogic)BizLogicFactory
                 .getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
         List list = bizLogic.retrieve(StorageContainer.class.getName(),
@@ -51,12 +51,11 @@ public class ShowStorageGridViewAction extends Action
         StorageContainerGridObject storageContainerGridObject
         		= new StorageContainerGridObject();
         boolean [][]fullStatus = null;
-        int [] childContainerSystemIdentifiers = null;
+        int [][] childContainerSystemIdentifiers = null;
 
         if (list != null)
         {
             StorageContainer storageContainer = (StorageContainer) list.get(0);
-            childContainerSystemIdentifiers = new int[storageContainer.getChildrenContainerCollection().size()];
             
             storageContainerGridObject.setSystemIdentifier(storageContainer.getSystemIdentifier().longValue());
             storageContainerGridObject.setType(storageContainer.getStorageType().getType());
@@ -65,8 +64,8 @@ public class ShowStorageGridViewAction extends Action
             				.getStorageContainerCapacity().getOneDimensionCapacity();
             Integer twoDimensionCapacity = storageContainer
             								.getStorageContainerCapacity().getTwoDimensionCapacity();
-            
-            System.out.println(storageContainer.getStorageType().getType()+storageContainer.getName());
+
+            childContainerSystemIdentifiers = new int[oneDimensionCapacity.intValue()][twoDimensionCapacity.intValue()];
             storageContainerGridObject.setOneDimensionCapacity(oneDimensionCapacity);
             storageContainerGridObject.setTwoDimensionCapacity(storageContainer
                     						.getStorageContainerCapacity().getTwoDimensionCapacity());
@@ -76,14 +75,14 @@ public class ShowStorageGridViewAction extends Action
             if (storageContainer.getChildrenContainerCollection() != null)
             {
                 Iterator iterator = storageContainer.getChildrenContainerCollection().iterator();
-                int i = 0;
                 while(iterator.hasNext())
                 {
                     StorageContainer childStorageContainer = (StorageContainer)iterator.next();
                     Integer positionDimensionOne = childStorageContainer.getPositionDimensionOne();
                     Integer positionDimensionTwo = childStorageContainer.getPositionDimensionTwo();
                     fullStatus[positionDimensionOne.intValue()][positionDimensionTwo.intValue()] = true;
-                    childContainerSystemIdentifiers[i++] = childStorageContainer.getSystemIdentifier().intValue();
+                    childContainerSystemIdentifiers[positionDimensionOne.intValue()][positionDimensionTwo.intValue()]
+                                                   = childStorageContainer.getSystemIdentifier().intValue();
                 }
             }            
         }
@@ -93,6 +92,7 @@ public class ShowStorageGridViewAction extends Action
                 								Long.parseLong(storageContainerType),false);
         
         request.setAttribute(Constants.STORAGE_CONTAINER_TYPE,storageContainerType); 
+        request.setAttribute(Constants.PAGEOF, pageOf);
         request.setAttribute(Constants.CHILD_CONTAINER_SYSTEM_IDENTIFIERS, childContainerSystemIdentifiers);
         request.setAttribute(Constants.START_NUMBER,new Integer(startNumber));
         request.setAttribute(Constants.STORAGE_CONTAINER_CHILDREN_STATUS,fullStatus);
