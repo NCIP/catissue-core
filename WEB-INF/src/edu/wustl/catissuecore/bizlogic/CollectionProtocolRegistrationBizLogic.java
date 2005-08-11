@@ -10,8 +10,6 @@
 
 package edu.wustl.catissuecore.bizlogic;
 
-import java.util.List;
-
 import edu.wustl.catissuecore.dao.DAO;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
@@ -24,49 +22,52 @@ import edu.wustl.common.util.dbManager.DAOException;
  */
 public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 {
-
-    /**
-     * Saves the user object in the database.
-     * @param session The session in which the object is saved.
-     * @param obj The user object to be saved.
-     * @throws DAOException 
-     */
+	/**
+	 * Saves the user object in the database.
+	 * @param session The session in which the object is saved.
+	 * @param obj The user object to be saved.
+	 * @throws DAOException 
+	 */
 	protected void insert(DAO dao, Object obj) throws DAOException
-    {
-        CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration) obj;
+	{
+		CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration) obj;
 
-		System.out.println("PID "+collectionProtocolRegistration.getParticipant().getSystemIdentifier());
-        Participant participant = null;
-        List list = dao.retrieve(Participant.class.getName(), "systemIdentifier", 
-        	collectionProtocolRegistration.getParticipant().getSystemIdentifier());
-        if (list.size() != 0)
-        {
-			participant = (Participant) list.get(0);
-        }
-        System.out.println("participant "+participant.getFirstName());
-
-		CollectionProtocol collectionProtocol = null;
-		list = dao.retrieve(CollectionProtocol.class.getName(), "systemIdentifier", 
-			collectionProtocolRegistration.getCollectionProtocol().getSystemIdentifier());
-		if (list.size() != 0)
+		Participant participant = null;
+		//Case of registering Participant on its participant ID
+		if(collectionProtocolRegistration.getParticipant()!=null)
 		{
-			collectionProtocol = (CollectionProtocol)list.get(0);
+			Object participantObj = dao.retrieve(Participant.class.getName(), collectionProtocolRegistration.getParticipant().getSystemIdentifier());
+			if (obj != null)
+			{
+				participant = (Participant) participantObj;
+			}
 		}
-		System.out.println("participant "+collectionProtocol.getTitle());
-
-		collectionProtocolRegistration.setCollectionProtocol(collectionProtocol);
+		else//Case of registering Participant on Participant Protocol ID
+		{
+			//Add a dummy participant in the system
+			participant = new Participant();
+			dao.insert(participant, true);
+		}
 		collectionProtocolRegistration.setParticipant(participant);
 
-        dao.insert(collectionProtocolRegistration,true);
-    }
+		Object collectionProtocolObj = dao.retrieve(CollectionProtocol.class.getName(), 
+				collectionProtocolRegistration.getCollectionProtocol().getSystemIdentifier());
+		if (collectionProtocolObj!=null)
+		{
+			CollectionProtocol collectionProtocol = (CollectionProtocol) collectionProtocolObj;
+			collectionProtocolRegistration.setCollectionProtocol(collectionProtocol);
+		}
 
-    /**
-     * Updates the persistent object in the database.
-     * @param session The session in which the object is saved.
-     * @param obj The object to be updated.
-     * @throws DAOException 
-     */
-    protected void update(DAO dao,Object obj) throws DAOException
-    {
-    }
+		dao.insert(collectionProtocolRegistration, true);
+	}
+
+	/**
+	 * Updates the persistent object in the database.
+	 * @param session The session in which the object is saved.
+	 * @param obj The object to be updated.
+	 * @throws DAOException 
+	 */
+	protected void update(DAO dao, Object obj) throws DAOException
+	{
+	}
 }
