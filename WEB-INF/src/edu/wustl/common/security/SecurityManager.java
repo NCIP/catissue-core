@@ -9,12 +9,18 @@
 package edu.wustl.common.security;
 
 
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 
+import edu.wustl.catissuecore.bizlogic.AbstractBizLogic;
+import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.util.Permissions;
+import edu.wustl.common.beans.UserGroupRoleProtectionGroupBean;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.SMTransactionException;
 import edu.wustl.common.util.logger.Logger;
@@ -22,7 +28,14 @@ import gov.nih.nci.security.AuthenticationManager;
 import gov.nih.nci.security.AuthorizationManager;
 import gov.nih.nci.security.SecurityServiceProvider;
 import gov.nih.nci.security.UserProvisioningManager;
+import gov.nih.nci.security.authorization.domainobjects.Application;
+import gov.nih.nci.security.authorization.domainobjects.Group;
+import gov.nih.nci.security.authorization.domainobjects.ProtectionElement;
+import gov.nih.nci.security.authorization.domainobjects.ProtectionGroup;
+import gov.nih.nci.security.authorization.domainobjects.Role;
 import gov.nih.nci.security.authorization.domainobjects.User;
+import gov.nih.nci.security.dao.ApplicationSearchCriteria;
+import gov.nih.nci.security.dao.RoleSearchCriteria;
 import gov.nih.nci.security.dao.SearchCriteria;
 import gov.nih.nci.security.dao.UserSearchCriteria;
 import gov.nih.nci.security.exceptions.CSException;
@@ -110,7 +123,7 @@ public class SecurityManager implements Permissions
 				}
 			}
 		}
-
+		
 		return authorizationManager;
 
 	}
@@ -123,8 +136,20 @@ public class SecurityManager implements Permissions
 	 */
 	protected UserProvisioningManager getUserProvisioningManager()
 			throws CSException {
-		return (UserProvisioningManager) getAuthorizationManager();
+	    UserProvisioningManager userProvisioningManager =(UserProvisioningManager) getAuthorizationManager();
+	    
+		return userProvisioningManager;
 	}
+	
+	public Application getApplication(String applicationName) throws CSException
+	{
+	    Application application = new Application();
+	    application.setApplicationName(applicationName);
+	    ApplicationSearchCriteria applicationSearchCriteria = new ApplicationSearchCriteria(application);
+	    application = (Application) getUserProvisioningManager().getObjects(applicationSearchCriteria).get(0);
+	    return application;
+	}
+	
 	
 	/**
 	 * Returns true or false depending on the person gets authenticated or not.
@@ -391,4 +416,114 @@ public class SecurityManager implements Permissions
 		return requestingClass.getName();
 	}
 
+	public void insertAuthorizationData(AbstractDomainObject obj,AbstractBizLogic bizlogic) throws SMException
+	{
+	    Logger.out.debug("************** Inserting authorization Data ***************");
+	    Vector authorizationData = bizlogic.getAuthorizationData(obj);
+	    ProtectionElement protectionElement = new ProtectionElement();
+	   
+	    try
+        {
+	        Set protectionElements = new HashSet();
+            UserProvisioningManager userProvisioningManager = getUserProvisioningManager();
+            
+            Set protectionObjects;
+            AbstractDomainObject protectionObject;
+           
+            protectionObjects = bizlogic.getProtectionObjects(obj);
+            if(protectionObjects != null)
+            {
+                for(Iterator it = protectionObjects.iterator(); it.hasNext(); )
+                {
+                    protectionObject = (AbstractDomainObject) it.next();
+                    protectionElement.setApplication(getApplication(CATISSUE_CORE_CONTEXT_NAME));
+                    protectionElement.setObjectId(protectionObject.getClass().getName()+"_"+protectionObject.getSystemIdentifier());
+                    protectionElement.setProtectionElementDescription(protectionObject.getClass().getName()+" object");
+                    protectionElement.setProtectionElementName(protectionObject.getClass().getName()+"_"+protectionObject.getSystemIdentifier());
+                    userProvisioningManager.createProtectionElement(protectionElement);
+                    Logger.out.debug("Protection element created: "+protectionElement.toString());
+                    protectionElements.add(protectionElement);
+                }
+            }
+           
+            
+            
+            UserGroupRoleProtectionGroupBean userGroupRoleProtectionGroupBean;
+            Group group;
+            ProtectionGroup protectionGroup;
+            RoleSearchCriteria roleSearchCriteria;
+            Role role;
+            List roles;
+            String[] roleIds;
+           
+            for(int i=0;i<authorizationData.size();i++)
+            {
+                userGroupRoleProtectionGroupBean = (UserGroupRoleProtectionGroupBean) authorizationData.get(i);
+                
+                
+                group = new Group();
+                group.setApplication(getApplication(CATISSUE_CORE_CONTEXT_NAME));
+                group.setGroupName(userGroupRoleProtectionGroupBean.getGroupName());
+                group.setUsers(userGroupRoleProtectionGroupBean.getGroup());
+                userProvisioningManager.createGroup(group);
+                Logger.out.debug("User group created: "+group.toString());
+                
+                protectionGroup = new ProtectionGroup();
+                protectionGroup.setApplication(getApplication(CATISSUE_CORE_CONTEXT_NAME));
+                protectionGroup.setProtectionGroupName(userGroupRoleProtectionGroupBean.getProtectionGroupName());
+                protectionGroup.setProtectionElements(protectionElements);
+                userProvisioningManager.createProtectionGroup(protectionGroup);
+                Logger.out.debug("Protection group created: "+protectionGroup.toString());
+                
+                role = new Role();
+                role.setName(userGroupRoleProtectionGroupBean.getRoleName());
+                roleSearchCriteria=new RoleSearchCriteria(role);
+                roles = userProvisioningManager.getObjects(roleSearchCriteria);
+                roleIds = new String[1];
+                roleIds[0]= String.valueOf(((Role)roles.get(0)).getId());
+                userProvisioningManager.assignGroupRoleToProtectionGroup(String.valueOf(protectionGroup.getProtectionGroupId()),String.valueOf(group.getGroupId()),roleIds);
+                Logger.out.debug("Assigned Group Role To Protection Group "+protectionGroup.getProtectionGroupId()+" "+String.valueOf(group.getGroupId())+" "+roleIds);
+            }
+            Logger.out.debug("************** Inserted authorization Data ***************");
+            
+        }
+        catch (CSException e)
+        {
+            Logger.out.fatal("The Security Service encountered "
+					+ "a fatal exception.", e);
+			throw new SMException(
+					"The Security Service encountered a fatal exception.", e);
+		}
+	   
+	}
+	
+	
+	public boolean isAuthorized(String userName, String objectId, String privilegeName) throws SMException
+	{
+	    try
+	    {
+	          return getAuthorizationManager().checkPermission(userName,objectId,privilegeName);
+	    }
+	    catch (CSException e)
+	    {
+	        Logger.out.debug("Unable to get all users: Exception: "+e.getMessage());
+	        throw new SMException (e.getMessage(), e);
+	    }
+	}
+	
+	public boolean isAuthorized(String userName, String objectId, String attributeName, String privilegeName) throws SMException
+	{
+	    try
+	    {
+	          return getAuthorizationManager().checkPermission(userName,objectId,attributeName, privilegeName);
+	    }
+	    catch (CSException e)
+	    {
+	        Logger.out.debug("Unable to get all users: Exception: "+e.getMessage());
+	        throw new SMException (e.getMessage(), e);
+	    }
+	}
+	
+
 }
+
