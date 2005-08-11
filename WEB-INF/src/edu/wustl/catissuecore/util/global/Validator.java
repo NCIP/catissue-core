@@ -11,6 +11,10 @@
 package edu.wustl.catissuecore.util.global;
 
 import java.util.StringTokenizer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.io.*;
+
 
 /**
  *  This Class contains the methods used for validation of the fields in the userform.
@@ -30,9 +34,13 @@ public class Validator
         boolean result = true;
         try
         {
-            if (!hasNameAndDomain(aEmailAddress))
+            if (isEmpty(aEmailAddress))
             {
                 result = false;
+            }
+            else
+            {
+            	result = isValidEmailId(aEmailAddress);
             }
         }
         catch (Exception ex)
@@ -41,7 +49,7 @@ public class Validator
         }
         return result;
     }
-
+/*
     private boolean hasNameAndDomain(String aEmailAddress)
     {
         StringTokenizer token = new StringTokenizer(aEmailAddress, "@");
@@ -53,7 +61,7 @@ public class Validator
         return false;
     }
     
-    
+  */  
     /**
      * Checks whether a string is empty and adds an ActionError object in the ActionErrors object.
      * @param componentName Component which is to be checked.
@@ -141,13 +149,86 @@ public class Validator
     	
     }
     
+    private boolean isValidEmailId(String emailAddress)
+    {
+    	boolean result = true;
+    	try
+		{
+    		
+    		Pattern re = Pattern.compile("^\\w(\\.?[\\w-])*@\\w(\\.?[-\\w])*\\.([a-z]{3}(\\.[a-z]{2})?|[a-z]{2}(\\.[a-z]{2})?)$", Pattern.CASE_INSENSITIVE);
+    		Matcher  mat =re.matcher(emailAddress); 
+    		result = mat.matches();
+		}
+    	catch(Exception exp)
+		{
+			System.out.println("5");
+    		return false;
+		}
+    	return result;
+    }
+    
     
     public static void main(String[] args)
     {
         Validator validator = new Validator();
-        String str = new String("aaaa");
+        String str = new String("mandar_deshmukh@persistent.co.in");
         boolean boo = validator.isNumeric(str);
         System.out.println(boo);
+        boo = validator.isValidEmailAddress(str);
+        System.out.println(boo);
+        System.out.println("\n************************************\n\n\n\n");
+        str="mandar_deshmukh@persistent.co.in";
+        boo = validator.isValidEmailId(str );
+        System.out.println("\n\nEmail : " + str + " : " + boo );
+        
+        str="@persistent.co.in";
+        boo = validator.isValidEmailId(str );
+        System.out.println("\n\nEmail : " + str + " : " + boo );
+        
+        str="@pers@istent.co.in";
+        boo = validator.isValidEmailId(str );
+        System.out.println("\n\nEmail : " + str + " : " + boo );
+        
+        str="@@persistent.co.in";
+        boo = validator.isValidEmailId(str );
+        System.out.println("\n\nEmail : " + str + " : " + boo );
+        
+        str=".persi@stent.co.in";
+        boo = validator.isValidEmailId(str );
+        System.out.println("\n\nEmail : " + str + " : " + boo );
+        
+        str="@.persistent.co.in";
+        boo = validator.isValidEmailId(str );
+        System.out.println("\n\nEmail : " + str + " : " + boo );
+
+        str="pers@istent..co.in";
+        boo = validator.isValidEmailId(str );
+        System.out.println("\n\nEmail : " + str + " : " + boo );
+        try
+		{
+            BufferedReader br = new BufferedReader (new InputStreamReader(System.in));
+            System.out.println("\nEnter N/n to Quit \n\n");
+            System.out.print("\n\nDo you want to check the Email Address : ");
+            String ch = br.readLine();
+            while(!ch.equalsIgnoreCase("N") )
+            {
+            	System.out.println("\nEnter the Email Adress to Check: ");
+            	String email = br.readLine();
+            	boolean b = validator.isValidEmailAddress(email );
+            	System.out.println("\n Is Valid : " + b);
+            	System.out.println("---------------------");
+            	System.out.print("Do you want to Continue : ");
+            	ch = br.readLine();
+            }
+            System.out.print("\n\n**************** D O N E *************\n"); 
+		}
+        catch(Exception exp)
+		{
+        	System.out.println("Error : " + exp);
+		}
+
+        
+        
     }
 
 }
