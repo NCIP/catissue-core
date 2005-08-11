@@ -21,27 +21,28 @@ import edu.wustl.catissuecore.util.global.Constants;
  */
 public class StorageLocationViewListener implements TreeSelectionListener
 {
-    
+
     /**
      * The URL of the host from which the applet is loaded.
      */
     private URL codeBase = null;
-    
+
     /**
      * Corresponds to an applet environment.
      */
     private AppletContext appletContext = null;
-    
+
     private String storageContainerType = null;
-    
-    
+
+    private String pageOf = null;
+
     /**
      * Initializes an empty NodeSelectionListener.
      */
     public StorageLocationViewListener()
     {
     }
-    
+
     /**
      * @return Returns the storageContainerType.
      */
@@ -49,7 +50,7 @@ public class StorageLocationViewListener implements TreeSelectionListener
     {
         return storageContainerType;
     }
-    
+
     /**
      * @param storageContainerType The storageContainerType to set.
      */
@@ -57,7 +58,23 @@ public class StorageLocationViewListener implements TreeSelectionListener
     {
         this.storageContainerType = storageContainerType;
     }
-    
+
+    /**
+     * @return Returns the pageOf.
+     */
+    public String getPageOf()
+    {
+        return pageOf;
+    }
+
+    /**
+     * @param pageOf The pageOf to set.
+     */
+    public void setPageOf(String pageOf)
+    {
+        this.pageOf = pageOf;
+    }
+
     /**
      * Creates and initializes a NodeSelectionListener with the codeBase and appletContext.
      * @param codeBase2
@@ -68,7 +85,7 @@ public class StorageLocationViewListener implements TreeSelectionListener
         this.codeBase = codeBase;
         this.appletContext = appletContext;
     }
-    
+
     /**
      * (non-Javadoc)
      * @see javax.swing.event.TreeSelectionListener#valueChanged(javax.swing.event.TreeSelectionEvent)
@@ -77,36 +94,40 @@ public class StorageLocationViewListener implements TreeSelectionListener
     {
         Object object = event.getSource();
         JTree tree = null;
-        
+
         if (object instanceof JTree)
         {
             tree = (JTree) object;
-            DefaultMutableTreeNode node = (DefaultMutableTreeNode)
-            					tree.getLastSelectedPathComponent();
-            StorageContainerTreeNode treeNode = (StorageContainerTreeNode) node.getUserObject();
-            
+            DefaultMutableTreeNode node = (DefaultMutableTreeNode) tree
+                    .getLastSelectedPathComponent();
+            StorageContainerTreeNode treeNode = (StorageContainerTreeNode) node
+                    .getUserObject();
+
             try
             {
                 String urlSuffix = null;
-                
-                if ((!treeNode.getStorageContainerName().equals(Constants.CATISSUE_CORE)) 
-                        			&& (treeNode.getStorageContainerType() != null))
+
+                if ((!treeNode.getStorageContainerName().equals(
+                        Constants.CATISSUE_CORE))
+                        && (treeNode.getStorageContainerType() != null))
                 {
                     String protocol = codeBase.getProtocol();
-                	String host = codeBase.getHost();
+                    String host = codeBase.getHost();
                     int port = codeBase.getPort();
 
                     urlSuffix = Constants.SHOW_STORAGE_CONTAINER_GRID_VIEW_ACTION
-                    			+ "?" + Constants.IDENTIFIER+"="+treeNode.getStorageContainerIdentifier()
-                    			+ "&" + Constants.STORAGE_CONTAINER_TYPE + "=" + this.getStorageContainerType();
-                    
-                    URL dataURL = new URL(protocol,host,port,urlSuffix);
-                    appletContext.showDocument(dataURL,Constants.DATA_VIEW_FRAME);
+                            + "?" + Constants.IDENTIFIER + "=" + treeNode.getStorageContainerIdentifier()
+                            + "&" + Constants.STORAGE_CONTAINER_TYPE + "=" + this.getStorageContainerType()
+                            + "&" + Constants.PAGEOF + "=" + this.pageOf;
+
+                    URL dataURL = new URL(protocol, host, port, urlSuffix);
+                    appletContext.showDocument(dataURL,
+                            Constants.DATA_VIEW_FRAME);
                 }
             }
             catch (MalformedURLException malExp)
             {
-            } 
+            }
 
         }
     }

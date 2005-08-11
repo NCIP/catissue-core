@@ -61,7 +61,6 @@ public class QueryTree extends JApplet
                 treeType = Constants.STORAGE_CONTAINER_TREE_ID;
             }
             
-//            codeBase.
             String urlSuffix = Constants.TREE_DATA_ACTION+"?"+Constants.PAGEOF+"="+pageOf;
 
             URL dataURL = new URL(protocol, host, port, urlSuffix);
@@ -125,6 +124,7 @@ public class QueryTree extends JApplet
             StorageLocationViewListener viewListener 
             		= new StorageLocationViewListener(this.getCodeBase(), this.getAppletContext()); 
             viewListener.setStorageContainerType(storageContainerType);
+            viewListener.setPageOf(pageOf);
             tree.addTreeSelectionListener(viewListener);
 
             //Add listeners for the radio buttons.
