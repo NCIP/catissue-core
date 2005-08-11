@@ -17,9 +17,11 @@ import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.Transaction;
 import edu.wustl.catissuecore.audit.AuditManager;
+import edu.wustl.catissuecore.audit.Auditable;
 import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
+import edu.wustl.catissuecore.exception.AuditException;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.util.dbManager.DAOException;
@@ -105,23 +107,23 @@ public class HibernateDAO extends AbstractDAO
      * @throws HibernateException Exception thrown during hibernate operations.
      * @throws DAOException
      */
-    public void insert(Object obj,boolean isAuditable) throws DAOException
+    public void insert(Object obj,boolean isToAudit) throws DAOException
     {
         try
         {
         	session.save(obj);
         	
-//        	if(isAuditable)
-//        		auditManager.compare((AbstractDomainObject)obj,null,"INSERT");
+        	if(obj instanceof Auditable && isToAudit )
+        		auditManager.compare((Auditable)obj,null,"INSERT");
         }
         catch(HibernateException hibExp)
         {
         	throw handleError(hibExp);
         }
-//        catch(AuditException hibExp)
-//        {
-//        	throw handleError(hibExp);
-//        }
+        catch(AuditException hibExp)
+        {
+        	throw handleError(hibExp);
+        }
     }
     
     private DAOException handleError(Exception hibExp)

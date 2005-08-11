@@ -11,6 +11,7 @@
 package edu.wustl.catissuecore.domain;
 
 import edu.wustl.catissuecore.actionForm.AbstractActionForm;
+import edu.wustl.catissuecore.audit.Auditable;
 import edu.wustl.catissuecore.exception.AssignDataException;
 import edu.wustl.catissuecore.util.global.Constants;
 
@@ -19,7 +20,7 @@ import edu.wustl.catissuecore.util.global.Constants;
  * AbstractDomain class is the superclass of all the domain classes.
  * @author gautam_shetty
  */
-public abstract class AbstractDomainObject
+public abstract class AbstractDomainObject implements Auditable
 {
     /**
      * Returns the fully qualified name of the class according to the form bean type.

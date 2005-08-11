@@ -13,7 +13,6 @@ import java.util.Iterator;
 import java.util.Set;
 
 import edu.wustl.catissuecore.dao.DAO;
-import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.domain.AuditEvent;
 import edu.wustl.catissuecore.domain.AuditEventDetails;
 import edu.wustl.catissuecore.domain.AuditEventLog;
@@ -30,21 +29,21 @@ import edu.wustl.common.util.dbManager.DAOException;
 public class AuditManager 
 {
 	private AuditEvent auditEvent;  
-	private final Set dataSet = new HashSet(); 
+//	private final Set dataSet = new HashSet(); 
 	public AuditManager()
 	{
-		dataSet.add(Byte.class);
-		dataSet.add(Double.class);
-		dataSet.add(Float.class);
-		dataSet.add(Integer.class);
-		dataSet.add(Long.class);
-		dataSet.add(Short.class);
-		
-		dataSet.add(String.class);
-		dataSet.add(Boolean.class);
-		dataSet.add(Character.class);
-		
-		dataSet.add(Date.class);
+//		dataSet.add(Byte.class);
+//		dataSet.add(Double.class);
+//		dataSet.add(Float.class);
+//		dataSet.add(Integer.class);
+//		dataSet.add(Long.class);
+//		dataSet.add(Short.class);
+//		
+//		dataSet.add(String.class);
+//		dataSet.add(Boolean.class);
+//		dataSet.add(Character.class);
+//		
+//		dataSet.add(Date.class);
 		
 		
 		auditEvent = new AuditEvent();
@@ -52,13 +51,21 @@ public class AuditManager
 		auditEvent.setUser(null);
 	}
 	
-	private boolean isVariable(Field filed)
+	private boolean isVariable(Object obj)
 	{
-		return dataSet.contains(filed.getType());
+		if(obj instanceof Number || obj instanceof String || 
+				obj instanceof Boolean || obj instanceof Character || 
+				obj instanceof Date || obj instanceof Auditable)
+			return true;
+		return false;
+		//return dataSet.contains(filed.getType());
 	}
 
-	public void compare(AbstractDomainObject currentObj, AbstractDomainObject previousObj,String eventType) throws AuditException
+	public void compare(Auditable currentObj, Auditable previousObj,String eventType) throws AuditException
 	{
+		if( currentObj == null )
+			return;
+		
 		try
 		{
 			AuditEventLog auditEventLog = new AuditEventLog();
@@ -67,27 +74,28 @@ public class AuditManager
 			auditEventLog.setObjectName(currentObj.getClass().getName());	
 			auditEventLog.setEventType(eventType);
 			
-			auditEvent.getAuditEventLogCollection().add(auditEventLog);
-			
 			Set auditEventDetailsCollection = new HashSet(); 
 			
 			Class currentObjClass = currentObj.getClass();
 			Class previousObjClass = currentObjClass; 
+			
 			if(previousObj!=null)
 				previousObjClass = previousObj.getClass();
 			
 			if(previousObjClass.equals(currentObjClass))
 			{
-				Field[] fields = previousObjClass.getDeclaredFields();
+				Field[] fields = currentObjClass.getDeclaredFields();
 				
 				for (int i = 0; i < fields.length; i++)
 				{
-					AuditEventDetails auditEventDetails = processField(fields[i], previousObj, currentObj);
+					AuditEventDetails auditEventDetails = processField(fields[i], currentObj, previousObj);
 					if(auditEventDetails!=null)
 						auditEventDetailsCollection.add(auditEventDetails);
 				}
 			}
+			
 			auditEventLog.setAuditEventDetailsCollcetion(auditEventDetailsCollection);
+			auditEvent.getAuditEventLogCollection().add(auditEventLog);
 		}
 		catch(Exception ex)
 		{
@@ -95,28 +103,38 @@ public class AuditManager
 		}
 	}
 	
-	private AuditEventDetails processField(Field field, Object previousObj, Object currentObj) throws Exception
+	private AuditEventDetails processField(Field field, Object currentObj, Object previousObj) throws Exception
 	{
-		if(isVariable(field))
+		System.out.println(field.getName()+": "+field.getType());
+		
+		field.setAccessible(true);
+		
+		Object prevVal = getValue(field, previousObj);
+		Object currVal = getValue(field, currentObj);
+		
+		System.out.println("prevVal "+prevVal);
+		System.out.println("currVal "+currVal);
+		
+		AuditEventDetails auditEventDetails = compareValue(prevVal, currVal);
+		if(auditEventDetails!=null)
 		{
-			System.out.println(field.getName()+": "+field.getType());
-			
-			field.setAccessible(true);
-			
-			Object prevVal = null;
-			if(previousObj!=null)
-				prevVal = field.get(previousObj);
-			Object currVal = field.get(currentObj);
-			
-			System.out.println("prevVal "+prevVal);
-			System.out.println("currVal "+currVal);
-			
-			AuditEventDetails auditEventDetails = compareValue(prevVal, currVal);
-			if(auditEventDetails!=null)
+			auditEventDetails.setElementName(field.getName());
+		}
+		return auditEventDetails;
+	}
+	
+	private Object getValue(Field field, Object obj) throws Exception
+	{
+		if(obj!=null)
+		{
+			Object val = field.get(obj);
+			if(val instanceof Auditable)
 			{
-				auditEventDetails.setElementName(field.getName());
-				return auditEventDetails;
+				Auditable auditable = (Auditable)val;
+				return auditable.getSystemIdentifier();
 			}
+			if(isVariable(val))
+				return val; 
 		}
 		return null;
 	}
@@ -125,7 +143,12 @@ public class AuditManager
 	{
 		AuditEventDetails auditEventDetails = new AuditEventDetails();
 		
-		if(prevVal==null || currVal==null )
+		if(prevVal==null && currVal==null)
+		{
+			return null;
+		}
+		
+		if(prevVal==null || currVal==null)
 		{
 			if(prevVal==null && currVal!=null)
 			{
@@ -137,8 +160,6 @@ public class AuditManager
 				auditEventDetails.setPreviousValue(prevVal.toString());
 				auditEventDetails.setCurrentValue(null);
 			}
-			else 
-				return null;
 		}
 		else if(!prevVal.equals(currVal))
 		{

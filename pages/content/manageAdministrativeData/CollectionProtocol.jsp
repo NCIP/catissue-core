@@ -99,11 +99,11 @@ function addDiv(div,adstr)
 //  function to insert a row in the inner block
 function insRow(subdivtag,iCounter)
 {
-		var cnt = document.getElementById(iCounter);
-		var val = parseInt(cnt.value);
-		val = val + 1;
-		cnt.value = val;
-alert(cnt.value);
+	var cnt = document.getElementById(iCounter);
+	var val = parseInt(cnt.value);
+	val = val + 1;
+	cnt.value = val;
+
 	var sname = "";
 	
 	var r = new Array(); 
@@ -124,9 +124,9 @@ alert(cnt.value);
 	var spreqtype=x.insertCell(1)
 	spreqtype.className="formField";
 	sname="";
-	objname = "value(" + subdivname + "_SpecimenRequirement:" + rowno + "_specimenClass)";
+	objname = subdivname + "_SpecimenRequirement:" + rowno + "_specimenClass)";
 	
-	var objunit = "value(" + subdivname + "_SpecimenRequirement:"+rowno+"_unitspan)";
+	var objunit = subdivname + "_SpecimenRequirement:"+rowno+"_unitspan)";
 	
 	sname = "<select name='" + objname + "' size='1' onchange=changeUnit('" + objname + "','" + objunit +"') class='formFieldSized10' id='" + objname + "'>";
 	<%for(int i=0;i<specimenClassIdArry.length;i++)
@@ -141,7 +141,7 @@ alert(cnt.value);
 	var spreqsubtype=x.insertCell(2)
 	spreqsubtype.className="formField";
 	sname="";
-	objname = "value("+subdivname + "_SpecimenRequirement:"+rowno+"_specimenType)";
+	objname = subdivname + "_SpecimenRequirement:"+rowno+"_specimenType)";
 	
 	sname= "<select name='" + objname + "' size='1' class='formFieldSized10' id='" + objname + "'>";
 	<%for(int i=0;i<specimenTypeArry.length;i++)
@@ -156,7 +156,7 @@ alert(cnt.value);
 	var spreqtissuesite=x.insertCell(3)
 	spreqtissuesite.className="formField";
 	sname="";
-	objname = "value("+subdivname + "_SpecimenRequirement:"+rowno+"_tissueSite)";
+	objname = subdivname + "_SpecimenRequirement:"+rowno+"_tissueSite)";
 	
 	sname = "<select name='" + objname + "' size='1' class='formFieldSized10' id='" + objname + "'>";
 	<%for(int i=0;i<tissueSiteArry.length;i++)
@@ -172,7 +172,7 @@ alert(cnt.value);
 	spreqpathologystatus.className="formField";
 	
 	sname="";
-	objname = "value("+subdivname + "_SpecimenRequirement:"+rowno+"_pathologyStatus)";
+	objname = subdivname + "_SpecimenRequirement:"+rowno+"_pathologyStatus)";
 	
 	sname="<select name='" + objname + "' size='1' class='formFieldSized10' id='" + objname + "'>";
 	<%for(int i=0;i<pathologyStatusArry.length;i++)
@@ -187,7 +187,7 @@ alert(cnt.value);
 	var spreqqty=x.insertCell(5)
 	spreqqty.className="formField";
 	sname="";
-	objname = "value("+subdivname + "_SpecimenRequirement:"+rowno+"_quantityIn)";
+	objname = subdivname + "_SpecimenRequirement:"+rowno+"_quantityIn)";
 
 	sname="<input type='text' name='" + objname + "' value='' class='formFieldSized5' id='" + objname + "'>"        	
 	sname = sname + "&nbsp;<span id='" + objunit + "'>&nbsp;</span>"
@@ -616,21 +616,6 @@ function getSubDivCount(subdivtag)
 			    </TR><!-- SUB TITLES END -->
 				
 				<%
-				
-	/*				Object obj1 = request.getAttribute("colForm");
-					int maxIntCount=1;
-					
-					if(obj1 != null && obj1 instanceof CollectionProtocolForm)
-					{
-						colForm = (CollectionProtocolForm)obj1;
-				
-						Map imap = colForm.getInnerLoopValues();
-						Object o = colForm.getIvl(cid);
-						
-						maxIntCount = Integer.parseInt(o.toString());
-					} // colForm exist
-					int maxIntCount=1;
-		*/			
 					for(int innerCounter=1;innerCounter<=maxIntCount;innerCounter++)
 					{
 				%>
@@ -818,7 +803,7 @@ function getSubDivCount(subdivtag)
 			        <%
 				        String hiddenCounter = "ivl(`)";
 			        %>
-			     		<html:button property="addSpecimenReq" styleClass="actionButton" value="Add More" onclick="insRow('CollectionProtocolEvent:`','ivl(`)')"/>
+			     		<html:button property="addSpecimenReq" styleClass="actionButton" value="Add More" onclick="insRow('value(CollectionProtocolEvent:`','ivl(`)')"/>
 			     		
 			     		<html:hidden styleId="<%=hiddenCounter%>" property="<%=hiddenCounter%>" value="1"/>
 			        </td>

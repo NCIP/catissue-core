@@ -304,9 +304,9 @@ public abstract class SpecimenProtocol extends AbstractDomainObject implements j
 		Map replaceMap = new HashMap();
 		Map unitMap = new HashMap();
 		unitMap.put("Cell","CellCount");
-		unitMap.put("Fluid","MiliLiter");
+		unitMap.put("Fluid","Milliliter");
 		unitMap.put("Tissue","Gram");
-		unitMap.put("Molecular","MicroGram");
+		unitMap.put("Molecular","Microgram");
 		
 		Iterator it = orgMap.keySet().iterator();
 		while(it.hasNext())
