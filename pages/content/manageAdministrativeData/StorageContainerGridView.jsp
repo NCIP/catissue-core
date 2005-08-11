@@ -24,7 +24,7 @@ function closeFramedWindow()
 <%
 	StorageContainerGridObject storageContainerGridObject 
 			= (StorageContainerGridObject)request.getAttribute(Constants.STORAGE_CONTAINER_GRID_OBJECT);
-	boolean [][]fullStatus = (boolean [][])request.getAttribute(Constants.STORAGE_CONTAINER_CHILDREN_STATUS);
+	int [][]fullStatus = (int [][])request.getAttribute(Constants.STORAGE_CONTAINER_CHILDREN_STATUS);
 	int [][] childContainerSystemIdentifiers = (int [][])request.getAttribute(Constants.CHILD_CONTAINER_SYSTEM_IDENTIFIERS);
 	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
 	String storageContainerType = null;
@@ -51,30 +51,35 @@ function closeFramedWindow()
 					<% for (int i=0;i<storageContainerGridObject.getOneDimensionCapacity().intValue();i++){%>
 						<tr class="dataRowLight">	
 					<% for (int j=0;j<storageContainerGridObject.getTwoDimensionCapacity().intValue();j++){
-						if (fullStatus[i][j] == true){
-					   			String openStorageContainer = Constants.SHOW_STORAGE_CONTAINER_GRID_VIEW_ACTION
+						if (fullStatus[i][j] != 0)
+						{
+							String openStorageContainer = null;
+							if (pageOf.equals(Constants.PAGEOF_SPECIMEN))
+							{
+								openStorageContainer = Constants.SHOW_STORAGE_CONTAINER_GRID_VIEW_ACTION
                     			+ "?" + Constants.IDENTIFIER + "=" + childContainerSystemIdentifiers[i][j]
-                    			+ "&" + Constants.STORAGE_CONTAINER_TYPE + "=" + storageContainerType;
-
-								if (pageOf.equals(Constants.PAGEOF_SPECIMEN))
-								{
-									openStorageContainer = Constants.SHOW_STORAGE_CONTAINER_GRID_VIEW_ACTION
-                    				+ "?" + Constants.IDENTIFIER + "=" + childContainerSystemIdentifiers[i][j]
-                    				+ "&" + Constants.PAGEOF + "=" + pageOf;
-								}
-								else
-								{
-									openStorageContainer = Constants.SHOW_STORAGE_CONTAINER_GRID_VIEW_ACTION
-                    				+ "?" + Constants.IDENTIFIER + "=" + childContainerSystemIdentifiers[i][j]
-                    				+ "&" + Constants.STORAGE_CONTAINER_TYPE + "=" + storageContainerType
-									+ "&" + Constants.PAGEOF + "=" + pageOf;
-								}%>
-
-						<td class="dataCellText">
-							<a href="<%=openStorageContainer%>">
-								<img src="images/redbox.gif" width="40" height="40" border="0">
-							</a>
- 						</td>
+                    			+ "&" + Constants.PAGEOF + "=" + pageOf;
+							}
+							else
+							{
+								openStorageContainer = Constants.SHOW_STORAGE_CONTAINER_GRID_VIEW_ACTION
+                    			+ "?" + Constants.IDENTIFIER + "=" + childContainerSystemIdentifiers[i][j]
+                    			+ "&" + Constants.STORAGE_CONTAINER_TYPE + "=" + storageContainerType
+								+ "&" + Constants.PAGEOF + "=" + pageOf;
+							}
+							if (fullStatus[i][j] == 1)
+							{%>
+							<td class="dataCellText">
+								<a href="<%=openStorageContainer%>">
+									<img src="images/redbox.gif" width="40" height="40" border="0">
+								</a>
+ 							</td>
+					   	  <%}
+							else{%>
+							<td class="dataCellText">
+								<img src="images/Tree.gif" width="40" height="40" border="0">
+ 							</td>
+							<%}%>
 						<%}
 						else
 						{ 
