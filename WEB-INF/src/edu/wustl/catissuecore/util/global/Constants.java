@@ -78,7 +78,6 @@ public class Constants
 	public static final String PARTICIPANT_LIST = "participantList";
 	public static final String PARTICIPANT_ID_LIST = "participantIdList";
 	public static final String PROTOCOL_LIST = "protocolList";
-	public static final String PROTOCOL_ID_LIST = "protocolIdList";
 	public static final String TIMEHOURLIST = "timeHourList";
 	public static final String TIMEMINUTESLIST = "timeMinutesList";
 	public static final String TIMEAMPMLIST = "timeAMPMList";
@@ -125,11 +124,6 @@ public class Constants
 	public static final String CLINICAL_STATUS_LIST = "cinicalStatusList";
 	public static final String SPECIMEN_CLASS_LIST = "specimenClassList";
 	public static final String SPECIMEN_CLASS_ID_LIST = "specimenClassIdList";
-	
-	//Simple Query Interface Lists
-	public static final String OBJECT_NAME_LIST = "objectNameList";
-	public static final String ATTRIBUTE_NAME_LIST = "attributeNameList";
-	public static final String ATTRIBUTE_CONDITION_LIST = "attributeConditionList";
 	
 	//Constants for Storage Container.
 	public static final String STORAGE_CONTAINER_TYPE = "storageType";
@@ -318,18 +312,6 @@ public class Constants
 	public static final String DISTRIBUTION_ADD_ACTION = "DistributionAdd.do";
 	public static final String DISTRIBUTION_EDIT_ACTION = "DistributionEdit.do";
 	
-	public static final String[] OBJECT_NAME_ARRAY = {
-	        "User","Participant","Specimen"
-	};
-	
-	public static final String[] ATTRIBUTE_NAME_ARRAY = {
-	        "Name","loginName","lastName"
-	};
-	
-	public static final String[] ATTRIBUTE_CONDITION_ARRAY = {
-	        "=","<",">"
-	};
-	
 	//Levels of nodes in query results tree.
 	public static final int MAX_LEVEL = 5;
 	public static final int MIN_LEVEL = 1;
@@ -477,7 +459,6 @@ public class Constants
 	//For Tree Applet
 	public static final String PAGEOF_QUERY_RESULTS = "pageOfQueryResults";
 	public static final String PAGEOF_STORAGE_LOCATION = "pageOfStorageLocation";
-	public static final String PAGEOF_SPECIMEN = "pageOfSpecimen";
 	public static final String PAGEOF_TISSUE_SITE = "pageOfTissueSite";
 	
 	//Query results view temporary table name.
