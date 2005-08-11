@@ -89,14 +89,14 @@ public class CollectionProtocolBizLogic extends DefaultBizLogic implements Roles
 			}
 		}
 		
-		try
-        {
-            SecurityManager.getInstance(this.getClass()).insertAuthorizationData((AbstractDomainObject) obj,this);
-        }
-        catch (SMException e)
-        {
-            Logger.out.error("Exception in Authorization: "+e.getMessage(),e);
-        }
+//		try
+//        {
+//            SecurityManager.getInstance(this.getClass()).insertAuthorizationData((AbstractDomainObject) obj,this);
+//        }
+//        catch (SMException e)
+//        {
+//            Logger.out.error("Exception in Authorization: "+e.getMessage(),e);
+//        }
 	}
 	
 	/**
