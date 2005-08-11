@@ -70,6 +70,11 @@ public class SpecimenForm extends AbstractActionForm
      * Amount of Specimen.
      */
     protected String quantity;
+    
+    /**
+     * Unit of specimen.
+     */
+    protected String unit;
 
     /**
      * A physically discreet container that is used to store a specimen.
@@ -282,6 +287,22 @@ public class SpecimenForm extends AbstractActionForm
     public void setQuantity(String quantity)
     {
         this.quantity = quantity;
+    }
+    
+    /**
+     * @return Returns the quantity.
+     */
+    public String getUnit()
+    {
+        return unit;
+    }
+
+    /**
+     * @param unit The quantity to set.
+     */
+    public void setUnit(String unit)
+    {
+        this.unit = unit;
     }
 
     /**

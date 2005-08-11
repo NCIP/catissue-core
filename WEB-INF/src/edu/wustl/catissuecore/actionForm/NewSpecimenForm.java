@@ -35,7 +35,7 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class NewSpecimenForm extends SpecimenForm
 {
-    private long specimenCollectionGroupId;
+    private String specimenCollectionGroupId;
     
      /**
      * Anatomic site from which the specimen was derived.
@@ -136,7 +136,7 @@ public class NewSpecimenForm extends SpecimenForm
     /**
      * @return Returns the specimenCollectionGroupId.
      */
-    public long getSpecimenCollectionGroupId()
+    public String getSpecimenCollectionGroupId()
     {
         return specimenCollectionGroupId;
     }
@@ -144,7 +144,7 @@ public class NewSpecimenForm extends SpecimenForm
     /**
      * @param specimenCollectionGroupId The specimenCollectionGroupId to set.
      */
-    public void setSpecimenCollectionGroupId(long specimenCollectionGroupId)
+    public void setSpecimenCollectionGroupId(String specimenCollectionGroupId)
     {
         this.specimenCollectionGroupId = specimenCollectionGroupId;
     }
@@ -269,6 +269,10 @@ public class NewSpecimenForm extends SpecimenForm
          {
              if (operation.equals(Constants.ADD) || operation.equals(Constants.EDIT))
              {             
+             	if (specimenCollectionGroupId.equals(Constants.SELECT_OPTION))
+                {
+                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("specimen.specimenCollectionGroupId")));
+                }
              	if (tissueSite.equals(Constants.SELECT_OPTION))
                 {
                     errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("specimen.tissueSite")));
