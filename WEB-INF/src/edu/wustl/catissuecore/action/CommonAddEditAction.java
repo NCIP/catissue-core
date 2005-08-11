@@ -29,6 +29,7 @@ import edu.wustl.catissuecore.bizlogic.AbstractBizLogic;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.domain.DomainObjectFactory;
+import edu.wustl.catissuecore.exception.AssignDataException;
 import edu.wustl.catissuecore.exception.BizLogicException;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.dbManager.DAOException;
@@ -108,6 +109,13 @@ public class CommonAddEditAction extends Action
             //Logger.out.error(excp.getMessage(), excp);
         }
         catch (DAOException excp)
+        {
+            target = new String(Constants.FAILURE);
+            Logger.out.debug("excp "+excp.getMessage());
+            Logger.out.error(excp.getMessage(), excp);
+            //Logger.out.error(excp.getMessage(), excp);
+        }
+        catch (AssignDataException excp)
         {
             target = new String(Constants.FAILURE);
             Logger.out.debug("excp "+excp.getMessage());
