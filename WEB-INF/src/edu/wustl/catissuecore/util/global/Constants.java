@@ -934,7 +934,7 @@ public class Constants
 	        SELECT_OPTION,
 			"Collection",
 			"Laboratory",
-			"Repository"
+			"Repository", "Hospital"
 	};
 	
 	public static final String [] BIOHAZARD_TYPE_ARRAY = {

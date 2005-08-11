@@ -162,7 +162,7 @@ public class  DefaultBizLogic extends AbstractBizLogic
         String[] whereColumnCondition = null;
         Object[] whereColumnValue = null;
         String joinCondition = null;
-        String separatorBetweenFields = ",";            
+        String separatorBetweenFields = ", ";            
         
         return getList(sourceObjectName, displayNameFields, valueField, whereColumnName,
                 whereColumnCondition, whereColumnValue,joinCondition, separatorBetweenFields);
