@@ -45,12 +45,12 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 	{
 		StorageContainer container = (StorageContainer)obj;
         
-        boolean fullStatus[][] = getStorageContainerFullStatus(container
+        boolean fullStatus[][] = getStorageContainerFullStatus(dao, container
                 .getParentContainer().getSystemIdentifier());
 
         int noOfContainers = container.getNoOfContainers().intValue();
         
-        List list = retrieve(StorageType.class.getName(),
+        List list = dao.retrieve(StorageType.class.getName(),
                 "systemIdentifier", container.getStorageType()
                         .getSystemIdentifier());
         if (list.size() != 0)
@@ -61,7 +61,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 
         if (container.getSite() != null)
         {
-            list = retrieve(Site.class.getName(), "systemIdentifier",
+            list = dao.retrieve(Site.class.getName(), "systemIdentifier",
                     container.getSite().getSystemIdentifier());
             if (list.size() != 0)
             {
@@ -72,7 +72,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 
         if (container.getParentContainer() != null)
         {
-            list = retrieve(StorageContainer.class.getName(),
+            list = dao.retrieve(StorageContainer.class.getName(),
                     "systemIdentifier", container.getParentContainer().getSystemIdentifier());
             if (list.size() != 0)
             {
@@ -214,10 +214,10 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
         return vector;
     }
 
-    public boolean[][] getStorageContainerFullStatus(Long systemIdentifier)
+    public boolean[][] getStorageContainerFullStatus(DAO dao, Long systemIdentifier)
             throws DAOException
     {
-        List list = retrieve(StorageContainer.class.getName(),
+        List list = dao.retrieve(StorageContainer.class.getName(),
                 "systemIdentifier", systemIdentifier);
         boolean[][] fullStatus = null;
 
