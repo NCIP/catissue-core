@@ -190,7 +190,7 @@ function insRow(subdivtag)
 		<!-- NEW STORAGE CONTAINER REGISTRATION BEGINS-->
 		<tr>
 		<td>
-			<table summary="" cellpadding="3" cellspacing="0" border="0" width="500">
+			<table summary="" cellpadding="3" cellspacing="0" border="0" width="510">
 				<tr>
 					<td><html:hidden property="operation" value="<%=operation%>" /></td>
 				</tr>
@@ -231,30 +231,15 @@ function insRow(subdivtag)
 	 						</html:link>
 						</td>
 					</tr>
-
+<!-- New row 1 -->
 					<tr>
-						<td class="formRequiredNotice" width="5">&nbsp;</td>
-						<td class="formRequiredRadio">
+						<td class="formRequiredNoticeNoBottom" width="5">&nbsp;</td>
+						<td class="formRequiredLabelRightBorder" colspan=2>
 							<html:radio styleClass="" styleId="checkedButton" property="checkedButton" value="1" onclick="onRadioButtonClick(this)">
 								<label for="siteId">
-									<%--<bean:message key="storageContainer.site" />--%>
+									<bean:message key="storageContainer.site" />
 								</label>
 							</html:radio>
-							<br>
-							<html:radio styleClass="" styleId="checkedButton" property="checkedButton" value="2" onclick="onRadioButtonClick(this)">
-								<label for="site">
-									<%--<bean:message key="storageContainer.parentContainer" />--%>
-								</label>
-							</html:radio>							
-						</td>
-						<td class="formLabel">
-							<label for="siteId">
-								<bean:message key="storageContainer.site" />
-							</label>
-							<br>
-							<label for="site">
-								<bean:message key="storageContainer.parentContainer" />
-							</label>
 						</td>
 						<td class="formField">
 							<logic:equal name="storageContainerForm" property="checkedButton" value="1">
@@ -263,16 +248,29 @@ function insRow(subdivtag)
 							</html:select>
 							</logic:equal>
 							<logic:equal name="storageContainerForm" property="checkedButton" value="2">
-							<html:select property="siteId" styleClass="formFieldSized" styleId="siteId" size="1" onchange="onSiteChange(this)" disabled="true">
+							<html:select property="siteId" styleClass="formFieldSized15" styleId="siteId" size="1" onchange="onSiteChange(this)" disabled="true">
 								<html:options name="siteIdList" labelName="siteList" />
 							</html:select>
 							</logic:equal>
+							
 							&nbsp;
 							<html:link page="/Site.do?operation=add" styleId="newSite">
 		 						<bean:message key="buttons.addNew" />
 	 						</html:link>
-	 						
-	 						<%-- LOGIC TAG TO ENABLE/DISABLE THE FIELDS OF PARENT CONTAINER --%>
+						
+						</td>							
+					</tr>
+<!-- New row two -->					
+					<tr>
+						<td class="formRequiredNotice" width="5">&nbsp;</td>
+						<td class="formRequiredLabel" colspan=2>
+							<html:radio styleClass="" styleId="checkedButton" property="checkedButton" value="2" onclick="onRadioButtonClick(this)">
+								<label for="site">
+									<bean:message key="storageContainer.parentContainer" />
+								</label>
+							</html:radio>							
+						</td>
+						<td class="formField">
 	 						<logic:equal name="storageContainerForm" property="checkedButton" value="1">							
 							<html:text styleClass="formFieldSized" size="30" styleId="positionInParentContainer" property="positionInParentContainer" readonly="true" disabled="true"/>
 							&nbsp;
@@ -293,8 +291,10 @@ function insRow(subdivtag)
 							</html:button>
 							
 							</logic:equal>
-						</td>
+						
+						</td>							
 					</tr>
+
 					<tr>
 						<td class="formRequiredNotice" width="5">&nbsp;</td>
 						<td class="formLabel" colspan="2">
