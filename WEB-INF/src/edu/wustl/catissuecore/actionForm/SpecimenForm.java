@@ -433,6 +433,21 @@ public class SpecimenForm extends AbstractActionForm
                 {
                     errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("specimen.subType")));
                 }
+             	
+             	if(className.equals("Molecular"))
+             	{
+             		if(!validator.isDouble(concentration))
+             			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("specimen.concentration")));
+             	}
+             	
+             	if(validator.isEmpty(quantity))
+             	{
+             		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("specimen.quantity")));
+             	}
+             	else if(!validator.isDouble(quantity))
+             	{
+             		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("specimen.quantity")));
+             	}
              }
          }
          catch(Exception excp)
