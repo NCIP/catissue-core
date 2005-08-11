@@ -45,8 +45,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 		else//Case of registering Participant on Participant Protocol ID
 		{
 			//Add a dummy participant in the system
-			participant = new Participant();
-			dao.insert(participant, true);
+			participant = null;
 		}
 		collectionProtocolRegistration.setParticipant(participant);
 
