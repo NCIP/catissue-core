@@ -57,7 +57,55 @@ public class ReportedProblem extends AbstractDomainObject implements Serializabl
     /**
      * States the activity status of the reported problem.
      */
-    protected String activityStatus; 
+    protected String activityStatus;
+    
+    
+    
+    private String nameOfReporter;
+    
+    private String affiliation;
+
+    /**
+     * The affiliation of the user with the reported problem.
+	 * @hibernate.property name="affiliation" type="string"
+     * column="AFFILIATION" length="200" not-null="true"
+     * @return The affiliation of the reported problem.
+     * @see #setAffiliation(String affiliation) 
+     */
+	public String getAffiliation()
+	{
+		return affiliation;
+	}
+	/**
+	 * @param affiliation The affiliation to set.
+	 */
+	public void setAffiliation(String affiliation)
+	{
+		this.affiliation = affiliation;
+	}
+    /**
+     * The name of the user who reported the problem.
+	 * @hibernate.property name="nameOfReporter" type="string"
+     * column="NAME_OF_REPORTER" length="200" not-null="true"
+     * @return The name of the user who reported the problem.
+     * @see #setNameOfReporter(String nameOfReporter) 
+     */
+	public String getNameOfReporter()
+	{
+		return nameOfReporter;
+	}
+	/**
+	 * @param nameOfReporter The nameOfReporter to set.
+	 */
+	public void setNameOfReporter(String nameOfReporter)
+	{
+		this.nameOfReporter = nameOfReporter;
+	}
+
+    
+    
+    
+    
     
     /**
      * Instantiates an empty Reported Problem. 
@@ -91,6 +139,8 @@ public class ReportedProblem extends AbstractDomainObject implements Serializabl
         this.messageBody = reportedProblemForm.getMessageBody();
         this.activityStatus = reportedProblemForm.getActivityStatus();
         this.comments = reportedProblemForm.getComments();
+        this.nameOfReporter = reportedProblemForm.getNameOfReporter();
+        this.affiliation = reportedProblemForm.getAffiliation(); 
     }
     
     /**

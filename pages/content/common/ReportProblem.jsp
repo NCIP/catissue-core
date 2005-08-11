@@ -101,6 +101,31 @@
 				     	<html:text styleClass="formFieldSized" size="30" styleId="from" property="from" readonly="<%=readOnlyValue%>"/>
 				     </td>
 				 </tr>
+<!-- nameOfReporter -->
+				 <tr>
+				     <td class="formRequiredNotice" width="5">*</td>
+				     <td class="formRequiredLabel">
+				     	<label for="nameOfReporter">
+				     		<bean:message key="fields.nameofreporter"/>
+				     	</label>
+				     </td>
+				     <td class="formField">
+				     	<html:text styleClass="formFieldSized" size="30" styleId="nameOfReporter" property="nameOfReporter" readonly="<%=readOnlyValue%>"/>
+				     </td>
+				 </tr>
+<!-- affiliation -->
+				 <tr>
+				     <td class="formRequiredNotice" width="5">*</td>
+				     <td class="formRequiredLabel">
+				     	<label for="affiliation">
+				     		<bean:message key="fields.affiliation"/>
+				     	</label>
+				     </td>
+				     <td class="formField">
+				     	<html:text styleClass="formFieldSized" size="30" styleId="affiliation" property="affiliation" readonly="<%=readOnlyValue%>"/>
+				     </td>
+				 </tr>
+
 				 <tr>
 				     <td class="formRequiredNotice" width="5">*</td>
 				     <td class="formRequiredLabel">

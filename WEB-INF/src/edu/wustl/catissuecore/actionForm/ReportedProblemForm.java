@@ -63,7 +63,51 @@ public class ReportedProblemForm extends AbstractActionForm
     private String activityStatus = new String();
     
     private String comments;
+    
 
+    
+    private String nameOfReporter;
+    
+    private String affiliation;
+
+    /**
+     * The affiliation of the user with the reported problem.
+     * @return The affiliation of the reported problem.
+     * @see #setAffiliation(String affiliation) 
+     */
+	public String getAffiliation()
+	{
+		return affiliation;
+	}
+	/**
+	 * @param affiliation The affiliation to set.
+	 */
+	public void setAffiliation(String affiliation)
+	{
+		this.affiliation = affiliation;
+	}
+    /**
+     * The name of the user who reported the problem.
+     * @return The name of the user who reported the problem.
+     * @see #setNameOfReporter(String nameOfReporter) 
+     */
+	public String getNameOfReporter()
+	{
+		return nameOfReporter;
+	}
+	/**
+	 * @param nameOfReporter The nameOfReporter to set.
+	 */
+	public void setNameOfReporter(String nameOfReporter)
+	{
+		this.nameOfReporter = nameOfReporter;
+	}
+
+    
+    
+    
+    
+    
     /**
      * Initializes an empty problem.
      */
@@ -83,6 +127,8 @@ public class ReportedProblemForm extends AbstractActionForm
         this.subject = null;
         this.messageBody = null;
         this.activityStatus = Constants.APPROVE_USER_PENDING_STATUS;
+        this.nameOfReporter = null;
+        this.affiliation = null;
     }
 
     /**
@@ -260,6 +306,8 @@ public class ReportedProblemForm extends AbstractActionForm
         this.messageBody = reportedProblem.getMessageBody();
         this.comments = reportedProblem.getComments();
         this.activityStatus = reportedProblem.getActivityStatus();
+        this.affiliation = reportedProblem.getAffiliation();
+        this.nameOfReporter = reportedProblem.getNameOfReporter() ;
     }
 
     /**
@@ -301,6 +349,20 @@ public class ReportedProblemForm extends AbstractActionForm
                                         .getValue("fields.title")));
                     }
 
+                    if (validator.isEmpty(nameOfReporter ))
+                    {
+                        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+                                "errors.item.required", ApplicationProperties
+                                        .getValue("fields.nameofreporter")));
+                    }
+                    if (validator.isEmpty(affiliation ))
+                    {
+                        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+                                "errors.item.required", ApplicationProperties
+                                        .getValue("fields.affiliation")));
+                    }
+
+                    
                     if (validator.isEmpty(messageBody))
                     {
                         errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
