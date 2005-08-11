@@ -25,6 +25,7 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.bizlogic.AbstractBizLogic;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
+import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.util.global.Constants;
 
 /**
@@ -62,8 +63,8 @@ public class CollectionProtocolRegistrationAction extends Action
 			request.setAttribute(Constants.PROTOCOL_LIST, list);
 
 			//get list of Participant's names
-			sourceObjectName = CollectionProtocol.class.getName();
-			String[] participantsFields = {"title"};
+			sourceObjectName = Participant.class.getName();
+			String[] participantsFields = {"lastName","firstName"};
 			list = bizLogic.getList(sourceObjectName, participantsFields, valueField);
 			request.setAttribute(Constants.PARTICIPANT_LIST, list);
 		}
