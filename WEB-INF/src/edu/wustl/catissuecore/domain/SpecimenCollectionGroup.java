@@ -313,51 +313,51 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
 		
 		SpecimenCollectionGroupForm form = (SpecimenCollectionGroupForm)abstractForm;
 		try
-			{
-				System.out.println("Inside SEtallValues method....");
-				this.systemIdentifier = new Long(form.getSystemIdentifier());
-				this.setClinicalDiagnosis(form.getClinicalDiagnosis());
-		        this.setClinicalStatus(form.getClinicalStatus());
-		        this.setActivityStatus(form.getActivityStatus());
+		{
+			this.systemIdentifier = new Long(form.getSystemIdentifier());
+			this.setClinicalDiagnosis(form.getClinicalDiagnosis());
+	        this.setClinicalStatus(form.getClinicalStatus());
+	        this.setActivityStatus(form.getActivityStatus());
+			
+			site = new Site();
+			site.setSystemIdentifier(new Long(form.getSiteId()));
+			
+			collectionProtocolEvent= new CollectionProtocolEvent();
+			collectionProtocolEvent.setSystemIdentifier(new Long(form.getCollectionProtocolEventId()));
+
+			clinicalReport = new ClinicalReport();
+			clinicalReport.setSurgicalPathologyNumber(form.getSurgicalPathologyNumber());
+			
+			collectionProtocolRegistration = new CollectionProtocolRegistration();
+			if(form.getCheckedButton() == 1)
+			{    
+				//value of radio button is 2 when participant name is selected
+				Participant participant = new Participant();
+				participant.setSystemIdentifier(new Long(form.getParticipantId()));
+				collectionProtocolRegistration.setParticipant(participant);
+				collectionProtocolRegistration.setProtocolParticipantIdentifier(null);
 				
-				
-				clinicalReport = new ClinicalReport();
-				clinicalReport.setSurgicalPathologyNumber(form.getSurgicalPathologyNumber());
 				ParticipantMedicalIdentifier participantMedicalIdentifier = new ParticipantMedicalIdentifier();
 				participantMedicalIdentifier.setSystemIdentifier(new Long(form.getParticipantsMedicalIdentifierId()));
 				clinicalReport.setParticipantMedicalIdentifier(participantMedicalIdentifier);
-				
-				site = new Site();
-				site.setSystemIdentifier(new Long(form.getSiteId()));
-				
-				collectionProtocolEvent= new CollectionProtocolEvent();
-				collectionProtocolEvent.setSystemIdentifier(new Long(form.getCollectionProtocolEventId()));
-				
-				
-				collectionProtocolRegistration = new CollectionProtocolRegistration();
-				if(form.getCheckedButton() == 1){    //value of radio button is 2 when participant name is selected
-					Participant participant = new Participant();
-					participant.setSystemIdentifier(new Long(form.getParticipantId()));
-					collectionProtocolRegistration.setParticipant(participant);
-					System.out.println("INSIDE IF PART (PARTICIPANTNAME)");
-				}else{
-					collectionProtocolRegistration.setProtocolParticipantIdentifier(form.getProtocolParticipantIdentifier());
-					System.out.println("INSIDE ELSE PART (PARTICIPANTNUMBER)");
-				}
-				
-				
-				CollectionProtocol collectionProtocol = new CollectionProtocol();
-				collectionProtocol.setSystemIdentifier(new Long(form.getCollectionProtocolId()));
-				collectionProtocolRegistration.setCollectionProtocol(collectionProtocol);
-				
-				
-				System.out.println("<<<<<END OF SETALLVALUES METHOD>>>");
 			}
-			catch(Exception e)
+			else
 			{
-				Logger.out.error(e.getMessage());
-				e.printStackTrace();
+				collectionProtocolRegistration.setProtocolParticipantIdentifier(form.getProtocolParticipantIdentifier());
+				collectionProtocolRegistration.setParticipant(null);
+				
+				clinicalReport.setParticipantMedicalIdentifier(null);
 			}
+			
+			CollectionProtocol collectionProtocol = new CollectionProtocol();
+			collectionProtocol.setSystemIdentifier(new Long(form.getCollectionProtocolId()));
+			collectionProtocolRegistration.setCollectionProtocol(collectionProtocol);
+		}
+		catch(Exception e)
+		{
+			Logger.out.error(e.getMessage());
+			e.printStackTrace();
+		}
 		
 	}
 	

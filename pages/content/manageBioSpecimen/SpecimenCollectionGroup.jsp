@@ -206,9 +206,10 @@
                          	     <html:options collection="<%=Constants.PARTICIPANT_LIST%>" labelProperty="name" property="value"/>				     	
   						     </html:select>
   						</logic:equal>     
-				  		   <html:link page="/Participant.do?operation=add" styleId="newParticipant">
-		 						<bean:message key="buttons.addNew" />
-	 						</html:link>
+  						
+			  		    <html:link page="/Participant.do?operation=add" styleId="newParticipant">
+	 						<bean:message key="buttons.addNew" />
+ 						</html:link>
 					
                         <%-- LOGIC TAG FOR PARTICPANT NUMBER --%> 												
                         <logic:equal name="specimenCollectionGroupForm" property="checkedButton" value="1">						
@@ -216,15 +217,15 @@
                          		<html:options collection="<%=Constants.PROTOCOL_PARTICIPANT_NUMBER_LIST%>" labelProperty="name" property="value"/>				     					     	
 							</html:select>
  						</logic:equal>
+ 						
  						<logic:equal name="specimenCollectionGroupForm" property="checkedButton" value="2">						
    						 	<html:select property="protocolParticipantIdentifier" styleClass="formFieldSized" styleId="protocolParticipantIdentifier" size="1" >
                          		<html:options collection="<%=Constants.PROTOCOL_PARTICIPANT_NUMBER_LIST%>" labelProperty="name" property="value"/>				     					     	
 							</html:select>
  						</logic:equal>
- 						   <html:link page="/CollectionProtocolRegistration.do?operation=add" styleId="newParticpantRegistration">
+ 						<html:link page="/CollectionProtocolRegistration.do?operation=add" styleId="newParticpantRegistration">
 		 						<bean:message key="buttons.addNew" />
-	 						</html:link>
- 						
+	 					</html:link>
 		        	</td>
 				 </tr>
 				 
@@ -232,7 +233,7 @@
 				 
 				      <td class="formRequiredNotice" width="5">
 				        	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">*</logic:notEqual>
-				     	   <logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;</logic:equal>
+				     	    <logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;</logic:equal>
 				      </td>
 				      
 				     <td class="formRequiredLabel">
@@ -243,7 +244,6 @@
 				     <td class="formField">
 				     	<html:select property="collectionProtocolEventId" styleClass="formFieldSized" styleId="collectionProtocolEventId" size="1" onchange="onChangeEvent(this)" >
                          	<html:options collection="<%=Constants.STUDY_CALENDAR_EVENT_POINT_LIST%>" labelProperty="name" property="value"/>				     					     					     	
-					<%--	<html:options name="<%=Constants.STUDY_CALENDAR_EVENT_POINT_ID_LIST%>" labelName="<%=Constants.STUDY_CALENDAR_EVENT_POINT_LIST%>"/>		--%>
 						</html:select>
 		        	  </td>
 				 </tr>
@@ -277,6 +277,7 @@
 						</html:select>
 		        	  </td>
 				 </tr>
+				 
 				 <tr>
 			     	<td class="formRequiredNotice" width="5">
 				     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">*</logic:notEqual>
@@ -287,27 +288,20 @@
 							<bean:message key="specimenCollectionGroup.medicalRecordNumber"/>
 						</label>
 					</td>
-                       <td class="formField">
+                    <td class="formField">
    						<logic:equal name="specimenCollectionGroupForm" property="checkedButton" value="1">
 				     		<html:select property="participantsMedicalIdentifierId" styleClass="formFieldSized" styleId="participantsMedicalIdentifierId" size="1" disabled="<%=readOnlyForAll%>">
-                         		<html:options collection="<%=Constants.PARTICIPANT_MEDICAL_IDNETIFIER_LIST%>" labelProperty="name" property="value"/>				     					     					     					     	
-							<%--<html:options name="<%=Constants.PARTICIPANT_MEDICAL_IDNETIFIER_ID_LIST%>" labelName="<%=Constants.PARTICIPANT_MEDICAL_IDNETIFIER_LIST%>"/>		--%>
+                         		<html:options collection="<%=Constants.PARTICIPANT_MEDICAL_IDNETIFIER_LIST%>" labelProperty="name" property="value"/>
 							</html:select>
 						</logic:equal>
 						<logic:equal name="specimenCollectionGroupForm" property="checkedButton" value="2">
 					     	<html:select property="participantsMedicalIdentifierId" styleClass="formFieldSized" styleId="participantsMedicalIdentifierId" size="1" disabled="true">
-                	         	<html:options collection="<%=Constants.PARTICIPANT_MEDICAL_IDNETIFIER_LIST%>" labelProperty="name" property="value"/>				     					     					     					     	
-							<%--<html:options name="<%=Constants.PARTICIPANT_MEDICAL_IDNETIFIER_ID_LIST%>" labelName="<%=Constants.PARTICIPANT_MEDICAL_IDNETIFIER_LIST%>"/>		--%>
+                	         	<html:options collection="<%=Constants.PARTICIPANT_MEDICAL_IDNETIFIER_LIST%>" labelProperty="name" property="value"/>
 							</html:select>
 						</logic:equal>
-		        	  </td>					
-					<!--
-					
-				    <td class="formField">
-				     	<html:text styleClass="formFieldSized" size="30" styleId="participantsMedicalIdentifierId" property="participantsMedicalIdentifierId" readonly="<%=readOnlyForAll%>"/>
-				    </td>
-				    -->
+		        	</td>					
 				 </tr>
+				 
 				 <tr>
 			     	<td class="formRequiredNotice" width="5">
 				     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">*</logic:notEqual>
