@@ -7,10 +7,13 @@ import java.util.Map;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
+import edu.wustl.catissuecore.util.Permissions;
 import edu.wustl.catissuecore.util.ProtectionGroups;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;
+import edu.wustl.common.security.SecurityManager;
+import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -20,7 +23,7 @@ import edu.wustl.common.util.logger.Logger;
  * */
 public class CatissueCoreServletContextListener
         implements
-            ServletContextListener, ProtectionGroups
+            ServletContextListener, ProtectionGroups, Permissions
 {
 
     /* (non-Javadoc)
@@ -73,7 +76,7 @@ public class CatissueCoreServletContextListener
         
         Map protectionGroupsForObjectTypes = new HashMap();
         protectionGroupsForObjectTypes.put("edu.wustl.catissuecore.domain.CollectionProtocol",
-                new String[] {ADMINISTRATIVE_DATA_GROUP,PUBLIC_DATA_GROUP});
+                new String[] {ADMINISTRATORS_DATA_GROUP,PUBLIC_DATA_GROUP});
         Constants.STATIC_PROTECTION_GROUPS_FOR_OBJECT_TYPES.putAll(protectionGroupsForObjectTypes);
         
         /**
@@ -92,6 +95,52 @@ public class CatissueCoreServletContextListener
                 + Variables.catissueHome);
         Logger.out.info(ApplicationProperties.getValue("logger.conf.filename")
                 + applicationResourcesPath);
+        
+        try
+        {
+            Logger.out
+                    .debug("Read Perm to aarti on edu.wustl.catissuecore.domain.CollectionProtocol_25 "
+                            + Boolean
+                                    .toString(SecurityManager
+                                            .getInstance(this.getClass())
+                                            .isAuthorized(
+                                                    "aarti",
+                                                    "edu.wustl.catissuecore.domain.CollectionProtocol_25",
+                                                    READ)));
+            Logger.out
+            .debug("Read Perm to admin on edu.wustl.catissuecore.domain.CollectionProtocol_25 "
+                    + Boolean
+                            .toString(SecurityManager
+                                    .getInstance(this.getClass())
+                                    .isAuthorized(
+                                            "admin",
+                                            "edu.wustl.catissuecore.domain.CollectionProtocol_25",
+                                            READ)));
+            Logger.out
+            .debug("Read Perm to aarti on edu.wustl.catissuecore.domain.CollectionProtocolEvent_14 "
+                    + Boolean
+                            .toString(SecurityManager
+                                    .getInstance(this.getClass())
+                                    .isAuthorized(
+                                            "aarti",
+                                            "edu.wustl.catissuecore.domain.CollectionProtocolEvent_14",
+                                            READ)));
+            
+            Logger.out
+            .debug("Read Perm to admin on edu.wustl.catissuecore.domain.CollectionProtocolEvent_14 "
+                    + Boolean
+                            .toString(SecurityManager
+                                    .getInstance(this.getClass())
+                                    .isAuthorized(
+                                            "admin",
+                                            "edu.wustl.catissuecore.domain.CollectionProtocolEvent_14",
+                                            READ)));
+        }
+        catch (SMException e1)
+        {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }  
 
     }
 
