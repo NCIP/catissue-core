@@ -11,6 +11,7 @@
 package edu.wustl.catissuecore.domain;
 
 import edu.wustl.catissuecore.actionForm.AbstractActionForm;
+import edu.wustl.catissuecore.exception.AssignDataException;
 import edu.wustl.catissuecore.util.global.Constants;
 
 
@@ -53,7 +54,7 @@ public abstract class AbstractDomainObject
      * Copies all values from the AbstractForm object
      * @param abstractForm The AbstractForm object
      */
-    public abstract void setAllValues(AbstractActionForm abstractForm);
+    public abstract void setAllValues(AbstractActionForm abstractForm) throws AssignDataException;
     
     /**
 	 * Returns the unique systemIdentifier assigned to the domain object.
