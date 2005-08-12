@@ -108,7 +108,7 @@ public class MapDataParser
 			if(tokenCount==2)
 			{
 				String attrName = st.nextToken();
-				String methodName =  createAccessorMethodName(attrName,true);
+				String methodName =  Utility.createAccessorMethodName(attrName,true);
 				
 				Class objClass = obj.getClass();
 
@@ -127,14 +127,7 @@ public class MapDataParser
 		
 	}
 	
-	private String createAccessorMethodName(String attr,boolean isSetter)
-	{
-		String firstChar = attr.substring(0,1);
-		String str = "get"; 
-		if(isSetter)
-			str = "set"; 
-		return str + firstChar.toUpperCase() + attr.substring(1);
-	}
+	
 	
 	private Object parseClassAndGetInstance(Object parentObj,String str,String mapKey) throws Exception
 	{
@@ -179,7 +172,7 @@ public class MapDataParser
 		else //case map.put("CollectionProtocolEvent.studyCalendarEventPoint", new Double(11));
 		{
 			className = str;
-			return getObj(parentObj,className);
+			return Utility.getValueFor(parentObj,className);
 		}
 	}
 	
@@ -204,17 +197,7 @@ public class MapDataParser
 	private Collection getCollectionObj(Object parentObj, String str) throws Exception
 	{
 		String attrName = str+"Collection";
-		return (Collection)getObj(parentObj, attrName);
-	}
-	
-	private Object getObj(Object parentObj, String attrName) throws Exception
-	{
-		//Create the getter method of attribute
-		String methodName =  createAccessorMethodName(attrName,false);
-		Class objClass = parentObj.getClass();
-		Method method = objClass.getMethod(methodName, new Class[0]);
-
-		return method.invoke(parentObj,new Object[0]);
+		return (Collection) Utility.getValueFor(parentObj, attrName);
 	}
 	
 
