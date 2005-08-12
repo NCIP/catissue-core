@@ -36,6 +36,7 @@ public class DistributionForm extends EventParametersForm
 	
 	private String fromSite;
 	private String toSite;
+	private int counter=1;
 	
 	/**
 	 * Map to handle values of all the CollectionProtocol Events
@@ -104,6 +105,18 @@ public class DistributionForm extends EventParametersForm
 	/**
 	 * @return
 	 */
+	public int getCounter()
+	{
+		return counter;
+	}
+	
+	/**
+	 * @param counter The counter to set.
+	 */
+	public void setCounter(int counter)
+	{
+		this.counter = counter;
+	}
 	public String getToSite() {
 		return toSite;
 	}

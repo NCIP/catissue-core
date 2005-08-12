@@ -2,16 +2,76 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
+<%@ page import="edu.wustl.catissuecore.actionForm.DistributionForm"%>
+<%@ page import="java.util.List,java.util.ListIterator"%>
+<%@ page import="edu.wustl.common.beans.NameValueBean"%>
 
+<%
+	List itemList = (List)request.getAttribute(Constants.ITEMLIST);
+	ListIterator iterator=null;
+%>
 <head>
+	<script language="JavaScript">
+		//function to insert a row in the inner block
+		function insRow(subdivtag)
+		{
+			var val = parseInt(document.forms[0].counter.value);
+			val = val + 1;
+			document.forms[0].counter.value = val;
+			
+			var r = new Array(); 
+			r = document.getElementById(subdivtag).rows;
+			var q = r.length;
+			var x=document.getElementById(subdivtag).insertRow(q);
+			
+			// First Cell
+			var spreqno=x.insertCell(0);
+			spreqno.className="formSerialNumberField";
+			sname=(q+1);
+			spreqno.innerHTML="" + sname;
+
+			//Second Cell
+			var spreqtype=x.insertCell(1);
+			spreqtype.className="formField";
+			sname="";
+
+			var name = "value(DistributionDistributedItem:" + (q+1) + "_Specimen_systemIdentifier)";
+			sname="<select name='" + name + "' size='1' class='formFieldSized15' id='" + name + "'>";
+			<%
+				if(itemList!=null)
+				{
+					iterator = itemList.listIterator();
+					while(iterator.hasNext())
+					{
+						NameValueBean bean = (NameValueBean)iterator.next();
+			%>
+						sname = sname + "<option value='<%=bean.getValue()%>'><%=bean.getName()%></option>";
+			<%		}
+				}
+			%>
+			sname = sname + "</select>";
+			spreqtype.innerHTML="" + sname;
+		
+			//Third Cellvalue(:1_medicalRecordNumber)
+			var spreqsubtype=x.insertCell(2);
+			spreqsubtype.className="formField";
+			sname="";
+		
+			name = "value(DistributionDistributedItem:" + (q+1) + "_quantity)";
+			sname= "";
+			sname="<input type='text' name='" + name + "' size='30'  class='formFieldSized15' id='" + name + "'>";
+			spreqsubtype.innerHTML="" + sname;
+		}
+	</script>
 </head>
-	
+
+
 <%
         String operation = (String) request.getAttribute(Constants.OPERATION);
         String formName;
         String searchFormName = new String(Constants.DISTRIBUTION_SEARCH_ACTION);
-
-        boolean readOnlyValue;
+		boolean readOnlyValue=false,readOnlyForAll=false;
+       
         if (operation.equals(Constants.EDIT))
         {
             formName = Constants.DISTRIBUTION_EDIT_ACTION;
@@ -23,6 +83,16 @@
             readOnlyValue = false;
         }
 		
+		String pageOf = (String)request.getAttribute(Constants.PAGEOF);
+
+		Object obj = request.getAttribute("distributionForm");
+		int noOfRows=1;
+
+		if(obj != null && obj instanceof DistributionForm)
+		{
+			DistributionForm form = (DistributionForm)obj;
+			noOfRows = form.getCounter();
+		}
 %>	
 			
 <html:errors/>
@@ -31,7 +101,7 @@
 
 <html:form action="<%=Constants.DISTRIBUTION_ADD_ACTION%>">
 
-	<logic:notEqual name="operation" value="<%=Constants.ADD%>"> 
+	<logic:notEqual name="operation" value="<%=Constants.ADD%>">  
 	<!-- ENTER IDENTIFIER BEGINS-->	
 	<br/>	
 	<tr>
@@ -73,9 +143,11 @@
 		</td>
 	</tr>
 	<!-- ENTER IDENTIFIER ENDS-->	
-	</logic:notEqual> 
-	
+	</logic:notEqual>
 
+			  
+			   	
+			  
 	<!-- NEW distribution REGISTRATION BEGINS-->
 	<tr>
 	<td>
@@ -83,6 +155,7 @@
 	<table summary="" cellpadding="3" cellspacing="0" border="0">
 		<tr>
 			<td><html:hidden property="operation" value="<%=operation%>"/></td>
+			<td><html:hidden property="counter"/></td>
 		</tr>
 
 		<logic:notEqual name="operation" value="<%=Constants.SEARCH%>">
@@ -123,7 +196,7 @@
 			<td class="formField">
 				 <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
 				<html:text styleClass="formDateSized" size="35" styleId="dateOfEvent" property="dateOfEvent" readonly="true"/>
-				<a href="javascript:show_calendar('distributionForm.dateOfEvent',null,null,'MM-DD-YYYY');">
+				<a href="javascript:show_calendar('distribution.dateOfEvent','','','MM-DD-YYYY');">
 					<img src="images\calendar.gif" width=24 height=22 border=0>
 				</a>
 			</td>
@@ -190,7 +263,54 @@
 				<html:textarea styleClass="formFieldSized"  styleId="comments" property="comments" />
 			</td>
 		</tr>
-
+<!--  Distributed Item begin here -->
+				 <tr>
+				     <td class="formTitle" height="20" colspan="2">
+				     	<bean:message key="distribution.distributedItem"/>
+				     </td>
+				     <td class="formButtonField">
+						<html:button property="addKeyValue" styleClass="actionButton" onclick="insRow('addMore')">
+						<bean:message key="buttons.addMore"/>
+						</html:button>
+				    </td>
+				  </tr>
+				 <tr>
+				 	<td class="formSerialNumberLabel" width="5">
+				     	#
+				    </td>
+				    <td class="formLeftSubTableTitle">
+						<bean:message key="itemrecord.specimenId"/>
+					</td>
+				    <td class="formRightSubTableTitle">
+						<bean:message key="itemrecord.quantity"/>
+					</td>
+				 </tr>
+				 
+				 <tbody id="addMore">
+				<%
+				for(int i=1;i<=noOfRows;i++)
+				{
+					String itemName = "value(DistributionDistributedItem:"+i+"_Item_systemIdentifier)";
+					String quantity = "value(DistributionDistributedItem:"+i+"_quantity)";
+				%>
+				 <tr>
+				 	<td class="formSerialNumberField" width="5"><%=i%>.</td>
+				    <td class="formField">
+						<html:select property="<%=itemName%>" styleClass="formFieldSized15" styleId="<%=itemName%>" size="1" disabled="<%=readOnlyForAll%>">
+							<html:options collection="<%=Constants.ITEMLIST%>" labelProperty="name" property="value"/>		
+						</html:select>
+					</td>
+				    <td class="formField">
+				     	<html:text styleClass="formFieldSized15" size="30" styleId="<%=quantity%>" property="<%=quantity%>" readonly="<%=readOnlyForAll%>"/>
+				    </td>
+				 </tr>
+				 <%
+				}
+				%>
+				 </tbody>
+				 
+			
+			<!-- Distributed item End here -->
 <!-- buttons -->
 		<tr>
 		  <td align="right" colspan="3">
@@ -216,7 +336,8 @@
 	  </td>
 	 </tr>
 
-	 <!-- NEW tdistribution ends-->
+	 <!-- NEW Distribution ends-->
 	 
 	 </html:form>
  </table>
+			

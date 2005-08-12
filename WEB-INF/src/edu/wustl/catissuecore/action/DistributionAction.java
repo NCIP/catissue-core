@@ -10,9 +10,13 @@
 
 package edu.wustl.catissuecore.action;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.beans.NameValueBean;
 
 /**
  * This class initializes the fields in the  Distribution Add/Edit webpage.
@@ -27,5 +31,15 @@ public class  DistributionAction extends SpecimenEventParametersAction
 		
 		request.setAttribute(Constants.FROMSITELIST, Constants.FROMSITEARRAY);
 		request.setAttribute(Constants.TOSITELIST, Constants.TOSITEARRAY);
+		
+		List list = new ArrayList();
+		NameValueBean nameValueBean = new NameValueBean();
+		nameValueBean.setName(Constants.SELECT_OPTION);
+		nameValueBean.setValue("-1");
+		
+		list.add(nameValueBean);
+		
+		
+		request.setAttribute(Constants.ITEMLIST, list);
 	}
 }
