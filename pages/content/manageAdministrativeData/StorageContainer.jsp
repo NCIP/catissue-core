@@ -223,7 +223,8 @@ function insRow(subdivtag)
 						</td>
 						<td class="formField">
 							<html:select property="typeId" styleClass="formFieldSized" styleId="typeId" size="1" onchange="onTypeChange(this)">
-								<html:options name="storageTypeIdList" labelName="storageTypeList" />
+								<%-- html:options name="storageTypeIdList" labelName="storageTypeList" /--%>
+								<html:options collection="<%=Constants.STORAGETYPELIST%>" labelProperty="name" property="value"/>
 							</html:select>
 							&nbsp;
 							<html:link page="/StorageType.do?operation=add">
@@ -244,7 +245,7 @@ function insRow(subdivtag)
 						<td class="formField">
 							<logic:equal name="storageContainerForm" property="checkedButton" value="1">
 							<html:select property="siteId" styleClass="formFieldSized" styleId="siteId" size="1" onchange="onSiteChange(this)">
-								<html:options name="siteIdList" labelName="siteList" />
+								<html:options collection="<%=Constants.SITELIST%>" labelProperty="name" property="value"/>
 							</html:select>
 							</logic:equal>
 							<logic:equal name="storageContainerForm" property="checkedButton" value="2">
