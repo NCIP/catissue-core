@@ -45,7 +45,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 	{
 		StorageContainer container = (StorageContainer)obj;
         
-        boolean fullStatus[][]  = null;
+        boolean fullStatus[][] = null;
 
         int noOfContainers = container.getNoOfContainers().intValue();
         
@@ -69,6 +69,8 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
             }
         }
 
+        int posOneCapacity = 1, posTwoCapacity = 1;
+        int positionDimensionOne = 0, positionDimensionTwo=0;
         if (container.getParentContainer() != null)
         {
             list = dao.retrieve(StorageContainer.class.getName(),
@@ -79,18 +81,24 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
                 container.setParentContainer(pc);
             }
             
+            posOneCapacity = container.getParentContainer().getStorageContainerCapacity().getOneDimensionCapacity().intValue();
+            posTwoCapacity = container.getParentContainer().getStorageContainerCapacity().getTwoDimensionCapacity().intValue();
+            
             fullStatus = getStorageContainerFullStatus(dao, container
                     .getParentContainer().getSystemIdentifier());
+            positionDimensionOne = container.getPositionDimensionOne().intValue();
+            positionDimensionTwo = container.getPositionDimensionTwo().intValue();
         }
 
-        int positionDimensionOne = container.getPositionDimensionOne().intValue(); 
-		int positionDimensionTwo = container.getPositionDimensionTwo().intValue();
-        
         for (int i = 0; i < noOfContainers; i++)
         {
             StorageContainer cont = new StorageContainer(container);
-            cont.setPositionDimensionOne(new Integer(positionDimensionOne));
-            cont.setPositionDimensionTwo(new Integer(positionDimensionTwo));
+            if (cont.getParentContainer() != null)
+            {
+                cont.setPositionDimensionOne(new Integer(positionDimensionOne));
+                cont.setPositionDimensionTwo(new Integer(positionDimensionTwo));
+            }
+            
             cont.setName(String.valueOf(i + container.getStartNo().intValue()));
             dao.insert(cont.getStorageContainerCapacity(),true);
             dao.insert(cont,true);
@@ -108,21 +116,18 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
                     dao.insert(storageContainerDetails,true);
                 }
             }
-
-            if(fullStatus!=null)
+            
+            if (container.getParentContainer() != null)
             {
-                int posOneCapacity = container.getParentContainer().getStorageContainerCapacity().getOneDimensionCapacity().intValue();
-                int posTwoCapacity = container.getParentContainer().getStorageContainerCapacity().getTwoDimensionCapacity().intValue();
-
-	            do
-	            {
-	                if (positionDimensionTwo == (posTwoCapacity - 1))
-	                {
-	                    positionDimensionOne = (positionDimensionOne + 1) % posOneCapacity;
-	                }
-	                positionDimensionTwo = (positionDimensionTwo + 1) % posTwoCapacity;
-	            }
-	            while (fullStatus[positionDimensionOne][positionDimensionTwo] != false);
+                do
+                {
+                    if (positionDimensionTwo == (posTwoCapacity - 1))
+                    {
+                        positionDimensionOne = (positionDimensionOne + 1) % posOneCapacity;
+                    }
+                    positionDimensionTwo = (positionDimensionTwo + 1) % posTwoCapacity;
+                }
+                while (fullStatus[positionDimensionOne][positionDimensionTwo] != false);
             }
         }
     }
