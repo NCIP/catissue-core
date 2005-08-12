@@ -362,7 +362,7 @@ String bhTypeArray [] = (String []) request.getAttribute(Constants.BIOHAZARD_TYP
 					</td>
 					<td class="formField" colspan="4">
 			     		<html:select property="specimenCollectionGroupId" styleClass="formFieldSized15" styleId="specimenCollectionGroupId" size="1" disabled="<%=readOnlyForAll%>">
-							<html:options name="specimenCollectionGroupIdList" labelName="specimenCollectionGroupIdList"/>		
+							<html:options collection="<%=Constants.SPECIMEN_COLLECTION_GROUP_LIST%>" labelProperty="name" property="value"/>		
 						</html:select>
 		        		<a href="SpecimenCollectionGroup.do?operation=add">
       						<bean:message key="app.addNew" />

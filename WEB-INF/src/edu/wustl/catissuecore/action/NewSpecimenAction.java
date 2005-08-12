@@ -56,84 +56,65 @@ public class NewSpecimenAction extends Action
         
         try
 		{
-            //Sets the Biohazard list of corresponding type.
-//        	HashMap map = new HashMap();
-//        	
-//        	for(int i=0;i<Constants.BIOHAZARD_TYPE_ARRAY.length;i++)
-//        	{
-//	            String sourceObjectName = Biohazard.class.getName();
-//	            String[] displayNameFields = {"name"};
-//	            String valueField = "systemIdentifier";
-//	            String[] whereColumnName = {"type"};
-//	            String[] whereColumnCondition = {"="};
-//	            Object[] whereColumnValue = {Constants.BIOHAZARD_TYPE_ARRAY[i]};
-//	            String joinCondition = Constants.AND_JOIN_CONDITION;
-//	            String separatorBetweenFields = "";
-//				
-//	            List biohazardList = dao.getList(sourceObjectName, displayNameFields, valueField,whereColumnName,
-//	            				whereColumnCondition,whereColumnValue,joinCondition,separatorBetweenFields);
-//	            
-//	            map.put(Constants.BIOHAZARD_TYPE_ARRAY[i],biohazardList);
-//        	}
-//        	
-//        	request.setAttribute(Constants.BIOHAZARD_NAME_LIST, map);
         	request.setAttribute(Constants.BIOHAZARD_TYPE_LIST, Constants.BIOHAZARD_TYPE_ARRAY);
         	
            	//List biohazardList = dao.retrieve(Biohazard.class.getName());
         	String selectColNames[] = {"systemIdentifier","name","type"}; 
         	List biohazardList = dao.retrieve(Biohazard.class.getName(),selectColNames);
         	Iterator iterator = biohazardList.iterator();
+        	
+        	String [] bhIdArray =  null;
+        	String [] bhTypeArray = null;
+        	String [] bhNameArray = null;
+        	
         	if(biohazardList!=null && biohazardList.size()>0)
         	{
-	        	String [] bhIdArray =  new String[biohazardList.size()];
-	        	String [] bhTypeArray =  new String[biohazardList.size()];
-	        	String [] bhNameArray =  new String[biohazardList.size()];
-	        	int i=0;
+	        	bhIdArray =  new String[biohazardList.size() + 1];
+	        	bhTypeArray =  new String[biohazardList.size() + 1];
+	        	bhNameArray =  new String[biohazardList.size() + 1];
+	        	
+	        	bhIdArray[0] = "-1";
+	        	bhTypeArray[0] = "";
+	        	bhNameArray[0] = Constants.SELECT_OPTION;
+	        	
+	        	int i=1;
 	        	
 	        	while(iterator.hasNext())
 	        	{
-	        		//Biohazard hazard = (Biohazard)iterator.next();
 	        		Object hazard[] = (Object[])iterator.next();
-	        		bhIdArray[i] = String.valueOf(hazard[0]);//.getSystemIdentifier());
-	        		bhNameArray[i] = (String)hazard[1];//.getName();
-	        		bhTypeArray[i] = (String)hazard[2];//.getType();
+	        		bhIdArray[i] = String.valueOf(hazard[0]);
+	        		bhNameArray[i] = (String)hazard[1];
+	        		bhTypeArray[i] = (String)hazard[2];
 	        		i++;
 	        	}
-	        	
-	        	request.setAttribute(Constants.BIOHAZARD_NAME_LIST, bhNameArray);
-	        	request.setAttribute(Constants.BIOHAZARD_ID_LIST, bhIdArray);
-	        	request.setAttribute(Constants.BIOHAZARD_TYPES_LIST, bhTypeArray);
         	}
+        	else
+        	{
+        		bhIdArray =  new String[1];
+	        	bhTypeArray =  new String[1];
+	        	bhNameArray =  new String[1];
+	        	
+	        	bhIdArray[0] = "-1";
+	        	bhTypeArray[0] = Constants.SELECT_OPTION;
+	        	bhNameArray[0] = Constants.SELECT_OPTION;;
+        	}
+        	
+        	request.setAttribute(Constants.BIOHAZARD_NAME_LIST, bhNameArray);
+        	request.setAttribute(Constants.BIOHAZARD_ID_LIST, bhIdArray);
+        	request.setAttribute(Constants.BIOHAZARD_TYPES_LIST, bhTypeArray);
+        	
+        	//Setting Secimen Collection Group
+			String sourceObjectName = SpecimenCollectionGroup.class.getName();
+			String[] displayNameFields = {"systemIdentifier"};
+			String valueField = "systemIdentifier";
+	
+			List specimenList = dao.getList(sourceObjectName, displayNameFields, valueField);
+			request.setAttribute(Constants.SPECIMEN_COLLECTION_GROUP_LIST, specimenList);
 		}
         catch(Exception e)
 		{
         	e.printStackTrace();
 		}
-        
-        String [] specimenCollectionGroupArray = null;
-
-     	List specimenCollectionList = dao.retrieve(SpecimenCollectionGroup.class.getName());
-     	if(specimenCollectionList!=null && specimenCollectionList.size()>0)
-    	{
-    		Iterator it = specimenCollectionList.iterator();
-    		specimenCollectionGroupArray = new String[specimenCollectionList.size() + 1];
-    		specimenCollectionGroupArray[0] = Constants.SELECT_OPTION;
-    		int i=1;
-    		
-    		while(it.hasNext())
-    		{
-    			SpecimenCollectionGroup scg = (SpecimenCollectionGroup)it.next();
-    			specimenCollectionGroupArray[i] = String.valueOf(scg.getSystemIdentifier());
-    			i++;
-    		}
-    	}
-     	else
-     	{
-     		specimenCollectionGroupArray = new String[1];
-    		specimenCollectionGroupArray[0] = Constants.SELECT_OPTION;
-     	}
-        
-        request.setAttribute(Constants.SPECIMEN_COLLECTION_GROUP_LIST,specimenCollectionGroupArray);
         
         request.setAttribute(Constants.SPECIMEN_TYPE_LIST, Constants.SPECIMEN_TYPE_VALUES);
         
