@@ -48,7 +48,7 @@ public class StorageTypeForm extends AbstractActionForm
     /**
      * A default temperature of the storage container.
      */
-    private double defaultTemperature;
+    private String defaultTemperature;
     
     /**
      * Capacity in dimension one.
@@ -89,7 +89,7 @@ public class StorageTypeForm extends AbstractActionForm
             StorageType storageType = (StorageType) abstractDomain;
             this.systemIdentifier = storageType.getSystemIdentifier().longValue();
             this.type = storageType.getType();
-            this.defaultTemperature = storageType.getDefaultTempratureInCentigrade().doubleValue();
+            this.defaultTemperature = "" + storageType.getDefaultTempratureInCentigrade().doubleValue();
             this.oneDimensionCapacity = storageType.getDefaultStorageCapacity().getOneDimensionCapacity().intValue();
             this.twoDimensionCapacity = storageType.getDefaultStorageCapacity().getTwoDimensionCapacity().intValue();
             this.oneDimensionLabel = storageType.getDefaultStorageCapacity().getOneDimensionLabel();
@@ -166,7 +166,7 @@ public class StorageTypeForm extends AbstractActionForm
      * @return double the default temperature of the storage container to be set.
      * @see #setDefaultTemperature(double)
      */
-    public double getDefaultTemperature()
+    public String getDefaultTemperature()
     {
         return this.defaultTemperature;
     }
@@ -176,7 +176,7 @@ public class StorageTypeForm extends AbstractActionForm
      * @param defaultTemperature the default temperature of the storage container to be set.
      * @see #getDefaultTemperature()
      */
-    public void setDefaultTemperature(double defaultTemperature)
+    public void setDefaultTemperature(String defaultTemperature)
     {
         this.defaultTemperature = defaultTemperature;
     }
@@ -369,6 +369,14 @@ public class StorageTypeForm extends AbstractActionForm
                 {
                     errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("storageType.twoDimensionLabel")));
                 }
+                // code as per bug id 233 
+                // checking for double value if present
+//                System.out.println("\n\n\n********************* DT : " + defaultTemperature + "\n\n*************\n" );
+//                if (!validator.isEmpty(defaultTemperature) && Double)
+//                {
+//                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("storageType.defaultTemperature")));
+//                }
+// 
             }
         }
         catch(Exception excp)

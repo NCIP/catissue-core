@@ -489,7 +489,20 @@
 		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>
 	<!-- procedureEventParameters end -->
-	
+
+	<!-- MolecularSpecimenReviewParameters -->
+	<definition name=".catissuecore.molecularSpecimenReviewParametersDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/MolecularSpecimenReviewParameters.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.molecularSpecimenReviewParametersAddSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/common/success.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.molecularSpecimenReviewParametersEditSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/common/success.jsp" />
+	</definition>
+	<!-- MolecularSpecimenReviewEventParameters end -->
 	
 	<!-- Distribution -->
 	<definition name=".catissuecore.distributionDef" extends=".catissuecore.manageBioSpecimenHomeDef">
@@ -504,7 +517,21 @@
 		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>
 	<!-- Distribution end -->
-	
+
+	<!-- specimenEventParameters -->
+	<definition name=".catissuecore.specimenEventParametersDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/SpecimenEventParameterLinks.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.specimenEventParametersAddSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/common/success.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.specimenEventParametersEditSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/common/success.jsp" />
+	</definition>
+	<!-- specimenEventParameters end -->
+
 	<!-- BioSpecimen tab pages definitions end -->
 
 	<!-- Search tab pages definitions start -->

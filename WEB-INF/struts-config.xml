@@ -42,6 +42,7 @@ PUBLIC
 		<form-bean name="procedureEventParametersForm" type="edu.wustl.catissuecore.actionForm.ProcedureEventParametersForm"/>
 		<form-bean name="forgotPasswordForm" type="edu.wustl.catissuecore.actionForm.ForgotPasswordForm"/>
 		<form-bean name="distributionForm" type="edu.wustl.catissuecore.actionForm.DistributionForm"/>
+		<form-bean name="specimenEventParametersForm" type="edu.wustl.catissuecore.actionForm.SpecimenEventParametersForm"/>
 		
 		<form-bean name="dummyCollectionProtocolForm" type="edu.wustl.catissuecore.actionForm.CollectionProtocolForm"/>
 	</form-beans>
@@ -1481,6 +1482,46 @@ PUBLIC
 			<forward name="failure" path="/Distribution.do?operation=edit"/>
 		</action>    
 		<!-- Distribution Actions Ends -->
+
+			<!-- SpecimenEventParameters Actions Begins -->
+        <action path="/SpecimenEventParameters"
+			type="edu.wustl.catissuecore.action.SpecimenEventParametersAction"
+			scope="request">
+			<forward name="success" path=".catissuecore.specimenEventParametersDef" />
+			<forward name="failure" path=".catissuecore.specimenEventParametersDef" />
+		</action>
+		
+		<action path="/SpecimenEventParametersAdd"
+			type="edu.wustl.catissuecore.action.CommonAddEditAction"
+			name="specimenEventParametersForm"
+			validate="true"
+			input="/SpecimenEventParameters.do"
+			scope="request">
+			<forward name="success" path=".catissuecore.specimenEventParametersAddSuccessDef" />
+			<forward name="failure" path="/SpecimenEventParameters.do" />
+		</action>
+		
+		<action path="/SpecimenEventParametersEdit"
+			type="edu.wustl.catissuecore.action.CommonAddEditAction"
+			name="specimenEventParametersForm"
+			validate="true"
+			input="/SpecimenEventParameters.do"
+			scope="request">
+			<forward name="success" path=".catissuecore.specimenEventParametersEditSuccessDef" />
+			<forward name="failure" path="/SpecimenEventParameters.do" />
+		</action>
+		
+		<action path="/SpecimenEventParametersSearch"
+		    type="edu.wustl.catissuecore.action.CommonSearchAction"
+			name="specimenEventParametersForm"
+			validate="true"
+			input="/SpecimenEventParameters.do"
+			scope="request">
+			<forward name="success" path="/SpecimenEventParameters.do"/>
+			<forward name="failure" path="/SpecimenEventParameters.do"/>
+		</action>    
+		<!-- SpecimenEventParameters Actions Ends -->
+
 		
 		<!--Query Result View Actions Begin-->
 		<action path="/ShowFramedPage"

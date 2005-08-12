@@ -420,6 +420,7 @@ public class Constants
 	public static final int FORGOT_PASSWORD_FORM_ID = 35;
 	public static final int SIGNUP_FORM_ID = 36;
 	public static final int DISTRIBUTION_FORM_ID = 37;
+	public static final int SPECIMEN_EVENT_PARAMETERS_FORM_ID = 37;
 	//Misc
 	public static final String SEPARATOR = " : ";
 	
