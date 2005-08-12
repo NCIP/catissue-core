@@ -151,6 +151,7 @@ public class Constants
 	public static final String FIXATIONLIST = "fixationList";	
 	public static final String FROMSITELIST="fromsiteList";
 	public static final String TOSITELIST="tositeList";	
+	public static final String ITEMLIST="itemList";
 			
 	//Constants required in User.jsp Page
 	public static final String USER_SEARCH_ACTION = "UserSearch.do";
@@ -1083,6 +1084,12 @@ public class Constants
 						"site2",
 				
 				};
+	public static final String [] ITEMARRAY = {
+			SELECT_OPTION,
+			"Item1",
+			"Item2",
+	
+	};
 	
 	public static final String UNIT_GM = "gm";
 	public static final String UNIT_ML = "ml";
