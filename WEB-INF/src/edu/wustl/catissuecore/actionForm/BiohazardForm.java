@@ -220,15 +220,6 @@ public class BiohazardForm extends AbstractActionForm
     
     /**
      * Resets the values of all the fields.
-     * This method defined in ActionForm is overridden in this class.
-     */
-    public void reset(ActionMapping mapping, HttpServletRequest request)
-    {
-        reset();
-    }
-    
-    /**
-     * Resets the values of all the fields.
      * Is called by the overridden reset method defined in ActionForm.  
      * */
     protected void reset()
