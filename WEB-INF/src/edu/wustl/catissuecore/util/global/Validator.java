@@ -131,7 +131,6 @@ public class Validator
     {
         try
         {
-        	System.out.println(dblString);
             double dblValue = Double.parseDouble(dblString);
 
             if (dblValue <= 0  || Double.isNaN(dblValue)) 
@@ -148,6 +147,34 @@ public class Validator
         }
     	
     }
+
+    public boolean isDouble(String dblString,int zero)
+    {
+        try
+        {
+            double dblValue = Double.parseDouble(dblString);
+
+            if (Double.isNaN(dblValue)) 
+            {
+                return false;
+            }
+            if (zero==0 &&  dblValue <= 0) 
+            {
+                return false;
+            }
+
+  
+            
+            return true;
+        }
+        catch(NumberFormatException exp)
+        {
+        	System.out.println("Error : "+exp);
+            return false;
+        }
+    	
+    }
+
     
     private boolean isValidEmailId(String emailAddress)
     {

@@ -316,6 +316,7 @@ public class StorageTypeForm extends AbstractActionForm
         this.oneDimensionLabel		= null;
         this.twoDimensionLabel		= null;
         this.type					= null;
+        this.defaultTemperature = null; 
     }
 
     /**
@@ -371,12 +372,11 @@ public class StorageTypeForm extends AbstractActionForm
                 }
                 // code as per bug id 233 
                 // checking for double value if present
-//                System.out.println("\n\n\n********************* DT : " + defaultTemperature + "\n\n*************\n" );
-//                if (!validator.isEmpty(defaultTemperature) && Double)
-//                {
-//                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("storageType.defaultTemperature")));
-//                }
-// 
+                if (!validator.isEmpty(defaultTemperature) && !validator.isDouble(defaultTemperature,1  )  )
+                {
+                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("storageType.defaultTemperature")));
+                }
+ 
             }
         }
         catch(Exception excp)
