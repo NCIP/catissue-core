@@ -45,8 +45,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 	{
 		StorageContainer container = (StorageContainer)obj;
         
-        boolean fullStatus[][] = getStorageContainerFullStatus(dao, container
-                .getParentContainer().getSystemIdentifier());
+        boolean fullStatus[][]  = null;
 
         int noOfContainers = container.getNoOfContainers().intValue();
         
@@ -79,14 +78,13 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
                 StorageContainer pc = (StorageContainer) list.get(0);
                 container.setParentContainer(pc);
             }
+            
+            fullStatus = getStorageContainerFullStatus(dao, container
+                    .getParentContainer().getSystemIdentifier());
         }
 
-        int posOneCapacity = container.getParentContainer().getStorageContainerCapacity().getOneDimensionCapacity().intValue();
-        int posTwoCapacity = container.getParentContainer().getStorageContainerCapacity().getTwoDimensionCapacity().intValue();
-        
-        int positionDimensionOne = container.getPositionDimensionOne()
-                .intValue(), positionDimensionTwo = container
-                .getPositionDimensionTwo().intValue();
+        int positionDimensionOne = container.getPositionDimensionOne().intValue(); 
+		int positionDimensionTwo = container.getPositionDimensionTwo().intValue();
         
         for (int i = 0; i < noOfContainers; i++)
         {
@@ -111,15 +109,21 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
                 }
             }
 
-            do
+            if(fullStatus!=null)
             {
-                if (positionDimensionTwo == (posTwoCapacity - 1))
-                {
-                    positionDimensionOne = (positionDimensionOne + 1) % posOneCapacity;
-                }
-                positionDimensionTwo = (positionDimensionTwo + 1) % posTwoCapacity;
+                int posOneCapacity = container.getParentContainer().getStorageContainerCapacity().getOneDimensionCapacity().intValue();
+                int posTwoCapacity = container.getParentContainer().getStorageContainerCapacity().getTwoDimensionCapacity().intValue();
+
+	            do
+	            {
+	                if (positionDimensionTwo == (posTwoCapacity - 1))
+	                {
+	                    positionDimensionOne = (positionDimensionOne + 1) % posOneCapacity;
+	                }
+	                positionDimensionTwo = (positionDimensionTwo + 1) % posTwoCapacity;
+	            }
+	            while (fullStatus[positionDimensionOne][positionDimensionTwo] != false);
             }
-            while (fullStatus[positionDimensionOne][positionDimensionTwo] != false);
         }
     }
 
