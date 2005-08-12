@@ -451,7 +451,9 @@ public class SiteForm extends AbstractActionForm
         this.zipCode		= null;
         this.phoneNumber	= null;
         this.faxNumber		= null;
-        this.activityStatus = Constants.ACTIVITY_STATUS_NEW;
+//        this.activityStatus = Constants.ACTIVITY_STATUS_NEW;
+        // changed as per bug id 230
+        this.activityStatus = Constants.ACTIVITY_STATUS_ACTIVE;
     }
     
     /**
