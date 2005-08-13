@@ -409,7 +409,7 @@ String bhTypeArray [] = (String []) request.getAttribute(Constants.BIOHAZARD_TYP
 				     	<html:select property="tissueSite" styleClass="formFieldSized15" styleId="tissueSite" size="1" disabled="<%=readOnlyForAll%>">
 							<html:options name="tissueSiteList" labelName="tissueSiteList"/>		
 						</html:select>
-						<a href="#"><img src="images\Tree.gif" border="0" width="24" height="18"></a>
+						<%-- <a href="#"><img src="images\Tree.gif" border="0" width="24" height="18"></a> --%>
 		        	  </td>
 				 </tr>
 				 <tr>
