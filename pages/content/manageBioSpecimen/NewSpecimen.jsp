@@ -490,11 +490,8 @@ String bhTypeArray [] = (String []) request.getAttribute(Constants.BIOHAZARD_TYP
 				 </tr>
 				 
 				 <tr>
-			     	<td class="formRequiredNotice" width="5">
-				     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">*</logic:notEqual>
-				     	<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;</logic:equal>
-				    </td>
-				    <td class="formRequiredLabel">
+			     	<td class="formRequiredNotice" width="5">&nbsp;</td>
+				    <td class="formLabel">
 						<label for="comments">
 							<bean:message key="specimen.comments"/>
 						</label>
@@ -664,7 +661,7 @@ String bhTypeArray [] = (String []) request.getAttribute(Constants.BIOHAZARD_TYP
 
  			   	 <logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">		
 				 	<tr>
-				  		<td align="right" colspan="4">
+				  		<td align="right" colspan="3">
 							<%
 								String changeAction = "setFormAction('"+formName+"')";
 				 			%>
@@ -676,16 +673,16 @@ String bhTypeArray [] = (String []) request.getAttribute(Constants.BIOHAZARD_TYP
 						   					<bean:message key="buttons.submit"/>
 						   				</html:submit>
 						   			</td>
-									<td>
+									<td colspan="2">
 										<html:reset styleClass="actionButton">
 											<bean:message key="buttons.reset"/>
 										</html:reset>
 									</td> 
-									<td>
+									<%--td>
 										<html:reset styleClass="actionButton">
 											<bean:message key="buttons.moreSpecimen"/>
 										</html:reset>
-									</td>
+									</td--%>
 								</tr>
 							</table>
 							<!-- action buttons end -->

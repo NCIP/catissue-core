@@ -388,16 +388,16 @@
 						   					<bean:message key="buttons.submit"/>
 						   				</html:submit>
 						   			</td>
-									<td>
+									<td colspan="2">
 										<html:reset styleClass="actionButton">
 											<bean:message key="buttons.reset"/>
 										</html:reset>
 									</td> 
-									<td>
+									<%--td>
 										<html:submit styleClass="actionButton">
 											<bean:message key="buttons.submitAndRegisterParticipant"/>
 										</html:submit>
-									</td> 
+									</td--%> 
 								</tr>
 							</table>
 							<!-- action buttons end -->
