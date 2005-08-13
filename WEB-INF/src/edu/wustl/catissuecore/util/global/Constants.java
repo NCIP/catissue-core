@@ -127,6 +127,7 @@ public class Constants
 	
 	//Simple Query Interface Lists
 	public static final String OBJECT_NAME_LIST = "objectNameList";
+	public static final String OBJECT_COMPLETE_NAME_LIST = "objectCompleteNameList";
 	public static final String ATTRIBUTE_NAME_LIST = "attributeNameList";
 	public static final String ATTRIBUTE_CONDITION_LIST = "attributeConditionList";
 	
@@ -318,18 +319,6 @@ public class Constants
 	public static final String DISTRIBUTION_ADD_ACTION = "DistributionAdd.do";
 	public static final String DISTRIBUTION_EDIT_ACTION = "DistributionEdit.do";
 	
-	public static final String[] OBJECT_NAME_ARRAY = {
-	        "User","Participant","Specimen"
-	};
-	
-	public static final String[] ATTRIBUTE_NAME_ARRAY = {
-	        "Name","loginName","lastName"
-	};
-	
-	public static final String[] ATTRIBUTE_CONDITION_ARRAY = {
-	        "=","<",">"
-	};
-	
 	//Levels of nodes in query results tree.
 	public static final int MAX_LEVEL = 5;
 	public static final int MIN_LEVEL = 1;
@@ -499,7 +488,25 @@ public class Constants
 	public static final String APPLET_CODEBASE = "Applet";
 	
 	public static final String SELECT_OPTION = "-- Select --";
-
+	
+	public static final String[] OBJECT_NAME_ARRAY = {
+	        SELECT_OPTION,	
+	        "User","Participant","Specimen"
+	};
+	
+	public static final String[] OBJECT_FULL_NAME_ARRAY = {
+	        SELECT_OPTION,	
+	        "edu.wustl.catissuecore.domain.User","edu.wustl.catissuecore.domain.Participant","edu.wustl.catissuecore.domain.Specimen"
+	};
+	
+	public static final String[] ATTRIBUTE_NAME_ARRAY = {
+	        "Name","loginName","lastName"
+	};
+	
+	public static final String[] ATTRIBUTE_CONDITION_ARRAY = {
+	        "=","<",">"
+	};
+	
 	public static final String [] RECEIVEDMODEARRAY = {
 	        SELECT_OPTION,
 	        "by hand", "courier", "FedEX", "UPS"
