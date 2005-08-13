@@ -677,8 +677,8 @@ function getSubDivCount(subdivtag)
 							<html:options name="<%=Constants.TISSUE_SITE_LIST%>" labelName="<%=Constants.TISSUE_SITE_LIST%>"/>
 						</html:select>
 			        
-				        <a href="#" onclick="javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfTissueSite','name','290','330','no');return false">
-							<img src="images\Tree.gif" border="0" width="26" height="22"></a>
+				 <%--       <a href="#" onclick="javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfTissueSite','name','290','330','no');return false">
+							<img src="images\Tree.gif" border="0" width="26" height="22"></a>  --%>
 					</td>
 					
 			        <td class="formField">
@@ -869,8 +869,8 @@ function getSubDivCount(subdivtag)
 							<html:options name="<%=Constants.TISSUE_SITE_LIST%>" labelName="<%=Constants.TISSUE_SITE_LIST%>"/>
 						</html:select>
 			        
-				        <a href="#">
-							<img src="images\Tree.gif" border="0" width="26" height="22"></a>
+				     <%--   <a href="#">
+							<img src="images\Tree.gif" border="0" width="26" height="22"></a>   --%>
 					</td>
 					
 			        <td class="formField">

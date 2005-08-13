@@ -11,6 +11,9 @@
 
 package edu.wustl.catissuecore.actionForm;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -196,6 +199,36 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
     					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocol.quantity")));
     				}
     			}
+    			// code added as per bug id 235 
+    			// code to validate startdate less than end date
+    			// check the start date less than end date
+    			if (!validator.isEmpty(startDate) && !validator.isEmpty(endDate )  )
+    			{
+    				try
+					{
+    					String pattern="MM-dd-yyyy";
+    					SimpleDateFormat dF = new SimpleDateFormat(pattern);
+    					Date sDate = dF.parse(this.startDate );
+    					Date eDate = dF.parse(this.endDate );
+    						
+    					int check = sDate.compareTo(eDate );
+    					System.out.println("\n\n\t************ " + sDate + "\t\t" + eDate + " \t\n\n***************\n\n");
+    					System.out.println("\n\n\t************ " + check + " \t\n\n***************\n\n");
+    					
+    					if(check>0)
+    					{
+    						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("specimenprotocol.invaliddate",ApplicationProperties.getValue("specimenprotocol.invaliddate")));
+    					}
+    					
+					} // try
+    				catch (Exception excp1)
+					{
+    					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("specimenprotocol.invaliddate",ApplicationProperties.getValue("specimenprotocol.invaliddate")));
+						errors = new ActionErrors();
+					}
+    				
+    			}
+
             }    
 		}
 		catch (Exception excp)

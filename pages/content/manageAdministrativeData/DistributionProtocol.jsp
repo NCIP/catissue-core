@@ -131,7 +131,7 @@ function insRow(subdivtag)
 		sname = sname + "<option value='<%=tissueSiteArry[i]%>'><%=tissueSiteArry[i]%></option>";
 	<%}%>
 	sname = sname + "</select>"
-	sname = sname + "<a href='#'><img src='images\Tree.gif' border='0' width='26' height='22'></a>"
+//	sname = sname + "<a href='#'><img src='images\Tree.gif' border='0' width='26' height='22'></a>"
 	
 	spreqtissuesite.innerHTML="" + sname;
 	
