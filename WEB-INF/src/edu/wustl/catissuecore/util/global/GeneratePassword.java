@@ -23,7 +23,7 @@ public class GeneratePassword
      */
     public static String getPassword()
     {
-        return ("loginName"+"123");
+        return ("login"+"123");
     }
 
 }
