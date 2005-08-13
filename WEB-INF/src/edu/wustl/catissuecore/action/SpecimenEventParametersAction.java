@@ -23,6 +23,8 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
+import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.util.logger.Logger;
@@ -50,13 +52,13 @@ public class SpecimenEventParametersAction extends Action
        try
        {
         	
-//        	UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getBizLogic(Constants.USER_FORM_ID);
-//        	Collection coll =  userBizLogic.getUsers(Constants.ACTIVITY_STATUS_ACTIVE);
-			Collection coll =  new ArrayList();
-			NameValueBean aNameValueBean = new NameValueBean();
-			aNameValueBean.setName(Constants.SELECT_OPTION);
-			aNameValueBean.setValue("-1");
-			coll.add(aNameValueBean);
+        	UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getBizLogic(Constants.USER_FORM_ID);
+        	Collection coll =  userBizLogic.getUsers(Constants.ACTIVITY_STATUS_ACTIVE);
+//			Collection coll =  new ArrayList();
+//			NameValueBean aNameValueBean = new NameValueBean();
+//			aNameValueBean.setName(Constants.SELECT_OPTION);
+//			aNameValueBean.setValue("-1");
+//			coll.add(aNameValueBean);
 //		
         	request.setAttribute(Constants.USERLIST, coll);
             
