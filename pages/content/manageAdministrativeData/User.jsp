@@ -414,9 +414,9 @@
 									</html:submit>
 								</td>
 								<td>
-									<html:submit styleClass="actionButton" >
+									<html:reset styleClass="actionButton" >
 										<bean:message  key="buttons.reset" />
-									</html:submit>
+									</html:reset>
 								</td>
 							</tr>
 						</table>
