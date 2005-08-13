@@ -69,6 +69,7 @@
 		</div>
 	</td>
 </tr>
+<%--
 <tr>
 	<td class="subMenuPrimaryItemsWithBorder" onmouseover="changeMenuStyle(this,'subMenuPrimaryItemsWithBorderOver')" onmouseout="changeMenuStyle(this,'subMenuPrimaryItemsWithBorder')">				
 		
@@ -84,6 +85,7 @@
 		</div>
 	</td>
 </tr>
+--%>
 <tr>
 	<td class="subMenuPrimaryItemsWithBorder" onmouseover="changeMenuStyle(this,'subMenuPrimaryItemsWithBorderOver')" onmouseout="changeMenuStyle(this,'subMenuPrimaryItemsWithBorder')">				
 		
