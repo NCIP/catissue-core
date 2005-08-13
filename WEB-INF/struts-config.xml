@@ -45,6 +45,7 @@ PUBLIC
 		<form-bean name="specimenEventParametersForm" type="edu.wustl.catissuecore.actionForm.SpecimenEventParametersForm"/>
 		
 		<form-bean name="dummyCollectionProtocolForm" type="edu.wustl.catissuecore.actionForm.CollectionProtocolForm"/>
+		<form-bean name="simpleQueryInterfaceForm" type="edu.wustl.catissuecore.actionForm.SimpleQueryInterfaceForm"/>
 	</form-beans>
 	
 	<!-- Global Exception Definitions -->
@@ -1483,7 +1484,29 @@ PUBLIC
 		</action>    
 		<!-- Distribution Actions Ends -->
 
-			<!-- SpecimenEventParameters Actions Begins -->
+		<!--Simple Query Interface Actions Begin-->		
+		<action path="/SimpleQueryInterface"
+			type="edu.wustl.catissuecore.action.SimpleQueryInterfaceAction"
+			name="simpleQueryInterfaceForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path=".catissuecore.simpleQueryInterfaceDef" />
+			<forward name="failure" path=".catissuecore.simpleQueryInterfaceDef" />
+		</action>
+
+		
+		<action path="/SimpleQueryInterfaceAdd"
+			type="edu.wustl.catissuecore.action.CommonAddEditAction"
+			name="simpleQueryInterfaceForm"
+			validate="true"
+			input="/SimpleQueryInterface.do"
+			scope="request">
+			<forward name="success" path=".catissuecore.distributionAddSuccessDef" />
+			<forward name="failure" path="/error.jsp" />
+		</action>
+		<!--Simple Query Interface Actions End-->		
+		
+		<!-- SpecimenEventParameters Actions Begins -->
         <action path="/SpecimenEventParameters"
 			type="edu.wustl.catissuecore.action.SpecimenEventParametersAction"
 			scope="request">
@@ -1521,7 +1544,6 @@ PUBLIC
 			<forward name="failure" path="/SpecimenEventParameters.do"/>
 		</action>    
 		<!-- SpecimenEventParameters Actions Ends -->
-
 		
 		<!--Query Result View Actions Begin-->
 		<action path="/ShowFramedPage"
