@@ -462,6 +462,42 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
                 }
              	
                 checkValidNumber(socialSecurityNumber,"participant.socialSecurityNumber",errors,validator);
+              
+                //Validations for Add-More Block
+                String className = "ParticipantMedicalIdentifier:";
+                String key1 = "_Site_systemIdentifier";
+                String key2 = "_medicalRecordNumber";
+                int index = 1;
+                boolean isError = false;
+                
+                while(true)
+                {
+                	String keyOne = className + index + key1;
+					String keyTwo = className + index + key2;
+                	String value1 = (String)values.get(keyOne);
+                	String value2 = (String)values.get(keyTwo);
+                	
+                	if(value1 == null || value2 == null)
+                	{
+                		break;
+                	}
+                	else if(value1.equals("-1") && value2.equals(""))
+                	{
+                		values.remove(keyOne);
+                		values.remove(keyTwo);
+                	}
+                	else if((!value1.equals("-1") && value2.equals("")) || (value1.equals("-1") && !value2.equals("")))
+                	{
+                		isError = true;
+                		break;
+                	}
+                	index++;
+                }
+                
+                if(isError)
+                {
+                	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.participant.missing",ApplicationProperties.getValue("particiapnt.msg")));
+                }
              }
          }
          catch(Exception excp)

@@ -449,14 +449,41 @@ public class SpecimenForm extends AbstractActionForm
              		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("specimen.quantity")));
              	}
              	
-             	if(externalIdentifier!=null && externalIdentifier.size()!=0)
-             	{
-             		String nameOfClass = "ExternalIdentifier";
-             		String key1 = "key";
-             		String key2 = "value";
-             		 
-             		parseMap(externalIdentifier,nameOfClass,key1,key2);
-             	}        	
+             	//Validations for External Identifier Add-More Block
+                String className = "ExternalIdentifier:";
+                String key1 = "_name";
+                String key2 = "_value";
+                int index = 1;
+                boolean isError = false;
+                
+                while(true)
+                {
+                	String keyOne = className + index + key1;
+					String keyTwo = className + index + key2;
+                	String value1 = (String)externalIdentifier.get(keyOne);
+                	String value2 = (String)externalIdentifier.get(keyTwo);
+                	
+                	if(value1 == null || value2 == null)
+                	{
+                		break;
+                	}
+                	else if(value1.equals("") && value2.equals(""))
+                	{
+                		externalIdentifier.remove(keyOne);
+                		externalIdentifier.remove(keyTwo);
+                	}
+                	else if((!value1.equals("") && value2.equals("")) || (value1.equals("") && !value2.equals("")))
+                	{
+                		isError = true;
+                		break;
+                	}
+                	index++;
+                }
+                
+                if(isError)
+                {
+                	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.specimen.externalIdentifier.missing",ApplicationProperties.getValue("specimen.msg")));
+                }
              }
          }
          catch(Exception excp)
@@ -480,20 +507,5 @@ public class SpecimenForm extends AbstractActionForm
 	public void setExIdCounter(int exIdCounter)
 	{
 		this.exIdCounter = exIdCounter;
-	}
-	
-	public Map parseMap(Map map,String nameOfClass, String key1, String key2)
-	{		
-		if(map != null)
-		{
-			int size = map.size() / 2;
-			for(int i=1;i<=size;i++)
-			{
-				String keyOne = nameOfClass + ":" + i + "_" + key1;
-				String keyTwo = nameOfClass + ":" + i + "_" + key2;
-				String val1 = (String) map.get(keyOne);
-			}
-		}
-		return map;
 	}
 }

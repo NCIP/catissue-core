@@ -287,6 +287,42 @@ public class NewSpecimenForm extends SpecimenForm
                 {
                     errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("specimen.pathologicalStatus")));
                 }
+
+             	//Validations for Biohazard Add-More Block
+                String className = "Biohazard:";
+                String key1 = "_type";
+                String key2 = "_systemIdentifier";
+                int index = 1;
+                boolean isError = false;
+                
+                while(true)
+                {
+                	String keyOne = className + index + key1;
+					String keyTwo = className + index + key2;
+                	String value1 = (String)biohazard.get(keyOne);
+                	String value2 = (String)biohazard.get(keyTwo);
+                	
+                	if(value1 == null || value2 == null)
+                	{
+                		break;
+                	}
+                	else if(value1.equals(Constants.SELECT_OPTION) && value2.equals("-1"))
+                	{
+                		biohazard.remove(keyOne);
+                		biohazard.remove(keyTwo);
+                	}
+                	else if((!value1.equals(Constants.SELECT_OPTION) && value2.equals("-1")) || (value1.equals(Constants.SELECT_OPTION) && !value2.equals("-1")))
+                	{
+                		isError = true;
+                		break;
+                	}
+                	index++;
+                }
+                
+                if(isError)
+                {
+                	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.newSpecimen.biohazard.missing",ApplicationProperties.getValue("newSpecimen.msg")));
+                }
              }
          }
          catch(Exception excp)
