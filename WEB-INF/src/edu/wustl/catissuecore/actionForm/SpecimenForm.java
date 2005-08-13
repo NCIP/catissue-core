@@ -449,14 +449,14 @@ public class SpecimenForm extends AbstractActionForm
              		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("specimen.quantity")));
              	}
              	
-//             	if(externalIdentifier!=null && externalIdentifier.size()!=0)
-//             	{
-//             		String nameOfClass = "ExternalIdentifier";
-//             		String key1 = "key";
-//             		String key2 = "value";
-//             		 
-//             		parseMap(externalIdentifier,nameOfClass,key1,key2);
-//             	}        	
+             	if(externalIdentifier!=null && externalIdentifier.size()!=0)
+             	{
+             		String nameOfClass = "ExternalIdentifier";
+             		String key1 = "key";
+             		String key2 = "value";
+             		 
+             		parseMap(externalIdentifier,nameOfClass,key1,key2);
+             	}        	
              }
          }
          catch(Exception excp)
@@ -482,18 +482,18 @@ public class SpecimenForm extends AbstractActionForm
 		this.exIdCounter = exIdCounter;
 	}
 	
-//	public Map parseMap(Map map,String nameOfClass, String key1, String key2)
-//	{		
-//		if(map != null)
-//		{
-//			int size = map.size() / 2;
-//			for(int i=1;i<=size;i++)
-//			{
-//				String keyOne = nameOfClass + ":" + i + "_" + key1;
-//				String keyTwo = nameOfClass + ":" + i + "_" + key2;
-//				String val1 = (String) map.get(keyOne);
-//			}
-//		}
-//		return map;
-//	}
+	public Map parseMap(Map map,String nameOfClass, String key1, String key2)
+	{		
+		if(map != null)
+		{
+			int size = map.size() / 2;
+			for(int i=1;i<=size;i++)
+			{
+				String keyOne = nameOfClass + ":" + i + "_" + key1;
+				String keyTwo = nameOfClass + ":" + i + "_" + key2;
+				String val1 = (String) map.get(keyOne);
+			}
+		}
+		return map;
+	}
 }

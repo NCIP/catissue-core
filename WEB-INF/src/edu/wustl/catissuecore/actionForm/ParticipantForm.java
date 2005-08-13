@@ -441,9 +441,14 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
                     errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("participant.birthDate")));
                 }
              	
-             	if(genotype.equals(Constants.SELECT_OPTION))
+             	if(gender.equals(Constants.SELECT_OPTION))
                 {
                 	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("participant.gender")));
+                }
+             	
+             	if(genotype.equals(Constants.SELECT_OPTION))
+                {
+                	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("participant.genotype")));
                 }
              	
              	if(race.equals(Constants.SELECT_OPTION))
