@@ -545,6 +545,10 @@
 		<put name="content" value="/pages/content/search/Home.jsp" />
 	</definition>
 
+	<definition name=".catissuecore.simpleQueryInterfaceDef" extends=".catissuecore.searchHomeDef">
+		<put name="content" value="/pages/content/search/SimpleQueryInterface.jsp" />
+	</definition>
+
 	<definition name=".catissuecore.queryResultsDef" extends=".catissuecore.searchHomeDef">
 		<put name="content" value="/pages/content/search/QueryResultsView.jsp" />
 	</definition>
