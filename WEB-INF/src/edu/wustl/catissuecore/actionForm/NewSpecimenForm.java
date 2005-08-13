@@ -269,7 +269,7 @@ public class NewSpecimenForm extends SpecimenForm
          {
              if (operation.equals(Constants.ADD) || operation.equals(Constants.EDIT))
              {             
-             	if (specimenCollectionGroupId.equals(Constants.SELECT_OPTION))
+             	if (specimenCollectionGroupId.equals("-1"))
                 {
                     errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("specimen.specimenCollectionGroupId")));
                 }

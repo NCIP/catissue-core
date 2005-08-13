@@ -443,22 +443,22 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
              	
              	if(gender.equals(Constants.SELECT_OPTION))
                 {
-                	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("participant.gender")));
+                	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("participant.gender")));
                 }
              	
              	if(genotype.equals(Constants.SELECT_OPTION))
                 {
-                	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("participant.genotype")));
+                	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("participant.genotype")));
                 }
              	
              	if(race.equals(Constants.SELECT_OPTION))
                 {
-                	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("participant.race")));
+                	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("participant.race")));
                 }
              	
              	if(ethnicity.equals(Constants.SELECT_OPTION))
                 {
-                	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("participant.ethnicity")));
+                	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("participant.ethnicity")));
                 }
              	
                 checkValidNumber(socialSecurityNumber,"participant.socialSecurityNumber",errors,validator);

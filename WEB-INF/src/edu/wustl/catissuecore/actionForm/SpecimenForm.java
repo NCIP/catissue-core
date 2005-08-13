@@ -449,6 +449,21 @@ public class SpecimenForm extends AbstractActionForm
              		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("specimen.quantity")));
              	}
              	
+             	if (storageContainer.equals(""))
+                {
+                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("specimen.storageContainer")));
+                }
+             	
+             	if (positionDimensionOne.equals(""))
+                {
+                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("specimen.positionDimensionOne")));
+                }
+             	
+             	if (positionDimensionTwo.equals(""))
+                {
+                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("specimen.positionDimensionTwo")));
+                }
+             	
              	//Validations for External Identifier Add-More Block
                 String className = "ExternalIdentifier:";
                 String key1 = "_name";
