@@ -69,23 +69,23 @@
 		</div>
 	</td>
 </tr>
-<%--
+<!--
 <tr>
 	<td class="subMenuPrimaryItemsWithBorder" onmouseover="changeMenuStyle(this,'subMenuPrimaryItemsWithBorderOver')" onmouseout="changeMenuStyle(this,'subMenuPrimaryItemsWithBorder')">				
 		
 		<div>
-			<!--img src="images/subMenuArrow.gif" width="7" height="7" alt="" /--> 
+			<img src="images/subMenuArrow.gif" width="7" height="7" alt="" /> 
 				<b><bean:message key="app.distribution" /></b>
 		</div>
 		<div>
 			<a class="subMenuPrimary" href="Distribution.do?operation=add"><bean:message key="app.add" /></a> | 
-			<a class="subMenuPrimary" <%--href="Distribution.do?operation=search"--%> >
+			<a class="subMenuPrimary" href="Distribution.do?operation=search">
 				<bean:message key="app.edit" />
 			</a>
 		</div>
 	</td>
 </tr>
---%>
+-->
 <tr>
 	<td class="subMenuPrimaryItemsWithBorder" onmouseover="changeMenuStyle(this,'subMenuPrimaryItemsWithBorderOver')" onmouseout="changeMenuStyle(this,'subMenuPrimaryItemsWithBorder')">				
 		
