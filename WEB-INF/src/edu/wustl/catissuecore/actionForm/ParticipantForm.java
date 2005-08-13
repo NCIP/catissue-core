@@ -496,7 +496,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
                 
                 if(isError)
                 {
-                	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.participant.missing",ApplicationProperties.getValue("particiapnt.msg")));
+                	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.participant.missing",ApplicationProperties.getValue("participant.msg")));
                 }
              }
          }
