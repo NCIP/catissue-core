@@ -398,11 +398,11 @@
 		<put name="content" value="/pages/content/manageBioSpecimen/ThawEventParameters.jsp" />
 	</definition>
 
-	<definition name=".catissuecore.ThawEventParametersAddSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+	<definition name=".catissuecore.thawEventParametersAddSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
 		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>
 
-	<definition name=".catissuecore.ThawEventParametersEditSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+	<definition name=".catissuecore.thawEventParametersEditSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
 		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>
 	<!-- ThawEventParameters end -->
