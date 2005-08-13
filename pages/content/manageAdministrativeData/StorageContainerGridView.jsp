@@ -77,7 +77,7 @@ function closeFramedWindow()
 					   	  <%}
 							else{%>
 							<td class="dataCellText">
-								<img src="images/Tree.gif" width="40" height="40" border="0">
+								<img src="images/specimen.jpg" width="40" height="40" border="0">
  							</td>
 							<%}%>
 						<%}
