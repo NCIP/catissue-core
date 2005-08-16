@@ -131,6 +131,7 @@ String bhTypeArray [] = (String []) request.getAttribute(Constants.BIOHAZARD_TYP
 			//Third Cell
 			var spreqsubtype=x.insertCell(2);
 			spreqsubtype.className="formField";
+			spreqsubtype.colSpan=2;
 			sname="";
 		
 			name = "externalIdentifierValue(ExternalIdentifier:" + rowno +"_value)";
@@ -180,6 +181,7 @@ String bhTypeArray [] = (String []) request.getAttribute(Constants.BIOHAZARD_TYP
 			//Third Cellvalue()
 			var spreqsubtype=x.insertCell(2);
 			spreqsubtype.className="formField";
+			spreqsubtype.colSpan=2;
 			sname="";
 
 			name = "biohazardValue(Biohazard:" + (q+1) + "_systemIdentifier)";
@@ -589,7 +591,7 @@ String bhTypeArray [] = (String []) request.getAttribute(Constants.BIOHAZARD_TYP
 					    <td class="formField">
 				     		<html:text styleClass="formFieldSized15" styleId="<%=exName%>" property="<%=exName%>" readonly="<%=readOnlyForAll%>"/>
 				    	</td>
-				    	<td class="formField">
+				    	<td class="formField" colspan="2">
 				     		<html:text styleClass="formFieldSized15" styleId="<%=exValue%>" property="<%=exValue%>" readonly="<%=readOnlyForAll%>"/>
 				    	</td>
 					 </tr>
@@ -633,7 +635,7 @@ String bhTypeArray [] = (String []) request.getAttribute(Constants.BIOHAZARD_TYP
 								<html:options name="<%=Constants.BIOHAZARD_TYPE_LIST%>" labelName="<%=Constants.BIOHAZARD_TYPE_LIST%>" />
 							</html:select>
 				    	</td>
-				    	<td class="formField">
+				    	<td class="formField" colspan="2">
 				     		<html:select property="<%=bhId%>" styleClass="formFieldSized15" styleId="<%="bhId" + i%>" size="1">
 								<html:option value="-1"><%=Constants.SELECT_OPTION%></html:option>
 								<%

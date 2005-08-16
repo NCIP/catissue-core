@@ -107,6 +107,7 @@
 			//Third Cell
 			var spreqsubtype=x.insertCell(2);
 			spreqsubtype.className="formField";
+			spreqsubtype.colSpan=2;
 			sname="";
 		
 			name = "externalIdentifierValue(ExternalIdentifier:" + rowno +"_value)";
@@ -464,7 +465,7 @@
 					    <td class="formField">
 				     		<html:text styleClass="formFieldSized15" styleId="<%=exName%>" property="<%=exName%>" readonly="<%=readOnlyForAll%>"/>
 				    	</td>
-				    	<td class="formField">
+				    	<td class="formField" colspan="2">
 				     		<html:text styleClass="formFieldSized15" styleId="<%=exValue%>" property="<%=exValue%>" readonly="<%=readOnlyForAll%>"/>
 				    	</td>
 					 </tr>
