@@ -159,7 +159,7 @@
 
 	<html:errors />
 
-		<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
+		<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="500">
 			
 		   <html:form action="<%=Constants.CREATE_SPECIMEN_ADD_ACTION%>">
 		   
@@ -249,7 +249,7 @@
 			  <!-- NEW SPECIMEN REGISTRATION BEGINS-->
 	    	  <tr>
 			    <td>
-			 	 <table summary="" cellpadding="3" cellspacing="0" border="0" width="600">
+			 	 <table summary="" cellpadding="3" cellspacing="0" border="0" width="500">
 				 <tr>
 					<td>
 						<html:hidden property="<%=Constants.OPERATION%>" value="<%=operation%>"/>
@@ -279,7 +279,7 @@
 				 </tr>
 				 <tr>
 			     	<td class="formRequiredNotice" width="5">*</td>
-				    <td class="formRequiredLabel">
+				    <td class="formRequiredLabel" width="175">
 						<label for="specimenCollectionGroupId">
 							<bean:message key="createSpecimen.parent"/>
 						</label>

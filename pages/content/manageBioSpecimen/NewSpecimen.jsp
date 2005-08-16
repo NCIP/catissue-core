@@ -234,7 +234,7 @@ String bhTypeArray [] = (String []) request.getAttribute(Constants.BIOHAZARD_TYP
 
 	<html:errors />
 
-		<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
+		<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="500">
 			
 		   <html:form action="<%=Constants.SPECIMEN_ADD_ACTION%>">
 		   
@@ -324,7 +324,7 @@ String bhTypeArray [] = (String []) request.getAttribute(Constants.BIOHAZARD_TYP
 			  <!-- NEW SPECIMEN REGISTRATION BEGINS-->
 	    	  <tr>
 			    <td>
-			 	 <table summary="" cellpadding="3" cellspacing="0" border="0" width="600">
+			 	 <table summary="" cellpadding="3" cellspacing="0" border="0" width="500">
 				 <tr>
 					<td>
 						<html:hidden property="<%=Constants.OPERATION%>" value="<%=operation%>"/>
@@ -409,7 +409,7 @@ String bhTypeArray [] = (String []) request.getAttribute(Constants.BIOHAZARD_TYP
 				     	<html:select property="tissueSite" styleClass="formFieldSized15" styleId="tissueSite" size="1" disabled="<%=readOnlyForAll%>">
 							<html:options name="tissueSiteList" labelName="tissueSiteList"/>		
 						</html:select>
-						<%-- <a href="#"><img src="images\Tree.gif" border="0" width="24" height="18"></a> --%>
+						<%--a href="#"><img src="images\Tree.gif" border="0" width="24" height="18"></a--%>
 		        	  </td>
 				 </tr>
 				 <tr>
