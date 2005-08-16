@@ -373,7 +373,7 @@
 						</label>
 					</td>
 				    <td class="formField" colspan="4">
-				    	<html:textarea styleClass="formFieldSized15" rows="3" styleId="comments" property="comments" readonly="<%=readOnlyForAll%>"/>
+				    	<html:textarea styleClass="formFieldSized" rows="3" styleId="comments" property="comments" readonly="<%=readOnlyForAll%>"/>
 				    </td>
 				 </tr>
 				 
