@@ -271,7 +271,7 @@
 	  </td>
 	 </tr>
 
-	 <!-- NEW MOLECULAR specimen review parameters ends-->
+	 <!-- NEW TRANSFER_EVENT_PARAMETERS ends-->
 	 
 	 </html:form>
  </table>

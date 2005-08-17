@@ -42,7 +42,7 @@
 			<table summary="" cellpadding="3" cellspacing="0" border="0">
 				<tr>
 					<td class="formTitle" height="20" colspan="3">
-						<bean:message key="frozeneventparameters.searchTitle"/>
+						<bean:message key="fixedeventparameters.searchTitle"/>
 					</td>
 				</tr>	
 		  
@@ -79,7 +79,7 @@
 	</logic:notEqual> 
 	
 
-	<!-- NEW FrozenEventParameter REGISTRATION BEGINS-->
+	<!-- NEW FixedEventParameter REGISTRATION BEGINS-->
 	<tr>
 	<td>
 	
@@ -99,7 +99,7 @@
 			 </td>
 		</tr>
 
-		<!-- Name of the frozenEventParameters -->
+		<!-- Name of the fixedEventParameters -->
 <!-- User -->		
 		<tr>
 			<td class="formRequiredNotice" width="5">*</td>
@@ -217,7 +217,7 @@
 	  </td>
 	 </tr>
 
-	 <!-- NEW FrozenEventParameters ends-->
+	 <!-- NEW FixedEventParameters ends-->
 	 
 	 </html:form>
  </table>

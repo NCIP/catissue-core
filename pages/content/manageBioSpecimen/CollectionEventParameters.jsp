@@ -220,7 +220,7 @@
 	  </td>
 	 </tr>
 
-	 <!-- NEW FrozenEventParameters ends-->
+	 <!-- NEW CollectionEventParameters ends-->
 	 
 	 </html:form>
  </table>
