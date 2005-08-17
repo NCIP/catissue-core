@@ -54,7 +54,7 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 
 	protected String endDate;
 
-	protected int enrollment;
+	protected String enrollment;
 
 	/**
 	 * Map to handle values of all the CollectionProtocol Events
@@ -162,7 +162,7 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 	/**
 	 * @return Returns the participants.
 	 */
-	public int getEnrollment()
+	public String getEnrollment()
 	{
 		return enrollment;
 	}
@@ -171,7 +171,7 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 	 * @param participants
 	 *            The participants to set.
 	 */
-	public void setEnrollment(int participants)
+	public void setEnrollment(String participants)
 	{
 		this.enrollment = participants;
 	}
@@ -335,7 +335,7 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 			this.startDate = collectionProtocol.getStartDate().toString();
 			this.endDate = collectionProtocol.getEndDate().toString();
 			this.irbID = collectionProtocol.getIrbIdentifier();
-			this.enrollment = collectionProtocol.getEnrollment().intValue();
+			this.enrollment ="" + collectionProtocol.getEnrollment().intValue();
 			this.descriptionURL = collectionProtocol.getDescriptionURL();
 		}
 		catch (Exception excp)
@@ -368,7 +368,7 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 		this.startDate = null;
 		this.endDate = null;
 		this.irbID = null;
-		this.enrollment = 0;
+		this.enrollment = "0";
 		this.descriptionURL = null;
 		
 		values = new HashMap();

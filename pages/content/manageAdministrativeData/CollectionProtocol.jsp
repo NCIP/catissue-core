@@ -607,20 +607,20 @@ function getSubDivCount(subdivtag)
 			        <td class="formLeftSubTableTitle">
 		        		<bean:message key="collectionprotocol.specimennumber" />
 			        </td>
-			        <td class="formLeftSubTableTitle">
+			        <td class="formLeftSubTableTitle">* 
 			        	<bean:message key="collectionprotocol.specimenclass" />
 			        </td>
-			        <td class="formLeftSubTableTitle">
+			        <td class="formLeftSubTableTitle">* 
 			        	<bean:message key="collectionprotocol.specimetype" />
 			        </td>
 			        
-			        <td class="formLeftSubTableTitle">
+			        <td class="formLeftSubTableTitle">* 
 			        	<bean:message key="collectionprotocol.specimensite" />
 				    </td>
-			        <td  class=formLeftSubTableTitle>
+			        <td  class=formLeftSubTableTitle>* 
 			    		<bean:message key="collectionprotocol.specimenstatus" />
 				    </td>
-			        <td class=formLeftSubTableTitle>
+			        <td class=formLeftSubTableTitle>* 
 			        	<bean:message key="collectionprotocol.quantity" />
 			        </td>
 			    </TR><!-- SUB TITLES END -->
@@ -824,20 +824,20 @@ function getSubDivCount(subdivtag)
 			        <td class="formLeftSubTableTitle">
 		        		<bean:message key="collectionprotocol.specimennumber" />
 			        </td>
-			        <td class="formLeftSubTableTitle">
+			        <td class="formLeftSubTableTitle">* 
 			        	<bean:message key="collectionprotocol.specimenclass" />
 			        </td>
-			        <td class="formLeftSubTableTitle">
+			        <td class="formLeftSubTableTitle">* 
 			        	<bean:message key="collectionprotocol.specimetype" />
 			        </td>
 			        
-			        <td class="formLeftSubTableTitle">
+			        <td class="formLeftSubTableTitle">* 
 			        	<bean:message key="collectionprotocol.specimensite" />
 				    </td>
-			        <td  class=formLeftSubTableTitle>
+			        <td  class=formLeftSubTableTitle>* 
 			    		<bean:message key="collectionprotocol.specimenstatus" />
 				    </td>
-			        <td class=formLeftSubTableTitle>
+			        <td class=formLeftSubTableTitle>* 
 			        	<bean:message key="collectionprotocol.quantity" />
 			        </td>
 			    </TR><!-- SUB TITLES END -->

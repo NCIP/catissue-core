@@ -159,6 +159,11 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
                 	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocol.protocoltitle")));
                 }
                 
+                if (!validator.isNumeric(enrollment) || validator.isEmpty(enrollment ))
+                {
+                	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.enrollment",ApplicationProperties.getValue("collectionprotocol.participants")));
+                }
+                
     			Iterator it = this.values.keySet().iterator();
     			while (it.hasNext())
     			{
@@ -171,9 +176,9 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
     					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("collectionprotocol.clinicalstatus")));
     				}
     				
-    				if(key.indexOf("studyCalendarEventPoint")!=-1 && validator.isEmpty(value))
+    				if(key.indexOf("studyCalendarEventPoint")!=-1 && (validator.isEmpty(value) || !validator.isNumeric(value)))
     				{
-    					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocol.studycalendartitle")));
+    					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.studycalendarpoint",ApplicationProperties.getValue("collectionprotocol.studycalendartitle")));
     				}
 
     				if(key.indexOf("specimenClass")!=-1 && value.equals(Constants.SELECT_OPTION))
@@ -212,8 +217,6 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
     					Date eDate = dF.parse(this.endDate );
     						
     					int check = sDate.compareTo(eDate );
-    					System.out.println("\n\n\t************ " + sDate + "\t\t" + eDate + " \t\n\n***************\n\n");
-    					System.out.println("\n\n\t************ " + check + " \t\n\n***************\n\n");
     					
     					if(check>0)
     					{
