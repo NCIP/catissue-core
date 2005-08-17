@@ -126,7 +126,7 @@
 			<td class="formField">
 				 <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
 					<html:text styleClass="formDateSized" size="35" styleId="dateOfEvent" property="dateOfEvent" readonly="true"/>
-						<a href="javascript:show_calendar('tissueSpecimenReviewEventParametersForm.dateOfEvent','','','MM-DD-YYYY');">
+						<a href="javascript:show_calendar('tissueSpecimenReviewEventParametersForm.dateOfEvent',null,null,'MM-DD-YYYY');">
 							<img src="images\calendar.gif" width=24 height=22 border=0>
 						</a>
 			</td>
