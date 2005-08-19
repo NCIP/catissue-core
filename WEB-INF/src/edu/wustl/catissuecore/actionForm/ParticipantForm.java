@@ -436,6 +436,20 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
              }
              if (operation.equals(Constants.ADD) || operation.equals(Constants.EDIT))
              {
+             	if (validator.isEmpty(firstName ))
+                {
+                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("user.firstName")));
+                }
+             	if (validator.isEmpty(lastName  ))
+                {
+                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("user.lastName")));
+                }
+
+             	if (validator.isEmpty(middleName  ))
+                {
+                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("participant.middleName")));
+                }
+          
              	if (validator.isEmpty(birthDate))
                 {
                     errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("participant.birthDate")));

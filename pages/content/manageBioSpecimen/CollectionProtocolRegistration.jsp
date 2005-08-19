@@ -119,7 +119,7 @@
  							    <html:options collection="<%=Constants.PROTOCOL_LIST%>" labelProperty="name" property="value"/>															
 						    </html:select>
 						    
-					    	<html:link page="CollectionProtocol.do?operation=add" styleId="newSite">
+					    	<html:link page="/CollectionProtocol.do?operation=add" styleId="newSite">
 		 						<bean:message key="buttons.addNew" />
 	 						</html:link>					   
 					   </td>
@@ -139,7 +139,7 @@
 							<html:select property="participantID" styleClass="formFieldSized" styleId="participantID" size="1" disabled="true">
  							    <html:options collection="<%=Constants.PARTICIPANT_LIST%>" labelProperty="name" property="value"/>							
 							</html:select>
-							<html:link page="Participant.do?operation=add" styleId="newParticipant" >
+							<html:link page="/Participant.do?operation=add" styleId="newParticipant" >
 		 						<bean:message key="buttons.addNew" />
 	 						</html:link>					   
 							
