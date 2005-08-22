@@ -15,7 +15,6 @@ import java.io.Serializable;
  * Capacity defined for a storage container.
  * @hibernate.class table="CATISSUE_STORAGE_CONTAINER_CAPACITY"
  * @author Aniruddha Phadnis
- * TODO Need to shift oneDimensionLabel and twoDimensionLabel to StorageType class
  */
 public class StorageContainerCapacity implements Serializable
 {
@@ -35,16 +34,6 @@ public class StorageContainerCapacity implements Serializable
      * Number of objects that can be stored in dimension two.
      */
 	protected Integer twoDimensionCapacity;
-	
-	/**
-     * Human understandable name assigned to dimension one.
-     */
-	protected String oneDimensionLabel;
-	
-	/**
-     * Human understandable name assigned to dimension two.
-     */
-	protected String twoDimensionLabel;
 
 	/**
      * Returns System generated unique systemIdentifier.
@@ -110,49 +99,5 @@ public class StorageContainerCapacity implements Serializable
 	public void setTwoDimensionCapacity(Integer twoDimensionCapacity)
 	{
 		this.twoDimensionCapacity = twoDimensionCapacity;
-	}
-
-	/**
-     * Returns human understandable name assigned to dimension one.
-     * @return Human understandable name assigned to dimension one.
-     * @see #setOneDimensionLabel(String)
-     * @hibernate.property name="oneDimensionLabel" type="string" 
-     * column="ONE_DIMENSION_LABEL" length="50"
-     */
-	public String getOneDimensionLabel()
-	{
-		return oneDimensionLabel;
-	}
-
-	/**
-     * Sets human understandable name assigned to dimension one.
-     * @param oneDimensionLabel human understandable name assigned to dimension one.
-     * @see #getOneDimensionLabel()
-     */
-	public void setOneDimensionLabel(String oneDimensionLabel)
-	{
-		this.oneDimensionLabel = oneDimensionLabel;
-	}
-
-	/**
-     * Returns human understandable name assigned to dimension two.
-     * @return Human understandable name assigned to dimension two.
-     * @see #setTwoDimensionLabel(String)
-     * @hibernate.property name="twoDimensionLabel" type="string" 
-     * column="TWO_DIMENSION_LABEL" length="50"
-     */
-	public String getTwoDimensionLabel()
-	{
-		return twoDimensionLabel;
-	}
-
-	/**
-     * Sets human understandable name assigned to dimension two.
-     * @param oneDimensionLabel human understandable name assigned to dimension two.
-     * @see #getTwoDimensionLabel()
-     */
-	public void setTwoDimensionLabel(String twoDimensionLabel)
-	{
-		this.twoDimensionLabel = twoDimensionLabel;
 	}
 }
