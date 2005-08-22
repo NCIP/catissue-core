@@ -456,11 +456,11 @@ public class StorageContainer extends AbstractDomainObject implements java.io.Se
 	        
 	        storageType = new StorageType();
 	        storageType.systemIdentifier = new Long(form.getTypeId());
+	        storageType.setOneDimensionLabel(form.getOneDimensionLabel());
+	        storageType.setTwoDimensionLabel(form.getTwoDimensionLabel());
 	        
 	        storageContainerCapacity.setOneDimensionCapacity(new Integer(form.getOneDimensionCapacity()));
 	        storageContainerCapacity.setTwoDimensionCapacity(new Integer(form.getTwoDimensionCapacity()));
-	        storageContainerCapacity.setOneDimensionLabel(form.getOneDimensionLabel());
-	        storageContainerCapacity.setTwoDimensionLabel(form.getTwoDimensionLabel());
 	        
 	        if(form.getCheckedButton() == 2)
 			{

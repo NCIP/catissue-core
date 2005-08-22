@@ -188,8 +188,8 @@ public class StorageContainerForm extends AbstractActionForm
 					.getOneDimensionCapacity().intValue();
 			this.twoDimensionCapacity = container.getStorageContainerCapacity()
 					.getTwoDimensionCapacity().intValue();
-			this.oneDimensionLabel = container.getStorageContainerCapacity().getOneDimensionLabel();
-			this.twoDimensionLabel = container.getStorageContainerCapacity().getTwoDimensionLabel();
+			this.oneDimensionLabel = container.getStorageType().getOneDimensionLabel();
+			this.twoDimensionLabel = container.getStorageType().getTwoDimensionLabel();
 			this.noOfContainers = container.getNoOfContainers().intValue();
 			this.startNumber = String.valueOf(container.getStartNo().intValue());
 		}

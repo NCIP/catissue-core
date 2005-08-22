@@ -44,6 +44,8 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 	protected void insert(DAO dao, Object obj) throws DAOException 
 	{
 		StorageContainer container = (StorageContainer)obj;
+		
+		container.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
         
         boolean fullStatus[][] = null;
 

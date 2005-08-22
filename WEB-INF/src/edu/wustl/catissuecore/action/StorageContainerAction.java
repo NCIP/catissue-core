@@ -71,8 +71,8 @@ public class StorageContainerAction extends Action
             		storageContainerForm.setDefaultTemperature(type.getDefaultTempratureInCentigrade().doubleValue());
             		storageContainerForm.setOneDimensionCapacity(type.getDefaultStorageCapacity().getOneDimensionCapacity().intValue());
             		storageContainerForm.setTwoDimensionCapacity(type.getDefaultStorageCapacity().getTwoDimensionCapacity().intValue());
-            		storageContainerForm.setOneDimensionLabel(type.getDefaultStorageCapacity().getOneDimensionLabel());
-            		storageContainerForm.setTwoDimensionLabel(type.getDefaultStorageCapacity().getTwoDimensionLabel());
+            		storageContainerForm.setOneDimensionLabel(type.getOneDimensionLabel());
+            		storageContainerForm.setTwoDimensionLabel(type.getTwoDimensionLabel());
             	}
             }
             else

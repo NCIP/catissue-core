@@ -92,8 +92,8 @@ public class StorageTypeForm extends AbstractActionForm
             this.defaultTemperature = "" + storageType.getDefaultTempratureInCentigrade().doubleValue();
             this.oneDimensionCapacity = storageType.getDefaultStorageCapacity().getOneDimensionCapacity().intValue();
             this.twoDimensionCapacity = storageType.getDefaultStorageCapacity().getTwoDimensionCapacity().intValue();
-            this.oneDimensionLabel = storageType.getDefaultStorageCapacity().getOneDimensionLabel();
-            this.twoDimensionLabel = storageType.getDefaultStorageCapacity().getTwoDimensionLabel();
+            this.oneDimensionLabel = storageType.getOneDimensionLabel();
+            this.twoDimensionLabel = storageType.getTwoDimensionLabel();
         }
         catch (Exception excp)
         {
