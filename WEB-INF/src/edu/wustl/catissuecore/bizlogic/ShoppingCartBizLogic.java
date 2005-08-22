@@ -19,6 +19,7 @@ import java.util.List;
 
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.query.ShoppingCart;
+import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.util.dbManager.DAOException;
 
 /**
@@ -60,6 +61,20 @@ public class ShoppingCartBizLogic extends DefaultBizLogic
 		return cart;
     }
     
+	public void deleteCartFile(String fileName)
+    {
+		try
+		{
+			fileName = fileName + ".txt";
+			File f = new File(Variables.catissueHome,fileName);
+			f.delete();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
 	public void export(ShoppingCart cart,String directory,String fileName)
     {
 		FileWriter writer = null;
