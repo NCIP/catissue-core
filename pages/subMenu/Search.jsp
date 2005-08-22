@@ -35,7 +35,7 @@
 	  </div>
 	  <div>
 	  	<img src="images/subMenuArrow.gif" width="7" height="7" alt="" />
-	  		<a class="subMenuPrimary" href="#">
+	  		<a class="subMenuPrimary" href="ShoppingCart.do">
 	  			<bean:message key="app.viewShoppingCart" />
 	  		</a>
 	  </div>
