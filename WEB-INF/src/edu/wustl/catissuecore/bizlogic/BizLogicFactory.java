@@ -94,6 +94,10 @@ public class BizLogicFactory
         		abstractBizLogic = new CreateSpecimenBizLogic();
         		break;
         		
+        	case Constants.SHOPPING_CART_FORM_ID :
+        		abstractBizLogic = new ShoppingCartBizLogic();
+        		break;
+        	
             default:
                 abstractBizLogic = new DefaultBizLogic();
             	break;

@@ -46,6 +46,8 @@ PUBLIC
 		
 		<form-bean name="dummyCollectionProtocolForm" type="edu.wustl.catissuecore.actionForm.CollectionProtocolForm"/>
 		<form-bean name="simpleQueryInterfaceForm" type="edu.wustl.catissuecore.actionForm.SimpleQueryInterfaceForm"/>
+		
+		<form-bean name="shoppingCartForm" type="edu.wustl.catissuecore.actionForm.ShoppingCartForm"/>
 	</form-beans>
 	
 	<!-- Global Exception Definitions -->
@@ -1621,6 +1623,30 @@ PUBLIC
 			<forward name="view" path="/QueryAccession.do?operation=view&amp;pageOf=query"/>
 		</action>
 		<!-- Actions to make the fields editable in the Query Results Object View End -->
+		
+		<!-- Shopping Cart Actions Begins -->
+        <action path="/ShoppingCart"
+			type="edu.wustl.catissuecore.action.ShoppingCartAction"
+			name="shoppingCartForm"
+			validate="true"
+			scope="request">
+			<forward name="success" path=".catissuecore.shoppingCartDef" />
+			<forward name="failure" path=".catissuecore.shoppingCartDef" />
+		</action>
+		
+		<action path="/ShoppingCartOperation"
+			type="edu.wustl.catissuecore.action.ShoppingCartAction"
+			name="shoppingCartForm"
+			validate="true"
+			input="/ShoppingCart.do"
+			scope="request">
+			<forward name="shoppingCartAdd" path="/ShoppingCart.do" />
+			<forward name="shoppingCartDelete" path="/ShoppingCart.do" />
+			<forward name="shoppingCartExport" path=".catissuecore.searchAddSuccessDef" />
+			<forward name="failure" path="/ShoppingCart.do" />
+		</action>
+		   
+		<!-- Shopping Cart Actions Ends -->
 	</action-mappings>
 	
 	<message-resources parameter="ApplicationResources" />

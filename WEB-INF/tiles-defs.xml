@@ -535,7 +535,7 @@
 	<!-- BioSpecimen tab pages definitions end -->
 
 	<!-- Search tab pages definitions start -->
-
+	
 	<definition name=".catissuecore.queryResultsTreeViewDef" path="/pages/content/search/TreeView.jsp">
 	</definition>
 	
@@ -543,6 +543,10 @@
 		<put name="submenu" value="/pages/subMenu/Search.jsp" />
 		<put name="mainmenu" value="/pages/mainMenu/Search.jsp" />
 		<put name="content" value="/pages/content/search/Home.jsp" />
+	</definition>
+	
+	<definition name=".catissuecore.searchAddSuccessDef" extends=".catissuecore.searchHomeDef">
+		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>
 
 	<definition name=".catissuecore.simpleQueryInterfaceDef" extends=".catissuecore.searchHomeDef">
@@ -577,6 +581,13 @@
 	<definition name=".catissuecore.storageLocationGridViewDef" extends=".catissuecore.queryDataViewDef">
 		<put name="content" value="/pages/content/manageAdministrativeData/StorageContainerGridView.jsp" />
 	</definition>
+	
+		
+	<!-- ShoppingCart -->
+	<definition name=".catissuecore.shoppingCartDef" extends=".catissuecore.searchHomeDef">
+		<put name="content" value="/pages/content/search/ShoppingCart.jsp" />
+	</definition>
+	<!-- ShoppingCart -->
 	
 	<!-- Query edit pages definitions end -->
 
@@ -613,5 +624,5 @@
 		<put name="content" value="/pages/content/help/Home.jsp" />
 	</definition>
 	<!-- Help tab pages definitions End -->
-
+	
 </tiles-definitions>
