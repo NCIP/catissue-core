@@ -12,6 +12,13 @@ package edu.wustl.catissuecore.domain;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Map;
+import java.util.Date;
+
+import edu.wustl.catissuecore.actionForm.AbstractActionForm;
+import edu.wustl.catissuecore.actionForm.DistributionForm;
+import edu.wustl.common.util.MapDataParser;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * An event that results in transfer of a specimen from a Repository to a Laboratory.
@@ -127,5 +134,29 @@ public class Distribution extends SpecimenEventParameters implements java.io.Ser
 	public void setDistributedItemCollection(Collection distributedItemCollection)
 	{
 		this.distributedItemCollection = distributedItemCollection;
+	}
+	
+	public void setAllValues(AbstractActionForm abstractForm)
+	{
+	    try
+	    {
+	    	DistributionForm form = (DistributionForm) abstractForm;
+	        super.setAllValues(form);
+	        this.toSite = new Site();
+	        toSite.setSystemIdentifier(new Long(form.getToSite()));
+	        this.fromSite =new Site();
+	        fromSite.setSystemIdentifier(new Long(form.getFromSite()));
+	        
+	        Map map = form.getValues();
+	        System.out.println("Map "+map);
+	        MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.domain");
+	        distributedItemCollection = parser.generateData(map);
+	        System.out.println("distributedItemCollection "+distributedItemCollection);
+	    }
+	    catch(Exception excp)
+	    {
+	    	excp.printStackTrace();
+	        Logger.out.error(excp.getMessage());
+	    }
 	}
 }

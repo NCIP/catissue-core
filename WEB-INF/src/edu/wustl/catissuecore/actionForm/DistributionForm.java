@@ -34,8 +34,8 @@ import edu.wustl.common.util.logger.Logger;
 public class DistributionForm extends EventParametersForm
 {
 	
-	private String fromSite;
-	private String toSite;
+	private long fromSite;
+	private long toSite;
 	private int counter=1;
 	
 	/**
@@ -61,44 +61,46 @@ public class DistributionForm extends EventParametersForm
 	 {
 		ActionErrors errors = super.validate(mapping, request);
 		 Validator validator = new Validator();
+		
          
-		 try
-		 {
-			if (fromSite.equals(Constants.SELECT_OPTION))
-			{
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("Distribution.fromSite")));
-			}
-		 }
-		 catch(Exception excp)
-		 {
-			 Logger.out.error(excp.getMessage());
-		 }
- 	  
-		try
-			{
-			   if (toSite.equals(Constants.SELECT_OPTION))
-			   {
-				   errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("Distribution.toSite")));
-			   }
-			}
-			catch(Exception excp)
-			{
-				Logger.out.error(excp.getMessage());
-			}
+//		 try
+//		 {
+//			if (fromSite.equals(Constants.SELECT_OPTION))
+//			{
+//				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("Distribution.fromSite")));
+//			}
+//		 }
+//		 catch(Exception excp)
+//		 {
+//			 Logger.out.error(excp.getMessage());
+//		 }
+// 	  
+//		try
+//			{
+//			   if (toSite.equals(Constants.SELECT_OPTION))
+//			   {
+//				   errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("Distribution.toSite")));
+//			   }
+//			}
+//			catch(Exception excp)
+//			{
+//				Logger.out.error(excp.getMessage());
+//			}
 			return errors;
 		 }
 	
 	/**
 	 * @return
 	 */
-	public String getFromSite() {
+	 
+	public long getFromSite() {
 		return fromSite;
 	}
 
 	/**
 	 * @param fromSite
 	 */
-	public void setFromSite(String fromSite) {
+	public void setFromSite(long fromSite) {
 		this.fromSite = fromSite;
 	}
 
@@ -117,14 +119,14 @@ public class DistributionForm extends EventParametersForm
 	{
 		this.counter = counter;
 	}
-	public String getToSite() {
+	public long getToSite() {
 		return toSite;
 	}
 
 	/**
 	 * @param toSite
 	 */
-	public void setToSite(String toSite) {
+	public void setToSite(long toSite) {
 		this.toSite = toSite;
 	}
 	
