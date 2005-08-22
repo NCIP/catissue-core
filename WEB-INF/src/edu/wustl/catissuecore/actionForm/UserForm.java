@@ -747,32 +747,35 @@ public class UserForm extends AbstractActionForm
                         }
                     }
 
+                    Logger.out.debug("institutionId ; "+institutionId);
                     if (institutionId == -1)
                     {
                         errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
                                 "errors.item.required", ApplicationProperties
-                                        .getValue("user.institutionId")));
+                                        .getValue("user.institution")));
                     }
 
+                    Logger.out.debug("departmentId ; "+departmentId);
                     if (departmentId == -1)
                     {
                         errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
                                 "errors.item.required", ApplicationProperties
-                                        .getValue("user.departmentId")));
+                                        .getValue("user.department")));
                     }
-
+                    
+                    Logger.out.debug("cancerResearchGroupId ; "+cancerResearchGroupId);
                     if (cancerResearchGroupId == -1)
                     {
                         errors.add(ActionErrors.GLOBAL_ERROR,
                                         new ActionError("errors.item.required",
-                                                ApplicationProperties.getValue("user.cancerResearchGroupId")));
+                                                ApplicationProperties.getValue("user.cancerResearchGroup")));
                     }
 
                 }
 
                 if (pageOf.equals(Constants.PAGEOF_USER_ADMIN))
                 {
-                    if (role.trim().equals(Constants.SELECT_OPTION))
+                    if (role.trim().equals("0"))
                     {
                         errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
                                 "errors.item.required", ApplicationProperties
