@@ -15,13 +15,29 @@
 	<script language="javascript">
 		function onDelete()
 		{
-			var flag = confirm("Are you sure you want to delete the selected item(s)?");
-			if(flag)
-			{
-				var action = "/catissuecore/ShoppingCart.do?operation=delete";
-				document.forms[0].operation.value="delete";
-				document.forms[0].action = action;
-				document.forms[0].submit();
+			var isChecked = "false";
+			for (var i=0;i < document.forms[0].elements.length;i++)
+		    {
+		    	var e = document.forms[0].elements[i];
+
+		        if (e.type == "checkbox" && e.checked == true)
+		        {
+		        	isChecked = "true";
+		        	break;
+		        }
+		    }
+		    
+		    if(isChecked == "true")
+		    {
+				var flag = confirm("Are you sure you want to delete the selected item(s)?");
+				if(flag)
+				{
+					var action = "/catissuecore/ShoppingCart.do?operation=delete";
+					document.forms[0].operation.value="delete";
+					document.forms[0].action = action;
+					document.forms[0].target = "_parent";
+					document.forms[0].submit();
+				}
 			}
 		}
 		
@@ -30,6 +46,7 @@
 			var action = "/catissuecore/ShoppingCart.do?operation=export";
 			document.forms[0].operation.value="export";
 			document.forms[0].action = action;
+			document.forms[0].target = "_blank";
 			document.forms[0].submit();
 		}
 		
