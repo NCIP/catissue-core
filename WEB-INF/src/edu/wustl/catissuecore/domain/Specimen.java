@@ -565,4 +565,32 @@ public abstract class Specimen extends AbstractDomainObject implements Serializa
             Logger.out.error(excp.getMessage());
         }
     }
+    
+    /**
+     * This function returns the actual type of the specimen i.e Cell / Fluid / Molecular / Tissue.
+     */
+    
+    public final String getClassName()
+    {
+    	String className = null;
+    	
+    	if(this instanceof CellSpecimen)
+    	{
+    		className = "Cell";
+    	}
+    	else if(this instanceof MolecularSpecimen)
+    	{
+    		className = "Molecular";
+    	}
+    	else if(this instanceof FluidSpecimen)
+    	{
+    		className = "Fluid";
+    	}
+    	else if(this instanceof TissueSpecimen)
+    	{
+    		className = "Tissue";
+    	}
+    	
+    	return className;
+    }
 }
