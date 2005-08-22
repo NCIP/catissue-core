@@ -20,7 +20,6 @@ import edu.wustl.common.util.logger.Logger;
 /**
  * Type of the storage container e.g. Freezer, Box etc.
  * @hibernate.class table="CATISSUE_STORAGE_TYPE"
- * TODO TODO Need to shift oneDimensionLabel and twoDimensionLabel to StorageType class
  */
 public class StorageType extends AbstractDomainObject implements Serializable
 {
@@ -40,6 +39,16 @@ public class StorageType extends AbstractDomainObject implements Serializable
      * Default temperature of current type of storage container.
      */
 	protected Double defaultTempratureInCentigrade;
+	
+	/**
+     * Human understandable name assigned to dimension one.
+     */
+	protected String oneDimensionLabel;
+	
+	/**
+     * Human understandable name assigned to dimension two.
+     */
+	protected String twoDimensionLabel;
 
 	/**
      * Default capacity of a storage container.
@@ -122,6 +131,50 @@ public class StorageType extends AbstractDomainObject implements Serializable
 	{
 		this.defaultTempratureInCentigrade = defaultTempratureInCentigrade;
 	}
+	
+	/**
+     * Returns human understandable name assigned to dimension one.
+     * @return Human understandable name assigned to dimension one.
+     * @see #setOneDimensionLabel(String)
+     * @hibernate.property name="oneDimensionLabel" type="string" 
+     * column="ONE_DIMENSION_LABEL" length="50"
+     */
+	public String getOneDimensionLabel()
+	{
+		return oneDimensionLabel;
+	}
+
+	/**
+     * Sets human understandable name assigned to dimension one.
+     * @param oneDimensionLabel human understandable name assigned to dimension one.
+     * @see #getOneDimensionLabel()
+     */
+	public void setOneDimensionLabel(String oneDimensionLabel)
+	{
+		this.oneDimensionLabel = oneDimensionLabel;
+	}
+
+	/**
+     * Returns human understandable name assigned to dimension two.
+     * @return Human understandable name assigned to dimension two.
+     * @see #setTwoDimensionLabel(String)
+     * @hibernate.property name="twoDimensionLabel" type="string" 
+     * column="TWO_DIMENSION_LABEL" length="50"
+     */
+	public String getTwoDimensionLabel()
+	{
+		return twoDimensionLabel;
+	}
+
+	/**
+     * Sets human understandable name assigned to dimension two.
+     * @param oneDimensionLabel human understandable name assigned to dimension two.
+     * @see #getTwoDimensionLabel()
+     */
+	public void setTwoDimensionLabel(String twoDimensionLabel)
+	{
+		this.twoDimensionLabel = twoDimensionLabel;
+	}
 
 	/**
 	 * Returns the default capacity of a storage container.
@@ -159,11 +212,12 @@ public class StorageType extends AbstractDomainObject implements Serializable
 	        this.systemIdentifier = new Long(storageTypeForm.getSystemIdentifier());
 	        this.type = storageTypeForm.getType();
 	        this.defaultTempratureInCentigrade = new Double(storageTypeForm.getDefaultTemperature());
+	        this.oneDimensionLabel = storageTypeForm.getOneDimensionLabel();
+	        this.twoDimensionLabel = storageTypeForm.getTwoDimensionLabel();
+	        
 	        defaultStorageCapacity.setSystemIdentifier(systemIdentifier);
 	        defaultStorageCapacity.setOneDimensionCapacity(new Integer(storageTypeForm.getOneDimensionCapacity()));
 	        defaultStorageCapacity.setTwoDimensionCapacity(new Integer(storageTypeForm.getTwoDimensionCapacity()));
-	        defaultStorageCapacity.setOneDimensionLabel(storageTypeForm.getOneDimensionLabel());
-	        defaultStorageCapacity.setTwoDimensionLabel(storageTypeForm.getTwoDimensionLabel());
 	    }
 	    catch(Exception excp)
 	    {
