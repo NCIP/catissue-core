@@ -41,6 +41,11 @@ public class Constants
 	public static final String EDIT = "edit";
 	public static final String VIEW = "view";
 	public static final String SEARCH = "search";
+	public static final String DELETE = "delete";
+	public static final String EXPORT = "export";
+	public static final String SHOPPING_CART_ADD = "shoppingCartAdd";
+	public static final String SHOPPING_CART_DELETE = "shoppingCartDelete";
+	public static final String SHOPPING_CART_EXPORT = "shoppingCartExport";
 	public static final String NEWUSERFORM = "newUserForm";
 	public static final String ACCESS_DENIED = "access_denied";
 
@@ -234,6 +239,9 @@ public class Constants
 	public static final String CREATE_SPECIMEN_ADD_ACTION = "CreateSpecimenAdd.do";
 	public static final String CREATE_SPECIMEN_EDIT_ACTION = "CreateSpecimenEdit.do";
 	public static final String CREATE_SPECIMEN_SEARCH_ACTION = "CreateSpecimenSearch.do";
+	
+	//ShoppingCart Actions.
+	public static final String SHOPPING_CART_OPERATION = "ShoppingCartOperation.do";
 
 	public static final String SPECIMEN_COLLECTION_GROUP_SEARCH_ACTION = "SpecimenCollectionGroup.do";
 	public static final String SPECIMEN_COLLECTION_GROUP_ADD_ACTION = "SpecimenCollectionGroupAdd.do";
@@ -410,6 +418,7 @@ public class Constants
 	public static final int SIGNUP_FORM_ID = 36;
 	public static final int DISTRIBUTION_FORM_ID = 37;
 	public static final int SPECIMEN_EVENT_PARAMETERS_FORM_ID = 37;
+	public static final int SHOPPING_CART_FORM_ID = 39;
 	//Misc
 	public static final String SEPARATOR = " : ";
 	
@@ -486,6 +495,9 @@ public class Constants
 	//URL paths for Applet in TreeView.jsp
 	public static final String QUERY_TREE_APPLET = "QueryTree.class";
 	public static final String APPLET_CODEBASE = "Applet";
+	
+	//Shopping Cart
+	public static final String SHOPPING_CART = "shoppingCart";
 	
 	public static final String SELECT_OPTION = "-- Select --";
 	
