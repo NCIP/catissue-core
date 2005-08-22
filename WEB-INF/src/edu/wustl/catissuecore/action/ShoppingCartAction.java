@@ -31,6 +31,7 @@ import edu.wustl.catissuecore.bizlogic.ShoppingCartBizLogic;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.query.ShoppingCart;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Variables;
 
 public class ShoppingCartAction extends Action//BaseAction
 {
@@ -90,9 +91,10 @@ public class ShoppingCartAction extends Action//BaseAction
 	        }
 	        else if(operation.equals(Constants.EXPORT))
 	        {
-	        	//System.out.println("********************Real PATH : " + request.getRealPath(request.getContextPath()));
-	        	//System.out.println("********************CONTEXT PATH : " + request.getContextPath());
-	        	bizLogic.export(cart,"E:\\Program_Files\\jboss-4.0.0\\server\\default\\work\\Temp",session.getId());
+	        	String fileName = session.getId() + ".txt";
+	        	bizLogic.export(cart,Variables.catissueHome,fileName);
+	        	String path = "/" + fileName;
+	        	return new ActionForward(path);
 	        }
         }
         
