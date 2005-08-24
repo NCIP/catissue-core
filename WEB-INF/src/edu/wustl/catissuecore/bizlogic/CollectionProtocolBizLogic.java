@@ -17,7 +17,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 
-import net.sf.hibernate.HibernateException;
+import org.hibernate.HibernateException;
+
 import edu.wustl.catissuecore.dao.DAO;
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
@@ -42,7 +43,6 @@ public class CollectionProtocolBizLogic extends DefaultBizLogic implements Roles
      * Saves the CollectionProtocol object in the database.
      * @param session The session in which the object is saved.
      * @param obj The CollectionProtocol object to be saved.
-     * @throws HibernateException Exception thrown during hibernate operations.
      * @throws DAOException 
      */
 	protected void insert(DAO dao, Object obj) throws DAOException

@@ -8,7 +8,6 @@ package edu.wustl.catissuecore.bizlogic;
 
 import java.util.List;
 
-import net.sf.hibernate.HibernateException;
 import edu.wustl.catissuecore.dao.DAO;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.User;
@@ -26,7 +25,6 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
      * Saves the FrozenEventParameters object in the database.
      * @param session The session in which the object is saved.
      * @param obj The FrozenEventParameters object to be saved.
-     * @throws HibernateException Exception thrown during hibernate operations.
      * @throws DAOException 
      */
 	protected void insert(DAO dao, Object obj) throws DAOException 

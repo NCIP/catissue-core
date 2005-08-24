@@ -15,7 +15,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
-import net.sf.hibernate.HibernateException;
+import org.hibernate.HibernateException;
+
 import edu.wustl.catissuecore.dao.AbstractDAO;
 import edu.wustl.catissuecore.dao.DAO;
 import edu.wustl.catissuecore.dao.DAOFactory;
@@ -38,7 +39,6 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
      * Saves the storageContainer object in the database.
      * @param session The session in which the object is saved.
      * @param obj The storageType object to be saved.
-     * @throws HibernateException Exception thrown during hibernate operations.
      * @throws DAOException 
      */
 	protected void insert(DAO dao, Object obj) throws DAOException 

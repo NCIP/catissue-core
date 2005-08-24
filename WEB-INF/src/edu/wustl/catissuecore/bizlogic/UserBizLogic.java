@@ -13,7 +13,8 @@ package edu.wustl.catissuecore.bizlogic;
 import java.util.List;
 import java.util.Vector;
 
-import net.sf.hibernate.HibernateException;
+import org.hibernate.HibernateException;
+
 import edu.wustl.catissuecore.action.DomainObjectListAction;
 import edu.wustl.catissuecore.dao.DAO;
 import edu.wustl.catissuecore.domain.CancerResearchGroup;
@@ -41,7 +42,6 @@ public class UserBizLogic extends DefaultBizLogic
      * Saves the user object in the database.
      * @param session The session in which the object is saved.
      * @param obj The user object to be saved.
-     * @throws HibernateException Exception thrown during hibernate operations.
      * @throws DAOException
      */
     protected void insert(DAO dao, Object obj) throws DAOException

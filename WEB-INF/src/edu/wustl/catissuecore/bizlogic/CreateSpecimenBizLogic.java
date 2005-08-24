@@ -14,7 +14,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-import net.sf.hibernate.HibernateException;
+import org.hibernate.HibernateException;
+
 import edu.wustl.catissuecore.dao.DAO;
 import edu.wustl.catissuecore.domain.ExternalIdentifier;
 import edu.wustl.catissuecore.domain.Specimen;
@@ -32,7 +33,6 @@ public class CreateSpecimenBizLogic extends DefaultBizLogic
      * Saves the storageType object in the database.
      * @param session The session in which the object is saved.
      * @param obj The storageType object to be saved.
-     * @throws HibernateException Exception thrown during hibernate operations.
      * @throws DAOException 
      */
 	protected void insert(DAO dao, Object obj) throws DAOException
