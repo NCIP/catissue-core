@@ -13,12 +13,15 @@ package edu.wustl.catissuecore.domain;
 import java.util.Collection;
 import java.util.HashSet;
 
+import edu.wustl.catissuecore.actionForm.AbstractActionForm;
+import edu.wustl.catissuecore.exception.AssignDataException;
+
 /**
  * @author mandar_deshmukh
  * Required generic attributes for a Specimen associated with a Collection or Distribution Protocol.
  * @hibernate.class table="CATISSUE_SPECIMEN_REQUIREMENT"
  */
-public abstract class SpecimenRequirement implements java.io.Serializable
+public abstract class SpecimenRequirement  extends AbstractDomainObject implements java.io.Serializable
 {
 	private static final long serialVersionUID = 1234567890L;
 
@@ -176,5 +179,13 @@ public abstract class SpecimenRequirement implements java.io.Serializable
 	public String toString()
 	{
 		return "SR "+this.getClass().getName()+" : "+specimenType+" | "+ tissueSite;
+	}
+	
+	
+	/* (non-Javadoc)
+	 * @see edu.wustl.catissuecore.domain.AbstractDomainObject#setAllValues(edu.wustl.catissuecore.actionForm.AbstractActionForm)
+	 */
+	public void setAllValues(AbstractActionForm abstractForm) throws AssignDataException
+	{
 	}
 }
