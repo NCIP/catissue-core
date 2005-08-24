@@ -1,6 +1,6 @@
 /**
- * <p>Title: GenerateStorageTree Class>
- * <p>Description:	GenerateStorageTree generates tree for the storage structure.</p>
+ * <p>Title: GenerateTree Class>
+ * <p>Description:	GenerateTree generates tree for the storage structure.</p>
  * Copyright:    Copyright (c) year
  * Company: Washington University, School of Medicine, St. Louis.
  * @author Gautam Shetty
@@ -20,10 +20,10 @@ import edu.wustl.catissuecore.vo.TreeNodeFactory;
 
 
 /**
- * GenerateStorageTree generates tree for the storage structure.
+ * GenerateTree generates tree for the storage structure.
  * @author gautam_shetty
  */
-public class GenerateStorageTree
+public class GenerateTree
 {
     public JTree createTree(Vector dataVector, int treeType)
     {

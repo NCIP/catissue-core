@@ -188,7 +188,7 @@ public class Constants
 	public static final String SITE_ADD_ACTION = "SiteAdd.do";
 	public static final String SITE_EDIT_ACTION = "SiteEdit.do";
 	
-//	Constants required in Site.jsp Page
+	//Constants required in Site.jsp Page
 	public static final String BIOHAZARD_SEARCH_ACTION = "BiohazardSearch.do";
 	public static final String BIOHAZARD_ADD_ACTION = "BiohazardAdd.do";
 	public static final String BIOHAZARD_EDIT_ACTION = "BiohazardEdit.do";
@@ -333,11 +333,8 @@ public class Constants
 	public static final int MIN_LEVEL = 1;
 	
 	public static final String[] DEFAULT_TREE_SELECT_COLUMNS = {
-	        Constants.QUERY_RESULTS_PARTICIPANT_ID,
-            Constants.QUERY_RESULTS_ACCESSION_ID,
-            Constants.QUERY_RESULTS_SPECIMEN_ID,
-            Constants.QUERY_RESULTS_SEGMENT_ID,
-            Constants.QUERY_RESULTS_SAMPLE_ID}; 
+	        
+	};
 	
 	//Frame names in Query Results page.
 	public static final String DATA_VIEW_FRAME = "myframe1";
@@ -346,6 +343,9 @@ public class Constants
 	//NodeSelectionlistener - Query Results Tree node selection (For spreadsheet or individual view).
 	public static final String DATA_VIEW_ACTION = "/catissuecore/DataView.do?nodeName=";
 	public static final String VIEW_TYPE = "viewType";
+	
+	//TissueSite Tree View Constants.
+	public static final String PROPERTY_NAME = "propertyName";
 	
 	//Constants for type of query results view.
 	public static final String SPREADSHEET_VIEW = "Spreadsheet View";
@@ -364,11 +364,6 @@ public class Constants
 	
 	//Tree Data Action
 	public static final String TREE_DATA_ACTION = "/catissuecore/Data.do";
-	
-	//Constants for default column names to be shown for query result.
-	public static final String[] DEFAULT_SPREADSHEET_COLUMNS = {"PARTICIPANT_ID","ACCESSION_ID","SPECIMEN_ID",
-	        													"TISSUE_SITE","SPECIMEN_TYPE","SEGMENT_ID",
-	        													"SAMPLE_ID","SAMPLE_TYPE"};
 	
 	public static final String SPECIMEN = "Specimen";
 	public static final String SEGMENT = "Segment";
@@ -422,8 +417,6 @@ public class Constants
 	public static final int SHOPPING_CART_FORM_ID = 39;
 	//Misc
 	public static final String SEPARATOR = " : ";
-	
-	
 		
 	//Status message key Constants
 	public static final String STATUS_MESSAGE_KEY = "statusMessageKey";
@@ -465,6 +458,7 @@ public class Constants
 	public static final String TISSUE_SITE = "Tissue Site";
 	public static final int TISSUE_SITE_TREE_ID = 1;
 	public static final int STORAGE_CONTAINER_TREE_ID = 2;
+	public static final int QUERY_RESULTS_TREE_ID = 3;
 	
 	//Query Interface Results View Constants
 	public static final String PAGEOF = "pageOf";
@@ -485,10 +479,17 @@ public class Constants
 	
 	//Query results view temporary table columns.
 	public static final String QUERY_RESULTS_PARTICIPANT_ID = "PARTICIPANT_ID";
-	public static final String QUERY_RESULTS_ACCESSION_ID = "ACCESSION_ID";
+	public static final String QUERY_RESULTS_COLLECTION_PROTOCOL_ID = "COLLECTION_PROTOCOL_ID";
+	public static final String QUERY_RESULTS_COLLECTION_PROTOCOL_EVENT_ID = "COLLECTION_PROTOCOL_EVENT_ID";
+	public static final String QUERY_RESULTS_SPECIMEN_COLLECTION_GROUP_ID = "SPECIMEN_COLLECTION_GROUP_ID";
 	public static final String QUERY_RESULTS_SPECIMEN_ID = "SPECIMEN_ID";
-	public static final String QUERY_RESULTS_SEGMENT_ID = "SEGMENT_ID";
-	public static final String QUERY_RESULTS_SAMPLE_ID = "SAMPLE_ID";
+	public static final String QUERY_RESULTS_SPECIMEN_TYPE = "SPECIMEN_TYPE";
+	
+	//Constants for default column names to be shown for query result.
+	public static final String[] DEFAULT_SPREADSHEET_COLUMNS = {
+	        	QUERY_RESULTS_PARTICIPANT_ID,QUERY_RESULTS_COLLECTION_PROTOCOL_ID,
+	        	QUERY_RESULTS_COLLECTION_PROTOCOL_EVENT_ID,QUERY_RESULTS_SPECIMEN_COLLECTION_GROUP_ID,
+	        	QUERY_RESULTS_SPECIMEN_ID,QUERY_RESULTS_SPECIMEN_TYPE};
 	
 	//Query results edit constants - MakeEditableAction.
 	public static final String EDITABLE = "editable";
@@ -496,24 +497,23 @@ public class Constants
 	//URL paths for Applet in TreeView.jsp
 	public static final String QUERY_TREE_APPLET = "QueryTree.class";
 	public static final String APPLET_CODEBASE = "Applet";
+	public static final String TREE_APPLET_NAME = "treeApplet";
+	
+	//Shopping Cart
+	public static final String SHOPPING_CART = "shoppingCart";
 	
 	//Shopping Cart
 	public static final String SHOPPING_CART = "shoppingCart";
 	
 	public static final String SELECT_OPTION = "-- Select --";
 	
-	public static final String[] OBJECT_NAME_ARRAY = {
-	        SELECT_OPTION,	
-	        "User","Participant","Specimen"
-	};
-	
-	public static final String[] OBJECT_FULL_NAME_ARRAY = {
-	        SELECT_OPTION,	
-	        "edu.wustl.catissuecore.domain.User","edu.wustl.catissuecore.domain.Participant","edu.wustl.catissuecore.domain.Specimen"
+	public static final String[] TISSUE_SITE_ARRAY = {
+	        SELECT_OPTION,"Sex","male","female",
+	        "Tissue","kidney","Left kidney","Right kidney"
 	};
 	
 	public static final String[] ATTRIBUTE_NAME_ARRAY = {
-	        "Name","loginName","lastName"
+	        SELECT_OPTION
 	};
 	
 	public static final String[] ATTRIBUTE_CONDITION_ARRAY = {
@@ -918,13 +918,6 @@ public class Constants
 	        "Blood",
 	        "Serum",
 	        "Plasma",
-	};
-	
-	public static final String [] TISSUE_SITE_VALUES = {
-	        SELECT_OPTION,
-	        "Adrenal-Cortex",
-	        "Adrenal-Medulla",
-	        "Adrenal-NOS"
 	};
 	
 	public static final String [] TISSUE_SIDE_VALUES = {
