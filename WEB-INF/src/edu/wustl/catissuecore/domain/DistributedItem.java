@@ -35,7 +35,7 @@ public class DistributedItem implements java.io.Serializable
      * A single unit of tissue, body fluid, or derivative biological macromolecule that is 
      * collected or created from a Participant
      */
-	protected Specimen specimen;
+	protected Specimen specimen = new Specimen();
 	
 	/**
      * An event that results in transfer of a specimen from a Repository to a Laboratory.
