@@ -26,19 +26,19 @@ import edu.wustl.common.util.dbManager.DAOException;
 public class CDEHandler 
 {
 	private Map inMemCacheMap = new HashMap(); 
-	private Map cdeMAP;
+	private Map cdeXMLMAP;
 	
 	
-	public CDEHandler(Map cdeMAP)
+	public CDEHandler(Map cdeXMLMAP)
 	{
-		this.cdeMAP = cdeMAP;
+		this.cdeXMLMAP = cdeXMLMAP;
 	}
 	
 	public void loadCDE()
 	{
 		AbstractBizLogic bizLogic = BizLogicFactory.getBizLogic(-1);
 		
-		Set ketSet = cdeMAP.keySet();
+		Set ketSet = cdeXMLMAP.keySet();
 		Iterator it = ketSet.iterator();
 		while(it.hasNext())
 		{
@@ -68,7 +68,7 @@ public class CDEHandler
 	
 	public CDE retrieve(String CDEName)
 	{
-		Object obj = cdeMAP.get(CDEName);
+		Object obj = cdeXMLMAP.get(CDEName);
 		if(obj!= null)
 		{
 			XMLCDE xmlCDE = (XMLCDE)obj;
@@ -86,7 +86,6 @@ public class CDEHandler
 				{
 					//Return in-memory_cache.get(CDE_NAME);
 					cde = (CDE)cdeObj;
-					return cde;
 				}
 				else
 				{
@@ -94,14 +93,18 @@ public class CDEHandler
 					try
 					{
 						AbstractBizLogic bizLogic = BizLogicFactory.getBizLogic(-1);
-						cde =  (CDE)bizLogic.retrieve(CDEImpl.class.getName(),"publicid",publicID);
+						List list = bizLogic.retrieve(CDEImpl.class.getName(),"publicid",publicID);
+						if(!list.isEmpty())
+						{
+							cde =  (CDE)list.get(0);
+							inMemCacheMap.put(publicID,cde);
+						}
 					}
 					catch(DAOException ex)
 					{
 						ex.printStackTrace();
 					}
 				}
-				//Return CDE;
 				return cde;
 			}
 			else /** Retrieve CDE from caDSR */

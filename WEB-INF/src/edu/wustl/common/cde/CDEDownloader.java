@@ -9,11 +9,14 @@ package edu.wustl.common.cde;
  * @author mandar_deshmukh
  *
  */
+import edu.wustl.common.cde.xml.XMLCDE;
+import edu.wustl.common.cde.xml.XMLPermissibleValueType;
 import edu.wustl.common.util.logger.Logger;
 import gov.nih.nci.cadsr.domain.DataElement;
 import gov.nih.nci.cadsr.domain.EnumeratedValueDomain;
 import gov.nih.nci.cadsr.domain.NonenumeratedValueDomain;
 import gov.nih.nci.cadsr.domain.PermissibleValue;
+import gov.nih.nci.cadsr.domain.ValueDomain;
 import gov.nih.nci.cadsr.domain.ValueDomainPermissibleValue;
 import gov.nih.nci.cadsr.domain.impl.DataElementImpl;
 import gov.nih.nci.cadsr.domain.impl.ValueDomainImpl;
@@ -27,7 +30,6 @@ import java.net.PasswordAuthentication;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
@@ -62,10 +64,14 @@ public class CDEDownloader
 			// the connection with the databse server.
 			createPasswordAuthentication(proxyhost, proxyport, username, password);
 
+			System.out.println("appService");
+			
 			appService = ApplicationService.getRemoteInstance(dbserver);
+			
 		} // try
 		catch (Exception conexp)
 		{
+			conexp.printStackTrace();
 			Logger.out.error("1Error: " + conexp);
 			return false;
 		} // catch
@@ -81,23 +87,23 @@ public class CDEDownloader
 	 * 
 	 * @throws Exception
 	 */
-	public CDE loadCDE(CDEConConfig cdeCon, String cdePublicId,
+	public CDE loadCDE(CDEConConfig cdeCon, XMLCDE xmlCDE ,
 						String vocabularyName, int limit)
 						throws Exception
 	{
 		boolean bCon = connect(cdeCon.getProxyhostip(), cdeCon.getProxyport(),
 				cdeCon.getUsername(), cdeCon.getPassword(), cdeCon.getDbserver());
-		if (bCon == true)
+		if (bCon)
 		{
-			// to remove the Logger configuration from the file
-			System.setProperty(
-					"catissue.home", "D:\\tomcat\\webapps\\catissuecore" + "/Logs");
-			Logger
-			.configure("D:\\tomcat\\webapps\\catissuecore\\WEB-INF\\classes\\ApplicationResources.properties");
+//			// to remove the Logger configuration from the file
+//			System.setProperty(
+//					"catissue.home", "D:\\tomcat\\webapps\\catissuecore" + "/Logs");
+//			Logger
+//			.configure("D:\\tomcat\\webapps\\catissuecore\\WEB-INF\\classes\\ApplicationResources.properties");
 
 			this.vocabularyName = vocabularyName;
 			this.limit = limit;
-			CDE resultCde = retrieveDataElement(new Long(cdePublicId));
+			CDE resultCde = retrieveDataElement(xmlCDE);
 			return resultCde;
 		} // connection successful
 		else
@@ -113,29 +119,33 @@ public class CDEDownloader
 	 * @return the CDE if available or null if cde not available
 	 * @throws Exception
 	 */
-	private CDE retrieveDataElement(Long CDEPublicID) throws Exception
+	private CDE retrieveDataElement(XMLCDE xmlCDE) throws Exception
 	{
 		//	Create the dataelement and set the dataelement properties
 		DataElement dataElement = new DataElementImpl();
-		dataElement.setPublicID(CDEPublicID);
-//		dataElement.setId(CDEPublicID.toString() ); 
+		dataElement.setPublicID(new Long(xmlCDE.getPublicId()));
+		
 		dataElement.setLatestVersionIndicator("Yes");
 
 		List resultList = appService.search("gov.nih.nci.cadsr.domain.DataElement", dataElement);
-
+		
 		// check if any cde exists with the given public id.
 		if (!resultList.isEmpty())
 		{
 			// retreive the Data Element for the given publicid
 			dataElement = (DataElement) resultList.get(0);
-
-			// get the Value Domain for the Data Element 
-			List lstValueDomain = retrieveValueDomain(dataElement); // valuedomain list
-
-			// get the PermissibleValues for the ValueDoamin of the Data Element
-			List lstPerValForValDomPerVal = retrievePermissibleValueForValueDomainPermissibleValue(lstValueDomain);
-			// list of permissiblevalues for the DataElement
-
+			
+			Iterator iterator = xmlCDE.getXMLPermissibleValues().iterator();
+			while(iterator.hasNext())
+			{
+				XMLPermissibleValueType  aXMLPermissibleValueType = (XMLPermissibleValueType)iterator.next();
+				if(aXMLPermissibleValueType.getEvsTerminology().equals("PV"))
+				{
+					// get the PermissibleValues for the ValueDoamin of the Data Element
+					List permissibleValuesList = retrievePermissibleValueForValueDomainPermissibleValue(dataElement,aXMLPermissibleValueType);
+				}
+			}
+			
 			// create the cde object and set the values.
 			CDEImpl cdeobj = new CDEImpl();
 
@@ -145,7 +155,12 @@ public class CDEDownloader
 			cdeobj.setVersion(dataElement.getVersion().toString());
 			cdeobj.setPreferredname(dataElement.getPreferredName());
 			//Kapil FIX
-			cdeobj.setPermissibleValues(new HashSet(lstPerValForValDomPerVal));
+//			Iterator iterator = permissibleValuesList.iterator();
+//			while(iterator.hasNext())
+//			{
+//				// iterator.next();
+//				cdeobj.setPermissibleValues(new HashSet(permissibleValuesList));
+//			}
 
 			return cdeobj;
 		} // list not empty
@@ -160,6 +175,7 @@ public class CDEDownloader
 	 * @param dataElement Data Element for which Value Domain is to be retrieved.
 	 * @return A List of ValueDomains
 	 * @throws Exception
+	 * OK
 	 */
 	private List retrieveValueDomain(DataElement dataElement) throws Exception
 	{
@@ -173,39 +189,35 @@ public class CDEDownloader
 	 * @return A List of the PermissibleValues for a Value Domain of the dataelement.
 	 * @throws Exception
 	 */
-	private List retrievePermissibleValueForValueDomainPermissibleValue(List lstValueDomain)
+	private List retrievePermissibleValueForValueDomainPermissibleValue(DataElement dataElement,XMLPermissibleValueType  xmlPermissibleValue)
 			throws Exception
 	{
+		//get the Value Domain for the Data Element 
+		List lstValueDomain = retrieveValueDomain(dataElement); // valuedomain list
+		
 		// list of permissible values for the given ValueDomain
 		List pvList = new ArrayList();
 
-		for (int i = 0; i < lstValueDomain.size(); i++)
+		Iterator iterator = lstValueDomain.iterator();
+		while(iterator.hasNext())
 		{
-			ValueDomainImpl valDomImpl = (ValueDomainImpl) lstValueDomain.get(i);
+			ValueDomain valueDomain = (ValueDomainImpl) iterator.next();
 
-			String valdomnm = valDomImpl.toString();
-			int z = valdomnm.lastIndexOf('.') + 1;
-
-			String valDomType = valdomnm.substring(z, z + 1);
-
-			// check  whether ValueDomain is Enumerated or Non Enumerated
-			if (valDomType.equals("E"))
+			if(valueDomain instanceof EnumeratedValueDomain)
 			{
 				// get the enumerated ValueDomain
-				EnumeratedValueDomain enumValDom = (EnumeratedValueDomain) lstValueDomain.get(i);
+				EnumeratedValueDomain enumValDom = (EnumeratedValueDomain) valueDomain;
 
 				// get the Collection of PermissibleValues for the ValueDomain 
 				Collection pvColl = enumValDom.getValueDomainPermissibleValueCollection();
 
-				int index = 1;
-				Iterator iterat = pvColl.iterator();
+				Iterator pvIterator = pvColl.iterator();
 
 				List permissibleValueList = null;
-				while (iterat.hasNext())
+				while (pvIterator.hasNext())
 				{
 					// ValueDomainPermissibleValue for the enumValDom
-					ValueDomainPermissibleValue valDomPerVal = (ValueDomainPermissibleValue) iterat
-							.next();
+					ValueDomainPermissibleValue valDomPerVal = (ValueDomainPermissibleValue) pvIterator.next();
 
 					//PermissibleValues for the given VDPV
 					permissibleValueList = appService.search(
@@ -229,12 +241,10 @@ public class CDEDownloader
 					} // if
 				} // while
 			} // valDomType = E
-			else
-			// valDomType = N   NonEnumerated
+			else //NonEnumerated
 			{
 				// get the nonenumerated ValueDomain
-				NonenumeratedValueDomain nonEnumValDom = (NonenumeratedValueDomain) lstValueDomain
-						.get(i);
+				NonenumeratedValueDomain nonEnumValDom = (NonenumeratedValueDomain)valueDomain;
 				Logger.out.info(nonEnumValDom.getPreferredName());
 				Logger.out.info(nonEnumValDom.getPreferredDefinition());
 				Logger.out.info(nonEnumValDom.getLongName());
@@ -300,12 +310,12 @@ public class CDEDownloader
 		/**
 		 * Validating the Proxy IpAddress 
 		 */
-		boolean validip = CommonUtilities.isvalidIP(proxyhost);
-		if (validip == false)
-		{
-			Logger.out.info("Invalid Proxy Host: " + proxyhost);
-			throw new Exception("Invalid ProxyHost");
-		}
+//		boolean validip = CommonUtilities.isvalidIP(proxyhost);
+//		if (validip == false)
+//		{
+//			Logger.out.info("Invalid Proxy Host: " + proxyhost);
+//			throw new Exception("Invalid ProxyHost");
+//		}
 		// setting the system settings
 		System.setProperty("proxyHost", proxyhost);
 		System.setProperty("proxyPort", proxyport);

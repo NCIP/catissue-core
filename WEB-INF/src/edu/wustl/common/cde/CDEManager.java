@@ -6,44 +6,72 @@
  */
 package edu.wustl.common.cde;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+
+import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.cde.xml.XMLCDE;
+import edu.wustl.common.cde.xml.XMLCDECACHE;
+import edu.wustl.common.util.logger.Logger;
 
 /**@author kapil_kaveeshwar
  *  This is a communication link between the caTISSUE Core Application and the caDSR interface. */
 public class CDEManager 
 {
 	public static CDEManager cdeManager = new CDEManager();
-	Map cdeMAP; 
-	CDEHandler cdeHandler;
+	private Map cdeXMLMAP; 
+	private CDEHandler cdeHandler;
 	public CDEManager()
 	{
-		cdeMAP = new HashMap();
+		cdeXMLMAP = new HashMap();
 		
-		XMLCDE xmCde1 = new XMLCDE();
-		xmCde1.setCache(true);
-		xmCde1.setLazyLoading(false);
-		xmCde1.setName("Sex");
-		xmCde1.setPublicId("p1");
-		
-		XMLCDE xmCde2 = new XMLCDE();
-		xmCde2.setCache(true);
-		xmCde2.setLazyLoading(false);
-		xmCde2.setName("Tissue");
-		xmCde2.setPublicId("p2");
-		
-		cdeMAP.put("Sex",xmCde1);
-		cdeMAP.put("Tissue",xmCde2);
-		
-		cdeHandler = new CDEHandler(cdeMAP);
+		try
+		{
+            // create a JAXBContext capable of handling classes generated into
+            // the pspl.cde package
+            JAXBContext jc = JAXBContext.newInstance( "edu.wustl.common.cde.xml" );
+            
+            // create an Unmarshaller
+            Unmarshaller u = jc.createUnmarshaller();
+            
+            // unmarshal a root instance document into a tree of Java content
+            // objects composed of classes from the pspl.cde package.
+            XMLCDECACHE root = 
+                (XMLCDECACHE)u.unmarshal( new FileInputStream( "CDEConfig.xml" ) );
+                
+            // display the cde details
+			List xmlCDEList = root.getXMLCDE();
+			Iterator iterator = xmlCDEList.iterator();
+			while(iterator.hasNext())
+			{
+				XMLCDE cdeobj = (XMLCDE)iterator.next();
+				cdeXMLMAP.put(cdeobj.getName(),cdeobj);
+			}
+        }
+		catch( JAXBException je )
+		{
+            je.printStackTrace();
+        }
+		catch( IOException ioe )
+		{
+            ioe.printStackTrace();
+        }
+		cdeHandler = new CDEHandler(cdeXMLMAP);
 	}
 	
 	/** Retrieves live CDEs from the caDSR and updates the database cache. */
 	public void refreshCache()
 	{
-		//CDECacheManager.refresh();
+		CDECacheManager cdeCacheManager = new CDECacheManager();
+		cdeCacheManager.refresh(cdeXMLMAP);
 	}
 	
 	/**
@@ -64,5 +92,14 @@ public class CDEManager
 	public CDE getCDE(String CDEName)
 	{
 		return cdeHandler.retrieve(CDEName);
+	}
+	
+	public static void main(String[] args)
+	{
+		Variables.catissueHome = System.getProperty("user.dir");
+		Logger.configure("Application.properties");
+		
+		CDEManager aCDEManager = new CDEManager();
+		aCDEManager.refreshCache();
 	}
 }

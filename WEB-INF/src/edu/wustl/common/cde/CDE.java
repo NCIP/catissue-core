@@ -11,6 +11,8 @@
 
 package edu.wustl.common.cde;
 
+import java.util.Set;
+
 /**
  * @author Mandar_Deshmukh
  * <p>This interface corresponds to the CDE.</p> 
@@ -37,5 +39,7 @@ public interface CDE
      * @return returns a String object that contains the Defination of the CDE 
      */
     String getDefination();
+    
+    Set getPermissibleValues();
 
 } // cde interface
