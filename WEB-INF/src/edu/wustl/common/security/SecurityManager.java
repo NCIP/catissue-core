@@ -574,7 +574,7 @@ public class SecurityManager implements Permissions
      * that are passed. It also creates user group, role, protection group mapping for 
      * all the elements in authorization data
      * @param authorizationData Vector of SecurityDataBean objects
-     * @param protectionObjects Set of ProtectionObject instances
+     * @param protectionObjects Set of AbstractDomainObject instances
      * @param dynamicGroups Array of dynamic group names
      * @throws SMException
      */
