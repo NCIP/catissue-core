@@ -158,6 +158,7 @@ public class Constants
 	public static final String FROMSITELIST="fromsiteList";
 	public static final String TOSITELIST="tositeList";	
 	public static final String ITEMLIST="itemList";
+	public static final String DISTRIBUTIONPROTOCOLLIST="distributionProtocolList";
 			
 	//Constants required in User.jsp Page
 	public static final String USER_SEARCH_ACTION = "UserSearch.do";
@@ -417,7 +418,7 @@ public class Constants
 	public static final int FORGOT_PASSWORD_FORM_ID = 35;
 	public static final int SIGNUP_FORM_ID = 36;
 	public static final int DISTRIBUTION_FORM_ID = 37;
-	public static final int SPECIMEN_EVENT_PARAMETERS_FORM_ID = 37;
+	public static final int SPECIMEN_EVENT_PARAMETERS_FORM_ID = 38;
 	public static final int SHOPPING_CART_FORM_ID = 39;
 	//Misc
 	public static final String SEPARATOR = " : ";
@@ -1091,19 +1092,6 @@ public class Constants
 				
 		};
 	
-	public static final String [] FROMSITEARRAY = {
-					SELECT_OPTION,
-					"site1",
-					"site2",
-				
-			};
-	
-	public static final String [] TOSITEARRAY = {
-						SELECT_OPTION,
-						"site1",
-						"site2",
-				
-				};
 	public static final String [] ITEMARRAY = {
 			SELECT_OPTION,
 			"Item1",
