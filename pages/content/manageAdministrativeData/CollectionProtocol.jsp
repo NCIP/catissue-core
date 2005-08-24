@@ -177,8 +177,12 @@ function insRow(subdivtag,iCounter)
 		sname = sname + "<option value='<%=tissueSiteArry[i]%>'><%=tissueSiteArry[i]%></option>";
 	<%}%>
 	sname = sname + "</select>"
+	var url = "ShowFramedPage.do?pageOf=pageOfTissueSite&propertyName="+objname;			
+	sname = sname + "<a href='#' onclick='javascript:NewWindow('" + url + "','name','250','330','no');return false>";
+	sname = sname + "<img src='images\\Tree.gif' border='0' width='26' height='22'></a>";
 	
 	spreqtissuesite.innerHTML="" + sname;
+	
 	
 	//pathologystatus
 	var spreqpathologystatus=x.insertCell(4)
