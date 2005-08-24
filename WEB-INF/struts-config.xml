@@ -1450,6 +1450,8 @@ PUBLIC
 		<!--Distribution Actions Begins -->
         <action path="/Distribution"
 			type="edu.wustl.catissuecore.action.DistributionAction"
+			name="distributionForm"
+			validate="false"
 			scope="request">
 			<forward name="success" path=".catissuecore.distributionDef" />
 			<forward name="failure" path=".catissuecore.distributionDef" />
