@@ -129,13 +129,12 @@ public class StorageLocationViewListener implements TreeSelectionListener
 
                     URL dataURL = new URL(protocol, host, port, urlSuffix);
                     appletContext.showDocument(dataURL,
-                            Constants.DATA_VIEW_FRAME);
+                            				   Constants.DATA_VIEW_FRAME);
                 }
             }
             catch (MalformedURLException malExp)
             {
             }
-
         }
     }
 }

@@ -26,7 +26,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
 
-import edu.wustl.catissuecore.storage.GenerateStorageTree;
+import edu.wustl.catissuecore.storage.GenerateTree;
 import edu.wustl.catissuecore.util.global.Constants;
 
 /**
@@ -52,17 +52,20 @@ public class QueryTree extends JApplet
             int port = codeBase.getPort();
             
             String pageOf = this.getParameter(Constants.PAGEOF);
-            String storageContainerType = null;
+            String storageContainerType = null,propertyName = null;
             int treeType = Constants.TISSUE_SITE_TREE_ID;
             
             if (pageOf.equals(Constants.PAGEOF_STORAGE_LOCATION))
             {
                 storageContainerType = this.getParameter(Constants.STORAGE_CONTAINER_TYPE);
                 treeType = Constants.STORAGE_CONTAINER_TREE_ID;
-            }
-            
-            if(pageOf.equals(Constants.PAGEOF_SPECIMEN))
+            }else if(pageOf.equals(Constants.PAGEOF_SPECIMEN))
             	treeType = Constants.STORAGE_CONTAINER_TREE_ID;
+            else if (pageOf.equals(Constants.PAGEOF_QUERY_RESULTS))
+                treeType = Constants.QUERY_RESULTS_TREE_ID;
+            else 
+                propertyName = this.getParameter(Constants.PROPERTY_NAME);
+            
             String urlSuffix = Constants.TREE_DATA_ACTION+"?"+Constants.PAGEOF+"="+pageOf;
             URL dataURL = new URL(protocol, host, port, urlSuffix);
             
@@ -71,14 +74,9 @@ public class QueryTree extends JApplet
             connection.setUseCaches(false);
             
             in = new ObjectInputStream(connection.getInputStream());
-            
             Vector treeDataVector = (Vector) in.readObject();
 
-//            //Creates tree.
-//            GenerateTree generateTree = new GenerateTree();
-//            JTree tree = generateTree.createTreeView(dataList);
-            
-            GenerateStorageTree generateTree = new GenerateStorageTree();
+            GenerateTree generateTree = new GenerateTree();
             JTree tree = generateTree.createTree(treeDataVector, treeType);
             
             Container contentPane = getContentPane();
@@ -122,11 +120,17 @@ public class QueryTree extends JApplet
             //Add listeners for the tree.
 //            NodeSelectionListener nodeSelectionListener = new NodeSelectionListener(
 //                    this.getCodeBase(), this.getAppletContext());
-            StorageLocationViewListener viewListener 
-            		= new StorageLocationViewListener(this.getCodeBase(), this.getAppletContext()); 
-            viewListener.setStorageContainerType(storageContainerType);
-            viewListener.setPageOf(pageOf);
-            tree.addTreeSelectionListener(viewListener);
+            
+//            StorageLocationViewListener viewListener 
+//            		= new StorageLocationViewListener(this.getCodeBase(), this.getAppletContext()); 
+//            viewListener.setStorageContainerType(storageContainerType);
+//            viewListener.setPageOf(pageOf);
+//            tree.addTreeSelectionListener(viewListener);
+            
+            TissueSiteTreeNodeListener tissueSiteListener = new TissueSiteTreeNodeListener();
+//            tissueSiteListener.setPropertyName(propertyName); 
+            tissueSiteListener.setAppletContext(this.getAppletContext());
+            tree.addTreeSelectionListener(tissueSiteListener);
 
             //Add listeners for the radio buttons.
 //            spreadsheetViewRadioButton.addActionListener(nodeSelectionListener);
