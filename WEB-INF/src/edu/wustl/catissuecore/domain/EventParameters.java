@@ -41,7 +41,7 @@ public abstract class EventParameters extends AbstractDomainObject implements ja
 	/**
      * User who performs the event.
      */
-	protected User user;
+	protected User user = new User();
 	
 	/**
      * Text comments on event.
@@ -146,15 +146,14 @@ public abstract class EventParameters extends AbstractDomainObject implements ja
 			EventParametersForm form = (EventParametersForm)abstractForm ;
 			this.systemIdentifier = new Long(form.getSystemIdentifier());
 			this.comments = form.getComments();
-			User u = new User();
-			u.setSystemIdentifier(new Long(form.getUserId()));
-			this.user = u;
-//System.out.println("Done");
-			if (form.getDateOfEvent().trim().length()!=0  )
+			
+			user.setSystemIdentifier(new Long(form.getUserId()));
+
+			if (form.getDateOfEvent() != null && form.getDateOfEvent().trim().length()!=0  )
 			{
 				this.timestamp = Utility.parseDate(form.getDateOfEvent(),Constants.DATE_PATTERN_MM_DD_YYYY);
-				this.timestamp.setHours(Integer.parseInt(form.getTimeInHours() ));
-				this.timestamp.setMinutes(Integer.parseInt(form.getTimeInMinutes()) );
+				this.timestamp.setHours(Integer.parseInt(form.getTimeInHours()));
+				this.timestamp.setMinutes(Integer.parseInt(form.getTimeInMinutes()));
 			}
 		}
         catch (Exception excp)
