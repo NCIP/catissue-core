@@ -1,23 +1,32 @@
 <?xml version='1.0' encoding='utf-8' ?>
-<CDE_CACHE REFRESH_RATE="5" LAZY_LOADING="TRUE">
-	<CDE CACHE="TRUE" LAZY_LOADING="FALSE">
-		<NAME>RACE</NAME>
-		<PUBLICID>106</PUBLICID>
-		<PERMISSIBLE_VALUE>
-			<EVS_TERMINOLOGY>NCI-THESAURAUS</EVS_TERMINOLOGY>
-			<CONCEPT_CODE>211101</CONCEPT_CODE>
-			<TREE_DEPTH>1</TREE_DEPTH>
-		</PERMISSIBLE_VALUE>
-	</CDE>
-	
-	<CDE CACHE="FALSE" LAZY_LOADING="FALSE">
-	<NAME>PATIENT</NAME>
-	<PUBLICID>110</PUBLICID>
-	<PERMISSIBLE_VALUE>
-		<EVS_TERMINOLOGY>NCI-THESAURAUS</EVS_TERMINOLOGY>
-		<CONCEPT_CODE>2111331</CONCEPT_CODE>
-		<TREE_DEPTH>2</TREE_DEPTH>
-	</PERMISSIBLE_VALUE>
-	</CDE>
+<XMLCDE_CACHE refreshTime="5" lazyLoading="true">
+	<XMLCDE cache="true" lazyLoading="false">
+		<name>RACE</name>
+		<publicId>106</publicId>
+		<XMLPermissibleValues>
+			<evsTerminology>NCI-THESAURAUS</evsTerminology>
+			<conceptCode>211101</conceptCode>
+			<parentConceptCode>C11101</parentConceptCode>
+			<depthOfHierarchyTree>1</depthOfHierarchyTree>
+		</XMLPermissibleValues>
+		<XMLPermissibleValues>
+			<evsTerminology>NCI-THESAURAUS</evsTerminology>
+			<conceptCode>112233</conceptCode>
+			<parentConceptCode>C311101</parentConceptCode>
+     		<depthOfHierarchyTree>3</depthOfHierarchyTree>
+		</XMLPermissibleValues>
 
-</CDE_CACHE>
+	</XMLCDE>
+	
+	<XMLCDE cache="false" lazyLoading="false">
+	<name>PATIENT</name>
+	<publicId>110</publicId>
+	<XMLPermissibleValues>
+		<evsTerminology>NCI-THESAURAUS</evsTerminology>
+		<conceptCode>2111331</conceptCode> 
+		<parentConceptCode>C112101</parentConceptCode>
+		<depthOfHierarchyTree>2</depthOfHierarchyTree> 
+	</XMLPermissibleValues>
+	</XMLCDE>
+
+</XMLCDE_CACHE>
