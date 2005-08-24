@@ -19,14 +19,16 @@ import edu.wustl.catissuecore.actionForm.AbstractActionForm;
 import edu.wustl.catissuecore.actionForm.SpecimenProtocolForm;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.common.util.logger.Logger;
+
 /**
- *A set of procedures that govern the collection and/or distribution of biospecimens. 
+ * A set of procedures that govern the collection and/or distribution of biospecimens. 
  * @author mandar_deshmukh
- * 
  * @hibernate.class table="CATISSUE_SPECIMEN_PROTOCOL"
  */
 public abstract class SpecimenProtocol extends AbstractDomainObject implements java.io.Serializable
 {
+    
 	private static final long serialVersionUID = 1234567890L;
 
 	/**
@@ -312,14 +314,17 @@ public abstract class SpecimenProtocol extends AbstractDomainObject implements j
 		while(it.hasNext())
 		{
 			String key = (String)it.next();
+			Logger.out.debug("Key************************"+key);
 			if(key.indexOf("specimenClass")!=-1)
 			{
 				String value = (String)orgMap.get(key);
+				Logger.out.debug("Value..........................."+value); 
 				String replaceWith = "SpecimenRequirement"+"#"+value+"SpecimenRequirement";
 				
 				key = key.substring(0,key.lastIndexOf("_"));
+				Logger.out.debug("Second Key***********************"+key);
 				String newKey = key.replaceFirst("SpecimenRequirement",replaceWith);
-				
+				Logger.out.debug("New Key................"+newKey);
 				replaceMap.put(key,newKey);
 			}
 		}

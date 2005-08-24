@@ -37,8 +37,8 @@ import edu.wustl.common.util.logger.Logger;
 public class ApproveUserBizLogic extends DefaultBizLogic
 { 
     
-    /* (non-Javadoc)
-     * @see edu.wustl.catissuecore.bizlogic.DefaultBizLogic#update(edu.wustl.catissuecore.dao.DAO, java.lang.Object)
+    /**
+     * Overrides the insert method of DefaultBizLogic 
      */
     protected void insert(DAO dao, Object obj) throws DAOException
     {

@@ -101,8 +101,8 @@ public class UserBizLogic extends DefaultBizLogic
             
             user.setSystemIdentifier(csmUser.getUserId());
 
-            dao.insert(user.getAddress(),true);
-            dao.insert(user,true);
+            dao.insert(user.getAddress(), true);
+            dao.insert(user, true);
 
             //Send email to administrator and cc it to the user registered.
             SendEmail email = new SendEmail();

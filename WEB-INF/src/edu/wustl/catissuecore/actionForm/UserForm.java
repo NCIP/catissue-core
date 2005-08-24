@@ -799,6 +799,7 @@ public class UserForm extends AbstractActionForm
         {
             Logger.out.error(excp.getMessage(), excp);
         }
+        
         return errors;
     }
 }

@@ -120,7 +120,7 @@ public class NewSpecimenAction extends Action
         
         request.setAttribute(Constants.SPECIMEN_SUB_TYPE_LIST, Constants.SPECIMEN_SUB_TYPE_VALUES);
         
-        request.setAttribute(Constants.TISSUE_SITE_LIST,Constants.TISSUE_SITE_VALUES);
+        request.setAttribute(Constants.TISSUE_SITE_LIST,Constants.TISSUE_SITE_ARRAY);
         
         request.setAttribute(Constants.TISSUE_SIDE_LIST,Constants.TISSUE_SIDE_VALUES);
         

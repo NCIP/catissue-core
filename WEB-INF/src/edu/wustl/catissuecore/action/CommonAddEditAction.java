@@ -54,7 +54,6 @@ public class CommonAddEditAction extends Action
 
         try
         {
-        	Logger.out.debug("CommonAddEditAction....");
             AbstractActionForm abstractForm = (AbstractActionForm) form;
             AbstractBizLogic bizLogic = BizLogicFactory.getBizLogic(abstractForm.getFormId());
 
@@ -78,7 +77,6 @@ public class CommonAddEditAction extends Action
                 if (list.size() != 0)
                 {
                 	AbstractDomainObject abstractDomain = (AbstractDomainObject) list.get(0);
-                    
                     abstractDomain.setAllValues(abstractForm);
                     bizLogic.update(abstractDomain,Constants.HIBERNATE_DAO);
                     target = new String(Constants.SUCCESS);
@@ -90,7 +88,7 @@ public class CommonAddEditAction extends Action
             }
             
             //Status message key.
-            String statusMessageKey = String.valueOf(abstractForm.getFormId()+
+            String statusMessageKey = String.valueOf(abstractForm.getFormId() +
 					"."+String.valueOf(abstractForm.isAddOperation()));
 
             request.setAttribute(Constants.STATUS_MESSAGE_KEY,statusMessageKey);

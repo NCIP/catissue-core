@@ -1499,8 +1499,8 @@ PUBLIC
 		</action>
 
 		
-		<action path="/SimpleQueryInterfaceAdd"
-			type="edu.wustl.catissuecore.action.CommonAddEditAction"
+		<action path="/SimpleSearch"
+			type="edu.wustl.catissuecore.action.SimpleSearchAction"
 			name="simpleQueryInterfaceForm"
 			validate="true"
 			input="/SimpleQueryInterface.do"
@@ -1555,6 +1555,7 @@ PUBLIC
 			<forward name="pageOfQueryResults" path=".catissuecore.queryResultsDef"/>
 			<forward name="pageOfStorageLocation" path=".catissuecore.storageLocationViewDef"/>
 			<forward name="pageOfSpecimen" path=".catissuecore.storageLocationViewDef"/>
+			<forward name="pageOfTissueSite" path=".catissuecore.queryResultsTreeViewDef"/>			
 		</action>
 		<action path="/Data"
 			type="edu.wustl.catissuecore.action.TreeDataAction">

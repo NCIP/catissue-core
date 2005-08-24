@@ -1,9 +1,5 @@
 package edu.wustl.catissuecore.action;
 
-import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.security.SecurityManager;
-import edu.wustl.common.util.logger.Logger;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -12,8 +8,10 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
+
+import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.security.SecurityManager;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * Class intercepts the struts action call and performs authorization to ensure

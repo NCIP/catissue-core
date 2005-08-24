@@ -13,4 +13,28 @@ insert into CATISSUE_STORAGE_TYPE VALUES (1,'Box',50,1);
 insert into CATISSUE_STORAGE_container VALUES (1,'name1',50,1,'abc','Active',1,1,null,1,0,0);
 insert into CATISSUE_STORAGE_CONTAINER values(2,'name2',50,false,'acb','Active',1,null,1,1,0,1)
 
+CREATE TABLE CATISSUE_QUERY_INTERFACE_TABLE_DATA
+(
+	  TABLE_ID bigint not null auto_increment, 
+	  
+      TABLE_NAME varchar(50),
+
+      DISPLAY_NAME varchar(50),
+      
+      primary key (TABLE_ID)
+);
+
+CREATE TABLE CATISSUE_QUERY_INTERFACE_COLUMN_DATA
+(
+	  IDENTIFIER bigint not null auto_increment,
+
+      TABLE_ID bigint not null,
+
+      COLUMN_NAME varchar(50),
+
+      DISPLAY_NAME varchar(50),
+      
+	  primary key (IDENTIFIER)
+);
+
 commit

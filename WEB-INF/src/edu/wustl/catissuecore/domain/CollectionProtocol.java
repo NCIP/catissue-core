@@ -87,7 +87,6 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 	 */
 	public Collection getUserCollection()
 	{
-
 		return userCollection;
 	}
 

@@ -48,12 +48,6 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	 */
 	protected Map innerLoopValues = new HashMap();
 	
-	
-	
-	
-	
-	
-	
 	/**
 	 * @return Returns the innerLoopValues.
 	 */
@@ -105,9 +99,6 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	{
 		this.outerCounter = outerCounter;
 	}
-	
-	
-	
 	
 	/**
 	 * No argument constructor for CollectionProtocolForm class.

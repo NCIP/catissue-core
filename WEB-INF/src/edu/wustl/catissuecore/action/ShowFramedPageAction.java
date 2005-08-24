@@ -39,6 +39,10 @@ public class ShowFramedPageAction extends Action
         {
             String storageContainerType = request.getParameter(Constants.STORAGE_CONTAINER_TYPE);
             request.setAttribute(Constants.STORAGE_CONTAINER_TYPE,storageContainerType);
+        }else if (pageOf.equals(Constants.PAGEOF_TISSUE_SITE))
+        {
+            String propertyName = request.getParameter(Constants.PROPERTY_NAME);
+            request.setAttribute(Constants.PROPERTY_NAME,propertyName);
         }
         
         return mapping.findForward(pageOf);

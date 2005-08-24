@@ -30,7 +30,6 @@
 		
         function onChangeEvent(element)
 		{
-
 			var action = "/catissuecore/SpecimenCollectionGroup.do?operation=add";
 			document.forms[0].action = action;
 			document.forms[0].submit();

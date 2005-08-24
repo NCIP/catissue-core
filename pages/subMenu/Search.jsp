@@ -11,7 +11,7 @@
     <td class="subMenuPrimaryItems">
       <div>
       	<img src="images/subMenuArrow.gif" width="7" height="7" alt="" />
-      		<a class="subMenuPrimary" href="#">
+      		<a class="subMenuPrimary" href="SimpleQueryInterface.do">
       			<bean:message key="app.simpleSearch" />
       		</a>
       </div>
@@ -23,7 +23,7 @@
       </div>
       <div>
 	  	<img src="images/subMenuArrow.gif" width="7" height="7" alt="" />
-	  		<a class="subMenuPrimary" href="QueryResults.do">
+	  		<a class="subMenuPrimary" href="ShowFramedPage.do?pageOf=pageOfStorageLocation">
 	  			<bean:message key="app.queryResultView" />
 	  		</a>
 	  </div>

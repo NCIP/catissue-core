@@ -51,6 +51,19 @@
 		var i = document.getElementById(listname).selectedIndex;
 		document.getElementById(unitspan).innerHTML = ugul[i];
 	}
+
+	var win = null;
+	function NewWindow(mypage,myname,w,h,scroll)
+	{
+		LeftPosition = (screen.width) ? (screen.width-w)/2 : 0;
+		TopPosition = (screen.height) ? (screen.height-h)/2 : 0;
+
+		settings =
+			'height='+h+',width='+w+',top='+TopPosition+',left='+LeftPosition+',scrollbars='+scroll+',resizable'
+		win = open(mypage,myname,settings)
+		if (win.opener == null)
+			win.opener = self;
+	}
 //code for units end
 </SCRIPT>
 
@@ -131,7 +144,9 @@ function insRow(subdivtag)
 		sname = sname + "<option value='<%=tissueSiteArry[i]%>'><%=tissueSiteArry[i]%></option>";
 	<%}%>
 	sname = sname + "</select>"
-//	sname = sname + "<a href='#'><img src='images\Tree.gif' border='0' width='26' height='22'></a>"
+	var url = "ShowFramedPage.do?pageOf=pageOfTissueSite&propertyName="+objname;			
+	sname = sname + "<a href='#' onclick=javascript:NewWindow('" + url + "','name','250','330','no');return false>";
+	sname = sname + "<img src='images\\Tree.gif' border='0' width='26' height='22'></a>";
 	
 	spreqtissuesite.innerHTML="" + sname;
 	
@@ -483,6 +498,12 @@ function insRow(subdivtag)
 					<html:select property="<%=objname%>" styleClass="formFieldSized10" styleId="<%=objname%>" size="1" >
 						<html:options name="<%=Constants.TISSUE_SITE_LIST%>" labelName="<%=Constants.TISSUE_SITE_LIST%>" />
 					</html:select>
+					<%
+						String url = "ShowFramedPage.do?pageOf=pageOfTissueSite&propertyName="+objname;			
+					%>
+				    <a href="#" onclick="javascript:NewWindow('<%=url%>','name','250','330','no');return false">
+						<img src="images\Tree.gif" border="0" width="26" height="22">
+					</a>
 			    </td>
 		        
 		        <td class="formField">

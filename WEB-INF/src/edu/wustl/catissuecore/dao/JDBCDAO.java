@@ -41,9 +41,18 @@ public class JDBCDAO extends AbstractDAO
     	auditManager = new AuditManager();
     }
     
-    public void closeSession()
+    public void closeSession() throws DAOException
     {
-    	auditManager = null;
+        try
+        {
+            auditManager = null;
+        	stmt.close();
+            connection.close();
+        }
+        catch(SQLException sqlExp)
+        {
+            new DAOException(sqlExp.getMessage(),sqlExp);
+        }
     }
     
     public void commit() throws DAOException
@@ -58,7 +67,7 @@ public class JDBCDAO extends AbstractDAO
         catch (SQLException dbex)
         {
         	Logger.out.error(dbex.getMessage(),dbex);
-        	new DAOException("Error in commit", dbex);
+        	throw new DAOException("Error in commit", dbex);
         }
     }
     
@@ -188,7 +197,29 @@ public class JDBCDAO extends AbstractDAO
                 query.append(sourceObjectName + "." + whereColumnName[i] + " "
                         + whereColumnCondition[i] + " " + whereColumnValue[i]);
             }
+            
+            list = execute(query.toString());
+        }
+        catch (ClassNotFoundException classExp)
+        {
+            Logger.out.error(classExp.getMessage(), classExp);
+        }
 
+        return list;
+    }
+    
+    /**
+     * Executes the query.
+     * @param query
+     * @return
+     * @throws ClassNotFoundException
+     * @throws SQLException
+     */
+    public List execute(String query) throws ClassNotFoundException, DAOException
+    {
+        List list = null;
+        try
+        {
             //Creates connection.
             createConnection();
 
@@ -196,7 +227,7 @@ public class JDBCDAO extends AbstractDAO
             PreparedStatement stmt = connection.prepareStatement(query
                     .toString());
             ResultSet resultSet = stmt.executeQuery();
-           
+             
             list = new ArrayList();
             
             ResultSetMetaData metaData = resultSet.getMetaData();
@@ -222,19 +253,16 @@ public class JDBCDAO extends AbstractDAO
                 	list.add(aList.get(0));
                 }
             }
+            closeSession();
         }
-        catch (SQLException sqlExp)
+        catch(SQLException sqlExp)
         {
-            Logger.out.error(sqlExp.getMessage(), sqlExp);
+            throw new DAOException(sqlExp.getMessage(),sqlExp);
         }
-        catch (ClassNotFoundException classExp)
-        {
-            Logger.out.error(classExp.getMessage(), classExp);
-        }
-
+        
         return list;
     }
-    
+
     public List retrieve(String sourceObjectName, String whereColumnName,
             Object whereColumnValue) throws DAOException
     {
@@ -246,21 +274,21 @@ public class JDBCDAO extends AbstractDAO
                 whereColumnConditions, whereColumnValues, Constants.AND_JOIN_CONDITION);
     }
     
-    /**
-     * Closes the Connection and PreparedStatement objects.  
-     */
-    protected void finalize() throws Throwable
-    {
-        try
-        {
-            stmt.close();
-            connection.close();
-        }
-        finally
-        {
-            super.finalize();
-        }
-    }
+//    /**
+//     * Closes the Connection and PreparedStatement objects.  
+//     */
+//    protected void finalize() throws Throwable
+//    {
+//        try
+//        {
+//            stmt.close();
+//            connection.close();
+//        }
+//        finally
+//        {
+//            super.finalize();
+//        }
+//    }
     
     //    public static void main(String[] args)
     //    {

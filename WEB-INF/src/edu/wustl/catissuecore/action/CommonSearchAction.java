@@ -1,7 +1,7 @@
 /**
  * <p>Title: CommonSearchAction Class>
  * <p>Description:	This class is used to retrieve the information whose record
- * 					is to be modified.</p>
+ * is to be modified.</p>
  * Copyright:    Copyright (c) year
  * Company: Washington University, School of Medicine, St. Louis.
  * @author Gautam Shetty
@@ -85,7 +85,8 @@ public class CommonSearchAction extends Action
                  * display an Error message.
                  */
                 ActionErrors errors = new ActionErrors();
-                errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.unknown",ApplicationProperties.getValue("user.systemIdentifier")));
+                errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.unknown",
+                        				ApplicationProperties.getValue("user.systemIdentifier")));
                 saveErrors(request,errors);
                 target = new String(Constants.FAILURE);
             }

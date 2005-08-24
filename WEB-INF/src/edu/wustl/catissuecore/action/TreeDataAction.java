@@ -56,10 +56,13 @@ public class TreeDataAction extends Action
             TreeDataInterface bizLogic = new StorageContainerBizLogic();
             
             if (pageOf.equals(Constants.PAGEOF_TISSUE_SITE))
-            {
                 bizLogic = new CDEBizLogic();
-            }
+//            else if (pageOf.equals(Constants.PAGEOF_QUERY_RESULTS))
+//                bizLogic = new CDEBizLogic();	
+            
+            
             Vector dataList = bizLogic.getTreeViewData();
+            Logger.out.debug("Got data************************"+dataList);
             String contentType = "application/x-java-serialized-object";
             response.setContentType(contentType);
             out = new ObjectOutputStream(response.getOutputStream());

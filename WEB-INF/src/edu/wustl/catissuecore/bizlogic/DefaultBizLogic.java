@@ -167,6 +167,7 @@ public class  DefaultBizLogic extends AbstractBizLogic
         return getList(sourceObjectName, displayNameFields, valueField, whereColumnName,
                 whereColumnCondition, whereColumnValue,joinCondition, separatorBetweenFields);
     }
+    
    /**
     * Returns collection of name value pairs.
     * @param sourceObjectName
@@ -225,6 +226,7 @@ public class  DefaultBizLogic extends AbstractBizLogic
                 }
             }
         }
+        
         return nameValuePairs;
     }
 }

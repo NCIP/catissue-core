@@ -61,8 +61,7 @@ public class SpecimenProtocolAction extends Action
 	    	String [] specimenTypeArry = {Constants.SELECT_OPTION,"Blood","Cerum"};
 	    	request.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeArry);
 	    	
-	    	String [] tissueSiteArry = {Constants.SELECT_OPTION,"Adrenal-Cortex","Adrenal-Medulla","Adrenal-NOS"};
-	    	request.setAttribute(Constants.TISSUE_SITE_LIST, tissueSiteArry);
+	    	request.setAttribute(Constants.TISSUE_SITE_LIST, Constants.TISSUE_SITE_ARRAY);
 	    		
 	    	String [] pathologyStatusArry = {Constants.SELECT_OPTION,"Primary Tumor","Metastatic Node","Non-Malignant Tissue"};
 	    	request.setAttribute(Constants.PATHOLOGICAL_STATUS_LIST, pathologyStatusArry);
