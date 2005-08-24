@@ -30,6 +30,8 @@ public class TreeNodeFactory
             case Constants.STORAGE_CONTAINER_TREE_ID:
                 treeNode = new StorageContainerTreeNode();
             	break;
+            case Constants.QUERY_RESULTS_TREE_ID:
+                break;
         }
         
         return treeNode;

@@ -502,9 +502,6 @@ public class Constants
 	//Shopping Cart
 	public static final String SHOPPING_CART = "shoppingCart";
 	
-	//Shopping Cart
-	public static final String SHOPPING_CART = "shoppingCart";
-	
 	public static final String SELECT_OPTION = "-- Select --";
 	
 	public static final String[] TISSUE_SITE_ARRAY = {
