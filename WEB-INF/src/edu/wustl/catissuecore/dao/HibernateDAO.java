@@ -12,13 +12,14 @@ package edu.wustl.catissuecore.dao;
 
 import java.util.List;
 
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.Query;
-import net.sf.hibernate.Session;
-import net.sf.hibernate.Transaction;
+import org.hibernate.HibernateException;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 import edu.wustl.catissuecore.audit.AuditManager;
 import edu.wustl.catissuecore.audit.Auditable;
 import edu.wustl.catissuecore.domain.Biohazard;
+import edu.wustl.catissuecore.domain.Department;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.exception.AuditException;
@@ -377,14 +378,17 @@ public class HibernateDAO extends AbstractDAO
 		{
     		dao.openSession();
     		
-    		Specimen specimen = new TissueSpecimen();
-    		Biohazard biohazard1 = (Biohazard)dao.retrieve(Biohazard.class.getName(),new Long(1));
-    		Biohazard biohazard2 = (Biohazard)dao.retrieve(Biohazard.class.getName(),new Long(2));
+//    		Specimen specimen = new TissueSpecimen();
+//    		Biohazard biohazard1 = (Biohazard)dao.retrieve(Biohazard.class.getName(),new Long(1));
+//    		Biohazard biohazard2 = (Biohazard)dao.retrieve(Biohazard.class.getName(),new Long(2));
+//    		
+//    		specimen.getBiohazardCollection().add(biohazard1);
+//    		specimen.getBiohazardCollection().add(biohazard2);
     		
-    		specimen.getBiohazardCollection().add(biohazard1);
-    		specimen.getBiohazardCollection().add(biohazard2);
-    		
-	    	dao.insert(specimen,false);
+//	    	dao.insert(specimen,false);
+    		Department dept = new Department();
+    		dept.setName("AABBCC1");
+    		dao.insert(dept,false);
 	    	dao.commit();
 		}
     	catch(DAOException ex)

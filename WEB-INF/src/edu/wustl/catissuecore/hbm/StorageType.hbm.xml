@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 
 <!DOCTYPE hibernate-mapping PUBLIC
-    "-//Hibernate/Hibernate Mapping DTD 2.0//EN" 
-    "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping>
     <class
@@ -41,6 +41,24 @@
             insert="true"
             column="DEFAULT_TEMPERATURE_IN_CENTIGRADE"
             length="30"
+        />
+
+        <property
+            name="oneDimensionLabel"
+            type="string"
+            update="true"
+            insert="true"
+            column="ONE_DIMENSION_LABEL"
+            length="50"
+        />
+
+        <property
+            name="twoDimensionLabel"
+            type="string"
+            update="true"
+            insert="true"
+            column="TWO_DIMENSION_LABEL"
+            length="50"
         />
 
         <many-to-one

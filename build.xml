@@ -174,7 +174,7 @@
 					     force="${generateforce}" mergedir="${src.dir}" verbose="false">
 			<fileset dir="${src.dir}">
 				<include name="**/domain/*.java"/>
-				<!--include name="**/cde/*.java"/-->
+				<include name="**/cde/*.java"/>
 			</fileset>
     		<hibernate version="2.0"/>
 		</hibernatedoclet>	
@@ -182,10 +182,11 @@
 		<!-- Upgrade grammar from Hibernate1 to Hibernate2 -->
 	    <replace dir="${src.dir}">
 	    	<include name="**/domain/*.hbm.xml"/>
-	        <!--include name="**/cde/*.hbm.xml"/-->
+	        <include name="**/cde/*.hbm.xml"/>
 	        <replacefilter token="readonly=" value="inverse="/>
 	        <replacefilter token="role=" value="name="/>
-	        <replacefilter token="hibernate-mapping.dtd" value="hibernate-mapping-2.0.dtd"/>
+	    	<replacefilter token="2.0//EN" value="3.0//EN"/>
+	        <replacefilter token="hibernate-mapping-2.0.dtd" value="hibernate-mapping-3.0.dtd"/>
 	    </replace>
 	    
 	    <copy todir="${hbm.dir}">
@@ -194,20 +195,21 @@
         	</fileset-->
 	    	<fileset dir="${src.dir}/edu/wustl/catissuecore/domain">
 	    	            	<include name="*.hbm.xml"/>
-	    	<!--fileset dir="${src.dir}/edu/wustl/common/cde">
-	    	            	<include name="*.hbm.xml"/-->
+    		</fileset>
+	    	<fileset dir="${src.dir}/edu/wustl/common/cde">
+	    	            	<include name="*.hbm.xml"/>
 	       	</fileset>
 	    </copy>
     	
     	<delete>
             <fileset dir="${src.dir}/edu/wustl/catissuecore/domain" includes="*.hbm.xml"/>
-    		<!--fileset dir="${src.dir}/edu/wustl/common/cde" includes="*.hbm.xml"/-->
+    		<fileset dir="${src.dir}/edu/wustl/common/cde" includes="*.hbm.xml"/>
         </delete>
     </target>
 
 	<!--Not Complete, YET TO DO-->
 	<!--target name="Genrate-Schema" depends="buildjar, generateHBM"-->
-	<target name="Genrate-Schema" depends="buildjar">
+	<!--target name="Genrate-Schema" depends="buildjar">
     	<java classname="edu.wustl.common.util.dbManager.GenerateSchema">
     		<arg value="true"/>	
             <classpath>
@@ -217,40 +219,23 @@
               </fileset>
             </classpath>       
       	</java>
-    </target>
+    </target-->
 	
-	<!--target name="DBImport" depends="Genrate-Schema">
-    	<java classname="edu.wustl.lims.db.DBImportUtil">
-    		<classpath refid="eclipse.classpath"/>
-            <classpath>
-	            <pathelement location="${LIMSPlugin.dir}/lims.jar"/>
-            	
-            	<fileset dir="${lib.dir}">
-                  <include name="*.jar"/>
-              </fileset>
-            </classpath>       
-      	</java>
-    </target-->
-    
-	<!--target name="GenerateDB" depends="DBImport">
-    </target-->
-      		
-    <!--target name="schemaexport">
-    	<taskdef name="schemaexport" classname="net.sf.hibernate.tool.hbm2ddl.SchemaExportTask">
-	    	<classpath>
-		   		<pathelement path="${target.dir}"/>
-            	<fileset dir="${lib.dir}">
-                	  <include name="*.jar"/>
-                	  <include name="*.class"/>
-	            </fileset>
-    	 	</classpath>       
-   		</taskdef>
-    
-    	<schemaexport properties="hibernate.properties"
-        		quiet="yes" text="no" drop="no" delimiter=";" output="schema-export.sql">
-        	<fileset dir="./bin">
-            	<include name="*.hbm.xml"/>
-        	</fileset>
-    	</schemaexport>
-	</target-->
+	<target name="schemaexport">
+	    <taskdef name="schemaexport"
+	        classname="org.hibernate.tool.hbm2ddl.SchemaExportTask"
+	        classpathref="app.classpath"/>
+	    
+	    <schemaexport
+	        properties="hibernate.properties"
+	        quiet="no"
+	        text="no"
+	        drop="no"
+	        delimiter=";"
+	        output="schema-export.sql">
+	        <fileset dir="WEB-INF/src">
+	            <include name="**/*.hbm.xml"/>
+	        </fileset>
+	    </schemaexport>
+	</target>
 </project>
