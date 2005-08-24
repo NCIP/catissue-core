@@ -13,7 +13,6 @@ package edu.wustl.catissuecore.domain;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Date;
 
 import edu.wustl.catissuecore.actionForm.AbstractActionForm;
 import edu.wustl.catissuecore.actionForm.DistributionForm;
@@ -33,23 +32,33 @@ public class Distribution extends SpecimenEventParameters implements java.io.Ser
 	/**
 	 * New location(site) of the item.
 	 */
-	protected Site toSite;
+	protected Site toSite = new Site();
 
 	/**
 	 * Original location(site) of the item. 
 	 */
-	protected Site fromSite;
+	protected Site fromSite = new Site();
 	
 	/**
 	 * DistributionProtocol associated with this Distribution.
 	 */
-	protected DistributionProtocol distributionProtocol;
+	protected DistributionProtocol distributionProtocol = new DistributionProtocol();
 	
 	/**
 	 * Collection of Items distributed in this distribution.
 	 */
 	protected Collection distributedItemCollection = new HashSet();
 
+	//Default Constructor
+	public Distribution()
+	{
+	}
+	
+	public Distribution(AbstractActionForm form)
+	{
+		setAllValues(form);
+	}
+	
 	// ---- Method Section
 
 	/**
@@ -142,16 +151,13 @@ public class Distribution extends SpecimenEventParameters implements java.io.Ser
 	    {
 	    	DistributionForm form = (DistributionForm) abstractForm;
 	        super.setAllValues(form);
-	        this.toSite = new Site();
 	        toSite.setSystemIdentifier(new Long(form.getToSite()));
-	        this.fromSite =new Site();
 	        fromSite.setSystemIdentifier(new Long(form.getFromSite()));
+	        distributionProtocol.setSystemIdentifier(new Long(form.getDistributionProtocolId()));
 	        
 	        Map map = form.getValues();
-	        System.out.println("Map "+map);
 	        MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.domain");
 	        distributedItemCollection = parser.generateData(map);
-	        System.out.println("distributedItemCollection "+distributedItemCollection);
 	    }
 	    catch(Exception excp)
 	    {
