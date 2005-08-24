@@ -28,7 +28,7 @@ import edu.wustl.common.util.logger.Logger;
  * @hibernate.class table="CATISSUE_SPECIMEN"
  * @author gautam_shetty
  */
-public abstract class Specimen extends AbstractDomainObject implements Serializable
+public class Specimen extends AbstractDomainObject implements Serializable
 {
     private static final long serialVersionUID = 1234567890L;
 
