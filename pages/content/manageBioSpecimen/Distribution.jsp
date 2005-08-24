@@ -35,7 +35,7 @@
 			spreqtype.className="formField";
 			sname="";
 
-			var name = "value(DistributionDistributedItem:" + (q+1) + "_Specimen_systemIdentifier)";
+			var name = "value(DistributedItem:" + (q+1) + "_Specimen_systemIdentifier)";
 			sname="<select name='" + name + "' size='1' class='formFieldSized15' id='" + name + "'>";
 			<%
 				if(itemList!=null)
@@ -52,12 +52,12 @@
 			sname = sname + "</select>";
 			spreqtype.innerHTML="" + sname;
 		
-			//Third Cellvalue(:1_medicalRecordNumber)
+			//Third Cellvalue()
 			var spreqsubtype=x.insertCell(2);
 			spreqsubtype.className="formField";
 			sname="";
 		
-			name = "value(DistributionDistributedItem:" + (q+1) + "_quantity)";
+			name = "value(DistributedItem:" + (q+1) + "_quantity)";
 			sname= "";
 			sname="<input type='text' name='" + name + "' size='30'  class='formFieldSized15' id='" + name + "'>";
 			spreqsubtype.innerHTML="" + sname;
@@ -170,6 +170,21 @@
 		</tr>
 
 		<!-- Name of the distribution -->
+<!-- Distribution Protocol Id -->		
+		<tr>
+			<td class="formRequiredNotice" width="5">*</td>
+			<td class="formRequiredLabel">
+				<label for="type">
+					<bean:message key="distribution.protocol"/> 
+				</label>	
+			</td>	
+			<td class="formField">
+				<html:select property="distributionProtocolId" styleClass="formFieldSized" styleId="distributionProtocolId" size="1">
+					<html:options collection="<%=Constants.DISTRIBUTIONPROTOCOLLIST%>" labelProperty="name" property="value"/>
+				</html:select>
+			</td>	
+		</tr>
+
 <!-- User -->		
 		<tr>
 			<td class="formRequiredNotice" width="5">*</td>
@@ -230,7 +245,7 @@
 			</td>
 			<td class="formField">
 				<html:select property="fromSite" styleClass="formFieldSized" styleId="fromSite" size="1">
-					<html:options name="<%=Constants.FROMSITELIST%>" labelName="<%=Constants.FROMSITELIST%>" />
+					<html:options collection="<%=Constants.FROMSITELIST%>" labelProperty="name" property="value"/>
 				</html:select>
 
 			</td>
@@ -245,7 +260,7 @@
 			</td>
 			<td class="formField">
 				<html:select property="toSite" styleClass="formFieldSized" styleId="toSite" size="1">
-					<html:options name="<%=Constants.TOSITELIST%>" labelName="<%=Constants.TOSITELIST%>" />
+					<html:options collection="<%=Constants.TOSITELIST%>" labelProperty="name" property="value"/>
 				</html:select>
 
 			</td>
@@ -290,8 +305,8 @@
 				<%
 				for(int i=1;i<=noOfRows;i++)
 				{
-					String itemName = "value(DistributionDistributedItem:"+i+"_Item_systemIdentifier)";
-					String quantity = "value(DistributionDistributedItem:"+i+"_quantity)";
+					String itemName = "value(DistributedItem:"+i+"_Specimen_systemIdentifier)";
+					String quantity = "value(DistributedItem:"+i+"_quantity)";
 				%>
 				 <tr>
 				 	<td class="formSerialNumberField" width="5"><%=i%>.</td>
