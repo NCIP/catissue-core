@@ -59,6 +59,7 @@
 			if (win.opener == null)
 				win.opener = self;
 		}
+		
 //code for units end
 </SCRIPT>
 
@@ -123,7 +124,7 @@ function insRow(subdivtag,iCounter)
 	var q = r.length;
 	var x=document.getElementById(subdivtag).insertRow(q);
 	
-//	setSubDivCount(subdivtag);
+	//setSubDivCount(subdivtag);
 	var subdivname = ""+ subdivtag;
 
 	// srno
@@ -676,9 +677,11 @@ function getSubDivCount(subdivtag)
 										styleId="<%=fName%>" size="1">
 							<html:options name="<%=Constants.TISSUE_SITE_LIST%>" labelName="<%=Constants.TISSUE_SITE_LIST%>"/>
 						</html:select>
-			        
-				 <%--       <a href="#" onclick="javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfTissueSite','name','290','330','no');return false">
-							<img src="images\Tree.gif" border="0" width="26" height="22"></a>  --%>
+			        	<%
+							String url = "ShowFramedPage.do?pageOf=pageOfTissueSite&propertyName="+fName;			
+						%>
+				        <a href="#" onclick="javascript:NewWindow('<%=url%>','name','250','330','no');return false">
+							<img src="images\Tree.gif" border="0" width="26" height="22"></a>
 					</td>
 					
 			        <td class="formField">
