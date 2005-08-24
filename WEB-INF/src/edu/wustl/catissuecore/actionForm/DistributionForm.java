@@ -25,7 +25,6 @@ import edu.wustl.catissuecore.domain.Distribution;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Validator;
-import edu.wustl.common.util.logger.Logger;
 
 /**
   *
@@ -34,9 +33,10 @@ import edu.wustl.common.util.logger.Logger;
 public class DistributionForm extends EventParametersForm
 {
 	
-	private long fromSite;
-	private long toSite;
+	private String fromSite;
+	private String toSite;
 	private int counter=1;
+	private String distributionProtocolId;
 	
 	/**
 	 * Map to handle values of all the CollectionProtocol Events
@@ -52,55 +52,122 @@ public class DistributionForm extends EventParametersForm
 	{
 		super.setAllValues(abstractDomain);
 		Distribution distributionObject = (Distribution)abstractDomain ;
-//		this.fromSite = distributionObject.getFromSite();
-//		this.toSite = distributionObject.getToSite();
+		this.fromSite = String.valueOf(distributionObject.getFromSite().getSystemIdentifier());
+		this.toSite = String.valueOf(distributionObject.getToSite().getSystemIdentifier());
+		this.userId = distributionObject.getUser().getSystemIdentifier().longValue();
+		this.distributionProtocolId = String.valueOf(distributionObject.getDistributionProtocol().getSystemIdentifier());
 	}
 	
 	
-	 public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
-	 {
+	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
+	{
 		ActionErrors errors = super.validate(mapping, request);
-		 Validator validator = new Validator();
+		Validator validator = new Validator();
 		
-         
-//		 try
-//		 {
-//			if (fromSite.equals(Constants.SELECT_OPTION))
-//			{
-//				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("Distribution.fromSite")));
-//			}
-//		 }
-//		 catch(Exception excp)
-//		 {
-//			 Logger.out.error(excp.getMessage());
-//		 }
-// 	  
-//		try
-//			{
-//			   if (toSite.equals(Constants.SELECT_OPTION))
-//			   {
-//				   errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("Distribution.toSite")));
-//			   }
-//			}
-//			catch(Exception excp)
-//			{
-//				Logger.out.error(excp.getMessage());
-//			}
-			return errors;
-		 }
+		if (operation.equals(Constants.SEARCH))
+        {
+            checkValidNumber(new Long(systemIdentifier).toString(),"user.systemIdentifier",errors,validator);
+        }
+		
+		if (operation.equals(Constants.ADD) || operation.equals(Constants.EDIT))
+        {
+			if(distributionProtocolId.equals("-1"))
+			{
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("distribution.protocol")));
+			}
+			
+			if(fromSite.equals("-1"))
+			{
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("distribution.fromSite")));
+			}
+			
+			if(toSite.equals("-1"))
+			{
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("distribution.toSite")));
+			}
+			
+			//Validations for Add-More Block
+            String className = "DistributedItem:";
+            String key1 = "_Specimen_systemIdentifier";
+            String key2 = "_quantity";
+            int index = 1;
+            boolean isError = false;
+            
+            while(true)
+            {
+            	String keyOne = className + index + key1;
+				String keyTwo = className + index + key2;
+            	String value1 = (String)values.get(keyOne);
+            	String value2 = (String)values.get(keyTwo);
+            	
+            	if(value1 == null || value2 == null)
+            	{
+            		break;
+            	}
+            	else if(value1.equals("-1") && value2.equals(""))
+            	{
+            		values.remove(keyOne);
+            		values.remove(keyTwo);
+            	}
+            	else if(!value1.equals("-1"))
+            	{
+            		if(value2.equals(""))
+            		{
+            			isError = true;
+            			break;
+            		}
+            		else
+            		{
+            			isError = validator.isDouble(value2);
+            			if(!isError)
+            			{
+            				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("itemrecord.quantity")));
+            				break;
+            			}
+            		}
+            	}
+            	else if(value1.equals("-1") && !value2.equals(""))
+            	{
+            		isError = true;
+            		break;
+            	}
+            	index++;
+            }
+            
+            if(isError)
+            {
+            	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.distribution.missing",ApplicationProperties.getValue("distribution.msg")));
+            }
+        }
+		return errors;
+	}
+	
+	/**
+	 * @return Returns the distributionProtocolId.
+	 */
+	public String getDistributionProtocolId()
+	{
+		return distributionProtocolId;
+	}
+	/**
+	 * @param distributionProtocolId The distributionProtocolId to set.
+	 */
+	public void setDistributionProtocolId(String distributionProtocolId)
+	{
+		this.distributionProtocolId = distributionProtocolId;
+	}
 	
 	/**
 	 * @return
-	 */
-	 
-	public long getFromSite() {
+	 */ 
+	public String getFromSite() {
 		return fromSite;
 	}
 
 	/**
 	 * @param fromSite
 	 */
-	public void setFromSite(long fromSite) {
+	public void setFromSite(String fromSite) {
 		this.fromSite = fromSite;
 	}
 
@@ -119,14 +186,14 @@ public class DistributionForm extends EventParametersForm
 	{
 		this.counter = counter;
 	}
-	public long getToSite() {
+	public String getToSite() {
 		return toSite;
 	}
 
 	/**
 	 * @param toSite
 	 */
-	public void setToSite(long toSite) {
+	public void setToSite(String toSite) {
 		this.toSite = toSite;
 	}
 	
