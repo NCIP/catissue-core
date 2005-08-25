@@ -92,7 +92,7 @@ public class Site extends AbstractDomainObject implements java.io.Serializable
 	/**
      * Returns the name of the physical location.
      * @hibernate.property name="name" type="string" 
-     * column="NAME" length="50"
+     * column="NAME" length="50" not-null="true" unique="true"
      * @return the name of the physical location.
      * @see #setName(String)
      */
