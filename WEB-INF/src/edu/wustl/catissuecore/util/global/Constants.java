@@ -1091,7 +1091,7 @@ public class Constants
 	
 	public static final String UNIT_GM = "gm";
 	public static final String UNIT_ML = "ml";
-	public static final String UNIT_CC = "cc";
+	public static final String UNIT_CC = "cell count";
 	public static final String UNIT_MG = "mg";
 	
 	public static final String [] PROCEDUREARRAY = {
