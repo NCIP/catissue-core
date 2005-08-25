@@ -250,7 +250,7 @@ function insRow(subdivtag)
 							</logic:equal>
 							<logic:equal name="storageContainerForm" property="checkedButton" value="2">
 							<html:select property="siteId" styleClass="formFieldSized15" styleId="siteId" size="1" onchange="onSiteChange(this)" disabled="true">
-								<html:options name="siteIdList" labelName="siteList" />
+								<html:options collection="<%=Constants.SITELIST%>" labelProperty="name" property="value"/>
 							</html:select>
 							</logic:equal>
 							
