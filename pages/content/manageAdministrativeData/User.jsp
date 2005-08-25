@@ -155,6 +155,19 @@
 						</td>
 					</tr>
 					
+					<!-- changes as per Bugzilla Bug 311 -->
+					<tr>
+						<td class="formRequiredNotice" width="5">*</td>
+						<td class="formRequiredLabel">
+							<label for="emailAddress">
+								<bean:message key="user.emailAddress" />
+							</label>
+						</td>
+						<td class="formField">
+							<html:text styleClass="formFieldSized" size="30" styleId="emailAddress" property="emailAddress" />
+						</td>
+					</tr>
+					
 					<tr>
 						<td class="formRequiredNotice" width="5">*</td>
 						<td class="formRequiredLabel">
@@ -267,7 +280,7 @@
 							<html:text styleClass="formFieldSized" size="30" styleId="faxNumber" property="faxNumber" />
 						</td>
 					</tr>
-					
+<!--					
 					<tr>
 						<td class="formRequiredNotice" width="5">*</td>
 						<td class="formRequiredLabel">
@@ -279,7 +292,7 @@
 							<html:text styleClass="formFieldSized" size="30" styleId="emailAddress" property="emailAddress" />
 						</td>
 					</tr>
-					
+-->					
 					<tr>
 						<td class="formRequiredNotice" width="5">*</td>
 						<td class="formRequiredLabel">
