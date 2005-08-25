@@ -1,30 +1,30 @@
 <?xml version='1.0' encoding='utf-8' ?>
 <XMLCDE_CACHE refreshTime="5" lazyLoading="true">
 	<XMLCDE cache="true" lazyLoading="false">
-		<name>RACE</name>
+		<name>Race</name>
 		<publicId>106</publicId>
 		<XMLPermissibleValues>
 			<evsTerminology>NCI-THESAURAUS</evsTerminology>
-			<conceptCode>211101</conceptCode>
-			<parentConceptCode>C11101</parentConceptCode>
+			<conceptCode>PV</conceptCode>
+			<parentConceptCode></parentConceptCode>
 			<depthOfHierarchyTree>1</depthOfHierarchyTree>
 		</XMLPermissibleValues>
-		<XMLPermissibleValues>
+		<!--XMLPermissibleValues>
 			<evsTerminology>NCI-THESAURAUS</evsTerminology>
 			<conceptCode>112233</conceptCode>
 			<parentConceptCode>C311101</parentConceptCode>
      		<depthOfHierarchyTree>3</depthOfHierarchyTree>
-		</XMLPermissibleValues>
+		</XMLPermissibleValues-->
 
 	</XMLCDE>
 	
-	<XMLCDE cache="false" lazyLoading="false">
-	<name>PATIENT</name>
-	<publicId>110</publicId>
+	<XMLCDE cache="true" lazyLoading="false">
+	<name>Gender</name>
+	<publicId>62</publicId>
 	<XMLPermissibleValues>
 		<evsTerminology>NCI-THESAURAUS</evsTerminology>
-		<conceptCode>2111331</conceptCode> 
-		<parentConceptCode>C112101</parentConceptCode>
+		<conceptCode>PV</conceptCode> 
+		<parentConceptCode></parentConceptCode>
 		<depthOfHierarchyTree>2</depthOfHierarchyTree> 
 	</XMLPermissibleValues>
 	</XMLCDE>

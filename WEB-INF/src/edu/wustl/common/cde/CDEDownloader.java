@@ -40,7 +40,7 @@ public class CDEDownloader
 {
 
 	private String vocabularyName;
-	private int limit;
+//	private int limit;
 	private ApplicationService appService;
 
 	/**
@@ -95,14 +95,11 @@ public class CDEDownloader
 				cdeCon.getUsername(), cdeCon.getPassword(), cdeCon.getDbserver());
 		if (bCon)
 		{
-//			// to remove the Logger configuration from the file
-//			System.setProperty(
-//					"catissue.home", "D:\\tomcat\\webapps\\catissuecore" + "/Logs");
-//			Logger
-//			.configure("D:\\tomcat\\webapps\\catissuecore\\WEB-INF\\classes\\ApplicationResources.properties");
+			// to remove the Logger configuration from the file
+			System.setProperty("catissue.home", "Logs");
+			Logger.configure("ApplicationResources.properties");
 
 			this.vocabularyName = vocabularyName;
-			this.limit = limit;
 			CDE resultCde = retrieveDataElement(xmlCDE);
 			return resultCde;
 		} // connection successful
@@ -121,30 +118,25 @@ public class CDEDownloader
 	 */
 	private CDE retrieveDataElement(XMLCDE xmlCDE) throws Exception
 	{
-		//	Create the dataelement and set the dataelement properties
-		DataElement dataElement = new DataElementImpl();
-		dataElement.setPublicID(new Long(xmlCDE.getPublicId()));
-		
-		dataElement.setLatestVersionIndicator("Yes");
+		//Create the dataelement and set the dataEelement properties
+		DataElement dataElementQuery = new DataElementImpl();
+		dataElementQuery.setPublicID(new Long(xmlCDE.getPublicId()));
+		dataElementQuery.setLatestVersionIndicator("Yes");
 
-		List resultList = appService.search("gov.nih.nci.cadsr.domain.DataElement", dataElement);
+		//List resultList = appService.search(DataElement.class, dataElementQuery);
+		List resultList = new ArrayList();
+		resultList.add(dataElementQuery);
 		
 		// check if any cde exists with the given public id.
 		if (!resultList.isEmpty())
 		{
 			// retreive the Data Element for the given publicid
-			dataElement = (DataElement) resultList.get(0);
+			DataElement dataElement = (DataElement) resultList.get(0);
 			
-			Iterator iterator = xmlCDE.getXMLPermissibleValues().iterator();
-			while(iterator.hasNext())
-			{
-				XMLPermissibleValueType  aXMLPermissibleValueType = (XMLPermissibleValueType)iterator.next();
-				if(aXMLPermissibleValueType.getEvsTerminology().equals("PV"))
-				{
-					// get the PermissibleValues for the ValueDoamin of the Data Element
-					List permissibleValuesList = retrievePermissibleValueForValueDomainPermissibleValue(dataElement,aXMLPermissibleValueType);
-				}
-			}
+			System.out.println("dataElement ");
+			System.out.println("PublicID "+dataElement.getPublicID());
+			System.out.println("LongName "+dataElement.getLongName());
+			
 			
 			// create the cde object and set the values.
 			CDEImpl cdeobj = new CDEImpl();
@@ -152,20 +144,32 @@ public class CDEDownloader
 			cdeobj.setPublicId(dataElement.getPublicID().toString());
 			cdeobj.setDefination(dataElement.getPreferredDefinition());
 			cdeobj.setLongName(dataElement.getLongName());
-			cdeobj.setVersion(dataElement.getVersion().toString());
+			//cdeobj.setVersion(dataElement.getVersion().toString());
 			cdeobj.setPreferredname(dataElement.getPreferredName());
-			//Kapil FIX
-//			Iterator iterator = permissibleValuesList.iterator();
-//			while(iterator.hasNext())
-//			{
-//				// iterator.next();
-//				cdeobj.setPermissibleValues(new HashSet(permissibleValuesList));
-//			}
 
+			Iterator iterator = xmlCDE.getXMLPermissibleValues().iterator();
+			while(iterator.hasNext())
+			{
+				XMLPermissibleValueType  aXMLPermissibleValueType = (XMLPermissibleValueType)iterator.next();
+				System.out.println("aXMLPermissibleValueType.getConceptCode() "+aXMLPermissibleValueType.getConceptCode());
+				if(aXMLPermissibleValueType.getConceptCode().equals("PV"))
+				{
+					System.out.println("here");
+					// get the PermissibleValues for the ValueDoamin of the Data Element
+					List permissibleValuesList = retrievePermissibleValue(dataElementQuery,aXMLPermissibleValueType);
+					
+					Iterator pvIterator = permissibleValuesList.iterator();
+					while(pvIterator.hasNext())
+					{
+						 pvIterator.next();
+						//cdeobj.setPermissibleValues(new HashSet(permissibleValuesList));
+					}
+
+				}
+			}
 			return cdeobj;
 		} // list not empty
-		else
-		// no Data Element retreived
+		else // no Data Element retreived
 		{
 			return null;
 		} // list empty
@@ -189,73 +193,76 @@ public class CDEDownloader
 	 * @return A List of the PermissibleValues for a Value Domain of the dataelement.
 	 * @throws Exception
 	 */
-	private List retrievePermissibleValueForValueDomainPermissibleValue(DataElement dataElement,XMLPermissibleValueType  xmlPermissibleValue)
+	private List retrievePermissibleValue(DataElement dataElement,XMLPermissibleValueType  xmlPermissibleValue)
 			throws Exception
 	{
 		//get the Value Domain for the Data Element 
-		List lstValueDomain = retrieveValueDomain(dataElement); // valuedomain list
-		
+		List valueDomainList = retrieveValueDomain(dataElement); // valuedomain list
+		System.out.println("valueDomainList "+valueDomainList.size());
 		// list of permissible values for the given ValueDomain
 		List pvList = new ArrayList();
 
-		Iterator iterator = lstValueDomain.iterator();
+		Iterator iterator = valueDomainList.iterator();
 		while(iterator.hasNext())
 		{
+			System.out.println("1");
 			ValueDomain valueDomain = (ValueDomainImpl) iterator.next();
 
-			if(valueDomain instanceof EnumeratedValueDomain)
+			if(valueDomain instanceof EnumeratedValueDomain)//Enumerated
 			{
-				// get the enumerated ValueDomain
+				System.out.println("EnumeratedValueDomain ");
+				//get the enumerated ValueDomain
 				EnumeratedValueDomain enumValDom = (EnumeratedValueDomain) valueDomain;
-
-				// get the Collection of PermissibleValues for the ValueDomain 
-				Collection pvColl = enumValDom.getValueDomainPermissibleValueCollection();
-
-				Iterator pvIterator = pvColl.iterator();
-
-				List permissibleValueList = null;
-				while (pvIterator.hasNext())
-				{
-					// ValueDomainPermissibleValue for the enumValDom
-					ValueDomainPermissibleValue valDomPerVal = (ValueDomainPermissibleValue) pvIterator.next();
-
-					//PermissibleValues for the given VDPV
-					permissibleValueList = appService.search(
-							"gov.nih.nci.cadsr.domain.PermissibleValue", valDomPerVal);
-
-					if (!permissibleValueList.isEmpty())
-					{
-						//collecting all the PermissibleValues
-						for (int cnt = 0; cnt < permissibleValueList.size(); cnt++)
-						{
-							PermissibleValue perVal = (PermissibleValue) permissibleValueList
-									.get(cnt);
-							pvList.add(perVal);
-
-							String searchTerm = perVal.getValue();
-							System.out.println("SearchTerm : "+ searchTerm);
-							List validValues = evsdata(searchTerm, limit);
-							if (validValues!=null )
-								pvList.addAll(validValues) ;
-						} // for
-					} // if
-				} // while
-			} // valDomType = E
+				pvList = getPermissibleValues(enumValDom, xmlPermissibleValue);
+			} 
 			else //NonEnumerated
 			{
-				// get the nonenumerated ValueDomain
 				NonenumeratedValueDomain nonEnumValDom = (NonenumeratedValueDomain)valueDomain;
-				Logger.out.info(nonEnumValDom.getPreferredName());
-				Logger.out.info(nonEnumValDom.getPreferredDefinition());
-				Logger.out.info(nonEnumValDom.getLongName());
-
 				pvList.add(nonEnumValDom);
-			} // valdomtype = N
-		} // for
-
+			} 
+		}
 		return pvList;
 	} // retrievePermissibleValueForValueDomainPermissibleValue
 
+
+	private List getPermissibleValues(EnumeratedValueDomain enumValDom, XMLPermissibleValueType xmlPermissibleValue) throws Exception
+	{
+		List pvList = new ArrayList();
+		System.out.println("enumValDom.getValueDomainPermissibleValueCollection().size() "+enumValDom.getValueDomainPermissibleValueCollection().size());
+		
+		// get the Collection of PermissibleValues for the ValueDomain 
+		Iterator pvIterator = enumValDom.getValueDomainPermissibleValueCollection().iterator();
+
+		while (pvIterator.hasNext())
+		{
+			System.out.println("pvIterator.hasNext()");
+			// ValueDomainPermissibleValue for the enumValDom
+			ValueDomainPermissibleValue valDomPerVal = (ValueDomainPermissibleValue) pvIterator.next();
+
+			//PermissibleValues for the given VDPV
+			List permissibleValueList = appService.search(PermissibleValue.class, valDomPerVal);
+			System.out.println("permissibleValueList "+permissibleValueList.size());
+			if (!permissibleValueList.isEmpty())
+			{
+				//collecting all the PermissibleValues
+				for (int cnt = 0; cnt < permissibleValueList.size(); cnt++)
+				{
+					PermissibleValue permissibleValue = (PermissibleValue) permissibleValueList
+							.get(cnt);
+					pvList.add(permissibleValue);
+					
+					System.out.println("Value "+permissibleValue.getValue());
+					System.out.println("Id "+permissibleValue.getId());
+					/* String searchTerm = permissibleValue.getValue();
+					System.out.println("SearchTerm : "+ searchTerm);
+					List validValues = evsdata(searchTerm, limit);
+					if (validValues!=null )
+						pvList.addAll(validValues) ;*/
+				} // for
+			} // if
+		} // while
+		return pvList;
+	}
 	/**
 	 * @param proxyhost  url of the database to connect
 	 * @param proxyport port to be used for connection
