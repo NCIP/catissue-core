@@ -7,12 +7,23 @@
 <script language="JavaScript">
 		function onCheckboxButtonClick(element,dropDownList)
 		{
+		// changes as per bug 287
+			var row = document.getElementById("row1");
+			var cell1 = row.cells[0];
+			var cell2 = row.cells[1];
+			
 		    if(element.checked==true)
 		    { 
+		    	cell1.innerHTML=" &nbsp; ";
+			    cell2.className="formLabel";
+			    
 		    	document.forms[0].participantID.disabled = false;
       		}
            	else
            	{
+	           	cell1.innerHTML="*";
+	           	cell2.className="formRequiredLabel";
+	           	
 	           	document.forms[0].participantID.disabled = true;
       		}
           
@@ -146,7 +157,7 @@
 						</td>
 					</tr>
 
-					<tr>
+					<tr id="row1">
              		    <td class="formRequiredNotice" width="5">*</td>					
 						<td class="formRequiredLabel">
 							<label for="name">
