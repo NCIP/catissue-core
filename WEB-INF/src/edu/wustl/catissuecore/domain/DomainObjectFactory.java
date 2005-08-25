@@ -189,10 +189,13 @@ public class DomainObjectFactory
 			 case Constants.PROCEDURE_EVENT_PARAMETERS_FORM_ID:
             	abstractDomain = new ProcedureEventParameters(form);            	
             	break;
-            
-            case Constants.DISTRIBUTION_FORM_ID :
+
+			 case Constants.DISTRIBUTION_FORM_ID :
             	abstractDomain = new Distribution(form);
             	break;
+			             	
+//             case Constants.SIMPLE_QUERY_INTERFACE_FORM_ID:
+//                 abstractDomain = new 
         }
         return abstractDomain;
     }
