@@ -241,11 +241,22 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 			    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocolregistration.date")));
 			}
 		
-			if (validator.isEmpty(participantProtocolID) && (participantID==-1))
+			// changes as per Bugzilla Bug 287 
+			if (checkedButton == true)
 			{
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocolregistration.participantnameorprotocolid")));
+				if (participantID == -1)
+				{
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionProtocolReg.participantName")));
+				}
+			} // name selected
+			else
+			{
+				if (validator.isEmpty(participantProtocolID))
+				{
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionProtocolReg.participantProtocolID")));
+				}
 			}
-		  
+
 	   }
 	   catch(Exception excp)
 	   {
