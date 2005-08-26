@@ -18,7 +18,7 @@
 <head>
 	<script language="JavaScript">
 		
-		function onSpecimenTypeChange(element,unitSpan,idCombo)
+		function onSpecimenTypeChange(element,unitSpan,idCombo,hiddenProperty)
 		{
 			comboToRefresh = document.getElementById(idCombo);
 			//To Clear the Combo Box
@@ -26,10 +26,12 @@
 			
 			var unit = document.getElementById(unitSpan);
 			var unitSpecimen = "";
+			var unitProperty = document.getElementById(hiddenProperty);
 			
 			if(element.value == "Tissue")
 			{
 				unitSpecimen = "<%=Constants.UNIT_GM%>";
+				unitProperty.value = "<%=Constants.UNIT_GM%>";
 				<%
 					if(tissueSpecimenIdArray != null && tissueSpecimenIdArray.length != 0)
 					{
@@ -45,6 +47,7 @@
 			else if(element.value == "Fluid")
 			{
 				unitSpecimen = "<%=Constants.UNIT_ML%>";
+				unitProperty.value = "<%=Constants.UNIT_ML%>";
 				<%
 					if(fluidSpecimenIdArray != null && fluidSpecimenIdArray.length != 0)
 					{
@@ -60,6 +63,7 @@
 			else if(element.value == "Cell")
 			{
 				unitSpecimen = "<%=Constants.UNIT_CC%>";
+				unitProperty.value = "<%=Constants.UNIT_CC%>";
 				<%
 					if(cellSpecimenIdArray != null && cellSpecimenIdArray.length != 0)
 					{
@@ -75,6 +79,7 @@
 			else if(element.value == "Molecular")
 			{
 				unitSpecimen = "<%=Constants.UNIT_MG%>";
+				unitProperty.value = "<%=Constants.UNIT_MG%>";
 				<%
 					if(molecularSpecimenIdArray != null && molecularSpecimenIdArray.length != 0)
 					{
@@ -86,6 +91,10 @@
 						}
 					}
 				%>
+			}
+			else
+			{
+				comboToRefresh.options[0] = new Option('<%=Constants.SELECT_OPTION%>','<%=Constants.SELECT_OPTION%>');
 			}
 			
 			unit.innerHTML = unitSpecimen;
@@ -117,7 +126,8 @@
 			var className = "value(DistributedItem:"+ (q+1) +"_className)";
 			sname= "";
 			var name = "value(DistributedItem:" + (q+1) + "_Specimen_systemIdentifier)";
-			var fName = "onSpecimenTypeChange(this,'" + unitName + "','" + name + "')";
+			var hiddenUnitName = "value(DistributedItem:" + (q+1) + "_unit)";
+			var fName = "onSpecimenTypeChange(this,'" + unitName + "','" + name + "','" + hiddenUnitName + "')";
 			sname="<select name='" + className + "' size='1' class='formFieldSized10' id='" + className + "' onChange=" + fName + ">";
 			<%
 				for(int i=0;i<Constants.SPECIMEN_TYPE_VALUES.length;i++)
@@ -127,7 +137,7 @@
 			<%
 				}
 			%>
-			sname = sname + "</select>";
+			sname = sname + "</select><input type='hidden' name='" + hiddenUnitName + "' value=''>";
 			spreqspecimen.innerHTML="" + sname;
 			
 			//Third Cell
@@ -301,7 +311,7 @@
 			<td class="formField">
 				 <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
 				<html:text styleClass="formDateSized" size="35" styleId="dateOfEvent" property="dateOfEvent" readonly="true"/>
-				<a href="javascript:show_calendar('distributionForm.dateOfEvent','','','MM-DD-YYYY');">
+				<a href="javascript:show_calendar('distributionForm.dateOfEvent',null,null,'MM-DD-YYYY');">
 					<img src="images\calendar.gif" width=24 height=22 border=0>
 				</a>
 			</td>
@@ -369,7 +379,7 @@
 			</td>
 		</tr>
 	</table>
-	<table summary="" cellpadding="3" cellspacing="0" border="0">
+	<table summary="" cellpadding="3" cellspacing="0" border="0" width="433">
 <!--  Distributed Item begin here -->
 				 <tr>
 				     <td class="formTitle" height="20" colspan="3">
@@ -405,10 +415,19 @@
 					String unitSpan = "value(DistributedItem:"+i+"_unitSpan)";
 					String className = "value(DistributedItem:"+i+"_className)";
 					String key = "DistributedItem:" + i + "_className";
-					String fName = "onSpecimenTypeChange(this,'" + unitSpan + "','" + itemName + "')";
+					String unitKey = "DistributedItem:" + i + "_unit";
+					String unitProperty = "value(DistributedItem:"+i+"_unit)";
+					String fName = "onSpecimenTypeChange(this,'" + unitSpan + "','" + itemName + "','" + unitProperty + "')";
+					
+					String temp = String.valueOf(formBean.getValue(unitKey));
+					
+					if(temp.equals("null"))
+						temp = "";
 				%>
 				 <tr>
-				 	<td class="formSerialNumberField" width="5"><%=i%>.</td>
+				 	<td class="formSerialNumberField" width="5"><%=i%>.
+				 	<html:hidden property="<%=unitProperty%>"/>
+				 	</td>
 				 	<td class="formField">
 				     	<html:select property="<%=className%>" styleClass="formFieldSized10" styleId="<%=className%>" size="1" disabled="<%=readOnlyForAll%>" onchange="<%=fName%>">
 							<html:options name="<%=Constants.SPECIMEN_CLASS_LIST%>" labelName="<%=Constants.SPECIMEN_CLASS_LIST%>"/>
@@ -464,7 +483,7 @@
 					</td>
 				    <td class="formField">
 				     	<html:text styleClass="formFieldSized10" size="30" styleId="<%=quantity%>" property="<%=quantity%>" readonly="<%=readOnlyForAll%>"/>
-				     	<span id="<%=unitSpan%>">&nbsp;</span>
+				     	<span id="<%=unitSpan%>">&nbsp;<%=temp%></span>
 				    </td>
 				 </tr>
 				 <%
@@ -476,7 +495,7 @@
 			<!-- Distributed item End here -->
 <!-- buttons -->
 		<tr>
-		  <td align="right" colspan="3">
+		  <td align="right" colspan="6">
 			<!-- action buttons begins -->
 			<%
         		String changeAction = "setFormAction('" + formName + "');";
