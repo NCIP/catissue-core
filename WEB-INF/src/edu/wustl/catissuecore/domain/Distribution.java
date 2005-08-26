@@ -158,6 +158,7 @@ public class Distribution extends SpecimenEventParameters implements java.io.Ser
 	        distributionProtocol.setSystemIdentifier(new Long(form.getDistributionProtocolId()));
 	        
 	        Map map = form.getValues();
+	        map = fixMap(map);
 	        MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.domain");
 	        distributedItemCollection = parser.generateData(map);
 	    }
@@ -168,12 +169,11 @@ public class Distribution extends SpecimenEventParameters implements java.io.Ser
 	    }
 	}
 	
-//	SpecimenRequirement#FluidSpecimenRequirement:1.specimenType", "Blood");
 	protected Map fixMap(Map orgMap)
 	{
-		Map replaceMap = new HashMap();
-		
+		Map replaceMap = new HashMap();		
 		Iterator it = orgMap.keySet().iterator();
+		
 		while(it.hasNext())
 		{
 			String key = (String)it.next();
@@ -198,24 +198,29 @@ public class Distribution extends SpecimenEventParameters implements java.io.Ser
 		{
 			String key = (String)it.next();
 			String value = (String)orgMap.get(key);
-			if(key.indexOf("Specimen")==-1)
+			
+			if(!key.endsWith("_unit"))
 			{
-				newMap.put(key,value);
-			}
-			else
-			{
-				if(key.indexOf("className")==-1)
+				if(key.indexOf("Specimen")==-1)
 				{
-					String keyPart, newKeyPart;
-					
-					//Replace # and class name and FIX for abstract class
-					keyPart = key.substring(0,key.lastIndexOf("_"));
-					newKeyPart = (String)replaceMap.get(keyPart);
-					key = key.replaceFirst(keyPart,newKeyPart);
 					newMap.put(key,value);
 				}
+				else
+				{
+					if(key.indexOf("className")==-1)
+					{
+						String keyPart, newKeyPart;
+						
+						//Replace # and class name and FIX for abstract class
+						keyPart = key.substring(0,key.lastIndexOf("_"));
+						newKeyPart = (String)replaceMap.get(keyPart);
+						key = key.replaceFirst(keyPart,newKeyPart);
+						newMap.put(key,value);
+					}
+				}
 			}
-		}		
+		}
+		
 		return newMap;
 	}
 }
