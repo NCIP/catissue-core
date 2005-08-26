@@ -252,9 +252,9 @@ public abstract class EventParametersForm extends AbstractActionForm
             {
            		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("eventparameters.user")));
             }
-           	if (dateOfEvent==null || dateOfEvent.trim().length()==0   )
+           	if (dateOfEvent==null || dateOfEvent.trim().length()==0)
            	{
-           		dateOfEvent = null; 
+           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("eventparameters.dateofevent")));
            	}
          }
          catch(Exception excp)
