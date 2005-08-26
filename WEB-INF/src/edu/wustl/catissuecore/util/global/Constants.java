@@ -159,6 +159,10 @@ public class Constants
 	public static final String TOSITELIST="tositeList";	
 	public static final String ITEMLIST="itemList";
 	public static final String DISTRIBUTIONPROTOCOLLIST="distributionProtocolList";
+	public static final String TISSUE_SPECIMEN_ID_LIST="tissueSpecimenIdList";
+	public static final String MOLECULAR_SPECIMEN_ID_LIST="molecularSpecimenIdList";
+	public static final String CELL_SPECIMEN_ID_LIST="cellSpecimenIdList";
+	public static final String FLUID_SPECIMEN_ID_LIST="fluidSpecimenIdList";
 			
 	//Constants required in User.jsp Page
 	public static final String USER_SEARCH_ACTION = "UserSearch.do";
