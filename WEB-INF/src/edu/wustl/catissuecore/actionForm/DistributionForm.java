@@ -210,20 +210,16 @@ public class DistributionForm extends EventParametersForm
 		/**
 		 * Returns the object to which this map maps the specified key.
 		 * 
-		 * @param key
-		 *            the required key.
+		 * @param key the required key.
 		 * @return the object to which this map maps the specified key.
 		 */
 		public Object getValue(String key)
 		{
 			return values.get(key);
-		}
-
-		
+		}		
 
 		/**
-		 * @param values
-		 *            The values to set.
+		 * @param values The values to set.
 		 */
 		public void setValues(Map values)
 		{
@@ -236,5 +232,4 @@ public class DistributionForm extends EventParametersForm
 	public Map getValues() {
 		return values;
 	}
-
 }
