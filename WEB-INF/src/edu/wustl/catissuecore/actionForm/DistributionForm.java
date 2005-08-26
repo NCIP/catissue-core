@@ -92,7 +92,7 @@ public class DistributionForm extends EventParametersForm
             String key2 = "_quantity";
             int index = 1;
             boolean isError = false;
-            
+
             while(true)
             {
             	String keyOne = className + index + key1;
@@ -104,12 +104,12 @@ public class DistributionForm extends EventParametersForm
             	{
             		break;
             	}
-            	else if(value1.equals("-1") && value2.equals(""))
+            	else if(value1.equals(Constants.SELECT_OPTION) && value2.equals(""))
             	{
             		values.remove(keyOne);
             		values.remove(keyTwo);
             	}
-            	else if(!value1.equals("-1"))
+            	else if(!value1.equals(Constants.SELECT_OPTION))
             	{
             		if(value2.equals(""))
             		{
@@ -118,15 +118,14 @@ public class DistributionForm extends EventParametersForm
             		}
             		else
             		{
-            			isError = validator.isDouble(value2);
-            			if(!isError)
+            			if(!validator.isDouble(value2))
             			{
             				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("itemrecord.quantity")));
             				break;
             			}
             		}
             	}
-            	else if(value1.equals("-1") && !value2.equals(""))
+            	else if(value1.equals(Constants.SELECT_OPTION) && !value2.equals(""))
             	{
             		isError = true;
             		break;
