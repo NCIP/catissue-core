@@ -739,3 +739,14 @@ td.onlyBottomBorder{ /* for the cell that contains the form elements */
   border-left:1px solid #5C5C5C; /* constant: dark gray */
   border-bottom:1px solid #F4F4F5; /* constant: dark gray */
  }
+ .formLeftSubTitle{ /* for specimen requirements in collectionprotocol and distributionprotocol */
+  font-family:arial,helvetica,verdana,sans-serif;
+  font-size:0.7em;
+  font-weight:bold;
+  background-color:#CCCCCC; /* constant: medium gray */
+  color:#000000; /* constant: black */
+  border-bottom:1px solid #5C5C5C; /* constant: dark gray */
+  border-left:1px solid #5C5C5C; /* constant: dark gray */
+  border-right:1px solid #5C5C5C; /* constant: dark gray */
+  text-align:left;
+}
