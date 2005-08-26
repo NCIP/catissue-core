@@ -26,51 +26,6 @@
 <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
 	
 	<html:form action="<%=Constants.DEPARTMENT_ADD_ACTION%>">
-		<logic:notEqual name="operation" value="<%=Constants.ADD%>">
-			<!-- ENTER IDENTIFIER BEGINS-->
-			<br />
-			<tr>
-				<td>
-				<table summary="" cellpadding="3" cellspacing="0" border="0">
-					<tr>
-						<td class="formTitle" height="20" colspan="3">
-							<bean:message key="department.searchTitle" />
-						</td>
-					</tr>
-
-					<tr>
-						<td class="formRequiredNotice" width="5">*</td>
-						<td class="formRequiredLabel">
-							<label for="identifier">
-								<bean:message key="department.identifier" />
-							</label>
-						</td>
-						<td class="formField">
-							<html:text styleClass="formFieldSized" size="30" styleId="identifier" property="identifier" />
-						</td>
-					</tr>
-					<%
-        				String changeAction = "setFormAction('" + searchFormName
-                							  + "');setOperation('" + Constants.SEARCH + "');";
-			        %>
-					<tr>
-						<td align="right" colspan="3">
-						<table cellpadding="4" cellspacing="0" border="0">
-							<tr>
-								<td>
-									<html:submit styleClass="actionButton" value="Search" onclick="<%=changeAction%>" />
-								</td>
-							</tr>
-						</table>
-						</td>
-					</tr>
-
-				</table>
-				</td>
-			</tr>
-			<!-- ENTER IDENTIFIER ENDS-->
-		</logic:notEqual>
-
 
 		<!-- NEW department ENTRY BEGINS-->
 		<tr>
@@ -80,6 +35,9 @@
 					<td><html:hidden property="operation" value="<%=operation%>" /></td>
 				</tr>
 
+				<tr>
+					<td><html:hidden property="systemIdentifier" /></td>
+				</tr>
 				<logic:notEqual name="operation" value="<%=Constants.SEARCH%>">
 					<tr>
 						<td class="formMessage" colspan="3">* indicates a required field</td>
