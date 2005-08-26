@@ -11,7 +11,9 @@
 package edu.wustl.catissuecore.domain;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 
 import edu.wustl.catissuecore.actionForm.AbstractActionForm;
@@ -164,5 +166,56 @@ public class Distribution extends SpecimenEventParameters implements java.io.Ser
 	    	excp.printStackTrace();
 	        Logger.out.error(excp.getMessage());
 	    }
+	}
+	
+//	SpecimenRequirement#FluidSpecimenRequirement:1.specimenType", "Blood");
+	protected Map fixMap(Map orgMap)
+	{
+		Map replaceMap = new HashMap();
+		
+		Iterator it = orgMap.keySet().iterator();
+		while(it.hasNext())
+		{
+			String key = (String)it.next();
+			Logger.out.debug("Key************************"+key);
+			if(key.indexOf("className")!=-1)
+			{
+				String value = (String)orgMap.get(key);
+				Logger.out.debug("Value..........................."+value); 
+				String replaceWith = "Specimen"+"#"+value+"Specimen";
+				
+				key = key.substring(0,key.lastIndexOf("_"));
+				Logger.out.debug("Second Key***********************"+key);
+				String newKey = key.replaceFirst("Specimen",replaceWith);
+				Logger.out.debug("New Key................"+newKey);
+				replaceMap.put(key,newKey);
+			}
+		}
+		
+		Map newMap = new HashMap();
+		it = orgMap.keySet().iterator();
+		while(it.hasNext())
+		{
+			String key = (String)it.next();
+			String value = (String)orgMap.get(key);
+			if(key.indexOf("Specimen")==-1)
+			{
+				newMap.put(key,value);
+			}
+			else
+			{
+				if(key.indexOf("className")==-1)
+				{
+					String keyPart, newKeyPart;
+					
+					//Replace # and class name and FIX for abstract class
+					keyPart = key.substring(0,key.lastIndexOf("_"));
+					newKeyPart = (String)replaceMap.get(keyPart);
+					key = key.replaceFirst(keyPart,newKeyPart);
+					newMap.put(key,value);
+				}
+			}
+		}		
+		return newMap;
 	}
 }
