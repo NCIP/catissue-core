@@ -437,27 +437,27 @@ function insRow(subdivtag)
 			<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
 			<tbody id="SpecimenRequirementData">			
 			<TR> 
-				<td class="formRequiredLabelLeft" ><!-- width="14" -->
+				<td class="formLeftSubTitle" ><!-- width="14" -->
 					<bean:message key="distributionprotocol.specimennumber" />
 		        </td>
 				
-				<td class="formRequiredLabelLeft"><!--  width="182" -->
+				<td class="formLeftSubTitle">* <!--  width="182" -->
 					<bean:message key="distributionprotocol.specimenclass" />
 		        </td>
 		        
-		        <td class="formRequiredLabelLeft"><!-- width="180" -->
+		        <td class="formLeftSubTitle">* <!-- width="180" -->
 			        <bean:message key="distributionprotocol.specimentype" />
 		        </td>
 		        
-		        <td class="formRequiredLabelLeft"><!--  width="211" -->
+		        <td class="formLeftSubTitle">* <!--  width="211" -->
 		        	<bean:message key="distributionprotocol.specimensite" />
 			    </td>
 		        
-		        <td class="formRequiredLabelLeft"><!--  width="208" -->
+		        <td class="formLeftSubTitle">* <!--  width="208" -->
 			        <bean:message key="distributionprotocol.pathologystatus" />
 			    </td>
 			    
-			    <td class="formFieldAllBorders"><!--  width="117" -->
+			    <td class="formLeftSubTitle">* <!--  width="117" -->
 			    	<b><bean:message key="distributionprotocol.quantity" /></b>
 		        </td>
 			</tr>	

@@ -608,23 +608,23 @@ function getSubDivCount(subdivtag)
 			    
 			    <TBODY id="<%=commonLabel%>">
 			    <TR> <!-- SUB TITLES -->
-			        <td class="formLeftSubTableTitle">
+			        <td class="formLeftSubTitle">
 		        		<bean:message key="collectionprotocol.specimennumber" />
 			        </td>
-			        <td class="formLeftSubTableTitle">* 
+			        <td class="formLeftSubTitle">* 
 			        	<bean:message key="collectionprotocol.specimenclass" />
 			        </td>
-			        <td class="formLeftSubTableTitle">* 
+			        <td class="formLeftSubTitle">* 
 			        	<bean:message key="collectionprotocol.specimetype" />
 			        </td>
 			        
-			        <td class="formLeftSubTableTitle">* 
+			        <td class="formLeftSubTitle">* 
 			        	<bean:message key="collectionprotocol.specimensite" />
 				    </td>
-			        <td  class=formLeftSubTableTitle>* 
+			        <td  class=formLeftSubTitle>* 
 			    		<bean:message key="collectionprotocol.specimenstatus" />
 				    </td>
-			        <td class=formLeftSubTableTitle>* 
+			        <td class=formLeftSubTitle>* 
 			        	<bean:message key="collectionprotocol.quantity" />
 			        </td>
 			    </TR><!-- SUB TITLES END -->
