@@ -146,7 +146,7 @@ function callAction(action)
 					<td class="formRequiredNotice" width="5">&nbsp;</td>
 					<td class="formField">
 						<html:select property="<%=objectName%>" styleClass="formFieldSized10" styleId="objectName" size="1" onchange="javascript:callAction('SimpleQueryInterface.do')">
-							<html:options collection="objectNameList" labelProperty="name" property="value" />
+							<html:options collection="objectNameList" labelProperty="name" property="name" />
 						</html:select>
 					</td>
 					<td class="formField">

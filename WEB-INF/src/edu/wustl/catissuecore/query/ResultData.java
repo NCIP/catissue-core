@@ -8,15 +8,14 @@
  */
 package edu.wustl.catissuecore.query;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
 import edu.wustl.catissuecore.dao.AbstractDAO;
 import edu.wustl.catissuecore.dao.DAOFactory;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -53,7 +52,7 @@ public class ResultData
 
         return dataList;
     }
-
+    
     public List getSpreadsheetViewData(String name, int id, String[] columnList)
     {
         
@@ -67,34 +66,44 @@ public class ResultData
             whereColumnCondition = null;
             whereColumnValue = null;
         }
-       
-        List dataList = new ArrayList();
+        
+        List dataList = null;
         
         try
         {
             AbstractDAO dao = DAOFactory.getDAO(Constants.JDBC_DAO);
-            List list = dao.retrieve(tmpResultsTableName,columnList,
+            dataList = dao.retrieve(tmpResultsTableName,columnList,
                     				 whereColumnName,whereColumnCondition,
                     				 whereColumnValue,null);
-            
-            if (list.size() != 0)
-            {
-                ResultSet resultSet = (ResultSet)list.get(0);
-                while (resultSet.next())
-                {
-                    int i = 0;
-                    String[] columnData = new String[resultSet.getFetchSize()];
-                    
-                    while (i < columnList.length)
-                    {
-                        columnData[i] = new String(resultSet.getString(columnList[i]));
-                        i++;
-                    }
-                    dataList.add(columnData);
-                }
-            }
         }
-        catch (SQLException sqlExp)
+        catch (DAOException sqlExp)
+        {
+            Logger.out.error(sqlExp.getMessage(),sqlExp);
+        }
+        catch (Exception exp)
+        {
+            Logger.out.error(exp.getMessage(),exp);
+        }
+        
+        return dataList;
+    }
+    
+    /**
+     * Returns all the data in the temporary table of query results.
+     * @return list of all the data in the temporary table of query results. 
+     */
+    public List getSpreadsheetViewData()
+    {
+        List dataList = null;
+        
+        try
+        {
+            AbstractDAO dao = DAOFactory.getDAO(Constants.JDBC_DAO);
+            dao.openSession();
+            dataList = dao.retrieve(tmpResultsTableName);
+            dao.closeSession();
+        }
+        catch (DAOException sqlExp)
         {
             Logger.out.error(sqlExp.getMessage(),sqlExp);
         }

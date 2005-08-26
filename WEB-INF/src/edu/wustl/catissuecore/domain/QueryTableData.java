@@ -43,7 +43,7 @@ public class QueryTableData implements Serializable
     /**
      * Returns the systemIdentifier.
      * @hibernate.id name="identifier" column="TABLE_ID" type="long" length="30"
-     * unsaved-value="null" generator-class="assigned"
+     * unsaved-value="null" generator-class="native"
      * @return Returns the identifier.
      */
     public long getIdentifier()

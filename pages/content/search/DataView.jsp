@@ -31,15 +31,15 @@
 <script>
 var myData = [<%int i;%><%for (i=0;i<(dataList.size()-1);i++){%>
 <%
-	String[] row = (String[])dataList.get(i);
+	List row = (List)dataList.get(i);
   	int j;
 %>
-[<%for (j=0;j < (row.length-3);j++){%>"<%=row[j]%>",<%}%>"<%=row[j]%>"],<%}%>
+[<%for (j=0;j < (row.size()-1);j++){%>"<%=row.get(j)%>",<%}%>"<%=row.get(j)%>"],<%}%>
 <%
-	String[] row = (String[])dataList.get(i);
+	List row = (List)dataList.get(i);
   	int j;
 %>
-[<%for (j=0;j < (row.length-3);j++){%>"<%=row[j]%>",<%}%>"<%=row[j]%>"]
+[<%for (j=0;j < (row.size()-1);j++){%>"<%=row.get(j)%>",<%}%>"<%=row.get(j)%>"]
 ];
 
 var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnList[k]%>",<%}%>"<%=columnList[k]%>"];
@@ -48,23 +48,24 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 
 <script>
 
-	//	create ActiveWidgets Grid javascript object
+	//	create ActiveWidgets Grid javascript object.
 	var obj = new Active.Controls.Grid;
 	
-	//	set number of rows/columns
+	//	set number of rows/columns.
 	obj.setRowProperty("count", <%=dataList.size()%>);
 	obj.setColumnProperty("count", <%=columnList.length%>);
 	
 	//	provide cells and headers text
 	obj.setDataProperty("text", function(i, j){return myData[i][j]});
 	obj.setColumnProperty("text", function(i){return columns[i]});
+	obj.setDataProperty("value", function(i){return myData[i][0]});
 	
 	//	set headers width/height.
 	obj.setRowHeaderWidth("28px");
 	obj.setColumnHeaderHeight("20px");
 	
 	//	set click action handler.
-	obj.setAction("click", function(src){window.status = src.getItemProperty("text")});
+	obj.setAction("click", function(src){window.location.href = 'http://localhost:8080/catissuecore/QueryDepartmentSearch.do?operation=search&systemIdentifier='+src.getDataProperty("value")});
 	
 	//	write grid html to the page.
 	document.write(obj);

@@ -93,7 +93,7 @@ public class StorageContainerForm extends AbstractActionForm
 	/**
 	 * Starting Number.
 	 */
-	private String startNumber = "1111";
+	private String startNumber = "";
 
 	/**
 	 * No. of containers.

@@ -1,6 +1,5 @@
 package edu.wustl.catissuecore.query;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -8,7 +7,7 @@ import java.util.Vector;
 
 import edu.wustl.catissuecore.dao.JDBCDAO;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.util.logger.Logger;
+import edu.wustl.common.util.dbManager.DAOException;
 
 
 
@@ -42,28 +41,9 @@ public abstract class Query {
     public static final String SPECIMEN_COLLECTION_GROUP = "SpecimenCollectionGroup"; 
     public static final String SPECIMEN = "Specimen"; 
     
+    public static final String DEPARTMENT = "Department";
     
-//    /**
-//     * Accession object constant
-//     */
-//    public static final String ACCESSION = "Accession";
-//    
-//    /**
-//     * Specimen object constant
-//     */
-//    public static final String SPECIMEN = "Specimen";
-//    
-//    /**
-//     * Segment object constant
-//     */
-//    public static final String SEGMENT = "Segment";
-//    
-//    /**
-//     * Sample object constant
-//     */
-//    public static final String SAMPLE = "Sample";
-    
-	/**
+    /**
 	 * Vector of DataElement objects that need to be selected in the output
 	 */
     private Vector resultView = new Vector();
@@ -95,51 +75,37 @@ public abstract class Query {
 	/**
 	 * This method executes the query string formed from getString method and creates a temporary table.
 	 * @return Returns true in case everything is successful else false
-	 */	
-	public boolean execute()
+	 */
+	public boolean execute() throws DAOException
 	{
-//	    try
+	    try
 	    {
 	        JDBCDAO dao = new JDBCDAO();
-	        Logger.out.info("SQL Query********************"+getString());
-//			List list = dao.execute(getString());
-	        List list = new ArrayList();
-	        String [] rowRecord = {"1","2","3","4","5","Blood"};
-	        list.add(rowRecord);
-	        Logger.out.info(getString());
+	        dao.openSession();
+			List list = dao.executeQuery(getString());
 	        String tableName = Constants.QUERY_RESULTS_TABLE;
-	        StringBuffer query = new StringBuffer("CREATE TABLE "+tableName+" (");
-	        int i = 0;
-	        for (;i<(Constants.DEFAULT_SPREADSHEET_COLUMNS.length-1);i++)
-	        {
-	            query = query.append(Constants.DEFAULT_SPREADSHEET_COLUMNS[i]+" VARCHAR(50),");
-	        }
 	        
-	        query.append(Constants.DEFAULT_SPREADSHEET_COLUMNS[i]+" VARCHAR(50));");
+	        dao.delete(tableName);
+	        dao.create(tableName,Constants.DEFAULT_SPREADSHEET_COLUMNS);
 	        
 	        Iterator iterator = list.iterator();
 	        while (iterator.hasNext())
 	        {
-	            String[] row = (String[]) iterator.next();
-	            query = new StringBuffer("INSERT INTO TABLE "+tableName+" values(");
-		        for (i=0;i<(Constants.DEFAULT_SPREADSHEET_COLUMNS.length-1);i++)
-		        {
-		            query.append("'"+row[i]+"',");
-		        }	
-		        
-		        query.append("'"+row[i]+"');");
-		        Logger.out.info("INSERT*********************"+query);
-//		        dao.execute(query.toString());
+	            List row = (List) iterator.next();
+	            
+	            dao.insert(tableName, row);
 	        }
+	        
+	        dao.closeSession();
 	    }
-//	    catch(ClassNotFoundException classExp)
-//	    {
-//	        
-//	    }
-//	    catch(DAOException daoExp)
-//	    {
-//	    }
-	    
+	    catch(DAOException daoExp)
+	    {
+	        throw new DAOException(daoExp.getMessage(), daoExp);
+	    }
+	    catch(ClassNotFoundException classExp)
+	    {
+	        throw new DAOException(classExp.getMessage(), classExp);
+	    }
 	    return true;
 	}
 			/**

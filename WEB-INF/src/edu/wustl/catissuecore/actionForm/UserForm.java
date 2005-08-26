@@ -773,7 +773,7 @@ public class UserForm extends AbstractActionForm
 
                 }
 
-                if (pageOf.equals(Constants.PAGEOF_USER_ADMIN))
+                if (pageOf.equals(Constants.PAGEOF_USER_ADMIN) || pageOf.equals(Constants.PAGEOF_APPROVE_USER))
                 {
                     if (role.trim().equals("0"))
                     {

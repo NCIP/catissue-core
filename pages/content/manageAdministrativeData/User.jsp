@@ -74,54 +74,6 @@
 			</tr>		   	
 		</logic:equal>
 		
-		<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>">
-			<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGEOF_APPROVE_USER%>">
-			<!-- ENTER IDENTIFIER BEGINS-->
-			<br />
-			<tr>
-				<td>
-				<table summary="" cellpadding="3" cellspacing="0" border="0">
-					<tr>
-						<td class="formTitle" height="20" colspan="3">
-							<bean:message key="user.searchTitle" />
-						</td>
-					</tr>
-
-					<tr>
-						<td class="formRequiredNotice" width="5">*</td>
-						<td class="formRequiredLabel">
-							<label for="identifier">
-								<bean:message key="user.identifier" />
-							</label>
-						</td>
-						<td class="formField">
-							<html:text styleClass="formFieldSized" size="30" styleId="systemIdentifier" property="systemIdentifier" />
-						</td>
-					</tr>
-					<%
-        				String changeAction = "setFormAction('" + searchFormName
-	                							  + "');setOperation('" + Constants.SEARCH + "')";
-			        %>
-					<tr>
-						<td align="right" colspan="3">
-						<table cellpadding="4" cellspacing="0" border="0">
-							<tr>
-								<td>
-									<html:submit styleClass="actionButton" value="Search" onclick="<%=changeAction%>" />
-								</td>
-							</tr>
-						</table>
-						</td>
-					</tr>
-
-				</table>
-			  </td>
-			</tr>
-			<!-- ENTER IDENTIFIER ENDS-->
-			</logic:notEqual>
-		</logic:notEqual>
-
-
 		<!-- NEW USER REGISTRATION BEGINS-->
 		<tr>
 		  <td>
@@ -155,7 +107,6 @@
 						</td>
 					</tr>
 					
-					<!-- changes as per Bugzilla Bug 311 -->
 					<tr>
 						<td class="formRequiredNotice" width="5">*</td>
 						<td class="formRequiredLabel">

@@ -24,19 +24,19 @@ public class CDEImpl implements CDE
 {
 
     /**
-     * publicid is a unique id assigned to each CDE.
+     * publicId is a unique id assigned to each CDE.
      * */
-    private String publicid;
+    private String publicId;
 
     /**
-     * preferredname is the name of the CDE that is preferred. 
+     * preferredName is the name of the CDE that is preferred. 
      * */
-    private String preferredname;
+    private String preferredName;
 
     /**
-     * longname is the complete name of the CDE. 
+     * longName is the complete name of the CDE. 
      * */
-    private String longname;
+    private String longName;
 
     /**
      * defination is the defination of the CDE. 
@@ -49,9 +49,9 @@ public class CDEImpl implements CDE
     private String version;
 
     /**
-     * permissiblevalues is the List of all the Permissible Values for the CDE. 
+     * permissibleValues is the List of all the Permissible Values for the CDE. 
      * */
-    private Set permissiblevalues;
+    private Set permissibleValues;
 
     /* (non-Javadoc)
      * @see edu.wustl.common.cde.CDE#getPublicId()
@@ -60,40 +60,40 @@ public class CDEImpl implements CDE
     /**
      * getPublicId method returns the public id of the CDE.
      * @returns PublicID as a String Object of the CDE.   
-     * @hibernate.id name="publicid" column="PUBLIC_ID" type="string"
+     * @hibernate.id name="publicId" column="PUBLIC_ID" type="string"
      * length="30" unsaved-value="null" generator-class="assigned"
      * */
     public String getPublicId()
     {
-        return this.publicid;
+        return this.publicId;
     }
 
     /**
-     * setPublicId method is used for setting the publicid of the CDE. 
+     * setPublicId method is used for setting the publicId of the CDE. 
      * @param accepts a String object.     
      * */
     public void setPublicId(String publicid)
     {
-        this.publicid = publicid;
+        this.publicId = publicid;
     }
 
     /**
      * getLongName method returns the long name of the CDE.
      * @returns LongName as a String Object of the CDE.   
-     * @hibernate.property name="longname" type="string" column="LONG_NAME" length="200"
+     * @hibernate.property name="longName" type="string" column="LONG_NAME" length="200"
      * */
     public String getLongName()
     {
-        return this.longname;
+        return this.longName;
     }
 
     /**
-     * setLongName method is used for setting the longname of the CDE. 
+     * setLongName method is used for setting the longName of the CDE. 
      * @param accepts a String object.   
      * */
     public void setLongName(String longname)
     {
-        this.longname = longname;
+        this.longName = longname;
     }
 
     /**
@@ -137,13 +137,13 @@ public class CDEImpl implements CDE
     /**
      * getPermissibleValues method returns the Permissible Values of the CDE.
      * @returns List of the PermissibleValues of the CDE.   
-     * @hibernate.set name="permissiblevalues" table="CATISSUE_PERMISSIBLE_VALUE"
+     * @hibernate.set name="permissibleValues" table="CATISSUE_PERMISSIBLE_VALUE"
      * @hibernate.collection-key column="PUBLIC_ID"
      * @hibernate.collection-one-to-many class="edu.wustl.common.cde.PermissibleValueImpl"
      * */
     public Set getPermissibleValues()
     {
-        return this.permissiblevalues;
+        return this.permissibleValues;
     }
 
     /**
@@ -152,7 +152,7 @@ public class CDEImpl implements CDE
      * */
     public void setPermissibleValues(Set permissiblevalues)
     {
-        this.permissiblevalues = permissiblevalues;
+        this.permissibleValues = permissiblevalues;
     }
 
     /**
@@ -164,7 +164,7 @@ public class CDEImpl implements CDE
      */
     public boolean addPermissibleValue(PermissibleValueImpl pv)
     {
-        return this.permissiblevalues.add(pv);
+        return this.permissibleValues.add(pv);
     }
 
     /**
@@ -179,22 +179,22 @@ public class CDEImpl implements CDE
      */
     public boolean removePermissibleValue(PermissibleValueImpl pv)
     {
-        return this.permissiblevalues.remove(pv);
+        return this.permissibleValues.remove(pv);
     }
 
     /**
-     * @return Returns the preferredname.
+     * @return Returns the preferredName.
      */
-    public String getPreferredname()
+    public String getPreferredName()
     {
-        return preferredname;
+        return preferredName;
     }
 
     /**
-     * @param preferredname The preferredname to set.
+     * @param preferredName The preferredName to set.
      */
-    public void setPreferredname(String preferredname)
+    public void setPreferredName(String preferredname)
     {
-        this.preferredname = preferredname;
+        this.preferredName = preferredname;
     }
 }

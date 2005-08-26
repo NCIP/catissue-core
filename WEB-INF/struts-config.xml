@@ -268,10 +268,10 @@ PUBLIC
 			type="edu.wustl.catissuecore.action.CommonAddEditAction"
 			name="userForm"
 			validate="true"
-			input="/User.do?operation=add&amp;pageOf=pageOfUserAdmin"
+			input="/User.do?operation=edit&amp;pageOf=pageOfApproveUser"
 			scope="request">
 			<forward name="success" path=".catissuecore.userAddSuccessDef" />
-			<forward name="failure" path="/User.do?operation=add&amp;pageOf=pageOfUserAdmin" />
+			<forward name="failure" path="/User.do?operation=edit&amp;pageOf=pageOfApproveUser" />
 		</action>
 
 		<action path="/UserEdit"
@@ -1505,9 +1505,34 @@ PUBLIC
 			validate="true"
 			input="/SimpleQueryInterface.do"
 			scope="request">
-			<forward name="success" path=".catissuecore.distributionAddSuccessDef" />
+			<forward name="success" path="/SpreadsheetView.do" />
 			<forward name="failure" path="/error.jsp" />
 		</action>
+
+		<action path="/SpreadsheetView"
+			type="edu.wustl.catissuecore.action.SpreadsheetViewAction"
+			scope="request">
+			<forward name="success" path=".catissuecore.simpleSearchResultsDef" />
+			<forward name="failure" path=".catissuecore.simpleSearchResultsDef" />
+		</action>
+		
+		<action path="/QueryDepartment"
+			type="edu.wustl.catissuecore.action.DepartmentAction"
+			scope="request">
+			<forward name="success" path=".catissuecore.simpleSearchDepartmentDef" />
+			<forward name="failure" path=".catissuecore.simpleSearchDepartmentDef" />
+		</action>
+		
+		<action path="/QueryDepartmentSearch"
+		    type="edu.wustl.catissuecore.action.CommonSearchAction"
+			name="departmentForm"
+			validate="true"
+			input="/Department.do?operation=edit"
+			scope="session">
+			<forward name="success" path="/QueryDepartment.do?operation=edit"/>
+			<forward name="failure" path="/QueryDepartment.do?operation=edit"/>
+		</action>
+				
 		<!--Simple Query Interface Actions End-->		
 		
 		<!-- SpecimenEventParameters Actions Begins -->

@@ -215,7 +215,6 @@ public class StorageType extends AbstractDomainObject implements Serializable
 	        this.oneDimensionLabel = storageTypeForm.getOneDimensionLabel();
 	        this.twoDimensionLabel = storageTypeForm.getTwoDimensionLabel();
 	        
-	        defaultStorageCapacity.setSystemIdentifier(systemIdentifier);
 	        defaultStorageCapacity.setOneDimensionCapacity(new Integer(storageTypeForm.getOneDimensionCapacity()));
 	        defaultStorageCapacity.setTwoDimensionCapacity(new Integer(storageTypeForm.getTwoDimensionCapacity()));
 	    }

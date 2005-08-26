@@ -11,7 +11,6 @@
 package edu.wustl.catissuecore.action;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.servlet.ServletException;
@@ -26,7 +25,6 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.util.logger.Logger;
 
 /**

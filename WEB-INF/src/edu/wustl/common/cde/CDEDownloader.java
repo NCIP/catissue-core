@@ -145,7 +145,7 @@ public class CDEDownloader
 			cdeobj.setDefination(dataElement.getPreferredDefinition());
 			cdeobj.setLongName(dataElement.getLongName());
 			//cdeobj.setVersion(dataElement.getVersion().toString());
-			cdeobj.setPreferredname(dataElement.getPreferredName());
+			cdeobj.setPreferredName(dataElement.getPreferredName());
 
 			Iterator iterator = xmlCDE.getXMLPermissibleValues().iterator();
 			while(iterator.hasNext())

@@ -30,8 +30,6 @@
             insert="true"
             column="NAME"
             length="50"
-            not-null="true"
-            unique="true"
         />
 
         <property

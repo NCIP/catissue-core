@@ -27,7 +27,7 @@ public class QueryColumnData implements Serializable
     /**
      * Returns the systemIdentifier.
      * @hibernate.id name="identifier" column="IDENTIFIER" type="long" length="30"
-     * unsaved-value="null" generator-class="assigned"
+     * unsaved-value="null" generator-class="native"
      * @return Returns the identifier.
      */
     public long getIdentifier()
@@ -94,5 +94,4 @@ public class QueryColumnData implements Serializable
     {
         this.displayName = displayName;
     }
-
 }

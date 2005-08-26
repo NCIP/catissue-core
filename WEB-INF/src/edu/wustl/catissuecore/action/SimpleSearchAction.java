@@ -50,7 +50,7 @@ public class SimpleSearchAction extends Action
         
         Client.initialize();
         
-        Query query = QueryFactory.getInstance().newQuery(Query.SIMPLE_QUERY, Query.PARTICIPANT);
+        Query query = QueryFactory.getInstance().newQuery(Query.SIMPLE_QUERY, Query.DEPARTMENT);
 //        HttpSession session = request.getSession();
 //        String[] columnList = (String[])request.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
 //        
@@ -58,14 +58,17 @@ public class SimpleSearchAction extends Action
 //        {
 //            columnList = Constants.DEFAULT_SPREADSHEET_COLUMNS;
 //        }
+        	
+//        query.addElementToView(new DataElement(Query.PARTICIPANT,"IDENTIFIER"));
+//        query.addElementToView(new DataElement(Query.COLLECTION_PROTOCOL,"IDENTIFIER"));
+//        query.addElementToView(new DataElement(Query.COLLECTION_PROTOCOL_EVENT,"IDENTIFIER"));
+//        query.addElementToView(new DataElement(Query.SPECIMEN_COLLECTION_GROUP,"IDENTIFIER"));
+//        query.addElementToView(new DataElement(Query.SPECIMEN,"IDENTIFIER"));
+//        query.addElementToView(new DataElement(Query.SPECIMEN,"TYPE"));
         
-        query.addElementToView(new DataElement(Query.PARTICIPANT,"IDENTIFIER"));
-        query.addElementToView(new DataElement(Query.COLLECTION_PROTOCOL,"IDENTIFIER"));
-        query.addElementToView(new DataElement(Query.COLLECTION_PROTOCOL_EVENT,"IDENTIFIER"));
-        query.addElementToView(new DataElement(Query.SPECIMEN_COLLECTION_GROUP,"IDENTIFIER"));
-        query.addElementToView(new DataElement(Query.SPECIMEN,"IDENTIFIER"));
-        query.addElementToView(new DataElement(Query.SPECIMEN,"TYPE"));
-        
+        query.addElementToView(new DataElement(Query.DEPARTMENT,"IDENTIFIER"));
+        query.addElementToView(new DataElement(Query.DEPARTMENT,"NAME"));
+
         ((SimpleQuery)query).addConditions(simpleConditionNodeCollection);
         
         query.execute();

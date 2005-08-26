@@ -50,22 +50,22 @@ public class Client
 
     public static void setRelations()
     {
-        Vector v = new Vector();
-        v.add(Query.COLLECTION_PROTOCOL_EVENT);
-        Vector v2 = new Vector();
-        v2.add(Query.COLLECTION_PROTOCOL_REGISTRATION);
-        Vector v3 = new Vector();
-        v3.add(Query.COLLECTION_PROTOCOL);
-        Vector v4 = new Vector();
-        v4.add(Query.SPECIMEN_COLLECTION_GROUP);
-        Vector v5 = new Vector();
-        v5.add(Query.SPECIMEN);
-        
-        relations.put(Query.PARTICIPANT, v2);
-        relations.put(Query.COLLECTION_PROTOCOL_REGISTRATION,v3);
-        relations.put(Query.COLLECTION_PROTOCOL,v);
-        relations.put(Query.COLLECTION_PROTOCOL_EVENT,v4);
-        relations.put(Query.SPECIMEN_COLLECTION_GROUP,v5);
+//        Vector v = new Vector();
+//        v.add(Query.COLLECTION_PROTOCOL_EVENT);
+//        Vector v2 = new Vector();
+//        v2.add(Query.COLLECTION_PROTOCOL_REGISTRATION);
+//        Vector v3 = new Vector();
+//        v3.add(Query.COLLECTION_PROTOCOL);
+//        Vector v4 = new Vector();
+//        v4.add(Query.SPECIMEN_COLLECTION_GROUP);
+//        Vector v5 = new Vector();
+//        v5.add(Query.SPECIMEN);
+//        
+//        relations.put(Query.PARTICIPANT, v2);
+//        relations.put(Query.COLLECTION_PROTOCOL_REGISTRATION,v3);
+//        relations.put(Query.COLLECTION_PROTOCOL,v);
+//        relations.put(Query.COLLECTION_PROTOCOL_EVENT,v4);
+//        relations.put(Query.SPECIMEN_COLLECTION_GROUP,v5);
     }
     
     public static void setObjectTableNames()
@@ -76,6 +76,7 @@ public class Client
         objectTableNames.put(Query.COLLECTION_PROTOCOL_EVENT,"CATISSUE_COLLECTION_PROTOCOL_EVENT");
         objectTableNames.put(Query.SPECIMEN_COLLECTION_GROUP,"CATISSUE_SPECIMEN_COLLECTION_GROUP");
         objectTableNames.put(Query.SPECIMEN,"CATISSUE_SPECIMEN");
+        objectTableNames.put(Query.DEPARTMENT,"CATISSUE_DEPARTMENT");
     }
     
     public static void main(String[] args)

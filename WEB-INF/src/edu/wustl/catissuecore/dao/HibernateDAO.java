@@ -16,12 +16,10 @@ import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+
 import edu.wustl.catissuecore.audit.AuditManager;
 import edu.wustl.catissuecore.audit.Auditable;
-import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.Department;
-import edu.wustl.catissuecore.domain.Specimen;
-import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.exception.AuditException;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;

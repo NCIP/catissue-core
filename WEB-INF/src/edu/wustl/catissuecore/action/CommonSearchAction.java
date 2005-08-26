@@ -86,7 +86,7 @@ public class CommonSearchAction extends Action
                  */
                 ActionErrors errors = new ActionErrors();
                 errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.unknown",
-                        				ApplicationProperties.getValue("user.systemIdentifier")));
+                        				ApplicationProperties.getValue("user.name")));
                 saveErrors(request,errors);
                 target = new String(Constants.FAILURE);
             }

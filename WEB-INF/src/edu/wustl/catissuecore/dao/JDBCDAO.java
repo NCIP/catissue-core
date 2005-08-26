@@ -19,8 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.wustl.catissuecore.audit.AuditManager;
-import edu.wustl.catissuecore.domain.AbstractDomainObject;
-import edu.wustl.catissuecore.exception.AuditException;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.dbManager.DAOException;
@@ -39,6 +37,30 @@ public class JDBCDAO extends AbstractDAO
     public void openSession() throws DAOException
     {
     	auditManager = new AuditManager();
+    	
+    	try
+    	{
+    	    //Initializes the oracle driver.
+            Class.forName(ApplicationProperties.getValue("database.driver"));
+
+            String database = ApplicationProperties
+            						.getValue("database.URL.1");
+            String loginName = ApplicationProperties
+                    				.getValue("database.loginName.1");
+            String password = ApplicationProperties
+            						.getValue("database.password.1");
+
+            //Creates a connection.
+            connection = DriverManager.getConnection(database, loginName, password);
+    	}
+    	catch(SQLException sqlExp)
+    	{
+    	    throw new DAOException(sqlExp.getMessage(),sqlExp);
+    	}
+    	catch(ClassNotFoundException classExp)
+    	{
+    	    throw new DAOException(classExp.getMessage(),classExp);
+    	}
     }
     
     public void closeSession() throws DAOException
@@ -47,7 +69,8 @@ public class JDBCDAO extends AbstractDAO
         {
             auditManager = null;
         	stmt.close();
-            connection.close();
+        	if (connection != null)
+        	    connection.close();
         }
         catch(SQLException sqlExp)
         {
@@ -83,28 +106,6 @@ public class JDBCDAO extends AbstractDAO
         	Logger.out.error(dbex.getMessage(),dbex);
         	new DAOException("Error in rollback", dbex);
         }
-    }
-    
-    /**
-     * Returns a connection to the database.
-     * @return a connection to the database.
-     * @throws ClassNotFoundException
-     * @throws SQLException
-     */
-    private Connection createConnection() throws ClassNotFoundException,
-            SQLException
-    {
-        //Initializes the oracle driver.
-        Class.forName(ApplicationProperties.getValue("database.driver"));
-
-        String database = ApplicationProperties.getValue("database.URL.1");
-        String loginName = ApplicationProperties
-                .getValue("database.loginName.1");
-        String password = ApplicationProperties.getValue("database.password.1");
-
-        //Creates a connection.
-        connection = DriverManager.getConnection(database, loginName, password);
-        return connection;
     }
     
     /**
@@ -151,7 +152,7 @@ public class JDBCDAO extends AbstractDAO
             throws DAOException
     {
         List list = null;
-
+        
         try
         {
             StringBuffer query = new StringBuffer("SELECT ");
@@ -198,13 +199,13 @@ public class JDBCDAO extends AbstractDAO
                         + whereColumnCondition[i] + " " + whereColumnValue[i]);
             }
             
-            list = execute(query.toString());
+            list = executeQuery(query.toString());
         }
         catch (ClassNotFoundException classExp)
         {
             Logger.out.error(classExp.getMessage(), classExp);
         }
-
+        
         return list;
     }
     
@@ -215,17 +216,12 @@ public class JDBCDAO extends AbstractDAO
      * @throws ClassNotFoundException
      * @throws SQLException
      */
-    public List execute(String query) throws ClassNotFoundException, DAOException
+    public List executeQuery(String query) throws ClassNotFoundException, DAOException
     {
         List list = null;
         try
         {
-            //Creates connection.
-            createConnection();
-
-            System.out.println("query "+query);
-            PreparedStatement stmt = connection.prepareStatement(query
-                    .toString());
+            stmt = connection.prepareStatement(query);
             ResultSet resultSet = stmt.executeQuery();
              
             list = new ArrayList();
@@ -233,12 +229,10 @@ public class JDBCDAO extends AbstractDAO
             ResultSetMetaData metaData = resultSet.getMetaData();
             int columnCount = metaData.getColumnCount();
             
-            List aList= new ArrayList();
-            
             while (resultSet.next())
             {
                 int i = 1;
-                                   
+                List aList= new ArrayList();
                 while (i <= columnCount)
                 {
                 	if(resultSet.getObject(i) != null)
@@ -248,16 +242,12 @@ public class JDBCDAO extends AbstractDAO
                 	i++;
                 }
                 
-                for(i=0;i<aList.size();i++)
-                {
-                	list.add(aList.get(0));
-                }
+                list.add(aList);
             }
-            closeSession();
         }
         catch(SQLException sqlExp)
         {
-            throw new DAOException(sqlExp.getMessage(),sqlExp);
+            throw new DAOException(sqlExp.getMessage(), sqlExp);
         }
         
         return list;
@@ -273,22 +263,6 @@ public class JDBCDAO extends AbstractDAO
         return retrieve(sourceObjectName, null, whereColumnNames,
                 whereColumnConditions, whereColumnValues, Constants.AND_JOIN_CONDITION);
     }
-    
-//    /**
-//     * Closes the Connection and PreparedStatement objects.  
-//     */
-//    protected void finalize() throws Throwable
-//    {
-//        try
-//        {
-//            stmt.close();
-//            connection.close();
-//        }
-//        finally
-//        {
-//            super.finalize();
-//        }
-//    }
     
     //    public static void main(String[] args)
     //    {
@@ -314,25 +288,27 @@ public class JDBCDAO extends AbstractDAO
     //
     //    }
 
-    /* (non-Javadoc)
+    /**
+     * (non-Javadoc)
      * @see edu.wustl.catissuecore.dao.AbstractDAO#insert(java.lang.Object)
      */
-    public void insert(Object obj,boolean isAuditable) throws DAOException
+    public void insert(String tableName, List columnValues) throws DAOException
     {
-        // TODO Auto-generated method stub
-    	try
-        {
-    		if(isAuditable)
-        		auditManager.compare((AbstractDomainObject)obj,null,"INSERT");
-        }
-        catch(AuditException hibExp)
-        {
-        	//throw handleError(hibExp);
-        }
-    	
+
+        StringBuffer query = new StringBuffer("INSERT INTO "+tableName+" values(");
+        int i;
+	    for (i=0;i<(Constants.DEFAULT_SPREADSHEET_COLUMNS.length-1);i++)
+	    {
+	        query.append("'"+columnValues.get(i)+"',");
+	    }	
+	        
+	    query.append("'"+columnValues.get(i)+"');");
+	        
+	    executeUpdate(query.toString());
     }
     
-    /* (non-Javadoc)
+    /**
+     * (non-Javadoc)
      * @see edu.wustl.catissuecore.dao.AbstractDAO#update(java.lang.Object)
      */
     public void update(Object obj) throws DAOException
@@ -349,6 +325,30 @@ public class JDBCDAO extends AbstractDAO
         //return false;
     }
     
+    public void create(String tableName, String[] columnNames) throws DAOException
+    {
+        StringBuffer query = new StringBuffer("CREATE TABLE "+tableName+" (");
+        int i = 0;
+        
+        for (;i<(columnNames.length-1);i++)
+        {
+            query = query.append(columnNames[i]+" VARCHAR(50),");
+        }
+            
+        query.append(columnNames[i]+" VARCHAR(50));");
+        
+        Logger.out.debug("Create Table*************************"+query.toString());
+            
+        executeUpdate(query.toString());
+    }
+    
+    public void delete(String tableName) throws DAOException
+    {
+        StringBuffer query = new StringBuffer("DROP TABLE IF EXISTS "+tableName);
+            
+        executeUpdate(query.toString());
+    }
+    
     public Object retrieve (String sourceObjectName, Long systemIdentifier) throws DAOException
 	{
 		try
@@ -361,5 +361,30 @@ public class JDBCDAO extends AbstractDAO
 	        throw new DAOException("Error in retrieve " + hibExp.getMessage(),hibExp);
 	    }
 	}
-//    private 
+    
+    
+    /* (non-Javadoc)
+     * @see edu.wustl.catissuecore.dao.DAO#insert(java.lang.Object, boolean)
+     */
+    public void insert(Object obj, boolean isAuditable) throws DAOException
+    {
+        // TODO Auto-generated method stub
+//		if(isAuditable)
+//		auditManager.compare((AbstractDomainObject)obj,null,"INSERT");
+    }
+    
+    private void executeUpdate(String query) throws DAOException
+    {
+        try
+        {
+            stmt = connection.prepareStatement(query
+                    	.toString());
+            
+            stmt.executeUpdate();
+        }
+        catch(SQLException sqlExp)
+        {
+            throw new DAOException(sqlExp.getMessage(), sqlExp);
+        }
+    }
 }

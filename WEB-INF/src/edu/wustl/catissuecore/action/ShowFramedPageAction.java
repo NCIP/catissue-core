@@ -41,6 +41,7 @@ public class ShowFramedPageAction extends Action
             request.setAttribute(Constants.STORAGE_CONTAINER_TYPE,storageContainerType);
         }else if (pageOf.equals(Constants.PAGEOF_TISSUE_SITE))
         {
+            System.out.println("In ShowFramedPageAction in PAGEOF_TISSUE_SITE***********************");
             String propertyName = request.getParameter(Constants.PROPERTY_NAME);
             request.setAttribute(Constants.PROPERTY_NAME,propertyName);
         }

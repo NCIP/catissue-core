@@ -56,7 +56,7 @@ public class SimpleQueryInterfaceAction extends Action
                     
                     String [] displayNameFields = {"displayName"};
                     String valueField = "columnName";
-                    String [] whereColumnNames = {"tableData.tableName"};
+                    String [] whereColumnNames = {"tableData.displayName"};
                     String [] whereCondition = {"="};
                     String [] whereColumnValues = {value};
                     
@@ -69,7 +69,6 @@ public class SimpleQueryInterfaceAction extends Action
             }
         }
         
-        //Sets the instituteList attribute to be used in the Add/Edit User Page.
         String sourceObjectName = QueryTableData.class.getName();
         String[] displayNameFields = {"displayName"};
         String valueField = "tableName";
