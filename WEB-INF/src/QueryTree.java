@@ -30,7 +30,7 @@ import edu.wustl.catissuecore.storage.GenerateTree;
 import edu.wustl.catissuecore.util.global.Constants;
 
 /**
- * QueryTree builds the applet for the tree representation 
+ * QueryTree builds the applet for the tree representation
  * of query result view.
  * @author gautam_shetty
  */
@@ -51,7 +51,9 @@ public class QueryTree extends JApplet
             String host = codeBase.getHost();
             int port = codeBase.getPort();
             
+            System.out.println("In Applet............................");
             String pageOf = this.getParameter(Constants.PAGEOF);
+            System.out.println("pageOf********************"+pageOf);
             String storageContainerType = null,propertyName = null;
             int treeType = Constants.TISSUE_SITE_TREE_ID;
             
@@ -63,7 +65,7 @@ public class QueryTree extends JApplet
             	treeType = Constants.STORAGE_CONTAINER_TREE_ID;
             else if (pageOf.equals(Constants.PAGEOF_QUERY_RESULTS))
                 treeType = Constants.QUERY_RESULTS_TREE_ID;
-            else 
+            else if (pageOf.equals(Constants.PAGEOF_TISSUE_SITE))
                 propertyName = this.getParameter(Constants.PROPERTY_NAME);
             
             String urlSuffix = Constants.TREE_DATA_ACTION+"?"+Constants.PAGEOF+"="+pageOf;
@@ -118,20 +120,27 @@ public class QueryTree extends JApplet
             treePanel.setVisible(true);
             
             //Add listeners for the tree.
-//            NodeSelectionListener nodeSelectionListener = new NodeSelectionListener(
-//                    this.getCodeBase(), this.getAppletContext());
+            NodeSelectionListener nodeSelectionListener = new NodeSelectionListener(
+                    this.getCodeBase(), this.getAppletContext());
             
-//            StorageLocationViewListener viewListener 
-//            		= new StorageLocationViewListener(this.getCodeBase(), this.getAppletContext()); 
-//            viewListener.setStorageContainerType(storageContainerType);
-//            viewListener.setPageOf(pageOf);
-//            tree.addTreeSelectionListener(viewListener);
+            System.out.println("PAGEOF****************"+pageOf);
+            if (pageOf.equals(Constants.PAGEOF_TISSUE_SITE))
+            {
+                System.out.println("In PAGEOF_TISSUE_SITE*************");
+                TissueSiteTreeNodeListener tissueSiteListener = new TissueSiteTreeNodeListener();
+	            tissueSiteListener.setAppletContext(this.getAppletContext());
+	            tree.addTreeSelectionListener(tissueSiteListener);
+            }
+            else
+            {
+                System.out.println("In PAGEOF_STORAGE_LOCATION***********");
+                StorageLocationViewListener viewListener 
+        			= new StorageLocationViewListener(this.getCodeBase(), this.getAppletContext()); 
+		        viewListener.setStorageContainerType(storageContainerType);
+		        viewListener.setPageOf(pageOf);
+		        tree.addTreeSelectionListener(viewListener);
+            } 
             
-            TissueSiteTreeNodeListener tissueSiteListener = new TissueSiteTreeNodeListener();
-//            tissueSiteListener.setPropertyName(propertyName); 
-            tissueSiteListener.setAppletContext(this.getAppletContext());
-            tree.addTreeSelectionListener(tissueSiteListener);
-
             //Add listeners for the radio buttons.
 //            spreadsheetViewRadioButton.addActionListener(nodeSelectionListener);
 //            individualViewRadioButton.addActionListener(nodeSelectionListener);

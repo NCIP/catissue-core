@@ -38,7 +38,7 @@ public class NodeSelectionListener implements TreeSelectionListener, ActionListe
     private AppletContext appletContext = null;
     
     /**
-     * Defines the type of view to be showed on tree node slection.
+     * Defines the type of view to be showed on tree node selection.
      */
     private String viewType = new String(Constants.SPREADSHEET_VIEW);
     
