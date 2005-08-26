@@ -9,9 +9,88 @@
 <%
 	List itemList = (List)request.getAttribute(Constants.ITEMLIST);
 	ListIterator iterator=null;
+	String [] cellSpecimenIdArray = (String [])request.getAttribute(Constants.CELL_SPECIMEN_ID_LIST);
+	String [] fluidSpecimenIdArray = (String [])request.getAttribute(Constants.FLUID_SPECIMEN_ID_LIST);
+	String [] molecularSpecimenIdArray = (String [])request.getAttribute(Constants.MOLECULAR_SPECIMEN_ID_LIST);
+	String [] tissueSpecimenIdArray = (String [])request.getAttribute(Constants.TISSUE_SPECIMEN_ID_LIST);
+	DistributionForm formBean = (DistributionForm)request.getAttribute("distributionForm");
 %>
 <head>
 	<script language="JavaScript">
+		
+		function onSpecimenTypeChange(element,unitSpan,idCombo)
+		{
+			comboToRefresh = document.getElementById(idCombo);
+			//To Clear the Combo Box
+			comboToRefresh.options.length = 0;
+			
+			var unit = document.getElementById(unitSpan);
+			var unitSpecimen = "";
+			
+			if(element.value == "Tissue")
+			{
+				unitSpecimen = "<%=Constants.UNIT_GM%>";
+				<%
+					if(tissueSpecimenIdArray != null && tissueSpecimenIdArray.length != 0)
+					{
+						for(int i=0;i<tissueSpecimenIdArray.length;i++)
+						{
+				%>
+							comboToRefresh.options[<%=i%>] = new Option('<%=tissueSpecimenIdArray[i]%>','<%=tissueSpecimenIdArray[i]%>');
+				<%
+						}
+					}
+				%>
+			}
+			else if(element.value == "Fluid")
+			{
+				unitSpecimen = "<%=Constants.UNIT_ML%>";
+				<%
+					if(fluidSpecimenIdArray != null && fluidSpecimenIdArray.length != 0)
+					{
+						for(int i=0;i<fluidSpecimenIdArray.length;i++)
+						{
+				%>
+							comboToRefresh.options[<%=i%>] = new Option('<%=fluidSpecimenIdArray[i]%>','<%=fluidSpecimenIdArray[i]%>');
+				<%
+						}
+					}
+				%>
+			}
+			else if(element.value == "Cell")
+			{
+				unitSpecimen = "<%=Constants.UNIT_CC%>";
+				<%
+					if(cellSpecimenIdArray != null && cellSpecimenIdArray.length != 0)
+					{
+						for(int i=0;i<cellSpecimenIdArray.length;i++)
+						{
+				%>
+							comboToRefresh.options[<%=i%>] = new Option('<%=cellSpecimenIdArray[i]%>','<%=cellSpecimenIdArray[i]%>');
+				<%
+						}
+					}
+				%>
+			}
+			else if(element.value == "Molecular")
+			{
+				unitSpecimen = "<%=Constants.UNIT_MG%>";
+				<%
+					if(molecularSpecimenIdArray != null && molecularSpecimenIdArray.length != 0)
+					{
+						for(int i=0;i<molecularSpecimenIdArray.length;i++)
+						{
+				%>
+							comboToRefresh.options[<%=i%>] = new Option('<%=molecularSpecimenIdArray[i]%>','<%=molecularSpecimenIdArray[i]%>');
+				<%
+						}
+					}
+				%>
+			}
+			
+			unit.innerHTML = unitSpecimen;
+		}
+		
 		//function to insert a row in the inner block
 		function insRow(subdivtag)
 		{
@@ -31,35 +110,46 @@
 			spreqno.innerHTML="" + sname;
 
 			//Second Cell
-			var spreqtype=x.insertCell(1);
-			spreqtype.className="formField";
+			var spreqspecimen=x.insertCell(1);
+			spreqspecimen.className="formField";
 			sname="";
-
+			var unitName = "value(DistributedItem:" + (q+1) + "_unitSpan)";
+			var className = "value(DistributedItem:"+ (q+1) +"_className)";
+			sname= "";
 			var name = "value(DistributedItem:" + (q+1) + "_Specimen_systemIdentifier)";
-			sname="<select name='" + name + "' size='1' class='formFieldSized15' id='" + name + "'>";
+			var fName = "onSpecimenTypeChange(this,'" + unitName + "','" + name + "')";
+			sname="<select name='" + className + "' size='1' class='formFieldSized10' id='" + className + "' onChange=" + fName + ">";
 			<%
-				if(itemList!=null)
+				for(int i=0;i<Constants.SPECIMEN_TYPE_VALUES.length;i++)
 				{
-					iterator = itemList.listIterator();
-					while(iterator.hasNext())
-					{
-						NameValueBean bean = (NameValueBean)iterator.next();
 			%>
-						sname = sname + "<option value='<%=bean.getValue()%>'><%=bean.getName()%></option>";
-			<%		}
+						sname = sname + "<option value='<%=Constants.SPECIMEN_TYPE_VALUES[i]%>'><%=Constants.SPECIMEN_TYPE_VALUES[i]%></option>";
+			<%
 				}
 			%>
 			sname = sname + "</select>";
+			spreqspecimen.innerHTML="" + sname;
+			
+			//Third Cell
+			var spreqtype=x.insertCell(2);
+			spreqtype.className="formField";
+			sname="";
+
+			//var name = "value(DistributedItem:" + (q+1) + "_Specimen_systemIdentifier)";
+			sname="<select name='" + name + "' size='1' class='formFieldSized10' id='" + name + "'>";
+			sname = sname + "<option value='<%=Constants.SELECT_OPTION%>'><%=Constants.SELECT_OPTION%></option>";
+			sname = sname + "</select>";
 			spreqtype.innerHTML="" + sname;
-		
-			//Third Cellvalue()
-			var spreqsubtype=x.insertCell(2);
+			
+			//Fourth Cellvalue()
+			var spreqsubtype=x.insertCell(3);
 			spreqsubtype.className="formField";
 			sname="";
 		
 			name = "value(DistributedItem:" + (q+1) + "_quantity)";
 			sname= "";
-			sname="<input type='text' name='" + name + "' size='30'  class='formFieldSized15' id='" + name + "'>";
+			sname="<input type='text' name='" + name + "' size='30'  class='formFieldSized10' id='" + name + "'>";
+			sname = sname + "&nbsp;<span id='" + unitName + "'>&nbsp;</span>";
 			spreqsubtype.innerHTML="" + sname;
 		}
 	</script>
@@ -202,8 +292,8 @@
 
 <!-- date -->		
 		<tr>
-			<td class="formRequiredNotice" width="5">&nbsp;</td>
-			<td class="formLabel">
+			<td class="formRequiredNotice" width="5">*</td>
+			<td class="formRequiredLabel">
 				<label for="type">
 					<bean:message key="eventparameters.dateofevent"/> 
 				</label>
@@ -278,9 +368,11 @@
 				<html:textarea styleClass="formFieldSized"  styleId="comments" property="comments" />
 			</td>
 		</tr>
+	</table>
+	<table summary="" cellpadding="3" cellspacing="0" border="0">
 <!--  Distributed Item begin here -->
 				 <tr>
-				     <td class="formTitle" height="20" colspan="2">
+				     <td class="formTitle" height="20" colspan="3">
 				     	<bean:message key="distribution.distributedItem"/>
 				     </td>
 				     <td class="formButtonField">
@@ -294,6 +386,9 @@
 				     	#
 				    </td>
 				    <td class="formLeftSubTableTitle">
+						<bean:message key="distribution.specimenType"/>
+					</td>
+					<td class="formRightSubTableTitle">
 						<bean:message key="itemrecord.specimenId"/>
 					</td>
 				    <td class="formRightSubTableTitle">
@@ -307,16 +402,69 @@
 				{
 					String itemName = "value(DistributedItem:"+i+"_Specimen_systemIdentifier)";
 					String quantity = "value(DistributedItem:"+i+"_quantity)";
+					String unitSpan = "value(DistributedItem:"+i+"_unitSpan)";
+					String className = "value(DistributedItem:"+i+"_className)";
+					String key = "DistributedItem:" + i + "_className";
+					String fName = "onSpecimenTypeChange(this,'" + unitSpan + "','" + itemName + "')";
 				%>
 				 <tr>
 				 	<td class="formSerialNumberField" width="5"><%=i%>.</td>
+				 	<td class="formField">
+				     	<html:select property="<%=className%>" styleClass="formFieldSized10" styleId="<%=className%>" size="1" disabled="<%=readOnlyForAll%>" onchange="<%=fName%>">
+							<html:options name="<%=Constants.SPECIMEN_CLASS_LIST%>" labelName="<%=Constants.SPECIMEN_CLASS_LIST%>"/>
+						</html:select>
+		        	</td>
+		        	
 				    <td class="formField">
-						<html:select property="<%=itemName%>" styleClass="formFieldSized15" styleId="<%=itemName%>" size="1" disabled="<%=readOnlyForAll%>">
-							<html:options collection="<%=Constants.ITEMLIST%>" labelProperty="name" property="value"/>		
+						<html:select property="<%=itemName%>" styleClass="formFieldSized10" styleId="<%=itemName%>" size="1" disabled="<%=readOnlyForAll%>">
+							<%
+								String keyValue = (String)formBean.getValue(key);
+
+								if(keyValue != null)
+								{
+								if(keyValue.equals("Cell"))
+								{
+							%>
+								<html:options name="<%=Constants.CELL_SPECIMEN_ID_LIST%>" labelName="<%=Constants.CELL_SPECIMEN_ID_LIST%>" />
+							<%
+								}
+								else if(keyValue.equals("Fluid"))
+								{
+							%>
+								<html:options name="<%=Constants.FLUID_SPECIMEN_ID_LIST%>" labelName="<%=Constants.FLUID_SPECIMEN_ID_LIST%>" />
+							<%
+								}
+								else if(keyValue.equals("Molecular"))
+								{
+							%>
+								<html:options name="<%=Constants.MOLECULAR_SPECIMEN_ID_LIST%>" labelName="<%=Constants.MOLECULAR_SPECIMEN_ID_LIST%>" />
+							<%
+								}
+								else if(keyValue.equals("Tissue"))
+								{
+							%>
+								<html:options name="<%=Constants.TISSUE_SPECIMEN_ID_LIST%>" labelName="<%=Constants.TISSUE_SPECIMEN_ID_LIST%>" />
+							<%
+								}
+								else
+								{
+							%>
+								<html:option value="<%=Constants.SELECT_OPTION%>"><%=Constants.SELECT_OPTION%></html:option>
+							<%
+								}
+								}
+								else
+								{
+							%>
+								<html:option value="<%=Constants.SELECT_OPTION%>"><%=Constants.SELECT_OPTION%></html:option>
+							<%
+								}
+							%>
 						</html:select>
 					</td>
 				    <td class="formField">
-				     	<html:text styleClass="formFieldSized15" size="30" styleId="<%=quantity%>" property="<%=quantity%>" readonly="<%=readOnlyForAll%>"/>
+				     	<html:text styleClass="formFieldSized10" size="30" styleId="<%=quantity%>" property="<%=quantity%>" readonly="<%=readOnlyForAll%>"/>
+				     	<span id="<%=unitSpan%>">&nbsp;</span>
 				    </td>
 				 </tr>
 				 <%
