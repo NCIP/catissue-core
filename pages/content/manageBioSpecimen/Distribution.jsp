@@ -23,7 +23,6 @@
 			comboToRefresh = document.getElementById(idCombo);
 			//To Clear the Combo Box
 			comboToRefresh.options.length = 0;
-			
 			var unit = document.getElementById(unitSpan);
 			var unitSpecimen = "";
 			var unitProperty = document.getElementById(hiddenProperty);
@@ -137,7 +136,7 @@
 			<%
 				}
 			%>
-			sname = sname + "</select><input type='hidden' name='" + hiddenUnitName + "' value=''>";
+			sname = sname + "</select><input type='hidden' name='" + hiddenUnitName + "' value='' id='" + hiddenUnitName + "'>";
 			spreqspecimen.innerHTML="" + sname;
 			
 			//Third Cell
@@ -426,7 +425,8 @@
 				%>
 				 <tr>
 				 	<td class="formSerialNumberField" width="5"><%=i%>.
-				 	<html:hidden property="<%=unitProperty%>"/>
+				 	<%--html:hidden property="<%=unitProperty%>"/--%>
+				 	<input type="hidden" property="<%=unitProperty%>" id="<%=unitProperty%>" />
 				 	</td>
 				 	<td class="formField">
 				     	<html:select property="<%=className%>" styleClass="formFieldSized10" styleId="<%=className%>" size="1" disabled="<%=readOnlyForAll%>" onchange="<%=fName%>">
