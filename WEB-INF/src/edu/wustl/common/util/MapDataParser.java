@@ -12,6 +12,8 @@ import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 
+import edu.wustl.common.util.logger.Logger;
+
 public class MapDataParser 
 {
 	private String packageName = "";
@@ -27,8 +29,17 @@ public class MapDataParser
 	{
 		Map map = new TreeMap();
 
-		map.put("ParticipantMedicalIdentifier:1_medicalRecordNumber","AAA");
-		map.put("ParticipantMedicalIdentifier:1_Site_systemIdentifier","1");
+		map.put("DistributedItem:1_Specimen_systemIdentifier","1");
+		map.put("DistributedItem:1_quantity","100");
+//		map.put("DistributedItem:1_unitSpan","mg");
+//		map.put("DistributedItem:1_unit","mg");
+		map.put("DistributedItem:1_Specimen_className","Tissue");
+		
+		map.put("DistributedItem:2_Specimen_systemIdentifier","2");
+		map.put("DistributedItem:2_quantity","200");
+//		map.put("DistributedItem:2_unitSpan","ml");
+//		map.put("DistributedItem:2_unit","ml");
+		map.put("DistributedItem:2_Specimen_className","Molecular");
 		
 		
 //		map.put("SpecimenRequirement#FluidSpecimenRequirement:1_pathologyStatus","Primary Tumor");
@@ -172,6 +183,13 @@ public class MapDataParser
 		else //case map.put("CollectionProtocolEvent.studyCalendarEventPoint", new Double(11));
 		{
 			className = str;
+			
+			StringTokenizer st = new StringTokenizer(className,"#");
+			if(st.countTokens()>1)
+			{
+				className = st.nextToken();
+			}
+			
 			return Utility.getValueFor(parentObj,className);
 		}
 	}
@@ -217,9 +235,14 @@ public class MapDataParser
 	{
 		MapDataParser aMapDataParser = new MapDataParser("edu.wustl.catissuecore.domain");
 		Map map = aMapDataParser.createMap();
-//		map = aMapDataParser.fixMap(map);
+		System.out.println(map);
+		//map = aMapDataParser.fixMap(map);
 		System.out.println(map);
 		Collection dataCollection = aMapDataParser.generateData(map);
 		System.out.println("Data: "+dataCollection);
 	}
+	
+	
+	
+
 }
