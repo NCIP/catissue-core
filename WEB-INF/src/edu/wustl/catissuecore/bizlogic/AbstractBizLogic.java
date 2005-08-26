@@ -147,15 +147,6 @@ public abstract class AbstractBizLogic
 		}
 	}
 
-    public Vector getAuthorizationData(AbstractDomainObject obj)
-    {
-        return new Vector();
-        
-    }
     
-    public Set getProtectionObjects(AbstractDomainObject obj)
-    {
-        return new HashSet();
-    }
 }
 
