@@ -123,7 +123,7 @@
 			spreqspecimen.className="formField";
 			sname="";
 			var unitName = "value(DistributedItem:" + (q+1) + "_unitSpan)";
-			var className = "value(DistributedItem:"+ (q+1) +"_className)";
+			var className = "value(DistributedItem:"+ (q+1) +"_Specimen_className)";
 			sname= "";
 			var name = "value(DistributedItem:" + (q+1) + "_Specimen_systemIdentifier)";
 			var hiddenUnitName = "value(DistributedItem:" + (q+1) + "_unit)";
@@ -413,8 +413,8 @@
 					String itemName = "value(DistributedItem:"+i+"_Specimen_systemIdentifier)";
 					String quantity = "value(DistributedItem:"+i+"_quantity)";
 					String unitSpan = "value(DistributedItem:"+i+"_unitSpan)";
-					String className = "value(DistributedItem:"+i+"_className)";
-					String key = "DistributedItem:" + i + "_className";
+					String className = "value(DistributedItem:"+i+"_Specimen_className)";
+					String key = "DistributedItem:" + i + "_Specimen_className";
 					String unitKey = "DistributedItem:" + i + "_unit";
 					String unitProperty = "value(DistributedItem:"+i+"_unit)";
 					String fName = "onSpecimenTypeChange(this,'" + unitSpan + "','" + itemName + "','" + unitProperty + "')";
