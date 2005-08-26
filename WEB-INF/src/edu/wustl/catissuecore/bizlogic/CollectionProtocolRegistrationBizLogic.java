@@ -10,11 +10,20 @@
 
 package edu.wustl.catissuecore.bizlogic;
 
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+
 import edu.wustl.catissuecore.dao.DAO;
+import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Participant;
+import edu.wustl.common.security.SecurityManager;
+import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * UserHDAO is used to add user information into the database using Hibernate.
@@ -58,6 +67,15 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 		}
 
 		dao.insert(collectionProtocolRegistration, true);
+		
+//		try
+//        {
+//		    SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null,getProtectionObjects(participant),getDynamicGroups(participant));
+//        }
+//        catch (SMException e)
+//        {
+//            Logger.out.error("Exception in Authorization: "+e.getMessage(),e);
+//        }
 	}
 
 	/**
@@ -69,4 +87,31 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 	protected void update(DAO dao, Object obj) throws DAOException
 	{
 	}
+
+	public Set getProtectionObjects(AbstractDomainObject obj)
+    {
+        Set protectionObjects = new HashSet();
+        
+        CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration) obj;
+
+		Participant participant = null;
+		//Case of registering Participant on its participant ID
+		if(collectionProtocolRegistration.getParticipant()!=null)
+		{
+		    protectionObjects.add(collectionProtocolRegistration.getParticipant());
+		}
+        Logger.out.debug(protectionObjects.toString());
+        return protectionObjects;
+    }
+
+    public String[] getDynamicGroups(AbstractDomainObject obj)
+    {
+        String[] dynamicGroups=null;
+        CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration) obj;
+        dynamicGroups = new String[1];
+        dynamicGroups[0] = "COLLECTION_PROTOCOL_"+collectionProtocolRegistration.getCollectionProtocol().getSystemIdentifier();
+        return dynamicGroups;
+        
+    }
+	
 }

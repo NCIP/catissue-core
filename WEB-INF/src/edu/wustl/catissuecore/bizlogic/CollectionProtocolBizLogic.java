@@ -26,7 +26,7 @@ import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.Roles;
-import edu.wustl.common.beans.UserGroupRoleProtectionGroupBean;
+import edu.wustl.common.beans.SecurityDataBean;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.util.dbManager.DAOException;
@@ -43,6 +43,7 @@ public class CollectionProtocolBizLogic extends DefaultBizLogic implements Roles
      * Saves the CollectionProtocol object in the database.
      * @param session The session in which the object is saved.
      * @param obj The CollectionProtocol object to be saved.
+     * @throws HibernateException Exception thrown during hibernate operations.
      * @throws DAOException 
      */
 	protected void insert(DAO dao, Object obj) throws DAOException
@@ -91,7 +92,7 @@ public class CollectionProtocolBizLogic extends DefaultBizLogic implements Roles
 		
 //		try
 //        {
-//            SecurityManager.getInstance(this.getClass()).insertAuthorizationData((AbstractDomainObject) obj,this);
+//            SecurityManager.getInstance(this.getClass()).insertAuthorizationData(getAuthorizationData(collectionProtocol),getProtectionObjects(collectionProtocol),getDynamicGroups(collectionProtocol));
 //        }
 //        catch (SMException e)
 //        {
@@ -140,10 +141,10 @@ public class CollectionProtocolBizLogic extends DefaultBizLogic implements Roles
             Logger.out.error("Exception in Authorization: "+e.getMessage(),e);
         }
         String protectionGroupName = new String("COLLECTION_PROTOCOL_"+collectionProtocol.getSystemIdentifier());
-        UserGroupRoleProtectionGroupBean userGroupRoleProtectionGroupBean = new UserGroupRoleProtectionGroupBean();
+        SecurityDataBean userGroupRoleProtectionGroupBean = new SecurityDataBean();
         userGroupRoleProtectionGroupBean.setUser(userId);
         userGroupRoleProtectionGroupBean.setRoleName(PI);
-        userGroupRoleProtectionGroupBean.setGroupName("PI_"+collectionProtocol.getPrincipalInvestigator().getSystemIdentifier()+"COLLECTION_PROTOCOL_"+collectionProtocol.getSystemIdentifier());
+        userGroupRoleProtectionGroupBean.setGroupName("PI_"+collectionProtocol.getPrincipalInvestigator().getSystemIdentifier()+"_COLLECTION_PROTOCOL_"+collectionProtocol.getSystemIdentifier());
         userGroupRoleProtectionGroupBean.setProtectionGroupName(protectionGroupName);
         userGroupRoleProtectionGroupBean.setGroup(group);
         authorizationData.add(userGroupRoleProtectionGroupBean);
@@ -168,6 +169,12 @@ public class CollectionProtocolBizLogic extends DefaultBizLogic implements Roles
         Logger.out.debug(protectionObjects.toString());
         return protectionObjects;
     }
-    
+
+    public String[] getDynamicGroups(AbstractDomainObject obj)
+    {
+        String[] dynamicGroups=null;
+        return dynamicGroups;
+        
+    }
     
 }
