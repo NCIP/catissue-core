@@ -409,7 +409,7 @@ String bhTypeArray [] = (String []) request.getAttribute(Constants.BIOHAZARD_TYP
 					</td>
 				     <td class="formField" colspan="4">
 				     	<html:select property="tissueSite" styleClass="formFieldSized15" styleId="tissueSite" size="1" disabled="<%=readOnlyForAll%>">
-							<html:options name="tissueSiteList" labelName="tissueSiteList"/>		
+							<html:options collection="<%=Constants.TISSUE_SITE_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
 						<%
 							String url = "ShowFramedPage.do?pageOf=pageOfTissueSite&propertyName=tissueSite";			

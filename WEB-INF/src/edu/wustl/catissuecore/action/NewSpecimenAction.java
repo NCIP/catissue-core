@@ -26,6 +26,7 @@ import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.cde.CDEManager;
 
 
 /**
@@ -120,7 +121,10 @@ public class NewSpecimenAction extends Action
         
         request.setAttribute(Constants.SPECIMEN_SUB_TYPE_LIST, Constants.SPECIMEN_SUB_TYPE_VALUES);
         
-        request.setAttribute(Constants.TISSUE_SITE_LIST,Constants.TISSUE_SITE_ARRAY);
+        //request.setAttribute(Constants.TISSUE_SITE_LIST,Constants.TISSUE_SITE_ARRAY);
+    	List tissueSiteList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_TISSUE_SITE);
+    	request.setAttribute(Constants.TISSUE_SITE_LIST, tissueSiteList);
+
         
         request.setAttribute(Constants.TISSUE_SIDE_LIST,Constants.TISSUE_SIDE_VALUES);
         
