@@ -12,14 +12,23 @@ package edu.wustl.catissuecore.dao;
 
 import java.util.List;
 
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
+//import org.hibernate.HibernateException;
+//import org.hibernate.Query;
+//import org.hibernate.Session;
+//import org.hibernate.Transaction;
+import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.Query;
+import net.sf.hibernate.Session;
+import net.sf.hibernate.Transaction;
 
 import edu.wustl.catissuecore.audit.AuditManager;
 import edu.wustl.catissuecore.audit.Auditable;
+import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.Department;
+import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.domain.StorageType;
+import edu.wustl.catissuecore.domain.TissueSpecimen;
+import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.exception.AuditException;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;
@@ -367,6 +376,9 @@ public class HibernateDAO extends AbstractDAO
 	
 	public static void main(String[] args) throws Exception
 	{
+		StorageType storageType = null;
+		User  user = null;
+		
 		Variables.catissueHome = System.getProperty("user.dir");
 		Logger.configure("Application.properties");
 		
@@ -384,10 +396,16 @@ public class HibernateDAO extends AbstractDAO
 //    		specimen.getBiohazardCollection().add(biohazard2);
     		
 //	    	dao.insert(specimen,false);
-    		Department dept = new Department();
-    		dept.setName("AABBCC1");
-    		dao.insert(dept,false);
+//    		Department dept = new Department();
+//    		dept.setName("AABBCC1");
+//    		dao.insert(dept,false);
+    		
+    		storageType = (StorageType)dao.retrieve(StorageType.class.getName(),new Long(1));
+    		//user = (User)dao.retrieve(User.class.getName(),new Long(1));
+    		
 	    	dao.commit();
+	    	
+	    	
 		}
     	catch(DAOException ex)
 		{
@@ -403,5 +421,11 @@ public class HibernateDAO extends AbstractDAO
 		}
     	
     	dao.closeSession();
+    	
+    	System.out.println("storageType "+storageType.getSystemIdentifier());
+    	System.out.println("StorageCapacity "+storageType.getDefaultStorageCapacity().getSystemIdentifier());
+
+//    	System.out.println("user "+user.getSystemIdentifier());
+//    	System.out.println("Department "+user.getDepartment().getSystemIdentifier());
 	}
 }

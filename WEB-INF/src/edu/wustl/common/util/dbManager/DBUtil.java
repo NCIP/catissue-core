@@ -5,10 +5,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.util.Properties;
 
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
+import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.Session;
+import net.sf.hibernate.SessionFactory;
+import net.sf.hibernate.cfg.Configuration;
 
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.util.logger.Logger;

@@ -6,9 +6,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
-import org.hibernate.HibernateException;
-import org.hibernate.cfg.Configuration;
-import org.hibernate.tool.hbm2ddl.SchemaExport;
+import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.cfg.Configuration;
+import net.sf.hibernate.tool.hbm2ddl.SchemaExport;
 
 /*
  * Created on Feb 20, 2004
