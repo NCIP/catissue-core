@@ -30,11 +30,11 @@
         <pathelement location="${extra_lib.dir}/commons-net-1.2.2.jar"/>
 		<pathelement location="${extra_lib.dir}/hibernate-tools.jar"/>
 		<pathelement location="${extra_lib.dir}/servlet-api.jar"/>
-		<pathelement location="${extra_lib.dir}/xdoclet-1.2.jar"/>
-		<pathelement location="${extra_lib.dir}/xdoclet-hibernate-module-1.2.jar"/>
-		<pathelement location="${extra_lib.dir}/xdoclet-xdoclet-module-1.2.jar"/>
+		<pathelement location="${extra_lib.dir}/xdoclet-1.2.3.jar"/>
+		<pathelement location="${extra_lib.dir}/xdoclet-hibernate-module-1.2.3.jar"/>
+		<pathelement location="${extra_lib.dir}/xdoclet-xdoclet-module-1.2.3.jar"/>
 		<pathelement location="${extra_lib.dir}/xerces.jar"/>
-		<pathelement location="${extra_lib.dir}/xjavadoc-1.0.2.jar"/>
+		<pathelement location="${extra_lib.dir}/xjavadoc-1.1.jar"/>
 		<pathelement location="${extra_lib.dir}/xsdlib.jar"/>
 	</path>
 	
@@ -176,19 +176,33 @@
 				<include name="**/domain/*.java"/>
 				<include name="**/cde/*.java"/>
 			</fileset>
-    		<hibernate version="2.0"/>
+    		<hibernate version="3.0"/>
 		</hibernatedoclet>	
 		
 		<!-- Upgrade grammar from Hibernate1 to Hibernate2 -->
-	    <replace dir="${src.dir}">
+	    <!--replace dir="${src.dir}">
 	    	<include name="**/domain/*.hbm.xml"/>
 	        <include name="**/cde/*.hbm.xml"/>
 	        <replacefilter token="readonly=" value="inverse="/>
 	        <replacefilter token="role=" value="name="/>
 	    	<replacefilter token="2.0//EN" value="3.0//EN"/>
 	        <replacefilter token="hibernate-mapping-2.0.dtd" value="hibernate-mapping-3.0.dtd"/>
-	    </replace>
+	    </replace-->
 	    
+    	<replace dir="${src.dir}" value="&lt;hibernate-mapping default-lazy=&quot;false&quot; &gt;">
+    	         <include name="**/*.hbm.xml"/>
+    	         <replacetoken><![CDATA[<hibernate-mapping>]]></replacetoken>
+    	       </replace>
+    	       <replace dir="${src.dir}" value="Hibernate Mapping DTD 3.0">
+    	         <include name="**/*.hbm.xml"/>
+    	         <replacetoken>Hibernate Mapping DTD 2.0</replacetoken>
+    	       </replace>
+    	       <replace dir="${src.dir}" value="hibernate-mapping-3.0.dtd">
+    	         <include name="**/*.hbm.xml"/>
+    	         <replacetoken>hibernate-mapping-2.0.dtd</replacetoken>
+    	       </replace>
+
+    	
 	    <copy todir="${hbm.dir}">
         	<!--fileset dir="${src.dir}/edu/wustl/catissuecore/domain">
             	<include name="*.hbm.xml"/>
@@ -239,3 +253,7 @@
 	    </schemaexport>
 	</target>
 </project>
+
+
+
+
