@@ -13,7 +13,6 @@ package edu.wustl.catissuecore.bizlogic;
 import java.util.Collection;
 import java.util.Iterator;
 
-import org.hibernate.HibernateException;
 
 import edu.wustl.catissuecore.dao.DAO;
 import edu.wustl.catissuecore.domain.Participant;
@@ -55,7 +54,6 @@ public class ParticipantBizLogic extends DefaultBizLogic
      * Updates the persistent object in the database.
      * @param session The session in which the object is saved.
      * @param obj The object to be updated.
-     * @throws HibernateException Exception thrown during hibernate operations.
      * @throws DAOException 
      */
 	protected void update(DAO dao, Object obj) throws DAOException 

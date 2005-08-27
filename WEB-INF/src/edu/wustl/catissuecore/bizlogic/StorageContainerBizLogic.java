@@ -15,7 +15,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
-import org.hibernate.HibernateException;
 
 import edu.wustl.catissuecore.dao.AbstractDAO;
 import edu.wustl.catissuecore.dao.DAO;
@@ -138,7 +137,6 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
      * Updates the persistent object in the database.
      * @param session The session in which the object is saved.
      * @param obj The object to be updated.
-     * @throws HibernateException Exception thrown during hibernate operations.
      * @throws DAOException 
      */
 	protected void update(DAO dao, Object obj) throws DAOException

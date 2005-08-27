@@ -13,8 +13,6 @@ package edu.wustl.catissuecore.bizlogic;
 import java.util.Iterator;
 import java.util.List;
 
-import org.hibernate.HibernateException;
-
 import edu.wustl.catissuecore.dao.DAO;
 import edu.wustl.catissuecore.domain.DistributionProtocol;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
@@ -62,7 +60,6 @@ public class DistributionProtocolBizLogic extends DefaultBizLogic
      * Updates the persistent object in the database.
      * @param session The session in which the object is saved.
      * @param obj The object to be updated.
-     * @throws HibernateException Exception thrown during hibernate operations.
      * @throws DAOException 
      */
 	protected void update(DAO dao, Object obj) throws DAOException
