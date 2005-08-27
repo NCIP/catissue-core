@@ -72,6 +72,7 @@ public class CDEHandler
 		if(obj!= null)
 		{
 			XMLCDE xmlCDE = (XMLCDE)obj;
+			System.out.println("xmlCDE "+xmlCDE.getName());
 			
 			/** Retrieve CDE from cache */
 			if(xmlCDE.isCache())
@@ -93,7 +94,7 @@ public class CDEHandler
 					try
 					{
 						AbstractBizLogic bizLogic = BizLogicFactory.getBizLogic(-1);
-						List list = bizLogic.retrieve(CDEImpl.class.getName(),"publicid",publicID);
+						List list = bizLogic.retrieve(CDEImpl.class.getName(),"publicId",publicID);
 						if(!list.isEmpty())
 						{
 							cde =  (CDE)list.get(0);
