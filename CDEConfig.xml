@@ -28,5 +28,16 @@
 		<depthOfHierarchyTree>2</depthOfHierarchyTree> 
 	</XMLPermissibleValues>
 	</XMLCDE>
+	
+	<XMLCDE cache="true" lazyLoading="false">
+	<name>Tissue Site</name>
+	<publicId>2003987</publicId>
+	<XMLPermissibleValues>
+		<evsTerminology>NCI-THESAURAUS</evsTerminology>
+		<conceptCode>PV</conceptCode> 
+		<parentConceptCode></parentConceptCode>
+		<depthOfHierarchyTree>6</depthOfHierarchyTree> 
+	</XMLPermissibleValues>
+	</XMLCDE>
 
 </XMLCDE_CACHE>
