@@ -1124,5 +1124,7 @@ public class Constants
 	
 	public static final  HashMap STATIC_PROTECTION_GROUPS_FOR_OBJECT_TYPES = new HashMap();
 
-
+	
+	public static final String CDE_CONF_FILE = "CDEConfig.xml";
+	public static final String CDE_NAME_TISSUE_SITE = "Tissue Site";
 }
