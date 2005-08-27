@@ -8,6 +8,7 @@ package edu.wustl.common.cde;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -17,7 +18,9 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;
+import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.cde.xml.XMLCDE;
 import edu.wustl.common.cde.xml.XMLCDECACHE;
 import edu.wustl.common.util.logger.Logger;
@@ -27,9 +30,17 @@ import edu.wustl.common.util.logger.Logger;
 public class CDEManager 
 {
 	public static CDEManager cdeManager = new CDEManager();
+	
+	public static CDEManager getCDEManager()
+	{
+		return cdeManager;
+	}
+	
+	
+	
 	private Map cdeXMLMAP; 
 	private CDEHandler cdeHandler;
-	public CDEManager()
+	private CDEManager()
 	{
 		cdeXMLMAP = new HashMap();
 		
@@ -45,7 +56,7 @@ public class CDEManager
             // unmarshal a root instance document into a tree of Java content
             // objects composed of classes from the pspl.cde package.
             XMLCDECACHE root = 
-                (XMLCDECACHE)u.unmarshal( new FileInputStream( "CDEConfig.xml" ) );
+                (XMLCDECACHE)u.unmarshal( new FileInputStream( Variables.catissueHome+System.getProperty("file.separator")+Constants.CDE_CONF_FILE));
                 
             // display the cde details
 			List xmlCDEList = root.getXMLCDE();
@@ -99,7 +110,42 @@ public class CDEManager
 		Variables.catissueHome = System.getProperty("user.dir");
 		Logger.configure("Application.properties");
 		
-		CDEManager aCDEManager = new CDEManager();
-		aCDEManager.refreshCache();
+		List list = CDEManager.getCDEManager().getList("Tissue Site");
+		System.out.println("list "+list.size());
+//		CDEManager aCDEManager = new CDEManager();
+//		aCDEManager.refreshCache();
+	}
+	
+	public List getList(String cdeName)
+	{
+		List list = new ArrayList();
+		
+		CDE cde = getCDE(cdeName);
+		
+		Iterator iterator = cde.getPermissibleValues().iterator();
+		while(iterator.hasNext())
+		{
+			PermissibleValue permissibleValue = (PermissibleValue)iterator.next();
+			List pvList = loadPermissibleValue(permissibleValue);
+			list.addAll(pvList);
+		}
+		return list;
+	}
+	
+	private List loadPermissibleValue(PermissibleValue permissibleValue)
+	{
+		List pvList = new ArrayList();
+		
+		String value = permissibleValue.getValue();
+		pvList.add(new NameValueBean(value,value));
+		
+		Iterator iterator = permissibleValue.getSubPermissibleValues().iterator();
+		while(iterator.hasNext())
+		{
+			PermissibleValue subPermissibleValue = (PermissibleValue)iterator.next();
+			List subPVList = loadPermissibleValue(subPermissibleValue);
+			pvList.addAll(subPVList);
+		}
+		return pvList;
 	}
 }
