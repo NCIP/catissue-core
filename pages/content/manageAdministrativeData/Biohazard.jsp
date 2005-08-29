@@ -122,7 +122,8 @@
 		
 			<td class="formField">
 				<html:select property="type" styleClass="formFieldSized15" styleId="type" size="1">
-					<html:options name="biohazardTypeList" labelName="biohazardTypeList" />
+					<%--html:options name="biohazardTypeList" labelName="biohazardTypeList" /--%>
+					<html:options collection="<%=Constants.BIOHAZARD_TYPE_LIST%>" labelProperty="name" property="value"/>
 				</html:select>
 			</td>
 		</tr>

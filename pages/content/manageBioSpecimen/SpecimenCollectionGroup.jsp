@@ -272,7 +272,7 @@
 					 </td>
 				     <td class="formField">
 				     	<html:select property="clinicalStatus" styleClass="formFieldSized" styleId="clinicalStatus" size="1" disabled="<%=readOnlyForAll%>">
-							<html:options name="<%=Constants.CLINICAL_STATUS_LIST%>" labelName="<%=Constants.CLINICAL_STATUS_LIST%>"/>		
+							<html:options collection="<%=Constants.CLINICAL_STATUS_LIST%>" labelProperty="name" property="value"/>		
 						</html:select>
 		        	  </td>
 				 </tr>

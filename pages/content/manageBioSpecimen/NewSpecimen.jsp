@@ -3,6 +3,7 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 
 <%@ page import="java.util.List,java.util.ListIterator"%>
+<%@ page import="edu.wustl.common.beans.NameValueBean"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.NewSpecimenForm"%>
 
@@ -10,6 +11,8 @@
 String bhIdArray [] = (String []) request.getAttribute(Constants.BIOHAZARD_ID_LIST);
 String bhNameArray [] = (String []) request.getAttribute(Constants.BIOHAZARD_NAME_LIST);
 String bhTypeArray [] = (String []) request.getAttribute(Constants.BIOHAZARD_TYPES_LIST);
+
+List biohazardList = (List)request.getAttribute(Constants.BIOHAZARD_TYPE_LIST);
 %>
 <head>
 	<script language="JavaScript">
@@ -169,11 +172,15 @@ String bhTypeArray [] = (String []) request.getAttribute(Constants.BIOHAZARD_TYP
 			var name = "biohazardValue(Biohazard:" + (q+1) + "_type)";
 			sname="<select name='" + name + "' size='1' class='formFieldSized15' id='" + name + "' onchange=onBiohazardTypeSelected(this)>";
 			<%
-					for(int i=0;i<Constants.BIOHAZARD_TYPE_ARRAY.length;i++)
+					if(biohazardList != null && biohazardList.size() != 0)
 					{
+						for(int i=0;i<biohazardList.size();i++)
+						{
+							NameValueBean bean = (NameValueBean)biohazardList.get(i);
 			%>
-						sname = sname + "<option value='<%=Constants.BIOHAZARD_TYPE_ARRAY[i]%>'><%=Constants.BIOHAZARD_TYPE_ARRAY[i]%></option>";
-			<%		}
+							sname = sname + "<option value='<%=bean.getValue()%>'><%=bean.getName()%></option>";
+			<%			}
+					}
 			%>
 			sname = sname + "</select>";
 			spreqtype.innerHTML="" + sname;
@@ -640,7 +647,8 @@ String bhTypeArray [] = (String []) request.getAttribute(Constants.BIOHAZARD_TYP
 					 	<td class="formSerialNumberField" width="5"><%=i%>.</td>
 					    <td class="formField">
 				     		<html:select property="<%=bhType%>" styleClass="formFieldSized15" styleId="<%=bhType%>" size="1" onchange="onBiohazardTypeSelected(this)">
-								<html:options name="<%=Constants.BIOHAZARD_TYPE_LIST%>" labelName="<%=Constants.BIOHAZARD_TYPE_LIST%>" />
+								<%--html:options name="<%=Constants.BIOHAZARD_TYPE_LIST%>" labelName="<%=Constants.BIOHAZARD_TYPE_LIST%>" /--%>
+								<html:options collection="<%=Constants.BIOHAZARD_TYPE_LIST%>" labelProperty="name" property="value"/>
 							</html:select>
 				    	</td>
 				    	<td class="formField" colspan="2">

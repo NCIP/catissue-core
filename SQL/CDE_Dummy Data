@@ -326,7 +326,26 @@ INSERT INTO CATISSUE_PERMISSIBLE_VALUE  VALUES
 		  
 /***************** Embedding Medium ************************************/
 
+/***************** Biohazards ************************************/
 
+INSERT INTO CATISSUE_CDE VALUES ( '2004000' , 'Biohazard', 'Biohazard',  1.0);
+
+INSERT INTO CATISSUE_PERMISSIBLE_VALUE  VALUES 
+		  (85, 'C60','Carcinogen','EVS60',null,'Carcinogen','2004000' );
+
+INSERT INTO CATISSUE_PERMISSIBLE_VALUE  VALUES 
+		  (86, 'C61','Infectious','EVS61',null,'Infectious','2004000' );
+ 
+INSERT INTO CATISSUE_PERMISSIBLE_VALUE  VALUES 
+		  (87, 'C62','Mutagen','EVS62',null,'Mutagen','2004000' );
+
+INSERT INTO CATISSUE_PERMISSIBLE_VALUE  VALUES 
+		  (88, 'C63','Radioactive','EVS63',null,'Radioactive','2004000' );
+
+INSERT INTO CATISSUE_PERMISSIBLE_VALUE  VALUES 
+		  (89, 'C64','Toxic','EVS64',null,'Toxic','2004000' );
+		  
+/***************** Biohazards ************************************/
 
 
 

@@ -29,6 +29,7 @@ import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.cde.CDEManager;
 
 
 /**
@@ -54,7 +55,9 @@ public class SpecimenCollectionGroupAction extends Action
         request.setAttribute(Constants.OPERATION, operation);
 
 		// populating clinical Status field from constant array
-		request.setAttribute(Constants.CLINICAL_STATUS_LIST,Constants.CLINICAL_STATUS_ARRAY);
+		//request.setAttribute(Constants.CLINICAL_STATUS_LIST,Constants.CLINICAL_STATUS_ARRAY);
+        List clinicalStatusList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_CLINICAL_STATUS);
+    	request.setAttribute(Constants.CLINICAL_STATUS_LIST, clinicalStatusList);
 
 		try
 		{

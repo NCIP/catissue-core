@@ -11,6 +11,7 @@
 package edu.wustl.catissuecore.action;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -22,6 +23,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.cde.CDEManager;
 
 public class BiohazardAction extends Action//BaseAction
 {
@@ -40,8 +42,10 @@ public class BiohazardAction extends Action//BaseAction
         request.setAttribute(Constants.OPERATION, operation);
         
         //Sets the operation attribute to be used in the Add/Edit Institute Page. 
-        request.setAttribute(Constants.BIOHAZARD_TYPE_LIST, Constants.BIOHAZARD_TYPE_ARRAY);
-        
+        //request.setAttribute(Constants.BIOHAZARD_TYPE_LIST, Constants.BIOHAZARD_TYPE_ARRAY);
+        List biohazardList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_BIOHAZARD);
+    	request.setAttribute(Constants.BIOHAZARD_TYPE_LIST, biohazardList);
+    	
         return mapping.findForward(Constants.SUCCESS);
     }
 }
