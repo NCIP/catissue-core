@@ -1,72 +1,82 @@
+INSERT INTO CATISSUE_CDE VALUES ( '2003987' , 'Anatomic Site Name', 'Name of the organ site within the body referenced in primary site of disease, surgical intervention, or extent of disease documentation.',  1.0);
+
+INSERT INTO CATISSUE_PERMISSIBLE_VALUE  VALUES 
+		  (1, 'C34022','Anatomic Surface','C34022',null,'Anatomic Surface','2003987' );
 
 
-insert into CATISSUE_CDE values(
-   'p1',
-   'Sex',
-   'Def1',
-   'v1'
-);
+	INSERT INTO CATISSUE_PERMISSIBLE_VALUE  VALUES 
+		  (2, 'C12238','Anterior Surface of Epiglottis','C12238',1,'Anterior Surface of Epiglottis',null );
 
-insert into CATISSUE_CDE values(
-   'p2',
-   'Tissue',
-   'Def2',
-   'v2'
-);
+	
+	INSERT INTO CATISSUE_PERMISSIBLE_VALUE  VALUES 
+		  (3, 'C32107','Kidney','C32107',1,'Kidney',null );
+
+	INSERT INTO CATISSUE_PERMISSIBLE_VALUE  VALUES 
+		  (4, 'C29667','Body Surface','C29667',1,'Body Surface',null );
+
+	INSERT INTO CATISSUE_PERMISSIBLE_VALUE  VALUES 
+		  (5, 'C32224','Bone Surface','C32224',1,'Bone Surface',null );
+
+		INSERT INTO CATISSUE_PERMISSIBLE_VALUE  VALUES 
+		  (6, 'C32143','Articular Bone Surface','C32143',5,'Articular Bone Surface',null );
+
+		INSERT INTO CATISSUE_PERMISSIBLE_VALUE  VALUES 
+		  (7, 'C32460','Diaphysis of the Bone','C32460',5,'Diaphysis of the Bone',null );
+
+		INSERT INTO CATISSUE_PERMISSIBLE_VALUE  VALUES 
+		  (8, 'C32529','Epiphysis of the Bone','C32529',5,'Epiphysis of the Bone',null );
+
+		INSERT INTO CATISSUE_PERMISSIBLE_VALUE  VALUES 
+		  (9, 'C33173','Non-Articular Bone Surface','C33173',5,'Non-Articular Bone Surface',null );
+
+INSERT INTO CATISSUE_PERMISSIBLE_VALUE  VALUES 
+		  (10, 'C34070','Normal Cell Part','C34070',null,'Normal Cell Part','2003987' );
+
+	INSERT INTO CATISSUE_PERMISSIBLE_VALUE  VALUES 
+		  (11, 'C32073','Anatomical Structure','C32073',10,'Anatomical Structure',null );
+
+	INSERT INTO CATISSUE_PERMISSIBLE_VALUE  VALUES 
+		  (12, 'C13983','Cell Junction','C13983',10,'Cell Junction',null );
+
+		INSERT INTO CATISSUE_PERMISSIBLE_VALUE  VALUES 
+		  (13, 'C32530','Epithelial Cell Junction','C32530',12,'Epithelial Cell Junction',null );
+		  
+			INSERT INTO CATISSUE_PERMISSIBLE_VALUE  VALUES 
+			  (14, 'C13984','Anchoring Junction','C13984',13,'Anchoring Junction',null );
+
+			INSERT INTO CATISSUE_PERMISSIBLE_VALUE  VALUES 
+			  (15, 'C32272','Cell-to-Extracellular Matrix Junction','C32272',13,'Cell-to-Extracellular Matrix Junction',null );
+
+			INSERT INTO CATISSUE_PERMISSIBLE_VALUE  VALUES 
+			  (16, 'C13312','Gap Junction','C13312',13,'Gap Junction',null );
+
+			INSERT INTO CATISSUE_PERMISSIBLE_VALUE  VALUES 
+			  (17, 'C13333','Tight Junction','C13333',13,'Tight Junction',null );
+
+		INSERT INTO CATISSUE_PERMISSIBLE_VALUE  VALUES 
+		  (18, 'C13281','Synapse','C13281',12,'Synapse',null );
+
+			INSERT INTO CATISSUE_PERMISSIBLE_VALUE  VALUES 
+			  (19, 'C32175','Axoaxonic Synapse','C32175',18,'Axoaxonic Synapse',null );
+
+			INSERT INTO CATISSUE_PERMISSIBLE_VALUE  VALUES 
+			  (20, 'C32176','Axodendritic Synapse','C32176',18,'Axodendritic Synapse',null );
+
+			INSERT INTO CATISSUE_PERMISSIBLE_VALUE  VALUES 
+			  (21, 'C32302','Chemical Synapse','C32302',18,'Chemical Synapse',null );
+
+			INSERT INTO CATISSUE_PERMISSIBLE_VALUE  VALUES 
+			  (22, 'C32498','Chemical Synapse','C32498',18,'Electrical Synapse',null );
+	
+	INSERT INTO CATISSUE_PERMISSIBLE_VALUE  VALUES 
+		  (23, 'C32603','Cytoskeleton Filament','C32603',10,'Cytoskeleton Filament',null );
+
+INSERT INTO CATISSUE_PERMISSIBLE_VALUE  VALUES 
+		  (24, 'C38617','Head and Neck Part','C38617',null,'Head and Neck Part','2003987' );
+
+	INSERT INTO CATISSUE_PERMISSIBLE_VALUE  VALUES 
+		  (25, 'C12245','Anterior Wall of the Nasopharynx','C12245',24,'Anterior Wall of the Nasopharynx',null );
+ 
 
 
 
-insert into CATISSUE_PERMISSIBLE_VALUE values (
-   1,
-   'C0001',
-   'Def1',
-   'EVS1',
-   null,
-   'male',
-   'p1'
-);
-
-
-insert into CATISSUE_PERMISSIBLE_VALUE values (
-   2,
-   'C0002',
-   'Def2',
-   'EVS2',
-   null,
-   'female',
-   'p1'
-);
-
-
-
-insert into CATISSUE_PERMISSIBLE_VALUE values (
-   3,
-   'C0003',
-   'Def3',
-   'EVS3',
-   null,
-   'kidney',
-   'p2'
-);
-
-
-
-insert into CATISSUE_PERMISSIBLE_VALUE values (
-   4,
-   'C0004',
-   'Def4',
-   'EVS4',
-   3,
-   'Left kidney',
-   'p2'
-);
-
-insert into CATISSUE_PERMISSIBLE_VALUE values (
-   5,
-   'C0005',
-   'Def5',
-   'EVS5',
-   3,
-   'Right kidney',
-   'p2'
-);
