@@ -1,0 +1,23 @@
+insert into application values (1 , 'catissuecore' , 'catisssue core application' , 0 , 0 , '2005-07-23');
+
+
+insert into groups values (1 , 'administrator_group' , 'group of administrators' , '0000-00-00' , 1);
+insert into groups values (2 , 'supervisor_group' , 'group of supervisors' , '0000-00-00' , 1);
+insert into groups values (3 , 'technician_group' , 'group of technicians' , '0000-00-00' , 1);
+
+insert into protection_group values (1 , 'administrator_protection_group' , 'protection elements for administrators' , 1 , 0 , '0000-00-00' , null);
+insert into protection_group values (2 , 'supervisor_protection_group' , 'protection elements for supervisors' , 1 , 0 , '0000-00-00' , null);
+insert into protection_group values (3 , 'technician_protection_group' , 'protection elements for technicians' , 1 , 0 , '0000-00-00' , null);
+
+insert into role values (1 , 'administrator' , 'role for administrator' , 1 , 0 , '0000-00-00');
+insert into role values (2 , 'supervisor' , 'role for supervisor' , 1 , 0 , '0000-00-00');
+insert into role values (3 , 'technician' , 'role for technician' , 1 , 0 , '0000-00-00');
+
+insert into user values (1 , 'admin' , 'admin' , 'admin' , null , null , null , null , 'admin123' , 'aarti_sharma@persistent.co.in' , '2005-08-02' , null , '2005-08-02');
+
+insert into user_group values (1 , 1 , 1);
+
+insert into user_group_role_protection_group values (1 , null , 1 , 1 , 1 , '0000-00-00');
+insert into user_group_role_protection_group values (2 , null , 2 , 2 , 2 , '0000-00-00');
+insert into user_group_role_protection_group values (3 , null , 3 , 3 , 3 , '0000-00-00');
+
