@@ -10,13 +10,16 @@
 
 package edu.wustl.catissuecore.domain;
 
+import edu.wustl.catissuecore.actionForm.AbstractActionForm;
+import edu.wustl.catissuecore.exception.AssignDataException;
+
 /**
  * The combined anatomic state and pathological 
  * disease classification of a specimen.
  * @hibernate.class table="CATISSUE_SPECIMEN_CHARACTERISTICS"
  * @author gautam_shetty
  */
-public class SpecimenCharacteristics implements java.io.Serializable
+public class SpecimenCharacteristics extends AbstractDomainObject implements java.io.Serializable
 {
     private static final long serialVersionUID = 1234567890L;
     
@@ -130,4 +133,12 @@ public class SpecimenCharacteristics implements java.io.Serializable
     {
         this.pathologicalStatus = pathologicalStatus;
     }
+
+	/* (non-Javadoc)
+	 * @see edu.wustl.catissuecore.domain.AbstractDomainObject#setAllValues(edu.wustl.catissuecore.actionForm.AbstractActionForm)
+	 */
+	public void setAllValues(AbstractActionForm abstractForm) throws AssignDataException
+	{
+		
+	}
 }

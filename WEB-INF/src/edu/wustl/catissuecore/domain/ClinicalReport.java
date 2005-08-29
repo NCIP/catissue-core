@@ -10,7 +10,9 @@
 
 package edu.wustl.catissuecore.domain;
 
-import java.io.Serializable;
+import edu.wustl.catissuecore.actionForm.AbstractActionForm;
+import edu.wustl.catissuecore.exception.AssignDataException;
+
 
 /**
  * A clinical report associated with the participant 
@@ -18,7 +20,7 @@ import java.io.Serializable;
  * @hibernate.class table="CATISSUE_CLINICAL_REPORT"
  * @author gautam_shetty
  */
-public class ClinicalReport implements Serializable
+public class ClinicalReport extends AbstractDomainObject implements java.io.Serializable
 {
     private static final long serialVersionUID = 1234567890L;
 
@@ -105,4 +107,12 @@ public class ClinicalReport implements Serializable
     {
         this.participantMedicalIdentifier = participantMedicalIdentifier;
     }
+ 
+	/* (non-Javadoc)
+	 * @see edu.wustl.catissuecore.domain.AbstractDomainObject#setAllValues(edu.wustl.catissuecore.actionForm.AbstractActionForm)
+	 */
+	public void setAllValues(AbstractActionForm abstractForm) throws AssignDataException
+	{
+		
+	}
 }

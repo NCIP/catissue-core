@@ -9,11 +9,14 @@
 
 package edu.wustl.catissuecore.domain;
 
+import edu.wustl.catissuecore.actionForm.AbstractActionForm;
+import edu.wustl.catissuecore.exception.AssignDataException;
+
 /**
  * A medical record identification number that refers to a Participant.
  * @hibernate.class table="CATISSUE_PARTICIPANT_MEDICAL_IDENTIFIER"
  */
-public class ParticipantMedicalIdentifier implements java.io.Serializable
+public class ParticipantMedicalIdentifier extends AbstractDomainObject implements java.io.Serializable
 {
 	private static final long serialVersionUID = 1234567890L;
 
@@ -117,5 +120,13 @@ public class ParticipantMedicalIdentifier implements java.io.Serializable
 	public void setParticipant(Participant participant) 
 	{
 		this.participant = participant;
+	}
+
+	/* (non-Javadoc)
+	 * @see edu.wustl.catissuecore.domain.AbstractDomainObject#setAllValues(edu.wustl.catissuecore.actionForm.AbstractActionForm)
+	 */
+	public void setAllValues(AbstractActionForm abstractForm) throws AssignDataException
+	{
+	
 	}
 }

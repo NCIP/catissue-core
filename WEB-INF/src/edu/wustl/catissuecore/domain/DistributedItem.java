@@ -9,15 +9,17 @@
  */
 package edu.wustl.catissuecore.domain;
 
+import edu.wustl.catissuecore.actionForm.AbstractActionForm;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.Distribution;
+import edu.wustl.catissuecore.exception.AssignDataException;
 
 /**
  * A specimen that is distributed.
  * @hibernate.class table="CATISSUE_DISTRIBUTED_ITEM"
  * @author Aniruddha Phadnis
  */
-public class DistributedItem implements java.io.Serializable
+public class DistributedItem extends AbstractDomainObject implements java.io.Serializable
 {
 	private static final long serialVersionUID = 1234567890L;
 
@@ -128,5 +130,13 @@ public class DistributedItem implements java.io.Serializable
 	public void setDistribution(edu.wustl.catissuecore.domain.Distribution distribution)
 	{
 		this.distribution = distribution;
+	}
+
+	/* (non-Javadoc)
+	 * @see edu.wustl.catissuecore.domain.AbstractDomainObject#setAllValues(edu.wustl.catissuecore.actionForm.AbstractActionForm)
+	 */
+	public void setAllValues(AbstractActionForm abstractForm) throws AssignDataException
+	{
+				
 	}
 }

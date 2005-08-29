@@ -11,12 +11,15 @@ package edu.wustl.catissuecore.domain;
 
 import java.io.Serializable;
 
+import edu.wustl.catissuecore.actionForm.AbstractActionForm;
+import edu.wustl.catissuecore.exception.AssignDataException;
+
 /**
  * Capacity defined for a storage container.
  * @hibernate.class table="CATISSUE_STORAGE_CONTAINER_CAPACITY"
  * @author Aniruddha Phadnis
  */
-public class StorageContainerCapacity implements Serializable
+public class StorageContainerCapacity extends AbstractDomainObject implements java.io.Serializable
 {
 	private static final long serialVersionUID = 1234567890L;
 
@@ -99,5 +102,13 @@ public class StorageContainerCapacity implements Serializable
 	public void setTwoDimensionCapacity(Integer twoDimensionCapacity)
 	{
 		this.twoDimensionCapacity = twoDimensionCapacity;
+	}
+
+	/* (non-Javadoc)
+	 * @see edu.wustl.catissuecore.domain.AbstractDomainObject#setAllValues(edu.wustl.catissuecore.actionForm.AbstractActionForm)
+	 */
+	public void setAllValues(AbstractActionForm abstractForm) throws AssignDataException
+	{
+		
 	}
 }

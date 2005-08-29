@@ -9,11 +9,14 @@ package edu.wustl.catissuecore.domain;
 
 import java.io.Serializable;
 
+import edu.wustl.catissuecore.actionForm.AbstractActionForm;
+import edu.wustl.catissuecore.exception.AssignDataException;
+
 /**
  * @hibernate.class table="CATISSUE_QUERY_INTERFACE_TABLE_DATA"
  * @author gautam_shetty
  */
-public class QueryTableData implements Serializable
+public class QueryTableData extends AbstractDomainObject implements java.io.Serializable
 {
 
     private long identifier;
@@ -76,4 +79,30 @@ public class QueryTableData implements Serializable
     {
         this.tableName = tableName;
     }
+
+	/* (non-Javadoc)
+	 * @see edu.wustl.catissuecore.domain.AbstractDomainObject#setAllValues(edu.wustl.catissuecore.actionForm.AbstractActionForm)
+	 */
+	public void setAllValues(AbstractActionForm abstractForm) throws AssignDataException
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	/* (non-Javadoc)
+	 * @see edu.wustl.catissuecore.domain.AbstractDomainObject#getSystemIdentifier()
+	 */
+	public Long getSystemIdentifier()
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see edu.wustl.catissuecore.domain.AbstractDomainObject#setSystemIdentifier(java.lang.Long)
+	 */
+	public void setSystemIdentifier(Long systemIdentifier)
+	{
+		
+	}
 }

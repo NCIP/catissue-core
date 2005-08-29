@@ -12,13 +12,16 @@ package edu.wustl.catissuecore.domain;
 
 import java.io.Serializable;
 
+import edu.wustl.catissuecore.actionForm.AbstractActionForm;
+import edu.wustl.catissuecore.exception.AssignDataException;
+
 /**
  * A pre-existing, externally defined 
  * systemIdentifier associated with a specimen.
  * @hibernate.class table="CATISSUE_EXTERNAL_IDENTIFIER"
  * @author gautam_shetty
  */
-public class ExternalIdentifier implements Serializable
+public class ExternalIdentifier extends AbstractDomainObject implements java.io.Serializable
 {
     private static final long serialVersionUID = 1234567890L;
 
@@ -120,5 +123,14 @@ public class ExternalIdentifier implements Serializable
 	public void setSpecimen(Specimen specimen) 
 	{
 		this.specimen = specimen;
+	}
+
+	/* (non-Javadoc)
+	 * @see edu.wustl.catissuecore.domain.AbstractDomainObject#setAllValues(edu.wustl.catissuecore.actionForm.AbstractActionForm)
+	 */
+	public void setAllValues(AbstractActionForm abstractForm) throws AssignDataException
+	{
+	
+		
 	}
 }

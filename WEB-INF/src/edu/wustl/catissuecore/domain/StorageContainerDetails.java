@@ -9,12 +9,15 @@
  */
 package edu.wustl.catissuecore.domain;
 
+import edu.wustl.catissuecore.actionForm.AbstractActionForm;
+import edu.wustl.catissuecore.exception.AssignDataException;
+
 /**
  * Attributes of a Storage Container in the form of key-value pair.
  * @hibernate.class table="CATISSUE_STORAGE_CONTAINER_DETAILS"
  * @author Aniruddha Phadnis
  */
-public class StorageContainerDetails implements java.io.Serializable
+public class StorageContainerDetails extends AbstractDomainObject implements java.io.Serializable
 {
 	private static final long serialVersionUID = 1234567890L;
 
@@ -114,5 +117,13 @@ public class StorageContainerDetails implements java.io.Serializable
 	public void setStorageContainer(StorageContainer storageContainer)
 	{
 		this.storageContainer = storageContainer;
+	}
+
+	/* (non-Javadoc)
+	 * @see edu.wustl.catissuecore.domain.AbstractDomainObject#setAllValues(edu.wustl.catissuecore.actionForm.AbstractActionForm)
+	 */
+	public void setAllValues(AbstractActionForm abstractForm) throws AssignDataException
+	{
+		
 	}
 }
