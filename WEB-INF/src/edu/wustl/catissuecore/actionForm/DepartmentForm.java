@@ -146,14 +146,7 @@ public class DepartmentForm extends AbstractActionForm
         return Constants.DEPARTMENT_FORM_ID;
     }
     
-    /**
-     * Resets the values of all the fields.
-     * This method defined in ActionForm is overridden in this class.
-     */
-    public void reset(ActionMapping mapping, HttpServletRequest request)
-    {
-        reset();
-    }
+  
     
     /**
      * Resets the values of all the fields.

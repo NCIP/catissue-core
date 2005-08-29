@@ -135,11 +135,7 @@ public class ReportedProblemForm extends AbstractActionForm
      * Resets all the fields.
      * Overridden method defined in ActionForm.
      */
-    public void reset(ActionMapping mapping, HttpServletRequest request)
-    {
-        reset();
-    }
-
+ 
     /**
      * Returns the systemIdentifier assigned to the reported problem.
      * @return the systemIdentifier assigned to the reported problem.

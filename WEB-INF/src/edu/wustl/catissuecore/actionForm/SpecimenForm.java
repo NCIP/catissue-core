@@ -362,13 +362,7 @@ public class SpecimenForm extends AbstractActionForm
         this.externalIdentifier = new HashMap();
     }
     
-    /**
-     * Resets all fields.
-     */
-    public void reset(ActionMapping mapping, HttpServletRequest request)
-    {
-        reset();
-    }
+ 
     
     /**
      * Checks the operation to be performed is add operation.

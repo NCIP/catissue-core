@@ -55,13 +55,7 @@ public class CreateSpecimenForm extends SpecimenForm
         this.parentSpecimenId = parentSpecimenId;
     }
         
-    /**
-     * Resets all fields.
-     */
-    public void reset(ActionMapping mapping, HttpServletRequest request)
-    {
-        reset();
-    }
+ 
    
     protected void reset()
     {

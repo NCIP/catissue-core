@@ -133,16 +133,7 @@ public class CellSpecimenReviewParametersForm extends EventParametersForm
       }
 	
      
-     /**
-      * Resets the values of all the fields.
-      * This method defined in ActionForm is overridden in this class.
-      */
-     public void reset(ActionMapping mapping, HttpServletRequest request)
-     {
-         reset();
-         this.neoplasticCellularityPercentage = 0.0;
-         this.viableCellPercentage =0.0;
-     }
+ 
      
      protected void reset()
  	{

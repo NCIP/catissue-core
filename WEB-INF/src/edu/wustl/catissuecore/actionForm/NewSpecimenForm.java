@@ -190,13 +190,7 @@ public class NewSpecimenForm extends SpecimenForm
         this.biohazard = new HashMap();
     }
     
-    /**
-     * Resets all fields.
-     */
-    public void reset(ActionMapping mapping, HttpServletRequest request)
-    {
-        reset();
-    }
+  
     
     /**
      * Returns the id assigned to form bean.

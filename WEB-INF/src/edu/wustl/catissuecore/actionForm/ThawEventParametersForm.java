@@ -40,14 +40,7 @@ public class ThawEventParametersForm extends EventParametersForm
 		ThawEventParameters ThawEventParametersObject = (ThawEventParameters)abstractDomain ;
 	}
 
-    /**
-     * Resets the values of all the fields.
-     * This method defined in ActionForm is overridden in this class.
-     */
-    public void reset(ActionMapping mapping, HttpServletRequest request)
-    {
-        reset();
-    }
+   
 	 protected void reset()
 	 {
 	 	super.reset();

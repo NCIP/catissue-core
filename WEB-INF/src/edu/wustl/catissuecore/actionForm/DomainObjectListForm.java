@@ -201,15 +201,7 @@ public class DomainObjectListForm extends AbstractActionForm
     public void setAllValues(AbstractDomainObject abstractDomain)
     {}
     
-    /**
-     * Resets the values of all the fields.
-     * This method defined in ActionForm is overridden in this class.
-     */
-    public void reset(ActionMapping mapping, HttpServletRequest request)
-    {
-        reset();
-    }
-    
+
     /**
      * Overrides the validate method of ActionForm.
      * */
