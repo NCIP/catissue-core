@@ -112,7 +112,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	{
 		super.reset();
 		protocolCoordinatorIds = null;
-		this.outerCounter = 0;
+		this.outerCounter = 1;
 		this.values  = new HashMap();
 	}
 	

@@ -523,7 +523,7 @@ function getSubDivCount(subdivtag)
 			colForm = (CollectionProtocolForm)obj;
 			maxCount = colForm.getOuterCounter();
 		}
-	
+
 		for(int counter=1;counter<=maxCount;counter++)
 		{
 			String commonLabel = "value(CollectionProtocolEvent:" + counter;
@@ -559,8 +559,7 @@ function getSubDivCount(subdivtag)
 					</td>
 					
 					<td class="formField" colspan=2>
-						<html:select property="<%=fldName%>" 
-										styleClass="formField" styleId="<%=fldName%>" size="1">
+						<html:select property="<%=fldName%>" styleClass="formField" styleId="<%=fldName%>" size="1">
 							<html:options collection="<%=Constants.CLINICAL_STATUS_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
 					</td>
