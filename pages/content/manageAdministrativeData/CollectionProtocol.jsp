@@ -760,7 +760,6 @@ function getSubDivCount(subdivtag)
 	<!-- NEW COLLECTIONPROTOCOL ENTRY ends-->
 </table>
 </html:form>
-<hr>
 
 
 <html:form action="DummyCollectionProtocol.do">

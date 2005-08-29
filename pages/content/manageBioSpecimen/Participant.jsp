@@ -101,10 +101,10 @@
 
 
 	<html:errors />
-
+<html:form action="<%=Constants.PARTICIPANT_ADD_ACTION%>">
 		<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
 			
-		   <html:form action="<%=Constants.PARTICIPANT_ADD_ACTION%>">
+		   
 		   		   
 		   <logic:equal name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
 		   	<tr>
@@ -420,5 +420,7 @@
 			 </tr>
 			 
 			 <!-- NEW PARTICIPANT REGISTRATION ends-->
-			 </html:form>
+			
 		</table>
+	 </html:form>	
+		

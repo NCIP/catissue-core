@@ -61,6 +61,7 @@
 		}
 		
 //  function to insert a row in the inner block
+
 function insRow(subdivtag)
 {
 
@@ -105,6 +106,66 @@ function insRow(subdivtag)
 
 	spreqsubtype.innerHTML="" + sname;
 }
+
+/*
+// using createelement functions
+function insRow(subdivtag)
+{
+
+		var val = parseInt(document.forms[0].counter.value);
+		val = val + 1;
+		document.forms[0].counter.value = val;
+
+	var r = new Array(); 
+	r = document.getElementById(subdivtag).rows;
+	
+	var q = r.length;
+	var x=document.getElementById(subdivtag).insertRow(q);
+	
+	// First Cell
+	var spreqno=x.insertCell(0);
+	spreqno.className="formSerialNumberField";
+	sname=(q+1);
+	var textNode = document.createTextNode(sname);
+	spreqno.appendChild(textNode);
+
+// -------------------------------------------------
+	//Second Cell
+	var spreqtype=x.insertCell(1);
+	spreqtype.className="formField";
+	spreqtype.colSpan=2;
+	sname="";
+	var name = "value(StorageContainerDetails:" + (q+1) +"_parameterName)";
+	var txtInp = document.createElement('input');
+
+	txtInp.setAttribute('type', 'text');
+	txtInp.setAttribute('name', name);
+	txtInp.setAttribute('class', 'formFieldSized10');
+	txtInp.setAttribute('id', name );
+//--		document.storageContainerForm.appendChild(txtInp);
+		
+	spreqtype.appendChild(txtInp);
+// -------------------------------------------------
+
+
+	//Third Cell
+	var spreqsubtype=x.insertCell(2);
+	spreqsubtype.className="formField";
+
+	var name1 = "value(StorageContainerDetails:" + (q+1) +"_parameterValue)";
+	var txtInp1 = document.createElement('input');
+
+	txtInp1.setAttribute('type', 'text');
+	txtInp1.setAttribute('name', name1);
+	txtInp1.setAttribute('class', 'formFieldSized10');
+	txtInp1.setAttribute('id', name1 );
+	
+//--		document.storageContainerForm.appendChild(txtInp1);
+	spreqsubtype.appendChild(txtInp1);
+// -------------------------------------------------
+
+}
+*/
 	</script>
 </head>
 
@@ -137,10 +198,10 @@ function insRow(subdivtag)
 
 <html:errors />
 
+<html:form action="<%=Constants.STORAGE_CONTAINER_ADD_ACTION%>" method="get">	
 
-<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
+	<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
 	
-	<html:form action="<%=Constants.STORAGE_CONTAINER_ADD_ACTION%>">
 		<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>">
 			<!-- ENTER IDENTIFIER BEGINS-->
 			<br />
@@ -465,5 +526,5 @@ function insRow(subdivtag)
 		</tr>
 
 		<!-- NEW STORAGE CONTAINER REGISTRATION ends-->
-	</html:form>
-</table>
+	</table>
+</html:form> 

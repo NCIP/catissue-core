@@ -236,9 +236,9 @@ String bhTypeArray [] = (String []) request.getAttribute(Constants.BIOHAZARD_TYP
 
 	<html:errors />
 
+   <html:form action="<%=Constants.SPECIMEN_ADD_ACTION%>">
+
 		<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="500">
-			
-		   <html:form action="<%=Constants.SPECIMEN_ADD_ACTION%>">
 		   
 		   <logic:equal name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
 		   	<tr>
@@ -701,5 +701,5 @@ String bhTypeArray [] = (String []) request.getAttribute(Constants.BIOHAZARD_TYP
 				
 			 
 			 <!-- NEW SPECIMEN REGISTRATION ends-->
-			 </html:form>
-</table>
+	</table>
+ </html:form>	
