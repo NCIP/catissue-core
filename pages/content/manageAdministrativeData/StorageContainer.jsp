@@ -198,7 +198,7 @@ function insRow(subdivtag)
 
 <html:errors />
 
-<html:form action="<%=Constants.STORAGE_CONTAINER_ADD_ACTION%>" method="get">	
+<html:form action="<%=Constants.STORAGE_CONTAINER_ADD_ACTION%>" method="post">	
 
 	<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
 	
