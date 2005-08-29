@@ -150,7 +150,7 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 	        System.out.println("MAP B "+map);
 	        MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.domain");
 	        this.collectionProtocolEventCollection = parser.generateData(map);
-	        System.out.println("storageContainerDetailsCollection "+this.collectionProtocolEventCollection);
+	        System.out.println("collectionProtocolEventCollection "+this.collectionProtocolEventCollection);
         }
         catch (Exception excp)
         {
