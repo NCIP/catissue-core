@@ -119,6 +119,7 @@ public class CDEManager
 	public List getList(String cdeName)
 	{
 		List list = new ArrayList();
+		list.add(new NameValueBean(Constants.SELECT_OPTION,"-1"));
 		
 		CDE cde = getCDE(cdeName);
 		
