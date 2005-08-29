@@ -1140,4 +1140,5 @@ public class Constants
 	public static final String CDE_NAME_CONTAINER = "Container";
 	public static final String CDE_NAME_METHOD = "Method";
 	public static final String CDE_NAME_EMBEDDING_MEDIUM = "Embedding Medium";
+	public static final String CDE_NAME_BIOHAZARD = "Biohazard";
 }
