@@ -11,6 +11,7 @@
 package edu.wustl.catissuecore.action;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -21,6 +22,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.cde.CDEManager;
 
 /**
  * This class initializes the fields in the User Add/Edit webpage.
@@ -38,8 +40,9 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
     {
     	super.execute(mapping, form, request, response);
     	
-    	String [] clinicalStatusArry = {Constants.SELECT_OPTION, "Pre-Opt","Post-Opt"};
-    	request.setAttribute(Constants.CLINICAL_STATUS_LIST, clinicalStatusArry);
+    	//String [] clinicalStatusArry = {Constants.SELECT_OPTION, "Pre-Opt","Post-Opt"};
+    	List clinicalStatusList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_CLINICAL_STATUS);
+    	request.setAttribute(Constants.CLINICAL_STATUS_LIST, clinicalStatusList);
 	    	
         return mapping.findForward(Constants.SUCCESS);
     }

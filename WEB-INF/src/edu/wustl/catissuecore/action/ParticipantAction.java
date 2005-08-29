@@ -25,6 +25,7 @@ import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.ParticipantBizLogic;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.cde.CDEManager;
 
 
 /**
@@ -48,10 +49,14 @@ public class ParticipantAction extends Action
         request.setAttribute(Constants.OPERATION,operation);
         
         //Sets the genderList attribute to be used in the Add/Edit Participant Page. 
-        request.setAttribute(Constants.GENDER_LIST, Constants.GENDER_ARRAY);
+        //request.setAttribute(Constants.GENDER_LIST, Constants.GENDER_ARRAY);
+        List genderList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_GENDER);
+        request.setAttribute(Constants.GENDER_LIST, genderList);
         
         //Sets the genotypeList attribute to be used in the Add/Edit Participant Page. 
-        request.setAttribute(Constants.GENOTYPE_LIST, Constants.GENOTYPE_ARRAY);
+        //request.setAttribute(Constants.GENOTYPE_LIST, Constants.GENOTYPE_ARRAY);
+        List genotypeList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_GENOTYPE);
+        request.setAttribute(Constants.GENOTYPE_LIST, genotypeList);
         
         request.setAttribute(Constants.ETHNICITY_LIST, Constants.ETHNICITY_VALUES);
   

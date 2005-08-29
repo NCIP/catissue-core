@@ -9,9 +9,12 @@
  */
 package edu.wustl.catissuecore.action;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.cde.CDEManager;
 
 
 /**
@@ -26,9 +29,13 @@ public class CollectionEventParametersAction extends SpecimenEventParametersActi
 		super.setRequestParameters(request);
 		
 		// set the procedure lists
-	    request.setAttribute(Constants.PROCEDURELIST, Constants.PROCEDUREARRAY);
+	    //request.setAttribute(Constants.PROCEDURELIST, Constants.PROCEDUREARRAY);
+		List procedureList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_COLLECTION_PROCEDURE);
+    	request.setAttribute(Constants.PROCEDURELIST, procedureList);
 	    
 	    // set the container lists
-	    request.setAttribute(Constants.CONTAINERLIST, Constants.CONTAINERARRAY);
+	    //request.setAttribute(Constants.CONTAINERLIST, Constants.CONTAINERARRAY);
+    	List containerList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_CONTAINER);
+    	request.setAttribute(Constants.CONTAINERLIST, containerList);
 	}
 }

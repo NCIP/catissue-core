@@ -161,7 +161,10 @@
 				</label>
 			</td>
 			<td class="formField">
-				<html:text styleClass="formDateSized" size="35" styleId="receivedQuality" property="receivedQuality" />
+				<%--html:text styleClass="formDateSized" size="35" styleId="receivedQuality" property="receivedQuality" /--%>
+				<html:select property="receivedQuality" styleClass="formFieldSized15" styleId="receivedQuality" size="1">
+					<html:options collection="<%=Constants.RECEIVED_QUALITY_LIST%>" labelProperty="name" property="value"/>
+				</html:select>
 			</td>
 		</tr>
 

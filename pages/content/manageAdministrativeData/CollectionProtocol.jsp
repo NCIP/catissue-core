@@ -561,7 +561,7 @@ function getSubDivCount(subdivtag)
 					<td class="formField" colspan=2>
 						<html:select property="<%=fldName%>" 
 										styleClass="formField" styleId="<%=fldName%>" size="1">
-							<html:options name="<%=Constants.CLINICAL_STATUS_LIST%>" labelName="<%=Constants.CLINICAL_STATUS_LIST%>" />
+							<html:options collection="<%=Constants.CLINICAL_STATUS_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
 					</td>
 				</tr>
@@ -782,7 +782,7 @@ function getSubDivCount(subdivtag)
 					<td class="formField" colspan=2>
 						<html:select property="value(CollectionProtocolEvent:`_clinicalStatus)" 
 										styleClass="formField" styleId="value(CollectionProtocolEvent:`_clinicalStatus)" size="1">
-							<html:options name="<%=Constants.CLINICAL_STATUS_LIST%>" labelName="<%=Constants.CLINICAL_STATUS_LIST%>" />
+							<html:options collection="<%=Constants.CLINICAL_STATUS_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
 					</td>
 				</tr>

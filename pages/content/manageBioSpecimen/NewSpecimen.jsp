@@ -380,7 +380,8 @@ String bhTypeArray [] = (String []) request.getAttribute(Constants.BIOHAZARD_TYP
 				    </td>
 				    <td class="formField" colspan="4">
 				     	<html:select property="className" styleClass="formFieldSized15" styleId="className" size="1" disabled="<%=readOnlyForAll%>" onchange="onTypeChange(this)">
-							<html:options name="specimenTypeList" labelName="specimenTypeList"/>	
+							<%--html:options name="specimenTypeList" labelName="specimenTypeList"/--%>
+							<html:options collection="<%=Constants.SPECIMEN_TYPE_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
 		        	</td>
 				 </tr>
@@ -393,7 +394,7 @@ String bhTypeArray [] = (String []) request.getAttribute(Constants.BIOHAZARD_TYP
 				    </td>
 				    <td class="formField" colspan="4">
 				     	<html:select property="type" styleClass="formFieldSized15" styleId="type" size="1" disabled="<%=readOnlyForAll%>">
-							<html:options name="specimenSubTypeList" labelName="specimenSubTypeList"/>		
+							<html:options name="specimenSubTypeList" labelName="specimenSubTypeList"/>
 						</html:select>
 		        	</td>
 				 </tr>
@@ -431,7 +432,8 @@ String bhTypeArray [] = (String []) request.getAttribute(Constants.BIOHAZARD_TYP
 					</td>
 				     <td class="formField" colspan="4">
 				     	<html:select property="tissueSide" styleClass="formFieldSized15" styleId="tissueSide" size="1" disabled="<%=readOnlyForAll%>">
-							<html:options name="tissueSideList" labelName="tissueSideList"/>		
+							<%--html:options name="tissueSideList" labelName="tissueSideList"/--%>
+							<html:options collection="<%=Constants.TISSUE_SIDE_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
 		        	  </td>
 				 </tr>
@@ -447,7 +449,8 @@ String bhTypeArray [] = (String []) request.getAttribute(Constants.BIOHAZARD_TYP
 					</td>
 				    <td class="formField" colspan="4">
 				     	<html:select property="pathologicalStatus" styleClass="formFieldSized15" styleId="pathologicalStatus" size="1" disabled="<%=readOnlyForAll%>">
-							<html:options name="pathologicalStatusList" labelName="pathologicalStatusList"/>		
+							<%--html:options name="pathologicalStatusList" labelName="pathologicalStatusList"/--%>
+							<html:options collection="<%=Constants.PATHOLOGICAL_STATUS_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
 		        	</td>
 				 </tr>
@@ -701,5 +704,5 @@ String bhTypeArray [] = (String []) request.getAttribute(Constants.BIOHAZARD_TYP
 				
 			 
 			 <!-- NEW SPECIMEN REGISTRATION ends-->
-	</table>
- </html:form>	
+			 </html:form>
+</table>

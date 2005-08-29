@@ -12,6 +12,7 @@ package edu.wustl.catissuecore.action;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -25,6 +26,7 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -59,6 +61,9 @@ public class SpecimenEventParametersAction extends Action
 //			coll.add(aNameValueBean);
 //		
         	request.setAttribute(Constants.USERLIST, coll);
+        	
+        	List qualityList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_RECEIVED_QUALITY);
+        	request.setAttribute(Constants.RECEIVED_QUALITY_LIST, qualityList);
             
         }
         catch (Exception exc)

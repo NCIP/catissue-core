@@ -277,7 +277,8 @@
 				     <td class="formRequiredLabel"><label for="state"><bean:message key="participant.gender"/></label></td>
 				     <td class="formField">
 				     	<html:select property="gender" styleClass="formFieldSized" styleId="gender" size="1" disabled="<%=readOnlyForAll%>">
-							<html:options name="genderList" labelName="genderList"/>		
+							<%--html:options name="genderList" labelName="genderList"/--%>
+							<html:options collection="<%=Constants.GENDER_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
 		        	  </td>
 				 </tr>
@@ -289,7 +290,8 @@
 				     <td class="formRequiredLabel"><label for="state"><bean:message key="participant.genotype"/></label></td>
 				     <td class="formField">
 				     	<html:select property="genotype" styleClass="formFieldSized" styleId="genotype" size="1" disabled="<%=readOnlyForAll%>">
-							<html:options name="genotypeList" labelName="genotypeList"/>
+							<%--html:options name="genotypeList" labelName="genotypeList"/--%>
+							<html:options collection="<%=Constants.GENOTYPE_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
 		        	  </td>
 				 </tr>

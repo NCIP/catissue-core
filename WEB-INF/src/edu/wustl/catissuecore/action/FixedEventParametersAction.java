@@ -9,9 +9,12 @@
  */
 package edu.wustl.catissuecore.action;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.cde.CDEManager;
 
 
 /**
@@ -25,7 +28,8 @@ public class FixedEventParametersAction extends SpecimenEventParametersAction
 		super.setRequestParameters(request);
 
 		// SETS THE FIXATION LIST
-		request.setAttribute(Constants.FIXATIONLIST , Constants.FIXATIONARRAY);
-        
+		//request.setAttribute(Constants.FIXATIONLIST , Constants.FIXATIONARRAY);
+		List fixationList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_FIXATION_TYPE);
+    	request.setAttribute(Constants.FIXATIONLIST, fixationList);
 	}
 }

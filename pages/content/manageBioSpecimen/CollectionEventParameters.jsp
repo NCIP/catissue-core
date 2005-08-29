@@ -161,7 +161,8 @@
 			</td>
 			<td class="formField">
 				<html:select property="collectionProcedure" styleClass="formFieldSized" styleId="collectionProcedure" size="1">
-					<html:options name="<%=Constants.PROCEDURELIST%>" labelName="<%=Constants.PROCEDURELIST%>" />
+					<%--html:options name="<%=Constants.PROCEDURELIST%>" labelName="<%=Constants.PROCEDURELIST%>" /--%>
+					<html:options collection="<%=Constants.PROCEDURELIST%>" labelProperty="name" property="value"/>
 				</html:select>
 			</td>
 		</tr>
@@ -176,7 +177,8 @@
 			</td>
 			<td class="formField">
 				<html:select property="container" styleClass="formFieldSized" styleId="container" size="1">
-					<html:options name="<%=Constants.CONTAINERLIST%>" labelName="<%=Constants.CONTAINERLIST%>" />
+					<%--html:options name="<%=Constants.CONTAINERLIST%>" labelName="<%=Constants.CONTAINERLIST%>" /--%>
+					<html:options collection="<%=Constants.CONTAINERLIST%>" labelProperty="name" property="value"/>
 				</html:select>
 			</td>
 		</tr>

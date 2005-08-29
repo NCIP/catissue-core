@@ -10,9 +10,12 @@
 
 package edu.wustl.catissuecore.action;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.cde.CDEManager;
 
 /**
  * This class initializes the fields in the EmbeddedEventParameters Add/Edit webpage.
@@ -25,7 +28,8 @@ public class EmbeddedEventParametersAction extends SpecimenEventParametersAction
 		super.setRequestParameters(request);
 		
 		//set array of EmbeddingMedium
-		request.setAttribute(Constants.EMBEDDINGMEDIUMLIST, Constants.EMBEDDINGMEDIUMARRAY);
-        
+		//request.setAttribute(Constants.EMBEDDINGMEDIUMLIST, Constants.EMBEDDINGMEDIUMARRAY);
+		List embeddingMediumList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_EMBEDDING_MEDIUM);
+    	request.setAttribute(Constants.EMBEDDINGMEDIUMLIST, embeddingMediumList);
 	}
 }
