@@ -1,4 +1,5 @@
 function changeMenuStyle(obj, new_style) { 
+if (objclick != obj)
   obj.className = new_style; 
 }
 
@@ -62,4 +63,13 @@ function send(pageNum,numresultsPerPage,prevPage,pageName)
 	document.forms[0].action = pageName+'?pageNum='+pageNum;
 	document.forms[0].submit();
 }
-
+// function for mouse click
+var objclick;
+function changeMenuSelected(obj, new_style) { 
+	
+	
+	objclick = obj;
+	window.location.reload
+  obj.className = new_style; 
+  obj.onmouseout="";
+}
