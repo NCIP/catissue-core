@@ -505,6 +505,46 @@ public class StorageContainerForm extends AbstractActionForm
 
 				checkValidNumber(String.valueOf(noOfContainers), "storageContainer.noOfContainers",
 						errors, validator);
+				
+				//Validations for External Identifier Add-More Block
+                String className = "StorageContainerDetails:";
+                String key1 = "_parameterName";
+                String key2 = "_parameterValue";
+                int index = 1;
+                boolean isError = false;
+                
+                while(true)
+                {
+                	String keyOne = className + index + key1;
+					String keyTwo = className + index + key2;
+                	String value1 = (String)values.get(keyOne);
+                	String value2 = (String)values.get(keyTwo);
+                	
+                	value1 = (value1==null ? null : value1.trim());
+                	value2 = (value2==null ? null : value2.trim());
+                	
+                	if(value1 == null || value2 == null)
+                	{
+                		break;
+                	}
+                	else if(value1.equals("") && value2.equals(""))
+                	{
+                		values.remove(keyOne);
+                		values.remove(keyTwo);
+                	}
+                	else if((!value1.equals("") && value2.equals("")) || (value1.equals("") && !value2.equals("")))
+                	{
+                		isError = true;
+                		break;
+                	}
+                	index++;
+                }
+                
+                if(isError)
+                {
+                	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.storageContainer.containerDetails.missing",ApplicationProperties.getValue("storageContainer.msg")));
+                }
+                
 
 				//            	if (validator.isEmpty(String.valueOf(noOfContainers)))
 				//                {
