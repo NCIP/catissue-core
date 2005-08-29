@@ -115,6 +115,7 @@ public class Constants
 	public static final String BIOHAZARD_ID_LIST = "biohazardIdList";
 	public static final String BIOHAZARD_TYPES_LIST = "biohazardTypesList";
 	public static final String PARENT_SPECIMEN_ID_LIST = "parentSpecimenIdList";
+	public static final String RECEIVED_QUALITY_LIST = "receivedQualityList";
 	
 	//SpecimenCollecionGroup lists.
 	public static final String PROTOCOL_TITLE_LIST = "protocolTitleList";
@@ -1127,4 +1128,16 @@ public class Constants
 	
 	public static final String CDE_CONF_FILE = "CDEConfig.xml";
 	public static final String CDE_NAME_TISSUE_SITE = "Tissue Site";
+	public static final String CDE_NAME_CLINICAL_STATUS = "Clinical Status";
+	public static final String CDE_NAME_GENDER = "Gender";
+	public static final String CDE_NAME_GENOTYPE = "Genotype";
+	public static final String CDE_NAME_SPECIMEN_TYPE = "Specimen Type";
+	public static final String CDE_NAME_TISSUE_SIDE = "Tissue Side";
+	public static final String CDE_NAME_PATHOLOGICAL_STATUS = "Pathological Status";
+	public static final String CDE_NAME_RECEIVED_QUALITY = "Received Quality";
+	public static final String CDE_NAME_FIXATION_TYPE = "Fixation Type";
+	public static final String CDE_NAME_COLLECTION_PROCEDURE = "Collection Procedure";
+	public static final String CDE_NAME_CONTAINER = "Container";
+	public static final String CDE_NAME_METHOD = "Method";
+	public static final String CDE_NAME_EMBEDDING_MEDIUM = "Embedding Medium";
 }
