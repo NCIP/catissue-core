@@ -65,6 +65,7 @@ public class DistributionProtocolForm extends SpecimenProtocolForm
 	protected void reset()
 	{
 		super.reset();
+		this.counter =1; 
 	}
 	
 	/**

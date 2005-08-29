@@ -13,6 +13,7 @@ package edu.wustl.catissuecore.actionForm;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -480,6 +481,9 @@ public class StorageContainerForm extends AbstractActionForm
 
 		try
 		{
+			System.out.println("\n\n****************\n\n");
+			printMap(); 
+			System.out.println("\n\n****************\n\n");
 			if (operation.equals(Constants.SEARCH))
 			{
 				checkValidNumber(new Long(systemIdentifier).toString(),
@@ -559,6 +563,7 @@ public class StorageContainerForm extends AbstractActionForm
 		}
 		catch (Exception excp)
 		{
+			System.out.println("\n\n*******Error*********\n\n");
 			Logger.out.error(excp.getMessage());
 		}
 		return errors;
@@ -732,5 +737,17 @@ public class StorageContainerForm extends AbstractActionForm
     public void setPositionDimensionTwo(int positionDimensionTwo)
     {
         this.positionDimensionTwo = positionDimensionTwo;
+    }
+    
+    private void printMap()
+    {
+    	Iterator it = this.values.keySet().iterator();
+		while (it.hasNext())
+		{
+			String key = (String)it.next();
+			String value = (String)values.get(key);
+			System.out.println(key+ " : " + value);
+			
+		}
     }
 }

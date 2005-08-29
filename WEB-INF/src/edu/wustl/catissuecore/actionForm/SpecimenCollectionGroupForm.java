@@ -162,7 +162,15 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	 * */
 	protected void reset()
 	{
-    
+		this.clinicalDiagnosis = null;
+	    
+		this.clinicalStatus = null;;
+		
+		this.activityStatus = null;
+		
+		this.surgicalPathologyNumber = null;
+		
+		this.protocolParticipantIdentifier =  null;
 	}
 	/**
 	   * This function Copies the data from an storage type object to a StorageTypeForm object.

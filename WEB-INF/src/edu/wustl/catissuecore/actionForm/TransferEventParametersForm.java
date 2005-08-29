@@ -263,15 +263,19 @@ public class TransferEventParametersForm extends EventParametersForm
       */
      public void reset(ActionMapping mapping, HttpServletRequest request)
      {
-         super.reset();
-         this.fromPositionDimensionOne = 0;
-         this.fromPositionDimensionTwo = 0;
-         this.toPositionDimensionOne = 0;
-         this.toPositionDimensionTwo = 0;
-         this.fromStorageContainerId = -1;
-         this.toStorageContainerId = -1;
-         
+     	reset();
      }
      
+	protected void reset()
+	{
+        super.reset();
+        this.fromPositionDimensionOne = 0;
+        this.fromPositionDimensionTwo = 0;
+        this.toPositionDimensionOne = 0;
+        this.toPositionDimensionTwo = 0;
+        this.fromStorageContainerId = -1;
+        this.toStorageContainerId = -1;
+		
+	}
 	
 }

@@ -112,6 +112,8 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	{
 		super.reset();
 		protocolCoordinatorIds = null;
+		this.outerCounter = 0;
+		this.values  = new HashMap();
 	}
 	
 	/**
@@ -167,7 +169,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
     					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("collectionprotocol.clinicalstatus")));
     				}
     				
-    				if(key.indexOf("studyCalendarEventPoint")!=-1 && (validator.isEmpty(value) || !validator.isNumeric(value)))
+    				if(key.indexOf("studyCalendarEventPoint")!=-1 && (!validator.isEmpty(value) && !validator.isNumeric(value)))
     				{
     					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.studycalendarpoint",ApplicationProperties.getValue("collectionprotocol.studycalendartitle")));
     				}

@@ -317,6 +317,10 @@ public class MolecularSpecimenReviewParametersForm extends EventParametersForm
      public void reset(ActionMapping mapping, HttpServletRequest request)
      {
          reset();
+     }
+     protected void reset()
+     {
+         super.reset();
          this.gelImageURL = null;
          this.qualityIndex = null;
          this.laneNumber = null;
@@ -324,8 +328,8 @@ public class MolecularSpecimenReviewParametersForm extends EventParametersForm
          this.absorbanceAt260 = 0.0;
          this.absorbanceAt280 = 0.0;
          this.ratio28STo18S = 0.0;
-         
      }
-     
+       
+    
 	
 }

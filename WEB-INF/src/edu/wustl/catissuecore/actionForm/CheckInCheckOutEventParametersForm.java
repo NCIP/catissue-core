@@ -104,9 +104,14 @@ public class CheckInCheckOutEventParametersForm extends EventParametersForm
      public void reset(ActionMapping mapping, HttpServletRequest request)
      {
          reset();
-         this.storageStatus = null;
      }
      
+     protected void reset()
+  	{
+      	super.reset();
+        this.storageStatus = null;
+  	}
+
 
 	
 }

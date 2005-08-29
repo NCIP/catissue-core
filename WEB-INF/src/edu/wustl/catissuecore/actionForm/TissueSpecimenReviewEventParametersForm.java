@@ -243,14 +243,19 @@ public class TissueSpecimenReviewEventParametersForm extends EventParametersForm
      public void reset(ActionMapping mapping, HttpServletRequest request)
      {
          reset();
-         this.necrosisPercentage = 0.0;
-         this.neoplasticCellularityPercentage = 0.0;
-         this.lymphocyticPercentage = 0.0;
-         this.totalCellularityPercentage = 0.0;
-         this.histologicalQuality = null;
-         
-         
+       
      }
-     
+	 protected void reset()
+	 {
+	 	super.reset();
+        this.necrosisPercentage = 0.0;
+        this.neoplasticCellularityPercentage = 0.0;
+        this.lymphocyticPercentage = 0.0;
+        this.totalCellularityPercentage = 0.0;
+        this.histologicalQuality = null;
+
+	 }
+
+    
 	
 }

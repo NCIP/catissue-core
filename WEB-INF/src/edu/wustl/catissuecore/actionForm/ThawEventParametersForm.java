@@ -48,5 +48,10 @@ public class ThawEventParametersForm extends EventParametersForm
     {
         reset();
     }
-    
+	 protected void reset()
+	 {
+	 	super.reset();
+ 	 }
+
+   
 }

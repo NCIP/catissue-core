@@ -26,5 +26,29 @@ public class SpecimenEventParametersForm extends EventParametersForm
 		return Constants.SPECIMEN_EVENT_PARAMETERS_FORM_ID;
 	}
 
+	private long specimenID=1;
+	
+	
+	/**
+	 * @return Returns the specimenID.
+	 */
+	public long getSpecimenID()
+	{
+		return specimenID;
+	}
+	/**
+	 * @param specimenID The specimenID to set.
+	 */
+	public void setSpecimenID(long specimenID)
+	{
+		this.specimenID = specimenID;
+	}
+	
+	 protected void reset()
+	 {
+	 	super.reset();
+	 	this.specimenID = 1;
+	 }
+	 
 	
 }

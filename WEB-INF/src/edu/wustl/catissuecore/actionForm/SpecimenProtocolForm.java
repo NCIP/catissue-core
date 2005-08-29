@@ -368,7 +368,7 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 		this.startDate = null;
 		this.endDate = null;
 		this.irbID = null;
-		this.enrollment = "0";
+		this.enrollment = null;
 		this.descriptionURL = null;
 		
 		values = new HashMap();

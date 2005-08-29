@@ -144,5 +144,10 @@ public class CellSpecimenReviewParametersForm extends EventParametersForm
          this.viableCellPercentage =0.0;
      }
      
-	
+     protected void reset()
+ 	{
+     	super.reset();
+     	this.neoplasticCellularityPercentage = 0.0;
+     	this.viableCellPercentage = 0.0;
+ 	}
 }

@@ -62,7 +62,13 @@ public class CreateSpecimenForm extends SpecimenForm
     {
         reset();
     }
-     
+   
+    protected void reset()
+    {
+    	super.reset();
+    	this.parentSpecimenId=null;
+    }
+    
     /**
      * Returns the id assigned to form bean.
      */

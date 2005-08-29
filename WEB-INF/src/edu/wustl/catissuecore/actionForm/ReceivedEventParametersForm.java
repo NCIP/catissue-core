@@ -106,8 +106,12 @@ public class ReceivedEventParametersForm extends EventParametersForm
      public void reset(ActionMapping mapping, HttpServletRequest request)
      {
          reset();
+     }
+     protected void reset()
+     {
+         super.reset();
          this.receivedQuality = null;
      }
-     		
+    		
 	
 }

@@ -102,7 +102,13 @@ public class FrozenEventParametersForm extends EventParametersForm
      public void reset(ActionMapping mapping, HttpServletRequest request)
      {
          reset();
+
+     }
+     protected void reset()
+     {
+         super.reset();
          this.method = null;
      }
-     
+       
+   
 }

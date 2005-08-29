@@ -149,10 +149,15 @@ public class SpunEventParametersForm extends EventParametersForm
     public void reset(ActionMapping mapping, HttpServletRequest request)
     {
         reset();
+    }
+  
+	 protected void reset()
+	 {
+	 	super.reset();
         this.gravityForce = 0;
         this.durationInMinutes = 0;
-    }
-    
+	 }
+
 	
     
 	/**

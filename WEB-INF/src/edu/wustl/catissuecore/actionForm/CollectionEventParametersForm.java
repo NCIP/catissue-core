@@ -137,10 +137,14 @@ public class CollectionEventParametersForm extends EventParametersForm
      public void reset(ActionMapping mapping, HttpServletRequest request)
      {
          reset();
-         this.collectionProcedure = null;
-         this.container = null;
+
      }
-     
+     protected void reset()
+     {
+     	super.reset();
+        this.collectionProcedure = null;
+        this.container = null;     	
+     }
 
 	
 }

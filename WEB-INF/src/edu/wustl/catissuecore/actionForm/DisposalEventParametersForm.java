@@ -101,8 +101,12 @@ public class DisposalEventParametersForm extends EventParametersForm
      public void reset(ActionMapping mapping, HttpServletRequest request)
      {
          reset();
-         this.reason = null;
      }
      
+    protected void reset()
+    {
+        super.reset();
+        this.reason = null;
+    }
 	
 }

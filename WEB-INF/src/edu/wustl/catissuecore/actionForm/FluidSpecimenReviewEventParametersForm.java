@@ -106,9 +106,14 @@ public class FluidSpecimenReviewEventParametersForm extends EventParametersForm
      public void reset(ActionMapping mapping, HttpServletRequest request)
      {
          reset();
-         this.cellCount = 0.0;
+   
      }
-     
+     protected void reset()
+     {
+         super.reset();
+         this.cellCount = 0.0;
+      }
+       
 
 	
 }

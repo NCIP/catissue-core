@@ -231,4 +231,15 @@ public class DistributionForm extends EventParametersForm
 	public Map getValues() {
 		return values;
 	}
+
+	protected void reset()
+    {
+        super.reset();
+        this.distributionProtocolId = null;
+        this.fromSite = null;
+        this.toSite = null;
+        this.counter =1;
+       
+    }
+
 }
