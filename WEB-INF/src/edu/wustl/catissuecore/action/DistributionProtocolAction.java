@@ -31,10 +31,10 @@ public class DistributionProtocolAction extends SpecimenProtocolAction
      * Overrides the execute method of Action class.
      * Sets the various fields in Distribution Add/Edit webpage.
      * */
-    public ActionForward executeAction(ActionMapping mapping, ActionForm form,
+    public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException
     {
-        return super.executeAction(mapping, form, request, response);
+        return super.executeSecureAction(mapping, form, request, response);
     }
 }

@@ -33,13 +33,13 @@ import edu.wustl.catissuecore.util.global.Constants;
  * ReportedProblemPendingCloseAction Class is used to close and keep pending a reported problem.
  * @author gautam_shetty
  */
-public class ReportedProblemPendingCloseAction  extends BaseAction
+public class ReportedProblemPendingCloseAction  extends SecureAction
 {
     
     /**
      * Overrides the execute method in Action.
      */
-    public ActionForward executeAction(ActionMapping mapping, ActionForm form,
+    public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
             throws Exception
     {

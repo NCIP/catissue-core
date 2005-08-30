@@ -35,13 +35,13 @@ import edu.wustl.catissuecore.util.global.Constants;
  * according to the storage container selected from the tree view.
  * @author gautam_shetty
  */
-public class ShowStorageGridViewAction  extends BaseAction
+public class ShowStorageGridViewAction  extends SecureAction
 {
 
     /**
      * Overrides the execute method of Action class.
      */
-    public ActionForward executeAction(ActionMapping mapping, ActionForm form,
+    public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
             throws Exception
     {

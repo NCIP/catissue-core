@@ -30,13 +30,13 @@ import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.util.global.Constants;
 
 //public class StorageContainerAction extends BaseAction
-public class StorageContainerAction  extends BaseAction
+public class StorageContainerAction  extends SecureAction
 {
 	/**
      * Overrides the execute method of Action class.
      * Initializes the various fields in StorageContainer.jsp Page.
      * */
-	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
+	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException
     {

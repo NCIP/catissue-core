@@ -30,14 +30,14 @@ import edu.wustl.catissuecore.util.global.Constants;
  * This class initializes the fields of the Site Add/Edit webpage.
  * @author aniruddha_phadnis
  */
-public class SiteAction  extends BaseAction
+public class SiteAction  extends SecureAction
 {
 
     /**
      * Overrides the execute method of Action class.
      * Sets the various fields in Site Add/Edit webpage.
      * */
-    public ActionForward executeAction(ActionMapping mapping, ActionForm form,
+    public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException
     {

@@ -22,13 +22,13 @@ import org.apache.struts.action.ActionMapping;
  * ApproveUserAction is used to Approve/Reject a user's registration request.
  * @author gautam_shetty
  */
-public class ApproveUserAction extends BaseAction
+public class ApproveUserAction extends SecureAction 
 {
 
     /**
      * Overrides the execute method in Action.
      */
-    public ActionForward executeAction(ActionMapping mapping, ActionForm form,
+    public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
             throws Exception
     {
