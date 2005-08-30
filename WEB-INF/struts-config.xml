@@ -99,8 +99,9 @@ PUBLIC
          <action path="/LoggedInHelp"
                     type="org.apache.struts.actions.ForwardAction"
                     parameter=".catissuecore.helpLoggedInDef" />
-         
+
         <!-- Login Module Actions Begin -->
+        
         
         <action path="/Login"
 			type="edu.wustl.catissuecore.action.LoginAction"
@@ -301,6 +302,7 @@ PUBLIC
 			scope="request">
 			<forward name="success" path=".catissuecore.departmentDef" />
 			<forward name="failure" path=".catissuecore.departmentDef" />
+			<forward name="access_denied" path="/ManageAdministrativeData.do" />
 		</action>
 
 		<action path="/DepartmentAdd"
