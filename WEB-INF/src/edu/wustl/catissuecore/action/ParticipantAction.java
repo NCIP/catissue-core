@@ -16,7 +16,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -32,13 +31,13 @@ import edu.wustl.common.cde.CDEManager;
  * This class initializes the fields in the Participant Add/Edit webpage.
  * @author gautam_shetty
  */
-public class ParticipantAction  extends BaseAction
+public class ParticipantAction  extends SecureAction
 {
     /**
      * Overrides the execute method of Action class.
      * Sets the various fields in Participant Add/Edit webpage.
      * */
-    public ActionForward executeAction(ActionMapping mapping, ActionForm form,
+    public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException
     {

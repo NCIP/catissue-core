@@ -15,7 +15,6 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -33,13 +32,13 @@ import edu.wustl.common.cde.CDEManager;
  * NewSpecimenAction initializes the fields in the New Specimen page.
  * @author aniruddha_phadnis
  */
-public class NewSpecimenAction  extends BaseAction
+public class NewSpecimenAction  extends SecureAction
 {
     
     /**
      * Overrides the execute method of Action class.
      */
-    public ActionForward executeAction(ActionMapping mapping, ActionForm form,
+    public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response) throws Exception
     {
         //Gets the value of the operation parameter.

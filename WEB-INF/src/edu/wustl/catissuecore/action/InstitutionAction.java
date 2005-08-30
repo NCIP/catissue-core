@@ -22,13 +22,13 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.util.global.Constants;
 
-public class InstitutionAction extends BaseAction
+public class InstitutionAction extends SecureAction
 {
     /**
      * Overrides the execute method of Action class.
      * Initializes the various drop down fields in Institute.jsp Page.
      * */
-    public ActionForward executeAction(ActionMapping mapping, ActionForm form,
+    public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException
     {

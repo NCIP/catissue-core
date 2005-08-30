@@ -32,13 +32,13 @@ import edu.wustl.common.cde.CDEManager;
  * CreateSpecimenAction initializes the fields in the Create Specimen page.
  * @author aniruddha_phadnis
  */
-public class CreateSpecimenAction extends BaseAction
+public class CreateSpecimenAction extends SecureAction
 {
     
     /**
      * Overrides the execute method of Action class.
      */
-    public ActionForward executeAction(ActionMapping mapping, ActionForm form,
+    public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response) throws Exception
     {
         //Gets the value of the operation parameter.
