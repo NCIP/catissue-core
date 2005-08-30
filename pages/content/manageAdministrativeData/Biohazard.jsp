@@ -12,7 +12,6 @@
 <%
         String operation = (String) request.getAttribute(Constants.OPERATION);
         String formName;
-        String searchFormName = new String(Constants.BIOHAZARD_SEARCH_ACTION);
 
         boolean readOnlyValue;
         if (operation.equals(Constants.EDIT))
@@ -32,53 +31,7 @@
 <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
 
 <html:form action="<%=Constants.BIOHAZARD_ADD_ACTION%>">
-
-	<logic:notEqual name="operation" value="<%=Constants.ADD%>"> 
-	<!-- ENTER IDENTIFIER BEGINS-->	
-	<br/>	
-	<tr>
-		<td>
-			<table summary="" cellpadding="3" cellspacing="0" border="0">
-				<tr>
-					<td class="formTitle" height="20" colspan="3">
-						<bean:message key="biohazard.searchTitle"/>
-					</td>
-				</tr>	
-		  
-				<tr>
-					<td class="formRequiredNotice" width="5">*</td>
-					<td class="formRequiredLabel">
-						<label for="systemIdentifier">
-							<bean:message key="biohazard.systemIdentifier"/>
-						</label>
-					</td>
-					<td class="formField">
-						<html:text styleClass="formFieldSized" size="30" styleId="systemIdentifier" property="systemIdentifier"/>
-					</td>
-				</tr>	
-				<%
-					String changeAction = "setFormAction('" + searchFormName
-							  + "');setOperation('" + Constants.SEARCH + "');";
-				%>
-				<tr>
-					<td align="right" colspan="3">
-					<table cellpadding="4" cellspacing="0" border="0">
-						<tr>
-							<td>
-								<html:submit styleClass="actionButton" value="Search" onclick="<%=changeAction%>" />
-							</td>
-						</tr>
-					</table>
-					</td>
-				</tr>
-			</table>
-		</td>
-	</tr>
-	<!-- ENTER IDENTIFIER ENDS-->	
-	</logic:notEqual> 
-	
-
-	<!-- NEW Biohazard REGISTRATION BEGINS-->
+<!-- NEW Biohazard REGISTRATION BEGINS-->
 	<tr>
 	<td>
 	
@@ -87,6 +40,10 @@
 			<td><html:hidden property="operation" value="<%=operation%>"/></td>
 		</tr>
 
+		<tr>
+			<td><html:hidden property="systemIdentifier" /></td>
+		</tr>
+		
 		<logic:notEqual name="operation" value="<%=Constants.SEARCH%>">
 		<tr>
 			 <td class="formMessage" colspan="3">* indicates a required field</td>
@@ -136,7 +93,7 @@
 				</label>
 			</td>
 			<td class="formField">
-				<html:textarea styleClass="formFieldSized" property="comments" styleId="comments" cols="32" rows="5" readonly="<%=readOnlyValue%>"/>
+				<html:textarea styleClass="formFieldSized" property="comments" styleId="comments" cols="32" rows="5"/>
 			</td>
 		</tr>
 		
