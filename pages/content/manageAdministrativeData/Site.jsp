@@ -55,7 +55,7 @@
 							</label>
 						</td>
 						<td class="formField">
-							<html:text styleClass="formFieldSized" size="30" styleId="name" property="name" readonly="<%=readOnlyValue%>" />
+							<html:text styleClass="formFieldSized" size="30" styleId="name" property="name"/>
 						</td>
 					</tr>
 			
