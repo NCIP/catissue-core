@@ -1124,6 +1124,7 @@ PUBLIC
 			scope="request">
 			<forward name="success" path=".catissuecore.disposalEventParametersDef" />
 			<forward name="failure" path=".catissuecore.disposalEventParametersDef" />
+			<forward name="access_denied" path="/ManageBioSpecimen.do" />
 		</action>
 		
 		<action path="/DisposalEventParametersAdd"
@@ -1164,6 +1165,7 @@ PUBLIC
 			scope="request">
 			<forward name="success" path=".catissuecore.thawEventParametersDef" />
 			<forward name="failure" path=".catissuecore.thawEventParametersDef" />
+			<forward name="access_denied" path="/ManageBioSpecimen.do" />
 		</action>
 		
 		<action path="/ThawEventParametersAdd"
@@ -1203,6 +1205,7 @@ PUBLIC
 			scope="request">
 			<forward name="success" path=".catissuecore.molecularSpecimenReviewParametersDef" />
 			<forward name="failure" path=".catissuecore.molecularSpecimenReviewParametersDef" />
+			<forward name="access_denied" path="/ManageBioSpecimen.do" />
 		</action>
 		
 		<action path="/MolecularSpecimenReviewParametersAdd"
@@ -1242,6 +1245,7 @@ PUBLIC
 			scope="request">
 			<forward name="success" path=".catissuecore.collectionEventParametersDef" />
 			<forward name="failure" path=".catissuecore.collectionEventParametersDef" />
+			<forward name="access_denied" path="/ManageBioSpecimen.do" />
 		</action>
 		
 		<action path="/CollectionEventParametersAdd"
@@ -1281,6 +1285,7 @@ PUBLIC
 			scope="request">
 			<forward name="success" path=".catissuecore.transferEventParametersDef" />
 			<forward name="failure" path=".catissuecore.transferEventParametersDef" />
+			<forward name="access_denied" path="/ManageBioSpecimen.do" />
 		</action>
 		
 		<action path="/TransferEventParametersAdd"
@@ -1320,6 +1325,7 @@ PUBLIC
 			scope="request">
 			<forward name="success" path=".catissuecore.spunEventParametersDef" />
 			<forward name="failure" path=".catissuecore.spunEventParametersDef" />
+			<forward name="access_denied" path="/ManageBioSpecimen.do" />
 		</action>
 		
 		<action path="/SpunEventParametersAdd"
@@ -1359,6 +1365,7 @@ PUBLIC
 			scope="request">
 			<forward name="success" path=".catissuecore.embeddedEventParametersDef" />
 			<forward name="failure" path=".catissuecore.embeddedEventParametersDef" />
+			<forward name="access_denied" path="/ManageBioSpecimen.do" />
 		</action>
 		
 		<action path="/EmbeddedEventParametersAdd"
@@ -1398,6 +1405,7 @@ PUBLIC
 			scope="request">
 			<forward name="success" path=".catissuecore.fixedEventParametersDef" />
 			<forward name="failure" path=".catissuecore.fixedEventParametersDef" />
+			<forward name="access_denied" path="/ManageBioSpecimen.do" />
 		</action>
 		
 		<action path="/FixedEventParametersAdd"
@@ -1437,6 +1445,7 @@ PUBLIC
 			scope="request">
 			<forward name="success" path=".catissuecore.procedureEventParametersDef" />
 			<forward name="failure" path=".catissuecore.procedureEventParametersDef" />
+			<forward name="access_denied" path="/ManageBioSpecimen.do" />
 		</action>
 		
 		<action path="/ProcedureEventParametersAdd"
@@ -1565,6 +1574,7 @@ PUBLIC
 			scope="request">
 			<forward name="success" path=".catissuecore.specimenEventParametersDef" />
 			<forward name="failure" path=".catissuecore.specimenEventParametersDef" />
+			<forward name="access_denied" path="/ManageBioSpecimen.do" />
 		</action>
 		
 		<action path="/SpecimenEventParametersAdd"
