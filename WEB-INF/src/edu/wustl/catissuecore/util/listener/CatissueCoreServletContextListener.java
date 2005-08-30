@@ -99,42 +99,42 @@ public class CatissueCoreServletContextListener
         try
         {
             Logger.out
-                    .debug("Read Perm to aarti on edu.wustl.catissuecore.domain.CollectionProtocol_25 "
+                    .debug("Create Perm to aarti on edu.wustl.catissuecore.domain.CollectionProtocol_37 "
                             + Boolean
                                     .toString(SecurityManager
                                             .getInstance(this.getClass())
                                             .isAuthorized(
                                                     "aarti",
-                                                    "edu.wustl.catissuecore.domain.CollectionProtocol_25",
-                                                    READ)));
+                                                    "edu.wustl.catissuecore.domain.CollectionProtocol_37",
+                                                    UPDATE)));
             Logger.out
-            .debug("Read Perm to admin on edu.wustl.catissuecore.domain.CollectionProtocol_25 "
+            .debug("CREATE Perm to admin on edu.wustl.catissuecore.domain.CollectionProtocol_37 "
                     + Boolean
                             .toString(SecurityManager
                                     .getInstance(this.getClass())
                                     .isAuthorized(
                                             "admin",
-                                            "edu.wustl.catissuecore.domain.CollectionProtocol_25",
-                                            READ)));
+                                            "edu.wustl.catissuecore.domain.CollectionProtocol_37",
+                                            UPDATE)));
             Logger.out
-            .debug("Read Perm to aarti on edu.wustl.catissuecore.domain.CollectionProtocolEvent_14 "
+            .debug("CREATE Perm to aarti on edu.wustl.catissuecore.domain.CollectionProtocolEvent_28 "
                     + Boolean
                             .toString(SecurityManager
                                     .getInstance(this.getClass())
                                     .isAuthorized(
                                             "aarti",
-                                            "edu.wustl.catissuecore.domain.CollectionProtocolEvent_14",
-                                            READ)));
+                                            "edu.wustl.catissuecore.domain.CollectionProtocolEvent_28",
+                                            UPDATE)));
             
             Logger.out
-            .debug("Read Perm to admin on edu.wustl.catissuecore.domain.CollectionProtocolEvent_14 "
+            .debug("CREATE Perm to admin on edu.wustl.catissuecore.domain.CollectionProtocolEvent_28"
                     + Boolean
                             .toString(SecurityManager
                                     .getInstance(this.getClass())
                                     .isAuthorized(
                                             "admin",
-                                            "edu.wustl.catissuecore.domain.CollectionProtocolEvent_14",
-                                            READ)));
+                                            "edu.wustl.catissuecore.domain.CollectionProtocolEvent_28",
+                                            UPDATE)));
         }
         catch (SMException e1)
         {
