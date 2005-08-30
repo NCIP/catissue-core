@@ -42,6 +42,9 @@ public class StorageTypeBizLogic extends DefaultBizLogic
      */
 	protected void update(DAO dao, Object obj) throws DAOException 
     {
-		
+		StorageType type = (StorageType)obj;
+
+		dao.update(type.getDefaultStorageCapacity());
+	    dao.update(type);
     }
 }
