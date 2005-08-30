@@ -249,10 +249,10 @@ PUBLIC
 		    type="edu.wustl.catissuecore.action.CommonSearchAction"
 			name="institutionForm"
 			validate="true"
-			input="/Institution.do?operation=search"
+			input="/Institution.do?operation=edit"
 			scope="request">
 			<forward name="success" path="/Institution.do?operation=edit"/>
-			<forward name="failure" path="/Institution.do?operation=search"/>
+			<forward name="failure" path="/Institution.do?operation=edit"/>
 		</action>    
 		<!-- Institution Actions Ends-->
 
