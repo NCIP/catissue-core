@@ -77,7 +77,7 @@ INSERT INTO CATISSUE_PERMISSIBLE_VALUE  VALUES
 	INSERT INTO CATISSUE_PERMISSIBLE_VALUE  VALUES 
 		  (25, 'C12245','Anterior Wall of the Nasopharynx','C12245',24,'Anterior Wall of the Nasopharynx',null );
 		  
-/***************** Clinical Status ************************************/		  
+#*************** Clinical Status **********************************		  
 
 INSERT INTO CATISSUE_CDE VALUES ( '2003988' , 'Clinical Status', 'Clinical status of the participant.',  1.0);
 
@@ -105,9 +105,9 @@ INSERT INTO CATISSUE_PERMISSIBLE_VALUE  VALUES
 INSERT INTO CATISSUE_PERMISSIBLE_VALUE  VALUES 
 		  (33, 'C8','New Dx','EVS8',null,'New Dx','2003988' );
 		  
-/***************** Clinical Status ************************************/
+#***************** Clinical Status ************************************
 
-/***************** Gender ************************************/
+#***************** Gender ************************************
 
 INSERT INTO CATISSUE_CDE VALUES ( '2003989' , 'Gender', 'Gender of the participant.',  1.0);
 
@@ -123,9 +123,9 @@ INSERT INTO CATISSUE_PERMISSIBLE_VALUE  VALUES
 INSERT INTO CATISSUE_PERMISSIBLE_VALUE  VALUES 
 		  (37, 'C12','Unknown','EVS12',null,'Unknown','2003989' );
 
-/***************** Gender ************************************/
+#*************** Gender **********************************
 
-/***************** Genotype ************************************/
+#*************** Genotype **********************************
 
 INSERT INTO CATISSUE_CDE VALUES ( '2003990' , 'Genotype', 'Genotype of the participant.',  1.0);
 
@@ -153,9 +153,9 @@ INSERT INTO CATISSUE_PERMISSIBLE_VALUE  VALUES
 INSERT INTO CATISSUE_PERMISSIBLE_VALUE  VALUES 
 		  (45, 'C20','Penta X Syndrome','EVS20',null,'Penta X Syndrome ','2003990' );
 
-/***************** Genotype ************************************/
+#*************** Genotype **********************************
 
-/***************** Specimen Type ************************************/
+#*************** Specimen Type **********************************
 
 INSERT INTO CATISSUE_CDE VALUES ( '2003991' , 'Specimen', 'Specimen Type',  1.0);
 
@@ -171,9 +171,9 @@ INSERT INTO CATISSUE_PERMISSIBLE_VALUE  VALUES
 INSERT INTO CATISSUE_PERMISSIBLE_VALUE  VALUES 
 		  (49, 'C24','Tissue','EVS24',null,'Tissue','2003991' );
 
-/***************** Specimen Type ************************************/
+#*************** Specimen Type **********************************
 
-/***************** Tissue Side ************************************/
+#*************** Tissue Side **********************************
 
 INSERT INTO CATISSUE_CDE VALUES ( '2003992' , 'Tissue Side', 'Tissue Side',  1.0);
 
@@ -189,9 +189,9 @@ INSERT INTO CATISSUE_PERMISSIBLE_VALUE  VALUES
 INSERT INTO CATISSUE_PERMISSIBLE_VALUE  VALUES 
 		  (53, 'C28','Not Applicable','EVS28',null,'Not Applicable','2003992' );
 
-/***************** Tissue Side ************************************/
+#*************** Tissue Side **********************************
 
-/***************** Pathological Status ************************************/
+#*************** Pathological Status **********************************
 
 INSERT INTO CATISSUE_CDE VALUES ( '2003993' , 'Pathological Status', 'Pathological Status',  1.0);
 
@@ -210,9 +210,9 @@ INSERT INTO CATISSUE_PERMISSIBLE_VALUE  VALUES
 INSERT INTO CATISSUE_PERMISSIBLE_VALUE  VALUES 
 		  (58, 'C33','Non-Malignant Diseased','EVS33',null,'Non-Malignant Diseased','2003993' );
 
-/***************** Pathological Status ************************************/
+#*************** Pathological Status **********************************
 
-/***************** Received Quality ************************************/
+#*************** Received Quality **********************************
 
 INSERT INTO CATISSUE_CDE VALUES ( '2003994' , 'Received Quality', 'Received Quality',  1.0);
 
@@ -240,9 +240,9 @@ INSERT INTO CATISSUE_PERMISSIBLE_VALUE  VALUES
 INSERT INTO CATISSUE_PERMISSIBLE_VALUE  VALUES 
 		  (66, 'C41','Physical Damage','EVS41',null,'Physical Damage','2003994' );
 		  
-/***************** Received Quality ************************************/
+#*************** Received Quality **********************************
 
-/***************** Fixation Type ************************************/
+#*************** Fixation Type **********************************
 
 INSERT INTO CATISSUE_CDE VALUES ( '2003995' , 'Fixation Type', 'Fixation Type',  1.0);
 
@@ -261,9 +261,9 @@ INSERT INTO CATISSUE_PERMISSIBLE_VALUE  VALUES
 INSERT INTO CATISSUE_PERMISSIBLE_VALUE  VALUES 
 		  (71, 'C46','RNALater','EVS46',null,'RNALater','2003995' );
 		  
-/***************** Fixation Type ************************************/
+#*************** Fixation Type **********************************
 
-/***************** Collection Procedure ************************************/
+#*************** Collection Procedure **********************************
 
 INSERT INTO CATISSUE_CDE VALUES ( '2003996' , 'Collection Procedure', 'Collection Procedure',  1.0);
 
@@ -276,9 +276,9 @@ INSERT INTO CATISSUE_PERMISSIBLE_VALUE  VALUES
 INSERT INTO CATISSUE_PERMISSIBLE_VALUE  VALUES 
 		  (74, 'C49','Bone Marrow Aspiration','EVS49',null,'Bone Marrow Aspiration','2003996' );
 		  
-/***************** Collection Procedure ************************************/
+#*************** Collection Procedure **********************************
 
-/***************** Container ************************************/
+#*************** Container **********************************
 
 INSERT INTO CATISSUE_CDE VALUES ( '2003997' , 'Container', 'Container',  1.0);
 
@@ -294,9 +294,9 @@ INSERT INTO CATISSUE_PERMISSIBLE_VALUE  VALUES
 INSERT INTO CATISSUE_PERMISSIBLE_VALUE  VALUES 
 		  (78, 'C53','Sterile Specimen Cup','EVS53',null,'Sterile Specimen Cup','2003997' );
 		  
-/***************** Container ************************************/
+#*************** Container **********************************
 
-/***************** Method ************************************/
+#*************** Method **********************************
 
 INSERT INTO CATISSUE_CDE VALUES ( '2003998' , 'Method', 'Method',  1.0);
 
@@ -309,9 +309,9 @@ INSERT INTO CATISSUE_PERMISSIBLE_VALUE  VALUES
 INSERT INTO CATISSUE_PERMISSIBLE_VALUE  VALUES 
 		  (81, 'C56','Isopentane','EVS56',null,'Isopentane','2003998' );
 		  
-/***************** Method ************************************/
+#*************** Method **********************************
 
-/***************** Embedding Medium ************************************/
+#*************** Embedding Medium **********************************
 
 INSERT INTO CATISSUE_CDE VALUES ( '2003999' , 'Embedding Medium', 'Embedding Medium',  1.0);
 
@@ -324,9 +324,9 @@ INSERT INTO CATISSUE_PERMISSIBLE_VALUE  VALUES
 INSERT INTO CATISSUE_PERMISSIBLE_VALUE  VALUES 
 		  (84, 'C59','OCT','EVS59',null,'OCT','2003999' );
 		  
-/***************** Embedding Medium ************************************/
+#*************** Embedding Medium **********************************
 
-/***************** Biohazards ************************************/
+#*************** Biohazards **********************************
 
 INSERT INTO CATISSUE_CDE VALUES ( '2004000' , 'Biohazard', 'Biohazard',  1.0);
 
@@ -345,7 +345,7 @@ INSERT INTO CATISSUE_PERMISSIBLE_VALUE  VALUES
 INSERT INTO CATISSUE_PERMISSIBLE_VALUE  VALUES 
 		  (89, 'C64','Toxic','EVS64',null,'Toxic','2004000' );
 		  
-/***************** Biohazards ************************************/
+#*************** Biohazards **********************************
 
 
 
