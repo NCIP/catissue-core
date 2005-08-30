@@ -34,15 +34,8 @@ public class SiteBizLogic extends DefaultBizLogic
 	protected void insert(DAO dao, Object obj) throws DAOException
 	{
 		Site site = (Site)obj;
-
-		Logger.out.debug("site.getCoordinator().getSystemIdentifier() "+site.getCoordinator().getSystemIdentifier());
-		List list = dao.retrieve(User.class.getName(), "systemIdentifier", site.getCoordinator().getSystemIdentifier());
-		Logger.out.debug("list "+list.size());
-		if (list.size() != 0)
-		{
-		    User user = (User) list.get(0);
-		    site.setCoordinator(user);
-		}
+		
+		setCordinator(dao,site);
 		
 		dao.insert(site.getAddress(),true);
 	    dao.insert(site,true);
@@ -56,5 +49,23 @@ public class SiteBizLogic extends DefaultBizLogic
      */
 	protected void update(DAO dao, Object obj) throws DAOException
     {
+		Site site = (Site)obj;
+		
+		setCordinator(dao,site);
+		
+		dao.update(site.getAddress());
+	    dao.update(site);
     }
+	
+	// This method sets the cordinator for a particular site.
+	private void setCordinator(DAO dao,Site site) throws DAOException
+	{
+		List list = dao.retrieve(User.class.getName(), "systemIdentifier", site.getCoordinator().getSystemIdentifier());
+		
+		if (list.size() != 0)
+		{
+		    User user = (User) list.get(0);
+		    site.setCoordinator(user);
+		}
+	}
 }
