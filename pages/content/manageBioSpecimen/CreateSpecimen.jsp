@@ -299,7 +299,8 @@
 				    </td>
 				    <td class="formField" colspan="4">
 				     	<html:select property="className" styleClass="formFieldSized15" styleId="className" size="1" disabled="<%=readOnlyForAll%>" onchange="onTypeChange(this)">
-							<html:options name="specimenTypeList" labelName="specimenTypeList"/>		
+							<%--html:options name="specimenTypeList" labelName="specimenTypeList"/--%>
+							<html:options collection="<%=Constants.SPECIMEN_TYPE_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
 		        	</td>
 				 </tr>

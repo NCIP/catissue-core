@@ -25,6 +25,7 @@ import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.CreateSpecimenBizLogic;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.cde.CDEManager;
 
 
 /**
@@ -81,7 +82,9 @@ public class CreateSpecimenAction extends Action
     	 	
     	 	request.setAttribute(Constants.PARENT_SPECIMEN_ID_LIST,parentSpecimenIdArray);
     	 	
-            request.setAttribute(Constants.SPECIMEN_TYPE_LIST, Constants.SPECIMEN_TYPE_VALUES);
+            //request.setAttribute(Constants.SPECIMEN_TYPE_LIST, Constants.SPECIMEN_TYPE_VALUES);
+    	 	List specimenList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_SPECIMEN_TYPE);
+        	request.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenList);
             
             request.setAttribute(Constants.SPECIMEN_SUB_TYPE_LIST, Constants.SPECIMEN_SUB_TYPE_VALUES);
             
