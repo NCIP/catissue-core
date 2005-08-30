@@ -426,8 +426,8 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 	    }
 	    catch(Exception excp)
 	    {
-	    	excp.printStackTrace();
-	        Logger.out.error(excp.getMessage());
+	    	// use of logger as per bug 79
+	    	Logger.out.error(excp.getMessage(),excp); 
 	    }
 	}
 }

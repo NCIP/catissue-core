@@ -68,8 +68,9 @@ public class DepartmentForm extends AbstractActionForm
         }
         catch (Exception excp)
         {
-            excp.printStackTrace();	
-            Logger.out.error(excp.getMessage());
+	    	// use of logger as per bug 79
+	    	Logger.out.error(excp.getMessage(),excp); 
+            
         }
     }
 

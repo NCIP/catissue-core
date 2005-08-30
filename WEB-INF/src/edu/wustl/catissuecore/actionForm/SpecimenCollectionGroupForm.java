@@ -20,6 +20,7 @@ import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Validator;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * SpecimenCollectionGroupForm Class is used to encapsulate 
@@ -185,8 +186,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 		  }
 		  catch (Exception excp)
 		  {
-			  excp.printStackTrace();
-
+	    	// use of logger as per bug 79
+	    	Logger.out.error(excp.getMessage(),excp); 
 		  }
 	  }
 	  
@@ -403,7 +404,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 		}
 		catch (Exception excp)
 		{
-			excp.printStackTrace();
+	    	// use of logger as per bug 79
+	    	Logger.out.error(excp.getMessage(),excp); 
 			errors = new ActionErrors();
 		}
 		return errors;

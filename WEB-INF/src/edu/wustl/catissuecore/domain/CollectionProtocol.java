@@ -17,6 +17,7 @@ import java.util.Map;
 import edu.wustl.catissuecore.actionForm.AbstractActionForm;
 import edu.wustl.catissuecore.actionForm.CollectionProtocolForm;
 import edu.wustl.common.util.MapDataParser;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * A set of written procedures that describe how a biospecimen is prospectively collected.
@@ -154,7 +155,8 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
         }
         catch (Exception excp)
         {
-        	excp.printStackTrace();
+	    	// use of logger as per bug 79
+	    	Logger.out.error(excp.getMessage(),excp); 
         }
     }
 }

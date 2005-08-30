@@ -164,8 +164,10 @@ public class Distribution extends SpecimenEventParameters implements java.io.Ser
 	    }
 	    catch(Exception excp)
 	    {
-	    	excp.printStackTrace();
-	        Logger.out.error(excp.getMessage());
+	   
+	    	// use of logger as per bug 79
+	    	Logger.out.error(excp.getMessage(),excp); 
+	   
 	    }
 	}
 	
