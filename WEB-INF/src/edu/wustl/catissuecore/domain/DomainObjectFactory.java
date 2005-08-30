@@ -16,6 +16,7 @@ import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.actionForm.ReportedProblemForm;
 import edu.wustl.catissuecore.actionForm.UserForm;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.util.logger.Logger;
 
 
 
@@ -193,9 +194,11 @@ public class DomainObjectFactory
 			 case Constants.DISTRIBUTION_FORM_ID :
             	abstractDomain = new Distribution(form);
             	break;
-			             	
-//             case Constants.SIMPLE_QUERY_INTERFACE_FORM_ID:
-//                 abstractDomain = new 
+			//added as per bug 79
+            	default:
+            		abstractDomain = null;
+            		Logger.out.error("Incompatible object ID");
+            		break;
         }
         return abstractDomain;
     }
