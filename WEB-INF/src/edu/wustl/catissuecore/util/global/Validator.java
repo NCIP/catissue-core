@@ -174,6 +174,20 @@ public class Validator
         }
     	
     }
+    
+    
+    public boolean isValidOption(String option)
+    {
+    	if(option != null)
+    	{
+    		if(option.equals("-1") || option.equals(Constants.SELECT_OPTION))
+    			return false;
+    		else
+    			return true;
+    	}
+    	
+    	return false;
+    }
 
     
     private boolean isValidEmailId(String emailAddress)
