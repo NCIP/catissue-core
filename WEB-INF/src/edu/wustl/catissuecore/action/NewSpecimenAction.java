@@ -33,13 +33,13 @@ import edu.wustl.common.cde.CDEManager;
  * NewSpecimenAction initializes the fields in the New Specimen page.
  * @author aniruddha_phadnis
  */
-public class NewSpecimenAction extends Action
+public class NewSpecimenAction  extends BaseAction
 {
     
     /**
      * Overrides the execute method of Action class.
      */
-    public ActionForward execute(ActionMapping mapping, ActionForm form,
+    public ActionForward executeAction(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response) throws Exception
     {
         //Gets the value of the operation parameter.

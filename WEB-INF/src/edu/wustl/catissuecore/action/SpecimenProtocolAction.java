@@ -30,14 +30,14 @@ import edu.wustl.catissuecore.util.global.Constants;
  * This class initializes the fields in the User Add/Edit webpage.
  * @author gautam_shetty
  */
-public class SpecimenProtocolAction extends Action
+public class SpecimenProtocolAction  extends BaseAction
 {
 
     /**
      * Overrides the execute method of Action class.
      * Sets the various fields in User Add/Edit webpage.
      * */
-    public ActionForward execute(ActionMapping mapping, ActionForm form,
+    public ActionForward executeAction(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException
     {

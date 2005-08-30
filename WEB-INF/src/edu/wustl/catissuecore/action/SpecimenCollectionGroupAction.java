@@ -37,13 +37,13 @@ import edu.wustl.common.cde.CDEManager;
  * New Specimen Collection Group page.
  * @author ajay_sharma
  */
-public class SpecimenCollectionGroupAction extends Action
+public class SpecimenCollectionGroupAction  extends BaseAction
 {
     
     /**
      * Overrides the execute method of Action class.
      */
-	public ActionForward execute(ActionMapping mapping, ActionForm form,
+	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response) throws Exception
     {
     	SpecimenCollectionGroupForm  specimenCollectionGroupForm = (SpecimenCollectionGroupForm)form;

@@ -21,9 +21,9 @@ import edu.wustl.catissuecore.util.global.Constants;
  *@author Aarti Sharma
  *@version 1.0
  */
-public class LogoutAction extends Action {
+public class LogoutAction  extends BaseAction {
 
-	public ActionForward execute(ActionMapping mapping, ActionForm form,
+	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) {
 		
 		HttpSession session = request.getSession();

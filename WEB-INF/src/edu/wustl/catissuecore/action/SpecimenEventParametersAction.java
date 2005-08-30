@@ -33,7 +33,7 @@ import edu.wustl.common.util.logger.Logger;
  * This class initializes the fields in the FrozenEventParameters Add/Edit webpage.
  * @author mandar deshmukh
  */
-public class SpecimenEventParametersAction extends Action
+public class SpecimenEventParametersAction  extends BaseAction
 {
 	protected void setRequestParameters(HttpServletRequest request)
 	{
@@ -75,7 +75,7 @@ public class SpecimenEventParametersAction extends Action
      * Overrides the execute method of Action class.
      * Sets the various fields in FrozenEventParameters Add/Edit webpage.
      * */
-    public ActionForward execute(ActionMapping mapping, ActionForm form,
+    public ActionForward executeAction(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException
     {

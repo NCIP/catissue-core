@@ -33,13 +33,13 @@ import edu.wustl.catissuecore.query.ShoppingCart;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;
 
-public class ShoppingCartAction extends Action//BaseAction
+public class ShoppingCartAction  extends BaseAction
 {
     /**
      * Overrides the execute method of Action class.
      * Initializes the various fields in ShoppingCart.jsp Page.
      * */
-    public ActionForward execute(ActionMapping mapping, ActionForm form,
+    public ActionForward executeAction(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException
     {

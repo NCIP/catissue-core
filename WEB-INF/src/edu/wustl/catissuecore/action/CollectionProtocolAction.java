@@ -34,11 +34,11 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
      * Overrides the execute method of Action class.
      * Sets the various fields in User Add/Edit webpage.
      * */
-    public ActionForward execute(ActionMapping mapping, ActionForm form,
+    public ActionForward executeAction(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException
     {
-    	super.execute(mapping, form, request, response);
+    	super.executeAction(mapping, form, request, response);
     	
     	//String [] clinicalStatusArry = {Constants.SELECT_OPTION, "Pre-Opt","Post-Opt"};
     	List clinicalStatusList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_CLINICAL_STATUS);

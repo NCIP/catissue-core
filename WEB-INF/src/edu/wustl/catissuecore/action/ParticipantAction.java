@@ -32,13 +32,13 @@ import edu.wustl.common.cde.CDEManager;
  * This class initializes the fields in the Participant Add/Edit webpage.
  * @author gautam_shetty
  */
-public class ParticipantAction extends Action
+public class ParticipantAction  extends BaseAction
 {
     /**
      * Overrides the execute method of Action class.
      * Sets the various fields in Participant Add/Edit webpage.
      * */
-    public ActionForward execute(ActionMapping mapping, ActionForm form,
+    public ActionForward executeAction(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException
     {

@@ -25,13 +25,13 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.cde.CDEManager;
 
-public class BiohazardAction extends Action//BaseAction
+public class BiohazardAction  extends BaseAction
 {
     /**
      * Overrides the execute method of Action class.
      * Initializes the various fields in Biohazard.jsp Page.
      * */
-    public ActionForward execute(ActionMapping mapping, ActionForm form,
+    public ActionForward executeAction(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException
     {

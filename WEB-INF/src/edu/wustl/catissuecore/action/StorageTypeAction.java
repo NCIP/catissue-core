@@ -23,13 +23,13 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.util.global.Constants;
 
-public class StorageTypeAction extends Action//BaseAction
+public class StorageTypeAction  extends BaseAction
 {
     /**
      * Overrides the execute method of Action class.
      * Initializes the various fields in StorageType.jsp Page.
      * */
-    public ActionForward execute(ActionMapping mapping, ActionForm form,
+    public ActionForward executeAction(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException
     {
