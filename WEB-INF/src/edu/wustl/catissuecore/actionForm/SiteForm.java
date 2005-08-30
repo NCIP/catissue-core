@@ -119,6 +119,7 @@ public class SiteForm extends AbstractActionForm
             Site site = (Site) abstractDomain;
             
             this.systemIdentifier= site.getSystemIdentifier().longValue();
+            this.name 			= site.getName();
             this.type			= site.getType();
             this.emailAddress 	= site.getEmailAddress();
             this.street 		= site.getAddress().getStreet();
@@ -451,8 +452,6 @@ public class SiteForm extends AbstractActionForm
         this.zipCode		= null;
         this.phoneNumber	= null;
         this.faxNumber		= null;
-//        this.activityStatus = Constants.ACTIVITY_STATUS_NEW;
-        // changed as per bug id 230
         this.activityStatus = Constants.ACTIVITY_STATUS_ACTIVE;
     }
     
@@ -505,33 +504,39 @@ public class SiteForm extends AbstractActionForm
                                      .getValue("site.street")));
                  }
                  
-                 if(type.equals(Constants.SELECT_OPTION))
+                 if(!validator.isValidOption(type))
                  {
-                 	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("site.type")));
+                 	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("site.type")));
                  }
                  if(coordinatorId == -1L)
                  {
-                 	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("site.coordinator")));
+                 	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("site.coordinator")));
                  }
                  
-                 if(state.equals(Constants.SELECT_OPTION))
+                 if(!validator.isValidOption(state))
                  {
-                 	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("site.state")));
+                 	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("site.state")));
                  }
-                 if(country.equals(Constants.SELECT_OPTION))
+                 
+                 if(!validator.isValidOption(country))
                  {
-                 	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("site.country")));
+                 	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("site.country")));
+                 }
+                 
+                 if (validator.isEmpty(city))
+                 {
+                     errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+                             "errors.item.required", ApplicationProperties
+                                     .getValue("site.city")));
+                 }
+                 
+                 checkValidNumber(zipCode, "site.zipCode", errors, validator);
+                 
+                 if(operation.equals(Constants.EDIT) && !validator.isValidOption(activityStatus))
+                 {
+                 	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("site.activityStatus")));
                  }
              }
-              
-             if (validator.isEmpty(city))
-             {
-                 errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-                         "errors.item.required", ApplicationProperties
-                                 .getValue("site.city")));
-             }
-             
-             checkValidNumber(zipCode, "site.zipCode", errors, validator);
          }
          catch(Exception excp)
          {
