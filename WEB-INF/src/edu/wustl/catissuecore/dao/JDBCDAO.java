@@ -34,6 +34,12 @@ public class JDBCDAO extends AbstractDAO
     private Connection connection = null;
     protected AuditManager auditManager;
     
+    /**
+     * This method will be used to establish the session with the database.
+     * Declared in AbstractDAO class.
+     * 
+     * @throws DAOException
+     */
     public void openSession() throws DAOException
     {
     	auditManager = new AuditManager();
@@ -62,7 +68,11 @@ public class JDBCDAO extends AbstractDAO
     	    throw new DAOException(classExp.getMessage(),classExp);
     	}
     }
-    
+    /**
+     * This method will be used to close the session with the database.
+     * Declared in AbstractDAO class.
+     * @throws DAOException
+     */
     public void closeSession() throws DAOException
     {
         try
@@ -77,7 +87,11 @@ public class JDBCDAO extends AbstractDAO
             new DAOException(sqlExp.getMessage(),sqlExp);
         }
     }
-    
+    /**
+     * Commit the database level changes.
+     * Declared in AbstractDAO class.
+     * @throws DAOException
+     */    
     public void commit() throws DAOException
     {
         try
@@ -93,7 +107,11 @@ public class JDBCDAO extends AbstractDAO
         	throw new DAOException("Error in commit", dbex);
         }
     }
-    
+    /**
+     * Rollback all the changes after last commit. 
+     * Declared in AbstractDAO class. 
+     * @throws DAOException
+     */    
     public void rollback() throws DAOException
     {
         try
@@ -253,6 +271,9 @@ public class JDBCDAO extends AbstractDAO
         return list;
     }
 
+    /* (non-Javadoc)
+     * @see edu.wustl.catissuecore.dao.DAO#retrieve(java.lang.String, java.lang.String, java.lang.Object)
+     */
     public List retrieve(String sourceObjectName, String whereColumnName,
             Object whereColumnValue) throws DAOException
     {
@@ -325,6 +346,12 @@ public class JDBCDAO extends AbstractDAO
         //return false;
     }
     
+    /**
+     * Creates a table with the name and columns specified.
+     * @param tableName Name of the table to create.
+     * @param columnNames Columns in the table.
+     * @throws DAOException
+     */
     public void create(String tableName, String[] columnNames) throws DAOException
     {
         StringBuffer query = new StringBuffer("CREATE TABLE "+tableName+" (");
@@ -342,6 +369,12 @@ public class JDBCDAO extends AbstractDAO
         executeUpdate(query.toString());
     }
     
+    
+    /**
+     * Deletes the specified table
+     * @param tableName
+     * @throws DAOException
+     */
     public void delete(String tableName) throws DAOException
     {
         StringBuffer query = new StringBuffer("DROP TABLE IF EXISTS "+tableName);
@@ -349,6 +382,9 @@ public class JDBCDAO extends AbstractDAO
         executeUpdate(query.toString());
     }
     
+    /* (non-Javadoc)
+     * @see edu.wustl.catissuecore.dao.DAO#retrieve(java.lang.String, java.lang.Long)
+     */
     public Object retrieve (String sourceObjectName, Long systemIdentifier) throws DAOException
 	{
 		try

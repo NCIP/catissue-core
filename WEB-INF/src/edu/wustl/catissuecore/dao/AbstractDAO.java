@@ -20,13 +20,14 @@ import edu.wustl.common.util.dbManager.DAOException;
 public abstract class AbstractDAO implements DAO
 {
     /**
+     * This method will be used to establish the session with the database.
      * 
      * @throws DAOException
      */
     public abstract void openSession() throws DAOException;
     
     /**
-     * 
+     * This method will be used to close the session with the database.
      * @throws DAOException
      */
     public abstract void closeSession() throws DAOException;

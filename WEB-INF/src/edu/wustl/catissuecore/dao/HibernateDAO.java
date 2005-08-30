@@ -46,6 +46,12 @@ public class HibernateDAO extends AbstractDAO
     protected Transaction transaction = null;
     protected AuditManager auditManager;
     
+    /**
+     * This method will be used to establish the session with the database.
+     * Declared in AbstractDAO class.
+     * 
+     * @throws DAOException
+     */
     public void openSession() throws DAOException
     {
         try
@@ -61,7 +67,11 @@ public class HibernateDAO extends AbstractDAO
             new DAOException("Error in opening connection", dbex);
         }
     }
-
+    /**
+     * This method will be used to close the session with the database.
+     * Declared in AbstractDAO class.
+     * @throws DAOException
+     */
     public void closeSession() throws DAOException
     {
     	try
@@ -77,7 +87,11 @@ public class HibernateDAO extends AbstractDAO
         transaction = null;
         auditManager = null;
     }
-    
+    /**
+     * Commit the database level changes.
+     * Declared in AbstractDAO class.
+     * @throws DAOException
+     */    
     public void commit() throws DAOException
     {
         try
@@ -93,7 +107,11 @@ public class HibernateDAO extends AbstractDAO
         	new DAOException("Error in commit", dbex);
         }
     }
-    
+    /**
+     * Rollback all the changes after last commit. 
+     * Declared in AbstractDAO class. 
+     * @throws DAOException
+     */    
     public void rollback() throws DAOException
     {
         try
@@ -422,8 +440,8 @@ public class HibernateDAO extends AbstractDAO
     	
     	dao.closeSession();
     	
-    	System.out.println("storageType "+storageType.getSystemIdentifier());
-    	System.out.println("StorageCapacity "+storageType.getDefaultStorageCapacity().getSystemIdentifier());
+//    	System.out.println("storageType "+storageType.getSystemIdentifier());
+//    	System.out.println("StorageCapacity "+storageType.getDefaultStorageCapacity().getSystemIdentifier());
 
 //    	System.out.println("user "+user.getSystemIdentifier());
 //    	System.out.println("Department "+user.getDepartment().getSystemIdentifier());

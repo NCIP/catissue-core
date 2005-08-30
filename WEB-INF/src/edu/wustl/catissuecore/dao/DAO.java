@@ -14,8 +14,7 @@ import edu.wustl.common.util.dbManager.DAOException;
 /**
  * @author kapil_kaveeshwar
  *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Style - Code Templates
+ * This interface defines methods for insertion, updation, deletion and retrival of data.
  */
 public interface DAO
 {
