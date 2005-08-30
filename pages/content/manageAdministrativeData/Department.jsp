@@ -6,7 +6,6 @@
 <%
         String operation = (String) request.getAttribute(Constants.OPERATION);
         String formName;
-        String searchFormName = new String(Constants.DEPARTMENT_SEARCH_ACTION);
 
         boolean readOnlyValue;
         if (operation.equals(Constants.EDIT))
