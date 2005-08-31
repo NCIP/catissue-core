@@ -273,7 +273,7 @@ PUBLIC
 			type="edu.wustl.catissuecore.action.CommonAddEditAction"
 			name="userForm"
 			validate="true"
-			input="/User.do?operation=edit&amp;pageOf=pageOfApproveUser"
+			input="/User.do?operation=edit"
 			scope="request">
 			<forward name="success" path=".catissuecore.userAddSuccessDef" />
 			<forward name="failure" path="/User.do?operation=edit&amp;pageOf=pageOfApproveUser" />
