@@ -10,7 +10,7 @@
 		//Change this to Constants.USER_EDIT_ACTION
         String searchFormName = new String(Constants.USER_EDIT_ACTION);
 
-		String pageOf = (String)request.getAttribute(Constants.PAGEOF);        
+		String pageOf = (String)request.getAttribute(Constants.PAGEOF);   
 
         boolean readOnlyValue;
         if (operation.equals(Constants.EDIT))
