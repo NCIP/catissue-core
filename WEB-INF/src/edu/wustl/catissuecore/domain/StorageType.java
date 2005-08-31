@@ -211,16 +211,19 @@ public class StorageType extends AbstractDomainObject implements Serializable
 	        
 	        this.systemIdentifier = new Long(storageTypeForm.getSystemIdentifier());
 	        this.type = storageTypeForm.getType();
-	        this.defaultTempratureInCentigrade = new Double(storageTypeForm.getDefaultTemperature());
+	        
+	        if(storageTypeForm.getDefaultTemperature()!=null && storageTypeForm.getDefaultTemperature().trim().length() >0 )
+	        	this.defaultTempratureInCentigrade = new Double(storageTypeForm.getDefaultTemperature());
+	        
 	        this.oneDimensionLabel = storageTypeForm.getOneDimensionLabel();
 	        this.twoDimensionLabel = storageTypeForm.getTwoDimensionLabel();
-	        
+
 	        defaultStorageCapacity.setOneDimensionCapacity(new Integer(storageTypeForm.getOneDimensionCapacity()));
 	        defaultStorageCapacity.setTwoDimensionCapacity(new Integer(storageTypeForm.getTwoDimensionCapacity()));
 	    }
 	    catch(Exception excp)
 	    {
-	        Logger.out.error(excp.getMessage());
+	    	Logger.out.error(excp.getMessage());
 	    }
 	}
 }
