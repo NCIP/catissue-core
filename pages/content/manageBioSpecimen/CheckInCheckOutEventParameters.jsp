@@ -161,7 +161,9 @@
 				</label>
 			</td>
 			<td class="formField">
-				<html:text styleClass="formDateSized" size="35" styleId="storageStatus" property="storageStatus" />
+				<html:select property="storageStatus" styleClass="formDateSized" styleId="storageStatus" size="1">
+					<html:options name="<%=Constants.STORAGESTATUSLIST%>" labelName="<%=Constants.STORAGESTATUSLIST%>" />
+				</html:select>
 			</td>
 		</tr>
 
