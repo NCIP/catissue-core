@@ -84,8 +84,8 @@ public class CheckInCheckOutEventParametersForm extends EventParametersForm
          try
          {
          	// checks the storageStatus
-
-           	if ( validator.isEmpty( storageStatus  ))
+         	// changed from isEmpty to isValidOption as per bug 294 textbox to dropdown
+           	if ( !validator.isValidOption( storageStatus  ))
             {
            		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("checkincheckouteventparameter.storagestatus")));
             }
