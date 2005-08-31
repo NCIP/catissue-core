@@ -245,60 +245,61 @@ public class MolecularSpecimenReviewParametersForm extends EventParametersForm
      * */
      public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
      {
-     	ActionErrors errors = super.validate(mapping, request);
+//     	ActionErrors errors = super.validate(mapping, request);
+     	ActionErrors errors = new ActionErrors();
          Validator validator = new Validator();
          
          try
          {
 
          	Logger.out.info("GelImageUrl: "+ gelImageURL );
-         //	 checks the gelImageURL
-          	if (validator.isEmpty(gelImageURL))
-            {
-           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("molecularspecimenreviewparameters.gelimageurl")));
-            }
+//         //	 checks the gelImageURL
+//          	if (validator.isEmpty(gelImageURL))
+//            {
+//           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("molecularspecimenreviewparameters.gelimageurl")));
+//            }
 
           	Logger.out.info("qualityIndex: "+ qualityIndex );
-            //	 checks the qualityIndex
-         	if (validator.isEmpty(qualityIndex ))
-            {
-           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("molecularspecimenreviewparameters.qualityindex")));
-            }
+//            //	 checks the qualityIndex
+//         	if (validator.isEmpty(qualityIndex ))
+//            {
+//           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("molecularspecimenreviewparameters.qualityindex")));
+//            }
 
           	Logger.out.info("laneNumber: "+ laneNumber );
-            //	 checks the laneNumber
-         	if (validator.isEmpty(laneNumber))
-            {
-           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("molecularspecimenreviewparameters.lanenumber")));
-            }
+//            //	 checks the laneNumber
+//         	if (validator.isEmpty(laneNumber))
+//            {
+//           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("molecularspecimenreviewparameters.lanenumber")));
+//            }
 
           	Logger.out.info("gelNumber: "+ gelNumber  );
-            //	 checks the gelNumber
-         	if (gelNumber <= 0 )
-            {
-           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("molecularspecimenreviewparameters.gelnumber")));
-            }
+//            //	 checks the gelNumber
+//         	if (gelNumber <= 0 )
+//            {
+//           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("molecularspecimenreviewparameters.gelnumber")));
+//            }
 
           	Logger.out.info("absorbanceAt260: "+ absorbanceAt260  );
-            //	 checks the absorbanceAt260
-         	if (!validator.isDouble(""+absorbanceAt260))
-            {
-           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("molecularspecimenreviewparameters.absorbanceat260")));
-            }
+//            //	 checks the absorbanceAt260
+//         	if (!validator.isDouble(""+absorbanceAt260))
+//            {
+//           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("molecularspecimenreviewparameters.absorbanceat260")));
+//            }
 
           	Logger.out.info("absorbanceAt280: "+ absorbanceAt280  );
-            //	 checks the absorbanceAt280
-         	if (!validator.isDouble(""+absorbanceAt280))
-            {
-           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("molecularspecimenreviewparameters.absorbanceat280")));
-            }
+//            //	 checks the absorbanceAt280
+//         	if (!validator.isDouble(""+absorbanceAt280))
+//            {
+//           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("molecularspecimenreviewparameters.absorbanceat280")));
+//            }
 
          	Logger.out.info("ratio28STo18S : "+ ratio28STo18S   );
-            //	 checks the ratio28STo18S 
-         	if (!validator.isDouble(""+ratio28STo18S ))
-            {
-           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("molecularspecimenreviewparameters.ratio28STo18S")));
-            }
+//            //	 checks the ratio28STo18S 
+//         	if (!validator.isDouble(""+ratio28STo18S ))
+//            {
+//           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("molecularspecimenreviewparameters.ratio28STo18S")));
+//            }
          	
          	
          }

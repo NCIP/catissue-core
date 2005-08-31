@@ -102,9 +102,9 @@
 		<!-- Name of the molecularspecimenreviewparameters -->
 <!-- User -->		
 		<tr>
-			<td class="formRequiredNotice" width="5">*</td>
-			<td class="formRequiredLabel">
-				<label for="type">
+			<td class="formRequiredNotice" width="5">&nbsp;</td>
+			<td class="formLabel">
+				<label for="eventparameters.user">
 					<bean:message key="eventparameters.user"/> 
 				</label>
 			</td>
@@ -119,7 +119,7 @@
 		<tr>
 			<td class="formRequiredNotice" width="5">&nbsp;</td>
 			<td class="formLabel">
-				<label for="type">
+				<label for="eventparameters.dateofevent">
 					<bean:message key="eventparameters.dateofevent"/> 
 				</label>
 			</td>
@@ -136,7 +136,7 @@
 		<tr>
 			<td class="formRequiredNotice" width="5">&nbsp;</td>
 			<td class="formLabel">
-				<label for="type">
+				<label for="eventparameters.timeinhours">
 					<bean:message key="eventparameters.timeinhours"/>&nbsp; 
 					<bean:message key="eventparameters.timeinminutes"/> 
 				</label>
@@ -153,9 +153,9 @@
 
 <!-- gelImageURL -->		
 		<tr>
-			<td class="formRequiredNotice" width="5">*</td>
-			<td class="formRequiredLabel">
-				<label for="type">
+			<td class="formRequiredNotice" width="5">&nbsp;</td>
+			<td class="formLabel">
+				<label for="molecularspecimenreviewparameters.gelimageurl">
 					<bean:message key="molecularspecimenreviewparameters.gelimageurl"/> 
 				</label>
 			</td>
@@ -166,9 +166,9 @@
 
 <!-- qualityIndex -->		
 		<tr>
-			<td class="formRequiredNotice" width="5">*</td>
-			<td class="formRequiredLabel">
-				<label for="type">
+			<td class="formRequiredNotice" width="5">&nbsp;</td>
+			<td class="formLabel">
+				<label for="molecularspecimenreviewparameters.qualityindex">
 					<bean:message key="molecularspecimenreviewparameters.qualityindex"/> 
 				</label>
 			</td>
@@ -179,9 +179,9 @@
 
 <!-- laneNumber -->		
 		<tr>
-			<td class="formRequiredNotice" width="5">*</td>
-			<td class="formRequiredLabel">
-				<label for="type">
+			<td class="formRequiredNotice" width="5">&nbsp;</td>
+			<td class="formLabel">
+				<label for="molecularspecimenreviewparameters.lanenumber">
 					<bean:message key="molecularspecimenreviewparameters.lanenumber"/> 
 				</label>
 			</td>
@@ -192,9 +192,9 @@
 
 <!-- gelNumber -->		
 		<tr>
-			<td class="formRequiredNotice" width="5">*</td>
-			<td class="formRequiredLabel">
-				<label for="type">
+			<td class="formRequiredNotice" width="5">&nbsp;</td>
+			<td class="formLabel">
+				<label for="molecularspecimenreviewparameters.gelnumber">
 					<bean:message key="molecularspecimenreviewparameters.gelnumber"/> 
 				</label>
 			</td>
@@ -205,9 +205,9 @@
 
 <!-- absorbanceAt260 -->		
 		<tr>
-			<td class="formRequiredNotice" width="5">*</td>
-			<td class="formRequiredLabel">
-				<label for="type">
+			<td class="formRequiredNotice" width="5">&nbsp;</td>
+			<td class="formLabel">
+				<label for="molecularspecimenreviewparameters.absorbanceat260">
 					<bean:message key="molecularspecimenreviewparameters.absorbanceat260"/> 
 				</label>
 			</td>
@@ -218,9 +218,9 @@
 
 <!-- absorbanceAt280 -->		
 		<tr>
-			<td class="formRequiredNotice" width="5">*</td>
-			<td class="formRequiredLabel">
-				<label for="type">
+			<td class="formRequiredNotice" width="5">&nbsp;</td>
+			<td class="formLabel">
+				<label for="molecularspecimenreviewparameters.absorbanceat280">
 					<bean:message key="molecularspecimenreviewparameters.absorbanceat280"/> 
 				</label>
 			</td>
@@ -231,9 +231,9 @@
 
 <!-- ratio28STo18S -->		
 		<tr>
-			<td class="formRequiredNotice" width="5">*</td>
-			<td class="formRequiredLabel">
-				<label for="type">
+			<td class="formRequiredNotice" width="5">&nbsp;</td>
+			<td class="formLabel">
+				<label for="molecularspecimenreviewparameters.ratio28STo18S">
 					<bean:message key="molecularspecimenreviewparameters.ratio28STo18S"/> 
 				</label>
 			</td>
