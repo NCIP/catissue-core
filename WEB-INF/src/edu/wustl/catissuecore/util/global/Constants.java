@@ -164,7 +164,8 @@ public class Constants
 	public static final String MOLECULAR_SPECIMEN_ID_LIST="molecularSpecimenIdList";
 	public static final String CELL_SPECIMEN_ID_LIST="cellSpecimenIdList";
 	public static final String FLUID_SPECIMEN_ID_LIST="fluidSpecimenIdList";
-			
+	public static final String STORAGESTATUSLIST="storageStatusList";
+	
 	//Constants required in User.jsp Page
 	public static final String USER_SEARCH_ACTION = "UserSearch.do";
 	public static final String USER_ADD_ACTION = "UserAdd.do";
@@ -1141,4 +1142,11 @@ public class Constants
 	public static final String CDE_NAME_METHOD = "Method";
 	public static final String CDE_NAME_EMBEDDING_MEDIUM = "Embedding Medium";
 	public static final String CDE_NAME_BIOHAZARD = "Biohazard";
+	
+	public static final String [] STORAGESTATUSARRAY = {
+	        SELECT_OPTION,
+			"STORAGESTATUS 1",
+			"STORAGESTATUS 2",
+			"STORAGESTATUS 3"
+	};
 }
