@@ -918,7 +918,7 @@ PUBLIC
 
 	<!-- CheckInCheckOutEventParameters Actions Begins -->
         <action path="/CheckInCheckOutEventParameters"
-			type="edu.wustl.catissuecore.action.SpecimenEventParametersAction"
+			type="edu.wustl.catissuecore.action.CheckInCheckOutEventParametersAction"
 			scope="request">
 			<forward name="success" path=".catissuecore.checkInCheckOutEventParametersDef" />
 			<forward name="failure" path=".catissuecore.checkInCheckOutEventParametersDef" />
