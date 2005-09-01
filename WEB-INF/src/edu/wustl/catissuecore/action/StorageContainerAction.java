@@ -48,6 +48,9 @@ public class StorageContainerAction  extends SecureAction
         //Sets the operation attribute to be used in the Add/Edit Institute Page. 
         request.setAttribute(Constants.OPERATION, operation);
         
+        //Sets the activityStatusList attribute to be used in the Site Add/Edit Page.
+        request.setAttribute(Constants.ACTIVITYSTATUSLIST, Constants.ACTIVITY_STATUS_VALUES);
+        
         try
 		{
         	StorageContainerBizLogic bizLogic = (StorageContainerBizLogic)BizLogicFactory.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
@@ -58,7 +61,7 @@ public class StorageContainerAction  extends SecureAction
         	request.setAttribute(Constants.STORAGETYPELIST, list);
         	
         	long typeSelected=-1;
-        	String selectedType = (String)request.getParameter("typeSelected");
+        	String selectedType = String.valueOf(storageContainerForm.getTypeId());
         	
         	if(selectedType != null && !selectedType.equals("-1"))
             {
@@ -89,21 +92,23 @@ public class StorageContainerAction  extends SecureAction
         	String []siteDisplayField = {"name"};
         	list = bizLogic.getList(Site.class.getName(),siteDisplayField, valueField);
         	request.setAttribute(Constants.SITELIST,list);
-        	
-        	if(storageContainerForm.getCheckedButton() == 1)
+
+        	if(!operation.equals(Constants.EDIT))
         	{
-        		request.setAttribute("startNumber",String.valueOf(bizLogic.getNextContainerNumber(storageContainerForm.getSiteId(),storageContainerForm.getTypeId(),true)));
-        	}
-        	else
-        	{
-        		request.setAttribute("startNumber",String.valueOf(bizLogic.getNextContainerNumber(Long.parseLong(request.getParameter("parentContainerId")),storageContainerForm.getTypeId(),false)));
-        	}
-        
+	        	if(storageContainerForm.getCheckedButton() == 1)
+	        	{
+	        		request.setAttribute("startNumber",String.valueOf(bizLogic.getNextContainerNumber(storageContainerForm.getSiteId(),storageContainerForm.getTypeId(),true)));
+	        	}
+	        	else
+	        	{
+	        		request.setAttribute("startNumber",String.valueOf(bizLogic.getNextContainerNumber(Long.parseLong(request.getParameter("parentContainerId")),storageContainerForm.getTypeId(),false)));
+	        	}
+        	}        
 		}
         catch(Exception e)
 		{
         	e.printStackTrace();
-		}        
+		}
     
         return mapping.findForward(Constants.SUCCESS);
     }
