@@ -29,7 +29,6 @@ public class StorageTypeBizLogic extends DefaultBizLogic
 	protected void insert(DAO dao, Object obj) throws DAOException  
 	{
 		StorageType type = (StorageType)obj;
-
 		dao.insert(type.getDefaultStorageCapacity(),true);
 	    dao.insert(type,true);
 	}

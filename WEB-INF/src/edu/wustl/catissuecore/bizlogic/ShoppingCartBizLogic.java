@@ -21,6 +21,7 @@ import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.query.ShoppingCart;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * ShoppingCartBizLogic provides the shopping cart functionality.
@@ -71,7 +72,7 @@ public class ShoppingCartBizLogic extends DefaultBizLogic
 		}
 		catch(Exception e)
 		{
-			e.printStackTrace();
+			 Logger.out.error(e.getMessage(), e);
 		}
 	}
 	
@@ -134,11 +135,11 @@ public class ShoppingCartBizLogic extends DefaultBizLogic
 		}
 		catch(IOException ie)
 		{
-			ie.printStackTrace();
+			 Logger.out.error(ie.getMessage(), ie);
 		}
 		catch(Exception e)
 		{
-			e.printStackTrace();
+			 Logger.out.error(e.getMessage(), e);
 		}
 		finally
 		{
@@ -148,7 +149,7 @@ public class ShoppingCartBizLogic extends DefaultBizLogic
 			}
 			catch(IOException ioe)
 			{
-				ioe.printStackTrace();
+				 Logger.out.error(ioe.getMessage(), ioe);
 			}
 		}
 	}
