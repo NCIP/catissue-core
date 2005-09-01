@@ -82,12 +82,20 @@ public class DistributionProtocolForm extends SpecimenProtocolForm
             {
                 if(this.principalInvestigatorId == -1)
 				{
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("collectionprotocol.principalinvestigator")));
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("distributionprotocol.principalinvestigator")));
 				}
                 if (validator.isEmpty(this.title))
                 {
-                	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocol.protocoltitle")));
+                	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("distributionprotocol.protocoltitle")));
                 }
+                
+                // as per bug 326
+                // check for valid enrollments if present
+                if (!validator.isEmpty(this.enrollment) && !validator.isNumeric(this.enrollment ))
+                {
+                	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("distributionprotocol.participants")));
+                }
+                
                 
     			Iterator it = this.values.keySet().iterator();
     			while (it.hasNext())
@@ -114,7 +122,7 @@ public class DistributionProtocolForm extends SpecimenProtocolForm
     				{
     					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("collectionprotocol.specimenstatus")));
     				}
-    				if(key.indexOf("quantityIn")!=-1 && validator.isEmpty(value))
+    				if(key.indexOf("quantityIn")!=-1  && (validator.isEmpty(value) || !validator.isNumeric(value )))
     				{
     					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocol.quantity")));
     				}
