@@ -212,7 +212,9 @@
 				</label>
 			</td>
 			<td class="formField">
-				<html:text styleClass="formDateSized" size="35" styleId="histologicalQuality" property="histologicalQuality" />
+				<html:select property="histologicalQuality" styleClass="formDateSized" styleId="histologicalQuality" size="1">
+					<html:options name="<%=Constants.HISTOLOGICALQUALITYLIST%>" labelName="<%=Constants.HISTOLOGICALQUALITYLIST%>" />
+				</html:select>
 			</td>
 		</tr>
 
