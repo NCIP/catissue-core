@@ -257,7 +257,10 @@
 						</label>
 					</td>
 				     <td class="formField">
-				     	<html:text property="clinicalDiagnosis" styleClass="formFieldSized" size="30" styleId="clinicalDiagnosis"  readonly="<%=readOnlyForAll%>"/>
+						<html:select property="clinicalDiagnosis" styleClass="formFieldSized" styleId="clinicalDiagnosis" size="1" >
+							<html:options name="<%=Constants.CLINICALDIAGNOSISLIST%>" labelName="<%=Constants.CLINICALDIAGNOSISLIST%>" />
+						</html:select>
+				  <!--   	<html:text property="clinicalDiagnosis" styleClass="formFieldSized" size="30" styleId="clinicalDiagnosis"  readonly="<%=readOnlyForAll%>"/>  -->
 		        	  </td>
 				 </tr>
 				 <tr>
@@ -302,11 +305,8 @@
 				 </tr>
 				 
 				 <tr>
-			     	<td class="formRequiredNotice" width="5">
-				     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">*</logic:notEqual>
-				     	<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;</logic:equal>
-				    </td>
-				    <td class="formRequiredLabel">
+					<td class="formRequiredNotice" width="5">&nbsp;</td>
+					<td class="formLabel">
 						<label for="surgicalPathologyNumber">
 							<bean:message key="specimenCollectionGroup.surgicalPathologyNumber"/>
 						</label>

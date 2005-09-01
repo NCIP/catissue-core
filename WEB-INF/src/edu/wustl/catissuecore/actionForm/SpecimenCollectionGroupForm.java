@@ -367,7 +367,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 				}
 				
 				// Mandatory Field : clinical Diagnosis
-				if(validator.isEmpty(this.clinicalDiagnosis)){
+				if(!validator.isValidOption(this.clinicalDiagnosis)){
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",
 									ApplicationProperties.getValue("specimenCollectionGroup.clinicalDiagnosis")));
 				}
@@ -393,11 +393,11 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 					// No need of any condition.
 				      
 				}
-				// Mandatory Field : surgical Pathological number
-				if(validator.isEmpty(this.surgicalPathologyNumber)){
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",
-								ApplicationProperties.getValue("specimenCollectionGroup.surgicalPathologyNumber")));
-				}
+				// not mandatory
+//				if(validator.isEmpty(this.surgicalPathologyNumber)){
+//					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",
+//								ApplicationProperties.getValue("specimenCollectionGroup.surgicalPathologyNumber")));
+//				}
 				
 			}
 
