@@ -24,6 +24,7 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.domain.StorageContainer;
+import edu.wustl.catissuecore.domain.StorageContainerDetails;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Validator;
@@ -49,7 +50,7 @@ public class StorageContainerForm extends AbstractActionForm
 	/**
 	 * An id which refers to the type of the storage.
 	 */
-	private long typeId;
+	private long typeId = -1;
 
 	/**
 	 * An id which refers to Parent Container of this container.
@@ -180,10 +181,23 @@ public class StorageContainerForm extends AbstractActionForm
 			StorageContainer container = (StorageContainer) abstractDomain;
 
 			this.systemIdentifier = container.getSystemIdentifier().longValue();
+			this.activityStatus = container.getActivityStatus();
+			this.startNumber = container.getName();
+			
 			this.typeId = container.getStorageType().getSystemIdentifier().longValue();
-			this.parentContainerId = container.getParentContainer().getSystemIdentifier()
-					.longValue();
-			this.siteId = container.getSite().getSystemIdentifier().longValue();
+			
+			if(container.getParentContainer() != null)
+			{
+				this.parentContainerId = container.getParentContainer().getSystemIdentifier().longValue();
+				this.checkedButton = 2;
+				this.positionInParentContainer = container.getStorageType().getType() + " : " 
+								+ container.getParentContainer().getSystemIdentifier() + " Pos(" + container.getPositionDimensionOne() + ","
+								+ container.getPositionDimensionTwo() + ")";
+			}
+			
+			if(container.getSite()!= null)
+				this.siteId = container.getSite().getSystemIdentifier().longValue();
+
 			this.defaultTemperature = container.getTempratureInCentigrade().doubleValue();
 			this.oneDimensionCapacity = container.getStorageContainerCapacity()
 					.getOneDimensionCapacity().intValue();
@@ -191,8 +205,43 @@ public class StorageContainerForm extends AbstractActionForm
 					.getTwoDimensionCapacity().intValue();
 			this.oneDimensionLabel = container.getStorageType().getOneDimensionLabel();
 			this.twoDimensionLabel = container.getStorageType().getTwoDimensionLabel();
-			this.noOfContainers = container.getNoOfContainers().intValue();
-			this.startNumber = String.valueOf(container.getStartNo().intValue());
+			
+			if(container.getNoOfContainers() != null)
+				this.noOfContainers = container.getNoOfContainers().intValue();
+			
+			if(container.getStartNo() != null)
+				this.startNumber = String.valueOf(container.getStartNo().intValue());
+			
+			Collection storageContainerDetails = container.getStorageContainerDetailsCollection();
+			
+			if(storageContainerDetails != null)
+			{
+				values = new HashMap();
+				
+				Iterator it = storageContainerDetails.iterator();
+				int i=1;
+				counter=0;
+				
+				while(it.hasNext())
+				{
+					String key1 = "StorageContainerDetails:" + i +"_parameterName";
+					String key2 = "StorageContainerDetails:" + i +"_parameterValue";
+					String key3 = "StorageContainerDetails:" + i +"_systemIdentifier";
+					
+					StorageContainerDetails containerDetails = (StorageContainerDetails)it.next();
+					
+					values.put(key1,containerDetails.getParameterName());
+					values.put(key2,containerDetails.getParameterValue());
+					values.put(key3,containerDetails.getSystemIdentifier());
+					
+					i++;
+					counter++;
+				}
+				
+				//At least one row should be displayed in ADD MORE therefore
+				if(counter == 0)
+					counter = 1;
+			}
 		}
 		catch (Exception excp)
 		{
@@ -474,9 +523,6 @@ public class StorageContainerForm extends AbstractActionForm
 
 		try
 		{
-			System.out.println("\n\n****************\n\n");
-			printMap(); 
-			System.out.println("\n\n****************\n\n");
 			if (operation.equals(Constants.SEARCH))
 			{
 				checkValidNumber(new Long(systemIdentifier).toString(),
@@ -502,6 +548,11 @@ public class StorageContainerForm extends AbstractActionForm
 
 				checkValidNumber(String.valueOf(noOfContainers), "storageContainer.noOfContainers",
 						errors, validator);
+				
+				if(operation.equals(Constants.EDIT) && !validator.isValidOption(activityStatus))
+                {
+                	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("site.activityStatus")));
+                }
 				
 				//Validations for External Identifier Add-More Block
                 String className = "StorageContainerDetails:";
@@ -730,17 +781,5 @@ public class StorageContainerForm extends AbstractActionForm
     public void setPositionDimensionTwo(int positionDimensionTwo)
     {
         this.positionDimensionTwo = positionDimensionTwo;
-    }
-    
-    private void printMap()
-    {
-    	Iterator it = this.values.keySet().iterator();
-		while (it.hasNext())
-		{
-			String key = (String)it.next();
-			String value = (String)values.get(key);
-			System.out.println(key+ " : " + value);
-			
-		}
     }
 }

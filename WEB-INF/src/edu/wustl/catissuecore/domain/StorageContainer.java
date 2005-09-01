@@ -1,6 +1,6 @@
 /**
- * <p>Title: Participant Class>
- * <p>Description:  A physically discreet container that is used to store a specimen  e.g. Box, Freezer etc. </p>
+ * <p>Title: StorageContainer Class>
+ * <p>Description:  A class that models storage container's information. </p>
  * Copyright:    Copyright (c) year
  * Company: Washington University, School of Medicine, St. Louis.
  * @author Aniruddha Phadnis
@@ -18,7 +18,7 @@ import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.logger.Logger;
 
 /**
- * A physically discreet container that is used to store a specimen  e.g. Box, Freezer etc.
+ * A class that models storage container's information.
  * @hibernate.class table="CATISSUE_STORAGE_CONTAINER"
  * @author Aniruddha Phadnis
  */
@@ -112,8 +112,11 @@ public class StorageContainer extends AbstractDomainObject implements java.io.Se
 	
 	public StorageContainer(StorageContainer oldContainer)
 	{
-		this.setActivityStatus(oldContainer.getActivityStatus());		
+		this.setSystemIdentifier(oldContainer.getSystemIdentifier());
+		this.setActivityStatus(oldContainer.getActivityStatus());
 		this.setParentContainer(oldContainer.getParentContainer());
+		this.setName(oldContainer.getName());
+		
 		if(parentContainer!=null)
 		{
 			parentContainer.getChildrenContainerCollection().add(this);
@@ -447,12 +450,12 @@ public class StorageContainer extends AbstractDomainObject implements java.io.Se
 	        StorageContainerForm form = (StorageContainerForm) abstractForm;
 	        this.systemIdentifier 		= new Long(form.getSystemIdentifier());
 	        this.name					= form.getStartNumber();
+	        this.startNo				= new Integer(form.getStartNumber());
 	        this.tempratureInCentigrade	= new Double(form.getDefaultTemperature());
 	        this.barcode				= form.getBarcode();
 	        this.isFull					= new Boolean(form.getIsFull());
 	        this.activityStatus			= form.getActivityStatus();
 	        this.noOfContainers			= new Integer(form.getNoOfContainers());
-	        this.startNo				= new Integer(form.getStartNumber());
 	        
 	        storageType = new StorageType();
 	        storageType.systemIdentifier = new Long(form.getTypeId());
@@ -476,18 +479,15 @@ public class StorageContainer extends AbstractDomainObject implements java.io.Se
 	        }
 	        
 	        Map map = form.getValues();
-	        
-	        System.out.println("MAP "+map);
-	        
+	        System.out.println("Map :"+map); 
 	        MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.domain");
 	        
 	        Collection storageContainerDetailsCollectionTemp = parser.generateData(map);
-	        this.storageContainerDetailsCollection.addAll(storageContainerDetailsCollectionTemp);
-	        
+	        this.storageContainerDetailsCollection = storageContainerDetailsCollectionTemp;
 	    }
 	    catch(Exception excp)
 	    {
-	        Logger.out.error(excp.getMessage());
+	        Logger.out.error(excp.getMessage(),excp);
 	    }
 	}
 	/**
