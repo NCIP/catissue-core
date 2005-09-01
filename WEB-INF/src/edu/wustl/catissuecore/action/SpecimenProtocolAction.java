@@ -11,13 +11,14 @@
 package edu.wustl.catissuecore.action;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -25,6 +26,7 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.cde.CDEManager;
 
 /**
  * This class initializes the fields in the User Add/Edit webpage.
@@ -53,18 +55,30 @@ public class SpecimenProtocolAction  extends SecureAction
         	Collection coll =  userBizLogic.getUsers(Constants.ACTIVITY_STATUS_ACTIVE);
         	request.setAttribute(Constants.USERLIST, coll);
         	
-	    	String [] specimenClassArry = {Constants.SELECT_OPTION, "Fluid Specimen","Tissue Specimen","Cell Specimen","Molecular Specimen"};
-	    	String [] specimenClassIdArry = {Constants.SELECT_OPTION, "Fluid","Tissue","Cell","Molecular"};
-	    	request.setAttribute(Constants.SPECIMEN_CLASS_LIST, specimenClassArry);
-	    	request.setAttribute(Constants.SPECIMEN_CLASS_ID_LIST, specimenClassIdArry);
-
-	    	String [] specimenTypeArry = {Constants.SELECT_OPTION,"Blood","Cerum"};
-	    	request.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeArry);
+	    	List specimenClassList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_SPECIMEN_CLASS);
+	    	request.setAttribute(Constants.SPECIMEN_CLASS_LIST, specimenClassList);
 	    	
-	    	request.setAttribute(Constants.TISSUE_SITE_LIST, Constants.TISSUE_SITE_ARRAY);
-	    		
-	    	String [] pathologyStatusArry = {Constants.SELECT_OPTION,"Primary Tumor","Metastatic Node","Non-Malignant Tissue"};
-	    	request.setAttribute(Constants.PATHOLOGICAL_STATUS_LIST, pathologyStatusArry);
+	    	List specimenTypeList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_SPECIMEN_TYPE);
+	    	request.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
+	    	
+	    	List tissueSiteList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_TISSUE_SITE);
+	    	request.setAttribute(Constants.TISSUE_SITE_LIST, tissueSiteList);
+	    	
+	    	List pathologyStatusList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_PATHOLOGICAL_STATUS);
+	    	request.setAttribute(Constants.PATHOLOGICAL_STATUS_LIST, pathologyStatusList);
+	    	
+			//String [] specimenClassArry = {Constants.SELECT_OPTION, "Fluid Specimen","Tissue Specimen","Cell Specimen","Molecular Specimen"};
+			//String [] specimenClassIdArry = {Constants.SELECT_OPTION, "Fluid","Tissue","Cell","Molecular"};
+			//request.setAttribute(Constants.SPECIMEN_CLASS_LIST, specimenClassArry);
+			//request.setAttribute(Constants.SPECIMEN_CLASS_ID_LIST, specimenClassIdArry);
+	    	
+	    	//request.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeArry);
+	    	
+	    	//request.setAttribute(Constants.TISSUE_SITE_LIST, Constants.TISSUE_SITE_ARRAY);
+	    	
+	    	//String [] pathologyStatusArry = {Constants.SELECT_OPTION,"Primary Tumor","Metastatic Node","Non-Malignant Tissue"};
+	    	//request.setAttribute(Constants.PATHOLOGICAL_STATUS_LIST, pathologyStatusArry);
+
 		}
         catch(Exception e)
 		{
