@@ -19,6 +19,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -37,14 +38,14 @@ import gov.nih.nci.security.authorization.domainobjects.Role;
  * This class initializes the fields in the User Add/Edit webpage.
  * @author gautam_shetty
  */
-public class UserAction extends SecureAction
+public class UserAction extends Action
 {
 
     /**
      * Overrides the execute method of Action class.
      * Sets the various fields in User Add/Edit webpage.
      * */
-    public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
+    public ActionForward execute(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException
     {
