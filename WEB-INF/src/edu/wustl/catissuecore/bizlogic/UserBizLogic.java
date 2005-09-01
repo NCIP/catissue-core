@@ -156,8 +156,11 @@ public class UserBizLogic extends DefaultBizLogic
         catch (SMException smExp)
         {
 //            throw new DAOException(smExp);
-            smExp.printStackTrace();
+	    	// use of logger as per bug 79
+	    	Logger.out.error(smExp.getMessage(),smExp); 
+
         }
+            
     }
 
     /**
