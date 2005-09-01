@@ -12,8 +12,6 @@ import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 
-import edu.wustl.common.util.logger.Logger;
-
 public class MapDataParser 
 {
 	private String packageName = "";
@@ -78,18 +76,24 @@ public class MapDataParser
 	{
 		if(type.equals(String.class))
 			return str;
-		else if(type.equals(Long.class))
-			return new Long(str);
-		else if(type.equals(Double.class))
-			return new Double(str);
-		else if(type.equals(Float.class))
-			return new Float(str);
-		else if(type.equals(Integer.class))
-			return new Integer(str);
-		else if(type.equals(Byte.class))
-			return new Integer(str);
-		else if(type.equals(Short.class))
-			return new Integer(str);
+		else
+		{
+			if(str.trim().length()==0)
+				str = "0";
+			
+			if(type.equals(Long.class))
+				return new Long(str);
+			else if(type.equals(Double.class))
+				return new Double(str);
+			else if(type.equals(Float.class))
+				return new Float(str);
+			else if(type.equals(Integer.class))
+				return new Integer(str);
+			else if(type.equals(Byte.class))
+				return new Integer(str);
+			else if(type.equals(Short.class))
+				return new Integer(str);
+		}
 		return str;
 	}
 	
