@@ -15,7 +15,7 @@
         <id
             name="identifier"
             column="IDENTIFIER"
-            type="long"
+            type="string"
             length="30"
             unsaved-value="null"
         >

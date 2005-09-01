@@ -73,8 +73,8 @@ public class PermissibleValueImpl implements PermissibleValue
      * getIdentifier method returns the unique id associated with the
      * PermissibleValue
      * @return Returns the identifier.
-     * @hibernate.id name="identifier" column="IDENTIFIER" type="long"
-     * length="30" unsaved-value="null" generator-class="native"
+     * @hibernate.id name="identifier" column="IDENTIFIER" type="string"
+     * length="30" unsaved-value="null" generator-class="assigned"
      */
     public Long getIdentifier()
     {
