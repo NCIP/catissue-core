@@ -74,7 +74,7 @@
 	</XMLCDE>
 	
 	<XMLCDE cache="true" lazyLoading="false">
-	<name>Specimen Type</name>
+	<name>Specimen</name>
 	<publicId>2003991</publicId>
 	<XMLPermissibleValues>
 		<evsTerminology>NCI-THESAURAUS</evsTerminology>
@@ -186,6 +186,17 @@
 	<XMLCDE cache="true" lazyLoading="false">
 	<name>Site Type</name>
 	<publicId>Site_Type_PID</publicId>
+	<XMLPermissibleValues>
+		<evsTerminology>NCI-THESAURAUS</evsTerminology>
+		<conceptCode>PV</conceptCode> 
+		<parentConceptCode></parentConceptCode>
+		<depthOfHierarchyTree>6</depthOfHierarchyTree> 
+	</XMLPermissibleValues>
+	</XMLCDE>
+	
+	<XMLCDE cache="true" lazyLoading="false">
+	<name>Specimen Type</name>
+	<publicId>Specimen_Type_PID</publicId>
 	<XMLPermissibleValues>
 		<evsTerminology>NCI-THESAURAUS</evsTerminology>
 		<conceptCode>PV</conceptCode> 
