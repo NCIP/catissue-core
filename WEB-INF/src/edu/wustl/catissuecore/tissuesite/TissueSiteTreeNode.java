@@ -20,12 +20,13 @@ import edu.wustl.catissuecore.vo.TreeNode;
  */
 public class TissueSiteTreeNode implements TreeNode, Serializable
 {
-
-    private Long identifier;
+	private static final long serialVersionUID = 1234567890L;
+	
+    private String identifier;
 
     private String value;
 
-    private Long parentIdentifier;
+    private String parentIdentifier;
 
     private String cdeLongName;
 
@@ -75,7 +76,7 @@ public class TissueSiteTreeNode implements TreeNode, Serializable
     /**
      * @return Returns the identifier.
      */
-    public Long getIdentifier()
+    public String getIdentifier()
     {
         return identifier;
     }
@@ -83,7 +84,7 @@ public class TissueSiteTreeNode implements TreeNode, Serializable
     /**
      * @param identifier The identifier to set.
      */
-    public void setIdentifier(Long identifier)
+    public void setIdentifier(String identifier)
     {
         this.identifier = identifier;
     }
@@ -91,7 +92,7 @@ public class TissueSiteTreeNode implements TreeNode, Serializable
     /**
      * @return Returns the parentIdentifier.
      */
-    public Long getParentIdentifier()
+    public Object getParentIdentifier()
     {
         return parentIdentifier;
     }
@@ -99,7 +100,7 @@ public class TissueSiteTreeNode implements TreeNode, Serializable
     /**
      * @param parentIdentifier The parentIdentifier to set.
      */
-    public void setParentIdentifier(Long parentIdentifier)
+    public void setParentIdentifier(String parentIdentifier)
     {
         this.parentIdentifier = parentIdentifier;
     }

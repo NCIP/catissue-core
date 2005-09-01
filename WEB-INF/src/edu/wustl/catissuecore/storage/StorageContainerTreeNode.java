@@ -20,7 +20,8 @@ import edu.wustl.catissuecore.vo.TreeNode;
  */
 public class StorageContainerTreeNode implements Serializable, TreeNode
 {
-
+	private static final long serialVersionUID = 1234567890L;
+	
     private Long storageContainerIdentifier;
 
     private String storageContainerName;
@@ -202,7 +203,7 @@ public class StorageContainerTreeNode implements Serializable, TreeNode
         return this.getSiteSystemIdentifier().equals(storageContainerTreeNode.getSiteSystemIdentifier());
     }
     
-    public Long getParentIdentifier()
+    public Object getParentIdentifier()
     {
         return this.getParentStorageContainerIdentifier();
     }
