@@ -43,38 +43,20 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 	protected void insert(DAO dao, Object obj) throws DAOException 
 	{
 		StorageContainer container = (StorageContainer)obj;
-		
 		container.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
         
-        boolean fullStatus[][] = null;
+        setSiteAndType(dao,container);
 
         int noOfContainers = container.getNoOfContainers().intValue();
         
-        List list = dao.retrieve(StorageType.class.getName(),
-                "systemIdentifier", container.getStorageType()
-                        .getSystemIdentifier());
-        if (list.size() != 0)
-        {
-            StorageType type = (StorageType) list.get(0);
-            container.setStorageType(type);
-        }
-
-        if (container.getSite() != null)
-        {
-            list = dao.retrieve(Site.class.getName(), "systemIdentifier",
-                    container.getSite().getSystemIdentifier());
-            if (list.size() != 0)
-            {
-                Site site = (Site) list.get(0);
-                container.setSite(site);
-            }
-        }
-
+        //Setting the Parent Container if applicable
         int posOneCapacity = 1, posTwoCapacity = 1;
         int positionDimensionOne = 0, positionDimensionTwo=0;
+        boolean fullStatus[][] = null;
+        
         if (container.getParentContainer() != null)
         {
-            list = dao.retrieve(StorageContainer.class.getName(),
+            List list = dao.retrieve(StorageContainer.class.getName(),
                     "systemIdentifier", container.getParentContainer().getSystemIdentifier());
             if (list.size() != 0)
             {
@@ -90,7 +72,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
             positionDimensionOne = container.getPositionDimensionOne().intValue();
             positionDimensionTwo = container.getPositionDimensionTwo().intValue();
         }
-
+        
         for (int i = 0; i < noOfContainers; i++)
         {
             StorageContainer cont = new StorageContainer(container);
@@ -100,7 +82,9 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
                 cont.setPositionDimensionTwo(new Integer(positionDimensionTwo));
             }
             
-            cont.setName(String.valueOf(i + container.getStartNo().intValue()));
+            if(container.getStartNo() != null)
+            	cont.setName(String.valueOf(i + container.getStartNo().intValue()));
+            
             dao.insert(cont.getStorageContainerCapacity(),true);
             dao.insert(cont,true);
 
@@ -141,8 +125,97 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
      */
 	protected void update(DAO dao, Object obj) throws DAOException
     {
-    }
+		StorageContainer container = (StorageContainer)obj;
+		
+        setSiteAndType(dao,container);
 
+        int posOneCapacity = 1, posTwoCapacity = 1;
+        int positionDimensionOne = 0, positionDimensionTwo=0;
+        boolean fullStatus[][] = null;
+        
+        if (container.getParentContainer() != null)
+        {
+            List list = dao.retrieve(StorageContainer.class.getName(),
+                    "systemIdentifier", container.getParentContainer().getSystemIdentifier());
+            if (list.size() != 0)
+            {
+                StorageContainer pc = (StorageContainer) list.get(0);
+                container.setParentContainer(pc);
+            }
+            
+            posOneCapacity = container.getParentContainer().getStorageContainerCapacity().getOneDimensionCapacity().intValue();
+            posTwoCapacity = container.getParentContainer().getStorageContainerCapacity().getTwoDimensionCapacity().intValue();
+            
+            fullStatus = getStorageContainerFullStatus(dao, container
+                    .getParentContainer().getSystemIdentifier());
+            positionDimensionOne = container.getPositionDimensionOne().intValue();
+            positionDimensionTwo = container.getPositionDimensionTwo().intValue();
+        }
+        
+
+            StorageContainer cont = new StorageContainer(container);
+            if (cont.getParentContainer() != null)
+            {
+                cont.setPositionDimensionOne(new Integer(positionDimensionOne));
+                cont.setPositionDimensionTwo(new Integer(positionDimensionTwo));
+            }
+            
+            //cont.setName(String.valueOf(i + container.getStartNo().intValue()));
+            dao.update(cont.getStorageContainerCapacity());
+            dao.update(cont);
+
+            Collection storageContainerDetailsCollection = cont.getStorageContainerDetailsCollection();
+            
+            if (storageContainerDetailsCollection.size() > 0)
+            {
+                Iterator it = storageContainerDetailsCollection.iterator();
+                while (it.hasNext())
+                {
+                    StorageContainerDetails storageContainerDetails = (StorageContainerDetails) it.next();
+                    storageContainerDetails.setStorageContainer(cont);
+                    dao.update(storageContainerDetails);
+                }
+            }
+            
+            if (container.getParentContainer() != null)
+            {
+                do
+                {
+                    if (positionDimensionTwo == (posTwoCapacity - 1))
+                    {
+                        positionDimensionOne = (positionDimensionOne + 1) % posOneCapacity;
+                    }
+                    positionDimensionTwo = (positionDimensionTwo + 1) % posTwoCapacity;
+                }
+                while (fullStatus[positionDimensionOne][positionDimensionTwo] != false);
+            }
+    }
+	
+	
+	// This method sets the Storage Type & Site (if applicable) of this container.
+	private void setSiteAndType(DAO dao, StorageContainer container) throws DAOException
+	{
+		//Setting the Storage Type
+		List list = dao.retrieve(StorageType.class.getName(),"systemIdentifier", container.getStorageType().getSystemIdentifier());
+        if (list.size() != 0)
+        {
+            StorageType type = (StorageType) list.get(0);
+            container.setStorageType(type);
+        }
+        
+        //Setting the site if applicable
+        if (container.getSite() != null)
+        {
+            list = dao.retrieve(Site.class.getName(), "systemIdentifier",
+                    container.getSite().getSystemIdentifier());
+            if (list.size() != 0)
+            {
+                Site site = (Site) list.get(0);
+                container.setSite(site);
+            }
+        }
+	}
+	
     public int getNextContainerNumber(long parentID, long typeID,
             boolean isInSite) throws DAOException
     {
