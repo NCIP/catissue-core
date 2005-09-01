@@ -479,7 +479,11 @@ public class Constants
 	public static final String PAGEOF_STORAGE_LOCATION = "pageOfStorageLocation";
 	public static final String PAGEOF_SPECIMEN = "pageOfSpecimen";
 	public static final String PAGEOF_TISSUE_SITE = "pageOfTissueSite";
-	
+
+	//For Simple Query Interface and Edit.
+	public static final String PAGEOF_SIMPLE_QUERY_INTERFACE = "pageOfSimpleQueryInterface";
+	public static final String PAGEOF_EDIT_OBJECT = "pageOfEditObject";
+
 	//Query results view temporary table name.
 	public static final String QUERY_RESULTS_TABLE = "CATISSUE_QUERY_RESULTS";
 	
