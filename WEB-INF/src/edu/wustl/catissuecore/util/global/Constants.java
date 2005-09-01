@@ -516,10 +516,10 @@ public class Constants
 	
 	public static final String SELECT_OPTION = "-- Select --";
 	
-	public static final String[] TISSUE_SITE_ARRAY = {
-	        SELECT_OPTION,"Sex","male","female",
-	        "Tissue","kidney","Left kidney","Right kidney"
-	};
+//	public static final String[] TISSUE_SITE_ARRAY = {
+//	        SELECT_OPTION,"Sex","male","female",
+//	        "Tissue","kidney","Left kidney","Right kidney"
+//	};
 	
 	public static final String[] ATTRIBUTE_NAME_ARRAY = {
 	        SELECT_OPTION
@@ -1136,6 +1136,7 @@ public class Constants
 	public static final String CDE_NAME_CLINICAL_STATUS = "Clinical Status";
 	public static final String CDE_NAME_GENDER = "Gender";
 	public static final String CDE_NAME_GENOTYPE = "Genotype";
+	public static final String CDE_NAME_SPECIMEN_CLASS = "Specimen";
 	public static final String CDE_NAME_SPECIMEN_TYPE = "Specimen Type";
 	public static final String CDE_NAME_TISSUE_SIDE = "Tissue Side";
 	public static final String CDE_NAME_PATHOLOGICAL_STATUS = "Pathological Status";
