@@ -98,7 +98,7 @@ public class CatissueCoreServletContextListener
         
         try
         {
-            Logger.out
+            /*Logger.out
                     .debug("Create Perm to aarti on edu.wustl.catissuecore.domain.CollectionProtocol_37 "
                             + Boolean
                                     .toString(SecurityManager
@@ -134,9 +134,9 @@ public class CatissueCoreServletContextListener
                                     .isAuthorized(
                                             "admin",
                                             "edu.wustl.catissuecore.domain.CollectionProtocolEvent_28",
-                                            UPDATE)));
+                                            UPDATE)));*/
         }
-        catch (SMException e1)
+        catch (Exception e1)
         {
             // TODO Auto-generated catch block
             e1.printStackTrace();
