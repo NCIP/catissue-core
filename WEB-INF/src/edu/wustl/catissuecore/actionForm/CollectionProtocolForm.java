@@ -193,7 +193,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
     				{
     					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("collectionprotocol.specimenstatus")));
     				}
-    				if(key.indexOf("quantityIn")!=-1 && validator.isEmpty(value))
+    				if(key.indexOf("quantityIn")!=-1 && (validator.isEmpty(value) || !validator.isNumeric(value )))
     				{
     					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocol.quantity")));
     				}
