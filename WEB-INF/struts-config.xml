@@ -1104,7 +1104,7 @@ PUBLIC
 
 	<!-- TissueSpecimenReviewEventParameters Actions Begins -->
         <action path="/TissueSpecimenReviewEventParameters"
-			type="edu.wustl.catissuecore.action.SpecimenEventParametersAction"
+			type="edu.wustl.catissuecore.action.TissueSpecimenReviewEventParametersAction"
 			scope="request">
 			<forward name="success" path=".catissuecore.tissueSpecimenReviewEventParametersDef" />
 			<forward name="failure" path=".catissuecore.tissueSpecimenReviewEventParametersDef" />
