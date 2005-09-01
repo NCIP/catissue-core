@@ -13,7 +13,6 @@ package edu.wustl.catissuecore.bizlogic;
 import java.util.List;
 import java.util.Vector;
 
-
 import edu.wustl.catissuecore.action.DomainObjectListAction;
 import edu.wustl.catissuecore.dao.DAO;
 import edu.wustl.catissuecore.domain.CancerResearchGroup;
@@ -155,12 +154,8 @@ public class UserBizLogic extends DefaultBizLogic
         }
         catch (SMException smExp)
         {
-//            throw new DAOException(smExp);
-	    	// use of logger as per bug 79
-	    	Logger.out.error(smExp.getMessage(),smExp); 
-
+            throw new DAOException(smExp.getMessage(),smExp);
         }
-            
     }
 
     /**
@@ -192,7 +187,7 @@ public class UserBizLogic extends DefaultBizLogic
                     csmUser.getLoginName(), user.getRoleId());
 
             dao.update(user);
-
+            
             //Send email to administrator and cc it to the user registered.
             SendEmail email = new SendEmail();
 
@@ -241,7 +236,7 @@ public class UserBizLogic extends DefaultBizLogic
         }
         catch (SMException smExp)
         {
-            Logger.out.error(smExp.getMessage(), smExp);
+            throw new DAOException(smExp.getMessage(),smExp);
         }
     }
 
@@ -309,10 +304,10 @@ public class UserBizLogic extends DefaultBizLogic
                             .getUserById(
                                     String.valueOf(user.getSystemIdentifier()));
                 }
-                catch (SMException e)
+                catch (SMException smExp)
                 {
-                    Logger.out.debug("Unable to get user : " + e.getMessage());
-                    throw new DAOException(e);
+                    Logger.out.debug("Unable to get user : " + smExp.getMessage());
+                    throw new DAOException(smExp.getMessage(),smExp);
                 }
                 nameValueBean = new NameValueBean();
                 nameValueBean.setName(csmUser.getLastName() + ", "
@@ -325,4 +320,24 @@ public class UserBizLogic extends DefaultBizLogic
         }
         return nameValuePairs;
     }
+    
+//    public static void main(String args[])
+//    {
+//        String [] whereColumnName = {"country"};
+//        String [] whereColumnCondition = {"LIKE"};
+//        String [] whereColumnValue = {"United States"};
+//        
+//        try
+//        {
+//            List list = retrieve(Address.class.getName(),whereColumnName,
+//                    whereColumnCondition,whereColumnValue,null);
+//            
+//            System.out.println("LIST SIZE..............."+list.size());
+//        }
+//        catch(DAOException daoExp)
+//        {
+//            daoExp.printStackTrace();
+//        }
+//        
+//    }
 }

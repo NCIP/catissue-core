@@ -150,7 +150,7 @@ public class ApproveUserBizLogic extends DefaultBizLogic
 	    }
 	    catch (SMException smExp)
 	    {
-	        Logger.out.error(smExp.getMessage(), smExp);
+	        throw new DAOException(smExp.getMessage(),smExp);
 	    }
     }
 
