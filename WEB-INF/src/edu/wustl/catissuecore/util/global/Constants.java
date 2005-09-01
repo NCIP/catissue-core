@@ -165,6 +165,7 @@ public class Constants
 	public static final String CELL_SPECIMEN_ID_LIST="cellSpecimenIdList";
 	public static final String FLUID_SPECIMEN_ID_LIST="fluidSpecimenIdList";
 	public static final String STORAGESTATUSLIST="storageStatusList";
+	public static final String CLINICALDIAGNOSISLIST="clinicalDiagnosisList";
 	
 	//Constants required in User.jsp Page
 	public static final String USER_SEARCH_ACTION = "UserSearch.do";
@@ -1150,8 +1151,14 @@ public class Constants
 	
 	public static final String [] STORAGESTATUSARRAY = {
 	        SELECT_OPTION,
-			"STORAGESTATUS 1",
-			"STORAGESTATUS 2",
-			"STORAGESTATUS 3"
+			"CHECK IN",
+			"CHECK OUT"
+	};
+
+	public static final String [] CLINICALDIAGNOSISARRAY = {
+	        SELECT_OPTION,
+			"CLINICALDIAGNOSIS 1",
+			"CLINICALDIAGNOSIS 2",
+			"CLINICALDIAGNOSIS 3"
 	};
 }
