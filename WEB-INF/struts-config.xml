@@ -313,7 +313,8 @@ PUBLIC
 			type="edu.wustl.catissuecore.action.CommonAddEditAction"
 			name="departmentForm"
 			validate="true"
-			input="/Department.do?operation=add">
+			input="/Department.do?operation=add"
+			scope="request">
 			<forward name="success" path=".catissuecore.departmentAddSuccessDef" />
 			<forward name="failure" path="/Department.do?operation=add" />
 		</action>
@@ -322,7 +323,8 @@ PUBLIC
 			type="edu.wustl.catissuecore.action.CommonAddEditAction"
 			name="departmentForm"
 			validate="true"
-			input="/Department.do?operation=edit">
+			input="/Department.do?operation=edit"
+			scope="request">
 			<forward name="success" path=".catissuecore.departmentEditSuccessDef" />
 			<forward name="failure" path="/Department.do?operation=edit" />
 		</action>
@@ -332,7 +334,7 @@ PUBLIC
 			name="departmentForm"
 			validate="true"
 			input="/Department.do?operation=edit"
-			scope="session">
+			scope="request">
 			<forward name="success" path="/Department.do?operation=edit"/>
 			<forward name="failure" path="/Department.do?operation=edit"/>
 		</action>    
@@ -429,7 +431,7 @@ PUBLIC
 		
 		<!-- DistributionProtocol Actions Begins-->
        <action path="/DistributionProtocol"
-			type="edu.wustl.catissuecore.action.SpecimenProtocolAction"
+			type="edu.wustl.catissuecore.action.DistributionProtocolAction"
 			name="distributionProtocolForm"
 			validate="false"
 			scope="request">
@@ -512,6 +514,7 @@ PUBLIC
 			scope="request">
 			<forward name="success" path=".catissuecore.reportedProblemDef" />
 			<forward name="failure" path=".catissuecore.reportedProblemDef" />
+			<forward name="access_denied" path="/ManageAdministrativeData.do" />
 		</action>
 		
 		<action path="/ProblemPendingClose"
@@ -605,6 +608,7 @@ PUBLIC
 			scope="request">
 			<forward name="success" path=".catissuecore.approveUserDef" />
 			<forward name="failure" path=".catissuecore.approveUserDef" />
+			<forward name="access_denied" path="/ManageAdministrativeData.do" />
 		</action>
 		
 		<action path="/ApproveUser"
