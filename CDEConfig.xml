@@ -31,7 +31,7 @@
 	
 	<XMLCDE cache="true" lazyLoading="false">
 	<name>Tissue Site</name>
-	<publicId>2003987</publicId>
+	<publicId>Tissue_Site_PID</publicId>
 	<XMLPermissibleValues>
 		<evsTerminology>NCI-THESAURAUS</evsTerminology>
 		<conceptCode>PV</conceptCode> 
@@ -183,4 +183,14 @@
 	</XMLPermissibleValues>
 	</XMLCDE>
 
+	<XMLCDE cache="true" lazyLoading="false">
+	<name>Site Type</name>
+	<publicId>Site_Type_PID</publicId>
+	<XMLPermissibleValues>
+		<evsTerminology>NCI-THESAURAUS</evsTerminology>
+		<conceptCode>PV</conceptCode> 
+		<parentConceptCode></parentConceptCode>
+		<depthOfHierarchyTree>6</depthOfHierarchyTree> 
+	</XMLPermissibleValues>
+	</XMLCDE>
 </XMLCDE_CACHE>
