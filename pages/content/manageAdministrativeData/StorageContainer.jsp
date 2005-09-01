@@ -42,7 +42,7 @@
 		
 		function onTypeChange(element)
 		{
-			var action = "/catissuecore/StorageContainer.do?operation=add&typeSelected=" + element.value;
+			var action = "/catissuecore/StorageContainer.do?operation=add";
 			document.forms[0].action = action;
 			document.forms[0].submit();
 		}
@@ -51,7 +51,7 @@
 		{
 			var list = document.getElementById('typeId');
 			var type = list.options[list.selectedIndex].value;
-			var action = "/catissuecore/StorageContainer.do?operation=add&typeSelected=" + type;
+			var action = "/catissuecore/StorageContainer.do?operation=add";
 			document.forms[0].action = action;
 			document.forms[0].submit();
 		}
@@ -78,6 +78,8 @@ function insRow(subdivtag)
 	var spreqno=x.insertCell(0);
 	spreqno.className="formSerialNumberField";
 	sname=(q+1);
+	var identifier = "value(StorageContainerDetails:" + (q+1) +"_systemIdentifier)";
+	sname = sname + "<input type='hidden' name='" + identifier + "' value='' id='" + identifier + "'>";
 	spreqno.innerHTML="" + sname;
 
 	//Second Cell
@@ -172,7 +174,6 @@ function insRow(subdivtag)
 <%
         String operation = (String) request.getAttribute(Constants.OPERATION);
         String formName;
-        String searchFormName = new String(Constants.STORAGE_CONTAINER_SEARCH_ACTION);
 
         boolean readOnlyValue;
         if (operation.equals(Constants.EDIT))
@@ -201,59 +202,15 @@ function insRow(subdivtag)
 <html:form action="<%=Constants.STORAGE_CONTAINER_ADD_ACTION%>" method="post">	
 
 	<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
-	
-		<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>">
-			<!-- ENTER IDENTIFIER BEGINS-->
-			<br />
-			<tr>
-				<td>
-				<table summary="" cellpadding="3" cellspacing="0" border="0">
-					<tr>
-						<td class="formTitle" height="20" colspan="3">
-							<bean:message key="storageContainer.searchTitle" />
-						</td>
-					</tr>
-						
-					<tr>
-						<td class="formRequiredNotice" width="5">*</td>
-						<td class="formRequiredLabel">
-							<label for="identifier">
-								<bean:message key="storageContainer.systemIdentifier" />
-							</label>
-						</td>
-						<td class="formField">
-							<html:text styleClass="formFieldSized" size="30" styleId="systemIdentifier" property="systemIdentifier" />
-						</td>
-					</tr>
-					<%
-        				String changeAction = "setFormAction('" + searchFormName
-                							  + "');setOperation('" + Constants.SEARCH + "');";
-			        %>
-					<tr>
-						<td align="right" colspan="3">
-						<table cellpadding="4" cellspacing="0" border="0">
-							<tr>
-								<td>
-									<html:submit styleClass="actionButton" value="Search" onclick="<%=changeAction%>" />
-								</td>
-							</tr>
-						</table>
-						</td>
-					</tr>
-
-				</table>
-				</td>
-			</tr>
-			<!-- ENTER IDENTIFIER ENDS-->
-		</logic:notEqual>
-
-
-		<!-- NEW STORAGE CONTAINER REGISTRATION BEGINS-->
+	<!-- NEW STORAGE CONTAINER REGISTRATION BEGINS-->
 		<tr>
 		<td>
 			<table summary="" cellpadding="3" cellspacing="0" border="0" width="510">
 				<tr>
 					<td><html:hidden property="operation" value="<%=operation%>" /></td>
+				</tr>
+				<tr>
+					<td><html:hidden property="systemIdentifier" /></td>
 				</tr>
 				<tr>
 					<td><html:hidden property="positionDimensionOne" /></td>
@@ -357,6 +314,7 @@ function insRow(subdivtag)
 						</td>							
 					</tr>
 
+					<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
 					<tr>
 						<td class="formRequiredNotice" width="5">&nbsp;</td>
 						<td class="formLabel" colspan="2">
@@ -368,6 +326,7 @@ function insRow(subdivtag)
 							<html:text styleClass="formFieldSized10" size="30" styleId="noOfContainers" property="noOfContainers" readonly="<%=readOnlyValue%>" onchange="onContainerChange(this)"/>
 						</td>
 					</tr>
+					</logic:notEqual>
 					
 					<tr>
 						<td class="formRequiredNotice" width="5">&nbsp;</td>
@@ -377,7 +336,12 @@ function insRow(subdivtag)
 							</label>
 						</td>
 						<td class="formField">
+						<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
 							<html:text styleClass="formFieldSized10" size="30" styleId="startNumber" property="startNumber" value="<%=number%>" readonly="TRUE"/>
+						</logic:notEqual>
+						<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
+							<html:text styleClass="formFieldSized10" size="30" styleId="startNumber" property="startNumber" readonly="TRUE"/>
+						</logic:equal>
 						</td>
 					</tr>
 					
@@ -389,10 +353,10 @@ function insRow(subdivtag)
 							</label>
 						</td>
 						<td class="formField">
-							<html:text styleClass="formFieldSized10" size="30" styleId="barcode" property="barcode" readonly="<%=readOnlyValue%>" />
+							<html:text styleClass="formFieldSized10" size="30" styleId="barcode" property="barcode"/>
 						</td>
 					</tr>
-
+					
 					<tr>
 						<td class="formRequiredNotice" width="5">&nbsp;</td>
 						<td class="formLabel" colspan="2">
@@ -401,10 +365,26 @@ function insRow(subdivtag)
 							</label>
 						</td>
 						<td class="formField">
-							<html:text styleClass="formFieldSized10" size="30" styleId="defaultTemperature" property="defaultTemperature" readonly="<%=readOnlyValue%>" />
+							<html:text styleClass="formFieldSized10" size="30" styleId="defaultTemperature" property="defaultTemperature"/>
 							°C
 						</td>
 					</tr>
+					
+					<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
+					<tr>
+						<td class="formRequiredNotice" width="5">*</td>
+						<td class="formRequiredLabel" colspan="2">
+							<label for="activityStatus">
+								<bean:message key="site.activityStatus" />
+							</label>
+						</td>
+						<td class="formField">
+							<html:select property="activityStatus" styleClass="formFieldSized10" styleId="activityStatus" size="1">
+								<html:options name="<%=Constants.ACTIVITYSTATUSLIST%>" labelName="<%=Constants.ACTIVITYSTATUSLIST%>" />
+							</html:select>
+						</td>
+					</tr>
+					</logic:equal>
 					
 					<tr>
 						<td class="formTitle" colspan="4">
@@ -423,7 +403,7 @@ function insRow(subdivtag)
 							</label>
 						</td>
 						<td class="formField">
-							<html:text styleClass="formFieldSized10" size="30" styleId="oneDimensionCapacity" property="oneDimensionCapacity" readonly="<%=readOnlyValue%>" />
+							<html:text styleClass="formFieldSized10" size="30" styleId="oneDimensionCapacity" property="oneDimensionCapacity"/>
 						</td>
 					</tr>
 					
@@ -436,7 +416,7 @@ function insRow(subdivtag)
 							</label>
 						</td>
 						<td class="formField">
-							<html:text styleClass="formFieldSized10" size="30" styleId="twoDimensionCapacity" property="twoDimensionCapacity" readonly="<%=readOnlyValue%>" />
+							<html:text styleClass="formFieldSized10" size="30" styleId="twoDimensionCapacity" property="twoDimensionCapacity"/>
 						</td>
 					</tr>
 					
@@ -475,14 +455,17 @@ function insRow(subdivtag)
 							{
 								String keyName = "value(StorageContainerDetails:" + rowCount +"_parameterName)";
 								String valueName = "value(StorageContainerDetails:" + rowCount +"_parameterValue)";
+								String identifier = "value(StorageContainerDetails:" + rowCount +"_systemIdentifier)";
 						%>
 					<tr>
-						<td class="formSerialNumberField" width="5"><%=rowCount%>.</td>
+						<td class="formSerialNumberField" width="5"><%=rowCount%>.
+							<html:hidden property="<%=identifier%>" />
+						</td>
 						<td class="formField" colspan="2">
-							<html:text styleClass="formFieldSized10" size="30" styleId="<%=keyName%>" property="<%=keyName%>" readonly="<%=readOnlyValue%>" />
+							<html:text styleClass="formFieldSized10" size="30" styleId="<%=keyName%>" property="<%=keyName%>"/>
 						</td>
 						<td class="formField">
-							<html:text styleClass="formFieldSized10" size="30" styleId="<%=valueName%>" property="<%=valueName%>" readonly="<%=readOnlyValue%>" />
+							<html:text styleClass="formFieldSized10" size="30" styleId="<%=valueName%>" property="<%=valueName%>"/>
 						</td>
 					</tr>
 						<%
