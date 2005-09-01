@@ -245,7 +245,8 @@ public class BiohazardForm extends AbstractActionForm
             }
             if (operation.equals(Constants.ADD) || operation.equals(Constants.EDIT))
             {
-            	if(type.equals(Constants.SELECT_OPTION))
+            	
+            	if(!validator.isValidOption(type))
                 {
                 	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("biohazard.type")));
                 }
