@@ -33,7 +33,7 @@ public class PermissibleValueImpl implements PermissibleValue
     /**
      * identifier is a unique id assigned to each PermissibleValue.
      */
-    private Long identifier;
+    private String identifier;
 
     /**
      * value is the value of the PermissibleValue object.
@@ -76,7 +76,7 @@ public class PermissibleValueImpl implements PermissibleValue
      * @hibernate.id name="identifier" column="IDENTIFIER" type="string"
      * length="30" unsaved-value="null" generator-class="assigned"
      */
-    public Long getIdentifier()
+    public String getIdentifier()
     {
         return identifier;
     }
@@ -86,7 +86,7 @@ public class PermissibleValueImpl implements PermissibleValue
      * 
      * @param identifier The identifier to set.
      */
-    public void setIdentifier(Long identifier)
+    public void setIdentifier(String identifier)
     {
         this.identifier = identifier;
     }
