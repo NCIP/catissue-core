@@ -20,6 +20,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+
 /**
  * This class initializes the fields in the Distribution Add/Edit webpage.
  * @author Mandar Deshmukh
@@ -34,7 +35,7 @@ public class DistributionProtocolAction extends SpecimenProtocolAction
     public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException
-    {
-        return super.executeSecureAction(mapping, form, request, response);
+    {     
+    	return super.executeSecureAction(mapping, form, request, response);
     }
 }
