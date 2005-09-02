@@ -16,8 +16,6 @@ import java.util.Map;
 
 import edu.wustl.catissuecore.actionForm.AbstractActionForm;
 import edu.wustl.catissuecore.actionForm.DistributionProtocolForm;
-import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.logger.Logger;
 
@@ -105,22 +103,9 @@ public class DistributionProtocol extends SpecimenProtocol implements java.io.Se
         {
         	super.setAllValues(abstractForm);
         	
-	    	DistributionProtocolForm form = (DistributionProtocolForm) abstractForm;
+	    	DistributionProtocolForm dpForm = (DistributionProtocolForm) abstractForm;
 	    	
-	    	this.systemIdentifier = new Long(form.getSystemIdentifier());
-	    	this.activityStatus = form.getActivityStatus();
-	    	this.principalInvestigator.setSystemIdentifier(new Long(form.getPrincipalInvestigatorId()));
-	    	this.title = form.getTitle();
-	    	this.shortTitle = form.getShortTitle();
-	    	if(form.getStartDate() != null)
-	    		this.startDate = Utility.parseDate(form.getStartDate(),Constants.DATE_PATTERN_MM_DD_YYYY);
-	    	if(form.getEndDate() != null)
-	    		this.endDate = Utility.parseDate(form.getEndDate(),Constants.DATE_PATTERN_MM_DD_YYYY);
-	    	this.irbIdentifier = form.getIrbID();
-	    	this.enrollment = new Integer(form.getEnrollment());
-	    	this.descriptionURL = form.getDescriptionURL();
-	    	
-	    	Map map = form.getValues();
+	    	Map map = dpForm.getValues();
 	        map = fixMap(map);
 	        Logger.out.debug("MAP "+map);
 	        MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.domain");

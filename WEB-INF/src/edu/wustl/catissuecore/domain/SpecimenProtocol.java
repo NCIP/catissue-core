@@ -298,6 +298,7 @@ public abstract class SpecimenProtocol extends AbstractDomainObject implements j
 
         	this.enrollment = new Integer(spForm.getEnrollment());
         	this.descriptionURL = spForm.getDescriptionURL();
+        	this.activityStatus = spForm.getActivityStatus();
         	
         	principalInvestigator  = new User();
         	this.principalInvestigator.setSystemIdentifier(new Long(spForm.getPrincipalInvestigatorId()));
@@ -344,6 +345,8 @@ public abstract class SpecimenProtocol extends AbstractDomainObject implements j
 		{
 			String key = (String)it.next();
 			String value = (String)orgMap.get(key);
+			Logger.out.debug("key "+key);
+			
 			if(key.indexOf("SpecimenRequirement")==-1)
 			{
 				newMap.put(key,value);
@@ -364,6 +367,14 @@ public abstract class SpecimenProtocol extends AbstractDomainObject implements j
 						
 						key = key.replaceFirst(keyPart,newKeyPart);
 					}
+					if(key.indexOf("systemIdentifier")!=-1)
+					{
+						Object obj = orgMap.get(key);
+						Logger.out.debug("Value "+obj);
+						if(obj==null || ((String)obj).trim().length()==0)
+							continue;
+					}
+					
 					//Replace # and class name and FIX for abstract class
 					keyPart = key.substring(0,key.lastIndexOf("_"));
 					newKeyPart = (String)replaceMap.get(keyPart);
