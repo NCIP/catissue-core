@@ -14,7 +14,7 @@
 			LeftPosition = (screen.width) ? (screen.width-w)/2 : 0;
 			TopPosition = (screen.height) ? (screen.height-h)/2 : 0;
 
-			mypage=mypage+document.forms[0].startNumber.value;
+			mypage=mypage+document.forms[0].typeId.value;
 			settings =
 				'height='+h+',width='+w+',top='+TopPosition+',left='+LeftPosition+',scrollbars='+scroll+',resizable'
 			win = open(mypage,myname,settings)
@@ -195,6 +195,7 @@ function insRow(subdivtag)
 			noOfRows = form.getCounter();
 		}
 		String number = (String)request.getAttribute("startNumber");
+		System.out.println("number JSP "+number);
 %>
 
 <html:errors />
@@ -348,7 +349,7 @@ function insRow(subdivtag)
 					<tr>
 						<td class="formRequiredNotice" width="5">&nbsp;</td>
 						<td class="formLabel" colspan="2">
-							<label for="startNumber">
+							<label for="barcode">
 								<bean:message key="storageContainer.barcode" />
 							</label>
 						</td>
