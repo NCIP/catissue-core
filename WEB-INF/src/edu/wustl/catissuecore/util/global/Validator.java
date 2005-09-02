@@ -208,65 +208,89 @@ public class Validator
     	return result;
     }
     
+    public boolean containsSpecialCharacters( String mainString, String delimiter)
+    {
+    	try
+		{
+    		StringTokenizer st = new StringTokenizer(mainString, delimiter);
+    		int count = st.countTokens();
+    		if(count>1)
+    			return true;
+    		else
+    			return false;
+		}
+    	catch(Exception exp)
+		{
+			System.out.println("error : " + exp);
+    		return true;
+		}
+
+    }
+    
     
     public static void main(String[] args)
     {
         Validator validator = new Validator();
-        String str = new String("mandar_deshmukh@persistent.co.in");
-        boolean boo = validator.isNumeric(str);
-        System.out.println(boo);
-        boo = validator.isValidEmailAddress(str);
-        System.out.println(boo);
-        System.out.println("\n************************************\n\n\n\n");
-        str="mandar_deshmukh@persistent.co.in";
-        boo = validator.isValidEmailId(str );
-        System.out.println("\n\nEmail : " + str + " : " + boo );
-        
-        str="@persistent.co.in";
-        boo = validator.isValidEmailId(str );
-        System.out.println("\n\nEmail : " + str + " : " + boo );
-        
-        str="@pers@istent.co.in";
-        boo = validator.isValidEmailId(str );
-        System.out.println("\n\nEmail : " + str + " : " + boo );
-        
-        str="@@persistent.co.in";
-        boo = validator.isValidEmailId(str );
-        System.out.println("\n\nEmail : " + str + " : " + boo );
-        
-        str=".persi@stent.co.in";
-        boo = validator.isValidEmailId(str );
-        System.out.println("\n\nEmail : " + str + " : " + boo );
-        
-        str="@.persistent.co.in";
-        boo = validator.isValidEmailId(str );
-        System.out.println("\n\nEmail : " + str + " : " + boo );
-
-        str="pers@istent..co.in";
-        boo = validator.isValidEmailId(str );
-        System.out.println("\n\nEmail : " + str + " : " + boo );
-        try
-		{
-            BufferedReader br = new BufferedReader (new InputStreamReader(System.in));
-            System.out.println("\nEnter N/n to Quit \n\n");
-            System.out.print("\n\nDo you want to check the Email Address : ");
-            String ch = br.readLine();
-            while(!ch.equalsIgnoreCase("N") )
-            {
-            	System.out.println("\nEnter the Email Adress to Check: ");
-            	String email = br.readLine();
-            	boolean b = validator.isValidEmailAddress(email );
-            	System.out.println("\n Is Valid : " + b);
-            	System.out.println("---------------------");
-            	System.out.print("Do you want to Continue : ");
-            	ch = br.readLine();
-            }
-            System.out.print("\n\n**************** D O N E *************\n"); 
-		}
-        catch(Exception exp)
-		{
-        	System.out.println("Error : " + exp);
-		}
+        String str = "mandar; deshmukh";
+        String delim=";,";
+        System.out.println("\nstr: "+str);
+        System.out.println("\ndelim: "+delim);
+        System.out.println("\nContains : " + validator.containsSpecialCharacters(str,delim )); 
+//        String str = new String("mandar_deshmukh@persistent.co.in");
+//        boolean boo = validator.isNumeric(str);
+//        System.out.println(boo);
+//        boo = validator.isValidEmailAddress(str);
+//        System.out.println(boo);
+//        System.out.println("\n************************************\n\n\n\n");
+//        str="mandar_deshmukh@persistent.co.in";
+//        boo = validator.isValidEmailId(str );
+//        System.out.println("\n\nEmail : " + str + " : " + boo );
+//        
+//        str="@persistent.co.in";
+//        boo = validator.isValidEmailId(str );
+//        System.out.println("\n\nEmail : " + str + " : " + boo );
+//        
+//        str="@pers@istent.co.in";
+//        boo = validator.isValidEmailId(str );
+//        System.out.println("\n\nEmail : " + str + " : " + boo );
+//        
+//        str="@@persistent.co.in";
+//        boo = validator.isValidEmailId(str );
+//        System.out.println("\n\nEmail : " + str + " : " + boo );
+//        
+//        str=".persi@stent.co.in";
+//        boo = validator.isValidEmailId(str );
+//        System.out.println("\n\nEmail : " + str + " : " + boo );
+//        
+//        str="@.persistent.co.in";
+//        boo = validator.isValidEmailId(str );
+//        System.out.println("\n\nEmail : " + str + " : " + boo );
+//
+//        str="pers@istent..co.in";
+//        boo = validator.isValidEmailId(str );
+//        System.out.println("\n\nEmail : " + str + " : " + boo );
+//        try
+//		{
+//            BufferedReader br = new BufferedReader (new InputStreamReader(System.in));
+//            System.out.println("\nEnter N/n to Quit \n\n");
+//            System.out.print("\n\nDo you want to check the Email Address : ");
+//            String ch = br.readLine();
+//            while(!ch.equalsIgnoreCase("N") )
+//            {
+//            	System.out.println("\nEnter the Email Adress to Check: ");
+//            	String email = br.readLine();
+//            	boolean b = validator.isValidEmailAddress(email );
+//            	System.out.println("\n Is Valid : " + b);
+//            	System.out.println("---------------------");
+//            	System.out.print("Do you want to Continue : ");
+//            	ch = br.readLine();
+//            }
+//            System.out.print("\n\n**************** D O N E *************\n"); 
+//		}
+//        catch(Exception exp)
+//		{
+//        	System.out.println("Error : " + exp);
+//		}
 
         
         
