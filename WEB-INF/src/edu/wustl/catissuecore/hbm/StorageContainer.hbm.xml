@@ -24,11 +24,11 @@
         </id>
 
         <property
-            name="name"
-            type="string"
+            name="number"
+            type="int"
             update="true"
             insert="true"
-            column="NAME"
+            column="CONTAINER_NUMBER"
             length="50"
         />
 

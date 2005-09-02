@@ -19,7 +19,7 @@
             length="30"
             unsaved-value="null"
         >
-            <generator class="native">
+            <generator class="assigned">
             </generator>
         </id>
 
