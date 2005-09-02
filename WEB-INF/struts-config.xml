@@ -149,7 +149,7 @@ PUBLIC
 			input="/SignUp.do?operation=add&amp;pageOf=pageOfSignUp"
 			scope="request">
 			<forward name="success" path=".catissuecore.reportProblemSuccessDef" />
-			<forward name="failure" path="/error.jsp" />
+			<forward name="failure" path="/SignUp.do?operation=add&amp;pageOf=pageOfSignUp" />
 		</action>
 
 		<action path="/Logout"
