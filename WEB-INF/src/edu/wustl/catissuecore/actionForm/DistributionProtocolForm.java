@@ -11,6 +11,8 @@
 
 package edu.wustl.catissuecore.actionForm;
 
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,6 +21,13 @@ import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.domain.AbstractDomainObject;
+import edu.wustl.catissuecore.domain.CellSpecimenRequirement;
+import edu.wustl.catissuecore.domain.DistributionProtocol;
+import edu.wustl.catissuecore.domain.FluidSpecimenRequirement;
+import edu.wustl.catissuecore.domain.MolecularSpecimenRequirement;
+import edu.wustl.catissuecore.domain.SpecimenRequirement;
+import edu.wustl.catissuecore.domain.TissueSpecimenRequirement;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Validator;
@@ -36,9 +45,6 @@ public class DistributionProtocolForm extends SpecimenProtocolForm
 	 * Counter that contains number of rows in the 'Add More' functionality.
 	 */
 	private int counter=1;
-	
-	
-	
 	
 	/**
 	 * @return Returns the counter.
@@ -65,8 +71,86 @@ public class DistributionProtocolForm extends SpecimenProtocolForm
 	
 	protected void reset()
 	{
-		super.reset();
-		this.counter =1; 
+		//super.reset();
+		//this.counter =1;
+	}
+	
+	/**
+	 * Copies the data from an AbstractDomain object to a DistributionProtocolForm object.
+	 * @param abstractDomain An AbstractDomain object.
+	 */
+	public void setAllValues(AbstractDomainObject abstractDomain)
+	{
+		try
+		{
+			super.setAllValues(abstractDomain);
+			
+			DistributionProtocol dProtocol = (DistributionProtocol)abstractDomain;
+			
+			Collection spcimenProtocolCollection = dProtocol.getSpecimenRequirementCollection();
+			
+			if(spcimenProtocolCollection != null)
+			{
+				values = new HashMap();
+				
+				Iterator it = spcimenProtocolCollection.iterator();
+				int i=1;
+				counter=0;
+				
+				while(it.hasNext())
+				{
+					String key1 = "SpecimenRequirement:" + i +"_specimenClass";
+					String key2 = "SpecimenRequirement:" + i +"_unitspan";
+					String key3 = "SpecimenRequirement:" + i +"_specimenType";
+					String key4 = "SpecimenRequirement:" + i +"_tissueSite";
+					String key5 = "SpecimenRequirement:" + i +"_pathologyStatus";
+					String key6 = "SpecimenRequirement:" + i +"_quantityIn";
+					String key7 = "StorageContainerDetails:" + i +"_systemIdentifier";
+					
+					SpecimenRequirement requirement = (SpecimenRequirement)it.next();
+					values.put(key3,requirement.getSpecimenType());
+					values.put(key4,requirement.getTissueSite());
+					values.put(key5,requirement.getPathologyStatus());
+					values.put(key7,requirement.getSystemIdentifier());
+					
+					if(requirement instanceof TissueSpecimenRequirement)
+					{
+						values.put(key1,"Tissue Specimen");
+						values.put(key2,Constants.UNIT_GM);
+						values.put(key6,String.valueOf(((TissueSpecimenRequirement)requirement).getQuantityInGram()));
+					}
+					else if(requirement instanceof CellSpecimenRequirement)
+					{
+						values.put(key1,"Cell Specimen");
+						values.put(key2,Constants.UNIT_CC);
+						values.put(key6,String.valueOf(((CellSpecimenRequirement)requirement).getQuantityInCellCount()));
+					}
+					else if(requirement instanceof MolecularSpecimenRequirement)
+					{
+						values.put(key1,"Molecular Specimen");
+						values.put(key2,Constants.UNIT_MG);
+						values.put(key6,String.valueOf(((MolecularSpecimenRequirement)requirement).getQuantityInMicrogram()));
+					}
+					else if(requirement instanceof FluidSpecimenRequirement)
+					{
+						values.put(key1,"Fluid Specimen");
+						values.put(key2,Constants.UNIT_ML);
+						values.put(key6,String.valueOf(((FluidSpecimenRequirement)requirement).getQuantityInMilliliter()));
+					}
+					
+					i++;
+					counter++;
+				}
+				
+				//At least one row should be displayed in ADD MORE therefore
+				if(counter == 0)
+					counter = 1;
+			}
+		}
+		catch (Exception excp)
+		{
+	    	Logger.out.error(excp.getMessage(),excp); 
+		}
 	}
 	
 	/**
@@ -82,7 +166,7 @@ public class DistributionProtocolForm extends SpecimenProtocolForm
             {
                 if(this.principalInvestigatorId == -1)
 				{
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("distributionprotocol.principalinvestigator")));
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("distributionprotocol.principalinvestigator")));
 				}
                 if (validator.isEmpty(this.title))
                 {
@@ -131,7 +215,6 @@ public class DistributionProtocolForm extends SpecimenProtocolForm
 		}
 		catch (Exception excp)
 		{
-	    	// use of logger as per bug 79
 	    	Logger.out.error(excp.getMessage(),excp); 
 			errors = new ActionErrors();
 		}
