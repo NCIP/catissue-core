@@ -30,18 +30,8 @@ public abstract class Query {
      */
     public static final String SIMPLE_QUERY = "SimpleQuery";
     
-    /**
-     * Participant object constant
-     */
-    public static final String PARTICIPANT = "Participant"; 
     
-    public static final String COLLECTION_PROTOCOL_REGISTRATION = "CollectionProtocolRegistration"; 
-    public static final String COLLECTION_PROTOCOL = "CollectionProtocol"; 
-    public static final String COLLECTION_PROTOCOL_EVENT = "CollectionProtocolEvent"; 
-    public static final String SPECIMEN_COLLECTION_GROUP = "SpecimenCollectionGroup"; 
-    public static final String SPECIMEN = "Specimen"; 
     
-    public static final String DEPARTMENT = "Department";
     
     /**
 	 * Vector of DataElement objects that need to be selected in the output
@@ -71,6 +61,51 @@ public abstract class Query {
      * to differentiate between super query object from the subquery object of same type
      */
     protected int tableSufix=1;
+
+    /**
+     * Participant object constant
+     */
+    public static final String PARTICIPANT = "Participant"; 
+    
+    public static final String COLLECTION_PROTOCOL_REGISTRATION = "CollectionProtocolRegistration"; 
+    public static final String COLLECTION_PROTOCOL = "CollectionProtocol"; 
+    public static final String COLLECTION_PROTOCOL_EVENT = "CollectionProtocolEvent"; 
+    public static final String SPECIMEN_COLLECTION_GROUP = "SpecimenCollectionGroup"; 
+    public static final String SPECIMEN = "Specimen"; 
+    public static final String PARTICIPANT_MEDICAL_IDENTIFIER = "ParticipantMedicalIdentifier";
+    public static final String INSTITUTION = "Institution";
+    public static final String DEPARTMENT = "Department";
+    public static final String CANCER_REESEARCH_GROUP = "CancerResearchGroup";
+    public static final String USER = "User";
+    public static final String ADDRESS = "Address";
+
+    public static final String CSM_USER = "CsmUser";
+
+    public static final String SITE = "Site";
+
+    public static final String STORAGE_TYPE = "StorageType";
+
+    public static final String STORAGE_CONTAINER_CAPACITY = "StorageContainerCapacity";
+
+    public static final String BIO_HAZARD = "BioHazard";
+
+    public static final String SPECIMEN_PROTOCOL = "SpecimenProtocol";
+
+    public static final String COLLECTION_COORDINATORS = "CollectionCoordinators";
+
+    public static final String SPECIMEN_REQUIREMENT = "SpecimenRequirement";
+
+    public static final String COLLECTION_SPECIMEN_REQUIREMENT = "CollectionSpecimenRequirement";
+
+    public static final String DISTRIBUTION_SPECIMEN_REQUIREMENT = "DistributionSpecimenRequirement";
+
+    public static final String DISTRIBUTION_PROTOCOL = "DistributionProtocol";
+
+    public static final String REPORTED_PROBLEM = "ReportedProblem";
+
+   
+
+    
 	
 	/**
 	 * This method executes the query string formed from getString method and creates a temporary table.
@@ -125,6 +160,7 @@ public abstract class Query {
 	public String getString()
 	{
 	    StringBuffer query= new StringBuffer();
+	    HashSet set =new HashSet();
 	    
 	    /**
 	     * Forming SELECT part of the query
@@ -140,6 +176,7 @@ public abstract class Query {
 		    for(int i=0; i < resultView.size();i++)
 		    {
 		        dataElement = (DataElement)resultView.get(i);
+		        set.add(dataElement.getTable());
 		        if(i != resultView.size()-1)
 		            query.append(dataElement.getTable()+tableSufix+"."+dataElement.getField()+", ");
 		        else
@@ -150,7 +187,9 @@ public abstract class Query {
 	    /**
 	     * Forming FROM part of query
 	     */
-	    HashSet set = this.getQueryObjects(this.queryStartObject);
+	    set.addAll(whereConditions.getQueryObjects());
+	    set.add(this.queryStartObject);
+//	    HashSet set = this.getQueryObjects(this.queryStartObject);
 //	    for(int i = 0 ; i < resultView.size(); i++)
 //	    {
 //	        set.add(((DataElement)resultView.get(i)).getTable());
@@ -241,6 +280,7 @@ public abstract class Query {
                 relationCondition=(RelationCondition) Client.relationConditionsForRelatedTables.get(new Relation((String)tablesArray[i],(String)tablesArray[j]));
                 if ( relationCondition != null)
                         {
+                    System.out.println(tablesArray[i]+" "+tablesArray[j]+" "+relationCondition.toSQLString(tableSufix));
                     		if(joinConditionString.length() != 0)
                     		{
                     		    joinConditionString.append(Operator.AND+" ");
@@ -251,8 +291,10 @@ public abstract class Query {
                 else
                 {
                     relationCondition=(RelationCondition) Client.relationConditionsForRelatedTables.get(new Relation((String)tablesArray[j],(String)tablesArray[i]));
+                    
                     if ( relationCondition != null)
                     {
+                        System.out.println(tablesArray[j]+" "+tablesArray[i]+" "+relationCondition.toSQLString(tableSufix));
                 		if(joinConditionString.length() != 0)
                 		{
                 		    joinConditionString.append(Operator.AND+" ");
@@ -290,6 +332,8 @@ public abstract class Query {
 	    }
 	    fromString.append(" ");
 	    return fromString.toString();
+	    
+	    
 	}
 	
     public int getTableSufix()

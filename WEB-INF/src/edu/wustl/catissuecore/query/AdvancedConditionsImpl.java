@@ -1,6 +1,8 @@
 
 package edu.wustl.catissuecore.query;
 
+import java.util.HashSet;
+
 import javax.swing.tree.DefaultMutableTreeNode;
 
 
@@ -144,6 +146,24 @@ public class AdvancedConditionsImpl extends ConditionsImpl {
     public void setWhereCondition(DefaultMutableTreeNode whereCondition)
     {
         this.whereCondition = whereCondition;
+    }
+
+    /* (non-Javadoc)
+     * @see edu.wustl.catissuecore.query.ConditionsImpl#getQueryObjects(java.lang.String)
+     */
+    public HashSet getQueryObjects(String queryStartObject)
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    /* (non-Javadoc)
+     * @see edu.wustl.catissuecore.query.ConditionsImpl#getQueryObjects()
+     */
+    public HashSet getQueryObjects()
+    {
+        // TODO Auto-generated method stub
+        return null;
     }
 
     /* (non-Javadoc)

@@ -1,5 +1,7 @@
 package edu.wustl.catissuecore.query;
 
+import java.util.HashSet;
+
 
 
 
@@ -29,4 +31,5 @@ public abstract class ConditionsImpl {
 //	//to form "FROM" part of query
 //	public abstract HashSet getConditionObjects();
 
+	public abstract HashSet getQueryObjects();
 }
