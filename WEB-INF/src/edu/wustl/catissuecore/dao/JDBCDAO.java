@@ -216,7 +216,7 @@ public class JDBCDAO extends AbstractDAO
                 query.append(sourceObjectName + "." + whereColumnName[i] + " "
                         + whereColumnCondition[i] + " " + whereColumnValue[i]);
             }
-            
+            Logger.out.debug("JDBC Query "+query);
             list = executeQuery(query.toString());
         }
         catch (ClassNotFoundException classExp)
