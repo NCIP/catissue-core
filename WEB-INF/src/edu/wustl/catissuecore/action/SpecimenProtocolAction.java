@@ -48,6 +48,9 @@ public class SpecimenProtocolAction  extends SecureAction
 
         //Sets the operation attribute to be used in the Add/Edit User Page. 
         request.setAttribute(Constants.OPERATION, operation);
+        
+        //Sets the activityStatusList attribute to be used in the Site Add/Edit Page.
+        request.setAttribute(Constants.ACTIVITYSTATUSLIST, Constants.ACTIVITY_STATUS_VALUES);
   
         try
 		{
