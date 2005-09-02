@@ -385,6 +385,8 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 		{
 			if (operation.equals(Constants.ADD) || operation.equals(Constants.EDIT))
             {
+				System.out.println("\n\nOper : \t" +operation + "\n");
+				System.out.println("\n\npid : \t" + this.principalInvestigatorId + "\n");
                 if(this.principalInvestigatorId == -1)
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("collectionprotocol.principalinvestigator")));

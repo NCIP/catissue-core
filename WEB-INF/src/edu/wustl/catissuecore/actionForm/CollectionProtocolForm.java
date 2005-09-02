@@ -162,7 +162,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
     				String value = (String)values.get(key);
 //    				System.out.println(key+ " : " + value);
     				
-    				if(key.indexOf("clinicalStatus")!=-1 && value.equals(Constants.SELECT_OPTION))
+    				if(key.indexOf("clinicalStatus")!=-1 && !validator.isValidOption( value))
     				{
     					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("collectionprotocol.clinicalstatus")));
     				}
@@ -172,28 +172,45 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
     					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.studycalendarpoint",ApplicationProperties.getValue("collectionprotocol.studycalendartitle")));
     				}
 
-    				if(key.indexOf("specimenClass")!=-1 && value.equals(Constants.SELECT_OPTION))
+    				if(key.indexOf("specimenClass")!=-1 && !validator.isValidOption( value))
     				{
     					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("collectionprotocol.specimenclass")));
     				}
     				
-    				if(key.indexOf("specimenType")!=-1 && value.equals(Constants.SELECT_OPTION))
+    				if(key.indexOf("specimenType")!=-1 && !validator.isValidOption( value))
     				{
     					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("collectionprotocol.specimetype")));
     				}
     				
-    				if(key.indexOf("tissueSite")!=-1 && value.equals(Constants.SELECT_OPTION))
+    				if(key.indexOf("tissueSite")!=-1 && !validator.isValidOption( value))
     				{
     					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("collectionprotocol.specimensite")));
     				}
-    				if(key.indexOf("pathologyStatus")!=-1 && value.equals(Constants.SELECT_OPTION))
+    				if(key.indexOf("pathologyStatus")!=-1 && !validator.isValidOption( value))
     				{
     					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("collectionprotocol.specimenstatus")));
     				}
-    				if(key.indexOf("quantityIn")!=-1 && (validator.isEmpty(value) || !validator.isDouble(value )))
+
+    				if(key.indexOf("quantityIn")!=-1)
     				{
-    					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocol.quantity")));
-    				}
+    					String classKey = key.substring(0,key.lastIndexOf("_") );
+    					classKey = classKey + "_specimenClass";
+    					String classValue = (String)getValue(classKey );
+    					if (classValue.trim().equals("Cell"))
+    					{
+            				if(key.indexOf("quantityIn")!=-1  && (validator.isEmpty(value) || !validator.isNumeric(value )))
+            				{
+            					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocol.quantity")));
+            				}
+    					}
+    					else
+    					{
+   							if(key.indexOf("quantityIn")!=-1  && (validator.isEmpty(value) || !validator.isDouble(value )))
+	        				{
+	        					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocol.quantity")));
+	        				}
+    					}
+    				} // if  quantity
     			}
 //    			// code added as per bug id 235 
 //    			// code to validate startdate less than end date
