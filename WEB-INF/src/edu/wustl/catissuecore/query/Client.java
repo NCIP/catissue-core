@@ -414,10 +414,14 @@ public class Client
          */
         query = QueryFactory.getInstance().newQuery(Query.SIMPLE_QUERY,
                 Query.COLLECTION_PROTOCOL);
-        query.addElementToView(new DataElement(Query.COLLECTION_PROTOCOL, "NAME"));
+        query.addElementToView(new DataElement(Query.SPECIMEN_PROTOCOL, "TITLE"));
+        query.addElementToView(new DataElement(Query.USER, "identifier"));
+        query.addElementToView(new DataElement(Query.CSM_USER, "first_name"));
+        query.addElementToView(new DataElement(Query.COLLECTION_PROTOCOL_EVENT, "CLINICAL_STATUS"));
+        query.addElementToView(new DataElement(Query.SPECIMEN_REQUIREMENT, "SPECIMEN_TYPE"));
         simpleConditionsNode = new SimpleConditionsNode(new Condition(
-                new DataElement(Query.BIO_HAZARD, "TYPE"), new Operator(
-                        Operator.EQUAL), "'Carcinogen'"), new Operator(
+                new DataElement(Query.SPECIMEN_REQUIREMENT, "SPECIMEN_TYPE"), new Operator(
+                        Operator.EQUAL), "'Blood'"), new Operator(
                 Operator.AND));
         ((SimpleQuery) query).addCondition(simpleConditionsNode);
         System.out.println("\nQuery:\n" + query.getString());
