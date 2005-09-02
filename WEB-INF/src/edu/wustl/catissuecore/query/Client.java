@@ -179,6 +179,63 @@ public class Client
                         new Operator(Operator.EQUAL), new DataElement(
                                 Query.DISTRIBUTION_SPECIMEN_REQUIREMENT,
                                 "DISTRIBUTION_PROTOCOL_ID")));
+        relationConditionsForRelatedTables.put(new Relation(
+                Query.CELL_SPECIMEN_REQUIREMENT,
+                Query.SPECIMEN_REQUIREMENT),
+                new RelationCondition(new DataElement(
+                        Query.CELL_SPECIMEN_REQUIREMENT, "Identifier"),
+                        new Operator(Operator.EQUAL), new DataElement(
+                                Query.SPECIMEN_REQUIREMENT,
+                                "Identifier")));
+        relationConditionsForRelatedTables.put(new Relation(
+                Query.MOLECULAR_SPECIMEN_REQUIREMENT,
+                Query.SPECIMEN_REQUIREMENT),
+                new RelationCondition(new DataElement(
+                        Query.MOLECULAR_SPECIMEN_REQUIREMENT, "Identifier"),
+                        new Operator(Operator.EQUAL), new DataElement(
+                                Query.SPECIMEN_REQUIREMENT,
+                                "Identifier")));
+        relationConditionsForRelatedTables.put(new Relation(
+                Query.TISSUE_SPECIMEN_REQUIREMENT,
+                Query.SPECIMEN_REQUIREMENT),
+                new RelationCondition(new DataElement(
+                        Query.TISSUE_SPECIMEN_REQUIREMENT, "Identifier"),
+                        new Operator(Operator.EQUAL), new DataElement(
+                                Query.SPECIMEN_REQUIREMENT,
+                                "Identifier")));
+        relationConditionsForRelatedTables.put(new Relation(
+                Query.FLUID_SPECIMEN_REQUIREMENT,
+                Query.SPECIMEN_REQUIREMENT),
+                new RelationCondition(new DataElement(
+                        Query.FLUID_SPECIMEN_REQUIREMENT, "Identifier"),
+                        new Operator(Operator.EQUAL), new DataElement(
+                                Query.SPECIMEN_REQUIREMENT,
+                                "Identifier")));
+        relationConditionsForRelatedTables.put(new Relation(
+                Query.STORAGE_TYPE,
+                Query.STORAGE_CONTAINER),
+                new RelationCondition(new DataElement(
+                        Query.STORAGE_TYPE, "Identifier"),
+                        new Operator(Operator.EQUAL), new DataElement(
+                                Query.STORAGE_CONTAINER,
+                                "STORAGE_TYPE_ID")));
+        relationConditionsForRelatedTables.put(new Relation(
+                Query.SITE,
+                Query.STORAGE_CONTAINER),
+                new RelationCondition(new DataElement(
+                        Query.SITE, "Identifier"),
+                        new Operator(Operator.EQUAL), new DataElement(
+                                Query.STORAGE_CONTAINER,
+                                "SITE_ID")));
+        relationConditionsForRelatedTables.put(new Relation(
+                Query.STORAGE_CONTAINER_CAPACITY,
+                Query.STORAGE_CONTAINER),
+                new RelationCondition(new DataElement(
+                        Query.STORAGE_CONTAINER_CAPACITY, "Identifier"),
+                        new Operator(Operator.EQUAL), new DataElement(
+                                Query.STORAGE_CONTAINER,
+                                "STORAGE_CONTAINER_CAPACITY_ID")));
+        
 
     }
 
@@ -242,6 +299,16 @@ public class Client
                 "catissue_distribution_specimen_requirement");
         objectTableNames.put(Query.REPORTED_PROBLEM,
                 "catissue_reported_problem");
+        objectTableNames.put(Query.CELL_SPECIMEN_REQUIREMENT,
+        "catissue_cell_specimen_requirement");
+        objectTableNames.put(Query.MOLECULAR_SPECIMEN_REQUIREMENT,
+        "catissue_molecular_specimen_requirement");
+        objectTableNames.put(Query.TISSUE_SPECIMEN_REQUIREMENT,
+        "catissue_tissue_specimen_requirement");
+        objectTableNames.put(Query.FLUID_SPECIMEN_REQUIREMENT,
+        "catissue_fluid_specimen_requirement");
+        objectTableNames.put(Query.STORAGE_CONTAINER,
+        "catissue_storage_container");
     }
 
     public static void main(String[] args)

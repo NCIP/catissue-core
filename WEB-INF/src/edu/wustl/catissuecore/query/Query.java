@@ -88,6 +88,20 @@ public abstract class Query {
     public static final String DISTRIBUTION_PROTOCOL = "DistributionProtocol";
     public static final String REPORTED_PROBLEM = "ReportedProblem";
 
+    public static final String CELL_SPECIMEN_REQUIREMENT = "CellSpecimenRequirement";
+
+    public static final String MOLECULAR_SPECIMEN_REQUIREMENT = "MolecularSpecimenRequirement";
+
+    public static final String TISSUE_SPECIMEN_REQUIREMENT = "TissueSpecimenRequirement";
+
+    public static final String FLUID_SPECIMEN_REQUIREMENT = "FluidSpecimenRequirement";
+
+    public static final String STORAGE_CONTAINER = "StorageContainer";
+
+   
+
+    
+	
 	/**
 	 * This method executes the query string formed from getString method and creates a temporary table.
 	 * @return Returns true in case everything is successful else false
