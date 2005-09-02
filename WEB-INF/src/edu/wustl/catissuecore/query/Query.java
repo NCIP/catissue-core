@@ -77,29 +77,17 @@ public abstract class Query {
     public static final String CANCER_REESEARCH_GROUP = "CancerResearchGroup";
     public static final String USER = "User";
     public static final String ADDRESS = "Address";
-
     public static final String CSM_USER = "CsmUser";
-
     public static final String SITE = "Site";
-
     public static final String STORAGE_TYPE = "StorageType";
-
     public static final String STORAGE_CONTAINER_CAPACITY = "StorageContainerCapacity";
-
     public static final String BIO_HAZARD = "BioHazard";
-
     public static final String SPECIMEN_PROTOCOL = "SpecimenProtocol";
-
     public static final String COLLECTION_COORDINATORS = "CollectionCoordinators";
-
     public static final String SPECIMEN_REQUIREMENT = "SpecimenRequirement";
-
     public static final String COLLECTION_SPECIMEN_REQUIREMENT = "CollectionSpecimenRequirement";
-
     public static final String DISTRIBUTION_SPECIMEN_REQUIREMENT = "DistributionSpecimenRequirement";
-
     public static final String DISTRIBUTION_PROTOCOL = "DistributionProtocol";
-
     public static final String REPORTED_PROBLEM = "ReportedProblem";
 
    
