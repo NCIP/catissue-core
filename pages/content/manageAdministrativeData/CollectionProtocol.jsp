@@ -44,8 +44,20 @@
 
 	function changeUnit(listname,unitspan)
 	{
-		var i = document.getElementById(listname).selectedIndex;
-		document.getElementById(unitspan).innerHTML = ugul[i];
+//		var i = document.getElementById(listname).selectedIndex;
+		var list = document.getElementById(listname);
+		var selectedOption = list.options[list.selectedIndex].text;
+
+		if(selectedOption == "-- Select --")
+			document.getElementById(unitspan).innerHTML = ugul[0];
+		if(selectedOption == "Fluid")
+			document.getElementById(unitspan).innerHTML = ugul[1];
+		if(selectedOption == "Tissue")
+			document.getElementById(unitspan).innerHTML = ugul[2];
+		if(selectedOption == "Cell")
+			document.getElementById(unitspan).innerHTML = ugul[3];
+		if(selectedOption == "Molecular")
+			document.getElementById(unitspan).innerHTML = ugul[4];
 	}
 
 	var win = null;
