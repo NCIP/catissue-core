@@ -285,18 +285,19 @@ public abstract class SpecimenProtocol extends AbstractDomainObject implements j
         	this.shortTitle = spForm.getShortTitle();
         	this.irbIdentifier = spForm.getIrbID();
         	
-        	if((spForm.getStartDate()!=null) ||!(spForm.getStartDate().equals("")) )
+        	if((spForm.getStartDate()!=null) && !(spForm.getStartDate().equals("")) )
         	{
             	this.startDate = Utility.parseDate(spForm.getStartDate(),Constants.DATE_PATTERN_MM_DD_YYYY);        		
         	}
         	
-        	if((spForm.getEndDate()!=null) ||!(spForm.getEndDate().equals("")) )
+        	if((spForm.getEndDate()!=null) && !(spForm.getEndDate().equals("")) )
         	{
             	this.endDate = Utility.parseDate(spForm.getEndDate(),Constants.DATE_PATTERN_MM_DD_YYYY);        		
         	}
 
-
-        	this.enrollment = new Integer(spForm.getEnrollment());
+        	if(spForm.getEnrollment() != null && spForm.getEnrollment().trim().length()>0 )
+        		this.enrollment = new Integer(spForm.getEnrollment());
+        	
         	this.descriptionURL = spForm.getDescriptionURL();
         	this.activityStatus = spForm.getActivityStatus();
         	
