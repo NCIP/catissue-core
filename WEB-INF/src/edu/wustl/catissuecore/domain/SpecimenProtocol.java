@@ -39,7 +39,7 @@ public abstract class SpecimenProtocol extends AbstractDomainObject implements j
 	/**
 	 * The current principal investigator of the protocol.
 	 */
-	protected User principalInvestigator;
+	protected User principalInvestigator = new User();
 	
 	/**
 	 * Full title assigned to the protocol.
@@ -285,19 +285,18 @@ public abstract class SpecimenProtocol extends AbstractDomainObject implements j
         	this.shortTitle = spForm.getShortTitle();
         	this.irbIdentifier = spForm.getIrbID();
         	
-        	if((spForm.getStartDate()!=null) && (spForm.getStartDate().trim().length()>0 ) )
+        	if((spForm.getStartDate()!=null) ||!(spForm.getStartDate().equals("")) )
         	{
             	this.startDate = Utility.parseDate(spForm.getStartDate(),Constants.DATE_PATTERN_MM_DD_YYYY);        		
         	}
         	
-        	if((spForm.getEndDate()!=null) && (spForm.getEndDate().trim().length()>0) )
+        	if((spForm.getEndDate()!=null) ||!(spForm.getEndDate().equals("")) )
         	{
             	this.endDate = Utility.parseDate(spForm.getEndDate(),Constants.DATE_PATTERN_MM_DD_YYYY);        		
         	}
 
-        	if (spForm.getEnrollment() !=null && spForm.getEnrollment().trim().length()>0 )
-        		this.enrollment = new Integer(spForm.getEnrollment());
 
+        	this.enrollment = new Integer(spForm.getEnrollment());
         	this.descriptionURL = spForm.getDescriptionURL();
         	
         	principalInvestigator  = new User();
