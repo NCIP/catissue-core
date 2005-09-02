@@ -486,10 +486,10 @@ PUBLIC
 		    type="edu.wustl.catissuecore.action.CommonSearchAction"
 			name="distributionProtocolForm"
 			validate="true"
-			input="/DistributionProtocol.do?operation=search"
+			input="/DistributionProtocol.do?operation=edit"
 			scope="request">
 			<forward name="success" path="/DistributionProtocol.do?operation=edit"/>
-			<forward name="failure" path="/DistributionProtocol.do?operation=search"/>
+			<forward name="failure" path="/DistributionProtocol.do?operation=edit"/>
 		</action>    
 		<!-- DistributionProtocol Actions Ends-->
 		
