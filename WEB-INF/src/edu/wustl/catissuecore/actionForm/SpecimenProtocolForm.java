@@ -10,13 +10,10 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.struts.action.ActionMapping;
-
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
-import edu.wustl.catissuecore.domain.CollectionProtocol;
+import edu.wustl.catissuecore.domain.SpecimenProtocol;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.util.logger.Logger;
 
 
@@ -325,22 +322,21 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 	{
 		try
 		{
-			CollectionProtocol collectionProtocol = (CollectionProtocol) abstractDomain;
-			this.systemIdentifier = collectionProtocol.getSystemIdentifier().longValue();
-			this.activityStatus = collectionProtocol.getActivityStatus();
-			this.principalInvestigatorId = collectionProtocol.getPrincipalInvestigator()
+			SpecimenProtocol protocol = (SpecimenProtocol)abstractDomain;			
+			this.systemIdentifier = protocol.getSystemIdentifier().longValue();
+			this.activityStatus = protocol.getActivityStatus();
+			this.principalInvestigatorId = protocol.getPrincipalInvestigator()
 					.getSystemIdentifier().longValue();
-			this.title = collectionProtocol.getTitle();
-			this.shortTitle = collectionProtocol.getShortTitle();
-			this.startDate = collectionProtocol.getStartDate().toString();
-			this.endDate = collectionProtocol.getEndDate().toString();
-			this.irbID = collectionProtocol.getIrbIdentifier();
-			this.enrollment ="" + collectionProtocol.getEnrollment().intValue();
-			this.descriptionURL = collectionProtocol.getDescriptionURL();
+			this.title = protocol.getTitle();
+			this.shortTitle = protocol.getShortTitle();
+			this.startDate = Utility.parseDateToString(protocol.getStartDate(),Constants.DATE_PATTERN_MM_DD_YYYY);
+			this.endDate = Utility.parseDateToString(protocol.getEndDate(),Constants.DATE_PATTERN_MM_DD_YYYY);
+			this.irbID = protocol.getIrbIdentifier();
+			this.enrollment ="" + protocol.getEnrollment().intValue();
+			this.descriptionURL = protocol.getDescriptionURL();
 		}
 		catch (Exception excp)
 		{
-	    	// use of logger as per bug 79
 	    	Logger.out.error(excp.getMessage(),excp); 
 		}
 	}
