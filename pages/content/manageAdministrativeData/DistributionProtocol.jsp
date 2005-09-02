@@ -105,7 +105,8 @@ function insRow(subdivtag)
 	var r = new Array(); 
 	r = document.getElementById(subdivtag).rows;
 	var q = r.length;
-	var x=document.getElementById(subdivtag).insertRow(q);
+//	var x=document.getElementById(subdivtag).insertRow(q);
+	var x=document.getElementById(subdivtag).insertRow(1);
 	
 	var subdivname = ""+ subdivtag;
 
@@ -438,7 +439,7 @@ function insRow(subdivtag)
 
 			<%
 				int maxcount=1;
-				for(int counter=1;counter<=noOfRows;counter++)
+				for(int counter=noOfRows;counter>=1;counter--)
 				{		
 					String objname = "value(SpecimenRequirement:" + counter + "_specimenClass)";
 					String objunit = "value(SpecimenRequirement:"+ counter +"_unitspan)";

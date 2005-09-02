@@ -112,7 +112,8 @@ var val = parseInt(document.forms[0].outerCounter.value);
 		z = z.replace('`',insno);
 		mm = z.indexOf('`');
 	}
-	div.innerHTML = div.innerHTML +z;
+//	div.innerHTML = div.innerHTML +z;
+	div.innerHTML = z + div.innerHTML ;
 }
 
 function addDiv(div,adstr)
@@ -135,7 +136,8 @@ function insRow(subdivtag,iCounter)
 	var r = new Array(); 
 	r = document.getElementById(subdivtag).rows;
 	var q = r.length;
-	var x=document.getElementById(subdivtag).insertRow(q);
+//	var x=document.getElementById(subdivtag).insertRow(q);
+	var x=document.getElementById(subdivtag).insertRow(1);
 	
 	//setSubDivCount(subdivtag);
 	var subdivname = ""+ subdivtag;
@@ -543,7 +545,7 @@ function getSubDivCount(subdivtag)
 			maxCount = colForm.getOuterCounter();
 		}
 
-		for(int counter=1;counter<=maxCount;counter++)
+		for(int counter=maxCount;counter>=1;counter--)
 		{
 			String commonLabel = "value(CollectionProtocolEvent:" + counter;
 			
@@ -648,7 +650,7 @@ function getSubDivCount(subdivtag)
 			    </TR><!-- SUB TITLES END -->
 				
 				<%
-					for(int innerCounter=1;innerCounter<=maxIntCount;innerCounter++)
+					for(int innerCounter=maxIntCount;innerCounter>=1;innerCounter--)
 					{
 				%>
 				

@@ -72,7 +72,8 @@ function insRow(subdivtag)
 	var r = new Array(); 
 	r = document.getElementById(subdivtag).rows;
 	var q = r.length;
-	var x=document.getElementById(subdivtag).insertRow(q);
+//	var x=document.getElementById(subdivtag).insertRow(q);
+	var x=document.getElementById(subdivtag).insertRow(0);
 	
 	// First Cell
 	var spreqno=x.insertCell(0);
@@ -452,7 +453,7 @@ function insRow(subdivtag)
 					<tbody id="addMore">
 						<%
 						
-							for(int rowCount=1;rowCount<=noOfRows;rowCount++)
+							for(int rowCount=noOfRows;rowCount>=1;rowCount--)
 							{
 								String keyName = "value(StorageContainerDetails:" + rowCount +"_parameterName)";
 								String valueName = "value(StorageContainerDetails:" + rowCount +"_parameterValue)";
