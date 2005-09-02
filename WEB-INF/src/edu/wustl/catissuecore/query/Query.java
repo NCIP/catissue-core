@@ -342,4 +342,11 @@ public abstract class Query {
     {
         this.parentOfQueryStartObject = parentOfQueryStartObject;
     }
+    /**
+     * @param resultView The resultView to set.
+     */
+    public void setResultView(Vector resultView)
+    {
+        this.resultView = resultView;
+    }
 }
