@@ -1,13 +1,14 @@
 package edu.wustl.catissuecore.query;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
 import edu.wustl.catissuecore.dao.JDBCDAO;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.logger.Logger;
 
 
 
@@ -29,9 +30,6 @@ public abstract class Query {
      * Simple query type constant
      */
     public static final String SIMPLE_QUERY = "SimpleQuery";
-    
-    
-    
     
     /**
 	 * Vector of DataElement objects that need to be selected in the output
@@ -90,35 +88,32 @@ public abstract class Query {
     public static final String DISTRIBUTION_PROTOCOL = "DistributionProtocol";
     public static final String REPORTED_PROBLEM = "ReportedProblem";
 
-   
-
-    
-	
 	/**
 	 * This method executes the query string formed from getString method and creates a temporary table.
 	 * @return Returns true in case everything is successful else false
 	 */
-	public boolean execute() throws DAOException
+	public List execute() throws DAOException
 	{
 	    try
 	    {
 	        JDBCDAO dao = new JDBCDAO();
 	        dao.openSession();
 			List list = dao.executeQuery(getString());
-	        String tableName = Constants.QUERY_RESULTS_TABLE;
+			Logger.out.debug("SQL************"+getString());
 	        
-	        dao.delete(tableName);
-	        dao.create(tableName,Constants.DEFAULT_SPREADSHEET_COLUMNS);
-	        
-	        Iterator iterator = list.iterator();
-	        while (iterator.hasNext())
-	        {
-	            List row = (List) iterator.next();
-	            
-	            dao.insert(tableName, row);
-	        }
-	        
-	        dao.closeSession();
+	        return list;
+//	        dao.delete(tableName);
+//	        dao.create(tableName,Constants.DEFAULT_SPREADSHEET_COLUMNS);
+//	        
+//	        Iterator iterator = list.iterator();
+//	        while (iterator.hasNext())
+//	        {
+//	            List row = (List) iterator.next();
+//	            
+//	            dao.insert(tableName, row);
+//	        }
+//	        
+//	        dao.closeSession();
 	    }
 	    catch(DAOException daoExp)
 	    {
@@ -128,7 +123,6 @@ public abstract class Query {
 	    {
 	        throw new DAOException(classExp.getMessage(), classExp);
 	    }
-	    return true;
 	}
 			/**
 	 * Adds the dataElement to result view
@@ -138,6 +132,23 @@ public abstract class Query {
 	public boolean addElementToView(DataElement dataElement)
 	{
 	    return resultView.add(dataElement);
+	}
+	
+	public void setViewElements(String aliasName)
+	{
+	    Vector vector = new Vector();
+	    List list = new ArrayList();
+	    Iterator iterator = list.iterator();
+	    while(iterator.hasNext())
+	    {
+	        List rowList = (List) iterator.next();
+	        DataElement dataElement = new DataElement();
+	        dataElement.setTable((String)rowList.get(0));
+	        dataElement.setField((String)rowList.get(1));
+	        vector.add(dataElement);
+	    }
+	    
+	    setResultView(vector);
 	}
 	
 	/**
