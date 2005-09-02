@@ -6,14 +6,25 @@
  */
 package edu.wustl.catissuecore.actionForm;
 
+import java.text.SimpleDateFormat;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.domain.SpecimenProtocol;
+import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
 
@@ -362,4 +373,69 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 		
 		values = new HashMap();
 	}
+	
+	/**
+	 * Overrides the validate method of ActionForm.
+	 */
+	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
+	{
+		ActionErrors errors = new ActionErrors();
+		Validator validator = new Validator();
+		try
+		{
+			if (operation.equals(Constants.ADD) || operation.equals(Constants.EDIT))
+            {
+                if(this.principalInvestigatorId == -1)
+				{
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("collectionprotocol.principalinvestigator")));
+				}
+                if (validator.isEmpty(this.title))
+                {
+                	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocol.protocoltitle")));
+                }
+                
+                if (!validator.isNumeric(enrollment) && !validator.isEmpty(enrollment ))
+                {
+                	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.enrollment",ApplicationProperties.getValue("collectionprotocol.participants")));
+                }
+                
+      			// code added as per bug id 235 
+    			// code to validate startdate less than end date
+    			// check the start date less than end date
+    			if (!validator.isEmpty(startDate) && !validator.isEmpty(endDate )  )
+    			{
+    				try
+					{
+    					String pattern="MM-dd-yyyy";
+    					SimpleDateFormat dF = new SimpleDateFormat(pattern);
+    					Date sDate = dF.parse(this.startDate );
+    					Date eDate = dF.parse(this.endDate );
+    						
+    					int check = sDate.compareTo(eDate );
+    					
+    					if(check>0)
+    					{
+    						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("specimenprotocol.invaliddate",ApplicationProperties.getValue("specimenprotocol.invaliddate")));
+    					}
+    					
+					} // try
+    				catch (Exception excp1)
+					{
+    					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("specimenprotocol.invaliddate",ApplicationProperties.getValue("specimenprotocol.invaliddate")));
+						errors = new ActionErrors();
+					}
+    				
+    			}
+
+            }    
+		}
+		catch (Exception excp)
+		{
+	    	// use of logger as per bug 79
+	    	Logger.out.error(excp.getMessage(),excp); 
+			errors = new ActionErrors();
+		}
+		return errors;
+	}
+	
 }

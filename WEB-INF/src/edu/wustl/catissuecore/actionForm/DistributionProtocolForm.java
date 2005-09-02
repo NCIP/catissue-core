@@ -158,27 +158,27 @@ public class DistributionProtocolForm extends SpecimenProtocolForm
 	 */
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
-		ActionErrors errors = new ActionErrors();
+		ActionErrors errors = super.validate(mapping, request );
 		Validator validator = new Validator();
 		try
 		{
 			if (operation.equals(Constants.ADD) || operation.equals(Constants.EDIT))
             {
-                if(this.principalInvestigatorId == -1)
-				{
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("distributionprotocol.principalinvestigator")));
-				}
-                if (validator.isEmpty(this.title))
-                {
-                	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("distributionprotocol.protocoltitle")));
-                }
-                
-                // as per bug 326
-                // check for valid enrollments if present
-                if (!validator.isEmpty(this.enrollment) && !validator.isNumeric(this.enrollment ))
-                {
-                	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("distributionprotocol.participants")));
-                }
+//                if(this.principalInvestigatorId == -1)
+//				{
+//					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("distributionprotocol.principalinvestigator")));
+//				}
+//                if (validator.isEmpty(this.title))
+//                {
+//                	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("distributionprotocol.protocoltitle")));
+//                }
+//                
+//                // as per bug 326
+//                // check for valid enrollments if present
+//                if (!validator.isEmpty(this.enrollment) && !validator.isNumeric(this.enrollment ))
+//                {
+//                	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("distributionprotocol.participants")));
+//                }
                 
                 
     			Iterator it = this.values.keySet().iterator();
