@@ -11,8 +11,6 @@
 
 package edu.wustl.catissuecore.actionForm;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -192,7 +190,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
     				{
     					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("collectionprotocol.specimenstatus")));
     				}
-    				if(key.indexOf("quantityIn")!=-1 && (validator.isEmpty(value) || !validator.isNumeric(value )))
+    				if(key.indexOf("quantityIn")!=-1 && (validator.isEmpty(value) || !validator.isDouble(value )))
     				{
     					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocol.quantity")));
     				}
