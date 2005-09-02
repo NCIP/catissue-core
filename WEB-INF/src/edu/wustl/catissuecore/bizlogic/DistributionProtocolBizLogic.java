@@ -18,7 +18,6 @@ import edu.wustl.catissuecore.domain.DistributionProtocol;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.common.util.dbManager.DAOException;
-import edu.wustl.common.util.logger.Logger;
 
 /**
  * DistributionProtocolBizLogic is used to add DistributionProtocol information into the database using Hibernate.
@@ -35,22 +34,13 @@ public class DistributionProtocolBizLogic extends DefaultBizLogic
 	protected void insert(DAO dao, Object obj) throws DAOException 
 	{
 		DistributionProtocol distributionProtocol = (DistributionProtocol)obj;
-		
-		List list = dao.retrieve(User.class.getName(), "systemIdentifier", distributionProtocol.getPrincipalInvestigator().getSystemIdentifier());
-		if (list.size() != 0)
-		{
-			User pi = (User) list.get(0);
-			distributionProtocol.setPrincipalInvestigator(pi);
-		}
-		
-		Logger.out.debug("SIZE "+distributionProtocol.getSpecimenRequirementCollection().size());
+		setPrincipalInvestigator(dao,distributionProtocol);
 		dao.insert(distributionProtocol,true);
-		Logger.out.debug("SIZE "+distributionProtocol.getSpecimenRequirementCollection().size());
+
 		Iterator it = distributionProtocol.getSpecimenRequirementCollection().iterator();
 		while(it.hasNext())
 		{
 			SpecimenRequirement specimenRequirement = (SpecimenRequirement)it.next();
-			Logger.out.debug("specimenRequirement "+specimenRequirement);
 			specimenRequirement.getDistributionProtocolCollection().add(distributionProtocol);
 			dao.insert(specimenRequirement,true);
 		}
@@ -64,5 +54,27 @@ public class DistributionProtocolBizLogic extends DefaultBizLogic
      */
 	protected void update(DAO dao, Object obj) throws DAOException
     {
+		DistributionProtocol distributionProtocol = (DistributionProtocol)obj;
+		setPrincipalInvestigator(dao,distributionProtocol);
+		dao.update(distributionProtocol);
+
+		Iterator it = distributionProtocol.getSpecimenRequirementCollection().iterator();
+		while(it.hasNext())
+		{
+			SpecimenRequirement specimenRequirement = (SpecimenRequirement)it.next();
+			specimenRequirement.getDistributionProtocolCollection().add(distributionProtocol);
+			dao.update(specimenRequirement);
+		}
     }
+	
+	//This method sets the Principal Investigator
+	private void setPrincipalInvestigator(DAO dao,DistributionProtocol distributionProtocol) throws DAOException
+	{
+		List list = dao.retrieve(User.class.getName(), "systemIdentifier", distributionProtocol.getPrincipalInvestigator().getSystemIdentifier());
+		if (list.size() != 0)
+		{
+			User pi = (User) list.get(0);
+			distributionProtocol.setPrincipalInvestigator(pi);
+		}
+	}
 }
