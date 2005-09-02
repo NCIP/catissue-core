@@ -3,14 +3,19 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.DistributionProtocolForm"%>
+<%@ page import="java.util.List"%>
+<%@ page import="edu.wustl.common.beans.NameValueBean"%>
+
 <head>
 
 <%
-	String specimenClassArry[] = (String[]) request.getAttribute(Constants.SPECIMEN_CLASS_LIST);
-	String specimenClassIdArry[] = (String[]) request.getAttribute(Constants.SPECIMEN_CLASS_ID_LIST);
-	String specimenTypeArry[] = (String[]) request.getAttribute(Constants.SPECIMEN_TYPE_LIST);
-	String tissueSiteArry[] = (String[]) request.getAttribute(Constants.TISSUE_SITE_LIST);
-	String pathologyStatusArry[] = (String[]) request.getAttribute(Constants.PATHOLOGICAL_STATUS_LIST);
+	List specimenClassList = (List) request.getAttribute(Constants.SPECIMEN_CLASS_LIST);
+	
+	List specimenTypeList = (List) request.getAttribute(Constants.SPECIMEN_TYPE_LIST);
+	
+	List tissueSiteList = (List) request.getAttribute(Constants.TISSUE_SITE_LIST);
+
+	List pathologyStatusList = (List) request.getAttribute(Constants.PATHOLOGICAL_STATUS_LIST);
 	
     String operation = (String) request.getAttribute(Constants.OPERATION);
     String formName;
@@ -111,9 +116,12 @@ function insRow(subdivtag)
 	var objunit = "value(SpecimenRequirement:"+rowno+"_unitspan)";
 	
 	sname = "<select name='" + objname + "' size='1' onchange=changeUnit('" + objname + "','" + objunit +"') class='formFieldSized10' id='" + objname + "'>";
-	<%for(int i=0;i<specimenClassIdArry.length;i++)
-	{%>
-		sname = sname + "<option value='<%=specimenClassIdArry[i]%>'><%=specimenClassArry[i]%></option>";
+	<%for(int i=0;i<specimenClassList.size();i++)
+	{
+		String specimenClassLabel = "" + ((NameValueBean)specimenClassList.get(i)).getName();
+		String specimenClassValue = "" + ((NameValueBean)specimenClassList.get(i)).getValue();
+	%>
+		sname = sname + "<option value='<%=specimenClassValue%>'><%=specimenClassLabel%></option>";
 	<%}%>
 	sname = sname + "</select>";
 	 
@@ -126,9 +134,12 @@ function insRow(subdivtag)
 	objname = "value(SpecimenRequirement:"+rowno+"_specimenType)";
 	
 	sname= "<select name='" + objname + "' size='1' class='formFieldSized10' id='" + objname + "'>";
-	<%for(int i=0;i<specimenTypeArry.length;i++)
-	{%>
-		sname = sname + "<option value='<%=specimenTypeArry[i]%>'><%=specimenTypeArry[i]%></option>";
+	<%for(int i=0;i<specimenTypeList.size();i++)
+	{
+		String specimenTypeLabel = "" + ((NameValueBean)specimenTypeList.get(i)).getName();
+		String specimenTypeValue = "" + ((NameValueBean)specimenTypeList.get(i)).getValue();		
+	%>
+		sname = sname + "<option value='<%=specimenTypeValue%>'><%=specimenTypeLabel%></option>";
 	<%}%>
 	sname = sname + "</select>"
 	
@@ -141,9 +152,9 @@ function insRow(subdivtag)
 	objname = "value(SpecimenRequirement:"+rowno+"_tissueSite)";
 	
 	sname = "<select name='" + objname + "' size='1' class='formFieldSized10' id='" + objname + "'>";
-	<%for(int i=0;i<tissueSiteArry.length;i++)
+	<%for(int i=0;i<tissueSiteList.size();i++)
 	{%>
-		sname = sname + "<option value='<%=tissueSiteArry[i]%>'><%=tissueSiteArry[i]%></option>";
+		sname = sname + "<option value='<%=((NameValueBean)tissueSiteList.get(i)).getValue()%>'><%=((NameValueBean)tissueSiteList.get(i)).getName()%></option>";
 	<%}%>
 	sname = sname + "</select>"
 	var url = "ShowFramedPage.do?pageOf=pageOfTissueSite&propertyName="+objname;			
@@ -160,9 +171,9 @@ function insRow(subdivtag)
 	objname = "value(SpecimenRequirement:"+rowno+"_pathologyStatus)";
 	
 	sname="<select name='" + objname + "' size='1' class='formFieldSized10' id='" + objname + "'>";
-	<%for(int i=0;i<pathologyStatusArry.length;i++)
+	<%for(int i=0;i<pathologyStatusList.size();i++)
 	{%>
-		sname = sname + "<option value='<%=pathologyStatusArry[i]%>'><%=pathologyStatusArry[i]%></option>";
+		sname = sname + "<option value='<%=((NameValueBean)pathologyStatusList.get(i)).getValue()%>'><%=((NameValueBean)pathologyStatusList.get(i)).getName()%></option>";
 	<%}%>
 	sname = sname + "</select>";
 	
@@ -430,7 +441,7 @@ function insRow(subdivtag)
 			<% String functionName ="changeUnit('" + objname + "',' " + objunit + "')"; %>	
 				<td class="formField">
 					<html:select property="<%=objname%>" styleClass="formFieldSized10" styleId="<%=objname%>" size="1" onchange="<%=functionName%>" >
-						<html:options name="<%=Constants.SPECIMEN_CLASS_ID_LIST%>" labelName="<%=Constants.SPECIMEN_CLASS_LIST%>" />
+						<html:options collection="<%=Constants.SPECIMEN_CLASS_LIST%>" labelProperty="name" property="value"/>
 					</html:select>
 		        </td>
 		        
@@ -440,7 +451,7 @@ function insRow(subdivtag)
 						objname = "value(SpecimenRequirement:" + counter + "_specimenType)";
 					%>
 					<html:select property="<%=objname%>" styleClass="formFieldSized10" styleId="<%=objname%>" size="1" >
-						<html:options name="<%=Constants.SPECIMEN_TYPE_LIST%>" labelName="<%=Constants.SPECIMEN_TYPE_LIST%>" />
+						<html:options collection="<%=Constants.SPECIMEN_TYPE_LIST%>" labelProperty="name" property="value"/>
 					</html:select>
 		        </td>
 		        
@@ -450,7 +461,7 @@ function insRow(subdivtag)
 						objname = "value(SpecimenRequirement:" + counter + "_tissueSite)";
 					%>
 					<html:select property="<%=objname%>" styleClass="formFieldSized10" styleId="<%=objname%>" size="1" >
-						<html:options name="<%=Constants.TISSUE_SITE_LIST%>" labelName="<%=Constants.TISSUE_SITE_LIST%>" />
+						<html:options collection="<%=Constants.TISSUE_SITE_LIST%>" labelProperty="name" property="value"/>
 					</html:select>
 					<%
 						String url = "ShowFramedPage.do?pageOf=pageOfTissueSite&propertyName="+objname;			
@@ -466,7 +477,7 @@ function insRow(subdivtag)
 						objname = "value(SpecimenRequirement:" + counter + "_pathologyStatus)";
 					%>
 					<html:select property="<%=objname%>" styleClass="formFieldSized10" styleId="<%=objname%>" size="1" >
-						<html:options name="<%=Constants.PATHOLOGICAL_STATUS_LIST%>" labelName="<%=Constants.PATHOLOGICAL_STATUS_LIST%>" />
+						<html:options collection="<%=Constants.PATHOLOGICAL_STATUS_LIST%>" labelProperty="name" property="value"/>
 					</html:select>
 			    </td>
 			    
