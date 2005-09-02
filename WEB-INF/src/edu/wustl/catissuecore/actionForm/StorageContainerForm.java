@@ -182,7 +182,7 @@ public class StorageContainerForm extends AbstractActionForm
 
 			this.systemIdentifier = container.getSystemIdentifier().longValue();
 			this.activityStatus = container.getActivityStatus();
-			this.startNumber = container.getName();
+			this.startNumber = container.getNumber().toString();
 			
 			this.typeId = container.getStorageType().getSystemIdentifier().longValue();
 			

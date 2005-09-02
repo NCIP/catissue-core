@@ -83,7 +83,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
             }
             
             if(container.getStartNo() != null)
-            	cont.setName(String.valueOf(i + container.getStartNo().intValue()));
+            	cont.setNumber(new Integer(i + container.getStartNo().intValue()));
             
             dao.insert(cont.getStorageContainerCapacity(),true);
             dao.insert(cont,true);
@@ -220,7 +220,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
             boolean isInSite) throws DAOException
     {
         String sourceObjectName = "CATISSUE_STORAGE_CONTAINER";
-        String[] selectColumnName = {"max(NAME) as MAX_NAME"};
+        String[] selectColumnName = {"max(CONTAINER_NUMBER) as MAX_NAME"};
         String[] whereColumnName = new String[2];
 
         whereColumnName[0] = "STORAGE_TYPE_ID";
@@ -275,7 +275,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
                 StorageContainerTreeNode treeNode = new StorageContainerTreeNode();
                 treeNode.setStorageContainerIdentifier(storageContainer
                         .getSystemIdentifier());
-                treeNode.setStorageContainerName(storageContainer.getName());
+                treeNode.setStorageContainerName(storageContainer.getNumber()+"");
                 treeNode.setStorageContainerType(storageContainer
                         .getStorageType().getType());
                 if (storageContainer.getParentContainer() != null)

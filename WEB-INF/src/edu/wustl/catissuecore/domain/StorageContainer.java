@@ -34,7 +34,7 @@ public class StorageContainer extends AbstractDomainObject implements java.io.Se
 	/**
      * Name assigned to storage container.
      */
-	protected String name;
+	protected Integer number;
 	
 	/**
      * Intended temperature of the storage container.
@@ -115,7 +115,7 @@ public class StorageContainer extends AbstractDomainObject implements java.io.Se
 		this.setSystemIdentifier(oldContainer.getSystemIdentifier());
 		this.setActivityStatus(oldContainer.getActivityStatus());
 		this.setParentContainer(oldContainer.getParentContainer());
-		this.setName(oldContainer.getName());
+		this.setNumber(oldContainer.getNumber());
 		
 		if(parentContainer!=null)
 		{
@@ -151,25 +151,25 @@ public class StorageContainer extends AbstractDomainObject implements java.io.Se
 	}
 
 	/**
-     * Returns the name assigned to storage container. 
-     * @return Name assigned to storage container.
-     * @see #setName(String)
-     * @hibernate.property name="name" type="string" 
-     * column="NAME" length="50"
+     * Returns the number assigned to storage container. 
+     * @return number assigned to storage container.
+     * @see #setNumber(Integer)
+     * @hibernate.property name="number" type="int" 
+     * column="CONTAINER_NUMBER" length="50"
      */
-	public String getName()
+	public Integer getNumber()
 	{
-		return name;
+		return number;
 	}
 
 	/**
      * Sets the name of the storage container.
      * @param name name of the storage container to be set.
-     * @see #getName()
+     * @see #getNumber()
      */
-	public void setName(String name)
+	public void setNumber(Integer number)
 	{
-		this.name = name;
+		this.number = number;
 	}
 
 	/**
@@ -449,7 +449,7 @@ public class StorageContainer extends AbstractDomainObject implements java.io.Se
 	    {
 	        StorageContainerForm form = (StorageContainerForm) abstractForm;
 	        this.systemIdentifier 		= new Long(form.getSystemIdentifier());
-	        this.name					= form.getStartNumber();
+	        this.number 				= new Integer(form.getStartNumber());
 	        this.startNo				= new Integer(form.getStartNumber());
 	        this.tempratureInCentigrade	= new Double(form.getDefaultTemperature());
 	        this.barcode				= form.getBarcode();
