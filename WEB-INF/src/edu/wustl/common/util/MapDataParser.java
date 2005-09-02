@@ -79,7 +79,7 @@ public class MapDataParser
 		else
 		{
 			if(str.trim().length()==0)
-				str = "0";
+				return null;
 			
 			if(type.equals(Long.class))
 				return new Long(str);

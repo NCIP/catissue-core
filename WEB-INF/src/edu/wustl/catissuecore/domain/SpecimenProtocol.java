@@ -367,13 +367,13 @@ public abstract class SpecimenProtocol extends AbstractDomainObject implements j
 						
 						key = key.replaceFirst(keyPart,newKeyPart);
 					}
-					if(key.indexOf("systemIdentifier")!=-1)
-					{
-						Object obj = orgMap.get(key);
-						Logger.out.debug("Value "+obj);
-						if(obj==null || ((String)obj).trim().length()==0)
-							continue;
-					}
+//					if(key.indexOf("systemIdentifier")!=-1)
+//					{
+//						Object obj = orgMap.get(key);
+//						Logger.out.debug("Value "+obj);
+//						if(obj==null || ((String)obj).trim().length()==0)
+//							continue;
+//					}
 					
 					//Replace # and class name and FIX for abstract class
 					keyPart = key.substring(0,key.lastIndexOf("_"));
