@@ -66,4 +66,9 @@ public class SimpleConditionsNode {
     {
         this.operator = operator;
     }
+    
+    public String getConditionObject()
+    {
+        return condition.getDataElement().getTable();
+    }
 }

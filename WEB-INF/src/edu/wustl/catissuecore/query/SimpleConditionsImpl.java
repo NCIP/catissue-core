@@ -1,5 +1,7 @@
 package edu.wustl.catissuecore.query;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Vector;
  
 
@@ -102,4 +104,23 @@ public class SimpleConditionsImpl extends ConditionsImpl {
         
     }
 
+/* (non-Javadoc)
+ * @see edu.wustl.catissuecore.query.ConditionsImpl#getQueryObjects(java.lang.String)
+ */
+public HashSet getQueryObjects()
+{
+    HashSet queryObjects = new HashSet();
+    SimpleConditionsNode condition;
+    for(int i=0; i<whereConditions.size(); i++)
+    {
+        condition = (SimpleConditionsNode) whereConditions.get(i);
+        if(condition !=null)
+        {
+            queryObjects.add(condition.getConditionObject());
+        }
+    }
+    return queryObjects;
+}
+
+    
 }

@@ -1,6 +1,7 @@
 package edu.wustl.catissuecore.query;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 
 
@@ -62,5 +63,6 @@ public class SimpleQuery extends Query
 	public boolean addCondition(int position,SimpleConditionsNode condition){
 	    return ((SimpleConditionsImpl)this.whereConditions).addCondition(position,condition);
 	}
+	
 	
 }

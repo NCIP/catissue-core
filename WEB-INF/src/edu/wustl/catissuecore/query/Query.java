@@ -66,7 +66,6 @@ public abstract class Query {
      * Participant object constant
      */
     public static final String PARTICIPANT = "Participant"; 
-    
     public static final String COLLECTION_PROTOCOL_REGISTRATION = "CollectionProtocolRegistration"; 
     public static final String COLLECTION_PROTOCOL = "CollectionProtocol"; 
     public static final String COLLECTION_PROTOCOL_EVENT = "CollectionProtocolEvent"; 
