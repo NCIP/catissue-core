@@ -105,7 +105,7 @@ public class DistributionProtocolForm extends SpecimenProtocolForm
 					String key4 = "SpecimenRequirement:" + i +"_tissueSite";
 					String key5 = "SpecimenRequirement:" + i +"_pathologyStatus";
 					String key6 = "SpecimenRequirement:" + i +"_quantityIn";
-					String key7 = "StorageContainerDetails:" + i +"_systemIdentifier";
+					String key7 = "SpecimenRequirement:" + i +"_systemIdentifier";
 					
 					SpecimenRequirement requirement = (SpecimenRequirement)it.next();
 					values.put(key3,requirement.getSpecimenType());
@@ -115,25 +115,25 @@ public class DistributionProtocolForm extends SpecimenProtocolForm
 					
 					if(requirement instanceof TissueSpecimenRequirement)
 					{
-						values.put(key1,"Tissue Specimen");
+						values.put(key1,"Tissue");
 						values.put(key2,Constants.UNIT_GM);
 						values.put(key6,String.valueOf(((TissueSpecimenRequirement)requirement).getQuantityInGram()));
 					}
 					else if(requirement instanceof CellSpecimenRequirement)
 					{
-						values.put(key1,"Cell Specimen");
+						values.put(key1,"Cell");
 						values.put(key2,Constants.UNIT_CC);
 						values.put(key6,String.valueOf(((CellSpecimenRequirement)requirement).getQuantityInCellCount()));
 					}
 					else if(requirement instanceof MolecularSpecimenRequirement)
 					{
-						values.put(key1,"Molecular Specimen");
+						values.put(key1,"Molecular");
 						values.put(key2,Constants.UNIT_MG);
 						values.put(key6,String.valueOf(((MolecularSpecimenRequirement)requirement).getQuantityInMicrogram()));
 					}
 					else if(requirement instanceof FluidSpecimenRequirement)
 					{
-						values.put(key1,"Fluid Specimen");
+						values.put(key1,"Fluid");
 						values.put(key2,Constants.UNIT_ML);
 						values.put(key6,String.valueOf(((FluidSpecimenRequirement)requirement).getQuantityInMilliliter()));
 					}
