@@ -532,17 +532,17 @@ public class StorageContainerForm extends AbstractActionForm
 			{
 				if (this.typeId == -1)
 				{
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 							ApplicationProperties.getValue("storageContainer.type")));
 				}
 				if (checkedButton == 1 && siteId == -1)
 				{
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 							ApplicationProperties.getValue("storageContainer.site")));
 				}
 				else if (checkedButton == 2 && parentContainerId == 0)
 				{
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 							ApplicationProperties.getValue("storageContainer.parentContainer")));
 				}
 

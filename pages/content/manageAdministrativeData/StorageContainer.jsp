@@ -254,7 +254,7 @@ function insRow(subdivtag)
 					</tr>
 <!-- New row 1 -->
 					<tr>
-						<td class="formRequiredNoticeNoBottom" width="5">&nbsp;</td>
+						<td class="formRequiredNoticeNoBottom" width="5">*</td>
 						<td class="formRequiredLabelRightBorder" colspan=2>
 							<html:radio styleClass="" styleId="checkedButton" property="checkedButton" value="1" onclick="onRadioButtonClick(this)">
 								<label for="siteId">
