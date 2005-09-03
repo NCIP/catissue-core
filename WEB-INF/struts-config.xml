@@ -866,7 +866,7 @@ PUBLIC
         <action path="/Biohazard"
 			type="edu.wustl.catissuecore.action.BiohazardAction"
 			scope="request">
-			<forward name="pageOfBiohazard" path=".catissuecore.biohazardDef" />
+			<forward name="pageOfBioHazard" path=".catissuecore.biohazardDef" />
 			<forward name="failure" path=".catissuecore.biohazardDef" />
 			<forward name="access_denied" path="/ManageAdministrativeData.do" />
 		</action>
@@ -897,7 +897,7 @@ PUBLIC
 			validate="false"
 			input="/Biohazard.do?operation=edit"
 			scope="request">
-			<forward name="pageOfBiohazard" path="/Biohazard.do?operation=edit&amp;pageOf=pageOfBiohazard"/>
+			<forward name="pageOfBioHazard" path="/Biohazard.do?operation=edit&amp;pageOf=pageOfBioHazard"/>
 			<forward name="failure" path="/Biohazard.do?operation=edit"/>
 		</action>    
 		<!-- Biohazard Actions Ends -->
@@ -1562,7 +1562,7 @@ PUBLIC
 			<forward name="pageOfStorageType" path=".catissuecore.editSearchPageDef"/>
 			<forward name="pageOfStorageContainer" path=".catissuecore.editSearchPageDef"/>
 			<forward name="pageOfSite" path=".catissuecore.editSearchPageDef"/>
-			<forward name="pageOfBiohazard" path=".catissuecore.editSearchPageDef"/>			
+			<forward name="pageOfBioHazard" path=".catissuecore.editSearchPageDef"/>			
 			<forward name="failure" path=".catissuecore.simpleQueryInterfaceDef" />
 		</action>
 
@@ -1582,7 +1582,7 @@ PUBLIC
 			<forward name="pageOfStorageType" path="/SpreadsheetView.do?pageOf=pageOfStorageType"/>
 			<forward name="pageOfStorageContainer" path="/SpreadsheetView.do?pageOf=pageOfStorageContainer"/>
 			<forward name="pageOfSite" path="/SpreadsheetView.do?pageOf=pageOfSite"/>
-			<forward name="pageOfBiohazard" path="/SpreadsheetView.do?pageOf=pageOfBiohazard"/>
+			<forward name="pageOfBioHazard" path="/SpreadsheetView.do?pageOf=pageOfBioHazard"/>
 			<forward name="failure" path="/error.jsp" />
 		</action>
 		
@@ -1599,7 +1599,7 @@ PUBLIC
 			<forward name="pageOfStorageType" path=".catissuecore.editSearchResultsDef"/>
 			<forward name="pageOfStorageContainer" path=".catissuecore.editSearchResultsDef"/>
 			<forward name="pageOfSite" path=".catissuecore.editSearchResultsDef"/>
-			<forward name="pageOfBiohazard" path=".catissuecore.editSearchResultsDef"/>
+			<forward name="pageOfBioHazard" path=".catissuecore.editSearchResultsDef"/>
 			<forward name="failure" path=".catissuecore.simpleSearchResultsDef" />
 		</action>
 		
@@ -1698,7 +1698,7 @@ PUBLIC
 			<forward name="pageOfDistributionProtocol" path="/DistributionProtocolSearch.do?pageOf=pageOfDistributionProtocol"/>
 			<forward name="pageOfStorageContainer" path="/StorageContainerSearch.do?pageOf=pageOfStorageContainer"/>
 			<forward name="pageOfSite" path="/SiteSearch.do?pageOf=pageOfSite"/>
-			<forward name="pageOfBiohazard" path="/BiohazardSearch.do?pageOf=pageOfBiohazard"/>
+			<forward name="pageOfBioHazard" path="/BiohazardSearch.do?pageOf=pageOfBioHazard"/>
 			<forward name="failure" path="/QueryParticipant.do?operation=view&amp;pageOf=query"/>
 		</action>
 		<!--Query Result View Actions End-->

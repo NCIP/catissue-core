@@ -123,8 +123,8 @@
 				<b><bean:message key="app.biohazard" /></b>
 		</div>
 		<div>
-			<a class="subMenuPrimary" href="Biohazard.do?operation=add&pageOf=pageOfBiohazard"><bean:message key="app.add" /></a> | 
-			<a class="subMenuPrimary" href="SimpleQueryInterface.do?pageOf=pageOfBiohazard&aliasName=Biohazard" >
+			<a class="subMenuPrimary" href="Biohazard.do?operation=add&pageOf=pageOfBioHazard"><bean:message key="app.add" /></a> | 
+			<a class="subMenuPrimary" href="SimpleQueryInterface.do?pageOf=pageOfBioHazard&aliasName=BioHazard" >
 				<bean:message key="app.edit" />
 			</a>
 		</div>
