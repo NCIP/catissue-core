@@ -40,10 +40,9 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
     {
     	super.executeSecureAction(mapping, form, request, response);
     	
-    	//String [] clinicalStatusArry = {Constants.SELECT_OPTION, "Pre-Opt","Post-Opt"};
     	List clinicalStatusList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_CLINICAL_STATUS);
     	request.setAttribute(Constants.CLINICAL_STATUS_LIST, clinicalStatusList);
-	    	
+    	
         return mapping.findForward(Constants.SUCCESS);
     }
 }
