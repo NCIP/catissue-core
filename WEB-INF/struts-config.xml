@@ -443,10 +443,10 @@ PUBLIC
 		    type="edu.wustl.catissuecore.action.CommonSearchAction"
 			name="collectionProtocolForm"
 			validate="true"
-			input="/CollectionProtocol.do?operation=search"
+			input="/CollectionProtocol.do?operation=edit"
 			scope="request">
 			<forward name="success" path="/CollectionProtocol.do?operation=edit"/>
-			<forward name="failure" path="/CollectionProtocol.do?operation=search"/>
+			<forward name="failure" path="/CollectionProtocol.do?operation=edit"/>
 		</action>    
 		<!-- CollectionProtocol Actions Ends-->
 		
