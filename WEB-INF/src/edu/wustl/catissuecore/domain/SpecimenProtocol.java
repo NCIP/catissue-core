@@ -276,7 +276,7 @@ public abstract class SpecimenProtocol extends AbstractDomainObject implements j
 	
 	public void setAllValues(AbstractActionForm abstractForm)
 	{
-		System.out.println("setAllValues ");
+		Logger.out.debug("SpecimenProtocol: setAllValues ");
         try
         {
         	SpecimenProtocolForm spForm = (SpecimenProtocolForm) abstractForm;
@@ -285,15 +285,8 @@ public abstract class SpecimenProtocol extends AbstractDomainObject implements j
         	this.shortTitle = spForm.getShortTitle();
         	this.irbIdentifier = spForm.getIrbID();
         	
-        	if((spForm.getStartDate()!=null) && !(spForm.getStartDate().equals("")) )
-        	{
-            	this.startDate = Utility.parseDate(spForm.getStartDate(),Constants.DATE_PATTERN_MM_DD_YYYY);        		
-        	}
-        	
-        	if((spForm.getEndDate()!=null) && !(spForm.getEndDate().equals("")) )
-        	{
-            	this.endDate = Utility.parseDate(spForm.getEndDate(),Constants.DATE_PATTERN_MM_DD_YYYY);        		
-        	}
+        	this.startDate = Utility.parseDate(spForm.getStartDate(),Constants.DATE_PATTERN_MM_DD_YYYY);        		
+        	this.endDate = Utility.parseDate(spForm.getEndDate(),Constants.DATE_PATTERN_MM_DD_YYYY);        		
 
         	if(spForm.getEnrollment() != null && spForm.getEnrollment().trim().length()>0 )
         		this.enrollment = new Integer(spForm.getEnrollment());
@@ -368,13 +361,6 @@ public abstract class SpecimenProtocol extends AbstractDomainObject implements j
 						
 						key = key.replaceFirst(keyPart,newKeyPart);
 					}
-//					if(key.indexOf("systemIdentifier")!=-1)
-//					{
-//						Object obj = orgMap.get(key);
-//						Logger.out.debug("Value "+obj);
-//						if(obj==null || ((String)obj).trim().length()==0)
-//							continue;
-//					}
 					
 					//Replace # and class name and FIX for abstract class
 					keyPart = key.substring(0,key.lastIndexOf("_"));
