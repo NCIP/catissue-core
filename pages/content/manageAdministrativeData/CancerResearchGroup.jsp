@@ -43,7 +43,12 @@
 					
 					<tr>
 						<td class="formTitle" height="20" colspan="3">
-							<bean:message key="cancerResearchGroup.title" />
+							<logic:equal name="operation" value="<%=Constants.ADD%>">
+								<bean:message key="cancerResearchGroup.title"/>
+							</logic:equal>
+							<logic:equal name="operation" value="<%=Constants.EDIT%>">
+								<bean:message key="cancerResearchGroup.editTitle"/>
+							</logic:equal>
 						</td>
 					</tr>
 					

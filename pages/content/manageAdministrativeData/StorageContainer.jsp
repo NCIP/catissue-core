@@ -230,7 +230,12 @@ function insRow(subdivtag)
 					
 					<tr>
 						<td class="formTitle" height="20" colspan="4">
-							<bean:message key="storageContainer.title" />
+							<logic:equal name="operation" value="<%=Constants.ADD%>">
+								<bean:message key="storageContainer.title"/>
+							</logic:equal>
+							<logic:equal name="operation" value="<%=Constants.EDIT%>">
+								<bean:message key="storageContainer.editTitle"/>
+							</logic:equal>
 						</td>
 					</tr>
 					

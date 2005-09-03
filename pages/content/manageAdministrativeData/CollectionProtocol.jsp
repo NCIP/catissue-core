@@ -295,7 +295,12 @@ function getSubDivCount(subdivtag)
 <!-- page title -->					
 					<tr>
 						<td class="formTitle" height="20" colspan="4">
-							<bean:message key="collectionprotocol.title" />
+							<logic:equal name="operation" value="<%=Constants.ADD%>">
+								<bean:message key="collectionprotocol.title"/>
+							</logic:equal>
+							<logic:equal name="operation" value="<%=Constants.EDIT%>">
+								<bean:message key="collectionprotocol.editTitle"/>
+							</logic:equal>
 						</td>
 					</tr>
 					

@@ -51,7 +51,12 @@
 
 		<tr>
 			 <td class="formTitle" height="20" colspan="3">
-				<bean:message key="storageType.title"/>
+				<logic:equal name="operation" value="<%=Constants.ADD%>">
+					<bean:message key="storageType.title"/>
+				</logic:equal>
+				<logic:equal name="operation" value="<%=Constants.EDIT%>">
+					<bean:message key="storageType.editTitle"/>
+				</logic:equal>
 			 </td>
 		</tr>
 
