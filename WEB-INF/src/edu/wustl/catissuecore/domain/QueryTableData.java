@@ -16,7 +16,9 @@ import edu.wustl.catissuecore.exception.AssignDataException;
  * @hibernate.class table="CATISSUE_QUERY_INTERFACE_TABLE_DATA"
  * @author gautam_shetty
  */
-public class QueryTableData extends AbstractDomainObject implements java.io.Serializable
+public class QueryTableData extends AbstractDomainObject
+        implements
+            Serializable
 {
 
     private long identifier;
@@ -24,6 +26,8 @@ public class QueryTableData extends AbstractDomainObject implements java.io.Seri
     private String tableName;
 
     private String displayName;
+
+    private String aliasName;
 
     /**
      * Display name of Table.
@@ -71,7 +75,7 @@ public class QueryTableData extends AbstractDomainObject implements java.io.Seri
     {
         return tableName;
     }
-
+    
     /**
      * @param tableName The tableName to set.
      */
@@ -80,29 +84,47 @@ public class QueryTableData extends AbstractDomainObject implements java.io.Seri
         this.tableName = tableName;
     }
 
-	/* (non-Javadoc)
-	 * @see edu.wustl.catissuecore.domain.AbstractDomainObject#setAllValues(edu.wustl.catissuecore.actionForm.AbstractActionForm)
-	 */
-	public void setAllValues(AbstractActionForm abstractForm) throws AssignDataException
-	{
-		// TODO Auto-generated method stub
-		
-	}
+    /**
+     * @hibernate.property name="aliasName" type="string" column="ALIAS_NAME" length="50"
+     * @return Returns the aliasName.
+     */
+    public String getAliasName()
+    {
+        return aliasName;
+    }
 
-	/* (non-Javadoc)
-	 * @see edu.wustl.catissuecore.domain.AbstractDomainObject#getSystemIdentifier()
-	 */
-	public Long getSystemIdentifier()
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
+    /**
+     * @param aliasName The aliasName to set.
+     */
+    public void setAliasName(String aliasName)
+    {
+        this.aliasName = aliasName;
+    }
+    
+    /* (non-Javadoc)
+     * @see edu.wustl.catissuecore.domain.AbstractDomainObject#setAllValues(edu.wustl.catissuecore.actionForm.AbstractActionForm)
+     */
+    public void setAllValues(AbstractActionForm abstractForm)
+            throws AssignDataException
+    {
+        // TODO Auto-generated method stub
 
-	/* (non-Javadoc)
-	 * @see edu.wustl.catissuecore.domain.AbstractDomainObject#setSystemIdentifier(java.lang.Long)
-	 */
-	public void setSystemIdentifier(Long systemIdentifier)
-	{
-		
-	}
+    }
+
+    /* (non-Javadoc)
+     * @see edu.wustl.catissuecore.domain.AbstractDomainObject#getSystemIdentifier()
+     */
+    public Long getSystemIdentifier()
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    /* (non-Javadoc)
+     * @see edu.wustl.catissuecore.domain.AbstractDomainObject#setSystemIdentifier(java.lang.Long)
+     */
+    public void setSystemIdentifier(Long systemIdentifier)
+    {
+
+    }
 }

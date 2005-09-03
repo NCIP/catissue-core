@@ -23,8 +23,8 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
 
 /**
- * A person who interacts with the caTISSUE Core data system 
- * and/or participates in the process of biospecimen collection, 
+ * A person who interacts with the caTISSUE Core data system
+ * and/or participates in the process of biospecimen collection,
  * processing, or utilization.
  * @hibernate.class table="CATISSUE_USER"
  */

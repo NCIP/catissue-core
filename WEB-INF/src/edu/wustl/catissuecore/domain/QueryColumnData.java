@@ -16,7 +16,9 @@ import edu.wustl.catissuecore.exception.AssignDataException;
  * @author gautam_shetty
  * @hibernate.class table="CATISSUE_QUERY_INTERFACE_COLUMN_DATA"
  */
-public class QueryColumnData extends AbstractDomainObject implements java.io.Serializable
+public class QueryColumnData extends AbstractDomainObject
+        implements
+            Serializable
 {
 
     private long identifier;
@@ -26,7 +28,9 @@ public class QueryColumnData extends AbstractDomainObject implements java.io.Ser
     private String columnName;
 
     private String displayName;
-    
+
+    private String columnType;
+
     /**
      * Returns the systemIdentifier.
      * @hibernate.id name="identifier" column="IDENTIFIER" type="long" length="30"
@@ -55,7 +59,23 @@ public class QueryColumnData extends AbstractDomainObject implements java.io.Ser
     {
         return tableData;
     }
-    
+
+    /**
+     * @return Returns the columnType.
+     */
+    public String getColumnType()
+    {
+        return columnType;
+    }
+
+    /**
+     * @param columnType The columnType to set.
+     */
+    public void setColumnType(String columnType)
+    {
+        this.columnType = columnType;
+    }
+
     /**
      * @param tableData The tableData to set.
      */
@@ -63,7 +83,7 @@ public class QueryColumnData extends AbstractDomainObject implements java.io.Ser
     {
         this.tableData = tableData;
     }
-    
+
     /**
      * @hibernate.property name="columnName" type="string" column="COLUMN_NAME" length="50"
      * @return Returns the tableName.
@@ -80,7 +100,7 @@ public class QueryColumnData extends AbstractDomainObject implements java.io.Ser
     {
         this.columnName = columnName;
     }
-    
+
     /**
      * @hibernate.property name="displayName" type="string" column="DISPLAY_NAME" length="50"
      * @return Returns the displayName.
@@ -98,29 +118,30 @@ public class QueryColumnData extends AbstractDomainObject implements java.io.Ser
         this.displayName = displayName;
     }
 
-	/* (non-Javadoc)
-	 * @see edu.wustl.catissuecore.domain.AbstractDomainObject#setAllValues(edu.wustl.catissuecore.actionForm.AbstractActionForm)
-	 */
-	public void setAllValues(AbstractActionForm abstractForm) throws AssignDataException
-	{
-		// TODO Auto-generated method stub
-		
-	}
+    /* (non-Javadoc)
+     * @see edu.wustl.catissuecore.domain.AbstractDomainObject#setAllValues(edu.wustl.catissuecore.actionForm.AbstractActionForm)
+     */
+    public void setAllValues(AbstractActionForm abstractForm)
+            throws AssignDataException
+    {
+        // TODO Auto-generated method stub
 
-	/* (non-Javadoc)
-	 * @see edu.wustl.catissuecore.domain.AbstractDomainObject#getSystemIdentifier()
-	 */
-	public Long getSystemIdentifier()
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
+    }
 
-	/* (non-Javadoc)
-	 * @see edu.wustl.catissuecore.domain.AbstractDomainObject#setSystemIdentifier(java.lang.Long)
-	 */
-	public void setSystemIdentifier(Long systemIdentifier)
-	{
-		
-	}
+    /* (non-Javadoc)
+     * @see edu.wustl.catissuecore.domain.AbstractDomainObject#getSystemIdentifier()
+     */
+    public Long getSystemIdentifier()
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    /* (non-Javadoc)
+     * @see edu.wustl.catissuecore.domain.AbstractDomainObject#setSystemIdentifier(java.lang.Long)
+     */
+    public void setSystemIdentifier(Long systemIdentifier)
+    {
+
+    }
 }
