@@ -10,7 +10,6 @@ import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -333,18 +332,20 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 	{
 		try
 		{
-			SpecimenProtocol protocol = (SpecimenProtocol)abstractDomain;			
+			SpecimenProtocol protocol = (SpecimenProtocol)abstractDomain;
+			
 			this.systemIdentifier = protocol.getSystemIdentifier().longValue();
-			this.activityStatus = protocol.getActivityStatus();
 			this.principalInvestigatorId = protocol.getPrincipalInvestigator()
 					.getSystemIdentifier().longValue();
-			this.title = protocol.getTitle();
-			this.shortTitle = protocol.getShortTitle();
+			this.title = Utility.toString(protocol.getTitle());
+			this.shortTitle = Utility.toString(protocol.getShortTitle());
 			this.startDate = Utility.parseDateToString(protocol.getStartDate(),Constants.DATE_PATTERN_MM_DD_YYYY);
 			this.endDate = Utility.parseDateToString(protocol.getEndDate(),Constants.DATE_PATTERN_MM_DD_YYYY);
-			this.irbID = protocol.getIrbIdentifier();
-			this.enrollment ="" + protocol.getEnrollment().intValue();
-			this.descriptionURL = protocol.getDescriptionURL();
+			this.irbID = Utility.toString(protocol.getIrbIdentifier());
+			this.enrollment = Utility.toString(protocol.getEnrollment());
+			this.descriptionURL = Utility.toString(protocol.getDescriptionURL());
+			
+			this.activityStatus = Utility.toString(protocol.getActivityStatus());
 		}
 		catch (Exception excp)
 		{
@@ -385,8 +386,6 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 		{
 			if (operation.equals(Constants.ADD) || operation.equals(Constants.EDIT))
             {
-				System.out.println("\n\nOper : \t" +operation + "\n");
-				System.out.println("\n\npid : \t" + this.principalInvestigatorId + "\n");
                 if(this.principalInvestigatorId == -1)
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("collectionprotocol.principalinvestigator")));

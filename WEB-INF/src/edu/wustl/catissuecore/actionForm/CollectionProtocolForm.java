@@ -11,6 +11,9 @@
 
 package edu.wustl.catissuecore.actionForm;
 
+import java.text.SimpleDateFormat;
+import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -21,8 +24,18 @@ import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.domain.AbstractDomainObject;
+import edu.wustl.catissuecore.domain.CellSpecimenRequirement;
+import edu.wustl.catissuecore.domain.CollectionProtocol;
+import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
+import edu.wustl.catissuecore.domain.FluidSpecimenRequirement;
+import edu.wustl.catissuecore.domain.MolecularSpecimenRequirement;
+import edu.wustl.catissuecore.domain.SpecimenRequirement;
+import edu.wustl.catissuecore.domain.TissueSpecimenRequirement;
+import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.catissuecore.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
@@ -108,10 +121,10 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	
 	protected void reset()
 	{
-		super.reset();
-		protocolCoordinatorIds = null;
-		this.outerCounter = 1;
-		this.values  = new HashMap();
+//		super.reset();
+//		protocolCoordinatorIds = null;
+//		this.outerCounter = 1;
+//		this.values  = new HashMap();
 	}
 	
 	/**
@@ -131,6 +144,140 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	}
 	
 	/**
+	 * Copies the data from an AbstractDomain object to a DistributionProtocolForm object.
+	 * @param abstractDomain An AbstractDomain object.
+	 */
+	public void setAllValues(AbstractDomainObject abstractDomain)
+	{
+		try
+		{
+			super.setAllValues(abstractDomain);
+			
+			CollectionProtocol cProtocol = (CollectionProtocol)abstractDomain;
+			Collection protocolEventCollection = cProtocol.getCollectionProtocolEventCollection(); 
+			
+			if(protocolEventCollection != null)
+			{
+				values = new HashMap();
+				innerLoopValues = new HashMap();
+				
+				Iterator it = protocolEventCollection.iterator();
+				int i = 1;
+				
+				while(it.hasNext())
+				{
+					CollectionProtocolEvent cpEvent = (CollectionProtocolEvent)it.next();
+					
+					String keyClinicalStatus = "CollectionProtocolEvent:" + i + "_clinicalStatus";
+					String keyStudyCalendarEventPoint = "CollectionProtocolEvent:" + i + "_studyCalendarEventPoint";
+					String keyCPESystemIdentifier = "CollectionProtocolEvent:" + i + "_systemIdentifier";
+					
+					values.put(keyClinicalStatus,Utility.toString(cpEvent.getClinicalStatus()));
+					values.put(keyStudyCalendarEventPoint, Utility.toString(cpEvent.getStudyCalendarEventPoint()));
+					values.put(keyCPESystemIdentifier,Utility.toString(cpEvent.getSystemIdentifier()));
+					
+					Collection specimenRequirementCollection = cpEvent.getSpecimenRequirementCollection();
+					
+					populateSpecimenRequirement(specimenRequirementCollection, i);
+					
+					i++;
+				}
+				
+				outerCounter = protocolEventCollection.size();
+			}
+			
+			//At least one outer row should be displayed in ADD MORE therefore
+			if(outerCounter == 0)
+				outerCounter = 1;
+			
+			//Populating the user-id array
+			Collection userCollection = cProtocol.getUserCollection();
+			
+			if(userCollection != null)
+			{
+				protocolCoordinatorIds = new long[userCollection.size()];
+				int i=0;
+
+				Iterator it = userCollection.iterator();
+				while(it.hasNext())
+				{
+					User user = (User)it.next();
+					protocolCoordinatorIds[i] = user.getSystemIdentifier().longValue();
+					i++;
+				}
+			}
+		}
+		catch (Exception excp)
+		{
+	    	Logger.out.error(excp.getMessage(),excp); 
+		}
+	}
+	
+	private void populateSpecimenRequirement(Collection specimenRequirementCollection, int counter)
+	{
+		int innerCounter = 0;
+		if(specimenRequirementCollection != null)
+		{
+			int j = 1;
+
+			Iterator iterator = specimenRequirementCollection.iterator();
+			while(iterator.hasNext())
+			{
+				SpecimenRequirement requirement = (SpecimenRequirement)iterator.next();
+				
+				String key1 = "CollectionProtocolEvent:" + counter + "_SpecimenRequirement:" + j +"_specimenClass";
+				String key3 = "CollectionProtocolEvent:" + counter + "_SpecimenRequirement:" + j +"_specimenType";
+				String key4 = "CollectionProtocolEvent:" + counter + "_SpecimenRequirement:" + j +"_tissueSite";
+				String key5 = "CollectionProtocolEvent:" + counter + "_SpecimenRequirement:" + j +"_pathologyStatus";
+				String key6 = "CollectionProtocolEvent:" + counter + "_SpecimenRequirement:" + j +"_quantityIn";
+				String key7 = "CollectionProtocolEvent:" + counter + "_SpecimenRequirement:" + j +"_systemIdentifier";
+				String key2 = "CollectionProtocolEvent:" + counter + "_SpecimenRequirement:" + j +"_unitspan";
+				
+				values.put(key3,requirement.getSpecimenType());
+				values.put(key4,requirement.getTissueSite());
+				values.put(key5,requirement.getPathologyStatus());
+				values.put(key7,requirement.getSystemIdentifier());
+				
+				if(requirement instanceof TissueSpecimenRequirement)
+				{
+					values.put(key1,"Tissue");
+					values.put(key2,Constants.UNIT_GM);
+					values.put(key6,String.valueOf(((TissueSpecimenRequirement)requirement).getQuantityInGram()));
+				}
+				else if(requirement instanceof CellSpecimenRequirement)
+				{
+					values.put(key1,"Cell");
+					values.put(key2,Constants.UNIT_CC);
+					values.put(key6,String.valueOf(((CellSpecimenRequirement)requirement).getQuantityInCellCount()));
+				}
+				else if(requirement instanceof MolecularSpecimenRequirement)
+				{
+					values.put(key1,"Molecular");
+					values.put(key2,Constants.UNIT_MG);
+					values.put(key6,String.valueOf(((MolecularSpecimenRequirement)requirement).getQuantityInMicrogram()));
+				}
+				else if(requirement instanceof FluidSpecimenRequirement)
+				{
+					values.put(key1,"Fluid");
+					values.put(key2,Constants.UNIT_ML);
+					values.put(key6,String.valueOf(((FluidSpecimenRequirement)requirement).getQuantityInMilliliter()));
+				}
+				
+				j++;
+			}
+			
+			innerCounter = specimenRequirementCollection.size();
+		}
+		
+		//At least one inner row should be displayed in ADD MORE therefore
+		if(innerCounter == 0)
+			innerCounter = 1;
+		
+		String innerCounterKey = String.valueOf(counter);
+		innerLoopValues.put(innerCounterKey,String.valueOf(innerCounter));
+	}
+	
+	/**
 	 * Overrides the validate method of ActionForm.
 	 */
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
@@ -141,26 +288,11 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 		{
 			if (operation.equals(Constants.ADD) || operation.equals(Constants.EDIT))
             {
-//                if(this.principalInvestigatorId == -1)
-//				{
-//					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("collectionprotocol.principalinvestigator")));
-//				}
-//                if (validator.isEmpty(this.title))
-//                {
-//                	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocol.protocoltitle")));
-//                }
-//                
-//                if (!validator.isNumeric(enrollment) || validator.isEmpty(enrollment ))
-//                {
-//                	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.enrollment",ApplicationProperties.getValue("collectionprotocol.participants")));
-//                }
-//                
     			Iterator it = this.values.keySet().iterator();
     			while (it.hasNext())
     			{
     				String key = (String)it.next();
     				String value = (String)values.get(key);
-//    				System.out.println(key+ " : " + value);
     				
     				if(key.indexOf("clinicalStatus")!=-1 && !validator.isValidOption( value))
     				{
@@ -212,34 +344,6 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
     					}
     				} // if  quantity
     			}
-//    			// code added as per bug id 235 
-//    			// code to validate startdate less than end date
-//    			// check the start date less than end date
-//    			if (!validator.isEmpty(startDate) && !validator.isEmpty(endDate )  )
-//    			{
-//    				try
-//					{
-//    					String pattern="MM-dd-yyyy";
-//    					SimpleDateFormat dF = new SimpleDateFormat(pattern);
-//    					Date sDate = dF.parse(this.startDate );
-//    					Date eDate = dF.parse(this.endDate );
-//    						
-//    					int check = sDate.compareTo(eDate );
-//    					
-//    					if(check>0)
-//    					{
-//    						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("specimenprotocol.invaliddate",ApplicationProperties.getValue("specimenprotocol.invaliddate")));
-//    					}
-//    					
-//					} // try
-//    				catch (Exception excp1)
-//					{
-//    					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("specimenprotocol.invaliddate",ApplicationProperties.getValue("specimenprotocol.invaliddate")));
-//						errors = new ActionErrors();
-//					}
-//    				
-//    			}
-
             }    
 		}
 		catch (Exception excp)
@@ -250,6 +354,8 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 		}
 		return errors;
 	}
+	
+	
 	
 	/**
 	 * Returns the id assigned to form bean
