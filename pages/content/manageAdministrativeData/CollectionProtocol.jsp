@@ -19,7 +19,6 @@
 	
     String operation = (String) request.getAttribute(Constants.OPERATION);
     String formName;
-    String searchFormName = new String(Constants.COLLECTIONPROTOCOL_SEARCH_ACTION);
 
     boolean readOnlyValue;
     if (operation.equals(Constants.EDIT))
@@ -146,7 +145,9 @@ function insRow(subdivtag,iCounter)
 	var spreqno=x.insertCell(0)
 	spreqno.className="tabrightmostcell";
 	var rowno=(q);
-	spreqno.innerHTML="" + rowno+".";
+	var srIdentifier = subdivname + "_SpecimenRequirement:" + rowno + "_systemIdentifier)";
+	var cell1 = "<input type='hidden' name='" + srIdentifier + "' value='' id='" + srIdentifier + "'>";
+	spreqno.innerHTML="" + rowno+"." + cell1;
 	
 	//type
 	var spreqtype=x.insertCell(1)
@@ -274,61 +275,17 @@ function getSubDivCount(subdivtag)
 
 <!-- table 1 -->
 <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="100%">
-	<logic:notEqual name="operation" value="<%=Constants.ADD%>">
-		<!-- ENTER IDENTIFIER BEGINS-->
-		<br />
-		<tr>
-			<td>
-			<!-- table 2 -->
-				<table summary="" cellpadding="3" cellspacing="0" border="0">
-					<tr>
-						<td class="formTitle" height="20" colspan="3">
-							<bean:message key="collectionprotocol.searchTitle" />
-						</td>
-					</tr>
-
-					<tr>
-						<td class="formRequiredNotice" width="5">*</td>
-						<td class="formRequiredLabel">
-							<label for="identifier">
-								<bean:message key="collectionprotocol.identifier" />
-							</label>
-						</td>
-						<td class="formField">
-							<html:text styleClass="formFieldSized" size="30" styleId="identifier" property="identifier" />
-						</td>
-					</tr>
-					<%
-        				String changeAction = "setFormAction('" + searchFormName
-                							  + "');setOperation('" + Constants.SEARCH + "');";
-			        %>
-					<tr>
-						<td align="right" colspan="3">
-						<!-- table 3 -->
-						<table cellpadding="4" cellspacing="0" border="0">
-							<tr>
-								<td>
-									<html:submit styleClass="actionButton" value="Search" onclick="<%=changeAction%>" />
-								</td>
-							</tr>
-						</table>  <!-- table 3 end -->
-						</td>
-					</tr>
-
-				</table>  <!-- table 2 end -->
-				</td>
-			</tr>
-			<!-- ENTER IDENTIFIER ENDS-->
-		</logic:notEqual>
-
-
-		<!-- NEW COLLECTIONPROTOCOL ENTRY BEGINS-->
+<!-- NEW COLLECTIONPROTOCOL ENTRY BEGINS-->
 		<tr>
 		<td colspan="3">
 		<!-- table 4 -->
 			<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
 				<tr>
 					<td><html:hidden property="operation" value="<%=operation%>" /></td>
+				</tr>
+				
+				<tr>
+					<td><html:hidden property="systemIdentifier" /></td>
 				</tr>
 
 				<logic:notEqual name="operation" value="<%=Constants.SEARCH%>">
@@ -484,26 +441,21 @@ function getSubDivCount(subdivtag)
 					</tr>
 
 <!-- activitystatus -->	
-					<%
-						if(formName == Constants.COLLECTIONPROTOCOL_EDIT_ACTION)
-						{
-					%>
-							<tr>
-								<td class="formRequiredNotice" width="5">&nbsp;</td>
-								<td class="formLabel">
-									<label for="activityStatus">
-										<bean:message key="collectionprotocol.activitystatus" />
-									</label>
-								</td>
-								<td class="formField" colspan=2>
-										<html:select property="activityStatus" styleClass="formFieldSized" styleId="activityStatus" size="1">
-								        	<html:option value="Type1">Activity Status</html:option>
-										</html:select>
-								</td>
-							</tr>
-					<%
-						}
-					%>
+					<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
+					<tr>
+						<td class="formRequiredNotice" width="5">*</td>
+						<td class="formRequiredLabel" >
+							<label for="activityStatus">
+								<bean:message key="site.activityStatus" />
+							</label>
+						</td>
+						<td class="formField">
+							<html:select property="activityStatus" styleClass="formFieldSized10" styleId="activityStatus" size="1">
+								<html:options name="<%=Constants.ACTIVITYSTATUSLIST%>" labelName="<%=Constants.ACTIVITYSTATUSLIST%>" />
+							</html:select>
+						</td>
+					</tr>
+					</logic:equal>
 							
 				</table> 	<!-- table 4 end -->
 			</td>
@@ -551,6 +503,7 @@ function getSubDivCount(subdivtag)
 			
 			String cid = "ivl(" + counter + ")";
 			String functionName = "insRow('" + commonLabel + "','" + cid +"')";
+			String cpeIdentifier= commonLabel + "_systemIdentifier)";
 		
 			if(colForm!=null)
 			{
@@ -569,7 +522,9 @@ function getSubDivCount(subdivtag)
 		<td class="formField">
 			<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
 				<tr>
-					<td class="formRequiredNotice" width="5">*</td>
+					<td class="formRequiredNotice" width="5">*
+						<html:hidden property="<%=cpeIdentifier%>" />
+					</td>
 					<td class="formRequiredLabel" width="32%">
 					<%
 						String fldName = commonLabel + "_clinicalStatus)";
@@ -662,12 +617,14 @@ function getSubDivCount(subdivtag)
 						cName = commonLabel + "_SpecimenRequirement:" + iCnt ;
 						String fName = cName + "_specimenClass)";
 						String sName = cName + "_unitspan)";
+						String srIdentifier = cName + "_systemIdentifier)";
 					%>
 			        
-			        <td class="formField">		
-			        <%
-			        	String onChangeFun = "changeUnit('" + fName + "','" + sName + "')";
-			        %>
+			        <td class="formField">
+			        	<html:hidden property="<%=srIdentifier%>" />	
+			        	<%
+			        		String onChangeFun = "changeUnit('" + fName + "','" + sName + "')";
+			        	%>
 			        	<html:select property="<%=fName%>" 
 										styleClass="formFieldSized10" 
 										styleId="<%=fName%>" size="1"
@@ -791,7 +748,9 @@ function getSubDivCount(subdivtag)
 		<td class="formField">
 			<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
 				<tr>
-					<td class="formRequiredNotice" width="5">*</td>
+					<td class="formRequiredNotice" width="5">*
+						<html:hidden property="value(CollectionProtocolEvent:`_systemIdentifier)" />
+					</td>
 					<td class="formRequiredLabel" width="32%">
 						<label for="value(CollectionProtocolEvent:`_clinicalStatus)">
 							<bean:message key="collectionprotocol.clinicalstatus" />
@@ -868,7 +827,9 @@ function getSubDivCount(subdivtag)
 			    </TR><!-- SUB TITLES END -->
 				
 				<TR>	<!-- SPECIMEN REQ DATA -->
-			        <td class="tabrightmostcell">1.</td>
+			        <td class="tabrightmostcell">1.
+			        	<html:hidden property="value(CollectionProtocolEvent:`_SpecimenRequirement:1_systemIdentifier)" />
+			        </td>
 			        <td class="formField">		
 			        	<html:select property="value(CollectionProtocolEvent:`_SpecimenRequirement:1_specimenClass)" 
 										styleClass="formFieldSized10" 
