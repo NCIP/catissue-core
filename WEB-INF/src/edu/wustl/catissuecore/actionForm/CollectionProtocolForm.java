@@ -11,9 +11,7 @@
 
 package edu.wustl.catissuecore.actionForm;
 
-import java.text.SimpleDateFormat;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -286,65 +284,62 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 		Validator validator = new Validator();
 		try
 		{
-			if (operation.equals(Constants.ADD) || operation.equals(Constants.EDIT))
-            {
-    			Iterator it = this.values.keySet().iterator();
-    			while (it.hasNext())
-    			{
-    				String key = (String)it.next();
-    				String value = (String)values.get(key);
-    				
-    				if(key.indexOf("clinicalStatus")!=-1 && !validator.isValidOption( value))
-    				{
-    					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("collectionprotocol.clinicalstatus")));
-    				}
-    				
-    				if(key.indexOf("studyCalendarEventPoint")!=-1 && (!validator.isEmpty(value) && !validator.isNumeric(value)))
-    				{
-    					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.studycalendarpoint",ApplicationProperties.getValue("collectionprotocol.studycalendartitle")));
-    				}
+			Iterator it = this.values.keySet().iterator();
+			while (it.hasNext())
+			{
+				String key = (String)it.next();
+				String value = (String)values.get(key);
+				
+				if(key.indexOf("clinicalStatus")!=-1 && !validator.isValidOption( value))
+				{
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("collectionprotocol.clinicalstatus")));
+				}
+				
+				if(key.indexOf("studyCalendarEventPoint")!=-1 && (!validator.isEmpty(value) && !validator.isNumeric(value)))
+				{
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.studycalendarpoint",ApplicationProperties.getValue("collectionprotocol.studycalendartitle")));
+				}
 
-    				if(key.indexOf("specimenClass")!=-1 && !validator.isValidOption( value))
-    				{
-    					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("collectionprotocol.specimenclass")));
-    				}
-    				
-    				if(key.indexOf("specimenType")!=-1 && !validator.isValidOption( value))
-    				{
-    					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("collectionprotocol.specimetype")));
-    				}
-    				
-    				if(key.indexOf("tissueSite")!=-1 && !validator.isValidOption( value))
-    				{
-    					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("collectionprotocol.specimensite")));
-    				}
-    				if(key.indexOf("pathologyStatus")!=-1 && !validator.isValidOption( value))
-    				{
-    					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("collectionprotocol.specimenstatus")));
-    				}
+				if(key.indexOf("specimenClass")!=-1 && !validator.isValidOption( value))
+				{
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("collectionprotocol.specimenclass")));
+				}
+				
+				if(key.indexOf("specimenType")!=-1 && !validator.isValidOption( value))
+				{
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("collectionprotocol.specimetype")));
+				}
+				
+				if(key.indexOf("tissueSite")!=-1 && !validator.isValidOption( value))
+				{
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("collectionprotocol.specimensite")));
+				}
+				if(key.indexOf("pathologyStatus")!=-1 && !validator.isValidOption( value))
+				{
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("collectionprotocol.specimenstatus")));
+				}
 
-    				if(key.indexOf("quantityIn")!=-1)
-    				{
-    					String classKey = key.substring(0,key.lastIndexOf("_") );
-    					classKey = classKey + "_specimenClass";
-    					String classValue = (String)getValue(classKey );
-    					if (classValue.trim().equals("Cell"))
-    					{
-            				if(key.indexOf("quantityIn")!=-1  && (validator.isEmpty(value) || !validator.isNumeric(value )))
-            				{
-            					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocol.quantity")));
-            				}
-    					}
-    					else
-    					{
-   							if(key.indexOf("quantityIn")!=-1  && (validator.isEmpty(value) || !validator.isDouble(value )))
-	        				{
-	        					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocol.quantity")));
-	        				}
-    					}
-    				} // if  quantity
-    			}
-            }    
+				if(key.indexOf("quantityIn")!=-1)
+				{
+					String classKey = key.substring(0,key.lastIndexOf("_") );
+					classKey = classKey + "_specimenClass";
+					String classValue = (String)getValue(classKey );
+					if (classValue.trim().equals("Cell"))
+					{
+        				if(key.indexOf("quantityIn")!=-1  && (validator.isEmpty(value) || !validator.isNumeric(value )))
+        				{
+        					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocol.quantity")));
+        				}
+					}
+					else
+					{
+						if(key.indexOf("quantityIn")!=-1  && (validator.isEmpty(value) || !validator.isDouble(value )))
+        				{
+        					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocol.quantity")));
+        				}
+					}
+				} // if  quantity
+			}
 		}
 		catch (Exception excp)
 		{

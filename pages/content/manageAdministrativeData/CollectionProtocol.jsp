@@ -288,7 +288,6 @@ function getSubDivCount(subdivtag)
 					<td><html:hidden property="systemIdentifier" /></td>
 				</tr>
 
-				<logic:notEqual name="operation" value="<%=Constants.SEARCH%>">
 					<tr>
 						<td class="formMessage" colspan="4">* indicates a required field</td>
 					</tr>
@@ -736,7 +735,6 @@ function getSubDivCount(subdivtag)
 				<!-- action buttons end -->
 			</td>
 		</tr>
-	</logic:notEqual>
 
 	<!-- NEW COLLECTIONPROTOCOL ENTRY ends-->
 </table>

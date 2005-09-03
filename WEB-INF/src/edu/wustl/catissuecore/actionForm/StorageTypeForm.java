@@ -322,54 +322,46 @@ public class StorageTypeForm extends AbstractActionForm
         
         try
         {
-            if (operation.equals(Constants.SEARCH))
+            if (validator.isEmpty(type))
             {
-                checkValidNumber(new Long(systemIdentifier).toString(),"storageType.identifier",errors,validator);
+                errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("storageType.type")));
+            }  
+            if (validator.isEmpty(String.valueOf(oneDimensionCapacity)))
+            {
+                errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("storageType.oneDimensionCapacity")));
             }
-            if (operation.equals(Constants.ADD) || operation.equals(Constants.EDIT))
-            {             
-                if (validator.isEmpty(type))
-                {
-                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("storageType.type")));
-                }  
-                if (validator.isEmpty(String.valueOf(oneDimensionCapacity)))
-                {
-                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("storageType.oneDimensionCapacity")));
-                }
-                else
-                {
-                	if(!validator.isNumeric(String.valueOf(oneDimensionCapacity)))
-                	{
-                		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("storageType.oneDimensionCapacity")));
-                	}
-                }
-                if (validator.isEmpty(String.valueOf(twoDimensionCapacity)))
-                {
-                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("storageType.twoDimensionCapacity")));
-                }
-                else
-                {
-                	if(!validator.isNumeric(String.valueOf(twoDimensionCapacity)))
-                	{
-                		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("storageType.twoDimensionCapacity")));
-                	}
-                }
-                
-                if (validator.isEmpty(oneDimensionLabel))
-                {
-                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("storageType.oneDimensionLabel")));
-                }
-                if (validator.isEmpty(twoDimensionLabel))
-                {
-                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("storageType.twoDimensionLabel")));
-                }
-                // code as per bug id 233 
-                // checking for double value if present
-                if (!validator.isEmpty(defaultTemperature) && !validator.isDouble(defaultTemperature,1  )  )
-                {
-                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("storageType.defaultTemperature")));
-                }
- 
+            else
+            {
+            	if(!validator.isNumeric(String.valueOf(oneDimensionCapacity)))
+            	{
+            		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("storageType.oneDimensionCapacity")));
+            	}
+            }
+            if (validator.isEmpty(String.valueOf(twoDimensionCapacity)))
+            {
+                errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("storageType.twoDimensionCapacity")));
+            }
+            else
+            {
+            	if(!validator.isNumeric(String.valueOf(twoDimensionCapacity)))
+            	{
+            		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("storageType.twoDimensionCapacity")));
+            	}
+            }
+            
+            if (validator.isEmpty(oneDimensionLabel))
+            {
+                errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("storageType.oneDimensionLabel")));
+            }
+            if (validator.isEmpty(twoDimensionLabel))
+            {
+                errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("storageType.twoDimensionLabel")));
+            }
+            // code as per bug id 233 
+            // checking for double value if present
+            if (!validator.isEmpty(defaultTemperature) && !validator.isDouble(defaultTemperature,1  )  )
+            {
+                errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("storageType.defaultTemperature")));
             }
         }
         catch(Exception excp)

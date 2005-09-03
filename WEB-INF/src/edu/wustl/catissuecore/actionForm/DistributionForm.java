@@ -63,81 +63,74 @@ public class DistributionForm extends EventParametersForm
 	{
 		ActionErrors errors = super.validate(mapping, request);
 		Validator validator = new Validator();
-		
-		if (operation.equals(Constants.SEARCH))
-        {
-            checkValidNumber(new Long(systemIdentifier).toString(),"user.systemIdentifier",errors,validator);
-        }
-		
-		if (operation.equals(Constants.ADD) || operation.equals(Constants.EDIT))
-        {
-			if(distributionProtocolId.equals("-1"))
-			{
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("distribution.protocol")));
-			}
-			
-			if(fromSite.equals("-1"))
-			{
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("distribution.fromSite")));
-			}
-			
-			if(toSite.equals("-1"))
-			{
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("distribution.toSite")));
-			}
-			
-			//Validations for Add-More Block
-            String className = "DistributedItem:";
-            String key1 = "_Specimen_systemIdentifier";
-            String key2 = "_quantity";
-            int index = 1;
-            boolean isError = false;
 
-            while(true)
-            {
-            	String keyOne = className + index + key1;
-				String keyTwo = className + index + key2;
-            	String value1 = (String)values.get(keyOne);
-            	String value2 = (String)values.get(keyTwo);
-            	
-            	if(value1 == null || value2 == null)
-            	{
-            		break;
-            	}
-            	else if(value1.equals(Constants.SELECT_OPTION) && value2.equals(""))
-            	{
-            		values.remove(keyOne);
-            		values.remove(keyTwo);
-            	}
-            	else if(!value1.equals(Constants.SELECT_OPTION))
-            	{
-            		if(value2.equals(""))
-            		{
-            			isError = true;
-            			break;
-            		}
-            		else
-            		{
-            			if(!validator.isDouble(value2))
-            			{
-            				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("itemrecord.quantity")));
-            				break;
-            			}
-            		}
-            	}
-            	else if(value1.equals(Constants.SELECT_OPTION) && !value2.equals(""))
-            	{
-            		isError = true;
-            		break;
-            	}
-            	index++;
-            }
-            
-            if(isError)
-            {
-            	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.distribution.missing",ApplicationProperties.getValue("distribution.msg")));
-            }
+		if(distributionProtocolId.equals("-1"))
+		{
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("distribution.protocol")));
+		}
+		
+		if(fromSite.equals("-1"))
+		{
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("distribution.fromSite")));
+		}
+		
+		if(toSite.equals("-1"))
+		{
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("distribution.toSite")));
+		}
+		
+		//Validations for Add-More Block
+        String className = "DistributedItem:";
+        String key1 = "_Specimen_systemIdentifier";
+        String key2 = "_quantity";
+        int index = 1;
+        boolean isError = false;
+
+        while(true)
+        {
+        	String keyOne = className + index + key1;
+			String keyTwo = className + index + key2;
+        	String value1 = (String)values.get(keyOne);
+        	String value2 = (String)values.get(keyTwo);
+        	
+        	if(value1 == null || value2 == null)
+        	{
+        		break;
+        	}
+        	else if(value1.equals(Constants.SELECT_OPTION) && value2.equals(""))
+        	{
+        		values.remove(keyOne);
+        		values.remove(keyTwo);
+        	}
+        	else if(!value1.equals(Constants.SELECT_OPTION))
+        	{
+        		if(value2.equals(""))
+        		{
+        			isError = true;
+        			break;
+        		}
+        		else
+        		{
+        			if(!validator.isDouble(value2))
+        			{
+        				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("itemrecord.quantity")));
+        				break;
+        			}
+        		}
+        	}
+        	else if(value1.equals(Constants.SELECT_OPTION) && !value2.equals(""))
+        	{
+        		isError = true;
+        		break;
+        	}
+        	index++;
         }
+        
+        if(isError)
+        {
+        	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.distribution.missing",ApplicationProperties.getValue("distribution.msg")));
+        }
+
 		return errors;
 	}
 	

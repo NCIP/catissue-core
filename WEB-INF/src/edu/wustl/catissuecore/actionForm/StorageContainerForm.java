@@ -523,87 +523,79 @@ public class StorageContainerForm extends AbstractActionForm
 
 		try
 		{
-			if (operation.equals(Constants.SEARCH))
+			if (this.typeId == -1)
 			{
-				checkValidNumber(new Long(systemIdentifier).toString(),
-						"storageContainer.identifier", errors, validator);
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
+						ApplicationProperties.getValue("storageContainer.type")));
 			}
-			if (operation.equals(Constants.ADD) || operation.equals(Constants.EDIT))
+			if (checkedButton == 1 && siteId == -1)
 			{
-				if (this.typeId == -1)
-				{
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
-							ApplicationProperties.getValue("storageContainer.type")));
-				}
-				if (checkedButton == 1 && siteId == -1)
-				{
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
-							ApplicationProperties.getValue("storageContainer.site")));
-				}
-				else if (checkedButton == 2 && parentContainerId == 0)
-				{
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
-							ApplicationProperties.getValue("storageContainer.parentContainer")));
-				}
-
-				checkValidNumber(String.valueOf(noOfContainers), "storageContainer.noOfContainers",
-						errors, validator);
-				
-				if(operation.equals(Constants.EDIT) && !validator.isValidOption(activityStatus))
-                {
-                	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("site.activityStatus")));
-                }
-				
-				//Validations for External Identifier Add-More Block
-                String className = "StorageContainerDetails:";
-                String key1 = "_parameterName";
-                String key2 = "_parameterValue";
-                int index = 1;
-                boolean isError = false;
-                
-                while(true)
-                {
-                	String keyOne = className + index + key1;
-					String keyTwo = className + index + key2;
-                	String value1 = (String)values.get(keyOne);
-                	String value2 = (String)values.get(keyTwo);
-                	
-                	value1 = (value1==null ? null : value1.trim());
-                	value2 = (value2==null ? null : value2.trim());
-                	
-                	if(value1 == null || value2 == null)
-                	{
-                		break;
-                	}
-                	else if(value1.equals("") && value2.equals(""))
-                	{
-                		values.remove(keyOne);
-                		values.remove(keyTwo);
-                	}
-                	else if((!value1.equals("") && value2.equals("")) || (value1.equals("") && !value2.equals("")))
-                	{
-                		isError = true;
-                		break;
-                	}
-                	index++;
-                }
-                
-                if(isError)
-                {
-                	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.storageContainer.containerDetails.missing",ApplicationProperties.getValue("storageContainer.msg")));
-                }
-                
-
-				//            	if (validator.isEmpty(String.valueOf(noOfContainers)))
-				//                {
-				//                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("storageContainer.noOfContainers")));
-				//                }
-				//                
-				//                if (validator.isEmpty(String.valueOf(startNumber)))
-				//                {
-				//                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("storageContainer.startNumber")));
-				//                }
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
+						ApplicationProperties.getValue("storageContainer.site")));
 			}
+			else if (checkedButton == 2 && parentContainerId == 0)
+			{
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
+						ApplicationProperties.getValue("storageContainer.parentContainer")));
+			}
+
+			checkValidNumber(String.valueOf(noOfContainers), "storageContainer.noOfContainers",
+					errors, validator);
+			
+			if(operation.equals(Constants.EDIT) && !validator.isValidOption(activityStatus))
+            {
+            	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("site.activityStatus")));
+            }
+			
+			//Validations for External Identifier Add-More Block
+            String className = "StorageContainerDetails:";
+            String key1 = "_parameterName";
+            String key2 = "_parameterValue";
+            int index = 1;
+            boolean isError = false;
+            
+            while(true)
+            {
+            	String keyOne = className + index + key1;
+				String keyTwo = className + index + key2;
+            	String value1 = (String)values.get(keyOne);
+            	String value2 = (String)values.get(keyTwo);
+            	
+            	value1 = (value1==null ? null : value1.trim());
+            	value2 = (value2==null ? null : value2.trim());
+            	
+            	if(value1 == null || value2 == null)
+            	{
+            		break;
+            	}
+            	else if(value1.equals("") && value2.equals(""))
+            	{
+            		values.remove(keyOne);
+            		values.remove(keyTwo);
+            	}
+            	else if((!value1.equals("") && value2.equals("")) || (value1.equals("") && !value2.equals("")))
+            	{
+            		isError = true;
+            		break;
+            	}
+            	index++;
+            }
+            
+            if(isError)
+            {
+            	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.storageContainer.containerDetails.missing",ApplicationProperties.getValue("storageContainer.msg")));
+            }
+            
+
+			//            	if (validator.isEmpty(String.valueOf(noOfContainers)))
+			//                {
+			//                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("storageContainer.noOfContainers")));
+			//                }
+			//                
+			//                if (validator.isEmpty(String.valueOf(startNumber)))
+			//                {
+			//                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("storageContainer.startNumber")));
+			//                }
 		}
 		catch (Exception excp)
 		{

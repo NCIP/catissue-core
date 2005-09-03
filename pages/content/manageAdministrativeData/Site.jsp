@@ -36,7 +36,6 @@
 					<td><html:hidden property="systemIdentifier" /></td>
 				</tr>
 
-				<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.SEARCH%>">
 					<tr>
 						<td class="formMessage" colspan="3">* indicates a required field</td>
 					</tr>
@@ -234,8 +233,7 @@
 						<!-- action buttons end -->
 						</td>
 					</tr>
-					
-				</logic:notEqual>
+
 			</table>
 
 			</td>

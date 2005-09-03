@@ -465,77 +465,70 @@ public class SiteForm extends AbstractActionForm
          
          try
          {
-             if (operation.equals(Constants.SEARCH))
+         	if (validator.isEmpty(name))
+            {
+                errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("site.name")));
+            }
+         	
+         	if (validator.isEmpty(type))
+            {
+                errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("site.type")));
+            }
+             
+             if (validator.isEmpty(emailAddress))
              {
-                 checkValidNumber(new Long(systemIdentifier).toString(),"site.identifier",errors,validator);
+                 errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+                         "errors.item.required", ApplicationProperties
+                                 .getValue("site.emailAddress")));
              }
-             if (operation.equals(Constants.ADD) || operation.equals(Constants.EDIT))
-             {             
-             	if (validator.isEmpty(name))
-                {
-                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("site.name")));
-                }
-             	
-             	if (validator.isEmpty(type))
-                {
-                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("site.type")));
-                }
-                 
-                 if (validator.isEmpty(emailAddress))
+             else
+             {
+                 if (!validator.isValidEmailAddress(emailAddress))
                  {
                      errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-                             "errors.item.required", ApplicationProperties
+                             "errors.item.format", ApplicationProperties
                                      .getValue("site.emailAddress")));
                  }
-                 else
-                 {
-                     if (!validator.isValidEmailAddress(emailAddress))
-                     {
-                         errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-                                 "errors.item.format", ApplicationProperties
-                                         .getValue("site.emailAddress")));
-                     }
-                 }
-                 
-                 if (validator.isEmpty(street))
-                 {
-                     errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-                             "errors.item.required", ApplicationProperties
-                                     .getValue("site.street")));
-                 }
-                 
-                 if(!validator.isValidOption(type))
-                 {
-                 	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("site.type")));
-                 }
-                 if(coordinatorId == -1L)
-                 {
-                 	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("site.coordinator")));
-                 }
-                 
-                 if(!validator.isValidOption(state))
-                 {
-                 	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("site.state")));
-                 }
-                 
-                 if(!validator.isValidOption(country))
-                 {
-                 	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("site.country")));
-                 }
-                 
-                 if (validator.isEmpty(city))
-                 {
-                     errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-                             "errors.item.required", ApplicationProperties
-                                     .getValue("site.city")));
-                 }
-                 
-                 checkValidNumber(zipCode, "site.zipCode", errors, validator);
-                 
-                 if(operation.equals(Constants.EDIT) && !validator.isValidOption(activityStatus))
-                 {
-                 	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("site.activityStatus")));
-                 }
+             }
+             
+             if (validator.isEmpty(street))
+             {
+                 errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+                         "errors.item.required", ApplicationProperties
+                                 .getValue("site.street")));
+             }
+             
+             if(!validator.isValidOption(type))
+             {
+             	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("site.type")));
+             }
+             if(coordinatorId == -1L)
+             {
+             	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("site.coordinator")));
+             }
+             
+             if(!validator.isValidOption(state))
+             {
+             	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("site.state")));
+             }
+             
+             if(!validator.isValidOption(country))
+             {
+             	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("site.country")));
+             }
+             
+             if (validator.isEmpty(city))
+             {
+                 errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+                         "errors.item.required", ApplicationProperties
+                                 .getValue("site.city")));
+             }
+             
+             checkValidNumber(zipCode, "site.zipCode", errors, validator);
+             
+             if(operation.equals(Constants.EDIT) && !validator.isValidOption(activityStatus))
+             {
+             	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("site.activityStatus")));
              }
          }
          catch(Exception excp)

@@ -167,24 +167,10 @@ public class InstitutionForm extends AbstractActionForm
         Validator validator = new Validator();
         try
         {
-            if (operation.equals(Constants.SEARCH))
+        	if (validator.isEmpty(name))
             {
-            	if(systemIdentifier == 0)
-            	{
-            		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("institution.identifier")));            		
-            	}
-            	else
-            	{
-            		checkValidNumber(new Long(systemIdentifier).toString(),"institution.identifier",errors,validator);
-            	}	
+            	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("institution.name")));
             }
-            if (operation.equals(Constants.ADD) || operation.equals(Constants.EDIT))
-            {
-                if (validator.isEmpty(name))
-                {
-                	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("institution.name")));
-                }
-            }    
         }
         catch(Exception excp)
         {

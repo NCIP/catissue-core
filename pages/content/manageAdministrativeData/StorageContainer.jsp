@@ -223,7 +223,7 @@ function insRow(subdivtag)
 				<tr>
 					<td><html:hidden property="parentContainerId" /></td>
 				</tr>
-				<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.SEARCH%>">
+
 					<tr>
 						<td class="formMessage" colspan="4">* indicates a required field</td>
 					</tr>
@@ -509,7 +509,6 @@ function insRow(subdivtag)
 						</td>
 					</tr>
 					
-				</logic:notEqual>
 			</table>
 
 			</td>
