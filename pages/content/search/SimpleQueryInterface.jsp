@@ -148,7 +148,7 @@ function changeAndOrLink(id, operation)
 				</tr>
 				<tr>
 					<td>
-					<%String pageOf = (String)request.getAttribute(Constants.PAGEOF);%>
+						<%String pageOf = (String)request.getAttribute(Constants.PAGEOF);%>
 						<html:hidden property="pageOf" value="<%=pageOf%>"/>
 					</td>
 				</tr>
@@ -205,7 +205,7 @@ function changeAndOrLink(id, operation)
 						<html:hidden property="<%=nextOperator%>"/>
 					</td>
 					<td class="formField" id="<%=i%>">
-					<%String andOrLink = "javascript:insertRow('simpleQuery');setPropertyValue('"+nextOperator+"','"+Constants.AND_JOIN_CONDITION+"');changeAndOrLink('"+i+"','AND')"; %>
+						<%String andOrLink = "javascript:insertRow('simpleQuery');setPropertyValue('"+nextOperator+"','"+Constants.AND_JOIN_CONDITION+"');changeAndOrLink('"+i+"','AND')"; %>
 						<a href="#" onclick="<%=andOrLink%>">
 							<bean:message key="simpleQuery.and" />
 						</a>/

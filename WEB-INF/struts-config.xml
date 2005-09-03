@@ -743,7 +743,7 @@ PUBLIC
         <action path="/StorageType"
 			type="edu.wustl.catissuecore.action.StorageTypeAction"
 			scope="request">
-			<forward name="success" path=".catissuecore.storageTypeDef" />
+			<forward name="pageOfStorageType" path=".catissuecore.storageTypeDef" />
 			<forward name="failure" path=".catissuecore.storageTypeDef" />
 			<forward name="access_denied" path="/ManageAdministrativeData.do" />
 		</action>
@@ -774,7 +774,7 @@ PUBLIC
 			validate="false"
 			input="/StorageType.do?operation=edit"
 			scope="request">
-			<forward name="pageOfEditObject" path="/StorageType.do?operation=edit&amp;pageOf=pageOfEditObject"/>
+			<forward name="pageOfStorageType" path="/StorageType.do?operation=edit&amp;pageOf=pageOfStorageType"/>
 			<forward name="failure" path="/StorageType.do?operation=edit"/>
 		</action>    
 		<!-- StorageType Actions Ends -->
@@ -866,7 +866,7 @@ PUBLIC
         <action path="/Biohazard"
 			type="edu.wustl.catissuecore.action.BiohazardAction"
 			scope="request">
-			<forward name="success" path=".catissuecore.biohazardDef" />
+			<forward name="pageOfBiohazard" path=".catissuecore.biohazardDef" />
 			<forward name="failure" path=".catissuecore.biohazardDef" />
 			<forward name="access_denied" path="/ManageAdministrativeData.do" />
 		</action>
@@ -877,7 +877,7 @@ PUBLIC
 			validate="true"
 			input="/Biohazard.do?operation=add"
 			scope="request">
-			<forward name="pageOfBiohazard" path=".catissuecore.biohazardAddSuccessDef" />
+			<forward name="success" path=".catissuecore.biohazardAddSuccessDef" />
 			<forward name="failure" path="/Biohazard.do?operation=add" />
 		</action>
 		

@@ -109,6 +109,6 @@ public class StorageContainerAction  extends SecureAction
         	e.printStackTrace();
 		}
     
-        return mapping.findForward(Constants.SUCCESS);
+        return mapping.findForward((String)request.getParameter(Constants.PAGEOF));
     }
 }

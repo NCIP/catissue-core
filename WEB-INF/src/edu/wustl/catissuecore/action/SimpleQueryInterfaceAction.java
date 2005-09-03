@@ -63,13 +63,16 @@ public class SimpleQueryInterfaceAction extends Action
                     String [] whereCondition = {"="};
                     String [] whereColumnValues = {value};
                     
-                    String sql = "SELECT columnData.COLUMN_NAME,columnData.DISPLAY_NAME," +
-                    			 "columnData.ATTRIBUTE_TYPE FROM CATISSUE_QUERY_INTERFACE_COLUMN_DATA columnData," +
-                    			 "CATISSUE_TABLE_RELATION relationData," +
-                    			 "CATISSUE_QUERY_INTERFACE_TABLE_DATA tableData " +
-                    			 "where relationData.CHILD_TABLE_ID = columnData.TABLE_ID " +
-                    			 "and relationData.PARENT_TABLE_ID = tableData.TABLE_ID " +
-                    			 "and tableData.ALIAS_NAME='"+value+"'";
+                    String sql = "SELECT tableData2.ALIAS_NAME, temp.COLUMN_NAME, temp.DISPLAY_NAME, temp.ATTRIBUTE_TYPE "+
+				       			 " from CATISSUE_QUERY_INTERFACE_TABLE_DATA tableData2 join "+
+				       			 " ( SELECT  columnData.COLUMN_NAME, columnData.TABLE_ID, columnData.ATTRIBUTE_TYPE, columnData.DISPLAY_NAME "+
+				       			 " FROM CATISSUE_QUERY_INTERFACE_COLUMN_DATA columnData, " +
+				       			 " CATISSUE_TABLE_RELATION relationData, "+
+				       			 " CATISSUE_QUERY_INTERFACE_TABLE_DATA tableData " + 
+				       			 " where relationData.CHILD_TABLE_ID = columnData.TABLE_ID " + 
+				       			 " and relationData.PARENT_TABLE_ID = tableData.TABLE_ID " + 
+				       			 " and tableData.ALIAS_NAME = '"+value+"') as temp "+
+				       			 " on temp.TABLE_ID = tableData2.TABLE_ID ";
                     
                     Logger.out.debug("SQL*****************************"+sql);
                     
@@ -87,11 +90,10 @@ public class SimpleQueryInterfaceAction extends Action
                     while (iterator.hasNext())
                     {
                         List rowList = (List)iterator.next();
-                        columnNameList[k] = (String)rowList.get(j);
-                        j++;
-                        columnDisplayNameList[k] = (String)rowList.get(j);
-                        j++;
-                        columnTypeList[k] = (String)rowList.get(j);
+                        columnNameList[k] = (String)rowList.get(j++)+"."+(String)rowList.get(j++);
+                        Logger.out.debug("columnNameList******************"+columnNameList[k]);
+                        columnDisplayNameList[k] = (String)rowList.get(j++);
+                        columnTypeList[k] = (String)rowList.get(j++);
                         j = 0;
                         k++;
                     }

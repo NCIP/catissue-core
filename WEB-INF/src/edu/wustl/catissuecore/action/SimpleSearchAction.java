@@ -9,8 +9,10 @@
 package edu.wustl.catissuecore.action;
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,6 +26,7 @@ import edu.wustl.catissuecore.actionForm.SimpleQueryInterfaceForm;
 import edu.wustl.catissuecore.query.Client;
 import edu.wustl.catissuecore.query.Query;
 import edu.wustl.catissuecore.query.QueryFactory;
+import edu.wustl.catissuecore.query.SimpleConditionsNode;
 import edu.wustl.catissuecore.query.SimpleQuery;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.MapDataParser;
@@ -45,15 +48,16 @@ public class SimpleSearchAction extends Action
         
         Collection simpleConditionNodeCollection = parser.generateData(map);
         
-//        Iterator iterator = simpleConditionNodeCollection.iterator();
-//        
-//        while (iterator.hasNext())
-//        {
-//            SimpleConditionsNode simpleConditionsNode = (SimpleConditionsNode)iterator.next();
-//            String tableName = simpleConditionsNode.getCondition().getDataElement().getTable();
-//            String columnName = simpleConditionsNode.getCondition().getDataElement().getField();
-//            
-//        }
+        Iterator iterator = simpleConditionNodeCollection.iterator();
+        
+        while (iterator.hasNext())
+        {
+            SimpleConditionsNode simpleConditionsNode = (SimpleConditionsNode)iterator.next();
+            String columnName = simpleConditionsNode.getCondition().getDataElement().getField();
+            StringTokenizer stringToken = new StringTokenizer(columnName,".");
+            simpleConditionsNode.getCondition().getDataElement().setTable(stringToken.nextToken());
+            simpleConditionsNode.getCondition().getDataElement().setField(stringToken.nextToken());
+        }
         
         Client.initialize();
         
