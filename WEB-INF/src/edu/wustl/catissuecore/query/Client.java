@@ -92,9 +92,9 @@ public class Client
                 Query.INSTITUTION, "Identifier"), new Operator(Operator.EQUAL),
                 new DataElement(Query.USER, "INSTITUTION_ID")));
         relationConditionsForRelatedTables.put(new Relation(
-                Query.CANCER_REESEARCH_GROUP, Query.USER),
+                Query.CANCER_RESEARCH_GROUP, Query.USER),
                 new RelationCondition(new DataElement(
-                        Query.CANCER_REESEARCH_GROUP, "Identifier"),
+                        Query.CANCER_RESEARCH_GROUP, "Identifier"),
                         new Operator(Operator.EQUAL), new DataElement(
                                 Query.USER, "CANCER_RESEARCH_GROUP_ID")));
         relationConditionsForRelatedTables.put(new Relation(Query.ADDRESS,
@@ -275,7 +275,7 @@ public class Client
         objectTableNames.put(Query.SPECIMEN, "CATISSUE_SPECIMEN");
         objectTableNames.put(Query.DEPARTMENT, "CATISSUE_DEPARTMENT");
         objectTableNames.put(Query.INSTITUTION, "catissue_institution");
-        objectTableNames.put(Query.CANCER_REESEARCH_GROUP,
+        objectTableNames.put(Query.CANCER_RESEARCH_GROUP,
                 "catissue_cancer_research_group");
         objectTableNames.put(Query.USER, "catissue_user");
         objectTableNames.put(Query.CSM_USER, "csm_user");
@@ -371,7 +371,7 @@ public class Client
         query.addElementToView(new DataElement(Query.CSM_USER, "FIRST_NAME"));
         query.addElementToView(new DataElement(Query.INSTITUTION, "NAME"));
         query.addElementToView(new DataElement(Query.DEPARTMENT, "NAME"));
-        query.addElementToView(new DataElement(Query.CANCER_REESEARCH_GROUP,
+        query.addElementToView(new DataElement(Query.CANCER_RESEARCH_GROUP,
                 "NAME"));
         simpleConditionsNode = new SimpleConditionsNode(new Condition(
                 new DataElement(Query.ADDRESS, "COUNTRY"), new Operator(
@@ -414,11 +414,11 @@ public class Client
          * Query for cancer research group
          */
         query = QueryFactory.getInstance().newQuery(Query.SIMPLE_QUERY,
-                Query.CANCER_REESEARCH_GROUP);
-        query.addElementToView(new DataElement(Query.CANCER_REESEARCH_GROUP,
+                Query.CANCER_RESEARCH_GROUP);
+        query.addElementToView(new DataElement(Query.CANCER_RESEARCH_GROUP,
                 "NAME"));
         simpleConditionsNode = new SimpleConditionsNode(new Condition(
-                new DataElement(Query.CANCER_REESEARCH_GROUP, "NAME"),
+                new DataElement(Query.CANCER_RESEARCH_GROUP, "NAME"),
                 new Operator(Operator.EQUAL), "'crg1'"), new Operator(
                 Operator.AND));
         ((SimpleQuery) query).addCondition(simpleConditionsNode);
