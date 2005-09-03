@@ -1,7 +1,6 @@
 
 package edu.wustl.catissuecore.query;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -100,75 +99,110 @@ public abstract class Query
 
     public static final String STORAGE_CONTAINER = "StorageContainer";
 
-    /**
-     * This method executes the query string formed from getString method and creates a temporary table.
-     * @return Returns true in case everything is successful else false
-     */
-    public List execute() throws DAOException
-    {
-        try
-        {
-            JDBCDAO dao = new JDBCDAO();
-            dao.openSession();
-            List list = dao.executeQuery(getString());
-            Logger.out.debug("SQL************" + getString());
-
-            return list;
-            //	        dao.delete(tableName);
-            //	        dao.create(tableName,Constants.DEFAULT_SPREADSHEET_COLUMNS);
-            //	        
-            //	        Iterator iterator = list.iterator();
-            //	        while (iterator.hasNext())
-            //	        {
-            //	            List row = (List) iterator.next();
-            //	            
-            //	            dao.insert(tableName, row);
-            //	        }
-            //	        
-            //	        dao.closeSession();
-        }
-        catch (DAOException daoExp)
-        {
-            throw new DAOException(daoExp.getMessage(), daoExp);
-        }
-        catch (ClassNotFoundException classExp)
-        {
-            throw new DAOException(classExp.getMessage(), classExp);
-        }
-    }
-
-    /**
-     * Adds the dataElement to result view
-     * @param dataElement - Data Element to be added
-     * @return - true (as per the general contract of Collection.add).
-     */
-    public boolean addElementToView(DataElement dataElement)
-    {
-        return resultView.add(dataElement);
-    }
-
-    public void setViewElements(String aliasName)
-    {
-        Vector vector = new Vector();
-        List list = new ArrayList();
-        Iterator iterator = list.iterator();
-        while (iterator.hasNext())
-        {
-            List rowList = (List) iterator.next();
-            DataElement dataElement = new DataElement();
-            dataElement.setTable((String) rowList.get(0));
-            dataElement.setField((String) rowList.get(1));
-            vector.add(dataElement);
-        }
-
-        setResultView(vector);
-    }
-
-    /**
-     * Returns the SQL representation of this query object
-     * @return
-     */
-    public String getString()
+	/**
+	 * This method executes the query string formed from getString method and creates a temporary table.
+	 * @return Returns true in case everything is successful else false
+	 */
+	public List execute() throws DAOException
+	{
+	    try
+	    {
+	        JDBCDAO dao = new JDBCDAO();
+	        dao.openSession();
+	        Logger.out.debug("SQL************"+getString());
+			List list = dao.executeQuery(getString());
+			
+	        return list;
+//	        dao.delete(tableName);
+//	        dao.create(tableName,Constants.DEFAULT_SPREADSHEET_COLUMNS);
+//	        
+//	        Iterator iterator = list.iterator();
+//	        while (iterator.hasNext())
+//	        {
+//	            List row = (List) iterator.next();
+//	            
+//	            dao.insert(tableName, row);
+//	        }
+//	        
+//	        dao.closeSession();
+	    }
+	    catch(DAOException daoExp)
+	    {
+	        throw new DAOException(daoExp.getMessage(), daoExp);
+	    }
+	    catch(ClassNotFoundException classExp)
+	    {
+	        throw new DAOException(classExp.getMessage(), classExp);
+	    }
+	}
+			/**
+	 * Adds the dataElement to result view
+	 * @param dataElement - Data Element to be added
+	 * @return - true (as per the general contract of Collection.add).
+	 */
+	public boolean addElementToView(DataElement dataElement)
+	{
+	    return resultView.add(dataElement);
+	}
+	
+	public String [] setViewElements(String aliasName) throws DAOException
+	{
+	    try
+	    {
+	        String sql = "SELECT tableData2.ALIAS_NAME, temp.COLUMN_NAME "+
+	        			 " from CATISSUE_QUERY_INTERFACE_TABLE_DATA tableData2 join"+
+	        			 " ( SELECT  columnData.COLUMN_NAME, columnData.TABLE_ID "+
+	        			 " FROM CATISSUE_QUERY_INTERFACE_COLUMN_DATA columnData, " +
+	        			 " CATISSUE_TABLE_RELATION relationData, "+
+	        			 " CATISSUE_QUERY_INTERFACE_TABLE_DATA tableData " + 
+	        			 " where relationData.CHILD_TABLE_ID = columnData.TABLE_ID " + 
+	        			 " and relationData.PARENT_TABLE_ID = tableData.TABLE_ID " + 
+	        			 " and tableData.ALIAS_NAME = '"+aliasName+"') as temp "+
+	        			 " on temp.TABLE_ID = tableData2.TABLE_ID ";
+	        
+	        Logger.out.debug("DATAELEMENT SQL : "+sql);
+		    
+		    JDBCDAO jdbcDao = new JDBCDAO();
+	        jdbcDao.openSession();
+	        List list = jdbcDao.executeQuery(sql);
+	        jdbcDao.closeSession();
+		    
+		    Vector vector = new Vector();
+		    String [] columnNames = new String[list.size()];
+		    Iterator iterator = list.iterator();
+		    int i = 0;
+		    while(iterator.hasNext())
+		    {
+		        List rowList = (List) iterator.next();
+		        DataElement dataElement = new DataElement();
+		        dataElement.setTable((String)rowList.get(0));
+		        Logger.out.debug("TABLE NAME : "+dataElement.getTable());
+		        dataElement.setField((String)rowList.get(1));
+		        Logger.out.debug("ALIAS NAME : "+dataElement.getField());
+		        vector.add(dataElement);
+		        columnNames[i++] = (String)rowList.get(1);
+		        Logger.out.debug("COLUMN NAME : "+columnNames[i-1]);
+		    }
+		    
+		    setResultView(vector);
+		    
+		    return columnNames;
+	    }
+	    catch(DAOException daoExp)
+	    {
+	        throw new DAOException(daoExp.getMessage(),daoExp);
+	    }
+	    catch(ClassNotFoundException classExp)
+	    {
+	        throw new DAOException(classExp.getMessage(),classExp);
+	    }
+	}
+	
+	/**
+	 * Returns the SQL representation of this query object
+	 * @return
+	 */
+	public String getString()
     {
         StringBuffer query = new StringBuffer();
         HashSet set = new HashSet();
@@ -244,9 +278,9 @@ public abstract class Query
         }
         return query.toString();
     }
-
-    /**
-     * This method returns set of all objects related to queryStartObject transitively
+	
+	/**
+	 * This method returns set of all objects related to queryStartObject transitively
      * @param string - Starting object to which all related objects should be found
      * @return set of all objects related to queryStartObject transitively
      */
