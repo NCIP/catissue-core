@@ -42,7 +42,7 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
     	
     	List clinicalStatusList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_CLINICAL_STATUS);
     	request.setAttribute(Constants.CLINICAL_STATUS_LIST, clinicalStatusList);
-    	
-        return mapping.findForward(Constants.SUCCESS);
+	    	
+        return mapping.findForward((String)request.getParameter(Constants.PAGEOF));
     }
 }
