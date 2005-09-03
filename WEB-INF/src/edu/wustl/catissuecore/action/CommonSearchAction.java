@@ -57,7 +57,7 @@ public class CommonSearchAction extends Action
         AbstractActionForm abstractForm = (AbstractActionForm) form;
 
         /* Get the systemIdentifier whose information is to be searched */
-        long identifier = abstractForm.getSystemIdentifier();
+        long identifier = ((Long)request.getAttribute(Constants.IDENTIFIER)).longValue();
 
         try
         {
@@ -76,10 +76,9 @@ public class CommonSearchAction extends Action
                  */
                 abstractDomain = (AbstractDomainObject)list.get(0);
                 abstractForm.setAllValues(abstractDomain);
-                Logger.out.debug("mapping.getAttribute() <"+mapping.getAttribute()+">");
-                //request.setAttribute(mapping.getAttribute(),form);
-                
-                target = new String(Constants.SUCCESS);
+                request.setAttribute(mapping.getAttribute(),form);
+                String pageOf = request.getParameter(Constants.PAGEOF);
+                target = new String(pageOf);
             }
             else
             {
