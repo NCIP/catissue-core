@@ -41,6 +41,15 @@
             length="50"
         />
 
+        <property
+            name="aliasName"
+            type="string"
+            update="true"
+            insert="true"
+            column="ALIAS_NAME"
+            length="50"
+        />
+
         <!--
             To add non XDoclet property mappings, create a file named
                 hibernate-properties-QueryTableData.xml
