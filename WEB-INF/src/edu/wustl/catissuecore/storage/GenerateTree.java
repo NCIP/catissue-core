@@ -102,7 +102,7 @@ public class GenerateTree
             {
                 DefaultMutableTreeNode node = (DefaultMutableTreeNode) parentNode.getChildAt(i);
                 TreeNode nodeData = (TreeNode) node.getUserObject();
-                if (treeNode.isChildOf(nodeData) )
+                if (treeNode.isChildOf(nodeData))
                 {
                     returnNode = node;
                     flag = true;

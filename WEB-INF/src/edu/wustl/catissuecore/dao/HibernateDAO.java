@@ -12,22 +12,14 @@ package edu.wustl.catissuecore.dao;
 
 import java.util.List;
 
-//import org.hibernate.HibernateException;
-//import org.hibernate.Query;
-//import org.hibernate.Session;
-//import org.hibernate.Transaction;
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.Transaction;
-
+import net.sf.hibernate.tool.hbm2ddl.TableMetadata;
 import edu.wustl.catissuecore.audit.AuditManager;
 import edu.wustl.catissuecore.audit.Auditable;
-import edu.wustl.catissuecore.domain.Biohazard;
-import edu.wustl.catissuecore.domain.Department;
-import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.StorageType;
-import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.exception.AuditException;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -445,5 +437,10 @@ public class HibernateDAO extends AbstractDAO
 
 //    	System.out.println("user "+user.getSystemIdentifier());
 //    	System.out.println("Department "+user.getDepartment().getSystemIdentifier());
+	}
+	
+	private void getMetaData()
+	{
+//	    TableMetadata metaData = new TableMetadata();
 	}
 }

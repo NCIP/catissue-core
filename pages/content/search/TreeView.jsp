@@ -8,8 +8,6 @@
 		storageContainerType = (String)request.getAttribute(Constants.STORAGE_CONTAINER_TYPE);
 	else
 		propertyName = request.getParameter(Constants.PROPERTY_NAME);
-		
-
 %>
 
 <script language="javascript">

@@ -508,7 +508,7 @@ public class UserForm extends AbstractActionForm
 
     /**
      * Checks the operation to be performed is add operation.
-     * @return Returns true if operation is equal to "add", else it returns false
+     * @return Returns true if operation is equal to "add", else it returns false.
      * */
     public boolean isAddOperation()
     {
@@ -524,7 +524,11 @@ public class UserForm extends AbstractActionForm
         if (pageOf != null)
         {
             if (pageOf.equals(Constants.PAGEOF_APPROVE_USER))
+            {
                 formId = Constants.APPROVE_USER_FORM_ID;
+                if (this.status.equals(Constants.APPROVE_USER_PENDING_STATUS))
+                    formId = Constants.SIGNUP_FORM_ID;
+            }
             else if (pageOf.equals(Constants.PAGEOF_USER_ADMIN))
                 formId = Constants.USER_FORM_ID;
         }
@@ -547,7 +551,6 @@ public class UserForm extends AbstractActionForm
     {
         this.status = status;
     }
-
    
     /**
      * Resets the values of all the fields.
@@ -767,13 +770,15 @@ public class UserForm extends AbstractActionForm
 
                 if (pageOf.equals(Constants.PAGEOF_USER_ADMIN) || pageOf.equals(Constants.PAGEOF_APPROVE_USER))
                 {
-                    if (role.trim().equals("0"))
+                    if (role != null)
                     {
-                        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-                                "errors.item.required", ApplicationProperties
-                                        .getValue("user.role")));
+                        if (role.trim().equals("0"))
+	                    {
+	                        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+	                                "errors.item.required", ApplicationProperties
+	                                        .getValue("user.role")));
+	                    }
                     }
-
                 }
 
                 if (pageOf.equals(Constants.PAGEOF_APPROVE_USER))
@@ -789,7 +794,8 @@ public class UserForm extends AbstractActionForm
         }
         catch (Exception excp)
         {
-            Logger.out.error(excp.getMessage(), excp);
+//            Logger.out.error(excp.getMessage(), excp);
+            excp.printStackTrace();
         }
         
         return errors;

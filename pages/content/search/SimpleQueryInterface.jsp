@@ -7,6 +7,7 @@
 	List objectNameArray = (List)request.getAttribute(Constants.OBJECT_NAME_LIST);
 	String[] attributeConditionArray = (String[])request.getAttribute(Constants.ATTRIBUTE_CONDITION_LIST);
 	Object obj = request.getAttribute("simpleQueryInterfaceForm");
+	String aliasName = (String)request.getAttribute(Constants.TABLE_ALIAS_NAME);
 	String noOfRows="1";
 	if(obj != null && obj instanceof SimpleQueryInterfaceForm)
 	{
@@ -96,10 +97,11 @@ function insertRow(subdivtag)
 	//Next Operator Link.
 	var spreqqty=x.insertCell(6)
 	spreqqty.className="formField";
+	spreqqty.id=val;
 	sname="";
 	
-	sname="<a href='#' onclick=javascript:insertRow('simpleQuery')><bean:message key='simpleQuery.and' /></a>"
-	sname=sname+" / <a href='#' onclick=javascript:insertRow('simpleQuery')><bean:message key='simpleQuery.or' /></a>"        	
+	sname="<a href='#' onclick=javascript:insertRow('simpleQuery');setPropertyValue('"+objname+"','AND');changeAndOrLink('"+val+"','AND')><bean:message key='simpleQuery.and'/></a>"
+	sname=sname+" / <a href='#' onclick=javascript:insertRow('simpleQuery');setPropertyValue('"+objname+"','OR');changeAndOrLink('"+val+"','OR')><bean:message key='simpleQuery.or' /></a>"        	
 	spreqqty.innerHTML="" + sname;
 }
 
@@ -107,6 +109,24 @@ function callAction(action)
 {
 	document.forms[0].action = "/catissuecore/"+action;
 	document.forms[0].submit();
+}
+
+function setPropertyValue(propertyName, value)
+{
+	for (var i=0;i < document.forms[0].elements.length;i++)
+    {
+    	var e = document.forms[0].elements[i];
+        if (e.name == propertyName)
+        {
+        	document.forms[0].elements[i].value = value;
+        }
+    }
+}
+
+function changeAndOrLink(id, operation)
+{
+	var r = document.getElementById(id);
+	r.innerHTML = operation;
 }
 </script>
 
@@ -127,11 +147,21 @@ function callAction(action)
 					</td>
 				</tr>
 				<tr>
+					<td>
+					<%String pageOf = (String)request.getAttribute(Constants.PAGEOF);%>
+						<html:hidden property="pageOf" value="<%=pageOf%>"/>
+					</td>
+				</tr>
+				<tr>
 					<td class="formTitle" height="20" colspan="7">
 						<bean:message key="simpleQuery.title" />
 					</td>
 				</tr>
-					
+				<tr>
+					<td>
+						<html:hidden property="aliasName" value="<%=aliasName%>"/>
+					</td>
+				</tr>	
 				<tbody id="simpleQuery">
 				<%
 					for (int i=1;i<=Integer.parseInt(noOfRows);i++){
@@ -140,22 +170,26 @@ function callAction(action)
 						String attributeCondition = "value(SimpleConditionsNode:"+i+"_Condition_Operator_operator)";
 						String attributeValue = "value(SimpleConditionsNode:"+i+"_Condition_value)";
 						String nextOperator = "value(SimpleConditionsNode:"+i+"_Operator_operator)";			
-						String attributeNameList = "SimpleConditionsNode"+i;
+						String attributeNameList = "attributeNameList"+i;
+						String attributeDisplayNameList = "attributeDisplayNameList"+i;
 				%>
 				<tr>
 					<td class="formRequiredNotice" width="5">&nbsp;</td>
 					<td class="formField">
-						<html:select property="<%=objectName%>" styleClass="formFieldSized10" styleId="objectName" size="1" onchange="javascript:callAction('SimpleQueryInterface.do')">
-							<html:options collection="objectNameList" labelProperty="name" property="name" />
+					<%
+						String attributeAction = "javascript:callAction('SimpleQueryInterface.do?pageOf="+pageOf+
+												 "&aliasName="+aliasName+"')"; %>
+						<html:select property="<%=objectName%>" styleClass="formFieldSized15" styleId="objectName" size="1" onchange="<%=attributeAction%>">
+							<html:options collection="objectNameList" labelProperty="name" property="value" />
 						</html:select>
 					</td>
 					<td class="formField">
-						<html:select property="<%=attributeName%>" styleClass="formFieldSized10" styleId="attributeName" size="1">
+						<html:select property="<%=attributeName%>" styleClass="formFieldSized15" styleId="attributeName" size="1">
 							<logic:notPresent name="<%=attributeNameList%>">			
 								<html:options name="attributeNameList" labelName="attributeNameList" />
 							</logic:notPresent>	
 							<logic:present name="<%=attributeNameList%>">				
-								<html:options collection="<%=attributeNameList%>" labelProperty="name" property="value" />
+								<html:options name="<%=attributeNameList%>" labelName="<%=attributeDisplayNameList%>" />
 							</logic:present>	
 						</html:select>
 					</td>
@@ -168,16 +202,18 @@ function callAction(action)
 						<html:text styleClass="formFieldSized10" size="30" styleId="attributeValue" property="<%=attributeValue%>" />
 					</td>
 					<td class="formSmallField">
-						<html:hidden property="<%=nextOperator%>" value="AND"/>
+						<html:hidden property="<%=nextOperator%>"/>
 					</td>
-					<td class="formField">
-						<a href="#" onclick="javascript:insertRow('simpleQuery');">
+					<td class="formField" id="<%=i%>">
+					<%String andOrLink = "javascript:insertRow('simpleQuery');setPropertyValue('"+nextOperator+"','"+Constants.AND_JOIN_CONDITION+"');changeAndOrLink('"+i+"','AND')"; %>
+						<a href="#" onclick="<%=andOrLink%>">
 							<bean:message key="simpleQuery.and" />
 						</a>/
-						<a href="#" onclick="javascript:insertRow('simpleQuery');">
+						<%andOrLink = "javascript:insertRow('simpleQuery');setPropertyValue('"+nextOperator+"','"+Constants.OR_JOIN_CONDITION+"');changeAndOrLink('"+i+"','OR')"; %>
+						<a href="#" onclick="<%=andOrLink%>">
 							<bean:message key="simpleQuery.or" />
 						</a>
-					</td>
+					</td>	
 				</tr>
 				<%}%>
 				</tbody>	

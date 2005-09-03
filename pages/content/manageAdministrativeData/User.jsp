@@ -34,6 +34,22 @@
         }
 %>
 
+
+<script>
+//If the administrator keeps the user status pending update the user record and disable role.
+function handleStatus(status)
+{
+	setOperation("<%=Constants.EDIT%>");
+	document.forms[0].role.value=0;
+	document.forms[0].role.disabled=true;
+
+	if (status.value == "<%=Constants.APPROVE_USER_APPROVE_STATUS%>")
+	{
+		setOperation("<%=Constants.ADD%>");
+		document.forms[0].role.disabled=false;
+	}
+}
+</script>
 <html:errors />
 
 <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
@@ -236,19 +252,6 @@
 							<html:text styleClass="formFieldSized" size="30" styleId="faxNumber" property="faxNumber" />
 						</td>
 					</tr>
-<!--					
-					<tr>
-						<td class="formRequiredNotice" width="5">*</td>
-						<td class="formRequiredLabel">
-							<label for="emailAddress">
-								<bean:message key="user.emailAddress" />
-							</label>
-						</td>
-						<td class="formField">
-							<html:text styleClass="formFieldSized" size="30" styleId="emailAddress" property="emailAddress" />
-						</td>
-					</tr>
--->					
 					<tr>
 						<td class="formRequiredNotice" width="5">*</td>
 						<td class="formRequiredLabel">
@@ -316,7 +319,7 @@
 								</label>
 							</td>
 						<td class="formField">
-							<html:select property="status" styleClass="formFieldSized" styleId="status" size="1">
+							<html:select property="status" styleClass="formFieldSized" styleId="status" size="1" onchange="javascript:handleStatus(this)">
 								<html:options name="statusList" labelName="statusList" />
 							</html:select>
 						</td>

@@ -256,32 +256,32 @@ public class Constants
 	public static final String SPECIMEN_COLLECTION_GROUP_ADD_ACTION = "SpecimenCollectionGroupAdd.do";
 	public static final String SPECIMEN_COLLECTION_GROUP_EDIT_ACTION = "SpecimenCollectionGroupEdit.do";
 
-//	Constants required in FrozenEventParameters.jsp Page
+	//Constants required in FrozenEventParameters.jsp Page
 	public static final String FROZEN_EVENT_PARAMETERS_SEARCH_ACTION = "FrozenEventParametersSearch.do";
 	public static final String FROZEN_EVENT_PARAMETERS_ADD_ACTION = "FrozenEventParametersAdd.do";
 	public static final String FROZEN_EVENT_PARAMETERS_EDIT_ACTION = "FrozenEventParametersEdit.do";
 
-//	Constants required in CheckInCheckOutEventParameters.jsp Page
+	//Constants required in CheckInCheckOutEventParameters.jsp Page
 	public static final String CHECKIN_CHECKOUT_EVENT_PARAMETERS_SEARCH_ACTION = "CheckInCheckOutEventParametersSearch.do";
 	public static final String CHECKIN_CHECKOUT_EVENT_PARAMETERS_ADD_ACTION = "CheckInCheckOutEventParametersAdd.do";
 	public static final String CHECKIN_CHECKOUT_EVENT_PARAMETERS_EDIT_ACTION = "CheckInCheckOutEventParametersEdit.do";
 
-//	Constants required in ReceivedEventParameters.jsp Page
+	//Constants required in ReceivedEventParameters.jsp Page
 	public static final String RECEIVED_EVENT_PARAMETERS_SEARCH_ACTION = "ReceivedEventParametersSearch.do";
 	public static final String RECEIVED_EVENT_PARAMETERS_ADD_ACTION = "ReceivedEventParametersAdd.do";
 	public static final String RECEIVED_EVENT_PARAMETERS_EDIT_ACTION = "ReceivedEventParametersEdit.do";
 
-//	Constants required in FluidSpecimenReviewEventParameters.jsp Page
+	//Constants required in FluidSpecimenReviewEventParameters.jsp Page
 	public static final String FLUID_SPECIMEN_REVIEW_EVENT_PARAMETERS_SEARCH_ACTION = "FluidSpecimenReviewEventParametersSearch.do";
 	public static final String FLUID_SPECIMEN_REVIEW_EVENT_PARAMETERS_ADD_ACTION = "FluidSpecimenReviewEventParametersAdd.do";
 	public static final String FLUID_SPECIMEN_REVIEW_EVENT_PARAMETERS_EDIT_ACTION = "FluidSpecimenReviewEventParametersEdit.do";
 
-//	Constants required in CELLSPECIMENREVIEWParameters.jsp Page
+	//Constants required in CELLSPECIMENREVIEWParameters.jsp Page
 	public static final String CELL_SPECIMEN_REVIEW_PARAMETERS_SEARCH_ACTION = "CellSpecimenReviewParametersSearch.do";
 	public static final String CELL_SPECIMEN_REVIEW_PARAMETERS_ADD_ACTION = "CellSpecimenReviewParametersAdd.do";
 	public static final String CELL_SPECIMEN_REVIEW_PARAMETERS_EDIT_ACTION = "CellSpecimenReviewParametersEdit.do";
 
-//	Constants required in tissue SPECIMEN REVIEW event Parameters.jsp Page
+	//Constants required in tissue SPECIMEN REVIEW event Parameters.jsp Page
 	public static final String TISSUE_SPECIMEN_REVIEW_EVENT_PARAMETERS_SEARCH_ACTION = "TissueSpecimenReviewEventParametersSearch.do";
 	public static final String TISSUE_SPECIMEN_REVIEW_EVENT_PARAMETERS_ADD_ACTION = "TissueSpecimenReviewEventParametersAdd.do";
 	public static final String TISSUE_SPECIMEN_REVIEW_EVENT_PARAMETERS_EDIT_ACTION = "TissueSpecimenReviewEventParametersEdit.do";
@@ -423,6 +423,8 @@ public class Constants
 	public static final int DISTRIBUTION_FORM_ID = 37;
 	public static final int SPECIMEN_EVENT_PARAMETERS_FORM_ID = 38;
 	public static final int SHOPPING_CART_FORM_ID = 39;
+	public static final int SIMPLE_QUERY_INTERFACE_ID = 40;
+	
 	//Misc
 	public static final String SEPARATOR = " : ";
 		
@@ -468,6 +470,9 @@ public class Constants
 	public static final int STORAGE_CONTAINER_TREE_ID = 2;
 	public static final int QUERY_RESULTS_TREE_ID = 3;
 	
+	//Edit Object Constants.
+	public static final String TABLE_ALIAS_NAME = "aliasName"; 
+	
 	//Query Interface Results View Constants
 	public static final String PAGEOF = "pageOf";
 	public static final String QUERY = "query";
@@ -502,7 +507,7 @@ public class Constants
 //	        	QUERY_RESULTS_PARTICIPANT_ID,QUERY_RESULTS_COLLECTION_PROTOCOL_ID,
 //	        	QUERY_RESULTS_COLLECTION_PROTOCOL_EVENT_ID,QUERY_RESULTS_SPECIMEN_COLLECTION_GROUP_ID,
 //	        	QUERY_RESULTS_SPECIMEN_ID,QUERY_RESULTS_SPECIMEN_TYPE
-	        "IDENTIFIER","NAME"
+	        "IDENTIFIER","TYPE","ONE_DIMENSION_LABEL"
 	};
 	
 	//Query results edit constants - MakeEditableAction.

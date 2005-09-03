@@ -56,15 +56,15 @@
 		<put name="mainmenu" value="/pages/mainMenu/ManageAdminData.jsp" />
 		<put name="content" value="/pages/content/manageAdministrativeData/Home.jsp"/>
 	</definition>
-
+	
 	<definition name=".catissuecore.userDef" extends=".catissuecore.manageAdminDataHomeDef">
 		<put name="content" value="/pages/content/manageAdministrativeData/User.jsp" />
 	</definition>
-
+	
 	<definition name=".catissuecore.userAddSuccessDef" extends=".catissuecore.manageAdminDataHomeDef">
 		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>
-
+	
 	<definition name=".catissuecore.userEditSuccessDef" extends=".catissuecore.manageAdminDataHomeDef">
 		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>
@@ -203,6 +203,13 @@
 		<put name="content" value="/pages/content/common/ReportProblem.jsp" />
 	</definition>
 	
+	<definition name=".catissuecore.editSearchPageDef" extends=".catissuecore.manageAdminDataHomeDef">
+		<put name="content" value="/pages/content/search/SimpleQueryInterface.jsp" />
+	</definition>
+	
+	<definition name=".catissuecore.editSearchResultsDef" extends=".catissuecore.manageAdminDataHomeDef">
+		<put name="content" value="/pages/content/search/DataView.jsp" />
+	</definition>
 	<!-- Manage Administrative Data tab pages definitions end -->
 
 	<!-- Manage BioSpecimen tab pages definitions start -->

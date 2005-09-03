@@ -11,10 +11,6 @@
 
 package edu.wustl.catissuecore.actionForm;
 
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.struts.action.ActionMapping;
-
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.domain.ThawEventParameters;
 import edu.wustl.catissuecore.util.global.Constants;

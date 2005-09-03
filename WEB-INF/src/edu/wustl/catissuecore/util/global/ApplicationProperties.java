@@ -9,7 +9,6 @@ import java.util.ResourceBundle;
 /**
  * This class is used to retrieve values of keys from the ApplicationResources.properties file.
  * @author kapil_kaveeshwar
- *
  */
 public class ApplicationProperties
 {

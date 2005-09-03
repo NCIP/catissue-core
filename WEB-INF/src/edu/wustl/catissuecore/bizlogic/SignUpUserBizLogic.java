@@ -120,4 +120,16 @@ public class SignUpUserBizLogic extends DefaultBizLogic
         }
     }
 
+    /**
+     * Updates the persistent object in the database.
+     * @param session The session in which the object is saved.
+     * @param obj The object to be updated.
+     * @throws DAOException 
+     */
+    protected void update(DAO dao, Object obj) throws DAOException
+    {
+        SignUpUser user = (SignUpUser) obj;
+        dao.update(user);
+        
+    }
 }

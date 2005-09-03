@@ -9,15 +9,11 @@
  */
 package edu.wustl.catissuecore.bizlogic;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.Vector;
 
 import edu.wustl.catissuecore.dao.AbstractDAO;
 import edu.wustl.catissuecore.dao.DAO;
 import edu.wustl.catissuecore.dao.DAOFactory;
-import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.exception.BizLogicException;
 import edu.wustl.common.util.dbManager.DAOException;
 

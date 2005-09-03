@@ -51,9 +51,7 @@ public class QueryTree extends JApplet
             String host = codeBase.getHost();
             int port = codeBase.getPort();
             
-            System.out.println("In Applet............................");
             String pageOf = this.getParameter(Constants.PAGEOF);
-            System.out.println("pageOf********************"+pageOf);
             String storageContainerType = null,propertyName = null;
             int treeType = Constants.TISSUE_SITE_TREE_ID;
             
@@ -123,19 +121,16 @@ public class QueryTree extends JApplet
             NodeSelectionListener nodeSelectionListener = new NodeSelectionListener(
                     this.getCodeBase(), this.getAppletContext());
             
-            System.out.println("PAGEOF****************"+pageOf);
             if (pageOf.equals(Constants.PAGEOF_TISSUE_SITE))
             {
-                System.out.println("In PAGEOF_TISSUE_SITE*************");
                 TissueSiteTreeNodeListener tissueSiteListener = new TissueSiteTreeNodeListener();
 	            tissueSiteListener.setAppletContext(this.getAppletContext());
 	            tree.addTreeSelectionListener(tissueSiteListener);
             }
             else
             {
-                System.out.println("In PAGEOF_STORAGE_LOCATION***********");
                 StorageLocationViewListener viewListener 
-        			= new StorageLocationViewListener(this.getCodeBase(), this.getAppletContext()); 
+        			= new StorageLocationViewListener(this.getCodeBase(), this.getAppletContext());
 		        viewListener.setStorageContainerType(storageContainerType);
 		        viewListener.setPageOf(pageOf);
 		        tree.addTreeSelectionListener(viewListener);

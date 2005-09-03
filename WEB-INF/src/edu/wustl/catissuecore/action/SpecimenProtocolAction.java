@@ -75,6 +75,6 @@ public class SpecimenProtocolAction  extends SecureAction
         	Logger.out.error(e.getMessage(),e);
 		}
         
-        return mapping.findForward(Constants.SUCCESS);
+        return mapping.findForward((String)request.getParameter(Constants.PAGEOF));
     }
 }

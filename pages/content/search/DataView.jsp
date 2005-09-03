@@ -26,6 +26,7 @@
 <%
 	String[] columnList = (String[]) request.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
 	List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
+	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
 %>
 
 <script>
@@ -65,7 +66,7 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 	obj.setColumnHeaderHeight("20px");
 	
 	//	set click action handler.
-	obj.setAction("click", function(src){window.location.href = 'http://localhost:8080/catissuecore/QueryDepartmentSearch.do?operation=search&systemIdentifier='+src.getDataProperty("value")});
+	obj.setAction("click", function(src){window.location.href = 'SearchObject.do?pageOf=<%=pageOf%>&operation=search&systemIdentifier='+src.getDataProperty("value")});
 	
 	//	write grid html to the page.
 	document.write(obj);

@@ -17,7 +17,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -46,6 +45,6 @@ public class BiohazardAction  extends SecureAction
         List biohazardList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_BIOHAZARD);
     	request.setAttribute(Constants.BIOHAZARD_TYPE_LIST, biohazardList);
     	
-        return mapping.findForward(Constants.SUCCESS);
+        return mapping.findForward((String)request.getParameter(Constants.PAGEOF));
     }
 }

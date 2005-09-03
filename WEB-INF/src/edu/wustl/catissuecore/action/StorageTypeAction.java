@@ -16,7 +16,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -39,6 +38,6 @@ public class StorageTypeAction  extends SecureAction
         //Sets the operation attribute to be used in the Add/Edit Institute Page. 
         request.setAttribute(Constants.OPERATION, operation);
         
-        return mapping.findForward(Constants.SUCCESS);
+        return mapping.findForward((String)request.getParameter(Constants.PAGEOF));
     }
 }

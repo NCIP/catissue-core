@@ -11,7 +11,7 @@
     <td class="subMenuPrimaryItems">
       <div>
       	<img src="images/subMenuArrow.gif" width="7" height="7" alt="" />
-      		<a class="subMenuPrimary" href="SimpleQueryInterface.do">
+      		<a class="subMenuPrimary" href="SimpleQueryInterface.do?pageOf=pageOfSimpleQueryInterface">
       			<bean:message key="app.simpleSearch" />
       		</a>
       </div>

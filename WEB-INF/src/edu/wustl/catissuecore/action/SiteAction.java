@@ -71,6 +71,6 @@ public class SiteAction  extends SecureAction
 		}
 
 
-        return mapping.findForward(Constants.SUCCESS);
+        return mapping.findForward((String)request.getParameter(Constants.PAGEOF));
     }
 }

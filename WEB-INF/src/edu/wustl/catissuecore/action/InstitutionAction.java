@@ -38,6 +38,6 @@ public class InstitutionAction extends SecureAction
         //Sets the operation attribute to be used in the Add/Edit Institute Page. 
         request.setAttribute(Constants.OPERATION, operation);
         
-        return mapping.findForward(Constants.SUCCESS);
+        return mapping.findForward((String)request.getParameter(Constants.PAGEOF));
     }
 }

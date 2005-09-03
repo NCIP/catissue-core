@@ -53,10 +53,6 @@ public class CDEImpl implements CDE
      * */
     private Set permissibleValues;
 
-    /* (non-Javadoc)
-     * @see edu.wustl.common.cde.CDE#getPublicId()
-     */
-
     /**
      * getPublicId method returns the public id of the CDE.
      * @returns PublicID as a String Object of the CDE.   
