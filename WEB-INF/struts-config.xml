@@ -354,7 +354,7 @@ PUBLIC
 		<action path="/DepartmentSearch"
 		    type="edu.wustl.catissuecore.action.CommonSearchAction"
 			name="departmentForm"
-			validate="true"
+			validate="false"
 			input="/Department.do?operation=edit"
 			scope="request">
 			<forward name="success" path="/Department.do?operation=edit"/>
