@@ -50,37 +50,6 @@ CREATE TABLE CATISSUE_TABLE_RELATIONS
 );
 
 
-CREATE TABLE CATISSUE_CLASS_DATA
-(
-      IDENTIFIER bigint not null auto_increment, 
-	  
-      CLASS_NAME varchar(50),
-
-      DISPLAY_NAME varchar(50),
-      
-      primary key (IDENTIFIER)
-);
-
-CREATE TABLE CATISSUE_ATTRIBUTE_DATA
-(
-      IDENTIFIER bigint not null auto_increment,
-
-      CLASS_ID bigint not null,
-
-      ATTRIBUTE_NAME varchar(50),
-
-      DISPLAY_NAME varchar(50),
-      
-      primary key (IDENTIFIER)
-);
-
-CREATE TABLE CATISSUE_CLASS_RELATIONS
-(
-      PARENT_CLASS_ID bigint not null,      
-      
-      CHILD_CLASS_ID bigint not null
-);
-
 commit
 
 insert into CATISSUE_CLASS_DATA (CLASS_NAME,DISPLAY_NAME) values ('User','User');
