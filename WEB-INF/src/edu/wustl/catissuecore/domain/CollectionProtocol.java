@@ -12,6 +12,7 @@ package edu.wustl.catissuecore.domain;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 
 import edu.wustl.catissuecore.actionForm.AbstractActionForm;
@@ -134,6 +135,7 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
         	
         	CollectionProtocolForm cpForm = (CollectionProtocolForm) abstractForm;
         	
+        	userCollection.clear();
         	long [] coordinatorsArr = cpForm.getProtocolCoordinatorIds();
         	for (int i = 0; i < coordinatorsArr.length; i++)
 			{
@@ -141,22 +143,48 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
         		{
 	        		User coordinator = new User();
 	        		coordinator.setSystemIdentifier(new Long(coordinatorsArr[i]));
-	        		userCollection.add(coordinator);
+	        		
+//	        		if(!contians(userCollection, coordinator))
+//	        		{
+	        			userCollection.add(coordinator);
+//	        		}
         		}
 			}
         	
 	        Map map = cpForm.getValues();
-	        System.out.println("MAP "+map);
+	        Logger.out.debug("PRE FIX MAP "+map);
 	        map = fixMap(map);
-	        System.out.println("MAP B "+map);
+	        System.out.println("POST FIX MAP "+map);
+	        
 	        MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.domain");
 	        this.collectionProtocolEventCollection = parser.generateData(map);
-	        System.out.println("collectionProtocolEventCollection "+this.collectionProtocolEventCollection);
+	        Logger.out.debug("collectionProtocolEventCollection "+this.collectionProtocolEventCollection);
         }
         catch (Exception excp)
         {
 	    	// use of logger as per bug 79
 	    	Logger.out.error(excp.getMessage(),excp); 
         }
+    }
+    
+    private boolean contiansCoordinator(User coordinator)
+    {
+    	return userCollection.contains(coordinator);
+    }
+    
+    public static boolean contians(Collection collection, AbstractDomainObject obj)
+    {
+    	Iterator iterator = collection.iterator();
+    	while(iterator.hasNext())
+    	{
+    		Object absObj = iterator.next();
+    		if(absObj instanceof AbstractDomainObject)
+    		{
+    			AbstractDomainObject abstractDomainObject = (AbstractDomainObject)absObj;
+    			if(abstractDomainObject.getSystemIdentifier() == obj.getSystemIdentifier())
+    				return true;
+    		}
+    	}
+    	return false;
     }
 }
