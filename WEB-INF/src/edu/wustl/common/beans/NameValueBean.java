@@ -9,6 +9,7 @@
 package edu.wustl.common.beans;
 
 
+
 /**
  *<p>Title: </p>
  *<p>Description:  </p>
@@ -18,7 +19,7 @@ package edu.wustl.common.beans;
  *@version 1.0
  */
 
-public class NameValueBean
+public class NameValueBean implements Comparable
 {
     private String name=new String();
     private String value=new String();
@@ -71,4 +72,17 @@ public class NameValueBean
     {
         return new String("name:"+ name +" value:"+value);
     }
+
+	/* (non-Javadoc)
+	 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
+	 */
+	public int compareTo(Object obj)
+	{
+		if(obj instanceof NameValueBean)
+		{
+			NameValueBean nameValueBean = (NameValueBean)obj;
+			return name.compareTo(nameValueBean.getName());
+		}
+		return 0;
+	}
 }
