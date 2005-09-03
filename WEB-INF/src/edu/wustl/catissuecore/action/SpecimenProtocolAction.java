@@ -11,7 +11,6 @@
 package edu.wustl.catissuecore.action;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -27,6 +26,7 @@ import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.cde.CDEManager;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * This class initializes the fields in the User Add/Edit webpage.
@@ -69,23 +69,10 @@ public class SpecimenProtocolAction  extends SecureAction
 	    	
 	    	List pathologyStatusList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_PATHOLOGICAL_STATUS);
 	    	request.setAttribute(Constants.PATHOLOGICAL_STATUS_LIST, pathologyStatusList);
-	    	
-			//String [] specimenClassArry = {Constants.SELECT_OPTION, "Fluid Specimen","Tissue Specimen","Cell Specimen","Molecular Specimen"};
-			//String [] specimenClassIdArry = {Constants.SELECT_OPTION, "Fluid","Tissue","Cell","Molecular"};
-			//request.setAttribute(Constants.SPECIMEN_CLASS_LIST, specimenClassArry);
-			//request.setAttribute(Constants.SPECIMEN_CLASS_ID_LIST, specimenClassIdArry);
-	    	
-	    	//request.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeArry);
-	    	
-	    	//request.setAttribute(Constants.TISSUE_SITE_LIST, Constants.TISSUE_SITE_ARRAY);
-	    	
-	    	//String [] pathologyStatusArry = {Constants.SELECT_OPTION,"Primary Tumor","Metastatic Node","Non-Malignant Tissue"};
-	    	//request.setAttribute(Constants.PATHOLOGICAL_STATUS_LIST, pathologyStatusArry);
-
 		}
         catch(Exception e)
 		{
-        	e.printStackTrace();
+        	Logger.out.error(e.getMessage(),e);
 		}
         
         return mapping.findForward(Constants.SUCCESS);
