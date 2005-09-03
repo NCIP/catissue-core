@@ -272,7 +272,7 @@ PUBLIC
 		<action path="/InstitutionSearch"
 		    type="edu.wustl.catissuecore.action.CommonSearchAction"
 			name="institutionForm"
-			validate="true"
+			validate="false"
 			input="/Institution.do?operation=edit"
 			scope="request">
 			<forward name="pageOfInstitution" path="/Institution.do?operation=edit&amp;pageOf=pageOfInstitution"/>
@@ -392,9 +392,9 @@ PUBLIC
 		<action path="/CancerResearchGroupSearch"
 		    type="edu.wustl.catissuecore.action.CommonSearchAction"
 			name="cancerResearchGroupForm"
-			validate="true"
+			validate="false"
 			input="/CancerResearchGroup.do?operation=edit"
-			scope="session">
+			scope="request">
 			<forward name="pageOfCancerResearchGroup" path="/CancerResearchGroup.do?operation=edit&amp;pageOf=pageOfCancerResearchGroup"/>
 			<forward name="failure" path="/CancerResearchGroup.do?operation=edit"/>
 		</action>    
@@ -442,7 +442,7 @@ PUBLIC
 		<action path="/CollectionProtocolSearch"
 		    type="edu.wustl.catissuecore.action.CommonSearchAction"
 			name="collectionProtocolForm"
-			validate="true"
+			validate="false"
 			input="/CollectionProtocol.do?operation=edit"
 			scope="request">
 			<forward name="pageOfCollectionProtocol" path="/CollectionProtocol.do?operation=edit&amp;pageOf=pageOfCollectionProtocol"/>
@@ -485,7 +485,7 @@ PUBLIC
 		<action path="/DistributionProtocolSearch"
 		    type="edu.wustl.catissuecore.action.CommonSearchAction"
 			name="distributionProtocolForm"
-			validate="true"
+			validate="false"
 			input="/DistributionProtocol.do?operation=edit"
 			scope="request">
 			<forward name="pageOfDistributionProtocol" path="/DistributionProtocol.do?operation=edit&amp;pageOf=pageOfDistributionProtocol"/>
@@ -771,7 +771,7 @@ PUBLIC
 		<action path="/StorageTypeSearch"
 		    type="edu.wustl.catissuecore.action.CommonSearchAction"
 			name="storageTypeForm"
-			validate="true"
+			validate="false"
 			input="/StorageType.do?operation=edit"
 			scope="request">
 			<forward name="pageOfEditObject" path="/StorageType.do?operation=edit&amp;pageOf=pageOfEditObject"/>
@@ -814,7 +814,7 @@ PUBLIC
 		<action path="/StorageContainerSearch"
 		    type="edu.wustl.catissuecore.action.CommonSearchAction"
 			name="storageContainerForm"
-			validate="true"
+			validate="false"
 			input="/StorageContainer.do?operation=edit"
 			scope="request">
 			<forward name="pageOfStorageContainer" path="/StorageContainer.do?operation=edit&amp;pageOf=pageOfStorageContainer"/>
@@ -854,7 +854,7 @@ PUBLIC
 		<action path="/SiteSearch"
 		    type="edu.wustl.catissuecore.action.CommonSearchAction"
 			name="siteForm"
-			validate="true"
+			validate="false"
 			input="/Site.do?operation=edit"
 			scope="request">
 			<forward name="pageOfSite" path="/Site.do?operation=edit&amp;pageOf=pageOfSite"/>
@@ -894,7 +894,7 @@ PUBLIC
 		<action path="/BiohazardSearch"
 		    type="edu.wustl.catissuecore.action.CommonSearchAction"
 			name="biohazardForm"
-			validate="true"
+			validate="false"
 			input="/Biohazard.do?operation=edit"
 			scope="request">
 			<forward name="pageOfBiohazard" path="/Biohazard.do?operation=edit&amp;pageOf=pageOfBiohazard"/>
