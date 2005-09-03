@@ -62,9 +62,7 @@ PUBLIC
 		
 	</global-exceptions>
 	
-	
 	<action-mappings>
-	
 		<action path="/viewErrorDetails" forward=".catissuecore.error.details"
 			validate="false" />
 		
@@ -246,7 +244,7 @@ PUBLIC
 		<action path="/Institution"
 			type="edu.wustl.catissuecore.action.InstitutionAction"
 			scope="request">
-			<forward name="success" path=".catissuecore.institutionDef" />
+			<forward name="pageOfInstitution" path=".catissuecore.institutionDef" />
 			<forward name="failure" path=".catissuecore.institutionDef" />
 			<forward name="access_denied" path="/ManageAdministrativeData.do" />
 		</action>
@@ -277,7 +275,7 @@ PUBLIC
 			validate="true"
 			input="/Institution.do?operation=edit"
 			scope="request">
-			<forward name="success" path="/Institution.do?operation=edit"/>
+			<forward name="pageOfInstitution" path="/Institution.do?operation=edit&amp;pageOf=pageOfInstitution"/>
 			<forward name="failure" path="/Institution.do?operation=edit"/>
 		</action>    
 		<!-- Institution Actions Ends-->
@@ -326,11 +324,12 @@ PUBLIC
 		<action path="/Department"
 			type="edu.wustl.catissuecore.action.DepartmentAction"
 			scope="request">
-			<forward name="success" path=".catissuecore.departmentDef" />
+			<forward name="pageOfDepartment" path=".catissuecore.departmentDef" />
+			<forward name="pageOfSimpleQueryInterface" path=".catissuecore.simpleSearchDepartmentDef" />
 			<forward name="failure" path=".catissuecore.departmentDef" />
 			<forward name="access_denied" path="/ManageAdministrativeData.do" />
 		</action>
-
+		
 		<action path="/DepartmentAdd"
 			type="edu.wustl.catissuecore.action.CommonAddEditAction"
 			name="departmentForm"
@@ -340,7 +339,7 @@ PUBLIC
 			<forward name="success" path=".catissuecore.departmentAddSuccessDef" />
 			<forward name="failure" path="/Department.do?operation=add" />
 		</action>
-
+		
 		<action path="/DepartmentEdit"
 			type="edu.wustl.catissuecore.action.CommonAddEditAction"
 			name="departmentForm"
@@ -350,14 +349,15 @@ PUBLIC
 			<forward name="success" path=".catissuecore.departmentEditSuccessDef" />
 			<forward name="failure" path="/Department.do?operation=edit" />
 		</action>
-		
+			
 		<action path="/DepartmentSearch"
 		    type="edu.wustl.catissuecore.action.CommonSearchAction"
 			name="departmentForm"
 			validate="false"
 			input="/Department.do?operation=edit"
 			scope="request">
-			<forward name="success" path="/Department.do?operation=edit"/>
+			<forward name="pageOfDepartment" path="/Department.do?operation=edit&amp;pageOf=pageOfDepartment"/>
+			<forward name="pageOfSimpleQueryInterface" path="/Department.do?operation=edit&amp;pageOf=pageOfSimpleQueryInterface"/>
 			<forward name="failure" path="/Department.do?operation=edit"/>
 		</action>    
 		<!-- Department Actions Ends-->
@@ -366,7 +366,7 @@ PUBLIC
 		<action path="/CancerResearchGroup"
 			type="edu.wustl.catissuecore.action.CancerResearchGroupAction"
 			scope="request">
-			<forward name="success" path=".catissuecore.cancerResearchGroupDef" />
+			<forward name="pageOfCancerResearchGroup" path=".catissuecore.cancerResearchGroupDef" />
 			<forward name="failure" path=".catissuecore.cancerResearchGroupDef" />
 			<forward name="access_denied" path="/ManageAdministrativeData.do" />
 		</action>
@@ -395,7 +395,7 @@ PUBLIC
 			validate="true"
 			input="/CancerResearchGroup.do?operation=edit"
 			scope="session">
-			<forward name="success" path="/CancerResearchGroup.do?operation=edit"/>
+			<forward name="pageOfCancerResearchGroup" path="/CancerResearchGroup.do?operation=edit&amp;pageOf=pageOfCancerResearchGroup"/>
 			<forward name="failure" path="/CancerResearchGroup.do?operation=edit"/>
 		</action>    
 		<!-- CancerResearchGroup Actions Ends-->
@@ -414,7 +414,7 @@ PUBLIC
 			name="collectionProtocolForm"
 			validate="false"
 			scope="request">
-			<forward name="success" path=".catissuecore.collectionProtocolDef" />
+			<forward name="pageOfCollectionProtocol" path=".catissuecore.collectionProtocolDef" />
 			<forward name="failure" path=".catissuecore.collectionProtocolDef" />
 			<forward name="access_denied" path="/ManageAdministrativeData.do" />
 		</action>
@@ -445,8 +445,8 @@ PUBLIC
 			validate="true"
 			input="/CollectionProtocol.do?operation=edit"
 			scope="request">
-			<forward name="success" path="/CollectionProtocol.do?operation=edit"/>
-			<forward name="failure" path="/CollectionProtocol.do?operation=edit"/>
+			<forward name="pageOfCollectionProtocol" path="/CollectionProtocol.do?operation=edit&amp;pageOf=pageOfCollectionProtocol"/>
+			<forward name="failure" path="/CollectionProtocol.do?operation=search"/>
 		</action>    
 		<!-- CollectionProtocol Actions Ends-->
 		
@@ -457,7 +457,7 @@ PUBLIC
 			name="distributionProtocolForm"
 			validate="false"
 			scope="request">
-			<forward name="success" path=".catissuecore.distributionProtocolDef" />
+			<forward name="pageOfDistributionProtocol" path=".catissuecore.distributionProtocolDef" />
 			<forward name="failure" path=".catissuecore.distributionProtocolDef" />
 			<forward name="access_denied" path="/ManageAdministrativeData.do" />
 		</action>
@@ -488,7 +488,7 @@ PUBLIC
 			validate="true"
 			input="/DistributionProtocol.do?operation=edit"
 			scope="request">
-			<forward name="success" path="/DistributionProtocol.do?operation=edit"/>
+			<forward name="pageOfDistributionProtocol" path="/DistributionProtocol.do?operation=edit&amp;pageOf=pageOfDistributionProtocol"/>
 			<forward name="failure" path="/DistributionProtocol.do?operation=edit"/>
 		</action>    
 		<!-- DistributionProtocol Actions Ends-->
@@ -774,7 +774,7 @@ PUBLIC
 			validate="true"
 			input="/StorageType.do?operation=edit"
 			scope="request">
-			<forward name="success" path="/StorageType.do?operation=edit"/>
+			<forward name="pageOfEditObject" path="/StorageType.do?operation=edit&amp;pageOf=pageOfEditObject"/>
 			<forward name="failure" path="/StorageType.do?operation=edit"/>
 		</action>    
 		<!-- StorageType Actions Ends -->
@@ -786,7 +786,7 @@ PUBLIC
 			name="storageContainerForm"
 			validate="false"
 			scope="request">
-			<forward name="success" path=".catissuecore.storageContainerDef" />
+			<forward name="pageOfStorageContainer" path=".catissuecore.storageContainerDef" />
 			<forward name="failure" path=".catissuecore.storageContainerDef" />
 			<forward name="access_denied" path="/ManageAdministrativeData.do" />
 		</action>
@@ -817,7 +817,7 @@ PUBLIC
 			validate="true"
 			input="/StorageContainer.do?operation=edit"
 			scope="request">
-			<forward name="success" path="/StorageContainer.do?operation=edit"/>
+			<forward name="pageOfStorageContainer" path="/StorageContainer.do?operation=edit&amp;pageOf=pageOfStorageContainer"/>
 			<forward name="failure" path="/StorageContainer.do?operation=edit"/>
 		</action>    
 		<!-- StorageContainer Actions Ends -->
@@ -826,7 +826,7 @@ PUBLIC
         <action path="/Site"
 			type="edu.wustl.catissuecore.action.SiteAction"
 			scope="request">
-			<forward name="success" path=".catissuecore.siteDef" />
+			<forward name="pageOfSite" path=".catissuecore.siteDef" />
 			<forward name="failure" path=".catissuecore.siteDef" />
 			<forward name="access_denied" path="/ManageAdministrativeData.do" />
 		</action>
@@ -857,7 +857,7 @@ PUBLIC
 			validate="true"
 			input="/Site.do?operation=edit"
 			scope="request">
-			<forward name="success" path="/Site.do?operation=edit"/>
+			<forward name="pageOfSite" path="/Site.do?operation=edit&amp;pageOf=pageOfSite"/>
 			<forward name="failure" path="/Site.do?operation=edit"/>
 		</action>    
 		<!-- Site Actions Ends -->
@@ -877,7 +877,7 @@ PUBLIC
 			validate="true"
 			input="/Biohazard.do?operation=add"
 			scope="request">
-			<forward name="success" path=".catissuecore.biohazardAddSuccessDef" />
+			<forward name="pageOfBiohazard" path=".catissuecore.biohazardAddSuccessDef" />
 			<forward name="failure" path="/Biohazard.do?operation=add" />
 		</action>
 		
@@ -897,7 +897,7 @@ PUBLIC
 			validate="true"
 			input="/Biohazard.do?operation=edit"
 			scope="request">
-			<forward name="success" path="/Biohazard.do?operation=edit"/>
+			<forward name="pageOfBiohazard" path="/Biohazard.do?operation=edit&amp;pageOf=pageOfBiohazard"/>
 			<forward name="failure" path="/Biohazard.do?operation=edit"/>
 		</action>    
 		<!-- Biohazard Actions Ends -->
@@ -982,7 +982,7 @@ PUBLIC
 		</action>    
 		<!-- CheckInCheckOutEventParameters Actions Ends -->
 
-	<!-- ReceivedEventParameters Actions Begins -->
+		<!-- ReceivedEventParameters Actions Begins -->
         <action path="/ReceivedEventParameters"
 			type="edu.wustl.catissuecore.action.SpecimenEventParametersAction"
 			scope="request">
@@ -1022,7 +1022,7 @@ PUBLIC
 		</action>    
 		<!-- ReceivedEventParameters Actions Ends -->
 
-	<!-- FluidSpecimenReviewEventParameters Actions Begins -->
+		<!-- FluidSpecimenReviewEventParameters Actions Begins -->
         <action path="/FluidSpecimenReviewEventParameters"
 			type="edu.wustl.catissuecore.action.SpecimenEventParametersAction"
 			scope="request">
@@ -1062,7 +1062,7 @@ PUBLIC
 		</action>    
 		<!-- FluidSpecimenReviewEventParameters Actions Ends -->
 
-	<!-- CellSpecimenReviewParameters Actions Begins -->
+		<!-- CellSpecimenReviewParameters Actions Begins -->
         <action path="/CellSpecimenReviewParameters"
 			type="edu.wustl.catissuecore.action.SpecimenEventParametersAction"
 			scope="request">
@@ -1102,7 +1102,7 @@ PUBLIC
 		</action>    
 		<!-- CellSpecimenReviewParameters Actions Ends -->
 
-	<!-- TissueSpecimenReviewEventParameters Actions Begins -->
+		<!-- TissueSpecimenReviewEventParameters Actions Begins -->
         <action path="/TissueSpecimenReviewEventParameters"
 			type="edu.wustl.catissuecore.action.TissueSpecimenReviewEventParametersAction"
 			scope="request">
@@ -1141,10 +1141,8 @@ PUBLIC
 			<forward name="failure" path="/TissueSpecimenReviewEventParameters.do?operation=edit"/>
 		</action>    
 		<!-- TissueSpecimenReviewEventParameters Actions Ends -->
-		
 
-
-	<!-- DisposalEventParameters Actions Begins -->
+		<!-- DisposalEventParameters Actions Begins -->
         <action path="/DisposalEventParameters"
 			type="edu.wustl.catissuecore.action.SpecimenEventParametersAction"
 			scope="request">
@@ -1553,25 +1551,55 @@ PUBLIC
 			name="simpleQueryInterfaceForm"
 			validate="false"
 			scope="request">
-			<forward name="success" path=".catissuecore.simpleQueryInterfaceDef" />
+			<forward name="pageOfSimpleQueryInterface" path=".catissuecore.simpleQueryInterfaceDef" />
+			<forward name="pageOfSimpleQueryInterface" path=".catissuecore.editSearchPageDef" />
+			<forward name="pageOfDepartment" path=".catissuecore.editSearchPageDef"/>
+			<forward name="pageOfInstitution" path=".catissuecore.editSearchPageDef"/>
+			<forward name="pageOfDepartment" path=".catissuecore.editSearchPageDef"/>
+			<forward name="pageOfCancerResearchGroup" path=".catissuecore.editSearchPageDef"/>
+			<forward name="pageOfCollectionProtocol" path=".catissuecore.editSearchPageDef"/>
+			<forward name="pageOfDistributionProtocol" path=".catissuecore.editSearchPageDef"/>
+			<forward name="pageOfStorageType" path=".catissuecore.editSearchPageDef"/>
+			<forward name="pageOfStorageContainer" path=".catissuecore.editSearchPageDef"/>
+			<forward name="pageOfSite" path=".catissuecore.editSearchPageDef"/>
+			<forward name="pageOfBiohazard" path=".catissuecore.editSearchPageDef"/>			
 			<forward name="failure" path=".catissuecore.simpleQueryInterfaceDef" />
 		</action>
 
-		
 		<action path="/SimpleSearch"
 			type="edu.wustl.catissuecore.action.SimpleSearchAction"
 			name="simpleQueryInterfaceForm"
 			validate="true"
 			input="/SimpleQueryInterface.do"
 			scope="request">
-			<forward name="success" path="/SpreadsheetView.do" />
+			<forward name="pageOfSimpleQueryInterface" path="/SpreadsheetView.do?pageOf=pageOfSimpleQueryInterface" />
+			<forward name="pageOfDepartment" path="/SpreadsheetView.do?pageOf=pageOfDepartment"/>
+			<forward name="pageOfInstitution" path="/SpreadsheetView.do?pageOf=pageOfInstitution"/>
+			<forward name="pageOfDepartment" path="/SpreadsheetView.do?pageOf=pageOfDepartment"/>
+			<forward name="pageOfCancerResearchGroup" path="/SpreadsheetView.do?pageOf=pageOfCancerResearchGroup"/>
+			<forward name="pageOfCollectionProtocol" path="/SpreadsheetView.do?pageOfCollectionProtocol"/>
+			<forward name="pageOfDistributionProtocol" path="/SpreadsheetView.do?pageOf=pageOfDistributionProtocol"/>
+			<forward name="pageOfStorageType" path="/SpreadsheetView.do?pageOf=pageOfStorageType"/>
+			<forward name="pageOfStorageContainer" path="/SpreadsheetView.do?pageOf=pageOfStorageContainer"/>
+			<forward name="pageOfSite" path="/SpreadsheetView.do?pageOf=pageOfSite"/>
+			<forward name="pageOfBiohazard" path="/SpreadsheetView.do?pageOf=pageOfBiohazard"/>
 			<forward name="failure" path="/error.jsp" />
 		</action>
-
+		
 		<action path="/SpreadsheetView"
 			type="edu.wustl.catissuecore.action.SpreadsheetViewAction"
 			scope="request">
-			<forward name="success" path=".catissuecore.simpleSearchResultsDef" />
+			<forward name="pageOfSimpleQueryInterface" path=".catissuecore.simpleSearchResultsDef" />
+			<forward name="pageOfDepartment" path=".catissuecore.editSearchResultsDef"/>
+			<forward name="pageOfInstitution" path=".catissuecore.editSearchResultsDef"/>
+			<forward name="pageOfDepartment" path=".catissuecore.editSearchResultsDef"/>
+			<forward name="pageOfCancerResearchGroup" path=".catissuecore.editSearchResultsDef"/>
+			<forward name="pageOfCollectionProtocol" path=".catissuecore.editSearchResultsDef"/>
+			<forward name="pageOfDistributionProtocol" path=".catissuecore.editSearchResultsDef"/>
+			<forward name="pageOfStorageType" path=".catissuecore.editSearchResultsDef"/>
+			<forward name="pageOfStorageContainer" path=".catissuecore.editSearchResultsDef"/>
+			<forward name="pageOfSite" path=".catissuecore.editSearchResultsDef"/>
+			<forward name="pageOfBiohazard" path=".catissuecore.editSearchResultsDef"/>
 			<forward name="failure" path=".catissuecore.simpleSearchResultsDef" />
 		</action>
 		
@@ -1658,6 +1686,21 @@ PUBLIC
 		    type="edu.wustl.catissuecore.action.ShowStorageGridViewAction">
 			<forward name="success" path=".catissuecore.storageLocationGridViewDef"/>
 		</action>
+		
+		<action path="/SearchObject"
+		    type="edu.wustl.catissuecore.action.SearchObjectAction"
+			scope="request">
+			<forward name="pageOfStorageType" path="/StorageTypeSearch.do?pageOf=pageOfStorageType"/>
+			<forward name="pageOfInstitution" path="/InstitutionSearch.do?pageOf=pageOfInstitution"/>
+			<forward name="pageOfDepartment" path="/DepartmentSearch.do?pageOf=pageOfDepartment"/>
+			<forward name="pageOfCancerResearchGroup" path="/CancerResearchGroupSearch.do?pageOf=pageOfCancerResearchGroup"/>
+			<forward name="pageOfCollectionProtocol" path="/CollectionProtocolSearch.do?pageOfCollectionProtocol"/>
+			<forward name="pageOfDistributionProtocol" path="/DistributionProtocolSearch.do?pageOf=pageOfDistributionProtocol"/>
+			<forward name="pageOfStorageContainer" path="/StorageContainerSearch.do?pageOf=pageOfStorageContainer"/>
+			<forward name="pageOfSite" path="/SiteSearch.do?pageOf=pageOfSite"/>
+			<forward name="pageOfBiohazard" path="/BiohazardSearch.do?pageOf=pageOfBiohazard"/>
+			<forward name="failure" path="/QueryParticipant.do?operation=view&amp;pageOf=query"/>
+		</action>
 		<!--Query Result View Actions End-->
 		
 		<!--Participant Object View Actions Begin-->
@@ -1676,23 +1719,6 @@ PUBLIC
 			<forward name="failure" path="/QueryParticipant.do?operation=view&amp;pageOf=query"/>
 		</action>
 		<!--Participant Object View Actions End-->
-		
-		<!--Accession Object View Actions Begin-->
-		<action path="/QueryAccession"
-			type="edu.wustl.catissuecore.action.AccessionAction"
-			scope="request">
-			<forward name="success" path=".catissuecore.queryAccessionViewDef" />
-			<forward name="failure" path=".catissuecore.queryAccessionViewDef" />
-		</action>
-		
-		<action path="/QueryAccessionSearch"
-		    type="edu.wustl.catissuecore.action.CommonSearchAction"
-			name="accessionForm"
-			scope="request">
-			<forward name="success" path="/QueryAccession.do?operation=view&amp;pageOf=query"/>
-			<forward name="failure" path="/QueryAccession.do?operation=view&amp;pageOf=query"/>
-		</action>
-		<!--Accession Object View Actions End-->
 		
 		<!-- Actions to make the fields editable in the Query Results Object View Begin -->
 		<action path="/MakeParticipantEditable"
@@ -1733,8 +1759,10 @@ PUBLIC
 			<forward name="shoppingCartExport" path=".catissuecore.searchAddSuccessDef" />
 			<forward name="failure" path="/ShoppingCart.do" />
 		</action>
-		   
 		<!-- Shopping Cart Actions Ends -->
+		
+		<!-- Edit Object Actions -->
+		
 	</action-mappings>
 	
 	<message-resources parameter="ApplicationResources" />
