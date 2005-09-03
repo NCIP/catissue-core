@@ -48,31 +48,12 @@ public class CollectionProtocolBizLogic extends DefaultBizLogic implements Roles
 	{
 		CollectionProtocol collectionProtocol = (CollectionProtocol)obj;
 		
-		List list = dao.retrieve(User.class.getName(), "systemIdentifier", collectionProtocol.getPrincipalInvestigator().getSystemIdentifier());
-		if (list.size() != 0)
-		{
-			User pi = (User) list.get(0);
-			collectionProtocol.setPrincipalInvestigator(pi);
-		}
-		
-		Collection coordinatorColl = new HashSet();
-		Iterator it = collectionProtocol.getUserCollection().iterator();
-		while(it.hasNext())
-		{
-			User aUser  =(User)it.next();
-			list = dao.retrieve(User.class.getName(), "systemIdentifier", aUser.getSystemIdentifier());
-			if (list.size() != 0)
-			{
-				User coordinator = (User) list.get(0);
-				coordinatorColl.add(coordinator);
-				coordinator.getCollectionProtocolCollection().add(collectionProtocol);
-				dao.update(coordinator);
-			}
-		}
-		collectionProtocol.setUserCollection(coordinatorColl);
+		setPrincipalInvestigator(dao,collectionProtocol);		
+		setCoordinatorCollection(dao,collectionProtocol);
 		
 		dao.insert(collectionProtocol,true);
-		it = collectionProtocol.getCollectionProtocolEventCollection().iterator();
+		
+		Iterator it = collectionProtocol.getCollectionProtocolEventCollection().iterator();		
 		while(it.hasNext())
 		{
 			CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent)it.next();
@@ -106,7 +87,28 @@ public class CollectionProtocolBizLogic extends DefaultBizLogic implements Roles
      */
     protected void update(DAO dao,Object obj) throws DAOException
     {
-    	
+    	CollectionProtocol collectionProtocol = (CollectionProtocol)obj;
+		
+		setPrincipalInvestigator(dao,collectionProtocol);		
+		setCoordinatorCollection(dao,collectionProtocol);
+		
+		dao.update(collectionProtocol);
+		
+		Iterator it = collectionProtocol.getCollectionProtocolEventCollection().iterator();		
+		while(it.hasNext())
+		{
+			CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent)it.next();
+			collectionProtocolEvent.setCollectionProtocol(collectionProtocol);
+			dao.update(collectionProtocolEvent);
+			
+			Iterator srIt = collectionProtocolEvent.getSpecimenRequirementCollection().iterator();
+			while(srIt.hasNext())
+			{
+				SpecimenRequirement specimenRequirement = (SpecimenRequirement)srIt.next();
+				specimenRequirement.getCollectionProtocolEventCollection().add(collectionProtocolEvent);
+				dao.update(specimenRequirement);
+			}
+		}
     }
 
     /**
@@ -173,5 +175,42 @@ public class CollectionProtocolBizLogic extends DefaultBizLogic implements Roles
         return dynamicGroups;
         
     }
+    
+    //This method sets the Principal Investigator.
+	private void setPrincipalInvestigator(DAO dao,CollectionProtocol collectionProtocol) throws DAOException
+	{
+		List list = dao.retrieve(User.class.getName(), "systemIdentifier", collectionProtocol.getPrincipalInvestigator().getSystemIdentifier());
+		if (list.size() != 0)
+		{
+			User pi = (User) list.get(0);
+			collectionProtocol.setPrincipalInvestigator(pi);
+		}
+	}
+	
+	//This method sets the User Collection.
+	private void setCoordinatorCollection(DAO dao,CollectionProtocol collectionProtocol) throws DAOException
+	{
+		Logger.out.debug("Coordinator Size "+collectionProtocol.getUserCollection().size());
+		Collection coordinatorColl = new HashSet();
+		
+		Iterator it = collectionProtocol.getUserCollection().iterator();
+		while(it.hasNext())
+		{
+			User aUser  =(User)it.next();
+			
+			//if()
+			
+			Logger.out.debug("Coordinator ID :"+aUser.getSystemIdentifier());
+			List list = retrieve(User.class.getName(), "systemIdentifier", aUser.getSystemIdentifier());
+			if (list.size() != 0)
+			{
+				User coordinator = (User) list.get(0);
+				coordinatorColl.add(coordinator);
+				coordinator.getCollectionProtocolCollection().add(collectionProtocol);
+				dao.update(coordinator);
+			}
+		}
+		collectionProtocol.setUserCollection(coordinatorColl);
+	}
     
 }
