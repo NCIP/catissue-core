@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 
+import net.sf.hibernate.HibernateException;
 import edu.wustl.catissuecore.dao.DAO;
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
@@ -198,16 +199,13 @@ public class CollectionProtocolBizLogic extends DefaultBizLogic implements Roles
 		{
 			User aUser  =(User)it.next();
 			
-			//if()
-			
 			Logger.out.debug("Coordinator ID :"+aUser.getSystemIdentifier());
-			List list = retrieve(User.class.getName(), "systemIdentifier", aUser.getSystemIdentifier());
-			if (list.size() != 0)
+			Object obj = dao.retrieve(User.class.getName(),  aUser.getSystemIdentifier());
+			if (obj != null)
 			{
-				User coordinator = (User) list.get(0);
+				User coordinator = (User) obj;//list.get(0);
 				coordinatorColl.add(coordinator);
 				coordinator.getCollectionProtocolCollection().add(collectionProtocol);
-				dao.update(coordinator);
 			}
 		}
 		collectionProtocol.setUserCollection(coordinatorColl);
