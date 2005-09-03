@@ -28,15 +28,22 @@ public class Utility
      */
 	public static Date parseDate(String date,String pattern) throws ParseException
 	{
-		try
+		if(date!=null && !date.trim().equals(""))
 		{
-		    SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
-		    Date d = dateFormat.parse(date);
-		    return d;
+			try
+			{
+			    SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
+			    Date dateObj = dateFormat.parse(date);
+			    return dateObj;
+			}
+			catch(Exception e)
+			{
+				throw new ParseException("Date '"+date+"' is not in format of "+pattern,0);
+			}
 		}
-		catch(Exception e)
+		else
 		{
-			throw new ParseException("Date '"+date+"' is not in format of "+pattern,0);
+			return null;
 		}
 	}
 	
@@ -49,11 +56,19 @@ public class Utility
 	public static String parseDateToString(Date date, String pattern)
 	{
 	    String d = null;
-	    
+	    //TODO Check for null
 	    SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
 		d = dateFormat.format(date);
 		    
 	    return d;
+	}
+	
+	public static String toString(Object obj)
+	{
+		if(obj == null)
+			return "";
+		
+		return obj.toString();
 	}
 	
 //	public static void main(String[] args)
