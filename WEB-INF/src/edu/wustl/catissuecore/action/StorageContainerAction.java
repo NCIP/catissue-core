@@ -92,7 +92,7 @@ public class StorageContainerAction  extends SecureAction
         	list = bizLogic.getList(Site.class.getName(),siteDisplayField, valueField);
         	request.setAttribute(Constants.SITELIST,list);
 
-        	if(!operation.equals(Constants.EDIT))
+        	if(operation.equals(Constants.ADD))
         	{
 	        	if(storageContainerForm.getCheckedButton() == 1)
 	        	{
