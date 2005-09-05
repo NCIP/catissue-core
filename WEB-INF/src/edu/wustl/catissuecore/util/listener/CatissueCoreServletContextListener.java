@@ -11,9 +11,8 @@ import edu.wustl.catissuecore.util.Permissions;
 import edu.wustl.catissuecore.util.ProtectionGroups;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.HibernateProperties;
 import edu.wustl.catissuecore.util.global.Variables;
-import edu.wustl.common.security.SecurityManager;
-import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -55,6 +54,11 @@ public class CatissueCoreServletContextListener
          * Getting and storing Home path for the application
          */
         Variables.catissueHome = sce.getServletContext().getRealPath("");
+
+        HibernateProperties.initBundle(Variables.catissueHome +
+        			System.getProperty("file.separator") + "hibernate.properties");
+
+        String str = HibernateProperties.getValue("hibernate.connection.driver_class");
         
         /**
          * Creating Logs Folder inside catissue home
@@ -98,6 +102,8 @@ public class CatissueCoreServletContextListener
         
         try
         {
+        	Logger.out.debug("hibernate.connection.driver_class "+str);
+        	
             /*Logger.out
                     .debug("Create Perm to aarti on edu.wustl.catissuecore.domain.CollectionProtocol_37 "
                             + Boolean
