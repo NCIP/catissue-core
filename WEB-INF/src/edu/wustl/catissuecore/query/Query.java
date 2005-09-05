@@ -7,9 +7,12 @@ import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 
+import javax.swing.text.Utilities;
+
 import edu.wustl.catissuecore.dao.JDBCDAO;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
+import gov.nih.nci.security.util.StringUtilities;
 
 /**
  *<p>Title: </p>
@@ -402,7 +405,7 @@ public abstract class Query
         {
             fromString.append(" ");
             tableAlias = it.next();
-            fromString.append(Client.objectTableNames.get(tableAlias) + " "
+            fromString.append(((String)Client.objectTableNames.get(tableAlias)).toUpperCase() + " "
                     + tableAlias + tableSufix + " ");
             if (it.hasNext())
             {
