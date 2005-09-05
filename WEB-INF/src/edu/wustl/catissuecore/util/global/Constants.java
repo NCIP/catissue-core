@@ -472,6 +472,8 @@ public class Constants
 	
 	//Edit Object Constants.
 	public static final String TABLE_ALIAS_NAME = "aliasName"; 
+	public static final String FIELD_TYPE_VARCHAR = "varchar";
+	public static final String FIELD_TYPE_DATE = "date";
 	
 	//Query Interface Results View Constants
 	public static final String PAGEOF = "pageOf";
