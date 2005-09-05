@@ -253,10 +253,10 @@ PUBLIC
 			type="edu.wustl.catissuecore.action.CommonAddEditAction"
 			name="institutionForm"
 			validate="true"
-			input="/Institution.do?operation=add"
+			input="/Institution.do?operation=add&amp;pageOf=pageOfInstitution"
 			scope="request">
 			<forward name="success" path=".catissuecore.institutionAddSuccessDef" />
-			<forward name="failure" path="/Institution.do?operation=add" />
+			<forward name="failure" path="/Institution.do?operation=add&amp;pageOf=pageOfInstitution" />
 		</action>
 
 		<action path="/InstitutionEdit"
@@ -266,17 +266,17 @@ PUBLIC
 			input="/Institution.do?operation=edit"
 			scope="request">
 			<forward name="success" path=".catissuecore.institutionEditSuccessDef" />
-			<forward name="failure" path="/Institution.do?operation=edit" />
+			<forward name="failure" path="/Institution.do?operation=edit&amp;pageOf=pageOfInstitution" />
 		</action>
 
 		<action path="/InstitutionSearch"
 		    type="edu.wustl.catissuecore.action.CommonSearchAction"
 			name="institutionForm"
 			validate="false"
-			input="/Institution.do?operation=edit"
+			input="/Institution.do?operation=edit&amp;pageOf=pageOfInstitution"
 			scope="request">
 			<forward name="pageOfInstitution" path="/Institution.do?operation=edit&amp;pageOf=pageOfInstitution"/>
-			<forward name="failure" path="/Institution.do?operation=edit"/>
+			<forward name="failure" path="/Institution.do?operation=edit&amp;pageOf=pageOfInstitution"/>
 		</action>    
 		<!-- Institution Actions Ends-->
 
@@ -334,20 +334,20 @@ PUBLIC
 			type="edu.wustl.catissuecore.action.CommonAddEditAction"
 			name="departmentForm"
 			validate="true"
-			input="/Department.do?operation=add"
+			input="/Department.do?operation=add&amp;pageOf=pageOfDepartment"
 			scope="request">
 			<forward name="success" path=".catissuecore.departmentAddSuccessDef" />
-			<forward name="failure" path="/Department.do?operation=add" />
+			<forward name="failure" path="/Department.do?operation=add&amp;pageOf=pageOfDepartment" />
 		</action>
 		
 		<action path="/DepartmentEdit"
 			type="edu.wustl.catissuecore.action.CommonAddEditAction"
 			name="departmentForm"
 			validate="true"
-			input="/Department.do?operation=edit"
+			input="/Department.do?operation=edit&amp;pageOf=pageOfDepartment"
 			scope="request">
 			<forward name="success" path=".catissuecore.departmentEditSuccessDef" />
-			<forward name="failure" path="/Department.do?operation=edit" />
+			<forward name="failure" path="/Department.do?operation=edit&amp;pageOf=pageOfDepartment" />
 		</action>
 			
 		<action path="/DepartmentSearch"
@@ -358,7 +358,7 @@ PUBLIC
 			scope="request">
 			<forward name="pageOfDepartment" path="/Department.do?operation=edit&amp;pageOf=pageOfDepartment"/>
 			<forward name="pageOfSimpleQueryInterface" path="/Department.do?operation=edit&amp;pageOf=pageOfSimpleQueryInterface"/>
-			<forward name="failure" path="/Department.do?operation=edit"/>
+			<forward name="failure" path="/Department.do?operation=edit&amp;pageOf=pageOfDepartment"/>
 		</action>    
 		<!-- Department Actions Ends-->
 
@@ -375,28 +375,28 @@ PUBLIC
 			type="edu.wustl.catissuecore.action.CommonAddEditAction"
 			name="cancerResearchGroupForm"
 			validate="true"
-			input="/CancerResearchGroup.do?operation=add" scope="request">
+			input="/CancerResearchGroup.do?operation=add&amp;pageOf=pageOfCancerResearchGroup" scope="request">
 			<forward name="success" path=".catissuecore.cancerResearchGroupAddSuccessDef" />
-			<forward name="failure" path="/CancerResearchGroup.do?operation=add" />
+			<forward name="failure" path="/CancerResearchGroup.do?operation=add&amp;pageOf=pageOfCancerResearchGroup" />
 		</action>
 
 		<action path="/CancerResearchGroupEdit"
 			type="edu.wustl.catissuecore.action.CommonAddEditAction"
 			name="cancerResearchGroupForm"
 			validate="true"
-			input="/CancerResearchGroup.do?operation=edit">
+			input="/CancerResearchGroup.do?operation=edit&amp;pageOf=pageOfCancerResearchGroup">
 			<forward name="success" path=".catissuecore.cancerResearchGroupEditSuccessDef" />
-			<forward name="failure" path="/CancerResearchGroup.do?operation=edit" />
+			<forward name="failure" path="/CancerResearchGroup.do?operation=edit&amp;pageOf=pageOfCancerResearchGroup" />
 		</action>
 		
 		<action path="/CancerResearchGroupSearch"
 		    type="edu.wustl.catissuecore.action.CommonSearchAction"
 			name="cancerResearchGroupForm"
 			validate="false"
-			input="/CancerResearchGroup.do?operation=edit"
+			input="/CancerResearchGroup.do?operation=edit&amp;pageOf=pageOfCancerResearchGroup"
 			scope="request">
 			<forward name="pageOfCancerResearchGroup" path="/CancerResearchGroup.do?operation=edit&amp;pageOf=pageOfCancerResearchGroup"/>
-			<forward name="failure" path="/CancerResearchGroup.do?operation=edit"/>
+			<forward name="failure" path="/CancerResearchGroup.do?operation=edit&amp;pageOf=pageOfCancerResearchGroup"/>
 		</action>    
 		<!-- CancerResearchGroup Actions Ends-->
 
@@ -423,30 +423,30 @@ PUBLIC
 			type="edu.wustl.catissuecore.action.CommonAddEditAction"
 			name="collectionProtocolForm"
 			validate="true"
-			input="/CollectionProtocol.do?operation=add"
+			input="/CollectionProtocol.do?operation=add&amp;pageOf=pageOfCollectionProtocol"
 			scope="request">
 			<forward name="success" path=".catissuecore.collectionProtocolAddSuccessDef" />
-			<forward name="failure" path="/CollectionProtocol.do?operation=add" />
+			<forward name="failure" path="/CollectionProtocol.do?operation=add&amp;pageOf=pageOfCollectionProtocol" />
 		</action>
 
 		<action path="/CollectionProtocolEdit"
 			type="edu.wustl.catissuecore.action.CommonAddEditAction"
 			name="collectionProtocolForm"
 			validate="true"
-			input="/CollectionProtocol.do?operation=edit"
+			input="/CollectionProtocol.do?operation=edit&amp;pageOf=pageOfCollectionProtocol"
 			scope="request">
 			<forward name="success" path=".catissuecore.collectionProtocolEditSuccessDef" />
-			<forward name="failure" path="/CollectionProtocol.do?operation=edit" />
+			<forward name="failure" path="/CollectionProtocol.do?operation=edit&amp;pageOf=pageOfCollectionProtocol" />
 		</action>
 
 		<action path="/CollectionProtocolSearch"
 		    type="edu.wustl.catissuecore.action.CommonSearchAction"
 			name="collectionProtocolForm"
 			validate="false"
-			input="/CollectionProtocol.do?operation=edit"
+			input="/CollectionProtocol.do?operation=edit&amp;pageOf=pageOfCollectionProtocol"
 			scope="request">
 			<forward name="pageOfCollectionProtocol" path="/CollectionProtocol.do?operation=edit&amp;pageOf=pageOfCollectionProtocol"/>
-			<forward name="failure" path="/CollectionProtocol.do?operation=search"/>
+			<forward name="failure" path="/CollectionProtocol.do?operation=edit&amp;pageOf=pageOfCollectionProtocol"/>
 		</action>    
 		<!-- CollectionProtocol Actions Ends-->
 		
@@ -466,30 +466,30 @@ PUBLIC
 			type="edu.wustl.catissuecore.action.CommonAddEditAction"
 			name="distributionProtocolForm"
 			validate="true"
-			input="/DistributionProtocol.do?operation=add"
+			input="/DistributionProtocol.do?operation=add&amp;pageOf=pageOfDistributionProtocol"
 			scope="request">
 			<forward name="success" path=".catissuecore.distributionProtocolAddSuccessDef" />
-			<forward name="failure" path="/DistributionProtocol.do?operation=add" />
+			<forward name="failure" path="/DistributionProtocol.do?operation=add&amp;pageOf=pageOfDistributionProtocol" />
 		</action>
 
 		<action path="/DistributionProtocolEdit"
 			type="edu.wustl.catissuecore.action.CommonAddEditAction"
 			name="distributionProtocolForm"
 			validate="true"
-			input="/DistributionProtocol.do?operation=edit"
+			input="/DistributionProtocol.do?operation=edit&amp;pageOf=pageOfDistributionProtocol"
 			scope="request">
 			<forward name="success" path=".catissuecore.distributionProtocolEditSuccessDef" />
-			<forward name="failure" path="/DistributionProtocol.do?operation=edit" />
+			<forward name="failure" path="/DistributionProtocol.do?operation=edit&amp;pageOf=pageOfDistributionProtocol" />
 		</action>
 		
 		<action path="/DistributionProtocolSearch"
 		    type="edu.wustl.catissuecore.action.CommonSearchAction"
 			name="distributionProtocolForm"
 			validate="false"
-			input="/DistributionProtocol.do?operation=edit"
+			input="/DistributionProtocol.do?operation=edit&amp;pageOf=pageOfDistributionProtocol"
 			scope="request">
 			<forward name="pageOfDistributionProtocol" path="/DistributionProtocol.do?operation=edit&amp;pageOf=pageOfDistributionProtocol"/>
-			<forward name="failure" path="/DistributionProtocol.do?operation=edit"/>
+			<forward name="failure" path="/DistributionProtocol.do?operation=edit&amp;pageOf=pageOfDistributionProtocol"/>
 		</action>    
 		<!-- DistributionProtocol Actions Ends-->
 		
@@ -752,30 +752,30 @@ PUBLIC
 			type="edu.wustl.catissuecore.action.CommonAddEditAction"
 			name="storageTypeForm"
 			validate="true"
-			input="/StorageType.do?operation=add"
+			input="/StorageType.do?operation=add&amp;pageOf=pageOfStorageType"
 			scope="request">
 			<forward name="success" path=".catissuecore.storageTypeAddSuccessDef" />
-			<forward name="failure" path="/StorageType.do?operation=add" />
+			<forward name="failure" path="/StorageType.do?operation=add&amp;pageOf=pageOfStorageType" />
 		</action>
 		
 		<action path="/StorageTypeEdit"
 			type="edu.wustl.catissuecore.action.CommonAddEditAction"
 			name="storageTypeForm"
 			validate="true"
-			input="/StorageType.do?operation=edit"
+			input="/StorageType.do?operation=edit&amp;pageOf=pageOfStorageType"
 			scope="request">
 			<forward name="success" path=".catissuecore.storageTypeEditSuccessDef" />
-			<forward name="failure" path="/StorageType.do?operation=edit" />
+			<forward name="failure" path="/StorageType.do?operation=edit&amp;pageOf=pageOfStorageType" />
 		</action>
 		
 		<action path="/StorageTypeSearch"
 		    type="edu.wustl.catissuecore.action.CommonSearchAction"
 			name="storageTypeForm"
 			validate="false"
-			input="/StorageType.do?operation=edit"
+			input="/StorageType.do?operation=edit&amp;pageOf=pageOfStorageType"
 			scope="request">
 			<forward name="pageOfStorageType" path="/StorageType.do?operation=edit&amp;pageOf=pageOfStorageType"/>
-			<forward name="failure" path="/StorageType.do?operation=edit"/>
+			<forward name="failure" path="/StorageType.do?operation=edit&amp;pageOf=pageOfStorageType"/>
 		</action>    
 		<!-- StorageType Actions Ends -->
 		
@@ -795,30 +795,30 @@ PUBLIC
 			type="edu.wustl.catissuecore.action.CommonAddEditAction"
 			name="storageContainerForm"
 			validate="true"
-			input="/StorageContainer.do?operation=add"
+			input="/StorageContainer.do?operation=add&amp;pageOf=pageOfStorageContainer"
 			scope="request">
 			<forward name="success" path=".catissuecore.storageContainerAddSuccessDef" />
-			<forward name="failure" path="/StorageContainer.do?operation=add" />
+			<forward name="failure" path="/StorageContainer.do?operation=add&amp;pageOf=pageOfStorageContainer" />
 		</action>
 		
 		<action path="/StorageContainerEdit"
 			type="edu.wustl.catissuecore.action.CommonAddEditAction"
 			name="storageContainerForm"
 			validate="true"
-			input="/StorageContainer.do?operation=edit"
+			input="/StorageContainer.do?operation=edit&amp;pageOf=pageOfStorageContainer"
 			scope="request">
 			<forward name="success" path=".catissuecore.storageContainerEditSuccessDef" />
-			<forward name="failure" path="/StorageContainer.do?operation=edit" />
+			<forward name="failure" path="/StorageContainer.do?operation=edit&amp;pageOf=pageOfStorageContainer" />
 		</action>
 		
 		<action path="/StorageContainerSearch"
 		    type="edu.wustl.catissuecore.action.CommonSearchAction"
 			name="storageContainerForm"
 			validate="false"
-			input="/StorageContainer.do?operation=edit"
+			input="/StorageContainer.do?operation=edit&amp;pageOf=pageOfStorageContainer"
 			scope="request">
 			<forward name="pageOfStorageContainer" path="/StorageContainer.do?operation=edit&amp;pageOf=pageOfStorageContainer"/>
-			<forward name="failure" path="/StorageContainer.do?operation=edit"/>
+			<forward name="failure" path="/StorageContainer.do?operation=edit&amp;pageOf=pageOfStorageContainer"/>
 		</action>    
 		<!-- StorageContainer Actions Ends -->
 				
@@ -835,30 +835,30 @@ PUBLIC
 			type="edu.wustl.catissuecore.action.CommonAddEditAction"
 			name="siteForm"
 			validate="true"
-			input="/Site.do?operation=add"
+			input="/Site.do?operation=add&amp;pageOf=pageOfSite"
 			scope="request">
 			<forward name="success" path=".catissuecore.siteAddSuccessDef" />
-			<forward name="failure" path="/Site.do?operation=add" />
+			<forward name="failure" path="/Site.do?operation=add&amp;pageOf=pageOfSite" />
 		</action>
 		
 		<action path="/SiteEdit"
 			type="edu.wustl.catissuecore.action.CommonAddEditAction"
 			name="siteForm"
 			validate="true"
-			input="/Site.do?operation=edit"
+			input="/Site.do?operation=edit&amp;pageOf=pageOfSite"
 			scope="request">
 			<forward name="success" path=".catissuecore.siteEditSuccessDef" />
-			<forward name="failure" path="/Site.do?operation=edit" />
+			<forward name="failure" path="/Site.do?operation=edit&amp;pageOf=pageOfSite" />
 		</action>
 		
 		<action path="/SiteSearch"
 		    type="edu.wustl.catissuecore.action.CommonSearchAction"
 			name="siteForm"
 			validate="false"
-			input="/Site.do?operation=edit"
+			input="/Site.do?operation=edit&amp;pageOf=pageOfSite"
 			scope="request">
 			<forward name="pageOfSite" path="/Site.do?operation=edit&amp;pageOf=pageOfSite"/>
-			<forward name="failure" path="/Site.do?operation=edit"/>
+			<forward name="failure" path="/Site.do?operation=edit&amp;pageOf=pageOfSite"/>
 		</action>    
 		<!-- Site Actions Ends -->
 			
@@ -875,10 +875,10 @@ PUBLIC
 			type="edu.wustl.catissuecore.action.CommonAddEditAction"
 			name="biohazardForm"
 			validate="true"
-			input="/Biohazard.do?operation=add"
+			input="/Biohazard.do?operation=add&amp;pageOf=pageOfBioHazard"
 			scope="request">
 			<forward name="success" path=".catissuecore.biohazardAddSuccessDef" />
-			<forward name="failure" path="/Biohazard.do?operation=add" />
+			<forward name="failure" path="/Biohazard.do?operation=add&amp;pageOf=pageOfBioHazard" />
 		</action>
 		
 		<action path="/BiohazardEdit"
@@ -888,17 +888,17 @@ PUBLIC
 			input="/Biohazard.do?operation=edit"
 			scope="request">
 			<forward name="success" path=".catissuecore.biohazardEditSuccessDef" />
-			<forward name="failure" path="/Biohazard.do?operation=edit" />
+			<forward name="failure" path="/Biohazard.do?operation=edit&amp;pageOf=pageOfBioHazard" />
 		</action>
 		
 		<action path="/BiohazardSearch"
 		    type="edu.wustl.catissuecore.action.CommonSearchAction"
 			name="biohazardForm"
 			validate="false"
-			input="/Biohazard.do?operation=edit"
+			input="/Biohazard.do?operation=edit&amp;pageOf=pageOfBioHazard"
 			scope="request">
 			<forward name="pageOfBioHazard" path="/Biohazard.do?operation=edit&amp;pageOf=pageOfBioHazard"/>
-			<forward name="failure" path="/Biohazard.do?operation=edit"/>
+			<forward name="failure" path="/Biohazard.do?operation=edit&amp;pageOf=pageOfBioHazard"/>
 		</action>    
 		<!-- Biohazard Actions Ends -->
 		
