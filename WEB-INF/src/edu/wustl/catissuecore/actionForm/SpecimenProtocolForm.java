@@ -45,7 +45,7 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 	 */
 	protected String operation;
 
-	protected String activityStatus;
+	protected String activityStatus = Constants.ACTIVITY_STATUS_ACTIVE;
 
 	protected long principalInvestigatorId;
 
