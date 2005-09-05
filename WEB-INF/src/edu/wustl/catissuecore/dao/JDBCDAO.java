@@ -19,8 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.wustl.catissuecore.audit.AuditManager;
-import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.HibernateProperties;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
@@ -47,14 +47,14 @@ public class JDBCDAO extends AbstractDAO
     	try
     	{
     	    //Initializes the oracle driver.
-            Class.forName(ApplicationProperties.getValue("database.driver"));
+            Class.forName(HibernateProperties.getValue("hibernate.connection.driver_class"));
 
-            String database = ApplicationProperties
-            						.getValue("database.URL.1");
-            String loginName = ApplicationProperties
-                    				.getValue("database.loginName.1");
-            String password = ApplicationProperties
-            						.getValue("database.password.1");
+            String database = HibernateProperties
+            						.getValue("hibernate.connection.url");
+            String loginName = HibernateProperties
+                    				.getValue("hibernate.connection.username");
+            String password = HibernateProperties
+            						.getValue("hibernate.connection.password");
 
             //Creates a connection.
             connection = DriverManager.getConnection(database, loginName, password);
