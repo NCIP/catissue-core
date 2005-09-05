@@ -42,7 +42,7 @@
 		
 		function onTypeChange(element)
 		{
-			var action = "/catissuecore/StorageContainer.do?operation=add";
+			var action = "/catissuecore/StorageContainer.do?operation=add&pageOf=pageOfStorageContainer";
 			document.forms[0].action = action;
 			document.forms[0].submit();
 		}
@@ -51,7 +51,7 @@
 		{
 			var list = document.getElementById('typeId');
 			var type = list.options[list.selectedIndex].value;
-			var action = "/catissuecore/StorageContainer.do?operation=add";
+			var action = "/catissuecore/StorageContainer.do?operation=add&pageOf=pageOfStorageContainer";
 			document.forms[0].action = action;
 			document.forms[0].submit();
 		}
