@@ -129,6 +129,6 @@ public class UserAction extends Action
             Logger.out.error(exc.getMessage());
         }
 
-        return mapping.findForward(Constants.SUCCESS);
+        return mapping.findForward(pageOf);
     }
 }
