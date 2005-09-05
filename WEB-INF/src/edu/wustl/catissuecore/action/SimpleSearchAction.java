@@ -32,6 +32,7 @@ import edu.wustl.catissuecore.query.SimpleConditionsNode;
 import edu.wustl.catissuecore.query.SimpleQuery;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.MapDataParser;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * @author gautam_shetty
@@ -93,7 +94,7 @@ public class SimpleSearchAction extends DispatchAction
 //        query.addElementToView(new DataElement(Query.DEPARTMENT,"NAME"));
         
         ((SimpleQuery)query).addConditions(simpleConditionNodeCollection);
-        
+        Logger.out.debug("BEFORE EXECUTE*******************");
         List list = query.execute();
         String target = simpleQueryInterfaceForm.getPageOf();
         
