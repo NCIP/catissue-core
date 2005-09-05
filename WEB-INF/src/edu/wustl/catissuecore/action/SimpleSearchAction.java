@@ -1,10 +1,9 @@
-/*
+/**
  * Created on Aug 17, 2005
  *
  * TODO To change the template for this generated file go to
  * Window - Preferences - Java - Code Style - Code Templates
  */
-
 
 package edu.wustl.catissuecore.action;
 
@@ -14,13 +13,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.actions.DispatchAction;
 
 import edu.wustl.catissuecore.actionForm.SimpleQueryInterfaceForm;
 import edu.wustl.catissuecore.query.Client;
@@ -34,7 +36,7 @@ import edu.wustl.common.util.MapDataParser;
 /**
  * @author gautam_shetty
  */
-public class SimpleSearchAction extends Action
+public class SimpleSearchAction extends DispatchAction
 {
     
     public ActionForward execute(ActionMapping mapping, ActionForm form,
@@ -57,6 +59,14 @@ public class SimpleSearchAction extends Action
             StringTokenizer stringToken = new StringTokenizer(columnName,".");
             simpleConditionsNode.getCondition().getDataElement().setTable(stringToken.nextToken());
             simpleConditionsNode.getCondition().getDataElement().setField(stringToken.nextToken());
+            String fieldType = stringToken.nextToken();
+            String value = simpleConditionsNode.getCondition().getValue();
+            
+            if (fieldType.equals(Constants.FIELD_TYPE_VARCHAR) || fieldType.equals(Constants.FIELD_TYPE_DATE))
+            {
+                value = "'"+value+"'";
+                simpleConditionsNode.getCondition().setValue(value);
+            }
         }
         
         Client.initialize();
@@ -85,10 +95,25 @@ public class SimpleSearchAction extends Action
         ((SimpleQuery)query).addConditions(simpleConditionNodeCollection);
         
         List list = query.execute();
+        String target = simpleQueryInterfaceForm.getPageOf();
         
-        request.setAttribute(Constants.SPREADSHEET_DATA_LIST, list);
-        request.setAttribute(Constants.SPREADSHEET_COLUMN_LIST, columnNames);
+        if (list.isEmpty())
+        {
+            ActionErrors errors = new ActionErrors();
+            errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("simpleQuery.noRecordsFound"));
+            saveErrors(request,errors);
+            
+            String path = "SimpleQueryInterface.do?pageOf="+simpleQueryInterfaceForm.getPageOf()+"&aliasName="+simpleQueryInterfaceForm.getAliasName();
+            RequestDispatcher requestDispatcher = request.getRequestDispatcher(path);
+            requestDispatcher.forward(request,response);
+        }
+        else
+        {
+            request.setAttribute(Constants.SPREADSHEET_DATA_LIST, list);
+            request.setAttribute(Constants.SPREADSHEET_COLUMN_LIST, columnNames);
+        }
         
-        return mapping.findForward(simpleQueryInterfaceForm.getPageOf());
+        return mapping.findForward(target);
     }
+    
 }
