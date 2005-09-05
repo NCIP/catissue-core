@@ -1577,13 +1577,13 @@ PUBLIC
 			<forward name="pageOfInstitution" path="/SpreadsheetView.do?pageOf=pageOfInstitution"/>
 			<forward name="pageOfDepartment" path="/SpreadsheetView.do?pageOf=pageOfDepartment"/>
 			<forward name="pageOfCancerResearchGroup" path="/SpreadsheetView.do?pageOf=pageOfCancerResearchGroup"/>
-			<forward name="pageOfCollectionProtocol" path="/SpreadsheetView.do?pageOfCollectionProtocol"/>
+			<forward name="pageOfCollectionProtocol" path="/SpreadsheetView.do?pageOf=pageOfCollectionProtocol"/>
 			<forward name="pageOfDistributionProtocol" path="/SpreadsheetView.do?pageOf=pageOfDistributionProtocol"/>
 			<forward name="pageOfStorageType" path="/SpreadsheetView.do?pageOf=pageOfStorageType"/>
 			<forward name="pageOfStorageContainer" path="/SpreadsheetView.do?pageOf=pageOfStorageContainer"/>
 			<forward name="pageOfSite" path="/SpreadsheetView.do?pageOf=pageOfSite"/>
 			<forward name="pageOfBioHazard" path="/SpreadsheetView.do?pageOf=pageOfBioHazard"/>
-			<forward name="failure" path="/error.jsp" />
+			<forward name="failure" path="/SimpleQueryInterface.do" />
 		</action>
 		
 		<action path="/SpreadsheetView"
