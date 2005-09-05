@@ -143,6 +143,11 @@ function changeAndOrLink(id, operation)
 				<br/>
 				<tr>
 					<td>
+						<html:hidden property="aliasName" value="<%=aliasName%>"/>
+					</td>
+				</tr>
+				<tr>
+					<td>
 						<html:hidden property="counter" value="<%=noOfRows%>"/>
 					</td>
 				</tr>
@@ -157,11 +162,6 @@ function changeAndOrLink(id, operation)
 						<bean:message key="simpleQuery.title" />
 					</td>
 				</tr>
-				<tr>
-					<td>
-						<html:hidden property="aliasName" value="<%=aliasName%>"/>
-					</td>
-				</tr>	
 				<tbody id="simpleQuery">
 				<%
 					for (int i=1;i<=Integer.parseInt(noOfRows);i++){
@@ -201,7 +201,8 @@ function changeAndOrLink(id, operation)
 					<td class="formField">
 						<html:text styleClass="formFieldSized10" size="30" styleId="attributeValue" property="<%=attributeValue%>" />
 					</td>
-					<td class="formSmallField">
+					<logic:equal name="<%=pageOf%>" value="<%=Constants.PAGEOF_SIMPLE_QUERY_INTERFACE%>">
+					<td class="formField">
 						<html:hidden property="<%=nextOperator%>"/>
 					</td>
 					<td class="formField" id="<%=i%>">
@@ -214,6 +215,7 @@ function changeAndOrLink(id, operation)
 							<bean:message key="simpleQuery.or" />
 						</a>
 					</td>	
+					</logic:equal>
 				</tr>
 				<%}%>
 				</tbody>	
