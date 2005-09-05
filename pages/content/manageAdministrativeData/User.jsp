@@ -10,13 +10,18 @@
 		String pageOf = (String)request.getAttribute(Constants.PAGEOF);   
 
         boolean readOnlyValue,roleStatus=false;
-        if (operation.equals(Constants.EDIT))
-        {
-            formName = Constants.USER_EDIT_ACTION;
+
+		if (pageOf.equals(Constants.PAGEOF_APPROVE_USER))
+		{
 			Long identifier = (Long)request.getAttribute(Constants.PREVIOUS_PAGE);
 			prevPage = Constants.USER_DETAILS_SHOW_ACTION+"?"+Constants.IDENTIFIER+"="+identifier;
 			identifier = (Long)request.getAttribute(Constants.NEXT_PAGE);
 			nextPage = Constants.USER_DETAILS_SHOW_ACTION+"?"+Constants.IDENTIFIER+"="+identifier;
+		}
+
+        if (operation.equals(Constants.EDIT))
+        {
+            formName = Constants.USER_EDIT_ACTION;
             readOnlyValue = true;
         }
         else
