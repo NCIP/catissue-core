@@ -1178,4 +1178,7 @@ public class Constants
 			"OK",
 			"DAMAGED"
 	};
+	
+	// constants for Data required in query
+	private static final String ALIAS_NAME_TABLE_NAME_MAP="objectTableNames";
 }
