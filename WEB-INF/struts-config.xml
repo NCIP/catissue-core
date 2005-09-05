@@ -293,20 +293,20 @@ PUBLIC
 			type="edu.wustl.catissuecore.action.CommonAddEditAction"
 			name="userForm"
 			validate="true"
-			input="/User.do?operation=add&amp;pageOf=pageOfApproveUser"
+			input="/User.do?operation=add"
 			scope="request">
 			<forward name="success" path=".catissuecore.userAddSuccessDef" />
-			<forward name="failure" path="/User.do?operation=edit&amp;pageOf=pageOfApproveUser" />
+			<forward name="failure" path="/User.do?operation=edit" />
 		</action>
 
 		<action path="/UserEdit"
 			type="edu.wustl.catissuecore.action.CommonAddEditAction"
 			name="userForm"
 			validate="true"
-			input="/User.do?operation=edit&amp;pageOf=pageOfApproveUser"
+			input="/User.do?operation=edit"
 			scope="request">
 			<forward name="success" path=".catissuecore.userEditSuccessDef" />
-			<forward name="failure" path="/User.do?operation=edit&amp;pageOf=pageOfApproveUser" />
+			<forward name="failure" path="/User.do?operation=edit" />
 		</action>
 		
 		<action path="/UserSearch"
