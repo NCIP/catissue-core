@@ -172,6 +172,8 @@ public class Constants
 	public static final String USER_SEARCH_ACTION = "UserSearch.do";
 	public static final String USER_ADD_ACTION = "UserAdd.do";
 	public static final String USER_EDIT_ACTION = "UserEdit.do";
+	public static final String APPROVE_USER_ADD_ACTION = "ApproveUserAdd.do";
+	public static final String APPROVE_USER_EDIT_ACTION = "ApproveUserEdit.do";
 	public static final String SIGNUP_USER_ADD_ACTION = "SignUpUserAdd.do";
 
 	//Constants required in Accession.jsp Page

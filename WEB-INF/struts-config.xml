@@ -284,7 +284,8 @@ PUBLIC
 		<action path="/User"
 			type="edu.wustl.catissuecore.action.UserAction"
 			scope="request">
-			<forward name="success" path=".catissuecore.userDef" />
+			<forward name="pageOfUserAdmin" path=".catissuecore.userDef" />
+			<forward name="pageOfApproveUser" path=".catissuecore.userDef" />
 			<forward name="failure" path=".catissuecore.userDef" />
 			<forward name="access_denied" path="/ManageAdministrativeData.do" />
 		</action>
@@ -293,20 +294,40 @@ PUBLIC
 			type="edu.wustl.catissuecore.action.CommonAddEditAction"
 			name="userForm"
 			validate="true"
-			input="/User.do?operation=add"
+			input="/User.do?operation=add&amp;pageOf=pageOfUserAdmin"
 			scope="request">
 			<forward name="success" path=".catissuecore.userAddSuccessDef" />
-			<forward name="failure" path="/User.do?operation=edit" />
+			<forward name="failure" path="/User.do?operation=edit&amp;pageOf=pageOfUserAdmin" />
 		</action>
 
 		<action path="/UserEdit"
 			type="edu.wustl.catissuecore.action.CommonAddEditAction"
 			name="userForm"
 			validate="true"
-			input="/User.do?operation=edit"
+			input="/User.do?operation=edit&amp;pageOf=pageOfUserAdmin"
 			scope="request">
 			<forward name="success" path=".catissuecore.userEditSuccessDef" />
-			<forward name="failure" path="/User.do?operation=edit" />
+			<forward name="failure" path="/User.do?operation=edit&amp;pageOf=pageOfUserAdmin" />
+		</action>
+		
+		<action path="/ApproveUserAdd"
+			type="edu.wustl.catissuecore.action.CommonAddEditAction"
+			name="userForm"
+			validate="true"
+			input="/User.do?operation=add&amp;pageOf=pageOfApproveUser"
+			scope="request">
+			<forward name="success" path=".catissuecore.userAddSuccessDef" />
+			<forward name="failure" path="/User.do?operation=edit&amp;pageOf=pageOfApproveUser" />
+		</action>
+
+		<action path="/ApproveUserEdit"
+			type="edu.wustl.catissuecore.action.CommonAddEditAction"
+			name="userForm"
+			validate="true"
+			input="/User.do?operation=edit&amp;pageOf=pageOfApproveUser"
+			scope="request">
+			<forward name="success" path=".catissuecore.userEditSuccessDef" />
+			<forward name="failure" path="/User.do?operation=edit&amp;pageOf=pageOfApproveUser" />
 		</action>
 		
 		<action path="/UserSearch"
@@ -315,7 +336,7 @@ PUBLIC
 			validate="true"
 			input="/User.do?operation=edit"
 			scope="request">
-			<forward name="success" path="/User.do?operation=edit&amp;pageOf="/>
+			<forward name="pageOfUserAdmin" path="/User.do?operation=edit&amp;pageOf=pageOfUserAdmin"/>
 			<forward name="failure" path="/User.do?operation=edit&amp;pageOf="/>
 		</action>    
 		<!-- User Actions Ends-->
@@ -1562,7 +1583,8 @@ PUBLIC
 			<forward name="pageOfStorageType" path=".catissuecore.editSearchPageDef"/>
 			<forward name="pageOfStorageContainer" path=".catissuecore.editSearchPageDef"/>
 			<forward name="pageOfSite" path=".catissuecore.editSearchPageDef"/>
-			<forward name="pageOfBioHazard" path=".catissuecore.editSearchPageDef"/>			
+			<forward name="pageOfBioHazard" path=".catissuecore.editSearchPageDef"/>
+			<forward name="pageOfUserAdmin" path=".catissuecore.editSearchPageDef"/>			
 			<forward name="failure" path=".catissuecore.simpleQueryInterfaceDef" />
 		</action>
 
@@ -1583,6 +1605,7 @@ PUBLIC
 			<forward name="pageOfStorageContainer" path="/SpreadsheetView.do?pageOf=pageOfStorageContainer"/>
 			<forward name="pageOfSite" path="/SpreadsheetView.do?pageOf=pageOfSite"/>
 			<forward name="pageOfBioHazard" path="/SpreadsheetView.do?pageOf=pageOfBioHazard"/>
+			<forward name="pageOfUserAdmin" path="/SpreadsheetView.do?pageOf=pageOfUserAdmin"/>	
 			<forward name="failure" path="/SimpleQueryInterface.do" />
 		</action>
 		
@@ -1600,6 +1623,7 @@ PUBLIC
 			<forward name="pageOfStorageContainer" path=".catissuecore.editSearchResultsDef"/>
 			<forward name="pageOfSite" path=".catissuecore.editSearchResultsDef"/>
 			<forward name="pageOfBioHazard" path=".catissuecore.editSearchResultsDef"/>
+			<forward name="pageOfUserAdmin" path=".catissuecore.editSearchResultsDef"/>
 			<forward name="failure" path=".catissuecore.simpleSearchResultsDef" />
 		</action>
 		
@@ -1699,6 +1723,7 @@ PUBLIC
 			<forward name="pageOfStorageContainer" path="/StorageContainerSearch.do?pageOf=pageOfStorageContainer"/>
 			<forward name="pageOfSite" path="/SiteSearch.do?pageOf=pageOfSite"/>
 			<forward name="pageOfBioHazard" path="/BiohazardSearch.do?pageOf=pageOfBioHazard"/>
+			<forward name="pageOfUserAdmin" path="/UserSearch.do?pageOf=pageOfUserAdmin"/>
 			<forward name="failure" path="/QueryParticipant.do?operation=view&amp;pageOf=query"/>
 		</action>
 		<!--Query Result View Actions End-->

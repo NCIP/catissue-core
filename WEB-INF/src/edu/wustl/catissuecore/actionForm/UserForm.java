@@ -673,7 +673,7 @@ public class UserForm extends AbstractActionForm
             Logger.out.error(excp.getMessage());
         }
     }
-
+    
     /**
      * Overrides the validate method of ActionForm.
      * */
@@ -803,11 +803,9 @@ public class UserForm extends AbstractActionForm
         }
         catch (Exception excp)
         {
-//            Logger.out.error(excp.getMessage(), excp);
-            excp.printStackTrace();
+            Logger.out.error(excp.getMessage(), excp);
         }
         
-        Logger.out.debug("ERRORS***********************"+errors);
         return errors;
     }
 }

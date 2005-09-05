@@ -21,17 +21,31 @@
 
         if (operation.equals(Constants.EDIT))
         {
-            formName = Constants.USER_EDIT_ACTION;
+			if (pageOf.equals(Constants.PAGEOF_APPROVE_USER))
+			{
+				formName = Constants.APPROVE_USER_EDIT_ACTION;
+			}
+			else
+			{
+            	formName = Constants.USER_EDIT_ACTION;
+			}
             readOnlyValue = true;
         }
         else
         {
-            formName = Constants.USER_ADD_ACTION;
-
-			if (pageOf.equals(Constants.PAGEOF_SIGNUP))
+			if (pageOf.equals(Constants.PAGEOF_APPROVE_USER))
 			{
-				formName = Constants.SIGNUP_USER_ADD_ACTION;
+				formName = Constants.APPROVE_USER_ADD_ACTION;
 			}
+			else
+			{
+            	formName = Constants.USER_ADD_ACTION;
+				if (pageOf.equals(Constants.PAGEOF_SIGNUP))
+				{
+					formName = Constants.SIGNUP_USER_ADD_ACTION;
+				}
+			}
+
             readOnlyValue = false;
         }
 
