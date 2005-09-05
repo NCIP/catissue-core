@@ -45,9 +45,7 @@ public class DomainObjectListAction extends SecureAction
         List list = null,showList = null;
 
         AbstractActionForm abstractForm = (AbstractActionForm)form;
-        System.out.println("abstractForm****************"+abstractForm);
-        System.out.println("abstractForm.getFormId()***************"+abstractForm.getFormId());
-        AbstractBizLogic abstractDAO = BizLogicFactory.getBizLogic(abstractForm.getFormId());
+        AbstractBizLogic abstractBizLogic = BizLogicFactory.getBizLogic(abstractForm.getFormId());
         
         //Returns the page number to be shown.
         int pageNum = Integer.parseInt(request.getParameter(Constants.PAGE_NUMBER));
@@ -64,8 +62,20 @@ public class DomainObjectListAction extends SecureAction
         if (pageNum == Constants.START_PAGE)
         {
             //If start page is to be shown retrieve the list from the database.
-            list = abstractDAO.retrieve(AbstractDomainObject.getDomainObjectName(abstractForm.getFormId()),
-                    					"activityStatus",abstractForm.getActivityStatus());
+            if (abstractForm.getFormId() == Constants.SIGNUP_FORM_ID)
+            {
+                String [] whereColumnNames = {"activityStatus","activityStatus"};
+                String [] whereColumnConditions = {"=","="};
+                String [] whereColumnValues = {"New","Pending"};
+                list = abstractBizLogic.retrieve(AbstractDomainObject.getDomainObjectName(abstractForm.getFormId()),
+    					whereColumnNames,whereColumnConditions,whereColumnValues,Constants.OR_JOIN_CONDITION);
+            }
+            else
+            {
+                list = abstractBizLogic.retrieve(AbstractDomainObject.getDomainObjectName(abstractForm.getFormId()),
+    					"activityStatus",abstractForm.getActivityStatus());
+            }
+            
             
             if (Constants.NUMBER_RESULTS_PER_PAGE > list.size())
             {

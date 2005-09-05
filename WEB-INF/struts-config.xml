@@ -293,7 +293,7 @@ PUBLIC
 			type="edu.wustl.catissuecore.action.CommonAddEditAction"
 			name="userForm"
 			validate="true"
-			input="/User.do?operation=edit"
+			input="/User.do?operation=add&amp;pageOf=pageOfApproveUser"
 			scope="request">
 			<forward name="success" path=".catissuecore.userAddSuccessDef" />
 			<forward name="failure" path="/User.do?operation=edit&amp;pageOf=pageOfApproveUser" />
@@ -481,7 +481,7 @@ PUBLIC
 			<forward name="success" path=".catissuecore.distributionProtocolEditSuccessDef" />
 			<forward name="failure" path="/DistributionProtocol.do?operation=edit" />
 		</action>
-
+		
 		<action path="/DistributionProtocolSearch"
 		    type="edu.wustl.catissuecore.action.CommonSearchAction"
 			name="distributionProtocolForm"

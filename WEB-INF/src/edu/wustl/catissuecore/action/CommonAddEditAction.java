@@ -56,6 +56,7 @@ public class CommonAddEditAction extends Action
         {
             AbstractActionForm abstractForm = (AbstractActionForm) form;
             AbstractBizLogic bizLogic = BizLogicFactory.getBizLogic(abstractForm.getFormId());
+            Logger.out.debug("IN ADDEDIT ACTION FORM ID************************"+abstractForm.getFormId());
 
             if (abstractForm.isAddOperation())
             {
@@ -70,7 +71,7 @@ public class CommonAddEditAction extends Action
             {
                 //If operation is edit, update the data in the database.
             	String objName = AbstractDomainObject.getDomainObjectName(abstractForm.getFormId());
-            	Logger.out.debug("DEBUG...................ID*********"+abstractForm.getSystemIdentifier());
+            	Logger.out.debug("IN ADDEDIT ACTION DEBUG...................ID*********"+abstractForm.getSystemIdentifier());
                 List list = bizLogic.retrieve(objName, Constants.IDENTIFIER,
 										  new Long(abstractForm.getSystemIdentifier()));
                 
@@ -90,7 +91,7 @@ public class CommonAddEditAction extends Action
             //Status message key.
             String statusMessageKey = String.valueOf(abstractForm.getFormId() +
 					"."+String.valueOf(abstractForm.isAddOperation()));
-
+            
             request.setAttribute(Constants.STATUS_MESSAGE_KEY,statusMessageKey);
         }
         catch (BizLogicException excp)
@@ -102,23 +103,19 @@ public class CommonAddEditAction extends Action
         	saveErrors(request,errors);
             target = new String(Constants.FAILURE);
             
-            Logger.out.debug("excp "+excp.getMessage());
             Logger.out.error(excp.getMessage(), excp);
-            //Logger.out.error(excp.getMessage(), excp);
         }
         catch (DAOException excp)
         {
             target = new String(Constants.FAILURE);
             Logger.out.debug("excp "+excp.getMessage());
             Logger.out.error(excp.getMessage(), excp);
-            //Logger.out.error(excp.getMessage(), excp);
         }
         catch (AssignDataException excp)
         {
             target = new String(Constants.FAILURE);
             Logger.out.debug("excp "+excp.getMessage());
             Logger.out.error(excp.getMessage(), excp);
-            //Logger.out.error(excp.getMessage(), excp);
         }
         return (mapping.findForward(target));
     }

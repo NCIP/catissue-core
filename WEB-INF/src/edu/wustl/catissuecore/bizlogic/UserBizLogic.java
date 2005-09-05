@@ -46,6 +46,7 @@ public class UserBizLogic extends DefaultBizLogic
     {
         try
         {
+            Logger.out.debug("IN UserBizLogic insert***************************");
             User user = (User) obj;
             
             Department department = null;
@@ -166,6 +167,7 @@ public class UserBizLogic extends DefaultBizLogic
      */
     protected void update(DAO dao, Object obj) throws DAOException
     {
+        Logger.out.debug("IN UserBizLogic update***************************");
         User user = (User) obj;
         List list = null;
 

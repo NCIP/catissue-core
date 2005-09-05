@@ -1,18 +1,15 @@
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
-<%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
+<%@ page import="edu.wustl.catissuecore.util.global.Constants,edu.wustl.catissuecore.actionForm.UserForm"%>
 
 <%
         String operation = (String) request.getAttribute(Constants.OPERATION);
         String formName,prevPage=null,nextPage=null;
 		
-		//Change this to Constants.USER_EDIT_ACTION
-        String searchFormName = new String(Constants.USER_EDIT_ACTION);
-
 		String pageOf = (String)request.getAttribute(Constants.PAGEOF);   
 
-        boolean readOnlyValue;
+        boolean readOnlyValue,roleStatus=false;
         if (operation.equals(Constants.EDIT))
         {
             formName = Constants.USER_EDIT_ACTION;
@@ -32,6 +29,22 @@
 			}
             readOnlyValue = false;
         }
+
+		Object obj = request.getAttribute("userForm");
+		if(obj != null && obj instanceof UserForm)
+		{
+			UserForm userForm = (UserForm)obj;
+			if (pageOf.equals(Constants.PAGEOF_APPROVE_USER) &&
+			   (userForm.getStatus().equals(Constants.APPROVE_USER_PENDING_STATUS) || 
+				userForm.getStatus().equals(Constants.APPROVE_USER_REJECT_STATUS)))
+			{
+				roleStatus = true;
+				if (userForm.getStatus().equals(Constants.APPROVE_USER_PENDING_STATUS))
+				{
+					operation = Constants.EDIT;
+				}
+			}
+		}
 %>
 
 
@@ -42,7 +55,10 @@ function handleStatus(status)
 	setOperation("<%=Constants.EDIT%>");
 	document.forms[0].role.value=0;
 	document.forms[0].role.disabled=true;
-
+	if (status.value == "<%=Constants.APPROVE_USER_REJECT_STATUS%>")
+	{
+		setOperation("<%=Constants.ADD%>");
+	}
 	if (status.value == "<%=Constants.APPROVE_USER_APPROVE_STATUS%>")
 	{
 		setOperation("<%=Constants.ADD%>");
@@ -319,7 +335,7 @@ function handleStatus(status)
 								</label>
 							</td>
 						<td class="formField">
-							<html:select property="status" styleClass="formFieldSized" styleId="status" size="1" onchange="javascript:handleStatus(this)">
+							<html:select property="status" styleClass="formFieldSized" styleId="status" size="1" onchange="javascript:handleStatus(this)" >
 								<html:options name="statusList" labelName="statusList" />
 							</html:select>
 						</td>
@@ -334,7 +350,7 @@ function handleStatus(status)
 							</label>
 						</td>
 						<td class="formField">
-							<html:select property="role" styleClass="formFieldSized" styleId="role" size="1">
+							<html:select property="role" styleClass="formFieldSized" styleId="role" size="1" disabled="<%=roleStatus%>">
 								<html:options name="roleIdList" labelName="roleList" />
 							</html:select>
 						</td>

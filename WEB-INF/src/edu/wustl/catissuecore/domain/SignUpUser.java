@@ -522,7 +522,7 @@ public class SignUpUser extends AbstractDomainObject implements Serializable
             this.cancerResearchGroup.setSystemIdentifier(new Long(uform
                     .getCancerResearchGroupId()));
 
-            this.activityStatus = uform.getActivityStatus();
+            this.activityStatus = uform.getStatus();
             this.roleId = uform.getRole();
             this.setStreet(uform.getStreet());
             this.setCity(uform.getCity());

@@ -20,6 +20,7 @@ import edu.wustl.catissuecore.domain.Institution;
 import edu.wustl.catissuecore.domain.SignUpUser;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.GeneratePassword;
 import edu.wustl.catissuecore.util.global.SendEmail;
 import edu.wustl.common.security.SecurityManager;
@@ -30,7 +31,6 @@ import edu.wustl.common.util.logger.Logger;
 
 /**
  * @author gautam_shetty
- *
  * TODO To change the template for this generated type comment go to
  * Window - Preferences - Java - Code Style - Code Templates
  */
@@ -42,6 +42,7 @@ public class ApproveUserBizLogic extends DefaultBizLogic
      */
     protected void insert(DAO dao, Object obj) throws DAOException
     {
+        Logger.out.debug("IN ApproveUserBizLogic insert***************************");
         User user = (User) obj;
         List list = null;
 
@@ -53,20 +54,25 @@ public class ApproveUserBizLogic extends DefaultBizLogic
             csmUser.setLastName(user.getLastName());
             csmUser.setFirstName(user.getFirstName());
             csmUser.setEmailId(user.getEmailAddress());
-            csmUser.setPassword(GeneratePassword.getPassword());
+            if (user.getActivityStatus().equals(Constants.ACTIVITY_STATUS_ACTIVE))
+                csmUser.setPassword(GeneratePassword.getPassword());
             csmUser.setStartDate(Calendar.getInstance().getTime());
 
             SecurityManager.getInstance(ApproveUserBizLogic.class).createUser(csmUser);
-
-            SecurityManager.getInstance(ApproveUserBizLogic.class).assignRoleToUser(
-                    csmUser.getLoginName(), user.getRoleId());
+            
+            if (user.getRoleId() != null)
+            {
+                SecurityManager.getInstance(ApproveUserBizLogic.class).assignRoleToUser(
+                        csmUser.getLoginName(), user.getRoleId());
+            }
+            
             user.setSystemIdentifier(csmUser.getUserId());
             
             Department department = null;
             Institution institution = null;
             CancerResearchGroup cancerResearchGroup = null;
             Address address = null;
-
+            
             list = dao.retrieve(Department.class.getName(),
                     "systemIdentifier", user.getDepartment()
                             .getSystemIdentifier());
@@ -74,7 +80,7 @@ public class ApproveUserBizLogic extends DefaultBizLogic
             {
                 department = (Department) list.get(0);
             }
-
+            
             list = dao.retrieve(Institution.class.getName(),
                     "systemIdentifier", user.getInstitution()
                             .getSystemIdentifier());

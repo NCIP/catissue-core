@@ -64,7 +64,7 @@ public class UserAction extends Action
         //Sets the pageOf attribute (for Add,Edit or Query Interface)
         String pageOf  = request.getParameter(Constants.PAGEOF);
         request.setAttribute(Constants.PAGEOF,pageOf);
-
+        
         try
         {
             AbstractBizLogic dao = BizLogicFactory.getBizLogic(Constants.USER_FORM_ID);

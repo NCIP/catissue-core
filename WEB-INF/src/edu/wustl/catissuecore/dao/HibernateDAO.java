@@ -16,7 +16,6 @@ import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.Transaction;
-import net.sf.hibernate.tool.hbm2ddl.TableMetadata;
 import edu.wustl.catissuecore.audit.AuditManager;
 import edu.wustl.catissuecore.audit.Auditable;
 import edu.wustl.catissuecore.domain.StorageType;
@@ -439,8 +438,4 @@ public class HibernateDAO extends AbstractDAO
 //    	System.out.println("Department "+user.getDepartment().getSystemIdentifier());
 	}
 	
-	private void getMetaData()
-	{
-//	    TableMetadata metaData = new TableMetadata();
-	}
 }

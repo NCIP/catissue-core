@@ -34,6 +34,7 @@ public class SignUpUserBizLogic extends DefaultBizLogic
      */
     protected void insert(DAO dao, Object obj) throws DAOException
     {
+        Logger.out.debug("IN SignUpUserBizLogic insert***************************");
         SignUpUser user = (SignUpUser) obj;
         
         Department department = null;
@@ -128,6 +129,7 @@ public class SignUpUserBizLogic extends DefaultBizLogic
      */
     protected void update(DAO dao, Object obj) throws DAOException
     {
+        Logger.out.debug("IN SignUpUserBizLogic update***************************");
         SignUpUser user = (SignUpUser) obj;
         dao.update(user);
         

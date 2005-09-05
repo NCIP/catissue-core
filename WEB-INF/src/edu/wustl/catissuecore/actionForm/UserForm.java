@@ -574,7 +574,7 @@ public class UserForm extends AbstractActionForm
         this.faxNumber = null;
         this.role = null;
         this.cancerResearchGroupId = -1;
-        this.activityStatus = Constants.ACTIVITY_STATUS_NEW;
+        this.status = Constants.ACTIVITY_STATUS_NEW;
     }
     
     /**
@@ -608,6 +608,24 @@ public class UserForm extends AbstractActionForm
                 this.zipCode = signUpUser.getZipCode();
                 this.phoneNumber = signUpUser.getPhoneNumber();
                 this.faxNumber = signUpUser.getFaxNumber();
+                
+                this.activityStatus = signUpUser.getActivityStatus();
+                if (activityStatus.equals(Constants.ACTIVITY_STATUS_ACTIVE))
+                {
+                    this.status = Constants.APPROVE_USER_APPROVE_STATUS;
+                }
+                
+                else if (activityStatus.equals(Constants.ACTIVITY_STATUS_CLOSED))
+                {
+                    this.status = Constants.APPROVE_USER_REJECT_STATUS;
+                }
+                else
+                {
+                    this.status = Constants.APPROVE_USER_PENDING_STATUS;
+                }
+                
+                this.role = signUpUser.getRoleId();
+                this.comments = signUpUser.getComments();
             }
             else
             {
@@ -668,12 +686,6 @@ public class UserForm extends AbstractActionForm
         {
             if (operation != null)
             {
-                if (operation.equals(Constants.SEARCH))
-                {
-                    checkValidNumber(new Long(systemIdentifier).toString(),
-                            "user.systemIdentifier", errors, validator);
-                }
-                
                 if (operation.equals(Constants.ADD)
                         || operation.equals(Constants.EDIT))
                 {
@@ -742,7 +754,6 @@ public class UserForm extends AbstractActionForm
                         }
                     }
 
-                    Logger.out.debug("institutionId ; "+institutionId);
                     if (institutionId == -1)
                     {
                         errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
@@ -750,7 +761,6 @@ public class UserForm extends AbstractActionForm
                                         .getValue("user.institution")));
                     }
 
-                    Logger.out.debug("departmentId ; "+departmentId);
                     if (departmentId == -1)
                     {
                         errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
@@ -758,7 +768,6 @@ public class UserForm extends AbstractActionForm
                                         .getValue("user.department")));
                     }
                     
-                    Logger.out.debug("cancerResearchGroupId ; "+cancerResearchGroupId);
                     if (cancerResearchGroupId == -1)
                     {
                         errors.add(ActionErrors.GLOBAL_ERROR,
@@ -798,6 +807,7 @@ public class UserForm extends AbstractActionForm
             excp.printStackTrace();
         }
         
+        Logger.out.debug("ERRORS***********************"+errors);
         return errors;
     }
 }

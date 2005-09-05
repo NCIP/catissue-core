@@ -443,7 +443,7 @@ public class User extends AbstractDomainObject implements Serializable
             {
                 this.activityStatus = Constants.ACTIVITY_STATUS_ACTIVE;
             }
-
+            
             if (uform.getPageOf().equals(Constants.PAGEOF_APPROVE_USER))
             {
                 if (uform.getStatus().equals(
@@ -456,11 +456,12 @@ public class User extends AbstractDomainObject implements Serializable
                 {
                     this.activityStatus = Constants.ACTIVITY_STATUS_CLOSED;
                 }
-                else if (uform.getStatus().equals(
-                        Constants.APPROVE_USER_PENDING_STATUS))
-                {
-                    this.activityStatus = Constants.ACTIVITY_STATUS_NEW;
-                }
+//                else if (uform.getStatus().equals(
+//                        Constants.APPROVE_USER_PENDING_STATUS))
+//                {
+////                    this.activityStatus = Constants.ACTIVITY_STATUS_NEW;
+//                    this.activityStatus = Constants.ACTIVITY_STATUS_PENDING;
+//                }
             }
             
             this.roleId = uform.getRole();
