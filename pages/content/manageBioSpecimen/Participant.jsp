@@ -29,6 +29,8 @@
 			var spreqno=x.insertCell(0);
 			spreqno.className="formSerialNumberField";
 			sname=(q+1);
+			var identifier = "value(ParticipantMedicalIdentifier:" + (q+1) +"_systemIdentifier)";
+			sname = sname + "<input type='hidden' name='" + identifier + "' value='' id='" + identifier + "'>";
 			spreqno.innerHTML="" + sname;
 
 			//Second Cell
@@ -65,6 +67,8 @@
 		}
 	</script>
 </head>
+
+
 <% 
 		String operation = (String)request.getAttribute(Constants.OPERATION);
 		String formName,pageView=operation,editViewButton="buttons."+Constants.EDIT;
@@ -100,11 +104,10 @@
 %>
 
 
-	<html:errors />
+<html:errors />
+
 <html:form action="<%=Constants.PARTICIPANT_ADD_ACTION%>">
 		<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
-			
-		   
 		   		   
 		   <logic:equal name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
 		   	<tr>
@@ -139,7 +142,7 @@
 			</logic:equal>		 
 			
 			<!-- If operation is equal to edit or search but,the page is for query the identifier field is not shown -->
-			<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>">
+			<%--logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>">
 				<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
 			<!-- ENTER IDENTIFIER BEGINS-->	
 			  <br/>	
@@ -185,7 +188,7 @@
 			  </tr>
 			  <!-- ENTER IDENTIFIER ENDS-->
 			  	</logic:notEqual>
-			  </logic:notEqual>
+			  </logic:notEqual--%>
 			  
 			   	
 			  <!-- NEW PARTICIPANT REGISTRATION BEGINS-->
@@ -195,6 +198,7 @@
 				 <tr>
 					<td><html:hidden property="<%=Constants.OPERATION%>" value="<%=operation%>"/></td>
 					<td><html:hidden property="counter"/></td>
+					<td><html:hidden property="systemIdentifier" /></td>
 				 </tr>
 				 
 				<logic:equal name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
@@ -274,7 +278,7 @@
 				     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">*</logic:notEqual>
 				     	<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;</logic:equal>
 				     </td>
-				     <td class="formRequiredLabel"><label for="state"><bean:message key="participant.gender"/></label></td>
+				     <td class="formRequiredLabel"><label for="gender"><bean:message key="participant.gender"/></label></td>
 				     <td class="formField">
 				     	<html:select property="gender" styleClass="formFieldSized" styleId="gender" size="1" disabled="<%=readOnlyForAll%>">
 							<%--html:options name="genderList" labelName="genderList"/--%>
@@ -287,10 +291,9 @@
 				     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">*</logic:notEqual>
 				     	<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;</logic:equal>
 				     </td>
-				     <td class="formRequiredLabel"><label for="state"><bean:message key="participant.genotype"/></label></td>
+				     <td class="formRequiredLabel"><label for="genotype"><bean:message key="participant.genotype"/></label></td>
 				     <td class="formField">
 				     	<html:select property="genotype" styleClass="formFieldSized" styleId="genotype" size="1" disabled="<%=readOnlyForAll%>">
-							<%--html:options name="genotypeList" labelName="genotypeList"/--%>
 							<html:options collection="<%=Constants.GENOTYPE_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
 		        	  </td>
@@ -367,9 +370,12 @@
 				{
 					String siteName = "value(ParticipantMedicalIdentifier:"+i+"_Site_systemIdentifier)";
 					String medicalRecordNumber = "value(ParticipantMedicalIdentifier:"+i+"_medicalRecordNumber)";
+					String identifier = "value(ParticipantMedicalIdentifier:" + i +"_systemIdentifier)";
 				%>
 				 <tr>
-				 	<td class="formSerialNumberField" width="5"><%=i%>.</td>
+				 	<td class="formSerialNumberField" width="5"><%=i%>.
+				 		<html:hidden property="<%=identifier%>" />
+				 	</td>
 				    <td class="formField">
 						<html:select property="<%=siteName%>" styleClass="formFieldSized15" styleId="<%=siteName%>" size="1" disabled="<%=readOnlyForAll%>">
 							<html:options collection="<%=Constants.SITELIST%>" labelProperty="name" property="value"/>		

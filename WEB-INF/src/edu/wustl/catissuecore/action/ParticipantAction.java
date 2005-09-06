@@ -47,13 +47,11 @@ public class ParticipantAction  extends SecureAction
         //Sets the operation attribute to be used in the Add/Edit Participant Page. 
         request.setAttribute(Constants.OPERATION,operation);
         
-        //Sets the genderList attribute to be used in the Add/Edit Participant Page. 
-        //request.setAttribute(Constants.GENDER_LIST, Constants.GENDER_ARRAY);
+        //Sets the genderList attribute to be used in the Add/Edit Participant Page.
         List genderList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_GENDER);
         request.setAttribute(Constants.GENDER_LIST, genderList);
         
-        //Sets the genotypeList attribute to be used in the Add/Edit Participant Page. 
-        //request.setAttribute(Constants.GENOTYPE_LIST, Constants.GENOTYPE_ARRAY);
+        //Sets the genotypeList attribute to be used in the Add/Edit Participant Page.
         List genotypeList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_GENOTYPE);
         request.setAttribute(Constants.GENOTYPE_LIST, genotypeList);
         
@@ -63,9 +61,10 @@ public class ParticipantAction  extends SecureAction
         request.setAttribute(Constants.RACELIST,Constants.RACEARRAY);
         
         //Sets the pageOf attribute (for Add,Edit or Query Interface)
-        String pageName  = request.getParameter(Constants.PAGEOF);
-        request.setAttribute(Constants.PAGEOF,pageName);
+        String pageOf  = request.getParameter(Constants.PAGEOF);
         
+        request.setAttribute(Constants.PAGEOF,pageOf);
+                
         try
 		{
         	ParticipantBizLogic dao = (ParticipantBizLogic)BizLogicFactory.getBizLogic(Constants.PARTICIPANT_FORM_ID);
@@ -90,7 +89,7 @@ public class ParticipantAction  extends SecureAction
         	e.printStackTrace();
 		}
         
-        return mapping.findForward(Constants.SUCCESS);
+        return mapping.findForward(pageOf);
     }
 
 }

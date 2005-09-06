@@ -17,7 +17,6 @@ import java.util.Iterator;
 import edu.wustl.catissuecore.dao.DAO;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.dbManager.DAOException;
 
 /**
@@ -36,7 +35,6 @@ public class ParticipantBizLogic extends DefaultBizLogic
 	{
 		Participant participant = (Participant)obj;
         
-		participant.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
 		dao.insert(participant,true);
 		
 		Collection participantMedicalIdentifierCollection = participant.getParticipantMedicalIdentifierCollection();		
@@ -58,5 +56,18 @@ public class ParticipantBizLogic extends DefaultBizLogic
      */
 	protected void update(DAO dao, Object obj) throws DAOException 
     {
+		Participant participant = (Participant)obj;
+        
+		dao.update(participant);
+		
+		Collection participantMedicalIdentifierCollection = participant.getParticipantMedicalIdentifierCollection();		
+		Iterator it = participantMedicalIdentifierCollection.iterator();
+		
+		while(it.hasNext())
+		{
+			ParticipantMedicalIdentifier pmIdentifier = (ParticipantMedicalIdentifier)it.next();
+			pmIdentifier.setParticipant(participant);
+			dao.update(pmIdentifier);
+		}
     }
 }

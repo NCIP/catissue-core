@@ -14,6 +14,7 @@ package edu.wustl.catissuecore.actionForm;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,6 +25,7 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.domain.Participant;
+import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
@@ -99,7 +101,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
     /**
      * The activity status of the Participant.
      */
-    protected String activityStatus = "";
+    protected String activityStatus = Constants.ACTIVITY_STATUS_ACTIVE;
 
     /**
 	 * Map to handle values of all the CollectionProtocol Events
@@ -138,6 +140,37 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
         this.race = participant.getRace();
         this.activityStatus = participant.getActivityStatus();
         this.ethnicity = participant.getEthnicity();
+        
+        Collection medicalIdentifierCollection = participant.getParticipantMedicalIdentifierCollection();
+        
+        if(medicalIdentifierCollection != null)
+        {
+        	values = new HashMap();
+        	int i = 1;
+        	counter = 0;
+        	
+        	Iterator it = medicalIdentifierCollection.iterator();
+        	
+        	while(it.hasNext())
+        	{
+        		String key1 = "ParticipantMedicalIdentifier:" + i +"_Site_systemIdentifier";
+				String key2 = "ParticipantMedicalIdentifier:" + i +"_medicalRecordNumber";
+				String key3 = "ParticipantMedicalIdentifier:" + i +"_systemIdentifier";
+				
+				ParticipantMedicalIdentifier participantMedicalIdentifier = (ParticipantMedicalIdentifier)it.next();
+				
+				values.put(key1,String.valueOf(participantMedicalIdentifier.getSite().getSystemIdentifier()));
+				values.put(key2,participantMedicalIdentifier.getMedicalRecordNumber());
+				values.put(key3,String.valueOf(participantMedicalIdentifier.getSystemIdentifier()));
+				
+				i++;
+				counter++;
+        	}
+        	
+        	//At least one row should be displayed in ADD MORE therefore
+			if(counter == 0)
+				counter = 1;
+        }
    }
     
     /**
@@ -401,14 +434,14 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
      */
     protected void reset()
     {
-        this.systemIdentifier = -1;
-        this.lastName = null;
-        this.firstName = null;
-        this.middleName = null;
-        this.birthDate=null;
-        this.genotype = null;
-        this.socialSecurityNumber = null;
-        this.race = null;
+//        this.systemIdentifier = -1;
+//        this.lastName = null;
+//        this.firstName = null;
+//        this.middleName = null;
+//        this.birthDate=null;
+//        this.genotype = null;
+//        this.socialSecurityNumber = null;
+//        this.race = null;
     }
     
   
