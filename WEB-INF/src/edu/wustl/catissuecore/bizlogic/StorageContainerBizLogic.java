@@ -250,8 +250,11 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
             if (!columnList.isEmpty())
             {
                 String str = (String)columnList.get(0);
-                int no = Integer.parseInt(str);
-                return no + 1;
+                if(!str.equals(""))
+                {
+                	int no = Integer.parseInt(str);
+                	return no + 1;
+                }
             }
         }
 
