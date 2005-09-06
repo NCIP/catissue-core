@@ -207,9 +207,17 @@
 		<put name="content" value="/pages/content/search/SimpleQueryInterface.jsp" />
 	</definition>
 	
+	<definition name=".catissuecore.editSearchResultsFrameDef" extends=".catissuecore.manageAdminDataHomeDef">
+		<put name="content" value="/pages/content/manageAdministrativeData/DataViewFrame.jsp" />
+	</definition>
+	
+	<definition name=".catissuecore.queryDataViewDef" path="/pages/content/search/ContentLayout.jsp">
+	</definition>
+	
 	<definition name=".catissuecore.editSearchResultsDef" extends=".catissuecore.manageAdminDataHomeDef">
 		<put name="content" value="/pages/content/search/DataView.jsp" />
 	</definition>
+	
 	<!-- Manage Administrative Data tab pages definitions end -->
 
 	<!-- Manage BioSpecimen tab pages definitions start -->
@@ -573,9 +581,6 @@
 	</definition>
 
 	<!-- Query edit pages definitions begin -->
-	<definition name=".catissuecore.queryDataViewDef" path="/pages/content/search/ContentLayout.jsp">
-	</definition>
-
 	<definition name=".catissuecore.queryParticipantViewDef" extends=".catissuecore.queryDataViewDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/Participant.jsp" />
 	</definition>
