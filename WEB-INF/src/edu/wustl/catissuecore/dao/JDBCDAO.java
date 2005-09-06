@@ -257,6 +257,10 @@ public class JDBCDAO extends AbstractDAO
                 	{
                 		aList.add(new String(resultSet.getObject(i).toString()));
                 	}
+                	else
+                	{
+                	    aList.add("");
+                	}
                 	i++;
                 }
                 
