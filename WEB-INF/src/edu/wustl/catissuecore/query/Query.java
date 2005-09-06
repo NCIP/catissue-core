@@ -7,12 +7,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 
-import javax.swing.text.Utilities;
-
 import edu.wustl.catissuecore.dao.JDBCDAO;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
-import gov.nih.nci.security.util.StringUtilities;
 
 /**
  *<p>Title: </p>
@@ -152,9 +149,9 @@ public abstract class Query
 	{
 	    try
 	    {
-	        String sql = "SELECT tableData2.ALIAS_NAME, temp.COLUMN_NAME "+
+	        String sql = "SELECT tableData2.ALIAS_NAME, temp.COLUMN_NAME, temp.DISPLAY_NAME "+
 	        			 " from CATISSUE_QUERY_INTERFACE_TABLE_DATA tableData2 join"+
-	        			 " ( SELECT  columnData.COLUMN_NAME, columnData.TABLE_ID "+
+	        			 " ( SELECT  columnData.COLUMN_NAME, columnData.TABLE_ID, columnData.DISPLAY_NAME "+
 	        			 " FROM CATISSUE_QUERY_INTERFACE_COLUMN_DATA columnData, " +
 	        			 " CATISSUE_TABLE_RELATION relationData, "+
 	        			 " CATISSUE_QUERY_INTERFACE_TABLE_DATA tableData " + 
@@ -171,6 +168,7 @@ public abstract class Query
 	        jdbcDao.closeSession();
 		    
 		    Vector vector = new Vector();
+		    Logger.out.debug("list.size()************************"+list.size());
 		    String [] columnNames = new String[list.size()];
 		    Iterator iterator = list.iterator();
 		    int i = 0;
@@ -183,7 +181,7 @@ public abstract class Query
 		        dataElement.setField((String)rowList.get(1));
 		        Logger.out.debug("ALIAS NAME : "+dataElement.getField());
 		        vector.add(dataElement);
-		        columnNames[i++] = (String)rowList.get(1);
+		        columnNames[i++] = (String)rowList.get(2);
 		        Logger.out.debug("COLUMN NAME : "+columnNames[i-1]);
 		    }
 		    
