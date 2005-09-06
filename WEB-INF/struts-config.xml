@@ -163,7 +163,7 @@ PUBLIC
 			name="participantForm"
 			validate="false"
 			scope="request">
-			<forward name="success" path=".catissuecore.participantDef" />
+			<forward name="pageOfParticipant" path=".catissuecore.participantDef" />
 			<forward name="failure" path=".catissuecore.participantDef" />
 			<forward name="access_denied" path="/ManageBioSpecimen.do" />
 		</action>
@@ -172,30 +172,30 @@ PUBLIC
 			type="edu.wustl.catissuecore.action.CommonAddEditAction"
 			name="participantForm"
 			validate="true"
-			input="/Participant.do?operation=add&amp;pageOf="
+			input="/Participant.do?operation=add&amp;pageOf=pageOfParticipant"
 			scope="request">
 			<forward name="success" path=".catissuecore.participantAddSuccessDef" />
-			<forward name="failure" path="/Participant.do?operation=add&amp;pageOf=" />
+			<forward name="failure" path="/Participant.do?operation=add&amp;pageOf=pageOfParticipant" />
 		</action>
 		
 		<action path="/ParticipantEdit"
 			type="edu.wustl.catissuecore.action.CommonAddEditAction"
 			name="participantForm"
 			validate="true"
-			input="/Participant.do?operation=edit&amp;pageOf="
+			input="/Participant.do?operation=edit&amp;pageOf=pageOfParticipant"
 			scope="request">
 			<forward name="success" path=".catissuecore.participantEditSuccessDef" />
-			<forward name="failure" path="/Participant.do?operation=edit&amp;pageOf=" />
+			<forward name="failure" path="/Participant.do?operation=edit&amp;pageOf=pageOfParticipant" />
 		</action>
 		
 		<action path="/ParticipantSearch"
 		    type="edu.wustl.catissuecore.action.CommonSearchAction"
 			name="participantForm"
-			validate="true"
-			input="/Participant.do?operation=edit&amp;pageOf="
+			validate="false"
+			input="/Participant.do?operation=edit&amp;pageOf=pageOfParticipant"
 			scope="request">
-			<forward name="success" path="/Participant.do?operation=edit&amp;pageOf="/>
-			<forward name="failure" path="/Participant.do?operation=edit&amp;pageOf="/>
+			<forward name="pageOfParticipant" path="/Participant.do?operation=edit&amp;pageOf=pageOfParticipant"/>
+			<forward name="failure" path="/Participant.do?operation=edit&amp;pageOf=pageOfParticipant"/>
 		</action>    
 		<!-- Participant Actions Ends -->
 		
@@ -797,7 +797,7 @@ PUBLIC
 			scope="request">
 			<forward name="pageOfStorageType" path="/StorageType.do?operation=edit&amp;pageOf=pageOfStorageType"/>
 			<forward name="failure" path="/StorageType.do?operation=edit&amp;pageOf=pageOfStorageType"/>
-		</action>    
+		</action>
 		<!-- StorageType Actions Ends -->
 		
 		
@@ -1724,6 +1724,7 @@ PUBLIC
 			<forward name="pageOfSite" path="/SiteSearch.do?pageOf=pageOfSite"/>
 			<forward name="pageOfBioHazard" path="/BiohazardSearch.do?pageOf=pageOfBioHazard"/>
 			<forward name="pageOfUserAdmin" path="/UserSearch.do?pageOf=pageOfUserAdmin"/>
+			<forward name="pageOfParticipant" path="/ParticipantSearch.do?pageOf=pageOfParticipant"/>
 			<forward name="failure" path="/QueryParticipant.do?operation=view&amp;pageOf=query"/>
 		</action>
 		<!--Query Result View Actions End-->
