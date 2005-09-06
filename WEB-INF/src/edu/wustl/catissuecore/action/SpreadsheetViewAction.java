@@ -16,7 +16,6 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import edu.wustl.catissuecore.query.ResultData;
 import edu.wustl.catissuecore.util.global.Constants;
 
 
@@ -35,7 +34,6 @@ public class SpreadsheetViewAction extends Action
     public ActionForward execute(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response) throws Exception
     {
-        ResultData resultData = new ResultData();
         List list = (List)request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
         String [] columnNames = (String [])request.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
         
