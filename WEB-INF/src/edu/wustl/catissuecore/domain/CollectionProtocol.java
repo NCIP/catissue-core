@@ -135,7 +135,7 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
         	
         	CollectionProtocolForm cpForm = (CollectionProtocolForm) abstractForm;
         	
-        	userCollection.clear();
+        	//userCollection.clear();
         	long [] coordinatorsArr = cpForm.getProtocolCoordinatorIds();
         	for (int i = 0; i < coordinatorsArr.length; i++)
 			{
@@ -146,7 +146,9 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 	        		
 //	        		if(!contians(userCollection, coordinator))
 //	        		{
-	        			userCollection.add(coordinator);
+	        			//Temp Fix
+	        			if(abstractForm.isAddOperation())
+	        				userCollection.add(coordinator);
 //	        		}
         		}
 			}
