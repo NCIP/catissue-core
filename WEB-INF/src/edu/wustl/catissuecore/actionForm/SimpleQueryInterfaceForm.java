@@ -19,7 +19,6 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.util.global.Validator;
-import edu.wustl.common.util.logger.Logger;
 
 /**
  * @author gautam_shetty
