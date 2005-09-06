@@ -119,7 +119,36 @@ public class Validator
             return false;
         }
     }
-    
+
+    /**
+     * 
+     * Checks that the input String contains only numeric digits.
+     * @param numString The string whose characters are to be checked.
+     * @param positiveCheck Positive integer to check for positive number
+     * @return Returns false if the String contains any alphabet else returns true.
+     * Depending on the value of the positiveCheck will check for positive values
+     *   
+     */
+    public boolean isNumeric(String numString, int positiveCheck)
+    {
+        try
+        {
+            long longValue = Long.parseLong(numString);
+           if(positiveCheck >0 )
+           {
+	            if (longValue <= 0)
+	            {
+	                return false;
+	            }
+           }     
+            return true;
+        }
+        catch(NumberFormatException exp)
+        {
+            return false;
+        }
+    }
+
     
     /**
      * Checks the given String for double value.
@@ -162,9 +191,7 @@ public class Validator
             {
                 return false;
             }
-
-  
-            
+      
             return true;
         }
         catch(NumberFormatException exp)
