@@ -13,8 +13,13 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
+
+import edu.wustl.catissuecore.util.global.Validator;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * @author gautam_shetty
@@ -110,5 +115,28 @@ public class SimpleQueryInterfaceForm extends ActionForm
     {
         this.counter = "1";
         this.values = new HashMap();
+    }
+    
+    
+    /**
+     * Override validate method fo ActionForm class. 
+     */
+    public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
+    {
+        ActionErrors errors = new ActionErrors();
+        Validator validator = new Validator();
+        
+        for (int i = 1;i<=Integer.parseInt(counter);i++)
+        {
+            String key = "SimpleConditionsNode:"+i+"_Condition_value";
+            if (validator.isEmpty((String)getValue(key)))
+            {
+                errors.add(ActionErrors.GLOBAL_ERROR, 
+                        new ActionError("simpleQuery.value.required"));
+            }
+            
+        }
+        
+        return errors;
     }
 }
