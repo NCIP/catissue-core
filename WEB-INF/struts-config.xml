@@ -331,7 +331,7 @@ PUBLIC
 		</action>
 		
 		<action path="/UserSearch"
-		    type="edu.wustl.catissuecore.action.CommonSearchAction"
+		    type="edu.wustl.catissuecore.action.UserSearchAction"
 			name="userForm"
 			validate="true"
 			input="/User.do?operation=edit"
@@ -1565,7 +1565,7 @@ PUBLIC
 			<forward name="failure" path="/Distribution.do?operation=edit"/>
 		</action>    
 		<!-- Distribution Actions Ends -->
-
+		
 		<!--Simple Query Interface Actions Begin-->		
 		<action path="/SimpleQueryInterface"
 			type="edu.wustl.catissuecore.action.SimpleQueryInterfaceAction"
@@ -1643,7 +1643,6 @@ PUBLIC
 			<forward name="success" path="/QueryDepartment.do?operation=edit"/>
 			<forward name="failure" path="/QueryDepartment.do?operation=edit"/>
 		</action>
-				
 		<!--Simple Query Interface Actions End-->		
 		
 		<!-- SpecimenEventParameters Actions Begins -->
