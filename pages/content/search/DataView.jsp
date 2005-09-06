@@ -46,6 +46,8 @@ var myData = [<%int i;%><%for (i=0;i<(dataList.size()-1);i++){%>
 var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnList[k]%>",<%}%>"<%=columnList[k]%>"];
 
 </script>
+
+<div STYLE="overflow: auto; width:100%; height: 340; padding:0px; margin: 0px; border: 1px solid">
 <script>
 	
 		//	create ActiveWidgets Grid javascript object.
@@ -75,4 +77,4 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 		document.write(obj);
 		
 </script>
-
+</div>
