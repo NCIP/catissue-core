@@ -328,6 +328,48 @@ public class SecurityManager implements Permissions
         }
     }
 
+    public Role getUserRole(Long userID) throws SMException
+    {
+        Set groups;
+        UserProvisioningManager userProvisioningManager = null;
+        Iterator it;
+        Group group;
+        Role role =null;
+        try
+        {
+            userProvisioningManager = getUserProvisioningManager();
+            groups = userProvisioningManager.getGroups(String.valueOf(userID));
+            it = groups.iterator();
+            while(it.hasNext())
+            {
+                group = (Group) it.next();
+                if(group.getGroupName().equals(ADMINISTRATOR_GROUP))
+                {
+                    role = userProvisioningManager.getRoleById(ADMINISTRATOR_ROLE);
+                    return role;
+                }
+                else if(group.getGroupName().equals(SUPERVISOR_GROUP))
+                {
+                    role = userProvisioningManager.getRoleById(SUPERVISOR_ROLE);
+                    return role;
+                }
+                else if(group.getGroupName().equals(TECHNICIAN_GROUP))
+                {
+                    role = userProvisioningManager.getRoleById(TECHNICIAN_ROLE);
+                    return role;
+                }
+            }
+        }
+        catch (CSException e)
+        {
+            Logger.out.debug("Unable to get roles: Exception: "
+                    + e.getMessage());
+            throw new SMException(e.getMessage(), e);
+        }
+        return role;
+        
+    }
+    
     /**
      * Modifies an entry for an existing User in the database based on the data passed 
      * @param user - the User object that needs to be modified in the database 
