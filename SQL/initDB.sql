@@ -197,6 +197,9 @@ insert into CATISSUE_TABLE_RELATION values (19 , 19);
 insert into CATISSUE_TABLE_RELATION values (19 , 9 );
 insert into CATISSUE_TABLE_RELATION values (19 , 20);
 insert into CATISSUE_TABLE_RELATION values (19 , 12);
+insert into CATISSUE_TABLE_RELATION values (23 , 23);
+insert into CATISSUE_TABLE_RELATION values (23 , 24);
+insert into CATISSUE_TABLE_RELATION values (23 , 4);
 
 
 
