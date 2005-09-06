@@ -142,7 +142,7 @@ public class SimpleQueryInterfaceForm extends ActionForm
 	            int lastInd = selectedField.lastIndexOf(".");
 	            String dataType = selectedField.substring(lastInd+1);
 //	            System.out.println("\n\n\n\n*******"+ dataType + "\n\n\n\n*******\n");
-	            if((dataType.trim().equals("bigint" ) || dataType.trim().equals("integer" )) && !validator.isNumeric(enteredValue ))
+	            if((dataType.trim().equals("bigint" ) || dataType.trim().equals("integer" )) && !validator.isNumeric(enteredValue,0))
 	            {
 	            	 errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("simpleQuery.intvalue.required"));
 	            }// integer or long
