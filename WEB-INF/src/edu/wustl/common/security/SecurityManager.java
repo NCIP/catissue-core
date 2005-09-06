@@ -64,9 +64,12 @@ public class SecurityManager implements Permissions
     private static final String ADMINISTRATOR_ROLE = "1";
     private static final String SUPERVISOR_ROLE = "2";
     private static final String TECHNICIAN_ROLE = "3";
+    private static final String PUBLIC_ROLE = "7";
     private static final String ADMINISTRATOR_GROUP = "ADMINISTRATOR_GROUP";
     private static final String SUPERVISOR_GROUP = "SUPERVISOR_GROUP";
     private static final String TECHNICIAN_GROUP = "TECHNICIAN_GROUP";
+    private static final String PUBLIC_GROUP = "PUBLIC_GROUP";
+    private static final String PUBLIC_GROUP_ID = "4";
 
     /**
      * @param class1
@@ -281,6 +284,7 @@ public class SecurityManager implements Permissions
             roles.add(userProvisioningManager.getRoleById(ADMINISTRATOR_ROLE));
             roles.add(userProvisioningManager.getRoleById(SUPERVISOR_ROLE));
             roles.add(userProvisioningManager.getRoleById(TECHNICIAN_ROLE));
+            roles.add(userProvisioningManager.getRoleById(PUBLIC_ROLE));
         }
         catch (CSException e)
         {
@@ -311,6 +315,7 @@ public class SecurityManager implements Permissions
             userProvisioningManager.removeUserFromGroup(ADMINISTRATOR_ROLE,String.valueOf(user.getUserId()));
             userProvisioningManager.removeUserFromGroup(SUPERVISOR_ROLE,String.valueOf(user.getUserId()));
             userProvisioningManager.removeUserFromGroup(TECHNICIAN_ROLE,String.valueOf(user.getUserId()));
+            userProvisioningManager.removeUserFromGroup(PUBLIC_GROUP_ID,String.valueOf(user.getUserId()));
             
             if (roleID.equals(ADMINISTRATOR_ROLE))
             {
@@ -326,6 +331,11 @@ public class SecurityManager implements Permissions
             {
                 userProvisioningManager.assignUserToGroup(userName,
                         TECHNICIAN_GROUP);
+            }
+            else if (roleID.equals(PUBLIC_ROLE))
+            {
+                userProvisioningManager.assignUserToGroup(userName,
+                        PUBLIC_GROUP);
             }
         }
         catch (CSException e)
@@ -364,6 +374,11 @@ public class SecurityManager implements Permissions
                 else if(group.getGroupName().equals(TECHNICIAN_GROUP))
                 {
                     role = userProvisioningManager.getRoleById(TECHNICIAN_ROLE);
+                    return role;
+                }
+                else if(group.getGroupName().equals(PUBLIC_GROUP))
+                {
+                    role = userProvisioningManager.getRoleById(PUBLIC_ROLE);
                     return role;
                 }
             }
