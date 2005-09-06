@@ -301,9 +301,17 @@ public class SecurityManager implements Permissions
             throws SMException
     {
         UserProvisioningManager userProvisioningManager = null;
+        User user;
         try
         {
             userProvisioningManager = getUserProvisioningManager();
+            user = userProvisioningManager.getUser(userName);
+            
+            //Remove user from any other role if he is assigned some
+            userProvisioningManager.removeUserFromGroup(ADMINISTRATOR_ROLE,String.valueOf(user.getUserId()));
+            userProvisioningManager.removeUserFromGroup(SUPERVISOR_ROLE,String.valueOf(user.getUserId()));
+            userProvisioningManager.removeUserFromGroup(TECHNICIAN_ROLE,String.valueOf(user.getUserId()));
+            
             if (roleID.equals(ADMINISTRATOR_ROLE))
             {
                 userProvisioningManager.assignUserToGroup(userName,
