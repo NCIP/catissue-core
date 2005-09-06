@@ -128,11 +128,29 @@ public class SimpleQueryInterfaceForm extends ActionForm
         for (int i = 1;i<=Integer.parseInt(counter);i++)
         {
             String key = "SimpleConditionsNode:"+i+"_Condition_value";
-            if (validator.isEmpty((String)getValue(key)))
+            String enteredValue = (String)getValue(key);
+            if (validator.isEmpty(enteredValue))
             {
                 errors.add(ActionErrors.GLOBAL_ERROR, 
                         new ActionError("simpleQuery.value.required"));
             }
+            else
+            {
+	            //---------- DataType validation
+	            String dataElement = "SimpleConditionsNode:"+i+"_Condition_DataElement_field";
+	            String selectedField = (String)getValue(dataElement);
+	            int lastInd = selectedField.lastIndexOf(".");
+	            String dataType = selectedField.substring(lastInd+1);
+//	            System.out.println("\n\n\n\n*******"+ dataType + "\n\n\n\n*******\n");
+	            if((dataType.trim().equals("bigint" ) || dataType.trim().equals("integer" )) && !validator.isNumeric(enteredValue ))
+	            {
+	            	 errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("simpleQuery.intvalue.required"));
+	            }// integer or long
+	            else if((dataType.trim().equals("double" )) && !validator.isDouble(enteredValue))
+	            {
+	            	 errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("simpleQuery.decvalue.required"));
+	            } // double
+	        }
             
         }
         
