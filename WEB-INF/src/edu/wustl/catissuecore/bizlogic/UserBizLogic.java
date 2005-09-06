@@ -188,53 +188,9 @@ public class UserBizLogic extends DefaultBizLogic
             SecurityManager.getInstance(UserBizLogic.class).assignRoleToUser(
                     csmUser.getLoginName(), user.getRoleId());
 
+            dao.update(user.getAddress());
             dao.update(user);
             
-            //Send email to administrator and cc it to the user registered.
-            SendEmail email = new SendEmail();
-
-            String subject = ApplicationProperties
-                    .getValue("userRegistration.approve.subject");
-
-            String body = "Dear "
-                    + csmUser.getFirstName()
-                    + " "
-                    + csmUser.getLastName()
-                    + "\n\n"
-                    + ApplicationProperties
-                            .getValue("userRegistration.approved.body.start")
-                    + ApplicationProperties
-                            .getValue("userRegistration.loginDetails")
-                    + "\n\tLogin Name : " + csmUser.getLoginName()
-                    + "\n\tPassword : " + csmUser.getPassword() + "\n\n"
-                    + ApplicationProperties.getValue("email.catissuecore.team");
-
-            String adminEmailAddress = ApplicationProperties
-                    .getValue("email.administrative.emailAddress");
-            String technicalSupportEmailAddress = ApplicationProperties
-                    .getValue("email.technicalSupport.emailAddress");
-            String mailServer = ApplicationProperties
-                    .getValue("email.mailServer");
-
-            boolean emailStatus = email.sendmail(adminEmailAddress, csmUser.getEmailId(), null,
-                    technicalSupportEmailAddress, mailServer, subject, body);
-
-            if (emailStatus)
-            {
-                Logger.out.info(ApplicationProperties
-                        .getValue("userRegistration.email.success")
-                        + csmUser.getFirstName()
-                        + " "
-                        + csmUser.getLastName());
-            }
-            else
-            {
-                Logger.out.info(ApplicationProperties
-                        .getValue("userRegistration.email.failure")
-                        + csmUser.getFirstName()
-                        + " "
-                        + csmUser.getLastName());
-            }
         }
         catch (SMException smExp)
         {
