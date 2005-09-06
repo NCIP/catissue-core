@@ -3,6 +3,14 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants,edu.wustl.catissuecore.actionForm.SimpleQueryInterfaceForm,java.util.List,edu.wustl.common.beans.NameValueBean"%>
 
+<head>
+<style>
+.hideTD
+{
+	display:none;
+}
+</style>
+</head>
 <%
 	List objectNameArray = (List)request.getAttribute(Constants.OBJECT_NAME_LIST);
 	String[] attributeConditionArray = (String[])request.getAttribute(Constants.ATTRIBUTE_CONDITION_LIST);
@@ -128,6 +136,38 @@ function changeAndOrLink(id, operation)
 	var r = document.getElementById(id);
 	r.innerHTML = operation;
 }
+
+function showDateColumn(element)
+{
+	var dataStr = element.options[element.selectedIndex].value;
+	var dataValue = new String(dataStr);
+//	alert(dataValue);
+	var lastInd = dataValue.lastIndexOf(".");
+//	alert(lastInd);
+	if(lastInd == -1)
+		return;
+	else
+	{
+		var dataType = dataValue.substr(lastInd+1);
+
+		var txtField = document.getElementById("attributeValue");
+		txtField.value="";
+
+		if (dataType == "date")
+		{
+			var td = document.getElementById("calTD");
+			td.className="formField";
+			txtField.readOnly="readOnly";
+		}
+		else
+		{
+			var td = document.getElementById("calTD");
+			td.className="hideTD";
+			txtField.readOnly="";
+		}	
+	}	
+}
+
 </script>
 
 <html:errors />
@@ -184,7 +224,7 @@ function changeAndOrLink(id, operation)
 						</html:select>
 					</td>
 					<td class="formField">
-						<html:select property="<%=attributeName%>" styleClass="formFieldSized15" styleId="attributeName" size="1">
+						<html:select property="<%=attributeName%>" styleClass="formFieldSized15" styleId="attributeName" size="1" onchange="showDateColumn(this)">
 							<logic:notPresent name="<%=attributeNameList%>">			
 								<html:options name="attributeNameList" labelName="attributeNameList" />
 							</logic:notPresent>	
@@ -200,7 +240,19 @@ function changeAndOrLink(id, operation)
 					</td>
 					<td class="formField">
 						<html:text styleClass="formFieldSized10" size="30" styleId="attributeValue" property="<%=attributeValue%>" />
+
 					</td>
+				<!--  ********************* MD Code ********************** -->	
+					<td id="calTD" class="hideTD">
+					<%	
+						String fieldName = "simpleQueryInterfaceForm.attributeValue";
+					%>
+						<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
+							<a href="javascript:show_calendar('<%=fieldName%>',null,null,'MM-DD-YYYY');">
+								<img src="images\calendar.gif" width=24 height=22 border=0>
+							</a>
+					</td>
+					
 					<logic:equal name="<%=pageOf%>" value="<%=Constants.PAGEOF_SIMPLE_QUERY_INTERFACE%>">
 					<td class="formField">
 						<html:hidden property="<%=nextOperator%>"/>
@@ -225,7 +277,7 @@ function changeAndOrLink(id, operation)
 					<table cellpadding="4" cellspacing="0" border="0">
 						<tr>
 							<td>
-								<html:submit styleClass="actionButton">
+								<html:submit styleClass="actionButton" >
 									<bean:message  key="buttons.search" />
 								</html:submit>
 							</td>
