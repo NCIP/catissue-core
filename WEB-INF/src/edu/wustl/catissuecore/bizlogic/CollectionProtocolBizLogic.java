@@ -91,7 +91,7 @@ public class CollectionProtocolBizLogic extends DefaultBizLogic implements Roles
 		
     	//collectionProtocol.setPrincipalInvestigator(null);
     	//collectionProtocol.getUserCollection().clear();
-		setPrincipalInvestigator(dao,collectionProtocol);		
+		//setPrincipalInvestigator(dao,collectionProtocol);		
 		//setCoordinatorCollection(dao,collectionProtocol);
 		
 		dao.update(collectionProtocol);
@@ -107,6 +107,10 @@ public class CollectionProtocolBizLogic extends DefaultBizLogic implements Roles
 			while(srIt.hasNext())
 			{
 				SpecimenRequirement specimenRequirement = (SpecimenRequirement)srIt.next();
+				
+				Logger.out.debug("specimenRequirement "+specimenRequirement);
+				
+				
 				specimenRequirement.getCollectionProtocolEventCollection().add(collectionProtocolEvent);
 				dao.update(specimenRequirement);
 			}
