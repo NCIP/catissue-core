@@ -136,7 +136,7 @@ PUBLIC
         <action path="/SignUp"
 			type="edu.wustl.catissuecore.action.UserAction"
 			scope="request">
-			<forward name="success" path=".catissuecore.userSignUpDef" />
+			<forward name="pageOfSignUp" path=".catissuecore.userSignUpDef" />
 			<forward name="failure" path=".catissuecore.userSignUpDef" />
 		</action>
 		
