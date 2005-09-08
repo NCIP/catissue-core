@@ -62,6 +62,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
             {
                 StorageContainer pc = (StorageContainer) list.get(0);
                 container.setParentContainer(pc);
+                container.setSite(pc.getSite());
             }
             
             posOneCapacity = container.getParentContainer().getStorageContainerCapacity().getOneDimensionCapacity().intValue();
@@ -141,6 +142,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
             {
                 StorageContainer pc = (StorageContainer) list.get(0);
                 container.setParentContainer(pc);
+                container.setSite(pc.getSite());
             }
             
             posOneCapacity = container.getParentContainer().getStorageContainerCapacity().getOneDimensionCapacity().intValue();
@@ -153,18 +155,17 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
         }
         
 
-            StorageContainer cont = new StorageContainer(container);
-            if (cont.getParentContainer() != null)
+            if (container.getParentContainer() != null)
             {
-                cont.setPositionDimensionOne(new Integer(positionDimensionOne));
-                cont.setPositionDimensionTwo(new Integer(positionDimensionTwo));
+                container.setPositionDimensionOne(new Integer(positionDimensionOne));
+                container.setPositionDimensionTwo(new Integer(positionDimensionTwo));
             }
             
             //cont.setName(String.valueOf(i + container.getStartNo().intValue()));
-            dao.update(cont.getStorageContainerCapacity());
-            dao.update(cont);
+//            dao.update(cont.getStorageContainerCapacity());
+            dao.update(container);
 
-            Collection storageContainerDetailsCollection = cont.getStorageContainerDetailsCollection();
+            Collection storageContainerDetailsCollection = container.getStorageContainerDetailsCollection();
             
             if (storageContainerDetailsCollection.size() > 0)
             {
@@ -172,7 +173,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
                 while (it.hasNext())
                 {
                     StorageContainerDetails storageContainerDetails = (StorageContainerDetails) it.next();
-                    storageContainerDetails.setStorageContainer(cont);
+                    storageContainerDetails.setStorageContainer(container);
                     dao.update(storageContainerDetails);
                 }
             }
