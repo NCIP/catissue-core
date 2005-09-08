@@ -263,7 +263,7 @@ PUBLIC
 			type="edu.wustl.catissuecore.action.CommonAddEditAction"
 			name="institutionForm"
 			validate="true"
-			input="/Institution.do?operation=edit"
+			input="/Institution.do?operation=edit&amp;pageOf=pageOfInstitution"
 			scope="request">
 			<forward name="success" path=".catissuecore.institutionEditSuccessDef" />
 			<forward name="failure" path="/Institution.do?operation=edit&amp;pageOf=pageOfInstitution" />
