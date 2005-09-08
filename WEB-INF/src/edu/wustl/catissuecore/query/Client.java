@@ -35,7 +35,7 @@ public class Client
 
     public static void initialize()
     {
-        setObjectTableNames();
+//        setObjectTableNames();
         setRelationConditionsForRelatedTables();
         setRelations();
     }
@@ -114,11 +114,11 @@ public class Client
                 Query.ADDRESS, "Identifier"), new Operator(Operator.EQUAL),
                 new DataElement(Query.SITE, "ADDRESS_ID")));
         relationConditionsForRelatedTables.put(new Relation(
-                Query.STORAGE_CONTAINER_CAPACITY, Query.STORAGE_TYPE),
+                Query.STORAGE_CONTAINER_CAPACITY, Query.STORAGE_CONTAINER),
                 new RelationCondition(new DataElement(
                         Query.STORAGE_CONTAINER_CAPACITY, "Identifier"),
                         new Operator(Operator.EQUAL), new DataElement(
-                                Query.STORAGE_TYPE,
+                                Query.STORAGE_CONTAINER,
                                 "STORAGE_CONTAINER_CAPACITY_ID")));
         relationConditionsForRelatedTables
                 .put(new Relation(Query.SPECIMEN_PROTOCOL,
@@ -569,4 +569,5 @@ public class Client
         //        ((AdvancedConditionsImpl)((AdvancedQuery)query).whereConditions).setWhereCondition(root);
         //        System.out.println(query.getString()+"\n\n");
     }
+   
 }
