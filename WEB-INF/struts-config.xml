@@ -204,7 +204,7 @@ PUBLIC
         <action path="/CollectionProtocolRegistration"
 			type="edu.wustl.catissuecore.action.CollectionProtocolRegistrationAction"
 			scope="request">
-			<forward name="success" path=".catissuecore.collectionProtocolRegistrationDef" />
+			<forward name="pageOfCollectionProtocolRegistration" path=".catissuecore.collectionProtocolRegistrationDef" />
 			<forward name="failure" path=".catissuecore.collectionProtocolRegistrationDef" />
 			<forward name="access_denied" path="/ManageBioSpecimen.do" />
 		</action>
@@ -213,30 +213,30 @@ PUBLIC
 			type="edu.wustl.catissuecore.action.CommonAddEditAction"
 			name="collectionProtocolRegistrationForm"
 			validate="true"
-			input="/CollectionProtocolRegistration.do?operation=add"
+			input="/CollectionProtocolRegistration.do?operation=add&amp;pageOf=pageOfCollectionProtocolRegistration"
 			scope="request">
 			<forward name="success" path=".catissuecore.collectionProtocolRegistrationAddSuccessDef" />
-			<forward name="failure" path="/CollectionProtocolRegistration.do?operation=add" />
+			<forward name="failure" path="/CollectionProtocolRegistration.do?operation=add&amp;pageOf=pageOfCollectionProtocolRegistration" />
 		</action>
 		
 		<action path="/CollectionProtocolRegistrationEdit"
 			type="edu.wustl.catissuecore.action.CommonAddEditAction"
 			name="collectionProtocolRegistrationForm"
 			validate="true"
-			input="/CollectionProtocolRegistration.do?operation=edit"
+			input="/CollectionProtocolRegistration.do?operation=edit&amp;pageOf=pageOfCollectionProtocolRegistration"
 			scope="request">
 			<forward name="success" path=".catissuecore.collectionProtocolRegistrationEditSuccessDef" />
-			<forward name="failure" path="/CollectionProtocolRegistration.do?operation=edit" />
+			<forward name="failure" path="/CollectionProtocolRegistration.do?operation=edit&amp;pageOf=pageOfCollectionProtocolRegistration" />
 		</action>
 		
 		<action path="/CollectionProtocolRegistrationSearch"
 		    type="edu.wustl.catissuecore.action.CommonSearchAction"
 			name="collectionProtocolRegistrationForm"
-			validate="true"
-			input="/CollectionProtocolRegistrationSearch.do?operation=edit"
+			validate="false"
+			input="/CollectionProtocolRegistrationSearch.do?operation=edit&amp;pageOf=pageOfCollectionProtocolRegistration"
 			scope="request">
-			<forward name="success" path="/CollectionProtocolRegistration.do?operation=edit"/>
-			<forward name="failure" path="/CollectionProtocolRegistration.do?operation=edit"/>
+			<forward name="pageOfCollectionProtocolRegistration" path="/CollectionProtocolRegistration.do?operation=edit&amp;pageOf=pageOfCollectionProtocolRegistration"/>
+			<forward name="failure" path="/CollectionProtocolRegistration.do?operation=edit&amp;pageOf=pageOfCollectionProtocolRegistration"/>
 		</action>    
 		<!-- Collection Protocol Registration Actions Ends -->
 		
@@ -681,7 +681,7 @@ PUBLIC
 			name="newSpecimenForm"
 			validate="false"
 			scope="request">
-			<forward name="success" path=".catissuecore.newSpecimenDef" />
+			<forward name="pageOfNewSpecimen" path=".catissuecore.newSpecimenDef" />
 			<forward name="failure" path=".catissuecore.newSpecimenDef" />
 			<forward name="access_denied" path="/ManageBioSpecimen.do" />
 		</action>
@@ -690,30 +690,30 @@ PUBLIC
 			type="edu.wustl.catissuecore.action.CommonAddEditAction"
 			name="newSpecimenForm"
 			validate="true"
-			input="/NewSpecimen.do?operation=add&amp;pageOf="
+			input="/NewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimen"
 			scope="request">
 			<forward name="success" path=".catissuecore.newSpecimenAddSuccessDef" />
-			<forward name="failure" path="/NewSpecimen.do?operation=add&amp;pageOf=" />
+			<forward name="failure" path="/NewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimen" />
 		</action>
 		
 		<action path="/NewSpecimenEdit"
 			type="edu.wustl.catissuecore.action.CommonAddEditAction"
 			name="newSpecimenForm"
 			validate="true"
-			input="/NewSpecimen.do?operation=edit&amp;pageOf="
+			input="/NewSpecimen.do?operation=edit&amp;pageOf=pageOfNewSpecimen"
 			scope="request">
 			<forward name="success" path=".catissuecore.newSpecimenEditSuccessDef" />
-			<forward name="failure" path="/NewSpecimen.do?operation=edit&amp;pageOf=" />
+			<forward name="failure" path="/NewSpecimen.do?operation=edit&amp;pageOf=pageOfNewSpecimen" />
 		</action>
 		
 		<action path="/NewSpecimenSearch"
 		    type="edu.wustl.catissuecore.action.CommonSearchAction"
 			name="newSpecimenForm"
-			validate="true"
-			input="/NewSpecimen.do?operation=edit"
+			validate="false"
+			input="/NewSpecimen.do?operation=edit&amp;pageOf=pageOfNewSpecimen"
 			scope="request">
-			<forward name="success" path="/NewSpecimen.do?operation=edit&amp;pageOf="/>
-			<forward name="failure" path="/NewSpecimen.do?operation=edit&amp;pageOf="/>
+			<forward name="pageOfNewSpecimen" path="/NewSpecimen.do?operation=edit&amp;pageOf=pageOfNewSpecimen"/>
+			<forward name="failure" path="/NewSpecimen.do?operation=edit&amp;pageOf=pageOfNewSpecimen"/>
 		</action>
 		<!--New Specimen Actions Ends-->
 		
@@ -1724,6 +1724,8 @@ PUBLIC
 			<forward name="pageOfBioHazard" path="/BiohazardSearch.do?pageOf=pageOfBioHazard"/>
 			<forward name="pageOfUserAdmin" path="/UserSearch.do?pageOf=pageOfUserAdmin"/>
 			<forward name="pageOfParticipant" path="/ParticipantSearch.do?pageOf=pageOfParticipant"/>
+			<forward name="pageOfCollectionProtocolRegistration" path="/CollectionProtocolRegistrationSearch.do?pageOf=pageOfCollectionProtocolRegistration"/>
+			<forward name="pageOfNewSpecimen" path="/NewSpecimenSearch.do?pageOf=pageOfNewSpecimen"/>
 			<forward name="failure" path="/QueryParticipant.do?operation=view&amp;pageOf=query"/>
 		</action>
 		<!--Query Result View Actions End-->
