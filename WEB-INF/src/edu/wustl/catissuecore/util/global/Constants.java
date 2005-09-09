@@ -102,6 +102,7 @@ public class Constants
 	public static final String STORAGETYPEIDLIST="storageTypeIdList";
 	public static final String SPECIMENCOLLECTIONLIST="specimentCollectionList";
 	public static final String APPROVE_USER_STATUS_LIST = "statusList";
+	public static final String EVENT_PARAMETERS_LIST = "eventParametersList";
 		
 	//New Specimen lists.
 	public static final String SPECIMEN_COLLECTION_GROUP_LIST = "specimenCollectionGroupIdList";
@@ -1159,6 +1160,8 @@ public class Constants
 	public static final String CDE_NAME_METHOD = "Method";
 	public static final String CDE_NAME_EMBEDDING_MEDIUM = "Embedding Medium";
 	public static final String CDE_NAME_BIOHAZARD = "Biohazard";
+	public static final String CDE_NAME_ETHNICITY = "Ethnicity";
+	public static final String CDE_NAME_RACE = "Race";
 	
 	public static final String [] STORAGESTATUSARRAY = {
 	        SELECT_OPTION,
