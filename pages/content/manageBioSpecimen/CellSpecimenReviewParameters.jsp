@@ -12,7 +12,6 @@
 <%
         String operation = (String) request.getAttribute(Constants.OPERATION);
         String formName;
-        String searchFormName = new String(Constants.CELL_SPECIMEN_REVIEW_PARAMETERS_SEARCH_ACTION);
 
         boolean readOnlyValue;
         if (operation.equals(Constants.EDIT))
@@ -25,59 +24,13 @@
             formName = Constants.CELL_SPECIMEN_REVIEW_PARAMETERS_ADD_ACTION;
             readOnlyValue = false;
         }
-		
 %>	
 			
 <html:errors/>
     
 <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
 
-<html:form action="<%=Constants.CELL_SPECIMEN_REVIEW_PARAMETERS_ADD_ACTION%>">
-
-	<logic:notEqual name="operation" value="<%=Constants.ADD%>"> 
-	<!-- ENTER IDENTIFIER BEGINS-->	
-	<br/>	
-	<tr>
-		<td>
-			<table summary="" cellpadding="3" cellspacing="0" border="0">
-				<tr>
-					<td class="formTitle" height="20" colspan="3">
-						<bean:message key="cellspecimenreviewparameters.searchTitle"/>
-					</td>
-				</tr>	
-		  
-				<tr>
-					<td class="formRequiredNotice" width="5">*</td>
-					<td class="formRequiredLabel">
-						<label for="systemIdentifier">
-							<bean:message key="eventparameters.systemIdentifier"/>
-						</label>
-					</td>
-					<td class="formField">
-						<html:text styleClass="formFieldSized" size="30" styleId="systemIdentifier" property="systemIdentifier"/>
-					</td>
-				</tr>	
-				<%
-					String changeAction = "setFormAction('" + searchFormName
-							  + "');setOperation('" + Constants.SEARCH + "');";
-				%>
-				<tr>
-					<td align="right" colspan="3">
-					<table cellpadding="4" cellspacing="0" border="0">
-						<tr>
-							<td>
-								<html:submit styleClass="actionButton" value="Search" onclick="<%=changeAction%>" />
-							</td>
-						</tr>
-					</table>
-					</td>
-				</tr>
-			</table>
-		</td>
-	</tr>
-	<!-- ENTER IDENTIFIER ENDS-->	
-	</logic:notEqual> 
-	
+	<html:form action="<%=Constants.CELL_SPECIMEN_REVIEW_PARAMETERS_ADD_ACTION%>">
 
 	<!-- NEW CELL_SPECIMEN_REVIEW_PARAMETERS REGISTRATION BEGINS-->
 	<tr>
@@ -87,16 +40,24 @@
 		<tr>
 			<td><html:hidden property="operation" value="<%=operation%>"/></td>
 		</tr>
+		
+		<tr>
+			<td><html:hidden property="systemIdentifier" /></td>
+		</tr>
 
-		<logic:notEqual name="operation" value="<%=Constants.SEARCH%>">
 		<tr>
 			 <td class="formMessage" colspan="3">* indicates a required field</td>
 		</tr>
 
 		<tr>
-			 <td class="formTitle" height="20" colspan="3">
-				<bean:message key="cellspecimenreviewparameters.title"/>
-			 </td>
+			<td class="formTitle" height="20" colspan="3">
+				<logic:equal name="operation" value="<%=Constants.ADD%>">
+					<bean:message key="cellspecimenreviewparameters.title"/>
+				</logic:equal>
+				<logic:equal name="operation" value="<%=Constants.EDIT%>">
+					<bean:message key="cellspecimenreviewparameters.edittitle"/>
+				</logic:equal>
+			</td>
 		</tr>
 
 		<!-- Name of the cellspecimenreviewparameters -->
@@ -209,7 +170,6 @@
 			</td>
 		</tr>
 
-		</logic:notEqual>
 		</table>
 		
 	  </td>

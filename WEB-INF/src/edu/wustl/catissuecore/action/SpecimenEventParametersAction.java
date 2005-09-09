@@ -53,17 +53,8 @@ public class SpecimenEventParametersAction  extends SecureAction
         	
         	UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getBizLogic(Constants.USER_FORM_ID);
         	Collection coll =  userBizLogic.getUsers(Constants.ACTIVITY_STATUS_ACTIVE);
-//			Collection coll =  new ArrayList();
-//			NameValueBean aNameValueBean = new NameValueBean();
-//			aNameValueBean.setName(Constants.SELECT_OPTION);
-//			aNameValueBean.setValue("-1");
-//			coll.add(aNameValueBean);
-//		
-        	request.setAttribute(Constants.USERLIST, coll);
         	
-        	List qualityList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_RECEIVED_QUALITY);
-        	request.setAttribute(Constants.RECEIVED_QUALITY_LIST, qualityList);
-            
+        	request.setAttribute(Constants.USERLIST, coll);
         }
         catch (Exception exc)
         {
@@ -79,6 +70,7 @@ public class SpecimenEventParametersAction  extends SecureAction
             throws IOException, ServletException
     {
     	setRequestParameters(request);
-        return mapping.findForward(Constants.SUCCESS);
+    	
+    	return mapping.findForward((String)request.getParameter(Constants.PAGEOF));
     }
 }

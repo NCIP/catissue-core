@@ -29,7 +29,6 @@ public class FrozenEventParametersAction extends SpecimenEventParametersAction
 		
 		//set array of methods
         //Sets the hourList attribute to be used in the Add/Edit FrozenEventParameters Page.
-        //request.setAttribute(Constants.METHODLIST  , Constants.METHODARRAY);
 		List methodList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_METHOD);
     	request.setAttribute(Constants.METHODLIST, methodList);
 	}

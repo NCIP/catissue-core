@@ -22,18 +22,13 @@ import edu.wustl.common.cde.CDEManager;
  *
  * This class initializes the fields in the CollectionEventParameters Add/Edit webpage.
  */
-public class CollectionEventParametersAction extends SpecimenEventParametersAction
+public class ReceivedEventParametersAction extends SpecimenEventParametersAction
 {
 	protected void setRequestParameters(HttpServletRequest request)
 	{
 		super.setRequestParameters(request);
 		
-		// set the procedure lists
-		List procedureList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_COLLECTION_PROCEDURE);
-    	request.setAttribute(Constants.PROCEDURELIST, procedureList);
-	    
-	    // set the container lists
-    	List containerList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_CONTAINER);
-    	request.setAttribute(Constants.CONTAINERLIST, containerList);
+		List qualityList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_RECEIVED_QUALITY);
+    	request.setAttribute(Constants.RECEIVED_QUALITY_LIST, qualityList);
 	}
 }

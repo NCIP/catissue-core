@@ -28,7 +28,6 @@ public class EmbeddedEventParametersAction extends SpecimenEventParametersAction
 		super.setRequestParameters(request);
 		
 		//set array of EmbeddingMedium
-		//request.setAttribute(Constants.EMBEDDINGMEDIUMLIST, Constants.EMBEDDINGMEDIUMARRAY);
 		List embeddingMediumList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_EMBEDDING_MEDIUM);
     	request.setAttribute(Constants.EMBEDDINGMEDIUMLIST, embeddingMediumList);
 	}

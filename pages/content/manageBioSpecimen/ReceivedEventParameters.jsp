@@ -12,7 +12,6 @@
 <%
         String operation = (String) request.getAttribute(Constants.OPERATION);
         String formName;
-        String searchFormName = new String(Constants.RECEIVED_EVENT_PARAMETERS_SEARCH_ACTION);
 
         boolean readOnlyValue;
         if (operation.equals(Constants.EDIT))
@@ -34,50 +33,6 @@
 
 <html:form action="<%=Constants.RECEIVED_EVENT_PARAMETERS_ADD_ACTION%>">
 
-	<logic:notEqual name="operation" value="<%=Constants.ADD%>"> 
-	<!-- ENTER IDENTIFIER BEGINS-->	
-	<br/>	
-	<tr>
-		<td>
-			<table summary="" cellpadding="3" cellspacing="0" border="0">
-				<tr>
-					<td class="formTitle" height="20" colspan="3">
-						<bean:message key="receivedeventparameters.searchTitle"/>
-					</td>
-				</tr>	
-		  
-				<tr>
-					<td class="formRequiredNotice" width="5">*</td>
-					<td class="formRequiredLabel">
-						<label for="systemIdentifier">
-							<bean:message key=".systemIdentifier"/>
-						</label>
-					</td>
-					<td class="formField">
-						<html:text styleClass="formFieldSized" size="30" styleId="systemIdentifier" property="systemIdentifier"/>
-					</td>
-				</tr>	
-				<%
-					String changeAction = "setFormAction('" + searchFormName
-							  + "');setOperation('" + Constants.SEARCH + "');";
-				%>
-				<tr>
-					<td align="right" colspan="3">
-					<table cellpadding="4" cellspacing="0" border="0">
-						<tr>
-							<td>
-								<html:submit styleClass="actionButton" value="Search" onclick="<%=changeAction%>" />
-							</td>
-						</tr>
-					</table>
-					</td>
-				</tr>
-			</table>
-		</td>
-	</tr>
-	<!-- ENTER IDENTIFIER ENDS-->	
-	</logic:notEqual> 
-	
 
 	<!-- NEW RECEIVEDEventParameter REGISTRATION BEGINS-->
 	<tr>
@@ -87,18 +42,26 @@
 		<tr>
 			<td><html:hidden property="operation" value="<%=operation%>"/></td>
 		</tr>
-
-		<logic:notEqual name="operation" value="<%=Constants.SEARCH%>">
+		
+		<tr>
+			<td><html:hidden property="systemIdentifier" /></td>
+		</tr>
+		
 		<tr>
 			 <td class="formMessage" colspan="3">* indicates a required field</td>
 		</tr>
 
 		<tr>
-			 <td class="formTitle" height="20" colspan="3">
-				<bean:message key="receivedeventparameters.title"/>
-			 </td>
+			<td class="formTitle" height="20" colspan="3">
+				<logic:equal name="operation" value="<%=Constants.ADD%>">
+					<bean:message key="receivedeventparameters.title"/>
+				</logic:equal>
+				<logic:equal name="operation" value="<%=Constants.EDIT%>">
+					<bean:message key="receivedeventparameters.edittitle"/>
+				</logic:equal>
+			</td>
 		</tr>
-
+		
 		<!-- Name of the receivedeventparameter -->
 <!-- User -->		
 		<tr>
@@ -161,7 +124,6 @@
 				</label>
 			</td>
 			<td class="formField">
-				<%--html:text styleClass="formDateSized" size="35" styleId="receivedQuality" property="receivedQuality" /--%>
 				<html:select property="receivedQuality" styleClass="formFieldSized15" styleId="receivedQuality" size="1">
 					<html:options collection="<%=Constants.RECEIVED_QUALITY_LIST%>" labelProperty="name" property="value"/>
 				</html:select>
@@ -200,7 +162,6 @@
 			</td>
 		</tr>
 
-		</logic:notEqual>
 		</table>
 		
 	  </td>
