@@ -13,6 +13,8 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.exception.UserNotAuthenticatedException;
 import edu.wustl.catissuecore.util.global.Constants;
 
+import edu.wustl.common.beans.SessionDataBean;
+
 
 /**
  * This is the base class for all other Actions. The class provides generic
@@ -41,7 +43,7 @@ public abstract class BaseAction extends Action  {
 	public final ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
-		if (request.getSession().getAttribute(Constants.USER) == null) {
+		if (request.getSession().getAttribute(Constants.SESSION_DATA) == null) {
 			//Forward to the Login
 		   
 			throw new UserNotAuthenticatedException();
@@ -56,7 +58,14 @@ public abstract class BaseAction extends Action  {
 	 * @return
 	 */
 	protected String getUserLoginName(HttpServletRequest request) {
-		return  (String) request.getSession().getAttribute(Constants.USER);
+		Object obj = request.getSession().getAttribute(Constants.SESSION_DATA);
+		if(obj!=null)
+		{
+			SessionDataBean sessionData = (SessionDataBean) obj;
+			return  sessionData.getUserName();
+		}
+		return null;
+		//return (String) request.getSession().getAttribute(Constants.SESSION_DATA);
 	}
 	
 	/**

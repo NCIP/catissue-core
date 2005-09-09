@@ -22,7 +22,7 @@ public class Constants
  
     //Constants used for authentication module.
     public static final String LOGIN = "login";
-    public static final String USER = "user";
+    public static final String SESSION_DATA = "sessionData";
     
     public static final String AND_JOIN_CONDITION = "AND";
 	public static final String OR_JOIN_CONDITION = "OR";

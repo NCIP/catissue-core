@@ -26,6 +26,8 @@ import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
+import edu.wustl.common.beans.SessionDataBean;
+
 /**
  * 
  *<p>Title: </p>
@@ -62,7 +64,9 @@ public class LoginAction extends Action
 
         loginName = loginForm.getLoginName();
         password = loginForm.getPassword();
-
+        String ipAddress = null;
+        SessionDataBean sessionData = new SessionDataBean();
+        Long userId = null;
         try
         {
         	boolean validUser = isValidUser(loginName );
@@ -73,9 +77,18 @@ public class LoginAction extends Action
 	                    .login(loginName, password);
 	            if (loginOK)
 	            {
-	                Logger.out.info(">>>>>>>>>>>>> SUCESSFUL LOGIN <<<<<<<<< ");
+	                Logger.out.info(">>>>>>>>>>>>> SUCESSFUL LOGIN A <<<<<<<<< ");
 	                session = request.getSession(true);
-	                session.setAttribute(Constants.USER,loginName);
+	                gov.nih.nci.security.authorization.domainobjects.User userData = SecurityManager.getInstance(
+	                																LoginAction.class).getUser(loginName);
+	                userId = userData.getUserId();
+	                ipAddress = request.getRemoteAddr();
+	                sessionData.setUserName(loginName);
+	                sessionData.setIpAddress(ipAddress);
+	                sessionData.setUserId(userId);
+	                session.setAttribute(Constants.SESSION_DATA,sessionData);
+	                //session.setAttribute(Constants.SESSION_DATA,loginName);
+	                Logger.out.info(">>>>>>>>>>>>> SUCESSFUL LOGIN B <<<<<<<<< ");
 	                return mapping.findForward(Constants.SUCCESS);
 	            }
 	            else
