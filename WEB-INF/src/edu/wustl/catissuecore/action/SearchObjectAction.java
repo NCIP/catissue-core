@@ -34,7 +34,11 @@ public class SearchObjectAction extends Action
     {
         Long identifier = Long.valueOf(request.getParameter(Constants.IDENTIFIER));
         request.setAttribute(Constants.IDENTIFIER, identifier);
-        return mapping.findForward(request.getParameter(Constants.PAGEOF));
+        
+        String pageOf = request.getParameter(Constants.PAGEOF);
+        request.setAttribute(Constants.PAGEOF, pageOf);
+        
+        return mapping.findForward(pageOf);
     }
 
 }
