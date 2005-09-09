@@ -546,6 +546,15 @@
 		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>
 	<!-- specimenEventParameters end -->
+	
+	<definition name=".catissuecore.editBioSpecimenSearchPageDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/search/SimpleQueryInterface.jsp" />
+	</definition>
+	
+	<definition name=".catissuecore.editBioSpecimenSearchResultsDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/search/DataView.jsp" />
+	</definition>
+	
 
 	<!-- BioSpecimen tab pages definitions end -->
 
