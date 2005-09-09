@@ -25,8 +25,6 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
 
 import edu.wustl.catissuecore.actionForm.SimpleQueryInterfaceForm;
-import edu.wustl.catissuecore.bizlogic.QueryBizLogic;
-import edu.wustl.catissuecore.query.Client;
 import edu.wustl.catissuecore.query.Query;
 import edu.wustl.catissuecore.query.QueryFactory;
 import edu.wustl.catissuecore.query.SimpleConditionsNode;
@@ -71,7 +69,14 @@ public class SimpleSearchAction extends DispatchAction
                 
                 if (fieldType.equalsIgnoreCase(Constants.FIELD_TYPE_VARCHAR) || fieldType.equalsIgnoreCase(Constants.FIELD_TYPE_DATE))
                 {
-                    value = "'"+value+"'";
+                    if (fieldType.equalsIgnoreCase(Constants.FIELD_TYPE_VARCHAR))
+                    {
+                        value = "'"+value+"'";
+                    }
+                    else
+                    {
+                        value = "STR_TO_DATE('"+value+"','"+Constants.MYSQL_DATE_PATTERN+"')";
+                    }
                     simpleConditionsNode.getCondition().setValue(value);
                 }
             }
