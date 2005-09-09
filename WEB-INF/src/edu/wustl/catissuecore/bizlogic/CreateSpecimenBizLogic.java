@@ -11,11 +11,14 @@
 package edu.wustl.catissuecore.bizlogic;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 
 import edu.wustl.catissuecore.dao.DAO;
+import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.ExternalIdentifier;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.StorageContainer;
@@ -64,6 +67,7 @@ public class CreateSpecimenBizLogic extends DefaultBizLogic
 		specimen.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
 		dao.insert(specimen,true);
 		
+		//Setting the External Identifier Collection
 		Collection externalIdentifierCollection = specimen.getExternalIdentifierCollection();
 		if(externalIdentifierCollection != null && externalIdentifierCollection.size() > 0)
 		{
@@ -75,6 +79,40 @@ public class CreateSpecimenBizLogic extends DefaultBizLogic
 				exId.setSpecimen(specimen);
 				dao.insert(exId,true);
 			}
+		}
+		
+		//Setting the Biohazard Collection
+		Specimen parentSpecimen = null;
+		
+		List parentSpecimenList = dao.retrieve(Specimen.class.getName(),"systemIdentifier",specimen.getParentSpecimen().getSystemIdentifier());
+		
+		if(parentSpecimenList!=null && parentSpecimenList.size()!=0)
+		{
+			parentSpecimen = (Specimen)parentSpecimenList.get(0);
+		}
+		
+		if(parentSpecimen != null)
+		{
+			Set set = new HashSet();
+			
+			Collection biohazardCollection = parentSpecimen.getBiohazardCollection();
+			if(biohazardCollection != null && biohazardCollection.size() > 0)
+			{
+				Iterator it = biohazardCollection.iterator();
+	
+				while(it.hasNext())
+				{
+					Biohazard hazard = (Biohazard)it.next();
+					Object bioObj = dao.retrieve(Biohazard.class.getName(), hazard.getSystemIdentifier());
+					if(bioObj!=null)
+					{
+						Biohazard hazardObj = (Biohazard)bioObj;
+						set.add(hazardObj);
+					}
+				}
+			}
+			
+			specimen.setBiohazardCollection(set);
 		}
 	}
 	

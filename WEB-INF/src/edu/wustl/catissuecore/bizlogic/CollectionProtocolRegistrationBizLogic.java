@@ -11,6 +11,7 @@
 package edu.wustl.catissuecore.bizlogic;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import edu.wustl.catissuecore.dao.DAO;
@@ -36,32 +37,9 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 	protected void insert(DAO dao, Object obj) throws DAOException
 	{
 		CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration) obj;
-
-		Participant participant = null;
-		//Case of registering Participant on its participant ID
-		if(collectionProtocolRegistration.getParticipant()!=null)
-		{
-			Object participantObj = dao.retrieve(Participant.class.getName(), collectionProtocolRegistration.getParticipant().getSystemIdentifier());
-			if (obj != null)
-			{
-				participant = (Participant) participantObj;
-			}
-		}
-		else//Case of registering Participant on Participant Protocol ID
-		{
-			//Add a dummy participant in the system
-			participant = null;
-		}
-		collectionProtocolRegistration.setParticipant(participant);
-
-		Object collectionProtocolObj = dao.retrieve(CollectionProtocol.class.getName(), 
-				collectionProtocolRegistration.getCollectionProtocol().getSystemIdentifier());
-		if (collectionProtocolObj!=null)
-		{
-			CollectionProtocol collectionProtocol = (CollectionProtocol) collectionProtocolObj;
-			collectionProtocolRegistration.setCollectionProtocol(collectionProtocol);
-		}
-
+		
+		registerParticipantAndProtocol(dao,collectionProtocolRegistration);
+		
 		dao.insert(collectionProtocolRegistration, true);
 		
 //		try
@@ -82,6 +60,11 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 	 */
 	protected void update(DAO dao, Object obj) throws DAOException
 	{
+		CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration) obj;
+		
+		registerParticipantAndProtocol(dao,collectionProtocolRegistration);
+		
+		dao.update(collectionProtocolRegistration);
 	}
 
 	public Set getProtectionObjects(AbstractDomainObject obj)
@@ -109,5 +92,32 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
         return dynamicGroups;
         
     }
+    
+    private void registerParticipantAndProtocol(DAO dao, CollectionProtocolRegistration collectionProtocolRegistration) throws DAOException
+	{
+    	//Case of registering Participant on its participant ID
+    	Participant participant = null;
+    	
+		if(collectionProtocolRegistration.getParticipant()!=null)
+		{
+			List list = dao.retrieve(Participant.class.getName(),
+                    "systemIdentifier", collectionProtocolRegistration.getParticipant().getSystemIdentifier());
+			
+			if (list != null && list.size() != 0)
+			{
+				participant = (Participant)list.get(0);
+			}
+		}
+		
+		collectionProtocolRegistration.setParticipant(participant);
+
+		List list = dao.retrieve(CollectionProtocol.class.getName(), "systemIdentifier",
+				collectionProtocolRegistration.getCollectionProtocol().getSystemIdentifier());
+		if (list != null && list.size() != 0)
+		{
+			CollectionProtocol collectionProtocol = (CollectionProtocol)list.get(0);
+			collectionProtocolRegistration.setCollectionProtocol(collectionProtocol);
+		}
+	}
 	
 }
