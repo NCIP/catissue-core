@@ -29,8 +29,11 @@ public class Constants
 	
 	public static final String DATE_PATTERN = "yyyy-MM-dd HH:mm aa";
 	public static final String DATE_PATTERN_YYYY_MM_DD = "yyyy-MM-dd";
-	
 	public static final String DATE_PATTERN_MM_DD_YYYY = "MM-dd-yyyy";
+	
+	
+	//Database constants.
+	public static final String MYSQL_DATE_PATTERN = "%m-%d-%Y";
 	//DAO Constants.
 	public static final int HIBERNATE_DAO = 1;
 	public static final int JDBC_DAO = 2;
