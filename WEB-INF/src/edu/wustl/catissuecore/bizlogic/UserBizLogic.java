@@ -26,6 +26,7 @@ import edu.wustl.catissuecore.util.global.SendEmail;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
+import edu.wustl.common.util.PasswordEncoderDecoder;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
@@ -89,7 +90,8 @@ public class UserBizLogic extends DefaultBizLogic
             csmUser.setFirstName(user.getFirstName());
             csmUser.setEmailId(user.getEmailAddress());
             csmUser.setStartDate(user.getStartDate());
-            csmUser.setPassword(GeneratePassword.getPassword());
+            csmUser.setPassword(PasswordEncoderDecoder.encode(GeneratePassword.getPassword()));
+            Logger.out.debug("Password generated:"+csmUser.getPassword());
 
             SecurityManager.getInstance(UserBizLogic.class).createUser(csmUser);
 
@@ -132,7 +134,7 @@ public class UserBizLogic extends DefaultBizLogic
             			  "\n\n" + ApplicationProperties.getValue("user.cancerResearchGroup")+ Constants.SEPARATOR + cancerResearchGroup.getName()+
             			  "\n\n" + ApplicationProperties.getValue("userRegistration.loginDetails")
             			  + "\n\tLogin Name : " + csmUser.getLoginName()
-            			  + "\n\tPassword : " + csmUser.getPassword() + "\n\n"+
+            			  + "\n\tPassword : " + PasswordEncoderDecoder.decode(csmUser.getPassword()) + "\n\n"+
             			  "\n\n" + ApplicationProperties.getValue("email.catissuecore.team");
             
             boolean emailStatus = email.sendmail(adminEmailAddress, csmUser.getEmailId(), null,

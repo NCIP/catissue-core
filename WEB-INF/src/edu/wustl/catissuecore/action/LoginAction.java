@@ -23,6 +23,7 @@ import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
+import edu.wustl.common.util.PasswordEncoderDecoder;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
@@ -63,7 +64,7 @@ public class LoginAction extends Action
         Logger.out.info("Inside Login Action, Just before validation");
 
         loginName = loginForm.getLoginName();
-        password = loginForm.getPassword();
+        password = PasswordEncoderDecoder.encode(loginForm.getPassword());
         String ipAddress = null;
         SessionDataBean sessionData = new SessionDataBean();
         Long userId = null;
