@@ -9,7 +9,6 @@
 
 package edu.wustl.catissuecore.action;
 
-import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -55,37 +54,15 @@ public class CreateSpecimenAction extends SecureAction
         
         try
 		{
-        	String [] parentSpecimenIdArray = null;
-
-            List parentSpecimenList = dao.retrieve(Specimen.class.getName());
-            
-    	 	if(parentSpecimenList!=null && parentSpecimenList.size()>0)
-    		{
-    	 		parentSpecimenIdArray = new String[parentSpecimenList.size() + 1];
-    	 		parentSpecimenIdArray[0] = Constants.SELECT_OPTION;
-    	 		Iterator it = parentSpecimenList.iterator();
-    			int i=1;
-    			
-    			while(it.hasNext())
-    			{
-    				Specimen specimen = (Specimen)it.next();
-    				parentSpecimenIdArray[i] = String.valueOf(specimen.getSystemIdentifier());
-    				i++;
-    			}
-    		}
-    	 	else
-    	 	{
-    	 		parentSpecimenIdArray = new String[1];
-    	 		parentSpecimenIdArray[0] = Constants.SELECT_OPTION;
-    	 	}
+            String [] fields = {"systemIdentifier"};
+            List parentSpecimenList = dao.getList(Specimen.class.getName(), fields, fields[0]); 	 	
+    	 	request.setAttribute(Constants.PARENT_SPECIMEN_ID_LIST,parentSpecimenList);
     	 	
-    	 	request.setAttribute(Constants.PARENT_SPECIMEN_ID_LIST,parentSpecimenIdArray);
-    	 	
-            //request.setAttribute(Constants.SPECIMEN_TYPE_LIST, Constants.SPECIMEN_TYPE_VALUES);
-    	 	List specimenList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_SPECIMEN_TYPE);
-        	request.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenList);
-            
-            request.setAttribute(Constants.SPECIMEN_SUB_TYPE_LIST, Constants.SPECIMEN_SUB_TYPE_VALUES);
+    	 	List specimenClassList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_SPECIMEN_CLASS);
+        	request.setAttribute(Constants.SPECIMEN_CLASS_LIST, specimenClassList);
+        	
+        	List specimenTypeList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_SPECIMEN_TYPE);
+        	request.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
             
             request.setAttribute(Constants.BIOHAZARD_TYPE_LIST, Constants.BIOHAZARD_TYPE_ARRAY);
 		}

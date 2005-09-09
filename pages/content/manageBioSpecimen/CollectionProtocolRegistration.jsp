@@ -2,6 +2,7 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
+<%@ page import="edu.wustl.catissuecore.actionForm.CollectionProtocolRegistrationForm"%>
 
 <head>
 <script language="JavaScript">
@@ -33,7 +34,6 @@
 <%
         String operation = (String) request.getAttribute(Constants.OPERATION);
         String formName;
-        String searchFormName = new String(Constants.COLLECTION_PROTOCOL_REGISTRATION_SEARCH_ACTION);
 
         boolean readOnlyValue;
         if (operation.equals(Constants.EDIT))
@@ -53,61 +53,15 @@
 <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
 	
 	<html:form action="<%=Constants.COLLECTIONP_ROTOCOL_REGISTRATION_ADD_ACTION%>">
-		<logic:notEqual name="operation" value="<%=Constants.ADD%>">
-			<!-- ENTER IDENTIFIER BEGINS-->
-			<br />
-			<tr>
-				<td>
-				<table summary="" cellpadding="3" cellspacing="0" border="0">
-					<tr>
-						<td class="formTitle" height="20" colspan="3">
-							<bean:message key="collectionProtocolReg.searchTitle" />
-						</td>
-					</tr>
-
-					<tr>
-						<td class="formRequiredNotice" width="5">*</td>
-						<td class="formRequiredLabel">
-							<label for="identifier">
-								<bean:message key="collectionProtocolReg.identifier" />
-							</label>
-						</td>
-						<td class="formField">
-							<html:text styleClass="formFieldSized" size="30" styleId="identifier" property="identifier" />
-						</td>
-					</tr>
-					<%
-        				String changeAction = "setFormAction('" + searchFormName
-                							  + "');setOperation('" + Constants.SEARCH + "');";
-			        %>
-					<tr>
-						<td align="right" colspan="3">
-						<table cellpadding="4" cellspacing="0" border="0">
-							<tr>
-								<td>
-									<html:submit styleClass="actionButton" value="Search" onclick="<%=changeAction%>" />
-								</td>
-							</tr>
-						</table>
-						</td>
-					</tr>
-
-				</table>
-				</td>
-			</tr>
-			<!-- ENTER IDENTIFIER ENDS-->
-		</logic:notEqual>
-
-
-		<!-- NEW Collection Protocol Registration ENTRY BEGINS-->
+	<!-- NEW Collection Protocol Registration ENTRY BEGINS-->
 		<tr>
 		<td>
 			<table summary="" cellpadding="3" cellspacing="0" border="0">
 				<tr>
 					<td><html:hidden property="operation" value="<%=operation%>" /></td>
+					<td><html:hidden property="systemIdentifier" /></td>
 				</tr>
 
-				<logic:notEqual name="operation" value="<%=Constants.SEARCH%>">
 					<tr>
 						<td class="formMessage" colspan="3">* indicates a required field</td>
 					</tr>
@@ -147,9 +101,16 @@
 							</html:checkbox>
 						</td>
 						<td class="formField">
+						<logic:equal name="collectionProtocolRegistrationForm" property="checkedButton" value="true">
+							<html:select property="participantID" styleClass="formFieldSized" styleId="participantID" size="1">
+ 							    <html:options collection="<%=Constants.PARTICIPANT_LIST%>" labelProperty="name" property="value"/>							
+							</html:select>
+						</logic:equal>
+						<logic:equal name="collectionProtocolRegistrationForm" property="checkedButton" value="false">
 							<html:select property="participantID" styleClass="formFieldSized" styleId="participantID" size="1" disabled="true">
  							    <html:options collection="<%=Constants.PARTICIPANT_LIST%>" labelProperty="name" property="value"/>							
 							</html:select>
+						</logic:equal>
 							<html:link page="/Participant.do?operation=add" styleId="newParticipant" >
 		 						<bean:message key="buttons.addNew" />
 	 						</html:link>					   
@@ -205,8 +166,7 @@
 						</table>
 						<!-- action buttons end --></td>
 					</tr>
-					
-				</logic:notEqual>
+
 			</table>
 
 			</td>

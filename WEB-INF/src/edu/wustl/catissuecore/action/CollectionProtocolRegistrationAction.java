@@ -48,6 +48,9 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 
 		//Sets the operation attribute to be used in the Add/Edit User Page. 
 		request.setAttribute(Constants.OPERATION, operation);
+		
+		//Sets the pageOf attribute
+        String pageOf  = request.getParameter(Constants.PAGEOF);
 
 		try
 		{
@@ -72,6 +75,6 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 			exc.printStackTrace();
 		}
 
-		return mapping.findForward(Constants.SUCCESS);
+		return mapping.findForward(pageOf);
 	}
 }

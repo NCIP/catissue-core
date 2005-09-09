@@ -23,6 +23,7 @@ import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.domain.Biohazard;
+import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.cde.CDEManager;
@@ -51,11 +52,50 @@ public class NewSpecimenAction  extends SecureAction
         
         request.setAttribute(Constants.PAGEOF,pageOf);
         
+        NewSpecimenForm specimenForm = (NewSpecimenForm)form;
+        
+        if(!operation.equals(Constants.ADD))
+        {
+        	String [] eventParameters = {	Constants.SELECT_OPTION,
+						        			"Cell Specimen Review",
+											"Check In Check Out",
+											"Collection",
+											"Disposal",
+											"Embedded",
+											"Fixed",
+											"Fluid Specimen Review",
+											"Frozen",
+											"Molecular Specimen Review",
+											"Procedure",
+											"Received",
+											"Spun",
+											"Thaw",
+											"Tissue Specimen Review",
+											"Transfer"
+        								};
+        	
+        	request.setAttribute(Constants.EVENT_PARAMETERS_LIST,eventParameters);
+        	
+        	String [] columns = { "#",
+					"Event Parameter",
+					"User",
+					"Time"};
+        	
+        	request.setAttribute(Constants.SPREADSHEET_COLUMN_LIST,columns);
+        	request.setAttribute(Constants.SPREADSHEET_DATA_LIST,specimenForm.getGridData());
+        }
+        
         NewSpecimenBizLogic dao = (NewSpecimenBizLogic)BizLogicFactory.getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
-        NewSpecimenForm newForm = (NewSpecimenForm) form;
         
         try
-		{
+		{	
+        	if(specimenForm.isParentPresent())
+        	{
+        		String [] fields = {"systemIdentifier"};
+                List parentSpecimenList = dao.getList(Specimen.class.getName(), fields, fields[0]); 	 	
+        	 	request.setAttribute(Constants.PARENT_SPECIMEN_ID_LIST,parentSpecimenList);
+        	}
+        	
         	request.setAttribute(Constants.BIOHAZARD_TYPE_LIST, Constants.BIOHAZARD_TYPE_ARRAY);
         	
            	//List biohazardList = dao.retrieve(Biohazard.class.getName());
@@ -116,17 +156,16 @@ public class NewSpecimenAction  extends SecureAction
         	e.printStackTrace();
 		}
         
-        //request.setAttribute(Constants.SPECIMEN_TYPE_LIST, Constants.SPECIMEN_TYPE_VALUES);
-        List specimenList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_SPECIMEN_TYPE);
-    	request.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenList);
-        
-        request.setAttribute(Constants.SPECIMEN_SUB_TYPE_LIST, Constants.SPECIMEN_SUB_TYPE_VALUES);
+        List specimenClassList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_SPECIMEN_CLASS);
+    	request.setAttribute(Constants.SPECIMEN_CLASS_LIST, specimenClassList);
+    	
+    	List specimenTypeList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_SPECIMEN_TYPE);
+    	request.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
         
         //request.setAttribute(Constants.TISSUE_SITE_LIST,Constants.TISSUE_SITE_ARRAY);
     	List tissueSiteList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_TISSUE_SITE);
     	request.setAttribute(Constants.TISSUE_SITE_LIST, tissueSiteList);
 
-        
         //request.setAttribute(Constants.TISSUE_SIDE_LIST,Constants.TISSUE_SIDE_VALUES);
     	List tissueSideList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_TISSUE_SIDE);
     	request.setAttribute(Constants.TISSUE_SIDE_LIST, tissueSideList);
@@ -139,7 +178,8 @@ public class NewSpecimenAction  extends SecureAction
     	List biohazardList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_BIOHAZARD);
     	request.setAttribute(Constants.BIOHAZARD_TYPE_LIST, biohazardList);
         
-        return mapping.findForward(Constants.SUCCESS);
+        //return mapping.findForward(Constants.SUCCESS);
+    	return mapping.findForward(pageOf);
     }
 
 }

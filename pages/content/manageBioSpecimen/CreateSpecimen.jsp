@@ -285,7 +285,7 @@
 					</td>
 					<td class="formField" colspan="4">
 			     		<html:select property="parentSpecimenId" styleClass="formFieldSized10" styleId="parentSpecimenId" size="1" disabled="<%=readOnlyForAll%>">
-							<html:options name="<%=Constants.PARENT_SPECIMEN_ID_LIST%>" labelName="<%=Constants.PARENT_SPECIMEN_ID_LIST%>"/>
+							<html:options collection="<%=Constants.PARENT_SPECIMEN_ID_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
 		        	</td>
 				 </tr>
@@ -299,8 +299,7 @@
 				    </td>
 				    <td class="formField" colspan="4">
 				     	<html:select property="className" styleClass="formFieldSized15" styleId="className" size="1" disabled="<%=readOnlyForAll%>" onchange="onTypeChange(this)">
-							<%--html:options name="specimenTypeList" labelName="specimenTypeList"/--%>
-							<html:options collection="<%=Constants.SPECIMEN_TYPE_LIST%>" labelProperty="name" property="value"/>
+							<html:options collection="<%=Constants.SPECIMEN_CLASS_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
 		        	</td>
 				 </tr>
@@ -314,7 +313,7 @@
 				    </td>
 				    <td class="formField" colspan="4">
 				     	<html:select property="type" styleClass="formFieldSized15" styleId="type" size="1" disabled="<%=readOnlyForAll%>">
-							<html:options name="specimenSubTypeList" labelName="specimenSubTypeList"/>		
+							<html:options collection="<%=Constants.SPECIMEN_TYPE_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
 		        	</td>
 				 </tr>
@@ -504,8 +503,7 @@
 				 	</tr>
 				 </logic:notEqual>
 				 
-				</logic:notEqual>
-				
+				</logic:notEqual>				
 			 
 			 <!-- NEW SPECIMEN REGISTRATION ends-->
 	</table>

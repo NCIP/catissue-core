@@ -2,7 +2,7 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 
-<%@ page import="java.util.List,java.util.ListIterator"%>
+<%@ page import="java.util.Map,java.util.List,java.util.ListIterator"%>
 <%@ page import="edu.wustl.common.beans.NameValueBean"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.NewSpecimenForm"%>
@@ -13,6 +13,7 @@ String bhNameArray [] = (String []) request.getAttribute(Constants.BIOHAZARD_NAM
 String bhTypeArray [] = (String []) request.getAttribute(Constants.BIOHAZARD_TYPES_LIST);
 
 List biohazardList = (List)request.getAttribute(Constants.BIOHAZARD_TYPE_LIST);
+NewSpecimenForm form = (NewSpecimenForm)request.getAttribute("newSpecimenForm");
 %>
 <head>
 	<script language="JavaScript">
@@ -79,6 +80,57 @@ List biohazardList = (List)request.getAttribute(Constants.BIOHAZARD_TYPE_LIST);
 			unit.innerHTML = unitSpecimen;
 		}
 		
+		function onParameterChange(element)
+		{
+			<% if(form != null) { %>
+				var specimenIdentifier = "<%=form.getSystemIdentifier()%>";
+			<% } %>
+			
+			var action = "";
+			var addNew = document.getElementById("sepAdd");
+			addNew.target="_blank";
+			
+			if(element.value == "Cell Specimen Review")
+				action = "/catissuecore/CellSpecimenReviewParameters.do?operation=add";
+			else if(element.value == "Check In Check Out")
+				action = "/catissuecore/CheckInCheckOutEventParameters.do?operation=add";
+			else if(element.value == "Collection")
+				action = "/catissuecore/CollectionEventParameters.do?operation=add";
+			else if(element.value == "Disposal")
+				action = "/catissuecore/DisposalEventParameters.do?operation=add";
+			else if(element.value == "Embedded")
+				action = "/catissuecore/EmbeddedEventParameters.do?operation=add";
+			else if(element.value == "Fixed")
+				action = "/catissuecore/FixedEventParameters.do?operation=add";
+			else if(element.value == "Fluid Specimen Review")
+				action = "/catissuecore/FluidSpecimenReviewEventParameters.do?operation=add";
+			else if(element.value == "Frozen")
+				action = "/catissuecore/FrozenEventParameters.do?operation=add";
+			else if(element.value == "Molecular Specimen Review")
+				action = "/catissuecore/MolecularSpecimenReviewParameters.do?operation=add";
+			else if(element.value == "Procedure")
+				action = "/catissuecore/ProcedureEventParameters.do?operation=add";
+			else if(element.value == "Received")
+				action = "/catissuecore/ReceivedEventParameters.do?operation=add";
+			else if(element.value == "Spun")
+				action = "/catissuecore/SpunEventParameters.do?operation=add";
+			else if(element.value == "Thaw")
+				action = "/catissuecore/ThawEventParameters.do?operation=add";
+			else if(element.value == "Tissue Specimen Review")
+				action = "/catissuecore/TissueSpecimenReviewEventParameters.do?operation=add";
+			else if(element.value == "Transfer")
+				action = "/catissuecore/TransferEventParameters.do?operation=add";
+						
+			action = action + "&specimenIdentifier=" + specimenIdentifier;
+			addNew.href = action;
+			
+			if(element.value == "<%=Constants.SELECT_OPTION%>")
+			{
+				addNew.href = "#";
+				addNew.target="_parent";
+			}
+		}
+		
 		function onBiohazardTypeSelected(element)
 		{ 
 			var i = (element.name).indexOf("_");
@@ -117,7 +169,9 @@ List biohazardList = (List)request.getAttribute(Constants.BIOHAZARD_TYPE_LIST);
 			var spreqno=x.insertCell(0);
 			spreqno.className="formSerialNumberField";
 			sname=(q+1);
-			spreqno.innerHTML="" + rowno + ".";
+			var identifier = "externalIdentifierValue(ExternalIdentifier:" + (q+1) +"_systemIdentifier)";
+			var hiddenTag = "<input type='hidden' name='" + identifier + "' value='' id='" + identifier + "'>";
+			spreqno.innerHTML="" + rowno + "." + hiddenTag;
 		
 			//Second Cell
 			var spreqtype=x.insertCell(1);
@@ -162,7 +216,9 @@ List biohazardList = (List)request.getAttribute(Constants.BIOHAZARD_TYPE_LIST);
 			var spreqno=x.insertCell(0);
 			spreqno.className="formSerialNumberField";
 			sname=(q+1);
-			spreqno.innerHTML="" + sname;
+			//var identifier = "biohazardValue(Biohazard:" + (q+1) +"_systemIdentifier)";
+			//var hiddenTag = "<input type='hidden' name='" + identifier + "' value='' id='" + identifier + "'>";
+			spreqno.innerHTML= "" + sname;
 
 			//Second Cell
 			var spreqtype=x.insertCell(1);
@@ -225,15 +281,12 @@ List biohazardList = (List)request.getAttribute(Constants.BIOHAZARD_TYPE_LIST);
 		}
 
 		String pageOf = (String)request.getAttribute(Constants.PAGEOF);
-
-		Object obj = request.getAttribute("newSpecimenForm");
 		int exIdRows=1;
 		int bhRows=1;
 
 		String unitSpecimen = "";
-		if(obj != null && obj instanceof NewSpecimenForm)
+		if(form != null)
 		{
-			NewSpecimenForm form = (NewSpecimenForm)obj;
 			exIdRows = form.getExIdCounter();
 			bhRows	 = form.getBhCounter();
 			if(form.getUnit() != null)
@@ -280,55 +333,6 @@ List biohazardList = (List)request.getAttribute(Constants.BIOHAZARD_TYPE_LIST);
 			</logic:equal>		 
 			
 			<!-- If operation is equal to edit or search but,the page is for query the identifier field is not shown -->
-			<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>">
-				<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
-			<!-- ENTER IDENTIFIER BEGINS-->	
-			  <br/>	
-  	    	  <tr>
-    		    <td>
-			 	 <table summary="" cellpadding="3" cellspacing="0" border="0">
-			 	 
-				  <tr>
-				     <td class="formTitle" height="20" colspan="3">
-				     	<bean:message key="user.searchTitle"/>
-				     </td>
-				  </tr>
-				  
-				  <tr>
-						<td class="formRequiredNotice" width="5">*</td>
-						<td class="formRequiredLabel">
-							<label for="identifier">
-								<bean:message key="user.identifier"/>
-							</label>
-						</td>
-					    <td class="formField">
-					    	<html:text styleClass="formFieldSized15" size="30" styleId="identifier" property="identifier" readonly="<%=readOnlyForAll%>"/>
-					    </td>
-				  </tr>	
-
-				 <%
-					String changeAction = "setFormAction('"+Constants.PARTICIPANT_SEARCH_ACTION+"');setOperation('"+Constants.SEARCH+"');";
-				 %>
- 
-				  <tr>
-				   <td align="right" colspan="3">
-					 <table cellpadding="4" cellspacing="0" border="0">
-						 <tr>
-						    <td>
-						    	<html:submit styleClass="actionButton" value="Search" onclick="<%=changeAction%>"/>
-						    </td>
-						 </tr>
-					 </table>
-				   </td>
-				  </tr>
-
-				 </table>
-			    </td>
-			  </tr>
-			  <!-- ENTER IDENTIFIER ENDS-->
-			  	</logic:notEqual>
-			  </logic:notEqual>
-			  
 			   	
 			  <!-- NEW SPECIMEN REGISTRATION BEGINS-->
 	    	  <tr>
@@ -337,25 +341,15 @@ List biohazardList = (List)request.getAttribute(Constants.BIOHAZARD_TYPE_LIST);
 				 <tr>
 					<td>
 						<html:hidden property="<%=Constants.OPERATION%>" value="<%=operation%>"/>
-						<td><html:hidden property="exIdCounter"/></td>
-						<td><html:hidden property="bhCounter"/></td>
 					</td>
+					<td><html:hidden property="exIdCounter"/></td>
+					<td><html:hidden property="bhCounter"/></td>
+					<td><html:hidden property="systemIdentifier"/></td>
 				 </tr>
 				 
-				<logic:equal name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
-				 <tr>
-					<td>
-						<html:hidden property="sysmtemIdentifier"/>
-					</td>
-				 </tr>
-				</logic:equal>
-
-				<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.SEARCH%>">
-					<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">
 				 		<tr>
 				     		<td class="formMessage" colspan="3">* indicates a required field</td>
 				 		</tr>
-				 	</logic:notEqual>
 				 <tr>
 				     <td class="formTitle" height="20" colspan="6">
 				     <%String title = "specimen."+pageView+".title";%>
@@ -364,19 +358,37 @@ List biohazardList = (List)request.getAttribute(Constants.BIOHAZARD_TYPE_LIST);
 				 </tr>
 				 <tr>
 			     	<td class="formRequiredNotice" width="5">*</td>
-				    <td class="formRequiredLabel">
-						<label for="specimenCollectionGroupId">
-							<bean:message key="specimen.specimenCollectionGroupId"/>
-						</label>
-					</td>
-					<td class="formField" colspan="4">
-			     		<html:select property="specimenCollectionGroupId" styleClass="formFieldSized15" styleId="specimenCollectionGroupId" size="1" disabled="<%=readOnlyForAll%>">
-							<html:options collection="<%=Constants.SPECIMEN_COLLECTION_GROUP_LIST%>" labelProperty="name" property="value"/>		
-						</html:select>
-		        		<a href="SpecimenCollectionGroup.do?operation=add">
-      						<bean:message key="app.addNew" />
-   						</a>
-		        	</td>
+				    
+					<logic:equal name="newSpecimenForm" property="parentPresent" value="false">
+						<td class="formRequiredLabel">
+							<label for="specimenCollectionGroupId">
+								<bean:message key="specimen.specimenCollectionGroupId"/>
+							</label>
+						</td>
+						<td class="formField" colspan="4">
+				     		<html:select property="specimenCollectionGroupId" styleClass="formFieldSized15" styleId="specimenCollectionGroupId" size="1" disabled="<%=readOnlyForAll%>">
+								<html:options collection="<%=Constants.SPECIMEN_COLLECTION_GROUP_LIST%>" labelProperty="name" property="value"/>		
+							</html:select>
+			        		<a href="SpecimenCollectionGroup.do?operation=add">
+	      						<bean:message key="app.addNew" />
+	   						</a>
+			        	</td>
+		        	</logic:equal>
+		        	
+		        	<logic:equal name="newSpecimenForm" property="parentPresent" value="true">
+			        	<td class="formRequiredLabel">
+							<label for="parentSpecimenId">
+								<bean:message key="createSpecimen.parent"/>
+							</label>
+						</td>
+						
+			        	<td class="formField" colspan="4">
+				     		<html:select property="parentSpecimenId" styleClass="formFieldSized10" styleId="parentSpecimenId" size="1" disabled="<%=readOnlyForAll%>">
+								<html:options collection="<%=Constants.PARENT_SPECIMEN_ID_LIST%>" labelProperty="name" property="value"/>
+							</html:select>
+			        	</td>
+		        	</logic:equal>
+		        	
 				 </tr>
 				 <tr>
 				 	<td class="formRequiredNotice" width="5">*</td>
@@ -387,8 +399,7 @@ List biohazardList = (List)request.getAttribute(Constants.BIOHAZARD_TYPE_LIST);
 				    </td>
 				    <td class="formField" colspan="4">
 				     	<html:select property="className" styleClass="formFieldSized15" styleId="className" size="1" disabled="<%=readOnlyForAll%>" onchange="onTypeChange(this)">
-							<%--html:options name="specimenTypeList" labelName="specimenTypeList"/--%>
-							<html:options collection="<%=Constants.SPECIMEN_TYPE_LIST%>" labelProperty="name" property="value"/>
+							<html:options collection="<%=Constants.SPECIMEN_CLASS_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
 		        	</td>
 				 </tr>
@@ -401,7 +412,7 @@ List biohazardList = (List)request.getAttribute(Constants.BIOHAZARD_TYPE_LIST);
 				    </td>
 				    <td class="formField" colspan="4">
 				     	<html:select property="type" styleClass="formFieldSized15" styleId="type" size="1" disabled="<%=readOnlyForAll%>">
-							<html:options name="specimenSubTypeList" labelName="specimenSubTypeList"/>
+							<html:options collection="<%=Constants.SPECIMEN_TYPE_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
 		        	</td>
 				 </tr>
@@ -420,7 +431,7 @@ List biohazardList = (List)request.getAttribute(Constants.BIOHAZARD_TYPE_LIST);
 							<html:options collection="<%=Constants.TISSUE_SITE_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
 						<%
-							String url = "ShowFramedPage.do?pageOf=pageOfTissueSite&propertyName=tissueSite";			
+							String url = "ShowFramedPage.do?pageOf=pageOfTissueSite&propertyName=tissueSite";
 						%>
 						<a href="#" onclick="javascript:NewWindow('<%=url%>','name','250','330','no');return false">
 							<img src="images\Tree.gif" border="0" width="24" height="18">
@@ -439,7 +450,6 @@ List biohazardList = (List)request.getAttribute(Constants.BIOHAZARD_TYPE_LIST);
 					</td>
 				     <td class="formField" colspan="4">
 				     	<html:select property="tissueSide" styleClass="formFieldSized15" styleId="tissueSide" size="1" disabled="<%=readOnlyForAll%>">
-							<%--html:options name="tissueSideList" labelName="tissueSideList"/--%>
 							<html:options collection="<%=Constants.TISSUE_SIDE_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
 		        	  </td>
@@ -517,6 +527,25 @@ List biohazardList = (List)request.getAttribute(Constants.BIOHAZARD_TYPE_LIST);
 				    	<html:textarea styleClass="formFieldSized" rows="3" styleId="comments" property="comments" readonly="<%=readOnlyForAll%>"/>
 				    </td>
 				 </tr>
+				 
+				 <logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>">
+					 <tr>
+					 	<td class="formRequiredNotice" width="5">&nbsp;</td>
+					    <td class="formLabel">
+					     	<label for="className">
+					     		<bean:message key="newSpecimen.specimenEventParameters"/>
+					     	</label>
+					    </td>
+					    <td class="formField" colspan="4">
+					     	<html:select property="specimenEventParameter" styleClass="formFieldSized15" styleId="className" size="1" disabled="<%=readOnlyForAll%>" onchange="onParameterChange(this)">
+								<html:options name="<%=Constants.EVENT_PARAMETERS_LIST%>" labelName="<%=Constants.EVENT_PARAMETERS_LIST%>"/>
+							</html:select>
+							<a id="sepAdd" href="#">
+	      						<bean:message key="app.addNew" />
+	   						</a>
+			        	</td>
+					 </tr>
+				 </logic:notEqual>
 				 
 				 <tr>
 				     <td class="formTitle" height="20" colspan="2">
@@ -600,9 +629,12 @@ List biohazardList = (List)request.getAttribute(Constants.BIOHAZARD_TYPE_LIST);
 				  	{
 						String exName = "externalIdentifierValue(ExternalIdentifier:" + i + "_name)";
 						String exValue = "externalIdentifierValue(ExternalIdentifier:" + i + "_value)";
+						String exIdentifier = "externalIdentifierValue(ExternalIdentifier:" + i +"_systemIdentifier)";
 				  %>
 					<tr>
-					 	<td class="formSerialNumberField" width="5"><%=i%>.</td>
+					 	<td class="formSerialNumberField" width="5"><%=i%>.
+				 			<html:hidden property="<%=exIdentifier%>" />
+				 		</td>
 					    <td class="formField">
 				     		<html:text styleClass="formFieldSized15" styleId="<%=exName%>" property="<%=exName%>" readonly="<%=readOnlyForAll%>"/>
 				    	</td>
@@ -637,17 +669,19 @@ List biohazardList = (List)request.getAttribute(Constants.BIOHAZARD_TYPE_LIST);
 				 </tr>
 				 
 				 <tbody id="addBiohazardRow">
-				 	<%
-				  	for(int i=1;i<=bhRows;i++)
+				 <%
+				  	Map bioHazardMap = form.getBiohazard();
+
+					for(int i=1;i<=bhRows;i++)
 				  	{
 						String bhType = "biohazardValue(Biohazard:" + i + "_type)";
+						String bhTypeKey = "Biohazard:" + i + "_type";
 						String bhId	  = "biohazardValue(Biohazard:" + i + "_systemIdentifier)";
 				  %>
 					<tr>
 					 	<td class="formSerialNumberField" width="5"><%=i%>.</td>
 					    <td class="formField">
 				     		<html:select property="<%=bhType%>" styleClass="formFieldSized15" styleId="<%=bhType%>" size="1" onchange="onBiohazardTypeSelected(this)">
-								<%--html:options name="<%=Constants.BIOHAZARD_TYPE_LIST%>" labelName="<%=Constants.BIOHAZARD_TYPE_LIST%>" /--%>
 								<html:options collection="<%=Constants.BIOHAZARD_TYPE_LIST%>" labelProperty="name" property="value"/>
 							</html:select>
 				    	</td>
@@ -655,7 +689,8 @@ List biohazardList = (List)request.getAttribute(Constants.BIOHAZARD_TYPE_LIST);
 				     		<html:select property="<%=bhId%>" styleClass="formFieldSized15" styleId="<%="bhId" + i%>" size="1">
 								<html:option value="-1"><%=Constants.SELECT_OPTION%></html:option>
 								<%
-									String type = (String)request.getParameter(bhType);
+									/*String type = (String)request.getParameter(bhType);*/
+									String type = (String)bioHazardMap.get(bhTypeKey);
 									for(int x=0;x<bhIdArray.length;x++)
 									{
 										if(type!=null && type.equals(bhTypeArray[x]))
@@ -671,14 +706,11 @@ List biohazardList = (List)request.getAttribute(Constants.BIOHAZARD_TYPE_LIST);
 					 </tr>
 				  <% } %>
 				 </tbody>
-				 <!-- Bio-hazards End here -->	
+				 <!-- Bio-hazards End here -->
 				 
 			 </table>		
 		
-			   
-
- 			   	 <logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">		
-				 	<tr>
+			   	 	<tr>
 				  		<td align="right" colspan="3">
 							<%
 								String changeAction = "setFormAction('"+formName+"')";
@@ -706,11 +738,7 @@ List biohazardList = (List)request.getAttribute(Constants.BIOHAZARD_TYPE_LIST);
 							<!-- action buttons end -->
 				  		</td>
 				 	</tr>
-				 </logic:notEqual>
-				 
-				</logic:notEqual>
-				
-			 
+				 	
 			 <!-- NEW SPECIMEN REGISTRATION ends-->
 			 </html:form>
 </table>

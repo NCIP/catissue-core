@@ -55,10 +55,12 @@ public class ParticipantAction  extends SecureAction
         List genotypeList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_GENOTYPE);
         request.setAttribute(Constants.GENOTYPE_LIST, genotypeList);
         
-        request.setAttribute(Constants.ETHNICITY_LIST, Constants.ETHNICITY_VALUES);
+        List ethnicityList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_ETHNICITY);
+        request.setAttribute(Constants.ETHNICITY_LIST, ethnicityList);
   
-        //Sets the raceList attribute to be used in the Add/Edit Participant Page. 
-        request.setAttribute(Constants.RACELIST,Constants.RACEARRAY);
+        //Sets the raceList attribute to be used in the Add/Edit Participant Page.
+        List raceList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_RACE);
+        request.setAttribute(Constants.RACELIST, raceList);
         
         //Sets the pageOf attribute (for Add,Edit or Query Interface)
         String pageOf  = request.getParameter(Constants.PAGEOF);

@@ -306,7 +306,8 @@
 				     <td class="formRequiredLabel"><label for="race"><bean:message key="participant.race"/></label></td>
 				     <td class="formField">
 				     	<html:select property="race" styleClass="formFieldSized" styleId="race" size="1" disabled="<%=readOnlyForAll%>">
-							<html:options name="raceList" labelName="raceList"/>		
+							<%--html:options name="raceList" labelName="raceList"/--%>
+							<html:options collection="<%=Constants.RACELIST%>" labelProperty="name" property="value"/>
 						</html:select>
 		        	  </td>
 				 </tr>
@@ -322,7 +323,8 @@
 				     </td>
 				     <td class="formField">
 				     	<html:select property="ethnicity" styleClass="formFieldSized" styleId="ethnicity" size="1" disabled="<%=readOnlyForAll%>">
-							<html:options name="ethnicityList" labelName="ethnicityList"/>		
+							<%--html:options name="ethnicityList" labelName="ethnicityList"/--%>
+							<html:options collection="<%=Constants.ETHNICITY_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
 		        	  </td>
 				 </tr>
