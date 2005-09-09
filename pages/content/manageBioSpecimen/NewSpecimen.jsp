@@ -16,7 +16,53 @@ List biohazardList = (List)request.getAttribute(Constants.BIOHAZARD_TYPE_LIST);
 NewSpecimenForm form = (NewSpecimenForm)request.getAttribute("newSpecimenForm");
 %>
 <head>
-	<script language="JavaScript">
+
+<link href="runtime/styles/xp/grid.css" rel="stylesheet" type="text/css" ></link>
+<script src="runtime/lib/grid.js"></script>
+
+<!-- grid format -->
+	<style>
+		.active-controls-grid {height: 100%; font: menu;}
+		
+		.active-column-0 {width:  80px;}
+		.active-column-1 {width: 200px;}
+		.active-column-2 {text-align: right;}
+		.active-column-3 {text-align: right;}
+		.active-column-4 {text-align: right;}
+		
+		.active-grid-column {border-right: 1px solid threedlightshadow;}
+		.active-grid-row {border-bottom: 1px solid threedlightshadow;}
+	</style>
+<!--  grid data -->
+
+<%
+	String[] columnList = (String[]) request.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
+	List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
+	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
+if(dataList!=null && dataList.size() != 0)
+{
+%>
+
+<script>
+var myData = [<%int xx;%><%for (xx=0;xx<(dataList.size()-1);xx++){%>
+<%
+	List row = (List)dataList.get(xx);
+  	int j;
+%>
+[<%for (j=0;j < (row.size()-1);j++){%>"<%=row.get(j)%>",<%}%>"<%=row.get(j)%>"],<%}%>
+<%
+	List row = (List)dataList.get(xx);
+  	int j;
+%>
+[<%for (j=0;j < (row.size()-1);j++){%>"<%=row.get(j)%>",<%}%>"<%=row.get(j)%>"]
+];
+
+var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnList[k]%>",<%}%>"<%=columnList[k]%>"];
+</script>
+
+<%}%>
+
+<script language="JavaScript">
 	
 		var win = null;
 		function NewWindow(mypage,myname,w,h,scroll)
@@ -280,7 +326,6 @@ NewSpecimenForm form = (NewSpecimenForm)request.getAttribute("newSpecimenForm");
 			readOnlyForAll=true;
 		}
 
-		String pageOf = (String)request.getAttribute(Constants.PAGEOF);
 		int exIdRows=1;
 		int bhRows=1;
 
@@ -294,7 +339,7 @@ NewSpecimenForm form = (NewSpecimenForm)request.getAttribute("newSpecimenForm");
 		}
 %>
 
-	<html:errors />
+<html:errors />
 
    <html:form action="<%=Constants.SPECIMEN_ADD_ACTION%>">
 
@@ -706,9 +751,7 @@ NewSpecimenForm form = (NewSpecimenForm)request.getAttribute("newSpecimenForm");
 					 </tr>
 				  <% } %>
 				 </tbody>
-				 <!-- Bio-hazards End here -->
-				 
-			 </table>		
+				 <!-- Bio-hazards End here -->	
 		
 			   	 	<tr>
 				  		<td align="right" colspan="3">
@@ -738,7 +781,58 @@ NewSpecimenForm form = (NewSpecimenForm)request.getAttribute("newSpecimenForm");
 							<!-- action buttons end -->
 				  		</td>
 				 	</tr>
-				 	
-			 <!-- NEW SPECIMEN REGISTRATION ends-->
-			 </html:form>
+	</table>
+  </td>
+</tr>
+ <!-- NEW SPECIMEN REGISTRATION ends-->
+<%
+	List gridData = form.getGridData();
+	if(gridData!=null && gridData.size() != 0)
+	{
+%>
+<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>">
+<tr>
+ <td>
+  	 <table summary="" cellpadding="3" cellspacing="0" border="0" width="500">
+   	 	<tr>
+			<td>
+				<div STYLE="overflow: auto; width:600; height: 340; padding:0px; margin: 0px; border: 1px solid" id="eventGrid">
+				<script>
+				
+					//	create ActiveWidgets Grid javascript object.
+					var obj = new Active.Controls.Grid;
+					
+					//	set number of rows/columns.
+					obj.setRowProperty("count", <%=dataList.size()%>);
+					obj.setColumnProperty("count", <%=columnList.length%>);
+					
+					//	provide cells and headers text
+					obj.setDataProperty("text", function(i, j){return myData[i][j]});
+					obj.setColumnProperty("text", function(i){return columns[i]});
+					obj.setDataProperty("value", function(i){return myData[i][0]});
+					//obj.setRowProperty("value", function(i){return myData[i][4]});
+					
+					//	set headers width/height.
+					obj.setRowHeaderWidth("28px");
+					obj.setColumnHeaderHeight("20px");
+			
+					var row = new Active.Templates.Row;
+					row.setEvent("ondblclick", function(){this.action("myAction")}); 
+					
+					obj.setTemplate("row", row);
+			   		obj.setAction("myAction", 
+						function(src){window.location.href = 'SearchObject.do?pageOf=' + src.getDataProperty("value") + '&operation=search&systemIdentifier=' + src.getDataProperty("value")}); 
+			
+					//	write grid html to the page.
+					document.write(obj);
+				</script>
+				</div>
+			</td>
+		</tr>
+	</table>
+ </td>
+</tr>
+</logic:notEqual>
+<% } %>
 </table>
+</html:form>
