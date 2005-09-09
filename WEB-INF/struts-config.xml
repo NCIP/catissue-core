@@ -1710,21 +1710,21 @@ PUBLIC
 		<action path="/SearchObject"
 		    type="edu.wustl.catissuecore.action.SearchObjectAction"
 			scope="request">
-			<forward name="pageOfStorageType" path="/StorageTypeSearch.do?pageOf=pageOfStorageType"/>
-			<forward name="pageOfInstitution" path="/InstitutionSearch.do?pageOf=pageOfInstitution"/>
-			<forward name="pageOfDepartment" path="/DepartmentSearch.do?pageOf=pageOfDepartment"/>
-			<forward name="pageOfCancerResearchGroup" path="/CancerResearchGroupSearch.do?pageOf=pageOfCancerResearchGroup"/>
-			<forward name="pageOfCollectionProtocol" path="/CollectionProtocolSearch.do?pageOfCollectionProtocol"/>
-			<forward name="pageOfDistributionProtocol" path="/DistributionProtocolSearch.do?pageOf=pageOfDistributionProtocol"/>
-			<forward name="pageOfStorageContainer" path="/StorageContainerSearch.do?pageOf=pageOfStorageContainer"/>
-			<forward name="pageOfSite" path="/SiteSearch.do?pageOf=pageOfSite"/>
-			<forward name="pageOfBioHazard" path="/BiohazardSearch.do?pageOf=pageOfBioHazard"/>
-			<forward name="pageOfUserAdmin" path="/UserSearch.do?pageOf=pageOfUserAdmin"/>
-			<forward name="pageOfParticipant" path="/ParticipantSearch.do?pageOf=pageOfParticipant"/>
-			<forward name="pageOfCollectionProtocolRegistration" path="/CollectionProtocolRegistrationSearch.do?pageOf=pageOfCollectionProtocolRegistration"/>
-			<forward name="pageOfNewSpecimen" path="/NewSpecimenSearch.do?pageOf=pageOfNewSpecimen"/>
-			<forward name="pageOfSpecimenCollectionGroup" path="/SpecimenCollectionGroupSearch.do?pageOf=pageOfSpecimenCollectionGroup"/>
-			<forward name="pageOfDistribution" path="/DistributionSearch.do?pageOf=pageOfDistribution"/>
+			<forward name="pageOfStorageType" path="/StorageTypeSearch.do"/>
+			<forward name="pageOfInstitution" path="/InstitutionSearch.do"/>
+			<forward name="pageOfDepartment" path="/DepartmentSearch.do"/>
+			<forward name="pageOfCancerResearchGroup" path="/CancerResearchGroupSearch.do"/>
+			<forward name="pageOfCollectionProtocol" path="/CollectionProtocolSearch.do"/>
+			<forward name="pageOfDistributionProtocol" path="/DistributionProtocolSearch.do"/>
+			<forward name="pageOfStorageContainer" path="/StorageContainerSearch.do"/>
+			<forward name="pageOfSite" path="/SiteSearch.do"/>
+			<forward name="pageOfBioHazard" path="/BiohazardSearch.do"/>
+			<forward name="pageOfUserAdmin" path="/UserSearch.do"/>
+			<forward name="pageOfParticipant" path="/ParticipantSearch.do"/>
+			<forward name="pageOfCollectionProtocolRegistration" path="/CollectionProtocolRegistrationSearch.do"/>
+			<forward name="pageOfNewSpecimen" path="/NewSpecimenSearch.do"/>
+			<forward name="pageOfSpecimenCollectionGroup" path="/SpecimenCollectionGroupSearch.do"/>
+			<forward name="pageOfDistribution" path="/DistributionSearch.do"/>
 			<forward name="failure" path="/QueryParticipant.do?operation=view&amp;pageOf=query"/>
 		</action>
 		<!--Query Result View Actions End-->
