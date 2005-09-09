@@ -51,7 +51,7 @@ public class UserSearchAction extends SecureAction
             AbstractBizLogic bizLogic = BizLogicFactory.getBizLogic(Constants.USER_FORM_ID);
             Logger.out.debug("Constants.USER_FORM_ID***********************"+Constants.USER_FORM_ID);
             List userList = bizLogic.retrieve(edu.wustl.catissuecore.domain.User.class.getName(),"systemIdentifier",new Long(userForm.getSystemIdentifier()));
-            Role role = SecurityManager.getInstance(UserSearchAction.class).getUserRole(new Long(userForm.getSystemIdentifier()));
+            Role role = SecurityManager.getInstance(UserSearchAction.class).getUserRole(userForm.getSystemIdentifier());
             edu.wustl.catissuecore.domain.User appUser = null;
             if (!userList.isEmpty())
             {

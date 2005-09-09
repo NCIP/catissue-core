@@ -346,7 +346,7 @@ public class SecurityManager implements Permissions
         }
     }
 
-    public Role getUserRole(Long userID) throws SMException
+    public Role getUserRole(long userID) throws SMException
     {
         Set groups;
         UserProvisioningManager userProvisioningManager = null;

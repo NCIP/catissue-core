@@ -12,6 +12,8 @@ package edu.wustl.catissuecore.query;
 import java.util.HashMap;
 import java.util.Vector;
 
+import edu.wustl.catissuecore.bizlogic.QueryBizLogic;
+
 public class Client
 {
 
@@ -35,9 +37,8 @@ public class Client
 
     public static void initialize()
     {
-//        setObjectTableNames();
-        setRelationConditionsForRelatedTables();
-        setRelations();
+        objectTableNames = QueryBizLogic.getQueryObjectNameTableNameMap();
+        relationConditionsForRelatedTables = QueryBizLogic.getRelationData();
     }
 
     public static void setRelationConditionsForRelatedTables()

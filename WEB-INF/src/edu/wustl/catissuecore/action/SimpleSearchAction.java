@@ -25,6 +25,7 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
 
 import edu.wustl.catissuecore.actionForm.SimpleQueryInterfaceForm;
+import edu.wustl.catissuecore.bizlogic.QueryBizLogic;
 import edu.wustl.catissuecore.query.Client;
 import edu.wustl.catissuecore.query.Query;
 import edu.wustl.catissuecore.query.QueryFactory;
@@ -75,7 +76,6 @@ public class SimpleSearchAction extends DispatchAction
                 }
             }
             
-            Client.initialize();
             
             Query query = QueryFactory.getInstance().newQuery(Query.SIMPLE_QUERY, simpleQueryInterfaceForm.getAliasName());
             

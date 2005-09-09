@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Set;
 
 import edu.wustl.catissuecore.dao.JDBCDAO;
+import edu.wustl.catissuecore.query.Client;
 import edu.wustl.catissuecore.query.DataElement;
 import edu.wustl.catissuecore.query.Operator;
 import edu.wustl.catissuecore.query.Query;
@@ -41,13 +42,18 @@ public class QueryBizLogic extends DefaultBizLogic
         "CATISSUE_QUERY_INTERFACE_TABLE_DATA";
     
     private static final String GET_RELATION_DATA=
-        "select PARENT_TABLE_FIELD_ID, CHILD_TABLE_FIELD_ID " +
-    		"from CATISSUE_TABLE_RELATION";
+        "select FIRST_TABLE_ID, SECOND_TABLE_ID," +
+        "FIRST_TABLE_JOIN_COLUMN, SECOND_TABLE_JOIN_COLUMN " +
+    		"from CATISSUE_RELATED_TABLES_MAP";
     
     private static final String GET_COLUMN_DATA=
         "select ALIAS_NAME,COLUMN_NAME from CATISSUE_QUERY_INTERFACE_COLUMN_DATA columnData, " +
         "CATISSUE_QUERY_INTERFACE_TABLE_DATA tableData where columnData.TABLE_ID = tableData.TABLE_ID  " +
         "and columnData.IDENTIFIER=";
+    
+    private static final String GET_TABLE_ALIAS =
+        "select ALIAS_NAME from CATISSUE_QUERY_INTERFACE_TABLE_DATA " +
+        "where TABLE_ID=";
 
     public static HashMap getQueryObjectNameTableNameMap()
     {
@@ -120,12 +126,14 @@ public class QueryBizLogic extends DefaultBizLogic
                 row = (List) iterator.next();
                 parentTableColumnID = (String) row.get(0);
                 childTableColumnID = (String) row.get(1);
+                columnName1 = (String) row.get(2);
+                columnName2 = (String) row.get(3);
                 if(Integer.parseInt(parentTableColumnID) ==0 || Integer.parseInt(childTableColumnID) ==0)
                 {
                     continue;
                 }
                 
-                columnDataList = dao.executeQuery(GET_COLUMN_DATA+parentTableColumnID);
+                columnDataList = dao.executeQuery(GET_TABLE_ALIAS+parentTableColumnID);
                 if(columnDataList.size() <=0 )
                 {
                     continue;
@@ -136,9 +144,8 @@ public class QueryBizLogic extends DefaultBizLogic
                     continue;
                 }
                 tableAlias1 = (String) row.get(0);
-                columnName1 = (String)row.get(1);
                 
-                columnDataList = dao.executeQuery(GET_COLUMN_DATA+childTableColumnID);
+                columnDataList = dao.executeQuery(GET_TABLE_ALIAS+childTableColumnID);
                 if(columnDataList.size() <=0 )
                 {
                     continue;
@@ -149,7 +156,6 @@ public class QueryBizLogic extends DefaultBizLogic
                     continue;
                 }
                 tableAlias2 = (String) row.get(0);
-                columnName2 = (String)row.get(1);
                 
                 relationConditionsForRelatedTables.put(new Relation(tableAlias1,
                         tableAlias2), new RelationCondition(
@@ -184,6 +190,16 @@ public class QueryBizLogic extends DefaultBizLogic
             }
         }
         return relationConditionsForRelatedTables;
+    }
+    
+    public static void initializeQueryData()
+    {
+//        setObjectTableNames();
+//        setRelationConditionsForRelatedTables();
+//        setRelations();
+        
+        Client.objectTableNames = QueryBizLogic.getQueryObjectNameTableNameMap();
+        Client.relationConditionsForRelatedTables = QueryBizLogic.getRelationData();
     }
     
    

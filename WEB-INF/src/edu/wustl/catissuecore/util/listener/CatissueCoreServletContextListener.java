@@ -102,7 +102,7 @@ public class CatissueCoreServletContextListener
         Logger.out.info(ApplicationProperties.getValue("logger.conf.filename")
                 + applicationResourcesPath);
         
-        Client.objectTableNames= QueryBizLogic.getQueryObjectNameTableNameMap();
+        QueryBizLogic.initializeQueryData();
         
         try
         {
