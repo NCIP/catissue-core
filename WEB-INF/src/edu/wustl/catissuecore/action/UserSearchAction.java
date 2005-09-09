@@ -49,6 +49,7 @@ public class UserSearchAction extends SecureAction
         {
             User user = SecurityManager.getInstance(UserSearchAction.class).getUserById(String.valueOf(userForm.getSystemIdentifier()));
             AbstractBizLogic bizLogic = BizLogicFactory.getBizLogic(Constants.USER_FORM_ID);
+            Logger.out.debug("Constants.USER_FORM_ID***********************"+Constants.USER_FORM_ID);
             List userList = bizLogic.retrieve(edu.wustl.catissuecore.domain.User.class.getName(),"systemIdentifier",new Long(userForm.getSystemIdentifier()));
             Role role = SecurityManager.getInstance(UserSearchAction.class).getUserRole(new Long(userForm.getSystemIdentifier()));
             edu.wustl.catissuecore.domain.User appUser = null;
@@ -59,7 +60,12 @@ public class UserSearchAction extends SecureAction
                 appUser.setLastName(user.getLastName());
                 appUser.setFirstName(user.getFirstName());
                 appUser.setEmailAddress(user.getEmailId());
-                appUser.setRoleId(role.getId().toString());
+                Logger.out.debug("ROLE****************************"+role);
+                if (role != null)
+                {
+                    appUser.setRoleId(role.getId().toString());
+                }
+                
             }
             
             userForm.setAllValues(appUser);
