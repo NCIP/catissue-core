@@ -78,7 +78,7 @@
 				<b><bean:message key="app.distribution" /></b>
 		</div>
 		<div>
-			<a class="subMenuPrimary" href="Distribution.do?operation=add"><bean:message key="app.add" /></a> | 
+			<a class="subMenuPrimary" href="Distribution.do?operation=add&pageOf=pageOfDistribution"><bean:message key="app.add" /></a> | 
 			<a class="subMenuPrimary" href="SimpleQueryInterface.do?pageOf=pageOfDistribution&aliasName=Distribution">
 				<bean:message key="app.edit" />
 			</a>
