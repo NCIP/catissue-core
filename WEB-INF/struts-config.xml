@@ -1530,7 +1530,7 @@ PUBLIC
 			name="distributionForm"
 			validate="false"
 			scope="request">
-			<forward name="success" path=".catissuecore.distributionDef" />
+			<forward name="pageOfDistribution" path=".catissuecore.distributionDef" />
 			<forward name="failure" path=".catissuecore.distributionDef" />
 			<forward name="access_denied" path="/ManageBioSpecimen.do" />
 		</action>
@@ -1539,20 +1539,20 @@ PUBLIC
 			type="edu.wustl.catissuecore.action.CommonAddEditAction"
 			name="distributionForm"
 			validate="true"
-			input="/Distribution.do?operation=add"
+			input="/Distribution.do?operation=add&amp;pageOf=pageOfDistrbution"
 			scope="request">
 			<forward name="success" path=".catissuecore.distributionAddSuccessDef" />
-			<forward name="failure" path="/Distribution.do?operation=add" />
+			<forward name="failure" path="/Distribution.do?operation=add&amp;pageOf=pageOfDistrbution" />
 		</action>
 		
 		<action path="/DistributionEdit"
 			type="edu.wustl.catissuecore.action.CommonAddEditAction"
 			name="distributionForm"
 			validate="true"
-			input="/Distribution.do?operation=edit"
+			input="/Distribution.do?operation=edit&amp;pageOf=pageOfDistrbution"
 			scope="request">
 			<forward name="success" path=".catissuecore.distributionEditSuccessDef" />
-			<forward name="failure" path="/Distribution.do?operation=edit" />
+			<forward name="failure" path="/Distribution.do?operation=edit&amp;pageOf=pageOfDistrbution" />
 		</action>
 		
 		<action path="/DistributionSearch"
@@ -1561,8 +1561,9 @@ PUBLIC
 			validate="true"
 			input="/Distribution.do?operation=edit"
 			scope="request">
-			<forward name="success" path="/Distribution.do?operation=edit"/>
-			<forward name="failure" path="/Distribution.do?operation=edit"/>
+			<forward name="pageOfDistribution" path="/Distribution.do?operation=edit&amp;pageOf=pageOfDistribution"/>
+			<forward name="pageOfSimpleQueryInterface" path="/Distribution.do?operation=edit&amp;pageOf=pageOfSimpleQueryInterface"/>
+			<forward name="failure" path="/Distribution.do?operation=edit&amp;pageOf=pageOfDistribution"/>
 		</action>    
 		<!-- Distribution Actions Ends -->
 		
