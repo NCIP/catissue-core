@@ -46,8 +46,8 @@ public class SimpleSearchAction extends DispatchAction
             HttpServletRequest request, HttpServletResponse response) throws Exception
     {
         SimpleQueryInterfaceForm simpleQueryInterfaceForm = (SimpleQueryInterfaceForm) form;
-
-        String target = simpleQueryInterfaceForm.getPageOf();
+        
+        String target = Constants.SUCCESS;
         
         try
         {
@@ -69,7 +69,7 @@ public class SimpleSearchAction extends DispatchAction
                 String fieldType = stringToken.nextToken();
                 String value = simpleConditionsNode.getCondition().getValue();
                 
-                if (fieldType.equals(Constants.FIELD_TYPE_VARCHAR) || fieldType.equals(Constants.FIELD_TYPE_DATE))
+                if (fieldType.equalsIgnoreCase(Constants.FIELD_TYPE_VARCHAR) || fieldType.equalsIgnoreCase(Constants.FIELD_TYPE_DATE))
                 {
                     value = "'"+value+"'";
                     simpleConditionsNode.getCondition().setValue(value);
@@ -124,6 +124,7 @@ public class SimpleSearchAction extends DispatchAction
                 }
                 else
                 {
+                    request.setAttribute(Constants.PAGEOF, simpleQueryInterfaceForm.getPageOf());
                     request.setAttribute(Constants.SPREADSHEET_DATA_LIST, list);
                     request.setAttribute(Constants.SPREADSHEET_COLUMN_LIST, columnNames);
                 }
