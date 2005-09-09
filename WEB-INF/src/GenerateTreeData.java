@@ -1,5 +1,7 @@
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.StringTokenizer;
 
 /*
@@ -52,14 +54,17 @@ public class GenerateTreeData
 	}
 	public static void main(String[] args) throws Exception
 	{
-		BufferedReader reader = new BufferedReader(new FileReader("Tissue_Site.txt"));
+		BufferedWriter writer = new BufferedWriter(new FileWriter("ClinicalDiagnosis-out.txt"));
+		BufferedReader reader = new BufferedReader(new FileReader("ClinicalDiagnosis.txt"));
 		String line = "";
 		while((line=reader.readLine())!=null)
 		{
 			//System.out.println(line);
 			String data[] = parseLine(line);
 			
-			String statement = createStatement(data,"Tissue_Site_PID");
+			String statement = createStatement(data,"Clinical_Diagnosis_PID");
+			writer.write(statement+"\n");
 		}
+		writer.close();
 	}
 }
