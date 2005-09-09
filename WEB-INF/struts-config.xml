@@ -992,7 +992,7 @@ PUBLIC
 			<forward name="failure" path="/checkInCheckOutEventParameters.do?operation=edit" />
 		</action>
 		
-		<action path="/checkInCheckOutEventParametersSearch"
+		<action path="/CheckInCheckOutEventParametersSearch"
 		    type="edu.wustl.catissuecore.action.CommonSearchAction"
 			name="checkInCheckOutEventParametersForm"
 			validate="true"
@@ -1717,14 +1717,29 @@ PUBLIC
 			<forward name="pageOfCollectionProtocol" path="/CollectionProtocolSearch.do"/>
 			<forward name="pageOfDistributionProtocol" path="/DistributionProtocolSearch.do"/>
 			<forward name="pageOfStorageContainer" path="/StorageContainerSearch.do"/>
-			<forward name="pageOfSite" path="/SiteSearch.do"/>
+			<forward name="pageOfSite" path="/SiteSearch.do?pageOf=pageOfSite"/>
 			<forward name="pageOfBioHazard" path="/BiohazardSearch.do"/>
 			<forward name="pageOfUserAdmin" path="/UserSearch.do"/>
 			<forward name="pageOfParticipant" path="/ParticipantSearch.do"/>
 			<forward name="pageOfCollectionProtocolRegistration" path="/CollectionProtocolRegistrationSearch.do"/>
-			<forward name="pageOfNewSpecimen" path="/NewSpecimenSearch.do"/>
-			<forward name="pageOfSpecimenCollectionGroup" path="/SpecimenCollectionGroupSearch.do"/>
-			<forward name="pageOfDistribution" path="/DistributionSearch.do"/>
+			<forward name="pageOfNewSpecimen" path="/NewSpecimenSearch.do?pageOf=pageOfNewSpecimen"/>
+			
+			<forward name="pageOfCellSpecimenReviewParameters" path="/CellSpecimenReviewParametersSearch.do"/>
+			<forward name="pageOfCheckInCheckOutEventParameters" path="/CheckInCheckOutEventParametersSearch.do"/>
+			<forward name="pageOfCollectionEventParameters" path="/CollectionEventParametersSearch.do"/>
+			<forward name="pageOfDisposalEventParameters" path="/DisposalEventParametersSearch.do"/>
+			<forward name="pageOfEmbeddedEventParameters" path="/EmbeddedEventParametersSearch.do"/>
+			<forward name="pageOfFixedEventParameters" path="/FixedEventParametersSearch.do"/>
+			<forward name="pageOfFluidSpecimenReviewParameters" path="/FluidSpecimenReviewEventParametersSearch.do"/>
+			<forward name="pageOfFrozenEventParameters" path="/FrozenEventParameters.do"/>
+			<forward name="pageOfMolecularSpecimenReviewParameters" path="/MolecularSpecimenReviewParametersSearch.do"/>
+			<forward name="pageOfProcedureEventParameters" path="/ProcedureEventParametersSearch.do"/>
+			<forward name="pageOfReceivedEventParameters" path="/receivedEventParametersSearch.do"/>
+			<forward name="pageOfSpunEventParameters" path="/SpunEventParametersSearch.do"/>
+			<forward name="pageOfThawEventParameters" path="/ThawEventParametersSearch.do"/>
+			<forward name="pageOfTissueSpecimenReviewParameters" path="/TissueSpecimenReviewEventParametersSearch.do"/>
+			<forward name="pageOfTransferEventParameters" path="/TransferEventParametersSearch.do"/>
+			
 			<forward name="failure" path="/QueryParticipant.do?operation=view&amp;pageOf=query"/>
 		</action>
 		<!--Query Result View Actions End-->
