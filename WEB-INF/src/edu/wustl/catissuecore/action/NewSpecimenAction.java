@@ -76,10 +76,11 @@ public class NewSpecimenAction  extends SecureAction
         	
         	request.setAttribute(Constants.EVENT_PARAMETERS_LIST,eventParameters);
         	
-        	String [] columns = { "#",
+        	String [] columns = { "Identifier",
 					"Event Parameter",
 					"User",
-					"Time"};
+					"Time",
+					"PageOf"};
         	
         	request.setAttribute(Constants.SPREADSHEET_COLUMN_LIST,columns);
         	request.setAttribute(Constants.SPREADSHEET_DATA_LIST,specimenForm.getGridData());
