@@ -204,4 +204,26 @@
 		<depthOfHierarchyTree>6</depthOfHierarchyTree> 
 	</XMLPermissibleValues>
 	</XMLCDE>
+	
+	<XMLCDE cache="true" lazyLoading="false">
+	<name>Ethnicity</name>
+	<publicId>Ethnicity_PID</publicId>
+	<XMLPermissibleValues>
+		<evsTerminology>NCI-THESAURAUS</evsTerminology>
+		<conceptCode>PV</conceptCode> 
+		<parentConceptCode></parentConceptCode>
+		<depthOfHierarchyTree>6</depthOfHierarchyTree> 
+	</XMLPermissibleValues>
+	</XMLCDE>
+	
+	<XMLCDE cache="true" lazyLoading="false">
+	<name>Race</name>
+	<publicId>Race_PID</publicId>
+	<XMLPermissibleValues>
+		<evsTerminology>NCI-THESAURAUS</evsTerminology>
+		<conceptCode>PV</conceptCode>
+		<parentConceptCode></parentConceptCode>
+		<depthOfHierarchyTree>6</depthOfHierarchyTree> 
+	</XMLPermissibleValues>
+	</XMLCDE>
 </XMLCDE_CACHE>
