@@ -37,12 +37,6 @@ public class DepartmentAction extends SecureAction
             HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException
     {
-    	/*System.out.println("heree rerere rere...............");
-    	Logger.out.info("heree rerere rere...............");
-    	CDE cde = CDEManager.cdeManager.getCDE("Sex");
-    	System.out.println("CDE>> "+cde.getPublicId()+" : "+cde.getLongName());
-    	Logger.out.info("After heree rerere rere...............");*/
-    	
         //Gets the value of the operation parameter.
         String operation = request.getParameter(Constants.OPERATION);
         
