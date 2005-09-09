@@ -40,7 +40,7 @@ public class SpreadsheetViewAction extends Action
         request.setAttribute(Constants.SPREADSHEET_COLUMN_LIST,columnNames);
         request.setAttribute(Constants.SPREADSHEET_DATA_LIST,list);
         
-        String pageOf = request.getParameter(Constants.PAGEOF);
+        String pageOf = (String)request.getAttribute(Constants.PAGEOF);
         request.setAttribute(Constants.PAGEOF, pageOf);
         return mapping.findForward(pageOf);
     }
