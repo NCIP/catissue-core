@@ -30,7 +30,7 @@
 				<b> <bean:message key="app.participantregister" /> </b>
 		</div>
 		<div>
-			<a class="subMenuPrimary" href="CollectionProtocolRegistration.do?operation=add"><bean:message key="app.add" /></a> | 
+			<a class="subMenuPrimary" href="CollectionProtocolRegistration.do?operation=add&pageOf=pageOfCollectionProtocolRegistration"><bean:message key="app.add" /></a> | 
 			<a class="subMenuPrimary" <%--href="CollectionProtocolRegistration.do?operation=search"--%> >
 				<bean:message key="app.edit" />
 			</a>
@@ -60,7 +60,7 @@
 				<b><bean:message key="app.newSpecimen" /> </b>
 		</div>
 		<div>
-			<a class="subMenuPrimary" href="NewSpecimen.do?operation=add">
+			<a class="subMenuPrimary" href="NewSpecimen.do?operation=add&pageOf=pageOfNewSpecimen">
 				<bean:message key="app.add" />
 			</a> | 
 			<a class="subMenuPrimary" <%--href="NewSpecimen.do?operation=search"--%> ><bean:message key="app.edit" /></a>
