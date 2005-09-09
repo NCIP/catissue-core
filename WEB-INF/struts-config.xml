@@ -1573,8 +1573,6 @@ PUBLIC
 			validate="false"
 			scope="request">
 			<forward name="pageOfSimpleQueryInterface" path=".catissuecore.simpleQueryInterfaceDef" />
-			<forward name="pageOfSimpleQueryInterface" path=".catissuecore.editSearchPageDef" />
-			<forward name="pageOfDepartment" path=".catissuecore.editSearchPageDef"/>
 			<forward name="pageOfInstitution" path=".catissuecore.editSearchPageDef"/>
 			<forward name="pageOfDepartment" path=".catissuecore.editSearchPageDef"/>
 			<forward name="pageOfCancerResearchGroup" path=".catissuecore.editSearchPageDef"/>
@@ -1584,7 +1582,12 @@ PUBLIC
 			<forward name="pageOfStorageContainer" path=".catissuecore.editSearchPageDef"/>
 			<forward name="pageOfSite" path=".catissuecore.editSearchPageDef"/>
 			<forward name="pageOfBioHazard" path=".catissuecore.editSearchPageDef"/>
-			<forward name="pageOfUserAdmin" path=".catissuecore.editSearchPageDef"/>			
+			<forward name="pageOfUserAdmin" path=".catissuecore.editSearchPageDef"/>
+			<forward name="pageOfParticipant" path=".catissuecore.editBioSpecimenSearchPageDef"/>
+			<forward name="pageOfCollectionProtocolRegistration" path=".catissuecore.editBioSpecimenSearchPageDef"/>
+			<forward name="pageOfNewSpecimen" path=".catissuecore.editBioSpecimenSearchPageDef"/>
+			<forward name="pageOfSpecimenCollectionGroup" path=".catissuecore.editBioSpecimenSearchPageDef"/>
+			<forward name="pageOfDistribution" path=".catissuecore.editBioSpecimenSearchPageDef"/>						
 			<forward name="failure" path=".catissuecore.simpleQueryInterfaceDef" />
 		</action>
 
@@ -1594,18 +1597,7 @@ PUBLIC
 			validate="true"
 			input="/SimpleQueryInterface.do"
 			scope="request">
-			<forward name="pageOfSimpleQueryInterface" path="/SpreadsheetView.do?pageOf=pageOfSimpleQueryInterface" />
-			<forward name="pageOfDepartment" path="/SpreadsheetView.do?pageOf=pageOfDepartment"/>
-			<forward name="pageOfInstitution" path="/SpreadsheetView.do?pageOf=pageOfInstitution"/>
-			<forward name="pageOfDepartment" path="/SpreadsheetView.do?pageOf=pageOfDepartment"/>
-			<forward name="pageOfCancerResearchGroup" path="/SpreadsheetView.do?pageOf=pageOfCancerResearchGroup"/>
-			<forward name="pageOfCollectionProtocol" path="/SpreadsheetView.do?pageOf=pageOfCollectionProtocol"/>
-			<forward name="pageOfDistributionProtocol" path="/SpreadsheetView.do?pageOf=pageOfDistributionProtocol"/>
-			<forward name="pageOfStorageType" path="/SpreadsheetView.do?pageOf=pageOfStorageType"/>
-			<forward name="pageOfStorageContainer" path="/SpreadsheetView.do?pageOf=pageOfStorageContainer"/>
-			<forward name="pageOfSite" path="/SpreadsheetView.do?pageOf=pageOfSite"/>
-			<forward name="pageOfBioHazard" path="/SpreadsheetView.do?pageOf=pageOfBioHazard"/>
-			<forward name="pageOfUserAdmin" path="/SpreadsheetView.do?pageOf=pageOfUserAdmin"/>	
+			<forward name="success" path="/SpreadsheetView.do" />
 			<forward name="failure" path="/SimpleQueryInterface.do" />
 		</action>
 		
@@ -1613,7 +1605,6 @@ PUBLIC
 			type="edu.wustl.catissuecore.action.SpreadsheetViewAction"
 			scope="request">
 			<forward name="pageOfSimpleQueryInterface" path=".catissuecore.simpleSearchResultsDef" />
-			<forward name="pageOfDepartment" path=".catissuecore.editSearchResultsDef"/>
 			<forward name="pageOfInstitution" path=".catissuecore.editSearchResultsDef"/>
 			<forward name="pageOfDepartment" path=".catissuecore.editSearchResultsDef"/>
 			<forward name="pageOfCancerResearchGroup" path=".catissuecore.editSearchResultsDef"/>
@@ -1624,6 +1615,11 @@ PUBLIC
 			<forward name="pageOfSite" path=".catissuecore.editSearchResultsDef"/>
 			<forward name="pageOfBioHazard" path=".catissuecore.editSearchResultsDef"/>
 			<forward name="pageOfUserAdmin" path=".catissuecore.editSearchResultsDef"/>
+			<forward name="pageOfParticipant" path=".catissuecore.editBioSpecimenSearchResultsDef"/>
+			<forward name="pageOfCollectionProtocolRegistration" path=".catissuecore.editBioSpecimenSearchResultsDef"/>
+			<forward name="pageOfNewSpecimen" path=".catissuecore.editBioSpecimenSearchResultsDef"/>
+			<forward name="pageOfSpecimenCollectionGroup" path=".catissuecore.editBioSpecimenSearchResultsDef"/>
+			<forward name="pageOfDistribution" path=".catissuecore.editBioSpecimenSearchResultsDef"/>
 			<forward name="failure" path=".catissuecore.simpleSearchResultsDef" />
 		</action>
 		
@@ -1726,6 +1722,8 @@ PUBLIC
 			<forward name="pageOfParticipant" path="/ParticipantSearch.do?pageOf=pageOfParticipant"/>
 			<forward name="pageOfCollectionProtocolRegistration" path="/CollectionProtocolRegistrationSearch.do?pageOf=pageOfCollectionProtocolRegistration"/>
 			<forward name="pageOfNewSpecimen" path="/NewSpecimenSearch.do?pageOf=pageOfNewSpecimen"/>
+			<forward name="pageOfSpecimenCollectionGroup" path="/SpecimenCollectionGroupSearch.do?pageOf=pageOfSpecimenCollectionGroup"/>
+			<forward name="pageOfDistribution" path="/DistributionSearch.do?pageOf=pageOfDistribution"/>
 			<forward name="failure" path="/QueryParticipant.do?operation=view&amp;pageOf=query"/>
 		</action>
 		<!--Query Result View Actions End-->
