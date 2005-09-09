@@ -2,8 +2,6 @@
 
 <%@ page import="java.util.List,edu.wustl.catissuecore.util.global.Constants"%>
 
-<style> body, html {margin:0px; padding: 0px; overflow: hidden;} </style>
-
 <link href="runtime/styles/xp/grid.css" rel="stylesheet" type="text/css" ></link>
 <script src="runtime/lib/grid.js"></script>
 
@@ -47,7 +45,7 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 
 </script>
 
-<div STYLE="overflow: auto; width:100%; height: 340; padding:0px; margin: 0px; border: 1px solid">
+<div STYLE="overflow: auto; width:100%; height:100%; padding:0px; margin: 0px; border: 1px solid">
 <script>
 	
 		//	create ActiveWidgets Grid javascript object.
@@ -65,14 +63,14 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 		//	set headers width/height.
 		obj.setRowHeaderWidth("28px");
 		obj.setColumnHeaderHeight("20px");
-
+		
 		var row = new Active.Templates.Row;
 		row.setEvent("ondblclick", function(){this.action("myAction")}); 
 		
 		obj.setTemplate("row", row);
    		obj.setAction("myAction", 
 			function(src){window.location.href = 'SearchObject.do?pageOf=<%=pageOf%>&operation=search&systemIdentifier='+src.getDataProperty("value")}); 
-
+		
 		//	write grid html to the page.
 		document.write(obj);
 		
