@@ -17,7 +17,7 @@
 		</html:link></td>
 
 		<!-- Links that need to be shown when user is logged in -->
-		<logic:notEmpty scope="session" name="<%=Constants.USER%>">	
+		<logic:notEmpty scope="session" name="<%=Constants.SESSION_DATA%>">	
 		<!-- link 1 ends -->
 		<td><img src="images/mainMenuSeparator.gif" width="1" height="16"
 			alt="" /></td>

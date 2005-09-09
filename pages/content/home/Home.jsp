@@ -47,7 +47,7 @@
                                         <td class="sidebarContent">
                                           <table cellpadding="2" cellspacing="0" border="0">
                                           <html:errors />
-										  <logic:empty scope="session" name="<%=Constants.USER%>">	
+										  <logic:empty scope="session" name="<%=Constants.SESSION_DATA%>">	
 										   <html:form action="Login.do">
 									
                                             <tr>
@@ -103,7 +103,7 @@
 
 										</html:form>
 										</logic:empty>
-										<logic:notEmpty scope="session"	name="<%=Constants.USER%>">
+										<logic:notEmpty scope="session"	name="<%=Constants.SESSION_DATA%>">
 												<tr>
 													<TD class="welcomeContent"><bean:message key="app.welcomeNote"/></TD>
 												</tr>			

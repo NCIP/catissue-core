@@ -57,12 +57,12 @@
 							
 								<td height="20" class="mainMenuItem"
 									onclick="document.location.href='Home.do'">
-									<logic:empty scope="session" name="<%=Constants.USER%>">
+									<logic:empty scope="session" name="<%=Constants.SESSION_DATA%>">
 									<html:link styleClass="mainMenuLink" page="/Home.do">
 										<bean:message key="app.loginMessage" />
 									</html:link>
 									</logic:empty>
-									<logic:notEmpty scope="session" name="<%=Constants.USER%>">
+									<logic:notEmpty scope="session" name="<%=Constants.SESSION_DATA%>">
 									<html:link styleClass="mainMenuLink" page="/Logout.do">
 										<bean:message key="app.logoutMessage" />
 									</html:link>
