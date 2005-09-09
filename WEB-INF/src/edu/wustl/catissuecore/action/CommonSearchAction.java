@@ -77,8 +77,8 @@ public class CommonSearchAction extends Action
                 abstractDomain = (AbstractDomainObject)list.get(0);
                 abstractForm.setAllValues(abstractDomain);
                 request.setAttribute(mapping.getAttribute(),form);
-                String pageOf = request.getParameter(Constants.PAGEOF);
-                target = new String(pageOf);
+                String pageOf = (String)request.getAttribute(Constants.PAGEOF);
+                target = pageOf;
             }
             else
             {
@@ -94,7 +94,7 @@ public class CommonSearchAction extends Action
         }
         catch (DAOException excp)
         {
-            target = new String(Constants.FAILURE);
+            target = Constants.FAILURE;
             Logger.out.error(excp.getMessage());
         }
         return (mapping.findForward(target));
