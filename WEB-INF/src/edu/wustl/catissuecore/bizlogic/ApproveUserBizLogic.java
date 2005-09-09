@@ -25,6 +25,7 @@ import edu.wustl.catissuecore.util.global.GeneratePassword;
 import edu.wustl.catissuecore.util.global.SendEmail;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
+import edu.wustl.common.util.PasswordEncoderDecoder;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
@@ -55,7 +56,7 @@ public class ApproveUserBizLogic extends DefaultBizLogic
             csmUser.setFirstName(user.getFirstName());
             csmUser.setEmailId(user.getEmailAddress());
             if (user.getActivityStatus().equals(Constants.ACTIVITY_STATUS_ACTIVE))
-                csmUser.setPassword(GeneratePassword.getPassword());
+                csmUser.setPassword(PasswordEncoderDecoder.encode(GeneratePassword.getPassword()));
             csmUser.setStartDate(Calendar.getInstance().getTime());
 
             SecurityManager.getInstance(ApproveUserBizLogic.class).createUser(csmUser);
