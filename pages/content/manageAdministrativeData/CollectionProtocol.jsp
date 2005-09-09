@@ -101,10 +101,8 @@ var val = parseInt(document.forms[0].outerCounter.value);
 		
 	var y = div.innerHTML;
 	var z = d0.innerHTML;
-
-	//subDivRowCount[insno] = 1;
-	insno =insno + 1;
-	//alert("insno "+z);
+						//	insno =insno + 1;
+	insno =val;
 	var mm = z.indexOf('`');
 	for(var cnt=0;cnt<mm;cnt++)
 	{
