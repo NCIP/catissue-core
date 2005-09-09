@@ -10,8 +10,11 @@
 
 package edu.wustl.catissuecore.actionForm;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,10 +24,28 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
+import edu.wustl.catissuecore.domain.Biohazard;
+import edu.wustl.catissuecore.domain.CellSpecimenReviewParameters;
+import edu.wustl.catissuecore.domain.CheckInCheckOutEventParameter;
+import edu.wustl.catissuecore.domain.CollectionEventParameters;
+import edu.wustl.catissuecore.domain.DisposalEventParameters;
+import edu.wustl.catissuecore.domain.EmbeddedEventParameters;
+import edu.wustl.catissuecore.domain.EventParameters;
+import edu.wustl.catissuecore.domain.FixedEventParameters;
+import edu.wustl.catissuecore.domain.FluidSpecimenReviewEventParameters;
+import edu.wustl.catissuecore.domain.FrozenEventParameters;
+import edu.wustl.catissuecore.domain.MolecularSpecimenReviewParameters;
+import edu.wustl.catissuecore.domain.ProcedureEventParameters;
+import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
+import edu.wustl.catissuecore.domain.SpunEventParameters;
+import edu.wustl.catissuecore.domain.ThawEventParameters;
+import edu.wustl.catissuecore.domain.TissueSpecimenReviewEventParameters;
+import edu.wustl.catissuecore.domain.TransferEventParameters;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.catissuecore.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
@@ -37,7 +58,17 @@ public class NewSpecimenForm extends SpecimenForm
 {
     private String specimenCollectionGroupId;
     
-     /**
+    /**
+     * Identifier of the Parent Speciemen if present.
+     */
+    private String parentSpecimenId;
+    
+    /**
+     * If "True" then Parent is present else Parent is absent.
+     */
+    private boolean parentPresent;
+    
+    /**
      * Anatomic site from which the specimen was derived.
      */
     private String tissueSite;
@@ -70,8 +101,31 @@ public class NewSpecimenForm extends SpecimenForm
     
     private Map biohazard = new HashMap();
     
+    private String specimenEventParameter;
     
-	/**
+    List gridData;
+    
+    /**
+     * Returns an identifier of the Parent Speciemen.
+     * @return String an identifier of the Parent Speciemen.
+     * @see #setParentSpecimenId(String)
+     * */
+    public String getParentSpecimenId()
+    {
+        return parentSpecimenId;
+    }
+
+    /**
+     * Sets an identifier of the Parent Speciemen.
+     * @param parentSpecimenId an identifier of the Parent Speciemen.
+     * @see #getParentSpecimenId()
+     * */
+    public void setParentSpecimenId(String parentSpecimenId)
+    {
+        this.parentSpecimenId = parentSpecimenId;
+    }
+	
+    /**
 	 * Associates the specified object with the specified key in the map.
 	 * @param key the key to which the object is mapped.
 	 * @param value the object which is mapped.
@@ -183,11 +237,11 @@ public class NewSpecimenForm extends SpecimenForm
 
     protected void reset()
     {
-        super.reset();
-    	this.tissueSite = null;
-        this.tissueSide = null;
-        this.pathologicalStatus = null;
-        this.biohazard = new HashMap();
+//        super.reset();
+//    	this.tissueSite = null;
+//        this.tissueSide = null;
+//        this.pathologicalStatus = null;
+//        this.biohazard = new HashMap();
     }
     
   
@@ -208,12 +262,142 @@ public class NewSpecimenForm extends SpecimenForm
     {
         try
         {
-            Specimen specimen = (Specimen) abstractDomain;
+            super.setAllValues(abstractDomain);
+            
+        	Specimen specimen = (Specimen) abstractDomain;
+        	
+        	if(specimen.getSpecimenCollectionGroup() != null)
+        	{
+        		this.specimenCollectionGroupId = String.valueOf(specimen.getSpecimenCollectionGroup().getSystemIdentifier());
+        		this.parentPresent = false;
+        	}
+        	else
+        	{
+        		this.parentSpecimenId = String.valueOf(specimen.getParentSpecimen().getSystemIdentifier());
+        		this.parentPresent = true;
+        	}
             
             SpecimenCharacteristics characteristic = specimen.getSpecimenCharacteristics();
             this.pathologicalStatus = characteristic.getPathologicalStatus();
             this.tissueSide = characteristic.getTissueSide();
             this.tissueSite = characteristic.getTissueSite();
+            
+            Collection biohazardCollection = specimen.getBiohazardCollection();
+            bhCounter = 1;
+            
+            if(biohazardCollection != null)
+            {
+            	biohazard = new HashMap();
+            	
+            	int i=1;
+            	
+            	Iterator it = biohazardCollection.iterator();
+            	
+            	while(it.hasNext())
+            	{
+            		String key1 = "Biohazard:" + i +"_type";
+    				String key2 = "Biohazard:" + i +"_systemIdentifier";
+    				
+    				Biohazard hazard = (Biohazard)it.next();
+    				
+    				biohazard.put(key1,hazard.getType());
+    				biohazard.put(key2,hazard.getSystemIdentifier());
+    				
+    				i++;
+            	}
+            	
+            	bhCounter = biohazardCollection.size();
+            }
+            
+            //Setting Specimen Event Parameters' Grid            
+            Collection specimenEventCollection = specimen.getSpecimenEventCollection();
+            
+            if(specimenEventCollection != null)
+            {
+            	gridData = new ArrayList();
+            	Iterator it = specimenEventCollection.iterator();
+            	int i=1;
+            	
+            	while(it.hasNext())
+            	{
+            		List rowData = new ArrayList();
+            		EventParameters eventParameters = (EventParameters)it.next();
+            		            		
+            		if(eventParameters != null)
+            		{
+            			String event = null;
+            			
+            			if(eventParameters instanceof CellSpecimenReviewParameters)
+            			{
+            				event = "Cell Specimen Review";
+            			}
+            			else if(eventParameters instanceof CheckInCheckOutEventParameter)
+            			{
+            				event = "Check In Check Out";
+            			}
+            			else if(eventParameters instanceof CollectionEventParameters)
+            			{
+            				event = "Collection";
+            			}
+            			else if(eventParameters instanceof DisposalEventParameters)
+            			{
+            				event = "Disposal";
+            			}
+            			else if(eventParameters instanceof EmbeddedEventParameters)
+            			{
+            				event = "Embedded";
+            			}
+            			else if(eventParameters instanceof FixedEventParameters)
+            			{
+            				event = "Fixed";
+            			}
+            			else if(eventParameters instanceof FluidSpecimenReviewEventParameters)
+            			{
+            				event = "Fluid Specimen Review";
+            			}
+            			else if(eventParameters instanceof FrozenEventParameters)
+            			{
+            				event = "Frozen";
+            			}
+            			else if(eventParameters instanceof MolecularSpecimenReviewParameters)
+            			{
+            				event = "Molecular Specimen Review";
+            			}
+            			else if(eventParameters instanceof ProcedureEventParameters)
+            			{
+            				event = "Procedure Event";
+            			}
+            			else if(eventParameters instanceof ReceivedEventParameters)
+            			{
+            				event = "Received Event";
+            			}
+            			else if(eventParameters instanceof SpunEventParameters)
+            			{
+            				event = "Spun";
+            			}
+            			else if(eventParameters instanceof ThawEventParameters)
+            			{
+            				event = "Thaw";
+            			}
+            			else if(eventParameters instanceof TissueSpecimenReviewEventParameters)
+            			{
+            				event = "Tissue Specimen Review";
+            			}
+            			else if(eventParameters instanceof TransferEventParameters)
+            			{
+            				event = "Transfer";
+            			}
+            			
+            			rowData.add(String.valueOf(i));
+            			rowData.add(event);
+            			rowData.add(eventParameters.getUser().getLastName() + ", " + eventParameters.getUser().getFirstName());
+            			rowData.add(Utility.parseDateToString(eventParameters.getTimestamp(),Constants.DATE_PATTERN_MM_DD_YYYY));
+            			
+            			gridData.add(rowData);
+            			i++;
+            		}
+            	}
+            }
         }
         catch (Exception excp)
         {
@@ -340,5 +524,53 @@ public class NewSpecimenForm extends SpecimenForm
 	public void setBhCounter(int bhCounter)
 	{
 		this.bhCounter = bhCounter;
+	}
+	
+	
+	/**
+	 * @return Returns the parentPresent.
+	 */
+	public boolean isParentPresent()
+	{
+		return parentPresent;
+	}
+	/**
+	 * @param parentPresent The parentPresent to set.
+	 */
+	public void setParentPresent(boolean parentPresent)
+	{
+		this.parentPresent = parentPresent;
+	}
+	
+	/**
+	 * @return Returns the specimenEventParameter.
+	 */
+	public String getSpecimenEventParameter()
+	{
+		return specimenEventParameter;
+	}
+	
+	/**
+	 * @param specimenEventParameter The specimenEventParameter to set.
+	 */
+	public void setSpecimenEventParameter(String specimenEventParameter)
+	{
+		this.specimenEventParameter = specimenEventParameter;
+	}
+	
+	/**
+	 * @return Returns the gridData.
+	 */
+	public List getGridData()
+	{
+		return gridData;
+	}
+	
+	/**
+	 * @param gridData The gridData to set.
+	 */
+	public void setGridData(List gridData)
+	{
+		this.gridData = gridData;
 	}
 }

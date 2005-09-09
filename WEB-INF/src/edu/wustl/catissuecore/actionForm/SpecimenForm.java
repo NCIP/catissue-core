@@ -12,6 +12,7 @@ package edu.wustl.catissuecore.actionForm;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,8 +22,14 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
+import edu.wustl.catissuecore.domain.CellSpecimen;
+import edu.wustl.catissuecore.domain.ExternalIdentifier;
+import edu.wustl.catissuecore.domain.FluidSpecimen;
+import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
+import edu.wustl.catissuecore.domain.StorageContainer;
+import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Validator;
@@ -49,7 +56,7 @@ public class SpecimenForm extends AbstractActionForm
     /**
      * Activity Status
      */
-    protected String activityStatus;
+    protected String activityStatus = Constants.ACTIVITY_STATUS_ACTIVE;
     
     /**
      * Type of specimen. e.g. Tissue, Molecular, Cell, Fluid
@@ -392,9 +399,73 @@ public class SpecimenForm extends AbstractActionForm
             Specimen specimen = (Specimen) abstractDomain;
             
             this.systemIdentifier= specimen.getSystemIdentifier().longValue();
-            this.className = specimen.getType();
+            this.type = specimen.getType();
+            this.concentration = "";
+            this.comments = specimen.getComments();
+            
+            StorageContainer container = specimen.getStorageContainer();
+            
+            if(container != null)
+            {
+            	this.storageContainer = String.valueOf(container.getSystemIdentifier());
+            	this.positionDimensionOne = String.valueOf(specimen.getPositionDimensionOne());
+            	this.positionDimensionTwo = String.valueOf(specimen.getPositionDimensionTwo());
+            }
+            
+            if(specimen instanceof CellSpecimen)
+            {
+            	this.className = "Cell";
+            	this.quantity = String.valueOf(((CellSpecimen)specimen).getQuantityInCellCount());
+            }
+            else if(specimen instanceof FluidSpecimen)
+            {
+            	this.className = "Fluid";
+            	this.quantity = String.valueOf(((FluidSpecimen)specimen).getQuantityInMilliliter());
+            }
+            else if(specimen instanceof MolecularSpecimen)
+            {
+            	this.className = "Molecular";
+            	this.quantity = String.valueOf(((MolecularSpecimen)specimen).getQuantityInMicrogram());
+            	if(((MolecularSpecimen)specimen).getConcentrationInMicrogramPerMicroliter() != null)
+            		this.concentration = String.valueOf(((MolecularSpecimen)specimen).getConcentrationInMicrogramPerMicroliter());
+            }
+            else if(specimen instanceof TissueSpecimen)
+            {
+            	this.className = "Tissue";
+            	this.quantity = String.valueOf(((TissueSpecimen)specimen).getQuantityInGram());
+            }
+            
             
             SpecimenCharacteristics characteristic = specimen.getSpecimenCharacteristics();
+            
+            Collection externalIdentifierCollection = specimen.getExternalIdentifierCollection();
+            exIdCounter = 1;
+            
+            if(externalIdentifierCollection != null)
+            {
+            	externalIdentifier = new HashMap();
+            	
+            	int i = 1;
+            	
+            	Iterator it = externalIdentifierCollection.iterator();
+            	
+            	while(it.hasNext())
+            	{
+            		String key1 = "ExternalIdentifier:" + i +"_name";
+    				String key2 = "ExternalIdentifier:" + i +"_value";
+    				String key3 = "ExternalIdentifier:" + i +"_systemIdentifier";
+    				
+    				ExternalIdentifier externalId = (ExternalIdentifier)it.next();
+    				
+    				externalIdentifier.put(key1,externalId.getName());
+    				externalIdentifier.put(key2,externalId.getValue());
+    				externalIdentifier.put(key3,String.valueOf(externalId.getSystemIdentifier()));
+    				
+    				i++;
+            	}
+            	
+            	exIdCounter = externalIdentifierCollection.size();
+            }
         }
         catch (Exception excp)
         {

@@ -15,8 +15,10 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
+import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.catissuecore.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
@@ -27,7 +29,7 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
      * System generated unique systemIdentifier.
      */
     protected long systemIdentifier;
-	
+    	
 	/**
 	 * System generated unique collection protocol Identifier
 	 */
@@ -41,7 +43,7 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 	/**
 	 * System generated unique participant protocol Identifier.
 	 */	
-	protected String participantProtocolID;
+	protected String participantProtocolID="";
 
 	/**
 	 * Date on which the Participant is registered to the Collection Protocol.
@@ -62,7 +64,7 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 	
 	public CollectionProtocolRegistrationForm()
 	{
-		reset();
+		//reset();
 	}
 	
 	/**
@@ -73,7 +75,19 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
     {
 	  try
 	  {
-	  	//FIXME for edit page 
+	  	CollectionProtocolRegistration registration = (CollectionProtocolRegistration)abstractDomain;
+	  	
+	  	this.collectionProtocolID = registration.getCollectionProtocol().getSystemIdentifier().longValue();
+	  	
+	  	if(registration.getParticipant() != null)
+	  	{
+	  		this.participantID = registration.getParticipant().getSystemIdentifier().longValue();
+	  		checkedButton = true;
+	  	}
+	  	
+	  	this.participantProtocolID = registration.getProtocolParticipantIdentifier();
+	  	
+	  	this.registrationDate = Utility.parseDateToString(registration.getRegistrationDate(),Constants.DATE_PATTERN_MM_DD_YYYY);
 	  }
 	  catch (Exception excp)
 	  {
@@ -271,12 +285,12 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 	* */
    protected void reset()
    {
-	   this.collectionProtocolID = 0;
-	   this.participantID = 0;
-	   this.participantProtocolID = null;
-	   this.registrationDate = null;
-	   this.systemIdentifier = 0;
-	   this.operation = null;
+//	   this.collectionProtocolID = 0;
+//	   this.participantID = 0;
+//	   this.participantProtocolID = null;
+//	   this.registrationDate = null;
+//	   this.systemIdentifier = 0;
+//	   this.operation = null;
    }
 
 	

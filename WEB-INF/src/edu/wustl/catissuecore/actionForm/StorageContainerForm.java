@@ -167,7 +167,7 @@ public class StorageContainerForm extends AbstractActionForm
 	 */
 	public StorageContainerForm()
 	{
-		reset();
+		//reset();
 	}
 
 	/**
