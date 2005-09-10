@@ -129,4 +129,9 @@ public class ParticipantMedicalIdentifier extends AbstractDomainObject implement
 	{
 	
 	}
+	
+	public String toString()
+	{
+		return "ParticipantMedicalIdentifier: "+systemIdentifier+", "+medicalRecordNumber+", "+site;
+	}
 }
