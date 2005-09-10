@@ -226,4 +226,15 @@
 		<depthOfHierarchyTree>6</depthOfHierarchyTree> 
 	</XMLPermissibleValues>
 	</XMLCDE>
+	
+	<XMLCDE cache="true" lazyLoading="false">
+	<name>Clinical Diagnosis</name>
+	<publicId>Clinical_Diagnosis_PID</publicId>
+	<XMLPermissibleValues>
+		<evsTerminology>NCI-THESAURAUS</evsTerminology>
+		<conceptCode>PV</conceptCode>
+		<parentConceptCode></parentConceptCode>
+		<depthOfHierarchyTree>6</depthOfHierarchyTree> 
+	</XMLPermissibleValues>
+	</XMLCDE>
 </XMLCDE_CACHE>
