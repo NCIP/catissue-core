@@ -14,6 +14,7 @@ import java.util.Date;
 
 import edu.wustl.catissuecore.actionForm.AbstractActionForm;
 import edu.wustl.catissuecore.actionForm.CollectionProtocolRegistrationForm;
+import edu.wustl.catissuecore.exception.AssignDataException;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.util.logger.Logger;
@@ -25,7 +26,6 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class CollectionProtocolRegistration extends AbstractDomainObject implements Serializable
 {
-
 	private static final long serialVersionUID = 1234567890L;
 
 	/**
@@ -64,7 +64,7 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 	 * one argument constructor
 	 * @param CollectionProtocolRegistrationFrom object 
 	 */
-	public CollectionProtocolRegistration(AbstractActionForm form)
+	public CollectionProtocolRegistration(AbstractActionForm form) throws AssignDataException
 	{
 		setAllValues(form);
 	}
@@ -194,15 +194,11 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 	 * Set all values from CollectionProtocolRegistrationForm to the member variables of class
 	 * @param CollectionProtocolRegistrationForm object  
 	 */
-	public void setAllValues(AbstractActionForm abstractForm)
+	public void setAllValues(AbstractActionForm abstractForm) throws AssignDataException
 	{
 		CollectionProtocolRegistrationForm form = (CollectionProtocolRegistrationForm) abstractForm;
 		try
 		{
-			this.systemIdentifier = new Long(form.getSystemIdentifier());
-			this.registrationDate = Utility.parseDate(form.getRegistrationDate(),
-					Constants.DATE_PATTERN_MM_DD_YYYY);
-			
 			this.collectionProtocol.setSystemIdentifier(new Long(form.getCollectionProtocolID()));
 			
 			if(form.isCheckedButton())
@@ -210,12 +206,19 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 				this.participant = new Participant();
 				this.participant.setSystemIdentifier(new Long(form.getParticipantID()));
 			}
+			else
+				this.participant = null;
 			
-			this.protocolParticipantIdentifier = form.getParticipantProtocolID();
+			this.protocolParticipantIdentifier = form.getParticipantProtocolID().trim();
+			if(protocolParticipantIdentifier.equals(""))
+				this.protocolParticipantIdentifier = null;
+			
+			this.registrationDate = Utility.parseDate(form.getRegistrationDate(), Constants.DATE_PATTERN_MM_DD_YYYY);
 		}
 		catch (Exception e)
 		{
 			Logger.out.error(e.getMessage());
+			throw new AssignDataException();
 		}
 	}
 }

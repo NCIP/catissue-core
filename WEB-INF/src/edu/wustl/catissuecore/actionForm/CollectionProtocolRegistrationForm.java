@@ -73,27 +73,26 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 	 */	
     public void setAllValues(AbstractDomainObject abstractDomain)
     {
-	  try
-	  {
-	  	CollectionProtocolRegistration registration = (CollectionProtocolRegistration)abstractDomain;
-	  	
-	  	this.collectionProtocolID = registration.getCollectionProtocol().getSystemIdentifier().longValue();
-	  	
-	  	if(registration.getParticipant() != null)
-	  	{
-	  		this.participantID = registration.getParticipant().getSystemIdentifier().longValue();
-	  		checkedButton = true;
-	  	}
-	  	
-	  	this.participantProtocolID = registration.getProtocolParticipantIdentifier();
-	  	
-	  	this.registrationDate = Utility.parseDateToString(registration.getRegistrationDate(),Constants.DATE_PATTERN_MM_DD_YYYY);
-	  }
-	  catch (Exception excp)
-	  {
-    	// use of logger as per bug 79
-    	Logger.out.error(excp.getMessage(),excp); 
-	  }
+    	try
+		{
+    		CollectionProtocolRegistration registration = (CollectionProtocolRegistration)abstractDomain;
+  	
+    		this.collectionProtocolID = registration.getCollectionProtocol().getSystemIdentifier().longValue();
+  	
+		  	if(registration.getParticipant() != null)
+		  	{
+		  		this.participantID = registration.getParticipant().getSystemIdentifier().longValue();
+		  		checkedButton = true;
+		  	}
+  	
+		  	this.participantProtocolID = Utility.toString(registration.getProtocolParticipantIdentifier());
+  		  	this.registrationDate = Utility.parseDateToString(registration.getRegistrationDate(),Constants.DATE_PATTERN_MM_DD_YYYY);
+		}
+    	catch (Exception excp)
+		{
+			// use of logger as per bug 79
+			Logger.out.error(excp.getMessage(),excp); 
+		}
     }
 	   
 	/**

@@ -26,6 +26,7 @@ import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * This class initializes the fields in the User Add/Edit webpage.
@@ -34,7 +35,6 @@ import edu.wustl.catissuecore.util.global.Constants;
 
 public class CollectionProtocolRegistrationAction extends SecureAction
 {
-
 	/**
 	 * Overrides the execute method of Action class.
 	 * Sets the various fields in Participant Registration Add/Edit webpage.
@@ -51,16 +51,17 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 		
 		//Sets the pageOf attribute
         String pageOf  = request.getParameter(Constants.PAGEOF);
+        
+        request.setAttribute(Constants.PAGEOF,pageOf);
 
 		try
 		{
-			AbstractBizLogic bizLogic = BizLogicFactory
-					.getBizLogic(Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
+			AbstractBizLogic bizLogic = BizLogicFactory.getBizLogic(Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
 
 			//get list of Protocol title.
 			String sourceObjectName = CollectionProtocol.class.getName();
 			String[] displayNameFields = {"title"};
-			String valueField = "systemIdentifier";
+			String valueField = Constants.SYSTEM_IDENTIFIER;
 			List list = bizLogic.getList(sourceObjectName, displayNameFields, valueField);
 			request.setAttribute(Constants.PROTOCOL_LIST, list);
 
@@ -72,9 +73,9 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 		}
 		catch (Exception exc)
 		{
-			exc.printStackTrace();
+			Logger.out.error(exc.getMessage(),exc);
+        	mapping.findForward(Constants.FAILURE); 
 		}
-
 		return mapping.findForward(pageOf);
 	}
 }
