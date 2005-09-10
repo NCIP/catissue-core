@@ -62,7 +62,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 	{
 		CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration) obj;
 		
-		registerParticipantAndProtocol(dao,collectionProtocolRegistration);
+		//registerParticipantAndProtocol(dao,collectionProtocolRegistration);
 		
 		dao.update(collectionProtocolRegistration);
 	}
@@ -119,5 +119,4 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 			collectionProtocolRegistration.setCollectionProtocol(collectionProtocol);
 		}
 	}
-	
 }
