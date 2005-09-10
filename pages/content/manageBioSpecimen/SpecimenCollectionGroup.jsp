@@ -257,7 +257,7 @@
 					</td>
 				     <td class="formField">
 						<html:select property="clinicalDiagnosis" styleClass="formFieldSized" styleId="clinicalDiagnosis" size="1" >
-							<html:options name="<%=Constants.CLINICALDIAGNOSISLIST%>" labelName="<%=Constants.CLINICALDIAGNOSISLIST%>" />
+							<html:options collection="<%=Constants.CLINICALDIAGNOSISLIST%>" labelProperty="name" property="value"/>				     					     					     	
 						</html:select>
 				  <!--   	<html:text property="clinicalDiagnosis" styleClass="formFieldSized" size="30" styleId="clinicalDiagnosis"  readonly="<%=readOnlyForAll%>"/>  -->
 		        	  </td>

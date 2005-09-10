@@ -1165,6 +1165,7 @@ public class Constants
 	public static final String CDE_NAME_BIOHAZARD = "Biohazard";
 	public static final String CDE_NAME_ETHNICITY = "Ethnicity";
 	public static final String CDE_NAME_RACE = "Race";
+	public static final String CDE_CLINICAL_DIAGNOSIS = "Clinical Diagnosis";
 	
 	public static final String [] STORAGESTATUSARRAY = {
 	        SELECT_OPTION,
