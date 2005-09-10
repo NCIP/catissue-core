@@ -1005,7 +1005,7 @@ PUBLIC
 
 		<!-- ReceivedEventParameters Actions Begins -->
         <action path="/ReceivedEventParameters"
-			type="edu.wustl.catissuecore.action.SpecimenEventParametersAction"
+			type="edu.wustl.catissuecore.action.ReceivedEventParametersAction"
 			scope="request">
 			<forward name="pageOfReceivedEventParameters" path=".catissuecore.receivedEventParametersDef" />
 			<forward name="failure" path=".catissuecore.receivedEventParametersDef" />
@@ -1646,7 +1646,7 @@ PUBLIC
         <action path="/SpecimenEventParameters"
 			type="edu.wustl.catissuecore.action.SpecimenEventParametersAction"
 			scope="request">
-			<forward name="success" path=".catissuecore.specimenEventParametersDef" />
+			<forward name="pageOfSpecimenEventParameters" path=".catissuecore.specimenEventParametersDef" />
 			<forward name="failure" path=".catissuecore.specimenEventParametersDef" />
 			<forward name="access_denied" path="/ManageBioSpecimen.do" />
 		</action>
