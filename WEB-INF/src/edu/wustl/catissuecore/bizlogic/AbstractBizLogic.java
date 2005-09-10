@@ -16,6 +16,7 @@ import edu.wustl.catissuecore.dao.DAO;
 import edu.wustl.catissuecore.dao.DAOFactory;
 import edu.wustl.catissuecore.exception.BizLogicException;
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.logger.Logger;
 
 
 /**
@@ -86,8 +87,9 @@ public abstract class AbstractBizLogic
 			catch(DAOException daoEx)
 			{
 				//TODO ERROR Handling
-				throw new BizLogicException();
+				throw new BizLogicException(daoEx.getMessage(), daoEx);
 			}
+			Logger.out.debug("Error in insert");
 			//TODO ERROR Handling
 			throw new BizLogicException(ex.getMessage(), ex);
 		}
@@ -123,7 +125,7 @@ public abstract class AbstractBizLogic
 			catch(DAOException daoEx)
 			{
 				//TODO ERROR Handling
-				throw new BizLogicException();
+				throw new BizLogicException(daoEx.getMessage(), daoEx);
 				//throw new BizLogicException(ex.getMessage(), ex);
 			}
 			//TODO ERROR Handling
@@ -142,7 +144,4 @@ public abstract class AbstractBizLogic
 			}
 		}
 	}
-
-    
 }
-

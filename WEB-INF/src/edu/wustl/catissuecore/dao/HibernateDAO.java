@@ -10,6 +10,7 @@
 
 package edu.wustl.catissuecore.dao;
 
+import java.util.HashSet;
 import java.util.List;
 
 import net.sf.hibernate.HibernateException;
@@ -18,7 +19,12 @@ import net.sf.hibernate.Session;
 import net.sf.hibernate.Transaction;
 import edu.wustl.catissuecore.audit.AuditManager;
 import edu.wustl.catissuecore.audit.Auditable;
-import edu.wustl.catissuecore.domain.StorageType;
+import edu.wustl.catissuecore.bizlogic.AbstractBizLogic;
+import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
+import edu.wustl.catissuecore.domain.CollectionProtocol;
+import edu.wustl.catissuecore.domain.Participant;
+import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
+import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.exception.AuditException;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -55,7 +61,7 @@ public class HibernateDAO extends AbstractDAO
         catch (HibernateException dbex)
         {
             Logger.out.error(dbex.getMessage(),dbex);
-            new DAOException("Error in opening connection", dbex);
+            throw handleError("Error in opening connection: ",dbex);
         }
     }
     /**
@@ -72,7 +78,7 @@ public class HibernateDAO extends AbstractDAO
     	catch(HibernateException dx)
 		{
     		Logger.out.error(dx.getMessage(),dx);
-    		new DAOException("Error in closing connection", dx);
+    		throw handleError("Error in closing connection: ",dx);
 		}
         session = null;
         transaction = null;
@@ -95,7 +101,7 @@ public class HibernateDAO extends AbstractDAO
         catch (HibernateException dbex)
         {
         	Logger.out.error(dbex.getMessage(),dbex);
-        	new DAOException("Error in commit", dbex);
+        	throw handleError("Error in commit: ",dbex);
         }
     }
     /**
@@ -113,7 +119,7 @@ public class HibernateDAO extends AbstractDAO
         catch (HibernateException dbex)
         {
         	Logger.out.error(dbex.getMessage(),dbex);
-        	new DAOException("Error in rollback", dbex);
+        	throw handleError("Error in rollback: ",dbex);
         }
     }
 
@@ -135,27 +141,27 @@ public class HibernateDAO extends AbstractDAO
         }
         catch(HibernateException hibExp)
         {
-        	throw handleError(hibExp);
+        	throw handleError("",hibExp);
         }
         catch(AuditException hibExp)
         {
-        	throw handleError(hibExp);
+        	throw handleError("",hibExp);
         }
     }
     
-    private DAOException handleError(Exception hibExp)
+    private DAOException handleError(String message, Exception hibExp)
     {
         Logger.out.error(hibExp.getMessage(),hibExp);
-        String msg = generateErrorMessage(hibExp);
+        String msg = generateErrorMessage(message, hibExp);
         return new DAOException(msg , hibExp);
     }
     
-    private String generateErrorMessage(Exception ex)
+    private String generateErrorMessage(String messageToAdd, Exception ex)
     {
     	if(ex instanceof HibernateException)
     	{
     		HibernateException hibernateException = (HibernateException)ex;
-		  	StringBuffer message = new StringBuffer();
+		  	StringBuffer message = new StringBuffer(messageToAdd);
 		  	String str[] = hibernateException.getMessages();
 		  	if(message!=null)
 		  	{
@@ -383,38 +389,23 @@ public class HibernateDAO extends AbstractDAO
 	    }
 	}
 	
-	public static void main(String[] args) throws Exception
+	public static void main1(String[] args) throws Exception
 	{
-		StorageType storageType = null;
-		User  user = null;
-		
 		Variables.catissueHome = System.getProperty("user.dir");
 		Logger.configure("Application.properties");
 		
     	HibernateDAO dao = new HibernateDAO();
     	
+    	CollectionProtocol collectionProtocol = null;
     	try
 		{
     		dao.openSession();
     		
-//    		Specimen specimen = new TissueSpecimen();
-//    		Biohazard biohazard1 = (Biohazard)dao.retrieve(Biohazard.class.getName(),new Long(1));
-//    		Biohazard biohazard2 = (Biohazard)dao.retrieve(Biohazard.class.getName(),new Long(2));
-//    		
-//    		specimen.getBiohazardCollection().add(biohazard1);
-//    		specimen.getBiohazardCollection().add(biohazard2);
+    		collectionProtocol = (CollectionProtocol)dao.retrieve(CollectionProtocol.class.getName(),new Long(3));
     		
-//	    	dao.insert(specimen,false);
-//    		Department dept = new Department();
-//    		dept.setName("AABBCC1");
-//    		dao.insert(dept,false);
-    		
-    		storageType = (StorageType)dao.retrieve(StorageType.class.getName(),new Long(1));
     		//user = (User)dao.retrieve(User.class.getName(),new Long(1));
     		
 	    	dao.commit();
-	    	
-	    	
 		}
     	catch(DAOException ex)
 		{
@@ -431,6 +422,23 @@ public class HibernateDAO extends AbstractDAO
     	
     	dao.closeSession();
     	
+    	
+    	User user = new User();
+    	user.setSystemIdentifier(new Long(16));
+    	collectionProtocol.getUserCollection().add(user);
+    	
+    	AbstractBizLogic bl = BizLogicFactory.getBizLogic(Constants.COLLECTION_PROTOCOL_FORM_ID);
+    	
+    	bl.update(collectionProtocol, Constants.HIBERNATE_DAO);
+//    	dao.openSession();
+//		
+//		dao.update(collectionProtocol);
+//		
+//		collectionProtocol.getUserCollection()
+//		//user = (User)dao.retrieve(User.class.getName(),new Long(1));
+//		
+//    	dao.commit();
+    	
 //    	System.out.println("storageType "+storageType.getSystemIdentifier());
 //    	System.out.println("StorageCapacity "+storageType.getDefaultStorageCapacity().getSystemIdentifier());
 
@@ -438,4 +446,34 @@ public class HibernateDAO extends AbstractDAO
 //    	System.out.println("Department "+user.getDepartment().getSystemIdentifier());
 	}
 	
+	public static void main(String[] args) throws Exception
+	{
+		Variables.catissueHome = System.getProperty("user.dir");
+		Logger.configure("Application.properties");
+//		HibernateDAO dao = new HibernateDAO();
+		
+		Participant p = new Participant();
+		p.setFirstName("A");
+		p.setLastName("b");
+		p.setParticipantMedicalIdentifierCollection(new HashSet());
+		
+		ParticipantMedicalIdentifier pmi = new ParticipantMedicalIdentifier();
+		Site aSite = new Site();
+		aSite.setSystemIdentifier(new Long(2));
+		pmi.setSite(aSite);
+		pmi.setMedicalRecordNumber("1");
+		
+		p.getParticipantMedicalIdentifierCollection().add(pmi);
+		
+		AbstractBizLogic bl = BizLogicFactory.getBizLogic(Constants.PARTICIPANT_FORM_ID);
+		bl.insert(p,Constants.HIBERNATE_DAO);
+		
+//		dao.openSession();
+//		
+//		dao.insert(p,false);
+//		
+//		dao.commit();
+//		
+//		dao.closeSession();
+	}
 }
