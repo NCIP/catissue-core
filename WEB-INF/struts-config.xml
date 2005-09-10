@@ -606,7 +606,7 @@ PUBLIC
 			name="specimenCollectionGroupForm"
 			validate="false"
 			scope="request">
-			<forward name="success" path=".catissuecore.specimenCollectionGroupDef" />
+			<forward name="pageOfSpecimenCollectionGroup" path=".catissuecore.specimenCollectionGroupDef" />
 			<forward name="failure" path=".catissuecore.specimenCollectionGroupDef" />
 			<forward name="access_denied" path="/ManageBioSpecimen.do" />
 		</action>
@@ -615,30 +615,30 @@ PUBLIC
 			type="edu.wustl.catissuecore.action.CommonAddEditAction"
 			name="specimenCollectionGroupForm"
 			validate="true"
-			input="/SpecimenCollectionGroup.do?operation=add"
+			input="/SpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroup"
 			scope="request">
 			<forward name="success" path=".catissuecore.specimenCollectionGroupAddSuccessDef" />
-			<forward name="failure" path="/SpecimenCollectionGroup.do?operation=add" />
+			<forward name="failure" path="/SpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroup" />
 		</action>
 
 		<action path="/SpecimenCollectionGroupEdit"
 			type="edu.wustl.catissuecore.action.CommonAddEditAction"
 			name="specimenCollectionGroupForm"
 			validate="true"
-			input="/SpecimenCollectionGroup.do?operation=edit"
+			input="/SpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroup"
 			scope="request">
 			<forward name="success" path=".catissuecore.specimenCollectionGroupEditSuccessDef" />
-			<forward name="failure" path="/SpecimenCollectionGroup.do?operation=edit" />
+			<forward name="failure" path="/SpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroup" />
 		</action>
 
 		<action path="/SpecimenCollectionGroupSearch"
 		    type="edu.wustl.catissuecore.action.CommonSearchAction"
 			name="specimenCollectionGroupForm"
 			validate="true"
-			input="/SpecimenCollectionGroup.do?operation=search"
+			input="/SpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroup"
 			scope="request">
-			<forward name="success" path="/SpecimenCollectionGroup.do?operation=edit"/>
-			<forward name="failure" path="/SpecimenCollectionGroup.do?operation=search"/>
+			<forward name="pageOfSpecimenCollectionGroup" path="/SpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroup"/>
+			<forward name="failure" path="/SpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroup"/>
 		</action>    
 	
 		<!--SpecimenCollectonGroup Actions Begin-->
@@ -927,7 +927,7 @@ PUBLIC
         <action path="/FrozenEventParameters"
 			type="edu.wustl.catissuecore.action.FrozenEventParametersAction"
 			scope="request">
-			<forward name="success" path=".catissuecore.frozenEventParametersDef" />
+			<forward name="pageOfFrozenEventParameters" path=".catissuecore.frozenEventParametersDef" />
 			<forward name="failure" path=".catissuecore.frozenEventParametersDef" />
 			<forward name="access_denied" path="/ManageBioSpecimen.do" />
 		</action>
@@ -936,30 +936,30 @@ PUBLIC
 			type="edu.wustl.catissuecore.action.CommonAddEditAction"
 			name="frozenEventParametersForm"
 			validate="true"
-			input="/FrozenEventParameters.do?operation=add"
+			input="/FrozenEventParameters.do?operation=add&amp;pageOf=pageOfFrozenEventParameters"
 			scope="request">
 			<forward name="success" path=".catissuecore.frozenEventParametersAddSuccessDef" />
-			<forward name="failure" path="/FrozenEventParameters.do?operation=add" />
+			<forward name="failure" path="/FrozenEventParameters.do?operation=add&amp;pageOf=pageOfFrozenEventParameters" />
 		</action>
 		
 		<action path="/FrozenEventParametersEdit"
 			type="edu.wustl.catissuecore.action.CommonAddEditAction"
 			name="frozenEventParametersForm"
 			validate="true"
-			input="/FrozenEventParameters.do?operation=edit"
+			input="/FrozenEventParameters.do?operation=edit&amp;pageOf=pageOfFrozenEventParameters"
 			scope="request">
 			<forward name="success" path=".catissuecore.frozenEventParametersEditSuccessDef" />
-			<forward name="failure" path="/FrozenEventParameters.do?operation=edit" />
+			<forward name="failure" path="/FrozenEventParameters.do?operation=edit&amp;pageOf=pageOfFrozenEventParameters" />
 		</action>
 		
 		<action path="/FrozenEventParametersSearch"
 		    type="edu.wustl.catissuecore.action.CommonSearchAction"
 			name="frozenEventParametersForm"
 			validate="true"
-			input="/FrozenEventParameters.do?operation=edit"
+			input="/FrozenEventParameters.do?operation=edit&amp;pageOf=pageOfFrozenEventParameters"
 			scope="request">
-			<forward name="success" path="/FrozenEventParameters.do?operation=edit"/>
-			<forward name="failure" path="/FrozenEventParameters.do?operation=edit"/>
+			<forward name="pageOfFrozenEventParameters" path="/FrozenEventParameters.do?operation=edit&amp;pageOf=pageOfFrozenEventParameters"/>
+			<forward name="failure" path="/FrozenEventParameters.do?operation=edit&amp;pageOf=pageOfFrozenEventParameters"/>
 		</action>    
 		<!-- FrozenEventParameters Actions Ends -->
 
@@ -967,7 +967,7 @@ PUBLIC
         <action path="/CheckInCheckOutEventParameters"
 			type="edu.wustl.catissuecore.action.CheckInCheckOutEventParametersAction"
 			scope="request">
-			<forward name="success" path=".catissuecore.checkInCheckOutEventParametersDef" />
+			<forward name="pageOfCheckInCheckOutEventParameters" path=".catissuecore.checkInCheckOutEventParametersDef" />
 			<forward name="failure" path=".catissuecore.checkInCheckOutEventParametersDef" />
 			<forward name="access_denied" path="/ManageBioSpecimen.do" />
 		</action>
@@ -976,30 +976,30 @@ PUBLIC
 			type="edu.wustl.catissuecore.action.CommonAddEditAction"
 			name="checkInCheckOutEventParametersForm"
 			validate="true"
-			input="/CheckInCheckOutEventParameters.do?operation=add"
+			input="/CheckInCheckOutEventParameters.do?operation=add&amp;pageOf=pageOfCheckInCheckOutEventParameters"
 			scope="request">
 			<forward name="success" path=".catissuecore.checkInCheckOutEventParametersAddSuccessDef" />
-			<forward name="failure" path="/CheckInCheckOutEventParameters.do?operation=add" />
+			<forward name="failure" path="/CheckInCheckOutEventParameters.do?operation=add&amp;pageOf=pageOfCheckInCheckOutEventParameters" />
 		</action>
 		
 		<action path="/checkInCheckOutEventParametersEdit"
 			type="edu.wustl.catissuecore.action.CommonAddEditAction"
 			name="checkInCheckOutEventParametersForm"
 			validate="true"
-			input="/checkInCheckOutEventParameters.do?operation=edit"
+			input="/checkInCheckOutEventParameters.do?operation=edit&amp;pageOf=pageOfCheckInCheckOutEventParameters"
 			scope="request">
 			<forward name="success" path=".catissuecore.checkInCheckOutEventParametersEditSuccessDef" />
-			<forward name="failure" path="/checkInCheckOutEventParameters.do?operation=edit" />
+			<forward name="failure" path="/checkInCheckOutEventParameters.do?operation=edit&amp;pageOf=pageOfCheckInCheckOutEventParameters" />
 		</action>
 		
 		<action path="/CheckInCheckOutEventParametersSearch"
 		    type="edu.wustl.catissuecore.action.CommonSearchAction"
 			name="checkInCheckOutEventParametersForm"
 			validate="true"
-			input="/CheckInCheckOutEventParameters.do?operation=edit"
+			input="/CheckInCheckOutEventParameters.do?operation=edit&amp;pageOf=pageOfCheckInCheckOutEventParameters"
 			scope="request">
-			<forward name="success" path="/CheckInCheckOutEventParameters.do?operation=edit"/>
-			<forward name="failure" path="/CheckInCheckOutEventParameters.do?operation=edit"/>
+			<forward name="pageOfCheckInCheckOutEventParameters" path="/CheckInCheckOutEventParameters.do?operation=edit&amp;pageOf=pageOfCheckInCheckOutEventParameters"/>
+			<forward name="failure" path="/CheckInCheckOutEventParameters.do?operation=edit&amp;pageOf=pageOfCheckInCheckOutEventParameters"/>
 		</action>    
 		<!-- CheckInCheckOutEventParameters Actions Ends -->
 
@@ -1007,7 +1007,7 @@ PUBLIC
         <action path="/ReceivedEventParameters"
 			type="edu.wustl.catissuecore.action.SpecimenEventParametersAction"
 			scope="request">
-			<forward name="success" path=".catissuecore.receivedEventParametersDef" />
+			<forward name="pageOfReceivedEventParameters" path=".catissuecore.receivedEventParametersDef" />
 			<forward name="failure" path=".catissuecore.receivedEventParametersDef" />
 			<forward name="access_denied" path="/ManageBioSpecimen.do" />
 		</action>
@@ -1016,30 +1016,30 @@ PUBLIC
 			type="edu.wustl.catissuecore.action.CommonAddEditAction"
 			name="receivedEventParametersForm"
 			validate="true"
-			input="/ReceivedEventParameters.do?operation=add"
+			input="/ReceivedEventParameters.do?operation=add&amp;pageOf=pageOfReceivedEventParameters"
 			scope="request">
 			<forward name="success" path=".catissuecore.receivedEventParametersAddSuccessDef" />
-			<forward name="failure" path="/ReceivedEventParameters.do?operation=add" />
+			<forward name="failure" path="/ReceivedEventParameters.do?operation=add&amp;pageOf=pageOfReceivedEventParameters" />
 		</action>
 		
 		<action path="/receivedEventParametersEdit"
 			type="edu.wustl.catissuecore.action.CommonAddEditAction"
 			name="receivedEventParametersForm"
 			validate="true"
-			input="/receivedEventParameters.do?operation=edit"
+			input="/ReceivedEventParameters.do?operation=edit&amp;pageOf=pageOfReceivedEventParameters"
 			scope="request">
 			<forward name="success" path=".catissuecore.receivedEventParametersEditSuccessDef" />
-			<forward name="failure" path="/receivedEventParameters.do?operation=edit" />
+			<forward name="failure" path="/receivedEventParameters.do?operation=edit&amp;pageOf=pageOfReceivedEventParameters" />
 		</action>
 		
 		<action path="/receivedEventParametersSearch"
 		    type="edu.wustl.catissuecore.action.CommonSearchAction"
 			name="receivedEventParametersForm"
 			validate="true"
-			input="/ReceivedEventParameters.do?operation=edit"
+			input="/ReceivedEventParameters.do?operation=edit&amp;pageOf=pageOfReceivedEventParameters"
 			scope="request">
-			<forward name="success" path="/ReceivedEventParameters.do?operation=edit"/>
-			<forward name="failure" path="/ReceivedEventParameters.do?operation=edit"/>
+			<forward name="pageOfReceivedEventParameters" path="/ReceivedEventParameters.do?operation=edit&amp;pageOf=pageOfReceivedEventParameters"/>
+			<forward name="failure" path="/ReceivedEventParameters.do?operation=edit&amp;pageOf=pageOfReceivedEventParameters"/>
 		</action>    
 		<!-- ReceivedEventParameters Actions Ends -->
 
@@ -1047,7 +1047,7 @@ PUBLIC
         <action path="/FluidSpecimenReviewEventParameters"
 			type="edu.wustl.catissuecore.action.SpecimenEventParametersAction"
 			scope="request">
-			<forward name="success" path=".catissuecore.fluidSpecimenReviewEventParametersDef" />
+			<forward name="pageOfFluidSpecimenReviewParameters" path=".catissuecore.fluidSpecimenReviewEventParametersDef" />
 			<forward name="failure" path=".catissuecore.fluidSpecimenReviewEventParametersDef" />
 			<forward name="access_denied" path="/ManageBioSpecimen.do" />
 		</action>
@@ -1056,30 +1056,30 @@ PUBLIC
 			type="edu.wustl.catissuecore.action.CommonAddEditAction"
 			name="fluidSpecimenReviewEventParametersForm"
 			validate="true"
-			input="/FluidSpecimenReviewEventParameters.do?operation=add"
+			input="/FluidSpecimenReviewEventParameters.do?operation=add&amp;pageOf=pageOfFluidSpecimenReviewParameters"
 			scope="request">
 			<forward name="success" path=".catissuecore.fluidSpecimenReviewEventParametersAddSuccessDef" />
-			<forward name="failure" path="/FluidSpecimenReviewEventParameters.do?operation=add" />
+			<forward name="failure" path="/FluidSpecimenReviewEventParameters.do?operation=add&amp;pageOf=pageOfFluidSpecimenReviewParameters" />
 		</action>
 		
 		<action path="/FluidSpecimenReviewEventParametersEdit"
 			type="edu.wustl.catissuecore.action.CommonAddEditAction"
 			name="fluidSpecimenReviewEventParametersForm"
 			validate="true"
-			input="/FluidSpecimenReviewEventParameters.do?operation=edit"
+			input="/FluidSpecimenReviewEventParameters.do?operation=edit&amp;pageOf=pageOfFluidSpecimenReviewParameters"
 			scope="request">
 			<forward name="success" path=".catissuecore.fluidSpecimenReviewEventParametersEditSuccessDef" />
-			<forward name="failure" path="/FluidSpecimenReviewEventParameters.do?operation=edit" />
+			<forward name="failure" path="/FluidSpecimenReviewEventParameters.do?operation=edit&amp;pageOf=pageOfFluidSpecimenReviewParameters" />
 		</action>
 		
 		<action path="/FluidSpecimenReviewEventParametersSearch"
 		    type="edu.wustl.catissuecore.action.CommonSearchAction"
 			name="fluidSpecimenReviewEventParametersForm"
 			validate="true"
-			input="/FluidSpecimenReviewEventParameters.do?operation=edit"
+			input="/FluidSpecimenReviewEventParameters.do?operation=edit&amp;pageOf=pageOfFluidSpecimenReviewParameters"
 			scope="request">
-			<forward name="success" path="/FluidSpecimenReviewEventParameters.do?operation=edit"/>
-			<forward name="failure" path="/FluidSpecimenReviewEventParameters.do?operation=edit"/>
+			<forward name="pageOfFluidSpecimenReviewParameters" path="/FluidSpecimenReviewEventParameters.do?operation=edit&amp;pageOf=pageOfFluidSpecimenReviewParameters"/>
+			<forward name="failure" path="/FluidSpecimenReviewEventParameters.do?operation=edit&amp;pageOf=pageOfFluidSpecimenReviewParameters"/>
 		</action>    
 		<!-- FluidSpecimenReviewEventParameters Actions Ends -->
 
@@ -1087,7 +1087,7 @@ PUBLIC
         <action path="/CellSpecimenReviewParameters"
 			type="edu.wustl.catissuecore.action.SpecimenEventParametersAction"
 			scope="request">
-			<forward name="success" path=".catissuecore.cellSpecimenReviewParametersDef" />
+			<forward name="pageOfCellSpecimenReviewParameters" path=".catissuecore.cellSpecimenReviewParametersDef" />
 			<forward name="failure" path=".catissuecore.cellSpecimenReviewParametersDef" />
 			<forward name="access_denied" path="/ManageBioSpecimen.do" />
 		</action>
@@ -1096,30 +1096,30 @@ PUBLIC
 			type="edu.wustl.catissuecore.action.CommonAddEditAction"
 			name="cellSpecimenReviewParametersForm"
 			validate="true"
-			input="/CellSpecimenReviewParameters.do?operation=add"
+			input="/CellSpecimenReviewParameters.do?operation=add&amp;pageOf=pageOfCellSpecimenReviewParameters"
 			scope="request">
 			<forward name="success" path=".catissuecore.cellSpecimenReviewParametersAddSuccessDef" />
-			<forward name="failure" path="/CellSpecimenReviewParameters.do?operation=add" />
+			<forward name="failure" path="/CellSpecimenReviewParameters.do?operation=add&amp;pageOf=pageOfCellSpecimenReviewParameters" />
 		</action>
 		
 		<action path="/CellSpecimenReviewParametersEdit"
 			type="edu.wustl.catissuecore.action.CommonAddEditAction"
 			name="cellSpecimenReviewParametersForm"
 			validate="true"
-			input="/CellSpecimenReviewParameters.do?operation=edit"
+			input="/CellSpecimenReviewParameters.do?operation=edit&amp;pageOf=pageOfCellSpecimenReviewParameters"
 			scope="request">
 			<forward name="success" path=".catissuecore.cellSpecimenReviewParametersEditSuccessDef" />
-			<forward name="failure" path="/CellSpecimenReviewParameters.do?operation=edit" />
+			<forward name="failure" path="/CellSpecimenReviewParameters.do?operation=edit&amp;pageOf=pageOfCellSpecimenReviewParameters" />
 		</action>
 		
 		<action path="/CellSpecimenReviewParametersSearch"
 		    type="edu.wustl.catissuecore.action.CommonSearchAction"
 			name="cellSpecimenReviewParametersForm"
 			validate="true"
-			input="/CellSpecimenReviewParameters.do?operation=edit"
+			input="/CellSpecimenReviewParameters.do?operation=edit&amp;pageOf=pageOfCellSpecimenReviewParameters"
 			scope="request">
-			<forward name="success" path="/CellSpecimenReviewParameters.do?operation=edit"/>
-			<forward name="failure" path="/CellSpecimenReviewParameters.do?operation=edit"/>
+			<forward name="pageOfCellSpecimenReviewParameters" path="/CellSpecimenReviewParameters.do?operation=edit&amp;pageOf=pageOfCellSpecimenReviewParameters"/>
+			<forward name="failure" path="/CellSpecimenReviewParameters.do?operation=edit&amp;pageOf=pageOfCellSpecimenReviewParameters"/>
 		</action>    
 		<!-- CellSpecimenReviewParameters Actions Ends -->
 
@@ -1559,7 +1559,7 @@ PUBLIC
 		    type="edu.wustl.catissuecore.action.CommonSearchAction"
 			name="distributionForm"
 			validate="true"
-			input="/Distribution.do?operation=edit"
+			input="/Distribution.do?operation=edit&amp;pageOf=pageOfDistribution"
 			scope="request">
 			<forward name="pageOfDistribution" path="/Distribution.do?operation=edit&amp;pageOf=pageOfDistribution"/>
 			<forward name="pageOfSimpleQueryInterface" path="/Distribution.do?operation=edit&amp;pageOf=pageOfSimpleQueryInterface"/>
@@ -1723,7 +1723,7 @@ PUBLIC
 			<forward name="pageOfParticipant" path="/ParticipantSearch.do"/>
 			<forward name="pageOfCollectionProtocolRegistration" path="/CollectionProtocolRegistrationSearch.do"/>
 			<forward name="pageOfNewSpecimen" path="/NewSpecimenSearch.do?pageOf=pageOfNewSpecimen"/>
-			
+			<forward name="pageOfSpecimenCollectionGroup" path="/SpecimenCollectionGroupSearch.do?pageOf=pageOfSpecimenCollectionGroup"/>
 			<forward name="pageOfCellSpecimenReviewParameters" path="/CellSpecimenReviewParametersSearch.do"/>
 			<forward name="pageOfCheckInCheckOutEventParameters" path="/CheckInCheckOutEventParametersSearch.do"/>
 			<forward name="pageOfCollectionEventParameters" path="/CollectionEventParametersSearch.do"/>
@@ -1739,7 +1739,6 @@ PUBLIC
 			<forward name="pageOfThawEventParameters" path="/ThawEventParametersSearch.do"/>
 			<forward name="pageOfTissueSpecimenReviewParameters" path="/TissueSpecimenReviewEventParametersSearch.do"/>
 			<forward name="pageOfTransferEventParameters" path="/TransferEventParametersSearch.do"/>
-			
 			<forward name="failure" path="/QueryParticipant.do?operation=view&amp;pageOf=query"/>
 		</action>
 		<!--Query Result View Actions End-->
