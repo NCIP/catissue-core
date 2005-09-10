@@ -182,7 +182,6 @@ public class Biohazard extends AbstractDomainObject implements Serializable
         try
         {
             BiohazardForm form 	= (BiohazardForm) abstractForm;
-            this.systemIdentifier = new Long(form.getSystemIdentifier());
             this.comments = form.getComments();
             this.name = form.getName();
             this.type = form.getType();

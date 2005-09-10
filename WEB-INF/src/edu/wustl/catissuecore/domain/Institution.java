@@ -97,7 +97,6 @@ public class Institution extends AbstractDomainObject implements Serializable
     {
 		InstitutionForm instituteForm = (InstitutionForm)abstractForm;
 		
-		this.systemIdentifier = new Long(instituteForm.getSystemIdentifier());
 		this.name = instituteForm.getName();
     }
 }

@@ -143,7 +143,6 @@ public abstract class EventParameters extends AbstractDomainObject implements ja
 		try
 		{
 			EventParametersForm form = (EventParametersForm)abstractForm ;
-			this.systemIdentifier = new Long(form.getSystemIdentifier());
 			this.comments = form.getComments();
 			
 			user.setSystemIdentifier(new Long(form.getUserId()));

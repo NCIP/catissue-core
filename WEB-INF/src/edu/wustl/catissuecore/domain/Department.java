@@ -94,7 +94,6 @@ public class Department extends AbstractDomainObject implements java.io.Serializ
 	{
 		DepartmentForm departmentForm = (DepartmentForm)abstractForm;
 		
-		this.systemIdentifier = new Long(departmentForm.getSystemIdentifier());
 		this.name = departmentForm.getName();
 	}
 }
