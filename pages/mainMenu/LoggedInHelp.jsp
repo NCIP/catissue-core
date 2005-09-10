@@ -38,7 +38,7 @@
               <!-- link 4 ends -->
               <td><img src="images/mainMenuSeparator.gif" width="1" height="16" alt="" /></td>
 			  <!-- link 2 begins -->
-              <td height="20" class="mainMenuItem" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'mainMenuItem'),hideCursor()" onclick="document.location.href='Summary.do'">
+              <td height="20" class="mainMenuItem" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'mainMenuItem'),hideCursor()" onclick="document.location.href='LoggedInSummary.do'">
                 <html:link styleClass="mainMenuLink" page="/LoggedInSummary.do">
                 	<bean:message key="app.summary" />
                 </html:link>
@@ -46,7 +46,7 @@
               <!-- link 2 ends -->
 			  <td><img src="images/mainMenuSeparator.gif" width="1" height="16" alt="" /></td>	
   		      <!-- link 5 begins -->
-              <td height="20" class="mainMenuItemOver" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'mainMenuItemOver'),hideCursor()" onclick="document.location.href='#'">
+              <td height="20" class="mainMenuItemOver" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'mainMenuItemOver'),hideCursor()" onclick="document.location.href='LoggedInHelp.do'">
                 <html:link styleClass="mainMenuLink" page="/LoggedInHelp.do">
                 	<bean:message key="app.help" />
                 </html:link>

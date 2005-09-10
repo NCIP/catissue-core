@@ -21,7 +21,7 @@
               <!-- link 2 ends -->
 			  <td><img src="images/mainMenuSeparator.gif" width="1" height="16" alt="" /></td>	
   		      <!-- link 5 begins -->
-              <td height="20" class="mainMenuItem" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'mainMenuItem'),hideCursor()" onclick="document.location.href='#'">
+              <td height="20" class="mainMenuItem" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'mainMenuItem'),hideCursor()" onclick="document.location.href='Help.do'">
                 <html:link styleClass="mainMenuLink" page="/Help.do">
                 	<bean:message key="app.help" />
                 </html:link>
