@@ -2,15 +2,47 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 
-<%@ page import="java.util.List,java.util.ListIterator"%>
+<%@ page import="java.util.List,java.util.Iterator"%>
 <%@ page import="edu.wustl.common.beans.NameValueBean"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.ParticipantForm"%>
 
-<%
-	List siteList = (List)request.getAttribute(Constants.SITELIST);
-	ListIterator iterator=null;
+<% 
+		List siteList = (List)request.getAttribute(Constants.SITELIST);
+		
+		String operation = (String)request.getAttribute(Constants.OPERATION);
+		String formName, pageView=operation,editViewButton="buttons."+Constants.EDIT;
+		boolean readOnlyValue=false,readOnlyForAll=false;
+
+		if(operation.equals(Constants.EDIT))
+		{
+			editViewButton="buttons."+Constants.VIEW;
+			formName = Constants.PARTICIPANT_EDIT_ACTION;
+			readOnlyValue=true;
+		}
+		else
+		{
+			formName = Constants.PARTICIPANT_ADD_ACTION;
+			readOnlyValue=false;
+		}
+
+		if (operation.equals(Constants.VIEW))
+		{
+			readOnlyForAll=true;
+		}
+
+		String pageOf = (String)request.getAttribute(Constants.PAGEOF);
+
+		Object obj = request.getAttribute("participantForm");
+		int noOfRows=0;
+
+		if(obj != null && obj instanceof ParticipantForm)
+		{
+			ParticipantForm form = (ParticipantForm)obj;
+			noOfRows = form.getCounter();
+		}
 %>
+
 <head>
 	<script language="JavaScript">
 		//function to insert a row in the inner block
@@ -43,7 +75,7 @@
 			<%
 				if(siteList!=null)
 				{
-					iterator = siteList.listIterator();
+					Iterator iterator = siteList.iterator();
 					while(iterator.hasNext())
 					{
 						NameValueBean bean = (NameValueBean)iterator.next();
@@ -68,82 +100,47 @@
 	</script>
 </head>
 
-
-<% 
-		String operation = (String)request.getAttribute(Constants.OPERATION);
-		String formName,pageView=operation,editViewButton="buttons."+Constants.EDIT;
-		boolean readOnlyValue=false,readOnlyForAll=false;
-
-		if(operation.equals(Constants.EDIT))
-		{
-			editViewButton="buttons."+Constants.VIEW;
-			formName = Constants.PARTICIPANT_EDIT_ACTION;
-			readOnlyValue=true;
-		}
-		else
-		{
-			formName = Constants.PARTICIPANT_ADD_ACTION;
-			readOnlyValue=false;
-		}
-
-		if (operation.equals(Constants.VIEW))
-		{
-			readOnlyForAll=true;
-		}
-
-		String pageOf = (String)request.getAttribute(Constants.PAGEOF);
-
-		Object obj = request.getAttribute("participantForm");
-		int noOfRows=0;
-
-		if(obj != null && obj instanceof ParticipantForm)
-		{
-			ParticipantForm form = (ParticipantForm)obj;
-			noOfRows = form.getCounter();
-		}
-%>
-
-
 <html:errors />
 
+
 <html:form action="<%=Constants.PARTICIPANT_ADD_ACTION%>">
-		<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
+	<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
 		   		   
-		   <logic:equal name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
-		   	<tr>
-    		    <td>
-			 	 <table summary="" cellpadding="3" cellspacing="0" border="0">
-		   			<tr>
-				  	<td align="right" colspan="3">
-					<%
-						String changeAction = "setFormAction('MakeParticipantEditable.do?"+Constants.EDITABLE+"="+!readOnlyForAll+"')";
-				 	%>
-					<!-- action buttons begins -->
-					<table cellpadding="4" cellspacing="0" border="0">
-						<tr>
-						   	<td>
-						   		<html:submit styleClass="actionButton" onclick="<%=changeAction%>">
-						   			<bean:message key="<%=editViewButton%>"/>
-						   		</html:submit>
-						   	</td>
-							<td>
-								<html:reset styleClass="actionButton">
-									<bean:message key="buttons.export"/>
-								</html:reset>
-							</td>
-						</tr>
-					</table>
-					<!-- action buttons end -->
-				  </td>
-				  </tr>
+	   <logic:equal name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
+	   	<tr>
+		    <td>
+		 	 <table summary="" cellpadding="3" cellspacing="0" border="0">
+	   			<tr>
+			  	<td align="right" colspan="3">
+				<%
+					String changeAction = "setFormAction('MakeParticipantEditable.do?"+Constants.EDITABLE+"="+!readOnlyForAll+"')";
+			 	%>
+				<!-- action buttons begins -->
+				<table cellpadding="4" cellspacing="0" border="0">
+					<tr>
+					   	<td>
+					   		<html:submit styleClass="actionButton" onclick="<%=changeAction%>">
+					   			<bean:message key="<%=editViewButton%>"/>
+					   		</html:submit>
+					   	</td>
+						<td>
+							<html:reset styleClass="actionButton">
+								<bean:message key="buttons.export"/>
+							</html:reset>
+						</td>
+					</tr>
 				</table>
-			   </td>
-			</tr>
-			</logic:equal>		 
+				<!-- action buttons end -->
+			  </td>
+			  </tr>
+			</table>
+		   </td>
+		</tr>
+		</logic:equal>		 
 			
-			<!-- If operation is equal to edit or search but,the page is for query the identifier field is not shown -->
-			<%--logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>">
-				<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
+		<!-- If operation is equal to edit or search but,the page is for query the identifier field is not shown -->
+		<%--logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>">
+			<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
 			<!-- ENTER IDENTIFIER BEGINS-->	
 			  <br/>	
   	    	  <tr>
@@ -191,9 +188,9 @@
 			  </logic:notEqual--%>
 			  
 			   	
-			  <!-- NEW PARTICIPANT REGISTRATION BEGINS-->
-	    	  <tr>
-			    <td>
+		  <!-- NEW PARTICIPANT REGISTRATION BEGINS-->
+				<tr>
+				<td>
 			 	 <table summary="" cellpadding="3" cellspacing="0" border="0">
 				 <tr>
 					<td><html:hidden property="<%=Constants.OPERATION%>" value="<%=operation%>"/></td>

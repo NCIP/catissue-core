@@ -18,6 +18,7 @@ import edu.wustl.catissuecore.dao.DAO;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * ParticipantHDAO is used to to add Participant's information into the database using Hibernate.
@@ -37,12 +38,22 @@ public class ParticipantBizLogic extends DefaultBizLogic
         
 		dao.insert(participant,true);
 		
-		Collection participantMedicalIdentifierCollection = participant.getParticipantMedicalIdentifierCollection();		
-		Iterator it = participantMedicalIdentifierCollection.iterator();
+		Collection participantMedicalIdentifierCollection = participant.getParticipantMedicalIdentifierCollection();
 		
+		if(participantMedicalIdentifierCollection.isEmpty())
+		{
+			//add a dummy participant MedicalIdentifier for Query.
+			ParticipantMedicalIdentifier participantMedicalIdentifier = new ParticipantMedicalIdentifier();
+			participantMedicalIdentifier.setMedicalRecordNumber(null);
+			participantMedicalIdentifier.setSite(null);
+			participantMedicalIdentifierCollection.add(participantMedicalIdentifier);
+		}
+		
+		Iterator it = participantMedicalIdentifierCollection.iterator();
 		while(it.hasNext())
 		{
 			ParticipantMedicalIdentifier pmIdentifier = (ParticipantMedicalIdentifier)it.next();
+			Logger.out.debug(pmIdentifier);
 			pmIdentifier.setParticipant(participant);
 			dao.insert(pmIdentifier,true);
 		}

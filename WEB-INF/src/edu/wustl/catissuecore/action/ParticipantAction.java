@@ -25,6 +25,7 @@ import edu.wustl.catissuecore.bizlogic.ParticipantBizLogic;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.cde.CDEManager;
+import edu.wustl.common.util.logger.Logger;
 
 
 /**
@@ -47,6 +48,11 @@ public class ParticipantAction  extends SecureAction
         //Sets the operation attribute to be used in the Add/Edit Participant Page. 
         request.setAttribute(Constants.OPERATION,operation);
         
+        //Sets the pageOf attribute (for Add,Edit or Query Interface)
+        String pageOf  = request.getParameter(Constants.PAGEOF);
+        
+        request.setAttribute(Constants.PAGEOF,pageOf);
+
         //Sets the genderList attribute to be used in the Add/Edit Participant Page.
         List genderList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_GENDER);
         request.setAttribute(Constants.GENDER_LIST, genderList);
@@ -62,11 +68,6 @@ public class ParticipantAction  extends SecureAction
         List raceList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_RACE);
         request.setAttribute(Constants.RACELIST, raceList);
         
-        //Sets the pageOf attribute (for Add,Edit or Query Interface)
-        String pageOf  = request.getParameter(Constants.PAGEOF);
-        
-        request.setAttribute(Constants.PAGEOF,pageOf);
-                
         try
 		{
         	ParticipantBizLogic dao = (ParticipantBizLogic)BizLogicFactory.getBizLogic(Constants.PARTICIPANT_FORM_ID);
@@ -74,7 +75,7 @@ public class ParticipantAction  extends SecureAction
         	//Sets the Site list of corresponding type.
             String sourceObjectName = Site.class.getName();
             String[] displayNameFields = {"name"};
-            String valueField = "systemIdentifier";
+            String valueField = Constants.SYSTEM_IDENTIFIER;
             String[] whereColumnName = {"type"};
             String[] whereColumnCondition = {"="};
             Object[] whereColumnValue = {"Hospital"};
@@ -88,10 +89,10 @@ public class ParticipantAction  extends SecureAction
 		}
         catch(Exception e)
 		{
-        	e.printStackTrace();
+        	Logger.out.error(e.getMessage(),e);
+        	mapping.findForward(Constants.FAILURE); 
 		}
         
         return mapping.findForward(pageOf);
     }
-
 }
