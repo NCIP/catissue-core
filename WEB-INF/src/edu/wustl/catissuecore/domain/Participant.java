@@ -243,7 +243,7 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
      * @return String representing the genotype of a participant.
      * @see #setGender(String)
      * @hibernate.property name="genotype" type="string" 
-     * column="GENOTYPE" length="20"
+     * column="GENOTYPE" length="50"
      */
 	public String getGenotype()
 	{
@@ -406,23 +406,22 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 	    {
 	        ParticipantForm form = (ParticipantForm) abstractForm;
 	        
-	        this.systemIdentifier	= new Long(form.getSystemIdentifier());
-	        this.activityStatus		= form.getActivityStatus();
-	        this.ethnicity			= form.getEthnicity();
-	        this.firstName			= form.getFirstName();
-	        this.middleName			= form.getMiddleName();
-	        this.lastName			= form.getLastName();
-	        this.gender				= form.getGender();
-	        this.genotype			= form.getGenotype();
-	        this.race				= form.getRace();
+	        this.activityStatus		 = form.getActivityStatus();
+	        this.ethnicity			 = form.getEthnicity();
+	        this.firstName			 = form.getFirstName();
+	        this.middleName			 = form.getMiddleName();
+	        this.lastName			 = form.getLastName();
+	        this.gender				 = form.getGender();
+	        this.genotype			 = form.getGenotype();
+	        this.race				 = form.getRace();
 	        this.socialSecurityNumber=form.getSocialSecurityNumber();
-	        this.birthDate			= Utility.parseDate(form.getBirthDate(),Constants.DATE_PATTERN_MM_DD_YYYY);
+	        this.birthDate			 = Utility.parseDate(form.getBirthDate(),Constants.DATE_PATTERN_MM_DD_YYYY);
 	        
 	        Map map = form.getValues();
-	        System.out.println("Map "+map);
+	        Logger.out.debug("Map "+map);
 	        MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.domain");
 	        participantMedicalIdentifierCollection = parser.generateData(map);
-	        System.out.println("ParticipantMedicalIdentifierCollection "+participantMedicalIdentifierCollection);
+	        Logger.out.debug("ParticipantMedicalIdentifierCollection "+participantMedicalIdentifierCollection);
 	    }
 	    catch(Exception excp)
 	    {
