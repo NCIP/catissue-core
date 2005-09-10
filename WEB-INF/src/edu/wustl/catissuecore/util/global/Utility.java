@@ -55,11 +55,13 @@ public class Utility
 	 */
 	public static String parseDateToString(Date date, String pattern)
 	{
-	    String d = null;
+	    String d = "";
 	    //TODO Check for null
-	    SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
-		d = dateFormat.format(date);
-		    
+	    if(date!=null)
+	    {
+		    SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
+			d = dateFormat.format(date);
+	    }
 	    return d;
 	}
 	
