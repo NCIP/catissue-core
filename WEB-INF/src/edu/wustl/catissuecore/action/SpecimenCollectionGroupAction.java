@@ -57,7 +57,7 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 		//request.setAttribute(Constants.CLINICAL_STATUS_LIST,Constants.CLINICAL_STATUS_ARRAY);
         List clinicalStatusList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_CLINICAL_STATUS);
     	request.setAttribute(Constants.CLINICAL_STATUS_LIST, clinicalStatusList);
-
+    	
 		try
 		{
 			// get list of Protocol title.
@@ -103,7 +103,7 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 		{
 			exc.printStackTrace();
 		}
-        return mapping.findForward(Constants.SUCCESS);
+        return mapping.findForward(request.getParameter(Constants.PAGEOF));
     }
     
     
