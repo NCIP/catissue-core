@@ -27,10 +27,9 @@
 			}
 		} 
 		
-		
         function onChangeEvent(element)
 		{
-			var action = "/catissuecore/SpecimenCollectionGroup.do?operation=add";
+			var action = "/catissuecore/SpecimenCollectionGroup.do?operation=add&pageOf=pageOfSpecimenCollectionGroup";
 			document.forms[0].action = action;
 			document.forms[0].submit();
 		}
