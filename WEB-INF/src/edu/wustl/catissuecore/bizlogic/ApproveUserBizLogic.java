@@ -43,7 +43,6 @@ public class ApproveUserBizLogic extends DefaultBizLogic
      */
     protected void insert(DAO dao, Object obj) throws DAOException
     {
-        Logger.out.debug("IN ApproveUserBizLogic insert***************************");
         User user = (User) obj;
         List list = null;
 
@@ -127,7 +126,7 @@ public class ApproveUserBizLogic extends DefaultBizLogic
                     + ApplicationProperties
                             .getValue("userRegistration.loginDetails")
                     + "\n\tLogin Name : " + csmUser.getLoginName()
-                    + "\n\tPassword : " + csmUser.getPassword() + "\n\n"
+                    + "\n\tPassword : " + PasswordEncoderDecoder.decode(csmUser.getPassword()) + "\n\n"
                     + ApplicationProperties.getValue("email.catissuecore.team");
 
             String adminEmailAddress = ApplicationProperties
