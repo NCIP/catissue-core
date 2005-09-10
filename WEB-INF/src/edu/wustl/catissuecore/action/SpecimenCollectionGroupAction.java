@@ -97,7 +97,8 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 				CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent)calendarEventPointList.get(0);
 				specimenCollectionGroupForm.setClinicalStatus(collectionProtocolEvent.getClinicalStatus());
 			}
-			request.setAttribute(Constants.CLINICALDIAGNOSISLIST, Constants.CLINICALDIAGNOSISARRAY);
+			List clinicalDiagnosisList = CDEManager.getCDEManager().getList(Constants.CDE_CLINICAL_DIAGNOSIS);
+			request.setAttribute(Constants.CLINICALDIAGNOSISLIST, clinicalDiagnosisList);
 		}
 		catch(Exception exc)
 		{
