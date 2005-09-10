@@ -26,6 +26,7 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
+import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
@@ -147,30 +148,32 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
         {
         	values = new HashMap();
         	int i = 1;
-        	counter = 0;
         	
         	Iterator it = medicalIdentifierCollection.iterator();
-        	
         	while(it.hasNext())
         	{
+        		ParticipantMedicalIdentifier participantMedicalIdentifier = (ParticipantMedicalIdentifier)it.next();
+        		
         		String key1 = "ParticipantMedicalIdentifier:" + i +"_Site_systemIdentifier";
 				String key2 = "ParticipantMedicalIdentifier:" + i +"_medicalRecordNumber";
 				String key3 = "ParticipantMedicalIdentifier:" + i +"_systemIdentifier";
+
+				Site site = participantMedicalIdentifier.getSite();
+				if(site!=null)
+					values.put(key1,Utility.toString(site.getSystemIdentifier()));
+				else
+					values.put(key1,Utility.toString(Constants.SELECT_OPTION));
 				
-				ParticipantMedicalIdentifier participantMedicalIdentifier = (ParticipantMedicalIdentifier)it.next();
-				
-				values.put(key1,String.valueOf(participantMedicalIdentifier.getSite().getSystemIdentifier()));
-				values.put(key2,participantMedicalIdentifier.getMedicalRecordNumber());
-				values.put(key3,String.valueOf(participantMedicalIdentifier.getSystemIdentifier()));
+				values.put(key2,Utility.toString(participantMedicalIdentifier.getMedicalRecordNumber()));
+				values.put(key3,Utility.toString(participantMedicalIdentifier.getSystemIdentifier()));
 				
 				i++;
-				counter++;
         	}
-        	
-        	//At least one row should be displayed in ADD MORE therefore
-			if(counter == 0)
-				counter = 1;
+        	counter = medicalIdentifierCollection.size();
         }
+        //At least one row should be displayed in ADD MORE therefore
+		if(counter == 0)
+			counter = 1;
    }
     
     /**
@@ -456,97 +459,93 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 
          try
          {
-             if (operation.equals(Constants.SEARCH))
-             {
-                 checkValidNumber(new Long(systemIdentifier).toString(),"user.systemIdentifier",errors,validator);
-             }
-             if (operation.equals(Constants.ADD) || operation.equals(Constants.EDIT))
-             {
-             	if (validator.isEmpty(firstName ))
-                {
-                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("user.firstName")));
-                }
-             	if (validator.isEmpty(lastName  ))
-                {
-                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("user.lastName")));
-                }
-
-             	if (validator.isEmpty(middleName  ))
-                {
-                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("participant.middleName")));
-                }
-          
-             	if (validator.isEmpty(birthDate))
-                {
-                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("participant.birthDate")));
-                }
-             	
-             	if(gender.equals(Constants.SELECT_OPTION))
-                {
-                	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("participant.gender")));
-                }
-             	
-             	if(genotype.equals(Constants.SELECT_OPTION))
-                {
-                	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("participant.genotype")));
-                }
-             	
-             	if(race.equals(Constants.SELECT_OPTION))
-                {
-                	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("participant.race")));
-                }
-             	
-             	if(ethnicity.equals(Constants.SELECT_OPTION))
-                {
-                	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("participant.ethnicity")));
-                }
-             	
-                checkValidNumber(socialSecurityNumber,"participant.socialSecurityNumber",errors,validator);
-              
-                //Validations for Add-More Block
-                String className = "ParticipantMedicalIdentifier:";
-                String key1 = "_Site_systemIdentifier";
-                String key2 = "_medicalRecordNumber";
-                int index = 1;
-                boolean isError = false;
-                
-                while(true)
-                {
-                	String keyOne = className + index + key1;
-					String keyTwo = className + index + key2;
-                	String value1 = (String)values.get(keyOne);
-                	String value2 = (String)values.get(keyTwo);
-                	
-                	if(value1 == null || value2 == null)
-                	{
-                		break;
-                	}
-                	else if(value1.equals("-1") && value2.equals(""))
-                	{
-                		values.remove(keyOne);
-                		values.remove(keyTwo);
-                	}
-                	else if((!value1.equals("-1") && value2.equals("")) || (value1.equals("-1") && !value2.equals("")))
-                	{
-                		isError = true;
-                		break;
-                	}
-                	index++;
-                }
-                
-                if(isError)
-                {
-                	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.participant.missing",ApplicationProperties.getValue("participant.msg")));
-                }
-             }
-         }
-         catch(Exception excp)
-         {
-             Logger.out.error(excp.getMessage());
-         }
+			if (validator.isEmpty(firstName))
+			{
+			    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("user.firstName")));
+			}
+			if (validator.isEmpty(lastName))
+			{
+			    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("user.lastName")));
+			}
+			
+			if (validator.isEmpty(middleName))
+			{
+			    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("participant.middleName")));
+			}
+			  
+			if (validator.isEmpty(birthDate))
+			{
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("participant.birthDate")));
+			}
+			
+			if(!validator.isValidOption(gender))
+			{
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("participant.gender")));
+			}
+			
+			if(!validator.isValidOption(genotype))
+			{
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("participant.genotype")));
+			}
+			
+			if(!validator.isValidOption(race))
+			{
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("participant.race")));
+			}
+			
+			if(!validator.isValidOption(ethnicity))
+			{
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("participant.ethnicity")));
+			}
+			
+			checkValidNumber(socialSecurityNumber,"participant.socialSecurityNumber",errors,validator);
+			  
+			//Validations for Add-More Block
+			String className = "ParticipantMedicalIdentifier:";
+			String key1 = "_Site_systemIdentifier";
+			String key2 = "_medicalRecordNumber";
+			String key3 = "_systemIdentifier";
+			int index = 1;
+			boolean isError = false;
+			
+			while(true)
+			{
+				String keyOne = className + index + key1;
+				String keyTwo = className + index + key2;
+				String keyThree = className + index + key3;
+				
+				String value1 = (String)values.get(keyOne);
+				String value2 = (String)values.get(keyTwo);
+				
+				if(value1 == null || value2 == null)
+				{
+					break;
+				}
+				else if(value1.equals("-1") && value2.equals(""))
+				{
+					values.remove(keyOne);
+					values.remove(keyTwo);
+					values.remove(keyThree);
+				}
+				else if((!value1.equals("-1") && value2.equals("")) || (value1.equals("-1") && !value2.equals("")))
+				{
+					isError = true;
+					break;
+				}
+				index++;
+			}
+			
+			if(isError)
+			{
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.participant.missing",ApplicationProperties.getValue("participant.msg")));
+			}
+		}
+		catch(Exception excp)
+		{
+			Logger.out.error(excp.getMessage());
+		}
         return errors;
      }
-     
      
      /**
       * Associates the specified object with the specified key in the map.
@@ -555,7 +554,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
       */
      public void setValue(String key, Object value) 
      {
-             values.put(key, value);
+         values.put(key, value);
      }
 
      /**
@@ -610,4 +609,4 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 	{
 		this.counter = counter;
 	}
- }
+}
