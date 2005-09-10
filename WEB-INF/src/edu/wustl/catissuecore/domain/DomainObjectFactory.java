@@ -15,6 +15,7 @@ import edu.wustl.catissuecore.actionForm.CreateSpecimenForm;
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.actionForm.ReportedProblemForm;
 import edu.wustl.catissuecore.actionForm.UserForm;
+import edu.wustl.catissuecore.exception.AssignDataException;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
 
@@ -32,7 +33,7 @@ public class DomainObjectFactory
      * @param form Form bean object.
      * @return an AbstractDomain object copy of the form bean object.
      */
-    public static AbstractDomainObject getDomainObject(int FORM_TYPE,AbstractActionForm form)
+    public static AbstractDomainObject getDomainObject(int FORM_TYPE,AbstractActionForm form) throws AssignDataException
     {
         AbstractDomainObject abstractDomain = null;
         switch(FORM_TYPE)
