@@ -20,7 +20,7 @@
 		<!-- Received Event Parameters -->
 				<tr>
 					<td class="formRequiredLabel">
-						<html:link page="/ReceivedEventParameters.do" paramId="<%=operation%>" paramName="<%=operationValue%>">
+						<html:link page="/ReceivedEventParameters.do?pageOf=pageOfReceivedEventParameters" paramId="<%=operation%>" paramName="<%=operationValue%>">
 							Received Event Parameters	
 						</html:link>
 					</td>
@@ -28,7 +28,7 @@
 		<!-- Disposal Event Parameters -->
 				<tr>
 					<td class="formRequiredLabel">
-						<html:link page="/DisposalEventParameters.do" paramId="<%=operation%>" paramName="<%=operationValue%>">
+						<html:link page="/DisposalEventParameters.do?pageOf=pageOfDisposalEventParameters" paramId="<%=operation%>" paramName="<%=operationValue%>">
 							Disposal Event Parameters	
 						</html:link>
 					</td>
@@ -36,7 +36,7 @@
 		<!-- Fixed Event Parameters -->
 				<tr>
 					<td class="formRequiredLabel">
-						<html:link page="/FixedEventParameters.do" paramId="<%=operation%>" paramName="<%=operationValue%>">
+						<html:link page="/FixedEventParameters.do?pageOf=pageOfFixedEventParameters" paramId="<%=operation%>" paramName="<%=operationValue%>">
 							Fixed Event Parameters	
 						</html:link>
 					</td>
@@ -44,7 +44,7 @@
 		<!-- Collection Event Parameters -->
 				<tr>
 					<td class="formRequiredLabel">
-						<html:link page="/CollectionEventParameters.do" paramId="<%=operation%>" paramName="<%=operationValue%>">
+						<html:link page="/CollectionEventParameters.do?pageOf=pageOfCollectionEventParameters" paramId="<%=operation%>" paramName="<%=operationValue%>">
 							Collection Event Parameters	
 						</html:link>
 					</td>
@@ -52,7 +52,7 @@
 		<!-- Transfer Event Parameters -->
 				<tr>
 					<td class="formRequiredLabel">
-						<html:link page="/TransferEventParameters.do" paramId="<%=operation%>" paramName="<%=operationValue%>">
+						<html:link page="/TransferEventParameters.do?pageOf=pageOfTransferEventParameters" paramId="<%=operation%>" paramName="<%=operationValue%>">
 							Transfer Event Parameters	
 						</html:link>
 					</td>
@@ -60,7 +60,7 @@
 		<!-- Procedure Event Parameters -->
 				<tr>
 					<td class="formRequiredLabel">
-						<html:link page="/ProcedureEventParameters.do" paramId="<%=operation%>" paramName="<%=operationValue%>">
+						<html:link page="/ProcedureEventParameters.do?pageOf=pageOfProcedureEventParameters" paramId="<%=operation%>" paramName="<%=operationValue%>">
 							Procedure Event Parameters	
 						</html:link>
 					</td>
@@ -68,7 +68,7 @@
 		<!-- CheckInCheckOut Event Parameters -->
 				<tr>
 					<td class="formRequiredLabel">
-						<html:link page="/CheckInCheckOutEventParameters.do" paramId="<%=operation%>" paramName="<%=operationValue%>">
+						<html:link page="/CheckInCheckOutEventParameters.do?pageOf=pageOfCheckInCheckOutEventParameters" paramId="<%=operation%>" paramName="<%=operationValue%>">
 							CheckInCheckOut Event Parameters	
 						</html:link>
 					</td>
@@ -76,7 +76,7 @@
 		<!-- Frozen Event Parameters -->
 				<tr>
 					<td class="formRequiredLabel">
-						<html:link page="/FrozenEventParameters.do" paramId="<%=operation%>" paramName="<%=operationValue%>">
+						<html:link page="/FrozenEventParameters.do?pageOf=pageOfFrozenEventParameters" paramId="<%=operation%>" paramName="<%=operationValue%>">
 							Frozen Event Parameters	
 						</html:link>
 					</td>
@@ -84,7 +84,7 @@
 		<!-- Thaw Event Parameters -->
 				<tr>
 					<td class="formRequiredLabel">
-						<html:link page="/ThawEventParameters.do" paramId="<%=operation%>" paramName="<%=operationValue%>">
+						<html:link page="/ThawEventParameters.do?pageOf=pageOfThawEventParameters" paramId="<%=operation%>" paramName="<%=operationValue%>">
 							Thaw Event Parameters	
 						</html:link>
 					</td>
@@ -93,7 +93,7 @@
 		<!-- Spun Event Parameters -->
 				<tr>
 					<td class="formRequiredLabel">
-						<html:link page="/SpunEventParameters.do" paramId="<%=operation%>" paramName="<%=operationValue%>">
+						<html:link page="/SpunEventParameters.do?pageOf=pageOfSpunEventParameters" paramId="<%=operation%>" paramName="<%=operationValue%>">
 							Spun Event Parameters	
 						</html:link>
 					</td>
@@ -102,7 +102,7 @@
 		<!-- Embedded Event Parameters -->
 				<tr>
 					<td class="formRequiredLabel">
-						<html:link page="/EmbeddedEventParameters.do" paramId="<%=operation%>" paramName="<%=operationValue%>">
+						<html:link page="/EmbeddedEventParameters.do?pageOf=pageOfEmbeddedEventParameters" paramId="<%=operation%>" paramName="<%=operationValue%>">
 							Embedded Event Parameters	
 						</html:link>
 					</td>
@@ -111,7 +111,7 @@
 		<!-- MolecularSpecimenReview Event Parameters -->
 				<tr>
 					<td class="formRequiredLabel">
-						<html:link page="/MolecularSpecimenReviewParameters.do" paramId="<%=operation%>" paramName="<%=operationValue%>">
+						<html:link page="/MolecularSpecimenReviewParameters.do?pageOf=pageOfMolecularSpecimenReviewParameters" paramId="<%=operation%>" paramName="<%=operationValue%>">
 							Molecular Specimen Review Parameters	
 						</html:link>
 					</td>
@@ -119,7 +119,7 @@
 		<!-- Tissue Specimen Review Event Parameters -->
 				<tr>
 					<td class="formRequiredLabel">
-						<html:link page="/TissueSpecimenReviewEventParameters.do" paramId="<%=operation%>" paramName="<%=operationValue%>">
+						<html:link page="/TissueSpecimenReviewEventParameters.do?pageOf=pageOfTissueSpecimenReviewParameters" paramId="<%=operation%>" paramName="<%=operationValue%>">
 							Tissue Specimen Review Event Parameters
 						</html:link>
 					</td>
@@ -128,7 +128,7 @@
 		<!-- CellSpecimenReview Event Parameters -->
 				<tr>
 					<td class="formRequiredLabel">
-						<html:link page="/CellSpecimenReviewParameters.do" paramId="<%=operation%>" paramName="<%=operationValue%>">
+						<html:link page="/CellSpecimenReviewParameters.do?pageOf=pageOfCellSpecimenReviewParameters" paramId="<%=operation%>" paramName="<%=operationValue%>">
 							Cell Specimen Review Parameters	
 						</html:link>
 					</td>
@@ -137,7 +137,7 @@
 		<!-- Fluid Specimen Review Event Parameters -->
 				<tr>
 					<td class="formRequiredLabel">
-						<html:link page="/FluidSpecimenReviewEventParameters.do" paramId="<%=operation%>" paramName="<%=operationValue%>">
+						<html:link page="/FluidSpecimenReviewEventParameters.do?pageOf=pageOfFluidSpecimenReviewParameters" paramId="<%=operation%>" paramName="<%=operationValue%>">
 							Fluid Specimen Review Event Parameters
 						</html:link>
 					</td>
