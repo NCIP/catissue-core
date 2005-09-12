@@ -169,7 +169,7 @@ public class Constants
 	public static final String CELL_SPECIMEN_ID_LIST="cellSpecimenIdList";
 	public static final String FLUID_SPECIMEN_ID_LIST="fluidSpecimenIdList";
 	public static final String STORAGESTATUSLIST="storageStatusList";
-	public static final String CLINICALDIAGNOSISLIST="clinicalDiagnosisList";
+	public static final String CLINICAL_DIAGNOSIS_LIST = "clinicalDiagnosisList";
 	public static final String HISTOLOGICALQUALITYLIST="histologicalQualityList";
 	
 	//Constants required in User.jsp Page
@@ -892,12 +892,6 @@ public class Constants
 	public static final String DISTRIBUTIONPROTOCOL_ADD_ACTION = "DistributionProtocolAdd.do";
 	public static final String DISTRIBUTIONPROTOCOL_EDIT_ACTION = "DistributionProtocolEdit.do";
 	
-	public static final String [] CANCER_RESEARCH_GROUP_VALUES = {
-	        SELECT_OPTION,
-	        "Siteman Cancer Center",
-	        "Washington University"
-	};
-	
 	public static final String [] ACTIVITY_STATUS_VALUES = {
 	        SELECT_OPTION,
 	        "Active",
@@ -918,17 +912,6 @@ public class Constants
 	        "Pending"
 	};
 
-	//Only for showing UI.
-	public static final String [] INSTITUTE_VALUES = {
-	        SELECT_OPTION,
-	        "Washington University"
-	};
-	
-	public static final String [] DEPARTMENT_VALUES = {
-	        SELECT_OPTION,
-	        "Cardiology",
-	        "Pathology"
-	};
 	
 	public static final String [] SPECIMEN_TYPE_VALUES = {
 	        SELECT_OPTION,
@@ -938,71 +921,12 @@ public class Constants
 	        "Molecular"
 	};
 	
-	public static final String [] SPECIMEN_SUB_TYPE_VALUES = {
-	        SELECT_OPTION,
-	        "Blood",
-	        "Serum",
-	        "Plasma",
-	};
-	
-	public static final String [] TISSUE_SIDE_VALUES = {
-	        SELECT_OPTION,
-	        "Lavage",
-	        "Metastatic Lesion",
-	};
-	
-	public static final String [] PATHOLOGICAL_STATUS_VALUES = {
-	        SELECT_OPTION,
-	        "Primary Tumor",
-	        "Metastatic Node",
-	        "Non-Maglignant Tissue",
-	};
-
-//	public static final String [] BIOHAZARD_NAME_VALUES = {
-//	        SELECT_OPTION,
-//	        ""
-//	};
-	
-	public static final String [] BIOHAZARD_TYPE_VALUES = {
-	        SELECT_OPTION,
-	        "Radioactive"
-	};
-	
-	public static final String [] ETHNICITY_VALUES = {
-	        SELECT_OPTION,
-			"Ethnicity1",
-			"Ethnicity2",
-			"Ethnicity3",
-	};
-	
-	public static final String [] PARTICIPANT_MEDICAL_RECORD_SOURCE_VALUES = {
-	        SELECT_OPTION
-	};
-	
-	public static final String [] STUDY_CALENDAR_EVENT_POINT_ARRAY = {
-	        SELECT_OPTION,
-	        "30","60","90"
-	};
-	public static final String [] CLINICAL_STATUS_ARRAY = {
-		    SELECT_OPTION,
-	        "Pre-Opt",
-	        "Post-Opt"
-	};
-	
 	public static final String [] SITE_TYPE_ARRAY = {
 	        SELECT_OPTION,
 			"Collection",
 			"Laboratory",
-			"Repository", "Hospital"
-	};
-	
-	public static final String [] BIOHAZARD_TYPE_ARRAY = {
-	        SELECT_OPTION, 
-			"Carcinogen",
-			"Infectious",
-			"Mutagen",
-			"Radioactive",
-			"Toxic"
+			"Repository", 
+			"Hospital"
 	};
 	
 	public static final String [] HOURARRAY = {
@@ -1165,7 +1089,7 @@ public class Constants
 	public static final String CDE_NAME_BIOHAZARD = "Biohazard";
 	public static final String CDE_NAME_ETHNICITY = "Ethnicity";
 	public static final String CDE_NAME_RACE = "Race";
-	public static final String CDE_CLINICAL_DIAGNOSIS = "Clinical Diagnosis";
+	public static final String CDE_NAME_CLINICAL_DIAGNOSIS = "Clinical Diagnosis";
 	
 	public static final String [] STORAGESTATUSARRAY = {
 	        SELECT_OPTION,
@@ -1189,5 +1113,15 @@ public class Constants
 	
 	// constants for Data required in query
 	public static final String ALIAS_NAME_TABLE_NAME_MAP="objectTableNames";
-	public static final String SYSTEM_IDENTIFIER = "systemIdentifier"; 
+	public static final String SYSTEM_IDENTIFIER = "systemIdentifier";
+	
+	
+	public static final String EVENT_PARAMETERS[] = {	Constants.SELECT_OPTION,
+							"Cell Specimen Review",	"Check In Check Out", "Collection",
+							"Disposal", "Embedded", "Fixed", "Fluid Specimen Review",
+							"Frozen", "Molecular Specimen Review", "Procedure", "Received",
+							"Spun", "Thaw", "Tissue Specimen Review", "Transfer" };
+	
+	public static final String EVENT_PARAMETERS_COLUMNS[] = { "Identifier",
+											"Event Parameter", "User", "Time", "PageOf"};
 }
