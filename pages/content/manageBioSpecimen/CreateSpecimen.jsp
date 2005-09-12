@@ -194,57 +194,6 @@
 			</tr>
 			</logic:equal>		 
 			
-			<!-- If operation is equal to edit or search but,the page is for query the identifier field is not shown -->
-			<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>">
-				<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
-			<!-- ENTER IDENTIFIER BEGINS-->	
-			  <br/>	
-  	    	  <tr>
-    		    <td>
-			 	 <table summary="" cellpadding="3" cellspacing="0" border="0">
-			 	 
-				  <tr>
-				     <td class="formTitle" height="20" colspan="3">
-				     	<bean:message key="user.searchTitle"/>
-				     </td>
-				  </tr>
-				  
-				  <tr>
-						<td class="formRequiredNotice" width="5">*</td>
-						<td class="formRequiredLabel">
-							<label for="identifier">
-								<bean:message key="specimen.identifier"/>
-							</label>
-						</td>
-					    <td class="formField">
-					    	<html:text styleClass="formFieldSized15" size="30" styleId="identifier" property="identifier" readonly="<%=readOnlyForAll%>"/>
-					    </td>
-				  </tr>	
-
-				 <%
-					String changeAction = "setFormAction('"+Constants.PARTICIPANT_SEARCH_ACTION+"');setOperation('"+Constants.SEARCH+"');";
-				 %>
- 
-				  <tr>
-				   <td align="right" colspan="3">
-					 <table cellpadding="4" cellspacing="0" border="0">
-						 <tr>
-						    <td>
-						    	<html:submit styleClass="actionButton" value="Search" onclick="<%=changeAction%>"/>
-						    </td>
-						 </tr>
-					 </table>
-				   </td>
-				  </tr>
-
-				 </table>
-			    </td>
-			  </tr>
-			  <!-- ENTER IDENTIFIER ENDS-->
-			  	</logic:notEqual>
-			  </logic:notEqual>
-			  
-			   	
 			  <!-- NEW SPECIMEN REGISTRATION BEGINS-->
 	    	  <tr>
 			    <td>
@@ -255,6 +204,21 @@
 						<td><html:hidden property="exIdCounter"/></td>
 					</td>
 				 </tr>
+				<tr>
+					<td>
+						<html:hidden property="storageContainer" />
+					</td>
+				  </tr>
+				  <tr>
+					<td>
+						<html:hidden property="positionDimensionOne" />
+					</td>
+				  </tr>
+				  <tr>
+					<td>
+						<html:hidden property="positionDimensionTwo" />
+					</td>
+				  </tr>
 				 
 				<logic:equal name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
 				 <tr>
@@ -362,6 +326,22 @@
 				     	<html:hidden property="unit"/>
 				    </td>
 				 </tr>
+
+				<tr>
+				 	<td class="formRequiredNotice" width="5">*</td>
+					<td class="formRequiredLabel">
+					   <label for="className">
+					   		<bean:message key="specimen.positionInStorageContainer"/>
+					   </label>
+					</td>
+				 	<td class="formField" colspan="2">
+						<html:text styleClass="formFieldSized15" size="30" styleId="positionInStorageContainer" property="positionInStorageContainer" readonly="true"/>
+						<html:button property="mapButton" styleClass="actionButton" styleId="Map"
+							onclick="javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfSpecimen','name','810','320','yes');return false" >
+							<bean:message key="buttons.map"/>
+						</html:button>
+					</td>
+				 </tr>
 				 
 				 <tr>
 			     	<td class="formRequiredNotice" width="5">&nbsp;</td>
@@ -375,60 +355,6 @@
 				    </td>
 				 </tr>
 				 
-				 <tr>
-				     <td class="formTitle" height="20" colspan="2">
-				     	<bean:message key="specimen.storage"/>
-				     </td>
-				     <td class="formButtonField" colspan="4">
-				     	<html:button property="mapButton" styleClass="actionButton" onclick="javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfSpecimen','name','810','320','yes');return false">
-							<bean:message key="buttons.showMap"/>
-						</html:button>
-				    </td>
-				  </tr>
- 				  <tr>
-			     	<td class="formRequiredNotice" width="5">
-				     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">*</logic:notEqual>
-				     	<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;</logic:equal>
-				    </td>
-				    <td class="formRequiredLabel">
-						<label for="storageContainer">
-							<bean:message key="specimen.storageContainer"/>
-						</label>
-					</td>
-				    <td class="formField" colspan="2">
-				     	<html:text styleClass="formFieldSized15" size="30" styleId="storageContainer" property="storageContainer" readonly="true"/>
-				    </td>
-				 </tr>
-				 <tr>
-			     	<td class="formRequiredNotice" width="5">
-				     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">*</logic:notEqual>
-				     	<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;</logic:equal>
-				    </td>
-				    <td class="formRequiredLabel">
-						<label for="positionDimensionOne">
-							<bean:message key="specimen.positionDimensionOne"/>
-						</label>
-					</td>
-				    <td class="formField" colspan="2">
-				     	<html:text styleClass="formFieldSized15" size="30" styleId="positionDimensionOne" property="positionDimensionOne" readonly="true"/>
-				    </td>
-				 </tr>
-			 
-				 <tr>
-			     	<td class="formRequiredNotice" width="5">
-				     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">*</logic:notEqual>
-				     	<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;</logic:equal>
-				    </td>
-				    <td class="formRequiredLabel">
-						<label for="positionDimensionTwo">
-							<bean:message key="specimen.positionDimensionTwo"/>
-						</label>
-					</td>
-				    <td class="formField" colspan="2">
-				     	<html:text styleClass="formFieldSized15" size="30" styleId="positionDimensionTwo" property="positionDimensionTwo" readonly="true"/>
-				    </td>
-				 </tr>
-		 
 				 <tr>
 				     <td class="formTitle" height="20" colspan="2">
 				     	<bean:message key="specimen.externalIdentifier"/>

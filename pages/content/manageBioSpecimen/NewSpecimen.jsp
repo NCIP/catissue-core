@@ -137,9 +137,9 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 			addNew.target="_blank";
 			
 			if(element.value == "Cell Specimen Review")
-				action = "/catissuecore/CellSpecimenReviewParameters.do?operation=add";
+				action = "/catissuecore/CellSpecimenReviewParameters.do?operation=add&pageOf=pageOfCellSpecimenReviewParameters";
 			else if(element.value == "Check In Check Out")
-				action = "/catissuecore/CheckInCheckOutEventParameters.do?operation=add";
+				action = "/catissuecore/CheckInCheckOutEventParameters.do?operation=add&pageOf=pageOfCheckInCheckOutEventParameters";
 			else if(element.value == "Collection")
 				action = "/catissuecore/CollectionEventParameters.do?operation=add";
 			else if(element.value == "Disposal")
@@ -384,17 +384,37 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 			    <td>
 			 	 <table summary="" cellpadding="3" cellspacing="0" border="0" width="500">
 				 <tr>
-					<td>
+				 	<td>
 						<html:hidden property="<%=Constants.OPERATION%>" value="<%=operation%>"/>
 					</td>
-					<td><html:hidden property="exIdCounter"/></td>
-					<td><html:hidden property="bhCounter"/></td>
-					<td><html:hidden property="systemIdentifier"/></td>
+					<td>
+						<html:hidden property="exIdCounter"/>
+					</td>
+					<td>
+						<html:hidden property="bhCounter"/>
+					</td>
+					<td>
+						<html:hidden property="systemIdentifier"/>
+					</td>
 				 </tr>
-				 
-				 		<tr>
-				     		<td class="formMessage" colspan="3">* indicates a required field</td>
-				 		</tr>
+				 <tr>
+					<td>
+						<html:hidden property="storageContainer" />
+					</td>
+				 </tr>
+				 <tr>
+					<td>
+						<html:hidden property="positionDimensionOne" />
+					</td>
+				 </tr>
+				 <tr>
+					<td>
+						<html:hidden property="positionDimensionTwo" />
+					</td>
+				 </tr>
+				 <tr>
+					<td class="formMessage" colspan="3">* indicates a required field</td>
+				 </tr>
 				 <tr>
 				     <td class="formTitle" height="20" colspan="6">
 				     <%String title = "specimen."+pageView+".title";%>
@@ -562,6 +582,22 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 				 </tr>
 				 
 				 <tr>
+				 	<td class="formRequiredNotice" width="5">*</td>
+					<td class="formRequiredLabel">
+					   <label for="className">
+					   		<bean:message key="specimen.positionInStorageContainer"/>
+					   </label>
+					</td>
+				 	<td class="formField" colspan="2">
+						<html:text styleClass="formFieldSized15" size="30" styleId="positionInStorageContainer" property="positionInStorageContainer" readonly="true"/>
+						<html:button property="mapButton" styleClass="actionButton" styleId="Map"
+							onclick="javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfSpecimen','name','810','320','yes');return false" >
+							<bean:message key="buttons.map"/>
+						</html:button>
+					</td>
+				 </tr>
+				 
+				 <tr>
 			     	<td class="formRequiredNotice" width="5">&nbsp;</td>
 				    <td class="formLabel">
 						<label for="comments">
@@ -592,60 +628,6 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 					 </tr>
 				 </logic:notEqual>
 				 
-				 <tr>
-				     <td class="formTitle" height="20" colspan="2">
-				     	<bean:message key="specimen.storage"/>
-				     </td>
-				     <td class="formButtonField" colspan="4">
-				     	<html:button property="mapButton" styleClass="actionButton" onclick="javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfSpecimen','name','810','320','yes');return false">
-							<bean:message key="buttons.showMap"/>
-						</html:button>
-				    </td>
-				  </tr>
- 				  <tr>
-			     	<td class="formRequiredNotice" width="5">
-				     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">*</logic:notEqual>
-				     	<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;</logic:equal>
-				    </td>
-				    <td class="formRequiredLabel">
-						<label for="storageContainer">
-							<bean:message key="specimen.storageContainer"/>
-						</label>
-					</td>
-				    <td class="formField" colspan="2">
-				     	<html:text styleClass="formFieldSized15" size="30" styleId="storageContainer" property="storageContainer" readonly="true"/>
-				    </td>
-				 </tr>
-				 <tr>
-			     	<td class="formRequiredNotice" width="5">
-				     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">*</logic:notEqual>
-				     	<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;</logic:equal>
-				    </td>
-				    <td class="formRequiredLabel">
-						<label for="positionDimensionOne">
-							<bean:message key="specimen.positionDimensionOne"/>
-						</label>
-					</td>
-				    <td class="formField" colspan="2">
-				     	<html:text styleClass="formFieldSized15" size="30" styleId="positionDimensionOne" property="positionDimensionOne" readonly="true"/>
-				    </td>
-				 </tr>
-			 
-				 <tr>
-			     	<td class="formRequiredNotice" width="5">
-				     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">*</logic:notEqual>
-				     	<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;</logic:equal>
-				    </td>
-				    <td class="formRequiredLabel">
-						<label for="positionDimensionTwo">
-							<bean:message key="specimen.positionDimensionTwo"/>
-						</label>
-					</td>
-				    <td class="formField" colspan="2">
-				     	<html:text styleClass="formFieldSized15" size="30" styleId="positionDimensionTwo" property="positionDimensionTwo" readonly="true"/>
-				    </td>
-				 </tr>
-		 
 				 <tr>
 				     <td class="formTitle" height="20" colspan="2">
 				     	<bean:message key="specimen.externalIdentifier"/>
@@ -754,7 +736,7 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 				 <!-- Bio-hazards End here -->	
 		
 			   	 	<tr>
-				  		<td align="right" colspan="3">
+				  		<td align="right" colspan="4">
 							<%
 								String changeAction = "setFormAction('"+formName+"')";
 				 			%>
@@ -810,7 +792,6 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 					obj.setDataProperty("text", function(i, j){return myData[i][j]});
 					obj.setColumnProperty("text", function(i){return columns[i]});
 					obj.setDataProperty("value", function(i){return myData[i][0]});
-					//obj.setRowProperty("value", function(i){return myData[i][4]});
 					
 					//	set headers width/height.
 					obj.setRowHeaderWidth("28px");
@@ -821,7 +802,7 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 					
 					obj.setTemplate("row", row);
 			   		obj.setAction("myAction", 
-						function(src){window.location.href = 'SearchObject.do?pageOf=' + src.getDataProperty("value") + '&operation=search&systemIdentifier=' + src.getDataProperty("value")}); 
+						function(src){window.location.href = 'SearchObject.do?pageOf=' + myData[this.getSelectionProperty("index")][<%=columnList.length-1%>] + '&operation=search&systemIdentifier=' + src.getDataProperty("value")}); 
 			
 					//	write grid html to the page.
 					document.write(obj);
