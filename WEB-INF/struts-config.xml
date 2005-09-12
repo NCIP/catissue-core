@@ -955,7 +955,7 @@ PUBLIC
 		<action path="/FrozenEventParametersSearch"
 		    type="edu.wustl.catissuecore.action.CommonSearchAction"
 			name="frozenEventParametersForm"
-			validate="true"
+			validate="false"
 			input="/FrozenEventParameters.do?operation=edit&amp;pageOf=pageOfFrozenEventParameters"
 			scope="request">
 			<forward name="pageOfFrozenEventParameters" path="/FrozenEventParameters.do?operation=edit&amp;pageOf=pageOfFrozenEventParameters"/>
@@ -995,7 +995,7 @@ PUBLIC
 		<action path="/CheckInCheckOutEventParametersSearch"
 		    type="edu.wustl.catissuecore.action.CommonSearchAction"
 			name="checkInCheckOutEventParametersForm"
-			validate="true"
+			validate="false"
 			input="/CheckInCheckOutEventParameters.do?operation=edit&amp;pageOf=pageOfCheckInCheckOutEventParameters"
 			scope="request">
 			<forward name="pageOfCheckInCheckOutEventParameters" path="/CheckInCheckOutEventParameters.do?operation=edit&amp;pageOf=pageOfCheckInCheckOutEventParameters"/>
@@ -1075,7 +1075,7 @@ PUBLIC
 		<action path="/FluidSpecimenReviewEventParametersSearch"
 		    type="edu.wustl.catissuecore.action.CommonSearchAction"
 			name="fluidSpecimenReviewEventParametersForm"
-			validate="true"
+			validate="false"
 			input="/FluidSpecimenReviewEventParameters.do?operation=edit&amp;pageOf=pageOfFluidSpecimenReviewParameters"
 			scope="request">
 			<forward name="pageOfFluidSpecimenReviewParameters" path="/FluidSpecimenReviewEventParameters.do?operation=edit&amp;pageOf=pageOfFluidSpecimenReviewParameters"/>
@@ -1115,7 +1115,7 @@ PUBLIC
 		<action path="/CellSpecimenReviewParametersSearch"
 		    type="edu.wustl.catissuecore.action.CommonSearchAction"
 			name="cellSpecimenReviewParametersForm"
-			validate="true"
+			validate="false"
 			input="/CellSpecimenReviewParameters.do?operation=edit&amp;pageOf=pageOfCellSpecimenReviewParameters"
 			scope="request">
 			<forward name="pageOfCellSpecimenReviewParameters" path="/CellSpecimenReviewParameters.do?operation=edit&amp;pageOf=pageOfCellSpecimenReviewParameters"/>
@@ -1155,7 +1155,7 @@ PUBLIC
 		<action path="/TissueSpecimenReviewEventParametersSearch"
 		    type="edu.wustl.catissuecore.action.CommonSearchAction"
 			name="tissueSpecimenReviewEventParametersForm"
-			validate="true"
+			validate="false"
 			input="/TissueSpecimenReviewEventParameters.do?operation=edit&amp;pageOf=pageOfTissueSpecimenReviewParameters"
 			scope="request">
 			<forward name="pageOfTissueSpecimenReviewParameters" path="/TissueSpecimenReviewEventParameters.do?operation=edit&amp;pageOf=pageOfTissueSpecimenReviewParameters"/>
@@ -1195,7 +1195,7 @@ PUBLIC
 		<action path="/DisposalEventParametersSearch"
 		    type="edu.wustl.catissuecore.action.CommonSearchAction"
 			name="disposalEventParametersForm"
-			validate="true"
+			validate="false"
 			input="/DisposalEventParameters.do?operation=edit&amp;pageOf=pageOfDisposalEventParameters"
 			scope="request">
 			<forward name="pageOfDisposalEventParameters" path="/DisposalEventParameters.do?operation=edit&amp;pageOf=pageOfDisposalEventParameters"/>
@@ -1236,7 +1236,7 @@ PUBLIC
 		<action path="/ThawEventParametersSearch"
 		    type="edu.wustl.catissuecore.action.CommonSearchAction"
 			name="thawEventParametersForm"
-			validate="true"
+			validate="false"
 			input="/ThawEventParameters.do?operation=edit&amp;pageOf=pageOfThawEventParameters"
 			scope="request">
 			<forward name="pageOfThawEventParameters" path="/ThawEventParameters.do?operation=edit&amp;pageOf=pageOfThawEventParameters"/>
@@ -1276,7 +1276,7 @@ PUBLIC
 		<action path="/MolecularSpecimenReviewParametersSearch"
 		    type="edu.wustl.catissuecore.action.CommonSearchAction"
 			name="molecularSpecimenReviewParametersForm"
-			validate="true"
+			validate="false"
 			input="/MolecularSpecimenReviewParameters.do?operation=edit&amp;pageOf=pageOfMolecularSpecimenReviewParameters"
 			scope="request">
 			<forward name="pageOfMolecularSpecimenReviewParameters" path="/MolecularSpecimenReviewParameters.do?operation=edit&amp;pageOf=pageOfMolecularSpecimenReviewParameters"/>
@@ -1316,7 +1316,7 @@ PUBLIC
 		<action path="/CollectionEventParametersSearch"
 		    type="edu.wustl.catissuecore.action.CommonSearchAction"
 			name="collectionEventParametersForm"
-			validate="true"
+			validate="false"
 			input="/CollectionEventParameters.do?operation=edit&amp;pageOf=pageOfCollectionEventParameters"
 			scope="request">
 			<forward name="pageOfCollectionEventParameters" path="/CollectionEventParameters.do?operation=edit&amp;pageOf=pageOfCollectionEventParameters"/>
@@ -1356,7 +1356,7 @@ PUBLIC
 		<action path="/TransferEventParametersSearch"
 		    type="edu.wustl.catissuecore.action.CommonSearchAction"
 			name="transferEventParametersForm"
-			validate="true"
+			validate="false"
 			input="/TransferEventParameters.do?operation=edit&amp;pageOf=pageOfTransferEventParameters"
 			scope="request">
 			<forward name="pageOfTransferEventParameters" path="/TransferEventParameters.do?operation=edit&amp;pageOf=pageOfTransferEventParameters"/>
@@ -1396,7 +1396,7 @@ PUBLIC
 		<action path="/SpunEventParametersSearch"
 		    type="edu.wustl.catissuecore.action.CommonSearchAction"
 			name="spunEventParametersForm"
-			validate="true"
+			validate="false"
 			input="/SpunEventParameters.do?operation=edit&amp;pageOf=pageOfSpunEventParameters"
 			scope="request">
 			<forward name="pageOfSpunEventParameters" path="/SpunEventParameters.do?operation=edit&amp;pageOf=pageOfSpunEventParameters"/>
@@ -1436,7 +1436,7 @@ PUBLIC
 		<action path="/EmbeddedEventParametersSearch"
 		    type="edu.wustl.catissuecore.action.CommonSearchAction"
 			name="embeddedEventParametersForm"
-			validate="true"
+			validate="false"
 			input="/EmbeddedEventParameters.do?operation=edit&amp;pageOf=pageOfEmbeddedEventParameters"
 			scope="request">
 			<forward name="pageOfEmbeddedEventParameters" path="/EmbeddedEventParameters.do?operation=edit&amp;pageOf=pageOfEmbeddedEventParameters"/>
@@ -1476,7 +1476,7 @@ PUBLIC
 		<action path="/FixedEventParametersSearch"
 		    type="edu.wustl.catissuecore.action.CommonSearchAction"
 			name="fixedEventParametersForm"
-			validate="true"
+			validate="false"
 			input="/FixedEventParameters.do?operation=edit&amp;pageOf=pageOfFixedEventParameters"
 			scope="request">
 			<forward name="pageOfFixedEventParameters" path="/FixedEventParameters.do?operation=edit&amp;pageOf=pageOfFixedEventParameters"/>
@@ -1516,7 +1516,7 @@ PUBLIC
 		<action path="/ProcedureEventParametersSearch"
 		    type="edu.wustl.catissuecore.action.CommonSearchAction"
 			name="procedureEventParametersForm"
-			validate="true"
+			validate="false"
 			input="/ProcedureEventParameters.do?operation=edit&amp;pageOf=pageOfProcedureEventParameters"
 			scope="request">
 			<forward name="pageOfProcedureEventParameters" path="/ProcedureEventParameters.do?operation=edit&amp;pageOf=pageOfProcedureEventParameters"/>
