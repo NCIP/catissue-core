@@ -9,6 +9,7 @@
  */
 package edu.wustl.catissuecore.domain;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import edu.wustl.catissuecore.actionForm.AbstractActionForm;
@@ -144,14 +145,19 @@ public abstract class EventParameters extends AbstractDomainObject implements ja
 		{
 			EventParametersForm form = (EventParametersForm)abstractForm ;
 			this.comments = form.getComments();
+			Calendar calender = Calendar.getInstance();
+			
 			
 			user.setSystemIdentifier(new Long(form.getUserId()));
 
 			if (form.getDateOfEvent() != null && form.getDateOfEvent().trim().length()!=0  )
 			{
+			    Date date = Utility.parseDate(form.getDateOfEvent(),Constants.DATE_PATTERN_MM_DD_YYYY);
+				calender.setTime(date);
+				
 				this.timestamp = Utility.parseDate(form.getDateOfEvent(),Constants.DATE_PATTERN_MM_DD_YYYY);
-				this.timestamp.setHours(Integer.parseInt(form.getTimeInHours()));
-				this.timestamp.setMinutes(Integer.parseInt(form.getTimeInMinutes()));
+//				this.timestamp.setHours(Integer.parseInt(form.getTimeInHours()));
+//				this.timestamp.setMinutes(Integer.parseInt(form.getTimeInMinutes()));
 			}
 		}
         catch (Exception excp)

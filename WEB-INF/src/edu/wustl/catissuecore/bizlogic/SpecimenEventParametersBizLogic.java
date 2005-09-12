@@ -47,7 +47,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
      * @param obj The object to be updated.
      * @throws DAOException 
      */
-	protected void update(DAO dao, Object obj) throws DAOException
-    {
-    }
+//	protected void update(DAO dao, Object obj) throws DAOException
+//    {
+//    }
 }

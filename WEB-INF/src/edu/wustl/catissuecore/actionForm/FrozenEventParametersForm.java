@@ -102,8 +102,8 @@ public class FrozenEventParametersForm extends EventParametersForm
  
      protected void reset()
      {
-         super.reset();
-         this.method = null;
+//         super.reset();
+//         this.method = null;
      }
        
    

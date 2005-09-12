@@ -982,7 +982,7 @@ PUBLIC
 			<forward name="failure" path="/CheckInCheckOutEventParameters.do?operation=add&amp;pageOf=pageOfCheckInCheckOutEventParameters" />
 		</action>
 		
-		<action path="/checkInCheckOutEventParametersEdit"
+		<action path="/CheckInCheckOutEventParametersEdit"
 			type="edu.wustl.catissuecore.action.CommonAddEditAction"
 			name="checkInCheckOutEventParametersForm"
 			validate="true"
@@ -1731,7 +1731,7 @@ PUBLIC
 			<forward name="pageOfEmbeddedEventParameters" path="/EmbeddedEventParametersSearch.do"/>
 			<forward name="pageOfFixedEventParameters" path="/FixedEventParametersSearch.do"/>
 			<forward name="pageOfFluidSpecimenReviewParameters" path="/FluidSpecimenReviewEventParametersSearch.do"/>
-			<forward name="pageOfFrozenEventParameters" path="/FrozenEventParameters.do"/>
+			<forward name="pageOfFrozenEventParameters" path="/FrozenEventParametersSearch.do"/>
 			<forward name="pageOfMolecularSpecimenReviewParameters" path="/MolecularSpecimenReviewParametersSearch.do"/>
 			<forward name="pageOfProcedureEventParameters" path="/ProcedureEventParametersSearch.do"/>
 			<forward name="pageOfReceivedEventParameters" path="/receivedEventParametersSearch.do"/>
