@@ -15,5 +15,12 @@ package edu.wustl.catissuecore.exception;
  */
 public class AssignDataException extends Exception
 {
-
+	public AssignDataException()
+	{
+		
+	}
+	public AssignDataException(Exception e)
+	{
+		
+	}
 }
