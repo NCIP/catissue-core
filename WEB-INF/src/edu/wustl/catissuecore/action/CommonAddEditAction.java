@@ -63,7 +63,7 @@ public class CommonAddEditAction extends Action
                 //If operation is add, add the data in the database.
                 AbstractDomainObject abstractDomain = DomainObjectFactory.getDomainObject(
                         abstractForm.getFormId(), abstractForm);
-                
+                Logger.out.debug("IN ADD ACTION DEBUG...................ID*********"+abstractForm.getSystemIdentifier());
                 bizLogic.insert(abstractDomain, Constants.HIBERNATE_DAO);
                 target = new String(Constants.SUCCESS);
             }
@@ -71,7 +71,7 @@ public class CommonAddEditAction extends Action
             {
                 //If operation is edit, update the data in the database.
             	String objName = AbstractDomainObject.getDomainObjectName(abstractForm.getFormId());
-            	Logger.out.debug("IN ADDEDIT ACTION DEBUG...................ID*********"+abstractForm.getSystemIdentifier());
+            	Logger.out.debug("IN EDIT ACTION DEBUG...................ID*********"+abstractForm.getSystemIdentifier());
                 List list = bizLogic.retrieve(objName, Constants.IDENTIFIER,
 										  new Long(abstractForm.getSystemIdentifier()));
                 
