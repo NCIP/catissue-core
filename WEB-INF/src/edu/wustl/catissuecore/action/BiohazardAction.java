@@ -41,7 +41,6 @@ public class BiohazardAction  extends SecureAction
         request.setAttribute(Constants.OPERATION, operation);
         
         //Sets the operation attribute to be used in the Add/Edit Institute Page. 
-        //request.setAttribute(Constants.BIOHAZARD_TYPE_LIST, Constants.BIOHAZARD_TYPE_ARRAY);
         List biohazardList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_BIOHAZARD);
     	request.setAttribute(Constants.BIOHAZARD_TYPE_LIST, biohazardList);
     	

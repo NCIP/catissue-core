@@ -27,6 +27,7 @@ import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.cde.CDEManager;
+import edu.wustl.common.util.logger.Logger;
 
 
 /**
@@ -34,81 +35,45 @@ import edu.wustl.common.cde.CDEManager;
  * @author aniruddha_phadnis
  */
 public class NewSpecimenAction  extends SecureAction
-{
-    
+{   
     /**
      * Overrides the execute method of Action class.
      */
     public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response) throws Exception
     {
-        //Gets the value of the operation parameter.
-        String operation = request.getParameter(Constants.OPERATION);
-
-        //Sets the operation attribute to be used in the Add/Edit User Page. 
-        request.setAttribute(Constants.OPERATION, operation);
-        
         String pageOf = request.getParameter(Constants.PAGEOF);
-        
         request.setAttribute(Constants.PAGEOF,pageOf);
-        
+
         NewSpecimenForm specimenForm = (NewSpecimenForm)form;
         
-        if(!operation.equals(Constants.ADD))
+        //FIXME
+        //if(!operation.equals(Constants.ADD))
         {
-        	String [] eventParameters = {	Constants.SELECT_OPTION,
-						        			"Cell Specimen Review",
-											"Check In Check Out",
-											"Collection",
-											"Disposal",
-											"Embedded",
-											"Fixed",
-											"Fluid Specimen Review",
-											"Frozen",
-											"Molecular Specimen Review",
-											"Procedure",
-											"Received",
-											"Spun",
-											"Thaw",
-											"Tissue Specimen Review",
-											"Transfer"
-        								};
-        	
-        	request.setAttribute(Constants.EVENT_PARAMETERS_LIST,eventParameters);
-        	
-        	String [] columns = { "Identifier",
-					"Event Parameter",
-					"User",
-					"Time",
-					"PageOf"};
-        	
-        	request.setAttribute(Constants.SPREADSHEET_COLUMN_LIST,columns);
-        	request.setAttribute(Constants.SPREADSHEET_DATA_LIST,specimenForm.getGridData());
+        	request.setAttribute(Constants.EVENT_PARAMETERS_LIST,Constants.EVENT_PARAMETERS);
+        	request.setAttribute(Constants.SPREADSHEET_COLUMN_LIST,Constants.EVENT_PARAMETERS_COLUMNS);
+        	request.setAttribute(Constants.SPREADSHEET_DATA_LIST, specimenForm.getGridData());
         }
         
-        NewSpecimenBizLogic dao = (NewSpecimenBizLogic)BizLogicFactory.getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
+        NewSpecimenBizLogic bizLogic = (NewSpecimenBizLogic)BizLogicFactory.getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
         
         try
 		{	
         	if(specimenForm.isParentPresent())
         	{
-        		String [] fields = {"systemIdentifier"};
-                List parentSpecimenList = dao.getList(Specimen.class.getName(), fields, fields[0]); 	 	
-        	 	request.setAttribute(Constants.PARENT_SPECIMEN_ID_LIST,parentSpecimenList);
+        		String [] fields = {Constants.SYSTEM_IDENTIFIER};
+                List parentSpecimenList = bizLogic.getList(Specimen.class.getName(), fields, Constants.SYSTEM_IDENTIFIER); 	 	
+        	 	request.setAttribute(Constants.PARENT_SPECIMEN_ID_LIST, parentSpecimenList);
         	}
         	
-        	request.setAttribute(Constants.BIOHAZARD_TYPE_LIST, Constants.BIOHAZARD_TYPE_ARRAY);
+        	String [] bhIdArray =  {"-1"};
+        	String [] bhTypeArray =  {Constants.SELECT_OPTION};
+        	String [] bhNameArray =  {Constants.SELECT_OPTION};
         	
-           	//List biohazardList = dao.retrieve(Biohazard.class.getName());
-        	String selectColNames[] = {"systemIdentifier","name","type"}; 
-        	List biohazardList = dao.retrieve(Biohazard.class.getName(),selectColNames);
+        	String selectColNames[] = {Constants.SYSTEM_IDENTIFIER,"name","type"}; 
+        	List biohazardList = bizLogic.retrieve(Biohazard.class.getName(), selectColNames);
         	Iterator iterator = biohazardList.iterator();
-        	
-        	String [] bhIdArray =  null;
-        	String [] bhTypeArray = null;
-        	String [] bhNameArray = null;
-        	
-        	if(biohazardList!=null && biohazardList.size()>0)
+        	if(biohazardList!=null && !biohazardList.isEmpty())
         	{
 	        	bhIdArray =  new String[biohazardList.size() + 1];
 	        	bhTypeArray =  new String[biohazardList.size() + 1];
@@ -129,16 +94,6 @@ public class NewSpecimenAction  extends SecureAction
 	        		i++;
 	        	}
         	}
-        	else
-        	{
-        		bhIdArray =  new String[1];
-	        	bhTypeArray =  new String[1];
-	        	bhNameArray =  new String[1];
-	        	
-	        	bhIdArray[0] = "-1";
-	        	bhTypeArray[0] = Constants.SELECT_OPTION;
-	        	bhNameArray[0] = Constants.SELECT_OPTION;;
-        	}
         	
         	request.setAttribute(Constants.BIOHAZARD_NAME_LIST, bhNameArray);
         	request.setAttribute(Constants.BIOHAZARD_ID_LIST, bhIdArray);
@@ -146,15 +101,16 @@ public class NewSpecimenAction  extends SecureAction
         	
         	//Setting Secimen Collection Group
 			String sourceObjectName = SpecimenCollectionGroup.class.getName();
-			String[] displayNameFields = {"systemIdentifier"};
-			String valueField = "systemIdentifier";
+			String[] displayNameFields = {Constants.SYSTEM_IDENTIFIER};
+			String valueField = Constants.SYSTEM_IDENTIFIER;
 	
-			List specimenList = dao.getList(sourceObjectName, displayNameFields, valueField);
+			List specimenList = bizLogic.getList(sourceObjectName, displayNameFields, valueField);
 			request.setAttribute(Constants.SPECIMEN_COLLECTION_GROUP_LIST, specimenList);
 		}
         catch(Exception e)
 		{
-        	e.printStackTrace();
+        	Logger.out.error(e.getMessage(),e);
+        	return mapping.findForward(Constants.FAILURE);
 		}
         
         List specimenClassList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_SPECIMEN_CLASS);
@@ -163,24 +119,18 @@ public class NewSpecimenAction  extends SecureAction
     	List specimenTypeList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_SPECIMEN_TYPE);
     	request.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
         
-        //request.setAttribute(Constants.TISSUE_SITE_LIST,Constants.TISSUE_SITE_ARRAY);
     	List tissueSiteList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_TISSUE_SITE);
     	request.setAttribute(Constants.TISSUE_SITE_LIST, tissueSiteList);
 
-        //request.setAttribute(Constants.TISSUE_SIDE_LIST,Constants.TISSUE_SIDE_VALUES);
     	List tissueSideList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_TISSUE_SIDE);
     	request.setAttribute(Constants.TISSUE_SIDE_LIST, tissueSideList);
         
-        //request.setAttribute(Constants.PATHOLOGICAL_STATUS_LIST, Constants.PATHOLOGICAL_STATUS_VALUES);
     	List pathologicalStatusList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_PATHOLOGICAL_STATUS);
     	request.setAttribute(Constants.PATHOLOGICAL_STATUS_LIST, pathologicalStatusList);
         
-        //request.setAttribute(Constants.BIOHAZARD_TYPE_LIST, Constants.BIOHAZARD_TYPE_ARRAY);
     	List biohazardList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_BIOHAZARD);
     	request.setAttribute(Constants.BIOHAZARD_TYPE_LIST, biohazardList);
         
-        //return mapping.findForward(Constants.SUCCESS);
     	return mapping.findForward(pageOf);
     }
-
 }
