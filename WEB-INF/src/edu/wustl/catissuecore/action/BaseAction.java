@@ -48,9 +48,20 @@ public abstract class BaseAction extends Action  {
 		   
 			throw new UserNotAuthenticatedException();
 		}
+		setRequestData(request);
 		return executeAction(mapping, form, request, response);
 	}
 
+	protected void setRequestData(HttpServletRequest request)
+	{
+		//Gets the value of the operation parameter.
+        String operation = request.getParameter(Constants.OPERATION);
+        if(operation!=null)
+        {
+        	//Sets the operation attribute to be used in the Add/Edit User Page. 
+        	request.setAttribute(Constants.OPERATION, operation);
+        }
+	}
 	/**
 	 * Returns the current User authenticated by CSM Authentication.
 	 * 
