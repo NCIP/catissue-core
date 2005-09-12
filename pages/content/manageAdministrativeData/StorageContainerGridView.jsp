@@ -89,7 +89,11 @@ function closeFramedWindow()
 								setParentWindowContainer = "javascript:setParentWindowValue('positionDimensionOne','"+
 															  + i + "');"+"javascript:setParentWindowValue('positionDimensionTwo','"+
 															  + j + "');"+"javascript:setParentWindowValue('storageContainer','"+
-															  + storageContainerGridObject.getSystemIdentifier() + "');closeFramedWindow()";
+															  + storageContainerGridObject.getSystemIdentifier() + "');"+
+																"javascript:setParentWindowValue('positionInStorageContainer','"
+															  + storageContainerGridObject.getType() + " : " 
+															  + storageContainerGridObject.getSystemIdentifier()
+															  + " Pos (" + i + "," + j + ")');"+"closeFramedWindow()";
 							}
 							else
 							{
