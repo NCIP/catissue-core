@@ -4,9 +4,31 @@
 <%@ page import="edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 
+<% 
+		String operation = (String)request.getAttribute(Constants.OPERATION);
+		String formName, pageView = operation;
+		boolean readOnlyValue=false,readOnlyForAll=false;
+
+		if(operation.equals(Constants.EDIT))
+		{
+			formName = Constants.SPECIMEN_COLLECTION_GROUP_EDIT_ACTION;
+			readOnlyValue=true;
+		}
+		else
+		{
+			formName = Constants.SPECIMEN_COLLECTION_GROUP_ADD_ACTION;
+			readOnlyValue=false;
+		}
+
+		if (operation.equals(Constants.VIEW))
+		{
+			readOnlyForAll=true;
+		}
+%>
+
+
 <head>
      <script language="JavaScript">
-     
      
     	function onRadioButtonClick(element)
 		{
@@ -29,121 +51,50 @@
 		
         function onChangeEvent(element)
 		{
-			var action = "/catissuecore/SpecimenCollectionGroup.do?operation=add&pageOf=pageOfSpecimenCollectionGroup";
+			var action = "/catissuecore/SpecimenCollectionGroup.do?operation=<%=operation%>&pageOf=pageOfSpecimenCollectionGroup";
 			document.forms[0].action = action;
 			document.forms[0].submit();
 		}
 		
 	</script>
 </head>
-<% 
-		String operation = (String)request.getAttribute(Constants.OPERATION);
-		String formName,pageView=operation;
-		boolean readOnlyValue=false,readOnlyForAll=false;
 
-		if(operation.equals(Constants.EDIT))
-		{
-			formName = Constants.SPECIMEN_COLLECTION_GROUP_EDIT_ACTION;
-			readOnlyValue=true;
-		}
-		else
-		{
-			formName = Constants.SPECIMEN_COLLECTION_GROUP_ADD_ACTION;
-			readOnlyValue=false;
-		}
+<html:errors />
 
-		if (operation.equals(Constants.VIEW))
-		{
-			readOnlyForAll=true;
-		}
-%>
+<html:form action="<%=Constants.SPECIMEN_COLLECTION_GROUP_ADD_ACTION%>">
 
-	<html:errors />
-
-		<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
-		
-		   <html:form action="<%=Constants.SPECIMEN_COLLECTION_GROUP_ADD_ACTION%>">
-		   
-			<!-- If operation is equal to edit or search but,the page is for query the identifier field is not shown -->
-			<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>">
-			<!-- ENTER IDENTIFIER BEGINS-->	
-			
-			  <br/>	
-  	    	  <tr>
-    		    <td>
-			 	 <table summary="" cellpadding="3" cellspacing="0" border="0">
-			 	 
-				  <tr>
-				     <td class="formTitle" height="20" colspan="3">
-				     	<bean:message key="user.searchTitle"/>
-				     </td>
-				  </tr>
-				  
-				  <tr>
-						<td class="formRequiredNotice" width="5">*</td>
-						<td class="formRequiredLabel">
-							<label for="identifier">
-								<bean:message key="user.identifier"/>
-							</label>
-						</td>
-					    <td class="formField">
-					    	<html:text styleClass="formFieldSized" size="30" styleId="systemIdentifier" property="systemIdentifier" readonly="<%=readOnlyForAll%>"/>
-					    </td>
-				  </tr>	
-
-				 <%
-					String changeAction = "setFormAction('"+Constants.PARTICIPANT_SEARCH_ACTION+"');setOperation('"+Constants.SEARCH+"');";
-				 %>
-
-				  <tr>
-				   <td align="right" colspan="3">
-					 <table cellpadding="4" cellspacing="0" border="0">
-						 <tr>
-						    <td>
-						    	<html:submit styleClass="actionButton" value="Search" onclick="<%=changeAction%>"/></td>
-						 </tr>
-					 </table>
-				   </td>
-				  </tr>
-
-				 </table>
-			    </td>
-			  </tr>
-			  
-			  <!-- ENTER IDENTIFIER ENDS-->
-			  </logic:notEqual>
-			  
-			   	
-			  <!-- NEW SPECIMEN COLLECTION GROUP REGISTRATION BEGINS-->
-	    	  <tr>
-			    <td>
-			 	 <table summary="" cellpadding="3" cellspacing="0" border="0">
+	<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
+		<!-- NEW SPECIMEN COLLECTION GROUP REGISTRATION BEGINS-->
+	    <tr><td>
+			<table summary="" cellpadding="3" cellspacing="0" border="0">
 				 <tr>
-					<td>
-						<html:hidden property="<%=Constants.OPERATION%>" value="<%=operation%>"/>
-					</td>
+					<td><html:hidden property="<%=Constants.OPERATION%>" value="<%=operation%>"/></td>
 				 </tr>
 				 
 				 <tr>
-					<td>
-						<html:hidden property="systemIdentifier"/>
-					</td>
+					<td><html:hidden property="systemIdentifier"/></td>
 				 </tr>
 
-				<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.SEARCH%>">
 				 <tr>
 				 	<td class="formMessage" colspan="4">* indicates a required field</td>
 				 </tr>
+				 
 				 <tr>
-				    <td class="formTitle" height="5" colspan="4">
-				    <%String title = "specimenCollectionGroup."+operation+".title";%>
-				    	<bean:message key="<%=title%>"/>
-				    </td>
+					<td class="formTitle" height="20" colspan="3">
+						<logic:equal name="operation" value="<%=Constants.ADD%>">
+							<bean:message key="specimenCollectionGroup.add.title"/>
+						</logic:equal>
+						<logic:equal name="operation" value="<%=Constants.EDIT%>">
+								<bean:message key="specimenCollectionGroup.edit.title"/>
+						</logic:equal>
+					</td>
 				 </tr>
+				 
+				 <!--Collection Protocol -->
 				 <tr>
 			     	<td class="formRequiredNotice" width="5">*</td>
 				    <td class="formRequiredLabel">
-						<label for="protocolTitle">
+						<label for="collectionProtocolId">
 							<bean:message key="specimenCollectionGroup.protocolTitle"/>
 						</label>
 					</td>
@@ -170,6 +121,8 @@
 		        	</td>
 				 </tr>
 				 
+				 
+				 
 				 <tr>
 				    <td class="formRequiredNotice" >
 				     	<html:radio styleClass=""  property="checkedButton" value="1" onclick="onRadioButtonClick(this)">
@@ -184,6 +137,7 @@
 							</label>
 				     	</html:radio>
 				    </td>
+				    
 				    <td class="formRequiredLabel">
 						<label for="participantId">
 					        <bean:message key="specimenCollectionGroup.collectedByParticipant" />
@@ -193,6 +147,7 @@
 							<bean:message key="specimenCollectionGroup.collectedByProtocolParticipantNumber" />
 						</label>
 					</td>
+					
   			        <td class="formField">
   						<logic:equal name="specimenCollectionGroupForm" property="checkedButton" value="1">
 				     	     <html:select property="participantId" styleClass="formFieldSized" styleId="ParticipantId" size="1" onchange="onChangeEvent(this)">
@@ -203,8 +158,8 @@
 				     	     <html:select property="participantId" styleClass="formFieldSized" styleId="ParticipantId" size="1" onchange="onChangeEvent(this)" disabled="true">
                          	     <html:options collection="<%=Constants.PARTICIPANT_LIST%>" labelProperty="name" property="value"/>				     	
   						     </html:select>
-  						</logic:equal>     
-  						
+  						</logic:equal>
+
 			  		    <html:link page="/Participant.do?operation=add" styleId="newParticipant">
 	 						<bean:message key="buttons.addNew" />
  						</html:link>
@@ -228,50 +183,42 @@
 				 </tr>
 				 
 				 <tr>
-				 
-				      <td class="formRequiredNotice" width="5">
-				        	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">*</logic:notEqual>
-				     	    <logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;</logic:equal>
-				      </td>
-				      
-				     <td class="formRequiredLabel">
-						<label for="studyCalendarEventPoint">
+				 	<td class="formRequiredNotice" width="5">*</td>
+				    
+				    <td class="formRequiredLabel">
+						<label for="collectionProtocolEventId">
 							<bean:message key="specimenCollectionGroup.studyCalendarEventPoint"/>
 						</label>
 					</td>
-				     <td class="formField">
+				    <td class="formField">
 				     	<html:select property="collectionProtocolEventId" styleClass="formFieldSized" styleId="collectionProtocolEventId" size="1" onchange="onChangeEvent(this)" >
                          	<html:options collection="<%=Constants.STUDY_CALENDAR_EVENT_POINT_LIST%>" labelProperty="name" property="value"/>				     					     					     	
 						</html:select>
-		        	  </td>
+		        	</td>
 				 </tr>
+				 
 				 <tr>
-				     <td class="formRequiredNotice" width="5">
-				     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">*</logic:notEqual>
-				     	<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;</logic:equal>
-				     </td>
+				     <td class="formRequiredNotice" width="5">*</td>
 				     <td class="formRequiredLabel">
 						<label for="clinicalDiagnosis">
 							<bean:message key="specimenCollectionGroup.clinicalDiagnosis"/>
 						</label>
-					</td>
+					 </td>
 				     <td class="formField">
 						<html:select property="clinicalDiagnosis" styleClass="formFieldSized" styleId="clinicalDiagnosis" size="1" >
-							<html:options collection="<%=Constants.CLINICALDIAGNOSISLIST%>" labelProperty="name" property="value"/>				     					     					     	
+							<html:options collection="<%=Constants.CLINICAL_DIAGNOSIS_LIST%>" labelProperty="name" property="value"/>				     					     					     	
 						</html:select>
-				  <!--   	<html:text property="clinicalDiagnosis" styleClass="formFieldSized" size="30" styleId="clinicalDiagnosis"  readonly="<%=readOnlyForAll%>"/>  -->
-		        	  </td>
+		        	 </td>
 				 </tr>
+				 
 				 <tr>
-				     <td class="formRequiredNotice" width="5">
-				     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">*</logic:notEqual>
-				     	<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;</logic:equal>
-				     </td>
+				     <td class="formRequiredNotice" width="5">*</td>
 				     <td class="formRequiredLabel">
 						<label for="clinicalStatus">
 							<bean:message key="specimenCollectionGroup.clinicalStatus"/>
 						</label>
 					 </td>
+					 
 				     <td class="formField">
 				     	<html:select property="clinicalStatus" styleClass="formFieldSized" styleId="clinicalStatus" size="1" disabled="<%=readOnlyForAll%>">
 							<html:options collection="<%=Constants.CLINICAL_STATUS_LIST%>" labelProperty="name" property="value"/>		
@@ -280,12 +227,9 @@
 				 </tr>
 				 
 				 <tr>
-			     	<td class="formRequiredNotice" width="5">
-				     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">*</logic:notEqual>
-				     	<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;</logic:equal>
-				    </td>
-				    <td class="formRequiredLabel">
-						<label for="medicalRecordNumber">
+			     	<td class="formRequiredNotice" width="5">&nbsp;</td>
+				    <td class="formLabel">
+						<label for="participantsMedicalIdentifierId">
 							<bean:message key="specimenCollectionGroup.medicalRecordNumber"/>
 						</label>
 					</td>
@@ -316,7 +260,7 @@
 				 </tr>
 
  			   	 <logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">		
-				 	<tr>
+				 		<tr>
 				  		<td align="right" colspan="3">
 							<%
 								String changeAction = "setFormAction('"+formName+"')";
@@ -344,13 +288,10 @@
 							<!-- action buttons end -->
 				  		</td>
 				 	</tr>
-				 </logic:notEqual>
-				 
 				</logic:notEqual>
-				</table>
-			  </td>
-			 </tr>
-			 
-			  <!-- NEW SPECIMEN COLLECTION GROUP REGISTRATION ENDS-->
-			 </html:form>
-		</table>
+				 
+			</table>
+		</td></tr>
+		<!-- NEW SPECIMEN COLLECTION GROUP REGISTRATION ENDS-->
+	</table>
+</html:form>		

@@ -166,9 +166,9 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 		String sourceObjectName = ParticipantMedicalIdentifier.class.getName();
 		String displayEventFields[] = {"medicalRecordNumber"};
 		String valueField = Constants.SYSTEM_IDENTIFIER;
-		String whereColumnName[] = {"participant."+Constants.SYSTEM_IDENTIFIER};
-		String whereColumnCondition[] = {"="};
-		Object[] whereColumnValue = {new Long(participantID)};
+		String whereColumnName[] = {"participant."+Constants.SYSTEM_IDENTIFIER, "medicalRecordNumber"};
+		String whereColumnCondition[] = {"=","!="};
+		Object[] whereColumnValue = {new Long(participantID),"null"};
 		String joinCondition = Constants.AND_JOIN_CONDITION;
 		String separatorBetweenFields = "";
 						

@@ -16,9 +16,12 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
+import edu.wustl.catissuecore.domain.ClinicalReport;
+import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.catissuecore.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
@@ -29,19 +32,16 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class SpecimenCollectionGroupForm extends AbstractActionForm
 {
-   
 	/**
 	 * Represents the operation(Add/Edit) to be performed.
 	 * */
 	private String operation;
-	
 	
     private long systemIdentifier;
     
 	private String clinicalDiagnosis;
     
 	private String clinicalStatus;
-	
 	
 	private String activityStatus;
 	
@@ -61,10 +61,9 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	/**
      * Radio button to choose participantName/participantNumber.
      */
-     private int checkedButton = 1;
+    private int checkedButton = 1;
 	
 	private long participantId;
-	
 	
 	private String protocolParticipantIdentifier;
 	
@@ -75,7 +74,6 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	{
 		reset();
 	}
-	
 	
 	/**
      * @return Returns the systemIdentifier.
@@ -127,14 +125,16 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	/**
 	 * @return
 	 */
-	public long getParticipantId() {
+	public long getParticipantId() 
+	{
 		return participantId;
 	}
 
 	/**
 	 * @param participantId
 	 */
-	public void setParticipantId(long participantId) {
+	public void setParticipantId(long participantId) 
+	{
 		this.participantId = participantId;
 	}
 
@@ -154,83 +154,113 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 		this.checkedButton = checkedButton;
 	}
 
-
-
-
 	/**
 	 * Resets the values of all the fields.
 	 * Is called by the overridden reset method defined in ActionForm.  
 	 * */
 	protected void reset()
 	{
-		this.clinicalDiagnosis = null;
-	    
-		this.clinicalStatus = null;;
-		
-		this.activityStatus = null;
-		
-		this.surgicalPathologyNumber = null;
-		
-		this.protocolParticipantIdentifier =  null;
+//		this.clinicalDiagnosis = null;
+//	    
+//		this.clinicalStatus = null;;
+//		
+//		this.activityStatus = null;
+//		
+//		this.surgicalPathologyNumber = null;
+//		
+//		this.protocolParticipantIdentifier =  null;
 	}
 	/**
 	   * This function Copies the data from an storage type object to a StorageTypeForm object.
 	   * @param storageType A StorageType object containing the information about storage type of the container.  
 	   */
-	  public void setAllValues(AbstractDomainObject abstractDomain)
-	  {
-		  try
-		  {
-			  SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) abstractDomain;
-        	  
-		  }
-		  catch (Exception excp)
-		  {
+	public void setAllValues(AbstractDomainObject abstractDomain)
+	{
+		try
+		{
+			SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) abstractDomain;
+				
+			systemIdentifier = specimenCollectionGroup.getSystemIdentifier().longValue();
+			    
+			Logger.out.debug("specimenCollectionGroup.getClinicalDiagnosis() "+specimenCollectionGroup.getClinicalDiagnosis());
+			clinicalDiagnosis = Utility.toString(specimenCollectionGroup.getClinicalDiagnosis());
+			clinicalStatus = Utility.toString(specimenCollectionGroup.getClinicalStatus());
+			activityStatus = Utility.toString(specimenCollectionGroup.getActivityStatus());
+				
+			ClinicalReport clinicalReport = specimenCollectionGroup.getClinicalReport();
+			surgicalPathologyNumber = Utility.toString(clinicalReport.getSurgicalPathologyNumber());
+			
+			if(clinicalReport.getParticipantMedicalIdentifier()!=null)
+				participantsMedicalIdentifierId = clinicalReport.getParticipantMedicalIdentifier().getSystemIdentifier().longValue();
+				
+			collectionProtocolId = specimenCollectionGroup.getCollectionProtocolRegistration().getCollectionProtocol().getSystemIdentifier().longValue();
+			collectionProtocolEventId = specimenCollectionGroup.getCollectionProtocolEvent().getSystemIdentifier().longValue();
+			
+			Participant participant = specimenCollectionGroup.getCollectionProtocolRegistration().getParticipant();
+			if(participant!=null)
+			{
+				participantId = participant.getSystemIdentifier().longValue();
+				checkedButton = 1;
+			}
+			else
+			{
+				protocolParticipantIdentifier =  Utility.toString(specimenCollectionGroup.getCollectionProtocolRegistration().getProtocolParticipantIdentifier());
+				checkedButton = 2;
+			}
+			
+			siteId = specimenCollectionGroup.getSite().getSystemIdentifier().longValue();
+		}
+		catch (Exception excp)
+		{
 	    	// use of logger as per bug 79
 	    	Logger.out.error(excp.getMessage(),excp); 
-		  }
-	  }
+		}
+	}
 	  
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#getFormId()
 	 */
-	public int getFormId() {
+	public int getFormId() 
+	{
 		return Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID;
 
 	}
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#isAddOperation()
 	 */
-	public boolean isAddOperation() {
-		// TODO Auto-generated method stub
-		return (getOperation().equals(Constants.ADD));
+	public boolean isAddOperation() 
+	{
+		return getOperation().equals(Constants.ADD);
 	}
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#getActivityStatus()
 	 */
-	public String getActivityStatus() {
-		// TODO Auto-generated method stub
-		return null;
+	public String getActivityStatus() 
+	{
+		return this.activityStatus;
 	}
+	
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#setActivityStatus(java.lang.String)
 	 */
-	public void setActivityStatus(String activityStatus) {
-		// TODO Auto-generated method stub
-		
+	public void setActivityStatus(String activityStatus) 
+	{
+		this.activityStatus = activityStatus;
 	}
 
 	/**
 	 * @return
 	 */
-	public long getSiteId() {
+	public long getSiteId() 
+	{
 		return siteId;
 	}
 
 	/**
 	 * @param siteId
 	 */
-	public void setSiteId(long siteId) {
+	public void setSiteId(long siteId) 
+	{
 		this.siteId = siteId;
 	}
 
@@ -327,80 +357,75 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 		Validator validator = new Validator();
 		try
 		{
-			if (operation.equals(Constants.SEARCH))
+			if(this.collectionProtocolId == -1)
 			{
-				checkValidNumber(new Long(systemIdentifier).toString(),
-							"storageContainer.identifier", errors, validator);
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",
+								ApplicationProperties.getValue("specimenCollectionGroup.protocolTitle")));
 			}
-			if (operation.equals(Constants.ADD) || operation.equals(Constants.EDIT))
+			
+			if(this.siteId == -1)
 			{
-				if(this.collectionProtocolId == -1){
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",
-									ApplicationProperties.getValue("specimenCollectionGroup.protocolTitle")));
-				}
-				
-				if(this.siteId == -1){
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",
-									ApplicationProperties.getValue("specimenCollectionGroup.site")));
-				}
-				
-				
-				// Check what user has selected Participant Name / Participant Number
-				if(this.checkedButton == 1 ){   //if participant name field is checked.
-					if(this.siteId == -1){
-							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",
-										ApplicationProperties.getValue("specimenCollectionGroup.collectedByParticipant")));
-					}
-					
-				}
-				else{
-					if(this.siteId == -1){
-							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",
-										ApplicationProperties.getValue("specimenCollectionGroup.collectedByProtocolParticipantNumber")));
-					}
-				}
-				 
-                // Mandatory Field : Study Calendar event point
-				if(this.collectionProtocolEventId == -1){
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",
-									ApplicationProperties.getValue("specimenCollectionGroup.studyCalendarEventPoint")));
-				}
-				
-				// Mandatory Field : clinical Diagnosis
-				if(!validator.isValidOption(this.clinicalDiagnosis)){
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",
-									ApplicationProperties.getValue("specimenCollectionGroup.clinicalDiagnosis")));
-				}
-				
-				// Mandatory Field : clinical Status
-				if(this.clinicalStatus.equals(Constants.SELECT_OPTION)){
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",
-									ApplicationProperties.getValue("specimenCollectionGroup.clinicalStatus")));
-				}
-				
-				//Condition for medical Record Number.
-				if(this.checkedButton == 1 ){   //if participant name field is checked.
-					// here medical record number field should be enabled and must have some value selected.
-					
-					if(this.participantsMedicalIdentifierId == -1){
-						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",
-										ApplicationProperties.getValue("specimenCollectionGroup.medicalRecordNumber")));
-					}
-								
-				}
-				else{
-					// here this field will be alltogether disabled
-					// No need of any condition.
-				      
-				}
-				// not mandatory
-//				if(validator.isEmpty(this.surgicalPathologyNumber)){
-//					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",
-//								ApplicationProperties.getValue("specimenCollectionGroup.surgicalPathologyNumber")));
-//				}
-				
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",
+								ApplicationProperties.getValue("specimenCollectionGroup.site")));
 			}
-
+			
+			
+			// Check what user has selected Participant Name / Participant Number
+			if(this.checkedButton == 1 )
+			{   
+				//if participant name field is checked.
+				if(this.participantId == -1)
+				{
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",
+									ApplicationProperties.getValue("specimenCollectionGroup.collectedByParticipant")));
+				}
+			}
+			else
+			{
+				if(!validator.isValidOption(this.protocolParticipantIdentifier))
+				{
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",
+									ApplicationProperties.getValue("specimenCollectionGroup.collectedByProtocolParticipantNumber")));
+				}
+			}
+			 
+            // Mandatory Field : Study Calendar event point
+			if(this.collectionProtocolEventId == -1)
+			{
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",
+								ApplicationProperties.getValue("specimenCollectionGroup.studyCalendarEventPoint")));
+			}
+			
+			// Mandatory Field : clinical Diagnosis
+			if(!validator.isValidOption(this.clinicalDiagnosis))
+			{
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",
+								ApplicationProperties.getValue("specimenCollectionGroup.clinicalDiagnosis")));
+			}
+			
+			// Mandatory Field : clinical Status
+			if(!validator.isValidOption(clinicalStatus))
+			{
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",
+								ApplicationProperties.getValue("specimenCollectionGroup.clinicalStatus")));
+			}
+			
+			//Condition for medical Record Number.
+			if(this.checkedButton == 1 )
+			{   
+				//if participant name field is checked.
+				// here medical record number field should be enabled and must have some value selected.
+//					if(this.participantsMedicalIdentifierId == -1){
+//						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",
+//										ApplicationProperties.getValue("specimenCollectionGroup.medicalRecordNumber")));
+//					}
+							
+			}
+			else
+			{
+				// here this field will be alltogether disabled
+				// No need of any condition.
+			}
 		}
 		catch (Exception excp)
 		{
@@ -410,6 +435,4 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 		}
 		return errors;
 	}
-
-
 }

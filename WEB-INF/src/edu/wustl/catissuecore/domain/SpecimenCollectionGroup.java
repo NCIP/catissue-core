@@ -16,6 +16,7 @@ import java.util.HashSet;
 
 import edu.wustl.catissuecore.actionForm.AbstractActionForm;
 import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
+import edu.wustl.catissuecore.exception.AssignDataException;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -78,14 +79,15 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
      */
     protected CollectionProtocolRegistration collectionProtocolRegistration;
 
-    public SpecimenCollectionGroup(){
+    public SpecimenCollectionGroup()
+    {
     
     }
     
-	public SpecimenCollectionGroup(AbstractActionForm form)
+	public SpecimenCollectionGroup(AbstractActionForm form) throws AssignDataException
 	{
-		    System.out.println("<<< Before setting Values >>>");
-			setAllValues(form);
+	    System.out.println("<<< Before setting Values >>>");
+		setAllValues(form);
 	}
 
 	/**
@@ -95,7 +97,8 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
 	 * @return the system generated unique systemIdentifier.
 	 * @see #setSystemIdentifier(Long)
 	 */
-	public Long getSystemIdentifier() {
+	public Long getSystemIdentifier() 
+	{
 		return systemIdentifier;
 	}
 
@@ -309,12 +312,12 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.domain.AbstractDomainObject#setAllValues(edu.wustl.catissuecore.actionForm.AbstractActionForm)
 	 */
-	public void setAllValues(AbstractActionForm abstractForm) {
+	public void setAllValues(AbstractActionForm abstractForm) throws AssignDataException 
+	{
 		
 		SpecimenCollectionGroupForm form = (SpecimenCollectionGroupForm)abstractForm;
 		try
 		{
-			this.systemIdentifier = new Long(form.getSystemIdentifier());
 			this.setClinicalDiagnosis(form.getClinicalDiagnosis());
 	        this.setClinicalStatus(form.getClinicalStatus());
 	        this.setActivityStatus(form.getActivityStatus());
@@ -325,9 +328,13 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
 			collectionProtocolEvent= new CollectionProtocolEvent();
 			collectionProtocolEvent.setSystemIdentifier(new Long(form.getCollectionProtocolEventId()));
 
-			clinicalReport = new ClinicalReport();
-			clinicalReport.setSurgicalPathologyNumber(form.getSurgicalPathologyNumber());
+			Logger.out.debug("form.getParticipantsMedicalIdentifierId() "+form.getParticipantsMedicalIdentifierId());
 			
+			if(abstractForm.isAddOperation())
+				clinicalReport = new ClinicalReport();
+			
+			clinicalReport.setSurgicalPathologyNumber(form.getSurgicalPathologyNumber());
+
 			collectionProtocolRegistration = new CollectionProtocolRegistration();
 			if(form.getCheckedButton() == 1)
 			{    
@@ -339,14 +346,16 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
 				
 				ParticipantMedicalIdentifier participantMedicalIdentifier = new ParticipantMedicalIdentifier();
 				participantMedicalIdentifier.setSystemIdentifier(new Long(form.getParticipantsMedicalIdentifierId()));
-				clinicalReport.setParticipantMedicalIdentifier(participantMedicalIdentifier);
+				
+				if(form.getParticipantsMedicalIdentifierId()!=-1)
+					clinicalReport.setParticipantMedicalIdentifier(participantMedicalIdentifier);
+				else
+					clinicalReport.setParticipantMedicalIdentifier(null);
 			}
 			else
 			{
 				collectionProtocolRegistration.setProtocolParticipantIdentifier(form.getProtocolParticipantIdentifier());
 				collectionProtocolRegistration.setParticipant(null);
-				
-				clinicalReport.setParticipantMedicalIdentifier(null);
 			}
 			
 			CollectionProtocol collectionProtocol = new CollectionProtocol();
@@ -355,10 +364,8 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
 		}
 		catch(Exception e)
 		{
-			Logger.out.error(e.getMessage());
-			e.printStackTrace();
+			Logger.out.error(e.getMessage(),e);
+			throw new AssignDataException();
 		}
-		
 	}
-	
 }

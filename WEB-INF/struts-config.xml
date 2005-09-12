@@ -634,7 +634,7 @@ PUBLIC
 		<action path="/SpecimenCollectionGroupSearch"
 		    type="edu.wustl.catissuecore.action.CommonSearchAction"
 			name="specimenCollectionGroupForm"
-			validate="true"
+			validate="false"
 			input="/SpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroup"
 			scope="request">
 			<forward name="pageOfSpecimenCollectionGroup" path="/SpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroup"/>
