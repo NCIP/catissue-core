@@ -29,6 +29,7 @@ import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.cde.CDEManager;
+import edu.wustl.common.util.logger.Logger;
 
 
 /**
@@ -37,8 +38,7 @@ import edu.wustl.common.cde.CDEManager;
  * @author ajay_sharma
  */
 public class SpecimenCollectionGroupAction  extends SecureAction
-{
-    
+{   
     /**
      * Overrides the execute method of Action class.
      */
@@ -46,17 +46,6 @@ public class SpecimenCollectionGroupAction  extends SecureAction
             HttpServletRequest request, HttpServletResponse response) throws Exception
     {
     	SpecimenCollectionGroupForm  specimenCollectionGroupForm = (SpecimenCollectionGroupForm)form;
-    	
-        //Gets the value of the operation parameter.
-        String operation = request.getParameter(Constants.OPERATION);
-
-        //Sets the operation attribute to be used in the Add/Edit SpecimenCollectionGroup Page. 
-        request.setAttribute(Constants.OPERATION, operation);
-
-		// populating clinical Status field from constant array
-		//request.setAttribute(Constants.CLINICAL_STATUS_LIST,Constants.CLINICAL_STATUS_ARRAY);
-        List clinicalStatusList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_CLINICAL_STATUS);
-    	request.setAttribute(Constants.CLINICAL_STATUS_LIST, clinicalStatusList);
     	
 		try
 		{
@@ -66,7 +55,7 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 		    //populating protocolist bean.
 			String sourceObjectName = CollectionProtocol.class.getName();
 			String [] displayNameFields = {"title"};
-			String valueField = "systemIdentifier";
+			String valueField = Constants.SYSTEM_IDENTIFIER;
 		  	List list = bizLogic.getList(sourceObjectName,displayNameFields,valueField);
 			request.setAttribute(Constants.PROTOCOL_LIST, list);
 		
@@ -77,7 +66,7 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 		   	request.setAttribute(Constants.SITELIST, list);
 
 		   	//Populating the participants registered to a given protocol
-			loadPaticipants(specimenCollectionGroupForm.getCollectionProtocolId(),bizLogic,request);
+			loadPaticipants(specimenCollectionGroupForm.getCollectionProtocolId() , bizLogic, request);
 			
 			//Populating the protocol participants id registered to a given protocol
 			loadPaticipantNumberList(specimenCollectionGroupForm.getCollectionProtocolId(),bizLogic,request);
@@ -90,31 +79,37 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 			
 			//Load Clinical status for a given study calander event point
 			List calendarEventPointList = bizLogic.retrieve(CollectionProtocolEvent.class.getName(),
-											"systemIdentifier",
+											Constants.SYSTEM_IDENTIFIER,
 											new Long(specimenCollectionGroupForm.getCollectionProtocolEventId()));
 			if(!calendarEventPointList.isEmpty())
 			{
 				CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent)calendarEventPointList.get(0);
 				specimenCollectionGroupForm.setClinicalStatus(collectionProtocolEvent.getClinicalStatus());
 			}
-			List clinicalDiagnosisList = CDEManager.getCDEManager().getList(Constants.CDE_CLINICAL_DIAGNOSIS);
-			request.setAttribute(Constants.CLINICALDIAGNOSISLIST, clinicalDiagnosisList);
+			
+			// populating clinical Diagnosis field 
+			List clinicalDiagnosisList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_CLINICAL_DIAGNOSIS);
+			request.setAttribute(Constants.CLINICAL_DIAGNOSIS_LIST, clinicalDiagnosisList);
+
+			// populating clinical Status field 
+	        List clinicalStatusList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_CLINICAL_STATUS);
+	    	request.setAttribute(Constants.CLINICAL_STATUS_LIST, clinicalStatusList);
 		}
 		catch(Exception exc)
 		{
-			exc.printStackTrace();
+			Logger.out.error(exc.getMessage(),exc);
+			mapping.findForward(request.getParameter(Constants.FAILURE));
 		}
         return mapping.findForward(request.getParameter(Constants.PAGEOF));
     }
-    
     
 	private void loadPaticipants(long protocolID, AbstractBizLogic bizLogic, HttpServletRequest request) throws Exception
 	{
 		//get list of Participant's names
 		String sourceObjectName = CollectionProtocolRegistration.class.getName();
-	  	String [] displayParticipantFields = {"participant.lastName","participant.firstName"};
-	  	String valueField = "participant.systemIdentifier";
-	  	String whereColumnName[] = {"collectionProtocol.systemIdentifier"};
+	  	String [] displayParticipantFields = {"participant.lastName" , "participant.firstName"};
+	  	String valueField = "participant."+Constants.SYSTEM_IDENTIFIER;
+	  	String whereColumnName[] = {"collectionProtocol."+Constants.SYSTEM_IDENTIFIER};
 	  	String whereColumnCondition[] = {"="};
 	  	Object[] whereColumnValue = {new Long(protocolID)};
 	  	String joinCondition = Constants.AND_JOIN_CONDITION;
@@ -123,6 +118,7 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 	  	List list = bizLogic.getList(sourceObjectName, displayParticipantFields, valueField, whereColumnName,
 				  whereColumnCondition, whereColumnValue, joinCondition, separatorBetweenFields);
 	
+	  	Logger.out.debug("Paticipants List"+list);
 	  	request.setAttribute(Constants.PARTICIPANT_LIST, list);
 	}
     
@@ -133,15 +129,16 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 		String sourceObjectName = CollectionProtocolRegistration.class.getName();
 		String displayParticipantNumberFields[] = {"protocolParticipantIdentifier"};
 		String valueField = "protocolParticipantIdentifier";
-		String whereColumnName[] = {"collectionProtocol.systemIdentifier"};
-		String whereColumnCondition[] = {"="};
-		Object[] whereColumnValue = {new Long(protocolID)};
+		String whereColumnName[] = {"collectionProtocol."+Constants.SYSTEM_IDENTIFIER, "protocolParticipantIdentifier"};
+		String whereColumnCondition[] = {"=","!="};
+		Object[] whereColumnValue = {new Long(protocolID),"null"};
 		String joinCondition = Constants.AND_JOIN_CONDITION;
 		String separatorBetweenFields = "";
 			
 		List list = bizLogic.getList(sourceObjectName, displayParticipantNumberFields, valueField, whereColumnName,
 					whereColumnCondition, whereColumnValue, joinCondition, separatorBetweenFields);
-
+		
+		Logger.out.debug("Paticipant Number List"+list);
 		request.setAttribute(Constants.PROTOCOL_PARTICIPANT_NUMBER_LIST, list);
 	}    
     
@@ -150,7 +147,7 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 		String sourceObjectName = CollectionProtocolEvent.class.getName();
 		String displayEventFields[] = {"studyCalendarEventPoint"};
 		String valueField = "systemIdentifier";
-		String whereColumnName[] = {"collectionProtocol.systemIdentifier"};
+		String whereColumnName[] = {"collectionProtocol."+Constants.SYSTEM_IDENTIFIER};
 		String whereColumnCondition[] = {"="};
 		Object[] whereColumnValue = {new Long(protocolID)};
 		String joinCondition = Constants.AND_JOIN_CONDITION;
@@ -159,6 +156,7 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 		List list = bizLogic.getList(sourceObjectName, displayEventFields, valueField, whereColumnName,
 					whereColumnCondition, whereColumnValue, joinCondition, separatorBetweenFields);
 		
+		Logger.out.debug("Collection Protocol Event List"+list);
 		request.setAttribute(Constants.STUDY_CALENDAR_EVENT_POINT_LIST, list);
 	}
 
@@ -167,8 +165,8 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 		//get list of Participant's names
 		String sourceObjectName = ParticipantMedicalIdentifier.class.getName();
 		String displayEventFields[] = {"medicalRecordNumber"};
-		String valueField = "systemIdentifier";
-		String whereColumnName[] = {"participant.systemIdentifier"};
+		String valueField = Constants.SYSTEM_IDENTIFIER;
+		String whereColumnName[] = {"participant."+Constants.SYSTEM_IDENTIFIER};
 		String whereColumnCondition[] = {"="};
 		Object[] whereColumnValue = {new Long(participantID)};
 		String joinCondition = Constants.AND_JOIN_CONDITION;
