@@ -274,9 +274,9 @@ public class Constants
 	public static final String CHECKIN_CHECKOUT_EVENT_PARAMETERS_EDIT_ACTION = "CheckInCheckOutEventParametersEdit.do";
 
 	//Constants required in ReceivedEventParameters.jsp Page
-	public static final String RECEIVED_EVENT_PARAMETERS_SEARCH_ACTION = "ReceivedEventParametersSearch.do";
+	public static final String RECEIVED_EVENT_PARAMETERS_SEARCH_ACTION = "receivedEventParametersSearch.do";
 	public static final String RECEIVED_EVENT_PARAMETERS_ADD_ACTION = "ReceivedEventParametersAdd.do";
-	public static final String RECEIVED_EVENT_PARAMETERS_EDIT_ACTION = "ReceivedEventParametersEdit.do";
+	public static final String RECEIVED_EVENT_PARAMETERS_EDIT_ACTION = "receivedEventParametersEdit.do";
 
 	//Constants required in FluidSpecimenReviewEventParameters.jsp Page
 	public static final String FLUID_SPECIMEN_REVIEW_EVENT_PARAMETERS_SEARCH_ACTION = "FluidSpecimenReviewEventParametersSearch.do";

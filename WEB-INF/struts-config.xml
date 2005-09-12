@@ -1029,7 +1029,7 @@ PUBLIC
 			input="/ReceivedEventParameters.do?operation=edit&amp;pageOf=pageOfReceivedEventParameters"
 			scope="request">
 			<forward name="success" path=".catissuecore.receivedEventParametersEditSuccessDef" />
-			<forward name="failure" path="/receivedEventParameters.do?operation=edit&amp;pageOf=pageOfReceivedEventParameters" />
+			<forward name="failure" path="/ReceivedEventParameters.do?operation=edit&amp;pageOf=pageOfReceivedEventParameters" />
 		</action>
 		
 		<action path="/receivedEventParametersSearch"
