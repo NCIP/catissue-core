@@ -134,7 +134,7 @@ public class Constants
 	public static final String CLINICAL_STATUS_LIST = "cinicalStatusList";
 	public static final String SPECIMEN_CLASS_LIST = "specimenClassList";
 	public static final String SPECIMEN_CLASS_ID_LIST = "specimenClassIdList";
-	
+	public static final String SPECIMEN_TYPE_MAP = "specimenTypeMap";
 	//Simple Query Interface Lists
 	public static final String OBJECT_NAME_LIST = "objectNameList";
 	public static final String OBJECT_COMPLETE_NAME_LIST = "objectCompleteNameList";
