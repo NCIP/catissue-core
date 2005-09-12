@@ -49,6 +49,7 @@ public class CommonSearchAction extends Action
             HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServerException
     {
+        Logger.out.debug("*******In here************");
         /** 
          * Represents whether the search operation was successful or not.
          */
@@ -67,6 +68,7 @@ public class CommonSearchAction extends Action
             
             //Retrieves the information to be edited.
             String objName = AbstractDomainObject.getDomainObjectName(abstractForm.getFormId());
+            Logger.out.debug("object name to be retrieved:"+objName+" identifier:"+identifier);
             list= bizLogic.retrieve(objName,Constants.IDENTIFIER, new Long(identifier).toString());
 
             if (list.size() != 0)

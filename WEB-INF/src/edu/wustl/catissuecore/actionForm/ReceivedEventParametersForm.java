@@ -105,8 +105,8 @@ public class ReceivedEventParametersForm extends EventParametersForm
       */
       protected void reset()
      {
-         super.reset();
-         this.receivedQuality = null;
+//         super.reset();
+//         this.receivedQuality = null;
      }
     		
 	

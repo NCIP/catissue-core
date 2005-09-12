@@ -11,6 +11,8 @@
 
 package edu.wustl.catissuecore.actionForm;
 
+import java.util.Calendar;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts.action.ActionError;
@@ -273,9 +275,12 @@ public abstract class EventParametersForm extends AbstractActionForm
   		this.comments  = eventParametersObject.getComments();
  		this.systemIdentifier = eventParametersObject.getSystemIdentifier().longValue() ;
 		
- 		this.timeInHours = ""+eventParametersObject.getTimestamp().getHours();
- 		this.timeInMinutes = "" + eventParametersObject.getTimestamp().getMinutes();
+ 		Calendar calender = Calendar.getInstance();
+ 		calender.setTime(eventParametersObject.getTimestamp());
+ 		this.timeInHours = ""+calender.get(Calendar.HOUR_OF_DAY);
+ 		this.timeInMinutes = "" + calender.get(Calendar.MINUTE);
  		this.userId = eventParametersObject.getUser().getSystemIdentifier().longValue() ;
- 		this.dateOfEvent = eventParametersObject.getTimestamp().getMonth()+"-"+eventParametersObject.getTimestamp().getDay()+"-"+eventParametersObject.getTimestamp().getYear() ;
+ 		this.dateOfEvent = calender.get(Calendar.MONTH)+"-"+calender.get(Calendar.DAY_OF_MONTH)+"-"+calender.get(Calendar.YEAR) ;
+ 		Logger.out.debug("systemIdentifier:"+systemIdentifier+" timeInHours:"+timeInHours+" timeInMinutes:"+timeInMinutes+" userId:"+userId+" dateOfEvent:"+dateOfEvent);
  	}
 }

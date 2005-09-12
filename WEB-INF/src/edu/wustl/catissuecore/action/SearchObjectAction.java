@@ -15,6 +15,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.util.logger.Logger;
 
 
 /**
@@ -38,6 +39,7 @@ public class SearchObjectAction extends Action
         String pageOf = request.getParameter(Constants.PAGEOF);
         request.setAttribute(Constants.PAGEOF, pageOf);
         
+        Logger.out.debug("identifier:"+identifier+" PAGEOF:"+pageOf);
         return mapping.findForward(pageOf);
     }
 

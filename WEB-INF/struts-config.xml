@@ -1035,7 +1035,7 @@ PUBLIC
 		<action path="/receivedEventParametersSearch"
 		    type="edu.wustl.catissuecore.action.CommonSearchAction"
 			name="receivedEventParametersForm"
-			validate="true"
+			validate="false"
 			input="/ReceivedEventParameters.do?operation=edit&amp;pageOf=pageOfReceivedEventParameters"
 			scope="request">
 			<forward name="pageOfReceivedEventParameters" path="/ReceivedEventParameters.do?operation=edit&amp;pageOf=pageOfReceivedEventParameters"/>
