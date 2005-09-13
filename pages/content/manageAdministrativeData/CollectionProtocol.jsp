@@ -252,7 +252,7 @@ function insRow(subdivtag,iCounter)
 	
 	sname= "<select name='" + objname + "' size='1' class='formFieldSized10' id='" + objname + "'>";
 	
-	sname = sname + "<option value='-1'>-- SELECT --</option>";
+	sname = sname + "<option value='-1'><%=Constants.SELECT_OPTION%></option>";
 
 	sname = sname + "</select>"
 	
@@ -717,6 +717,11 @@ function getSubDivCount(subdivtag)
 								String classValue = (String)colForm.getValue(srFname);
 								specimenTypeList = (List)specimenTypeMap.get(classValue);
 								
+								if(specimenTypeList == null)
+								{
+									specimenTypeList = new ArrayList();
+									specimenTypeList.add(new NameValueBean(Constants.SELECT_OPTION,"-1"));
+								}
 								pageContext.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
 								fName="";
 								 fName = cName + "_specimenType)";
@@ -933,7 +938,7 @@ function getSubDivCount(subdivtag)
 			        	<html:select property="value(CollectionProtocolEvent:`_SpecimenRequirement:1_specimenType)" 
 										styleClass="formFieldSized10" 
 										styleId="value(CollectionProtocolEvent:`_SpecimenRequirement:1_specimenType)" size="1">
-							<html:options collection="<%=Constants.SPECIMEN_TYPE_LIST%>" labelProperty="name" property="value"/>
+							<html:option value="-1"><%=Constants.SELECT_OPTION%></html:option>
 						</html:select>
 			        </td>
 			        

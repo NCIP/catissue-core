@@ -3,15 +3,34 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.DistributionProtocolForm"%>
-<%@ page import="java.util.List"%>
+<%@ page import="java.util.*"%>
 <%@ page import="edu.wustl.common.beans.NameValueBean"%>
 
 <head>
-
+<%!
+	private String changeUnit(String specimenType)
+	{
+		if (specimenType == null)
+			return "";
+		if(specimenType.equals("Fluid"))
+			return Constants.UNIT_ML;
+		else if(specimenType.equals("Tissue"))
+			return Constants.UNIT_GM;
+		else if(specimenType.equals("Cell"))
+			return Constants.UNIT_CC;
+		else if(specimenType.equals("Molecular"))
+			return Constants.UNIT_MG;
+		else
+			return " ";
+			
+	}
+%>
 <%
 	List specimenClassList = (List) request.getAttribute(Constants.SPECIMEN_CLASS_LIST);
-	
+
 	List specimenTypeList = (List) request.getAttribute(Constants.SPECIMEN_TYPE_LIST);
+
+	HashMap specimenTypeMap = (HashMap) request.getAttribute(Constants.SPECIMEN_TYPE_MAP);
 	
 	List tissueSiteList = (List) request.getAttribute(Constants.TISSUE_SITE_LIST);
 
@@ -19,6 +38,7 @@
 	
     String operation = (String) request.getAttribute(Constants.OPERATION);
     String formName;
+
 
     boolean readOnlyValue;
     if (operation.equals(Constants.EDIT))
@@ -34,10 +54,11 @@
     
 		Object obj = request.getAttribute("distributionProtocolForm");
 		int noOfRows=1;
-
+		
+		DistributionProtocolForm form = null;
 		if(obj != null && obj instanceof DistributionProtocolForm)
 		{
-			DistributionProtocolForm form = (DistributionProtocolForm)obj;
+			form = (DistributionProtocolForm)obj;
 			noOfRows = form.getCounter();
 		}
 
@@ -51,6 +72,49 @@
 	ugul[3]="<%=Constants.UNIT_CC%>";
 	ugul[4]="<%=Constants.UNIT_MG%>";
 
+
+<%
+
+	    	Iterator specimenTypeIterator = specimenTypeMap.keySet().iterator();
+	    	int classCount=0;
+	    	for(classCount=1;classCount<specimenClassList.size();classCount++  )
+	    	{
+	    		String keyObj = (String)((NameValueBean)specimenClassList.get(classCount)).getName() ;
+	    		List subList = (List)specimenTypeMap.get(keyObj);
+	    		String arrayData = "";
+	    		for(int listSize=0;listSize<subList.size();listSize++ )
+	    		{
+	    			if(listSize == subList.size()-1 )
+	    				arrayData = arrayData + "\"" + ((NameValueBean)subList.get(listSize)).getName() + "\"";
+	    			else
+		    			arrayData = arrayData + "\"" + ((NameValueBean)subList.get(listSize)).getName() + "\",";   
+	    		}
+%>
+			var <%=keyObj%>Array = new Array(<%=arrayData%>);
+<%	    		
+	    	}
+
+%>	
+
+		function typeChange(element,arrayName)
+		{ 
+			var i = (element.name).lastIndexOf("_");
+			var combo = (element.name).substring(0,i);
+			var specimenTypeCombo = combo + "_specimenType)";
+			ele = document.getElementById(specimenTypeCombo);
+			//To Clear the Combo Box
+			ele.options.length = 0;
+			
+			//ele.options[0] = new Option('-- Select --','-1');
+			var j=0;
+			//Populating the corresponding Combo Box
+			for(i=0;i<arrayName.length;i++)
+			{
+					ele.options[j++] = new Option(arrayName[i],arrayName[i]);
+			}
+		}
+
+
 	function changeUnit(listname,unitspan)
 	{
 //		var i = document.getElementById(listname).selectedIndex;
@@ -60,14 +124,27 @@
 		if(selectedOption == "-- Select --")
 			document.getElementById(unitspan).innerHTML = ugul[0];
 		if(selectedOption == "Fluid")
+		{
 			document.getElementById(unitspan).innerHTML = ugul[1];
+			typeChange(list,FluidArray);
+		}
 		if(selectedOption == "Tissue")
+		{
 			document.getElementById(unitspan).innerHTML = ugul[2];
+			typeChange(list,TissueArray);
+		}
 		if(selectedOption == "Cell")
+		{
 			document.getElementById(unitspan).innerHTML = ugul[3];
+			typeChange(list,CellArray);
+		}
 		if(selectedOption == "Molecular")
+		{
 			document.getElementById(unitspan).innerHTML = ugul[4];
+			typeChange(list,MolecularArray);
+		}
 	}
+
 	var win = null;
 	function NewWindow(mypage,myname,w,h,scroll)
 	{
@@ -146,13 +223,8 @@ function insRow(subdivtag)
 	objname = "value(SpecimenRequirement:"+rowno+"_specimenType)";
 	
 	sname= "<select name='" + objname + "' size='1' class='formFieldSized10' id='" + objname + "'>";
-	<%for(int i=0;i<specimenTypeList.size();i++)
-	{
-		String specimenTypeLabel = "" + ((NameValueBean)specimenTypeList.get(i)).getName();
-		String specimenTypeValue = "" + ((NameValueBean)specimenTypeList.get(i)).getValue();		
-	%>
-		sname = sname + "<option value='<%=specimenTypeValue%>'><%=specimenTypeLabel%></option>";
-	<%}%>
+		
+		sname = sname + "<option value='-1'><%=Constants.SELECT_OPTION%></option>";
 	sname = sname + "</select>"
 	
 	spreqsubtype.innerHTML="" + sname;
@@ -447,6 +519,9 @@ function insRow(subdivtag)
 				for(int counter=noOfRows;counter>=1;counter--)
 				{		
 					String objname = "value(SpecimenRequirement:" + counter + "_specimenClass)";
+					String srCommonName = "SpecimenRequirement:" + counter;
+					String srKeyName = srCommonName + "_specimenClass";
+					
 					String objunit = "value(SpecimenRequirement:"+ counter +"_unitspan)";
 					String identifier = "value(SpecimenRequirement:"+ counter +"_systemIdentifier)";
 			%>
@@ -464,6 +539,17 @@ function insRow(subdivtag)
 		        
 		        <td class="formField">
 					<%
+					
+						String classValue = (String)form.getValue(srKeyName);
+						specimenTypeList = (List)specimenTypeMap.get(classValue);
+								
+						if(specimenTypeList == null)
+						{
+							specimenTypeList = new ArrayList();
+							specimenTypeList.add(new NameValueBean(Constants.SELECT_OPTION,"-1"));
+						}
+						pageContext.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);						
+					
 						objname="";
 						objname = "value(SpecimenRequirement:" + counter + "_specimenType)";
 					%>
@@ -502,10 +588,25 @@ function insRow(subdivtag)
 			    	<%
 						objname="";
 						objname = "value(SpecimenRequirement:"+ counter +"_quantityIn)";
-					%>
+						
+								 String srHiddenUnitName = "value(SpecimenRequirement:"+ counter + "_hiddenUnit)";
+								 String srHiddenUnit = srCommonName + "_hiddenUnit";
+								 String strHiddenUnitValue = ""+(String)form.getValue(srHiddenUnit);
+								 
+								 strHiddenUnitValue = changeUnit(classValue);
+								 
+						%>
+
+		        		
 			    
-					<html:text styleClass="formFieldSized5" styleId="<%=objname%>" property="<%=objname%>" readonly="<%=readOnlyValue%>" />
-						&nbsp;<span id=' <%= objunit %>'>&nbsp;</span>
+					<html:text styleClass="formFieldSized5" 
+								styleId="<%=objname%>" 
+								property="<%=objname%>"
+								readonly="<%=readOnlyValue%>" />
+						<html:hidden property="<%=srHiddenUnitName%>" />&nbsp;
+						<span id=' <%= objunit %>'>
+							<%=strHiddenUnitValue%>
+						</span>
 		        </td>
 			</tr>	
 							
