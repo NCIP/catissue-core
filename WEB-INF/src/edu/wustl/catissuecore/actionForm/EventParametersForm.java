@@ -277,10 +277,17 @@ public abstract class EventParametersForm extends AbstractActionForm
 		
  		Calendar calender = Calendar.getInstance();
  		calender.setTime(eventParametersObject.getTimestamp());
- 		this.timeInHours = ""+calender.get(Calendar.HOUR_OF_DAY);
+ 		this.timeInHours = ""+calender.get(Calendar.HOUR);
+ 		
+// 		if(this.timeInHours.trim().length()==1 )
+// 			this.timeInHours = "0"+this.timeInHours;
+// 		
+// 		if(this.timeInMinutes.trim().length()==1 )
+// 			this.timeInMinutes = "0"+this.timeInMinutes;
+ 		
  		this.timeInMinutes = "" + calender.get(Calendar.MINUTE);
  		this.userId = eventParametersObject.getUser().getSystemIdentifier().longValue() ;
- 		this.dateOfEvent = calender.get(Calendar.MONTH)+"-"+calender.get(Calendar.DAY_OF_MONTH)+"-"+calender.get(Calendar.YEAR) ;
+ 		this.dateOfEvent = (calender.get(Calendar.MONTH)+1)+"-"+calender.get(Calendar.DAY_OF_MONTH)+"-"+calender.get(Calendar.YEAR) ;
  		Logger.out.debug("systemIdentifier:"+systemIdentifier+" timeInHours:"+timeInHours+" timeInMinutes:"+timeInMinutes+" userId:"+userId+" dateOfEvent:"+dateOfEvent);
  	}
 }
