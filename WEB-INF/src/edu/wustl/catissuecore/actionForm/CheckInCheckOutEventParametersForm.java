@@ -26,7 +26,7 @@ import edu.wustl.common.util.logger.Logger;
 /**
 * This Class handles the CheckIn CheckOut Event Parameters.
 */
-public class CheckInCheckOutEventParametersForm extends EventParametersForm
+public class CheckInCheckOutEventParametersForm extends SpecimenEventParametersForm
 {
 	/**
 	 * Type of the movement e.g. Check-in or Check-out.

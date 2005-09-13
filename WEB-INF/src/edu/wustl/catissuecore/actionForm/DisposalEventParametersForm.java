@@ -29,7 +29,7 @@ import edu.wustl.common.util.logger.Logger;
  *
  * Description:  This Class handles the Disposal event parameters..
  */
-public class DisposalEventParametersForm extends EventParametersForm
+public class DisposalEventParametersForm extends SpecimenEventParametersForm
 {
 	/**
      * reason for disposal of specimen it.

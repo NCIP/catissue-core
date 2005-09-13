@@ -28,7 +28,7 @@ import edu.wustl.common.util.logger.Logger;
  * @author mandar_deshmukh
  *   This Class handles the Fluid Specimen Review event parameters.
  */
-public class FluidSpecimenReviewEventParametersForm extends EventParametersForm
+public class FluidSpecimenReviewEventParametersForm extends SpecimenEventParametersForm
 {
 	/**
      * Cell Count.

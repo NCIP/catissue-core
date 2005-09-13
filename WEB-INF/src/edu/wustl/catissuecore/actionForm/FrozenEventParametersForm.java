@@ -29,7 +29,7 @@ import edu.wustl.common.util.logger.Logger;
  *
  * Description:  This Class handles the frozen event parameters..
  */
-public class FrozenEventParametersForm extends EventParametersForm
+public class FrozenEventParametersForm extends SpecimenEventParametersForm
 {
 	/**
      * Method applied on specimen to freeze it.

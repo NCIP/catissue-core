@@ -29,7 +29,7 @@ import edu.wustl.common.util.logger.Logger;
  *
  * This Class handles the Fixed Event Parameters.
  */
-public class FixedEventParametersForm extends EventParametersForm
+public class FixedEventParametersForm extends SpecimenEventParametersForm
 {
 	/**
 	 * Type of the fixation.

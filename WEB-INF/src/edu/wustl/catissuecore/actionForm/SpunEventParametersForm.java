@@ -29,7 +29,7 @@ import edu.wustl.common.util.logger.Logger;
  *
  * Description:  This Class handles the Spun event parameters..
  */
-public class SpunEventParametersForm extends EventParametersForm
+public class SpunEventParametersForm extends SpecimenEventParametersForm
 {
 	/**
      * Rotational force applied to specimen.

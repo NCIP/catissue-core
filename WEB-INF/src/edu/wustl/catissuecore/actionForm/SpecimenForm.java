@@ -435,8 +435,15 @@ public class SpecimenForm extends AbstractActionForm
                         .getPositionDimensionOne());
                 this.positionDimensionTwo = String.valueOf(specimen
                         .getPositionDimensionTwo());
+                
+                this.positionInStorageContainer = container.getStorageType().getType() + " : " 
+				+ container.getSystemIdentifier() + " Pos(" + this.positionDimensionOne + ","
+				+ this.positionDimensionTwo + ")";
+                
             }
-
+            
+            this.barcode = specimen.getBarcode();
+            
             if (specimen instanceof CellSpecimen)
             {
                 this.className = "Cell";

@@ -19,7 +19,7 @@ import edu.wustl.catissuecore.util.global.Constants;
  *
  * Description:  This Class handles the thaw event parameters..
  */
-public class ThawEventParametersForm extends EventParametersForm
+public class ThawEventParametersForm extends SpecimenEventParametersForm
 {
 	
 	public int getFormId()

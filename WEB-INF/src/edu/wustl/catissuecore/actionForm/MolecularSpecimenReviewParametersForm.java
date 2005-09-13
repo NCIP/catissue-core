@@ -29,7 +29,7 @@ import edu.wustl.common.util.logger.Logger;
  * This Class handles the Molecular Specimen Review event parameters.
  * Attributes associated with a review event of a molecular specimen.
  */
-public class MolecularSpecimenReviewParametersForm extends EventParametersForm
+public class MolecularSpecimenReviewParametersForm extends SpecimenEventParametersForm
 {
 	/**
      * A reference to the location of an electrophoretic gel image of the specimen.

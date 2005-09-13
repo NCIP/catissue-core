@@ -29,7 +29,7 @@ import edu.wustl.common.util.logger.Logger;
  *
  * Description:  This Class handles the Procedure event parameters..
  */
-public class ProcedureEventParametersForm extends EventParametersForm {
+public class ProcedureEventParametersForm extends SpecimenEventParametersForm {
 	
 	private String url;
 	private String name;

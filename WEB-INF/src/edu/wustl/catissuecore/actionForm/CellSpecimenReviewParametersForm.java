@@ -28,7 +28,7 @@ import edu.wustl.common.util.logger.Logger;
  * @author mandar_deshmukh
  * Handles attributes associated with a review event of a cell specimen.
  */
-public class CellSpecimenReviewParametersForm extends EventParametersForm
+public class CellSpecimenReviewParametersForm extends SpecimenEventParametersForm
 {
 	/**
      * Percentage of histologically evident neoplastic cells present in the specimen.

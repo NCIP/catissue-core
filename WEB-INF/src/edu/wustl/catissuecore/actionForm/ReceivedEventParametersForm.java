@@ -26,7 +26,7 @@ import edu.wustl.common.util.logger.Logger;
  * TODO To change the template for this generated type comment go to
  * Window - Preferences - Java - Code Style - Code Templates
  */
-public class ReceivedEventParametersForm extends EventParametersForm
+public class ReceivedEventParametersForm extends SpecimenEventParametersForm
 {
 
 	/**

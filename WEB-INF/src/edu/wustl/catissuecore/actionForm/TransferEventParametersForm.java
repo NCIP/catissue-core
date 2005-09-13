@@ -29,7 +29,7 @@ import edu.wustl.common.util.logger.Logger;
  *
  *  This Class handles the Transfer Event Parameters.
  */
-public class TransferEventParametersForm extends EventParametersForm
+public class TransferEventParametersForm extends SpecimenEventParametersForm
 {
 	/**
 	 * Reference to dimensional position one of the specimen in previous storage container before transfer.

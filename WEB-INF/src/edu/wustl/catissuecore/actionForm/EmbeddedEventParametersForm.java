@@ -28,7 +28,7 @@ import edu.wustl.common.util.logger.Logger;
   *
  * Description:  This Class handles the embedded event parameters..
  */
-public class EmbeddedEventParametersForm extends EventParametersForm
+public class EmbeddedEventParametersForm extends SpecimenEventParametersForm
 {
 	
 	private String embeddingMedium;

@@ -15,7 +15,7 @@ import edu.wustl.catissuecore.util.global.Constants;
  * TODO To change the template for this generated type comment go to
  * Window - Preferences - Java - Code Style - Code Templates
  */
-public class SpecimenEventParametersForm extends EventParametersForm
+public abstract class SpecimenEventParametersForm extends EventParametersForm
 {
 
 	/* (non-Javadoc)
@@ -26,28 +26,28 @@ public class SpecimenEventParametersForm extends EventParametersForm
 		return Constants.SPECIMEN_EVENT_PARAMETERS_FORM_ID;
 	}
 
-	private long specimenID=1;
+	private long specimenId;
 	
 	
 	/**
-	 * @return Returns the specimenID.
+	 * @return Returns the specimenId.
 	 */
-	public long getSpecimenID()
+	public long getSpecimenId()
 	{
-		return specimenID;
+		return specimenId;
 	}
 	/**
-	 * @param specimenID The specimenID to set.
+	 * @param specimenId The specimenId to set.
 	 */
-	public void setSpecimenID(long specimenID)
+	public void setSpecimenId(long specimenId)
 	{
-		this.specimenID = specimenID;
+		this.specimenId = specimenId;
 	}
 	
 	 protected void reset()
 	 {
 	 	super.reset();
-	 	this.specimenID = 1;
+//	 	this.specimenId = -1;
 	 }
 	 
 	

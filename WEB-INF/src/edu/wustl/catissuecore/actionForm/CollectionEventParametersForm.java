@@ -29,7 +29,7 @@ import edu.wustl.common.util.logger.Logger;
  *
  * This Class handles the Collection Event Parameters.
  */
-public class CollectionEventParametersForm extends EventParametersForm
+public class CollectionEventParametersForm extends SpecimenEventParametersForm
 {
 	/**	
 	 *	Method of specimen collection from participant (e.g. needle biopsy, central venous line, bone marrow aspiration)

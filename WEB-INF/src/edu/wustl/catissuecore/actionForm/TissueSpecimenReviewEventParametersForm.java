@@ -28,7 +28,7 @@ import edu.wustl.common.util.logger.Logger;
  * @author mandar_deshmukh
  * This Class handles the Tissue Specimen Review event parameters.
  */
-public class TissueSpecimenReviewEventParametersForm extends EventParametersForm
+public class TissueSpecimenReviewEventParametersForm extends SpecimenEventParametersForm
 {
 	/**
      * Percentage of histologically evident neoplastic cells present in the tissue specimen.
