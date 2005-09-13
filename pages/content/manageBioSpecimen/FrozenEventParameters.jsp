@@ -11,7 +11,7 @@
 	
 <%
         String operation = (String) request.getAttribute(Constants.OPERATION);
-        String formName;
+        String formName, specimenId=null;
 
         boolean readOnlyValue;
         if (operation.equals(Constants.EDIT))
@@ -22,6 +22,7 @@
         else
         {
             formName = Constants.FROZEN_EVENT_PARAMETERS_ADD_ACTION;
+			specimenId = (String) request.getAttribute(Constants.SPECIMEN_ID);
             readOnlyValue = false;
         }
 		
@@ -46,11 +47,17 @@
 		<tr>
 			<td><html:hidden property="systemIdentifier" /></td>
 		</tr>
+
+		<tr>
+			<td>
+				<html:hidden property="specimenId" value="<%=specimenId%>"/>
+			</td>
+		</tr>
 		
 		<tr>
 			 <td class="formMessage" colspan="3">* indicates a required field</td>
 		</tr>
-
+		
 		<tr>
 			<td class="formTitle" height="20" colspan="3">
 				<logic:equal name="operation" value="<%=Constants.ADD%>">
