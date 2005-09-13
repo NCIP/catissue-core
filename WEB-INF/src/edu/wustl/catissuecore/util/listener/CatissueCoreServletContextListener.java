@@ -8,7 +8,6 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 import edu.wustl.catissuecore.bizlogic.QueryBizLogic;
-import edu.wustl.catissuecore.query.Client;
 import edu.wustl.catissuecore.util.Permissions;
 import edu.wustl.catissuecore.util.ProtectionGroups;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
