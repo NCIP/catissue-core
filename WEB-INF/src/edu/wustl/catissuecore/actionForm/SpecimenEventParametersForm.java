@@ -6,7 +6,8 @@
  */
 package edu.wustl.catissuecore.actionForm;
 
-import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.domain.AbstractDomainObject;
+import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 
 
 /**
@@ -21,10 +22,10 @@ public abstract class SpecimenEventParametersForm extends EventParametersForm
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#getFormId()
 	 */
-	public int getFormId()
-	{
-		return Constants.SPECIMEN_EVENT_PARAMETERS_FORM_ID;
-	}
+//	public int getFormId()
+//	{
+//		return Constants.SPECIMEN_EVENT_PARAMETERS_FORM_ID;
+//	}
 
 	private long specimenId;
 	
@@ -50,5 +51,10 @@ public abstract class SpecimenEventParametersForm extends EventParametersForm
 //	 	this.specimenId = -1;
 	 }
 	 
-	
+	 public void setAllValues(AbstractDomainObject abstractDomain)
+ 	 {
+	 	super.setAllValues(abstractDomain);
+	 	SpecimenEventParameters specimenEventParameters = (SpecimenEventParameters)abstractDomain;
+	 	specimenId = specimenEventParameters.getSpecimen().getSystemIdentifier().longValue();
+ 	 }
 }

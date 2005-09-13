@@ -53,7 +53,8 @@ public abstract class SpecimenEventParameters extends EventParameters
 		super.setAllValues(abstractForm);
 		
 		//Temporary fix.
-		specimen = new CellSpecimen();
+		if(abstractForm.isAddOperation())
+				specimen = new CellSpecimen();
 		
 		SpecimenEventParametersForm specimenEventParametersForm = (SpecimenEventParametersForm) abstractForm;
 		Logger.out.debug("specimenEventParametersForm.getSpecimenId()............................."+specimenEventParametersForm.getSpecimenId());

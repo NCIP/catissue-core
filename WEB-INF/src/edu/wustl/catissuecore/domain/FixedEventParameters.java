@@ -97,9 +97,12 @@ public class FixedEventParameters extends SpecimenEventParameters implements jav
         try
         {
         	FixedEventParametersForm form = (FixedEventParametersForm) abstractForm;
+        	
+        	super.setAllValues(form);
+        	
+        	
         	this.fixationType = form.getFixationType();
         	this.durationInMinutes = new Integer(form.getDurationInMinutes() );
-        	super.setAllValues(form);
         }
         catch (Exception excp)
         {
