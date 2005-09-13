@@ -117,21 +117,19 @@ public class SpunEventParametersForm extends EventParametersForm
         
         try
         {
-
-
-         	Logger.out.info("durationInMinutes: "+ durationInMinutes  );
-           //	 checks the durationInMinutes
-        	if (durationInMinutes <= 0 )
-           {
-          		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("spuneventparameters.durationinminutes")));
-           }
         	
            //	 checks the gForce
         	if (!validator.isDouble(""+gravityForce ))
            {
-          		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("spuneventparameters.gforce")));
+          		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("spuneventparameters.gforce")));
            }
         	
+        	Logger.out.info("durationInMinutes: "+ durationInMinutes  );
+            //	 checks the durationInMinutes
+         	if (!validator.isNumeric(String.valueOf(durationInMinutes),1) )
+            {
+           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("spuneventparameters.durationinminutes")));
+            }
         	
         }
         catch(Exception excp)

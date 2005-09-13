@@ -33,7 +33,7 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 
 		try
 		{
-			String[] displayNameFields = {"name"};
+			String[] displayNameFields = {"number"};
 			String valueField = "systemIdentifier";
 			AbstractBizLogic dao = BizLogicFactory.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 

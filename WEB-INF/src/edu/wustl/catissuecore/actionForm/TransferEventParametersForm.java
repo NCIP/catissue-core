@@ -216,36 +216,36 @@ public class TransferEventParametersForm extends EventParametersForm
          try
          {
             //	 checks the fromPositionDimensionOne 
-         	if (fromPositionDimensionOne <= 0 )
+         	if (!validator.isNumeric(String.valueOf(fromPositionDimensionOne)))
             {
-           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("transfereventparameters.frompositiondimensionone")));
+           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("transfereventparameters.frompositiondimensionone")));
             }
 
             //	 checks the fromPositionDimensionTwo 
-         	if (fromPositionDimensionTwo  <= 0 )
+         	if (!validator.isNumeric(String.valueOf(fromPositionDimensionTwo) ))
             {
-           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("transfereventparameters.frompositiondimensiontwo")));
+           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("transfereventparameters.frompositiondimensiontwo")));
             }
 
          	//	 checks the toPositionDimensionOne 
-         	if (toPositionDimensionOne  <= 0 )
+         	if (!validator.isNumeric(String.valueOf(toPositionDimensionOne)) )
             {
-           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("transfereventparameters.topositiondimensionone")));
+           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("transfereventparameters.topositiondimensionone")));
             }
             //	 checks the toPositionDimensionTwo 
-         	if (toPositionDimensionTwo <= 0 )
+         	if (!validator.isNumeric(String.valueOf(toPositionDimensionTwo)))
             {
-           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("transfereventparameters.topositiondimensiontwo")));
+           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("transfereventparameters.topositiondimensiontwo")));
             }
              //	 checks the fromStorageContainerId 
          	if (fromStorageContainerId <= 0 )
             {
-           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("transfereventparameters.fromstoragecontainerid")));
+           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("transfereventparameters.fromstoragecontainerid")));
             }
             //	 checks the toStorageContainerId
          	if (toStorageContainerId  <= 0 )
             {
-           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("transfereventparameters.tostoragecontainerid")));
+           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("transfereventparameters.tostoragecontainerid")));
             }
 
          }

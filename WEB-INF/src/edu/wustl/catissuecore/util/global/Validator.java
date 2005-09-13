@@ -15,6 +15,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.io.*;
 
+import edu.wustl.common.util.logger.Logger;
+
 
 /**
  *  This Class contains the methods used for validation of the fields in the userform.
@@ -205,9 +207,10 @@ public class Validator
     
     public boolean isValidOption(String option)
     {
+        Logger.out.debug("option value: "+option);
     	if(option != null)
     	{
-    		if(option.equals("-1") || option.equals(Constants.SELECT_OPTION))
+    		if(option.trim().equals("-1") || option.equals(Constants.SELECT_OPTION))
     			return false;
     		else
     			return true;

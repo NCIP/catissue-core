@@ -86,10 +86,12 @@ public class ReceivedEventParametersForm extends EventParametersForm
          {
          	// checks the receivedQuality
 
-           	if ( validator.isEmpty( receivedQuality ))
+           	if ( !validator.isValidOption( receivedQuality ))
             {
+           	    Logger.out.debug(" not a valid option");
            		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("receivedeventparameters.receivedquality")));
             }
+           	Logger.out.debug(receivedQuality+" is a valid option");
          }
          catch(Exception excp)
          {

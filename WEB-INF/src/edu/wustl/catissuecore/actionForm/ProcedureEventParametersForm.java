@@ -90,12 +90,6 @@ public class ProcedureEventParametersForm extends EventParametersForm {
 
 		try {
 
-			// checks the URL
-			if (validator.isEmpty(url)) {
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue(
-						"procedureeventparameters.url")));
-			}
-
 			if (validator.isEmpty(name)) {
 				errors.add(
 					ActionErrors.GLOBAL_ERROR,

@@ -113,13 +113,18 @@ public class FixedEventParametersForm extends EventParametersForm
          {
 
          //	 checks the fixationType
-          	if (validator.isEmpty(fixationType ))
+          	if (!validator.isValidOption(fixationType ))
             {
            		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("fixedeventparameters.fixationtype")));
             }
-
-            //	 checks the durationInMinutes
-         	if (durationInMinutes <= 0 )
+          	
+//       	 checks the durationInMinutes
+         	if (!validator.isNumeric(String.valueOf(durationInMinutes)))
+            {
+           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("fixedeventparameters.durationinminutes")));
+            }
+          	           //	 checks the durationInMinutes
+         	else if (durationInMinutes <= 0 )
             {
            		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("fixedeventparameters.durationinminutes")));
             }

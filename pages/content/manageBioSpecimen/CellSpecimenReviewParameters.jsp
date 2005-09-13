@@ -78,8 +78,8 @@
 
 <!-- date -->		
 		<tr>
-			<td class="formRequiredNotice" width="5">&nbsp;</td>
-			<td class="formLabel">
+			<td class="formRequiredNotice" width="5">*</td>
+			<td class="formRequiredLabel">
 				<label for="type">
 					<bean:message key="eventparameters.dateofevent"/> 
 				</label>
@@ -95,8 +95,8 @@
 
 <!-- hours & minutes -->		
 		<tr>
-			<td class="formRequiredNotice" width="5">&nbsp;</td>
-			<td class="formLabel">
+			<td class="formRequiredNotice" width="5">*</td>
+			<td class="formRequiredLabel">
 				<label for="type">
 					<bean:message key="eventparameters.timeinhours"/>&nbsp; 
 					<bean:message key="eventparameters.timeinminutes"/> 
