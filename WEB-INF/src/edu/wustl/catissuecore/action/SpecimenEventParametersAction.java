@@ -12,7 +12,6 @@ package edu.wustl.catissuecore.action;
 
 import java.io.IOException;
 import java.util.Collection;
-import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -25,7 +24,6 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -41,16 +39,19 @@ public class SpecimenEventParametersAction  extends SecureAction
 
         //Sets the operation attribute to be used in the Add/Edit FrozenEventParameters Page. 
         request.setAttribute(Constants.OPERATION, operation);
-
+        
         //Sets the minutesList attribute to be used in the Add/Edit FrozenEventParameters Page.
         request.setAttribute(Constants.MINUTESLIST, Constants.MINUTESARRAY);
 
         //Sets the hourList attribute to be used in the Add/Edit FrozenEventParameters Page.
         request.setAttribute(Constants.HOURLIST, Constants.HOURARRAY);
         
+        //The id of specimen of this event.
+        String specimenId = request.getParameter(Constants.SPECIMEN_ID); 
+        request.setAttribute(Constants.SPECIMEN_ID, specimenId);
+        
        try
        {
-        	
         	UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getBizLogic(Constants.USER_FORM_ID);
         	Collection coll =  userBizLogic.getUsers(Constants.ACTIVITY_STATUS_ACTIVE);
         	
@@ -72,7 +73,6 @@ public class SpecimenEventParametersAction  extends SecureAction
     {
     	setRequestParameters(request);
     	
-    	Logger.out.debug("(String)request.getParameter(Constants.PAGEOF)******************"+(String)request.getParameter(Constants.PAGEOF));
     	return mapping.findForward((String)request.getParameter(Constants.PAGEOF));
     }
 }
