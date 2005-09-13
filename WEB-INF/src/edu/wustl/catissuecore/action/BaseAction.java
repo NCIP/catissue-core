@@ -42,7 +42,7 @@ public abstract class BaseAction extends Action  {
 	public final ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
-		if (1==2 && request.getSession().getAttribute(Constants.SESSION_DATA) == null) {
+		if (request.getSession().getAttribute(Constants.SESSION_DATA) == null) {
 			//Forward to the Login
 		   
 			throw new UserNotAuthenticatedException();
