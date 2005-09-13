@@ -62,6 +62,11 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 	 */    	
 	protected boolean checkedButton; 	
 	
+	/**
+     * The activity status of the Participant.
+     */
+    protected String activityStatus = Constants.ACTIVITY_STATUS_ACTIVE;
+    
 	public CollectionProtocolRegistrationForm()
 	{
 		//reset();
@@ -76,7 +81,7 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
     	try
 		{
     		CollectionProtocolRegistration registration = (CollectionProtocolRegistration)abstractDomain;
-  	
+    		this.activityStatus = registration.getActivityStatus();
     		this.collectionProtocolID = registration.getCollectionProtocol().getSystemIdentifier().longValue();
   	
 		  	if(registration.getParticipant() != null)
@@ -158,16 +163,25 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
     }
 
            
-	public String getActivityStatus()
-	{
-		return null;
-	}
-    
+    /**
+     * Returns the Activity Status of the Participant.
+     * @return String the Activity Status of the Participant.
+     * @see #setActivityStatus(String)
+     */
+    public String getActivityStatus()
+    {
+        return activityStatus;
+    }
 
-	public void setActivityStatus(String activityStatus)
-	{
-		// TODO Auto-generated method stub
-	}
+    /**
+     * Sets the Activity Status of the Participant.
+     * @param activityStatus String the Activity Status of the Participant.
+     * @see #getActivityStatus()
+     */
+    public void setActivityStatus(String activityStatus)
+    {
+        this.activityStatus = activityStatus;
+    }
 	
 	/**
 	 * @return
@@ -253,7 +267,7 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 			{
 			    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocolregistration.date")));
 			}
-		
+			
 			// changes as per Bugzilla Bug 287 
 			if (checkedButton == true)
 			{
@@ -269,7 +283,11 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionProtocolReg.participantProtocolID")));
 				}
 			}
-
+			//
+			if (!validator.isValidOption(activityStatus))
+			{
+			    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocolregistration.activityStatus")));
+			}
 	   }
 	   catch(Exception excp)
 	   {

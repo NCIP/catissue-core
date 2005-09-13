@@ -40,6 +40,15 @@
             column="REGISTRATION_DATE"
         />
 
+		<property
+            name="activityStatus"
+            type="string"
+            update="true"
+            insert="true"
+            column="ACTIVITY_STATUS"
+            length="20"
+        />
+        
         <many-to-one
             name="participant"
             class="edu.wustl.catissuecore.domain.Participant"

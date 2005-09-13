@@ -68,6 +68,9 @@ public class ParticipantAction  extends SecureAction
         List raceList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_RACE);
         request.setAttribute(Constants.RACELIST, raceList);
         
+        //Sets the activityStatusList attribute to be used in the Site Add/Edit Page.
+        request.setAttribute(Constants.ACTIVITYSTATUSLIST, Constants.ACTIVITY_STATUS_VALUES);
+        
         try
 		{
         	ParticipantBizLogic dao = (ParticipantBizLogic)BizLogicFactory.getBizLogic(Constants.PARTICIPANT_FORM_ID);

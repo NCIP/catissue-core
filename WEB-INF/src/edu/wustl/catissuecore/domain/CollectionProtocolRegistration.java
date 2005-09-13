@@ -55,6 +55,11 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 	 */
 	protected CollectionProtocol collectionProtocol = new CollectionProtocol();
 
+	/**
+	 * Defines whether this CollectionProtocolRegistration record can be queried (Active) or not queried (Inactive) by any actor
+	 * */
+	protected String activityStatus;
+	
 	public CollectionProtocolRegistration()
 	{
 
@@ -190,6 +195,28 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 		this.collectionProtocol = collectionProtocol;
 	}
 
+	/**
+	 * Returns the activity status of the participant.
+	 * @hibernate.property name="activityStatus" type="string"
+	 * column="ACTIVITY_STATUS" length="20"
+	 * @return Returns the activity status of the participant.
+	 * @see #setActivityStatus(String)
+	 */
+	public String getActivityStatus()
+	{
+		return activityStatus;
+	}
+
+	/**
+	 * Sets the activity status of the participant.
+	 * @param activityStatus activity status of the participant.
+	 * @see #getActivityStatus()
+	 */
+	public void setActivityStatus(String activityStatus)
+	{
+		this.activityStatus = activityStatus;
+	}
+	
 	/** 
 	 * Set all values from CollectionProtocolRegistrationForm to the member variables of class
 	 * @param CollectionProtocolRegistrationForm object  
@@ -199,6 +226,8 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 		CollectionProtocolRegistrationForm form = (CollectionProtocolRegistrationForm) abstractForm;
 		try
 		{
+			this.activityStatus		 = form.getActivityStatus();
+			
 			this.collectionProtocol.setSystemIdentifier(new Long(form.getCollectionProtocolID()));
 			
 			if(form.isCheckedButton())

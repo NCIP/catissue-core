@@ -70,6 +70,9 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 			String[] participantsFields = {"lastName","firstName"};
 			list = bizLogic.getList(sourceObjectName, participantsFields, valueField);
 			request.setAttribute(Constants.PARTICIPANT_LIST, list);
+			
+			//Sets the activityStatusList attribute to be used in the Site Add/Edit Page.
+	        request.setAttribute(Constants.ACTIVITYSTATUSLIST, Constants.ACTIVITY_STATUS_VALUES);
 		}
 		catch (Exception exc)
 		{

@@ -500,6 +500,10 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("participant.ethnicity")));
 			}
 			
+			if (!validator.isValidOption(activityStatus))
+			{
+			    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("participant.activityStatus")));
+			}
 			checkValidNumber(socialSecurityNumber,"participant.socialSecurityNumber",errors,validator);
 			  
 			//Validations for Add-More Block
