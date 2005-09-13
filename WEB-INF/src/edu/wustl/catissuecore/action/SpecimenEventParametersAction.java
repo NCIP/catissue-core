@@ -59,6 +59,7 @@ public class SpecimenEventParametersAction  extends SecureAction
         catch (Exception exc)
         {
             Logger.out.error(exc.getMessage());
+            exc.printStackTrace();
         }
 	}
     /**
@@ -71,6 +72,7 @@ public class SpecimenEventParametersAction  extends SecureAction
     {
     	setRequestParameters(request);
     	
+    	Logger.out.debug("(String)request.getParameter(Constants.PAGEOF)******************"+(String)request.getParameter(Constants.PAGEOF));
     	return mapping.findForward((String)request.getParameter(Constants.PAGEOF));
     }
 }

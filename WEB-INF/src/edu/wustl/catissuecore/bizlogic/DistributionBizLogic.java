@@ -86,5 +86,17 @@ public class DistributionBizLogic extends DefaultBizLogic
      */
 	protected void update(DAO dao, Object obj) throws DAOException 
     {
+		Distribution distribution = (Distribution)obj;
+		dao.update(obj);
+		
+		Collection distributedItemCollection = distribution.getDistributedItemCollection();		
+		Iterator it = distributedItemCollection.iterator();
+		while(it.hasNext())
+		{
+			DistributedItem item = (DistributedItem)it.next();
+			item.setDistribution(distribution);
+			
+			dao.update(item);
+		}
     }
 }

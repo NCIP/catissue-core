@@ -18,6 +18,7 @@ import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.DistributionBizLogic;
 import edu.wustl.catissuecore.domain.CellSpecimen;
 import edu.wustl.catissuecore.domain.DistributionProtocol;
+import edu.wustl.catissuecore.domain.SpecimenProtocol;
 import edu.wustl.catissuecore.domain.FluidSpecimen;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Site;
@@ -33,10 +34,11 @@ public class  DistributionAction extends SpecimenEventParametersAction
 {
 	protected void setRequestParameters(HttpServletRequest request)
 	{
-		super.setRequestParameters(request);
 		
 		try
 		{
+			super.setRequestParameters(request);
+			
 			DistributionBizLogic dao = (DistributionBizLogic)BizLogicFactory.getBizLogic(Constants.DISTRIBUTION_FORM_ID);
 			
 			//Sets the Site list.
@@ -51,12 +53,15 @@ public class  DistributionAction extends SpecimenEventParametersAction
 			
 			//Sets the Distribution Protocol Id List.
 	        sourceObjectName = DistributionProtocol.class.getName();
-	        String [] displayNameField = {"systemIdentifier"};
+	        String [] displayName = {"title"};
 	        
-	        List protocolList = dao.getList(sourceObjectName, displayNameField, valueField);
+	        List protocolList = dao.getList(sourceObjectName, displayName, valueField);
 			request.setAttribute(Constants.DISTRIBUTIONPROTOCOLLIST, protocolList);
 			
+			
+			
 			//SET THE CELL SPECIMEN LIST
+			String [] displayNameField = {"systemIdentifier"};
 			List specimenList = dao.getList(CellSpecimen.class.getName(), displayNameField, valueField);
 			String [] cellSpecimenIds = new String[specimenList.size()];
 			cellSpecimenIds[0] = Constants.SELECT_OPTION;

@@ -116,6 +116,10 @@
 			spreqno.className="formSerialNumberField";
 			sname=(q+1);
 			spreqno.innerHTML="" + sname;
+			var rowno=(q);
+			var identifier = "value(DistributedItem:" + rowno +"_systemIdentifier)";
+			var cell1 = "<input type='hidden' name='" + identifier + "' value='' id='" + identifier + "'>";
+			spreqno.innerHTML="" + rowno+"." + cell1;
 
 			//Second Cell
 			var spreqspecimen=x.insertCell(1);
@@ -168,7 +172,6 @@
 <%
         String operation = (String) request.getAttribute(Constants.OPERATION);
         String formName;
-        String searchFormName = new String(Constants.DISTRIBUTION_SEARCH_ACTION);
 		boolean readOnlyValue=false,readOnlyForAll=false;
        
         if (operation.equals(Constants.EDIT))
@@ -198,53 +201,6 @@
 <html:form action="<%=Constants.DISTRIBUTION_ADD_ACTION%>">    
 	<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
 
-	<logic:notEqual name="operation" value="<%=Constants.ADD%>">  
-	<!-- ENTER IDENTIFIER BEGINS-->	
-	<br/>	
-	<tr>
-		<td>
-			<table summary="" cellpadding="3" cellspacing="0" border="0">
-				<tr>
-					<td class="formTitle" height="20" colspan="3">
-						<bean:message key="distribution.searchTitle"/>
-					</td>
-				</tr>	
-		  
-				<tr>
-					<td class="formRequiredNotice" width="5">*</td>
-					<td class="formRequiredLabel">
-						<label for="systemIdentifier">
-							<bean:message key="eventparameters.systemIdentifier"/>
-						</label>
-					</td>
-					<td class="formField">
-						<html:text styleClass="formFieldSized" size="30" styleId="systemIdentifier" property="systemIdentifier"/>
-					</td>
-				</tr>	
-				<%
-					String changeAction = "setFormAction('" + searchFormName
-							  + "');setOperation('" + Constants.SEARCH + "');";
-				%>
-				<tr>
-					<td align="right" colspan="3">
-					<table cellpadding="4" cellspacing="0" border="0">
-						<tr>
-							<td>
-								<html:submit styleClass="actionButton" value="Search" onclick="<%=changeAction%>" />
-							</td>
-						</tr>
-					</table>
-					</td>
-				</tr>
-			</table>
-		</td>
-	</tr>
-	<!-- ENTER IDENTIFIER ENDS-->	
-	</logic:notEqual>
-
-			  
-			   	
-			  
 	<!-- NEW distribution REGISTRATION BEGINS-->
 	<tr>
 	<td>
@@ -253,16 +209,21 @@
 		<tr>
 			<td><html:hidden property="operation" value="<%=operation%>"/></td>
 			<td><html:hidden property="counter"/></td>
+			<td><html:hidden property="systemIdentifier" /></td>
 		</tr>
-
-		<logic:notEqual name="operation" value="<%=Constants.SEARCH%>">
+		
 		<tr>
 			 <td class="formMessage" colspan="3">* indicates a required field</td>
 		</tr>
 
 		<tr>
 			 <td class="formTitle" height="20" colspan="3">
-				<bean:message key="distribution.title"/>
+				<logic:equal name="operation" value="<%=Constants.ADD%>">
+					<bean:message key="distribution.addTitle"/>
+				</logic:equal>
+				<logic:equal name="operation" value="<%=Constants.EDIT%>">
+					<bean:message key="distribution.editTitle"/>
+				</logic:equal>
 			 </td>
 		</tr>
 
@@ -287,7 +248,7 @@
 			<td class="formRequiredNotice" width="5">*</td>
 			<td class="formRequiredLabel">
 				<label for="type">
-					<bean:message key="eventparameters.user"/> 
+					<bean:message key="eventparameters.distributed.to"/> 
 				</label>	
 			</td>	
 			<td class="formField">
@@ -319,8 +280,8 @@
 			<td class="formRequiredNotice" width="5">&nbsp;</td>
 			<td class="formLabel">
 				<label for="type">
-					<bean:message key="eventparameters.timeinhours"/>&nbsp; 
-					<bean:message key="eventparameters.timeinminutes"/> 
+					<bean:message key="eventparameters.time"/>&nbsp; 
+					
 				</label>
 			</td>
 			<td class="formField">
@@ -407,6 +368,7 @@
 				<%
 				for(int i=1;i<=noOfRows;i++)
 				{
+					String dIdentifier = "value(DistributedItem:"+i+"_systemIdentifier)";
 					String itemName = "value(DistributedItem:"+i+"_Specimen_systemIdentifier)";
 					String quantity = "value(DistributedItem:"+i+"_quantity)";
 					String unitSpan = "value(DistributedItem:"+i+"_unitSpan)";
@@ -424,6 +386,7 @@
 				 <tr>
 				 	<td class="formSerialNumberField" width="5"><%=i%>.
 				 	<%--html:hidden property="<%=unitProperty%>"/--%>
+				 	<html:hidden property="<%=dIdentifier%>" />	
 				 	<input type="hidden" property="<%=unitProperty%>" id="<%=unitProperty%>" />
 				 	</td>
 				 	<td class="formField">
@@ -510,7 +473,6 @@
 			</td>
 		</tr>
 
-		</logic:notEqual>
 		</table>
 		
 	  </td>
