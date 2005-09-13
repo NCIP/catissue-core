@@ -79,7 +79,8 @@ public class FluidSpecimenReviewEventParameters extends ReviewEventParameters
         try
         {
         	FluidSpecimenReviewEventParametersForm form = (FluidSpecimenReviewEventParametersForm) abstractForm;
-            this.cellCount = new Double(form.getCellCount()); 
+           	if(form.getCellCount() != null && form.getCellCount().trim().length()>0 )
+           		this.cellCount = new Double(form.getCellCount()); 
            	super.setAllValues(form);
         }
         catch (Exception excp)

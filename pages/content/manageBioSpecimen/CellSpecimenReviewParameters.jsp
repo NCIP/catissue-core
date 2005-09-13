@@ -114,8 +114,8 @@
 
 <!-- neoplasticCellularityPercentage -->		
 		<tr>
-			<td class="formRequiredNotice" width="5">*</td>
-			<td class="formRequiredLabel">
+			<td class="formRequiredNotice" width="5">&nbsp;</td>
+			<td class="formLabel">
 				<label for="type">
 					<bean:message key="cellspecimenreviewparameters.neoplasticcellularitypercentage"/> 
 				</label>
@@ -127,8 +127,8 @@
 
 <!-- viableCellPercentage -->		
 		<tr>
-			<td class="formRequiredNotice" width="5">*</td>
-			<td class="formRequiredLabel">
+			<td class="formRequiredNotice" width="5">&nbsp;</td>
+			<td class="formLabel">
 				<label for="type">
 					<bean:message key="cellspecimenreviewparameters.viablecellpercentage"/> 
 				</label>

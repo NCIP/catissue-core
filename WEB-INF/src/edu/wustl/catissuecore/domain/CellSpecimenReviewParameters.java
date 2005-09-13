@@ -96,8 +96,11 @@ public class CellSpecimenReviewParameters extends ReviewEventParameters	implemen
         try
         {
         	CellSpecimenReviewParametersForm form = (CellSpecimenReviewParametersForm) abstractForm;
-        	this.neoplasticCellularityPercentage = new Double(form.getNeoplasticCellularityPercentage());  
-        	this.viableCellPercentage = new Double(form.getViableCellPercentage());
+           	if(form.getNeoplasticCellularityPercentage() != null && form.getNeoplasticCellularityPercentage().trim().length()>0 )
+           		this.neoplasticCellularityPercentage = new Double(form.getNeoplasticCellularityPercentage());  
+           	if(form.getViableCellPercentage() != null && form.getViableCellPercentage().trim().length()>0 )        	
+           		this.viableCellPercentage = new Double(form.getViableCellPercentage());
+           	
            	super.setAllValues(form);
         }
         catch (Exception excp)

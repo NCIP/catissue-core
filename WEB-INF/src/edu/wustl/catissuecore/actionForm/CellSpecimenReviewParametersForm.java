@@ -33,19 +33,19 @@ public class CellSpecimenReviewParametersForm extends EventParametersForm
 	/**
      * Percentage of histologically evident neoplastic cells present in the specimen.
      */
-	protected double neoplasticCellularityPercentage;
+	protected String neoplasticCellularityPercentage;
 	
 	/**
      * Percentage of viable cells in the specimen.
      */
-	protected double viableCellPercentage;
+	protected String viableCellPercentage;
 
 	/**
      * Returns the percentage of histologically evident neoplastic cells present in the specimen. 
      * @return The percentage of histologically evident neoplastic cells present in the specimen.
      * @see #setNeoplasticCellularityPercentage(double)
      */
-	public double getNeoplasticCellularityPercentage()
+	public String getNeoplasticCellularityPercentage()
 	{
 		return neoplasticCellularityPercentage;
 	}
@@ -55,7 +55,7 @@ public class CellSpecimenReviewParametersForm extends EventParametersForm
      * @param neoplasticCellularityPercentage the percentage of histologically evident neoplastic cells present in the specimen.
      * @see #getNeoplasticCellularityPercentage()
      */
-	public void setNeoplasticCellularityPercentage(double neoplasticCellularityPercentage)
+	public void setNeoplasticCellularityPercentage(String neoplasticCellularityPercentage)
 	{
 		this.neoplasticCellularityPercentage = neoplasticCellularityPercentage;
 	}
@@ -65,7 +65,7 @@ public class CellSpecimenReviewParametersForm extends EventParametersForm
      * @return The percentage of viable cells in the specimen.
      * @see #setViableCellPercentage(Double)
      */
-	public double getViableCellPercentage()
+	public String getViableCellPercentage()
 	{
 		return viableCellPercentage;
 	}
@@ -75,7 +75,7 @@ public class CellSpecimenReviewParametersForm extends EventParametersForm
      * @param viableCellPercentage the percentage of viable cells in the specimen.
      * @see #getViableCellPercentage()
      */
-	public void setViableCellPercentage(double viableCellPercentage)
+	public void setViableCellPercentage(String viableCellPercentage)
 	{
 		this.viableCellPercentage = viableCellPercentage;
 	}
@@ -96,8 +96,8 @@ public class CellSpecimenReviewParametersForm extends EventParametersForm
 	{
 		super.setAllValues(abstractDomain);
 		CellSpecimenReviewParameters cellSpecimenReviewParametersObject = (CellSpecimenReviewParameters)abstractDomain ;
-		this.neoplasticCellularityPercentage = cellSpecimenReviewParametersObject.getNeoplasticCellularityPercentage().doubleValue() ;
-		this.viableCellPercentage =  cellSpecimenReviewParametersObject.getViableCellPercentage().doubleValue() ; 
+		this.neoplasticCellularityPercentage ="" + cellSpecimenReviewParametersObject.getNeoplasticCellularityPercentage().doubleValue() ;
+		this.viableCellPercentage = "" + cellSpecimenReviewParametersObject.getViableCellPercentage().doubleValue() ; 
 	}
 	
 	/**
@@ -111,16 +111,16 @@ public class CellSpecimenReviewParametersForm extends EventParametersForm
          try
          {
          	// checks the neoplasticCellularityPercentage
-           	if (neoplasticCellularityPercentage <= 0  || Double.isNaN(neoplasticCellularityPercentage) )
+           	if (!validator.isEmpty(neoplasticCellularityPercentage)  &&  !validator.isDouble(neoplasticCellularityPercentage,0) )
             {
-           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("cellspecimenreviewparameters.neoplasticcellularitypercentage")));
+           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("cellspecimenreviewparameters.neoplasticcellularitypercentage")));
             }
 
 
          	// checks the viableCellPercentage
-           	if (viableCellPercentage <= 0  || Double.isNaN(viableCellPercentage) )
+           	if (!validator.isEmpty(viableCellPercentage) && !validator.isDouble(viableCellPercentage,0) )
             {
-           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("cellspecimenreviewparameters.viablecellpercentage")));
+           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("cellspecimenreviewparameters.viablecellpercentage")));
             }
 
          
@@ -138,7 +138,7 @@ public class CellSpecimenReviewParametersForm extends EventParametersForm
      protected void reset()
  	{
      	super.reset();
-     	this.neoplasticCellularityPercentage = 0.0;
-     	this.viableCellPercentage = 0.0;
+     	this.neoplasticCellularityPercentage = null;
+     	this.viableCellPercentage = null;
  	}
 }

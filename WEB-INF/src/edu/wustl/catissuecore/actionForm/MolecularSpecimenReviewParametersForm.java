@@ -245,8 +245,7 @@ public class MolecularSpecimenReviewParametersForm extends EventParametersForm
      * */
      public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
      {
-//     	ActionErrors errors = super.validate(mapping, request);
-     	ActionErrors errors = new ActionErrors();
+     	ActionErrors errors = super.validate(mapping, request);
          Validator validator = new Validator();
          
          try
@@ -260,11 +259,11 @@ public class MolecularSpecimenReviewParametersForm extends EventParametersForm
 //            }
 
           	Logger.out.info("qualityIndex: "+ qualityIndex );
-//            //	 checks the qualityIndex
-//         	if (validator.isEmpty(qualityIndex ))
-//            {
-//           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("molecularspecimenreviewparameters.qualityindex")));
-//            }
+            //	 checks the qualityIndex
+         	if (validator.isEmpty(qualityIndex ))
+            {
+           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("molecularspecimenreviewparameters.qualityindex")));
+            }
 
           	Logger.out.info("laneNumber: "+ laneNumber );
 //            //	 checks the laneNumber

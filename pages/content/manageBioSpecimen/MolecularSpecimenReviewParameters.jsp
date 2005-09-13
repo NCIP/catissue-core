@@ -64,8 +64,8 @@
 		<!-- Name of the molecularspecimenreviewparameters -->
 <!-- User -->		
 		<tr>
-			<td class="formRequiredNotice" width="5">&nbsp;</td>
-			<td class="formLabel">
+			<td class="formRequiredNotice" width="5">*</td>
+			<td class="formRequiredLabel">
 				<label for="eventparameters.user">
 					<bean:message key="eventparameters.user"/> 
 				</label>
@@ -128,8 +128,8 @@
 
 <!-- qualityIndex -->		
 		<tr>
-			<td class="formRequiredNotice" width="5">&nbsp;</td>
-			<td class="formLabel">
+			<td class="formRequiredNotice" width="5">*</td>
+			<td class="formRequiredLabel">
 				<label for="molecularspecimenreviewparameters.qualityindex">
 					<bean:message key="molecularspecimenreviewparameters.qualityindex"/> 
 				</label>

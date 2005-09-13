@@ -74,7 +74,7 @@ public class EmbeddedEventParametersForm extends EventParametersForm
          
 		 try
 		 {
-			if (embeddingMedium.equals(Constants.SELECT_OPTION))
+			if (!validator.isValidOption(embeddingMedium))
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("embeddedeventparameters.embeddingMedium")));
 			}

@@ -115,8 +115,8 @@
 
 <!-- cellCount -->		
 		<tr>
-			<td class="formRequiredNotice" width="5">*</td>
-			<td class="formRequiredLabel">
+			<td class="formRequiredNotice" width="5">&nbsp;</td>
+			<td class="formLabel">
 				<label for="cellCount">
 					<bean:message key="fluidspecimenrevieweventparameters.cellcount"/> 
 				</label>

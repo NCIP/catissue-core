@@ -115,8 +115,8 @@
 
 <!-- neoplasticCellularityPercentage -->		
 		<tr>
-			<td class="formRequiredNotice" width="5">*</td>
-			<td class="formRequiredLabel">
+			<td class="formRequiredNotice" width="5">&nbsp;</td>
+			<td class="formLabel">
 				<label for="type">
 					<bean:message key="tissuespecimenrevieweventparameters.neoplasticcellularitypercentage"/> 
 				</label>
@@ -128,8 +128,8 @@
 
 <!-- necrosisPercentage -->		
 		<tr>
-			<td class="formRequiredNotice" width="5">*</td>
-			<td class="formRequiredLabel">
+			<td class="formRequiredNotice" width="5">&nbsp;</td>
+			<td class="formLabel">
 				<label for="type">
 					<bean:message key="tissuespecimenrevieweventparameters.necrosispercentage"/> 
 				</label>
@@ -141,8 +141,8 @@
 
 <!-- lymphocyticPercentage -->		
 		<tr>
-			<td class="formRequiredNotice" width="5">*</td>
-			<td class="formRequiredLabel">
+			<td class="formRequiredNotice" width="5">&nbsp;</td>
+			<td class="formLabel">
 				<label for="type">
 					<bean:message key="tissuespecimenrevieweventparameters.lymphocyticpercentage"/> 
 				</label>
@@ -154,8 +154,8 @@
 
 <!-- totalCellularityPercentage -->		
 		<tr>
-			<td class="formRequiredNotice" width="5">*</td>
-			<td class="formRequiredLabel">
+			<td class="formRequiredNotice" width="5">&nbsp;</td>
+			<td class="formLabel">
 				<label for="type">
 					<bean:message key="tissuespecimenrevieweventparameters.totalcellularitypercentage"/> 
 				</label>
@@ -167,8 +167,8 @@
 
 <!-- histologicalQuality -->		
 		<tr>
-			<td class="formRequiredNotice" width="5">*</td>
-			<td class="formRequiredLabel">
+			<td class="formRequiredNotice" width="5">&nbsp;</td>
+			<td class="formLabel">
 				<label for="type">
 					<bean:message key="tissuespecimenrevieweventparameters.histologicalquality"/> 
 				</label>

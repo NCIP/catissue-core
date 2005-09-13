@@ -33,24 +33,24 @@ public class TissueSpecimenReviewEventParametersForm extends EventParametersForm
 	/**
      * Percentage of histologically evident neoplastic cells present in the tissue specimen.
      */
-	protected double neoplasticCellularityPercentage;
+	protected String neoplasticCellularityPercentage;
 	
 	/**
      * Percentage of specimen that is histologically necrotic.
      */
-	protected double necrosisPercentage;
+	protected String necrosisPercentage;
 	
 	/**
      * Percentage of histologically evident lymphocytes in the tissue specimen.
      */
-	protected double lymphocyticPercentage;
+	protected String lymphocyticPercentage;
 	
 	/**
      * Percentage of total cellularity of the specimen.  Note that TOTCELL-NEOCELL-LYMPHCELL= % cellularity 
      * of other stromal, etc. cell types.  Also Note that 100-TOTCELL-NECROSIS= % of tissue containing a 
      * cellular material.
      */
-	protected double totalCellularityPercentage;
+	protected String totalCellularityPercentage;
 	
 	/**
      * Histological Quality of the specimen.
@@ -62,7 +62,7 @@ public class TissueSpecimenReviewEventParametersForm extends EventParametersForm
      * @return The percentage of histologically evident neoplastic cells present in the tissue specimen.
      * @see #setNeoplasticCellularityPercentage(double)
      */
-	public double getNeoplasticCellularityPercentage()
+	public String getNeoplasticCellularityPercentage()
 	{
 		return neoplasticCellularityPercentage;
 	}
@@ -72,7 +72,7 @@ public class TissueSpecimenReviewEventParametersForm extends EventParametersForm
      * @param neoplasticCellularityPercentage the percentage of histologically evident neoplastic cells present in the specimen.
      * @see #getNeoplasticCellularityPercentage()
      */
-	public void setNeoplasticCellularityPercentage(double neoplasticCellularityPercentage)
+	public void setNeoplasticCellularityPercentage(String neoplasticCellularityPercentage)
 	{
 		this.neoplasticCellularityPercentage = neoplasticCellularityPercentage;
 	}
@@ -82,7 +82,7 @@ public class TissueSpecimenReviewEventParametersForm extends EventParametersForm
      * @return The percentage of specimen that is histologically necrotic.
      * @see #setNecrosisPercentage(double)
      */
-	public double getNecrosisPercentage()
+	public String getNecrosisPercentage()
 	{
 		return necrosisPercentage;
 	}
@@ -92,7 +92,7 @@ public class TissueSpecimenReviewEventParametersForm extends EventParametersForm
      * @param necrosisPercentage the percentage of specimen that is histologically necrotic.
      * @see #getNecrosisPercentage()
      */
-	public void setNecrosisPercentage(double necrosisPercentage)
+	public void setNecrosisPercentage(String necrosisPercentage)
 	{
 		this.necrosisPercentage = necrosisPercentage;
 	}
@@ -102,7 +102,7 @@ public class TissueSpecimenReviewEventParametersForm extends EventParametersForm
      * @return The percentage of histologically evident lymphocytes in the tissue specimen.
      * @see #setLymphocyticPercentage(double)
      */
-	public double getLymphocyticPercentage()
+	public String getLymphocyticPercentage()
 	{
 		return lymphocyticPercentage;
 	}
@@ -112,7 +112,7 @@ public class TissueSpecimenReviewEventParametersForm extends EventParametersForm
      * @param lymphocyticPercentage the percentage of histologically evident lymphocytes in the tissue specimen.
      * @see #getLymphocyticPercentage()
      */
-	public void setLymphocyticPercentage(double lymphocyticPercentage)
+	public void setLymphocyticPercentage(String lymphocyticPercentage)
 	{
 		this.lymphocyticPercentage = lymphocyticPercentage;
 	}
@@ -122,7 +122,7 @@ public class TissueSpecimenReviewEventParametersForm extends EventParametersForm
      * @return The total cellularity percentage.
      * @see #setTotalCellularityPercentage(double)
      */
-	public double getTotalCellularityPercentage()
+	public String getTotalCellularityPercentage()
 	{
 		return totalCellularityPercentage;
 	}
@@ -132,7 +132,7 @@ public class TissueSpecimenReviewEventParametersForm extends EventParametersForm
      * @param totalCellularityPercentage the total cellularity percentage.
      * @see #getTotalCellularityPercentage()
      */
-	public void setTotalCellularityPercentage(double totalCellularityPercentage)
+	public void setTotalCellularityPercentage(String totalCellularityPercentage)
 	{
 		this.totalCellularityPercentage = totalCellularityPercentage;
 	}
@@ -175,10 +175,10 @@ public class TissueSpecimenReviewEventParametersForm extends EventParametersForm
 		super.setAllValues(abstractDomain);
 		TissueSpecimenReviewEventParameters tissueSpecimenReviewParametersObject = (TissueSpecimenReviewEventParameters)abstractDomain ;
 		
-		this.neoplasticCellularityPercentage = tissueSpecimenReviewParametersObject.getNeoplasticCellularityPercentage().doubleValue() ;
-		this.necrosisPercentage = tissueSpecimenReviewParametersObject.getNecrosisPercentage().doubleValue() ;
-		this.lymphocyticPercentage = tissueSpecimenReviewParametersObject.getLymphocyticPercentage().doubleValue();
-		this.totalCellularityPercentage =tissueSpecimenReviewParametersObject.getTotalCellularityPercentage().doubleValue();
+		this.neoplasticCellularityPercentage = "" + tissueSpecimenReviewParametersObject.getNeoplasticCellularityPercentage().doubleValue() ;
+		this.necrosisPercentage = "" + tissueSpecimenReviewParametersObject.getNecrosisPercentage().doubleValue() ;
+		this.lymphocyticPercentage ="" + tissueSpecimenReviewParametersObject.getLymphocyticPercentage().doubleValue();
+		this.totalCellularityPercentage ="" + tissueSpecimenReviewParametersObject.getTotalCellularityPercentage().doubleValue();
 		this.histologicalQuality = tissueSpecimenReviewParametersObject.getHistologicalQuality();
 	}
 	
@@ -194,39 +194,40 @@ public class TissueSpecimenReviewEventParametersForm extends EventParametersForm
          {
  
 //         	// checks the neoplasticCellularityPercentage
-           	if (neoplasticCellularityPercentage <= 0  || Double.isNaN(neoplasticCellularityPercentage) )
+           	if (!validator.isEmpty( neoplasticCellularityPercentage) && !validator.isDouble( neoplasticCellularityPercentage,0 ) )
             {
-           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("tissuespecimenrevieweventparameters.neoplasticcellularitypercentage")));
+           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("tissuespecimenrevieweventparameters.neoplasticcellularitypercentage")));
             }
-
+//
  
 //         	// checks the necrosisPercentage
-           	if (necrosisPercentage <= 0  || Double.isNaN(necrosisPercentage) )
+           	if (!validator.isEmpty(necrosisPercentage) && !validator.isDouble(necrosisPercentage,0) )
             {
-           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("tissuespecimenrevieweventparameters.necrosispercentage")));
+           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("tissuespecimenrevieweventparameters.necrosispercentage")));
             }
-
+//
  
 //         	// checks the lymphocyticPercentage
-           	if (lymphocyticPercentage <= 0  || Double.isNaN(lymphocyticPercentage) )
-            {
-           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("tissuespecimenrevieweventparameters.lymphocyticpercentage")));
-            }
+           	if (!validator.isEmpty(lymphocyticPercentage) && !validator.isDouble(lymphocyticPercentage,0) )
 
+            {
+           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("tissuespecimenrevieweventparameters.lymphocyticpercentage")));
+            }
+//
  
 //         	// checks the totalCellularityPercentage
-           	if (totalCellularityPercentage <= 0  || Double.isNaN(totalCellularityPercentage) )
+       		if (!validator.isEmpty(totalCellularityPercentage) && !validator.isDouble(totalCellularityPercentage,0) )
             {
-           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("tissuespecimenrevieweventparameters.totalcellularitypercentage")));
+           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("tissuespecimenrevieweventparameters.totalcellularitypercentage")));
             }
-
+//
  
 //         	// checks the histologicalQuality
-           	if (!validator.isValidOption(histologicalQuality) )
-            {
-           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("tissuespecimenrevieweventparameters.histologicalquality")));
-            }
-        
+//           	if (!validator.isValidOption(histologicalQuality) )
+//            {
+//           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("tissuespecimenrevieweventparameters.histologicalquality")));
+//            }
+//        
          }
          catch(Exception excp)
          {
@@ -240,10 +241,10 @@ public class TissueSpecimenReviewEventParametersForm extends EventParametersForm
 	 protected void reset()
 	 {
 	 	super.reset();
-        this.necrosisPercentage = 0.0;
-        this.neoplasticCellularityPercentage = 0.0;
-        this.lymphocyticPercentage = 0.0;
-        this.totalCellularityPercentage = 0.0;
+        this.necrosisPercentage = null;
+        this.neoplasticCellularityPercentage = null;
+        this.lymphocyticPercentage = null;
+        this.totalCellularityPercentage = null;
         this.histologicalQuality = null;
 
 	 }

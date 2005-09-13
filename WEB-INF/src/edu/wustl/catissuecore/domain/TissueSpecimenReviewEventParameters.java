@@ -180,10 +180,15 @@ public class TissueSpecimenReviewEventParameters extends ReviewEventParameters
         try
         {
         	TissueSpecimenReviewEventParametersForm form = (TissueSpecimenReviewEventParametersForm) abstractForm;
-        	this.neoplasticCellularityPercentage = new Double(form.getNeoplasticCellularityPercentage());  
-        	this.necrosisPercentage = new Double (form.getNecrosisPercentage());
-        	this.totalCellularityPercentage = new Double(form.getTotalCellularityPercentage());
-        	this.lymphocyticPercentage = new Double(form.getLymphocyticPercentage());
+        	if(form.getNeoplasticCellularityPercentage() != null && form.getNeoplasticCellularityPercentage().trim().length()>0 )
+        		this.neoplasticCellularityPercentage = new Double(form.getNeoplasticCellularityPercentage()); 
+        	if(form.getNecrosisPercentage() != null && form.getNecrosisPercentage().trim().length()>0 )        	
+        		this.necrosisPercentage = new Double(form.getNecrosisPercentage());
+        	if(form.getTotalCellularityPercentage() != null && form.getTotalCellularityPercentage().trim().length()>0 )
+        		this.totalCellularityPercentage = new Double(form.getTotalCellularityPercentage());
+        	if(form.getLymphocyticPercentage() != null && form.getLymphocyticPercentage().trim().length()>0 )
+        		this.lymphocyticPercentage = new Double(form.getLymphocyticPercentage());
+        	
         	this.histologicalQuality = form.getHistologicalQuality() ;
            	super.setAllValues(form);
         }

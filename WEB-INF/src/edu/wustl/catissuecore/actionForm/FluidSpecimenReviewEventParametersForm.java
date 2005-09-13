@@ -33,14 +33,14 @@ public class FluidSpecimenReviewEventParametersForm extends EventParametersForm
 	/**
      * Cell Count.
      */
-	protected double cellCount;
+	protected String cellCount;
 
 	/**
      * Returns the cell count. 
      * @return The cell count.
      * @see #setCellCount(double)
      */
-	public double getCellCount()
+	public String getCellCount()
 	{
 		return cellCount;
 	}
@@ -50,7 +50,7 @@ public class FluidSpecimenReviewEventParametersForm extends EventParametersForm
      * @param cellCount the cell count.
      * @see #getCellCount()
      */
-	public void setCellCount(double cellCount)
+	public void setCellCount(String cellCount)
 	{
 		this.cellCount = cellCount;
 	}
@@ -72,7 +72,7 @@ public class FluidSpecimenReviewEventParametersForm extends EventParametersForm
 	{
 		super.setAllValues(abstractDomain);
 		FluidSpecimenReviewEventParameters fluidSpecimenReviewEventParametersObject = (FluidSpecimenReviewEventParameters)abstractDomain ;
-		this.cellCount = fluidSpecimenReviewEventParametersObject.getCellCount().doubleValue() ; 
+		this.cellCount = "" + fluidSpecimenReviewEventParametersObject.getCellCount().doubleValue() ; 
 	}
 	
 	/**
@@ -87,9 +87,9 @@ public class FluidSpecimenReviewEventParametersForm extends EventParametersForm
          {
  
 //         	// checks the cellCount
-           	if (cellCount <= 0  || Double.isNaN(cellCount) )
+           	if (!validator.isEmpty(cellCount) && !validator.isDouble(cellCount,0) )
             {
-           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("fluidspecimenrevieweventparameters.cellcount")));
+           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("fluidspecimenrevieweventparameters.cellcount")));
             }
          }
          catch(Exception excp)
@@ -107,7 +107,7 @@ public class FluidSpecimenReviewEventParametersForm extends EventParametersForm
      protected void reset()
      {
          super.reset();
-         this.cellCount = 0.0;
+         this.cellCount = null;
       }
        
 
