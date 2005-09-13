@@ -73,7 +73,7 @@
             update="true"
             insert="true"
             column="GENOTYPE"
-            length="20"
+            length="50"
         />
 
         <property
