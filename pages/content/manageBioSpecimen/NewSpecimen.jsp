@@ -141,33 +141,33 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 			else if(element.value == "Check In Check Out")
 				action = "/catissuecore/CheckInCheckOutEventParameters.do?operation=add&pageOf=pageOfCheckInCheckOutEventParameters";
 			else if(element.value == "Collection")
-				action = "/catissuecore/CollectionEventParameters.do?operation=add";
+				action = "/catissuecore/CollectionEventParameters.do?operation=add&pageOf=pageOfCollectionEventParameters";
 			else if(element.value == "Disposal")
-				action = "/catissuecore/DisposalEventParameters.do?operation=add";
+				action = "/catissuecore/DisposalEventParameters.do?operation=add&pageOf=pageOfDisposalEventParameters";
 			else if(element.value == "Embedded")
-				action = "/catissuecore/EmbeddedEventParameters.do?operation=add";
+				action = "/catissuecore/EmbeddedEventParameters.do?operation=add&pageOf=pageOfEmbeddedEventParameters";
 			else if(element.value == "Fixed")
-				action = "/catissuecore/FixedEventParameters.do?operation=add";
+				action = "/catissuecore/FixedEventParameters.do?operation=add&pageOf=pageOfFixedEventParameters";
 			else if(element.value == "Fluid Specimen Review")
-				action = "/catissuecore/FluidSpecimenReviewEventParameters.do?operation=add";
+				action = "/catissuecore/FluidSpecimenReviewEventParameters.do?operation=add&pageOf=pageOfFluidSpecimenReviewParameters";
 			else if(element.value == "Frozen")
-				action = "/catissuecore/FrozenEventParameters.do?operation=add";
+				action = "/catissuecore/FrozenEventParameters.do?operation=add&pageOf=pageOfFrozenEventParameters";
 			else if(element.value == "Molecular Specimen Review")
-				action = "/catissuecore/MolecularSpecimenReviewParameters.do?operation=add";
+				action = "/catissuecore/MolecularSpecimenReviewParameters.do?operation=add&pageOf=pageOfMolecularSpecimenReviewParameters";
 			else if(element.value == "Procedure")
-				action = "/catissuecore/ProcedureEventParameters.do?operation=add";
+				action = "/catissuecore/ProcedureEventParameters.do?operation=add&pageOf=pageOfProcedureEventParameters";
 			else if(element.value == "Received")
-				action = "/catissuecore/ReceivedEventParameters.do?operation=add";
+				action = "/catissuecore/ReceivedEventParameters.do?operation=add&pageOf=pageOfReceivedEventParameters";
 			else if(element.value == "Spun")
-				action = "/catissuecore/SpunEventParameters.do?operation=add";
+				action = "/catissuecore/SpunEventParameters.do?operation=add&pageOf=pageOfSpunEventParameters";
 			else if(element.value == "Thaw")
-				action = "/catissuecore/ThawEventParameters.do?operation=add";
+				action = "/catissuecore/ThawEventParameters.do?operation=add&pageOf=pageOfThawEventParameters";
 			else if(element.value == "Tissue Specimen Review")
-				action = "/catissuecore/TissueSpecimenReviewEventParameters.do?operation=add";
+				action = "/catissuecore/TissueSpecimenReviewEventParameters.do?operation=add&pageOf=pageOfTissueSpecimenReviewParameters";
 			else if(element.value == "Transfer")
-				action = "/catissuecore/TransferEventParameters.do?operation=add";
+				action = "/catissuecore/TransferEventParameters.do?operation=add&pageOf=pageOfTransferEventParameters";
 						
-			action = action + "&specimenIdentifier=" + specimenIdentifier;
+			action = action + "&specimenId=" + specimenIdentifier;
 			addNew.href = action;
 			
 			if(element.value == "<%=Constants.SELECT_OPTION%>")
@@ -793,7 +793,7 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
   	 <table summary="" cellpadding="3" cellspacing="0" border="0" width="500">
    	 	<tr>
 			<td>
-				<div STYLE="overflow: auto; width:600; height: 340; padding:0px; margin: 0px; border: 1px solid" id="eventGrid">
+				<div STYLE="overflow: auto; width:550; height: 200; padding:0px; margin: 0px; border: 1px solid" id="eventGrid">
 				<script>
 				
 					//	create ActiveWidgets Grid javascript object.
