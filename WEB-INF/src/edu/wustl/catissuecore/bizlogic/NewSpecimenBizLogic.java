@@ -16,8 +16,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-//import org.hibernate.HibernateException;
-
 import edu.wustl.catissuecore.dao.DAO;
 import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.ExternalIdentifier;
@@ -71,9 +69,8 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
     public void update(DAO dao, Object obj) throws DAOException
     {
     	Specimen specimen = (Specimen)obj;
-
-		setSpecimenAttributes(dao,specimen);
-				
+    	
+//		setSpecimenAttributes(dao,specimen);
 		dao.update(specimen.getSpecimenCharacteristics());
 		dao.update(specimen);
 		
@@ -91,7 +88,6 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		}
     }
     
-    
     private void setSpecimenAttributes(DAO dao, Specimen specimen) throws DAOException
 	{
     	//Load & set Specimen Collection Group if present
@@ -105,7 +101,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 				specimen.setSpecimenCollectionGroup(spg);
 			}
 		}
-
+		
 		//Load & set Parent Specimen if present
 		if(specimen.getParentSpecimen() != null)
 		{
@@ -117,7 +113,6 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 				specimen.setParentSpecimen(parentSpecimen);
 			}
 		}
-		
 		
 		//Load & set Storage Container
 		List scList = dao.retrieve(StorageContainer.class.getName(), "systemIdentifier", specimen.getStorageContainer().getSystemIdentifier());
@@ -149,7 +144,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 				}
 			}
 		}
-
+		
 		specimen.setBiohazardCollection(set);
 	}
 }
