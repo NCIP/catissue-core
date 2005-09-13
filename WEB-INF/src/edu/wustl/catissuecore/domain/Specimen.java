@@ -505,7 +505,6 @@ public class Specimen extends AbstractDomainObject implements Serializable
             {
 	        	NewSpecimenForm form = (NewSpecimenForm) abstractForm;
 	            
-	            this.systemIdentifier = new Long(form.getSystemIdentifier());
 	            this.activityStatus = form.getActivityStatus();
 	            this.barcode = form.getBarcode();
 	            this.comments = form.getComments();
@@ -539,7 +538,6 @@ public class Specimen extends AbstractDomainObject implements Serializable
             {
             	CreateSpecimenForm form = (CreateSpecimenForm)abstractForm;
             	
-            	this.systemIdentifier = new Long(form.getSystemIdentifier());
             	this.activityStatus = form.getActivityStatus();
             	this.barcode = form.getBarcode();
             	this.comments = form.getComments();

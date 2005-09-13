@@ -65,12 +65,12 @@ public class ReceivedEventParameters extends SpecimenEventParameters
     {
         try
         {
+            ReceivedEventParametersForm form = (ReceivedEventParametersForm) abstractForm;
+            super.setAllValues(form);
 //        	//call to event parameters setallvalue method
 //        	super.setAllValues(abstractForm);
-        	ReceivedEventParametersForm form = (ReceivedEventParametersForm) abstractForm;
             this.receivedQuality = form.getReceivedQuality();  
             Logger.out.debug("receivedQuality: "+receivedQuality);
-           	super.setAllValues(form);
         }
         catch (Exception excp)
         {
