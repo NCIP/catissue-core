@@ -98,6 +98,11 @@ public class SpecimenForm extends AbstractActionForm
      * Reference to dimensional position two of the specimen in Storage Container.
      */
     protected String positionDimensionTwo;
+    
+    /**
+     * Barcode assigned to the specimen.
+     */
+    protected String barcode;
 
     /**
      * Comments on specimen.
@@ -283,6 +288,22 @@ public class SpecimenForm extends AbstractActionForm
         this.positionDimensionTwo = positionDimensionTwo;
     }
 
+    /**
+     * @return Returns the barcode.
+     */
+    public String getBarcode()
+    {
+        return barcode;
+    }
+    
+    /**
+     * @param barcode The barcode to set.
+     */
+    public void setBarcode(String barcode)
+    {
+        this.barcode = barcode;
+    }
+    
     /**
      * @return Returns the quantity.
      */
@@ -502,14 +523,14 @@ public class SpecimenForm extends AbstractActionForm
             if (operation.equals(Constants.ADD)
                     || operation.equals(Constants.EDIT))
             {
-                if (className.equals(Constants.SELECT_OPTION))
+                if (className.equals("-1"))
                 {
                     errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
                             "errors.item.required", ApplicationProperties
                                     .getValue("specimen.type")));
                 }
 
-                if (type.equals(Constants.SELECT_OPTION))
+                if (type.equals("-1"))
                 {
                     errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
                             "errors.item.required", ApplicationProperties
@@ -537,40 +558,18 @@ public class SpecimenForm extends AbstractActionForm
                                     .getValue("specimen.quantity")));
                 }
 
-                if (storageContainer.equals(""))
-                {
-                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-                            "errors.item.required", ApplicationProperties
-                                    .getValue("specimen.storageContainer")));
-                }
-
-                if (positionDimensionOne.equals(""))
-                {
-                    errors
-                            .add(
-                                    ActionErrors.GLOBAL_ERROR,
-                                    new ActionError(
-                                            "errors.item.required",
-                                            ApplicationProperties
-                                                    .getValue("specimen.positionDimensionOne")));
-                }
-                
                 if (validator.isEmpty(positionInStorageContainer))
                 {
                     errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
                             "errors.item.required", ApplicationProperties
                                     .getValue("specimen.positionInStorageContainer")));
                 }
-
-                if (positionDimensionTwo.equals(""))
+                
+                if (validator.isEmpty(barcode))
                 {
-                    errors
-                            .add(
-                                    ActionErrors.GLOBAL_ERROR,
-                                    new ActionError(
-                                            "errors.item.required",
-                                            ApplicationProperties
-                                                    .getValue("specimen.positionDimensionTwo")));
+                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+                            "errors.item.required", ApplicationProperties
+                                    .getValue("specimen.barcode")));
                 }
 
                 //Validations for External Identifier Add-More Block
