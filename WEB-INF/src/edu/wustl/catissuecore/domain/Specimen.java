@@ -507,7 +507,7 @@ public class Specimen extends AbstractDomainObject implements Serializable
 	            
 	            this.systemIdentifier = new Long(form.getSystemIdentifier());
 	            this.activityStatus = form.getActivityStatus();
-	            //this.barcode = form.
+	            this.barcode = form.getBarcode();
 	            this.comments = form.getComments();
 	            this.positionDimensionOne = new Integer(form.getPositionDimensionOne());
 	            this.positionDimensionTwo = new Integer(form.getPositionDimensionTwo());
@@ -541,6 +541,7 @@ public class Specimen extends AbstractDomainObject implements Serializable
             	
             	this.systemIdentifier = new Long(form.getSystemIdentifier());
             	this.activityStatus = form.getActivityStatus();
+            	this.barcode = form.getBarcode();
             	this.comments = form.getComments();
             	this.positionDimensionOne = new Integer(form.getPositionDimensionOne());
 	            this.positionDimensionTwo = new Integer(form.getPositionDimensionTwo());
@@ -550,7 +551,6 @@ public class Specimen extends AbstractDomainObject implements Serializable
             	this.parentSpecimen = new CellSpecimen();
             	
             	this.parentSpecimen.setSystemIdentifier(new Long(form.getParentSpecimenId()));
-            	
             	//Getting the Map of External Identifiers
 	            Map extMap = form.getExternalIdentifier();
 		        
