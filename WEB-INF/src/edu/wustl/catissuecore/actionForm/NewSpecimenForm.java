@@ -393,17 +393,17 @@ public class NewSpecimenForm extends SpecimenForm
                 {
                     errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("specimen.specimenCollectionGroupId")));
                 }
-             	if (tissueSite.equals(Constants.SELECT_OPTION))
+             	if (tissueSite.equals("-1"))
                 {
                     errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("specimen.tissueSite")));
                 }
              	
-             	if (tissueSide.equals(Constants.SELECT_OPTION))
+             	if (tissueSide.equals("-1"))
                 {
                     errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("specimen.tissueSide")));
                 }
              	
-             	if (pathologicalStatus.equals(Constants.SELECT_OPTION))
+             	if (pathologicalStatus.equals("-1"))
                 {
                     errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("specimen.pathologicalStatus")));
                 }
