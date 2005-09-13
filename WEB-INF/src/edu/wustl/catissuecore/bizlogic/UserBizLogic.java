@@ -47,7 +47,6 @@ public class UserBizLogic extends DefaultBizLogic
     {
         try
         {
-            Logger.out.debug("IN UserBizLogic insert***************************");
             User user = (User) obj;
             
             Department department = null;

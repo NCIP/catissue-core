@@ -42,7 +42,6 @@ public class CreateSpecimenBizLogic extends DefaultBizLogic
 		Specimen specimen = (Specimen)obj;
 		
 		specimen.setSpecimenCollectionGroup(null);
-		
         //Load & set the Parent Specimen of this specimen
 		List list = dao.retrieve(Specimen.class.getName(), "systemIdentifier", specimen.getParentSpecimen().getSystemIdentifier());
 		
