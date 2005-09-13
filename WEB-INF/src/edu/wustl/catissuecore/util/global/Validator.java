@@ -179,7 +179,7 @@ public class Validator
     	
     }
 
-    public boolean isDouble(String dblString,int zero)
+    public boolean isDouble(String dblString,int positiveCheck)
     {
         try
         {
@@ -189,10 +189,13 @@ public class Validator
             {
                 return false;
             }
-            if (zero==0 &&  dblValue <= 0) 
+            if(positiveCheck >0 )
             {
-                return false;
-            }
+ 	            if (dblValue <= 0)
+ 	            {
+ 	                return false;
+ 	            }
+            }     
       
             return true;
         }
