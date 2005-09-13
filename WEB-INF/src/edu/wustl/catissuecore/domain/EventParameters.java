@@ -74,7 +74,7 @@ public abstract class EventParameters extends AbstractDomainObject implements ja
      * Returns date and time of the event. 
      * @return Date and time of the event.
      * @see #setTimestamp(Date)
-     * @hibernate.property name="timestamp" type="date" 
+     * @hibernate.property name="timestamp" type="timestamp" 
      * column="EVENT_TIMESTAMP"
      */
 	public Date getTimestamp()
@@ -145,7 +145,7 @@ public abstract class EventParameters extends AbstractDomainObject implements ja
 		{
 			EventParametersForm form = (EventParametersForm)abstractForm ;
 			this.comments = form.getComments();
-			Calendar calender = Calendar.getInstance();
+			Calendar calendar = Calendar.getInstance();
 			
 			
 			user.setSystemIdentifier(new Long(form.getUserId()));
@@ -153,9 +153,18 @@ public abstract class EventParameters extends AbstractDomainObject implements ja
 			if (form.getDateOfEvent() != null && form.getDateOfEvent().trim().length()!=0  )
 			{
 			    Date date = Utility.parseDate(form.getDateOfEvent(),Constants.DATE_PATTERN_MM_DD_YYYY);
-				calender.setTime(date);
+			    date.setHours(Integer.parseInt(form.getTimeInHours()));
+			    date.setMinutes(Integer.parseInt(form.getTimeInMinutes()));
 				
-				this.timestamp = Utility.parseDate(form.getDateOfEvent(),Constants.DATE_PATTERN_MM_DD_YYYY);
+			    calendar.setTime(date);
+			    Logger.out.debug("\n----------------------------------\n");
+			    Logger.out.debug(calendar.getTime());
+			    
+				this.timestamp = date;  
+				Logger.out.debug(date);
+			    Logger.out.debug("\n----------------------------------\n");
+
+//				this.timestamp = Utility.parseDate(form.getDateOfEvent(),Constants.DATE_PATTERN_MM_DD_YYYY);
 //				this.timestamp.setHours(Integer.parseInt(form.getTimeInHours()));
 //				this.timestamp.setMinutes(Integer.parseInt(form.getTimeInMinutes()));
 			}
