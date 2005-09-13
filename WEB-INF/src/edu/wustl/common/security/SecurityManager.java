@@ -15,9 +15,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 
-import javax.servlet.http.HttpServletRequest;
-
-import edu.wustl.catissuecore.bizlogic.AbstractBizLogic;
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.util.Permissions;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -1027,8 +1024,12 @@ public class SecurityManager implements Permissions
     {
         try
         {
-            return getAuthorizationManager().checkPermission(userName,
+            boolean isAuthorized = getAuthorizationManager().checkPermission(userName,
                     objectId, privilegeName);
+            Logger.out.debug(" User:" + userName + " objectId:" + objectId
+                    + " privilegeName:" + privilegeName + " isAuthorized:"
+                    + isAuthorized);
+            return isAuthorized;
         }
         catch (CSException e)
         {
