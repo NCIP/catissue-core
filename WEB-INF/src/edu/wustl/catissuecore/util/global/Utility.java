@@ -11,6 +11,7 @@ package edu.wustl.catissuecore.util.global;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -88,4 +89,15 @@ public class Utility
 //	        System.out.println("Exception"+pexcp.getMessage());
 //	    }
 //    }
+	
+	public static String[] getTime(Date date)
+	{
+		String []time =new String[2];
+		Calendar cal = Calendar.getInstance();
+ 		cal.setTime(date);
+ 		time[0]= Integer.toString(cal.get(Calendar.HOUR_OF_DAY));
+ 		time[1]= Integer.toString(cal.get(Calendar.MINUTE));
+ 		return time;
+	}
+
 }

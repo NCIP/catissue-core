@@ -151,16 +151,21 @@ public class Distribution extends SpecimenEventParameters implements java.io.Ser
 	{
 	    try
 	    {
+	    	super.setAllValues(abstractForm);
+	    	
 	    	DistributionForm form = (DistributionForm) abstractForm;
-	        super.setAllValues(form);
+	    	
 	        toSite.setSystemIdentifier(new Long(form.getToSite()));
 	        fromSite.setSystemIdentifier(new Long(form.getFromSite()));
+	        
 	        distributionProtocol.setSystemIdentifier(new Long(form.getDistributionProtocolId()));
 	        
 	        Map map = form.getValues();
+	        Logger.out.debug("map "+map);
 	        map = fixMap(map);
 	        MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.domain");
 	        distributedItemCollection = parser.generateData(map);
+	        Logger.out.debug("distributedItemCollection "+distributedItemCollection);
 	    }
 	    catch(Exception excp)
 	    {

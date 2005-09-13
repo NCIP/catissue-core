@@ -11,7 +11,9 @@
 
 package edu.wustl.catissuecore.actionForm;
 
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,10 +23,20 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
+import edu.wustl.catissuecore.domain.CellSpecimen;
 import edu.wustl.catissuecore.domain.Distribution;
+import edu.wustl.catissuecore.domain.FluidSpecimen;
+import edu.wustl.catissuecore.domain.MolecularSpecimen;
+import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.domain.DistributedItem;
+import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Validator;
+
+import edu.wustl.common.util.Utility;
+import edu.wustl.common.util.logger.Logger;
+import edu.wustl.catissuecore.domain.SpecimenRequirement;
 
 /**
   *
@@ -51,11 +63,47 @@ public class DistributionForm extends EventParametersForm
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
 		super.setAllValues(abstractDomain);
+		Logger.out.debug("setAllValues of DistributionForm"); 
 		Distribution distributionObject = (Distribution)abstractDomain ;
+		this.distributionProtocolId = String.valueOf(distributionObject.getDistributionProtocol().getSystemIdentifier());
 		this.fromSite = String.valueOf(distributionObject.getFromSite().getSystemIdentifier());
 		this.toSite = String.valueOf(distributionObject.getToSite().getSystemIdentifier());
-		this.userId = distributionObject.getUser().getSystemIdentifier().longValue();
-		this.distributionProtocolId = String.valueOf(distributionObject.getDistributionProtocol().getSystemIdentifier());
+		//this.userId = distributionObject.getUser().getSystemIdentifier().longValue();
+		Collection distributedItemCollection = distributionObject.getDistributedItemCollection();
+		
+		if(distributedItemCollection != null)
+		{
+			values = new HashMap();
+			
+			Iterator it = distributedItemCollection.iterator();
+			int i=1;
+			
+			while(it.hasNext())
+			{
+				
+				String key1 = "DistributedItem:"+i+"_systemIdentifier";
+				String key2 = "DistributedItem:"+i+"_Specimen_systemIdentifier";
+				String key3 = "DistributedItem:"+i+"_quantity";
+				String key4 = "DistributedItem:"+i+"_unitSpan";
+				String key5 = "DistributedItem:"+i+"_Specimen_className";				
+				
+				DistributedItem dItem = (DistributedItem)it.next();
+				String unit = getUnitSpan(dItem.getSpecimen());
+				values.put(key1,dItem.getSystemIdentifier());
+				values.put(key2,dItem.getSpecimen().getSystemIdentifier());
+				values.put(key3,dItem.getQuantity());
+				values.put(key4,unit);
+				values.put(key5,dItem.getSpecimen().getClassName());
+				
+				i++;
+			}
+			Logger.out.debug("Display Map Values"+values); 
+			counter = distributedItemCollection.size();
+		}
+		
+		//At least one row should be displayed in ADD MORE therefore
+		if(counter == 0)
+			counter = 1;
 	}
 	
 	
@@ -63,19 +111,22 @@ public class DistributionForm extends EventParametersForm
 	{
 		ActionErrors errors = super.validate(mapping, request);
 		Validator validator = new Validator();
-
-		if(distributionProtocolId.equals("-1"))
+		Logger.out.debug("Inside validate function");
+		if(!validator.isValidOption(distributionProtocolId))
 		{
+			Logger.out.debug("dist prot");
 			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("distribution.protocol")));
 		}
 		
-		if(fromSite.equals("-1"))
+		if(!validator.isValidOption(fromSite))
 		{
+			Logger.out.debug("from site");
 			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("distribution.fromSite")));
 		}
 		
-		if(toSite.equals("-1"))
+		if(!validator.isValidOption(toSite))
 		{
+			Logger.out.debug("to site");
 			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("distribution.toSite")));
 		}
 		
@@ -83,28 +134,47 @@ public class DistributionForm extends EventParametersForm
         String className = "DistributedItem:";
         String key1 = "_Specimen_systemIdentifier";
         String key2 = "_quantity";
+        String key3 = "_Specimen_className";
         int index = 1;
         boolean isError = false;
+        
 
         while(true)
         {
         	String keyOne = className + index + key1;
 			String keyTwo = className + index + key2;
+			String keyThree = className + index + key3;
         	String value1 = (String)values.get(keyOne);
         	String value2 = (String)values.get(keyTwo);
+        	String value3 = (String)values.get(keyThree);
+        	if(value1==null)
+        		break;
         	
-        	if(value1 == null || value2 == null)
+        	if(index == 1 && !validator.isValidOption(value1) && validator.isEmpty(value2) && !validator.isValidOption(value3))
         	{
+        		Logger.out.debug("All values null");
+        		isError=true;
         		break;
         	}
-        	else if(value1.equals(Constants.SELECT_OPTION) && value2.equals(""))
+        	   	
+        	
+        	
+        	/*if(!validator.isValidOption(value1) && value2.equals("") 
+        							&& !validator.isValidOption(value3) )
         	{
         		values.remove(keyOne);
         		values.remove(keyTwo);
-        	}
-        	else if(!value1.equals(Constants.SELECT_OPTION))
+        		values.remove(keyThree);
+        	}*/
+        	if(validator.isValidOption(value1))
         	{
-        		if(value2.equals(""))
+        		if(validator.isEmpty(value2))
+        		{
+        			Logger.out.debug("quantity");
+        			isError = true;
+        			break;
+        		}
+        		else if(!validator.isValidOption(value3))
         		{
         			isError = true;
         			break;
@@ -118,11 +188,17 @@ public class DistributionForm extends EventParametersForm
         			}
         		}
         	}
-        	else if(value1.equals(Constants.SELECT_OPTION) && !value2.equals(""))
+        	else if(!validator.isValidOption(value1) && !validator.isEmpty(value2) && validator.isValidOption(value3))
         	{
         		isError = true;
         		break;
         	}
+        	else if(!validator.isValidOption(value3) && !validator.isEmpty(value2) && validator.isValidOption(value1))
+        	{
+        		isError = true;
+        		break;
+        	}
+        	
         	index++;
         }
         
@@ -130,7 +206,8 @@ public class DistributionForm extends EventParametersForm
         {
         	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.distribution.missing",ApplicationProperties.getValue("distribution.msg")));
         }
-
+        
+        Logger.out.debug("Errors***************"+errors);
 		return errors;
 	}
 	
@@ -227,12 +304,36 @@ public class DistributionForm extends EventParametersForm
 
 	protected void reset()
     {
-        super.reset();
-        this.distributionProtocolId = null;
-        this.fromSite = null;
-        this.toSite = null;
-        this.counter =1;
+//        super.reset();
+//        this.distributionProtocolId = null;
+//        this.fromSite = null;
+//        this.toSite = null;
+//        this.counter =1;
        
     }
+	public static String getUnitSpan(Specimen specimen)
+	{
+		
+		if(specimen instanceof TissueSpecimen)
+		{
+			return Constants.UNIT_GM;
+			
+		}
+		else if(specimen instanceof CellSpecimen)
+		{
+			return Constants.UNIT_CC;
+			
+		}
+		else if(specimen instanceof MolecularSpecimen)
+		{
+			return Constants.UNIT_MG;
+			
+		}
+		else if(specimen instanceof FluidSpecimen)
+		{
+			return Constants.UNIT_ML;
+		}
+		return null;
+	}
 
 }

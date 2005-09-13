@@ -42,7 +42,7 @@ public class DistributedItem extends AbstractDomainObject implements java.io.Ser
 	/**
      * An event that results in transfer of a specimen from a Repository to a Laboratory.
      */
-	protected Distribution distribution;
+	protected Distribution distribution = new Distribution();
 
 	/**
      * Returns the system generated unique systemIdentifier.
@@ -138,5 +138,10 @@ public class DistributedItem extends AbstractDomainObject implements java.io.Ser
 	public void setAllValues(AbstractActionForm abstractForm) throws AssignDataException
 	{
 				
+	}
+	
+	public String toString()
+	{
+		return systemIdentifier+" "+quantity+" "+specimen.getSystemIdentifier();		
 	}
 }
