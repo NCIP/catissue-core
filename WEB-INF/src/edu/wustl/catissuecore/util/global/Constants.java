@@ -448,6 +448,7 @@ public class Constants
 	public static final String ACTIVITY_STATUS_NEW = "New";
 	public static final String ACTIVITY_STATUS_PENDING = "Pending";
 	public static final String ACTIVITY_STATUS_CLOSED = "Closed";
+	public static final String ACTIVITY_STATUS_DISABLED = "Disabled";
 	
 	//Approve User status values.
 	public static final String APPROVE_USER_APPROVE_STATUS = "Approve";
