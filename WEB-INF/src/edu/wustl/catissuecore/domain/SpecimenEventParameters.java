@@ -9,6 +9,10 @@
  */
 package edu.wustl.catissuecore.domain;
 
+import edu.wustl.catissuecore.actionForm.AbstractActionForm;
+import edu.wustl.catissuecore.actionForm.SpecimenEventParametersForm;
+import edu.wustl.common.util.logger.Logger;
+
 
 /**
  * Attributes associated with a specific specimen event.
@@ -21,7 +25,7 @@ public abstract class SpecimenEventParameters extends EventParameters
 {
 	private static final long serialVersionUID = 1234567890L;
 	
-	protected Specimen specimen;
+	protected Specimen specimen ;
 	
 	/**
      * @hibernate.many-to-one column="SPECIMEN_ID"  class="edu.wustl.catissuecore.domain.Specimen" constrained="true"
@@ -41,11 +45,18 @@ public abstract class SpecimenEventParameters extends EventParameters
 	}
 	
 	
-//	/* (non-Javadoc)
-//	 * @see edu.wustl.catissuecore.domain.EventParameters#setAllValues(edu.wustl.catissuecore.actionForm.AbstractActionForm)
-//	 */
-//	public void setAllValues(AbstractActionForm abstractForm)
-//	{
-//		super.setAllValues(abstractForm);
-//	}
+	/* (non-Javadoc)
+	 * @see edu.wustl.catissuecore.domain.EventParameters#setAllValues(edu.wustl.catissuecore.actionForm.AbstractActionForm)
+	 */
+	public void setAllValues(AbstractActionForm abstractForm)
+	{
+		super.setAllValues(abstractForm);
+		
+		//Temporary fix.
+		specimen = new CellSpecimen();
+		
+		SpecimenEventParametersForm specimenEventParametersForm = (SpecimenEventParametersForm) abstractForm;
+		Logger.out.debug("specimenEventParametersForm.getSpecimenId()............................."+specimenEventParametersForm.getSpecimenId());
+		specimen.setSystemIdentifier(new Long(specimenEventParametersForm.getSpecimenId()));
+	}
 }
