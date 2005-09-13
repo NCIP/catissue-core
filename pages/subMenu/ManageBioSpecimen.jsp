@@ -86,15 +86,14 @@
 	</td>
 </tr>
 
-<tr>
+<!-- tr>
 	<td class="subMenuPrimaryItemsWithBorder" onmouseover="changeMenuStyle(this,'subMenuPrimaryItemsWithBorderOver')" onmouseout="changeMenuStyle(this,'subMenuPrimaryItemsWithBorder')">				
 		
 		<div>
-			<!--img src="images/subMenuArrow.gif" width="7" height="7" alt="" /--> 
 				<a class="subMenuPrimary" href="SpecimenEventParameters.do?pageOf=pageOfSpecimenEventParameters">
 					<b><bean:message key="app.specimeneventparameters" /></b>
 				</a>
 		</div>
 	</td>
-</tr>
+</tr> -->
 
