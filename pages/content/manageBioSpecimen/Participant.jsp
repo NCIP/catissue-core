@@ -197,12 +197,6 @@
 					<td><html:hidden property="systemIdentifier" /></td>
 				 </tr>
 				 
-				<logic:equal name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
-				 <tr>
-					<td><html:hidden property="identifier"/></td>
-				 </tr>
-				</logic:equal>
-
 				<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.SEARCH%>">
 					<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">
 				 		<tr>
