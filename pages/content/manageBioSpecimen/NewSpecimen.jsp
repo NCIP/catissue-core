@@ -598,6 +598,21 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 				 </tr>
 				 
 				 <tr>
+				    <td class="formRequiredNotice" width="5">
+				     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">*</logic:notEqual>
+				     	<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;</logic:equal>
+				    </td>
+				    <td class="formRequiredLabel">
+						<label for="barcode">
+							<bean:message key="specimen.barcode"/>
+						</label>
+					</td>
+				    <td class="formField" colspan="4">
+						<html:text styleClass="formFieldSized" size="30" styleId="barcode" property="barcode" readonly="<%=readOnlyForAll%>" />
+		        	</td>
+				 </tr>
+				 
+				 <tr>
 			     	<td class="formRequiredNotice" width="5">&nbsp;</td>
 				    <td class="formLabel">
 						<label for="comments">
@@ -785,8 +800,8 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 					var obj = new Active.Controls.Grid;
 					
 					//	set number of rows/columns.
-					obj.setRowProperty("count", <%=dataList.size()%>);
-					obj.setColumnProperty("count", <%=columnList.length%>);
+					obj.setRowProperty("count", <%=dataList.size()-1%>);
+					obj.setColumnProperty("count", <%=columnList.length-1%>);
 					
 					//	provide cells and headers text
 					obj.setDataProperty("text", function(i, j){return myData[i][j]});
