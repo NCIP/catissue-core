@@ -172,6 +172,9 @@ public class Constants
 	public static final String CLINICAL_DIAGNOSIS_LIST = "clinicalDiagnosisList";
 	public static final String HISTOLOGICALQUALITYLIST="histologicalQualityList";
 	
+	//For Specimen Event Parameters.
+	public static final String SPECIMEN_ID = "specimenId";
+	
 	//Constants required in User.jsp Page
 	public static final String USER_SEARCH_ACTION = "UserSearch.do";
 	public static final String USER_ADD_ACTION = "UserAdd.do";
