@@ -100,7 +100,7 @@
             table="CATISSUE_SPECIMEN_BIOHAZARD_RELATIONSHIP"
             lazy="false"
             inverse="false"
-            cascade="save-update"
+            cascade="none"
             sort="unsorted"
         >
 

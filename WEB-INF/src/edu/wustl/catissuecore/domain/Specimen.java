@@ -323,7 +323,7 @@ public class Specimen extends AbstractDomainObject implements Serializable
      * Returns the collection of attributes of a Specimen 
      * that renders it potentially harmful to a User.
      * @hibernate.set name="biohazardCollection" table="CATISSUE_SPECIMEN_BIOHAZARD_RELATIONSHIP"
-     * cascade="save-update" inverse="false" lazy="false"
+     * cascade="none" inverse="false" lazy="false"
      * @hibernate.collection-key column="SPECIMEN_ID"
      * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.Biohazard" column="BIOHAZARD_ID"
      * @return the collection of attributes of a Specimen 
