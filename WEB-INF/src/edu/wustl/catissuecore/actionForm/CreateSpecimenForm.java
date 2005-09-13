@@ -101,7 +101,7 @@ public class CreateSpecimenForm extends SpecimenForm
          {
              if (operation.equals(Constants.ADD) || operation.equals(Constants.EDIT))
              {
-             	if (parentSpecimenId.equals(Constants.SELECT_OPTION))
+             	if (parentSpecimenId.equals("-1"))
                 {
                     errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("createSpecimen.parent")));
                 }
