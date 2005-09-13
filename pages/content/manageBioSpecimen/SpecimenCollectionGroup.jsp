@@ -51,7 +51,7 @@
 		
         function onChangeEvent(element)
 		{
-			var action = "/catissuecore/SpecimenCollectionGroup.do?operation=<%=operation%>&pageOf=pageOfSpecimenCollectionGroup";
+			var action = "/catissuecore/SpecimenCollectionGroup.do?operation=<%=operation%>&pageOf=pageOfSpecimenCollectionGroup&isOnChange=true";
 			document.forms[0].action = action;
 			document.forms[0].submit();
 		}
@@ -259,6 +259,23 @@
 				    </td>
 				 </tr>
 
+				<!-- activitystatus -->	
+				<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
+				<tr>
+					<td class="formRequiredNotice" width="5">*</td>
+					<td class="formRequiredLabel" >
+						<label for="activityStatus">
+							<bean:message key="site.activityStatus" />
+						</label>
+					</td>
+					<td class="formField">
+						<html:select property="activityStatus" styleClass="formFieldSized10" styleId="activityStatus" size="1">
+							<html:options name="<%=Constants.ACTIVITYSTATUSLIST%>" labelName="<%=Constants.ACTIVITYSTATUSLIST%>" />
+						</html:select>
+					</td>
+				</tr>
+				</logic:equal>
+					
  			   	 <logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">		
 				 		<tr>
 				  		<td align="right" colspan="3">

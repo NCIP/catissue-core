@@ -49,6 +49,14 @@ public class SpecimenCollectionGroupAction  extends SecureAction
     	
 		try
 		{
+			boolean isOnChange = false; 
+			String str = request.getParameter("isOnChange");
+			if(str!=null)
+			{
+				if(str.equals("true"))
+					isOnChange = true; 
+			}
+			
 			// get list of Protocol title.
 			AbstractBizLogic bizLogic = BizLogicFactory.getBizLogic(Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID);
 
@@ -81,7 +89,7 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 			List calendarEventPointList = bizLogic.retrieve(CollectionProtocolEvent.class.getName(),
 											Constants.SYSTEM_IDENTIFIER,
 											new Long(specimenCollectionGroupForm.getCollectionProtocolEventId()));
-			if(!calendarEventPointList.isEmpty())
+			if(isOnChange && !calendarEventPointList.isEmpty())
 			{
 				CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent)calendarEventPointList.get(0);
 				specimenCollectionGroupForm.setClinicalStatus(collectionProtocolEvent.getClinicalStatus());
@@ -94,6 +102,9 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 			// populating clinical Status field 
 	        List clinicalStatusList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_CLINICAL_STATUS);
 	    	request.setAttribute(Constants.CLINICAL_STATUS_LIST, clinicalStatusList);
+	    	
+	    	//Sets the activityStatusList attribute to be used in the Site Add/Edit Page.
+	        request.setAttribute(Constants.ACTIVITYSTATUSLIST, Constants.ACTIVITY_STATUS_VALUES);
 		}
 		catch(Exception exc)
 		{

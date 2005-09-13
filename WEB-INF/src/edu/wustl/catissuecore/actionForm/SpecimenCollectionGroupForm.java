@@ -43,7 +43,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
     
 	private String clinicalStatus;
 	
-	private String activityStatus;
+	private String activityStatus = Constants.ACTIVITY_STATUS_ACTIVE;
 	
 	private String surgicalPathologyNumber;
 	
