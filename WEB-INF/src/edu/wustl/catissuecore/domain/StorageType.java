@@ -13,7 +13,6 @@ package edu.wustl.catissuecore.domain;
 import java.io.Serializable;
 
 import edu.wustl.catissuecore.actionForm.AbstractActionForm;
-import edu.wustl.catissuecore.domain.StorageContainerCapacity;
 import edu.wustl.catissuecore.actionForm.StorageTypeForm;
 import edu.wustl.common.util.logger.Logger;
 

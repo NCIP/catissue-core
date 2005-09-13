@@ -10,8 +10,6 @@
 package edu.wustl.catissuecore.domain;
 
 import edu.wustl.catissuecore.actionForm.AbstractActionForm;
-import edu.wustl.catissuecore.domain.Specimen;
-import edu.wustl.catissuecore.domain.Distribution;
 import edu.wustl.catissuecore.exception.AssignDataException;
 
 /**

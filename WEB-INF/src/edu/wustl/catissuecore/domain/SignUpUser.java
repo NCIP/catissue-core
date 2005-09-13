@@ -11,9 +11,9 @@
 
 package edu.wustl.catissuecore.domain;
 
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
-import java.io.Serializable;
 
 import edu.wustl.catissuecore.actionForm.AbstractActionForm;
 import edu.wustl.catissuecore.actionForm.UserForm;

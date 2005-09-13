@@ -11,7 +11,6 @@ package edu.wustl.catissuecore.domain;
 
 import edu.wustl.catissuecore.actionForm.AbstractActionForm;
 import edu.wustl.catissuecore.actionForm.DepartmentForm;
-import edu.wustl.catissuecore.domain.AbstractDomainObject;
 /**
  * A department to which a User belongs to.
  *  * @hibernate.class table="CATISSUE_DEPARTMENT"

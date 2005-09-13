@@ -1,7 +1,6 @@
 package edu.wustl.catissuecore.query;
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Iterator;
 
 
