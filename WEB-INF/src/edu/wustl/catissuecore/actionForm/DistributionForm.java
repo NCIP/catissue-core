@@ -131,14 +131,64 @@ public class DistributionForm extends EventParametersForm
 		}
 		
 		//Validations for Add-More Block
-        String className = "DistributedItem:";
+        
+        try
+		{
+			Iterator it = this.values.keySet().iterator();
+			while (it.hasNext())
+			{
+				String key = (String)it.next();
+				String value = (String)values.get(key);
+				
+				if(key.indexOf("Specimen_systemIdentifier")!=-1 && !validator.isValidOption( value))
+				{
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.distribution.missing",ApplicationProperties.getValue("itemrecord.specimenId")));
+				}
+				
+				
+				if(key.indexOf("Specimen_className")!=-1 && !validator.isValidOption( value))
+				{
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.distribution.missing",ApplicationProperties.getValue("distribution.specimenType")));
+				}
+				/*if(key.indexOf("quantity")!=-1)
+				{
+					String classKey = key.substring(0,key.lastIndexOf("_") );
+					classKey = classKey + "_specimenClass";
+					String classValue = (String)getValue(classKey );
+					if (classValue.trim().equals("Cell"))
+					{*/
+        		if(key.indexOf("_quantity")!=-1  && (validator.isEmpty(value) ))
+        		{
+        			Logger.out.debug("Quantity empty**************");
+        			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.distribution.missing",ApplicationProperties.getValue("itemrecord.quantity")));
+        		}
+					
+				else
+				{
+					if(key.indexOf("_quantity")!=-1  && !(validator.isEmpty(value) && !validator.isNumeric(value)))
+        			{
+						Logger.out.debug("Quantity invalid**************");
+						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("itemrecord.quantity")));
+        			}
+				}
+				//}  if  quantity
+			}
+		}
+		catch (Exception excp)
+		{
+	    	// use of logger as per bug 79
+	    	Logger.out.error(excp.getMessage(),excp); 
+			errors = new ActionErrors();
+		}
+		return errors;
+
+        /*String className = "DistributedItem:";
         String key1 = "_Specimen_systemIdentifier";
         String key2 = "_quantity";
         String key3 = "_Specimen_className";
         int index = 1;
         boolean isError = false;
-        
-
+          
         while(true)
         {
         	String keyOne = className + index + key1;
@@ -166,7 +216,7 @@ public class DistributionForm extends EventParametersForm
         		values.remove(keyTwo);
         		values.remove(keyThree);
         	}*/
-        	if(validator.isValidOption(value1))
+        	/*if(validator.isValidOption(value1))
         	{
         		if(validator.isEmpty(value2))
         		{
@@ -208,7 +258,7 @@ public class DistributionForm extends EventParametersForm
         }
         
         Logger.out.debug("Errors***************"+errors);
-		return errors;
+		return errors;*/
 	}
 	
 	/**

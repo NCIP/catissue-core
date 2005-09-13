@@ -287,10 +287,10 @@
 			<td class="formField">
 				<html:select property="timeInHours" styleClass="formFieldSized5" styleId="timeInHours" size="1">
 					<html:options name="<%=Constants.HOURLIST%>" labelName="<%=Constants.HOURLIST%>" />
-				</html:select>&nbsp;
+				</html:select>&nbsp;<bean:message key="eventparameters.timeinhours"/>&nbsp;
 				<html:select property="timeInMinutes" styleClass="formFieldSized5" styleId="timeInMinutes" size="1">
 					<html:options name="<%=Constants.MINUTESLIST%>" labelName="<%=Constants.MINUTESLIST%>" />
-				</html:select>
+				</html:select>&nbsp;<bean:message key="eventparameters.timeinminutes"/>
 			</td>
 		</tr>
 <!-- fromSite -->		

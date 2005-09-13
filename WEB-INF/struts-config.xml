@@ -1539,20 +1539,20 @@ PUBLIC
 			type="edu.wustl.catissuecore.action.CommonAddEditAction"
 			name="distributionForm"
 			validate="true"
-			input="/Distribution.do?operation=add&amp;pageOf=pageOfDistrbution"
+			input="/Distribution.do?operation=add&amp;pageOf=pageOfDistribution"
 			scope="request">
 			<forward name="success" path=".catissuecore.distributionAddSuccessDef" />
-			<forward name="failure" path="/Distribution.do?operation=add&amp;pageOf=pageOfDistrbution" />
+			<forward name="failure" path="/Distribution.do?operation=add&amp;pageOf=pageOfDistribution" />
 		</action>
 		
 		<action path="/DistributionEdit"
 			type="edu.wustl.catissuecore.action.CommonAddEditAction"
 			name="distributionForm"
 			validate="true"
-			input="/Distribution.do?operation=edit&amp;pageOf=pageOfDistrbution"
+			input="/Distribution.do?operation=edit&amp;pageOf=pageOfDistribution"
 			scope="request">
 			<forward name="success" path=".catissuecore.distributionEditSuccessDef" />
-			<forward name="failure" path="/Distribution.do?operation=edit&amp;pageOf=pageOfDistrbution" />
+			<forward name="failure" path="/Distribution.do?operation=edit&amp;pageOf=pageOfDistribution" />
 		</action>
 		
 		<action path="/DistributionSearch"
