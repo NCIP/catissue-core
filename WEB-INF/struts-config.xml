@@ -1558,7 +1558,7 @@ PUBLIC
 		<action path="/DistributionSearch"
 		    type="edu.wustl.catissuecore.action.CommonSearchAction"
 			name="distributionForm"
-			validate="true"
+			validate="false"
 			input="/Distribution.do?operation=edit&amp;pageOf=pageOfDistribution"
 			scope="request">
 			<forward name="pageOfDistribution" path="/Distribution.do?operation=edit&amp;pageOf=pageOfDistribution"/>
@@ -1739,6 +1739,7 @@ PUBLIC
 			<forward name="pageOfThawEventParameters" path="/ThawEventParametersSearch.do"/>
 			<forward name="pageOfTissueSpecimenReviewParameters" path="/TissueSpecimenReviewEventParametersSearch.do"/>
 			<forward name="pageOfTransferEventParameters" path="/TransferEventParametersSearch.do"/>
+			<forward name="pageOfDistribution" path="/DistributionSearch.do"/>
 			<forward name="failure" path="/QueryParticipant.do?operation=view&amp;pageOf=query"/>
 		</action>
 		<!--Query Result View Actions End-->
