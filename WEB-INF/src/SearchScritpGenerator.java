@@ -33,6 +33,9 @@ public class SearchScritpGenerator
 	int colIndex = 1;
 	BufferedWriter writer;
 	private Connection connection = null;
+	
+	List listTable = new ArrayList();
+	
 	public SearchScritpGenerator()throws Exception
 	{
 		HibernateProperties.initBundle("hibernate.properties");
@@ -49,6 +52,22 @@ public class SearchScritpGenerator
 		connection = DriverManager.getConnection(database, loginName, password);
 		
 		writer = new BufferedWriter(new FileWriter("QueryData-Out.txt"));
+		
+		/*listTable.add("CATISSUE_PARTICIPANT");
+		listTable.add("CATISSUE_PARTICIPANT_MEDICAL_IDENTIFIER");
+		listTable.add("CATISSUE_SPECIMEN");
+		listTable.add("CATISSUE_CELL_SPECIMEN");
+		listTable.add("CATISSUE_FLUID_SPECIMEN");
+		listTable.add("CATISSUE_MOLECULAR_SPECIMEN");
+		listTable.add("CATISSUE_TISSUE_SPECIMEN");
+		listTable.add("CATISSUE_SPECIMEN_CHARACTERISTICS");
+		listTable.add("CATISSUE_EXTERNAL_IDENTIFIER");
+		listTable.add("CATISSUE_SPECIMEN_COLLECTION_GROUP");
+		listTable.add("CATISSUE_COLLECTION_PROTOCOL_REGISTRATION");
+		listTable.add("CATISSUE_CLINICAL_REPORT");*/
+		
+		listTable.add("CATISSUE_DISTRIBUTION");
+		listTable.add("CATISSUE_DISTRIBUTED_ITEM");
 	}
 	
 	
@@ -62,7 +81,7 @@ public class SearchScritpGenerator
 		List tableNameList = getTableNameList(rs);
 		System.out.println(tableNameList);
 		
-		int index = 1;
+		int index = 37;
 		Iterator it = tableNameList.iterator();
 		while(it.hasNext())
 		{
@@ -102,8 +121,9 @@ public class SearchScritpGenerator
 			String names[] = generateDisplayName(col[0], false);
 			
 			// 1, 'IDENTIFIER' , 'Storage Type Identifier' , 'bigint' );
-			StringBuffer buff = new StringBuffer("insert into CATISSUE_QUERY_INTERFACE_COLUMN_DATA ( IDENTIFIER, TABLE_ID, COLUMN_NAME , DISPLAY_NAME , ATTRIBUTE_TYPE ) values ( ");
-			buff.append(colIndex+", ");
+			//StringBuffer buff = new StringBuffer("insert into CATISSUE_QUERY_INTERFACE_COLUMN_DATA ( IDENTIFIER, TABLE_ID, COLUMN_NAME , DISPLAY_NAME , ATTRIBUTE_TYPE ) values ( ");
+			StringBuffer buff = new StringBuffer("insert into CATISSUE_QUERY_INTERFACE_COLUMN_DATA ( TABLE_ID, COLUMN_NAME , DISPLAY_NAME , ATTRIBUTE_TYPE ) values ( ");
+			//buff.append(colIndex+", ");
 			buff.append(tableIndex+", ");
 			buff.append("'"+col[0]+"', ");
 			buff.append("'"+names[0]+"', ");
@@ -148,7 +168,7 @@ public class SearchScritpGenerator
 			
 			String tableName = ((String)innerList.get(2)).toUpperCase();
 			
-			if(tableName.startsWith("CATISSUE_"))
+			if(tableName.startsWith("CATISSUE_") && (listTable.contains(tableName) || listTable.isEmpty()))
 			{
 				tableNameList.add(tableName);
 			}
@@ -171,14 +191,14 @@ public class SearchScritpGenerator
 		for (int i = 1; i <= count; i++)
 		{
 			String colName = rsmd.getColumnName(i);
-			String colTypeName = rsmd.getColumnTypeName(i);
+			String colTypeName = rsmd.getColumnTypeName(i).toLowerCase();
 			
-			if(colTypeName.startsWith("DATE"))
-				colTypeName = "DATE";
-			else if(colTypeName.startsWith("TEXT") || colTypeName.startsWith("VARCHAR"))
-				colTypeName = "TEXT";
-			else
-				colTypeName = "NUMERIC";
+//			if(colTypeName.startsWith("DATE"))
+//				colTypeName = "DATE";
+//			else if(colTypeName.startsWith("TEXT") || colTypeName.startsWith("VARCHAR"))
+//				colTypeName = "TEXT";
+//			else
+//				colTypeName = "NUMERIC";
 			
 			//System.out.println(colName+" " +colTypeName);
 			
