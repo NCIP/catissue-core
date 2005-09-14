@@ -23,12 +23,10 @@ import edu.wustl.catissuecore.audit.AuditManager;
 import edu.wustl.catissuecore.audit.Auditable;
 import edu.wustl.catissuecore.bizlogic.AbstractBizLogic;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
-import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.domain.Site;
-import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.exception.AuditException;
 import edu.wustl.catissuecore.util.Permissions;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -527,7 +525,6 @@ public class HibernateDAO extends AbstractDAO
 
 //    	System.out.println("user "+user.getSystemIdentifier());
 //    	System.out.println("Department "+user.getDepartment().getSystemIdentifier());
-	}
 	
 	public static void maina(String[] args) throws Exception
 	{
@@ -549,7 +546,7 @@ public class HibernateDAO extends AbstractDAO
 		p.getParticipantMedicalIdentifierCollection().add(pmi);
 		
 		AbstractBizLogic bl = BizLogicFactory.getBizLogic(Constants.PARTICIPANT_FORM_ID);
-		bl.insert(p,Constants.HIBERNATE_DAO);
+//		bl.insert(p,Constants.HIBERNATE_DAO);
 		
 //		dao.openSession();
 //		

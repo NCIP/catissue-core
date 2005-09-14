@@ -431,4 +431,9 @@ public class JDBCDAO extends AbstractDAO
             throw new DAOException(sqlExp.getMessage(), sqlExp);
         }
     }
+    
+    
+    public void disableRelatedObjects(String TABLE_NAME, String WHERE_COLUMN_NAME, Long whereColValue[]) throws DAOException
+	{
+	}
 }
