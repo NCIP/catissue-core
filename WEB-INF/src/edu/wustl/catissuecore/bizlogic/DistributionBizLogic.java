@@ -14,12 +14,16 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import net.sf.hibernate.HibernateException;
 import edu.wustl.catissuecore.dao.DAO;
 import edu.wustl.catissuecore.domain.DistributedItem;
 import edu.wustl.catissuecore.domain.Distribution;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.catissuecore.util.global.Constants;
+
 import edu.wustl.common.util.dbManager.DAOException;
 
 /**
@@ -30,11 +34,11 @@ public class DistributionBizLogic extends DefaultBizLogic
 {
 	/**
      * Saves the Distribution object in the database.
-     * @param session The session in which the object is saved.
-     * @param obj The storageType object to be saved.
-     * @throws DAOException 
+	 * @param obj The storageType object to be saved.
+	 * @param session The session in which the object is saved.
+	 * @throws DAOException 
      */
-	protected void insert(DAO dao, Object obj) throws DAOException 
+	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException 
 	{
 		Distribution dist = (Distribution)obj;
 		
@@ -62,7 +66,7 @@ public class DistributionBizLogic extends DefaultBizLogic
 			dist.setToSite(site);
 		}
 
-		dao.insert(dist,true);
+		dao.insert(dist,sessionDataBean, true, true);
 		
 		Collection distributedItemCollection = dist.getDistributedItemCollection();		
 		Iterator it = distributedItemCollection.iterator();
@@ -70,21 +74,21 @@ public class DistributionBizLogic extends DefaultBizLogic
 		{
 			DistributedItem item = (DistributedItem)it.next();
 			item.setDistribution(dist);
-			dao.insert(item,true);
+			dao.insert(item,sessionDataBean, true, true);
 		}
 	}
 	
 	/**
      * Updates the persistent object in the database.
-     * @param session The session in which the object is saved.
-     * @param obj The object to be updated.
-     * @throws HibernateException Exception thrown during hibernate operations.
-     * @throws DAOException 
+	 * @param obj The object to be updated.
+	 * @param session The session in which the object is saved.
+	 * @throws DAOException 
+	 * @throws HibernateException Exception thrown during hibernate operations.
      */
-	protected void update(DAO dao, Object obj) throws DAOException 
+	protected void update(DAO dao, Object obj, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException 
     {
 		Distribution distribution = (Distribution)obj;
-		dao.update(obj);
+		dao.update(obj, sessionDataBean, true, true);
 		
 		Collection distributedItemCollection = distribution.getDistributedItemCollection();		
 		Iterator it = distributedItemCollection.iterator();
@@ -93,7 +97,7 @@ public class DistributionBizLogic extends DefaultBizLogic
 			DistributedItem item = (DistributedItem)it.next();
 			item.setDistribution(distribution);
 			
-			dao.update(item);
+			dao.update(item, sessionDataBean, true, true);
 		}
     }
 }

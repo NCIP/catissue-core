@@ -16,12 +16,15 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import net.sf.hibernate.HibernateException;
 import edu.wustl.catissuecore.dao.DAO;
 import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.ExternalIdentifier;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.StorageContainer;
+import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
 
 /**
@@ -32,18 +35,18 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 {
 	/**
      * Saves the storageType object in the database.
-     * @param session The session in which the object is saved.
-     * @param obj The storageType object to be saved.
-     * @throws DAOException 
+	 * @param obj The storageType object to be saved.
+	 * @param session The session in which the object is saved.
+	 * @throws DAOException 
      */
-	protected void insert(DAO dao, Object obj) throws DAOException
+	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 	{
 		Specimen specimen = (Specimen)obj;
 		
 		setSpecimenAttributes(dao,specimen);
 				
-		dao.insert(specimen.getSpecimenCharacteristics(),true);
-		dao.insert(specimen,true);
+		dao.insert(specimen.getSpecimenCharacteristics(),sessionDataBean, true, true);
+		dao.insert(specimen,sessionDataBean, true, true);
 		
 		Collection externalIdentifierCollection = specimen.getExternalIdentifierCollection();
 		if(externalIdentifierCollection != null && externalIdentifierCollection.size() > 0)
@@ -54,25 +57,25 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			{
 				ExternalIdentifier exId = (ExternalIdentifier)it.next();
 				exId.setSpecimen(specimen);
-				dao.insert(exId,true);
+				dao.insert(exId,sessionDataBean, true, true);
 			}
 		}
 	}
 	
 	/**
      * Updates the persistent object in the database.
-     * @param session The session in which the object is saved.
-     * @param obj The object to be updated.
-     * @throws HibernateException Exception thrown during hibernate operations.
-     * @throws DAOException 
+	 * @param obj The object to be updated.
+	 * @param session The session in which the object is saved.
+	 * @throws DAOException 
+	 * @throws HibernateException Exception thrown during hibernate operations.
      */
-    public void update(DAO dao, Object obj) throws DAOException
+    public void update(DAO dao, Object obj, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
     {
     	Specimen specimen = (Specimen)obj;
     	
 //		setSpecimenAttributes(dao,specimen);
-		dao.update(specimen.getSpecimenCharacteristics());
-		dao.update(specimen);
+		dao.update(specimen.getSpecimenCharacteristics(), sessionDataBean, true, true);
+		dao.update(specimen, sessionDataBean, true, true);
 		
 		Collection externalIdentifierCollection = specimen.getExternalIdentifierCollection();
 		if(externalIdentifierCollection != null && externalIdentifierCollection.size() > 0)
@@ -83,7 +86,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			{
 				ExternalIdentifier exId = (ExternalIdentifier)it.next();
 				exId.setSpecimen(specimen);
-				dao.update(exId);
+				dao.update(exId, sessionDataBean, true, true);
 			}
 		}
     }
