@@ -264,7 +264,7 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
     /**
      * Returns the collection Specimens in this SpecimenCollectionGroup.
      * @hibernate.set name="specimenCollection" table="CATISSUE_SPECIMEN"
-	 * cascade="save-update" inverse="true" lazy="false"
+	 * cascade="none" inverse="true" lazy="false"
 	 * @hibernate.collection-key column="SPECIMEN_COLLECTION_GROUP_ID"
 	 * @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.Specimen"
      * @return the collection Specimens in this SpecimenCollectionGroup.
