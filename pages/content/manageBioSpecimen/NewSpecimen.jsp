@@ -6,6 +6,59 @@
 <%@ page import="edu.wustl.common.beans.NameValueBean"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.NewSpecimenForm"%>
+<%@ page import="java.util.*"%>
+
+<!-- ---------------------------------------------------------------  -->
+<%
+	List specimenClassList = (List) request.getAttribute(Constants.SPECIMEN_CLASS_LIST);
+
+	List specimenTypeList = (List) request.getAttribute(Constants.SPECIMEN_TYPE_LIST);
+
+	HashMap specimenTypeMap = (HashMap) request.getAttribute(Constants.SPECIMEN_TYPE_MAP);
+%>
+<SCRIPT LANGUAGE="JavaScript">
+
+<%
+
+	    	Iterator specimenTypeIterator = specimenTypeMap.keySet().iterator();
+	    	int classCount=0;
+	    	for(classCount=1;classCount<specimenClassList.size();classCount++  )
+	    	{
+	    		String keyObj = (String)((NameValueBean)specimenClassList.get(classCount)).getName() ;
+	    		List subList = (List)specimenTypeMap.get(keyObj);
+	    		String arrayData = "";
+	    		for(int listSize=0;listSize<subList.size();listSize++ )
+	    		{
+	    			if(listSize == subList.size()-1 )
+	    				arrayData = arrayData + "\"" + ((NameValueBean)subList.get(listSize)).getName() + "\"";
+	    			else
+		    			arrayData = arrayData + "\"" + ((NameValueBean)subList.get(listSize)).getName() + "\",";   
+	    		}
+%>
+			var <%=keyObj%>Array = new Array(<%=arrayData%>);
+<%	    		
+	    	}
+
+%>	
+
+		function typeChange(arrayName)
+		{ 
+			var specimenTypeCombo = "type";
+			ele = document.getElementById(specimenTypeCombo);
+			//To Clear the Combo Box
+			ele.options.length = 0;
+			
+			//ele.options[0] = new Option('-- Select --','-1');
+			var j=0;
+			//Populating the corresponding Combo Box
+			for(i=0;i<arrayName.length;i++)
+			{
+					ele.options[j++] = new Option(arrayName[i],arrayName[i]);
+			}
+		}
+
+</script>
+<!-- ---------------------------------------------------------------  -->
 
 <%
 String bhIdArray [] = (String []) request.getAttribute(Constants.BIOHAZARD_ID_LIST);
@@ -105,22 +158,26 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 			{
 				unitSpecimen = "<%=Constants.UNIT_GM%>";
 				document.forms[0].unit.value = "<%=Constants.UNIT_GM%>";
+				typeChange(TissueArray);
 			}
 			else if(element.value == "Fluid")
 			{
 				unitSpecimen = "<%=Constants.UNIT_ML%>";
 				document.forms[0].unit.value = "<%=Constants.UNIT_ML%>";
+				typeChange(FluidArray);
 			}
 			else if(element.value == "Cell")
 			{
 				unitSpecimen = "<%=Constants.UNIT_CC%>";
 				document.forms[0].unit.value = "<%=Constants.UNIT_CC%>";
+				typeChange(CellArray);
 			}
 			else if(element.value == "Molecular")
 			{
 				unitSpecimen = "<%=Constants.UNIT_MG%>";
 				document.forms[0].unit.value = "<%=Constants.UNIT_MG%>";
 				document.forms[0].concentration.disabled = false;
+				typeChange(MolecularArray);
 			}
 			
 			unit.innerHTML = unitSpecimen;
@@ -474,8 +531,22 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 				     	<label for="type">
 				     		<bean:message key="specimen.subType"/>
 				     	</label>
-				    </td>
+				    </td>				    
 				    <td class="formField" colspan="4">
+				    <!-- --------------------------------------- -->
+				    <%
+								String classValue = (String)form.getClassName();
+								specimenTypeList = (List)specimenTypeMap.get(classValue);
+								
+								if(specimenTypeList == null)
+								{
+									specimenTypeList = new ArrayList();
+									specimenTypeList.add(new NameValueBean(Constants.SELECT_OPTION,"-1"));
+								}
+								pageContext.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
+					%>
+				    <!-- --------------------------------------- -->
+				    
 				     	<html:select property="type" styleClass="formFieldSized15" styleId="type" size="1" disabled="<%=readOnlyForAll%>">
 							<html:options collection="<%=Constants.SPECIMEN_TYPE_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
