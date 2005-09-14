@@ -6,6 +6,7 @@
 <%@ page import="java.util.List,java.util.ListIterator"%>
 <%@ page import="edu.wustl.common.beans.NameValueBean"%>
 
+
 <%
 	List itemList = (List)request.getAttribute(Constants.ITEMLIST);
 	ListIterator iterator=null;
@@ -165,13 +166,14 @@
 			sname = sname + "&nbsp;<span id='" + unitName + "'>&nbsp;</span>";
 			spreqsubtype.innerHTML="" + sname;
 		}
-	</script>
+		</script>
 </head>
 
 
 <%
         String operation = (String) request.getAttribute(Constants.OPERATION);
         String formName;
+
 		boolean readOnlyValue=false,readOnlyForAll=false;
        
         if (operation.equals(Constants.EDIT))
@@ -248,11 +250,11 @@
 			<td class="formRequiredNotice" width="5">*</td>
 			<td class="formRequiredLabel">
 				<label for="type">
-					<bean:message key="eventparameters.distributed.to"/> 
+					<bean:message key="eventparameters.distributed.by"/> 
 				</label>	
 			</td>	
 			<td class="formField">
-				<html:select property="userId" styleClass="formFieldSized" styleId="userId" size="1">
+				<html:select property="userId" styleClass="formFieldSized" styleId="userId" size="1" >
 					<html:options collection="<%=Constants.USERLIST%>" labelProperty="name" property="value"/>
 				</html:select>
 			</td>	
@@ -353,6 +355,7 @@
 				 	<td class="formSerialNumberLabel" width="5">
 				     	#
 				    </td>
+
 				    <td class="formLeftSubTableTitle">
 						<bean:message key="distribution.specimenType"/>
 					</td>
@@ -362,6 +365,7 @@
 				    <td class="formRightSubTableTitle">
 						<bean:message key="itemrecord.quantity"/>
 					</td>
+
 				 </tr>
 				 
 				 <tbody id="addMore">
@@ -384,10 +388,12 @@
 						temp = "";
 				%>
 				 <tr>
-				 	<td class="formSerialNumberField" width="5"><%=i%>.
+				 	<td class="formSerialNumberField" width="5"><%=i%>
+
 				 	<%--html:hidden property="<%=unitProperty%>"/--%>
 				 	<html:hidden property="<%=dIdentifier%>" />	
 				 	<input type="hidden" property="<%=unitProperty%>" id="<%=unitProperty%>" />
+
 				 	</td>
 				 	<td class="formField">
 				     	<html:select property="<%=className%>" styleClass="formFieldSized10" styleId="<%=className%>" size="1" disabled="<%=readOnlyForAll%>" onchange="<%=fName%>">
@@ -443,9 +449,10 @@
 						</html:select>
 					</td>
 				    <td class="formField">
-				     	<html:text styleClass="formFieldSized10" size="30" styleId="<%=quantity%>" property="<%=quantity%>" readonly="<%=readOnlyForAll%>"/>
+				     	<html:text styleClass="formFieldSized10" size="30" styleId="<%=quantity%>" property="<%=quantity%>" disabled="<%=readOnlyForAll%>" readonly="<%=readOnlyForAll%>"/>
 				     	<span id="<%=unitSpan%>">&nbsp;<%=temp%></span>
 				    </td>
+				 					    
 				 </tr>
 				 <%
 				}
