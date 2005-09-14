@@ -16,14 +16,18 @@ import java.util.Collection;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.actionForm.EventParametersForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -49,10 +53,10 @@ public class SpecimenEventParametersAction  extends SecureAction
         //The id of specimen of this event.
         String specimenId = request.getParameter(Constants.SPECIMEN_ID); 
         request.setAttribute(Constants.SPECIMEN_ID, specimenId);
-        
+                
        try
        {
-        	UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getBizLogic(Constants.USER_FORM_ID);
+           	UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getBizLogic(Constants.USER_FORM_ID);
         	Collection coll =  userBizLogic.getUsers(Constants.ACTIVITY_STATUS_ACTIVE);
         	
         	request.setAttribute(Constants.USERLIST, coll);
@@ -73,6 +77,13 @@ public class SpecimenEventParametersAction  extends SecureAction
     {
     	setRequestParameters(request);
     	
+    	EventParametersForm eventParametersForm = (EventParametersForm)form;
+    	HttpSession session = request.getSession(true);
+    	SessionDataBean sessionData = (SessionDataBean) session.getAttribute(Constants.SESSION_DATA);
+    	Logger.out.debug("sessionData.getUserId()*********"+sessionData.getUserId());
+    	long userId = sessionData.getUserId().longValue();
+    	eventParametersForm.setUserId(userId);
+    	Logger.out.debug("(String)request.getParameter(Constants.PAGEOF)******************"+(String)request.getParameter(Constants.PAGEOF));
     	return mapping.findForward((String)request.getParameter(Constants.PAGEOF));
     }
 }
