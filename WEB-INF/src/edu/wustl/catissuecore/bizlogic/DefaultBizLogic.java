@@ -234,4 +234,22 @@ public class  DefaultBizLogic extends AbstractBizLogic
         
         return nameValuePairs;
     }
+    
+    protected List disableObjects(DAO dao, Class sourceClass, String classIdentifier, String tablename, String colName,Long objIDArr[])throws DAOException 
+    {
+		dao.disableRelatedObjects(tablename,colName,objIDArr);
+		
+		String sourceObjectName = sourceClass.getName();
+		String selectColumnName [] = {Constants.SYSTEM_IDENTIFIER};
+		
+		String[] whereColumnName = {classIdentifier+"."+Constants.SYSTEM_IDENTIFIER};
+		String[] whereColumnCondition = {"in"};
+		Object[] whereColumnValue = {objIDArr};
+		String joinCondition = Constants.AND_JOIN_CONDITION;
+		
+		List list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, 
+				whereColumnCondition, whereColumnValue, joinCondition);
+		Logger.out.debug(sourceClass.getName()+" To Disable "+list);
+		return list;
+    }
 }
