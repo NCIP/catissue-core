@@ -14,6 +14,7 @@ import java.util.Date;
 
 import edu.wustl.catissuecore.actionForm.AbstractActionForm;
 import edu.wustl.catissuecore.actionForm.EventParametersForm;
+import edu.wustl.catissuecore.exception.AssignDataException;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.util.logger.Logger;
@@ -139,40 +140,36 @@ public abstract class EventParameters extends AbstractDomainObject implements ja
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.domain.AbstractDomainObject#setAllValues(edu.wustl.catissuecore.actionForm.AbstractActionForm)
 	 */
-	public void setAllValues(AbstractActionForm abstractForm)
+	public void setAllValues(AbstractActionForm abstractForm)throws AssignDataException
 	{
 		try
 		{
 			EventParametersForm form = (EventParametersForm)abstractForm ;
 			this.comments = form.getComments();
-			Calendar calendar = Calendar.getInstance();
+			
 			
 			
 			user.setSystemIdentifier(new Long(form.getUserId()));
 
 			if (form.getDateOfEvent() != null && form.getDateOfEvent().trim().length()!=0  )
 			{
-			    Date date = Utility.parseDate(form.getDateOfEvent(),Constants.DATE_PATTERN_MM_DD_YYYY);
-			    date.setHours(Integer.parseInt(form.getTimeInHours()));
-			    date.setMinutes(Integer.parseInt(form.getTimeInMinutes()));
+				Calendar calendar = Calendar.getInstance();
 				
-			    calendar.setTime(date);
-			    Logger.out.debug("\n----------------------------------\n");
-			    Logger.out.debug(calendar.getTime());
-			    
-				this.timestamp = date;  
-				Logger.out.debug(date);
-			    Logger.out.debug("\n----------------------------------\n");
+				Date date = Utility.parseDate(form.getDateOfEvent(),Constants.DATE_PATTERN_MM_DD_YYYY);
+				calendar.setTime(date);
+				calendar.set(Calendar.HOUR_OF_DAY,Integer.parseInt(form.getTimeInHours()));
+				calendar.set(Calendar.MINUTE,Integer.parseInt(form.getTimeInMinutes()));
+			
+				this.timestamp = calendar.getTime();  
+				
 
-//				this.timestamp = Utility.parseDate(form.getDateOfEvent(),Constants.DATE_PATTERN_MM_DD_YYYY);
-//				this.timestamp.setHours(Integer.parseInt(form.getTimeInHours()));
-//				this.timestamp.setMinutes(Integer.parseInt(form.getTimeInMinutes()));
 			}
 		}
         catch (Exception excp)
         {
 	    	// use of logger as per bug 79
 	    	Logger.out.error(excp.getMessage(),excp); 
+	    	throw new AssignDataException();
         }
 	}
 	
