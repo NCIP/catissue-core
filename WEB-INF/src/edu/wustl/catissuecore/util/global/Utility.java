@@ -12,7 +12,11 @@ package edu.wustl.catissuecore.util.global;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
+import java.util.Iterator;
+
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * Utility Class contain general methods used through out the application.
@@ -99,5 +103,21 @@ public class Utility
  		time[1]= Integer.toString(cal.get(Calendar.MINUTE));
  		return time;
 	}
-
+	
+	public static Long[] toLongArray(Collection collection)
+	{
+		Logger.out.debug(collection.toArray().getClass().getName());
+		
+		Long obj[] = new Long[collection.size()];
+		
+		int index = 0;
+		Iterator it = collection.iterator();
+		while(it.hasNext())
+		{
+			obj[index] = (Long)it.next();
+			Logger.out.debug("obj[index] "+obj[index].getClass().getName());
+			index++;
+		}
+		return obj;
+	}
 }
