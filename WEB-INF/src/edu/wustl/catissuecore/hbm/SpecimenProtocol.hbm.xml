@@ -149,7 +149,7 @@
             table="CATISSUE_COLLECTION_COORDINATORS"
             lazy="false"
             inverse="false"
-            cascade="save-update"
+            cascade="none"
             sort="unsorted"
         >
 

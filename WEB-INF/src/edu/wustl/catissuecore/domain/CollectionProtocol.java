@@ -12,7 +12,6 @@ package edu.wustl.catissuecore.domain;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
 
 import edu.wustl.catissuecore.actionForm.AbstractActionForm;
@@ -82,7 +81,7 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 	/**
 	 * Returns the collection of Users(ProtocolCoordinators) for this Protocol.
 	 * @hibernate.set name="userCollection" table="CATISSUE_COLLECTION_COORDINATORS" 
-	 * cascade="save-update" inverse="false" lazy="false"
+	 * cascade="none" inverse="false" lazy="false"
 	 * @hibernate.collection-key column="COLLECTION_PROTOCOL_ID"
 	 * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.User" column="USER_ID"
 	 * @return The collection of Users(ProtocolCoordinators) for this Protocol.
@@ -135,7 +134,7 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
         	
         	CollectionProtocolForm cpForm = (CollectionProtocolForm) abstractForm;
         	
-        	//userCollection.clear();
+        	userCollection.clear();
         	long [] coordinatorsArr = cpForm.getProtocolCoordinatorIds();
         	for (int i = 0; i < coordinatorsArr.length; i++)
 			{
@@ -143,13 +142,7 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
         		{
 	        		User coordinator = new User();
 	        		coordinator.setSystemIdentifier(new Long(coordinatorsArr[i]));
-	        		
-//	        		if(!contians(userCollection, coordinator))
-//	        		{
-	        			//Temp Fix
-	        			if(abstractForm.isAddOperation())
-	        				userCollection.add(coordinator);
-//	        		}
+	        		userCollection.add(coordinator);
         		}
 			}
         	
@@ -172,21 +165,5 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
     private boolean contiansCoordinator(User coordinator)
     {
     	return userCollection.contains(coordinator);
-    }
-    
-    public static boolean contians(Collection collection, AbstractDomainObject obj)
-    {
-    	Iterator iterator = collection.iterator();
-    	while(iterator.hasNext())
-    	{
-    		Object absObj = iterator.next();
-    		if(absObj instanceof AbstractDomainObject)
-    		{
-    			AbstractDomainObject abstractDomainObject = (AbstractDomainObject)absObj;
-    			if(abstractDomainObject.getSystemIdentifier() == obj.getSystemIdentifier())
-    				return true;
-    		}
-    	}
-    	return false;
     }
 }
