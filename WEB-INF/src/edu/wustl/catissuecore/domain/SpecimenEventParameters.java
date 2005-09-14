@@ -11,6 +11,7 @@ package edu.wustl.catissuecore.domain;
 
 import edu.wustl.catissuecore.actionForm.AbstractActionForm;
 import edu.wustl.catissuecore.actionForm.SpecimenEventParametersForm;
+import edu.wustl.catissuecore.exception.AssignDataException;
 import edu.wustl.common.util.logger.Logger;
 
 
@@ -48,7 +49,7 @@ public abstract class SpecimenEventParameters extends EventParameters
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.domain.EventParameters#setAllValues(edu.wustl.catissuecore.actionForm.AbstractActionForm)
 	 */
-	public void setAllValues(AbstractActionForm abstractForm)
+	public void setAllValues(AbstractActionForm abstractForm) throws AssignDataException
 	{
 		super.setAllValues(abstractForm);
 		
