@@ -190,7 +190,7 @@ public class UserBizLogic extends DefaultBizLogic
             csmUser.setLastName(user.getLastName());
             csmUser.setFirstName(user.getFirstName());
             csmUser.setEmailId(user.getEmailAddress());
-            csmUser.setPassword(GeneratePassword.getPassword());
+//            csmUser.setPassword(GeneratePassword.getPassword());
 
             SecurityManager.getInstance(UserBizLogic.class).modifyUser(csmUser);
 
