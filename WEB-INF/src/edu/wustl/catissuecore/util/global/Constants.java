@@ -174,6 +174,10 @@ public class Constants
 	
 	//For Specimen Event Parameters.
 	public static final String SPECIMEN_ID = "specimenId";
+	public static final String FROM_POSITION_DATA = "fromPositionData";
+	public static final String POS_ONE ="posOne";
+	public static final String POS_TWO ="posTwo";
+	public static final String STORAGE_CONTAINER_ID ="storContId";
 	
 	//Constants required in User.jsp Page
 	public static final String USER_SEARCH_ACTION = "UserSearch.do";
