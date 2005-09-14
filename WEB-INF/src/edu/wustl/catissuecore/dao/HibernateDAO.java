@@ -176,31 +176,31 @@ public class HibernateDAO extends AbstractDAO
         boolean isAuthorized = true;
         try
         {
-            if (isSecureInsert)
-            {
-                if (null != sessionDataBean)
-                {
-                    isAuthorized = SecurityManager.getInstance(this.getClass())
-                            .isAuthorized(sessionDataBean.getUserName(),
-                                    obj.getClass().getName(),
-                                    Permissions.CREATE);
-                }
-                else
-                {
-                    isAuthorized = false;
-                }
-            }
-            Logger.out.debug(" User's Authorization to insert "+obj.getClass().getName()+" "+isAuthorized);
-            if(isAuthorized)
-            {
+//            if (isSecureInsert)
+//            {
+//                if (null != sessionDataBean)
+//                {
+//                    isAuthorized = SecurityManager.getInstance(this.getClass())
+//                            .isAuthorized(sessionDataBean.getUserName(),
+//                                    obj.getClass().getName(),
+//                                    Permissions.CREATE);
+//                }
+//                else
+//                {
+//                    isAuthorized = false;
+//                }
+//            }
+//            Logger.out.debug(" User's Authorization to insert "+obj.getClass().getName()+" "+isAuthorized);
+//            if(isAuthorized)
+//            {
                 session.save(obj);
                 if (obj instanceof Auditable && isToAudit)
                     auditManager.compare((Auditable) obj, null, "INSERT");
-            }
-            else
-            {
-                throw new UserNotAuthorizedException("Not Authorized to insert");
-            }
+//            }
+//            else
+//            {
+//                throw new UserNotAuthorizedException("Not Authorized to insert");
+//            }
 
            
         }
@@ -212,10 +212,10 @@ public class HibernateDAO extends AbstractDAO
         {
             throw handleError("", hibExp);
         }
-        catch( SMException smex)
-        {
-            throw handleError("", smex);
-        }
+//        catch( SMException smex)
+//        {
+//            throw handleError("", smex);
+//        }
         
     }
 
@@ -264,29 +264,29 @@ public class HibernateDAO extends AbstractDAO
         boolean isAuthorized = true;
         try
         {
-            if (isSecureUpdate)
-            {
-                if (null != sessionDataBean)
-                {
-                    isAuthorized = SecurityManager.getInstance(this.getClass())
-                            .isAuthorized(sessionDataBean.getUserName(),
-                                    obj.getClass().getName(),
-                                    Permissions.UPDATE);
-                }
-                else
-                {
-                    isAuthorized = false;
-                }
-            }
-            Logger.out.debug(" User's Authorization to update "+obj.getClass().getName()+" "+isAuthorized);
-            if(isAuthorized)
-            {
+//            if (isSecureUpdate)
+//            {
+//                if (null != sessionDataBean)
+//                {
+//                    isAuthorized = SecurityManager.getInstance(this.getClass())
+//                            .isAuthorized(sessionDataBean.getUserName(),
+//                                    obj.getClass().getName(),
+//                                    Permissions.UPDATE);
+//                }
+//                else
+//                {
+//                    isAuthorized = false;
+//                }
+//            }
+//            Logger.out.debug(" User's Authorization to update "+obj.getClass().getName()+" "+isAuthorized);
+//            if(isAuthorized)
+//            {
                 session.update(obj);
-            }
-            else
-            {
-                throw new UserNotAuthorizedException("Not Authorized to update");
-            }
+//            }
+//            else
+//            {
+//                throw new UserNotAuthorizedException("Not Authorized to update");
+//            }
 
             //            if(isAuditable)
             //        		auditManager.compare((AbstractDomainObject)obj,null,"INSERT");
@@ -296,11 +296,11 @@ public class HibernateDAO extends AbstractDAO
             Logger.out.error(hibExp.getMessage(), hibExp);
             throw new DAOException("Error in update", hibExp);
         }
-        catch (SMException smex)
-        {
-            Logger.out.error(smex.getMessage(), smex);
-            throw new DAOException("Error in update", smex);
-        }
+//        catch (SMException smex)
+//        {
+//            Logger.out.error(smex.getMessage(), smex);
+//            throw new DAOException("Error in update", smex);
+//        }
     }
 
     /**
