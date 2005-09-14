@@ -881,7 +881,7 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 					var obj = new Active.Controls.Grid;
 					
 					//	set number of rows/columns.
-					obj.setRowProperty("count", <%=dataList.size()-1%>);
+					obj.setRowProperty("count", <%=dataList.size()%>);
 					obj.setColumnProperty("count", <%=columnList.length-1%>);
 					
 					//	provide cells and headers text
