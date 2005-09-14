@@ -10,6 +10,8 @@
 
 package edu.wustl.catissuecore.dao;
 
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.HashSet;
 import java.util.List;
 
@@ -22,6 +24,7 @@ import edu.wustl.catissuecore.audit.Auditable;
 import edu.wustl.catissuecore.bizlogic.AbstractBizLogic;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
+import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.domain.Site;
@@ -132,6 +135,36 @@ public class HibernateDAO extends AbstractDAO
         }
     }
 
+    public void disableRelatedObjects(String TABLE_NAME, String WHERE_COLUMN_NAME, Long whereColValue[]) throws DAOException
+	{
+    	try
+        {
+    		Statement st = session.connection().createStatement();
+    		
+    		StringBuffer buff = new StringBuffer();
+    		for (int i = 0; i < whereColValue.length; i++)
+			{
+    			buff.append(whereColValue[i].longValue());
+    			if((i+1)<whereColValue.length)
+    				buff.append(",");
+			}
+    		String sql = "UPDATE "+TABLE_NAME+" SET ACTIVITY_STATUS = '"+Constants.ACTIVITY_STATUS_DISABLED+ "' WHERE "+WHERE_COLUMN_NAME+" IN ( "+buff.toString()+")";
+    		Logger.out.debug("sql "+sql);
+    		int count = st.executeUpdate(sql);
+    		Logger.out.debug("Update count "+count);
+        }
+        catch (HibernateException dbex)
+        {
+        	Logger.out.error(dbex.getMessage(),dbex);
+        	throw handleError("Error in JDBC connection: ",dbex);
+        }
+        catch (SQLException sqlEx)
+        {
+        	Logger.out.error(sqlEx.getMessage(),sqlEx);
+        	throw handleError("Error in disabling Related Objects: ",sqlEx);
+        }
+	}
+    
     /**
      * Saves the persistent object in the database.
      * @param obj The object to be saved.
@@ -359,11 +392,12 @@ public class HibernateDAO extends AbstractDAO
                 }
                 sqlBuff.append(" ");
             }
-            Logger.out.debug(" String : " + sqlBuff.toString());
-
+            //Logger.out.debug(" String : "+sqlBuff.toString());
+            
             Query query = null;
-            sqlBuff.append("from " + sourceObjectName + " " + className);
-            Logger.out.debug(" String : " + sqlBuff.toString());
+            sqlBuff.append("from " + sourceObjectName
+                    + " " + className);
+            //Logger.out.debug(" String : "+sqlBuff.toString());
 
             if ((whereColumnName != null && whereColumnName.length > 0)
                     && (whereColumnCondition != null && whereColumnCondition.length == whereColumnName.length)
@@ -378,7 +412,24 @@ public class HibernateDAO extends AbstractDAO
                 for (int i = 0; i < whereColumnName.length; i++)
                 {
                     sqlBuff.append(className + "." + whereColumnName[i] + " ");
-                    sqlBuff.append(whereColumnCondition[i] + " ? ");
+                    if(whereColumnCondition[i].indexOf("in")!=-1)
+                    {
+                    	sqlBuff.append(whereColumnCondition[i] + "(  ");
+                    	Object valArr[] = (Object [])whereColumnValue[i];
+                    	for (int j = 0; j < valArr.length; j++)
+						{
+                    		System.out.println(sqlBuff);
+                    		sqlBuff.append("? ");
+                    		if((j+1)<valArr.length)
+                    			sqlBuff.append(", ");
+						}
+                    	sqlBuff.append(") ");
+                    }
+                    else
+                    {
+                    	sqlBuff.append(whereColumnCondition[i] + " ? ");
+                    }
+                    
                     if (i < (whereColumnName.length - 1))
                         sqlBuff.append(" " + joinCondition + " ");
                 }
@@ -387,12 +438,26 @@ public class HibernateDAO extends AbstractDAO
 
                 query = session.createQuery(sqlBuff.toString());
 
+                int index = 0;
                 //Adds the column values in where clause
                 for (int i = 0; i < whereColumnValue.length; i++)
                 {
-                    Logger.out.debug("whereColumnValue[i]. "
-                            + whereColumnValue[i]);
-                    query.setParameter(i, whereColumnValue[i]);
+                    //Logger.out.debug("whereColumnValue[i]. " + whereColumnValue[i]);
+                    Object obj = whereColumnValue[i];
+                    if(obj instanceof Object[])
+                    {
+                    	Object[] valArr = (Object[])obj;
+                    	for (int j = 0; j < valArr.length; j++)
+						{
+                    		query.setParameter(index, valArr[j]);
+                    		index++;
+						}
+                    }
+                    else
+                    {
+                    	query.setParameter(index, obj);
+                    	index++;
+                    }
                 }
             }
             else
@@ -437,7 +502,7 @@ public class HibernateDAO extends AbstractDAO
             return fullyQualifiedName;
         }
     }
-
+    
     public Object retrieve(String sourceObjectName, Long systemIdentifier)
             throws DAOException
     {
@@ -460,93 +525,81 @@ public class HibernateDAO extends AbstractDAO
         }
     }
 
-    public static void main1(String[] args) throws Exception
+//    	System.out.println("user "+user.getSystemIdentifier());
+//    	System.out.println("Department "+user.getDepartment().getSystemIdentifier());
+	}
+	
+	public static void maina(String[] args) throws Exception
+	{
+		Variables.catissueHome = System.getProperty("user.dir");
+		Logger.configure("Application.properties");
+//		HibernateDAO dao = new HibernateDAO();
+		
+		Participant p = new Participant();
+		p.setFirstName("A");
+		p.setLastName("b");
+		p.setParticipantMedicalIdentifierCollection(new HashSet());
+		
+		ParticipantMedicalIdentifier pmi = new ParticipantMedicalIdentifier();
+		Site aSite = new Site();
+		aSite.setSystemIdentifier(new Long(2));
+		pmi.setSite(aSite);
+		pmi.setMedicalRecordNumber("1");
+		
+		p.getParticipantMedicalIdentifierCollection().add(pmi);
+		
+		AbstractBizLogic bl = BizLogicFactory.getBizLogic(Constants.PARTICIPANT_FORM_ID);
+		bl.insert(p,Constants.HIBERNATE_DAO);
+		
+//		dao.openSession();
+//		
+//		dao.insert(p,false);
+//		
+//		dao.commit();
+//		
+//		dao.closeSession();
+	}
+	public static void main3(String[] args) throws Exception
+	{
+		Variables.catissueHome = System.getProperty("user.dir");
+		Logger.configure("Application.properties");
+		
+		HibernateDAO dao = new HibernateDAO();
+		dao.openSession();
+		Statement st = dao.session.connection().createStatement();
+		//dao.session.createSQLQuery()
+		int count = st.executeUpdate("UPDATE catissue_specimen_collection_group set ACTIVITY_STATUS = 'A'");
+		//Query query = dao.session.createQuery("update edu.wustl.catissuecore.domain.SpecimenCollectionGroup specimenCollectionGroup set specimenCollectionGroup.activityStatus = 'A'");
+		System.out.println("count "+count);
+		dao.commit();
+		dao.closeSession();
+	}
+	
+	public static void main(String[] args)throws DAOException 
     {
-        Variables.catissueHome = System.getProperty("user.dir");
-        Logger.configure("Application.properties");
+		Variables.catissueHome = System.getProperty("user.dir");
+		Logger.configure("Application.properties");
+		
+		HibernateDAO dao = new HibernateDAO();
+		dao.openSession();
+		
+		String sourceObjectName = CollectionProtocolRegistration.class.getName();
+		String selectColumnName [] = {Constants.SYSTEM_IDENTIFIER};
+		
+		String[] whereColumnName = {"participant."+Constants.SYSTEM_IDENTIFIER};
+//		String[] whereColumnCondition = {"in"};
+//		Object[] whereColumnValue = {new String[]{"2","1"}};
+		
+		String[] whereColumnCondition = {"!="};
+		Object[] whereColumnValue = {"1"};
 
-        HibernateDAO dao = new HibernateDAO();
-
-        CollectionProtocol collectionProtocol = null;
-        try
-        {
-            dao.openSession();
-
-            collectionProtocol = (CollectionProtocol) dao.retrieve(
-                    CollectionProtocol.class.getName(), new Long(3));
-
-            //user = (User)dao.retrieve(User.class.getName(),new Long(1));
-
-            dao.commit();
-        }
-        catch (DAOException ex)
-        {
-            ex.printStackTrace();
-            try
-            {
-                dao.rollback();
-            }
-            catch (DAOException sex)
-            {
-
-            }
-        }
-
-        dao.closeSession();
-
-        User user = new User();
-        user.setSystemIdentifier(new Long(16));
-        collectionProtocol.getUserCollection().add(user);
-
-        AbstractBizLogic bl = BizLogicFactory
-                .getBizLogic(Constants.COLLECTION_PROTOCOL_FORM_ID);
-
-//        bl.update(collectionProtocol, Constants.HIBERNATE_DAO, getSessionData(request));
-        //    	dao.openSession();
-        //		
-        //		dao.update(collectionProtocol);
-        //		
-        //		collectionProtocol.getUserCollection()
-        //		//user = (User)dao.retrieve(User.class.getName(),new Long(1));
-        //		
-        //    	dao.commit();
-
-        //    	System.out.println("storageType "+storageType.getSystemIdentifier());
-        //    	System.out.println("StorageCapacity "+storageType.getDefaultStorageCapacity().getSystemIdentifier());
-
-        //    	System.out.println("user "+user.getSystemIdentifier());
-        //    	System.out.println("Department "+user.getDepartment().getSystemIdentifier());
-    }
-
-    public static void main(String[] args) throws Exception
-    {
-        Variables.catissueHome = System.getProperty("user.dir");
-        Logger.configure("Application.properties");
-        //		HibernateDAO dao = new HibernateDAO();
-
-        Participant p = new Participant();
-        p.setFirstName("A");
-        p.setLastName("b");
-        p.setParticipantMedicalIdentifierCollection(new HashSet());
-
-        ParticipantMedicalIdentifier pmi = new ParticipantMedicalIdentifier();
-        Site aSite = new Site();
-        aSite.setSystemIdentifier(new Long(2));
-        pmi.setSite(aSite);
-        pmi.setMedicalRecordNumber("1");
-
-        p.getParticipantMedicalIdentifierCollection().add(pmi);
-
-        AbstractBizLogic bl = BizLogicFactory
-                .getBizLogic(Constants.PARTICIPANT_FORM_ID);
-        //		bl.insert(p,getSessionData(request), Constants.HIBERNATE_DAO, true);
-
-        //		dao.openSession();
-        //		
-        //		dao.insert(p,false);
-        //		
-        //		dao.commit();
-        //		
-        //		dao.closeSession();
+		String joinCondition = Constants.AND_JOIN_CONDITION;
+		
+		List list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, 
+				whereColumnCondition, whereColumnValue, joinCondition);
+		
+		System.out.println(list);
+		dao.commit();
+		dao.closeSession();
     }
 }
