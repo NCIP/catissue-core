@@ -89,4 +89,6 @@ public interface DAO
 	public abstract List retrieve (String sourceObjectName, String[] selectColumnName) throws DAOException;
 	
 	public Object retrieve (String sourceObjectName, Long systemIdentifier) throws DAOException;
+	
+	public abstract void disableRelatedObjects(String TABLE_NAME, String WHERE_COLUMN_NAME, Long whereColValue[]) throws DAOException;
 }
