@@ -44,6 +44,7 @@ public class DistributionForm extends EventParametersForm
 	
 	private String fromSite;
 	private String toSite;
+	
 	private int counter=1;
 	private String distributionProtocolId;
 	
@@ -160,14 +161,14 @@ public class DistributionForm extends EventParametersForm
         			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.distribution.missing",ApplicationProperties.getValue("itemrecord.quantity")));
         		}
 					
-				else
+				/*else
 				{
 					if(key.indexOf("_quantity")!=-1  && !(validator.isEmpty(value) && !validator.isNumeric(value)))
         			{
 						Logger.out.debug("Quantity invalid**************");
 						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("itemrecord.quantity")));
         			}
-				}
+				}*/
 				//}  if  quantity
 			}
 		}
@@ -179,84 +180,9 @@ public class DistributionForm extends EventParametersForm
 		}
 		return errors;
 
-        /*String className = "DistributedItem:";
-        String key1 = "_Specimen_systemIdentifier";
-        String key2 = "_quantity";
-        String key3 = "_Specimen_className";
-        int index = 1;
-        boolean isError = false;
-          
-        while(true)
-        {
-        	String keyOne = className + index + key1;
-			String keyTwo = className + index + key2;
-			String keyThree = className + index + key3;
-        	String value1 = (String)values.get(keyOne);
-        	String value2 = (String)values.get(keyTwo);
-        	String value3 = (String)values.get(keyThree);
-        	if(value1==null)
-        		break;
-        	
-        	if(index == 1 && !validator.isValidOption(value1) && validator.isEmpty(value2) && !validator.isValidOption(value3))
-        	{
-        		Logger.out.debug("All values null");
-        		isError=true;
-        		break;
-        	}
-        	   	
-        	
-        	
-        	/*if(!validator.isValidOption(value1) && value2.equals("") 
-        							&& !validator.isValidOption(value3) )
-        	{
-        		values.remove(keyOne);
-        		values.remove(keyTwo);
-        		values.remove(keyThree);
-        	}*/
-        	/*if(validator.isValidOption(value1))
-        	{
-        		if(validator.isEmpty(value2))
-        		{
-        			Logger.out.debug("quantity");
-        			isError = true;
-        			break;
-        		}
-        		else if(!validator.isValidOption(value3))
-        		{
-        			isError = true;
-        			break;
-        		}
-        		else
-        		{
-        			if(!validator.isDouble(value2))
-        			{
-        				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("itemrecord.quantity")));
-        				break;
-        			}
-        		}
-        	}
-        	else if(!validator.isValidOption(value1) && !validator.isEmpty(value2) && validator.isValidOption(value3))
-        	{
-        		isError = true;
-        		break;
-        	}
-        	else if(!validator.isValidOption(value3) && !validator.isEmpty(value2) && validator.isValidOption(value1))
-        	{
-        		isError = true;
-        		break;
-        	}
-        	
-        	index++;
-        }
         
-        if(isError)
-        {
-        	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.distribution.missing",ApplicationProperties.getValue("distribution.msg")));
-        }
-        
-        Logger.out.debug("Errors***************"+errors);
-		return errors;*/
 	}
+	
 	
 	/**
 	 * @return Returns the distributionProtocolId.
@@ -274,7 +200,7 @@ public class DistributionForm extends EventParametersForm
 	}
 	
 	/**
-	 * @return
+	 * @return fromSite
 	 */ 
 	public String getFromSite() {
 		return fromSite;
