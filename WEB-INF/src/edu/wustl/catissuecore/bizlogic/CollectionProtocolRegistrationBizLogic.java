@@ -19,6 +19,8 @@ import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Participant;
+import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
@@ -30,17 +32,17 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 {
 	/**
 	 * Saves the user object in the database.
-	 * @param session The session in which the object is saved.
 	 * @param obj The user object to be saved.
+	 * @param session The session in which the object is saved.
 	 * @throws DAOException 
 	 */
-	protected void insert(DAO dao, Object obj) throws DAOException
+	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 	{
 		CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration) obj;
 		
 		registerParticipantAndProtocol(dao,collectionProtocolRegistration);
 		
-		dao.insert(collectionProtocolRegistration, true);
+		dao.insert(collectionProtocolRegistration, sessionDataBean, true, true);
 		
 //		try
 //        {
@@ -54,17 +56,17 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 
 	/**
 	 * Updates the persistent object in the database.
-	 * @param session The session in which the object is saved.
 	 * @param obj The object to be updated.
+	 * @param session The session in which the object is saved.
 	 * @throws DAOException 
 	 */
-	protected void update(DAO dao, Object obj) throws DAOException
+	protected void update(DAO dao, Object obj, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 	{
 		CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration) obj;
 		
 		//registerParticipantAndProtocol(dao,collectionProtocolRegistration);
 		
-		dao.update(collectionProtocolRegistration);
+		dao.update(collectionProtocolRegistration, sessionDataBean, true, true);
 	}
 
 	public Set getProtectionObjects(AbstractDomainObject obj)

@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.action;
 
 import javax.servlet.http.HttpServletRequest;
@@ -29,58 +30,53 @@ import edu.wustl.common.util.logger.Logger;
  * @author Aarti Sharma
  *  
  */
-public abstract class SecureAction extends BaseAction {
+public abstract class SecureAction extends BaseAction
+{
 
-	/*
-	 * Authorizes the user and executes the secure workflow. If authorization
-	 * fails, the user is denied access to the secured action
-	 * 
-	 */
-	public ActionForward executeAction(ActionMapping mapping,
-			ActionForm form, HttpServletRequest request,
-			HttpServletResponse response) throws Exception {
-	    
-	    Logger.out.debug("********"+request.getPathInfo());
+    /*
+     * Authorizes the user and executes the secure workflow. If authorization
+     * fails, the user is denied access to the secured action
+     * 
+     */
+    public ActionForward executeAction(ActionMapping mapping, ActionForm form,
+            HttpServletRequest request, HttpServletResponse response)
+            throws Exception
+    {
 
-	    //Block the CSM
-		if (true || SecurityManager.getInstance(this.getClass()).isAuthorizedToExecuteAction(getUserLoginName(request))) {
+        if (1==1 || SecurityManager.getInstance(this.getClass())
+                .isAuthorizedToExecuteAction(getUserLoginName(request)))
+        {
+            return executeSecureAction(mapping, form, request, response);
+        }
 
-			return executeSecureAction(mapping, form, request, response);
+        Logger.out.debug("The Access was denied for the User "
+                + "to Execute this Action.");
 
-		}
+        ActionErrors errors = new ActionErrors();
 
-		Logger.out.debug("The Access was denied for the User "
-				+ "to Execute this Action.");
-		
-		ActionErrors errors = new ActionErrors();
-    	
-    	ActionError error = new ActionError("access.execute.action.denied",new String[] {
-				getUserLoginName(request),
-				", " + this.getClass().getName() });
-    	errors.add(ActionErrors.GLOBAL_ERROR,error);
-    	saveErrors(request,errors);
+        ActionError error = new ActionError("access.execute.action.denied",
+                new String[]{getUserLoginName(request),
+                        ", " + this.getClass().getName()});
+        errors.add(ActionErrors.GLOBAL_ERROR, error);
+        saveErrors(request, errors);
 
-		return mapping.findForward(Constants.ACCESS_DENIED);
+        return mapping.findForward(Constants.ACCESS_DENIED);
 
-	}
-	
-	
+    }
 
-	
-
-	/**
-	 * 
-	 * Subclasses should implement this method to execute the Action logic.
-	 * 
-	 * @param mapping
-	 * @param form
-	 * @param request
-	 * @param response
-	 * @return
-	 * @throws Exception
-	 */
-	public abstract ActionForward executeSecureAction(ActionMapping mapping,
-			ActionForm form, HttpServletRequest request,
-			HttpServletResponse response) throws Exception;
+    /**
+     * 
+     * Subclasses should implement this method to execute the Action logic.
+     * 
+     * @param mapping
+     * @param form
+     * @param request
+     * @param response
+     * @return
+     * @throws Exception
+     */
+    public abstract ActionForward executeSecureAction(ActionMapping mapping,
+            ActionForm form, HttpServletRequest request,
+            HttpServletResponse response) throws Exception;
 
 }

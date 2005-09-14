@@ -8,6 +8,8 @@ package edu.wustl.catissuecore.dao;
 
 import java.util.List;
 
+import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
 
 
@@ -21,14 +23,21 @@ public interface DAO
 	/**
 	 * Insert the Object in the database.
 	 * @param obj Object to be inserted in database
+	 * @param sessionDataBean TODO
+	 * @param isSecureInsert TODO
+	 * @throws UserNotAuthorizedException TODO
 	 */
-	public abstract void insert (Object obj, boolean isAuditable) throws DAOException;
+	public abstract void insert (Object obj, SessionDataBean sessionDataBean, boolean isAuditable, boolean isSecureInsert) throws DAOException, UserNotAuthorizedException;
 	
 	/**
 	 * updates the persisted object in the database.
 	 * @param obj Object to be updated in database
+	 * @param sessionDataBean TODO
+	 * @param isAuditable TODO
+	 * @param isSecureUpdate TODO
+	 * @throws UserNotAuthorizedException TODO
 	 */
-	public abstract void update (Object obj) throws DAOException;
+	public abstract void update (Object obj, SessionDataBean sessionDataBean, boolean isAuditable, boolean isSecureUpdate) throws DAOException, UserNotAuthorizedException;
 	
 	/**
      * Deletes the persistent object from the database.

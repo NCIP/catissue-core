@@ -12,10 +12,11 @@ package edu.wustl.catissuecore.bizlogic;
 
 import java.util.List;
 
-
 import edu.wustl.catissuecore.dao.DAO;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
 
 /**
@@ -26,34 +27,34 @@ public class SiteBizLogic extends DefaultBizLogic
 {
 	/**
      * Saves the storageType object in the database.
-     * @param session The session in which the object is saved.
-     * @param obj The storageType object to be saved.
-     * @throws DAOException 
+	 * @param obj The storageType object to be saved.
+	 * @param session The session in which the object is saved.
+	 * @throws DAOException 
      */
-	protected void insert(DAO dao, Object obj) throws DAOException
+	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 	{
 		Site site = (Site)obj;
 		
 		setCordinator(dao,site);
 		
-		dao.insert(site.getAddress(),true);
-	    dao.insert(site,true);
+		dao.insert(site.getAddress(),sessionDataBean, true, true);
+	    dao.insert(site,sessionDataBean, true, true);
 	}
 	
 	/**
      * Updates the persistent object in the database.
-     * @param session The session in which the object is saved.
-     * @param obj The object to be updated.
-     * @throws DAOException 
+	 * @param obj The object to be updated.
+	 * @param session The session in which the object is saved.
+	 * @throws DAOException 
      */
-	protected void update(DAO dao, Object obj) throws DAOException
+	protected void update(DAO dao, Object obj, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
     {
 		Site site = (Site)obj;
 		
 		setCordinator(dao,site);
 		
-		dao.update(site.getAddress());
-	    dao.update(site);
+		dao.update(site.getAddress(), sessionDataBean, true, true);
+	    dao.update(site, sessionDataBean, true, true);
     }
 	
 	// This method sets the cordinator for a particular site.

@@ -16,6 +16,8 @@ import edu.wustl.catissuecore.domain.SignUpUser;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.SendEmail;
+import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
@@ -32,7 +34,7 @@ public class SignUpUserBizLogic extends DefaultBizLogic
     /* (non-Javadoc)
      * @see edu.wustl.catissuecore.bizlogic.DefaultBizLogic#insert(edu.wustl.catissuecore.dao.DAO, java.lang.Object)
      */
-    protected void insert(DAO dao, Object obj) throws DAOException
+    protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
     {
         Logger.out.debug("IN SignUpUserBizLogic insert***************************");
         SignUpUser user = (SignUpUser) obj;
@@ -69,7 +71,7 @@ public class SignUpUserBizLogic extends DefaultBizLogic
         user.setInstitution(institution);
         user.setCancerResearchGroup(cancerResearchGroup);
         
-        dao.insert(user,true);
+        dao.insert(user,sessionDataBean, true, false);
         
         //Send email to administrator and cc it to the user registered.
         SendEmail email = new SendEmail();
@@ -123,15 +125,15 @@ public class SignUpUserBizLogic extends DefaultBizLogic
 
     /**
      * Updates the persistent object in the database.
-     * @param session The session in which the object is saved.
      * @param obj The object to be updated.
+     * @param session The session in which the object is saved.
      * @throws DAOException 
      */
-    protected void update(DAO dao, Object obj) throws DAOException
+    protected void update(DAO dao, Object obj, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
     {
         Logger.out.debug("IN SignUpUserBizLogic update***************************");
         SignUpUser user = (SignUpUser) obj;
-        dao.update(user);
+        dao.update(user, sessionDataBean, true,true);
         
     }
 }

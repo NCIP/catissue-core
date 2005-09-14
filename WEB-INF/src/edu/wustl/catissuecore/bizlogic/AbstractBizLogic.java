@@ -15,6 +15,8 @@ import edu.wustl.catissuecore.dao.AbstractDAO;
 import edu.wustl.catissuecore.dao.DAO;
 import edu.wustl.catissuecore.dao.DAOFactory;
 import edu.wustl.catissuecore.exception.BizLogicException;
+import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
@@ -28,16 +30,20 @@ public abstract class AbstractBizLogic
     /**
      * Inserts an object into the database.
      * @param obj The object to be inserted.
+     * @param sessionDataBean TODO
      * @throws DAOException
+     * @throws UserNotAuthorizedException TODO
      */
-    protected abstract void insert(DAO dao, Object obj) throws DAOException;    
+    protected abstract void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException;    
 
     /**
      * Updates an objects into the database.
      * @param obj The object to be updated into the database. 
+     * @param sessionDataBean TODO
      * @throws DAOException
+     * @throws UserNotAuthorizedException TODO
      */
-    protected abstract void update(DAO dao, Object obj) throws DAOException;
+    protected abstract void update(DAO dao, Object obj, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException;
     
     /**
      * Retrieves the records for class name in sourceObjectName according to field values passed.
@@ -69,13 +75,13 @@ public abstract class AbstractBizLogic
     public abstract List getList(String sourceObjectName, String[] displayNameFields, String valueField) 
     			throws DAOException;
     
-    public final void insert(Object obj,int daoType) throws BizLogicException
+    public final void insert(Object obj,SessionDataBean sessionDataBean, int daoType) throws BizLogicException, UserNotAuthorizedException
 	{
 		AbstractDAO dao = DAOFactory.getDAO(daoType);
 		try
 		{
 	        dao.openSession();
-	        insert(dao, obj);
+	        insert(obj, dao, sessionDataBean);
 	        dao.commit();
 		}
 		catch(DAOException ex)
@@ -107,13 +113,13 @@ public abstract class AbstractBizLogic
 		}
 	}
     
-    public final void update(Object obj,int daoType) throws BizLogicException
+    public final void update(Object obj,int daoType, SessionDataBean sessionDataBean) throws BizLogicException, UserNotAuthorizedException
 	{
 		AbstractDAO dao = DAOFactory.getDAO(daoType);
 		try
 		{
 	        dao.openSession();
-	        update(dao, obj);
+	        update(dao, obj,sessionDataBean);
 	        dao.commit();
 		}
 		catch(DAOException ex)

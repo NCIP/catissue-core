@@ -24,8 +24,10 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.GeneratePassword;
 import edu.wustl.catissuecore.util.global.SendEmail;
 import edu.wustl.common.beans.NameValueBean;
+import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
+import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.PasswordEncoderDecoder;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
@@ -39,14 +41,13 @@ public class UserBizLogic extends DefaultBizLogic
 
     /**
      * Saves the user object in the database.
-     * @param session The session in which the object is saved.
      * @param obj The user object to be saved.
+     * @param session The session in which the object is saved.
      * @throws DAOException
      */
-    protected void insert(DAO dao, Object obj) throws DAOException
+    protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
     {
-        try
-        {
+        
             User user = (User) obj;
             
             Department department = null;
@@ -91,18 +92,27 @@ public class UserBizLogic extends DefaultBizLogic
             csmUser.setStartDate(user.getStartDate());
             csmUser.setPassword(PasswordEncoderDecoder.encode(GeneratePassword.getPassword()));
             Logger.out.debug("Password generated:"+csmUser.getPassword());
+            
+            try
+            {
+                SecurityManager.getInstance(UserBizLogic.class).createUser(csmUser);
 
-            SecurityManager.getInstance(UserBizLogic.class).createUser(csmUser);
-
-            if (user.getRoleId() != null)
-                SecurityManager.getInstance(UserBizLogic.class)
-                        .assignRoleToUser(csmUser.getLoginName(),
-                                user.getRoleId());
+                if (user.getRoleId() != null)
+                    SecurityManager.getInstance(UserBizLogic.class)
+                            .assignRoleToUser(csmUser.getLoginName(),
+                                    user.getRoleId());
+            }
+            catch (SMException smex)
+            {
+                Logger.out.debug("Exception in CSM user creation:"+smex.getMessage(),smex);
+                throw new DAOException(smex.getCause().getMessage());
+            }
+           
             
             user.setSystemIdentifier(csmUser.getUserId());
 
-            dao.insert(user.getAddress(), true);
-            dao.insert(user, true);
+            dao.insert(user.getAddress(), sessionDataBean, true, true);
+            dao.insert(user, sessionDataBean, true, true);
 
             //Send email to administrator and cc it to the user registered.
             SendEmail email = new SendEmail();
@@ -153,25 +163,23 @@ public class UserBizLogic extends DefaultBizLogic
                         + csmUser.getFirstName()
                         + " " + csmUser.getLastName());
             }
-        }
-        catch (SMException smExp)
-        {
-            throw new DAOException(smExp.getMessage(),smExp);
-        }
+       
     }
 
     /**
      * Updates the persistent object in the database.
-     * @param session The session in which the object is saved.
      * @param obj The object to be updated.
+     * @param session The session in which the object is saved.
      * @throws DAOException 
      */
-    protected void update(DAO dao, Object obj) throws DAOException
+    protected void update(DAO dao, Object obj, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
     {
         Logger.out.debug("IN UserBizLogic update***************************");
         User user = (User) obj;
         List list = null;
-
+        
+        dao.update(user.getAddress(), sessionDataBean, true, true);
+        dao.update(user, sessionDataBean, true, true);
         try
         {
             gov.nih.nci.security.authorization.domainobjects.User csmUser = SecurityManager
@@ -188,15 +196,15 @@ public class UserBizLogic extends DefaultBizLogic
 
             SecurityManager.getInstance(UserBizLogic.class).assignRoleToUser(
                     csmUser.getLoginName(), user.getRoleId());
-
-            dao.update(user.getAddress());
-            dao.update(user);
-            
         }
         catch (SMException smExp)
         {
             throw new DAOException(smExp.getMessage(),smExp);
         }
+
+            
+            
+       
     }
 
     //    public Vector getList(String sourceObjectName, String[] displayNameFields, String valueField, String[] whereColumnName,

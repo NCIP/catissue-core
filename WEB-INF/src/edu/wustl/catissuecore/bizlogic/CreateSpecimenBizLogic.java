@@ -16,13 +16,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-
 import edu.wustl.catissuecore.dao.DAO;
 import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.ExternalIdentifier;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
 
 /**
@@ -33,11 +34,11 @@ public class CreateSpecimenBizLogic extends DefaultBizLogic
 {
 	/**
      * Saves the storageType object in the database.
-     * @param session The session in which the object is saved.
-     * @param obj The storageType object to be saved.
-     * @throws DAOException 
+	 * @param obj The storageType object to be saved.
+	 * @param session The session in which the object is saved.
+	 * @throws DAOException 
      */
-	protected void insert(DAO dao, Object obj) throws DAOException
+	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 	{
 		Specimen specimen = (Specimen)obj;
 		
@@ -62,9 +63,9 @@ public class CreateSpecimenBizLogic extends DefaultBizLogic
 			specimen.setStorageContainer(container);
 		}
 
-		dao.insert(specimen.getSpecimenCharacteristics(),true);
+		dao.insert(specimen.getSpecimenCharacteristics(),sessionDataBean, true,true);
 		specimen.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
-		dao.insert(specimen,true);
+		dao.insert(specimen,sessionDataBean, true,true);
 		
 		//Setting the External Identifier Collection
 		Collection externalIdentifierCollection = specimen.getExternalIdentifierCollection();
@@ -76,7 +77,7 @@ public class CreateSpecimenBizLogic extends DefaultBizLogic
 			{
 				ExternalIdentifier exId = (ExternalIdentifier)it.next();
 				exId.setSpecimen(specimen);
-				dao.insert(exId,true);
+				dao.insert(exId,sessionDataBean, true,true);
 			}
 		}
 		

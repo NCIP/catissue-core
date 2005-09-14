@@ -21,6 +21,9 @@ import java.util.List;
 import edu.wustl.catissuecore.audit.AuditManager;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.HibernateProperties;
+import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.security.exceptions.SMException;
+import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
@@ -91,6 +94,7 @@ public class JDBCDAO extends AbstractDAO
      * Commit the database level changes.
      * Declared in AbstractDAO class.
      * @throws DAOException
+     * @throws SMException
      */    
     public void commit() throws DAOException
     {
@@ -334,9 +338,9 @@ public class JDBCDAO extends AbstractDAO
     
     /**
      * (non-Javadoc)
-     * @see edu.wustl.catissuecore.dao.AbstractDAO#update(java.lang.Object)
+     * @see edu.wustl.catissuecore.dao.AbstractDAO#update(java.lang.Object, SessionDataBean, boolean, boolean)
      */
-    public void update(Object obj) throws DAOException
+    public void update(Object obj, SessionDataBean sessionDataBean, boolean isAuditable, boolean isSecureUpdate) throws DAOException, UserNotAuthorizedException
     {
         // TODO Auto-generated method stub
     }
@@ -406,7 +410,7 @@ public class JDBCDAO extends AbstractDAO
     /* (non-Javadoc)
      * @see edu.wustl.catissuecore.dao.DAO#insert(java.lang.Object, boolean)
      */
-    public void insert(Object obj, boolean isAuditable) throws DAOException
+    public void insert(Object obj, SessionDataBean sessionDataBean, boolean isAuditable, boolean isSecureInsert) throws DAOException, UserNotAuthorizedException
     {
         // TODO Auto-generated method stub
 //		if(isAuditable)

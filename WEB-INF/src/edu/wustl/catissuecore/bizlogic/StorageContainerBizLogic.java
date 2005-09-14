@@ -15,7 +15,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
-
 import edu.wustl.catissuecore.dao.AbstractDAO;
 import edu.wustl.catissuecore.dao.DAO;
 import edu.wustl.catissuecore.dao.DAOFactory;
@@ -25,6 +24,8 @@ import edu.wustl.catissuecore.domain.StorageContainerDetails;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.storage.StorageContainerTreeNode;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
 
 /**
@@ -36,11 +37,11 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 
     /**
      * Saves the storageContainer object in the database.
-     * @param session The session in which the object is saved.
      * @param obj The storageType object to be saved.
+     * @param session The session in which the object is saved.
      * @throws DAOException 
      */
-	protected void insert(DAO dao, Object obj) throws DAOException 
+	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException 
 	{
 		StorageContainer container = (StorageContainer)obj;
 		container.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
@@ -86,8 +87,8 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
             if(container.getStartNo() != null)
             	cont.setNumber(new Integer(i + container.getStartNo().intValue()));
             
-            dao.insert(cont.getStorageContainerCapacity(),true);
-            dao.insert(cont,true);
+            dao.insert(cont.getStorageContainerCapacity(),sessionDataBean, true, true);
+            dao.insert(cont,sessionDataBean, true, true);
 
             Collection storageContainerDetailsCollection = cont
                     .getStorageContainerDetailsCollection();
@@ -99,7 +100,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
                     StorageContainerDetails storageContainerDetails = (StorageContainerDetails) it
                             .next();
                     storageContainerDetails.setStorageContainer(cont);
-                    dao.insert(storageContainerDetails,true);
+                    dao.insert(storageContainerDetails,sessionDataBean, true, true);
                 }
             }
             
@@ -120,11 +121,11 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 
     /**
      * Updates the persistent object in the database.
-     * @param session The session in which the object is saved.
      * @param obj The object to be updated.
+     * @param session The session in which the object is saved.
      * @throws DAOException 
      */
-	protected void update(DAO dao, Object obj) throws DAOException
+	protected void update(DAO dao, Object obj, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
     {
 		StorageContainer container = (StorageContainer)obj;
 		
@@ -163,7 +164,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
             
             //cont.setName(String.valueOf(i + container.getStartNo().intValue()));
 //            dao.update(cont.getStorageContainerCapacity());
-            dao.update(container);
+            dao.update(container, sessionDataBean, true, true);
 
             Collection storageContainerDetailsCollection = container.getStorageContainerDetailsCollection();
             
@@ -174,7 +175,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
                 {
                     StorageContainerDetails storageContainerDetails = (StorageContainerDetails) it.next();
                     storageContainerDetails.setStorageContainer(container);
-                    dao.update(storageContainerDetails);
+                    dao.update(storageContainerDetails, sessionDataBean, true, true);
                 }
             }
             

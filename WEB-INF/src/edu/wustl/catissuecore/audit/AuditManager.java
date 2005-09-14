@@ -18,8 +18,11 @@ import edu.wustl.catissuecore.domain.AuditEventDetails;
 import edu.wustl.catissuecore.domain.AuditEventLog;
 import edu.wustl.catissuecore.domain.Department;
 import edu.wustl.catissuecore.exception.AuditException;
+import edu.wustl.common.security.exceptions.SMException;
+import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * @author kapil_kaveeshwar
@@ -197,22 +200,29 @@ public class AuditManager
 		if(auditEvent.getAuditEventLogCollection().isEmpty())
 			return;
 		
-		dao.insert(auditEvent,false);
+		try
+		{
+		dao.insert(auditEvent,null, false, true);
 		Iterator auditLogIterator = auditEvent.getAuditEventLogCollection().iterator();
 		while(auditLogIterator.hasNext())
 		{
 			AuditEventLog auditEventLog = (AuditEventLog)auditLogIterator.next();
 			auditEventLog.setAuditEvent(auditEvent);
-			dao.insert(auditEventLog,false);
+			dao.insert(auditEventLog,null, false, true);
 			
   			Iterator auditEventDetailsIterator = auditEventLog.getAuditEventDetailsCollcetion().iterator();
   			while(auditEventDetailsIterator.hasNext())
   			{
   				AuditEventDetails auditEventDetails = (AuditEventDetails)auditEventDetailsIterator.next();
   				auditEventDetails.setAuditEventLog(auditEventLog);
-  				dao.insert(auditEventDetails,false);
+  				dao.insert(auditEventDetails,null, false, true);
   			}
 		}
 		auditEvent = new AuditEvent();
+		}
+		catch(UserNotAuthorizedException sme)
+		{
+		    Logger.out.debug("Exception:"+sme.getMessage(),sme);
+		}
 	}
 }

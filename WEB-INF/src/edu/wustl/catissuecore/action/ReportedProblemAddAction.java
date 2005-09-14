@@ -17,6 +17,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -29,6 +31,9 @@ import edu.wustl.catissuecore.exception.BizLogicException;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.SendEmail;
+import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.security.exceptions.SMException;
+import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.logger.Logger;
 
 
@@ -46,11 +51,12 @@ public class ReportedProblemAddAction extends Action
         
         ReportedProblemForm reportedProblemForm = (ReportedProblemForm)form;
         AbstractBizLogic bizLogic = BizLogicFactory.getBizLogic(reportedProblemForm.getFormId());
+        ReportedProblem reportedProblem =null;
         
         try
         {
-            ReportedProblem reportedProblem = new ReportedProblem(reportedProblemForm);
-            bizLogic.insert(reportedProblem,Constants.HIBERNATE_DAO);
+            reportedProblem = new ReportedProblem(reportedProblemForm);
+            bizLogic.insert(reportedProblem,null,Constants.HIBERNATE_DAO);
             
             String adminEmailAddress = ApplicationProperties.getValue("email.administrative.emailAddress");
             String technicalSupportEmailAddress = ApplicationProperties.getValue("email.technicalSupport.emailAddress");
@@ -79,6 +85,37 @@ public class ReportedProblemAddAction extends Action
             target = new String(Constants.FAILURE);
             Logger.out.error(daoExp.getMessage(),daoExp);
         }
+        catch (UserNotAuthorizedException excp)
+        {
+            ActionErrors errors = new ActionErrors();
+            SessionDataBean sessionDataBean =getSessionData(request);
+            String userName;
+        	if(sessionDataBean == null)
+        	{
+        	    userName = "";
+        	}
+        	else
+        	{
+        	    userName = sessionDataBean.getUserName();
+        	}
+        	ActionError error = new ActionError("access.addedit.object.denied",userName, reportedProblem .getClass().getName());
+        	errors.add(ActionErrors.GLOBAL_ERROR,error);
+        	saveErrors(request,errors);
+        	target = new String(Constants.FAILURE);
+            Logger.out.debug("excp "+excp.getMessage());
+            Logger.out.error(excp.getMessage(), excp);
+        }
         return (mapping.findForward(target));
     }    
+    
+    protected SessionDataBean getSessionData(HttpServletRequest request) {
+		Object obj = request.getSession().getAttribute(Constants.SESSION_DATA);
+		if(obj!=null)
+		{
+			SessionDataBean sessionData = (SessionDataBean) obj;
+			return  sessionData;
+		}
+		return null;
+		//return (String) request.getSession().getAttribute(Constants.SESSION_DATA);
+	}
 }

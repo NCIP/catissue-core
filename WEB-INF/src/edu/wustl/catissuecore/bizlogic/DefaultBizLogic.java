@@ -14,6 +14,9 @@ import edu.wustl.catissuecore.dao.DAO;
 import edu.wustl.catissuecore.dao.DAOFactory;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
+import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.security.exceptions.SMException;
+import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
@@ -27,12 +30,12 @@ public class  DefaultBizLogic extends AbstractBizLogic
 {
 	/**
      * Inserts an object into the database.
-     * @param obj The object to be inserted.
-     * @throws DAOException
+	 * @param obj The object to be inserted.
+	 * @throws DAOException
      */
-    protected void insert(DAO dao, Object obj) throws DAOException
+    protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
     {
-        dao.insert(obj,true);
+        dao.insert(obj,sessionDataBean, true, true);
     }
     
     /**
@@ -40,9 +43,9 @@ public class  DefaultBizLogic extends AbstractBizLogic
      * @param obj The object to be updated into the database. 
      * @throws DAOException
      */
-    protected void update(DAO dao, Object obj) throws DAOException
+    protected void update(DAO dao, Object obj, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
     {
-        dao.update(obj);
+        dao.update(obj, sessionDataBean, true, true);
     }
     
     /**
@@ -53,6 +56,7 @@ public class  DefaultBizLogic extends AbstractBizLogic
      * @param whereColumnCondition The comparision condition for the field values. 
      * @param whereColumnValue An array of field values.
      * @param joinCondition The join condition.
+     * @throws SMException
      */
     public List retrieve(String sourceObjectName, String[] selectColumnName, String[] whereColumnName,
             String[] whereColumnCondition, Object[] whereColumnValue,
@@ -90,6 +94,7 @@ public class  DefaultBizLogic extends AbstractBizLogic
      * @param whereColumnCondition The comparision condition for the field values. 
      * @param whereColumnValue An array of field values.
      * @param joinCondition The join condition.
+     * @throws SMException
      */
     public List retrieve(String sourceObjectName, String[] whereColumnName,
             String[] whereColumnCondition, Object[] whereColumnValue,

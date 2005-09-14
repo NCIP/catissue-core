@@ -25,8 +25,10 @@ import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.Roles;
 import edu.wustl.common.beans.SecurityDataBean;
+import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
+import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
@@ -39,33 +41,33 @@ public class CollectionProtocolBizLogic extends DefaultBizLogic implements Roles
 {
 	/**
      * Saves the CollectionProtocol object in the database.
-     * @param session The session in which the object is saved.
-     * @param obj The CollectionProtocol object to be saved.
-     * @throws HibernateException Exception thrown during hibernate operations.
-     * @throws DAOException 
+	 * @param obj The CollectionProtocol object to be saved.
+	 * @param session The session in which the object is saved.
+	 * @throws DAOException 
+	 * @throws HibernateException Exception thrown during hibernate operations.
      */
-	protected void insert(DAO dao, Object obj) throws DAOException
+	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 	{
 		CollectionProtocol collectionProtocol = (CollectionProtocol)obj;
 		
 		setPrincipalInvestigator(dao,collectionProtocol);		
 		setCoordinatorCollection(dao,collectionProtocol);
 		
-		dao.insert(collectionProtocol,true);
+		dao.insert(collectionProtocol,sessionDataBean, true, true);
 		
 		Iterator it = collectionProtocol.getCollectionProtocolEventCollection().iterator();		
 		while(it.hasNext())
 		{
 			CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent)it.next();
 			collectionProtocolEvent.setCollectionProtocol(collectionProtocol);
-			dao.insert(collectionProtocolEvent,true);
+			dao.insert(collectionProtocolEvent,sessionDataBean, true, true);
 			
 			Iterator srIt = collectionProtocolEvent.getSpecimenRequirementCollection().iterator();
 			while(srIt.hasNext())
 			{
 				SpecimenRequirement specimenRequirement = (SpecimenRequirement)srIt.next();
 				specimenRequirement.getCollectionProtocolEventCollection().add(collectionProtocolEvent);
-				dao.insert(specimenRequirement,true);
+				dao.insert(specimenRequirement,sessionDataBean, true, true);
 			}
 		}
 		
@@ -81,11 +83,11 @@ public class CollectionProtocolBizLogic extends DefaultBizLogic implements Roles
 	
 	/**
      * Updates the persistent object in the database.
-     * @param session The session in which the object is saved.
-     * @param obj The object to be updated.
-     * @throws DAOException 
+	 * @param obj The object to be updated.
+	 * @param session The session in which the object is saved.
+	 * @throws DAOException 
      */
-    protected void update(DAO dao,Object obj) throws DAOException
+    protected void update(DAO dao,Object obj, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
     {
     	CollectionProtocol collectionProtocol = (CollectionProtocol)obj;
 		
@@ -94,14 +96,14 @@ public class CollectionProtocolBizLogic extends DefaultBizLogic implements Roles
 		//setPrincipalInvestigator(dao,collectionProtocol);		
 		//setCoordinatorCollection(dao,collectionProtocol);
 		
-		dao.update(collectionProtocol);
+		dao.update(collectionProtocol, sessionDataBean, true, true);
 		
 		Iterator it = collectionProtocol.getCollectionProtocolEventCollection().iterator();		
 		while(it.hasNext())
 		{
 			CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent)it.next();
 			collectionProtocolEvent.setCollectionProtocol(collectionProtocol);
-			dao.update(collectionProtocolEvent);
+			dao.update(collectionProtocolEvent, sessionDataBean, true, true);
 			
 			Iterator srIt = collectionProtocolEvent.getSpecimenRequirementCollection().iterator();
 			while(srIt.hasNext())
@@ -112,7 +114,7 @@ public class CollectionProtocolBizLogic extends DefaultBizLogic implements Roles
 				
 				
 				specimenRequirement.getCollectionProtocolEventCollection().add(collectionProtocolEvent);
-				dao.update(specimenRequirement);
+				dao.update(specimenRequirement, sessionDataBean, true, true);
 			}
 		}
     }

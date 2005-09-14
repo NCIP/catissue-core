@@ -11,6 +11,8 @@ import edu.wustl.catissuecore.dao.DAO;
 import edu.wustl.catissuecore.domain.ReportedProblem;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.SendEmail;
+import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
 
 /**
@@ -25,11 +27,11 @@ public class ReportedProblemBizLogic extends DefaultBizLogic
     /* (non-Javadoc)
      * @see edu.wustl.catissuecore.dao.HibernateDAO#add(java.lang.Object)
      */
-	protected void insert(DAO dao, Object obj) throws DAOException
+	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
     {
         ReportedProblem reportedProblem = (ReportedProblem) obj;
 
-        dao.insert(obj,true);
+        dao.insert(obj,sessionDataBean, true, false);
 
         //Send the reported problem to administrator and the user who reported it.
         SendEmail email = new SendEmail();
@@ -53,9 +55,9 @@ public class ReportedProblemBizLogic extends DefaultBizLogic
     /* (non-Javadoc)
      * @see edu.wustl.catissuecore.dao.AbstractBizLogic#update(java.lang.Object)
      */
-	protected void update(DAO dao, Object obj) throws DAOException
+	protected void update(DAO dao, Object obj, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
     {
         ReportedProblem reportedProblem = (ReportedProblem) obj;
-        dao.update(obj);
+        dao.update(obj, sessionDataBean, true,true);
     }
 }

@@ -12,6 +12,8 @@ import edu.wustl.catissuecore.dao.DAO;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
@@ -25,11 +27,11 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 {
 	/**
      * Saves the FrozenEventParameters object in the database.
-     * @param session The session in which the object is saved.
-     * @param obj The FrozenEventParameters object to be saved.
-     * @throws DAOException 
+	 * @param obj The FrozenEventParameters object to be saved.
+	 * @param session The session in which the object is saved.
+	 * @throws DAOException 
      */
-	protected void insert(DAO dao, Object obj) throws DAOException 
+	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException 
 	{
 		SpecimenEventParameters specimenEventParametersObject = (SpecimenEventParameters)obj;
 
@@ -47,7 +49,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 		    specimenEventParametersObject.setSpecimen(specimen);
 		}
 		
-		dao.insert(specimenEventParametersObject,true);
+		dao.insert(specimenEventParametersObject,sessionDataBean, true, true);
 	}
 	
 	/**

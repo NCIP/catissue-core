@@ -88,7 +88,7 @@ public class ReportedProblemPendingCloseAction  extends SecureAction
                 reportedProblem.setActivityStatus(activityStatus);
 
                 //Updates reported problem's information in the database.
-                bizLogic.update(reportedProblem,Constants.HIBERNATE_DAO);
+                bizLogic.update(reportedProblem,Constants.HIBERNATE_DAO, getSessionData(request));
                 
                 target = new String(Constants.SUCCESS);
             }

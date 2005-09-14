@@ -17,6 +17,8 @@ import edu.wustl.catissuecore.dao.DAO;
 import edu.wustl.catissuecore.domain.DistributionProtocol;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
 
 /**
@@ -27,43 +29,43 @@ public class DistributionProtocolBizLogic extends DefaultBizLogic
 {
 	/**
      * Saves the DistributionProtocol object in the database.
-     * @param session The session in which the object is saved.
-     * @param obj The DistributionProtocol object to be saved.
-     * @throws DAOException 
+	 * @param obj The DistributionProtocol object to be saved.
+	 * @param session The session in which the object is saved.
+	 * @throws DAOException 
      */
-	protected void insert(DAO dao, Object obj) throws DAOException 
+	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException 
 	{
 		DistributionProtocol distributionProtocol = (DistributionProtocol)obj;
 		setPrincipalInvestigator(dao,distributionProtocol);
-		dao.insert(distributionProtocol,true);
+		dao.insert(distributionProtocol,sessionDataBean, true, true);
 
 		Iterator it = distributionProtocol.getSpecimenRequirementCollection().iterator();
 		while(it.hasNext())
 		{
 			SpecimenRequirement specimenRequirement = (SpecimenRequirement)it.next();
 			specimenRequirement.getDistributionProtocolCollection().add(distributionProtocol);
-			dao.insert(specimenRequirement,true);
+			dao.insert(specimenRequirement,sessionDataBean, true, true);
 		}
 	}
 	
 	/**
      * Updates the persistent object in the database.
-     * @param session The session in which the object is saved.
-     * @param obj The object to be updated.
-     * @throws DAOException 
+	 * @param obj The object to be updated.
+	 * @param session The session in which the object is saved.
+	 * @throws DAOException 
      */
-	protected void update(DAO dao, Object obj) throws DAOException
+	protected void update(DAO dao, Object obj, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
     {
 		DistributionProtocol distributionProtocol = (DistributionProtocol)obj;
 		setPrincipalInvestigator(dao,distributionProtocol);
-		dao.update(distributionProtocol);
+		dao.update(distributionProtocol, sessionDataBean, true, true);
 
 		Iterator it = distributionProtocol.getSpecimenRequirementCollection().iterator();
 		while(it.hasNext())
 		{
 			SpecimenRequirement specimenRequirement = (SpecimenRequirement)it.next();
 			specimenRequirement.getDistributionProtocolCollection().add(distributionProtocol);
-			dao.update(specimenRequirement);
+			dao.update(specimenRequirement, sessionDataBean, true, true);
 		}
     }
 	

@@ -12,6 +12,8 @@ package edu.wustl.catissuecore.bizlogic;
 
 import edu.wustl.catissuecore.dao.DAO;
 import edu.wustl.catissuecore.domain.StorageType;
+import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
 
 /**
@@ -22,28 +24,28 @@ public class StorageTypeBizLogic extends DefaultBizLogic
 {
 	/**
      * Saves the storageType object in the database.
-     * @param session The session in which the object is saved.
-     * @param obj The storageType object to be saved.
-     * @throws DAOException 
+	 * @param obj The storageType object to be saved.
+	 * @param session The session in which the object is saved.
+	 * @throws DAOException 
      */
-	protected void insert(DAO dao, Object obj) throws DAOException  
+	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException  
 	{
 		StorageType type = (StorageType)obj;
-		dao.insert(type.getDefaultStorageCapacity(),true);
-	    dao.insert(type,true);
+		dao.insert(type.getDefaultStorageCapacity(),sessionDataBean, true, true);
+	    dao.insert(type,sessionDataBean, true, true);
 	}
 	
 	/**
      * Updates the persistent object in the database.
-     * @param session The session in which the object is saved.
-     * @param obj The object to be updated.
-     * @throws DAOException 
+	 * @param obj The object to be updated.
+	 * @param session The session in which the object is saved.
+	 * @throws DAOException 
      */
-	protected void update(DAO dao, Object obj) throws DAOException 
+	protected void update(DAO dao, Object obj, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException 
     {
 		StorageType type = (StorageType)obj;
 
-		dao.update(type.getDefaultStorageCapacity());
-	    dao.update(type);
+		dao.update(type.getDefaultStorageCapacity(), sessionDataBean, true, true);
+	    dao.update(type, sessionDataBean, true, true);
     }
 }

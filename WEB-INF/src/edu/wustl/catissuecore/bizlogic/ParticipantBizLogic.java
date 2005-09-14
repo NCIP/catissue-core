@@ -13,10 +13,11 @@ package edu.wustl.catissuecore.bizlogic;
 import java.util.Collection;
 import java.util.Iterator;
 
-
 import edu.wustl.catissuecore.dao.DAO;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
+import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
@@ -28,15 +29,15 @@ public class ParticipantBizLogic extends DefaultBizLogic
 {
 	/**
      * Saves the Participant object in the database.
-     * @param session The session in which the object is saved.
-     * @param obj The storageType object to be saved.
-     * @throws DAOException 
+	 * @param obj The storageType object to be saved.
+	 * @param session The session in which the object is saved.
+	 * @throws DAOException 
      */
-	protected void insert(DAO dao, Object obj) throws DAOException 
+	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException 
 	{
 		Participant participant = (Participant)obj;
         
-		dao.insert(participant,true);
+		dao.insert(participant,sessionDataBean, true, true);
 		
 		Collection participantMedicalIdentifierCollection = participant.getParticipantMedicalIdentifierCollection();
 		
@@ -55,21 +56,21 @@ public class ParticipantBizLogic extends DefaultBizLogic
 			ParticipantMedicalIdentifier pmIdentifier = (ParticipantMedicalIdentifier)it.next();
 			Logger.out.debug(pmIdentifier);
 			pmIdentifier.setParticipant(participant);
-			dao.insert(pmIdentifier,true);
+			dao.insert(pmIdentifier,sessionDataBean, true, true);
 		}
 	}
 	
 	/**
      * Updates the persistent object in the database.
-     * @param session The session in which the object is saved.
-     * @param obj The object to be updated.
-     * @throws DAOException 
+	 * @param obj The object to be updated.
+	 * @param session The session in which the object is saved.
+	 * @throws DAOException 
      */
-	protected void update(DAO dao, Object obj) throws DAOException 
+	protected void update(DAO dao, Object obj, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException 
     {
 		Participant participant = (Participant)obj;
         
-		dao.update(participant);
+		dao.update(participant, sessionDataBean, true, true);
 		
 		Collection participantMedicalIdentifierCollection = participant.getParticipantMedicalIdentifierCollection();		
 		Iterator it = participantMedicalIdentifierCollection.iterator();
@@ -78,7 +79,7 @@ public class ParticipantBizLogic extends DefaultBizLogic
 		{
 			ParticipantMedicalIdentifier pmIdentifier = (ParticipantMedicalIdentifier)it.next();
 			pmIdentifier.setParticipant(participant);
-			dao.update(pmIdentifier);
+			dao.update(pmIdentifier, sessionDataBean, true, true);
 		}
     }
 }

@@ -16,11 +16,13 @@ import java.util.Vector;
 import edu.wustl.catissuecore.dao.DAO;
 import edu.wustl.catissuecore.tissuesite.TissueSiteTreeNode;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.cde.CDE;
 import edu.wustl.common.cde.CDEImpl;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.cde.PermissibleValue;
 import edu.wustl.common.cde.PermissibleValueImpl;
+import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
 
 /**
@@ -31,14 +33,14 @@ public class CDEBizLogic extends DefaultBizLogic implements TreeDataInterface
 
     /**
      * Saves the storageType object in the database.
-     * @param session The session in which the object is saved.
      * @param obj The storageType object to be saved.
-     * @throws DAOException 
+     * @param session The session in which the object is saved.
+     * @throws DAOException
      */
-    protected void insert(DAO dao, Object obj) throws DAOException
+    protected void insert(Object obj,DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
     {
         CDEImpl cde = (CDEImpl) obj;
-        dao.insert(cde, false);
+        dao.insert(cde, sessionDataBean, false,false);
 
         Iterator iterator = cde.getPermissibleValues().iterator();
         while (iterator.hasNext())
@@ -46,7 +48,7 @@ public class CDEBizLogic extends DefaultBizLogic implements TreeDataInterface
             PermissibleValueImpl permissibleValue = (PermissibleValueImpl) iterator
                     .next();
             permissibleValue.setCde(cde);
-            dao.insert(permissibleValue, false);
+            dao.insert(permissibleValue, sessionDataBean, false,false);
         }
     }
     

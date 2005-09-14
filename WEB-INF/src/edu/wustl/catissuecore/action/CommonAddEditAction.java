@@ -32,6 +32,9 @@ import edu.wustl.catissuecore.domain.DomainObjectFactory;
 import edu.wustl.catissuecore.exception.AssignDataException;
 import edu.wustl.catissuecore.exception.BizLogicException;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.security.exceptions.SMException;
+import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
@@ -51,6 +54,7 @@ public class CommonAddEditAction extends Action
             throws IOException, ServletException
     {
         String target = null;
+        AbstractDomainObject abstractDomain = null;
 
         try
         {
@@ -61,10 +65,10 @@ public class CommonAddEditAction extends Action
             if (abstractForm.isAddOperation())
             {
                 //If operation is add, add the data in the database.
-                AbstractDomainObject abstractDomain = DomainObjectFactory.getDomainObject(
+                abstractDomain = DomainObjectFactory.getDomainObject(
                         abstractForm.getFormId(), abstractForm);
                 Logger.out.debug("IN ADD ACTION DEBUG...................ID*********"+abstractForm.getSystemIdentifier());
-                bizLogic.insert(abstractDomain, Constants.HIBERNATE_DAO);
+                bizLogic.insert(abstractDomain, getSessionData(request),  Constants.HIBERNATE_DAO);
                 target = new String(Constants.SUCCESS);
             }
             else
@@ -77,9 +81,9 @@ public class CommonAddEditAction extends Action
                 
                 if (!list.isEmpty())
                 {
-                	AbstractDomainObject abstractDomain = (AbstractDomainObject) list.get(0);
+                	abstractDomain = (AbstractDomainObject) list.get(0);
                     abstractDomain.setAllValues(abstractForm);
-                    bizLogic.update(abstractDomain,Constants.HIBERNATE_DAO);
+                    bizLogic.update(abstractDomain,Constants.HIBERNATE_DAO, getSessionData(request));
                     target = new String(Constants.SUCCESS);
                 }
                 else
@@ -111,6 +115,27 @@ public class CommonAddEditAction extends Action
             Logger.out.debug("excp "+excp.getMessage());
             Logger.out.error(excp.getMessage(), excp);
         }
+        catch (UserNotAuthorizedException excp)
+        {
+            
+            ActionErrors errors = new ActionErrors();
+            SessionDataBean sessionDataBean =getSessionData(request);
+            String userName;
+        	if(sessionDataBean == null)
+        	{
+        	    userName = "";
+        	}
+        	else
+        	{
+        	    userName = sessionDataBean.getUserName();
+        	}
+        	ActionError error = new ActionError("access.addedit.object.denied",userName,abstractDomain.getClass().getName());
+        	errors.add(ActionErrors.GLOBAL_ERROR,error);
+        	saveErrors(request,errors);
+        	target = new String(Constants.FAILURE);
+            Logger.out.debug("excp "+excp.getMessage());
+            Logger.out.error(excp.getMessage(), excp);
+        }
         catch (AssignDataException excp)
         {
             target = new String(Constants.FAILURE);
@@ -119,4 +144,15 @@ public class CommonAddEditAction extends Action
         }
         return (mapping.findForward(target));
     }
+    
+    protected SessionDataBean getSessionData(HttpServletRequest request) {
+		Object obj = request.getSession().getAttribute(Constants.SESSION_DATA);
+		if(obj!=null)
+		{
+			SessionDataBean sessionData = (SessionDataBean) obj;
+			return  sessionData;
+		}
+		return null;
+		//return (String) request.getSession().getAttribute(Constants.SESSION_DATA);
+	}
 }
