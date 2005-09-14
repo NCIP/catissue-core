@@ -58,6 +58,7 @@ public abstract class SpecimenEventParameters extends EventParameters
 		
 		SpecimenEventParametersForm specimenEventParametersForm = (SpecimenEventParametersForm) abstractForm;
 		Logger.out.debug("specimenEventParametersForm.getSpecimenId()............................."+specimenEventParametersForm.getSpecimenId());
-		specimen.setSystemIdentifier(new Long(specimenEventParametersForm.getSpecimenId()));
+		if(specimen!=null)
+			specimen.setSystemIdentifier(new Long(specimenEventParametersForm.getSpecimenId()));
 	}
 }
