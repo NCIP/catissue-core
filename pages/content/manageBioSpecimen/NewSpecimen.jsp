@@ -187,6 +187,10 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 		{
 			<% if(form != null) { %>
 				var specimenIdentifier = "<%=form.getSystemIdentifier()%>";
+				var fromPositionData = "<%=form.getPositionInStorageContainer()%>";
+				var posOne = "<%=form.getPositionDimensionOne()%>";
+				var posTwo = "<%=form.getPositionDimensionTwo()%>";
+				var storContId = "<%=form.getStorageContainer()%>";
 			<% } %>
 			
 			var action = "";
@@ -222,8 +226,14 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 			else if(element.value == "Tissue Specimen Review")
 				action = "/catissuecore/TissueSpecimenReviewEventParameters.do?operation=add&pageOf=pageOfTissueSpecimenReviewParameters";
 			else if(element.value == "Transfer")
+			{
 				action = "/catissuecore/TransferEventParameters.do?operation=add&pageOf=pageOfTransferEventParameters";
-						
+				action = action + "&fromPositionData=" + fromPositionData;			
+				action = action + "&posOne=" + posOne;
+				action = action + "&posTwo=" + posTwo;
+				action = action + "&storContId=" + storContId;			
+				
+			}	
 			action = action + "&specimenId=" + specimenIdentifier;
 			addNew.href = action;
 			
