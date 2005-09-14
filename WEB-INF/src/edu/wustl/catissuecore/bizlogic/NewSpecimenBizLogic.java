@@ -23,9 +23,12 @@ import edu.wustl.catissuecore.domain.ExternalIdentifier;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.StorageContainer;
+import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.logger.Logger;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
-import edu.wustl.common.util.dbManager.DAOException;
 
 /**
  * NewSpecimenHDAO is used to add new specimen information into the database using Hibernate.
@@ -89,6 +92,16 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 				dao.update(exId, sessionDataBean, true, true);
 			}
 		}
+		
+		Logger.out.debug("specimen.getActivityStatus() "+specimen.getActivityStatus());
+		if(specimen.getActivityStatus().equals(Constants.ACTIVITY_STATUS_DISABLED))
+		{
+			Logger.out.debug("specimen.getActivityStatus() "+specimen.getActivityStatus());
+			Long specimenIDArr[] = new Long[1];
+			specimenIDArr[0] = specimen.getSystemIdentifier();
+			
+			disableSubSpecimens(dao,specimenIDArr);
+		}
     }
     
     private void setSpecimenAttributes(DAO dao, Specimen specimen) throws DAOException
@@ -149,5 +162,24 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		}
 		
 		specimen.setBiohazardCollection(set);
+	}
+    
+    public void disableRelatedObjects(DAO dao, Long specimenCollectionGroupArr[])throws DAOException 
+    {
+    	Logger.out.debug("disableRelatedObjects NewSpecimenBizLogic");
+    	List listOfSubElement = super.disableObjects(dao, Specimen.class, "specimenCollectionGroup", 
+    			"CATISSUE_SPECIMEN", "SPECIMEN_COLLECTION_GROUP_ID", specimenCollectionGroupArr);
+    	
+    	disableSubSpecimens(dao,Utility.toLongArray(listOfSubElement));
+    }
+    
+    private void disableSubSpecimens(DAO dao, Long speIDArr[])throws DAOException
+	{
+    	List listOfSubElement = super.disableObjects(dao, Specimen.class, "parentSpecimen", 
+    			"CATISSUE_SPECIMEN", "PARENT_SPECIMEN_ID", speIDArr);
+    	
+    	if(listOfSubElement.isEmpty())
+    		return;
+    	disableSubSpecimens(dao, Utility.toLongArray(listOfSubElement));
 	}
 }

@@ -16,10 +16,11 @@ import java.util.Iterator;
 import edu.wustl.catissuecore.dao.DAO;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
-import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 
 /**
  * ParticipantHDAO is used to to add Participant's information into the database using Hibernate.
@@ -80,6 +81,16 @@ public class ParticipantBizLogic extends DefaultBizLogic
 			ParticipantMedicalIdentifier pmIdentifier = (ParticipantMedicalIdentifier)it.next();
 			pmIdentifier.setParticipant(participant);
 			dao.update(pmIdentifier, sessionDataBean, true, true);
+		}
+		
+		Logger.out.debug("participant.getActivityStatus() "+participant.getActivityStatus());
+		if(participant.getActivityStatus().equals(Constants.ACTIVITY_STATUS_DISABLED))
+		{
+			Logger.out.debug("participant.getActivityStatus() "+participant.getActivityStatus());
+			Long participantIDArr[] = {participant.getSystemIdentifier()};
+			
+			CollectionProtocolRegistrationBizLogic bizLogic = (CollectionProtocolRegistrationBizLogic)BizLogicFactory.getBizLogic(Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
+			bizLogic.disableRelatedObjects(dao,participantIDArr);
 		}
     }
 }

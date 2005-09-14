@@ -19,10 +19,12 @@ import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Participant;
-import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
+import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 
 /**
  * UserHDAO is used to add user information into the database using Hibernate.
@@ -67,6 +69,16 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 		//registerParticipantAndProtocol(dao,collectionProtocolRegistration);
 		
 		dao.update(collectionProtocolRegistration, sessionDataBean, true, true);
+		
+		Logger.out.debug("collectionProtocolRegistration.getActivityStatus() "+collectionProtocolRegistration.getActivityStatus());
+		if(collectionProtocolRegistration.getActivityStatus().equals(Constants.ACTIVITY_STATUS_DISABLED))
+		{
+			Logger.out.debug("collectionProtocolRegistration.getActivityStatus() "+collectionProtocolRegistration.getActivityStatus());
+			Long collectionProtocolRegistrationIDArr[] = {collectionProtocolRegistration.getSystemIdentifier()};
+			
+			SpecimenCollectionGroupBizLogic bizLogic = (SpecimenCollectionGroupBizLogic)BizLogicFactory.getBizLogic(Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID);
+			bizLogic.disableRelatedObjects(dao,collectionProtocolRegistrationIDArr);
+		}
 	}
 
 	public Set getProtectionObjects(AbstractDomainObject obj)
@@ -121,4 +133,13 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 			collectionProtocolRegistration.setCollectionProtocol(collectionProtocol);
 		}
 	}
+    
+    public void disableRelatedObjects(DAO dao, Long participantIDArr[])throws DAOException 
+    {
+    	List listOfSubElement = super.disableObjects(dao, CollectionProtocolRegistration.class, "participant", 
+    			"CATISSUE_COLLECTION_PROTOCOL_REGISTRATION", "PARTICIPANT_ID", participantIDArr);
+    	
+		SpecimenCollectionGroupBizLogic bizLogic = (SpecimenCollectionGroupBizLogic)BizLogicFactory.getBizLogic(Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID);
+		bizLogic.disableRelatedObjects(dao,Utility.toLongArray(listOfSubElement));
+    }  
 }

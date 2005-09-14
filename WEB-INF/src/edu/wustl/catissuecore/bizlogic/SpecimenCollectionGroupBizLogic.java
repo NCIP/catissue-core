@@ -20,9 +20,11 @@ import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.logger.Logger;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
-import edu.wustl.common.util.dbManager.DAOException;
 
 /**
  * UserHDAO is used to add user information into the database using Hibernate.
@@ -74,6 +76,16 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		
 		dao.update(specimenCollectionGroup, sessionDataBean, true, true);
 		dao.update(specimenCollectionGroup.getClinicalReport(), sessionDataBean, true, true);
+		
+		Logger.out.debug("specimenCollectionGroup.getActivityStatus() "+specimenCollectionGroup.getActivityStatus());
+		if(specimenCollectionGroup.getActivityStatus().equals(Constants.ACTIVITY_STATUS_DISABLED))
+		{
+			Logger.out.debug("specimenCollectionGroup.getActivityStatus() "+specimenCollectionGroup.getActivityStatus());
+			Long specimenCollectionGroupIDArr[] = {specimenCollectionGroup.getSystemIdentifier()};
+			
+			NewSpecimenBizLogic bizLogic = (NewSpecimenBizLogic)BizLogicFactory.getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
+			bizLogic.disableRelatedObjects(dao,specimenCollectionGroupIDArr);
+		}
 	}
 	
 	private void setCollectionProtocolRegistration(DAO dao, SpecimenCollectionGroup specimenCollectionGroup) throws DAOException 
@@ -121,4 +133,30 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 			}
 		}
 	}
+	
+//	public void disableRelatedObjects(DAO dao, Long [])throws DAOException 
+//    {
+//		dao.disableRelatedObjects("","",collProtRegIDArr);
+//
+//		String sourceObjectName = .class.getName();
+//		String selectColumnName [] = {Constants.SYSTEM_IDENTIFIER};
+//		
+//		String[] whereColumnName = {"."+Constants.SYSTEM_IDENTIFIER};
+//		String[] whereColumnCondition = {"in"};
+//		Object[] whereColumnValue = {collProtRegIDArr};
+//		String joinCondition = Constants.AND_JOIN_CONDITION;
+//		
+//		List list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, 
+//				whereColumnCondition, whereColumnValue, joinCondition);
+//		Logger.out.debug("SpecimenCollectionGroup To Disable "+list);
+//    }
+	
+	public void disableRelatedObjects(DAO dao, Long collProtRegIDArr[])throws DAOException 
+    {
+    	List listOfSubElement = super.disableObjects(dao, SpecimenCollectionGroup.class, "collectionProtocolRegistration", 
+    			"CATISSUE_SPECIMEN_COLLECTION_GROUP", "COLLECTION_PROTOCOL_REGISTRATION_ID", collProtRegIDArr);
+    	
+    	NewSpecimenBizLogic bizLogic = (NewSpecimenBizLogic)BizLogicFactory.getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
+		bizLogic.disableRelatedObjects(dao,Utility.toLongArray(listOfSubElement));
+    }  
 }
