@@ -934,7 +934,8 @@ public class Constants
 	};
 	
 	public static final String [] HOURARRAY = {
-	        "1",
+			"00",
+			"1",
 	        "2",
 	        "3",
 	        "4",
@@ -956,8 +957,8 @@ public class Constants
 	        "20",
 	        "21",
 	        "22",
-	        "23",
-	        "00"
+	        "23"
+	        
 	};
 
 	
