@@ -44,6 +44,23 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 
 			List toContainerList = dao.getList(sourceObjectName, displayNameFields, valueField);
 			request.setAttribute(Constants.TOCONTAINERLIST, toContainerList);
+			
+			 //The fromPositionData(storageContainer Info) of specimen of this event.
+	        String fromPositionData = request.getParameter(Constants.FROM_POSITION_DATA); 
+	        request.setAttribute(Constants.FROM_POSITION_DATA, fromPositionData);
+	        
+	        //POSITION 1
+	        String posOne = request.getParameter(Constants.POS_ONE); 
+	        request.setAttribute(Constants.POS_ONE, posOne);
+	        
+	        //POSITION 2
+	        String posTwo = request.getParameter(Constants.POS_TWO); 
+	        request.setAttribute(Constants.POS_TWO, posTwo);
+
+	        //storagecontainer info
+	        String storContId = request.getParameter(Constants.STORAGE_CONTAINER_ID); 
+	        request.setAttribute(Constants.STORAGE_CONTAINER_ID, storContId);
+	        
 		}
 		catch (Exception exc)
 		{

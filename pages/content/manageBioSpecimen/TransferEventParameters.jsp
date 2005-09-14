@@ -5,14 +5,26 @@
 
 <head>
 	<script language="javascript">
-		
+		var win = null;
+		function NewWindow(mypage,myname,w,h,scroll)
+		{
+			LeftPosition = (screen.width) ? (screen.width-w)/2 : 0;
+			TopPosition = (screen.height) ? (screen.height-h)/2 : 0;
+
+			settings =
+				'height='+h+',width='+w+',top='+TopPosition+',left='+LeftPosition+',scrollbars='+scroll+',resizable'
+			win = open(mypage,myname,settings)
+			if (win.opener == null)
+				win.opener = self;
+		}
 	</script>
 </head>
 	
 <%
         String operation = (String) request.getAttribute(Constants.OPERATION);
-        String formName, specimenId=null;
-
+        String formName, specimenId=null , fromPositionData =null;
+        String posOne = null, posTwo = null, storContId = null;
+		
         boolean readOnlyValue;
         if (operation.equals(Constants.EDIT))
         {
@@ -23,6 +35,11 @@
         {
             formName = Constants.TRANSFER_EVENT_PARAMETERS_ADD_ACTION;
 			specimenId = (String) request.getAttribute(Constants.SPECIMEN_ID);
+			fromPositionData = (String) request.getAttribute(Constants.FROM_POSITION_DATA);
+			posOne = (String) request.getAttribute(Constants.POS_ONE);
+			posTwo = (String) request.getAttribute(Constants.POS_TWO);
+			storContId = (String) request.getAttribute(Constants.STORAGE_CONTAINER_ID);
+			
             readOnlyValue = false;
         }
 		
@@ -121,87 +138,57 @@
 			</td>
 		</tr>
 
-<!-- fromPositionDimensionOne -->		
+<!-- fromPosition -->		
 		<tr>
 			<td class="formRequiredNotice" width="5">*</td>
 			<td class="formRequiredLabel">
 				<label for="type">
-					<bean:message key="transfereventparameters.frompositiondimensionone"/> 
+					<bean:message key="transfereventparameters.fromposition"/> 
 				</label>
 			</td>
 			<td class="formField">
-				<html:text styleClass="formDateSized" size="35" styleId="fromPositionDimensionOne" property="fromPositionDimensionOne" />
+				<html:hidden property="fromPositionDimensionOne" value="<%=posOne%>" />
+				<html:hidden property="fromPositionDimensionTwo" value="<%=posTwo%>" />
+				<html:hidden property="fromStorageContainerId" value="<%=storContId%>" />
+				<%
+					if(fromPositionData == null)
+					{
+				%>
+				<html:text styleClass="formDateSized" size="35" styleId="fromPosition" property="fromPosition" readonly="true" />
+				<%
+					}
+					else
+					{
+				%>
+				<html:text styleClass="formDateSized" size="35" styleId="fromPosition" property="fromPosition" value="<%=fromPositionData%>" readonly="true" />
+				<%
+					}
+				%>
 			</td>
 		</tr>
 
-<!-- fromPositionDimensionTwo -->		
+<!-- toPosition -->		
 		<tr>
 			<td class="formRequiredNotice" width="5">*</td>
 			<td class="formRequiredLabel">
 				<label for="type">
-					<bean:message key="transfereventparameters.frompositiondimensiontwo"/> 
+					<bean:message key="transfereventparameters.toposition"/> 
 				</label>
 			</td>
 			<td class="formField">
-				<html:text styleClass="formDateSized" size="35" styleId="fromPositionDimensionTwo" property="fromPositionDimensionTwo" />
+				<html:hidden property="positionDimensionOne" />
+				<html:hidden property="positionDimensionTwo" />
+				<html:hidden property="storageContainer" />
+				<html:text styleClass="formDateSized" size="35" styleId="positionInStorageContainer" property="positionInStorageContainer" readonly="true" />
+				<html:button property="mapButton" styleClass="actionButton" styleId="Map"
+							onclick="javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfSpecimen','name','810','320','yes');return false" >
+					<bean:message key="buttons.map"/>
+				</html:button>
 			</td>
 		</tr>
 
-<!-- toPositionDimensionOne -->		
-		<tr>
-			<td class="formRequiredNotice" width="5">*</td>
-			<td class="formRequiredLabel">
-				<label for="type">
-					<bean:message key="transfereventparameters.topositiondimensionone"/> 
-				</label>
-			</td>
-			<td class="formField">
-				<html:text styleClass="formDateSized" size="35" styleId="toPositionDimensionOne" property="toPositionDimensionOne" />
-			</td>
-		</tr>
 
-<!-- toPositionDimensionTwo -->		
-		<tr>
-			<td class="formRequiredNotice" width="5">*</td>
-			<td class="formRequiredLabel">
-				<label for="type">
-					<bean:message key="transfereventparameters.topositiondimensiontwo"/> 
-				</label>
-			</td>
-			<td class="formField">
-				<html:text styleClass="formDateSized" size="35" styleId="toPositionDimensionTwo" property="toPositionDimensionTwo" />
-			</td>
-		</tr>
 
-<!-- fromStorageContainerId -->		
-		<tr>
-			<td class="formRequiredNotice" width="5">*</td>
-			<td class="formRequiredLabel">
-				<label for="type">
-					<bean:message key="transfereventparameters.fromstoragecontainerid"/> 
-				</label>
-			</td>
-			<td class="formField">
-				<html:select property="fromStorageContainerId" styleClass="formFieldSized" styleId="fromStorageContainerId" size="1">
-					<html:options collection="<%=Constants.FROMCONTAINERLIST%>" labelProperty="name" property="value"/>
-				</html:select>
-			</td>
-		</tr>
-
-<!-- toStorageContainerId -->		
-		<tr>
-			<td class="formRequiredNotice" width="5">*</td>
-			<td class="formRequiredLabel">
-				<label for="type">
-					<bean:message key="transfereventparameters.tostoragecontainerid"/> 
-				</label>
-			</td>
-			<td class="formField">
-				<html:select property="toStorageContainerId" styleClass="formFieldSized" styleId="toStorageContainerId" size="1">
-					<html:options collection="<%=Constants.TOCONTAINERLIST%>" labelProperty="name" property="value"/>
-				</html:select>
-			</td>
-		</tr>
 
 <!-- comments -->		
 		<tr>
