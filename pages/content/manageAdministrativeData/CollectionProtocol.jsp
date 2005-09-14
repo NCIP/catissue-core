@@ -769,11 +769,8 @@ function getSubDivCount(subdivtag)
 						<%
 								fName="";
 								 fName = cName + "_quantityIn)";
-								 String srHiddenUnitName =  cName + "__hiddenUnit)";
-								 String srHiddenUnit = srCommonName + "_hiddenUnit";
-								 String strHiddenUnitValue = ""+(String)colForm.getValue(srHiddenUnit);
 								 
-								 strHiddenUnitValue = changeUnit(classValue);
+								 String strHiddenUnitValue = ""+changeUnit(classValue);
 								 
 						%>
 
@@ -781,7 +778,7 @@ function getSubDivCount(subdivtag)
 			        			styleId="<%=fName%>" 
 			        			property="<%=fName%>" 
 			        			readonly="<%=readOnlyValue%>" />
-		        		<html:hidden property="<%=srHiddenUnitName%>" />	
+		        			
 			        	<span id="<%=sName%>">
 			        		<%=strHiddenUnitValue%>
 						</span>

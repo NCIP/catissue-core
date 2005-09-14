@@ -589,11 +589,7 @@ function insRow(subdivtag)
 						objname="";
 						objname = "value(SpecimenRequirement:"+ counter +"_quantityIn)";
 						
-								 String srHiddenUnitName = "value(SpecimenRequirement:"+ counter + "_hiddenUnit)";
-								 String srHiddenUnit = srCommonName + "_hiddenUnit";
-								 String strHiddenUnitValue = ""+(String)form.getValue(srHiddenUnit);
-								 
-								 strHiddenUnitValue = changeUnit(classValue);
+								 String strHiddenUnitValue = "" + changeUnit(classValue);
 								 
 						%>
 
@@ -603,7 +599,7 @@ function insRow(subdivtag)
 								styleId="<%=objname%>" 
 								property="<%=objname%>"
 								readonly="<%=readOnlyValue%>" />
-						<html:hidden property="<%=srHiddenUnitName%>" />&nbsp;
+						&nbsp;
 						<span id=' <%= objunit %>'>
 							<%=strHiddenUnitValue%>
 						</span>
