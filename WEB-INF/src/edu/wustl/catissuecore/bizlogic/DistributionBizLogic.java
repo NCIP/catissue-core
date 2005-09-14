@@ -19,6 +19,7 @@ import edu.wustl.catissuecore.domain.DistributedItem;
 import edu.wustl.catissuecore.domain.Distribution;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.dbManager.DAOException;
 
 /**
@@ -38,27 +39,24 @@ public class DistributionBizLogic extends DefaultBizLogic
 		Distribution dist = (Distribution)obj;
 		
 		//Load & set the User
-		List list = dao.retrieve(User.class.getName(), "systemIdentifier", dist.getUser().getSystemIdentifier());
-		
-		if(list!=null && list.size()!=0)
+		List list = dao.retrieve(User.class.getName(), Constants.SYSTEM_IDENTIFIER, dist.getUser().getSystemIdentifier());
+		if(list!=null && !list.isEmpty())
 		{
 			User user = (User)list.get(0);
 			dist.setUser(user);
 		}
 		
 		//Load & set From Site
-		list = dao.retrieve(Site.class.getName(),"systemIdentifier", dist.getFromSite().getSystemIdentifier());
-		
-		if(list!=null && list.size()!=0)
+		list = dao.retrieve(Site.class.getName(),Constants.SYSTEM_IDENTIFIER, dist.getFromSite().getSystemIdentifier());
+		if(list!=null && !list.isEmpty())
 		{
 			Site site = (Site)list.get(0);
 			dist.setFromSite(site);
 		}
 
 		//Load & set the To Site
-		list = dao.retrieve(Site.class.getName(),"systemIdentifier", dist.getToSite().getSystemIdentifier());
-		
-		if(list!=null && list.size()!=0)
+		list = dao.retrieve(Site.class.getName(),Constants.SYSTEM_IDENTIFIER, dist.getToSite().getSystemIdentifier());
+		if(list!=null && !list.isEmpty())
 		{
 			Site site = (Site)list.get(0);
 			dist.setToSite(site);
@@ -68,7 +66,6 @@ public class DistributionBizLogic extends DefaultBizLogic
 		
 		Collection distributedItemCollection = dist.getDistributedItemCollection();		
 		Iterator it = distributedItemCollection.iterator();
-		
 		while(it.hasNext())
 		{
 			DistributedItem item = (DistributedItem)it.next();

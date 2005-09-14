@@ -98,7 +98,7 @@ public class CommonAddEditAction extends Action
         {
         	ActionErrors errors = new ActionErrors();
         	
-        	ActionError error = new ActionError("errors.item.required","Error "+excp.getMessage());
+        	ActionError error = new ActionError("errors.item","Error "+excp.getMessage());
         	errors.add(ActionErrors.GLOBAL_ERROR,error);
         	saveErrors(request,errors);
             target = new String(Constants.FAILURE);

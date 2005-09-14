@@ -39,7 +39,7 @@ import edu.wustl.common.util.logger.Logger;
   *
  * Description:  This Class handles the Distribution..
  */
-public class DistributionForm extends EventParametersForm
+public class DistributionForm extends SpecimenEventParametersForm
 {
 	
 	private String fromSite;

@@ -153,6 +153,8 @@ public class Distribution extends SpecimenEventParameters implements java.io.Ser
 	    {
 	    	super.setAllValues(abstractForm);
 	    	
+	    	super.specimen = null;
+	    	
 	    	DistributionForm form = (DistributionForm) abstractForm;
 	    	
 	        toSite.setSystemIdentifier(new Long(form.getToSite()));
