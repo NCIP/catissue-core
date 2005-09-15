@@ -193,7 +193,8 @@
 				    <td class="formField">
 				     	<html:select property="collectionProtocolEventId" styleClass="formFieldSized" styleId="collectionProtocolEventId" size="1" onchange="onChangeEvent(this)" >
                          	<html:options collection="<%=Constants.STUDY_CALENDAR_EVENT_POINT_LIST%>" labelProperty="name" property="value"/>				     					     					     	
-						</html:select>
+						</html:select>&nbsp;
+						<bean:message key="collectionprotocol.studycalendarcomment"/>
 		        	</td>
 				 </tr>
 				 
