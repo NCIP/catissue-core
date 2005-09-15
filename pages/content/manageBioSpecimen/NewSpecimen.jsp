@@ -191,6 +191,11 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 				var posOne = "<%=form.getPositionDimensionOne()%>";
 				var posTwo = "<%=form.getPositionDimensionTwo()%>";
 				var storContId = "<%=form.getStorageContainer()%>";
+				var subTypeData = "<%=form.getType()%>";
+				var isRNA="false";
+				if (subTypeData=="RNA")
+					isRNA = "true";
+				
 			<% } %>
 			
 			var action = "";
@@ -235,6 +240,7 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 				
 			}	
 			action = action + "&specimenId=" + specimenIdentifier;
+			action = action + "&isRNA=" + isRNA;
 			addNew.href = action;
 			
 			if(element.value == "<%=Constants.SELECT_OPTION%>")

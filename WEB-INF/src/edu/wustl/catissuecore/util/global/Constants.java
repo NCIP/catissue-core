@@ -178,6 +178,7 @@ public class Constants
 	public static final String POS_ONE ="posOne";
 	public static final String POS_TWO ="posTwo";
 	public static final String STORAGE_CONTAINER_ID ="storContId";
+	public static final String IS_RNA = "isRNA";
 	
 	//Constants required in User.jsp Page
 	public static final String USER_SEARCH_ACTION = "UserSearch.do";
