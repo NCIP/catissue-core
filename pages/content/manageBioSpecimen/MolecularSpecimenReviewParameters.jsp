@@ -2,7 +2,7 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
-
+<%@ page import="edu.wustl.catissuecore.actionForm.MolecularSpecimenReviewParametersForm"%>
 <head>
 	<script language="javascript">
 		
@@ -12,7 +12,8 @@
 <%
         String operation = (String) request.getAttribute(Constants.OPERATION);
         String formName,specimenId=null;
-
+        String isRNA = null;
+        
         boolean readOnlyValue;
         if (operation.equals(Constants.EDIT))
         {
@@ -23,8 +24,17 @@
         {
             formName = Constants.MOLECULAR_SPECIMEN_REVIEW_PARAMETERS_ADD_ACTION;
 			specimenId = (String) request.getAttribute(Constants.SPECIMEN_ID);
+			isRNA = (String) request.getAttribute(Constants.IS_RNA);
+			
             readOnlyValue = false;
         }
+        
+        Object obj =(Object)request.getAttribute("molecularSpecimenReviewParametersForm");
+        	MolecularSpecimenReviewParametersForm form = null;
+		if(obj != null && obj instanceof MolecularSpecimenReviewParametersForm)
+		{
+			form = (MolecularSpecimenReviewParametersForm)obj;
+		}
 		
 %>	
 			
@@ -51,6 +61,7 @@
 		<tr>
 			<td>
 				<html:hidden property="specimenId" value="<%=specimenId%>"/>
+				<html:hidden property="isRNA" value="<%=isRNA%>"/>
 			</td>
 		</tr>
 		
@@ -199,6 +210,12 @@
 		</tr>
 
 <!-- ratio28STo18S -->		
+
+	<%
+		if(((isRNA != null) && (isRNA.equals("true"))) || ((form != null) && !(form.getIsRNA() == null) && (form.getIsRNA().equals("true"))))
+		{
+			
+	%>
 		<tr>
 			<td class="formRequiredNotice" width="5">&nbsp;</td>
 			<td class="formLabel">
@@ -210,8 +227,9 @@
 				<html:text styleClass="formDateSized" size="35" styleId="ratio28STo18S" property="ratio28STo18S" />
 			</td>
 		</tr>
-
-
+	<%
+	}
+	%>
 <!-- comments -->		
 		<tr>
 			<td class="formRequiredNotice" width="5">&nbsp;</td>
