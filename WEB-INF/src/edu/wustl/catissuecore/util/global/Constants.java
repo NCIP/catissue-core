@@ -127,7 +127,7 @@ public class Constants
 	public static final String PROTOCOL_PARTICIPANT_NUMBER_LIST = "protocolParticipantNumberList";
 	//public static final String PROTOCOL_PARTICIPANT_NUMBER_ID_LIST = "protocolParticipantNumberIdList";
 	public static final String STUDY_CALENDAR_EVENT_POINT_LIST = "studyCalendarEventPointList";
-	//public static final String STUDY_CALENDAR_EVENT_POINT_ID_LIST="studyCalendarEventPointIdList";
+   	//public static final String STUDY_CALENDAR_EVENT_POINT_ID_LIST="studyCalendarEventPointIdList";
 	public static final String PARTICIPANT_MEDICAL_IDNETIFIER_LIST = "participantMedicalIdentifierArray";
 	//public static final String PARTICIPANT_MEDICAL_IDNETIFIER_ID_LIST = "participantMedicalIdentifierIdArray";
 	
@@ -1134,4 +1134,20 @@ public class Constants
 	
 	public static final String EVENT_PARAMETERS_COLUMNS[] = { "Identifier",
 											"Event Parameter", "User", "Time", "PageOf"};
+	
+	
+	public static final String getCollectionProtocolPGName(Long identifier)
+	{
+	    return "COLLECTION_PROTOCOL_"+identifier;
+	}
+	
+	public static final String getCollectionProtocolPIGroupName(Long identifier)
+	{
+	    return "COLLECTION_PROTOCOL_"+identifier;
+	}
+	
+	public static final String getCollectionProtocolCoordinatorGroupName(Long identifier)
+	{
+	    return "COLLECTION_PROTOCOL_"+identifier;
+	}
 }
