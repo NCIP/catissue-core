@@ -11,6 +11,7 @@ package edu.wustl.catissuecore.domain;
 
 import edu.wustl.catissuecore.actionForm.AbstractActionForm;
 import edu.wustl.catissuecore.actionForm.MolecularSpecimenReviewParametersForm;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -251,6 +252,7 @@ public class MolecularSpecimenReviewParameters extends ReviewEventParameters
         	this.gelNumber = new Integer(form.getGelNumber());
         	this.absorbanceAt260 = new Double(form.getAbsorbanceAt260());
         	this.absorbanceAt280 = new Double(form.getAbsorbanceAt280());
+        	if (Utility.toString(form.getRatio28STo18S()).trim().length() > 0  )
         	this.ratio28STo18S = new Double(form.getRatio28STo18S());
 
         	super.setAllValues(form);
