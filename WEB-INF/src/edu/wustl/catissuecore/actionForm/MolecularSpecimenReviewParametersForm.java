@@ -62,11 +62,13 @@ public class MolecularSpecimenReviewParametersForm extends SpecimenEventParamete
      */
 	protected double absorbanceAt280;
 	
+	protected String isRNA = "false";
+	
 	/**
      * A unitless ratio of the full-length 28S to 18S ribosomal RNA mass that is detected in a mammalian 
      * cellular RNA sample.
      */
-	protected double ratio28STo18S;
+	protected String ratio28STo18S;
 	
 	/**
      * Returns a reference to the location of an electrophoretic gel image of the specimen. 
@@ -193,9 +195,9 @@ public class MolecularSpecimenReviewParametersForm extends SpecimenEventParamete
      * mammalian cellular RNA sample. 
      * @return A unitless ratio of the full-length 28S to 18S ribosomal RNA mass that is detected 
      * in a mammalian cellular RNA sample.
-     * @see #setRatio28STo18S(double)
+     * @see #setRatio28STo18S(String)
      */
-	public double getRatio28STo18S()
+	public String getRatio28STo18S()
 	{
 		return ratio28STo18S;
 	}
@@ -207,7 +209,7 @@ public class MolecularSpecimenReviewParametersForm extends SpecimenEventParamete
      * detected in a mammalian cellular RNA sample.
      * @see #getRatio28STo18S()
      */
-	public void setRatio28STo18S(double ratio28STo18S)
+	public void setRatio28STo18S(String ratio28STo18S)
 	{
 		this.ratio28STo18S = ratio28STo18S;
 	}
@@ -233,7 +235,15 @@ public class MolecularSpecimenReviewParametersForm extends SpecimenEventParamete
 			this.gelNumber = molecularSpecimenReviewParametersObject.getGelNumber().intValue() ;
 			this.absorbanceAt260 = molecularSpecimenReviewParametersObject.getAbsorbanceAt260().doubleValue() ;
 			this.absorbanceAt280 = molecularSpecimenReviewParametersObject.getAbsorbanceAt280().doubleValue();  
-			this.ratio28STo18S = molecularSpecimenReviewParametersObject.getRatio28STo18S().doubleValue() ; 
+			this.ratio28STo18S = Utility.toString(molecularSpecimenReviewParametersObject.getRatio28STo18S()) ; 
+			if(this.ratio28STo18S.trim().length()>0  )
+			{
+				this.isRNA = "true"; 
+			}
+			else
+			{
+				this.isRNA = "false";
+			}
 	    }
 	    catch(Exception excp)
 	    {
@@ -324,9 +334,22 @@ public class MolecularSpecimenReviewParametersForm extends SpecimenEventParamete
          this.gelNumber = 0;
          this.absorbanceAt260 = 0.0;
          this.absorbanceAt280 = 0.0;
-         this.ratio28STo18S = 0.0;
+         this.ratio28STo18S = null;
+         this.isRNA = "false";
      }
        
     
 	
+	/**
+	 * @return Returns the isRNA.
+	 */
+	public String getIsRNA() {
+		return isRNA;
+	}
+	/**
+	 * @param isRNA The isRNA to set.
+	 */
+	public void setIsRNA(String isRNA) {
+		this.isRNA = isRNA;
+	}
 }
