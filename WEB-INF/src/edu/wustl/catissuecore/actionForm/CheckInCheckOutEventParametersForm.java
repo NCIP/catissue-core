@@ -20,6 +20,7 @@ import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.domain.CheckInCheckOutEventParameter;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.catissuecore.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
@@ -69,7 +70,7 @@ public class CheckInCheckOutEventParametersForm extends SpecimenEventParametersF
 	{
 		super.setAllValues(abstractDomain);
 		CheckInCheckOutEventParameter checkInCheckOutEventParameterObject = (CheckInCheckOutEventParameter)abstractDomain ;
-		this.storageStatus = checkInCheckOutEventParameterObject.getStorageStatus(); 
+		this.storageStatus = Utility.toString(checkInCheckOutEventParameterObject.getStorageStatus()); 
 	}
 	
 	/**

@@ -21,6 +21,7 @@ import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.domain.DisposalEventParameters;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.catissuecore.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
@@ -67,7 +68,7 @@ public class DisposalEventParametersForm extends SpecimenEventParametersForm
 	{
 		super.setAllValues(abstractDomain);
 		DisposalEventParameters disposalEventParametersObject = (DisposalEventParameters)abstractDomain ;
-		this.reason = disposalEventParametersObject.getReason();
+		this.reason = Utility.toString(disposalEventParametersObject.getReason());
 	}
 	
 	/**

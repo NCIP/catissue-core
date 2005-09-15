@@ -20,6 +20,7 @@ import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.domain.MolecularSpecimenReviewParameters;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.catissuecore.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
@@ -226,9 +227,9 @@ public class MolecularSpecimenReviewParametersForm extends SpecimenEventParamete
         {
 			super.setAllValues(abstractDomain);
 			MolecularSpecimenReviewParameters molecularSpecimenReviewParametersObject = (MolecularSpecimenReviewParameters)abstractDomain ;
-			this.gelImageURL = molecularSpecimenReviewParametersObject.getGelImageURL() ;
-			this.qualityIndex = molecularSpecimenReviewParametersObject.getQualityIndex();
-			this.laneNumber = molecularSpecimenReviewParametersObject.getLaneNumber() ;
+			this.gelImageURL = Utility.toString(molecularSpecimenReviewParametersObject.getGelImageURL()) ;
+			this.qualityIndex = Utility.toString(molecularSpecimenReviewParametersObject.getQualityIndex());
+			this.laneNumber = Utility.toString(molecularSpecimenReviewParametersObject.getLaneNumber()) ;
 			this.gelNumber = molecularSpecimenReviewParametersObject.getGelNumber().intValue() ;
 			this.absorbanceAt260 = molecularSpecimenReviewParametersObject.getAbsorbanceAt260().doubleValue() ;
 			this.absorbanceAt280 = molecularSpecimenReviewParametersObject.getAbsorbanceAt280().doubleValue();  

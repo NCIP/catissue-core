@@ -16,6 +16,7 @@ import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.catissuecore.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
@@ -70,7 +71,7 @@ public class ReceivedEventParametersForm extends SpecimenEventParametersForm
 	{
 		super.setAllValues(abstractDomain);
 		ReceivedEventParameters receivedEventParameterObject = (ReceivedEventParameters)abstractDomain ;
-		this.receivedQuality =  receivedEventParameterObject.getReceivedQuality(); 
+		this.receivedQuality =  Utility.toString(receivedEventParameterObject.getReceivedQuality()); 
 	}
 	
 	/**

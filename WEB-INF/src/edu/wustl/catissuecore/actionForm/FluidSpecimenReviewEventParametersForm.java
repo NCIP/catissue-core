@@ -20,6 +20,7 @@ import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.domain.FluidSpecimenReviewEventParameters;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.catissuecore.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
@@ -72,7 +73,7 @@ public class FluidSpecimenReviewEventParametersForm extends SpecimenEventParamet
 	{
 		super.setAllValues(abstractDomain);
 		FluidSpecimenReviewEventParameters fluidSpecimenReviewEventParametersObject = (FluidSpecimenReviewEventParameters)abstractDomain ;
-		this.cellCount = "" + fluidSpecimenReviewEventParametersObject.getCellCount().doubleValue() ; 
+		this.cellCount = Utility.toString(fluidSpecimenReviewEventParametersObject.getCellCount()) ; 
 	}
 	
 	/**

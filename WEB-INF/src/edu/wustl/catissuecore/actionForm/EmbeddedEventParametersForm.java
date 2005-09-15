@@ -21,6 +21,7 @@ import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.domain.EmbeddedEventParameters;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.catissuecore.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
@@ -61,7 +62,7 @@ public class EmbeddedEventParametersForm extends SpecimenEventParametersForm
 	{
 		super.setAllValues(abstractDomain);
 		EmbeddedEventParameters embeddedEventParametersObject = (EmbeddedEventParameters)abstractDomain ;
-		this.embeddingMedium = embeddedEventParametersObject.getEmbeddingMedium();
+		this.embeddingMedium = Utility.toString(embeddedEventParametersObject.getEmbeddingMedium());
 	}
 	
 	/**

@@ -20,6 +20,7 @@ import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.domain.TissueSpecimenReviewEventParameters;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.catissuecore.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
@@ -175,11 +176,11 @@ public class TissueSpecimenReviewEventParametersForm extends SpecimenEventParame
 		super.setAllValues(abstractDomain);
 		TissueSpecimenReviewEventParameters tissueSpecimenReviewParametersObject = (TissueSpecimenReviewEventParameters)abstractDomain ;
 		
-		this.neoplasticCellularityPercentage = "" + tissueSpecimenReviewParametersObject.getNeoplasticCellularityPercentage().doubleValue() ;
-		this.necrosisPercentage = "" + tissueSpecimenReviewParametersObject.getNecrosisPercentage().doubleValue() ;
-		this.lymphocyticPercentage ="" + tissueSpecimenReviewParametersObject.getLymphocyticPercentage().doubleValue();
-		this.totalCellularityPercentage ="" + tissueSpecimenReviewParametersObject.getTotalCellularityPercentage().doubleValue();
-		this.histologicalQuality = tissueSpecimenReviewParametersObject.getHistologicalQuality();
+		this.neoplasticCellularityPercentage = Utility.toString(tissueSpecimenReviewParametersObject.getNeoplasticCellularityPercentage() );
+		this.necrosisPercentage = Utility.toString( tissueSpecimenReviewParametersObject.getNecrosisPercentage() );
+		this.lymphocyticPercentage =Utility.toString( tissueSpecimenReviewParametersObject.getLymphocyticPercentage());
+		this.totalCellularityPercentage =Utility.toString( tissueSpecimenReviewParametersObject.getTotalCellularityPercentage());
+		this.histologicalQuality = Utility.toString(tissueSpecimenReviewParametersObject.getHistologicalQuality());
 	}
 	
 	/**

@@ -20,6 +20,7 @@ import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.domain.FixedEventParameters;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.catissuecore.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
@@ -92,7 +93,7 @@ public class FixedEventParametersForm extends SpecimenEventParametersForm
         {
 			super.setAllValues(abstractDomain);
 			FixedEventParameters fixedEventParametersObject = (FixedEventParameters)abstractDomain ;
-			this.fixationType = fixedEventParametersObject.getFixationType();
+			this.fixationType = Utility.toString(fixedEventParametersObject.getFixationType());
 			this.durationInMinutes = fixedEventParametersObject.getDurationInMinutes().intValue();  
 	    }
 	    catch(Exception excp)

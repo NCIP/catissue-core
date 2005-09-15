@@ -20,6 +20,7 @@ import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.domain.CellSpecimenReviewParameters;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.catissuecore.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
@@ -96,8 +97,8 @@ public class CellSpecimenReviewParametersForm extends SpecimenEventParametersFor
 	{
 		super.setAllValues(abstractDomain);
 		CellSpecimenReviewParameters cellSpecimenReviewParametersObject = (CellSpecimenReviewParameters)abstractDomain ;
-		this.neoplasticCellularityPercentage ="" + cellSpecimenReviewParametersObject.getNeoplasticCellularityPercentage().doubleValue() ;
-		this.viableCellPercentage = "" + cellSpecimenReviewParametersObject.getViableCellPercentage().doubleValue() ; 
+		this.neoplasticCellularityPercentage =Utility.toString(cellSpecimenReviewParametersObject.getNeoplasticCellularityPercentage()) ;
+		this.viableCellPercentage = Utility.toString(cellSpecimenReviewParametersObject.getViableCellPercentage()) ; 
 	}
 	
 	/**

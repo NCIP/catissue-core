@@ -21,6 +21,7 @@ import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.domain.ProcedureEventParameters;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.catissuecore.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
@@ -75,8 +76,8 @@ public class ProcedureEventParametersForm extends SpecimenEventParametersForm {
 	public void setAllValues(AbstractDomainObject abstractDomain) {
 	super.setAllValues(abstractDomain);
 	ProcedureEventParameters procedureEventParametersObject = (ProcedureEventParameters) abstractDomain;
-	this.url = procedureEventParametersObject.getUrl();
-	this.name = procedureEventParametersObject.getName();
+	this.url = Utility.toString(procedureEventParametersObject.getUrl());
+	this.name = Utility.toString(procedureEventParametersObject.getName());
 	}
 
 	/**

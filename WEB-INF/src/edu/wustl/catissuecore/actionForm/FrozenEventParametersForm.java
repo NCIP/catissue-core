@@ -21,6 +21,7 @@ import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.domain.FrozenEventParameters;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.catissuecore.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
@@ -68,7 +69,7 @@ public class FrozenEventParametersForm extends SpecimenEventParametersForm
 	{
 		super.setAllValues(abstractDomain);
 		FrozenEventParameters frozenEventParametersObject = (FrozenEventParameters)abstractDomain ;
-		this.method = frozenEventParametersObject.getMethod();
+		this.method = Utility.toString(frozenEventParametersObject.getMethod());
 	}
 	
 	/**
