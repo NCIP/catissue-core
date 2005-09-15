@@ -117,8 +117,15 @@
 				</tr>
 
 				<tr id="row1">
-         		    <td class="formRequiredNotice" width="5">*</td>					
-					<td class="formRequiredLabel">
+						<logic:equal name="collectionProtocolRegistrationForm" property="checkedButton" value="true">
+		         		    <td class="formRequiredNotice" width="5">&nbsp;</td>					
+							<td class="formLabel">
+						</logic:equal>
+						<logic:equal name="collectionProtocolRegistrationForm" property="checkedButton" value="false">
+		         		    <td class="formRequiredNotice" width="5">*</td>					
+							<td class="formRequiredLabel">
+						</logic:equal>
+
 						<label for="name">
 							<bean:message key="collectionProtocolReg.participantProtocolID" />
 						</label>
