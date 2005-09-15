@@ -24,9 +24,11 @@ import edu.wustl.catissuecore.domain.StorageContainerDetails;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.storage.StorageContainerTreeNode;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * StorageContainerHDAO is used to add Storage Container information into the database using Hibernate.
@@ -129,7 +131,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
     {
 		StorageContainer container = (StorageContainer)obj;
 		
-        setSiteAndType(dao,container);
+//        setSiteAndType(dao,container);
 
         int posOneCapacity = 1, posTwoCapacity = 1;
         int positionDimensionOne = 0, positionDimensionTwo=0;
@@ -156,41 +158,50 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
         }
         
 
-            if (container.getParentContainer() != null)
-            {
-                container.setPositionDimensionOne(new Integer(positionDimensionOne));
-                container.setPositionDimensionTwo(new Integer(positionDimensionTwo));
-            }
-            
-            //cont.setName(String.valueOf(i + container.getStartNo().intValue()));
+        if (container.getParentContainer() != null)
+        {
+            container.setPositionDimensionOne(new Integer(positionDimensionOne));
+            container.setPositionDimensionTwo(new Integer(positionDimensionTwo));
+        }
+        
+        //cont.setName(String.valueOf(i + container.getStartNo().intValue()));
 //            dao.update(cont.getStorageContainerCapacity());
-            dao.update(container, sessionDataBean, true, true);
+        dao.update(container, sessionDataBean, true, true);
 
-            Collection storageContainerDetailsCollection = container.getStorageContainerDetailsCollection();
-            
-            if (storageContainerDetailsCollection.size() > 0)
+        Collection storageContainerDetailsCollection = container.getStorageContainerDetailsCollection();
+        
+        if (storageContainerDetailsCollection.size() > 0)
+        {
+            Iterator it = storageContainerDetailsCollection.iterator();
+            while (it.hasNext())
             {
-                Iterator it = storageContainerDetailsCollection.iterator();
-                while (it.hasNext())
-                {
-                    StorageContainerDetails storageContainerDetails = (StorageContainerDetails) it.next();
-                    storageContainerDetails.setStorageContainer(container);
-                    dao.update(storageContainerDetails, sessionDataBean, true, true);
-                }
+                StorageContainerDetails storageContainerDetails = (StorageContainerDetails) it.next();
+                storageContainerDetails.setStorageContainer(container);
+                dao.update(storageContainerDetails, sessionDataBean, true, true);
             }
-            
-            if (container.getParentContainer() != null)
+        }
+        
+        if (container.getParentContainer() != null)
+        {
+            do
             {
-                do
+                if (positionDimensionTwo == (posTwoCapacity - 1))
                 {
-                    if (positionDimensionTwo == (posTwoCapacity - 1))
-                    {
-                        positionDimensionOne = (positionDimensionOne + 1) % posOneCapacity;
-                    }
-                    positionDimensionTwo = (positionDimensionTwo + 1) % posTwoCapacity;
+                    positionDimensionOne = (positionDimensionOne + 1) % posOneCapacity;
                 }
-                while (fullStatus[positionDimensionOne][positionDimensionTwo] != false);
+                positionDimensionTwo = (positionDimensionTwo + 1) % posTwoCapacity;
             }
+            while (fullStatus[positionDimensionOne][positionDimensionTwo] != false);
+        }
+        
+        Logger.out.debug("container.getActivityStatus() "+container.getActivityStatus());
+		if(container.getActivityStatus().equals(Constants.ACTIVITY_STATUS_DISABLED))
+		{
+			Logger.out.debug("container.getActivityStatus() "+container.getActivityStatus());
+			Long containerIDArr[] = {container.getSystemIdentifier()};
+			
+			disableSubStorageContainer(dao, containerIDArr);
+		}
     }
 	
 	
@@ -339,4 +350,27 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
         }
         return fullStatus;
     }
+    
+    public void disableRelatedObjects(DAO dao, Long siteArr[])throws DAOException 
+    {
+    	Logger.out.debug("disableRelatedObjects StorageContainerBizLogic");
+    	List listOfSubElement = super.disableObjects(dao, StorageContainer.class, "site", 
+    			"CATISSUE_STORAGE_CONTAINER", "SITE_ID", siteArr);
+    	
+    	disableSubStorageContainer(dao,Utility.toLongArray(listOfSubElement));
+    }
+    
+    private void disableSubStorageContainer(DAO dao, Long storageContainerIDArr[])throws DAOException
+	{
+    	NewSpecimenBizLogic bizLogic = (NewSpecimenBizLogic)BizLogicFactory.getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
+		bizLogic.disableRelatedObjectsForStorageContainer(dao,storageContainerIDArr);
+
+    	List listOfSubStorageContainerId = super.disableObjects(dao, StorageContainer.class, "parentContainer", 
+    			"CATISSUE_STORAGE_CONTAINER", "PARENT_CONTAINER_ID", storageContainerIDArr);
+
+    	if(listOfSubStorageContainerId.isEmpty())
+    		return;
+    	
+    	disableSubStorageContainer(dao, Utility.toLongArray(listOfSubStorageContainerId));
+	}
 }

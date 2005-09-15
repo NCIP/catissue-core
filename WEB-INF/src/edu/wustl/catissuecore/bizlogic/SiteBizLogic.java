@@ -15,9 +15,11 @@ import java.util.List;
 import edu.wustl.catissuecore.dao.DAO;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * SiteHDAO is used to add site type information into the database using Hibernate.
@@ -55,6 +57,16 @@ public class SiteBizLogic extends DefaultBizLogic
 		
 		dao.update(site.getAddress(), sessionDataBean, true, true);
 	    dao.update(site, sessionDataBean, true, true);
+	    
+	    Logger.out.debug("site.getActivityStatus() "+site.getActivityStatus());
+		if(site.getActivityStatus().equals(Constants.ACTIVITY_STATUS_DISABLED))
+		{
+			Logger.out.debug("site.getActivityStatus() "+site.getActivityStatus());
+			Long siteIDArr[] = {site.getSystemIdentifier()};
+			
+			StorageContainerBizLogic bizLogic = (StorageContainerBizLogic)BizLogicFactory.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
+			bizLogic.disableRelatedObjects(dao,siteIDArr);
+		}
     }
 	
 	// This method sets the cordinator for a particular site.

@@ -164,13 +164,22 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		specimen.setBiohazardCollection(set);
 	}
     
-    public void disableRelatedObjects(DAO dao, Long specimenCollectionGroupArr[])throws DAOException 
+    public void disableRelatedObjectsForSpecimenCollectionGroup(DAO dao, Long specimenCollectionGroupArr[])throws DAOException 
     {
     	Logger.out.debug("disableRelatedObjects NewSpecimenBizLogic");
-    	List listOfSubElement = super.disableObjects(dao, Specimen.class, "specimenCollectionGroup", 
+    	List listOfSpecimenId = super.disableObjects(dao, Specimen.class, "specimenCollectionGroup", 
     			"CATISSUE_SPECIMEN", "SPECIMEN_COLLECTION_GROUP_ID", specimenCollectionGroupArr);
     	
-    	disableSubSpecimens(dao,Utility.toLongArray(listOfSubElement));
+    	disableSubSpecimens(dao,Utility.toLongArray(listOfSpecimenId));
+    }
+    
+    public void disableRelatedObjectsForStorageContainer(DAO dao, Long storageContainerIdArr[])throws DAOException 
+    {
+    	Logger.out.debug("disableRelatedObjectsForStorageContainer NewSpecimenBizLogic");
+    	List listOfSpecimenId = super.disableObjects(dao, Specimen.class, "storageContainer", 
+    			"CATISSUE_SPECIMEN", "STORAGE_CONTAINER_IDENTIFIER", storageContainerIdArr);
+    	
+    	disableSubSpecimens(dao,Utility.toLongArray(listOfSpecimenId));
     }
     
     private void disableSubSpecimens(DAO dao, Long speIDArr[])throws DAOException

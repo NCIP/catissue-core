@@ -90,7 +90,7 @@ public class ParticipantBizLogic extends DefaultBizLogic
 			Long participantIDArr[] = {participant.getSystemIdentifier()};
 			
 			CollectionProtocolRegistrationBizLogic bizLogic = (CollectionProtocolRegistrationBizLogic)BizLogicFactory.getBizLogic(Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
-			bizLogic.disableRelatedObjects(dao,participantIDArr);
+			bizLogic.disableRelatedObjectsForParticipant(dao,participantIDArr);
 		}
     }
 }

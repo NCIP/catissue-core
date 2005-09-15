@@ -21,10 +21,10 @@ import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
-import edu.wustl.common.util.dbManager.DAOException;
-import edu.wustl.common.util.logger.Logger;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
+import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * UserHDAO is used to add user information into the database using Hibernate.
@@ -134,12 +134,21 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 		}
 	}
     
-    public void disableRelatedObjects(DAO dao, Long participantIDArr[])throws DAOException 
+    public void disableRelatedObjectsForParticipant(DAO dao, Long participantIDArr[])throws DAOException 
     {
     	List listOfSubElement = super.disableObjects(dao, CollectionProtocolRegistration.class, "participant", 
     			"CATISSUE_COLLECTION_PROTOCOL_REGISTRATION", "PARTICIPANT_ID", participantIDArr);
     	
 		SpecimenCollectionGroupBizLogic bizLogic = (SpecimenCollectionGroupBizLogic)BizLogicFactory.getBizLogic(Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID);
 		bizLogic.disableRelatedObjects(dao,Utility.toLongArray(listOfSubElement));
-    }  
+    }
+    
+    public void disableRelatedObjectsForCollectionProtocol(DAO dao, Long collectionProtocolIDArr[])throws DAOException 
+    {
+    	List listOfSubElement = super.disableObjects(dao, CollectionProtocolRegistration.class, "collectionProtocol", 
+    			"CATISSUE_COLLECTION_PROTOCOL_REGISTRATION", "COLLECTION_PROTOCOL_ID", collectionProtocolIDArr);
+    	
+		SpecimenCollectionGroupBizLogic bizLogic = (SpecimenCollectionGroupBizLogic)BizLogicFactory.getBizLogic(Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID);
+		bizLogic.disableRelatedObjects(dao,Utility.toLongArray(listOfSubElement));
+    }
 }

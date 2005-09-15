@@ -24,6 +24,7 @@ import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.Roles;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SecurityDataBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.security.SecurityManager;
@@ -116,6 +117,17 @@ public class CollectionProtocolBizLogic extends DefaultBizLogic implements Roles
 				specimenRequirement.getCollectionProtocolEventCollection().add(collectionProtocolEvent);
 				dao.update(specimenRequirement, sessionDataBean, true, true);
 			}
+		}
+		
+		
+		Logger.out.debug("collectionProtocol.getActivityStatus() "+collectionProtocol.getActivityStatus());
+		if(collectionProtocol.getActivityStatus().equals(Constants.ACTIVITY_STATUS_DISABLED))
+		{
+			Logger.out.debug("collectionProtocol.getActivityStatus() "+collectionProtocol.getActivityStatus());
+			Long collectionProtocolIDArr[] = {collectionProtocol.getSystemIdentifier()};
+			
+			CollectionProtocolRegistrationBizLogic bizLogic = (CollectionProtocolRegistrationBizLogic)BizLogicFactory.getBizLogic(Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
+			bizLogic.disableRelatedObjectsForCollectionProtocol(dao,collectionProtocolIDArr);
 		}
     }
 

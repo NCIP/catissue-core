@@ -84,7 +84,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 			Long specimenCollectionGroupIDArr[] = {specimenCollectionGroup.getSystemIdentifier()};
 			
 			NewSpecimenBizLogic bizLogic = (NewSpecimenBizLogic)BizLogicFactory.getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
-			bizLogic.disableRelatedObjects(dao,specimenCollectionGroupIDArr);
+			bizLogic.disableRelatedObjectsForSpecimenCollectionGroup(dao,specimenCollectionGroupIDArr);
 		}
 	}
 	
@@ -157,6 +157,6 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
     			"CATISSUE_SPECIMEN_COLLECTION_GROUP", "COLLECTION_PROTOCOL_REGISTRATION_ID", collProtRegIDArr);
     	
     	NewSpecimenBizLogic bizLogic = (NewSpecimenBizLogic)BizLogicFactory.getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
-		bizLogic.disableRelatedObjects(dao,Utility.toLongArray(listOfSubElement));
+		bizLogic.disableRelatedObjectsForSpecimenCollectionGroup(dao,Utility.toLongArray(listOfSubElement));
     }  
 }
