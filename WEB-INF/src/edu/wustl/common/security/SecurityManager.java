@@ -741,10 +741,12 @@ public class SecurityManager implements Permissions
         Iterator it;
         UserProvisioningManager userProvisioningManager = getUserProvisioningManager();
         groupSearchCriteria = new GroupSearchCriteria(group);
+        Logger.out.debug(" UserGroupRoleProtectionGroup Size:"+ authorizationData.size());
         if (authorizationData != null)
         {
             for (int i = 0; i < authorizationData.size(); i++)
             {
+                Logger.out.debug(" authorizationData:"+i+" "+ authorizationData.get(i).toString());
                 try
                 {
                     userGroupRoleProtectionGroupBean = (SecurityDataBean) authorizationData
@@ -754,6 +756,7 @@ public class SecurityManager implements Permissions
                             .setApplication(getApplication(CATISSUE_CORE_CONTEXT_NAME));
                     group.setGroupName(userGroupRoleProtectionGroupBean
                             .getGroupName());
+                    groupSearchCriteria = new GroupSearchCriteria(group);
                     /**
                      * If group already exists
                      */
