@@ -202,20 +202,20 @@ public class AuditManager
 		
 		try
 		{
-		dao.insert(auditEvent,null, false, true);
+		dao.insert(auditEvent,null, false, false);
 		Iterator auditLogIterator = auditEvent.getAuditEventLogCollection().iterator();
 		while(auditLogIterator.hasNext())
 		{
 			AuditEventLog auditEventLog = (AuditEventLog)auditLogIterator.next();
 			auditEventLog.setAuditEvent(auditEvent);
-			dao.insert(auditEventLog,null, false, true);
+			dao.insert(auditEventLog,null, false, false);
 			
   			Iterator auditEventDetailsIterator = auditEventLog.getAuditEventDetailsCollcetion().iterator();
   			while(auditEventDetailsIterator.hasNext())
   			{
   				AuditEventDetails auditEventDetails = (AuditEventDetails)auditEventDetailsIterator.next();
   				auditEventDetails.setAuditEventLog(auditEventLog);
-  				dao.insert(auditEventDetails,null, false, true);
+  				dao.insert(auditEventDetails,null, false, false);
   			}
 		}
 		auditEvent = new AuditEvent();
