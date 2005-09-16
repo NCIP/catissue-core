@@ -25,6 +25,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.AbstractActionForm;
+import edu.wustl.catissuecore.actionForm.SpecimenEventParametersForm;
 import edu.wustl.catissuecore.bizlogic.AbstractBizLogic;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
@@ -60,6 +61,13 @@ public class CommonAddEditAction extends Action
         {
             AbstractActionForm abstractForm = (AbstractActionForm) form;
             AbstractBizLogic bizLogic = BizLogicFactory.getBizLogic(abstractForm.getFormId());
+            
+            if(abstractForm instanceof SpecimenEventParametersForm)
+            {
+            	String specimenId = String.valueOf(((SpecimenEventParametersForm)abstractForm).getSpecimenId());
+            	request.setAttribute("specimenIdentifier",specimenId);
+            }
+            
             Logger.out.debug("IN ADDEDIT ACTION FORM ID************************"+abstractForm.getFormId());
 
             if (abstractForm.isAddOperation())
