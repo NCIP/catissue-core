@@ -130,7 +130,7 @@
 				</label>
 			</td>
 			<td class="formField">
-				<html:text styleClass="formFieldSized"  styleId="reason" property="reason" />
+				<html:textarea styleClass="formFieldSized"  styleId="reason" property="reason" />
 			</td>
 		</tr>
 	
