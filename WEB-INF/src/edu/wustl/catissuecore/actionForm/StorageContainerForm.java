@@ -190,7 +190,7 @@ public class StorageContainerForm extends AbstractActionForm
 			{
 				this.parentContainerId = container.getParentContainer().getSystemIdentifier().longValue();
 				this.checkedButton = 2;
-				this.positionInParentContainer = container.getStorageType().getType() + " : " 
+				this.positionInParentContainer = container.getParentContainer().getStorageType().getType() + " : " 
 								+ container.getParentContainer().getSystemIdentifier() + " Pos(" + container.getPositionDimensionOne() + ","
 								+ container.getPositionDimensionTwo() + ")";
 			}
@@ -547,10 +547,11 @@ public class StorageContainerForm extends AbstractActionForm
             	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("site.activityStatus")));
             }
 			
-			//Validations for External Identifier Add-More Block
+			//Validations for External Identifier Add-More Block.
             String className = "StorageContainerDetails:";
             String key1 = "_parameterName";
             String key2 = "_parameterValue";
+            String key3 = "_systemIdentifier";
             int index = 1;
             boolean isError = false;
             
@@ -558,20 +559,25 @@ public class StorageContainerForm extends AbstractActionForm
             {
             	String keyOne = className + index + key1;
 				String keyTwo = className + index + key2;
+				String keyThree = className + index + key3;
+				
             	String value1 = (String)values.get(keyOne);
             	String value2 = (String)values.get(keyTwo);
+            	String value3 = (String)values.get(keyThree);
             	
             	value1 = (value1==null ? null : value1.trim());
             	value2 = (value2==null ? null : value2.trim());
+            	value3 = (value3==null ? null : value3.trim());
             	
-            	if(value1 == null || value2 == null)
+            	if(value1 == null || value2 == null || value3 == null)
             	{
             		break;
             	}
-            	else if(value1.equals("") && value2.equals(""))
+            	else if(value1.equals("") && value2.equals("") && value3.equals(""))
             	{
             		values.remove(keyOne);
             		values.remove(keyTwo);
+            		values.remove(keyThree);
             	}
             	else if((!value1.equals("") && value2.equals("")) || (value1.equals("") && !value2.equals("")))
             	{
