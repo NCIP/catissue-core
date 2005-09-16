@@ -65,6 +65,7 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 	 * Used for getting the TO and FROM Positions from the JSP 
 	 */
 	protected String fromPosition;
+	
 	protected String positionInStorageContainer;
 
 	/**
@@ -202,7 +203,12 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 			this.positionDimensionTwo = transferEventParametersObject.getToPositionDimensionTwo().intValue();
 			this.fromStorageContainerId = transferEventParametersObject.getFromStorageContainer().getSystemIdentifier().longValue();
 			this.storageContainer = transferEventParametersObject.getToStorageContainer().getSystemIdentifier().longValue();  
-			 
+			this.positionInStorageContainer = transferEventParametersObject.getToStorageContainer().getStorageType().getType() + " : " 
+				+ this.storageContainer + " Pos(" + this.positionDimensionOne + ","
+				+ this.positionDimensionTwo + ")";
+			this.fromPosition = transferEventParametersObject.getFromStorageContainer().getStorageType().getType() + " : " 
+			+ this.fromStorageContainerId + " Pos(" + this.fromPositionDimensionOne + ","
+			+ this.fromPositionDimensionTwo + ")";
 			
 	    }
 	    catch(Exception excp)
