@@ -77,6 +77,16 @@ public class SpecimenForm extends AbstractActionForm
      * Amount of Specimen.
      */
     protected String quantity;
+    
+    /**
+     * Available Amount of Specimen.
+     */
+    protected String availableQuantity;
+    
+    /**
+     * Is quantity available?
+     */
+    protected boolean available;
 
     /**
      * Unit of specimen.
@@ -319,6 +329,22 @@ public class SpecimenForm extends AbstractActionForm
     {
         this.quantity = quantity;
     }
+    
+    /**
+     * @return Returns the availableQuantity.
+     */
+    public String getAvailableQuantity()
+    {
+        return availableQuantity;
+    }
+
+    /**
+     * @param availableQuantity The Available Quantity to set.
+     */
+    public void setAvailableQuantity(String availableQuantity)
+    {
+        this.availableQuantity = availableQuantity;
+    }
 
     /**
      * @return Returns the quantity.
@@ -424,6 +450,8 @@ public class SpecimenForm extends AbstractActionForm
             this.type = specimen.getType();
             this.concentration = "";
             this.comments = specimen.getComments();
+            this.activityStatus = specimen.getActivityStatus();
+            this.available = specimen.getAvailable().booleanValue();
 
             StorageContainer container = specimen.getStorageContainer();
 
@@ -449,18 +477,21 @@ public class SpecimenForm extends AbstractActionForm
                 this.className = "Cell";
                 this.quantity = String.valueOf(((CellSpecimen) specimen)
                         .getQuantityInCellCount());
+                this.availableQuantity = String.valueOf(((CellSpecimen) specimen).getAvailableQuantityInCellCount());
             }
             else if (specimen instanceof FluidSpecimen)
             {
                 this.className = "Fluid";
                 this.quantity = String.valueOf(((FluidSpecimen) specimen)
                         .getQuantityInMilliliter());
+                this.availableQuantity = String.valueOf(((FluidSpecimen) specimen).getAvailableQuantityInMilliliter());
             }
             else if (specimen instanceof MolecularSpecimen)
             {
                 this.className = "Molecular";
                 this.quantity = String.valueOf(((MolecularSpecimen) specimen)
                         .getQuantityInMicrogram());
+                this.availableQuantity = String.valueOf(((MolecularSpecimen) specimen).getAvailableQuantityInMicrogram());
                 if (((MolecularSpecimen) specimen)
                         .getConcentrationInMicrogramPerMicroliter() != null)
                     this.concentration = String
@@ -472,8 +503,9 @@ public class SpecimenForm extends AbstractActionForm
                 this.className = "Tissue";
                 this.quantity = String.valueOf(((TissueSpecimen) specimen)
                         .getQuantityInGram());
+                this.availableQuantity = String.valueOf(((TissueSpecimen) specimen).getAvailableQuantityInGram());
             }
-
+                        
             SpecimenCharacteristics characteristic = specimen
                     .getSpecimenCharacteristics();
 
@@ -524,7 +556,7 @@ public class SpecimenForm extends AbstractActionForm
     {
         ActionErrors errors = new ActionErrors();
         Validator validator = new Validator();
-
+System.out.println("********************* " + available);
         try
         {
             if (operation.equals(Constants.ADD)
@@ -657,4 +689,19 @@ public class SpecimenForm extends AbstractActionForm
     {
         this.positionInStorageContainer = positionInStorageContainer;
     }
+    
+	/**
+	 * @return Returns the available.
+	 */
+	public boolean isAvailable()
+	{
+		return available;
+	}
+	/**
+	 * @param available The available to set.
+	 */
+	public void setAvailable(boolean available)
+	{
+		this.available = available;
+	}
 }
