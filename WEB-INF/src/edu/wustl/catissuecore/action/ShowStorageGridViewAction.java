@@ -17,6 +17,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -35,13 +36,13 @@ import edu.wustl.common.util.logger.Logger;
  * according to the storage container selected from the tree view.
  * @author gautam_shetty
  */
-public class ShowStorageGridViewAction  extends SecureAction
+public class ShowStorageGridViewAction  extends Action
 {
 
     /**
      * Overrides the execute method of Action class.
      */
-    public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
+    public ActionForward execute(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
             throws Exception
     {
