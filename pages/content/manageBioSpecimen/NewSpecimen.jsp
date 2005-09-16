@@ -70,54 +70,24 @@ NewSpecimenForm form = (NewSpecimenForm)request.getAttribute("newSpecimenForm");
 %>
 <head>
 
-<link href="runtime/styles/xp/grid.css" rel="stylesheet" type="text/css" ></link>
-<script src="runtime/lib/grid.js"></script>
-
-<!-- grid format -->
-	<style>
-		.active-controls-grid {height: 100%; font: menu;}
-		
-		.active-column-0 {width:  80px;}
-		.active-column-1 {width: 200px;}
-		.active-column-2 {text-align: right;}
-		.active-column-3 {text-align: right;}
-		.active-column-4 {text-align: right;}
-		
-		.active-grid-column {border-right: 1px solid threedlightshadow;}
-		.active-grid-row {border-bottom: 1px solid threedlightshadow;}
-	</style>
-<!--  grid data -->
-
 <%
 	String[] columnList = (String[]) request.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
 	List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
-if(dataList!=null && dataList.size() != 0)
-{
 %>
-
-<script>
-var myData = [<%int xx;%><%for (xx=0;xx<(dataList.size()-1);xx++){%>
-<%
-	List row = (List)dataList.get(xx);
-  	int j;
-%>
-[<%for (j=0;j < (row.size()-1);j++){%>"<%=row.get(j)%>",<%}%>"<%=row.get(j)%>"],<%}%>
-<%
-	List row = (List)dataList.get(xx);
-  	int j;
-%>
-[<%for (j=0;j < (row.size()-1);j++){%>"<%=row.get(j)%>",<%}%>"<%=row.get(j)%>"]
-];
-
-var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnList[k]%>",<%}%>"<%=columnList[k]%>"];
-</script>
-
-<%}%>
 
 <script language="JavaScript">
 	
 		var win = null;
+		
+		function onSpecimenEventUpdate(element)
+		{
+			var identifier = "<%=form.getSystemIdentifier()%>";
+			var action = "/catissuecore/NewSpecimenEventParameters.do?pageOf=pageOfNewSpecimenEventParameters&specimenIdentifier=" + identifier;
+			document.forms[0].action = action;
+			document.forms[0].submit();
+		}
+		
 		function NewWindow(mypage,myname,w,h,scroll)
 		{
 			LeftPosition = (screen.width) ? (screen.width-w)/2 : 0;
@@ -668,6 +638,35 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 				    </td>
 				 </tr>
 				 
+				 <logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
+				<!-- Available -->
+				<tr>
+					<td class="formRequiredNotice" width="5">&nbsp;</td>
+					<td class="formLabel">
+						<label for="available">
+							<bean:message key="specimen.available" />
+						</label>
+					</td>
+					<td class="formField" colspan="3">
+						<html:checkbox property="available">
+						</html:checkbox>
+					</td>
+				</tr>
+				
+				<!-- Available Quantity -->
+				<tr>
+					<td class="formRequiredNotice" width="5">&nbsp;</td>
+					<td class="formLabel" >
+						<label for="availableQuantity">
+							<bean:message key="specimen.availableQuantity" />
+						</label>
+					</td>
+					<td class="formField" colspan="2">
+						<html:text styleClass="formFieldSized15" size="30" styleId="availableQuantity" property="availableQuantity" readonly="<%=readOnlyForAll%>" />
+					</td>
+				</tr>
+				</logic:equal>
+				 
 				 <tr>
 				 	<td class="formRequiredNotice" width="5">*</td>
 					<td class="formRequiredLabel">
@@ -677,10 +676,13 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 					</td>
 				 	<td class="formField" colspan="2">
 						<html:text styleClass="formFieldSized15" size="30" styleId="positionInStorageContainer" property="positionInStorageContainer" readonly="true"/>
+						
+						<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
 						<html:button property="mapButton" styleClass="actionButton" styleId="Map"
 							onclick="javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfSpecimen','name','810','320','yes');return false" >
 							<bean:message key="buttons.map"/>
 						</html:button>
+						</logic:notEqual>
 					</td>
 				 </tr>
 				 
@@ -710,26 +712,24 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 				    	<html:textarea styleClass="formFieldSized" rows="3" styleId="comments" property="comments" readonly="<%=readOnlyForAll%>"/>
 				    </td>
 				 </tr>
-				 
-				 <logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>">
-					 <tr>
-					 	<td class="formRequiredNotice" width="5">&nbsp;</td>
-					    <td class="formLabel">
-					     	<label for="className">
-					     		<bean:message key="newSpecimen.specimenEventParameters"/>
-					     	</label>
-					    </td>
-					    <td class="formField" colspan="4">
-					     	<html:select property="specimenEventParameter" styleClass="formFieldSized15" styleId="className" size="1" disabled="<%=readOnlyForAll%>" onchange="onParameterChange(this)">
-								<html:options name="<%=Constants.EVENT_PARAMETERS_LIST%>" labelName="<%=Constants.EVENT_PARAMETERS_LIST%>"/>
-							</html:select>
-							<a id="sepAdd" href="#">
-	      						<bean:message key="app.addNew" />
-	   						</a>
-			        	</td>
-					 </tr>
-				 </logic:notEqual>
-				 
+					
+				<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
+				<!-- activitystatus -->
+				<tr>
+					<td class="formRequiredNotice" width="5">*</td>
+					<td class="formRequiredLabel" >
+						<label for="activityStatus">
+							<bean:message key="participant.activityStatus" />
+						</label>
+					</td>
+					<td class="formField" colspan="2">
+						<html:select property="activityStatus" styleClass="formFieldSized10" styleId="activityStatus" size="1">
+							<html:options name="<%=Constants.ACTIVITYSTATUSLIST%>" labelName="<%=Constants.ACTIVITYSTATUSLIST%>" />
+						</html:select>
+					</td>
+				</tr>
+				</logic:equal>
+ 
 				 <tr>
 				     <td class="formTitle" height="20" colspan="2">
 				     	<bean:message key="specimen.externalIdentifier"/>
@@ -855,10 +855,10 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 											<bean:message key="buttons.reset"/>
 										</html:reset>
 									</td> 
-									<%--td>
-										<html:reset styleClass="actionButton">
-											<bean:message key="buttons.moreSpecimen"/>
-										</html:reset>
+									<td>
+										<html:button property="eventButton" styleClass="actionButton" onclick="onSpecimenEventUpdate(this)">
+											<bean:message key="buttons.spcimenEventParameters"/>
+										</html:button>
 									</td--%>
 								</tr>
 							</table>
@@ -868,54 +868,6 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 	</table>
   </td>
 </tr>
- <!-- NEW SPECIMEN REGISTRATION ends-->
-<%
-	List gridData = form.getGridData();
-	if(gridData!=null && gridData.size() != 0)
-	{
-%>
-<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>">
-<tr>
- <td>
-  	 <table summary="" cellpadding="3" cellspacing="0" border="0" width="500">
-   	 	<tr>
-			<td>
-				<div STYLE="overflow: auto; width:550; height: 200; padding:0px; margin: 0px; border: 1px solid" id="eventGrid">
-				<script>
-				
-					//	create ActiveWidgets Grid javascript object.
-					var obj = new Active.Controls.Grid;
-					
-					//	set number of rows/columns.
-					obj.setRowProperty("count", <%=dataList.size()%>);
-					obj.setColumnProperty("count", <%=columnList.length-1%>);
-					
-					//	provide cells and headers text
-					obj.setDataProperty("text", function(i, j){return myData[i][j]});
-					obj.setColumnProperty("text", function(i){return columns[i]});
-					obj.setDataProperty("value", function(i){return myData[i][0]});
-					
-					//	set headers width/height.
-					obj.setRowHeaderWidth("28px");
-					obj.setColumnHeaderHeight("20px");
-			
-					var row = new Active.Templates.Row;
-					row.setEvent("ondblclick", function(){this.action("myAction")}); 
-					
-					obj.setTemplate("row", row);
-			   		obj.setAction("myAction", 
-						function(src){window.location.href = 'SearchObject.do?pageOf=' + myData[this.getSelectionProperty("index")][<%=columnList.length-1%>] + '&operation=search&systemIdentifier=' + src.getDataProperty("value")}); 
-			
-					//	write grid html to the page.
-					document.write(obj);
-				</script>
-				</div>
-			</td>
-		</tr>
-	</table>
- </td>
-</tr>
-</logic:notEqual>
-<% } %>
+<!-- NEW SPECIMEN REGISTRATION ends-->
 </table>
 </html:form>
