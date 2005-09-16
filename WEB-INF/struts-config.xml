@@ -677,6 +677,16 @@ PUBLIC
 		</action>
 		<!--Approve User Actions End-->
 		
+		<!-- New Specimen Event Parameters Action Begin-->
+		<action path="/NewSpecimenEventParameters"
+			type="edu.wustl.catissuecore.action.NewSpecimenEventParametersAction"
+			scope="request">
+			<forward name="pageOfNewSpecimenEventParameters" path=".catissuecore.newSpecimenEventParametersDef" />
+			<forward name="failure" path=".catissuecore.newSpecimenEventParametersDef" />
+			<forward name="access_denied" path="/ManageBioSpecimen.do" />
+		</action>
+		<!-- New Specimen Event Parameters Action End-->
+		
 		<!--New Specimen Actions Begin-->
 		<action path="/NewSpecimen"
 			type="edu.wustl.catissuecore.action.NewSpecimenAction"
@@ -1100,7 +1110,7 @@ PUBLIC
 			validate="true"
 			input="/CellSpecimenReviewParameters.do?operation=add&amp;pageOf=pageOfCellSpecimenReviewParameters"
 			scope="request">
-			<forward name="success" path=".catissuecore.cellSpecimenReviewParametersAddSuccessDef" />
+			<forward name="success" path="/NewSpecimenEventParameters.do?pageOf=pageOfNewSpecimenEventParameters" />
 			<forward name="failure" path="/CellSpecimenReviewParameters.do?operation=add&amp;pageOf=pageOfCellSpecimenReviewParameters" />
 		</action>
 		
@@ -1110,7 +1120,7 @@ PUBLIC
 			validate="true"
 			input="/CellSpecimenReviewParameters.do?operation=edit&amp;pageOf=pageOfCellSpecimenReviewParameters"
 			scope="request">
-			<forward name="success" path=".catissuecore.cellSpecimenReviewParametersEditSuccessDef" />
+			<forward name="success" path="/NewSpecimenEventParameters.do?pageOf=pageOfNewSpecimenEventParameters"/>
 			<forward name="failure" path="/CellSpecimenReviewParameters.do?operation=edit&amp;pageOf=pageOfCellSpecimenReviewParameters" />
 		</action>
 		
@@ -1150,7 +1160,7 @@ PUBLIC
 			validate="true"
 			input="/TissueSpecimenReviewEventParameters.do?operation=edit&amp;pageOf=pageOfTissueSpecimenReviewParameters"
 			scope="request">
-			<forward name="success" path=".catissuecore.tissueSpecimenReviewEventParametersEditSuccessDef" />
+			<forward name="success" path=".catissuecore.tissueSpecimenReviewEventParametersEditSuccessDef"/>
 			<forward name="failure" path="/TissueSpecimenReviewEventParameters.do?operation=edit&amp;pageOf=pageOfTissueSpecimenReviewParameters" />
 		</action>
 		
