@@ -27,6 +27,7 @@ import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.util.logger.Logger;
 
 
 public class StorageContainerAction  extends SecureAction
@@ -91,17 +92,31 @@ public class StorageContainerAction  extends SecureAction
         	String []siteDisplayField = {"name"};
         	list = bizLogic.getList(Site.class.getName(),siteDisplayField, valueField);
         	request.setAttribute(Constants.SITELIST,list);
+        	
+        	boolean isOnChange = false; 
+			String str = request.getParameter("isOnChange");
+			if(str!=null)
+			{
+				if(str.equals("true"))
+					isOnChange = true; 
+			}
 
-        	if(operation.equals(Constants.ADD))
+        	if(isOnChange)
         	{
+        	    int startNumber = 1;
 	        	if(storageContainerForm.getCheckedButton() == 1)
 	        	{
-	        		request.setAttribute("startNumber",String.valueOf(bizLogic.getNextContainerNumber(storageContainerForm.getSiteId(),storageContainerForm.getTypeId(),true)));
+	        	    Logger.out.debug("storageContainerForm.getSiteId()......................."+storageContainerForm.getSiteId());
+	        	    Logger.out.debug("storageContainerForm.getTypeId()......................."+storageContainerForm.getTypeId());
+	        		startNumber = bizLogic.getNextContainerNumber(storageContainerForm.getSiteId(),storageContainerForm.getTypeId(),true);
 	        	}
 	        	else
 	        	{
-	        		request.setAttribute("startNumber",String.valueOf(bizLogic.getNextContainerNumber(Long.parseLong(request.getParameter("parentContainerId")),storageContainerForm.getTypeId(),false)));
+	        	    Logger.out.debug("Long.parseLong(request.getParameter(parentContainerId)......................."+request.getParameter("parentContainerId"));
+	        	    Logger.out.debug("storageContainerForm.getTypeId()......................."+storageContainerForm.getTypeId());
+	        		startNumber = bizLogic.getNextContainerNumber(Long.parseLong(request.getParameter("parentContainerId")),storageContainerForm.getTypeId(),false);
 	        	}
+	        	storageContainerForm.setStartNumber(String.valueOf(startNumber));
         	}        
 		}
         catch(Exception e)
