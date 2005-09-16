@@ -479,7 +479,7 @@ public class StorageContainer extends AbstractDomainObject implements java.io.Se
 	        }
 	        
 	        Map map = form.getValues();
-	        System.out.println("Map :"+map); 
+	        Logger.out.debug("Map.................. :"+map); 
 	        MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.domain");
 	        
 	        Collection storageContainerDetailsCollectionTemp = parser.generateData(map);
