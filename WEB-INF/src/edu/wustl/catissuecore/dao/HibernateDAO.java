@@ -29,9 +29,12 @@ import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.exception.AuditException;
+import edu.wustl.catissuecore.util.Permissions;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.security.SecurityManager;
+import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.dbManager.DBUtil;
@@ -180,31 +183,31 @@ public class HibernateDAO extends AbstractDAO
         boolean isAuthorized = true;
         try
         {
-//            if (isSecureInsert)
-//            {
-//                if (null != sessionDataBean)
-//                {
-//                    isAuthorized = SecurityManager.getInstance(this.getClass())
-//                            .isAuthorized(sessionDataBean.getUserName(),
-//                                    obj.getClass().getName(),
-//                                    Permissions.CREATE);
-//                }
-//                else
-//                {
-//                    isAuthorized = false;
-//                }
-//            }
-//            Logger.out.debug(" User's Authorization to insert "+obj.getClass().getName()+" "+isAuthorized);
-//            if(isAuthorized)
-//            {
+            if (isSecureInsert)
+            {
+                if (null != sessionDataBean)
+                {
+                    isAuthorized = SecurityManager.getInstance(this.getClass())
+                            .isAuthorized(sessionDataBean.getUserName(),
+                                    obj.getClass().getName(),
+                                    Permissions.CREATE);
+                }
+                else
+                {
+                    isAuthorized = false;
+                }
+            }
+            Logger.out.debug(" User's Authorization to insert "+obj.getClass().getName()+" "+isAuthorized);
+            if(isAuthorized)
+            {
                 session.save(obj);
                 if (obj instanceof Auditable && isToAudit)
                     auditManager.compare((Auditable) obj, null, "INSERT");
-//            }
-//            else
-//            {
-//                throw new UserNotAuthorizedException("Not Authorized to insert");
-//            }
+            }
+            else
+            {
+                throw new UserNotAuthorizedException("Not Authorized to insert");
+            }
 
            
         }
@@ -216,10 +219,10 @@ public class HibernateDAO extends AbstractDAO
         {
             throw handleError("", hibExp);
         }
-//        catch( SMException smex)
-//        {
-//            throw handleError("", smex);
-//        }
+        catch( SMException smex)
+        {
+            throw handleError("", smex);
+        }
         
     }
 
@@ -268,29 +271,29 @@ public class HibernateDAO extends AbstractDAO
         boolean isAuthorized = true;
         try
         {
-//            if (isSecureUpdate)
-//            {
-//                if (null != sessionDataBean)
-//                {
-//                    isAuthorized = SecurityManager.getInstance(this.getClass())
-//                            .isAuthorized(sessionDataBean.getUserName(),
-//                                    obj.getClass().getName(),
-//                                    Permissions.UPDATE);
-//                }
-//                else
-//                {
-//                    isAuthorized = false;
-//                }
-//            }
-//            Logger.out.debug(" User's Authorization to update "+obj.getClass().getName()+" "+isAuthorized);
-//            if(isAuthorized)
-//            {
+            if (isSecureUpdate)
+            {
+                if (null != sessionDataBean)
+                {
+                    isAuthorized = SecurityManager.getInstance(this.getClass())
+                            .isAuthorized(sessionDataBean.getUserName(),
+                                    obj.getClass().getName(),
+                                    Permissions.UPDATE);
+                }
+                else
+                {
+                    isAuthorized = false;
+                }
+            }
+            Logger.out.debug(" User's Authorization to update "+obj.getClass().getName()+" "+isAuthorized);
+            if(isAuthorized)
+            {
                 session.update(obj);
-//            }
-//            else
-//            {
-//                throw new UserNotAuthorizedException("Not Authorized to update");
-//            }
+            }
+            else
+            {
+                throw new UserNotAuthorizedException("Not Authorized to update");
+            }
 
             //            if(isAuditable)
             //        		auditManager.compare((AbstractDomainObject)obj,null,"INSERT");
@@ -300,11 +303,11 @@ public class HibernateDAO extends AbstractDAO
             Logger.out.error(hibExp.getMessage(), hibExp);
             throw new DAOException("Error in update", hibExp);
         }
-//        catch (SMException smex)
-//        {
-//            Logger.out.error(smex.getMessage(), smex);
-//            throw new DAOException("Error in update", smex);
-//        }
+        catch (SMException smex)
+        {
+            Logger.out.error(smex.getMessage(), smex);
+            throw new DAOException("Error in update", smex);
+        }
     }
 
     /**

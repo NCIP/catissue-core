@@ -43,7 +43,7 @@ public abstract class SecureAction extends BaseAction
             throws Exception
     {
 
-        if (1==1 || SecurityManager.getInstance(this.getClass())
+        if (SecurityManager.getInstance(this.getClass())
                 .isAuthorizedToExecuteAction(getUserLoginName(request)))
         {
             return executeSecureAction(mapping, form, request, response);
