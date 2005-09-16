@@ -21,6 +21,7 @@ import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.catissuecore.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
@@ -89,7 +90,7 @@ public class StorageTypeForm extends AbstractActionForm
             StorageType storageType = (StorageType) abstractDomain;
             this.systemIdentifier = storageType.getSystemIdentifier().longValue();
             this.type = storageType.getType();
-            this.defaultTemperature = "" + storageType.getDefaultTempratureInCentigrade().doubleValue();
+            this.defaultTemperature = Utility.toString( storageType.getDefaultTempratureInCentigrade());
             this.oneDimensionCapacity = storageType.getDefaultStorageCapacity().getOneDimensionCapacity().intValue();
             this.twoDimensionCapacity = storageType.getDefaultStorageCapacity().getTwoDimensionCapacity().intValue();
             this.oneDimensionLabel = storageType.getOneDimensionLabel();
@@ -326,6 +327,16 @@ public class StorageTypeForm extends AbstractActionForm
             {
                 errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("storageType.type")));
             }  
+            else
+            {
+                String s= new String("- _");
+                String delimitedString = validator.delimiterExcludingGiven(s );
+                if (validator.containsSpecialCharacters(type,delimitedString  ))
+                {
+                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("storageType.type")));
+                }  
+            	
+            }
             if (validator.isEmpty(String.valueOf(oneDimensionCapacity)))
             {
                 errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("storageType.oneDimensionCapacity")));
@@ -359,7 +370,7 @@ public class StorageTypeForm extends AbstractActionForm
             }
             // code as per bug id 233 
             // checking for double value if present
-            if (!validator.isEmpty(defaultTemperature) && !validator.isDouble(defaultTemperature,1  )  )
+            if (!validator.isEmpty(defaultTemperature) && !validator.isDouble(defaultTemperature,0  )  )
             {
                 errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("storageType.defaultTemperature")));
             }
