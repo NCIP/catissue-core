@@ -23,10 +23,11 @@ import edu.wustl.catissuecore.audit.AuditManager;
 import edu.wustl.catissuecore.audit.Auditable;
 import edu.wustl.catissuecore.bizlogic.AbstractBizLogic;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
-import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
+import edu.wustl.catissuecore.domain.Institution;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.domain.Site;
+import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.exception.AuditException;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;
@@ -34,6 +35,7 @@ import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.dbManager.DBUtil;
+import edu.wustl.common.util.dbManager.HibernateMetaData;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -42,7 +44,6 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class HibernateDAO extends AbstractDAO
 {
-
     protected Session session = null;
     protected Transaction transaction = null;
     protected AuditManager auditManager;
@@ -53,14 +54,20 @@ public class HibernateDAO extends AbstractDAO
      * 
      * @throws DAOException
      */
-    public void openSession() throws DAOException
+    public void openSession(SessionDataBean sessionDataBean) throws DAOException
     {
         try
         {
             session = DBUtil.currentSession();
             transaction = session.beginTransaction();
-
+            
             auditManager = new AuditManager();
+            
+            if(sessionDataBean!=null)
+            {
+            	auditManager.setUserId(sessionDataBean.getUserId());
+            	auditManager.setIpAddress(sessionDataBean.getIpAddress());
+            }
         }
         catch (HibernateException dbex)
         {
@@ -559,7 +566,7 @@ public class HibernateDAO extends AbstractDAO
 		Logger.configure("Application.properties");
 		
 		HibernateDAO dao = new HibernateDAO();
-		dao.openSession();
+		dao.openSession(null);
 		Statement st = dao.session.connection().createStatement();
 		//dao.session.createSQLQuery()
 		int count = st.executeUpdate("UPDATE catissue_specimen_collection_group set ACTIVITY_STATUS = 'A'");
@@ -569,30 +576,17 @@ public class HibernateDAO extends AbstractDAO
 		dao.closeSession();
 	}
 	
-	public static void main(String[] args)throws DAOException 
+	public static void main(String[] args)throws Exception 
     {
 		Variables.catissueHome = System.getProperty("user.dir");
 		Logger.configure("Application.properties");
 		
 		HibernateDAO dao = new HibernateDAO();
-		dao.openSession();
+		dao.openSession(null);
 		
-		String sourceObjectName = CollectionProtocolRegistration.class.getName();
-		String selectColumnName [] = {Constants.SYSTEM_IDENTIFIER};
+		System.out.println("TN "+HibernateMetaData.getTableName(Institution.class));
+		System.out.println("CN "+HibernateMetaData.getColumnName(Institution.class,"name"));
 		
-		String[] whereColumnName = {"participant."+Constants.SYSTEM_IDENTIFIER};
-//		String[] whereColumnCondition = {"in"};
-//		Object[] whereColumnValue = {new String[]{"2","1"}};
-		
-		String[] whereColumnCondition = {"!="};
-		Object[] whereColumnValue = {"1"};
-
-		String joinCondition = Constants.AND_JOIN_CONDITION;
-		
-		List list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, 
-				whereColumnCondition, whereColumnValue, joinCondition);
-		
-		System.out.println(list);
 		dao.commit();
 		dao.closeSession();
     }

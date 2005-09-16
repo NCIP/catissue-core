@@ -10,6 +10,7 @@
 
 package edu.wustl.catissuecore.dao;
 
+import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.util.dbManager.DAOException;
 
 /**
@@ -24,7 +25,7 @@ public abstract class AbstractDAO implements DAO
      * 
      * @throws DAOException
      */
-    public abstract void openSession() throws DAOException;
+    public abstract void openSession(SessionDataBean sessionDataBean) throws DAOException;
     
     /**
      * This method will be used to close the session with the database.

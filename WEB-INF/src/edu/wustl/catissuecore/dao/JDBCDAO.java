@@ -43,9 +43,14 @@ public class JDBCDAO extends AbstractDAO
      * 
      * @throws DAOException
      */
-    public void openSession() throws DAOException
+    public void openSession(SessionDataBean sessionDataBean) throws DAOException
     {
     	auditManager = new AuditManager();
+    	if(sessionDataBean!=null)
+        {
+        	auditManager.setUserId(sessionDataBean.getUserId());
+        	auditManager.setIpAddress(sessionDataBean.getIpAddress());
+        }
     	
     	try
     	{
