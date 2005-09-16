@@ -66,6 +66,9 @@ public class SecurityManager implements Permissions
     private static final String SUPERVISOR_GROUP = "SUPERVISOR_GROUP";
     private static final String TECHNICIAN_GROUP = "TECHNICIAN_GROUP";
     private static final String PUBLIC_GROUP = "PUBLIC_GROUP";
+    private static final String ADMINISTRATOR_GROUP_ID = "1";
+    private static final String SUPERVISOR_GROUP_ID = "2";
+    private static final String TECHNICIAN_GROUP_ID = "3";
     private static final String PUBLIC_GROUP_ID = "4";
 
     /**
@@ -301,6 +304,7 @@ public class SecurityManager implements Permissions
     public void assignRoleToUser(String userName, String roleID)
             throws SMException
     {
+        Logger.out.debug("UserName: "+userName+" Role ID:"+roleID);
         UserProvisioningManager userProvisioningManager = null;
         User user;
         try
@@ -316,23 +320,31 @@ public class SecurityManager implements Permissions
             
             if (roleID.equals(ADMINISTRATOR_ROLE))
             {
-                userProvisioningManager.assignUserToGroup(userName,
-                        ADMINISTRATOR_GROUP);
+                assignAdditionalGroupsToUser(String.valueOf(user.getUserId()),new String[] {
+                        ADMINISTRATOR_GROUP_ID });
+                Logger.out.debug(" User assigned Administrator role");
             }
             else if (roleID.equals(SUPERVISOR_ROLE))
             {
-                userProvisioningManager.assignUserToGroup(userName,
-                        SUPERVISOR_GROUP);
+                assignAdditionalGroupsToUser(String.valueOf(user.getUserId()),new String[] {
+                        SUPERVISOR_GROUP_ID });
+                Logger.out.debug(" User assigned supervisor role");
             }
             else if (roleID.equals(TECHNICIAN_ROLE))
             {
-                userProvisioningManager.assignUserToGroup(userName,
-                        TECHNICIAN_GROUP);
+                assignAdditionalGroupsToUser(String.valueOf(user.getUserId()),new String[] {
+                        TECHNICIAN_GROUP_ID });
+                Logger.out.debug(" User assigned technician role");
             }
             else if (roleID.equals(PUBLIC_ROLE))
             {
-                userProvisioningManager.assignUserToGroup(userName,
-                        PUBLIC_GROUP);
+                assignAdditionalGroupsToUser(String.valueOf(user.getUserId()),new String[] {
+                        PUBLIC_GROUP_ID });
+                Logger.out.debug(" User assigned public role");
+            }
+            else
+            {
+                Logger.out.debug(" User assigned no role");
             }
         }
         catch (CSException e)
@@ -483,12 +495,12 @@ public class SecurityManager implements Permissions
      * @return
      * @throws CSException
      */
-    public boolean isAuthorizedToExecuteAction(String loginName)
+    public boolean isAuthorizedToExecuteAction(String loginName, String objectId)
             throws Exception
     {
         Logger.out.debug("Login Name: " + loginName);
         User user = getUser(loginName);
-        String objectId = getObjectIdForSecureMethodAccess();
+//        String objectId = getObjectIdForSecureMethodAccess();
 
         Logger.out.debug("The User name is: " + user.getName());
         Logger.out.debug("The Object ID is: " + objectId);
@@ -512,16 +524,16 @@ public class SecurityManager implements Permissions
 
     }
 
-    /**
-     * Returns the object id of the protection element that represents
-     * the Action that is being requested for invocation.
-     * @param clazz
-     * @return
-     */
-    private String getObjectIdForSecureMethodAccess()
-    {
-        return requestingClass.getName();
-    }
+//    /**
+//     * Returns the object id of the protection element that represents
+//     * the Action that is being requested for invocation.
+//     * @param clazz
+//     * @return
+//     */
+//    private String getObjectIdForSecureMethodAccess()
+//    {
+//        return requestingClass.getName();
+//    }
 
     /**
      * Returns list of objects corresponding to the searchCriteria passed
