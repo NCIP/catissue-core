@@ -71,6 +71,10 @@ public class HibernateDAO extends AbstractDAO
             	auditManager.setUserId(sessionDataBean.getUserId());
             	auditManager.setIpAddress(sessionDataBean.getIpAddress());
             }
+            else
+            {
+                auditManager.setUserId(null);
+            }
         }
         catch (HibernateException dbex)
         {

@@ -52,6 +52,10 @@ public class JDBCDAO extends AbstractDAO
         	auditManager.setUserId(sessionDataBean.getUserId());
         	auditManager.setIpAddress(sessionDataBean.getIpAddress());
         }
+    	else
+        {
+            auditManager.setUserId(null);
+        }
     	
     	try
     	{
