@@ -80,7 +80,7 @@ public abstract class AbstractBizLogic
 		AbstractDAO dao = DAOFactory.getDAO(daoType);
 		try
 		{
-	        dao.openSession();
+	        dao.openSession(sessionDataBean);
 	        insert(obj, dao, sessionDataBean);
 	        dao.commit();
 		}
@@ -118,7 +118,7 @@ public abstract class AbstractBizLogic
 		AbstractDAO dao = DAOFactory.getDAO(daoType);
 		try
 		{
-	        dao.openSession();
+	        dao.openSession(sessionDataBean);
 	        update(dao, obj,sessionDataBean);
 	        dao.commit();
 		}

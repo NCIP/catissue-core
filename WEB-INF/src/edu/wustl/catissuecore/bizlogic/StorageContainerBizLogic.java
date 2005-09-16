@@ -249,7 +249,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 
         AbstractDAO dao = DAOFactory.getDAO(Constants.JDBC_DAO);
 
-        dao.openSession();
+        dao.openSession(null);
 
         List list = dao.retrieve(sourceObjectName, selectColumnName,
                 whereColumnName, whereColumnCondition, whereColumnValue,
@@ -277,7 +277,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
     public Vector getTreeViewData() throws DAOException
     {
         AbstractDAO dao = DAOFactory.getDAO(Constants.HIBERNATE_DAO);
-        dao.openSession();
+        dao.openSession(null);
 
         List list = (List) dao.retrieve(StorageContainer.class.getName());
 

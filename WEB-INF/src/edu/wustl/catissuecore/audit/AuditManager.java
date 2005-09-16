@@ -17,11 +17,12 @@ import edu.wustl.catissuecore.domain.AuditEvent;
 import edu.wustl.catissuecore.domain.AuditEventDetails;
 import edu.wustl.catissuecore.domain.AuditEventLog;
 import edu.wustl.catissuecore.domain.Department;
+import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.exception.AuditException;
-import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.dbManager.HibernateMetaData;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -37,8 +38,18 @@ public class AuditManager
 	public AuditManager()
 	{
 		auditEvent = new AuditEvent();
-		auditEvent.setIpAddress("10.10.10.10");
-		auditEvent.setUser(null);
+	}
+	
+	public void setUserId(Long userId)
+	{
+		User user = new User();
+		user.setSystemIdentifier(userId);
+		auditEvent.setUser(user);
+	}
+	
+	public void setIpAddress(String IPAddress)
+	{
+		auditEvent.setIpAddress(IPAddress);
 	}
 	
 	private boolean isVariable(Object obj)
@@ -60,7 +71,7 @@ public class AuditManager
 			AuditEventLog auditEventLog = new AuditEventLog();
 			
 			auditEventLog.setObjectIdentifier(currentObj.getSystemIdentifier());
-			auditEventLog.setObjectName(currentObj.getClass().getName());	
+			auditEventLog.setObjectName(HibernateMetaData.getTableName(currentObj.getClass()));	
 			auditEventLog.setEventType(eventType);
 			
 			Set auditEventDetailsCollection = new HashSet(); 
@@ -92,7 +103,7 @@ public class AuditManager
 		}
 		catch(Exception ex)
 		{
-			ex.printStackTrace();
+			Logger.out.debug(ex.getMessage(),ex) ;
 			throw new AuditException();
 		}
 	}
@@ -106,7 +117,7 @@ public class AuditManager
 		if(auditEventDetails!=null)
 		{
 			String attributeName = processAttributeName(method.getName());
-			auditEventDetails.setElementName(attributeName);
+			auditEventDetails.setElementName(HibernateMetaData.getColumnName(currentObj.getClass(),attributeName));
 		}
 		return auditEventDetails;
 	}
@@ -119,6 +130,13 @@ public class AuditManager
 		{
 			attributeName = methodName.substring(index+"get".length());
 		}
+		
+		String firstChar = (attributeName.charAt(0)+"").toLowerCase();
+		attributeName = firstChar + attributeName.substring(1);
+		
+		Logger.out.debug("methodName <"+methodName+">");
+		Logger.out.debug("attributeName <"+attributeName+">");
+		
 		return attributeName;
 	}
 	

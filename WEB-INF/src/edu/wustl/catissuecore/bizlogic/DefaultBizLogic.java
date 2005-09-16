@@ -68,7 +68,7 @@ public class  DefaultBizLogic extends AbstractBizLogic
         
         try
         {
-            dao.openSession();
+            dao.openSession(null);
             
             list = dao.retrieve(sourceObjectName, selectColumnName,
                     whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);
@@ -107,7 +107,7 @@ public class  DefaultBizLogic extends AbstractBizLogic
         
         try
         {
-            dao.openSession();
+            dao.openSession(null);
             
             list = dao.retrieve(sourceObjectName, null,
                     whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);

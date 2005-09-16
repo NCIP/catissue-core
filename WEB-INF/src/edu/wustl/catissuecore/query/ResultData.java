@@ -96,21 +96,21 @@ public class ResultData
     {
         List dataList = null;
         
-        try
-        {
-            AbstractDAO dao = DAOFactory.getDAO(Constants.JDBC_DAO);
-            dao.openSession();
-            dataList = dao.retrieve(tmpResultsTableName);
-            dao.closeSession();
-        }
-        catch (DAOException sqlExp)
-        {
-            Logger.out.error(sqlExp.getMessage(),sqlExp);
-        }
-        catch (Exception exp)
-        {
-            Logger.out.error(exp.getMessage(),exp);
-        }
+//        try
+//        {
+//            AbstractDAO dao = DAOFactory.getDAO(Constants.JDBC_DAO);
+//            dao.openSession();
+//            dataList = dao.retrieve(tmpResultsTableName);
+//            dao.closeSession();
+//        }
+//        catch (DAOException sqlExp)
+//        {
+//            Logger.out.error(sqlExp.getMessage(),sqlExp);
+//        }
+//        catch (Exception exp)
+//        {
+//            Logger.out.error(exp.getMessage(),exp);
+//        }
         
         return dataList;
     }

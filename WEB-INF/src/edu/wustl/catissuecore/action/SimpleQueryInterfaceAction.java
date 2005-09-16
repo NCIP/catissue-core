@@ -120,7 +120,7 @@ public class SimpleQueryInterfaceAction extends Action
         Logger.out.debug("SQL*****************************"+sql);
         
         JDBCDAO jdbcDao = new JDBCDAO();
-        jdbcDao.openSession();
+        jdbcDao.openSession(null);
         List list = jdbcDao.executeQuery(sql);
         jdbcDao.closeSession();
         

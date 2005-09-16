@@ -21,7 +21,6 @@ import edu.wustl.common.util.logger.Logger;
  */
 public abstract class Query
 {
-
     /**
      * Advanced query type constant
      */
@@ -108,7 +107,7 @@ public abstract class Query
 	    try
 	    {
 	        JDBCDAO dao = new JDBCDAO();
-	        dao.openSession();
+	        dao.openSession(null);
 	        Logger.out.debug("SQL************"+getString());
 			List list = dao.executeQuery(getString());
 			
@@ -163,7 +162,7 @@ public abstract class Query
 	        Logger.out.debug("DATAELEMENT SQL : "+sql);
 		    
 		    JDBCDAO jdbcDao = new JDBCDAO();
-	        jdbcDao.openSession();
+	        jdbcDao.openSession(null);
 	        List list = jdbcDao.executeQuery(sql);
 	        jdbcDao.closeSession();
 		    
@@ -450,7 +449,7 @@ public abstract class Query
         try
         {
             JDBCDAO dao = new JDBCDAO();
-            dao.openSession();
+            dao.openSession(null);
             String sqlString = "SELECT tableData2.ALIAS_NAME from CATISSUE_QUERY_INTERFACE_TABLE_DATA tableData2 "
                     + "join (SELECT CHILD_TABLE_ID FROM CATISSUE_TABLE_RELATION relationData,"
                     + "CATISSUE_QUERY_INTERFACE_TABLE_DATA tableData "

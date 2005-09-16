@@ -60,7 +60,7 @@ public class QueryBizLogic extends DefaultBizLogic
         try
         {
             dao = new JDBCDAO();
-            dao.openSession();
+            dao.openSession(null);
             list = dao.executeQuery(ALIAS_NAME_TABLE_NAME_MAP_QUERY);
 
             Iterator iterator = list.iterator();
@@ -113,7 +113,7 @@ public class QueryBizLogic extends DefaultBizLogic
         try
         {
             dao = new JDBCDAO();
-            dao.openSession();
+            dao.openSession(null);
             list = dao.executeQuery(GET_RELATION_DATA);
 
             Iterator iterator = list.iterator();
