@@ -131,9 +131,9 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
     {
     	Participant participant = (Participant) abstractDomain;
         this.systemIdentifier = participant.getSystemIdentifier().longValue();
-        this.lastName = participant.getLastName();
-        this.firstName = participant.getFirstName();
-        this.middleName = participant.getMiddleName();
+        this.lastName = Utility.toString( participant.getLastName());
+        this.firstName =  Utility.toString( participant.getFirstName());
+        this.middleName = Utility.toString( participant.getMiddleName());
         this.birthDate = Utility.parseDateToString(participant.getBirthDate(),Constants.DATE_PATTERN_MM_DD_YYYY);
         this.gender = participant.getGender();
         this.genotype = participant.getGenotype();
@@ -470,10 +470,10 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 			    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("user.firstName")));
 			}
 			
-			if (validator.isEmpty(middleName))
-			{
-			    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("participant.middleName")));
-			}
+//			if (validator.isEmpty(middleName))
+//			{
+//			    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("participant.middleName")));
+//			}
 			  
 			if (validator.isEmpty(birthDate))
 			{
