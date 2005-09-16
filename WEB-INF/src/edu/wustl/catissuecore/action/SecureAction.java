@@ -59,8 +59,17 @@ public abstract class SecureAction extends BaseAction
         errors.add(ActionErrors.GLOBAL_ERROR, error);
         saveErrors(request, errors);
 
-        return mapping.findForward(Constants.ACCESS_DENIED);
+        return getActionForward(request,mapping);
 
+    }
+
+    /**
+     * @param mapping
+     * @return
+     */
+    protected ActionForward getActionForward(HttpServletRequest request,ActionMapping mapping)
+    {
+        return mapping.findForward(Constants.ACCESS_DENIED);
     }
 
     /**

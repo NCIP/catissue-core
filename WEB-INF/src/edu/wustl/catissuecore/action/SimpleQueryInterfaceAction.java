@@ -34,13 +34,13 @@ import edu.wustl.common.util.logger.Logger;
  * SimpleQueryInterfaceAction initializes the fields in the Simple Query Interface.
  * @author gautam_shetty
  */
-public class SimpleQueryInterfaceAction extends Action
+public class SimpleQueryInterfaceAction extends SecureAction
 {
     
     /**
      * Overrides the execute method of Action class.
      */
-    public ActionForward execute(ActionMapping mapping, ActionForm form,
+    public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response) throws Exception
     {
         SimpleQueryInterfaceForm simpleQueryInterfaceForm = (SimpleQueryInterfaceForm) form;
@@ -140,5 +140,48 @@ public class SimpleQueryInterfaceAction extends Action
         
         request.setAttribute(attributeNameList, columnNameList);
         request.setAttribute(attributeDisplayNameList, columnDisplayNameList);
+    }
+    /* (non-Javadoc)
+     * @see edu.wustl.catissuecore.action.SecureAction#isAuthorizedToExecute(javax.servlet.http.HttpServletRequest)
+     */
+    /**
+     * Returns the object id of the protection element that represents
+     * the Action that is being requested for invocation.
+     * @param clazz
+     * @return
+     */
+    protected String getObjectIdForSecureMethodAccess(HttpServletRequest request)
+    {
+        String aliasName = request.getParameter("aliasName");
+        if(aliasName!=null)
+        {
+            return this.getClass().getName()+"_"+aliasName;
+        }
+        else
+        {
+            return super.getObjectIdForSecureMethodAccess(request);
+        }
+    }
+    
+    /**
+     * @param mapping
+     * @return
+     */
+    protected ActionForward getActionForward(HttpServletRequest request,ActionMapping mapping)
+    {
+        String aliasName = request.getParameter("aliasName");
+        if(aliasName.equals("User") || aliasName.equals("Institution") || aliasName.equals("Department")|| aliasName.equals("CancerResearchGroup")|| aliasName.equals("Site")|| aliasName.equals("StorageType")|| aliasName.equals("StorageContainer")|| aliasName.equals("BioHazard")|| aliasName.equals("CollectionProtocol")|| aliasName.equals("DistributionProtocol"))
+        {
+            return mapping.findForward(Constants.ACCESS_DENIED_ADMIN);
+        }
+        else if(aliasName.equals("Participant") ||aliasName.equals("CollectionProtocolRegistration") ||aliasName.equals("SpecimenCollectionGroup") ||aliasName.equals("Specimen") ||aliasName.equals("Distribution"))
+        {
+            return mapping.findForward(Constants.ACCESS_DENIED_BIOSPECIMEN);
+        }
+        else
+        {
+            return mapping.findForward(Constants.ACCESS_DENIED);
+        }
+        
     }
 }
