@@ -531,7 +531,10 @@ public class Specimen extends AbstractDomainObject implements Serializable
 		        //Getting the Map of Biohazards
 		        parser = new MapDataParser("edu.wustl.catissuecore.domain");
 		        Map bioMap = form.getBiohazard();
+		        Logger.out.debug("\n\n\n\n\nBIOMAP : " + bioMap );
 		        Collection bioCollection = parser.generateData(bioMap);
+		        Logger.out.debug("\n\n\n\n\nBIO-COL : " + bioCollection );
+
 		        this.biohazardCollection = bioCollection;
             }
             else if(abstractForm instanceof CreateSpecimenForm)

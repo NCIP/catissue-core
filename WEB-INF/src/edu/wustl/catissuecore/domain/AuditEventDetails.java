@@ -115,15 +115,15 @@ public class AuditEventDetails implements java.io.Serializable
 	
 	public boolean equals(Object obj)
 	{
-		if(obj instanceof AuditEventDetails)
-		{
-			AuditEventDetails auditEventDetails = (AuditEventDetails)obj;
-			if(this.systemIdentifier.equals(auditEventDetails.systemIdentifier) && 
-					this.elementName.equals(auditEventDetails.elementName) &&
-					this.previousValue.equals(auditEventDetails.previousValue) &&
-					this.currentValue.equals(auditEventDetails.currentValue))
-				return true;
-		}
+//		if(obj instanceof AuditEventDetails)
+//		{
+//			AuditEventDetails auditEventDetails = (AuditEventDetails)obj;
+//			if(this.systemIdentifier.equals(auditEventDetails.systemIdentifier) && 
+//					this.elementName.equals(auditEventDetails.elementName) &&
+//					this.previousValue.equals(auditEventDetails.previousValue) &&
+//					this.currentValue.equals(auditEventDetails.currentValue))
+//				return true;
+//		}
 		return false;
 	}
 }
