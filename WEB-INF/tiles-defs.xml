@@ -265,6 +265,12 @@
 		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>
 
+	<!-- NEW SPECIMEN EVENT PARAMETERS -->
+	<definition name=".catissuecore.newSpecimenEventParametersDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/SpecimenEventParameters.jsp" />
+	</definition>
+	<!-- NEW SPECIMEN EVENT PARAMETERS -->
+	
 	<!-- NEW SPECIMEN -->
 	<definition name=".catissuecore.newSpecimenDef" extends=".catissuecore.manageBioSpecimenHomeDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/NewSpecimen.jsp" />
@@ -311,7 +317,7 @@
 	<!-- SpecimenCollectionGroup Parameters -->
 
 	<!-- FrozenEventParameters -->
-	<definition name=".catissuecore.frozenEventParametersDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+	<definition name=".catissuecore.frozenEventParametersDef" extends=".catissuecore.queryDataViewDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/FrozenEventParameters.jsp" />
 	</definition>
 
@@ -325,7 +331,7 @@
 	<!-- FrozenEventParameters end -->
 
 	<!-- CheckInCheckOutEventParameters -->
-	<definition name=".catissuecore.checkInCheckOutEventParametersDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+	<definition name=".catissuecore.checkInCheckOutEventParametersDef" extends=".catissuecore.queryDataViewDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/CheckInCheckOutEventParameters.jsp" />
 	</definition>
 
@@ -339,7 +345,7 @@
 	<!-- CheckInCheckOut EventParameters end -->
 
 	<!-- ReceivedOutEventParameters -->
-	<definition name=".catissuecore.receivedEventParametersDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+	<definition name=".catissuecore.receivedEventParametersDef" extends=".catissuecore.queryDataViewDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/ReceivedEventParameters.jsp" />
 	</definition>
 
@@ -353,7 +359,7 @@
 	<!-- Received EventParameters end -->
 	
 	<!-- FluidSpecimenReviewEventParameters -->
-	<definition name=".catissuecore.fluidSpecimenReviewEventParametersDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+	<definition name=".catissuecore.fluidSpecimenReviewEventParametersDef" extends=".catissuecore.queryDataViewDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/FluidSpecimenReviewEventParameters.jsp" />
 	</definition>
 
@@ -367,7 +373,7 @@
 	<!-- FluidSpecimenReviewEventParameters end -->
 	
 	<!-- CellSpecimenReviewParameters -->
-	<definition name=".catissuecore.cellSpecimenReviewParametersDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+	<definition name=".catissuecore.cellSpecimenReviewParametersDef" extends=".catissuecore.queryDataViewDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/CellSpecimenReviewParameters.jsp" />
 	</definition>
 
@@ -381,7 +387,7 @@
 	<!-- CellSpecimenReviewParameters end -->
 
 	<!-- TissueSpecimenReviewEventParameters -->
-	<definition name=".catissuecore.tissueSpecimenReviewEventParametersDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+	<definition name=".catissuecore.tissueSpecimenReviewEventParametersDef" extends=".catissuecore.queryDataViewDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/TissueSpecimenReviewEventParameters.jsp" />
 	</definition>
 
@@ -395,7 +401,7 @@
 	<!-- TissueSpecimenReviewEventParameters end -->
 
 	<!-- DisposalEventParameters -->
-	<definition name=".catissuecore.disposalEventParametersDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+	<definition name=".catissuecore.disposalEventParametersDef" extends=".catissuecore.queryDataViewDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/DisposalEventParameters.jsp" />
 	</definition>
 
@@ -409,7 +415,7 @@
 	<!-- DisposalEventParameters end -->
 	
 	<!-- ThawEventParameters -->
-	<definition name=".catissuecore.thawEventParametersDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+	<definition name=".catissuecore.thawEventParametersDef" extends=".catissuecore.queryDataViewDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/ThawEventParameters.jsp" />
 	</definition>
 
@@ -423,7 +429,7 @@
 	<!-- ThawEventParameters end -->
 
 		<!-- collectionEventParameters -->
-	<definition name=".catissuecore.collectionEventParametersDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+	<definition name=".catissuecore.collectionEventParametersDef" extends=".catissuecore.queryDataViewDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/CollectionEventParameters.jsp" />
 	</definition>
 
@@ -437,7 +443,7 @@
 	<!-- collectionEventParameters end -->
 	
 	<!-- TransferEventParameters -->
-	<definition name=".catissuecore.transferEventParametersDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+	<definition name=".catissuecore.transferEventParametersDef" extends=".catissuecore.queryDataViewDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/TransferEventParameters.jsp" />
 	</definition>
 
@@ -451,7 +457,7 @@
 	<!-- transferEventParameters end -->
 
 	<!-- SpunEventParameters -->
-	<definition name=".catissuecore.spunEventParametersDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+	<definition name=".catissuecore.spunEventParametersDef" extends=".catissuecore.queryDataViewDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/SpunEventParameters.jsp" />
 	</definition>
 	
@@ -464,7 +470,7 @@
 	</definition>
 	<!-- SpunEventParameters end -->
 	<!-- EmbeddedEventParameters -->
-	<definition name=".catissuecore.embeddedEventParametersDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+	<definition name=".catissuecore.embeddedEventParametersDef" extends=".catissuecore.queryDataViewDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/EmbeddedEventParameters.jsp" />
 	</definition>
 
@@ -478,7 +484,7 @@
 	<!-- EmbeddedEventParameters end -->
 	
 		<!-- fixedEventParameters -->
-	<definition name=".catissuecore.fixedEventParametersDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+	<definition name=".catissuecore.fixedEventParametersDef" extends=".catissuecore.queryDataViewDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/FixedEventParameters.jsp" />
 	</definition>
 
@@ -492,7 +498,7 @@
 	<!-- fixedEventParameters end -->
 
 	<!-- procedureEventParameters -->
-	<definition name=".catissuecore.procedureEventParametersDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+	<definition name=".catissuecore.procedureEventParametersDef" extends=".catissuecore.queryDataViewDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/ProcedureEventParameters.jsp" />
 	</definition>
 
@@ -506,7 +512,7 @@
 	<!-- procedureEventParameters end -->
 
 	<!-- MolecularSpecimenReviewParameters -->
-	<definition name=".catissuecore.molecularSpecimenReviewParametersDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+	<definition name=".catissuecore.molecularSpecimenReviewParametersDef" extends=".catissuecore.queryDataViewDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/MolecularSpecimenReviewParameters.jsp" />
 	</definition>
 
