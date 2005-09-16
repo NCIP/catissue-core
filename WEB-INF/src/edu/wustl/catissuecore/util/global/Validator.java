@@ -260,6 +260,40 @@ public class Validator
 
     }
     
+    public String delimiterExcludingGiven(String ignoreList)
+    {
+    	String spChars = "!@#$%^&*()=+\\|{[ ]}\'\";:/?.>,<`~ -_";
+//    	System.out.println("Original : " + spChars);
+    	StringBuffer sb = new StringBuffer(spChars);
+//    	System.out.println("SB : " +sb);
+    	StringBuffer retStr = new StringBuffer();
+
+    	try
+		{
+    		char spIgnoreChars[] = ignoreList.toCharArray();
+    		for(int spCharCount =0; spCharCount<spIgnoreChars.length ; spCharCount++)
+    		{
+    			char chkChar = spIgnoreChars[spCharCount];
+//    			System.out.println(chkChar);
+    			int chInd = sb.indexOf(""+chkChar );
+    			while(chInd !=-1)
+    			{
+    				sb = sb.deleteCharAt(chInd );
+    				chInd = sb.indexOf(""+chkChar );
+//    				System.out.println("\t"+sb);
+    			}
+    			
+    		}
+    		retStr = sb;
+//    		System.out.println("\n\nRetStr : " + retStr);
+		}
+    	catch(Exception exp)
+		{
+			System.out.println("error : " + exp);
+		}
+    	
+    	return retStr.toString(); 
+    }
     
     public static void main(String[] args)
     {
@@ -269,6 +303,13 @@ public class Validator
         System.out.println("\nstr: "+str);
         System.out.println("\ndelim: "+delim);
         System.out.println("\nContains : " + validator.containsSpecialCharacters(str,delim )); 
+        
+        String s= new String("- _");
+        String delimitedString = validator.delimiterExcludingGiven(s );
+        System.out.println("\n\n" + delimitedString );
+        System.out.println(delimitedString.indexOf(s ));
+        
+        
 //        String str = new String("mandar_deshmukh@persistent.co.in");
 //        boolean boo = validator.isNumeric(str);
 //        System.out.println(boo);
