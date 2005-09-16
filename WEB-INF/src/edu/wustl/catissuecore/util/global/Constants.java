@@ -138,6 +138,7 @@ public class Constants
 	//Simple Query Interface Lists
 	public static final String OBJECT_NAME_LIST = "objectNameList";
 	public static final String OBJECT_COMPLETE_NAME_LIST = "objectCompleteNameList";
+    
 	public static final String ATTRIBUTE_NAME_LIST = "attributeNameList";
 	public static final String ATTRIBUTE_CONDITION_LIST = "attributeConditionList";
 	
@@ -1150,4 +1151,7 @@ public class Constants
 	{
 	    return "COLLECTION_PROTOCOL_"+identifier;
 	}
+
+	public static final String ACCESS_DENIED_ADMIN = "access_denied_admin";
+	public static final String ACCESS_DENIED_BIOSPECIMEN = "access_denied_biospecimen";
 }
