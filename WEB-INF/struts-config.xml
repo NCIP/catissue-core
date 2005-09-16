@@ -1590,6 +1590,9 @@ PUBLIC
 			<forward name="pageOfSpecimenCollectionGroup" path=".catissuecore.editBioSpecimenSearchPageDef"/>
 			<forward name="pageOfDistribution" path=".catissuecore.editBioSpecimenSearchPageDef"/>						
 			<forward name="failure" path=".catissuecore.simpleQueryInterfaceDef" />
+			<forward name="access_denied_admin" path="/ManageAdministrativeData.do" />
+			<forward name="access_denied_biospecimen" path="/ManageBioSpecimen.do" />
+			<forward name="access_denied" path="/ManageAdministrativeData.do" />
 		</action>
 
 		<action path="/SimpleSearch"
