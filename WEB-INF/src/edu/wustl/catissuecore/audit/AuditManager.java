@@ -42,9 +42,12 @@ public class AuditManager
 	
 	public void setUserId(Long userId)
 	{
-		User user = new User();
-		user.setSystemIdentifier(userId);
-		auditEvent.setUser(user);
+		if(userId!=null)
+		{
+			User user = new User();
+			user.setSystemIdentifier(userId);
+			auditEvent.setUser(user);
+		}
 	}
 	
 	public void setIpAddress(String IPAddress)
