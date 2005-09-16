@@ -52,16 +52,10 @@ public class NewSpecimenAction  extends SecureAction
         String pageOf = request.getParameter(Constants.PAGEOF);
         request.setAttribute(Constants.PAGEOF,pageOf);
 
-        NewSpecimenForm specimenForm = (NewSpecimenForm)form;
+        //Sets the activityStatusList attribute to be used in the Site Add/Edit Page.
+        request.setAttribute(Constants.ACTIVITYSTATUSLIST, Constants.ACTIVITY_STATUS_VALUES);
         
-        //FIXME
-        //if(!operation.equals(Constants.ADD))
-        {
-        	request.setAttribute(Constants.EVENT_PARAMETERS_LIST,Constants.EVENT_PARAMETERS);
-        	request.setAttribute(Constants.SPREADSHEET_COLUMN_LIST,Constants.EVENT_PARAMETERS_COLUMNS);
-        	request.setAttribute(Constants.SPREADSHEET_DATA_LIST, specimenForm.getGridData());
-        }
-        
+        NewSpecimenForm specimenForm = (NewSpecimenForm)form;        
         NewSpecimenBizLogic bizLogic = (NewSpecimenBizLogic)BizLogicFactory.getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
         
         try
