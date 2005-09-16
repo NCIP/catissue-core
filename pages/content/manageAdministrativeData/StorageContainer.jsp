@@ -42,7 +42,7 @@
 		
 		function onTypeChange(element)
 		{
-			var action = "/catissuecore/StorageContainer.do?operation=add&pageOf=pageOfStorageContainer";
+			var action = "/catissuecore/StorageContainer.do?operation="+document.forms[0].operation.value+"&pageOf=pageOfStorageContainer&isOnChange=true";
 			document.forms[0].action = action;
 			document.forms[0].submit();
 		}
@@ -51,7 +51,7 @@
 		{
 			var list = document.getElementById('typeId');
 			var type = list.options[list.selectedIndex].value;
-			var action = "/catissuecore/StorageContainer.do?operation=add&pageOf=pageOfStorageContainer";
+			var action = "/catissuecore/StorageContainer.do?operation="+document.forms[0].operation.value+"&pageOf=pageOfStorageContainer&isOnChange=true";
 			document.forms[0].action = action;
 			document.forms[0].submit();
 		}
@@ -195,8 +195,6 @@ function insRow(subdivtag)
 			StorageContainerForm form = (StorageContainerForm)obj;
 			noOfRows = form.getCounter();
 		}
-		String number = (String)request.getAttribute("startNumber");
-		System.out.println("number JSP "+number);
 %>
 
 <html:errors />
@@ -343,12 +341,7 @@ function insRow(subdivtag)
 							</label>
 						</td>
 						<td class="formField">
-						<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
-							<html:text styleClass="formFieldSized10" size="30" styleId="startNumber" property="startNumber" value="<%=number%>" readonly="TRUE"/>
-						</logic:notEqual>
-						<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
 							<html:text styleClass="formFieldSized10" size="30" styleId="startNumber" property="startNumber" readonly="TRUE"/>
-						</logic:equal>
 						</td>
 					</tr>
 					
