@@ -72,7 +72,18 @@ public abstract class SecureAction extends BaseAction
     {
         Logger.out.debug("in here");
         return SecurityManager.getInstance(this.getClass())
-                .isAuthorizedToExecuteAction(getUserLoginName(request));
+                .isAuthorizedToExecuteAction(getUserLoginName(request),getObjectIdForSecureMethodAccess(request));
+    }
+    
+    /**
+     * Returns the object id of the protection element that represents
+     * the Action that is being requested for invocation.
+     * @param clazz
+     * @return
+     */
+    protected String getObjectIdForSecureMethodAccess(HttpServletRequest request)
+    {
+        return this.getClass().getName();
     }
 
     /**
