@@ -295,9 +295,19 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("collectionprotocol.clinicalstatus")));
 				}
 				
-				if(key.indexOf("studyCalendarEventPoint")!=-1 && (!validator.isEmpty(value) && !validator.isDouble(value)))
+				if(key.indexOf("studyCalendarEventPoint")!=-1 )
 				{
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.studycalendarpoint",ApplicationProperties.getValue("collectionprotocol.studycalendartitle")));
+					if(validator.isEmpty(value))
+					{
+						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocol.studycalendartitle")));						
+					}
+					else
+					{
+						 if(!validator.isDouble(value,1))
+						 {
+							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.studycalendarpoint",ApplicationProperties.getValue("collectionprotocol.studycalendartitle")));						
+						 }
+					}
 				}
 
 				if(key.indexOf("specimenClass")!=-1 && !validator.isValidOption( value))
