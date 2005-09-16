@@ -568,6 +568,7 @@ PUBLIC
 			scope="request">
 			<forward name="success" path="/ReportedProblemShow.do?pageNum=1" />
 			<forward name="failure" path="/error.jsp" />
+			<forward name="access_denied" path="/ManageAdministrativeData.do" />
 		</action>
 		
 		<action path="/ProblemDetails"
@@ -672,6 +673,7 @@ PUBLIC
 			scope="request">
 			<forward name="success" path="/User.do?operation=add&amp;pageOf=pageOfApproveUser" />
 			<forward name="failure" path="/error.jsp" />
+			<forward name="access_denied" path="/ManageAdministrativeData.do" />
 		</action>
 		<!--Approve User Actions End-->
 		
