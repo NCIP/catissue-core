@@ -5,7 +5,10 @@
 
 <head>
 	<script language="javascript">
-		
+		function beforeSubmit(element)
+		{
+			document.forms[0].target = "_top";
+		}
 	</script>
 </head>
 	
@@ -163,7 +166,7 @@
 		  <td align="right" colspan="3">
 			<!-- action buttons begins -->
 			<%
-        		String changeAction = "setFormAction('" + formName + "');";
+        		String changeAction = "beforeSubmit(this);setFormAction('" + formName + "');";
 			%> 
 			<table cellpadding="4" cellspacing="0" border="0">
 				<tr>
