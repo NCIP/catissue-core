@@ -52,7 +52,7 @@
 
         <property
             name="timestamp"
-            type="date"
+            type="timestamp"
             update="true"
             insert="true"
             column="EVENT_TIMESTAMP"
