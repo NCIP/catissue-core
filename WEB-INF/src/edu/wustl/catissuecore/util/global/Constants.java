@@ -260,6 +260,8 @@ public class Constants
 	public static final String SPECIMEN_EDIT_ACTION = "NewSpecimenEdit.do";
 	public static final String SPECIMEN_SEARCH_ACTION = "NewSpecimenSearch.do";
 	
+	public static final String SPECIMEN_EVENT_PARAMETERS_ACTION = "NewSpecimenEventParameters.do";
+	
 	//Create Specimen Data Actions.
 	public static final String CREATE_SPECIMEN_ADD_ACTION = "CreateSpecimenAdd.do";
 	public static final String CREATE_SPECIMEN_EDIT_ACTION = "CreateSpecimenEdit.do";
