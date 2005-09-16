@@ -500,7 +500,7 @@ function Build(p_item, p_month, p_year, p_format) {
 	if (ggPosX == -1 && ggPosY == -1) {
 		overlib(ggWinContent, AUTOSTATUSCAP, STICKY, CLOSECLICK, CSSSTYLE,
 			TEXTSIZEUNIT, "pt", TEXTSIZE, 8, CAPTIONSIZEUNIT, "pt", CAPTIONSIZE, 8, CLOSESIZEUNIT, "pt", CLOSESIZE, 8,
-			CAPTION, "Select a date", OFFSETX, 20, OFFSETY, -20);
+			CAPTION, "Select a date", OFFSETX, 20, OFFSETY, -40);
 		// save where the 'over' div ended up; we want to stay in the same place if the user
 		//	clicks on one of the year or month navigation links
 		if ( (ns4) || (ie4) ) {
