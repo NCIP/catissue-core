@@ -617,13 +617,13 @@ function getSubDivCount(subdivtag)
 				</tr>
 				
 			    <tr>
-					<td class="formRequiredNotice" width="5">&nbsp;</td>
+					<td class="formRequiredNotice" width="5">*</td>
 					<%
 						fldName="";
 						fldName = commonLabel + "_studyCalendarEventPoint)";
 					%>
 
-			        <td colspan="1" class="formLabel">
+			        <td colspan="1" class="formRequiredLabel">
 			        	<label for="<%=fldName%>">
 							<bean:message key="collectionprotocol.studycalendartitle" />
 						</label>
@@ -857,8 +857,8 @@ function getSubDivCount(subdivtag)
 				</tr>
 				
 			    <tr>
-					<td class="formRequiredNotice" width="5">&nbsp;</td>
-			        <td colspan="1" class="formLabel">
+					<td class="formRequiredNotice" width="5">*</td>
+			        <td colspan="1" class="formRequiredLabel">
 			        	<label for="value(CollectionProtocolEvent:`_studyCalendarEventPoint)">
 							<bean:message key="collectionprotocol.studycalendartitle" />
 						</label>
