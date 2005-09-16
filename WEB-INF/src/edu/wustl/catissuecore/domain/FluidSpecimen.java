@@ -109,7 +109,15 @@ public class FluidSpecimen extends Specimen implements Serializable
         	SpecimenForm form = (SpecimenForm) abstractForm;
         	
         	this.quantityInMilliliter = new Double(form.getQuantity());
-        	//this.availableQuantityInMiliLiter =
+        	
+        	if(form.isAddOperation())
+        	{
+        		this.availableQuantityInMilliliter = quantityInMilliliter;
+        	}
+        	else
+        	{
+        		this.availableQuantityInMilliliter = new Double(form.getAvailableQuantity());
+        	}
         }
         catch (Exception excp)
         {

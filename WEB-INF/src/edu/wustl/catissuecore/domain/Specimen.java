@@ -512,6 +512,15 @@ public class Specimen extends AbstractDomainObject implements Serializable
 	            this.positionDimensionTwo = new Integer(form.getPositionDimensionTwo());
 	            this.type = form.getType();
 	            
+	            if(form.isAddOperation())
+	            {
+	            	this.available = new Boolean(true);
+	            }
+	            else
+	            {
+	            	this.available = new Boolean(form.isAvailable());
+	            }
+	            
 	            this.specimenCollectionGroup.setSystemIdentifier(new Long(form.getSpecimenCollectionGroupId()));
 	            this.storageContainer.setSystemIdentifier(new Long(form.getStorageContainer()));
 	            
@@ -547,6 +556,15 @@ public class Specimen extends AbstractDomainObject implements Serializable
             	this.positionDimensionOne = new Integer(form.getPositionDimensionOne());
 	            this.positionDimensionTwo = new Integer(form.getPositionDimensionTwo());
             	this.type = form.getType();
+            	
+            	if(form.isAddOperation())
+	            {
+	            	this.available = new Boolean(true);
+	            }
+	            else
+	            {
+	            	this.available = new Boolean(form.isAvailable());
+	            }
             	
             	this.storageContainer.setSystemIdentifier(new Long(form.getStorageContainer()));
             	this.parentSpecimen = new CellSpecimen();

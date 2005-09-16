@@ -141,7 +141,15 @@ public class MolecularSpecimen extends Specimen implements Serializable
         	
         	this.quantityInMicrogram = new Double(form.getQuantity());
         	this.concentrationInMicrogramPerMicroliter = new Double(form.getConcentration());
-        	//this.availableQuantityInMicroGram=
+        	
+        	if(form.isAddOperation())
+        	{
+        		this.availableQuantityInMicrogram = quantityInMicrogram;
+        	}
+        	else
+        	{
+            	this.availableQuantityInMicrogram = new Double(form.getAvailableQuantity());
+        	}
         }
         catch (Exception excp)
         {

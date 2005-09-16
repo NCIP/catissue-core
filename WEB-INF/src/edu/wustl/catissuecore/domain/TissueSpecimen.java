@@ -110,7 +110,15 @@ public class TissueSpecimen extends Specimen implements Serializable
         	SpecimenForm form = (SpecimenForm) abstractForm;
         	
         	this.quantityInGram = new Double(form.getQuantity());
-        	//this.availableQuantityInGram = new Double(form.get)
+        	
+        	if(form.isAddOperation())
+        	{
+        		this.availableQuantityInGram = quantityInGram;
+        	}
+        	else
+        	{
+        		this.availableQuantityInGram = new Double(form.getAvailableQuantity());
+        	}
         }
         catch (Exception excp)
         {
