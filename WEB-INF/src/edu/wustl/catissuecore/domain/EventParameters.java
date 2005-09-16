@@ -37,7 +37,7 @@ public abstract class EventParameters extends AbstractDomainObject implements ja
 	/**
      * Date and time of the event.
      */
-	protected Date timestamp;
+	protected Date timestamp = Calendar.getInstance().getTime();
 	
 	/**
      * User who performs the event.
