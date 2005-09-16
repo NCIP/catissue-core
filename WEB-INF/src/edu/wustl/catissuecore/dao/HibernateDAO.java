@@ -187,10 +187,18 @@ public class HibernateDAO extends AbstractDAO
             {
                 if (null != sessionDataBean)
                 {
+                    String userName = sessionDataBean.getUserName();
+                    if(userName != null)
+                    {
                     isAuthorized = SecurityManager.getInstance(this.getClass())
-                            .isAuthorized(sessionDataBean.getUserName(),
+                            .isAuthorized(userName,
                                     obj.getClass().getName(),
                                     Permissions.CREATE);
+                    }
+                    else
+                    {
+                        isAuthorized = false;
+                    }
                 }
                 else
                 {
