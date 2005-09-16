@@ -10,11 +10,9 @@
 
 package edu.wustl.catissuecore.actionForm;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,31 +23,12 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.domain.Biohazard;
-import edu.wustl.catissuecore.domain.CellSpecimenReviewParameters;
-import edu.wustl.catissuecore.domain.CheckInCheckOutEventParameter;
-import edu.wustl.catissuecore.domain.CollectionEventParameters;
-import edu.wustl.catissuecore.domain.DisposalEventParameters;
-import edu.wustl.catissuecore.domain.EmbeddedEventParameters;
-import edu.wustl.catissuecore.domain.EventParameters;
-import edu.wustl.catissuecore.domain.FixedEventParameters;
-import edu.wustl.catissuecore.domain.FluidSpecimenReviewEventParameters;
-import edu.wustl.catissuecore.domain.FrozenEventParameters;
-import edu.wustl.catissuecore.domain.MolecularSpecimenReviewParameters;
-import edu.wustl.catissuecore.domain.ProcedureEventParameters;
-import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
-import edu.wustl.catissuecore.domain.SpunEventParameters;
-import edu.wustl.catissuecore.domain.ThawEventParameters;
-import edu.wustl.catissuecore.domain.TissueSpecimenReviewEventParameters;
-import edu.wustl.catissuecore.domain.TransferEventParameters;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.catissuecore.util.global.Validator;
-import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.util.logger.Logger;
-import gov.nih.nci.security.authorization.domainobjects.User;
 
 /**
  * NewSpecimenForm Class is used to encapsulate all the request parameters passed 
@@ -104,9 +83,7 @@ public class NewSpecimenForm extends SpecimenForm
     private Map biohazard = new HashMap();
     
     private String specimenEventParameter;
-    
-    List gridData;
-    
+
     /**
      * Returns an identifier of the Parent Speciemen.
      * @return String an identifier of the Parent Speciemen.
@@ -310,36 +287,6 @@ public class NewSpecimenForm extends SpecimenForm
             	
             	bhCounter = biohazardCollection.size();
             }
-            
-            //Setting Specimen Event Parameters' Grid            
-            Collection specimenEventCollection = specimen.getSpecimenEventCollection();
-            
-            if(specimenEventCollection != null)
-            {
-            	gridData = new ArrayList();
-            	Iterator it = specimenEventCollection.iterator();
-            	//int i=1;
-            	
-            	while(it.hasNext())
-            	{
-            		List rowData = new ArrayList();
-            		EventParameters eventParameters = (EventParameters)it.next();
-            		            		
-            		if(eventParameters != null)
-            		{
-            			String [] events = getEvent(eventParameters);
-            			rowData.add(String.valueOf(eventParameters.getSystemIdentifier()));
-            			rowData.add(events[0]);//Event Name
-            			            			
-            			User user = SecurityManager.getInstance(NewSpecimenForm.class).getUserById(String.valueOf(eventParameters.getUser().getSystemIdentifier()));
-						
-            			rowData.add(user.getLastName() + ", " + user.getFirstName());
-            			rowData.add(Utility.parseDateToString(eventParameters.getTimestamp(),Constants.DATE_PATTERN_MM_DD_YYYY));
-            			rowData.add(events[1]);//pageOf
-            			gridData.add(rowData);
-            		}
-            	}
-            }
         }
         catch (Exception excp)
         {
@@ -384,7 +331,7 @@ public class NewSpecimenForm extends SpecimenForm
      {
          ActionErrors errors = super.validate(mapping,request);
          Validator validator = new Validator();
-         
+
          try
          {
              if (operation.equals(Constants.ADD) || operation.equals(Constants.EDIT))
@@ -501,104 +448,5 @@ public class NewSpecimenForm extends SpecimenForm
 	public void setSpecimenEventParameter(String specimenEventParameter)
 	{
 		this.specimenEventParameter = specimenEventParameter;
-	}
-	
-	/**
-	 * @return Returns the gridData.
-	 */
-	public List getGridData()
-	{
-		return gridData;
-	}
-	
-	/**
-	 * @param gridData The gridData to set.
-	 */
-	public void setGridData(List gridData)
-	{
-		this.gridData = gridData;
-	}
-	
-	private String[] getEvent(EventParameters eventParameters)
-	{
-		String [] events = new String[2];
-				
-		if(eventParameters instanceof CellSpecimenReviewParameters)
-		{
-			events[0] = "Cell Specimen Review";
-			events[1] = "pageOfCellSpecimenReviewParameters";
-		}
-		else if(eventParameters instanceof CheckInCheckOutEventParameter)
-		{
-			events[0] = "Check In Check Out";
-			events[1] = "pageOfCheckInCheckOutEventParameters";
-		}
-		else if(eventParameters instanceof CollectionEventParameters)
-		{
-			events[0] = "Collection";
-			events[1] = "pageOfCollectionEventParameters";
-		}
-		else if(eventParameters instanceof DisposalEventParameters)
-		{
-			events[0] = "Disposal";
-			events[1] = "pageOfDisposalEventParameters";
-		}
-		else if(eventParameters instanceof EmbeddedEventParameters)
-		{
-			events[0] = "Embedded";
-			events[1] = "pageOfEmbeddedEventParameters";
-		}
-		else if(eventParameters instanceof FixedEventParameters)
-		{
-			events[0] = "Fixed";
-			events[1] = "pageOfFixedEventParameters";
-		}
-		else if(eventParameters instanceof FluidSpecimenReviewEventParameters)
-		{
-			events[0] = "Fluid Specimen Review";
-			events[1] = "pageOfFluidSpecimenReviewParameters";
-		}
-		else if(eventParameters instanceof FrozenEventParameters)
-		{
-			events[0] = "Frozen";
-			events[1] = "pageOfFrozenEventParameters";
-		}
-		else if(eventParameters instanceof MolecularSpecimenReviewParameters)
-		{
-			events[0] = "Molecular Specimen Review";
-			events[1] = "pageOfMolecularSpecimenReviewParameters";
-		}
-		else if(eventParameters instanceof ProcedureEventParameters)
-		{
-			events[0] = "Procedure Event";
-			events[1] = "pageOfProcedureEventParameters";
-		}
-		else if(eventParameters instanceof ReceivedEventParameters)
-		{
-			events[0] = "Received Event";
-			events[1] = "pageOfReceivedEventParameters";
-		}
-		else if(eventParameters instanceof SpunEventParameters)
-		{
-			events[0] = "Spun";
-			events[1] = "pageOfSpunEventParameters";
-		}
-		else if(eventParameters instanceof ThawEventParameters)
-		{
-			events[0] = "Thaw";
-			events[1] = "pageOfThawEventParameters";
-		}
-		else if(eventParameters instanceof TissueSpecimenReviewEventParameters)
-		{
-			events[0] = "Tissue Specimen Review";
-			events[1] = "pageOfTissueSpecimenReviewParameters";
-		}
-		else if(eventParameters instanceof TransferEventParameters)
-		{
-			events[0] = "Transfer";
-			events[1] = "pageOfTransferEventParameters";
-		}
-		
-		return events;
 	}
 }
