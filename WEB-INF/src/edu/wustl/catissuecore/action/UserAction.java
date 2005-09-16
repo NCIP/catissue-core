@@ -30,6 +30,7 @@ import edu.wustl.catissuecore.domain.CancerResearchGroup;
 import edu.wustl.catissuecore.domain.Department;
 import edu.wustl.catissuecore.domain.Institution;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.util.logger.Logger;
 import gov.nih.nci.security.authorization.domainobjects.Role;
@@ -38,14 +39,14 @@ import gov.nih.nci.security.authorization.domainobjects.Role;
  * This class initializes the fields in the User Add/Edit webpage.
  * @author gautam_shetty
  */
-public class UserAction extends Action
+public class UserAction extends SecureAction
 {
 
     /**
      * Overrides the execute method of Action class.
      * Sets the various fields in User Add/Edit webpage.
      * */
-    public ActionForward execute(ActionMapping mapping, ActionForm form,
+    public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException
     {
@@ -130,5 +131,31 @@ public class UserAction extends Action
         }
 
         return mapping.findForward(pageOf);
+    }
+    
+    /* (non-Javadoc)
+     * @see edu.wustl.catissuecore.action.SecureAction#isAuthorizedToExecute(javax.servlet.http.HttpServletRequest)
+     */
+    protected boolean isAuthorizedToExecute(HttpServletRequest request)
+            throws Exception
+    {
+        String pageOf  = request.getParameter(Constants.PAGEOF);
+        if(pageOf.equals("pageOfUserAdmin"))
+        {
+            return super.isAuthorizedToExecute(request);
+        }
+        return true;
+    }
+    /* (non-Javadoc)
+     * @see edu.wustl.catissuecore.action.BaseAction#getSessionData(javax.servlet.http.HttpServletRequest)
+     */
+    protected SessionDataBean getSessionData(HttpServletRequest request)
+    {
+        String pageOf  = request.getParameter(Constants.PAGEOF);
+        if(pageOf.equals("pageOfUserAdmin"))
+        {
+            return super.getSessionData(request);
+        }
+        return new SessionDataBean();
     }
 }

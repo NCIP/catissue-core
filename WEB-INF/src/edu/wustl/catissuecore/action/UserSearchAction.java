@@ -32,13 +32,13 @@ import gov.nih.nci.security.authorization.domainobjects.User;
  * TODO To change the template for this generated type comment go to
  * Window - Preferences - Java - Code Style - Code Templates
  */
-public class UserSearchAction extends SecureAction
+public class UserSearchAction extends BaseAction
 {
     
     /* (non-Javadoc)
      * @see edu.wustl.catissuecore.action.SecureAction#executeSecureAction(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
      */
-    public ActionForward executeSecureAction(ActionMapping mapping,
+    public ActionForward executeAction(ActionMapping mapping,
             ActionForm form, HttpServletRequest request,
             HttpServletResponse response) throws Exception
     {

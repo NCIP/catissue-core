@@ -43,8 +43,7 @@ public abstract class SecureAction extends BaseAction
             throws Exception
     {
 
-        if (SecurityManager.getInstance(this.getClass())
-                .isAuthorizedToExecuteAction(getUserLoginName(request)))
+        if (isAuthorizedToExecute(request))
         {
             return executeSecureAction(mapping, form, request, response);
         }
@@ -62,6 +61,18 @@ public abstract class SecureAction extends BaseAction
 
         return mapping.findForward(Constants.ACCESS_DENIED);
 
+    }
+
+    /**
+     * @param request
+     * @return
+     * @throws Exception
+     */
+    protected boolean isAuthorizedToExecute(HttpServletRequest request) throws Exception
+    {
+        Logger.out.debug("in here");
+        return SecurityManager.getInstance(this.getClass())
+                .isAuthorizedToExecuteAction(getUserLoginName(request));
     }
 
     /**
