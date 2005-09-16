@@ -9,6 +9,7 @@
 
 package edu.wustl.catissuecore.dao;
 
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -398,7 +399,7 @@ public class JDBCDAO extends AbstractDAO
     /* (non-Javadoc)
      * @see edu.wustl.catissuecore.dao.DAO#retrieve(java.lang.String, java.lang.Long)
      */
-    public Object retrieve (String sourceObjectName, Long systemIdentifier) throws DAOException
+    public Object retrieve (String sourceObjectName, Serializable systemIdentifier) throws DAOException
 	{
 		try
 		{

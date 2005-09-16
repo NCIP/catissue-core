@@ -10,6 +10,7 @@
 
 package edu.wustl.catissuecore.dao;
 
+import java.io.Serializable;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashSet;
@@ -27,7 +28,6 @@ import edu.wustl.catissuecore.domain.Institution;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.domain.Site;
-import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.exception.AuditException;
 import edu.wustl.catissuecore.util.Permissions;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -508,12 +508,12 @@ public class HibernateDAO extends AbstractDAO
         }
     }
     
-    public Object retrieve(String sourceObjectName, Long systemIdentifier)
+    public Object retrieve(String sourceObjectName, Serializable systemIdentifier)
             throws DAOException
     {
         try
         {
-            return session.load(Class.forName(sourceObjectName),
+            return session.load(Class.forName(sourceObjectName), 
                     systemIdentifier);
         }
         catch (ClassNotFoundException cnFoundExp)
