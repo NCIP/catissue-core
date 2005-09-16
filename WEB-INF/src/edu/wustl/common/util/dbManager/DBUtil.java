@@ -3,13 +3,16 @@ package edu.wustl.common.util.dbManager;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.Iterator;
 import java.util.Properties;
 
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.SessionFactory;
 import net.sf.hibernate.cfg.Configuration;
-
+import net.sf.hibernate.mapping.Column;
+import net.sf.hibernate.mapping.Property;
+import net.sf.hibernate.mapping.Table;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.util.logger.Logger;
 
@@ -28,7 +31,6 @@ public class DBUtil
 
 	//ThreadLocal to hold the Session for the current executing thread. 
 	private static final ThreadLocal session = new ThreadLocal();
-	
 	//Initialize the session Factory in the Static block.
 	static 
 	{
@@ -44,6 +46,7 @@ public class DBUtil
 			Configuration cfg = new Configuration();
 			cfg.setProperties(p);
 			m_sessionFactory = cfg.configure().buildSessionFactory();
+			HibernateMetaData.initHibernateMetaData(cfg);
 		}
 		catch(Exception ex)
 		{
@@ -80,17 +83,4 @@ public class DBUtil
 		if (s != null)
 			s.close();
 	}
-	
-//	public static String getTableName(Class classObj)
-//	{
-//		try
-//		{
-//			ClassMetadata classMetaData = m_sessionFactory.getClassMetadata(classObj);
-//			//classMetaData.get
-//		}
-//		catch(Exception ex)
-//		{
-//			ex.printStackTrace();
-//		}
-//	}
 }
