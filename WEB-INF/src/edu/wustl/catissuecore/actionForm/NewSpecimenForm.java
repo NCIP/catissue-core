@@ -426,12 +426,15 @@ public class NewSpecimenForm extends SpecimenForm
                 	{
                 		break;
                 	}
-                	else if(value1.equals(Constants.SELECT_OPTION) && value2.equals("-1"))
+                	else if(!validator.isValidOption(value1) && !validator.isValidOption( value2))
                 	{
+                		
                 		biohazard.remove(keyOne);
                 		biohazard.remove(keyTwo);
                 	}
-                	else if((!value1.equals(Constants.SELECT_OPTION) && value2.equals("-1")) || (value1.equals(Constants.SELECT_OPTION) && !value2.equals("-1")))
+//                	else if(!validator.isValidOption(value1) ||  (!validator.isValidOption(value2)))
+                	else if((validator.isValidOption(value1) && !validator.isValidOption(value2)) 
+                			|| (!validator.isValidOption(value1) && validator.isValidOption( value2)))   		
                 	{
                 		isError = true;
                 		break;
