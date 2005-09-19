@@ -451,7 +451,9 @@ public class SpecimenForm extends AbstractActionForm
             this.concentration = "";
             this.comments = specimen.getComments();
             this.activityStatus = specimen.getActivityStatus();
-            this.available = specimen.getAvailable().booleanValue();
+            
+            if(specimen.getAvailable()!=null)
+            	this.available = specimen.getAvailable().booleanValue();
 
             StorageContainer container = specimen.getStorageContainer();
 
