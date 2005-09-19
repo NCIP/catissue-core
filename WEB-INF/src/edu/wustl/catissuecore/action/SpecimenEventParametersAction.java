@@ -11,12 +11,12 @@
 package edu.wustl.catissuecore.action;
 
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.Collection;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -26,6 +26,7 @@ import edu.wustl.catissuecore.actionForm.EventParametersForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.util.logger.Logger;
 
@@ -84,13 +85,22 @@ public class SpecimenEventParametersAction  extends SecureAction
     	setRequestParameters(request);
     	
     	EventParametersForm eventParametersForm = (EventParametersForm)form;
-    	/*HttpSession session = request.getSession(true);
-    	SessionDataBean sessionData = (SessionDataBean) session.getAttribute(Constants.SESSION_DATA);
-    	Logger.out.debug("sessionData.getUserId()*********"+sessionData.getUserId());
-    	long userId = sessionData.getUserId().longValue();
-    	//eventParametersForm.setUserId(userId);
-    	Logger.out.debug("(String)request.getParameter(Constants.PAGEOF)******************"+(String)request.getParameter(Constants.PAGEOF));
-    	*/
+    	
+    	if(eventParametersForm.isAddOperation())
+    	{
+	    	SessionDataBean sessionData = getSessionData(request);
+	    	if(sessionData!=null && sessionData.getUserId()!=null)
+	    	{
+	    		long userId = sessionData.getUserId().longValue();
+	    		eventParametersForm.setUserId(userId);
+	    	}
+	    	
+			Calendar cal = Calendar.getInstance();
+			eventParametersForm.setDateOfEvent(Utility.parseDateToString(cal.getTime(), Constants.DATE_PATTERN_MM_DD_YYYY));
+			eventParametersForm.setTimeInHours(Integer.toString(cal.get(Calendar.HOUR_OF_DAY)));
+			eventParametersForm.setTimeInMinutes(Integer.toString(cal.get(Calendar.MINUTE)));
+    	}
+    	
     	return mapping.findForward((String)request.getParameter(Constants.PAGEOF));
     }
 }
