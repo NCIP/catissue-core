@@ -938,6 +938,8 @@ PUBLIC
 	<!-- FrozenEventParameters Actions Begins -->
         <action path="/FrozenEventParameters"
 			type="edu.wustl.catissuecore.action.FrozenEventParametersAction"
+			name="frozenEventParametersForm"
+			validate="false"
 			scope="request">
 			<forward name="pageOfFrozenEventParameters" path=".catissuecore.frozenEventParametersDef" />
 			<forward name="failure" path=".catissuecore.frozenEventParametersDef" />
@@ -978,6 +980,8 @@ PUBLIC
 	<!-- CheckInCheckOutEventParameters Actions Begins -->
         <action path="/CheckInCheckOutEventParameters"
 			type="edu.wustl.catissuecore.action.CheckInCheckOutEventParametersAction"
+			name="checkInCheckOutEventParametersForm"
+			validate="false"
 			scope="request">
 			<forward name="pageOfCheckInCheckOutEventParameters" path=".catissuecore.checkInCheckOutEventParametersDef" />
 			<forward name="failure" path=".catissuecore.checkInCheckOutEventParametersDef" />
@@ -1018,6 +1022,8 @@ PUBLIC
 		<!-- ReceivedEventParameters Actions Begins -->
         <action path="/ReceivedEventParameters"
 			type="edu.wustl.catissuecore.action.ReceivedEventParametersAction"
+			name="receivedEventParametersForm"
+			validate="false"
 			scope="request">
 			<forward name="pageOfReceivedEventParameters" path=".catissuecore.receivedEventParametersDef" />
 			<forward name="failure" path=".catissuecore.receivedEventParametersDef" />
@@ -1058,6 +1064,8 @@ PUBLIC
 		<!-- FluidSpecimenReviewEventParameters Actions Begins -->
         <action path="/FluidSpecimenReviewEventParameters"
 			type="edu.wustl.catissuecore.action.SpecimenEventParametersAction"
+			name="fluidSpecimenReviewEventParametersForm"
+			validate="false"
 			scope="request">
 			<forward name="pageOfFluidSpecimenReviewParameters" path=".catissuecore.fluidSpecimenReviewEventParametersDef" />
 			<forward name="failure" path=".catissuecore.fluidSpecimenReviewEventParametersDef" />
@@ -1098,6 +1106,8 @@ PUBLIC
 		<!-- CellSpecimenReviewParameters Actions Begins -->
         <action path="/CellSpecimenReviewParameters"
 			type="edu.wustl.catissuecore.action.SpecimenEventParametersAction"
+			name="cellSpecimenReviewParametersForm"
+			validate="false"
 			scope="request">
 			<forward name="pageOfCellSpecimenReviewParameters" path=".catissuecore.cellSpecimenReviewParametersDef" />
 			<forward name="failure" path=".catissuecore.cellSpecimenReviewParametersDef" />
@@ -1138,6 +1148,8 @@ PUBLIC
 		<!-- TissueSpecimenReviewEventParameters Actions Begins -->
         <action path="/TissueSpecimenReviewEventParameters"
 			type="edu.wustl.catissuecore.action.TissueSpecimenReviewEventParametersAction"
+			name="tissueSpecimenReviewEventParametersForm"
+			validate="false"
 			scope="request">
 			<forward name="pageOfTissueSpecimenReviewParameters" path=".catissuecore.tissueSpecimenReviewEventParametersDef" />
 			<forward name="failure" path=".catissuecore.tissueSpecimenReviewEventParametersDef" />
@@ -1178,6 +1190,8 @@ PUBLIC
 		<!-- DisposalEventParameters Actions Begins -->
         <action path="/DisposalEventParameters"
 			type="edu.wustl.catissuecore.action.SpecimenEventParametersAction"
+			name="disposalEventParametersForm"
+			validate="false"
 			scope="request">
 			<forward name="pageOfDisposalEventParameters" path=".catissuecore.disposalEventParametersDef" />
 			<forward name="failure" path=".catissuecore.disposalEventParametersDef" />
@@ -1219,6 +1233,8 @@ PUBLIC
 			<!--ThawEventParameters Actions Begins -->
         <action path="/ThawEventParameters"
 			type="edu.wustl.catissuecore.action.SpecimenEventParametersAction"
+			name="thawEventParametersForm"
+			validate="false"
 			scope="request">
 			<forward name="pageOfThawEventParameters" path=".catissuecore.thawEventParametersDef" />
 			<forward name="failure" path=".catissuecore.thawEventParametersDef" />
@@ -1259,6 +1275,8 @@ PUBLIC
 		<!-- MolecularSpecimenReviewParameters Actions Begins -->
         <action path="/MolecularSpecimenReviewParameters"
 			type="edu.wustl.catissuecore.action.SpecimenEventParametersAction"
+			name="molecularSpecimenReviewParametersForm"
+			validate="false"
 			scope="request">
 			<forward name="pageOfMolecularSpecimenReviewParameters" path=".catissuecore.molecularSpecimenReviewParametersDef" />
 			<forward name="failure" path=".catissuecore.molecularSpecimenReviewParametersDef" />
@@ -1299,6 +1317,8 @@ PUBLIC
 	<!-- CollectionEventParameters Actions Begins -->
         <action path="/CollectionEventParameters"
 			type="edu.wustl.catissuecore.action.CollectionEventParametersAction"
+			name="collectionEventParametersForm"
+			validate="false"
 			scope="request">
 			<forward name="pageOfCollectionEventParameters" path=".catissuecore.collectionEventParametersDef" />
 			<forward name="failure" path=".catissuecore.collectionEventParametersDef" />
@@ -1339,6 +1359,8 @@ PUBLIC
 		<!-- TransferEventParameters Actions Begins -->
         <action path="/TransferEventParameters"
 			type="edu.wustl.catissuecore.action.TransferEventParametersAction"
+			name="transferEventParametersForm"
+			validate="false"
 			scope="request">
 			<forward name="pageOfTransferEventParameters" path=".catissuecore.transferEventParametersDef" />
 			<forward name="failure" path=".catissuecore.transferEventParametersDef" />
@@ -1379,6 +1401,8 @@ PUBLIC
 	<!-- SpunEventParameters Actions Begins -->
         <action path="/SpunEventParameters"
 			type="edu.wustl.catissuecore.action.SpecimenEventParametersAction"
+			name="spunEventParametersForm"
+			validate="false"
 			scope="request">
 			<forward name="pageOfSpunEventParameters" path=".catissuecore.spunEventParametersDef" />
 			<forward name="failure" path=".catissuecore.spunEventParametersDef" />
@@ -1419,6 +1443,8 @@ PUBLIC
 		<!-- EmbeddedEventParameters Actions Begins -->
         <action path="/EmbeddedEventParameters"
 			type="edu.wustl.catissuecore.action.EmbeddedEventParametersAction"
+			name="embeddedEventParametersForm"
+			validate="false"
 			scope="request">
 			<forward name="pageOfEmbeddedEventParameters" path=".catissuecore.embeddedEventParametersDef" />
 			<forward name="failure" path=".catissuecore.embeddedEventParametersDef" />
@@ -1459,6 +1485,8 @@ PUBLIC
 		<!-- FixedEventParameters Actions Begins -->
         <action path="/FixedEventParameters"
 			type="edu.wustl.catissuecore.action.FixedEventParametersAction"
+			name="fixedEventParametersForm"
+			validate="false"
 			scope="request">
 			<forward name="pageOfFixedEventParameters" path=".catissuecore.fixedEventParametersDef" />
 			<forward name="failure" path=".catissuecore.fixedEventParametersDef" />
@@ -1499,6 +1527,8 @@ PUBLIC
 			<!-- ProcedureEventParameters Actions Begins -->
         <action path="/ProcedureEventParameters"
 			type="edu.wustl.catissuecore.action.SpecimenEventParametersAction"
+			name="procedureEventParametersForm"
+			validate="false"
 			scope="request">
 			<forward name="pageOfProcedureEventParameters" path=".catissuecore.procedureEventParametersDef" />
 			<forward name="failure" path=".catissuecore.procedureEventParametersDef" />
