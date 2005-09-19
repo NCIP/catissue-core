@@ -679,7 +679,7 @@ PUBLIC
 		
 		<!-- New Specimen Event Parameters Action Begin-->
 		<action path="/NewSpecimenEventParameters"
-			type="edu.wustl.catissuecore.action.NewSpecimenEventParametersAction"
+			type="edu.wustl.catissuecore.action.ListSpecimenEventParametersAction"
 			scope="request">
 			<forward name="pageOfNewSpecimenEventParameters" path=".catissuecore.newSpecimenEventParametersDef" />
 			<forward name="failure" path=".catissuecore.newSpecimenEventParametersDef" />
@@ -1110,7 +1110,7 @@ PUBLIC
 			validate="true"
 			input="/CellSpecimenReviewParameters.do?operation=add&amp;pageOf=pageOfCellSpecimenReviewParameters"
 			scope="request">
-			<forward name="success" path="/NewSpecimenEventParameters.do?pageOf=pageOfNewSpecimenEventParameters" />
+			<forward name="success" path=".catissuecore.cellSpecimenReviewParametersAddSuccessDef" />
 			<forward name="failure" path="/CellSpecimenReviewParameters.do?operation=add&amp;pageOf=pageOfCellSpecimenReviewParameters" />
 		</action>
 		
@@ -1120,7 +1120,7 @@ PUBLIC
 			validate="true"
 			input="/CellSpecimenReviewParameters.do?operation=edit&amp;pageOf=pageOfCellSpecimenReviewParameters"
 			scope="request">
-			<forward name="success" path="/NewSpecimenEventParameters.do?pageOf=pageOfNewSpecimenEventParameters"/>
+			<forward name="success" path=".catissuecore.cellSpecimenReviewParametersEditSuccessDef"/>
 			<forward name="failure" path="/CellSpecimenReviewParameters.do?operation=edit&amp;pageOf=pageOfCellSpecimenReviewParameters" />
 		</action>
 		
