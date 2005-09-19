@@ -34,7 +34,6 @@ import edu.wustl.catissuecore.exception.AssignDataException;
 import edu.wustl.catissuecore.exception.BizLogicException;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
@@ -65,7 +64,7 @@ public class CommonAddEditAction extends Action
             if(abstractForm instanceof SpecimenEventParametersForm)
             {
             	String specimenId = String.valueOf(((SpecimenEventParametersForm)abstractForm).getSpecimenId());
-            	request.setAttribute("specimenIdentifier",specimenId);
+            	request.setAttribute(Constants.SPECIMEN_ID,specimenId);
             }
             
             Logger.out.debug("IN ADDEDIT ACTION FORM ID************************"+abstractForm.getFormId());
