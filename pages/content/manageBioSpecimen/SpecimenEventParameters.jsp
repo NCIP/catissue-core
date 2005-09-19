@@ -27,7 +27,7 @@
 	String[] columnList = Constants.EVENT_PARAMETERS_COLUMNS;
 	List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
-	String specimenIdentifier = (String)request.getParameter("specimenIdentifier");
+	String specimenIdentifier = (String)request.getParameter(Constants.SPECIMEN_ID);
 if(dataList!=null && dataList.size() != 0)
 {
 %>
@@ -57,8 +57,7 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 	{
 		var action = "";
 		var iFrame = document.getElementById("newEventFrame");
-		var addNew = document.getElementById("sepAdd");
-		//addNew.target="_blank";
+		//var addNew = document.getElementById("sepAdd");
 		
 		if(element.value == "Cell Specimen Review")
 			action = "/catissuecore/CellSpecimenReviewParameters.do?operation=add&pageOf=pageOfCellSpecimenReviewParameters";
@@ -91,23 +90,19 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 		else if(element.value == "Transfer")
 		{
 			action = "/catissuecore/TransferEventParameters.do?operation=add&pageOf=pageOfTransferEventParameters";
-			//action = action + "&fromPositionData=" + fromPositionData;			
-			//action = action + "&posOne=" + posOne;
-			//action = action + "&posTwo=" + posTwo;
-			//action = action + "&storContId=" + storContId;			
 			
 		}	
 		
 		var specimenIdentifier = "<%=specimenIdentifier%>";
 		action = action + "&specimenId=" + specimenIdentifier;
-		addNew.href = action;
+		//addNew.href = action;
 		iFrame.src = action;
 		
 		if(element.value == "<%=Constants.SELECT_OPTION%>")
 		{
 			iFrame.src = "";
-			addNew.href = "#";
-			addNew.target="_parent";
+			//addNew.href = "#";
+			//addNew.target="_parent";
 		}
 	}
 </script>
@@ -174,9 +169,9 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 		<html:select property="specimenEventParameter" styleClass="formFieldSized15" styleId="className" size="1" disabled="false" onchange="onParameterChange(this)">
 			<html:options name="<%=Constants.EVENT_PARAMETERS_LIST%>" labelName="<%=Constants.EVENT_PARAMETERS_LIST%>"/>
 		</html:select>
-		<a id="sepAdd" href="#">
+		<%--a id="sepAdd" href="#">
   			<bean:message key="app.addNew" />
-   		</a>
+   		</a--%>
 	</td>
 </tr>
 

@@ -83,7 +83,7 @@ NewSpecimenForm form = (NewSpecimenForm)request.getAttribute("newSpecimenForm");
 		function onSpecimenEventUpdate(element)
 		{
 			var identifier = "<%=form.getSystemIdentifier()%>";
-			var action = "/catissuecore/NewSpecimenEventParameters.do?pageOf=pageOfNewSpecimenEventParameters&specimenIdentifier=" + identifier;
+			var action = "/catissuecore/NewSpecimenEventParameters.do?pageOf=pageOfNewSpecimenEventParameters&specimenId=" + identifier;
 			document.forms[0].action = action;
 			document.forms[0].submit();
 		}

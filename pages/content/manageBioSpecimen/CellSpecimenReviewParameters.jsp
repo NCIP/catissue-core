@@ -3,20 +3,14 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 
-<head>
-	<script language="javascript">
-		function beforeSubmit(element)
-		{
-			document.forms[0].target = "_top";
-		}
-	</script>
-</head>
-	
 <%
         String operation = (String) request.getAttribute(Constants.OPERATION);
         String formName,specimenId=null;
 
         boolean readOnlyValue;
+
+		specimenId = (String) request.getAttribute(Constants.SPECIMEN_ID);
+
         if (operation.equals(Constants.EDIT))
         {
             formName = Constants.CELL_SPECIMEN_REVIEW_PARAMETERS_EDIT_ACTION;
@@ -25,17 +19,16 @@
         else
         {
             formName = Constants.CELL_SPECIMEN_REVIEW_PARAMETERS_ADD_ACTION;
-			specimenId = (String) request.getAttribute(Constants.SPECIMEN_ID);
             readOnlyValue = false;
         }
 %>	
-			
+
 <html:errors/>
-    
+
 <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
-
+	
 	<html:form action="<%=Constants.CELL_SPECIMEN_REVIEW_PARAMETERS_ADD_ACTION%>">
-
+	
 	<!-- NEW CELL_SPECIMEN_REVIEW_PARAMETERS REGISTRATION BEGINS-->
 	<tr>
 	<td>
@@ -166,7 +159,7 @@
 		  <td align="right" colspan="3">
 			<!-- action buttons begins -->
 			<%
-        		String changeAction = "beforeSubmit(this);setFormAction('" + formName + "');";
+        		String changeAction = "setFormAction('" + formName + "');";
 			%> 
 			<table cellpadding="4" cellspacing="0" border="0">
 				<tr>
