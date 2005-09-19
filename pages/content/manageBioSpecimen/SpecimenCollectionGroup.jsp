@@ -296,11 +296,11 @@
 											<bean:message key="buttons.reset"/>
 										</html:reset>
 									</td> 
-									<td>
+									<!--td>
 										<html:submit styleClass="actionButton">
 											<bean:message key="buttons.submitAndAddNewSpecimen"/>
 										</html:submit>
-									</td>
+									</td-->
 								</tr>
 							</table>
 							<!-- action buttons end -->
