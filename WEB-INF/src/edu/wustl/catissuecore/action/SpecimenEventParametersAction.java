@@ -55,6 +55,9 @@ public class SpecimenEventParametersAction  extends SecureAction
         
         String isRNA = request.getParameter(Constants.IS_RNA); 
         request.setAttribute(Constants.IS_RNA, isRNA);
+        
+        //The Add/Edit status message
+        request.setAttribute(Constants.STATUS_MESSAGE_KEY, request.getAttribute(Constants.STATUS_MESSAGE_KEY));
        
                 
        try
