@@ -70,8 +70,9 @@ public class StorageContainerAction  extends SecureAction
             	if(!list.isEmpty())
             	{
             		StorageType type = (StorageType)list.get(0);
+            		if(type.getDefaultTempratureInCentigrade()!= null)
+            			storageContainerForm.setDefaultTemperature(type.getDefaultTempratureInCentigrade().doubleValue());
             		
-            		storageContainerForm.setDefaultTemperature(type.getDefaultTempratureInCentigrade().doubleValue());
             		storageContainerForm.setOneDimensionCapacity(type.getDefaultStorageCapacity().getOneDimensionCapacity().intValue());
             		storageContainerForm.setTwoDimensionCapacity(type.getDefaultStorageCapacity().getTwoDimensionCapacity().intValue());
             		storageContainerForm.setOneDimensionLabel(type.getOneDimensionLabel());
