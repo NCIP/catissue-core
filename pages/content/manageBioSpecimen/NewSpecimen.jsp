@@ -83,7 +83,7 @@ NewSpecimenForm form = (NewSpecimenForm)request.getAttribute("newSpecimenForm");
 		function onSpecimenEventUpdate(element)
 		{
 			var identifier = "<%=form.getSystemIdentifier()%>";
-			var action = "/catissuecore/NewSpecimenEventParameters.do?pageOf=pageOfNewSpecimenEventParameters&specimenId=" + identifier;
+			var action = "/catissuecore/ListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParameters&specimenId=" + identifier;
 			document.forms[0].action = action;
 			document.forms[0].submit();
 		}
@@ -854,12 +854,14 @@ NewSpecimenForm form = (NewSpecimenForm)request.getAttribute("newSpecimenForm");
 										<html:reset styleClass="actionButton">
 											<bean:message key="buttons.reset"/>
 										</html:reset>
-									</td> 
+									</td>
+									<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
 									<td>
 										<html:button property="eventButton" styleClass="actionButton" onclick="onSpecimenEventUpdate(this)">
 											<bean:message key="buttons.specimenEventParameters"/>
 										</html:button>
-									</td--%>
+									</td>
+									</logic:equal>
 								</tr>
 							</table>
 							<!-- action buttons end -->
