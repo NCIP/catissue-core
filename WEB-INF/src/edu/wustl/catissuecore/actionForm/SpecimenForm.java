@@ -578,13 +578,13 @@ System.out.println("********************* " + available);
                                     .getValue("specimen.subType")));
                 }
 
-                if (className.equals("Molecular"))
-                {
-                    if (!validator.isDouble(concentration))
-                        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-                                "errors.item.format", ApplicationProperties
-                                        .getValue("specimen.concentration")));
-                }
+//                if (className.equals("Molecular"))
+//                {
+//                    if (!validator.isDouble(concentration))
+//                        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+//                                "errors.item.format", ApplicationProperties
+//                                        .getValue("specimen.concentration")));
+//                }
 
                 if (validator.isEmpty(quantity))
                 {
