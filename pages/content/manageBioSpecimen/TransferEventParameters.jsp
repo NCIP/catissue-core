@@ -24,7 +24,14 @@
         String operation = (String) request.getAttribute(Constants.OPERATION);
         String formName, specimenId=null , fromPositionData =null;
         String posOne = null, posTwo = null, storContId = null;
-		
+
+		specimenId = (String) request.getAttribute(Constants.SPECIMEN_ID);
+		fromPositionData = (String) request.getAttribute(Constants.FROM_POSITION_DATA);
+		posOne = (String) request.getAttribute(Constants.POS_ONE);
+		posTwo = (String) request.getAttribute(Constants.POS_TWO);
+		storContId = (String) request.getAttribute(Constants.STORAGE_CONTAINER_ID);
+		System.out.println("\n\n\n\n\n***********\n JSP FromPos: " + fromPositionData + "\n ************ \n\n\n\n\n");
+	
         boolean readOnlyValue;
         if (operation.equals(Constants.EDIT))
         {
@@ -34,11 +41,6 @@
         else
         {
             formName = Constants.TRANSFER_EVENT_PARAMETERS_ADD_ACTION;
-			specimenId = (String) request.getAttribute(Constants.SPECIMEN_ID);
-			fromPositionData = (String) request.getAttribute(Constants.FROM_POSITION_DATA);
-			posOne = (String) request.getAttribute(Constants.POS_ONE);
-			posTwo = (String) request.getAttribute(Constants.POS_TWO);
-			storContId = (String) request.getAttribute(Constants.STORAGE_CONTAINER_ID);
 			
             readOnlyValue = false;
         }

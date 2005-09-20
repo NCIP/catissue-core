@@ -53,7 +53,8 @@ public class SpecimenEventParametersAction  extends SecureAction
         //The id of specimen of this event.
         String specimenId = request.getParameter(Constants.SPECIMEN_ID); 
         request.setAttribute(Constants.SPECIMEN_ID, specimenId);
-        
+        Logger.out.debug("\t\t************************************");
+        Logger.out.debug("\t\t************************************ : "+specimenId );
         String isRNA = request.getParameter(Constants.IS_RNA); 
         request.setAttribute(Constants.IS_RNA, isRNA);
         

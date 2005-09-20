@@ -10,13 +10,18 @@
  */
 package edu.wustl.catissuecore.actionForm;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.bizlogic.DefaultBizLogic;
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
+import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.TransferEventParameters;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -210,6 +215,39 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 			+ this.fromStorageContainerId + " Pos(" + this.fromPositionDimensionOne + ","
 			+ this.fromPositionDimensionTwo + ")";
 			
+			
+			// ---------------------------------------------
+			String specimenId = transferEventParametersObject.getSpecimen().getSystemIdentifier().toString(); 
+	      	DefaultBizLogic bizLogic = new DefaultBizLogic();
+	    	
+	    	String identifier = specimenId ;
+	    	
+	    	Logger.out.debug("\t\t*****************Form**************SpecimenID : "+identifier );
+	    	List specimenList = bizLogic.retrieve(Specimen.class.getName(),Constants.SYSTEM_IDENTIFIER,identifier);
+	    	
+	    	String posOne = null;
+	    	String posTwo = null;
+	    	String storContId = null;
+	    	String fromPositionData = null;
+	    	if(specimenList!=null && specimenList.size() != 0)
+	    	{
+	    		Specimen specimen = (Specimen)specimenList.get(0);
+	    		posOne = specimen.getPositionDimensionOne().toString();
+	    		posTwo = specimen.getPositionDimensionTwo().toString();
+	    		
+	    		StorageContainer container = specimen.getStorageContainer();
+	    		storContId = container.getSystemIdentifier().toString();
+	    		fromPositionData = container.getStorageType().getType() + " : " 
+				+ storContId + " Pos(" + posOne + "," + posTwo + ")";
+	    		
+	            Logger.out.debug("\t\t************************************");
+	            Logger.out.debug("\t\t*******************************SPID : "+specimenId );
+	            Logger.out.debug("\t\t*******************************fromPosData : "+fromPositionData );
+	            Logger.out.debug("\t\t*******************************Pos 1 : " + posOne );
+	            Logger.out.debug("\t\t*******************************Pos 2 : " + posTwo );
+	    	}	
+			// ---------------------------------------------
+			
 	    }
 	    catch(Exception excp)
 	    {
@@ -285,15 +323,15 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
      
 	protected void reset()
 	{
-        super.reset();
-        this.fromPositionDimensionOne = 0;
-        this.fromPositionDimensionTwo = 0;
-        this.positionDimensionOne = 0;
-        this.positionDimensionTwo = 0;
-        this.fromStorageContainerId = -1;
-        this.storageContainer = -1;
-        this.fromPosition = null;
-        this.positionInStorageContainer = null;
+//        super.reset();
+//        this.fromPositionDimensionOne = 0;
+//        this.fromPositionDimensionTwo = 0;
+//        this.positionDimensionOne = 0;
+//        this.positionDimensionTwo = 0;
+//        this.fromStorageContainerId = -1;
+//        this.storageContainer = -1;
+//        this.fromPosition = null;
+//        this.positionInStorageContainer = null;
 		
 	}
 	
