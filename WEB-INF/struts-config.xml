@@ -678,10 +678,10 @@ PUBLIC
 		<!--Approve User Actions End-->
 		
 		<!-- New Specimen Event Parameters Action Begin-->
-		<action path="/NewSpecimenEventParameters"
+		<action path="/ListSpecimenEventParameters"
 			type="edu.wustl.catissuecore.action.ListSpecimenEventParametersAction"
 			scope="request">
-			<forward name="pageOfNewSpecimenEventParameters" path=".catissuecore.newSpecimenEventParametersDef" />
+			<forward name="pageOfListSpecimenEventParameters" path=".catissuecore.newSpecimenEventParametersDef" />
 			<forward name="failure" path=".catissuecore.newSpecimenEventParametersDef" />
 			<forward name="access_denied" path="/ManageBioSpecimen.do" />
 		</action>
@@ -704,7 +704,7 @@ PUBLIC
 			validate="true"
 			input="/NewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimen"
 			scope="request">
-			<forward name="success" path=".catissuecore.newSpecimenAddSuccessDef" />
+			<forward name="success" path="/ListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParameters" />
 			<forward name="failure" path="/NewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimen" />
 		</action>
 		
@@ -746,7 +746,7 @@ PUBLIC
 			validate="true"
 			input="/CreateSpecimen.do?operation=add&amp;pageOf="
 			scope="request">
-			<forward name="success" path=".catissuecore.createSpecimenAddSuccessDef" />
+			<forward name="success" path="/ListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParameters" />
 			<forward name="failure" path="/error.jsp" />
 		</action>
 		

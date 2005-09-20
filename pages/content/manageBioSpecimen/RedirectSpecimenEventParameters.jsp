@@ -3,7 +3,7 @@
 <logic:present name="statusMessageKey">
 	<%
 		String specimenId = (String) request.getAttribute(Constants.SPECIMEN_ID);
-		String parentUrl = "top.window.location.href='NewSpecimenEventParameters.do?pageOf=pageOfNewSpecimenEventParameters&specimenId="+specimenId+"'";
+		String parentUrl = "top.window.location.href='ListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParameters&specimenId="+specimenId+"'";
 	%>
 
 	<body onload="<%=parentUrl%>" />
