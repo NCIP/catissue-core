@@ -27,7 +27,6 @@ import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.util.logger.Logger;
 
 
@@ -71,10 +70,11 @@ public class StorageContainerAction  extends SecureAction
             	if(!list.isEmpty())
             	{
             		StorageType type = (StorageType)list.get(0);
+            		if(type.getDefaultTempratureInCentigrade()!= null)
+            			storageContainerForm.setDefaultTemperature(type.getDefaultTempratureInCentigrade().doubleValue());
             		
-            		storageContainerForm.setDefaultTemperature(Utility.toDouble(type.getDefaultTempratureInCentigrade()));
-            		storageContainerForm.setOneDimensionCapacity(Utility.toInt(type.getDefaultStorageCapacity().getOneDimensionCapacity()));
-            		storageContainerForm.setTwoDimensionCapacity(Utility.toInt(type.getDefaultStorageCapacity().getTwoDimensionCapacity()));
+            		storageContainerForm.setOneDimensionCapacity(type.getDefaultStorageCapacity().getOneDimensionCapacity().intValue());
+            		storageContainerForm.setTwoDimensionCapacity(type.getDefaultStorageCapacity().getTwoDimensionCapacity().intValue());
             		storageContainerForm.setOneDimensionLabel(type.getOneDimensionLabel());
             		storageContainerForm.setTwoDimensionLabel(type.getTwoDimensionLabel());
             	}
