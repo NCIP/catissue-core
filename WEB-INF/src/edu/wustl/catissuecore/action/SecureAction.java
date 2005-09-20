@@ -48,14 +48,13 @@ public abstract class SecureAction extends BaseAction
             return executeSecureAction(mapping, form, request, response);
         }
 
-        Logger.out.debug("The Access was denied for the User "
-                + "to Execute this Action.");
+        Logger.out.debug("The Access was denied for the User "+ getUserLoginName(request)
+                + "to Execute this Action "+this.getClass().getName());
 
         ActionErrors errors = new ActionErrors();
 
-        ActionError error = new ActionError("access.execute.action.denied",
-                new String[]{getUserLoginName(request),
-                        ", " + this.getClass().getName()});
+        ActionError error = new ActionError("access.execute.action.denied"
+                );
         errors.add(ActionErrors.GLOBAL_ERROR, error);
         saveErrors(request, errors);
 
