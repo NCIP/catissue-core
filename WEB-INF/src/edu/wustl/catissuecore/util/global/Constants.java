@@ -1141,6 +1141,10 @@ public class Constants
 	
 	public static final String getCollectionProtocolPGName(Long identifier)
 	{
+	    if(identifier == null)
+	    {
+	        return "COLLECTION_PROTOCOL_";
+	    }
 	    return "COLLECTION_PROTOCOL_"+identifier;
 	}
 	
