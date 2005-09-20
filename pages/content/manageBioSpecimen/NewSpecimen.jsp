@@ -857,7 +857,7 @@ NewSpecimenForm form = (NewSpecimenForm)request.getAttribute("newSpecimenForm");
 									</td> 
 									<td>
 										<html:button property="eventButton" styleClass="actionButton" onclick="onSpecimenEventUpdate(this)">
-											<bean:message key="buttons.spcimenEventParameters"/>
+											<bean:message key="buttons.specimenEventParameters"/>
 										</html:button>
 									</td--%>
 								</tr>
