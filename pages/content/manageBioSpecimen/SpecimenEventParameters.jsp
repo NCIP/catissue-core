@@ -27,7 +27,9 @@
 	String[] columnList = Constants.EVENT_PARAMETERS_COLUMNS;
 	List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
-	String specimenIdentifier = (String)request.getParameter(Constants.SPECIMEN_ID);
+	String specimenIdentifier = (String)request.getAttribute(Constants.SPECIMEN_ID);
+	if(specimenIdentifier == null || specimenIdentifier.equals("0"))
+		specimenIdentifier = (String)request.getParameter(Constants.SPECIMEN_ID);
 if(dataList!=null && dataList.size() != 0)
 {
 %>
@@ -89,8 +91,7 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 			action = "/catissuecore/TissueSpecimenReviewEventParameters.do?operation=add&pageOf=pageOfTissueSpecimenReviewParameters";
 		else if(element.value == "Transfer")
 		{
-			action = "/catissuecore/TransferEventParameters.do?operation=add&pageOf=pageOfTransferEventParameters";
-			
+			action = "/catissuecore/TransferEventParameters.do?operation=add&pageOf=pageOfTransferEventParameters";			
 		}	
 		
 		var specimenIdentifier = "<%=specimenIdentifier%>";
@@ -113,13 +114,26 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 
 <html:form action="<%=Constants.SPECIMEN_ADD_ACTION%>">
 <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="500">
+<tr>
+	<td>		
+		&nbsp;
+	</td>
+</tr>
+
+<tr>
+ <td>
+  	 <table summary="" cellpadding="3" cellspacing="0" border="0" width="500">
+
 <%
 	if(dataList!=null && dataList.size() != 0)
 	{
 %>
-<tr>
- <td>
-  	 <table summary="" cellpadding="3" cellspacing="0" border="0" width="500">
+
+   	 	<tr>
+			<td class="formTitle" height="20">
+				<bean:message key="specimenEventParameters.list"/>
+			</td>
+		</tr>
 
    	 	<tr>
 			<td>
@@ -155,10 +169,16 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 				</div>
 			</td>
 		</tr>
+<% } else { %>
+		<tr>
+			<td class="formTitle" height="20">
+				<bean:message key="specimenEventParameters.noSpecimen"/>
+			</td>
+		</tr>
+<% } %>	
 	</table>
  </td>
 </tr>
-<% } %>
 
 <tr>
 	<td>&nbsp;</td>
@@ -166,12 +186,10 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 
 <tr>
 	<td>
+		<b><bean:message key="specimenEventParameters.caption"/></b>&nbsp;&nbsp;
 		<html:select property="specimenEventParameter" styleClass="formFieldSized15" styleId="className" size="1" disabled="false" onchange="onParameterChange(this)">
 			<html:options name="<%=Constants.EVENT_PARAMETERS_LIST%>" labelName="<%=Constants.EVENT_PARAMETERS_LIST%>"/>
 		</html:select>
-		<%--a id="sepAdd" href="#">
-  			<bean:message key="app.addNew" />
-   		</a--%>
 	</td>
 </tr>
 
@@ -181,7 +199,7 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 
 <tr>
 	<td>
-		<iframe name="newEventFrame" id="newEventFrame" src="" width="550" height="400" scrolling="auto">
+		<iframe name="newEventFrame" id="newEventFrame" src="" width="650" height="400" frameborder="0" scrolling="auto">
 		</iframe>
 	</td>
 </tr>
