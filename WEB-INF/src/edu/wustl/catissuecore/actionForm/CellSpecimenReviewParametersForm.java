@@ -138,7 +138,7 @@ public class CellSpecimenReviewParametersForm extends SpecimenEventParametersFor
      
      protected void reset()
  	{
-     	super.reset();
+     	//super.reset();
      	this.neoplasticCellularityPercentage = null;
      	this.viableCellPercentage = null;
  	}
