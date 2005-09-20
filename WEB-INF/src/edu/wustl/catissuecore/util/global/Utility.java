@@ -120,4 +120,29 @@ public class Utility
 		}
 		return obj;
 	}
+	
+	public static int toInt(Object obj)
+	{
+		int value=0;
+		if(obj == null)
+			return value;
+		else
+		{	Integer intObj = (Integer)obj;
+			value=intObj.intValue() ;
+			return value;
+		}
+	}
+
+	public static double toDouble(Object obj)
+	{
+		double value=0;
+		if(obj == null)
+			return value;
+		else
+		{	Double dblObj = (Double)obj;
+			value=dblObj.doubleValue() ;
+			return value;
+		}
+	}
+	
 }
