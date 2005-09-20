@@ -7,7 +7,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 
+import edu.wustl.catissuecore.dao.DAOFactory;
 import edu.wustl.catissuecore.dao.JDBCDAO;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
@@ -106,11 +108,12 @@ public abstract class Query
 	{
 	    try
 	    {
-	        JDBCDAO dao = new JDBCDAO();
+	        //JDBCDAO dao = new JDBCDAO();
+	    	JDBCDAO dao = (JDBCDAO)DAOFactory.getDAO(Constants.JDBC_DAO);
 	        dao.openSession(null);
 	        Logger.out.debug("SQL************"+getString());
 			List list = dao.executeQuery(getString());
-			
+			dao.closeSession();
 	        return list;
 //	        dao.delete(tableName);
 //	        dao.create(tableName,Constants.DEFAULT_SPREADSHEET_COLUMNS);
