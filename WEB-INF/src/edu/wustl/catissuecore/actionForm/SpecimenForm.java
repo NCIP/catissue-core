@@ -515,7 +515,7 @@ public class SpecimenForm extends AbstractActionForm
                     .getExternalIdentifierCollection();
             exIdCounter = 1;
 
-            if (externalIdentifierCollection != null)
+            if (externalIdentifierCollection != null && externalIdentifierCollection.size() != 0)
             {
                 externalIdentifier = new HashMap();
 
@@ -558,7 +558,7 @@ public class SpecimenForm extends AbstractActionForm
     {
         ActionErrors errors = new ActionErrors();
         Validator validator = new Validator();
-System.out.println("********************* " + available);
+
         try
         {
             if (operation.equals(Constants.ADD)

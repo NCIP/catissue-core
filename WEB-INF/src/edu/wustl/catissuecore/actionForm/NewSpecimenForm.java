@@ -264,7 +264,7 @@ public class NewSpecimenForm extends SpecimenForm
             Collection biohazardCollection = specimen.getBiohazardCollection();
             bhCounter = 1;
             
-            if(biohazardCollection != null)
+            if(biohazardCollection != null && biohazardCollection.size() != 0)
             {
             	biohazard = new HashMap();
             	
