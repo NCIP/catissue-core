@@ -90,7 +90,7 @@
 								<html:options collection="userList" labelProperty="name" property="value"/>
 							</html:select>
 							&nbsp;
-							<html:link page="/User.do?operation=add&amp;pageOf=">
+							<html:link page="/User.do?operation=add&amp;pageOf=pageOfUserAdmin">
 		 						<bean:message key="buttons.addNew" />
 	 						</html:link>
 						</td>

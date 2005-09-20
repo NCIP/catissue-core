@@ -338,7 +338,7 @@ function insRow(subdivtag)
 								<html:options collection="<%=Constants.USERLIST%>" labelProperty="name" property="value"/>
 							</html:select>
 							&nbsp;
-							<html:link page="/User.do?operation=add&pageOf=">
+							<html:link page="/User.do?operation=add&pageOf=pageOfUserAdmin">
 		 						<bean:message key="buttons.addNew" />
 	 						</html:link>
 						</td>

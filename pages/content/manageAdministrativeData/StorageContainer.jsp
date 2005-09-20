@@ -250,7 +250,7 @@ function insRow(subdivtag)
 								<html:options collection="<%=Constants.STORAGETYPELIST%>" labelProperty="name" property="value"/>
 							</html:select>
 							&nbsp;
-							<html:link page="/StorageType.do?operation=add">
+							<html:link page="/StorageType.do?operation=add&pageOf=pageOfStorageType">
 		 						<bean:message key="buttons.addNew" />
 	 						</html:link>
 						</td>
@@ -278,7 +278,7 @@ function insRow(subdivtag)
 							</logic:equal>
 							
 							&nbsp;
-							<html:link page="/Site.do?operation=add" styleId="newSite">
+							<html:link page="/Site.do?operation=add&pageOf=pageOfSite" styleId="newSite">
 		 						<bean:message key="buttons.addNew" />
 	 						</html:link>
 						
