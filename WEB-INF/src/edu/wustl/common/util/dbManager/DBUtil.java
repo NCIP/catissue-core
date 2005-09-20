@@ -1,19 +1,11 @@
 package edu.wustl.common.util.dbManager;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.util.Iterator;
-import java.util.Properties;
+import java.sql.Connection;
 
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.SessionFactory;
 import net.sf.hibernate.cfg.Configuration;
-import net.sf.hibernate.mapping.Column;
-import net.sf.hibernate.mapping.Property;
-import net.sf.hibernate.mapping.Table;
-import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -30,21 +22,13 @@ public class DBUtil
 	private static  SessionFactory m_sessionFactory;
 
 	//ThreadLocal to hold the Session for the current executing thread. 
-	private static final ThreadLocal session = new ThreadLocal();
+	private static final ThreadLocal threadLocal = new ThreadLocal();
 	//Initialize the session Factory in the Static block.
 	static 
 	{
 		try
 		{
-			File file = new File(Variables.catissueHome+System.getProperty("file.separator")+"hibernate.properties");
-			Logger.out.info("File "+file);
-			BufferedInputStream stram = new BufferedInputStream(new FileInputStream(file));
-			Properties p = new Properties();
-			p.load(stram);
-			
-			stram.close();
 			Configuration cfg = new Configuration();
-			cfg.setProperties(p);
 			m_sessionFactory = cfg.configure().buildSessionFactory();
 			HibernateMetaData.initHibernateMetaData(cfg);
 		}
@@ -62,13 +46,13 @@ public class DBUtil
 	 * */
 	public static Session currentSession() throws HibernateException
 	{
-		Session s = (Session) session.get();
+		Session s = (Session) threadLocal.get();
 		
 		//Open a new Session, if this Thread has none yet
 		if (s == null)
 		{
 			s = m_sessionFactory.openSession();
-			session.set(s);
+			threadLocal.set(s);
 		}
 		return s;
 	}
@@ -78,9 +62,19 @@ public class DBUtil
 	 * */
 	public static void closeSession() throws HibernateException
 	{
-		Session s = (Session) session.get(); 
-		session.set(null);
+		Session s = (Session) threadLocal.get(); 
+		threadLocal.set(null);
 		if (s != null)
 			s.close();
+	}
+	
+	public static Connection getConnection() throws HibernateException
+	{
+		return currentSession().connection();
+	}
+	
+	public static void closeConnection() throws HibernateException
+	{
+		closeSession();
 	}
 }

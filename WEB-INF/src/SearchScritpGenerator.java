@@ -38,7 +38,7 @@ public class SearchScritpGenerator
 	
 	public SearchScritpGenerator()throws Exception
 	{
-		HibernateProperties.initBundle("hibernate.properties");
+		HibernateProperties.initBundle("db.properties");
 		Class.forName(HibernateProperties.getValue("hibernate.connection.driver_class"));
 		
 		String database = HibernateProperties

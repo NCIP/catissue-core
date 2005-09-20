@@ -57,7 +57,7 @@ public class CatissueCoreServletContextListener
         Variables.catissueHome = sce.getServletContext().getRealPath("");
 
         HibernateProperties.initBundle(Variables.catissueHome +
-        			System.getProperty("file.separator") + "hibernate.properties");
+        			System.getProperty("file.separator") + "db.properties");
 
         String str = HibernateProperties.getValue("hibernate.connection.driver_class");
         

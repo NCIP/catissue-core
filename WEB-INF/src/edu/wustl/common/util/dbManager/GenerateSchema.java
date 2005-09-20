@@ -44,7 +44,7 @@ public class GenerateSchema
 			}
 		}
 		
-		File file = new File("hibernate.properties");
+		File file = new File("db.properties");
 		BufferedInputStream stram = new BufferedInputStream(new FileInputStream(file));  
 		Properties p = new Properties();
 		p.load(stram);
