@@ -11,7 +11,6 @@ package edu.wustl.catissuecore.dao;
 
 import java.io.Serializable;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -21,11 +20,11 @@ import java.util.List;
 
 import edu.wustl.catissuecore.audit.AuditManager;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.HibernateProperties;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.dbManager.DBUtil;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -37,7 +36,6 @@ public class JDBCDAO extends AbstractDAO
     private PreparedStatement stmt = null;
     private Connection connection = null;
     protected AuditManager auditManager;
-    
     /**
      * This method will be used to establish the session with the database.
      * Declared in AbstractDAO class.
@@ -59,26 +57,12 @@ public class JDBCDAO extends AbstractDAO
     	
     	try
     	{
-    	    //Initializes the oracle driver.
-            Class.forName(HibernateProperties.getValue("hibernate.connection.driver_class"));
-
-            String database = HibernateProperties
-            						.getValue("hibernate.connection.url");
-            String loginName = HibernateProperties
-                    				.getValue("hibernate.connection.username");
-            String password = HibernateProperties
-            						.getValue("hibernate.connection.password");
-
             //Creates a connection.
-            connection = DriverManager.getConnection(database, loginName, password);
+            connection = DBUtil.getConnection();// getConnection(database, loginName, password);
     	}
-    	catch(SQLException sqlExp)
+    	catch(Exception sqlExp)
     	{
     	    throw new DAOException(sqlExp.getMessage(),sqlExp);
-    	}
-    	catch(ClassNotFoundException classExp)
-    	{
-    	    throw new DAOException(classExp.getMessage(),classExp);
     	}
     }
     /**
@@ -92,10 +76,11 @@ public class JDBCDAO extends AbstractDAO
         {
             auditManager = null;
         	stmt.close();
-        	if (connection != null)
-        	    connection.close();
+        	DBUtil.closeConnection();
+//        	if (connection != null && !connection.isClosed())
+//        	    connection.close();
         }
-        catch(SQLException sqlExp)
+        catch(Exception sqlExp)
         {
             new DAOException(sqlExp.getMessage(),sqlExp);
         }
