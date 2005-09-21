@@ -447,11 +447,11 @@
 		<put name="content" value="/pages/content/manageBioSpecimen/TransferEventParameters.jsp" />
 	</definition>
 
-	<definition name=".catissuecore.transferEventParametersAddSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+	<definition name=".catissuecore.transferEventParametersAddSuccessDef" extends=".catissuecore.queryDataViewDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/RedirectSpecimenEventParameters.jsp" />
 	</definition>
 
-	<definition name=".catissuecore.transferEventParametersEditSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+	<definition name=".catissuecore.transferEventParametersEditSuccessDef" extends=".catissuecore.queryDataViewDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/RedirectSpecimenEventParameters.jsp" />
 	</definition>
 	<!-- transferEventParameters end -->
