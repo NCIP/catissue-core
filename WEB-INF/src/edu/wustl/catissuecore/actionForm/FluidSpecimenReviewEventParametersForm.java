@@ -74,6 +74,9 @@ public class FluidSpecimenReviewEventParametersForm extends SpecimenEventParamet
 		super.setAllValues(abstractDomain);
 		FluidSpecimenReviewEventParameters fluidSpecimenReviewEventParametersObject = (FluidSpecimenReviewEventParameters)abstractDomain ;
 		this.cellCount = Utility.toString(fluidSpecimenReviewEventParametersObject.getCellCount()) ; 
+		Logger.out.debug("############FormObject################## : ");
+		Logger.out.debug(this.cellCount);
+		Logger.out.debug("############################## : ");
 	}
 	
 	/**
@@ -108,7 +111,7 @@ public class FluidSpecimenReviewEventParametersForm extends SpecimenEventParamet
      protected void reset()
      {
          super.reset();
-         this.cellCount = null;
+       //  this.cellCount = null;
       }
        
 
