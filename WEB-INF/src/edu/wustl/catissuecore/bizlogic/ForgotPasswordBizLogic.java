@@ -18,6 +18,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.SendEmail;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
+import edu.wustl.common.util.PasswordEncoderDecoder;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
@@ -72,7 +73,7 @@ public class ForgotPasswordBizLogic extends DefaultBizLogic
                             + " " + csmUser.getLastName()
                             + "\n\n" + ApplicationProperties.getValue("forgotPassword.email.body.start")
                             + "\n\t User Name : " + csmUser.getLoginName()
-                            + "\n\t Password : " + csmUser.getPassword()
+                            + "\n\t Password : " + PasswordEncoderDecoder.decode(csmUser.getPassword())
                             + "\n\n" + ApplicationProperties.getValue("email.catissuecore.team");
                     
                     boolean emailStatus = email.sendmail(csmUser
