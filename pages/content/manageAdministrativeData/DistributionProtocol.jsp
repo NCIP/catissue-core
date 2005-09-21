@@ -359,8 +359,8 @@ function insRow(subdivtag)
 
 <!-- short title -->						
 					<tr>
-						<td class="formRequiredNotice" width="5">&nbsp;</td>
-						<td class="formLabel">
+						<td class="formRequiredNotice" width="5">*</td>
+						<td class="formRequiredLabel">
 							<label for="shortTitle">
 								<bean:message key="distributionprotocol.shorttitle" />
 							</label>
@@ -372,8 +372,8 @@ function insRow(subdivtag)
 					
 <!-- irb id -->						
 					<tr>
-						<td class="formRequiredNotice" width="5">&nbsp;</td>
-						<td class="formLabel">
+						<td class="formRequiredNotice" width="5">*</td>
+						<td class="formRequiredLabel">
 							<label for="irbID">
 								<bean:message key="distributionprotocol.irbid" />
 							</label>
@@ -385,8 +385,8 @@ function insRow(subdivtag)
 
 <!-- startdate -->						
 					<tr>
-						<td class="formRequiredNotice" width="5">&nbsp;</td>
-						<td class="formLabel">
+						<td class="formRequiredNotice" width="5">*</td>
+						<td class="formRequiredLabel">
 							<label for="startDate">
 								<bean:message key="distributionprotocol.startdate" />
 							</label>
