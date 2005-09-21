@@ -58,7 +58,6 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 		//	provide cells and headers text
 		obj.setDataProperty("text", function(i, j){return myData[i][j]});
 		obj.setColumnProperty("text", function(i){return columns[i]});
-		obj.setDataProperty("value", function(i){return myData[i][0]});
 		
 		//	set headers width/height.
 		obj.setRowHeaderWidth("28px");
@@ -69,7 +68,7 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 		
 		obj.setTemplate("row", row);
    		obj.setAction("myAction", 
-			function(src){window.location.href = 'SearchObject.do?pageOf=<%=pageOf%>&operation=search&systemIdentifier='+src.getDataProperty("value")}); 
+			function(src){window.location.href = 'SearchObject.do?pageOf=<%=pageOf%>&operation=search&systemIdentifier='+myData[this.getSelectionProperty("index")][0]}); 
 		
 		//	write grid html to the page.
 		document.write(obj);
