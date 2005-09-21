@@ -20,6 +20,7 @@ import org.apache.commons.lang.StringUtils;
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.util.Permissions;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SecurityDataBean;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.SMTransactionException;
@@ -31,6 +32,7 @@ import gov.nih.nci.security.UserProvisioningManager;
 import gov.nih.nci.security.authorization.domainobjects.Application;
 import gov.nih.nci.security.authorization.domainobjects.Group;
 import gov.nih.nci.security.authorization.domainobjects.ProtectionElement;
+import gov.nih.nci.security.authorization.domainobjects.ProtectionElementPrivilegeContext;
 import gov.nih.nci.security.authorization.domainobjects.ProtectionGroup;
 import gov.nih.nci.security.authorization.domainobjects.Role;
 import gov.nih.nci.security.authorization.domainobjects.User;
@@ -1116,5 +1118,76 @@ public class SecurityManager implements Permissions
         return name;
         
     }
+
+    /**
+     * Returns name value beans corresponding to all 
+     * privileges that can be assigned for Assign Privileges Page
+     * @param userName login name of user logged in 
+     * @return
+     */
+    public Vector getPrivilegesForAssignPrivilege(String userName)
+    {
+        Vector privileges = new Vector();
+        NameValueBean nameValueBean;
+        nameValueBean = new NameValueBean(Permissions.READ,Permissions.READ);
+        privileges.add(nameValueBean);
+        nameValueBean = new NameValueBean(Permissions.UPDATE,Permissions.UPDATE);
+        privileges.add(nameValueBean);
+        nameValueBean = new NameValueBean(Permissions.CREATE,Permissions.CREATE);
+        privileges.add(nameValueBean);
+        nameValueBean = new NameValueBean(Permissions.USE,Permissions.USE);
+        privileges.add(nameValueBean);
+        return privileges;
+    }
+    
+    /**
+     * This method returns NameValueBeans for all the objects of type objectType
+     * on which user with identifier userID has privilege ASSIGN_<<privilegeName>>.
+     * @param userID
+     * @param objectType
+     * @param privilegeName
+     * @return
+     * @throws SMException thrown if any error occurs while retreiving ProtectionElementPrivilegeContextForUser
+     */
+    public Vector getObjectsForAssignPrivilege(String userID, String objectType, String privilegeName) throws SMException
+    {
+        Vector objects = new Vector();
+        NameValueBean nameValueBean;
+        UserProvisioningManager userProvisioningManager;
+        ProtectionElementPrivilegeContext protectionElementPrivilegeContext;
+        Set protectionElementPrivilegeContextSet;
+        Iterator iterator;
+        String objectId;
+        try
+        {
+           userProvisioningManager= getUserProvisioningManager();
+           protectionElementPrivilegeContextSet = userProvisioningManager.getProtectionElementPrivilegeContextForUser(userID);
+           if(protectionElementPrivilegeContextSet !=null)
+           {
+               iterator = protectionElementPrivilegeContextSet.iterator();
+               while(iterator.hasNext())
+               {
+                   protectionElementPrivilegeContext = (ProtectionElementPrivilegeContext) iterator.next();
+                   objectId =protectionElementPrivilegeContext.getProtectionElement().getObjectId();
+                   if(objectId.indexOf(objectType)!=-1)
+                   {
+                       if(protectionElementPrivilegeContext.getPrivileges().contains("ASSIGN_"+privilegeName))
+                       {
+                           nameValueBean = new NameValueBean(objectId,objectId);
+                           objects.add(nameValueBean);
+                       }
+                   }
+               }
+           }
+        }
+        catch (CSException e)
+        {
+            Logger.out.debug("Unable to get objects: Exception: "
+                    + e.getMessage());
+            throw new SMException(e.getMessage(), e);
+        }
+        return objects;
+    }
 }
+
 
