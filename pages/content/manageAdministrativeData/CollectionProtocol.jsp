@@ -621,6 +621,12 @@ function getSubDivCount(subdivtag)
 					<%
 						fldName="";
 						fldName = commonLabel + "_studyCalendarEventPoint)";
+						String keyStudyPoint = commonName + "_studyCalendarEventPoint";
+						String valueStudyPoint = (String)colForm.getValue(keyStudyPoint);
+					
+						if(valueStudyPoint == null)
+							valueStudyPoint = "1";
+						
 					%>
 
 			        <td colspan="1" class="formRequiredLabel">
@@ -633,7 +639,8 @@ function getSubDivCount(subdivtag)
 			        	<html:text styleClass="formFieldSized5" size="30" 
 			        			styleId="<%=fldName%>" 
 			        			property="<%=fldName%>" 
-			        			readonly="<%=readOnlyValue%>" /> 
+			        			readonly="<%=readOnlyValue%>"
+			        			value="<%=valueStudyPoint%>" /> 
 			        	<bean:message key="collectionprotocol.studycalendarcomment"/>
 					</td>
 			    </tr>
@@ -868,7 +875,8 @@ function getSubDivCount(subdivtag)
 			        	<html:text styleClass="formFieldSized5" size="30" 
 			        			styleId="value(CollectionProtocolEvent:`_studyCalendarEventPoint)" 
 			        			property="value(CollectionProtocolEvent:`_studyCalendarEventPoint)" 
-			        			readonly="<%=readOnlyValue%>" /> 
+			        			readonly="<%=readOnlyValue%>"
+			        			value="1" /> 
 			        	<bean:message key="collectionprotocol.studycalendarcomment"/>
 					</td>
 			    </tr>
