@@ -390,15 +390,28 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("collectionprotocol.principalinvestigator")));
 				}
+
                 if (validator.isEmpty(this.title))
                 {
                 	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocol.protocoltitle")));
                 }
                 
-                if (!validator.isNumeric(enrollment) && !validator.isEmpty(enrollment ))
+                if (validator.isEmpty(this.shortTitle))
                 {
-                	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.enrollment",ApplicationProperties.getValue("collectionprotocol.participants")));
+                	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocol.shorttitle")));
                 }
+                
+                if (validator.isEmpty(this.irbID))
+                {
+                	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocol.irbid")));
+                }
+                
+                 
+                if (validator.isEmpty(this.startDate ))
+                {
+                	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocol.startdate")));
+                }
+               
                 
       			// code added as per bug id 235 
     			// code to validate startdate less than end date
@@ -427,6 +440,11 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 					}
     				
     			}
+    			if (!validator.isNumeric(enrollment) && !validator.isEmpty(enrollment ))
+                {
+                 	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.enrollment",ApplicationProperties.getValue("collectionprotocol.participants")));
+                }
+               
 
             }    
 		}

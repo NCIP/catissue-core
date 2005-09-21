@@ -240,25 +240,25 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 				{
 					values.put(key1,"Tissue");
 					values.put(key2,Constants.UNIT_GM);
-					values.put(key6,String.valueOf(((TissueSpecimenRequirement)requirement).getQuantityInGram()));
+					values.put(key6,Utility.toString(((TissueSpecimenRequirement)requirement).getQuantityInGram()));
 				}
 				else if(requirement instanceof CellSpecimenRequirement)
 				{
 					values.put(key1,"Cell");
 					values.put(key2,Constants.UNIT_CC);
-					values.put(key6,String.valueOf(((CellSpecimenRequirement)requirement).getQuantityInCellCount()));
+					values.put(key6,Utility.toString(((CellSpecimenRequirement)requirement).getQuantityInCellCount()));
 				}
 				else if(requirement instanceof MolecularSpecimenRequirement)
 				{
 					values.put(key1,"Molecular");
 					values.put(key2,Constants.UNIT_MG);
-					values.put(key6,String.valueOf(((MolecularSpecimenRequirement)requirement).getQuantityInMicrogram()));
+					values.put(key6,Utility.toString(((MolecularSpecimenRequirement)requirement).getQuantityInMicrogram()));
 				}
 				else if(requirement instanceof FluidSpecimenRequirement)
 				{
 					values.put(key1,"Fluid");
 					values.put(key2,Constants.UNIT_ML);
-					values.put(key6,String.valueOf(((FluidSpecimenRequirement)requirement).getQuantityInMilliliter()));
+					values.put(key6,Utility.toString(((FluidSpecimenRequirement)requirement).getQuantityInMilliliter()));
 				}
 				
 				j++;
@@ -284,6 +284,11 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 		Validator validator = new Validator();
 		try
 		{
+			 if(this.protocolCoordinatorIds == null || this.protocolCoordinatorIds.length <1)
+				{
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("collectionprotocol.protocolcoordinator")));
+				}
+			 
 			Iterator it = this.values.keySet().iterator();
 			while (it.hasNext())
 			{
@@ -336,14 +341,14 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 					String classValue = (String)getValue(classKey );
 					if (classValue.trim().equals("Cell"))
 					{
-        				if(key.indexOf("quantityIn")!=-1  && (validator.isEmpty(value) || !validator.isNumeric(value )))
+        				if(!validator.isEmpty(value) && !validator.isNumeric(value ))
         				{
         					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocol.quantity")));
         				}
 					}
 					else
 					{
-						if(key.indexOf("quantityIn")!=-1  && (validator.isEmpty(value) || !validator.isDouble(value )))
+						if(!validator.isEmpty(value) && !validator.isDouble(value ))
         				{
         					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocol.quantity")));
         				}
