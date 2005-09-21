@@ -41,10 +41,10 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 
 			//Sets the TO and FROM StorageContainerList attribute to be used in the Add/Edit User Page.
 			String sourceObjectName = StorageContainer.class.getName();
-			List fromContainerList = dao.getList(sourceObjectName, displayNameFields, valueField);
+			List fromContainerList = dao.getList(sourceObjectName, displayNameFields, valueField, true);
 			request.setAttribute(Constants.FROMCONTAINERLIST, fromContainerList);
 
-			List toContainerList = dao.getList(sourceObjectName, displayNameFields, valueField);
+			List toContainerList = dao.getList(sourceObjectName, displayNameFields, valueField, true);
 			request.setAttribute(Constants.TOCONTAINERLIST, toContainerList);
 			
 			// ---------------------------------------------

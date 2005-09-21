@@ -19,7 +19,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -77,17 +76,17 @@ public class UserAction extends SecureAction
             String[] displayNameFields = {"name"};
             String valueField = "systemIdentifier";
             
-            List instituteList = dao.getList(sourceObjectName, displayNameFields, valueField);
+            List instituteList = dao.getList(sourceObjectName, displayNameFields, valueField, false);
             request.setAttribute(Constants.INSTITUTIONLIST, instituteList);
             
             //Sets the departmentList attribute to be used in the Add/Edit User Page.
             sourceObjectName = Department.class.getName();
-            List departmentList = dao.getList(sourceObjectName, displayNameFields, valueField);
+            List departmentList = dao.getList(sourceObjectName, displayNameFields, valueField, false);
             request.setAttribute(Constants.DEPARTMENTLIST, departmentList);
             	
             //Sets the cancerResearchGroupList attribute to be used in the Add/Edit User Page.
             sourceObjectName = CancerResearchGroup.class.getName();
-            List cancerResearchGroupList = dao.getList(sourceObjectName, displayNameFields, valueField);
+            List cancerResearchGroupList = dao.getList(sourceObjectName, displayNameFields, valueField, false);
             request.setAttribute(Constants.CANCER_RESEARCH_GROUP_LIST, cancerResearchGroupList);
 
             if (operation.equals(Constants.EDIT))

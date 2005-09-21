@@ -15,7 +15,6 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -71,7 +70,7 @@ public class SimpleQueryInterfaceAction extends SecureAction
         String [] whereCondition = {"="};
         
         List tableList = dao.getList(sourceObjectName, displayNameFields, valueField, 
-                				whereColumnNames, whereCondition, whereColumnValues,null,null);
+                				whereColumnNames, whereCondition, whereColumnValues,null,null, false);
         
         //Removing select option from drop down.
         tableList.remove(0); 

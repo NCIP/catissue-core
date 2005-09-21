@@ -18,7 +18,6 @@ import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.DistributionBizLogic;
 import edu.wustl.catissuecore.domain.CellSpecimen;
 import edu.wustl.catissuecore.domain.DistributionProtocol;
-import edu.wustl.catissuecore.domain.SpecimenProtocol;
 import edu.wustl.catissuecore.domain.FluidSpecimen;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Site;
@@ -46,7 +45,7 @@ public class  DistributionAction extends SpecimenEventParametersAction
 	        String[] displayNameFields = {"name"};
 	        String valueField = "systemIdentifier";
 	        
-	        List siteList = dao.getList(sourceObjectName, displayNameFields, valueField);
+	        List siteList = dao.getList(sourceObjectName, displayNameFields, valueField, true);
 			 
 			request.setAttribute(Constants.FROMSITELIST, siteList);
 			request.setAttribute(Constants.TOSITELIST, siteList);
@@ -55,14 +54,14 @@ public class  DistributionAction extends SpecimenEventParametersAction
 	        sourceObjectName = DistributionProtocol.class.getName();
 	        String [] displayName = {"title"};
 	        
-	        List protocolList = dao.getList(sourceObjectName, displayName, valueField);
+	        List protocolList = dao.getList(sourceObjectName, displayName, valueField, true);
 			request.setAttribute(Constants.DISTRIBUTIONPROTOCOLLIST, protocolList);
 			
 			
 			
 			//SET THE CELL SPECIMEN LIST
 			String [] displayNameField = {"systemIdentifier"};
-			List specimenList = dao.getList(CellSpecimen.class.getName(), displayNameField, valueField);
+			List specimenList = dao.getList(CellSpecimen.class.getName(), displayNameField, valueField, true);
 			String [] cellSpecimenIds = new String[specimenList.size()];
 			cellSpecimenIds[0] = Constants.SELECT_OPTION;
 			
@@ -76,7 +75,7 @@ public class  DistributionAction extends SpecimenEventParametersAction
 			request.setAttribute(Constants.CELL_SPECIMEN_ID_LIST, cellSpecimenIds);
 			
 			//SET THE FLUID SPECIMEN LIST
-			specimenList = dao.getList(FluidSpecimen.class.getName(), displayNameField, valueField);
+			specimenList = dao.getList(FluidSpecimen.class.getName(), displayNameField, valueField, true);
 			String [] fluidSpecimenIds = new String[specimenList.size()];
 			fluidSpecimenIds[0] = Constants.SELECT_OPTION;
 			
@@ -90,7 +89,7 @@ public class  DistributionAction extends SpecimenEventParametersAction
 			request.setAttribute(Constants.FLUID_SPECIMEN_ID_LIST, fluidSpecimenIds);
 			
 			//SET THE MOLECULAR SPECIMEN LIST
-			specimenList = dao.getList(MolecularSpecimen.class.getName(), displayNameField, valueField);
+			specimenList = dao.getList(MolecularSpecimen.class.getName(), displayNameField, valueField, true);
 			String [] molecularSpecimenIds = new String[specimenList.size()];
 			molecularSpecimenIds[0] = Constants.SELECT_OPTION;
 			
@@ -104,7 +103,7 @@ public class  DistributionAction extends SpecimenEventParametersAction
 			request.setAttribute(Constants.MOLECULAR_SPECIMEN_ID_LIST, molecularSpecimenIds);
 			
 			//SET THE TISSUE SPECIMEN LIST
-			specimenList = dao.getList(TissueSpecimen.class.getName(), displayNameField, valueField);
+			specimenList = dao.getList(TissueSpecimen.class.getName(), displayNameField, valueField, true);
 			String [] tissueSpecimenIds = new String[specimenList.size()];
 			tissueSpecimenIds[0] = Constants.SELECT_OPTION;
 			

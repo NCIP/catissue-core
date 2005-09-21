@@ -64,7 +64,7 @@ public class CreateSpecimenAction extends SecureAction
         try
 		{
             String [] fields = {"systemIdentifier"};
-            List parentSpecimenList = dao.getList(Specimen.class.getName(), fields, fields[0]); 	 	
+            List parentSpecimenList = dao.getList(Specimen.class.getName(), fields, fields[0], true); 	 	
     	 	request.setAttribute(Constants.PARENT_SPECIMEN_ID_LIST,parentSpecimenList);
     	 	
     	 	List specimenClassList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_SPECIMEN_CLASS);

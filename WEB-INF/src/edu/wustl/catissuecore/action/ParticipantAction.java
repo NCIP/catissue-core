@@ -86,7 +86,7 @@ public class ParticipantAction  extends SecureAction
             String separatorBetweenFields = "";
 			
             List siteList = dao.getList(sourceObjectName, displayNameFields, valueField,whereColumnName,
-            				whereColumnCondition,whereColumnValue,joinCondition,separatorBetweenFields);
+            				whereColumnCondition,whereColumnValue,joinCondition,separatorBetweenFields, true);
             
             request.setAttribute(Constants.SITELIST, siteList);
 		}

@@ -63,7 +63,7 @@ public class NewSpecimenAction  extends SecureAction
         	if(specimenForm.isParentPresent())
         	{
         		String [] fields = {Constants.SYSTEM_IDENTIFIER};
-                List parentSpecimenList = bizLogic.getList(Specimen.class.getName(), fields, Constants.SYSTEM_IDENTIFIER); 	 	
+                List parentSpecimenList = bizLogic.getList(Specimen.class.getName(), fields, Constants.SYSTEM_IDENTIFIER, true); 	 	
         	 	request.setAttribute(Constants.PARENT_SPECIMEN_ID_LIST, parentSpecimenList);
         	}
         	
@@ -105,7 +105,7 @@ public class NewSpecimenAction  extends SecureAction
 			String[] displayNameFields = {Constants.SYSTEM_IDENTIFIER};
 			String valueField = Constants.SYSTEM_IDENTIFIER;
 	
-			List specimenList = bizLogic.getList(sourceObjectName, displayNameFields, valueField);
+			List specimenList = bizLogic.getList(sourceObjectName, displayNameFields, valueField, true);
 			request.setAttribute(Constants.SPECIMEN_COLLECTION_GROUP_LIST, specimenList);
 		}
         catch(Exception e)

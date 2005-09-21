@@ -57,7 +57,7 @@ public class StorageContainerAction  extends SecureAction
             
         	String []displayField = {"type"};  
         	String valueField = "systemIdentifier";
-        	List list = bizLogic.getList(StorageType.class.getName(),displayField, valueField);
+        	List list = bizLogic.getList(StorageType.class.getName(),displayField, valueField, false);
         	request.setAttribute(Constants.STORAGETYPELIST, list);
         	
         	long typeSelected=-1;
@@ -91,7 +91,7 @@ public class StorageContainerAction  extends SecureAction
         	
         	//Populating the Site Array
         	String []siteDisplayField = {"name"};
-        	list = bizLogic.getList(Site.class.getName(),siteDisplayField, valueField);
+        	list = bizLogic.getList(Site.class.getName(),siteDisplayField, valueField, true);
         	request.setAttribute(Constants.SITELIST,list);
         	
         	boolean isOnChange = false; 

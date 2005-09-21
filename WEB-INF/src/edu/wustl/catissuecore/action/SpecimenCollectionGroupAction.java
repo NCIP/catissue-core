@@ -64,13 +64,13 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 			String sourceObjectName = CollectionProtocol.class.getName();
 			String [] displayNameFields = {"title"};
 			String valueField = Constants.SYSTEM_IDENTIFIER;
-		  	List list = bizLogic.getList(sourceObjectName,displayNameFields,valueField);
+		  	List list = bizLogic.getList(sourceObjectName,displayNameFields,valueField, true);
 			request.setAttribute(Constants.PROTOCOL_LIST, list);
 		
            	//Populating the Site Type bean
 		   	sourceObjectName = Site.class.getName();
 		   	String siteDisplaySiteFields[] = {"name"};
-		   	list = bizLogic.getList(sourceObjectName,siteDisplaySiteFields,valueField);
+		   	list = bizLogic.getList(sourceObjectName,siteDisplaySiteFields,valueField, true);
 		   	request.setAttribute(Constants.SITELIST, list);
 
 		   	//Populating the participants registered to a given protocol
@@ -127,7 +127,7 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 	  	String separatorBetweenFields = ", ";
 	  	
 	  	List list = bizLogic.getList(sourceObjectName, displayParticipantFields, valueField, whereColumnName,
-				  whereColumnCondition, whereColumnValue, joinCondition, separatorBetweenFields);
+				  whereColumnCondition, whereColumnValue, joinCondition, separatorBetweenFields, true);
 	
 	  	Logger.out.debug("Paticipants List"+list);
 	  	request.setAttribute(Constants.PARTICIPANT_LIST, list);
@@ -147,7 +147,7 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 		String separatorBetweenFields = "";
 			
 		List list = bizLogic.getList(sourceObjectName, displayParticipantNumberFields, valueField, whereColumnName,
-					whereColumnCondition, whereColumnValue, joinCondition, separatorBetweenFields);
+					whereColumnCondition, whereColumnValue, joinCondition, separatorBetweenFields, true);
 		
 		Logger.out.debug("Paticipant Number List"+list);
 		request.setAttribute(Constants.PROTOCOL_PARTICIPANT_NUMBER_LIST, list);
@@ -165,9 +165,9 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 		String separatorBetweenFields = "";
 					
 		List list = bizLogic.getList(sourceObjectName, displayEventFields, valueField, whereColumnName,
-					whereColumnCondition, whereColumnValue, joinCondition, separatorBetweenFields);
+					whereColumnCondition, whereColumnValue, joinCondition, separatorBetweenFields, false);
 		
-		Logger.out.debug("Collection Protocol Event List"+list);
+		//Logger.out.debug("Collection Protocol Event List"+list);
 		request.setAttribute(Constants.STUDY_CALENDAR_EVENT_POINT_LIST, list);
 	}
 
@@ -184,7 +184,7 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 		String separatorBetweenFields = "";
 						
 		List list = bizLogic.getList(sourceObjectName, displayEventFields, valueField, whereColumnName,
-					whereColumnCondition, whereColumnValue, joinCondition, separatorBetweenFields);
+					whereColumnCondition, whereColumnValue, joinCondition, separatorBetweenFields, false);
 						
 		request.setAttribute(Constants.PARTICIPANT_MEDICAL_IDNETIFIER_LIST, list);
 	}
