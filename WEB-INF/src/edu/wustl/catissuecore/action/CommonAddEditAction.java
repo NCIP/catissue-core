@@ -120,7 +120,7 @@ public class CommonAddEditAction extends Action
         	saveErrors(request,errors);
             target = new String(Constants.FAILURE);
             
-            //Logger.out.error(excp.getMessage(), excp);
+            Logger.out.error(excp.getMessage(), excp);
         }
         catch (DAOException excp)
         {
