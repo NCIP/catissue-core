@@ -430,12 +430,13 @@ public class StorageContainerBizLogic extends DefaultBizLogic
     public void disableRelatedObjects(DAO dao, Long siteArr[])
             throws DAOException
     {
-        Logger.out.debug("disableRelatedObjects StorageContainerBizLogic");
-        List listOfSubElement = super.disableObjects(dao,
-                StorageContainer.class, "site", "CATISSUE_STORAGE_CONTAINER",
-                "SITE_ID", siteArr);
-
-        disableSubStorageContainer(dao, Utility.toLongArray(listOfSubElement));
+    	Logger.out.debug("disableRelatedObjects StorageContainerBizLogic");
+    	List listOfSubElement = super.disableObjects(dao, StorageContainer.class, "site", 
+    			"CATISSUE_STORAGE_CONTAINER", "SITE_ID", siteArr);
+    	if(!listOfSubElement.isEmpty())
+    	{
+    		disableSubStorageContainer(dao,Utility.toLongArray(listOfSubElement));
+    	}
     }
 
     private void disableSubStorageContainer(DAO dao,

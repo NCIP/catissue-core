@@ -134,29 +134,14 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		}
 	}
 	
-//	public void disableRelatedObjects(DAO dao, Long [])throws DAOException 
-//    {
-//		dao.disableRelatedObjects("","",collProtRegIDArr);
-//
-//		String sourceObjectName = .class.getName();
-//		String selectColumnName [] = {Constants.SYSTEM_IDENTIFIER};
-//		
-//		String[] whereColumnName = {"."+Constants.SYSTEM_IDENTIFIER};
-//		String[] whereColumnCondition = {"in"};
-//		Object[] whereColumnValue = {collProtRegIDArr};
-//		String joinCondition = Constants.AND_JOIN_CONDITION;
-//		
-//		List list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, 
-//				whereColumnCondition, whereColumnValue, joinCondition);
-//		Logger.out.debug("SpecimenCollectionGroup To Disable "+list);
-//    }
-	
 	public void disableRelatedObjects(DAO dao, Long collProtRegIDArr[])throws DAOException 
     {
     	List listOfSubElement = super.disableObjects(dao, SpecimenCollectionGroup.class, "collectionProtocolRegistration", 
     			"CATISSUE_SPECIMEN_COLLECTION_GROUP", "COLLECTION_PROTOCOL_REGISTRATION_ID", collProtRegIDArr);
-    	
-    	NewSpecimenBizLogic bizLogic = (NewSpecimenBizLogic)BizLogicFactory.getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
-		bizLogic.disableRelatedObjectsForSpecimenCollectionGroup(dao,Utility.toLongArray(listOfSubElement));
+    	if(!listOfSubElement.isEmpty())
+    	{
+	    	NewSpecimenBizLogic bizLogic = (NewSpecimenBizLogic)BizLogicFactory.getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
+			bizLogic.disableRelatedObjectsForSpecimenCollectionGroup(dao,Utility.toLongArray(listOfSubElement));
+    	}
     }  
 }
