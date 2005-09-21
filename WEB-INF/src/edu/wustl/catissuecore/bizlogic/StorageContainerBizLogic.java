@@ -161,10 +161,6 @@ public class StorageContainerBizLogic extends DefaultBizLogic
     {
         StorageContainer container = (StorageContainer) obj;
 
-        int posOneCapacity = 1, posTwoCapacity = 1;
-        int positionDimensionOne = 0, positionDimensionTwo = 0;
-        boolean fullStatus[][] = null;
-
         if (container.getParentContainer() != null)
         {
             List list = dao.retrieve(StorageContainer.class.getName(),
@@ -176,20 +172,6 @@ public class StorageContainerBizLogic extends DefaultBizLogic
                 container.setParentContainer(pc);
                 setSiteForSubContainers(container, pc.getSite());
             }
-            
-            posOneCapacity = container.getParentContainer()
-                    .getStorageContainerCapacity().getOneDimensionCapacity()
-                    .intValue();
-            posTwoCapacity = container.getParentContainer()
-                    .getStorageContainerCapacity().getTwoDimensionCapacity()
-                    .intValue();
-
-            fullStatus = getStorageContainerFullStatus(dao, container
-                    .getParentContainer().getSystemIdentifier());
-            positionDimensionOne = container.getPositionDimensionOne()
-                    .intValue();
-            positionDimensionTwo = container.getPositionDimensionTwo()
-                    .intValue();
         }
         else
         {
@@ -217,22 +199,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic
                                 true);
             }
         }
-
-        if (container.getParentContainer() != null)
-        {
-            do
-            {
-                if (positionDimensionTwo == (posTwoCapacity - 1))
-                {
-                    positionDimensionOne = (positionDimensionOne + 1)
-                            % posOneCapacity;
-                }
-                positionDimensionTwo = (positionDimensionTwo + 1)
-                        % posTwoCapacity;
-            }
-            while (fullStatus[positionDimensionOne][positionDimensionTwo] != false);
-        }
-
+        
         Logger.out.debug("container.getActivityStatus() "
                 + container.getActivityStatus());
         if (container.getActivityStatus().equals(
