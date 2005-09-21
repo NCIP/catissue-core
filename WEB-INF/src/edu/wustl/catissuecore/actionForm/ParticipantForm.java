@@ -137,7 +137,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
         this.birthDate = Utility.parseDateToString(participant.getBirthDate(),Constants.DATE_PATTERN_MM_DD_YYYY);
         this.gender = participant.getGender();
         this.genotype = participant.getGenotype();
-        this.socialSecurityNumber = participant.getSocialSecurityNumber();
+        this.socialSecurityNumber = Utility.toString( participant.getSocialSecurityNumber());
         this.race = participant.getRace();
         this.activityStatus = participant.getActivityStatus();
         this.ethnicity = participant.getEthnicity();
@@ -504,7 +504,8 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 			{
 			    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("participant.activityStatus")));
 			}
-			checkValidNumber(socialSecurityNumber,"participant.socialSecurityNumber",errors,validator);
+			//social security number is optional bug id 450
+			//checkValidNumber(socialSecurityNumber,"participant.socialSecurityNumber",errors,validator);
 			  
 			//Validations for Add-More Block
 			String className = "ParticipantMedicalIdentifier:";

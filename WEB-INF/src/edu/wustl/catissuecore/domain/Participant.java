@@ -414,7 +414,7 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 	        this.gender				 = form.getGender();
 	        this.genotype			 = form.getGenotype();
 	        this.race				 = form.getRace();
-	        this.socialSecurityNumber=form.getSocialSecurityNumber();
+	        this.socialSecurityNumber=Utility.toString( form.getSocialSecurityNumber());
 	        this.birthDate			 = Utility.parseDate(form.getBirthDate(),Constants.DATE_PATTERN_MM_DD_YYYY);
 	        
 	        Map map = form.getValues();
