@@ -396,8 +396,8 @@ function getSubDivCount(subdivtag)
 
 <!-- protocol coordinators -->	
 					<tr>
-						<td class="formRequiredNotice" width="5">&nbsp;</td>
-						<td class="formLabel">
+						<td class="formRequiredNotice" width="5">*</td>
+						<td class="formRequiredLabel">
 							<label for="protocolCoordinatorIds">
 								<bean:message key="collectionprotocol.protocolcoordinator" />
 							</label>
@@ -429,8 +429,8 @@ function getSubDivCount(subdivtag)
 
 <!-- short title -->						
 					<tr>
-						<td class="formRequiredNotice" width="5">&nbsp;</td>
-						<td class="formLabel">
+						<td class="formRequiredNotice" width="5">*</td>
+						<td class="formRequiredLabel">
 							<label for="shortTitle">
 								<bean:message key="collectionprotocol.shorttitle" />
 							</label>
@@ -442,8 +442,8 @@ function getSubDivCount(subdivtag)
 					
 <!-- irb id -->						
 					<tr>
-						<td class="formRequiredNotice" width="5">&nbsp;</td>
-						<td class="formLabel">
+						<td class="formRequiredNotice" width="5">*</td>
+						<td class="formRequiredLabel">
 							<label for="irbID">
 								<bean:message key="collectionprotocol.irbid" />
 							</label>
@@ -455,8 +455,8 @@ function getSubDivCount(subdivtag)
 
 <!-- startdate -->						
 					<tr>
-						<td class="formRequiredNotice" width="5">&nbsp;</td>
-						<td class="formLabel">
+						<td class="formRequiredNotice" width="5">*</td>
+						<td class="formRequiredLabel">
 							<label for="startDate">
 								<bean:message key="collectionprotocol.startdate" />
 							</label>
@@ -681,7 +681,7 @@ function getSubDivCount(subdivtag)
 			        <td  class=formLeftSubTitle>* 
 			    		<bean:message key="collectionprotocol.specimenstatus" />
 				    </td>
-			        <td class=formLeftSubTitle>* 
+			        <td class=formLeftSubTitle>&nbsp;
 			        	<bean:message key="collectionprotocol.quantity" />
 			        </td>
 			    </TR><!-- SUB TITLES END -->
