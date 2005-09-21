@@ -145,4 +145,18 @@ public class Utility
 		}
 	}
 	
+	public static Object[] addElement(Object[] array, Object obj)
+	{
+		Object newObjectArr[] = new Object[array.length+1];
+		
+		if(array instanceof String[])
+			newObjectArr = new String[array.length+1];
+		
+		for (int i = 0; i < array.length; i++)
+		{
+			newObjectArr[i] = array[i];
+		}
+		newObjectArr[newObjectArr.length-1] = obj;
+		return newObjectArr;
+	}
 }
