@@ -13,6 +13,7 @@ import edu.wustl.catissuecore.dao.AbstractDAO;
 import edu.wustl.catissuecore.dao.DAO;
 import edu.wustl.catissuecore.dao.DAOFactory;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.security.exceptions.SMException;
@@ -161,13 +162,20 @@ public class  DefaultBizLogic extends AbstractBizLogic
     }
     
     
-    public List getList(String sourceObjectName, String[] displayNameFields, String valueField) throws DAOException
+    public List getList(String sourceObjectName, String[] displayNameFields, String valueField,boolean isActiveOnly) throws DAOException
     {
         String[] whereColumnName = null;
         String[] whereColumnCondition = null;
         Object[] whereColumnValue = null;
         String joinCondition = null;
-        String separatorBetweenFields = ", ";            
+        String separatorBetweenFields = ", ";
+        
+        if(isActiveOnly)
+        {
+        	whereColumnName = new String[]{"activityStatus"};
+        	whereColumnCondition = new String[]{"="};
+        	whereColumnValue = new String[]{Constants.ACTIVITY_STATUS_ACTIVE};
+        }
         
         return getList(sourceObjectName, displayNameFields, valueField, whereColumnName,
                 whereColumnCondition, whereColumnValue,joinCondition, separatorBetweenFields);
@@ -188,9 +196,24 @@ public class  DefaultBizLogic extends AbstractBizLogic
     */
     public List getList(String sourceObjectName, String[] displayNameFields, String valueField, String[] whereColumnName,
             String[] whereColumnCondition, Object[] whereColumnValue,
-            String joinCondition, String separatorBetweenFields) throws DAOException
+            String joinCondition, String separatorBetweenFields, boolean isActiveOnly) throws DAOException
+	{
+    	if(isActiveOnly)
+        {
+        	whereColumnName = (String[])Utility.addElement(whereColumnName,"activityStatus");
+        	whereColumnCondition = (String[])Utility.addElement(whereColumnCondition,"=");
+        	whereColumnValue = Utility.addElement(whereColumnValue,Constants.ACTIVITY_STATUS_ACTIVE);
+        }
+    	
+    	return getList(sourceObjectName, displayNameFields, valueField, whereColumnName,
+                	  whereColumnCondition, whereColumnValue, joinCondition, separatorBetweenFields);
+	}
+    
+    private List getList(String sourceObjectName, String[] displayNameFields, String valueField, String[] whereColumnName,
+                    String[] whereColumnCondition, Object[] whereColumnValue,
+                    String joinCondition, String separatorBetweenFields) throws DAOException
     {
-        Logger.out.debug("in get list");
+        //Logger.out.debug("in get list");
         Vector nameValuePairs = new Vector();
           
         nameValuePairs.add(new NameValueBean(Constants.SELECT_OPTION,"-1"));
@@ -201,6 +224,7 @@ public class  DefaultBizLogic extends AbstractBizLogic
             selectColumnName[i]=displayNameFields[i];
         }
         selectColumnName[displayNameFields.length]=valueField;
+        
         List results = retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);
               
         NameValueBean nameValueBean; 
