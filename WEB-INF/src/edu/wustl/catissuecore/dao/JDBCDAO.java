@@ -33,9 +33,9 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class JDBCDAO extends AbstractDAO
 {
-    private PreparedStatement stmt = null;
     private Connection connection = null;
     protected AuditManager auditManager;
+    
     /**
      * This method will be used to establish the session with the database.
      * Declared in AbstractDAO class.
@@ -75,7 +75,6 @@ public class JDBCDAO extends AbstractDAO
         try
         {
             auditManager = null;
-        	stmt.close();
         	DBUtil.closeConnection();
 //        	if (connection != null && !connection.isClosed())
 //        	    connection.close();
@@ -235,11 +234,13 @@ public class JDBCDAO extends AbstractDAO
      */
     public List executeQuery(String query) throws ClassNotFoundException, DAOException
     {
+    	PreparedStatement stmt = null;
+    	ResultSet resultSet = null;
         List list = null;
         try
         {
-            stmt = connection.prepareStatement(query);
-            ResultSet resultSet = stmt.executeQuery();
+        	stmt = connection.prepareStatement(query);
+            resultSet = stmt.executeQuery();
              
             list = new ArrayList();
             
@@ -270,7 +271,21 @@ public class JDBCDAO extends AbstractDAO
         {
             throw new DAOException(sqlExp.getMessage(), sqlExp);
         }
-        
+        finally
+		{
+        	try
+			{
+        		if(stmt!=null)
+        			stmt.close();
+        		
+        		if(resultSet!=null)
+        			resultSet.close();
+			}
+        	catch(SQLException ex)
+			{
+        		throw new DAOException(ex.getMessage(), ex);
+			}
+		}
         return list;
     }
 
@@ -414,9 +429,10 @@ public class JDBCDAO extends AbstractDAO
     
     private void executeUpdate(String query) throws DAOException
     {
+    	PreparedStatement stmt = null;
         try
         {
-            stmt = connection.prepareStatement(query
+        	stmt = connection.prepareStatement(query
                     	.toString());
             
             stmt.executeUpdate();
@@ -425,6 +441,18 @@ public class JDBCDAO extends AbstractDAO
         {
             throw new DAOException(sqlExp.getMessage(), sqlExp);
         }
+        finally
+		{
+        	try
+			{
+        		if(stmt!=null)
+            		stmt.close();
+			}
+        	catch(SQLException ex)
+			{
+        		throw new DAOException(ex.getMessage(), ex);
+			}
+		}
     }
     
     

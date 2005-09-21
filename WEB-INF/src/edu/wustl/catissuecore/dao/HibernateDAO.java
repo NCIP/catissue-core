@@ -20,11 +20,13 @@ import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.Transaction;
+
+import org.apache.log4j.PropertyConfigurator;
+
 import edu.wustl.catissuecore.audit.AuditManager;
 import edu.wustl.catissuecore.audit.Auditable;
 import edu.wustl.catissuecore.bizlogic.AbstractBizLogic;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
-import edu.wustl.catissuecore.domain.Institution;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.domain.Site;
@@ -38,7 +40,6 @@ import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.dbManager.DBUtil;
-import edu.wustl.common.util.dbManager.HibernateMetaData;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -160,6 +161,7 @@ public class HibernateDAO extends AbstractDAO
     		String sql = "UPDATE "+TABLE_NAME+" SET ACTIVITY_STATUS = '"+Constants.ACTIVITY_STATUS_DISABLED+ "' WHERE "+WHERE_COLUMN_NAME+" IN ( "+buff.toString()+")";
     		Logger.out.debug("sql "+sql);
     		int count = st.executeUpdate(sql);
+    		st.close();
     		Logger.out.debug("Update count "+count);
         }
         catch (HibernateException dbex)
@@ -298,27 +300,35 @@ public class HibernateDAO extends AbstractDAO
                 }
             }
             Logger.out.debug(" User's Authorization to update "+obj.getClass().getName()+" "+isAuthorized);
+            
             if(isAuthorized)
             {
                 session.update(obj);
+                
+//                Object oldObj = retrieve(obj.getClass().getName(), ((Auditable)obj).getSystemIdentifier());
+//                if (obj instanceof Auditable && isAuditable)
+//                    auditManager.compare((Auditable) obj, (Auditable)oldObj, "UPDATE");
             }
             else
             {
                 throw new UserNotAuthorizedException("Not Authorized to update");
             }
-
-            //            if(isAuditable)
-            //        		auditManager.compare((AbstractDomainObject)obj,null,"INSERT");
         }
         catch (HibernateException hibExp)
         {
-            Logger.out.error(hibExp.getMessage(), hibExp);
-            throw new DAOException("Error in update", hibExp);
+            //Logger.out.error(hibExp.getMessage(), hibExp);
+            //throw new DAOException("Error in update", hibExp);
+        	throw handleError("", hibExp);
         }
+//        catch (AuditException hibExp)
+//        {
+//            throw handleError("", hibExp);
+//        }
         catch (SMException smex)
         {
-            Logger.out.error(smex.getMessage(), smex);
-            throw new DAOException("Error in update", smex);
+            //Logger.out.error(smex.getMessage(), smex);
+            //throw new DAOException("Error in update", smex);
+        	throw handleError("", smex);
         }
     }
 
@@ -591,18 +601,43 @@ public class HibernateDAO extends AbstractDAO
 		dao.closeSession();
 	}
 	
+	public Object loadCleanObj( String sourceObjectName, Long systemIdentifier ) throws Exception
+	{
+		Object obj = retrieve(sourceObjectName, systemIdentifier);
+		session.evict(obj);
+		return obj;
+	}
+	
 	public static void main(String[] args)throws Exception 
     {
 		Variables.catissueHome = System.getProperty("user.dir");
-		Logger.configure("Application.properties");
+		Logger.out = org.apache.log4j.Logger.getLogger("");
+		PropertyConfigurator.configure(Variables.catissueHome+"\\WEB-INF\\src\\"+"ApplicationResources.properties");
 		
+		Logger.out.debug("here");
+		
+		Participant participant = null;
 		HibernateDAO dao = new HibernateDAO();
 		dao.openSession(null);
 		
-		System.out.println("TN "+HibernateMetaData.getTableName(Institution.class));
-		System.out.println("CN "+HibernateMetaData.getColumnName(Institution.class,"name"));
+		participant = (Participant)dao.retrieve(Participant.class.getName() ,new Long(8));
 		
 		dao.commit();
 		dao.closeSession();
+		
+		System.out.println("\n\n");
+		
+		participant.setActivityStatus(Constants.ACTIVITY_STATUS_DISABLED);
+		
+		AbstractBizLogic bizLogic = BizLogicFactory.getBizLogic(Constants.PARTICIPANT_FORM_ID);
+		bizLogic.update(participant,Constants.HIBERNATE_DAO,null);
+		
+		
+//		dao.openSession(null);
+//		Object obj2 = dao.retrieve(Department.class.getName() ,new Long(1));
+//		System.out.println(obj2);
+//		dao.commit();
+//		dao.closeSession();
+
     }
 }
