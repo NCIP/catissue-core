@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 
+import org.apache.commons.lang.StringUtils;
+
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.util.Permissions;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -753,9 +755,10 @@ public class SecurityManager implements Permissions
         Iterator it;
         UserProvisioningManager userProvisioningManager = getUserProvisioningManager();
         groupSearchCriteria = new GroupSearchCriteria(group);
-        Logger.out.debug(" UserGroupRoleProtectionGroup Size:"+ authorizationData.size());
+       
         if (authorizationData != null)
         {
+            Logger.out.debug(" UserGroupRoleProtectionGroup Size:"+ authorizationData.size());
             for (int i = 0; i < authorizationData.size(); i++)
             {
                 Logger.out.debug(" authorizationData:"+i+" "+ authorizationData.get(i).toString());
@@ -1069,6 +1072,49 @@ public class SecurityManager implements Permissions
             throw new SMException(e.getMessage(), e);
         }
     }
-
+    
+    /**
+     * This method returns name of the Protection groupwhich consists of obj as Protection Element and 
+     * whose name consists of string nameConsistingOf
+     * @param obj
+     * @param nameConsistingOf
+     * @return
+     * @throws SMException
+     */
+    public String getProtectionGroupByName(AbstractDomainObject obj, String nameConsistingOf) throws SMException
+    {
+        Set protectionGroups;
+        Iterator it;
+        ProtectionGroup protectionGroup;
+        ProtectionElement protectionElement;
+        String name =null;
+        String protectionElementName = obj.getClass()
+        .getName()
+        + "_" + obj.getSystemIdentifier();
+        try
+        {
+            protectionElement = getAuthorizationManager().getProtectionElement(protectionElementName);
+            protectionGroups = getAuthorizationManager().getProtectionGroups(protectionElement.getProtectionElementId().toString());
+            it = protectionGroups.iterator();
+            while(it.hasNext())
+            {
+                protectionGroup = (ProtectionGroup) it.next();
+                name=protectionGroup.getProtectionGroupName();
+                if(name.indexOf(nameConsistingOf) !=-1)
+                {
+                    Logger.out.debug("protection group by name "+nameConsistingOf+" for Protection Element "+protectionElementName+" is "+name );
+                    return name;
+                }
+            }
+        }
+        catch (CSException e)
+        {
+            Logger.out.debug("Unable to get protection group by name "+nameConsistingOf+" for Protection Element "+protectionElementName
+                    + e.getMessage());
+            throw new SMException(e.getMessage(), e);
+        }
+        return name;
+        
+    }
 }
 
