@@ -78,7 +78,6 @@ public class CommonSearchAction extends Action
                  */
                 abstractDomain = (AbstractDomainObject)list.get(0);
                 abstractForm.setAllValues(abstractDomain);
-                request.setAttribute(mapping.getAttribute(),form);
                 String pageOf = (String)request.getAttribute(Constants.PAGEOF);
                 target = pageOf;
             }
