@@ -50,15 +50,15 @@ public class AssignPrivilegeAction extends BaseAction
         
         Vector objectTypes = new Vector();
         objectTypes.add(new NameValueBean(Constants.ANY,Constants.ANY));
-        objectTypes.add(new NameValueBean("Participant","Participant"));
-        objectTypes.add(new NameValueBean("Collection Protocol","CollectionProtocol"));
-        objectTypes.add(new NameValueBean("Distribution Protocol","DistributionProtocol"));
-        objectTypes.add(new NameValueBean("Specimen Collection","SpecimenCollectionGroup"));
-        objectTypes.add(new NameValueBean("Specimen","Specimen"));
-        objectTypes.add(new NameValueBean("Specimen Events","SpecimenEventParameters"));
-        objectTypes.add(new NameValueBean("Storage","StorageContainer"));
-        objectTypes.add(new NameValueBean("Site","Site"));
-        objectTypes.add(new NameValueBean("Distribution","Distribution"));
+        objectTypes.add(new NameValueBean("Participant","edu.wustl.catissuecore.domain.Participant"));
+        objectTypes.add(new NameValueBean("Collection Protocol","edu.wustl.catissuecore.domain.CollectionProtocol"));
+        objectTypes.add(new NameValueBean("Distribution Protocol","edu.wustl.catissuecore.domain.DistributionProtocol"));
+        objectTypes.add(new NameValueBean("Specimen Collection","edu.wustl.catissuecore.domain.SpecimenCollectionGroup"));
+        objectTypes.add(new NameValueBean("Specimen","edu.wustl.catissuecore.domain.Specimen"));
+        objectTypes.add(new NameValueBean("Specimen Events","edu.wustl.catissuecore.domain.SpecimenEventParameters"));
+        objectTypes.add(new NameValueBean("Storage","edu.wustl.catissuecore.domain.StorageContainer"));
+        objectTypes.add(new NameValueBean("Site","edu.wustl.catissuecore.domain.Site"));
+        objectTypes.add(new NameValueBean("Distribution","edu.wustl.catissuecore.domain.Distribution"));
         objectTypes.add(new NameValueBean("User","User"));
         
         //String [] recordIds = {Constants.ANY};
@@ -101,7 +101,7 @@ public class AssignPrivilegeAction extends BaseAction
             
             Set recordIds = SecurityManager.getInstance(AssignPrivilegeAction.class).getObjectsForAssignPrivilege(String.valueOf(bean.getUserId()),objects,privilegeName);
         	
-            System.out.println("*********************IS RECORD ID NULL" + (recordIds == null));
+            Logger.out.debug("*********************IS RECORD ID NULL" + (recordIds == null));
             
 //            if(recordIds == null || recordIds.size() == 0)
 //            {
