@@ -1160,4 +1160,15 @@ public class Constants
 
 	public static final String ACCESS_DENIED_ADMIN = "access_denied_admin";
 	public static final String ACCESS_DENIED_BIOSPECIMEN = "access_denied_biospecimen";
+	
+	//Constants required in AssignPrivileges.jsp
+	public static final String ASSIGN = "assignOperation";
+	public static final String PRIVILEGES = "privileges";
+	public static final String OBJECT_TYPES = "objectTypes";
+	public static final String OBJECT_TYPE_VALUES = "objectTypeValues";
+	public static final String RECORD_IDS = "recordIds";
+	public static final String ATTRIBUTES = "attributes";
+	public static final String GROUPS = "groups";
+	public static final String ASSIGN_PRIVILEGES_ACTION = "AssignPrivileges.do";
+	public static final String ANY = "Any";
 }
