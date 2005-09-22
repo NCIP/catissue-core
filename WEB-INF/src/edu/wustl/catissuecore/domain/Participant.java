@@ -410,19 +410,31 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 	        
 	        this.activityStatus = validator.getObjectValue(form.getActivityStatus());
 	        
-	        this.ethnicity = validator.getObjectValue( form.getEthnicity());
-
 	        this.firstName = validator.getObjectValue(form.getFirstName());
 
 	        this.middleName = validator.getObjectValue(form.getMiddleName());
 	        
 	        this.lastName = validator.getObjectValue(form.getLastName());
 
-	        this.gender = validator.getObjectValue(form.getGender());
+	        if(validator.isValidOption(form.getGender()) )
+	        	this.gender = validator.getObjectValue(form.getGender());
+	        else
+	        	this.gender = null;
 	        
-	       	this.genotype = validator.getObjectValue(form.getGenotype());
-	       	
-        	this.race = validator.getObjectValue(form.getRace());
+	        if(validator.isValidOption(form.getGenotype()) )
+	        	this.genotype = validator.getObjectValue(form.getGenotype());
+	        else
+	        	this.genotype = null;
+
+	        if(validator.isValidOption(form.getEthnicity()) )
+	        	this.ethnicity = validator.getObjectValue( form.getEthnicity());
+	       	else
+	       		this.ethnicity = null;
+	        
+	        if(validator.isValidOption(form.getRace()) )
+	        	this.race = validator.getObjectValue(form.getRace());
+	        else
+	        	this.race = null;
 	        
 	        this.socialSecurityNumber = validator.getObjectValue(form.getSocialSecurityNumber());
 	        
