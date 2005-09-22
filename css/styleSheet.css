@@ -750,3 +750,20 @@ td.onlyBottomBorder{ /* for the cell that contains the form elements */
   border-right:1px solid #5C5C5C; /* constant: dark gray */
   text-align:left;
 }
+
+/*###############
+DATA GRID CLASS
+###############*/
+.active-controls-grid 
+{
+	height: 100%; 
+	font: menu;
+}
+.active-grid-column 
+{
+	border-right: 1px solid threedlightshadow;
+}
+.active-grid-row 
+{
+	border-bottom: 1px solid threedlightshadow;
+}
