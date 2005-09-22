@@ -40,12 +40,14 @@ public class HibernateMetaData
 	public static String getColumnName(Class classObj, String attributeName)
 	{
 		Logger.out.debug("classObj, String attributeName "+classObj+" "+attributeName);
-		Iterator it = cfg.getClassMapping(classObj).getPropertyIterator();
+		Iterator it = cfg.getClassMapping(classObj).getPropertyClosureIterator();
 		while(it.hasNext())
 		{
 			Property property = (Property)it.next();
 			
 			Logger.out.debug("property.getName() "+property.getName());
+			//System.out.println();
+			//System.out.print("property.getName() "+property.getName()+" ");
 			if(property!=null && property.getName().equals(attributeName))
 			{
 				//System.out.println("property.getColumnSpan() "+property.getColumnSpan());
@@ -53,6 +55,7 @@ public class HibernateMetaData
 				while(colIt.hasNext())
 				{
 					Column col = (Column)colIt.next();
+					//System.out.println("col "+col.getName());
 					return col.getName();
 				}
 			}
