@@ -64,13 +64,38 @@ public class Validator
     }
     
   */
-    
+    /**
+     *  Returns theValue of the given string or null.
+     */
     public String getObjectValue(String obj)
     {
     	if(isEmpty(obj))
     		return null;
     	else
     		return obj.toString(); 
+    }
+    
+    /**
+     * 
+     * @param ssn Social Security Number to check
+     * @return boolean depending on the value of ssn.
+     */
+    public boolean isValidSSN(String ssn)
+    {
+    	boolean result = true;
+    	try
+		{
+    		Pattern re = Pattern.compile("[0-9]{3}-[0-9]{2}-[0-9]{4}", Pattern.CASE_INSENSITIVE);
+    		Matcher  mat =re.matcher(ssn); 
+    		result = mat.matches();
+    		System.out.println(result);
+		}
+    	catch(Exception exp)
+		{
+			System.out.println("exp");
+    		return false;
+		}
+    	return result;
     }
     
     /**
@@ -307,16 +332,23 @@ public class Validator
     public static void main(String[] args)
     {
         Validator validator = new Validator();
-        String str = "mandar; deshmukh";
-        String delim=";,";
-        System.out.println("\nstr: "+str);
-        System.out.println("\ndelim: "+delim);
-        System.out.println("\nContains : " + validator.containsSpecialCharacters(str,delim )); 
         
-        String s= new String("- _");
-        String delimitedString = validator.delimiterExcludingGiven(s );
-        System.out.println("\n\n" + delimitedString );
-        System.out.println(delimitedString.indexOf(s ));
+        String ssn = "sdf-ss-dfds";
+        System.out.println(ssn);
+        validator.isValidSSN(ssn );
+        ssn = "111-11-1111";
+        validator.isValidSSN(ssn );
+
+//        String str = "mandar; deshmukh";
+//        String delim=";,";
+//        System.out.println("\nstr: "+str);
+//        System.out.println("\ndelim: "+delim);
+//        System.out.println("\nContains : " + validator.containsSpecialCharacters(str,delim )); 
+//        
+//        String s= new String("- _");
+//        String delimitedString = validator.delimiterExcludingGiven(s );
+//        System.out.println("\n\n" + delimitedString );
+//        System.out.println(delimitedString.indexOf(s ));
         
         
 //        String str = new String("mandar_deshmukh@persistent.co.in");

@@ -504,8 +504,11 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 //			{
 //			    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("participant.activityStatus")));
 //			}
-			//social security number is optional bug id 450
-			//checkValidNumber(socialSecurityNumber,"participant.socialSecurityNumber",errors,validator);
+
+         	if(!validator.isEmpty(socialSecurityNumber) && !validator.isValidSSN(socialSecurityNumber ) )
+         	{
+         		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.invalid",ApplicationProperties.getValue("participant.socialSecurityNumber")));
+         	}
 			  
 			//Validations for Add-More Block
 			String className = "ParticipantMedicalIdentifier:";
