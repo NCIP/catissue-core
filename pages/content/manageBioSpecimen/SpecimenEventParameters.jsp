@@ -8,20 +8,6 @@
 <link href="runtime/styles/xp/grid.css" rel="stylesheet" type="text/css" ></link>
 <script src="runtime/lib/grid.js"></script>
 
-<!-- grid format -->
-	<style>
-		.active-controls-grid {height: 100%; font: menu;}
-		
-		.active-column-0 {width:  80px;}
-		.active-column-1 {width: 200px;}
-		.active-column-2 {text-align: right;}
-		.active-column-3 {text-align: right;}
-		.active-column-4 {text-align: right;}
-		
-		.active-grid-column {border-right: 1px solid threedlightshadow;}
-		.active-grid-row {border-bottom: 1px solid threedlightshadow;}
-	</style>
-<!--  grid data -->
 <head>
 <%
 	String[] columnList = Constants.EVENT_PARAMETERS_COLUMNS;
@@ -134,7 +120,7 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 				<bean:message key="specimenEventParameters.list"/>
 			</td>
 		</tr>
-
+		
    	 	<tr>
 			<td>
 				<div STYLE="overflow: auto; width:550; height: 200; padding:0px; margin: 0px; border: 1px solid" id="eventGrid">
@@ -150,7 +136,6 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 					//	provide cells and headers text
 					obj.setDataProperty("text", function(i, j){return myData[i][j]});
 					obj.setColumnProperty("text", function(i){return columns[i]});
-					obj.setDataProperty("value", function(i){return myData[i][0]});
 					
 					//	set headers width/height.
 					obj.setRowHeaderWidth("28px");
@@ -161,7 +146,7 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 					
 					obj.setTemplate("row", row);
 			   		obj.setAction("myAction", 
-						function(src){var frame = document.getElementById("newEventFrame"); frame.src = 'SearchObject.do?pageOf=' + myData[this.getSelectionProperty("index")][<%=columnList.length-1%>] + '&operation=search&systemIdentifier=' + src.getDataProperty("value")}); 
+						function(src){var frame = document.getElementById("newEventFrame"); frame.src = 'SearchObject.do?pageOf=' + myData[this.getSelectionProperty("index")][<%=columnList.length-1%>] + '&operation=search&systemIdentifier=' + myData[this.getSelectionProperty("index")][0]}); 
 			
 					//	write grid html to the page.
 					document.write(obj);
