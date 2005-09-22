@@ -63,7 +63,16 @@ public class Validator
         return false;
     }
     
-  */  
+  */
+    
+    public String getObjectValue(String obj)
+    {
+    	if(isEmpty(obj))
+    		return null;
+    	else
+    		return obj.toString(); 
+    }
+    
     /**
      * Checks whether a string is empty and adds an ActionError object in the ActionErrors object.
      * @param componentName Component which is to be checked.
