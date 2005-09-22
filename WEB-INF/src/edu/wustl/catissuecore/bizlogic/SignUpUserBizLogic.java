@@ -134,6 +134,5 @@ public class SignUpUserBizLogic extends DefaultBizLogic
         Logger.out.debug("IN SignUpUserBizLogic update***************************");
         SignUpUser user = (SignUpUser) obj;
         dao.update(user, sessionDataBean, true,true);
-        
     }
 }
