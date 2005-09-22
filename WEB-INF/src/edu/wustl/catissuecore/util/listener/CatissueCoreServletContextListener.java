@@ -2,12 +2,20 @@ package edu.wustl.catissuecore.util.listener;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 import edu.wustl.catissuecore.bizlogic.QueryBizLogic;
+import edu.wustl.catissuecore.bizlogic.UserBizLogic;
+import edu.wustl.catissuecore.dao.DAO;
+import edu.wustl.catissuecore.dao.HibernateDAO;
+import edu.wustl.catissuecore.domain.Participant;
+import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.Permissions;
 import edu.wustl.catissuecore.util.ProtectionGroups;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
@@ -15,6 +23,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.HibernateProperties;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.security.SecurityManager;
+import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -151,15 +160,29 @@ public class CatissueCoreServletContextListener
                                             "admin",
                                             "edu.wustl.catissuecore.domain.CollectionProtocolEvent_28",
                                             UPDATE)));*/
-        	 Logger.out
-             .debug("CREATE Perm to admin on edu.wustl.catissuecore.domain.CollectionProtocolEvent_28"
-                     + 
-                            (SecurityManager
-                                     .getInstance(this.getClass())
-                                     .getObjectsForAssignPrivilege(
-                                             "1",
-                                             new String[] {"edu.wustl.catissuecore.domain.CollectionProtocol","edu.wustl.catissuecore.domain.Participant"},
-                                             new String[] {READ})));
+        	
+        	
+        	UserBizLogic userBizLogic = new UserBizLogic();
+        	List list = userBizLogic.retrieve(User.class.getName());
+        	User user;
+        	for(int i=0; i<list.size();i++)
+        	{
+        	    user = (User) list.get(i);
+        	    if(user!=null)
+        	    {
+        	        Set protectionObjects=new HashSet();
+                    protectionObjects.add(user);
+            	    try
+                    {
+                        SecurityManager.getInstance(this.getClass()).insertAuthorizationData(userBizLogic.getAuthorizationData(user),protectionObjects,null);
+                    }
+                    catch (SMException e)
+                    {
+                        Logger.out.error("Exception in Authorization: "+e.getMessage(),e);
+                    }
+        	    }
+        	}
+        	
         	
         }
         catch (Exception e1)
