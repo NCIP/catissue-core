@@ -11,9 +11,12 @@
 
 package edu.wustl.catissuecore.actionForm;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -156,12 +159,15 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 			
 			if(protocolEventCollection != null)
 			{
+				List eventList = new ArrayList(protocolEventCollection);
+				Collections.sort(eventList);
+				protocolEventCollection = eventList;
+				
 				values = new HashMap();
 				innerLoopValues = new HashMap();
 				
-				Iterator it = protocolEventCollection.iterator();
 				int i = 1;
-				
+				Iterator it = protocolEventCollection.iterator();
 				while(it.hasNext())
 				{
 					CollectionProtocolEvent cpEvent = (CollectionProtocolEvent)it.next();
