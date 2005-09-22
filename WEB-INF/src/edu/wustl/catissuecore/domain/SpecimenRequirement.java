@@ -100,7 +100,7 @@ public abstract class SpecimenRequirement  extends AbstractDomainObject implemen
 	/**
 	 * Returns the tissueSite.
 	 * @hibernate.property name="tissueSite" type="string"
-	 * column="TISSUE_SITE" length="50"
+	 * column="TISSUE_SITE" length="150"
 	 * @return Returns the tissueSite.
 	 */
 	public String getTissueSite()

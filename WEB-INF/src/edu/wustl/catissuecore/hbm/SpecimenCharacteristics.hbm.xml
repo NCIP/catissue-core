@@ -29,7 +29,7 @@
             update="true"
             insert="true"
             column="TISSUE_SITE"
-            length="50"
+            length="150"
         />
 
         <property

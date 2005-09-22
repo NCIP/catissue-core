@@ -69,7 +69,7 @@ public class SpecimenCharacteristics extends AbstractDomainObject implements jav
     /**
      * Returns the anatomical site from which a specimen is derived.
      * @hibernate.property name="tissueSite" type="string" 
-     * column="TISSUE_SITE" length="50"
+     * column="TISSUE_SITE" length="150"
      * @return the anatomical site from which a specimen is derived.
      * @see #setTissueSite(String)
      */

@@ -113,7 +113,7 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
      * Returns the participant's clinical diagnosis at 
      * this collection event (e.g. Prostate Adenocarcinoma).
      * @hibernate.property name="clinicalDiagnosis" type="string" 
-     * column="CLINICAL_DIAGNOSIS" length="50"
+     * column="CLINICAL_DIAGNOSIS" length="150"
      * @return the participant's clinical diagnosis at 
      * this collection event (e.g. Prostate Adenocarcinoma).
      * @see #setClinicalDiagnosis(String)
