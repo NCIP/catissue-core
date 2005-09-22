@@ -19,7 +19,14 @@
             readOnlyValue = false;
         }
 %>
-
+<script>
+	function onCoordinatorChange()
+	{
+		var action = "/catissuecore/Site.do?operation="+document.forms[0].operation.value+"&pageOf=pageOfSite&isOnChange=true";
+		document.forms[0].action = action;
+		document.forms[0].submit();
+	}
+</script>
 <html:errors />
 
 <html:form action="<%=Constants.SITE_ADD_ACTION%>">
@@ -86,7 +93,7 @@
 							</label>
 						</td>
 						<td class="formField">
-							<html:select property="coordinatorId" styleClass="formFieldSized" styleId="coordinatorId" size="1">
+							<html:select property="coordinatorId" styleClass="formFieldSized" styleId="coordinatorId" size="1" onchange="onCoordinatorChange()">
 								<html:options collection="userList" labelProperty="name" property="value"/>
 							</html:select>
 							&nbsp;
@@ -97,8 +104,8 @@
 					</tr>
 		
 					<tr>
-						<td class="formRequiredNotice" width="5">*</td>
-						<td class="formRequiredLabel">
+						<td class="formRequiredNotice" width="5">&nbsp;</td>
+						<td class="formLabel">
 							<label for="emailAddress">
 								<bean:message key="site.emailAddress" />
 							</label>

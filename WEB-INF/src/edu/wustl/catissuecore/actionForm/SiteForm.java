@@ -475,20 +475,10 @@ public class SiteForm extends AbstractActionForm
                 errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("site.type")));
             }
              
-             if (validator.isEmpty(emailAddress))
+             if (!validator.isEmpty(emailAddress) && !validator.isValidEmailAddress(emailAddress))
              {
-                 errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-                         "errors.item.required", ApplicationProperties
+                 errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format", ApplicationProperties
                                  .getValue("site.emailAddress")));
-             }
-             else
-             {
-                 if (!validator.isValidEmailAddress(emailAddress))
-                 {
-                     errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-                             "errors.item.format", ApplicationProperties
-                                     .getValue("site.emailAddress")));
-                 }
              }
              
              if (validator.isEmpty(street))
