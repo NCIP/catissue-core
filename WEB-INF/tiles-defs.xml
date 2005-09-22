@@ -48,6 +48,16 @@
 		<put name="content" value="/pages/content/home/ErrorDetails.jsp" />
 	</definition>
 	
+	<definition name=".catissuecore.userProfileDef" extends=".catissuecore.homePageDef">
+		<put name="content" value="/pages/content/manageAdministrativeData/User.jsp" />
+	</definition>
+	
+	
+	<definition name=".catissuecore.userProfileSuccessDef" extends=".catissuecore.homePageDef">
+		<put name="content" value="/pages/content/common/success.jsp" />
+	</definition>
+	
+	
 	<!-- Home tab pages definitions end -->
 
 	<!-- Manage Administrative Data tab pages definitions start -->
