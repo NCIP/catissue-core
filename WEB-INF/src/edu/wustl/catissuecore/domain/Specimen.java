@@ -19,6 +19,7 @@ import java.util.Set;
 import edu.wustl.catissuecore.actionForm.AbstractActionForm;
 import edu.wustl.catissuecore.actionForm.CreateSpecimenForm;
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
+import edu.wustl.catissuecore.util.global.Validator;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.logger.Logger;
 
@@ -501,12 +502,15 @@ public class Specimen extends AbstractDomainObject implements Serializable
     {
         try
         {
+        	Validator validator = new Validator();
         	if(abstractForm instanceof NewSpecimenForm)
             {
 	        	NewSpecimenForm form = (NewSpecimenForm) abstractForm;
 	            
 	            this.activityStatus = form.getActivityStatus();
-	            this.barcode = form.getBarcode();
+	            
+	            this.barcode = validator.getObjectValue( form.getBarcode());
+	            
 	            this.comments = form.getComments();
 	            this.positionDimensionOne = new Integer(form.getPositionDimensionOne());
 	            this.positionDimensionTwo = new Integer(form.getPositionDimensionTwo());
@@ -551,7 +555,7 @@ public class Specimen extends AbstractDomainObject implements Serializable
             	CreateSpecimenForm form = (CreateSpecimenForm)abstractForm;
             	
             	this.activityStatus = form.getActivityStatus();
-            	this.barcode = form.getBarcode();
+            	this.barcode = validator.getObjectValue( form.getBarcode());
             	this.comments = form.getComments();
             	this.positionDimensionOne = new Integer(form.getPositionDimensionOne());
 	            this.positionDimensionTwo = new Integer(form.getPositionDimensionTwo());
