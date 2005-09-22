@@ -89,13 +89,13 @@ public class UserAction extends SecureAction
             List cancerResearchGroupList = dao.getList(sourceObjectName, displayNameFields, valueField, false);
             request.setAttribute(Constants.CANCER_RESEARCH_GROUP_LIST, cancerResearchGroupList);
 
-            if (operation.equals(Constants.EDIT))
+            if (operation.equals(Constants.EDIT) && pageOf.equals(Constants.PAGEOF_USER_ADMIN))
             {
                 request.setAttribute(Constants.ACTIVITYSTATUSLIST,
                         Constants.ACTIVITY_STATUS_VALUES);
             }
             
-            if (!pageOf.equals(Constants.PAGEOF_SIGNUP))
+            if (pageOf.equals(Constants.PAGEOF_APPROVE_USER) || pageOf.equals(Constants.PAGEOF_USER_ADMIN))
             {
                 //Sets the roleList attribute to be used in the Add/Edit User Page.
                 Vector roleList = SecurityManager.getInstance(UserAction.class).getRoles();

@@ -45,14 +45,18 @@ public class UserBizLogic extends DefaultBizLogic
      * @param session The session in which the object is saved.
      * @throws DAOException
      */
-    protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
+    protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean)
+            throws DAOException, UserNotAuthorizedException
     {
-        
-            User user = (User) obj;
-            
-            Department department = null;
-            Institution institution = null;
-            CancerResearchGroup cancerResearchGroup = null;
+
+        User user = (User) obj;
+
+        Department department = null;
+        Institution institution = null;
+        CancerResearchGroup cancerResearchGroup = null;
+
+        try
+        {
 
             List list = dao.retrieve(Department.class.getName(),
                     "systemIdentifier", user.getDepartment()
@@ -81,34 +85,25 @@ public class UserBizLogic extends DefaultBizLogic
             user.setDepartment(department);
             user.setInstitution(institution);
             user.setCancerResearchGroup(cancerResearchGroup);
-            
-            gov.nih.nci.security.authorization.domainobjects.User csmUser 
-            					= new gov.nih.nci.security.authorization.domainobjects.User();
-            
+
+            gov.nih.nci.security.authorization.domainobjects.User csmUser = new gov.nih.nci.security.authorization.domainobjects.User();
+
             csmUser.setLoginName(user.getLoginName());
             csmUser.setLastName(user.getLastName());
             csmUser.setFirstName(user.getFirstName());
             csmUser.setEmailId(user.getEmailAddress());
             csmUser.setStartDate(user.getStartDate());
-            csmUser.setPassword(PasswordEncoderDecoder.encode(GeneratePassword.getPassword()));
-            Logger.out.debug("Password generated:"+csmUser.getPassword());
-            
-            try
-            {
-                SecurityManager.getInstance(UserBizLogic.class).createUser(csmUser);
+            csmUser.setPassword(PasswordEncoderDecoder.encode(GeneratePassword
+                    .getPassword()));
+            Logger.out.debug("Password generated:" + csmUser.getPassword());
 
-                if (user.getRoleId() != null)
-                    SecurityManager.getInstance(UserBizLogic.class)
-                            .assignRoleToUser(csmUser.getLoginName(),
-                                    user.getRoleId());
-            }
-            catch (SMException smex)
-            {
-                Logger.out.debug("Exception in CSM user creation:"+smex.getMessage(),smex);
-                throw new DAOException(smex.getCause().getMessage());
-            }
-           
-            
+            SecurityManager.getInstance(UserBizLogic.class).createUser(csmUser);
+
+            if (user.getRoleId() != null)
+                SecurityManager.getInstance(UserBizLogic.class)
+                        .assignRoleToUser(csmUser.getLoginName(),
+                                user.getRoleId());
+
             user.setSystemIdentifier(csmUser.getUserId());
 
             dao.insert(user.getAddress(), sessionDataBean, true, true);
@@ -124,46 +119,53 @@ public class UserBizLogic extends DefaultBizLogic
             String mailServer = ApplicationProperties
                     .getValue("email.mailServer");
 
-            String subject = ApplicationProperties.getValue("createUser.subject");
+            String subject = ApplicationProperties
+                    .getValue("createUser.subject");
             String body = "Dear "+ csmUser.getFirstName()+" "+ csmUser.getLastName()+"\n\n"+
-            			  ApplicationProperties.getValue("createUser.body.start") +"\n"+
-            			  "\n\n" + ApplicationProperties.getValue("user.loginName")+ Constants.SEPARATOR + csmUser.getLoginName() + 
-            			  "\n\n" + ApplicationProperties.getValue("user.lastName")+ Constants.SEPARATOR + csmUser.getLastName() +
-            			  "\n\n" + ApplicationProperties.getValue("user.firstName")+ Constants.SEPARATOR + csmUser.getFirstName() +
-            			  "\n\n" + ApplicationProperties.getValue("user.street")+ Constants.SEPARATOR + user.getAddress().getStreet() +
-            			  "\n\n" + ApplicationProperties.getValue("user.city")+ Constants.SEPARATOR + user.getAddress().getCity() +
-            			  "\n\n" + ApplicationProperties.getValue("user.zipCode")+ Constants.SEPARATOR + user.getAddress().getZipCode() +
-            			  "\n\n" + ApplicationProperties.getValue("user.state")+ Constants.SEPARATOR + user.getAddress().getState() +
-            			  "\n\n" + ApplicationProperties.getValue("user.country")+ Constants.SEPARATOR + user.getAddress().getCountry() +
-            			  "\n\n" + ApplicationProperties.getValue("user.phoneNumber")+ Constants.SEPARATOR + user.getAddress().getPhoneNumber() +
-            			  "\n\n" + ApplicationProperties.getValue("user.faxNumber")+ Constants.SEPARATOR + user.getAddress().getFaxNumber() +
-            			  "\n\n" + ApplicationProperties.getValue("user.emailAddress")+ Constants.SEPARATOR + csmUser.getEmailId() +
-            			  "\n\n" + ApplicationProperties.getValue("user.institution")+ Constants.SEPARATOR + institution.getName() +
-            			  "\n\n" + ApplicationProperties.getValue("user.department")+ Constants.SEPARATOR + department.getName() +
-            			  "\n\n" + ApplicationProperties.getValue("user.cancerResearchGroup")+ Constants.SEPARATOR + cancerResearchGroup.getName()+
-            			  "\n\n" + ApplicationProperties.getValue("userRegistration.loginDetails")
-            			  + "\n\tLogin Name : " + csmUser.getLoginName()
-            			  + "\n\tPassword : " + PasswordEncoderDecoder.decode(csmUser.getPassword()) + "\n\n"+
-            			  "\n\n" + ApplicationProperties.getValue("email.catissuecore.team");
-            
-            boolean emailStatus = email.sendmail(adminEmailAddress, csmUser.getEmailId(), null,
-                    technicalSupportEmailAddress, mailServer, subject, body);
+						  ApplicationProperties.getValue("createUser.body.start") +"\n"+
+						  "\n\n" + ApplicationProperties.getValue("user.loginName")+ Constants.SEPARATOR + csmUser.getLoginName() + 
+						  "\n\n" + ApplicationProperties.getValue("user.lastName")+ Constants.SEPARATOR + csmUser.getLastName() +
+						  "\n\n" + ApplicationProperties.getValue("user.firstName")+ Constants.SEPARATOR + csmUser.getFirstName() +
+						  "\n\n" + ApplicationProperties.getValue("user.street")+ Constants.SEPARATOR + user.getAddress().getStreet() +
+						  "\n\n" + ApplicationProperties.getValue("user.city")+ Constants.SEPARATOR + user.getAddress().getCity() +
+						  "\n\n" + ApplicationProperties.getValue("user.zipCode")+ Constants.SEPARATOR + user.getAddress().getZipCode() +
+						  "\n\n" + ApplicationProperties.getValue("user.state")+ Constants.SEPARATOR + user.getAddress().getState() +
+						  "\n\n" + ApplicationProperties.getValue("user.country")+ Constants.SEPARATOR + user.getAddress().getCountry() +
+						  "\n\n" + ApplicationProperties.getValue("user.phoneNumber")+ Constants.SEPARATOR + user.getAddress().getPhoneNumber() +
+						  "\n\n" + ApplicationProperties.getValue("user.faxNumber")+ Constants.SEPARATOR + user.getAddress().getFaxNumber() +
+						  "\n\n" + ApplicationProperties.getValue("user.emailAddress")+ Constants.SEPARATOR + csmUser.getEmailId() +
+						  "\n\n" + ApplicationProperties.getValue("user.institution")+ Constants.SEPARATOR + institution.getName() +
+						  "\n\n" + ApplicationProperties.getValue("user.department")+ Constants.SEPARATOR + department.getName() +
+						  "\n\n" + ApplicationProperties.getValue("user.cancerResearchGroup")+ Constants.SEPARATOR + cancerResearchGroup.getName()+
+						  "\n\n" + ApplicationProperties.getValue("userRegistration.loginDetails")
+						  + "\n\tLogin Name : " + csmUser.getLoginName()
+						  + "\n\tPassword : " + PasswordEncoderDecoder.decode(csmUser.getPassword()) + "\n\n"+
+						  "\n\n" + ApplicationProperties.getValue("email.catissuecore.team");
+
+            boolean emailStatus = email.sendmail(adminEmailAddress, csmUser
+                    .getEmailId(), null, technicalSupportEmailAddress,
+                    mailServer, subject, body);
 
             if (emailStatus)
             {
                 Logger.out.info(ApplicationProperties
                         .getValue("userRegistration.email.success")
-                        + csmUser.getFirstName()
-                        + " " + csmUser.getLastName());
+                        + csmUser.getFirstName() + " " + csmUser.getLastName());
             }
             else
             {
                 Logger.out.info(ApplicationProperties
                         .getValue("userRegistration.email.failure")
-                        + csmUser.getFirstName()
-                        + " " + csmUser.getLastName());
+                        + csmUser.getFirstName() + " " + csmUser.getLastName());
             }
-       
+
+        }
+        catch (SMException smex)
+        {
+            Logger.out.debug("Exception in CSM user creation:"
+                    + smex.getMessage(), smex);
+            throw new DAOException(smex.getCause().getMessage(),smex);
+        }
     }
 
     /**
@@ -172,16 +174,18 @@ public class UserBizLogic extends DefaultBizLogic
      * @param session The session in which the object is saved.
      * @throws DAOException 
      */
-    protected void update(DAO dao, Object obj, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
+    protected void update(DAO dao, Object obj, SessionDataBean sessionDataBean)
+            throws DAOException, UserNotAuthorizedException
     {
         Logger.out.debug("IN UserBizLogic update***************************");
         User user = (User) obj;
         List list = null;
-        
-        dao.update(user.getAddress(), sessionDataBean, true, true);
-        dao.update(user, sessionDataBean, true, true);
+
         try
         {
+	        dao.update(user.getAddress(), sessionDataBean, true, true);
+	        dao.update(user, sessionDataBean, true, true);
+        
             gov.nih.nci.security.authorization.domainobjects.User csmUser = SecurityManager
                     .getInstance(DomainObjectListAction.class).getUserById(
                             String.valueOf(user.getSystemIdentifier()));
@@ -190,23 +194,25 @@ public class UserBizLogic extends DefaultBizLogic
             csmUser.setLastName(user.getLastName());
             csmUser.setFirstName(user.getFirstName());
             csmUser.setEmailId(user.getEmailAddress());
-//            csmUser.setPassword(GeneratePassword.getPassword());
+            if (user.getPageOf().equals(Constants.PAGEOF_USER_PROFILE))
+            {
+                csmUser.setPassword(PasswordEncoderDecoder.encode(user.getPassword()));
+            }
 
             SecurityManager.getInstance(UserBizLogic.class).modifyUser(csmUser);
 
-            SecurityManager.getInstance(UserBizLogic.class).assignRoleToUser(
-                    csmUser.getLoginName(), user.getRoleId());
+            if (!user.getPageOf().equals(Constants.PAGEOF_USER_PROFILE))
+            {
+                SecurityManager.getInstance(UserBizLogic.class).assignRoleToUser(
+                        csmUser.getLoginName(), user.getRoleId());
+            }
         }
         catch (SMException smExp)
         {
-            throw new DAOException(smExp.getMessage(),smExp);
+            throw new DAOException(smExp.getMessage(), smExp);
         }
-
-            
-            
-       
     }
-
+    
     //    public Vector getList(String sourceObjectName, String[] displayNameFields, String valueField, String[] whereColumnName,
     //            String[] whereColumnCondition, Object[] whereColumnValue,
     //            String joinCondition, String separatorBetweenFields) throws DAOException
@@ -273,8 +279,9 @@ public class UserBizLogic extends DefaultBizLogic
                 }
                 catch (SMException smExp)
                 {
-                    Logger.out.debug("Unable to get user : " + smExp.getMessage());
-                    throw new DAOException(smExp.getMessage(),smExp);
+                    Logger.out.debug("Unable to get user : "
+                            + smExp.getMessage());
+                    throw new DAOException(smExp.getMessage(), smExp);
                 }
                 nameValueBean = new NameValueBean();
                 nameValueBean.setName(csmUser.getLastName() + ", "
@@ -287,24 +294,24 @@ public class UserBizLogic extends DefaultBizLogic
         }
         return nameValuePairs;
     }
-    
-//    public static void main(String args[])
-//    {
-//        String [] whereColumnName = {"country"};
-//        String [] whereColumnCondition = {"LIKE"};
-//        String [] whereColumnValue = {"United States"};
-//        
-//        try
-//        {
-//            List list = retrieve(Address.class.getName(),whereColumnName,
-//                    whereColumnCondition,whereColumnValue,null);
-//            
-//            System.out.println("LIST SIZE..............."+list.size());
-//        }
-//        catch(DAOException daoExp)
-//        {
-//            daoExp.printStackTrace();
-//        }
-//        
-//    }
+
+    //    public static void main(String args[])
+    //    {
+    //        String [] whereColumnName = {"country"};
+    //        String [] whereColumnCondition = {"LIKE"};
+    //        String [] whereColumnValue = {"United States"};
+    //        
+    //        try
+    //        {
+    //            List list = retrieve(Address.class.getName(),whereColumnName,
+    //                    whereColumnCondition,whereColumnValue,null);
+    //            
+    //            System.out.println("LIST SIZE..............."+list.size());
+    //        }
+    //        catch(DAOException daoExp)
+    //        {
+    //            daoExp.printStackTrace();
+    //        }
+    //        
+    //    }
 }

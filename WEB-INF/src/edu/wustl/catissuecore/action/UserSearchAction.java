@@ -20,6 +20,8 @@ import edu.wustl.catissuecore.bizlogic.AbstractBizLogic;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.security.SecurityManager;
+import edu.wustl.common.security.exceptions.SMException;
+import edu.wustl.common.util.PasswordEncoderDecoder;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 import gov.nih.nci.security.authorization.domainobjects.Role;
@@ -52,6 +54,7 @@ public class UserSearchAction extends BaseAction
             Logger.out.debug("Constants.USER_FORM_ID***********************"+Constants.USER_FORM_ID);
             List userList = bizLogic.retrieve(edu.wustl.catissuecore.domain.User.class.getName(),"systemIdentifier",new Long(userForm.getSystemIdentifier()));
             Role role = SecurityManager.getInstance(UserSearchAction.class).getUserRole(userForm.getSystemIdentifier());
+            
             edu.wustl.catissuecore.domain.User appUser = null;
             if (!userList.isEmpty())
             {
@@ -60,12 +63,11 @@ public class UserSearchAction extends BaseAction
                 appUser.setLastName(user.getLastName());
                 appUser.setFirstName(user.getFirstName());
                 appUser.setEmailAddress(user.getEmailId());
-                Logger.out.debug("ROLE****************************"+role);
+                appUser.setPassword(PasswordEncoderDecoder.decode(user.getPassword()));
                 if (role != null)
                 {
                     appUser.setRoleId(role.getId().toString());
                 }
-                
             }
             
             userForm.setAllValues(appUser);
@@ -76,7 +78,12 @@ public class UserSearchAction extends BaseAction
             Logger.out.debug(daoExp.getMessage(), daoExp);
             target = Constants.FAILURE;
         }
-        
+        catch(SMException smExp)
+        {
+            smExp.printStackTrace();
+            Logger.out.debug(smExp.getMessage(), smExp);
+            target = Constants.FAILURE;
+        }
         
         return mapping.findForward(target);
     }
