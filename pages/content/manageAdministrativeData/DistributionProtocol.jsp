@@ -8,14 +8,19 @@
 
 <head>
 <%!
-	private String changeUnit(String specimenType)
+	private String changeUnit(String specimenType,String subTypeValue)
 	{
 		if (specimenType == null)
 			return "";
 		if(specimenType.equals("Fluid"))
 			return Constants.UNIT_ML;
 		else if(specimenType.equals("Tissue"))
-			return Constants.UNIT_GM;
+		{
+			if(subTypeValue.equals("Slide") || subTypeValue.equals("Paraffin Block") || subTypeValue.equals("Frozen Block"))
+				return " ";
+			else	
+				return Constants.UNIT_GM;
+		}
 		else if(specimenType.equals("Cell"))
 			return Constants.UNIT_CC;
 		else if(specimenType.equals("Molecular"))
@@ -114,6 +119,26 @@
 			}
 		}
 
+	function onSubTypeChangeUnit(typeList,element,unitspan)
+	{
+		var classList = document.getElementById(typeList);
+		var className = classList.options[classList.selectedIndex].text;
+		var selectedOption = element.options[element.selectedIndex].text;
+	
+		if(className == "Tissue" && (selectedOption == "Slide" || selectedOption == "Paraffin Block" || selectedOption == "Frozen Block"))
+		{
+			document.getElementById(unitspan).innerHTML = ugul[0];
+		}	
+		else 
+		{
+			if(className == "Tissue")
+			{
+				document.getElementById(unitspan).innerHTML = ugul[2];
+			}	
+		}
+			
+	}
+
 
 	function changeUnit(listname,unitspan)
 	{
@@ -200,6 +225,7 @@ function insRow(subdivtag)
 	spreqtype.className="formField";
 	sname="";
 	objname = "value(SpecimenRequirement:" + rowno + "_specimenClass)";
+	var specimenClassName = objname;
 //value(SpecimenRequirement:`_quantityIn)	
 	
 	var objunit = "value(SpecimenRequirement:"+rowno+"_unitspan)";
@@ -221,21 +247,22 @@ function insRow(subdivtag)
 	spreqsubtype.className="formField";
 	sname="";
 	objname = "value(SpecimenRequirement:"+rowno+"_specimenType)";
+	var functionName = "onSubTypeChangeUnit('" + specimenClassName + "',this,'" + objunit + "')" ;
 	
-	sname= "<select name='" + objname + "' size='1' class='formFieldSized10' id='" + objname + "'>";
-		
-		sname = sname + "<option value='-1'><%=Constants.SELECT_OPTION%></option>";
+	sname= "<select name='" + objname + "' size='1' class='formFieldSized10' id='" + objname + "' onChange=" + functionName + " >";
+			
+	sname = sname + "<option value='-1'><%=Constants.SELECT_OPTION%></option>";
 	sname = sname + "</select>"
 	
 	spreqsubtype.innerHTML="" + sname;
 	
 	//tissuesite
 	var spreqtissuesite=x.insertCell(3)
-	spreqtissuesite.className="formFieldSized35";
+	spreqtissuesite.className="formField";
 	sname="";
 	objname = "value(SpecimenRequirement:"+rowno+"_tissueSite)";
 	
-	sname = "<select name='" + objname + "' size='1' class='formFieldSized10' id='" + objname + "'>";
+	sname = "<select name='" + objname + "' size='1' class='formFieldSized35' id='" + objname + "'>";
 	<%for(int i=0;i<tissueSiteList.size();i++)
 	{%>
 		sname = sname + "<option value='<%=((NameValueBean)tissueSiteList.get(i)).getValue()%>'><%=((NameValueBean)tissueSiteList.get(i)).getName()%></option>";
@@ -521,6 +548,7 @@ function insRow(subdivtag)
 					String objname = "value(SpecimenRequirement:" + counter + "_specimenClass)";
 					String srCommonName = "SpecimenRequirement:" + counter;
 					String srKeyName = srCommonName + "_specimenClass";
+					String srSubTypeKeyName = srCommonName + "_specimenType";
 					
 					String objunit = "value(SpecimenRequirement:"+ counter +"_unitspan)";
 					String identifier = "value(SpecimenRequirement:"+ counter +"_systemIdentifier)";
@@ -530,7 +558,10 @@ function insRow(subdivtag)
 					<%=counter%>
 					<html:hidden property="<%=identifier%>" />				
 		        </td>
-			<% String functionName ="changeUnit('" + objname + "',' " + objunit + "')"; %>	
+			<%
+				String functionName ="changeUnit('" + objname + "',' " + objunit + "')"; 
+				String subTypeFunctionName ="onSubTypeChangeUnit('" + objname + "',this,' " + objunit + "')"; 
+			%>	
 				<td class="formField">
 					<html:select property="<%=objname%>" styleClass="formFieldSized10" styleId="<%=objname%>" size="1" onchange="<%=functionName%>" >
 						<html:options collection="<%=Constants.SPECIMEN_CLASS_LIST%>" labelProperty="name" property="value"/>
@@ -541,6 +572,7 @@ function insRow(subdivtag)
 					<%
 					
 						String classValue = (String)form.getValue(srKeyName);
+						
 						specimenTypeList = (List)specimenTypeMap.get(classValue);
 								
 						if(specimenTypeList == null)
@@ -549,11 +581,15 @@ function insRow(subdivtag)
 							specimenTypeList.add(new NameValueBean(Constants.SELECT_OPTION,"-1"));
 						}
 						pageContext.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);						
-					
+						String tmpSpecimenClass = objname;
+						
 						objname="";
 						objname = "value(SpecimenRequirement:" + counter + "_specimenType)";
+						
+						
+						
 					%>
-					<html:select property="<%=objname%>" styleClass="formFieldSized10" styleId="<%=objname%>" size="1" >
+					<html:select property="<%=objname%>" styleClass="formFieldSized10" styleId="<%=objname%>" size="1"  onchange="<%=subTypeFunctionName%>" >
 						<html:options collection="<%=Constants.SPECIMEN_TYPE_LIST%>" labelProperty="name" property="value"/>
 					</html:select>
 		        </td>
@@ -588,8 +624,8 @@ function insRow(subdivtag)
 			    	<%
 						objname="";
 						objname = "value(SpecimenRequirement:"+ counter +"_quantityIn)";
-						
-								 String strHiddenUnitValue = "" + changeUnit(classValue);
+						String typeclassValue = (String)form.getValue(srSubTypeKeyName);
+								 String strHiddenUnitValue = "" + changeUnit(classValue,typeclassValue);
 								 
 						%>
 

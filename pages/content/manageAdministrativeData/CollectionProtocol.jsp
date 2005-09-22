@@ -8,14 +8,19 @@
 
 <head>
 <%!
-	private String changeUnit(String specimenType)
+	private String changeUnit(String specimenType,String subTypeValue)
 	{
 		if (specimenType == null)
 			return "";
 		if(specimenType.equals("Fluid"))
 			return Constants.UNIT_ML;
 		else if(specimenType.equals("Tissue"))
-			return Constants.UNIT_GM;
+		{
+			if(subTypeValue.equals("Slide") || subTypeValue.equals("Paraffin Block") || subTypeValue.equals("Frozen Block"))
+				return " ";
+			else	
+				return Constants.UNIT_GM;
+		}
 		else if(specimenType.equals("Cell"))
 			return Constants.UNIT_CC;
 		else if(specimenType.equals("Molecular"))
@@ -103,7 +108,25 @@
 			}
 		}
 
-
+	function onSubTypeChangeUnit(typeList,element,unitspan)
+	{
+		var classList = document.getElementById(typeList);
+		var className = classList.options[classList.selectedIndex].text;
+		var selectedOption = element.options[element.selectedIndex].text;
+	
+		if(className == "Tissue" && (selectedOption == "Slide" || selectedOption == "Paraffin Block" || selectedOption == "Frozen Block"))
+		{
+			document.getElementById(unitspan).innerHTML = ugul[0];
+		}	
+		else 
+		{
+			if(className == "Tissue")
+			{
+				document.getElementById(unitspan).innerHTML = ugul[2];
+			}	
+		}
+			
+	}
 
 	function changeUnit(listname,unitspan)
 	{
@@ -231,6 +254,7 @@ function insRow(subdivtag,iCounter)
 	objname = subdivname + "_SpecimenRequirement:" + rowno + "_specimenClass)";
 	
 	var objunit = subdivname + "_SpecimenRequirement:"+rowno+"_unitspan)";
+	var specimenClassName = objname;
 	
 	sname = "<select name='" + objname + "' size='1' onchange=changeUnit('" + objname + "','" + objunit +"') class='formFieldSized10' id='" + objname + "'>";
 	<%for(int i=0;i<specimenClassList.size();i++)
@@ -249,8 +273,9 @@ function insRow(subdivtag,iCounter)
 	spreqsubtype.className="formField";
 	sname="";
 	objname = subdivname + "_SpecimenRequirement:"+rowno+"_specimenType)";
+	var functionName = "onSubTypeChangeUnit('" + specimenClassName + "',this,'" + objunit + "')" ;
 	
-	sname= "<select name='" + objname + "' size='1' class='formFieldSized10' id='" + objname + "'>";
+	sname= "<select name='" + objname + "' size='1' class='formFieldSized10' id='" + objname + "' onChange=" + functionName + " >";
 	
 	sname = sname + "<option value='-1'><%=Constants.SELECT_OPTION%></option>";
 
@@ -701,7 +726,7 @@ function getSubDivCount(subdivtag)
 						
 						String fName = cName + "_specimenClass)";
 						String srFname = srCommonName + "_specimenClass";
-						
+						String srSubTypeKeyName = srCommonName + "_specimenType";
 						String sName = cName + "_unitspan)";
 						String srIdentifier = cName + "_systemIdentifier)";
 					%>
@@ -710,6 +735,8 @@ function getSubDivCount(subdivtag)
 			        	<html:hidden property="<%=srIdentifier%>" />	
 			        	<%
 			        		String onChangeFun = "changeUnit('" + fName + "','" + sName + "')";
+			        		String subTypeFunctionName ="onSubTypeChangeUnit('" + fName + "',this,'" + sName + "')"; 
+			        		
 			        	%>
 			        	<html:select property="<%=fName%>" 
 										styleClass="formFieldSized10" 
@@ -735,7 +762,8 @@ function getSubDivCount(subdivtag)
 						%>
 			        	<html:select property="<%=fName%>" 
 										styleClass="formFieldSized10" 
-										styleId="<%=fName%>" size="1">
+										styleId="<%=fName%>" size="1"
+										   onchange="<%=subTypeFunctionName%>" >
 							<html:options collection="<%=Constants.SPECIMEN_TYPE_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
 			        </td>
@@ -777,7 +805,8 @@ function getSubDivCount(subdivtag)
 								fName="";
 								 fName = cName + "_quantityIn)";
 								 
-								 String strHiddenUnitValue = ""+changeUnit(classValue);
+								 String typeclassValue = (String)colForm.getValue(srSubTypeKeyName);
+								 String strHiddenUnitValue = "" + changeUnit(classValue,typeclassValue);
 								 
 						%>
 
@@ -942,7 +971,10 @@ function getSubDivCount(subdivtag)
 			        <td class="formField">
 			        	<html:select property="value(CollectionProtocolEvent:`_SpecimenRequirement:1_specimenType)" 
 										styleClass="formFieldSized10" 
-										styleId="value(CollectionProtocolEvent:`_SpecimenRequirement:1_specimenType)" size="1">
+										styleId="value(CollectionProtocolEvent:`_SpecimenRequirement:1_specimenType)" size="1"
+										onchange="onSubTypeChangeUnit('value(CollectionProtocolEvent:`_SpecimenRequirement:1_specimenClass)',
+			           						this,'value(CollectionProtocolEvent:`_SpecimenRequirement:1_unitspan)')"
+										>
 							<html:option value="-1"><%=Constants.SELECT_OPTION%></html:option>
 						</html:select>
 			        </td>
