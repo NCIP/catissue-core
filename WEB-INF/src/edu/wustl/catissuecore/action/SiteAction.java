@@ -12,6 +12,7 @@ package edu.wustl.catissuecore.action;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -24,6 +25,7 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.cde.CDEManager;
 
 /**
  * This class initializes the fields of the Site Add/Edit webpage.
@@ -56,7 +58,8 @@ public class SiteAction  extends SecureAction
         request.setAttribute(Constants.ACTIVITYSTATUSLIST, Constants.ACTIVITY_STATUS_VALUES);
         
         //Sets the siteTypeList attribute to be used in the Site Add/Edit Page.
-        request.setAttribute(Constants.SITETYPELIST, Constants.SITE_TYPE_ARRAY);
+        List siteList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_SITE_TYPE);
+        request.setAttribute(Constants.SITETYPELIST, siteList);
         
         try
 		{

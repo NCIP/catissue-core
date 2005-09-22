@@ -22,8 +22,8 @@
 
 <html:errors />
 
-<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">	
-	<html:form action="<%=Constants.SITE_ADD_ACTION%>">
+<html:form action="<%=Constants.SITE_ADD_ACTION%>">
+	<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">	
 	<!-- NEW SITE REGISTRATION BEGINS-->
 		<tr>
 		<td>
@@ -73,7 +73,7 @@
 
 						<td class="formField">
 							<html:select property="type" styleClass="formFieldSized" styleId="type" size="1">
-								<html:options name="siteTypeList" labelName="siteTypeList" />
+								<html:options collection="<%=Constants.SITETYPELIST%>" labelProperty="name" property="value"/>
 							</html:select>
 						</td>
 					</tr>
@@ -235,10 +235,7 @@
 					</tr>
 
 			</table>
-
-			</td>
-		</tr>
-
+		</td></tr>
 		<!-- NEW SITE REGISTRATION ends-->
-	</html:form>
 </table>
+</html:form>
