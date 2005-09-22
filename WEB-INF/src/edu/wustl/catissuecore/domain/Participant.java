@@ -19,6 +19,7 @@ import edu.wustl.catissuecore.actionForm.AbstractActionForm;
 import edu.wustl.catissuecore.actionForm.ParticipantForm;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.Validator;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.logger.Logger;
 
@@ -405,17 +406,27 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 	    try
 	    {
 	        ParticipantForm form = (ParticipantForm) abstractForm;
+	        Validator validator = new Validator();
 	        
-	        this.activityStatus		 = form.getActivityStatus();
-	        this.ethnicity			 = form.getEthnicity();
-	        this.firstName			 = form.getFirstName();
-	        this.middleName			 = form.getMiddleName();
-	        this.lastName			 = form.getLastName();
-	        this.gender				 = form.getGender();
-	        this.genotype			 = form.getGenotype();
-	        this.race				 = form.getRace();
-	        this.socialSecurityNumber=Utility.toString( form.getSocialSecurityNumber());
-	        this.birthDate			 = Utility.parseDate(form.getBirthDate(),Constants.DATE_PATTERN_MM_DD_YYYY);
+	        this.activityStatus = validator.getObjectValue(form.getActivityStatus());
+	        
+	        this.ethnicity = validator.getObjectValue( form.getEthnicity());
+
+	        this.firstName = validator.getObjectValue(form.getFirstName());
+
+	        this.middleName = validator.getObjectValue(form.getMiddleName());
+	        
+	        this.lastName = validator.getObjectValue(form.getLastName());
+
+	        this.gender = validator.getObjectValue(form.getGender());
+	        
+	       	this.genotype = validator.getObjectValue(form.getGenotype());
+	       	
+        	this.race = validator.getObjectValue(form.getRace());
+	        
+	        this.socialSecurityNumber = validator.getObjectValue(form.getSocialSecurityNumber());
+	        
+	        this.birthDate = Utility.parseDate(form.getBirthDate(),Constants.DATE_PATTERN_MM_DD_YYYY);
 	        
 	        Map map = form.getValues();
 	        Logger.out.debug("Map "+map);
