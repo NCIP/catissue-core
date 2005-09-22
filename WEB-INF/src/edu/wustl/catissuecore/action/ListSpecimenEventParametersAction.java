@@ -101,7 +101,8 @@ public class ListSpecimenEventParametersAction  extends SecureAction
 	            			User user = SecurityManager.getInstance(NewSpecimenForm.class).getUserById(String.valueOf(eventParameters.getUser().getSystemIdentifier()));
 							
 	            			rowData.add(user.getLastName() + ", " + user.getFirstName());
-	            			rowData.add(Utility.parseDateToString(eventParameters.getTimestamp(),Constants.DATE_PATTERN_MM_DD_YYYY));
+	            			rowData.add(Utility.parseDateToString(eventParameters.getTimestamp(),
+	            					Constants.TIMESTAMP_PATTERN)); // Sri: Changed format for bug #463
 	            			rowData.add(events[1]);//pageOf
 	            			gridData.add(rowData);
 	            		}
