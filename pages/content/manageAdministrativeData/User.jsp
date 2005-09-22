@@ -25,6 +25,10 @@
 			{
 				formName = Constants.APPROVE_USER_EDIT_ACTION;
 			}
+			else if (pageOf.equals(Constants.PAGEOF_USER_PROFILE))
+			{
+				formName = Constants.USER_EDIT_PROFILE_ACTION;
+			}
 			else
 			{
             	formName = Constants.USER_EDIT_ACTION;
@@ -174,6 +178,20 @@ function handleStatus(status)
 							<html:text styleClass="formFieldSized" size="30" styleId="emailAddress" property="emailAddress" />
 						</td>
 					</tr>
+
+					<logic:equal name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGEOF_USER_PROFILE%>">
+					<tr>
+						<td class="formRequiredNotice" width="5">*</td>
+						<td class="formRequiredLabel">
+							<label for="password">
+								<bean:message key="user.password" />
+							</label>
+						</td>
+						<td class="formField">
+							<html:password styleClass="formFieldSized" size="30" styleId="password" property="password" />
+						</td>
+					</tr>
+					</logic:equal>
 					
 					<tr>
 						<td class="formRequiredNotice" width="5">*</td>
@@ -339,6 +357,7 @@ function handleStatus(status)
 				<table summary="" cellpadding="3" cellspacing="0" border="0" width="440">
 					
 					<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGEOF_SIGNUP%>">
+					<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGEOF_USER_PROFILE%>">
 					<tr>
 						<td class="formTitle" height="20" colspan="3">
 							<bean:message key="user.administrativeDetails.title" />
@@ -386,6 +405,7 @@ function handleStatus(status)
 				    		<html:textarea styleClass="formFieldSized" rows="3" styleId="comments" property="comments"/>
 				    	</td>
 				 	 </tr>
+					</logic:notEqual>
 					</logic:notEqual>
 					
 					<logic:equal name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGEOF_USER_ADMIN%>">

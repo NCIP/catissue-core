@@ -287,6 +287,7 @@ PUBLIC
 			scope="request">
 			<forward name="pageOfUserAdmin" path=".catissuecore.userDef" />
 			<forward name="pageOfApproveUser" path=".catissuecore.userDef" />
+			<forward name="pageOfUserProfile" path=".catissuecore.userProfileDef" />
 			<forward name="failure" path=".catissuecore.userDef" />
 			<forward name="access_denied" path="/ManageAdministrativeData.do" />
 		</action>
@@ -309,6 +310,16 @@ PUBLIC
 			scope="request">
 			<forward name="success" path=".catissuecore.userEditSuccessDef" />
 			<forward name="failure" path="/User.do?operation=edit&amp;pageOf=pageOfUserAdmin" />
+		</action>
+		
+		<action path="/UserEditProfile"
+			type="edu.wustl.catissuecore.action.CommonAddEditAction"
+			name="userForm"
+			validate="true"
+			input="/User.do?operation=edit&amp;pageOf=pageOfUserProfile"
+			scope="request">
+			<forward name="success" path=".catissuecore.userProfileSuccessDef" />
+			<forward name="failure" path="/User.do?operation=edit&amp;pageOf=pageOfUserProfile" />
 		</action>
 		
 		<action path="/ApproveUserAdd"
@@ -338,6 +349,7 @@ PUBLIC
 			input="/User.do?operation=edit"
 			scope="request">
 			<forward name="pageOfUserAdmin" path="/User.do?operation=edit&amp;pageOf=pageOfUserAdmin"/>
+			<forward name="pageOfUserProfile" path="/User.do?operation=edit&amp;pageOf=pageOfUserProfile"/>
 			<forward name="failure" path="/User.do?operation=edit&amp;pageOf="/>
 		</action>    
 		<!-- User Actions Ends-->
