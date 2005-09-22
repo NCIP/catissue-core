@@ -8,6 +8,7 @@
  */
 
 package edu.wustl.catissuecore.dao;
+import java.text.SimpleDateFormat;
 
 import java.io.Serializable;
 import java.sql.Connection;
@@ -255,7 +256,22 @@ public class JDBCDAO extends AbstractDAO
                 {
                 	if(resultSet.getObject(i) != null)
                 	{
-                		aList.add(new String(resultSet.getObject(i).toString()));
+                		Object valueObj = resultSet.getObject(i);
+                		String value;
+                		// Sri: Added check for date/time/timestamp since the
+                		// default date format returned by toString was yyyy-dd-mm
+                		// bug#463 
+                		if(valueObj instanceof java.util.Date) // since all java.sql time 
+                			//classes are derived from java.util.Date 
+                		{
+                			SimpleDateFormat formatter = new SimpleDateFormat(Constants.DATE_PATTERN_MM_DD_YYYY);
+                			value = formatter.format((java.util.Date)valueObj);
+                		}
+                		else
+                		{
+                    		value = valueObj.toString();
+                		}
+                		aList.add(value);
                 	}
                 	else
                 	{
