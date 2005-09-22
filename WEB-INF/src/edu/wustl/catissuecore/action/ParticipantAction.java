@@ -79,14 +79,8 @@ public class ParticipantAction  extends SecureAction
             String sourceObjectName = Site.class.getName();
             String[] displayNameFields = {"name"};
             String valueField = Constants.SYSTEM_IDENTIFIER;
-            String[] whereColumnName = {"type"};
-            String[] whereColumnCondition = {"="};
-            Object[] whereColumnValue = {"Hospital"};
-            String joinCondition = Constants.AND_JOIN_CONDITION;
-            String separatorBetweenFields = "";
 			
-            List siteList = dao.getList(sourceObjectName, displayNameFields, valueField,whereColumnName,
-            				whereColumnCondition,whereColumnValue,joinCondition,separatorBetweenFields, true);
+            List siteList = dao.getList(sourceObjectName, displayNameFields, valueField, true);
             
             request.setAttribute(Constants.SITELIST, siteList);
 		}
