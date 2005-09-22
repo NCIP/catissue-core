@@ -22,7 +22,7 @@ import edu.wustl.catissuecore.exception.AssignDataException;
  * @hibernate.class table="CATISSUE_COLLECTION_PROTOCOL_EVENT"
  * @author Mandar Deshmukh
  */
-public class CollectionProtocolEvent extends AbstractDomainObject implements java.io.Serializable
+public class CollectionProtocolEvent extends AbstractDomainObject implements java.io.Serializable, Comparable
 {
 	private static final long serialVersionUID = 1234567890L;
 	
@@ -162,4 +162,19 @@ public class CollectionProtocolEvent extends AbstractDomainObject implements jav
     {
         
     }
+    
+    public int compareTo(Object obj)
+	{
+		if(obj instanceof CollectionProtocolEvent)
+		{
+			CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent)obj;
+			if(studyCalendarEventPoint.doubleValue()< collectionProtocolEvent.getStudyCalendarEventPoint().doubleValue())
+				return -1;
+			else if(studyCalendarEventPoint.doubleValue() > collectionProtocolEvent.getStudyCalendarEventPoint().doubleValue())
+				return 1;
+			else
+				return 0;
+		}
+		return 0;
+	}
 }
