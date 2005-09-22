@@ -621,6 +621,7 @@ PUBLIC
 			scope="request">
 			<forward name="success" path=".catissuecore.specimenCollectionGroupAddSuccessDef" />
 			<forward name="failure" path="/SpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroup" />
+			<forward name="specimenRedirect" path="/NewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimen" />
 		</action>
 
 		<action path="/SpecimenCollectionGroupEdit"
@@ -859,6 +860,8 @@ PUBLIC
 		<!-- Site Actions Begins -->
         <action path="/Site"
 			type="edu.wustl.catissuecore.action.SiteAction"
+			name="siteForm"
+			validate="false"
 			scope="request">
 			<forward name="pageOfSite" path=".catissuecore.siteDef" />
 			<forward name="failure" path=".catissuecore.siteDef" />
