@@ -48,7 +48,11 @@ public abstract class Query
      * queryStartObject is derived 
      */
     private String parentOfQueryStartObject = new String();
-    private Set tableSet;
+    
+    /**
+     * Set of tables that should be included in FROM part of query
+     */
+    private Set tableSet = new HashSet();
 
     /**
      * Object that forms the where part of query.
