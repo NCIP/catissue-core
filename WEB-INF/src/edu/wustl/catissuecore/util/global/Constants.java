@@ -933,14 +933,6 @@ public class Constants
 	        "Molecular"
 	};
 	
-	public static final String [] SITE_TYPE_ARRAY = {
-	        SELECT_OPTION,
-			"Collection",
-			"Laboratory",
-			"Repository", 
-			"Hospital"
-	};
-	
 	public static final String [] HOURARRAY = {
 			"00",
 			"1",
@@ -1103,6 +1095,8 @@ public class Constants
 	public static final String CDE_NAME_ETHNICITY = "Ethnicity";
 	public static final String CDE_NAME_RACE = "Race";
 	public static final String CDE_NAME_CLINICAL_DIAGNOSIS = "Clinical Diagnosis";
+	public static final String CDE_NAME_SITE_TYPE = "Site Type";
+	
 	
 	public static final String [] STORAGESTATUSARRAY = {
 	        SELECT_OPTION,
