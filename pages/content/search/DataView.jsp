@@ -5,22 +5,6 @@
 <link href="runtime/styles/xp/grid.css" rel="stylesheet" type="text/css" ></link>
 <script src="runtime/lib/grid.js"></script>
 
-<!-- grid format -->
-
-	<style>
-		.active-controls-grid {height: 100%; font: menu;}
-		
-		.active-column-0 {width:  80px;}
-		.active-column-1 {width: 200px;}
-		.active-column-2 {text-align: right;}
-		.active-column-3 {text-align: right;}
-		.active-column-4 {text-align: right;}
-		
-		.active-grid-column {border-right: 1px solid threedlightshadow;}
-		.active-grid-row {border-bottom: 1px solid threedlightshadow;}
-	</style>
-
-	<!--  grid data -->
 <%
 	String[] columnList = (String[]) request.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
 	List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
@@ -72,6 +56,5 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 		
 		//	write grid html to the page.
 		document.write(obj);
-		
 </script>
 </div>
