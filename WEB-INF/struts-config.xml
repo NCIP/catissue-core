@@ -48,6 +48,7 @@ PUBLIC
 		<form-bean name="simpleQueryInterfaceForm" type="edu.wustl.catissuecore.actionForm.SimpleQueryInterfaceForm"/>
 		
 		<form-bean name="shoppingCartForm" type="edu.wustl.catissuecore.actionForm.ShoppingCartForm"/>
+		<form-bean name="assignPrivilegesForm" type="edu.wustl.catissuecore.actionForm.AssignPrivilegesForm"/>
 	</form-beans>
 	
 	<!-- Global Exception Definitions -->
@@ -1846,6 +1847,18 @@ PUBLIC
 			<forward name="failure" path="/ShoppingCart.do" />
 		</action>
 		<!-- Shopping Cart Actions Ends -->
+		
+		<!-- Assign Privileges Action Begins -->
+		<action path="/AssignPrivileges"
+			type="edu.wustl.catissuecore.action.AssignPrivilegeAction"
+			name="assignPrivilegesForm"
+			validate="false"
+			scope="request">
+			<forward name="pageOfAssignPrivileges" path=".catissuecore.assignPrivilegesDef" />
+			<forward name="failure" path=".catissuecore.assignPrivilegesDef" />
+			<forward name="access_denied" path="/ManageBioSpecimen.do" />
+		</action>
+		<!-- Assign Privileges Actions Ends -->
 		
 		<!-- Edit Object Actions -->
 		

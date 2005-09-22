@@ -624,6 +624,12 @@
 	</definition>
 	<!-- ShoppingCart -->
 	
+	<!-- ASSIGN PRIVILEGES -->
+	<definition name=".catissuecore.assignPrivilegesDef" extends=".catissuecore.searchHomeDef">
+		<put name="content" value="/pages/content/search/AssignPrivileges.jsp" />
+	</definition>
+	<!-- ASSIGN PRIVILEGES -->
+	
 	<!-- Query edit pages definitions end -->
 
 	<!-- Search tab pages definitions end -->
