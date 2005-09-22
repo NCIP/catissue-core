@@ -22,10 +22,13 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.actionForm.SiteForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.cde.CDEManager;
+import edu.wustl.common.security.SecurityManager;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * This class initializes the fields of the Site Add/Edit webpage.
@@ -66,10 +69,37 @@ public class SiteAction  extends SecureAction
         	UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getBizLogic(Constants.USER_FORM_ID);
         	Collection coll =  userBizLogic.getUsers(Constants.ACTIVITY_STATUS_ACTIVE);
         	request.setAttribute(Constants.USERLIST, coll);
+        	
+        	// ------------------------------------------------------------------
+        	SiteForm siteForm = (SiteForm )form;
+        	boolean isOnChange = false; 
+			String str = request.getParameter("isOnChange");
+			if(str!=null)
+			{
+				if(str.equals("true"))
+					isOnChange = true; 
+			}
+			
+			if (siteForm != null)
+        	if(isOnChange)
+        	{
+        	    String emailAddress ="";
+	        	    Logger.out.debug("Id of Coordinator of Site : " + siteForm.getCoordinatorId() );
+	        	    gov.nih.nci.security.authorization.domainobjects.User user = SecurityManager.getInstance(SiteAction.class ).getUserById(String.valueOf(siteForm.getCoordinatorId() ) );
+	        		if (user != null)
+	        		{
+	        		    emailAddress = user.getEmailId(); 
+	        		    Logger.out.debug("Email Id of Coordinator of Site : " + emailAddress );
+	        		}
+        		siteForm.setEmailAddress(emailAddress  ); 
+        	}        
+        	// ------------------------------------------------------------------
+        	
 		}
         catch(Exception e)
 		{
         	e.printStackTrace();
+        	Logger.out.error(e);
 		}
 
 
