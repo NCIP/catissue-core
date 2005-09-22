@@ -162,7 +162,7 @@ public class  DefaultBizLogic extends AbstractBizLogic
     }
     
     
-    public List getList(String sourceObjectName, String[] displayNameFields, String valueField,boolean isActiveOnly) throws DAOException
+    public List getList(String sourceObjectName, String[] displayNameFields, String valueField,boolean isToExcludeDisabled) throws DAOException
     {
         String[] whereColumnName = null;
         String[] whereColumnCondition = null;
@@ -170,11 +170,11 @@ public class  DefaultBizLogic extends AbstractBizLogic
         String joinCondition = null;
         String separatorBetweenFields = ", ";
         
-        if(isActiveOnly)
+        if(isToExcludeDisabled)
         {
         	whereColumnName = new String[]{"activityStatus"};
-        	whereColumnCondition = new String[]{"="};
-        	whereColumnValue = new String[]{Constants.ACTIVITY_STATUS_ACTIVE};
+        	whereColumnCondition = new String[]{"!="};
+        	whereColumnValue = new String[]{Constants.ACTIVITY_STATUS_DISABLED};
         }
         
         return getList(sourceObjectName, displayNameFields, valueField, whereColumnName,
@@ -196,13 +196,13 @@ public class  DefaultBizLogic extends AbstractBizLogic
     */
     public List getList(String sourceObjectName, String[] displayNameFields, String valueField, String[] whereColumnName,
             String[] whereColumnCondition, Object[] whereColumnValue,
-            String joinCondition, String separatorBetweenFields, boolean isActiveOnly) throws DAOException
+            String joinCondition, String separatorBetweenFields, boolean isToExcludeDisabled) throws DAOException
 	{
-    	if(isActiveOnly)
+    	if(isToExcludeDisabled)
         {
         	whereColumnName = (String[])Utility.addElement(whereColumnName,"activityStatus");
-        	whereColumnCondition = (String[])Utility.addElement(whereColumnCondition,"=");
-        	whereColumnValue = Utility.addElement(whereColumnValue,Constants.ACTIVITY_STATUS_ACTIVE);
+        	whereColumnCondition = (String[])Utility.addElement(whereColumnCondition,"!=");
+        	whereColumnValue = Utility.addElement(whereColumnValue,Constants.ACTIVITY_STATUS_DISABLED);
         }
     	
     	return getList(sourceObjectName, displayNameFields, valueField, whereColumnName,

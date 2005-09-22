@@ -70,9 +70,9 @@ public abstract class AbstractBizLogic
     
     public abstract List getList(String sourceObjectName, String[] displayNameFields, String valueField, String[] whereColumnName,
             String[] whereColumnCondition, Object[] whereColumnValue,
-            String joinCondition, String separatorBetweenFields,  boolean isActiveOnly) throws DAOException;
+            String joinCondition, String separatorBetweenFields,  boolean isToExcludeDisabled) throws DAOException;
     
-    public abstract List getList(String sourceObjectName, String[] displayNameFields, String valueField, boolean isActiveOnly) 
+    public abstract List getList(String sourceObjectName, String[] displayNameFields, String valueField, boolean isToExcludeDisabled) 
     			throws DAOException;
     
     public final void insert(Object obj,SessionDataBean sessionDataBean, int daoType) throws BizLogicException, UserNotAuthorizedException
