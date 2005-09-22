@@ -1164,23 +1164,19 @@ public class SecurityManager implements Permissions
      * @return
      * @throws SMException thrown if any error occurs while retreiving ProtectionElementPrivilegeContextForUser
      */
-    public Vector getObjectsForAssignPrivilege(String userID,
+    private Set getObjectsForAssignPrivilege(Set protectionElementPrivilegeContextSet,
             String objectType, String privilegeName) throws SMException
     {
-        Vector objects = new Vector();
+        Set objects = new HashSet();
         NameValueBean nameValueBean;
-        UserProvisioningManager userProvisioningManager;
+        
         ProtectionElementPrivilegeContext protectionElementPrivilegeContext;
-        Set protectionElementPrivilegeContextSet;
+        
         Set privileges;
         Iterator iterator;
         String objectId;
         Privilege privilege;
-        try
-        {
-            userProvisioningManager = getUserProvisioningManager();
-            protectionElementPrivilegeContextSet = userProvisioningManager
-                    .getProtectionElementPrivilegeContextForUser(userID);
+        
             if (protectionElementPrivilegeContextSet != null)
             {
                 iterator = protectionElementPrivilegeContextSet.iterator();
@@ -1215,6 +1211,28 @@ public class SecurityManager implements Permissions
                     }
                 }
             }
+        
+        return objects;
+    }
+    
+    public Set getObjectsForAssignPrivilege(String userID,
+            String[] objectTypes, String[] privilegeNames) throws SMException
+    {
+        Set objects = new HashSet();
+        UserProvisioningManager userProvisioningManager;
+        Set protectionElementPrivilegeContextSet;
+        try
+        {
+            userProvisioningManager = getUserProvisioningManager();
+            protectionElementPrivilegeContextSet = userProvisioningManager
+                    .getProtectionElementPrivilegeContextForUser(userID);
+        for(int i=0; i<objectTypes.length;i++)
+        {
+            for(int j=0; j<privilegeNames.length; j++)
+            {
+                objects.addAll(getObjectsForAssignPrivilege(protectionElementPrivilegeContextSet,objectTypes[i],privilegeNames[j]));
+            }
+        }
         }
         catch (CSException e)
         {
@@ -1223,6 +1241,7 @@ public class SecurityManager implements Permissions
             throw new SMException(e.getMessage(), e);
         }
         return objects;
+        
     }
 }
 
