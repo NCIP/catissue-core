@@ -55,6 +55,11 @@ public class User extends AbstractDomainObject implements Serializable
      * EmailAddress of the user.
      */
     protected String emailAddress = "";
+    
+    /**
+     * EmailAddress Address of the user.
+     */
+    protected String password;
 
     /**
      * Date of user registration.
@@ -100,6 +105,8 @@ public class User extends AbstractDomainObject implements Serializable
      * Set of collection protocol.
      */
     protected Collection collectionProtocolCollection = new HashSet();
+    
+    protected String pageOf;
 
     /**
      * Initialize a new User instance.
@@ -154,6 +161,22 @@ public class User extends AbstractDomainObject implements Serializable
         this.emailAddress = emailAddress;
     }
 
+    /**
+     * @return Returns the password.
+     */
+    public String getPassword()
+    {
+        return password;
+    }
+    
+    /**
+     * @param password The password to set.
+     */
+    public void setPassword(String password)
+    {
+        this.password = password;
+    }
+    
     /**
      * @return Returns the firstName.
      */
@@ -334,6 +357,22 @@ public class User extends AbstractDomainObject implements Serializable
         this.collectionProtocolCollection = collectionProtocolCollection;
     }
 
+    /**
+     * @return Returns the pageOf.
+     */
+    public String getPageOf()
+    {
+        return pageOf;
+    }
+    
+    /**
+     * @param pageOf The pageOf to set.
+     */
+    public void setPageOf(String pageOf)
+    {
+        this.pageOf = pageOf;
+    }
+    
     //	/**
     //     * Returns the comments given by the approver. 
     //     * @return the comments given by the approver.
@@ -418,6 +457,7 @@ public class User extends AbstractDomainObject implements Serializable
         {
             UserForm uform = (UserForm) abstractForm;
             this.systemIdentifier = new Long(uform.getSystemIdentifier());
+            this.pageOf = uform.getPageOf();
             
             if (this.systemIdentifier.intValue() == -1)
             {
@@ -436,7 +476,16 @@ public class User extends AbstractDomainObject implements Serializable
             this.cancerResearchGroup.setSystemIdentifier(new Long(uform
                     .getCancerResearchGroupId()));
 
-            this.activityStatus = uform.getActivityStatus();
+            if (!pageOf.equals(Constants.PAGEOF_SIGNUP) && !pageOf.equals(Constants.PAGEOF_USER_PROFILE))
+            {
+                this.activityStatus = uform.getActivityStatus();
+                this.comments = uform.getComments();
+            }
+            
+            if (uform.getPageOf().equals(Constants.PAGEOF_USER_PROFILE))
+            {
+                this.password = uform.getPassword();
+            }
 
             if (uform.getPageOf().equals(Constants.PAGEOF_USER_ADMIN)
                     && uform.getOperation().equals(Constants.ADD))
@@ -456,12 +505,6 @@ public class User extends AbstractDomainObject implements Serializable
                 {
                     this.activityStatus = Constants.ACTIVITY_STATUS_CLOSED;
                 }
-//                else if (uform.getStatus().equals(
-//                        Constants.APPROVE_USER_PENDING_STATUS))
-//                {
-////                    this.activityStatus = Constants.ACTIVITY_STATUS_NEW;
-//                    this.activityStatus = Constants.ACTIVITY_STATUS_PENDING;
-//                }
             }
             
             this.roleId = uform.getRole();
@@ -472,7 +515,6 @@ public class User extends AbstractDomainObject implements Serializable
             this.address.setZipCode(uform.getZipCode());
             this.address.setPhoneNumber(uform.getPhoneNumber());
             this.address.setFaxNumber(uform.getFaxNumber());
-            this.comments = uform.getComments();
         }
         catch (Exception excp)
         {

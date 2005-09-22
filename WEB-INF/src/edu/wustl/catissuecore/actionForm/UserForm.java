@@ -67,6 +67,11 @@ public class UserForm extends AbstractActionForm
      * EmailAddress Address of the user.
      */
     private String emailAddress;
+    
+    /**
+     * Password of the user.
+     */
+    private String password;
 
     /**
      * Department name of the user.
@@ -274,6 +279,22 @@ public class UserForm extends AbstractActionForm
         this.emailAddress = emailAddress;
     }
 
+    /**
+     * @return Returns the password.
+     */
+    public String getPassword()
+    {
+        return password;
+    }
+    
+    /**
+     * @param password The password to set.
+     */
+    public void setPassword(String password)
+    {
+        this.password = password;
+    }
+    
     /**
      * Returns the Department Name of the user.
      * @return String representing departmentId of the user.
@@ -529,7 +550,7 @@ public class UserForm extends AbstractActionForm
                 if (this.status.equals(Constants.APPROVE_USER_PENDING_STATUS))
                     formId = Constants.SIGNUP_FORM_ID;
             }
-            else if (pageOf.equals(Constants.PAGEOF_USER_ADMIN))
+            else 
                 formId = Constants.USER_FORM_ID;
         }
         
@@ -650,22 +671,30 @@ public class UserForm extends AbstractActionForm
                 this.phoneNumber = user.getAddress().getPhoneNumber();
                 this.faxNumber = user.getAddress().getFaxNumber();
                 
-                this.activityStatus = user.getActivityStatus();
-                if (activityStatus.equals(Constants.ACTIVITY_STATUS_ACTIVE))
+                if (pageOf.equals(Constants.PAGEOF_USER_PROFILE))
                 {
-                    this.status = Constants.APPROVE_USER_APPROVE_STATUS;
+                    this.password = user.getPassword();
                 }
-                else if (activityStatus.equals(Constants.ACTIVITY_STATUS_NEW))
+                else
                 {
-                    this.status = Constants.APPROVE_USER_PENDING_STATUS;
+                    this.activityStatus = user.getActivityStatus();
+                    this.comments = user.getComments();
+                    
+                    if (activityStatus.equals(Constants.ACTIVITY_STATUS_ACTIVE))
+                    {
+                        this.status = Constants.APPROVE_USER_APPROVE_STATUS;
+                    }
+                    else if (activityStatus.equals(Constants.ACTIVITY_STATUS_NEW))
+                    {
+                        this.status = Constants.APPROVE_USER_PENDING_STATUS;
+                    }
+                    else if (activityStatus.equals(Constants.ACTIVITY_STATUS_CLOSED))
+                    {
+                        this.status = Constants.APPROVE_USER_REJECT_STATUS;
+                    }
+                    
+                    this.role = user.getRoleId();
                 }
-                else if (activityStatus.equals(Constants.ACTIVITY_STATUS_CLOSED))
-                {
-                    this.status = Constants.APPROVE_USER_REJECT_STATUS;
-                }
-                
-                this.role = user.getRoleId();
-                this.comments = user.getComments();
             }
         }
         catch (Exception excp)
@@ -797,6 +826,16 @@ public class UserForm extends AbstractActionForm
                         errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
                                 "errors.item.required", ApplicationProperties
                                         .getValue("user.approveOperation")));
+                    }
+                }
+                
+                if (pageOf.equals(Constants.PAGEOF_USER_PROFILE))
+                {
+                    if (validator.isEmpty(password))
+                    {
+                        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+                                "errors.item.required", ApplicationProperties
+                                        .getValue("user.password")));
                     }
                 }
             }
