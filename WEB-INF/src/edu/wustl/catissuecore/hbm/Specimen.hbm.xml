@@ -65,6 +65,7 @@
             insert="true"
             column="BARCODE"
             length="50"
+            unique="true"
         />
 
         <property

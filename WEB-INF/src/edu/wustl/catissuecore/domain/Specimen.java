@@ -126,7 +126,7 @@ public class Specimen extends AbstractDomainObject implements Serializable
     
     /**
      * Returns the system generated unique systemIdentifier.
-     * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"
+     * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30" 
      * unsaved-value="null" generator-class="native"
      * @return the system generated unique systemIdentifier.
      * @see #setSystemIdentifier(Long)
@@ -237,7 +237,7 @@ public class Specimen extends AbstractDomainObject implements Serializable
 
     /**
      * Returns the barcode assigned to the specimen.
-     * @hibernate.property name="barcode" type="string" column="BARCODE" length="50"
+     * @hibernate.property name="barcode" type="string" column="BARCODE" length="50" unique="true"
      * @return the barcode assigned to the specimen.
      * @see #setBarcode(String)
      */
