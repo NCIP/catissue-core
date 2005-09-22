@@ -296,6 +296,7 @@ public class HibernateDAO extends AbstractDAO
                             .isAuthorized(sessionDataBean.getUserName(),
                                     obj.getClass().getName(),
                                     Permissions.UPDATE);
+                    Logger.out.debug(" User's Authorization to update "+obj.getClass().getName()+" "+isAuthorized);
                     }
                     else
                     {
@@ -303,14 +304,18 @@ public class HibernateDAO extends AbstractDAO
                         .isAuthorized(sessionDataBean.getUserName(),
                                 obj.getClass().getName()+"_"+((AbstractDomainObject)obj).getSystemIdentifier(),
                                 Permissions.UPDATE);
+                        Logger.out.debug(" User's Authorization to update "+obj.getClass().getName()+" "+isAuthorized);
                     }
                 }
                 else
                 {
                     isAuthorized = false;
+                    Logger.out.debug(" User's Authorization to update "+obj.getClass().getName()+"_"+((AbstractDomainObject)obj).getSystemIdentifier()+" "+isAuthorized);
                 }
+                
+                
             }
-            Logger.out.debug(" User's Authorization to update "+obj.getClass().getName()+" "+isAuthorized);
+            
             
             if(isAuthorized)
             {

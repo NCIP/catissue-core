@@ -1167,4 +1167,31 @@ public class Constants
 	public static final String GROUPS = "groups";
 	public static final String ASSIGN_PRIVILEGES_ACTION = "AssignPrivileges.do";
 	public static final String ANY = "Any";
+
+
+    /**
+     * @param systemIdentifier
+     * @return
+     */
+    public static String getUserPGName(Long identifier)
+    {
+        if(identifier == null)
+	    {
+	        return "USER_";
+	    }
+	    return "USER_"+identifier;
+    }
+
+    /**
+     * @param systemIdentifier
+     * @return
+     */
+    public static String getUserGroupName(Long identifier)
+    {
+        if(identifier == null)
+	    {
+	        return "USER_";
+	    }
+	    return "USER_"+identifier;
+    }
 }
