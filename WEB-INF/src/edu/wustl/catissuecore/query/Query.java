@@ -48,6 +48,7 @@ public abstract class Query
      * queryStartObject is derived 
      */
     private String parentOfQueryStartObject = new String();
+    private Set tableSet;
 
     /**
      * Object that forms the where part of query.
@@ -239,6 +240,7 @@ public abstract class Query
          */
         set.addAll(whereConditions.getQueryObjects());
         set.add(this.queryStartObject);
+        set.addAll(tableSet);
 //        HashSet relatedTables = new HashSet();
 //        Iterator it = set.iterator();
 //        while(it.hasNext())
@@ -482,5 +484,19 @@ public abstract class Query
         }
         Logger.out.debug("Tables related to "+aliasName+" "+relatedTableNames.toString());
         return relatedTableNames;
+    }
+    /**
+     * @return Returns the tableSet.
+     */
+    public Set getTableSet()
+    {
+        return tableSet;
+    }
+    /**
+     * @param tableSet The tableSet to set.
+     */
+    public void setTableSet(Set tableSet)
+    {
+        this.tableSet = tableSet;
     }
 }
