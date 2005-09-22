@@ -39,5 +39,11 @@
 	  			<bean:message key="app.viewShoppingCart" />
 	  		</a>
 	  </div>
+	  <div>
+	  	<img src="images/subMenuArrow.gif" width="7" height="7" alt="" />
+	  		<a class="subMenuPrimary" href="AssignPrivileges.do?pageOf=pageOfAssignPrivileges">
+	  			<bean:message key="app.assignPrevileges" />
+	  		</a>
+	  </div>
     </td>
   </tr>
