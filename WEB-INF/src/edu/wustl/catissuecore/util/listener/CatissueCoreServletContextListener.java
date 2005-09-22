@@ -162,26 +162,26 @@ public class CatissueCoreServletContextListener
                                             UPDATE)));*/
         	
         	
-        	UserBizLogic userBizLogic = new UserBizLogic();
-        	List list = userBizLogic.retrieve(User.class.getName());
-        	User user;
-        	for(int i=0; i<list.size();i++)
-        	{
-        	    user = (User) list.get(i);
-        	    if(user!=null)
-        	    {
-        	        Set protectionObjects=new HashSet();
-                    protectionObjects.add(user);
-            	    try
-                    {
-                        SecurityManager.getInstance(this.getClass()).insertAuthorizationData(userBizLogic.getAuthorizationData(user),protectionObjects,null);
-                    }
-                    catch (SMException e)
-                    {
-                        Logger.out.error("Exception in Authorization: "+e.getMessage(),e);
-                    }
-        	    }
-        	}
+//        	UserBizLogic userBizLogic = new UserBizLogic();
+//        	List list = userBizLogic.retrieve(User.class.getName());
+//        	User user;
+//        	for(int i=0; i<list.size();i++)
+//        	{
+//        	    user = (User) list.get(i);
+//        	    if(user!=null)
+//        	    {
+//        	        Set protectionObjects=new HashSet();
+//                    protectionObjects.add(user);
+//            	    try
+//                    {
+//                        SecurityManager.getInstance(this.getClass()).insertAuthorizationData(userBizLogic.getAuthorizationData(user),protectionObjects,null);
+//                    }
+//                    catch (SMException e)
+//                    {
+//                        Logger.out.error("Exception in Authorization: "+e.getMessage(),e);
+//                    }
+//        	    }
+//        	}
         	
         	
         }
