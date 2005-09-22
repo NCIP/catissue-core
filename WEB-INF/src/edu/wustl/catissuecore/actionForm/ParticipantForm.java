@@ -460,50 +460,50 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
          try
          {
              
-            if (validator.isEmpty(lastName))
- 			{
- 			    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("user.lastName")));
- 			}
-             
-			if (validator.isEmpty(firstName))
-			{
-			    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("user.firstName")));
-			}
+//            if (validator.isEmpty(lastName))
+// 			{
+// 			    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("user.lastName")));
+// 			}
+//             
+//			if (validator.isEmpty(firstName))
+//			{
+//			    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("user.firstName")));
+//			}
 			
 //			if (validator.isEmpty(middleName))
 //			{
 //			    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("participant.middleName")));
 //			}
 			  
-			if (validator.isEmpty(birthDate))
-			{
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("participant.birthDate")));
-			}
-			
-			if(!validator.isValidOption(gender))
-			{
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("participant.gender")));
-			}
-			
-			if(!validator.isValidOption(genotype))
-			{
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("participant.genotype")));
-			}
-			
-			if(!validator.isValidOption(race))
-			{
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("participant.race")));
-			}
-			
-			if(!validator.isValidOption(ethnicity))
-			{
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("participant.ethnicity")));
-			}
-			
-			if (!validator.isValidOption(activityStatus))
-			{
-			    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("participant.activityStatus")));
-			}
+//			if (validator.isEmpty(birthDate))
+//			{
+//				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("participant.birthDate")));
+//			}
+//			
+//			if(!validator.isValidOption(gender))
+//			{
+//				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("participant.gender")));
+//			}
+//			
+//			if(!validator.isValidOption(genotype))
+//			{
+//				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("participant.genotype")));
+//			}
+//			
+//			if(!validator.isValidOption(race))
+//			{
+//				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("participant.race")));
+//			}
+//			
+//			if(!validator.isValidOption(ethnicity))
+//			{
+//				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("participant.ethnicity")));
+//			}
+//			
+//			if (!validator.isValidOption(activityStatus))
+//			{
+//			    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("participant.activityStatus")));
+//			}
 			//social security number is optional bug id 450
 			//checkValidNumber(socialSecurityNumber,"participant.socialSecurityNumber",errors,validator);
 			  

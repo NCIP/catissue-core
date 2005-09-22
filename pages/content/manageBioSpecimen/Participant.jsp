@@ -209,11 +209,8 @@
 				     <bean:message key="<%=title%>"/></td>
 				 </tr>
 				 <tr>
-				    <td class="formRequiredNotice" width="5">
-				     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">*</logic:notEqual>
-				     	<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;</logic:equal>
-				     </td>
-				     <td class="formRequiredLabel">
+					<td class="formRequiredNotice" width="5">&nbsp;</td>
+					<td class="formLabel">
 				     	<label for="lastName">
 				     		<bean:message key="user.lastName"/>
 				     	</label>
@@ -221,11 +218,8 @@
 				     <td class="formField"><html:text styleClass="formFieldSized" size="30" styleId="lastName" property="lastName" readonly="<%=readOnlyForAll%>"/></td>
 				 </tr>
 				  <tr>
-				     <td class="formRequiredNotice" width="5">
-				     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">*</logic:notEqual>
-				     	<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;</logic:equal>
-				     </td>
-				     <td class="formRequiredLabel">
+					<td class="formRequiredNotice" width="5">&nbsp;</td>
+					<td class="formLabel">
 				     	<label for="firstName">
 				     		<bean:message key="user.firstName"/>
 				     	</label>
@@ -242,11 +236,8 @@
 				     <td class="formField"><html:text styleClass="formFieldSized" size="30" styleId="middleName" property="middleName" readonly="<%=readOnlyForAll%>"/></td>
 				 </tr>
 				 <tr>
-				     <td class="formRequiredNotice" width="5">
-				     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">*</logic:notEqual>
-				     	<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;</logic:equal>
-				     </td>
-				     <td class="formRequiredLabel">
+					<td class="formRequiredNotice" width="5">&nbsp;</td>
+					<td class="formLabel">
 						<label for="birthDate">
 							<bean:message key="participant.birthDate"/>
 						</label>
@@ -261,11 +252,10 @@
 					 </td>
 				 </tr>
 				 <tr>
-				     <td class="formRequiredNotice" width="5">
-				     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">*</logic:notEqual>
-				     	<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;</logic:equal>
+					<td class="formRequiredNotice" width="5">&nbsp;</td>
+					<td class="formLabel">
+				     	<label for="gender"><bean:message key="participant.gender"/></label>
 				     </td>
-				     <td class="formRequiredLabel"><label for="gender"><bean:message key="participant.gender"/></label></td>
 				     <td class="formField">
 				     	<html:select property="gender" styleClass="formFieldSized" styleId="gender" size="1" disabled="<%=readOnlyForAll%>">
 							<%--html:options name="genderList" labelName="genderList"/--%>
@@ -274,11 +264,10 @@
 		        	  </td>
 				 </tr>
 				 <tr>
-				     <td class="formRequiredNotice" width="5">
-				     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">*</logic:notEqual>
-				     	<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;</logic:equal>
-				     </td>
-				     <td class="formRequiredLabel"><label for="genotype"><bean:message key="participant.genotype"/></label></td>
+					<td class="formRequiredNotice" width="5">&nbsp;</td>
+					<td class="formLabel">
+						<label for="genotype"><bean:message key="participant.genotype"/></label>
+					</td>
 				     <td class="formField">
 				     	<html:select property="genotype" styleClass="formFieldSized" styleId="genotype" size="1" disabled="<%=readOnlyForAll%>">
 							<html:options collection="<%=Constants.GENOTYPE_LIST%>" labelProperty="name" property="value"/>
@@ -286,11 +275,10 @@
 		        	  </td>
 				 </tr>
 				 <tr>
-				     <td class="formRequiredNotice" width="5">
-				     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">*</logic:notEqual>
-				     	<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;</logic:equal>
+					<td class="formRequiredNotice" width="5">&nbsp;</td>
+					<td class="formLabel">
+					     <label for="race"><bean:message key="participant.race"/></label>
 				     </td>
-				     <td class="formRequiredLabel"><label for="race"><bean:message key="participant.race"/></label></td>
 				     <td class="formField">
 				     	<html:select property="race" styleClass="formFieldSized" styleId="race" size="1" disabled="<%=readOnlyForAll%>">
 							<%--html:options name="raceList" labelName="raceList"/--%>
@@ -299,11 +287,8 @@
 		        	  </td>
 				 </tr>
 				 <tr>
-				     <td class="formRequiredNotice" width="5">
-				     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">*</logic:notEqual>
-				     	<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;</logic:equal>
-				     </td>
-				     <td class="formRequiredLabel">
+					<td class="formRequiredNotice" width="5">&nbsp;</td>
+					<td class="formLabel">
 				     	<label for="ethnicity">
 				     		<bean:message key="participant.ethnicity"/>
 				     	</label>
