@@ -71,7 +71,7 @@ public class ParticipantBizLogic extends DefaultBizLogic
     {
 		Participant participant = (Participant)obj;
         
-		dao.update(participant, sessionDataBean, true, true);
+		dao.update(participant, sessionDataBean, true, true, false);
 		
 		Collection participantMedicalIdentifierCollection = participant.getParticipantMedicalIdentifierCollection();		
 		Iterator it = participantMedicalIdentifierCollection.iterator();
@@ -80,7 +80,7 @@ public class ParticipantBizLogic extends DefaultBizLogic
 		{
 			ParticipantMedicalIdentifier pmIdentifier = (ParticipantMedicalIdentifier)it.next();
 			pmIdentifier.setParticipant(participant);
-			dao.update(pmIdentifier, sessionDataBean, true, true);
+			dao.update(pmIdentifier, sessionDataBean, true, true, false);
 		}
 		
 		Logger.out.debug("participant.getActivityStatus() "+participant.getActivityStatus());

@@ -36,9 +36,10 @@ public interface DAO
 	 * @param sessionDataBean TODO
 	 * @param isAuditable TODO
 	 * @param isSecureUpdate TODO
+	 * @param hasObjectLevelPrivilege TODO
 	 * @throws UserNotAuthorizedException TODO
 	 */
-	public abstract void update (Object obj, SessionDataBean sessionDataBean, boolean isAuditable, boolean isSecureUpdate) throws DAOException, UserNotAuthorizedException;
+	public abstract void update (Object obj, SessionDataBean sessionDataBean, boolean isAuditable, boolean isSecureUpdate, boolean hasObjectLevelPrivilege) throws DAOException, UserNotAuthorizedException;
 	
 	/**
      * Deletes the persistent object from the database.

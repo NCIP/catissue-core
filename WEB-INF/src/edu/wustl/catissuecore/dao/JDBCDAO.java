@@ -348,9 +348,9 @@ public class JDBCDAO extends AbstractDAO
     
     /**
      * (non-Javadoc)
-     * @see edu.wustl.catissuecore.dao.AbstractDAO#update(java.lang.Object, SessionDataBean, boolean, boolean)
+     * @see edu.wustl.catissuecore.dao.AbstractDAO#update(java.lang.Object, SessionDataBean, boolean, boolean, boolean)
      */
-    public void update(Object obj, SessionDataBean sessionDataBean, boolean isAuditable, boolean isSecureUpdate) throws DAOException, UserNotAuthorizedException
+    public void update(Object obj, SessionDataBean sessionDataBean, boolean isAuditable, boolean isSecureUpdate, boolean hasObjectLevelPrivilege) throws DAOException, UserNotAuthorizedException
     {
         // TODO Auto-generated method stub
     }

@@ -22,6 +22,8 @@ import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.security.SecurityManager;
+import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
@@ -46,14 +48,14 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 		
 		dao.insert(collectionProtocolRegistration, sessionDataBean, true, true);
 		
-//		try
-//        {
-//		    SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null,getProtectionObjects(participant),getDynamicGroups(participant));
-//        }
-//        catch (SMException e)
-//        {
-//            Logger.out.error("Exception in Authorization: "+e.getMessage(),e);
-//        }
+		try
+        {
+            SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null,getProtectionObjects(collectionProtocolRegistration),getDynamicGroups(collectionProtocolRegistration));
+        }
+        catch (SMException e)
+        {
+            Logger.out.error("Exception in Authorization: "+e.getMessage(),e);
+        }
 	}
 
 	/**
@@ -68,7 +70,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 		
 		//registerParticipantAndProtocol(dao,collectionProtocolRegistration);
 		
-		dao.update(collectionProtocolRegistration, sessionDataBean, true, true);
+		dao.update(collectionProtocolRegistration, sessionDataBean, true, true, false);
 		
 		Logger.out.debug("collectionProtocolRegistration.getActivityStatus() "+collectionProtocolRegistration.getActivityStatus());
 		if(collectionProtocolRegistration.getActivityStatus().equals(Constants.ACTIVITY_STATUS_DISABLED))
@@ -86,13 +88,15 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
         Set protectionObjects = new HashSet();
         
         CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration) obj;
-
+        protectionObjects.add(collectionProtocolRegistration);
+        
 		Participant participant = null;
 		//Case of registering Participant on its participant ID
 		if(collectionProtocolRegistration.getParticipant()!=null)
 		{
 		    protectionObjects.add(collectionProtocolRegistration.getParticipant());
 		}
+		
         Logger.out.debug(protectionObjects.toString());
         return protectionObjects;
     }
@@ -102,7 +106,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
         String[] dynamicGroups=null;
         CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration) obj;
         dynamicGroups = new String[1];
-        dynamicGroups[0] = "COLLECTION_PROTOCOL_"+collectionProtocolRegistration.getCollectionProtocol().getSystemIdentifier();
+        dynamicGroups[0] = Constants.getCollectionProtocolPGName(collectionProtocolRegistration.getCollectionProtocol().getSystemIdentifier());
         return dynamicGroups;
         
     }

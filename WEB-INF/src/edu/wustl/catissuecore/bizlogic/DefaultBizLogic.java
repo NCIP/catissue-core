@@ -46,7 +46,7 @@ public class  DefaultBizLogic extends AbstractBizLogic
      */
     protected void update(DAO dao, Object obj, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
     {
-        dao.update(obj, sessionDataBean, true, true);
+        dao.update(obj, sessionDataBean, true, true, false);
     }
     
     /**

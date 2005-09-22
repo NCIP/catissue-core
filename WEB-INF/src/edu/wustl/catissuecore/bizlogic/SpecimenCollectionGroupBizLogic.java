@@ -10,12 +10,16 @@
 
 package edu.wustl.catissuecore.bizlogic;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import edu.wustl.catissuecore.dao.DAO;
+import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.domain.ClinicalReport;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
+import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
@@ -24,6 +28,8 @@ import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.security.SecurityManager;
+import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 
 /**
@@ -60,7 +66,53 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		dao.insert(specimenCollectionGroup,sessionDataBean, true, true);
 		if(specimenCollectionGroup.getClinicalReport()!=null)
 			dao.insert(specimenCollectionGroup.getClinicalReport(),sessionDataBean, true, true);
+		try
+        {
+            SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null,getProtectionObjects(specimenCollectionGroup),getDynamicGroups(specimenCollectionGroup));
+        }
+        catch (SMException e)
+        {
+            Logger.out.error("Exception in Authorization: "+e.getMessage(),e);
+        }
+		
 	}
+	
+	public Set getProtectionObjects(AbstractDomainObject obj)
+    {
+        Set protectionObjects = new HashSet();
+        
+        SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) obj;
+        protectionObjects.add(specimenCollectionGroup);
+        
+		Participant participant = null;
+		//Case of registering Participant on its participant ID
+		if(specimenCollectionGroup.getClinicalReport()!=null)
+		{
+		    protectionObjects.add(specimenCollectionGroup.getClinicalReport());
+		}
+		
+        Logger.out.debug(protectionObjects.toString());
+        return protectionObjects;
+    }
+
+    public String[] getDynamicGroups(AbstractDomainObject obj)
+    {
+        String[] dynamicGroups=null;
+        SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) obj;
+        dynamicGroups = new String[1];
+        
+        try
+        {
+            dynamicGroups[0] = SecurityManager.getInstance(this.getClass()).getProtectionGroupByName(specimenCollectionGroup.getCollectionProtocolEvent(),Constants.getCollectionProtocolPGName(null));
+        }
+        catch (SMException e)
+        {
+            Logger.out.error("Exception in Authorization: "+e.getMessage(),e);
+        }
+        Logger.out.debug("Dynamic Group name: "+dynamicGroups[0]);
+        return dynamicGroups;
+        
+    }
 
 	/**
 	 * Updates the persistent object in the database.
@@ -74,8 +126,8 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		
 		setCollectionProtocolRegistration(dao, specimenCollectionGroup);
 		
-		dao.update(specimenCollectionGroup, sessionDataBean, true, true);
-		dao.update(specimenCollectionGroup.getClinicalReport(), sessionDataBean, true, true);
+		dao.update(specimenCollectionGroup, sessionDataBean, true, true, false);
+		dao.update(specimenCollectionGroup.getClinicalReport(), sessionDataBean, true, true, false);
 		
 		Logger.out.debug("specimenCollectionGroup.getActivityStatus() "+specimenCollectionGroup.getActivityStatus());
 		if(specimenCollectionGroup.getActivityStatus().equals(Constants.ACTIVITY_STATUS_DISABLED))

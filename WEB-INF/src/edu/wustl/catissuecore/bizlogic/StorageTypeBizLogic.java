@@ -45,7 +45,7 @@ public class StorageTypeBizLogic extends DefaultBizLogic
     {
 		StorageType type = (StorageType)obj;
 
-		dao.update(type.getDefaultStorageCapacity(), sessionDataBean, true, true);
-	    dao.update(type, sessionDataBean, true, true);
+		dao.update(type.getDefaultStorageCapacity(), sessionDataBean, true, true, false);
+	    dao.update(type, sessionDataBean, true, true, false);
     }
 }

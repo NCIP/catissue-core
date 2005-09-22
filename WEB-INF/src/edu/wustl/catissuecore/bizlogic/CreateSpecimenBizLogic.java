@@ -17,14 +17,18 @@ import java.util.List;
 import java.util.Set;
 
 import edu.wustl.catissuecore.dao.DAO;
+import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.ExternalIdentifier;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.security.SecurityManager;
+import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * CreateSpecimenHDAO is used to add new specimen information into the database using Hibernate.
@@ -40,6 +44,7 @@ public class CreateSpecimenBizLogic extends DefaultBizLogic
      */
 	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 	{
+	    Set protectionObjects = new HashSet();
 		Specimen specimen = (Specimen)obj;
 		
 		specimen.setSpecimenCollectionGroup(null);
@@ -66,6 +71,11 @@ public class CreateSpecimenBizLogic extends DefaultBizLogic
 		dao.insert(specimen.getSpecimenCharacteristics(),sessionDataBean, true,true);
 		specimen.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
 		dao.insert(specimen,sessionDataBean, true,true);
+		protectionObjects.add(specimen);
+		if(specimen.getSpecimenCharacteristics()!=null)
+		{
+		    protectionObjects.add(specimen.getSpecimenCharacteristics());
+		}
 		
 		//Setting the External Identifier Collection
 		Collection externalIdentifierCollection = specimen.getExternalIdentifierCollection();
@@ -78,6 +88,7 @@ public class CreateSpecimenBizLogic extends DefaultBizLogic
 				ExternalIdentifier exId = (ExternalIdentifier)it.next();
 				exId.setSpecimen(specimen);
 				dao.insert(exId,sessionDataBean, true,true);
+				protectionObjects.add(exId);
 			}
 		}
 		
@@ -114,7 +125,36 @@ public class CreateSpecimenBizLogic extends DefaultBizLogic
 			
 			specimen.setBiohazardCollection(set);
 		}
+		
+//		Inserting data for Authorization
+		try
+        {
+            SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null,protectionObjects,getDynamicGroups(specimen));
+        }
+        catch (SMException e)
+        {
+            Logger.out.error("Exception in Authorization: "+e.getMessage(),e);
+        }
 	}
+	
+	 public String[] getDynamicGroups(AbstractDomainObject obj)
+	    {
+	        String[] dynamicGroups=null;
+	        Specimen specimen = (Specimen)obj;
+	        dynamicGroups = new String[1];
+	        
+	        try
+	        {
+	            dynamicGroups[0] = SecurityManager.getInstance(this.getClass()).getProtectionGroupByName(specimen.getParentSpecimen(),Constants.getCollectionProtocolPGName(null));
+	        }
+	        catch (SMException e)
+	        {
+	            Logger.out.error("Exception in Authorization: "+e.getMessage(),e);
+	        }
+	        Logger.out.debug("Dynamic Group name: "+dynamicGroups[0]);
+	        return dynamicGroups;
+	        
+	    }
 	
 	/**
      * Updates the persistent object in the database.

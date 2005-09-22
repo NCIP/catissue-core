@@ -72,14 +72,14 @@ public class CollectionProtocolBizLogic extends DefaultBizLogic implements Roles
 			}
 		}
 		
-//		try
-//        {
-//            SecurityManager.getInstance(this.getClass()).insertAuthorizationData(getAuthorizationData(collectionProtocol),getProtectionObjects(collectionProtocol),getDynamicGroups(collectionProtocol));
-//        }
-//        catch (SMException e)
-//        {
-//            Logger.out.error("Exception in Authorization: "+e.getMessage(),e);
-//        }
+		try
+        {
+            SecurityManager.getInstance(this.getClass()).insertAuthorizationData(getAuthorizationData(collectionProtocol),getProtectionObjects(collectionProtocol),getDynamicGroups(collectionProtocol));
+        }
+        catch (SMException e)
+        {
+            Logger.out.error("Exception in Authorization: "+e.getMessage(),e);
+        }
 	}
 	
 	/**
@@ -97,14 +97,14 @@ public class CollectionProtocolBizLogic extends DefaultBizLogic implements Roles
 		//setPrincipalInvestigator(dao,collectionProtocol);		
 		//setCoordinatorCollection(dao,collectionProtocol);
 		
-		dao.update(collectionProtocol, sessionDataBean, true, true);
+		dao.update(collectionProtocol, sessionDataBean, true, true, false);
 		
 		Iterator it = collectionProtocol.getCollectionProtocolEventCollection().iterator();		
 		while(it.hasNext())
 		{
 			CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent)it.next();
 			collectionProtocolEvent.setCollectionProtocol(collectionProtocol);
-			dao.update(collectionProtocolEvent, sessionDataBean, true, true);
+			dao.update(collectionProtocolEvent, sessionDataBean, true, true, false);
 			
 			Iterator srIt = collectionProtocolEvent.getSpecimenRequirementCollection().iterator();
 			while(srIt.hasNext())
@@ -115,7 +115,7 @@ public class CollectionProtocolBizLogic extends DefaultBizLogic implements Roles
 				
 				
 				specimenRequirement.getCollectionProtocolEventCollection().add(collectionProtocolEvent);
-				dao.update(specimenRequirement, sessionDataBean, true, true);
+				dao.update(specimenRequirement, sessionDataBean, true, true, false);
 			}
 		}
 		
@@ -142,13 +142,17 @@ public class CollectionProtocolBizLogic extends DefaultBizLogic implements Roles
         Logger.out.debug("--------------- In here ---------------");
         Vector authorizationData = new Vector();
         Set group = new HashSet();
-       
+        SecurityDataBean userGroupRoleProtectionGroupBean;
+        String protectionGroupName;
+        gov.nih.nci.security.authorization.domainobjects.User user ;
+        Collection coordinators;
+        User aUser;
         
         CollectionProtocol collectionProtocol = (CollectionProtocol)obj;
         String userId = new String();
         try
         {
-            gov.nih.nci.security.authorization.domainobjects.User user = new gov.nih.nci.security.authorization.domainobjects.User();
+            user = new gov.nih.nci.security.authorization.domainobjects.User();
             userId = String.valueOf(collectionProtocol.getPrincipalInvestigator().getSystemIdentifier());
             Logger.out.debug(" PI ID: "+userId);
             user = SecurityManager.getInstance(this.getClass()).getUserById(userId);
@@ -159,14 +163,47 @@ public class CollectionProtocolBizLogic extends DefaultBizLogic implements Roles
         {
             Logger.out.error("Exception in Authorization: "+e.getMessage(),e);
         }
-        String protectionGroupName = new String("COLLECTION_PROTOCOL_"+collectionProtocol.getSystemIdentifier());
-        SecurityDataBean userGroupRoleProtectionGroupBean = new SecurityDataBean();
+        
+        // Protection group of PI
+        protectionGroupName = new String(Constants.getCollectionProtocolPGName(collectionProtocol.getSystemIdentifier()));
+        userGroupRoleProtectionGroupBean = new SecurityDataBean();
         userGroupRoleProtectionGroupBean.setUser(userId);
         userGroupRoleProtectionGroupBean.setRoleName(PI);
-        userGroupRoleProtectionGroupBean.setGroupName("PI_"+collectionProtocol.getPrincipalInvestigator().getSystemIdentifier()+"_COLLECTION_PROTOCOL_"+collectionProtocol.getSystemIdentifier());
+        userGroupRoleProtectionGroupBean.setGroupName("PI_COLLECTION_PROTOCOL_"+collectionProtocol.getSystemIdentifier());
         userGroupRoleProtectionGroupBean.setProtectionGroupName(protectionGroupName);
         userGroupRoleProtectionGroupBean.setGroup(group);
         authorizationData.add(userGroupRoleProtectionGroupBean);
+        
+        
+        // Protection group of coordinators
+        try
+        {
+            coordinators = collectionProtocol.getUserCollection();
+            group = new HashSet();
+            for(Iterator it = coordinators.iterator();it.hasNext();)
+            {
+                 aUser  =(User)it.next();
+                 userId = String.valueOf(aUser.getSystemIdentifier());
+                 Logger.out.debug(" COORDINATOR ID: "+userId);
+                 user = SecurityManager.getInstance(this.getClass()).getUserById(userId);
+                 Logger.out.debug(" COORDINATOR: "+user.getLoginName());
+                 group.add(user);
+            }
+            
+        }
+        catch (SMException e)
+        {
+            Logger.out.error("Exception in Authorization: "+e.getMessage(),e);
+        }
+        protectionGroupName = new String(Constants.getCollectionProtocolPGName(collectionProtocol.getSystemIdentifier()));
+        userGroupRoleProtectionGroupBean = new SecurityDataBean();
+        userGroupRoleProtectionGroupBean.setUser(userId);
+        userGroupRoleProtectionGroupBean.setRoleName(READ_ONLY);
+        userGroupRoleProtectionGroupBean.setGroupName("COORDINATORS_COLLECTION_PROTOCOL_"+collectionProtocol.getSystemIdentifier());
+        userGroupRoleProtectionGroupBean.setProtectionGroupName(protectionGroupName);
+        userGroupRoleProtectionGroupBean.setGroup(group);
+        authorizationData.add(userGroupRoleProtectionGroupBean);
+        
         Logger.out.debug(authorizationData.toString());
         return authorizationData;
     }
@@ -174,6 +211,8 @@ public class CollectionProtocolBizLogic extends DefaultBizLogic implements Roles
     public Set getProtectionObjects(AbstractDomainObject obj)
     {
         Set protectionObjects = new HashSet();
+        CollectionProtocolEvent collectionProtocolEvent;
+        SpecimenRequirement specimenRequirement;
         
         CollectionProtocol collectionProtocol = (CollectionProtocol)obj;
         protectionObjects.add(collectionProtocol);
@@ -182,7 +221,16 @@ public class CollectionProtocolBizLogic extends DefaultBizLogic implements Roles
         {
            for(Iterator it = collectionProtocolEventCollection.iterator(); it.hasNext();)
            {
-               protectionObjects.add(it.next());
+               collectionProtocolEvent = (CollectionProtocolEvent) it.next();
+               if(collectionProtocolEvent !=null)
+               {
+                   protectionObjects.add(collectionProtocolEvent);
+                   for(Iterator it2=collectionProtocolEvent.getSpecimenRequirementCollection().iterator();it2.hasNext();)
+                   {
+                       protectionObjects.add(it2.next());
+                   }
+               }
+               
            }
         }
         Logger.out.debug(protectionObjects.toString());

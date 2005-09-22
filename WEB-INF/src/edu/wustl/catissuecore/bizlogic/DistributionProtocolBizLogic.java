@@ -10,16 +10,21 @@
 
 package edu.wustl.catissuecore.bizlogic;
 
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import edu.wustl.catissuecore.dao.DAO;
 import edu.wustl.catissuecore.domain.DistributionProtocol;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.security.SecurityManager;
+import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * DistributionProtocolBizLogic is used to add DistributionProtocol information into the database using Hibernate.
@@ -46,6 +51,18 @@ public class DistributionProtocolBizLogic extends DefaultBizLogic
 			specimenRequirement.getDistributionProtocolCollection().add(distributionProtocol);
 			dao.insert(specimenRequirement,sessionDataBean, true, true);
 		}
+		
+//		Inserting authorization data
+        Set protectionObjects=new HashSet();
+        protectionObjects.add(distributionProtocol);
+	    try
+        {
+            SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null,protectionObjects,null);
+        }
+        catch (SMException e)
+        {
+            Logger.out.error("Exception in Authorization: "+e.getMessage(),e);
+        }
 	}
 	
 	/**
@@ -58,14 +75,14 @@ public class DistributionProtocolBizLogic extends DefaultBizLogic
     {
 		DistributionProtocol distributionProtocol = (DistributionProtocol)obj;
 		setPrincipalInvestigator(dao,distributionProtocol);
-		dao.update(distributionProtocol, sessionDataBean, true, true);
+		dao.update(distributionProtocol, sessionDataBean, true, true, false);
 
 		Iterator it = distributionProtocol.getSpecimenRequirementCollection().iterator();
 		while(it.hasNext())
 		{
 			SpecimenRequirement specimenRequirement = (SpecimenRequirement)it.next();
 			specimenRequirement.getDistributionProtocolCollection().add(distributionProtocol);
-			dao.update(specimenRequirement, sessionDataBean, true, true);
+			dao.update(specimenRequirement, sessionDataBean, true, true, false);
 		}
     }
 	

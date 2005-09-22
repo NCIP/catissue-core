@@ -88,7 +88,7 @@ public class DistributionBizLogic extends DefaultBizLogic
 	protected void update(DAO dao, Object obj, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException 
     {
 		Distribution distribution = (Distribution)obj;
-		dao.update(obj, sessionDataBean, true, true);
+		dao.update(obj, sessionDataBean, true, true, false);
 		
 		Collection distributedItemCollection = distribution.getDistributedItemCollection();		
 		Iterator it = distributedItemCollection.iterator();
@@ -97,7 +97,7 @@ public class DistributionBizLogic extends DefaultBizLogic
 			DistributedItem item = (DistributedItem)it.next();
 			item.setDistribution(distribution);
 			
-			dao.update(item, sessionDataBean, true, true);
+			dao.update(item, sessionDataBean, true, true, false);
 		}
     }
 }

@@ -11,8 +11,10 @@
 package edu.wustl.catissuecore.bizlogic;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.Vector;
 
 import edu.wustl.catissuecore.dao.AbstractDAO;
@@ -27,6 +29,8 @@ import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.security.SecurityManager;
+import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
@@ -146,6 +150,18 @@ public class StorageContainerBizLogic extends DefaultBizLogic
                 }
                 while (fullStatus[positionDimensionOne][positionDimensionTwo] != false);
             }
+            
+            //Inserting authorization data
+            Set protectionObjects=new HashSet();
+            protectionObjects.add(cont);
+    	    try
+            {
+                SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null,protectionObjects,null);
+            }
+            catch (SMException e)
+            {
+                Logger.out.error("Exception in Authorization: "+e.getMessage(),e);
+            }
         }
         
     }
@@ -180,7 +196,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic
 
         loadStorageType(dao, container);
 
-        dao.update(container, sessionDataBean, true, true);
+        dao.update(container, sessionDataBean, true, true, false);
 
         Collection storageContainerDetailsCollection = container
                 .getStorageContainerDetailsCollection();
@@ -196,7 +212,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic
                         .next();
                 storageContainerDetails.setStorageContainer(container);
                 dao.update(storageContainerDetails, sessionDataBean, true,
-                                true);
+                                true, false);
             }
         }
         

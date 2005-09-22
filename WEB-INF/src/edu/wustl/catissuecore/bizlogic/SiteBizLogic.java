@@ -10,13 +10,17 @@
 
 package edu.wustl.catissuecore.bizlogic;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import edu.wustl.catissuecore.dao.DAO;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.security.SecurityManager;
+import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
@@ -36,11 +40,22 @@ public class SiteBizLogic extends DefaultBizLogic
 	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 	{
 		Site site = (Site)obj;
+		Set protectionObjects = new HashSet();
 		
 		setCordinator(dao,site);
 		
 		dao.insert(site.getAddress(),sessionDataBean, true, true);
 	    dao.insert(site,sessionDataBean, true, true);
+	    protectionObjects.add(site);
+	    try
+        {
+            SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null,protectionObjects,null);
+        }
+        catch (SMException e)
+        {
+            Logger.out.error("Exception in Authorization: "+e.getMessage(),e);
+        }
+		
 	}
 	
 	/**
@@ -55,8 +70,8 @@ public class SiteBizLogic extends DefaultBizLogic
 		
 		setCordinator(dao,site);
 		
-		dao.update(site.getAddress(), sessionDataBean, true, true);
-	    dao.update(site, sessionDataBean, true, true);
+		dao.update(site.getAddress(), sessionDataBean, true, true, false);
+	    dao.update(site, sessionDataBean, true, true, false);
 	    
 	    Logger.out.debug("site.getActivityStatus() "+site.getActivityStatus());
 		if(site.getActivityStatus().equals(Constants.ACTIVITY_STATUS_DISABLED))

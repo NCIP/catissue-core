@@ -58,6 +58,6 @@ public class ReportedProblemBizLogic extends DefaultBizLogic
 	protected void update(DAO dao, Object obj, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
     {
         ReportedProblem reportedProblem = (ReportedProblem) obj;
-        dao.update(obj, sessionDataBean, true,true);
+        dao.update(obj, sessionDataBean, true,true, false);
     }
 }

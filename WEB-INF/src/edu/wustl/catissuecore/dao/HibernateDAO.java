@@ -27,6 +27,7 @@ import edu.wustl.catissuecore.audit.AuditManager;
 import edu.wustl.catissuecore.audit.Auditable;
 import edu.wustl.catissuecore.bizlogic.AbstractBizLogic;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
+import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.domain.Site;
@@ -280,7 +281,7 @@ public class HibernateDAO extends AbstractDAO
      * @throws DAOException 
      * @throws HibernateException Exception thrown during hibernate operations.
      */
-    public void update(Object obj, SessionDataBean sessionDataBean, boolean isAuditable, boolean isSecureUpdate) throws DAOException, UserNotAuthorizedException
+    public void update(Object obj, SessionDataBean sessionDataBean, boolean isAuditable, boolean isSecureUpdate, boolean hasObjectLevelPrivilege) throws DAOException, UserNotAuthorizedException
     {
         boolean isAuthorized = true;
         try
@@ -289,10 +290,20 @@ public class HibernateDAO extends AbstractDAO
             {
                 if (null != sessionDataBean)
                 {
+                    if(!(obj instanceof AbstractDomainObject)||!hasObjectLevelPrivilege)
+                    {
                     isAuthorized = SecurityManager.getInstance(this.getClass())
                             .isAuthorized(sessionDataBean.getUserName(),
                                     obj.getClass().getName(),
                                     Permissions.UPDATE);
+                    }
+                    else
+                    {
+                        isAuthorized = SecurityManager.getInstance(this.getClass())
+                        .isAuthorized(sessionDataBean.getUserName(),
+                                obj.getClass().getName()+"_"+((AbstractDomainObject)obj).getSystemIdentifier(),
+                                Permissions.UPDATE);
+                    }
                 }
                 else
                 {

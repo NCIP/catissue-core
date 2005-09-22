@@ -14,6 +14,7 @@ import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.HibernateProperties;
 import edu.wustl.catissuecore.util.global.Variables;
+import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -80,8 +81,14 @@ public class CatissueCoreServletContextListener
         }
         
         Map protectionGroupsForObjectTypes = new HashMap();
-        protectionGroupsForObjectTypes.put("edu.wustl.catissuecore.domain.CollectionProtocol",
-                new String[] {ADMINISTRATORS_DATA_GROUP,PUBLIC_DATA_GROUP});
+        protectionGroupsForObjectTypes.put("edu.wustl.catissuecore.domain.Site",
+                new String[] {ADMINISTRATORS_DATA_GROUP});
+        protectionGroupsForObjectTypes.put("edu.wustl.catissuecore.domain.StorageContainer",
+                new String[] {ADMINISTRATORS_DATA_GROUP});
+        protectionGroupsForObjectTypes.put("edu.wustl.catissuecore.domain.DistributionProtocol",
+                new String[] {ADMINISTRATORS_DATA_GROUP});
+        protectionGroupsForObjectTypes.put("edu.wustl.catissuecore.domain.User",
+                new String[] {ADMINISTRATORS_DATA_GROUP});
         Constants.STATIC_PROTECTION_GROUPS_FOR_OBJECT_TYPES.putAll(protectionGroupsForObjectTypes);
         
         /**
@@ -144,6 +151,16 @@ public class CatissueCoreServletContextListener
                                             "admin",
                                             "edu.wustl.catissuecore.domain.CollectionProtocolEvent_28",
                                             UPDATE)));*/
+        	 Logger.out
+             .debug("CREATE Perm to admin on edu.wustl.catissuecore.domain.CollectionProtocolEvent_28"
+                     + 
+                            (SecurityManager
+                                     .getInstance(this.getClass())
+                                     .getObjectsForAssignPrivilege(
+                                             "1",
+                                             new String[] {"edu.wustl.catissuecore.domain.CollectionProtocol","edu.wustl.catissuecore.domain.Participant"},
+                                             new String[] {READ})));
+        	
         }
         catch (Exception e1)
         {

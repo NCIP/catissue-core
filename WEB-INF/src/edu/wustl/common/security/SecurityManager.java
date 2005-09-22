@@ -1144,12 +1144,7 @@ public class SecurityManager implements Permissions
         NameValueBean nameValueBean;
         nameValueBean = new NameValueBean(Permissions.READ, Permissions.READ);
         privileges.add(nameValueBean);
-        nameValueBean = new NameValueBean(Permissions.UPDATE,
-                Permissions.UPDATE);
-        privileges.add(nameValueBean);
-        nameValueBean = new NameValueBean(Permissions.CREATE,
-                Permissions.CREATE);
-        privileges.add(nameValueBean);
+
         nameValueBean = new NameValueBean(Permissions.USE, Permissions.USE);
         privileges.add(nameValueBean);
         return privileges;
@@ -1164,57 +1159,58 @@ public class SecurityManager implements Permissions
      * @return
      * @throws SMException thrown if any error occurs while retreiving ProtectionElementPrivilegeContextForUser
      */
-    private Set getObjectsForAssignPrivilege(Set protectionElementPrivilegeContextSet,
-            String objectType, String privilegeName) throws SMException
+    private Set getObjectsForAssignPrivilege(
+            Set protectionElementPrivilegeContextSet, String objectType,
+            String privilegeName) throws SMException
     {
         Set objects = new HashSet();
         NameValueBean nameValueBean;
-        
+
         ProtectionElementPrivilegeContext protectionElementPrivilegeContext;
-        
+
         Set privileges;
         Iterator iterator;
         String objectId;
         Privilege privilege;
-        
-            if (protectionElementPrivilegeContextSet != null)
-            {
-                iterator = protectionElementPrivilegeContextSet.iterator();
-                while (iterator.hasNext())
-                {
-                    protectionElementPrivilegeContext = (ProtectionElementPrivilegeContext) iterator
-                            .next();
-                    objectId = protectionElementPrivilegeContext
-                            .getProtectionElement().getObjectId();
-                    Logger.out.debug(objectId);
-                    if (objectId.indexOf(objectType + "_") != -1)
-                    {
-                        privileges = protectionElementPrivilegeContext
-                                .getPrivileges();
-                        Iterator it = privileges.iterator();
-                        while (it.hasNext())
-                        {
-                            privilege = (Privilege) it.next();
-                            Logger.out.debug(objectId + "*************"
-                                    + privilege.getName());
-                            if (privilege.getName().equals(
-                                    "ASSIGN_" + privilegeName))
-                            {
-                                nameValueBean = new NameValueBean(objectId,
-                                        objectId);
-                                objects.add(nameValueBean);
-                                Logger.out.debug(nameValueBean);
-                                break;
-                            }
-                        }
 
+        if (protectionElementPrivilegeContextSet != null)
+        {
+            iterator = protectionElementPrivilegeContextSet.iterator();
+            while (iterator.hasNext())
+            {
+                protectionElementPrivilegeContext = (ProtectionElementPrivilegeContext) iterator
+                        .next();
+                objectId = protectionElementPrivilegeContext
+                        .getProtectionElement().getObjectId();
+                Logger.out.debug(objectId);
+                if (objectId.indexOf(objectType + "_") != -1)
+                {
+                    privileges = protectionElementPrivilegeContext
+                            .getPrivileges();
+                    Iterator it = privileges.iterator();
+                    while (it.hasNext())
+                    {
+                        privilege = (Privilege) it.next();
+
+                        if (privilege.getName().equals(
+                                "ASSIGN_" + privilegeName))
+                        {
+                            nameValueBean = new NameValueBean(objectId
+                                    .substring(objectId.lastIndexOf(".") + 1),
+                                    objectId);
+                            objects.add(nameValueBean);
+                            Logger.out.debug(nameValueBean);
+                            break;
+                        }
                     }
+
                 }
             }
-        
+        }
+
         return objects;
     }
-    
+
     public Set getObjectsForAssignPrivilege(String userID,
             String[] objectTypes, String[] privilegeNames) throws SMException
     {
@@ -1223,16 +1219,23 @@ public class SecurityManager implements Permissions
         Set protectionElementPrivilegeContextSet;
         try
         {
+            if (objectTypes == null || privilegeNames == null)
+            {
+                return objects;
+            }
             userProvisioningManager = getUserProvisioningManager();
             protectionElementPrivilegeContextSet = userProvisioningManager
                     .getProtectionElementPrivilegeContextForUser(userID);
-        for(int i=0; i<objectTypes.length;i++)
-        {
-            for(int j=0; j<privilegeNames.length; j++)
+
+            for (int i = 0; i < objectTypes.length; i++)
             {
-                objects.addAll(getObjectsForAssignPrivilege(protectionElementPrivilegeContextSet,objectTypes[i],privilegeNames[j]));
+                for (int j = 0; j < privilegeNames.length; j++)
+                {
+                    objects.addAll(getObjectsForAssignPrivilege(
+                            protectionElementPrivilegeContextSet,
+                            objectTypes[i], privilegeNames[j]));
+                }
             }
-        }
         }
         catch (CSException e)
         {
@@ -1241,7 +1244,37 @@ public class SecurityManager implements Permissions
             throw new SMException(e.getMessage(), e);
         }
         return objects;
-        
+
     }
+
+    public void setOwnerForProtectionElement(edu.wustl.catissuecore.domain.User user,
+            java.lang.String userName) throws SMException
+    {
+        if (user != null && userName != null)
+        {
+            String protectionElementObjectId = user.getClass().getName() + "_"
+                    + user.getSystemIdentifier();
+            Logger.out.debug(" Protection Element Object Id:"
+                    + protectionElementObjectId);
+            Logger.out.debug(" userName:" + userName);
+            try
+            {
+                UserProvisioningManager userProvisioningManager = getUserProvisioningManager();
+                userProvisioningManager.setOwnerForProtectionElement(
+                        protectionElementObjectId, new String[]{userName});
+            }
+            catch (CSException e)
+            {
+                Logger.out.debug("Unable to set owner: Exception: "
+                        + e.getMessage());
+                throw new SMException(e.getMessage(), e);
+            }
+        }
+        else
+        {
+            Logger.out.debug("user:"+user+" username:"+userName);
+        }
+    }
+
 }
 
