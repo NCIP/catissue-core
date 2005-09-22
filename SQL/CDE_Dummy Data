@@ -17,8 +17,6 @@ INSERT INTO CATISSUE_CDE VALUES ( 'Site_Type_PID' , 'Site Type', 'Site Type',  1
 INSERT INTO CATISSUE_PERMISSIBLE_VALUE (IDENTIFIER, VALUE, PUBLIC_ID) VALUES ('9','Tissue Bank','Site_Type_PID');
 INSERT INTO CATISSUE_PERMISSIBLE_VALUE (IDENTIFIER, VALUE, PUBLIC_ID) VALUES ('10','Collection Site','Site_Type_PID');
 INSERT INTO CATISSUE_PERMISSIBLE_VALUE (IDENTIFIER, VALUE, PUBLIC_ID) VALUES ('11','Research Laboratory','Site_Type_PID');
-INSERT INTO CATISSUE_PERMISSIBLE_VALUE (IDENTIFIER, VALUE, PUBLIC_ID) VALUES ('12','Hospital','Site_Type_PID');
-
 
 #*************** Pathological Status **********************************
 INSERT INTO CATISSUE_CDE VALUES ( '2003993' , 'Pathological Status', 'Pathological Status', 1.0);
