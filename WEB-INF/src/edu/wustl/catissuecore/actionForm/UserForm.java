@@ -550,8 +550,9 @@ public class UserForm extends AbstractActionForm
                 if (this.status.equals(Constants.APPROVE_USER_PENDING_STATUS))
                     formId = Constants.SIGNUP_FORM_ID;
             }
-            else 
+            else if (pageOf.equals(Constants.PAGEOF_USER_ADMIN) || pageOf.equals(Constants.PAGEOF_USER_PROFILE))
                 formId = Constants.USER_FORM_ID;
+                
         }
         
         return formId;
