@@ -212,6 +212,8 @@ public class StorageContainerForm extends AbstractActionForm
 			if(container.getStartNo() != null)
 				this.startNumber = String.valueOf(container.getStartNo().intValue());
 			
+			this.barcode = container.getBarcode();
+			
 			Collection storageContainerDetails = container.getStorageContainerDetailsCollection();
 			
 			if(storageContainerDetails != null)
@@ -656,7 +658,7 @@ public class StorageContainerForm extends AbstractActionForm
 	 */
 	public void setBarcode(String barcode)
 	{
-		this.barcode = null;
+		this.barcode = barcode;
 	}
 
 	/**
