@@ -606,12 +606,12 @@ public class SpecimenForm extends AbstractActionForm
                                     .getValue("specimen.positionInStorageContainer")));
                 }
                 
-                if (validator.isEmpty(barcode))
-                {
-                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-                            "errors.item.required", ApplicationProperties
-                                    .getValue("specimen.barcode")));
-                }
+//                if (validator.isEmpty(barcode))
+//                {
+//                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+//                            "errors.item.required", ApplicationProperties
+//                                    .getValue("specimen.barcode")));
+//                }
 
                 //Validations for External Identifier Add-More Block
                 String className = "ExternalIdentifier:";

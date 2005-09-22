@@ -416,11 +416,8 @@
 				 </tr>
 	
 				 <tr>
-				    <td class="formRequiredNotice" width="5">
-				     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">*</logic:notEqual>
-				     	<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;</logic:equal>
-				    </td>
-				    <td class="formRequiredLabel">
+			     	<td class="formRequiredNotice" width="5">&nbsp;</td>
+				    <td class="formLabel">
 						<label for="barcode">
 							<bean:message key="specimen.barcode"/>
 						</label>
