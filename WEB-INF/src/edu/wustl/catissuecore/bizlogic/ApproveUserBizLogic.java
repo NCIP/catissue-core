@@ -10,7 +10,9 @@
 package edu.wustl.catissuecore.bizlogic;
 
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import edu.wustl.catissuecore.dao.DAO;
 import edu.wustl.catissuecore.domain.Address;
@@ -168,5 +170,18 @@ public class ApproveUserBizLogic extends DefaultBizLogic
                     + smex.getMessage(), smex);
             throw new DAOException(smex.getCause().getMessage());
         }
+        
+        Set protectionObjects=new HashSet();
+        protectionObjects.add(user);
+	    try
+        {
+            SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null,protectionObjects,null);
+            SecurityManager.getInstance(this.getClass()).setOwnerForProtectionElement(user,user.getLoginName());
+        }
+        catch (SMException e)
+        {
+            Logger.out.error("Exception in Authorization: "+e.getMessage(),e);
+        }
+
     }
 }

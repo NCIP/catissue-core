@@ -10,20 +10,28 @@
 
 package edu.wustl.catissuecore.bizlogic;
 
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.Vector;
 
 import edu.wustl.catissuecore.action.DomainObjectListAction;
 import edu.wustl.catissuecore.dao.DAO;
+import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.domain.CancerResearchGroup;
+import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.Department;
 import edu.wustl.catissuecore.domain.Institution;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.util.Roles;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.GeneratePassword;
 import edu.wustl.catissuecore.util.global.SendEmail;
 import edu.wustl.common.beans.NameValueBean;
+import edu.wustl.common.beans.SecurityDataBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
@@ -158,14 +166,26 @@ public class UserBizLogic extends DefaultBizLogic
                         .getValue("userRegistration.email.failure")
                         + csmUser.getFirstName() + " " + csmUser.getLastName());
             }
-
+            
+            Set protectionObjects=new HashSet();
+            protectionObjects.add(user);
+    	    try
+            {
+                SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null,protectionObjects,null);
+                SecurityManager.getInstance(this.getClass()).setOwnerForProtectionElement(user,user.getLoginName());
+            }
+            catch (SMException e)
+            {
+                Logger.out.error("Exception in Authorization: "+e.getMessage(),e);
+            }
         }
         catch (SMException smex)
         {
             Logger.out.debug("Exception in CSM user creation:"
                     + smex.getMessage(), smex);
             throw new DAOException(smex.getCause().getMessage(),smex);
-        }
+        }  
+       
     }
 
     /**
@@ -180,11 +200,12 @@ public class UserBizLogic extends DefaultBizLogic
         Logger.out.debug("IN UserBizLogic update***************************");
         User user = (User) obj;
         List list = null;
-
+        
+        
         try
         {
-	        dao.update(user.getAddress(), sessionDataBean, true, true);
-	        dao.update(user, sessionDataBean, true, true);
+	        dao.update(user.getAddress(), sessionDataBean, true, true, false);
+	        dao.update(user, sessionDataBean, true, true, true);
         
             gov.nih.nci.security.authorization.domainobjects.User csmUser = SecurityManager
                     .getInstance(DomainObjectListAction.class).getUserById(
@@ -212,6 +233,9 @@ public class UserBizLogic extends DefaultBizLogic
             throw new DAOException(smExp.getMessage(), smExp);
         }
     }
+    
+    
+    
     
     //    public Vector getList(String sourceObjectName, String[] displayNameFields, String valueField, String[] whereColumnName,
     //            String[] whereColumnCondition, Object[] whereColumnValue,
