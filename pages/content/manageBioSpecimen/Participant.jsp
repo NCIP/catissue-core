@@ -258,7 +258,6 @@
 				     </td>
 				     <td class="formField">
 				     	<html:select property="gender" styleClass="formFieldSized" styleId="gender" size="1" disabled="<%=readOnlyForAll%>">
-							<%--html:options name="genderList" labelName="genderList"/--%>
 							<html:options collection="<%=Constants.GENDER_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
 		        	  </td>
@@ -281,7 +280,6 @@
 				     </td>
 				     <td class="formField">
 				     	<html:select property="race" styleClass="formFieldSized" styleId="race" size="1" disabled="<%=readOnlyForAll%>">
-							<%--html:options name="raceList" labelName="raceList"/--%>
 							<html:options collection="<%=Constants.RACELIST%>" labelProperty="name" property="value"/>
 						</html:select>
 		        	  </td>
@@ -295,7 +293,6 @@
 				     </td>
 				     <td class="formField">
 				     	<html:select property="ethnicity" styleClass="formFieldSized" styleId="ethnicity" size="1" disabled="<%=readOnlyForAll%>">
-							<%--html:options name="ethnicityList" labelName="ethnicityList"/--%>
 							<html:options collection="<%=Constants.ETHNICITY_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
 		        	  </td>
