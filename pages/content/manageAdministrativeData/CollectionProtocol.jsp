@@ -264,7 +264,7 @@ function insRow(subdivtag,iCounter)
 	sname="";
 	objname = subdivname + "_SpecimenRequirement:"+rowno+"_tissueSite)";
 	
-	sname = "<select name='" + objname + "' size='1' class='formFieldSized10' id='" + objname + "'>";
+	sname = "<select name='" + objname + "' size='1' class='formFieldSized35' id='" + objname + "'>";
 	<%for(int i=0;i<tissueSiteList.size();i++)
 	{%>
 		sname = sname + "<option value='<%=((NameValueBean)tissueSiteList.get(i)).getValue()%>'><%=((NameValueBean)tissueSiteList.get(i)).getName()%></option>";
@@ -747,7 +747,7 @@ function getSubDivCount(subdivtag)
 						%>
 
 			        	<html:select property="<%=fName%>" 
-										styleClass="formFieldSized10" 
+										styleClass="formFieldSized35" 
 										styleId="<%=fName%>" size="1">
 							<html:options collection="<%=Constants.TISSUE_SITE_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
@@ -949,7 +949,7 @@ function getSubDivCount(subdivtag)
 			        
 			        <td class="formField">
 			        	<html:select property="value(CollectionProtocolEvent:`_SpecimenRequirement:1_tissueSite)" 
-										styleClass="formFieldSized10" 
+										styleClass="formFieldSized35" 
 										styleId="value(CollectionProtocolEvent:`_SpecimenRequirement:1_tissueSite)" size="1">
 							<html:options collection="<%=Constants.TISSUE_SITE_LIST%>" labelProperty="name" property="value"/>
 						</html:select>

@@ -231,7 +231,7 @@ function insRow(subdivtag)
 	
 	//tissuesite
 	var spreqtissuesite=x.insertCell(3)
-	spreqtissuesite.className="formField";
+	spreqtissuesite.className="formFieldSized35";
 	sname="";
 	objname = "value(SpecimenRequirement:"+rowno+"_tissueSite)";
 	
@@ -563,7 +563,7 @@ function insRow(subdivtag)
 						objname="";
 						objname = "value(SpecimenRequirement:" + counter + "_tissueSite)";
 					%>
-					<html:select property="<%=objname%>" styleClass="formFieldSized10" styleId="<%=objname%>" size="1" >
+					<html:select property="<%=objname%>" styleClass="formFieldSized35" styleId="<%=objname%>" size="1" >
 						<html:options collection="<%=Constants.TISSUE_SITE_LIST%>" labelProperty="name" property="value"/>
 					</html:select>
 					<%
