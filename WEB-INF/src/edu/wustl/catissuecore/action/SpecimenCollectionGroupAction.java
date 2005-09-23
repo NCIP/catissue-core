@@ -120,9 +120,9 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 		String sourceObjectName = CollectionProtocolRegistration.class.getName();
 	  	String [] displayParticipantFields = {"participant.lastName" , "participant.firstName"};
 	  	String valueField = "participant."+Constants.SYSTEM_IDENTIFIER;
-	  	String whereColumnName[] = {"collectionProtocol."+Constants.SYSTEM_IDENTIFIER};
-	  	String whereColumnCondition[] = {"="};
-	  	Object[] whereColumnValue = {new Long(protocolID)};
+	  	String whereColumnName[] = {"collectionProtocol."+Constants.SYSTEM_IDENTIFIER,"participant.lastName" , "participant.firstName"};
+	  	String whereColumnCondition[] = {"=","!=","!="};
+	  	Object[] whereColumnValue = {new Long(protocolID),"",""};
 	  	String joinCondition = Constants.AND_JOIN_CONDITION;
 	  	String separatorBetweenFields = ", ";
 	  	

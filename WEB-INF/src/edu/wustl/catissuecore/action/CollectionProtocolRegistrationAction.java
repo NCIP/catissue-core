@@ -68,7 +68,17 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 			//get list of Participant's names
 			sourceObjectName = Participant.class.getName();
 			String[] participantsFields = {"lastName","firstName"};
-			list = bizLogic.getList(sourceObjectName, participantsFields, valueField, true);
+			String[] whereColumnName = {"lastName","firstName"};
+			String[] whereColumnCondition = {"!=","!="};
+			Object[] whereColumnValue = {"",""};
+			String joinCondition = Constants.AND_JOIN_CONDITION;
+			String separatorBetweenFields = ",";
+			
+			//list = bizLogic.getList(sourceObjectName, participantsFields, valueField, true);
+			
+			list = bizLogic.getList(sourceObjectName, participantsFields, valueField, whereColumnName,
+		            whereColumnCondition, whereColumnValue, joinCondition, separatorBetweenFields, true);
+
 			request.setAttribute(Constants.PARTICIPANT_LIST, list);
 			
 			//Sets the activityStatusList attribute to be used in the Site Add/Edit Page.
