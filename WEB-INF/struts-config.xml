@@ -322,6 +322,24 @@ PUBLIC
 			<forward name="failure" path="/User.do?operation=edit&amp;pageOf=pageOfUserProfile" />
 		</action>
 		
+		<action path="/ChangePassword"
+			type="edu.wustl.catissuecore.action.ChangePasswordAction"
+			scope="request">
+			<forward name="pageOfChangePassword" path=".catissuecore.changePasswordDef" />
+			<forward name="failure" path=".catissuecore.changePasswordDef" />
+			<forward name="access_denied" path="/Home.do" />
+		</action>
+		
+		<action path="/UpdatePassword"
+			type="edu.wustl.catissuecore.action.CommonAddEditAction"
+			name="userForm"
+			validate="true"
+			input="/ChangePassword.do?operation=edit&amp;pageOf=pageOfChangePassword"
+			scope="request">
+			<forward name="success" path=".catissuecore.userProfileSuccessDef" />
+			<forward name="failure" path="/User.do?operation=edit&amp;pageOf=pageOfChangePassword" />
+		</action>
+		
 		<action path="/ApproveUserAdd"
 			type="edu.wustl.catissuecore.action.CommonAddEditAction"
 			name="userForm"
@@ -350,6 +368,7 @@ PUBLIC
 			scope="request">
 			<forward name="pageOfUserAdmin" path="/User.do?operation=edit&amp;pageOf=pageOfUserAdmin"/>
 			<forward name="pageOfUserProfile" path="/User.do?operation=edit&amp;pageOf=pageOfUserProfile"/>
+			<forward name="pageOfChangePassword" path="/ChangePassword.do?operation=edit&amp;pageOf=pageOfChangePassword"/>
 			<forward name="failure" path="/User.do?operation=edit&amp;pageOf="/>
 		</action>    
 		<!-- User Actions Ends-->
