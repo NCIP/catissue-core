@@ -408,35 +408,35 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 	        ParticipantForm form = (ParticipantForm) abstractForm;
 	        Validator validator = new Validator();
 	        
-	        this.activityStatus = validator.getObjectValue(form.getActivityStatus());
-	        
-	        this.firstName = validator.getObjectValue(form.getFirstName());
+	        this.activityStatus = form.getActivityStatus();
+	        this.firstName = form.getFirstName();
+	        this.middleName = form.getMiddleName();
+	        this.lastName = form.getLastName();
 
-	        this.middleName = validator.getObjectValue(form.getMiddleName());
-	        
-	        this.lastName = validator.getObjectValue(form.getLastName());
-
-	        if(validator.isValidOption(form.getGender()) )
-	        	this.gender = validator.getObjectValue(form.getGender());
+	        if(validator.isValidOption(form.getGender()))
+	        	this.gender = form.getGender();
 	        else
 	        	this.gender = null;
 	        
 	        if(validator.isValidOption(form.getGenotype()) )
-	        	this.genotype = validator.getObjectValue(form.getGenotype());
+	        	this.genotype = form.getGenotype();
 	        else
 	        	this.genotype = null;
 
 	        if(validator.isValidOption(form.getEthnicity()) )
-	        	this.ethnicity = validator.getObjectValue( form.getEthnicity());
+	        	this.ethnicity = form.getEthnicity();
 	       	else
 	       		this.ethnicity = null;
 	        
 	        if(validator.isValidOption(form.getRace()) )
-	        	this.race = validator.getObjectValue(form.getRace());
+	        	this.race = form.getRace();
 	        else
 	        	this.race = null;
 	        
-	        this.socialSecurityNumber = validator.getObjectValue(form.getSocialSecurityNumber());
+	        if(!validator.isEmpty(form.getSocialSecurityNumber()))
+	        	this.socialSecurityNumber = form.getSocialSecurityNumber();
+	        else
+	        	this.socialSecurityNumber = null;
 	        
 	        this.birthDate = Utility.parseDate(form.getBirthDate(),Constants.DATE_PATTERN_MM_DD_YYYY);
 	        

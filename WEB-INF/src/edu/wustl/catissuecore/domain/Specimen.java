@@ -509,7 +509,10 @@ public class Specimen extends AbstractDomainObject implements Serializable
 	            
 	            this.activityStatus = form.getActivityStatus();
 	            
-	            this.barcode = validator.getObjectValue( form.getBarcode());
+	            if(!validator.isEmpty(form.getBarcode()))
+	            	this.barcode = form.getBarcode();
+	            else
+	            	this.barcode = null; 
 	            
 	            this.comments = form.getComments();
 	            this.positionDimensionOne = new Integer(form.getPositionDimensionOne());
@@ -555,7 +558,12 @@ public class Specimen extends AbstractDomainObject implements Serializable
             	CreateSpecimenForm form = (CreateSpecimenForm)abstractForm;
             	
             	this.activityStatus = form.getActivityStatus();
-            	this.barcode = validator.getObjectValue( form.getBarcode());
+            	
+            	if(!validator.isEmpty(form.getBarcode()))
+	            	this.barcode = form.getBarcode();
+	            else
+	            	this.barcode = null; 
+            	
             	this.comments = form.getComments();
             	this.positionDimensionOne = new Integer(form.getPositionDimensionOne());
 	            this.positionDimensionTwo = new Integer(form.getPositionDimensionTwo());
