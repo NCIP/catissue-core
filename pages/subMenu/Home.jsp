@@ -22,7 +22,11 @@
 		<div>
 			<a class="subMenuPrimary" href="UserSearch.do?pageOf=pageOfUserProfile&systemIdentifier=<bean:write name="<%=Constants.SESSION_DATA%>" property="userId" scope="session"/>" >
 				<bean:message key="app.edit" />
-			</a> 
+			</a> |  
+			<a class="subMenuPrimary" href="UserSearch.do?pageOf=pageOfChangePassword&systemIdentifier=<bean:write name="<%=Constants.SESSION_DATA%>" property="userId" scope="session"/>" >
+					<bean:message key="user.changePassword" />
+			</a>
+			
 		</div>
 	</td>
 </tr>
