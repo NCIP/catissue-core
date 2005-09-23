@@ -78,22 +78,6 @@ public class Utility
 		return obj.toString();
 	}
 	
-//	public static void main(String[] args)
-//    {
-//	    try{
-//	      String date = "2005-10-22";  
-//	      String pattern = "yyyy-MM-dd HH:mm aa";
-//	      Date d = parseDate(date,pattern);
-//	      String dd = parseDateToString(d,pattern);
-//	      System.out.println("Date........."+d);
-//	      System.out.println("String......."+dd);
-//	    }
-//	    catch(ParseException pexcp)
-//	    {
-//	        System.out.println("Exception"+pexcp.getMessage());
-//	    }
-//    }
-	
 	public static String[] getTime(Date date)
 	{
 		String []time =new String[2];
@@ -159,4 +143,21 @@ public class Utility
 		newObjectArr[newObjectArr.length-1] = obj;
 		return newObjectArr;
 	}
+	
+//	public static void main(String[] args)
+//  {
+//	    try{
+//	      String date = "2005-10-22";  
+//	      String pattern = "yyyy-MM-dd HH:mm aa";
+//	      Date d = parseDate(date,pattern);
+//	      String dd = parseDateToString(d,pattern);
+//	      System.out.println("Date........."+d);
+//	      System.out.println("String......."+dd);
+//	    }
+//	    catch(ParseException pexcp)
+//	    {
+//	        System.out.println("Exception"+pexcp.getMessage());
+//	    }
+//  }
+
 }

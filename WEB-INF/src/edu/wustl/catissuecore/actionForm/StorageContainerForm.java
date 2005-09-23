@@ -27,6 +27,7 @@ import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.StorageContainerDetails;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.catissuecore.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
@@ -212,7 +213,7 @@ public class StorageContainerForm extends AbstractActionForm
 			if(container.getStartNo() != null)
 				this.startNumber = String.valueOf(container.getStartNo().intValue());
 			
-			this.barcode = container.getBarcode();
+			this.barcode = Utility.toString(container.getBarcode());
 			
 			Collection storageContainerDetails = container.getStorageContainerDetailsCollection();
 			
@@ -220,10 +221,10 @@ public class StorageContainerForm extends AbstractActionForm
 			{
 				values = new HashMap();
 				
-				Iterator it = storageContainerDetails.iterator();
 				int i=1;
-				counter=0;
+				counter = storageContainerDetails.size();
 				
+				Iterator it = storageContainerDetails.iterator();
 				while(it.hasNext())
 				{
 					String key1 = "StorageContainerDetails:" + i +"_parameterName";
@@ -237,13 +238,12 @@ public class StorageContainerForm extends AbstractActionForm
 					values.put(key3,containerDetails.getSystemIdentifier());
 					
 					i++;
-					counter++;
 				}
-				
-				//At least one row should be displayed in ADD MORE therefore
-				if(counter == 0)
-					counter = 1;
 			}
+			Logger.out.debug("counter + "+counter);
+			//At least one row should be displayed in ADD MORE therefore
+			if(counter == 0)
+				counter = 1;
 		}
 		catch (Exception excp)
 		{
@@ -258,7 +258,7 @@ public class StorageContainerForm extends AbstractActionForm
 	 * */
 	public long getSystemIdentifier()
 	{
-		return (this.systemIdentifier);
+		return this.systemIdentifier;
 	}
 
 	/**

@@ -216,16 +216,16 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
     	}
     }
     
-    public void disableRelatedObjectsForStorageContainer(DAO dao, Long storageContainerIdArr[])throws DAOException 
-    {
-    	Logger.out.debug("disableRelatedObjectsForStorageContainer NewSpecimenBizLogic");
-    	List listOfSpecimenId = super.disableObjects(dao, Specimen.class, "storageContainer", 
-    			"CATISSUE_SPECIMEN", "STORAGE_CONTAINER_IDENTIFIER", storageContainerIdArr);
-    	if(!listOfSpecimenId.isEmpty())
-    	{
-    		disableSubSpecimens(dao,Utility.toLongArray(listOfSpecimenId));
-    	}
-    }
+//    public void disableRelatedObjectsForStorageContainer(DAO dao, Long storageContainerIdArr[])throws DAOException 
+//    {
+//    	Logger.out.debug("disableRelatedObjectsForStorageContainer NewSpecimenBizLogic");
+//    	List listOfSpecimenId = super.disableObjects(dao, Specimen.class, "storageContainer", 
+//    			"CATISSUE_SPECIMEN", "STORAGE_CONTAINER_IDENTIFIER", storageContainerIdArr);
+//    	if(!listOfSpecimenId.isEmpty())
+//    	{
+//    		disableSubSpecimens(dao,Utility.toLongArray(listOfSpecimenId));
+//    	}
+//    }
     
     private void disableSubSpecimens(DAO dao, Long speIDArr[])throws DAOException
 	{

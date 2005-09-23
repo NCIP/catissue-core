@@ -105,8 +105,9 @@ public class StorageContainerDetails extends AbstractDomainObject implements jav
 	}
 	
 	/**
+     * @hibernate.many-to-one column="STORAGE_CONTAINER_ID"  class="edu.wustl.catissuecore.domain.StorageContainer" constrained="true"
 	 * @return Returns the storageContainer.
-	 */
+     */
 	public StorageContainer getStorageContainer()
 	{
 		return storageContainer;

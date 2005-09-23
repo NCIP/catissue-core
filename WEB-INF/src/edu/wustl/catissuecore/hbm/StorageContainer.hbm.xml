@@ -102,8 +102,8 @@
             name="storageContainerDetailsCollection"
             table="CATISSUE_STORAGE_CONTAINER_DETAILS"
             lazy="false"
-            inverse="false"
-            cascade="none"
+            inverse="true"
+            cascade="save-update"
             sort="unsorted"
         >
 
@@ -115,11 +115,11 @@
                   class="edu.wustl.catissuecore.domain.StorageContainerDetails"
               />
         </set>
-
+        
         <many-to-one
             name="storageContainerCapacity"
             class="edu.wustl.catissuecore.domain.StorageContainerCapacity"
-            cascade="none"
+            cascade="save-update"
             outer-join="auto"
             update="true"
             insert="true"
@@ -131,7 +131,7 @@
             table="CATISSUE_STORAGE_CONTAINER"
             lazy="false"
             inverse="false"
-            cascade="none"
+            cascade="save-update"
             sort="unsorted"
         >
 

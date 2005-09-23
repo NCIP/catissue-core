@@ -4,6 +4,30 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.StorageContainerForm"%>
 
+<%
+        String operation = (String) request.getAttribute(Constants.OPERATION);
+        String formName;
+
+        boolean readOnlyValue;
+        if (operation.equals(Constants.EDIT))
+        {
+            formName = Constants.STORAGE_CONTAINER_EDIT_ACTION;
+            readOnlyValue = true;
+        }
+        else
+        {
+            formName = Constants.STORAGE_CONTAINER_ADD_ACTION;
+            readOnlyValue = false;
+        }
+	
+		Object obj = request.getAttribute("storageContainerForm");
+		int noOfRows=1;
+		if(obj != null && obj instanceof StorageContainerForm)
+		{
+			StorageContainerForm form = (StorageContainerForm)obj;
+			noOfRows = form.getCounter();
+		}
+%>
 
 <head>
 	<script language="JavaScript">
@@ -172,30 +196,7 @@ function insRow(subdivtag)
 	</script>
 </head>
 
-<%
-        String operation = (String) request.getAttribute(Constants.OPERATION);
-        String formName;
 
-        boolean readOnlyValue;
-        if (operation.equals(Constants.EDIT))
-        {
-            formName = Constants.STORAGE_CONTAINER_EDIT_ACTION;
-            readOnlyValue = true;
-        }
-        else
-        {
-            formName = Constants.STORAGE_CONTAINER_ADD_ACTION;
-            readOnlyValue = false;
-        }
-	
-		Object obj = request.getAttribute("storageContainerForm");
-		int noOfRows=1;
-		if(obj != null && obj instanceof StorageContainerForm)
-		{
-			StorageContainerForm form = (StorageContainerForm)obj;
-			noOfRows = form.getCounter();
-		}
-%>
 
 <html:errors />
 

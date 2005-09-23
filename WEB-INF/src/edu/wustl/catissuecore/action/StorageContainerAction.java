@@ -60,35 +60,6 @@ public class StorageContainerAction  extends SecureAction
         	List list = bizLogic.getList(StorageType.class.getName(),displayField, valueField, false);
         	request.setAttribute(Constants.STORAGETYPELIST, list);
         	
-        	long typeSelected=-1;
-        	String selectedType = String.valueOf(storageContainerForm.getTypeId());
-        	
-        	if(selectedType != null && !selectedType.equals("-1"))
-            {
-            	typeSelected = Long.parseLong(selectedType);
-            	list = bizLogic.retrieve(StorageType.class.getName(),valueField,new Long(typeSelected));
-            	if(!list.isEmpty())
-            	{
-            		StorageType type = (StorageType)list.get(0);
-            		if(type.getDefaultTempratureInCentigrade()!= null)
-            			storageContainerForm.setDefaultTemperature(type.getDefaultTempratureInCentigrade().doubleValue());
-            		
-            		storageContainerForm.setOneDimensionCapacity(type.getDefaultStorageCapacity().getOneDimensionCapacity().intValue());
-            		storageContainerForm.setTwoDimensionCapacity(type.getDefaultStorageCapacity().getTwoDimensionCapacity().intValue());
-            		storageContainerForm.setOneDimensionLabel(type.getOneDimensionLabel());
-            		storageContainerForm.setTwoDimensionLabel(type.getTwoDimensionLabel());
-            	}
-            }
-            else
-            {
-            	request.setAttribute("storageType", null);
-            	storageContainerForm.setDefaultTemperature(0.0);
-        		storageContainerForm.setOneDimensionCapacity(0);
-        		storageContainerForm.setTwoDimensionCapacity(0);
-        		storageContainerForm.setOneDimensionLabel("Dimension One");
-        		storageContainerForm.setTwoDimensionLabel("Dimension Two");
-            }
-        	
         	//Populating the Site Array
         	String []siteDisplayField = {"name"};
         	list = bizLogic.getList(Site.class.getName(),siteDisplayField, valueField, true);
@@ -101,9 +72,40 @@ public class StorageContainerAction  extends SecureAction
 				if(str.equals("true"))
 					isOnChange = true; 
 			}
-
+			
         	if(isOnChange)
         	{
+
+	        	long typeSelected=-1;
+	        	String selectedType = String.valueOf(storageContainerForm.getTypeId());
+	        	
+	        	if(selectedType != null && !selectedType.equals("-1"))
+	            {
+	            	typeSelected = Long.parseLong(selectedType);
+	            	list = bizLogic.retrieve(StorageType.class.getName(),valueField,new Long(typeSelected));
+	            	if(!list.isEmpty())
+	            	{
+	            		StorageType type = (StorageType)list.get(0);
+	            		if(type.getDefaultTempratureInCentigrade()!= null)
+	            			storageContainerForm.setDefaultTemperature(type.getDefaultTempratureInCentigrade().doubleValue());
+	            		
+	            		storageContainerForm.setOneDimensionCapacity(type.getDefaultStorageCapacity().getOneDimensionCapacity().intValue());
+	            		storageContainerForm.setTwoDimensionCapacity(type.getDefaultStorageCapacity().getTwoDimensionCapacity().intValue());
+	            		storageContainerForm.setOneDimensionLabel(type.getOneDimensionLabel());
+	            		storageContainerForm.setTwoDimensionLabel(type.getTwoDimensionLabel());
+	            	}
+	            }
+	            else
+	            {
+	            	request.setAttribute("storageType", null);
+	            	storageContainerForm.setDefaultTemperature(0.0);
+	        		storageContainerForm.setOneDimensionCapacity(0);
+	        		storageContainerForm.setTwoDimensionCapacity(0);
+	        		storageContainerForm.setOneDimensionLabel("Dimension One");
+	        		storageContainerForm.setTwoDimensionLabel("Dimension Two");
+	            }
+        	
+        	
         	    int startNumber = 1;
 	        	if(storageContainerForm.getCheckedButton() == 1)
 	        	{
@@ -122,7 +124,7 @@ public class StorageContainerAction  extends SecureAction
 		}
         catch(Exception e)
 		{
-        	e.printStackTrace();
+        	Logger.out.error(e.getMessage(),e);
 		}
     
         return mapping.findForward((String)request.getParameter(Constants.PAGEOF));

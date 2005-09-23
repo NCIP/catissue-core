@@ -1167,9 +1167,8 @@ public class Constants
 	public static final String GROUPS = "groups";
 	public static final String ASSIGN_PRIVILEGES_ACTION = "AssignPrivileges.do";
 	public static final String ANY = "Any";
-
-
-    /**
+	public static final int CONTAINER_IN_ANOTHER_CONTAINER = 2;
+	    /**
      * @param systemIdentifier
      * @return
      */
@@ -1194,9 +1193,8 @@ public class Constants
 	    }
 	    return "USER_"+identifier;
     }
-    
-    public static final String SLIDE = "Slide";
-    public static final String PARAFFIN_BLOCK = "Paraffin Block"; 
-	public static final String FROZEN_BLOCK = "Frozen Block";
 	
+	public static final String SLIDE = "Slide";
+    public static final String PARAFFIN_BLOCK = "Paraffin Block"; 
+	public static final String FROZEN_BLOCK = "Frozen Block";    
 }

@@ -14,6 +14,7 @@ import java.util.Map;
 
 import edu.wustl.catissuecore.actionForm.AbstractActionForm;
 import edu.wustl.catissuecore.actionForm.StorageContainerForm;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.logger.Logger;
 
@@ -86,19 +87,20 @@ public class StorageContainer extends AbstractDomainObject implements java.io.Se
 	 */
 	protected Collection childrenContainerCollection = new HashSet();
 	
-	/**
-	 * Number of containers
-	 */
-	protected transient Integer noOfContainers;
+	protected Integer positionDimensionOne;
+
+	protected Integer positionDimensionTwo;
 	
 	/**
 	 * Number of containers
 	 */
 	protected transient Integer startNo;
-	
-	protected Integer positionDimensionOne;
+	/**
+	 * Number of containers
+	 */
+	protected transient Integer noOfContainers;
 
-	protected Integer positionDimensionTwo;
+	protected transient boolean isParentChanged = false;
 
 	//Default Constructor
 	public StorageContainer()
@@ -330,6 +332,7 @@ public class StorageContainer extends AbstractDomainObject implements java.io.Se
 	 * Returns collection of storage container details.
 	 * @return Collection of storage container details.
 	 * @hibernate.set name="storageContainerDetailsCollection" table="CATISSUE_STORAGE_CONTAINER_DETAILS"
+	 * cascade="save-update" inverse="true" lazy="false"
 	 * @hibernate.collection-key column="STORAGE_CONTAINER_ID"
 	 * @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.StorageContainerDetails"
 	 * @see setStorageContainerDetailsCollection(Collection)
@@ -352,7 +355,7 @@ public class StorageContainer extends AbstractDomainObject implements java.io.Se
 	/**
      * Returns the capacity of this storage container.
      * @hibernate.many-to-one column="STORAGE_CONTAINER_CAPACITY_ID" 
-     * class="edu.wustl.catissuecore.domain.StorageContainerCapacity" constrained="true"
+     * class="edu.wustl.catissuecore.domain.StorageContainerCapacity" constrained="true" cascade="save-update" 
      * @return The capacity of this storage container.
      * @see #setStorageContainerCapacity(StorageContainerCapacity)
      */
@@ -376,6 +379,7 @@ public class StorageContainer extends AbstractDomainObject implements java.io.Se
 	 * Returns collection of sub containers under this.
 	 * @return collection of sub containers under this.
 	 * @hibernate.set name="childrenContainerCollection" table="CATISSUE_STORAGE_CONTAINER"
+	 * cascade="save-update" 
 	 * @hibernate.collection-key column="PARENT_CONTAINER_ID"
 	 * @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.StorageContainer"
 	 * @see setChildrenContainerCollection(Collection)
@@ -440,57 +444,6 @@ public class StorageContainer extends AbstractDomainObject implements java.io.Se
     }
 	
 	/**
-	 * This function Copies the data from a StorageTypeForm object to a StorageType object.
-	 * @param storageTypeForm A StorageTypeForm object containing the information about the StorageType.  
-	 * */
-	public void setAllValues(AbstractActionForm abstractForm)
-	{
-	    try
-	    {
-	        StorageContainerForm form = (StorageContainerForm) abstractForm;
-	        this.systemIdentifier 		= new Long(form.getSystemIdentifier());
-	        this.number 				= new Integer(form.getStartNumber());
-	        this.startNo				= new Integer(form.getStartNumber());
-	        this.tempratureInCentigrade	= new Double(form.getDefaultTemperature());
-	        this.barcode				= form.getBarcode();
-	        this.isFull					= new Boolean(form.getIsFull());
-	        this.activityStatus			= form.getActivityStatus();
-	        this.noOfContainers			= new Integer(form.getNoOfContainers());
-	        
-	        storageType = new StorageType();
-	        storageType.systemIdentifier = new Long(form.getTypeId());
-	        storageType.setOneDimensionLabel(form.getOneDimensionLabel());
-	        storageType.setTwoDimensionLabel(form.getTwoDimensionLabel());
-	        
-	        storageContainerCapacity.setOneDimensionCapacity(new Integer(form.getOneDimensionCapacity()));
-	        storageContainerCapacity.setTwoDimensionCapacity(new Integer(form.getTwoDimensionCapacity()));
-	        
-	        if(form.getCheckedButton() == 2)
-			{
-				parentContainer = new StorageContainer();
-				parentContainer.setSystemIdentifier(new Long(form.getParentContainerId()));
-				this.setPositionDimensionOne(new Integer(form.getPositionDimensionOne()));
-		        this.setPositionDimensionTwo(new Integer(form.getPositionDimensionTwo()));
-			}
-	        else
-	        {
-		        site = new Site();
-		        site.setSystemIdentifier(new Long(form.getSiteId()));
-	        }
-	        
-	        Map map = form.getValues();
-	        Logger.out.debug("Map.................. :"+map); 
-	        MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.domain");
-	        
-	        Collection storageContainerDetailsCollectionTemp = parser.generateData(map);
-	        this.storageContainerDetailsCollection = storageContainerDetailsCollectionTemp;
-	    }
-	    catch(Exception excp)
-	    {
-	        Logger.out.error(excp.getMessage(),excp);
-	    }
-	}
-	/**
 	 * @return Returns the noOfContainers.
 	 */
 	public Integer getNoOfContainers()
@@ -517,5 +470,97 @@ public class StorageContainer extends AbstractDomainObject implements java.io.Se
 	public void setStartNo(Integer startNo)
 	{
 		this.startNo = startNo;
+	}
+	
+	public boolean isParentChanged()
+	{
+		return isParentChanged;
+	}
+	public void setParentChanged(boolean isParentChanged)
+	{
+		this.isParentChanged = isParentChanged;
+	}
+	
+	/**
+	 * This function Copies the data from a StorageTypeForm object to a StorageType object.
+	 * @param storageTypeForm A StorageTypeForm object containing the information about the StorageType.  
+	 * */
+	public void setAllValues(AbstractActionForm abstractForm)
+	{
+	    try
+	    {
+	        StorageContainerForm form = (StorageContainerForm) abstractForm;
+	        
+	        this.number 				= new Integer(form.getStartNumber());
+	        this.startNo				= new Integer(form.getStartNumber());
+	        this.tempratureInCentigrade	= new Double(form.getDefaultTemperature());
+	        
+	        if(!form.getBarcode().trim().equals(""))
+	        	this.barcode			= form.getBarcode();
+	        else
+	        	this.barcode			= null;
+	        
+	        this.isFull					= new Boolean(form.getIsFull());
+	        this.activityStatus			= form.getActivityStatus();
+	        this.noOfContainers			= new Integer(form.getNoOfContainers());
+	        
+	        storageType = new StorageType();
+	        storageType.setSystemIdentifier(new Long(form.getTypeId()));
+	        storageType.setOneDimensionLabel(form.getOneDimensionLabel());
+	        storageType.setTwoDimensionLabel(form.getTwoDimensionLabel());
+	        
+	        storageContainerCapacity.setOneDimensionCapacity(new Integer(form.getOneDimensionCapacity()));
+	        storageContainerCapacity.setTwoDimensionCapacity(new Integer(form.getTwoDimensionCapacity()));
+	        
+	        //in case of edit
+        	if(!form.isAddOperation())
+        	{
+        		//Previously Container was in a site
+        		if(parentContainer==null)
+        		{
+        			//Put this in another container
+        			if(form.getParentContainerId()>0)
+        			{
+        				isParentChanged = true;
+        			}
+        		}
+        		else//in another container
+        		{
+        			if(parentContainer.getSystemIdentifier().longValue()!=form.getParentContainerId())
+        			{
+        				isParentChanged = true;
+        			}
+        		}
+        	}
+	        
+        	Logger.out.debug("isParentChanged "+isParentChanged);
+	        if(form.getCheckedButton() == Constants.CONTAINER_IN_ANOTHER_CONTAINER)
+			{
+        		parentContainer = new StorageContainer();
+				parentContainer.setSystemIdentifier(new Long(form.getParentContainerId()));
+        		this.setPositionDimensionOne(new Integer(form.getPositionDimensionOne()));
+        		this.setPositionDimensionTwo(new Integer(form.getPositionDimensionTwo()));
+			}
+	        else
+	        {
+	        	parentContainer = null;
+	        	this.setPositionDimensionOne(null);
+	        	this.setPositionDimensionTwo(null);
+		        site = new Site();
+		        site.setSystemIdentifier(new Long(form.getSiteId()));
+	        }
+	        
+	        Map map = form.getValues();
+	        Logger.out.debug("Map.................. :"+map); 
+	        MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.domain");
+	        
+	        Collection storageContainerDetailsCollectionTemp = parser.generateData(map);
+	        this.storageContainerDetailsCollection = storageContainerDetailsCollectionTemp;
+	        Logger.out.debug("OBJ.................. :"+storageContainerDetailsCollection); 
+	    }
+	    catch(Exception excp)
+	    {
+	        Logger.out.error(excp.getMessage(),excp);
+	    }
 	}
 }
