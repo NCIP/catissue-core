@@ -184,12 +184,12 @@ public abstract class Query
 		        List rowList = (List) iterator.next();
 		        DataElement dataElement = new DataElement();
 		        dataElement.setTable((String)rowList.get(0));
-		        Logger.out.debug("TABLE NAME : "+dataElement.getTable());
+		        //Logger.out.debug("TABLE NAME : "+dataElement.getTable());
 		        dataElement.setField((String)rowList.get(1));
-		        Logger.out.debug("ALIAS NAME : "+dataElement.getField());
+		        //Logger.out.debug("ALIAS NAME : "+dataElement.getField());
 		        vector.add(dataElement);
 		        columnNames[i++] = (String)rowList.get(2);
-		        Logger.out.debug("COLUMN NAME : "+columnNames[i-1]);
+		        //Logger.out.debug("COLUMN NAME : "+columnNames[i-1]);
 		    }
 		    
 		    setResultView(vector);
