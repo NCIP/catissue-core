@@ -44,7 +44,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 	{
 		CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration) obj;
 		
-		registerParticipantAndProtocol(dao,collectionProtocolRegistration);
+		registerParticipantAndProtocol(dao,collectionProtocolRegistration, sessionDataBean);
 		
 		dao.insert(collectionProtocolRegistration, sessionDataBean, true, true);
 		
@@ -67,8 +67,6 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 	protected void update(DAO dao, Object obj, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 	{
 		CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration) obj;
-		
-		//registerParticipantAndProtocol(dao,collectionProtocolRegistration);
 		
 		dao.update(collectionProtocolRegistration, sessionDataBean, true, true, false);
 		
@@ -111,7 +109,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
         
     }
     
-    private void registerParticipantAndProtocol(DAO dao, CollectionProtocolRegistration collectionProtocolRegistration) throws DAOException
+    private void registerParticipantAndProtocol(DAO dao, CollectionProtocolRegistration collectionProtocolRegistration, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 	{
     	//Case of registering Participant on its participant ID
     	Participant participant = null;
@@ -119,17 +117,28 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 		if(collectionProtocolRegistration.getParticipant()!=null)
 		{
 			List list = dao.retrieve(Participant.class.getName(),
-                    "systemIdentifier", collectionProtocolRegistration.getParticipant().getSystemIdentifier());
+                    Constants.SYSTEM_IDENTIFIER, collectionProtocolRegistration.getParticipant().getSystemIdentifier());
 			
 			if (list != null && list.size() != 0)
 			{
 				participant = (Participant)list.get(0);
 			}
 		}
+		else
+		{
+			participant = new Participant();
+			
+			participant.setLastName("");
+			participant.setFirstName("");
+			participant.setMiddleName("");
+			participant.setSocialSecurityNumber(null);
+			
+			dao.insert(participant, sessionDataBean, true, true);
+		}
 		
 		collectionProtocolRegistration.setParticipant(participant);
 
-		List list = dao.retrieve(CollectionProtocol.class.getName(), "systemIdentifier",
+		List list = dao.retrieve(CollectionProtocol.class.getName(), Constants.SYSTEM_IDENTIFIER,
 				collectionProtocolRegistration.getCollectionProtocol().getSystemIdentifier());
 		if (list != null && list.size() != 0)
 		{
