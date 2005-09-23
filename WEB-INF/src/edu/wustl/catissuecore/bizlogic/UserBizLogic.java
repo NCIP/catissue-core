@@ -12,7 +12,6 @@ package edu.wustl.catissuecore.bizlogic;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.Vector;
@@ -21,7 +20,6 @@ import edu.wustl.catissuecore.action.DomainObjectListAction;
 import edu.wustl.catissuecore.dao.DAO;
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.domain.CancerResearchGroup;
-import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.Department;
 import edu.wustl.catissuecore.domain.Institution;
 import edu.wustl.catissuecore.domain.User;
@@ -248,25 +246,34 @@ public class UserBizLogic extends DefaultBizLogic
         
         try
         {
-	        dao.update(user.getAddress(), sessionDataBean, true, false, false);
-	        dao.update(user, sessionDataBean, true, true, true);
-        
             gov.nih.nci.security.authorization.domainobjects.User csmUser = SecurityManager
                     .getInstance(DomainObjectListAction.class).getUserById(
                             String.valueOf(user.getSystemIdentifier()));
 
-            csmUser.setLoginName(user.getLoginName());
-            csmUser.setLastName(user.getLastName());
-            csmUser.setFirstName(user.getFirstName());
-            csmUser.setEmailId(user.getEmailAddress());
-            if (user.getPageOf().equals(Constants.PAGEOF_USER_PROFILE))
+            if (user.getPageOf().equals(Constants.PAGEOF_CHANGE_PASSWORD))
             {
+                Logger.out.debug("New Password**********************"+user.getPassword());
+//                if (!user.getOldPassword().equals(csmUser.getPassword()))
+//                {
+//                    throw new DAOException("Your old Password does not match with your current password. " +
+//                    					   "Please retype your old password");
+//                }
                 csmUser.setPassword(PasswordEncoderDecoder.encode(user.getPassword()));
+            }
+            else
+            {
+                dao.update(user.getAddress(), sessionDataBean, true, false, false);
+    	        dao.update(user, sessionDataBean, true, true, true);
+    	        
+                csmUser.setLoginName(user.getLoginName());
+                csmUser.setLastName(user.getLastName());
+                csmUser.setFirstName(user.getFirstName());
+                csmUser.setEmailId(user.getEmailAddress());
             }
 
             SecurityManager.getInstance(UserBizLogic.class).modifyUser(csmUser);
 
-            if (!user.getPageOf().equals(Constants.PAGEOF_USER_PROFILE))
+            if (!user.getPageOf().equals(Constants.PAGEOF_USER_PROFILE) && !user.getPageOf().equals(Constants.PAGEOF_CHANGE_PASSWORD))
             {
                 SecurityManager.getInstance(UserBizLogic.class).assignRoleToUser(
                         csmUser.getLoginName(), user.getRoleId());

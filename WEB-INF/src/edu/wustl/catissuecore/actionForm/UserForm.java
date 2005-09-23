@@ -69,10 +69,20 @@ public class UserForm extends AbstractActionForm
     private String emailAddress;
     
     /**
-     * Password of the user.
+     * Old Password of the user.
      */
-    private String password;
-
+    private String oldPassword;
+    
+    /**
+     * New Password of the user.
+     */
+    private String newPassword;
+    
+    /**
+     * Confirmed new password of the user.
+     */
+    private String confirmNewPassword;
+    
     /**
      * Department name of the user.
      */
@@ -87,7 +97,7 @@ public class UserForm extends AbstractActionForm
      * The City where the user stays.
      */
     private String city;
-
+    
     /**
      * The State where the user stays.
      */
@@ -280,19 +290,51 @@ public class UserForm extends AbstractActionForm
     }
 
     /**
-     * @return Returns the password.
+     * @return Returns the confirmNewPassword.
      */
-    public String getPassword()
+    public String getConfirmNewPassword()
     {
-        return password;
+        return confirmNewPassword;
     }
     
     /**
-     * @param password The password to set.
+     * @return Returns the newPassword.
      */
-    public void setPassword(String password)
+    public String getNewPassword()
     {
-        this.password = password;
+        return newPassword;
+    }
+    
+    /**
+     * @return Returns the oldPassword.
+     */
+    public String getOldPassword()
+    {
+        return oldPassword;
+    }
+    
+    /**
+     * @param confirmNewPassword The confirmNewPassword to set.
+     */
+    public void setConfirmNewPassword(String confirmNewPassword)
+    {
+        this.confirmNewPassword = confirmNewPassword;
+    }
+    
+    /**
+     * @param newPassword The newPassword to set.
+     */
+    public void setNewPassword(String newPassword)
+    {
+        this.newPassword = newPassword;
+    }
+    
+    /**
+     * @param oldPassword The oldPassword to set.
+     */
+    public void setOldPassword(String oldPassword)
+    {
+        this.oldPassword = oldPassword;
     }
     
     /**
@@ -550,7 +592,9 @@ public class UserForm extends AbstractActionForm
                 if (this.status.equals(Constants.APPROVE_USER_PENDING_STATUS))
                     formId = Constants.SIGNUP_FORM_ID;
             }
-            else if (pageOf.equals(Constants.PAGEOF_USER_ADMIN) || pageOf.equals(Constants.PAGEOF_USER_PROFILE))
+            else if (pageOf.equals(Constants.PAGEOF_USER_ADMIN) || 
+                     pageOf.equals(Constants.PAGEOF_USER_PROFILE) ||
+                     pageOf.equals(Constants.PAGEOF_CHANGE_PASSWORD))
                 formId = Constants.USER_FORM_ID;
                 
         }
@@ -653,48 +697,51 @@ public class UserForm extends AbstractActionForm
             {
                 User user = (User) abstractDomain;
                 
-                this.systemIdentifier = user.getSystemIdentifier().longValue();
-                this.lastName = user.getLastName();
-                this.firstName = user.getFirstName();
-                this.institutionId = user.getInstitution().getSystemIdentifier()
-                        .longValue();
-                this.emailAddress = user.getEmailAddress();
-                this.departmentId = user.getDepartment().getSystemIdentifier()
-                        .longValue();
-                this.cancerResearchGroupId = user.getCancerResearchGroup()
-                .getSystemIdentifier().longValue();
-                
-                this.street = user.getAddress().getStreet();
-                this.city = user.getAddress().getCity();
-                this.state = user.getAddress().getState();
-                this.country = user.getAddress().getCountry();
-                this.zipCode = user.getAddress().getZipCode();
-                this.phoneNumber = user.getAddress().getPhoneNumber();
-                this.faxNumber = user.getAddress().getFaxNumber();
-                
-                if (pageOf.equals(Constants.PAGEOF_USER_PROFILE))
+                if (pageOf.equals(Constants.PAGEOF_CHANGE_PASSWORD))
                 {
-                    this.password = user.getPassword();
+                    oldPassword = user.getPassword();
                 }
                 else
                 {
-                    this.activityStatus = user.getActivityStatus();
-                    this.comments = user.getComments();
+                    this.systemIdentifier = user.getSystemIdentifier().longValue();
+                    this.lastName = user.getLastName();
+                    this.firstName = user.getFirstName();
+                    this.institutionId = user.getInstitution().getSystemIdentifier()
+                            .longValue();
+                    this.emailAddress = user.getEmailAddress();
+                    this.departmentId = user.getDepartment().getSystemIdentifier()
+                            .longValue();
+                    this.cancerResearchGroupId = user.getCancerResearchGroup()
+                    		.getSystemIdentifier().longValue();
                     
-                    if (activityStatus.equals(Constants.ACTIVITY_STATUS_ACTIVE))
-                    {
-                        this.status = Constants.APPROVE_USER_APPROVE_STATUS;
-                    }
-                    else if (activityStatus.equals(Constants.ACTIVITY_STATUS_NEW))
-                    {
-                        this.status = Constants.APPROVE_USER_PENDING_STATUS;
-                    }
-                    else if (activityStatus.equals(Constants.ACTIVITY_STATUS_CLOSED))
-                    {
-                        this.status = Constants.APPROVE_USER_REJECT_STATUS;
-                    }
+                    this.street = user.getAddress().getStreet();
+                    this.city = user.getAddress().getCity();
+                    this.state = user.getAddress().getState();
+                    this.country = user.getAddress().getCountry();
+                    this.zipCode = user.getAddress().getZipCode();
+                    this.phoneNumber = user.getAddress().getPhoneNumber();
+                    this.faxNumber = user.getAddress().getFaxNumber();
                     
-                    this.role = user.getRoleId();
+                    if (!pageOf.equals(Constants.PAGEOF_USER_PROFILE))
+                    {
+                        this.activityStatus = user.getActivityStatus();
+                        this.comments = user.getComments();
+                        
+                        if (activityStatus.equals(Constants.ACTIVITY_STATUS_ACTIVE))
+                        {
+                            this.status = Constants.APPROVE_USER_APPROVE_STATUS;
+                        }
+                        else if (activityStatus.equals(Constants.ACTIVITY_STATUS_NEW))
+                        {
+                            this.status = Constants.APPROVE_USER_PENDING_STATUS;
+                        }
+                        else if (activityStatus.equals(Constants.ACTIVITY_STATUS_CLOSED))
+                        {
+                            this.status = Constants.APPROVE_USER_REJECT_STATUS;
+                        }
+                        
+                        this.role = user.getRoleId();
+                    }
                 }
             }
         }
@@ -716,127 +763,151 @@ public class UserForm extends AbstractActionForm
         {
             if (operation != null)
             {
-                if (operation.equals(Constants.ADD)
-                        || operation.equals(Constants.EDIT))
+                if (pageOf.equals(Constants.PAGEOF_CHANGE_PASSWORD))
                 {
-                    if (validator.isEmpty(lastName))
+                    if (validator.isEmpty(oldPassword))
                     {
                         errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
                                 "errors.item.required", ApplicationProperties
-                                        .getValue("user.lastName")));
-                    }
-
-                    if (validator.isEmpty(firstName))
-                    {
-                        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-                                "errors.item.required", ApplicationProperties
-                                        .getValue("user.firstName")));
-                    }
-
-                    if (validator.isEmpty(city))
-                    {
-                        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-                                "errors.item.required", ApplicationProperties
-                                        .getValue("user.city")));
-                    }
-
-                    if (state.trim().equals(Constants.SELECT_OPTION))
-                    {
-                        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-                                "errors.item.required", ApplicationProperties
-                                        .getValue("user.state")));
-                    }
-
-                    if (validator.isEmpty(zipCode))
-                    {
-                        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-                                "errors.item.required", ApplicationProperties
-                                        .getValue("user.zipCode")));
-                    }
-
-                    if (country.trim().equals(Constants.SELECT_OPTION))
-                    {
-                        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-                                "errors.item.required", ApplicationProperties
-                                        .getValue("user.country")));
+                                        .getValue("user.oldPassword")));
                     }
                     
-                    if (validator.isEmpty(phoneNumber))
+                    if (validator.isEmpty(newPassword))
                     {
                         errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
                                 "errors.item.required", ApplicationProperties
-                                        .getValue("user.phoneNumber")));
+                                        .getValue("user.newPassword")));
                     }
+                    
+                    if (validator.isEmpty(confirmNewPassword))
+                    {
+                        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+                                "errors.item.required", ApplicationProperties
+                                        .getValue("user.confirmNewPassword")));
+                    }
+                    
+                    if (!validator.isEmpty(newPassword) && !validator.isEmpty(confirmNewPassword))
+                    {
+                        if (!newPassword.equals(confirmNewPassword))
+                        {
+                            errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.confirmNewPassword.reType"));
+                        }
+                    }
+                }
+                else
+                {
+                    if (operation.equals(Constants.ADD)
+                            || operation.equals(Constants.EDIT))
+                    {
+                        if (validator.isEmpty(lastName))
+                        {
+                            errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+                                    "errors.item.required", ApplicationProperties
+                                            .getValue("user.lastName")));
+                        }
 
-                    if (validator.isEmpty(emailAddress))
-                    {
-                        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-                                "errors.item.required", ApplicationProperties
-                                        .getValue("user.emailAddress")));
-                    }
-                    else
-                    {
-                        if (!validator.isValidEmailAddress(emailAddress))
+                        if (validator.isEmpty(firstName))
+                        {
+                            errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+                                    "errors.item.required", ApplicationProperties
+                                            .getValue("user.firstName")));
+                        }
+
+                        if (validator.isEmpty(city))
+                        {
+                            errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+                                    "errors.item.required", ApplicationProperties
+                                            .getValue("user.city")));
+                        }
+
+                        if (state.trim().equals(Constants.SELECT_OPTION))
+                        {
+                            errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+                                    "errors.item.required", ApplicationProperties
+                                            .getValue("user.state")));
+                        }
+
+                        if (validator.isEmpty(zipCode))
+                        {
+                            errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+                                    "errors.item.required", ApplicationProperties
+                                            .getValue("user.zipCode")));
+                        }
+
+                        if (country.trim().equals(Constants.SELECT_OPTION))
+                        {
+                            errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+                                    "errors.item.required", ApplicationProperties
+                                            .getValue("user.country")));
+                        }
+                        
+                        if (validator.isEmpty(phoneNumber))
+                        {
+                            errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+                                    "errors.item.required", ApplicationProperties
+                                            .getValue("user.phoneNumber")));
+                        }
+
+                        if (validator.isEmpty(emailAddress))
+                        {
+                            errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+                                    "errors.item.required", ApplicationProperties
+                                            .getValue("user.emailAddress")));
+                        }
+                        else
+                        {
+                            if (!validator.isValidEmailAddress(emailAddress))
+                            {
+                                errors.add(ActionErrors.GLOBAL_ERROR,
+                                                new ActionError("errors.item.format",
+                                                        ApplicationProperties.getValue("user.emailAddress")));
+                            }
+                        }
+
+                        if (institutionId == -1)
+                        {
+                            errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+                                    "errors.item.required", ApplicationProperties
+                                            .getValue("user.institution")));
+                        }
+
+                        if (departmentId == -1)
+                        {
+                            errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+                                    "errors.item.required", ApplicationProperties
+                                            .getValue("user.department")));
+                        }
+                        
+                        if (cancerResearchGroupId == -1)
                         {
                             errors.add(ActionErrors.GLOBAL_ERROR,
-                                            new ActionError("errors.item.format",
-                                                    ApplicationProperties.getValue("user.emailAddress")));
+                                            new ActionError("errors.item.required",
+                                                    ApplicationProperties.getValue("user.cancerResearchGroup")));
+                        }
+
+                    }
+
+                    if (pageOf.equals(Constants.PAGEOF_USER_ADMIN) || pageOf.equals(Constants.PAGEOF_APPROVE_USER))
+                    {
+                        if (role != null)
+                        {
+                            if (role.trim().equals("0"))
+    	                    {
+    	                        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+    	                                "errors.item.required", ApplicationProperties
+    	                                        .getValue("user.role")));
+    	                    }
                         }
                     }
 
-                    if (institutionId == -1)
+                    if (pageOf.equals(Constants.PAGEOF_APPROVE_USER))
                     {
-                        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-                                "errors.item.required", ApplicationProperties
-                                        .getValue("user.institution")));
-                    }
-
-                    if (departmentId == -1)
-                    {
-                        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-                                "errors.item.required", ApplicationProperties
-                                        .getValue("user.department")));
-                    }
-                    
-                    if (cancerResearchGroupId == -1)
-                    {
-                        errors.add(ActionErrors.GLOBAL_ERROR,
-                                        new ActionError("errors.item.required",
-                                                ApplicationProperties.getValue("user.cancerResearchGroup")));
-                    }
-
-                }
-
-                if (pageOf.equals(Constants.PAGEOF_USER_ADMIN) || pageOf.equals(Constants.PAGEOF_APPROVE_USER))
-                {
-                    if (role != null)
-                    {
-                        if (role.trim().equals("0"))
-	                    {
-	                        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-	                                "errors.item.required", ApplicationProperties
-	                                        .getValue("user.role")));
-	                    }
-                    }
-                }
-
-                if (pageOf.equals(Constants.PAGEOF_APPROVE_USER))
-                {
-                    if (status.trim().equals(Constants.SELECT_OPTION))
-                    {
-                        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-                                "errors.item.required", ApplicationProperties
-                                        .getValue("user.approveOperation")));
-                    }
-                }
-                
-                if (pageOf.equals(Constants.PAGEOF_USER_PROFILE))
-                {
-                    if (validator.isEmpty(password))
-                    {
-                        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-                                "errors.item.required", ApplicationProperties
-                                        .getValue("user.password")));
+                        if (status.trim().equals(Constants.SELECT_OPTION))
+                        {
+                            errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+                                    "errors.item.required", ApplicationProperties
+                                            .getValue("user.approveOperation")));
+                        }
                     }
                 }
             }
