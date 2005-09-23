@@ -486,6 +486,7 @@ public class User extends AbstractDomainObject implements Serializable
             }
             else
             {
+                this.systemIdentifier = new Long(uform.getSystemIdentifier());
                 if (this.systemIdentifier.intValue() == -1)
                 {
                     this.setStartDate(Calendar.getInstance().getTime());
@@ -537,6 +538,7 @@ public class User extends AbstractDomainObject implements Serializable
                 this.address.setZipCode(uform.getZipCode());
                 this.address.setPhoneNumber(uform.getPhoneNumber());
                 this.address.setFaxNumber(uform.getFaxNumber());
+                
             }
         }
         catch (Exception excp)
