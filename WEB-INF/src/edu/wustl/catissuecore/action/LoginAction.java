@@ -48,7 +48,7 @@ public class LoginAction extends Action
             HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException
     {
-
+        
         String loginName = null;
         String password = null;
         HttpSession session = null;
@@ -153,47 +153,18 @@ public class LoginAction extends Action
             else
             {
             	Long uidCSM = csmUser.getUserId();
-//            	System.out.println("\n\n\n\n****** CSMUser : " + csmUser + "\n\n\n\n\n****");
-//            	System.out.println("\n\n\n\n****** CSMUserId : " + csmUser.getUserId() + "\n\n\n\n\n****");
-//            	//---------------------------
             	
             	UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getBizLogic(Constants.USER_FORM_ID);
-            	List users = userBizLogic.retrieve(User.class.getName(), "activityStatus",Constants.ACTIVITY_STATUS_ACTIVE);
-            	
-
-				User user = null;
-               
-                if (users != null)
-                {
-                	boolean found=false;
-                    for (int i = 0; i < users.size(); i++)
-                    {
-                        user = (User) users.get(i);
-                        try
-                        {
-                        	Long uidLocal = user.getSystemIdentifier();
-//                        	System.out.println("\n****** LocalUserId : " + uidLocal.toString() + "\n****");
-                        	if (uidLocal.longValue() == (uidCSM.longValue() ))
-                        	{
-                        		found = true;
-                        		break;
-                        	}
-                        		
-                        }
-                        catch (Exception e)
-                        {
-                            Logger.out.debug("Unable to get user : " + e.getMessage());
-                            throw new DAOException(e);
-                        }
-                   } // for
-                   if (found)
-                   	return true;
-                   else
-                   	return false;
-                }
-                else
-                	return false;
+            	String[] whereColumnName = {"activityStatus","systemIdentifier"};
+            	String[] whereColumnCondition = {"=","="};
+            	String[] whereColumnValue = {Constants.ACTIVITY_STATUS_ACTIVE, uidCSM.toString()};
+            	List users = userBizLogic.retrieve(User.class.getName(), whereColumnName, whereColumnCondition, whereColumnValue,Constants.AND_JOIN_CONDITION);
+            	Logger.out.debug("USERS.................."+users.isEmpty());
+            	if (!users.isEmpty())
+            	    return true;
             }
+            
+            return false;
         }
         catch (SMException e)
         {
