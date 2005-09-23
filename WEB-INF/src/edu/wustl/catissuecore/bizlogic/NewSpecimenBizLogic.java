@@ -21,18 +21,17 @@ import edu.wustl.catissuecore.dao.DAO;
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.ExternalIdentifier;
-import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
-import edu.wustl.common.util.dbManager.DAOException;
-import edu.wustl.common.util.logger.Logger;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
+import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * NewSpecimenHDAO is used to add new specimen information into the database using Hibernate.
