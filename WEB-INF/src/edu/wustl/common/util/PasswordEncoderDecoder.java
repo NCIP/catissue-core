@@ -32,10 +32,10 @@ public class PasswordEncoderDecoder
                 'b', 'c', 'd', 'e', 'f'};
         char ch1 = 'A';
         String key = new String("" + ch1);
-        key += "Copyright" + char_O;
+        key += "WelcomeTocaTISSUECORE" + char_O;
         String in = "";
         key += char_F;
-        key += "WashingtonUniversitySchoolOfMedicineStLouisGeneChipCoreALongStringLongerThanAllPossiblePasswords";
+        key += "ThisIsTheFirstReleaseOfcaTISSUECOREDevelopedByWashUAtPersistentSystemsPrivateLimited";
         for (int i = 0; i < input.length(); i++)
         {
             in += input.substring(i, i + 1);
@@ -103,6 +103,10 @@ public class PasswordEncoderDecoder
     
 //    public static void main(String[] args)
 //    {
-//        System.out.println(decode("6c416f43676f69706e79317232693367"));
+//    	String pwd = "forgot";
+//    	String encodedPWD = encode(pwd);
+//    	System.out.println("encodedPWD "+encodedPWD);
+//    	
+//        System.out.println(decode(encodedPWD));
 //    }
 }
