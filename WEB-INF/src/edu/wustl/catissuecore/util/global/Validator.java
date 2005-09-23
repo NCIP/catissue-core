@@ -13,7 +13,6 @@ package edu.wustl.catissuecore.util.global;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.io.*;
 
 import edu.wustl.common.util.logger.Logger;
 
@@ -67,13 +66,13 @@ public class Validator
     /**
      *  Returns theValue of the given string or null.
      */
-    public String getObjectValue(String obj)
-    {
-    	if(isEmpty(obj))
-    		return null;
-    	else
-    		return obj.toString(); 
-    }
+//    public String getObjectValue(String obj)
+//    {
+//    	if(isEmpty(obj))
+//    		return null;
+//    	else
+//    		return obj.toString(); 
+//    }
     
     /**
      * 
