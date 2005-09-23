@@ -234,7 +234,7 @@ public class Site extends AbstractDomainObject implements java.io.Serializable
             this.name 		= form.getName();
             this.type 		= form.getType();
             
-            this.emailAddress = validator.getObjectValue(form.getEmailAddress());            
+            this.emailAddress = form.getEmailAddress();            
             
             this.activityStatus = form.getActivityStatus();
             Logger.out.debug("form.getCoordinatorId() "+form.getCoordinatorId());
