@@ -8,58 +8,7 @@
 <%@ page import="edu.wustl.common.beans.NameValueBean"%>
 <%@ page import="java.util.*"%>
 
-<!-- ---------------------------------------------------------------  -->
-<%
-	List specimenClassList = (List) request.getAttribute(Constants.SPECIMEN_CLASS_LIST);
-
-	List specimenTypeList = (List) request.getAttribute(Constants.SPECIMEN_TYPE_LIST);
-
-	HashMap specimenTypeMap = (HashMap) request.getAttribute(Constants.SPECIMEN_TYPE_MAP);
-%>
-<head>
-<SCRIPT LANGUAGE="JavaScript">
-
-<%
-
-	    	Iterator specimenTypeIterator = specimenTypeMap.keySet().iterator();
-	    	int classCount=0;
-	    	for(classCount=1;classCount<specimenClassList.size();classCount++  )
-	    	{
-	    		String keyObj = (String)((NameValueBean)specimenClassList.get(classCount)).getName() ;
-	    		List subList = (List)specimenTypeMap.get(keyObj);
-	    		String arrayData = "";
-	    		for(int listSize=0;listSize<subList.size();listSize++ )
-	    		{
-	    			if(listSize == subList.size()-1 )
-	    				arrayData = arrayData + "\"" + ((NameValueBean)subList.get(listSize)).getName() + "\"";
-	    			else
-		    			arrayData = arrayData + "\"" + ((NameValueBean)subList.get(listSize)).getName() + "\",";   
-	    		}
-%>
-			var <%=keyObj%>Array = new Array(<%=arrayData%>);
-<%	    		
-	    	}
-
-%>	
-
-		function typeChange(arrayName)
-		{ 
-			var specimenTypeCombo = "type";
-			ele = document.getElementById(specimenTypeCombo);
-			//To Clear the Combo Box
-			ele.options.length = 0;
-			
-			//ele.options[0] = new Option('-- Select --','-1');
-			var j=0;
-			//Populating the corresponding Combo Box
-			for(i=0;i<arrayName.length;i++)
-			{
-					ele.options[j++] = new Option(arrayName[i],arrayName[i]);
-			}
-		}
-
-</script>
-<!-- ---------------------------------------------------------------  -->
+<%@ include file="/pages/content/common/SpecimenCommonScripts.jsp" %>
 
 	<script language="JavaScript">
 		var win = null;
@@ -75,61 +24,6 @@
 				win.opener = self;
 		}
 		
-		function onTypeChange(element)
-		{
-			var unit = document.getElementById("unitSpan");
-			var unitSpecimen = "";
-			document.forms[0].concentration.disabled = true;
-			
-			if(element.value == "Tissue")
-			{
-				unitSpecimen = "<%=Constants.UNIT_GM%>";
-				document.forms[0].unit.value = "<%=Constants.UNIT_GM%>";
-				typeChange(TissueArray);
-			}
-			else if(element.value == "Fluid")
-			{
-				unitSpecimen = "<%=Constants.UNIT_ML%>";
-				document.forms[0].unit.value = "<%=Constants.UNIT_ML%>";
-				typeChange(FluidArray);
-			}
-			else if(element.value == "Cell")
-			{
-				unitSpecimen = "<%=Constants.UNIT_CC%>";
-				document.forms[0].unit.value = "<%=Constants.UNIT_CC%>";
-				typeChange(CellArray);
-			}
-			else if(element.value == "Molecular")
-			{
-				unitSpecimen = "<%=Constants.UNIT_MG%>";
-				document.forms[0].unit.value = "<%=Constants.UNIT_MG%>";
-				document.forms[0].concentration.disabled = false;
-				typeChange(MolecularArray);
-			}
-			
-			unit.innerHTML = unitSpecimen;
-		}
-		
-		function onBiohazardTypeSelected(element)
-		{ 
-			var i = (element.name).indexOf("_");
-			var comboNo = (element.name).substring(i-1,i);
-			var comboToRefresh = "bhId" + comboNo;
-			ele = document.getElementById(comboToRefresh);
-			//To Clear the Combo Box
-			ele.options.length = 0;
-			
-			ele.options[0] = new Option('-- Select --','-1');
-			var j=1;
-			//Populating the corresponding Combo Box
-			for(i=0;i<idArray.length;i++)
-			{
-				if(typeArray[i] == element.value)
-				{
-					ele.options[j++] = new Option(nameArray[i],idArray[i]);
-				}
-			}
-		}
 	
 		//ADD MORE -------- EXTERNAL IDENTIFIER
 		function insExIdRow(subdivtag)
@@ -142,7 +36,7 @@
 			r = document.getElementById(subdivtag).rows;
 			var q = r.length;
 			var rowno = q + 1;
-			var x=document.getElementById(subdivtag).insertRow(q);
+			var x=document.getElementById(subdivtag).insertRow(0);
 		
 			// First Cell
 			var spreqno=x.insertCell(0);
@@ -346,9 +240,12 @@
 									specimenTypeList.add(new NameValueBean(Constants.SELECT_OPTION,"-1"));
 								}
 								pageContext.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
+								String subTypeFunctionName ="onSubTypeChangeUnit('className',this,'unitSpan')"; 
 					%>
 				    <!-- --------------------------------------- -->
-				     	<html:select property="type" styleClass="formFieldSized15" styleId="type" size="1" disabled="<%=readOnlyForAll%>">
+				     	<html:select property="type" styleClass="formFieldSized15" styleId="type" 
+				     	 size="1" disabled="<%=readOnlyForAll%>"
+				     	 onchange="<%=subTypeFunctionName%>" >
 							<html:options collection="<%=Constants.SPECIMEN_TYPE_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
 		        	</td>
@@ -463,7 +360,7 @@
 					 </tr>
 				  <tbody id="addExternalIdentifier">
 				  <%
-				  	for(int i=1;i<=exIdRows;i++)
+				  	for(int i=exIdRows;i>=1;i--)
 				  	{
 						String exName = "externalIdentifierValue(ExternalIdentifier:" + i + "_name)";
 						String exValue = "externalIdentifierValue(ExternalIdentifier:" + i + "_value)";
