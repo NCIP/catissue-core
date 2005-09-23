@@ -337,7 +337,7 @@ PUBLIC
 			input="/ChangePassword.do?operation=edit&amp;pageOf=pageOfChangePassword"
 			scope="request">
 			<forward name="success" path=".catissuecore.userProfileSuccessDef" />
-			<forward name="failure" path="/User.do?operation=edit&amp;pageOf=pageOfChangePassword" />
+			<forward name="failure" path="/ChangePassword.do?operation=edit&amp;pageOf=pageOfChangePassword" />
 		</action>
 		
 		<action path="/ApproveUserAdd"
