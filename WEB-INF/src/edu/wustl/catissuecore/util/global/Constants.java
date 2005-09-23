@@ -1194,4 +1194,9 @@ public class Constants
 	    }
 	    return "USER_"+identifier;
     }
+    
+    public static final String SLIDE = "Slide";
+    public static final String PARAFFIN_BLOCK = "Paraffin Block"; 
+	public static final String FROZEN_BLOCK = "Frozen Block";
+	
 }
