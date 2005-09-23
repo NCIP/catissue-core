@@ -189,6 +189,7 @@ public class Constants
 	public static final String APPROVE_USER_EDIT_ACTION = "ApproveUserEdit.do";
 	public static final String SIGNUP_USER_ADD_ACTION = "SignUpUserAdd.do";
 	public static final String USER_EDIT_PROFILE_ACTION = "UserEditProfile.do";
+	public static final String UPDATE_PASSWORD_ACTION = "UpdatePassword.do";
 
 	//Constants required in Accession.jsp Page
 	public static final String ACCESSION_SEARCH_ACTION = "AccessionSearch.do";
@@ -503,6 +504,7 @@ public class Constants
 	public static final String PAGEOF_USERADD = "pageOfUserAdd";
 	public static final String PAGEOF_USER_ADMIN = "pageOfUserAdmin";
 	public static final String PAGEOF_USER_PROFILE = "pageOfUserProfile";
+	public static final String PAGEOF_CHANGE_PASSWORD = "pageOfChangePassword";
 	
 	//For Tree Applet
 	public static final String PAGEOF_QUERY_RESULTS = "pageOfQueryResults";
