@@ -66,7 +66,7 @@
 	<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
 		<!-- NEW SPECIMEN COLLECTION GROUP REGISTRATION BEGINS-->
 	    <tr><td>
-			<table summary="" cellpadding="3" cellspacing="0" border="0">
+			<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
 				 <tr>
 					<td><html:hidden property="<%=Constants.OPERATION%>" value="<%=operation%>"/></td>
 				 </tr>
@@ -121,34 +121,20 @@
 		        	</td>
 				 </tr>
 				 
-				 
-				 
 				 <tr>
-				    <td class="formRequiredNotice" >
+				 	<td class="formRequiredNoticeNoBottom">
 				     	<html:radio styleClass=""  property="checkedButton" value="1" onclick="onRadioButtonClick(this)">
   				     	    <label for="participantId">
 								<%--<bean:message key="specimenCollectionGroup.collectedByParticipant" />--%>
 							</label>
 				     	</html:radio>
-				        <br>
-				       	<html:radio styleClass="" property="checkedButton" value="2" onclick="onRadioButtonClick(this)">
-  				       	    <label for="protocolParticipantIdentifier">
-								<%--<bean:message key="specimenCollectionGroup.collectedByProtocolParticipantNumber" />--%>
-							</label>
-				     	</html:radio>
-				    </td>
-				    
-				    <td class="formRequiredLabel">
-						<label for="participantId">
+ 				    </td>
+ 				    <td class="formRequiredLabelRightBorder"  width="186">
+ 				    	<label for="participantId">
 					        <bean:message key="specimenCollectionGroup.collectedByParticipant" />
 						</label>
-  					    <br>
-						<label for="protocolParticipantIdentifier">
-							<bean:message key="specimenCollectionGroup.collectedByProtocolParticipantNumber" />
-						</label>
-					</td>
-					
-  			        <td class="formField">
+  					</td>
+  					<td class="formField">
   						<logic:equal name="specimenCollectionGroupForm" property="checkedButton" value="1">
 				     	     <html:select property="participantId" styleClass="formFieldSized" styleId="ParticipantId" size="1" onchange="onChangeEvent(this)">
                          	     <html:options collection="<%=Constants.PARTICIPANT_LIST%>" labelProperty="name" property="value"/>				     	
@@ -163,8 +149,26 @@
 			  		    <html:link page="/Participant.do?operation=add" styleId="newParticipant">
 	 						<bean:message key="buttons.addNew" />
  						</html:link>
+					</td>
+  					
+				 </tr>
+				 
+				 <tr>
+				    <td class="formRequiredNotice">
+				       	<html:radio styleClass="" property="checkedButton" value="2" onclick="onRadioButtonClick(this)">
+  				       	    <label for="protocolParticipantIdentifier">
+								<%--<bean:message key="specimenCollectionGroup.collectedByProtocolParticipantNumber" />--%>
+							</label>
+				     	</html:radio>
+				    </td>
+				    <td class="formRequiredLabel"  width="186">
+						<label for="protocolParticipantIdentifier">
+							<bean:message key="specimenCollectionGroup.collectedByProtocolParticipantNumber" />
+						</label>
+					</td>
 					
-                        <%-- LOGIC TAG FOR PARTICPANT NUMBER --%> 												
+  			        <td class="formField">
+  					<%-- LOGIC TAG FOR PARTICPANT NUMBER --%> 												
                         <logic:equal name="specimenCollectionGroupForm" property="checkedButton" value="1">						
    						 	<html:select property="protocolParticipantIdentifier" styleClass="formFieldSized" styleId="protocolParticipantIdentifier" size="1" disabled="true">
                          		<html:options collection="<%=Constants.PROTOCOL_PARTICIPANT_NUMBER_LIST%>" labelProperty="name" property="value"/>				     					     	
