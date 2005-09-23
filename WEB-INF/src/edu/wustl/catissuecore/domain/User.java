@@ -57,6 +57,11 @@ public class User extends AbstractDomainObject implements Serializable
     protected String emailAddress = "";
     
     /**
+     * Old password of this user.
+     */
+    protected String oldPassword;
+    
+    /**
      * EmailAddress Address of the user.
      */
     protected String password;
@@ -161,6 +166,22 @@ public class User extends AbstractDomainObject implements Serializable
         this.emailAddress = emailAddress;
     }
 
+    /**
+     * @return Returns the oldPassword.
+     */
+    public String getOldPassword()
+    {
+        return oldPassword;
+    }
+    
+    /**
+     * @param oldPassword The oldPassword to set.
+     */
+    public void setOldPassword(String oldPassword)
+    {
+        this.oldPassword = oldPassword;
+    }
+    
     /**
      * @return Returns the password.
      */
@@ -456,65 +477,67 @@ public class User extends AbstractDomainObject implements Serializable
         try
         {
             UserForm uform = (UserForm) abstractForm;
-            this.systemIdentifier = new Long(uform.getSystemIdentifier());
             this.pageOf = uform.getPageOf();
             
-            if (this.systemIdentifier.intValue() == -1)
+            if (pageOf.equals(Constants.PAGEOF_CHANGE_PASSWORD))
             {
-                this.setStartDate(Calendar.getInstance().getTime());
+                this.password = uform.getNewPassword(); 
+                this.oldPassword = uform.getOldPassword();
             }
-
-            this.setLoginName(uform.getEmailAddress());
-            this.setLastName(uform.getLastName());
-            this.setFirstName(uform.getFirstName());
-            this.setEmailAddress(uform.getEmailAddress());
-            this.institution.setSystemIdentifier(new Long(uform
-                    .getInstitutionId()));
-
-            this.department.setSystemIdentifier(new Long(uform
-                    .getDepartmentId()));
-            this.cancerResearchGroup.setSystemIdentifier(new Long(uform
-                    .getCancerResearchGroupId()));
-
-            if (!pageOf.equals(Constants.PAGEOF_SIGNUP) && !pageOf.equals(Constants.PAGEOF_USER_PROFILE))
+            else
             {
-                this.activityStatus = uform.getActivityStatus();
-                this.comments = uform.getComments();
-            }
-            
-            if (uform.getPageOf().equals(Constants.PAGEOF_USER_PROFILE))
-            {
-                this.password = uform.getPassword();
-            }
+                if (this.systemIdentifier.intValue() == -1)
+                {
+                    this.setStartDate(Calendar.getInstance().getTime());
+                }
 
-            if (uform.getPageOf().equals(Constants.PAGEOF_USER_ADMIN)
-                    && uform.getOperation().equals(Constants.ADD))
-            {
-                this.activityStatus = Constants.ACTIVITY_STATUS_ACTIVE;
-            }
-            
-            if (uform.getPageOf().equals(Constants.PAGEOF_APPROVE_USER))
-            {
-                if (uform.getStatus().equals(
-                        Constants.APPROVE_USER_APPROVE_STATUS))
+                this.setLoginName(uform.getEmailAddress());
+                this.setLastName(uform.getLastName());
+                this.setFirstName(uform.getFirstName());
+                this.setEmailAddress(uform.getEmailAddress());
+                this.institution.setSystemIdentifier(new Long(uform
+                        .getInstitutionId()));
+
+                this.department.setSystemIdentifier(new Long(uform
+                        .getDepartmentId()));
+                this.cancerResearchGroup.setSystemIdentifier(new Long(uform
+                        .getCancerResearchGroupId()));
+
+                if (!pageOf.equals(Constants.PAGEOF_SIGNUP) && !pageOf.equals(Constants.PAGEOF_USER_PROFILE))
+                {
+                    this.activityStatus = uform.getActivityStatus();
+                    this.comments = uform.getComments();
+                }
+                
+                if (uform.getPageOf().equals(Constants.PAGEOF_USER_ADMIN)
+                        && uform.getOperation().equals(Constants.ADD))
                 {
                     this.activityStatus = Constants.ACTIVITY_STATUS_ACTIVE;
                 }
-                else if (uform.getStatus().equals(
-                        Constants.APPROVE_USER_REJECT_STATUS))
+                
+                if (uform.getPageOf().equals(Constants.PAGEOF_APPROVE_USER))
                 {
-                    this.activityStatus = Constants.ACTIVITY_STATUS_CLOSED;
+                    if (uform.getStatus().equals(
+                            Constants.APPROVE_USER_APPROVE_STATUS))
+                    {
+                        this.activityStatus = Constants.ACTIVITY_STATUS_ACTIVE;
+                    }
+                    else if (uform.getStatus().equals(
+                            Constants.APPROVE_USER_REJECT_STATUS))
+                    {
+                        this.activityStatus = Constants.ACTIVITY_STATUS_CLOSED;
+                    }
                 }
+                
+                this.roleId = uform.getRole();
+                this.address.setStreet(uform.getStreet());
+                this.address.setCity(uform.getCity());
+                this.address.setState(uform.getState());
+                this.address.setCountry(uform.getCountry());
+                this.address.setZipCode(uform.getZipCode());
+                this.address.setPhoneNumber(uform.getPhoneNumber());
+                this.address.setFaxNumber(uform.getFaxNumber());
             }
-            
-            this.roleId = uform.getRole();
-            this.address.setStreet(uform.getStreet());
-            this.address.setCity(uform.getCity());
-            this.address.setState(uform.getState());
-            this.address.setCountry(uform.getCountry());
-            this.address.setZipCode(uform.getZipCode());
-            this.address.setPhoneNumber(uform.getPhoneNumber());
-            this.address.setFaxNumber(uform.getFaxNumber());
         }
         catch (Exception excp)
         {
