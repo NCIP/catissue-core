@@ -253,11 +253,11 @@ public class UserBizLogic extends DefaultBizLogic
             if (user.getPageOf().equals(Constants.PAGEOF_CHANGE_PASSWORD))
             {
                 Logger.out.debug("New Password**********************"+user.getPassword());
-//                if (!user.getOldPassword().equals(csmUser.getPassword()))
-//                {
-//                    throw new DAOException("Your old Password does not match with your current password. " +
-//                    					   "Please retype your old password");
-//                }
+                if (!user.getOldPassword().equals(csmUser.getPassword()))
+                {
+                    throw new DAOException("Your old Password does not match with your current password. " +
+                    					   "Please retype your old password");
+                }
                 csmUser.setPassword(PasswordEncoderDecoder.encode(user.getPassword()));
             }
             else

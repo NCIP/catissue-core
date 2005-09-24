@@ -35,11 +35,11 @@
 					</td>
 				</tr>
 
-				<tr>
+				<!--tr>
 					<td>
 						<html:hidden property="oldPassword" />
 					</td>
-				</tr>
+				</tr-->
 
 				<tr>
 					<td class="formMessage" colspan="3">* indicates a required field</td>
@@ -51,7 +51,7 @@
 					</td>
 				</tr>
 
-				<!-- tr>
+				<tr>
 					<td class="formRequiredNotice" width="5">*</td>
 					<td class="formRequiredLabel">
 						<label for="oldPassword">
@@ -61,7 +61,7 @@
 					<td class="formField">
 						<html:password styleClass="formFieldSized" size="30" styleId="oldPassword" property="oldPassword" />
 					</td>
-				</tr>  -->
+				</tr>
 
 				<tr>
 					<td class="formRequiredNotice" width="5">*</td>
