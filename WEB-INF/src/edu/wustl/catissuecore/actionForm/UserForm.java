@@ -699,7 +699,7 @@ public class UserForm extends AbstractActionForm
                 
                 if (pageOf.equals(Constants.PAGEOF_CHANGE_PASSWORD))
                 {
-                    oldPassword = user.getPassword();
+                    //oldPassword = user.getPassword();
                 }
                 else
                 {
