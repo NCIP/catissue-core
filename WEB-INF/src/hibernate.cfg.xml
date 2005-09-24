@@ -10,7 +10,7 @@
     	<property name="show_sql">true</property>
     	<property name="dialect">net.sf.hibernate.dialect.MySQLDialect</property>	
         <property name="connection.datasource">java:/catissuecore</property>
-        <property name="hibernate.transaction.factory_class">net.sf.hibernate.transaction.JDBCTransactionFactory</property>
+        <property name="hibernate.transaction.factory_class">net.sf.hibernate.transaction.JTATransactionFactory</property>
         <property name="hibernate.connection.autocommit">false</property>
 		<property name="transaction.manager_lookup_class">net.sf.hibernate.transaction.JBossTransactionManagerLookup</property>
     	
