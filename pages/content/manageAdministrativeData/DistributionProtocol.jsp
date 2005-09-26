@@ -298,7 +298,7 @@ function insRow(subdivtag)
 			
 						<td class="formField" colspan=2>
 							<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
-						 	<html:text styleClass="formDateSized" size="35" styleId="startDate" property="startDate" readonly="true"/>
+						 	<html:text styleClass="formDateSized" size="35" styleId="startDate" property="startDate" />
 							<a href="javascript:show_calendar('distributionProtocolForm.startDate',null,null,'MM-DD-YYYY');">
 								<img src="images\calendar.gif" width=24 height=22 border=0>
 							</a>
@@ -316,7 +316,7 @@ function insRow(subdivtag)
 			
 						 <td class="formField" colspan=2>
 						 <div id="enddateDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
-						 <html:text styleClass="formDateSized" size="35" styleId="endDate" property="endDate" readonly="true"/>
+						 <html:text styleClass="formDateSized" size="35" styleId="endDate" property="endDate" />
 							<a href="javascript:show_calendar('distributionProtocolForm.endDate',null,null,'MM-DD-YYYY');">
 								<img src="images\calendar.gif" width=24 height=22 border=0>
 							</a>
