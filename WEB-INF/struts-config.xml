@@ -49,6 +49,7 @@ PUBLIC
 		
 		<form-bean name="shoppingCartForm" type="edu.wustl.catissuecore.actionForm.ShoppingCartForm"/>
 		<form-bean name="assignPrivilegesForm" type="edu.wustl.catissuecore.actionForm.AssignPrivilegesForm"/>
+		<form-bean name="configureResultViewForm" type="edu.wustl.catissuecore.actionForm.ConfigureResultViewForm"/>
 	</form-beans>
 	
 	<!-- Global Exception Definitions -->
@@ -1618,7 +1619,7 @@ PUBLIC
 			validate="true"
 			input="/Distribution.do?operation=add&amp;pageOf=pageOfDistribution"
 			scope="request">
-			<forward name="success" path=".catissuecore.distributionAddSuccessDef" />
+			<forward name="success" path="/DistributionReport.do" />
 			<forward name="failure" path="/Distribution.do?operation=add&amp;pageOf=pageOfDistribution" />
 		</action>
 		
@@ -1628,7 +1629,7 @@ PUBLIC
 			validate="true"
 			input="/Distribution.do?operation=edit&amp;pageOf=pageOfDistribution"
 			scope="request">
-			<forward name="success" path=".catissuecore.distributionEditSuccessDef" />
+			<forward name="success" path="/DistributionReport.do" />
 			<forward name="failure" path="/Distribution.do?operation=edit&amp;pageOf=pageOfDistribution" />
 		</action>
 		
@@ -1642,6 +1643,32 @@ PUBLIC
 			<forward name="pageOfSimpleQueryInterface" path="/Distribution.do?operation=edit&amp;pageOf=pageOfSimpleQueryInterface"/>
 			<forward name="failure" path="/Distribution.do?operation=edit&amp;pageOf=pageOfDistribution"/>
 		</action>    
+		
+		<action path="/DistributionReport"
+			type="edu.wustl.catissuecore.action.DistributionReportAction"
+			name="configureResultViewForm"
+			validate="false"
+			scope="request">
+			<forward name="Success" path=".catissuecore.distributionReportSuccessDef" />
+		</action>
+		
+		<!-- Configure Result View Actions -->		
+		<action path="/ConfigureDistribution"
+			type="edu.wustl.catissuecore.action.ConfigureDistributionAction"
+			name="configureResultViewForm"
+			validate="false"
+			scope="request">
+			<forward name="Success" path="/ConfigureResultView.do" />
+		</action>
+		
+		<action path="/ConfigureResultView"
+			type="edu.wustl.catissuecore.action.ConfigureResultViewAction"
+			name="configureResultViewForm"
+			validate="false"
+			scope="request">
+			<forward name="Success" path=".catissuecore.configDistributionReport" />
+		</action>
+		
 		<!-- Distribution Actions Ends -->
 		
 		<!--Simple Query Interface Actions Begin-->		
@@ -1895,7 +1922,7 @@ PUBLIC
 		<!-- Assign Privileges Actions Ends -->
 		
 		<!-- Edit Object Actions -->
-		
+	
 	</action-mappings>
 	
 	<message-resources parameter="ApplicationResources" />
