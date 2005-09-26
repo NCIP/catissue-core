@@ -106,20 +106,26 @@
 		<tr>
 			<td class="formRequiredNotice" width="5">*</td>
 			<td class="formRequiredLabel">
-				<label for="type">
-					<bean:message key="eventparameters.timeinhours"/>&nbsp; 
-					<bean:message key="eventparameters.timeinminutes"/> 
+				<label for="eventparameters.time">
+					<bean:message key="eventparameters.time"/>
 				</label>
 			</td>
 			<td class="formField">
 				<html:select property="timeInHours" styleClass="formFieldSized5" styleId="timeInHours" size="1">
 					<html:options name="<%=Constants.HOURLIST%>" labelName="<%=Constants.HOURLIST%>" />
 				</html:select>&nbsp;
+				<label for="eventparameters.timeinhours">
+					<bean:message key="eventparameters.timeinhours"/>&nbsp; 
+				</label>
 				<html:select property="timeInMinutes" styleClass="formFieldSized5" styleId="timeInMinutes" size="1">
 					<html:options name="<%=Constants.MINUTESLIST%>" labelName="<%=Constants.MINUTESLIST%>" />
 				</html:select>
+				<label for="eventparameters.timeinhours">
+					&nbsp;<bean:message key="eventparameters.timeinminutes"/> 
+				</label>
 			</td>
 		</tr>
+
 
 <!-- method -->		
 		<tr>
