@@ -20,6 +20,7 @@ import java.util.Vector;
 import edu.wustl.catissuecore.dao.AbstractDAO;
 import edu.wustl.catissuecore.dao.DAO;
 import edu.wustl.catissuecore.dao.DAOFactory;
+import edu.wustl.catissuecore.dao.JDBCDAO;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.StorageContainer;
@@ -356,44 +357,57 @@ public class StorageContainerBizLogic extends DefaultBizLogic
 
     public Vector getTreeViewData() throws DAOException
     {
-        AbstractDAO dao = DAOFactory.getDAO(Constants.HIBERNATE_DAO);
+    	//SRI: Made changes for performance enhancement of the 
+    	//tree applet
+        JDBCDAO dao = (JDBCDAO)DAOFactory.getDAO(Constants.JDBC_DAO);
         dao.openSession(null);
 
-        List list = (List) dao.retrieve(StorageContainer.class.getName());
+
+        // Sri: Get all container, thier site details and storage type details
+        String queryStr = "select t1.PARENT_CONTAINER_ID,t1.IDENTIFIER, " + 
+        		"t1.SITE_ID, t2.NAME,t2.TYPE, t3.TYPE,CONTAINER_NUMBER " +
+				"from CATISSUE_STORAGE_CONTAINER t1, " +
+				"CATISSUE_SITE t2, " +
+				"catissue_storage_type t3 " +
+				"where t1.SITE_ID = t2.IDENTIFIER and t1.STORAGE_TYPE_ID = t3.IDENTIFIER";
+
+
+        List list = null;
+        try{
+        list = dao.executeQuery(queryStr);
+        }
+        catch(Exception ex)
+		{
+		   throw new DAOException (ex.getMessage());
+		}
 
         dao.closeSession();
+
         Vector vector = new Vector();
         if (list != null)
         {
             for (int i = 0; i < list.size(); i++)
             {
-                StorageContainer storageContainer = (StorageContainer) list
-                        .get(i);
+            	List rowList = (List)list.get(i);
                 StorageContainerTreeNode treeNode = new StorageContainerTreeNode();
-                treeNode.setStorageContainerIdentifier(storageContainer
-                        .getSystemIdentifier());
-                treeNode.setStorageContainerName(storageContainer.getNumber()
-                        + "");
-                treeNode.setStorageContainerType(storageContainer
-                        .getStorageType().getType());
-                if (storageContainer.getParentContainer() != null)
+                treeNode.setStorageContainerIdentifier(Long.valueOf((String)rowList.get(1)));
+                treeNode.setStorageContainerName((String)rowList.get(6)); 
+                treeNode.setStorageContainerType((String)rowList.get(5));
+                if ((String)rowList.get(0) != "") // if parent is null in db
                 {
-                    treeNode
-                            .setParentStorageContainerIdentifier(storageContainer
-                                    .getParentContainer().getSystemIdentifier());
+                    treeNode.setParentStorageContainerIdentifier(Long.valueOf((String)rowList.get(0)));
                 }
-                Site site = storageContainer.getSite();
-                treeNode.setSiteSystemIdentifier(site.getSystemIdentifier());
-                treeNode.setSiteName(site.getName());
-                treeNode.setSiteType(site.getType());
+                treeNode.setSiteSystemIdentifier(Long.valueOf((String)rowList.get(2)));
+                treeNode.setSiteName((String)rowList.get(3));
+                treeNode.setSiteType((String)rowList.get(4));
 
                 vector.add(treeNode);
             }
         }
-
         return vector;
     }
 
+    
     public boolean[][] getStorageContainerFullStatus(DAO dao,
             Long systemIdentifier) throws DAOException
     {
@@ -448,16 +462,5 @@ public class StorageContainerBizLogic extends DefaultBizLogic
 
         disableSubStorageContainer(dao, Utility.toLongArray(listOfSubStorageContainerId));
     }
-    
-//  public void disableRelatedObjects(DAO dao, Long siteArr[])
-//  throws DAOException
-//{
-//Logger.out.debug("disableRelatedObjects StorageContainerBizLogic");
-//List listOfSubElement = super.disableObjects(dao, StorageContainer.class, "site", 
-//		"CATISSUE_STORAGE_CONTAINER", "SITE_ID", siteArr);
-//if(!listOfSubElement.isEmpty())
-//{
-//	disableSubStorageContainer(dao,Utility.toLongArray(listOfSubElement));
-//}
-//}
+
 }
