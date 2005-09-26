@@ -1,6 +1,7 @@
 package edu.wustl.common.util.dbManager;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Session;
@@ -52,6 +53,14 @@ public class DBUtil
 		if (s == null)
 		{
 			s = m_sessionFactory.openSession();
+			try
+			{
+				s.connection().setAutoCommit(false);
+			}
+			catch(SQLException ex)
+			{
+				throw new HibernateException(ex.getMessage(),ex);
+			}
 			threadLocal.set(s);
 		}
 		return s;
