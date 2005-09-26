@@ -71,7 +71,6 @@ public class UserBizLogic extends DefaultBizLogic
             {
                 department = (Department) list.get(0);
             }
-
             list = dao.retrieve(Institution.class.getName(),
                     "systemIdentifier", user.getInstitution()
                             .getSystemIdentifier());
@@ -252,11 +251,9 @@ public class UserBizLogic extends DefaultBizLogic
 
             if (user.getPageOf().equals(Constants.PAGEOF_CHANGE_PASSWORD))
             {
-                Logger.out.debug("Old Password**********************"+user.getOldPassword()+"END");
                 if (!user.getOldPassword().equals(PasswordEncoderDecoder.decode(csmUser.getPassword())))
                 {
-                    throw new DAOException("Your old Password does not match with your current password. " +
-                    					   "Please retype your old password");
+                    throw new DAOException(ApplicationProperties.getValue("errors.oldPassword.wrong"));
                 }
                 csmUser.setPassword(PasswordEncoderDecoder.encode(user.getPassword()));
             }
