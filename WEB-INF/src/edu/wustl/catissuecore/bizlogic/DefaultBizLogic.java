@@ -262,11 +262,11 @@ public class  DefaultBizLogic extends AbstractBizLogic
     protected List disableObjects(DAO dao, Class sourceClass, String classIdentifier, String tablename, String colName,Long objIDArr[])throws DAOException 
     {
 		dao.disableRelatedObjects(tablename,colName,objIDArr);
-		return getRelatedMethod(dao, sourceClass, classIdentifier,objIDArr);
+		return getRelatedObject(dao, sourceClass, classIdentifier,objIDArr);
     }
     
     
-    public List getRelatedMethod(DAO dao, Class sourceClass, String classIdentifier,Long objIDArr[])throws DAOException
+    public List getRelatedObject(DAO dao, Class sourceClass, String classIdentifier,Long objIDArr[])throws DAOException
     {
 		String sourceObjectName = sourceClass.getName();
 		String selectColumnName [] = {Constants.SYSTEM_IDENTIFIER};
