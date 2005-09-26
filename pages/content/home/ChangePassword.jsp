@@ -1,11 +1,13 @@
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
-<%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
+<%@ page import="edu.wustl.catissuecore.util.global.Constants,edu.wustl.common.beans.SessionDataBean"%>
 
 <%
 	String operation = (String) request.getAttribute(Constants.OPERATION);
 	String pageOf = (String) request.getAttribute(Constants.PAGEOF);
+	SessionDataBean sessionData = (SessionDataBean)session.getAttribute(Constants.SESSION_DATA);
+	String userId = sessionData.getUserId().toString();
 %>
 
 <html:errors />
@@ -31,7 +33,7 @@
 				
 				<tr>
 					<td>
-						<html:hidden property="systemIdentifier" value="<bean:write name='<%=Constants.SESSION_DATA%>' property='userId' scope='session'/>" />
+						<html:hidden property="systemIdentifier" value="<%=userId%>" />
 					</td>
 				</tr>
 
