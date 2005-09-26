@@ -327,16 +327,183 @@ public class Validator
     	
     	return retStr.toString(); 
     }
+
+    
+   // ----------------------------------- Date Validation -------------------- 
+    
+    private boolean isValidDatePattern(String checkDate)
+    {
+    	boolean result = true;
+    	try
+		{
+    		Pattern re = Pattern.compile("[0-9]{2}-[0-9]{2}-[0-9]{4}", Pattern.CASE_INSENSITIVE);
+    		Matcher  mat =re.matcher(checkDate); 
+    		result = mat.matches();
+    		System.out.println("is Valid Date Pattern "+result);
+		}
+    	catch(Exception exp)
+		{
+			Logger.out.error("IsValidDatePattern : exp : " + exp);
+    		return false;
+		}
+    	return result;
+    }
+
+    String dtCh= Constants.DATE_SEPARATOR;
+    int minYear = Integer.parseInt(Constants.MIN_YEAR);
+    int maxYear = Integer.parseInt(Constants.MAX_YEAR);
+    
+    private int daysInFebruary (int year)
+    {
+    	// February has 29 days in any year evenly divisible by four,
+        // EXCEPT for centurial years which are not also divisible by 400.
+        return (((year % 4 == 0) && ( (!(year % 100 == 0)) || (year % 400 == 0))) ? 29 : 28 );
+    }
+
+    private int[] DaysArray(int n)
+    {
+    	int dayArray[] = new int[n+1];
+    	dayArray[0] = 0;
+    	for (int i = 1; i <= n; i++) 
+    	{
+    		dayArray[i] = 31;
+    		if (i==4 || i==6 || i==9 || i==11)
+    		{
+    			dayArray [i] = 30;
+    		}
+    		if (i==2)
+    		{
+    			dayArray[i] = 29;
+    		}
+        } 
+       return dayArray; 
+    }
+
+    
+    private boolean isDate(String dtStr)
+    {
+    	try
+		{
+    		
+	    	int []daysInMonth = DaysArray(12);
+	    	int pos1=dtStr.indexOf(dtCh);
+	    	int pos2=dtStr.indexOf(dtCh,pos1+1);
+	    	String strMonth=dtStr.substring(0,pos1);
+	    	String strDay=dtStr.substring(pos1+1,pos2);
+	    	String strYear=dtStr.substring(pos2+1);
+	    	
+	    	String strYr=strYear;
+	    	
+	    	if (strDay.charAt(0)=='0' && strDay.length()>1) strDay=strDay.substring(1);
+	    	
+	    	if (strMonth.charAt(0)=='0' && strMonth.length()>1) strMonth=strMonth.substring(1);
+	    	for (int i = 1; i <= 3; i++)
+	    	{
+	    		if (strYr.charAt(0)=='0' && strYr.length()>1) strYr=strYr.substring(1);
+	    	}
+	    	int month=Integer.parseInt(strMonth);
+	    	int day=Integer.parseInt(strDay);
+	    	int year=Integer.parseInt(strYr);
+	    	
+	    	if (pos1==-1 || pos2==-1){
+	    		Logger.out.debug("The date format should be : mm/dd/yyyy");
+	    		return false;
+	    	}
+	    	if (strMonth.length()<1 || month<1 || month>12)
+	    	{
+	    		Logger.out.debug("Please enter a valid month");
+	    		return false;
+	    	}
+	    	if (strDay.length()<1 || day<1 || day>31 || (month==2 && day>daysInFebruary(year)) || day > daysInMonth[month])
+	    	{
+	    		Logger.out.debug("Please enter a valid day");
+	    		return false;
+	    	}
+	    	if (strYear.length() != 4 || year==0 || year<minYear || year>maxYear){
+	    		Logger.out.debug("Please enter a valid 4 digit year between "+minYear+" and "+maxYear);
+	    		return false;
+	    	}
+	    return true;
+		}
+    	catch(Exception exp)
+		{
+			Logger.out.error("exp in isDate : "+ exp);
+			exp.printStackTrace();
+			return false;
+		}
+
+    }
+    
+    
+    public boolean checkDate(String checkDate)
+    {
+    	boolean result = true;
+    	try
+		{
+    		Logger.out.debug("checkDate : " + checkDate); 
+    		if(isEmpty(checkDate))
+    		{
+    			result = false;
+    		}
+    		else
+    		{
+    			if(isValidDatePattern(checkDate ))
+    			{
+    				result = isDate(checkDate ); 
+    				
+//    				SimpleDateFormat dF = new SimpleDateFormat(Constants.DATE_PATTERN_MM_DD_YYYY);
+//					Date sDate = dF.parse(checkDate );
+//					Logger.out.debug("Date : " + sDate.toString() );
+//					Logger.out.debug(sDate.getDate());
+//					Logger.out.debug(sDate.getDay() );
+//					Logger.out.debug(sDate.getHours()) ;
+//					Logger.out.debug(sDate.getMinutes());
+//					Logger.out.debug(sDate.getMonth() );
+//					Logger.out.debug(sDate.getSeconds()) ;
+//					Logger.out.debug(sDate.getYear()) ;
+//					Logger.out.debug(sDate.getTime()) ;
+					
+    			}
+    			else
+    				result = false;
+    		}
+		}
+    	catch(Exception exp)
+		{
+			Logger.out.error("Check Date : exp : "+ exp);
+			result = false;
+		}
+		Logger.out.debug("CheckDate : "+result);
+    	return result;
+    }
+    // ------------------------------Date Validation ends-----------------------------------------------------------------------
+    
+    
     
     public static void main(String[] args)
     {
         Validator validator = new Validator();
         
-        String ssn = "sdf-ss-dfds";
-        System.out.println(ssn);
-        validator.isValidSSN(ssn );
-        ssn = "111-11-1111";
-        validator.isValidSSN(ssn );
+//        String ssn = "sdf-ss-dfds";
+//        System.out.println(ssn);
+//        validator.isValidSSN(ssn );
+//        ssn = "111-11-1111";
+        String sdate = "00-00-0000";
+        validator.checkDate(sdate );
+
+        sdate = "18-13-1901";
+        validator.checkDate(sdate );
+        
+        sdate = "12-43-1901";
+        validator.checkDate(sdate );
+
+        sdate = "02-30-1901";
+        validator.checkDate(sdate );
+        
+        sdate = "02-13-1901";
+        validator.checkDate(sdate );
+
+
 
 //        String str = "mandar; deshmukh";
 //        String delim=";,";

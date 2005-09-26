@@ -406,17 +406,27 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
                 	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocol.irbid")));
                 }
                 
-                 
-                if (validator.isEmpty(this.startDate ))
+                if (validator.isEmpty(startDate))
                 {
                 	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocol.startdate")));
                 }
-               
+				else
+				{
+				    if (!validator.checkDate(startDate))
+				    {
+				    	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.invalid",ApplicationProperties.getValue("collectionprotocol.startdate")));
+				    }
+				}
+                if (!validator.isEmpty(endDate) &&  !validator.checkDate(endDate))
+                {
+                	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.invalid",ApplicationProperties.getValue("collectionprotocol.enddate")));
+                }
+             
                 
       			// code added as per bug id 235 
     			// code to validate startdate less than end date
     			// check the start date less than end date
-    			if (!validator.isEmpty(startDate) && !validator.isEmpty(endDate )  )
+    			if (validator.checkDate(startDate) && validator.checkDate(endDate )  )
     			{
     				try
 					{

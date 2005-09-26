@@ -30,7 +30,10 @@ public class Constants
 	public static final String TIMESTAMP_PATTERN = "MM-dd-yyyy HH:mm aa";
 	public static final String DATE_PATTERN_YYYY_MM_DD = "yyyy-MM-dd";
 	public static final String DATE_PATTERN_MM_DD_YYYY = "MM-dd-yyyy";
-	
+	// Mandar: Used for Date Validations in Validator Class
+	public static final String DATE_SEPARATOR = "-";
+	public static final String MIN_YEAR = "1900";
+	public static final String MAX_YEAR = "9999";
 	
 	//Database constants.
 	public static final String MYSQL_DATE_PATTERN = "%m-%d-%Y";

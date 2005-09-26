@@ -263,7 +263,7 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocolregistration.protocoltitle")));
 		  	}
 		  	//check if date is empty.
-			if (validator.isEmpty(registrationDate))
+			if (!validator.checkDate(registrationDate))
 			{
 			    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocolregistration.date")));
 			}
