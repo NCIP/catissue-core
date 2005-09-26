@@ -54,6 +54,8 @@ public class Constants
 	public static final String SHOPPING_CART_EXPORT = "shoppingCartExport";
 	public static final String NEWUSERFORM = "newUserForm";
 	public static final String ACCESS_DENIED = "access_denied";
+	public static final String REDIRECT_TO_SPECIMEN = "specimenRedirect";
+
 
 	//Constants required for Forgot Password
 	public static final String FORGOT_PASSWORD = "forgotpassword";
@@ -133,6 +135,7 @@ public class Constants
    	//public static final String STUDY_CALENDAR_EVENT_POINT_ID_LIST="studyCalendarEventPointIdList";
 	public static final String PARTICIPANT_MEDICAL_IDNETIFIER_LIST = "participantMedicalIdentifierArray";
 	//public static final String PARTICIPANT_MEDICAL_IDNETIFIER_ID_LIST = "participantMedicalIdentifierIdArray";
+	public static final String SPECIMEN_COLLECTION_GROUP_ID = "specimenCollectionGroupId";
 	
 	public static final String CLINICAL_STATUS_LIST = "cinicalStatusList";
 	public static final String SPECIMEN_CLASS_LIST = "specimenClassList";

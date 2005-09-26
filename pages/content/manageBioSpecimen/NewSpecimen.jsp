@@ -275,6 +275,8 @@ NewSpecimenForm form = (NewSpecimenForm)request.getAttribute("newSpecimenForm");
 			if(form.getUnit() != null)
 				unitSpecimen = form.getUnit();
 		}
+		
+
 %>
 
 <html:errors />
@@ -369,9 +371,12 @@ NewSpecimenForm form = (NewSpecimenForm)request.getAttribute("newSpecimenForm");
 							</label>
 						</td>
 						<td class="formField" colspan="4">
-				     		<html:select property="specimenCollectionGroupId" styleClass="formFieldSized15" styleId="specimenCollectionGroupId" size="1" disabled="<%=readOnlyForAll%>">
-								<html:options collection="<%=Constants.SPECIMEN_COLLECTION_GROUP_LIST%>" labelProperty="name" property="value"/>		
+				     		<html:select property="specimenCollectionGroupId" styleClass="formFieldSized15" 
+				     				styleId="specimenCollectionGroupId" size="1" >
+								<html:options collection="<%=Constants.SPECIMEN_COLLECTION_GROUP_LIST%>" 
+									labelProperty="name" property="value"/>		
 							</html:select>
+
 			        		<a href="SpecimenCollectionGroup.do?operation=add">
 	      						<bean:message key="app.addNew" />
 	   						</a>

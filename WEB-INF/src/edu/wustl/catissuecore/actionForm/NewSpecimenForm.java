@@ -335,7 +335,8 @@ public class NewSpecimenForm extends SpecimenForm
          try
          {
              if (operation.equals(Constants.ADD) || operation.equals(Constants.EDIT))
-             {             
+             {           
+             	System.out.println("\n\n\n\n\n\n\n\n\n\n\n : :- " + specimenCollectionGroupId);
              	if (specimenCollectionGroupId.equals("-1"))
                 {
                     errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("specimen.specimenCollectionGroupId")));

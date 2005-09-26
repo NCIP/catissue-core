@@ -31,6 +31,7 @@ import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.domain.DomainObjectFactory;
 import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.exception.AssignDataException;
 import edu.wustl.catissuecore.exception.BizLogicException;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -78,10 +79,17 @@ public class CommonAddEditAction extends Action
                 
                 bizLogic.insert(abstractDomain, getSessionData(request), Constants.HIBERNATE_DAO);
                 Logger.out.debug("IN ADD ACTION DEBUG...................ID*********"+abstractDomain.getSystemIdentifier());
-            	if(abstractDomain instanceof Specimen)
-            		request.setAttribute(Constants.SPECIMEN_ID,String.valueOf(abstractDomain.getSystemIdentifier()));
             	
-                target = new String(Constants.SUCCESS);
+                if(abstractDomain instanceof Specimen)
+            		request.setAttribute(Constants.SPECIMEN_ID,String.valueOf(abstractDomain.getSystemIdentifier()));
+                
+                if(abstractDomain instanceof SpecimenCollectionGroup)
+                {
+                	request.setAttribute(Constants.SPECIMEN_COLLECTION_GROUP_ID,abstractDomain.getSystemIdentifier().toString());
+            		target = new String(Constants.REDIRECT_TO_SPECIMEN);
+                }	
+            	else
+            		target = new String(Constants.SUCCESS);
             }
             else
             {

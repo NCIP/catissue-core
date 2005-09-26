@@ -49,13 +49,22 @@ public class NewSpecimenAction  extends SecureAction
     public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response) throws Exception
     {
+        NewSpecimenForm specimenForm = (NewSpecimenForm)form;        
+
+    	// ----------- redirected from specimencollection group
+        String specimenCollectionGroupId = (String)request.getAttribute(Constants.SPECIMEN_COLLECTION_GROUP_ID);
+        if(specimenCollectionGroupId != null)
+		{
+        	specimenForm.setSpecimenCollectionGroupId( specimenCollectionGroupId); 
+		}
+
+    	
         String pageOf = request.getParameter(Constants.PAGEOF);
         request.setAttribute(Constants.PAGEOF,pageOf);
 
         //Sets the activityStatusList attribute to be used in the Site Add/Edit Page.
         request.setAttribute(Constants.ACTIVITYSTATUSLIST, Constants.ACTIVITY_STATUS_VALUES);
         
-        NewSpecimenForm specimenForm = (NewSpecimenForm)form;        
         NewSpecimenBizLogic bizLogic = (NewSpecimenBizLogic)BizLogicFactory.getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
         
         try
@@ -184,6 +193,7 @@ public class NewSpecimenAction  extends SecureAction
         	return mapping.findForward(Constants.FAILURE);
 		}
 
+        
     	//----------------------------------------
     	return mapping.findForward(pageOf);
     }
