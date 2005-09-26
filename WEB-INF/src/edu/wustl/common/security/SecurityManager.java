@@ -35,6 +35,7 @@ import gov.nih.nci.security.authorization.domainobjects.Privilege;
 import gov.nih.nci.security.authorization.domainobjects.ProtectionElement;
 import gov.nih.nci.security.authorization.domainobjects.ProtectionElementPrivilegeContext;
 import gov.nih.nci.security.authorization.domainobjects.ProtectionGroup;
+import gov.nih.nci.security.authorization.domainobjects.ProtectionGroupRoleContext;
 import gov.nih.nci.security.authorization.domainobjects.Role;
 import gov.nih.nci.security.authorization.domainobjects.User;
 import gov.nih.nci.security.dao.ApplicationSearchCriteria;
@@ -1247,8 +1248,9 @@ public class SecurityManager implements Permissions
 
     }
 
-    public void setOwnerForProtectionElement(edu.wustl.catissuecore.domain.User user,
-            java.lang.String userName) throws SMException
+    public void setOwnerForProtectionElement(
+            edu.wustl.catissuecore.domain.User user, java.lang.String userName)
+            throws SMException
     {
         if (user != null && userName != null)
         {
@@ -1272,9 +1274,163 @@ public class SecurityManager implements Permissions
         }
         else
         {
-            Logger.out.debug("user:"+user+" username:"+userName);
+            Logger.out.debug("user:" + user + " username:" + userName);
         }
     }
+
+    public void assignPrivilegeToUser(String privilegeName, String[] objectIds, Long userId) throws SMException
+    {
+        UserProvisioningManager userProvisioningManager;
+        String protectionGroupName;
+        String roleName;
+        RoleSearchCriteria roleSearchCriteria;
+        Role role;
+        List list;
+        ProtectionGroupSearchCriteria protectionGroupSearchCriteria;
+        ProtectionGroup protectionGroup;
+        try
+        {
+            userProvisioningManager = getUserProvisioningManager();
+
+            //Getting Appropriate Role
+            //role name is generated as <<privilegeName>>_ONLY
+            roleName = privilegeName + "_ONLY";
+            role = new Role();
+            role.setName(roleName);
+            roleSearchCriteria = new RoleSearchCriteria(role);
+            try
+            {
+                list = getObjects(roleSearchCriteria);
+            }
+            catch (SMException e)
+            {
+                Logger.out.debug("Role not found by name " + roleName);
+                throw new SMException("Role not found by name " + roleName, e);
+            }
+            role = (Role) list.get(0);
+
+            //Getting Appropriate Group
+            // Protection Group Name is generated as PG_<<userID>>_ROLE_<<roleID>>
+            protectionGroupName = "PG_" + userId + "_ROLE_" + role.getId();
+            protectionGroup = new ProtectionGroup();
+            protectionGroup.setProtectionGroupName(protectionGroupName);
+            protectionGroupSearchCriteria = new ProtectionGroupSearchCriteria(
+                    protectionGroup);
+            try
+            {
+                list = getObjects(protectionGroupSearchCriteria);
+            }
+            catch (SMException e)
+            {
+                Logger.out.debug("Protection Group not found by name "
+                        + protectionGroupName);
+                userProvisioningManager.createProtectionGroup(protectionGroup);
+                list = getObjects(protectionGroupSearchCriteria);
+            }
+            protectionGroup = (ProtectionGroup) list.get(0);
+            
+            Logger.out.debug("Assign Protection elements");
+            //Assign Protection elements to Protection Group
+            assignProtectionElements(protectionGroup.getProtectionGroupName(),
+                    objectIds);
+            
+            Logger.out.debug("Assign User Role To Protection Group");
+            //Assign User Role To Protection Group
+            Set roles = new HashSet();
+            roles.add(role);
+            assignUserRoleToProtectionGroup(userId, roles, protectionGroup);
+
+        }
+        catch (CSException csex)
+        {
+            throw new SMException(csex);
+        }
+    }
+
+//    public void assignPrivilegeToGroup(String privilegeName,
+//            String[] objectIds, String groupName)
+//    {
+//
+//    }
+
+    public void assignProtectionElements(String protectionGroupName,
+            java.lang.String[] protectionElementIds) throws SMException
+    {
+        try
+        {
+            Logger.out.debug("Protection Group NAme:"+protectionGroupName+" protectionElementIds:"+protectionElementIds);
+            UserProvisioningManager userProvisioningManager = getUserProvisioningManager();
+            for (int i = 0; i < protectionElementIds.length; i++)
+            {
+                userProvisioningManager.assignProtectionElement(protectionGroupName, protectionElementIds[i]);
+            }
+        }
+        catch (CSException csex)
+        {
+            Logger.out.debug("Could not assign Protection elements to protection group",
+                    csex);
+            throw new SMException(
+                    "Could not assign Protection elements to protection group",
+                    csex);
+        }
+    }
+
+    public void assignUserRoleToProtectionGroup(Long userId, Set roles,
+            ProtectionGroup protectionGroup) throws SMException
+    {
+        Logger.out.debug("userId:"+userId+" roles:"+roles+" protectionGroup:"+protectionGroup.getProtectionGroupName());
+        Set protectionGroupRoleContextSet;
+        ProtectionGroupRoleContext protectionGroupRoleContext;
+        Iterator it;
+        Set aggregatedRoles = new HashSet();
+        String[] roleIds = null;
+        try
+        {
+            UserProvisioningManager userProvisioningManager = getUserProvisioningManager();
+            protectionGroupRoleContextSet = userProvisioningManager
+                    .getProtectionGroupRoleContextForUser(String
+                            .valueOf(userId));
+
+            it = protectionGroupRoleContextSet.iterator();
+            while (it.hasNext())
+            {
+                protectionGroupRoleContext = (ProtectionGroupRoleContext) it
+                        .next();
+                if (protectionGroupRoleContext.getProtectionGroup()
+                        .getProtectionGroupId().equals(
+                                protectionGroup.getProtectionGroupId()))
+                {
+                    aggregatedRoles.addAll(protectionGroupRoleContext
+                            .getRoles());
+
+                    break;
+                }
+            }
+
+            aggregatedRoles.addAll(roles);
+            roleIds = new String[aggregatedRoles.size()];
+            Iterator roleIt = aggregatedRoles.iterator();
+
+            for (int i = 0; roleIt.hasNext(); i++)
+            {
+                roleIds[i] = String.valueOf(((Role) roleIt.next()).getId());
+            }
+
+            userProvisioningManager.assignUserRoleToProtectionGroup(String
+                    .valueOf(userId), roleIds, String.valueOf(protectionGroup
+                    .getProtectionGroupId()));
+
+        }
+        catch (CSException csex)
+        {
+            Logger.out.debug("Could not assign user role to protection group",
+                    csex);
+            throw new SMException(
+                    "Could not assign user role to protection group", csex);
+        }
+    }
+
+    
 
 }
 
