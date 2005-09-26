@@ -23,7 +23,7 @@
 			<a class="subMenuPrimary" href="UserSearch.do?pageOf=pageOfUserProfile&systemIdentifier=<bean:write name="<%=Constants.SESSION_DATA%>" property="userId" scope="session"/>" >
 				<bean:message key="app.edit" />
 			</a> |  
-			<a class="subMenuPrimary" href="UserSearch.do?pageOf=pageOfChangePassword&systemIdentifier=<bean:write name="<%=Constants.SESSION_DATA%>" property="userId" scope="session"/>" >
+			<a class="subMenuPrimary" href="ChangePassword.do?operation=edit&amp;pageOf=pageOfChangePassword" >
 					<bean:message key="user.changePassword" />
 			</a>
 			
