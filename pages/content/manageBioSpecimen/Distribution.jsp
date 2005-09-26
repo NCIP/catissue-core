@@ -5,7 +5,24 @@
 <%@ page import="edu.wustl.catissuecore.actionForm.DistributionForm"%>
 <%@ page import="java.util.List,java.util.ListIterator"%>
 <%@ page import="edu.wustl.common.beans.NameValueBean"%>
-
+<%!
+	private String changeUnit(String specimenType)
+	{
+		if (specimenType == null)
+			return "";
+		if(specimenType.equals("Fluid"))
+			return Constants.UNIT_ML;
+		else if(specimenType.equals("Tissue"))
+			return Constants.UNIT_GM;
+		else if(specimenType.equals("Cell"))
+			return Constants.UNIT_CC;
+		else if(specimenType.equals("Molecular"))
+			return Constants.UNIT_MG;
+		else
+			return " ";
+			
+	}
+%>
 
 <%
 	List itemList = (List)request.getAttribute(Constants.ITEMLIST);
@@ -15,6 +32,7 @@
 	String [] molecularSpecimenIdArray = (String [])request.getAttribute(Constants.MOLECULAR_SPECIMEN_ID_LIST);
 	String [] tissueSpecimenIdArray = (String [])request.getAttribute(Constants.TISSUE_SPECIMEN_ID_LIST);
 	DistributionForm formBean = (DistributionForm)request.getAttribute("distributionForm");
+	request.setAttribute("action","default");
 %>
 <head>
 	<script language="JavaScript">
@@ -381,11 +399,13 @@
 					String unitKey = "DistributedItem:" + i + "_unit";
 					String unitProperty = "value(DistributedItem:"+i+"_unit)";
 					String fName = "onSpecimenTypeChange(this,'" + unitSpan + "','" + itemName + "','" + unitProperty + "')";
+					String srKeyName = "DistributedItem:"+i+"_Specimen_className";
+					String classValue=(String)formBean.getValue(srKeyName);
 					
-					String temp = String.valueOf(formBean.getValue(unitKey));
-					
-					if(temp.equals("null"))
-						temp = "";
+					 
+					 
+					 String strUnitValue = ""+(String)formBean.getValue(unitProperty);
+					 strUnitValue = changeUnit(classValue);
 				%>
 				 <tr>
 				 	<td class="formSerialNumberField" width="5"><%=i%>
@@ -450,7 +470,7 @@
 					</td>
 				    <td class="formField">
 				     	<html:text styleClass="formFieldSized10" size="30" styleId="<%=quantity%>" property="<%=quantity%>" disabled="<%=readOnlyForAll%>" readonly="<%=readOnlyForAll%>"/>
-				     	<span id="<%=unitSpan%>">&nbsp;<%=temp%></span>
+				     	<span id="<%=unitSpan%>">&nbsp;<%=strUnitValue%></span>
 				    </td>
 				 					    
 				 </tr>
@@ -479,7 +499,7 @@
 			<!-- action buttons end -->
 			</td>
 		</tr>
-
+		
 		</table>
 		
 	  </td>
