@@ -1,6 +1,22 @@
 <td class="subMenuPrimaryItemsWithBorder" onmouseover="changeMenuStyle(this,'subMenuPrimaryItemsWithBorderOver')" onmouseout="changeMenuStyle(this,'subMenuPrimaryItemsWithBorder')">		
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 
+	<script language="JavaScript">
+		
+		var win = null;
+		function NewWindow(mypage,myname,w,h,scroll)
+		{
+			LeftPosition = (screen.width) ? (screen.width-w)/2 : 0;
+			TopPosition = (screen.height) ? (screen.height-h)/2 : 0;
+
+			//mypage=mypage+document.forms[0].typeId.value;
+			settings =
+				'height='+h+',width='+w+',top='+TopPosition+',left='+LeftPosition+',scrollbars='+scroll+',resizable'
+			win = open(mypage,myname,settings)
+			if (win.opener == null)
+				win.opener = self;
+		}
+	</script>
 <tr>
 	<td class="subMenuPrimaryTitle" height="22">
 		<a href="#content">
@@ -111,7 +127,10 @@
 			<a class="subMenuPrimary" href="StorageContainer.do?operation=add&pageOf=pageOfStorageContainer"><bean:message key="app.add" /></a> | 
 			<a class="subMenuPrimary" href="SimpleQueryInterface.do?pageOf=pageOfStorageContainer&aliasName=StorageContainer" >
 				<bean:message key="app.edit" />
-			</a>
+			</a> | 
+			<a class="subMenuPrimary" href="#" onclick="javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfSpecimen','name','810','320','yes');return false" >
+				<bean:message key="app.viewmap" />
+			</a>	
 		</div>
 	</td>
 </tr>
