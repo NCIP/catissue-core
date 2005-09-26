@@ -86,12 +86,45 @@ public class DistributionForm extends SpecimenEventParametersForm
 				String key5 = "DistributedItem:"+i+"_Specimen_className";				
 				
 				DistributedItem dItem = (DistributedItem)it.next();
-				String unit = getUnitSpan(dItem.getSpecimen());
+				Specimen specimen =dItem.getSpecimen();
+				String unit= getUnitSpan(specimen);
+				Double quantity = dItem.getQuantity();
+				double availableQuantity = 0.0;
+				/*if(specimen instanceof TissueSpecimen)
+				{
+					TissueSpecimen tissueSpecimen = 
+					availableQuantity = tissueSpecimen.getAvailableQuantityInGram().doubleValue() - 
+																					quantity.doubleValue();
+				}
+				else if(specimen instanceof CellSpecimen)
+				{
+					CellSpecimen cellSpecimen = 
+					availableQuantity = cellSpecimen.getAvailableQuantityInCellCount().doubleValue() - 
+																						quantity.doubleValue();
+					
+				}
+				else if(specimen instanceof MolecularSpecimen)
+				{
+					MolecularSpecimen molecularSpecimen = 
+					availableQuantity = molecularSpecimen.getAvailableQuantityInMicrogram().doubleValue() - 
+																						quantity.doubleValue();
+						
+					
+				}
+				else if(specimen instanceof FluidSpecimen)
+				{
+					FluidSpecimen fluidSpecimen = 
+					availableQuantity = fluidSpecimen.getAvailableQuantityInMilliliter().doubleValue() - 
+																						quantity.doubleValue();
+						
+				}*/
+				
 				values.put(key1,dItem.getSystemIdentifier());
 				values.put(key2,dItem.getSpecimen().getSystemIdentifier());
-				values.put(key3,dItem.getQuantity());
+				values.put(key3,quantity);
 				values.put(key4,unit);
 				values.put(key5,dItem.getSpecimen().getClassName());
+				
 				
 				i++;
 			}

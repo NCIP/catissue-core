@@ -550,6 +550,15 @@
 	<definition name=".catissuecore.distributionEditSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
 		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>
+	
+	<definition name=".catissuecore.configDistributionReport" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/search/ConfigureResultView.jsp" />
+	</definition>
+	<definition name=".catissuecore.distributionReportSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/search/DistributionReport.jsp" />
+	</definition>
+	
+	
 	<!-- Distribution end -->
 
 	<!-- specimenEventParameters -->

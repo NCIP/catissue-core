@@ -25,10 +25,12 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.AbstractActionForm;
+import edu.wustl.catissuecore.actionForm.DistributionForm;
 import edu.wustl.catissuecore.actionForm.SpecimenEventParametersForm;
 import edu.wustl.catissuecore.bizlogic.AbstractBizLogic;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
+import edu.wustl.catissuecore.domain.Distribution;
 import edu.wustl.catissuecore.domain.DomainObjectFactory;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
@@ -67,8 +69,15 @@ public class CommonAddEditAction extends Action
             {
             	String specimenId = String.valueOf(((SpecimenEventParametersForm)abstractForm).getSpecimenId());
             	request.setAttribute(Constants.SPECIMEN_ID,specimenId);
+            	
             }
-            
+            if(abstractForm instanceof DistributionForm)
+            {
+            	//Setting Distribution ID as request parameter
+            	Long distributionId =new Long(((DistributionForm)abstractForm).getSystemIdentifier());
+            	Logger.out.debug("distributionId "+distributionId);
+            	request.setAttribute(Constants.DISTRIBUTION_ID,distributionId);
+            }
             Logger.out.debug("IN ADDEDIT ACTION FORM ID************************"+abstractForm.getFormId());
 
             if (abstractForm.isAddOperation())
@@ -82,8 +91,14 @@ public class CommonAddEditAction extends Action
             	
                 if(abstractDomain instanceof Specimen)
             		request.setAttribute(Constants.SPECIMEN_ID,String.valueOf(abstractDomain.getSystemIdentifier()));
-                
-                if(abstractDomain instanceof SpecimenCollectionGroup)
+            	if(abstractDomain instanceof Distribution)
+                {
+                	//Setting Distribution ID as request parameter
+                	request.setAttribute(Constants.DISTRIBUTION_ID,abstractDomain.getSystemIdentifier());
+                	 
+                }
+            	
+               if(abstractDomain instanceof SpecimenCollectionGroup)
                 {
                 	request.setAttribute(Constants.SPECIMEN_COLLECTION_GROUP_ID,abstractDomain.getSystemIdentifier().toString());
             		target = new String(Constants.REDIRECT_TO_SPECIMEN);
@@ -111,6 +126,7 @@ public class CommonAddEditAction extends Action
                 {
                     target = new String(Constants.FAILURE);
                 }
+                
             }
             
             //Status message key.

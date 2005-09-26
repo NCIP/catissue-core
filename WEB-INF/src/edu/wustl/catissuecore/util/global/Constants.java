@@ -450,6 +450,7 @@ public class Constants
 	public static final int SPECIMEN_EVENT_PARAMETERS_FORM_ID = 38;
 	public static final int SHOPPING_CART_FORM_ID = 39;
 	public static final int SIMPLE_QUERY_INTERFACE_ID = 40;
+	public static final int CONFIGURE_RESULT_VIEW_ID = 41;
 	
 	//Misc
 	public static final String SEPARATOR = " : ";
@@ -1205,4 +1206,13 @@ public class Constants
 	public static final String SLIDE = "Slide";
     public static final String PARAFFIN_BLOCK = "Paraffin Block"; 
 	public static final String FROZEN_BLOCK = "Frozen Block";    
+	
+//	 constants required for Configuration Result View
+	public static final String TABLE_IDS = "tableIds";
+	public static final String TABLE_COLUMN_DATA_MAP = "tableColumnDataMap";
+	public static final String CONFIGURE_RESULT_VIEW_ACTION = "ConfigureResultView.do";
+	public static final String TABLE_NAMES_LIST = "tableNamesList";
+	public static final String COLUMN_NAMES_LIST = "columnNamesList";
+	public static final String DISTRIBUTION_ID = "distributionId";
+
 }
