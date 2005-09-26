@@ -180,6 +180,11 @@ public class StorageContainerBizLogic extends DefaultBizLogic
         
         if(container.isParentChanged())
         {
+        	//Check whether continer is moved to one of its sub container.
+        	if(isUnderSubContainer(container,container.getParentContainer().getSystemIdentifier()))
+        	{
+        		throw new DAOException(ApplicationProperties.getValue("errors.container.under.subcontainer"));  
+        	}
         	Logger.out.debug("Loading ParentContainer: "+container.getParentContainer().getSystemIdentifier());
 			
         	StorageContainer pc = (StorageContainer) dao.retrieve(StorageContainer.class.getName(), container.getParentContainer().getSystemIdentifier());
@@ -203,6 +208,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic
         Logger.out.debug("container.getActivityStatus() "+ container.getActivityStatus());
         if (container.getActivityStatus().equals(Constants.ACTIVITY_STATUS_DISABLED))
         {
+        	setDisableToSubContainer(container);
             Logger.out.debug("container.getActivityStatus() "+ container.getActivityStatus());
             Long containerIDArr[] = {container.getSystemIdentifier()};
 
@@ -227,7 +233,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic
             }
         }
     }
-
+    
     private void loadStorageType(DAO dao, StorageContainer container)
             throws DAOException
     {
@@ -255,6 +261,39 @@ public class StorageContainerBizLogic extends DefaultBizLogic
                 StorageContainer container = (StorageContainer) iterator.next();
                 container.setSite(site);
                 setSiteForSubContainers(container, site);
+            }
+        }
+    }
+    
+    private boolean isUnderSubContainer(StorageContainer storageContainer, Long parentContainerID)
+    {
+    	if (storageContainer != null)
+        {
+        	Iterator iterator = storageContainer.getChildrenContainerCollection().iterator();
+            while (iterator.hasNext())
+            {
+                StorageContainer container = (StorageContainer) iterator.next();
+                //Logger.out.debug("SUB CONTINER container "+parentContainerID.longValue()+" "+container.getSystemIdentifier().longValue()+"  "+(parentContainerID.longValue()==container.getSystemIdentifier().longValue()));
+                if(parentContainerID.longValue()==container.getSystemIdentifier().longValue())
+                	return true;
+                if(isUnderSubContainer(container,parentContainerID))
+                	return true;
+            }
+        }
+    	return false;
+    }
+    
+//  TODO TO BE REMOVED 
+    private void setDisableToSubContainer(StorageContainer storageContainer)
+    {
+    	if (storageContainer != null)
+        {
+        	Iterator iterator = storageContainer.getChildrenContainerCollection().iterator();
+            while (iterator.hasNext())
+            {
+                StorageContainer container = (StorageContainer) iterator.next();
+                container.setActivityStatus(Constants.ACTIVITY_STATUS_DISABLED);
+                setDisableToSubContainer(container);
             }
         }
     }
@@ -392,18 +431,6 @@ public class StorageContainerBizLogic extends DefaultBizLogic
         return fullStatus;
     }
 
-//    public void disableRelatedObjects(DAO dao, Long siteArr[])
-//            throws DAOException
-//    {
-//    	Logger.out.debug("disableRelatedObjects StorageContainerBizLogic");
-//    	List listOfSubElement = super.disableObjects(dao, StorageContainer.class, "site", 
-//    			"CATISSUE_STORAGE_CONTAINER", "SITE_ID", siteArr);
-//    	if(!listOfSubElement.isEmpty())
-//    	{
-//    		disableSubStorageContainer(dao,Utility.toLongArray(listOfSubElement));
-//    	}
-//    }
-
     private void disableSubStorageContainer(DAO dao,
             Long storageContainerIDArr[]) throws DAOException
     {
@@ -422,26 +449,15 @@ public class StorageContainerBizLogic extends DefaultBizLogic
         disableSubStorageContainer(dao, Utility.toLongArray(listOfSubStorageContainerId));
     }
     
-//    private boolean hasSpecimen(DAO dao,Long storageContainerIdArr[]) throws DAOException
-//    {
-//    	String sourceObjectName = Specimen.class.getName();
-//		String selectColumnName [] = {"count("+Constants.SYSTEM_IDENTIFIER+")"};
-//		
-//		String[] whereColumnName = {"storageContainer."+Constants.SYSTEM_IDENTIFIER};
-//		String[] whereColumnCondition = {"in"};
-//		Object[] whereColumnValue = {storageContainerIdArr};
-//		String joinCondition = Constants.AND_JOIN_CONDITION;
-//		
-//		List list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, 
-//				whereColumnCondition, whereColumnValue, joinCondition);
-//		
-//		if(!list.isEmpty())
-//		{
-//			Object obj = list.get(0);
-//			if(obj!=null)
-//				Logger.out.debug("obj "+obj.getClass()+" "+obj);
-//			list.get(0);
-//		}
-//		return false;
-//    }
+//  public void disableRelatedObjects(DAO dao, Long siteArr[])
+//  throws DAOException
+//{
+//Logger.out.debug("disableRelatedObjects StorageContainerBizLogic");
+//List listOfSubElement = super.disableObjects(dao, StorageContainer.class, "site", 
+//		"CATISSUE_STORAGE_CONTAINER", "SITE_ID", siteArr);
+//if(!listOfSubElement.isEmpty())
+//{
+//	disableSubStorageContainer(dao,Utility.toLongArray(listOfSubElement));
+//}
+//}
 }
