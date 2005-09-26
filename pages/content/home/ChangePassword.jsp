@@ -31,15 +31,9 @@
 				
 				<tr>
 					<td>
-						<html:hidden property="systemIdentifier" />
+						<html:hidden property="systemIdentifier" value="<bean:write name='<%=Constants.SESSION_DATA%>' property='userId' scope='session'/>" />
 					</td>
 				</tr>
-
-				<!--tr>
-					<td>
-						<html:hidden property="oldPassword" />
-					</td>
-				</tr-->
 
 				<tr>
 					<td class="formMessage" colspan="3">* indicates a required field</td>
