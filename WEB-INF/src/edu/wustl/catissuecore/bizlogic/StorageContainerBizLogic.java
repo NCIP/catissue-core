@@ -407,17 +407,14 @@ public class StorageContainerBizLogic extends DefaultBizLogic
     private void disableSubStorageContainer(DAO dao,
             Long storageContainerIDArr[]) throws DAOException
     {
-//        NewSpecimenBizLogic bizLogic = (NewSpecimenBizLogic) BizLogicFactory
-//                .getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
-//        bizLogic.disableRelatedObjectsForStorageContainer(dao,
-//                storageContainerIDArr);
-    	
-    	
+    	List listOfSpecimenIDs = getRelatedObject(dao, Specimen.class, "storageContainer" ,storageContainerIDArr);
+    	if(!listOfSpecimenIDs.isEmpty())
+    	{
+    		throw new DAOException(ApplicationProperties.getValue("errors.container.contains.specimen"));
+    	}
     	
         List listOfSubStorageContainerId = super.disableObjects(dao,
-                StorageContainer.class, "parentContainer",
-                "CATISSUE_STORAGE_CONTAINER", "PARENT_CONTAINER_ID",
-                storageContainerIDArr);
+                StorageContainer.class, "parentContainer", "CATISSUE_STORAGE_CONTAINER", "PARENT_CONTAINER_ID", storageContainerIDArr);
 
         if (listOfSubStorageContainerId.isEmpty())
             return;
@@ -425,26 +422,26 @@ public class StorageContainerBizLogic extends DefaultBizLogic
         disableSubStorageContainer(dao, Utility.toLongArray(listOfSubStorageContainerId));
     }
     
-    private boolean hasSpecimen(DAO dao,Long storageContainerIdArr[]) throws DAOException
-    {
-    	String sourceObjectName = Specimen.class.getName();
-		String selectColumnName [] = {"count("+Constants.SYSTEM_IDENTIFIER+")"};
-		
-		String[] whereColumnName = {"storageContainer."+Constants.SYSTEM_IDENTIFIER};
-		String[] whereColumnCondition = {"in"};
-		Object[] whereColumnValue = {storageContainerIdArr};
-		String joinCondition = Constants.AND_JOIN_CONDITION;
-		
-		List list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, 
-				whereColumnCondition, whereColumnValue, joinCondition);
-		
-		if(!list.isEmpty())
-		{
-			Object obj = list.get(0);
-			if(obj!=null)
-				Logger.out.debug("obj "+obj.getClass()+" "+obj);
-			list.get(0);
-		}
-		return false;
-    }
+//    private boolean hasSpecimen(DAO dao,Long storageContainerIdArr[]) throws DAOException
+//    {
+//    	String sourceObjectName = Specimen.class.getName();
+//		String selectColumnName [] = {"count("+Constants.SYSTEM_IDENTIFIER+")"};
+//		
+//		String[] whereColumnName = {"storageContainer."+Constants.SYSTEM_IDENTIFIER};
+//		String[] whereColumnCondition = {"in"};
+//		Object[] whereColumnValue = {storageContainerIdArr};
+//		String joinCondition = Constants.AND_JOIN_CONDITION;
+//		
+//		List list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, 
+//				whereColumnCondition, whereColumnValue, joinCondition);
+//		
+//		if(!list.isEmpty())
+//		{
+//			Object obj = list.get(0);
+//			if(obj!=null)
+//				Logger.out.debug("obj "+obj.getClass()+" "+obj);
+//			list.get(0);
+//		}
+//		return false;
+//    }
 }
