@@ -1211,7 +1211,7 @@ public class SecurityManager implements Permissions
                         {
                             nameValueBean = new NameValueBean(objectId
                                     .substring(objectId.lastIndexOf(".") + 1),
-                                    objectId);
+                                    objectId.substring(objectId.lastIndexOf("_")+1));
                             objects.add(nameValueBean);
                             Logger.out.debug(nameValueBean);
                             break;
