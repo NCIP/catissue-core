@@ -7,6 +7,9 @@
 
 <link href="runtime/styles/xp/grid.css" rel="stylesheet" type="text/css" ></link>
 <script src="runtime/lib/grid.js"></script>
+<script src="runtime/formats/date.js"></script>
+<script src="runtime/formats/string.js"></script>
+<script src="runtime/formats/number.js"></script>
 
 <head>
 <%
@@ -128,14 +131,23 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 				
 					//	create ActiveWidgets Grid javascript object.
 					var obj = new Active.Controls.Grid;
+					var date  = new Active.Formats.Date; 
+			 		var string  = new Active.Formats.String;
+					var number  = new Active.Formats.Number; 
+
+					date.setTextFormat("mm-dd-yyyy HH:mm");
+					number.setTextFormat("#*");
 					
 					//	set number of rows/columns.
 					obj.setRowProperty("count", <%=dataList.size()%>);
 					obj.setColumnProperty("count", <%=columnList.length-1%>);
+					var formats = [number,string,string,date];
 					
 					//	provide cells and headers text
-					obj.setDataProperty("text", function(i, j){return myData[i][j]});
+					//obj.setDataProperty("text", function(i, j){return formats[j].dataToValue(myData[i][j])});
+					obj.setDataText(function(i, j){return formats[j].dataToText(myData[i][j])});
 					obj.setColumnProperty("text", function(i){return columns[i]});
+					obj.sort(3,'descending');
 					
 					//	set headers width/height.
 					obj.setRowHeaderWidth("28px");
