@@ -18,12 +18,8 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 
-import edu.wustl.catissuecore.domain.AbstractDomainObject;
-import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Validator;
-import edu.wustl.common.util.logger.Logger;
 
 /**
  * This Class is used to encapsulate all the request parameters passed from AssignPrivileges.jsp page.
@@ -39,12 +35,12 @@ public class AssignPrivilegesForm extends ActionForm
     /**
      * A String array containing the list of privileges.
      * */
-    private String [] privileges;
+    private String privilege;
     
     /**
      * A String array containing the list of object-types.
      * */
-    private String [] objectTypes;
+    private String objectType;
     
     /**
      * A String array containing the list of record identifiers.
@@ -60,6 +56,10 @@ public class AssignPrivilegesForm extends ActionForm
      * A String array containing the list of groups/users.
      * */
     private String [] groups;
+    
+    public AssignPrivilegesForm()
+    {
+    }
     
     /**
      * Returns the assignment operation.
@@ -122,43 +122,43 @@ public class AssignPrivilegesForm extends ActionForm
 	}
 	
 	/**
-     * Returns the list of object types.
-     * @return String[] the list of object types.
-     * @see #setObjectTypes(String[])
+     * Returns the object type.
+     * @return String the object type.
+     * @see #setObjectType(String)
      */
-	public String[] getObjectTypes()
+	public String getObjectType()
 	{
-		return objectTypes;
+		return objectType;
 	}
 	
 	/**
-     * Sets the list of object types.
-     * @param attributes String[] the list of object types.
-     * @see #getObjectTypes()
+     * Sets the object type.
+     * @param attributes String the object type.
+     * @see #getObjectType()
      */
-	public void setObjectTypes(String[] objectTypes)
+	public void setObjectType(String objectTypes)
 	{
-		this.objectTypes = objectTypes;
+		this.objectType = objectTypes;
 	}
 	
 	/**
-     * Returns the list of privileges.
-     * @return String[] the list of privileges.
-     * @see #setPrivileges(String[])
+     * Returns the privilege name.
+     * @return String the privilege name.
+     * @see #setPrivilege(String)
      */
-	public String[] getPrivileges()
+	public String getPrivilege()
 	{
-		return privileges;
+		return privilege;
 	}
 	
 	/**
-     * Sets the list of privileges.
-     * @param attributes String[] the list of privileges.
-     * @see #getPrivileges()
+     * Sets the privilege name.
+     * @param attributes String the privilege name.
+     * @see #getPrivilege()
      */
-	public void setPrivileges(String[] privileges)
+	public void setPrivilege(String privileges)
 	{
-		this.privileges = privileges;
+		this.privilege = privileges;
 	}
 	
 	/**
@@ -194,29 +194,29 @@ public class AssignPrivilegesForm extends ActionForm
         	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("assignPrivileges.assign")));
         }
         
-        if(privileges == null)
+        if(privilege == null)
         {
         	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("assignPrivileges.privileges")));
         }
         
-        if(objectTypes == null)
+        if(objectType == null)
         {
-        	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("assignPrivileges.objectTypes")));
+        	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("assignPrivileges.objectType")));
         }
         
         if(recordIds == null)
         {
-        	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("assignPrivileges.recordIds")));
+        	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("assignPrivileges.recordId")));
         }
         
         if(attributes == null)
         {
-        	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("assignPrivileges.attributes")));
+        	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("assignPrivileges.attribute")));
         }
         
         if(groups == null)
         {
-        	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("assignPrivileges.groups")));
+        	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("assignPrivileges.group")));
         }
         
         return errors;
