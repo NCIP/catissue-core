@@ -109,4 +109,74 @@ public class BizLogicFactory
         }
         return abstractBizLogic;
     }
+    
+    
+    /**
+     * Returns DAO instance according to the fully qualified class name.
+     * @param className The name of the class.
+     * @return An AbstractDAO object.
+     */
+    public static AbstractBizLogic getBizLogic(String className)
+    {
+    	AbstractBizLogic abstractBizLogic = null;
+    	
+    	if(className.equals("edu.wustl.catissuecore.domain.User"))
+    	{
+    		abstractBizLogic = new UserBizLogic();
+    	}
+    	else if(className.equals("edu.wustl.catissuecore.domain.ReportedProblem"))
+    	{
+    		abstractBizLogic = new ReportedProblemBizLogic();
+    	}
+    	else if(className.equals("edu.wustl.catissuecore.domain.StorageType"))
+    	{
+    		abstractBizLogic = new StorageTypeBizLogic();
+    	}
+    	else if(className.equals("edu.wustl.catissuecore.domain.StorageContainer"))
+    	{
+    		abstractBizLogic = new StorageContainerBizLogic();
+    	}
+    	else if(className.equals("edu.wustl.catissuecore.domain.Site"))
+    	{
+    		abstractBizLogic = new SiteBizLogic();
+    	}
+    	else if(className.equals("edu.wustl.catissuecore.domain.Participant"))
+    	{
+    		abstractBizLogic = new ParticipantBizLogic();
+    	}
+    	else if(className.equals("edu.wustl.catissuecore.domain.CollectionProtocol"))
+    	{
+    		abstractBizLogic = new CollectionProtocolBizLogic();
+    	}
+    	else if(className.equals("edu.wustl.catissuecore.domain.DistributionProtocol"))
+    	{
+    		abstractBizLogic = new DistributionProtocolBizLogic();
+    	}
+    	else if(className.equals("edu.wustl.catissuecore.domain.Specimen"))
+    	{
+    		abstractBizLogic = new NewSpecimenBizLogic();
+    	}
+    	else if(className.equals("edu.wustl.catissuecore.domain.SpecimenCollectionGroup"))
+    	{
+    		abstractBizLogic = new SpecimenCollectionGroupBizLogic();
+    	}
+    	else if(className.equals("edu.wustl.catissuecore.domain.Distribution"))
+    	{
+    		abstractBizLogic = new DistributionBizLogic();
+    	}
+    	else if(className.endsWith("EventParameters"))
+    	{
+    		abstractBizLogic = new SpecimenEventParametersBizLogic();
+    	}
+    	else if(className.equals("edu.wustl.catissuecore.domain.CheckInCheckOutEventParameter"))
+    	{
+    		abstractBizLogic = new SpecimenEventParametersBizLogic();
+    	}
+    	else
+    	{
+    		abstractBizLogic = new DefaultBizLogic();
+    	}
+    	
+    	return abstractBizLogic;
+    }
 }
