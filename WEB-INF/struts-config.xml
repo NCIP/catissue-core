@@ -1910,13 +1910,24 @@ PUBLIC
 		<!-- Shopping Cart Actions Ends -->
 		
 		<!-- Assign Privileges Action Begins -->
-		<action path="/AssignPrivileges"
-			type="edu.wustl.catissuecore.action.AssignPrivilegeAction"
+		<action path="/AssignPrivilegesPage"
+			type="edu.wustl.catissuecore.action.AssignPrivilegePageAction"
 			name="assignPrivilegesForm"
 			validate="false"
 			scope="request">
+			<forward name="pageOfAssignPrivilegesPage" path=".catissuecore.assignPrivilegesPageDef" />
+			<forward name="failure" path=".catissuecore.assignPrivilegesPageDef" />
+			<forward name="access_denied" path="/ManageBioSpecimen.do" />
+		</action>
+		
+		<action path="/AssignPrivileges"
+			type="edu.wustl.catissuecore.action.AssignPrivilegeAction"
+			name="assignPrivilegesForm"
+			input="/AssignPrivilegesPage.do?pageOf=pageOfAssignPrivilegesPage"
+			validate="true"
+			scope="request">
 			<forward name="pageOfAssignPrivileges" path=".catissuecore.assignPrivilegesDef" />
-			<forward name="failure" path=".catissuecore.assignPrivilegesDef" />
+			<forward name="failure" path=".catissuecore.assignPrivilegesPageDef" />
 			<forward name="access_denied" path="/ManageBioSpecimen.do" />
 		</action>
 		<!-- Assign Privileges Actions Ends -->
