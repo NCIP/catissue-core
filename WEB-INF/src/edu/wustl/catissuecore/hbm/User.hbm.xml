@@ -75,7 +75,7 @@
         <set
             name="collectionProtocolCollection"
             table="CATISSUE_COLLECTION_COORDINATORS"
-            lazy="false"
+            lazy="true"
             inverse="true"
             cascade="save-update"
             sort="unsorted"
