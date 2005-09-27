@@ -146,7 +146,7 @@
   						     </html:select>
   						</logic:equal>
 
-			  		    <html:link page="/Participant.do?operation=add" styleId="newParticipant">
+			  		    <html:link page="/Participant.do?operation=add&pageOf=pageOfParticipant" styleId="newParticipant">
 	 						<bean:message key="buttons.addNew" />
  						</html:link>
 					</td>
@@ -180,7 +180,7 @@
                          		<html:options collection="<%=Constants.PROTOCOL_PARTICIPANT_NUMBER_LIST%>" labelProperty="name" property="value"/>				     					     	
 							</html:select>
  						</logic:equal>
- 						<html:link page="/CollectionProtocolRegistration.do?operation=add" styleId="newParticpantRegistration">
+ 						<html:link page="/CollectionProtocolRegistration.do?operation=add&pageOf=pageOfCollectionProtocolRegistration" styleId="newParticpantRegistration">
 		 						<bean:message key="buttons.addNew" />
 	 					</html:link>
 		        	</td>

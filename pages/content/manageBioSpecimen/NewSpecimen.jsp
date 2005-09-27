@@ -377,7 +377,7 @@ NewSpecimenForm form = (NewSpecimenForm)request.getAttribute("newSpecimenForm");
 									labelProperty="name" property="value"/>		
 							</html:select>
 
-			        		<a href="SpecimenCollectionGroup.do?operation=add">
+			        		<a href="SpecimenCollectionGroup.do?operation=add&pageOf=pageOfSpecimenCollectionGroup">
 	      						<bean:message key="app.addNew" />
 	   						</a>
 			        	</td>
