@@ -647,8 +647,12 @@
 	<!-- ShoppingCart -->
 	
 	<!-- ASSIGN PRIVILEGES -->
-	<definition name=".catissuecore.assignPrivilegesDef" extends=".catissuecore.searchHomeDef">
+	<definition name=".catissuecore.assignPrivilegesPageDef" extends=".catissuecore.searchHomeDef">
 		<put name="content" value="/pages/content/search/AssignPrivileges.jsp" />
+	</definition>
+	
+	<definition name=".catissuecore.assignPrivilegesDef" extends=".catissuecore.searchHomeDef">
+		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>
 	<!-- ASSIGN PRIVILEGES -->
 	
