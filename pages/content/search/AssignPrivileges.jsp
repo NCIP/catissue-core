@@ -23,9 +23,20 @@
 		function onObjectTypeChange(element)
 		{
 			selectAll(element);
-			var action = "/catissuecore/AssignPrivileges.do?pageOf=pageOfAssignPrivileges";
+			var action = "/catissuecore/AssignPrivilegesPage.do?pageOf=pageOfAssignPrivilegesPage";
 			document.forms[0].action = action;
 			document.forms[0].submit();
+		}
+
+		function onPrivilegeChange(element)
+		{
+			var objectCombo = document.getElementById("objectTypes");
+			if(objectCombo.selectedIndex != -1)
+			{
+				var action = "/catissuecore/AssignPrivilegesPage.do?pageOf=pageOfAssignPrivilegesPage";
+				document.forms[0].action = action;
+				document.forms[0].submit();
+			}
 		}
 
 		function assign()
@@ -38,29 +49,60 @@
 	</SCRIPT>
 </head>
 
+<html:errors/>
+
 <html:form action="<%=Constants.ASSIGN_PRIVILEGES_ACTION%>">
-<table summary="" cellpadding="0" cellspacing="0" border="0" width="600">
+<table summary="" cellpadding="5" cellspacing="0" border="0" width="600">
 
 <tr>
+	<td>&nbsp;&nbsp;</td>
 	<td colspan="6">
 		&nbsp;
 	</td>
 </tr>
 
-<!-- First Row -->
+<!-- Title Row -->
 <tr>
-	<td class="formTitle" height="20" colspan="6">
+	<td>&nbsp;&nbsp;</td>
+	<td class="formTitle" height="25" colspan="6">
 		<bean:message key="assignPrivileges.title"/>
 	</td>
 </tr>
+<!-- Title Row -->
+
+<!-- SubTitle-1 Row -->
 <tr>
-	<td class="formLeftSubTableTitle">
+	<td>&nbsp;&nbsp;</td>
+	<td class="formLeftSubTableTitle" height="25" colspan="2">
      	<bean:message key="assignPrivileges.assign"/>
     </td>
-    <td class="formRightSubTableTitle">
+    <td class="formRightSubTableTitle" colspan="2">
 		<bean:message key="assignPrivileges.privileges"/>
 	</td>
-    <td class="formRightSubTableTitle">
+</tr>
+<!-- SubTitle-1 Row -->
+
+<!-- Assign/Privilege Row -->
+<tr>
+	<td>&nbsp;&nbsp;</td>
+	<td class="formSerialNumberField" colspan="2">
+     	<html:select property="assignOperation" styleClass="formFieldSized15" styleId="assignOperation" size="1">
+			<html:options name="<%=Constants.ASSIGN%>" labelName="<%=Constants.ASSIGN%>"/>
+		</html:select>
+	</td>
+
+	<td class="formField" colspan="2">
+     	<html:select property="privilege" styleClass="formFieldSized15" styleId="privileges" size="1" onchange="onPrivilegeChange(this)">
+			<html:options collection="<%=Constants.PRIVILEGES%>" labelProperty="name" property="value"/>
+		</html:select>
+	</td>
+</tr>
+<!-- Assign/Privilege Row -->
+
+<!-- SubTitle-2 Row -->
+<tr>
+	<td height="25">&nbsp;&nbsp;</td>
+    <td class="formLeftSubTableTitle">
 		<bean:message key="assignPrivileges.objectType"/>
 	</td>
 	<td class="formRightSubTableTitle">
@@ -73,26 +115,13 @@
 		<bean:message key="assignPrivileges.group"/>
 	</td>
 </tr>
-<!-- First Row -->
+<!-- SubTitle-2 Row -->
 
-<!-- Second Row -->
+<!-- Objct Type/.../Group Row -->
 <tr>
-	<td class="formField">
-     	<html:select property="assignOperation" styleClass="formFieldSized15" styleId="assignOperation" size="10">
-			<html:options name="<%=Constants.ASSIGN%>" labelName="<%=Constants.ASSIGN%>"/>
-		</html:select>
-	</td>
-
-	<td class="formField">
-     	<html:select property="privileges" styleClass="formFieldSized15" styleId="privileges" size="10" multiple="true" onchange="selectAll(this)">
-			<%--html:options name="<%=Constants.PRIVILEGES%>" labelName="<%=Constants.PRIVILEGES%>"/--%>
-			<html:options collection="<%=Constants.PRIVILEGES%>" labelProperty="name" property="value"/>
-		</html:select>
-	</td>
-
-	<td class="formField">
-     	<html:select property="objectTypes" styleClass="formFieldSized15" styleId="objectTypes" size="10" multiple="true" onchange="onObjectTypeChange(this)">
-			<%--html:options name="<%=Constants.OBJECT_TYPE_VALUES%>" labelName="<%=Constants.OBJECT_TYPES%>"/--%>
+	<td>&nbsp;&nbsp;</td>
+	<td class="formSerialNumberField">
+     	<html:select property="objectType" styleClass="formFieldSized15" styleId="objectTypes" size="10" onchange="onObjectTypeChange(this)">
 			<html:options collection="<%=Constants.OBJECT_TYPES%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
@@ -115,20 +144,27 @@
 		</html:select>
 	</td>
 </tr>
-<!-- Second Row -->
+<!-- Objct Type/.../Group Row -->
 
+<!-- Empty Row -->
 <tr>
-	<td colspan="6">
+	<td>&nbsp;&nbsp;</td>
+	<td colspan="5">
 		&nbsp;
 	</td>
 </tr>
+<!-- Empty Row -->
 
+<!-- Button Row -->
 <tr>
-	<td align="right" colspan="6">
+	<td>&nbsp;&nbsp;</td>
+	<td align="right" colspan="5">
 		<html:button property="assignButton" styleClass="actionButton" styleId="assignButton" onclick="assign()">
 	   		<bean:message key="buttons.assign"/>
 	   	</html:button>
 	</td>
 </tr>
+<!-- Button Row -->
+
 </table>
 </html:form>
