@@ -16,6 +16,7 @@ import edu.wustl.catissuecore.dao.DAO;
 import edu.wustl.catissuecore.dao.DAOFactory;
 import edu.wustl.catissuecore.exception.BizLogicException;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
@@ -150,4 +151,47 @@ public abstract class AbstractBizLogic
 			}
 		}
 	}
+    
+    public abstract List getRelatedObjects(DAO dao, Class sourceClass, String classIdentifier,Long objIDArr[])throws DAOException;
+    
+    public abstract void setPrivilege(DAO dao,String privilegeName, Class objectType, Long[] objectIds, Long userId, String roleId, boolean assignToUser) throws SMException,DAOException;
+    
+    public final void setPrivilege(int daoType,String privilegeName, Class objectType, Long[] objectIds, Long userId, SessionDataBean sessionDataBean, String roleId, boolean assignToUser) throws SMException, BizLogicException
+    {
+        AbstractDAO dao = DAOFactory.getDAO(daoType);
+		try
+		{
+	        dao.openSession(sessionDataBean);
+	        setPrivilege(dao, privilegeName,objectType,objectIds,userId, null, true);
+	        dao.commit();
+		}
+		catch(DAOException ex)
+		{
+			try
+			{
+				dao.rollback();
+			}
+			catch(DAOException daoEx)
+			{
+				//TODO ERROR Handling
+				throw new BizLogicException(daoEx.getMessage(), daoEx);
+				//throw new BizLogicException(ex.getMessage(), ex);
+			}
+			//TODO ERROR Handling
+			throw new BizLogicException(ex.getMessage(), ex);
+		}
+		finally
+		{
+			try
+			{
+				dao.closeSession();
+			}
+			catch(DAOException daoEx)
+			{
+				//TODO ERROR Handling
+				throw new BizLogicException();
+			}
+		}
+    }
+
 }

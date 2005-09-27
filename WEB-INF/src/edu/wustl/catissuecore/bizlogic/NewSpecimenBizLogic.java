@@ -235,4 +235,51 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
     		return;
     	disableSubSpecimens(dao, Utility.toLongArray(listOfSubElement));
 	}
+
+
+    /**
+     * @param dao
+     * @param privilegeName
+     * @param longs
+     * @param userId
+     * @throws DAOException
+     * @throws SMException
+     */
+    public void assignPrivilegeToRelatedObjectsForSCG(DAO dao, String privilegeName, Long[] specimenCollectionGroupArr, Long userId) throws SMException, DAOException
+    {
+        Logger.out.debug("assignPrivilegeToRelatedObjectsForSCG NewSpecimenBizLogic");
+    	List listOfSpecimenId = super.getRelatedObjects(dao, Specimen.class, "specimenCollectionGroup", 
+    			 specimenCollectionGroupArr);
+    	if(!listOfSpecimenId.isEmpty())
+    	{
+    	    super.setPrivilege(dao,privilegeName,Specimen.class,Utility.toLongArray(listOfSpecimenId),userId, null, true);
+    		assignPrivilegeToSubSpecimens(dao,privilegeName,Specimen.class,Utility.toLongArray(listOfSpecimenId),userId);
+    	}
+    }
+
+
+    /**
+     * @param dao
+     * @param privilegeName
+     * @param class1
+     * @param longs
+     * @param userId
+     * @throws DAOException
+     * @throws SMException
+     */
+    private void assignPrivilegeToSubSpecimens(DAO dao, String privilegeName, Class class1, Long[] speIDArr, Long userId) throws SMException, DAOException
+    {
+        List listOfSubElement = super.getRelatedObjects(dao, Specimen.class, "parentSpecimen",  speIDArr);
+    	
+    	if(listOfSubElement.isEmpty())
+    		return;
+    	super.setPrivilege(dao,privilegeName,Specimen.class,Utility.toLongArray(listOfSubElement),userId, null, true);
+    	disableSubSpecimens(dao, Utility.toLongArray(listOfSubElement));
+    }
+    
+    public void assignPrivilegeToUser(DAO dao, String privilegeName, Class objectType, Long[] objectIds, Long userId, String roleId, boolean assignToUser) throws SMException, DAOException
+    {
+	    super.setPrivilege(dao,privilegeName,objectType,objectIds,userId, roleId, assignToUser);
+	    assignPrivilegeToSubSpecimens(dao,privilegeName,Specimen.class,objectIds,userId);
+    }
 }

@@ -283,4 +283,13 @@ public class CollectionProtocolBizLogic extends DefaultBizLogic implements Roles
 		collectionProtocol.setUserCollection(coordinatorColl);
 	}
     
+	public void setPrivilege(DAO dao, String privilegeName, Class objectType, Long[] objectIds, Long userId, String roleId, boolean assignToUser) throws SMException, DAOException
+    {
+	    super.setPrivilege(dao,privilegeName,objectType,objectIds,userId, roleId, assignToUser);
+	   
+		CollectionProtocolRegistrationBizLogic bizLogic = (CollectionProtocolRegistrationBizLogic)BizLogicFactory.getBizLogic(Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
+		bizLogic.assignPrivilegeToRelatedObjectsForCP(dao,privilegeName,objectIds,userId);
+    }
+	
+	
 }

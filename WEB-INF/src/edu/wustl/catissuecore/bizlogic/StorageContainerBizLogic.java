@@ -448,7 +448,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic
     private void disableSubStorageContainer(DAO dao,
             Long storageContainerIDArr[]) throws DAOException
     {
-    	List listOfSpecimenIDs = getRelatedObject(dao, Specimen.class, "storageContainer" ,storageContainerIDArr);
+    	List listOfSpecimenIDs = getRelatedObjects(dao, Specimen.class, "storageContainer" ,storageContainerIDArr);
     	if(!listOfSpecimenIDs.isEmpty())
     	{
     		throw new DAOException(ApplicationProperties.getValue("errors.container.contains.specimen"));

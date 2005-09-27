@@ -16,6 +16,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
@@ -262,11 +263,11 @@ public class  DefaultBizLogic extends AbstractBizLogic
     protected List disableObjects(DAO dao, Class sourceClass, String classIdentifier, String tablename, String colName,Long objIDArr[])throws DAOException 
     {
 		dao.disableRelatedObjects(tablename,colName,objIDArr);
-		return getRelatedObject(dao, sourceClass, classIdentifier,objIDArr);
+		return getRelatedObjects(dao, sourceClass, classIdentifier,objIDArr);
     }
     
     
-    public List getRelatedObject(DAO dao, Class sourceClass, String classIdentifier,Long objIDArr[])throws DAOException
+    public List getRelatedObjects(DAO dao, Class sourceClass, String classIdentifier,Long objIDArr[])throws DAOException
     {
 		String sourceObjectName = sourceClass.getName();
 		String selectColumnName [] = {Constants.SYSTEM_IDENTIFIER};
@@ -278,7 +279,19 @@ public class  DefaultBizLogic extends AbstractBizLogic
 		
 		List list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, 
 				whereColumnCondition, whereColumnValue, joinCondition);
-		Logger.out.debug(sourceClass.getName()+" To Disable "+list);
+		Logger.out.debug(sourceClass.getName()+" Related objects "+list);
 		return list;
+    }
+    
+    public void setPrivilege(DAO dao, String privilegeName,Class objectType, Long[] objectIds, Long userId, String roleId, boolean assignToUser) throws SMException,DAOException
+    {
+        if(assignToUser)
+        {
+            SecurityManager.getInstance(this.getClass()).assignPrivilegeToUser(privilegeName,objectType,objectIds,userId);
+        }
+        else
+        {
+            SecurityManager.getInstance(this.getClass()).assignPrivilegeToGroup(privilegeName,objectType,objectIds,roleId);
+        }
     }
 }

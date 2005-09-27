@@ -195,5 +195,33 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 	    	NewSpecimenBizLogic bizLogic = (NewSpecimenBizLogic)BizLogicFactory.getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
 			bizLogic.disableRelatedObjectsForSpecimenCollectionGroup(dao,Utility.toLongArray(listOfSubElement));
     	}
+    }
+
+    /**
+     * @param dao
+     * @param privilegeName
+     * @param objectIds
+     * @param longs
+     * @throws DAOException
+     * @throws SMException
+     */
+    public void assignPrivilegeToRelatedObjects(DAO dao, String privilegeName, Long[] objectIds, Long userId) throws SMException, DAOException
+    {
+        List listOfSubElement = super.getRelatedObjects(dao, SpecimenCollectionGroup.class,"collectionProtocolRegistration", objectIds);
+		if(!listOfSubElement.isEmpty())
+		{
+		    super.setPrivilege(dao,privilegeName,SpecimenCollectionGroup.class,Utility.toLongArray(listOfSubElement),userId, null, true);
+	    	NewSpecimenBizLogic bizLogic = (NewSpecimenBizLogic)BizLogicFactory.getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
+			bizLogic.assignPrivilegeToRelatedObjectsForSCG(dao,privilegeName,Utility.toLongArray(listOfSubElement),userId);
+		}
+        
     }  
+    
+    public void assignPrivilegeToUser(DAO dao, String privilegeName, Class objectType, Long[] objectIds, Long userId, String roleId, boolean assignToUser) throws SMException, DAOException
+    {
+	    super.setPrivilege(dao,privilegeName,objectType,objectIds,userId, roleId, assignToUser);
+	    
+	    NewSpecimenBizLogic bizLogic = (NewSpecimenBizLogic)BizLogicFactory.getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
+	    bizLogic.assignPrivilegeToRelatedObjectsForSCG(dao,privilegeName,objectIds,userId);
+    }
 }
