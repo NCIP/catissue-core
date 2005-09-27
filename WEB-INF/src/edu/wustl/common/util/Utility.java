@@ -46,6 +46,20 @@ public class Utility
 	{
 		return method.invoke(obj,new Object[0]);
 	}
+
+    /**
+     * @param objectIds
+     * @return
+     */
+    public static String getArrayString(Object[] objectIds)
+    {
+        StringBuffer arrayStr = new StringBuffer();
+        for(int i=0; i<objectIds.length; i++)
+        {
+            arrayStr.append(objectIds[i].toString()+",");
+        }
+        return arrayStr.toString();
+    }
 	
 	
 }
