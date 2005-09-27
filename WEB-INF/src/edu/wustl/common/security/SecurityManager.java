@@ -22,6 +22,7 @@ import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SecurityDataBean;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.SMTransactionException;
+import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.logger.Logger;
 import gov.nih.nci.security.AuthenticationManager;
 import gov.nih.nci.security.AuthorizationManager;
@@ -1490,7 +1491,7 @@ public class SecurityManager implements Permissions
     {
         try
         {
-            Logger.out.debug("Protection Group NAme:"+protectionGroupName+" protectionElementIds:"+objectIds);
+            Logger.out.debug("Protection Group Name:"+protectionGroupName+" protectionElementIds:"+objectIds);
             UserProvisioningManager userProvisioningManager = getUserProvisioningManager();
             for (int i = 0; i < objectIds.length; i++)
             {
@@ -1643,7 +1644,85 @@ public class SecurityManager implements Permissions
         }
     }
 
-    
+    /**
+     * This method disassigns privilege by privilegeName to the user identified by userId
+     * on the objects identified by objectIds
+     * @param privilegeName
+     * @param objectIds
+     * @param userId
+     * @throws SMException
+     */
+    public void disassignPrivilegeToUser(String privilegeName,Class objectType, Long[] objectIds, Long userId) throws SMException
+    {
+        UserProvisioningManager userProvisioningManager;
+        String protectionGroupName;
+        String roleName;
+        RoleSearchCriteria roleSearchCriteria;
+        Role role;
+        List list;
+        ProtectionGroupSearchCriteria protectionGroupSearchCriteria;
+        ProtectionGroup protectionGroup;
+        try
+        {
+            userProvisioningManager = getUserProvisioningManager();
+
+            //Getting Appropriate Role
+            //role name is generated as <<privilegeName>>_ONLY
+            roleName = privilegeName + "_ONLY";
+            role = getRole(roleName);
+
+            //Getting Appropriate Group
+            // Protection Group Name is generated as PG_<<userID>>_ROLE_<<roleID>>
+            protectionGroupName = "PG_" + userId + "_ROLE_" + role.getId();
+            protectionGroup = getProtectionGroup( protectionGroupName);
+            
+            Logger.out.debug("Disassign Protection elements");
+            //Disassign Protection elements to Protection Group
+            disassignProtectionElements(protectionGroup.getProtectionGroupName(),objectType,
+                    objectIds);
+            
+
+        }
+        catch (CSException csex)
+        {
+            throw new SMException(csex);
+        }
+    }
+
+    /**
+     * @param protectionGroupName
+     * @param objectType
+     * @param objectIds
+     * @throws SMException
+     */
+    private void disassignProtectionElements(String protectionGroupName, Class objectType, Long[] objectIds) throws SMException
+    {
+        try
+        {
+            Logger.out.debug("Protection Group Name:"+protectionGroupName+" protectionElementIds:"+Utility.getArrayString(objectIds));
+            UserProvisioningManager userProvisioningManager = getUserProvisioningManager();
+            for (int i = 0; i < objectIds.length; i++)
+            {
+                try
+                {
+                    Logger.out.debug(" protectionGroupName:"+protectionGroupName+" objectId:"+objectType.getName()+"_"+objectIds[i]);
+                    userProvisioningManager.deAssignProtectionElements(protectionGroupName, objectType.getName()+"_"+objectIds[i]);
+                }
+                catch(CSTransactionException txex) //thrown when no association exists
+                {
+                    Logger.out.debug("Exception:"+txex.getMessage(),txex);
+                }
+            }
+        }
+        catch (CSException csex)
+        {
+            Logger.out.debug("Could not assign Protection elements to protection group",
+                    csex);
+            throw new SMException(
+                    "Could not assign Protection elements to protection group",
+                    csex);
+        }
+    }
 
 }
 
