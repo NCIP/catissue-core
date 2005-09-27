@@ -41,7 +41,7 @@
 	  </div>
 	  <div>
 	  	<img src="images/subMenuArrow.gif" width="7" height="7" alt="" />
-	  		<a class="subMenuPrimary" href="AssignPrivileges.do?pageOf=pageOfAssignPrivileges">
+	  		<a class="subMenuPrimary" href="AssignPrivilegesPage.do?pageOf=pageOfAssignPrivilegesPage">
 	  			<bean:message key="app.assignPrevileges" />
 	  		</a>
 	  </div>
