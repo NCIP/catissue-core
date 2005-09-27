@@ -1312,7 +1312,7 @@ public class SecurityManager implements Permissions
      * @param userId
      * @throws SMException
      */
-    public void assignPrivilegeToUser(String privilegeName, String[] objectIds, Long userId) throws SMException
+    public void assignPrivilegeToUser(String privilegeName,Class objectType, Long[] objectIds, Long userId) throws SMException
     {
         UserProvisioningManager userProvisioningManager;
         String protectionGroupName;
@@ -1338,7 +1338,7 @@ public class SecurityManager implements Permissions
             
             Logger.out.debug("Assign Protection elements");
             //Assign Protection elements to Protection Group
-            assignProtectionElements(protectionGroup.getProtectionGroupName(),
+            assignProtectionElements(protectionGroup.getProtectionGroupName(),objectType,
                     objectIds);
             
             Logger.out.debug("Assign User Role To Protection Group");
@@ -1425,8 +1425,8 @@ public class SecurityManager implements Permissions
      * @param roleId
      * @throws SMException
      */
-    public void assignPrivilegeToGroup(String privilegeName,
-            String[] objectIds, String roleId) throws SMException
+    public void assignPrivilegeToGroup(String privilegeName, Class objectType,
+            Long[] objectIds, String roleId) throws SMException
     {
         //Get user group for the corresponding role
         String groupId; 
@@ -1458,10 +1458,10 @@ public class SecurityManager implements Permissions
                 
                 Logger.out.debug("Assign Protection elements");
                 //Assign Protection elements to Protection Group
-                assignProtectionElements(protectionGroup.getProtectionGroupName(),
+                assignProtectionElements(protectionGroup.getProtectionGroupName(),objectType,
                         objectIds);
                 
-                Logger.out.debug("Assign User Role To Protection Group");
+                Logger.out.debug("Assign Group Role To Protection Group");
                 //Assign User Role To Protection Group
                 Set roles = new HashSet();
                 roles.add(role);
@@ -1482,19 +1482,26 @@ public class SecurityManager implements Permissions
      * This method assigns additional protection Elements identified by protectionElementIds
      * to the protection Group identified by protectionGroupName
      * @param protectionGroupName
-     * @param protectionElementIds
+     * @param objectIds
      * @throws SMException
      */
-    public void assignProtectionElements(String protectionGroupName,
-            java.lang.String[] protectionElementIds) throws SMException
+    public void assignProtectionElements(String protectionGroupName,Class objectType,
+            Long[] objectIds) throws SMException
     {
         try
         {
-            Logger.out.debug("Protection Group NAme:"+protectionGroupName+" protectionElementIds:"+protectionElementIds);
+            Logger.out.debug("Protection Group NAme:"+protectionGroupName+" protectionElementIds:"+objectIds);
             UserProvisioningManager userProvisioningManager = getUserProvisioningManager();
-            for (int i = 0; i < protectionElementIds.length; i++)
+            for (int i = 0; i < objectIds.length; i++)
             {
-                userProvisioningManager.assignProtectionElement(protectionGroupName, protectionElementIds[i]);
+                try
+                {
+                    userProvisioningManager.assignProtectionElement(protectionGroupName, objectType.getName()+"_"+objectIds[i]);
+                }
+                catch(CSTransactionException txex) //thrown when association already exists
+                {
+                    Logger.out.debug("Exception:"+txex.getMessage());
+                }
             }
         }
         catch (CSException csex)
@@ -1587,6 +1594,7 @@ public class SecurityManager implements Permissions
         Iterator it;
         Set aggregatedRoles = new HashSet();
         String[] roleIds = null;
+        Role role;
         try
         {
             UserProvisioningManager userProvisioningManager = getUserProvisioningManager();
@@ -1616,7 +1624,9 @@ public class SecurityManager implements Permissions
 
             for (int i = 0; roleIt.hasNext(); i++)
             {
-                roleIds[i] = String.valueOf(((Role) roleIt.next()).getId());
+                role = (Role) roleIt.next();
+                Logger.out.debug(" Role "+i+1+" "+role.getName());
+                roleIds[i] = String.valueOf(role.getId());
             }
 
             userProvisioningManager.assignGroupRoleToProtectionGroup(String.valueOf(protectionGroup
