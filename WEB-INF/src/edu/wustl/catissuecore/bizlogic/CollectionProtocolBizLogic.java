@@ -71,10 +71,11 @@ public class CollectionProtocolBizLogic extends DefaultBizLogic implements Roles
 				dao.insert(specimenRequirement,sessionDataBean, true, true);
 			}
 		}
-		
+		HashSet protectionObjects= new HashSet();
+		protectionObjects.add(collectionProtocol);
 		try
         {
-            SecurityManager.getInstance(this.getClass()).insertAuthorizationData(getAuthorizationData(collectionProtocol),getProtectionObjects(collectionProtocol),getDynamicGroups(collectionProtocol));
+            SecurityManager.getInstance(this.getClass()).insertAuthorizationData(getAuthorizationData(collectionProtocol),protectionObjects,getDynamicGroups(collectionProtocol));
         }
         catch (SMException e)
         {
@@ -208,34 +209,34 @@ public class CollectionProtocolBizLogic extends DefaultBizLogic implements Roles
         return authorizationData;
     }
     
-    public Set getProtectionObjects(AbstractDomainObject obj)
-    {
-        Set protectionObjects = new HashSet();
-        CollectionProtocolEvent collectionProtocolEvent;
-        SpecimenRequirement specimenRequirement;
-        
-        CollectionProtocol collectionProtocol = (CollectionProtocol)obj;
-        protectionObjects.add(collectionProtocol);
-        Collection collectionProtocolEventCollection = collectionProtocol.getCollectionProtocolEventCollection();
-        if(collectionProtocolEventCollection != null)
-        {
-           for(Iterator it = collectionProtocolEventCollection.iterator(); it.hasNext();)
-           {
-               collectionProtocolEvent = (CollectionProtocolEvent) it.next();
-               if(collectionProtocolEvent !=null)
-               {
-                   protectionObjects.add(collectionProtocolEvent);
-                   for(Iterator it2=collectionProtocolEvent.getSpecimenRequirementCollection().iterator();it2.hasNext();)
-                   {
-                       protectionObjects.add(it2.next());
-                   }
-               }
-               
-           }
-        }
-        Logger.out.debug(protectionObjects.toString());
-        return protectionObjects;
-    }
+//    public Set getProtectionObjects(AbstractDomainObject obj)
+//    {
+//        Set protectionObjects = new HashSet();
+//        CollectionProtocolEvent collectionProtocolEvent;
+//        SpecimenRequirement specimenRequirement;
+//        
+//        CollectionProtocol collectionProtocol = (CollectionProtocol)obj;
+//        protectionObjects.add(collectionProtocol);
+//        Collection collectionProtocolEventCollection = collectionProtocol.getCollectionProtocolEventCollection();
+//        if(collectionProtocolEventCollection != null)
+//        {
+//           for(Iterator it = collectionProtocolEventCollection.iterator(); it.hasNext();)
+//           {
+//               collectionProtocolEvent = (CollectionProtocolEvent) it.next();
+//               if(collectionProtocolEvent !=null)
+//               {
+//                   protectionObjects.add(collectionProtocolEvent);
+//                   for(Iterator it2=collectionProtocolEvent.getSpecimenRequirementCollection().iterator();it2.hasNext();)
+//                   {
+//                       protectionObjects.add(it2.next());
+//                   }
+//               }
+//               
+//           }
+//        }
+//        Logger.out.debug(protectionObjects.toString());
+//        return protectionObjects;
+//    }
 
     public String[] getDynamicGroups(AbstractDomainObject obj)
     {

@@ -55,10 +55,10 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		dao.insert(specimen.getSpecimenCharacteristics(),sessionDataBean, true, true);
 		dao.insert(specimen,sessionDataBean, true, true);
 		protectionObjects.add(specimen);
-		if(specimen.getSpecimenCharacteristics()!=null)
-		{
-		    protectionObjects.add(specimen.getSpecimenCharacteristics());
-		}
+//		if(specimen.getSpecimenCharacteristics()!=null)
+//		{
+//		    protectionObjects.add(specimen.getSpecimenCharacteristics());
+//		}
 		
 		Collection externalIdentifierCollection = specimen.getExternalIdentifierCollection();
 		if(externalIdentifierCollection != null && externalIdentifierCollection.size() > 0)
@@ -70,7 +70,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 				ExternalIdentifier exId = (ExternalIdentifier)it.next();
 				exId.setSpecimen(specimen);
 				dao.insert(exId,sessionDataBean, true, true);
-				protectionObjects.add(exId);
+//				protectionObjects.add(exId);
 			}
 		}
 		//Inserting data for Authorization
@@ -277,7 +277,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
     	disableSubSpecimens(dao, Utility.toLongArray(listOfSubElement));
     }
     
-    public void assignPrivilegeToUser(DAO dao, String privilegeName, Class objectType, Long[] objectIds, Long userId, String roleId, boolean assignToUser) throws SMException, DAOException
+    public void setPrivilege(DAO dao, String privilegeName, Class objectType, Long[] objectIds, Long userId, String roleId, boolean assignToUser) throws SMException, DAOException
     {
 	    super.setPrivilege(dao,privilegeName,objectType,objectIds,userId, roleId, assignToUser);
 	    assignPrivilegeToSubSpecimens(dao,privilegeName,Specimen.class,objectIds,userId);

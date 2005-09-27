@@ -205,7 +205,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
     	}
     }
     
-    public void assignPrivilegeToUser(DAO dao, String privilegeName, Class objectType, Long[] objectIds, Long userId, String roleId, boolean assignToUser) throws SMException, DAOException
+    public void setPrivilege(DAO dao, String privilegeName, Class objectType, Long[] objectIds, Long userId, String roleId, boolean assignToUser) throws SMException, DAOException
     {
 	    super.setPrivilege(dao,privilegeName,objectType,objectIds,userId, roleId, assignToUser);
 	    

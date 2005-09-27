@@ -72,10 +72,10 @@ public class CreateSpecimenBizLogic extends DefaultBizLogic
 		specimen.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
 		dao.insert(specimen,sessionDataBean, true,true);
 		protectionObjects.add(specimen);
-		if(specimen.getSpecimenCharacteristics()!=null)
-		{
-		    protectionObjects.add(specimen.getSpecimenCharacteristics());
-		}
+//		if(specimen.getSpecimenCharacteristics()!=null)
+//		{
+//		    protectionObjects.add(specimen.getSpecimenCharacteristics());
+//		}
 		
 		//Setting the External Identifier Collection
 		Collection externalIdentifierCollection = specimen.getExternalIdentifierCollection();
@@ -88,7 +88,7 @@ public class CreateSpecimenBizLogic extends DefaultBizLogic
 				ExternalIdentifier exId = (ExternalIdentifier)it.next();
 				exId.setSpecimen(specimen);
 				dao.insert(exId,sessionDataBean, true,true);
-				protectionObjects.add(exId);
+//				protectionObjects.add(exId);
 			}
 		}
 		
