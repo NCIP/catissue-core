@@ -161,8 +161,9 @@ public abstract class AbstractBizLogic
         AbstractDAO dao = DAOFactory.getDAO(daoType);
 		try
 		{
+		    Logger.out.debug(" privilegeName:"+privilegeName+" objectType:"+objectType+" objectIds:"+edu.wustl.common.util.Utility.getArrayString(objectIds)+" userId:"+userId+" roleId:"+roleId+" assignToUser:"+assignToUser);
 	        dao.openSession(sessionDataBean);
-	        setPrivilege(dao, privilegeName,objectType,objectIds,userId, null, true);
+	        setPrivilege(dao, privilegeName,objectType,objectIds,userId, roleId, assignToUser);
 	        dao.commit();
 		}
 		catch(DAOException ex)

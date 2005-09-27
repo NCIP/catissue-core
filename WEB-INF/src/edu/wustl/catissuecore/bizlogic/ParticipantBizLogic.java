@@ -97,9 +97,10 @@ public class ParticipantBizLogic extends DefaultBizLogic
 	
 	public void setPrivilege(DAO dao, String privilegeName, Class objectType, Long[] objectIds, Long userId, String roleId, boolean assignToUser) throws SMException, DAOException
     {
+	    Logger.out.debug(" privilegeName:"+privilegeName+" objectType:"+objectType+" objectIds:"+edu.wustl.common.util.Utility.getArrayString(objectIds)+" userId:"+userId+" roleId:"+roleId+" assignToUser:"+assignToUser);
 	    super.setPrivilege(dao,privilegeName,objectType,objectIds,userId, roleId, assignToUser);
 	    
 	    CollectionProtocolRegistrationBizLogic bizLogic = (CollectionProtocolRegistrationBizLogic)BizLogicFactory.getBizLogic(Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
-		bizLogic.assignPrivilegeToRelatedObjectsForParticipant(dao,privilegeName,objectIds,userId);
+		bizLogic.assignPrivilegeToRelatedObjectsForParticipant(dao,privilegeName,objectIds,userId,roleId,assignToUser );
     }
 }

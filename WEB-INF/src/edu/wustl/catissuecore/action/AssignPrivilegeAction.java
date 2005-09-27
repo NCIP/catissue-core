@@ -70,11 +70,12 @@ public class AssignPrivilegeAction extends BaseAction
     				Logger.out.debug("classObject " + classObject);
     				Logger.out.debug("groupId " + groupId);
     				Logger.out.debug("objectIdentifiers " + objectIdentifiers);
-    				
+    				Logger.out.debug("bizlogic:"+bizLogic.getClass());
     				bizLogic.setPrivilege(Constants.HIBERNATE_DAO,privileges[0],classObject,objectIdentifiers,null,bean,groupId,false);
     			}
     			else //IF THE SELECTED OPTION IS USER THEN
     			{
+    			    Logger.out.debug("In here");
     				Long userId = new Long(groupUsers[i]);
     				bizLogic.setPrivilege(Constants.HIBERNATE_DAO,privileges[0],classObject,objectIdentifiers,userId,bean,null,true);
     			}

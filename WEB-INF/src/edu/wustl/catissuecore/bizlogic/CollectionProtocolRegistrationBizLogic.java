@@ -172,19 +172,21 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
     /**
      * @param dao
      * @param objectIds
+     * @param assignToUser
+     * @param roleId
      * @throws DAOException
      * @throws SMException
      */
-    public void assignPrivilegeToRelatedObjectsForParticipant(DAO dao, String privilegeName, Long[] objectIds, Long userId) throws SMException, DAOException
+    public void assignPrivilegeToRelatedObjectsForParticipant(DAO dao, String privilegeName, Long[] objectIds, Long userId, String roleId, boolean assignToUser) throws SMException, DAOException
     {
         List listOfSubElement = super.getRelatedObjects(dao, CollectionProtocolRegistration.class, "participant", 
     			 objectIds);
         
     	if(!listOfSubElement.isEmpty())
     	{
-    	    super.setPrivilege(dao,privilegeName,CollectionProtocolRegistration.class,Utility.toLongArray(listOfSubElement),userId, null, true);
+    	    super.setPrivilege(dao,privilegeName,CollectionProtocolRegistration.class,Utility.toLongArray(listOfSubElement),userId, roleId, assignToUser);
     		SpecimenCollectionGroupBizLogic bizLogic = (SpecimenCollectionGroupBizLogic)BizLogicFactory.getBizLogic(Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID);
-    		bizLogic.assignPrivilegeToRelatedObjects(dao,privilegeName,Utility.toLongArray(listOfSubElement),userId);
+    		bizLogic.assignPrivilegeToRelatedObjects(dao,privilegeName,Utility.toLongArray(listOfSubElement),userId, roleId, assignToUser);
     	}
     }
 
@@ -194,14 +196,14 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
      * @param objectIds
      * @param userId
      */
-    public void assignPrivilegeToRelatedObjectsForCP(DAO dao, String privilegeName, Long[] objectIds, Long userId)throws SMException, DAOException
+    public void assignPrivilegeToRelatedObjectsForCP(DAO dao, String privilegeName, Long[] objectIds, Long userId, String roleId, boolean assignToUser)throws SMException, DAOException
     {
         List listOfSubElement = super.getRelatedObjects(dao, CollectionProtocolRegistration.class, "collectionProtocol",objectIds);
     	if(!listOfSubElement.isEmpty())
     	{
-    	    super.setPrivilege(dao,privilegeName,CollectionProtocolRegistration.class,Utility.toLongArray(listOfSubElement),userId, null, true);
+    	    super.setPrivilege(dao,privilegeName,CollectionProtocolRegistration.class,Utility.toLongArray(listOfSubElement),userId,roleId, assignToUser);
 			SpecimenCollectionGroupBizLogic bizLogic = (SpecimenCollectionGroupBizLogic)BizLogicFactory.getBizLogic(Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID);
-			bizLogic.assignPrivilegeToRelatedObjects(dao,privilegeName,Utility.toLongArray(listOfSubElement),userId);
+			bizLogic.assignPrivilegeToRelatedObjects(dao,privilegeName,Utility.toLongArray(listOfSubElement),userId, roleId, assignToUser);
     	}
     }
     
@@ -210,6 +212,6 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 	    super.setPrivilege(dao,privilegeName,objectType,objectIds,userId, roleId, assignToUser);
 	    
 	    SpecimenCollectionGroupBizLogic bizLogic = (SpecimenCollectionGroupBizLogic)BizLogicFactory.getBizLogic(Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID);
-		bizLogic.assignPrivilegeToRelatedObjects(dao,privilegeName,objectIds,userId);
+		bizLogic.assignPrivilegeToRelatedObjects(dao,privilegeName,objectIds,userId, roleId, assignToUser);
 	}
 }

@@ -285,6 +285,7 @@ public class  DefaultBizLogic extends AbstractBizLogic
     
     public void setPrivilege(DAO dao, String privilegeName,Class objectType, Long[] objectIds, Long userId, String roleId, boolean assignToUser) throws SMException,DAOException
     {
+        Logger.out.debug(" privilegeName:"+privilegeName+" objectType:"+objectType+" objectIds:"+edu.wustl.common.util.Utility.getArrayString(objectIds)+" userId:"+userId+" roleId:"+roleId+" assignToUser:"+assignToUser);
         if(assignToUser)
         {
             SecurityManager.getInstance(this.getClass()).assignPrivilegeToUser(privilegeName,objectType,objectIds,userId);

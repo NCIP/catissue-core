@@ -245,15 +245,15 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
      * @throws DAOException
      * @throws SMException
      */
-    public void assignPrivilegeToRelatedObjectsForSCG(DAO dao, String privilegeName, Long[] specimenCollectionGroupArr, Long userId) throws SMException, DAOException
+    public void assignPrivilegeToRelatedObjectsForSCG(DAO dao, String privilegeName, Long[] specimenCollectionGroupArr, Long userId, String roleId, boolean assignToUser) throws SMException, DAOException
     {
         Logger.out.debug("assignPrivilegeToRelatedObjectsForSCG NewSpecimenBizLogic");
     	List listOfSpecimenId = super.getRelatedObjects(dao, Specimen.class, "specimenCollectionGroup", 
     			 specimenCollectionGroupArr);
     	if(!listOfSpecimenId.isEmpty())
     	{
-    	    super.setPrivilege(dao,privilegeName,Specimen.class,Utility.toLongArray(listOfSpecimenId),userId, null, true);
-    		assignPrivilegeToSubSpecimens(dao,privilegeName,Specimen.class,Utility.toLongArray(listOfSpecimenId),userId);
+    	    super.setPrivilege(dao,privilegeName,Specimen.class,Utility.toLongArray(listOfSpecimenId),userId, roleId, assignToUser);
+    		assignPrivilegeToSubSpecimens(dao,privilegeName,Specimen.class,Utility.toLongArray(listOfSpecimenId),userId, roleId, assignToUser);
     	}
     }
 
@@ -267,19 +267,19 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
      * @throws DAOException
      * @throws SMException
      */
-    private void assignPrivilegeToSubSpecimens(DAO dao, String privilegeName, Class class1, Long[] speIDArr, Long userId) throws SMException, DAOException
+    private void assignPrivilegeToSubSpecimens(DAO dao, String privilegeName, Class class1, Long[] speIDArr, Long userId, String roleId, boolean assignToUser) throws SMException, DAOException
     {
         List listOfSubElement = super.getRelatedObjects(dao, Specimen.class, "parentSpecimen",  speIDArr);
     	
     	if(listOfSubElement.isEmpty())
     		return;
-    	super.setPrivilege(dao,privilegeName,Specimen.class,Utility.toLongArray(listOfSubElement),userId, null, true);
+    	super.setPrivilege(dao,privilegeName,Specimen.class,Utility.toLongArray(listOfSubElement),userId, roleId, assignToUser);
     	disableSubSpecimens(dao, Utility.toLongArray(listOfSubElement));
     }
     
     public void setPrivilege(DAO dao, String privilegeName, Class objectType, Long[] objectIds, Long userId, String roleId, boolean assignToUser) throws SMException, DAOException
     {
 	    super.setPrivilege(dao,privilegeName,objectType,objectIds,userId, roleId, assignToUser);
-	    assignPrivilegeToSubSpecimens(dao,privilegeName,Specimen.class,objectIds,userId);
+	    assignPrivilegeToSubSpecimens(dao,privilegeName,Specimen.class,objectIds,userId, roleId, assignToUser);
     }
 }

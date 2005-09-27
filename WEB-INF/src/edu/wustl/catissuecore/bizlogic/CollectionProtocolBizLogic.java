@@ -289,7 +289,7 @@ public class CollectionProtocolBizLogic extends DefaultBizLogic implements Roles
 	    super.setPrivilege(dao,privilegeName,objectType,objectIds,userId, roleId, assignToUser);
 	   
 		CollectionProtocolRegistrationBizLogic bizLogic = (CollectionProtocolRegistrationBizLogic)BizLogicFactory.getBizLogic(Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
-		bizLogic.assignPrivilegeToRelatedObjectsForCP(dao,privilegeName,objectIds,userId);
+		bizLogic.assignPrivilegeToRelatedObjectsForCP(dao,privilegeName,objectIds,userId, roleId, assignToUser);
     }
 	
 	
