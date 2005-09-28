@@ -111,16 +111,15 @@ public class CDEManager
 		Variables.catissueHome = System.getProperty("user.dir");
 		Logger.configure("Application.properties");
 		
-		List list = CDEManager.getCDEManager().getList("Tissue Site");
+		List list = CDEManager.getCDEManager().getList("Tissue Site", null);
 		System.out.println("list "+list.size());
 //		CDEManager aCDEManager = new CDEManager();
 //		aCDEManager.refreshCache();
 	}
 	
-	public List getList(String cdeName)
+	public List getList(String cdeName, NameValueBean otherValue)
 	{
 		List list = new ArrayList();
-		list.add(new NameValueBean(Constants.SELECT_OPTION,"-1"));
 		
 		CDE cde = getCDE(cdeName);
 		
@@ -133,6 +132,10 @@ public class CDEManager
 		}
 		
 		Collections.sort(list);
+		
+		list.add(0,new NameValueBean(Constants.SELECT_OPTION,"-1"));
+		if(otherValue!=null)
+			list.add(1,otherValue);
 		
 		return list;
 	}
