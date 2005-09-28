@@ -7,12 +7,22 @@
 package edu.wustl.common.util.dbManager;
 
 import java.util.Iterator;
+import java.util.Map;
+
+import org.apache.log4j.PropertyConfigurator;
+
+import edu.wustl.catissuecore.bizlogic.AbstractBizLogic;
+import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
+import edu.wustl.catissuecore.domain.CollectionProtocol;
+import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Variables;
+import edu.wustl.common.util.logger.Logger;
 
 import net.sf.hibernate.cfg.Configuration;
 import net.sf.hibernate.mapping.Column;
 import net.sf.hibernate.mapping.Property;
+import net.sf.hibernate.mapping.SimpleValue;
 import net.sf.hibernate.mapping.Table;
-import edu.wustl.common.util.logger.Logger;
 
 
 /**
@@ -39,13 +49,13 @@ public class HibernateMetaData
 	
 	public static String getColumnName(Class classObj, String attributeName)
 	{
-		Logger.out.debug("classObj, String attributeName "+classObj+" "+attributeName);
+		//Logger.out.debug("classObj, String attributeName "+classObj+" "+attributeName);
 		Iterator it = cfg.getClassMapping(classObj).getPropertyClosureIterator();
 		while(it.hasNext())
 		{
 			Property property = (Property)it.next();
 			
-			Logger.out.debug("property.getName() "+property.getName());
+			//Logger.out.debug("property.getName() "+property.getName());
 			//System.out.println();
 			//System.out.print("property.getName() "+property.getName()+" ");
 			if(property!=null && property.getName().equals(attributeName))
@@ -63,7 +73,7 @@ public class HibernateMetaData
 		
 		
 		Property property = cfg.getClassMapping(classObj).getIdentifierProperty();
-		Logger.out.debug("property.getName() "+property.getName());
+		//Logger.out.debug("property.getName() "+property.getName());
 		if(property.getName().equals(attributeName))
 		{
 			Iterator colIt = property.getColumnIterator();//y("systemIdentifier").getColumnIterator();
@@ -76,5 +86,38 @@ public class HibernateMetaData
 		}
 		
 		return "";
+	}
+	
+	public static void getDATA(Class classObj)
+	{
+		net.sf.hibernate.mapping.Collection coll = cfg.getCollectionMapping("edu.wustl.catissuecore.domain.CollectionProtocolEvent.specimenRequirementCollection");
+		//System.out.println(map);
+		
+		System.out.println(coll.getCollectionTable().getName());
+		System.out.println(coll.getTable().getName());
+		//System.out.println();
+		
+		Iterator it = coll.getColumnIterator();
+		
+		while(it.hasNext())
+		{
+			//net.sf.hibernate.mapping.Set set = (net.sf.hibernate.mapping.Set)it.next();
+			System.out.println(it.next());
+			
+		}
+	}
+	
+	public static void main(String[] args) throws Exception
+	{
+		Variables.catissueHome = System.getProperty("user.dir");
+		Logger.out = org.apache.log4j.Logger.getLogger("");
+		PropertyConfigurator.configure(Variables.catissueHome+"\\WEB-INF\\src\\"+"ApplicationResources.properties");
+		
+		AbstractBizLogic bizLogic = BizLogicFactory.getBizLogic(Constants.COLLECTION_PROTOCOL_FORM_ID);
+		bizLogic.retrieve(CollectionProtocol.class.getName(),Constants.SYSTEM_IDENTIFIER,new Long(1));
+		
+		HibernateMetaData.getDATA(CollectionProtocol.class);
+		//System.out.println(str);
+		
 	}
 }
