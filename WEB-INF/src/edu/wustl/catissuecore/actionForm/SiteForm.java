@@ -30,7 +30,6 @@ import edu.wustl.common.util.logger.Logger;
  * */
 public class SiteForm extends AbstractActionForm
 {
-
     /**
      * Name of the site.
      */
@@ -41,7 +40,6 @@ public class SiteForm extends AbstractActionForm
      */
     private String type;
 
-   
     /**
      * EmailAddress Address of the site.
      */
@@ -105,7 +103,7 @@ public class SiteForm extends AbstractActionForm
         {
             Site site = (Site) abstractDomain;
             
-            this.systemIdentifier= site.getSystemIdentifier().longValue();
+            this.systemIdentifier = site.getSystemIdentifier().longValue();
             this.name 			= site.getName();
             this.type			= site.getType();
             this.emailAddress 	= site.getEmailAddress();
@@ -124,7 +122,6 @@ public class SiteForm extends AbstractActionForm
             Logger.out.error(excp.getMessage(),excp);
         }
     }
-
 
 	/**
 	 * Returns the name of the site.
@@ -343,13 +340,6 @@ public class SiteForm extends AbstractActionForm
     }
 
     /**
-     * Returns the Department Name of the user.
-     * @return String representing department of the user.
-     * @see #getDepartment()
-     */
-	
-       
-    /**
      * Returns the id assigned to form bean.
      */
     public int getFormId()
@@ -363,16 +353,16 @@ public class SiteForm extends AbstractActionForm
      * */
     protected void reset()
     {
-        this.name			= null;
-        this.type			= null;
-        this.emailAddress	= null;
-        this.street			= null;
-        this.city			= null;
-        this.state			= null;
-        this.country		= null;
-        this.zipCode		= null;
-        this.phoneNumber	= null;
-        this.faxNumber		= null;
+//        this.name			= null;
+//        this.type			= null;
+//        this.emailAddress	= null;
+//        this.street			= null;
+//        this.city			= null;
+//        this.state			= null;
+//        this.country		= null;
+//        this.zipCode		= null;
+//        this.phoneNumber	= null;
+//        this.faxNumber		= null;
     }
     
     /**
