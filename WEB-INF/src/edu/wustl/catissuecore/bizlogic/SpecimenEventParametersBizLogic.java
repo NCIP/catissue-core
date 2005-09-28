@@ -40,7 +40,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
      */
 	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException 
 	{
-	    Set protectionObjects = new HashSet();
+//	    Set protectionObjects = new HashSet();
 		SpecimenEventParameters specimenEventParametersObject = (SpecimenEventParameters)obj;
 
 		List list = dao.retrieve(User.class.getName(), "systemIdentifier", specimenEventParametersObject.getUser().getSystemIdentifier()  );
@@ -70,17 +70,17 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 		}
 		
 		dao.insert(specimenEventParametersObject,sessionDataBean, true, true);
-		protectionObjects.add(specimenEventParametersObject);
+//		protectionObjects.add(specimenEventParametersObject);
 		
 //		Inserting data for Authorization
-		try
-        {
-            SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null,protectionObjects,getDynamicGroups(specimenEventParametersObject));
-        }
-        catch (SMException e)
-        {
-            Logger.out.error("Exception in Authorization: "+e.getMessage(),e);
-        }
+//		try
+//        {
+//            SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null,protectionObjects,getDynamicGroups(specimenEventParametersObject));
+//        }
+//        catch (SMException e)
+//        {
+//            Logger.out.error("Exception in Authorization: "+e.getMessage(),e);
+//        }
 	}
 	
 	 public String[] getDynamicGroups(AbstractDomainObject obj)
