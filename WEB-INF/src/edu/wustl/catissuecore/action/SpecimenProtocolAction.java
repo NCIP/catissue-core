@@ -67,7 +67,7 @@ public class SpecimenProtocolAction  extends SecureAction
         	request.setAttribute(Constants.USERLIST, coll);
         	Logger.out.debug("1");
         	// get the Specimen class and type from the cde
-	    	List specimenTypeList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_SPECIMEN_TYPE);
+	    	List specimenTypeList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_SPECIMEN_TYPE,null);
 	    	request.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
 
         	CDE specimenClassCDE = CDEManager.getCDEManager().getCDE(Constants.CDE_NAME_SPECIMEN_CLASS);
@@ -112,10 +112,11 @@ public class SpecimenProtocolAction  extends SecureAction
 	    	// set the map to subtype
 	    	request.setAttribute(Constants.SPECIMEN_TYPE_MAP, subTypeMap);
 	    	
-	    	List tissueSiteList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_TISSUE_SITE);
+	    	NameValueBean undefinedVal = new NameValueBean(Constants.UNDEFINED,Constants.UNDEFINED);
+	    	List tissueSiteList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_TISSUE_SITE,undefinedVal);
 	    	request.setAttribute(Constants.TISSUE_SITE_LIST, tissueSiteList);
 	    	
-	    	List pathologyStatusList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_PATHOLOGICAL_STATUS);
+	    	List pathologyStatusList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_PATHOLOGICAL_STATUS,null);
 	    	request.setAttribute(Constants.PATHOLOGICAL_STATUS_LIST, pathologyStatusList);
 		}
         catch(Exception e)

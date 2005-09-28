@@ -29,11 +29,11 @@ public class CollectionEventParametersAction extends SpecimenEventParametersActi
 		super.setRequestParameters(request);
 		
 		// set the procedure lists
-		List procedureList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_COLLECTION_PROCEDURE);
+		List procedureList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_COLLECTION_PROCEDURE,null);
     	request.setAttribute(Constants.PROCEDURELIST, procedureList);
 	    
 	    // set the container lists
-    	List containerList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_CONTAINER);
+    	List containerList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_CONTAINER,null);
     	request.setAttribute(Constants.CONTAINERLIST, containerList);
 	}
 }

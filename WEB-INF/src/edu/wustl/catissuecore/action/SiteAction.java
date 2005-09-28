@@ -68,7 +68,7 @@ public class SiteAction  extends SecureAction
         request.setAttribute(Constants.ACTIVITYSTATUSLIST, Constants.ACTIVITY_STATUS_VALUES);
         
         //Sets the siteTypeList attribute to be used in the Site Add/Edit Page.
-        List siteList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_SITE_TYPE);
+        List siteList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_SITE_TYPE,null);
         request.setAttribute(Constants.SITETYPELIST, siteList);
         
         try

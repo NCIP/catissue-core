@@ -22,6 +22,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.cde.CDEManager;
 
 /**
@@ -40,7 +41,8 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
     {
     	super.executeSecureAction(mapping, form, request, response);
     	
-    	List clinicalStatusList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_CLINICAL_STATUS);
+    	NameValueBean undefinedVal = new NameValueBean(Constants.UNDEFINED,Constants.UNDEFINED);
+    	List clinicalStatusList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_CLINICAL_STATUS,undefinedVal);
     	request.setAttribute(Constants.CLINICAL_STATUS_LIST, clinicalStatusList);
 	    	
         return mapping.findForward((String)request.getParameter(Constants.PAGEOF));

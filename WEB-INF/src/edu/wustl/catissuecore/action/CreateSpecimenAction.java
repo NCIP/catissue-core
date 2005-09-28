@@ -67,13 +67,13 @@ public class CreateSpecimenAction extends SecureAction
             List parentSpecimenList = dao.getList(Specimen.class.getName(), fields, fields[0], true); 	 	
     	 	request.setAttribute(Constants.PARENT_SPECIMEN_ID_LIST,parentSpecimenList);
     	 	
-    	 	List specimenClassList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_SPECIMEN_CLASS);
+    	 	List specimenClassList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_SPECIMEN_CLASS,null);
         	request.setAttribute(Constants.SPECIMEN_CLASS_LIST, specimenClassList);
         	
-        	List specimenTypeList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_SPECIMEN_TYPE);
+        	List specimenTypeList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_SPECIMEN_TYPE,null);
         	request.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
             
-        	List biohazardList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_BIOHAZARD);
+        	List biohazardList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_BIOHAZARD,null);
         	request.setAttribute(Constants.BIOHAZARD_TYPE_LIST, biohazardList);
         	
         	 //----------------------------------------

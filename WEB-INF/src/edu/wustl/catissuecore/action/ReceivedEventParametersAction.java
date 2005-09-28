@@ -28,7 +28,7 @@ public class ReceivedEventParametersAction extends SpecimenEventParametersAction
 	{
 		super.setRequestParameters(request);
 		
-		List qualityList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_RECEIVED_QUALITY);
+		List qualityList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_RECEIVED_QUALITY,null);
     	request.setAttribute(Constants.RECEIVED_QUALITY_LIST, qualityList);
 	}
 }

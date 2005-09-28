@@ -28,7 +28,7 @@ public class FixedEventParametersAction extends SpecimenEventParametersAction
 		super.setRequestParameters(request);
 
 		// SETS THE FIXATION LIST
-		List fixationList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_FIXATION_TYPE);
+		List fixationList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_FIXATION_TYPE,null);
     	request.setAttribute(Constants.FIXATIONLIST, fixationList);
 	}
 }
