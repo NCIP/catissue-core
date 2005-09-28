@@ -1220,4 +1220,6 @@ public class Constants
 	public static final String DELIMETER = ",";
 	
 
+	public static final String UNDEFINED = "Undefined";
+	public static final String UNKNOWN = "Unknown";
 }
