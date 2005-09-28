@@ -166,6 +166,7 @@ PUBLIC
 			validate="false"
 			scope="request">
 			<forward name="pageOfParticipant" path=".catissuecore.participantDef" />
+			<forward name="pageOfSCGParticipant" path=".catissuecore.participantDef" />
 			<forward name="failure" path=".catissuecore.participantDef" />
 			<forward name="access_denied" path="/ManageBioSpecimen.do" />
 		</action>
@@ -176,7 +177,8 @@ PUBLIC
 			validate="true"
 			input="/Participant.do?operation=add&amp;pageOf=pageOfParticipant"
 			scope="request">
-			<forward name="success" path=".catissuecore.participantAddSuccessDef" />
+			<forward name="success" path="/Participant.do?operation=edit&amp;pageOf=pageOfParticipant" />
+			<forward name="pageOfSCGParticipant" path="/SpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroup" />
 			<forward name="failure" path="/Participant.do?operation=add&amp;pageOf=pageOfParticipant" />
 		</action>
 		
@@ -186,7 +188,7 @@ PUBLIC
 			validate="true"
 			input="/Participant.do?operation=edit&amp;pageOf=pageOfParticipant"
 			scope="request">
-			<forward name="success" path=".catissuecore.participantEditSuccessDef" />
+			<forward name="success" path="/Participant.do?operation=edit&amp;pageOf=pageOfParticipant" />
 			<forward name="failure" path="/Participant.do?operation=edit&amp;pageOf=pageOfParticipant" />
 		</action>
 		
@@ -217,7 +219,7 @@ PUBLIC
 			validate="true"
 			input="/CollectionProtocolRegistration.do?operation=add&amp;pageOf=pageOfCollectionProtocolRegistration"
 			scope="request">
-			<forward name="success" path=".catissuecore.collectionProtocolRegistrationAddSuccessDef" />
+			<forward name="success" path="/CollectionProtocolRegistration.do?operation=edit&amp;pageOf=pageOfCollectionProtocolRegistration" />
 			<forward name="failure" path="/CollectionProtocolRegistration.do?operation=add&amp;pageOf=pageOfCollectionProtocolRegistration" />
 		</action>
 		
@@ -227,7 +229,7 @@ PUBLIC
 			validate="true"
 			input="/CollectionProtocolRegistration.do?operation=edit&amp;pageOf=pageOfCollectionProtocolRegistration"
 			scope="request">
-			<forward name="success" path=".catissuecore.collectionProtocolRegistrationEditSuccessDef" />
+			<forward name="success" path="/CollectionProtocolRegistration.do?operation=edit&amp;pageOf=pageOfCollectionProtocolRegistration" />
 			<forward name="failure" path="/CollectionProtocolRegistration.do?operation=edit&amp;pageOf=pageOfCollectionProtocolRegistration" />
 		</action>
 		
@@ -257,7 +259,7 @@ PUBLIC
 			validate="true"
 			input="/Institution.do?operation=add&amp;pageOf=pageOfInstitution"
 			scope="request">
-			<forward name="success" path=".catissuecore.institutionAddSuccessDef" />
+			<forward name="success" path="/Institution.do?operation=edit&amp;pageOf=pageOfInstitution" />
 			<forward name="failure" path="/Institution.do?operation=add&amp;pageOf=pageOfInstitution" />
 		</action>
 
@@ -267,7 +269,7 @@ PUBLIC
 			validate="true"
 			input="/Institution.do?operation=edit&amp;pageOf=pageOfInstitution"
 			scope="request">
-			<forward name="success" path=".catissuecore.institutionEditSuccessDef" />
+			<forward name="success" path="/Institution.do?operation=edit&amp;pageOf=pageOfInstitution" />
 			<forward name="failure" path="/Institution.do?operation=edit&amp;pageOf=pageOfInstitution" />
 		</action>
 
@@ -299,8 +301,8 @@ PUBLIC
 			validate="true"
 			input="/User.do?operation=add&amp;pageOf=pageOfUserAdmin"
 			scope="request">
-			<forward name="success" path=".catissuecore.userAddSuccessDef" />
-			<forward name="failure" path="/User.do?operation=edit&amp;pageOf=pageOfUserAdmin" />
+			<forward name="success" path="/User.do?operation=edit&amp;pageOf=pageOfUserAdmin" />
+			<forward name="failure" path="/User.do?operation=add&amp;pageOf=pageOfUserAdmin" />
 		</action>
 
 		<action path="/UserEdit"
@@ -309,7 +311,7 @@ PUBLIC
 			validate="true"
 			input="/User.do?operation=edit&amp;pageOf=pageOfUserAdmin"
 			scope="request">
-			<forward name="success" path=".catissuecore.userEditSuccessDef" />
+			<forward name="success" path="/User.do?operation=edit&amp;pageOf=pageOfUserAdmin" />
 			<forward name="failure" path="/User.do?operation=edit&amp;pageOf=pageOfUserAdmin" />
 		</action>
 		
@@ -319,7 +321,7 @@ PUBLIC
 			validate="true"
 			input="/User.do?operation=edit&amp;pageOf=pageOfUserProfile"
 			scope="request">
-			<forward name="success" path=".catissuecore.userProfileSuccessDef" />
+			<forward name="success" path="/User.do?operation=edit&amp;pageOf=pageOfUserProfile" />
 			<forward name="failure" path="/User.do?operation=edit&amp;pageOf=pageOfUserProfile" />
 		</action>
 		
@@ -347,17 +349,17 @@ PUBLIC
 			validate="true"
 			input="/User.do?operation=add&amp;pageOf=pageOfApproveUser"
 			scope="request">
-			<forward name="success" path=".catissuecore.userAddSuccessDef" />
+			<forward name="success" path="/User.do?operation=edit&amp;pageOf=pageOfApproveUser" />
 			<forward name="failure" path="/User.do?operation=edit&amp;pageOf=pageOfApproveUser" />
 		</action>
-
+		
 		<action path="/ApproveUserEdit"
 			type="edu.wustl.catissuecore.action.CommonAddEditAction"
 			name="userForm"
 			validate="true"
 			input="/User.do?operation=edit&amp;pageOf=pageOfApproveUser"
 			scope="request">
-			<forward name="success" path=".catissuecore.userEditSuccessDef" />
+			<forward name="success" path="/User.do?operation=edit&amp;pageOf=pageOfApproveUser" />
 			<forward name="failure" path="/User.do?operation=edit&amp;pageOf=pageOfApproveUser" />
 		</action>
 		
@@ -369,7 +371,6 @@ PUBLIC
 			scope="request">
 			<forward name="pageOfUserAdmin" path="/User.do?operation=edit&amp;pageOf=pageOfUserAdmin"/>
 			<forward name="pageOfUserProfile" path="/User.do?operation=edit&amp;pageOf=pageOfUserProfile"/>
-			<forward name="pageOfChangePassword" path="/ChangePassword.do?operation=edit&amp;pageOf=pageOfChangePassword"/>
 			<forward name="failure" path="/User.do?operation=edit&amp;pageOf="/>
 		</action>    
 		<!-- User Actions Ends-->
@@ -390,7 +391,7 @@ PUBLIC
 			validate="true"
 			input="/Department.do?operation=add&amp;pageOf=pageOfDepartment"
 			scope="request">
-			<forward name="success" path=".catissuecore.departmentAddSuccessDef" />
+			<forward name="success" path="/Department.do?operation=edit&amp;pageOf=pageOfDepartment" />
 			<forward name="failure" path="/Department.do?operation=add&amp;pageOf=pageOfDepartment" />
 		</action>
 		
@@ -400,7 +401,7 @@ PUBLIC
 			validate="true"
 			input="/Department.do?operation=edit&amp;pageOf=pageOfDepartment"
 			scope="request">
-			<forward name="success" path=".catissuecore.departmentEditSuccessDef" />
+			<forward name="success" path="/Department.do?operation=edit&amp;pageOf=pageOfDepartment" />
 			<forward name="failure" path="/Department.do?operation=edit&amp;pageOf=pageOfDepartment" />
 		</action>
 			
@@ -429,8 +430,9 @@ PUBLIC
 			type="edu.wustl.catissuecore.action.CommonAddEditAction"
 			name="cancerResearchGroupForm"
 			validate="true"
-			input="/CancerResearchGroup.do?operation=add&amp;pageOf=pageOfCancerResearchGroup" scope="request">
-			<forward name="success" path=".catissuecore.cancerResearchGroupAddSuccessDef" />
+			input="/CancerResearchGroup.do?operation=add&amp;pageOf=pageOfCancerResearchGroup" 
+			scope="request">
+			<forward name="success" path="/CancerResearchGroup.do?operation=edit&amp;pageOf=pageOfCancerResearchGroup" />
 			<forward name="failure" path="/CancerResearchGroup.do?operation=add&amp;pageOf=pageOfCancerResearchGroup" />
 		</action>
 
@@ -438,8 +440,9 @@ PUBLIC
 			type="edu.wustl.catissuecore.action.CommonAddEditAction"
 			name="cancerResearchGroupForm"
 			validate="true"
-			input="/CancerResearchGroup.do?operation=edit&amp;pageOf=pageOfCancerResearchGroup">
-			<forward name="success" path=".catissuecore.cancerResearchGroupEditSuccessDef" />
+			input="/CancerResearchGroup.do?operation=edit&amp;pageOf=pageOfCancerResearchGroup"
+			scope="request">
+			<forward name="success" path="/CancerResearchGroup.do?operation=edit&amp;pageOf=pageOfCancerResearchGroup" />
 			<forward name="failure" path="/CancerResearchGroup.do?operation=edit&amp;pageOf=pageOfCancerResearchGroup" />
 		</action>
 		
@@ -479,7 +482,7 @@ PUBLIC
 			validate="true"
 			input="/CollectionProtocol.do?operation=add&amp;pageOf=pageOfCollectionProtocol"
 			scope="request">
-			<forward name="success" path=".catissuecore.collectionProtocolAddSuccessDef" />
+			<forward name="success" path="/CollectionProtocol.do?operation=edit&amp;pageOf=pageOfCollectionProtocol" />
 			<forward name="failure" path="/CollectionProtocol.do?operation=add&amp;pageOf=pageOfCollectionProtocol" />
 		</action>
 
@@ -489,7 +492,7 @@ PUBLIC
 			validate="true"
 			input="/CollectionProtocol.do?operation=edit&amp;pageOf=pageOfCollectionProtocol"
 			scope="request">
-			<forward name="success" path=".catissuecore.collectionProtocolEditSuccessDef" />
+			<forward name="success" path="/CollectionProtocol.do?operation=edit&amp;pageOf=pageOfCollectionProtocol" />
 			<forward name="failure" path="/CollectionProtocol.do?operation=edit&amp;pageOf=pageOfCollectionProtocol" />
 		</action>
 
@@ -503,7 +506,6 @@ PUBLIC
 			<forward name="failure" path="/CollectionProtocol.do?operation=edit&amp;pageOf=pageOfCollectionProtocol"/>
 		</action>    
 		<!-- CollectionProtocol Actions Ends-->
-		
 		
 		<!-- DistributionProtocol Actions Begins-->
        <action path="/DistributionProtocol"
@@ -522,7 +524,7 @@ PUBLIC
 			validate="true"
 			input="/DistributionProtocol.do?operation=add&amp;pageOf=pageOfDistributionProtocol"
 			scope="request">
-			<forward name="success" path=".catissuecore.distributionProtocolAddSuccessDef" />
+			<forward name="success" path="/DistributionProtocol.do?operation=edit&amp;pageOf=pageOfDistributionProtocol" />
 			<forward name="failure" path="/DistributionProtocol.do?operation=add&amp;pageOf=pageOfDistributionProtocol" />
 		</action>
 
@@ -532,7 +534,7 @@ PUBLIC
 			validate="true"
 			input="/DistributionProtocol.do?operation=edit&amp;pageOf=pageOfDistributionProtocol"
 			scope="request">
-			<forward name="success" path=".catissuecore.distributionProtocolEditSuccessDef" />
+			<forward name="success" path="/DistributionProtocol.do?operation=edit&amp;pageOf=pageOfDistributionProtocol" />
 			<forward name="failure" path="/DistributionProtocol.do?operation=edit&amp;pageOf=pageOfDistributionProtocol" />
 		</action>
 		
@@ -580,7 +582,7 @@ PUBLIC
 			validate="true"
 			input="/ReportProblem.do?operation=edit"
 			scope="request">
-			<forward name="success" path=".catissuecore.reportProblemSuccessDef" />
+			<forward name="success" path=".catissuecore.userAddSuccessDef" />
 			<forward name="failure" path="/ReportProblem.do?operation=edit" />
 		</action>
 		
@@ -821,7 +823,7 @@ PUBLIC
 			validate="true"
 			input="/StorageType.do?operation=add&amp;pageOf=pageOfStorageType"
 			scope="request">
-			<forward name="success" path=".catissuecore.storageTypeAddSuccessDef" />
+			<forward name="success" path="/StorageType.do?operation=edit&amp;pageOf=pageOfStorageType" />
 			<forward name="failure" path="/StorageType.do?operation=add&amp;pageOf=pageOfStorageType" />
 		</action>
 		
@@ -831,7 +833,7 @@ PUBLIC
 			validate="true"
 			input="/StorageType.do?operation=edit&amp;pageOf=pageOfStorageType"
 			scope="request">
-			<forward name="success" path=".catissuecore.storageTypeEditSuccessDef" />
+			<forward name="success" path="/StorageType.do?operation=edit&amp;pageOf=pageOfStorageType" />
 			<forward name="failure" path="/StorageType.do?operation=edit&amp;pageOf=pageOfStorageType" />
 		</action>
 		
@@ -864,7 +866,7 @@ PUBLIC
 			validate="true"
 			input="/StorageContainer.do?operation=add&amp;pageOf=pageOfStorageContainer"
 			scope="request">
-			<forward name="success" path=".catissuecore.storageContainerAddSuccessDef" />
+			<forward name="success" path="/StorageContainer.do?operation=edit&amp;pageOf=pageOfStorageContainer" />
 			<forward name="failure" path="/StorageContainer.do?operation=add&amp;pageOf=pageOfStorageContainer" />
 		</action>
 		
@@ -874,7 +876,7 @@ PUBLIC
 			validate="true"
 			input="/StorageContainer.do?operation=edit&amp;pageOf=pageOfStorageContainer"
 			scope="request">
-			<forward name="success" path=".catissuecore.storageContainerEditSuccessDef" />
+			<forward name="success" path="/StorageContainer.do?operation=edit&amp;pageOf=pageOfStorageContainer" />
 			<forward name="failure" path="/StorageContainer.do?operation=edit&amp;pageOf=pageOfStorageContainer" />
 		</action>
 		
@@ -906,7 +908,7 @@ PUBLIC
 			validate="true"
 			input="/Site.do?operation=add&amp;pageOf=pageOfSite"
 			scope="request">
-			<forward name="success" path=".catissuecore.siteAddSuccessDef" />
+			<forward name="success" path="/Site.do?operation=edit&amp;pageOf=pageOfSite" />
 			<forward name="failure" path="/Site.do?operation=add&amp;pageOf=pageOfSite" />
 		</action>
 		
@@ -916,7 +918,7 @@ PUBLIC
 			validate="true"
 			input="/Site.do?operation=edit&amp;pageOf=pageOfSite"
 			scope="request">
-			<forward name="success" path=".catissuecore.siteEditSuccessDef" />
+			<forward name="success" path="/Site.do?operation=edit&amp;pageOf=pageOfSite" />
 			<forward name="failure" path="/Site.do?operation=edit&amp;pageOf=pageOfSite" />
 		</action>
 		
@@ -928,7 +930,7 @@ PUBLIC
 			scope="request">
 			<forward name="pageOfSite" path="/Site.do?operation=edit&amp;pageOf=pageOfSite"/>
 			<forward name="failure" path="/Site.do?operation=edit&amp;pageOf=pageOfSite"/>
-		</action>    
+		</action>
 		<!-- Site Actions Ends -->
 			
 		<!-- Biohazard Actions Begins -->
@@ -946,7 +948,7 @@ PUBLIC
 			validate="true"
 			input="/Biohazard.do?operation=add&amp;pageOf=pageOfBioHazard"
 			scope="request">
-			<forward name="success" path=".catissuecore.biohazardAddSuccessDef" />
+			<forward name="success" path="/Biohazard.do?operation=edit&amp;pageOf=pageOfBioHazard" />
 			<forward name="failure" path="/Biohazard.do?operation=add&amp;pageOf=pageOfBioHazard" />
 		</action>
 		
@@ -954,9 +956,9 @@ PUBLIC
 			type="edu.wustl.catissuecore.action.CommonAddEditAction"
 			name="biohazardForm"
 			validate="true"
-			input="/Biohazard.do?operation=edit"
+			input="/Biohazard.do?operation=edit&amp;pageOf=pageOfBioHazard"
 			scope="request">
-			<forward name="success" path=".catissuecore.biohazardEditSuccessDef" />
+			<forward name="success" path="/Biohazard.do?operation=edit&amp;pageOf=pageOfBioHazard" />
 			<forward name="failure" path="/Biohazard.do?operation=edit&amp;pageOf=pageOfBioHazard" />
 		</action>
 		

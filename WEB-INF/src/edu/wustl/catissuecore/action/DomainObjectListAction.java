@@ -73,7 +73,7 @@ public class DomainObjectListAction extends SecureAction
             else
             {
                 list = abstractBizLogic.retrieve(AbstractDomainObject.getDomainObjectName(abstractForm.getFormId()),
-    					"activityStatus",abstractForm.getActivityStatus());
+    					"activityStatus","Pending");
             }
             
             

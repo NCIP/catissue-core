@@ -49,8 +49,11 @@
 %>
 
 <html:errors />
+<html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
+	<%=messageKey%>
+</html:messages>
 
-<html:form action="<%=Constants.COLLECTIONP_ROTOCOL_REGISTRATION_ADD_ACTION%>">
+<html:form action="<%=formName%>">
 	<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
 	
 		<!-- NEW Collection Protocol Registration ENTRY BEGINS-->

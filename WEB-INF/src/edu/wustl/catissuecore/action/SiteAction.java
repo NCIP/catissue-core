@@ -45,11 +45,18 @@ public class SiteAction  extends SecureAction
             HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException
     {
+        
+    	SiteForm siteForm = (SiteForm )form;
+    	Logger.out.debug("siteForm systemIdentifier*************************"+siteForm.getSystemIdentifier());
+    	Logger.out.debug("siteForm Name*************************"+siteForm.getName());
+    	Logger.out.debug("Form Bean In SiteAction...................."+siteForm);
+
         //Gets the value of the operation parameter.
         String operation = request.getParameter(Constants.OPERATION);
 
-        //Sets the operation attribute to be used in the Add/Edit User Page. 
-        request.setAttribute(Constants.OPERATION, operation);
+        //Sets the operation attribute to be used in the Add/Edit User Page.
+        if (operation != null)
+            request.setAttribute(Constants.OPERATION, operation);
 
         //Sets the stateList attribute to be used in the Add/Edit User Page.
         request.setAttribute(Constants.STATELIST, Constants.STATEARRAY);
@@ -71,7 +78,6 @@ public class SiteAction  extends SecureAction
         	request.setAttribute(Constants.USERLIST, coll);
         	
         	// ------------------------------------------------------------------
-        	SiteForm siteForm = (SiteForm )form;
         	boolean isOnChange = false; 
 			String str = request.getParameter("isOnChange");
 			if(str!=null)
@@ -91,7 +97,7 @@ public class SiteAction  extends SecureAction
 	        		    emailAddress = user.getEmailId(); 
 	        		    Logger.out.debug("Email Id of Coordinator of Site : " + emailAddress );
 	        		}
-        		siteForm.setEmailAddress(emailAddress  ); 
+        		siteForm.setEmailAddress(emailAddress); 
         	}        
         	// ------------------------------------------------------------------
         	
@@ -102,7 +108,9 @@ public class SiteAction  extends SecureAction
         	Logger.out.error(e);
 		}
 
-
-        return mapping.findForward((String)request.getParameter(Constants.PAGEOF));
+        String pageOf = (String)request.getParameter(Constants.PAGEOF); 
+        if (pageOf != null)
+            request.setAttribute(Constants.PAGEOF, pageOf);
+        return mapping.findForward(pageOf);
     }
 }

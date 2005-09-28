@@ -27,7 +27,7 @@ public class Constants
     public static final String AND_JOIN_CONDITION = "AND";
 	public static final String OR_JOIN_CONDITION = "OR";
 	//Sri: Changed the format for displaying in Specimen Event list (#463)
-	public static final String TIMESTAMP_PATTERN = "MM-dd-yyyy HH:mm aa";
+	public static final String TIMESTAMP_PATTERN = "MM-dd-yyyy HH:mm";
 	public static final String DATE_PATTERN_YYYY_MM_DD = "yyyy-MM-dd";
 	public static final String DATE_PATTERN_MM_DD_YYYY = "MM-dd-yyyy";
 	// Mandar: Used for Date Validations in Validator Class

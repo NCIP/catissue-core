@@ -23,6 +23,8 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 
 import edu.wustl.catissuecore.actionForm.AbstractActionForm;
 import edu.wustl.catissuecore.actionForm.DistributionForm;
@@ -78,8 +80,11 @@ public class CommonAddEditAction extends Action
             	Logger.out.debug("distributionId "+distributionId);
             	request.setAttribute(Constants.DISTRIBUTION_ID,distributionId);
             }
-            Logger.out.debug("IN ADDEDIT ACTION FORM ID************************"+abstractForm.getFormId());
 
+            //The object name which is to be added. 
+            String objectName = AbstractDomainObject.getDomainObjectName(abstractForm.getFormId());
+            
+            ActionMessages messages = null;
             if (abstractForm.isAddOperation())
             {
                 //If operation is add, add the data in the database.
@@ -87,46 +92,71 @@ public class CommonAddEditAction extends Action
                         abstractForm.getFormId(), abstractForm);
                 
                 bizLogic.insert(abstractDomain, getSessionData(request), Constants.HIBERNATE_DAO);
-                Logger.out.debug("IN ADD ACTION DEBUG...................ID*********"+abstractDomain.getSystemIdentifier());
             	
                 if(abstractDomain instanceof Specimen)
             		request.setAttribute(Constants.SPECIMEN_ID,String.valueOf(abstractDomain.getSystemIdentifier()));
+                
             	if(abstractDomain instanceof Distribution)
                 {
                 	//Setting Distribution ID as request parameter
                 	request.setAttribute(Constants.DISTRIBUTION_ID,abstractDomain.getSystemIdentifier());
-                	 
                 }
             	
-               if(abstractDomain instanceof SpecimenCollectionGroup)
+                if(abstractDomain instanceof SpecimenCollectionGroup)
                 {
                 	request.setAttribute(Constants.SPECIMEN_COLLECTION_GROUP_ID,abstractDomain.getSystemIdentifier().toString());
             		target = new String(Constants.REDIRECT_TO_SPECIMEN);
                 }	
             	else
             		target = new String(Constants.SUCCESS);
+            		
+                target = new String(Constants.SUCCESS);
+                
+                //The successful add messages.
+                messages = new ActionMessages();
+                messages.add(ActionErrors.GLOBAL_MESSAGE,new ActionMessage("object.add.success",
+                        	 AbstractDomainObject.parseClassName(objectName), abstractDomain.getSystemIdentifier()));
+                
+                if (abstractDomain.getSystemIdentifier() != null)
+                {
+                    //Setting the system identifier after inserting the object in the DB.
+                    abstractForm.setSystemIdentifier(abstractDomain.getSystemIdentifier().longValue());
+                    abstractForm.setMutable(false);
+                }
             }
             else
             {
                 //If operation is edit, update the data in the database.
-            	
-            	String objName = AbstractDomainObject.getDomainObjectName(abstractForm.getFormId());
-            	Logger.out.debug("IN EDIT ACTION DEBUG...................ID*********"+abstractForm.getSystemIdentifier());
-                List list = bizLogic.retrieve(objName, Constants.IDENTIFIER,
+                List list = bizLogic.retrieve(objectName, Constants.IDENTIFIER,
 										  new Long(abstractForm.getSystemIdentifier()));
-                
                 if (!list.isEmpty())
                 {
                 	abstractDomain = (AbstractDomainObject) list.get(0);
                     abstractDomain.setAllValues(abstractForm);
                     bizLogic.update(abstractDomain,Constants.HIBERNATE_DAO, getSessionData(request));
                     target = new String(Constants.SUCCESS);
+                    
+                    //The successful edit message.
+                    messages = new ActionMessages();
+                    messages.add(ActionErrors.GLOBAL_MESSAGE,new ActionMessage("object.edit.success",
+                       	 AbstractDomainObject.parseClassName(objectName), abstractDomain.getSystemIdentifier()));
                 }
                 else
                 {
                     target = new String(Constants.FAILURE);
+                    
+                    ActionErrors errors = new ActionErrors();
+                	ActionError error = new ActionError("errors.item.unknown",
+                	        				AbstractDomainObject.parseClassName(objectName));
+                	errors.add(ActionErrors.GLOBAL_ERROR,error);
+                	saveErrors(request,errors);
                 }
                 
+            }
+            
+            if (messages != null)
+            {
+                saveMessages(request,messages);
             }
             
             //Status message key.
@@ -138,7 +168,6 @@ public class CommonAddEditAction extends Action
         catch (BizLogicException excp)
         {
         	ActionErrors errors = new ActionErrors();
-        	
         	ActionError error = new ActionError("errors.item",excp.getMessage());
         	errors.add(ActionErrors.GLOBAL_ERROR,error);
         	saveErrors(request,errors);
@@ -179,6 +208,8 @@ public class CommonAddEditAction extends Action
             Logger.out.debug("excp "+excp.getMessage());
             Logger.out.error(excp.getMessage(), excp);
         }
+        
+        Logger.out.debug("target....................."+target); 
         return (mapping.findForward(target));
     }
     

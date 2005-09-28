@@ -122,7 +122,10 @@ public class StorageContainerBizLogic extends DefaultBizLogic
             dao.insert(cont.getStorageContainerCapacity(), sessionDataBean,
                     true, true);
             dao.insert(cont, sessionDataBean, true, true);
-
+            
+            //Used for showing the success message after insert and using it for edit. 
+            container.setSystemIdentifier(cont.getSystemIdentifier());
+            
             Collection storageContainerDetailsCollection = cont
                     .getStorageContainerDetailsCollection();
             if (storageContainerDetailsCollection.size() > 0)
