@@ -33,16 +33,6 @@ public class ReportedProblemForm extends AbstractActionForm
 {
 
     /**
-     * systemIdentifier is a unique id assigned to each reported problem.
-     * */
-    private long systemIdentifier;
-
-    /**
-     * States which operation is to be performed.
-     */
-    private String operation;
-
-    /**
      * The subject of the reported problem.
      */
     private String subject;
@@ -57,11 +47,6 @@ public class ReportedProblemForm extends AbstractActionForm
      */
     private String messageBody;
 
-    /**
-     * States the activity status of the reported problem.
-     */
-    private String activityStatus = new String();
-    
     private String comments;
     
 
@@ -121,62 +106,14 @@ public class ReportedProblemForm extends AbstractActionForm
      */
     protected void reset()
     {
-        this.systemIdentifier = -1;
-        this.operation = null;
         this.from = null;
         this.subject = null;
         this.messageBody = null;
-        this.activityStatus = Constants.APPROVE_USER_PENDING_STATUS;
         this.nameOfReporter = null;
         this.affiliation = null;
     }
 
-    /**
-     * Resets all the fields.
-     * Overridden method defined in ActionForm.
-     */
- 
-    /**
-     * Returns the systemIdentifier assigned to the reported problem.
-     * @return the systemIdentifier assigned to the reported problem.
-     * @see #setIdentifier(long)
-     */
-    public long getSystemIdentifier()
-    {
-        return systemIdentifier;
-    }
-
-    /**
-     * Sets the systemIdentifier to the reported problem.
-     * @param systemIdentifier The systemIdentifier to set.
-     * @see #getIdentifier()
-     */
-    public void setSystemIdentifier(long systemIdentifier)
-    {
-        this.systemIdentifier = systemIdentifier;
-    }
-
-    /**
-     * Returns the operation to be performed.
-     * @return Returns the operation.
-     * @see #setOperation(String)
-     */
-    public String getOperation()
-    {
-        return operation;
-    }
-
-    /**
-     * Sets the operation to be performed.
-     * @param operation The operation to set.
-     * @see #getOperation()
-     */
-    public void setOperation(String operation)
-    {
-        this.operation = operation;
-    }
-
-    /**
+      /**
      * Returns the email id of who reported the problem.
      * @return the email id of who reported the problem.
      * @see #setFrom(String)
@@ -236,27 +173,7 @@ public class ReportedProblemForm extends AbstractActionForm
         this.subject = subject;
     }
 
-    /**
-     * Returns the activity status of the participant.
-     * @return Returns the activity status of the participant.
-     * @see #setActivityStatus(ActivityStatus)
-     */
-    public String getActivityStatus()
-    {
-        return activityStatus;
-    }
-
-    /**
-     * Sets the activity status of the participant.
-     * @param activityStatus activity status of the participant.
-     * @see #getActivityStatus()
-     */
-    public void setActivityStatus(String activityStatus)
-    {
-        this.activityStatus = activityStatus;
-    }
-
-    /**
+      /**
      * @return Returns the comments.
      */
     public String getComments()
@@ -281,15 +198,7 @@ public class ReportedProblemForm extends AbstractActionForm
         return Constants.REPORTEDPROBLEM_FORM_ID;
     }
 
-    /**
-     * Returns true if the operation is add else returns false.
-     * @return true if the operation is add else returns false.
-     */
-    public boolean isAddOperation()
-    {
-        return operation.equals(Constants.ADD);
-    }
-
+  
     /**
      * (non-Javadoc)
      * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#setAllValues(edu.wustl.catissuecore.domain.AbstractDomain)

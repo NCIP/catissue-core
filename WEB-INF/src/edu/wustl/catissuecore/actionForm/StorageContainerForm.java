@@ -39,16 +39,6 @@ public class StorageContainerForm extends AbstractActionForm
 {
 
 	/**
-	 * identifier is a unique id assigned to each Storage Container.
-	 * */
-	private long systemIdentifier;
-
-	/**
-	 * A String containing the operation(Add/Edit) to be performed.
-	 * */
-	private String operation;
-
-	/**
 	 * An id which refers to the type of the storage.
 	 */
 	private long typeId = -1;
@@ -122,11 +112,6 @@ public class StorageContainerForm extends AbstractActionForm
 	 * Tells whether this container is full or not.
 	 */
 	private String isFull;
-
-	/**
-	 * Defines whether this Storage Container record can be queried (ACTIVE) or not queried (INACTIVE) by any actor.
-	 */
-	private String activityStatus;
 
 	/**
 	 * Map to handle values of all the CollectionProtocol Events
@@ -251,45 +236,7 @@ public class StorageContainerForm extends AbstractActionForm
 		}
 	}
 
-	/**
-	 * Returns the identifier assigned to Storage Container.
-	 * @return long identifier assigned to Storage Container.
-	 * @see #setIdentifier(long)
-	 * */
-	public long getSystemIdentifier()
-	{
-		return this.systemIdentifier;
-	}
 
-	/**
-	 * Sets an the identifier for a Storage Container.
-	 * @param systemIdentifier identifier to be assigned to Storage Container.
-	 * @see #getIdentifier()
-	 * */
-	public void setSystemIdentifier(long systemIdentifier)
-	{
-		this.systemIdentifier = systemIdentifier;
-	}
-
-	/**
-	 * Returns the operation(Add/Edit) to be performed.
-	 * @return Returns the operation.
-	 * @see #setOperation(String)
-	 */
-	public String getOperation()
-	{
-		return operation;
-	}
-
-	/**
-	 * Sets the operation to be performed.
-	 * @param operation The operation to set.
-	 * @see #getOperation()
-	 */
-	public void setOperation(String operation)
-	{
-		this.operation = operation;
-	}
 
 	/**
 	 * Returns an id which refers to the type of the storage.
@@ -465,35 +412,6 @@ public class StorageContainerForm extends AbstractActionForm
 	public void setSiteId(long siteId)
 	{
 		this.siteId = siteId;
-	}
-
-	/**
-	 * Returns the activity status of the storage container. 
-	 * @return The activity status of storage container.
-	 * @see #setActivityStatus(String)
-	 */
-	public String getActivityStatus()
-	{
-		return activityStatus;
-	}
-
-	/**
-	 * Sets the activity status.
-	 * @param activityStatus the activity status of the storagecontainer to be set.
-	 * @see #getActivityStatus()
-	 */
-	public void setActivityStatus(String activityStatus)
-	{
-		this.activityStatus = activityStatus;
-	}
-
-	/**
-	 * Checks the operation to be performed is add or not.
-	 * @return Returns true if operation is equal to "add", else it returns false
-	 * */
-	public boolean isAddOperation()
-	{
-		return (getOperation().equals(Constants.ADD));
 	}
 
 	/**

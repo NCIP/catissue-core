@@ -35,17 +35,6 @@ import edu.wustl.common.util.logger.Logger;
  */
 public abstract class SpecimenProtocolForm extends AbstractActionForm
 {
-	/**
-	 * identifier is a unique id assigned to each User.
-	 */
-	protected long systemIdentifier;
-
-	/**
-	 * Represents the operation(Add/Edit) to be performed.
-	 */
-	protected String operation;
-
-	protected String activityStatus = Constants.ACTIVITY_STATUS_ACTIVE;
 
 	protected long principalInvestigatorId;
 
@@ -251,52 +240,6 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 		this.title = title;
 	}
 
-	/**
-	 * @param operation
-	 *            The operation to set.
-	 */
-	public void setOperation(String operation)
-	{
-		this.operation = operation;
-	}
-
-	/**
-	 * @return Returns the activityStatus.
-	 */
-	public String getActivityStatus()
-	{
-		return activityStatus;
-	}
-
-	/**
-	 * @param activityStatus
-	 *            The activityStatus to set.
-	 */
-	public void setActivityStatus(String activityStatus)
-	{
-		this.activityStatus = activityStatus;
-	}
-
-	/**
-	 * Checks the operation to be performed is add operation.
-	 * 
-	 * @return Returns true if operation is equal to "add", else it returns
-	 *         false
-	 */
-	public boolean isAddOperation()
-	{
-		return (getOperation().equals(Constants.ADD));
-	}
-
-	/**
-	 * Returns the operation(Add/Edit) to be performed.
-	 * 
-	 * @return Returns the operation.
-	 */
-	public String getOperation()
-	{
-		return operation;
-	}
 
 	/**
 	 * @return Returns the values.
@@ -306,21 +249,6 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 		return values;
 	}
 
-	/**
-	 * @return Returns the systemIdentifier.
-	 */
-	public long getSystemIdentifier()
-	{
-		return systemIdentifier;
-	}
-
-	/**
-	 * @param systemIdentifier The systemIdentifier to set.
-	 */
-	public void setSystemIdentifier(long systemIdentifier)
-	{
-		this.systemIdentifier = systemIdentifier;
-	}
 	/**
 	 * Copies the data from an AbstractDomain object to a CollectionProtocolForm
 	 * object.
@@ -361,8 +289,6 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 	 */
 	protected void reset()
 	{
-		this.systemIdentifier = 0;
-		this.activityStatus = null;
 		this.principalInvestigatorId = 0;
 		this.title = null;
 		this.shortTitle = null;

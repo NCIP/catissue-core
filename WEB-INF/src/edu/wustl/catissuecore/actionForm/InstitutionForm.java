@@ -30,16 +30,7 @@ import edu.wustl.common.util.logger.Logger;
  * */
 public class InstitutionForm extends AbstractActionForm
 {
-    /**
-     * systemIdentifier is a unique id assigned to each Institute.
-     * */
-    private long systemIdentifier = -1;
-
-    /**
-     * A String containing the operation(Add/Edit) to be performed.
-     * */
-    private String operation = null;
-    
+   
     /**
      * A string containing the name of the institute.
      */
@@ -71,43 +62,6 @@ public class InstitutionForm extends AbstractActionForm
         }
     }
 
-    /**
-     * Returns the systemIdentifier assigned to Institute.
-     * @return int representing the id assigned to Institute.
-     * @see #setSystemIdentifier(int)
-     * */
-    public long getSystemIdentifier()
-    {
-        return (this.systemIdentifier);
-    }
-
-    /**
-     * Sets an id for the Institute.
-     * @param systemIdentifier id to be assigned to the Institute.
-     * @see #getSystemIdentifier()
-     * */
-    public void setSystemIdentifier(long identifier)
-    {
-        this.systemIdentifier = identifier;
-    }
-    
-    /**
-     * Returns the operation(Add/Edit) to be performed.
-     * @return Returns the operation.
-     */
-    public String getOperation()
-    {
-        return operation;
-    }
-    
-    /**
-     * Sets the operation to be performed.
-     * @param operation The operation to set.
-     */
-    public void setOperation(String operation)
-    {
-        this.operation = operation;
-    }
     
     /**
      * Returns the login name of the institute.
@@ -129,14 +83,6 @@ public class InstitutionForm extends AbstractActionForm
         this.name = name;
     }
 
-    /**
-     * Checks the operation to be performed is add or not.
-     * @return Returns true if operation is equal to "add", else it returns false
-     * */
-    public boolean isAddOperation()
-    {
-        return(getOperation().equals(Constants.ADD));
-    }
     
     /**
      * Returns the id assigned to form bean
@@ -153,7 +99,6 @@ public class InstitutionForm extends AbstractActionForm
      * */
     protected void reset()
     {
-        this.systemIdentifier = -1;
         this.name = null;
     }
 
@@ -178,25 +123,5 @@ public class InstitutionForm extends AbstractActionForm
         }
         return errors;
      }
-    
-    
-    /* (non-Javadoc)
-     * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#getActivityStatus()
-     */
-    public String getActivityStatus()
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
-    
-    
-    /* (non-Javadoc)
-     * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#setActivityStatus(java.lang.String)
-     */
-    public void setActivityStatus(String activityStatus)
-    {
-        // TODO Auto-generated method stub
-
-    }
-     
+       
 }

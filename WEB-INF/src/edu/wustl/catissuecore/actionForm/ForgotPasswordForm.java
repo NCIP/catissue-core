@@ -35,18 +35,6 @@ public class ForgotPasswordForm extends AbstractActionForm
      */
     private String emailAddress;
 
-    public long getSystemIdentifier()
-    {
-        return 0;
-    }
-
-    /* (non-Javadoc)
-     * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#setSystemIdentifier(long)
-     */
-    public void setSystemIdentifier(long systemIdentifier)
-    {
-    }
-
     /**
      * @return Returns the emailAddress.
      */
@@ -89,13 +77,6 @@ public class ForgotPasswordForm extends AbstractActionForm
         return Constants.FORGOT_PASSWORD_FORM_ID;
     }
 
-    /* (non-Javadoc)
-     * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#isAddOperation()
-     */
-    public boolean isAddOperation()
-    {
-        return false;
-    }
 
     /* (non-Javadoc)
      * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#setAllValues(edu.wustl.catissuecore.domain.AbstractDomainObject)

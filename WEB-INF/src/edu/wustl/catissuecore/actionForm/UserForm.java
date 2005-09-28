@@ -33,20 +33,8 @@ import edu.wustl.common.util.logger.Logger;
 public class UserForm extends AbstractActionForm
 {
 
-    /**
-     * systemIdentifier is a unique id assigned to each User.
-     * */
-    private long systemIdentifier;
 
-    /**
-     * Represents the operation(Add/Edit) to be performed.
-     * */
-    private String operation;
 
-    /**
-     * Represents the page the user has submitted the form from.
-     */
-    private String pageOf;
 
     /**
      * Last Name of the user.
@@ -133,10 +121,6 @@ public class UserForm extends AbstractActionForm
      */
     private long cancerResearchGroupId;
 
-    /**
-     * Activity status of the user.
-     */
-    private String activityStatus;
 
     /**
      * Comments given by user.
@@ -156,59 +140,6 @@ public class UserForm extends AbstractActionForm
         reset();
     }
 
-    /**
-     * Returns the systemIdentifier assigned to User.
-     * @return int representing the id assigned to User.
-     * @see #setIdentifier(int)
-     * */
-    public long getSystemIdentifier()
-    {
-        return (this.systemIdentifier);
-    }
-
-    /**
-     * Sets an id for the User.
-     * @param systemIdentifier id to be assigned to the User.
-     * @see #getIdentifier()
-     * */
-    public void setSystemIdentifier(long systemIdentifier)
-    {
-        this.systemIdentifier = systemIdentifier;
-    }
-
-    /**
-     * Returns the operation(Add/Edit) to be performed.
-     * @return Returns the operation.
-     */
-    public String getOperation()
-    {
-        return operation;
-    }
-
-    /**
-     * Sets the operation to be performed.
-     * @param operation The operation to set.
-     */
-    public void setOperation(String operation)
-    {
-        this.operation = operation;
-    }
-
-    /**
-     * @return Returns the pageOf.
-     */
-    public String getPageOf()
-    {
-        return pageOf;
-    }
-
-    /**
-     * @param pageOf The pageOf to set.
-     */
-    public void setPageOf(String pageOf)
-    {
-        this.pageOf = pageOf;
-    }
 
     /**
      * Returns the last name of the user 
@@ -537,21 +468,6 @@ public class UserForm extends AbstractActionForm
         this.role = role;
     }
 
-    /**
-     * @return Returns the activityStatus.
-     */
-    public String getActivityStatus()
-    {
-        return activityStatus;
-    }
-
-    /**
-     * @param activityStatus The activityStatus to set.
-     */
-    public void setActivityStatus(String activityStatus)
-    {
-        this.activityStatus = activityStatus;
-    }
 
     /**
      * @return Returns the comments.
@@ -569,14 +485,6 @@ public class UserForm extends AbstractActionForm
         this.comments = comments;
     }
 
-    /**
-     * Checks the operation to be performed is add operation.
-     * @return Returns true if operation is equal to "add", else it returns false.
-     * */
-    public boolean isAddOperation()
-    {
-        return (getOperation().equals(Constants.ADD));
-    }
 
     /**
      * Returns the id assigned to form bean
@@ -624,8 +532,6 @@ public class UserForm extends AbstractActionForm
      * */
     protected void reset()
     {
-        this.systemIdentifier = -1;
-        this.operation = null;
         this.lastName = null;
         this.firstName = null;
         this.institutionId = -1;

@@ -30,15 +30,6 @@ import edu.wustl.common.util.logger.Logger;
  * */
 public class SiteForm extends AbstractActionForm
 {
-    /**
-     * System generated unique identifier.
-     * */
-    private long systemIdentifier;
-    
-    /**
-     * A String containing the operation(Add/Edit) to be performed.
-     * */
-    private String operation = null;
 
     /**
      * Name of the site.
@@ -50,11 +41,7 @@ public class SiteForm extends AbstractActionForm
      */
     private String type;
 
-    /**
-     * Type of site (e.g. Collection site, repository, or laboratory).
-     */
-    private String activityStatus;
-    
+   
     /**
      * EmailAddress Address of the site.
      */
@@ -138,65 +125,7 @@ public class SiteForm extends AbstractActionForm
         }
     }
 
-	/**
-	 * Returns the activity status
-	 * @return the activityStatus.
-	 * @see #setActivityStatus(String)
-	 */
-	public String getActivityStatus()
-	{
-		return activityStatus;
-	}
-	/**
-	 * Sets the activity status.
-	 * @param activityStatus activity status.
-	 * @see #getActivityStatus()
-	 */
-	public void setActivityStatus(String activityStatus)
-	{
-		this.activityStatus = activityStatus;
-	}
-	
-	/**
-     * Returns system generated unique identifier.
-     * @return system generated unique identifier.
-     * @see #setSystemIdentifier(long)
-     * */
-	public long getSystemIdentifier()
-	{
-		return systemIdentifier;
-	}
-	
-	/**
-     * Sets system generated unique identifier.
-     * @param identifier system generated unique identifier.
-     * @see #getSystemIdentifier()
-     * */
-	public void setSystemIdentifier(long identifier)
-	{
-		this.systemIdentifier = identifier;
-	}
-	
-	/**
-     * Returns the operation(Add/Edit) to be performed.
-     * @return Returns the operation.
-     * @see #setOperation(String)
-     */
-    public String getOperation()
-    {
-        return operation;
-    }
-    
-    /**
-     * Sets the operation to be performed.
-     * @param operation The operation to set.
-     * @see #getOperation()
-     */
-    public void setOperation(String operation)
-    {
-        this.operation = operation;
-    }
-	
+
 	/**
 	 * Returns the name of the site.
 	 * @return the name of the site.
@@ -419,15 +348,7 @@ public class SiteForm extends AbstractActionForm
      * @see #getDepartment()
      */
 	
-    /**
-     * Checks the operation to be performed is add operation.
-     * @return Returns true if operation is equal to "add", else returns false.
-     * */
-    public boolean isAddOperation()
-    {
-        return(getOperation().equals(Constants.ADD));
-    }
-    
+       
     /**
      * Returns the id assigned to form bean.
      */
@@ -452,7 +373,6 @@ public class SiteForm extends AbstractActionForm
         this.zipCode		= null;
         this.phoneNumber	= null;
         this.faxNumber		= null;
-        this.activityStatus = Constants.ACTIVITY_STATUS_ACTIVE;
     }
     
     /**

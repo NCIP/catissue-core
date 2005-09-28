@@ -31,15 +31,6 @@ import edu.wustl.common.util.logger.Logger;
  * */
 public class StorageTypeForm extends AbstractActionForm
 {
-    /**
-     * identifier is a unique id assigned to each Storage Type.
-     * */
-    private long systemIdentifier;
-
-    /**
-     * A String containing the operation(Add/Edit) to be performed.
-     * */
-    private String operation = null;
     
     /**
      * A string containing the type of the storage.
@@ -102,46 +93,6 @@ public class StorageTypeForm extends AbstractActionForm
         }
     }
 
-    /**
-     * Returns the identifier assigned to Storage Type.
-     * @return long identifier assigned to Storage Type.
-     * @see #setSystemIdentifier(long)
-     * */
-    public long getSystemIdentifier()
-    {
-        return (this.systemIdentifier);
-    }
-
-    /**
-     * Sets an the identifier for a Storage Type.
-     * @param identifier identifier to be assigned to Storage Type.
-     * @see #getSystemIdentifier()
-     * */
-    public void setSystemIdentifier(long identifier)
-    {
-        this.systemIdentifier = identifier;
-    }
-    
-    /**
-     * Returns the operation(Add/Edit) to be performed.
-     * @return Returns the operation.
-     * @see #setOperation(String)
-     */
-    public String getOperation()
-    {
-        return operation;
-    }
-    
-    /**
-     * Sets the operation to be performed.
-     * @param operation The operation to set.
-     * @see #getOperation()
-     */
-    public void setOperation(String operation)
-    {
-        this.operation = operation;
-    }
-    
     /**
      * Returns the type of the storage.
      * @return String the type of the storage.
@@ -262,35 +213,6 @@ public class StorageTypeForm extends AbstractActionForm
         this.twoDimensionLabel = twoDimensionLabel;
     }
 
-       
-    /* (non-Javadoc)
-     * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#getActivityStatus()
-     */
-    public String getActivityStatus()
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
-    
-    
-    /* (non-Javadoc)
-     * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#setActivityStatus(java.lang.String)
-     */
-    public void setActivityStatus(String activityStatus)
-    {
-        // TODO Auto-generated method stub
-
-    }
-    
-    /**
-     * Checks the operation to be performed is add or not.
-     * @return Returns true if operation is equal to "add", else it returns false
-     * */
-    public boolean isAddOperation()
-    {
-        return(getOperation().equals(Constants.ADD));
-    }
-    
     /**
      * Returns the id assigned to form bean
      */

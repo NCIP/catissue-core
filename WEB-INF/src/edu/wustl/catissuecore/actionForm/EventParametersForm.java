@@ -34,16 +34,6 @@ import edu.wustl.common.util.logger.Logger;
  */
 public abstract class EventParametersForm extends AbstractActionForm
 {
-	/**
-     * System generated unique identifier.
-     * */
-    protected long systemIdentifier;
-    
-	 /**
-     * A String containing the operation(Add/Edit) to be performed.
-     * */
-    protected String operation = null;
-
     
     /**
      * Time in hours for the Event Parameter.
@@ -154,83 +144,11 @@ public abstract class EventParametersForm extends AbstractActionForm
 	{
 		this.userId = userId;
 	}    
-	
-	
-//--------  Super class Methods
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#getSystemIdentifier()
-	 */
-	public long getSystemIdentifier()
-	{
-		return this.systemIdentifier ;
-	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#setSystemIdentifier(long)
-	 */
-	public void setSystemIdentifier(long systemIdentifier)
-	{
-		this.systemIdentifier = systemIdentifier ; 
-	}
-
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#getActivityStatus()
-	 */
-	public String getActivityStatus()
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#setActivityStatus(java.lang.String)
-	 */
-	public void setActivityStatus(String activityStatus)
-	{
-		// TODO Auto-generated method stub
-	}
-
-	/**
-     * Returns the operation(Add/Edit) to be performed.
-     * @return Returns the operation.
-     * @see #setOperation(String)
-     */
-    public String getOperation()
-    {
-        return operation;
-    }
     
-    /**
-     * Sets the operation to be performed.
-     * @param operation The operation to set.
-     * @see #getOperation()
-     */
-    public void setOperation(String operation)
-    {
-        this.operation = operation;
-    }
-    
-    /**
-     * Checks the operation to be performed is add operation.
-     * @return Returns true if operation is equal to "add", else it returns false
-     * */
-    public boolean isAddOperation()
-    {
-        return(getOperation().equals(Constants.ADD));
-    }
     
 	protected void reset()
 	{
-//		this.systemIdentifier = -1;
 //		this.comments = null;
 //		this.dateOfEvent =null;
 //		this.timeInHours = null;

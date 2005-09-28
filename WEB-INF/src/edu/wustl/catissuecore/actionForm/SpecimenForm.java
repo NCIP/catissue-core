@@ -44,21 +44,6 @@ public class SpecimenForm extends AbstractActionForm
 {
 
     /**
-     * systemIdentifier is a unique id assigned to each User.
-     * */
-    protected long systemIdentifier;
-
-    /**
-     * A String containing the operation(Add/Edit) to be performed.
-     * */
-    protected String operation = null;
-
-    /**
-     * Activity Status
-     */
-    protected String activityStatus = Constants.ACTIVITY_STATUS_ACTIVE;
-
-    /**
      * Type of specimen. e.g. Tissue, Molecular, Cell, Fluid
      */
     protected String className = "";
@@ -128,66 +113,7 @@ public class SpecimenForm extends AbstractActionForm
 
     protected Map externalIdentifier = new HashMap();
 
-    /**
-     * Returns the systemIdentifier assigned to User.
-     * @return int representing the id assigned to User.
-     * @see #setIdentifier(long)
-     * */
-    public long getSystemIdentifier()
-    {
-        return (this.systemIdentifier);
-    }
-
-    /**
-     * Sets an id for the User.
-     * @param systemIdentifier id to be assigned to the User.
-     * @see #getIdentifier()
-     * */
-    public void setSystemIdentifier(long systemIdentifier)
-    {
-        this.systemIdentifier = systemIdentifier;
-    }
-
-    /**
-     * Returns the operation(Add/Edit) to be performed.
-     * @return Returns the operation.
-     * @see #setOperation(String)
-     */
-    public String getOperation()
-    {
-        return operation;
-    }
-
-    /**
-     * Sets the operation to be performed.
-     * @param operation The operation to set.
-     * @see #getOperation()
-     */
-    public void setOperation(String operation)
-    {
-        this.operation = operation;
-    }
-
-    /**
-     * Returns the activity status
-     * @return the activityStatus.
-     * @see #setActivityStatus(String)
-     */
-    public String getActivityStatus()
-    {
-        return activityStatus;
-    }
-
-    /**
-     * Sets the activity status.
-     * @param activityStatus activity status.
-     * @see #getActivityStatus()
-     */
-    public void setActivityStatus(String activityStatus)
-    {
-        this.activityStatus = activityStatus;
-    }
-
+ 
     /**
      * @return Returns the concentration.
      */
@@ -419,15 +345,7 @@ public class SpecimenForm extends AbstractActionForm
         this.externalIdentifier = new HashMap();
     }
 
-    /**
-     * Checks the operation to be performed is add operation.
-     * @return Returns true if operation is equal to "add", else returns false.
-     * */
-    public boolean isAddOperation()
-    {
-        return (getOperation().equals(Constants.ADD));
-    }
-
+  
     /**
      * Returns the id assigned to form bean.
      */

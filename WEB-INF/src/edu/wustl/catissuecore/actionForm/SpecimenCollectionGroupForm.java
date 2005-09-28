@@ -32,18 +32,10 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class SpecimenCollectionGroupForm extends AbstractActionForm
 {
-	/**
-	 * Represents the operation(Add/Edit) to be performed.
-	 * */
-	private String operation;
-	
-    private long systemIdentifier;
-    
+ 
 	private String clinicalDiagnosis;
     
 	private String clinicalStatus;
-	
-	private String activityStatus = Constants.ACTIVITY_STATUS_ACTIVE;
 	
 	private String surgicalPathologyNumber;
 	
@@ -75,22 +67,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 		reset();
 	}
 	
-	/**
-     * @return Returns the systemIdentifier.
-     */
-    public long getSystemIdentifier()
-    {
-	    return systemIdentifier;
-    }
-    
-    /**
-    * @param systemIdentifier The systemIdentifier to set.
-    */
-    public void setSystemIdentifier(long systemIdentifier)
-    {
-	    this.systemIdentifier = systemIdentifier;
-    }    
-    
+   
     /**
      * @return Returns the clinicalDiagnosis.
      */
@@ -164,8 +141,6 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 //	    
 //		this.clinicalStatus = null;;
 //		
-//		this.activityStatus = null;
-//		
 //		this.surgicalPathologyNumber = null;
 //		
 //		this.protocolParticipantIdentifier =  null;
@@ -225,29 +200,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 		return Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID;
 
 	}
-	/* (non-Javadoc)
-	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#isAddOperation()
-	 */
-	public boolean isAddOperation() 
-	{
-		return getOperation().equals(Constants.ADD);
-	}
-	/* (non-Javadoc)
-	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#getActivityStatus()
-	 */
-	public String getActivityStatus() 
-	{
-		return this.activityStatus;
-	}
-	
-	/* (non-Javadoc)
-	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#setActivityStatus(java.lang.String)
-	 */
-	public void setActivityStatus(String activityStatus) 
-	{
-		this.activityStatus = activityStatus;
-	}
 
+	
 	/**
 	 * @return
 	 */
@@ -334,19 +288,6 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 		this.protocolParticipantIdentifier = protocolParticipantIdentifier;
 	}
 
-	/**
-	 * @return
-	 */
-	public String getOperation() {
-		return operation;
-	}
-
-	/**
-	 * @param operation
-	 */
-	public void setOperation(String operation) {
-		this.operation = operation;
-	}
 
 	/**
 	 * Overrides the validate method of ActionForm.

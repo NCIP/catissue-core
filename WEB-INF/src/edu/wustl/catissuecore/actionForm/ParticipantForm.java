@@ -44,16 +44,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
     
     private static final long serialVersionUID = 1234567890L;
 
-    /**
-     * systemIdentifier is a unique id assigned to each Participant.
-     * */
-    protected long systemIdentifier;
-
-    /**
-     * The operation(Add/Edit) to be performed.
-     * */
-    private String operation = "";
-    
+ 
     /**
      * Last Name of the Participant.
      */
@@ -99,11 +90,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
      */
 	protected String ethnicity;
 
-    /**
-     * The activity status of the Participant.
-     */
-    protected String activityStatus = Constants.ACTIVITY_STATUS_ACTIVE;
-
+ 
     /**
 	 * Map to handle values of all the CollectionProtocol Events
 	 */
@@ -176,44 +163,8 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 			counter = 1;
    }
     
-    /**
-     * Returns the systemIdentifier assigned to the Participant.
-     * @return int the id assigned to User.
-     * @see #setSystemIdentifier(int)
-     * */
-    public long getSystemIdentifier()
-    {
-        return systemIdentifier;
-    }
     
-    /**
-     * Sets an id for the Participant.
-     * @param systemIdentifier id to be assigned to the Participant.
-     * @see #getSystemIdentifier()
-     * */
-    public void setSystemIdentifier(long identifier)
-    {
-        this.systemIdentifier = identifier;
-    }
-    
-    /**
-     * Returns the operation(Add/Edit) to be performed.
-     * @return Returns the operation.
-     */
-    public String getOperation()
-    {
-        return operation;
-    }
-    
-    /**
-     * Sets the operation to be performed.
-     * @param operation The operation to set.
-     */
-    public void setOperation(String operation)
-    {
-        this.operation = operation;
-    }
-
+ 
     /**
      * Returns the last name of the Participant. 
      * @return String the last name of the Participant.
@@ -374,25 +325,6 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
         this.race = race;
     }
 
-    /**
-     * Returns the Activity Status of the Participant.
-     * @return String the Activity Status of the Participant.
-     * @see #setActivityStatus(String)
-     */
-    public String getActivityStatus()
-    {
-        return activityStatus;
-    }
-
-    /**
-     * Sets the Activity Status of the Participant.
-     * @param activityStatus String the Activity Status of the Participant.
-     * @see #getActivityStatus()
-     */
-    public void setActivityStatus(String activityStatus)
-    {
-        this.activityStatus = activityStatus;
-    }
     
     /**
      * Returns the ethnicity of the Participant.
@@ -414,15 +346,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 		this.ethnicity = ethnicity;
 	}
     
-    /**
-     * Checks the operation to be performed is add operation or not.
-     * @return Returns true if operation is equal to "add", else it returns false
-     * */
-    public boolean isAddOperation()
-    {
-        return(getOperation().equals(Constants.ADD));
-    }
-
+ 
     /**
      * Returns the id assigned to form bean.
      * @return the id assigned to form bean.
@@ -459,6 +383,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 
          try
          {
+         	
              
 //            if (validator.isEmpty(lastName))
 // 			{
