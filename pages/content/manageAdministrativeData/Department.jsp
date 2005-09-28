@@ -21,10 +21,13 @@
         %>
 
 <html:errors />
+<html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
+	<%=messageKey%>
+</html:messages>
 
 <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
 	
-	<html:form action="<%=Constants.DEPARTMENT_ADD_ACTION%>">
+	<html:form action="<%=formName%>">
 
 		<!-- NEW department ENTRY BEGINS-->
 		<tr>
@@ -68,22 +71,23 @@
 	
 					<tr>
 						<td align="right" colspan="3">
-						<%
-        					String changeAction = "setFormAction('" + formName + "');";
-				        %> 
-						
 						<!-- action buttons begins -->
 						<table cellpadding="4" cellspacing="0" border="0">
 							<tr>
 								<td>
-									<html:submit styleClass="actionButton" value="Submit" onclick="<%=changeAction%>" />
+									<html:submit styleClass="actionButton">
+										<bean:message  key="buttons.submit" />
+									</html:submit>
 								</td>
 								<td>
-									<html:reset styleClass="actionButton" />
+									<html:reset styleClass="actionButton" >
+										<bean:message  key="buttons.reset" />
+									</html:reset>
 								</td>
 							</tr>
 						</table>
-						<!-- action buttons end --></td>
+						<!-- action buttons end -->
+						</td>
 					</tr>
 
 			</table>

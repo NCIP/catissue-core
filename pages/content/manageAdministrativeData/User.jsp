@@ -70,7 +70,6 @@
 		}
 %>
 
-
 <script>
 //If the administrator keeps the user status pending update the user record and disable role.
 function handleStatus(status)
@@ -90,10 +89,13 @@ function handleStatus(status)
 }
 </script>
 <html:errors />
+<html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
+	<%=messageKey%>
+</html:messages>
 
 <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
 	
-	<html:form action="<%=Constants.USER_ADD_ACTION%>">
+	<html:form action="<%=formName%>">
 	
 	   <logic:equal name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGEOF_APPROVE_USER%>">
   	    	  <tr>
@@ -414,15 +416,11 @@ function handleStatus(status)
 					
 					<tr>
 						<td align="right" colspan="3">
-						<%
-        					String changeAction = "setFormAction('" + formName + "');";
-				        %>
-						
 						<!-- action buttons begins -->
 						<table cellpadding="4" cellspacing="0" border="0">
 							<tr>
 								<td>
-									<html:submit styleClass="actionButton" onclick="<%=changeAction%>">
+									<html:submit styleClass="actionButton">
 										<bean:message  key="buttons.submit" />
 									</html:submit>
 								</td>

@@ -242,7 +242,11 @@ function getSubDivCount(subdivtag)
 
         
 <html:errors />
-<html:form action="<%=Constants.COLLECTIONPROTOCOL_ADD_ACTION%>">
+<html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
+	<%=messageKey%>
+</html:messages>
+
+<html:form action="<%=formName%>">
 
 <!-- table 1 -->
 <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="100%">
@@ -715,22 +719,23 @@ function getSubDivCount(subdivtag)
 	<!-- to keep -->
 		<tr>
 			<td align="right" colspan="3">
-				<%
-					String changeAction = "setFormAction('" + formName + "');";
-		        %> 
-				
 				<!-- action buttons begins -->
 				<!-- table 6 -->
-				<table cellpadding="4" cellspacing="0" border="0" >
+				<table cellpadding="4" cellspacing="0" border="0">
 					<tr>
 						<td>
-							<html:submit styleClass="actionButton" value="Submit" onclick="<%=changeAction%>" />
-						</td>
-						<td>
-							<html:reset styleClass="actionButton" />
+							<html:submit styleClass="actionButton">
+								<bean:message  key="buttons.submit" />
+							</html:submit>
+							</td>
+							<td>
+							<html:reset styleClass="actionButton" >
+								<bean:message  key="buttons.reset" />
+							</html:reset>
 						</td>
 					</tr>
-				</table>  <!-- table 6 end -->
+				</table>  
+				<!-- table 6 end -->
 				<!-- action buttons end -->
 			</td>
 		</tr>

@@ -101,8 +101,11 @@
 </head>
 
 <html:errors />
+<html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
+	<%=messageKey%>
+</html:messages>
 
-<html:form action="<%=Constants.PARTICIPANT_ADD_ACTION%>">
+<html:form action="<%=formName%>">
 	<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
 		   		   
 	   <logic:equal name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
@@ -195,6 +198,7 @@
 					<td><html:hidden property="<%=Constants.OPERATION%>" value="<%=operation%>"/></td>
 					<td><html:hidden property="counter"/></td>
 					<td><html:hidden property="systemIdentifier" /></td>
+					<td><html:hidden property="pageOf" value="<%=pageOf%>"/></td>
 				 </tr>
 				 
 				<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.SEARCH%>">

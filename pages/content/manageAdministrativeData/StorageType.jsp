@@ -27,10 +27,13 @@
 %>	
 			
 <html:errors/>
+<html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
+	<%=messageKey%>
+</html:messages>
     
 <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
 
-<html:form action="<%=Constants.STORAGE_TYPE_ADD_ACTION%>">
+<html:form action="<%=formName%>">
 <!-- NEW Institute REGISTRATION BEGINS-->
 	<tr>
 	<td>
@@ -153,9 +156,15 @@
 			<table cellpadding="4" cellspacing="0" border="0">
 				<tr>
 					<td>
-						<html:submit styleClass="actionButton" value="Submit" onclick="<%=changeAction%>" />
+						<html:submit styleClass="actionButton">
+							<bean:message  key="buttons.submit" />
+						</html:submit>
 					</td>
-					<td><html:reset styleClass="actionButton"/></td> 
+					<td>
+						<html:reset styleClass="actionButton" >
+							<bean:message  key="buttons.reset" />
+						</html:reset>
+					</td>
 				</tr>
 			</table>
 			<!-- action buttons end -->

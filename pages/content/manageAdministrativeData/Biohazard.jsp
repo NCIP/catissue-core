@@ -27,10 +27,13 @@
 %>	
 			
 <html:errors/>
+<html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
+	<%=messageKey%>
+</html:messages>
     
 <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
 
-<html:form action="<%=Constants.BIOHAZARD_ADD_ACTION%>">
+<html:form action="<%=formName%>">
 <!-- NEW Biohazard REGISTRATION BEGINS-->
 	<tr>
 	<td>
@@ -105,17 +108,20 @@
 		<tr>
 		  <td align="right" colspan="3">
 			<!-- action buttons begins -->
-			<%
-        		String changeAction = "setFormAction('" + formName + "');";
-			%> 
 			<table cellpadding="4" cellspacing="0" border="0">
-				<tr>
-					<td>
-						<html:submit styleClass="actionButton" value="Submit" onclick="<%=changeAction%>" />
-					</td>
-					<td><html:reset styleClass="actionButton"/></td> 
-				</tr>
-			</table>
+			<tr>
+				<td>
+					<html:submit styleClass="actionButton" >
+						<bean:message key="buttons.submit"/>
+					</html:submit>
+				</td>
+				<td>
+					<html:reset styleClass="actionButton">
+						<bean:message key="buttons.reset"/>
+					</html:reset>
+				</td> 
+			</tr>
+			</table>				
 			<!-- action buttons end -->
 			</td>
 		</tr>

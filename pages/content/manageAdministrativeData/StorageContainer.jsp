@@ -199,8 +199,11 @@ function insRow(subdivtag)
 
 
 <html:errors />
+<html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
+	<%=messageKey%>
+</html:messages>
 
-<html:form action="<%=Constants.STORAGE_CONTAINER_ADD_ACTION%>" method="post">	
+<html:form action="<%=formName%>" method="post">	
 
 	<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
 	<!-- NEW STORAGE CONTAINER REGISTRATION BEGINS-->
@@ -480,22 +483,18 @@ function insRow(subdivtag)
 				<table summary="" cellpadding="3" cellspacing="0" border="0" width="500">	
 					<tr>
 						<td align="right">
-						<%
-        					String changeAction = "setFormAction('" + formName + "');";
-				        %> 
-						
 						<!-- action buttons begins -->
 						<table cellpadding="4" cellspacing="0" border="0">
 							<tr>
 								<td>
-						   				<html:submit styleClass="actionButton" onclick="<%=changeAction%>">
-						   					<bean:message key="buttons.submit"/>
-						   				</html:submit>
+						   			<html:submit styleClass="actionButton" >
+						   				<bean:message key="buttons.submit"/>
+						   			</html:submit>
 						   		</td>
 								<td>
-										<html:reset styleClass="actionButton">
-											<bean:message key="buttons.reset"/>
-										</html:reset>
+									<html:reset styleClass="actionButton">
+										<bean:message key="buttons.reset"/>
+									</html:reset>
 								</td> 
 							</tr>
 						</table>

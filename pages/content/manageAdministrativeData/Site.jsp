@@ -5,6 +5,7 @@
 
 <%
         String operation = (String) request.getAttribute(Constants.OPERATION);
+		String pageOf = (String) request.getAttribute(Constants.PAGEOF);
         String formName;
 
         boolean readOnlyValue;
@@ -28,8 +29,12 @@
 	}
 </script>
 <html:errors />
+<html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
+	<%=messageKey%>
+</html:messages>
 
-<html:form action="<%=Constants.SITE_ADD_ACTION%>">
+
+<html:form action="<%=formName%>">
 	<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">	
 	<!-- NEW SITE REGISTRATION BEGINS-->
 		<tr>
@@ -41,6 +46,10 @@
 				
 				<tr>
 					<td><html:hidden property="systemIdentifier" /></td>
+				</tr>
+
+				<tr>
+					<td><html:hidden property="pageOf" value="<%=pageOf%>"/></td>
 				</tr>
 
 					<tr>
@@ -222,18 +231,18 @@
 					
 					<tr>
 						<td align="right" colspan="3">
-						<%
-        					String changeAction = "setFormAction('" + formName + "');";
-				        %> 
-						
 						<!-- action buttons begins -->
 						<table cellpadding="4" cellspacing="0" border="0">
 							<tr>
 								<td>
-									<html:submit styleClass="actionButton" value="Submit" onclick="<%=changeAction%>" />
+									<html:submit styleClass="actionButton">
+										<bean:message  key="buttons.submit" />
+									</html:submit>
 								</td>
 								<td>
-									<html:reset styleClass="actionButton" />
+									<html:reset styleClass="actionButton" >
+										<bean:message  key="buttons.reset" />
+									</html:reset>
 								</td>
 							</tr>
 						</table>

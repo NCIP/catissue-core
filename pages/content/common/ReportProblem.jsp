@@ -24,10 +24,14 @@
 %>
 
 	<html:errors/>
+	<html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
+		<%=messageKey%>
+	</html:messages>
+	
     
 		<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
 			
-		   <html:form action="<%=Constants.REPORTED_PROBLEM_ADD_ACTION%>">		
+		   <html:form action="<%=formName%>">		
 		   	<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
   	    	  <tr>
 			  	<td align="right" colspan="3">
@@ -179,12 +183,9 @@
 
 			<!-- action buttons begins -->
 					<table cellpadding="4" cellspacing="0" border="0">
-						<%
-        					String changeAction = "setFormAction('" + formName + "');";
-				        %>
 						<tr>
 						   	<td>
-								<html:submit styleClass="actionButton" onclick="<%=changeAction%>">
+								<html:submit styleClass="actionButton">
 									<bean:message  key="buttons.submit" />
 								</html:submit>
 							</td>
