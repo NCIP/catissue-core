@@ -327,20 +327,20 @@ public class SecurityManager implements Permissions
                     .valueOf(user.getUserId()));
             userProvisioningManager.removeUserFromGroup(PUBLIC_GROUP_ID, String
                     .valueOf(user.getUserId()));
-            
+
             //Add user to corresponding group
             groupId = getGroupIdForRole(roleID);
-            if(groupId == null)
+            if (groupId == null)
             {
                 Logger.out.debug(" User assigned no role");
             }
-            else 
+            else
             {
                 assignAdditionalGroupsToUser(String.valueOf(user.getUserId()),
                         new String[]{groupId});
-                Logger.out.debug(" User assigned role:"+groupId);
+                Logger.out.debug(" User assigned role:" + groupId);
             }
-            
+
         }
         catch (CSException e)
         {
@@ -349,7 +349,7 @@ public class SecurityManager implements Permissions
             throw new SMException(e.getMessage(), e);
         }
     }
-    
+
     private String getGroupIdForRole(String roleID)
     {
         if (roleID.equals(ADMINISTRATOR_ROLE))
@@ -1212,7 +1212,8 @@ public class SecurityManager implements Permissions
                         {
                             nameValueBean = new NameValueBean(objectId
                                     .substring(objectId.lastIndexOf(".") + 1),
-                                    objectId.substring(objectId.lastIndexOf("_")+1));
+                                    objectId.substring(objectId
+                                            .lastIndexOf("_") + 1));
                             objects.add(nameValueBean);
                             Logger.out.debug(nameValueBean);
                             break;
@@ -1275,35 +1276,35 @@ public class SecurityManager implements Permissions
 
     }
 
-//    public void setOwnerForProtectionElement(
-//            edu.wustl.catissuecore.domain.User user, java.lang.String userName)
-//            throws SMException
-//    {
-//        if (user != null && userName != null)
-//        {
-//            String protectionElementObjectId = user.getClass().getName() + "_"
-//                    + user.getSystemIdentifier();
-//            Logger.out.debug(" Protection Element Object Id:"
-//                    + protectionElementObjectId);
-//            Logger.out.debug(" userName:" + userName);
-//            try
-//            {
-//                UserProvisioningManager userProvisioningManager = getUserProvisioningManager();
-//                userProvisioningManager.setOwnerForProtectionElement(
-//                        protectionElementObjectId, new String[]{userName});
-//            }
-//            catch (CSException e)
-//            {
-//                Logger.out.debug("Unable to set owner: Exception: "
-//                        + e.getMessage());
-//                throw new SMException(e.getMessage(), e);
-//            }
-//        }
-//        else
-//        {
-//            Logger.out.debug("user:" + user + " username:" + userName);
-//        }
-//    }
+    //    public void setOwnerForProtectionElement(
+    //            edu.wustl.catissuecore.domain.User user, java.lang.String userName)
+    //            throws SMException
+    //    {
+    //        if (user != null && userName != null)
+    //        {
+    //            String protectionElementObjectId = user.getClass().getName() + "_"
+    //                    + user.getSystemIdentifier();
+    //            Logger.out.debug(" Protection Element Object Id:"
+    //                    + protectionElementObjectId);
+    //            Logger.out.debug(" userName:" + userName);
+    //            try
+    //            {
+    //                UserProvisioningManager userProvisioningManager = getUserProvisioningManager();
+    //                userProvisioningManager.setOwnerForProtectionElement(
+    //                        protectionElementObjectId, new String[]{userName});
+    //            }
+    //            catch (CSException e)
+    //            {
+    //                Logger.out.debug("Unable to set owner: Exception: "
+    //                        + e.getMessage());
+    //                throw new SMException(e.getMessage(), e);
+    //            }
+    //        }
+    //        else
+    //        {
+    //            Logger.out.debug("user:" + user + " username:" + userName);
+    //        }
+    //    }
 
     /**
      * This method assigns privilege by privilegeName to the user identified by userId
@@ -1313,45 +1314,58 @@ public class SecurityManager implements Permissions
      * @param userId
      * @throws SMException
      */
-    public void assignPrivilegeToUser(String privilegeName,Class objectType, Long[] objectIds, Long userId) throws SMException
+    public void assignPrivilegeToUser(String privilegeName, Class objectType,
+            Long[] objectIds, Long userId) throws SMException
     {
-        UserProvisioningManager userProvisioningManager;
-        String protectionGroupName;
-        String roleName;
-        RoleSearchCriteria roleSearchCriteria;
-        Role role;
-        List list;
-        ProtectionGroupSearchCriteria protectionGroupSearchCriteria;
-        ProtectionGroup protectionGroup;
-        try
+        Logger.out.debug("privilegeName:" + privilegeName + " objectType:"
+                + objectType + " objectIds:"
+                + Utility.getArrayString(objectIds) + " userId:" + userId);
+        if (privilegeName == null || objectType == null || objectIds == null
+                || userId == null)
         {
-            userProvisioningManager = getUserProvisioningManager();
-
-            //Getting Appropriate Role
-            //role name is generated as <<privilegeName>>_ONLY
-            roleName = privilegeName + "_ONLY";
-            role = getRole(roleName);
-
-            //Getting Appropriate Group
-            // Protection Group Name is generated as PG_<<userID>>_ROLE_<<roleID>>
-            protectionGroupName = "PG_" + userId + "_ROLE_" + role.getId();
-            protectionGroup = getProtectionGroup( protectionGroupName);
-            
-            Logger.out.debug("Assign Protection elements");
-            //Assign Protection elements to Protection Group
-            assignProtectionElements(protectionGroup.getProtectionGroupName(),objectType,
-                    objectIds);
-            
-            Logger.out.debug("Assign User Role To Protection Group");
-            //Assign User Role To Protection Group
-            Set roles = new HashSet();
-            roles.add(role);
-            assignUserRoleToProtectionGroup(userId, roles, protectionGroup);
-
+            Logger.out
+                    .debug("Cannot assign privilege to user. One of the parameters is null.");
         }
-        catch (CSException csex)
+        else
         {
-            throw new SMException(csex);
+            UserProvisioningManager userProvisioningManager;
+            String protectionGroupName;
+            String roleName;
+            RoleSearchCriteria roleSearchCriteria;
+            Role role;
+            List list;
+            ProtectionGroupSearchCriteria protectionGroupSearchCriteria;
+            ProtectionGroup protectionGroup;
+            try
+            {
+                userProvisioningManager = getUserProvisioningManager();
+
+                //Getting Appropriate Role
+                //role name is generated as <<privilegeName>>_ONLY
+                roleName = privilegeName + "_ONLY";
+                role = getRole(roleName);
+
+                //Getting Appropriate Group
+                // Protection Group Name is generated as PG_<<userID>>_ROLE_<<roleID>>
+                protectionGroupName = "PG_" + userId + "_ROLE_" + role.getId();
+                protectionGroup = getProtectionGroup(protectionGroupName);
+
+                Logger.out.debug("Assign Protection elements");
+                //Assign Protection elements to Protection Group
+                assignProtectionElements(protectionGroup
+                        .getProtectionGroupName(), objectType, objectIds);
+
+                Logger.out.debug("Assign User Role To Protection Group");
+                //Assign User Role To Protection Group
+                Set roles = new HashSet();
+                roles.add(role);
+                assignUserRoleToProtectionGroup(userId, roles, protectionGroup);
+
+            }
+            catch (CSException csex)
+            {
+                throw new SMException(csex);
+            }
         }
     }
 
@@ -1364,8 +1378,17 @@ public class SecurityManager implements Permissions
      * @throws CSTransactionException
      * @throws SMException
      */
-    private ProtectionGroup getProtectionGroup(String protectionGroupName) throws CSException, CSTransactionException, SMException
+    private ProtectionGroup getProtectionGroup(String protectionGroupName)
+            throws CSException, CSTransactionException, SMException
     {
+        Logger.out.debug(" protectionGroupName:" + protectionGroupName);
+        if (protectionGroupName == null)
+        {
+            Logger.out.debug("protectionGroupName passed is null");
+            throw new SMException("No protectionGroup of name null");
+        }
+
+        //Search for Protection Group of the name passed
         ProtectionGroupSearchCriteria protectionGroupSearchCriteria;
         ProtectionGroup protectionGroup;
         protectionGroup = new ProtectionGroup();
@@ -1387,10 +1410,15 @@ public class SecurityManager implements Permissions
             list = getObjects(protectionGroupSearchCriteria);
         }
         protectionGroup = (ProtectionGroup) list.get(0);
+
+        Logger.out.debug(" ID of ProtectionGroup "
+                + protectionGroup.getProtectionGroupName() + " is "
+                + protectionGroup.getProtectionGroupId());
         return protectionGroup;
     }
 
     /**
+     * This method returns role corresponding to the rolename passed
      * @param privilegeName
      * @param list
      * @return
@@ -1399,6 +1427,14 @@ public class SecurityManager implements Permissions
      */
     private Role getRole(String roleName) throws CSException, SMException
     {
+        Logger.out.debug(" roleName:" + roleName);
+        if (roleName == null)
+        {
+            Logger.out.debug("Rolename passed is null");
+            throw new SMException("No role of name null");
+        }
+
+        //Search for role by the name roleName
         RoleSearchCriteria roleSearchCriteria;
         Role role;
         role = new Role();
@@ -1415,6 +1451,8 @@ public class SecurityManager implements Permissions
             throw new SMException("Role not found by name " + roleName, e);
         }
         role = (Role) list.get(0);
+        Logger.out.debug(" RoleId of role " + role.getName() + " is "
+                + role.getId());
         return role;
     }
 
@@ -1429,12 +1467,19 @@ public class SecurityManager implements Permissions
     public void assignPrivilegeToGroup(String privilegeName, Class objectType,
             Long[] objectIds, String roleId) throws SMException
     {
-        //Get user group for the corresponding role
-        String groupId; 
-        if(roleId != null )
+
+        Logger.out.debug("privilegeName:" + privilegeName + " objectType:"
+                + objectType + " objectIds:"
+                + Utility.getArrayString(objectIds) + " roleId:" + roleId);
+        if (privilegeName == null || objectType == null || objectIds == null
+                || roleId == null)
         {
-            groupId = getGroupIdForRole(roleId);
-            
+            Logger.out
+                    .debug("Cannot assign privilege to user. One of the parameters is null.");
+        }
+        else
+        {
+            String groupId;
             UserProvisioningManager userProvisioningManager;
             String protectionGroupName;
             String roleName;
@@ -1445,6 +1490,8 @@ public class SecurityManager implements Permissions
             ProtectionGroup protectionGroup;
             try
             {
+                //Get user group for the corresponding role
+                groupId = getGroupIdForRole(roleId);
                 userProvisioningManager = getUserProvisioningManager();
 
                 //Getting Appropriate Role
@@ -1454,19 +1501,21 @@ public class SecurityManager implements Permissions
 
                 //Getting Appropriate Group
                 // Protection Group Name is generated as PG_<<userID>>_ROLE_<<roleID>>
-                protectionGroupName = "PG_GROUP_" + groupId + "_ROLE_" + role.getId();
-                protectionGroup = getProtectionGroup( protectionGroupName);
-                
+                protectionGroupName = "PG_GROUP_" + groupId + "_ROLE_"
+                        + role.getId();
+                protectionGroup = getProtectionGroup(protectionGroupName);
+
                 Logger.out.debug("Assign Protection elements");
                 //Assign Protection elements to Protection Group
-                assignProtectionElements(protectionGroup.getProtectionGroupName(),objectType,
-                        objectIds);
-                
+                assignProtectionElements(protectionGroup
+                        .getProtectionGroupName(), objectType, objectIds);
+
                 Logger.out.debug("Assign Group Role To Protection Group");
                 //Assign User Role To Protection Group
                 Set roles = new HashSet();
                 roles.add(role);
-                assignGroupRoleToProtectionGroup(Long.valueOf(groupId), roles, protectionGroup);
+                assignGroupRoleToProtectionGroup(Long.valueOf(groupId), roles,
+                        protectionGroup);
 
             }
             catch (CSException csex)
@@ -1474,9 +1523,7 @@ public class SecurityManager implements Permissions
                 throw new SMException(csex);
             }
         }
-        
-        
-        
+
     }
 
     /**
@@ -1486,35 +1533,48 @@ public class SecurityManager implements Permissions
      * @param objectIds
      * @throws SMException
      */
-    public void assignProtectionElements(String protectionGroupName,Class objectType,
-            Long[] objectIds) throws SMException
+    public void assignProtectionElements(String protectionGroupName,
+            Class objectType, Long[] objectIds) throws SMException
     {
         try
         {
-            Logger.out.debug("Protection Group Name:"+protectionGroupName+" protectionElementIds:"+objectIds);
+            Logger.out.debug("Protection Group Name:" + protectionGroupName +" objectType:"+objectType
+                    + " protectionElementIds:" + Utility.getArrayString(objectIds));
+            
+            if(protectionGroupName == null || objectType ==null || objectIds == null)
+            {
+                Logger.out.debug(" One of the parameters is null");
+                throw new SMException(
+                        "Could not assign Protection elements to protection group. One or more parameters are null"
+                        );
+            }
+            
             UserProvisioningManager userProvisioningManager = getUserProvisioningManager();
             for (int i = 0; i < objectIds.length; i++)
             {
                 try
                 {
-                    userProvisioningManager.assignProtectionElement(protectionGroupName, objectType.getName()+"_"+objectIds[i]);
+                    userProvisioningManager.assignProtectionElement(
+                            protectionGroupName, objectType.getName() + "_"
+                                    + objectIds[i]);
                 }
-                catch(CSTransactionException txex) //thrown when association already exists
+                catch (CSTransactionException txex) //thrown when association already exists
                 {
-                    Logger.out.debug("Exception:"+txex.getMessage());
+                    Logger.out.debug("Exception:" + txex.getMessage());
                 }
             }
         }
         catch (CSException csex)
         {
-            Logger.out.debug("Could not assign Protection elements to protection group",
+            Logger.out.debug(
+                    "Could not assign Protection elements to protection group",
                     csex);
             throw new SMException(
                     "Could not assign Protection elements to protection group",
                     csex);
         }
     }
-    
+
     /**
      * This method assigns user identified by userId, roles identified by roles
      * on protectionGroup
@@ -1526,7 +1586,15 @@ public class SecurityManager implements Permissions
     public void assignUserRoleToProtectionGroup(Long userId, Set roles,
             ProtectionGroup protectionGroup) throws SMException
     {
-        Logger.out.debug("userId:"+userId+" roles:"+roles+" protectionGroup:"+protectionGroup.getProtectionGroupName());
+        Logger.out.debug("userId:" + userId + " roles:" + roles
+                + " protectionGroup:"
+                + protectionGroup);
+        if(userId == null || roles == null || protectionGroup == null)
+        {
+            Logger.out.debug("Could not assign user role to protection group. One or more parameters are null");
+            throw new SMException(
+                    "Could not assign user role to protection group");
+        }
         Set protectionGroupRoleContextSet;
         ProtectionGroupRoleContext protectionGroupRoleContext;
         Iterator it;
@@ -1539,6 +1607,7 @@ public class SecurityManager implements Permissions
                     .getProtectionGroupRoleContextForUser(String
                             .valueOf(userId));
 
+            //get all the roles that user has on this protection group
             it = protectionGroupRoleContextSet.iterator();
             while (it.hasNext())
             {
@@ -1577,7 +1646,7 @@ public class SecurityManager implements Permissions
                     "Could not assign user role to protection group", csex);
         }
     }
-    
+
     /**
      * This method assigns user group identified by groupId, roles identified by roles
      * on protectionGroup
@@ -1589,7 +1658,16 @@ public class SecurityManager implements Permissions
     public void assignGroupRoleToProtectionGroup(Long groupId, Set roles,
             ProtectionGroup protectionGroup) throws SMException
     {
-        Logger.out.debug("userId:"+groupId+" roles:"+roles+" protectionGroup:"+protectionGroup.getProtectionGroupName());
+        Logger.out.debug("userId:" + groupId + " roles:" + roles
+                + " protectionGroup:"
+                + protectionGroup.getProtectionGroupName());
+        
+        if(groupId == null || roles == null || protectionGroup == null)
+        {
+            Logger.out.debug("Could not assign group role to protection group. One or more parameters are null");
+            throw new SMException(
+                    "Could not assign group role to protection group. One or more parameters are null");
+        }
         Set protectionGroupRoleContextSet;
         ProtectionGroupRoleContext protectionGroupRoleContext;
         Iterator it;
@@ -1626,12 +1704,12 @@ public class SecurityManager implements Permissions
             for (int i = 0; roleIt.hasNext(); i++)
             {
                 role = (Role) roleIt.next();
-                Logger.out.debug(" Role "+i+1+" "+role.getName());
+                Logger.out.debug(" Role " + i + 1 + " " + role.getName());
                 roleIds[i] = String.valueOf(role.getId());
             }
 
-            userProvisioningManager.assignGroupRoleToProtectionGroup(String.valueOf(protectionGroup
-                    .getProtectionGroupId()), String
+            userProvisioningManager.assignGroupRoleToProtectionGroup(String
+                    .valueOf(protectionGroup.getProtectionGroupId()), String
                     .valueOf(groupId), roleIds);
 
         }
@@ -1652,8 +1730,20 @@ public class SecurityManager implements Permissions
      * @param userId
      * @throws SMException
      */
-    public void disassignPrivilegeToUser(String privilegeName,Class objectType, Long[] objectIds, Long userId) throws SMException
+    public void deAssignPrivilegeToUser(String privilegeName,
+            Class objectType, Long[] objectIds, Long userId) throws SMException
     {
+        Logger.out.debug("privilegeName:" + privilegeName + " objectType:"
+                + objectType + " objectIds:"
+                + Utility.getArrayString(objectIds) + " userId:" + userId);
+        if (privilegeName == null || objectType == null || objectIds == null
+                || userId == null)
+        {
+            Logger.out
+                    .debug("Cannot disassign privilege to user. One of the parameters is null.");
+        }
+        else
+        {
         UserProvisioningManager userProvisioningManager;
         String protectionGroupName;
         String roleName;
@@ -1674,18 +1764,18 @@ public class SecurityManager implements Permissions
             //Getting Appropriate Group
             // Protection Group Name is generated as PG_<<userID>>_ROLE_<<roleID>>
             protectionGroupName = "PG_" + userId + "_ROLE_" + role.getId();
-            protectionGroup = getProtectionGroup( protectionGroupName);
-            
+            protectionGroup = getProtectionGroup(protectionGroupName);
+
             Logger.out.debug("Disassign Protection elements");
             //Disassign Protection elements to Protection Group
-            disassignProtectionElements(protectionGroup.getProtectionGroupName(),objectType,
-                    objectIds);
-            
+            deAssignProtectionElements(protectionGroup
+                    .getProtectionGroupName(), objectType, objectIds);
 
         }
         catch (CSException csex)
         {
             throw new SMException(csex);
+        }
         }
     }
 
@@ -1695,31 +1785,47 @@ public class SecurityManager implements Permissions
      * @param objectIds
      * @throws SMException
      */
-    private void disassignProtectionElements(String protectionGroupName, Class objectType, Long[] objectIds) throws SMException
+    private void deAssignProtectionElements(String protectionGroupName,
+            Class objectType, Long[] objectIds) throws SMException
     {
         try
         {
-            Logger.out.debug("Protection Group Name:"+protectionGroupName+" protectionElementIds:"+Utility.getArrayString(objectIds));
+            Logger.out.debug("Protection Group Name:" + protectionGroupName
+                    + " protectionElementIds:"
+                    + Utility.getArrayString(objectIds));
+            if(protectionGroupName == null || objectType == null || objectIds == null)
+            {
+                Logger.out
+                .debug("Cannot disassign protection elements. One of the parameters is null.");
+                throw new SMException(
+                        "Could not deassign Protection elements to protection group. One of the parameters is null."
+                   );
+            }
             UserProvisioningManager userProvisioningManager = getUserProvisioningManager();
             for (int i = 0; i < objectIds.length; i++)
             {
                 try
                 {
-                    Logger.out.debug(" protectionGroupName:"+protectionGroupName+" objectId:"+objectType.getName()+"_"+objectIds[i]);
-                    userProvisioningManager.deAssignProtectionElements(protectionGroupName, objectType.getName()+"_"+objectIds[i]);
+                    Logger.out.debug(" protectionGroupName:"
+                            + protectionGroupName + " objectId:"
+                            + objectType.getName() + "_" + objectIds[i]);
+                    userProvisioningManager.deAssignProtectionElements(
+                            protectionGroupName, objectType.getName() + "_"
+                                    + objectIds[i]);
                 }
-                catch(CSTransactionException txex) //thrown when no association exists
+                catch (CSTransactionException txex) //thrown when no association exists
                 {
-                    Logger.out.debug("Exception:"+txex.getMessage(),txex);
+                    Logger.out.debug("Exception:" + txex.getMessage(), txex);
                 }
             }
         }
         catch (CSException csex)
         {
-            Logger.out.debug("Could not assign Protection elements to protection group",
+            Logger.out.debug(
+                    "Could not deassign Protection elements to protection group",
                     csex);
             throw new SMException(
-                    "Could not assign Protection elements to protection group",
+                    "Could not deassign Protection elements to protection group",
                     csex);
         }
     }
