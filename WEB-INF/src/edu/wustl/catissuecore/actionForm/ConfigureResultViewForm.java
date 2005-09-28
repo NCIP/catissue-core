@@ -29,9 +29,10 @@ public class ConfigureResultViewForm extends ActionForm
     private String tableName;
     private String []selectedColumnNames ;
     private String []columnNames;
-    private String action;
+    private String nextAction;
     private Long distributionId;
-
+    private boolean reportAction=true;
+    
 	/**
 	 * @return Returns the systemIdentifier.
 	 */
@@ -80,16 +81,29 @@ public class ConfigureResultViewForm extends ActionForm
 	public void setTableName(String tableName) {
 		this.tableName = tableName;
 	}
+	
 	/**
-	 * @return Returns the action.
+	 * @return Returns the nextAction.
 	 */
-	public String getAction() {
-		return action;
+	public String getNextAction() {
+		return nextAction;
 	}
 	/**
-	 * @param action The action to set.
+	 * @param nextAction The nextAction to set.
 	 */
-	public void setAction(String action) {
-		this.action = action;
+	public void setNextAction(String nextAction) {
+		this.nextAction = nextAction;
+	}
+	/**
+	 * @return Returns the reportAction.
+	 */
+	public boolean isReportAction() {
+		return reportAction;
+	}
+	/**
+	 * @param reportAction The reportAction to set.
+	 */
+	public void setReportAction(boolean reportAction) {
+		this.reportAction = reportAction;
 	}
 }

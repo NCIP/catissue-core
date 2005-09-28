@@ -71,7 +71,6 @@ public class CommonAddEditAction extends Action
             {
             	String specimenId = String.valueOf(((SpecimenEventParametersForm)abstractForm).getSpecimenId());
             	request.setAttribute(Constants.SPECIMEN_ID,specimenId);
-            	
             }
             if(abstractForm instanceof DistributionForm)
             {

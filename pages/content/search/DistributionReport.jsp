@@ -3,24 +3,56 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ page import="java.util.*" %>
 <%@ page import="edu.wustl.catissuecore.actionForm.DistributionReportForm" %>
+<%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
+<%@ page import="edu.wustl.catissuecore.actionForm.ConfigureResultViewForm"%>
 <%
         List dataList = (List)request.getAttribute("listOfData");
         String []columnNames = (String []) request.getAttribute("columnNames");
         DistributionReportForm distForm = (DistributionReportForm)request.getAttribute("distributionReportForm");
-        String reportName = (String) request.getAttribute("reportName");
-        //String reportName = "defaultReport";
+		ConfigureResultViewForm form = (ConfigureResultViewForm)request.getAttribute("configureResultViewForm");
+		String []selectedColumns=form.getSelectedColumnNames();
+		
 %> 
-
-<html:form action="ConfigureDistribution.do">
+<script language="JavaScript">
+	function changeAction()
+	{
+		document.forms[0].reportAction.value="false";
+		selectOptions(document.forms[0].selectedColumnNames);
+		setFormAction("<%=Constants.DISTRIBUTION_REPORT_ACTION%>");
+		//document.forms[0].action = "<%=Constants.DISTRIBUTION_REPORT_ACTION%>";
+		//document.forms[0].submit();
+	}
+	function selectOptions(element)
+	{
+		for(i=0;i<element.length;i++) 
+		{
+			element.options[i].selected=true;
+		}
+	}
+</script>
+<style>
+	tr#hiddenCombo
+	{
+	 display:none;
+	}
+	
+</style>
+<html:form action="<%=Constants.CONFIGURE_DISTRIBUTION_ACTION%>">
 	<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
 	<tr>
 		<td align="right" colspan="3">
-			<html:hidden property="distributionId"/>
+			<html:hidden property="distributionId" />
+			<html:hidden property="nextAction"/>
 		</td>
+		
+		<td align="right" colspan="3">
+			<html:hidden property="reportAction"/>
+		</td>
+		
 	</tr>
 
 	<!-- NEW distribution REGISTRATION BEGINS-->
-	<tr>
+	<tr> 
 	<td>
 	
 	<TABLE cellSpacing=0 cellPadding=3 summary="" border=1 width="556">
@@ -122,24 +154,44 @@
 				&nbsp;<%=distForm.getComments()%>
 			</td>
 		</tr>
+		<tr id="hiddenCombo" >
+			<td class="formField" colspan="4">
+	       		<html:select property="selectedColumnNames" styleClass="selectedColumnNames"  size="1" styleId="selectedColumnNames" multiple="true">
+	       		<%
+	       			for(int j=0;j<selectedColumns.length;j++)
+	       			{
+	       		%>
+						<html:option value="<%=selectedColumns[j]%>"><%=selectedColumns[j]%></html:option>
+				<%
+					}
+				%>
+           	 	</html:select>
+        	</td>
+		</tr>
 	</table>
 	
 	<table cellpadding="3" cellspacing="0" border="0">
-		<tr></tr>
-		<tr></tr>
-		<tr></tr>
+		<tr rowspan = 4>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>									
+		</tr>
 	</table>
 	
 	
 	<table summary="" cellpadding="3" cellspacing="0" border="0" width="433">
 <!--  Distributed Item begin here -->
 				 <tr>
-				     <td class="formTitle" height="20" colspan="<%=columnNames.length%>">
+				     <td class="formTitle" height="20" colspan="<%=columnNames.length+1%>">
 				     	<bean:message key="distribution.distributedItem"/>
 				     </td>
 				     
 				  </tr>
 				 <tr>
+				 	<td class="formSerialNumberLabel" width="5">
+				     	#
+				    </td>
 				 	<% 
 				 		for(int i=0;i<columnNames.length;i++)
 				 		{
@@ -154,6 +206,7 @@
 				 </tr>
 				 <%
 				 	Iterator itr= dataList.iterator();
+				 	int i=1;
 				 	while(itr.hasNext())
 				 	{
 				 %>
@@ -165,7 +218,9 @@
 				 		{
 				 %>
 				 		<tr>
-				 <%
+				 			<td class="formSerialNumberField" width="5"><%=i%>
+				 			</td>
+				 <%			
 				 			List rowElements = (List)innerItr.next();
 				 			Iterator elementItr= rowElements.iterator();
 				 			while(elementItr.hasNext())
@@ -176,6 +231,7 @@
 				 				</td>
 				 	<%
 				 			}
+				 			i++;
 				 	%>
 				 		</tr>
 				 	<%
@@ -187,28 +243,25 @@
 				%>
 			<!-- Distributed item End here -->
 <!-- buttons -->
+		
 		<tr>
 		  <td align="right" colspan="6">
 			<!-- action buttons begins -->
 			
 			<table cellpadding="4" cellspacing="0" border="0">
 				<tr>
+					<%--
+						String changeAction = "setFormAction('"+Constants.DISTRIBUTION_REPORT_ACTION+"')";
+				 	--%>
 					<td>
-						<html:submit styleClass="actionButton" value="Print" />
+						<html:submit property="saveButton" styleClass="actionButton" value="Save" onclick="changeAction()" />
+					
 					</td>
+						
 					<td>
-						<html:submit styleClass="actionButton" value="Save" />
+						<html:submit styleClass="actionButton" value="Configure" />
 					</td>
-					<%
-					if("defaultReport".equals(reportName))
-						{
-					%>	
-						<td>
-							<html:submit styleClass="actionButton" value="Configure" />
-						</td>
-					<%
-						}
-					%>
+					
 				</tr>
 			</table>
 			<!-- action buttons end -->

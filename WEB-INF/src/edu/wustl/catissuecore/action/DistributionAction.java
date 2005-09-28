@@ -24,6 +24,7 @@ import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * This class initializes the fields in the  Distribution Add/Edit webpage.
@@ -83,6 +84,7 @@ public class  DistributionAction extends SpecimenEventParametersAction
 			{
 				NameValueBean bean = (NameValueBean)specimenList.get(i);
 				fluidSpecimenIds[i] = bean.getValue();
+				Logger.out.debug("fluidSpecimenIds "+fluidSpecimenIds[i]);
 				i++;
 			}
 			

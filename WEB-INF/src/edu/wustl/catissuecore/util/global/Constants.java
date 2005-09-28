@@ -1214,5 +1214,10 @@ public class Constants
 	public static final String TABLE_NAMES_LIST = "tableNamesList";
 	public static final String COLUMN_NAMES_LIST = "columnNamesList";
 	public static final String DISTRIBUTION_ID = "distributionId";
+	public static final String CONFIGURE_DISTRIBUTION_ACTION = "ConfigureDistribution.do";
+	public static final String DISTRIBUTION_REPORT_ACTION = "DistributionReport.do";
+	//public static final String DISTRIBUTION_REPORT_SAVE_ACTION = "DistributionReportSave.do";
+	public static final String DELIMETER = ",";
+	
 
 }

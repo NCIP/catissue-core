@@ -12,10 +12,7 @@
 <%
     HashMap tableDataMap = (HashMap) request.getAttribute(Constants.TABLE_COLUMN_DATA_MAP);
     Set tableNamesList = tableDataMap.keySet();
-    
-    
 %>
-
     <SCRIPT LANGUAGE="JavaScript">
     var size = <%=(tableNamesList.size()-1)%>;
     var tableDataArray=new Array(size);
@@ -165,14 +162,14 @@
 %>
 </head>
 <html:errors/>
-<html:form action="DistributionReport.do">
+<html:form action="<%=Constants.DISTRIBUTION_REPORT_ACTION%>">
     <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="1000">
 		<tr>
 		    <td>
 			 	<table summary="" cellpadding="3" cellspacing="0" border="0">
 					<tr>
 						<td align="right" colspan="3">
-							<html:hidden property="action" value="configure"/>
+							<html:hidden property="nextAction" value="configure"/>
 						</td>
 						<td align="right" colspan="3">
 							<html:hidden property="distributionId"/>

@@ -1,7 +1,9 @@
 
 package edu.wustl.catissuecore.actionForm;
 
+
 import java.util.Calendar;
+import java.util.List;
 
 import org.apache.struts.action.ActionForm;
 
@@ -47,11 +49,23 @@ public class DistributionReportForm extends ActionForm
      * Comments on the event parameter.   
      */
     protected String comments;
+    /**
+    *  List of data for Distributed Items
+    **/
+    /*private List dataList;
+    /**
+     *  Column Names for the distributed item
+     *
+    private String []columnNames;*/
 
 	private String fromSite;
 	private String toSite;
 	private String distributionProtocolTitle;
+	private Long distributionId;
+
+	
  	
+	
 	public void setAllValues(Distribution distribution) throws Exception
 	{
 		this.distributionProtocolTitle = String.valueOf(distribution.getDistributionProtocol().getTitle());
@@ -70,6 +84,8 @@ public class DistributionReportForm extends ActionForm
 		this.fromSite = String.valueOf(distribution.getFromSite().getName());
 		this.toSite = String.valueOf(distribution.getToSite().getName());
 		this.comments  = Utility.toString(distribution.getComments());
+		distributionId = distribution.getSystemIdentifier();
+		
 	}
 	
 	/**
@@ -198,4 +214,20 @@ public class DistributionReportForm extends ActionForm
 		this.systemIdentifier = systemIdentifier ; 
 	}
 	
+
+	
+	/**
+	 * @return Returns the distributionId.
+	 */
+	public Long getDistributionId() {
+		return distributionId;
+	}
+	/**
+	 * @param distributionId The distributionId to set.
+	 */
+	public void setDistributionId(Long distributionId) {
+		this.distributionId = distributionId;
+	}
+
+
 }

@@ -50,6 +50,8 @@ PUBLIC
 		<form-bean name="shoppingCartForm" type="edu.wustl.catissuecore.actionForm.ShoppingCartForm"/>
 		<form-bean name="assignPrivilegesForm" type="edu.wustl.catissuecore.actionForm.AssignPrivilegesForm"/>
 		<form-bean name="configureResultViewForm" type="edu.wustl.catissuecore.actionForm.ConfigureResultViewForm"/>
+		<form-bean name="distributionReportForm" type="edu.wustl.catissuecore.actionForm.DistributionReportForm"/>
+		
 	</form-beans>
 	
 	<!-- Global Exception Definitions -->
@@ -1671,6 +1673,13 @@ PUBLIC
 			<forward name="Success" path=".catissuecore.configDistributionReport" />
 		</action>
 		
+		<action path="/DistributionReportSave"
+			type="edu.wustl.catissuecore.action.DistributionReportSaveAction"
+			name="distributionReportForm"
+			validate="false"
+			scope="request">
+			<forward name="Success" path=".catissuecore.configDistributionReport" />
+		</action>
 		<!-- Distribution Actions Ends -->
 		
 		<!--Simple Query Interface Actions Begin-->		
