@@ -52,7 +52,7 @@ public abstract class AbstractActionForm extends ActionForm
     /**
      * Activity Status.
      */
-    protected String activityStatus;
+    protected String activityStatus = Constants.ACTIVITY_STATUS_ACTIVE;
 
     /**
      * @return Returns the mutable.
@@ -112,6 +112,15 @@ public abstract class AbstractActionForm extends ActionForm
     }
     
     /**
+	 * Checks the operation to be performed is add operation.
+	 * @return Returns true if operation is equal to "add", else it returns false
+	 * */
+	public boolean isAddOperation()
+	{
+		return(operation.equals(Constants.ADD));
+	}
+	
+    /**
      * Returns the specifies the page associated with this form bean.
      * @return
      */
@@ -159,12 +168,6 @@ public abstract class AbstractActionForm extends ActionForm
      * @param obj The Object object.
      */
     public abstract void setAllValues(AbstractDomainObject abstractDomain);
-    
-    /**
-     * Returns true if the operation is Add, else returns false.
-     * @return true if the operation is Add, else returns false.
-     */
-    public abstract boolean isAddOperation();
     
     /**
      * Checks the validity of string value of the component and adds an ActionError object in the ActionErrors object.
