@@ -10,6 +10,8 @@ import java.util.Set;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
+import edu.wustl.catissuecore.bizlogic.AbstractBizLogic;
+import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.QueryBizLogic;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.dao.DAO;
@@ -95,7 +97,7 @@ public class CatissueCoreServletContextListener
         protectionGroupsForObjectTypes.put("edu.wustl.catissuecore.domain.StorageContainer",
                 new String[] {ADMINISTRATORS_DATA_GROUP});
         protectionGroupsForObjectTypes.put("edu.wustl.catissuecore.domain.DistributionProtocol",
-                new String[] {ADMINISTRATORS_DATA_GROUP});
+                new String[] {TECHNICIANS_DATA_GROUP});
         protectionGroupsForObjectTypes.put("edu.wustl.catissuecore.domain.User",
                 new String[] {ADMINISTRATORS_DATA_GROUP});
         Constants.STATIC_PROTECTION_GROUPS_FOR_OBJECT_TYPES.putAll(protectionGroupsForObjectTypes);
@@ -183,21 +185,32 @@ public class CatissueCoreServletContextListener
 //        	    }
 //        	}
         	
-//        	SecurityManager.getInstance(this.getClass()).assignPrivilegeToUser("USE",new String[] {"edu.wustl.catissuecore.domain.StorageContainer_92","edu.wustl.catissuecore.domain.StorageContainer_96"},new Long(29) );
 //        	Logger.out
-//            .debug("CREATE Perm to admin on edu.wustl.catissuecore.domain.CollectionProtocolEvent_28"
+//            .debug("edu.wustl.catissuecore.domain.Participant_5"
 //                    + Boolean
 //                            .toString(SecurityManager
 //                                    .getInstance(this.getClass())
 //                                    .isAuthorized(
 //                                            "sharma.aarti@gmail.com",
-//                                            "edu.wustl.catissuecore.domain.StorageContainer_92",
-//                                            USE)));
+//                                            "edu.wustl.catissuecore.domain.Participant_5",
+//                                            READ)));
+//        	
+//        	AbstractBizLogic bizLogic = BizLogicFactory.getBizLogic(Constants.PARTICIPANT_FORM_ID);
+////        	bizLogic.setPrivilege(Constants.HIBERNATE_DAO,READ,Participant.class,new Long[] {new Long(5)},new Long(29),null, null, true);
+//        	SecurityManager.getInstance(this.getClass()).deAssignPrivilegeToUser("READ",Participant.class,new Long[] {new Long(5)},new Long(29));
+//        	Logger.out
+//            .debug("After edu.wustl.catissuecore.domain.Participant_5 "
+//                    + Boolean
+//                            .toString(SecurityManager
+//                                    .getInstance(this.getClass())
+//                                    .isAuthorized(
+//                                            "sharma.aarti@gmail.com",
+//                                            "edu.wustl.catissuecore.domain.Participant_5",
+//                                            READ)));
         	
         }
         catch (Exception e1)
         {
-            // TODO Auto-generated catch block
             e1.printStackTrace();
         }  
 
