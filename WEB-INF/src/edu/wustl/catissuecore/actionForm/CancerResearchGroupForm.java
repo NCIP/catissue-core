@@ -30,15 +30,6 @@ import edu.wustl.common.util.logger.Logger;
  * */
 public class CancerResearchGroupForm extends AbstractActionForm
 {
-    /**
-     * identifier is a unique id assigned to each CancerResearchGroup.
-     * */
-    private long identifier;
-
-    /**
-     * Represents the operation(Add/Edit) to be performed.
-     * */
-    private String operation;
     
     /**
      * Name of the CancerResearchGroup.
@@ -62,7 +53,7 @@ public class CancerResearchGroupForm extends AbstractActionForm
         try
         {
         	CancerResearchGroup cancerResearchGroup = (CancerResearchGroup)abstractDomain;
-            this.identifier = cancerResearchGroup.getSystemIdentifier().longValue();
+            this.systemIdentifier = cancerResearchGroup.getSystemIdentifier().longValue();
             this.name = cancerResearchGroup.getName();
         }
         catch (Exception excp)
@@ -72,44 +63,6 @@ public class CancerResearchGroupForm extends AbstractActionForm
         }
     }
 
-    /**
-     * Returns the identifier assigned to CancerResearchGroup.
-     * @return int representing the id assigned to CancerResearchGroup.
-     * @see #setIdentifier(int)
-     * */
-    public long getSystemIdentifier()
-    {
-        return (this.identifier);
-    }
-
-    /**
-     * Sets an id for the User.
-     * @param identifier id to be assigned to the CancerResearchGroup.
-     * @see #getIdentifier()
-     * */
-    public void setSystemIdentifier(long identifier)
-    {
-        this.identifier = identifier;
-    }
-    
-    /**
-     * Returns the operation(Add/Edit) to be performed.
-     * @return Returns the operation.
-     */
-    public String getOperation()
-    {
-        return operation;
-    }
-    
-    /**
-     * Sets the operation to be performed.
-     * @param operation The operation to set.
-     */
-    public void setOperation(String operation)
-    {
-        this.operation = operation;
-    }
-    
     /**
      * Returns the name of the CancerResearchGroup.
      * @return String representing the name of the CancerResearchGroup
@@ -145,16 +98,12 @@ public class CancerResearchGroupForm extends AbstractActionForm
         return Constants.CANCER_RESEARCH_GROUP_FORM_ID;
     }
     
- 
-    
     /**
      * Resets the values of all the fields.
      * Is called by the overridden reset method defined in ActionForm.  
      * */
     protected void reset()
     {
-        this.identifier = -1;
-        this.operation = null;
         this.name = null;
     }
 
@@ -178,24 +127,4 @@ public class CancerResearchGroupForm extends AbstractActionForm
         }
         return errors;
      }
-    
-    
-    /* (non-Javadoc)
-     * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#getActivityStatus()
-     */
-    public String getActivityStatus()
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
-    
-    
-    /* (non-Javadoc)
-     * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#setActivityStatus(java.lang.String)
-     */
-    public void setActivityStatus(String activityStatus)
-    {
-        // TODO Auto-generated method stub
-
-    }
 }

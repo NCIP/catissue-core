@@ -34,7 +34,7 @@ import edu.wustl.common.util.logger.Logger;
  */
 public abstract class EventParametersForm extends AbstractActionForm
 {
-    
+
     /**
      * Time in hours for the Event Parameter.
      * */
@@ -50,7 +50,6 @@ public abstract class EventParametersForm extends AbstractActionForm
      * */
     protected String dateOfEvent;
 
-    
     /**
      * Id of the User.   
      */
@@ -144,9 +143,9 @@ public abstract class EventParametersForm extends AbstractActionForm
 	{
 		this.userId = userId;
 	}    
-
-    
-    
+	
+	
+//--------  Super class Methods
 	protected void reset()
 	{
 //		this.comments = null;

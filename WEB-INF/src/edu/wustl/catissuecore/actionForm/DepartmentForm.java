@@ -32,16 +32,6 @@ import edu.wustl.common.util.logger.Logger;
 public class DepartmentForm extends AbstractActionForm
 {
     /**
-     * identifier is a unique id assigned to each Department.
-     * */
-    private long identifier;
-
-    /**
-     * Represents the operation(Add/Edit) to be performed.
-     * */
-    private String operation;
-    
-    /**
      * Name of the Department.
      */
     private String name;
@@ -63,7 +53,7 @@ public class DepartmentForm extends AbstractActionForm
         try
         {
             Department department = (Department)abstractDomain;
-            this.identifier = department.getSystemIdentifier().longValue();
+            this.systemIdentifier = department.getSystemIdentifier().longValue();
             this.name = department.getName();
         }
         catch (Exception excp)
@@ -74,44 +64,6 @@ public class DepartmentForm extends AbstractActionForm
         }
     }
 
-    /**
-     * Returns the identifier assigned to Department.
-     * @return int representing the id assigned to Department.
-     * @see #setIdentifier(int)
-     * */
-    public long getSystemIdentifier()
-    {
-        return (this.identifier);
-    }
-
-    /**
-     * Sets an id for the User.
-     * @param identifier id to be assigned to the Department.
-     * @see #getIdentifier()
-     * */
-    public void setSystemIdentifier(long identifier)
-    {
-        this.identifier = identifier;
-    }
-    
-    /**
-     * Returns the operation(Add/Edit) to be performed.
-     * @return Returns the operation.
-     */
-    public String getOperation()
-    {
-        return operation;
-    }
-    
-    /**
-     * Sets the operation to be performed.
-     * @param operation The operation to set.
-     */
-    public void setOperation(String operation)
-    {
-        this.operation = operation;
-    }
-    
     /**
      * Returns the name of the Department.
      * @return String representing the name of the Department
@@ -131,15 +83,6 @@ public class DepartmentForm extends AbstractActionForm
     }
 
     /**
-     * Checks the operation to be performed is add operation.
-     * @return Returns true if operation is equal to "add", else it returns false
-     * */
-    public boolean isAddOperation()
-    {
-        return(getOperation().equals(Constants.ADD));
-    }
-    
-    /**
      * Returns the id assigned to form bean
      */
     public int getFormId()
@@ -153,8 +96,6 @@ public class DepartmentForm extends AbstractActionForm
      * */
     protected void reset()
     {
-        this.identifier = -1;
-        this.operation = null;
         this.name = null;
     }
 
@@ -179,23 +120,4 @@ public class DepartmentForm extends AbstractActionForm
         return errors;
      }
     
-    
-    /* (non-Javadoc)
-     * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#getActivityStatus()
-     */
-    public String getActivityStatus()
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
-    
-    
-    /* (non-Javadoc)
-     * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#setActivityStatus(java.lang.String)
-     */
-    public void setActivityStatus(String activityStatus)
-    {
-        // TODO Auto-generated method stub
-
-    }
 }

@@ -113,7 +113,6 @@ public class SpecimenForm extends AbstractActionForm
 
     protected Map externalIdentifier = new HashMap();
 
- 
     /**
      * @return Returns the concentration.
      */
@@ -345,7 +344,6 @@ public class SpecimenForm extends AbstractActionForm
         this.externalIdentifier = new HashMap();
     }
 
-  
     /**
      * Returns the id assigned to form bean.
      */

@@ -33,13 +33,6 @@ import edu.wustl.common.util.logger.Logger;
 public class DomainObjectListForm extends AbstractActionForm
 {
     
-    protected long systemIdentifier;
-    
-    /**
-     * Represents the operation(Approve/Reject) to be performed.
-     * */
-    protected String operation;
-    
     /**
      * Map of users whose registration is to be approved/rejected.
      */
@@ -106,48 +99,8 @@ public class DomainObjectListForm extends AbstractActionForm
      */
     protected void reset()
     {
-        systemIdentifier = -1;
-        operation = null;
         comments = null;
         values = new HashMap();
-    }
-    
-    /**
-     * Returns the systemIdentifier assigned to User.
-     * @return int representing the id assigned to User.
-     * @see #setSystemIdentifier(int)
-     * */
-    public long getSystemIdentifier()
-    {
-        return (this.systemIdentifier);
-    }
-
-    /**
-     * Sets an id for the User.
-     * @param systemIdentifier id to be assigned to the User.
-     * @see #getSystemIdentifier()
-     * */
-    public void setSystemIdentifier(long identifier)
-    {
-        this.systemIdentifier = identifier;
-    }
-    
-    /**
-     * Returns the operation(Approve/Reject) which is to be performed.
-     * @return Returns the operation.
-     */
-    public String getOperation()
-    {
-        return operation;
-    }
-    
-    /**
-     * Sets the operation to be performed.
-     * @param operation The operation to set.
-     */
-    public void setOperation(String operation)
-    {
-        this.operation = operation;
     }
     
     /**
@@ -160,14 +113,6 @@ public class DomainObjectListForm extends AbstractActionForm
     }
     
     /* (non-Javadoc)
-     * @see edu.wustl.catissuecore.actionForm.AbstractForm#isAddOperation()
-     */
-    public boolean isAddOperation()
-    {
-        return false;
-    }
-    
-    /* (non-Javadoc)
      * @see edu.wustl.catissuecore.actionForm.AbstractForm#getFormId()
      */
     public int getFormId()
@@ -175,26 +120,6 @@ public class DomainObjectListForm extends AbstractActionForm
         return Constants.APPROVE_USER_FORM_ID;
     }
 
-    
-    /* (non-Javadoc)
-     * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#getActivityStatus()
-     */
-    public String getActivityStatus()
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
-    
-    
-    /* (non-Javadoc)
-     * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#setActivityStatus(java.lang.String)
-     */
-    public void setActivityStatus(String activityStatus)
-    {
-        // TODO Auto-generated method stub
-
-    }
-    
     /* (non-Javadoc)
      * @see edu.wustl.catissuecore.actionForm.AbstractForm#setAllValues(edu.wustl.catissuecore.domain.AbstractDomain)
      */

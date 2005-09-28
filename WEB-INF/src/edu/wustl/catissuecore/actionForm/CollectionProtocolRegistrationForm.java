@@ -25,10 +25,6 @@ import edu.wustl.common.util.logger.Logger;
 
 public class CollectionProtocolRegistrationForm extends AbstractActionForm
 {
-    /**
-     * System generated unique systemIdentifier.
-     */
-    protected long systemIdentifier;
     	
 	/**
 	 * System generated unique collection protocol Identifier
@@ -50,22 +46,12 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 	 */
 	protected String registrationDate;
 
-   	/**
-	 * Represents the operation(Add/Edit) to be performed.
-	 *
-	 */
-	private String operation;
-    
 	/**
 	 * Represents the weather participant Name is selected or not.
 	 *
 	 */    	
 	protected boolean checkedButton; 	
 	
-	/**
-     * The activity status of the Participant.
-     */
-    protected String activityStatus = Constants.ACTIVITY_STATUS_ACTIVE;
     
 	public CollectionProtocolRegistrationForm()
 	{
@@ -108,36 +94,6 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 		return Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID;
 	}
 	
-	/**
-	 * Checks the operation to be performed is add operation.
-	 * @return Returns true if operation is equal to "add", else it returns false
-	 * */
-	public boolean isAddOperation()
-	{
-		return(getOperation().equals(Constants.ADD));
-	}
-	
-
-	/**
-	 * Returns the operation(Add/Edit) to be performed.
-	 * @return Returns the operation.
-	 * @see #setOperation(String)
-	 */
-	public String getOperation()
-	{
-		return operation;
-	}
-
-	/**
-	 * Sets the operation to be performed.
-	 * @param operation The operation to set.
-	 * @see #getOperation()
-	 */
-	public void setOperation(String operation)
-	{
-		this.operation = operation;
-	}
-
     /**
      * Returns the date on which the Participant is 
      * registered to the Collection Protocol.
@@ -162,27 +118,6 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
         this.registrationDate = registrationDate;
     }
 
-           
-    /**
-     * Returns the Activity Status of the Participant.
-     * @return String the Activity Status of the Participant.
-     * @see #setActivityStatus(String)
-     */
-    public String getActivityStatus()
-    {
-        return activityStatus;
-    }
-
-    /**
-     * Sets the Activity Status of the Participant.
-     * @param activityStatus String the Activity Status of the Participant.
-     * @see #getActivityStatus()
-     */
-    public void setActivityStatus(String activityStatus)
-    {
-        this.activityStatus = activityStatus;
-    }
-	
 	/**
 	 * @return
 	 */
@@ -210,27 +145,6 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 	public void setParticipantID(long participantID) {
 		this.participantID = participantID;
 	}
-
-	/**
-	 * Returns the identifier assigned to Participant Registration.
-	 * @return long identifier assigned to Participant Registration.
-	 * @see #setIdentifier(long)
-	 * */
-	public long getSystemIdentifier()
-	{
-		return (this.systemIdentifier);
-	}
-
-	/**
-	 * Sets an the identifier for a Participant Registration.
-	 * @param systemIdentifier identifier to be assigned to Participant Registration.
-	 * @see #getIdentifier()
-	 * */
-	public void setSystemIdentifier(long systemIdentifier)
-	{
-		this.systemIdentifier = systemIdentifier;
-	}
-
 
 	/**
  	* @return returns praticipant Protocol ID

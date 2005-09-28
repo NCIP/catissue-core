@@ -217,9 +217,9 @@ public abstract class AbstractActionForm extends ActionForm
      */
     public void reset(ActionMapping mapping, HttpServletRequest request)
     {
-        systemIdentifier = -1;
-        operation = null;
-        activityStatus = Constants.ACTIVITY_STATUS_ACTIVE;
+//        systemIdentifier = -1;
+//        operation = null;
+//        activityStatus = Constants.ACTIVITY_STATUS_ACTIVE;
         reset();
     }
     

@@ -30,16 +30,7 @@ import edu.wustl.common.util.logger.Logger;
  * */
 public class BiohazardForm extends AbstractActionForm
 {
-    /**
-     * identifier is a unique id assigned to each Biohazard.
-     * */
-    private long systemIdentifier;
 
-    /**
-     * A String containing the operation(Add/Edit) to be performed.
-     * */
-    private String operation;
-    
     /**
      * A string containing the type of Biohazard.
      */
@@ -70,6 +61,7 @@ public class BiohazardForm extends AbstractActionForm
         try
         {
             Biohazard hazard = (Biohazard) abstractDomain;
+            
             this.systemIdentifier = hazard.getSystemIdentifier().longValue();
             this.name = hazard.getName();
             this.type = hazard.getType();
@@ -81,46 +73,6 @@ public class BiohazardForm extends AbstractActionForm
         }
     }
 
-    /**
-     * Returns the identifier assigned to Storage Type.
-     * @return long identifier assigned to Storage Type.
-     * @see #setSystemIdentifier(long)
-     * */
-    public long getSystemIdentifier()
-    {
-        return (this.systemIdentifier);
-    }
-
-    /**
-     * Sets an the identifier for a Storage Type.
-     * @param identifier identifier to be assigned to Storage Type.
-     * @see #getSystemIdentifier()
-     * */
-    public void setSystemIdentifier(long identifier)
-    {
-        this.systemIdentifier = identifier;
-    }
-    
-    /**
-     * Returns the operation(Add/Edit) to be performed.
-     * @return Returns the operation.
-     * @see #setOperation(String)
-     */
-    public String getOperation()
-    {
-        return operation;
-    }
-    
-    /**
-     * Sets the operation to be performed.
-     * @param operation The operation to set.
-     * @see #getOperation()
-     */
-    public void setOperation(String operation)
-    {
-        this.operation = operation;
-    }
-    
     /**
      * Returns the type of the storage.
      * @return String the type of the storage.
@@ -239,13 +191,6 @@ public class BiohazardForm extends AbstractActionForm
         
         try
         {
-            if (operation.equals(Constants.SEARCH))
-            {
-                checkValidNumber(new Long(systemIdentifier).toString(),"storageType.identifier",errors,validator);
-            }
-            if (operation.equals(Constants.ADD) || operation.equals(Constants.EDIT))
-            {
-            	
             	if(!validator.isValidOption(type))
                 {
                 	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("biohazard.type")));
@@ -255,7 +200,6 @@ public class BiohazardForm extends AbstractActionForm
                 {
                     errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("biohazard.name")));
                 }
-            }
         }
         catch(Exception excp)
         {

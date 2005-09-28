@@ -52,31 +52,12 @@ public class ForgotPasswordForm extends AbstractActionForm
     }
 
     /* (non-Javadoc)
-     * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#getActivityStatus()
-     */
-    public String getActivityStatus()
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    /* (non-Javadoc)
-     * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#setActivityStatus(java.lang.String)
-     */
-    public void setActivityStatus(String activityStatus)
-    {
-        // TODO Auto-generated method stub
-
-    }
-
-    /* (non-Javadoc)
      * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#getFormId()
      */
     public int getFormId()
     {
         return Constants.FORGOT_PASSWORD_FORM_ID;
     }
-
 
     /* (non-Javadoc)
      * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#setAllValues(edu.wustl.catissuecore.domain.AbstractDomainObject)

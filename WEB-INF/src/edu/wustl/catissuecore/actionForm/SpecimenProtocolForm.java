@@ -240,7 +240,6 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 		this.title = title;
 	}
 
-
 	/**
 	 * @return Returns the values.
 	 */
@@ -380,8 +379,6 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
                 {
                  	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.enrollment",ApplicationProperties.getValue("collectionprotocol.participants")));
                 }
-               
-
             }    
 		}
 		catch (Exception excp)
