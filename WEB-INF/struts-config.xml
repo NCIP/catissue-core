@@ -1930,7 +1930,7 @@ PUBLIC
 			scope="request">
 			<forward name="pageOfAssignPrivilegesPage" path=".catissuecore.assignPrivilegesPageDef" />
 			<forward name="failure" path=".catissuecore.assignPrivilegesPageDef" />
-			<forward name="access_denied" path="/ManageBioSpecimen.do" />
+			<forward name="access_denied" path="/Home.do" />
 		</action>
 		
 		<action path="/AssignPrivileges"
@@ -1941,7 +1941,7 @@ PUBLIC
 			scope="request">
 			<forward name="pageOfAssignPrivileges" path=".catissuecore.assignPrivilegesDef" />
 			<forward name="failure" path=".catissuecore.assignPrivilegesPageDef" />
-			<forward name="access_denied" path="/ManageBioSpecimen.do" />
+			<forward name="access_denied" path="/Home.do" />
 		</action>
 		<!-- Assign Privileges Actions Ends -->
 		
