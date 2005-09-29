@@ -15,6 +15,7 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.Map;
 
 import edu.wustl.common.util.logger.Logger;
 
@@ -142,6 +143,18 @@ public class Utility
 		}
 		newObjectArr[newObjectArr.length-1] = obj;
 		return newObjectArr;
+	}
+	
+	public static boolean isPersistedValue(Map map,String key){
+		Object obj = map.get(key);
+		String val=null;
+		if (obj!=null) 
+			val = obj.toString();
+		if((val!= null && val != "0") && !(val.equals("")))
+			return true;
+		else 
+			return false; 
+			
 	}
 	
 //	public static void main(String[] args)
