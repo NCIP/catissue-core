@@ -48,11 +48,6 @@ public class AssignPrivilegesForm extends ActionForm
     private String [] recordIds;
     
     /**
-     * A String array containing the list of attributes.
-     * */
-    private String [] attributes;
-    
-    /**
      * A String array containing the list of groups/users.
      * */
     private String [] groups;
@@ -79,26 +74,6 @@ public class AssignPrivilegesForm extends ActionForm
 	public void setAssignOperation(String assignOperation)
 	{
 		this.assignOperation = assignOperation;
-	}
-	
-	/**
-     * Returns the list of attributes.
-     * @return String[] the list of attributes.
-     * @see #setAttributes(String[])
-     */
-	public String[] getAttributes()
-	{
-		return attributes;
-	}
-	
-	/**
-     * Sets the list of attributes.
-     * @param attributes String[] the list of attributes.
-     * @see #getAttributes()
-     */
-	public void setAttributes(String[] attributes)
-	{
-		this.attributes = attributes;
 	}
 	
 	/**
@@ -207,11 +182,6 @@ public class AssignPrivilegesForm extends ActionForm
         if(recordIds == null)
         {
         	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("assignPrivileges.recordId")));
-        }
-        
-        if(attributes == null)
-        {
-        	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("assignPrivileges.attribute")));
         }
         
         if(groups == null)
