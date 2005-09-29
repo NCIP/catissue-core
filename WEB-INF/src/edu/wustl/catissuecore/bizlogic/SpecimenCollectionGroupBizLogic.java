@@ -85,11 +85,11 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
         protectionObjects.add(specimenCollectionGroup);
         
 		Participant participant = null;
-		//Case of registering Participant on its participant ID
-		if(specimenCollectionGroup.getClinicalReport()!=null)
-		{
-		    protectionObjects.add(specimenCollectionGroup.getClinicalReport());
-		}
+//		//Case of registering Participant on its participant ID
+//		if(specimenCollectionGroup.getClinicalReport()!=null)
+//		{
+//		    protectionObjects.add(specimenCollectionGroup.getClinicalReport());
+//		}
 		
         Logger.out.debug(protectionObjects.toString());
         return protectionObjects;
@@ -103,7 +103,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
         
         try
         {
-            dynamicGroups[0] = SecurityManager.getInstance(this.getClass()).getProtectionGroupByName(specimenCollectionGroup.getCollectionProtocolEvent(),Constants.getCollectionProtocolPGName(null));
+            dynamicGroups[0] = SecurityManager.getInstance(this.getClass()).getProtectionGroupByName(specimenCollectionGroup.getCollectionProtocolRegistration(),Constants.getCollectionProtocolPGName(null));
         }
         catch (SMException e)
         {
