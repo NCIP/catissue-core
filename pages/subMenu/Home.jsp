@@ -19,15 +19,21 @@
 			<!--img src="images/subMenuArrow.gif" width="7" height="7" alt="" /--> 
 				<b> <bean:message key="app.userProfile" /> </b>
 		</div>		
+		
 		<div>
 			<a class="subMenuPrimary" href="UserSearch.do?pageOf=pageOfUserProfile&systemIdentifier=<bean:write name="<%=Constants.SESSION_DATA%>" property="userId" scope="session"/>" >
 				<bean:message key="app.edit" />
 			</a> |  
 			<a class="subMenuPrimary" href="ChangePassword.do?operation=edit&amp;pageOf=pageOfChangePassword" >
 					<bean:message key="user.changePassword" />
-			</a>
-			
+			</a>			
 		</div>
+		
+		<div>
+	  		<a class="subMenuPrimary" href="AssignPrivilegesPage.do?pageOf=pageOfAssignPrivilegesPage">
+	  			<bean:message key="app.assignPrevileges" />
+	  		</a>
+	  	</div>
 	</td>
 </tr>
 </logic:notEmpty>
