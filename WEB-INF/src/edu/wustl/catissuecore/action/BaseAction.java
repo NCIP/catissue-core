@@ -2,6 +2,9 @@ package edu.wustl.catissuecore.action;
 
 
 
+import java.util.List;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -10,6 +13,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.actionForm.StorageContainerForm;
 import edu.wustl.catissuecore.exception.UserNotAuthenticatedException;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
@@ -25,6 +29,7 @@ import edu.wustl.common.beans.SessionDataBean;
  * @author Aarti Sharma
  *  
  */
+
 public abstract class BaseAction extends Action  {
 
 
@@ -87,6 +92,38 @@ public abstract class BaseAction extends Action  {
 		}
 		return null;
 		//return (String) request.getSession().getAttribute(Constants.SESSION_DATA);
+	}
+	
+	
+	/**
+	 * Returns boolean used for diabling/enabling checkbox in jsp Page and
+	 * rearranging rows
+	 */
+	protected void DeleteRow(List list,Map map,
+			HttpServletRequest request){
+		
+		String status = request.getParameter("status");
+    	if(status == null){
+    		status = Constants.FALSE;
+    	}
+    	
+    	String text;
+       	for(int k = 0; k < list.size(); k++){
+    		text = (String)list.get(k);
+    		String first = text.substring(0,text.indexOf(":"));
+    		String last = text.substring(text.indexOf("_"));
+    		if(status.equals(Constants.TRUE)){
+    			Map values = map;
+    			int count = 1;
+    			for(int i = 1; i <= values.size() ; i++){
+    				String id = first + ":" + i +last;
+    				if(values.containsKey(id)){
+    					values.put(first + ":" +count +last,map.get(id));
+    					count++;
+    				}
+    			}
+    		}
+    	}
 	}
 	
 	/**
