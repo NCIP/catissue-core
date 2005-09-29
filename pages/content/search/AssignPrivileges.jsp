@@ -31,11 +31,23 @@
 		function onPrivilegeChange(element)
 		{
 			var objectCombo = document.getElementById("objectTypes");
-			if(objectCombo.selectedIndex != -1)
+			var recordCombo = document.getElementById("recordIds");
+			
+			objectCombo.options.length = 0;
+			recordCombo.options.length = 0;
+			
+			if(element.options[element.selectedIndex].text == "READ")
 			{
-				var action = "/catissuecore/AssignPrivilegesPage.do?pageOf=pageOfAssignPrivilegesPage";
-				document.forms[0].action = action;
-				document.forms[0].submit();
+				objectCombo.options[0] = new Option("Participant","edu.wustl.catissuecore.domain.Participant");
+				objectCombo.options[1] = new Option("Collection Protocol","edu.wustl.catissuecore.domain.CollectionProtocol");
+				objectCombo.options[2] = new Option("Distribution Protocol","edu.wustl.catissuecore.domain.DistributionProtocol");
+				objectCombo.options[3] = new Option("Specimen Collection","edu.wustl.catissuecore.domain.SpecimenCollectionGroup");
+				objectCombo.options[4] = new Option("Specimen","edu.wustl.catissuecore.domain.Specimen");
+			}
+			else if(element.options[element.selectedIndex].text == "USE")
+			{
+				objectCombo.options[0] = new Option("Site","edu.wustl.catissuecore.domain.Site");
+				objectCombo.options[1] = new Option("Storage","edu.wustl.catissuecore.domain.StorageContainer");
 			}
 		}
 
@@ -52,11 +64,11 @@
 <html:errors/>
 
 <html:form action="<%=Constants.ASSIGN_PRIVILEGES_ACTION%>">
-<table summary="" cellpadding="5" cellspacing="0" border="0" width="600">
+<table summary="" cellpadding="5" cellspacing="0" border="0" width="500">
 
 <tr>
 	<td>&nbsp;&nbsp;</td>
-	<td colspan="6">
+	<td colspan="3">
 		&nbsp;
 	</td>
 </tr>
@@ -64,7 +76,7 @@
 <!-- Title Row -->
 <tr>
 	<td>&nbsp;&nbsp;</td>
-	<td class="formTitle" height="25" colspan="6">
+	<td class="formTitle" height="25" colspan="3">
 		<bean:message key="assignPrivileges.title"/>
 	</td>
 </tr>
@@ -73,9 +85,10 @@
 <!-- SubTitle-1 Row -->
 <tr>
 	<td>&nbsp;&nbsp;</td>
-	<td class="formLeftSubTableTitle" height="25" colspan="2">
+	<td class="formLeftSubTableTitle" height="25">
      	<bean:message key="assignPrivileges.assign"/>
     </td>
+
     <td class="formRightSubTableTitle" colspan="2">
 		<bean:message key="assignPrivileges.privileges"/>
 	</td>
@@ -85,7 +98,7 @@
 <!-- Assign/Privilege Row -->
 <tr>
 	<td>&nbsp;&nbsp;</td>
-	<td class="formSerialNumberField" colspan="2">
+	<td class="formSerialNumberField" >
      	<html:select property="assignOperation" styleClass="formFieldSized15" styleId="assignOperation" size="1">
 			<html:options name="<%=Constants.ASSIGN%>" labelName="<%=Constants.ASSIGN%>"/>
 		</html:select>
@@ -105,12 +118,11 @@
     <td class="formLeftSubTableTitle">
 		<bean:message key="assignPrivileges.objectType"/>
 	</td>
+
 	<td class="formRightSubTableTitle">
 		<bean:message key="assignPrivileges.recordId"/>
 	</td>
-	<td class="formRightSubTableTitle">
-		<bean:message key="assignPrivileges.attribute"/>
-	</td>
+
 	<td class="formRightSubTableTitle">
 		<bean:message key="assignPrivileges.group"/>
 	</td>
@@ -133,12 +145,6 @@
 	</td>
 
 	<td class="formField">
-     	<html:select property="attributes" styleClass="formFieldSized15" styleId="attributes" size="10" multiple="true" onchange="selectAll(this)">
-			<html:options name="<%=Constants.ATTRIBUTES%>" labelName="<%=Constants.ATTRIBUTES%>"/>
-		</html:select>
-	</td>
-
-	<td class="formField">
      	<html:select property="groups" styleClass="formFieldSized15" styleId="groups" size="10" multiple="true">
 			<html:options collection="<%=Constants.GROUPS%>" labelProperty="name" property="value"/>
 		</html:select>
@@ -149,7 +155,7 @@
 <!-- Empty Row -->
 <tr>
 	<td>&nbsp;&nbsp;</td>
-	<td colspan="5">
+	<td colspan="3">
 		&nbsp;
 	</td>
 </tr>
@@ -158,7 +164,7 @@
 <!-- Button Row -->
 <tr>
 	<td>&nbsp;&nbsp;</td>
-	<td align="right" colspan="5">
+	<td align="right" colspan="3">
 		<html:button property="assignButton" styleClass="actionButton" styleId="assignButton" onclick="assign()">
 	   		<bean:message key="buttons.assign"/>
 	   	</html:button>
