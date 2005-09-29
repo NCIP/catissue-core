@@ -86,6 +86,9 @@ public class LoginAction extends Action
 	                sessionData.setUserName(loginName);
 	                sessionData.setIpAddress(ipAddress);
 	                sessionData.setUserId(userId);
+	                sessionData.setFirstName(userData.getFirstName());
+	                sessionData.setLastName(userData.getLastName());
+	                
 	                session.setAttribute(Constants.SESSION_DATA,sessionData);
 	                //session.setAttribute(Constants.SESSION_DATA,loginName);
 	                Logger.out.info(">>>>>>>>>>>>> SUCESSFUL LOGIN B <<<<<<<<< ");

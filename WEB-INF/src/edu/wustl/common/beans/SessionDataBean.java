@@ -21,6 +21,9 @@ package edu.wustl.common.beans;
 
 public class SessionDataBean 
 {
+	private String firstName = new String();
+	private String lastName  = new String();
+	
     private String userName=new String();
     private String ipAddress=new String();
     private Long userId = null;
@@ -69,4 +72,20 @@ public class SessionDataBean
     }
     
 
+	public String getFirstName()
+	{
+		return firstName;
+	}
+	public void setFirstName(String firstName)
+	{
+		this.firstName = firstName;
+	}
+	public String getLastName()
+	{
+		return lastName;
+	}
+	public void setLastName(String lastName)
+	{
+		this.lastName = lastName;
+	}
 }
