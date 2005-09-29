@@ -3,6 +3,8 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.StorageContainerForm"%>
+<%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
+<%@ page import="java.util.*"%>
 
 <%
         String operation = (String) request.getAttribute(Constants.OPERATION);
@@ -22,17 +24,23 @@
 	
 		Object obj = request.getAttribute("storageContainerForm");
 		int noOfRows=1;
+		Map map = null;
+		
 		if(obj != null && obj instanceof StorageContainerForm)
 		{
 			StorageContainerForm form = (StorageContainerForm)obj;
+			map = form.getValues();
 			noOfRows = form.getCounter();
 		}
 %>
 
 <head>
+	<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 	<script language="JavaScript">
 		
 		var win = null;
+	
+		
 		function NewWindow(mypage,myname,w,h,scroll)
 		{
 			LeftPosition = (screen.width) ? (screen.width-w)/2 : 0;
@@ -99,6 +107,7 @@ function insRow(subdivtag)
 //	var x=document.getElementById(subdivtag).insertRow(q);
 	var x=document.getElementById(subdivtag).insertRow(0);
 	
+	
 	// First Cell
 	var spreqno=x.insertCell(0);
 	spreqno.className="formSerialNumberField";
@@ -132,6 +141,15 @@ function insRow(subdivtag)
 	sname="<input type='text' name='" + name + "' class='formFieldSized10' id='" + name + "'>"        
 
 	spreqsubtype.innerHTML="" + sname;
+	
+	//Fourth Cell
+	var checkb=x.insertCell(3);
+	checkb.className="formField";
+	checkb.colSpan=2;
+	sname="";
+	var name = "chk_"+(q+1);
+	sname="<input type='checkbox' name='" + name +"' id='" + name +"' value='C'>"
+	checkb.innerHTML=""+sname;
 }
 
 /*
@@ -231,7 +249,7 @@ function insRow(subdivtag)
 					</tr>
 					
 					<tr>
-						<td class="formTitle" height="20" colspan="4">
+						<td class="formTitle" height="20" colspan="5">
 							<logic:equal name="operation" value="<%=Constants.ADD%>">
 								<bean:message key="storageContainer.title"/>
 							</logic:equal>
@@ -248,7 +266,7 @@ function insRow(subdivtag)
 								<bean:message key="storageContainer.type" />
 							</label>
 						</td>
-						<td class="formField">
+						<td class="formField" colspan="2">
 							<html:select property="typeId" styleClass="formFieldSized" styleId="typeId" size="1" onchange="onTypeChange(this)">
 								<%-- html:options name="storageTypeIdList" labelName="storageTypeList" /--%>
 								<html:options collection="<%=Constants.STORAGETYPELIST%>" labelProperty="name" property="value"/>
@@ -269,7 +287,7 @@ function insRow(subdivtag)
 								</label>
 							</html:radio>
 						</td>
-						<td class="formField">
+						<td class="formField" colspan="2">
 							<logic:equal name="storageContainerForm" property="checkedButton" value="1">
 							<html:select property="siteId" styleClass="formFieldSized" styleId="siteId" size="1" onchange="onSiteChange(this)">
 								<html:options collection="<%=Constants.SITELIST%>" labelProperty="name" property="value"/>
@@ -298,7 +316,7 @@ function insRow(subdivtag)
 								</label>
 							</html:radio>							
 						</td>
-						<td class="formField">
+						<td class="formField" colspan="2">
 	 						<logic:equal name="storageContainerForm" property="checkedButton" value="1">							
 							<html:text styleClass="formFieldSized" size="30" styleId="positionInParentContainer" property="positionInParentContainer" readonly="true" disabled="true"/>
 							&nbsp;
@@ -331,7 +349,7 @@ function insRow(subdivtag)
 								<bean:message key="storageContainer.noOfContainers" />
 							</label>
 						</td>
-						<td class="formField">
+						<td class="formField" colspan="2">
 							<html:text styleClass="formFieldSized10" size="30" styleId="noOfContainers" property="noOfContainers" readonly="<%=readOnlyValue%>" onchange="onContainerChange(this)"/>
 						</td>
 					</tr>
@@ -344,7 +362,7 @@ function insRow(subdivtag)
 								<bean:message key="storageContainer.startNumber" />
 							</label>
 						</td>
-						<td class="formField">
+						<td class="formField" colspan="2">
 							<html:text styleClass="formFieldSized10" size="30" styleId="startNumber" property="startNumber" readonly="TRUE"/>
 						</td>
 					</tr>
@@ -356,7 +374,7 @@ function insRow(subdivtag)
 								<bean:message key="storageContainer.barcode" />
 							</label>
 						</td>
-						<td class="formField">
+						<td class="formField" colspan="2">
 							<html:text styleClass="formFieldSized10" size="30" styleId="barcode" property="barcode"/>
 						</td>
 					</tr>
@@ -368,7 +386,7 @@ function insRow(subdivtag)
 								<bean:message key="storageContainer.temperature" />
 							</label>
 						</td>
-						<td class="formField">
+						<td class="formField" colspan="2">
 							<html:text styleClass="formFieldSized10" size="30" styleId="defaultTemperature" property="defaultTemperature"/>
 							°C
 						</td>
@@ -382,7 +400,7 @@ function insRow(subdivtag)
 								<bean:message key="site.activityStatus" />
 							</label>
 						</td>
-						<td class="formField">
+						<td class="formField" colspan="2">
 							<html:select property="activityStatus" styleClass="formFieldSized10" styleId="activityStatus" size="1">
 								<html:options name="<%=Constants.ACTIVITYSTATUSLIST%>" labelName="<%=Constants.ACTIVITYSTATUSLIST%>" />
 							</html:select>
@@ -391,7 +409,7 @@ function insRow(subdivtag)
 					</logic:equal>
 					
 					<tr>
-						<td class="formTitle" colspan="4">
+						<td class="formTitle" colspan="5">
 							<label for="capacity">
 								<bean:message key="storageContainer.capacity" />
 							</label>
@@ -406,7 +424,7 @@ function insRow(subdivtag)
 								<bean:write name="storageContainerForm" property="oneDimensionLabel"/>
 							</label>
 						</td>
-						<td class="formField">
+						<td class="formField" colspan="2">
 							<html:text styleClass="formFieldSized10" size="30" styleId="oneDimensionCapacity" property="oneDimensionCapacity"/>
 						</td>
 					</tr>
@@ -419,7 +437,7 @@ function insRow(subdivtag)
 								<bean:write name="storageContainerForm" property="twoDimensionLabel"/>
 							</label>
 						</td>
-						<td class="formField">
+						<td class="formField" colspan="2">
 							<html:text styleClass="formFieldSized10" size="30" styleId="twoDimensionCapacity" property="twoDimensionCapacity"/>
 						</td>
 					</tr>
@@ -436,6 +454,11 @@ function insRow(subdivtag)
 						</html:button>
 						<html:hidden property="counter"/>
 						</td>
+						<td class="formTitle" align="Right">
+							<html:button property="deleteValue" styleClass="actionButton" onclick="deleteChecked('addMore','/catissuecore/StorageContainer.do?operation=add&pageOf=pageOfStorageContainer&status=true')">
+								<bean:message key="buttons.delete"/>
+							</html:button>
+						</td>
 					</tr>
 									
 					<tr>
@@ -450,6 +473,11 @@ function insRow(subdivtag)
 								<bean:message key="storageContainer.value" />
 							</label>
 						</td>
+						<td class="formRightSubTableTitle">
+							<label for="delete" align="center">
+								<bean:message key="storageContainer.delete" />
+							</label>
+						</td>
 					</tr>
 					
 					<tbody id="addMore">
@@ -460,6 +488,7 @@ function insRow(subdivtag)
 								String keyName = "value(StorageContainerDetails:" + rowCount +"_parameterName)";
 								String valueName = "value(StorageContainerDetails:" + rowCount +"_parameterValue)";
 								String identifier = "value(StorageContainerDetails:" + rowCount +"_systemIdentifier)";
+								String check = "chk_"+rowCount;
 						%>
 					<tr>
 						<td class="formSerialNumberField" width="5"><%=rowCount%>.
@@ -471,6 +500,18 @@ function insRow(subdivtag)
 						<td class="formField">
 							<html:text styleClass="formFieldSized10" size="30" styleId="<%=valueName%>" property="<%=valueName%>"/>
 						</td>
+						<%
+							String key = "StorageContainerDetails:" + rowCount +"_systemIdentifier";
+							boolean bool = Utility.isPersistedValue(map,key);
+							String condition = "";
+							if(bool)
+								condition = "disabled='disabled'";
+
+						%>
+						<td class="formField" width="5">
+							<input type=checkbox name="<%=check %>" id="<%=check %>" <%=condition%>>		
+						</td>
+						
 					</tr>
 						<%
 							} // for
@@ -504,7 +545,7 @@ function insRow(subdivtag)
 					
 			</table>
 
-			</td>
+			<!-- /td-->
 		</tr>
 
 		<!-- NEW STORAGE CONTAINER REGISTRATION ends-->
