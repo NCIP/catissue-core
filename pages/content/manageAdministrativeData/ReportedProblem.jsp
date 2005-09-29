@@ -45,13 +45,13 @@
 					</td>
 				</tr>
 				
-				<tr>
+				<!--tr>
 					<td class="dataTablePrimaryLabel" height="20">
 						<html:checkbox property="value(userselectAll)" onclick="CheckAll(this)">
 							<bean:message key="app.selectAll"/>
 						</html:checkbox>
 					</td>
-				</tr>
+				</tr-->
 				
 				<!-- paging ends -->
 
@@ -64,9 +64,9 @@
 							<th class="formSerialNumberLabelForTable" scope="col">
 				     			#
 				    		</th>
-							<th class="dataTableHeader" scope="col" align="left">
+							<!--th class="dataTableHeader" scope="col" align="left">
 								<bean:message key="reportedProblem.pendingClose" />
-							</th>
+							</th-->
 							<th class="dataTableHeader" scope="col" align="left">
 								<bean:message key="reportedProblem.from" />
 							</th>
@@ -79,7 +79,7 @@
 						</tr>
 						<logic:empty name="showDomainObjectList">
 							<tr>
-								<td class="dataTableWhiteCenterHeader" colspan="5">  
+								<td class="dataTableWhiteCenterHeader" colspan="4">  
 									<bean:message key="reportedProblem.noNewProblemFound" />
 								</td>
 							</tr>
@@ -89,16 +89,15 @@
 							<tr class="dataRowLight">
 								<%
         								ReportedProblem reportedProblem = (ReportedProblem) problem;
-										String checkBoxValue = reportedProblem.getSystemIdentifier().toString();
-        								String checkBoxName = "value(problem" + checkBoxValue + ")";
-										String problemDetailsLink = Constants.PROBLEM_DETAILS_ACTION+"?"+Constants.IDENTIFIER+"="+checkBoxValue;				
+										String identifier = reportedProblem.getSystemIdentifier().toString();
+										String problemDetailsLink = Constants.PROBLEM_DETAILS_ACTION+"?"+Constants.IDENTIFIER+"="+identifier;				
         						%>
         						<td class="dataCellText">
 									<%=i%>
 								</td>
-								<td class="dataCellText">
+								<%--td class="dataCellText">
 									<html:checkbox property="<%=checkBoxName%>" value="<%=checkBoxValue%>" />
-								</td>
+								</td--%>
 								<td class="dataCellText">
 										<bean:write	name="problem" property="from" /> 
 								</td>
@@ -117,7 +116,7 @@
 					</td>
 				</tr>
 				
-				<logic:notEmpty name="showDomainObjectList">
+				<%--logic:notEmpty name="showDomainObjectList">
 				<tr>
 					<td align="right" class="actionSection">
 					<!-- action buttons begins -->
@@ -146,7 +145,7 @@
 					<!-- action buttons end -->
 					</td>
 				</tr>
-				</logic:notEmpty>
+				</logic:notEmpty--%>
 			</html:form>
 		</table>
 		</td>
