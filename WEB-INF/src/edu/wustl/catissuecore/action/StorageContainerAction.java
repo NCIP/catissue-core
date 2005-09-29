@@ -11,7 +11,9 @@
 package edu.wustl.catissuecore.action;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -40,8 +42,18 @@ public class StorageContainerAction  extends SecureAction
             HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException
     {
-    	StorageContainerForm storageContainerForm = (StorageContainerForm) form;
+		StorageContainerForm storageContainerForm = (StorageContainerForm) form;
+		
+		//List of keys used in map of ActionForm
+		List key = new ArrayList();
+    	key.add("StorageContainerDetails:i_parameterName");
+    	key.add("StorageContainerDetails:i_parameterValue");
     	
+    	//Gets the map from ActionForm
+    	Map map = storageContainerForm.getValues();
+    	//Calling DeleteRow of BaseAction class
+    	DeleteRow(key,map,request);
+    
         //Gets the value of the operation parameter.
         String operation = request.getParameter(Constants.OPERATION);
         
