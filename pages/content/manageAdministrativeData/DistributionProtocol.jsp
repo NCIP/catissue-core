@@ -5,6 +5,8 @@
 <%@ page import="edu.wustl.catissuecore.actionForm.DistributionProtocolForm"%>
 <%@ page import="java.util.*"%>
 <%@ page import="edu.wustl.common.beans.NameValueBean"%>
+<%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
+<%@ page import="java.util.*"%>
 
 <head>
 
@@ -32,11 +34,12 @@
     
 		Object obj = request.getAttribute("distributionProtocolForm");
 		int noOfRows=1;
-		
+		Map map = null;
 		DistributionProtocolForm form = null;
 		if(obj != null && obj instanceof DistributionProtocolForm)
 		{
 			form = (DistributionProtocolForm)obj;
+			map = form.getValues();
 			noOfRows = form.getCounter();
 		}
 
@@ -177,6 +180,15 @@ function insRow(subdivtag)
 	sname = sname + "&nbsp;<span id='" + objunit + "'>&nbsp;</span>"
 					
 	spreqqty.innerHTML="" + sname;
+	
+	//CheckBox
+	var checkb=x.insertCell(6);
+	checkb.className="formField";
+	checkb.colSpan=2;
+	sname="";
+	var name = "chk_"+rowno;
+	sname="<input type='checkbox' name='" + name +"' id='" + name +"' value='C'>"
+	checkb.innerHTML=""+sname;
 }
 
 //-->
@@ -390,6 +402,11 @@ function insRow(subdivtag)
 				<td align="right" class="formTitle">		
 						<html:button property="addDistributionProtocolEvents" styleClass="actionButton" onclick="insRow('SpecimenRequirementData')">Add More</html:button>
 				</td> 
+				<td class="formTitle" align="Right">
+					<html:button property="deleteValue" styleClass="actionButton" onclick="deleteChecked('SpecimenRequirementData','/catissuecore/DistributionProtocol.do?operation=add&pageOf=pageOfDistributionProtocol&status=true')">
+					<bean:message key="buttons.delete"/>
+					</html:button>
+				</td>
 			</tr>
 		</table>	
 			<!-- SUB TITLES -->
@@ -420,6 +437,11 @@ function insRow(subdivtag)
 			    <td class="formLeftSubTitle">* <!--  width="117" -->
 			    	<b><bean:message key="distributionprotocol.quantity" /></b>
 		        </td>
+		        <td class="formRightSubTableTitle">
+							<label for="delete" align="center">
+								<bean:message key="distributionprotocol.delete" />
+							</label>
+						</td>
 			</tr>	
 
 			<%
@@ -433,6 +455,7 @@ function insRow(subdivtag)
 					
 					String objunit = "value(SpecimenRequirement:"+ counter +"_unitspan)";
 					String identifier = "value(SpecimenRequirement:"+ counter +"_systemIdentifier)";
+					String check = "chk_"+counter;
 			%>
 			<TR> 
 				<td class="tabrightmostcell">
@@ -521,6 +544,17 @@ function insRow(subdivtag)
 							<%=strHiddenUnitValue%>
 						</span>
 		        </td>
+		        <%
+							String key = "SpecimenRequirement:"+ counter +"_systemIdentifier";
+							boolean bool = Utility.isPersistedValue(map,key);
+							String condition = "";
+							if(bool)
+								condition = "disabled='disabled'";
+
+						%>
+						<td class="formField" width="5">
+							<input type=checkbox name="<%=check %>" id="<%=check %>" <%=condition%>>		
+						</td>
 			</tr>	
 							
 			<%
@@ -534,7 +568,7 @@ function insRow(subdivtag)
 </table>
 
 
-<table width="100%">		
+<table width="97%">		
 	<!-- to keep -->
 		<tr>
 			<td align="right" colspan="3">
