@@ -41,6 +41,8 @@ public class Constants
 	public static final int HIBERNATE_DAO = 1;
 	public static final int JDBC_DAO = 2;
 	
+	public static final String TRUE = "true";
+	public static final String FALSE = "false";
 	public static final String SUCCESS = "success";
 	public static final String FAILURE = "failure";
 	public static final String ADD = "add";
