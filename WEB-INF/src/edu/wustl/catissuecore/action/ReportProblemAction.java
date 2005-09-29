@@ -21,7 +21,9 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.actionForm.ReportedProblemForm;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.beans.SessionDataBean;
 
 
 /**
@@ -38,6 +40,15 @@ public class ReportProblemAction extends Action
             HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException
     {
+		Object obj = request.getSession().getAttribute(Constants.SESSION_DATA);
+		if(obj!=null)
+		{
+			SessionDataBean sessionData = (SessionDataBean) obj;
+			ReportedProblemForm reportedProblemForm = (ReportedProblemForm)form;
+			reportedProblemForm.setNameOfReporter(sessionData.getLastName()+", "+sessionData.getFirstName());
+			reportedProblemForm.setFrom(sessionData.getUserName());
+		}
+    	
         //Gets the value of the operation parameter.
         String operation = request.getParameter(Constants.OPERATION);
 

@@ -555,6 +555,8 @@ PUBLIC
 		<!--Report Problem Actions Begins-->
 		<action path="/ReportProblem"
 			type="edu.wustl.catissuecore.action.ReportProblemAction"
+			name="reportedProblemForm"
+			validate="false"
 			scope="request">
 			<forward name="success" path=".catissuecore.reportProblemDef" />
 			<forward name="failure" path=".catissuecore.reportProblemDef" />
