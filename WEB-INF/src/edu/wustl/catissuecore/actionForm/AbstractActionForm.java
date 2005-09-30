@@ -224,4 +224,28 @@ public abstract class AbstractActionForm extends ActionForm
     }
     
     protected abstract void reset();
+    
+    // -------- Add new
+    private String redirectTo = null;
+       
+	/**
+	 * @return Returns the redirectTo.
+	 */
+	public String getRedirectTo() {
+		return redirectTo;
+	}
+	/**
+	 * @param redirectTo The redirectTo to set.
+	 */
+	public void setRedirectTo(String redirectTo) {
+		this.redirectTo = redirectTo;
+	}
+	
+	public void setRedirectValue(Validator validator)
+	{
+     	String cf = getRedirectTo();
+     	if(validator.isEmpty(cf ) )
+     		cf = "";
+     	setRedirectTo(cf );
+	}
 }
