@@ -97,6 +97,27 @@
 			sname="<input type='text' name='" + name + "' size='30'  class='formFieldSized15' id='" + name + "'>";
 			spreqsubtype.innerHTML="" + sname;
 		}
+		
+		function textLimit(field) 
+		{
+			if(field.value.length>0) 
+				field.value = field.value.replace(/[^\d]+/g, '');
+				
+			/*if (element.value.length > maxlen + 1)
+				alert('your input has been truncated!');*/
+			/*if (field.value.length > maxlen)
+			{
+				//field.value = field.value.substring(0, maxlen);
+				field.value = field.value.replace(/[^\d]+/g, '');
+			}*/
+		}
+		function intOnly(field) 
+		{
+			if(field.value.length>0) 
+			{
+				field.value = field.value.replace(/[^\d]+/g, ''); 
+			}
+		}
 	</script>
 </head>
 
@@ -309,7 +330,11 @@
 				     	</label>
 				     </td>
 				     <td class="formField">
-				     	<html:text styleClass="formFieldSized" size="30" styleId="socialSecurityNumber" property="socialSecurityNumber" readonly="<%=readOnlyForAll%>"/>
+				     	<html:text styleClass="formFieldSized2" maxlength="3" styleId="socialSecurityNumberPartA" property="socialSecurityNumberPartA" readonly="<%=readOnlyForAll%>" onkeypress="intOnly(this);" onchange="intOnly(this);" onkeyup="intOnly(this);"/>
+				     	-
+				     	<html:text styleClass="formFieldSized1" maxlength="2" styleId="socialSecurityNumberPartB" property="socialSecurityNumberPartB" readonly="<%=readOnlyForAll%>" onkeypress="intOnly(this);" onchange="intOnly(this);" onkeyup="intOnly(this);"/>
+				     	-
+				     	<html:text styleClass="formFieldSized3" maxlength="4" styleId="socialSecurityNumberPartC" property="socialSecurityNumberPartC" readonly="<%=readOnlyForAll%>" onkeypress="intOnly(this);" onchange="intOnly(this);" onkeyup="intOnly(this);"/>
 				     </td>
 				 </tr>
 				 
