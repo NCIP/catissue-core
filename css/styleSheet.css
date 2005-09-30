@@ -456,6 +456,32 @@ input.formFieldSmallSized,textarea.formFieldSmallSized,select.formFieldSmallSize
   font-size:1em;
   width:5em;
 }
+
+
+/* used by mandar in collection prptocol. Size set to 5em */
+input.formFieldSized2{ /* for the form elements themselves and with a constant width (on elements) */
+  font-family:arial,helvetica,verdana,sans-serif;
+  border:1px solid #5C5C5C; /* constant: dark gray */
+  font-size:1em;
+  width:2em;
+}
+/* used by mandar in collection prptocol. Size set to 5em */
+input.formFieldSized1{ /* for the form elements themselves and with a constant width (on elements) */
+  font-family:arial,helvetica,verdana,sans-serif;
+  border:1px solid #5C5C5C; /* constant: dark gray */
+  font-size:1em;
+  width:1.5em;
+}
+
+/* used by mandar in collection prptocol. Size set to 5em */
+input.formFieldSized3{ /* for the form elements themselves and with a constant width (on elements) */
+  font-family:arial,helvetica,verdana,sans-serif;
+  border:1px solid #5C5C5C; /* constant: dark gray */
+  font-size:1em;
+  width:2.5em;
+}
+
+
 td.formFieldAllBorders{ /* for the cell that contains the form elements */
   font-family:arial,helvetica,verdana,sans-serif;
   font-size:0.7em;
