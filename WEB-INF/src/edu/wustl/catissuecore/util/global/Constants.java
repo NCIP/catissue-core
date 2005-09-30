@@ -1209,7 +1209,7 @@ public class Constants
     public static final String PARAFFIN_BLOCK = "Paraffin Block"; 
 	public static final String FROZEN_BLOCK = "Frozen Block";    
 	
-//	 constants required for Configuration Result View
+//	 constants required for Distribution Report
 	public static final String TABLE_IDS = "tableIds";
 	public static final String TABLE_COLUMN_DATA_MAP = "tableColumnDataMap";
 	public static final String CONFIGURE_RESULT_VIEW_ACTION = "ConfigureResultView.do";
@@ -1220,6 +1220,7 @@ public class Constants
 	public static final String DISTRIBUTION_REPORT_ACTION = "DistributionReport.do";
 	//public static final String DISTRIBUTION_REPORT_SAVE_ACTION = "DistributionReportSave.do";
 	public static final String DELIMETER = ",";
+	public static final String DISTRIBUTION_REPORT_SAVE_ACTION="DistributionReportSave.do";
 	
 
 	public static final String UNDEFINED = "Undefined";

@@ -184,6 +184,10 @@
 			sname = sname + "&nbsp;<span id='" + unitName + "'>&nbsp;</span>";
 			spreqsubtype.innerHTML="" + sname;
 		}
+		function changeAction()
+		{
+			setFormAction("<%=Constants.DISTRIBUTION_REPORT_ACTION%>");
+		}
 		</script>
 </head>
 
@@ -490,6 +494,16 @@
 			%> 
 			<table cellpadding="4" cellspacing="0" border="0">
 				<tr>
+				<%
+					if (operation.equals(Constants.EDIT))
+        			{
+        		%>
+					<td>
+						<html:submit styleClass="actionButton" value="Report"/>
+					</td>
+			    <%
+        			}
+        		%>
 					<td>
 						<html:submit styleClass="actionButton" value="Submit" onclick="<%=changeAction%>" />
 					</td>

@@ -13,7 +13,7 @@
     HashMap tableDataMap = (HashMap) request.getAttribute(Constants.TABLE_COLUMN_DATA_MAP);
     Set tableNamesList = tableDataMap.keySet();
 %>
-    <SCRIPT LANGUAGE="JavaScript">
+<SCRIPT LANGUAGE="JavaScript">
     var size = <%=(tableNamesList.size()-1)%>;
     var tableDataArray=new Array(size);
 	<%
@@ -154,9 +154,36 @@
 			element.options[i].selected=true;
 		}
 	}
+	function moveUp(obj)
+	{
+	  var currernt;
+	  var reverse;
+	  if(obj.options[obj.options.selectedIndex].index > 0)
+	  {
+	    current = obj.options[obj.options.selectedIndex].text;
+	    reverse = obj.options[obj.options[obj.options.selectedIndex].index-1].text;
+	    obj.options[obj.options.selectedIndex].text = reverse;
+	    obj.options[obj.options[obj.options.selectedIndex].index-1].text = current;
+	    self.focus();
+	    obj.options.selectedIndex--;
+	  }
+	}
 	
-
-    </script>
+	function moveDown(obj)
+	{
+	  var currernt;
+	  var next;
+	  if(obj.options[obj.options.selectedIndex].index != obj.length-1)
+	  {
+	    current = obj.options[obj.options.selectedIndex].text;
+	    next = obj.options[obj.options[obj.options.selectedIndex].index+1].text;
+	    obj.options[obj.options.selectedIndex].text =  next;
+	    obj.options[obj.options[obj.options.selectedIndex].index+1].text = current;
+	    self.focus();
+	    obj.options.selectedIndex++;
+	  }
+	}
+</script>
 <%
     ConfigureResultViewForm form = (ConfigureResultViewForm)request.getAttribute("configureResultViewForm");
 %>
@@ -235,6 +262,10 @@
 			                    
 			                    
 			                </html:select>
+			            </td>
+			            <td align="center" valign="middle">
+			                <html:button styleClass="actionButton" property="shiftUp" value="Up" styleClass="actionButton" styleId ="shiftUp" onclick="moveUp(this.form.selectedColumnNames);"/><br/><br/>
+			                <html:button styleClass="actionButton" property="shiftDown" value="Down" styleClass="actionButton" styleId ="shiftDown" onclick="moveDown(this.form.selectedColumnNames)" />
 			            </td>
 		        	</tr>
        			</table>

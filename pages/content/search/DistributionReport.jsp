@@ -5,6 +5,8 @@
 <%@ page import="edu.wustl.catissuecore.actionForm.DistributionReportForm" %>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.ConfigureResultViewForm"%>
+<%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
+<%@ page import="edu.wustl.common.util.SendFile"%>
 <%
         List dataList = (List)request.getAttribute("listOfData");
         String []columnNames = (String []) request.getAttribute("columnNames");
@@ -12,16 +14,34 @@
 		ConfigureResultViewForm form = (ConfigureResultViewForm)request.getAttribute("configureResultViewForm");
 		String []selectedColumns=form.getSelectedColumnNames();
 		
+		/*if(!form.isReportAction())
+		{
+			String filename = Variables.catissueHome+System.getProperty("file.separator")+"Temp.csv";
+			SendFile.sendFileToClient(response,filename,out);
+			//out.clear(); 
+			//out = pageContext.pushBody(); 
+			//form.setReportAction(true);
+		}*/
 %> 
 <script language="JavaScript">
 	function changeAction()
 	{
 		document.forms[0].reportAction.value="false";
 		selectOptions(document.forms[0].selectedColumnNames);
-		setFormAction("<%=Constants.DISTRIBUTION_REPORT_ACTION%>");
+		setFormAction("<%=Constants.DISTRIBUTION_REPORT_SAVE_ACTION%>");
 		//document.forms[0].action = "<%=Constants.DISTRIBUTION_REPORT_ACTION%>";
 		//document.forms[0].submit();
 	}
+	
+	function changeActionOnConfig()
+	{
+		document.forms[0].reportAction.value="true";
+		selectOptions(document.forms[0].selectedColumnNames);
+		setFormAction("<%=Constants.CONFIGURE_DISTRIBUTION_ACTION%>");
+		//document.forms[0].action = "<%=Constants.DISTRIBUTION_REPORT_ACTION%>";
+		//document.forms[0].submit();
+	}
+	
 	function selectOptions(element)
 	{
 		for(i=0;i<element.length;i++) 
@@ -29,6 +49,7 @@
 			element.options[i].selected=true;
 		}
 	}
+	
 </script>
 <style>
 	tr#hiddenCombo
@@ -46,7 +67,7 @@
 		</td>
 		
 		<td align="right" colspan="3">
-			<html:hidden property="reportAction"/>
+			<html:hidden property="reportAction" value="true"/>
 		</td>
 		
 	</tr>
@@ -259,7 +280,7 @@
 					</td>
 						
 					<td>
-						<html:submit styleClass="actionButton" value="Configure" />
+						<html:submit styleClass="actionButton" value="Configure"  onclick="changeActionOnConfig()"/>
 					</td>
 					
 				</tr>

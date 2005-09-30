@@ -1677,10 +1677,10 @@ PUBLIC
 		
 		<action path="/DistributionReportSave"
 			type="edu.wustl.catissuecore.action.DistributionReportSaveAction"
-			name="distributionReportForm"
+			name="configureResultViewForm"
 			validate="false"
 			scope="request">
-			<forward name="Success" path=".catissuecore.configDistributionReport" />
+			<forward name="Success" path="/DistributionReport.do" />
 		</action>
 		<!-- Distribution Actions Ends -->
 		

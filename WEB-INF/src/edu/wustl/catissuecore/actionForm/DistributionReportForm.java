@@ -24,31 +24,31 @@ public class DistributionReportForm extends ActionForm
 	/**
      * System generated unique identifier.
      * */
-    protected long systemIdentifier;
+	private long systemIdentifier;
     
     /**
      * Time in hours for the Event Parameter.
      * */
-    protected String timeInHours;
+    private String timeInHours;
 
     /**
      * Time in minutes for the Event Parameter.
      * */
-    protected String timeInMinutes;
+    private String timeInMinutes;
 
     /**
      * Date of the Event Parameter.
      * */
-    protected String dateOfEvent;
+    private String dateOfEvent;
    /**
      * Id of the User.   
      */
-    protected String userName;
+    private String userName;
 
     /**
      * Comments on the event parameter.   
      */
-    protected String comments;
+    private String comments;
     /**
     *  List of data for Distributed Items
     **/
