@@ -16,6 +16,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -73,7 +74,9 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
     /**
      * Social Security Number of the Participant.
      */
-    protected String socialSecurityNumber = "";
+    protected String socialSecurityNumberPartA = "";
+    protected String socialSecurityNumberPartB = "";
+    protected String socialSecurityNumberPartC = "";
 
     /**
      * The Date of Birth of the Participant.
@@ -109,7 +112,27 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
     {
         
     }
-
+    
+    private void setSSN(String ssnString)
+    {
+    	if(ssnString!=null && !ssnString.equals(""))
+    	{
+    		try
+			{
+    			StringTokenizer tok = new StringTokenizer(ssnString,"-");
+    			socialSecurityNumberPartA = tok.nextToken();
+    			socialSecurityNumberPartB = tok.nextToken();
+    			socialSecurityNumberPartC = tok.nextToken();
+			}
+    		catch(Exception ex)
+			{
+    			Logger.out.debug(ex.getMessage(), ex);
+    			socialSecurityNumberPartA = "";
+    			socialSecurityNumberPartB = "";
+    			socialSecurityNumberPartC = "";
+			}
+    	}
+    }
     /**
      * Copies the data from an AbstractDomain object to a ParticipantForm object.
      * @param abstractDomain An AbstractDomain object.  
@@ -124,7 +147,8 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
         this.birthDate = Utility.parseDateToString(participant.getBirthDate(),Constants.DATE_PATTERN_MM_DD_YYYY);
         this.gender = participant.getGender();
         this.genotype = participant.getGenotype();
-        this.socialSecurityNumber = Utility.toString( participant.getSocialSecurityNumber());
+        //this.socialSecurityNumber = Utility.toString( participant.getSocialSecurityNumber());
+        setSSN(participant.getSocialSecurityNumber());
         this.race = participant.getRace();
         this.activityStatus = participant.getActivityStatus();
         this.ethnicity = participant.getEthnicity();
@@ -285,25 +309,25 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
         this.gender = gender;
     }
 
-    /**
-     * Returns the Social Security Number of the Participant.
-     * @return String the Social Security Number of the Participant.
-     * @see #setSocialSecurityNumber(String)
-     */
-    public String getSocialSecurityNumber()
-    {
-        return socialSecurityNumber;
-    }
-
-    /**
-     * Sets the Social Security Number of the Participant.
-     * @param birthDate String the Social Security Number of the Participant.
-     * @see #getSocialSecurityNumber()
-     */
-    public void setSocialSecurityNumber(String socialSecurityNumber)
-    {
-        this.socialSecurityNumber = socialSecurityNumber;
-    }
+//    /**
+//     * Returns the Social Security Number of the Participant.
+//     * @return String the Social Security Number of the Participant.
+//     * @see #setSocialSecurityNumber(String)
+//     */
+//    public String getSocialSecurityNumber()
+//    {
+//        return socialSecurityNumber;
+//    }
+//
+//    /**
+//     * Sets the Social Security Number of the Participant.
+//     * @param birthDate String the Social Security Number of the Participant.
+//     * @see #getSocialSecurityNumber()
+//     */
+//    public void setSocialSecurityNumber(String socialSecurityNumber)
+//    {
+//        this.socialSecurityNumber = socialSecurityNumber;
+//    }
 
     /**
      * Returns the race of the Participant.
@@ -430,6 +454,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 //			    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("participant.activityStatus")));
 //			}
 
+			String socialSecurityNumber = socialSecurityNumberPartA+"-"+socialSecurityNumberPartB+"-"+socialSecurityNumberPartC; 
          	if(!validator.isEmpty(socialSecurityNumber) && !validator.isValidSSN(socialSecurityNumber ) )
          	{
          		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.invalid",ApplicationProperties.getValue("participant.socialSecurityNumber")));
@@ -543,5 +568,29 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 	public void setCounter(int counter)
 	{
 		this.counter = counter;
+	}
+	public String getSocialSecurityNumberPartA()
+	{
+		return socialSecurityNumberPartA;
+	}
+	public void setSocialSecurityNumberPartA(String socialSecurityNumberPartA)
+	{
+		this.socialSecurityNumberPartA = socialSecurityNumberPartA;
+	}
+	public String getSocialSecurityNumberPartB()
+	{
+		return socialSecurityNumberPartB;
+	}
+	public void setSocialSecurityNumberPartB(String socialSecurityNumberPartB)
+	{
+		this.socialSecurityNumberPartB = socialSecurityNumberPartB;
+	}
+	public String getSocialSecurityNumberPartC()
+	{
+		return socialSecurityNumberPartC;
+	}
+	public void setSocialSecurityNumberPartC(String socialSecurityNumberPartC)
+	{
+		this.socialSecurityNumberPartC = socialSecurityNumberPartC;
 	}
 }
