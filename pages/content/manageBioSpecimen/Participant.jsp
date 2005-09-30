@@ -7,6 +7,8 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.ParticipantForm"%>
 
+<script src="jss/script.js" type="text/javascript"></script>
+
 <% 
 		List siteList = (List)request.getAttribute(Constants.SITELIST);
 		
@@ -218,8 +220,8 @@
 				 <tr>
 					<td><html:hidden property="<%=Constants.OPERATION%>" value="<%=operation%>"/></td>
 					<td><html:hidden property="counter"/></td>
-					<td><html:hidden property="systemIdentifier" /></td>
-					<td><html:hidden property="pageOf" value="<%=pageOf%>"/></td>
+					<td><html:hidden property="systemIdentifier" /><html:hidden property="redirectTo"/></td>
+<td><html:hidden property="pageOf" value="<%=pageOf%>"/></td>
 				 </tr>
 				 
 				<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.SEARCH%>">

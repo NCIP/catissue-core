@@ -108,8 +108,8 @@ public class CommonAddEditAction extends Action
                 }	
             	else
             		target = new String(Constants.SUCCESS);
-            		
-                target = new String(Constants.SUCCESS);
+
+            target = new String(Constants.SUCCESS);
                 
                 //The successful add messages.
                 messages = new ActionMessages();
@@ -122,6 +122,38 @@ public class CommonAddEditAction extends Action
                     abstractForm.setSystemIdentifier(abstractDomain.getSystemIdentifier().longValue());
                     abstractForm.setMutable(false);
                 }
+            
+               
+               Logger.out.debug("CAE :------  " +abstractForm.getRedirectTo());
+               if (abstractForm.getRedirectTo()!=null)
+               {
+               		String reDirectUrl = abstractForm.getRedirectTo();
+               		Logger.out.debug("redirecturl -- :  : " + reDirectUrl);
+               		
+               		String tmpreDirectUrl = null;
+               		
+               		
+               		if(reDirectUrl.lastIndexOf('|') != -1)
+               		{
+               			tmpreDirectUrl = reDirectUrl.substring(reDirectUrl.lastIndexOf('|')+1);;
+               			String remainingURL = reDirectUrl.substring(0,reDirectUrl.lastIndexOf('|'));
+               			Logger.out.debug("remaurl -- :  : " + remainingURL);
+               			tmpreDirectUrl = tmpreDirectUrl.replaceAll("_","&" );
+               			tmpreDirectUrl = tmpreDirectUrl + "&"+Constants.REQ_PATH + "="+ remainingURL;  
+               		}
+               		else
+               		{
+               			tmpreDirectUrl = reDirectUrl; 
+               			tmpreDirectUrl = tmpreDirectUrl.replaceAll("_","&" );
+               		}
+               		
+               		Logger.out.debug("tmpurl -- :  : " + tmpreDirectUrl);
+               		
+               		ActionForward reDirectForward = new ActionForward();
+//               		reDirectForward.setName("reDirectTo");
+               		reDirectForward.setPath(tmpreDirectUrl);
+               		return reDirectForward;
+               }
             }
             else
             {
@@ -149,6 +181,17 @@ public class CommonAddEditAction extends Action
                 	        				AbstractDomainObject.parseClassName(objectName));
                 	errors.add(ActionErrors.GLOBAL_ERROR,error);
                 	saveErrors(request,errors);
+                }
+
+                if (abstractForm.getRedirectTo()!=null)
+                {
+                		String reDirectUrl = abstractForm.getRedirectTo();
+                		reDirectUrl = reDirectUrl.replaceAll("_","&");
+                		
+                		ActionForward reDirectForward = new ActionForward();
+                		reDirectForward.setName("reDirectTo");
+                		reDirectForward.setPath(reDirectUrl);
+                		return reDirectForward;
                 }
                 
             }
