@@ -781,7 +781,7 @@ td.onlyBottomBorder{ /* for the cell that contains the form elements */
   font-family:arial,helvetica,verdana,sans-serif;
   border:1px solid #5C5C5C; /* constant: dark gray */
   font-size:1em;
-  width:22em;
+  width:18em;
 }
 /*###############
 DATA GRID CLASS
