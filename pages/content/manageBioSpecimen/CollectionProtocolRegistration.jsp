@@ -4,6 +4,8 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.CollectionProtocolRegistrationForm"%>
 
+<script src="jss/script.js" type="text/javascript"></script>
+
 <head>
 <script language="JavaScript">
 		function onCheckboxButtonClick(element,dropDownList)
@@ -33,6 +35,11 @@
 </head>
 <%
         String operation = (String) request.getAttribute(Constants.OPERATION);
+        String reqPath = (String)request.getAttribute(Constants.REQ_PATH);
+        String appendingPath = "/CollectionProtocolRegistration.do?operation=add&pageOf=pageOfCollectionProtocolRegistration";
+		if (reqPath != null)
+			appendingPath = reqPath + "|/CollectionProtocolRegistration.do?operation=add&pageOf=pageOfCollectionProtocolRegistration";
+        
         String formName;
 
         boolean readOnlyValue;
@@ -62,7 +69,9 @@
 			<table summary="" cellpadding="3" cellspacing="0" border="0">
 				<tr>
 					<td><html:hidden property="operation" value="<%=operation%>" /></td>
-					<td><html:hidden property="systemIdentifier"/></td>
+					<td><html:hidden property="systemIdentifier"/>
+					<html:hidden property="redirectTo" value="<%=reqPath%>"/>
+					</td>
 				</tr>
 
 				<tr>
@@ -86,8 +95,11 @@
 						<html:select property="collectionProtocolID" styleClass="formFieldSized" styleId="collectionProtocolID" size="1">
 						    <html:options collection="<%=Constants.PROTOCOL_LIST%>" labelProperty="name" property="value"/>															
 					    </html:select>
-						    
-				    	<html:link page="/CollectionProtocol.do?operation=add&pageOf=pageOfCollectionProtocol" styleId="newSite">
+					<%
+						String url1 = "/CollectionProtocol.do?operation=add&pageOf=pageOfCollectionProtocol";
+						String onClickPath = "changeUrl(this,'"+appendingPath+"')";
+					%>
+				    	<html:link page="<%=url1%>" styleId="newSite" onclick="<%=onClickPath%>">
 	 						<bean:message key="buttons.addNew" />
  						</html:link>					   
 					</td>
@@ -113,7 +125,11 @@
  							    <html:options collection="<%=Constants.PARTICIPANT_LIST%>" labelProperty="name" property="value"/>							
 							</html:select>
 						</logic:equal>
-							<html:link page="/Participant.do?operation=add&pageOf=pageOfParticipant" styleId="newParticipant" >
+					<%
+						String url = "/Participant.do?operation=add&pageOf=pageOfParticipant";
+					%>
+						
+							<html:link page="<%=url%>" styleId="newParticipant" onclick="<%=onClickPath%>">
 		 						<bean:message key="buttons.addNew" />
 	 						</html:link>					   
 					</td>
