@@ -435,7 +435,7 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 	        
 	        String socialSecurityNumberTemp = form.getSocialSecurityNumberPartA()+"-"+form.getSocialSecurityNumberPartB()+"-"+form.getSocialSecurityNumberPartC();
 	        
-	        if(!validator.isEmpty(socialSecurityNumberTemp))
+	        if(!validator.isEmpty(socialSecurityNumberTemp) && validator.isValidSSN(socialSecurityNumberTemp))
 	        	this.socialSecurityNumber = socialSecurityNumberTemp;
 	        else
 	        	this.socialSecurityNumber = null;

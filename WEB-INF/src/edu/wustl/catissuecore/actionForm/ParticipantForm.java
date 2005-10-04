@@ -461,7 +461,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 //			}
 
 			String socialSecurityNumber = socialSecurityNumberPartA+"-"+socialSecurityNumberPartB+"-"+socialSecurityNumberPartC; 
-         	if(!validator.isEmpty(socialSecurityNumber) && !validator.isValidSSN(socialSecurityNumber ) )
+         	if(!validator.isEmpty(socialSecurityNumberPartA+socialSecurityNumberPartB+socialSecurityNumberPartC) && !validator.isValidSSN(socialSecurityNumber ) )
          	{
          		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.invalid",ApplicationProperties.getValue("participant.socialSecurityNumber")));
          	}
