@@ -73,3 +73,34 @@ function changeMenuSelected(obj, new_style) {
   obj.className = new_style; 
   obj.onmouseout="";
 }
+
+
+function changeUrl(element,str)
+{
+			var redirectTo1 = "redirectTo=" + str;
+			
+			var redirectTo = replaceAll("&","_",redirectTo1);
+			var url = element.href + "&" + redirectTo;
+			alert(redirectTo);
+			alert(url);
+			element.href = url;
+}		
+
+		function replaceAll(oldStr,newStr,fromStr)
+		{
+			var i = fromStr.indexOf(oldStr);
+			while(i != -1)
+			{
+				var s = fromStr.replace(oldStr,newStr);
+				fromStr = s;
+				i = fromStr.indexOf(oldStr);
+			}
+			return fromStr;
+		}
+
+		function getURL(str)
+		{
+			var ind = str.lastIndexOf("/");
+			var s = str.substring(ind);
+			return s;
+		}
