@@ -8,6 +8,9 @@
         String formName,prevPage=null,nextPage=null;
 		
 		String pageOf = (String)request.getAttribute(Constants.PAGEOF);   
+		
+		String reqPath = (String)request.getAttribute(Constants.REQ_PATH);  
+		System.out.println("User JSP : reqPath ::  " + reqPath);
 
         boolean readOnlyValue,roleStatus=false;
 
@@ -56,6 +59,7 @@
 		Object obj = request.getAttribute("userForm");
 		if(obj != null && obj instanceof UserForm)
 		{
+		
 			UserForm userForm = (UserForm)obj;
 			if (pageOf.equals(Constants.PAGEOF_APPROVE_USER) &&
 			   (userForm.getStatus().equals(Constants.APPROVE_USER_PENDING_STATUS) || 
@@ -69,7 +73,7 @@
 			}
 		}
 %>
-
+<script src="jss/script.js" type="text/javascript"></script>
 <script>
 //If the administrator keeps the user status pending update the user record and disable role.
 function handleStatus(status)
@@ -144,6 +148,7 @@ function handleStatus(status)
 				<tr>
 					<td>
 						<html:hidden property="systemIdentifier" />
+						<html:hidden property="<%=Constants.REQ_PATH%>" value="<%=reqPath%>" />
 					</td>
 				</tr>
 				

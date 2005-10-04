@@ -7,10 +7,13 @@
 	<script language="javascript">
 		
 	</script>
+	<script language="JavaScript" src="jss/script.js" type="text/javascript"></script>
 </head>
 	
 <%
         String operation = (String) request.getAttribute(Constants.OPERATION);
+        String reqPath = (String)request.getAttribute(Constants.REQ_PATH);  
+		System.out.println("StorageType JSP : reqPath ::  " + reqPath);
         String formName;
 
         boolean readOnlyValue;
@@ -44,7 +47,9 @@
 		</tr>
 		
 		<tr>
-			<td><html:hidden property="systemIdentifier" /></td>
+			<td><html:hidden property="systemIdentifier" />
+				<html:hidden property="<%=Constants.REQ_PATH%>" value="<%=reqPath%>" />
+			</td>
 		</tr>
 
 		<tr>

@@ -2,6 +2,7 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
+<%@ page import="edu.wustl.catissuecore.actionForm.SiteForm"%>
 
 <%
         String operation = (String) request.getAttribute(Constants.OPERATION);
@@ -19,6 +20,25 @@
             formName = Constants.SITE_ADD_ACTION;
             readOnlyValue = false;
         }
+    
+    // ----------- add new    
+       	String reqPath = (String)request.getAttribute(Constants.REQ_PATH);
+		String appendingPath = "/Site.do?operation=add&pageOf=pageOfSite";
+		if (reqPath != null)
+			appendingPath = reqPath + "|/Site.do?operation=add&pageOf=pageOfSite";
+	
+	   	if(!operation.equals("add") )
+	   	{
+	   		Object obj = request.getAttribute("siteForm");
+			if(obj != null && obj instanceof SiteForm)
+			{
+				SiteForm form = (SiteForm)obj;
+		   		appendingPath = "/SiteSearch.do?operation=search&pageOf=pageOfSite&systemIdentifier="+form.getSystemIdentifier() ;
+		   		System.out.println("---------- Site JSP appendingPath -------- : "+ appendingPath);
+		   	}
+	   	}
+		
+        
 %>
 <script>
 	function onCoordinatorChange()
@@ -28,6 +48,7 @@
 		document.forms[0].submit();
 	}
 </script>
+<script language="JavaScript" src="jss/script.js" type="text/javascript"></script>
 <html:errors />
 <html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
 	<%=messageKey%>
@@ -45,7 +66,9 @@
 				</tr>
 				
 				<tr>
-					<td><html:hidden property="systemIdentifier" /></td>
+					<td><html:hidden property="systemIdentifier" />
+						<html:hidden property="redirectTo" value="<%=reqPath%>"/>
+					</td>
 				</tr>
 
 				<tr>
@@ -106,7 +129,11 @@
 								<html:options collection="userList" labelProperty="name" property="value"/>
 							</html:select>
 							&nbsp;
-							<html:link page="/User.do?operation=add&amp;pageOf=pageOfUserAdmin">
+							<%
+								String urlToGo = "/User.do?operation=add&amp;pageOf=pageOfUserAdmin";
+								String onClickPath = "changeUrl(this,'"+appendingPath+"')";
+							%>
+							<html:link page="<%=urlToGo%>" styleId="newUser" onclick="<%=onClickPath%>">
 		 						<bean:message key="buttons.addNew" />
 	 						</html:link>
 						</td>

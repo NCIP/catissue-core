@@ -32,10 +32,32 @@
 			map = form.getValues();
 			noOfRows = form.getCounter();
 		}
+		
+		//  --------- add new 
+		String reqPath = (String)request.getAttribute(Constants.REQ_PATH);
+		String appendingPath = "/StorageContainer.do?operation=add&pageOf=pageOfStorageContainer";
+		if (reqPath != null)
+			appendingPath = reqPath + "|/StorageContainer.do?operation=add&pageOf=pageOfStorageContainer";
+	
+	   	if(!operation.equals("add") )
+	   	{
+	   		Object obj1 = request.getAttribute("storageContainerForm");
+			if(obj1 != null && obj1 instanceof StorageContainerForm)
+			{
+				StorageContainerForm form1 = (StorageContainerForm)obj1;
+		   		appendingPath = "/StorageContainerSearch.do?operation=search&pageOf=pageOfStorageContainer&systemIdentifier="+form1.getSystemIdentifier() ;
+		   		System.out.println("---------- SC JSP appendingPath -------- : "+ appendingPath);
+		   	}
+	   	}
+			
+		
+		
+		
 %>
 
 <head>
 	<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
+	<script language="JavaScript" src="jss/script.js" type="text/javascript"></script>
 	<script language="JavaScript">
 		
 		var win = null;
@@ -272,7 +294,11 @@ function insRow(subdivtag)
 								<html:options collection="<%=Constants.STORAGETYPELIST%>" labelProperty="name" property="value"/>
 							</html:select>
 							&nbsp;
-							<html:link page="/StorageType.do?operation=add&pageOf=pageOfStorageType">
+							<%
+								String urlToGo = "/StorageType.do?operation=add&pageOf=pageOfStorageType";
+								String onClickPath = "changeUrl(this,'"+appendingPath+"')";
+							%>
+							<html:link page="<%=urlToGo%>" styleId="newStorageType" onclick="<%=onClickPath%>">
 		 						<bean:message key="buttons.addNew" />
 	 						</html:link>
 						</td>
@@ -300,8 +326,11 @@ function insRow(subdivtag)
 							</logic:equal>
 							
 							&nbsp;
-							<html:link page="/Site.do?operation=add&pageOf=pageOfSite" styleId="newSite">
-		 						<bean:message key="buttons.addNew" />
+							<%
+								urlToGo = "/Site.do?operation=add&pageOf=pageOfSite";
+							%>
+							<html:link page="<%=urlToGo%>" styleId="newSite" onclick="<%=onClickPath%>">
+								<bean:message key="buttons.addNew" />
 	 						</html:link>
 						
 						</td>							

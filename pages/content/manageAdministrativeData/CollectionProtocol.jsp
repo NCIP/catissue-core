@@ -16,6 +16,22 @@
     String operation = (String) request.getAttribute(Constants.OPERATION);
     String formName;
 
+		String reqPath = (String)request.getAttribute(Constants.REQ_PATH);
+		String appendingPath = "/CollectionProtocol.do?operation=add&pageOf=pageOfCollectionProtocol";
+		if (reqPath != null)
+			appendingPath = reqPath + "|/CollectionProtocol.do?operation=add&pageOf=pageOfCollectionProtocol";
+	
+	   	if(!operation.equals("add") )
+	   	{
+	   		Object obj = request.getAttribute("collectionProtocolForm");
+			if(obj != null && obj instanceof CollectionProtocolForm)
+			{
+				CollectionProtocolForm form = (CollectionProtocolForm)obj;
+		   		appendingPath = "/CollectionProtocolSearch.do?operation=search&pageOf=pageOfCollectionProtocol&systemIdentifier="+form.getSystemIdentifier() ;
+		   	}
+	   	}
+		System.out.println("CP JSP : ----- " + appendingPath);
+		
 
     boolean readOnlyValue;
     if (operation.equals(Constants.EDIT))
@@ -53,7 +69,7 @@
 <SCRIPT LANGUAGE="JavaScript">
 	var search1='`';
 </script>
-
+<script src="jss/script.js" type="text/javascript"></script>
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 
 <SCRIPT LANGUAGE="JavaScript">
@@ -260,7 +276,8 @@ function getSubDivCount(subdivtag)
 				</tr>
 				
 				<tr>
-					<td><html:hidden property="systemIdentifier" /></td>
+					<td><html:hidden property="systemIdentifier" />
+					<html:hidden property="redirectTo" value="<%=reqPath%>"/></td>
 				</tr>
 
 					<tr>
@@ -292,7 +309,13 @@ function getSubDivCount(subdivtag)
 								<html:options collection="<%=Constants.USERLIST%>" labelProperty="name" property="value"/>
 							</html:select>
 							&nbsp;
-							<html:link page="/User.do?operation=add&pageOf=pageOfUserAdmin">
+							<%
+								String urlToGo = "/User.do?operation=add&pageOf=pageOfUserAdmin";
+								String onClickPath = "changeUrl(this,'"+appendingPath+"')";
+								System.out.println("CP URL TO GO  :-- " + urlToGo);
+								System.out.println("onClickPath : " + onClickPath);
+							%>
+							<html:link page="<%=urlToGo%>" onclick="<%=onClickPath%>">
 		 						<bean:message key="buttons.addNew" />
 	 						</html:link>
 						</td>
@@ -312,7 +335,7 @@ function getSubDivCount(subdivtag)
 								<html:options collection="<%=Constants.USERLIST%>" labelProperty="name" property="value"/>
 							</html:select>
 							&nbsp;
-							<html:link page="/User.do?operation=add&pageOf=pageOfUserAdmin">
+							<html:link page="<%=urlToGo%>" onclick="<%=onClickPath%>">
 		 						<bean:message key="buttons.addNew" />
 	 						</html:link>
 						</td>

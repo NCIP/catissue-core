@@ -9,7 +9,7 @@
 <%@ page import="java.util.*"%>
 
 <head>
-
+<script src="jss/script.js" type="text/javascript"></script>
 <%
 	
 	List tissueSiteList = (List) request.getAttribute(Constants.TISSUE_SITE_LIST);
@@ -42,6 +42,23 @@
 			map = form.getValues();
 			noOfRows = form.getCounter();
 		}
+		
+		
+			String reqPath = (String)request.getAttribute(Constants.REQ_PATH);
+		String appendingPath = "/DistributionProtocol.do?operation=add&pageOf=pageOfDistributionProtocol";
+		if (reqPath != null)
+			appendingPath = reqPath + "|/DistributionProtocol.do?operation=add&pageOf=pageOfDistributionProtocol";
+	
+	   	if(!operation.equals("add") )
+	   	{
+	   		Object obj1 = request.getAttribute("distributionProtocolForm");
+			if(obj1 != null && obj instanceof DistributionProtocolForm)
+			{
+				DistributionProtocolForm form1 = (DistributionProtocolForm)obj1;
+		   		appendingPath = "/DistributionProtocolSearch.do?operation=search&pageOf=pageOfDistributionProtocol&systemIdentifier="+form1.getSystemIdentifier() ;
+		   		System.out.println("---------- DP JSP appendingPath -------- : "+ appendingPath);
+		   	}
+	   	}
 
 %>
 
@@ -258,8 +275,12 @@ function insRow(subdivtag)
 								<html:options collection="<%=Constants.USERLIST%>" labelProperty="name" property="value"/>
 							</html:select>
 							&nbsp;
-							<html:link page="/User.do?operation=add&pageOf=pageOfUserAdmin">
-		 						<bean:message key="buttons.addNew" />
+							<%
+								String urlToGo = "/User.do?operation=add&pageOf=pageOfUserAdmin";
+								String onClickPath = "changeUrl(this,'"+appendingPath+"')";
+							%>
+							<html:link page="<%=urlToGo%>" styleId="newUser" onclick="<%=onClickPath%>">
+								<bean:message key="buttons.addNew" />
 	 						</html:link>
 						</td>
 					</tr>
