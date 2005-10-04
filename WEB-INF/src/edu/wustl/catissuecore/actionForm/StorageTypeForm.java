@@ -287,9 +287,9 @@ public class StorageTypeForm extends AbstractActionForm
             {
                 errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("storageType.oneDimensionLabel")));
             }
-            if (validator.isEmpty(twoDimensionLabel))
+            if (validator.isEmpty(twoDimensionLabel) && (twoDimensionCapacity>1)  )
             {
-                errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("storageType.twoDimensionLabel")));
+                errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.labelRequired",ApplicationProperties.getValue("storageType.twoDimensionLabel")));
             }
             // code as per bug id 233 
             // checking for double value if present
