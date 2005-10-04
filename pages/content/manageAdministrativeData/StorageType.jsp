@@ -118,18 +118,6 @@
 		<tr>
 			<td class="formRequiredNotice" width="5">*</td>
 			<td class="formRequiredLabel">
-				<label for="twoDimensionCapacity">
-					<bean:message key="storageType.twoDimensionCapacity"/>
-				</label>
-			</td>
-			<td class="formField">
-				<html:text styleClass="formFieldSized10" size="10" styleId="twoDimensionCapacity" property="twoDimensionCapacity"/>
-			</td>
-		</tr>
-
-		<tr>
-			<td class="formRequiredNotice" width="5">*</td>
-			<td class="formRequiredLabel">
 				<label for="oneDimensionLabel">
 					<bean:message key="storageType.oneDimensionLabel"/>
 				</label>
@@ -139,6 +127,17 @@
 			</td>
 		</tr>
 
+		<tr>
+			<td class="formRequiredNotice" width="5">*</td>
+			<td class="formRequiredLabel">
+				<label for="twoDimensionCapacity">
+					<bean:message key="storageType.twoDimensionCapacity"/>
+				</label>
+			</td>
+			<td class="formField">
+				<html:text styleClass="formFieldSized10" size="10" styleId="twoDimensionCapacity" property="twoDimensionCapacity"/>
+			</td>
+		</tr>
 
 		<tr>
 			<td class="formRequiredNotice" width="5">*</td>
