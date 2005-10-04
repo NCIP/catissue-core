@@ -140,8 +140,8 @@
 		</tr>
 
 		<tr>
-			<td class="formRequiredNotice" width="5">*</td>
-			<td class="formRequiredLabel">
+			<td class="formRequiredNotice" width="5">&nbsp;</td>
+			<td class="formLabel">
 				<label for="twoDimensionLabel">
 					<bean:message key="storageType.twoDimensionLabel"/>
 				</label>
