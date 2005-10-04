@@ -105,6 +105,7 @@ public class CommonAddEditAction extends Action
                 {
                 	request.setAttribute(Constants.SPECIMEN_COLLECTION_GROUP_ID,abstractDomain.getSystemIdentifier().toString());
             		target = new String(Constants.REDIRECT_TO_SPECIMEN);
+            		return (mapping.findForward(target));
                 }	
             	else
             		target = new String(Constants.SUCCESS);
@@ -124,36 +125,39 @@ public class CommonAddEditAction extends Action
                 }
             
                
-	//               Logger.out.debug("CAE :------  " +abstractForm.getRedirectTo());
-	//               if (abstractForm.getRedirectTo()!=null)
-	//               {
-	//               		String reDirectUrl = abstractForm.getRedirectTo();
-	//               		Logger.out.debug("redirecturl -- :  : " + reDirectUrl);
-	//               		
-	//               		String tmpreDirectUrl = null;
-	//               		
-	//               		
-	//               		if(reDirectUrl.lastIndexOf('|') != -1)
-	//               		{
-	//               			tmpreDirectUrl = reDirectUrl.substring(reDirectUrl.lastIndexOf('|')+1);;
-	//               			String remainingURL = reDirectUrl.substring(0,reDirectUrl.lastIndexOf('|'));
-	//               			Logger.out.debug("remaurl -- :  : " + remainingURL);
-	//               			tmpreDirectUrl = tmpreDirectUrl.replaceAll("_","&" );
-	//               			tmpreDirectUrl = tmpreDirectUrl + "&"+Constants.REQ_PATH + "="+ remainingURL;  
-	//               		}
-	//               		else
-	//               		{
-	//               			tmpreDirectUrl = reDirectUrl; 
-	//               			tmpreDirectUrl = tmpreDirectUrl.replaceAll("_","&" );
-	//               		}
-	//               		
-	//               		Logger.out.debug("tmpurl -- :  : " + tmpreDirectUrl);
-	//               		
-	//               		ActionForward reDirectForward = new ActionForward();
-	////               		reDirectForward.setName("reDirectTo");
-	//               		reDirectForward.setPath(tmpreDirectUrl);
-	//               		return reDirectForward;
-    //          }
+	               Logger.out.debug("CAE :------  " +abstractForm.getRedirectTo());
+	               if (abstractForm.getRedirectTo()!=null && abstractForm.getRedirectTo().trim().length() >0 )
+	               {
+	               		String reDirectUrl = abstractForm.getRedirectTo();
+	               		Logger.out.debug("redirecturl -- :  : " + reDirectUrl);
+	               		
+	               		String tmpreDirectUrl = null;
+	               		
+	               		
+	               		if(reDirectUrl.lastIndexOf('|') != -1)
+	               		{
+	               			tmpreDirectUrl = reDirectUrl.substring(reDirectUrl.lastIndexOf('|')+1);;
+	               			String remainingURL = reDirectUrl.substring(0,reDirectUrl.lastIndexOf('|'));
+	               			Logger.out.debug("remaurl -- :  : " + remainingURL);
+	               			tmpreDirectUrl = tmpreDirectUrl.replaceAll("_","&" );
+	               			tmpreDirectUrl = tmpreDirectUrl + "&"+Constants.REQ_PATH + "="+ remainingURL;  
+	               		}
+	               		else
+	               		{
+	               			tmpreDirectUrl = reDirectUrl; 
+	               			reDirectUrl =null; 
+	               			tmpreDirectUrl = tmpreDirectUrl.replaceAll("_","&" );
+	               		}
+	               		
+	               		Logger.out.debug("tmpurl -- :  : " + tmpreDirectUrl);
+	               		
+	               		ActionForward reDirectForward = new ActionForward();
+	//               		reDirectForward.setName("reDirectTo");
+	               		reDirectForward.setPath(tmpreDirectUrl);
+	               		return reDirectForward;
+	               }
+	               Logger.out.debug("CAE ---TARGET ----- "+ target); 
+//	               return (mapping.findForward(target)); 
             }
             else
             {

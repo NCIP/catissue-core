@@ -58,8 +58,10 @@ public class CommonSearchAction extends Action
         AbstractActionForm abstractForm = (AbstractActionForm) form;
 
         /* Get the systemIdentifier whose information is to be searched */
-        long identifier = ((Long)request.getAttribute(Constants.IDENTIFIER)).longValue();
-
+        Long identifier = ((Long)request.getAttribute(Constants.IDENTIFIER));
+        if(identifier == null )
+        	identifier = Long.valueOf(request.getParameter(Constants.IDENTIFIER));
+        	
         try
         {
             AbstractBizLogic bizLogic = BizLogicFactory.getBizLogic(abstractForm.getFormId());
@@ -69,7 +71,7 @@ public class CommonSearchAction extends Action
             //Retrieves the information to be edited.
             String objName = AbstractDomainObject.getDomainObjectName(abstractForm.getFormId());
             Logger.out.debug("object name to be retrieved:"+objName+" identifier:"+identifier);
-            list= bizLogic.retrieve(objName,Constants.IDENTIFIER, new Long(identifier).toString());
+            list= bizLogic.retrieve(objName,Constants.IDENTIFIER, identifier.toString());
 
             if (list.size() != 0)
             {
@@ -79,7 +81,11 @@ public class CommonSearchAction extends Action
                 abstractDomain = (AbstractDomainObject)list.get(0);
                 abstractForm.setAllValues(abstractDomain);
                 String pageOf = (String)request.getAttribute(Constants.PAGEOF);
+                if (pageOf == null)
+                	pageOf = (String)request.getParameter(Constants.PAGEOF);
                 target = pageOf;
+                abstractForm.setMutable(false);
+                Logger.out.debug("Search Action ...................pageOf........."+pageOf);
             }
             else
             {
