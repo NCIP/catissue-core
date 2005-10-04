@@ -132,7 +132,16 @@ public class StorageContainerAction  extends SecureAction
 	        		startNumber = bizLogic.getNextContainerNumber(Long.parseLong(request.getParameter("parentContainerId")),storageContainerForm.getTypeId(),false);
 	        	}
 	        	storageContainerForm.setStartNumber(String.valueOf(startNumber));
-        	}        
+        	}     
+        	
+	        // ---------- Add new
+			String reqPath = request.getParameter(Constants.REQ_PATH);
+			if (reqPath != null)
+				request.setAttribute(Constants.REQ_PATH, reqPath);
+
+			Logger.out.debug("StorageContainerAction redirect :---------- "+ reqPath  );
+			
+
 		}
         catch(Exception e)
 		{

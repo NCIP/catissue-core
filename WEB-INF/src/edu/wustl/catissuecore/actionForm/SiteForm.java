@@ -375,6 +375,7 @@ public class SiteForm extends AbstractActionForm
          
          try
          {
+         	setRedirectValue(validator);
          	if (validator.isEmpty(name))
             {
                 errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("site.name")));

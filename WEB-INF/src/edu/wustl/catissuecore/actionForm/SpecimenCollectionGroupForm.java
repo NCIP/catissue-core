@@ -128,7 +128,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	 */
 	public void setCheckedButton(int checkedButton)
 	{
-		this.checkedButton = checkedButton;
+			if(isMutable())
+				this.checkedButton = checkedButton;
 	}
 
 	/**
@@ -144,6 +145,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 //		this.surgicalPathologyNumber = null;
 //		
 //		this.protocolParticipantIdentifier =  null;
+//		checkedButton = 1;
 	}
 	/**
 	   * This function Copies the data from an storage type object to a StorageTypeForm object.
@@ -153,6 +155,9 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	{
 		try
 		{
+//			if(operation.equals("add" ) )
+//				setMutable(true );
+				
 			SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) abstractDomain;
 				
 			systemIdentifier = specimenCollectionGroup.getSystemIdentifier().longValue();
@@ -172,6 +177,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 			collectionProtocolEventId = specimenCollectionGroup.getCollectionProtocolEvent().getSystemIdentifier().longValue();
 			
 			Participant participant = specimenCollectionGroup.getCollectionProtocolRegistration().getParticipant();
+			Logger.out.debug("SCgForm --------- Participant : -- "+ participant.toString() );
 			if(participant!=null)
 			{
 				participantId = participant.getSystemIdentifier().longValue();
@@ -183,6 +189,9 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 				checkedButton = 2;
 			}
 			
+			Logger.out.debug("participantId.................................."+participantId);
+			Logger.out.debug("protocolParticipantIdentifier........................."+protocolParticipantIdentifier);
+			Logger.out.debug("SCgForm --------- checkButton : -- " + checkedButton );
 			siteId = specimenCollectionGroup.getSite().getSystemIdentifier().longValue();
 		}
 		catch (Exception excp)
@@ -298,6 +307,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 		Validator validator = new Validator();
 		try
 		{
+			setRedirectValue(validator  );
 			if(this.collectionProtocolId == -1)
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",

@@ -286,10 +286,12 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	 */
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
+		Logger.out.debug("OPERATION : ----- : " + operation );
 		ActionErrors errors = super.validate(mapping, request );
 		Validator validator = new Validator();
 		try
 		{
+			setRedirectValue(validator);
 			 if(this.protocolCoordinatorIds == null || this.protocolCoordinatorIds.length <1)
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("collectionprotocol.protocolcoordinator")));

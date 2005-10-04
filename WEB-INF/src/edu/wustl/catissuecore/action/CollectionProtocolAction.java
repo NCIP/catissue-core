@@ -24,6 +24,7 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.cde.CDEManager;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * This class initializes the fields in the User Add/Edit webpage.
@@ -45,6 +46,13 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
     	List clinicalStatusList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_CLINICAL_STATUS,undefinedVal);
     	request.setAttribute(Constants.CLINICAL_STATUS_LIST, clinicalStatusList);
 	    	
+    	 // ---------- Add new
+		String reqPath = request.getParameter(Constants.REQ_PATH);
+		if (reqPath != null)
+			request.setAttribute(Constants.REQ_PATH, reqPath);
+		Logger.out.debug("CP Action reqPath : " + reqPath ); 
+    	
+    	
         return mapping.findForward((String)request.getParameter(Constants.PAGEOF));
     }
 }

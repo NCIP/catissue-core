@@ -245,6 +245,7 @@ public class StorageTypeForm extends AbstractActionForm
         
         try
         {
+        	setRedirectValue(validator);
             if (validator.isEmpty(type))
             {
                 errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("storageType.type")));

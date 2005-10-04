@@ -669,6 +669,7 @@ public class UserForm extends AbstractActionForm
         {
             if (operation != null)
             {
+            	
                 if (pageOf.equals(Constants.PAGEOF_CHANGE_PASSWORD))
                 {
                     if (validator.isEmpty(oldPassword))
@@ -702,6 +703,8 @@ public class UserForm extends AbstractActionForm
                 }
                 else
                 {
+                	setRedirectValue(validator);
+                	Logger.out.debug("user form " ); 
                     if (operation.equals(Constants.ADD)
                             || operation.equals(Constants.EDIT))
                     {

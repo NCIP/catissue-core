@@ -21,6 +21,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.actionForm.AbstractActionForm;
 import edu.wustl.catissuecore.bizlogic.AbstractBizLogic;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
@@ -56,6 +57,30 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 
 		try
 		{
+//            // ------------- add new
+//            String reqPath = request.getParameter(Constants.REQ_PATH);
+//			if(reqPath!=null)
+//			{
+//				reqPath = reqPath + "|/CollectionProtocolRegistration.do?operation=add&pageOf=pageOfCollectionProtocolRegistration";			 
+//			}
+//			else
+//			{
+//				reqPath = "/CollectionProtocolRegistration.do?operation=add&pageOf=pageOfCollectionProtocolRegistration";
+//			}
+//			request.setAttribute(Constants.REQ_PATH, reqPath);
+//	        
+////            AbstractActionForm aForm = (AbstractActionForm )form; 
+////            if(reqPath != null )
+////            	aForm.setRedirectTo(reqPath  );
+//            
+			String reqPath = request.getParameter(Constants.REQ_PATH);
+			if (reqPath != null)
+				request.setAttribute(Constants.REQ_PATH, reqPath);
+			
+			Logger.out.debug("PartProtReg redirect :---------- "+ reqPath  );
+            
+            // ----------------add new end-----
+            
 			AbstractBizLogic bizLogic = BizLogicFactory.getBizLogic(Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
 
 			//get list of Protocol title.
@@ -83,6 +108,9 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 			
 			//Sets the activityStatusList attribute to be used in the Site Add/Edit Page.
 	        request.setAttribute(Constants.ACTIVITYSTATUSLIST, Constants.ACTIVITY_STATUS_VALUES);
+	        
+
+	        
 		}
 		catch (Exception exc)
 		{

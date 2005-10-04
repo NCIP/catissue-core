@@ -171,6 +171,8 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 	   Validator validator = new Validator();
 	   try
 	   {
+	   		setRedirectValue(validator);
+	   	
 	   	    //check if Protocol Title is empty.
 			if (collectionProtocolID==-1)
 			{

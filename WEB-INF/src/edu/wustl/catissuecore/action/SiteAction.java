@@ -100,6 +100,16 @@ public class SiteAction  extends SecureAction
         		siteForm.setEmailAddress(emailAddress); 
         	}        
         	// ------------------------------------------------------------------
+       
+//          // ------------- add new
+			String reqPath = request.getParameter(Constants.REQ_PATH);
+			if (reqPath != null)
+				request.setAttribute(Constants.REQ_PATH, reqPath);
+			
+			Logger.out.debug("SiteAction redirect :---------- "+ reqPath  );
+            
+            // ----------------add new end-----
+           
         	
 		}
         catch(Exception e)

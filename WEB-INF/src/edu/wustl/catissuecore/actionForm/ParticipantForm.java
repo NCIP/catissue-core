@@ -407,8 +407,14 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 
          try
          {
+         	setRedirectValue(validator);
+//         	String cf = getRedirectTo();
+//         	if(validator.isEmpty(cf ) )
+//         		cf = "";
+//         	setRedirectTo(cf );
+//          -----------------------------------------------------   
          	
-             
+         	
 //            if (validator.isEmpty(lastName))
 // 			{
 // 			    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("user.lastName")));

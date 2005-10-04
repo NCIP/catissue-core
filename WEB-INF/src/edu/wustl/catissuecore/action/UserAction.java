@@ -23,6 +23,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.actionForm.AbstractActionForm;
 import edu.wustl.catissuecore.bizlogic.AbstractBizLogic;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.domain.CancerResearchGroup;
@@ -123,6 +124,21 @@ public class UserAction extends SecureAction
             {
                 request.setAttribute(Constants.APPROVE_USER_STATUS_LIST,Constants.APPROVE_USER_STATUS_VALUES);
             }
+            
+            Logger.out.debug("pageOf :---------- "+ pageOf );
+            
+            // ------------- add new
+            String reqPath = request.getParameter(Constants.REQ_PATH);
+
+			request.setAttribute(Constants.REQ_PATH, reqPath);
+            
+            AbstractActionForm aForm = (AbstractActionForm )form; 
+            if(reqPath != null && aForm !=null )
+            	aForm.setRedirectTo(reqPath);
+            
+            Logger.out.debug("USerAction redirect :---------- "+ reqPath  );
+               
+            
         }
         catch (Exception exc)
         {

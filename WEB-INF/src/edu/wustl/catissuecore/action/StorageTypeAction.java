@@ -20,7 +20,9 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.actionForm.AbstractActionForm;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.util.logger.Logger;
 
 public class StorageTypeAction  extends SecureAction
 {
@@ -37,6 +39,20 @@ public class StorageTypeAction  extends SecureAction
         
         //Sets the operation attribute to be used in the Add/Edit Institute Page. 
         request.setAttribute(Constants.OPERATION, operation);
+        
+        
+        // ------------- add new
+        String reqPath = request.getParameter(Constants.REQ_PATH);
+		request.setAttribute(Constants.REQ_PATH, reqPath);
+		
+        AbstractActionForm aForm = (AbstractActionForm )form; 
+        if(reqPath != null  && aForm !=null)
+        	aForm.setRedirectTo(reqPath);
+        
+        Logger.out.debug("StorageTypeAction redirect :---------- "+ reqPath  );
+        
+        
+        
         
         return mapping.findForward((String)request.getParameter(Constants.PAGEOF));
     }

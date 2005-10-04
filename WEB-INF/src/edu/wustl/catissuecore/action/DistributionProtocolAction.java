@@ -24,6 +24,8 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.DistributionProtocolForm;
+import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.util.logger.Logger;
 
 
 /**
@@ -56,6 +58,12 @@ public class DistributionProtocolAction extends SpecimenProtocolAction
     	
     	//Calling DeleteRow of BaseAction class
     	DeleteRow(key,map,request);
+    	
+    	// ---------- Add new
+		String reqPath = request.getParameter(Constants.REQ_PATH);
+		if (reqPath != null)
+			request.setAttribute(Constants.REQ_PATH, reqPath);
+		Logger.out.debug("DP Action reqPath : ---- " + reqPath );
     	return super.executeSecureAction(mapping, form, request, response);
     }
 }

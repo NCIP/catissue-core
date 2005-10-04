@@ -20,6 +20,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.actionForm.AbstractActionForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.ParticipantBizLogic;
 import edu.wustl.catissuecore.domain.Site;
@@ -85,13 +86,34 @@ public class ParticipantAction  extends SecureAction
             List siteList = dao.getList(sourceObjectName, displayNameFields, valueField, true);
             
             request.setAttribute(Constants.SITELIST, siteList);
+            Logger.out.debug("pageOf :---------- "+ pageOf );
+            
+            // ------------- add new
+            String reqPath = request.getParameter(Constants.REQ_PATH);
+//			if(reqPath!=null)
+//			{
+//				reqPath = reqPath + "|/Participant.do?operation=add&amp;pageOf=pageOfParticipant"	;			 
+//			}
+//			else
+//			{
+//				reqPath = "/Participant.do?operation=add&amp;pageOf=pageOfParticipant"	;
+//			}
+			request.setAttribute(Constants.REQ_PATH, reqPath);
+			request.setAttribute("A", "A");
+            
+            AbstractActionForm aForm = (AbstractActionForm )form; 
+            if(reqPath != null && aForm !=null )
+            	aForm.setRedirectTo(reqPath);
+            
+            Logger.out.debug("redirect :---------- "+ reqPath  );
+            
+            
 		}
         catch(Exception e)
 		{
         	Logger.out.error(e.getMessage(),e);
         	mapping.findForward(Constants.FAILURE); 
 		}
-        
         return mapping.findForward(pageOf);
     }
 }

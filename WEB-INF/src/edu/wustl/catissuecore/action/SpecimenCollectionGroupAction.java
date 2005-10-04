@@ -107,6 +107,26 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 	    	
 	    	//Sets the activityStatusList attribute to be used in the Site Add/Edit Page.
 	        request.setAttribute(Constants.ACTIVITYSTATUSLIST, Constants.ACTIVITY_STATUS_VALUES);
+	        
+	        // ---------- Add new
+			String reqPath = request.getParameter(Constants.REQ_PATH);
+			if (reqPath != null)
+				request.setAttribute(Constants.REQ_PATH, reqPath);
+//			if(reqPath!=null)
+//			{
+//				reqPath = reqPath + "|/SpecimenCollectionGroup.do?operation=add&pageOf=pageOfSpecimenCollectionGroup"	;			 
+//			}
+//			else
+//			{
+//				reqPath = "/SpecimenCollectionGroup.do?operation=add&pageOf=pageOfSpecimenCollectionGroup"	;
+//			}
+			Logger.out.debug("SCG Action : "+ reqPath );
+			
+			Logger.out.debug("Participant Name *************************************"+specimenCollectionGroupForm.getCheckedButton());
+			Logger.out.debug("Action participantId.................................."+specimenCollectionGroupForm.getParticipantId());
+			Logger.out.debug("Action protocolParticipantIdentifier........................."+specimenCollectionGroupForm.getProtocolParticipantIdentifier());
+			Logger.out.debug("Action Medical Record Number...................."+specimenCollectionGroupForm.getParticipantsMedicalIdentifierId());
+			
 		}
 		catch(Exception exc)
 		{
