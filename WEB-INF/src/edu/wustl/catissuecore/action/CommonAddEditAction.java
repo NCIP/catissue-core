@@ -169,6 +169,11 @@ public class CommonAddEditAction extends Action
                 	abstractDomain = (AbstractDomainObject) list.get(0);
                     abstractDomain.setAllValues(abstractForm);
                     bizLogic.update(abstractDomain,Constants.HIBERNATE_DAO, getSessionData(request));
+                    
+                    if(abstractDomain instanceof Specimen)
+                		request.setAttribute(Constants.SPECIMEN_ID,String.valueOf(abstractDomain.getSystemIdentifier()));
+
+                    
                     target = new String(Constants.SUCCESS);
                     
                     //The successful edit message.
@@ -185,17 +190,6 @@ public class CommonAddEditAction extends Action
                 	        				AbstractDomainObject.parseClassName(objectName));
                 	errors.add(ActionErrors.GLOBAL_ERROR,error);
                 	saveErrors(request,errors);
-                }
-
-                if (abstractForm.getRedirectTo()!=null)
-                {
-                		String reDirectUrl = abstractForm.getRedirectTo();
-                		reDirectUrl = reDirectUrl.replaceAll("_","&");
-                		
-                		ActionForward reDirectForward = new ActionForward();
-                		reDirectForward.setName("reDirectTo");
-                		reDirectForward.setPath(reDirectUrl);
-                		return reDirectForward;
                 }
                 
             }
