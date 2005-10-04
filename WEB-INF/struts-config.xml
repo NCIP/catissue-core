@@ -182,6 +182,8 @@ PUBLIC
 			<forward name="success" path="/Participant.do?operation=edit&amp;pageOf=pageOfParticipant" />
 			<forward name="pageOfSCGParticipant" path="/SpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroup" />
 			<forward name="failure" path="/Participant.do?operation=add&amp;pageOf=pageOfParticipant" />
+			<forward name="specimenCollectionGroup" path="/SpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroup" />
+			<forward name="redirectTo" path="" />
 		</action>
 		
 		<action path="/ParticipantEdit"
@@ -192,6 +194,7 @@ PUBLIC
 			scope="request">
 			<forward name="success" path="/Participant.do?operation=edit&amp;pageOf=pageOfParticipant" />
 			<forward name="failure" path="/Participant.do?operation=edit&amp;pageOf=pageOfParticipant" />
+			<forward name="redirectTo" path="" />
 		</action>
 		
 		<action path="/ParticipantSearch"
