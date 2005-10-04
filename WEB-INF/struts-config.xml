@@ -757,7 +757,7 @@ PUBLIC
 			validate="true"
 			input="/NewSpecimen.do?operation=edit&amp;pageOf=pageOfNewSpecimen"
 			scope="request">
-			<forward name="success" path=".catissuecore.newSpecimenEditSuccessDef" />
+			<forward name="success" path="/ListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParameters" />
 			<forward name="failure" path="/NewSpecimen.do?operation=edit&amp;pageOf=pageOfNewSpecimen" />
 		</action>
 		
