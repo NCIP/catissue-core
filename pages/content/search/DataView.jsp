@@ -1,4 +1,5 @@
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
+<%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 
 <%@ page import="java.util.List,edu.wustl.catissuecore.util.global.Constants"%>
 
@@ -9,6 +10,8 @@
 	String[] columnList = (String[]) request.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
 	List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
+
+	String title = pageOf + ".searchResultTitle";
 %>
 
 <script>
@@ -28,6 +31,14 @@ var myData = [<%int i;%><%for (i=0;i<(dataList.size()-1);i++){%>
 var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnList[k]%>",<%}%>"<%=columnList[k]%>"];
 
 </script>
+
+<table summary="" cellpadding="0" cellspacing="0" border="0" width="100%">
+	<tr>
+		 <td class="formTitle" height="25">
+			<bean:message key="<%=title%>"/>
+		 </td>
+	</tr>
+</table>
 
 <div STYLE="overflow: auto; width:100%; height:100%; padding:0px; margin: 0px; border: 1px solid">
 <script>

@@ -25,6 +25,7 @@ import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.dao.JDBCDAO;
 import edu.wustl.catissuecore.domain.QueryTableData;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
@@ -83,6 +84,21 @@ public class SimpleQueryInterfaceAction extends SecureAction
         
         String pageOf = request.getParameter(Constants.PAGEOF);
         request.setAttribute(Constants.PAGEOF, pageOf);
+        
+        //Fix as per Bug : 521
+        String title = null;
+        
+        if(tableList != null && tableList.size() != 0)
+        {
+        	NameValueBean bean = (NameValueBean)tableList.get(0);
+        	title = bean.getName().toUpperCase() + " SEARCH";
+        }
+        else
+        {
+        	title = "SIMPLE SEARCH";
+        }
+        
+        request.setAttribute(Constants.SIMPLE_QUERY_INTERFACE_TITLE,title);
         
         return mapping.findForward(pageOf);
     }

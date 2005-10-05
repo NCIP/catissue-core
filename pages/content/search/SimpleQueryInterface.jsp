@@ -22,6 +22,8 @@
 		SimpleQueryInterfaceForm form = (SimpleQueryInterfaceForm)obj;
 		noOfRows = form.getCounter();
 	}
+
+	String title = (String)request.getAttribute(Constants.SIMPLE_QUERY_INTERFACE_TITLE);
 %>
 <script>
 
@@ -199,7 +201,8 @@ function showDateColumn(element)
 				</tr>
 				<tr>
 					<td class="formTitle" height="20" colspan="7">
-						<bean:message key="simpleQuery.title" />
+						<%--bean:message key="simpleQuery.title" /--%>
+						<%=title%>
 					</td>
 				</tr>
 				<tbody id="simpleQuery">

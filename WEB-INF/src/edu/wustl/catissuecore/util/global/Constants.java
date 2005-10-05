@@ -147,6 +147,7 @@ public class Constants
 	//Simple Query Interface Lists
 	public static final String OBJECT_NAME_LIST = "objectNameList";
 	public static final String OBJECT_COMPLETE_NAME_LIST = "objectCompleteNameList";
+	public static final String SIMPLE_QUERY_INTERFACE_TITLE = "simpleQueryInterfaceTitle";
     
 	public static final String ATTRIBUTE_NAME_LIST = "attributeNameList";
 	public static final String ATTRIBUTE_CONDITION_LIST = "attributeConditionList";
