@@ -4,6 +4,8 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.DistributionForm"%>
 <%@ page import="java.util.List,java.util.Iterator"%>
+<%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
+<%@ page import="java.util.*"%>
 <%@ page import="edu.wustl.common.beans.NameValueBean"%>
 
 <%!
@@ -37,6 +39,7 @@
 	
 %>
 <head>
+<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 	<script language="JavaScript">
 		function onSpecimenIdChange(element)
 		{	
@@ -130,6 +133,15 @@
 			//var unitValue = changeUnit(document.forms[0].className.value)
 			sname = sname + "&nbsp;<span id='"+unitName+"'>&nbsp;</span>";
 			spreqquantity.innerHTML="" + sname;
+			
+			//Seventh Cell
+			var checkb=x.insertCell(6);
+			checkb.className="formField";
+			checkb.colSpan=2;
+			sname="";
+			var name = "chk_"+ rowno;
+			sname="<input type='checkbox' name='" + name +"' id='" + name +"' value='C'>"
+			checkb.innerHTML=""+sname;	
 		}
 		function changeAction()
 		{
@@ -160,11 +172,12 @@
 
 		Object obj = request.getAttribute("distributionForm");
 		int noOfRows=1;
-
+		Map map =null;
 		if(obj != null && obj instanceof DistributionForm)
 		{
 			DistributionForm form = (DistributionForm)obj;
 			noOfRows = form.getCounter();
+			map = form.getValues();
 		}
 %>	
 			
@@ -328,6 +341,12 @@
 						<bean:message key="buttons.addMore"/>
 						</html:button>
 				    </td>
+				    <td class="formButtonField" align="Right">
+						<html:button property="deleteValue" styleClass="actionButton" onclick="deleteChecked('addMore','/catissuecore/Distribution.do?operation=<%=operation%>&pageOf=pageOfDistribution&status=true',document.forms[0].counter,'chk_')">
+							<bean:message key="buttons.delete"/>
+						</html:button>
+					</td>
+				    
 				 </tr>
 				 <tr>
 				 	<td class="formSerialNumberLabel" width="5">
@@ -347,6 +366,11 @@
 					</td>
 					<td class="formRightSubTableTitle">
 						<bean:message key="itemrecord.quantity"/>
+					</td>
+					<td class="formRightSubTableTitle">
+						<label for="delete" align="center">
+							<bean:message key="addMore.delete" />
+						</label>
 					</td>
 				 </tr>
 				 
@@ -371,6 +395,7 @@
 					//String strUnitValue = ""+(String)formBean.getValue(unitProperty);
 					String classValue = (String)formBean.getValue(key);
 					String strUnitValue = changeUnit(classValue);
+					String check = "chk_" + i;
 				%>
 				 <tr>
 				 	<td class="formSerialNumberField" width="5"><%=i%>
@@ -398,6 +423,18 @@
 				     	<html:text styleClass="formFieldSized5" size="30" styleId="<%=quantity%>" property="<%=quantity%>" disabled="<%=readOnlyForAll%>" readonly="<%=readOnlyForAll%>"/>
 				     	<span id="<%=unitSpan%>">&nbsp;<%=strUnitValue%></span>
 				    </td>
+				    <%
+							String keyid = "DistributedItem:"+i+"_systemIdentifier";
+							boolean bool = Utility.isPersistedValue(map,keyid);
+							String condition = "";
+							if(bool)
+								condition = "disabled='disabled'";
+
+						%>
+						<td class="formField" width="5">
+							<input type=checkbox name="<%=check %>" id="<%=check %>" <%=condition%>>		
+						</td>
+				 			
 				 </tr>
 				 <%
 				}

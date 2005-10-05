@@ -666,7 +666,7 @@ Map map = form.getExternalIdentifier();
 				     	</html:button>
 				    </td>
 				    <td class="formTitle" align="Right">
-							<html:button property="deleteExId" styleClass="actionButton" onclick="deleteChecked('addExternalIdentifier','/catissuecore/NewSpecimen.do?operation=add&pageOf=pageOfNewSpecimen&status=true&button=deleteExId',document.forms[0].exIdCounter,'chk_ex_')">
+							<html:button property="deleteExId" styleClass="actionButton" onclick="deleteChecked('addExternalIdentifier','/catissuecore/NewSpecimen.do?operation=<%=operation%>&pageOf=pageOfNewSpecimen&status=true&button=deleteExId',document.forms[0].exIdCounter,'chk_ex_')">
 								<bean:message key="buttons.delete"/>
 							</html:button>
 					</td>
@@ -732,7 +732,7 @@ Map map = form.getExternalIdentifier();
 				     	</html:button>
 				    </td>
 				    <td class="formTitle" align="Right">
-							<html:button property="deleteBiohazard" styleClass="actionButton" onclick="deleteChecked('addBiohazardRow','/catissuecore/NewSpecimen.do?operation=add&pageOf=pageOfNewSpecimen&status=true&button=deleteBiohazard',document.forms[0].bhCounter,'chk_bio_')">
+							<html:button property="deleteBiohazard" styleClass="actionButton" onclick="deleteChecked('addBiohazardRow','/catissuecore/NewSpecimen.do?operation=<%=operation%>&pageOf=pageOfNewSpecimen&status=true&button=deleteBiohazard',document.forms[0].bhCounter,'chk_bio_')">
 								<bean:message key="buttons.delete"/>
 							</html:button>
 					</td>

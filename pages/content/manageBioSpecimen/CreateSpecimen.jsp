@@ -11,6 +11,7 @@
 
 
 <%@ include file="/pages/content/common/SpecimenCommonScripts.jsp" %>
+<head>
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 	<script language="JavaScript">
 		var win = null;
@@ -366,7 +367,7 @@
 				     	</html:button>
 				    </td>
 				    <td class="formTitle" align="Right">
-							<html:button property="deleteValue" styleClass="actionButton" onclick="deleteChecked('addExternalIdentifier','/catissuecore/CreateSpecimen.do?operation=add&pageOf=&status=true',document.forms[0].exIdCounter,'chk_')">
+							<html:button property="deleteValue" styleClass="actionButton" onclick="deleteChecked('addExternalIdentifier','/catissuecore/CreateSpecimen.do?operation=<%=operation%>&pageOf=&status=true',document.forms[0].exIdCounter,'chk_')">
 								<bean:message key="buttons.delete"/>
 							</html:button>
 						</td>
