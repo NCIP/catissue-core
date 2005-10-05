@@ -6,23 +6,25 @@
  */
 package edu.wustl.common.util.dbManager;
 
+import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Map;
+import java.util.List;
+
+import net.sf.hibernate.cfg.Configuration;
+import net.sf.hibernate.mapping.Column;
+import net.sf.hibernate.mapping.Property;
+import net.sf.hibernate.mapping.Subclass;
+import net.sf.hibernate.mapping.Table;
 
 import org.apache.log4j.PropertyConfigurator;
 
 import edu.wustl.catissuecore.bizlogic.AbstractBizLogic;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
+import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.util.logger.Logger;
-
-import net.sf.hibernate.cfg.Configuration;
-import net.sf.hibernate.mapping.Column;
-import net.sf.hibernate.mapping.Property;
-import net.sf.hibernate.mapping.SimpleValue;
-import net.sf.hibernate.mapping.Table;
 
 
 /**
@@ -37,6 +39,21 @@ public class HibernateMetaData
 	public static void initHibernateMetaData(Configuration configuration)
 	{
 		cfg = configuration;
+	}
+	
+	public static List getSubClassList(Class classObj)
+	{
+		List list = new ArrayList();
+		Iterator it = cfg.getClassMapping(classObj).getDirectSubclasses();
+		while(it.hasNext())
+		{
+			Subclass subClass = (Subclass)it.next();
+			
+			System.out.println(subClass.getClass().getName());
+			System.out.println("Name "+subClass.getName());
+			list.add(subClass.getName());
+		}
+		return list;
 	}
 	
 	public static String getTableName(Class classObj)
@@ -116,7 +133,8 @@ public class HibernateMetaData
 		AbstractBizLogic bizLogic = BizLogicFactory.getBizLogic(Constants.COLLECTION_PROTOCOL_FORM_ID);
 		bizLogic.retrieve(CollectionProtocol.class.getName(),Constants.SYSTEM_IDENTIFIER,new Long(1));
 		
-		HibernateMetaData.getDATA(CollectionProtocol.class);
+		//HibernateMetaData.getDATA(CollectionProtocol.class);
+		HibernateMetaData.getSubClassList(Specimen.class);
 		//System.out.println(str);
 		
 	}
