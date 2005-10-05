@@ -10,7 +10,9 @@
 package edu.wustl.catissuecore.action;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -29,7 +31,7 @@ import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.util.logger.Logger;
 
-
+import edu.wustl.catissuecore.actionForm.ParticipantForm;
 /**
  * This class initializes the fields in the Participant Add/Edit webpage.
  * @author gautam_shetty
@@ -44,6 +46,19 @@ public class ParticipantAction  extends SecureAction
             HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException
     {
+    	ParticipantForm participantForm = (ParticipantForm) form;
+		
+//    	List of keys used in map of ActionForm
+		List key = new ArrayList();
+    	key.add("ParticipantMedicalIdentifier:i_Site_systemIdentifier");
+    	key.add("ParticipantMedicalIdentifier:i_medicalRecordNumber");
+    	
+//    	Gets the map from ActionForm
+    	Map map = participantForm.getValues();
+    	
+//    	Calling DeleteRow of BaseAction class
+    	DeleteRow(key,map,request);
+    	
         //Gets the value of the operation parameter.
         String operation = request.getParameter(Constants.OPERATION);
         

@@ -48,6 +48,19 @@ public class CreateSpecimenAction extends SecureAction
     public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response) throws Exception
     {
+    	CreateSpecimenForm createForm = (CreateSpecimenForm) form;
+    	
+    	//List of keys used in map of ActionForm
+		List key = new ArrayList();
+    	key.add("ExternalIdentifier:i_name");
+    	key.add("ExternalIdentifier:i_value");
+    	
+    	//Gets the map from ActionForm
+    	Map map = createForm.getExternalIdentifier();
+    	
+    	//Calling DeleteRow of BaseAction class
+    	DeleteRow(key,map,request);
+    	
         //Gets the value of the operation parameter.
         String operation = request.getParameter(Constants.OPERATION);
 
@@ -59,7 +72,7 @@ public class CreateSpecimenAction extends SecureAction
         request.setAttribute(Constants.PAGEOF,pageOf);
         
         CreateSpecimenBizLogic dao = (CreateSpecimenBizLogic)BizLogicFactory.getBizLogic(Constants.CREATE_SPECIMEN_FORM_ID);
-        CreateSpecimenForm createForm = (CreateSpecimenForm) form;
+        
         
         try
 		{

@@ -11,8 +11,11 @@
 package edu.wustl.catissuecore.action;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -22,6 +25,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.actionForm.DistributionForm;
 import edu.wustl.catissuecore.actionForm.EventParametersForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
@@ -101,6 +105,20 @@ public class SpecimenEventParametersAction  extends SecureAction
 			eventParametersForm.setTimeInHours(Integer.toString(cal.get(Calendar.HOUR_OF_DAY)));
 			eventParametersForm.setTimeInMinutes(Integer.toString(cal.get(Calendar.MINUTE)));
     	}
+    	
+    	DistributionForm distributionForm = (DistributionForm) form;
+    	
+    	//List of keys used in map of ActionForm
+		List key = new ArrayList();
+    	key.add("DistributedItem:i_Specimen_className");
+    	key.add("DistributedItem:i_Specimen_systemIdentifier");
+    	key.add("DistributedItem:i_quantity");
+    	
+    	//Gets the map from ActionForm
+    	Map map = distributionForm.getValues();
+    	
+    	//Calling DeleteRow of BaseAction class
+    	DeleteRow(key,map,request);
     	
     	return mapping.findForward((String)request.getParameter(Constants.PAGEOF));
     }
