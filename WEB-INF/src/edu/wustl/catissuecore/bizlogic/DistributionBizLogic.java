@@ -43,15 +43,15 @@ public class DistributionBizLogic extends DefaultBizLogic
 		Distribution dist = (Distribution)obj;
 		
 		//Load & set the User
-		List list = dao.retrieve(User.class.getName(), Constants.SYSTEM_IDENTIFIER, dist.getUser().getSystemIdentifier());
-		if(list!=null && !list.isEmpty())
+		Object userObj = dao.retrieve(User.class.getName(), dist.getUser().getSystemIdentifier());
+		if(userObj!=null)
 		{
-			User user = (User)list.get(0);
+			User user = (User)userObj;
 			dist.setUser(user);
 		}
 		
 		//Load & set From Site
-		list = dao.retrieve(Site.class.getName(),Constants.SYSTEM_IDENTIFIER, dist.getFromSite().getSystemIdentifier());
+		List list = dao.retrieve(Site.class.getName(),Constants.SYSTEM_IDENTIFIER, dist.getFromSite().getSystemIdentifier());
 		if(list!=null && !list.isEmpty())
 		{
 			Site site = (Site)list.get(0);
