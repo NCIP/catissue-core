@@ -146,6 +146,11 @@ public class DistributionForm extends SpecimenEventParametersForm
         
         try
 		{
+        	if (this.values.keySet().isEmpty())
+			{
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.one.item.required",ApplicationProperties.getValue("distribution.distributedItem")));
+			}
+        	
 			Iterator it = this.values.keySet().iterator();
 			while (it.hasNext())
 			{

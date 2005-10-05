@@ -162,8 +162,6 @@ public class DistributionProtocolForm extends SpecimenProtocolForm
 		Validator validator = new Validator();
 		try
 		{
-			if (operation.equals(Constants.ADD) || operation.equals(Constants.EDIT))
-            {
 //                if(this.principalInvestigatorId == -1)
 //				{
 //					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("distributionprotocol.principalinvestigator")));
@@ -181,7 +179,7 @@ public class DistributionProtocolForm extends SpecimenProtocolForm
 //                }
 				if (this.values.keySet().isEmpty())
 				{
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required","Atleast one entry for "+ApplicationProperties.getValue("distributionprotocol.specimenreq")));
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.one.item.required",ApplicationProperties.getValue("distributionprotocol.specimenreq")));
 				}
                 
     			Iterator it = this.values.keySet().iterator();
@@ -231,7 +229,6 @@ public class DistributionProtocolForm extends SpecimenProtocolForm
     					}
     				} // if  quantity
     			}
-            }    
 		}
 		catch (Exception excp)
 		{
