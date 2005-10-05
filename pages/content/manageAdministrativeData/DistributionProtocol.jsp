@@ -424,7 +424,7 @@ function insRow(subdivtag)
 						<html:button property="addDistributionProtocolEvents" styleClass="actionButton" onclick="insRow('SpecimenRequirementData')">Add More</html:button>
 				</td> 
 				<td class="formTitle" align="Right">
-					<html:button property="deleteValue" styleClass="actionButton" onclick="deleteChecked('SpecimenRequirementData','/catissuecore/DistributionProtocol.do?operation=add&pageOf=pageOfDistributionProtocol&status=true')">
+					<html:button property="deleteValue" styleClass="actionButton" onclick="deleteChecked('SpecimenRequirementData','/catissuecore/DistributionProtocol.do?operation=add&pageOf=pageOfDistributionProtocol&status=true',document.forms[0].counter,'chk_')">
 					<bean:message key="buttons.delete"/>
 					</html:button>
 				</td>
@@ -460,7 +460,7 @@ function insRow(subdivtag)
 		        </td>
 		        <td class="formRightSubTableTitle">
 							<label for="delete" align="center">
-								<bean:message key="distributionprotocol.delete" />
+								<bean:message key="addMore.delete" />
 							</label>
 						</td>
 			</tr>	
