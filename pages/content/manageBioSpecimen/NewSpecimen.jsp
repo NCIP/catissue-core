@@ -424,6 +424,11 @@ NewSpecimenForm form = (NewSpecimenForm)request.getAttribute("newSpecimenForm");
 								String classValue = (String)form.getClassName();
 								specimenTypeList = (List)specimenTypeMap.get(classValue);
 								
+								boolean subListEnabled = false;
+						
+								if(classValue != null && classValue.equals("Cell"))
+									subListEnabled = true;
+								
 								if(specimenTypeList == null)
 								{
 									specimenTypeList = new ArrayList();
@@ -436,7 +441,7 @@ NewSpecimenForm form = (NewSpecimenForm)request.getAttribute("newSpecimenForm");
 				    <!-- --------------------------------------- -->
 				    
 				     	<html:select property="type" styleClass="formFieldSized15" styleId="type" size="1"
-				     	 disabled="<%=readOnlyForAll%>"
+				     	  disabled="<%=subListEnabled%>"
 				     	  onchange="<%=subTypeFunctionName%>" >
 							<html:options collection="<%=Constants.SPECIMEN_TYPE_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
@@ -506,24 +511,17 @@ NewSpecimenForm form = (NewSpecimenForm)request.getAttribute("newSpecimenForm");
 							<bean:message key="specimen.concentration"/>
 						</label>
 					</td>
+					<td class="formField" colspan="4">
 					<%
+						boolean concentrationDisabled = true;
+						
 						if(unitSpecimen.equals(Constants.UNIT_MG))
-						{
+							concentrationDisabled = false;
 					%>
-				    		<td class="formField" colspan="4">
-				     			<html:text styleClass="formFieldSized15" size="30" styleId="concentration" property="concentration" readonly="<%=readOnlyForAll%>" disabled="false"/>
-				   			</td>
-				    <%
-						}
-						else
-						{
-					%>
-							<td class="formField" colspan="4">
-				     			<html:text styleClass="formFieldSized15" size="30" styleId="concentration" property="concentration" readonly="<%=readOnlyForAll%>" disabled="true"/>
-				    		</td>
-					<%
-						}
-					%>
+			     		<html:text styleClass="formFieldSized15" size="30" styleId="concentration" property="concentration" 
+			     		readonly="<%=readOnlyForAll%>" disabled="<%=concentrationDisabled%>"/>
+						&nbsp;<bean:message key="specimen.concentrationUnit"/>
+					</td>
 				 </tr>
 				 <tr>
 			     	<td class="formRequiredNotice" width="5">

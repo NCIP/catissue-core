@@ -234,6 +234,12 @@
 								String classValue = (String)form.getClassName();
 								specimenTypeList = (List)specimenTypeMap.get(classValue);
 								
+								boolean subListEnabled = false;
+						
+								if(classValue != null && classValue.equals("Cell"))
+									subListEnabled = true;
+								
+								
 								if(specimenTypeList == null)
 								{
 									specimenTypeList = new ArrayList();
@@ -244,7 +250,7 @@
 					%>
 				    <!-- --------------------------------------- -->
 				     	<html:select property="type" styleClass="formFieldSized15" styleId="type" 
-				     	 size="1" disabled="<%=readOnlyForAll%>"
+				     	 size="1" disabled="<%=subListEnabled%>"
 				     	 onchange="<%=subTypeFunctionName%>" >
 							<html:options collection="<%=Constants.SPECIMEN_TYPE_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
@@ -274,6 +280,7 @@
 					%>
 							<td class="formField" colspan="4">
 				     			<html:text styleClass="formFieldSized15" size="30" styleId="concentration" property="concentration" readonly="<%=readOnlyForAll%>" disabled="true"/>
+				     			&nbsp;<bean:message key="specimen.concentrationUnit"/>
 				    		</td>
 					<%
 						}
