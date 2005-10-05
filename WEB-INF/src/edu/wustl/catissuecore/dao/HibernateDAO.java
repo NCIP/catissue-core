@@ -23,6 +23,8 @@ import net.sf.hibernate.Transaction;
 
 import org.apache.log4j.PropertyConfigurator;
 
+
+
 import edu.wustl.catissuecore.audit.AuditManager;
 import edu.wustl.catissuecore.audit.Auditable;
 import edu.wustl.catissuecore.bizlogic.AbstractBizLogic;
@@ -35,6 +37,7 @@ import edu.wustl.catissuecore.exception.AuditException;
 import edu.wustl.catissuecore.util.Permissions;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;
+import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
@@ -421,10 +424,20 @@ public class HibernateDAO extends AbstractDAO
             StringBuffer sqlBuff = new StringBuffer();
 
             String className = parseClassName(sourceObjectName);
-
+            
+            Logger.out.debug("***********className:"+className);
             if (selectColumnName != null && selectColumnName.length > 0)
             {
                 sqlBuff.append("Select ");
+                
+                //Added by Aarti 
+                //--------------------------------
+//                if(sourceObjectName.equals(Site.class.getName()))
+//                {
+//                    sqlBuff.append(className + "." + Constants.SYSTEM_IDENTIFIER);
+//                    sqlBuff.append(", ");
+//                }
+                //---------------------------------
                 for (int i = 0; i < selectColumnName.length; i++)
                 {
                     sqlBuff.append(className + "." + selectColumnName[i]);
@@ -509,6 +522,78 @@ public class HibernateDAO extends AbstractDAO
             }
 
             list = query.list();
+            
+//          Added by Aarti 
+            //--------------------------------
+           
+//            if(sourceObjectName.equals(Site.class.getName()))
+//            {
+//                boolean isAuthorized;
+//                Object[] objects = null;
+//                Object[] newObjects = null;
+//                Long systemIdentifier;
+//                Site site;
+//                
+//                if (selectColumnName != null && selectColumnName.length > 0)
+//                {
+//                    if(list != null)
+//                    {
+//                        for(int i=0; i<list.size();)
+//                        {
+//                            objects = (Object[]) list.get(i);
+//                            
+//                            if(objects != null)
+//                            {
+//                                newObjects = new Object[objects.length-1];
+//                                systemIdentifier = (Long) objects[0];
+//                                isAuthorized = SecurityManager.getInstance(this.getClass())
+//                                .isAuthorized("sharma.aarti@gmail.com",
+//                                        sourceObjectName+"_"+systemIdentifier,
+//                                        Permissions.USE);
+//                                Logger.out.debug(" User's Authorization to update "+sourceObjectName+"_"+systemIdentifier+" "+isAuthorized);
+//                                list.remove(i);
+//                                if(isAuthorized)
+//                                {
+//                                    for(int x = 1;x<objects.length;x++ )
+//                                    {
+//                                        newObjects[x-1] = objects[x];
+//                                    }
+//                                    list.add(i,newObjects);
+//                                    i++;
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//                else
+//                {
+//                    if(list != null)
+//                    {
+//                        for(int i=0; i<list.size();)
+//                        {
+//                            site = (Site) list.get(i);
+//                            if(site !=null)
+//                            {
+//                                isAuthorized = SecurityManager.getInstance(this.getClass())
+//                                .isAuthorized("sharma.aarti@gmail.com",
+//                                        sourceObjectName+"_"+site.getSystemIdentifier(),
+//                                        Permissions.USE);
+//                                Logger.out.debug(" User's Authorization to update "+sourceObjectName+"_"+site.getSystemIdentifier()+" "+isAuthorized);
+//                                
+//                                if(isAuthorized)
+//                                {
+//                                    i++;
+//                                }
+//                                else
+//                                {
+//                                    list.remove(i);
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+            //---------------------------------
 
             Logger.out.debug(" String : " + sqlBuff.toString());
         }
