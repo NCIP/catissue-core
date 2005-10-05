@@ -4,6 +4,7 @@ package edu.wustl.common.util;
  * @author Kapil Kaveeshwar
  */
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -222,6 +223,14 @@ public class MapDataParser
 		return (Collection) Utility.getValueFor(parentObj, attrName);
 	}
 	
+	public Collection generateData(Map map, boolean isOrdered)  throws Exception
+	{
+	    if (isOrdered)
+	    {
+	        dataList = new ArrayList();
+	    }
+	    return generateData(map);
+	}
 
 	public Collection generateData(Map map)  throws Exception
 	{
