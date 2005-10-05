@@ -24,17 +24,21 @@ function addDiv(div,adstr)
 	alert(div.innerHTML);
 }
 
-function  deleteChecked(subdivtag,action)
+function  deleteChecked(subdivtag,action,countElement,checkName)
 {
 	var r = new Array(); 
 	var element = document.getElementById(subdivtag);
 	var pNode = element.parentNode;
-	//var counts = element.rows.length;
-	var counts = document.forms[0].counter.value;
+	var counts = countElement.value;
+	if(counts == undefined){
+		var cnt = document.getElementById(countElement);
+		counts = cnt.value;
+	}
 	var delCounts = 0;
-	for(i=1;i<=counts;i++)//2
+	for(i=1;i <= counts;i++)
 	{
-		itemCheck="chk_"+i;
+
+		itemCheck = checkName+i;
 		var chk = document.getElementById(itemCheck);
 		if(document.all[itemCheck].checked==true){
 			var currentRow = chk.parentNode.parentNode;
@@ -44,8 +48,12 @@ function  deleteChecked(subdivtag,action)
 		}
 	}
 	
-	//document.forms[0].counter.value = element.rows.length;
-	document.forms[0].counter.value = (document.forms[0].counter.value - delCounts);
+	if(countElement.value == undefined){
+		cnt.value = counts - delCounts;
+	}
+	else
+		countElement.value = (countElement.value - delCounts);
+	
 	document.forms[0].action = action;
 	document.forms[0].submit();
 		
