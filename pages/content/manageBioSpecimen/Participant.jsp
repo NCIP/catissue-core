@@ -6,6 +6,8 @@
 <%@ page import="edu.wustl.common.beans.NameValueBean"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.ParticipantForm"%>
+<%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
+<%@ page import="java.util.*"%>
 
 <script src="jss/script.js" type="text/javascript"></script>
 
@@ -37,15 +39,18 @@
 
 		Object obj = request.getAttribute("participantForm");
 		int noOfRows=0;
+		Map map = null;
 
 		if(obj != null && obj instanceof ParticipantForm)
 		{
 			ParticipantForm form = (ParticipantForm)obj;
+			map = form.getValues();
 			noOfRows = form.getCounter();
 		}
 %>
 
 <head>
+	<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 	<script language="JavaScript">
 		//function to insert a row in the inner block
 		function insRow(subdivtag)
@@ -98,6 +103,15 @@
 			sname= "";
 			sname="<input type='text' name='" + name + "' size='30'  class='formFieldSized15' id='" + name + "'>";
 			spreqsubtype.innerHTML="" + sname;
+			
+			//Fourth Cell
+			var checkb=x.insertCell(3);
+			checkb.className="formField";
+			checkb.colSpan=2;
+			sname="";
+			var name = "chk_"+(q+1);
+			sname="<input type='checkbox' name='" + name +"' id='" + name +"' value='C'>"
+			checkb.innerHTML=""+sname;
 		}
 		
 		function textLimit(field) 
@@ -231,7 +245,7 @@
 				 		</tr>
 				 	</logic:notEqual>
 				 <tr>
-				     <td class="formTitle" height="20" colspan="3">
+				     <td class="formTitle" height="20" colspan="4">
 				     <%String title = "participant."+pageView+".title";%>
 				     <bean:message key="<%=title%>"/></td>
 				 </tr>
@@ -242,7 +256,7 @@
 				     		<bean:message key="user.lastName"/>
 				     	</label>
 				     </td>
-				     <td class="formField"><html:text styleClass="formFieldSized" size="30" styleId="lastName" property="lastName" readonly="<%=readOnlyForAll%>"/></td>
+				     <td class="formField" colspan="2"><html:text styleClass="formFieldSized" size="30" styleId="lastName" property="lastName" readonly="<%=readOnlyForAll%>"/></td>
 				 </tr>
 				  <tr>
 					<td class="formRequiredNotice" width="5">&nbsp;</td>
@@ -251,7 +265,7 @@
 				     		<bean:message key="user.firstName"/>
 				     	</label>
 				     </td>
-				     <td class="formField"><html:text styleClass="formFieldSized" size="30" styleId="firstName" property="firstName" readonly="<%=readOnlyForAll%>"/></td>
+				     <td class="formField" colspan="2"><html:text styleClass="formFieldSized" size="30" styleId="firstName" property="firstName" readonly="<%=readOnlyForAll%>"/></td>
 				 </tr>
 				 <tr>
 					<td class="formRequiredNotice" width="5">&nbsp;</td>
@@ -260,7 +274,7 @@
 				     		<bean:message key="participant.middleName"/>
 				     	</label>
 				     </td>
-				     <td class="formField"><html:text styleClass="formFieldSized" size="30" styleId="middleName" property="middleName" readonly="<%=readOnlyForAll%>"/></td>
+				     <td class="formField" colspan="2"><html:text styleClass="formFieldSized" size="30" styleId="middleName" property="middleName" readonly="<%=readOnlyForAll%>"/></td>
 				 </tr>
 				 <tr>
 					<td class="formRequiredNotice" width="5">&nbsp;</td>
@@ -270,7 +284,7 @@
 						</label>
 					</td>
 					 
-					 <td class="formField">
+					 <td class="formField" colspan="2">
 					 <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
 					 <html:text styleClass="formDateSized" size="25" styleId="birthDate" property="birthDate" />
 						<a href="javascript:show_calendar('participantForm.birthDate',null,null,'MM-DD-YYYY');">
@@ -283,7 +297,7 @@
 					<td class="formLabel">
 				     	<label for="gender"><bean:message key="participant.gender"/></label>
 				     </td>
-				     <td class="formField">
+				     <td class="formField" colspan="2">
 				     	<html:select property="gender" styleClass="formFieldSized" styleId="gender" size="1" disabled="<%=readOnlyForAll%>">
 							<html:options collection="<%=Constants.GENDER_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
@@ -294,7 +308,7 @@
 					<td class="formLabel">
 						<label for="genotype"><bean:message key="participant.genotype"/></label>
 					</td>
-				     <td class="formField">
+				     <td class="formField" colspan="2">
 				     	<html:select property="genotype" styleClass="formFieldSized" styleId="genotype" size="1" disabled="<%=readOnlyForAll%>">
 							<html:options collection="<%=Constants.GENOTYPE_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
@@ -305,7 +319,7 @@
 					<td class="formLabel">
 					     <label for="race"><bean:message key="participant.race"/></label>
 				     </td>
-				     <td class="formField">
+				     <td class="formField" colspan="2">
 				     	<html:select property="race" styleClass="formFieldSized" styleId="race" size="1" disabled="<%=readOnlyForAll%>">
 							<html:options collection="<%=Constants.RACELIST%>" labelProperty="name" property="value"/>
 						</html:select>
@@ -318,7 +332,7 @@
 				     		<bean:message key="participant.ethnicity"/>
 				     	</label>
 				     </td>
-				     <td class="formField">
+				     <td class="formField" colspan="2">
 				     	<html:select property="ethnicity" styleClass="formFieldSized" styleId="ethnicity" size="1" disabled="<%=readOnlyForAll%>">
 							<html:options collection="<%=Constants.ETHNICITY_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
@@ -331,7 +345,7 @@
 				     		<bean:message key="participant.socialSecurityNumber"/>
 				     	</label>
 				     </td>
-				     <td class="formField">
+				     <td class="formField" colspan="2">
 				     	<html:text styleClass="formFieldSized2" maxlength="3" styleId="socialSecurityNumberPartA" property="socialSecurityNumberPartA" readonly="<%=readOnlyForAll%>" onkeypress="intOnly(this);" onchange="intOnly(this);" onkeyup="intOnly(this);"/>
 				     	-
 				     	<html:text styleClass="formFieldSized1" maxlength="2" styleId="socialSecurityNumberPartB" property="socialSecurityNumberPartB" readonly="<%=readOnlyForAll%>" onkeypress="intOnly(this);" onchange="intOnly(this);" onkeyup="intOnly(this);"/>
@@ -349,7 +363,7 @@
 							<bean:message key="participant.activityStatus" />
 						</label>
 					</td>
-					<td class="formField">
+					<td class="formField" colspan="2">
 						<html:select property="activityStatus" styleClass="formFieldSized10" styleId="activityStatus" size="1">
 							<html:options name="<%=Constants.ACTIVITYSTATUSLIST%>" labelName="<%=Constants.ACTIVITYSTATUSLIST%>" />
 						</html:select>
@@ -367,6 +381,11 @@
 						<bean:message key="buttons.addMore"/>
 						</html:button>
 				    </td>
+				    <td class="formTitle" align="Right">
+						<html:button property="deleteValue" styleClass="actionButton" onclick="deleteChecked('addMore','/catissuecore/Participant.do?operation=add&pageOf=pageOfParticipant&status=true',document.forms[0].counter,'chk_')">
+							<bean:message key="buttons.delete"/>
+						</html:button>
+					</td>
 				  </tr>
 				 <tr>
 				 	<td class="formSerialNumberLabel" width="5">
@@ -378,6 +397,11 @@
 				    <td class="formRightSubTableTitle">
 						<bean:message key="medicalrecord.number"/>
 					</td>
+					<td class="formRightSubTableTitle">
+							<label for="delete" align="center">
+								<bean:message key="addMore.delete" />
+							</label>
+						</td>
 				 </tr>
 				 
 				 <tbody id="addMore">
@@ -387,6 +411,7 @@
 					String siteName = "value(ParticipantMedicalIdentifier:"+i+"_Site_systemIdentifier)";
 					String medicalRecordNumber = "value(ParticipantMedicalIdentifier:"+i+"_medicalRecordNumber)";
 					String identifier = "value(ParticipantMedicalIdentifier:" + i +"_systemIdentifier)";
+					String check = "chk_"+i;
 				%>
 				 <tr>
 				 	<td class="formSerialNumberField" width="5"><%=i%>.
@@ -400,6 +425,18 @@
 				    <td class="formField">
 				     	<html:text styleClass="formFieldSized15" size="30" styleId="<%=medicalRecordNumber%>" property="<%=medicalRecordNumber%>" readonly="<%=readOnlyForAll%>"/>
 				    </td>
+				    <%
+							String key = "ParticipantMedicalIdentifier:" + i +"_systemIdentifier";
+							boolean bool = Utility.isPersistedValue(map,key);
+							String condition = "";
+							if(bool)
+								condition = "disabled='disabled'";
+
+						%>
+						<td class="formField" width="5">
+							<input type=checkbox name="<%=check %>" id="<%=check %>" <%=condition%>>		
+						</td>
+				    
 				 </tr>
 				 <%
 				}
@@ -409,7 +446,7 @@
 				 <!-- Medical Identifiers End here -->
  			   	 <logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">
 				 	<tr>
-				  		<td align="right" colspan="3">
+				  		<td align="right" colspan="4">
 							<%
 								String changeAction = "setFormAction('"+formName+"')";
 				 			%>
@@ -421,7 +458,7 @@
 						   					<bean:message key="buttons.submit"/>
 						   				</html:submit>
 						   			</td>
-									<td colspan="2">
+									<td colspan="3">
 										<html:reset styleClass="actionButton">
 											<bean:message key="buttons.reset"/>
 										</html:reset>
