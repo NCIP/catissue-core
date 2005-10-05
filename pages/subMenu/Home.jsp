@@ -28,7 +28,12 @@
 					<bean:message key="user.changePassword" />
 			</a>			
 		</div>
-		
+	</td>
+</tr>
+
+</tr>
+<tr>
+	<td class="subMenuPrimaryItemsWithBorder" onmouseover="changeMenuStyle(this,'subMenuPrimaryItemsWithBorderOver')" onmouseout="changeMenuStyle(this,'subMenuPrimaryItemsWithBorder')">				
 		<div>
 	  		<a class="subMenuPrimary" href="AssignPrivilegesPage.do?pageOf=pageOfAssignPrivilegesPage">
 	  			<bean:message key="app.assignPrevileges" />
