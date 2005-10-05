@@ -49,7 +49,32 @@ public class NewSpecimenAction  extends SecureAction
     public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response) throws Exception
     {
-        NewSpecimenForm specimenForm = (NewSpecimenForm)form;        
+        NewSpecimenForm specimenForm = (NewSpecimenForm)form;    
+        String button = request.getParameter("button");
+        Map map = null;
+        
+        if(button != null){
+        	if(button.equals("deleteExId")){
+        		List key = new ArrayList();
+        		key.add("ExternalIdentifier:i_name");
+        		key.add("ExternalIdentifier:i_value");
+    	
+        		//Gets the map from ActionForm
+        		map = specimenForm.getExternalIdentifier();
+        		DeleteRow(key,map,request);
+        	}
+        	else {
+        		List key = new ArrayList();
+        		key.add("Biohazard:i_type");
+        		key.add("Biohazard:i_systemIdentifier");
+    	
+        		//Gets the map from ActionForm
+        		map = specimenForm.getBiohazard();
+        		DeleteRow(key,map,request);
+        	}
+        }
+        
+    	
 
     	// ----------- redirected from specimencollection group
         String specimenCollectionGroupId = (String)request.getAttribute(Constants.SPECIMEN_COLLECTION_GROUP_ID);
