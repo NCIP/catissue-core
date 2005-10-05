@@ -41,9 +41,10 @@ public class HibernateMetaData
 		cfg = configuration;
 	}
 	
-	public static List getSubClassList(Class classObj)
+	public static List getSubClassList(String className) throws ClassNotFoundException
 	{
 		List list = new ArrayList();
+		Class classObj = Class.forName(className);
 		Iterator it = cfg.getClassMapping(classObj).getDirectSubclasses();
 		while(it.hasNext())
 		{
@@ -134,7 +135,7 @@ public class HibernateMetaData
 		bizLogic.retrieve(CollectionProtocol.class.getName(),Constants.SYSTEM_IDENTIFIER,new Long(1));
 		
 		//HibernateMetaData.getDATA(CollectionProtocol.class);
-		HibernateMetaData.getSubClassList(Specimen.class);
+		HibernateMetaData.getSubClassList(Specimen.class.getName());
 		//System.out.println(str);
 		
 	}
