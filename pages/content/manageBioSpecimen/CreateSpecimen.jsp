@@ -6,10 +6,12 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.CreateSpecimenForm"%>
 <%@ page import="edu.wustl.common.beans.NameValueBean"%>
+<%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
 <%@ page import="java.util.*"%>
 
-<%@ include file="/pages/content/common/SpecimenCommonScripts.jsp" %>
 
+<%@ include file="/pages/content/common/SpecimenCommonScripts.jsp" %>
+<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 	<script language="JavaScript">
 		var win = null;
 		function NewWindow(mypage,myname,w,h,scroll)
@@ -51,7 +53,7 @@
 			sname="";
 			
 			var name = "externalIdentifierValue(ExternalIdentifier:" + rowno +"_name)";
-			sname="<input type='text' name='" + name + "' class='formFieldSized15' id='" + name + "'>";      
+			sname="<input type='text' name='" + name + "' class='formFieldSized10' id='" + name + "'>";      
 		
 		
 			spreqtype.innerHTML="" + sname;
@@ -59,15 +61,24 @@
 			//Third Cell
 			var spreqsubtype=x.insertCell(2);
 			spreqsubtype.className="formField";
-			spreqsubtype.colSpan=2;
+			spreqsubtype.colSpan=1;
 			sname="";
 		
 			name = "externalIdentifierValue(ExternalIdentifier:" + rowno +"_value)";
 			sname= "";
 			
-			sname="<input type='text' name='" + name + "' class='formFieldSized15' id='" + name + "'>"   
+			sname="<input type='text' name='" + name + "' class='formFieldSized10' id='" + name + "'>"   
 		
 			spreqsubtype.innerHTML="" + sname;
+			
+			//Fourth Cell
+			var checkb=x.insertCell(3);
+			checkb.className="formField";
+			checkb.colSpan=2;
+			sname="";
+			var name = "chk_"+ rowno;
+			sname="<input type='checkbox' name='" + name +"' id='" + name +"' value='C'>"
+			checkb.innerHTML=""+sname;
 		}
 		
 	</script>
@@ -102,9 +113,11 @@
 		
 		CreateSpecimenForm form = null;
 		String unitSpecimen = "";
+		Map map = null;
 		if(obj != null && obj instanceof CreateSpecimenForm)
 		{
 			form = (CreateSpecimenForm)obj;
+			map = form.getExternalIdentifier();
 			exIdRows = form.getExIdCounter();
 			if(form.getUnit() != null)
 				unitSpecimen = form.getUnit();
@@ -200,7 +213,7 @@
 							<bean:message key="createSpecimen.parent"/>
 						</label>
 					</td>
-					<td class="formField" colspan="4">
+					<td class="formField" colspan="2">
 			     		<html:select property="parentSpecimenId" styleClass="formFieldSized10" styleId="parentSpecimenId" size="1" disabled="<%=readOnlyForAll%>">
 							<html:options collection="<%=Constants.PARENT_SPECIMEN_ID_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
@@ -214,7 +227,7 @@
 				     		<bean:message key="specimen.type"/>
 				     	</label>
 				    </td>
-				    <td class="formField" colspan="4">
+				    <td class="formField" colspan="2">
 				     	<html:select property="className" styleClass="formFieldSized15" styleId="className" size="1" disabled="<%=readOnlyForAll%>" onchange="onTypeChange(this)">
 							<html:options collection="<%=Constants.SPECIMEN_CLASS_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
@@ -228,7 +241,7 @@
 				     		<bean:message key="specimen.subType"/>
 				     	</label>
 				    </td>
-				    <td class="formField" colspan="4">
+				    <td class="formField" colspan="2">
 				    <!-- --------------------------------------- -->
 				    <%
 								String classValue = (String)form.getClassName();
@@ -270,7 +283,7 @@
 						if(unitSpecimen.equals(Constants.UNIT_MG))
 						{
 					%>
-				    		<td class="formField" colspan="4">
+				    		<td class="formField" colspan="2">
 				     			<html:text styleClass="formFieldSized15" size="30" styleId="concentration" property="concentration" readonly="<%=readOnlyForAll%>" disabled="false"/>
 				   			</td>
 				    <%
@@ -278,7 +291,7 @@
 						else
 						{
 					%>
-							<td class="formField" colspan="4">
+							<td class="formField" colspan="2">
 				     			<html:text styleClass="formFieldSized15" size="30" styleId="concentration" property="concentration" readonly="<%=readOnlyForAll%>" disabled="true"/>
 				     			&nbsp;<bean:message key="specimen.concentrationUnit"/>
 				    		</td>
@@ -296,7 +309,7 @@
 							<bean:message key="specimen.quantity"/>
 						</label>
 					</td>
-				    <td class="formField" colspan="4">
+				    <td class="formField" colspan="2">
 				     	<html:text styleClass="formFieldSized15" size="30" styleId="quantity" property="quantity" readonly="<%=readOnlyForAll%>"/>
 				     	<span id="unitSpan"><%=unitSpecimen%></span>
 				     	<html:hidden property="unit"/>
@@ -326,7 +339,7 @@
 							<bean:message key="specimen.barcode"/>
 						</label>
 					</td>
-				    <td class="formField" colspan="4">
+				    <td class="formField" colspan="2">
 						<html:text styleClass="formFieldSized" size="30" styleId="barcode" property="barcode" readonly="<%=readOnlyForAll%>" />
 		        	</td>
 				 </tr>
@@ -338,7 +351,7 @@
 							<bean:message key="specimen.comments"/>
 						</label>
 					</td>
-				    <td class="formField" colspan="4">
+				    <td class="formField" colspan="2">
 				    	<html:textarea styleClass="formFieldSized" rows="3" styleId="comments" property="comments" readonly="<%=readOnlyForAll%>"/>
 				    </td>
 				 </tr>
@@ -347,11 +360,16 @@
 				     <td class="formTitle" height="20" colspan="2">
 				     	<bean:message key="specimen.externalIdentifier"/>
 				     </td>
-				     <td class="formButtonField" colspan="2">
+				     <td class="formButtonField">
 				     	<html:button property="addExId" styleClass="actionButton" onclick="insExIdRow('addExternalIdentifier')">
 				     		<bean:message key="buttons.addMore"/>
 				     	</html:button>
 				    </td>
+				    <td class="formTitle" align="Right">
+							<html:button property="deleteValue" styleClass="actionButton" onclick="deleteChecked('addExternalIdentifier','/catissuecore/CreateSpecimen.do?operation=add&pageOf=&status=true',document.forms[0].exIdCounter,'chk_')">
+								<bean:message key="buttons.delete"/>
+							</html:button>
+						</td>
 				 </tr>
 				 
 				 	<tr>
@@ -361,8 +379,13 @@
 					    <td class="formLeftSubTableTitle">
 							<bean:message key="externalIdentifier.name"/>
 						</td>
-					    <td class="formRightSubTableTitle" colspan="2">
+					    <td class="formRightSubTableTitle">
 							<bean:message key="externalIdentifier.value"/>
+						</td>
+						<td class="formRightSubTableTitle">
+							<label for="delete" align="center">
+								<bean:message key="addMore.delete" />
+							</label>
 						</td>
 					 </tr>
 				  <tbody id="addExternalIdentifier">
@@ -371,15 +394,27 @@
 				  	{
 						String exName = "externalIdentifierValue(ExternalIdentifier:" + i + "_name)";
 						String exValue = "externalIdentifierValue(ExternalIdentifier:" + i + "_value)";
+						String check = "chk_"+i;
 				  %>
 					<tr>
 					 	<td class="formSerialNumberField" width="5"><%=i%>.</td>
 					    <td class="formField">
-				     		<html:text styleClass="formFieldSized15" styleId="<%=exName%>" property="<%=exName%>" readonly="<%=readOnlyForAll%>"/>
+				     		<html:text styleClass="formFieldSized10" styleId="<%=exName%>" property="<%=exName%>" readonly="<%=readOnlyForAll%>"/>
 				    	</td>
-				    	<td class="formField" colspan="2">
-				     		<html:text styleClass="formFieldSized15" styleId="<%=exValue%>" property="<%=exValue%>" readonly="<%=readOnlyForAll%>"/>
+				    	<td class="formField">
+				     		<html:text styleClass="formFieldSized10" styleId="<%=exValue%>" property="<%=exValue%>" readonly="<%=readOnlyForAll%>"/>
 				    	</td>
+				    	<%
+							String key = "";
+							boolean bool = Utility.isPersistedValue(map,key);
+							String condition = "";
+							if(bool)
+								condition = "disabled='disabled'";
+
+						%>
+						<td class="formField" width="5">
+							<input type=checkbox name="<%=check %>" id="<%=check %>" <%=condition%>>		
+						</td>
 					 </tr>
 				  <% } %>
 				 </tbody>

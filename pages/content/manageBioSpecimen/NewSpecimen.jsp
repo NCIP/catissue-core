@@ -6,6 +6,7 @@
 <%@ page import="edu.wustl.common.beans.NameValueBean"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.NewSpecimenForm"%>
+<%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
 <%@ page import="java.util.*"%>
 
 
@@ -16,6 +17,7 @@ String bhTypeArray [] = (String []) request.getAttribute(Constants.BIOHAZARD_TYP
 
 List biohazardList = (List)request.getAttribute(Constants.BIOHAZARD_TYPE_LIST);
 NewSpecimenForm form = (NewSpecimenForm)request.getAttribute("newSpecimenForm");
+Map map = form.getExternalIdentifier();
 %>
 <head>
 
@@ -25,7 +27,9 @@ NewSpecimenForm form = (NewSpecimenForm)request.getAttribute("newSpecimenForm");
 	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
 %>
 <%@ include file="/pages/content/common/SpecimenCommonScripts.jsp" %>
+<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 <script language="JavaScript">
+
 	
 		var win = null;
 		
@@ -35,6 +39,7 @@ NewSpecimenForm form = (NewSpecimenForm)request.getAttribute("newSpecimenForm");
 			var action = "/catissuecore/ListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParameters&specimenId=" + identifier;
 			document.forms[0].action = action;
 			document.forms[0].submit();
+		
 		}
 		
 		function NewWindow(mypage,myname,w,h,scroll)
@@ -142,6 +147,7 @@ NewSpecimenForm form = (NewSpecimenForm)request.getAttribute("newSpecimenForm");
 			var val = parseInt(document.forms[0].exIdCounter.value);
 			val = val + 1;
 			document.forms[0].exIdCounter.value = val;
+		
 			
 			var r = new Array(); 
 			r = document.getElementById(subdivtag).rows;
@@ -181,6 +187,15 @@ NewSpecimenForm form = (NewSpecimenForm)request.getAttribute("newSpecimenForm");
 			sname="<input type='text' name='" + name + "' class='formFieldSized15' id='" + name + "'>"   
 		
 			spreqsubtype.innerHTML="" + sname;
+			
+			//Fourth Cell
+			var checkb=x.insertCell(3);
+			checkb.className="formField";
+			checkb.colSpan=2;
+			sname="";
+			var name = "chk_ex_"+ rowno;
+			sname="<input type='checkbox' name='" + name +"' id='" + name +"' value='C'>"
+			checkb.innerHTML=""+sname;
 		}
 		
 		
@@ -237,6 +252,15 @@ NewSpecimenForm form = (NewSpecimenForm)request.getAttribute("newSpecimenForm");
 			sname = sname + "<option value='-1'><%=Constants.SELECT_OPTION%></option>";			
 			sname = sname + "</select>";
 			spreqsubtype.innerHTML="" + sname;
+			
+			//Fourth Cell
+			var checkb=x.insertCell(3);
+			checkb.className="formField";
+			checkb.colSpan=2;
+			sname="";
+			var name = "chk_bio_"+ (q+1);
+			sname="<input type='checkbox' name='" + name +"' id='" + name +"' value='C'>"
+			checkb.innerHTML=""+sname;
 		}
 	
 	</script>
@@ -284,7 +308,7 @@ NewSpecimenForm form = (NewSpecimenForm)request.getAttribute("newSpecimenForm");
    <html:form action="<%=Constants.SPECIMEN_ADD_ACTION%>">
 
 		<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="500">
-		   
+			   
 		   <logic:equal name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
 		   	<tr>
     		    <td>
@@ -323,6 +347,7 @@ NewSpecimenForm form = (NewSpecimenForm)request.getAttribute("newSpecimenForm");
 	    	  <tr>
 			    <td>
 			 	 <table summary="" cellpadding="3" cellspacing="0" border="0" width="500">
+			 	 
 				 <tr>
 				 	<td>
 						<html:hidden property="<%=Constants.OPERATION%>" value="<%=operation%>"/>
@@ -563,7 +588,7 @@ NewSpecimenForm form = (NewSpecimenForm)request.getAttribute("newSpecimenForm");
 							<bean:message key="specimen.availableQuantity" />
 						</label>
 					</td>
-					<td class="formField" colspan="2">
+					<td class="formField" colspan="3">
 						<html:text styleClass="formFieldSized15" size="30" styleId="availableQuantity" property="availableQuantity" readonly="<%=readOnlyForAll%>" />
 					</td>
 				</tr>
@@ -576,14 +601,16 @@ NewSpecimenForm form = (NewSpecimenForm)request.getAttribute("newSpecimenForm");
 					   		<bean:message key="specimen.positionInStorageContainer"/>
 					   </label>
 					</td>
-				 	<td class="formField" colspan="2">
+				 	<td class="formField">
 						<html:text styleClass="formFieldSized15" size="30" styleId="positionInStorageContainer" property="positionInStorageContainer" readonly="true"/>
-						
+					</td>
+					
+					<td class="formField" colspan="2">
 						<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
-						<html:button property="mapButton" styleClass="actionButton" styleId="Map"
-							onclick="javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfSpecimen','name','810','320','yes');return false" >
-							<bean:message key="buttons.map"/>
-						</html:button>
+							<html:button property="mapButton" styleClass="actionButton" styleId="Map"
+								onclick="javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfSpecimen','name','810','320','yes');return false" >
+								<bean:message key="buttons.map"/>
+							</html:button>
 						</logic:notEqual>
 					</td>
 				 </tr>
@@ -621,7 +648,7 @@ NewSpecimenForm form = (NewSpecimenForm)request.getAttribute("newSpecimenForm");
 							<bean:message key="participant.activityStatus" />
 						</label>
 					</td>
-					<td class="formField" colspan="2">
+					<td class="formField" colspan="3">
 						<html:select property="activityStatus" styleClass="formFieldSized10" styleId="activityStatus" size="1">
 							<html:options name="<%=Constants.ACTIVITYSTATUSLIST%>" labelName="<%=Constants.ACTIVITYSTATUSLIST%>" />
 						</html:select>
@@ -638,6 +665,11 @@ NewSpecimenForm form = (NewSpecimenForm)request.getAttribute("newSpecimenForm");
 				     		<bean:message key="buttons.addMore"/>
 				     	</html:button>
 				    </td>
+				    <td class="formTitle" align="Right">
+							<html:button property="deleteExId" styleClass="actionButton" onclick="deleteChecked('addExternalIdentifier','/catissuecore/NewSpecimen.do?operation=add&pageOf=pageOfNewSpecimen&status=true&button=deleteExId',document.forms[0].exIdCounter,'chk_ex_')">
+								<bean:message key="buttons.delete"/>
+							</html:button>
+					</td>
 				 </tr>
 				 
 				 	<tr>
@@ -650,6 +682,11 @@ NewSpecimenForm form = (NewSpecimenForm)request.getAttribute("newSpecimenForm");
 					    <td class="formRightSubTableTitle" colspan="2">
 							<bean:message key="externalIdentifier.value"/>
 						</td>
+						<td class="formRightSubTableTitle">
+							<label for="delete" align="center">
+								<bean:message key="addMore.delete" />
+							</label>
+						</td>
 					 </tr>
 				  <tbody id="addExternalIdentifier">
 				  <%
@@ -658,6 +695,7 @@ NewSpecimenForm form = (NewSpecimenForm)request.getAttribute("newSpecimenForm");
 						String exName = "externalIdentifierValue(ExternalIdentifier:" + i + "_name)";
 						String exValue = "externalIdentifierValue(ExternalIdentifier:" + i + "_value)";
 						String exIdentifier = "externalIdentifierValue(ExternalIdentifier:" + i +"_systemIdentifier)";
+						String check = "chk_ex_"+i;
 				  %>
 					<tr>
 					 	<td class="formSerialNumberField" width="5"><%=i%>.
@@ -669,6 +707,17 @@ NewSpecimenForm form = (NewSpecimenForm)request.getAttribute("newSpecimenForm");
 				    	<td class="formField" colspan="2">
 				     		<html:text styleClass="formFieldSized15" styleId="<%=exValue%>" property="<%=exValue%>" readonly="<%=readOnlyForAll%>"/>
 				    	</td>
+				    	<%
+							String key = "ExternalIdentifier:" + i +"_systemIdentifier";
+							boolean bool = Utility.isPersistedValue(map,key);
+							String condition = "";
+							if(bool)
+								condition = "disabled='disabled'";
+
+						%>
+						<td class="formField" width="5">
+							<input type=checkbox name="<%=check %>" id="<%=check %>" <%=condition%>>		
+						</td>
 					 </tr>
 				  <% } %>
 				 </tbody>
@@ -682,6 +731,11 @@ NewSpecimenForm form = (NewSpecimenForm)request.getAttribute("newSpecimenForm");
 				     		<bean:message key="buttons.addMore"/>
 				     	</html:button>
 				    </td>
+				    <td class="formTitle" align="Right">
+							<html:button property="deleteBiohazard" styleClass="actionButton" onclick="deleteChecked('addBiohazardRow','/catissuecore/NewSpecimen.do?operation=add&pageOf=pageOfNewSpecimen&status=true&button=deleteBiohazard',document.forms[0].bhCounter,'chk_bio_')">
+								<bean:message key="buttons.delete"/>
+							</html:button>
+					</td>
 				  </tr>
 				  
 				  <tr>
@@ -694,6 +748,11 @@ NewSpecimenForm form = (NewSpecimenForm)request.getAttribute("newSpecimenForm");
 				    <td class="formRightSubTableTitle" colspan="2">
 						<bean:message key="biohazards.name"/>
 					</td>
+					<td class="formRightSubTableTitle">
+							<label for="delete" align="center">
+								<bean:message key="addMore.delete" />
+							</label>
+					</td>
 				 </tr>
 				 
 				 <tbody id="addBiohazardRow">
@@ -705,6 +764,7 @@ NewSpecimenForm form = (NewSpecimenForm)request.getAttribute("newSpecimenForm");
 						String bhType = "biohazardValue(Biohazard:" + i + "_type)";
 						String bhTypeKey = "Biohazard:" + i + "_type";
 						String bhId	  = "biohazardValue(Biohazard:" + i + "_systemIdentifier)";
+						String check = "chk_bio_"+i;
 				  %>
 					<tr>
 					 	<td class="formSerialNumberField" width="5"><%=i%>.</td>
@@ -731,6 +791,18 @@ NewSpecimenForm form = (NewSpecimenForm)request.getAttribute("newSpecimenForm");
 								%>
 							</html:select>
 				    	</td>
+				    	<%
+							String key = "Biohazard:" + i +"_systemIdentifier";
+							boolean bool = Utility.isPersistedValue(bioHazardMap,key);
+							String condition = "";
+							System.out.println("bool--"+bool);
+							if(bool)
+								condition = "disabled='disabled'";
+
+						%>
+						<td class="formField" width="5">
+							<input type=checkbox name="<%=check %>" id="<%=check %>" <%=condition%>>		
+						</td>
 					 </tr>
 				  <% } %>
 				 </tbody>
