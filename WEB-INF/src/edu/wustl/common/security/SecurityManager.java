@@ -9,11 +9,14 @@
 
 package edu.wustl.common.security;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.Vector;
+
+import org.apache.commons.collections.iterators.CollatingIterator;
 
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.util.Permissions;
@@ -28,6 +31,7 @@ import gov.nih.nci.security.AuthenticationManager;
 import gov.nih.nci.security.AuthorizationManager;
 import gov.nih.nci.security.SecurityServiceProvider;
 import gov.nih.nci.security.UserProvisioningManager;
+import gov.nih.nci.security.authorization.ObjectPrivilegeMap;
 import gov.nih.nci.security.authorization.domainobjects.Application;
 import gov.nih.nci.security.authorization.domainobjects.Group;
 import gov.nih.nci.security.authorization.domainobjects.Privilege;
@@ -39,6 +43,7 @@ import gov.nih.nci.security.authorization.domainobjects.Role;
 import gov.nih.nci.security.authorization.domainobjects.User;
 import gov.nih.nci.security.dao.ApplicationSearchCriteria;
 import gov.nih.nci.security.dao.GroupSearchCriteria;
+import gov.nih.nci.security.dao.ProtectionElementSearchCriteria;
 import gov.nih.nci.security.dao.ProtectionGroupSearchCriteria;
 import gov.nih.nci.security.dao.RoleSearchCriteria;
 import gov.nih.nci.security.dao.SearchCriteria;
@@ -567,7 +572,7 @@ public class SecurityManager implements Permissions
      * @throws SMException if searchCriteria passed is null or if search results in no results
      * @throws CSException
      */
-    private List getObjects(SearchCriteria searchCriteria) throws SMException,
+    public List getObjects(SearchCriteria searchCriteria) throws SMException,
             CSException
     {
         if (null == searchCriteria)
@@ -1175,38 +1180,41 @@ public class SecurityManager implements Permissions
      * @throws SMException thrown if any error occurs while retreiving ProtectionElementPrivilegeContextForUser
      */
     private Set getObjectsForAssignPrivilege(
-            Set protectionElementPrivilegeContextSet, String objectType,
+            Collection privilegeMap, String objectType,
             String privilegeName) throws SMException
     {
+    	Logger.out.debug(" objectType:"+objectType+" privilegeName:"+privilegeName);
         Set objects = new HashSet();
         NameValueBean nameValueBean;
 
-        ProtectionElementPrivilegeContext protectionElementPrivilegeContext;
+        ObjectPrivilegeMap objectPrivilegeMap;
 
-        Set privileges;
+        Collection privileges;
         Iterator iterator;
         String objectId;
         Privilege privilege;
 
-        if (protectionElementPrivilegeContextSet != null)
+        if (privilegeMap != null)
         {
-            iterator = protectionElementPrivilegeContextSet.iterator();
+            iterator = privilegeMap.iterator();
             while (iterator.hasNext())
             {
-                protectionElementPrivilegeContext = (ProtectionElementPrivilegeContext) iterator
+            	objectPrivilegeMap = (ObjectPrivilegeMap) iterator
                         .next();
-                objectId = protectionElementPrivilegeContext
+                objectId = objectPrivilegeMap
                         .getProtectionElement().getObjectId();
                 Logger.out.debug(objectId);
                 if (objectId.indexOf(objectType + "_") != -1)
                 {
-                    privileges = protectionElementPrivilegeContext
+                    privileges = objectPrivilegeMap
                             .getPrivileges();
+                    Logger.out.debug("Privileges:"+privileges.size());
                     Iterator it = privileges.iterator();
                     while (it.hasNext())
                     {
                         privilege = (Privilege) it.next();
-
+                        Logger.out.debug(" Privilege:"+privilege.getName());
+                        
                         if (privilege.getName().equals(
                                 "ASSIGN_" + privilegeName))
                         {
@@ -1244,25 +1252,52 @@ public class SecurityManager implements Permissions
             String[] objectTypes, String[] privilegeNames) throws SMException
     {
         Set objects = new HashSet();
-        UserProvisioningManager userProvisioningManager;
-        Set protectionElementPrivilegeContextSet;
+        AuthorizationManager authorizationManager;
+        Collection privilegeMap;
+        List list;
         try
         {
             if (objectTypes == null || privilegeNames == null)
             {
                 return objects;
             }
-            userProvisioningManager = getUserProvisioningManager();
-            protectionElementPrivilegeContextSet = userProvisioningManager
-                    .getProtectionElementPrivilegeContextForUser(userID);
-
+            authorizationManager = getAuthorizationManager();
+            
+            ProtectionElement protectionElement = new ProtectionElement();
+            ProtectionElementSearchCriteria protectionElementSearchCriteria ;
+        	User user = new User();
+        	user = getUserById(userID);
+        	if(user == null)
+        	{
+        		Logger.out.debug(" User not found");
+        		return objects;
+        	}
+        	Logger.out.debug("user login name:"+user.getLoginName());
+        	
             for (int i = 0; i < objectTypes.length; i++)
             {
                 for (int j = 0; j < privilegeNames.length; j++)
                 {
+                	protectionElement.setObjectId(objectTypes[i]+"_*");
+                	protectionElementSearchCriteria= new ProtectionElementSearchCriteria(protectionElement);
+                	try
+					{
+                	list = getObjects(protectionElementSearchCriteria);
+                	privilegeMap = authorizationManager.getPrivilegeMap(user.getLoginName(),list);
+                	for(int k = 0; k<list.size(); k++)
+                	{
+                		protectionElement = (ProtectionElement) list.get(k);
+                		Logger.out.debug(protectionElement.getObjectId()+" "+protectionElement.getAttribute());
+                	}
+                	
                     objects.addAll(getObjectsForAssignPrivilege(
-                            protectionElementPrivilegeContextSet,
+                    		privilegeMap,
                             objectTypes[i], privilegeNames[j]));
+					}
+                	catch(SMException smex)
+					{
+                		Logger.out.debug(" Exception:",smex);
+					}
                 }
             }
         }
