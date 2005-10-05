@@ -7,10 +7,13 @@
 
 package edu.wustl.catissuecore.action;
 
+import java.lang.reflect.Field;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 import javax.servlet.RequestDispatcher;
@@ -45,6 +48,10 @@ public class SimpleSearchAction extends DispatchAction
     {
         SimpleQueryInterfaceForm simpleQueryInterfaceForm = (SimpleQueryInterfaceForm) form;
         
+        //Get the aliasName.
+        String viewAliasName = (String)simpleQueryInterfaceForm
+        						.getValue("SimpleConditionsNode:1_Condition_DataElement_table");
+        
         String target = Constants.SUCCESS;
         
         try
@@ -53,13 +60,15 @@ public class SimpleSearchAction extends DispatchAction
             
             MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.query");
             
-            Collection simpleConditionNodeCollection = parser.generateData(map);
-            
+            Collection simpleConditionNodeCollection = parser.generateData(map, true);
             Iterator iterator = simpleConditionNodeCollection.iterator();
             
+            Set fromTables = new HashSet(); 
+            
+            SimpleConditionsNode simpleConditionsNode = null;
             while (iterator.hasNext())
             {
-                SimpleConditionsNode simpleConditionsNode = (SimpleConditionsNode)iterator.next();
+                simpleConditionsNode = (SimpleConditionsNode)iterator.next();
                 String columnName = simpleConditionsNode.getCondition().getDataElement().getField();
                 StringTokenizer stringToken = new StringTokenizer(columnName,".");
                 simpleConditionsNode.getCondition().getDataElement().setTable(stringToken.nextToken());
@@ -79,29 +88,42 @@ public class SimpleSearchAction extends DispatchAction
                     }
                     simpleConditionsNode.getCondition().setValue(value);
                 }
+                
+                if (simpleQueryInterfaceForm.getPageOf().equals(Constants.PAGEOF_SIMPLE_QUERY_INTERFACE))
+                {
+                    //Prepare a Set of table names.
+                    fromTables.add(simpleConditionsNode.getCondition().getDataElement().getTable());
+                }
             }
             
+            if(hasActivityStatus(viewAliasName))
+            {
+                Logger.out.debug("Adding ActivityStatus............................");
+                SimpleConditionsNode activityStatusCondition = new SimpleConditionsNode();
+                activityStatusCondition.getCondition().getDataElement().setTable(viewAliasName);
+                activityStatusCondition.getCondition().getDataElement().setField("ACTIVITY_STATUS");
+                activityStatusCondition.getCondition().getOperator().setOperator("!=");
+                activityStatusCondition.getCondition().setValue("'"+Constants.ACTIVITY_STATUS_DISABLED+"'");
+                
+                simpleConditionsNode.getOperator().setOperator(Constants.AND_JOIN_CONDITION);
+                simpleConditionNodeCollection.add(activityStatusCondition);
+            }
             
-            Query query = QueryFactory.getInstance().newQuery(Query.SIMPLE_QUERY, simpleQueryInterfaceForm.getAliasName());
-            
-            String [] columnNames = query.setViewElements(simpleQueryInterfaceForm.getAliasName());
-            
-//            HttpSession session = request.getSession();
-//            String[] columnList = (String[])request.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
-//            
-//            if (columnList == null)
+//            Iterator iterator1 = fromTables.iterator();
+//            while (iterator1.hasNext())
 //            {
-//                columnList = Constants.DEFAULT_SPREADSHEET_COLUMNS;
+//                Logger.out.debug("From tABLES............................."+iterator1.next());
 //            }
-              
-//            query.addElementToView(new DataElement(Query.PARTICIPANT,"IDENTIFIER"));
-//            query.addElementToView(new DataElement(Query.COLLECTION_PROTOCOL,"IDENTIFIER"));
-//            query.addElementToView(new DataElement(Query.COLLECTION_PROTOCOL_EVENT,"IDENTIFIER"));
-//            query.addElementToView(new DataElement(Query.SPECIMEN_COLLECTION_GROUP,"IDENTIFIER"));
-//            query.addElementToView(new DataElement(Query.SPECIMEN,"IDENTIFIER"));
-//            query.addElementToView(new DataElement(Query.SPECIMEN,"TYPE"));
-//            query.addElementToView(new DataElement(Query.DEPARTMENT,"IDENTIFIER"));
-//            query.addElementToView(new DataElement(Query.DEPARTMENT,"NAME"));
+            Query query = QueryFactory.getInstance().newQuery(Query.SIMPLE_QUERY, viewAliasName);
+            
+            //Get the view columns.
+            String [] columnNames = query.setViewElements(viewAliasName);
+            
+            if (simpleQueryInterfaceForm.getPageOf().equals(Constants.PAGEOF_SIMPLE_QUERY_INTERFACE))
+            {
+                query.setTableSet(fromTables);
+                Logger.out.debug("setTableSet.......................................");
+            }
             
             ((SimpleQuery)query).addConditions(simpleConditionNodeCollection);
             List list = query.execute();
@@ -144,4 +166,34 @@ public class SimpleSearchAction extends DispatchAction
         return mapping.findForward(target);
     }
     
+    /**
+     * Returns true if the object named aliasName contains the activityStatus 
+     * data member, else returns false.
+     * @param aliasName
+     * @return
+     */
+    private boolean hasActivityStatus(String aliasName)
+    {
+        try
+        {
+            Class className = Class.forName("edu.wustl.catissuecore.domain."+aliasName);
+            Logger.out.debug("Class.................."+className.getName());
+            Field[] objectFields = className.getDeclaredFields();
+            Logger.out.debug("Field Size..........................."+objectFields.length);
+            for (int i=0;i<objectFields.length;i++)
+            {
+                Logger.out.debug("objectFields[i].getName().............................."+objectFields[i].getName());
+                if (objectFields[i].getName().equals(Constants.ACTIVITY_STATUS))
+                {
+                    return true;
+                }
+            }
+        }
+        catch(ClassNotFoundException classNotExcp)
+        {
+            Logger.out.debug(classNotExcp.getMessage(),classNotExcp);
+        }
+        
+        return false;
+    }
 }
