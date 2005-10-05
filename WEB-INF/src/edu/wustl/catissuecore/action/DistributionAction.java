@@ -11,6 +11,7 @@
 package edu.wustl.catissuecore.action;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -139,7 +140,22 @@ public class  DistributionAction extends SpecimenEventParametersAction
             throws IOException, ServletException
     {
 		super.executeSecureAction(mapping,form,request,response);
+		
 		DistributionForm dForm = (DistributionForm)form;
+    	
+    	//List of keys used in map of ActionForm
+		List key = new ArrayList();
+    	key.add("DistributedItem:i_Specimen_className");
+    	key.add("DistributedItem:i_Specimen_systemIdentifier");
+    	key.add("DistributedItem:i_quantity");
+    	
+    	//Gets the map from ActionForm
+    	Map map = dForm.getValues();
+    	
+    	//Calling DeleteRow of BaseAction class
+    	DeleteRow(key,map,request);
+    	
+		
 		if(dForm.isIdChange())
 		{
 			setSpecimenChars(dForm,request);
