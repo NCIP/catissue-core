@@ -27,6 +27,8 @@ import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.util.logger.Logger;
+import gov.nih.nci.security.authorization.domainobjects.ProtectionElement;
+import gov.nih.nci.security.dao.ProtectionElementSearchCriteria;
 
 /**
  * 
@@ -208,6 +210,15 @@ public class CatissueCoreServletContextListener
 //                                            "edu.wustl.catissuecore.domain.Participant_5",
 //                                            READ)));
         	
+//        	ProtectionElement protectionElement = new ProtectionElement();
+//        	protectionElement.setObjectId("edu.wustl.catissuecore.domain.Participant_*");
+//        	ProtectionElementSearchCriteria protectionElementSearchCriteria = new ProtectionElementSearchCriteria(protectionElement);
+//        	List list = SecurityManager.getInstance(this.getClass()).getObjects(protectionElementSearchCriteria);
+//        	for(int i = 0; i<list.size(); i++)
+//        	{
+//        		protectionElement = (ProtectionElement) list.get(i);
+//        		Logger.out.debug(protectionElement.getObjectId());
+//        	}
         }
         catch (Exception e1)
         {
