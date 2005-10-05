@@ -183,7 +183,17 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 
 <tr>
 	<td>
-		<b><bean:message key="specimenEventParameters.caption"/></b>&nbsp;&nbsp;
+	  	 <table summary="" cellpadding="3" cellspacing="0" border="0" width="500">
+			<tr>
+				<td class="formTitle" height="20">
+					<bean:message key="specimenEventParameters.caption"/>
+				</td>
+			</tr>
+		</table>	
+	</td>	
+</tr>
+<tr>
+	<td>
 		<html:select property="specimenEventParameter" styleClass="formFieldSized15" styleId="className" size="1" disabled="false" onchange="onParameterChange(this)">
 			<html:options name="<%=Constants.EVENT_PARAMETERS_LIST%>" labelName="<%=Constants.EVENT_PARAMETERS_LIST%>"/>
 		</html:select>
