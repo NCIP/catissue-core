@@ -1144,7 +1144,7 @@ public class Constants
 							"Spun", "Thaw", "Tissue Specimen Review", "Transfer" };
 	
 	public static final String EVENT_PARAMETERS_COLUMNS[] = { "Identifier",
-											"Event Parameter", "User", "Time", "PageOf"};
+											"Event Parameter", "User", "Date / Time", "PageOf"};
 	
 	
 	public static final String getCollectionProtocolPGName(Long identifier)
