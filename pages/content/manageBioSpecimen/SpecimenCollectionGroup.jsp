@@ -164,7 +164,8 @@
   						     </html:select>
   						</logic:equal>
 						<%
-							String url = "/Participant.do?operation=add&pageOf=pageOfParticipant";
+							//String url = "/Participant.do?operation=add&pageOf=pageOfParticipant";
+							String url = "/CollectionProtocolRegistration.do?operation=add&pageOf=pageOfCollectionProtocolRegistration";
 							String onClickPath = "changeUrl(this,'"+appendingPath+"')";
 						%>
 			  		    <html:link page="<%=url%>" styleId="newParticipant" onclick="<%=onClickPath%>">
