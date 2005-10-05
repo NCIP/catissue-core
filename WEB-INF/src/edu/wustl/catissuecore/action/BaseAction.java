@@ -94,13 +94,17 @@ public abstract class BaseAction extends Action  {
 		//return (String) request.getSession().getAttribute(Constants.SESSION_DATA);
 	}
 	
-	
+	protected void DeleteRow(List list,Map map,
+			HttpServletRequest request){
+		
+		DeleteRow(list,map,request,null);
+	}
 	/**
 	 * Returns boolean used for diabling/enabling checkbox in jsp Page and
 	 * rearranging rows
 	 */
 	protected void DeleteRow(List list,Map map,
-			HttpServletRequest request){
+			HttpServletRequest request,String outer){
 		
 		String status = request.getParameter("status");
     	if(status == null){
@@ -111,14 +115,34 @@ public abstract class BaseAction extends Action  {
        	for(int k = 0; k < list.size(); k++){
     		text = (String)list.get(k);
     		String first = text.substring(0,text.indexOf(":"));
-    		String last = text.substring(text.indexOf("_"));
+    		String second = text.substring(text.indexOf("_"));
+    		boolean condition = false;
+    		String third = "",fourth = "";
+    		if(second.indexOf(":") != -1){
+    			condition = true;
+    			third = second.substring(0,second.indexOf(":"));
+    			fourth = second.substring(second.lastIndexOf("_"));
+    			
+    		}
+    		
     		if(status.equals(Constants.TRUE)){
     			Map values = map;
     			int count = 1;
     			for(int i = 1; i <= values.size() ; i++){
-    				String id = first + ":" + i +last;
+    				String id = "";
+    				String mapId = "";
+    				if(condition){
+    	    			id = first + ":"+ outer + third + ":"+ i + fourth;
+    	    			mapId = first + ":"+ outer + third + ":"+ count + fourth;
+    				}
+    	    			
+    	    		else {
+    	    			id = first + ":" + i + second;
+    	    			mapId = first + ":" +count + second;
+    	    		}
+    				
     				if(values.containsKey(id)){
-    					values.put(first + ":" +count +last,map.get(id));
+    					values.put(mapId,map.get(id));
     					count++;
     				}
     			}
