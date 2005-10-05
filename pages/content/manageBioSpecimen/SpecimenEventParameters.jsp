@@ -14,6 +14,7 @@
 <head>
 <%
 	String[] columnList = Constants.EVENT_PARAMETERS_COLUMNS;
+	String title = null;
 	List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
 	String specimenIdentifier = (String)request.getAttribute(Constants.SPECIMEN_ID);
@@ -116,11 +117,13 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 <%
 	if(dataList!=null && dataList.size() != 0)
 	{
+		title = "Specimen Event Parameters List for Identifier : " + specimenIdentifier;
 %>
 
    	 	<tr>
 			<td class="formTitle" height="20">
-				<bean:message key="specimenEventParameters.list"/>
+				<%--bean:message key="specimenEventParameters.list"/--%>
+				<%=title%>
 			</td>
 		</tr>
 		
@@ -166,10 +169,14 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 				</div>
 			</td>
 		</tr>
-<% } else { %>
+<% } else
+   {
+		title = "No Specimen Event Paremeters are available for Identifier : " + specimenIdentifier;
+%>
 		<tr>
 			<td class="formTitle" height="20">
-				<bean:message key="specimenEventParameters.noSpecimen"/>
+				<%--bean:message key="specimenEventParameters.noSpecimen"/--%>
+				<%=title%>
 			</td>
 		</tr>
 <% } %>	
