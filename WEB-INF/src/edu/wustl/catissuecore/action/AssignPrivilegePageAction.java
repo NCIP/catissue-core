@@ -12,6 +12,8 @@ package edu.wustl.catissuecore.action;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 
@@ -30,8 +32,10 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.security.SecurityManager;
+import edu.wustl.common.util.dbManager.HibernateMetaData;
 import edu.wustl.common.util.logger.Logger;
 import gov.nih.nci.security.authorization.domainobjects.Role;
+import gov.nih.nci.security.dao.ProtectionElementSearchCriteria;
 
 public class AssignPrivilegePageAction extends BaseAction
 {
@@ -106,7 +110,28 @@ public class AssignPrivilegePageAction extends BaseAction
             
             //SETTING THE RECORD IDS AS PER THE OBJECT TYPES
             String [] privilegeName = {privilegesForm.getPrivilege()};
-            String [] objects = {privilegesForm.getObjectType()};
+            String [] objects =null;
+            try {
+            	if(privilegesForm.getObjectType()!=null)
+            	{
+				List subclassList = HibernateMetaData.getSubClassList(privilegesForm.getObjectType());
+				objects = new String[subclassList.size()+1];
+				Iterator subclassIt = subclassList.iterator();
+				objects[0] = privilegesForm.getObjectType();
+				for(int i =0;subclassIt.hasNext();i++)
+				{
+					objects[i+1] = (String) subclassIt.next();
+				}
+            	}
+            	else
+            	{
+            		objects = new String[]{privilegesForm.getObjectType()};
+            	}
+			
+			} catch (ClassNotFoundException e1) {
+				Logger.out.debug("Exception:"+e1.getMessage(),e1);
+				objects = new String[]{privilegesForm.getObjectType()};
+			}
             
             Set recordIds = SecurityManager.getInstance(AssignPrivilegePageAction.class).getObjectsForAssignPrivilege(String.valueOf(bean.getUserId()),objects,privilegeName);
         	            
