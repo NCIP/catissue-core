@@ -611,7 +611,7 @@ Map map = form.getExternalIdentifier();
 								onclick="javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfSpecimen','name','810','320','yes');return false" >
 								<bean:message key="buttons.map"/>
 							</html:button>
-						</logic:notEqual>
+						</logic:notEqual>&nbsp;
 					</td>
 				 </tr>
 				 
