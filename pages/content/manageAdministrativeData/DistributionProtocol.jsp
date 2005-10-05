@@ -126,8 +126,8 @@ function insRow(subdivtag)
 //value(SpecimenRequirement:`_quantityIn)	
 	
 	var objunit = "value(SpecimenRequirement:"+rowno+"_unitspan)";
-	
-	sname = "<select name='" + objname + "' size='1' onchange=changeUnit('" + objname + "','" + objunit +"') class='formFieldSized10' id='" + objname + "'>";
+	var subtypename =  "value(SpecimenRequirement:"+rowno+"_specimenType)";
+	sname = "<select name='" + objname + "' size='1' onchange=changeUnit('" + objname + "','" + objunit +"','" + subtypename + "') class='formFieldSized10' id='" + objname + "'>";
 	<%for(int i=0;i<specimenClassList.size();i++)
 	{
 		String specimenClassLabel = "" + ((NameValueBean)specimenClassList.get(i)).getName();
@@ -475,6 +475,7 @@ function insRow(subdivtag)
 					String srSubTypeKeyName = srCommonName + "_specimenType";
 					
 					String objunit = "value(SpecimenRequirement:"+ counter +"_unitspan)";
+					String objsubTypeName = "value(SpecimenRequirement:" + counter + "_specimenType)";
 					String identifier = "value(SpecimenRequirement:"+ counter +"_systemIdentifier)";
 					String check = "chk_"+counter;
 			%>
@@ -484,7 +485,7 @@ function insRow(subdivtag)
 					<html:hidden property="<%=identifier%>" />				
 		        </td>
 			<%
-				String functionName ="changeUnit('" + objname + "',' " + objunit + "')"; 
+				String functionName ="changeUnit('" + objname + "',' " + objunit + "','" + objsubTypeName + "')"; 
 				String subTypeFunctionName ="onSubTypeChangeUnit('" + objname + "',this,' " + objunit + "')"; 
 			%>	
 				<td class="formField">
@@ -499,6 +500,10 @@ function insRow(subdivtag)
 						String classValue = (String)form.getValue(srKeyName);
 						
 						specimenTypeList = (List)specimenTypeMap.get(classValue);
+						boolean subListEnabled = false;
+						
+						if(classValue != null && classValue.equals("Cell"))
+								subListEnabled = true;
 								
 						if(specimenTypeList == null)
 						{
@@ -514,7 +519,8 @@ function insRow(subdivtag)
 						
 						
 					%>
-					<html:select property="<%=objname%>" styleClass="formFieldSized10" styleId="<%=objname%>" size="1"  onchange="<%=subTypeFunctionName%>" >
+					<html:select property="<%=objname%>" styleClass="formFieldSized10" styleId="<%=objname%>" 
+						size="1"  onchange="<%=subTypeFunctionName%>" disabled="<%=subListEnabled%>" >
 						<html:options collection="<%=Constants.SPECIMEN_TYPE_LIST%>" labelProperty="name" property="value"/>
 					</html:select>
 		        </td>

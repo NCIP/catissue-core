@@ -480,14 +480,14 @@ public class SpecimenForm extends AbstractActionForm
             if (operation.equals(Constants.ADD)
                     || operation.equals(Constants.EDIT))
             {
-                if (className.equals("-1"))
+                if (!validator.isValidOption(className))
                 {
                     errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
                             "errors.item.required", ApplicationProperties
                                     .getValue("specimen.type")));
                 }
 
-                if (type.equals("-1"))
+                if (!className.equals("Cell") && !validator.isValidOption(type))
                 {
                     errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
                             "errors.item.required", ApplicationProperties

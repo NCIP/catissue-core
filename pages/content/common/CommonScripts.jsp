@@ -114,21 +114,24 @@
 	}
 
 // changes unit on specimen class changed.
-	function changeUnit(listname,unitspan)
+	function changeUnit(listname,unitspan,subTypeListName)
 	{
 		var list = document.getElementById(listname);
 		var selectedOption = list.options[list.selectedIndex].text;
-
+		var subTypeList = document.getElementById(subTypeListName);
+		subTypeList.disabled = true;
 		if(selectedOption == "-- Select --")
 			document.getElementById(unitspan).innerHTML = ugul[0];
 		if(selectedOption == "Fluid")
 		{
 			document.getElementById(unitspan).innerHTML = ugul[1];
+			subTypeList.disabled = false;
 			typeChange(list,FluidArray);
 		}
 		if(selectedOption == "Tissue")
 		{
 			document.getElementById(unitspan).innerHTML = ugul[2];
+			subTypeList.disabled = false;
 			typeChange(list,TissueArray);
 		}
 		if(selectedOption == "Cell")
@@ -139,6 +142,7 @@
 		if(selectedOption == "Molecular")
 		{
 			document.getElementById(unitspan).innerHTML = ugul[4];
+			subTypeList.disabled = false;
 			typeChange(list,MolecularArray);
 		}
 	}

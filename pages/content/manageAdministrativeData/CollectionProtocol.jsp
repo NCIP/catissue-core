@@ -146,8 +146,8 @@ function insRow(subdivtag,iCounter)
 	
 	var objunit = subdivname + "_SpecimenRequirement:"+rowno+"_unitspan)";
 	var specimenClassName = objname;
-	
-	sname = "<select name='" + objname + "' size='1' onchange=changeUnit('" + objname + "','" + objunit +"') class='formFieldSized10' id='" + objname + "'>";
+	var objsubtype = subdivname + "_SpecimenRequirement:"+rowno+"_specimenType)";
+	sname = "<select name='" + objname + "' size='1' onchange=changeUnit('" + objname + "','" + objunit +"','"+ objsubtype +"') class='formFieldSized10' id='" + objname + "'>";
 	<%for(int i=0;i<specimenClassList.size();i++)
 	{
 		String specimenClassLabel = "" + ((NameValueBean)specimenClassList.get(i)).getName();
@@ -631,12 +631,13 @@ function getSubDivCount(subdivtag)
 						String srSubTypeKeyName = srCommonName + "_specimenType";
 						String sName = cName + "_unitspan)";
 						String srIdentifier = cName + "_systemIdentifier)";
+						String tmpSubTypeName = cName + "_specimenType)";
 					%>
 			        
 			        <td class="formField">
 			        	<html:hidden property="<%=srIdentifier%>" />	
 			        	<%
-			        		String onChangeFun = "changeUnit('" + fName + "','" + sName + "')";
+			        		String onChangeFun = "changeUnit('" + fName + "','" + sName + "','" + tmpSubTypeName + "')";
 			        		String subTypeFunctionName ="onSubTypeChangeUnit('" + fName + "',this,'" + sName + "')"; 
 			        		
 			        	%>
@@ -653,6 +654,10 @@ function getSubDivCount(subdivtag)
 								String classValue = (String)colForm.getValue(srFname);
 								specimenTypeList = (List)specimenTypeMap.get(classValue);
 								
+								boolean subListEnabled = false;
+								if(classValue != null && classValue.equals("Cell"))
+									subListEnabled = true;
+								
 								if(specimenTypeList == null)
 								{
 									specimenTypeList = new ArrayList();
@@ -665,7 +670,8 @@ function getSubDivCount(subdivtag)
 			        	<html:select property="<%=fName%>" 
 										styleClass="formFieldSized10" 
 										styleId="<%=fName%>" size="1"
-										   onchange="<%=subTypeFunctionName%>" >
+										   onchange="<%=subTypeFunctionName%>" 
+										   disabled="<%=subListEnabled%>" >
 							<html:options collection="<%=Constants.SPECIMEN_TYPE_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
 			        </td>
@@ -866,7 +872,8 @@ function getSubDivCount(subdivtag)
 										styleClass="formFieldSized10" 
 										styleId="value(CollectionProtocolEvent:`_SpecimenRequirement:1_specimenClass)" size="1"
 										onchange="changeUnit('value(CollectionProtocolEvent:`_SpecimenRequirement:1_specimenClass)',
-			           						'value(CollectionProtocolEvent:`_SpecimenRequirement:1_unitspan)')">
+			           						'value(CollectionProtocolEvent:`_SpecimenRequirement:1_unitspan)',
+			           						'value(CollectionProtocolEvent:`_SpecimenRequirement:1_specimenType)')">
 							<html:options collection="<%=Constants.SPECIMEN_CLASS_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
 			        </td>
