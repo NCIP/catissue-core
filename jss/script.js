@@ -81,8 +81,8 @@ function changeUrl(element,str)
 			
 			var redirectTo = replaceAll("&","_",redirectTo1);
 			var url = element.href + "&" + redirectTo;
-			alert(redirectTo);
-			alert(url);
+			//alert(redirectTo);
+			//alert(url);
 			element.href = url;
 }		
 
