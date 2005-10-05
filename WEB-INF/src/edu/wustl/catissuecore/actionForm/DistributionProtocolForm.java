@@ -179,7 +179,10 @@ public class DistributionProtocolForm extends SpecimenProtocolForm
 //                {
 //                	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("distributionprotocol.participants")));
 //                }
-                
+				if (this.values.keySet().isEmpty())
+				{
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required","Atleast one entry for "+ApplicationProperties.getValue("distributionprotocol.specimenreq")));
+				}
                 
     			Iterator it = this.values.keySet().iterator();
     			while (it.hasNext())
