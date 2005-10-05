@@ -158,12 +158,19 @@
 	{
 	  var currernt;
 	  var reverse;
+	  var currerntValue;
+	  var reverseValue;
+	  
 	  if(obj.options[obj.options.selectedIndex].index > 0)
 	  {
 	    current = obj.options[obj.options.selectedIndex].text;
+	    currentValue = obj.options[obj.options.selectedIndex].value;
 	    reverse = obj.options[obj.options[obj.options.selectedIndex].index-1].text;
+	    reverseValue = obj.options[obj.options[obj.options.selectedIndex].index-1].value;
 	    obj.options[obj.options.selectedIndex].text = reverse;
+	    obj.options[obj.options.selectedIndex].value = reverseValue;
 	    obj.options[obj.options[obj.options.selectedIndex].index-1].text = current;
+	    obj.options[obj.options[obj.options.selectedIndex].index-1].value = currentValue;
 	    self.focus();
 	    obj.options.selectedIndex--;
 	  }
@@ -172,13 +179,19 @@
 	function moveDown(obj)
 	{
 	  var currernt;
-	  var next;
+	  var reverse;
+	  var currerntValue;
+	  var reverseValue;
 	  if(obj.options[obj.options.selectedIndex].index != obj.length-1)
 	  {
 	    current = obj.options[obj.options.selectedIndex].text;
-	    next = obj.options[obj.options[obj.options.selectedIndex].index+1].text;
-	    obj.options[obj.options.selectedIndex].text =  next;
+	    currentValue = obj.options[obj.options.selectedIndex].value;
+	    reverse = obj.options[obj.options[obj.options.selectedIndex].index+1].text;
+	    reverseValue = obj.options[obj.options[obj.options.selectedIndex].index+1].value;
+	    obj.options[obj.options.selectedIndex].text = reverse;
+	    obj.options[obj.options.selectedIndex].value = reverseValue;
 	    obj.options[obj.options[obj.options.selectedIndex].index+1].text = current;
+	    obj.options[obj.options[obj.options.selectedIndex].index+1].value = currentValue;
 	    self.focus();
 	    obj.options.selectedIndex++;
 	  }
@@ -226,6 +239,7 @@
                 	%>
                 
                 	<html:select property="tableName" styleClass="formFieldSized15"  size="1" styleId="tableName" onchange="onTypeChange(this)">
+                		<html:option value="-1"><%=Constants.SELECT_OPTION%></html:option>
                  		<html:options collection="<%=Constants.TABLE_NAMES_LIST%>" labelProperty="name" property="value"/>   
 	                </html:select>
     		        </td>

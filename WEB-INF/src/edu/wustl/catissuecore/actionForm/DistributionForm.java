@@ -47,9 +47,13 @@ public class DistributionForm extends SpecimenEventParametersForm
 	
 	private int counter=1;
 	private String distributionProtocolId;
+	private boolean idChange = false;
+	private int rowNo=0;
+	
+	
 	
 	/**
-	 * Map to handle values of all the CollectionProtocol Events
+	 * Map to handle values of all Events
 	 */
 	protected Map values = new HashMap();
 	
@@ -83,48 +87,25 @@ public class DistributionForm extends SpecimenEventParametersForm
 				String key2 = "DistributedItem:"+i+"_Specimen_systemIdentifier";
 				String key3 = "DistributedItem:"+i+"_quantity";
 				String key4 = "DistributedItem:"+i+"_unitSpan";
-				String key5 = "DistributedItem:"+i+"_Specimen_className";				
+				String key5 = "DistributedItem:"+i+"_tissueSite";
+				String key6 = "DistributedItem:"+i+"_tissueSide";
+				String key7 = "DistributedItem:"+i+"_pathologicalStatus";
+				String key8 = "DistributedItem:"+i+"_Specimen_className";				
 				
 				DistributedItem dItem = (DistributedItem)it.next();
 				Specimen specimen =dItem.getSpecimen();
 				String unit= getUnitSpan(specimen);
 				Double quantity = dItem.getQuantity();
 				double availableQuantity = 0.0;
-				/*if(specimen instanceof TissueSpecimen)
-				{
-					TissueSpecimen tissueSpecimen = 
-					availableQuantity = tissueSpecimen.getAvailableQuantityInGram().doubleValue() - 
-																					quantity.doubleValue();
-				}
-				else if(specimen instanceof CellSpecimen)
-				{
-					CellSpecimen cellSpecimen = 
-					availableQuantity = cellSpecimen.getAvailableQuantityInCellCount().doubleValue() - 
-																						quantity.doubleValue();
-					
-				}
-				else if(specimen instanceof MolecularSpecimen)
-				{
-					MolecularSpecimen molecularSpecimen = 
-					availableQuantity = molecularSpecimen.getAvailableQuantityInMicrogram().doubleValue() - 
-																						quantity.doubleValue();
-						
-					
-				}
-				else if(specimen instanceof FluidSpecimen)
-				{
-					FluidSpecimen fluidSpecimen = 
-					availableQuantity = fluidSpecimen.getAvailableQuantityInMilliliter().doubleValue() - 
-																						quantity.doubleValue();
-						
-				}*/
 				
 				values.put(key1,dItem.getSystemIdentifier());
-				values.put(key2,dItem.getSpecimen().getSystemIdentifier());
+				values.put(key2,specimen.getSystemIdentifier());
 				values.put(key3,quantity);
 				values.put(key4,unit);
-				values.put(key5,dItem.getSpecimen().getClassName());
-				
+				values.put(key5,specimen.getSpecimenCharacteristics().getTissueSite());
+				values.put(key6,specimen.getSpecimenCharacteristics().getTissueSide());
+				values.put(key7,specimen.getSpecimenCharacteristics().getPathologicalStatus());
+				values.put(key8,specimen.getClassName());
 				
 				i++;
 			}
@@ -177,11 +158,11 @@ public class DistributionForm extends SpecimenEventParametersForm
 				}
 				
 				
-				if(key.indexOf("Specimen_className")!=-1 && !validator.isValidOption( value))
+				/*if(key.indexOf("Specimen_className")!=-1 && !validator.isValidOption( value))
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.distribution.missing",ApplicationProperties.getValue("distribution.specimenType")));
 				}
-				/*if(key.indexOf("quantity")!=-1)
+				if(key.indexOf("quantity")!=-1)
 				{
 					String classKey = key.substring(0,key.lastIndexOf("_") );
 					classKey = classKey + "_specimenClass";
@@ -342,4 +323,28 @@ public class DistributionForm extends SpecimenEventParametersForm
 		return null;
 	}
 
+	/**
+	 * @return Returns the idChange.
+	 */
+	public boolean isIdChange() {
+		return idChange;
+	}
+	/**
+	 * @param idChange The idChange to set.
+	 */
+	public void setIdChange(boolean idChange) {
+		this.idChange = idChange;
+	}
+	/**
+	 * @return Returns the rowNo.
+	 */
+	public int getRowNo() {
+		return rowNo;
+	}
+	/**
+	 * @param rowNo The rowNo to set.
+	 */
+	public void setRowNo(int rowNo) {
+		this.rowNo = rowNo;
+	}
 }

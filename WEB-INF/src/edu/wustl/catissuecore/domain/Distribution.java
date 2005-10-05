@@ -146,7 +146,6 @@ public class Distribution extends SpecimenEventParameters implements java.io.Ser
 	{
 		this.distributedItemCollection = distributedItemCollection;
 	}
-	
 	public void setAllValues(AbstractActionForm abstractForm)
 	{
 	    try
@@ -165,6 +164,7 @@ public class Distribution extends SpecimenEventParameters implements java.io.Ser
 	        Map map = form.getValues();
 	        Logger.out.debug("map "+map);
 	        map = fixMap(map);
+	        Logger.out.debug("fixedMap "+map);
 	        MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.domain");
 	        distributedItemCollection = parser.generateData(map);
 	        Logger.out.debug("distributedItemCollection "+distributedItemCollection);
@@ -180,56 +180,20 @@ public class Distribution extends SpecimenEventParameters implements java.io.Ser
 	
 	protected Map fixMap(Map orgMap)
 	{
-		Map replaceMap = new HashMap();		
 		Iterator it = orgMap.keySet().iterator();
-		
-		while(it.hasNext())
-		{
-			String key = (String)it.next();
-			Logger.out.debug("Key************************"+key);
-			if(key.indexOf("className")!=-1)
-			{
-				String value = (String)orgMap.get(key);
-				Logger.out.debug("Value..........................."+value); 
-				String replaceWith = "Specimen"+"#"+value+"Specimen";
-				
-				key = key.substring(0,key.lastIndexOf("_"));
-				Logger.out.debug("Second Key***********************"+key);
-				String newKey = key.replaceFirst("Specimen",replaceWith);
-				Logger.out.debug("New Key................"+newKey);
-				replaceMap.put(key,newKey);
-			}
-		}
-		
 		Map newMap = new HashMap();
-		it = orgMap.keySet().iterator();
 		while(it.hasNext())
 		{
 			String key = (String)it.next();
 			String value = (String)orgMap.get(key);
-			
-			if(!key.endsWith("_unit"))
+			if(key.endsWith("_systemIdentifier") || key.endsWith("_quantity"))
 			{
-				if(key.indexOf("Specimen")==-1)
-				{
-					newMap.put(key,value);
-				}
-				else
-				{
-					if(key.indexOf("className")==-1)
-					{
-						String keyPart, newKeyPart;
-						
-						//Replace # and class name and FIX for abstract class
-						keyPart = key.substring(0,key.lastIndexOf("_"));
-						newKeyPart = (String)replaceMap.get(keyPart);
-						key = key.replaceFirst(keyPart,newKeyPart);
-						newMap.put(key,value);
-					}
-				}
+				newMap.put(key,value);
 			}
-		}
-		
+		}	
 		return newMap;
+		
 	}
+	
+	
 }

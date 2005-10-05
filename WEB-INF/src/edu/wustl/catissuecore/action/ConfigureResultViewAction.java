@@ -73,10 +73,11 @@ public class ConfigureResultViewAction extends Action  {
 	        		columnList = dao.getList(sourceObjectName, displayNameField, valueField1, 
 	        				whereColumnNames, whereCondition1, whereColumnValue,null,null,false);
 	        		//columnList.remove(1);
+	        		tableColumnDataMap.put(tableData,columnList);
 	        		i++;
 	        	}
 	        	Logger.out.debug("Table Name"+ tableData.getName());
-	        	tableColumnDataMap.put(tableData,columnList);
+	        	
 	        	
 		        Logger.out.debug("Column List"+ columnList);
 		        

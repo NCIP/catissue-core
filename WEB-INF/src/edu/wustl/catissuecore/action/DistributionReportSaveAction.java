@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -38,9 +39,10 @@ public class DistributionReportSaveAction extends BaseDistributionReportAction
 		String []columnNames = getColumnNames(selectedColumns);
 		try
 		{
-			SessionDataBean sessionData = getSessionData(request);
-			String fileName = "DistributionReport_"+sessionData.getUserName()+".csv";
-			String filePath = Variables.catissueHome+System.getProperty("file.separator")+fileName;
+			HttpSession session=request.getSession();
+			//SessionDataBean sessionData = getSessionData(request);
+			String fileName = "Distribution Report.csv";
+			String filePath = Variables.catissueHome+System.getProperty("file.separator")+"DistributionReport_"+session.getId()+".csv";
 			saveReport(distributionReportForm,listOfData,filePath,columnNames);
 			SendFile.sendFileToClient(response,filePath,fileName);
 		}

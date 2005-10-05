@@ -1212,6 +1212,7 @@ public class Constants
 	
 //	 constants required for Distribution Report
 	public static final String TABLE_IDS = "tableIds";
+	public static final String DISTRIBUTION_TABLE_IDS[] = {"27","31","33","34","35","37"};
 	public static final String TABLE_COLUMN_DATA_MAP = "tableColumnDataMap";
 	public static final String CONFIGURE_RESULT_VIEW_ACTION = "ConfigureResultView.do";
 	public static final String TABLE_NAMES_LIST = "tableNamesList";
@@ -1222,8 +1223,16 @@ public class Constants
 	//public static final String DISTRIBUTION_REPORT_SAVE_ACTION = "DistributionReportSave.do";
 	public static final String DELIMETER = ",";
 	public static final String DISTRIBUTION_REPORT_SAVE_ACTION="DistributionReportSave.do";
+	public static final String SELECTED_COLUMNS[] = {"Specimen.IDENTIFIER.Specimen Identifier",
+													"Specimen.TYPE.Specimen Type",
+													"DistributedItem.QUANTITY.Specimen Quantity",
+													"SpecimenCharacteristics.TISSUE_SITE.Tissue Site",
+													"SpecimenCharacteristics.TISSUE_SIDE.Tissue Side",
+													"SpecimenCharacteristics.PATHOLOGICAL_STATUS.Pathological Status"};
+	public static final String SPECIMEN_ID_LIST = "specimenIdList";
+	public static final String DISTRIBUTION_ACTION = "Distribution.do?operation=add&pageOf=pageOfDistribution&specimenIdKey=";
 	
-
+	
 	public static final String UNDEFINED = "Undefined";
 	public static final String UNKNOWN = "Unknown";
 }

@@ -1,10 +1,11 @@
-<%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
+							<%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.DistributionForm"%>
-<%@ page import="java.util.List,java.util.ListIterator"%>
+<%@ page import="java.util.List,java.util.Iterator"%>
 <%@ page import="edu.wustl.common.beans.NameValueBean"%>
+
 <%!
 	private String changeUnit(String specimenType)
 	{
@@ -25,105 +26,31 @@
 %>
 
 <%
-	List itemList = (List)request.getAttribute(Constants.ITEMLIST);
-	ListIterator iterator=null;
-	String [] cellSpecimenIdArray = (String [])request.getAttribute(Constants.CELL_SPECIMEN_ID_LIST);
+	//List itemList = (List)request.getAttribute(Constants.ITEMLIST);
+	//ListIterator iterator=null;
+	/*String [] cellSpecimenIdArray = (String [])request.getAttribute(Constants.CELL_SPECIMEN_ID_LIST);
 	String [] fluidSpecimenIdArray = (String [])request.getAttribute(Constants.FLUID_SPECIMEN_ID_LIST);
 	String [] molecularSpecimenIdArray = (String [])request.getAttribute(Constants.MOLECULAR_SPECIMEN_ID_LIST);
-	String [] tissueSpecimenIdArray = (String [])request.getAttribute(Constants.TISSUE_SPECIMEN_ID_LIST);
+	String [] tissueSpecimenIdArray = (String [])request.getAttribute(Constants.TISSUE_SPECIMEN_ID_LIST);*/
+	List specimenIdList = (List)request.getAttribute(Constants.SPECIMEN_ID_LIST);
 	DistributionForm formBean = (DistributionForm)request.getAttribute("distributionForm");
-	request.setAttribute("action","default");
+	
 %>
 <head>
 	<script language="JavaScript">
-		
-		function onSpecimenTypeChange(element,unitSpan,idCombo,hiddenProperty)
-		{
-			comboToRefresh = document.getElementById(idCombo);
-			//To Clear the Combo Box
-			comboToRefresh.options.length = 0;
-			var unit = document.getElementById(unitSpan);
-			var unitSpecimen = "";
-			var unitProperty = document.getElementById(hiddenProperty);
-			
-			if(element.value == "Tissue")
-			{
-				unitSpecimen = "<%=Constants.UNIT_GM%>";
-				unitProperty.value = "<%=Constants.UNIT_GM%>";
-				<%
-					if(tissueSpecimenIdArray != null && tissueSpecimenIdArray.length != 0)
-					{
-						for(int i=0;i<tissueSpecimenIdArray.length;i++)
-						{
-				%>
-							comboToRefresh.options[<%=i%>] = new Option('<%=tissueSpecimenIdArray[i]%>','<%=tissueSpecimenIdArray[i]%>');
-				<%
-						}
-					}
-				%>
-			}
-			else if(element.value == "Fluid")
-			{
-				unitSpecimen = "<%=Constants.UNIT_ML%>";
-				unitProperty.value = "<%=Constants.UNIT_ML%>";
-				<%
-					if(fluidSpecimenIdArray != null && fluidSpecimenIdArray.length != 0)
-					{
-						for(int i=0;i<fluidSpecimenIdArray.length;i++)
-						{
-				%>
-							comboToRefresh.options[<%=i%>] = new Option('<%=fluidSpecimenIdArray[i]%>','<%=fluidSpecimenIdArray[i]%>');
-				<%
-						}
-					}
-				%>
-			}
-			else if(element.value == "Cell")
-			{
-				unitSpecimen = "<%=Constants.UNIT_CC%>";
-				unitProperty.value = "<%=Constants.UNIT_CC%>";
-				<%
-					if(cellSpecimenIdArray != null && cellSpecimenIdArray.length != 0)
-					{
-						for(int i=0;i<cellSpecimenIdArray.length;i++)
-						{
-				%>
-							comboToRefresh.options[<%=i%>] = new Option('<%=cellSpecimenIdArray[i]%>','<%=cellSpecimenIdArray[i]%>');
-				<%
-						}
-					}
-				%>
-			}
-			else if(element.value == "Molecular")
-			{
-				unitSpecimen = "<%=Constants.UNIT_MG%>";
-				unitProperty.value = "<%=Constants.UNIT_MG%>";
-				<%
-					if(molecularSpecimenIdArray != null && molecularSpecimenIdArray.length != 0)
-					{
-						for(int i=0;i<molecularSpecimenIdArray.length;i++)
-						{
-				%>
-							comboToRefresh.options[<%=i%>] = new Option('<%=molecularSpecimenIdArray[i]%>','<%=molecularSpecimenIdArray[i]%>');
-				<%
-						}
-					}
-				%>
-			}
-			else
-			{
-				comboToRefresh.options[0] = new Option('<%=Constants.SELECT_OPTION%>','<%=Constants.SELECT_OPTION%>');
-			}
-			
-			unit.innerHTML = unitSpecimen;
+		function onSpecimenIdChange(element)
+		{	
+			document.forms[0].idChange.value="true";
+			setFormAction("<%=Constants.DISTRIBUTION_ACTION%>"+element.name);
+			document.forms[0].submit();
 		}
-		
 		//function to insert a row in the inner block
 		function insRow(subdivtag)
 		{
 			var val = parseInt(document.forms[0].counter.value);
 			val = val + 1;
 			document.forms[0].counter.value = val;
+			var sname = "";
 			
 			var r = new Array(); 
 			r = document.getElementById(subdivtag).rows;
@@ -133,56 +60,76 @@
 			// First Cell
 			var spreqno=x.insertCell(0);
 			spreqno.className="formSerialNumberField";
-			sname=(q+1);
-			spreqno.innerHTML="" + sname;
-			var rowno=(q);
+			var rowno=(q+1);
+			//spreqno.innerHTML="" + sname;
 			var identifier = "value(DistributedItem:" + rowno +"_systemIdentifier)";
 			var cell1 = "<input type='hidden' name='" + identifier + "' value='' id='" + identifier + "'>";
-			spreqno.innerHTML="" + rowno+"." + cell1;
+			var className = "value(DistributedItem:" + rowno +"_Specimen_className)";
+			var cell2 = "<input type='hidden' name='" + className + "' value='' id='" + className + "'>";
+			
+			
+			spreqno.innerHTML="" + rowno+"." + cell1 + cell2 ;
 
 			//Second Cell
-			var spreqspecimen=x.insertCell(1);
-			spreqspecimen.className="formField";
-			sname="";
-			var unitName = "value(DistributedItem:" + (q+1) + "_unitSpan)";
-			var className = "value(DistributedItem:"+ (q+1) +"_Specimen_className)";
-			sname= "";
-			var name = "value(DistributedItem:" + (q+1) + "_Specimen_systemIdentifier)";
-			var hiddenUnitName = "value(DistributedItem:" + (q+1) + "_unit)";
-			var fName = "onSpecimenTypeChange(this,'" + unitName + "','" + name + "','" + hiddenUnitName + "')";
-			sname="<select name='" + className + "' size='1' class='formFieldSized10' id='" + className + "' onChange=" + fName + ">";
-			<%
-				for(int i=0;i<Constants.SPECIMEN_TYPE_VALUES.length;i++)
-				{
-			%>
-						sname = sname + "<option value='<%=Constants.SPECIMEN_TYPE_VALUES[i]%>'><%=Constants.SPECIMEN_TYPE_VALUES[i]%></option>";
-			<%
-				}
-			%>
-			sname = sname + "</select><input type='hidden' name='" + hiddenUnitName + "' value='' id='" + hiddenUnitName + "'>";
-			spreqspecimen.innerHTML="" + sname;
-			
-			//Third Cell
-			var spreqtype=x.insertCell(2);
-			spreqtype.className="formField";
+			var spreqidentifier=x.insertCell(1);
+			spreqidentifier.className="formField";
 			sname="";
 
-			//var name = "value(DistributedItem:" + (q+1) + "_Specimen_systemIdentifier)";
-			sname="<select name='" + name + "' size='1' class='formFieldSized10' id='" + name + "'>";
-			sname = sname + "<option value='<%=Constants.SELECT_OPTION%>'><%=Constants.SELECT_OPTION%></option>";
-			sname = sname + "</select>";
-			spreqtype.innerHTML="" + sname;
+			var name = "value(DistributedItem:" + rowno + "_Specimen_systemIdentifier)";
+			sname="<select name='" + name + "' size='1' class='formField' id='" + name + "' onchange='onSpecimenIdChange(this)'>";
 			
-			//Fourth Cellvalue()
-			var spreqsubtype=x.insertCell(3);
-			spreqsubtype.className="formField";
+			<%for(int i=0;i<specimenIdList.size();i++)
+			{%>
+				sname = sname + "<option value='<%=((NameValueBean)specimenIdList.get(i)).getValue()%>'><%=((NameValueBean)specimenIdList.get(i)).getName()%></option>";
+			<%}%>
+			sname = sname + "</select>";
+			//var hiddenUnitName = "value(DistributedItem:" + (q+1) + "_unit)";
+			//sname = sname + "<input type='hidden' name='" + hiddenUnitName + "' value='' id='" + hiddenUnitName + "'>";
+			
+			spreqidentifier.innerHTML="" + sname;
+	
+			//Third Cell
+			var spreqtissueSite=x.insertCell(2);
+			spreqtissueSite.className="formField";
 			sname="";
 		
-			name = "value(DistributedItem:" + (q+1) + "_quantity)";
+			name = "value(DistributedItem:" + rowno + "_tissueSite)";
 			sname= "";
-			sname="<input type='text' name='" + name + "' size='30'  class='formFieldSized10' id='" + name + "'>";
-			sname = sname + "&nbsp;<span id='" + unitName + "'>&nbsp;</span>";
-			spreqsubtype.innerHTML="" + sname;
+			sname="<input type='text' name='" + name + "' class='formField' id='" + name + "'>";
+			spreqtissueSite.innerHTML="" + sname;
+			
+			//Fourth Cell
+			var spreqtissueSide=x.insertCell(3);
+			spreqtissueSide.className="formField";
+			sname="";
+		
+			name = "value(DistributedItem:" + rowno + "_tissueSide)";
+			sname= "";
+			sname="<input type='text' name='" + name + "'   class='formField' id='" + name + "'>";
+			spreqtissueSide.innerHTML="" + sname;
+			
+			//Fifth Cell
+			var spreqpathologicalStatus=x.insertCell(4);
+			spreqpathologicalStatus.className="formField";
+			sname="";
+		
+			name = "value(DistributedItem:" + rowno + "_pathologicalStatus)";
+			sname= "";
+			sname="<input type='text' name='" + name + "' class='formField' id='" + name + "'>";
+			spreqpathologicalStatus.innerHTML="" + sname;
+			
+			//Sixh Cell
+			var spreqquantity=x.insertCell(5);
+			spreqquantity.className="formField";
+			sname="";
+		
+			name = "value(DistributedItem:" + rowno + "_quantity)";
+			sname= "";
+			sname="<input type='text' name='" + name + "' size='30'  class='formFieldSized5' id='" + name + "'>";
+			var unitName ="value(DistributedItem:"+rowno+"_unitSpan)";
+			//var unitValue = changeUnit(document.forms[0].className.value)
+			sname = sname + "&nbsp;<span id='"+unitName+"'>&nbsp;</span>";
+			spreqquantity.innerHTML="" + sname;
 		}
 		function changeAction()
 		{
@@ -234,6 +181,7 @@
 			<td><html:hidden property="operation" value="<%=operation%>"/></td>
 			<td><html:hidden property="counter"/></td>
 			<td><html:hidden property="systemIdentifier" /></td>
+			<td><html:hidden property="idChange"/></td>
 		</tr>
 		
 		<tr>
@@ -361,10 +309,18 @@
 			</td>
 		</tr>
 	</table>
+	<table cellpadding="3" cellspacing="0" border="0">
+		<tr rowspan = 4>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>									
+		</tr>
+	</table>
 	<table summary="" cellpadding="3" cellspacing="0" border="0" width="433">
 <!--  Distributed Item begin here -->
 				 <tr>
-				     <td class="formTitle" height="20" colspan="3">
+				     <td class="formTitle" height="20" colspan="5">
 				     	<bean:message key="distribution.distributedItem"/>
 				     </td>
 				     <td class="formButtonField">
@@ -372,22 +328,26 @@
 						<bean:message key="buttons.addMore"/>
 						</html:button>
 				    </td>
-				  </tr>
+				 </tr>
 				 <tr>
 				 	<td class="formSerialNumberLabel" width="5">
 				     	#
 				    </td>
-
-				    <td class="formLeftSubTableTitle">
-						<bean:message key="distribution.specimenType"/>
-					</td>
 					<td class="formRightSubTableTitle">
 						<bean:message key="itemrecord.specimenId"/>
 					</td>
+					<td class="formLeftSubTableTitle">
+						<bean:message key="specimen.tissueSite"/>
+					</td>
+					<td class="formRightSubTableTitle">
+						<bean:message key="specimen.tissueSide"/>
+					</td>
 				    <td class="formRightSubTableTitle">
+						<bean:message key="specimen.pathologicalStatus"/>
+					</td>
+					<td class="formRightSubTableTitle">
 						<bean:message key="itemrecord.quantity"/>
 					</td>
-
 				 </tr>
 				 
 				 <tbody id="addMore">
@@ -397,93 +357,52 @@
 					String dIdentifier = "value(DistributedItem:"+i+"_systemIdentifier)";
 					String itemName = "value(DistributedItem:"+i+"_Specimen_systemIdentifier)";
 					String quantity = "value(DistributedItem:"+i+"_quantity)";
+					String tissueSite = "value(DistributedItem:"+i+"_tissueSite)";
+					String tissueSide = "value(DistributedItem:"+i+"_tissueSide)";
+					String pathologicalStatus = "value(DistributedItem:"+i+"_pathologicalStatus)";					
 					String unitSpan = "value(DistributedItem:"+i+"_unitSpan)";
 					String className = "value(DistributedItem:"+i+"_Specimen_className)";
 					String key = "DistributedItem:" + i + "_Specimen_className";
-					String unitKey = "DistributedItem:" + i + "_unit";
-					String unitProperty = "value(DistributedItem:"+i+"_unit)";
-					String fName = "onSpecimenTypeChange(this,'" + unitSpan + "','" + itemName + "','" + unitProperty + "')";
-					String srKeyName = "DistributedItem:"+i+"_Specimen_className";
-					String classValue=(String)formBean.getValue(srKeyName);
-					
-					 
-					 
-					 String strUnitValue = ""+(String)formBean.getValue(unitProperty);
-					 strUnitValue = changeUnit(classValue);
+					//String unitKey = "DistributedItem:" + i + "_unit";
+					//String unitProperty = "value(DistributedItem:"+i+"_unit)";
+					//String fName = "onSpecimenTypeChange(this,'" + unitSpan + "','" + itemName + "','" + unitProperty + "')";
+					String srKeyName = "DistributedItem:"+i+"_Specimen_systemIdentifier";
+					//String idValue=(String)formBean.getValue(srKeyName);
+					//String strUnitValue = ""+(String)formBean.getValue(unitProperty);
+					String classValue = (String)formBean.getValue(key);
+					String strUnitValue = changeUnit(classValue);
 				%>
 				 <tr>
 				 	<td class="formSerialNumberField" width="5"><%=i%>
-
-				 	<%--html:hidden property="<%=unitProperty%>"/--%>
+					
+				 	
 				 	<html:hidden property="<%=dIdentifier%>" />	
-				 	<input type="hidden" property="<%=unitProperty%>" id="<%=unitProperty%>" />
-
+				 	
+					<input type="hidden" property="<%=className%>" id="<%=className%>" />
 				 	</td>
 				 	<td class="formField">
-				     	<html:select property="<%=className%>" styleClass="formFieldSized10" styleId="<%=className%>" size="1" disabled="<%=readOnlyForAll%>" onchange="<%=fName%>">
-							<html:options name="<%=Constants.SPECIMEN_CLASS_LIST%>" labelName="<%=Constants.SPECIMEN_CLASS_LIST%>"/>
-						</html:select>
-		        	</td>
-		        	
-				    <td class="formField">
-						<html:select property="<%=itemName%>" styleClass="formFieldSized10" styleId="<%=itemName%>" size="1" disabled="<%=readOnlyForAll%>">
-							<%
-								String keyValue = (String)formBean.getValue(key);
-
-								if(keyValue != null)
-								{
-								if(keyValue.equals("Cell"))
-								{
-							%>
-								<html:options name="<%=Constants.CELL_SPECIMEN_ID_LIST%>" labelName="<%=Constants.CELL_SPECIMEN_ID_LIST%>" />
-							<%
-								}
-								else if(keyValue.equals("Fluid"))
-								{
-							%>
-								<html:options name="<%=Constants.FLUID_SPECIMEN_ID_LIST%>" labelName="<%=Constants.FLUID_SPECIMEN_ID_LIST%>" />
-							<%
-								}
-								else if(keyValue.equals("Molecular"))
-								{
-							%>
-								<html:options name="<%=Constants.MOLECULAR_SPECIMEN_ID_LIST%>" labelName="<%=Constants.MOLECULAR_SPECIMEN_ID_LIST%>" />
-							<%
-								}
-								else if(keyValue.equals("Tissue"))
-								{
-							%>
-								<html:options name="<%=Constants.TISSUE_SPECIMEN_ID_LIST%>" labelName="<%=Constants.TISSUE_SPECIMEN_ID_LIST%>" />
-							<%
-								}
-								else
-								{
-							%>
-								<html:option value="<%=Constants.SELECT_OPTION%>"><%=Constants.SELECT_OPTION%></html:option>
-							<%
-								}
-								}
-								else
-								{
-							%>
-								<html:option value="<%=Constants.SELECT_OPTION%>"><%=Constants.SELECT_OPTION%></html:option>
-							<%
-								}
-							%>
+						<html:select property="<%=itemName%>" styleClass="formField" styleId="<%=itemName%>" size="1" onchange="onSpecimenIdChange(this)">
+							<html:options collection="<%=Constants.SPECIMEN_ID_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
 					</td>
 				    <td class="formField">
-				     	<html:text styleClass="formFieldSized10" size="30" styleId="<%=quantity%>" property="<%=quantity%>" disabled="<%=readOnlyForAll%>" readonly="<%=readOnlyForAll%>"/>
+				     	<html:text styleClass="formField"  styleId="<%=tissueSite%>" property="<%=tissueSite%>" readonly="true"/>
+				    </td>
+   				    <td class="formField">
+				     	<html:text styleClass="formField" styleId="<%=tissueSide%>" property="<%=tissueSide%>" readonly="true"/>
+				    </td>
+   				    <td class="formField">
+				     	<html:text styleClass="formField" styleId="<%=pathologicalStatus%>" property="<%=pathologicalStatus%>" readonly="true"/>
+				    </td>
+				    <td class="formField">
+				     	<html:text styleClass="formFieldSized5" size="30" styleId="<%=quantity%>" property="<%=quantity%>" disabled="<%=readOnlyForAll%>" readonly="<%=readOnlyForAll%>"/>
 				     	<span id="<%=unitSpan%>">&nbsp;<%=strUnitValue%></span>
 				    </td>
-				 					    
 				 </tr>
 				 <%
 				}
 				%>
 				 </tbody>
-				 
-			
 			<!-- Distributed item End here -->
 <!-- buttons -->
 		<tr>

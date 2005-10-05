@@ -169,6 +169,7 @@ public abstract class BaseDistributionReportAction extends BaseAction
     		tableSet.add("CollectionProtocolRegistration");
     		tableSet.add("SpecimenCollectionGroup");
     		tableSet.add("DistributedItem");
+			tableSet.add("SpecimenCharacteristics");
     		query.setTableSet(tableSet);
     		
     		Vector vector = setViewElements(selectedColumns);
@@ -196,9 +197,9 @@ public abstract class BaseDistributionReportAction extends BaseAction
     	}
     	else 
     	{
-    		String selectedColumns[] ={"Specimen.IDENTIFIER.Specimen Identifier","Specimen.TYPE.Specimen Type","DistributedItem.QUANTITY.Specimen Quantity"};
-    		form.setSelectedColumnNames(selectedColumns);
-    		return selectedColumns;
+    		
+    		form.setSelectedColumnNames(Constants.SELECTED_COLUMNS);
+    		return Constants.SELECTED_COLUMNS;
     	}
     	
     }

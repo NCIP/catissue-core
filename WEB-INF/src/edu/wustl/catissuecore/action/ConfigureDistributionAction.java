@@ -29,10 +29,7 @@ public class ConfigureDistributionAction extends Action
             HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException
     {
-    	//ConfigureResultViewForm configForm = (ConfigureResultViewForm)form;
-    	//configForm.setAction("configure");
-    	String []tableIds = {"27","31","33","34","35","37"};
-    	request.setAttribute(Constants.TABLE_IDS, tableIds);
+    	request.setAttribute(Constants.TABLE_IDS, Constants.DISTRIBUTION_TABLE_IDS);
     	return (mapping.findForward("Success"));
     }
 }
