@@ -100,6 +100,7 @@ public class AuthorizationDAOImpl extends
 			stbr
 					.append(" and pg.protection_group_id = ugrpg.protection_group_id ");
 			stbr.append(" and (( ugrpg.group_id = g.group_id");
+			stbr.append(" and ug.group_id= g.group_id");
 			stbr.append("       and ug.user_id = u.user_id)");
 			stbr.append("       or ");
 			stbr.append("     (ugrpg.user_id = u.user_id))");
@@ -128,6 +129,7 @@ public class AuthorizationDAOImpl extends
 			stbr2
 					.append(" and pg.protection_group_id = ugrpg.protection_group_id ");
 			stbr2.append(" and (( ugrpg.group_id = g.group_id");
+			stbr2.append(" and ug.group_id= g.group_id");
 			stbr2.append("       and ug.user_id = u.user_id)");
 			stbr2.append("       or ");
 			stbr2.append("     (ugrpg.user_id = u.user_id))");
