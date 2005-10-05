@@ -148,9 +148,12 @@ public class Utility
 	public static boolean isPersistedValue(Map map,String key){
 		Object obj = map.get(key);
 		String val=null;
-		if (obj!=null) 
+		if (obj!=null) {
 			val = obj.toString();
-		if((val!= null && val != "0") && !(val.equals("")))
+			
+		}
+			
+		if((val!= null && !(val.equals("0"))) && !(val.equals("")))
 			return true;
 		else 
 			return false; 
