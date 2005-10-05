@@ -146,9 +146,9 @@ public class FixedEventParametersForm extends SpecimenEventParametersForm
  
      protected void reset()
      {
-         super.reset();
-         this.fixationType = null;
-         this.durationInMinutes = 0;
+//         super.reset();
+//         this.fixationType = null;
+//         this.durationInMinutes = 0;
      }
     
 	

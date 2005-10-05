@@ -111,9 +111,9 @@ public class ProcedureEventParametersForm extends SpecimenEventParametersForm {
 	 */
     protected void reset()
     {
-        super.reset();
-		this.url = null;
-		this.name = null;
+//        super.reset();
+//		this.url = null;
+//		this.name = null;
     }
 	
 

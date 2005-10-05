@@ -100,8 +100,8 @@ public class CheckInCheckOutEventParametersForm extends SpecimenEventParametersF
 	
      protected void reset()
   	{
-      	super.reset();
-        this.storageStatus = null;
+//      	super.reset();
+//        this.storageStatus = null;
   	}
 
 

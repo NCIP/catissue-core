@@ -39,7 +39,7 @@ public class ThawEventParametersForm extends SpecimenEventParametersForm
    
 	 protected void reset()
 	 {
-	 	super.reset();
+//	 	super.reset();
  	 }
 
    

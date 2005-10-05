@@ -327,15 +327,15 @@ public class MolecularSpecimenReviewParametersForm extends SpecimenEventParamete
       */
       protected void reset()
      {
-         super.reset();
-         this.gelImageURL = null;
-         this.qualityIndex = null;
-         this.laneNumber = null;
-         this.gelNumber = 0;
-         this.absorbanceAt260 = 0.0;
-         this.absorbanceAt280 = 0.0;
-         this.ratio28STo18S = null;
-         this.isRNA = "false";
+//         super.reset();
+//         this.gelImageURL = null;
+//         this.qualityIndex = null;
+//         this.laneNumber = null;
+//         this.gelNumber = 0;
+//         this.absorbanceAt260 = 0.0;
+//         this.absorbanceAt280 = 0.0;
+//         this.ratio28STo18S = null;
+//         this.isRNA = "false";
      }
        
     

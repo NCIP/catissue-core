@@ -181,6 +181,11 @@ public class TissueSpecimenReviewEventParametersForm extends SpecimenEventParame
 		this.lymphocyticPercentage =Utility.toString( tissueSpecimenReviewParametersObject.getLymphocyticPercentage());
 		this.totalCellularityPercentage =Utility.toString( tissueSpecimenReviewParametersObject.getTotalCellularityPercentage());
 		this.histologicalQuality = Utility.toString(tissueSpecimenReviewParametersObject.getHistologicalQuality());
+		Logger.out.debug("this.neoplasticCellularityPercentage : "+ this.neoplasticCellularityPercentage );
+		Logger.out.debug("this.necrosisPercentage : " + this.necrosisPercentage);
+		Logger.out.debug("this.lymphocyticPercentage : " + this.lymphocyticPercentage);
+		Logger.out.debug("this.totalCellularityPercentage : " + this.totalCellularityPercentage);
+						
 	}
 	
 	/**
@@ -241,12 +246,12 @@ public class TissueSpecimenReviewEventParametersForm extends SpecimenEventParame
    
 	 protected void reset()
 	 {
-	 	super.reset();
-        this.necrosisPercentage = null;
-        this.neoplasticCellularityPercentage = null;
-        this.lymphocyticPercentage = null;
-        this.totalCellularityPercentage = null;
-        this.histologicalQuality = null;
+//	 	super.reset();
+//        this.necrosisPercentage = null;
+//        this.neoplasticCellularityPercentage = null;
+//        this.lymphocyticPercentage = null;
+//        this.totalCellularityPercentage = null;
+//        this.histologicalQuality = null;
 
 	 }
 

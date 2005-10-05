@@ -143,9 +143,9 @@ public class SpunEventParametersForm extends SpecimenEventParametersForm
    
 	 protected void reset()
 	 {
-	 	super.reset();
-        this.gravityForce = 0;
-        this.durationInMinutes = 0;
+//	 	super.reset();
+//        this.gravityForce = 0;
+//        this.durationInMinutes = 0;
 	 }
 
 	

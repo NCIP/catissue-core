@@ -92,8 +92,8 @@ public class EmbeddedEventParametersForm extends SpecimenEventParametersForm
       */
       protected void reset()
      {
-         super.reset();
-         this.embeddingMedium = null;
+//         super.reset();
+//         this.embeddingMedium = null;
      }
   
 }

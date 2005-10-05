@@ -47,7 +47,7 @@ public abstract class SpecimenEventParametersForm extends EventParametersForm
 	
 	 protected void reset()
 	 {
-	 	super.reset();
+//	 	super.reset();
 //	 	this.specimenId = -1;
 	 }
 	 

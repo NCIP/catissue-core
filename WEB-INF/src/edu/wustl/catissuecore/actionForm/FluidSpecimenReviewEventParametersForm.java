@@ -110,7 +110,7 @@ public class FluidSpecimenReviewEventParametersForm extends SpecimenEventParamet
   
      protected void reset()
      {
-         super.reset();
+//         super.reset();
        //  this.cellCount = null;
       }
        

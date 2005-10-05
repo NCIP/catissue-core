@@ -130,9 +130,9 @@ public class CollectionEventParametersForm extends SpecimenEventParametersForm
   
      protected void reset()
      {
-     	super.reset();
-        this.collectionProcedure = null;
-        this.container = null;     	
+//     	super.reset();
+//        this.collectionProcedure = null;
+//        this.container = null;     	
      }
 
 	

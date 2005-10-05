@@ -101,8 +101,8 @@ public class DisposalEventParametersForm extends SpecimenEventParametersForm
       */
     protected void reset()
     {
-        super.reset();
-        this.reason = null;
+//        super.reset();
+//        this.reason = null;
     }
 	
 }
