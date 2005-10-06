@@ -19,14 +19,10 @@
                   <td class="welcomeContent" valign="top">
 				  <ul>
 					<li>
-						
-						caTISSUE Core is informatics system that keeps track of multiple specimens from the participant, tracks refined materials (RNA, DNA, Protein) that are used for molecular analysis, and annotate biospecimens with accumulating experimental data, as they are successively used for clinical correlative studies.
-						
+						<bean:message key="home.text.bullet1"/>
 					</li>
 					<li>
-						
-						caTISSUE Core also helps in reducing the evolving functional complexity of the biospecimen banks in collecting, processing, storing, and distribution of human specimens for correlative science cancer research.
-						
+						<bean:message key="home.text.bullet2"/>
 					</li>
                   </td>
                 </tr>
