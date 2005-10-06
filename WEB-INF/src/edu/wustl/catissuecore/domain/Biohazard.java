@@ -49,6 +49,13 @@ public class Biohazard extends AbstractDomainObject implements Serializable
      */
     protected String type;
     
+    /**
+     *boolean for checking persisted Biohazard persisted value
+     *
+     */
+    
+    protected transient Boolean persisted;
+    
     protected Collection specimenCollection = new HashSet();
 
     //Default Constructor
@@ -191,4 +198,12 @@ public class Biohazard extends AbstractDomainObject implements Serializable
             Logger.out.error(excp.getMessage());
         }
     }
+
+	public Boolean getPersisted() {
+		return persisted;
+	}
+
+	public void setPersisted(Boolean persisted) {
+		this.persisted = persisted;
+	}
 }

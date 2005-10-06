@@ -274,13 +274,17 @@ public class NewSpecimenForm extends SpecimenForm
             	
             	while(it.hasNext())
             	{
-            		String key1 = "Biohazard:" + i +"_type";
-    				String key2 = "Biohazard:" + i +"_systemIdentifier";
+            		String key1 = "Biohazard:" + i + "_type";
+    				String key2 = "Biohazard:" + i + "_systemIdentifier";
+    				String key3 = "Biohazard:" + i + "_persisted";
     				
     				Biohazard hazard = (Biohazard)it.next();
     				
     				biohazard.put(key1,hazard.getType());
     				biohazard.put(key2,hazard.getSystemIdentifier());
+    				
+    				//boolean for showing persisted value
+    				biohazard.put(key3,"true");
     				
     				i++;
             	}
