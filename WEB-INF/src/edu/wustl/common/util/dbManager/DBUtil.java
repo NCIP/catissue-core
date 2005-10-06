@@ -1,12 +1,17 @@
 package edu.wustl.common.util.dbManager;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Properties;
 
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.SessionFactory;
 import net.sf.hibernate.cfg.Configuration;
+import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -39,6 +44,48 @@ public class DBUtil
 		    Logger.out.debug("Exception: "+ex.getMessage(),ex);
 			throw new RuntimeException(ex.getMessage());
 		}
+		
+		
+//		try
+//
+//		{
+//
+//		File file = new File(Variables.catissueHome+System.getProperty("file.separator")+"db.properties");
+//
+//		Logger.out.info("File "+file);
+//
+//		BufferedInputStream stram = new BufferedInputStream(new FileInputStream(file));
+//
+//		Properties p = new Properties();
+//
+//		p.load(stram);
+//
+//
+//		stram.close();
+//
+//		Configuration cfg = new Configuration();
+//
+//		cfg.setProperties(p);
+//
+//		m_sessionFactory = cfg.configure().buildSessionFactory();
+//
+//		HibernateMetaData.initHibernateMetaData(cfg);
+//
+//		}
+//
+//		catch(Exception ex)
+//
+//		{
+//
+//		ex.printStackTrace();
+//
+//		Logger.out.debug("Exception: "+ex.getMessage(),ex);
+//
+//		throw new RuntimeException(ex.getMessage());
+
+//		}
+
+
 	}
 
 	/**
