@@ -600,7 +600,6 @@ function getSubDivCount(subdivtag)
 							boolean outerBool = Utility.isPersistedValue(map,outerKey);
 							//boolean bool = false;
 							String outerCondition = "";
-							System.out.println("outerbool--"+outerBool);
 							if(outerBool)
 								outerCondition = "disabled='disabled'";
 
@@ -633,7 +632,7 @@ function getSubDivCount(subdivtag)
 			        			temp = temp + "'/catissuecore/CollectionProtocol.do?operation="+operation+"&pageOf=pageOfCollectionProtocol&status=true&button=deleteSpecimenReq&blockCounter="+counter+"',";
 			        			temp = temp +"'"+ cid + "'" +",";
 			        			temp = temp + "'chk_spec_"+ counter +"_',false)";
-			        			System.out.println("temp--"+temp);
+			        			
 			        		%> 
 							<html:button property="deleteSpecimenReq" styleClass="actionButton" onclick="<%=temp%>">
 								<bean:message key="buttons.delete"/>
@@ -690,7 +689,7 @@ function getSubDivCount(subdivtag)
 						String tmpSubTypeName = cName + "_specimenType)";
 						
 						String innerCheck = "chk_spec_" + counter + "_"+ iCnt;
-						System.out.println("check--"+innerCheck);
+						
 					%>
 			        
 			        <td class="formField">
@@ -788,10 +787,8 @@ function getSubDivCount(subdivtag)
 					</td>
 					<%
 							String innerKey = "CollectionProtocolEvent:"+counter+"_SpecimenRequirement:"+iCnt+"_systemIdentifier";
-							System.out.println("innerKey--"+innerKey);
 							boolean innerBool = Utility.isPersistedValue(map,innerKey);
 							String innerCondition = "";
-							System.out.println("innerBool--"+innerBool);
 							if(innerBool)
 								innerCondition = "disabled='disabled'";
 
