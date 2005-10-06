@@ -335,10 +335,10 @@ function insRow(subdivtag)
 			
 						<td class="formField" colspan=2>
 							<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
-						 	<html:text styleClass="formDateSized" size="35" styleId="startDate" property="startDate" />
+						 	<html:text styleClass="formDateSized15" size="35" styleId="startDate" property="startDate" />
+						 	&nbsp;<bean:message key="page.dateFormat" />&nbsp;
 							<a href="javascript:show_calendar('distributionProtocolForm.startDate',null,null,'MM-DD-YYYY');">
-								<img src="images\calendar.gif" width=24 height=22 border=0>
-							</a>
+								<img src="images\calendar.gif" width=24 height=22 border=0></a>
 						</td>
 					</tr>
 
@@ -353,10 +353,10 @@ function insRow(subdivtag)
 			
 						 <td class="formField" colspan=2>
 						 <div id="enddateDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
-						 <html:text styleClass="formDateSized" size="35" styleId="endDate" property="endDate" />
+						 <html:text styleClass="formDateSized15" size="35" styleId="endDate" property="endDate" />
+						 &nbsp;<bean:message key="page.dateFormat" />&nbsp;
 							<a href="javascript:show_calendar('distributionProtocolForm.endDate',null,null,'MM-DD-YYYY');">
-								<img src="images\calendar.gif" width=24 height=22 border=0>
-							</a>
+								<img src="images\calendar.gif" width=24 height=22 border=0></a>
 						 </td>
 					</tr>
 
