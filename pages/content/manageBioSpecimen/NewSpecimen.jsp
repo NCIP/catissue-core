@@ -708,15 +708,15 @@ Map map = form.getExternalIdentifier();
 				     		<html:text styleClass="formFieldSized15" styleId="<%=exValue%>" property="<%=exValue%>" readonly="<%=readOnlyForAll%>"/>
 				    	</td>
 				    	<%
-							String key = "ExternalIdentifier:" + i +"_systemIdentifier";
-							boolean bool = Utility.isPersistedValue(map,key);
-							String condition = "";
-							if(bool)
-								condition = "disabled='disabled'";
+							String exKey = "ExternalIdentifier:" + i +"_systemIdentifier";
+							boolean exBool = Utility.isPersistedValue(map,exKey);
+							String exCondition = "";
+							if(exBool)
+								exCondition = "disabled='disabled'";
 
 						%>
 						<td class="formField" width="5">
-							<input type=checkbox name="<%=check %>" id="<%=check %>" <%=condition%>>		
+							<input type=checkbox name="<%=check %>" id="<%=check %>" <%=exCondition%>>		
 						</td>
 					 </tr>
 				  <% } %>
@@ -764,10 +764,13 @@ Map map = form.getExternalIdentifier();
 						String bhType = "biohazardValue(Biohazard:" + i + "_type)";
 						String bhTypeKey = "Biohazard:" + i + "_type";
 						String bhId	  = "biohazardValue(Biohazard:" + i + "_systemIdentifier)";
+						String biohzId = "biohazardValue(Biohazard:" + i + "_persisted)";
 						String check = "chk_bio_"+i;
 				  %>
 					<tr>
-					 	<td class="formSerialNumberField" width="5"><%=i%>.</td>
+						<td class="formSerialNumberField" width="5"><%=i%>.
+					 		<html:hidden property="<%=biohzId%>" />
+					 	</td>
 					    <td class="formField">
 				     		<html:select property="<%=bhType%>" styleClass="formFieldSized15" styleId="<%=bhType%>" size="1" onchange="onBiohazardTypeSelected(this)">
 								<html:options collection="<%=Constants.BIOHAZARD_TYPE_LIST%>" labelProperty="name" property="value"/>
@@ -792,16 +795,15 @@ Map map = form.getExternalIdentifier();
 							</html:select>
 				    	</td>
 				    	<%
-							String key = "Biohazard:" + i +"_systemIdentifier";
-							boolean bool = Utility.isPersistedValue(bioHazardMap,key);
-							String condition = "";
-							System.out.println("bool--"+bool);
-							if(bool)
-								condition = "disabled='disabled'";
-
+							String biohzKey = "Biohazard:" + i + "_persisted";
+				    		String condition = (String)bioHazardMap.get(biohzKey);
+				    		boolean biohzBool = Boolean.valueOf(condition).booleanValue();
+							String biohzCondition = "";
+							if(biohzBool)
+								biohzCondition = "disabled='disabled'";
 						%>
 						<td class="formField" width="5">
-							<input type=checkbox name="<%=check %>" id="<%=check %>" <%=condition%>>		
+							<input type=checkbox name="<%=check %>" id="<%=check %>" <%=biohzCondition%>>		
 						</td>
 					 </tr>
 				  <% } %>
