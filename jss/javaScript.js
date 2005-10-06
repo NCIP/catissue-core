@@ -24,38 +24,77 @@ function addDiv(div,adstr)
 	alert(div.innerHTML);
 }
 
-function  deleteChecked(subdivtag,action,countElement,checkName)
+function  deleteChecked(subdivtag,action,countElement,checkName,isOuterTable)
 {
 	var r = new Array(); 
+	
+	/** element of tbody    **/
 	var element = document.getElementById(subdivtag);
-	var pNode = element.parentNode;
+	
+	/** number of rows present    **/
 	var counts = countElement.value;
 	if(counts == undefined){
 		var cnt = document.getElementById(countElement);
+		
+		/** number of rows present(counts) when countElement is again element    **/
 		counts = cnt.value;
 	}
+	/** number if rows deleted**/
 	var delCounts = 0;
+	
+	/** checking whether checkbox is checked or not **/
+	var status = false;
 	for(i=1;i <= counts;i++)
 	{
-
+		/** creating checkbox name**/
 		itemCheck = checkName+i;
 		var chk = document.getElementById(itemCheck);
+		
+		
 		if(document.all[itemCheck].checked==true){
-			var currentRow = chk.parentNode.parentNode;
-			var k = currentRow.rowIndex;
-			pNode.deleteRow(k);
+			var pNode = null;
+			var k = 0;
+			
+			/** condition for checking whether outerTable's delete is clicked or not **/
+			if(isOuterTable) {
+				tableId = "table_" + i;
+				var table = document.getElementById(tableId);
+				
+				/** removing table from tbody tag(div)   **/
+				element.removeChild(table);
+	
+			}
+			else {
+				/** getting table ref from tbody    **/
+				pNode = element.parentNode;
+				
+				/** curent row of table ref **/
+				var currentRow = chk.parentNode.parentNode;
+				k = currentRow.rowIndex;
+				
+				/** deleting row from table **/
+				pNode.deleteRow(k);
+			}
+			
 			delCounts++;
+			status = true;
 		}
 	}
 	
+	
 	if(countElement.value == undefined){
+		/** setting number of rows present in form   **/
 		cnt.value = counts - delCounts;
 	}
 	else
+		/** setting number of rows present in form   **/
 		countElement.value = (countElement.value - delCounts);
 	
-	document.forms[0].action = action;
-	document.forms[0].submit();
+	if(status){
+		/** set action when checkbox is clicked **/
+		document.forms[0].action = action;
+		document.forms[0].submit();
+	}
 		
 		
 }
