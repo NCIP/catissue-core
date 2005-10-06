@@ -32,40 +32,40 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 
 </script>
 
-<table summary="" cellpadding="0" cellspacing="0" border="0" width="100%">
+<table summary="" cellpadding="0" cellspacing="0" border="0" width="100%" height="4%">
 	<tr>
-		 <td class="formTitle" height="25">
+		 <td class="formTitle">
 			<bean:message key="<%=title%>"/>
 		 </td>
 	</tr>
 </table>
 
-<div STYLE="overflow: auto; width:100%; height:100%; padding:0px; margin: 0px; border: 1px solid">
-<script>
-	
-		//	create ActiveWidgets Grid javascript object.
-		var obj = new Active.Controls.Grid;
+<div STYLE="overflow: auto; width:100%; height:96%; padding:0px; margin: 0px; border: 1px solid">
+	<script>
 		
-		//	set number of rows/columns.
-		obj.setRowProperty("count", <%=dataList.size()%>);
-		obj.setColumnProperty("count", <%=columnList.length%>);
-		
-		//	provide cells and headers text
-		obj.setDataProperty("text", function(i, j){return myData[i][j]});
-		obj.setColumnProperty("text", function(i){return columns[i]});
-		
-		//	set headers width/height.
-		obj.setRowHeaderWidth("28px");
-		obj.setColumnHeaderHeight("20px");
-		
-		var row = new Active.Templates.Row;
-		row.setEvent("ondblclick", function(){this.action("myAction")}); 
-		
-		obj.setTemplate("row", row);
-   		obj.setAction("myAction", 
-			function(src){window.location.href = 'SearchObject.do?pageOf=<%=pageOf%>&operation=search&systemIdentifier='+myData[this.getSelectionProperty("index")][0]}); 
-		
-		//	write grid html to the page.
-		document.write(obj);
-</script>
+			//	create ActiveWidgets Grid javascript object.
+			var obj = new Active.Controls.Grid;
+			
+			//	set number of rows/columns.
+			obj.setRowProperty("count", <%=dataList.size()%>);
+			obj.setColumnProperty("count", <%=columnList.length%>);
+			
+			//	provide cells and headers text
+			obj.setDataProperty("text", function(i, j){return myData[i][j]});
+			obj.setColumnProperty("text", function(i){return columns[i]});
+			
+			//	set headers width/height.
+			obj.setRowHeaderWidth("28px");
+			obj.setColumnHeaderHeight("20px");
+			
+			var row = new Active.Templates.Row;
+			row.setEvent("ondblclick", function(){this.action("myAction")}); 
+			
+			obj.setTemplate("row", row);
+	   		obj.setAction("myAction", 
+				function(src){window.location.href = 'SearchObject.do?pageOf=<%=pageOf%>&operation=search&systemIdentifier='+myData[this.getSelectionProperty("index")][0]}); 
+			
+			//	write grid html to the page.
+			document.write(obj);
+	</script>
 </div>
