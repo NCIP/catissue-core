@@ -106,6 +106,7 @@ public abstract class BaseAction extends Action  {
 	protected void DeleteRow(List list,Map map,
 			HttpServletRequest request,String outer){
 		
+		//whether delete button is clicked or not
 		String status = request.getParameter("status");
     	if(status == null){
     		status = Constants.FALSE;
@@ -113,11 +114,15 @@ public abstract class BaseAction extends Action  {
     	
     	String text;
        	for(int k = 0; k < list.size(); k++){
-    		text = (String)list.get(k);
+       		text = (String)list.get(k);
     		String first = text.substring(0,text.indexOf(":"));
     		String second = text.substring(text.indexOf("_"));
+    		
+    		//condition for creating ids for innerTable
     		boolean condition = false;
     		String third = "",fourth = "";
+    		
+    		//checking whether key is inneTable'key or not
     		if(second.indexOf(":") != -1){
     			condition = true;
     			third = second.substring(0,second.indexOf(":"));
@@ -127,23 +132,47 @@ public abstract class BaseAction extends Action  {
     		
     		if(status.equals(Constants.TRUE)){
     			Map values = map;
-    			int count = 1;
+    			
+    			//for outerTable
+    			int outerCount = 1;
+    			
+    			//for innerTable
+    			int innerCount = 1;
     			for(int i = 1; i <= values.size() ; i++){
     				String id = "";
     				String mapId = "";
+    				
+    				//for innerTable key's rearrangement
     				if(condition){
-    	    			id = first + ":"+ outer + third + ":"+ i + fourth;
-    	    			mapId = first + ":"+ outer + third + ":"+ count + fourth;
+    					if(outer != null){
+    						id = first + ":"+ outer + third + ":"+ i + fourth;
+    						mapId = first + ":"+ outer + third + ":"+ innerCount + fourth;
+    					}
+    					else {
+    						//for outer key's rearrangement
+    						for(int j = 1; j <= values.size() ; j++){
+    							id = first + ":"+ i + third + ":"+ j + fourth;
+    							mapId = first + ":"+ outerCount + third + ":"+ j + fourth;
+    							
+    							//checking whether map from form contains keys or not
+    							if(values.containsKey(id)){
+    								values.put(mapId,map.get(id));
+    		    					outerCount++;
+    		    				}
+    						}
+    					}
+    					
     				}
     	    			
     	    		else {
     	    			id = first + ":" + i + second;
-    	    			mapId = first + ":" +count + second;
+    	    			mapId = first + ":" +innerCount + second;
     	    		}
     				
+    				//rearranging key's
     				if(values.containsKey(id)){
     					values.put(mapId,map.get(id));
-    					count++;
+    					innerCount++;
     				}
     			}
     		}

@@ -49,31 +49,25 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
          String button = request.getParameter("button");
          String outer = request.getParameter("blockCounter");
          
-         Map map = null;
+//       Gets the map from ActionForm
+         Map map = collectionProtocolForm.getValues();
+         
+         List key = new ArrayList();
+  		 key.add("CollectionProtocolEvent:outer_SpecimenRequirement:inner_specimenClass");
+  		 key.add("CollectionProtocolEvent:outer_SpecimenRequirement:inner_specimenType");
+  		 key.add("CollectionProtocolEvent:outer_SpecimenRequirement:inner_tissueSite");
+  		 key.add("CollectionProtocolEvent:outer_SpecimenRequirement:inner_pathologyStatus");
+  		 key.add("CollectionProtocolEvent:outer_SpecimenRequirement:inner_quantityIn");
         
          if(button != null){
-         	if(button.equals("deleteSpecimenReq")){
-         		List key = new ArrayList();
-         		key.add("CollectionProtocolEvent:outer_SpecimenRequirement:inner_specimenClass");
-         		key.add("CollectionProtocolEvent:outer_SpecimenRequirement:inner_specimenType");
-         		key.add("CollectionProtocolEvent:outer_SpecimenRequirement:inner_tissueSite");
-         		key.add("CollectionProtocolEvent:outer_SpecimenRequirement:inner_pathologyStatus");
-         		key.add("CollectionProtocolEvent:outer_SpecimenRequirement:inner_quantityIn");
-     	
-         		//Gets the map from ActionForm
-         		map = collectionProtocolForm.getValues();
-         		System.out.println("specimens'map--"+map);
+         	if(button.equals("deleteSpecimenReq"))
          		DeleteRow(key,map,request,outer);
-         	}
+         	
          	else {
-         		List key = new ArrayList();
+         	
          		key.add("CollectionProtocolEvent:outer_clinicalStatus");
          		key.add("CollectionProtocolEvent:outer_studyCalendarEventPoint");
-     	
-         		//Gets the map from ActionForm
-         		map = collectionProtocolForm.getValues();//outer block
-         		System.out.println("clooection's map--"+map);
-         		DeleteRow(key,map,request,null);
+     	        DeleteRow(key,map,request);
          	}
          }
     	
