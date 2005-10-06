@@ -3,6 +3,7 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.CollectionProtocolForm"%>
+<%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
 <%@ page import="java.util.*"%>
 <%@ page import="edu.wustl.common.beans.NameValueBean"%>
 
@@ -112,7 +113,7 @@ function addDiv(div,adstr)
 }
 
 //  function to insert a row in the inner block
-function insRow(subdivtag,iCounter)
+function insRow(subdivtag,iCounter,blockCounter)
 {
 	var cnt = document.getElementById(iCounter);
 	var val = parseInt(cnt.value);
@@ -218,6 +219,16 @@ function insRow(subdivtag,iCounter)
 	sname = sname + "&nbsp;<span id='" + objunit + "'>&nbsp;</span>"
 					
 	spreqqty.innerHTML="" + sname;
+	
+	//Fourth Cell
+	var checkb=x.insertCell(6);
+	checkb.className="formField";
+	checkb.colSpan=2;
+	sname="";
+	var name = "chk_spec_"+ blockCounter +"_"+rowno;
+	sname="<input type='checkbox' name='" + name +"' id='" + name +"' value='C'>"
+	checkb.innerHTML=""+sname;
+	
 }
 /*
 
@@ -477,6 +488,11 @@ function getSubDivCount(subdivtag)
 			<html:button property="addCollectionProtocolEvents" styleClass="actionButton" onclick="addBlock(outerdiv,d1)">Add More</html:button>
 			<html:hidden property="outerCounter"/>	
 	</td>
+	<td class="formTitle" align="Right">
+		<html:button property="deleteCollectionProtocolEvents" styleClass="actionButton" onclick="deleteChecked('outerdiv','/catissuecore/CollectionProtocol.do?operation=<%=operation%>&pageOf=pageOfCollectionProtocol&status=true&button=deleteCollectionProtocolEvents',document.forms[0].outerCounter,'chk_proto_',true)">
+			<bean:message key="buttons.delete"/>
+		</html:button>
+	</td>
 	</tr>
 </table>
 </td></tr>
@@ -484,7 +500,10 @@ function getSubDivCount(subdivtag)
 
 
 <!--  outermostdiv start --><!-- outer div tag  for entire block -->
+
+
 <div id="outerdiv"> 
+<%! Map map; %>
 <%
 		int maxCount=1;
 		int maxIntCount=1;
@@ -492,11 +511,14 @@ function getSubDivCount(subdivtag)
 		CollectionProtocolForm colForm = null;
 		
 		Object obj = request.getAttribute("collectionProtocolForm");
+		//Map map = null;
 		
 		if(obj != null && obj instanceof CollectionProtocolForm)
 		{
 			colForm = (CollectionProtocolForm)obj;
 			maxCount = colForm.getOuterCounter();
+			map = colForm.getValues();
+			
 		}
 
 		for(int counter=maxCount;counter>=1;counter--)
@@ -504,8 +526,10 @@ function getSubDivCount(subdivtag)
 			String commonLabel = "value(CollectionProtocolEvent:" + counter;
 			String commonName = "CollectionProtocolEvent:" + counter;
 			String cid = "ivl(" + counter + ")";
-			String functionName = "insRow('" + commonLabel + "','" + cid +"')";
+			String functionName = "insRow('" + commonLabel + "','" + cid +"'," + counter+ ")";
 			String cpeIdentifier= commonLabel + "_systemIdentifier)";
+			String check = "chk_proto_"+ counter;
+			String tableId = "table_" + counter;
 		
 			if(colForm!=null)
 			{
@@ -516,7 +540,7 @@ function getSubDivCount(subdivtag)
 
 						
 %>
-<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="100%">
+<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="100%" id="<%=tableId%>">
 <tr><td>
 <table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
 	<tr>
@@ -550,6 +574,7 @@ function getSubDivCount(subdivtag)
 						fldName = commonLabel + "_studyCalendarEventPoint)";
 						String keyStudyPoint = commonName + "_studyCalendarEventPoint";
 						String valueStudyPoint = (String)colForm.getValue(keyStudyPoint);
+						
 					
 						if(valueStudyPoint == null)
 							valueStudyPoint = "1";
@@ -570,8 +595,22 @@ function getSubDivCount(subdivtag)
 			        			value="<%=valueStudyPoint%>" /> 
 			        	<bean:message key="collectionprotocol.studycalendarcomment"/>
 					</td>
+					<%
+							String outerKey = "CollectionProtocolEvent:" + counter + "_systemIdentifier";
+							boolean outerBool = Utility.isPersistedValue(map,outerKey);
+							//boolean bool = false;
+							String outerCondition = "";
+							System.out.println("outerbool--"+outerBool);
+							if(outerBool)
+								outerCondition = "disabled='disabled'";
+
+						%>
+						
 			    </tr>
 			</TABLE>
+		</td>
+		<td rowspan=2 class="tabrightmostcell">
+			<input type=checkbox name="<%=check%>" id="<%=check %>" <%=outerCondition%>>		
 		</td>
 	</tr>
 
@@ -588,6 +627,18 @@ function getSubDivCount(subdivtag)
 			     		
 			     		<html:hidden styleId="<%=cid%>" property="<%=cid%>" value="<%=""+maxIntCount%>"/>
 			        </td>
+			        <td class="formTitle" align="Right">
+			        		<% String temp = "deleteChecked('";
+			        			temp = temp + commonLabel+"',";
+			        			temp = temp + "'/catissuecore/CollectionProtocol.do?operation="+operation+"&pageOf=pageOfCollectionProtocol&status=true&button=deleteSpecimenReq&blockCounter="+counter+"',";
+			        			temp = temp +"'"+ cid + "'" +",";
+			        			temp = temp + "'chk_spec_"+ counter +"_',false)";
+			        			System.out.println("temp--"+temp);
+			        		%> 
+							<html:button property="deleteSpecimenReq" styleClass="actionButton" onclick="<%=temp%>">
+								<bean:message key="buttons.delete"/>
+							</html:button>
+					</td>
 			    </tr>
 			    
 			    <TBODY id="<%=commonLabel%>">
@@ -611,6 +662,11 @@ function getSubDivCount(subdivtag)
 			        <td class=formLeftSubTitle>&nbsp;
 			        	<bean:message key="collectionprotocol.quantity" />
 			        </td>
+			        <td class="formRightSubTableTitle">
+						<label for="delete" align="center">
+							<bean:message key="addMore.delete" />
+						</label>
+					</td>
 			    </TR><!-- SUB TITLES END -->
 				
 				<%
@@ -632,6 +688,9 @@ function getSubDivCount(subdivtag)
 						String sName = cName + "_unitspan)";
 						String srIdentifier = cName + "_systemIdentifier)";
 						String tmpSubTypeName = cName + "_specimenType)";
+						
+						String innerCheck = "chk_spec_" + counter + "_"+ iCnt;
+						System.out.println("check--"+innerCheck);
 					%>
 			        
 			        <td class="formField">
@@ -727,6 +786,19 @@ function getSubDivCount(subdivtag)
 			        		<%=strHiddenUnitValue%>
 						</span>
 					</td>
+					<%
+							String innerKey = "CollectionProtocolEvent:"+counter+"_SpecimenRequirement:"+iCnt+"_systemIdentifier";
+							System.out.println("innerKey--"+innerKey);
+							boolean innerBool = Utility.isPersistedValue(map,innerKey);
+							String innerCondition = "";
+							System.out.println("innerBool--"+innerBool);
+							if(innerBool)
+								innerCondition = "disabled='disabled'";
+
+						%>
+						<td class="formField" width="5">
+							<input type=checkbox name="<%=innerCheck%>" id="<%=innerCheck %>" <%=innerCondition%>>		
+						</td>
 				</TR>	<!-- SPECIMEN REQ DATA END -->
 				<%
 					} // inner for block
@@ -776,7 +848,7 @@ function getSubDivCount(subdivtag)
 
 <html:form action="DummyCollectionProtocol.do">
 <div id="d1">
-<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="100%">
+<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="100%" id="table_`">
 <tr><td>
 <table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
 	<tr>
@@ -817,9 +889,14 @@ function getSubDivCount(subdivtag)
 			        			value="1" /> 
 			        	<bean:message key="collectionprotocol.studycalendarcomment"/>
 					</td>
+					
 			    </tr>
 			</TABLE>
 		</td>
+		
+			<td rowspan=2 class="tabrightmostcell">
+				<input type=checkbox name="chk_proto_`" id="chk_proto_`">		
+			</td>
 	</tr>
 
 	<!-- 2nd row -->
@@ -834,10 +911,15 @@ function getSubDivCount(subdivtag)
 			        <%
 				        String hiddenCounter = "ivl(`)";
 			        %>
-			     		<html:button property="addSpecimenReq" styleClass="actionButton" value="Add More" onclick="insRow('value(CollectionProtocolEvent:`','ivl(`)')"/>
+			     		<html:button property="addSpecimenReq" styleClass="actionButton" value="Add More" onclick="insRow('value(CollectionProtocolEvent:`','ivl(`)','`')"/>
 			     		
 			     		<html:hidden styleId="<%=hiddenCounter%>" property="<%=hiddenCounter%>" value="1"/>
 			        </td>
+			        <td class="formTitle" align="Right">
+							<html:button property="deleteSpecimenReq" styleClass="actionButton" onclick="deleteChecked('value(CollectionProtocolEvent:`','/catissuecore/CollectionProtocol.do?operation=<%=operation%>&pageOf=pageOfCollectionProtocol&status=true&button=deleteSpecimenReq&blockCounter=`','ivl(`)','chk_spec_`_',false)">
+								<bean:message key="buttons.delete"/>
+							</html:button>
+					</td>
 			    </tr>
 			    
 			    <TBODY id="value(CollectionProtocolEvent:`">
@@ -861,6 +943,11 @@ function getSubDivCount(subdivtag)
 			        <td class=formLeftSubTitle>* 
 			        	<bean:message key="collectionprotocol.quantity" />
 			        </td>
+			        <td class="formRightSubTableTitle">
+						<label for="delete" align="center">
+							<bean:message key="addMore.delete" />
+						</label>
+					</td>
 			    </TR><!-- SUB TITLES END -->
 				
 				<TR>	<!-- SPECIMEN REQ DATA -->
@@ -920,6 +1007,11 @@ function getSubDivCount(subdivtag)
 			        		&nbsp;
 						</span>
 					</td>
+					
+						<td class="formField" width="5">
+							<input type=checkbox name="chk_spec_`_1" id="chk_spec_`_1">		
+						</td>
+					
 				</TR>	<!-- SPECIMEN REQ DATA END -->
 				</TBODY>
 			</TABLE>
