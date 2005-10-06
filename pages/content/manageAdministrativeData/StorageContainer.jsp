@@ -25,12 +25,23 @@
 		Object obj = request.getAttribute("storageContainerForm");
 		int noOfRows=1;
 		Map map = null;
+		String label1 = null;
+		String label2 = null;
 		
 		if(obj != null && obj instanceof StorageContainerForm)
 		{
 			StorageContainerForm form = (StorageContainerForm)obj;
 			map = form.getValues();
 			noOfRows = form.getCounter();
+
+			label1 = form.getOneDimensionLabel();
+			label2 = form.getTwoDimensionLabel();
+
+			if(label1 == null)
+			{
+				label1 = "Dimension One";
+				label2 = "Dimension Two";
+			}
 		}
 		
 		//  --------- add new 
@@ -448,10 +459,7 @@ function insRow(subdivtag)
 					<tr>
 						<td class="formRequiredNotice" width="5">&nbsp;</td>
 						<td class="formLabel" colspan="2">
-							<label for="oneDimensionLabel">
-								<%--<bean:message key="storageContainer.oneDimensionLabel" />--%>
-								<bean:write name="storageContainerForm" property="oneDimensionLabel"/>
-							</label>
+							&nbsp;<%=label1%>
 						</td>
 						<td class="formField" colspan="2">
 							<html:text styleClass="formFieldSized10" size="30" styleId="oneDimensionCapacity" property="oneDimensionCapacity"/>
@@ -461,10 +469,15 @@ function insRow(subdivtag)
 					<tr>
 						<td class="formRequiredNotice" width="5">&nbsp;</td>
 						<td class="formLabel" colspan="2">
-							<label for="twoDimensionLabel">
-								<%--<bean:message key="storageContainer.twoDimensionLabel" />--%>								
-								<bean:write name="storageContainerForm" property="twoDimensionLabel"/>
-							</label>
+							&nbsp;
+							<%
+								if(label2 != null || !(label2.equals("")))
+								{
+							%>
+							<%=label2%>
+							<%
+								}
+							%>
 						</td>
 						<td class="formField" colspan="2">
 							<html:text styleClass="formFieldSized10" size="30" styleId="twoDimensionCapacity" property="twoDimensionCapacity"/>
