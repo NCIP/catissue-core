@@ -12,6 +12,7 @@ import java.util.List;
 
 import net.sf.hibernate.cfg.Configuration;
 import net.sf.hibernate.mapping.Column;
+import net.sf.hibernate.mapping.PersistentClass;
 import net.sf.hibernate.mapping.Property;
 import net.sf.hibernate.mapping.Subclass;
 import net.sf.hibernate.mapping.Table;
@@ -62,6 +63,24 @@ public class HibernateMetaData
 		Table tbl = cfg.getClassMapping(classObj).getTable();
 		if(tbl!=null)
 			return tbl.getName();
+		return "";
+		
+	}
+	
+	public static  String getClassName(String tableName)
+	{
+		Iterator it = cfg.getClassMappings();
+		PersistentClass persistentClass;
+		String className;
+		while(it.hasNext())
+		{
+			persistentClass = (PersistentClass) it.next();
+			if(tableName.equalsIgnoreCase(persistentClass.getTable().getName()))
+			{
+				return persistentClass.getName();
+			}
+		}
+		
 		return "";
 	}
 	
@@ -137,6 +156,8 @@ public class HibernateMetaData
 		//HibernateMetaData.getDATA(CollectionProtocol.class);
 		HibernateMetaData.getSubClassList(Specimen.class.getName());
 		//System.out.println(str);
+		
+		System.out.println(HibernateMetaData.getClassName("CATISSUE_MOLECULAR_SPECIMEN"));
 		
 	}
 }
