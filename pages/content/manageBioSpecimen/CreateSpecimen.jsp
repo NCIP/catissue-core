@@ -367,7 +367,7 @@
 				     	</html:button>
 				    </td>
 				    <td class="formTitle" align="Right">
-							<html:button property="deleteValue" styleClass="actionButton" onclick="deleteChecked('addExternalIdentifier','/catissuecore/CreateSpecimen.do?operation=<%=operation%>&pageOf=&status=true',document.forms[0].exIdCounter,'chk_')">
+							<html:button property="deleteValue" styleClass="actionButton" onclick="deleteChecked('addExternalIdentifier','/catissuecore/CreateSpecimen.do?operation=<%=operation%>&pageOf=&status=true',document.forms[0].exIdCounter,'chk_',false)">
 								<bean:message key="buttons.delete"/>
 							</html:button>
 						</td>

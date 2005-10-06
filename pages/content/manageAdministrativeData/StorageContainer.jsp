@@ -484,7 +484,7 @@ function insRow(subdivtag)
 						<html:hidden property="counter"/>
 						</td>
 						<td class="formTitle" align="Right">
-							<html:button property="deleteValue" styleClass="actionButton" onclick="deleteChecked('addMore','/catissuecore/StorageContainer.do?operation=<%=operation%>&pageOf=pageOfStorageContainer&status=true',document.forms[0].counter,'chk_')">
+							<html:button property="deleteValue" styleClass="actionButton" onclick="deleteChecked('addMore','/catissuecore/StorageContainer.do?operation=<%=operation%>&pageOf=pageOfStorageContainer&status=true',document.forms[0].counter,'chk_',false)">
 								<bean:message key="buttons.delete"/>
 							</html:button>
 						</td>
