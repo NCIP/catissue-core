@@ -1,4 +1,4 @@
-### CSM DATA
+### CSM_DATA 
 insert into application values (1 , 'catissuecore' , 'catisssue core application' , 0 , 0 , '2005-07-23');
 
 
