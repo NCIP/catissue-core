@@ -16,7 +16,16 @@ import edu.wustl.catissuecore.bizlogic.QueryBizLogic;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.dao.DAO;
 import edu.wustl.catissuecore.dao.HibernateDAO;
+import edu.wustl.catissuecore.domain.CellSpecimen;
+import edu.wustl.catissuecore.domain.CollectionProtocol;
+import edu.wustl.catissuecore.domain.DistributionProtocol;
+import edu.wustl.catissuecore.domain.FluidSpecimen;
+import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Participant;
+import edu.wustl.catissuecore.domain.Site;
+import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.domain.StorageContainer;
+import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.Permissions;
 import edu.wustl.catissuecore.util.ProtectionGroups;
@@ -27,6 +36,7 @@ import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.util.logger.Logger;
+import gov.nih.nci.cabio.domain.Tissue;
 import gov.nih.nci.security.authorization.domainobjects.ProtectionElement;
 import gov.nih.nci.security.dao.ProtectionElementSearchCriteria;
 
@@ -94,13 +104,27 @@ public class CatissueCoreServletContextListener
         }
         
         Map protectionGroupsForObjectTypes = new HashMap();
-        protectionGroupsForObjectTypes.put("edu.wustl.catissuecore.domain.Site",
+        protectionGroupsForObjectTypes.put(Site.class.getName(),
                 new String[] {ADMINISTRATORS_DATA_GROUP});
-        protectionGroupsForObjectTypes.put("edu.wustl.catissuecore.domain.StorageContainer",
+        protectionGroupsForObjectTypes.put(StorageContainer.class.getName(),
                 new String[] {ADMINISTRATORS_DATA_GROUP});
-        protectionGroupsForObjectTypes.put("edu.wustl.catissuecore.domain.DistributionProtocol",
+        protectionGroupsForObjectTypes.put(DistributionProtocol.class.getName(),
                 new String[] {TECHNICIANS_DATA_GROUP});
-        protectionGroupsForObjectTypes.put("edu.wustl.catissuecore.domain.User",
+        protectionGroupsForObjectTypes.put(User.class.getName(),
+                new String[] {ADMINISTRATORS_DATA_GROUP});
+        protectionGroupsForObjectTypes.put(Participant.class.getName(),
+                new String[] {ADMINISTRATORS_DATA_GROUP});
+        protectionGroupsForObjectTypes.put(CollectionProtocol.class.getName(),
+                new String[] {ADMINISTRATORS_DATA_GROUP});
+        protectionGroupsForObjectTypes.put(SpecimenCollectionGroup.class.getName(),
+                new String[] {ADMINISTRATORS_DATA_GROUP});
+        protectionGroupsForObjectTypes.put(FluidSpecimen.class.getName(),
+                new String[] {ADMINISTRATORS_DATA_GROUP});
+        protectionGroupsForObjectTypes.put(TissueSpecimen.class.getName(),
+                new String[] {ADMINISTRATORS_DATA_GROUP});
+        protectionGroupsForObjectTypes.put(MolecularSpecimen.class.getName(),
+                new String[] {ADMINISTRATORS_DATA_GROUP});
+        protectionGroupsForObjectTypes.put(CellSpecimen.class.getName(),
                 new String[] {ADMINISTRATORS_DATA_GROUP});
         Constants.STATIC_PROTECTION_GROUPS_FOR_OBJECT_TYPES.putAll(protectionGroupsForObjectTypes);
         
