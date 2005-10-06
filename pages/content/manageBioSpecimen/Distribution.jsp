@@ -342,7 +342,7 @@
 						</html:button>
 				    </td>
 				    <td class="formButtonField" align="Right">
-						<html:button property="deleteValue" styleClass="actionButton" onclick="deleteChecked('addMore','/catissuecore/Distribution.do?operation=<%=operation%>&pageOf=pageOfDistribution&status=true',document.forms[0].counter,'chk_')">
+						<html:button property="deleteValue" styleClass="actionButton" onclick="deleteChecked('addMore','/catissuecore/Distribution.do?operation=<%=operation%>&pageOf=pageOfDistribution&status=true',document.forms[0].counter,'chk_',false)">
 							<bean:message key="buttons.delete"/>
 						</html:button>
 					</td>
