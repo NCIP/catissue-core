@@ -8,9 +8,6 @@
  */ 
 package edu.wustl.catissuecore.actionForm;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.struts.action.ActionForm;
 
 
@@ -27,7 +24,7 @@ import org.apache.struts.action.ActionForm;
 public class ConfigureResultViewForm extends ActionForm
 {
     private String tableName;
-    private String []selectedColumnNames ;
+    private String []selectedColumnNames;
     private String []columnNames;
     private String nextAction;
     private Long distributionId;

@@ -151,14 +151,10 @@ public class Distribution extends SpecimenEventParameters implements java.io.Ser
 	    try
 	    {
 	    	super.setAllValues(abstractForm);
-	    	
 	    	super.specimen = null;
-	    	
 	    	DistributionForm form = (DistributionForm) abstractForm;
-	    	
 	        toSite.setSystemIdentifier(new Long(form.getToSite()));
 	        fromSite.setSystemIdentifier(new Long(form.getFromSite()));
-	        
 	        distributionProtocol.setSystemIdentifier(new Long(form.getDistributionProtocolId()));
 	        
 	        Map map = form.getValues();
@@ -171,10 +167,8 @@ public class Distribution extends SpecimenEventParameters implements java.io.Ser
 	    }
 	    catch(Exception excp)
 	    {
-	   
 	    	// use of logger as per bug 79
 	    	Logger.out.error(excp.getMessage(),excp); 
-	   
 	    }
 	}
 	
@@ -186,7 +180,7 @@ public class Distribution extends SpecimenEventParameters implements java.io.Ser
 		{
 			String key = (String)it.next();
 			String value = (String)orgMap.get(key);
-			if(key.endsWith("_systemIdentifier") || key.endsWith("_quantity"))
+			if(key.endsWith("_systemIdentifier") || key.endsWith("uantity"))
 			{
 				newMap.put(key,value);
 			}

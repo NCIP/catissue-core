@@ -8,20 +8,12 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
 <%@ page import="edu.wustl.common.util.SendFile"%>
 <%
-        List dataList = (List)request.getAttribute("listOfData");
-        String []columnNames = (String []) request.getAttribute("columnNames");
-        DistributionReportForm distForm = (DistributionReportForm)request.getAttribute("distributionReportForm");
+        List dataList = (List)request.getAttribute(Constants.DISTRIBUTED_ITEMS_DATA);
+        String []columnNames = (String []) request.getAttribute(Constants.COLUMN_NAMES_LIST);
+        DistributionReportForm distForm = (DistributionReportForm)request.getAttribute(Constants.DISTRIBUTION_REPORT_FORM);
 		ConfigureResultViewForm form = (ConfigureResultViewForm)request.getAttribute("configureResultViewForm");
 		String []selectedColumns=form.getSelectedColumnNames();
 		
-		/*if(!form.isReportAction())
-		{
-			String filename = Variables.catissueHome+System.getProperty("file.separator")+"Temp.csv";
-			SendFile.sendFileToClient(response,filename,out);
-			//out.clear(); 
-			//out = pageContext.pushBody(); 
-			//form.setReportAction(true);
-		}*/
 %> 
 <script language="JavaScript">
 	function changeAction()
@@ -217,7 +209,7 @@
 				 		for(int i=0;i<columnNames.length;i++)
 				 		{
 				 	%>
-						    <td class="formLeftSubTableTitle" >
+						    <td class="formLeftSubTitle" >
 								<%=columnNames[i]%>		
 							</td>
 					<%

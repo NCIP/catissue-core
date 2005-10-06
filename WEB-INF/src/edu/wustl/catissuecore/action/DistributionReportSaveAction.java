@@ -16,8 +16,8 @@ import edu.wustl.catissuecore.actionForm.ConfigureResultViewForm;
 import edu.wustl.catissuecore.actionForm.DistributionReportForm;
 import edu.wustl.catissuecore.domain.Distribution;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;
-import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.util.ExportReport;
 import edu.wustl.common.util.SendFile;
 import edu.wustl.common.util.logger.Logger;
@@ -28,8 +28,9 @@ public class DistributionReportSaveAction extends BaseDistributionReportAction
 									HttpServletResponse response)throws Exception 
 	{
 		ConfigureResultViewForm configForm = (ConfigureResultViewForm)form;
-		Long distributionId = null;
-		Distribution dist =  getDistribution(distributionId,configForm);
+		Long distributionId =configForm.getDistributionId();;
+		
+		Distribution dist =  getDistribution(distributionId);
     	
     	DistributionReportForm distributionReportForm = getDistributionReportForm(dist);
     	List listOfData = getListOfData(dist, configForm) ;
@@ -40,17 +41,20 @@ public class DistributionReportSaveAction extends BaseDistributionReportAction
 		try
 		{
 			HttpSession session=request.getSession();
-			//SessionDataBean sessionData = getSessionData(request);
-			String fileName = "Distribution Report.csv";
-			String filePath = Variables.catissueHome+System.getProperty("file.separator")+"DistributionReport_"+session.getId()+".csv";
-			saveReport(distributionReportForm,listOfData,filePath,columnNames);
-			SendFile.sendFileToClient(response,filePath,fileName);
+			if(session!=null)
+			{
+				String filePath = Variables.catissueHome+System.getProperty("file.separator")+"DistributionReport_"+session.getId()+".csv";
+				saveReport(distributionReportForm,listOfData,filePath,columnNames);
+				String fileName = Constants.DISTRIBUTION_REPORT_NAME;
+				String contentType= "application/csv";
+				SendFile.sendFileToClient(response,filePath,fileName,contentType);
+			}
 		}
 		catch (IOException e)
 		{
 			Logger.out.error(e.getMessage(),e);
 		}  
-		return null;//(mapping.findForward("Success"));
+		return null;
 	}
 	
 	private void saveReport(DistributionReportForm distributionReportForm,List listOfData,String fileName,

@@ -1,13 +1,10 @@
 package edu.wustl.catissuecore.action;
 
-
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -52,7 +49,7 @@ public class ConfigureResultViewAction extends Action  {
 	        List tableList = dao.getList(sourceObjectName, displayNameField, valueField, 
     				whereColumnNames, whereCondition, whereColumnValues,null,null,false);
      
-	        //Col data
+	        //List of Column data corresponding to table names.
 	        sourceObjectName = QueryColumnData.class.getName();
 	        String valueField1 = "columnName";
 	        String [] whereCondition1 = {"="};
@@ -72,13 +69,10 @@ public class ConfigureResultViewAction extends Action  {
 	        		String []whereColumnValue = {tableIds[i]};
 	        		columnList = dao.getList(sourceObjectName, displayNameField, valueField1, 
 	        				whereColumnNames, whereCondition1, whereColumnValue,null,null,false);
-	        		//columnList.remove(1);
 	        		tableColumnDataMap.put(tableData,columnList);
 	        		i++;
 	        	}
 	        	Logger.out.debug("Table Name"+ tableData.getName());
-	        	
-	        	
 		        Logger.out.debug("Column List"+ columnList);
 		        
 	        }

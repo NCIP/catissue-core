@@ -199,6 +199,19 @@
 </script>
 <%
     ConfigureResultViewForm form = (ConfigureResultViewForm)request.getAttribute("configureResultViewForm");
+    String selectedColumns[] = form.getSelectedColumnNames();
+    String [] columnNames=new String[selectedColumns.length];
+	for(int i=0;i<selectedColumns.length;i++)
+    {
+    	//Split the string which is in the form TableAlias.columnNames.columnDisplayNames
+		StringTokenizer st= new StringTokenizer(selectedColumns[i],".");
+    	while (st.hasMoreTokens())
+    	{
+    		st.nextToken();
+    		st.nextToken();
+    		columnNames[i]=st.nextToken();
+    	}
+   	}
 %>
 </head>
 <html:errors/>
@@ -273,7 +286,12 @@
 			            </td>
 			            <td class="formField">
 			                <html:select property="selectedColumnNames" styleClass="formFieldSized" styleId="selectedColumnNames" size="10" multiple="true">
-			                    
+			                <%	for(int i=0;i<selectedColumns.length;i++) {
+			                %>
+			                	<option value="<%=selectedColumns[i]%>"><%=columnNames[i]%></option>  
+			                <%
+			                	}
+			                %>
 			                    
 			                </html:select>
 			            </td>

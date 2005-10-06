@@ -11,11 +11,8 @@ import edu.wustl.common.util.logger.Logger;
 
 public class SendFile 
 {
-	public static void sendFileToClient(HttpServletResponse response,String filePath,String fileName)
+	public static void sendFileToClient(HttpServletResponse response,String filePath,String fileName,String contentType)
 	{
-		StringBuffer sb = new StringBuffer();
-		int invid;
-		String prefix = null;
 		try
 		{
 			if ( filePath != null && (false == (filePath.length()==0)) )
@@ -23,7 +20,7 @@ public class SendFile
 				File f = new File(filePath);
 				if (f.exists())
 				{
-					response.setContentType("application/csv");
+					response.setContentType(contentType);
 					response.setHeader("Content-Disposition", " filename=\""+fileName+"\";");
 					response.setContentLength((int) f.length());
 					try

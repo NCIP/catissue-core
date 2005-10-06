@@ -113,7 +113,7 @@ public class Specimen extends AbstractDomainObject implements Serializable
      * The combined anatomic state and pathological disease classification of a specimen.
      */
     protected SpecimenCharacteristics specimenCharacteristics = new SpecimenCharacteristics();
-
+    
     public Specimen()
     {    	
     }

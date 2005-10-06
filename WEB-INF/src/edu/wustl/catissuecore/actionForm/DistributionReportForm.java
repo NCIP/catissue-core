@@ -3,7 +3,6 @@ package edu.wustl.catissuecore.actionForm;
 
 
 import java.util.Calendar;
-import java.util.List;
 
 import org.apache.struts.action.ActionForm;
 
@@ -49,14 +48,7 @@ public class DistributionReportForm extends ActionForm
      * Comments on the event parameter.   
      */
     private String comments;
-    /**
-    *  List of data for Distributed Items
-    **/
-    /*private List dataList;
-    /**
-     *  Column Names for the distributed item
-     *
-    private String []columnNames;*/
+
 
 	private String fromSite;
 	private String toSite;
@@ -123,7 +115,7 @@ public class DistributionReportForm extends ActionForm
 	public void setToSite(String toSite) {
 		this.toSite = toSite;
 	}
-//	 ------ GET SET methods
+
 	/**
 	 * @return Returns the comments.
 	 */
@@ -213,9 +205,6 @@ public class DistributionReportForm extends ActionForm
 	{
 		this.systemIdentifier = systemIdentifier ; 
 	}
-	
-
-	
 	/**
 	 * @return Returns the distributionId.
 	 */

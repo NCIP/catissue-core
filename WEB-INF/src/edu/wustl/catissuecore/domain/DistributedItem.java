@@ -25,7 +25,6 @@ public class DistributedItem extends AbstractDomainObject implements java.io.Ser
      * System generated unique systemIdentifier.
      */
 	protected Long systemIdentifier;
-	
 	/**
      * Amount distributed.
      */
@@ -41,6 +40,8 @@ public class DistributedItem extends AbstractDomainObject implements java.io.Ser
      * An event that results in transfer of a specimen from a Repository to a Laboratory.
      */
 	protected Distribution distribution = new Distribution();
+	
+	transient private Double previousQuantity;
 
 	/**
      * Returns the system generated unique systemIdentifier.
@@ -141,5 +142,18 @@ public class DistributedItem extends AbstractDomainObject implements java.io.Ser
 	public String toString()
 	{
 		return systemIdentifier+" "+quantity+" "+specimen.getSystemIdentifier();		
+	}
+	
+	/**
+	 * @return Returns the previousQuantity.
+	 */
+	public Double getPreviousQuantity() {
+		return previousQuantity;
+	}
+	/**
+	 * @param previousQuantity The previousQuantity to set.
+	 */
+	public void setPreviousQuantity(Double previousQuantity) {
+		this.previousQuantity = previousQuantity;
 	}
 }

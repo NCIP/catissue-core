@@ -12,7 +12,6 @@ import java.util.Vector;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -38,19 +37,14 @@ public abstract class BaseDistributionReportAction extends BaseAction
 	/**
      * Overrides the execute method of Action class.
      * */
-    /*public ActionForward executeAction(ActionMapping mapping, ActionForm form,
-            HttpServletRequest request, HttpServletResponse response)
-            throws Exception 
-    {
-    	return executeAction(mapping, form, request, response);
-    }*/
     
 	protected String []getColumnNames(String []selectedColumnsList)
 	{
 		String [] columnNames=new String[selectedColumnsList.length];
 		for(int i=0;i<selectedColumnsList.length;i++)
 	    {
-	    	StringTokenizer st= new StringTokenizer(selectedColumnsList[i],".");
+	    	//Split the string which is in the form TableAlias.columnNames.columnDisplayNames
+			StringTokenizer st= new StringTokenizer(selectedColumnsList[i],".");
 	    	while (st.hasMoreTokens())
 	    	{
 	    		st.nextToken();
@@ -95,14 +89,9 @@ public abstract class BaseDistributionReportAction extends BaseAction
 	}
 	
 	
-    protected Distribution getDistribution(Long distributionId,ConfigureResultViewForm configForm)throws Exception
+    protected Distribution getDistribution(Long distributionId)throws Exception
     {
-    	if(distributionId!=null)
-    		configForm.setDistributionId(distributionId);
-    	else
-    		distributionId = configForm.getDistributionId();
     	
-    	Logger.out.debug("distributionId "+distributionId);
     	AbstractBizLogic bizLogic = BizLogicFactory.getBizLogic(Constants.DISTRIBUTION_FORM_ID);
     	List list = bizLogic.retrieve(Distribution.class.getName(),Constants.SYSTEM_IDENTIFIER,distributionId);
     	Distribution dist = (Distribution) list.get(0);
@@ -131,15 +120,6 @@ public abstract class BaseDistributionReportAction extends BaseAction
     	Logger.out.debug("Configure/Default action "+action);
     	String selectedColumns[] = getSelectedColumns(action,configForm);
     	Logger.out.debug("Selected columns length"+selectedColumns.length);
-    	if(selectedColumns.length!=0)
-    	{
-    		for(int k=0;k<selectedColumns.length;k++)
-    		{
-    			Logger.out.debug("Selected columns in configuration "+selectedColumns[k]);
-    			
-    		}
-    	}
-    	
     	for(int j=0;j<specimenIds.length;j++)
     	{
     		Collection simpleConditionNodeCollection = new ArrayList();
@@ -157,7 +137,7 @@ public abstract class BaseDistributionReportAction extends BaseAction
     		simpleConditionsNode1.getCondition().getDataElement().setField("Distribution_Id");
     		simpleConditionsNode1.getCondition().getOperator().setOperator("=");
     		simpleConditionsNode1.getCondition().setValue(dist.getSystemIdentifier().toString());
-    		simpleConditionsNode1.setOperator(new Operator("And"));
+    		simpleConditionsNode1.setOperator(new Operator(Constants.AND_JOIN_CONDITION));
     		
     		simpleConditionNodeCollection.add(simpleConditionsNode1);
     		simpleConditionNodeCollection.add(simpleConditionsNode);
@@ -197,7 +177,6 @@ public abstract class BaseDistributionReportAction extends BaseAction
     	}
     	else 
     	{
-    		
     		form.setSelectedColumnNames(Constants.SELECTED_COLUMNS);
     		return Constants.SELECTED_COLUMNS;
     	}

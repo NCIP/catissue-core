@@ -12,19 +12,23 @@ package edu.wustl.catissuecore.bizlogic;
 
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 
 import net.sf.hibernate.HibernateException;
 import edu.wustl.catissuecore.dao.DAO;
+import edu.wustl.catissuecore.domain.CellSpecimen;
 import edu.wustl.catissuecore.domain.DistributedItem;
 import edu.wustl.catissuecore.domain.Distribution;
+import edu.wustl.catissuecore.domain.FluidSpecimen;
+import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Site;
+import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
-import edu.wustl.catissuecore.util.global.Constants;
-
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * DistributionHDAO is used to add distribution information into the database using Hibernate.
@@ -51,28 +55,39 @@ public class DistributionBizLogic extends DefaultBizLogic
 		}
 		
 		//Load & set From Site
-		List list = dao.retrieve(Site.class.getName(),Constants.SYSTEM_IDENTIFIER, dist.getFromSite().getSystemIdentifier());
-		if(list!=null && !list.isEmpty())
+		Object siteObj = dao.retrieve(Site.class.getName(), dist.getFromSite().getSystemIdentifier());
+		if(siteObj!=null)
 		{
-			Site site = (Site)list.get(0);
+			Site site = (Site)siteObj;
 			dist.setFromSite(site);
 		}
 
 		//Load & set the To Site
-		list = dao.retrieve(Site.class.getName(),Constants.SYSTEM_IDENTIFIER, dist.getToSite().getSystemIdentifier());
-		if(list!=null && !list.isEmpty())
+		siteObj = dao.retrieve(Site.class.getName(), dist.getToSite().getSystemIdentifier());
+		if(siteObj!=null )
 		{
-			Site site = (Site)list.get(0);
+			Site site = (Site)siteObj;
 			dist.setToSite(site);
 		}
 
 		dao.insert(dist,sessionDataBean, true, true);
-		
 		Collection distributedItemCollection = dist.getDistributedItemCollection();		
 		Iterator it = distributedItemCollection.iterator();
 		while(it.hasNext())
 		{
 			DistributedItem item = (DistributedItem)it.next();
+			//update the available quantity
+			Object specimenObj = dao.retrieve(Specimen.class.getName(), item.getSpecimen().getSystemIdentifier());
+			double quantity = item.getQuantity().doubleValue();
+			boolean availability = checkAvailableQty((Specimen)specimenObj,quantity);
+			if (!availability)
+            {
+                throw new DAOException(ApplicationProperties.getValue("errors.distribution.quantity"));
+            }
+			else
+			{
+				dao.update(specimenObj,sessionDataBean,true,true,false);
+			}
 			item.setDistribution(dist);
 			dao.insert(item,sessionDataBean, true, true);
 		}
@@ -95,9 +110,79 @@ public class DistributionBizLogic extends DefaultBizLogic
 		while(it.hasNext())
 		{
 			DistributedItem item = (DistributedItem)it.next();
+			//update the available quantity
+			Object specimenObj = dao.retrieve(Specimen.class.getName(), item.getSpecimen().getSystemIdentifier());
+	        Double previousQuantity = (Double)item.getPreviousQuantity();
+	        Logger.out.debug("previousQuantity "+previousQuantity);
+			double quantity = item.getQuantity().doubleValue()-previousQuantity.doubleValue();
+			
+			boolean availability = checkAvailableQty((Specimen)specimenObj,quantity);
+			if (!availability)
+            {
+                throw new DAOException(ApplicationProperties.getValue("errors.distribution.quantity"));
+            }
+			else
+			{
+				dao.update(specimenObj,sessionDataBean,true,true,false);
+			}
 			item.setDistribution(distribution);
 			
 			dao.update(item, sessionDataBean, true, true, false);
 		}
     }
+	public boolean checkAvailableQty(Specimen specimen, double quantity)
+	{
+		if(specimen instanceof TissueSpecimen)
+		{
+			TissueSpecimen tissueSpecimen = (TissueSpecimen) specimen;
+			double availabeQty = tissueSpecimen.getAvailableQuantityInGram().doubleValue();
+			Logger.out.debug("TissueAvailabeQty"+availabeQty);
+			if(quantity > availabeQty)
+				return false;
+			else
+			{
+				availabeQty = availabeQty - quantity;
+				Logger.out.debug("TissueAvailabeQty after deduction"+availabeQty);
+				tissueSpecimen.setAvailableQuantityInGram(new Double(availabeQty));
+			}
+		}
+		else if(specimen instanceof CellSpecimen)
+		{
+			CellSpecimen cellSpecimen = (CellSpecimen) specimen;
+			int availabeQty = cellSpecimen.getAvailableQuantityInCellCount().intValue();
+			if(quantity > availabeQty)
+				return false;
+			else
+			{
+				availabeQty = availabeQty - (int)quantity;
+				cellSpecimen.setAvailableQuantityInCellCount(new Integer(availabeQty));
+			}
+		}
+		else if(specimen instanceof MolecularSpecimen)
+		{
+			MolecularSpecimen molecularSpecimen = (MolecularSpecimen) specimen;
+			double availabeQty = molecularSpecimen.getAvailableQuantityInMicrogram().doubleValue();
+			if(quantity > availabeQty)
+				return false;
+			else
+			{
+				availabeQty = availabeQty - quantity;
+				molecularSpecimen.setAvailableQuantityInMicrogram(new Double(availabeQty));
+			}
+		}
+		else if(specimen instanceof FluidSpecimen)
+		{
+			FluidSpecimen fluidSpecimen = (FluidSpecimen) specimen;
+			double availabeQty = fluidSpecimen.getAvailableQuantityInMilliliter().doubleValue();
+			if(quantity > availabeQty)
+				return false;
+			else
+			{
+				availabeQty = availabeQty - quantity;
+				fluidSpecimen.setAvailableQuantityInMilliliter(new Double(availabeQty));
+			}
+		}
+		return true;
+		
+	}
 }

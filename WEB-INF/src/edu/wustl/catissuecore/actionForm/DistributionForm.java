@@ -90,14 +90,17 @@ public class DistributionForm extends SpecimenEventParametersForm
 				String key5 = "DistributedItem:"+i+"_tissueSite";
 				String key6 = "DistributedItem:"+i+"_tissueSide";
 				String key7 = "DistributedItem:"+i+"_pathologicalStatus";
-				String key8 = "DistributedItem:"+i+"_Specimen_className";				
+				String key8 = "DistributedItem:"+i+"_Specimen_className";	
+				String key9 = "DistributedItem:"+i+"_availableQty";
+				String key10 = "DistributedItem:"+i+"_previousQuantity";
 				
 				DistributedItem dItem = (DistributedItem)it.next();
 				Specimen specimen =dItem.getSpecimen();
 				String unit= getUnitSpan(specimen);
-				Double quantity = dItem.getQuantity();
-				double availableQuantity = 0.0;
 				
+				Double quantity = dItem.getQuantity();
+				//dItem.setPreviousQty(quantity);
+
 				values.put(key1,dItem.getSystemIdentifier());
 				values.put(key2,specimen.getSystemIdentifier());
 				values.put(key3,quantity);
@@ -106,6 +109,8 @@ public class DistributionForm extends SpecimenEventParametersForm
 				values.put(key6,specimen.getSpecimenCharacteristics().getTissueSide());
 				values.put(key7,specimen.getSpecimenCharacteristics().getPathologicalStatus());
 				values.put(key8,specimen.getClassName());
+				values.put(key9,getAvailableQty(specimen));
+				values.put(key10,quantity);
 				
 				i++;
 			}
@@ -198,11 +203,7 @@ public class DistributionForm extends SpecimenEventParametersForm
 			errors = new ActionErrors();
 		}
 		return errors;
-
-        
 	}
-	
-	
 	/**
 	 * @return Returns the distributionProtocolId.
 	 */
@@ -301,33 +302,8 @@ public class DistributionForm extends SpecimenEventParametersForm
 //        this.fromSite = null;
 //        this.toSite = null;
 //        this.counter =1;
-       
+		  
     }
-	public static String getUnitSpan(Specimen specimen)
-	{
-		
-		if(specimen instanceof TissueSpecimen)
-		{
-			return Constants.UNIT_GM;
-			
-		}
-		else if(specimen instanceof CellSpecimen)
-		{
-			return Constants.UNIT_CC;
-			
-		}
-		else if(specimen instanceof MolecularSpecimen)
-		{
-			return Constants.UNIT_MG;
-			
-		}
-		else if(specimen instanceof FluidSpecimen)
-		{
-			return Constants.UNIT_ML;
-		}
-		return null;
-	}
-
 	/**
 	 * @return Returns the idChange.
 	 */
@@ -352,4 +328,59 @@ public class DistributionForm extends SpecimenEventParametersForm
 	public void setRowNo(int rowNo) {
 		this.rowNo = rowNo;
 	}
+	public static String getUnitSpan(Specimen specimen)
+	{
+		
+		if(specimen instanceof TissueSpecimen)
+		{
+			return Constants.UNIT_GM;
+			
+		}
+		else if(specimen instanceof CellSpecimen)
+		{
+			return Constants.UNIT_CC;
+			
+		}
+		else if(specimen instanceof MolecularSpecimen)
+		{
+			return Constants.UNIT_MG;
+			
+		}
+		else if(specimen instanceof FluidSpecimen)
+		{
+			return Constants.UNIT_ML;
+		}
+		return null;
+	}
+	public Object getAvailableQty(Specimen specimen)
+	{
+		if(specimen instanceof TissueSpecimen)
+		{
+			
+			TissueSpecimen tissueSpecimen = (TissueSpecimen) specimen;
+			Logger.out.debug("tissueSpecimenAvailableQuantityInGram "+tissueSpecimen.getAvailableQuantityInGram());
+			return tissueSpecimen.getAvailableQuantityInGram();
+			
+		}
+		else if(specimen instanceof CellSpecimen)
+		{
+			CellSpecimen cellSpecimen = (CellSpecimen) specimen;
+			return cellSpecimen.getAvailableQuantityInCellCount();
+			
+		}
+		else if(specimen instanceof MolecularSpecimen)
+		{
+			MolecularSpecimen molecularSpecimen = (MolecularSpecimen) specimen;
+			return molecularSpecimen.getAvailableQuantityInMicrogram();
+			
+		}
+		else if(specimen instanceof FluidSpecimen)
+		{
+			FluidSpecimen fluidSpecimen = (FluidSpecimen) specimen;
+			return fluidSpecimen.getAvailableQuantityInMilliliter();
+		}
+		return null;
+	}
+	
+	
 }

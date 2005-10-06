@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,10 +25,14 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.actionForm.DistributionForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.DistributionBizLogic;
+import edu.wustl.catissuecore.domain.CellSpecimen;
 import edu.wustl.catissuecore.domain.DistributionProtocol;
+import edu.wustl.catissuecore.domain.FluidSpecimen;
+import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
+import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
 
@@ -51,7 +54,7 @@ public class  DistributionAction extends SpecimenEventParametersAction
 			//Sets the Site list.
 	        String sourceObjectName = Site.class.getName();
 	        String[] displayNameFields = {"name"};
-	        String valueField = "systemIdentifier";
+	        String valueField = Constants.SYSTEM_IDENTIFIER;
 	        
 	        List siteList = dao.getList(sourceObjectName, displayNameFields, valueField, true);
 			 
@@ -64,67 +67,7 @@ public class  DistributionAction extends SpecimenEventParametersAction
 	        
 	        List protocolList = dao.getList(sourceObjectName, displayName, valueField, true);
 			request.setAttribute(Constants.DISTRIBUTIONPROTOCOLLIST, protocolList);
-			/*SET THE CELL SPECIMEN LIST
-			String [] displayNameField = {"systemIdentifier"};
-			List specimenList = dao.getList(CellSpecimen.class.getName(), displayNameField, valueField, true);
-			String [] cellSpecimenIds = new String[specimenList.size()];
-			cellSpecimenIds[0] = Constants.SELECT_OPTION;
-			
-			for(int i=1;i<specimenList.size();i++)
-			{
-				NameValueBean bean = (NameValueBean)specimenList.get(i);
-				cellSpecimenIds[i] = bean.getValue();
-				i++;
-			}
-			
-			request.setAttribute(Constants.CELL_SPECIMEN_ID_LIST, cellSpecimenIds);
-			
-			//SET THE FLUID SPECIMEN LIST
-			specimenList = dao.getList(FluidSpecimen.class.getName(), displayNameField, valueField, true);
-			String [] fluidSpecimenIds = new String[specimenList.size()];
-			fluidSpecimenIds[0] = Constants.SELECT_OPTION;
-			
-			for(int i=1;i<specimenList.size();i++)
-			{
-				NameValueBean bean = (NameValueBean)specimenList.get(i);
-				fluidSpecimenIds[i] = bean.getValue();
-				Logger.out.debug("fluidSpecimenIds "+fluidSpecimenIds[i]);
-				i++;
-			}
-			
-			request.setAttribute(Constants.FLUID_SPECIMEN_ID_LIST, fluidSpecimenIds);
-			
-			//SET THE MOLECULAR SPECIMEN LIST
-			specimenList = dao.getList(MolecularSpecimen.class.getName(), displayNameField, valueField, true);
-			String [] molecularSpecimenIds = new String[specimenList.size()];
-			molecularSpecimenIds[0] = Constants.SELECT_OPTION;
-			
-			for(int i=1;i<specimenList.size();i++)
-			{
-				NameValueBean bean = (NameValueBean)specimenList.get(i);
-				molecularSpecimenIds[i] = bean.getValue();
-				i++;
-			}
-			
-			request.setAttribute(Constants.MOLECULAR_SPECIMEN_ID_LIST, molecularSpecimenIds);
-			
-			//SET THE TISSUE SPECIMEN LIST
-			specimenList = dao.getList(TissueSpecimen.class.getName(), displayNameField, valueField, true);
-			String [] tissueSpecimenIds = new String[specimenList.size()];
-			tissueSpecimenIds[0] = Constants.SELECT_OPTION;
-			
-			for(int i=1;i<specimenList.size();i++)
-			{
-				NameValueBean bean = (NameValueBean)specimenList.get(i);
-				tissueSpecimenIds[i] = bean.getValue();
-				i++;
-			}
-			
-			request.setAttribute(Constants.TISSUE_SPECIMEN_ID_LIST, tissueSpecimenIds);
-			
-			request.setAttribute(Constants.SPECIMEN_CLASS_LIST,Constants.SPECIMEN_TYPE_VALUES);*/
-			
-			
+
 			//SET THE SPECIMEN Ids LIST
 			String [] displayNameField = {Constants.SYSTEM_IDENTIFIER};
 			List specimenList = dao.getList(Specimen.class.getName(), displayNameField, valueField, true);
@@ -189,9 +132,9 @@ public class  DistributionAction extends SpecimenEventParametersAction
 			dForm.setValue("DistributedItem:"+rowNo+"_tissueSite",specimenCharacteristics.getTissueSite());
 			dForm.setValue("DistributedItem:"+rowNo+"_tissueSide",specimenCharacteristics.getTissueSide());
 			dForm.setValue("DistributedItem:"+rowNo+"_pathologicalStatus",specimenCharacteristics.getPathologicalStatus());
-			
-			Map map = dForm.getValues();
-			Logger.out.debug("Map values after speci chars are set: "+map);
+			dForm.setValue("DistributedItem:"+rowNo+"_availableQty",getAvailableQty(specimen));
+		
+			Logger.out.debug("Map values after speci chars are set: "+dForm.getValues());
 			dForm.setIdChange(false);
 		}
 		catch(Exception e)
@@ -199,4 +142,30 @@ public class  DistributionAction extends SpecimenEventParametersAction
 			Logger.out.error(e.getMessage(),e);
 		}
 	}
+	public Object getAvailableQty(Specimen specimen)
+	{
+		if(specimen instanceof TissueSpecimen)
+		{
+			TissueSpecimen tissueSpecimen = (TissueSpecimen) specimen;
+			Logger.out.debug("tissueSpecimenAvailableQuantityInGram "+tissueSpecimen.getAvailableQuantityInGram());
+			return tissueSpecimen.getAvailableQuantityInGram();
+		}
+		else if(specimen instanceof CellSpecimen)
+		{
+			CellSpecimen cellSpecimen = (CellSpecimen) specimen;
+			return cellSpecimen.getAvailableQuantityInCellCount();
+		}
+		else if(specimen instanceof MolecularSpecimen)
+		{
+			MolecularSpecimen molecularSpecimen = (MolecularSpecimen) specimen;
+			return molecularSpecimen.getAvailableQuantityInMicrogram();
+		}
+		else if(specimen instanceof FluidSpecimen)
+		{
+			FluidSpecimen fluidSpecimen = (FluidSpecimen) specimen;
+			return fluidSpecimen.getAvailableQuantityInMilliliter();
+		}
+		return null;
+	}
+	
 }

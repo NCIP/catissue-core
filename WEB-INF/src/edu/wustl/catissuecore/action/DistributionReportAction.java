@@ -25,9 +25,12 @@ public class DistributionReportAction extends BaseDistributionReportAction
 		
 		Long distributionId = (Long)request.getAttribute(Constants.DISTRIBUTION_ID);
 		Logger.out.debug("distributionId "+distributionId);
-		
-    	//getData(distributionId,configForm);
-    	Distribution dist =  getDistribution(distributionId,configForm);
+		if(distributionId!=null)
+    		configForm.setDistributionId(distributionId);
+    	else
+    		distributionId = configForm.getDistributionId();
+    	
+    	Distribution dist =  getDistribution(distributionId);
     	
     	DistributionReportForm distributionReportForm = getDistributionReportForm(dist);
     	List listOfData = getListOfData(dist, configForm) ;
@@ -36,9 +39,9 @@ public class DistributionReportAction extends BaseDistributionReportAction
 		String selectedColumns[] = getSelectedColumns(action,configForm);
 		String []columnNames = getColumnNames(selectedColumns);
     	
-		request.setAttribute("distributionReportForm", distributionReportForm);
-    	request.setAttribute("columnNames", columnNames);
-    	request.setAttribute("listOfData", listOfData);
+		request.setAttribute(Constants.DISTRIBUTION_REPORT_FORM, distributionReportForm);
+    	request.setAttribute(Constants.COLUMN_NAMES_LIST, columnNames);
+    	request.setAttribute(Constants.DISTRIBUTED_ITEMS_DATA, listOfData);
     	
 		return (mapping.findForward("Success"));
 	}
