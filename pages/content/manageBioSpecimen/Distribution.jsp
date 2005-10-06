@@ -1,4 +1,4 @@
-							<%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
+<%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
@@ -28,15 +28,8 @@
 %>
 
 <%
-	//List itemList = (List)request.getAttribute(Constants.ITEMLIST);
-	//ListIterator iterator=null;
-	/*String [] cellSpecimenIdArray = (String [])request.getAttribute(Constants.CELL_SPECIMEN_ID_LIST);
-	String [] fluidSpecimenIdArray = (String [])request.getAttribute(Constants.FLUID_SPECIMEN_ID_LIST);
-	String [] molecularSpecimenIdArray = (String [])request.getAttribute(Constants.MOLECULAR_SPECIMEN_ID_LIST);
-	String [] tissueSpecimenIdArray = (String [])request.getAttribute(Constants.TISSUE_SPECIMEN_ID_LIST);*/
 	List specimenIdList = (List)request.getAttribute(Constants.SPECIMEN_ID_LIST);
 	DistributionForm formBean = (DistributionForm)request.getAttribute("distributionForm");
-	
 %>
 <head>
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
@@ -120,9 +113,21 @@
 			sname= "";
 			sname="<input type='text' name='" + name + "' class='formField' id='" + name + "'>";
 			spreqpathologicalStatus.innerHTML="" + sname;
-			
+
 			//Sixh Cell
-			var spreqquantity=x.insertCell(5);
+			var spreqAvailqty=x.insertCell(5);
+			spreqAvailqty.className="formField";
+			sname="";
+		
+			availableQty = "value(DistributedItem:" + rowno + "_availableQty)";
+			sname= "";
+			sname="<input type='text' name='" + availableQty + "' size='30'  class='formFieldSized5' id='" + availableQty + "'>";
+			var previousQuantity = "value(DistributedItem:"+rowno+"_previousQuantity)";
+			sname = sname + "<input type='hidden' name='" + previousQuantity + "' value='' id='" + previousQuantity + "'>";
+			spreqAvailqty.innerHTML="" + sname;
+			
+			//Seventh Cell
+			var spreqquantity=x.insertCell(6);
 			spreqquantity.className="formField";
 			sname="";
 		
@@ -134,8 +139,8 @@
 			sname = sname + "&nbsp;<span id='"+unitName+"'>&nbsp;</span>";
 			spreqquantity.innerHTML="" + sname;
 			
-			//Seventh Cell
-			var checkb=x.insertCell(6);
+			//Eighth  Cell
+			var checkb=x.insertCell(7);
 			checkb.className="formField";
 			checkb.colSpan=2;
 			sname="";
@@ -333,7 +338,7 @@
 	<table summary="" cellpadding="3" cellspacing="0" border="0" width="433">
 <!--  Distributed Item begin here -->
 				 <tr>
-				     <td class="formTitle" height="20" colspan="5">
+				     <td class="formTitle" height="20" colspan="6">
 				     	<bean:message key="distribution.distributedItem"/>
 				     </td>
 				     <td class="formButtonField">
@@ -352,19 +357,22 @@
 				 	<td class="formSerialNumberLabel" width="5">
 				     	#
 				    </td>
-					<td class="formRightSubTableTitle">
+					<td class="formLeftSubTitle">
 						<bean:message key="itemrecord.specimenId"/>
 					</td>
-					<td class="formLeftSubTableTitle">
+					<td class="formLeftSubTitle">
 						<bean:message key="specimen.tissueSite"/>
 					</td>
-					<td class="formRightSubTableTitle">
+					<td class="formLeftSubTitle">
 						<bean:message key="specimen.tissueSide"/>
 					</td>
-				    <td class="formRightSubTableTitle">
+				    <td class="formLeftSubTitle">
 						<bean:message key="specimen.pathologicalStatus"/>
 					</td>
-					<td class="formRightSubTableTitle">
+					<td class="formLeftSubTitle">
+						<bean:message key="specimen.availableQuantity"/>
+					</td>
+					<td class="formLeftSubTitle">
 						<bean:message key="itemrecord.quantity"/>
 					</td>
 					<td class="formRightSubTableTitle">
@@ -381,11 +389,13 @@
 					String dIdentifier = "value(DistributedItem:"+i+"_systemIdentifier)";
 					String itemName = "value(DistributedItem:"+i+"_Specimen_systemIdentifier)";
 					String quantity = "value(DistributedItem:"+i+"_quantity)";
+					String availableQuantity = "value(DistributedItem:"+i+"_availableQty)";
 					String tissueSite = "value(DistributedItem:"+i+"_tissueSite)";
 					String tissueSide = "value(DistributedItem:"+i+"_tissueSide)";
 					String pathologicalStatus = "value(DistributedItem:"+i+"_pathologicalStatus)";					
 					String unitSpan = "value(DistributedItem:"+i+"_unitSpan)";
 					String className = "value(DistributedItem:"+i+"_Specimen_className)";
+					String previousQuantity = "value(DistributedItem:"+i+"_previousQuantity)";
 					String key = "DistributedItem:" + i + "_Specimen_className";
 					//String unitKey = "DistributedItem:" + i + "_unit";
 					//String unitProperty = "value(DistributedItem:"+i+"_unit)";
@@ -418,6 +428,10 @@
 				    </td>
    				    <td class="formField">
 				     	<html:text styleClass="formField" styleId="<%=pathologicalStatus%>" property="<%=pathologicalStatus%>" readonly="true"/>
+				    </td>
+				    <td class="formField">
+				     	<html:text styleClass="formFieldSized5" size="30" styleId="<%=availableQuantity%>" property="<%=availableQuantity%>" readonly="true"/>
+						<html:hidden property="<%=previousQuantity%>" />	
 				    </td>
 				    <td class="formField">
 				     	<html:text styleClass="formFieldSized5" size="30" styleId="<%=quantity%>" property="<%=quantity%>" disabled="<%=readOnlyForAll%>" readonly="<%=readOnlyForAll%>"/>
