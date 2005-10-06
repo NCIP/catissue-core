@@ -45,13 +45,18 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
     {
     	super.executeSecureAction(mapping, form, request, response);
     	
-    	CollectionProtocolForm collectionProtocolForm = (CollectionProtocolForm)form;    
+    	CollectionProtocolForm collectionProtocolForm = (CollectionProtocolForm)form; 
+    	
+    	//Name of delete button clicked
          String button = request.getParameter("button");
+         
+         //Row number of outerblock
          String outer = request.getParameter("blockCounter");
          
 //       Gets the map from ActionForm
          Map map = collectionProtocolForm.getValues();
          
+//       List of keys used in map of ActionForm
          List key = new ArrayList();
   		 key.add("CollectionProtocolEvent:outer_SpecimenRequirement:inner_specimenClass");
   		 key.add("CollectionProtocolEvent:outer_SpecimenRequirement:inner_specimenType");
@@ -64,7 +69,7 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
          		DeleteRow(key,map,request,outer);
          	
          	else {
-         	
+         		//keys of outer block
          		key.add("CollectionProtocolEvent:outer_clinicalStatus");
          		key.add("CollectionProtocolEvent:outer_studyCalendarEventPoint");
      	        DeleteRow(key,map,request);

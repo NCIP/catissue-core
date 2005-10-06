@@ -23,6 +23,7 @@ import edu.wustl.common.util.logger.Logger;
  * Utility Class contain general methods used through out the application.
  * @author kapil_kaveeshwar
  */
+
 public class Utility
 {
     /**
@@ -145,6 +146,10 @@ public class Utility
 		return newObjectArr;
 	}
 	
+	/**
+	 * checking whether key's value is persisted or not
+	 *
+	 */
 	public static boolean isPersistedValue(Map map,String key){
 		Object obj = map.get(key);
 		String val=null;
@@ -152,7 +157,6 @@ public class Utility
 			val = obj.toString();
 			
 		}
-			
 		if((val!= null && !(val.equals("0"))) && !(val.equals("")))
 			return true;
 		else 

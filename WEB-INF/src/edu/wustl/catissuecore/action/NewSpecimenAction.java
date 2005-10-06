@@ -49,7 +49,9 @@ public class NewSpecimenAction  extends SecureAction
     public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response) throws Exception
     {
-        NewSpecimenForm specimenForm = (NewSpecimenForm)form;    
+        NewSpecimenForm specimenForm = (NewSpecimenForm)form;   
+        
+        //Name of button clicked
         String button = request.getParameter("button");
         Map map = null;
         
