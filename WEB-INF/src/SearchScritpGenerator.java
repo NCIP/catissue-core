@@ -8,6 +8,7 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -31,9 +32,10 @@ import edu.wustl.common.util.dbManager.DAOException;
 public class SearchScritpGenerator
 {
 	int colIndex = 1;
+	int index = 39;
 	BufferedWriter writer;
 	private Connection connection = null;
-	
+	HashMap map = new HashMap();
 	List listTable = new ArrayList();
 	
 	public SearchScritpGenerator()throws Exception
@@ -53,6 +55,47 @@ public class SearchScritpGenerator
 		
 		writer = new BufferedWriter(new FileWriter("QueryData-Out.txt"));
 		
+		
+		map.put("CATISSUE_STORAGE_TYPE","1");
+		map.put("CATISSUE_STORAGE_CONTAINER_CAPACITY","2");
+		map.put("CATISSUE_SITE","3");
+		map.put("CATISSUE_ADDRESS","4");
+		map.put("CATISSUE_DEPARTMENT","5");
+		map.put("CATISSUE_INSTITUTION","6");
+		map.put("CATISSUE_CANCER_RESEARCH_GROUP","7");
+		map.put("CATISSUE_BIOHAZARD","8");
+		map.put("CATISSUE_SPECIMEN_PROTOCOL","9");
+		map.put("CATISSUE_COLLECTION_PROTOCOL","10");
+		map.put("CATISSUE_COLLECTION_PROTOCOL_EVENT","11");
+		map.put("CATISSUE_SPECIMEN_REQUIREMENT","12");
+		map.put("CATISSUE_CELL_SPECIMEN_REQUIREMENT","13");
+		map.put("CATISSUE_MOLECULAR_SPECIMEN_REQUIREMENT","14");
+		map.put("CATISSUE_TISSUE_SPECIMEN_REQUIREMENT","15");
+		map.put("CATISSUE_FLUID_SPECIMEN_REQUIREMENT","16");
+		map.put("CATISSUE_COLLECTION_COORDINATORS","17");
+		map.put("CATISSUE_COLLECTION_SPECIMEN_REQUIREMENT","18");
+		map.put("CATISSUE_DISTRIBUTION_PROTOCOL","19");
+		map.put("CATISSUE_DISTRIBUTION_SPECIMEN_REQUIREMENT","20");
+		map.put("CATISSUE_STORAGE_CONTAINER","21");
+		map.put("CATISSUE_STORAGE_CONTAINER_DETAILS","22");
+		map.put("CATISSUE_USER","23");
+		map.put("CSM_USER","24");
+		map.put("CATISSUE_CELL_SPECIMEN","25");
+		map.put("CATISSUE_CLINICAL_REPORT","26");
+		map.put("CATISSUE_COLLECTION_PROTOCOL_REGISTRATION","27");
+		map.put("CATISSUE_EXTERNAL_IDENTIFIER","28");
+		map.put("CATISSUE_FLUID_SPECIMEN","29");
+		map.put("CATISSUE_MOLECULAR_SPECIMEN","30");
+		map.put("CATISSUE_PARTICIPANT","31");
+		map.put("CATISSUE_PARTICIPANT_MEDICAL_IDENTIFIER","32");
+		map.put("CATISSUE_SPECIMEN","33");
+		map.put("CATISSUE_SPECIMEN_CHARACTERISTICS","34");
+		map.put("CATISSUE_SPECIMEN_COLLECTION_GROUP","35");
+		map.put("CATISSUE_TISSUE_SPECIMEN","36");
+		map.put("CATISSUE_DISTRIBUTED_ITEM","37");
+		map.put("CATISSUE_DISTRIBUTION","38");
+
+		
 		/*listTable.add("CATISSUE_PARTICIPANT");
 		listTable.add("CATISSUE_PARTICIPANT_MEDICAL_IDENTIFIER");
 		listTable.add("CATISSUE_SPECIMEN");
@@ -66,8 +109,8 @@ public class SearchScritpGenerator
 		listTable.add("CATISSUE_COLLECTION_PROTOCOL_REGISTRATION");
 		listTable.add("CATISSUE_CLINICAL_REPORT");*/
 		
-		listTable.add("CATISSUE_DISTRIBUTION");
-		listTable.add("CATISSUE_DISTRIBUTED_ITEM");
+		/*listTable.add("CATISSUE_DISTRIBUTION");
+		listTable.add("CATISSUE_DISTRIBUTED_ITEM");*/
 	}
 	
 	
@@ -81,27 +124,34 @@ public class SearchScritpGenerator
 		List tableNameList = getTableNameList(rs);
 		System.out.println(tableNameList);
 		
-		int index = 37;
+		
 		Iterator it = tableNameList.iterator();
 		while(it.hasNext())
 		{
 			String tableName = (String)it.next();
-			generateTableScript(tableName, index);
+			String tblIndex = generateTableScript(tableName);
 			
 			List colList = getColumnNameList(tableName);
-			generateColScript(colList, index);
-			index++;
-			//System.out.println(colNameList);
+			generateColScript(colList, tblIndex);
 		}
 		
 		writer.close();
 	}
 	
-	private void generateTableScript(String tableName, int index) throws Exception
+	private String generateTableScript(String tableName) throws Exception
 	{
 		String names[] = generateDisplayName(tableName, true);
 		StringBuffer buff = new StringBuffer("insert into CATISSUE_QUERY_INTERFACE_TABLE_DATA  ( TABLE_ID, TABLE_NAME, DISPLAY_NAME, ALIAS_NAME) values ( ");
-		buff.append(index+", ");
+		String tempIndex = (String)map.get(tableName);
+		
+		String tblIndex  = index+"";
+		
+		if(tempIndex!=null)
+			tblIndex = tempIndex;
+		else
+			index++;
+		
+		buff.append(tblIndex +", ");
 		buff.append("'"+tableName+"', ");
 		buff.append("'"+names[0]+"', ");
 		buff.append("'"+names[1]+"');");
@@ -109,9 +159,10 @@ public class SearchScritpGenerator
 		System.out.println(buff);
 		writer.write(buff.toString()+"\n");
 		
+		return tblIndex;
 	}
 	
-	private void generateColScript(List colList, int tableIndex) throws Exception
+	private void generateColScript(List colList, String tableIndex) throws Exception
 	{
 		Iterator it = colList.iterator();
 		while(it.hasNext())
@@ -122,16 +173,18 @@ public class SearchScritpGenerator
 			
 			// 1, 'IDENTIFIER' , 'Storage Type Identifier' , 'bigint' );
 			//StringBuffer buff = new StringBuffer("insert into CATISSUE_QUERY_INTERFACE_COLUMN_DATA ( IDENTIFIER, TABLE_ID, COLUMN_NAME , DISPLAY_NAME , ATTRIBUTE_TYPE ) values ( ");
-			StringBuffer buff = new StringBuffer("insert into CATISSUE_QUERY_INTERFACE_COLUMN_DATA ( TABLE_ID, COLUMN_NAME , DISPLAY_NAME , ATTRIBUTE_TYPE ) values ( ");
-			//buff.append(colIndex+", ");
+			//StringBuffer buff = new StringBuffer("insert into CATISSUE_QUERY_INTERFACE_COLUMN_DATA ( TABLE_ID, COLUMN_NAME , DISPLAY_NAME , ATTRIBUTE_TYPE ) values ( ");
+			StringBuffer buff = new StringBuffer("insert into CATISSUE_QUERY_INTERFACE_COLUMN_DATA ( IDENTIFIER, TABLE_ID, COLUMN_NAME , ATTRIBUTE_TYPE ) values ( ");
+			buff.append(colIndex+", ");
 			buff.append(tableIndex+", ");
 			buff.append("'"+col[0]+"', ");
-			buff.append("'"+names[0]+"', ");
+			//buff.append("'"+names[0]+"', ");
 			buff.append("'"+col[1]+"');");
 			colIndex++;
 			System.out.println(buff);
 			writer.write(buff.toString()+"\n");
 		}
+		writer.write("\n");
 	}
 	
 	private String[] generateDisplayName(String tableName, boolean isTable)
