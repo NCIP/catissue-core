@@ -219,6 +219,27 @@ public class StorageContainerBizLogic extends DefaultBizLogic
             disableSubStorageContainer(dao, containerIDArr);
         }
     }
+    
+    public void setPrivilege(DAO dao, String privilegeName, Class objectType, Long[] objectIds, Long userId, String roleId, boolean assignToUser) throws SMException, DAOException
+    {
+	    Logger.out.debug(" privilegeName:"+privilegeName+" objectType:"+objectType+" objectIds:"+edu.wustl.common.util.Utility.getArrayString(objectIds)+" userId:"+userId+" roleId:"+roleId+" assignToUser:"+assignToUser);
+	    super.setPrivilege(dao,privilegeName,objectType,objectIds,userId, roleId, assignToUser);
+		assignPrivilegeToSubStorageContainer(dao,privilegeName,objectIds,userId,roleId,assignToUser );
+    }
+    
+    private void assignPrivilegeToSubStorageContainer(DAO dao, String privilegeName,Long[] storageContainerIDArr, Long userId, String roleId, boolean assignToUser) throws SMException, DAOException
+    {
+    	
+        List listOfSubStorageContainerId = super.getRelatedObjects(dao,
+                StorageContainer.class, "parentContainer", storageContainerIDArr);
+
+        if (listOfSubStorageContainerId.isEmpty())
+            return;
+
+        super.setPrivilege(dao,privilegeName,StorageContainer.class,Utility.toLongArray(listOfSubStorageContainerId),userId, roleId, assignToUser);
+        assignPrivilegeToSubStorageContainer(dao,privilegeName, Utility.toLongArray(listOfSubStorageContainerId),userId,roleId,assignToUser);
+   
+    }
 
     // This method sets the Storage Type & Site (if applicable) of this container.
     private void loadSite(DAO dao, StorageContainer container)

@@ -383,7 +383,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
     	if(listOfSubElement.isEmpty())
     		return;
     	super.setPrivilege(dao,privilegeName,Specimen.class,Utility.toLongArray(listOfSubElement),userId, roleId, assignToUser);
-    	disableSubSpecimens(dao, Utility.toLongArray(listOfSubElement));
+    	assignPrivilegeToSubSpecimens(dao,privilegeName,Specimen.class, Utility.toLongArray(listOfSubElement),userId,roleId,assignToUser);
     }
     
     public void setPrivilege(DAO dao, String privilegeName, Class objectType, Long[] objectIds, Long userId, String roleId, boolean assignToUser) throws SMException, DAOException

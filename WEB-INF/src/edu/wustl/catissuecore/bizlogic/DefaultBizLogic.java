@@ -279,7 +279,7 @@ public class  DefaultBizLogic extends AbstractBizLogic
 		
 		List list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, 
 				whereColumnCondition, whereColumnValue, joinCondition);
-		Logger.out.debug(sourceClass.getName()+" Related objects "+list);
+		Logger.out.debug(sourceClass.getName()+" Related objects to "+edu.wustl.common.util.Utility.getArrayString(objIDArr)+" are "+list);
 		return list;
     }
     
