@@ -113,7 +113,8 @@ public class Specimen extends AbstractDomainObject implements Serializable
      * The combined anatomic state and pathological disease classification of a specimen.
      */
     protected SpecimenCharacteristics specimenCharacteristics = new SpecimenCharacteristics();
-    
+
+    protected transient boolean isParentChanged = false;
     public Specimen()
     {    	
     }
@@ -494,6 +495,14 @@ public class Specimen extends AbstractDomainObject implements Serializable
         this.specimenCharacteristics = specimenCharacteristics;
     }
     
+    public boolean isParentChanged()
+	{
+		return isParentChanged;
+	}
+	public void setParentChanged(boolean isParentChanged)
+	{
+		this.isParentChanged = isParentChanged;
+	}
     /**
      * This function Copies the data from an NewSpecimenForm object to a Specimen object.
      * @param siteForm An SiteForm object containing the information about the site.  
@@ -528,7 +537,43 @@ public class Specimen extends AbstractDomainObject implements Serializable
 	            	this.available = new Boolean(form.isAvailable());
 	            }
 	            
-	            this.specimenCollectionGroup.setSystemIdentifier(new Long(form.getSpecimenCollectionGroupId()));
+	            //in case of edit
+	        	if(!form.isAddOperation())
+	        	{
+	        		//specimen is a new specimen  
+	        		if(parentSpecimen==null)
+	        		{
+	        			// specimen created from another specimen
+	        			if(Long.parseLong(form.getParentSpecimenId())>0)
+	        			{
+	        				isParentChanged = true;
+	        			}
+	        		}
+	        		else//specimen created from another specimen
+	        		{
+	        			if(parentSpecimen.getSystemIdentifier().longValue()!=Long.parseLong(form.getParentSpecimenId()))
+	        			{
+	        				isParentChanged = true;
+	        			}
+	        		}
+	        	}
+		        
+	            Logger.out.debug("isParentChanged "+isParentChanged);
+		        if(form.isParentPresent())
+				{
+		            parentSpecimen = new CellSpecimen();
+					parentSpecimen.setSystemIdentifier(new Long(form.getParentSpecimenId()));
+					
+	        		this.setPositionDimensionOne(new Integer(form.getPositionDimensionOne()));
+	        		this.setPositionDimensionTwo(new Integer(form.getPositionDimensionTwo()));
+				}
+		        else
+		        {
+		        	parentSpecimen = null;
+		        	specimenCollectionGroup = new SpecimenCollectionGroup();
+		        	this.specimenCollectionGroup.setSystemIdentifier(new Long(form.getSpecimenCollectionGroupId()));
+		        }
+	            
 	            this.storageContainer.setSystemIdentifier(new Long(form.getStorageContainer()));
 	            
 	            //Setting the SpecimenCharacteristics
@@ -593,7 +638,7 @@ public class Specimen extends AbstractDomainObject implements Serializable
         }
         catch (Exception excp)
         {
-            Logger.out.error(excp.getMessage());
+            Logger.out.error(excp.getMessage(),excp);
         }
     }
     

@@ -25,8 +25,10 @@ import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
+import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.catissuecore.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
@@ -245,17 +247,17 @@ public class NewSpecimenForm extends SpecimenForm
             
         	Specimen specimen = (Specimen) abstractDomain;
         	
-        	if(specimen.getSpecimenCollectionGroup() != null)
-        	{
-        		this.specimenCollectionGroupId = String.valueOf(specimen.getSpecimenCollectionGroup().getSystemIdentifier());
-        		this.parentPresent = false;
-        	}
-        	else
+        	this.parentPresent = false;
+        	SpecimenCollectionGroup specimenCollectionGroup = specimen.getSpecimenCollectionGroup();
+        	if(specimenCollectionGroup!=null)
+        		this.specimenCollectionGroupId = Utility.toString(specimenCollectionGroup.getSystemIdentifier());
+        	
+        	if(specimen.getParentSpecimen() != null)
         	{
         		this.parentSpecimenId = String.valueOf(specimen.getParentSpecimen().getSystemIdentifier());
         		this.parentPresent = true;
         	}
-            
+        	
             SpecimenCharacteristics characteristic = specimen.getSpecimenCharacteristics();
             this.pathologicalStatus = characteristic.getPathologicalStatus();
             this.tissueSide = characteristic.getTissueSide();
@@ -271,7 +273,6 @@ public class NewSpecimenForm extends SpecimenForm
             	int i=1;
             	
             	Iterator it = biohazardCollection.iterator();
-            	
             	while(it.hasNext())
             	{
             		String key1 = "Biohazard:" + i + "_type";
@@ -364,6 +365,7 @@ public class NewSpecimenForm extends SpecimenForm
                 String className = "Biohazard:";
                 String key1 = "_type";
                 String key2 = "_systemIdentifier";
+                String key3 = "_persisted";
                 int index = 1;
                 boolean isError = false;
                 
@@ -371,18 +373,21 @@ public class NewSpecimenForm extends SpecimenForm
                 {
                 	String keyOne = className + index + key1;
 					String keyTwo = className + index + key2;
+					String keyThree = className + index + key3;
+					
                 	String value1 = (String)biohazard.get(keyOne);
                 	String value2 = (String)biohazard.get(keyTwo);
+                	String value3 = (String)biohazard.get(keyThree);
                 	
-                	if(value1 == null || value2 == null)
+                	if(value1 == null || value2 == null || value3 == null)
                 	{
                 		break;
                 	}
                 	else if(!validator.isValidOption(value1) && !validator.isValidOption( value2))
                 	{
-                		
                 		biohazard.remove(keyOne);
                 		biohazard.remove(keyTwo);
+                		biohazard.remove(keyThree);
                 	}
 //                	else if(!validator.isValidOption(value1) ||  (!validator.isValidOption(value2)))
                 	else if((validator.isValidOption(value1) && !validator.isValidOption(value2)) 

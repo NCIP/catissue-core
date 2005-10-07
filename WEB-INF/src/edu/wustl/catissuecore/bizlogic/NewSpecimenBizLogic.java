@@ -22,8 +22,10 @@ import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.ExternalIdentifier;
 import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.StorageContainer;
+import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.SessionDataBean;
@@ -61,10 +63,9 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 //		}
 		
 		Collection externalIdentifierCollection = specimen.getExternalIdentifierCollection();
-		if(externalIdentifierCollection != null && externalIdentifierCollection.size() > 0)
+		if(externalIdentifierCollection != null)
 		{
 			Iterator it = externalIdentifierCollection.iterator();
-			
 			while(it.hasNext())
 			{
 				ExternalIdentifier exId = (ExternalIdentifier)it.next();
@@ -104,6 +105,49 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
         
     }
 
+    private SpecimenCollectionGroup loadSpecimenCollectionGroup(Long specimenID, DAO dao) throws DAOException
+	{
+		//get list of Participant's names
+		String sourceObjectName = Specimen.class.getName();
+	  	String [] selectedColumn = {"specimenCollectionGroup."+Constants.SYSTEM_IDENTIFIER};
+	  	String whereColumnName[] = {Constants.SYSTEM_IDENTIFIER};
+	  	String whereColumnCondition[] = {"="};
+	  	Object whereColumnValue[] = {specimenID};
+	  	String joinCondition = Constants.AND_JOIN_CONDITION;
+	  	
+	  	List list = dao.retrieve(sourceObjectName, selectedColumn, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);
+	  	if(!list.isEmpty())
+	  	{
+	  		Long specimenCollectionGroupId  = (Long)list.get(0);
+	  		SpecimenCollectionGroup specimenCollectionGroup = new SpecimenCollectionGroup();
+	  		specimenCollectionGroup.setSystemIdentifier(specimenCollectionGroupId);
+	  		return specimenCollectionGroup;
+	  	}
+	  	return null;
+	}
+    
+    private SpecimenCharacteristics loadSpecimenCharacteristics(Long specimenID, DAO dao) throws DAOException
+	{
+		//get list of Participant's names
+		String sourceObjectName = Specimen.class.getName();
+	  	String [] selectedColumn = {"specimenCharacteristics."+Constants.SYSTEM_IDENTIFIER};
+	  	String whereColumnName[] = {Constants.SYSTEM_IDENTIFIER};
+	  	String whereColumnCondition[] = {"="};
+	  	Object whereColumnValue[] = {specimenID};
+	  	String joinCondition = Constants.AND_JOIN_CONDITION;
+	  	
+	  	List list = dao.retrieve(sourceObjectName, selectedColumn, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);
+	  	if(!list.isEmpty())
+	  	{
+	  		Long specimenCharacteristicsId  = (Long)list.get(0);
+	  		SpecimenCharacteristics specimenCharacteristics = new SpecimenCharacteristics();
+	  		specimenCharacteristics.setSystemIdentifier(specimenCharacteristicsId);
+	  		return specimenCharacteristics;
+
+	  		//return (SpecimenCharacteristics)list.get(0);
+	  	}
+	  	return null;
+	}
 	
 	/**
      * Updates the persistent object in the database.
@@ -116,15 +160,34 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
     {
     	Specimen specimen = (Specimen)obj;
     	
-//		setSpecimenAttributes(dao,specimen);
+    	if(specimen.isParentChanged())
+        {
+        	//Check whether continer is moved to one of its sub container.
+        	if(isUnderSubSpecimen(specimen,specimen.getParentSpecimen().getSystemIdentifier()))
+        	{
+        		throw new DAOException(ApplicationProperties.getValue("errors.specimen.under.subspecimen"));  
+        	}
+        	Logger.out.debug("Loading ParentSpecimen: "+specimen.getParentSpecimen().getSystemIdentifier());
+			
+//        	Specimen parentSpecimen = (Specimen) dao.retrieve(Specimen.class.getName(), specimen.getParentSpecimen().getSystemIdentifier());
+//        	specimen.setParentSpecimen(parentSpecimen);
+//        	specimen.setSpecimenCollectionGroup(parentSpecimen.getSpecimenCollectionGroup());
+//        	specimen.setSpecimenCharacteristics(parentSpecimen.getSpecimenCharacteristics());
+        	SpecimenCollectionGroup scg = loadSpecimenCollectionGroup(specimen.getParentSpecimen().getSystemIdentifier(), dao);
+        	specimen.setSpecimenCollectionGroup(scg);
+        	SpecimenCharacteristics sc= loadSpecimenCharacteristics(specimen.getParentSpecimen().getSystemIdentifier(), dao);
+        	specimen.setSpecimenCharacteristics(sc);
+        }
+    	
+    	setSpecimenGroupForSubSpecimen(specimen, specimen.getSpecimenCollectionGroup(),specimen.getSpecimenCharacteristics());
+    	
 		dao.update(specimen.getSpecimenCharacteristics(), sessionDataBean, true, true, false);
 		dao.update(specimen, sessionDataBean, true, true, false);
 		
 		Collection externalIdentifierCollection = specimen.getExternalIdentifierCollection();
-		if(externalIdentifierCollection != null && externalIdentifierCollection.size() > 0)
+		if(externalIdentifierCollection != null)
 		{
 			Iterator it = externalIdentifierCollection.iterator();
-			
 			while(it.hasNext())
 			{
 				ExternalIdentifier exId = (ExternalIdentifier)it.next();
@@ -133,9 +196,11 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			}
 		}
 		
+		//Disable functionality
 		Logger.out.debug("specimen.getActivityStatus() "+specimen.getActivityStatus());
 		if(specimen.getActivityStatus().equals(Constants.ACTIVITY_STATUS_DISABLED))
 		{
+			setDisableToSubSpecimen(specimen);
 			Logger.out.debug("specimen.getActivityStatus() "+specimen.getActivityStatus());
 			Long specimenIDArr[] = new Long[1];
 			specimenIDArr[0] = specimen.getSystemIdentifier();
@@ -144,16 +209,66 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		}
     }
     
+    private boolean isUnderSubSpecimen(Specimen specimen, Long parentSpecimenID)
+    {
+    	if (specimen != null)
+        {
+        	Iterator iterator = specimen.getChildrenSpecimen().iterator();
+            while (iterator.hasNext())
+            {
+            	Specimen childSpecimen = (Specimen) iterator.next();
+                //Logger.out.debug("SUB CONTINER container "+parentContainerID.longValue()+" "+container.getSystemIdentifier().longValue()+"  "+(parentContainerID.longValue()==container.getSystemIdentifier().longValue()));
+                if(parentSpecimenID.longValue()==childSpecimen.getSystemIdentifier().longValue())
+                	return true;
+                if(isUnderSubSpecimen(childSpecimen,parentSpecimenID))
+                	return true;
+            }
+        }
+    	return false;
+    }
+    
+    private void setSpecimenGroupForSubSpecimen(Specimen specimen, SpecimenCollectionGroup specimenCollectionGroup, SpecimenCharacteristics specimenCharacteristics)
+    {
+        if (specimen != null)
+        {
+        	Logger.out.debug("specimen() "+specimen.getSystemIdentifier());
+        	Logger.out.debug("specimen.getChildrenContainerCollection() "+specimen.getChildrenSpecimen().size());
+            
+        	Iterator iterator = specimen.getChildrenSpecimen().iterator();
+            while (iterator.hasNext())
+            {
+            	Specimen childSpecimen = (Specimen) iterator.next();
+            	childSpecimen.setSpecimenCollectionGroup(specimenCollectionGroup);
+            	childSpecimen.setSpecimenCharacteristics(specimenCharacteristics);
+            	setSpecimenGroupForSubSpecimen(childSpecimen, specimenCollectionGroup, specimenCharacteristics);
+            }
+        }
+    }
+    
+//  TODO TO BE REMOVED 
+    private void setDisableToSubSpecimen(Specimen specimen)
+    {
+    	if (specimen != null)
+        {
+        	Iterator iterator = specimen.getChildrenSpecimen().iterator();
+            while (iterator.hasNext())
+            {
+            	Specimen childSpecimen = (Specimen) iterator.next();
+            	childSpecimen.setActivityStatus(Constants.ACTIVITY_STATUS_DISABLED);
+            	setDisableToSubSpecimen(childSpecimen);
+            }
+        }
+    }
+    
     private void setSpecimenAttributes(DAO dao, Specimen specimen) throws DAOException
 	{
     	//Load & set Specimen Collection Group if present
 		if(specimen.getSpecimenCollectionGroup() != null)
 		{
-	    	List list = dao.retrieve(SpecimenCollectionGroup.class.getName(), "systemIdentifier", specimen.getSpecimenCollectionGroup().getSystemIdentifier());
-			
-			if(list!=null && list.size()!=0)
+	    	Object specimenCollectionGroupObj = dao.retrieve(SpecimenCollectionGroup.class.getName(), specimen.getSpecimenCollectionGroup().getSystemIdentifier());
+			if(specimenCollectionGroupObj!=null )
 			{
-				SpecimenCollectionGroup spg = (SpecimenCollectionGroup)list.get(0);
+				SpecimenCollectionGroup spg = (SpecimenCollectionGroup)specimenCollectionGroupObj;
 				specimen.setSpecimenCollectionGroup(spg);
 			}
 		}
@@ -161,46 +276,40 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		//Load & set Parent Specimen if present
 		if(specimen.getParentSpecimen() != null)
 		{
-			List parentSpecimenList = dao.retrieve(Specimen.class.getName(),"systemIdentifier",specimen.getParentSpecimen().getSystemIdentifier());
-			
-			if(parentSpecimenList!=null && parentSpecimenList.size()!=0)
+			Object parentSpecimenObj = dao.retrieve(Specimen.class.getName(), specimen.getParentSpecimen().getSystemIdentifier());
+			if(parentSpecimenObj!=null)
 			{
-				Specimen parentSpecimen = (Specimen)parentSpecimenList.get(0);
+				Specimen parentSpecimen = (Specimen)parentSpecimenObj;
 				specimen.setParentSpecimen(parentSpecimen);
 			}
 		}
 		
 		//Load & set Storage Container
-		List scList = dao.retrieve(StorageContainer.class.getName(), "systemIdentifier", specimen.getStorageContainer().getSystemIdentifier());
-		
-		if(scList!=null && scList.size()!=0)
+		Object containerObj = dao.retrieve(StorageContainer.class.getName(), specimen.getStorageContainer().getSystemIdentifier());
+		if(containerObj!=null)
 		{
-			StorageContainer container = (StorageContainer)scList.get(0);
+			StorageContainer container = (StorageContainer)containerObj;
 			specimen.setStorageContainer(container);
 		}
 		
 		//Setting the Biohazard Collection
 		Set set = new HashSet();
-		
 		Collection biohazardCollection = specimen.getBiohazardCollection();
-		if(biohazardCollection != null && biohazardCollection.size() > 0)
+		if(biohazardCollection != null)
 		{
 			Iterator it = biohazardCollection.iterator();
-
 			while(it.hasNext())
 			{
 				Biohazard hazard = (Biohazard)it.next();
-				System.out.println("hazard.getSystemIdentifier() "+hazard.getSystemIdentifier());
+				Logger.out.debug("hazard.getSystemIdentifier() "+hazard.getSystemIdentifier());
 				Object bioObj = dao.retrieve(Biohazard.class.getName(), hazard.getSystemIdentifier());
 				if(bioObj!=null)
 				{
 					Biohazard hazardObj = (Biohazard)bioObj;
-					System.out.println("hazard.getSystemIdentifier() "+hazardObj.getSystemIdentifier());
 					set.add(hazardObj);
 				}
 			}
 		}
-		
 		specimen.setBiohazardCollection(set);
 	}
     

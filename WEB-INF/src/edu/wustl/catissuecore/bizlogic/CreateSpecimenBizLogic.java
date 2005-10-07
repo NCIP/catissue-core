@@ -13,12 +13,10 @@ package edu.wustl.catissuecore.bizlogic;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 
 import edu.wustl.catissuecore.dao.DAO;
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
-import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.ExternalIdentifier;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.StorageContainer;
@@ -48,30 +46,32 @@ public class CreateSpecimenBizLogic extends DefaultBizLogic
 		Specimen specimen = (Specimen)obj;
 		
 		specimen.setSpecimenCollectionGroup(null);
-        //Load & set the Parent Specimen of this specimen
-		List list = dao.retrieve(Specimen.class.getName(), "systemIdentifier", specimen.getParentSpecimen().getSystemIdentifier());
 		
-		if(list!=null && list.size()>0)
+		//Setting the Biohazard Collection
+		Specimen parentSpecimen = null;
+		
+        //Load & set the Parent Specimen of this specimen
+		Object specimenObj = dao.retrieve(Specimen.class.getName(), specimen.getParentSpecimen().getSystemIdentifier());
+		if(specimenObj!=null)
 		{
-			Specimen parentSpecimen = (Specimen)list.get(0);
+			parentSpecimen = (Specimen)specimenObj;
 			specimen.setParentSpecimen(parentSpecimen);
 			specimen.setSpecimenCharacteristics(parentSpecimen.getSpecimenCharacteristics());
-			//parentSpecimen.getChildrenSpecimen().add(specimen);
+			specimen.setSpecimenCollectionGroup(parentSpecimen.getSpecimenCollectionGroup());
 		}
 
 		//Load & set Storage Container
-		List scList = dao.retrieve(StorageContainer.class.getName(), "systemIdentifier", specimen.getStorageContainer().getSystemIdentifier());
-		
-		if(scList!=null && scList.size()!=0)
+		Object storageContainerObj = dao.retrieve(StorageContainer.class.getName(), specimen.getStorageContainer().getSystemIdentifier());
+		if(storageContainerObj!=null)
 		{
-			StorageContainer container = (StorageContainer)scList.get(0);
+			StorageContainer container = (StorageContainer)storageContainerObj;
 			specimen.setStorageContainer(container);
 		}
 
-		dao.insert(specimen.getSpecimenCharacteristics(),sessionDataBean, true,true);
 		specimen.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
 		dao.insert(specimen,sessionDataBean, true,true);
 		protectionObjects.add(specimen);
+		
 //		if(specimen.getSpecimenCharacteristics()!=null)
 //		{
 //		    protectionObjects.add(specimen.getSpecimenCharacteristics());
@@ -79,7 +79,7 @@ public class CreateSpecimenBizLogic extends DefaultBizLogic
 		
 		//Setting the External Identifier Collection
 		Collection externalIdentifierCollection = specimen.getExternalIdentifierCollection();
-		if(externalIdentifierCollection != null && externalIdentifierCollection.size() > 0)
+		if(externalIdentifierCollection != null)
 		{
 			Iterator it = externalIdentifierCollection.iterator();
 			
@@ -92,41 +92,24 @@ public class CreateSpecimenBizLogic extends DefaultBizLogic
 			}
 		}
 		
-		//Setting the Biohazard Collection
-		Specimen parentSpecimen = null;
+//		if(parentSpecimen != null)
+//		{
+//			Set set = new HashSet();
+//			
+//			Collection biohazardCollection = parentSpecimen.getBiohazardCollection();
+//			if(biohazardCollection != null)
+//			{
+//				Iterator it = biohazardCollection.iterator();
+//				while(it.hasNext())
+//				{
+//					Biohazard hazard = (Biohazard)it.next();
+//					set.add(hazard);
+//				}
+//			}
+//			specimen.setBiohazardCollection(set);
+//		}
 		
-		List parentSpecimenList = dao.retrieve(Specimen.class.getName(),"systemIdentifier",specimen.getParentSpecimen().getSystemIdentifier());
-		
-		if(parentSpecimenList!=null && parentSpecimenList.size()!=0)
-		{
-			parentSpecimen = (Specimen)parentSpecimenList.get(0);
-		}
-		
-		if(parentSpecimen != null)
-		{
-			Set set = new HashSet();
-			
-			Collection biohazardCollection = parentSpecimen.getBiohazardCollection();
-			if(biohazardCollection != null && biohazardCollection.size() > 0)
-			{
-				Iterator it = biohazardCollection.iterator();
-	
-				while(it.hasNext())
-				{
-					Biohazard hazard = (Biohazard)it.next();
-					Object bioObj = dao.retrieve(Biohazard.class.getName(), hazard.getSystemIdentifier());
-					if(bioObj!=null)
-					{
-						Biohazard hazardObj = (Biohazard)bioObj;
-						set.add(hazardObj);
-					}
-				}
-			}
-			
-			specimen.setBiohazardCollection(set);
-		}
-		
-//		Inserting data for Authorization
+		//Inserting data for Authorization
 		try
         {
             SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null,protectionObjects,getDynamicGroups(specimen));
@@ -137,24 +120,23 @@ public class CreateSpecimenBizLogic extends DefaultBizLogic
         }
 	}
 	
-	 public String[] getDynamicGroups(AbstractDomainObject obj)
-	    {
-	        String[] dynamicGroups=null;
-	        Specimen specimen = (Specimen)obj;
-	        dynamicGroups = new String[1];
-	        
-	        try
-	        {
-	            dynamicGroups[0] = SecurityManager.getInstance(this.getClass()).getProtectionGroupByName(specimen.getParentSpecimen(),Constants.getCollectionProtocolPGName(null));
-	        }
-	        catch (SMException e)
-	        {
-	            Logger.out.error("Exception in Authorization: "+e.getMessage(),e);
-	        }
-	        Logger.out.debug("Dynamic Group name: "+dynamicGroups[0]);
-	        return dynamicGroups;
-	        
-	    }
+	public String[] getDynamicGroups(AbstractDomainObject obj)
+	{
+        String[] dynamicGroups=null;
+        Specimen specimen = (Specimen)obj;
+        dynamicGroups = new String[1];
+        
+        try
+        {
+            dynamicGroups[0] = SecurityManager.getInstance(this.getClass()).getProtectionGroupByName(specimen.getParentSpecimen(),Constants.getCollectionProtocolPGName(null));
+        }
+        catch (SMException e)
+        {
+            Logger.out.error("Exception in Authorization: "+e.getMessage(),e);
+        }
+        Logger.out.debug("Dynamic Group name: "+dynamicGroups[0]);
+        return dynamicGroups;
+	}
 	
 	/**
      * Updates the persistent object in the database.
