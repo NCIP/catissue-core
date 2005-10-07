@@ -107,8 +107,6 @@ public class CellSpecimen extends Specimen implements Serializable
         	SpecimenForm form = (SpecimenForm) abstractForm;
         	
         	this.quantityInCellCount = new Integer(form.getQuantity());
-        	if(form.getAvailableQuantity() != null)
-        	
         	
         	if(form.isAddOperation())
         	{
@@ -121,7 +119,7 @@ public class CellSpecimen extends Specimen implements Serializable
         }
         catch (Exception excp)
         {
-            Logger.out.error(excp.getMessage());
+            Logger.out.error(excp.getMessage(),excp);
         }
     }
 }
