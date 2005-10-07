@@ -103,7 +103,10 @@ public class SimpleSearchAction extends DispatchAction
             {
                 Logger.out.debug("Adding ActivityStatus............................");
                 SimpleConditionsNode activityStatusCondition = new SimpleConditionsNode();
-                activityStatusCondition.getCondition().getDataElement().setTable(viewAliasName);
+                if(viewAliasName.indexOf("CollectionProtocol")!=-1 || viewAliasName.indexOf("DistributionProtocol")!=-1)
+                	activityStatusCondition.getCondition().getDataElement().setTable("SpecimenProtocol");
+                else
+                	activityStatusCondition.getCondition().getDataElement().setTable(viewAliasName);
                 activityStatusCondition.getCondition().getDataElement().setField("ACTIVITY_STATUS");
                 activityStatusCondition.getCondition().getOperator().setOperator("!=");
                 activityStatusCondition.getCondition().setValue("'"+Constants.ACTIVITY_STATUS_DISABLED+"'");
