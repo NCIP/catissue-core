@@ -98,6 +98,7 @@ public class ReportedProblemForm extends AbstractActionForm
      */
     public ReportedProblemForm()
     {
+    	activityStatus = Constants.ACTIVITY_STATUS_PENDING;
         reset();
     }
 

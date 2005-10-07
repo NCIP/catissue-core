@@ -45,8 +45,11 @@ public class ReportProblemAction extends Action
 		{
 			SessionDataBean sessionData = (SessionDataBean) obj;
 			ReportedProblemForm reportedProblemForm = (ReportedProblemForm)form;
-			reportedProblemForm.setNameOfReporter(sessionData.getLastName()+", "+sessionData.getFirstName());
-			reportedProblemForm.setFrom(sessionData.getUserName());
+			if(reportedProblemForm!=null)
+			{
+				reportedProblemForm.setNameOfReporter(sessionData.getLastName()+", "+sessionData.getFirstName());
+				reportedProblemForm.setFrom(sessionData.getUserName());
+			}
 		}
     	
         //Gets the value of the operation parameter.
