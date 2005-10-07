@@ -181,7 +181,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
     	
     	setSpecimenGroupForSubSpecimen(specimen, specimen.getSpecimenCollectionGroup(),specimen.getSpecimenCharacteristics());
     	
-		dao.update(specimen.getSpecimenCharacteristics(), sessionDataBean, true, true, false);
+		//dao.update(specimen.getSpecimenCharacteristics(), sessionDataBean, true, true, false);
 		dao.update(specimen, sessionDataBean, true, true, false);
 		
 		Collection externalIdentifierCollection = specimen.getExternalIdentifierCollection();

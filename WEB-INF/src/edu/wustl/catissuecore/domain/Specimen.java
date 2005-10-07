@@ -543,8 +543,9 @@ public class Specimen extends AbstractDomainObject implements Serializable
 	        		//specimen is a new specimen  
 	        		if(parentSpecimen==null)
 	        		{
+	        			String parentSpecimenId = form.getParentSpecimenId();
 	        			// specimen created from another specimen
-	        			if(Long.parseLong(form.getParentSpecimenId())>0)
+	        			if(parentSpecimenId!=null && !parentSpecimenId.trim().equals("") && Long.parseLong(parentSpecimenId)>0)
 	        			{
 	        				isParentChanged = true;
 	        			}
