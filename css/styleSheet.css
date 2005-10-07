@@ -726,7 +726,7 @@ img.img{ /* for images that need a border */
   color:#000000; /* constant: black */
   border-right:1px solid #5C5C5C; /* constant: dark gray */
   border-bottom:1px solid #5C5C5C; /* constant: dark gray */
-  background-color:#F4F4F5; /* constant: light gray */ 
+  background-color:#F4F4F5; /* //constant: light gray */ 
   border-left:1px solid #5C5C5C; /* constant: dark gray */
  }
 td.onlyBottomBorder{ /* for the cell that contains the form elements */
@@ -805,5 +805,50 @@ input.formDateSized15{ /* for the form elements themselves and with a constant w
   border:1px solid #5C5C5C; /* constant: dark gray */
   font-size:1em;
   width:15em;
+}
+
+/* ######### Classes used for Add More Coloring  */
+.formRequiredLabelAddMore{ /* for the required form labels */
+  font-family:arial,helvetica,verdana,sans-serif;
+  font-size:0.7em;
+  font-weight:bold;
+  color:#000000; /* constant: black */
+  border-right:1px solid #5C5C5C; /* constant: dark gray */
+  border-bottom:1px solid #5C5C5C; /* constant: dark gray */
+	text-align:right;
+}
+
+.formLabelAddMore{ /* for the non-required form labels */
+  font-family:arial,helvetica,verdana,sans-serif;
+  font-size:0.7em;
+  color:#000000; /* constant: black */
+  border-right:1px solid #5C5C5C; /* constant: dark gray */
+  border-bottom:1px solid #5C5C5C; /* constant: dark gray */
+  text-align:right;
+}
+
+.tabrightmostcellAddMore{ /* for the rightmost cell */
+ font-family:arial,helvetica,verdana,sans-serif;
+  font-size:0.7em;
+  color:#000000; /* constant: black */
+  border-right:1px solid #5C5C5C; /* constant: dark gray */
+  border-bottom:1px solid #5C5C5C; /* constant: dark gray */
+  border-left:1px solid #5C5C5C; /* constant: dark gray */
+ }
+
+ .formRequiredNoticeAddMore{ /* for the asterisk cell */
+  font-family:arial,helvetica,verdana,sans-serif;
+  font-size:1em;
+  color:#000000; /* constant: black */
+  border-left:1px solid #5C5C5C; /* constant: dark gray */
+  border-bottom:1px solid #5C5C5C; /* constant: dark gray */
+}
+
+td.formFieldAddMore{ /* for the cell that contains the form elements */
+  font-family:arial,helvetica,verdana,sans-serif;
+  font-size:0.7em;
+  color:#000000; /* constant: black */
+  border-right:1px solid #5C5C5C; /* constant: dark gray */
+  border-bottom:1px solid #5C5C5C; /* constant: dark gray */
 }
 
