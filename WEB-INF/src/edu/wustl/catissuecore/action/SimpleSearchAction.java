@@ -28,6 +28,9 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
 
 import edu.wustl.catissuecore.actionForm.SimpleQueryInterfaceForm;
+import edu.wustl.catissuecore.domain.CollectionProtocol;
+import edu.wustl.catissuecore.domain.DistributionProtocol;
+import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.query.Query;
 import edu.wustl.catissuecore.query.QueryFactory;
 import edu.wustl.catissuecore.query.SimpleConditionsNode;
@@ -172,11 +175,16 @@ public class SimpleSearchAction extends DispatchAction
      * @param aliasName
      * @return
      */
+    //TODO To be fix
     private boolean hasActivityStatus(String aliasName)
     {
         try
         {
             Class className = Class.forName("edu.wustl.catissuecore.domain."+aliasName);
+            
+            if(className.equals(CollectionProtocol.class) || className.equals(DistributionProtocol.class) || className.equals(Specimen.class))
+            	return true;
+            
             Logger.out.debug("Class.................."+className.getName());
             Field[] objectFields = className.getDeclaredFields();
             Logger.out.debug("Field Size..........................."+objectFields.length);
