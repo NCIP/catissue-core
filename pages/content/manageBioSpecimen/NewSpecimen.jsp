@@ -378,6 +378,11 @@ Map map = form.getExternalIdentifier();
 					</td>
 				 </tr>
 				 <tr>
+					<td>
+						<html:hidden property="parentPresent" />
+					</td>
+				 </tr>
+				 <tr>
 					<td class="formMessage" colspan="3">* indicates a required field</td>
 				 </tr>
 				 <tr>
@@ -416,6 +421,7 @@ Map map = form.getExternalIdentifier();
 						</td>
 						
 			        	<td class="formField" colspan="4">
+			        		<html:hidden property="specimenCollectionGroupId"/>
 				     		<html:select property="parentSpecimenId" styleClass="formFieldSized10" styleId="parentSpecimenId" size="1" disabled="<%=readOnlyForAll%>">
 								<html:options collection="<%=Constants.PARENT_SPECIMEN_ID_LIST%>" labelProperty="name" property="value"/>
 							</html:select>
