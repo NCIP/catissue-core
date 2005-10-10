@@ -33,6 +33,8 @@ public class SimpleQueryInterfaceForm extends ActionForm
     String pageOf;
 
     String aliasName;
+    
+    String showCalendar="";
 
     public SimpleQueryInterfaceForm()
     {
@@ -107,6 +109,20 @@ public class SimpleQueryInterfaceForm extends ActionForm
         return values;
     }
 
+    
+    
+	/**
+	 * @return Returns the showCalendar.
+	 */
+	public String getShowCalendar() {
+		return showCalendar;
+	}
+	/**
+	 * @param showCalendar The showCalendar to set.
+	 */
+	public void setShowCalendar(String showCalendar) {
+		this.showCalendar = showCalendar;
+	}
     /**
      * Overrides the reset method of ActionForm.
      */

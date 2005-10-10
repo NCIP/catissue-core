@@ -17,12 +17,18 @@
 	Object obj = request.getAttribute("simpleQueryInterfaceForm");
 	String aliasName = (String)request.getAttribute(Constants.TABLE_ALIAS_NAME);
 	String noOfRows="1";
+	String showCal = "";
+	String dateClass = "hideTD";
 	if(obj != null && obj instanceof SimpleQueryInterfaceForm)
 	{
 		SimpleQueryInterfaceForm form = (SimpleQueryInterfaceForm)obj;
 		noOfRows = form.getCounter();
+		showCal = form.getShowCalendar();
 	}
-
+	
+	if(showCal != null && showCal.trim().length()>0)
+		dateClass = "formField";
+		
 	String title = (String)request.getAttribute(Constants.SIMPLE_QUERY_INTERFACE_TITLE);
 %>
 <script>
@@ -160,12 +166,14 @@ function showDateColumn(element)
 			var td = document.getElementById("calTD");
 			td.className="formField";
 			txtField.readOnly="readOnly";
+			document.forms[0].showCalendar.value = "Show";
 		}
 		else
 		{
 			var td = document.getElementById("calTD");
 			td.className="hideTD";
 			txtField.readOnly="";
+			document.forms[0].showCalendar.value = "";
 		}	
 	}	
 }
@@ -243,10 +251,11 @@ function showDateColumn(element)
 					</td>
 					<td class="formField">
 						<html:text styleClass="formFieldSized10" size="30" styleId="attributeValue" property="<%=attributeValue%>" />
-
+						<html:hidden property="showCalendar" />
 					</td>
 				<!--  ********************* MD Code ********************** -->	
-					<td id="calTD" class="hideTD">
+					
+					<td id="calTD" class="<%=dateClass%>">
 					<%	
 						String fieldName = "simpleQueryInterfaceForm.attributeValue";
 					%>
