@@ -17,6 +17,7 @@ import java.util.Set;
 import edu.wustl.catissuecore.dao.DAO;
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.domain.ClinicalReport;
+import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Participant;
@@ -51,12 +52,29 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		List list = dao.retrieve(Site.class.getName(), Constants.SYSTEM_IDENTIFIER, specimenCollectionGroup.getSite().getSystemIdentifier());
 		if (!list.isEmpty())
 		{
+			// check for closed Site
+			Long siteID = specimenCollectionGroup.getSite().getSystemIdentifier() ; 
+			String className = Site.class.getName();
+			String errorName = "Site";
+			Utility.checkStatus(dao,  siteID, className, errorName );
+
 			specimenCollectionGroup.setSite((Site)list.get(0));
 		}
 		
 		list  =  dao.retrieve(CollectionProtocolEvent.class.getName(), Constants.SYSTEM_IDENTIFIER, specimenCollectionGroup.getCollectionProtocolEvent().getSystemIdentifier());
 		if(!list.isEmpty())
 		{
+			// check for closed CollectionProtocol
+			CollectionProtocolEvent cpe = (CollectionProtocolEvent)list.get(0);
+			
+			Long cpID = cpe.getCollectionProtocol().getSystemIdentifier();   
+			String className = CollectionProtocol.class.getName();
+			String errorName = "Collection Protocol";
+			Logger.out.debug("CollectionProtocol :------------- : " + cpID);
+
+			Utility.checkStatus(dao,  cpID, className, errorName );
+
+			
 			specimenCollectionGroup.setCollectionProtocolEvent((CollectionProtocolEvent)list.get(0));
 		}
 		
@@ -123,6 +141,38 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 	protected void update(DAO dao, Object obj, Object oldObj,SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException 
 	{
 		SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) obj;
+		SpecimenCollectionGroup oldspecimenCollectionGroup = (SpecimenCollectionGroup) oldObj;
+		
+		// Check for different closed site
+		if(!specimenCollectionGroup.getSite().getSystemIdentifier().equals( oldspecimenCollectionGroup.getSite().getSystemIdentifier()))
+		{
+			Logger.out.debug("specimenCollectionGroup.getSite().getSystemIdentifier() "+specimenCollectionGroup.getSite().getSystemIdentifier());
+			Logger.out.debug("oldspecimenCollectionGroup.getSite().getSystemIdentifier() "+oldspecimenCollectionGroup.getSite().getSystemIdentifier());
+
+			Long siteID = specimenCollectionGroup.getSite().getSystemIdentifier();
+			String className = Site.class.getName();
+			String errorName = "Site";
+			Utility.checkStatus(dao,  siteID, className, errorName );
+		}
+		// --------------- site check complete
+		
+		// -- check for closed CollectionProtocol
+		List list  =  dao.retrieve(CollectionProtocolEvent.class.getName(), Constants.SYSTEM_IDENTIFIER, specimenCollectionGroup.getCollectionProtocolEvent().getSystemIdentifier());
+		if(!list.isEmpty())
+		{
+			// check for closed CollectionProtocol
+			CollectionProtocolEvent cpe = (CollectionProtocolEvent)list.get(0);
+			Long cpID = cpe.getCollectionProtocol().getSystemIdentifier();   
+			String className = CollectionProtocol.class.getName();
+			String errorName = "Collection Protocol";
+
+			Logger.out.debug("CollectionProtocol :------------- : " + cpID);
+			Utility.checkStatus(dao,  cpID, className, errorName );
+			
+			specimenCollectionGroup.setCollectionProtocolEvent((CollectionProtocolEvent)list.get(0));
+		}
+		// ---------- CollectionProtocol check complete.
+		
 		
 		setCollectionProtocolRegistration(dao, specimenCollectionGroup);
 		
@@ -154,6 +204,16 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		
 		if(specimenCollectionGroup.getCollectionProtocolRegistration().getParticipant()!=null)
 		{
+			// check for closed Participant
+			Participant participantObject = (Participant)specimenCollectionGroup.getCollectionProtocolRegistration().getParticipant() ;
+				Long cpID = participantObject.getSystemIdentifier(); 
+				String className = Participant.class.getName();
+				String errorName = "Participant";
+				Logger.out.debug("Participant :------------- : " + cpID);
+				Utility.checkStatus(dao,  cpID, className, errorName );
+				
+			// ---------- Participant check complete.
+
 			whereColumnName[1]="participant."+Constants.SYSTEM_IDENTIFIER;
 			whereColumnValue[1]=specimenCollectionGroup.getCollectionProtocolRegistration().getParticipant().getSystemIdentifier();
 		}
@@ -168,6 +228,17 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 							 whereColumnCondition, whereColumnValue, joinCondition);
 		if(!list.isEmpty())
 		{
+				// check for closed CollectionProtocolRegistration
+			CollectionProtocolRegistration collectionProtocolRegistrationObject = (CollectionProtocolRegistration)list.get(0);
+				Long cpID = collectionProtocolRegistrationObject.getSystemIdentifier(); 
+				String className = CollectionProtocolRegistration.class.getName();
+				String errorName = "Collection Protocol Registration";
+
+				Logger.out.debug("CollectionProtocolRegistration :------------- : " + cpID);
+				Utility.checkStatus(dao,  cpID, className, errorName );
+				
+			// ---------- CollectionProtocolRegistration check complete.
+			
 		   specimenCollectionGroup.setCollectionProtocolRegistration((CollectionProtocolRegistration)list.get(0));
 		}
 	}
