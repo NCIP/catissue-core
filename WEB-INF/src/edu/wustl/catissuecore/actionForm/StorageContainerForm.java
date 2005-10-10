@@ -179,6 +179,10 @@ public class StorageContainerForm extends AbstractActionForm
 				this.positionInParentContainer = container.getParentContainer().getStorageType().getType() + " : " 
 								+ container.getParentContainer().getSystemIdentifier() + " Pos(" + container.getPositionDimensionOne() + ","
 								+ container.getPositionDimensionTwo() + ")";
+				
+				//Sri: Fix for bug #
+				this.positionDimensionOne = container.getPositionDimensionOne().intValue();
+				this.positionDimensionTwo = container.getPositionDimensionTwo().intValue();
 			}
 			
 			if(container.getSite()!= null)
