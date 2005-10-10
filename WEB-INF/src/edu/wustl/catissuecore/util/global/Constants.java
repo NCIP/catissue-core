@@ -62,7 +62,7 @@ public class Constants
 	//Constants required for Forgot Password
 	public static final String FORGOT_PASSWORD = "forgotpassword";
 	
-	//public static final String IDENTIFIER = "systemIdentifier";
+	public static final String IDENTIFIER = "systemIdentifier";
 	public static final String LOGINNAME = "loginName";
 	public static final String LASTNAME = "lastName";
 	public static final String FIRSTNAME = "firstName";
