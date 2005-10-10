@@ -58,13 +58,8 @@ public class CreateSpecimenBizLogic extends DefaultBizLogic
 			parentSpecimen = (Specimen)specimenObj;
 			
 			// check for closed ParentSpecimen
-			Long pID = parentSpecimen.getSystemIdentifier();
-			if(pID != null)
-			{
-				String className = Specimen.class.getName();
 				String errorName = "Parent Specimen";
-				Utility.checkStatus(dao, pID, className, errorName );
-			}
+				Utility.checkStatus(dao,parentSpecimen, errorName );
 			
 			specimen.setParentSpecimen(parentSpecimen);
 			specimen.setSpecimenCharacteristics(parentSpecimen.getSpecimenCharacteristics());
@@ -78,13 +73,8 @@ public class CreateSpecimenBizLogic extends DefaultBizLogic
 			StorageContainer container = (StorageContainer)storageContainerObj;
 			
 			// check for closed Storage Container
-			Long scID = container.getSystemIdentifier();
-			if(scID != null)
-			{
-				String className = StorageContainer.class.getName();
 				String errorName = "Storage Container";
-				Utility.checkStatus(dao, scID, className, errorName );
-			}
+				Utility.checkStatus(dao,container, errorName );
 			
 			specimen.setStorageContainer(container);
 		}

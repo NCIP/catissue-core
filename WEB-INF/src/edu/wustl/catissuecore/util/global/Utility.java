@@ -18,6 +18,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import edu.wustl.catissuecore.dao.DAO;
+import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
@@ -175,19 +176,38 @@ public class Utility
 	 * @param errorName Dispaly Name of the Element
 	 * @throws DAOException
 	 */
-	public static void checkStatus(DAO dao, Long identifier, String className, String errorName ) throws DAOException 
-	    {
-			if(identifier!=null)
+//	public static void checkStatus(DAO dao, Long identifier, String className, String errorName ) throws DAOException 
+//	    {
+//			if(identifier!=null)
+//			{
+//				String activityStatus = dao.getActivityStatus(className,identifier);
+//				if(activityStatus.equals(Constants.ACTIVITY_STATUS_CLOSED))
+//				{
+//					throw new DAOException(errorName + " " + ApplicationProperties.getValue("error.object.closed"));
+//				}
+//			}
+//		
+//	    }
+	//		Method to check the ActivityStatus of the given element 
+	public static void checkStatus(DAO dao, AbstractDomainObject ado , String errorName ) throws DAOException 
+    {
+		if(ado !=null)
+		{
+			Long identifier = ado.getSystemIdentifier() ;
+			if(identifier != null)
 			{
+				String className = ado.getClass().getName();  
 				String activityStatus = dao.getActivityStatus(className,identifier);
 				if(activityStatus.equals(Constants.ACTIVITY_STATUS_CLOSED))
 				{
 					throw new DAOException(errorName + " " + ApplicationProperties.getValue("error.object.closed"));
 				}
 			}
-		
-	    }
-//	public static void main(String[] args)
+		}
+    }
+
+	
+	//	public static void main(String[] args)
 //  {
 //	    try{
 //	      String date = "2005-10-22";  

@@ -53,10 +53,8 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		if (!list.isEmpty())
 		{
 			// check for closed Site
-			Long siteID = specimenCollectionGroup.getSite().getSystemIdentifier() ; 
-			String className = Site.class.getName();
 			String errorName = "Site";
-			Utility.checkStatus(dao,  siteID, className, errorName );
+			Utility.checkStatus(dao,specimenCollectionGroup.getSite(), errorName );
 
 			specimenCollectionGroup.setSite((Site)list.get(0));
 		}
@@ -67,12 +65,9 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 			// check for closed CollectionProtocol
 			CollectionProtocolEvent cpe = (CollectionProtocolEvent)list.get(0);
 			
-			Long cpID = cpe.getCollectionProtocol().getSystemIdentifier();   
-			String className = CollectionProtocol.class.getName();
 			String errorName = "Collection Protocol";
-			Logger.out.debug("CollectionProtocol :------------- : " + cpID);
+			Utility.checkStatus(dao,cpe.getCollectionProtocol(), errorName );
 
-			Utility.checkStatus(dao,  cpID, className, errorName );
 
 			
 			specimenCollectionGroup.setCollectionProtocolEvent((CollectionProtocolEvent)list.get(0));
@@ -149,10 +144,9 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 			Logger.out.debug("specimenCollectionGroup.getSite().getSystemIdentifier() "+specimenCollectionGroup.getSite().getSystemIdentifier());
 			Logger.out.debug("oldspecimenCollectionGroup.getSite().getSystemIdentifier() "+oldspecimenCollectionGroup.getSite().getSystemIdentifier());
 
-			Long siteID = specimenCollectionGroup.getSite().getSystemIdentifier();
-			String className = Site.class.getName();
 			String errorName = "Site";
-			Utility.checkStatus(dao,  siteID, className, errorName );
+			Utility.checkStatus(dao,specimenCollectionGroup.getSite(), errorName );
+
 		}
 		// --------------- site check complete
 		
@@ -162,12 +156,9 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		{
 			// check for closed CollectionProtocol
 			CollectionProtocolEvent cpe = (CollectionProtocolEvent)list.get(0);
-			Long cpID = cpe.getCollectionProtocol().getSystemIdentifier();   
-			String className = CollectionProtocol.class.getName();
-			String errorName = "Collection Protocol";
 
-			Logger.out.debug("CollectionProtocol :------------- : " + cpID);
-			Utility.checkStatus(dao,  cpID, className, errorName );
+			String errorName = "Collection Protocol";
+			Utility.checkStatus(dao,cpe.getCollectionProtocol(), errorName );
 			
 			specimenCollectionGroup.setCollectionProtocolEvent((CollectionProtocolEvent)list.get(0));
 		}
@@ -206,11 +197,8 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		{
 			// check for closed Participant
 			Participant participantObject = (Participant)specimenCollectionGroup.getCollectionProtocolRegistration().getParticipant() ;
-				Long cpID = participantObject.getSystemIdentifier(); 
-				String className = Participant.class.getName();
 				String errorName = "Participant";
-				Logger.out.debug("Participant :------------- : " + cpID);
-				Utility.checkStatus(dao,  cpID, className, errorName );
+				Utility.checkStatus(dao,participantObject, errorName );
 				
 			// ---------- Participant check complete.
 
@@ -230,13 +218,9 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		{
 				// check for closed CollectionProtocolRegistration
 			CollectionProtocolRegistration collectionProtocolRegistrationObject = (CollectionProtocolRegistration)list.get(0);
-				Long cpID = collectionProtocolRegistrationObject.getSystemIdentifier(); 
-				String className = CollectionProtocolRegistration.class.getName();
 				String errorName = "Collection Protocol Registration";
 
-				Logger.out.debug("CollectionProtocolRegistration :------------- : " + cpID);
-				Utility.checkStatus(dao,  cpID, className, errorName );
-				
+				Utility.checkStatus(dao,collectionProtocolRegistrationObject, errorName );				
 			// ---------- CollectionProtocolRegistration check complete.
 			
 		   specimenCollectionGroup.setCollectionProtocolRegistration((CollectionProtocolRegistration)list.get(0));

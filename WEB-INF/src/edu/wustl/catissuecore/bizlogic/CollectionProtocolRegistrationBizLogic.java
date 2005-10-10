@@ -46,16 +46,12 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 		CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration) obj;
 
 		// check for closed Collection Protocol
-		Long cpID = collectionProtocolRegistration.getCollectionProtocol().getSystemIdentifier();
-		String className = CollectionProtocol.class.getName();
 		String errorName = "Collection Protocol";
-		Utility.checkStatus(dao,  cpID, className, errorName );
+		Utility.checkStatus(dao,collectionProtocolRegistration.getCollectionProtocol(), errorName );
 
 		//-- Check for closed Participant
-		Long participantID = collectionProtocolRegistration.getParticipant().getSystemIdentifier();
-		className = Participant.class.getName();
 		errorName = "Participant";
-		Utility.checkStatus(dao,  participantID, className, errorName );
+		Utility.checkStatus(dao, collectionProtocolRegistration.getParticipant(), errorName );
 		
 		
 		registerParticipantAndProtocol(dao,collectionProtocolRegistration, sessionDataBean);
@@ -90,10 +86,8 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 			Logger.out.debug("collectionProtocolRegistration.getCollectionProtocol().getSystemIdentifier() "+collectionProtocolRegistration.getCollectionProtocol().getSystemIdentifier());
 			Logger.out.debug("oldCollectionProtocolRegistration.getCollectionProtocol().getSystemIdentifier() "+oldCollectionProtocolRegistration.getCollectionProtocol().getSystemIdentifier());
 
-			Long cpID = collectionProtocolRegistration.getCollectionProtocol().getSystemIdentifier();
-			String className = CollectionProtocol.class.getName();
 			String errorName = "Collection Protocol";
-			Utility.checkStatus(dao,  cpID, className, errorName );
+			Utility.checkStatus(dao,collectionProtocolRegistration.getCollectionProtocol(), errorName );
 		}
 
 		// -- Check for different Participants and closed participant
@@ -105,11 +99,9 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 				Logger.out.debug("collectionProtocolRegistration.getParticipant().getSystemIdentifier() : " + collectionProtocolRegistration.getParticipant().getSystemIdentifier());
 				Logger.out.debug("oldCollectionProtocolRegistration.getParticipant().getSystemIdentifier() : " + oldCollectionProtocolRegistration.getParticipant().getSystemIdentifier());
 				if(!collectionProtocolRegistration.getParticipant().getSystemIdentifier().equals( oldCollectionProtocolRegistration.getParticipant().getSystemIdentifier()))
-				{
-					Long participantID = collectionProtocolRegistration.getParticipant().getSystemIdentifier();
-					String className = Participant.class.getName();
+				{					
 					String errorName = "Participant";
-					Utility.checkStatus(dao,  participantID, className, errorName );
+					Utility.checkStatus(dao,collectionProtocolRegistration.getParticipant(), errorName );
 				}		
 			}
 		}
@@ -120,11 +112,9 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 			if(collectionProtocolRegistration.getParticipant().getSystemIdentifier()  != null )
 			{
 				Logger.out.debug("collectionProtocolRegistration.getParticipant().getSystemIdentifier() : " + collectionProtocolRegistration.getParticipant().getSystemIdentifier());
-
-				Long participantID = collectionProtocolRegistration.getParticipant().getSystemIdentifier();
-				String className = Participant.class.getName();
+				
 				String errorName = "Participant";
-				Utility.checkStatus(dao,  participantID, className, errorName );
+				Utility.checkStatus(dao,collectionProtocolRegistration.getParticipant(), errorName );
 			}
 		}
 		
