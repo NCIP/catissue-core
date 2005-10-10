@@ -32,6 +32,7 @@ import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.catissuecore.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
@@ -70,7 +71,8 @@ public class DistributionForm extends SpecimenEventParametersForm
 		this.distributionProtocolId = String.valueOf(distributionObject.getDistributionProtocol().getSystemIdentifier());
 		this.fromSite = String.valueOf(distributionObject.getFromSite().getSystemIdentifier());
 		this.toSite = String.valueOf(distributionObject.getToSite().getSystemIdentifier());
-		//this.userId = distributionObject.getUser().getSystemIdentifier().longValue();
+		this.activityStatus = Utility.toString(distributionObject.getActivityStatus());
+		Logger.out.debug("this.activityStatus "+this.activityStatus);
 		Collection distributedItemCollection = distributionObject.getDistributedItemCollection();
 		
 		if(distributedItemCollection != null)

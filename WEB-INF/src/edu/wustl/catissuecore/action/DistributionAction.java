@@ -72,6 +72,9 @@ public class  DistributionAction extends SpecimenEventParametersAction
 			String [] displayNameField = {Constants.SYSTEM_IDENTIFIER};
 			List specimenList = dao.getList(Specimen.class.getName(), displayNameField, valueField, true);
 			request.setAttribute(Constants.SPECIMEN_ID_LIST,specimenList);
+			
+//			Sets the activityStatusList attribute to be used in the Site Add/Edit Page.
+	        request.setAttribute(Constants.ACTIVITYSTATUSLIST, Constants.ACTIVITY_STATUS_VALUES);
 		}
 		catch(Exception e)
 		{

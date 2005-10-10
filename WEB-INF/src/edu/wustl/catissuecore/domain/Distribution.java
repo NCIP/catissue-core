@@ -50,6 +50,11 @@ public class Distribution extends SpecimenEventParameters implements java.io.Ser
 	 * Collection of Items distributed in this distribution.
 	 */
 	protected Collection distributedItemCollection = new HashSet();
+	
+	/**
+	 * Defines whether this SpecimenProtocol record can be queried (Active) or not queried (Inactive) by any actor.
+	 */
+	protected String activityStatus;
 
 	//Default Constructor
 	public Distribution()
@@ -139,6 +144,24 @@ public class Distribution extends SpecimenEventParameters implements java.io.Ser
 	}
 
 	/**
+	 * Returns the activityStatus.
+	 * @hibernate.property name="activityStatus" type="string" column="ACTIVITY_STATUS" length="50"
+	 * @return Returns the activityStatus.
+	 */
+	public String getActivityStatus()
+	{
+		return activityStatus;
+	}
+
+	/**
+	 * @param activityStatus The activityStatus to set.
+	 */
+	public void setActivityStatus(String activityStatus)
+	{
+		this.activityStatus = activityStatus;
+	}
+	
+	/**
 	 * @param distributedItemCollection
 	 *  The distributedItemCollection to set.
 	 */
@@ -156,6 +179,7 @@ public class Distribution extends SpecimenEventParameters implements java.io.Ser
 	        toSite.setSystemIdentifier(new Long(form.getToSite()));
 	        fromSite.setSystemIdentifier(new Long(form.getFromSite()));
 	        distributionProtocol.setSystemIdentifier(new Long(form.getDistributionProtocolId()));
+	        this.activityStatus = form.getActivityStatus();
 	        
 	        Map map = form.getValues();
 	        Logger.out.debug("map "+map);

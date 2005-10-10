@@ -105,6 +105,15 @@
             column="IDENTIFIER"
         />
 
+		<property
+            name="activityStatus"
+            type="string"
+            update="true"
+            insert="true"
+            column="ACTIVITY_STATUS"
+            length="50"
+        />
+        
         <many-to-one
             name="toSite"
             class="edu.wustl.catissuecore.domain.Site"
