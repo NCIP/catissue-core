@@ -21,6 +21,7 @@ import edu.wustl.catissuecore.domain.ExternalIdentifier;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
@@ -55,6 +56,16 @@ public class CreateSpecimenBizLogic extends DefaultBizLogic
 		if(specimenObj!=null)
 		{
 			parentSpecimen = (Specimen)specimenObj;
+			
+			// check for closed ParentSpecimen
+			Long pID = parentSpecimen.getSystemIdentifier();
+			if(pID != null)
+			{
+				String className = Specimen.class.getName();
+				String errorName = "Parent Specimen";
+				Utility.checkStatus(dao, pID, className, errorName );
+			}
+			
 			specimen.setParentSpecimen(parentSpecimen);
 			specimen.setSpecimenCharacteristics(parentSpecimen.getSpecimenCharacteristics());
 			specimen.setSpecimenCollectionGroup(parentSpecimen.getSpecimenCollectionGroup());
@@ -65,6 +76,16 @@ public class CreateSpecimenBizLogic extends DefaultBizLogic
 		if(storageContainerObj!=null)
 		{
 			StorageContainer container = (StorageContainer)storageContainerObj;
+			
+			// check for closed Storage Container
+			Long scID = container.getSystemIdentifier();
+			if(scID != null)
+			{
+				String className = StorageContainer.class.getName();
+				String errorName = "Storage Container";
+				Utility.checkStatus(dao, scID, className, errorName );
+			}
+			
 			specimen.setStorageContainer(container);
 		}
 

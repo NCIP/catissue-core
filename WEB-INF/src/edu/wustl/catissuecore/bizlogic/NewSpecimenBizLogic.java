@@ -168,12 +168,30 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
         		throw new DAOException(ApplicationProperties.getValue("errors.specimen.under.subspecimen"));  
         	}
         	Logger.out.debug("Loading ParentSpecimen: "+specimen.getParentSpecimen().getSystemIdentifier());
-			
+
+			// check for closed ParentSpecimen
+			Long pID = specimen.getParentSpecimen().getSystemIdentifier();
+			if(pID != null)
+			{
+				String className = Specimen.class.getName();
+				String errorName = "Parent Specimen";
+				Utility.checkStatus(dao, pID, className, errorName );
+			}
+        	
 //        	Specimen parentSpecimen = (Specimen) dao.retrieve(Specimen.class.getName(), specimen.getParentSpecimen().getSystemIdentifier());
 //        	specimen.setParentSpecimen(parentSpecimen);
 //        	specimen.setSpecimenCollectionGroup(parentSpecimen.getSpecimenCollectionGroup());
 //        	specimen.setSpecimenCharacteristics(parentSpecimen.getSpecimenCharacteristics());
         	SpecimenCollectionGroup scg = loadSpecimenCollectionGroup(specimen.getParentSpecimen().getSystemIdentifier(), dao);
+        	
+			// check for closed Specimen Collection Group
+			Long cpID = scg.getSystemIdentifier();
+			String className = SpecimenCollectionGroup.class.getName();
+			String errorName = "Specimen Collection Group";
+			Utility.checkStatus(dao, cpID, className, errorName );
+
+        	
+        	
         	specimen.setSpecimenCollectionGroup(scg);
         	SpecimenCharacteristics sc= loadSpecimenCharacteristics(specimen.getParentSpecimen().getSystemIdentifier(), dao);
         	specimen.setSpecimenCharacteristics(sc);
@@ -269,6 +287,13 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			if(specimenCollectionGroupObj!=null )
 			{
 				SpecimenCollectionGroup spg = (SpecimenCollectionGroup)specimenCollectionGroupObj;
+				
+				// check for closed SpecimenCollectionGroup
+				Long cpID = spg.getSystemIdentifier();
+				String className = SpecimenCollectionGroup.class.getName();
+				String errorName = "Specimen Collection Group";
+				Utility.checkStatus(dao, cpID, className, errorName );
+				
 				specimen.setSpecimenCollectionGroup(spg);
 			}
 		}
@@ -280,6 +305,13 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			if(parentSpecimenObj!=null)
 			{
 				Specimen parentSpecimen = (Specimen)parentSpecimenObj;
+				
+				// check for closed Parent Specimen
+				Long cpID = parentSpecimen.getSystemIdentifier();
+				String className = Specimen.class.getName();
+				String errorName = "Parent Specimen";
+				Utility.checkStatus(dao, cpID, className, errorName );
+				
 				specimen.setParentSpecimen(parentSpecimen);
 			}
 		}
@@ -289,6 +321,14 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		if(containerObj!=null)
 		{
 			StorageContainer container = (StorageContainer)containerObj;
+			// check for closed Storage Container
+			Long scID = container.getSystemIdentifier();
+			if(scID != null)
+			{
+				String className = StorageContainer.class.getName();
+				String errorName = "Storage Container";
+				Utility.checkStatus(dao, scID, className, errorName );
+			}
 			specimen.setStorageContainer(container);
 		}
 		
