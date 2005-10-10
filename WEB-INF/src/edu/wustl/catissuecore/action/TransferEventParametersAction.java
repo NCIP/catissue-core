@@ -52,7 +52,7 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 			if(operation.equals("add") )
 			{
 				String specimenId = request.getParameter(Constants.SPECIMEN_ID); 
-		      	DefaultBizLogic bizLogic = new DefaultBizLogic();
+		      	DefaultBizLogic bizLogic = BizLogicFactory.getDefaultBizLogic();
 		    	
 		    	String identifier = (String)request.getAttribute(Constants.SPECIMEN_ID);
 		    	if(identifier == null)

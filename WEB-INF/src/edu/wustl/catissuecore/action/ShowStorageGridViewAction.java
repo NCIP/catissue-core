@@ -46,7 +46,7 @@ public class ShowStorageGridViewAction  extends Action
             HttpServletRequest request, HttpServletResponse response)
             throws Exception
     {
-        String systemIdentifier = request.getParameter(Constants.IDENTIFIER);
+        String systemIdentifier = request.getParameter(Constants.SYSTEM_IDENTIFIER);
         String pageOf = request.getParameter(Constants.PAGEOF);
         StorageContainerBizLogic bizLogic = (StorageContainerBizLogic)BizLogicFactory
                 .getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);

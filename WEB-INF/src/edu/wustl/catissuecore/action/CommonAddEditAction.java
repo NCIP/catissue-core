@@ -162,13 +162,21 @@ public class CommonAddEditAction extends Action
             else
             {
                 //If operation is edit, update the data in the database.
-                List list = bizLogic.retrieve(objectName, Constants.IDENTIFIER,
+                List list = bizLogic.retrieve(objectName, Constants.SYSTEM_IDENTIFIER,
 										  new Long(abstractForm.getSystemIdentifier()));
                 if (!list.isEmpty())
                 {
+                    List listOld = bizLogic.retrieve(objectName, Constants.SYSTEM_IDENTIFIER,
+							  new Long(abstractForm.getSystemIdentifier()));
+
+                    AbstractDomainObject abstractDomainOld = (AbstractDomainObject) listOld.get(0);
+                    
+                    
                 	abstractDomain = (AbstractDomainObject) list.get(0);
                     abstractDomain.setAllValues(abstractForm);
-                    bizLogic.update(abstractDomain,Constants.HIBERNATE_DAO, getSessionData(request));
+                    
+                    
+                    bizLogic.update(abstractDomain, abstractDomainOld, Constants.HIBERNATE_DAO, getSessionData(request));
                     
                     if(abstractDomain instanceof Specimen)
                 		request.setAttribute(Constants.SPECIMEN_ID,String.valueOf(abstractDomain.getSystemIdentifier()));

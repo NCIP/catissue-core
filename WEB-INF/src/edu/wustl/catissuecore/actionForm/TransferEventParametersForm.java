@@ -18,6 +18,7 @@ import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.DefaultBizLogic;
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.domain.Specimen;
@@ -218,7 +219,7 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 			
 			// ---------------------------------------------
 			String specimenId = transferEventParametersObject.getSpecimen().getSystemIdentifier().toString(); 
-	      	DefaultBizLogic bizLogic = new DefaultBizLogic();
+	      	DefaultBizLogic bizLogic = BizLogicFactory.getDefaultBizLogic();;
 	    	
 	    	String identifier = specimenId ;
 	    	

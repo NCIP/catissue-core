@@ -100,7 +100,7 @@ public class DistributionBizLogic extends DefaultBizLogic
 	 * @throws DAOException 
 	 * @throws HibernateException Exception thrown during hibernate operations.
      */
-	protected void update(DAO dao, Object obj, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException 
+	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException 
     {
 		Distribution distribution = (Distribution)obj;
 		dao.update(obj, sessionDataBean, true, true, false);

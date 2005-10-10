@@ -110,6 +110,10 @@ public class BizLogicFactory
         return abstractBizLogic;
     }
     
+    public static DefaultBizLogic getDefaultBizLogic()
+    {
+    	return new DefaultBizLogic();
+    }
     
     /**
      * Returns DAO instance according to the fully qualified class name.

@@ -59,10 +59,13 @@ public class ReportedProblemPendingCloseAction  extends SecureAction
         {
             String identifier = (String) iterator.next();
             String objName = AbstractDomainObject.getDomainObjectName(Constants.REPORTEDPROBLEM_FORM_ID);
-            list = bizLogic.retrieve(objName, Constants.IDENTIFIER, new Long(identifier));
+            list = bizLogic.retrieve(objName, Constants.SYSTEM_IDENTIFIER, new Long(identifier));
 
             if (list.size() != 0)
             {
+            	List listOld = bizLogic.retrieve(objName, Constants.SYSTEM_IDENTIFIER, new Long(identifier));
+            	ReportedProblem reportedProblemOld = (ReportedProblem) listOld.get(0);
+            	
                 ReportedProblem reportedProblem = (ReportedProblem) list.get(0);
 
                 //Sets the comments given by the resolver.
@@ -88,7 +91,7 @@ public class ReportedProblemPendingCloseAction  extends SecureAction
                 reportedProblem.setActivityStatus(activityStatus);
 
                 //Updates reported problem's information in the database.
-                bizLogic.update(reportedProblem,Constants.HIBERNATE_DAO, getSessionData(request));
+                bizLogic.update(reportedProblem, reportedProblemOld, Constants.HIBERNATE_DAO, getSessionData(request));
                 
                 target = new String(Constants.SUCCESS);
             }

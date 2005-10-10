@@ -44,7 +44,7 @@ public abstract class AbstractBizLogic
      * @throws DAOException
      * @throws UserNotAuthorizedException TODO
      */
-    protected abstract void update(DAO dao, Object obj, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException;
+    protected abstract void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException;
     
     /**
      * Retrieves the records for class name in sourceObjectName according to field values passed.
@@ -114,13 +114,13 @@ public abstract class AbstractBizLogic
 		}
 	}
     
-    public final void update(Object obj,int daoType, SessionDataBean sessionDataBean) throws BizLogicException, UserNotAuthorizedException
+    public final void update(Object currentObj,Object oldObj,int daoType, SessionDataBean sessionDataBean) throws BizLogicException, UserNotAuthorizedException
 	{
 		AbstractDAO dao = DAOFactory.getDAO(daoType);
 		try
 		{
 	        dao.openSession(sessionDataBean);
-	        update(dao, obj,sessionDataBean);
+	        update(dao, currentObj, oldObj, sessionDataBean);
 	        dao.commit();
 		}
 		catch(DAOException ex)

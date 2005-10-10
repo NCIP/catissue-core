@@ -25,6 +25,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
+import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.DefaultBizLogic;
 import edu.wustl.catissuecore.domain.CellSpecimenReviewParameters;
 import edu.wustl.catissuecore.domain.CheckInCheckOutEventParameter;
@@ -66,7 +67,7 @@ public class NewSpecimenEventParametersAction  extends SecureAction
 //        request.setAttribute(Constants.OPERATION, operation);
         try
 		{
-        	DefaultBizLogic bizLogic = new DefaultBizLogic();
+        	DefaultBizLogic bizLogic = BizLogicFactory.getDefaultBizLogic();
 	    	
 	    	String identifier = (String)request.getAttribute("specimenIdentifier");
 	    	if(identifier == null)

@@ -475,4 +475,8 @@ public class JDBCDAO extends AbstractDAO
     public void disableRelatedObjects(String TABLE_NAME, String WHERE_COLUMN_NAME, Long whereColValue[]) throws DAOException
 	{
 	}
+    public String getActivityStatus(String sourceObjectName, Long indetifier) throws DAOException
+	{
+    	return null; 
+	}
 }

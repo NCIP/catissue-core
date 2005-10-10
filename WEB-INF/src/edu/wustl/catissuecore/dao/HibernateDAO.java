@@ -23,8 +23,6 @@ import net.sf.hibernate.Transaction;
 
 import org.apache.log4j.PropertyConfigurator;
 
-
-
 import edu.wustl.catissuecore.audit.AuditManager;
 import edu.wustl.catissuecore.audit.Auditable;
 import edu.wustl.catissuecore.bizlogic.AbstractBizLogic;
@@ -37,7 +35,6 @@ import edu.wustl.catissuecore.exception.AuditException;
 import edu.wustl.catissuecore.util.Permissions;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;
-import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
@@ -731,7 +728,7 @@ public class HibernateDAO extends AbstractDAO
 		participant.setActivityStatus(Constants.ACTIVITY_STATUS_DISABLED);
 		
 		AbstractBizLogic bizLogic = BizLogicFactory.getBizLogic(Constants.PARTICIPANT_FORM_ID);
-		bizLogic.update(participant,Constants.HIBERNATE_DAO,null);
+		bizLogic.update(participant,null,Constants.HIBERNATE_DAO,null);
 		
 		
 //		dao.openSession(null);
@@ -740,5 +737,24 @@ public class HibernateDAO extends AbstractDAO
 //		dao.commit();
 //		dao.closeSession();
 
+    }
+	
+	public String getActivityStatus(String sourceObjectName, Long indetifier) throws DAOException
+	{
+		String whereColumnNames[] = {Constants.SYSTEM_IDENTIFIER};
+        String colConditions[] = {"="};
+        Object whereColumnValues[] = {indetifier};
+        String[] selectColumnName = {Constants.ACTIVITY_STATUS};
+        List list = retrieve(sourceObjectName, selectColumnName, whereColumnNames,
+                colConditions, whereColumnValues, Constants.AND_JOIN_CONDITION);
+        
+        if(!list.isEmpty())
+        {
+        	Object obj = list.get(0);
+        	Logger.out.debug("obj Class "+obj.getClass());
+        	//Object[] objArr = (String)obj
+        	return (String)obj;
+        }
+        return "";
     }
 }

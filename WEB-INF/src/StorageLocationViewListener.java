@@ -116,14 +116,14 @@ public class StorageLocationViewListener implements TreeSelectionListener
                     int port = codeBase.getPort();
 
                     urlSuffix = Constants.SHOW_STORAGE_CONTAINER_GRID_VIEW_ACTION
-                            + "?" + Constants.IDENTIFIER + "=" + treeNode.getStorageContainerIdentifier()
+                            + "?" + Constants.SYSTEM_IDENTIFIER + "=" + treeNode.getStorageContainerIdentifier()
                             + "&" + Constants.STORAGE_CONTAINER_TYPE + "=" + this.getStorageContainerType()
                             + "&" + Constants.PAGEOF + "=" + this.pageOf;
                     
                     if (pageOf.equals(Constants.PAGEOF_SPECIMEN))
                     {
                     	urlSuffix = Constants.SHOW_STORAGE_CONTAINER_GRID_VIEW_ACTION
-                        + "?" + Constants.IDENTIFIER + "=" + treeNode.getStorageContainerIdentifier()
+                        + "?" + Constants.SYSTEM_IDENTIFIER + "=" + treeNode.getStorageContainerIdentifier()
                         + "&" + Constants.PAGEOF + "=" + this.pageOf;
                     }
 

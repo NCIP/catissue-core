@@ -33,8 +33,8 @@ public class SearchObjectAction extends Action
     public ActionForward execute(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response) throws Exception
     {
-        Long identifier = Long.valueOf(request.getParameter(Constants.IDENTIFIER));
-        request.setAttribute(Constants.IDENTIFIER, identifier);
+        Long identifier = Long.valueOf(request.getParameter(Constants.SYSTEM_IDENTIFIER));
+        request.setAttribute(Constants.SYSTEM_IDENTIFIER, identifier);
         
         String pageOf = request.getParameter(Constants.PAGEOF);
         request.setAttribute(Constants.PAGEOF, pageOf);

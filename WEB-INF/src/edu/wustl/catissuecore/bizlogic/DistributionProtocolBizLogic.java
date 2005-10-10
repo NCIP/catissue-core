@@ -71,7 +71,7 @@ public class DistributionProtocolBizLogic extends DefaultBizLogic
 	 * @param session The session in which the object is saved.
 	 * @throws DAOException 
      */
-	protected void update(DAO dao, Object obj, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
+	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
     {
 		DistributionProtocol distributionProtocol = (DistributionProtocol)obj;
 		setPrincipalInvestigator(dao,distributionProtocol);

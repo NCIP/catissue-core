@@ -19,6 +19,7 @@ import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Participant;
+import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.SessionDataBean;
@@ -44,6 +45,16 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 	{
 		CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration) obj;
 		
+		Long cpID = collectionProtocolRegistration.getCollectionProtocol().getSystemIdentifier();
+		if(cpID!=null)
+		{
+			String activityStatus = dao.getActivityStatus(CollectionProtocol.class.getName(),cpID);
+			if(activityStatus.equals(Constants.ACTIVITY_STATUS_CLOSED))
+			{
+				throw new DAOException("Collection Protocol "+ ApplicationProperties.getValue("error.object.closed"));
+			}
+		}
+		
 		registerParticipantAndProtocol(dao,collectionProtocolRegistration, sessionDataBean);
 		
 		dao.insert(collectionProtocolRegistration, sessionDataBean, true, true);
@@ -64,9 +75,26 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 	 * @param session The session in which the object is saved.
 	 * @throws DAOException 
 	 */
-	protected void update(DAO dao, Object obj, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
+	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 	{
 		CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration) obj;
+		
+		CollectionProtocolRegistration oldCollectionProtocolRegistration = (CollectionProtocolRegistration) oldObj;
+		//if(collectionProtocolRegistration.getCollectionProtocol().getSystemIdentifier()!= oldCollectionProtocolRegistration.getCollectionProtocol().getSystemIdentifier())
+		if(!collectionProtocolRegistration.getCollectionProtocol().getSystemIdentifier().equals( oldCollectionProtocolRegistration.getCollectionProtocol().getSystemIdentifier()))
+		{
+			Logger.out.debug("collectionProtocolRegistration.getCollectionProtocol().getSystemIdentifier() "+collectionProtocolRegistration.getCollectionProtocol().getSystemIdentifier());
+			Logger.out.debug("oldCollectionProtocolRegistration.getCollectionProtocol().getSystemIdentifier() "+oldCollectionProtocolRegistration.getCollectionProtocol().getSystemIdentifier());
+			Long cpID = collectionProtocolRegistration.getCollectionProtocol().getSystemIdentifier();
+			if(cpID!=null)
+			{
+				String activityStatus = dao.getActivityStatus(CollectionProtocol.class.getName(),cpID);
+				if(activityStatus.equals(Constants.ACTIVITY_STATUS_CLOSED))
+				{
+					throw new DAOException("Collection Protocol "+ ApplicationProperties.getValue("error.object.closed"));
+				}
+			}
+		}
 		
 		dao.update(collectionProtocolRegistration, sessionDataBean, true, true, false);
 		

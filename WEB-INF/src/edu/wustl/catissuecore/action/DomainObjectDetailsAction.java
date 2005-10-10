@@ -42,7 +42,7 @@ public class DomainObjectDetailsAction extends SecureAction
         HttpSession session = request.getSession();
         List list = (List)session.getAttribute(Constants.ORIGINAL_DOMAIN_OBJECT_LIST);
         
-        long identifier = Long.parseLong(request.getParameter(Constants.IDENTIFIER));
+        long identifier = Long.parseLong(request.getParameter(Constants.SYSTEM_IDENTIFIER));
         Iterator iterator = list.iterator();
         
         AbstractDomainObject currentDomainObject = null;

@@ -45,7 +45,7 @@ public class  DefaultBizLogic extends AbstractBizLogic
      * @param obj The object to be updated into the database. 
      * @throws DAOException
      */
-    protected void update(DAO dao, Object obj, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
+    protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
     {
         dao.update(obj, sessionDataBean, true, true, false);
     }

@@ -93,4 +93,6 @@ public interface DAO
 	public Object retrieve (String sourceObjectName, Serializable systemIdentifier) throws DAOException;
 	
 	public abstract void disableRelatedObjects(String TABLE_NAME, String WHERE_COLUMN_NAME, Long whereColValue[]) throws DAOException;
+	
+	public abstract String getActivityStatus(String sourceObjectName, Long indetifier) throws DAOException;
 }
