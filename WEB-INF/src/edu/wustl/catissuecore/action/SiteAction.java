@@ -47,9 +47,9 @@ public class SiteAction  extends SecureAction
     {
         
     	SiteForm siteForm = (SiteForm )form;
-    	Logger.out.debug("siteForm systemIdentifier*************************"+siteForm.getSystemIdentifier());
-    	Logger.out.debug("siteForm Name*************************"+siteForm.getName());
-    	Logger.out.debug("Form Bean In SiteAction...................."+siteForm);
+    	//Logger.out.debug("siteForm systemIdentifier*************************"+siteForm.getSystemIdentifier());
+    	//Logger.out.debug("siteForm Name*************************"+siteForm.getName());
+    	//Logger.out.debug("Form Bean In SiteAction...................."+siteForm);
 
         //Gets the value of the operation parameter.
         String operation = request.getParameter(Constants.OPERATION);
@@ -65,7 +65,7 @@ public class SiteAction  extends SecureAction
         request.setAttribute(Constants.COUNTRYLIST, Constants.COUNTRYARRAY);
 
         //Sets the activityStatusList attribute to be used in the Site Add/Edit Page.
-        request.setAttribute(Constants.ACTIVITYSTATUSLIST, Constants.ACTIVITY_STATUS_VALUES);
+        request.setAttribute(Constants.ACTIVITYSTATUSLIST, Constants.SITE_ACTIVITY_STATUS_VALUES);
         
         //Sets the siteTypeList attribute to be used in the Site Add/Edit Page.
         List siteList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_SITE_TYPE,null);

@@ -922,7 +922,13 @@ public class Constants
 	public static final String [] ACTIVITY_STATUS_VALUES = {
 	        SELECT_OPTION,
 	        "Active",
-	        "Disabled",
+	        "Closed",
+			"Disabled"
+	};
+
+	public static final String [] SITE_ACTIVITY_STATUS_VALUES = {
+	        SELECT_OPTION,
+	        "Active",
 	        "Closed"
 	};
 
