@@ -35,15 +35,18 @@ import edu.wustl.common.util.logger.Logger;
 public abstract class BaseDistributionReportAction extends BaseAction
 {
 	/**
-     * Overrides the execute method of Action class.
-     * */
-    
+	 * This is the Base action class the Distribution report actions
+	 * @author Poornima Govindrao
+	 *  
+	 */
 	protected String []getColumnNames(String []selectedColumnsList)
 	{
 		String [] columnNames=new String[selectedColumnsList.length];
 		for(int i=0;i<selectedColumnsList.length;i++)
 	    {
-	    	//Split the string which is in the form TableAlias.columnNames.columnDisplayNames
+	    	/*Split the string which is in the form TableAlias.columnNames.columnDisplayNames
+	    	 * to get the column Names 
+	    	 */
 			StringTokenizer st= new StringTokenizer(selectedColumnsList[i],".");
 	    	while (st.hasMoreTokens())
 	    	{
@@ -58,6 +61,9 @@ public abstract class BaseDistributionReportAction extends BaseAction
 	
     private Vector setViewElements(String []selectedColumnsList) 
 	{
+    	/*Split the string which is in the form TableAlias.columnNames.columnDisplayNames 
+    	 * and set the dataelement object.
+    	 */
 	    Vector vector = new Vector();
 	    for(int i=0;i<selectedColumnsList.length;i++)
 	    {
@@ -76,6 +82,7 @@ public abstract class BaseDistributionReportAction extends BaseAction
     
 	protected DistributionReportForm getDistributionReportForm(Distribution dist)
 	{
+		//For a given Distribution object set the values for Distribution report.
 		DistributionReportForm distributionReportForm = new DistributionReportForm();
 		try
 		{
@@ -83,7 +90,7 @@ public abstract class BaseDistributionReportAction extends BaseAction
 		}
 		catch(Exception ex)
 		{
-			
+			Logger.out.error(ex.getMessage(),ex);
 		}
 		return distributionReportForm;
 	}
@@ -91,7 +98,7 @@ public abstract class BaseDistributionReportAction extends BaseAction
 	
     protected Distribution getDistribution(Long distributionId)throws Exception
     {
-    	
+    	//For a given Distribution ID retrieve the distribution object
     	AbstractBizLogic bizLogic = BizLogicFactory.getBizLogic(Constants.DISTRIBUTION_FORM_ID);
     	List list = bizLogic.retrieve(Distribution.class.getName(),Constants.SYSTEM_IDENTIFIER,distributionId);
     	Distribution dist = (Distribution) list.get(0);
@@ -100,12 +107,14 @@ public abstract class BaseDistributionReportAction extends BaseAction
     	
     protected List getListOfData(Distribution dist, ConfigureResultViewForm configForm) throws Exception
 	{
+    	//Get the list of data for Distributed items data for the report.
     	List listOfData = new ArrayList();
     	Collection distributedItemCollection = dist.getDistributedItemCollection();		
-    	
+    	//Specimen Ids which are getting distributed.
     	String []specimenIds = new String[distributedItemCollection.size()];
     	int i=0;
     	Iterator itr = distributedItemCollection.iterator();
+    	
     	while(itr.hasNext())
     	{
     		DistributedItem item = (DistributedItem)itr.next();
@@ -169,6 +178,7 @@ public abstract class BaseDistributionReportAction extends BaseAction
     
     protected String [] getSelectedColumns(String action,ConfigureResultViewForm form)
     {
+    	//Set the columns according action(Default/Configured report)
     	if(("configure").equals(action))
     	{
     		String selectedColumns[] = form.getSelectedColumnNames();

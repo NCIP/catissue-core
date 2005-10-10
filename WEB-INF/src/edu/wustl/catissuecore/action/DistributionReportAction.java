@@ -15,6 +15,11 @@ import edu.wustl.catissuecore.domain.Distribution;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
 
+/**
+ * This is the action class for displaying the Distribution report
+ * @author Poornima Govindrao
+ *  
+ */
 
 public class DistributionReportAction extends BaseDistributionReportAction
 {
@@ -22,23 +27,26 @@ public class DistributionReportAction extends BaseDistributionReportAction
 															HttpServletResponse response) throws Exception
 	{
 		ConfigureResultViewForm configForm = (ConfigureResultViewForm)form;
-		
+		//Retrieve the distribution ID
 		Long distributionId = (Long)request.getAttribute(Constants.DISTRIBUTION_ID);
 		Logger.out.debug("distributionId "+distributionId);
 		if(distributionId!=null)
     		configForm.setDistributionId(distributionId);
     	else
     		distributionId = configForm.getDistributionId();
-    	
+    	//Retrieve the distribution object for the distribution ID
     	Distribution dist =  getDistribution(distributionId);
     	
+    	//Retrieve the distributed items data
     	DistributionReportForm distributionReportForm = getDistributionReportForm(dist);
     	List listOfData = getListOfData(dist, configForm) ;
-
+    	
+    	//Set the columns for Distribution report
 		String action = configForm.getNextAction();
 		String selectedColumns[] = getSelectedColumns(action,configForm);
 		String []columnNames = getColumnNames(selectedColumns);
     	
+		//Set the request attributes for the Distribution report data
 		request.setAttribute(Constants.DISTRIBUTION_REPORT_FORM, distributionReportForm);
     	request.setAttribute(Constants.COLUMN_NAMES_LIST, columnNames);
     	request.setAttribute(Constants.DISTRIBUTED_ITEMS_DATA, listOfData);

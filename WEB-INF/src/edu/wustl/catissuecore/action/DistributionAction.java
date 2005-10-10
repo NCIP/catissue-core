@@ -101,7 +101,7 @@ public class  DistributionAction extends SpecimenEventParametersAction
     	//Calling DeleteRow of BaseAction class
     	DeleteRow(key,map,request);
     	
-		
+		//Populate Distributed Items data in the Distribution page if specimen ID is changed. 
 		if(dForm.isIdChange())
 		{
 			setSpecimenChars(dForm,request);
@@ -112,6 +112,7 @@ public class  DistributionAction extends SpecimenEventParametersAction
 	
 	private void setSpecimenChars(DistributionForm dForm,HttpServletRequest request)
 	{
+		//Set specimen characteristics according to the specimen ID changed
 		try
 		{
 			DistributionBizLogic dao = (DistributionBizLogic)BizLogicFactory.getBizLogic(Constants.DISTRIBUTION_FORM_ID);
@@ -147,6 +148,7 @@ public class  DistributionAction extends SpecimenEventParametersAction
 	}
 	public Object getAvailableQty(Specimen specimen)
 	{
+		//Retrieve the Available quantity for the particular specimen
 		if(specimen instanceof TissueSpecimen)
 		{
 			TissueSpecimen tissueSpecimen = (TissueSpecimen) specimen;

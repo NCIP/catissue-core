@@ -22,22 +22,32 @@ import edu.wustl.common.util.ExportReport;
 import edu.wustl.common.util.SendFile;
 import edu.wustl.common.util.logger.Logger;
 
+/**
+ * This is the action class for saving the Distribution report
+ * @author Poornima Govindrao
+ *  
+ */
+
 public class DistributionReportSaveAction extends BaseDistributionReportAction
 {
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,HttpServletRequest request,
 									HttpServletResponse response)throws Exception 
 	{
 		ConfigureResultViewForm configForm = (ConfigureResultViewForm)form;
+		//Retrieve the distribution ID
 		Long distributionId =configForm.getDistributionId();;
-		
+		//Retrieve the distribution object for the distribution ID
 		Distribution dist =  getDistribution(distributionId);
-    	
+		//Retrieve the distributed items data
     	DistributionReportForm distributionReportForm = getDistributionReportForm(dist);
     	List listOfData = getListOfData(dist, configForm) ;
     	
+    	//Set the columns for Distribution report
     	String action = configForm.getNextAction();
 		String selectedColumns[] = getSelectedColumns(action,configForm);
 		String []columnNames = getColumnNames(selectedColumns);
+		
+		//Save the report as a CSV file at the client side
 		try
 		{
 			HttpSession session=request.getSession();
@@ -57,9 +67,17 @@ public class DistributionReportSaveAction extends BaseDistributionReportAction
 		return null;
 	}
 	
+	/**
+	 * @param distributionReportForm
+	 * @param listOfData
+	 * @param fileName
+	 * @param columnNames
+	 * @throws IOException
+	 */
 	private void saveReport(DistributionReportForm distributionReportForm,List listOfData,String fileName,
 																	String []columnNames) throws IOException
 	{
+		//Save the report data in a CSV file at server side
 		Logger.out.debug("Save action");
 		List distributionData = new ArrayList();
 		distributionData = createList("distribution.protocol",distributionReportForm.getDistributionProtocolTitle(),distributionData);

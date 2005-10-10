@@ -19,13 +19,16 @@ import edu.wustl.catissuecore.util.global.Constants;
 public class ConfigureDistributionAction extends Action
 {
 
-    /**
-     * Overrides the execute method of Action class.
-     * */
+	/**
+	 * This is the initialization action class for configuring Distribution report
+	 * @author Poornima Govindrao
+	 *  
+	 */
     public ActionForward execute(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException
     {
+    	//Set the tables for the configuration of distribution report
     	request.setAttribute(Constants.TABLE_IDS, Constants.DISTRIBUTION_TABLE_IDS);
     	return (mapping.findForward("Success"));
     }

@@ -8,11 +8,16 @@ import java.io.OutputStream;
 import javax.servlet.http.HttpServletResponse;
 
 import edu.wustl.common.util.logger.Logger;
-
+/**
+ * This is the action class for sending file to client end.
+ * @author Poornima Govindrao
+ *  
+ */
 public class SendFile 
 {
 	public static void sendFileToClient(HttpServletResponse response,String filePath,String fileName,String contentType)
 	{
+		//Saves file on client end in the specified format.
 		try
 		{
 			if ( filePath != null && (false == (filePath.length()==0)) )

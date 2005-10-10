@@ -24,7 +24,7 @@ import edu.wustl.common.util.logger.Logger;
 
 
 /**
- * This is the action class for configuring data for QueryInterface
+ * This is the action class for configuring data 
  * @author Poornima Govindrao
  *  
  */
