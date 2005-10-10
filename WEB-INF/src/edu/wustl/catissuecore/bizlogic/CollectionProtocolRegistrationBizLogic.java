@@ -44,16 +44,19 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 	{
 		CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration) obj;
-		
+
+		// check for closed Collection Protocol
 		Long cpID = collectionProtocolRegistration.getCollectionProtocol().getSystemIdentifier();
-		if(cpID!=null)
-		{
-			String activityStatus = dao.getActivityStatus(CollectionProtocol.class.getName(),cpID);
-			if(activityStatus.equals(Constants.ACTIVITY_STATUS_CLOSED))
-			{
-				throw new DAOException("Collection Protocol "+ ApplicationProperties.getValue("error.object.closed"));
-			}
-		}
+		String className = CollectionProtocol.class.getName();
+		String errorName = "Collection Protocol";
+		Utility.checkStatus(dao,  cpID, className, errorName );
+
+		//-- Check for closed Participant
+		Long participantID = collectionProtocolRegistration.getParticipant().getSystemIdentifier();
+		className = Participant.class.getName();
+		errorName = "Participant";
+		Utility.checkStatus(dao,  participantID, className, errorName );
+		
 		
 		registerParticipantAndProtocol(dao,collectionProtocolRegistration, sessionDataBean);
 		
@@ -80,21 +83,51 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 		CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration) obj;
 		
 		CollectionProtocolRegistration oldCollectionProtocolRegistration = (CollectionProtocolRegistration) oldObj;
-		//if(collectionProtocolRegistration.getCollectionProtocol().getSystemIdentifier()!= oldCollectionProtocolRegistration.getCollectionProtocol().getSystemIdentifier())
+		
+		// Check for different Collection Protocol
 		if(!collectionProtocolRegistration.getCollectionProtocol().getSystemIdentifier().equals( oldCollectionProtocolRegistration.getCollectionProtocol().getSystemIdentifier()))
 		{
 			Logger.out.debug("collectionProtocolRegistration.getCollectionProtocol().getSystemIdentifier() "+collectionProtocolRegistration.getCollectionProtocol().getSystemIdentifier());
 			Logger.out.debug("oldCollectionProtocolRegistration.getCollectionProtocol().getSystemIdentifier() "+oldCollectionProtocolRegistration.getCollectionProtocol().getSystemIdentifier());
+
 			Long cpID = collectionProtocolRegistration.getCollectionProtocol().getSystemIdentifier();
-			if(cpID!=null)
+			String className = CollectionProtocol.class.getName();
+			String errorName = "Collection Protocol";
+			Utility.checkStatus(dao,  cpID, className, errorName );
+		}
+
+		// -- Check for different Participants and closed participant
+		// old and new values are not null
+		if(collectionProtocolRegistration.getParticipant() != null  && oldCollectionProtocolRegistration.getParticipant() != null)
+		{
+			if(collectionProtocolRegistration.getParticipant().getSystemIdentifier()  != null  && oldCollectionProtocolRegistration.getParticipant().getSystemIdentifier()  != null)
 			{
-				String activityStatus = dao.getActivityStatus(CollectionProtocol.class.getName(),cpID);
-				if(activityStatus.equals(Constants.ACTIVITY_STATUS_CLOSED))
+				Logger.out.debug("collectionProtocolRegistration.getParticipant().getSystemIdentifier() : " + collectionProtocolRegistration.getParticipant().getSystemIdentifier());
+				Logger.out.debug("oldCollectionProtocolRegistration.getParticipant().getSystemIdentifier() : " + oldCollectionProtocolRegistration.getParticipant().getSystemIdentifier());
+				if(!collectionProtocolRegistration.getParticipant().getSystemIdentifier().equals( oldCollectionProtocolRegistration.getParticipant().getSystemIdentifier()))
 				{
-					throw new DAOException("Collection Protocol "+ ApplicationProperties.getValue("error.object.closed"));
-				}
+					Long participantID = collectionProtocolRegistration.getParticipant().getSystemIdentifier();
+					String className = Participant.class.getName();
+					String errorName = "Participant";
+					Utility.checkStatus(dao,  participantID, className, errorName );
+				}		
 			}
 		}
+		
+		//when old participant is null and new is not null
+		if(collectionProtocolRegistration.getParticipant() != null  && oldCollectionProtocolRegistration.getParticipant() == null)
+		{
+			if(collectionProtocolRegistration.getParticipant().getSystemIdentifier()  != null )
+			{
+				Logger.out.debug("collectionProtocolRegistration.getParticipant().getSystemIdentifier() : " + collectionProtocolRegistration.getParticipant().getSystemIdentifier());
+
+				Long participantID = collectionProtocolRegistration.getParticipant().getSystemIdentifier();
+				String className = Participant.class.getName();
+				String errorName = "Participant";
+				Utility.checkStatus(dao,  participantID, className, errorName );
+			}
+		}
+		
 		
 		dao.update(collectionProtocolRegistration, sessionDataBean, true, true, false);
 		
@@ -242,4 +275,6 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 	    SpecimenCollectionGroupBizLogic bizLogic = (SpecimenCollectionGroupBizLogic)BizLogicFactory.getBizLogic(Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID);
 		bizLogic.assignPrivilegeToRelatedObjects(dao,privilegeName,objectIds,userId, roleId, assignToUser);
 	}
+    
+ 
 }
