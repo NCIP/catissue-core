@@ -12,13 +12,13 @@ package edu.wustl.catissuecore.bizlogic;
 
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 
 import edu.wustl.catissuecore.dao.DAO;
 import edu.wustl.catissuecore.domain.DistributionProtocol;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
@@ -84,15 +84,25 @@ public class DistributionProtocolBizLogic extends DefaultBizLogic
 			specimenRequirement.getDistributionProtocolCollection().add(distributionProtocol);
 			dao.update(specimenRequirement, sessionDataBean, true, true, false);
 		}
+		
+		Logger.out.debug("distributionProtocol.getActivityStatus() "+distributionProtocol.getActivityStatus());
+		if(distributionProtocol.getActivityStatus().equals(Constants.ACTIVITY_STATUS_DISABLED))
+		{
+			Logger.out.debug("distributionProtocol.getActivityStatus() "+distributionProtocol.getActivityStatus());
+			Long distributionProtocolIDArr[] = {distributionProtocol.getSystemIdentifier()};
+			
+			DistributionBizLogic bizLogic = (DistributionBizLogic)BizLogicFactory.getBizLogic(Constants.DISTRIBUTION_FORM_ID);
+			bizLogic.disableRelatedObjects(dao, distributionProtocolIDArr);
+		}
     }
 	
 	//This method sets the Principal Investigator
 	private void setPrincipalInvestigator(DAO dao,DistributionProtocol distributionProtocol) throws DAOException
 	{
-		List list = dao.retrieve(User.class.getName(), "systemIdentifier", distributionProtocol.getPrincipalInvestigator().getSystemIdentifier());
-		if (list.size() != 0)
+		Object userObj = dao.retrieve(User.class.getName() , distributionProtocol.getPrincipalInvestigator().getSystemIdentifier());
+		if (userObj != null)
 		{
-			User pi = (User) list.get(0);
+			User pi = (User) userObj;
 			distributionProtocol.setPrincipalInvestigator(pi);
 		}
 	}

@@ -12,6 +12,7 @@ package edu.wustl.catissuecore.bizlogic;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 import net.sf.hibernate.HibernateException;
 import edu.wustl.catissuecore.dao.DAO;
@@ -185,4 +186,10 @@ public class DistributionBizLogic extends DefaultBizLogic
 		return true;
 		
 	}
+	
+	public void disableRelatedObjects(DAO dao, Long distributionProtocolIDArr[])throws DAOException 
+    {
+    	List listOfSubElement = super.disableObjects(dao, Distribution.class, "distributionProtocol", 
+    			"CATISSUE_DISTRIBUTION", "DISTRIBUTION_PROTOCOL_ID", distributionProtocolIDArr);
+    }
 }
