@@ -61,7 +61,17 @@
     {
 	    var newOpt = new Option(theText, theValue);
 	    var selLength = theSel.length;
-	    theSel.options[selLength] = newOpt;
+	    var exists="false";
+	    for(var i=0;i<selLength; i++)
+	    {
+			if(theSel.options[i].value==theValue)
+				{
+					exists="true";
+					break;
+				}
+	    }
+	    if(exists=="false")
+		    theSel.options[selLength] = newOpt;
 	}
 	
     function deleteOption(theSel, theIndex)
