@@ -671,7 +671,7 @@ PUBLIC
 			validate="true"
 			input="/SpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroup"
 			scope="request">
-			<forward name="success" path=".catissuecore.specimenCollectionGroupEditSuccessDef" />
+			<forward name="success" path="/SpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroup" />
 			<forward name="failure" path="/SpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroup" />
 		</action>
 
