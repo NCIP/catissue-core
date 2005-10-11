@@ -190,10 +190,18 @@
 				<html:hidden property="positionDimensionTwo" />
 				<html:hidden property="storageContainer" />
 				<html:text styleClass="formDateSized" size="35" styleId="positionInStorageContainer" property="positionInStorageContainer" readonly="true" />
-				<html:button property="mapButton" styleClass="actionButton" styleId="Map"
-							onclick="javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfSpecimen','name','810','320','yes');return false" >
-					<bean:message key="buttons.map"/>
-				</html:button>
+				<%
+					if(operation.equals("add"))
+					{
+				%>
+					<html:button property="mapButton" styleClass="actionButton" styleId="Map"
+								onclick="javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfSpecimen','name','810','320','yes');return false" >
+						<bean:message key="buttons.map"/>
+					</html:button>
+				<%
+					}
+				%>				
+				&nbsp;
 			</td>
 		</tr>
 
