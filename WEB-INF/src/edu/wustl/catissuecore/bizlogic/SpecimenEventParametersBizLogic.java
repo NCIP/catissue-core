@@ -12,6 +12,7 @@ import java.util.Set;
 
 import edu.wustl.catissuecore.dao.DAO;
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
+import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.StorageContainer;
@@ -47,20 +48,33 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 		if (!list.isEmpty())
 		{
 		    User user = (User) list.get(0);
+
+		    // check for closed User
+			checkStatus(dao, user, "User" );
+
 		    specimenEventParametersObject.setUser(user);
 		}
 		Specimen specimen = (Specimen) dao.retrieve(Specimen.class.getName(), specimenEventParametersObject.getSpecimen().getSystemIdentifier());
+		
+		// check for closed Specimen
+		checkStatus(dao, specimen, "Specimen" );
+
 		
 		if (specimen != null)
 		{
 		    specimenEventParametersObject.setSpecimen(specimen);
 		    if (specimenEventParametersObject instanceof TransferEventParameters)
 		    {
-		        TransferEventParameters transferEventParameters = (TransferEventParameters)specimenEventParametersObject; 
+		        TransferEventParameters transferEventParameters = (TransferEventParameters)specimenEventParametersObject;
+		        
 			    specimen.setPositionDimensionOne(transferEventParameters.getToPositionDimensionOne());
 			    specimen.setPositionDimensionTwo(transferEventParameters.getToPositionDimensionTwo());
 			    
 			    StorageContainer storageContainer = (StorageContainer)dao.retrieve(StorageContainer.class.getName(), transferEventParameters.getToStorageContainer().getSystemIdentifier());
+			    
+				// check for closed StorageContainer
+				checkStatus(dao, storageContainer, "Storage Container" );
+
 			    if (storageContainer != null)
 			    {
 			        specimen.setStorageContainer(storageContainer);
@@ -101,4 +115,65 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 	        return dynamicGroups;
 	        
 	    }
+	 
+	 // ---------------------------------------------------
+	 
+		/**
+		 * Updates the persistent object in the database.
+		 * @param obj The object to be updated.
+		 * @param session The session in which the object is saved.
+		 * @throws DAOException 
+		 */
+		protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
+		{
+			Logger.out.debug("In SEP UpDate" );
+			SpecimenEventParameters specimenEventParameters = (SpecimenEventParameters) obj;
+			
+			SpecimenEventParameters oldSpecimenEventParameters = (SpecimenEventParameters) oldObj;
+			Logger.out.debug("In SEP Before SpecimenCheck" );
+			
+			// ----- Check for Closed Specimen
+			checkStatus(dao, specimenEventParameters.getSpecimen(), "Specimen" );
+
+			Logger.out.debug("In SEP after SpecimenCheck" );
+			
+			// Check for different User
+			Logger.out.debug("In SEP before UserCheck" );
+
+			if(!specimenEventParameters.getUser().getSystemIdentifier().equals( oldSpecimenEventParameters.getUser().getSystemIdentifier()))
+			{
+				    checkStatus(dao,specimenEventParameters.getUser(), "User" );
+			}
+			Logger.out.debug("In SEP after UserCheck" );
+
+			// check for transfer event
+			if (specimenEventParameters.getSpecimen() != null)
+			{
+				Logger.out.debug("In SEP before TEPCheck" );
+
+//			    specimenEventParametersObject.setSpecimen(specimen);
+			    if (specimenEventParameters instanceof TransferEventParameters)
+			    {
+			        TransferEventParameters transferEventParameters = (TransferEventParameters)specimenEventParameters;
+			        TransferEventParameters oldTransferEventParameters = (TransferEventParameters)oldSpecimenEventParameters;
+				    
+				    StorageContainer storageContainer = transferEventParameters.getToStorageContainer();
+				    StorageContainer oldstorageContainer = oldTransferEventParameters.getToStorageContainer();
+				    Logger.out.debug("StorageContainer match : " + storageContainer.equals(oldstorageContainer ) );
+//				    if(!storageContainer.equals(oldstorageContainer ) )
+//				    {
+//				    	// check for closed StorageContainer
+				    	checkStatus(dao, storageContainer, "Storage Container" );
+//						dao.update(transferEventParameters.getSpecimen(), sessionDataBean, true, true, false);
+//				    }
+			    }
+			}
+		
+			
+			Logger.out.debug("In SEP before Update call" );
+			
+			//Update registration
+			dao.update(specimenEventParameters, sessionDataBean, true, true, false);
+		}
+	 
 }
