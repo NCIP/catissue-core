@@ -93,7 +93,7 @@ public class UserAction extends SecureAction
             if (operation.equals(Constants.EDIT) && pageOf.equals(Constants.PAGEOF_USER_ADMIN))
             {
                 request.setAttribute(Constants.ACTIVITYSTATUSLIST,
-                        Constants.ACTIVITY_STATUS_VALUES);
+                        Constants.USER_ACTIVITY_STATUS_VALUES);
             }
             
             if (pageOf.equals(Constants.PAGEOF_APPROVE_USER) || pageOf.equals(Constants.PAGEOF_USER_ADMIN))

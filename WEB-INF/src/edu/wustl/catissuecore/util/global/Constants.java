@@ -933,6 +933,12 @@ public class Constants
 	        "Closed"
 	};
 
+	public static final String [] USER_ACTIVITY_STATUS_VALUES = {
+	        SELECT_OPTION,
+	        "Active",
+	        "Closed"
+	};
+	
 	public static final String [] APPROVE_USER_STATUS_VALUES = {
 	        SELECT_OPTION,
 	        APPROVE_USER_APPROVE_STATUS,
