@@ -56,7 +56,6 @@ public class ParticipantBizLogic extends DefaultBizLogic
 		while(it.hasNext())
 		{
 			ParticipantMedicalIdentifier pmIdentifier = (ParticipantMedicalIdentifier)it.next();
-			Logger.out.debug(pmIdentifier);
 			pmIdentifier.setParticipant(participant);
 			dao.insert(pmIdentifier,sessionDataBean, true, true);
 		}
@@ -84,6 +83,7 @@ public class ParticipantBizLogic extends DefaultBizLogic
 			dao.update(pmIdentifier, sessionDataBean, true, true, false);
 		}
 		
+		//Disable the associate collection protocol registration
 		Logger.out.debug("participant.getActivityStatus() "+participant.getActivityStatus());
 		if(participant.getActivityStatus().equals(Constants.ACTIVITY_STATUS_DISABLED))
 		{
