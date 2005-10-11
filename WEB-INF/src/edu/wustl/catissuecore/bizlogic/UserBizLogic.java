@@ -324,10 +324,20 @@ public class UserBizLogic extends DefaultBizLogic
     //                return nameValuePairs;
     //            }
 
-    public Vector getUsers(String ActivityStatus) throws DAOException
+    public Vector getUsers() throws DAOException
     {
-        List users = retrieve(User.class.getName(), "activityStatus",
-                ActivityStatus);
+    	String sourceObjectName = User.class.getName();
+    	String[] selectColumnName = null;
+    	String[] whereColumnName = {"activityStatus"};
+        String[] whereColumnCondition = {"!="};
+        Object[] whereColumnValue = {Constants.ACTIVITY_STATUS_DISABLED};
+        String joinCondition = Constants.AND_JOIN_CONDITION;
+		
+        List users = retrieve(sourceObjectName, selectColumnName, whereColumnName,
+                whereColumnCondition, whereColumnValue, joinCondition);
+				
+//        List users = retrieve(User.class.getName(), ,
+//                );
         Vector nameValuePairs = new Vector();
         nameValuePairs.add(new NameValueBean(Constants.SELECT_OPTION, "-1"));
 
