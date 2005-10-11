@@ -41,6 +41,9 @@ public class DistributionProtocolBizLogic extends DefaultBizLogic
 	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException 
 	{
 		DistributionProtocol distributionProtocol = (DistributionProtocol)obj;
+		
+		checkStatus(dao, distributionProtocol.getPrincipalInvestigator(), "Principal Investigator");
+		
 		setPrincipalInvestigator(dao,distributionProtocol);
 		dao.insert(distributionProtocol,sessionDataBean, true, true);
 
@@ -74,6 +77,11 @@ public class DistributionProtocolBizLogic extends DefaultBizLogic
 	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
     {
 		DistributionProtocol distributionProtocol = (DistributionProtocol)obj;
+		DistributionProtocol distributionProtocolOld = (DistributionProtocol)oldObj;
+    	
+    	if(!distributionProtocol.getPrincipalInvestigator().getSystemIdentifier().equals(distributionProtocolOld.getPrincipalInvestigator().getSystemIdentifier()))
+			checkStatus(dao, distributionProtocol.getPrincipalInvestigator(), "Principal Investigator");
+    	
 		setPrincipalInvestigator(dao,distributionProtocol);
 		dao.update(distributionProtocol, sessionDataBean, true, true, false);
 
