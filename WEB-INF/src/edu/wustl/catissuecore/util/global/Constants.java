@@ -1249,4 +1249,10 @@ public class Constants
 	public static final String ODD_COLOR = "#CFCFCF";
 	public static final String EVEN_COLOR = "#F7F7F7"; 
 	
+	//	Aarti: Constants for security parameter required 
+	//while retrieving data from DAOs
+	public static final int INSECURE_RETRIEVE = 0;
+	public static final int CLASS_LEVEL_SECURE_RETRIEVE = 1; 
+	public static final int OBJECT_LEVEL_SECURE_RETRIEVE = 2; 
+	
 }
