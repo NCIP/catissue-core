@@ -69,7 +69,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		}
 		
 		setClinicalReport(dao, specimenCollectionGroup);
-		setCollectionProtocolRegistration(dao, specimenCollectionGroup);
+		setCollectionProtocolRegistration(dao, specimenCollectionGroup, null);
 		
 		dao.insert(specimenCollectionGroup,sessionDataBean, true, true);
 		if(specimenCollectionGroup.getClinicalReport()!=null)
@@ -137,12 +137,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		// Check for different closed site
 		if(!specimenCollectionGroup.getSite().getSystemIdentifier().equals( oldspecimenCollectionGroup.getSite().getSystemIdentifier()))
 		{
-			Logger.out.debug("specimenCollectionGroup.getSite().getSystemIdentifier() "+specimenCollectionGroup.getSite().getSystemIdentifier());
-			Logger.out.debug("oldspecimenCollectionGroup.getSite().getSystemIdentifier() "+oldspecimenCollectionGroup.getSite().getSystemIdentifier());
-
-			String errorName = "Site";
-			checkStatus(dao,specimenCollectionGroup.getSite(), errorName );
-
+			checkStatus(dao,specimenCollectionGroup.getSite(), "Site" );
 		}
 		// --------------- site check complete
 		
@@ -152,20 +147,20 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		{
 			// check for closed CollectionProtocol
 			CollectionProtocolEvent cpe = (CollectionProtocolEvent)list.get(0);
-
-			String errorName = "Collection Protocol";
-			checkStatus(dao,cpe.getCollectionProtocol(), errorName );
+			if(!cpe.getCollectionProtocol().getSystemIdentifier().equals(oldspecimenCollectionGroup.getCollectionProtocolEvent().getCollectionProtocol().getSystemIdentifier()))
+				checkStatus(dao,cpe.getCollectionProtocol(), "Collection Protocol" );
 			
 			specimenCollectionGroup.setCollectionProtocolEvent((CollectionProtocolEvent)list.get(0));
 		}
 		// ---------- CollectionProtocol check complete.
 		
 		
-		setCollectionProtocolRegistration(dao, specimenCollectionGroup);
+		setCollectionProtocolRegistration(dao, specimenCollectionGroup, oldspecimenCollectionGroup);
 		
 		dao.update(specimenCollectionGroup, sessionDataBean, true, true, false);
 		dao.update(specimenCollectionGroup.getClinicalReport(), sessionDataBean, true, true, false);
 		
+		//Disable the related specimens to this specimen group
 		Logger.out.debug("specimenCollectionGroup.getActivityStatus() "+specimenCollectionGroup.getActivityStatus());
 		if(specimenCollectionGroup.getActivityStatus().equals(Constants.ACTIVITY_STATUS_DISABLED))
 		{
@@ -177,7 +172,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		}
 	}
 	
-	private void setCollectionProtocolRegistration(DAO dao, SpecimenCollectionGroup specimenCollectionGroup) throws DAOException 
+	private void setCollectionProtocolRegistration(DAO dao, SpecimenCollectionGroup specimenCollectionGroup,SpecimenCollectionGroup oldSpecimenCollectionGroup) throws DAOException 
 	{
 		String sourceObjectName = CollectionProtocolRegistration.class.getName();
 		String[] selectColumnName = null;
@@ -193,10 +188,15 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		{
 			// check for closed Participant
 			Participant participantObject = (Participant)specimenCollectionGroup.getCollectionProtocolRegistration().getParticipant() ;
-				String errorName = "Participant";
-				checkStatus(dao,participantObject, errorName );
-				
-			// ---------- Participant check complete.
+			
+			if(oldSpecimenCollectionGroup!=null)
+			{
+				Participant participantObjectOld =oldSpecimenCollectionGroup.getCollectionProtocolRegistration().getParticipant();
+				if(!participantObject.getSystemIdentifier().equals(participantObjectOld.getSystemIdentifier()))
+					checkStatus(dao,participantObject, "Participant" );
+			}
+			else
+				checkStatus(dao,participantObject, "Participant" );
 
 			whereColumnName[1]="participant."+Constants.SYSTEM_IDENTIFIER;
 			whereColumnValue[1]=specimenCollectionGroup.getCollectionProtocolRegistration().getParticipant().getSystemIdentifier();
@@ -212,12 +212,17 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 							 whereColumnCondition, whereColumnValue, joinCondition);
 		if(!list.isEmpty())
 		{
-				// check for closed CollectionProtocolRegistration
-			CollectionProtocolRegistration collectionProtocolRegistrationObject = (CollectionProtocolRegistration)list.get(0);
-				String errorName = "Collection Protocol Registration";
-
-			checkStatus(dao,collectionProtocolRegistrationObject, errorName );				
-			// ---------- CollectionProtocolRegistration check complete.
+			//check for closed CollectionProtocolRegistration
+			CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration)list.get(0);
+			
+			if(oldSpecimenCollectionGroup!=null)
+			{
+				CollectionProtocolRegistration collectionProtocolRegistrationOld =oldSpecimenCollectionGroup.getCollectionProtocolRegistration();
+				if(!collectionProtocolRegistration.getSystemIdentifier().equals(collectionProtocolRegistrationOld.getSystemIdentifier()))
+					checkStatus(dao,collectionProtocolRegistration, "Collection Protocol Registration" );
+			}
+			else
+				checkStatus(dao,collectionProtocolRegistration, "Collection Protocol Registration" );
 			
 		   specimenCollectionGroup.setCollectionProtocolRegistration((CollectionProtocolRegistration)list.get(0));
 		}
