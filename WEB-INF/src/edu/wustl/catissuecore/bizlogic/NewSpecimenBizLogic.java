@@ -159,6 +159,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
     public void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
     {
     	Specimen specimen = (Specimen)obj;
+    	Specimen specimenOld = (Specimen)oldObj;
     	
     	if(specimen.isParentChanged())
         {
@@ -179,14 +180,15 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 //        	specimen.setSpecimenCharacteristics(parentSpecimen.getSpecimenCharacteristics());
         	SpecimenCollectionGroup scg = loadSpecimenCollectionGroup(specimen.getParentSpecimen().getSystemIdentifier(), dao);
         	
-			// check for closed Specimen Collection Group
-			checkStatus(dao,scg, "Specimen Collection Group" );
-        	
         	specimen.setSpecimenCollectionGroup(scg);
         	SpecimenCharacteristics sc= loadSpecimenCharacteristics(specimen.getParentSpecimen().getSystemIdentifier(), dao);
         	specimen.setSpecimenCharacteristics(sc);
         }
     	
+    	//check for closed Specimen Collection Group
+    	if(!specimen.getSpecimenCollectionGroup().getSystemIdentifier().equals(specimenOld.getSpecimenCollectionGroup().getSystemIdentifier()))
+    		checkStatus(dao,specimen.getSpecimenCollectionGroup(), "Specimen Collection Group" );
+		
     	setSpecimenGroupForSubSpecimen(specimen,specimen.getSpecimenCollectionGroup(),specimen.getSpecimenCharacteristics());
     	
 		//dao.update(specimen.getSpecimenCharacteristics(), sessionDataBean, true, true, false);

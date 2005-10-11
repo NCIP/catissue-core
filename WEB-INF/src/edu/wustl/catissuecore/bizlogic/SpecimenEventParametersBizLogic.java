@@ -6,13 +6,10 @@
  */
 package edu.wustl.catissuecore.bizlogic;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import edu.wustl.catissuecore.dao.DAO;
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
-import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.StorageContainer;
@@ -44,7 +41,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 //	    Set protectionObjects = new HashSet();
 		SpecimenEventParameters specimenEventParametersObject = (SpecimenEventParameters)obj;
 
-		List list = dao.retrieve(User.class.getName(), "systemIdentifier", specimenEventParametersObject.getUser().getSystemIdentifier()  );
+		List list = dao.retrieve(User.class.getName(), Constants.SYSTEM_IDENTIFIER, specimenEventParametersObject.getUser().getSystemIdentifier());
 		if (!list.isEmpty())
 		{
 		    User user = (User) list.get(0);
@@ -98,23 +95,23 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 	}
 	
 	 public String[] getDynamicGroups(AbstractDomainObject obj)
-	    {
-	        String[] dynamicGroups=null;
-	        SpecimenEventParameters specimenEventParametersObject = (SpecimenEventParameters)obj;
-	        dynamicGroups = new String[1];
-	        
-	        try
-	        {
-	            dynamicGroups[0] = SecurityManager.getInstance(this.getClass()).getProtectionGroupByName(specimenEventParametersObject.getSpecimen(),Constants.getCollectionProtocolPGName(null));
-	        }
-	        catch (SMException e)
-	        {
-	            Logger.out.error("Exception in Authorization: "+e.getMessage(),e);
-	        }
-	        Logger.out.debug("Dynamic Group name: "+dynamicGroups[0]);
-	        return dynamicGroups;
-	        
-	    }
+	 {
+        String[] dynamicGroups=null;
+        SpecimenEventParameters specimenEventParametersObject = (SpecimenEventParameters)obj;
+        dynamicGroups = new String[1];
+        
+        try
+        {
+            dynamicGroups[0] = SecurityManager.getInstance(this.getClass()).getProtectionGroupByName(specimenEventParametersObject.getSpecimen(),Constants.getCollectionProtocolPGName(null));
+        }
+        catch (SMException e)
+        {
+            Logger.out.error("Exception in Authorization: "+e.getMessage(),e);
+        }
+        Logger.out.debug("Dynamic Group name: "+dynamicGroups[0]);
+        return dynamicGroups;
+        
+	 }
 	 
 	 // ---------------------------------------------------
 	 
@@ -126,54 +123,37 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 		 */
 		protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 		{
-			Logger.out.debug("In SEP UpDate" );
 			SpecimenEventParameters specimenEventParameters = (SpecimenEventParameters) obj;
-			
 			SpecimenEventParameters oldSpecimenEventParameters = (SpecimenEventParameters) oldObj;
-			Logger.out.debug("In SEP Before SpecimenCheck" );
 			
 			// ----- Check for Closed Specimen
-			checkStatus(dao, specimenEventParameters.getSpecimen(), "Specimen" );
+			//checkStatus(dao, specimenEventParameters.getSpecimen(), "Specimen" );
 
-			Logger.out.debug("In SEP after SpecimenCheck" );
-			
 			// Check for different User
-			Logger.out.debug("In SEP before UserCheck" );
-
 			if(!specimenEventParameters.getUser().getSystemIdentifier().equals( oldSpecimenEventParameters.getUser().getSystemIdentifier()))
 			{
-				    checkStatus(dao,specimenEventParameters.getUser(), "User" );
+				checkStatus(dao,specimenEventParameters.getUser(), "User" );
 			}
-			Logger.out.debug("In SEP after UserCheck" );
 
 			// check for transfer event
-			if (specimenEventParameters.getSpecimen() != null)
-			{
-				Logger.out.debug("In SEP before TEPCheck" );
-
-//			    specimenEventParametersObject.setSpecimen(specimen);
-			    if (specimenEventParameters instanceof TransferEventParameters)
-			    {
-			        TransferEventParameters transferEventParameters = (TransferEventParameters)specimenEventParameters;
-			        TransferEventParameters oldTransferEventParameters = (TransferEventParameters)oldSpecimenEventParameters;
-				    
-				    StorageContainer storageContainer = transferEventParameters.getToStorageContainer();
-				    StorageContainer oldstorageContainer = oldTransferEventParameters.getToStorageContainer();
-				    Logger.out.debug("StorageContainer match : " + storageContainer.equals(oldstorageContainer ) );
-//				    if(!storageContainer.equals(oldstorageContainer ) )
-//				    {
-//				    	// check for closed StorageContainer
-				    	checkStatus(dao, storageContainer, "Storage Container" );
-//						dao.update(transferEventParameters.getSpecimen(), sessionDataBean, true, true, false);
-//				    }
-			    }
-			}
-		
-			
-			Logger.out.debug("In SEP before Update call" );
+//			if (specimenEventParameters.getSpecimen() != null)
+//			{
+//			    if (specimenEventParameters instanceof TransferEventParameters)
+//			    {
+//			        TransferEventParameters transferEventParameters = (TransferEventParameters)specimenEventParameters;
+//			        TransferEventParameters oldTransferEventParameters = (TransferEventParameters)oldSpecimenEventParameters;
+//				    
+//				    StorageContainer storageContainer = transferEventParameters.getToStorageContainer();
+//				    StorageContainer oldstorageContainer = oldTransferEventParameters.getToStorageContainer();
+//				    Logger.out.debug("StorageContainer match : " + storageContainer.equals(oldstorageContainer ) );
+//				    
+//				    // check for closed StorageContainer
+//				    if(!storageContainer.getSystemIdentifier().equals(oldstorageContainer.getSystemIdentifier()) )
+//				    	checkStatus(dao, storageContainer, "Storage Container" );
+//			    }
+//			}
 			
 			//Update registration
 			dao.update(specimenEventParameters, sessionDataBean, true, true, false);
 		}
-	 
 }
