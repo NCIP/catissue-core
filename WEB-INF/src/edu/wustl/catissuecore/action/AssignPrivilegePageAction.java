@@ -28,6 +28,7 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.actionForm.AssignPrivilegesForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
+import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
@@ -56,9 +57,8 @@ public class AssignPrivilegePageAction extends BaseAction
         
         if(privilegesForm.getPrivilege() == null || (privilegesForm.getPrivilege()).equals("READ"))
         {
-	        objectTypes.add(new NameValueBean("Participant","edu.wustl.catissuecore.domain.Participant"));
 	        objectTypes.add(new NameValueBean("Collection Protocol","edu.wustl.catissuecore.domain.CollectionProtocol"));
-	        objectTypes.add(new NameValueBean("Distribution Protocol","edu.wustl.catissuecore.domain.DistributionProtocol"));
+	        objectTypes.add(new NameValueBean("Collection Protocol Registration",CollectionProtocolRegistration.class.getName()));
 	        objectTypes.add(new NameValueBean("Specimen Collection","edu.wustl.catissuecore.domain.SpecimenCollectionGroup"));
 	        objectTypes.add(new NameValueBean("Specimen","edu.wustl.catissuecore.domain.Specimen"));
         }
