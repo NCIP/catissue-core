@@ -51,6 +51,8 @@ public class CollectionProtocolBizLogic extends DefaultBizLogic implements Roles
 	{
 		CollectionProtocol collectionProtocol = (CollectionProtocol)obj;
 		
+		checkStatus(dao, collectionProtocol.getPrincipalInvestigator(), "Principal Investigator");
+		
 		setPrincipalInvestigator(dao,collectionProtocol);		
 		setCoordinatorCollection(dao,collectionProtocol);
 		
@@ -92,15 +94,27 @@ public class CollectionProtocolBizLogic extends DefaultBizLogic implements Roles
     protected void update(DAO dao,Object obj, Object oldObj, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
     {
     	CollectionProtocol collectionProtocol = (CollectionProtocol)obj;
+    	CollectionProtocol collectionProtocolOld = (CollectionProtocol)oldObj;
 		
-    	//collectionProtocol.setPrincipalInvestigator(null);
-    	//collectionProtocol.getUserCollection().clear();
-		//setPrincipalInvestigator(dao,collectionProtocol);		
-		//setCoordinatorCollection(dao,collectionProtocol);
+    	if(!collectionProtocol.getPrincipalInvestigator().getSystemIdentifier().equals(collectionProtocolOld.getPrincipalInvestigator().getSystemIdentifier()))
+			checkStatus(dao, collectionProtocol.getPrincipalInvestigator(), "Principal Investigator");
+    	
+    	Iterator it = collectionProtocol.getUserCollection().iterator();
+		while(it.hasNext())
+		{
+			User coordinator  = (User)it.next();
+			if(!coordinator.getSystemIdentifier().equals(collectionProtocol.getPrincipalInvestigator().getSystemIdentifier()))
+			{
+				if(!hasCoordinator(coordinator, collectionProtocolOld))
+					checkStatus(dao, coordinator, "Coordinator");
+			}
+			else
+				it.remove();
+		}
 		
 		dao.update(collectionProtocol, sessionDataBean, true, true, false);
 		
-		Iterator it = collectionProtocol.getCollectionProtocolEventCollection().iterator();		
+		it = collectionProtocol.getCollectionProtocolEventCollection().iterator();		
 		while(it.hasNext())
 		{
 			CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent)it.next();
@@ -114,13 +128,12 @@ public class CollectionProtocolBizLogic extends DefaultBizLogic implements Roles
 				
 				Logger.out.debug("specimenRequirement "+specimenRequirement);
 				
-				
 				specimenRequirement.getCollectionProtocolEventCollection().add(collectionProtocolEvent);
 				dao.update(specimenRequirement, sessionDataBean, true, true, false);
 			}
 		}
 		
-		
+		//Disable related Objects
 		Logger.out.debug("collectionProtocol.getActivityStatus() "+collectionProtocol.getActivityStatus());
 		if(collectionProtocol.getActivityStatus().equals(Constants.ACTIVITY_STATUS_DISABLED))
 		{
@@ -130,6 +143,8 @@ public class CollectionProtocolBizLogic extends DefaultBizLogic implements Roles
 			CollectionProtocolRegistrationBizLogic bizLogic = (CollectionProtocolRegistrationBizLogic)BizLogicFactory.getBizLogic(Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
 			bizLogic.disableRelatedObjectsForCollectionProtocol(dao,collectionProtocolIDArr);
 		}
+		
+		
     }
 
     /**
@@ -276,6 +291,9 @@ public class CollectionProtocolBizLogic extends DefaultBizLogic implements Roles
 				if (obj != null)
 				{
 					User coordinator = (User) obj;//list.get(0);
+					
+					checkStatus(dao, coordinator, "coordinator");
+					
 					coordinatorColl.add(coordinator);
 					coordinator.getCollectionProtocolCollection().add(collectionProtocol);
 				}
@@ -292,5 +310,17 @@ public class CollectionProtocolBizLogic extends DefaultBizLogic implements Roles
 		bizLogic.assignPrivilegeToRelatedObjectsForCP(dao,privilegeName,objectIds,userId, roleId, assignToUser);
     }
 	
-	
+	private boolean hasCoordinator(User coordinator, CollectionProtocol collectionProtocol)
+	{
+		Iterator it = collectionProtocol.getUserCollection().iterator();
+		while(it.hasNext())
+		{
+			User coordinatorOld  = (User)it.next();
+			if(coordinator.getSystemIdentifier().equals(coordinatorOld.getSystemIdentifier()))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
 }

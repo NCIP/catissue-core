@@ -35,7 +35,6 @@ import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.util.dbManager.HibernateMetaData;
 import edu.wustl.common.util.logger.Logger;
 import gov.nih.nci.security.authorization.domainobjects.Role;
-import gov.nih.nci.security.dao.ProtectionElementSearchCriteria;
 
 public class AssignPrivilegePageAction extends BaseAction
 {
@@ -75,7 +74,7 @@ public class AssignPrivilegePageAction extends BaseAction
 		{
         	//SETTING THE USER LIST
        		UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getBizLogic(Constants.USER_FORM_ID);
-        	Collection userCollection =  userBizLogic.getUsers(Constants.ACTIVITY_STATUS_ACTIVE);
+        	Collection userCollection =  userBizLogic.getUsers();
         	
         	if(userCollection != null && userCollection.size() !=0)
         	{

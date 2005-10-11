@@ -65,7 +65,7 @@ public class SpecimenEventParametersAction  extends SecureAction
        try
        {
            	UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getBizLogic(Constants.USER_FORM_ID);
-        	Collection coll =  userBizLogic.getUsers(Constants.ACTIVITY_STATUS_ACTIVE);
+        	Collection coll =  userBizLogic.getUsers();
         	
         	request.setAttribute(Constants.USERLIST, coll);
         }
