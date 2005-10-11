@@ -73,6 +73,10 @@ public class StorageContainerBizLogic extends DefaultBizLogic
             if (list.size() != 0)
             {
                 StorageContainer pc = (StorageContainer) list.get(0);
+                
+                // check for closed ParentContainer
+    			checkStatus(dao, pc, "Parent Container" );
+    			
                 int totalCapacity = pc.getStorageContainerCapacity().getOneDimensionCapacity().intValue()
                         * pc.getStorageContainerCapacity().getTwoDimensionCapacity().intValue();
                 if ((noOfContainers + pc.getChildrenContainerCollection()
@@ -83,6 +87,10 @@ public class StorageContainerBizLogic extends DefaultBizLogic
                 else
                 {
                     container.setParentContainer(pc);
+                    
+//                  check for closed ParentSite
+        			checkStatus(dao, pc.getSite() , "Parent Site" );
+        			
                     container.setSite(pc.getSite());
 
                     posOneCapacity = pc.getStorageContainerCapacity()
@@ -181,21 +189,36 @@ public class StorageContainerBizLogic extends DefaultBizLogic
             throws DAOException, UserNotAuthorizedException
     {
         StorageContainer container = (StorageContainer) obj;
+        StorageContainer oldContainer = (StorageContainer) oldObj;
         
         if(container.isParentChanged())
         {
-        	//Check whether continer is moved to one of its sub container.
-        	if(isUnderSubContainer(container,container.getParentContainer().getSystemIdentifier()))
+        	if(container.getParentContainer() !=null)
         	{
-        		throw new DAOException(ApplicationProperties.getValue("errors.container.under.subcontainer"));  
+            	//Check whether continer is moved to one of its sub container.
+            	if(isUnderSubContainer(container,container.getParentContainer().getSystemIdentifier()))
+            	{
+            		throw new DAOException(ApplicationProperties.getValue("errors.container.under.subcontainer"));  
+            	}
+            	Logger.out.debug("Loading ParentContainer: "+container.getParentContainer().getSystemIdentifier());
+    			
+            	StorageContainer pc = (StorageContainer) dao.retrieve(StorageContainer.class.getName(), container.getParentContainer().getSystemIdentifier());
+//            	 check for closed ParentContainer
+    			checkStatus(dao, pc, "Parent Container" );
+    			
+                container.setParentContainer(pc);
+//              check for closed Site
+               	checkStatus(dao, pc.getSite(), "Parent Site" );
+
+               	container.setSite(pc.getSite());
         	}
-        	Logger.out.debug("Loading ParentContainer: "+container.getParentContainer().getSystemIdentifier());
-			
-        	StorageContainer pc = (StorageContainer) dao.retrieve(StorageContainer.class.getName(), container.getParentContainer().getSystemIdentifier());
-            container.setParentContainer(pc);
-            container.setSite(pc.getSite());
         }
         
+//      check for closed Site
+        if(!container.getSite().equals(oldContainer.getSite() )  )
+		{
+        	checkStatus(dao, container.getSite(), "Site" );
+		}
         setSiteForSubContainers(container, container.getSite());
         
         dao.update(container, sessionDataBean, true, true, false);
@@ -253,7 +276,11 @@ public class StorageContainerBizLogic extends DefaultBizLogic
             if (list.size() != 0)
             {
                 Site site = (Site) list.get(0);
-                container.setSite(site);
+                
+                // check for closed site
+    			checkStatus(dao, site, "Site" );
+                
+    			container.setSite(site);
                 setSiteForSubContainers(container, site);
             }
         }
