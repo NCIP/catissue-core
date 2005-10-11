@@ -215,10 +215,16 @@ public class StorageContainerBizLogic extends DefaultBizLogic
         }
         
 //      check for closed Site
-        if(!container.getSite().equals(oldContainer.getSite() )  )
-		{
-        	checkStatus(dao, container.getSite(), "Site" );
-		}
+        if((container.getSite() !=null) && (oldContainer.getSite() != null) )
+        {
+            if((container.getSite().getSystemIdentifier() !=null) && (oldContainer.getSite().getSystemIdentifier() != null) )
+            {
+            	if((!container.getSite().getSystemIdentifier().equals(oldContainer.getSite().getSystemIdentifier())))
+            	{
+                	checkStatus(dao, container.getSite(), "Site" );
+            	}
+            }
+        }
         setSiteForSubContainers(container, container.getSite());
         
         dao.update(container, sessionDataBean, true, true, false);
