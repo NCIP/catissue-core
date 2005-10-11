@@ -21,7 +21,6 @@ import edu.wustl.catissuecore.domain.ExternalIdentifier;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
@@ -48,18 +47,16 @@ public class CreateSpecimenBizLogic extends DefaultBizLogic
 		
 		specimen.setSpecimenCollectionGroup(null);
 		
-		//Setting the Biohazard Collection
-		Specimen parentSpecimen = null;
 		
         //Load & set the Parent Specimen of this specimen
 		Object specimenObj = dao.retrieve(Specimen.class.getName(), specimen.getParentSpecimen().getSystemIdentifier());
 		if(specimenObj!=null)
 		{
-			parentSpecimen = (Specimen)specimenObj;
+			//Setting the Biohazard Collection
+			Specimen parentSpecimen = (Specimen)specimenObj;
 			
 			// check for closed ParentSpecimen
-				String errorName = "Parent Specimen";
-				Utility.checkStatus(dao,parentSpecimen, errorName );
+			checkStatus(dao,parentSpecimen, "Parent Specimen" );
 			
 			specimen.setParentSpecimen(parentSpecimen);
 			specimen.setSpecimenCharacteristics(parentSpecimen.getSpecimenCharacteristics());
@@ -73,8 +70,7 @@ public class CreateSpecimenBizLogic extends DefaultBizLogic
 			StorageContainer container = (StorageContainer)storageContainerObj;
 			
 			// check for closed Storage Container
-				String errorName = "Storage Container";
-				Utility.checkStatus(dao,container, errorName );
+			checkStatus(dao, container, "Storage Container" );
 			
 			specimen.setStorageContainer(container);
 		}
@@ -148,14 +144,4 @@ public class CreateSpecimenBizLogic extends DefaultBizLogic
         Logger.out.debug("Dynamic Group name: "+dynamicGroups[0]);
         return dynamicGroups;
 	}
-	
-	/**
-     * Updates the persistent object in the database.
-     * @param session The session in which the object is saved.
-     * @param obj The object to be updated.
-     * @throws DAOException 
-     */
-    public void update(Object obj) throws DAOException
-    {
-    }
 }

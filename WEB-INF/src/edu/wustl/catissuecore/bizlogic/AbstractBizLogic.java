@@ -14,7 +14,10 @@ import java.util.List;
 import edu.wustl.catissuecore.dao.AbstractDAO;
 import edu.wustl.catissuecore.dao.DAO;
 import edu.wustl.catissuecore.dao.DAOFactory;
+import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.exception.BizLogicException;
+import edu.wustl.catissuecore.util.global.ApplicationProperties;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
@@ -195,4 +198,28 @@ public abstract class AbstractBizLogic
 		}
     }
 
+	/**
+	 *  Method to check the ActivityStatus of the given identifier
+	 * @param dao
+	 * @param identifier of the Element
+	 * @param className of the Element
+	 * @param errorName Dispaly Name of the Element
+	 * @throws DAOException
+	 */
+	protected void checkStatus(DAO dao, AbstractDomainObject ado , String errorName) throws DAOException 
+    {
+		if(ado !=null)
+		{
+			Long identifier = ado.getSystemIdentifier() ;
+			if(identifier != null)
+			{
+				String className = ado.getClass().getName();  
+				String activityStatus = dao.getActivityStatus(className,identifier);
+				if(activityStatus.equals(Constants.ACTIVITY_STATUS_CLOSED))
+				{
+					throw new DAOException(errorName + " " + ApplicationProperties.getValue("error.object.closed"));
+				}
+			}
+		}
+    }
 }

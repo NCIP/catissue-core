@@ -170,8 +170,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
         	Logger.out.debug("Loading ParentSpecimen: "+specimen.getParentSpecimen().getSystemIdentifier());
 
 			// check for closed ParentSpecimen
-				String errorName = "Parent Specimen";
-				Utility.checkStatus(dao,specimen.getParentSpecimen(), errorName );
+			checkStatus(dao, specimen.getParentSpecimen(), "Parent Specimen" );
 			
         	
 //        	Specimen parentSpecimen = (Specimen) dao.retrieve(Specimen.class.getName(), specimen.getParentSpecimen().getSystemIdentifier());
@@ -181,10 +180,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
         	SpecimenCollectionGroup scg = loadSpecimenCollectionGroup(specimen.getParentSpecimen().getSystemIdentifier(), dao);
         	
 			// check for closed Specimen Collection Group
-			errorName = "Specimen Collection Group";
-			Utility.checkStatus(dao,scg, errorName );
-
-        	
+			checkStatus(dao,scg, "Specimen Collection Group" );
         	
         	specimen.setSpecimenCollectionGroup(scg);
         	SpecimenCharacteristics sc= loadSpecimenCharacteristics(specimen.getParentSpecimen().getSystemIdentifier(), dao);
@@ -282,9 +278,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			{
 				SpecimenCollectionGroup spg = (SpecimenCollectionGroup)specimenCollectionGroupObj;
 				
-				String errorName = "Specimen Collection Group";
-				Utility.checkStatus(dao,spg, errorName );
-
+				checkStatus(dao,spg, "Specimen Collection Group" );
 				
 				specimen.setSpecimenCollectionGroup(spg);
 			}
@@ -299,8 +293,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 				Specimen parentSpecimen = (Specimen)parentSpecimenObj;
 				
 				// check for closed Parent Specimen
-				String errorName = "Parent Specimen";
-				Utility.checkStatus(dao,parentSpecimen, errorName );
+				checkStatus(dao,parentSpecimen, "Parent Specimen");
 				
 				specimen.setParentSpecimen(parentSpecimen);
 			}
@@ -308,12 +301,11 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		
 		//Load & set Storage Container
 		Object containerObj = dao.retrieve(StorageContainer.class.getName(), specimen.getStorageContainer().getSystemIdentifier());
-		if(containerObj!=null)
+		if(containerObj != null)
 		{
 			StorageContainer container = (StorageContainer)containerObj;
 			// check for closed Storage Container
-				String errorName = "Storage Container";
-				Utility.checkStatus(dao,container, errorName );
+			checkStatus(dao,container, "Storage Container");
 			specimen.setStorageContainer(container);
 		}
 		
