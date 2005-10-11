@@ -39,6 +39,9 @@ public class SiteBizLogic extends DefaultBizLogic
 	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 	{
 		Site site = (Site)obj;
+		
+		checkStatus(dao, site.getCoordinator(), "Coordinator");
+		
 		Set protectionObjects = new HashSet();
 		
 		setCordinator(dao,site);
@@ -66,21 +69,15 @@ public class SiteBizLogic extends DefaultBizLogic
 	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
     {
 		Site site = (Site)obj;
+		Site siteOld = (Site)oldObj;
+		
+		if(!site.getCoordinator().getSystemIdentifier().equals(siteOld.getCoordinator().getSystemIdentifier()))
+			checkStatus(dao, site.getCoordinator(), "Coordinator");
 		
 		setCordinator(dao,site);
 		
 		dao.update(site.getAddress(), sessionDataBean, true, true, false);
 	    dao.update(site, sessionDataBean, true, true, false);
-	    
-//	    Logger.out.debug("site.getActivityStatus() "+site.getActivityStatus());
-//		if(site.getActivityStatus().equals(Constants.ACTIVITY_STATUS_DISABLED))
-//		{
-//			Logger.out.debug("site.getActivityStatus() "+site.getActivityStatus());
-//			Long siteIDArr[] = {site.getSystemIdentifier()};
-//			
-//			StorageContainerBizLogic bizLogic = (StorageContainerBizLogic)BizLogicFactory.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
-//			bizLogic.disableRelatedObjects(dao,siteIDArr);
-//		}
     }
 	
 	// This method sets the cordinator for a particular site.
