@@ -179,4 +179,21 @@ public class Utility
 //	    }
 //  }
 
+	/**
+     * Parses the fully qualified classname and returns only the classname.
+     * @param fullyQualifiedName The fully qualified classname. 
+     * @return The classname.
+     */
+    public static String parseClassName(String fullyQualifiedName)
+    {
+        try
+        {
+            return fullyQualifiedName.substring(fullyQualifiedName
+                    .lastIndexOf(".") + 1);
+        }
+        catch (Exception e)
+        {
+            return fullyQualifiedName;
+        }
+    }
 }
