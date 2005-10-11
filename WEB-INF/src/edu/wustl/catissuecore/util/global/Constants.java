@@ -111,6 +111,7 @@ public class Constants
 	public static final String USERIDLIST = "userIdList";
 	public static final String STORAGETYPEIDLIST="storageTypeIdList";
 	public static final String SPECIMENCOLLECTIONLIST="specimentCollectionList";
+	public static final String PARTICIPANT_IDENTIFIER_IN_CPR = "participant";
 	public static final String APPROVE_USER_STATUS_LIST = "statusList";
 	public static final String EVENT_PARAMETERS_LIST = "eventParametersList";
 		
