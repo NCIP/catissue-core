@@ -146,7 +146,8 @@ public class Constants
 	public static final String SPECIMEN_CLASS_ID_LIST = "specimenClassIdList";
 	public static final String SPECIMEN_TYPE_MAP = "specimenTypeMap";
 	//Simple Query Interface Lists
-	public static final String OBJECT_NAME_LIST = "objectNameList";
+	public static final String OBJECT_DISPLAY_NAME_LIST = "objectDisplayNameList";
+	public static final String OBJECT_ALIAS_NAME_LIST = "objectAliasNameList";
 	public static final String OBJECT_COMPLETE_NAME_LIST = "objectCompleteNameList";
 	public static final String SIMPLE_QUERY_INTERFACE_TITLE = "simpleQueryInterfaceTitle";
     
