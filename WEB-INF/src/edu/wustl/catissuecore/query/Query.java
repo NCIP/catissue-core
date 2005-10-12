@@ -113,25 +113,12 @@ public abstract class Query
 	{
 	    try
 	    {
-	        //JDBCDAO dao = new JDBCDAO();
 	    	JDBCDAO dao = (JDBCDAO)DAOFactory.getDAO(Constants.JDBC_DAO);
 	        dao.openSession(null);
-	        Logger.out.debug("SQL************"+getString());
+	        Logger.out.debug("Simple SQL....................."+getString());
 			List list = dao.executeQuery(getString());
 			dao.closeSession();
 	        return list;
-//	        dao.delete(tableName);
-//	        dao.create(tableName,Constants.DEFAULT_SPREADSHEET_COLUMNS);
-//	        
-//	        Iterator iterator = list.iterator();
-//	        while (iterator.hasNext())
-//	        {
-//	            List row = (List) iterator.next();
-//	            
-//	            dao.insert(tableName, row);
-//	        }
-//	        
-//	        dao.closeSession();
 	    }
 	    catch(DAOException daoExp)
 	    {
@@ -143,8 +130,8 @@ public abstract class Query
 	    }
 	}
 			/**
-	 * Adds the dataElement to result view
-	 * @param dataElement - Data Element to be added
+	 * Adds the dataElement to result view.
+	 * @param dataElement - Data Element to be added.
 	 * @return - true (as per the general contract of Collection.add).
 	 */
 	public boolean addElementToView(DataElement dataElement)
@@ -156,18 +143,26 @@ public abstract class Query
 	{
 	    try
 	    {
-	        String sql = "SELECT tableData2.ALIAS_NAME, temp.COLUMN_NAME, temp.DISPLAY_NAME "+
-	        			 " from CATISSUE_QUERY_INTERFACE_TABLE_DATA tableData2 join"+
-	        			 " ( SELECT  columnData.COLUMN_NAME, columnData.TABLE_ID, columnData.DISPLAY_NAME "+
-	        			 " FROM CATISSUE_QUERY_INTERFACE_COLUMN_DATA columnData, " +
-	        			 " CATISSUE_TABLE_RELATION relationData, "+
-	        			 " CATISSUE_QUERY_INTERFACE_TABLE_DATA tableData " + 
-	        			 " where relationData.CHILD_TABLE_ID = columnData.TABLE_ID " + 
-	        			 " and relationData.PARENT_TABLE_ID = tableData.TABLE_ID " + 
-	        			 " and tableData.ALIAS_NAME = '"+aliasName+"') as temp "+
-	        			 " on temp.TABLE_ID = tableData2.TABLE_ID ";
+	        String sql =" SELECT tableData2.ALIAS_NAME, temp.COLUMN_NAME, temp.DISPLAY_NAME " +
+				        " from CATISSUE_QUERY_INTERFACE_TABLE_DATA tableData2 join " +
+				        " ( SELECT  columnData.COLUMN_NAME, columnData.TABLE_ID, displayData.DISPLAY_NAME " +
+				        " FROM CATISSUE_QUERY_INTERFACE_COLUMN_DATA columnData, " +
+				        " CATISSUE_TABLE_RELATION relationData, " +
+				        " CATISSUE_QUERY_INTERFACE_TABLE_DATA tableData, " +
+				        " CATISSUE_SEARCH_DISPLAY_DATA displayData " +
+				        " where relationData.CHILD_TABLE_ID = columnData.TABLE_ID and " +
+				        " relationData.PARENT_TABLE_ID = tableData.TABLE_ID and " +
+				        " relationData.RELATIONSHIP_ID = displayData.RELATIONSHIP_ID and " +
+				        " columnData.IDENTIFIER = displayData.COL_ID and " +
+				        " tableData.ALIAS_NAME = '"+aliasName+"') as temp " +
+				        " on temp.TABLE_ID = tableData2.TABLE_ID";
 	        
-	        Logger.out.debug("DATAELEMENT SQL : "+sql);
+//	        if (pageOf.equals(Constants.PAGEOF_SIMPLE_QUERY_INTERFACE))
+//	        {
+//	            sql = 
+//	        }
+	        
+	        Logger.out.debug("DATA ELEMENT SQL : "+sql);
 		    
 		    JDBCDAO jdbcDao = new JDBCDAO();
 	        jdbcDao.openSession(null);
@@ -184,12 +179,9 @@ public abstract class Query
 		        List rowList = (List) iterator.next();
 		        DataElement dataElement = new DataElement();
 		        dataElement.setTable((String)rowList.get(0));
-		        //Logger.out.debug("TABLE NAME : "+dataElement.getTable());
 		        dataElement.setField((String)rowList.get(1));
-		        //Logger.out.debug("ALIAS NAME : "+dataElement.getField());
 		        vector.add(dataElement);
 		        columnNames[i++] = (String)rowList.get(2);
-		        //Logger.out.debug("COLUMN NAME : "+columnNames[i-1]);
 		    }
 		    
 		    setResultView(vector);
@@ -216,7 +208,7 @@ public abstract class Query
         HashSet set = new HashSet();
 
         /**
-         * Forming SELECT part of the query
+         * Forming SELECT part of the query.
          */
         query.append("Select ");
         if (resultView.size() == 0)
@@ -420,7 +412,6 @@ public abstract class Query
         }
         fromString.append(" ");
         return fromString.toString();
-
     }
 
     public int getTableSufix()

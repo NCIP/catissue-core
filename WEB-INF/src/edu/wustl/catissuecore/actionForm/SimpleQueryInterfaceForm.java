@@ -8,8 +8,8 @@
 package edu.wustl.catissuecore.actionForm;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -26,7 +26,7 @@ import edu.wustl.catissuecore.util.global.Validator;
 public class SimpleQueryInterfaceForm extends ActionForm
 {
 
-    Map values = new HashMap();
+    Map values = new TreeMap();
 
     String counter;
 
@@ -108,8 +108,6 @@ public class SimpleQueryInterfaceForm extends ActionForm
     {
         return values;
     }
-
-    
     
 	/**
 	 * @return Returns the showCalendar.
@@ -128,8 +126,9 @@ public class SimpleQueryInterfaceForm extends ActionForm
      */
     public void reset(ActionMapping mapping, HttpServletRequest request)
     {
-        this.counter = "1";
-        this.values = new HashMap();
+//        this.counter = "1";
+//        this.values = new HashMap();
+//        this.aliasName = null;
     }
     
     
@@ -145,6 +144,7 @@ public class SimpleQueryInterfaceForm extends ActionForm
         {
             String key = "SimpleConditionsNode:"+i+"_Condition_value";
             String enteredValue = (String)getValue(key);
+            String nextOperator = "SimpleConditionsNode:"+i+"_Operator_operator";
             if (validator.isEmpty(enteredValue))
             {
                 errors.add(ActionErrors.GLOBAL_ERROR, 
