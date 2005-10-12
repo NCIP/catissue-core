@@ -163,22 +163,7 @@ public class Utility
 			return false; 
 			
 	}
-	//	public static void main(String[] args)
-//  {
-//	    try{
-//	      String date = "2005-10-22";  
-//	      String pattern = "yyyy-MM-dd HH:mm aa";
-//	      Date d = parseDate(date,pattern);
-//	      String dd = parseDateToString(d,pattern);
-//	      System.out.println("Date........."+d);
-//	      System.out.println("String......."+dd);
-//	    }
-//	    catch(ParseException pexcp)
-//	    {
-//	        System.out.println("Exception"+pexcp.getMessage());
-//	    }
-//  }
-
+	
 	/**
      * Parses the fully qualified classname and returns only the classname.
      * @param fullyQualifiedName The fully qualified classname. 
@@ -196,4 +181,20 @@ public class Utility
             return fullyQualifiedName;
         }
     }
+	
+	//	public static void main(String[] args)
+//  {
+//	    try{
+//	      String date = "2005-10-22";  
+//	      String pattern = "yyyy-MM-dd HH:mm aa";
+//	      Date d = parseDate(date,pattern);
+//	      String dd = parseDateToString(d,pattern);
+//	      System.out.println("Date........."+d);
+//	      System.out.println("String......."+dd);
+//	    }
+//	    catch(ParseException pexcp)
+//	    {
+//	        System.out.println("Exception"+pexcp.getMessage());
+//	    }
+//  }
 }
