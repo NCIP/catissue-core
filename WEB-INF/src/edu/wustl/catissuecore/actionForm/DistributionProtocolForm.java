@@ -182,6 +182,12 @@ public class DistributionProtocolForm extends SpecimenProtocolForm
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.one.item.required",ApplicationProperties.getValue("distributionprotocol.specimenreq")));
 				}
                 
+				boolean bSpecimenClass = false;
+				boolean bSpecimenType = false;
+				boolean bTissueSite = false;
+				boolean bPathologyStatus = false;
+				boolean bQuantity = false;
+				
     			Iterator it = this.values.keySet().iterator();
     			while (it.hasNext())
     			{
@@ -189,46 +195,68 @@ public class DistributionProtocolForm extends SpecimenProtocolForm
     				String value = (String)values.get(key);
     				System.out.println(key+ " : " + value);
     				
-    				if(key.indexOf("specimenClass")!=-1 && !validator.isValidOption( value))
+    				if(!bSpecimenClass)
     				{
-    					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("collectionprotocol.specimenclass")));
-    				}
-    				
-    				if(key.indexOf("specimenType")!=-1 && !validator.isValidOption( value))
-    				{
-    					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("collectionprotocol.specimetype")));
-    				}
-    				
-    				if(key.indexOf("tissueSite")!=-1 && !validator.isValidOption( value))
-    				{
-    					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("collectionprotocol.specimensite")));
-    				}
-    				if(key.indexOf("pathologyStatus")!=-1 && !validator.isValidOption( value))
-    				{
-    					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("collectionprotocol.specimenstatus")));
-    				}
-    				
-    				if(key.indexOf("quantityIn")!=-1)
-    				{
-    					String classKey = key.substring(0,key.lastIndexOf("_") );
-    					classKey = classKey + "_specimenClass";
-    					String classValue = (String)getValue(classKey );
-    					if (classValue.trim().equals("Cell"))
+    					if(key.indexOf("specimenClass")!=-1 && !validator.isValidOption( value))
     					{
-            				if(key.indexOf("quantityIn")!=-1  && (validator.isEmpty(value) || !validator.isNumeric(value )))
-            				{
-            					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocol.quantity")));
-            				}
+    						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("collectionprotocol.specimenclass")));
+    						bSpecimenClass = true;
     					}
-    					else
+    				}
+    				
+    				if(!bSpecimenType )
+    				{
+    					if(key.indexOf("specimenType")!=-1 && !validator.isValidOption( value))
     					{
-   							if(key.indexOf("quantityIn")!=-1  && (validator.isEmpty(value) || !validator.isDouble(value )))
-	        				{
-	        					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocol.quantity")));
-	        				}
+    						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("collectionprotocol.specimetype")));
+    						bSpecimenType = true;
     					}
-    				} // if  quantity
-    			}
+    				}				
+
+    				if(!bTissueSite)
+    				{
+    					if(key.indexOf("tissueSite")!=-1 && !validator.isValidOption( value))
+    					{
+    						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("collectionprotocol.specimensite")));
+    						bTissueSite = true;
+    					}
+    				}
+
+    				if(!bPathologyStatus )
+    				{
+    					if(key.indexOf("pathologyStatus")!=-1 && !validator.isValidOption( value))
+    					{
+    						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("collectionprotocol.specimenstatus")));
+    						bPathologyStatus = true; 
+    					}
+    				}
+    					
+    				if(!bQuantity )
+    				{
+	    				if(key.indexOf("quantityIn")!=-1)
+	    				{
+	    					String classKey = key.substring(0,key.lastIndexOf("_") );
+	    					classKey = classKey + "_specimenClass";
+	    					String classValue = (String)getValue(classKey );
+	    					if (classValue.trim().equals("Cell"))
+	    					{
+	            				if(key.indexOf("quantityIn")!=-1  && (validator.isEmpty(value) || !validator.isNumeric(value )))
+	            				{
+	            					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocol.quantity")));
+	            					bQuantity = true;
+	            				}
+	    					}
+	    					else
+	    					{
+	   							if(key.indexOf("quantityIn")!=-1  && (validator.isEmpty(value) || !validator.isDouble(value )))
+		        				{
+		        					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocol.quantity")));
+		        					bQuantity = true;
+		        				}
+	    					}
+	    				} // if  quantity
+    				}
+   				}
 		}
 		catch (Exception excp)
 		{
