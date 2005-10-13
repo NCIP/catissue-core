@@ -32,13 +32,13 @@ import edu.wustl.catissuecore.query.SimpleQuery;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
 
+/**
+ * This is the Base action class the Distribution report actions
+ * @author Poornima Govindrao
+ *  
+ */
 public abstract class BaseDistributionReportAction extends BaseAction
 {
-	/**
-	 * This is the Base action class the Distribution report actions
-	 * @author Poornima Govindrao
-	 *  
-	 */
 	protected String []getColumnNames(String []selectedColumnsList)
 	{
 		String [] columnNames=new String[selectedColumnsList.length];

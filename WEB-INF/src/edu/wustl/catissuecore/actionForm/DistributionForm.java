@@ -95,6 +95,7 @@ public class DistributionForm extends SpecimenEventParametersForm
 				String key8 = "DistributedItem:"+i+"_Specimen_className";	
 				String key9 = "DistributedItem:"+i+"_availableQty";
 				String key10 = "DistributedItem:"+i+"_previousQuantity";
+				String key11 = "DistributedItem:"+i+"_Specimen_type";
 				
 				DistributedItem dItem = (DistributedItem)it.next();
 				Specimen specimen =dItem.getSpecimen();
@@ -113,6 +114,7 @@ public class DistributionForm extends SpecimenEventParametersForm
 				values.put(key8,specimen.getClassName());
 				values.put(key9,getAvailableQty(specimen));
 				values.put(key10,quantity);
+				values.put(key11,specimen.getType());
 				
 				i++;
 			}

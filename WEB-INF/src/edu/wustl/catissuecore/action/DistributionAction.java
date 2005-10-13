@@ -133,6 +133,7 @@ public class  DistributionAction extends SpecimenEventParametersAction
 			Logger.out.debug("SpecimenCharacteristics: "+specimenCharacteristics.getTissueSite()+","+
 					specimenCharacteristics.getTissueSide()+","+specimenCharacteristics.getPathologicalStatus());
 			dForm.setValue("DistributedItem:"+rowNo+"_Specimen_className",specimen.getClassName());
+			dForm.setValue("DistributedItem:"+rowNo+"_Specimen_type",specimen.getType());
 			dForm.setValue("DistributedItem:"+rowNo+"_tissueSite",specimenCharacteristics.getTissueSite());
 			dForm.setValue("DistributedItem:"+rowNo+"_tissueSide",specimenCharacteristics.getTissueSide());
 			dForm.setValue("DistributedItem:"+rowNo+"_pathologicalStatus",specimenCharacteristics.getPathologicalStatus());
