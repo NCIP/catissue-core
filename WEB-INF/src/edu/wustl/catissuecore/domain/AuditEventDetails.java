@@ -107,10 +107,10 @@ public class AuditEventDetails implements java.io.Serializable
 	public String toString()
 	{
 		return 
-			"SystemIdentifier "+systemIdentifier+"\t"+
-			"ElementName "+elementName +"\t"+
-			"PreviousValue "+previousValue+"\t"+
-			"CurrentValue "+currentValue;
+			"SystemIdentifier "+systemIdentifier+" "+
+			"ElementName "+elementName +" "+
+			"PreviousValue "+previousValue+" "+
+			"CurrentValue "+currentValue+"\n";
 	}
 	
 	public boolean equals(Object obj)

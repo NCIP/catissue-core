@@ -102,4 +102,9 @@ public class AuditEventLog implements java.io.Serializable
 	{
 		this.auditEventDetailsCollcetion = auditEventDetailsCollcetion;
 	}
+	
+	public String toString()
+	{
+		return systemIdentifier+" "+ objectIdentifier+" "+ObjectName+" "+eventType+" \n "+auditEventDetailsCollcetion;
+	}
 }
