@@ -275,6 +275,11 @@ public class UserBizLogic extends DefaultBizLogic
                 SecurityManager.getInstance(UserBizLogic.class).assignRoleToUser(
                         csmUser.getLoginName(), user.getRoleId());
             }
+            
+            
+            User oldUser = (User) oldObj;
+            dao.audit(user.getAddress(), oldUser.getAddress(),sessionDataBean,true);
+            dao.audit(obj, oldObj,sessionDataBean,true);
         }
         catch (SMException smExp)
         {

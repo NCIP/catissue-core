@@ -73,7 +73,12 @@ public class ParticipantBizLogic extends DefaultBizLogic
         
 		dao.update(participant, sessionDataBean, true, true, false);
 		
-		Collection participantMedicalIdentifierCollection = participant.getParticipantMedicalIdentifierCollection();		
+		//Audit of Participant.
+		dao.audit(obj, oldObj, sessionDataBean, true);
+		Participant oldParticipant = (Participant) oldObj;
+		Collection oldParticipantMedicalIdentifierCollection = (Collection)oldParticipant.getParticipantMedicalIdentifierCollection();
+		
+		Collection participantMedicalIdentifierCollection = participant.getParticipantMedicalIdentifierCollection();
 		Iterator it = participantMedicalIdentifierCollection.iterator();
 		
 		while(it.hasNext())
@@ -81,6 +86,13 @@ public class ParticipantBizLogic extends DefaultBizLogic
 			ParticipantMedicalIdentifier pmIdentifier = (ParticipantMedicalIdentifier)it.next();
 			pmIdentifier.setParticipant(participant);
 			dao.update(pmIdentifier, sessionDataBean, true, true, false);
+			
+			//Audit of ParticipantMedicalIdentifier.
+			ParticipantMedicalIdentifier oldPmIdentifier 
+					= (ParticipantMedicalIdentifier)getCorrespondingOldObject(oldParticipantMedicalIdentifierCollection, 
+					        pmIdentifier.getSystemIdentifier());
+			
+			dao.audit(pmIdentifier, oldPmIdentifier, sessionDataBean, true);
 		}
 		
 		//Disable the associate collection protocol registration

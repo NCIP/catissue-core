@@ -106,11 +106,22 @@ public class DistributionBizLogic extends DefaultBizLogic
 		Distribution distribution = (Distribution)obj;
 		dao.update(obj, sessionDataBean, true, true, false);
 		
+		//Audit of Distribution.
+		dao.audit(obj, oldObj, sessionDataBean, true);
+		
+		Distribution oldDistribution = (Distribution)oldObj;
+		Collection oldDistributedItemCollection = oldDistribution.getDistributedItemCollection();
+		
 		Collection distributedItemCollection = distribution.getDistributedItemCollection();		
 		Iterator it = distributedItemCollection.iterator();
 		while(it.hasNext())
 		{
 			DistributedItem item = (DistributedItem)it.next();
+			
+			DistributedItem oldItem 
+				= (DistributedItem)getCorrespondingOldObject(oldDistributedItemCollection, 
+				        item.getSystemIdentifier());
+			
 			//update the available quantity
 			Object specimenObj = dao.retrieve(Specimen.class.getName(), item.getSpecimen().getSystemIdentifier());
 	        Double previousQuantity = (Double)item.getPreviousQuantity();
@@ -125,10 +136,16 @@ public class DistributionBizLogic extends DefaultBizLogic
 			else
 			{
 				dao.update(specimenObj,sessionDataBean,true,true,false);
+				
+				//Audit of Specimen.
+				dao.audit(specimenObj, oldItem.getSpecimen(), sessionDataBean, true);
 			}
 			item.setDistribution(distribution);
 			
 			dao.update(item, sessionDataBean, true, true, false);
+			
+			//Audit of Distributed Item.
+			dao.audit(item, oldItem, sessionDataBean, true);
 		}
     }
 	public boolean checkAvailableQty(Specimen specimen, double quantity)

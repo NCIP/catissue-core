@@ -59,5 +59,8 @@ public class ReportedProblemBizLogic extends DefaultBizLogic
     {
         ReportedProblem reportedProblem = (ReportedProblem) obj;
         dao.update(obj, sessionDataBean, true,true, false);
+        
+        //Audit.
+        dao.audit(obj, oldObj, sessionDataBean, true);
     }
 }

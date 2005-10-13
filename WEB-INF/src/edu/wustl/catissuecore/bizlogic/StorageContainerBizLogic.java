@@ -203,18 +203,18 @@ public class StorageContainerBizLogic extends DefaultBizLogic
             	Logger.out.debug("Loading ParentContainer: "+container.getParentContainer().getSystemIdentifier());
     			
             	StorageContainer pc = (StorageContainer) dao.retrieve(StorageContainer.class.getName(), container.getParentContainer().getSystemIdentifier());
-//            	 check for closed ParentContainer
+            	//check for closed ParentContainer
     			checkStatus(dao, pc, "Parent Container" );
     			
                 container.setParentContainer(pc);
-//              check for closed Site
+                //check for closed Site
                	checkStatus(dao, pc.getSite(), "Parent Site" );
 
                	container.setSite(pc.getSite());
         	}
         }
         
-//      check for closed Site
+        //check for closed Site
         if((container.getSite() !=null) && (oldContainer.getSite() != null) )
         {
             if((container.getSite().getSystemIdentifier() !=null) && (oldContainer.getSite().getSystemIdentifier() != null) )
@@ -228,14 +228,26 @@ public class StorageContainerBizLogic extends DefaultBizLogic
         setSiteForSubContainers(container, container.getSite());
         
         dao.update(container, sessionDataBean, true, true, false);
+        
+        //Audit of update of storage container.
+        dao.audit(obj, oldObj, sessionDataBean, true);
 
         Collection storageContainerDetailsCollection = container.getStorageContainerDetailsCollection();
+        StorageContainer oldStorageContainer = (StorageContainer) oldObj; 
+        Collection oldStorageContainerDetailsCollection = oldStorageContainer.getStorageContainerDetailsCollection(); 
         Iterator it = storageContainerDetailsCollection.iterator();
         while (it.hasNext())
         {
             StorageContainerDetails storageContainerDetails = (StorageContainerDetails) it.next();
             storageContainerDetails.setStorageContainer(container);
             dao.update(storageContainerDetails, sessionDataBean, true, true, false);
+            StorageContainerDetails oldStorageContainerDetails 
+            						= (StorageContainerDetails)
+            							getCorrespondingOldObject
+            								(oldStorageContainerDetailsCollection, 
+            								        storageContainerDetails.getSystemIdentifier());
+            
+            dao.audit(storageContainerDetails, oldStorageContainerDetails, sessionDataBean, true);
         }
         
         Logger.out.debug("container.getActivityStatus() "+ container.getActivityStatus());

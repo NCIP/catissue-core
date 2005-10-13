@@ -78,6 +78,11 @@ public class SiteBizLogic extends DefaultBizLogic
 		
 		dao.update(site.getAddress(), sessionDataBean, true, true, false);
 	    dao.update(site, sessionDataBean, true, true, false);
+	    
+	    //Audit of update.
+	    Site oldSite = (Site) oldObj;
+	    dao.audit(site.getAddress(), oldSite.getAddress(), sessionDataBean, true);
+	    dao.audit(obj, oldObj, sessionDataBean, true);
     }
 	
 	// This method sets the cordinator for a particular site.

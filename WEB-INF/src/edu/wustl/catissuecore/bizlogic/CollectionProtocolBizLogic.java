@@ -114,12 +114,25 @@ public class CollectionProtocolBizLogic extends DefaultBizLogic implements Roles
 		
 		dao.update(collectionProtocol, sessionDataBean, true, true, false);
 		
+		//Audit of Collection Protocol.
+		CollectionProtocol oldCollectionProtocol = (CollectionProtocol)oldObj;
+		dao.audit(obj, oldObj, sessionDataBean, true);
+		
+		Collection oldCollectionProtocolEventCollection 
+				= oldCollectionProtocol.getCollectionProtocolEventCollection();  
+		
 		it = collectionProtocol.getCollectionProtocolEventCollection().iterator();		
 		while(it.hasNext())
 		{
 			CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent)it.next();
 			collectionProtocolEvent.setCollectionProtocol(collectionProtocol);
 			dao.update(collectionProtocolEvent, sessionDataBean, true, true, false);
+			
+			//Audit of collectionProtocolEvent
+			CollectionProtocolEvent oldCollectionProtocolEvent 
+						= (CollectionProtocolEvent)getCorrespondingOldObject(oldCollectionProtocolEventCollection, 
+						        collectionProtocolEvent.getSystemIdentifier());
+			dao.audit(collectionProtocolEvent, oldCollectionProtocolEvent, sessionDataBean, true);
 			
 			Iterator srIt = collectionProtocolEvent.getSpecimenRequirementCollection().iterator();
 			while(srIt.hasNext())

@@ -6,12 +6,15 @@
  */
 package edu.wustl.catissuecore.bizlogic;
 
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
 import edu.wustl.catissuecore.dao.AbstractDAO;
 import edu.wustl.catissuecore.dao.DAO;
 import edu.wustl.catissuecore.dao.DAOFactory;
+import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.NameValueBean;
@@ -295,5 +298,20 @@ public class  DefaultBizLogic extends AbstractBizLogic
         {
             SecurityManager.getInstance(this.getClass()).assignPrivilegeToGroup(privilegeName,objectType,objectIds,roleId);
         }
+    }
+    
+    protected Object getCorrespondingOldObject(Collection objectCollection, Long systemIdentifier)
+    {
+        Iterator iterator = objectCollection.iterator();
+        while (iterator.hasNext())
+        {
+            AbstractDomainObject abstractDomainObject = (AbstractDomainObject) iterator.next();
+            if (abstractDomainObject.getSystemIdentifier().equals(systemIdentifier))
+            {
+                return abstractDomainObject;
+            }
+        }
+        
+        return null;
     }
 }

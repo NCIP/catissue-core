@@ -107,6 +107,9 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 		//Update registration
 		dao.update(collectionProtocolRegistration, sessionDataBean, true, true, false);
 		
+		//Audit.
+		dao.audit(obj, oldObj, sessionDataBean, true);
+		
 		//Disable all specimen Collection group under this registration. 
 		Logger.out.debug("collectionProtocolRegistration.getActivityStatus() "+collectionProtocolRegistration.getActivityStatus());
 		if(collectionProtocolRegistration.getActivityStatus().equals(Constants.ACTIVITY_STATUS_DISABLED))

@@ -47,5 +47,10 @@ public class StorageTypeBizLogic extends DefaultBizLogic
 
 		dao.update(type.getDefaultStorageCapacity(), sessionDataBean, true, true, false);
 	    dao.update(type, sessionDataBean, true, true, false);
+	    
+	    //Audit of update.
+	    StorageType oldStorageType = (StorageType) oldObj;
+	    dao.audit(type.getDefaultStorageCapacity(), oldStorageType.getDefaultStorageCapacity(), sessionDataBean, true);
+	    dao.audit(obj, oldObj, sessionDataBean, true);
     }
 }

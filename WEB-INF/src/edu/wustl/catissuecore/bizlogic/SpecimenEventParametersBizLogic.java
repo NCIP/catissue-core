@@ -155,5 +155,8 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 			
 			//Update registration
 			dao.update(specimenEventParameters, sessionDataBean, true, true, false);
+			
+			//Audit.
+			dao.audit(obj, oldObj, sessionDataBean, true);
 		}
 }

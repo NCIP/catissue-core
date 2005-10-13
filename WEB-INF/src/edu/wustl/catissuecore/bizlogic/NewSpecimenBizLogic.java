@@ -194,6 +194,11 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		//dao.update(specimen.getSpecimenCharacteristics(), sessionDataBean, true, true, false);
 		dao.update(specimen, sessionDataBean, true, true, false);
 		
+		//Audit of Specimen.
+		dao.audit(obj, oldObj, sessionDataBean, true);
+		
+		Collection oldExternalIdentifierCollection = specimenOld.getExternalIdentifierCollection();
+		
 		Collection externalIdentifierCollection = specimen.getExternalIdentifierCollection();
 		if(externalIdentifierCollection != null)
 		{
@@ -203,6 +208,10 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 				ExternalIdentifier exId = (ExternalIdentifier)it.next();
 				exId.setSpecimen(specimen);
 				dao.update(exId, sessionDataBean, true, true, false);
+				
+				ExternalIdentifier oldExId = (ExternalIdentifier)
+					getCorrespondingOldObject(oldExternalIdentifierCollection, exId.getSystemIdentifier());
+				dao.audit(exId, oldExId, sessionDataBean, true);
 			}
 		}
 		

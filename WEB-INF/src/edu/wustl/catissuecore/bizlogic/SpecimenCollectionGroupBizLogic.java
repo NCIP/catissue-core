@@ -160,6 +160,12 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		dao.update(specimenCollectionGroup, sessionDataBean, true, true, false);
 		dao.update(specimenCollectionGroup.getClinicalReport(), sessionDataBean, true, true, false);
 		
+		//Audit.
+		dao.audit(obj, oldObj, sessionDataBean, true);
+		SpecimenCollectionGroup oldSpecimenCollectionGroup = (SpecimenCollectionGroup) oldObj;
+		dao.audit(specimenCollectionGroup.getClinicalReport(), 
+		        oldspecimenCollectionGroup.getClinicalReport(), sessionDataBean, true);
+		
 		//Disable the related specimens to this specimen group
 		Logger.out.debug("specimenCollectionGroup.getActivityStatus() "+specimenCollectionGroup.getActivityStatus());
 		if(specimenCollectionGroup.getActivityStatus().equals(Constants.ACTIVITY_STATUS_DISABLED))

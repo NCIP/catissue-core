@@ -135,5 +135,7 @@ public class SignUpUserBizLogic extends DefaultBizLogic
         SignUpUser user = (SignUpUser) obj;
         dao.update(user, sessionDataBean, true,true, false);
         
+        //Audit of update.
+        dao.audit(obj, oldObj, sessionDataBean, true);
     }
 }

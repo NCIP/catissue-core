@@ -10,6 +10,7 @@
 
 package edu.wustl.catissuecore.bizlogic;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -84,6 +85,11 @@ public class DistributionProtocolBizLogic extends DefaultBizLogic
     	
 		setPrincipalInvestigator(dao,distributionProtocol);
 		dao.update(distributionProtocol, sessionDataBean, true, true, false);
+		
+		//Audit of Distribution Protocol.
+		dao.audit(obj, oldObj, sessionDataBean, true);
+		
+		Collection oldSpecimenRequirementCollection = distributionProtocolOld.getSpecimenRequirementCollection();
 
 		Iterator it = distributionProtocol.getSpecimenRequirementCollection().iterator();
 		while(it.hasNext())
@@ -91,6 +97,12 @@ public class DistributionProtocolBizLogic extends DefaultBizLogic
 			SpecimenRequirement specimenRequirement = (SpecimenRequirement)it.next();
 			specimenRequirement.getDistributionProtocolCollection().add(distributionProtocol);
 			dao.update(specimenRequirement, sessionDataBean, true, true, false);
+			
+			SpecimenRequirement oldSpecimenRequirement 
+				= (SpecimenRequirement)getCorrespondingOldObject(oldSpecimenRequirementCollection, 
+				        specimenRequirement.getSystemIdentifier());
+			
+			dao.audit(specimenRequirement, oldSpecimenRequirement, sessionDataBean, true);
 		}
 		
 		Logger.out.debug("distributionProtocol.getActivityStatus() "+distributionProtocol.getActivityStatus());
