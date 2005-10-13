@@ -292,6 +292,22 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 		try
 		{
 			setRedirectValue(validator);
+			// ---------START --------------------------------------
+				if(values.isEmpty() )
+				{
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocol.eventtitle")));						
+				}
+			// check for atleast 1 specimen requirement per CollectionProtocol Event
+				for(int i=1;i<=outerCounter;i++ )
+				{
+					String className = "CollectionProtocolEvent:"+i+"_SpecimenRequirement:1_specimenClass";
+					Object obj = getValue( className  );
+					if(obj == null )
+					{
+						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocol.specimenreq")));						
+					}
+				}
+			// ---------END-----------------------------------------
 			 if(this.protocolCoordinatorIds == null || this.protocolCoordinatorIds.length <1)
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("collectionprotocol.protocolcoordinator")));
