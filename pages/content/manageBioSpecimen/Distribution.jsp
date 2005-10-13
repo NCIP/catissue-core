@@ -60,11 +60,8 @@
 			//spreqno.innerHTML="" + sname;
 			var identifier = "value(DistributedItem:" + rowno +"_systemIdentifier)";
 			var cell1 = "<input type='hidden' name='" + identifier + "' value='' id='" + identifier + "'>";
-			var className = "value(DistributedItem:" + rowno +"_Specimen_className)";
-			var cell2 = "<input type='hidden' name='" + className + "' value='' id='" + className + "'>";
 			
-			
-			spreqno.innerHTML="" + rowno+"." + cell1 + cell2 ;
+			spreqno.innerHTML="" + rowno+"." + cell1 ;
 
 			//Second Cell
 			var spreqidentifier=x.insertCell(1);
@@ -85,27 +82,39 @@
 			spreqidentifier.innerHTML="" + sname;
 	
 			//Third Cell
-			var spreqtissueSite=x.insertCell(2);
+			var spreqclassname=x.insertCell(2);
+			spreqclassname.className="formField";
+			sname="";
+			var className = "value(DistributedItem:" + rowno +"_Specimen_className)";
+			sname="<input type='text' name='" + className + "' class='formField' id='" + className + "'>";
+			spreqclassname.innerHTML="" + sname;
+			
+			//Fourth Cell
+			var spreqtype=x.insertCell(3);
+			spreqtype.className="formField";
+			sname="";
+			var type = "value(DistributedItem:"+rowno+"_Specimen_type)";
+			sname="<input type='text' name='" + type + "' class='formField' id='" + type + "'>";
+			spreqtype.innerHTML="" + sname;
+			
+			//Fifth Cell
+			var spreqtissueSite=x.insertCell(4);
 			spreqtissueSite.className="formField";
 			sname="";
-		
 			name = "value(DistributedItem:" + rowno + "_tissueSite)";
-			sname= "";
 			sname="<input type='text' name='" + name + "' class='formField' id='" + name + "'>";
 			spreqtissueSite.innerHTML="" + sname;
 			
-			//Fourth Cell
-			var spreqtissueSide=x.insertCell(3);
+			//Sixh Cell
+			var spreqtissueSide=x.insertCell(5);
 			spreqtissueSide.className="formField";
-			sname="";
-		
 			name = "value(DistributedItem:" + rowno + "_tissueSide)";
 			sname= "";
 			sname="<input type='text' name='" + name + "'   class='formField' id='" + name + "'>";
 			spreqtissueSide.innerHTML="" + sname;
 			
-			//Fifth Cell
-			var spreqpathologicalStatus=x.insertCell(4);
+			//Seventh Cell
+			var spreqpathologicalStatus=x.insertCell(6);
 			spreqpathologicalStatus.className="formField";
 			sname="";
 		
@@ -114,8 +123,8 @@
 			sname="<input type='text' name='" + name + "' class='formField' id='" + name + "'>";
 			spreqpathologicalStatus.innerHTML="" + sname;
 
-			//Sixh Cell
-			var spreqAvailqty=x.insertCell(5);
+			//Eighth Cell
+			var spreqAvailqty=x.insertCell(7);
 			spreqAvailqty.className="formField";
 			sname="";
 		
@@ -126,8 +135,8 @@
 			sname = sname + "<input type='hidden' name='" + previousQuantity + "' value='' id='" + previousQuantity + "'>";
 			spreqAvailqty.innerHTML="" + sname;
 			
-			//Seventh Cell
-			var spreqquantity=x.insertCell(6);
+			//Ninth Cell
+			var spreqquantity=x.insertCell(8);
 			spreqquantity.className="formField";
 			sname="";
 		
@@ -139,8 +148,8 @@
 			sname = sname + "&nbsp;<span id='"+unitName+"'>&nbsp;</span>";
 			spreqquantity.innerHTML="" + sname;
 			
-			//Eighth  Cell
-			var checkb=x.insertCell(7);
+			//Tenth  Cell
+			var checkb=x.insertCell(9);
 			checkb.className="formField";
 			checkb.colSpan=2;
 			sname="";
@@ -174,16 +183,32 @@
         }
 		
 		String pageOf = (String)request.getAttribute(Constants.PAGEOF);
-
+	
 		Object obj = request.getAttribute("distributionForm");
 		int noOfRows=1;
 		Map map =null;
+
 		if(obj != null && obj instanceof DistributionForm)
 		{
 			DistributionForm form = (DistributionForm)obj;
 			noOfRows = form.getCounter();
 			map = form.getValues();
 		}
+		String reqPath = (String)request.getAttribute(Constants.REQ_PATH);
+		String appendingPath = "/Distribution.do?operation=add&pageOf=pageOfDistribution";
+		if (reqPath != null)
+			appendingPath = reqPath + "|/Distribution.do?operation=add&pageOf=pageOfDistribution";
+	
+	   	if(!operation.equals("add") )
+	   	{
+	   		Object obj1 = request.getAttribute("distributionForm");
+			if(obj1 != null && obj1 instanceof DistributionForm)
+			{
+				DistributionForm form1 = (DistributionForm)obj1;
+		   		appendingPath = "/DistributionSearch.do?operation=search&pageOf=pageOfDistribution&systemIdentifier="+form1.getSystemIdentifier() ;
+		   	}
+	   	}
+				
 %>	
 			
 <html:errors/>
@@ -295,6 +320,14 @@
 				<html:select property="fromSite" styleClass="formFieldSized" styleId="fromSite" size="1">
 					<html:options collection="<%=Constants.FROMSITELIST%>" labelProperty="name" property="value"/>
 				</html:select>
+				&nbsp;
+				<%
+					String urlToGo = "/Site.do?operation=add&pageOf=pageOfSite";
+					String onClickPath = "changeUrl(this,'"+appendingPath+"')";
+				%>
+				<html:link page="<%=urlToGo%>" styleId="newSite" onclick="<%=onClickPath%>">
+					<bean:message key="buttons.addNew" />
+ 				</html:link>
 
 			</td>
 		</tr>
@@ -310,7 +343,10 @@
 				<html:select property="toSite" styleClass="formFieldSized" styleId="toSite" size="1">
 					<html:options collection="<%=Constants.TOSITELIST%>" labelProperty="name" property="value"/>
 				</html:select>
-
+				&nbsp;
+			<html:link page="<%=urlToGo%>" styleId="newSite" onclick="<%=onClickPath%>">
+					<bean:message key="buttons.addNew" />
+ 				</html:link>
 			</td>
 		</tr>				
 		
@@ -354,7 +390,7 @@
 	<table summary="" cellpadding="3" cellspacing="0" border="0" width="433">
 <!--  Distributed Item begin here -->
 				 <tr>
-				     <td class="formTitle" height="20" colspan="6">
+				     <td class="formTitle" height="20" colspan="8">
 				     	<bean:message key="distribution.distributedItem"/>
 				     </td>
 				     <td class="formButtonField">
@@ -373,8 +409,15 @@
 				 	<td class="formSerialNumberLabel" width="5">
 				     	#
 				    </td>
-					<td class="formLeftSubTitle">
+				    
+					<td class="formLeftSubTitle">*
 						<bean:message key="itemrecord.specimenId"/>
+					</td>
+					<td class="formLeftSubTitle">
+						<bean:message key="specimen.type"/>
+					</td>
+					<td class="formLeftSubTitle">
+						<bean:message key="specimen.subType"/>
 					</td>
 					<td class="formLeftSubTitle">
 						<bean:message key="specimen.tissueSite"/>
@@ -388,7 +431,8 @@
 					<td class="formLeftSubTitle">
 						<bean:message key="specimen.availableQuantity"/>
 					</td>
-					<td class="formLeftSubTitle">
+					
+					<td class="formLeftSubTitle">*
 						<bean:message key="itemrecord.quantity"/>
 					</td>
 					<td class="formRightSubTableTitle">
@@ -411,6 +455,7 @@
 					String pathologicalStatus = "value(DistributedItem:"+i+"_pathologicalStatus)";					
 					String unitSpan = "value(DistributedItem:"+i+"_unitSpan)";
 					String className = "value(DistributedItem:"+i+"_Specimen_className)";
+					String type = "value(DistributedItem:"+i+"_Specimen_type)";
 					String previousQuantity = "value(DistributedItem:"+i+"_previousQuantity)";
 					String key = "DistributedItem:" + i + "_Specimen_className";
 					//String unitKey = "DistributedItem:" + i + "_unit";
@@ -429,13 +474,19 @@
 				 	
 				 	<html:hidden property="<%=dIdentifier%>" />	
 				 	
-					<input type="hidden" property="<%=className%>" id="<%=className%>" />
+					
 				 	</td>
 				 	<td class="formField">
 						<html:select property="<%=itemName%>" styleClass="formField" styleId="<%=itemName%>" size="1" onchange="onSpecimenIdChange(this)">
 							<html:options collection="<%=Constants.SPECIMEN_ID_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
 					</td>
+					<td class="formField">
+				     	<html:text styleClass="formField"  styleId="<%=className%>" property="<%=className%>" readonly="true"/>
+				    </td>
+				    <td class="formField">
+				     	<html:text styleClass="formField"  styleId="<%=type%>" property="<%=type%>" readonly="true"/>
+				    </td>
 				    <td class="formField">
 				     	<html:text styleClass="formField"  styleId="<%=tissueSite%>" property="<%=tissueSite%>" readonly="true"/>
 				    </td>
@@ -449,7 +500,7 @@
 				     	<html:text styleClass="formFieldSized5" size="30" styleId="<%=availableQuantity%>" property="<%=availableQuantity%>" readonly="true"/>
 						<html:hidden property="<%=previousQuantity%>" />	
 				    </td>
-				    <td class="formField">
+				    <td class="formField" nowrap>
 				     	<html:text styleClass="formFieldSized5" size="30" styleId="<%=quantity%>" property="<%=quantity%>" disabled="<%=readOnlyForAll%>" readonly="<%=readOnlyForAll%>"/>
 				     	<span id="<%=unitSpan%>">&nbsp;<%=strUnitValue%></span>
 				    </td>
