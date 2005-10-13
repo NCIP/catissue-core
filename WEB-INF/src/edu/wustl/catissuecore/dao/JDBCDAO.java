@@ -479,4 +479,9 @@ public class JDBCDAO extends AbstractDAO
 	{
     	return null; 
 	}
+    
+    public void audit(Object obj, Object oldObj, SessionDataBean sessionDataBean, boolean isAuditable) throws DAOException
+    {
+        
+    }
 }

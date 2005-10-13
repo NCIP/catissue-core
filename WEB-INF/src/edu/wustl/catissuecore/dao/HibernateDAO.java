@@ -185,7 +185,7 @@ public class HibernateDAO extends AbstractDAO
      * @throws HibernateException Exception thrown during hibernate operations.
      */
     public void insert(Object obj, SessionDataBean sessionDataBean,
-            boolean isToAudit, boolean isSecureInsert) throws DAOException, UserNotAuthorizedException
+            boolean isAuditable, boolean isSecureInsert) throws DAOException, UserNotAuthorizedException
     {
         boolean isAuthorized = true;
         try
@@ -216,15 +216,13 @@ public class HibernateDAO extends AbstractDAO
             if(isAuthorized)
             {
                 session.save(obj);
-                if (obj instanceof Auditable && isToAudit)
+                if (obj instanceof Auditable && isAuditable)
                     auditManager.compare((Auditable) obj, null, "INSERT");
             }
             else
             {
                 throw new UserNotAuthorizedException("Not Authorized to insert");
             }
-
-           
         }
         catch (HibernateException hibExp)
         {
@@ -347,6 +345,24 @@ public class HibernateDAO extends AbstractDAO
         	throw handleError("", smex);
         }
     }
+    
+    public void audit(Object obj, Object oldObj, SessionDataBean sessionDataBean, boolean isAuditable) throws DAOException
+    {
+        try
+        {
+            if (obj instanceof Auditable && isAuditable)
+            {
+                Logger.out.debug("In update audit...................................");
+                auditManager.compare((Auditable) obj, (Auditable)oldObj, "UPDATE");
+            }
+                
+        }
+        catch (AuditException hibExp)
+        {
+            throw handleError("", hibExp);
+        }
+    }
+    
 
     /**
      * Deletes the persistent object from the database.

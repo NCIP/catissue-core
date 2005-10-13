@@ -47,6 +47,8 @@ public interface DAO
      */
 	public abstract void delete (Object obj)throws DAOException;	
 	
+	public void audit(Object obj, Object oldObj, SessionDataBean sessionDataBean, boolean isAuditable) throws DAOException;
+	
 	/**
 	 * Retrive and returns the list of all source objects that satisfy the  
 	 * for given conditions on a various columns.
