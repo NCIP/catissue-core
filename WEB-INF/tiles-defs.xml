@@ -227,6 +227,10 @@
 	<definition name=".catissuecore.queryDataViewDef" path="/pages/content/search/ContentLayout.jsp">
 	</definition>
 	
+	<definition name=".catissuecore.commonErrorDetailsDef" extends=".catissuecore.queryDataViewDef">
+		<put name="content" value="/pages/common/ErrorDetails.jsp" />
+	</definition>
+	
 	<definition name=".catissuecore.editSearchResultsDef" extends=".catissuecore.manageAdminDataHomeDef">
 		<put name="content" value="/pages/content/search/DataView.jsp" />
 	</definition>

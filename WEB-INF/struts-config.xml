@@ -1828,6 +1828,7 @@ PUBLIC
 		<action path="/ShowStorageGridView"
 		    type="edu.wustl.catissuecore.action.ShowStorageGridViewAction">
 			<forward name="success" path=".catissuecore.storageLocationGridViewDef"/>
+			<forward name="failure" path=".catissuecore.commonErrorDetailsDef"/>
 		</action>
 		
 		<action path="/SearchObject"
