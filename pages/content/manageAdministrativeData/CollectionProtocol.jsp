@@ -84,13 +84,18 @@
 
 // variable to count the oter blocks
 var insno=1;
-
+var tblColor = "#123456";
 function addBlock(div,d0)
 {
 var val = parseInt(document.forms[0].outerCounter.value);
 		val = val + 1;
 		document.forms[0].outerCounter.value = val;
 		
+		if(val%2 == 0)
+			tblColor = "<%=Constants.EVEN_COLOR%>";
+		else
+			tblColor = "<%=Constants.ODD_COLOR%>";
+//	alert("tblcolor : " + tblColor + " || val : "+ val  );	
 	var y = div.innerHTML;
 	var z = d0.innerHTML;
 						//	insno =insno + 1;
@@ -103,6 +108,9 @@ var val = parseInt(document.forms[0].outerCounter.value);
 	}
 //	div.innerHTML = div.innerHTML +z;
 	div.innerHTML = z + div.innerHTML ;
+	
+	var tb = document.getElementById("itable_"+val);
+	tb.bgColor = tblColor;
 }
 
 function addDiv(div,adstr)
@@ -133,7 +141,7 @@ function insRow(subdivtag,iCounter,blockCounter)
 
 	// srno
 	var spreqno=x.insertCell(0)
-	spreqno.className="tabrightmostcell";
+	spreqno.className="tabrightmostcellAddMore";
 	var rowno=(q);
 	var srIdentifier = subdivname + "_SpecimenRequirement:" + rowno + "_systemIdentifier)";
 	var cell1 = "<input type='hidden' name='" + srIdentifier + "' value='' id='" + srIdentifier + "'>";
@@ -141,7 +149,7 @@ function insRow(subdivtag,iCounter,blockCounter)
 	
 	//type
 	var spreqtype=x.insertCell(1)
-	spreqtype.className="formField";
+	spreqtype.className="formFieldAddMore";
 	sname="";
 	objname = subdivname + "_SpecimenRequirement:" + rowno + "_specimenClass)";
 	
@@ -162,7 +170,7 @@ function insRow(subdivtag,iCounter,blockCounter)
 	
 	//subtype
 	var spreqsubtype=x.insertCell(2)
-	spreqsubtype.className="formField";
+	spreqsubtype.className="formFieldAddMore";
 	sname="";
 	objname = subdivname + "_SpecimenRequirement:"+rowno+"_specimenType)";
 	var functionName = "onSubTypeChangeUnit('" + specimenClassName + "',this,'" + objunit + "')" ;
@@ -177,7 +185,7 @@ function insRow(subdivtag,iCounter,blockCounter)
 	
 	//tissuesite
 	var spreqtissuesite=x.insertCell(3)
-	spreqtissuesite.className="formField";
+	spreqtissuesite.className="formFieldAddMore";
 	sname="";
 	objname = subdivname + "_SpecimenRequirement:"+rowno+"_tissueSite)";
 	
@@ -195,7 +203,7 @@ function insRow(subdivtag,iCounter,blockCounter)
 	
 	//pathologystatus
 	var spreqpathologystatus=x.insertCell(4)
-	spreqpathologystatus.className="formField";
+	spreqpathologystatus.className="formFieldAddMore";
 	
 	sname="";
 	objname = subdivname + "_SpecimenRequirement:"+rowno+"_pathologyStatus)";
@@ -211,7 +219,7 @@ function insRow(subdivtag,iCounter,blockCounter)
 	
 	//qty
 	var spreqqty=x.insertCell(5)
-	spreqqty.className="formField";
+	spreqqty.className="formFieldAddMore";
 	sname="";
 	objname = subdivname + "_SpecimenRequirement:"+rowno+"_quantityIn)";
 
@@ -222,7 +230,7 @@ function insRow(subdivtag,iCounter,blockCounter)
 	
 	//Fourth Cell
 	var checkb=x.insertCell(6);
-	checkb.className="formField";
+	checkb.className="formFieldAddMore";
 	checkb.colSpan=2;
 	sname="";
 	var name = "chk_spec_"+ blockCounter +"_"+rowno;
@@ -537,21 +545,23 @@ function getSubDivCount(subdivtag)
 				if(o!=null)
 					maxIntCount = Integer.parseInt(o.toString());
 			}
-
+		String tblColor = Constants.ODD_COLOR;
+		if(counter%2 == 0)
+			tblColor = Constants.EVEN_COLOR;
 						
 %>
 <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="100%" id="<%=tableId%>">
 <tr><td>
-<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
+<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%" bgColor="<%=tblColor%>"  id="i<%=tableId%>">
 	<tr>
-		<td rowspan=2 class="tabrightmostcell"><%=counter%></td>
-		<td class="formField">
+		<td rowspan=2 class="tabrightmostcellAddMore"><%=counter%></td>
+		<td class="formFieldAddMore">
 			<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
 				<tr>
-					<td class="formRequiredNotice" width="5">*
+					<td class="formRequiredNoticeAddMore" width="5">*
 						<html:hidden property="<%=cpeIdentifier%>" />
 					</td>
-					<td class="formRequiredLabel" width="32%">
+					<td class="formRequiredLabelAddMore" width="32%">
 					<%
 						String fldName = commonLabel + "_clinicalStatus)";
 					%>
@@ -560,7 +570,7 @@ function getSubDivCount(subdivtag)
 						</label>
 					</td>
 					
-					<td class="formField" colspan=2>
+					<td class="formFieldAddMore" colspan=2>
 						<html:select property="<%=fldName%>" styleClass="formField" styleId="<%=fldName%>" size="1">
 							<html:options collection="<%=Constants.CLINICAL_STATUS_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
@@ -568,7 +578,7 @@ function getSubDivCount(subdivtag)
 				</tr>
 				
 			    <tr>
-					<td class="formRequiredNotice" width="5">*</td>
+					<td class="formRequiredNoticeAddMore" width="5">*</td>
 					<%
 						fldName="";
 						fldName = commonLabel + "_studyCalendarEventPoint)";
@@ -581,13 +591,13 @@ function getSubDivCount(subdivtag)
 						
 					%>
 
-			        <td colspan="1" class="formRequiredLabel">
+			        <td colspan="1" class="formRequiredLabelAddMore">
 			        	<label for="<%=fldName%>">
 							<bean:message key="collectionprotocol.studycalendartitle" />
 						</label>
 			        </td>
 			        
-			        <td colspan="2" class="formField">
+			        <td colspan="2" class="formFieldAddMore">
 			        	<html:text styleClass="formFieldSized5" size="30" 
 			        			styleId="<%=fldName%>" 
 			        			property="<%=fldName%>" 
@@ -608,18 +618,18 @@ function getSubDivCount(subdivtag)
 			    </tr>
 			</TABLE>
 		</td>
-		<td rowspan=2 class="tabrightmostcell">
+		<td rowspan=2 class="tabrightmostcellAddMore">
 			<input type=checkbox name="<%=check%>" id="<%=check %>" <%=outerCondition%>>		
 		</td>
 	</tr>
 
 	<!-- 2nd row -->
 	<tr>
-		<td class="formField">
+		<td class="formFieldAddMore">
 			<table summary="" cellpadding="3" cellspacing="0" border="0" width=100%>
 			    <tr>
 			        <td colspan="5" class="formTitle">
-			        	<b>SPECIMEN REQUIREMENTS</b>
+			        	<b><bean:message key="collectionprotocol.specimenreq"/></b>
 			        </td>
 			        <td class="formTitle">	
 			     		<html:button property="addSpecimenReq" styleClass="actionButton" value="Add More" onclick="<%=functionName%>"/>
@@ -674,7 +684,7 @@ function getSubDivCount(subdivtag)
 				%>
 				
 				<TR>	<!-- SPECIMEN REQ DATA -->
-			        <td class="tabrightmostcell"><%=innerCounter%>.</td>
+			        <td class="tabrightmostcellAddMore"><%=innerCounter%>.</td>
 			        <%
 						String cName="";
 						int iCnt = innerCounter;
@@ -692,7 +702,7 @@ function getSubDivCount(subdivtag)
 						
 					%>
 			        
-			        <td class="formField">
+			        <td class="formFieldAddMore">
 			        	<html:hidden property="<%=srIdentifier%>" />	
 			        	<%
 			        		String onChangeFun = "changeUnit('" + fName + "','" + sName + "','" + tmpSubTypeName + "')";
@@ -707,7 +717,7 @@ function getSubDivCount(subdivtag)
 						</html:select>
 			        </td>
 			        
-			        <td class="formField">
+			        <td class="formFieldAddMore">
 						<%
 								String classValue = (String)colForm.getValue(srFname);
 								specimenTypeList = (List)specimenTypeMap.get(classValue);
@@ -734,7 +744,7 @@ function getSubDivCount(subdivtag)
 						</html:select>
 			        </td>
 			        
-			        <td class="formField">
+			        <td class="formFieldAddMore">
 						<%
 								fName="";
 								 fName = cName + "_tissueSite)";
@@ -753,7 +763,7 @@ function getSubDivCount(subdivtag)
 						</a>
 					</td>
 					
-			        <td class="formField">
+			        <td class="formFieldAddMore">
 						<%
 								fName="";
 								 fName = cName + "_pathologyStatus)";
@@ -766,7 +776,7 @@ function getSubDivCount(subdivtag)
 						</html:select>
 			        </td>
 			        
-			        <td class="formField">
+			        <td class="formFieldAddMore">
 						<%
 								fName="";
 								 fName = cName + "_quantityIn)";
@@ -793,7 +803,7 @@ function getSubDivCount(subdivtag)
 								innerCondition = "disabled='disabled'";
 
 						%>
-						<td class="formField" width="5">
+						<td class="formFieldAddMore" width="5">
 							<input type=checkbox name="<%=innerCheck%>" id="<%=innerCheck %>" <%=innerCondition%>>		
 						</td>
 				</TR>	<!-- SPECIMEN REQ DATA END -->
@@ -847,22 +857,22 @@ function getSubDivCount(subdivtag)
 <div id="d1">
 <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="100%" id="table_`">
 <tr><td>
-<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
+<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%" id="itable_`">
 	<tr>
-		<td rowspan=2 class="tabrightmostcell">`</td>
-		<td class="formField">
+		<td rowspan=2 class="tabrightmostcellAddMore">`</td>
+		<td class="formFieldAddMore">
 			<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
 				<tr>
-					<td class="formRequiredNotice" width="5">*
+					<td class="formRequiredNoticeAddMore" width="5">*
 						<html:hidden property="value(CollectionProtocolEvent:`_systemIdentifier)" />
 					</td>
-					<td class="formRequiredLabel" width="32%">
+					<td class="formRequiredLabelAddMore" width="32%">
 						<label for="value(CollectionProtocolEvent:`_clinicalStatus)">
 							<bean:message key="collectionprotocol.clinicalstatus" />
 						</label>
 					</td>
 					
-					<td class="formField" colspan=2>
+					<td class="formFieldAddMore" colspan=2>
 						<html:select property="value(CollectionProtocolEvent:`_clinicalStatus)" 
 										styleClass="formField" styleId="value(CollectionProtocolEvent:`_clinicalStatus)" size="1">
 							<html:options collection="<%=Constants.CLINICAL_STATUS_LIST%>" labelProperty="name" property="value"/>
@@ -871,14 +881,14 @@ function getSubDivCount(subdivtag)
 				</tr>
 				
 			    <tr>
-					<td class="formRequiredNotice" width="5">*</td>
-			        <td colspan="1" class="formRequiredLabel">
+					<td class="formRequiredNoticeAddMore" width="5">*</td>
+			        <td colspan="1" class="formRequiredLabelAddMore">
 			        	<label for="value(CollectionProtocolEvent:`_studyCalendarEventPoint)">
 							<bean:message key="collectionprotocol.studycalendartitle" />
 						</label>
 			        </td>
 			        
-			        <td colspan="2" class="formField">
+			        <td colspan="2" class="formFieldAddMore">
 			        	<html:text styleClass="formFieldSized5" size="30" 
 			        			styleId="value(CollectionProtocolEvent:`_studyCalendarEventPoint)" 
 			        			property="value(CollectionProtocolEvent:`_studyCalendarEventPoint)" 
@@ -891,18 +901,18 @@ function getSubDivCount(subdivtag)
 			</TABLE>
 		</td>
 		
-			<td rowspan=2 class="tabrightmostcell">
+			<td rowspan=2 class="tabrightmostcellAddMore">
 				<input type=checkbox name="chk_proto_`" id="chk_proto_`">		
 			</td>
 	</tr>
 
 	<!-- 2nd row -->
 	<tr>
-		<td class="formField">
+		<td class="formFieldAddMore">
 			<table summary="" cellpadding="3" cellspacing="0" border="0" width=100%>
 			    <tr>
 			        <td colspan="5" class="formTitle">
-			        	<b>SPECIMEN REQUIREMENTS</b>
+			        	<b><bean:message key="collectionprotocol.specimenreq"/></b>
 			        </td>
 			        <td class="formTitle">	
 			        <%
@@ -948,10 +958,10 @@ function getSubDivCount(subdivtag)
 			    </TR><!-- SUB TITLES END -->
 				
 				<TR>	<!-- SPECIMEN REQ DATA -->
-			        <td class="tabrightmostcell">1.
+			        <td class="tabrightmostcellAddMore">1.
 			        	<html:hidden property="value(CollectionProtocolEvent:`_SpecimenRequirement:1_systemIdentifier)" />
 			        </td>
-			        <td class="formField">		
+			        <td class="formFieldAddMore">		
 			        	<html:select property="value(CollectionProtocolEvent:`_SpecimenRequirement:1_specimenClass)" 
 										styleClass="formFieldSized10" 
 										styleId="value(CollectionProtocolEvent:`_SpecimenRequirement:1_specimenClass)" size="1"
@@ -962,7 +972,7 @@ function getSubDivCount(subdivtag)
 						</html:select>
 			        </td>
 			        
-			        <td class="formField">
+			        <td class="formFieldAddMore">
 			        	<html:select property="value(CollectionProtocolEvent:`_SpecimenRequirement:1_specimenType)" 
 										styleClass="formFieldSized10" 
 										styleId="value(CollectionProtocolEvent:`_SpecimenRequirement:1_specimenType)" size="1"
@@ -973,7 +983,7 @@ function getSubDivCount(subdivtag)
 						</html:select>
 			        </td>
 			        
-			        <td class="formField">
+			        <td class="formFieldAddMore">
 			        	<html:select property="value(CollectionProtocolEvent:`_SpecimenRequirement:1_tissueSite)" 
 										styleClass="formFieldSized35" 
 										styleId="value(CollectionProtocolEvent:`_SpecimenRequirement:1_tissueSite)" size="1">
@@ -987,7 +997,7 @@ function getSubDivCount(subdivtag)
 							<img src="images\Tree.gif" border="0" width="26" height="22"></a>   --%>
 					</td>
 					
-			        <td class="formField">
+			        <td class="formFieldAddMore">
 			        	<html:select property="value(CollectionProtocolEvent:`_SpecimenRequirement:1_pathologyStatus)" 
 										styleClass="formFieldSized10" 
 										styleId="value(CollectionProtocolEvent:`_SpecimenRequirement:1_pathologyStatus)" size="1">
@@ -995,7 +1005,7 @@ function getSubDivCount(subdivtag)
 						</html:select>
 			        </td>
 			        
-			        <td class="formField">
+			        <td class="formFieldAddMore">
 			        	<html:text styleClass="formFieldSized5" size="30" 
 			        			styleId="value(CollectionProtocolEvent:`_SpecimenRequirement:1_quantityIn)" 
 			        			property="value(CollectionProtocolEvent:`_SpecimenRequirement:1_quantityIn)" 
@@ -1005,7 +1015,7 @@ function getSubDivCount(subdivtag)
 						</span>
 					</td>
 					
-						<td class="formField" width="5">
+						<td class="formFieldAddMore" width="5">
 							<input type=checkbox name="chk_spec_`_1" id="chk_spec_`_1">		
 						</td>
 					
