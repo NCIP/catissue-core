@@ -17,11 +17,10 @@ import org.apache.log4j.PropertyConfigurator;
 import edu.wustl.catissuecore.bizlogic.AbstractBizLogic;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.dao.DAO;
-import edu.wustl.catissuecore.dao.HibernateDAO;
 import edu.wustl.catissuecore.domain.AuditEvent;
 import edu.wustl.catissuecore.domain.AuditEventDetails;
 import edu.wustl.catissuecore.domain.AuditEventLog;
-import edu.wustl.catissuecore.domain.Department;
+import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.exception.AuditException;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -110,8 +109,11 @@ public class AuditManager
 				}
 			}
 			
-			auditEventLog.setAuditEventDetailsCollcetion(auditEventDetailsCollection);
-			auditEvent.getAuditEventLogCollection().add(auditEventLog);
+			if(!auditEventDetailsCollection.isEmpty())
+			{
+				auditEventLog.setAuditEventDetailsCollcetion(auditEventDetailsCollection);
+				auditEvent.getAuditEventLogCollection().add(auditEventLog);
+			}
 		}
 		catch(Exception ex)
 		{
@@ -220,23 +222,23 @@ public class AuditManager
 		
 		try
 		{
-		dao.insert(auditEvent,null, false, false);
-		Iterator auditLogIterator = auditEvent.getAuditEventLogCollection().iterator();
-		while(auditLogIterator.hasNext())
-		{
-			AuditEventLog auditEventLog = (AuditEventLog)auditLogIterator.next();
-			auditEventLog.setAuditEvent(auditEvent);
-			dao.insert(auditEventLog,null, false, false);
-			
-  			Iterator auditEventDetailsIterator = auditEventLog.getAuditEventDetailsCollcetion().iterator();
-  			while(auditEventDetailsIterator.hasNext())
-  			{
-  				AuditEventDetails auditEventDetails = (AuditEventDetails)auditEventDetailsIterator.next();
-  				auditEventDetails.setAuditEventLog(auditEventLog);
-  				dao.insert(auditEventDetails,null, false, false);
-  			}
-		}
-		auditEvent = new AuditEvent();
+			dao.insert(auditEvent,null, false, false);
+			Iterator auditLogIterator = auditEvent.getAuditEventLogCollection().iterator();
+			while(auditLogIterator.hasNext())
+			{
+				AuditEventLog auditEventLog = (AuditEventLog)auditLogIterator.next();
+				auditEventLog.setAuditEvent(auditEvent);
+				dao.insert(auditEventLog,null, false, false);
+				
+	  			Iterator auditEventDetailsIterator = auditEventLog.getAuditEventDetailsCollcetion().iterator();
+	  			while(auditEventDetailsIterator.hasNext())
+	  			{
+	  				AuditEventDetails auditEventDetails = (AuditEventDetails)auditEventDetailsIterator.next();
+	  				auditEventDetails.setAuditEventLog(auditEventLog);
+	  				dao.insert(auditEventDetails,null, false, false);
+	  			}
+			}
+			auditEvent = new AuditEvent();
 		}
 		catch(UserNotAuthorizedException sme)
 		{
@@ -265,13 +267,13 @@ public class AuditManager
 //		dao.closeSession();
 		
 		AbstractBizLogic bizLogic = BizLogicFactory.getDefaultBizLogic();
-		Department deptCurr = (Department)(bizLogic.retrieve(Department.class.getName(),Constants.SYSTEM_IDENTIFIER,new Long(1))).get(0);
-		Department deptOld = (Department)(bizLogic.retrieve(Department.class.getName(),Constants.SYSTEM_IDENTIFIER,new Long(1))).get(0);
+		StorageContainer storageContainerCurr = (StorageContainer)(bizLogic.retrieve(StorageContainer.class.getName(),Constants.SYSTEM_IDENTIFIER,new Long(1))).get(0);
+		StorageContainer storageContainerOld = (StorageContainer)(bizLogic.retrieve(StorageContainer.class.getName(),Constants.SYSTEM_IDENTIFIER,new Long(1))).get(0);
 		
 		
-		deptCurr.setName("Department 1222");
+		//storageContainerCurr.setTempratureInCentigrade(new Double(80));
 		
-		System.out.println("deptOld.getName() "+deptOld.getName());
+		//System.out.println("deptOld.getName() "+storageContainerOld.getName());
 		
 //		Department dept2 = new Department();
 //		dept2.setName("Department 2");
@@ -287,7 +289,7 @@ public class AuditManager
 //		part2.setActivityStatus("part2");
 //		part2.setDepartment(null);
 		
-		aAuditManager.compare(deptCurr,deptOld,"UPDATE");
+		aAuditManager.compare(storageContainerCurr,storageContainerOld,"UPDATE");
 		System.out.println(aAuditManager.auditEvent.getAuditEventLogCollection());
 	}
 }
