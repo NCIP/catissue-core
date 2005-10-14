@@ -13,6 +13,7 @@ package edu.wustl.catissuecore.dao;
 import java.io.Serializable;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
@@ -361,6 +362,11 @@ public class HibernateDAO extends AbstractDAO
         {
             throw handleError("", hibExp);
         }
+    }
+    
+    public void addAuditEventLogs(Collection auditEventDetailsCollection)
+    {
+        auditManager.addAuditEventLogs(auditEventDetailsCollection);
     }
     
 

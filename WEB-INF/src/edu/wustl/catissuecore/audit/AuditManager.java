@@ -7,6 +7,7 @@
 package edu.wustl.catissuecore.audit;
 
 import java.lang.reflect.Method;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -82,10 +83,10 @@ public class AuditManager
 			AuditEventLog auditEventLog = new AuditEventLog();
 			
 			auditEventLog.setObjectIdentifier(currentObj.getSystemIdentifier());
-			auditEventLog.setObjectName(HibernateMetaData.getTableName(currentObj.getClass()));	
+			auditEventLog.setObjectName(HibernateMetaData.getTableName(currentObj.getClass()));
 			auditEventLog.setEventType(eventType);
 			
-			Set auditEventDetailsCollection = new HashSet(); 
+			Set auditEventDetailsCollection = new HashSet();
 			
 			Class currentObjClass = currentObj.getClass();
 			Class previousObjClass = currentObjClass; 
@@ -117,8 +118,7 @@ public class AuditManager
 		}
 		catch(Exception ex)
 		{
-			ex.printStackTrace();
-			Logger.out.debug(ex.getMessage(),ex) ;
+			Logger.out.debug(ex.getMessage(),ex);
 			throw new AuditException();
 		}
 	}
@@ -292,4 +292,10 @@ public class AuditManager
 		aAuditManager.compare(storageContainerCurr,storageContainerOld,"UPDATE");
 		System.out.println(aAuditManager.auditEvent.getAuditEventLogCollection());
 	}
+	
+	public void addAuditEventLogs(Collection auditEventLogsCollection)
+	{
+	    auditEvent.getAuditEventLogCollection().addAll(auditEventLogsCollection);
+	}
+	
 }

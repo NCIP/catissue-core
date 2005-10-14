@@ -7,6 +7,7 @@
 package edu.wustl.catissuecore.bizlogic;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
@@ -14,7 +15,10 @@ import java.util.Vector;
 import edu.wustl.catissuecore.dao.AbstractDAO;
 import edu.wustl.catissuecore.dao.DAO;
 import edu.wustl.catissuecore.dao.DAOFactory;
+import edu.wustl.catissuecore.dao.HibernateDAO;
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
+import edu.wustl.catissuecore.domain.AuditEventDetails;
+import edu.wustl.catissuecore.domain.AuditEventLog;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.NameValueBean;
@@ -267,10 +271,44 @@ public class  DefaultBizLogic extends AbstractBizLogic
     protected List disableObjects(DAO dao, Class sourceClass, String classIdentifier, String tablename, String colName,Long objIDArr[])throws DAOException 
     {
 		dao.disableRelatedObjects(tablename,colName,objIDArr);
-		return getRelatedObjects(dao, sourceClass, classIdentifier,objIDArr);
+		List listOfSubElement = getRelatedObjects(dao, sourceClass, classIdentifier,objIDArr);
+		auditDisabledObjects(dao, tablename, listOfSubElement);
+		return listOfSubElement;
     }
     
     
+    /**
+     * @param tablename
+     * @param listOfSubElement
+     */
+    private void auditDisabledObjects(DAO dao, String tablename, List listOfSubElement)
+    {
+        Iterator iterator = listOfSubElement.iterator();
+		Collection auditEventLogsCollection = new HashSet();
+		
+		while (iterator.hasNext())
+		{
+		    Long objectIdentifier = (Long)iterator.next();
+		    AuditEventLog auditEventLog = new AuditEventLog();
+		    auditEventLog.setObjectIdentifier(objectIdentifier);
+		    auditEventLog.setObjectName(tablename);
+		    auditEventLog.setEventType(Constants.UPDATE_OPERATION);
+		    
+		    Collection auditEventDetailsCollection = new HashSet();
+		    AuditEventDetails auditEventDetails = new AuditEventDetails();
+		    auditEventDetails.setElementName(Constants.ACTIVITY_STATUS_COLUMN);
+		    auditEventDetails.setCurrentValue(Constants.ACTIVITY_STATUS_DISABLED);
+		    
+		    auditEventDetailsCollection.add(auditEventDetails);
+		    
+		    auditEventLog.setAuditEventDetailsCollcetion(auditEventDetailsCollection);
+		    auditEventLogsCollection.add(auditEventLog);
+		}
+		
+		HibernateDAO hibDAO = (HibernateDAO) dao;
+		hibDAO.addAuditEventLogs(auditEventLogsCollection);
+    }
+
     public List getRelatedObjects(DAO dao, Class sourceClass, String classIdentifier,Long objIDArr[])throws DAOException
     {
 		String sourceObjectName = sourceClass.getName();

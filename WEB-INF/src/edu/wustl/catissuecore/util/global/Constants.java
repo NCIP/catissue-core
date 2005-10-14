@@ -129,6 +129,10 @@ public class Constants
 	public static final String PARENT_SPECIMEN_ID_LIST = "parentSpecimenIdList";
 	public static final String RECEIVED_QUALITY_LIST = "receivedQualityList";
 	
+	//Constants for audit of disabled objects.
+	public static final String UPDATE_OPERATION = "UPDATE";
+	public static final String ACTIVITY_STATUS_COLUMN = "ACTIVITY_STATUS";
+	
 	//SpecimenCollecionGroup lists.
 	public static final String PROTOCOL_TITLE_LIST = "protocolTitleList";
 	public static final String PARTICIPANT_NAME_LIST = "participantNameList";
