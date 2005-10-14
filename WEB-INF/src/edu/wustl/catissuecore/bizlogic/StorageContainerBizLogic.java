@@ -231,10 +231,11 @@ public class StorageContainerBizLogic extends DefaultBizLogic
         
         //Audit of update of storage container.
         dao.audit(obj, oldObj, sessionDataBean, true);
-
+        dao.audit(container.getStorageContainerCapacity(), oldContainer.getStorageContainerCapacity(), sessionDataBean, true);
+        
         Collection storageContainerDetailsCollection = container.getStorageContainerDetailsCollection();
-        StorageContainer oldStorageContainer = (StorageContainer) oldObj; 
-        Collection oldStorageContainerDetailsCollection = oldStorageContainer.getStorageContainerDetailsCollection(); 
+
+        Collection oldStorageContainerDetailsCollection = oldContainer.getStorageContainerDetailsCollection(); 
         Iterator it = storageContainerDetailsCollection.iterator();
         while (it.hasNext())
         {
