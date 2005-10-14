@@ -1,7 +1,9 @@
 
 package edu.wustl.catissuecore.query;
 
+import java.util.Enumeration;
 import java.util.HashSet;
+import java.util.Vector;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
@@ -162,8 +164,23 @@ public class AdvancedConditionsImpl extends ConditionsImpl {
      */
     public HashSet getQueryObjects()
     {
-        // TODO Auto-generated method stub
-        return null;
+    	HashSet set = new HashSet();
+        
+        Enumeration enum = whereCondition.depthFirstEnumeration();
+        while(enum.hasMoreElements())
+        {
+            AdvancedConditionsNode advancedConditionsNode=(AdvancedConditionsNode) ((DefaultMutableTreeNode) enum.nextElement()).getUserObject();
+            
+            if(advancedConditionsNode != null)
+            {
+                Vector conditions = advancedConditionsNode.getObjectConditions();
+	            for(int i=0;i < conditions.size() ; i++)
+	            {
+	                set.add(((Condition)conditions.get(i)).getDataElement().getTable());
+	            }
+            }
+        }
+        return set;
     }
 
     /* (non-Javadoc)
