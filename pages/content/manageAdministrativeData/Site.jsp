@@ -85,7 +85,7 @@
 								<bean:message key="site.title"/>
 							</logic:equal>
 							<logic:equal name="operation" value="<%=Constants.EDIT%>">
-								<bean:message key="site.editTitle"/>
+								<bean:message key="site.editTitle"/>&nbsp;<bean:message key="for.identifier"/>&nbsp;<bean:write name="siteForm" property="systemIdentifier" />
 							</logic:equal>
 						</td>
 					</tr>

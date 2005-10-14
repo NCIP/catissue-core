@@ -81,6 +81,14 @@
 				<tr>
 					<td class="formTitle" height="20" colspan="3">
 						<bean:message key="collectionProtocolReg.title" />
+						<%
+							if(operation.equals(Constants.EDIT))
+							{
+						%>
+						&nbsp;<bean:message key="for.identifier"/>&nbsp;<bean:write name="collectionProtocolRegistrationForm" property="systemIdentifier" />
+						<%
+							}
+						%>
 					</td>
 				</tr>
 					

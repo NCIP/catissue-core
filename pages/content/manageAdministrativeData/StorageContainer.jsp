@@ -287,7 +287,7 @@ function insRow(subdivtag)
 								<bean:message key="storageContainer.title"/>
 							</logic:equal>
 							<logic:equal name="operation" value="<%=Constants.EDIT%>">
-								<bean:message key="storageContainer.editTitle"/>
+								<bean:message key="storageContainer.editTitle"/>&nbsp;<bean:message key="for.identifier"/>&nbsp;<bean:write name="storageContainerForm" property="systemIdentifier" />
 							</logic:equal>
 						</td>
 					</tr>

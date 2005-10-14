@@ -309,7 +309,7 @@ function getSubDivCount(subdivtag)
 								<bean:message key="collectionprotocol.title"/>
 							</logic:equal>
 							<logic:equal name="operation" value="<%=Constants.EDIT%>">
-								<bean:message key="collectionprotocol.editTitle"/>
+								<bean:message key="collectionprotocol.editTitle"/>&nbsp;<bean:message key="for.identifier"/>&nbsp;<bean:write name="collectionProtocolForm" property="systemIdentifier" />
 							</logic:equal>
 						</td>
 					</tr>

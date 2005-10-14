@@ -51,7 +51,7 @@
 								<bean:message key="department.title"/>
 							</logic:equal>
 							<logic:equal name="operation" value="<%=Constants.EDIT%>">
-								<bean:message key="department.editTitle"/>
+								<bean:message key="department.editTitle"/>&nbsp;<bean:message key="for.identifier"/>&nbsp;<bean:write name="departmentForm" property="systemIdentifier" />
 							</logic:equal>
 						</td>
 					</tr>

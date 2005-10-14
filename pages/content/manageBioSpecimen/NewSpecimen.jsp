@@ -389,6 +389,15 @@ Map map = form.getExternalIdentifier();
 				     <td class="formTitle" height="20" colspan="6">
 				     <%String title = "specimen."+pageView+".title";%>
 				     	<bean:message key="<%=title%>"/>
+				    	<%
+							if(pageView.equals(Constants.EDIT))
+							{
+						%>
+						     &nbsp;<bean:message key="for.identifier"/>&nbsp;<bean:write name="newSpecimenForm" property="systemIdentifier" />
+						<%
+							}
+						%>
+				     	
 				     </td>
 				 </tr>
 				 <tr>

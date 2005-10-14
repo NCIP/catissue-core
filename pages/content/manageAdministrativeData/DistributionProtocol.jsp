@@ -256,7 +256,7 @@ function insRow(subdivtag)
 								<bean:message key="distributionprotocol.title"/>
 							</logic:equal>
 							<logic:equal name="operation" value="<%=Constants.EDIT%>">
-								<bean:message key="distributionprotocol.editTitle"/>
+								<bean:message key="distributionprotocol.editTitle"/>&nbsp;<bean:message key="for.identifier"/>&nbsp;<bean:write name="distributionProtocolForm" property="systemIdentifier" />
 							</logic:equal>
 						</td>
 					</tr>

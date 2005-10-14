@@ -49,7 +49,7 @@
 								<bean:message key="cancerResearchGroup.title"/>
 							</logic:equal>
 							<logic:equal name="operation" value="<%=Constants.EDIT%>">
-								<bean:message key="cancerResearchGroup.editTitle"/>
+								<bean:message key="cancerResearchGroup.editTitle"/>&nbsp;<bean:message key="for.identifier"/>&nbsp;<bean:write name="cancerResearchGroupForm" property="systemIdentifier" />
 							</logic:equal>
 						</td>
 					</tr>

@@ -237,7 +237,7 @@
 					<bean:message key="distribution.addTitle"/>
 				</logic:equal>
 				<logic:equal name="operation" value="<%=Constants.EDIT%>">
-					<bean:message key="distribution.editTitle"/>
+					<bean:message key="distribution.editTitle"/>&nbsp;<bean:message key="for.identifier"/>&nbsp;<bean:write name="distributionForm" property="systemIdentifier" />
 				</logic:equal>
 			 </td>
 		</tr>

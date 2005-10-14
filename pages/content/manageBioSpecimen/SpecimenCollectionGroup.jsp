@@ -106,7 +106,7 @@
 							<bean:message key="specimenCollectionGroup.add.title"/>
 						</logic:equal>
 						<logic:equal name="operation" value="<%=Constants.EDIT%>">
-								<bean:message key="specimenCollectionGroup.edit.title"/>
+								<bean:message key="specimenCollectionGroup.edit.title"/>&nbsp;<bean:message key="for.identifier"/>&nbsp;<bean:write name="specimenCollectionGroupForm" property="systemIdentifier" />
 						</logic:equal>
 					</td>
 				 </tr>
