@@ -197,6 +197,9 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		//Audit of Specimen.
 		dao.audit(obj, oldObj, sessionDataBean, true);
 		
+		//Audit of Specimen Characteristics.
+		dao.audit(specimen.getSpecimenCharacteristics(), specimenOld.getSpecimenCharacteristics(), sessionDataBean, true);
+		
 		Collection oldExternalIdentifierCollection = specimenOld.getExternalIdentifierCollection();
 		
 		Collection externalIdentifierCollection = specimen.getExternalIdentifierCollection();
