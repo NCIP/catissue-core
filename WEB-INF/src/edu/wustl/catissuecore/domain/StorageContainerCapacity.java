@@ -36,6 +36,16 @@ public class StorageContainerCapacity extends AbstractDomainObject implements ja
      */
 	protected Integer twoDimensionCapacity;
 
+	public StorageContainerCapacity()
+	{
+		
+	}
+	
+	public StorageContainerCapacity(StorageContainerCapacity storageContainerCapacity)
+	{
+		oneDimensionCapacity = storageContainerCapacity.oneDimensionCapacity;
+		twoDimensionCapacity = storageContainerCapacity.twoDimensionCapacity;
+	}
 	/**
      * Returns System generated unique systemIdentifier.
      * @return Long System generated unique systemIdentifier.

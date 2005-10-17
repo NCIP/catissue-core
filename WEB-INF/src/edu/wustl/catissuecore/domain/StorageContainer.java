@@ -10,6 +10,7 @@
 package edu.wustl.catissuecore.domain;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 
 import edu.wustl.catissuecore.actionForm.AbstractActionForm;
@@ -124,10 +125,20 @@ public class StorageContainer extends AbstractDomainObject implements java.io.Se
 			parentContainer.getChildrenContainerCollection().add(this);
 		}
 		this.setSite(oldContainer.getSite());		
-		this.setStorageContainerCapacity(oldContainer.getStorageContainerCapacity());
+		//this.setStorageContainerCapacity(oldContainer.getStorageContainerCapacity());
+		storageContainerCapacity = new StorageContainerCapacity(oldContainer.getStorageContainerCapacity());
+		
 		this.setStorageType(oldContainer.getStorageType());
 		this.setTempratureInCentigrade(oldContainer.getTempratureInCentigrade());
-		this.setStorageContainerDetailsCollection(new HashSet(oldContainer.getStorageContainerDetailsCollection()));
+		//this.setStorageContainerDetailsCollection(new HashSet(oldContainer.getStorageContainerDetailsCollection()));
+		
+		Iterator it = oldContainer.getStorageContainerDetailsCollection().iterator();
+		while(it.hasNext())
+		{
+			StorageContainerDetails storageContainerDetails = (StorageContainerDetails)it.next();
+			StorageContainerDetails storageContainerDetailsNew = new StorageContainerDetails(storageContainerDetails);
+			storageContainerDetailsCollection.add(storageContainerDetailsNew);
+		}
 	}
 	
 	/**

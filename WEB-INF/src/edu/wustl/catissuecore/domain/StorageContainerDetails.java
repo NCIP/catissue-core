@@ -38,6 +38,17 @@ public class StorageContainerDetails extends AbstractDomainObject implements jav
 	
 	protected StorageContainer storageContainer; 
 	
+	public StorageContainerDetails()
+	{
+		
+	}
+	
+	public StorageContainerDetails(StorageContainerDetails storageContainerDetails)
+	{
+		parameterName = storageContainerDetails.parameterName;
+		parameterValue = storageContainerDetails.parameterValue;
+	}
+	
 	/**
      * Returns System generated unique identifier.
      * @return Long System generated unique identifier.
