@@ -31,14 +31,16 @@ import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.query.ShoppingCart;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;
+import edu.wustl.common.util.ExportReport;
+import edu.wustl.common.util.SendFile;
 
-public class ShoppingCartAction  extends SecureAction
+public class ShoppingCartAction  extends BaseAction
 {
     /**
      * Overrides the execute method of Action class.
      * Initializes the various fields in ShoppingCart.jsp Page.
      * */
-    public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
+    public ActionForward executeAction(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException
     {
@@ -90,8 +92,16 @@ public class ShoppingCartAction  extends SecureAction
 	        }
 	        else if(operation.equals(Constants.EXPORT))
 	        {
-	        	String fileName = session.getId() + ".txt";
-	        	bizLogic.export(cart,Variables.catissueHome,fileName);
+	        	String fileName = Variables.catissueHome + System.getProperty("file.separator") + session.getId() + ".csv";
+	        	
+	        	List cartList = bizLogic.export(cart,fileName);
+	        	
+	        	ExportReport report = new ExportReport(fileName);
+	    		report.writeData(cartList);
+	    		report.closeFile();
+	        	 
+	        	SendFile.sendFileToClient(response,fileName,"ShoppingCart.csv","application/csv");
+	        	
 	        	String path = "/" + fileName;
 	        	return new ActionForward(path);
 	        }
