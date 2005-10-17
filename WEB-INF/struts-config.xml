@@ -90,6 +90,11 @@ PUBLIC
 					type="edu.wustl.catissuecore.action.ForwardAction">
 					<forward name="success" path=".catissuecore.searchHomeDef" />
 		</action>
+		
+		<action path="/AdvanceQueryView"
+					type="edu.wustl.catissuecore.action.AdvanceQueryView">
+					<forward name="success" path=".catissuecore.advanceQueryViewDef" />
+		</action>
 
 	<!--	
 		<action path="/ManageAdministrativeData"
