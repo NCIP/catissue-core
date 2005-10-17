@@ -17,7 +17,7 @@
       </div>
       <div>
       	<img src="images/subMenuArrow.gif" width="7" height="7" alt="" />
-      		<a class="subMenuPrimary" href="#">
+      		<a class="subMenuPrimary" href="AdvanceQueryInterface.do?pageOf=pageOfAdvanceQueryInterface">
       			<bean:message key="app.advancedSearch" />
       		</a>
       </div>
