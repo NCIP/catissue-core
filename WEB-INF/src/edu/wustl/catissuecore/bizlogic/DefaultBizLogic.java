@@ -7,6 +7,7 @@
 package edu.wustl.catissuecore.bizlogic;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -264,7 +265,7 @@ public class  DefaultBizLogic extends AbstractBizLogic
                 }
             }
         }
-        
+        Collections.sort(nameValuePairs);
         return nameValuePairs;
     }
     
