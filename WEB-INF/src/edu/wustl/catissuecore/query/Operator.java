@@ -42,6 +42,11 @@ public class Operator
     public static final String GREATER_THAN = ">";
     
     /**
+     * LIKE constant
+     */
+    public static final String LIKE = "like";
+    
+    /**
      * Operator String
      */
     private String operator;
