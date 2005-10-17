@@ -5,7 +5,15 @@
 <%@ page import="edu.wustl.catissuecore.actionForm.CollectionProtocolRegistrationForm"%>
 
 <script src="jss/script.js" type="text/javascript"></script>
-
+<%
+	   		Object obj = request.getAttribute("collectionProtocolRegistrationForm");
+			CollectionProtocolRegistrationForm form =null;
+	
+			if(obj != null && obj instanceof CollectionProtocolRegistrationForm)
+			{
+				form = (CollectionProtocolRegistrationForm)obj;
+			}	
+%>
 <head>
 <script language="JavaScript">
 		function onCheckboxButtonClick(element,dropDownList)
@@ -29,7 +37,23 @@
 	           	
 	           	document.forms[0].participantID.disabled = true;
       		}
-          
+		}
+		
+		// for add new SpecimenCollectionGroup
+		function onAddSpecimenCollectionGroup(element)
+		{
+			var identifier = "";
+			<%
+				if(form != null)
+				{
+			%>
+			identifier = "<%=form.getSystemIdentifier()%>";
+			<%
+				}
+			%>
+			var action = "/catissuecore/SpecimenCollectionGroup.do?operation=add&pageOf=pageOfSpecimenCollectionGroup"+"&cprId=" + identifier;
+			document.forms[0].action = action;
+			document.forms[0].submit();
 		}
 </script>		
 </head>
@@ -211,6 +235,13 @@
 							<td>
 								<html:reset styleClass="actionButton" />
 							</td>
+						<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
+							<td>
+								<html:button property="addSpecimenCollectionGroup" styleClass="actionButton" onclick="onAddSpecimenCollectionGroup(this)">
+									<bean:message key="buttons.addSpecimenCollectionGroup"/>
+								</html:button>
+							</td>
+						</logic:equal>	
 						</tr>
 					</table>
 					<!-- action buttons end --></td>
