@@ -1267,4 +1267,9 @@ public class Constants
 	public static final int CLASS_LEVEL_SECURE_RETRIEVE = 1; 
 	public static final int OBJECT_LEVEL_SECURE_RETRIEVE = 2; 
 	
+	// TO FORWARD THE REQUEST ON SUBMIT IF STATUS IS DISABLED
+	public static final String DISABLED = "Disabled";
+	public static final String BIO_SPECIMEN = "/ManageBioSpecimen.do";
+	public static final String ADMINISTRATIVE = "/ManageAdministrativeData.do";
+	
 }
