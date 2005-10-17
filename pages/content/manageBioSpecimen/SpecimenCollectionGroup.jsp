@@ -13,12 +13,21 @@
 		if (reqPath != null)
 			appendingPath = reqPath + "|/SpecimenCollectionGroup.do?operation=add&pageOf=pageOfSpecimenCollectionGroup";
 	
-	   	if(!operation.equals("add") )
-	   	{
 	   		Object obj = request.getAttribute("specimenCollectionGroupForm");
+			SpecimenCollectionGroupForm form =null;
+	
 			if(obj != null && obj instanceof SpecimenCollectionGroupForm)
 			{
-				SpecimenCollectionGroupForm form = (SpecimenCollectionGroupForm)obj;
+				form = (SpecimenCollectionGroupForm)obj;
+			}	
+	
+	   	if(!operation.equals("add") )
+	   	{
+	   		obj = request.getAttribute("specimenCollectionGroupForm");
+	   		
+			if(obj != null && obj instanceof SpecimenCollectionGroupForm)
+			{
+				form = (SpecimenCollectionGroupForm)obj;
 		   		appendingPath = "/SpecimenCollectionGroupSearch.do?operation=search&pageOf=pageOfSpecimenCollectionGroup&systemIdentifier="+form.getSystemIdentifier() ;
 		   		int checkedButton1 = form.getCheckedButton();
 		   		System.out.println("---------- SCG JSP checkedButton -------- : "+ checkedButton1);
@@ -74,6 +83,16 @@
 			document.forms[0].action = action;
 			document.forms[0].submit();
 		}
+		
+		// for add new Specimen
+		function onAddNewSpecimen(element)
+		{
+			var identifier = "<%=form.getSystemIdentifier()%>";
+			var action = "/catissuecore/NewSpecimen.do?operation=add&pageOf=pageOfNewSpecimen"+"&specimenCollectionGroupId=" + identifier;
+			document.forms[0].action = action;
+			document.forms[0].submit();
+		}
+		
 	</script>
 </head>
 
@@ -337,6 +356,13 @@
 											<bean:message key="buttons.reset"/>
 										</html:reset>
 									</td> 
+								<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
+									<td>
+										<html:button property="addNewSpecimen" styleClass="actionButton" onclick="onAddNewSpecimen(this)">
+											<bean:message key="buttons.addNewSpecimen"/>
+										</html:button>
+									</td>
+								</logic:equal>	
 									<!--td>
 										<html:submit styleClass="actionButton">
 											<bean:message key="buttons.submitAndAddNewSpecimen"/>

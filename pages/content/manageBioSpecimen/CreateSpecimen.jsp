@@ -123,6 +123,7 @@
 			if(form.getUnit() != null)
 				unitSpecimen = form.getUnit();
 		}
+		System.out.println("SPID :--- : " +(String)request.getAttribute("parentSpecimenId"));
 %>
 
 	<html:errors />

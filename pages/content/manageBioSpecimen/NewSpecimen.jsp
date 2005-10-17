@@ -39,8 +39,17 @@ Map map = form.getExternalIdentifier();
 			var action = "/catissuecore/ListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParameters&specimenId=" + identifier;
 			document.forms[0].action = action;
 			document.forms[0].submit();
-		
 		}
+
+		// for create from existing
+		function onCreateFromExisting(element)
+		{
+			var identifier = "<%=form.getSystemIdentifier()%>";
+			var action = "/catissuecore/CreateSpecimen.do?operation=add&pageOf="+"&specimenId=" + identifier;
+			document.forms[0].action = action;
+			document.forms[0].submit();
+		}
+
 		
 		function NewWindow(mypage,myname,w,h,scroll)
 		{
@@ -847,6 +856,11 @@ Map map = form.getExternalIdentifier();
 									<td>
 										<html:button property="eventButton" styleClass="actionButton" onclick="onSpecimenEventUpdate(this)">
 											<bean:message key="buttons.specimenEventParameters"/>
+										</html:button>
+									</td>
+									<td>
+										<html:button property="createFromExisting" styleClass="actionButton" onclick="onCreateFromExisting(this)">
+											<bean:message key="buttons.createFrom"/>
 										</html:button>
 									</td>
 									</logic:equal>
