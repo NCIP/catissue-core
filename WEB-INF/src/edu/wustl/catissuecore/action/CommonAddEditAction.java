@@ -177,6 +177,16 @@ public class CommonAddEditAction extends Action
                     
                     
                     bizLogic.update(abstractDomain, abstractDomainOld, Constants.HIBERNATE_DAO, getSessionData(request));
+      
+                    // -- Direct to Main Menu if record is disabled
+                    if(abstractForm.getActivityStatus().equals(Constants.DISABLED  )  )
+                    {
+                    	String moveTo = abstractForm.getOnSubmit(); 
+                    	
+                   		ActionForward reDirectForward = new ActionForward();
+                   		reDirectForward.setPath(moveTo );
+                   		return reDirectForward;
+                    }
                     
                     if(abstractDomain instanceof Specimen)
                 		request.setAttribute(Constants.SPECIMEN_ID,String.valueOf(abstractDomain.getSystemIdentifier()));
