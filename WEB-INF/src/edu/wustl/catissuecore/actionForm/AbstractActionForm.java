@@ -248,4 +248,23 @@ public abstract class AbstractActionForm extends ActionForm
      		cf = "";
      	setRedirectTo(cf );
 	}
+	
+	// -------- For success pages
+	
+	protected String onSubmit;
+	
+	/**
+	 * @return Returns the onSubmit.
+	 */
+	public String getOnSubmit() {
+		return onSubmit;
+	}
+	
+	/**
+	 * @param onSubmit The onSubmit to set.
+	 */
+	public void setOnSubmit(String onSubmit)
+	{
+		this.onSubmit = onSubmit;
+	}
 }
