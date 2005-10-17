@@ -143,6 +143,14 @@ public class CreateSpecimenAction extends SecureAction
     		}
 
         	//----------------------------------------
+            String specimenId = request.getParameter("specimenId");
+            Logger.out.debug("SpecimenId : "+ specimenId);
+            request.setAttribute("parentSpecimenId",specimenId);
+            if(specimenId != null)
+            {
+            	createForm.setParentSpecimenId(specimenId  ); 
+            }
+
 		}
         catch(Exception e)
 		{

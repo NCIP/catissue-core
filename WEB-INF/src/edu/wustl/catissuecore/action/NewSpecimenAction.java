@@ -84,6 +84,14 @@ public class NewSpecimenAction  extends SecureAction
 		{
         	specimenForm.setSpecimenCollectionGroupId( specimenCollectionGroupId); 
 		}
+        else
+        {
+            specimenCollectionGroupId = request.getParameter(Constants.SPECIMEN_COLLECTION_GROUP_ID);
+            if(specimenCollectionGroupId != null)
+    		{
+            	specimenForm.setSpecimenCollectionGroupId( specimenCollectionGroupId); 
+    		}
+        }
 
     	
         String pageOf = request.getParameter(Constants.PAGEOF);
