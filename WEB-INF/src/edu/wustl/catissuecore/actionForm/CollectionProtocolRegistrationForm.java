@@ -70,12 +70,11 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
     		this.activityStatus = registration.getActivityStatus();
     		this.collectionProtocolID = registration.getCollectionProtocol().getSystemIdentifier().longValue();
   	
-		  	if(registration.getParticipant() != null)
+		  	if((registration.getParticipant() != null) && (registration.getParticipant().getFirstName().trim().length()>0  ))
 		  	{
 		  		this.participantID = registration.getParticipant().getSystemIdentifier().longValue();
 		  		checkedButton = true;
 		  	}
-  	
 		  	this.participantProtocolID = Utility.toString(registration.getProtocolParticipantIdentifier());
   		  	this.registrationDate = Utility.parseDateToString(registration.getRegistrationDate(),Constants.DATE_PATTERN_MM_DD_YYYY);
 		}
