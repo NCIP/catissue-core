@@ -126,6 +126,61 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 			Logger.out.debug("Action participantId.................................."+specimenCollectionGroupForm.getParticipantId());
 			Logger.out.debug("Action protocolParticipantIdentifier........................."+specimenCollectionGroupForm.getProtocolParticipantIdentifier());
 			Logger.out.debug("Action Medical Record Number...................."+specimenCollectionGroupForm.getParticipantsMedicalIdentifierId());
+
+			
+			// -------called from Collection Protocol Registration start-------------------------------
+			//cprId
+			String cprId = request.getParameter("cprId" );
+			if(cprId != null)
+			{
+				try
+				{
+					List collectionProtocolRegistrationList = bizLogic.retrieve(CollectionProtocolRegistration.class.getName(),
+							Constants.SYSTEM_IDENTIFIER,new Long(cprId));
+					if(!collectionProtocolRegistrationList.isEmpty()  )
+					{
+						Object  obj = collectionProtocolRegistrationList.get(0 ); 
+						CollectionProtocolRegistration cpr = (CollectionProtocolRegistration)obj;
+						
+						long cpID = cpr.getCollectionProtocol().getSystemIdentifier().longValue() ;
+						long pID = cpr.getParticipant().getSystemIdentifier().longValue()  ;
+						String ppID = cpr.getProtocolParticipantIdentifier();
+						
+						Logger.out.debug("cpID : "+ cpID + "   ||  pID : " + pID + "    || ppID : " + ppID );
+						
+						specimenCollectionGroupForm.setCollectionProtocolId(cpID );
+
+						//Populating the participants registered to a given protocol
+							loadPaticipants(cpID , bizLogic, request);
+							if(cpr.getParticipant().getFirstName().trim().length()>0 )
+							{
+								specimenCollectionGroupForm.setParticipantId(pID );
+								specimenCollectionGroupForm.setCheckedButton(1 ); 
+							}	
+						//Populating the protocol participants id registered to a given protocol
+							loadPaticipantNumberList(specimenCollectionGroupForm.getCollectionProtocolId(),bizLogic,request);
+							if(cpr.getProtocolParticipantIdentifier() != null)
+							{
+								specimenCollectionGroupForm.setProtocolParticipantIdentifier(ppID );
+								specimenCollectionGroupForm.setCheckedButton(2 ); 
+							}
+
+							//Populating the Collection Protocol Events
+							loadCollectionProtocolEvent(specimenCollectionGroupForm.getCollectionProtocolId(),bizLogic,request);
+
+					}
+					 
+				}
+				catch(Exception exc)
+				{
+					Logger.out.error(exc.getMessage(),exc);
+					mapping.findForward(request.getParameter(Constants.FAILURE));
+				}
+
+			}
+			
+			// -------called from Collection Protocol Registration end -------------------------------
+			
 			
 		}
 		catch(Exception exc)
