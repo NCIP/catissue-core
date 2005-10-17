@@ -61,7 +61,7 @@
 	<tr>
 	<td>
 	
-		<table summary="" cellpadding="3" cellspacing="0" border="0">
+		<table summary="" cellpadding="5" cellspacing="0" border="0">
 			<tr>
 				<td><html:hidden property="operation" value=""/></td>
 			</tr>
@@ -140,7 +140,13 @@
 					<bean:write name="specimen" property="className" />
 				</td>
 				<td class="formLabelLeft">
+				<logic:notEmpty name="specimen" property="type">
 					<bean:write name="specimen" property="type" />
+				</logic:notEmpty>
+				
+				<logic:empty name="specimen" property="type">
+					&nbsp;
+				</logic:empty>
 				</td>
 				<td class="formLabelLeft">
 					<bean:write name="specimenCharacteristics" property="tissueSite" />
