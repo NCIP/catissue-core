@@ -20,7 +20,7 @@
 
 	<tr>
 		<td>
-			<iframe name="queryFrame" id="queryFrame" src="" width="100%" height="300" frameborder="0" scrolling="auto">
+			<iframe name="queryFrame" id="queryFrame" src="/catissuecore/AdvanceQueryView.do" width="100%" height="300" frameborder="0" scrolling="auto">
 			</iframe>
 		</td>
 	</tr>
