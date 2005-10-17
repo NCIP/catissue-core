@@ -21,6 +21,7 @@ import edu.wustl.catissuecore.dao.DAO;
 import edu.wustl.catissuecore.domain.AuditEvent;
 import edu.wustl.catissuecore.domain.AuditEventDetails;
 import edu.wustl.catissuecore.domain.AuditEventLog;
+import edu.wustl.catissuecore.domain.Institution;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.exception.AuditException;
@@ -40,6 +41,7 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class AuditManager 
 {
+	//Instance of Audit event. All the change under one database session are added under this event.
 	private AuditEvent auditEvent;  
 	
 	public AuditManager()
@@ -64,6 +66,9 @@ public class AuditManager
 		auditEvent.setIpAddress(IPAddress);
 	}
 	
+	/**
+	 * Check whether the object type is a premitive data type or a user defined datatype.
+	 * */
 	private boolean isVariable(Object obj)
 	{
 		if(obj instanceof Number || obj instanceof String || 
@@ -73,34 +78,45 @@ public class AuditManager
 		return false;
 	}
 
-	public void compare(Auditable currentObj, Auditable previousObj,String eventType) throws AuditException
+	/**
+	 * Compares the contents of two objects. 
+	 * @param currentObj Current state of object.
+	 * @param currentObj Previous state of object.
+	 * @param eventType Event for which the comparator will be called. e.g. Insert, update, delete etc.
+	 * */
+	public void compare(Auditable currentObj, Auditable previousObj, String eventType) throws AuditException
 	{
 		if( currentObj == null )
 			return;
 		
 		try
 		{
+			//An auidt event will contain many logs.
 			AuditEventLog auditEventLog = new AuditEventLog();
 			
 			auditEventLog.setObjectIdentifier(currentObj.getSystemIdentifier());
 			auditEventLog.setObjectName(HibernateMetaData.getTableName(currentObj.getClass()));
 			auditEventLog.setEventType(eventType);
 			
+			//An event log will contain many event details
 			Set auditEventDetailsCollection = new HashSet();
 			
+			//Class of the object being compared
 			Class currentObjClass = currentObj.getClass();
 			Class previousObjClass = currentObjClass; 
 			
 			if(previousObj!=null)
 				previousObjClass = previousObj.getClass();
 			
+			//check the class for both objects are equals or not.
 			if(previousObjClass.equals(currentObjClass))
 			{
-				//Field[] fields = currentObjClass.getDeclaredFields();
+				//Retrieve all the methods defined in the class. 
 				Method[] methods = currentObjClass.getMethods();
 				
 				for (int i = 0; i < methods.length; i++)
 				{
+					//filter only getter methods.
 					if(methods[i].getName().startsWith("get") && methods[i].getParameterTypes().length==0)
 					{
 						AuditEventDetails auditEventDetails = processField(methods[i], currentObj, previousObj);
@@ -128,11 +144,20 @@ public class AuditManager
 		Object prevVal = getValue(method, previousObj);
 		Object currVal = getValue(method, currentObj);
 		
+		String attributeName = processAttributeName(method.getName());
 		AuditEventDetails auditEventDetails = compareValue(prevVal, currVal);
+		
 		if(auditEventDetails!=null)
 		{
-			String attributeName = processAttributeName(method.getName());
-			auditEventDetails.setElementName(HibernateMetaData.getColumnName(currentObj.getClass(),attributeName));
+			//String attributeName = processAttributeName(method.getName());
+			String columnName = HibernateMetaData.getColumnName(currentObj.getClass(),attributeName);
+		
+			//Logger.out.debug("attributeName "+attributeName);
+			///Case of transient object
+			if(columnName.equals(""))
+				return null;
+			
+			auditEventDetails.setElementName(columnName);
 		}
 		return auditEventDetails;
 	}
@@ -149,7 +174,7 @@ public class AuditManager
 		String firstChar = (attributeName.charAt(0)+"").toLowerCase();
 		attributeName = firstChar + attributeName.substring(1);
 		
-		Logger.out.debug("methodName <"+methodName+">");
+		//Logger.out.debug("methodName <"+methodName+">");
 		Logger.out.debug("attributeName <"+attributeName+">");
 		
 		return attributeName;
@@ -194,6 +219,7 @@ public class AuditManager
 				AuditEventDetails auditEventDetails = new AuditEventDetails();
 				auditEventDetails.setPreviousValue(null);
 				auditEventDetails.setCurrentValue(currVal.toString());
+				return auditEventDetails;
 			}
 			else if(prevVal!=null && currVal==null)
 			{
@@ -257,6 +283,7 @@ public class AuditManager
 		
 		AuditManager aAuditManager = new AuditManager();
 
+		
 //		HibernateDAO dao = new HibernateDAO();
 //		dao.openSession(null);
 //		Department deptCurr = (Department)dao.retrieve(Department.class.getName(),new Long(2));
@@ -273,23 +300,16 @@ public class AuditManager
 		
 		//storageContainerCurr.setTempratureInCentigrade(new Double(80));
 		
-		//System.out.println("deptOld.getName() "+storageContainerOld.getName());
-		
-//		Department dept2 = new Department();
-//		dept2.setName("Department 2");
-		
-		//aAuditManager.compare(dept1,dept2);
-		
-//		User part1 = new User();
-//		part1.setActivityStatus(null);
-//		part1.setDepartment(new Department());
-//		
-//		
-//		User part2 = new User();
-//		part2.setActivityStatus("part2");
-//		part2.setDepartment(null);
+
 		
 		aAuditManager.compare(storageContainerCurr,storageContainerOld,"UPDATE");
+		System.out.println(aAuditManager.auditEvent.getAuditEventLogCollection());
+		
+		
+		Institution a = new Institution();
+		a.setName("AA");
+		aAuditManager.compare(a,null, "INSERT");
+		
 		System.out.println(aAuditManager.auditEvent.getAuditEventLogCollection());
 	}
 	
