@@ -79,7 +79,8 @@
 						<html:hidden property="systemIdentifier" />
 					</td>
 				</tr>
-			 	 
+
+				 <logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>">
                  <tr> 
 		            <td colspan="3" class="formMessage">
 		            	<font color="#000000" size="2" face="Verdana">
@@ -87,7 +88,7 @@
 		            	</font>
 		            </td>
                  </tr>
-                 
+				</logic:equal>                 
 				 <tr>
 				     <td class="formTitle" height="20" colspan="3">
 				     	<bean:message key="reportProblem.title"/>
