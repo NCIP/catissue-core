@@ -52,6 +52,7 @@ PUBLIC
 		<form-bean name="configureResultViewForm" type="edu.wustl.catissuecore.actionForm.ConfigureResultViewForm"/>
 		<form-bean name="distributionReportForm" type="edu.wustl.catissuecore.actionForm.DistributionReportForm"/>
 		
+		<form-bean name="advanceSearchForm" type="edu.wustl.catissuecore.actionForm.AdvanceSearchForm"/>
 	</form-beans>
 	
 	<!-- Global Exception Definitions -->
@@ -1948,6 +1949,24 @@ PUBLIC
 			<forward name="access_denied" path="/Home.do" />
 		</action>
 		<!-- Assign Privileges Actions Ends -->
+		
+		<!-- Advance Query Interface Action Begins -->
+		<action path="/AdvanceQueryInterface"
+			type="edu.wustl.catissuecore.action.AdvanceQueryInterfaceAction"
+			scope="request">
+			<forward name="pageOfAdvanceQueryInterface" path=".catissuecore.advanceQueryInterfaceDef" />
+			<forward name="access_denied" path="/Home.do" />
+		</action>
+		
+		<action path="/ParticipantAdvanceSearch"
+			type="edu.wustl.catissuecore.action.ParticipantSearchAction"
+			name="advanceSearchForm"
+			validate="false"
+			scope="request">
+			<forward name="pageOfParticipantAdvanceSearch" path=".catissuecore.participantSearchDef" />
+			<forward name="access_denied" path="/Home.do" />
+		</action>
+		<!-- Advance Query Interface Actions Ends -->
 		
 		<!-- Edit Object Actions -->
 	

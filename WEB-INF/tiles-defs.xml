@@ -660,6 +660,16 @@
 	</definition>
 	<!-- ASSIGN PRIVILEGES -->
 	
+	<!-- ADVANCE QUERY INTERFACE -->
+	<definition name=".catissuecore.advanceQueryInterfaceDef" extends=".catissuecore.searchHomeDef">
+		<put name="content" value="/pages/content/search/AdvanceQueryInterface.jsp" />
+	</definition>
+	
+	<definition name=".catissuecore.participantSearchDef" extends=".catissuecore.queryDataViewDef">
+		<put name="content" value="/pages/content/search/ParticipantSearch.jsp" />
+	</definition>
+	<!-- ADVANCE QUERY INTERFACE -->
+	
 	<!-- Query edit pages definitions end -->
 
 	<!-- Search tab pages definitions end -->
