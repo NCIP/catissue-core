@@ -11,8 +11,7 @@
 package edu.wustl.catissuecore.bizlogic;
 
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.List;
@@ -76,81 +75,55 @@ public class ShoppingCartBizLogic extends DefaultBizLogic
 		}
 	}
 	
-	public void export(ShoppingCart cart,String directory,String fileName)
+	public List export(ShoppingCart cart,String fileName)
     {
-		FileWriter writer = null;
-		try
+		List shoppingCartList = null;
+		
+		if(cart != null)
 		{
-			File file = new File(directory,fileName);
-			writer = new FileWriter(file);
+			Hashtable table = cart.getCart();
 			
-			if(cart != null)
+			if(table != null && table.size() != 0)
 			{
-				Hashtable table = cart.getCart();
+				Enumeration enum = table.keys();
 				
-				if(table != null && table.size() != 0)
+				shoppingCartList = new ArrayList();
+				
+				List rowList = new ArrayList();
+				
+				rowList.add("Identifier");
+				rowList.add("Type");
+				rowList.add("Subtype");
+				rowList.add("Tissue Site");
+				rowList.add("Tissue Side");
+				rowList.add("Pathological Status");
+				
+				shoppingCartList.add(rowList);
+				
+				while(enum.hasMoreElements())
 				{
-					Enumeration enum = table.keys();
-					String fieldSeparator = "\t";
-					int i=1;
+					rowList = new ArrayList();
 					
-					writer.write("#");
-					writer.write(fieldSeparator);
-					writer.write("IDENTIFIER");
-					writer.write(fieldSeparator);
-					writer.write("TYPE");
-					writer.write(fieldSeparator);
-					writer.write("SUBTYPE");
-					writer.write(fieldSeparator);
-					writer.write("TISSUE SITE");
-					writer.write(fieldSeparator);
-					writer.write("TISSUE SIDE");
-					writer.write(fieldSeparator);
-					writer.write("PATHOLOGICAL STATUS");
-					writer.write(fieldSeparator);
+					String key = (String)enum.nextElement();
+					Specimen specimen = (Specimen)table.get(key);
 					
-					while(enum.hasMoreElements())
-					{
-						String key = (String)enum.nextElement();
-						Specimen specimen = (Specimen)table.get(key);
-						
-						writer.write("\n");
-						writer.write(i + ".");
-						writer.write(fieldSeparator);
-						writer.write(String.valueOf(specimen.getSystemIdentifier()));
-						writer.write(fieldSeparator);
-						writer.write(specimen.getClassName());
-						writer.write(fieldSeparator);
-						writer.write(specimen.getType());
-						writer.write(fieldSeparator);
-						writer.write(specimen.getSpecimenCharacteristics().getTissueSite());
-						writer.write(fieldSeparator);
-						writer.write(specimen.getSpecimenCharacteristics().getTissueSide());
-						writer.write(fieldSeparator);
-						writer.write(specimen.getSpecimenCharacteristics().getPathologicalStatus());
-						i++;
-					}
+					rowList.add(String.valueOf(specimen.getSystemIdentifier()));
+					rowList.add(specimen.getClassName());
+					
+					if(specimen.getType() != null)
+						rowList.add(specimen.getType());
+					else
+						rowList.add("");
+					
+					rowList.add(specimen.getSpecimenCharacteristics().getTissueSite());
+					rowList.add(specimen.getSpecimenCharacteristics().getTissueSide());
+					rowList.add(specimen.getSpecimenCharacteristics().getPathologicalStatus());
+					
+					shoppingCartList.add(rowList);
 				}
 			}
 		}
-		catch(IOException ie)
-		{
-			 Logger.out.error(ie.getMessage(), ie);
-		}
-		catch(Exception e)
-		{
-			 Logger.out.error(e.getMessage(), e);
-		}
-		finally
-		{
-			try
-			{
-				writer.close();
-			}
-			catch(IOException ioe)
-			{
-				 Logger.out.error(ioe.getMessage(), ioe);
-			}
-		}
+		
+		return shoppingCartList;
 	}
 }
