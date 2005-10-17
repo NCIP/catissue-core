@@ -70,12 +70,13 @@ public class ParticipantBizLogic extends DefaultBizLogic
 	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException 
     {
 		Participant participant = (Participant)obj;
-        
+		Participant oldParticipant = (Participant) oldObj;
+		
 		dao.update(participant, sessionDataBean, true, true, false);
 		
 		//Audit of Participant.
 		dao.audit(obj, oldObj, sessionDataBean, true);
-		Participant oldParticipant = (Participant) oldObj;
+		
 		Collection oldParticipantMedicalIdentifierCollection = (Collection)oldParticipant.getParticipantMedicalIdentifierCollection();
 		
 		Collection participantMedicalIdentifierCollection = participant.getParticipantMedicalIdentifierCollection();
