@@ -167,8 +167,10 @@ public class StorageContainerForm extends AbstractActionForm
 			StorageContainer container = (StorageContainer) abstractDomain;
 
 			this.systemIdentifier = container.getSystemIdentifier().longValue();
-			this.activityStatus = container.getActivityStatus();
-			this.startNumber = container.getNumber().toString();
+			this.activityStatus = Utility.toString(container.getActivityStatus());
+			this.startNumber = Utility.toString(container.getNumber());
+			
+			isFull = Utility.toString(container.getIsFull());
 			
 			this.typeId = container.getStorageType().getSystemIdentifier().longValue();
 			
