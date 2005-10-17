@@ -4,6 +4,7 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.CollectionProtocolRegistrationForm"%>
 
+<%@ include file="/pages/content/common/BioSpecimenCommonCode.jsp" %>
 <script src="jss/script.js" type="text/javascript"></script>
 <%
 	   		Object obj = request.getAttribute("collectionProtocolRegistrationForm");
@@ -94,6 +95,7 @@
 				<tr>
 					<td><html:hidden property="operation" value="<%=operation%>" /></td>
 					<td><html:hidden property="systemIdentifier"/>
+					<td><html:hidden property="onSubmit"/></td>
 					<html:hidden property="redirectTo" value="<%=reqPath%>"/>
 					</td>
 				</tr>
@@ -213,7 +215,7 @@
 						</label>
 					</td>
 					<td class="formField">
-						<html:select property="activityStatus" styleClass="formFieldSized10" styleId="activityStatus" size="1">
+						<html:select property="activityStatus" styleClass="formFieldSized10" styleId="activityStatus" size="1" onchange="<%=strCheckStatus%>">
 							<html:options name="<%=Constants.ACTIVITYSTATUSLIST%>" labelName="<%=Constants.ACTIVITYSTATUSLIST%>" />
 						</html:select>
 					</td>

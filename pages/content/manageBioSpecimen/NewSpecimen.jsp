@@ -9,7 +9,7 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
 <%@ page import="java.util.*"%>
 
-
+<%@ include file="/pages/content/common/BioSpecimenCommonCode.jsp" %>
 <%
 String bhIdArray [] = (String []) request.getAttribute(Constants.BIOHAZARD_ID_LIST);
 String bhNameArray [] = (String []) request.getAttribute(Constants.BIOHAZARD_NAME_LIST);
@@ -367,6 +367,7 @@ Map map = form.getExternalIdentifier();
 					<td>
 						<html:hidden property="bhCounter"/>
 					</td>
+					<td><html:hidden property="onSubmit"/></td>
 					<td>
 						<html:hidden property="systemIdentifier"/>
 					</td>
@@ -673,7 +674,7 @@ Map map = form.getExternalIdentifier();
 						</label>
 					</td>
 					<td class="formField" colspan="3">
-						<html:select property="activityStatus" styleClass="formFieldSized10" styleId="activityStatus" size="1">
+						<html:select property="activityStatus" styleClass="formFieldSized10" styleId="activityStatus" size="1" onchange="<%=strCheckStatus%>">
 							<html:options name="<%=Constants.ACTIVITYSTATUSLIST%>" labelName="<%=Constants.ACTIVITYSTATUSLIST%>" />
 						</html:select>
 					</td>

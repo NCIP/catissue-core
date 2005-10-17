@@ -26,7 +26,7 @@
 			
 	}
 %>
-
+<%@ include file="/pages/content/common/BioSpecimenCommonCode.jsp" %>
 <%
 	List specimenIdList = (List)request.getAttribute(Constants.SPECIMEN_ID_LIST);
 	DistributionForm formBean = (DistributionForm)request.getAttribute("distributionForm");
@@ -225,6 +225,7 @@
 			<td><html:hidden property="counter"/></td>
 			<td><html:hidden property="systemIdentifier" /></td>
 			<td><html:hidden property="idChange"/></td>
+			<td><html:hidden property="onSubmit"/></td>
 		</tr>
 		
 		<tr>
@@ -360,7 +361,7 @@
 							</label>
 						</td>
 						<td class="formField">
-							<html:select property="activityStatus" styleClass="formFieldSized10" styleId="activityStatus" size="1">
+							<html:select property="activityStatus" styleClass="formFieldSized10" styleId="activityStatus" size="1" onchange="<%=strCheckStatus%>">
 								<html:options name="<%=Constants.ACTIVITYSTATUSLIST%>" labelName="<%=Constants.ACTIVITYSTATUSLIST%>" />
 							</html:select>
 						</td>

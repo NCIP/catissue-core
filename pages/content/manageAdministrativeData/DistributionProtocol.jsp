@@ -8,6 +8,8 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
 <%@ page import="java.util.*"%>
 
+
+<%@ include file="/pages/content/common/AdminCommonCode.jsp" %>
 <head>
 <script src="jss/script.js" type="text/javascript"></script>
 <%
@@ -244,6 +246,8 @@ function insRow(subdivtag)
 				
 				<tr>
 					<td><html:hidden property="systemIdentifier" /></td>
+					<td><html:hidden property="onSubmit"/></td>
+					
 				</tr>
 
 					<tr>
@@ -398,7 +402,7 @@ function insRow(subdivtag)
 							</label>
 						</td>
 						<td class="formField">
-							<html:select property="activityStatus" styleClass="formFieldSized10" styleId="activityStatus" size="1">
+							<html:select property="activityStatus" styleClass="formFieldSized10" styleId="activityStatus" size="1"  onchange="<%=strCheckStatus%>">
 								<html:options name="<%=Constants.ACTIVITYSTATUSLIST%>" labelName="<%=Constants.ACTIVITYSTATUSLIST%>" />
 							</html:select>
 						</td>

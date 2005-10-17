@@ -6,6 +6,8 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
 <%@ page import="java.util.*"%>
 
+
+<%@ include file="/pages/content/common/AdminCommonCode.jsp" %>
 <%
         String operation = (String) request.getAttribute(Constants.OPERATION);
         String formName;
@@ -275,6 +277,7 @@ function insRow(subdivtag)
 				</tr>
 				<tr>
 					<td><html:hidden property="parentContainerId" /></td>
+					<td><html:hidden property="onSubmit"/></td>
 				</tr>
 
 					<tr>
@@ -441,7 +444,7 @@ function insRow(subdivtag)
 							</label>
 						</td>
 						<td class="formField" colspan="2">
-							<html:select property="activityStatus" styleClass="formFieldSized10" styleId="activityStatus" size="1">
+							<html:select property="activityStatus" styleClass="formFieldSized10" styleId="activityStatus" size="1" onchange="<%=strCheckStatus%>">
 								<html:options name="<%=Constants.ACTIVITYSTATUSLIST%>" labelName="<%=Constants.ACTIVITYSTATUSLIST%>" />
 							</html:select>
 						</td>

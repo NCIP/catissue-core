@@ -7,6 +7,8 @@
 <%@ page import="java.util.*"%>
 <%@ page import="edu.wustl.common.beans.NameValueBean"%>
 
+
+<%@ include file="/pages/content/common/AdminCommonCode.jsp" %>
 <head>
 
 <%
@@ -292,6 +294,7 @@ function getSubDivCount(subdivtag)
 			<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
 				<tr>
 					<td><html:hidden property="operation" value="<%=operation%>" /></td>
+					<td><html:hidden property="onSubmit"/></td>
 				</tr>
 				
 				<tr>
@@ -471,7 +474,7 @@ function getSubDivCount(subdivtag)
 							</label>
 						</td>
 						<td class="formField">
-							<html:select property="activityStatus" styleClass="formFieldSized10" styleId="activityStatus" size="1">
+							<html:select property="activityStatus" styleClass="formFieldSized10" styleId="activityStatus" size="1"  onchange="<%=strCheckStatus%>">
 								<html:options name="<%=Constants.ACTIVITYSTATUSLIST%>" labelName="<%=Constants.ACTIVITYSTATUSLIST%>" />
 							</html:select>
 						</td>

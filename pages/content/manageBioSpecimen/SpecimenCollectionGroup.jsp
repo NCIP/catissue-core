@@ -4,6 +4,7 @@
 <%@ page import="edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 
+<%@ include file="/pages/content/common/BioSpecimenCommonCode.jsp" %>
 <script src="jss/script.js" type="text/javascript"></script>
 
 <% 
@@ -113,6 +114,7 @@
 				 
 				 <tr>
 					<td><html:hidden property="systemIdentifier"/></td>
+					<td><html:hidden property="onSubmit"/></td>
 				 </tr>
 
 				 <tr>
@@ -330,7 +332,7 @@
 						</label>
 					</td>
 					<td class="formField">
-						<html:select property="activityStatus" styleClass="formFieldSized10" styleId="activityStatus" size="1">
+						<html:select property="activityStatus" styleClass="formFieldSized10" styleId="activityStatus" size="1" onchange="<%=strCheckStatus%>">
 							<html:options name="<%=Constants.ACTIVITYSTATUSLIST%>" labelName="<%=Constants.ACTIVITYSTATUSLIST%>" />
 						</html:select>
 					</td>

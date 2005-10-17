@@ -4,6 +4,8 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.SiteForm"%>
 
+
+<%@ include file="/pages/content/common/AdminCommonCode.jsp" %>
 <%
         String operation = (String) request.getAttribute(Constants.OPERATION);
 		String pageOf = (String) request.getAttribute(Constants.PAGEOF);
@@ -69,6 +71,7 @@
 					<td><html:hidden property="systemIdentifier" />
 						<html:hidden property="redirectTo" value="<%=reqPath%>"/>
 					</td>
+					<td><html:hidden property="onSubmit"/></td>
 				</tr>
 
 				<tr>
@@ -249,7 +252,7 @@
 								</label>
 							</td>
 						<td class="formField">
-							<html:select property="activityStatus" styleClass="formFieldSized" styleId="activityStatus" size="1">
+							<html:select property="activityStatus" styleClass="formFieldSized" styleId="activityStatus" size="1" onchange="<%=strCheckStatus%>">
 								<html:options name="activityStatusList" labelName="activityStatusList" />
 							</html:select>
 						</td>

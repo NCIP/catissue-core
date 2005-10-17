@@ -10,7 +10,7 @@
 <%@ page import="java.util.*"%>
 
 <script src="jss/script.js" type="text/javascript"></script>
-
+<%@ include file="/pages/content/common/BioSpecimenCommonCode.jsp" %>
 <% 
 		List siteList = (List)request.getAttribute(Constants.SITELIST);
 		
@@ -134,6 +134,8 @@
 				field.value = field.value.replace(/[^\d]+/g, ''); 
 			}
 		}
+		
+		
 	</script>
 </head>
 
@@ -234,6 +236,7 @@
 				 <tr>
 					<td><html:hidden property="<%=Constants.OPERATION%>" value="<%=operation%>"/></td>
 					<td><html:hidden property="counter"/></td>
+					<td><html:hidden property="onSubmit"/></td>
 					<td><html:hidden property="systemIdentifier" /><html:hidden property="redirectTo"/></td>
 <td><html:hidden property="pageOf" value="<%=pageOf%>"/></td>
 				 </tr>
@@ -373,7 +376,7 @@
 						</label>
 					</td>
 					<td class="formField" colspan="2">
-						<html:select property="activityStatus" styleClass="formFieldSized10" styleId="activityStatus" size="1">
+						<html:select property="activityStatus" styleClass="formFieldSized10" styleId="activityStatus" size="1" onchange="<%=strCheckStatus%>">
 							<html:options name="<%=Constants.ACTIVITYSTATUSLIST%>" labelName="<%=Constants.ACTIVITYSTATUSLIST%>" />
 						</html:select>
 					</td>
