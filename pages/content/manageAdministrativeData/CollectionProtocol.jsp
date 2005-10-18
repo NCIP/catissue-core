@@ -555,6 +555,8 @@ function getSubDivCount(subdivtag)
 %>
 <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="100%" id="<%=tableId%>">
 <tr><td>
+<table cellpadding=5 class="tbBorders">
+<tr><td>
 <table summary="" cellpadding="3" cellspacing="0" border="0" width="100%" bgColor="<%=tblColor%>"  id="i<%=tableId%>">
 	<tr>
 		<td rowspan=2 class="tabrightmostcellAddMore"><%=counter%></td>
@@ -631,15 +633,15 @@ function getSubDivCount(subdivtag)
 		<td class="formFieldAddMore">
 			<table summary="" cellpadding="3" cellspacing="0" border="0" width=100%>
 			    <tr>
-			        <td colspan="5" class="formTitle">
+			        <td colspan="5" class="formSubTitle">
 			        	<b><bean:message key="collectionprotocol.specimenreq"/></b>
 			        </td>
-			        <td class="formTitle">	
+			        <td class="formSubTitle">	
 			     		<html:button property="addSpecimenReq" styleClass="actionButton" value="Add More" onclick="<%=functionName%>"/>
 			     		
 			     		<html:hidden styleId="<%=cid%>" property="<%=cid%>" value="<%=""+maxIntCount%>"/>
 			        </td>
-			        <td class="formTitle" align="Right">
+			        <td class="formSubTitle" align="Right">
 			        		<% String temp = "deleteChecked('";
 			        			temp = temp + commonLabel+"',";
 			        			temp = temp + "'/catissuecore/CollectionProtocol.do?operation="+operation+"&pageOf=pageOfCollectionProtocol&status=true&button=deleteSpecimenReq&blockCounter="+counter+"',";
@@ -674,7 +676,7 @@ function getSubDivCount(subdivtag)
 			        <td class=formLeftSubTitle>&nbsp;
 			        	<bean:message key="collectionprotocol.quantity" />
 			        </td>
-			        <td class="formRightSubTableTitle">
+			        <td class="formLeftSubTitle">
 						<label for="delete" align="center">
 							<bean:message key="addMore.delete" />
 						</label>
@@ -820,6 +822,8 @@ function getSubDivCount(subdivtag)
 </table> <!-- outer table for CPE ends -->
 </td></tr>
 </table>
+</td></tr>
+</table>
 
 <%
 } // outer for
@@ -859,6 +863,8 @@ function getSubDivCount(subdivtag)
 <html:form action="DummyCollectionProtocol.do">
 <div id="d1">
 <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="100%" id="table_`">
+<tr><td>
+<table cellpadding=5 class="tbBorders">
 <tr><td>
 <table summary="" cellpadding="3" cellspacing="0" border="0" width="100%" id="itable_`">
 	<tr>
@@ -914,10 +920,10 @@ function getSubDivCount(subdivtag)
 		<td class="formFieldAddMore">
 			<table summary="" cellpadding="3" cellspacing="0" border="0" width=100%>
 			    <tr>
-			        <td colspan="5" class="formTitle">
+			        <td colspan="5" class="formSubTitle">
 			        	<b><bean:message key="collectionprotocol.specimenreq"/></b>
 			        </td>
-			        <td class="formTitle">	
+			        <td class="formSubTitle">	
 			        <%
 				        String hiddenCounter = "ivl(`)";
 			        %>
@@ -925,7 +931,7 @@ function getSubDivCount(subdivtag)
 			     		
 			     		<html:hidden styleId="<%=hiddenCounter%>" property="<%=hiddenCounter%>" value="1"/>
 			        </td>
-			        <td class="formTitle" align="Right">
+			        <td class="formSubTitle" align="Right">
 							<html:button property="deleteSpecimenReq" styleClass="actionButton" onclick="deleteChecked('value(CollectionProtocolEvent:`','/catissuecore/CollectionProtocol.do?operation=<%=operation%>&pageOf=pageOfCollectionProtocol&status=true&button=deleteSpecimenReq&blockCounter=`','ivl(`)','chk_spec_`_',false)">
 								<bean:message key="buttons.delete"/>
 							</html:button>
@@ -953,7 +959,7 @@ function getSubDivCount(subdivtag)
 			        <td class=formLeftSubTitle>* 
 			        	<bean:message key="collectionprotocol.quantity" />
 			        </td>
-			        <td class="formRightSubTableTitle">
+			        <td class="formLeftSubTitle">
 						<label for="delete" align="center">
 							<bean:message key="addMore.delete" />
 						</label>
@@ -1028,6 +1034,8 @@ function getSubDivCount(subdivtag)
 		</td>
 	</tr>
 </table> <!-- outer table for CPE ends -->
+</td></tr>
+</table>
 </td></tr>
 </table>
 </div>
