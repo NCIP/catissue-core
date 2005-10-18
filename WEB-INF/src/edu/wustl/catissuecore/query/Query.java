@@ -4,12 +4,15 @@ package edu.wustl.catissuecore.query;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
 import edu.wustl.catissuecore.dao.DAOFactory;
 import edu.wustl.catissuecore.dao.JDBCDAO;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
@@ -107,16 +110,17 @@ public abstract class Query
 
 	/**
 	 * This method executes the query string formed from getString method and creates a temporary table.
+	 * @param columnIdsMap
 	 * @return Returns true in case everything is successful else false
 	 */
-	public List execute() throws DAOException
+	public List execute(SessionDataBean sessionDataBean, int securityParam, String[][] objectIdentifiers, Map columnIdsMap) throws DAOException
 	{
 	    try
 	    {
 	    	JDBCDAO dao = (JDBCDAO)DAOFactory.getDAO(Constants.JDBC_DAO);
 	        dao.openSession(null);
-	        Logger.out.debug("Simple SQL....................."+getString());
-			List list = dao.executeQuery(getString());
+	        Logger.out.debug("SQL************"+getString());
+			List list = dao.executeQuery(getString(), sessionDataBean, securityParam, objectIdentifiers, columnIdsMap);
 			dao.closeSession();
 	        return list;
 	    }
@@ -137,6 +141,16 @@ public abstract class Query
 	public boolean addElementToView(DataElement dataElement)
 	{
 	    return resultView.add(dataElement);
+	}
+	
+	/**
+	 * Adds the dataElement to result view
+	 * @param dataElement - Data Element to be added
+	 * @return - true (as per the general contract of Collection.add).
+	 */
+	public void addElementToView(int position,DataElement dataElement)
+	{
+	    resultView.add(position,dataElement);
 	}
 	
 	public String [] setViewElements(String aliasName) throws DAOException
@@ -166,7 +180,7 @@ public abstract class Query
 		    
 		    JDBCDAO jdbcDao = new JDBCDAO();
 	        jdbcDao.openSession(null);
-	        List list = jdbcDao.executeQuery(sql);
+	        List list = jdbcDao.executeQuery(sql, null, Constants.INSECURE_RETRIEVE, null,null);
 	        jdbcDao.closeSession();
 		    
 		    Vector vector = new Vector();
@@ -221,7 +235,7 @@ public abstract class Query
             for (int i = 0; i < resultView.size(); i++)
             {
                 dataElement = (DataElement) resultView.get(i);
-                set.add(dataElement.getTable());
+//                set.add(dataElement.getTable());
                 if (i != resultView.size() - 1)
                     query.append(dataElement.getTable() + tableSufix + "."
                             + dataElement.getField() + ", ");
@@ -234,9 +248,7 @@ public abstract class Query
         /**
          * Forming FROM part of query
          */
-        set.addAll(whereConditions.getQueryObjects());
-        set.add(this.queryStartObject);
-        set.addAll(tableSet);
+        set = (HashSet) getTableSet();
 //        HashSet relatedTables = new HashSet();
 //        Iterator it = set.iterator();
 //        while(it.hasNext())
@@ -441,6 +453,15 @@ public abstract class Query
     {
         this.resultView = resultView;
     }
+    
+    /**
+     * 
+     * @return
+     */
+    public Vector getResultView()
+    {
+        return this.resultView;
+    }
 
     public Set getRelatedTables(String aliasName)
     {
@@ -456,7 +477,7 @@ public abstract class Query
                     + "where relationData.PARENT_TABLE_ID = tableData.TABLE_ID and tableData.ALIAS_NAME = '"
                     + aliasName
                     + "') as relatedTables  on relatedTables.CHILD_TABLE_ID = tableData2.TABLE_ID";
-            list = dao.executeQuery(getString());
+            list = dao.executeQuery(getString(), null, Constants.INSECURE_RETRIEVE, null,null);
 
             Iterator iterator = list.iterator();
             while (iterator.hasNext())
@@ -483,15 +504,57 @@ public abstract class Query
     /**
      * @return Returns the tableSet.
      */
-    public Set getTableSet()
-    {
-        return tableSet;
-    }
+    public Set getTableSet() {
+		Set set = new HashSet();
+		DataElement dataElement;
+		if (resultView != null) {
+			for (int i = 0; i < resultView.size(); i++) {
+				dataElement = (DataElement) resultView.get(i);
+				set.add(dataElement.getTable());
+
+			}
+		}
+		if (whereConditions != null) {
+			set.addAll(whereConditions.getQueryObjects());
+		}
+		if (this.queryStartObject != null) {
+			set.add(this.queryStartObject);
+		}
+		if (tableSet != null) {
+			set.addAll(tableSet);
+		}
+		Logger.out.debug("TableSet:"+set.size());
+		return set;
+	}
     /**
-     * @param tableSet The tableSet to set.
-     */
+	 * @param tableSet
+	 *            The tableSet to set.
+	 */
     public void setTableSet(Set tableSet)
     {
         this.tableSet = tableSet;
     }
+    
+    public Vector getColumnIds(String tableAlias)
+    {
+    	Vector columnIds = new Vector();
+    	DataElement dataElement;
+    	for(int i =0;i<resultView.size();i++)
+    	{
+    		dataElement = (DataElement) resultView.get(i);
+    		if(dataElement.getTable().equals(tableAlias))
+    		{
+    			columnIds.add(new Integer(i+1));
+    			Logger.out.debug("tableAlias:"+tableAlias+" columnId:"+(i+1));
+    		}
+    	}
+    	
+    	return columnIds;
+    }
+	/**
+	 * @return Returns the whereConditions.
+	 */
+	public ConditionsImpl getWhereConditions() {
+		return whereConditions;
+	}
 }
