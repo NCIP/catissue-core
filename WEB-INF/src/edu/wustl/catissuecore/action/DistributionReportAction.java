@@ -34,8 +34,8 @@ public class DistributionReportAction extends BaseDistributionReportAction
     		configForm.setDistributionId(distributionId);
     	else
     		distributionId = configForm.getDistributionId();
-    	//Retrieve the distribution object for the distribution ID
-    	Distribution dist =  getDistribution(distributionId);
+    	
+    	Distribution dist =  getDistribution(distributionId, getSessionData(request), Constants.CLASS_LEVEL_SECURE_RETRIEVE);
     	
     	//Retrieve the distributed items data
     	DistributionReportForm distributionReportForm = getDistributionReportForm(dist);

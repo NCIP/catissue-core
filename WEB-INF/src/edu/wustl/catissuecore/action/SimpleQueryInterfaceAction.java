@@ -84,7 +84,7 @@ public class SimpleQueryInterfaceAction extends SecureAction
                     JDBCDAO jdbcDAO = (JDBCDAO)DAOFactory.getDAO(Constants.JDBC_DAO);
                     jdbcDAO.openSession(null);
                     String sql = "select DISPLAY_NAME from CATISSUE_QUERY_INTERFACE_TABLE_DATA where ALIAS_NAME='"+value+"'";
-                    List list = jdbcDAO.executeQuery(sql);
+                    List list = jdbcDAO.executeQuery(sql,null,Constants.INSECURE_RETRIEVE,null,null);
                     jdbcDAO.closeSession();
                     
                     if (!list.isEmpty())
@@ -113,9 +113,10 @@ public class SimpleQueryInterfaceAction extends SecureAction
             request.setAttribute(Constants.TABLE_ALIAS_NAME,aliasName);
         }
         
+       
         JDBCDAO jdbcDAO = (JDBCDAO)DAOFactory.getDAO(Constants.JDBC_DAO);
         jdbcDAO.openSession(null);
-        List tableList = jdbcDAO.executeQuery(sql);
+        List tableList = jdbcDAO.executeQuery(sql,null,Constants.INSECURE_RETRIEVE,null,null);
         jdbcDAO.closeSession();
         
         String [] objectDisplayNames = null; 
@@ -193,7 +194,7 @@ public class SimpleQueryInterfaceAction extends SecureAction
         
         JDBCDAO jdbcDao = new JDBCDAO();
         jdbcDao.openSession(null);
-        List list = jdbcDao.executeQuery(sql);
+        List list = jdbcDao.executeQuery(sql, null, Constants.INSECURE_RETRIEVE, null,null);
         jdbcDao.closeSession();
         
         String [] columnNameList = new String[list.size()];
@@ -247,7 +248,7 @@ public class SimpleQueryInterfaceAction extends SecureAction
             
             JDBCDAO jdbcDao = (JDBCDAO)DAOFactory.getDAO(Constants.JDBC_DAO);
             jdbcDao.openSession(null);
-            List list = jdbcDao.executeQuery(sql);
+            List list = jdbcDao.executeQuery(sql,null,Constants.INSECURE_RETRIEVE,null,null);
             jdbcDao.closeSession();
             
             aliasNameList = new String[list.size()+2];
@@ -260,7 +261,7 @@ public class SimpleQueryInterfaceAction extends SecureAction
             jdbcDAO.openSession(null);
             sql = "select DISPLAY_NAME from CATISSUE_QUERY_INTERFACE_TABLE_DATA where ALIAS_NAME='"+prevValue+"'";
             Logger.out.debug("DISPLAY_NAME sql.........................."+sql);
-            List prevValueDisplayNameList = jdbcDAO.executeQuery(sql);
+            List prevValueDisplayNameList = jdbcDAO.executeQuery(sql,null,Constants.INSECURE_RETRIEVE,null,null);
             jdbcDAO.closeSession();
             
             String prevValueDisplayName = null;

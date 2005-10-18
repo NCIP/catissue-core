@@ -31,13 +31,13 @@ import edu.wustl.catissuecore.util.global.Constants;
  * in spreadsheet or individaul view.
  * @author gautam_shetty
  */
-public class DataViewAction extends Action
+public class DataViewAction extends BaseAction
 {
     
     /**
      * Overrides the execute method in Action class.
      */
-    public ActionForward execute(ActionMapping mapping, ActionForm form,
+    public ActionForward executeAction(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response) throws Exception
     {
         String nodeName = request.getParameter("nodeName");
@@ -65,7 +65,7 @@ public class DataViewAction extends Action
                 columnList = Constants.DEFAULT_SPREADSHEET_COLUMNS;
             }
             
-            list = resultData.getSpreadsheetViewData(name,id,columnList);
+            list = resultData.getSpreadsheetViewData(name,id,columnList, getSessionData(request), Constants.OBJECT_LEVEL_SECURE_RETRIEVE);
             request.setAttribute(Constants.SPREADSHEET_COLUMN_LIST,columnList);
             request.setAttribute(Constants.SPREADSHEET_DATA_LIST,list);
         }

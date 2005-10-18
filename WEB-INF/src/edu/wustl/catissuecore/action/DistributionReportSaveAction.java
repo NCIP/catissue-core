@@ -36,9 +36,9 @@ public class DistributionReportSaveAction extends BaseDistributionReportAction
 		ConfigureResultViewForm configForm = (ConfigureResultViewForm)form;
 		//Retrieve the distribution ID
 		Long distributionId =configForm.getDistributionId();;
-		//Retrieve the distribution object for the distribution ID
-		Distribution dist =  getDistribution(distributionId);
-		//Retrieve the distributed items data
+		
+		Distribution dist =  getDistribution(distributionId, getSessionData(request), Constants.CLASS_LEVEL_SECURE_RETRIEVE);
+    	
     	DistributionReportForm distributionReportForm = getDistributionReportForm(dist);
     	List listOfData = getListOfData(dist, configForm) ;
     	
