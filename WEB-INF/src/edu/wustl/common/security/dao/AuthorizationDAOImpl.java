@@ -138,6 +138,7 @@ public class AuthorizationDAOImpl extends
 			stbr2.append(" and rp.privilege_id = p.privilege_id");
 
 			String sql = stbr.toString();
+			log.debug("SQL:"+sql);
 			pstmt = cn.prepareStatement(sql);
 			
 			String sql2 = stbr2.toString();
