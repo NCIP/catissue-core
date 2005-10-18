@@ -9,7 +9,7 @@
 # ------------------------------------------------------
 # Server version 4.1.10-nt
 
-USE `catissuecore`;
+#USE `catissuecore`;
 
 #
 # Table Objects for table csm_application
