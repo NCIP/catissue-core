@@ -12,11 +12,14 @@ package edu.wustl.catissuecore.bizlogic;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 import edu.wustl.catissuecore.dao.DAO;
+import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.common.beans.SessionDataBean;
@@ -108,6 +111,9 @@ public class ParticipantBizLogic extends DefaultBizLogic
 		}
     }
 	
+	/**
+	 * @see AbstractBizLogic#setPrivilege(DAO, String, Class, Long[], Long, String, boolean)
+	 */
 	public void setPrivilege(DAO dao, String privilegeName, Class objectType, Long[] objectIds, Long userId, String roleId, boolean assignToUser) throws SMException, DAOException
     {
 	    Logger.out.debug(" privilegeName:"+privilegeName+" objectType:"+objectType+" objectIds:"+edu.wustl.common.util.Utility.getArrayString(objectIds)+" userId:"+userId+" roleId:"+roleId+" assignToUser:"+assignToUser);
@@ -116,4 +122,24 @@ public class ParticipantBizLogic extends DefaultBizLogic
 	    CollectionProtocolRegistrationBizLogic bizLogic = (CollectionProtocolRegistrationBizLogic)BizLogicFactory.getBizLogic(Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
 		bizLogic.assignPrivilegeToRelatedObjectsForParticipant(dao,privilegeName,objectIds,userId,roleId,assignToUser );
     }
+
+	/**
+	 * @param dao
+	 * @param privilegeName
+	 * @param longs
+	 * @param userId
+	 * @param roleId
+	 * @param assignToUser
+	 * @throws DAOException
+	 * @throws SMException
+	 */
+	public void assignPrivilegeToRelatedObjectsForCPR(DAO dao, String privilegeName, Long[] objectIds, Long userId, String roleId, boolean assignToUser) throws SMException, DAOException {
+		 List listOfSubElement = super.getRelatedObjects(dao, CollectionProtocolRegistration.class, new String[] {Constants.PARTICIPANT_IDENTIFIER_IN_CPR+"."+Constants.SYSTEM_IDENTIFIER}, new String[] {Constants.SYSTEM_IDENTIFIER}, 
+   			 objectIds);
+    Logger.out.debug(" CPR Ids:"+edu.wustl.common.util.Utility.getArrayString(objectIds)+" Related Participant Ids:"+listOfSubElement);  
+   	if(!listOfSubElement.isEmpty())
+   	{
+   	    super.setPrivilege(dao,privilegeName,Participant.class,Utility.toLongArray(listOfSubElement),userId, roleId, assignToUser);
+   	}
+	}
 }
