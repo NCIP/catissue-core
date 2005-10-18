@@ -1239,15 +1239,14 @@ public class Constants
 	public static final String DISTRIBUTION_ID = "distributionId";
 	public static final String CONFIGURE_DISTRIBUTION_ACTION = "ConfigureDistribution.do";
 	public static final String DISTRIBUTION_REPORT_ACTION = "DistributionReport.do";
-	//public static final String DISTRIBUTION_REPORT_SAVE_ACTION = "DistributionReportSave.do";
 	public static final String DELIMETER = ",";
 	public static final String DISTRIBUTION_REPORT_SAVE_ACTION="DistributionReportSave.do";
 	public static final String SELECTED_COLUMNS[] = {"Specimen.IDENTIFIER.Specimen Identifier",
 													"Specimen.TYPE.Specimen Type",
-													"DistributedItem.QUANTITY.Specimen Quantity",
 													"SpecimenCharacteristics.TISSUE_SITE.Tissue Site",
 													"SpecimenCharacteristics.TISSUE_SIDE.Tissue Side",
-													"SpecimenCharacteristics.PATHOLOGICAL_STATUS.Pathological Status"};
+													"SpecimenCharacteristics.PATHOLOGICAL_STATUS.Pathological Status",
+													"DistributedItem.QUANTITY.Specimen Quantity"};
 	public static final String SPECIMEN_ID_LIST = "specimenIdList";
 	public static final String DISTRIBUTION_ACTION = "Distribution.do?operation=add&pageOf=pageOfDistribution&specimenIdKey=";
 	public static final String DISTRIBUTION_REPORT_NAME = "Distribution Report.csv";
