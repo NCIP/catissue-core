@@ -104,3 +104,13 @@ function changeUrl(element,str)
 			var s = str.substring(ind);
 			return s;
 		}
+		
+		function checkActivityStatus(element,url)
+		{
+			var str = element.options[element.selectedIndex].text;
+			if(str == "Disabled")
+			{
+				document.forms[0].onSubmit.value=url;
+			}
+		}
+		
