@@ -157,9 +157,9 @@ public class SimpleQueryInterfaceAction extends SecureAction
         String pageOf = request.getParameter(Constants.PAGEOF);
         request.setAttribute(Constants.PAGEOF, pageOf);
         
-        //Fix as per Bug : 521
-        String title = "SIMPLE SEARCH";
-        request.setAttribute(Constants.SIMPLE_QUERY_INTERFACE_TITLE, title);
+//        //Fix as per Bug : 521
+//        String title = "SIMPLE SEARCH";
+//        request.setAttribute(Constants.SIMPLE_QUERY_INTERFACE_TITLE, title);
         
         return mapping.findForward(pageOf);
     }

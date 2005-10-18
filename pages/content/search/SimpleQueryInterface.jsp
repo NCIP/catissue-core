@@ -29,6 +29,16 @@
 		dateClass = "formField";
         
 	String title = (String)request.getAttribute(Constants.SIMPLE_QUERY_INTERFACE_TITLE);
+	
+	String alias = (String)request.getParameter("aliasName");
+	if(alias == null)
+	{
+		title="simpleQuery.title";
+	}
+	else
+	{
+		title=alias+".Search";
+	}
 %>
 <script>
 
@@ -116,8 +126,8 @@ function showDateColumn(element)
 				</tr>
 				<tr>
 					<td class="formTitle" height="20" colspan="7">
-						<%--bean:message key="simpleQuery.title" /--%>
-						<%=title%>
+						<bean:message key="<%=title%>" />
+						
 					</td>
 				</tr>
 				<tbody id="simpleQuery">
