@@ -237,10 +237,15 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
     }
 
     /**
+     * @see AbstractBizLogic#setPrivilege(DAO, String, Class, Long[], Long, String, boolean)
      * @param dao
      * @param privilegeName
      * @param objectIds
      * @param userId
+     * @param roleId
+     * @param assignToUser
+     * @throws SMException
+     * @throws DAOException
      */
     public void assignPrivilegeToRelatedObjectsForCP(DAO dao, String privilegeName, Long[] objectIds, Long userId, String roleId, boolean assignToUser)throws SMException, DAOException
     {
@@ -250,14 +255,24 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
     	    super.setPrivilege(dao,privilegeName,CollectionProtocolRegistration.class,Utility.toLongArray(listOfSubElement),userId,roleId, assignToUser);
 			SpecimenCollectionGroupBizLogic bizLogic = (SpecimenCollectionGroupBizLogic)BizLogicFactory.getBizLogic(Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID);
 			bizLogic.assignPrivilegeToRelatedObjects(dao,privilegeName,Utility.toLongArray(listOfSubElement),userId, roleId, assignToUser);
+			
+			ParticipantBizLogic participantBizLogic = (ParticipantBizLogic)BizLogicFactory.getBizLogic(Constants.PARTICIPANT_FORM_ID);
+			participantBizLogic.assignPrivilegeToRelatedObjectsForCPR(dao,privilegeName,Utility.toLongArray(listOfSubElement),userId, roleId, assignToUser);
     	}
     }
     
+    /**
+     * @see AbstractBizLogic#setPrivilege(DAO, String, Class, Long[], Long, String, boolean)
+     */
     public void setPrivilege(DAO dao, String privilegeName, Class objectType, Long[] objectIds, Long userId, String roleId, boolean assignToUser) throws SMException, DAOException
     {
 	    super.setPrivilege(dao,privilegeName,objectType,objectIds,userId, roleId, assignToUser);
 	    
 	    SpecimenCollectionGroupBizLogic bizLogic = (SpecimenCollectionGroupBizLogic)BizLogicFactory.getBizLogic(Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID);
 		bizLogic.assignPrivilegeToRelatedObjects(dao,privilegeName,objectIds,userId, roleId, assignToUser);
+		
+		ParticipantBizLogic participantBizLogic = (ParticipantBizLogic)BizLogicFactory.getBizLogic(Constants.PARTICIPANT_FORM_ID);
+		participantBizLogic.assignPrivilegeToRelatedObjectsForCPR(dao,privilegeName,objectIds,userId, roleId, assignToUser);
+	
 	}
 }
