@@ -1,8 +1,5 @@
 /*
- * Created on Jul 25, 2005
  *
- * TODO To change the template for this generated file go to
- * Window - Preferences - Java - Code Style - Code Templates
  */
 package edu.wustl.catissuecore.audit;
 
@@ -34,21 +31,29 @@ import edu.wustl.common.util.dbManager.HibernateMetaData;
 import edu.wustl.common.util.logger.Logger;
 
 /**
+ * AuditManager is an algorithm to figure out the changes with respect to database due to 
+ * insert, update or delete data from/to database. 
  * @author kapil_kaveeshwar
- *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Style - Code Templates
  */
 public class AuditManager 
 {
-	//Instance of Audit event. All the change under one database session are added under this event.
+	/* Instance of Audit event. 
+	 * All the change under one database session are added under this event.
+	 **/
 	private AuditEvent auditEvent;  
 	
+	/**
+	 * Instanciate a new instance of AuditManager
+	 * */
 	public AuditManager()
 	{
 		auditEvent = new AuditEvent();
 	}
 	
+	/**
+	 * Set the id of the logged-in user who performed the changes.
+	 * @param userId System identifier of logged-in user who performed the changes.
+	 * */
 	public void setUserId(Long userId)
 	{
 		if(userId!=null )
@@ -57,10 +62,13 @@ public class AuditManager
 			user.setSystemIdentifier(userId);
 			auditEvent.setUser(user);
 		}
-		else
+		else //CASE when no any user is logged-in in system. e.g report problem, signup user etc.
 			auditEvent.setUser(null);
 	}
 	
+	/**
+	 * Set the ip address of the machine from which the event was performed.
+	 * */
 	public void setIpAddress(String IPAddress)
 	{
 		auditEvent.setIpAddress(IPAddress);
@@ -73,7 +81,7 @@ public class AuditManager
 	{
 		if(obj instanceof Number || obj instanceof String || 
 				obj instanceof Boolean || obj instanceof Character || 
-				obj instanceof Date || obj instanceof Auditable)
+				obj instanceof Date)
 			return true;
 		return false;
 	}
@@ -94,7 +102,10 @@ public class AuditManager
 			//An auidt event will contain many logs.
 			AuditEventLog auditEventLog = new AuditEventLog();
 			
+			//Set System identifier if the current object.
 			auditEventLog.setObjectIdentifier(currentObj.getSystemIdentifier());
+			
+			//Set the table name of the current class
 			auditEventLog.setObjectName(HibernateMetaData.getTableName(currentObj.getClass()));
 			auditEventLog.setEventType(eventType);
 			
@@ -119,7 +130,9 @@ public class AuditManager
 					//filter only getter methods.
 					if(methods[i].getName().startsWith("get") && methods[i].getParameterTypes().length==0)
 					{
+						//For each attribute check the changes.
 						AuditEventDetails auditEventDetails = processField(methods[i], currentObj, previousObj);
+						
 						if(auditEventDetails!=null)
 							auditEventDetailsCollection.add(auditEventDetails);
 					}
@@ -139,21 +152,33 @@ public class AuditManager
 		}
 	}
 	
+	/**
+	 * Process each field to find the change from previous value to current value.
+	 * @param method referance of getter method object access the current and previous value of the object.
+	 * 
+	 * @param currentObj instance of current object
+	 * @param previousObj instance of previous object.
+	 * */
 	private AuditEventDetails processField(Method method, Object currentObj, Object previousObj) throws Exception
 	{
+		//Get the old value of the attribute from previousObject
 		Object prevVal = getValue(method, previousObj);
+		
+		//Get the current value of the attribute from currentObject
 		Object currVal = getValue(method, currentObj);
 		
-		String attributeName = processAttributeName(method.getName());
+		//Compare the old and current value
 		AuditEventDetails auditEventDetails = compareValue(prevVal, currVal);
 		
 		if(auditEventDetails!=null)
 		{
-			//String attributeName = processAttributeName(method.getName());
+			//Parse the attribute name from getter method.
+			String attributeName = processAttributeName(method.getName());
+			
+			//Find the currosponding column in the database
 			String columnName = HibernateMetaData.getColumnName(currentObj.getClass(),attributeName);
 		
-			//Logger.out.debug("attributeName "+attributeName);
-			///Case of transient object
+			//Case of transient object
 			if(columnName.equals(""))
 				return null;
 			
@@ -174,7 +199,6 @@ public class AuditManager
 		String firstChar = (attributeName.charAt(0)+"").toLowerCase();
 		attributeName = firstChar + attributeName.substring(1);
 		
-		//Logger.out.debug("methodName <"+methodName+">");
 		Logger.out.debug("attributeName <"+attributeName+">");
 		
 		return attributeName;
@@ -185,8 +209,6 @@ public class AuditManager
 	{
 		if(obj!=null)
 		{
-			//System.out.println("method "+method.getName());
-			
 			Object val = Utility.getValueFor(obj,method);
 			
 			if(val instanceof Auditable)
@@ -204,8 +226,6 @@ public class AuditManager
 	{
 		Logger.out.debug("prevVal <"+prevVal+">");
 		Logger.out.debug("currVal <"+currVal+">");
-		
-		
 		
 		if(prevVal==null && currVal==null)
 		{
@@ -236,7 +256,6 @@ public class AuditManager
 			auditEventDetails.setCurrentValue(currVal.toString());
 			return auditEventDetails;
 		}
-		
 		return null;
 	}
 	
