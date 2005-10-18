@@ -1974,7 +1974,24 @@ PUBLIC
 		<!-- Advance Query Interface Actions Ends -->
 		
 		<!-- Edit Object Actions -->
-	
+		<action path="/AdvanceQuery"
+			type="edu.wustl.catissuecore.action.SimpleQueryInterfaceAction"
+			name="simpleQueryInterfaceForm"
+			validate="false"
+			scope="request">
+			<forward name="pageOfSimpleQueryInterface" path=".catissuecore.advanceQueryDef" />
+			<forward name="failure" path=".catissuecore.advanceQueryDef" />
+		</action>
+
+		<action path="/AdvanceSearch"
+			type="edu.wustl.catissuecore.action.AdvanceSearchAction"
+			name="simpleQueryInterfaceForm"
+			validate="true"
+			input="/AdvanceQuery.do"
+			scope="request">
+			<forward name="success" path="/SpreadsheetView.do" />
+			<forward name="failure" path="/AdvanceQuery.do" />
+		</action>
 	</action-mappings>
 	
 	<message-resources parameter="ApplicationResources" />

@@ -561,7 +561,7 @@
 	<definition name=".catissuecore.distributionReportSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
 		<put name="content" value="/pages/content/search/DistributionReport.jsp" />
 	</definition>
-	
+
 	
 	<!-- Distribution end -->
 
@@ -619,6 +619,10 @@
 	<definition name=".catissuecore.simpleQueryInterfaceDef" extends=".catissuecore.searchHomeDef">
 		<put name="content" value="/pages/content/search/SimpleQueryInterface.jsp" />
 	</definition>
+	
+	<definition name=".catissuecore.advanceQueryDef" extends=".catissuecore.searchHomeDef">
+		<put name="content" value="/pages/content/search/AdvanceQuery.jsp" />
+	</definition>
 
 	<definition name=".catissuecore.queryResultsDef" extends=".catissuecore.searchHomeDef">
 		<put name="content" value="/pages/content/search/QueryResultsView.jsp" />
@@ -664,6 +668,7 @@
 	<!-- ASSIGN PRIVILEGES -->
 	
 	<!-- ADVANCE QUERY INTERFACE -->
+	
 	<definition name=".catissuecore.advanceQueryInterfaceDef" extends=".catissuecore.searchHomeDef">
 		<put name="content" value="/pages/content/search/AdvanceQueryInterface.jsp" />
 	</definition>
