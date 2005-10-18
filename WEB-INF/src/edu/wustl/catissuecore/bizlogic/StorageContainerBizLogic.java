@@ -290,11 +290,10 @@ public class StorageContainerBizLogic extends DefaultBizLogic
         //Setting the site if applicable
         if (container.getSite() != null)
         {
-            List list = dao.retrieve(Site.class.getName(), "systemIdentifier",
-                    container.getSite().getSystemIdentifier());
-            if (list.size() != 0)
+            Object siteObj = dao.retrieve(Site.class.getName(), container.getSite().getSystemIdentifier());
+            if (siteObj != null)
             {
-                Site site = (Site) list.get(0);
+                Site site = (Site) siteObj;
                 
                 // check for closed site
     			checkStatus(dao, site, "Site" );
@@ -305,16 +304,14 @@ public class StorageContainerBizLogic extends DefaultBizLogic
         }
     }
     
-    private void loadStorageType(DAO dao, StorageContainer container)
-            throws DAOException
+    private void loadStorageType(DAO dao, StorageContainer container) throws DAOException
     {
         //Setting the Storage Type
-        List list = dao.retrieve(StorageType.class.getName(),
-                "systemIdentifier", container.getStorageType()
+        Object storageTypeObj = dao.retrieve(StorageType.class.getName(), container.getStorageType()
                         .getSystemIdentifier());
-        if (list.size() != 0)
+        if (storageTypeObj != null)
         {
-            StorageType type = (StorageType) list.get(0);
+            StorageType type = (StorageType)storageTypeObj;
             container.setStorageType(type);
         }
     }
@@ -532,5 +529,4 @@ public class StorageContainerBizLogic extends DefaultBizLogic
 
         disableSubStorageContainer(dao, Utility.toLongArray(listOfSubStorageContainerId));
     }
-
 }
