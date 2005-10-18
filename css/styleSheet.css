@@ -765,17 +765,6 @@ td.onlyBottomBorder{ /* for the cell that contains the form elements */
   border-left:1px solid #5C5C5C; /* constant: dark gray */
   border-bottom:1px solid #F4F4F5; /* constant: dark gray */
  }
- .formLeftSubTitle{ /* for specimen requirements in collectionprotocol and distributionprotocol */
-  font-family:arial,helvetica,verdana,sans-serif;
-  font-size:0.7em;
-  font-weight:bold;
-  background-color:#CCCCCC; /* constant: medium gray */
-  color:#000000; /* constant: black */
-  border-bottom:1px solid #5C5C5C; /* constant: dark gray */
-  border-left:1px solid #5C5C5C; /* constant: dark gray */
-  border-right:1px solid #5C5C5C; /* constant: dark gray */
-  text-align:left;
-}
 
 .formFieldSized35{ /* for the form elements themselves and with a constant width (on elements) */
   font-family:arial,helvetica,verdana,sans-serif;
@@ -814,6 +803,7 @@ input.formDateSized15{ /* for the form elements themselves and with a constant w
   font-weight:bold;
   color:#000000; /* constant: black */
   border-right:1px solid #5C5C5C; /* constant: dark gray */
+  border-top:1px solid #5C5C5C; /* constant: dark gray */
   border-bottom:1px solid #5C5C5C; /* constant: dark gray */
 	text-align:right;
 }
@@ -824,6 +814,7 @@ input.formDateSized15{ /* for the form elements themselves and with a constant w
   color:#000000; /* constant: black */
   border-right:1px solid #5C5C5C; /* constant: dark gray */
   border-bottom:1px solid #5C5C5C; /* constant: dark gray */
+  border-top:1px solid #5C5C5C; /* constant: dark gray */
   text-align:right;
 }
 
@@ -834,6 +825,8 @@ input.formDateSized15{ /* for the form elements themselves and with a constant w
   border-right:1px solid #5C5C5C; /* constant: dark gray */
   border-bottom:1px solid #5C5C5C; /* constant: dark gray */
   border-left:1px solid #5C5C5C; /* constant: dark gray */
+  border-top:1px solid #5C5C5C; /* constant: dark gray */
+  
  }
 
  .formRequiredNoticeAddMore{ /* for the asterisk cell */
@@ -842,6 +835,7 @@ input.formDateSized15{ /* for the form elements themselves and with a constant w
   color:#000000; /* constant: black */
   border-left:1px solid #5C5C5C; /* constant: dark gray */
   border-bottom:1px solid #5C5C5C; /* constant: dark gray */
+  border-top:1px solid #5C5C5C; /* constant: dark gray */
 }
 
 td.formFieldAddMore{ /* for the cell that contains the form elements */
@@ -850,5 +844,36 @@ td.formFieldAddMore{ /* for the cell that contains the form elements */
   color:#000000; /* constant: black */
   border-right:1px solid #5C5C5C; /* constant: dark gray */
   border-bottom:1px solid #5C5C5C; /* constant: dark gray */
+  border-top:1px solid #5C5C5C; /* constant: dark gray */
 }
 
+.formSubTitle{ /* for sub titles(top) of forms */
+  font-family:arial,helvetica,verdana,sans-serif;
+  font-size:0.8em;
+  font-weight:bold;
+  padding-left:0.8em;
+  background-color:#7C7C7C; /* constant: dark gray */
+  color:#FFFFFF; /* constant: white */
+  border-top:1px solid #5C5C5C; /* constant: dark gray */
+  border-left:1px solid #5C5C5C; /* constant: dark gray */
+  border-right:1px solid #5C5C5C; /* constant: dark gray */
+}
+
+ .formLeftSubTitle{ /* for specimen requirements in collectionprotocol and distributionprotocol */
+  font-family:arial,helvetica,verdana,sans-serif;
+  font-size:0.7em;
+  font-weight:bold;
+  background-color:#F1F1F1; /* constant: medium gray */
+  color:#000000; /* constant: black */
+  border-bottom:1px solid #5C5C5C; /* constant: dark gray */
+  border-left:1px solid #5C5C5C; /* constant: dark gray */
+  border-right:1px solid #5C5C5C; /* constant: dark gray */
+  text-align:left;
+}
+
+ .tbBorders{ /* for block table */
+  border-bottom:2px solid #5C5C5C; /* constant: dark gray */
+  border-top:2px solid #5C5C5C; /* constant: dark gray */
+  border-left:2px solid #5C5C5C; /* constant: dark gray */
+  border-right:2px solid #5C5C5C; /* constant: dark gray */
+}
