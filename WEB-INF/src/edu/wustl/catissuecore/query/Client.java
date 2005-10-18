@@ -35,6 +35,11 @@ public class Client
      */
     public static HashMap objectTableNames = new HashMap();
 
+	/**
+	 * This maps the table alias with the type of privilege on that table
+	 */
+    public static HashMap privilegeTypeMap = new HashMap();
+
     public static void initialize()
     {
         objectTableNames = QueryBizLogic.getQueryObjectNameTableNameMap();
