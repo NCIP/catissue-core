@@ -193,15 +193,15 @@ public class  DefaultBizLogic extends AbstractBizLogic
     
    /**
     * Returns collection of name value pairs.
-    * @param sourceObjectName
-    * @param displayNameFields
-    * @param valueField
-    * @param whereColumnName
-    * @param whereColumnCondition
-    * @param whereColumnValue
-    * @param joinCondition
-    * @param separatorBetweenFields
-    * @return
+ * @param sourceObjectName
+ * @param displayNameFields
+ * @param valueField
+ * @param whereColumnName
+ * @param whereColumnCondition
+ * @param whereColumnValue
+ * @param joinCondition
+ * @param separatorBetweenFields
+ * @return
     * @throws DAOException
     */
     public List getList(String sourceObjectName, String[] displayNameFields, String valueField, String[] whereColumnName,
@@ -326,6 +326,33 @@ public class  DefaultBizLogic extends AbstractBizLogic
 		return list;
     }
     
+    //Aarti: Overloaded to let selectColumnName and whereColumnName also be
+	// parameters to method and are not hardcoded
+	public List getRelatedObjects(DAO dao, Class sourceClass,
+			String[] selectColumnName, String[] whereColumnName,
+			Long objIDArr[]) throws DAOException {
+		String sourceObjectName = sourceClass.getName();
+		String[] whereColumnCondition = { "in" };
+		Object[] whereColumnValue = { objIDArr };
+		String joinCondition = Constants.AND_JOIN_CONDITION;
+
+		List list = dao.retrieve(sourceObjectName, selectColumnName,
+				whereColumnName, whereColumnCondition, whereColumnValue,
+				joinCondition);
+		Logger.out.debug(sourceClass.getName() + " Related objects to "
+				+ edu.wustl.common.util.Utility.getArrayString(objIDArr)
+				+ " are " + list);
+		return list;
+	}
+    
+	/**
+	 * @author aarti_sharma
+	 * Method allows assigning of privilege privilegeName to user identified by userId 
+	 * or role identified by roleId
+	 * on objects ids objectIds of type objectType.
+	 * Privilege is to be assigned to user or a role is identified by boolean assignToUser
+	 * 
+	 */
     public void setPrivilege(DAO dao, String privilegeName,Class objectType, Long[] objectIds, Long userId, String roleId, boolean assignToUser) throws SMException,DAOException
     {
         Logger.out.debug(" privilegeName:"+privilegeName+" objectType:"+objectType+" objectIds:"+edu.wustl.common.util.Utility.getArrayString(objectIds)+" userId:"+userId+" roleId:"+roleId+" assignToUser:"+assignToUser);
