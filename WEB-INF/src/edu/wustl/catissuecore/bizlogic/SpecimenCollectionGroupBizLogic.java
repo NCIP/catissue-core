@@ -214,6 +214,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 			System.out.println("Value returned:"+whereColumnValue[1]);
 		}
 		
+		
 		List list = dao.retrieve( sourceObjectName, selectColumnName, whereColumnName, 
 							 whereColumnCondition, whereColumnValue, joinCondition);
 		if(!list.isEmpty())
@@ -281,6 +282,9 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
         
     }  
     
+    /**
+	 * @see AbstractBizLogic#setPrivilege(DAO, String, Class, Long[], Long, String, boolean)
+	 */
     public void setPrivilege(DAO dao, String privilegeName, Class objectType, Long[] objectIds, Long userId, String roleId, boolean assignToUser) throws SMException, DAOException
     {
 	    super.setPrivilege(dao,privilegeName,objectType,objectIds,userId, roleId, assignToUser);
