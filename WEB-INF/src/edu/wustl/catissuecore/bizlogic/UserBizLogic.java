@@ -270,7 +270,8 @@ public class UserBizLogic extends DefaultBizLogic
 
             SecurityManager.getInstance(UserBizLogic.class).modifyUser(csmUser);
 
-            if (!user.getPageOf().equals(Constants.PAGEOF_USER_PROFILE) && !user.getPageOf().equals(Constants.PAGEOF_CHANGE_PASSWORD))
+            if ((Constants.PAGEOF_USER_PROFILE.equals(user.getPageOf()) == false) 
+            		&& (Constants.PAGEOF_CHANGE_PASSWORD.equals(user.getPageOf()) == false))
             {
                 SecurityManager.getInstance(UserBizLogic.class).assignRoleToUser(
                         csmUser.getLoginName(), user.getRoleId());
