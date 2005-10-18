@@ -30,6 +30,7 @@ import edu.wustl.catissuecore.query.QueryFactory;
 import edu.wustl.catissuecore.query.SimpleConditionsNode;
 import edu.wustl.catissuecore.query.SimpleQuery;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -96,7 +97,7 @@ public abstract class BaseDistributionReportAction extends BaseAction
 	}
 	
 	
-    protected Distribution getDistribution(Long distributionId)throws Exception
+    protected Distribution getDistribution(Long distributionId, SessionDataBean sessionDataBean, int securityParam)throws Exception
     {
     	//For a given Distribution ID retrieve the distribution object
     	AbstractBizLogic bizLogic = BizLogicFactory.getBizLogic(Constants.DISTRIBUTION_FORM_ID);
@@ -164,7 +165,7 @@ public abstract class BaseDistributionReportAction extends BaseAction
     		Vector vector = setViewElements(selectedColumns);
     		query.setResultView(vector);
     		
-    		List list1 = query.execute();
+    		List list1 = query.execute(null,Constants.INSECURE_RETRIEVE,null,null);
     		Logger.out.debug("Size of the Data from the database" +list1.size());
     		Iterator listItr = list1.iterator();
     		while(listItr.hasNext())
