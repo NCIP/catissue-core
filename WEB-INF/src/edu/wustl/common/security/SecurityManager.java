@@ -1025,6 +1025,22 @@ public class SecurityManager implements Permissions {
 			throw new SMException(e.getMessage(), e);
 		}
 	}
+	
+	public boolean checkPermission(String userName, String objectType,
+			String objectIdentifier, String privilegeName) throws SMException {
+		try {
+			boolean isAuthorized = getAuthorizationManager().checkPermission(
+					userName, objectType+"_"+objectIdentifier, privilegeName);
+			Logger.out.debug(" User:" + userName + "objectType:"+objectType+" objectId:" + objectIdentifier
+					+ " privilegeName:" + privilegeName + " isAuthorized:"
+					+ isAuthorized);
+			return isAuthorized;
+		} catch (CSException e) {
+			Logger.out.debug("Unable to get all users: Exception: "
+					+ e.getMessage());
+			throw new SMException(e.getMessage(), e);
+		}
+	}
 
 	/**
 	 * This method returns name of the Protection groupwhich consists of obj as
@@ -1133,7 +1149,7 @@ public class SecurityManager implements Permissions {
 						if (privilege.getName().equals(
 								"ASSIGN_" + privilegeName)) {
 							nameValueBean = new NameValueBean(objectId
-									.substring(objectId.lastIndexOf(".") + 1),
+									.substring(objectId.lastIndexOf("_") + 1),
 									objectId.substring(objectId
 											.lastIndexOf("_") + 1));
 							objects.add(nameValueBean);
