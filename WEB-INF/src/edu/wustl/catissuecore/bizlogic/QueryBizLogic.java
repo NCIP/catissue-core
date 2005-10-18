@@ -19,6 +19,7 @@ import edu.wustl.catissuecore.query.DataElement;
 import edu.wustl.catissuecore.query.Operator;
 import edu.wustl.catissuecore.query.Relation;
 import edu.wustl.catissuecore.query.RelationCondition;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
@@ -36,6 +37,10 @@ public class QueryBizLogic extends DefaultBizLogic
 
     private static final String ALIAS_NAME_TABLE_NAME_MAP_QUERY = 
         "select ALIAS_NAME ,TABLE_NAME from " +
+        "CATISSUE_QUERY_INTERFACE_TABLE_DATA";
+    
+    private static final String ALIAS_NAME_PRIVILEGE_TYPE_MAP_QUERY = 
+        "select ALIAS_NAME ,PRIVILEGE_ID from " +
         "CATISSUE_QUERY_INTERFACE_TABLE_DATA";
     
     private static final String GET_RELATION_DATA=
@@ -61,7 +66,7 @@ public class QueryBizLogic extends DefaultBizLogic
         {
             dao = new JDBCDAO();
             dao.openSession(null);
-            list = dao.executeQuery(ALIAS_NAME_TABLE_NAME_MAP_QUERY);
+            list = dao.executeQuery(ALIAS_NAME_TABLE_NAME_MAP_QUERY, null, Constants.INSECURE_RETRIEVE, null,null);
 
             Iterator iterator = list.iterator();
             while (iterator.hasNext())
@@ -97,6 +102,56 @@ public class QueryBizLogic extends DefaultBizLogic
         return queryObjectNameTableNameMap;
     }
     
+    /**
+     * This returns the map containing table alias as key
+     * and type of privilege on that table as value
+     * @return
+     */
+    public static HashMap getPivilegeTypeMap()
+    {
+        List list = null;
+        HashMap pivilegeTypeMap = new HashMap();
+        JDBCDAO dao =null;
+        try
+        {
+            dao = new JDBCDAO();
+            dao.openSession(null);
+            list = dao.executeQuery(ALIAS_NAME_PRIVILEGE_TYPE_MAP_QUERY, null, Constants.INSECURE_RETRIEVE, null,null);
+
+            Iterator iterator = list.iterator();
+            while (iterator.hasNext())
+            {
+                List row = (List) iterator.next();
+                pivilegeTypeMap.put(row.get(0), row.get(1));
+                Logger.out.info("Key: "+row.get(0)+" value: "+row.get(1));
+            }
+
+            
+        }
+        catch (DAOException daoExp)
+        {
+            Logger.out.debug("Could not obtain table privilege map. Exception:"
+                    + daoExp.getMessage(), daoExp);
+        }
+        catch (ClassNotFoundException classExp)
+        {
+            Logger.out.debug("Could not obtain table privilege map. Exception:"
+                    + classExp.getMessage(), classExp);
+        }
+        finally
+        {
+            try
+            {
+                dao.closeSession();
+            }
+            catch (DAOException e)
+            {
+                Logger.out.debug(e.getMessage(),e);
+            }
+        }
+        return pivilegeTypeMap;
+    }
+    
     public static HashMap getRelationData()
     {
         List list = null;
@@ -114,7 +169,7 @@ public class QueryBizLogic extends DefaultBizLogic
         {
             dao = new JDBCDAO();
             dao.openSession(null);
-            list = dao.executeQuery(GET_RELATION_DATA);
+            list = dao.executeQuery(GET_RELATION_DATA, null, Constants.INSECURE_RETRIEVE, null,null);
 
             Iterator iterator = list.iterator();
             
@@ -130,7 +185,7 @@ public class QueryBizLogic extends DefaultBizLogic
                     continue;
                 }
                 
-                columnDataList = dao.executeQuery(GET_TABLE_ALIAS+parentTableColumnID);
+                columnDataList = dao.executeQuery(GET_TABLE_ALIAS+parentTableColumnID, null, Constants.INSECURE_RETRIEVE, null,null);
                 if(columnDataList.size() <=0 )
                 {
                     continue;
@@ -142,7 +197,7 @@ public class QueryBizLogic extends DefaultBizLogic
                 }
                 tableAlias1 = (String) row.get(0);
                 
-                columnDataList = dao.executeQuery(GET_TABLE_ALIAS+childTableColumnID);
+                columnDataList = dao.executeQuery(GET_TABLE_ALIAS+childTableColumnID, null, Constants.INSECURE_RETRIEVE, null,null);
                 if(columnDataList.size() <=0 )
                 {
                     continue;
@@ -197,6 +252,7 @@ public class QueryBizLogic extends DefaultBizLogic
         
         Client.objectTableNames = QueryBizLogic.getQueryObjectNameTableNameMap();
         Client.relationConditionsForRelatedTables = QueryBizLogic.getRelationData();
+        Client.privilegeTypeMap = QueryBizLogic.getPivilegeTypeMap();
     }
     
    
