@@ -18,6 +18,7 @@
 	String showCal = "";
 	String dateClass = "hideTD";
 	Object obj = request.getAttribute("simpleQueryInterfaceForm");
+	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
 	if(obj != null && obj instanceof SimpleQueryInterfaceForm)
 	{
 		SimpleQueryInterfaceForm form = (SimpleQueryInterfaceForm)obj;
@@ -31,7 +32,7 @@
 	String title = (String)request.getAttribute(Constants.SIMPLE_QUERY_INTERFACE_TITLE);
 	
 	String alias = (String)request.getParameter("aliasName");
-	if(alias == null)
+	if(pageOf.equals(Constants.PAGEOF_SIMPLE_QUERY_INTERFACE))
 	{
 		title="simpleQuery.title";
 	}
@@ -120,7 +121,7 @@ function showDateColumn(element)
 				</tr>
 				<tr>
 					<td>
-						<%String pageOf = (String)request.getAttribute(Constants.PAGEOF);%>
+						<%%>
 						<html:hidden property="pageOf" value="<%=pageOf%>"/>
 					</td>
 				</tr>
