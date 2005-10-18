@@ -18,6 +18,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -25,31 +27,50 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
+import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.storage.StorageContainerGridObject;
+import edu.wustl.catissuecore.util.Permissions;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.util.logger.Logger;
 
 /**
- * ShowStorageGridViewAction shows the grid view of the map 
- * according to the storage container selected from the tree view.
+ * ShowStorageGridViewAction shows the grid view of the map according to the
+ * storage container selected from the tree view.
+ * 
  * @author gautam_shetty
  */
-public class ShowStorageGridViewAction  extends Action
+public class ShowStorageGridViewAction  extends BaseAction
 {
 
     /**
-     * Overrides the execute method of Action class.
-     */
-    public ActionForward execute(ActionMapping mapping, ActionForm form,
+	 * Overrides the execute method of Action class.
+	 */
+    public ActionForward executeAction(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
             throws Exception
     {
-        String systemIdentifier = request.getParameter(Constants.SYSTEM_IDENTIFIER);
+        String systemIdentifier = request.getParameter(Constants.IDENTIFIER);
+        
+        // Aarti: Check whether user has use permission on the storage container
+		// or not
+        if(!SecurityManager.getInstance(this.getClass()).isAuthorized(getUserLoginName(request)
+        		,StorageContainer.class.getName()+"_"+systemIdentifier,Permissions.USE))
+		{
+        	ActionErrors errors = new ActionErrors();
+         	ActionError error = new ActionError("access.use.object.denied"
+         	        				);
+         	errors.add(ActionErrors.GLOBAL_ERROR,error);
+         	saveErrors(request,errors);
+        	return mapping.findForward(Constants.FAILURE);
+		}
+        
         String pageOf = request.getParameter(Constants.PAGEOF);
         StorageContainerBizLogic bizLogic = (StorageContainerBizLogic)BizLogicFactory
                 .getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
+        
         List list = bizLogic.retrieve(StorageContainer.class.getName(),
                 "systemIdentifier", systemIdentifier);
         StorageContainerGridObject storageContainerGridObject
@@ -131,10 +152,10 @@ public class ShowStorageGridViewAction  extends Action
     }
 
     /**
-     * @param fullStatus
-     * @param childContainerSystemIdentifiers
-     * @param storageContainer
-     */
+	 * @param fullStatus
+	 * @param childContainerSystemIdentifiers
+	 * @param storageContainer
+	 */
     private void setStorageContainerStatus(boolean[][] fullStatus, int[][] childContainerSystemIdentifiers, Collection collection)
     {
         Iterator iterator = collection.iterator();
