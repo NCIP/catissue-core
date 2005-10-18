@@ -15,6 +15,7 @@ import java.util.Vector;
 import edu.wustl.catissuecore.dao.AbstractDAO;
 import edu.wustl.catissuecore.dao.DAOFactory;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
@@ -32,28 +33,30 @@ public class ResultData
     
     /**
      * Builds a JTree from the ResultSet passed.
+     * @param sessionDataBean TODO
+     * @param securityParam TODO
      * @param rs The ResultSet object.
      * @return Returns the built JTree.
      * @throws SQLException
      */
-    public Vector getTreeViewData() throws SQLException
-    {
-        String[] selectColumnName = Constants.DEFAULT_TREE_SELECT_COLUMNS;
-        Vector dataList = new Vector();
-        
-        try
-        {
-            AbstractDAO dao = DAOFactory.getDAO(Constants.JDBC_DAO);
-            dataList = (Vector)dao.retrieve(tmpResultsTableName, selectColumnName);
-        }
-        catch (Exception exp)
-        {
-        }
-
-        return dataList;
-    }
+//    public Vector getTreeViewData() throws SQLException
+//    {
+//        String[] selectColumnName = Constants.DEFAULT_TREE_SELECT_COLUMNS;
+//        Vector dataList = new Vector();
+//        
+//        try
+//        {
+//            AbstractDAO dao = DAOFactory.getDAO(Constants.JDBC_DAO);
+//            dataList = (Vector)dao.retrieve(tmpResultsTableName, selectColumnName, sessionDataBean, securityParam);
+//        }
+//        catch (Exception exp)
+//        {
+//        }
+//
+//        return dataList;
+//    }
     
-    public List getSpreadsheetViewData(String name, int id, String[] columnList)
+    public List getSpreadsheetViewData(String name, int id, String[] columnList, SessionDataBean sessionDataBean, int securityParam)
     {
         
         String[] whereColumnName = {getColumnName(name)};
