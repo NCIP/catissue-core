@@ -1257,7 +1257,7 @@ public class Constants
 	public static final String UNDEFINED = "Undefined";
 	public static final String UNKNOWN = "Unknown";
 	
-	public static final String ODD_COLOR = "#CFCFCF";
+	public static final String ODD_COLOR = "#E5E5E5";
 	public static final String EVEN_COLOR = "#F7F7F7"; 
 	
 	//	Aarti: Constants for security parameter required 
