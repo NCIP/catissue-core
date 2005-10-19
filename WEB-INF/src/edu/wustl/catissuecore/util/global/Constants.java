@@ -1165,6 +1165,9 @@ public class Constants
 	public static final String EVENT_PARAMETERS_COLUMNS[] = { "Identifier",
 											"Event Parameter", "User", "Date / Time", "PageOf"};
 	
+	public static final String [] SHOPPING_CART_COLUMNS = {"","Identifier", 
+													"Type", "Subtype", "Tissue Site", "Tissue Side", "Pathological Status"}; 
+	
 	
 	public static final String getCollectionProtocolPGName(Long identifier)
 	{
