@@ -189,13 +189,14 @@ public class SimpleSearchAction extends BaseAction
 			}
 			else
 			{
-				if (list.size() == 1)
+				if ((list.size() == 1) 
+				        && (Constants.PAGEOF_SIMPLE_QUERY_INTERFACE.equals(simpleQueryInterfaceForm.getPageOf()) == false))
 				{
 					List rowList = (List) list.get(0);
 					String action = "SearchObject.do?pageOf="
 							+ simpleQueryInterfaceForm.getPageOf()
 							+ "&operation=search&systemIdentifier=" + rowList.get(0);
-
+					
 					RequestDispatcher requestDispatcher = request.getRequestDispatcher(action);
 					requestDispatcher.forward(request, response);
 				}
