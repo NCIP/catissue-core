@@ -3,11 +3,22 @@
 <% 	
 	String pageOf = request.getParameter(Constants.PAGEOF);
 	String storageContainerType = null;
+	String storageContainerID = null;
+	String position = null;
 	String propertyName = null;
-	if (!pageOf.equals(Constants.PAGEOF_TISSUE_SITE))
+	
+	if (pageOf.equals(Constants.PAGEOF_STORAGE_LOCATION) ||
+	     pageOf.equals(Constants.PAGEOF_SPECIMEN))
+	{
+	   // For all storage container maps...
 		storageContainerType = (String)request.getAttribute(Constants.STORAGE_CONTAINER_TYPE);
-	else
+		storageContainerID = (String)request.getAttribute(Constants.STORAGE_CONTAINER_TO_BE_SELECTED);
+		position = (String)request.getAttribute(Constants.STORAGE_CONTAINER_POSITION);
+	}
+	else if (pageOf.equals(Constants.PAGEOF_TISSUE_SITE))
+	{
 		propertyName = request.getParameter(Constants.PROPERTY_NAME);
+	}
 %>
 
 <script language="javascript">
@@ -37,6 +48,8 @@
 	<PARAM name="type" value="application/x-java-applet;version=1.3">
 	<PARAM name="<%=Constants.PAGEOF%>" value="<%=pageOf%>">
 	<PARAM name="<%=Constants.STORAGE_CONTAINER_TYPE%>" value="<%=storageContainerType%>">
+	<PARAM name="<%=Constants.STORAGE_CONTAINER_TO_BE_SELECTED%>" value="<%=storageContainerID%>">
+	<PARAM name="<%=Constants.STORAGE_CONTAINER_POSITION%>" value="<%=position%>">
 	<PARAM name="name" value="<%=Constants.TREE_APPLET_NAME%>">
 	<COMMENT>
 		<EMBED type="application/x-java-applet;version=1.3" width="180"
@@ -47,7 +60,10 @@
 			archive="Applet/QueryTree.jar"
 			pageOf="<%=pageOf%>"
 			storageType="<%=storageContainerType%>"
+			storageToBeSelected="<%=storageContainerID%>"
+			position="<%=position%>"
 			propertyName="<%=propertyName%>" MAYSCRIPT>
+			
 			
 			<NOEMBED>
 				No Java 2 SDK support for APPLET!!

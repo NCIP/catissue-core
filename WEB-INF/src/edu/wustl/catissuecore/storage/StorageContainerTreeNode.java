@@ -50,7 +50,10 @@ public class StorageContainerTreeNode implements Serializable, TreeNode
         siteType = null;
     }
 
-    public StorageContainerTreeNode(Long identifier, String name, String type, Long parentIdentifier)
+    public StorageContainerTreeNode(Long identifier, 
+    		String name, 
+    		String type, 
+    		Long parentIdentifier)
     {
         this.storageContainerIdentifier = identifier;
         this.storageContainerName = name;
@@ -66,6 +69,10 @@ public class StorageContainerTreeNode implements Serializable, TreeNode
         return storageContainerIdentifier;
     }
 
+    public Object getIdentifier()
+    {
+        return storageContainerIdentifier;
+    }
     /**
      * @param storageContainerIdentifier The storageContainerIdentifier to set.
      */
@@ -207,4 +214,5 @@ public class StorageContainerTreeNode implements Serializable, TreeNode
     {
         return this.getParentStorageContainerIdentifier();
     }
-}
+    
+ }

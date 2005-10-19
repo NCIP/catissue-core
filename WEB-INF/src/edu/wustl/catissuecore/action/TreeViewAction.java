@@ -17,6 +17,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.util.logger.Logger;
 
 
 /**
@@ -40,6 +41,10 @@ public class TreeViewAction extends Action
         {
         	String storageContainerType = request.getParameter(Constants.STORAGE_CONTAINER_TYPE);
         	request.setAttribute(Constants.STORAGE_CONTAINER_TYPE,storageContainerType);
+        	String storageContainerID = request.getParameter(Constants.STORAGE_CONTAINER_TO_BE_SELECTED);
+        	request.setAttribute(Constants.STORAGE_CONTAINER_TO_BE_SELECTED,storageContainerID);
+        	String position = request.getParameter(Constants.STORAGE_CONTAINER_POSITION);
+        	request.setAttribute(Constants.STORAGE_CONTAINER_POSITION,position);        	
         }
         
         return mapping.findForward(Constants.SUCCESS);

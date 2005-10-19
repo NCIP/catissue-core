@@ -160,6 +160,9 @@ public class Constants
 	
 	//Constants for Storage Container.
 	public static final String STORAGE_CONTAINER_TYPE = "storageType";
+	public static final String STORAGE_CONTAINER_TO_BE_SELECTED = "storageToBeSelected";
+	public static final String STORAGE_CONTAINER_POSITION = "position";
+	
 	public static final String STORAGE_CONTAINER_GRID_OBJECT = "storageContainerGridObject";
 	public static final String STORAGE_CONTAINER_CHILDREN_STATUS = "storageContainerChildrenStatus";
 	public static final String START_NUMBER = "startNumber";

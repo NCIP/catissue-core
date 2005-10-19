@@ -12,6 +12,14 @@
 						 "?" + Constants.PAGEOF + "=" + pageOf +
 						 "&"+ Constants.STORAGE_CONTAINER_TYPE + "=" + storageContainerType;
 	}
+	String storageContainerID = (String)request.getAttribute(Constants.STORAGE_CONTAINER_TO_BE_SELECTED);
+	if(null != storageContainerID) // If container ID is specified in the Edit boxes
+	{
+        // Forward the request with container ID, position IDs
+		String position = (String)request.getAttribute(Constants.STORAGE_CONTAINER_POSITION);
+		treeViewAction += "&" + Constants.STORAGE_CONTAINER_TO_BE_SELECTED + "=" + storageContainerID +
+						"&" + 	Constants.STORAGE_CONTAINER_POSITION + "=" + position;
+	}
 %>
 
 

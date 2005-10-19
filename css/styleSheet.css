@@ -642,6 +642,12 @@ DATA TABLE BEGINS
   border-bottom:1px solid #5C5C5C; /* constant: dark gray */
   text-align:left;
 }
+.dataSelectedCellText{ /* for text output cells */
+  border-right:1px solid #5C5C5C; /* constant: dark gray */
+  border-bottom:1px solid #5C5C5C; /* constant: dark gray */
+  text-align:left;
+  background-color:#A90101;
+}
 .dataCellNumerical{ /* for numerical output cells */
   border-right:1px solid #5C5C5C; /* constant: dark gray */
   border-bottom:1px solid #5C5C5C; /* constant: dark gray */

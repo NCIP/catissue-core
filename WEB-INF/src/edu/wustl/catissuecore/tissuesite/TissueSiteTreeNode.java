@@ -76,11 +76,10 @@ public class TissueSiteTreeNode implements TreeNode, Serializable
     /**
      * @return Returns the identifier.
      */
-    public String getIdentifier()
+    public Object getIdentifier()
     {
         return identifier;
     }
-
     /**
      * @param identifier The identifier to set.
      */
@@ -145,7 +144,7 @@ public class TissueSiteTreeNode implements TreeNode, Serializable
     public boolean isChildOf(TreeNode treeNode)
     {
         TissueSiteTreeNode tissueSiteTreeNode = (TissueSiteTreeNode) treeNode;
-        return this.getParentIdentifier().equals(tissueSiteTreeNode.getIdentifier());
+        return this.getParentIdentifier().equals(tissueSiteTreeNode.getIdentifier().toString());
     }
     
     public boolean hasEqualParents(TreeNode treeNode)

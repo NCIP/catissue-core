@@ -25,4 +25,7 @@ public interface TreeNode
     public boolean hasEqualParents(TreeNode treeNode);
     
     public Object getParentIdentifier();
+
+    public Object getIdentifier();
+    
 }

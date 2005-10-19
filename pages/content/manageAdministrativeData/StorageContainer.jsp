@@ -81,7 +81,12 @@
 			LeftPosition = (screen.width) ? (screen.width-w)/2 : 0;
 			TopPosition = (screen.height) ? (screen.height-h)/2 : 0;
 
-			mypage=mypage+document.forms[0].typeId.value;
+			// Sri: Added position one and two as parameters
+            // with format positionOne:positionTwo
+			mypage=mypage+document.forms[0].typeId.value + 
+					"&storageToBeSelected="+ document.forms[0].parentContainerId.value +
+					"&position=" + document.forms[0].positionDimensionOne.value + 
+					":" + document.forms[0].positionDimensionTwo.value;
 			settings =
 				'height='+h+',width='+w+',top='+TopPosition+',left='+LeftPosition+',scrollbars='+scroll+',resizable'
 			win = open(mypage,myname,settings)
@@ -94,12 +99,16 @@
 			if(element.value == 1)
 			{
 				document.forms[0].siteId.disabled = false;
-				document.forms[0].positionInParentContainer.disabled = true;
+				document.forms[0].parentContainerId.disabled = true;
+				document.forms[0].positionDimensionOne.disabled = true;				
+				document.forms[0].positionDimensionTwo.disabled = true;				
 				document.forms[0].Map.disabled = true;
 			}
 			else
 			{
-				document.forms[0].positionInParentContainer.disabled = false;
+				document.forms[0].parentContainerId.disabled = false;
+				document.forms[0].positionDimensionOne.disabled = false;				
+				document.forms[0].positionDimensionTwo.disabled = false;				
 				document.forms[0].Map.disabled = false;
 
 				document.forms[0].siteId.disabled = true;
@@ -270,16 +279,8 @@ function insRow(subdivtag)
 					<td><html:hidden property="systemIdentifier" /></td>
 				</tr>
 				<tr>
-					<td><html:hidden property="positionDimensionOne" /></td>
+					<td><html:hidden property="positionInParentContainer" /></td>
 				</tr>
-				<tr>
-					<td><html:hidden property="positionDimensionTwo" /></td>
-				</tr>
-				<tr>
-					<td><html:hidden property="parentContainerId" /></td>
-					<td><html:hidden property="onSubmit"/></td>
-				</tr>
-
 					<tr>
 						<td class="formMessage" colspan="4">* indicates a required field</td>
 					</tr>
@@ -361,18 +362,26 @@ function insRow(subdivtag)
 						</td>
 						<td class="formField" colspan="2">
 	 						<logic:equal name="storageContainerForm" property="checkedButton" value="1">							
-							<html:text styleClass="formFieldSized" size="30" styleId="positionInParentContainer" property="positionInParentContainer" readonly="true" disabled="true"/>
+				     			<html:text styleClass="formFieldSized3" styleId="parentContainerId" property="parentContainerId" disabled = "true"/>
+				     			-
+				     			<html:text styleClass="formFieldSized3" styleId="positionDimensionOne" property="positionDimensionOne" disabled = "true"/>
+				     			-
+				     			<html:text styleClass="formFieldSized3" styleId="positionDimensionTwo" property="positionDimensionTwo" disabled = "true"/>
 							&nbsp;
 							<html:button property="mapButton" styleClass="actionButton" styleId="Map" 
-								onclick="NewWindow('ShowFramedPage.do?pageOf=pageOfStorageLocation&amp;storageType=','name','810','320','yes');return false" disabled="true">
+								onclick="NewWindow('ShowFramedPage.do?pageOf=pageOfStorageLocation&amp;storageType=','name','810','320','yes');return false" disabled="true" >
 								<bean:message key="buttons.map"/>
 							</html:button>
-							
-							</logic:equal>
+
+				        	</logic:equal>
 							
 							<logic:equal name="storageContainerForm" property="checkedButton" value="2">
 							
-							<html:text styleClass="formFieldSized" size="30" styleId="positionInParentContainer" property="positionInParentContainer" readonly="true"/>
+			     			<html:text styleClass="formFieldSized3" styleId="parentContainerId" property="parentContainerId" />
+			     			-
+			     			<html:text styleClass="formFieldSized3" styleId="positionDimensionOne" property="positionDimensionOne" />
+			     			-
+			     			<html:text styleClass="formFieldSized3" styleId="positionDimensionTwo" property="positionDimensionTwo" />
 							&nbsp;
 							<html:button property="mapButton" styleClass="actionButton" styleId="Map" 
 								onclick="NewWindow('ShowFramedPage.do?pageOf=pageOfStorageLocation&amp;storageType=','name','810','320','yes');return false" >

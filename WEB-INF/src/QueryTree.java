@@ -55,16 +55,42 @@ public class QueryTree extends JApplet
             String storageContainerType = null,propertyName = null;
             int treeType = Constants.TISSUE_SITE_TREE_ID;
             
-            if (pageOf.equals(Constants.PAGEOF_STORAGE_LOCATION))
+            //Sri: Added for selecting node in the storage tree
+            Long selectedNode = new Long(0);
+            String position = null;
+            
+            if (pageOf.equals(Constants.PAGEOF_STORAGE_LOCATION)) 
             {
                 storageContainerType = this.getParameter(Constants.STORAGE_CONTAINER_TYPE);
-                treeType = Constants.STORAGE_CONTAINER_TREE_ID;
+                treeType = Constants.STORAGE_CONTAINER_TREE_ID;                
             }else if(pageOf.equals(Constants.PAGEOF_SPECIMEN))
             	treeType = Constants.STORAGE_CONTAINER_TREE_ID;
             else if (pageOf.equals(Constants.PAGEOF_QUERY_RESULTS))
                 treeType = Constants.QUERY_RESULTS_TREE_ID;
             else if (pageOf.equals(Constants.PAGEOF_TISSUE_SITE))
                 propertyName = this.getParameter(Constants.PROPERTY_NAME);
+
+            // If storage container tree, take care of positions and parent container
+            // ID edit boxes.
+            if(treeType == Constants.STORAGE_CONTAINER_TREE_ID)
+            {
+	            String selectedNodeStr = this.getParameter(Constants.STORAGE_CONTAINER_TO_BE_SELECTED);
+	            
+	            if((null != selectedNodeStr) && (false == selectedNodeStr.equals("")))
+	            {
+	            	try
+					{
+	            		selectedNode = Long.valueOf(selectedNodeStr);
+	            	}
+	            	catch(Exception ex)
+					{
+	            		//do nothing since default value of selectedNode is 0
+	            		ex.printStackTrace();
+					}
+	            }
+	            position = this.getParameter(Constants.STORAGE_CONTAINER_POSITION);
+            }
+
             
             String urlSuffix = Constants.TREE_DATA_ACTION+"?"+Constants.PAGEOF+"="+pageOf;
             URL dataURL = new URL(protocol, host, port, urlSuffix);
@@ -77,8 +103,8 @@ public class QueryTree extends JApplet
             Vector treeDataVector = (Vector) in.readObject();
 
             GenerateTree generateTree = new GenerateTree();
-            JTree tree = generateTree.createTree(treeDataVector, treeType);
-            
+            JTree tree = generateTree.createTree(treeDataVector, treeType,selectedNode);
+
             Container contentPane = getContentPane();
             contentPane.setLayout(new BorderLayout());
             
@@ -142,6 +168,24 @@ public class QueryTree extends JApplet
             
             //Put the tree panel on the Applet.
             contentPane.add(treePanel, BorderLayout.CENTER);
+
+            
+            //Sri: Pass the position of the container to the next level
+            // This is used to auto select the node
+            if(false == selectedNode.equals(new Long(0)))
+            {
+                urlSuffix = Constants.SHOW_STORAGE_CONTAINER_GRID_VIEW_ACTION
+	            + "?" + Constants.IDENTIFIER + "=" + selectedNode.toString()
+	            + "&" + Constants.STORAGE_CONTAINER_TYPE + "=" + storageContainerType
+	            + "&" + Constants.STORAGE_CONTAINER_POSITION + "=" + position
+	            + "&" + Constants.PAGEOF + "=" + pageOf;
+                System.out.println("urlSuffix: "+ urlSuffix);
+                dataURL = new URL(protocol, host, port, urlSuffix);
+
+	            this.getAppletContext().showDocument(dataURL,Constants.DATA_VIEW_FRAME);
+            }
+
+            
         }
         catch (MalformedURLException malExp)
         {

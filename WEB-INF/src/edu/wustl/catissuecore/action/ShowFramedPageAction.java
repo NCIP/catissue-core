@@ -39,6 +39,11 @@ public class ShowFramedPageAction extends Action
         {
             String storageContainerType = request.getParameter(Constants.STORAGE_CONTAINER_TYPE);
             request.setAttribute(Constants.STORAGE_CONTAINER_TYPE,storageContainerType);
+            String storageContainerID = request.getParameter(Constants.STORAGE_CONTAINER_TO_BE_SELECTED);
+            request.setAttribute(Constants.STORAGE_CONTAINER_TO_BE_SELECTED,storageContainerID);
+            String position = request.getParameter(Constants.STORAGE_CONTAINER_POSITION);
+            request.setAttribute(Constants.STORAGE_CONTAINER_POSITION,position);
+            
         }else if (pageOf.equals(Constants.PAGEOF_TISSUE_SITE))
         {
             System.out.println("In ShowFramedPageAction in PAGEOF_TISSUE_SITE***********************");

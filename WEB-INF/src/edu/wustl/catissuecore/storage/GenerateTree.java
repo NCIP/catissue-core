@@ -14,6 +14,7 @@ import java.util.Vector;
 
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreePath;
 
 import edu.wustl.catissuecore.vo.TreeNode;
 import edu.wustl.catissuecore.vo.TreeNodeFactory;
@@ -25,26 +26,29 @@ import edu.wustl.catissuecore.vo.TreeNodeFactory;
  */
 public class GenerateTree
 {
-    public JTree createTree(Vector dataVector, int treeType)
+    public JTree createTree(Vector dataVector, int treeType,
+    		Long nodeToBeSelected)
     {
         TreeNode rootNode = TreeNodeFactory.getTreeNode(treeType);
         rootNode.initialiseRoot();
         DefaultMutableTreeNode root = new DefaultMutableTreeNode(rootNode);
         DefaultMutableTreeNode parentNode;
-        
+        TreePath pathToRoot = null;
         synchronized (dataVector)
         {
             Iterator iterator = dataVector.iterator();
             while (iterator.hasNext())
-            {
+            {            	
                 parentNode = root;
                 DefaultMutableTreeNode node;
 
                 TreeNode treeNode = (TreeNode) iterator.next();
-                
+
+                DefaultMutableTreeNode nextNode = new DefaultMutableTreeNode(treeNode);
+                DefaultMutableTreeNode targetParentNode = null;
                 if (treeNode.getParentIdentifier() == null)
                 {
-                    boolean found = false;
+                	boolean parentNodeFound = false;
                     for (int i = 0; i < parentNode.getChildCount(); i++)
                     {
                         DefaultMutableTreeNode childNode = (DefaultMutableTreeNode) parentNode.getChildAt(i);
@@ -52,22 +56,22 @@ public class GenerateTree
                         
                         if (childDataNode.hasEqualParents(treeNode))
                         {
-                            found = true;
-                            DefaultMutableTreeNode containerNode = new DefaultMutableTreeNode(treeNode);
-                            childNode.add(containerNode);
+                        	targetParentNode = childNode;
+                        	parentNodeFound = true;
                             break;
                         }
                     }
-                    
-                    if (!found)
+
+                    if(false == parentNodeFound) // 
                     {
-                        TreeNode siteNode = treeNode.getParentTreeNode();
-                        
+                       	// Add missing parent node
+                    	TreeNode siteNode = treeNode.getParentTreeNode();
                        	DefaultMutableTreeNode siteTreeNode = new DefaultMutableTreeNode(siteNode);
-                       	DefaultMutableTreeNode childContainerNode = new DefaultMutableTreeNode(treeNode);
-                       	siteTreeNode.add(childContainerNode);
                        	parentNode.add(siteTreeNode);
+                       	
+                       	targetParentNode = siteTreeNode;
                     }
+
                 }
                 else
                 {
@@ -77,17 +81,31 @@ public class GenerateTree
                         node = getChildNode(site,treeNode);
                         
                         if (node != null)
-                        {
-                            DefaultMutableTreeNode childContainerNode = new DefaultMutableTreeNode(treeNode);
-                            node.add(childContainerNode);
+                        {                        	
+                        	targetParentNode = node;
                             break;
                         }
                     }
                 }
+                if(null != targetParentNode)
+                {
+                	targetParentNode.add(nextNode);
+                	
+                	//Sri: Select the path of the node to be selected
+                	if(nodeToBeSelected.equals((Long)treeNode.getIdentifier()))
+                	{
+                		pathToRoot  = new TreePath(nextNode.getPath());   
+                	}
+                }
+             
             }
         }
         
         JTree tree = new JTree(root);
+        if(null != pathToRoot) // if path to be selected, then select in the tree
+        {
+        	tree.setSelectionPath(pathToRoot);
+        }
         return tree;
     }
         

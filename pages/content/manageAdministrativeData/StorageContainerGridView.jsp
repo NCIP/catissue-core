@@ -29,6 +29,8 @@ function closeFramedWindow()
 	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
 	String storageContainerType = null;
 	Integer startNumber = null;
+	Long positionOne = (Long)request.getAttribute(Constants.POS_ONE);
+	Long positionTwo = (Long)request.getAttribute(Constants.POS_TWO);	
 	if (pageOf.equals(Constants.PAGEOF_STORAGE_LOCATION))
 	{
 		storageContainerType = (String)request.getAttribute(Constants.STORAGE_CONTAINER_TYPE);
@@ -51,6 +53,14 @@ function closeFramedWindow()
 					<% for (int i=0;i<storageContainerGridObject.getOneDimensionCapacity().intValue();i++){%>
 						<tr class="dataRowLight">	
 					<% for (int j=0;j<storageContainerGridObject.getTwoDimensionCapacity().intValue();j++){
+					String styleClassName = "dataCellText"; // Default cell boundary
+					if(((null != positionOne) && (null != positionTwo) &&
+          				(-1 != positionOne.intValue()) && (-1 != positionTwo.intValue())) && // means nothing entered by the user
+					   (i == positionOne.intValue()) && (j == positionTwo.intValue())) // means values entered by user
+					{
+						styleClassName = "dataSelectedCellText"; // Show the selected cell
+						                   // with red boundary
+					}
 						if (fullStatus[i][j] != 0)
 						{
 							String openStorageContainer = null;
@@ -69,14 +79,14 @@ function closeFramedWindow()
 							}
 							if (fullStatus[i][j] == 1)
 							{%>
-							<td class="dataCellText">
+							<td class="<%=styleClassName%>">
 								<a href="<%=openStorageContainer%>">
 									<img src="images/redbox.gif" width="40" height="40" border="0">
 								</a>
  							</td>
 					   	  <%}
 							else{%>
-							<td class="dataCellText">
+							<td class="<%=styleClassName%>">
 								<img src="images/specimen.jpg" width="40" height="40" border="0">
  							</td>
 							<%}%>
@@ -110,7 +120,7 @@ function closeFramedWindow()
 															  + startNumber.intValue() + "');closeFramedWindow()";
 							}
 						%>
-						<td class="dataCellText">
+						<td class="<%=styleClassName%>">
 						 	<a href="<%=setParentWindowContainer%>">
 								<img src="images/bluebox.gif" width="40" height="40" border="0">
 							</a>

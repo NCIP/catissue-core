@@ -13,6 +13,7 @@ package edu.wustl.catissuecore.action;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -68,18 +69,44 @@ public class ShowStorageGridViewAction  extends BaseAction
 		}
         
         String pageOf = request.getParameter(Constants.PAGEOF);
+        
+
+        //Sri: Added to get the position of the storage container map
+        String position = request.getParameter(Constants.STORAGE_CONTAINER_POSITION);
+        if((null != position) && ("" != position))
+        {
+        	Long positionOne;
+        	Long positionTwo;
+        	try
+			{
+	        	//The two positions are separated by :
+	        	StringTokenizer strToken = new StringTokenizer(position,":");
+	        	positionOne = Long.valueOf(strToken.nextToken());
+	        	positionTwo = Long.valueOf(strToken.nextToken());
+			}
+        	catch (Exception ex)
+			{
+			    //Will not select anything
+        		positionOne = null;
+        		positionTwo = null;
+			}
+        	request.setAttribute(Constants.POS_ONE,positionOne);
+        	request.setAttribute(Constants.POS_TWO,positionTwo);
+
+        }
+        
         StorageContainerBizLogic bizLogic = (StorageContainerBizLogic)BizLogicFactory
                 .getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
         
         List list = bizLogic.retrieve(StorageContainer.class.getName(),
                 "systemIdentifier", systemIdentifier);
-        StorageContainerGridObject storageContainerGridObject
-        		= new StorageContainerGridObject();
+        StorageContainerGridObject storageContainerGridObject = null;
         int [][]fullStatus = null;
         int [][] childContainerSystemIdentifiers = null;
         
-        if (list != null)
+        if ((list != null) && (list.size() > 0))
         {
+        	storageContainerGridObject = new StorageContainerGridObject();
             StorageContainer storageContainer = (StorageContainer) list.get(0);
             
             storageContainerGridObject.setSystemIdentifier(storageContainer.getSystemIdentifier().longValue());
@@ -139,7 +166,6 @@ public class ShowStorageGridViewAction  extends BaseAction
             
             request.setAttribute(Constants.STORAGE_CONTAINER_TYPE,storageContainerType);
             request.setAttribute(Constants.START_NUMBER,new Integer(startNumber));
-            Logger.out.debug("startNumber "+startNumber);
         }
          
         request.setAttribute(Constants.PAGEOF, pageOf);
