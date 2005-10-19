@@ -594,10 +594,7 @@
 	
 	<definition name=".catissuecore.queryResultsTreeViewDef" path="/pages/content/search/TreeView.jsp">
 	</definition>
-	
-	<definition name=".catissuecore.advanceQueryViewDef" path="/pages/content/search/AdvanceQueryView.jsp">
-	</definition>
-	
+			
 	<definition name=".catissuecore.searchHomeDef" extends=".catissuecore.homePageDef">
 		<put name="submenu" value="/pages/subMenu/Search.jsp" />
 		<put name="mainmenu" value="/pages/mainMenu/Search.jsp" />
@@ -675,6 +672,10 @@
 	
 	<definition name=".catissuecore.participantSearchDef" extends=".catissuecore.queryDataViewDef">
 		<put name="content" value="/pages/content/search/ParticipantSearch.jsp" />
+	</definition>
+	
+	<definition name=".catissuecore.advanceQueryViewDef" extends=".catissuecore.queryDataViewDef">
+		<put name="content" value="/pages/content/search/AdvanceQueryView.jsp" />
 	</definition>
 	<!-- ADVANCE QUERY INTERFACE -->
 	
