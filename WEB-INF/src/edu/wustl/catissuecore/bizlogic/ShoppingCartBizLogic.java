@@ -52,7 +52,7 @@ public class ShoppingCartBizLogic extends DefaultBizLogic
 			for(int i=0;i<obj.length;i++)
 			{
 	        	String str = obj[i].toString();
-	        	int index = str.indexOf(":") + 1;
+	        	int index = str.indexOf("_") + 1;
 	        	
 	        	cart.remove(str.substring(index));
 			}
