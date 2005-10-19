@@ -465,13 +465,11 @@
 							<!-- action buttons begins -->
 							<table cellpadding="4" cellspacing="0" border="0">
 								<tr>
-					 			   	 <logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
 						   			<td>
 						   				<html:submit styleClass="actionButton" disabled="true">
 						   					<bean:message key="buttons.getClinicalData"/>
 						   				</html:submit>
 						   			</td>
-								 </logic:equal>
 
 						   			<td>
 						   				<html:submit styleClass="actionButton" onclick="<%=changeAction%>">

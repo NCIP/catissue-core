@@ -312,13 +312,10 @@
 					</td>
 				    <td class="formField" noWrap="true">
 				     	<html:text styleClass="formFieldSized" size="30" styleId="surgicalPathologyNumber" property="surgicalPathologyNumber" readonly="<%=readOnlyForAll%>"/>
-				     	<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
 					     	&nbsp;
 							<html:submit styleClass="actionButton" disabled="true">
 								<bean:message key="buttons.getPathologyReport"/>
 							</html:submit>
-						</logic:equal>
-				     	
 				    </td>
 				 </tr>
 
