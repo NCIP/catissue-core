@@ -1958,6 +1958,8 @@ PUBLIC
 		<!-- Advance Query Interface Action Begins -->
 		<action path="/AdvanceQueryInterface"
 			type="edu.wustl.catissuecore.action.AdvanceQueryInterfaceAction"
+			name="simpleQueryInterfaceForm"
+			validate="false"
 			scope="request">
 			<forward name="pageOfAdvanceQueryInterface" path=".catissuecore.advanceQueryInterfaceDef" />
 			<forward name="access_denied" path="/Home.do" />
@@ -1982,14 +1984,14 @@ PUBLIC
 			<forward name="pageOfSimpleQueryInterface" path=".catissuecore.advanceQueryDef" />
 			<forward name="failure" path=".catissuecore.advanceQueryDef" />
 		</action>
-
+		
 		<action path="/AdvanceSearch"
 			type="edu.wustl.catissuecore.action.AdvanceSearchAction"
 			name="simpleQueryInterfaceForm"
 			validate="true"
 			input="/AdvanceQuery.do"
 			scope="request">
-			<forward name="success" path="/SpreadsheetView.do" />
+			<forward name="success" path=".catissuecore.advanceQueryRedirectDef" />
 			<forward name="failure" path="/AdvanceQuery.do" />
 		</action>
 	</action-mappings>

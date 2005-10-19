@@ -32,6 +32,12 @@
 %>
 <script>
 
+/*function onAddRule()
+{
+	alert("addrule");
+	parent.queryFrame.location.href = "/catissuecore/AdvanceQueryView.do";
+}*/
+
 function callAction(action)
 {
 	document.forms[0].action = "/catissuecore/"+action;
@@ -116,8 +122,8 @@ function showDateColumn(element)
 				</tr>
 				<tr>
 					<td class="formTitle" height="20" colspan="7">
-						<%--bean:message key="simpleQuery.title" /--%>
-						<%=title%>
+						<bean:message key="app.advancedSearch" />
+						
 					</td>
 				</tr>
 				<tbody id="simpleQuery">
@@ -219,7 +225,7 @@ function showDateColumn(element)
 						<tr>
 							<td>
 								<html:submit styleClass="actionButton" >
-									<bean:message  key="buttons.search" />
+									<bean:message  key="buttons.addRule" />
 								</html:submit>
 							</td>
 						</tr>

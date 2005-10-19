@@ -673,10 +673,23 @@
 	<definition name=".catissuecore.participantSearchDef" extends=".catissuecore.queryDataViewDef">
 		<put name="content" value="/pages/content/search/ParticipantSearch.jsp" />
 	</definition>
-	
+
 	<definition name=".catissuecore.advanceQueryViewDef" extends=".catissuecore.queryDataViewDef">
 		<put name="content" value="/pages/content/search/AdvanceQueryView.jsp" />
 	</definition>
+	
+	<definition name=".catissuecore.advanceQueryDef" extends=".catissuecore.queryDataViewDef">
+		<put name="content" value="/pages/content/search/AdvanceQuery.jsp" />
+	</definition>
+	
+	<definition name=".catissuecore.advanceQueryResultsDef" extends=".catissuecore.queryDataViewDef">
+		<put name="content" value="/pages/content/search/AdvanceQueryInterface.jsp" />
+	</definition>
+	
+	<definition name=".catissuecore.advanceQueryRedirectDef" extends=".catissuecore.queryDataViewDef">
+		<put name="content" value="/pages/content/search/RedirectAdvancedSearch.jsp" />
+	</definition>
+	
 	<!-- ADVANCE QUERY INTERFACE -->
 	
 	<!-- Query edit pages definitions end -->

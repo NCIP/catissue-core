@@ -37,7 +37,7 @@
 		</tr>
 
 		<tr>
-			<td colspan='2' bgcolor='#f1f1f1'>
+			<td>
 				<div class="tree">
 					<script type="text/javascript">
 						createTree(Tree);
