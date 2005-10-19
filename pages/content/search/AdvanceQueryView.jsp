@@ -4,6 +4,8 @@
 
 	<link rel="StyleSheet" href="tree.css" type="css/tree.css">
 	<script type="text/javascript" src="jss/tree.js"></script>
+	<LINK REL="StyleSheet" HREF="css/menu.css">
+	<script language="javascript" src="jss/menu.js"></script>
 	<script type="text/javascript">
 	<%
 		Vector Treelist = (Vector)request.getAttribute("vector");
@@ -28,19 +30,22 @@
 
 <html>
 <body>
-<div class="tree">
-<script type="text/javascript">
-<!--
-	createTree(Tree);
-//-->
-</script>
-</div>
 
-<br /><br />
+	<table cellpadding='0' cellspacing='0' border='0' width='600'>
+		<tr>
+			<td class='formTitle' height='20' colspan='4'>Rules</td>
+		</tr>
 
-<input type = button value="Delete">
-
-
+		<tr>
+			<td colspan='2' bgcolor='#f1f1f1'>
+				<div class="tree">
+					<script type="text/javascript">
+						createTree(Tree);
+					</script>
+				</div>
+			</td>
+		</tr>
+	</table>	
 </body>
 </html>
 
