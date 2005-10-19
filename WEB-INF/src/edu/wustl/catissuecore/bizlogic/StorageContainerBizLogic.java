@@ -86,6 +86,12 @@ public class StorageContainerBizLogic extends DefaultBizLogic
                 }
                 else
                 {
+                    //Check if position specified is within the parent container's
+                    //capacity
+                	if(false == validatePosition(pc,container))
+                	{
+                		throw new DAOException(ApplicationProperties.getValue("errors.storageContainer.dimensionOverflow"));
+                	}
                     container.setParentContainer(pc);
                     
 //                  check for closed ParentSite
@@ -203,6 +209,13 @@ public class StorageContainerBizLogic extends DefaultBizLogic
             	Logger.out.debug("Loading ParentContainer: "+container.getParentContainer().getSystemIdentifier());
     			
             	StorageContainer pc = (StorageContainer) dao.retrieve(StorageContainer.class.getName(), container.getParentContainer().getSystemIdentifier());
+
+            	//Check if position specified is within the parent container's
+                //capacity
+            	if(false == validatePosition(pc,container))
+            	{
+            		throw new DAOException(ApplicationProperties.getValue("errors.storageContainer.dimensionOverflow"));
+            	}
             	//check for closed ParentContainer
     			checkStatus(dao, pc, "Parent Container" );
     			
@@ -213,8 +226,23 @@ public class StorageContainerBizLogic extends DefaultBizLogic
                	container.setSite(pc.getSite());
         	}
         }
+
+    	//Check whether size has been reduced
+    	//Sri: fix for bug #355 (Storage capacity: Reducing capacity should be handled)
         
-        //check for closed Site
+    	Integer oldContainerDimOne =oldContainer.getStorageContainerCapacity().getOneDimensionCapacity();
+    	Integer oldContainerDimTwo =oldContainer.getStorageContainerCapacity().getTwoDimensionCapacity();
+    	Integer newContainerDimOne =container.getStorageContainerCapacity().getOneDimensionCapacity();
+    	Integer newContainerDimTwo =container.getStorageContainerCapacity().getTwoDimensionCapacity();
+
+    	// If any size of reduced, throw error
+    	if((oldContainerDimOne.compareTo(newContainerDimOne) > 0) ||
+    			(oldContainerDimTwo.compareTo(newContainerDimTwo) > 0))
+    	{
+    		throw new DAOException(ApplicationProperties.getValue("errors.storageContainer.cannotReduce"));        		
+    	}
+
+    	//Check for closed Site
         if((container.getSite() !=null) && (oldContainer.getSite() != null) )
         {
             if((container.getSite().getSystemIdentifier() !=null) && (oldContainer.getSite().getSystemIdentifier() != null) )
@@ -467,7 +495,6 @@ public class StorageContainerBizLogic extends DefaultBizLogic
                 treeNode.setSiteSystemIdentifier(Long.valueOf((String)rowList.get(2)));
                 treeNode.setSiteName((String)rowList.get(3));
                 treeNode.setSiteType((String)rowList.get(4));
-
                 vector.add(treeNode);
             }
         }
@@ -529,4 +556,24 @@ public class StorageContainerBizLogic extends DefaultBizLogic
 
         disableSubStorageContainer(dao, Utility.toLongArray(listOfSubStorageContainerId));
     }
+    
+    // Checks for whether the user is trying to place the container in a position
+    // outside the range of parent container
+    // This is needed since now users can enter the values in the edit box
+    private boolean validatePosition(StorageContainer parent, StorageContainer current)
+    {
+        int posOneCapacity = parent.getStorageContainerCapacity()
+								.getOneDimensionCapacity().intValue();
+        int posTwoCapacity = parent.getStorageContainerCapacity()
+        						.getTwoDimensionCapacity().intValue();
+        int positionDimensionOne = current.getPositionDimensionOne().intValue();
+        int positionDimensionTwo = current.getPositionDimensionTwo().intValue();
+        if((positionDimensionOne > posOneCapacity) ||
+        			(positionDimensionTwo > posTwoCapacity))
+        {
+        	return false;
+        }
+        return true;
+    }
+
 }
