@@ -14,9 +14,20 @@ var icons			= new Array(6);
 
 
 function CheckNum(num){
-
-alert('num-'+num);
 var checkb = "chk_"+num;
+
+var obj = document.getElementById(checkb);
+
+/*for (i=0; i< nodes.length; i++) {
+	var nodeValues = nodes[i].split("|");
+	alert(nodeValues[0]);
+		if (nodeValues[0] == num) {
+			alert(nodeValues[1]);
+			nodeValues[1].removeChild(obj);
+			
+		}
+}*/
+//alert('obj--'+obj);
 
 }
 
@@ -33,10 +44,10 @@ function preloadIcons() {
 	icons[2].src = "images/minus.gif";
 	icons[3] = new Image();
 	icons[3].src = "images/minusbottom.gif";
-	/*icons[4] = new Image();
-	icons[4].src = "images/folder.gif";
+	icons[4] = new Image();
+	icons[4].src = "img/folder.gif";
 	icons[5] = new Image();
-	icons[5].src = "images/folderopen.gif";*/
+	icons[5].src = "img/folderopen.gif";
 }
 // Create the tree
 function createTree(arrName, startNode, openNode) {
@@ -49,13 +60,13 @@ function createTree(arrName, startNode, openNode) {
 	
 		if (startNode !=0) {
 			var nodeValues = nodes[getArrayId(startNode)].split("|");
-			document.write("<a href=\"" + nodeValues[3] + "\" onmouseover=\"window.status='" + nodeValues[2] + "';return true;\" onmouseout=\"window.status=' ';return true;\"><img src=\"images/folderopen.gif\" align=\"absbottom\" alt=\"\" />" + nodeValues[2] + "</a><br />");
+			document.write("<a href=\"" + nodeValues[3] + "\" onmouseover=\"window.status='" + nodeValues[2] + "';return true;\" onmouseout=\"window.status=' ';return true;\"><img src=\"img/folderopen.gif\" align=\"absbottom\" alt=\"\" />" + nodeValues[2] + "</a><br />");
 		} //else document.write("<img src=\"img/base.gif\" align=\"absbottom\" alt=\"\" />Website<br />");
 	
 		var recursedNodes = new Array();
 		
 		addNode(startNode, recursedNodes);
-		
+		//addNode("root", recursedNodes);
 	}
 }
 // Returns the position of a node in the array
@@ -100,12 +111,15 @@ function lastSibling (node, parentNode) {
 	if (lastChild == node) return true;
 	return false;
 }
-// Adds a new node to the tree
+// Adds a new node to the  
 function addNode(parentNode, recursedNodes) {
+	
 	for (var i = 0; i < nodes.length; i++) {
 
 		var nodeValues = nodes[i].split("|");
-				
+		//alert('nodeValues[1]--'+nodeValues[1]);
+		//alert('nodeValues[0]--'+nodeValues[0]);
+		
 		if (nodeValues[1] == parentNode) {
 			
 			var ls	= lastSibling(nodeValues[0], nodeValues[1]);  //1|0
@@ -113,7 +127,12 @@ function addNode(parentNode, recursedNodes) {
 			var ino = isNodeOpen(nodeValues[0]);
 
 			// Write out line & empty icons
+			if(i == 0 || (i%2 == 0))
+				document.write("<tr><td bgcolor='#c5c5c5' colspan='2'>");
+			else
+				document.write("<tr><td bgcolor='#f1f1f1' colspan='2'>");
 			for (g=0; g<recursedNodes.length; g++) {
+				
 				if (recursedNodes[g] == 1) document.write("<img src=\"images/line.gif\" align=\"absbottom\" alt=\"\" />");
 				else  document.write("<img src=\"images/empty.gif\" align=\"absbottom\" alt=\"\" />");
 			}
@@ -129,7 +148,7 @@ function addNode(parentNode, recursedNodes) {
 				if (ls) {
 					 
 					document.write("<a href=\"javascript: oc(" + nodeValues[0] + ", 1);\"><img id=\"join" + nodeValues[0] + "\" src=\"images/");
-					//if(i == 0){
+					
 							if (ino) document.write("minus");
 							else document.write("plus");
 							document.write("bottom.gif\" align=\"absbottom\" alt=\"Open/Close node\" /></a>");
@@ -138,30 +157,42 @@ function addNode(parentNode, recursedNodes) {
 					
 					document.write("<a href=\"javascript: oc(" + nodeValues[0] + ", 0);\"><img id=\"join" + nodeValues[0] + "\" src=\"images/");
 					
-						
+						//if(i == 0){
 						if (ino) document.write("minus");
 						else document.write("plus");
 						document.write(".gif\" align=\"absbottom\" alt=\"Open/Close node\" /></a>");
-										
+
+						
 				}
 				
 			} else {
+				
 				if (ls) document.write("<img src=\"images/joinbottom.gif\" align=\"absbottom\" alt=\"\" />");
 				else document.write("<img src=\"images/join.gif\" align=\"absbottom\" alt=\"\" />");
 			}
 
-			document.write("<input type=checkbox name='chk_"+nodeValues[0]+"' id='chk_"+ nodeValues[0] + "' onClick = CheckNum("+ nodeValues[0] +")" +">" + nodeValues[2]);
 			
+			document.write("<input type=checkbox name='chk_"+nodeValues[0]+"' id='chk_"+ nodeValues[0] + "' onClick = CheckNum("+ nodeValues[0] +")" +">" + nodeValues[2]);
+			//alert('nodeValues[0]-'+nodeValues[0]);
+			document.write("</td></tr>");
+			
+
 			// End link
 			document.write("<br />");
 			
 			// If node has children write out divs and go deeper
 			if (hcn) {
-				document.write("<div id=\"div" + nodeValues[0] + "\"");
+				//alert('inside hcn block-->'+ nodeValues[0]);
+				document.write("<tbody id=\"div" + nodeValues[0] + "\"");
+				//alert('div '+nodeValues[0]);
+				//document.write("<div id=\"div" + nodeValues[0] + "\"");
 					if (!ino) document.write(" style=\"display: none;\"");
 				document.write(">");
 				addNode(nodeValues[0], recursedNodes);
-				document.write("</div>");
+				
+				//document.write("</div>");
+				document.write("</tbody>");
+				
 			}
 			
 			// remove last line or empty icon 
@@ -171,11 +202,13 @@ function addNode(parentNode, recursedNodes) {
 }
 // Opens or closes a node
 function oc(node, bottom) {
+	//alert('inside oc')
 	var theDiv = document.getElementById("div" + node);
 	var theJoin	= document.getElementById("join" + node);
 	//var theIcon = document.getElementById("icon" + node);
 	
 	if (theDiv.style.display == 'none') {
+		//alert('inside thdiv');
 		if (bottom==1) theJoin.src = icons[3].src;
 		else theJoin.src = icons[2].src;
 		//theIcon.src = icons[5].src;
