@@ -8,7 +8,7 @@
 **************************************************************************/
 
 // Arrays for nodes and icons
-var nodes			= new Array();;
+var nodes			= new Array();
 var openNodes	= new Array();
 var icons			= new Array(6);
 
@@ -18,16 +18,6 @@ var checkb = "chk_"+num;
 
 var obj = document.getElementById(checkb);
 
-/*for (i=0; i< nodes.length; i++) {
-	var nodeValues = nodes[i].split("|");
-	alert(nodeValues[0]);
-		if (nodeValues[0] == num) {
-			alert(nodeValues[1]);
-			nodeValues[1].removeChild(obj);
-			
-		}
-}*/
-//alert('obj--'+obj);
 
 }
 
