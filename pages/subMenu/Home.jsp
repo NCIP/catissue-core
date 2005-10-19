@@ -35,8 +35,12 @@
 <tr>
 	<td class="subMenuPrimaryItemsWithBorder" onmouseover="changeMenuStyle(this,'subMenuPrimaryItemsWithBorderOver')" onmouseout="changeMenuStyle(this,'subMenuPrimaryItemsWithBorder')">				
 		<div>
+			<b> <bean:message key="app.Privileges" /> </b>
+		</div>
+		
+		<div>
 	  		<a class="subMenuPrimary" href="AssignPrivilegesPage.do?pageOf=pageOfAssignPrivilegesPage">
-	  			<bean:message key="app.assignPrevileges" />
+	  			<bean:message key="app.assign" />
 	  		</a>
 	  	</div>
 	</td>

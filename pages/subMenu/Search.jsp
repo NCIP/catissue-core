@@ -7,37 +7,53 @@
     	</a>
 	</td>
   </tr>
-  <tr>
-    <td class="subMenuPrimaryItems">
-      <div>
-      	<img src="images/subMenuArrow.gif" width="7" height="7" alt="" />
+  
+<tr>
+	<td class="subMenuPrimaryItemsWithBorder" onmouseover="changeMenuStyle(this,'subMenuPrimaryItemsWithBorderOver')" onmouseout="changeMenuStyle(this,'subMenuPrimaryItemsWithBorder')">				
+		<div>
       		<a class="subMenuPrimary" href="SimpleQueryInterface.do?pageOf=pageOfSimpleQueryInterface">
       			<bean:message key="app.simpleSearch" />
       		</a>
       </div>
-      <div>
-      	<img src="images/subMenuArrow.gif" width="7" height="7" alt="" />
+	</td>
+</tr>
+
+<tr>
+	<td class="subMenuPrimaryItemsWithBorder" onmouseover="changeMenuStyle(this,'subMenuPrimaryItemsWithBorderOver')" onmouseout="changeMenuStyle(this,'subMenuPrimaryItemsWithBorder')">				
+	  <div>
       		<a class="subMenuPrimary" href="AdvanceQueryInterface.do?pageOf=pageOfAdvanceQueryInterface">
       			<bean:message key="app.advancedSearch" />
       		</a>
       </div>
-      <div>
-	  	<img src="images/subMenuArrow.gif" width="7" height="7" alt="" />
-	  		<a class="subMenuPrimary" href="ShowFramedPage.do?pageOf=pageOfStorageLocation">
+	</td>
+</tr>
+
+<tr>
+	<td class="subMenuPrimaryItemsWithBorder" onmouseover="changeMenuStyle(this,'subMenuPrimaryItemsWithBorderOver')" onmouseout="changeMenuStyle(this,'subMenuPrimaryItemsWithBorder')">				
+	  <div>
+      		<a class="subMenuPrimary" href="ShowFramedPage.do?pageOf=pageOfStorageLocation">
 	  			<bean:message key="app.queryResultView" />
 	  		</a>
-	  </div>
+      </div>
+	</td>
+</tr>
+
+<%--tr>
+	<td class="subMenuPrimaryItemsWithBorder" onmouseover="changeMenuStyle(this,'subMenuPrimaryItemsWithBorderOver')" onmouseout="changeMenuStyle(this,'subMenuPrimaryItemsWithBorder')">				
 	  <div>
-	  	<img src="images/subMenuArrow.gif" width="7" height="7" alt="" />
-	  		<a class="subMenuPrimary" href="#">
+      		<a class="subMenuPrimary" href="#">
 	  			<bean:message key="app.viewStoredQueries" />
 	  		</a>
-	  </div>
+      </div>
+	</td>
+</tr--%>
+
+<tr>
+	<td class="subMenuPrimaryItemsWithBorder" onmouseover="changeMenuStyle(this,'subMenuPrimaryItemsWithBorderOver')" onmouseout="changeMenuStyle(this,'subMenuPrimaryItemsWithBorder')">				
 	  <div>
-	  	<img src="images/subMenuArrow.gif" width="7" height="7" alt="" />
-	  		<a class="subMenuPrimary" href="ShoppingCart.do">
+      		<a class="subMenuPrimary" href="ShoppingCart.do">
 	  			<bean:message key="app.viewShoppingCart" />
 	  		</a>
-	  </div>
-    </td>
-  </tr>
+      </div>
+	</td>
+</tr>
