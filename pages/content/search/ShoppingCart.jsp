@@ -1,16 +1,57 @@
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
+<%@ page import="java.util.List"%>
 <%@ page import="java.util.Hashtable"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.ShoppingCartForm"%>
 <%@ page import="edu.wustl.catissuecore.domain.Specimen"%>
 <%@ page import="edu.wustl.catissuecore.query.ShoppingCart"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 
+<link href="runtime/styles/xp/grid.css" rel="stylesheet" type="text/css" ></link>
+<script src="runtime/lib/grid.js"></script>
+<script src="runtime/formats/date.js"></script>
+<script src="runtime/formats/string.js"></script>
+<script src="runtime/formats/number.js"></script>
+<style>
+.active-column-0 {width:30px}
+.active-column-4 {width:150px}
+.active-column-6 {width:150px}
+</style>
+
+
 <%
 	ShoppingCartForm form = (ShoppingCartForm)request.getAttribute("shoppingCartForm");
 %>
 <head>
+<%
+	String [] columnList = Constants.SHOPPING_CART_COLUMNS;
+	List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
+	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
+
+if(dataList.size() != 0)
+{
+%>
+
+	<script>
+		var myData = [<%int xx;%><%for (xx=0;xx<(dataList.size()-1);xx++){%>
+	<%
+		List row = (List)dataList.get(xx);
+  		int j;
+	%>
+		[<%for (j=0;j < (row.size()-1);j++){%>"<%=row.get(j)%>",<%}%>"<%=row.get(j)%>"],<%}%>
+	<%
+		List row = (List)dataList.get(xx);
+  		int j;
+	%>
+		[<%for (j=0;j < (row.size()-1);j++){%>"<%=row.get(j)%>",<%}%>"<%=row.get(j)%>"]
+		];
+		
+		var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnList[k]%>",<%}%>"<%=columnList[k]%>"];
+	</script>
+
+<% } %>
+
 	<script language="javascript" src="jss/script.js"></script>
 	<script language="javascript">
 		function onDelete()
@@ -19,7 +60,7 @@
 			for (var i=0;i < document.forms[0].elements.length;i++)
 		    {
 		    	var e = document.forms[0].elements[i];
-
+		    	
 		        if (e.type == "checkbox" && e.checked == true)
 		        {
 		        	isChecked = "true";
@@ -50,141 +91,81 @@
 			document.forms[0].submit();
 		}
 		
+		var selected;
+
+		function addCheckBoxValuesToArray(checkBoxName)
+		{
+			var theForm = document.forms[0];
+		    selected=new Array();
+		
+		    for(var i=0,j=0;i<theForm.elements.length;i++)
+		    {
+		 	  	if(theForm[i].type == 'checkbox' && theForm[i].checked==true)
+			        selected[j++]=theForm[i].value;
+			}
+		}		
 	</script>
 </head>
 
-<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
-
-<html:form action="<%=Constants.SHOPPING_CART_OPERATION%>">
-
-	<!-- SHOPPING CART BEGINS-->
-	<tr>
-	<td>
-	
-		<table summary="" cellpadding="5" cellspacing="0" border="0">
-			<tr>
-				<td><html:hidden property="operation" value=""/></td>
-			</tr>
-			
-			<tr>
-				<td class="formMessage" colspan="7">&nbsp;</td>
-			</tr>
-
-			<tr>
-				 <td class="formTitle" height="20" colspan="7">
-					<bean:message key="shoppingCart.title"/>
-				 </td>
-			</tr>
-	
-			<!-- FIRST ROW -->
-			
-			<tr>
-				<td class="formSerialNumberField" width="5">
-					<html:checkbox property="checkAll" onclick="javaScript:CheckAll(this)" value="off"/>
-				</td>
-				<td class="formRequiredLabelCenter">
-					<label for="type">
-						<bean:message key="specimen.identifier"/> 
-					</label>
-				</td>
-				<td class="formRequiredLabelCenter">
-					<label for="type">
-						<bean:message key="shoppingCart.type"/> 
-					</label>
-				</td>
-				<td class="formRequiredLabel">
-					<label for="subType">
-						<bean:message key="shoppingCart.subType"/> 
-					</label>
-				</td>
-				<td class="formRequiredLabelCenter">
-					<label for="tissueSite">
-						<bean:message key="specimen.tissueSite"/> 
-					</label>
-				</td>
-				<td class="formRequiredLabelCenter">
-					<label for="tissueSide">
-						<bean:message key="specimen.tissueSide"/> 
-					</label>
-				</td>
-				<td class="formRequiredLabelCenter">
-					<label for="pathologicalStatus">
-						<bean:message key="specimen.pathologicalStatus"/> 
-					</label>
-				</td>
-				<%--td class="formRequiredLabelCenter">
-					<label for="quantity">
-						<bean:message key="specimen.quantity"/> 
-					</label>
-				</td--%>
-			</tr>
-			
-			<% int i=1; %>
-			
-			<logic:iterate id="element" name="shoppingCart" property="cart" scope="session">
-			<bean:define id="specimen" name="element" property="value" />
-			<bean:define id="specimenCharacteristics" name="specimen" property="specimenCharacteristics" />
-			<tr>
-				<td class="formSerialNumberField" width="5">
-					<%
-						String chkName = "value(ShoppingCart:" + ((Specimen)specimen).getSystemIdentifier() + ")";
-					%>
-					<html:checkbox property="<%=chkName%>">
-						<%=i%>
-					</html:checkbox>
-				</td>
-				<td class="formLabelLeft">
-					<bean:write name="specimen" property="systemIdentifier" />
-				</td>
-				<td class="formLabelLeft">
-					<bean:write name="specimen" property="className" />
-				</td>
-				<td class="formLabelLeft">
-				<logic:notEmpty name="specimen" property="type">
-					<bean:write name="specimen" property="type" />
-				</logic:notEmpty>
-				
-				<logic:empty name="specimen" property="type">
-					&nbsp;
-				</logic:empty>
-				</td>
-				<td class="formLabelLeft">
-					<bean:write name="specimenCharacteristics" property="tissueSite" />
-				</td>
-				<td class="formLabelLeft">
-					<bean:write name="specimenCharacteristics" property="tissueSide" />
-				</td>
-				<td class="formLabelLeft">
-					<bean:write name="specimenCharacteristics" property="pathologicalStatus" />
-				</td>
-				<%--td class="formLabelLeft">
-					<bean:write name="specimen" property="quantity" />&nbsp;
-				</td--%>
-			</tr>
-			<% i++; %>
-			</logic:iterate>
-			
-			<%-- Buttons --%>
-			<tr>
-				<td align="right" colspan="7">
-					<table cellpadding="4" cellspacing="0" border="0">
-					<tr>
-						<td>
-							<html:button styleClass="actionButton" property="deleteCart" onclick="onDelete()">
-								<bean:message key="buttons.delete"/>
-							</html:button>
-						</td>
-						<td colspan="2">
-							<html:button styleClass="actionButton" property="exportCart" onclick="onExport()">
-								<bean:message key="buttons.export"/>
-							</html:button>
-						</td> 
-					</tr>
-					</table>
-				</td>
-			</tr>
-		</table>
-	</td>
+<html:form action="<%=Constants.SHOPPING_CART_OPERATION%>">		
+<table summary="" cellpadding="0" cellspacing="0" border="0" width="100%" height="100%">
+<%
+		if(dataList.size() != 0)
+		{
+%>
+	<tr height="95%">
+		<td width="100%">
+			<div STYLE="overflow: auto; width:100%; height:100%; padding:0px; margin: 0px; border: 1px solid">
+				<script>
+					
+						//	create ActiveWidgets Grid javascript object.
+						var obj = new Active.Controls.Grid;
+						
+						//	set number of rows/columns.
+						obj.setRowProperty("count", <%=dataList.size()%>);
+						obj.setColumnProperty("count", <%=columnList.length%>);
+						
+						//	provide cells and headers text
+						obj.setDataProperty("text", function(i, j){return myData[i][j]});
+						obj.setColumnProperty("text", function(i){return columns[i]});
+						
+						//	set headers width/height.
+						obj.setRowHeaderWidth("28px");
+						obj.setColumnHeaderHeight("20px");
+						
+						//	write grid html to the page.
+						document.write(obj);
+				</script>
+			</div>
+		</td>
 	</tr>
-</html:form>
+
+	<tr height="5%">
+		<td width="100%" align="right">
+			<table cellpadding="5" cellspacing="0" border="0">
+			<tr>
+				<td>
+					<html:button styleClass="actionButton" property="deleteCart" onclick="onDelete()">
+						<bean:message key="buttons.delete"/>
+					</html:button>
+				</td>
+				<td>
+					<html:button styleClass="actionButton" property="exportCart" onclick="onExport()">
+						<bean:message key="buttons.export"/>
+					</html:button>
+				</td> 
+			</tr>
+			</table>
+		</td>
+	</tr>
+<% } else  {%>
+	<tr height="10%">
+		<td><b>The Shopping Cart is empty.</b></td>
+	</tr>
+<% } %>
+
+	<tr>
+		<td><html:hidden property="operation" value=""/></td>
+	</tr>
 </table>
+</html:form>
