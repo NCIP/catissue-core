@@ -31,7 +31,7 @@
 <html>
 <body>
 
-	<table cellpadding='0' cellspacing='0' border='0' width='600'>
+	<table cellpadding='0' cellspacing='0' border='0' width='100%'>
 		<tr>
 			<td class='formTitle' height='20' colspan='4'>Rules</td>
 		</tr>
