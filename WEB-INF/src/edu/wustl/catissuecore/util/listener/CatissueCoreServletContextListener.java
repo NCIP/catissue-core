@@ -16,6 +16,7 @@ import edu.wustl.catissuecore.bizlogic.QueryBizLogic;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.dao.DAO;
 import edu.wustl.catissuecore.dao.HibernateDAO;
+import edu.wustl.catissuecore.domain.Address;
 import edu.wustl.catissuecore.domain.CellSpecimen;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.DistributionProtocol;
@@ -23,6 +24,7 @@ import edu.wustl.catissuecore.domain.FluidSpecimen;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.Site;
+import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
@@ -106,6 +108,8 @@ public class CatissueCoreServletContextListener
         Map protectionGroupsForObjectTypes = new HashMap();
         protectionGroupsForObjectTypes.put(Site.class.getName(),
                 new String[] {ADMINISTRATORS_DATA_GROUP});
+        protectionGroupsForObjectTypes.put(Address.class.getName(),
+                new String[] {ADMINISTRATORS_DATA_GROUP});
         protectionGroupsForObjectTypes.put(StorageContainer.class.getName(),
                 new String[] {ADMINISTRATORS_DATA_GROUP});
         protectionGroupsForObjectTypes.put(DistributionProtocol.class.getName(),
@@ -113,7 +117,7 @@ public class CatissueCoreServletContextListener
         protectionGroupsForObjectTypes.put(User.class.getName(),
                 new String[] {ADMINISTRATORS_DATA_GROUP});
         protectionGroupsForObjectTypes.put(Participant.class.getName(),
-                new String[] {ADMINISTRATORS_DATA_GROUP});
+                new String[] {SUPERVISORS_DATA_GROUP});
         protectionGroupsForObjectTypes.put(CollectionProtocol.class.getName(),
                 new String[] {ADMINISTRATORS_DATA_GROUP});
         protectionGroupsForObjectTypes.put(SpecimenCollectionGroup.class.getName(),
@@ -126,6 +130,9 @@ public class CatissueCoreServletContextListener
                 new String[] {ADMINISTRATORS_DATA_GROUP});
         protectionGroupsForObjectTypes.put(CellSpecimen.class.getName(),
                 new String[] {ADMINISTRATORS_DATA_GROUP});
+        protectionGroupsForObjectTypes.put(SpecimenCharacteristics.class.getName(),
+                new String[] {ADMINISTRATORS_DATA_GROUP});
+        
         Constants.STATIC_PROTECTION_GROUPS_FOR_OBJECT_TYPES.putAll(protectionGroupsForObjectTypes);
         
         /**
