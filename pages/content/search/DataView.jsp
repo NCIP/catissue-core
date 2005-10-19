@@ -58,12 +58,14 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 			obj.setRowHeaderWidth("28px");
 			obj.setColumnHeaderHeight("20px");
 			
+			<%if (Constants.PAGEOF_SIMPLE_QUERY_INTERFACE.equals(pageOf) == false){%>
 			var row = new Active.Templates.Row;
 			row.setEvent("ondblclick", function(){this.action("myAction")}); 
 			
 			obj.setTemplate("row", row);
 	   		obj.setAction("myAction", 
 				function(src){window.location.href = 'SearchObject.do?pageOf=<%=pageOf%>&operation=search&systemIdentifier='+myData[this.getSelectionProperty("index")][0]}); 
+			<%}%>
 			
 			//	write grid html to the page.
 			document.write(obj);
