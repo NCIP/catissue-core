@@ -11,6 +11,9 @@
 package edu.wustl.catissuecore.action;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -51,7 +54,7 @@ public class ShoppingCartAction  extends BaseAction
         ShoppingCart cart = (ShoppingCart)session.getAttribute(Constants.SHOPPING_CART);
         ShoppingCartBizLogic bizLogic = (ShoppingCartBizLogic)BizLogicFactory.getBizLogic(Constants.SHOPPING_CART_FORM_ID);
         ShoppingCartForm shopForm = (ShoppingCartForm)form;
-        
+     
         if(cart == null)
         {
         	cart = new ShoppingCart();
@@ -71,6 +74,8 @@ public class ShoppingCartAction  extends BaseAction
         		}
         		
         		session.setAttribute(Constants.SHOPPING_CART,cart);
+        		
+        		request.setAttribute(Constants.SPREADSHEET_DATA_LIST,makeGridData(cart));        		
 			}
         	catch(Exception e)
 			{
@@ -79,7 +84,7 @@ public class ShoppingCartAction  extends BaseAction
         }
         else
         {
-	        if(operation.equals(Constants.ADD))
+        	if(operation.equals(Constants.ADD))
 	        {
 	        	//bizLogic.add(cart);
 	        }
@@ -105,11 +110,54 @@ public class ShoppingCartAction  extends BaseAction
 	        	String path = "/" + fileName;
 	        	return new ActionForward(path);
 	        }
+	        
+        	request.setAttribute(Constants.SPREADSHEET_DATA_LIST,makeGridData(cart));
         }
         
         //Sets the operation attribute to be used in the Add/Edit Shopping Cart Page. 
         request.setAttribute(Constants.OPERATION, operation);
         
         return mapping.findForward(Constants.SUCCESS);
+    }
+    
+    //This function prepares the data in Grid Format
+    private List makeGridData(ShoppingCart cart)
+    {	
+		List gridData = new ArrayList(); 
+			
+    	if(cart != null)
+		{
+			Hashtable cartTable = cart.getCart();
+			
+			if(cartTable != null && cartTable.size() != 0)
+			{				
+				Enumeration enum = cartTable.keys();
+				
+				while(enum.hasMoreElements())
+				{
+					String key = (String)enum.nextElement();
+					Specimen specimen = (Specimen)cartTable.get(key);
+					
+					List rowData = new ArrayList();
+					
+					rowData.add("<input type='checkbox' name='value(CB_" + specimen.getSystemIdentifier() + ")'>");
+					rowData.add(String.valueOf(specimen.getSystemIdentifier()));
+					rowData.add(specimen.getClassName());
+					
+					if(specimen.getType() != null)
+						rowData.add(specimen.getType());
+					else
+						rowData.add("");
+					
+					rowData.add(specimen.getSpecimenCharacteristics().getTissueSite());
+					rowData.add(specimen.getSpecimenCharacteristics().getTissueSide());
+					rowData.add(specimen.getSpecimenCharacteristics().getPathologicalStatus());
+					
+					gridData.add(rowData);
+				}
+			}
+		}
+		
+		return gridData;
     }
 }
