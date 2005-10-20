@@ -38,8 +38,8 @@
 		    			NameValueBean columnData = (NameValueBean)subList.get(listSize);
 		    			//String columnName = columnData.getValue();
 		    			columnDisplayNamesArray = columnDisplayNamesArray + "\"" + columnData.getName() + "\"";
-		    			String values = tableNameVal+"."+columnData.getValue()+"."+columnData.getName();
-		    			columnNamesArray = columnNamesArray + "\"" + values + "\"";
+		    			//String values = columnData.getValue();
+		    			columnNamesArray = columnNamesArray + "\"" + columnData.getValue() + "\"";
 		    			if(listSize != subListSize - 1)
 		    			{
 			    			columnDisplayNamesArray = columnDisplayNamesArray + ",";   
@@ -251,7 +251,7 @@
             		</td>    
         		</tr>
         		<tr>
-            		<td class="formRequiredLabel">
+            		<td class="formRequiredLabel" align="left">
                 		<label for="tableName">
                     		<bean:message key="table.names"/>
                			</label>
@@ -268,7 +268,7 @@
     		        </td>
         		</tr>
         		<tr>
-            		<td class="formRequiredLabel">
+            		<td class="formRequiredLabel" align="left">
                 		<label for="columnNames">
                     		<bean:message key="column.names"/>
                 		</label>
