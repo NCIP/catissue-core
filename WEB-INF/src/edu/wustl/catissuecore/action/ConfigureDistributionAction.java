@@ -29,7 +29,7 @@ public class ConfigureDistributionAction extends Action
             throws IOException, ServletException
     {
     	//Set the tables for the configuration of distribution report
-    	request.setAttribute(Constants.TABLE_IDS, Constants.DISTRIBUTION_TABLE_IDS);
+    	request.setAttribute(Constants.CONFIGURATION_TABLES, Constants.DISTRIBUTION_TABLE_AlIAS);
     	return (mapping.findForward("Success"));
     }
 }

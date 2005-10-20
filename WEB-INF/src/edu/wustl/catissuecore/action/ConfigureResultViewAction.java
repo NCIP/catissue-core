@@ -16,10 +16,12 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.bizlogic.AbstractBizLogic;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
+import edu.wustl.catissuecore.dao.JDBCDAO;
 import edu.wustl.catissuecore.domain.QueryColumnData;
 import edu.wustl.catissuecore.domain.QueryTableData;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
+import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
 
@@ -36,44 +38,40 @@ public class ConfigureResultViewAction extends Action  {
 			
 			AbstractBizLogic dao = BizLogicFactory.getBizLogic(Constants.CONFIGURE_RESULT_VIEW_ID);
 			
-			String []tableIds = (String [])request.getAttribute(Constants.TABLE_IDS);
+			String []tables = (String [])request.getAttribute(Constants.CONFIGURATION_TABLES);
 			
 			String sourceObjectName = QueryTableData.class.getName();
 	        String[] displayNameField = {"displayName"};
 	        String valueField = "aliasName";
 	        
-	        String[] whereColumnNames = {"identifier"};
+	        String[] whereColumnNames = {"aliasName"};
 	        String [] whereCondition = {"in"};
-	        Object [] whereColumnValues = {tableIds};
+	        Object [] whereColumnValues = {tables};
 	        //List of objects containing TableNames and aliasName
 	        List tableList = dao.getList(sourceObjectName, displayNameField, valueField, 
     				whereColumnNames, whereCondition, whereColumnValues,null,null,false);
      
 	        //List of Column data corresponding to table names.
-	        sourceObjectName = QueryColumnData.class.getName();
+	        /*sourceObjectName = QueryColumnData.class.getName();
 	        String valueField1 = "columnName";
 	        String [] whereCondition1 = {"="};
-	        whereColumnNames[0] = "tableData.identifier";
+	        whereColumnNames[0] = "tableData.identifier";*/
 	       
-	        int i=0;
+	      
 	        Map tableColumnDataMap = new HashMap();
 	        
 	        Iterator itr = tableList.iterator();
-	        while(itr.hasNext() && i<tableIds.length)
+	        while(itr.hasNext())
 	        {
 	        	NameValueBean tableData = (NameValueBean)itr.next();
-	        	
-	        	List columnList =  new ArrayList();
 	        	if(!tableData.getName().equals(Constants.SELECT_OPTION))
 	        	{
-	        		String []whereColumnValue = {tableIds[i]};
-	        		columnList = dao.getList(sourceObjectName, displayNameField, valueField1, 
-	        				whereColumnNames, whereCondition1, whereColumnValue,null,null,false);
+	        		List columnList =  setColumnNames(tableData.getName());
 	        		tableColumnDataMap.put(tableData,columnList);
-	        		i++;
+	        		
 	        	}
 	        	Logger.out.debug("Table Name"+ tableData.getName());
-		        Logger.out.debug("Column List"+ columnList);
+		        //Logger.out.debug("Column List"+ columnList);
 		        
 	        }
 	        
@@ -81,4 +79,46 @@ public class ConfigureResultViewAction extends Action  {
 	        request.setAttribute(Constants.TABLE_COLUMN_DATA_MAP,tableColumnDataMap);
 			return mapping.findForward("Success");
 	}
+	private List setColumnNames(String value) throws DAOException, ClassNotFoundException
+    {
+        String sql = 	" SELECT temp.COLUMN_NAME, temp.DISPLAY_NAME " +
+				        " from CATISSUE_QUERY_INTERFACE_TABLE_DATA tableData2 join " +
+				        " ( SELECT  columnData.COLUMN_NAME, columnData.TABLE_ID, displayData.DISPLAY_NAME " +
+				        " FROM CATISSUE_QUERY_INTERFACE_COLUMN_DATA columnData, " +
+				        " CATISSUE_TABLE_RELATION relationData, " +
+				        " CATISSUE_QUERY_INTERFACE_TABLE_DATA tableData, " +
+				        " CATISSUE_SEARCH_DISPLAY_DATA displayData " +
+				        " where relationData.CHILD_TABLE_ID = columnData.TABLE_ID and " +
+				        " relationData.PARENT_TABLE_ID = tableData.TABLE_ID and " +
+				        " relationData.RELATIONSHIP_ID = displayData.RELATIONSHIP_ID and " +
+				        " columnData.IDENTIFIER = displayData.COL_ID and " +
+				        " tableData.ALIAS_NAME = '"+value+"') as temp " +
+				        " on temp.TABLE_ID = tableData2.TABLE_ID";
+        
+        Logger.out.debug("SQL*****************************"+sql);
+        
+        JDBCDAO jdbcDao = new JDBCDAO();
+        jdbcDao.openSession(null);
+        List list = jdbcDao.executeQuery(sql, null, Constants.INSECURE_RETRIEVE, null,null);
+        jdbcDao.closeSession();
+        
+        String columnName = new String();
+        String columnDisplayName = new String();
+        List columnList = new ArrayList();
+        Iterator iterator = list.iterator();
+        int j = 0,k=0;
+        while (iterator.hasNext())
+        {
+            List rowList = (List)iterator.next();
+            columnName = (String)rowList.get(j++);
+            columnDisplayName = (String)rowList.get(j++);
+            String columnValue = value+"."+columnDisplayName+"."+columnName;
+            NameValueBean columns = new NameValueBean(columnDisplayName,columnValue);
+            columnList.add(columns);
+            j = 0;
+            k++;
+        }
+        
+        return columnList;
+    }
 }
