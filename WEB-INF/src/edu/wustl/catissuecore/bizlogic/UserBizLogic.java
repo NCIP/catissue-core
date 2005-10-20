@@ -37,6 +37,7 @@ import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.PasswordEncoderDecoder;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
+import gov.nih.nci.security.authorization.domainobjects.Role;
 
 /**
  * UserHDAO is used to add user information into the database using Hibernate.
@@ -54,16 +55,16 @@ public class UserBizLogic extends DefaultBizLogic
     protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean)
             throws DAOException, UserNotAuthorizedException
     {
-
+        
         User user = (User) obj;
-
+        
         Department department = null;
         Institution institution = null;
         CancerResearchGroup cancerResearchGroup = null;
-
+        
         try
         {
-
+            
             List list = dao.retrieve(Department.class.getName(),
                     "systemIdentifier", user.getDepartment()
                             .getSystemIdentifier());
@@ -90,47 +91,63 @@ public class UserBizLogic extends DefaultBizLogic
             user.setDepartment(department);
             user.setInstitution(institution);
             user.setCancerResearchGroup(cancerResearchGroup);
+            
+            if (user.getPageOf().equals(Constants.PAGEOF_SIGNUP) == false)
+            {
+                gov.nih.nci.security.authorization.domainobjects.User csmUser = new gov.nih.nci.security.authorization.domainobjects.User();
 
-            gov.nih.nci.security.authorization.domainobjects.User csmUser = new gov.nih.nci.security.authorization.domainobjects.User();
-
-            csmUser.setLoginName(user.getLoginName());
-            csmUser.setLastName(user.getLastName());
-            csmUser.setFirstName(user.getFirstName());
-            csmUser.setEmailId(user.getEmailAddress());
-            csmUser.setStartDate(user.getStartDate());
-            csmUser.setPassword(PasswordEncoderDecoder.encode(GeneratePassword
-                    .getPassword()));
-            Logger.out.debug("Password generated:" + csmUser.getPassword());
-
-            SecurityManager.getInstance(UserBizLogic.class).createUser(csmUser);
-
-            if (user.getRoleId() != null)
-                SecurityManager.getInstance(UserBizLogic.class)
-                        .assignRoleToUser(csmUser.getLoginName(),
-                                user.getRoleId());
-
-            user.setSystemIdentifier(csmUser.getUserId());
-
+                csmUser.setLoginName(user.getLoginName());
+                csmUser.setLastName(user.getLastName());
+                csmUser.setFirstName(user.getFirstName());
+                csmUser.setEmailId(user.getEmailAddress());
+                csmUser.setStartDate(user.getStartDate());
+                csmUser.setPassword(PasswordEncoderDecoder.encode(GeneratePassword
+                        .getPassword()));
+                Logger.out.debug("Password generated:" + csmUser.getPassword());
+                
+                SecurityManager.getInstance(UserBizLogic.class).createUser(csmUser);
+                
+                if (user.getRoleId() != null)
+                    SecurityManager.getInstance(UserBizLogic.class)
+                            .assignRoleToUser(csmUser.getLoginName(),
+                                    user.getRoleId());
+                
+                user.setCsmUserId(csmUser.getUserId());
+                user.setPassword(csmUser.getPassword());
+                Logger.out.debug("CATISSUE USER PASSWORD................"+user.getPassword());
+            }
+            
             dao.insert(user.getAddress(), sessionDataBean, true, false);
-            dao.insert(user, sessionDataBean, true, true);
-
+            dao.insert(user, sessionDataBean, true, false);
+            
             //Send email to administrator and cc it to the user registered.
             SendEmail email = new SendEmail();
-
+            
             String adminEmailAddress = ApplicationProperties
                     .getValue("email.administrative.emailAddress");
             String technicalSupportEmailAddress = ApplicationProperties
                     .getValue("email.technicalSupport.emailAddress");
             String mailServer = ApplicationProperties
                     .getValue("email.mailServer");
-
-            String subject = ApplicationProperties
-                    .getValue("createUser.subject");
-            String body = "Dear "+ csmUser.getFirstName()+" "+ csmUser.getLastName()+"\n\n"+
-						  ApplicationProperties.getValue("createUser.body.start") +"\n"+
-						  "\n\n" + ApplicationProperties.getValue("user.loginName")+ Constants.SEPARATOR + csmUser.getLoginName() + 
-						  "\n\n" + ApplicationProperties.getValue("user.lastName")+ Constants.SEPARATOR + csmUser.getLastName() +
-						  "\n\n" + ApplicationProperties.getValue("user.firstName")+ Constants.SEPARATOR + csmUser.getFirstName() +
+            
+            String subjectKey = "userRegistration.request.subject";
+            String emailBodyStartKey = "userRegistration.request.body.start";
+            String emailBodyEndKey = "userRegistration.request.body.end";
+            
+            if (Constants.PAGEOF_USER_ADMIN.equals(user.getPageOf()))
+            {
+                subjectKey = "createUser.subject";
+                emailBodyStartKey = "createUser.body.start";
+                emailBodyEndKey = null;
+            }
+            
+            String subject = ApplicationProperties.getValue(subjectKey);
+            
+            String body = "Dear "+ user.getFirstName()+" "+ user.getLastName()+"\n\n"+
+						  ApplicationProperties.getValue(emailBodyStartKey) +"\n"+
+						  "\n\n" + ApplicationProperties.getValue("user.loginName")+ Constants.SEPARATOR + user.getLoginName() + 
+						  "\n\n" + ApplicationProperties.getValue("user.lastName")+ Constants.SEPARATOR + user.getLastName() +
+						  "\n\n" + ApplicationProperties.getValue("user.firstName")+ Constants.SEPARATOR + user.getFirstName() +
 						  "\n\n" + ApplicationProperties.getValue("user.street")+ Constants.SEPARATOR + user.getAddress().getStreet() +
 						  "\n\n" + ApplicationProperties.getValue("user.city")+ Constants.SEPARATOR + user.getAddress().getCity() +
 						  "\n\n" + ApplicationProperties.getValue("user.zipCode")+ Constants.SEPARATOR + user.getAddress().getZipCode() +
@@ -138,43 +155,52 @@ public class UserBizLogic extends DefaultBizLogic
 						  "\n\n" + ApplicationProperties.getValue("user.country")+ Constants.SEPARATOR + user.getAddress().getCountry() +
 						  "\n\n" + ApplicationProperties.getValue("user.phoneNumber")+ Constants.SEPARATOR + user.getAddress().getPhoneNumber() +
 						  "\n\n" + ApplicationProperties.getValue("user.faxNumber")+ Constants.SEPARATOR + user.getAddress().getFaxNumber() +
-						  "\n\n" + ApplicationProperties.getValue("user.emailAddress")+ Constants.SEPARATOR + csmUser.getEmailId() +
+						  "\n\n" + ApplicationProperties.getValue("user.emailAddress")+ Constants.SEPARATOR + user.getEmailAddress() +
 						  "\n\n" + ApplicationProperties.getValue("user.institution")+ Constants.SEPARATOR + institution.getName() +
 						  "\n\n" + ApplicationProperties.getValue("user.department")+ Constants.SEPARATOR + department.getName() +
-						  "\n\n" + ApplicationProperties.getValue("user.cancerResearchGroup")+ Constants.SEPARATOR + cancerResearchGroup.getName()+
-						  "\n\n" + ApplicationProperties.getValue("userRegistration.loginDetails")
-						  + "\n\tLogin Name : " + csmUser.getLoginName()
-						  + "\n\tPassword : " + PasswordEncoderDecoder.decode(csmUser.getPassword()) + "\n\n"+
-						  "\n\n" + ApplicationProperties.getValue("email.catissuecore.team");
+						  "\n\n" + ApplicationProperties.getValue("user.cancerResearchGroup")+ Constants.SEPARATOR + cancerResearchGroup.getName();
+            
+            if (Constants.PAGEOF_USER_ADMIN.equals(user.getPageOf()))
+            {
+                body = body + "\n\n" + ApplicationProperties.getValue("userRegistration.loginDetails")
+				  + "\n\tLogin Name : " + user.getLoginName()
+				  + "\n\tPassword : " + PasswordEncoderDecoder.decode(user.getPassword());
+            }
+            
+            if (emailBodyEndKey != null)
+            {
+                body = body + "\n\n\t" + ApplicationProperties.getValue(emailBodyEndKey);
+            }
 
-            boolean emailStatus = email.sendmail(adminEmailAddress, csmUser
-                    .getEmailId(), null, technicalSupportEmailAddress,
+            body = body + "\n\n" + "\n\n" + ApplicationProperties.getValue("email.catissuecore.team");
+            
+            boolean emailStatus = email.sendmail(adminEmailAddress, user
+                    .getEmailAddress(), null, technicalSupportEmailAddress,
                     mailServer, subject, body);
 
             if (emailStatus)
             {
                 Logger.out.info(ApplicationProperties
                         .getValue("userRegistration.email.success")
-                        + csmUser.getFirstName() + " " + csmUser.getLastName());
+                        + user.getFirstName() + " " + user.getLastName());
             }
             else
             {
                 Logger.out.info(ApplicationProperties
                         .getValue("userRegistration.email.failure")
-                        + csmUser.getFirstName() + " " + csmUser.getLastName());
+                        + user.getFirstName() + " " + user.getLastName());
             }
             
-            Set protectionObjects=new HashSet();
-            protectionObjects.add(user);
-    	    try
-            {
-                SecurityManager.getInstance(this.getClass()).insertAuthorizationData(getAuthorizationData(user),protectionObjects,null);
-            }
-            catch (SMException e)
-            {
-                Logger.out.error("Exception in Authorization: "+e.getMessage(),e);
-            }
-           
+                Set protectionObjects=new HashSet();
+                protectionObjects.add(user);
+        	    try
+                {
+                    SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null,protectionObjects,null);
+                }
+                catch (SMException e)
+                {
+                    Logger.out.error("Exception in Authorization: "+e.getMessage(),e);
+                }
         }
         catch (SMException smex)
         {
@@ -182,8 +208,6 @@ public class UserBizLogic extends DefaultBizLogic
                     + smex.getMessage(), smex);
             throw new DAOException(smex.getCause().getMessage(),smex);
         }  
-       
-
     }
     
     /**
@@ -202,7 +226,7 @@ public class UserBizLogic extends DefaultBizLogic
         gov.nih.nci.security.authorization.domainobjects.User user ;
         Collection coordinators;
         User aUser = (User)obj;
-        String userId = String.valueOf(aUser.getSystemIdentifier());
+        String userId = String.valueOf(aUser.getCsmUserId());
         try
         {
             user = new gov.nih.nci.security.authorization.domainobjects.User();
@@ -238,16 +262,26 @@ public class UserBizLogic extends DefaultBizLogic
     protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean)
             throws DAOException, UserNotAuthorizedException
     {
-        Logger.out.debug("IN UserBizLogic update***************************");
         User user = (User) obj;
         List list = null;
         
-        
         try
         {
+            String csmUserId = null;
+            if (user.getCsmUserId() != null)
+            {
+                csmUserId = user.getCsmUserId().toString(); 
+            }
+            
+            //Retrieve the user object for getting the csm user id. 
+            if (Constants.PAGEOF_CHANGE_PASSWORD.equals(user.getPageOf()))
+            {
+                User user1 = (User)dao.retrieve(User.class.getName(), user.getSystemIdentifier());
+                csmUserId = user1.getCsmUserId().toString();
+            }
+            Logger.out.debug("In UserBizLogic.......................csmUserId........."+csmUserId);
             gov.nih.nci.security.authorization.domainobjects.User csmUser = SecurityManager
-                    .getInstance(DomainObjectListAction.class).getUserById(
-                            String.valueOf(user.getSystemIdentifier()));
+                    .getInstance(DomainObjectListAction.class).getUserById(csmUserId);
 
             if (user.getPageOf().equals(Constants.PAGEOF_CHANGE_PASSWORD))
             {
@@ -255,32 +289,52 @@ public class UserBizLogic extends DefaultBizLogic
                 {
                     throw new DAOException(ApplicationProperties.getValue("errors.oldPassword.wrong"));
                 }
+                
                 csmUser.setPassword(PasswordEncoderDecoder.encode(user.getPassword()));
+                user.setPassword(csmUser.getPassword());
             }
             else
             {
-                dao.update(user.getAddress(), sessionDataBean, true, false, false);
-    	        dao.update(user, sessionDataBean, true, true, true);
-    	        
                 csmUser.setLoginName(user.getLoginName());
                 csmUser.setLastName(user.getLastName());
                 csmUser.setFirstName(user.getFirstName());
                 csmUser.setEmailId(user.getEmailAddress());
-            }
-
-            SecurityManager.getInstance(UserBizLogic.class).modifyUser(csmUser);
-
-            if ((Constants.PAGEOF_USER_PROFILE.equals(user.getPageOf()) == false) 
-            		&& (Constants.PAGEOF_CHANGE_PASSWORD.equals(user.getPageOf()) == false))
-            {
-                SecurityManager.getInstance(UserBizLogic.class).assignRoleToUser(
-                        csmUser.getLoginName(), user.getRoleId());
+                
+                
+                if ((Constants.PAGEOF_USER_PROFILE.equals(user.getPageOf()) == false)
+                        && (Constants.PAGEOF_CHANGE_PASSWORD.equals(user.getPageOf()) == false))
+                {
+                    SecurityManager.getInstance(UserBizLogic.class).assignRoleToUser(
+                            csmUser.getLoginName(), user.getRoleId());
+                }
+                
+                dao.update(user.getAddress(), sessionDataBean, true, false, false);
+                
+                //Audit of user address.
+                User oldUser = (User) oldObj;
+                dao.audit(user.getAddress(), oldUser.getAddress(),sessionDataBean,true);
             }
             
-            
-            User oldUser = (User) oldObj;
-            dao.audit(user.getAddress(), oldUser.getAddress(),sessionDataBean,true);
+	        dao.update(user, sessionDataBean, true, true, true);
+	        
+	        //Audit of user.
             dao.audit(obj, oldObj,sessionDataBean,true);
+            
+            SecurityManager.getInstance(UserBizLogic.class).modifyUser(csmUser);
+            
+            if (Constants.ACTIVITY_STATUS_ACTIVE.equals(user.getActivityStatus()))
+            {
+                Set protectionObjects=new HashSet();
+                protectionObjects.add(user);
+        	    try
+                {
+                    SecurityManager.getInstance(this.getClass()).insertAuthorizationData(getAuthorizationData(user),protectionObjects,null);
+                }
+                catch (SMException e)
+                {
+                    Logger.out.error("Exception in Authorization: "+e.getMessage(),e);
+                }
+            }
         }
         catch (SMException smExp)
         {
@@ -342,14 +396,11 @@ public class UserBizLogic extends DefaultBizLogic
         List users = retrieve(sourceObjectName, selectColumnName, whereColumnName,
                 whereColumnCondition, whereColumnValue, joinCondition);
 				
-//        List users = retrieve(User.class.getName(), ,
-//                );
         Vector nameValuePairs = new Vector();
         nameValuePairs.add(new NameValueBean(Constants.SELECT_OPTION, "-1"));
-
+        
         // Set CSM users for the user objects retrieved
         User user = null;
-        gov.nih.nci.security.authorization.domainobjects.User csmUser = null;
         if (users != null)
         {
 
@@ -359,21 +410,9 @@ public class UserBizLogic extends DefaultBizLogic
             for (int i = 0; i < users.size(); i++)
             {
                 user = (User) users.get(i);
-                try
-                {
-                    csmUser = SecurityManager.getInstance(UserBizLogic.class)
-                            .getUserById(
-                                    String.valueOf(user.getSystemIdentifier()));
-                }
-                catch (SMException smExp)
-                {
-                    Logger.out.debug("Unable to get user : "
-                            + smExp.getMessage());
-                    throw new DAOException(smExp.getMessage(), smExp);
-                }
                 nameValueBean = new NameValueBean();
-                nameValueBean.setName(csmUser.getLastName() + ", "
-                        + csmUser.getFirstName());
+                nameValueBean.setName(user.getLastName() + ", "
+                        + user.getFirstName());
                 nameValueBean.setValue(String.valueOf(user
                         .getSystemIdentifier()));
                 Logger.out.debug(nameValueBean.toString());
@@ -402,4 +441,38 @@ public class UserBizLogic extends DefaultBizLogic
     //        }
     //        
     //    }
+    
+    public List retrieve(String className, String colName, Object colValue) throws DAOException
+    {
+        List userList = null;
+        try
+        {
+            // Get the caTISSUE user.
+            userList = super.retrieve(className, colName, colValue);
+
+            edu.wustl.catissuecore.domain.User appUser = null;
+            if (!userList.isEmpty())
+            {
+                appUser = (edu.wustl.catissuecore.domain.User) userList.get(0);
+                
+                if (appUser.getCsmUserId() != null)
+                {
+                    //Get the role of the user.
+                    Role role = SecurityManager.getInstance(UserBizLogic.class)
+                    					.getUserRole(appUser.getCsmUserId().longValue());
+                    if (role != null)
+                    {
+                        appUser.setRoleId(role.getId().toString());
+                    }
+                }
+            }
+        }
+        catch (SMException smExp)
+        {
+            Logger.out.debug(smExp.getMessage(), smExp);
+            throw new DAOException(smExp.getMessage(), smExp);
+        }
+        
+        return userList; 
+    }
 }

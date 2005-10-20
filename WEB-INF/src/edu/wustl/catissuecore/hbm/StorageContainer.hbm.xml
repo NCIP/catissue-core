@@ -115,7 +115,7 @@
                   class="edu.wustl.catissuecore.domain.StorageContainerDetails"
               />
         </set>
-        
+
         <many-to-one
             name="storageContainerCapacity"
             class="edu.wustl.catissuecore.domain.StorageContainerCapacity"

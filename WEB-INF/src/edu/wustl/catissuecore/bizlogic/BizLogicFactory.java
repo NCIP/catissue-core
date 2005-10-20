@@ -10,6 +10,7 @@
 package edu.wustl.catissuecore.bizlogic;
 
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * BizLogicFactory is a factory for DAO instances of various domain objects.
@@ -31,11 +32,9 @@ public class BizLogicFactory
             case Constants.USER_FORM_ID:
                 abstractBizLogic = new UserBizLogic();
             	break;
-            case Constants.SIGNUP_FORM_ID:
-                abstractBizLogic = new SignUpUserBizLogic();
-            	break;
             case Constants.APPROVE_USER_FORM_ID:
                 abstractBizLogic = new ApproveUserBizLogic();
+            	Logger.out.debug("In Biz Logic Factory..............APPROVE_USER_FORM_ID");
             	break;
             case Constants.REPORTEDPROBLEM_FORM_ID:
                 abstractBizLogic = new ReportedProblemBizLogic();

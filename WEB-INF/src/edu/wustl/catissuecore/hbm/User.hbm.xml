@@ -19,9 +19,64 @@
             length="30"
             unsaved-value="null"
         >
-            <generator class="assigned">
+            <generator class="native">
             </generator>
         </id>
+
+        <property
+            name="emailAddress"
+            type="string"
+            update="true"
+            insert="true"
+            column="EMAIL_ADDRESS"
+            length="100"
+        />
+
+        <property
+            name="password"
+            type="string"
+            update="true"
+            insert="true"
+            column="PASSWORD"
+            length="50"
+        />
+
+        <property
+            name="firstName"
+            type="string"
+            update="true"
+            insert="true"
+            column="FIRST_NAME"
+            length="50"
+        />
+
+        <property
+            name="lastName"
+            type="string"
+            update="true"
+            insert="true"
+            column="LAST_NAME"
+            length="50"
+        />
+
+        <property
+            name="loginName"
+            type="string"
+            update="true"
+            insert="true"
+            column="LOGIN_NAME"
+            length="50"
+            not-null="true"
+            unique="true"
+        />
+
+        <property
+            name="startDate"
+            type="date"
+            update="true"
+            insert="true"
+            column="START_DATE"
+        />
 
         <property
             name="activityStatus"
@@ -92,6 +147,15 @@
               />
 
         </set>
+
+        <property
+            name="csmUserId"
+            type="long"
+            update="true"
+            insert="true"
+            column="CSM_USER_ID"
+            length="20"
+        />
 
         <property
             name="comments"

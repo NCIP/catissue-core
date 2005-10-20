@@ -50,7 +50,7 @@
             insert="true"
             column="STORAGE_CONTAINER_ID"
         />
-        
+
         <!--
             To add non XDoclet property mappings, create a file named
                 hibernate-properties-StorageContainerDetails.xml

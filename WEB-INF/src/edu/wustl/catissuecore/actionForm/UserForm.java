@@ -18,7 +18,6 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
-import edu.wustl.catissuecore.domain.SignUpUser;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -32,9 +31,6 @@ import edu.wustl.common.util.logger.Logger;
  * */
 public class UserForm extends AbstractActionForm
 {
-
-
-
 
     /**
      * Last Name of the user.
@@ -131,6 +127,9 @@ public class UserForm extends AbstractActionForm
      * Status of user in the system.
      */
     private String status;
+    
+    private Long csmUserId;
+    
 
     /**
      * No argument constructor for UserForm class. 
@@ -487,25 +486,16 @@ public class UserForm extends AbstractActionForm
 
 
     /**
-     * Returns the id assigned to form bean
+     * Returns the id assigned to form bean.
      */
     public int getFormId()
     {
-        int formId = Constants.SIGNUP_FORM_ID;
-        if (pageOf != null)
+        int formId = Constants.APPROVE_USER_FORM_ID;
+        if ((pageOf != null) && (Constants.PAGEOF_APPROVE_USER.equals(pageOf) == false))
         {
-            if (pageOf.equals(Constants.PAGEOF_APPROVE_USER))
-            {
-                formId = Constants.APPROVE_USER_FORM_ID;
-                if (this.status.equals(Constants.APPROVE_USER_PENDING_STATUS))
-                    formId = Constants.SIGNUP_FORM_ID;
-            }
-            else if (pageOf.equals(Constants.PAGEOF_USER_ADMIN) || 
-                     pageOf.equals(Constants.PAGEOF_USER_PROFILE) ||
-                     pageOf.equals(Constants.PAGEOF_CHANGE_PASSWORD))
-                formId = Constants.USER_FORM_ID;
-                
+           formId = Constants.USER_FORM_ID;
         }
+        Logger.out.debug("................formId...................."+formId);
         
         return formId;
     }
@@ -527,6 +517,22 @@ public class UserForm extends AbstractActionForm
     }
    
     /**
+     * @return Returns the csmUserId.
+     */
+    public Long getCsmUserId()
+    {
+        return csmUserId;
+    }
+    
+    /**
+     * @param csmUserId The csmUserId to set.
+     */
+    public void setCsmUserId(Long csmUserId)
+    {
+        this.csmUserId = csmUserId;
+    }
+    
+    /**
      * Resets the values of all the fields.
      * Is called by the overridden reset method defined in ActionForm.  
      * */
@@ -547,6 +553,7 @@ public class UserForm extends AbstractActionForm
         this.role = null;
         this.cancerResearchGroupId = -1;
         this.status = Constants.ACTIVITY_STATUS_NEW;
+        this.activityStatus = Constants.ACTIVITY_STATUS_NEW;
     }
     
     /**
@@ -557,99 +564,66 @@ public class UserForm extends AbstractActionForm
     {
         try
         {
-            if (getFormId() == Constants.SIGNUP_FORM_ID)
-            {
-                SignUpUser signUpUser = (SignUpUser)abstractDomain;
-                
-                this.systemIdentifier = signUpUser
-                			.getSystemIdentifier().longValue();
-                this.lastName = signUpUser.getLastName();
-                this.firstName = signUpUser.getFirstName();
-                this.institutionId = signUpUser.getInstitution()
-                			.getSystemIdentifier().longValue();
-                this.emailAddress = signUpUser.getEmailAddress();
-                this.departmentId = signUpUser.getDepartment()
-                			.getSystemIdentifier().longValue();
-                this.cancerResearchGroupId = signUpUser.getCancerResearchGroup()
-                			.getSystemIdentifier().longValue();
-
-                this.street = signUpUser.getStreet();
-                this.city = signUpUser.getCity();
-                this.state = signUpUser.getState();
-                this.country = signUpUser.getCountry();
-                this.zipCode = signUpUser.getZipCode();
-                this.phoneNumber = signUpUser.getPhoneNumber();
-                this.faxNumber = signUpUser.getFaxNumber();
-                
-                this.activityStatus = signUpUser.getActivityStatus();
-                if (activityStatus.equals(Constants.ACTIVITY_STATUS_ACTIVE))
-                {
-                    this.status = Constants.APPROVE_USER_APPROVE_STATUS;
-                }
-                
-                else if (activityStatus.equals(Constants.ACTIVITY_STATUS_CLOSED))
-                {
-                    this.status = Constants.APPROVE_USER_REJECT_STATUS;
-                }
-                else
-                {
-                    this.status = Constants.APPROVE_USER_PENDING_STATUS;
-                }
-                
-                this.role = signUpUser.getRoleId();
-                this.comments = signUpUser.getComments();
-            }
-            else
+            if (Constants.PAGEOF_CHANGE_PASSWORD.equals(pageOf) == false)
             {
                 User user = (User) abstractDomain;
                 
-                if (pageOf.equals(Constants.PAGEOF_CHANGE_PASSWORD))
+                this.systemIdentifier = user.getSystemIdentifier().longValue();
+                this.lastName = user.getLastName();
+                this.firstName = user.getFirstName();
+                this.institutionId = user.getInstitution().getSystemIdentifier()
+                        .longValue();
+                this.emailAddress = user.getEmailAddress();
+                this.departmentId = user.getDepartment().getSystemIdentifier()
+                        .longValue();
+                this.cancerResearchGroupId = user.getCancerResearchGroup()
+                		.getSystemIdentifier().longValue();
+                
+                this.street = user.getAddress().getStreet();
+                this.city = user.getAddress().getCity();
+                this.state = user.getAddress().getState();
+                this.country = user.getAddress().getCountry();
+                this.zipCode = user.getAddress().getZipCode();
+                this.phoneNumber = user.getAddress().getPhoneNumber();
+                this.faxNumber = user.getAddress().getFaxNumber();
+                
+                //Populate the activity status, comments and role for approve user and user edit.  
+                if ((getFormId() == Constants.APPROVE_USER_FORM_ID) || 
+                        ((pageOf != null) && (Constants.PAGEOF_USER_ADMIN.equals(pageOf))))
                 {
-                    //oldPassword = user.getPassword();
-                }
-                else
-                {
-                    this.systemIdentifier = user.getSystemIdentifier().longValue();
-                    this.lastName = user.getLastName();
-                    this.firstName = user.getFirstName();
-                    this.institutionId = user.getInstitution().getSystemIdentifier()
-                            .longValue();
-                    this.emailAddress = user.getEmailAddress();
-                    this.departmentId = user.getDepartment().getSystemIdentifier()
-                            .longValue();
-                    this.cancerResearchGroupId = user.getCancerResearchGroup()
-                    		.getSystemIdentifier().longValue();
+                    this.activityStatus = user.getActivityStatus();
+                    this.comments = user.getComments();
+                    this.role = user.getRoleId();
                     
-                    this.street = user.getAddress().getStreet();
-                    this.city = user.getAddress().getCity();
-                    this.state = user.getAddress().getState();
-                    this.country = user.getAddress().getCountry();
-                    this.zipCode = user.getAddress().getZipCode();
-                    this.phoneNumber = user.getAddress().getPhoneNumber();
-                    this.faxNumber = user.getAddress().getFaxNumber();
-                    
-                    if (!pageOf.equals(Constants.PAGEOF_USER_PROFILE))
+                    if (getFormId() == Constants.APPROVE_USER_FORM_ID)
                     {
-                        this.activityStatus = user.getActivityStatus();
-                        this.comments = user.getComments();
-                        
+                        this.status = user.getActivityStatus();
                         if (activityStatus.equals(Constants.ACTIVITY_STATUS_ACTIVE))
                         {
                             this.status = Constants.APPROVE_USER_APPROVE_STATUS;
-                        }
-                        else if (activityStatus.equals(Constants.ACTIVITY_STATUS_NEW))
-                        {
-                            this.status = Constants.APPROVE_USER_PENDING_STATUS;
                         }
                         else if (activityStatus.equals(Constants.ACTIVITY_STATUS_CLOSED))
                         {
                             this.status = Constants.APPROVE_USER_REJECT_STATUS;
                         }
-                        
-                        this.role = user.getRoleId();
+                        else if (activityStatus.equals(Constants.ACTIVITY_STATUS_NEW))
+                        {
+                            this.status = Constants.APPROVE_USER_PENDING_STATUS;
+                        }
                     }
                 }
+                
+                if (Constants.PAGEOF_USER_ADMIN.equals(pageOf))
+                {
+                    this.setCsmUserId(user.getCsmUserId());
+                }
             }
+            
+            Logger.out.debug("this.activityStatus............."+this.activityStatus);
+            Logger.out.debug("this.comments"+this.comments);
+            Logger.out.debug("this.role"+this.role);
+            Logger.out.debug("this.status"+this.status);
+            Logger.out.debug("this.csmUserid"+this.csmUserId);
         }
         catch (Exception excp)
         {
