@@ -163,15 +163,22 @@ if(dataList.size() != 0)
 	</tr>
 
 	<tr height="5%">
-		<td width="100%" align="right">
-			<table cellpadding="5" cellspacing="0" border="0">
+		<td width="100%">
+			<table cellpadding="5" cellspacing="0" border="0" width="100%">
 			<tr>
-				<td>
+				<td width="10%" nowrap>
+					<input type='checkbox' name='checkAll' id='checkAll' onClick='checkUncheck(this)'>
+					<bean:message key="buttons.checkAll" />
+				</td>
+				<td width="80%">
+					&nbsp;
+				</td>
+				<td width="5%" nowrap align="right">
 					<html:button styleClass="actionButton" property="deleteCart" onclick="onDelete()">
 						<bean:message key="buttons.delete"/>
 					</html:button>
 				</td>
-				<td>
+				<td width="5%" nowrap align="right">
 					<html:button styleClass="actionButton" property="exportCart" onclick="onExport()">
 						<bean:message key="buttons.export"/>
 					</html:button>
