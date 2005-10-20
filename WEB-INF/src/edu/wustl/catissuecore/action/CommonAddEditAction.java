@@ -32,6 +32,7 @@ import edu.wustl.catissuecore.actionForm.SpecimenEventParametersForm;
 import edu.wustl.catissuecore.bizlogic.AbstractBizLogic;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
+import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Distribution;
 import edu.wustl.catissuecore.domain.DomainObjectFactory;
 import edu.wustl.catissuecore.domain.Specimen;
@@ -199,6 +200,12 @@ public class CommonAddEditAction extends Action
                     if(abstractDomain instanceof SpecimenCollectionGroup)
                     {
                     	request.setAttribute(Constants.SPECIMEN_COLLECTION_GROUP_ID,abstractDomain.getSystemIdentifier().toString());
+                    }	
+
+                    // CollectionProtocolRegistration values
+                    if(abstractDomain instanceof CollectionProtocolRegistration)
+                    {
+                    	request.setAttribute(Constants.COLLECTION_REGISTRATION_ID,abstractDomain.getSystemIdentifier().toString());
                     }	
 
                     

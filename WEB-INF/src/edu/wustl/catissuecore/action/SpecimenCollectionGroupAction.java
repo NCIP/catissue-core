@@ -130,7 +130,8 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 			
 			// -------called from Collection Protocol Registration start-------------------------------
 			//cprId
-			String cprId = request.getParameter("cprId" );
+//			String cprId = request.getParameter("cprId" );
+			String cprId =(String) request.getAttribute(Constants.COLLECTION_REGISTRATION_ID );
 			if(cprId != null)
 			{
 				try
