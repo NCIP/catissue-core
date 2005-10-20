@@ -1274,7 +1274,6 @@ public class Constants
 	public static final int OBJECT_LEVEL_SECURE_RETRIEVE = 2; 
 	
 	// TO FORWARD THE REQUEST ON SUBMIT IF STATUS IS DISABLED
-	public static final String DISABLED = "Disabled";
 	public static final String BIO_SPECIMEN = "/ManageBioSpecimen.do";
 	public static final String ADMINISTRATIVE = "/ManageAdministrativeData.do";
 	public static final String PARENT_SPECIMEN_ID = "parentSpecimenId";
