@@ -242,6 +242,7 @@ PUBLIC
 			scope="request">
 			<forward name="success" path="/CollectionProtocolRegistration.do?operation=edit&amp;pageOf=pageOfCollectionProtocolRegistration" />
 			<forward name="failure" path="/CollectionProtocolRegistration.do?operation=edit&amp;pageOf=pageOfCollectionProtocolRegistration" />
+			<forward name="createSpecimenCollectionGroup" path="/SpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroup" />
 		</action>
 		
 		<action path="/CollectionProtocolRegistrationSearch"
