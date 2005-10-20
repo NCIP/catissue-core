@@ -188,17 +188,26 @@ public class CommonAddEditAction extends Action
                    		return reDirectForward;
                     }
                     
+                    // specimen values
                     if(abstractDomain instanceof Specimen)
                     {
                 		request.setAttribute(Constants.SPECIMEN_ID,String.valueOf(abstractDomain.getSystemIdentifier()));
                 		request.setAttribute(Constants.PARENT_SPECIMEN_ID,String.valueOf(abstractDomain.getSystemIdentifier()));
                     }
                     
+                    // SpecimenCollectionGroup values
+                    if(abstractDomain instanceof SpecimenCollectionGroup)
+                    {
+                    	request.setAttribute(Constants.SPECIMEN_COLLECTION_GROUP_ID,abstractDomain.getSystemIdentifier().toString());
+                    }	
+
+                    
+                    // Forward to
                     if(abstractForm.getOnSubmit()!= null && abstractForm.getOnSubmit().trim().length()>0  )
                     {
-                    	String moveTo = abstractForm.getOnSubmit(); 
-                    	Logger.out.debug("MoveTo :-- : "+ moveTo);
-                        return (mapping.findForward(moveTo));
+                    	String forwardTo = abstractForm.getOnSubmit(); 
+                    	Logger.out.debug("ForwardTo :-- : "+ forwardTo);
+                        return (mapping.findForward(forwardTo));
                     }
                     
                     target = new String(Constants.SUCCESS);
