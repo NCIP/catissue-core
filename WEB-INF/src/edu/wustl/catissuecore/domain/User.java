@@ -112,6 +112,11 @@ public class User extends AbstractDomainObject implements Serializable
     protected Collection collectionProtocolCollection = new HashSet();
     
     protected String pageOf;
+    
+    /**
+     * Identifier of this user in csm user table. 
+     */
+    protected Long csmUserId;
 
     /**
      * Initialize a new User instance.
@@ -134,7 +139,7 @@ public class User extends AbstractDomainObject implements Serializable
     /**
      * Returns the systemIdentifier assigned to user.
      * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"
-     * unsaved-value="null" generator-class="assigned"
+     * unsaved-value="null" generator-class="native"
      * @return Returns the systemIdentifier.
      */
     public Long getSystemIdentifier()
@@ -151,8 +156,10 @@ public class User extends AbstractDomainObject implements Serializable
     }
 
     /**
-     * @return Returns the emailAddress.
-     */
+	 * Returns the password assigned to user.
+	 * @hibernate.property name="emailAddress" type="string" column="EMAIL_ADDRESS" length="100"
+	 * @return Returns the password.
+	 */
     public String getEmailAddress()
     {
         return emailAddress;
@@ -183,8 +190,10 @@ public class User extends AbstractDomainObject implements Serializable
     }
     
     /**
-     * @return Returns the password.
-     */
+	 * Returns the password assigned to user.
+	 * @hibernate.property name="password" type="string" column="PASSWORD" length="50"
+	 * @return Returns the password.
+	 */
     public String getPassword()
     {
         return password;
@@ -199,8 +208,10 @@ public class User extends AbstractDomainObject implements Serializable
     }
     
     /**
-     * @return Returns the firstName.
-     */
+	 * Returns the firstname assigned to user.
+	 * @hibernate.property name="firstName" type="string" column="FIRST_NAME" length="50"
+	 * @return Returns the firstName.
+	 */
     public String getFirstName()
     {
         return firstName;
@@ -215,8 +226,10 @@ public class User extends AbstractDomainObject implements Serializable
     }
     
     /**
-     * @return Returns the lastName.
-     */
+	 * Returns the lastname assigned to user.
+	 * @hibernate.property name="lastName" type="string" column="LAST_NAME" length="50"
+	 * @return Returns the lastName.
+	 */
     public String getLastName()
     {
         return lastName;
@@ -231,8 +244,11 @@ public class User extends AbstractDomainObject implements Serializable
     }
 
     /**
-     * @return Returns the loginName.
-     */
+	 * Returns the loginname assigned to user.
+	 * @hibernate.property name="loginName" type="string" column="LOGIN_NAME" length="50" 
+	 * not-null="true" unique="true"
+	 * @return Returns the loginName.
+	 */
     public String getLoginName()
     {
         return loginName;
@@ -247,8 +263,10 @@ public class User extends AbstractDomainObject implements Serializable
     }
 
     /**
-     * @return Returns the startDate.
-     */
+	 * Returns the date when the user is added to the system.
+	 * @hibernate.property name="startDate" type="date" column="START_DATE"
+	 * @return Returns the dateAdded.
+	 */
     public Date getStartDate()
     {
         return startDate;
@@ -343,7 +361,6 @@ public class User extends AbstractDomainObject implements Serializable
      * constrained="true"
      * @return the address of the user.
      */
-
     public Address getAddress()
     {
         return address;
@@ -394,6 +411,24 @@ public class User extends AbstractDomainObject implements Serializable
         this.pageOf = pageOf;
     }
     
+    /**
+	 * Returns the password assigned to user.
+	 * @hibernate.property name="csmUserId" type="long" column="CSM_USER_ID" length="20"
+	 * @return Returns the password.
+	 */
+    public Long getCsmUserId()
+    {
+        return csmUserId;
+    }
+    
+    /**
+     * @param csmUserId The csmUserId to set.
+     */
+    public void setCsmUserId(Long csmUserId)
+    {
+        this.csmUserId = csmUserId;
+    }
+    
     //	/**
     //     * Returns the comments given by the approver. 
     //     * @return the comments given by the approver.
@@ -436,7 +471,7 @@ public class User extends AbstractDomainObject implements Serializable
     }
 
     /**
-     * Sets the commnets given by the approver.
+     * Sets the comments given by the approver.
      * @param comments The comments to set.
      * @see #getComments()
      */
@@ -481,17 +516,12 @@ public class User extends AbstractDomainObject implements Serializable
             
             if (pageOf.equals(Constants.PAGEOF_CHANGE_PASSWORD))
             {
-                this.password = uform.getNewPassword(); 
+                this.password = uform.getNewPassword();
                 this.oldPassword = uform.getOldPassword();
             }
             else
             {
                 this.systemIdentifier = new Long(uform.getSystemIdentifier());
-                if (this.systemIdentifier.intValue() == -1)
-                {
-                    this.setStartDate(Calendar.getInstance().getTime());
-                }
-
                 this.setLoginName(uform.getEmailAddress());
                 this.setLastName(uform.getLastName());
                 this.setFirstName(uform.getFirstName());
@@ -503,10 +533,19 @@ public class User extends AbstractDomainObject implements Serializable
                         .getDepartmentId()));
                 this.cancerResearchGroup.setSystemIdentifier(new Long(uform
                         .getCancerResearchGroupId()));
-
-                if (!pageOf.equals(Constants.PAGEOF_SIGNUP) && !pageOf.equals(Constants.PAGEOF_USER_PROFILE))
+                if (Constants.PAGEOF_USER_PROFILE.equals(pageOf) == false)
                 {
                     this.activityStatus = uform.getActivityStatus();
+                }
+                
+                if (pageOf.equals(Constants.PAGEOF_SIGNUP))
+                {
+                    this.setStartDate(Calendar.getInstance().getTime());
+                }
+
+                if (!pageOf.equals(Constants.PAGEOF_SIGNUP) 
+                        	&& !pageOf.equals(Constants.PAGEOF_USER_PROFILE))
+                {
                     this.comments = uform.getComments();
                 }
                 
@@ -514,6 +553,7 @@ public class User extends AbstractDomainObject implements Serializable
                         && uform.getOperation().equals(Constants.ADD))
                 {
                     this.activityStatus = Constants.ACTIVITY_STATUS_ACTIVE;
+                    this.setStartDate(Calendar.getInstance().getTime());
                 }
                 
                 if (uform.getPageOf().equals(Constants.PAGEOF_APPROVE_USER))
@@ -526,7 +566,11 @@ public class User extends AbstractDomainObject implements Serializable
                     else if (uform.getStatus().equals(
                             Constants.APPROVE_USER_REJECT_STATUS))
                     {
-                        this.activityStatus = Constants.ACTIVITY_STATUS_CLOSED;
+                        this.activityStatus = Constants.ACTIVITY_STATUS_REJECT;
+                    }
+                    else
+                    {
+                        this.activityStatus = Constants.ACTIVITY_STATUS_PENDING;
                     }
                 }
                 
@@ -539,6 +583,10 @@ public class User extends AbstractDomainObject implements Serializable
                 this.address.setPhoneNumber(uform.getPhoneNumber());
                 this.address.setFaxNumber(uform.getFaxNumber());
                 
+                if (Constants.PAGEOF_USER_ADMIN.equals(pageOf))
+                {
+                    this.csmUserId = uform.getCsmUserId();
+                }
             }
         }
         catch (Exception excp)
