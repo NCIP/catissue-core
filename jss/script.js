@@ -117,7 +117,7 @@ function changeUrl(element,str)
 		function changeSubmitTo(url)
 		{
 			var str = document.forms[0].onSubmit.value;
-			alert(str);
+	//		alert(str);
 			if(str == null || str == "")
 			{
 				document.forms[0].onSubmit.value=url;
