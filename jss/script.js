@@ -113,4 +113,15 @@ function changeUrl(element,str)
 				document.forms[0].onSubmit.value=url;
 			}
 		}
+
+		function changeSubmitTo(url)
+		{
+			var str = document.forms[0].onSubmit.value;
+			alert(str);
+			if(str == null || str == "")
+			{
+				document.forms[0].onSubmit.value=url;
+			}
+		}
+
 		
