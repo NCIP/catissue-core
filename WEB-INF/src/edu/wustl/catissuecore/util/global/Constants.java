@@ -1276,5 +1276,6 @@ public class Constants
 	public static final String DISABLED = "Disabled";
 	public static final String BIO_SPECIMEN = "/ManageBioSpecimen.do";
 	public static final String ADMINISTRATIVE = "/ManageAdministrativeData.do";
+	public static final String PARENT_SPECIMEN_ID = "parentSpecimenId";
 	
 }
