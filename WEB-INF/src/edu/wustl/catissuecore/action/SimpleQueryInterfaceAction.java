@@ -60,9 +60,6 @@ public class SimpleQueryInterfaceAction extends SecureAction
             String nextOperatorKey = "SimpleConditionsNode:"+i+"_Operator_operator";
             String nextOperatorValue = (String)simpleQueryInterfaceForm.getValue(nextOperatorKey);
             
-            Logger.out.debug(" i : "+i);
-            Logger.out.debug(" nextOperatorValue ...................."+nextOperatorValue);
-            
             if (value != null)
             {
                 if (!value.equals(Constants.SELECT_OPTION))
@@ -75,12 +72,12 @@ public class SimpleQueryInterfaceAction extends SecureAction
                 setNextTableNames(request, i, prevValue, nextOperatorValue);
             else
             {
-                if (nextOperatorValue != null && !nextOperatorValue.equals(""))
+                if (nextOperatorValue != null && !"".equals(nextOperatorValue))
                 {
                     String prevValueDisplayName = null;
                     String objectNameList = "objectNameList"+i;
             		String objectDisplayNameList = "objectDisplayNameList"+i;
-
+            		
                     JDBCDAO jdbcDAO = (JDBCDAO)DAOFactory.getDAO(Constants.JDBC_DAO);
                     jdbcDAO.openSession(null);
                     String sql = "select DISPLAY_NAME from CATISSUE_QUERY_INTERFACE_TABLE_DATA where ALIAS_NAME='"+value+"'";
@@ -102,18 +99,19 @@ public class SimpleQueryInterfaceAction extends SecureAction
             }
         }
         
-        String aliasName = request.getParameter(Constants.TABLE_ALIAS_NAME);
         String sql = " select distinct tableData.DISPLAY_NAME, tableData.ALIAS_NAME " +
         			 " from CATISSUE_TABLE_RELATION tableRelation join CATISSUE_QUERY_INTERFACE_TABLE_DATA " +
         			 " tableData on tableRelation.PARENT_TABLE_ID = tableData.TABLE_ID ";
         
+        String aliasName = request.getParameter(Constants.TABLE_ALIAS_NAME);
         if ((aliasName != null) && (!"".equals(aliasName)))
         {
             sql = sql + " where tableData.ALIAS_NAME = '"+ aliasName +"'";
             request.setAttribute(Constants.TABLE_ALIAS_NAME,aliasName);
         }
         
-       
+        sql = sql + " ORDER BY tableData.DISPLAY_NAME ";
+        
         JDBCDAO jdbcDAO = (JDBCDAO)DAOFactory.getDAO(Constants.JDBC_DAO);
         jdbcDAO.openSession(null);
         List tableList = jdbcDAO.executeQuery(sql,null,Constants.INSECURE_RETRIEVE,null,null);
@@ -156,10 +154,6 @@ public class SimpleQueryInterfaceAction extends SecureAction
         
         String pageOf = request.getParameter(Constants.PAGEOF);
         request.setAttribute(Constants.PAGEOF, pageOf);
-        
-//        //Fix as per Bug : 521
-//        String title = "SIMPLE SEARCH";
-//        request.setAttribute(Constants.SIMPLE_QUERY_INTERFACE_TITLE, title);
         
         return mapping.findForward(pageOf);
     }
@@ -223,9 +217,6 @@ public class SimpleQueryInterfaceAction extends SecureAction
 		String [] aliasNameList = null;
         String [] displayNameList = null;
         
-        Logger.out.debug("Count i :............. "+i);
-        Logger.out.debug("nextOperatorValue........................"+nextOperatorValue);
-        
         String sql =" (select temp.ALIAS_NAME, temp.DISPLAY_NAME " +
         			" from " +
 			        " (select relationData.FIRST_TABLE_ID, tableData.ALIAS_NAME, tableData.DISPLAY_NAME " +
@@ -242,7 +233,7 @@ public class SimpleQueryInterfaceAction extends SecureAction
 			        " CATISSUE_RELATED_TABLES_MAP relationData1 " +
 			        " on tableData4.TABLE_ID = relationData1.FIRST_TABLE_ID) as temp1 join CATISSUE_QUERY_INTERFACE_TABLE_DATA tableData3 " +
 			        " on temp1.SECOND_TABLE_ID = tableData3.TABLE_ID " +
-			        " where tableData3.ALIAS_NAME = '"+prevValue+"') ";		
+			        " where tableData3.ALIAS_NAME = '"+prevValue+"')";		
             
             Logger.out.debug("TABLE SQL*****************************"+sql);
             
