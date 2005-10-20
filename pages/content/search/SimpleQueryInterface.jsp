@@ -65,7 +65,7 @@ function incrementCounter()
 	document.forms[0].counter.value = parseInt(document.forms[0].counter.value) + 1;
 }
 
-function showDateColumn(element)
+function showDateColumn(element,valueField,colID)
 {
 	var dataStr = element.options[element.selectedIndex].value;
 	var dataValue = new String(dataStr);
@@ -76,19 +76,19 @@ function showDateColumn(element)
 	{
 		var dataType = dataValue.substr(lastInd+1);
 
-		var txtField = document.getElementById("attributeValue");
+		var txtField = document.getElementById(valueField);
 		txtField.value="";
 
 		if (dataType == "date")
 		{
-			var td = document.getElementById("calTD");
+			var td = document.getElementById(colID);
 			td.className="formField";
 			txtField.readOnly="readOnly";
 			document.forms[0].showCalendar.value = "Show";
 		}
 		else
 		{
-			var td = document.getElementById("calTD");
+			var td = document.getElementById(colID);
 			td.className="hideTD";
 			txtField.readOnly="";
 			document.forms[0].showCalendar.value = "";
@@ -145,7 +145,11 @@ function showDateColumn(element)
 						String objectDisplayNameList = "objectDisplayNameList"+i;
 						SimpleQueryInterfaceForm form = (SimpleQueryInterfaceForm)obj;
 						String nextOperatorValue = (String)form.getValue("SimpleConditionsNode:"+i+"_Operator_operator");
-				%>
+						String colID = "calTD"+i;
+						String functionName = "showDateColumn(this,'"+ attributeValue +"','" + colID + "')";
+				%>					
+						
+			
 				<tr>
 					<td class="formRequiredNotice" width="5">&nbsp;</td>
 					<td class="formField">
@@ -156,7 +160,7 @@ function showDateColumn(element)
 						else
 							attributeAction = attributeAction + "')";
 					%>
-						<html:select property="<%=objectName%>" styleClass="formFieldSized15" styleId="objectName" size="1" onchange="<%=attributeAction%>">
+						<html:select property="<%=objectName%>" styleClass="formFieldSized15" styleId="<%=objectName%>" size="1" onchange="<%=attributeAction%>">
 							<logic:notPresent name="<%=objectNameList%>">			
 								<html:options name="objectAliasNameList" labelName="objectDisplayNameList" />
 							</logic:notPresent>	
@@ -166,7 +170,7 @@ function showDateColumn(element)
 						</html:select>
 					</td>
 					<td class="formField">
-						<html:select property="<%=attributeName%>" styleClass="formFieldSized15" styleId="attributeName" size="1" onchange="showDateColumn(this)">
+						<html:select property="<%=attributeName%>" styleClass="formFieldSized15" styleId="<%=attributeName%>" size="1" onchange="<%=functionName%>">
 							<logic:notPresent name="<%=attributeNameList%>">			
 								<html:options name="attributeNameList" labelName="attributeNameList" />
 							</logic:notPresent>	
@@ -176,19 +180,18 @@ function showDateColumn(element)
 						</html:select>
 					</td>
 					<td class="formField">
-						<html:select property="<%=attributeCondition%>" styleClass="formFieldSized10" styleId="attributeCondition" size="1">
+						<html:select property="<%=attributeCondition%>" styleClass="formFieldSized10" styleId="<%=attributeCondition%>" size="1">
 							<html:options name="attributeConditionList" labelName="attributeConditionList" />
 						</html:select>
 					</td>
 					<td class="formField">
-						<html:text styleClass="formFieldSized10" size="30" styleId="attributeValue" property="<%=attributeValue%>" />
+						<html:text styleClass="formFieldSized10" size="30" styleId="<%=attributeValue%>" property="<%=attributeValue%>" />
 						<html:hidden property="showCalendar" />
 					</td>
 				<!--  ********************* MD Code ********************** -->	
-					
-					<td id="calTD" class="<%=dateClass%>">
+					<td id="<%=colID%>" class="<%=dateClass%>">
 					<%	
-						String fieldName = "simpleQueryInterfaceForm.attributeValue";
+						String fieldName = "simpleQueryInterfaceForm."+attributeValue;
 					%>
 						<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
 						<a href="javascript:show_calendar('<%=fieldName%>',null,null,'MM-DD-YYYY');">
