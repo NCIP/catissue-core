@@ -88,9 +88,8 @@
 		// for add new Specimen
 		function onAddNewSpecimen(element)
 		{
-			var identifier = "<%=form.getSystemIdentifier()%>";
-			var action = "/catissuecore/NewSpecimen.do?operation=add&pageOf=pageOfNewSpecimen"+"&specimenCollectionGroupId=" + identifier;
-			document.forms[0].action = action;
+			var action ="createNewSpecimen";
+			changeSubmitTo(action );
 			document.forms[0].submit();
 		}
 		
