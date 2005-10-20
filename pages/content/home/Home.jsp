@@ -13,17 +13,12 @@
             
               <!-- welcome begins -->
               <table summary="" cellpadding="0" cellspacing="0" border="0" width="600" height="100%">
-                <tr><td class="welcomeTitle" height="20">Welcome to caTISSUE Core</td>
+                <tr>
+                	<td class="welcomeTitle" height="20">Welcome to caTISSUE Core</td>
                 </tr>
                 <tr>
-                  <td class="welcomeContent" valign="top">
-				  <ul>
-					<li>
-						<bean:message key="home.text.bullet1"/>
-					</li>
-					<li>
-						<bean:message key="home.text.bullet2"/>
-					</li>
+                	<td>
+                  		<img src="images/HomeImage.jpg" alt="caTISSUE Core" border="0" />
                   </td>
                 </tr>
               </table>
