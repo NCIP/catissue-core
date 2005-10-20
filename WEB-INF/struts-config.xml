@@ -596,7 +596,7 @@ PUBLIC
 			validate="true"
 			input="/ReportProblem.do?operation=edit"
 			scope="request">
-			<forward name="success" path="/ReportProblem.do?operation=edit" />
+			<forward name="success" path="/ReportedProblemShow.do?pageNum=1" />
 			<forward name="failure" path="/ReportProblem.do?operation=edit" />
 		</action>
 		
