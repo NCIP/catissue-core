@@ -90,7 +90,6 @@ public class CommonAddEditAction extends Action
                 //If operation is add, add the data in the database.
                 abstractDomain = DomainObjectFactory.getDomainObject(
                         abstractForm.getFormId(), abstractForm);
-                
                 bizLogic.insert(abstractDomain, getSessionData(request), Constants.HIBERNATE_DAO);
             	
                 if(abstractDomain instanceof Specimen)
@@ -124,8 +123,7 @@ public class CommonAddEditAction extends Action
                     abstractForm.setSystemIdentifier(abstractDomain.getSystemIdentifier().longValue());
                     abstractForm.setMutable(false);
                 }
-            
-               
+                
 	               Logger.out.debug("CAE :------  " +abstractForm.getRedirectTo());
 	               if (abstractForm.getRedirectTo()!=null && abstractForm.getRedirectTo().trim().length() >0 )
 	               {
@@ -163,6 +161,7 @@ public class CommonAddEditAction extends Action
             else
             {
                 //If operation is edit, update the data in the database.
+                
                 List list = bizLogic.retrieve(objectName, Constants.SYSTEM_IDENTIFIER,
 										  new Long(abstractForm.getSystemIdentifier()));
                 if (!list.isEmpty())
@@ -180,7 +179,8 @@ public class CommonAddEditAction extends Action
                     bizLogic.update(abstractDomain, abstractDomainOld, Constants.HIBERNATE_DAO, getSessionData(request));
       
                     // -- Direct to Main Menu if record is disabled
-                    if(abstractForm.getActivityStatus().equals(Constants.DISABLED  )  )
+                    if((abstractForm.getActivityStatus() != null) &&
+                            (Constants.ACTIVITY_STATUS_DISABLED.equals(abstractForm.getActivityStatus())))
                     {
                     	String moveTo = abstractForm.getOnSubmit(); 
                     	Logger.out.debug("MoveTo in Disabled :-- : "+ moveTo);
