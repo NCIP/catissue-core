@@ -130,15 +130,24 @@ public class DistributionForm extends SpecimenEventParametersForm
 	
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
 	{
-		ActionErrors errors = super.validate(mapping, request);
+		//ActionErrors errors = super.validate(mapping, request);
+		ActionErrors errors = new ActionErrors();
 		Validator validator = new Validator();
 		Logger.out.debug("Inside validate function");
+		if ((userId) == -1L)
+        {
+       		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("distribution.distributedBy")));
+        }
+       	if (!validator.checkDate( dateOfEvent ) )
+       	{
+       		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("eventparameters.dateofevent")));
+       	}
 		if(!validator.isValidOption(distributionProtocolId))
 		{
 			Logger.out.debug("dist prot");
 			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("distribution.protocol")));
 		}
-		
+
 		if(!validator.isValidOption(fromSite))
 		{
 			Logger.out.debug("from site");
