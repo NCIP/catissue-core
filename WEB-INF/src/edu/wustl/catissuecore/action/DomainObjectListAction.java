@@ -62,7 +62,7 @@ public class DomainObjectListAction extends SecureAction
         if (pageNum == Constants.START_PAGE)
         {
             //If start page is to be shown retrieve the list from the database.
-            if (abstractForm.getFormId() == Constants.SIGNUP_FORM_ID)
+            if (abstractForm.getFormId() == Constants.APPROVE_USER_FORM_ID)
             {
                 String [] whereColumnNames = {"activityStatus","activityStatus"};
                 String [] whereColumnConditions = {"=","="};

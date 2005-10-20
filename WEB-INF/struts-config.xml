@@ -376,7 +376,7 @@ PUBLIC
 		</action>
 		
 		<action path="/UserSearch"
-		    type="edu.wustl.catissuecore.action.UserSearchAction"
+		    type="edu.wustl.catissuecore.action.CommonSearchAction"
 			name="userForm"
 			validate="true"
 			input="/User.do?operation=edit"
@@ -722,7 +722,7 @@ PUBLIC
 			name="userForm"
 			input="/ApproveUserShow.do?pageNum=1"
 			scope="request">
-			<forward name="success" path="/User.do?operation=add&amp;pageOf=pageOfApproveUser" />
+			<forward name="success" path="/User.do?operation=edit&amp;pageOf=pageOfApproveUser" />
 			<forward name="failure" path="/error.jsp" />
 			<forward name="access_denied" path="/ManageAdministrativeData.do" />
 		</action>

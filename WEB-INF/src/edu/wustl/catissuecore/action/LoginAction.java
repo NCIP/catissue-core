@@ -69,9 +69,9 @@ public class LoginAction extends Action
         Long userId = null;
         try
         {
-        	boolean validUser = isValidUser(loginName );
+        	User validUser = getUser(loginName);
         	
-        	if (validUser)
+        	if (validUser != null)
         	{
 	            boolean loginOK = SecurityManager.getInstance(LoginAction.class)
 	                    .login(loginName, password);
@@ -79,19 +79,19 @@ public class LoginAction extends Action
 	            {
 	                Logger.out.info(">>>>>>>>>>>>> SUCESSFUL LOGIN A <<<<<<<<< ");
 	                session = request.getSession(true);
-	                gov.nih.nci.security.authorization.domainobjects.User userData = SecurityManager.getInstance(
-	                																LoginAction.class).getUser(loginName);
-	                userId = userData.getUserId();
+	                
+	                userId = validUser.getSystemIdentifier();
 	                ipAddress = request.getRemoteAddr();
 	                sessionData.setUserName(loginName);
 	                sessionData.setIpAddress(ipAddress);
 	                sessionData.setUserId(userId);
-	                sessionData.setFirstName(userData.getFirstName());
-	                sessionData.setLastName(userData.getLastName());
+	                sessionData.setFirstName(validUser.getFirstName());
+	                sessionData.setLastName(validUser.getLastName());
 	                
 	                session.setAttribute(Constants.SESSION_DATA,sessionData);
-	                //session.setAttribute(Constants.SESSION_DATA,loginName);
+
 	                Logger.out.info(">>>>>>>>>>>>> SUCESSFUL LOGIN B <<<<<<<<< ");
+	                
 	                return mapping.findForward(Constants.SUCCESS);
 	            }
 	            else
@@ -141,9 +141,9 @@ public class LoginAction extends Action
             }
             return (mapping.findForward(Constants.FAILURE));
         }
-
     }
-    public boolean isValidUser(String loginName) throws DAOException
+    
+    private User getUser(String loginName) throws DAOException
     {
     	System.out.println("\n\n\n\n****** User : " + loginName + "\n\n\n\n\n****");
         gov.nih.nci.security.authorization.domainobjects.User csmUser = null;
@@ -151,35 +151,36 @@ public class LoginAction extends Action
         {
             csmUser = SecurityManager.getInstance(UserBizLogic.class).getUser(loginName);
             
-            if (csmUser == null)
-            	return false;
-            else
+            if (csmUser != null)
             {
             	Long uidCSM = csmUser.getUserId();
             	
             	UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getBizLogic(Constants.USER_FORM_ID);
-            	String[] whereColumnName = {"activityStatus","systemIdentifier"};
+            	String[] whereColumnName = {"activityStatus","csmUserId"};
             	String[] whereColumnCondition = {"=","="};
             	String[] whereColumnValue = {Constants.ACTIVITY_STATUS_ACTIVE, uidCSM.toString()};
             	List users = userBizLogic.retrieve(User.class.getName(), whereColumnName, whereColumnCondition, whereColumnValue,Constants.AND_JOIN_CONDITION);
-            	Logger.out.debug("USERS.................."+users.isEmpty());
-            	if (!users.isEmpty())
-            	    return true;
+            	Logger.out.debug("USERS...........users.isEmpty()......."+users.isEmpty());
+            	if (users.isEmpty() == false)
+            	{
+            	    User validUser = (User)users.get(0);
+            	    return validUser;
+            	}
             }
             
-            return false;
+            return null;
         }
         catch (SMException e)
         {
 //        	System.out.println("\n\n\n\n****** error : " + e + "\n\n\n\n\n****");
             Logger.out.debug("Unable to get user : " + e.getMessage());
-            return false;
+            return null;
         }
         catch (Exception e1)
         {
 //        	System.out.println("\n\n\n\n****** error : " + e1 + "\n\n\n\n\n****");
             Logger.out.debug("Unable to get user : " + e1.getMessage());
-            return false;
+            return null;
         }
     }
 }

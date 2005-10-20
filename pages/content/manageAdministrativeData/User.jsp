@@ -78,16 +78,10 @@
 //If the administrator keeps the user status pending update the user record and disable role.
 function handleStatus(status)
 {
-	setOperation("<%=Constants.EDIT%>");
 	document.forms[0].role.value=0;
 	document.forms[0].role.disabled=true;
-	if (status.value == "<%=Constants.APPROVE_USER_REJECT_STATUS%>")
-	{
-		setOperation("<%=Constants.ADD%>");
-	}
 	if (status.value == "<%=Constants.APPROVE_USER_APPROVE_STATUS%>")
 	{
-		setOperation("<%=Constants.ADD%>");
 		document.forms[0].role.disabled=false;
 	}
 }
@@ -148,6 +142,7 @@ function handleStatus(status)
 				<tr>
 					<td>
 						<html:hidden property="systemIdentifier" />
+						<html:hidden property="csmUserId" />
 						<html:hidden property="<%=Constants.REQ_PATH%>" value="<%=reqPath%>" />
 					</td>
 				</tr>
