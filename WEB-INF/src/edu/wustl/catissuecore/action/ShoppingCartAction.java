@@ -132,6 +132,7 @@ public class ShoppingCartAction  extends BaseAction
 			if(cartTable != null && cartTable.size() != 0)
 			{				
 				Enumeration enum = cartTable.keys();
+				int id = 0;
 				
 				while(enum.hasMoreElements())
 				{
@@ -140,7 +141,7 @@ public class ShoppingCartAction  extends BaseAction
 					
 					List rowData = new ArrayList();
 					
-					rowData.add("<input type='checkbox' name='value(CB_" + specimen.getSystemIdentifier() + ")'>");
+					rowData.add("<input type='checkbox' name='value(CB_" + specimen.getSystemIdentifier() + ")' id='" + id + "' onClick='changeData(this)'>");
 					rowData.add(String.valueOf(specimen.getSystemIdentifier()));
 					rowData.add(specimen.getClassName());
 					
@@ -152,8 +153,11 @@ public class ShoppingCartAction  extends BaseAction
 					rowData.add(specimen.getSpecimenCharacteristics().getTissueSite());
 					rowData.add(specimen.getSpecimenCharacteristics().getTissueSide());
 					rowData.add(specimen.getSpecimenCharacteristics().getPathologicalStatus());
-					
+					rowData.add("1");
+							
 					gridData.add(rowData);
+					
+					id++;
 				}
 			}
 		}

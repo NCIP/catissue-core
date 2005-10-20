@@ -10,6 +10,7 @@
 
 <link href="runtime/styles/xp/grid.css" rel="stylesheet" type="text/css" ></link>
 <script src="runtime/lib/grid.js"></script>
+<script src="runtime/lib/gridcheckbox.js"></script>
 <script src="runtime/formats/date.js"></script>
 <script src="runtime/formats/string.js"></script>
 <script src="runtime/formats/number.js"></script>
@@ -54,6 +55,7 @@ if(dataList.size() != 0)
 
 	<script language="javascript" src="jss/script.js"></script>
 	<script language="javascript">
+	var colZeroDir='ascending';
 		function onDelete()
 		{
 			var isChecked = "false";
@@ -133,6 +135,26 @@ if(dataList.size() != 0)
 						obj.setRowHeaderWidth("28px");
 						obj.setColumnHeaderHeight("20px");
 						
+						//original sort method  
+						var _sort = obj.sort; 
+						//overide sort function to meet our requirenemnt
+					    obj.sort = function(index, direction, alternateIndex){ 
+					        
+					    //if check box column is clicked
+					    //then sort on the flag those are in 8th column
+					        if(index==0)
+					        {
+					        	index=7;
+					        	direction=colZeroDir;
+								if(colZeroDir=='ascending')colZeroDir='descending';
+								else colZeroDir='ascending';
+					        	
+					        } 
+					        
+				            _sort.call(this, index, direction); 
+					        
+					        return true;
+					    }
 						//	write grid html to the page.
 						document.write(obj);
 				</script>
