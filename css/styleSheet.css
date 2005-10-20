@@ -456,7 +456,13 @@ input.formFieldSmallSized,textarea.formFieldSmallSized,select.formFieldSmallSize
   font-size:1em;
   width:5em;
 }
-
+/* used by poornima in Distribution. Size set to 3em */
+.formFieldSmallSized3{ /* for the form elements themselves and with a constant width (on elements) */
+  font-family:arial,helvetica,verdana,sans-serif;
+  border:1px solid #5C5C5C; /* constant: dark gray */
+  font-size:1em;
+  width:3em;
+}
 
 /* used by mandar in collection prptocol. Size set to 5em */
 input.formFieldSized2{ /* for the form elements themselves and with a constant width (on elements) */
