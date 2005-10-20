@@ -130,7 +130,7 @@
 		
 			availableQty = "value(DistributedItem:" + rowno + "_availableQty)";
 			sname= "";
-			sname="<input type='text' name='" + availableQty + "' size='30'  class='formFieldSized5' id='" + availableQty + "'>";
+			sname="<input type='text' name='" + availableQty + "' size='30'  class='formFieldSmallSized3' id='" + availableQty + "'>";
 			var previousQuantity = "value(DistributedItem:"+rowno+"_previousQuantity)";
 			sname = sname + "<input type='hidden' name='" + previousQuantity + "' value='' id='" + previousQuantity + "'>";
 			spreqAvailqty.innerHTML="" + sname;
@@ -142,7 +142,7 @@
 		
 			name = "value(DistributedItem:" + rowno + "_quantity)";
 			sname= "";
-			sname="<input type='text' name='" + name + "' size='30'  class='formFieldSized5' id='" + name + "'>";
+			sname="<input type='text' name='" + name + "' size='30'  class='formFieldSmallSized3' id='" + name + "'>";
 			var unitName ="value(DistributedItem:"+rowno+"_unitSpan)";
 			//var unitValue = changeUnit(document.forms[0].className.value)
 			sname = sname + "&nbsp;<span id='"+unitName+"'>&nbsp;</span>";
@@ -150,7 +150,7 @@
 			
 			//Tenth  Cell
 			var checkb=x.insertCell(9);
-			checkb.className="formField";
+			checkb.className="formFieldAddMore";
 			checkb.colSpan=2;
 			sname="";
 			var name = "chk_"+ rowno;
@@ -213,13 +213,13 @@
 			
 <html:errors/>
 <html:form action="<%=Constants.DISTRIBUTION_ADD_ACTION%>">    
-	<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
+	<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="100%">
 
 	<!-- NEW distribution REGISTRATION BEGINS-->
 	<tr>
 	<td>
 	
-	<table summary="" cellpadding="3" cellspacing="0" border="0">
+	<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
 		<tr>
 			<td><html:hidden property="operation" value="<%=operation%>"/></td>
 			<td><html:hidden property="counter"/></td>
@@ -407,7 +407,7 @@
 				    
 				 </tr>
 				 <tr>
-				 	<td class="formSerialNumberLabel" width="5">
+				 	<td class="formLeftSubTitle" width="5">
 				     	#
 				    </td>
 				    
@@ -436,7 +436,7 @@
 					<td class="formLeftSubTitle">*
 						<bean:message key="itemrecord.quantity"/>
 					</td>
-					<td class="formRightSubTableTitle">
+					<td class="formLeftSubTitle">
 						<label for="delete" align="center">
 							<bean:message key="addMore.delete" />
 						</label>
@@ -498,11 +498,11 @@
 				     	<html:text styleClass="formField" styleId="<%=pathologicalStatus%>" property="<%=pathologicalStatus%>" readonly="true"/>
 				    </td>
 				    <td class="formField">
-				     	<html:text styleClass="formFieldSized5" size="30" styleId="<%=availableQuantity%>" property="<%=availableQuantity%>" readonly="true"/>
+				     	<html:text styleClass="formFieldSmallSized3" size="30" styleId="<%=availableQuantity%>" property="<%=availableQuantity%>" readonly="true"/>
 						<html:hidden property="<%=previousQuantity%>" />	
 				    </td>
 				    <td class="formField" nowrap>
-				     	<html:text styleClass="formFieldSized5" size="30" styleId="<%=quantity%>" property="<%=quantity%>" disabled="<%=readOnlyForAll%>" readonly="<%=readOnlyForAll%>"/>
+				     	<html:text styleClass="formFieldSmallSized3" size="30" styleId="<%=quantity%>" property="<%=quantity%>" disabled="<%=readOnlyForAll%>" readonly="<%=readOnlyForAll%>"/>
 				     	<span id="<%=unitSpan%>">&nbsp;<%=strUnitValue%></span>
 				    </td>
 				    <%
