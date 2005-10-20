@@ -64,11 +64,11 @@ public class CommonSearchAction extends Action
         	
         try
         {
+            //Retrieves the information to be edited.
             AbstractBizLogic bizLogic = BizLogicFactory.getBizLogic(abstractForm.getFormId());
             AbstractDomainObject abstractDomain = null;
             List list = null;
             
-            //Retrieves the information to be edited.
             String objName = AbstractDomainObject.getDomainObjectName(abstractForm.getFormId());
             Logger.out.debug("object name to be retrieved:"+objName+" identifier:"+identifier);
             list= bizLogic.retrieve(objName,Constants.SYSTEM_IDENTIFIER, identifier.toString());
