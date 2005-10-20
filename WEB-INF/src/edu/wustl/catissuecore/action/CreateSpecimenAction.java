@@ -143,12 +143,18 @@ public class CreateSpecimenAction extends SecureAction
     		}
 
         	//----------------------------------------
-            String specimenId = request.getParameter("specimenId");
-            Logger.out.debug("SpecimenId : "+ specimenId);
-            request.setAttribute("parentSpecimenId",specimenId);
-            if(specimenId != null)
+//            String specimenId = request.getParameter("specimenId");
+//            Logger.out.debug("SpecimenId : "+ specimenId);
+            String pSpecimenId = (String)request.getAttribute(Constants.PARENT_SPECIMEN_ID  );
+            request.setAttribute("parentSpecimenId",pSpecimenId);
+            if(pSpecimenId != null)
             {
-            	createForm.setParentSpecimenId(specimenId  ); 
+            	createForm.setParentSpecimenId(pSpecimenId  );
+            	createForm.setPositionInStorageContainer("" );
+            	createForm.setQuantity("");
+            	map.clear(); 
+            	createForm.setExternalIdentifier(map);
+            	createForm.setExIdCounter(1 ); 
             }
 
 		}

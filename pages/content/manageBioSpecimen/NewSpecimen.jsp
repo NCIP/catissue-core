@@ -45,8 +45,10 @@ Map map = form.getExternalIdentifier();
 		function onCreateFromExisting(element)
 		{
 			var identifier = "<%=form.getSystemIdentifier()%>";
-			var action = "/catissuecore/CreateSpecimen.do?operation=add&pageOf="+"&specimenId=" + identifier;
-			document.forms[0].action = action;
+//			var action = "/catissuecore/CreateSpecimen.do?operation=add&pageOf="+"&specimenId=" + identifier;
+			var action ="createNew";
+			changeSubmitTo(action );
+//			document.forms[0].action = action;
 			document.forms[0].submit();
 		}
 
@@ -308,6 +310,8 @@ Map map = form.getExternalIdentifier();
 			if(form.getUnit() != null)
 				unitSpecimen = form.getUnit();
 		}
+		
+		
 		
 
 %>

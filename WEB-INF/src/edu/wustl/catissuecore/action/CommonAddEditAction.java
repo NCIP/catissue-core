@@ -182,15 +182,24 @@ public class CommonAddEditAction extends Action
                     if(abstractForm.getActivityStatus().equals(Constants.DISABLED  )  )
                     {
                     	String moveTo = abstractForm.getOnSubmit(); 
-                    	
+                    	Logger.out.debug("MoveTo in Disabled :-- : "+ moveTo);
                    		ActionForward reDirectForward = new ActionForward();
                    		reDirectForward.setPath(moveTo );
                    		return reDirectForward;
                     }
                     
                     if(abstractDomain instanceof Specimen)
+                    {
                 		request.setAttribute(Constants.SPECIMEN_ID,String.valueOf(abstractDomain.getSystemIdentifier()));
-
+                		request.setAttribute(Constants.PARENT_SPECIMEN_ID,String.valueOf(abstractDomain.getSystemIdentifier()));
+                    }
+                    
+                    if(abstractForm.getOnSubmit()!= null && abstractForm.getOnSubmit().trim().length()>0  )
+                    {
+                    	String moveTo = abstractForm.getOnSubmit(); 
+                    	Logger.out.debug("MoveTo :-- : "+ moveTo);
+                        return (mapping.findForward(moveTo));
+                    }
                     
                     target = new String(Constants.SUCCESS);
                     
