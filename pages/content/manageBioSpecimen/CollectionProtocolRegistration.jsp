@@ -43,17 +43,8 @@
 		// for add new SpecimenCollectionGroup
 		function onAddSpecimenCollectionGroup(element)
 		{
-			var identifier = "";
-			<%
-				if(form != null)
-				{
-			%>
-			identifier = "<%=form.getSystemIdentifier()%>";
-			<%
-				}
-			%>
-			var action = "/catissuecore/SpecimenCollectionGroup.do?operation=add&pageOf=pageOfSpecimenCollectionGroup"+"&cprId=" + identifier;
-			document.forms[0].action = action;
+			var action ="createSpecimenCollectionGroup";
+			changeSubmitTo(action );
 			document.forms[0].submit();
 		}
 </script>		
