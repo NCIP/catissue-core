@@ -112,7 +112,7 @@ public class ConfigureResultViewAction extends Action  {
             List rowList = (List)iterator.next();
             columnName = (String)rowList.get(j++);
             columnDisplayName = (String)rowList.get(j++);
-            String columnValue = value+"."+columnDisplayName+"."+columnName;
+            String columnValue = value+"."+columnName+"."+columnDisplayName;
             NameValueBean columns = new NameValueBean(columnDisplayName,columnValue);
             columnList.add(columns);
             j = 0;
