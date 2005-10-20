@@ -679,6 +679,7 @@ PUBLIC
 			scope="request">
 			<forward name="success" path="/SpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroup" />
 			<forward name="failure" path="/SpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroup" />
+			<forward name="createNewSpecimen" path="/NewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimen" />
 		</action>
 
 		<action path="/SpecimenCollectionGroupSearch"
