@@ -755,6 +755,7 @@ PUBLIC
 			scope="request">
 			<forward name="success" path="/ListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParameters" />
 			<forward name="failure" path="/NewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimen" />
+			<forward name="createNew" path="/CreateSpecimen.do?operation=add&amp;pageOf=" />
 		</action>
 		
 		<action path="/NewSpecimenEdit"
@@ -765,6 +766,7 @@ PUBLIC
 			scope="request">
 			<forward name="success" path="/ListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParameters" />
 			<forward name="failure" path="/NewSpecimen.do?operation=edit&amp;pageOf=pageOfNewSpecimen" />
+			<forward name="createNew" path="/CreateSpecimen.do?operation=add&amp;pageOf=" />
 		</action>
 		
 		<action path="/NewSpecimenSearch"
@@ -775,6 +777,7 @@ PUBLIC
 			scope="request">
 			<forward name="pageOfNewSpecimen" path="/NewSpecimen.do?operation=edit&amp;pageOf=pageOfNewSpecimen"/>
 			<forward name="failure" path="/NewSpecimen.do?operation=edit&amp;pageOf=pageOfNewSpecimen"/>
+			<forward name="createNew" path="/CreateSpecimen.do?operation=add&amp;pageOf=" />
 		</action>
 		<!--New Specimen Actions Ends-->
 		
