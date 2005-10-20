@@ -109,8 +109,8 @@ if(dataList.size() != 0)
 	</script>
 </head>
 
-<html:form action="<%=Constants.SHOPPING_CART_OPERATION%>">		
 <table summary="" cellpadding="0" cellspacing="0" border="0" width="100%" height="100%">
+<html:form action="<%=Constants.SHOPPING_CART_OPERATION%>">
 <%
 		if(dataList.size() != 0)
 		{
@@ -189,5 +189,5 @@ if(dataList.size() != 0)
 	<tr>
 		<td><html:hidden property="operation" value=""/></td>
 	</tr>
-</table>
 </html:form>
+</table>
