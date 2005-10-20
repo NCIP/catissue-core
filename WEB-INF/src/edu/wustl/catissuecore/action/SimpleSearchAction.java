@@ -8,6 +8,7 @@
 package edu.wustl.catissuecore.action;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -58,7 +59,7 @@ public class SimpleSearchAction extends BaseAction
 				.getValue("SimpleConditionsNode:1_Condition_DataElement_table");
 
 		String target = Constants.SUCCESS;
-
+		
 		try
 		{
 			Map map = simpleQueryInterfaceForm.getValuesMap();
@@ -110,13 +111,13 @@ public class SimpleSearchAction extends BaseAction
 			}
 
 			String fullyQualifiedClassName = "edu.wustl.catissuecore.domain."+viewAliasName;
-            SimpleConditionsNode activityStatusCondition = getActivityStatusCondition(fullyQualifiedClassName); 
-            if(activityStatusCondition != null)
+            List activityStatusConditionList = getActivityStatusCondition(fullyQualifiedClassName); 
+            if(activityStatusConditionList.isEmpty() == false)
             {
                 simpleConditionsNode.getOperator().setOperator(Constants.AND_JOIN_CONDITION);
-                simpleConditionNodeCollection.add(activityStatusCondition);
+                simpleConditionNodeCollection.addAll(activityStatusConditionList);
             }
-
+            
             //            Iterator iterator1 = fromTables.iterator();
 			//            while (iterator1.hasNext())
 			//            {
@@ -125,9 +126,10 @@ public class SimpleSearchAction extends BaseAction
 			Query query = QueryFactory.getInstance().newQuery(Query.SIMPLE_QUERY, viewAliasName);
 			((SimpleQuery) query).addConditions(simpleConditionNodeCollection);
 			List list = null;
+			
 			//Get the view columns.
 			String[] columnNames = null;
-
+			
 			if (simpleQueryInterfaceForm.getPageOf()
 					.equals(Constants.PAGEOF_SIMPLE_QUERY_INTERFACE))
 			{
@@ -172,7 +174,7 @@ public class SimpleSearchAction extends BaseAction
 				columnNames = query.setViewElements(viewAliasName);
 				 list = query.execute(getSessionData(request),Constants.INSECURE_RETRIEVE,null,null);
 			}
-
+			
 			if (list.isEmpty())
 			{
 				ActionErrors errors = new ActionErrors();
@@ -257,80 +259,61 @@ public class SimpleSearchAction extends BaseAction
 	}
 
 	/**
-
 	 * Returns SimpleConditionsNode if the object named aliasName contains the activityStatus 
-
 	 * data member, else returns false.
-
 	 * @param aliasName
-
 	 * @return
-
 	 */
-
-	private SimpleConditionsNode getActivityStatusCondition(String fullyQualifiedClassName)
-
+	private List getActivityStatusCondition(String fullyQualifiedClassName)
 	{
-
 		SimpleConditionsNode activityStatusCondition = null;
-
+		List activityStatusList = new ArrayList();
+		
 		try
-
 		{
-
 			Class className = Class.forName(fullyQualifiedClassName);
-
 			Field[] objectFields = className.getDeclaredFields();
 
 			for (int i = 0; i < objectFields.length; i++)
-
 			{
-
 				if (objectFields[i].getName().equals(Constants.ACTIVITY_STATUS))
-
 				{
 
 					activityStatusCondition = new SimpleConditionsNode();
+					activityStatusCondition.getCondition().getDataElement().setTable(Utility.parseClassName(fullyQualifiedClassName));
+					activityStatusCondition.getCondition().getDataElement().setField("ACTIVITY_STATUS");
+					activityStatusCondition.getCondition().getOperator().setOperator("=");
+					activityStatusCondition.getCondition().setValue("'" + Constants.ACTIVITY_STATUS_ACTIVE + "'");
+					activityStatusCondition.getOperator().setOperator(Constants.OR_JOIN_CONDITION);
+					
+					activityStatusList.add(activityStatusCondition);
+					
+					activityStatusCondition = new SimpleConditionsNode();
+					activityStatusCondition.getCondition().getDataElement().setTable(Utility.parseClassName(fullyQualifiedClassName));
+					activityStatusCondition.getCondition().getDataElement().setField("ACTIVITY_STATUS");
+					activityStatusCondition.getCondition().getOperator().setOperator("=");
+					activityStatusCondition.getCondition().setValue("'" + Constants.ACTIVITY_STATUS_CLOSED + "'");
 
-					activityStatusCondition.getCondition().getDataElement().setTable(
-							Utility.parseClassName(fullyQualifiedClassName));
-
-					activityStatusCondition.getCondition().getDataElement().setField(
-							"ACTIVITY_STATUS");
-
-					activityStatusCondition.getCondition().getOperator().setOperator("!=");
-
-					activityStatusCondition.getCondition().setValue(
-							"'" + Constants.ACTIVITY_STATUS_DISABLED + "'");
-
+					activityStatusList.add(activityStatusCondition);
 				}
-
 			}
 
-			if ((activityStatusCondition == null)
-					&&
-
+			if ((activityStatusCondition == null)&&
 					(className.getSuperclass().getName().equals(
 							"edu.wustl.catissuecore.domain.AbstractDomainObject") == false))
-
 			{
-
-				activityStatusCondition = getActivityStatusCondition(className.getSuperclass()
+			    activityStatusList = getActivityStatusCondition(className.getSuperclass()
 						.getName());
-
 			}
-
 		}
 
 		catch (ClassNotFoundException classNotExcp)
-
 		{
-
 			Logger.out.debug(classNotExcp.getMessage(), classNotExcp);
 
 		}
 
-		return activityStatusCondition;
+		return activityStatusList;
 
 	}
 
