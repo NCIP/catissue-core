@@ -14,6 +14,8 @@
 <script src="runtime/formats/date.js"></script>
 <script src="runtime/formats/string.js"></script>
 <script src="runtime/formats/number.js"></script>
+<script src="jss/script.js"></script>
+
 <style>
 .active-column-0 {width:30px}
 .active-column-4 {width:150px}
@@ -53,7 +55,6 @@ if(dataList.size() != 0)
 
 <% } %>
 
-	<script language="javascript" src="jss/script.js"></script>
 	<script language="javascript">
 	var colZeroDir='ascending';
 		function onDelete()
@@ -63,7 +64,7 @@ if(dataList.size() != 0)
 		    {
 		    	var e = document.forms[0].elements[i];
 		    	
-		        if (e.type == "checkbox" && e.checked == true)
+		        if (e.name != "checkAll" && e.type == "checkbox" && e.checked == true)
 		        {
 		        	isChecked = "true";
 		        	break;
@@ -86,11 +87,26 @@ if(dataList.size() != 0)
 		
 		function onExport()
 		{
-			var action = "/catissuecore/ShoppingCart.do?operation=export";
-			document.forms[0].operation.value="export";
-			document.forms[0].action = action;
-			document.forms[0].target = "_blank";
-			document.forms[0].submit();
+			var isChecked = "false";
+			for (var i=0;i < document.forms[0].elements.length;i++)
+		    {
+		    	var e = document.forms[0].elements[i];
+		    	
+		        if (e.name != "checkAll" && e.type == "checkbox" && e.checked == true)
+		        {
+		        	isChecked = "true";
+		        	break;
+		        }
+		    }
+		    
+		    if(isChecked == "true")
+		    {
+				var action = "/catissuecore/ShoppingCart.do?operation=export";
+				document.forms[0].operation.value="export";
+				document.forms[0].action = action;
+				document.forms[0].target = "_blank";
+				document.forms[0].submit();
+			}
 		}
 		
 		var selected;
@@ -105,7 +121,24 @@ if(dataList.size() != 0)
 		 	  	if(theForm[i].type == 'checkbox' && theForm[i].checked==true)
 			        selected[j++]=theForm[i].value;
 			}
-		}		
+		}
+		
+		
+		function checkAll(element)
+		{
+			if(element.name == "checkAll1")
+			{
+				var check2 = document.getElementById("checkAll2");
+				check2.checked = element.checked;
+				checkUncheck(element);
+			}
+			else
+			{
+				var check1 = document.getElementById("checkAll1");
+				check1.checked = element.checked;
+				checkUncheck(element);
+			}
+		}	
 	</script>
 </head>
 
@@ -115,7 +148,39 @@ if(dataList.size() != 0)
 		if(dataList.size() != 0)
 		{
 %>
-	<tr height="95%">
+	<tr height="5%">
+		 <td class="formTitle" width="100%">
+			<bean:message key="shoppingCart.title"/>
+		 </td>
+	</tr>
+	
+	<tr height="5%">
+		<td width="100%">
+			<table cellpadding="5" cellspacing="0" border="0" width="100%">
+			<tr>
+				<td width="10%" nowrap>
+					<input type='checkbox' name='checkAll1' id='checkAll1' onClick='checkAll(this)'>
+					<bean:message key="buttons.checkAll" />
+				</td>
+				<td width="80%">
+					&nbsp;
+				</td>
+				<td width="5%" nowrap align="right">
+					<html:button styleClass="actionButton" property="deleteCart" onclick="onDelete()">
+						<bean:message key="buttons.delete"/>
+					</html:button>
+				</td>
+				<td width="5%" nowrap align="right">
+					<html:button styleClass="actionButton" property="exportCart" onclick="onExport()">
+						<bean:message key="buttons.export"/>
+					</html:button>
+				</td> 
+			</tr>
+			</table>
+		</td>
+	</tr>
+	
+	<tr height="85%">
 		<td width="100%">
 			<div STYLE="overflow: auto; width:100%; height:100%; padding:0px; margin: 0px; border: 1px solid">
 				<script>
@@ -144,7 +209,7 @@ if(dataList.size() != 0)
 					    //then sort on the flag those are in 8th column
 					        if(index==0)
 					        {
-					        	index=7;
+					        	index=myData[0].length-1;
 					        	direction=colZeroDir;
 								if(colZeroDir=='ascending')colZeroDir='descending';
 								else colZeroDir='ascending';
@@ -167,7 +232,7 @@ if(dataList.size() != 0)
 			<table cellpadding="5" cellspacing="0" border="0" width="100%">
 			<tr>
 				<td width="10%" nowrap>
-					<input type='checkbox' name='checkAll' id='checkAll' onClick='checkUncheck(this)'>
+					<input type='checkbox' name='checkAll2' id='checkAll2' onClick='checkAll(this)'>
 					<bean:message key="buttons.checkAll" />
 				</td>
 				<td width="80%">
