@@ -36,7 +36,7 @@ public class BizLogicFactory
                 abstractBizLogic = new ApproveUserBizLogic();
             	Logger.out.debug("In Biz Logic Factory..............APPROVE_USER_FORM_ID");
             	break;
-            case Constants.REPORTEDPROBLEM_FORM_ID:
+            case Constants.REPORTED_PROBLEM_FORM_ID:
                 abstractBizLogic = new ReportedProblemBizLogic();
             	break;
         	case Constants.STORAGE_TYPE_FORM_ID :

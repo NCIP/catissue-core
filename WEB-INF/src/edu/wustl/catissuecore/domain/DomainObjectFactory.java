@@ -58,7 +58,7 @@ public class DomainObjectFactory
             case Constants.SITE_FORM_ID:
             	abstractDomain = new Site(form);
             	break;
-            case Constants.REPORTEDPROBLEM_FORM_ID:
+            case Constants.REPORTED_PROBLEM_FORM_ID:
                 ReportedProblemForm reportedProblemForm = (ReportedProblemForm)form;
             	abstractDomain = new ReportedProblem(reportedProblemForm);
             	break;

@@ -196,7 +196,7 @@ public class ReportedProblemForm extends AbstractActionForm
      */
     public int getFormId()
     {
-        return Constants.REPORTEDPROBLEM_FORM_ID;
+        return Constants.REPORTED_PROBLEM_FORM_ID;
     }
 
   

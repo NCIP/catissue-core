@@ -39,7 +39,7 @@ public abstract class AbstractDomainObject implements Auditable
             case Constants.INSTITUTION_FORM_ID:
                 className = Institution.class.getName();
             	break;
-            case Constants.REPORTEDPROBLEM_FORM_ID:
+            case Constants.REPORTED_PROBLEM_FORM_ID:
                 className = ReportedProblem.class.getName();
             	break;
             case Constants.USER_FORM_ID:

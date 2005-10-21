@@ -426,7 +426,7 @@ public class Constants
 	public static final int USER_FORM_ID = 1;
 	public static final int PARTICIPANT_FORM_ID = 2;
 	public static final int ACCESSION_FORM_ID = 3;
-	public static final int REPORTEDPROBLEM_FORM_ID = 4;
+	public static final int REPORTED_PROBLEM_FORM_ID = 4;
 	public static final int INSTITUTION_FORM_ID = 5;
 	public static final int APPROVE_USER_FORM_ID = 6;
 	public static final int ACTIVITY_STATUS_FORM_ID = 7;
