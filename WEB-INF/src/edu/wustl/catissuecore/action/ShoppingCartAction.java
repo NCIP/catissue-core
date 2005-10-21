@@ -99,7 +99,10 @@ public class ShoppingCartAction  extends BaseAction
 	        {
 	        	String fileName = Variables.catissueHome + System.getProperty("file.separator") + session.getId() + ".csv";
 	        	
-	        	List cartList = bizLogic.export(cart,fileName);
+	        	Map map = shopForm.getValues();
+	        	Object obj[] = map.keySet().toArray();
+	        	
+	        	List cartList = bizLogic.export(cart,obj,fileName);
 	        	
 	        	ExportReport report = new ExportReport(fileName);
 	    		report.writeData(cartList);
