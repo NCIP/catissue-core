@@ -10,17 +10,13 @@
 
 package edu.wustl.catissuecore.bizlogic;
 
-import java.io.File;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.List;
 
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.query.ShoppingCart;
-import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.util.dbManager.DAOException;
-import edu.wustl.common.util.logger.Logger;
 
 /**
  * ShoppingCartBizLogic provides the shopping cart functionality.
@@ -61,21 +57,21 @@ public class ShoppingCartBizLogic extends DefaultBizLogic
 		return cart;
     }
     
-	public void deleteCartFile(String fileName)
-    {
-		try
-		{
-			fileName = fileName + ".txt";
-			File f = new File(Variables.catissueHome,fileName);
-			f.delete();
-		}
-		catch(Exception e)
-		{
-			 Logger.out.error(e.getMessage(), e);
-		}
-	}
+//	public void deleteCartFile(String fileName)
+//    {
+//		try
+//		{
+//			fileName = fileName + ".txt";
+//			File f = new File(Variables.catissueHome,fileName);
+//			f.delete();
+//		}
+//		catch(Exception e)
+//		{
+//			 Logger.out.error(e.getMessage(), e);
+//		}
+//	}
 	
-	public List export(ShoppingCart cart,String fileName)
+	public List export(ShoppingCart cart,Object obj[],String fileName)
     {
 		List shoppingCartList = null;
 		
@@ -85,8 +81,6 @@ public class ShoppingCartBizLogic extends DefaultBizLogic
 			
 			if(table != null && table.size() != 0)
 			{
-				Enumeration enum = table.keys();
-				
 				shoppingCartList = new ArrayList();
 				
 				List rowList = new ArrayList();
@@ -100,11 +94,13 @@ public class ShoppingCartBizLogic extends DefaultBizLogic
 				
 				shoppingCartList.add(rowList);
 				
-				while(enum.hasMoreElements())
+				for(int i=0;i<obj.length;i++)
 				{
 					rowList = new ArrayList();
 					
-					String key = (String)enum.nextElement();
+					String str = obj[i].toString();
+		        	int index = str.indexOf("_") + 1;
+		        	String key = str.substring(index);
 					Specimen specimen = (Specimen)table.get(key);
 					
 					rowList.add(String.valueOf(specimen.getSystemIdentifier()));
