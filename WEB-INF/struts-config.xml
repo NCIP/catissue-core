@@ -1667,7 +1667,7 @@ PUBLIC
 			name="configureResultViewForm"
 			validate="false"
 			scope="request">
-			<forward name="Success" path="/ConfigureResultView.do" />
+			<forward name="Success" path="/ConfigureResultView.do?pageOf=pageOfDistribution" />
 		</action>
 		
 		<action path="/ConfigureResultView"
@@ -1725,8 +1725,28 @@ PUBLIC
 			<forward name="failure" path="/SimpleQueryInterface.do" />
 		</action>
 		
+		<action path="/ConfigureSimpleQuery"
+			type="edu.wustl.catissuecore.action.ConfigureSimpleQueryAction"
+			name="simpleQueryInterfaceForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path="/ConfigureResultView.do?pageOf=pageOfSimpleQueryInterface" />
+			<forward name="failure" path="/SimpleQueryInterface.do" />
+		</action>
+		
+		<action path="/ConfigureSimpleSearch"
+			type="edu.wustl.catissuecore.action.ConfigureSimpleSearchAction"
+			name="configureResultViewForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path="/SimpleSearch.do" />
+			<forward name="failure" path="/ConfigureResultView.do?pageOf=pageOfSimpleQueryInterface" />
+		</action>
+		
 		<action path="/SpreadsheetView"
 			type="edu.wustl.catissuecore.action.SpreadsheetViewAction"
+			name="configureResultViewForm"
+			validate="false"
 			scope="request">
 			<forward name="pageOfSimpleQueryInterface" path=".catissuecore.simpleSearchResultsDef" />
 			<forward name="pageOfInstitution" path=".catissuecore.editSearchResultsDef"/>
@@ -1967,9 +1987,8 @@ PUBLIC
 			<forward name="pageOfParticipantAdvanceSearch" path=".catissuecore.participantSearchDef" />
 			<forward name="access_denied" path="/Home.do" />
 		</action>
-		<!-- Advance Query Interface Actions Ends -->
 		
-		<!-- Edit Object Actions -->
+	
 		<action path="/AdvanceQuery"
 			type="edu.wustl.catissuecore.action.SimpleQueryInterfaceAction"
 			name="simpleQueryInterfaceForm"
@@ -1988,6 +2007,7 @@ PUBLIC
 			<forward name="success" path=".catissuecore.advanceQueryRedirectDef" />
 			<forward name="failure" path="/AdvanceQuery.do" />
 		</action>
+			<!-- Advance Query Interface Actions Ends -->
 	</action-mappings>
 	
 	<message-resources parameter="ApplicationResources" />

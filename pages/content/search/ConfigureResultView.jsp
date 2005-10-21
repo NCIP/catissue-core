@@ -12,6 +12,16 @@
 <%
     HashMap tableDataMap = (HashMap) request.getAttribute(Constants.TABLE_COLUMN_DATA_MAP);
     Set tableNamesList = tableDataMap.keySet();
+    String pageOf = (String)request.getParameter("pageOf");
+    String callAction;
+    if(pageOf.equals(Constants.PAGEOF_SIMPLE_QUERY_INTERFACE))
+	{
+		callAction=Constants.CONFIGURE_SIMPLE_SEARCH_ACTION;
+	}
+	else
+	{
+		callAction=Constants.DISTRIBUTION_REPORT_ACTION;
+	}
 %>
 <SCRIPT LANGUAGE="JavaScript">
     var size = <%=(tableNamesList.size()-1)%>;
@@ -206,26 +216,37 @@
 	    obj.options.selectedIndex++;
 	  }
 	}
+	function onClickAction(action)
+	{
+		selectOptions(document.forms[0].selectedColumnNames);
+		document.forms[0].action = "/catissuecore/"+action;
+		document.forms[0].submit();
+	}
+	
 </script>
 <%
-    ConfigureResultViewForm form = (ConfigureResultViewForm)request.getAttribute("configureResultViewForm");
+    
+   	ConfigureResultViewForm form = (ConfigureResultViewForm)request.getAttribute("configureResultViewForm");
     String selectedColumns[] = form.getSelectedColumnNames();
-    String [] columnNames=new String[selectedColumns.length];
-	for(int i=0;i<selectedColumns.length;i++)
-    {
-    	//Split the string which is in the form TableAlias.columnNames.columnDisplayNames
-		StringTokenizer st= new StringTokenizer(selectedColumns[i],".");
-    	while (st.hasMoreTokens())
-    	{
-    		st.nextToken();
-    		st.nextToken();
-    		columnNames[i]=st.nextToken();
-    	}
+	if(selectedColumns!=null)
+   {	    
+	    String [] columnNames=new String[selectedColumns.length];
+		for(int i=0;i<selectedColumns.length;i++)
+	    {
+	    	//Split the string which is in the form TableAlias.columnNames.columnDisplayNames
+			StringTokenizer st= new StringTokenizer(selectedColumns[i],".");
+	    	while (st.hasMoreTokens())
+	    	{
+	    		st.nextToken();
+	    		st.nextToken();
+	    		columnNames[i]=st.nextToken();
+	    	}
+	   	}
    	}
 %>
 </head>
 <html:errors/>
-<html:form action="<%=Constants.DISTRIBUTION_REPORT_ACTION%>">
+<html:form action="<%=Constants.CONFIGURE_SIMPLE_SEARCH_ACTION%>">
     <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="1000">
 		<tr>
 		    <td>
@@ -234,9 +255,12 @@
 						<td align="right" colspan="3">
 							<html:hidden property="nextAction" value="configure"/>
 						</td>
+						<% if(pageOf.equals(Constants.PAGEOF_DISTRIBUTION))
+					    {%>
 						<td align="right" colspan="3">
 							<html:hidden property="distributionId"/>
 						</td>
+						<%}%>
 				  	</tr>
 				</table>
 			<td>
@@ -276,18 +300,18 @@
 		            <td class="formField" colspan="4">
 		            <!-- --------------------------------------- -->
 		            <%
-		                String tableName = (String)form.getTableName();
+		                /*String tableName = (String)form.getTableName();
 		                List columnNamesList = (List)tableDataMap.get(tableName);
 		                if(columnNamesList == null)
 		                {
 		                    columnNamesList = new ArrayList();
 		                    columnNamesList.add(new NameValueBean(Constants.SELECT_OPTION,"-1"));
 		                }
-		                pageContext.setAttribute(Constants.COLUMN_NAMES_LIST, columnNamesList);
+		                pageContext.setAttribute(Constants.COLUMN_NAMES_LIST, columnNamesList);*/
 		            %>
 		            <!-- ----------------------------------------->
 		                <html:select property="columnNames" styleClass="formFieldSized"  styleId="columnNames" size="10"  multiple="true">
-	                    	<html:options collection="<%=Constants.COLUMN_NAMES_LIST%>" labelProperty="name" property="value"/>
+	                    	
 		                </html:select>
 			            </td>
 			            <td align="center" valign="middle">
@@ -296,13 +320,7 @@
 			            </td>
 			            <td class="formField">
 			                <html:select property="selectedColumnNames" styleClass="formFieldSized" styleId="selectedColumnNames" size="10" multiple="true">
-			                <%	for(int i=0;i<selectedColumns.length;i++) {
-			                %>
-			                	<option value="<%=selectedColumns[i]%>"><%=columnNames[i]%></option>  
-			                <%
-			                	}
-			                %>
-			                    
+                 
 			                </html:select>
 			            </td>
 			            <td align="center" valign="middle">
@@ -319,9 +337,10 @@
 			<table cellpadding="4" cellspacing="0" border="0">
 				<tr>
 	   				<td>
-	   					<html:submit styleClass = "actionButton" onclick = "selectOptions(this.form.selectedColumnNames);">
+	   					<%String nAction =  "onClickAction('"+callAction+"')";%>
+	   					<html:button styleClass="actionButton" property="configButton" onclick = "<%=nAction%>">
 	   						<bean:message key="buttons.submit"/>
-	   					</html:submit>
+	   					</html:button>
 	   				</td>
 					<td>
 						<html:reset styleClass="actionButton">

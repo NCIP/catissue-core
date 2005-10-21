@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -38,8 +39,10 @@ public class ConfigureResultViewAction extends Action  {
 			
 			AbstractBizLogic dao = BizLogicFactory.getBizLogic(Constants.CONFIGURE_RESULT_VIEW_ID);
 			
-			String []tables = (String [])request.getAttribute(Constants.CONFIGURATION_TABLES);
-			
+			String []tables = (String [])request.getAttribute(Constants.TABLE_ALIAS_NAME);
+			//HttpSession session =request.getSession();
+    		
+			//String []tables = (String[])session.getAttribute(Constants.TABLE_ALIAS_NAME);
 			String sourceObjectName = QueryTableData.class.getName();
 	        String[] displayNameField = {"displayName"};
 	        String valueField = "aliasName";

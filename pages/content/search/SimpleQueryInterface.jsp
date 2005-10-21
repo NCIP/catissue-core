@@ -43,6 +43,7 @@
 %>
 <script>
 
+
 function callAction(action)
 {
 	document.forms[0].action = "/catissuecore/"+action;
@@ -102,7 +103,7 @@ function showDateColumn(element,valueField,colID)
 
 <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="620">
 	
-	<html:form action="/SimpleSearch.do">
+	<html:form action="<%=Constants.SIMPLE_SEARCH_ACTION%>">
 	
 		<!-- SIMPLE QUERY INTERFACE BEGINS-->
 		<tr>
@@ -232,14 +233,26 @@ function showDateColumn(element,valueField,colID)
 					<table cellpadding="4" cellspacing="0" border="0">
 						<tr>
 							<td>
-								<html:submit styleClass="actionButton" >
+								<%String searchAction = "callAction('"+Constants.SIMPLE_SEARCH_ACTION+"')";%>
+								<html:button styleClass="actionButton" property="searchButton" onclick="<%=searchAction%>">
 									<bean:message  key="buttons.search" />
-								</html:submit>
+								</html:button>
 							</td>
+							<%
+							if(pageOf.equals(Constants.PAGEOF_SIMPLE_QUERY_INTERFACE))
+							{
+							String configAction = "callAction('"+Constants.CONFIGURE_SIMPLE_QUERY_ACTION+"')";%>
+							<td>
+								<html:button styleClass="actionButton" property="configureButton" onclick="<%=configAction%>">
+									<bean:message  key="buttons.configure" />
+								</html:button>
+							</td>
+							<%}%>
 						</tr>
 					</table>
 					<!-- action buttons end -->
 					</td>
+					
 				</tr>
 
 			</table>

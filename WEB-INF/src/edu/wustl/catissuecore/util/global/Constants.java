@@ -1260,6 +1260,11 @@ public class Constants
 	public static final String DISTRIBUTION_REPORT_FORM="distributionReportForm";
 	public static final String DISTRIBUTED_ITEMS_DATA = "distributedItemsData";
 	
+	//constants for Simple Query Interface Configuration
+	public static final String CONFIGURE_SIMPLE_QUERY_ACTION = "ConfigureSimpleQuery.do";
+	public static final String CONFIGURE_SIMPLE_SEARCH_ACTION = "ConfigureSimpleSearch.do";
+	public static final String SIMPLE_SEARCH_ACTION = "SimpleSearch.do";
+	public static final String PAGEOF_DISTRIBUTION = "pageOfDistribution";
 	
 	public static final String UNDEFINED = "Undefined";
 	public static final String UNKNOWN = "Unknown";
