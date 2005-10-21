@@ -48,7 +48,9 @@ public class ConfigureSimpleQueryAction extends Action
     			if(key.endsWith("_table"))
     			{
     				selectedTables[tableCount]= (String)map.get(key);
+    				tableCount++;
     			}
+    			
     		}
     		//HttpSession session =request.getSession();
     		request.setAttribute(Constants.TABLE_ALIAS_NAME,selectedTables);
