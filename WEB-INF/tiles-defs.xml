@@ -606,7 +606,7 @@
 	</definition>
 
 	<definition name=".catissuecore.simpleSearchResultsDef" extends=".catissuecore.searchHomeDef">
-		<put name="content" value="/pages/content/search/DataView.jsp" />
+		<put name="content" value="/pages/content/search/SimpleSearchDataView.jsp" />
 	</definition>
 	
 	<definition name=".catissuecore.simpleSearchDepartmentDef" extends=".catissuecore.searchHomeDef">
