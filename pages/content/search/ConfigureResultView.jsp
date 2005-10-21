@@ -268,7 +268,7 @@
 		
 		<tr>
 			<td>
-				<table summary="" cellpadding="3" cellspacing="0" border="0" >
+				<table summary="" cellpadding="3" cellspacing="0" border="1" >
 				<tr>	
 					<td class="formTitle" height="20" colspan="10">
             			<bean:message key="configure.result"/>
@@ -315,8 +315,13 @@
 		                </html:select>
 			            </td>
 			            <td align="center" valign="middle">
-			                <html:button styleClass="actionButton" property="shiftRight" value="-->" styleClass="actionButton" styleId ="shiftRight" onclick="moveOptionsRight(this.form.columnNames, this.form.selectedColumnNames);" /><br />
-			                <html:button styleClass="actionButton" property="shiftLeft" value="<--" styleClass="actionButton" styleId ="shiftLeft" onclick="moveOptionsLeft(this.form.selectedColumnNames, this.form.columnNames);" />
+			                <html:button styleClass="actionButton" property="shiftRight" styleClass="actionButton" styleId ="shiftRight" onclick="moveOptionsRight(this.form.columnNames, this.form.selectedColumnNames);">
+			                	<bean:message key="buttons.add"/>
+			                </html:button>
+			                <br/><br/>
+			                <html:button styleClass="actionButton" property="shiftLeft" styleClass="actionButton" styleId ="shiftLeft" onclick="moveOptionsLeft(this.form.selectedColumnNames, this.form.columnNames);" >
+				                <bean:message key="buttons.delete"/>
+				            </html:button>  
 			            </td>
 			            <td class="formField">
 			                <html:select property="selectedColumnNames" styleClass="formFieldSized" styleId="selectedColumnNames" size="10" multiple="true">
@@ -324,8 +329,13 @@
 			                </html:select>
 			            </td>
 			            <td align="center" valign="middle">
-			                <html:button styleClass="actionButton" property="shiftUp" value="Up" styleClass="actionButton" styleId ="shiftUp" onclick="moveUp(this.form.selectedColumnNames);"/><br/><br/>
-			                <html:button styleClass="actionButton" property="shiftDown" value="Down" styleClass="actionButton" styleId ="shiftDown" onclick="moveDown(this.form.selectedColumnNames)" />
+			                <html:button styleClass="actionButton" property="shiftUp" styleClass="actionButton" styleId ="shiftUp" onclick="moveUp(this.form.selectedColumnNames);">
+			                	<bean:message key="buttons.up"/>
+				            </html:button>  <br/><br/>
+			                
+			                <html:button styleClass="actionButton" property="shiftDown" styleClass="actionButton" styleId ="shiftDown" onclick="moveDown(this.form.selectedColumnNames)" >
+			                	<bean:message key="buttons.down"/>
+				            </html:button> 
 			            </td>
 		        	</tr>
        			</table>

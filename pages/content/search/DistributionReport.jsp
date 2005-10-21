@@ -51,7 +51,7 @@
 	
 </style>
 <html:form action="<%=Constants.CONFIGURE_DISTRIBUTION_ACTION%>">
-	<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
+	<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="100%">
 	<tr>
 		<td align="right" colspan="3">
 			<html:hidden property="distributionId" />
@@ -68,7 +68,7 @@
 	<tr> 
 	<td>
 	
-	<TABLE cellSpacing=0 cellPadding=3 summary="" border=1 width="556">
+	<TABLE cellSpacing=0 cellPadding=3 summary="" border=1 width="100%">
 		
 		<tr>
 			 <td class="formTitle" height="20" colspan="3">
@@ -167,7 +167,11 @@
 				&nbsp;<%=distForm.getComments()%>
 			</td>
 		</tr>
-		<tr id="hiddenCombo" >
+		
+	</table>
+	
+	<table cellpadding="3" cellspacing="0" border="0">
+		<tr id="hiddenCombo" rowspan="4">
 			<td class="formField" colspan="4">
 	       		<html:select property="selectedColumnNames" styleClass="selectedColumnNames"  size="1" styleId="selectedColumnNames" multiple="true">
 	       		<%
@@ -183,17 +187,8 @@
 		</tr>
 	</table>
 	
-	<table cellpadding="3" cellspacing="0" border="0">
-		<tr rowspan = 4>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>									
-		</tr>
-	</table>
 	
-	
-	<table summary="" cellpadding="3" cellspacing="0" border="0" width="433">
+	<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
 <!--  Distributed Item begin here -->
 				 <tr>
 				     <td class="formTitle" height="20" colspan="<%=columnNames.length+1%>">
@@ -267,26 +262,24 @@
 						String changeAction = "setFormAction('"+Constants.DISTRIBUTION_REPORT_ACTION+"')";
 				 	--%>
 					<td>
-						<html:submit property="saveButton" styleClass="actionButton" value="Save" onclick="changeAction()" />
+						<html:submit property="expButton" styleClass="actionButton" onclick="changeAction()" >
+							<bean:message  key="buttons.export" />
+						</html:submit>
 					
 					</td>
-						
 					<td>
-						<html:submit styleClass="actionButton" value="Configure"  onclick="changeActionOnConfig()"/>
+						<html:submit styleClass="actionButton" onclick="changeActionOnConfig()">
+							<bean:message  key="buttons.configure" />
+						</html:submit>
 					</td>
-					
 				</tr>
 			</table>
 			<!-- action buttons end -->
 			</td>
 		</tr>
-
 		</table>
-		
 	  </td>
 	 </tr>
-
 	 <!-- NEW Distribution ends-->
-	 
 	 </table>
 </html:form>			
