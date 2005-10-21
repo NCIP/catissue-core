@@ -1739,7 +1739,7 @@ PUBLIC
 			name="configureResultViewForm"
 			validate="false"
 			scope="request">
-			<forward name="success" path="/SimpleSearch.do" />
+			<forward name="success" path="/SimpleQueryInterface.do?pageOf=pageOfSimpleQueryInterface" />
 			<forward name="failure" path="/ConfigureResultView.do?pageOf=pageOfSimpleQueryInterface" />
 		</action>
 		
