@@ -83,7 +83,27 @@ public class ApproveUserBizLogic extends DefaultBizLogic
             dao.update(user.getAddress(), sessionDataBean, true, false, false);
 	        dao.update(user, sessionDataBean, true, true, true);
 
-	        if (Constants.ACTIVITY_STATUS_ACTIVE.equals(user.getActivityStatus()) 
+            //Audit of User Update during approving user.
+            User oldUser = (User) oldObj;
+            dao.audit(user.getAddress(), oldUser.getAddress(),sessionDataBean,true);
+            dao.audit(obj, oldObj,sessionDataBean,true);
+            
+            if (Constants.ACTIVITY_STATUS_ACTIVE.equals(user.getActivityStatus()))
+            {
+                Set protectionObjects=new HashSet();
+                protectionObjects.add(user);
+        	    try
+                {
+                    SecurityManager.getInstance(this.getClass()).insertAuthorizationData(getAuthorizationData(user),protectionObjects,null);
+                }
+                catch (SMException e)
+                {
+                    Logger.out.error("Exception in Authorization: "+e.getMessage(),e);
+                }
+            }
+            
+            //Send mail to administrator and user.
+            if (Constants.ACTIVITY_STATUS_ACTIVE.equals(user.getActivityStatus()) 
 	                || Constants.ACTIVITY_STATUS_REJECT.equals(user.getActivityStatus()))
 	        {
 	            //Send email to administrator and cc it to the user registered.
@@ -99,7 +119,7 @@ public class ApproveUserBizLogic extends DefaultBizLogic
 	                    + "\n\tLogin Name : " + user.getLoginName()
 	                    + "\n\tPassword : " + PasswordEncoderDecoder.decode(user.getPassword())
 	                    + "\n\n" + ApplicationProperties.getValue("email.catissuecore.team");
-	            
+	          
 	            if (Constants.ACTIVITY_STATUS_REJECT.equals(user.getActivityStatus()))
 	            {
 	                subject = ApplicationProperties.getValue("userRegistration.reject.subject");
@@ -145,25 +165,6 @@ public class ApproveUserBizLogic extends DefaultBizLogic
 	                        + user.getFirstName() + " " + user.getLastName());
 	            }
 	        }
-            
-            //Audit of User Update during approving user.
-            User oldUser = (User) oldObj;
-            dao.audit(user.getAddress(), oldUser.getAddress(),sessionDataBean,true);
-            dao.audit(obj, oldObj,sessionDataBean,true);
-            
-            if (Constants.ACTIVITY_STATUS_ACTIVE.equals(user.getActivityStatus()))
-            {
-                Set protectionObjects=new HashSet();
-                protectionObjects.add(user);
-        	    try
-                {
-                    SecurityManager.getInstance(this.getClass()).insertAuthorizationData(getAuthorizationData(user),protectionObjects,null);
-                }
-                catch (SMException e)
-                {
-                    Logger.out.error("Exception in Authorization: "+e.getMessage(),e);
-                }
-            }
         }
         catch (SMException smex)
         {

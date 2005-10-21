@@ -114,11 +114,21 @@ public class UserBizLogic extends DefaultBizLogic
                 
                 user.setCsmUserId(csmUser.getUserId());
                 user.setPassword(csmUser.getPassword());
-                Logger.out.debug("CATISSUE USER PASSWORD................"+user.getPassword());
             }
             
             dao.insert(user.getAddress(), sessionDataBean, true, false);
             dao.insert(user, sessionDataBean, true, false);
+            
+            Set protectionObjects=new HashSet();
+            protectionObjects.add(user);
+    	    try
+            {
+                SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null,protectionObjects,null);
+            }
+            catch (SMException e)
+            {
+                Logger.out.error("Exception in Authorization: "+e.getMessage(),e);
+            }
             
             //Send email to administrator and cc it to the user registered.
             SendEmail email = new SendEmail();
@@ -190,17 +200,6 @@ public class UserBizLogic extends DefaultBizLogic
                         .getValue("userRegistration.email.failure")
                         + user.getFirstName() + " " + user.getLastName());
             }
-            
-                Set protectionObjects=new HashSet();
-                protectionObjects.add(user);
-        	    try
-                {
-                    SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null,protectionObjects,null);
-                }
-                catch (SMException e)
-                {
-                    Logger.out.error("Exception in Authorization: "+e.getMessage(),e);
-                }
         }
         catch (SMException smex)
         {
