@@ -609,17 +609,6 @@ PUBLIC
 			<forward name="access_denied" path="/ManageAdministrativeData.do" />
 		</action>
 		
-		<action path="/ProblemPendingClose"
-			type="edu.wustl.catissuecore.action.ReportedProblemPendingCloseAction"
-			name="domainObjectListForm"
-			validate="true"
-			input="/ReportedProblemShow.do"
-			scope="request">
-			<forward name="success" path="/ReportedProblemShow.do?pageNum=1" />
-			<forward name="failure" path="/error.jsp" />
-			<forward name="access_denied" path="/ManageAdministrativeData.do" />
-		</action>
-		
 		<action path="/ProblemDetails"
 			type="edu.wustl.catissuecore.action.DomainObjectDetailsAction"
 			name="reportedProblemForm"
