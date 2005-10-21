@@ -10,6 +10,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -36,9 +37,12 @@ public class SpreadsheetViewAction extends Action
     {
         List list = (List)request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
         String [] columnNames = (String [])request.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
-        
-        request.setAttribute(Constants.SPREADSHEET_COLUMN_LIST,columnNames);
-        request.setAttribute(Constants.SPREADSHEET_DATA_LIST,list);
+
+        //Putting the results view column names and data in session.
+        //Required for Export functionality in simple query interface.
+        HttpSession session = request.getSession();
+        session.setAttribute(Constants.SPREADSHEET_COLUMN_LIST,columnNames);
+        session.setAttribute(Constants.SPREADSHEET_DATA_LIST,list);
         
         String pageOf = (String)request.getAttribute(Constants.PAGEOF);
         request.setAttribute(Constants.PAGEOF, pageOf);
