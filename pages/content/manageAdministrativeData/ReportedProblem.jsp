@@ -19,19 +19,6 @@
 	<tr>
 		<td>
 		<table summary="" cellpadding="0" cellspacing="0" border="0">
-			<html:form action="/ProblemPendingClose">
-				<tr>
-					<td>
-						<html:hidden property="operation" />
-					</td>
-				</tr>
-				
-				<tr>
-					<td>
-						<html:hidden property="systemIdentifier" />
-					</td>
-				</tr>
-				
 				<tr>
 					<td class="dataTablePrimaryLabel" height="20">
 						<bean:message key="reportedProblem.pageTitle" />	
@@ -45,28 +32,16 @@
 					</td>
 				</tr>
 				
-				<!--tr>
-					<td class="dataTablePrimaryLabel" height="20">
-						<html:checkbox property="value(userselectAll)" onclick="CheckAll(this)">
-							<bean:message key="app.selectAll"/>
-						</html:checkbox>
-					</td>
-				</tr-->
-				
 				<!-- paging ends -->
 
 				<tr>
 					<td>
 					<table summary="Enter summary of data here" cellpadding="3"
 						cellspacing="0" border="0" class="dataTable" width="100%">
-						
 						<tr>
 							<th class="formSerialNumberLabelForTable" scope="col">
 				     			#
 				    		</th>
-							<!--th class="dataTableHeader" scope="col" align="left">
-								<bean:message key="reportedProblem.pendingClose" />
-							</th-->
 							<th class="dataTableHeader" scope="col" align="left">
 								<bean:message key="reportedProblem.from" />
 							</th>
@@ -95,9 +70,6 @@
         						<td class="dataCellText">
 									<%=i%>
 								</td>
-								<%--td class="dataCellText">
-									<html:checkbox property="<%=checkBoxName%>" value="<%=checkBoxValue%>" />
-								</td--%>
 								<td class="dataCellText">
 										<bean:write	name="problem" property="from" /> 
 								</td>
@@ -115,38 +87,6 @@
 					 </table>
 					</td>
 				</tr>
-				
-				<%--logic:notEmpty name="showDomainObjectList">
-				<tr>
-					<td align="right" class="actionSection">
-					<!-- action buttons begins -->
-					<table cellpadding="4" cellspacing="0" border="0">
-					
-					<br/>
-						<tr>
-							<td>
-								<%
-									String setOperation = "setOperation('"+Constants.ACTIVITY_STATUS_CLOSED+"')";
-								%>
-								<html:submit styleClass="actionButton" onclick="<%=setOperation%>">
-									<bean:message  key="buttons.close" />
-								</html:submit>
-							</td>
-							<td>
-								<%
-									setOperation = "setOperation('"+Constants.APPROVE_USER_PENDING_STATUS+"')";
-								%>
-								<html:submit styleClass="actionButton" onclick="<%=setOperation%>">
-									<bean:message  key="buttons.pending" />
-								</html:submit>
-							</td>
-						</tr>
-					</table>
-					<!-- action buttons end -->
-					</td>
-				</tr>
-				</logic:notEmpty--%>
-			</html:form>
 		</table>
 		</td>
 	</tr>
