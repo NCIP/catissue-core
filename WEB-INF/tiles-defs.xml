@@ -555,7 +555,7 @@
 		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>
 	
-	<definition name=".catissuecore.configurationSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+	<definition name=".catissuecore.configurationSuccessDef" extends=".catissuecore.searchHomeDef">
 		<put name="content" value="/pages/content/search/ConfigureResultView.jsp" />
 	</definition>
 	<definition name=".catissuecore.distributionReportSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">

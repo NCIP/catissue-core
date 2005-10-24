@@ -14,6 +14,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -151,7 +152,10 @@ public class SimpleQueryInterfaceAction extends SecureAction
         
         request.setAttribute(Constants.ATTRIBUTE_NAME_LIST, Constants.ATTRIBUTE_NAME_ARRAY);
         request.setAttribute(Constants.ATTRIBUTE_CONDITION_LIST, Constants.ATTRIBUTE_CONDITION_ARRAY);
-        
+        HttpSession session =request.getSession();
+        session.setAttribute(Constants.SIMPLE_QUERY_ALIAS_NAME,null);
+        session.setAttribute(Constants.SIMPLE_QUERY_COUNTER,null);
+        session.setAttribute(Constants.SIMPLE_QUERY_MAP,null);
         String pageOf = request.getParameter(Constants.PAGEOF);
         request.setAttribute(Constants.PAGEOF, pageOf);
         

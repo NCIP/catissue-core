@@ -55,20 +55,32 @@ public class SimpleSearchAction extends BaseAction
 	{
 		Logger.out.debug("SimpleSearchAction");
 		SimpleQueryInterfaceForm simpleQueryInterfaceForm = (SimpleQueryInterfaceForm) form;
-		String viewAliasName=null;
+		String counter = simpleQueryInterfaceForm.getCounter();
 		HttpSession session = request.getSession();
-		Map map = (Map)session.getAttribute(Constants.SIMPLE_QUERY_MAP);
+		if(counter!=null)
+			session.setAttribute(Constants.SIMPLE_QUERY_COUNTER,simpleQueryInterfaceForm.getCounter());
+		Map map=null;
 		//	Get the aliasName.
-		viewAliasName = (String)map.get("SimpleConditionsNode:1_Condition_DataElement_table");
+		String viewAliasName = (String) simpleQueryInterfaceForm.getValue("SimpleConditionsNode:1_Condition_DataElement_table");
+		
 		if(viewAliasName==null)
-			viewAliasName = (String) simpleQueryInterfaceForm.getValue("SimpleConditionsNode:1_Condition_DataElement_table");
+		{
+			map = (Map)session.getAttribute(Constants.SIMPLE_QUERY_MAP);
+			viewAliasName = (String)map.get("SimpleConditionsNode:1_Condition_DataElement_table");
+		}
+		else
+			session.setAttribute(Constants.SIMPLE_QUERY_ALIAS_NAME,viewAliasName);
+
 		Logger.out.debug("viewAliasName"+viewAliasName);
 		String target = Constants.SUCCESS;
 		
 		try
 		{
 			if(map==null)
+			{
 				map = simpleQueryInterfaceForm.getValuesMap();
+				session.setAttribute(Constants.SIMPLE_QUERY_MAP,map);
+			}
 			Logger.out.debug("map size"+map.size());
 			MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.query");
 

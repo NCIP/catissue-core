@@ -50,7 +50,7 @@ public class ConfigureSimpleQueryAction extends Action
     		if(counter==null)
     			counter = (String)session.getAttribute(Constants.SIMPLE_QUERY_COUNTER);
     		int size = Integer.parseInt(counter);
-    		String[] selectedTables = new String[size]; 
+    		String[] selectedTables = new String[size+1]; 
     		int tableCount=0;
     		while (iterator.hasNext())
     		{
