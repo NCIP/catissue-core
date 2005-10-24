@@ -84,26 +84,45 @@ public class ShoppingCartAction  extends BaseAction
         }
         else
         {
-        	if(operation.equals(Constants.ADD))
+        	if(operation.equals(Constants.ADD)) //IF OPERATION IS "ADD"
 	        {
-	        	//bizLogic.add(cart);
+        		Map map = shopForm.getValues();
+        		
+        		if(map != null)
+        		{
+        			List dataList = (List) session.getAttribute(Constants.SPREADSHEET_DATA_LIST);
+        			
+        			Object [] keys = map.keySet().toArray();
+        			
+        			for(int i=0;i<keys.length;i++)
+        			{
+        				System.out.println("********************* " + keys[i].toString());
+        				System.out.println("********************* " + map.get(keys[i].toString()));
+        			}
+        		}
 	        }
-	        else if(operation.equals(Constants.DELETE))
+	        else if(operation.equals(Constants.DELETE)) //IF OPERATION IS "DELETE"
 	        {
+	        	//Extracting map from formbean that gives rows to be deleted
 	        	Map map = shopForm.getValues();
 	        	Object obj[] = map.keySet().toArray();
 	        	
+	        	/*Deleting the selected rows from Shopping Cart object & setting
+	        	 *it again in the session 
+	        	 */
 	        	session.setAttribute(Constants.SHOPPING_CART,bizLogic.delete(cart,obj));
 	        }
-	        else if(operation.equals(Constants.EXPORT))
+	        else if(operation.equals(Constants.EXPORT)) //IF OPERATION IS "EXPORT"
 	        {
 	        	String fileName = Variables.catissueHome + System.getProperty("file.separator") + session.getId() + ".csv";
 	        	
+	        	//Extracting map from formbean that gives rows to be exported
 	        	Map map = shopForm.getValues();
 	        	Object obj[] = map.keySet().toArray();
 	        	
 	        	List cartList = bizLogic.export(cart,obj,fileName);
 	        	
+	        	//Exporting the data to shopping cart file & sending it to user
 	        	ExportReport report = new ExportReport(fileName);
 	    		report.writeData(cartList);
 	    		report.closeFile();
@@ -144,6 +163,7 @@ public class ShoppingCartAction  extends BaseAction
 					
 					List rowData = new ArrayList();
 					
+					//Adding checkbox as a first column of the grid
 					rowData.add("<input type='checkbox' name='value(CB_" + specimen.getSystemIdentifier() + ")' id='" + id + "' onClick='changeData(this)'>");
 					rowData.add(String.valueOf(specimen.getSystemIdentifier()));
 					rowData.add(specimen.getClassName());
