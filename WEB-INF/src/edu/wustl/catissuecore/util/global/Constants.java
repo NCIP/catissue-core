@@ -1301,5 +1301,10 @@ public class Constants
 			{"Add New Specimen",			"createNewSpecimen"}
 	};
 	
+	public static final String [][] PROTOCOL_REGISTRATION_FORWARD_TO_LIST = {
+			{"Normal Submit",							"success"},
+			{"New Specimen Collection Group",			"createSpecimenCollectionGroup"}
+	};
 
+	
 }
