@@ -1292,5 +1292,11 @@ public class Constants
 			{"Add Events",				"eventParameters"},
 			{"Add More To Same Collection Group",	"sameCollectionGroup"}
 	};
+
+	public static final String [][] SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST = {
+			{"Normal Submit",				"success"},
+			{"Add New Specimen",			"createNewSpecimen"}
+	};
 	
+
 }
