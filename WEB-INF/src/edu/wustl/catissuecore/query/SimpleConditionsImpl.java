@@ -2,6 +2,8 @@ package edu.wustl.catissuecore.query;
 
 import java.util.HashSet;
 import java.util.Vector;
+
+import edu.wustl.catissuecore.util.global.Constants;
  
 
 
@@ -54,14 +56,45 @@ public class SimpleConditionsImpl extends ConditionsImpl {
     public String getString(int tableSufix)
     {
         StringBuffer whereConditionsString = new StringBuffer();
+        SimpleConditionsNode simpleConditionsNode;
+       
+        Vector activityStatusConditions = new Vector();
+        boolean isActivityStatusField = false;
         for(int i=0; i < whereConditions.size(); i++)
         {
-            whereConditionsString.append(" ");
-            if(i != whereConditions.size()-1)
-                whereConditionsString.append(((SimpleConditionsNode) whereConditions.get(i)).toSQLString(tableSufix));
+        	simpleConditionsNode = (SimpleConditionsNode)whereConditions.get(i);
+        	if(i==0)
+        		whereConditionsString.append(" ( ");
+        	
+        	// Separating the activity status fields from rest of the fields so that 
+        	//they are not included in brackets
+        	if(simpleConditionsNode.getCondition().getDataElement().getField().equals(Constants.ACTIVITY_STATUS_COLUMN))
+        	{
+        		for(int j=i; j<whereConditions.size(); j++)
+        		{
+        			activityStatusConditions.add(whereConditions.get(j));
+        		}
+        		
+        		break;
+        	}
+            if(i != whereConditions.size()-1 && !((SimpleConditionsNode)whereConditions.get(i+1)).getCondition().getDataElement().getField().equals(Constants.ACTIVITY_STATUS_COLUMN))
+                whereConditionsString.append((simpleConditionsNode).toSQLString(tableSufix));
             else
-                whereConditionsString.append(((SimpleConditionsNode)whereConditions.get(i)).getCondition().toSQLString(tableSufix));
+                whereConditionsString.append((simpleConditionsNode).getCondition().toSQLString(tableSufix)+" ) ");
             whereConditionsString.append(" ");
+        }
+        
+        //Adding activity status fields in the end
+        if(activityStatusConditions.size() > 0)
+        {
+        	whereConditionsString.append(Operator.AND+" ");
+        }
+        for(int i=0; i < activityStatusConditions.size(); i++)
+        {
+        	 if(i != activityStatusConditions.size()-1 )
+        	 	whereConditionsString.append(((SimpleConditionsNode)activityStatusConditions.get(i)).toSQLString(tableSufix));
+        	 else
+        	 	whereConditionsString.append(((SimpleConditionsNode)activityStatusConditions.get(i)).getCondition().toSQLString(tableSufix));
         }
 
         return whereConditionsString.toString();
