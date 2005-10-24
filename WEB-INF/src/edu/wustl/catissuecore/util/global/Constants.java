@@ -1285,4 +1285,12 @@ public class Constants
 	public static final String PARENT_SPECIMEN_ID = "parentSpecimenId";
 	public static final String COLLECTION_REGISTRATION_ID = "collectionProtocolId";
 	
+	public static final String FORWARDLIST = "forwardToList";
+	public static final String [][] SPECIMEN_FORWARD_TO_LIST = {
+			{"Normal Submit",				"success"},
+			{"Derive New From This Specimen",			"createNew"},
+			{"Add Events",				"eventParameters"},
+			{"Add More To Same Collection Group",	"sameCollectionGroup"}
+	};
+	
 }
