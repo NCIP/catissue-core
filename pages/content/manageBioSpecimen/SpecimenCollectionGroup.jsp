@@ -84,15 +84,7 @@
 			document.forms[0].action = action;
 			document.forms[0].submit();
 		}
-		
-		// for add new Specimen
-		function onAddNewSpecimen(element)
-		{
-			var action ="createNewSpecimen";
-			changeSubmitTo(action );
-			document.forms[0].submit();
-		}
-		
+
 	</script>
 </head>
 
@@ -344,6 +336,32 @@
 							<!-- action buttons begins -->
 							<table cellpadding="4" cellspacing="0" border="0">
 								<tr>
+									<td>
+										<table>
+											<tr>
+												<td class="formFieldNoBorders" nowrap>
+													<label for="proceedWith">
+														<bean:message key="proceedWith"/>
+													</label>
+												</td>
+												<td nowrap class="formFieldNoBorders">
+													<html:radio styleClass="" property="forwardTo" value="<%=Constants.SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST[0][1]%>" >
+						  				     	    <label for="<%=Constants.SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST[0][0]%>">
+														<%=Constants.SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST[0][0]%>
+													</label>
+											     	</html:radio>
+												</td>
+												<td nowrap class="formFieldNoBorders">
+													<html:radio styleClass=""  property="forwardTo" value="<%=Constants.SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST[1][1]%>">
+						  				     	    <label for="<%=Constants.SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST[1][0]%>">
+														<%=Constants.SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST[1][0]%>
+													</label>
+											     	</html:radio>
+												</td>		
+											</tr>
+										</table>
+									</td>					
+
 						   			<td>
 						   				<html:submit styleClass="actionButton" onclick="<%=changeAction%>">
 						   					<bean:message key="buttons.submit"/>
@@ -354,18 +372,6 @@
 											<bean:message key="buttons.reset"/>
 										</html:reset>
 									</td> 
-								<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
-									<td>
-										<html:button property="addNewSpecimen" styleClass="actionButton" onclick="onAddNewSpecimen(this)">
-											<bean:message key="buttons.addNewSpecimen"/>
-										</html:button>
-									</td>
-								</logic:equal>	
-									<!--td>
-										<html:submit styleClass="actionButton">
-											<bean:message key="buttons.submitAndAddNewSpecimen"/>
-										</html:submit>
-									</td-->
 								</tr>
 							</table>
 							<!-- action buttons end -->
