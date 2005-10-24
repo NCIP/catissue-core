@@ -158,12 +158,19 @@ public class SimpleSearchAction extends BaseAction
 					.equals(Constants.PAGEOF_SIMPLE_QUERY_INTERFACE))
 			{
 				query.setTableSet(fromTables);
-				Logger.out.debug("setTableSet......................................."+fromTables);
+				Logger.out.debug("setTableSet.......................................");
 				String[] selectedColumns = simpleQueryInterfaceForm.getSelectedColumnNames();
 				Logger.out.debug("selected columns "+selectedColumns);
-				String[] tempColumnNames=getColumnNames(selectedColumns,query,viewAliasName);
-				//String[] tempColumnNames= query.setViewElements(viewAliasName);
-				Set tableSet = query.getTableSet();
+				String[] tempColumnNames= query.setViewElements(viewAliasName);
+				Set tableSet;
+				if(Constants.switchSecurity)
+				{
+					tableSet = query.getTableSet();
+				}
+				else
+				{
+					tableSet = new HashSet();
+				}
 				columnNames = new String[tempColumnNames.length+tableSet.size()];
 				objectIdentifiers = new String[tableSet.size()][2];
 				Iterator fromTablesIterator = tableSet.iterator();
