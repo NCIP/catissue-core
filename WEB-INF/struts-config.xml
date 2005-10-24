@@ -2013,7 +2013,17 @@ PUBLIC
 			<forward name="success" path=".catissuecore.advanceQueryRedirectDef" />
 			<forward name="failure" path="/AdvanceQuery.do" />
 		</action>
-			<!-- Advance Query Interface Actions Ends -->
+		
+		<!--Spreadshet Export Actions Begins -->
+        <action path="/SpreadsheetExport"
+			type="edu.wustl.catissuecore.action.SpreadsheetExportAction"
+			name="advanceSearchForm"
+			validate="false"
+			scope="request">
+		</action>
+		<!--Spreadshet Export Actions Ends -->
+	
+	<!-- Advance Query Interface Actions Ends -->
 	</action-mappings>
 	
 	<message-resources parameter="ApplicationResources" />
