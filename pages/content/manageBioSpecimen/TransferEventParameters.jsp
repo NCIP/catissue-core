@@ -186,10 +186,13 @@
 				</label>
 			</td>
 			<td class="formField">
-				<html:hidden property="positionDimensionOne" />
-				<html:hidden property="positionDimensionTwo" />
-				<html:hidden property="storageContainer" />
-				<html:text styleClass="formDateSized" size="35" styleId="positionInStorageContainer" property="positionInStorageContainer" readonly="true" />
+     			<html:text styleClass="formFieldSized3" styleId="storageContainer" property="storageContainer" />
+     			-
+     			<html:text styleClass="formFieldSized3" styleId="positionDimensionOne" property="positionDimensionOne" />
+     			-
+     			<html:text styleClass="formFieldSized3" styleId="positionDimensionTwo" property="positionDimensionTwo" />
+
+				<html:hidden property="positionInStorageContainer" />
 				<%
 					if(operation.equals("add"))
 					{

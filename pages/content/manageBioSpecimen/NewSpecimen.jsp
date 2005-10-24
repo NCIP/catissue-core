@@ -59,6 +59,11 @@ Map map = form.getExternalIdentifier();
 			LeftPosition = (screen.width) ? (screen.width-w)/2 : 0;
 			TopPosition = (screen.height) ? (screen.height-h)/2 : 0;
 
+//			mypage=mypage+document.forms[0].typeId.value + 
+//					"&storageToBeSelected="+ document.forms[0].parentContainerId.value +
+//					"&position=" + document.forms[0].positionDimensionOne.value + 
+//					":" + document.forms[0].positionDimensionTwo.value;
+
 			settings =
 				'height='+h+',width='+w+',top='+TopPosition+',left='+LeftPosition+',scrollbars='+scroll+',resizable'
 			win = open(mypage,myname,settings)
@@ -382,17 +387,7 @@ Map map = form.getExternalIdentifier();
 				 </tr>
 				 <tr>
 					<td>
-						<html:hidden property="storageContainer" />
-					</td>
-				 </tr>
-				 <tr>
-					<td>
-						<html:hidden property="positionDimensionOne" />
-					</td>
-				 </tr>
-				 <tr>
-					<td>
-						<html:hidden property="positionDimensionTwo" />
+						<html:hidden property="positionInStorageContainer" />
 					</td>
 				 </tr>
 				 <tr>
@@ -634,8 +629,18 @@ Map map = form.getExternalIdentifier();
 					   		<bean:message key="specimen.positionInStorageContainer"/>
 					   </label>
 					</td>
+					<%
+						boolean readOnly=false;
+						if(operation.equals(Constants.ADD))
+							readOnly=true;
+					%>
 				 	<td class="formField">
-						<html:text styleClass="formFieldSized15" size="30" styleId="positionInStorageContainer" property="positionInStorageContainer" readonly="true"/>
+		     			<html:text styleClass="formFieldSized3" styleId="storageContainer" property="storageContainer"  readonly="<%=readOnly%>" />
+		     			-
+		     			<html:text styleClass="formFieldSized3" styleId="positionDimensionOne" property="positionDimensionOne" readonly="<%=readOnly%>" />
+		     			-
+		     			<html:text styleClass="formFieldSized3" styleId="positionDimensionTwo" property="positionDimensionTwo" readonly="<%=readOnly%>" />
+						&nbsp;
 					</td>
 					
 					<td class="formField" colspan="2">

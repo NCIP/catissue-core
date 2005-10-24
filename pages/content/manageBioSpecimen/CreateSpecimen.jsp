@@ -172,19 +172,9 @@
 						<td><html:hidden property="exIdCounter"/></td>
 					</td>
 				 </tr>
-				<tr>
+				 <tr>
 					<td>
-						<html:hidden property="storageContainer" />
-					</td>
-				  </tr>
-				  <tr>
-					<td>
-						<html:hidden property="positionDimensionOne" />
-					</td>
-				  </tr>
-				  <tr>
-					<td>
-						<html:hidden property="positionDimensionTwo" />
+						<html:hidden property="positionInStorageContainer" />
 					</td>
 				  </tr>
 				 
@@ -325,8 +315,14 @@
 					   		<bean:message key="specimen.positionInStorageContainer"/>
 					   </label>
 					</td>
-				 	<td class="formField" colspan="2">
-						<html:text styleClass="formFieldSized15" size="30" styleId="positionInStorageContainer" property="positionInStorageContainer" readonly="true"/>
+				 	<td class="formField">
+		     			<html:text styleClass="formFieldSized3" styleId="storageContainer" property="storageContainer" />
+		     			-
+		     			<html:text styleClass="formFieldSized3" styleId="positionDimensionOne" property="positionDimensionOne" />
+		     			-
+		     			<html:text styleClass="formFieldSized3" styleId="positionDimensionTwo" property="positionDimensionTwo" />
+					</td>
+					<td class="formField">
 						<html:button property="mapButton" styleClass="actionButton" styleId="Map"
 							onclick="javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfSpecimen','name','810','320','yes');return false" >
 							<bean:message key="buttons.map"/>
