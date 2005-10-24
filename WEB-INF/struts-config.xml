@@ -656,9 +656,9 @@ PUBLIC
 			validate="true"
 			input="/SpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroup"
 			scope="request">
-			<forward name="success" path=".catissuecore.specimenCollectionGroupAddSuccessDef" />
+			<forward name="success" path="/SpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroup" />
 			<forward name="failure" path="/SpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroup" />
-			<forward name="specimenRedirect" path="/NewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimen" />
+			<forward name="createNewSpecimen" path="/NewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimen" />
 		</action>
 
 		<action path="/SpecimenCollectionGroupEdit"
