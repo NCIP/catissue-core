@@ -83,7 +83,14 @@ public class NewSpecimenAction  extends SecureAction
         if(specimenCollectionGroupId != null)
 		{
         	specimenForm.setSpecimenCollectionGroupId( specimenCollectionGroupId); 
-		}
+        	specimenForm.setParentSpecimenId("" );
+        	specimenForm.setPositionInStorageContainer("" );
+        	specimenForm.setQuantity("" ); 
+        	specimenForm.setClassName( "");
+        	specimenForm.setTissueSide( "");
+        	specimenForm.setTissueSite( "");
+        	specimenForm.setPathologicalStatus( "");
+ 		}
         else
         {
             specimenCollectionGroupId = request.getParameter(Constants.SPECIMEN_COLLECTION_GROUP_ID);
@@ -93,6 +100,12 @@ public class NewSpecimenAction  extends SecureAction
     		}
         }
 
+        // - set the specimen id
+       	String specimenID = (String)request.getAttribute(Constants.SPECIMEN_ID);
+       	if(specimenID !=null)
+       		specimenForm.setSystemIdentifier(Long.parseLong(specimenID  )); 
+    	
+    	Logger.out.debug("SpecimenID in NewSpecimenAction : " + specimenID  );
     	
         String pageOf = request.getParameter(Constants.PAGEOF);
         request.setAttribute(Constants.PAGEOF,pageOf);
@@ -151,6 +164,10 @@ public class NewSpecimenAction  extends SecureAction
 	
 			List specimenList = bizLogic.getList(sourceObjectName, displayNameFields, valueField, true);
 			request.setAttribute(Constants.SPECIMEN_COLLECTION_GROUP_LIST, specimenList);
+			
+			// -- set ForwardTo list
+			List forwardToList = getForwardToList(Constants.SPECIMEN_FORWARD_TO_LIST );
+			request.setAttribute(Constants.FORWARDLIST,forwardToList   ); 
 		}
         catch(Exception e)
 		{
@@ -234,5 +251,17 @@ public class NewSpecimenAction  extends SecureAction
         
     	//----------------------------------------
     	return mapping.findForward(pageOf);
+    }
+    
+
+    // ----------- creates a list of NameValue Bean for the ForwardTo element  
+    private List getForwardToList(String [][] nameValueList)
+    {
+    	List returnList = new ArrayList() ;
+    	for(int i=0;i<nameValueList.length ;i++  )
+    	{
+    		returnList.add( new NameValueBean(nameValueList[i][0],nameValueList[i][1]    ) );
+    	}
+    	return returnList;
     }
 }
