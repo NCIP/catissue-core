@@ -69,11 +69,11 @@ public class ConfigureResultViewAction extends Action  {
 	        	NameValueBean tableData = (NameValueBean)itr.next();
 	        	if(!tableData.getName().equals(Constants.SELECT_OPTION))
 	        	{
-	        		List columnList =  setColumnNames(tableData.getName());
+	        		List columnList =  setColumnNames(tableData.getValue());
 	        		tableColumnDataMap.put(tableData,columnList);
 	        		
 	        	}
-	        	Logger.out.debug("Table Name"+ tableData.getName());
+	        	Logger.out.debug("Table Name"+ tableData.getValue());
 		        //Logger.out.debug("Column List"+ columnList);
 		        
 	        }
@@ -111,7 +111,7 @@ public class ConfigureResultViewAction extends Action  {
         String columnDisplayName = new String();
         List columnList = new ArrayList();
         Iterator iterator = list.iterator();
-        int j = 0,k=0;
+        int j=0,k=0;
         while (iterator.hasNext())
         {
         	
