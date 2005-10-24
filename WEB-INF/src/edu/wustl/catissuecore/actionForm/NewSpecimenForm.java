@@ -223,6 +223,7 @@ public class NewSpecimenForm extends SpecimenForm
 //        this.tissueSide = null;
 //        this.pathologicalStatus = null;
 //        this.biohazard = new HashMap();
+ //   	this.parentPresent = false;
     }
     
   
@@ -254,6 +255,7 @@ public class NewSpecimenForm extends SpecimenForm
         	
         	if(specimen.getParentSpecimen() != null)
         	{
+        		Logger.out.debug("ParentSpecimen : -- "+specimen.getParentSpecimen());
         		this.parentSpecimenId = String.valueOf(specimen.getParentSpecimen().getSystemIdentifier());
         		this.parentPresent = true;
         	}
