@@ -376,6 +376,9 @@ public class Constants
 	public static final String DISTRIBUTION_ADD_ACTION = "DistributionAdd.do";
 	public static final String DISTRIBUTION_EDIT_ACTION = "DistributionEdit.do";
 	
+	//Spreadsheet Export Action
+	public static final String SPREADSHEET_EXPORT_ACTION = "SpreadsheetExport.do";
+	
 	//Levels of nodes in query results tree.
 	public static final int MAX_LEVEL = 5;
 	public static final int MIN_LEVEL = 1;
