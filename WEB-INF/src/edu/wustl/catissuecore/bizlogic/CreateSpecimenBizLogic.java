@@ -79,10 +79,10 @@ public class CreateSpecimenBizLogic extends DefaultBizLogic
 		dao.insert(specimen,sessionDataBean, true,true);
 		protectionObjects.add(specimen);
 		
-//		if(specimen.getSpecimenCharacteristics()!=null)
-//		{
-//		    protectionObjects.add(specimen.getSpecimenCharacteristics());
-//		}
+		if(specimen.getSpecimenCharacteristics()!=null)
+		{
+		    protectionObjects.add(specimen.getSpecimenCharacteristics());
+		}
 		
 		//Setting the External Identifier Collection
 		Collection externalIdentifierCollection = specimen.getExternalIdentifierCollection();
