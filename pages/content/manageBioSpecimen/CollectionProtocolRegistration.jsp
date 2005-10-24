@@ -223,18 +223,37 @@
 					<table cellpadding="4" cellspacing="0" border="0">
 						<tr>
 							<td>
+								<table>
+									<tr>
+										<td class="formFieldNoBorders" nowrap>
+											<label for="proceedWith">
+												<bean:message key="proceedWith"/>
+											</label>
+										</td>
+										<td nowrap class="formFieldNoBorders">
+											<html:radio styleClass="" property="forwardTo" value="<%=Constants.PROTOCOL_REGISTRATION_FORWARD_TO_LIST[0][1]%>" >
+				  				     	    <label for="<%=Constants.PROTOCOL_REGISTRATION_FORWARD_TO_LIST[0][0]%>">
+												<%=Constants.PROTOCOL_REGISTRATION_FORWARD_TO_LIST[0][0]%>
+											</label>
+									     	</html:radio>
+										</td>
+										<td nowrap class="formFieldNoBorders">
+											<html:radio styleClass=""  property="forwardTo" value="<%=Constants.PROTOCOL_REGISTRATION_FORWARD_TO_LIST[1][1]%>">
+				  				     	    <label for="<%=Constants.PROTOCOL_REGISTRATION_FORWARD_TO_LIST[1][0]%>">
+												<%=Constants.PROTOCOL_REGISTRATION_FORWARD_TO_LIST[1][0]%>
+											</label>
+									     	</html:radio>
+										</td>		
+									</tr>
+								</table>
+							</td>					
+						
+							<td>
 								<html:submit styleClass="actionButton" value="Submit" onclick="<%=changeAction%>" />
 							</td>
 							<td>
 								<html:reset styleClass="actionButton" />
 							</td>
-						<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
-							<td>
-								<html:button property="addSpecimenCollectionGroup" styleClass="actionButton" onclick="onAddSpecimenCollectionGroup(this)">
-									<bean:message key="buttons.addSpecimenCollectionGroup"/>
-								</html:button>
-							</td>
-						</logic:equal>	
 						</tr>
 					</table>
 					<!-- action buttons end --></td>
