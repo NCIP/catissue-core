@@ -889,3 +889,11 @@ td.formFieldAddMore{ /* for the cell that contains the form elements */
   border-left:2px solid #5C5C5C; /* constant: dark gray */
   border-right:2px solid #5C5C5C; /* constant: dark gray */
 }
+
+td.formFieldNoBorders{ /* for the cell that contains the form elements */
+  font-family:arial,helvetica,verdana,sans-serif;
+  font-size:0.7em;
+  font-weight:bold;
+  color:#000000; /* constant: black */
+}
+
