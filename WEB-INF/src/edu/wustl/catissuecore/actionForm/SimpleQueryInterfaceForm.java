@@ -36,6 +36,12 @@ public class SimpleQueryInterfaceForm extends ActionForm
     
     String showCalendar="";
 
+    //Variables neccessary for Configuration of SImple Search 
+   
+    private String tableName;
+    private String []selectedColumnNames;
+    private String []columnNames;
+  
     public SimpleQueryInterfaceForm()
     {
         this.counter = "1";
@@ -54,7 +60,7 @@ public class SimpleQueryInterfaceForm extends ActionForm
      */
     public void setCounter(String counter)
     {
-        this.counter = counter;
+    	this.counter = counter;
     }
 
     /**
@@ -75,7 +81,7 @@ public class SimpleQueryInterfaceForm extends ActionForm
 
     public void setValue(String key, Object value)
     {
-        values.put(key, value);
+   		values.put(key, value);
     }
 
     public Object getValue(String key)
@@ -101,7 +107,7 @@ public class SimpleQueryInterfaceForm extends ActionForm
      */
     public void setAliasName(String aliasName)
     {
-        this.aliasName = aliasName;
+   		this.aliasName = aliasName;
     }
 
     public Map getValuesMap()
@@ -172,4 +178,54 @@ public class SimpleQueryInterfaceForm extends ActionForm
         
         return errors;
     }
+	/**
+	 * @return Returns the selectedColumnNames.
+	 */
+	public String[] getSelectedColumnNames() {
+		return selectedColumnNames;
+	}
+	/**
+	 * @param selectedColumnNames The selectedColumnNames to set.
+	 */
+	public void setSelectedColumnNames(String[] selectedColumnNames) {
+		this.selectedColumnNames = selectedColumnNames;
+	}
+	
+	/**
+	 * @return Returns the columnNames.
+	 */
+	public String[] getColumnNames() {
+		return columnNames;
+	}
+	/**
+	 * @param columnNames The columnNames to set.
+	 */
+	public void setColumnNames(String[] columnNames) {
+		this.columnNames = columnNames;
+	}
+	/**
+	 * @return Returns the tableName.
+	 */
+	public String getTableName() {
+		return tableName;
+	}
+	/**
+	 * @param tableName The tableName to set.
+	 */
+	public void setTableName(String tableName) {
+		this.tableName = tableName;
+	}
+
+	/**
+	 * @return Returns the values.
+	 */
+	public Map getValues() {
+		return values;
+	}
+	/**
+	 * @param values The values to set.
+	 */
+	public void setValues(Map values) {
+		this.values = values;
+	}
 }

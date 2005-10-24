@@ -36,25 +36,38 @@ public class ConfigureSimpleQueryAction extends Action
     	try
 		{
     		//Set the tables for the configuration 
-    		SimpleQueryInterfaceForm sForm =  (SimpleQueryInterfaceForm)form;
-    		Map map = sForm.getValuesMap();
+    		SimpleQueryInterfaceForm simpleQueryInterfaceForm =  (SimpleQueryInterfaceForm)form;
+    		HttpSession session =request.getSession();
+    		Map map = simpleQueryInterfaceForm.getValuesMap();
+    		Logger.out.debug("map size"+map.size());
+    		if(map.size()==0)
+    		{
+    			map=(Map)session.getAttribute(Constants.SIMPLE_QUERY_MAP);
+    			Logger.out.debug("map size"+map.size());
+    		}
     		Iterator iterator = map.keySet().iterator();
-    		int size = Integer.parseInt(sForm.getCounter());
+    		String counter = simpleQueryInterfaceForm.getCounter();
+    		if(counter==null)
+    			counter = (String)session.getAttribute(Constants.SIMPLE_QUERY_COUNTER);
+    		int size = Integer.parseInt(counter);
     		String[] selectedTables = new String[size]; 
     		int tableCount=0;
     		while (iterator.hasNext())
     		{
     			String key = (String)iterator.next();
+    			Logger.out.debug("map key"+key);
     			if(key.endsWith("_table"))
     			{
     				selectedTables[tableCount]= (String)map.get(key);
     				tableCount++;
     			}
-    			
     		}
-    		//HttpSession session =request.getSession();
-    		request.setAttribute(Constants.TABLE_ALIAS_NAME,selectedTables);
     		
+    		session.setAttribute(Constants.TABLE_ALIAS_NAME,selectedTables);
+    		request.setAttribute(Constants.PAGEOF,Constants.PAGEOF_SIMPLE_QUERY_INTERFACE);
+    		session.setAttribute(Constants.SIMPLE_QUERY_MAP,map);
+    		session.setAttribute(Constants.SIMPLE_QUERY_ALIAS_NAME,simpleQueryInterfaceForm.getAliasName());
+    		session.setAttribute(Constants.SIMPLE_QUERY_COUNTER,simpleQueryInterfaceForm.getCounter());
 		}
 		catch (Exception Exp)
 		{
@@ -63,5 +76,6 @@ public class ConfigureSimpleQueryAction extends Action
     	
     	return (mapping.findForward("success"));
     }
+
 }
     

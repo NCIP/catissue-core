@@ -1269,6 +1269,10 @@ public class Constants
 	public static final String CONFIGURE_SIMPLE_SEARCH_ACTION = "ConfigureSimpleSearch.do";
 	public static final String SIMPLE_SEARCH_ACTION = "SimpleSearch.do";
 	public static final String PAGEOF_DISTRIBUTION = "pageOfDistribution";
+	public static final String RESULT_VIEW_VECTOR = "resultViewVector";
+	public static final String SIMPLE_QUERY_MAP = "simpleQueryMap";
+	public static final String SIMPLE_QUERY_ALIAS_NAME = "simpleQueryAliasName";
+	public static final String SIMPLE_QUERY_COUNTER = "simpleQueryCount";
 	
 	public static final String UNDEFINED = "Undefined";
 	public static final String UNKNOWN = "Unknown";

@@ -146,6 +146,11 @@ if(dataList.size() != 0)
 				checkUncheck(element);
 			}
 		}
+		function callAction(action)
+		{
+			document.forms[0].action = "/catissuecore/"+action;
+			document.forms[0].submit();
+		}
 	</script>
 </head>
 
@@ -190,6 +195,12 @@ if(dataList.size() != 0)
 						<bean:message key="buttons.export"/>
 					</html:button>
 				</td> 
+				<%String configAction = "callAction('"+Constants.CONFIGURE_SIMPLE_QUERY_ACTION+"')";%>
+				<td>
+					<html:button styleClass="actionButton" property="configureButton" onclick="<%=configAction%>">
+						<bean:message  key="buttons.configure" />
+					</html:button>
+				</td>
 			</tr>
 			</table>
 		</td>
@@ -269,6 +280,11 @@ if(dataList.size() != 0)
 				<td width="5%" nowrap align="right">
 					<html:button styleClass="actionButton" property="exportCart" onclick="onExport()">
 						<bean:message key="buttons.export"/>
+					</html:button>
+				</td>
+				<td>
+					<html:button styleClass="actionButton" property="configureButton" onclick="<%=configAction%>">
+						<bean:message  key="buttons.configure" />
 					</html:button>
 				</td>
 			</tr>

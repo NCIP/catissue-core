@@ -240,7 +240,7 @@ function showDateColumn(element,valueField,colID)
 							if(pageOf.equals(Constants.PAGEOF_SIMPLE_QUERY_INTERFACE))
 							{
 							String configAction = "callAction('"+Constants.CONFIGURE_SIMPLE_QUERY_ACTION+"')";%>
-							<td class="hideTD">
+							<td>
 								<html:button styleClass="actionButton" property="configureButton" onclick="<%=configAction%>">
 									<bean:message  key="buttons.configure" />
 								</html:button>

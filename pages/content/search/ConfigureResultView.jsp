@@ -16,7 +16,7 @@
     String callAction;
     if(pageOf.equals(Constants.PAGEOF_SIMPLE_QUERY_INTERFACE))
 	{
-		callAction=Constants.CONFIGURE_SIMPLE_SEARCH_ACTION;
+		callAction=Constants.SIMPLE_SEARCH_ACTION+"?pageOf="+Constants.PAGEOF_SIMPLE_QUERY_INTERFACE;
 	}
 	else
 	{
@@ -225,42 +225,45 @@
 	
 </script>
 <%
-    
-   	ConfigureResultViewForm form = (ConfigureResultViewForm)request.getAttribute("configureResultViewForm");
-    String selectedColumns[] = form.getSelectedColumnNames();
-	if(selectedColumns!=null)
-   {	    
-	    String [] columnNames=new String[selectedColumns.length];
-		for(int i=0;i<selectedColumns.length;i++)
-	    {
-	    	//Split the string which is in the form TableAlias.columnNames.columnDisplayNames
-			StringTokenizer st= new StringTokenizer(selectedColumns[i],".");
-	    	while (st.hasMoreTokens())
-	    	{
-	    		st.nextToken();
-	    		st.nextToken();
-	    		columnNames[i]=st.nextToken();
-	    	}
+    if(pageOf.equals(Constants.PAGEOF_DISTRIBUTION))
+	{
+	    ConfigureResultViewForm form = (ConfigureResultViewForm)request.getAttribute("configureResultViewForm");
+	    String selectedColumns[] = form.getSelectedColumnNames();
+		if(selectedColumns!=null)
+	   {	    
+		    String [] columnNames=new String[selectedColumns.length];
+			for(int i=0;i<selectedColumns.length;i++)
+		    {
+		    	//Split the string which is in the form TableAlias.columnNames.columnDisplayNames
+				StringTokenizer st= new StringTokenizer(selectedColumns[i],".");
+		    	while (st.hasMoreTokens())
+		    	{
+		    		st.nextToken();
+		    		st.nextToken();
+		    		columnNames[i]=st.nextToken();
+		    	}
+		   	}
 	   	}
    	}
 %>
 </head>
 <html:errors/>
-<html:form action="<%=Constants.CONFIGURE_SIMPLE_SEARCH_ACTION%>">
+<html:form action="<%=Constants.DISTRIBUTION_REPORT_ACTION%>">
     <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="1000">
 		<tr>
 		    <td>
 			 	<table summary="" cellpadding="3" cellspacing="0" border="0">
 					<tr>
-						<td align="right" colspan="3">
-							<html:hidden property="nextAction" value="configure"/>
-						</td>
-						<% if(pageOf.equals(Constants.PAGEOF_DISTRIBUTION))
-					    {%>
-						<td align="right" colspan="3">
-							<html:hidden property="distributionId"/>
-						</td>
-						<%}%>
+						<logic:equal name="pageOf" value="<%=Constants.PAGEOF_DISTRIBUTION%>">
+							<td align="right" colspan="3">
+								<html:hidden property="nextAction" value="configure"/>
+							</td>
+						
+							<td align="right" colspan="3">
+								<html:hidden property="distributionId"/>
+							</td>
+						</logic:equal>
+						
 				  	</tr>
 				</table>
 			<td>

@@ -5,6 +5,7 @@ import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -29,7 +30,9 @@ public class ConfigureDistributionAction extends Action
             throws IOException, ServletException
     {
     	//Set the tables for the configuration of distribution report
-    	request.setAttribute(Constants.TABLE_ALIAS_NAME, Constants.DISTRIBUTION_TABLE_AlIAS);
+    	HttpSession session =request.getSession();
+    	session.setAttribute(Constants.TABLE_ALIAS_NAME, Constants.DISTRIBUTION_TABLE_AlIAS);
+    	request.setAttribute(Constants.PAGEOF,Constants.PAGEOF_DISTRIBUTION);
     	return (mapping.findForward("Success"));
     }
 }

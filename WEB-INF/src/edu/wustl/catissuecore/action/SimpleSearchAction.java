@@ -16,10 +16,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.Vector;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
@@ -51,18 +53,23 @@ public class SimpleSearchAction extends BaseAction
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
+		Logger.out.debug("SimpleSearchAction");
 		SimpleQueryInterfaceForm simpleQueryInterfaceForm = (SimpleQueryInterfaceForm) form;
-
-		//Get the aliasName.
-		String viewAliasName = (String) simpleQueryInterfaceForm
-				.getValue("SimpleConditionsNode:1_Condition_DataElement_table");
-
+		String viewAliasName=null;
+		HttpSession session = request.getSession();
+		Map map = (Map)session.getAttribute(Constants.SIMPLE_QUERY_MAP);
+		//	Get the aliasName.
+		viewAliasName = (String)map.get("SimpleConditionsNode:1_Condition_DataElement_table");
+		if(viewAliasName==null)
+			viewAliasName = (String) simpleQueryInterfaceForm.getValue("SimpleConditionsNode:1_Condition_DataElement_table");
+		Logger.out.debug("viewAliasName"+viewAliasName);
 		String target = Constants.SUCCESS;
 		
 		try
 		{
-			Map map = simpleQueryInterfaceForm.getValuesMap();
-
+			if(map==null)
+				map = simpleQueryInterfaceForm.getValuesMap();
+			Logger.out.debug("map size"+map.size());
 			MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.query");
 
 			Collection simpleConditionNodeCollection = parser.generateData(map, true);
@@ -74,6 +81,8 @@ public class SimpleSearchAction extends BaseAction
 			String[][] objectIdentifiers;
 
 			SimpleConditionsNode simpleConditionsNode = null;
+			//int tableCount=0;
+			//String[] selectedTables = new String[simpleConditionNodeCollection.size()];
 			while (iterator.hasNext())
 			{
 				simpleConditionsNode = (SimpleConditionsNode) iterator.next();
@@ -106,6 +115,7 @@ public class SimpleSearchAction extends BaseAction
 				{
 					//Prepare a Set of table names.
 					fromTables.add(simpleConditionsNode.getCondition().getDataElement().getTable());
+					//selectedTables[tableCount]=simpleConditionsNode.getCondition().getDataElement().getTable();
 				}
 			}
 
@@ -136,9 +146,11 @@ public class SimpleSearchAction extends BaseAction
 					.equals(Constants.PAGEOF_SIMPLE_QUERY_INTERFACE))
 			{
 				query.setTableSet(fromTables);
-				Logger.out.debug("setTableSet.......................................");
-				
-				String[] tempColumnNames= query.setViewElements(viewAliasName);
+				Logger.out.debug("setTableSet......................................."+fromTables);
+				String[] selectedColumns = simpleQueryInterfaceForm.getSelectedColumnNames();
+				Logger.out.debug("selected columns "+selectedColumns);
+				String[] tempColumnNames=getColumnNames(selectedColumns,query,viewAliasName);
+				//String[] tempColumnNames= query.setViewElements(viewAliasName);
 				Set tableSet = query.getTableSet();
 				columnNames = new String[tempColumnNames.length+tableSet.size()];
 				objectIdentifiers = new String[tableSet.size()][2];
@@ -173,6 +185,7 @@ public class SimpleSearchAction extends BaseAction
 			}
 			else
 			{
+				
 				columnNames = query.setViewElements(viewAliasName);
 				 list = query.execute(getSessionData(request),Constants.INSECURE_RETRIEVE,null,null);
 			}
@@ -184,10 +197,14 @@ public class SimpleSearchAction extends BaseAction
 						.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 								"simpleQuery.noRecordsFound"));
 				saveErrors(request, errors);
-
+				String alias = (String)session.getAttribute(Constants.SIMPLE_QUERY_ALIAS_NAME);
+				if(alias==null)
+					alias = simpleQueryInterfaceForm.getAliasName();
 				String path = "SimpleQueryInterface.do?pageOf="
 						+ simpleQueryInterfaceForm.getPageOf() + "&aliasName="
-						+ simpleQueryInterfaceForm.getAliasName();
+						+ alias;
+				simpleQueryInterfaceForm.setValues(map);
+				
 				RequestDispatcher requestDispatcher = request.getRequestDispatcher(path);
 				requestDispatcher.forward(request, response);
 			}
@@ -371,5 +388,49 @@ public class SimpleSearchAction extends BaseAction
 		}
 		return activityStatusCondition;
 	}
-
+	
+	 private Vector setViewElements(String []selectedColumnsList) 
+		{
+	    	/*Split the string which is in the form TableAlias.columnNames.columnDisplayNames 
+	    	 * and set the dataelement object.
+	    	 */
+		    Vector vector = new Vector();
+		    for(int i=0;i<selectedColumnsList.length;i++)
+		    {
+		    	StringTokenizer st= new StringTokenizer(selectedColumnsList[i],".");
+		    	DataElement dataElement = new DataElement();
+		    	while (st.hasMoreTokens())
+				{
+		    		dataElement.setTable(st.nextToken());
+		    		dataElement.setField(st.nextToken());
+		    		Logger.out.debug(st.nextToken());
+		    	}
+		        vector.add(dataElement);
+		    }
+			return vector;
+		}
+	 private String[] getColumnNames(String[] selectedColumns,Query query,String viewAliasName) throws DAOException
+	 {
+		String tempColumnNames[];
+	 	if(selectedColumns==null)
+			tempColumnNames	= query.setViewElements(viewAliasName);
+		else
+		{
+			Vector resultViewVector = setViewElements(selectedColumns); 
+			query.setResultView(resultViewVector);
+			Iterator itr = resultViewVector.iterator();
+			tempColumnNames = new String[resultViewVector.size()];
+			int columnCount = 0;
+			while(itr.hasNext())
+			{
+				DataElement dataElement = (DataElement)itr.next();
+				String column = dataElement.getField();
+				Logger.out.debug("column in the data element"+column);
+				tempColumnNames[columnCount]=column;
+				columnCount++;
+			}
+		}
+	 	return tempColumnNames;
+	 }
+	 
 }

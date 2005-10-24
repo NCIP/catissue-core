@@ -38,11 +38,11 @@ public class ConfigureResultViewAction extends Action  {
 			throws Exception {
 			
 			AbstractBizLogic dao = BizLogicFactory.getBizLogic(Constants.CONFIGURE_RESULT_VIEW_ID);
-			
-			String []tables = (String [])request.getAttribute(Constants.TABLE_ALIAS_NAME);
-			//HttpSession session =request.getSession();
+			String pageOf = (String) request.getAttribute(Constants.PAGEOF);
+			//String []tables = (String [])request.getAttribute(Constants.TABLE_ALIAS_NAME);
+			HttpSession session =request.getSession();
     		
-			//String []tables = (String[])session.getAttribute(Constants.TABLE_ALIAS_NAME);
+			String []tables = (String[])session.getAttribute(Constants.TABLE_ALIAS_NAME);
 			String sourceObjectName = QueryTableData.class.getName();
 	        String[] displayNameField = {"displayName"};
 	        String valueField = "aliasName";
@@ -80,9 +80,11 @@ public class ConfigureResultViewAction extends Action  {
 	        
 	        Logger.out.debug("Table Map"+tableColumnDataMap);
 	        request.setAttribute(Constants.TABLE_COLUMN_DATA_MAP,tableColumnDataMap);
+	        request.setAttribute(Constants.PAGEOF,pageOf);
 			return mapping.findForward("Success");
 	}
-	private List setColumnNames(String value) throws DAOException, ClassNotFoundException
+	//Retrieves columnNames corresponding to a table aliasName
+	private List setColumnNames(String aliasName) throws DAOException, ClassNotFoundException
     {
         String sql = 	" SELECT temp.COLUMN_NAME, temp.DISPLAY_NAME " +
 				        " from CATISSUE_QUERY_INTERFACE_TABLE_DATA tableData2 join " +
@@ -95,7 +97,7 @@ public class ConfigureResultViewAction extends Action  {
 				        " relationData.PARENT_TABLE_ID = tableData.TABLE_ID and " +
 				        " relationData.RELATIONSHIP_ID = displayData.RELATIONSHIP_ID and " +
 				        " columnData.IDENTIFIER = displayData.COL_ID and " +
-				        " tableData.ALIAS_NAME = '"+value+"') as temp " +
+				        " tableData.ALIAS_NAME = '"+aliasName+"') as temp " +
 				        " on temp.TABLE_ID = tableData2.TABLE_ID";
         
         Logger.out.debug("SQL*****************************"+sql);
@@ -112,10 +114,12 @@ public class ConfigureResultViewAction extends Action  {
         int j = 0,k=0;
         while (iterator.hasNext())
         {
+        	
             List rowList = (List)iterator.next();
             columnName = (String)rowList.get(j++);
             columnDisplayName = (String)rowList.get(j++);
-            String columnValue = value+"."+columnName+"."+columnDisplayName;
+            //Name ValueBean Value in the for of tableAlias..columnName.columnDisplayName 
+            String columnValue = aliasName+"."+columnName+"."+columnDisplayName;
             NameValueBean columns = new NameValueBean(columnDisplayName,columnValue);
             columnList.add(columns);
             j = 0;

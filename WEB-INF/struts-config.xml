@@ -1682,7 +1682,7 @@ PUBLIC
 			name="configureResultViewForm"
 			validate="false"
 			scope="request">
-			<forward name="Success" path=".catissuecore.configDistributionReport" />
+			<forward name="Success" path=".catissuecore.configurationSuccessDef" />
 		</action>
 		
 		<action path="/DistributionReportSave"
@@ -1722,38 +1722,35 @@ PUBLIC
 			<forward name="access_denied" path="/ManageAdministrativeData.do" />
 		</action>
 
-		<action path="/SimpleSearch"
-			type="edu.wustl.catissuecore.action.SimpleSearchAction"
-			name="simpleQueryInterfaceForm"
-			validate="true"
-			input="/SimpleQueryInterface.do"
-			scope="request">
-			<forward name="success" path="/SpreadsheetView.do" />
-			<forward name="failure" path="/SimpleQueryInterface.do" />
-		</action>
-		
 		<action path="/ConfigureSimpleQuery"
 			type="edu.wustl.catissuecore.action.ConfigureSimpleQueryAction"
 			name="simpleQueryInterfaceForm"
 			validate="false"
 			scope="request">
-			<forward name="success" path="/ConfigureResultView.do?pageOf=pageOfSimpleQueryInterface" />
+			<forward name="success" path="/ConfigureSimpleSearchView.do?pageOf=pageOfSimpleQueryInterface" />
 			<forward name="failure" path="/SimpleQueryInterface.do" />
 		</action>
 		
-		<action path="/ConfigureSimpleSearch"
-			type="edu.wustl.catissuecore.action.ConfigureSimpleSearchAction"
-			name="configureResultViewForm"
+		<action path="/ConfigureSimpleSearchView"
+			type="edu.wustl.catissuecore.action.ConfigureResultViewAction"
+			name="simpleQueryInterfaceForm"
 			validate="false"
 			scope="request">
-			<forward name="success" path="/SimpleSearch.do" />
-			<forward name="failure" path="/ConfigureResultView.do?pageOf=pageOfSimpleQueryInterface" />
+			<forward name="Success" path=".catissuecore.configurationSuccessDef" />
 		</action>
+		
+		<action path="/SimpleSearch"
+			type="edu.wustl.catissuecore.action.SimpleSearchAction"
+			name="simpleQueryInterfaceForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path="/SpreadsheetView.do" />
+			<forward name="failure" path="/SimpleQueryInterface.do" />
+		</action>
+		
 		
 		<action path="/SpreadsheetView"
 			type="edu.wustl.catissuecore.action.SpreadsheetViewAction"
-			name="configureResultViewForm"
-			validate="false"
 			scope="request">
 			<forward name="pageOfSimpleQueryInterface" path=".catissuecore.simpleSearchResultsDef" />
 			<forward name="pageOfInstitution" path=".catissuecore.editSearchResultsDef"/>
