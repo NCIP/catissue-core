@@ -93,6 +93,7 @@ public class CommonAddEditAction extends Action
                         abstractForm.getFormId(), abstractForm);
                 bizLogic.insert(abstractDomain, getSessionData(request), Constants.HIBERNATE_DAO);
 
+                target = new String(Constants.SUCCESS);
                 
                 if(abstractDomain instanceof Specimen)
                 {
@@ -132,11 +133,13 @@ public class CommonAddEditAction extends Action
 	                	Logger.out.debug("SpecimenCollectionGroup ID :-- : "+ String.valueOf(abstractDomain.getSystemIdentifier()) );
                 	}	
                 }	
-            	else
-            		target = new String(Constants.SUCCESS);
 
-            target = new String(Constants.SUCCESS);
-                
+                // CollectionProtocolRegistration values
+                if(abstractDomain instanceof CollectionProtocolRegistration)
+                {
+                	request.setAttribute(Constants.COLLECTION_REGISTRATION_ID,abstractDomain.getSystemIdentifier().toString());
+                }	
+
                 //The successful add messages.
                 messages = new ActionMessages();
                 messages.add(ActionErrors.GLOBAL_MESSAGE,new ActionMessage("object.add.success",
@@ -189,7 +192,8 @@ public class CommonAddEditAction extends Action
 	           {
 	           	String forwardTo = abstractForm.getForwardTo(); 
 	           	Logger.out.debug("ForwardTo in Add :-- : "+ forwardTo);
-                return (mapping.findForward(forwardTo));
+	           	target = forwardTo; 
+                //return (mapping.findForward(forwardTo));
 	           }
 	               
             }
@@ -273,13 +277,14 @@ public class CommonAddEditAction extends Action
                     	String forwardTo = abstractForm.getForwardTo(); 
                     	Logger.out.debug("ForwardTo :-- : "+ forwardTo);
                     	form = null;
-                        return (mapping.findForward(forwardTo));
+                       // return (mapping.findForward(forwardTo));
+                    	target = forwardTo; 
                     }
 
                     
                     
                     
-                    target = new String(Constants.SUCCESS);
+                   // target = new String(Constants.SUCCESS);
                     
                     //The successful edit message.
                     messages = new ActionMessages();
