@@ -175,8 +175,16 @@ public class Validator
 	            {
 	                return false;
 	            }
-           }     
-            return true;
+           }
+           else if(positiveCheck == 0 )
+           {
+	            if (longValue < 0)
+	            {
+	                return false;
+	            }
+           }
+     
+           return true;
         }
         catch(NumberFormatException exp)
         {
