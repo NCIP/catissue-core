@@ -124,9 +124,13 @@ public class CommonAddEditAction extends Action
             	
                 if(abstractDomain instanceof SpecimenCollectionGroup)
                 {
-                	request.setAttribute(Constants.SPECIMEN_COLLECTION_GROUP_ID,abstractDomain.getSystemIdentifier().toString());
-            		target = new String(Constants.REDIRECT_TO_SPECIMEN);
-            		return (mapping.findForward(target));
+                	String forwardTo = abstractForm.getForwardTo();
+                	Logger.out.debug("ForwardTo in SCG :-- : "+ forwardTo);
+                	if(forwardTo != null)
+                	{
+	                	request.setAttribute(Constants.SPECIMEN_COLLECTION_GROUP_ID,abstractDomain.getSystemIdentifier().toString());
+	                	Logger.out.debug("SpecimenCollectionGroup ID :-- : "+ String.valueOf(abstractDomain.getSystemIdentifier()) );
+                	}	
                 }	
             	else
             		target = new String(Constants.SUCCESS);
@@ -238,7 +242,13 @@ public class CommonAddEditAction extends Action
                     // SpecimenCollectionGroup values
                     if(abstractDomain instanceof SpecimenCollectionGroup)
                     {
-                    	request.setAttribute(Constants.SPECIMEN_COLLECTION_GROUP_ID,abstractDomain.getSystemIdentifier().toString());
+                    	String forwardTo = abstractForm.getForwardTo();
+                    	Logger.out.debug("ForwardTo in SCG :-- : "+ forwardTo);
+                    	if(forwardTo != null)
+                    	{
+    	                	request.setAttribute(Constants.SPECIMEN_COLLECTION_GROUP_ID,abstractDomain.getSystemIdentifier().toString());
+    	                	Logger.out.debug("SpecimenCollectionGroup ID :-- : "+ String.valueOf(abstractDomain.getSystemIdentifier()) );
+                    	}	
                     }	
 
                     // CollectionProtocolRegistration values
