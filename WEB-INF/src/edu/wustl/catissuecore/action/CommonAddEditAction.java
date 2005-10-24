@@ -28,6 +28,7 @@ import org.apache.struts.action.ActionMessages;
 
 import edu.wustl.catissuecore.actionForm.AbstractActionForm;
 import edu.wustl.catissuecore.actionForm.DistributionForm;
+import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.actionForm.SpecimenEventParametersForm;
 import edu.wustl.catissuecore.bizlogic.AbstractBizLogic;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
@@ -91,9 +92,29 @@ public class CommonAddEditAction extends Action
                 abstractDomain = DomainObjectFactory.getDomainObject(
                         abstractForm.getFormId(), abstractForm);
                 bizLogic.insert(abstractDomain, getSessionData(request), Constants.HIBERNATE_DAO);
-            	
+
+                
                 if(abstractDomain instanceof Specimen)
-            		request.setAttribute(Constants.SPECIMEN_ID,String.valueOf(abstractDomain.getSystemIdentifier()));
+                {
+                	String forwardTo = abstractForm.getForwardTo();
+                	request.setAttribute(Constants.SPECIMEN_ID,String.valueOf(abstractDomain.getSystemIdentifier()));
+                	Logger.out.debug("ForwardTo in Specimen :-- : "+ forwardTo);
+                	Logger.out.debug("Specimen ID :-- : "+ String.valueOf(abstractDomain.getSystemIdentifier()) );
+
+                	if(forwardTo != null)
+                	{
+                		if(forwardTo.equals("createNew") )
+                		request.setAttribute(Constants.PARENT_SPECIMEN_ID,String.valueOf(abstractDomain.getSystemIdentifier()));
+                		
+	                    if(forwardTo.equals("sameCollectionGroup") )
+	                		request.setAttribute(Constants.SPECIMEN_COLLECTION_GROUP_ID,String.valueOf(((Specimen)abstractDomain).getSpecimenCollectionGroup().getSystemIdentifier()  ));
+	                    		
+	                    if(forwardTo.equals("eventParameters") )
+	                    	request.setAttribute(Constants.SPECIMEN_ID,String.valueOf(abstractDomain.getSystemIdentifier()));
+	 
+	                    request.setAttribute("newSpecimenForm",new NewSpecimenForm() );
+                	}
+                }
                 
             	if(abstractDomain instanceof Distribution)
                 {
@@ -156,7 +177,17 @@ public class CommonAddEditAction extends Action
 	               		return reDirectForward;
 	               }
 	               Logger.out.debug("CAE ---TARGET ----- "+ target); 
-//	               return (mapping.findForward(target)); 
+//	               return (mapping.findForward(target));
+	       //-----------
+	           // ---ForwardTo list selection
+	           
+	           if(abstractForm.getForwardTo()!= null && abstractForm.getForwardTo().trim().length()>0  )
+	           {
+	           	String forwardTo = abstractForm.getForwardTo(); 
+	           	Logger.out.debug("ForwardTo in Add :-- : "+ forwardTo);
+                return (mapping.findForward(forwardTo));
+	           }
+	               
             }
             else
             {
@@ -192,8 +223,16 @@ public class CommonAddEditAction extends Action
                     // specimen values
                     if(abstractDomain instanceof Specimen)
                     {
-                		request.setAttribute(Constants.SPECIMEN_ID,String.valueOf(abstractDomain.getSystemIdentifier()));
-                		request.setAttribute(Constants.PARENT_SPECIMEN_ID,String.valueOf(abstractDomain.getSystemIdentifier()));
+                    	String forwardTo = abstractForm.getForwardTo(); 
+                    	Logger.out.debug("ForwardTo in Specimen :-- : "+ forwardTo);
+                    	if(forwardTo.equals("createNew") )
+                    		request.setAttribute(Constants.PARENT_SPECIMEN_ID,String.valueOf(abstractDomain.getSystemIdentifier()));
+                    		
+                        if(forwardTo.equals("sameCollectionGroup") )
+                    		request.setAttribute(Constants.SPECIMEN_COLLECTION_GROUP_ID,String.valueOf(((Specimen)abstractDomain).getSpecimenCollectionGroup().getSystemIdentifier()  ));
+                        		
+                        if(forwardTo.equals("eventParameters") )
+                        	request.setAttribute(Constants.SPECIMEN_ID,String.valueOf(abstractDomain.getSystemIdentifier()));
                     }
                     
                     // SpecimenCollectionGroup values
@@ -209,13 +248,26 @@ public class CommonAddEditAction extends Action
                     }	
 
                     
-                    // Forward to
+                    // OnSubmit
                     if(abstractForm.getOnSubmit()!= null && abstractForm.getOnSubmit().trim().length()>0  )
                     {
                     	String forwardTo = abstractForm.getOnSubmit(); 
-                    	Logger.out.debug("ForwardTo :-- : "+ forwardTo);
+                    	Logger.out.debug("OnSubmit :-- : "+ forwardTo);
                         return (mapping.findForward(forwardTo));
                     }
+
+                    // ---ForwardTo list selection
+                    
+                    if(abstractForm.getForwardTo()!= null && abstractForm.getForwardTo().trim().length()>0  )
+                    {
+                    	String forwardTo = abstractForm.getForwardTo(); 
+                    	Logger.out.debug("ForwardTo :-- : "+ forwardTo);
+                    	form = null;
+                        return (mapping.findForward(forwardTo));
+                    }
+
+                    
+                    
                     
                     target = new String(Constants.SUCCESS);
                     
