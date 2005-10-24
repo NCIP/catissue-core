@@ -12,10 +12,7 @@
 	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
 
 	String title = pageOf + ".searchResultTitle";
-	/*if(pageOf.equals(Constants.PAGEOF_SIMPLE_QUERY_INTERFACE))
-	{
-		String[] tableSet = (String[]) request.getAttribute(Constants.TABLE_ALIAS_NAME);
-	}*/
+	
 %>
 
 <script>
@@ -35,24 +32,15 @@ var myData = [<%int i;%><%for (i=0;i<(dataList.size()-1);i++){%>
 var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnList[k]%>",<%}%>"<%=columnList[k]%>"];
 
 </script>
-<style>
-	tr#hiddenCombo
-	{
-	 display:none;
-	}
-	
-</style>
-<html:form action="<%=Constants.CONFIGURE_DISTRIBUTION_ACTION%>">
-<table summary="" cellpadding="0" cellspacing="0" border="0" width="100%" height="100%">
+<table summary="" cellpadding="0" cellspacing="0" border="0" width="100%" height="4%">
 	<tr>
 		 <td class="formTitle">
 			<bean:message key="<%=title%>"/>
 		 </td>
 	</tr>
-<tr height="95%">
-		<td width="100%">
+</table>
 
-<div STYLE="overflow: auto; width:100%; height:100%; padding:0px; margin: 0px; border: 1px solid">
+<div STYLE="overflow: auto; width:100%; height:96%; padding:0px; margin: 0px; border: 1px solid">
 
 	<script>
 		
@@ -84,32 +72,3 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 			document.write(obj);
 	</script>
 </div>
-</td>
-</tr>
-
-<%
-if(pageOf.equals(Constants.PAGEOF_SIMPLE_QUERY_INTERFACE))
-{
-%>
-<tr height="5%">
-		<td width="100%" align="right">
-			<table cellpadding="5" cellspacing="0" border="0">
-			<tr>
-					<td>
-						<html:button styleClass="actionButton" property="expButton"> 
-							<bean:message  key="buttons.export" />
-						</html:button>
-					
-					</td>
-					<td>
-						<html:button styleClass="actionButton" property="configButton">
-							<bean:message  key="buttons.configure" />
-						</html:button>
-					</td>
-			</tr>
-			</table>
-		</td>
-	</tr>
-<% } %>
-</table>
-</html:form>
