@@ -515,12 +515,30 @@ public class SpecimenForm extends AbstractActionForm
                                     .getValue("specimen.quantity")));
                 }
 
-                if (validator.isEmpty(positionInStorageContainer))
+                if(validator.isEmpty(positionDimensionOne) || validator.isEmpty(positionDimensionTwo) || validator.isEmpty(storageContainer ))
                 {
-                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-                            "errors.item.required", ApplicationProperties
-                                    .getValue("specimen.positionInStorageContainer")));
+	                  errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+	                  "errors.item.required", ApplicationProperties
+	                          .getValue("specimen.positionInStorageContainer")));
                 }
+                else
+                {
+                    if(!validator.isNumeric(positionDimensionOne,0) || !validator.isNumeric(positionDimensionTwo,0) || !validator.isNumeric(storageContainer ,0))
+                    {
+    	                  errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+    	                  "errors.item.format", ApplicationProperties
+    	                          .getValue("specimen.positionInStorageContainer")));
+                    }
+                	
+                }
+				
+//                if (validator.isEmpty(positionInStorageContainer))
+//                {
+//                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+//                            "errors.item.required", ApplicationProperties
+//                                    .getValue("specimen.positionInStorageContainer")));
+//                }
+
                 
 //                if (validator.isEmpty(barcode))
 //                {
@@ -622,4 +640,22 @@ public class SpecimenForm extends AbstractActionForm
 	{
 		this.available = available;
 	}
+	
+	
+	
+	private String parentContainerId;
+	
+	/**
+	 * @return Returns the parentContainerId.
+	 */
+	public String getParentContainerId() {
+		return parentContainerId;
+	}
+	/**
+	 * @param parentContainerId The parentContainerId to set.
+	 */
+	public void setParentContainerId(String parentContainerId) {
+		this.parentContainerId = parentContainerId;
+	}
+	
 }

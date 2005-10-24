@@ -461,4 +461,6 @@ public class NewSpecimenForm extends SpecimenForm
 	{
 		this.specimenEventParameter = specimenEventParameter;
 	}
+	
+
 }

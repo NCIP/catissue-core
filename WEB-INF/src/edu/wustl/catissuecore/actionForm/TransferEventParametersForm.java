@@ -50,17 +50,17 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 	/**
 	 * Reference to dimensional position one of the specimen in new storage container after transfer.
 	 */
-	protected int positionDimensionOne;
+	protected String positionDimensionOne;
 
 	/**
 	 * Reference to dimensional position two of the specimen in new storage container after transfer.
 	 */
-	protected int positionDimensionTwo;
+	protected String positionDimensionTwo;
 
 	/**
 	 * Storage Container to which the transfer is made. 
 	 */
-	protected long storageContainer;
+	protected String storageContainer;
 
 	/**
 	 * Storage Container from which the transfer is made.
@@ -117,7 +117,7 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 	 * Returns the Reference to dimensional position one of the specimen in new storage container after transfer.
 	 * @return toPositionDimensionOne.
 	 */
-	public int getPositionDimensionOne()
+	public String getPositionDimensionOne()
 	{
 		return positionDimensionOne;
 	}
@@ -127,7 +127,7 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 	 * @param toPositionDimensionOne
 	 * Reference to dimensional position one of the specimen in new storage container after transfer.
 	 */
-	public void setPositionDimensionOne(int toPositionDimensionOne)
+	public void setPositionDimensionOne(String toPositionDimensionOne)
 	{
 		this.positionDimensionOne = toPositionDimensionOne;
 	}
@@ -136,7 +136,7 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 	 * Returns the Reference to dimensional position two of the specimen in new storage container after transfer.
 	 * @return toPositionDimensionTwo.
 	 */
-	public int getPositionDimensionTwo()
+	public String getPositionDimensionTwo()
 	{
 		return positionDimensionTwo;
 	}
@@ -146,7 +146,7 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 	 * @param toPositionDimensionTwo
 	 * Reference to dimensional position two of the specimen in new storage container after transfer.
 	 */
-	public void setPositionDimensionTwo(int toPositionDimensionTwo)
+	public void setPositionDimensionTwo(String toPositionDimensionTwo)
 	{
 		this.positionDimensionTwo = toPositionDimensionTwo;
 	}
@@ -155,7 +155,7 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 	 * Returns the new StorageContainer.  
 	 * @return the new StorageContainer. 
 	 */
-	public long getStorageContainer()
+	public String getStorageContainer()
 	{
 		return storageContainer;
 	}
@@ -164,7 +164,7 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 	 * @param toStorageContainerId
 	 *            The to StorageContainerId to set.
 	 */
-	public void setStorageContainer(long toStorageContainerId)
+	public void setStorageContainer(String toStorageContainerId)
 	{
 		this.storageContainer = toStorageContainerId;
 	}
@@ -205,10 +205,10 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 			TransferEventParameters transferEventParametersObject = (TransferEventParameters)abstractDomain ;
 			this.fromPositionDimensionOne = transferEventParametersObject.getFromPositionDimensionOne().intValue();
 			this.fromPositionDimensionTwo = transferEventParametersObject.getFromPositionDimensionTwo().intValue();
-			this.positionDimensionOne = transferEventParametersObject.getToPositionDimensionOne().intValue();
-			this.positionDimensionTwo = transferEventParametersObject.getToPositionDimensionTwo().intValue();
+			this.positionDimensionOne = transferEventParametersObject.getToPositionDimensionOne().toString();
+			this.positionDimensionTwo = transferEventParametersObject.getToPositionDimensionTwo().toString();
 			this.fromStorageContainerId = transferEventParametersObject.getFromStorageContainer().getSystemIdentifier().longValue();
-			this.storageContainer = transferEventParametersObject.getToStorageContainer().getSystemIdentifier().longValue();  
+			this.storageContainer = transferEventParametersObject.getToStorageContainer().getSystemIdentifier().toString() ;  
 			this.positionInStorageContainer = transferEventParametersObject.getToStorageContainer().getStorageType().getType() + " : " 
 				+ this.storageContainer + " Pos(" + this.positionDimensionOne + ","
 				+ this.positionDimensionTwo + ")";
@@ -273,9 +273,25 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
             }
          	
 //          check the TO position
-         	if (validator.isEmpty(String.valueOf(positionInStorageContainer )))
+//         	if (validator.isEmpty(String.valueOf(positionInStorageContainer )))
+//            {
+//           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("transfereventparameters.toposition")));
+//            }
+            if(validator.isEmpty(positionDimensionOne) || validator.isEmpty(positionDimensionTwo) || validator.isEmpty(storageContainer ))
             {
-           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("transfereventparameters.toposition")));
+                  errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+                  "errors.item.required", ApplicationProperties
+                          .getValue("transfereventparameters.toposition")));
+            }
+            else
+            {
+                if(!validator.isNumeric(positionDimensionOne,0) || !validator.isNumeric(positionDimensionTwo,0) || !validator.isNumeric(storageContainer ,0))
+                {
+	                  errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+	                  "errors.item.format", ApplicationProperties
+	                          .getValue("transfereventparameters.toposition")));
+                }
+            	
             }
 
          	
