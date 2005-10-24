@@ -17,6 +17,7 @@ String bhTypeArray [] = (String []) request.getAttribute(Constants.BIOHAZARD_TYP
 
 List biohazardList = (List)request.getAttribute(Constants.BIOHAZARD_TYPE_LIST);
 NewSpecimenForm form = (NewSpecimenForm)request.getAttribute("newSpecimenForm");
+
 Map map = form.getExternalIdentifier();
 %>
 <head>
@@ -309,6 +310,9 @@ Map map = form.getExternalIdentifier();
 			bhRows	 = form.getBhCounter();
 			if(form.getUnit() != null)
 				unitSpecimen = form.getUnit();
+				
+		System.out.println("\n\n\nparentPresent : " + form.isParentPresent());
+				
 		}
 		
 		
@@ -847,6 +851,47 @@ Map map = form.getExternalIdentifier();
 							<!-- action buttons begins -->
 							<table cellpadding="4" cellspacing="0" border="0">
 								<tr>
+									<td>
+										<table>
+											<tr>
+												<td rowspan=2 class="formFieldNoBorders" nowrap>
+													<label for="proceedWith">
+														<bean:message key="proceedWith"/>
+													</label>
+												</td>
+												<td nowrap class="formFieldNoBorders">
+													<html:radio styleClass="" property="forwardTo" value="<%=Constants.SPECIMEN_FORWARD_TO_LIST[0][1]%>" >
+						  				     	    <label for="<%=Constants.SPECIMEN_FORWARD_TO_LIST[0][0]%>">
+														<%=Constants.SPECIMEN_FORWARD_TO_LIST[0][0]%>
+													</label>
+											     	</html:radio>
+												</td>
+												<td nowrap class="formFieldNoBorders">
+													<html:radio styleClass=""  property="forwardTo" value="<%=Constants.SPECIMEN_FORWARD_TO_LIST[1][1]%>">
+						  				     	    <label for="<%=Constants.SPECIMEN_FORWARD_TO_LIST[1][0]%>">
+														<%=Constants.SPECIMEN_FORWARD_TO_LIST[1][0]%>
+													</label>
+											     	</html:radio>
+												</td>		
+											</tr>
+											<tr>							
+												<td class="formFieldNoBorders" nowrap>
+													<html:radio styleClass=""  property="forwardTo" value="<%=Constants.SPECIMEN_FORWARD_TO_LIST[2][1]%>">
+						  				     	    <label for="<%=Constants.SPECIMEN_FORWARD_TO_LIST[2][0]%>">
+														<%=Constants.SPECIMEN_FORWARD_TO_LIST[2][0]%>
+													</label>
+											     	</html:radio>
+												</td>
+												<td class="formFieldNoBorders" nowrap>
+													<html:radio styleClass=""  property="forwardTo" value="<%=Constants.SPECIMEN_FORWARD_TO_LIST[3][1]%>">
+						  				     	    <label for="<%=Constants.SPECIMEN_FORWARD_TO_LIST[3][0]%>">
+														<%=Constants.SPECIMEN_FORWARD_TO_LIST[3][0]%>
+													</label>
+											     	</html:radio>
+												</td>								
+											</tr>
+										</table>
+									</td>					
 						   			<td>
 						   				<html:submit styleClass="actionButton" onclick="<%=changeAction%>">
 						   					<bean:message key="buttons.submit"/>
@@ -857,18 +902,7 @@ Map map = form.getExternalIdentifier();
 											<bean:message key="buttons.reset"/>
 										</html:reset>
 									</td>
-									<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
-									<td>
-										<html:button property="eventButton" styleClass="actionButton" onclick="onSpecimenEventUpdate(this)">
-											<bean:message key="buttons.specimenEventParameters"/>
-										</html:button>
-									</td>
-									<td>
-										<html:button property="createFromExisting" styleClass="actionButton" onclick="onCreateFromExisting(this)">
-											<bean:message key="buttons.createFrom"/>
-										</html:button>
-									</td>
-									</logic:equal>
+									
 								</tr>
 							</table>
 							<!-- action buttons end -->
