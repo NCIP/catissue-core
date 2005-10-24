@@ -19,6 +19,7 @@ import java.util.Set;
 import net.sf.hibernate.HibernateException;
 import edu.wustl.catissuecore.dao.DAO;
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
+import edu.wustl.catissuecore.domain.Address;
 import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.ExternalIdentifier;
 import edu.wustl.catissuecore.domain.Specimen;
@@ -57,10 +58,10 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		dao.insert(specimen.getSpecimenCharacteristics(),sessionDataBean, true, true);
 		dao.insert(specimen,sessionDataBean, true, true);
 		protectionObjects.add(specimen);
-//		if(specimen.getSpecimenCharacteristics()!=null)
-//		{
-//		    protectionObjects.add(specimen.getSpecimenCharacteristics());
-//		}
+		if(specimen.getSpecimenCharacteristics()!=null)
+		{
+		    protectionObjects.add(specimen.getSpecimenCharacteristics());
+		}
 		
 		Collection externalIdentifierCollection = specimen.getExternalIdentifierCollection();
 		if(externalIdentifierCollection != null)
@@ -393,7 +394,10 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
     	if(!listOfSpecimenId.isEmpty())
     	{
     	    super.setPrivilege(dao,privilegeName,Specimen.class,Utility.toLongArray(listOfSpecimenId),userId, roleId, assignToUser);
-    		assignPrivilegeToSubSpecimens(dao,privilegeName,Specimen.class,Utility.toLongArray(listOfSpecimenId),userId, roleId, assignToUser);
+    	    List specimenCharacteristicsIds = super.getRelatedObjects(dao,Specimen.class,new String[] {"specimenCharacteristics."+Constants.SYSTEM_IDENTIFIER},new String[]{Constants.SYSTEM_IDENTIFIER},Utility.toLongArray(listOfSpecimenId));
+    	    super.setPrivilege(dao,privilegeName,Address.class,Utility.toLongArray(specimenCharacteristicsIds),userId, roleId, assignToUser);
+    	    
+    	    assignPrivilegeToSubSpecimens(dao,privilegeName,Specimen.class,Utility.toLongArray(listOfSpecimenId),userId, roleId, assignToUser);
     	}
     }
 
@@ -414,12 +418,18 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
     	if(listOfSubElement.isEmpty())
     		return;
     	super.setPrivilege(dao,privilegeName,Specimen.class,Utility.toLongArray(listOfSubElement),userId, roleId, assignToUser);
+    	List specimenCharacteristicsIds = super.getRelatedObjects(dao,Specimen.class,new String[] {"specimenCharacteristics."+Constants.SYSTEM_IDENTIFIER},new String[]{Constants.SYSTEM_IDENTIFIER},Utility.toLongArray(listOfSubElement));
+	    super.setPrivilege(dao,privilegeName,Address.class,Utility.toLongArray(specimenCharacteristicsIds),userId, roleId, assignToUser);
+    	
     	assignPrivilegeToSubSpecimens(dao,privilegeName,Specimen.class, Utility.toLongArray(listOfSubElement),userId,roleId,assignToUser);
     }
     
     public void setPrivilege(DAO dao, String privilegeName, Class objectType, Long[] objectIds, Long userId, String roleId, boolean assignToUser) throws SMException, DAOException
     {
 	    super.setPrivilege(dao,privilegeName,objectType,objectIds,userId, roleId, assignToUser);
+	    List specimenCharacteristicsIds = super.getRelatedObjects(dao,Specimen.class,new String[] {"specimenCharacteristics."+Constants.SYSTEM_IDENTIFIER},new String[]{Constants.SYSTEM_IDENTIFIER},objectIds);
+	    super.setPrivilege(dao,privilegeName,Address.class,Utility.toLongArray(specimenCharacteristicsIds),userId, roleId, assignToUser);
+	    
 	    assignPrivilegeToSubSpecimens(dao,privilegeName,Specimen.class,objectIds,userId, roleId, assignToUser);
     }
 }
