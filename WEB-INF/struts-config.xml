@@ -744,9 +744,12 @@ PUBLIC
 			validate="true"
 			input="/NewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimen"
 			scope="request">
-			<forward name="success" path="/ListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParameters" />
+			<forward name="success" path="/NewSpecimen.do?operation=edit&amp;pageOf=pageOfNewSpecimen" />
 			<forward name="failure" path="/NewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimen" />
 			<forward name="createNew" path="/CreateSpecimen.do?operation=add&amp;pageOf=" />
+			<forward name="sameCollectionGroup" path="/NewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimen" />
+			<forward name="eventParameters" path="/ListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParameters" />
+			
 		</action>
 		
 		<action path="/NewSpecimenEdit"
@@ -758,6 +761,9 @@ PUBLIC
 			<forward name="success" path="/ListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParameters" />
 			<forward name="failure" path="/NewSpecimen.do?operation=edit&amp;pageOf=pageOfNewSpecimen" />
 			<forward name="createNew" path="/CreateSpecimen.do?operation=add&amp;pageOf=" />
+			<forward name="sameCollectionGroup" path="/NewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimen" />
+			<forward name="eventParameters" path="/ListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParameters" />
+			
 		</action>
 		
 		<action path="/NewSpecimenSearch"
@@ -1739,7 +1745,7 @@ PUBLIC
 			name="configureResultViewForm"
 			validate="false"
 			scope="request">
-			<forward name="success" path="/SimpleQueryInterface.do?pageOf=pageOfSimpleQueryInterface" />
+			<forward name="success" path="/SimpleSearch.do" />
 			<forward name="failure" path="/ConfigureResultView.do?pageOf=pageOfSimpleQueryInterface" />
 		</action>
 		
