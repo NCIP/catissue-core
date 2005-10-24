@@ -16,8 +16,6 @@
 
 <style>
 .active-column-0 {width:30px}
-.active-column-4 {width:150px}
-.active-column-6 {width:150px}
 </style>
 
 
@@ -52,13 +50,13 @@ if(dataList.size() != 0)
 	<%
 		List row = (List)dataList.get(xx);
   		int j;
-		String chkName = "CHK_" + xx;
+		String chkName = "value(CHK_" + xx + ")";
 	%>
 		["<INPUT TYPE='CHECKBOX' NAME='<%=chkName%>' id='<%=xx%>' onClick='changeData(this)'>",<%for (j=0;j < (row.size()-1);j++){%>"<%=row.get(j)%>",<%}%>"<%=row.get(j)%>","1"],<%}%>
 	<%
 		List row = (List)dataList.get(xx);
   		int j;
-		String chkName = "CHK_" + xx;
+		String chkName = "value(CHK_" + xx + ")";
 	%>
 		["<INPUT TYPE='CHECKBOX' NAME='<%=chkName%>' id='<%=xx%>' onClick='changeData(this)'>",<%for (j=0;j < (row.size()-1);j++){%>"<%=row.get(j)%>",<%}%>"<%=row.get(j)%>","1"]
 		];
@@ -70,7 +68,7 @@ if(dataList.size() != 0)
 
 	<script language="javascript">
 	var colZeroDir='ascending';
-		function onDelete()
+		function onAddToCart()
 		{
 			var isChecked = "false";
 			for (var i=0;i < document.forms[0].elements.length;i++)
@@ -86,7 +84,11 @@ if(dataList.size() != 0)
 		    
 		    if(isChecked == "true")
 		    {
-				
+				//var action = "/catissuecore/ShoppingCart.do?operation=add";
+				//document.forms[0].operation.value="add";
+				//document.forms[0].action = action;
+				//document.forms[0].target = "_parent";
+				//document.forms[0].submit();
 			}
 		}
 		
@@ -106,7 +108,11 @@ if(dataList.size() != 0)
 		    
 		    if(isChecked == "true")
 		    {
-				
+				var action = "/catissuecore/SpreadsheetExport.do";
+				document.forms[0].operation.value="export";
+				document.forms[0].action = action;
+				document.forms[0].target = "_blank";
+				document.forms[0].submit();
 			}
 		}
 		
@@ -144,7 +150,7 @@ if(dataList.size() != 0)
 </head>
 
 <table summary="" cellpadding="0" cellspacing="0" border="0" width="100%" height="100%">
-<html:form action="<%=Constants.SHOPPING_CART_OPERATION%>">
+<html:form action="<%=Constants.SPREADSHEET_EXPORT_ACTION%>">
 <%
 		if(dataList.size() != 0)
 		{
@@ -169,9 +175,9 @@ if(dataList.size() != 0)
 				
 				<%if(isSpecimenData){%>
 				<td width="5%" nowrap align="right">
-					<html:button styleClass="actionButton" property="addToCart" onclick="onDelete()">
+					<%--html:button styleClass="actionButton" property="addToCart" onclick="onAddToCart()">
 						<bean:message key="buttons.addToCart"/>
-					</html:button>
+					</html:button--%>&nbsp;
 				</td>
 				<%}else{%>
 				<td width="5%" nowrap align="right">
@@ -250,9 +256,9 @@ if(dataList.size() != 0)
 				
 				<%if(isSpecimenData){%>
 				<td width="5%" nowrap align="right">
-					<html:button styleClass="actionButton" property="addToCart" onclick="onDelete()">
+					<%--html:button styleClass="actionButton" property="addToCart" onclick="onAddToCart()">
 						<bean:message key="buttons.addToCart"/>
-					</html:button>
+					</html:button--%>&nbsp;
 				</td>
 				<%}else{%>
 				<td width="5%" nowrap align="right">
