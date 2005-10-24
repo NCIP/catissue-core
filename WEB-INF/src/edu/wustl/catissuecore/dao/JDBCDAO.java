@@ -315,7 +315,7 @@ public class JDBCDAO extends AbstractDAO
                 }
                 
 //                Aarti: Checking object level privileges on each record
-            	if(securityParam == Constants.OBJECT_LEVEL_SECURE_RETRIEVE && objectIdentifiers != null)
+            	if(Constants.switchSecurity && securityParam == Constants.OBJECT_LEVEL_SECURE_RETRIEVE && objectIdentifiers != null)
             	{
             		boolean isAuthorized=false;
             		Vector objectColumnIds;
