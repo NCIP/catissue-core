@@ -267,4 +267,20 @@ public abstract class AbstractActionForm extends ActionForm
 	{
 		this.onSubmit = onSubmit;
 	}
+	
+	// ----------------- forwardTo-------------
+	protected String forwardTo = "success";
+	
+	/**
+	 * @return Returns the forwardTo.
+	 */
+	public String getForwardTo() {
+		return forwardTo;
+	}
+	/**
+	 * @param forwardTo The forwardTo to set.
+	 */
+	public void setForwardTo(String forwardTo) {
+		this.forwardTo = forwardTo;
+	}
 }
