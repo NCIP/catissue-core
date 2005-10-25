@@ -793,7 +793,7 @@ PUBLIC
 			input="/CreateSpecimen.do?operation=add&amp;pageOf="
 			scope="request">
 			<forward name="success" path="/ListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParameters" />
-			<forward name="failure" path="/error.jsp" />
+			<forward name="failure" path="/CreateSpecimen.do?operation=add&amp;pageOf=" />
 		</action>
 		
 		<action path="/CreateSpecimenEdit"
