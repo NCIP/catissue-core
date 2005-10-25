@@ -100,6 +100,10 @@ public class BizLogicFactory
         	case Constants.DISTRIBUTION_FORM_ID:
         		abstractBizLogic = new DistributionBizLogic();
         		break;
+        		
+        	case Constants.SIMPLE_QUERY_INTERFACE_ID:
+        	    abstractBizLogic = new QueryBizLogic();
+        		break;
         	
             default:
                 abstractBizLogic = new DefaultBizLogic();
