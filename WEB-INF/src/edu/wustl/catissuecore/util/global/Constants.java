@@ -1246,7 +1246,7 @@ public class Constants
 //	 constants required for Distribution Report
 	public static final String CONFIGURATION_TABLES = "configurationTables";
 	public static final String DISTRIBUTION_TABLE_AlIAS[] = {"CollectionProtocolRegistration","Participant","Specimen",
-															"SpecimenCharacteristics","SpecimenCollectionGroup","DistributedItem"};
+															 "SpecimenCollectionGroup","DistributedItem"};
 	public static final String TABLE_COLUMN_DATA_MAP = "tableColumnDataMap";
 	public static final String CONFIGURE_RESULT_VIEW_ACTION = "ConfigureResultView.do";
 	public static final String TABLE_NAMES_LIST = "tableNamesList";
