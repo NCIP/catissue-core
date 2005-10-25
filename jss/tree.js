@@ -13,13 +13,7 @@ var openNodes	= new Array();
 var icons			= new Array(6);
 
 
-function CheckNum(num){
-var checkb = "chk_"+num;
 
-var obj = document.getElementById(checkb);
-
-
-}
 
 
 
@@ -103,7 +97,7 @@ function lastSibling (node, parentNode) {
 }
 // Adds a new node to the  
 function addNode(parentNode, recursedNodes) {
-	
+	var nodeCount = nodes.length;
 	for (var i = 0; i < nodes.length; i++) {
 
 		var nodeValues = nodes[i].split("|");
@@ -118,9 +112,9 @@ function addNode(parentNode, recursedNodes) {
 
 			// Write out line & empty icons
 			if(i == 0 || (i%2 == 0))
-				document.write("<tr><td bgcolor='#c5c5c5' colspan='2'>");
+				document.write("<tr><td class='tdoneColor' colspan='4'><img src='images/"+nodeValues[3]+".GIF' alt='"+nodeValues[3]+"' />&nbsp;");
 			else
-				document.write("<tr><td bgcolor='#f1f1f1' colspan='2'>");
+				document.write("<tr><td class='tdsecondColor' colspan='4'><img src='images/"+nodeValues[3]+".GIF' alt='"+nodeValues[3]+"' />&nbsp;");
 			for (g=0; g<recursedNodes.length; g++) {
 				
 				if (recursedNodes[g] == 1) document.write("<img src=\"images/line.gif\" align=\"absbottom\" alt=\"\" />");
@@ -133,9 +127,9 @@ function addNode(parentNode, recursedNodes) {
 			else recursedNodes.push(1);
 
 			// Write out join icons
-			if (hcn) {
+			//if (hcn) {
 				//if(i == 0) {
-				if (ls) {
+				/*if (ls) {
 					 
 					document.write("<a href=\"javascript: oc(" + nodeValues[0] + ", 1);\"><img id=\"join" + nodeValues[0] + "\" src=\"images/");
 					
@@ -153,35 +147,39 @@ function addNode(parentNode, recursedNodes) {
 						document.write(".gif\" align=\"absbottom\" alt=\"Open/Close node\" /></a>");
 
 						
-				}
+				}*/
 				
-			} else {
+			//} else {
 				
 				if (ls) document.write("<img src=\"images/joinbottom.gif\" align=\"absbottom\" alt=\"\" />");
 				else document.write("<img src=\"images/join.gif\" align=\"absbottom\" alt=\"\" />");
-			}
+			//}
 
-			
-			document.write("<input type=checkbox name='chk_"+nodeValues[0]+"' id='chk_"+ nodeValues[0] + "' onClick = CheckNum("+ nodeValues[0] +")" +">" + nodeValues[2]);
+			var checkb = nodeValues[3] + "_" + nodeValues[0];
+			document.write("<input type=checkbox name='"+checkb+"' id='"+ checkb + "' onClick = CheckNum('"+ checkb +"','"+nodeValues[3]+"',"+nodeCount+")" +">");
+			//document.write("&nbsp;<img src='images/"+nodeValues[3]+".GIF' alt='"+nodeValues[3]+"' />&nbsp;"+ nodeValues[2]);
+			document.write("&nbsp;"+nodeValues[2]);
 			//alert('nodeValues[0]-'+nodeValues[0]);
 			document.write("</td></tr>");
+			//document.write("<td colspan='2'><img src='images/"+nodeValues[3]+".GIF' alt='"+nodeValues[3]+"' /></td></tr> ");
+			
 			
 
 			// End link
-			document.write("<br />");
+			//document.write("<br />");
 			
 			// If node has children write out divs and go deeper
 			if (hcn) {
 				//alert('inside hcn block-->'+ nodeValues[0]);
-				document.write("<tbody id=\"div" + nodeValues[0] + "\"");
+				//document.write("<tbody id=\"div" + nodeValues[0] + "\"");
 				//alert('div '+nodeValues[0]);
-				//document.write("<div id=\"div" + nodeValues[0] + "\"");
+				document.write("<div id=\"div" + nodeValues[0] + "\"");
 					if (!ino) document.write(" style=\"display: none;\"");
 				document.write(">");
 				addNode(nodeValues[0], recursedNodes);
 				
-				//document.write("</div>");
-				document.write("</tbody>");
+				document.write("</div>");
+				//document.write("</tbody>");
 				
 			}
 			
