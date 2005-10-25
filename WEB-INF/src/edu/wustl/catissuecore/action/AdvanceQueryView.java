@@ -54,49 +54,40 @@ public class AdvanceQueryView extends BaseAction
 		return (mapping.findForward(Constants.SUCCESS));
 	}
 	public void arrangeTree(DefaultMutableTreeNode node,int count,Vector tree,int temp){
-		//int temp = count + 1;
+		
 		temp++;
-		//System.out.println("temp-->"+temp);
-		
-		//if(!node.isLeaf()){
-			for(int i = 0; i < node.getChildCount();i++){
-				
-				DefaultMutableTreeNode n = (DefaultMutableTreeNode)node.getChildAt(i);
-				AdvancedConditionsNode advConditionNode = (AdvancedConditionsNode)n.getUserObject();
-				Vector v = advConditionNode.getObjectConditions();
-				Logger.out.debug("size-->"+v.size());
-				String str = "";
-				Condition con = null;
-				for(int k = 0; k < v.size(); k++){
-					con = (Condition)v.get(k);
-					DataElement data = con.getDataElement();
-		        	Operator op = con.getOperator();
-		        	if(k == 0)
-		        		str = temp + "|" + count + "|" +data.getTable()+": "+data.getField()+ " "+op.getOperator() + " "+con.getValue();
-		        	else
-		        		str = str +" "+"AND"+" "+data.getField()+" "+op.getOperator() + " "+con.getValue();
-		        	
-				}
-				
+		for(int i = 0; i < node.getChildCount();i++){
+			DefaultMutableTreeNode n = (DefaultMutableTreeNode)node.getChildAt(i);
+			AdvancedConditionsNode advConditionNode = (AdvancedConditionsNode)n.getUserObject();
+			Vector v = advConditionNode.getObjectConditions();
+			Logger.out.debug("size-->"+v.size());
+			String str = "";
+			Condition con = null;
+			DataElement data = null;
+			for(int k = 0; k < v.size(); k++){
+				con = (Condition)v.get(k);
+				data = con.getDataElement();
+		        Operator op = con.getOperator();
+		        if(k == 0)
+		        	//str = temp + "|" + count + "|" +data.getTable()+": "+data.getField()+ " "+op.getOperator() + " "+con.getValue();
+		        	str = temp + "|" + count + "|" +data.getField()+ " "+op.getOperator() + " " + con.getValue();
+		        else
+		        	//str = str +" "+"AND"+" "+data.getField()+" "+op.getOperator() + " "+con.getValue();
+		        	str = str +" "+"<font color='red'>AND</font>"+" "+data.getField()+" "+op.getOperator() + " "+con.getValue();
+		    }
+			if(data != null)
+				str = str +  "|" + data.getTable();
+			
 			if(con == null){
-				str = temp + "|" + count + "|"+advConditionNode.getObjectName()+": "+"ANY";
+				str = temp + "|" + count + "|" + "ANY" + advConditionNode.getObjectName();
 			}
-			//System.out.println("str-->"+str);
+				
 			tree.add(str);
-			
-				arrangeTree(n,temp,tree,temp);
-        }
+			arrangeTree(n,temp,tree,temp);
+		}
+	
+	}
 
-		
-		
-	//}
-			
-		//return element;
-}
-// 	public Vector getTreeElement(){
-// 		//System.out.println("element--"+element.size());
-// 		return element;
-// 	}
 }
 
 
