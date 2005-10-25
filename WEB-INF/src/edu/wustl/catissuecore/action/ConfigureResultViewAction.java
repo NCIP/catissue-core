@@ -86,7 +86,7 @@ public class ConfigureResultViewAction extends Action  {
 	//Retrieves columnNames corresponding to a table aliasName
 	private List setColumnNames(String aliasName) throws DAOException, ClassNotFoundException
     {
-        String sql = 	" SELECT temp.COLUMN_NAME, temp.DISPLAY_NAME " +
+        String sql = 	" SELECT tableData2.ALIAS_NAME,temp.COLUMN_NAME, temp.DISPLAY_NAME " +
 				        " from CATISSUE_QUERY_INTERFACE_TABLE_DATA tableData2 join " +
 				        " ( SELECT  columnData.COLUMN_NAME, columnData.TABLE_ID, displayData.DISPLAY_NAME " +
 				        " FROM CATISSUE_QUERY_INTERFACE_COLUMN_DATA columnData, " +
@@ -106,7 +106,7 @@ public class ConfigureResultViewAction extends Action  {
         jdbcDao.openSession(null);
         List list = jdbcDao.executeQuery(sql, null, Constants.INSECURE_RETRIEVE, null,null);
         jdbcDao.closeSession();
-        
+        String tableName = new String();
         String columnName = new String();
         String columnDisplayName = new String();
         List columnList = new ArrayList();
@@ -116,10 +116,11 @@ public class ConfigureResultViewAction extends Action  {
         {
         	
             List rowList = (List)iterator.next();
+            tableName = (String)rowList.get(j++);
             columnName = (String)rowList.get(j++);
             columnDisplayName = (String)rowList.get(j++);
             //Name ValueBean Value in the for of tableAlias..columnName.columnDisplayName 
-            String columnValue = aliasName+"."+columnName+"."+columnDisplayName;
+            String columnValue = tableName+"."+columnName+"."+columnDisplayName;
             NameValueBean columns = new NameValueBean(columnDisplayName,columnValue);
             columnList.add(columns);
             j = 0;
