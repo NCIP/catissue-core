@@ -42,6 +42,9 @@ public class ConditionMapParser
 				if(!operator.equals(Constants.ANY))
 				{
 					String value=new String();
+					String value2=new String();
+					String operator1=new String();
+					String operator2=new String();
 					while(st.hasMoreTokens())
 					{
 						st.nextToken();
@@ -51,9 +54,33 @@ public class ConditionMapParser
 						String columnName = st.nextToken();
 						dataElement.setField(columnName);
 						value = (String)conditionMap.get(aliasName+":"+columnName);
+						if(operator.equals(Operator.NOT_BETWEEN))
+						{
+							operator1 = Operator.LESS_THAN;
+							operator2 = Operator.GREATER_THAN;
+							value2 = (String)conditionMap.get(aliasName+":"+columnName+":"+"HLIMIT");
+						}
+						if(operator.equals(Operator.BETWEEN))
+						{
+							operator1 = Operator.GREATER_THAN;
+							operator2 = Operator.LESS_THAN;
+							value2 = (String)conditionMap.get(aliasName+":"+columnName+":"+"HLIMIT");
+						}
 					}
 					//String operatorValue = Operator.getOperator(operator);
 					Condition condition = new Condition(dataElement,new Operator(operator),value);
+					if(operator.equals(Operator.NOT_BETWEEN))
+					{
+						condition = new Condition(dataElement,new Operator(operator1),value);
+						Condition condition1 = new Condition(dataElement,new Operator(operator2),value2);
+						conditionList.add(condition1);
+					}
+					if(operator.equals(Operator.BETWEEN))
+					{
+						condition = new Condition(dataElement,new Operator(operator1),value);
+						Condition condition1 = new Condition(dataElement,new Operator(operator2),value2);
+						conditionList.add(condition1);
+					}
 					conditionList.add(condition);
 				}
 			}
