@@ -1,5 +1,6 @@
 <%@ page import="java.util.*"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
+<%@ page import="edu.wustl.common.util.SearchUtil"%>
 
 <head>
 
@@ -13,7 +14,7 @@
 	%>
 	var Tree = [<%int k;%><%for (k=0;k < (Treelist.size()-1);k++){%>"<%=Treelist.get(k)%>",<%}%>"<%=Treelist.get(k)%>"];
 	//window.onload=TreeContent(Treelist);
-	
+	<% SearchUtil util = new SearchUtil(); %>
 	/*function TreeContent(list){
 		alert('im in treecontent');
 		
@@ -28,8 +29,9 @@
 	
 	
 	function CheckNum(checkName,itemName,nodeCount){
+	
 		if(document.getElementById(checkName).checked==true){
-		
+			DisableAll();
 			if(itemName == '<%=Constants.PARTICIPANT%>'){
 				itemCount++;
 			}
@@ -52,8 +54,12 @@
 		//DisableAll();
 	//}
 	//else{
-		if(itemCount == 1)
+		if(itemCount == 1){
 			DisableAll();
+			var item = document.getElementById('<%=Constants.P%>');
+			item.className="linkChange";
+			item.innerHTML = "<a HREF='<%=util.getLink("Participant")%>' target='searchPageFrame'><%=Constants.PARTICIPANT%></a>";
+		}
 		else
 			EnableItem(nodeCount);
 		//}
@@ -95,7 +101,7 @@
 		
 		item = document.getElementById('<%=Constants.P%>');
 		item.className="linkChange";
-		item.innerHTML = "<a HREF='#'><%=Constants.PARTICIPANT%></a>";
+		item.innerHTML = "<a HREF='<%=util.getLink("Participant")%>' target='searchPageFrame'><%=Constants.PARTICIPANT%></a>";
 		
 		item = document.getElementById('<%=Constants.S%>');
 		item.className="linkChange"
@@ -186,8 +192,8 @@
 
 <html>
 <body>
-
-	<table cellpadding='0' cellspacing='0' border='0' width='75%'>
+	
+	<table cellpadding='0' cellspacing='0' border='0' width='85%'>
 		<tr>
 			<td class='formTitle' height='20' width='70%'>
 				<img src="images/arrow.GIF" alt="Rules" />Rules
@@ -203,12 +209,12 @@
 											<img src="images/Participant.GIF" alt="Participant" /> 
 										</td>
 										<td class='linkChange' id='P'>
-											Participant
-											<!-- font size='2'>
-											<a HREF='#' class='menuitem'>
-												Participant
+											
+											
+											<a HREF='<%=util.getLink("Participant")%>' target="searchPageFrame">
+												<%=Constants.PARTICIPANT%>
 											</a>
-											</font--> 
+											
 									</td>
 									</tr>
 									<tr>
@@ -216,7 +222,7 @@
 											<img src="images/CollectionProtocol.GIF" alt="CollectionProtocol" /> 
 										</td>
 										<td class='linkChange' id='CP'>	
-											CollectionProtocol 
+											<%=Constants.COLLECTION_PROTOCOL%>
 											<!-- a HREF='#' class='menuitem'>
 												CollectionProtocol 
 											</a-->
@@ -227,7 +233,7 @@
 											<img src="images/Specimen.GIF" alt="Specimen" /> 
 										</td>
 										<td class='linkChange' id='S'>
-											Specimen 
+											<%=Constants.SPECIMEN%>
 											<!--font size='2'>
 											<a HREF='#' class='menuitem'>
 												Specimen 
@@ -240,7 +246,7 @@
 										<img src="images/SpecimenCollectionGroup.GIF" alt="Specimen Collection Group" /> 
 									</td>
 										<td class='linkChange' id='SCG'>
-											SpecimenCollectionGroup
+											<%=Constants.SPECIMEN_COLLECTION_GROUP%>
 											<!--font size='2'>
 											<a HREF='#' class='menuitem'>
 												SpecimenCollectionGroup 
@@ -253,7 +259,7 @@
 										<img src="images/Distribution.GIF" alt="Distribution" /> 
 									</td>
 										<td class='linkChange' id='D'>
-											Distribution
+											<%=Constants.DISTRIBUTION%>
 											<!--font size='2'>
 											<a HREF='#' class='menuitem'>
 												Distribution 
@@ -266,7 +272,7 @@
 										<img src="images/DistributionProtocol.GIF" alt="DistributionProtocol" /> 
 									</td>
 										<td class='linkChange' id='DP'>
-											DistributionProtocol
+											<%=Constants.DISTRIBUTION_PROTOCOL%>
 											<!--font size='2'>
 											<a HREF='#' class='menuitem'>
 												DistributionProtocol 
@@ -286,11 +292,7 @@
 		<td class='formTitle' height='20' width='10%'>Delete</td>
 	</tr>
 
-	<tr>
-		<td class='tdTitle' colspan='4'>
-			Rule#1
-		</td>
-	</tr>
+	
 		<div class="tree">
 			<script type="text/javascript">
 				createTree(Tree);
