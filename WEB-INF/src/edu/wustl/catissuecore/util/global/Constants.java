@@ -1137,6 +1137,9 @@ public class Constants
 	public static final String CDE_NAME_CLINICAL_DIAGNOSIS = "Clinical Diagnosis";
 	public static final String CDE_NAME_SITE_TYPE = "Site Type";
 	
+	//Constants for Advanced Search
+	public static final String STRING_OPERATORS = "StringOperators";
+	public static final String DATE_NUMERIC_OPERATORS = "dateNumericOperators";
 	
 	public static final String [] STORAGESTATUSARRAY = {
 	        SELECT_OPTION,
