@@ -8,6 +8,7 @@
 package edu.wustl.catissuecore.action;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -30,9 +31,8 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.SimpleQueryInterfaceForm;
-import edu.wustl.catissuecore.domain.CollectionProtocol;
-import edu.wustl.catissuecore.domain.DistributionProtocol;
-import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
+import edu.wustl.catissuecore.bizlogic.QueryBizLogic;
 import edu.wustl.catissuecore.query.DataElement;
 import edu.wustl.catissuecore.query.Query;
 import edu.wustl.catissuecore.query.QueryFactory;
@@ -60,6 +60,7 @@ public class SimpleSearchAction extends BaseAction
 		if(counter!=null)
 			session.setAttribute(Constants.SIMPLE_QUERY_COUNTER,simpleQueryInterfaceForm.getCounter());
 		Map map=null;
+		
 		//	Get the aliasName.
 		String viewAliasName = (String) simpleQueryInterfaceForm.getValue("SimpleConditionsNode:1_Condition_DataElement_table");
 		
@@ -83,32 +84,36 @@ public class SimpleSearchAction extends BaseAction
 			}
 			Logger.out.debug("map size"+map.size());
 			MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.query");
-
+			
 			Collection simpleConditionNodeCollection = parser.generateData(map, true);
 			Iterator iterator = simpleConditionNodeCollection.iterator();
-
-			Set fromTables = new HashSet();
 			
-			//Aarti: identifiers of the objects that need to be checked for object level privileges
+			Set fromTables = new HashSet();
+			Set aliasNameSet = new HashSet(); 
+			
+			//Aarti: identifiers of the objects that need to be checked for object level privileges.
 			String[][] objectIdentifiers;
-
+			
+			//Adding single quotes to strings and date values.
 			SimpleConditionsNode simpleConditionsNode = null;
-			//int tableCount=0;
-			//String[] selectedTables = new String[simpleConditionNodeCollection.size()];
 			while (iterator.hasNext())
 			{
 				simpleConditionsNode = (SimpleConditionsNode) iterator.next();
 				String columnName = simpleConditionsNode.getCondition().getDataElement().getField();
 				StringTokenizer stringToken = new StringTokenizer(columnName, ".");
-				simpleConditionsNode.getCondition().getDataElement().setTable(
-						stringToken.nextToken());
-				simpleConditionsNode.getCondition().getDataElement().setField(
-						stringToken.nextToken());
+				simpleConditionsNode.getCondition().getDataElement().setTable(stringToken.nextToken());
+				simpleConditionsNode.getCondition().getDataElement().setField(stringToken.nextToken());
 				String fieldType = stringToken.nextToken();
 				String value = simpleConditionsNode.getCondition().getValue();
-
+				String tableInPath = null;
+				if (stringToken.hasMoreTokens())
+				{
+				    tableInPath = stringToken.nextToken();
+				}
+				
 				if (fieldType.equalsIgnoreCase(Constants.FIELD_TYPE_VARCHAR)
-						|| fieldType.equalsIgnoreCase(Constants.FIELD_TYPE_DATE))
+						|| fieldType.equalsIgnoreCase(Constants.FIELD_TYPE_DATE) 
+						|| fieldType.equalsIgnoreCase(Constants.FIELD_TYPE_TEXT))
 				{
 					if (fieldType.equalsIgnoreCase(Constants.FIELD_TYPE_VARCHAR))
 					{
@@ -116,53 +121,88 @@ public class SimpleSearchAction extends BaseAction
 					}
 					else
 					{
-						value = "STR_TO_DATE('" + value + "','" + Constants.MYSQL_DATE_PATTERN
-								+ "')";
+						value = "STR_TO_DATE('" + value + "','" + Constants.MYSQL_DATE_PATTERN + "')";
 					}
+					
 					simpleConditionsNode.getCondition().setValue(value);
 				}
-
-				if (simpleQueryInterfaceForm.getPageOf().equals(
-						Constants.PAGEOF_SIMPLE_QUERY_INTERFACE))
+				
+				//Get the tables in path for this field and add it in the fromTables Set. 
+				if (tableInPath != null)
 				{
-					//Prepare a Set of table names.
-					fromTables.add(simpleConditionsNode.getCondition().getDataElement().getTable());
-					//selectedTables[tableCount]=simpleConditionsNode.getCondition().getDataElement().getTable();
+				    StringTokenizer tableInPathTokenizer = new StringTokenizer(tableInPath, ":");
+				    String aliasName = null;
+					while (tableInPathTokenizer.hasMoreTokens())
+					{
+					    Long tableId = Long.valueOf(tableInPathTokenizer.nextToken());
+					    QueryBizLogic bizLogic = (QueryBizLogic)BizLogicFactory
+					    							.getBizLogic(Constants.SIMPLE_QUERY_INTERFACE_ID);
+					    aliasName = bizLogic.getAliasNameFromTableId(tableId);
+					    Logger.out.debug("aliasName for from Set**************************"+aliasName);
+					}
+					
+					if (aliasName != null)
+					{
+					    fromTables.add(aliasName);
+					}
 				}
+				
+				//Creating aliasName set with full package names.
+				//Required for checking the activityStatus.
+				aliasNameSet.add("edu.wustl.catissuecore.domain."
+				        		+ simpleConditionsNode.getCondition().getDataElement().getTable());
 			}
-
-			String fullyQualifiedClassName = "edu.wustl.catissuecore.domain."+viewAliasName;
-//            List activityStatusConditionList = getActivityStatusCondition(fullyQualifiedClassName);
-			SimpleConditionsNode activityStatusCondition = getActivityStatusCondition(fullyQualifiedClassName); 
-//            if(activityStatusConditionList.isEmpty() == false)
-			if(activityStatusCondition != null)
+			
+			//Add all the objects selected in UI to the fromtables Set. 
+			for (int i=1;i<=Integer.parseInt(simpleQueryInterfaceForm.getCounter());i++)
+			{
+			    String fromAliasNameKey = "SimpleConditionsNode:"+i+"_Condition_DataElement_table";
+			    String fromAliasNameValue = (String)simpleQueryInterfaceForm.getValue(fromAliasNameKey);
+			    
+			    //Prepare a Set of table names.
+				fromTables.add(fromAliasNameValue);
+			}
+			
+			//Activity Status condition nodes.
+			List activityStatusConditionList = new ArrayList();
+			Iterator aliasNameIterator = aliasNameSet.iterator();
+		    while (aliasNameIterator.hasNext())
+		    {
+		        String fullyQualifiedClassName = (String) aliasNameIterator.next();
+		        SimpleConditionsNode activityStatusCondition = getActivityStatusCondition(fullyQualifiedClassName);
+		        if (activityStatusCondition != null)
+		        {
+		            activityStatusCondition.getOperator().setOperator(Constants.AND_JOIN_CONDITION);
+			        activityStatusConditionList.add(activityStatusCondition);
+		        }
+		    }
+		    
+            if(activityStatusConditionList.isEmpty() == false)
             {
                 simpleConditionsNode.getOperator().setOperator(Constants.AND_JOIN_CONDITION);
-//                simpleConditionNodeCollection.addAll(activityStatusConditionList);
-                simpleConditionNodeCollection.add(activityStatusCondition);
+                simpleConditionNodeCollection.addAll(activityStatusConditionList);
             }
             
-            //            Iterator iterator1 = fromTables.iterator();
-			//            while (iterator1.hasNext())
-			//            {
-			//                Logger.out.debug("From tABLES............................."+iterator1.next());
-			//            }
+            // Forming the query.
 			Query query = QueryFactory.getInstance().newQuery(Query.SIMPLE_QUERY, viewAliasName);
+			
+			// Adding the condition objects from user.
 			((SimpleQuery) query).addConditions(simpleConditionNodeCollection);
 			List list = null;
 			
-			//Get the view columns.
-			String[] columnNames = null;
+			// Get the view columns.
+			List columnNames = null;
 			
 			if (simpleQueryInterfaceForm.getPageOf()
 					.equals(Constants.PAGEOF_SIMPLE_QUERY_INTERFACE))
 			{
+			    // Set the from tables in the query.
 				query.setTableSet(fromTables);
-				Logger.out.debug("setTableSet.......................................");
+				
 				String[] selectedColumns = simpleQueryInterfaceForm.getSelectedColumnNames();
-				Logger.out.debug("selected columns "+selectedColumns);
-				String[] tempColumnNames= query.setViewElements(viewAliasName);
+				List tempColumnNames = query.setViewElements(fromTables);
 				Set tableSet;
+				
 				if(Constants.switchSecurity)
 				{
 					tableSet = query.getTableSet();
@@ -171,7 +211,8 @@ public class SimpleSearchAction extends BaseAction
 				{
 					tableSet = new HashSet();
 				}
-				columnNames = new String[tempColumnNames.length+tableSet.size()];
+				
+				columnNames = new ArrayList();
 				objectIdentifiers = new String[tableSet.size()][2];
 				Iterator fromTablesIterator = tableSet.iterator();
 				DataElement identifierDataElement;
@@ -183,15 +224,15 @@ public class SimpleSearchAction extends BaseAction
 					objectIdentifiers[i][1] = String.valueOf(i);
 					identifierDataElement = new DataElement(tableName,"IDENTIFIER");
 					query.addElementToView(i,identifierDataElement);
-					columnNames[i] = tableName+" ID";
-					Logger.out.debug("Identifier field added: ********* "+identifierDataElement.getTable()+" "+identifierDataElement.getField());
-				}
-				for(int i=0, j= tableSet.size(); i<tempColumnNames.length;i++,j++)
-				{
-					columnNames[j] = tempColumnNames[i];
+					columnNames.add(tableName+" ID");
 				}
 				
-				//Setting column ids for the corresponding table Aliases
+				for(int i=0, j= tableSet.size(); i<tempColumnNames.size();i++,j++)
+				{
+					columnNames.add((String)tempColumnNames.get(i));
+				}
+				
+				//Setting column ids for the corresponding table Aliases.
 				fromTablesIterator = tableSet.iterator();
 				Map columnIdsMap = new HashMap();
 				for(int i =0; i<tableSet.size(); i++)
@@ -200,20 +241,19 @@ public class SimpleSearchAction extends BaseAction
 					columnIdsMap.put(tableName,query.getColumnIds(tableName));
 				}
 				
-				list = query.execute(getSessionData(request),Constants.OBJECT_LEVEL_SECURE_RETRIEVE,objectIdentifiers,columnIdsMap);
+				list = query.execute(getSessionData(request),
+				        Constants.OBJECT_LEVEL_SECURE_RETRIEVE,objectIdentifiers,columnIdsMap);
 			}
 			else
 			{
-				
-				columnNames = query.setViewElements(viewAliasName);
-				 list = query.execute(getSessionData(request),Constants.INSECURE_RETRIEVE,null,null);
+				columnNames = query.setViewElements(fromTables);
+				list = query.execute(getSessionData(request),Constants.INSECURE_RETRIEVE,null,null);
 			}
 			
 			if (list.isEmpty())
 			{
 				ActionErrors errors = new ActionErrors();
-				errors
-						.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 								"simpleQuery.noRecordsFound"));
 				saveErrors(request, errors);
 				String alias = (String)session.getAttribute(Constants.SIMPLE_QUERY_ALIAS_NAME);
@@ -257,44 +297,43 @@ public class SimpleSearchAction extends BaseAction
 		return mapping.findForward(target);
 	}
 
-	/**
-	 * Returns true if the object named aliasName contains the activityStatus 
-	 * data member, else returns false.
-	 * @param aliasName
-	 * @return
-	 */
-	//TODO To be fix
-	private boolean hasActivityStatus(String aliasName)
-	{
-		try
-		{
-			Class className = Class.forName("edu.wustl.catissuecore.domain." + aliasName);
-
-			if (className.equals(CollectionProtocol.class)
-					|| className.equals(DistributionProtocol.class)
-					|| className.equals(Specimen.class))
-				return true;
-
-			Logger.out.debug("Class.................." + className.getName());
-			Field[] objectFields = className.getDeclaredFields();
-			Logger.out.debug("Field Size..........................." + objectFields.length);
-			for (int i = 0; i < objectFields.length; i++)
-			{
-				Logger.out.debug("objectFields[i].getName().............................."
-						+ objectFields[i].getName());
-				if (objectFields[i].getName().equals(Constants.ACTIVITY_STATUS))
-				{
-					return true;
-				}
-			}
-		}
-		catch (ClassNotFoundException classNotExcp)
-		{
-			Logger.out.debug(classNotExcp.getMessage(), classNotExcp);
-		}
-
-		return false;
-	}
+//	/**
+//	 * Returns true if the object named aliasName contains the activityStatus 
+//	 * data member, else returns false.
+//	 * @param aliasName
+//	 * @return
+//	 */
+//	private boolean hasActivityStatus(String aliasName)
+//	{
+//		try
+//		{
+//			Class className = Class.forName("edu.wustl.catissuecore.domain." + aliasName);
+//
+//			if (className.equals(CollectionProtocol.class)
+//					|| className.equals(DistributionProtocol.class)
+//					|| className.equals(Specimen.class))
+//				return true;
+//
+//			Logger.out.debug("Class.................." + className.getName());
+//			Field[] objectFields = className.getDeclaredFields();
+//			Logger.out.debug("Field Size..........................." + objectFields.length);
+//			for (int i = 0; i < objectFields.length; i++)
+//			{
+//				Logger.out.debug("objectFields[i].getName().............................."
+//						+ objectFields[i].getName());
+//				if (objectFields[i].getName().equals(Constants.ACTIVITY_STATUS))
+//				{
+//					return true;
+//				}
+//			}
+//		}
+//		catch (ClassNotFoundException classNotExcp)
+//		{
+//			Logger.out.debug(classNotExcp.getMessage(), classNotExcp);
+//		}
+//
+//		return false;
+//	}
 
 //	/**
 //	 * Returns SimpleConditionsNode if the object named aliasName contains the activityStatus 
@@ -365,34 +404,27 @@ public class SimpleSearchAction extends BaseAction
 	{
 		SimpleConditionsNode activityStatusCondition = null;
 
-		try
+		//Returns the Class objet if it is a valid class else returns null.
+		Class className = edu.wustl.common.util.Utility.getClassObject(fullyQualifiedClassName);
+		if (className != null)
 		{
-			Class className = Class.forName(fullyQualifiedClassName);
-
-			Field[] objectFields = className.getDeclaredFields();
+		    Field[] objectFields = className.getDeclaredFields();
 
 			for (int i = 0; i < objectFields.length; i++)
 			{
-
 				if (objectFields[i].getName().equals(Constants.ACTIVITY_STATUS))
 				{
-
 					activityStatusCondition = new SimpleConditionsNode();
-
 					activityStatusCondition.getCondition().getDataElement().setTable(
 							Utility.parseClassName(fullyQualifiedClassName));
-
 					activityStatusCondition.getCondition().getDataElement().setField(
 							"ACTIVITY_STATUS");
-
 					activityStatusCondition.getCondition().getOperator().setOperator("!=");
-
 					activityStatusCondition.getCondition().setValue(
 							"'" + Constants.ACTIVITY_STATUS_DISABLED + "'");
-
 				}
 			}
-
+			
 			if ((activityStatusCondition == null) &&
 					(className.getSuperclass().getName().equals(
 							"edu.wustl.catissuecore.domain.AbstractDomainObject") == false))
@@ -401,10 +433,7 @@ public class SimpleSearchAction extends BaseAction
 						.getName());
 			}
 		}
-		catch (ClassNotFoundException classNotExcp)
-		{
-			Logger.out.debug(classNotExcp.getMessage(), classNotExcp);
-		}
+	    
 		return activityStatusCondition;
 	}
 	
@@ -428,28 +457,29 @@ public class SimpleSearchAction extends BaseAction
 		    }
 			return vector;
 		}
-	 private String[] getColumnNames(String[] selectedColumns,Query query,String viewAliasName) throws DAOException
-	 {
-		String tempColumnNames[];
-	 	if(selectedColumns==null)
-			tempColumnNames	= query.setViewElements(viewAliasName);
-		else
-		{
-			Vector resultViewVector = setViewElements(selectedColumns); 
-			query.setResultView(resultViewVector);
-			Iterator itr = resultViewVector.iterator();
-			tempColumnNames = new String[resultViewVector.size()];
-			int columnCount = 0;
-			while(itr.hasNext())
-			{
-				DataElement dataElement = (DataElement)itr.next();
-				String column = dataElement.getField();
-				Logger.out.debug("column in the data element"+column);
-				tempColumnNames[columnCount]=column;
-				columnCount++;
-			}
-		}
-	 	return tempColumnNames;
-	 }
+	 
+//	 private String[] getColumnNames(String[] selectedColumns,Query query,String viewAliasName) throws DAOException
+//	 {
+//		String tempColumnNames[];
+//	 	if(selectedColumns==null)
+//			tempColumnNames	= query.setViewElements(viewAliasName);
+//		else
+//		{
+//			Vector resultViewVector = setViewElements(selectedColumns); 
+//			query.setResultView(resultViewVector);
+//			Iterator itr = resultViewVector.iterator();
+//			tempColumnNames = new String[resultViewVector.size()];
+//			int columnCount = 0;
+//			while(itr.hasNext())
+//			{
+//				DataElement dataElement = (DataElement)itr.next();
+//				String column = dataElement.getField();
+//				Logger.out.debug("column in the data element"+column);
+//				tempColumnNames[columnCount]=column;
+//				columnCount++;
+//			}
+//		}
+//	 	return tempColumnNames;
+//	 }
 	 
 }
