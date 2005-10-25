@@ -91,10 +91,6 @@ PUBLIC
 					<forward name="success" path=".catissuecore.searchHomeDef" />
 		</action>
 		
-		<action path="/AdvanceQueryView"
-					type="edu.wustl.catissuecore.action.AdvanceQueryView">
-					<forward name="success" path=".catissuecore.advanceQueryViewDef" />
-		</action>
 
 	<!--	
 		<action path="/ManageAdministrativeData"
@@ -1976,7 +1972,7 @@ PUBLIC
 		<!-- Advance Query Interface Action Begins -->
 		<action path="/AdvanceQueryInterface"
 			type="edu.wustl.catissuecore.action.AdvanceQueryInterfaceAction"
-			name="simpleQueryInterfaceForm"
+			name="advanceSearchForm"
 			validate="false"
 			scope="request">
 			<forward name="pageOfAdvanceQueryInterface" path=".catissuecore.advanceQueryInterfaceDef" />
@@ -1992,10 +1988,17 @@ PUBLIC
 			<forward name="access_denied" path="/Home.do" />
 		</action>
 		
+		<action path="/AdvanceQueryView"
+			type="edu.wustl.catissuecore.action.AdvanceQueryView"
+			name="advanceSearchForm"
+			scope="request">
+			<forward name="success" path=".catissuecore.advanceQueryViewDef" />
+		</action>
+		
 	
 		<action path="/AdvanceQuery"
 			type="edu.wustl.catissuecore.action.SimpleQueryInterfaceAction"
-			name="simpleQueryInterfaceForm"
+			name="advanceSearchForm"
 			validate="false"
 			scope="request">
 			<forward name="pageOfSimpleQueryInterface" path=".catissuecore.advanceQueryDef" />
@@ -2004,9 +2007,7 @@ PUBLIC
 		
 		<action path="/AdvanceSearch"
 			type="edu.wustl.catissuecore.action.AdvanceSearchAction"
-			name="simpleQueryInterfaceForm"
-			validate="true"
-			input="/AdvanceQuery.do"
+			name="advanceSearchForm"
 			scope="request">
 			<forward name="success" path=".catissuecore.advanceQueryRedirectDef" />
 			<forward name="failure" path="/AdvanceQuery.do" />
