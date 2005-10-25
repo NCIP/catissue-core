@@ -262,7 +262,6 @@ public class UserBizLogic extends DefaultBizLogic
             throws DAOException, UserNotAuthorizedException
     {
         User user = (User) obj;
-        List list = null;
         
         try
         {
@@ -272,12 +271,6 @@ public class UserBizLogic extends DefaultBizLogic
                 csmUserId = user.getCsmUserId().toString(); 
             }
             
-            //Retrieve the user object for getting the csm user id. 
-            if (Constants.PAGEOF_CHANGE_PASSWORD.equals(user.getPageOf()))
-            {
-                User user1 = (User)dao.retrieve(User.class.getName(), user.getSystemIdentifier());
-                csmUserId = user1.getCsmUserId().toString();
-            }
             Logger.out.debug("In UserBizLogic.......................csmUserId........."+csmUserId);
             gov.nih.nci.security.authorization.domainobjects.User csmUser = SecurityManager
                     .getInstance(DomainObjectListAction.class).getUserById(csmUserId);
