@@ -142,7 +142,7 @@ function showDateColumn(element,valueField,colID)
 						String nextOperator = "value(SimpleConditionsNode:"+i+"_Operator_operator)";			
 						String attributeNameList = "attributeNameList"+i;
 						String attributeDisplayNameList = "attributeDisplayNameList"+i;
-						String objectNameList = "objectNameList"+i;
+						String objectNameList = "objectList"+i;
 						String objectDisplayNameList = "objectDisplayNameList"+i;
 						SimpleQueryInterfaceForm form = (SimpleQueryInterfaceForm)obj;
 						String nextOperatorValue = (String)form.getValue("SimpleConditionsNode:"+i+"_Operator_operator");
@@ -164,7 +164,7 @@ function showDateColumn(element,valueField,colID)
 								<html:options name="objectAliasNameList" labelName="objectDisplayNameList" />
 							</logic:notPresent>	
 							<logic:present name="<%=objectNameList%>">		
-								<html:options name="<%=objectNameList%>" labelName="<%=objectDisplayNameList%>" />
+								<html:options collection="<%=objectNameList%>" labelProperty="name" property="value"/>
 							</logic:present>	
 						</html:select>
 					</td>
