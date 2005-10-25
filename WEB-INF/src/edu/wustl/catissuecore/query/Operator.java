@@ -8,6 +8,9 @@
  */ 
 package edu.wustl.catissuecore.query;
 
+import java.util.HashMap;
+import java.util.Map;
+
 
 public class Operator
 {
@@ -41,11 +44,21 @@ public class Operator
      */
     public static final String GREATER_THAN = ">";
     
+    //public static final String LIKE = "Like";
+    
+    public static final String OR_CONDITION = "OR";
+    public static final String AND_CONDITION = "AND";
+	public static final String EXISTS_CONDITION = "EXISTS";
+	public static final String EQUALS_CONDITION = "EQUAL" ;
+	public static final String LESS_THAN_CONDITION = "LESS_THAN";
+	public static final String GREATER_THAN_CONDITION = "GREATER_THAN";
+	public static final String LIKE_CONDITION = "LIKE";
+
     /**
      * LIKE constant
      */
-    public static final String LIKE = "like";
     
+    public static final String LIKE = "like";
     /**
      * NOT EQUALS constant
      */
@@ -116,4 +129,18 @@ public class Operator
     {
         this.operator = operator;
     }
+    public static String getOperator(String operatorString)
+    {
+    	Map operators = new HashMap();
+    	operators.put(Operator.OR_CONDITION,Operator.OR);
+    	operators.put(Operator.AND_CONDITION,Operator.AND) ;
+		operators.put(Operator.EXISTS_CONDITION,Operator.EXIST);
+		operators.put(Operator.EQUALS_CONDITION,Operator.EQUAL) ;
+		operators.put(Operator.LESS_THAN_CONDITION,Operator.LESS_THAN);
+		operators.put(Operator.GREATER_THAN_CONDITION,Operator.GREATER_THAN) ;
+		operators.put(Operator.LIKE_CONDITION,Operator.LIKE);
+		String value=(String)operators.get(operatorString);
+		return value;
+    }
+
 }
