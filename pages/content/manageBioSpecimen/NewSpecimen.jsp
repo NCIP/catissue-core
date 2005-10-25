@@ -630,9 +630,9 @@ Map map = form.getExternalIdentifier();
 					   </label>
 					</td>
 					<%
-						boolean readOnly=false;
+						boolean readOnly=true;
 						if(operation.equals(Constants.ADD))
-							readOnly=true;
+							readOnly=false;
 					%>
 				 	<td class="formField">
 		     			<html:text styleClass="formFieldSized3" styleId="storageContainer" property="storageContainer"  readonly="<%=readOnly%>" />
