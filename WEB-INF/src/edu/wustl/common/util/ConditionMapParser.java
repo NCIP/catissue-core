@@ -52,7 +52,7 @@ public class ConditionMapParser
 						dataElement.setField(columnName);
 						value = (String)conditionMap.get(aliasName+":"+columnName);
 					}
-					String operatorValue = Operator.getOperator(operator);
+					//String operatorValue = Operator.getOperator(operator);
 					Condition condition = new Condition(dataElement,new Operator(operator),value);
 					conditionList.add(condition);
 				}
