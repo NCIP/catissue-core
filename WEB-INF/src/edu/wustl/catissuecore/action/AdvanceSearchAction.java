@@ -4,9 +4,11 @@ package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
@@ -50,6 +52,7 @@ public class AdvanceSearchAction extends DispatchAction
         						.getValue("SimpleConditionsNode:1_Condition_DataElement_table");
         
         String target = Constants.SUCCESS;
+        Set fromTables = new HashSet();
         
         try
         {
@@ -80,6 +83,9 @@ public class AdvanceSearchAction extends DispatchAction
                     
                     simpleConditionsNode.getCondition().setValue(value);
                 }
+                
+                //Prepare a Set of table names.
+				fromTables.add(simpleConditionsNode.getCondition().getDataElement().getTable());
             }
             Logger.out.debug("collection size: "+simpleConditionNodeCollection.size());
             Iterator itr = simpleConditionNodeCollection.iterator();
@@ -115,7 +121,7 @@ public class AdvanceSearchAction extends DispatchAction
             
            
             //Get the view columns.
-            String [] columnNames = query.setViewElements(aliasName);
+            List columnNames = query.setViewElements(fromTables);
             
             ((AdvancedConditionsImpl)((AdvancedQuery)query).getWhereConditions()).setWhereCondition(root);
 //          List list = query.execute();
