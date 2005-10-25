@@ -184,8 +184,8 @@ public class UserBizLogic extends DefaultBizLogic
 
             body = body + "\n\n" + "\n\n" + ApplicationProperties.getValue("email.catissuecore.team");
             
-            boolean emailStatus = email.sendmail(adminEmailAddress, user
-                    .getEmailAddress(), null, technicalSupportEmailAddress,
+            boolean emailStatus = email.sendmail(user
+                    .getEmailAddress(), adminEmailAddress, null, technicalSupportEmailAddress,
                     mailServer, subject, body);
 
             if (emailStatus)

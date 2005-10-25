@@ -128,8 +128,6 @@ public class ApproveUserBizLogic extends DefaultBizLogic
                     + " " + user.getLastName()
                     + "\n\n"+ ApplicationProperties.getValue("userRegistration.reject.body.start");
 	                
-	                Logger.out.debug("user.getComments()..................."+user.getComments());
-	                
 	                if ((user.getComments() != null) 
 	                        && ("".equals(user.getComments()) == false))
 	                {
@@ -148,8 +146,8 @@ public class ApproveUserBizLogic extends DefaultBizLogic
 	            String mailServer = ApplicationProperties
 	                    .getValue("email.mailServer");
 	            
-	            boolean emailStatus = email.sendmail(adminEmailAddress, user
-	                    .getEmailAddress(), null, technicalSupportEmailAddress,
+	            boolean emailStatus = email.sendmail(user
+	                    .getEmailAddress(), adminEmailAddress, null, technicalSupportEmailAddress,
 	                    mailServer, subject, body);
 	            
 	            if (emailStatus)
