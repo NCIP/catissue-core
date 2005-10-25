@@ -18,7 +18,6 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.bizlogic.AbstractBizLogic;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.dao.JDBCDAO;
-import edu.wustl.catissuecore.domain.QueryColumnData;
 import edu.wustl.catissuecore.domain.QueryTableData;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
@@ -86,9 +85,10 @@ public class ConfigureResultViewAction extends Action  {
 	//Retrieves columnNames corresponding to a table aliasName
 	private List setColumnNames(String aliasName) throws DAOException, ClassNotFoundException
     {
-        String sql = 	" SELECT tableData2.ALIAS_NAME,temp.COLUMN_NAME, temp.DISPLAY_NAME " +
+        String sql = 	" SELECT tableData2.ALIAS_NAME, temp.COLUMN_NAME, temp.ATTRIBUTE_TYPE, temp.TABLES_IN_PATH, temp.DISPLAY_NAME " +
 				        " from CATISSUE_QUERY_INTERFACE_TABLE_DATA tableData2 join " +
-				        " ( SELECT  columnData.COLUMN_NAME, columnData.TABLE_ID, displayData.DISPLAY_NAME " +
+				        " ( SELECT  columnData.COLUMN_NAME, columnData.TABLE_ID, columnData.ATTRIBUTE_TYPE, " +
+				        " displayData.DISPLAY_NAME, relationData.TABLES_IN_PATH " +
 				        " FROM CATISSUE_QUERY_INTERFACE_COLUMN_DATA columnData, " +
 				        " CATISSUE_TABLE_RELATION relationData, " +
 				        " CATISSUE_QUERY_INTERFACE_TABLE_DATA tableData, " +
@@ -98,7 +98,7 @@ public class ConfigureResultViewAction extends Action  {
 				        " relationData.RELATIONSHIP_ID = displayData.RELATIONSHIP_ID and " +
 				        " columnData.IDENTIFIER = displayData.COL_ID and " +
 				        " tableData.ALIAS_NAME = '"+aliasName+"') as temp " +
-				        " on temp.TABLE_ID = tableData2.TABLE_ID";
+				        " on temp.TABLE_ID = tableData2.TABLE_ID ";
         
         Logger.out.debug("SQL*****************************"+sql);
         
@@ -118,9 +118,17 @@ public class ConfigureResultViewAction extends Action  {
             List rowList = (List)iterator.next();
             tableName = (String)rowList.get(j++);
             columnName = (String)rowList.get(j++);
-            columnDisplayName = (String)rowList.get(j++);
+
             //Name ValueBean Value in the for of tableAlias..columnName.columnDisplayName 
             String columnValue = tableName+"."+columnName+"."+columnDisplayName;
+            
+            String tablesInPath = (String)rowList.get(j++);
+            if ((tablesInPath != null) && ("".equals(tablesInPath) == false))
+            {
+                columnValue = columnValue+"."+tablesInPath;
+            }
+            columnDisplayName = (String)rowList.get(j++);
+            
             NameValueBean columns = new NameValueBean(columnDisplayName,columnValue);
             columnList.add(columns);
             j = 0;
