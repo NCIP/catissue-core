@@ -33,8 +33,37 @@
 	<script language="JavaScript">
 		function onAddRule()
 		{
-			parent.queryFrame.location.href = "/catissuecore/Home.do";
+			//parent.queryFrame.location.href = "/catissuecore/AdvanceSearch.do";
+			document.forms[0].action = "/catissuecore/AdvanceSearch.do";
+			document.forms[0].submit();
 		}
+		
+		function onDate()
+		{
+			var dateCombo = document.getElementById("birthDate");
+			
+			if(dateCombo.options[dateCombo.selectedIndex].value == "<%=Operator.BETWEEN%>" || dateCombo.options[dateCombo.selectedIndex].value == "<%=Operator.NOT_BETWEEN%>")
+			{
+				show_calendar('advanceSearchForm.birthDate2',null,null,'MM-DD-YYYY')
+			}
+		}
+		
+		function onDateOperatorChange(element)
+		{
+			var dateTxt2  = document.getElementById("birthDate2");
+			
+			if(element.value == "<%=Operator.BETWEEN%>" || element.value == "<%=Operator.NOT_BETWEEN%>")
+			{
+				dateTxt2.disabled = false;
+				dateTxt2.value = "";
+			}
+			else
+			{
+				dateTxt2.value = "";
+				dateTxt2.disabled = true;
+			}
+		}
+		
 	</script>
 </head>
 
@@ -109,7 +138,7 @@
 		</label>
 	</td>
 	<td class="formField">
-		<html:select property="<%=opBirthDate%>" styleClass="formFieldSized10" styleId="birthDate" size="1">
+		<html:select property="<%=opBirthDate%>" styleClass="formFieldSized10" styleId="birthDate" size="1" onchange="onDateOperatorChange(this)">
 			<html:options collection="<%=Constants.DATE_NUMERIC_OPERATORS%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
@@ -117,13 +146,13 @@
 		<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
 		<html:text styleClass="formDateSized10" size="10" styleId="birthDate1" property="<%=birthDate%>" />
 					 &nbsp;
-		<a href="javascript:show_calendar('participantForm.birthDate1',null,null,'MM-DD-YYYY');">
+		<a href="javascript:show_calendar('advanceSearchForm.birthDate1',null,null,'MM-DD-YYYY');">
 			<img src="images\calendar.gif" width=24 height=22 border=0>
 		</a>
 					&nbsp;To&nbsp;
-		<html:text styleClass="formDateSized10" size="10" styleId="birthDate2" property="<%=birthDate2%>" />
+		<html:text styleClass="formDateSized10" size="10" styleId="birthDate2" property="<%=birthDate2%>" disabled="true"/>
 					 &nbsp;
-		<a href="javascript:show_calendar('participantForm.birthDate2',null,null,'MM-DD-YYYY');">
+		<a href="javascript:onDate();">
 			<img src="images\calendar.gif" width=24 height=22 border=0>
 		</a>
 	</td>
@@ -138,7 +167,7 @@
 	</td>
 	<td class="formField">
 		<html:select property="<%=opGender%>" styleClass="formFieldSized10" styleId="<%=opGender%>" size="1">
-			<html:options collection="<%=Constants.STRING_OPERATORS%>" labelProperty="name" property="value"/>
+			<html:options collection="<%=Constants.ENUMERATED_OPERATORS%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
 	<td class="formField">
@@ -157,7 +186,7 @@
 	</td>
 	<td class="formField">
 		<html:select property="<%=opGenotype%>" styleClass="formFieldSized10" styleId="<%=opGenotype%>" size="1">
-				<html:options collection="<%=Constants.STRING_OPERATORS%>" labelProperty="name" property="value"/>
+				<html:options collection="<%=Constants.ENUMERATED_OPERATORS%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
 	<td class="formField">
@@ -176,7 +205,7 @@
 	</td>
 	<td class="formField">
 		<html:select property="<%=opRace%>" styleClass="formFieldSized10" styleId="<%=opRace%>" size="1">
-			<html:options collection="<%=Constants.STRING_OPERATORS%>" labelProperty="name" property="value"/>
+			<html:options collection="<%=Constants.ENUMERATED_OPERATORS%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
 	<td class="formField" nowrap>
@@ -195,7 +224,7 @@
 	</td>
 	<td class="formField">
 		<html:select property="<%=opEthnicity%>" styleClass="formFieldSized10" styleId="<%=opEthnicity%>" size="1">
-			<html:options collection="<%=Constants.STRING_OPERATORS%>" labelProperty="name" property="value"/>
+			<html:options collection="<%=Constants.ENUMERATED_OPERATORS%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
 	<td class="formField">
