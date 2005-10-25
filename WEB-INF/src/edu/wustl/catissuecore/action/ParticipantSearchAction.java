@@ -24,6 +24,7 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.cde.CDEManager;
+import edu.wustl.common.util.SearchUtil;
 
 public class ParticipantSearchAction extends BaseAction
 {
@@ -51,6 +52,10 @@ public class ParticipantSearchAction extends BaseAction
         //Sets the raceList attribute to be used in the Participant Advance Search Page.
         List raceList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_RACE,unknownVal);
         request.setAttribute(Constants.RACELIST, raceList);
+        
+        //Setting the operators list in request scope
+        request.setAttribute(Constants.STRING_OPERATORS,SearchUtil.getOperatorList(SearchUtil.DATATYPE_STRING));
+        request.setAttribute(Constants.DATE_NUMERIC_OPERATORS,SearchUtil.getOperatorList(SearchUtil.DATATYPE_NUMERIC));
         
     	String pageOf = (String)request.getParameter(Constants.PAGEOF);
     	return mapping.findForward(pageOf);

@@ -6,15 +6,25 @@
 <%@ page import="edu.wustl.catissuecore.query.Operator"%>
 
 <%
-	String lastName = "value(Participant:LAST_NAME:" + Operator.LIKE + ")";
-	String firstName = "value(Participant:FIRST_NAME:" + Operator.LIKE + ")";
-	String middleName = "value(Participant:MIDDLE_NAME:" + Operator.LIKE + ")";
-	String birthDate = "value(Participant:BIRTH_DATE:" + Operator.LIKE + ")";
-	String gender = "value(Participant:GENDER:" + Operator.LIKE + ")";
-	String genotype = "value(Participant:GENOTYPE:" + Operator.LIKE + ")";
-	String race = "value(Participant:RACE:" + Operator.LIKE + ")";
-	String ethnicity = "value(Participant:ETHNICITY:" + Operator.LIKE + ")";
-	String ssn = "value(Participant:SOCIAL_SECURITY_NUMBER:" + Operator.LIKE + ")";
+	String lastName = "value(Participant:LAST_NAME)";
+	String firstName = "value(Participant:FIRST_NAME)";
+	String middleName = "value(Participant:MIDDLE_NAME)";
+	String birthDate = "value(Participant:BIRTH_DATE)";
+	String gender = "value(Participant:GENDER)";
+	String genotype = "value(Participant:GENOTYPE)";
+	String race = "value(Participant:RACE)";
+	String ethnicity = "value(Participant:ETHNICITY)";
+	String ssn = "value(Participant:SOCIAL_SECURITY_NUMBER)";
+
+	String opLastName = "value(Participant:LAST_NAME)";
+	String opFirstName = "value(Participant:FIRST_NAME)";
+	String opMiddleName = "value(Participant:MIDDLE_NAME)";
+	String opBirthDate = "value(Participant:BIRTH_DATE)";
+	String opGender = "value(Participant:GENDER)";
+	String opGenotype = "value(Participant:GENOTYPE)";
+	String opRace = "value(Participant:RACE)";
+	String opEthnicity = "value(Participant:ETHNICITY)";
+	String opSsn = "value(Participant:SOCIAL_SECURITY_NUMBER)";
 %>
 
 <head>
@@ -47,13 +57,9 @@
  		</label>
 	</td>
 	<td class="formField">
-		<select size="1" class="formFieldSized10" id="lastNameOp" name="lastNameOp">
-			<option>-- ANY --</option>
-            <option>LIKE</option>
-            <option>NOT LIKE</option>
-            <option>STARTS WITH</option>
-            <option>ENDS WITH</option>
-		</select>
+		<html:select property="<%=opLastName%>" styleClass="formFieldSized10" styleId="<%=opLastName%>" size="1">
+			<html:options collection="<%=Constants.STRING_OPERATORS%>" labelProperty="name" property="value"/>
+		</html:select>
 	</td>
 	<td class="formField">
 		<html:text styleClass="formFieldSized10" styleId="lastName" property="<%=lastName%>"/>
@@ -64,13 +70,9 @@
  		</label>
 	</td>
 	<td class="formField">
-		<select size="1" class="formFieldSized10" id="firstNameOp" name="firstNameOp">
-			<option>-- ANY --</option>
-            <option>LIKE</option>
-            <option>NOT LIKE</option>
-            <option>STARTS WITH</option>
-            <option>ENDS WITH</option>
-		</select>
+		<html:select property="<%=opFirstName%>" styleClass="formFieldSized10" styleId="<%=opFirstName%>" size="1">
+			<html:options collection="<%=Constants.STRING_OPERATORS%>" labelProperty="name" property="value"/>
+		</html:select>
 	</td>
 	<td class="formField">
 		<html:text styleClass="formFieldSized10" styleId="firstName" property="<%=firstName%>"/>
@@ -85,13 +87,9 @@
  		</label>
 	</td>
 	<td class="formField">
-		<select size="1" class="formFieldSized10" id="middleNameOp" name="middleNameOp">
-			<option>-- ANY --</option>
-            <option>LIKE</option>
-            <option>NOT LIKE</option>
-            <option>STARTS WITH</option>
-            <option>ENDS WITH</option>
-		</select>
+		<html:select property="<%=opMiddleName%>" styleClass="formFieldSized10" styleId="<%=opMiddleName%>" size="1">
+			<html:options collection="<%=Constants.STRING_OPERATORS%>" labelProperty="name" property="value"/>
+		</html:select>
 	</td>
 	<td class="formField">
 		<html:text styleClass="formFieldSized10" styleId="middleName" property="<%=middleName%>"/>
@@ -102,12 +100,9 @@
 		</label>
 	</td>
 	<td class="formField">
-		<select size="1" class="formFieldSized10" id="bDateOp" name="bDateOp">
-			<option>-- ANY --</option>
-            <option>IS</option>
-            <option>GREATER THAN</option>
-            <option>LESS THAN</option>
-		</select>
+		<html:select property="<%=opBirthDate%>" styleClass="formFieldSized10" styleId="birthDate" size="1">
+			<html:options collection="<%=Constants.DATE_NUMERIC_OPERATORS%>" labelProperty="name" property="value"/>
+		</html:select>
 	</td>
 	<td class="formField" nowrap>
 		<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
@@ -127,11 +122,9 @@
  		</label>
 	</td>
 	<td class="formField">
-		<select size="1" class="formFieldSized10" id="genderOp" name="genderOp">
-			<option>-- ANY --</option>
-            <option>IN</option>
-            <option>NOT IN</option>
-		</select>
+		<html:select property="<%=opGender%>" styleClass="formFieldSized10" styleId="<%=opGender%>" size="1">
+			<html:options collection="<%=Constants.STRING_OPERATORS%>" labelProperty="name" property="value"/>
+		</html:select>
 	</td>
 	<td class="formField">
 		<html:select property="<%=gender%>" styleClass="formFieldSized10" styleId="gender" size="1">
@@ -144,11 +137,9 @@
  		</label>
 	</td>
 	<td class="formField">
-		<select size="1" class="formFieldSized10" id="genotypeOp" name="genotypeOp">
-			<option>-- ANY --</option>
-            <option>IN</option>
-            <option>NOT IN</option>
-		</select>
+		<html:select property="<%=opGenotype%>" styleClass="formFieldSized10" styleId="<%=opGenotype%>" size="1">
+				<html:options collection="<%=Constants.STRING_OPERATORS%>" labelProperty="name" property="value"/>
+		</html:select>
 	</td>
 	<td class="formField">
 		<html:select property="<%=genotype%>" styleClass="formFieldSized10" styleId="genotype" size="1">
@@ -164,11 +155,9 @@
  		</label>
 	</td>
 	<td class="formField">
-		<select size="1" class="formFieldSized10" id="raceOp" name="raceOp">
-			<option>-- ANY --</option>
-            <option>IN</option>
-            <option>NOT IN</option>
-		</select>
+		<html:select property="<%=opRace%>" styleClass="formFieldSized10" styleId="<%=opRace%>" size="1">
+			<html:options collection="<%=Constants.STRING_OPERATORS%>" labelProperty="name" property="value"/>
+		</html:select>
 	</td>
 	<td class="formField" nowrap>
 		<html:select property="<%=race%>" styleClass="formFieldSized10" styleId="race" size="1">
@@ -181,11 +170,9 @@
      	</label>
 	</td>
 	<td class="formField">
-		<select size="1" class="formFieldSized10" id="ethnicityOp" name="ethnicityOp">
-			<option>-- ANY --</option>
-            <option>IN</option>
-            <option>NOT IN</option>
-		</select>
+		<html:select property="<%=opEthnicity%>" styleClass="formFieldSized10" styleId="<%=opEthnicity%>" size="1">
+			<html:options collection="<%=Constants.STRING_OPERATORS%>" labelProperty="name" property="value"/>
+		</html:select>
 	</td>
 	<td class="formField">
 		<html:select property="<%=ethnicity%>" styleClass="formFieldSized10" styleId="ethnicity" size="1">
@@ -201,10 +188,9 @@
      	</label>
 	</td>
 	<td class="formField">
-		<select size="1" class="formFieldSized10" id="ethnicityOp" name="ethnicityOp">
-            <option>-- ANY --</option>
-            <option>IS</option>
-		</select>
+		<html:select property="<%=opSsn%>" styleClass="formFieldSized10" styleId="<%=opSsn%>" size="1">
+			<html:options collection="<%=Constants.STRING_OPERATORS%>" labelProperty="name" property="value"/>
+		</html:select>
 	</td>
 	<td class="formField">
 		<html:text styleClass="formFieldSized10" styleId="ssn" property="<%=ssn%>"/>
