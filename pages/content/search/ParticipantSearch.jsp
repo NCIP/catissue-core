@@ -10,21 +10,22 @@
 	String firstName = "value(Participant:FIRST_NAME)";
 	String middleName = "value(Participant:MIDDLE_NAME)";
 	String birthDate = "value(Participant:BIRTH_DATE)";
+	String birthDate2 = "value(Participant:BIRTH_DATE:HLIMIT)";
 	String gender = "value(Participant:GENDER)";
 	String genotype = "value(Participant:GENOTYPE)";
 	String race = "value(Participant:RACE)";
 	String ethnicity = "value(Participant:ETHNICITY)";
 	String ssn = "value(Participant:SOCIAL_SECURITY_NUMBER)";
 
-	String opLastName = "value(Participant:LAST_NAME)";
-	String opFirstName = "value(Participant:FIRST_NAME)";
-	String opMiddleName = "value(Participant:MIDDLE_NAME)";
-	String opBirthDate = "value(Participant:BIRTH_DATE)";
-	String opGender = "value(Participant:GENDER)";
-	String opGenotype = "value(Participant:GENOTYPE)";
-	String opRace = "value(Participant:RACE)";
-	String opEthnicity = "value(Participant:ETHNICITY)";
-	String opSsn = "value(Participant:SOCIAL_SECURITY_NUMBER)";
+	String opLastName = "value(Operator:Participant:LAST_NAME)";
+	String opFirstName = "value(Operator:Participant:FIRST_NAME)";
+	String opMiddleName = "value(Operator:Participant:MIDDLE_NAME)";
+	String opBirthDate = "value(Operator:Participant:BIRTH_DATE)";
+	String opGender = "value(Operator:Participant:GENDER)";
+	String opGenotype = "value(Operator:Participant:GENOTYPE)";
+	String opRace = "value(Operator:Participant:RACE)";
+	String opEthnicity = "value(Operator:Participant:ETHNICITY)";
+	String opSsn = "value(Operator:Participant:SOCIAL_SECURITY_NUMBER)";
 %>
 
 <head>
@@ -44,7 +45,7 @@
 
 <!--  MAIN TITLE ROW -->
 <tr>
-	<td class="formTitle" height="25" colspan="6">
+	<td class="formTitle" height="25" colspan="3">
 	    <bean:message key="participant.queryRule"/>
 	</td>
 </tr>
@@ -53,7 +54,7 @@
 <tr>
 	<td class="formSerialNumberField" nowrap>
  		<label for="lastName">
- 			<bean:message key="user.lastName"/>
+ 			<b><bean:message key="user.lastName"/>
  		</label>
 	</td>
 	<td class="formField">
@@ -64,9 +65,13 @@
 	<td class="formField">
 		<html:text styleClass="formFieldSized10" styleId="lastName" property="<%=lastName%>"/>
 	</td>
-	<td class="formField" nowrap>
+</tr>
+
+<!--  SECOND ROW -->
+<tr>
+	<td class="formSerialNumberField" nowrap>
  		<label for="firstName">
- 			<bean:message key="user.firstName"/>
+ 			<b><bean:message key="user.firstName"/>
  		</label>
 	</td>
 	<td class="formField">
@@ -79,11 +84,11 @@
 	</td>
 </tr>
 
-<!--  SECOND ROW -->
+<!--  THIRD ROW -->
 <tr>
 	<td class="formSerialNumberField" nowrap>
  		<label for="middleName">
- 			<bean:message key="participant.middleName"/>
+ 			<b><bean:message key="participant.middleName"/>
  		</label>
 	</td>
 	<td class="formField">
@@ -94,9 +99,13 @@
 	<td class="formField">
 		<html:text styleClass="formFieldSized10" styleId="middleName" property="<%=middleName%>"/>
 	</td>
-	<td class="formField" nowrap>
+</tr>
+
+<!--  FOURTH ROW -->
+<tr>
+	<td class="formSerialNumberField" nowrap>
  		<label for="birthDate">
-			<bean:message key="participant.birthDate"/>
+			<b><bean:message key="participant.birthDate"/>
 		</label>
 	</td>
 	<td class="formField">
@@ -106,19 +115,25 @@
 	</td>
 	<td class="formField" nowrap>
 		<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
-		<html:text styleClass="formDateSized10" size="10" styleId="birthDate" property="<%=birthDate%>" />
-					 &nbsp;<bean:message key="page.dateFormat" />&nbsp;
-		<a href="javascript:show_calendar('participantForm.birthDate',null,null,'MM-DD-YYYY');">
+		<html:text styleClass="formDateSized10" size="10" styleId="birthDate1" property="<%=birthDate%>" />
+					 &nbsp;
+		<a href="javascript:show_calendar('participantForm.birthDate1',null,null,'MM-DD-YYYY');">
+			<img src="images\calendar.gif" width=24 height=22 border=0>
+		</a>
+					&nbsp;To&nbsp;
+		<html:text styleClass="formDateSized10" size="10" styleId="birthDate2" property="<%=birthDate2%>" />
+					 &nbsp;
+		<a href="javascript:show_calendar('participantForm.birthDate2',null,null,'MM-DD-YYYY');">
 			<img src="images\calendar.gif" width=24 height=22 border=0>
 		</a>
 	</td>
 </tr>
 
-<!--  THIRD ROW -->
+<!--  FIFTH ROW -->
 <tr>
 	<td class="formSerialNumberField" nowrap>
  		<label for="gender">
- 			<bean:message key="participant.gender"/>
+ 			<b><bean:message key="participant.gender"/>
  		</label>
 	</td>
 	<td class="formField">
@@ -130,10 +145,14 @@
 		<html:select property="<%=gender%>" styleClass="formFieldSized10" styleId="gender" size="1">
 			<html:options collection="<%=Constants.GENDER_LIST%>" labelProperty="name" property="value"/>
 		</html:select>
-	</td>	
-	<td class="formField" nowrap>
+	</td>
+</tr>
+
+<!-- SIXTH ROW -->
+<tr>
+	<td class="formSerialNumberField" nowrap>
  		<label for="genotype">
- 			<bean:message key="participant.genotype"/>
+ 			<b><bean:message key="participant.genotype"/>
  		</label>
 	</td>
 	<td class="formField">
@@ -147,11 +166,12 @@
 		</html:select>
 	</td>
 </tr>
-<!-- FOURTH ROW -->
+
+<!-- SEVENTH ROW -->
 <tr>
 	<td class="formSerialNumberField" nowrap>
  		<label for="race">
- 			<bean:message key="participant.race"/>
+ 			<b><bean:message key="participant.race"/>
  		</label>
 	</td>
 	<td class="formField">
@@ -164,9 +184,13 @@
 			<html:options collection="<%=Constants.RACELIST%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
-	<td class="formField" nowrap>
+</tr>
+
+<!-- EIGHTH ROW -->
+<tr>
+	<td class="formSerialNumberField" nowrap>
  		<label for="ethnicity">
-     		<bean:message key="participant.ethnicity"/>
+     		<b><bean:message key="participant.ethnicity"/>
      	</label>
 	</td>
 	<td class="formField">
@@ -180,11 +204,12 @@
 		</html:select>
 	</td>
 </tr>
-<!-- FIFTH ROW -->
+
+<!-- NINETH ROW -->
 <tr>
 	<td class="formSerialNumberField" nowrap>
  		<label for="socialSecurityNumber">
-     		<bean:message key="participant.socialSecurityNumber"/>
+     		<b><bean:message key="participant.socialSecurityNumber"/>
      	</label>
 	</td>
 	<td class="formField">
@@ -195,27 +220,24 @@
 	<td class="formField">
 		<html:text styleClass="formFieldSized10" styleId="ssn" property="<%=ssn%>"/>
 	</td>
-	<td class="formField" colspan="3">
-		&nbsp;
-	</td>
 </tr>
 
 <tr>
-	<td colspan="6">&nbsp;</td>
+	<td colspan="3">&nbsp;</td>
 </tr>
 
 
-<!-- SIXTH ROW -->
+<!-- TENTH ROW -->
 <tr>
-	<td colspan="3">&nbsp</td>
-	<td colspan="3" nowrap align="right">
+	<td colspan="2">&nbsp</td>
+	<td nowrap align="right">
 		<html:button property="addRule" styleClass="actionButton" onclick="onAddRule()">
 			<bean:message key="buttons.addRule"/>
 		</html:button>
-		&nbsp;&nbsp;
-		<html:button property="search" styleClass="actionButton" onclick="">
+		
+		<%--html:button property="search" styleClass="actionButton" onclick="">
 			<bean:message key="buttons.search"/>
-		</html:button>
+		</html:button--%>
 		&nbsp;&nbsp;
 		<html:button property="resetQuery" styleClass="actionButton" onclick="">
 			<bean:message key="buttons.resetQuery"/>
