@@ -195,19 +195,40 @@ public class SimpleSearchAction extends BaseAction
 			// Get the view columns.
 			List columnNames = null;
 			
+//						Iterator iterator1 = fromTables.iterator();
+//			            while (iterator1.hasNext())
+//			            {
+//			                Logger.out.debug("From tABLES before............................."+iterator1.next());
+//			            }
+			
 			if (simpleQueryInterfaceForm.getPageOf()
 					.equals(Constants.PAGEOF_SIMPLE_QUERY_INTERFACE))
 			{
-			    // Set the from tables in the query.
-				query.setTableSet(fromTables);
-				
 				String[] selectedColumns = simpleQueryInterfaceForm.getSelectedColumnNames();
-				//List tempColumnNames = query.setViewElements(fromTables);
 				
 				//Set the result view for the query
 				List tempColumnNames = getColumnNames(selectedColumns,query,fromTables);
-				Set tableSet;
+
+				//Getting the DataElement for select columns of the query.
+				Vector selectDataElements = query.getResultView();
 				
+				//Getting the aliasNames of the table ids in the tables in path.
+				Set forFromSet = configureSelectDataElements(selectDataElements, query);
+				fromTables.addAll(forFromSet);
+				
+//				iterator1 = fromTables.iterator();
+//	            while (iterator1.hasNext())
+//	            {
+//	                Logger.out.debug("From tABLES. after............................"+iterator1.next());
+//	            }
+				
+				// Set the from tables in the query.
+				query.setTableSet(fromTables);
+				
+//				Logger.out.debug("Show tables Set..............");
+//				query.showTableSet();
+				
+				Set tableSet;
 				if(Constants.switchSecurity)
 				{
 					tableSet = query.getTableSet();
@@ -252,8 +273,29 @@ public class SimpleSearchAction extends BaseAction
 			else
 			{
 				columnNames = query.setViewElements(fromTables);
+				
+				//Getting the DataElement for select columns of the query.
+				Vector selectDataElements = query.getResultView();
+				
+				//Getting the aliasNames of the table ids in the tables in path.
+				Set forFromSet = configureSelectDataElements(selectDataElements, query);
+				fromTables.addAll(forFromSet);
+				
+				//Set the from tables in the query.
+				query.setTableSet(fromTables);
+				
+//				Logger.out.debug("Show tables Set..............");
+//				query.showTableSet();
+//				
+//				iterator1 = fromTables.iterator();
+//	            while (iterator1.hasNext())
+//	            {
+//	                Logger.out.debug("From tABLES. after............................"+iterator1.next());
+//	            }
+				
 				list = query.execute(getSessionData(request),Constants.INSECURE_RETRIEVE,null,null);
 			}
+			
 			
 			if (list.isEmpty())
 			{
@@ -467,6 +509,7 @@ public class SimpleSearchAction extends BaseAction
 	 {
 	 	//set the result view for the query 
 		List tempColumnNames;
+		
 		//If columns not conigured, set to default
 	 	if(selectedColumns==null)
 			tempColumnNames	= query.setViewElements(tableSet);
@@ -488,6 +531,38 @@ public class SimpleSearchAction extends BaseAction
 			}
 		}
 	 	return tempColumnNames;
+	 }
+	 
+	 private Set configureSelectDataElements(Vector selectDataElements, Query query) throws DAOException
+	 {
+	     Set forFromSet = new HashSet();
+	     
+	     Iterator iterator = selectDataElements.iterator();
+	     QueryBizLogic bizLogic = (QueryBizLogic)BizLogicFactory
+		 							.getBizLogic(Constants.SIMPLE_QUERY_INTERFACE_ID);
+	     while (iterator.hasNext())
+	     {
+	         DataElement dataElement = (DataElement) iterator.next();
+	         String fieldName = dataElement.getField();
+	         StringTokenizer stringToken = new StringTokenizer(dataElement.getField(), ".");
+	         dataElement.setField(stringToken.nextToken());
+	         
+	         if (stringToken.hasMoreElements())
+	         {
+	             StringTokenizer pathIdToken = new StringTokenizer(stringToken.nextToken(), ":");
+		         while (pathIdToken.hasMoreTokens())
+		         {
+		             Long tableId = Long.valueOf(pathIdToken.nextToken());
+		             String aliasName = bizLogic.getAliasNameFromTableId(tableId);
+		             Logger.out.debug("configureSelectDataElements..............aliasName.."+aliasName);
+		             forFromSet.add(aliasName);
+		         }
+	         }
+	     }
+	     
+	     query.setResultView(selectDataElements);
+	     
+	     return forFromSet;
 	 }
 	 
 }
