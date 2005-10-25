@@ -100,7 +100,7 @@ public class Operator
     
     public String toSQLString()
     {
-        return operator;
+        return " "+operator+" ";
     }
     
     public boolean equals(Object obj)
