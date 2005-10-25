@@ -57,8 +57,10 @@ public class SimpleSearchAction extends BaseAction
 		SimpleQueryInterfaceForm simpleQueryInterfaceForm = (SimpleQueryInterfaceForm) form;
 		String counter = simpleQueryInterfaceForm.getCounter();
 		HttpSession session = request.getSession();
+		if(counter==null)
+			counter = (String)session.getAttribute(Constants.SIMPLE_QUERY_COUNTER);
 		//Set form attributes in session for configuration after Search
-		if(counter!=null)
+		else
 			session.setAttribute(Constants.SIMPLE_QUERY_COUNTER,simpleQueryInterfaceForm.getCounter());
 		Map map=null;
 		
@@ -156,10 +158,10 @@ public class SimpleSearchAction extends BaseAction
 			}
 			
 			//Add all the objects selected in UI to the fromtables Set. 
-			for (int i=1;i<=Integer.parseInt(simpleQueryInterfaceForm.getCounter());i++)
+			for (int i=1;i<=Integer.parseInt(counter);i++)
 			{
 			    String fromAliasNameKey = "SimpleConditionsNode:"+i+"_Condition_DataElement_table";
-			    String fromAliasNameValue = (String)simpleQueryInterfaceForm.getValue(fromAliasNameKey);
+			    String fromAliasNameValue = (String)map.get(fromAliasNameKey);
 			    
 			    //Prepare a Set of table names.
 				fromTables.add(fromAliasNameValue);
@@ -195,11 +197,11 @@ public class SimpleSearchAction extends BaseAction
 			// Get the view columns.
 			List columnNames = null;
 			
-//						Iterator iterator1 = fromTables.iterator();
-//			            while (iterator1.hasNext())
-//			            {
-//			                Logger.out.debug("From tABLES before............................."+iterator1.next());
-//			            }
+						Iterator iterator1 = fromTables.iterator();
+			            while (iterator1.hasNext())
+			            {
+			                Logger.out.debug("From tABLES before............................."+iterator1.next());
+			            }
 			
 			if (simpleQueryInterfaceForm.getPageOf()
 					.equals(Constants.PAGEOF_SIMPLE_QUERY_INTERFACE))
@@ -225,8 +227,8 @@ public class SimpleSearchAction extends BaseAction
 				// Set the from tables in the query.
 				query.setTableSet(fromTables);
 				
-//				Logger.out.debug("Show tables Set..............");
-//				query.showTableSet();
+				Logger.out.debug("Show tables Set..............");
+				query.showTableSet();
 				
 				Set tableSet;
 				if(Constants.switchSecurity)
@@ -497,12 +499,43 @@ public class SimpleSearchAction extends BaseAction
 		    	while (st.hasMoreTokens())
 				{
 		    		dataElement.setTable(st.nextToken());
-		    		dataElement.setField(st.nextToken());
+		    		String field = st.nextToken();
 		    		Logger.out.debug(st.nextToken());
+		    		String tableInPath = null;
+					if (st.hasMoreTokens())
+					{
+					    tableInPath = st.nextToken();
+					    field = field+"."+tableInPath;
+					    Logger.out.debug("Field with the table id......."+field);
+					}
+					dataElement.setField(field);
 		    	}
 		        vector.add(dataElement);
 		    }
 			return vector;
+		}
+	 private List getColumnDisplayNames(String []selectedColumnsList) 
+		{
+	    	/*Split the string which is in the form TableAlias.columnNames.columnDisplayNames 
+	    	 * and set the dataelement object.
+	    	 */
+		    List columnDisplayNames = new ArrayList();
+		    for(int i=0;i<selectedColumnsList.length;i++)
+		    {
+		    	StringTokenizer st= new StringTokenizer(selectedColumnsList[i],".");
+		    	DataElement dataElement = new DataElement();
+		    	while(st.hasMoreTokens())
+				{
+		    		st.nextToken();
+		    		st.nextToken();
+		    		String displayName = st.nextToken();
+		    		columnDisplayNames.add(displayName);
+		    		Logger.out.debug("columnDisplayNames"+displayName);
+		    		if(st.hasMoreTokens())
+		    			st.nextToken();
+				}
+		    }
+			return columnDisplayNames;
 		}
 	 
 	 private List getColumnNames(String[] selectedColumns,Query query,Set tableSet) throws DAOException
@@ -518,20 +551,11 @@ public class SimpleSearchAction extends BaseAction
 		{
 			Vector resultViewVector = setViewElements(selectedColumns); 
 			query.setResultView(resultViewVector);
-			Iterator itr = resultViewVector.iterator();
-			tempColumnNames = new ArrayList();
-			int columnCount = 0;
-			while(itr.hasNext())
-			{
-				DataElement dataElement = (DataElement)itr.next();
-				String column = dataElement.getField();
-				Logger.out.debug("column in the data element"+column);
-				tempColumnNames.add(column);
-				columnCount++;
-			}
+			tempColumnNames = getColumnDisplayNames(selectedColumns); 
 		}
 	 	return tempColumnNames;
 	 }
+	 
 	 
 	 private Set configureSelectDataElements(Vector selectDataElements, Query query) throws DAOException
 	 {
@@ -544,8 +568,10 @@ public class SimpleSearchAction extends BaseAction
 	     {
 	         DataElement dataElement = (DataElement) iterator.next();
 	         String fieldName = dataElement.getField();
+	         Logger.out.debug("Field with the table id in configureSelectDataElements......."+fieldName);
 	         StringTokenizer stringToken = new StringTokenizer(dataElement.getField(), ".");
 	         dataElement.setField(stringToken.nextToken());
+//	         Logger.out.debug("..........................."+stringToken.nextToken());
 	         
 	         if (stringToken.hasMoreElements())
 	         {
@@ -559,10 +585,8 @@ public class SimpleSearchAction extends BaseAction
 		         }
 	         }
 	     }
-	     
 	     query.setResultView(selectDataElements);
 	     
 	     return forFromSet;
 	 }
-	 
 }
