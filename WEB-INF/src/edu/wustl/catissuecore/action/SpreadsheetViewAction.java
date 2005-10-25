@@ -36,7 +36,7 @@ public class SpreadsheetViewAction extends Action
             HttpServletRequest request, HttpServletResponse response) throws Exception
     {
         List list = (List)request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
-        String [] columnNames = (String [])request.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
+        List columnNames = (List)request.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
         String pageOf = (String)request.getAttribute(Constants.PAGEOF);
 
         if (Constants.PAGEOF_SIMPLE_QUERY_INTERFACE.equals(pageOf))

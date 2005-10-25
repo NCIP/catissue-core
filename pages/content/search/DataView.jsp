@@ -7,7 +7,7 @@
 <script src="runtime/lib/grid.js"></script>
 
 <%
-	String[] columnList = (String[]) request.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
+	List columnList = (List) request.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
 	List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
 
@@ -29,7 +29,7 @@ var myData = [<%int i;%><%for (i=0;i<(dataList.size()-1);i++){%>
 [<%for (j=0;j < (row.size()-1);j++){%>"<%=row.get(j)%>",<%}%>"<%=row.get(j)%>"]
 ];
 
-var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnList[k]%>",<%}%>"<%=columnList[k]%>"];
+var columns = [<%int k;%><%for (k=0;k < (columnList.size()-1);k++){%>"<%=columnList.get(k)%>",<%}%>"<%=columnList.get(k)%>"];
 
 </script>
 <table summary="" cellpadding="0" cellspacing="0" border="0" width="100%" height="4%">
@@ -49,7 +49,7 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 			
 			//	set number of rows/columns.
 			obj.setRowProperty("count", <%=dataList.size()%>);
-			obj.setColumnProperty("count", <%=columnList.length%>);
+			obj.setColumnProperty("count", <%=columnList.size()%>);
 			
 			//	provide cells and headers text
 			obj.setDataProperty("text", function(i, j){return myData[i][j]});

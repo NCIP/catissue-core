@@ -24,7 +24,7 @@
 %>
 <head>
 <%
-	String [] columnList = (String[]) session.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
+	List columnList = (List) request.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
 	List dataList = (List) session.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
 
@@ -32,9 +32,10 @@
 
 	boolean isSpecimenData = false;
 
-	for(int i=0;i<columnList.length;i++)
+	for(int i=0;i<columnList.size();i++)
 	{
-		if(columnList[i].equalsIgnoreCase("Specimen Id"))
+		String columnName = (String)columnList.get(i);
+		if(columnName.equalsIgnoreCase("Specimen Id"))
 		{
 			isSpecimenData = true;
 			break;
@@ -61,7 +62,7 @@ if(dataList.size() != 0)
 		["<INPUT TYPE='CHECKBOX' NAME='<%=chkName%>' id='<%=xx%>' onClick='changeData(this)'>",<%for (j=0;j < (row.size()-1);j++){%>"<%=row.get(j)%>",<%}%>"<%=row.get(j)%>","1"]
 		];
 		
-		var columns = ["",<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnList[k]%>",<%}%>"<%=columnList[k]%>"];
+		var columns = ["",<%int k;%><%for (k=0;k < (columnList.size()-1);k++){%>"<%=columnList.get(k)%>",<%}%>"<%=columnList.get(k)%>"];
 	</script>
 
 <% } %>
@@ -216,7 +217,7 @@ if(dataList.size() != 0)
 						
 						//	set number of rows/columns.
 						obj.setRowProperty("count", <%=dataList.size()%>);
-						obj.setColumnProperty("count", <%=columnList.length + 1%>);
+						obj.setColumnProperty("count", <%=columnList.size() + 1%>);
 						
 						//	provide cells and headers text
 						obj.setDataProperty("text", function(i, j){return myData[i][j]});
