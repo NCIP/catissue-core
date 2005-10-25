@@ -11,24 +11,21 @@
 <tr>
 	<td class="subMenuPrimaryItemsWithBorder" onmouseover="changeMenuStyle(this,'subMenuPrimaryItemsWithBorderOver')" onmouseout="changeMenuStyle(this,'subMenuPrimaryItemsWithBorder')">				
 		<div>
-      		<a class="subMenuPrimary" href="SimpleQueryInterface.do?pageOf=pageOfSimpleQueryInterface">
-      			<bean:message key="app.simpleSearch" />
-      		</a>
-      </div>
+			<b> <bean:message key="app.search" /> </b>
+		</div>		
+		
+		<div>
+			<a class="subMenuPrimary" href="SimpleQueryInterface.do?pageOf=pageOfSimpleQueryInterface">
+				<bean:message key="app.simpleSearch" />
+			</a> |  
+			<a class="subMenuPrimary" href="AdvanceQueryInterface.do?pageOf=pageOfAdvanceQueryInterface">
+					<bean:message key="app.advancedSearch" />
+			</a>			
+		</div>
 	</td>
 </tr>
 
-<tr>
-	<td class="subMenuPrimaryItemsWithBorder" onmouseover="changeMenuStyle(this,'subMenuPrimaryItemsWithBorderOver')" onmouseout="changeMenuStyle(this,'subMenuPrimaryItemsWithBorder')">				
-	  <div>
-      		<a class="subMenuPrimary" href="AdvanceQueryInterface.do?pageOf=pageOfAdvanceQueryInterface">
-      			<bean:message key="app.advancedSearch" />
-      		</a>
-      </div>
-	</td>
-</tr>
-
-<tr>
+<%--tr>
 	<td class="subMenuPrimaryItemsWithBorder" onmouseover="changeMenuStyle(this,'subMenuPrimaryItemsWithBorderOver')" onmouseout="changeMenuStyle(this,'subMenuPrimaryItemsWithBorder')">				
 	  <div>
       		<a class="subMenuPrimary" href="ShowFramedPage.do?pageOf=pageOfStorageLocation">
@@ -38,7 +35,7 @@
 	</td>
 </tr>
 
-<%--tr>
+<tr>
 	<td class="subMenuPrimaryItemsWithBorder" onmouseover="changeMenuStyle(this,'subMenuPrimaryItemsWithBorderOver')" onmouseout="changeMenuStyle(this,'subMenuPrimaryItemsWithBorder')">				
 	  <div>
       		<a class="subMenuPrimary" href="#">
@@ -50,9 +47,13 @@
 
 <tr>
 	<td class="subMenuPrimaryItemsWithBorder" onmouseover="changeMenuStyle(this,'subMenuPrimaryItemsWithBorderOver')" onmouseout="changeMenuStyle(this,'subMenuPrimaryItemsWithBorder')">				
-	  <div>
+		<div>
+			<b> <bean:message key="app.shoppingCart" /> </b>
+		</div>		
+		
+		<div>
       		<a class="subMenuPrimary" href="ShoppingCart.do">
-	  			<bean:message key="app.viewShoppingCart" />
+	  			<bean:message key="app.view" />
 	  		</a>
       </div>
 	</td>
