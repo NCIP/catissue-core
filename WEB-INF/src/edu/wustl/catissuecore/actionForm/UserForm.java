@@ -717,7 +717,7 @@ public class UserForm extends AbstractActionForm
                                             .getValue("user.zipCode")));
                         }
 
-                        if (country.trim().equals(Constants.SELECT_OPTION))
+                        if(!validator.isValidOption(country))
                         {
                             errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
                                     "errors.item.required", ApplicationProperties
@@ -768,6 +768,12 @@ public class UserForm extends AbstractActionForm
                                                     ApplicationProperties.getValue("user.cancerResearchGroup")));
                         }
 
+                        if(!validator.isValidOption(activityStatus))
+                        {
+                        	errors.add(ActionErrors.GLOBAL_ERROR,
+                                    new ActionError("errors.item.required",
+                                            ApplicationProperties.getValue("user.activityStatus")));
+                        }
                     }
 
                     if (pageOf.equals(Constants.PAGEOF_USER_ADMIN) || pageOf.equals(Constants.PAGEOF_APPROVE_USER))
