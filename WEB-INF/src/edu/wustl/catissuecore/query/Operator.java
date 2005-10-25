@@ -47,6 +47,31 @@ public class Operator
     public static final String LIKE = "like";
     
     /**
+     * NOT EQUALS constant
+     */
+    public static final String NOT_EQUALS = "!=";
+    
+    /**
+     * LESS THAN OR EQUALS constant
+     */
+    public static final String LESS_THAN_OR_EQUALS = "<=";
+    
+    /**
+     * GREATER THAN OR EQUALS constant
+     */
+    public static final String GREATER_THAN_OR_EQUALS = ">=";
+    
+    /**
+     * BETWEEN constant
+     */
+    public static final String BETWEEN = "between";
+    
+    /**
+     * BETWEEN constant
+     */
+    public static final String NOT_BETWEEN = "not between";
+    
+    /**
      * Operator String
      */
     private String operator;
