@@ -51,18 +51,12 @@ public class SpreadsheetExportAction  extends BaseAction
     	Object [] obj = map.keySet().toArray();
     	
     	//Getting column data & grid data from session
-    	String [] columns = (String [])session.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
+    	List columnList = (List)session.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
     	List dataList = (List)session.getAttribute(Constants.SPREADSHEET_DATA_LIST);
     	
     	List exportList = new ArrayList();
-    	List columnList = new ArrayList();
     	
     	//Adding first row(column names) to exportData
-    	for(int i=0;i<columns.length;i++)
-    	{
-    		columnList.add(columns[i]);
-    	}
-    	
     	exportList.add(columnList);
     	
     	//Adding the selected rows to exportData
