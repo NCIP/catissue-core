@@ -35,8 +35,7 @@ public class AdvanceQueryView extends BaseAction
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 	{
-		//QueryTest test = new QueryTest();
-		//Vector v = test.getTreeElement();
+		
 		HttpSession session = request.getSession();
        	DefaultMutableTreeNode root = (DefaultMutableTreeNode)session.getAttribute("root");
        	int childCount = root.getChildCount();
@@ -83,7 +82,10 @@ public class AdvanceQueryView extends BaseAction
 			}
 				
 			tree.add(str);
-			arrangeTree(n,temp,tree,temp);
+			if(n.isLeaf())
+				temp++;
+			else
+				arrangeTree(n,temp,tree,temp);
 		}
 	
 	}
