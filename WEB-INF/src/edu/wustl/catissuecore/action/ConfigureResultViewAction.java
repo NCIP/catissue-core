@@ -85,7 +85,7 @@ public class ConfigureResultViewAction extends Action  {
 	//Retrieves columnNames corresponding to a table aliasName
 	private List setColumnNames(String aliasName) throws DAOException, ClassNotFoundException
     {
-        String sql = 	" SELECT tableData2.ALIAS_NAME, temp.COLUMN_NAME, temp.ATTRIBUTE_TYPE, temp.TABLES_IN_PATH, temp.DISPLAY_NAME " +
+        String sql = 	" SELECT tableData2.ALIAS_NAME, temp.COLUMN_NAME,  temp.DISPLAY_NAME, temp.TABLES_IN_PATH  " +
 				        " from CATISSUE_QUERY_INTERFACE_TABLE_DATA tableData2 join " +
 				        " ( SELECT  columnData.COLUMN_NAME, columnData.TABLE_ID, columnData.ATTRIBUTE_TYPE, " +
 				        " displayData.DISPLAY_NAME, relationData.TABLES_IN_PATH " +
@@ -118,16 +118,19 @@ public class ConfigureResultViewAction extends Action  {
             List rowList = (List)iterator.next();
             tableName = (String)rowList.get(j++);
             columnName = (String)rowList.get(j++);
-
+            columnDisplayName = (String)rowList.get(j++);
             //Name ValueBean Value in the for of tableAlias..columnName.columnDisplayName 
             String columnValue = tableName+"."+columnName+"."+columnDisplayName;
-            
+            Logger.out.debug("columnValue in configurationresultviewaction"+columnValue);
             String tablesInPath = (String)rowList.get(j++);
+            Logger.out.debug("tablesInPath......................."+tablesInPath);
+			
             if ((tablesInPath != null) && ("".equals(tablesInPath) == false))
             {
                 columnValue = columnValue+"."+tablesInPath;
+                Logger.out.debug("columnValue in config"+columnValue);
             }
-            columnDisplayName = (String)rowList.get(j++);
+            
             
             NameValueBean columns = new NameValueBean(columnDisplayName,columnValue);
             columnList.add(columns);

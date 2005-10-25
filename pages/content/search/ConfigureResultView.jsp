@@ -225,7 +225,7 @@
 	
 </script>
 <%
-    if(pageOf.equals(Constants.PAGEOF_DISTRIBUTION))
+    /*if(pageOf.equals(Constants.PAGEOF_DISTRIBUTION))
 	{
 	    ConfigureResultViewForm form = (ConfigureResultViewForm)request.getAttribute("configureResultViewForm");
 	    String selectedColumns[] = form.getSelectedColumnNames();
@@ -244,7 +244,7 @@
 		    	}
 		   	}
 	   	}
-   	}
+   	}*/
 %>
 </head>
 <html:errors/>

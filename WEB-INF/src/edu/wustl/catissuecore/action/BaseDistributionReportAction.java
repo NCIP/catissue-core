@@ -55,6 +55,8 @@ public abstract class BaseDistributionReportAction extends BaseAction
 	    		st.nextToken();
 	    		columnNames[i]=st.nextToken();
 	    		Logger.out.debug("Selected column names in configuration "+columnNames[i]);
+	    		if(st.hasMoreTokens())
+	    			st.nextToken();
 	    	}
 	    }
 		return columnNames;
@@ -75,6 +77,8 @@ public abstract class BaseDistributionReportAction extends BaseAction
 	    		dataElement.setTable(st.nextToken());
 	    		dataElement.setField(st.nextToken());
 	    		st.nextToken();
+	    		if(st.hasMoreTokens())
+	    			st.nextToken();
 	    	}
 	        vector.add(dataElement);
 	    }
