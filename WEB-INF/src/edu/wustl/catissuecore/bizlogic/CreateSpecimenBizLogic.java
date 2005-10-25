@@ -72,6 +72,10 @@ public class CreateSpecimenBizLogic extends DefaultBizLogic
 			// check for closed Storage Container
 			checkStatus(dao, container, "Storage Container" );
 			
+			// --- check for all validations on the storage container.
+			checkContainer(dao,container.getSystemIdentifier().toString(),
+					specimen.getPositionDimensionOne().toString(),specimen.getPositionDimensionTwo().toString());
+
 			specimen.setStorageContainer(container);
 		}
 
@@ -144,4 +148,6 @@ public class CreateSpecimenBizLogic extends DefaultBizLogic
         Logger.out.debug("Dynamic Group name: "+dynamicGroups[0]);
         return dynamicGroups;
 	}
+	
+	
 }

@@ -26,6 +26,7 @@ import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.StorageContainer;
+import edu.wustl.catissuecore.domain.StorageContainerCapacity;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
@@ -184,6 +185,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
         	specimen.setSpecimenCollectionGroup(scg);
         	SpecimenCharacteristics sc= loadSpecimenCharacteristics(specimen.getParentSpecimen().getSystemIdentifier(), dao);
         	specimen.setSpecimenCharacteristics(sc);
+        	 
         }
     	
     	//check for closed Specimen Collection Group
@@ -321,6 +323,11 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			StorageContainer container = (StorageContainer)containerObj;
 			// check for closed Storage Container
 			checkStatus(dao,container, "Storage Container");
+			
+			// --- check for all validations on the storage container.
+			checkContainer(dao,container.getSystemIdentifier().toString(),
+					specimen.getPositionDimensionOne().toString(),specimen.getPositionDimensionTwo().toString());
+			
 			specimen.setStorageContainer(container);
 		}
 		
@@ -432,4 +439,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	    
 	    assignPrivilegeToSubSpecimens(dao,privilegeName,Specimen.class,objectIds,userId, roleId, assignToUser);
     }
+    
+// validation code here
+    
 }
