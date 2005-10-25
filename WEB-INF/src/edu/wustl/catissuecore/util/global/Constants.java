@@ -1140,7 +1140,8 @@ public class Constants
 	
 	//Constants for Advanced Search
 	public static final String STRING_OPERATORS = "StringOperators";
-	public static final String DATE_NUMERIC_OPERATORS = "dateNumericOperators";
+	public static final String DATE_NUMERIC_OPERATORS = "DateNumericOperators";
+	public static final String ENUMERATED_OPERATORS = "EnumeratedOperators";
 	
 	public static final String [] STORAGESTATUSARRAY = {
 	        SELECT_OPTION,
