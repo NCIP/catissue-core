@@ -9,6 +9,7 @@
 
 package edu.wustl.catissuecore.action;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -26,9 +27,9 @@ import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.dao.DAOFactory;
 import edu.wustl.catissuecore.dao.JDBCDAO;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
-
 
 /**
  * SimpleQueryInterfaceAction initializes the fields in the Simple Query Interface.
@@ -68,9 +69,23 @@ public class SimpleQueryInterfaceAction extends SecureAction
                     setColumnNames(request, i, value);
                 }
             }
+            
+            String sql = 	" select TABLE_A.ALIAS_NAME, TABLE_A.DISPLAY_NAME " +
+				            " from catissue_table_relation TABLE_R, " +
+				            " CATISSUE_QUERY_INTERFACE_TABLE_DATA TABLE_A, " +
+				            " CATISSUE_QUERY_INTERFACE_TABLE_DATA TABLE_B " +
+				            " where TABLE_R.PARENT_TABLE_ID = TABLE_A.TABLE_ID and " +
+				            " TABLE_R.CHILD_TABLE_ID = TABLE_B.TABLE_ID ";
 
+			Logger.out.debug("Check sql....................."+sql);
+			
+			JDBCDAO jdbcDao = (JDBCDAO)DAOFactory.getDAO(Constants.JDBC_DAO);
+			jdbcDao.openSession(null);
+			List checkList = jdbcDao.executeQuery(sql,null,Constants.INSECURE_RETRIEVE,null,null);
+			jdbcDao.closeSession();
+            
             if (prevValue != null)
-                setNextTableNames(request, i, prevValue, nextOperatorValue);
+                setNextTableNames(request, i, prevValue, nextOperatorValue, checkList);
             else
             {
                 if (nextOperatorValue != null && !"".equals(nextOperatorValue))
@@ -81,7 +96,7 @@ public class SimpleQueryInterfaceAction extends SecureAction
             		
                     JDBCDAO jdbcDAO = (JDBCDAO)DAOFactory.getDAO(Constants.JDBC_DAO);
                     jdbcDAO.openSession(null);
-                    String sql = "select DISPLAY_NAME from CATISSUE_QUERY_INTERFACE_TABLE_DATA where ALIAS_NAME='"+value+"'";
+                    sql = "select DISPLAY_NAME from CATISSUE_QUERY_INTERFACE_TABLE_DATA where ALIAS_NAME='"+value+"'";
                     List list = jdbcDAO.executeQuery(sql,null,Constants.INSECURE_RETRIEVE,null,null);
                     jdbcDAO.closeSession();
                     
@@ -110,7 +125,6 @@ public class SimpleQueryInterfaceAction extends SecureAction
             sql = sql + " where tableData.ALIAS_NAME = '"+ aliasName +"'";
             request.setAttribute(Constants.TABLE_ALIAS_NAME,aliasName);
         }
-        
         sql = sql + " ORDER BY tableData.DISPLAY_NAME ";
         
         JDBCDAO jdbcDAO = (JDBCDAO)DAOFactory.getDAO(Constants.JDBC_DAO);
@@ -173,10 +187,11 @@ public class SimpleQueryInterfaceAction extends SecureAction
     {
         String attributeNameList = "attributeNameList"+i;
         String attributeDisplayNameList = "attributeDisplayNameList"+i;
-
-        String sql = 	" SELECT tableData2.ALIAS_NAME, temp.COLUMN_NAME, temp.ATTRIBUTE_TYPE, temp.DISPLAY_NAME " +
+        
+        String sql = 	" SELECT tableData2.ALIAS_NAME, temp.COLUMN_NAME, temp.ATTRIBUTE_TYPE, temp.TABLES_IN_PATH, temp.DISPLAY_NAME " +
 				        " from CATISSUE_QUERY_INTERFACE_TABLE_DATA tableData2 join " +
-				        " ( SELECT  columnData.COLUMN_NAME, columnData.TABLE_ID, columnData.ATTRIBUTE_TYPE, displayData.DISPLAY_NAME " +
+				        " ( SELECT  columnData.COLUMN_NAME, columnData.TABLE_ID, columnData.ATTRIBUTE_TYPE, " +
+				        " displayData.DISPLAY_NAME, relationData.TABLES_IN_PATH " +
 				        " FROM CATISSUE_QUERY_INTERFACE_COLUMN_DATA columnData, " +
 				        " CATISSUE_TABLE_RELATION relationData, " +
 				        " CATISSUE_QUERY_INTERFACE_TABLE_DATA tableData, " +
@@ -186,7 +201,7 @@ public class SimpleQueryInterfaceAction extends SecureAction
 				        " relationData.RELATIONSHIP_ID = displayData.RELATIONSHIP_ID and " +
 				        " columnData.IDENTIFIER = displayData.COL_ID and " +
 				        " tableData.ALIAS_NAME = '"+value+"') as temp " +
-				        " on temp.TABLE_ID = tableData2.TABLE_ID";
+				        " on temp.TABLE_ID = tableData2.TABLE_ID ";
         
         Logger.out.debug("SQL*****************************"+sql);
         
@@ -199,11 +214,19 @@ public class SimpleQueryInterfaceAction extends SecureAction
         String [] columnDisplayNameList = new String[list.size()];
         
         Iterator iterator = list.iterator();
-        int j = 0,k=0;
+        int j = 0, k=0;
         while (iterator.hasNext())
         {
             List rowList = (List)iterator.next();
-            columnNameList[k] = (String)rowList.get(j++)+"."+(String)rowList.get(j++)+"."+(String)rowList.get(j++);
+            columnNameList[k] = (String)rowList.get(j++)+"."+(String)rowList.get(j++)
+            					+"."+(String)rowList.get(j++);
+            Logger.out.debug("(String)rowList.get(j)........................."+(String)rowList.get(j));
+            String tablesInPath = (String)rowList.get(j++);
+            if ((tablesInPath != null) && ("".equals(tablesInPath) == false))
+            {
+                columnNameList[k] = columnNameList[k]+"."+tablesInPath;
+            }
+            
             columnDisplayNameList[k] = (String)rowList.get(j++);
             j = 0;
             k++;
@@ -213,13 +236,11 @@ public class SimpleQueryInterfaceAction extends SecureAction
         request.setAttribute(attributeDisplayNameList, columnDisplayNameList);    
     }
     
-    private void setNextTableNames(HttpServletRequest request, int i, String prevValue, String nextOperatorValue) throws DAOException, ClassNotFoundException
+    private void setNextTableNames(HttpServletRequest request, int i, String prevValue, String nextOperatorValue, List checkList) throws DAOException, ClassNotFoundException
     {
-        String objectNameList = "objectNameList"+i;
-		String objectDisplayNameList = "objectDisplayNameList"+i;
-		
-		String [] aliasNameList = null;
-        String [] displayNameList = null;
+        String objectNameList = "objectList"+i;
+        
+        List objectList = new ArrayList();
         
         String sql =" (select temp.ALIAS_NAME, temp.DISPLAY_NAME " +
         			" from " +
@@ -246,42 +267,43 @@ public class SimpleQueryInterfaceAction extends SecureAction
             List list = jdbcDao.executeQuery(sql,null,Constants.INSECURE_RETRIEVE,null,null);
             jdbcDao.closeSession();
             
-            aliasNameList = new String[list.size()+2];
-            displayNameList = new String[list.size()+2];
+            //Adding NameValueBean of select option.
+            NameValueBean nameValueBean = new NameValueBean();
+            nameValueBean.setName(Constants.SELECT_OPTION);
+            nameValueBean.setValue("-1");
+            objectList.add(nameValueBean);
             
-            aliasNameList[0] = "-1";
-            displayNameList[0] = Constants.SELECT_OPTION;
-            
+            //Adding the NameValueBean of previous selected object.
             JDBCDAO jdbcDAO = (JDBCDAO)DAOFactory.getDAO(Constants.JDBC_DAO);
             jdbcDAO.openSession(null);
             sql = "select DISPLAY_NAME from CATISSUE_QUERY_INTERFACE_TABLE_DATA where ALIAS_NAME='"+prevValue+"'";
-            Logger.out.debug("DISPLAY_NAME sql.........................."+sql);
             List prevValueDisplayNameList = jdbcDAO.executeQuery(sql,null,Constants.INSECURE_RETRIEVE,null,null);
             jdbcDAO.closeSession();
             
-            String prevValueDisplayName = null;
             if (!prevValueDisplayNameList.isEmpty())
             {
                 List rowList = (List)prevValueDisplayNameList.get(0);
-                prevValueDisplayName = (String)rowList.get(0);
+                nameValueBean = new NameValueBean();
+                nameValueBean.setName((String)rowList.get(0));
+                nameValueBean.setValue(prevValue);
+                objectList.add(nameValueBean);
             }
             
-            aliasNameList[1] = prevValue;
-            displayNameList[1] = prevValueDisplayName;
-            
             Iterator iterator = list.iterator();
-            int k=2;
             while (iterator.hasNext())
             {
                 int j=0;
                 List rowList = (List)iterator.next();
-                aliasNameList[k] = (String)rowList.get(j++);
-                displayNameList[k] = (String)rowList.get(j);
-                k++;
+                if (checkForTable(rowList, checkList))
+                {
+                    nameValueBean = new NameValueBean();
+                    nameValueBean.setValue((String)rowList.get(j++));
+                    nameValueBean.setName((String)rowList.get(j));
+                    objectList.add(nameValueBean);
+                }
             }
             
-            request.setAttribute(objectNameList, aliasNameList);
-            request.setAttribute(objectDisplayNameList, displayNameList);
+            request.setAttribute(objectNameList, objectList);
     }
     
     /**
@@ -322,5 +344,21 @@ public class SimpleQueryInterfaceAction extends SecureAction
         {
             return mapping.findForward(Constants.ACCESS_DENIED);
         }
+    }
+    
+    private boolean checkForTable(List rowList, List checkList)
+    {
+        String aliasName = (String)rowList.get(0), displayName = (String)rowList.get(1);
+        Iterator iterator = checkList.iterator();
+        while (iterator.hasNext())
+        {
+            List row = (List) iterator.next();
+            if (aliasName.equals((String) row.get(0)) && displayName.equals((String) row.get(1)))
+            {
+                return true;
+            }
+        }
+        
+        return false;
     }
 }
