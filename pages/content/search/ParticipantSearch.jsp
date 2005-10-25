@@ -40,7 +40,7 @@
 
 <html:errors />
 
-<html:form action="ParticipantSearch.do">
+<html:form action="AdvanceSearch.do">
 <table summary="" cellpadding="5" cellspacing="0" border="0" width="600">
 
 <!--  MAIN TITLE ROW -->
@@ -231,9 +231,9 @@
 <tr>
 	<td colspan="2">&nbsp</td>
 	<td nowrap align="right">
-		<html:button property="addRule" styleClass="actionButton" onclick="onAddRule()">
+		<html:submit property="addRule" styleClass="actionButton" >
 			<bean:message key="buttons.addRule"/>
-		</html:button>
+		</html:submit>
 		
 		<%--html:button property="search" styleClass="actionButton" onclick="">
 			<bean:message key="buttons.search"/>
