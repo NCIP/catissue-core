@@ -40,6 +40,11 @@ public class SearchUtil
      */
     public static final int DATATYPE_STRING = 3;
     
+    /**
+     * Constant for datatype STRING
+     */
+    public static final int DATATYPE_ENUMERATED = 4;
+    
     
 	//Function returns the list of operators as per the datatype.
 	public static final List getOperatorList(int dataType)
@@ -65,6 +70,11 @@ public class SearchUtil
 				operatorList.add(new NameValueBean("STARTS WITH",Operator.LIKE));
 				operatorList.add(new NameValueBean("ENDS WITH",Operator.LIKE));
 				operatorList.add(new NameValueBean("CONTAINS",Operator.LIKE));
+				operatorList.add(new NameValueBean(Operator.EQUAL,Operator.EQUAL));
+				operatorList.add(new NameValueBean(Operator.NOT_EQUALS,Operator.NOT_EQUALS));
+				break;
+				
+			case DATATYPE_ENUMERATED:
 				operatorList.add(new NameValueBean(Operator.EQUAL,Operator.EQUAL));
 				operatorList.add(new NameValueBean(Operator.NOT_EQUALS,Operator.NOT_EQUALS));
 				break;
