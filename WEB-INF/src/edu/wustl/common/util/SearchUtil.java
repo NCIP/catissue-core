@@ -11,6 +11,7 @@
 package edu.wustl.common.util;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import edu.wustl.catissuecore.query.Operator;
@@ -31,6 +32,8 @@ public class SearchUtil
      * Constant for datatype NUMERIC
      */
     public static final int DATATYPE_NUMERIC = 2;
+    
+    private HashMap map = new HashMap();
     
     /**
      * Constant for datatype STRING
@@ -68,5 +71,21 @@ public class SearchUtil
 		}
 		
 		return operatorList;
+	}
+	public String getLink(String item){
+		getMap();
+		String link = (String)map.get(item);
+		System.out.println("link--->"+link);
+		return link;
+	
+	}
+	private void getMap(){
+		map.put("Participant","ParticipantAdvanceSearch.do?pageOf=pageOfParticipantAdvanceSearch");
+		map.put("CollectionProtocol","#");
+		map.put("Specimen","#");
+		map.put("SpecimenCollectionGroup","#");
+		map.put("Distribution","#");
+		map.put("DistributionProtocol","#");	
+		
 	}
 }
