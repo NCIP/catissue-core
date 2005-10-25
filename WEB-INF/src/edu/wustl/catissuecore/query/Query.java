@@ -168,20 +168,20 @@ public abstract class Query
 	        {
 	            String aliasName = (String) aliasNameIterator.next();
 	            
-	            String sql =" SELECT tableData2.ALIAS_NAME, temp.COLUMN_NAME, temp.DISPLAY_NAME " +
-		        " from CATISSUE_QUERY_INTERFACE_TABLE_DATA tableData2 join " +
-		        " ( SELECT  columnData.COLUMN_NAME, columnData.TABLE_ID, displayData.DISPLAY_NAME " +
-		        " FROM CATISSUE_QUERY_INTERFACE_COLUMN_DATA columnData, " +
-		        " CATISSUE_TABLE_RELATION relationData, " +
-		        " CATISSUE_QUERY_INTERFACE_TABLE_DATA tableData, " +
-		        " CATISSUE_SEARCH_DISPLAY_DATA displayData " +
-		        " where relationData.CHILD_TABLE_ID = columnData.TABLE_ID and " +
-		        " relationData.PARENT_TABLE_ID = tableData.TABLE_ID and " +
-		        " relationData.RELATIONSHIP_ID = displayData.RELATIONSHIP_ID and " +
-		        " columnData.IDENTIFIER = displayData.COL_ID and " +
-		        " tableData.ALIAS_NAME = '"+aliasName+"') as temp " +
-		        " on temp.TABLE_ID = tableData2.TABLE_ID";
-    
+	            String sql =" SELECT tableData2.ALIAS_NAME, temp.COLUMN_NAME, temp.TABLES_IN_PATH, temp.DISPLAY_NAME " +
+					        " from CATISSUE_QUERY_INTERFACE_TABLE_DATA tableData2 join " +
+					        " ( SELECT  columnData.COLUMN_NAME, columnData.TABLE_ID, displayData.DISPLAY_NAME, relationData.TABLES_IN_PATH " +
+					        " FROM CATISSUE_QUERY_INTERFACE_COLUMN_DATA columnData, " +
+					        " CATISSUE_TABLE_RELATION relationData, " +
+					        " CATISSUE_QUERY_INTERFACE_TABLE_DATA tableData, " +
+					        " CATISSUE_SEARCH_DISPLAY_DATA displayData " +
+					        " where relationData.CHILD_TABLE_ID = columnData.TABLE_ID and " +
+					        " relationData.PARENT_TABLE_ID = tableData.TABLE_ID and " +
+					        " relationData.RELATIONSHIP_ID = displayData.RELATIONSHIP_ID and " +
+					        " columnData.IDENTIFIER = displayData.COL_ID and " +
+					        " tableData.ALIAS_NAME = '"+aliasName+"') as temp " +
+					        " on temp.TABLE_ID = tableData2.TABLE_ID";
+	            
 			    Logger.out.debug("DATA ELEMENT SQL : "+sql);
 			    
 			    List list = jdbcDao.executeQuery(sql, null, Constants.INSECURE_RETRIEVE, null,null);
@@ -195,10 +195,9 @@ public abstract class Query
 			        List rowList = (List) iterator.next();
 			        DataElement dataElement = new DataElement();
 			        dataElement.setTable((String)rowList.get(0));
-			        dataElement.setField((String)rowList.get(1));
+			        dataElement.setField((String)rowList.get(1)+"."+(String)rowList.get(2));
 			        vector.add(dataElement);
-			        columnList.add((String)rowList.get(2));
-			        Logger.out.debug("columnList..................."+columnList.get(i++));
+			        columnList.add((String)rowList.get(3));
 			    }
 	        }
 		    
@@ -217,7 +216,6 @@ public abstract class Query
 	    setResultView(vector);
 	    
 	    return columnList;
-
 	}
 	
 	/**
@@ -541,6 +539,15 @@ public abstract class Query
     public void setTableSet(Set tableSet)
     {
         this.tableSet = tableSet;
+    }
+    
+    public void showTableSet()
+    {
+        Iterator iterator1 = this.tableSet.iterator();
+        while (iterator1.hasNext())
+        {
+            Logger.out.debug("showTableSet............................"+iterator1.next());
+        }
     }
     
     public Vector getColumnIds(String tableAlias)
