@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+import edu.wustl.catissuecore.dao.DAOFactory;
 import edu.wustl.catissuecore.dao.JDBCDAO;
 import edu.wustl.catissuecore.query.Client;
 import edu.wustl.catissuecore.query.DataElement;
@@ -255,6 +256,33 @@ public class QueryBizLogic extends DefaultBizLogic
         Client.privilegeTypeMap = QueryBizLogic.getPivilegeTypeMap();
     }
     
-   
-
+    /**
+     * Returns the aliasName of the table from the table id.
+     * @param tableId
+     * @return
+     * @throws DAOException
+     */
+    public String getAliasNameFromTableId(Long tableId) throws DAOException
+    {
+        	Logger.out.debug("QueryBizLogic getAliasNameFromTableId.....................tableId......."+tableId);
+            JDBCDAO jdbcDAO = (JDBCDAO)DAOFactory.getDAO(Constants.JDBC_DAO);
+            jdbcDAO.openSession(null);
+            String [] selectColumnNames = {"ALIAS_NAME"};
+            String [] whereColumnNames = {"TABLE_ID"};
+            String [] whereColumnConditions = {"="};
+            Long [] whereColumnValues = {tableId};
+            List list = jdbcDAO.retrieve("CATISSUE_QUERY_INTERFACE_TABLE_DATA", selectColumnNames, 
+                    	whereColumnNames, whereColumnConditions, whereColumnValues, null);
+            jdbcDAO.closeSession();
+            
+            String aliasName = null;
+            if (list.isEmpty() == false)
+            {
+                List row = (List) list.get(0);
+                aliasName = (String) row.get(0);
+                Logger.out.debug("QueryBizLogic getAliasNameFromTableId............................"+aliasName);
+            }
+            
+            return aliasName;
+    }
 }
