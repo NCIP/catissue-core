@@ -2,20 +2,12 @@ package edu.wustl.catissuecore.util.listener;
 
 import java.io.File;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
-import edu.wustl.catissuecore.bizlogic.AbstractBizLogic;
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.QueryBizLogic;
-import edu.wustl.catissuecore.bizlogic.UserBizLogic;
-import edu.wustl.catissuecore.dao.DAO;
-import edu.wustl.catissuecore.dao.HibernateDAO;
 import edu.wustl.catissuecore.domain.Address;
 import edu.wustl.catissuecore.domain.CellSpecimen;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
@@ -35,12 +27,7 @@ import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.HibernateProperties;
 import edu.wustl.catissuecore.util.global.Variables;
-import edu.wustl.common.security.SecurityManager;
-import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.util.logger.Logger;
-import gov.nih.nci.cabio.domain.Tissue;
-import gov.nih.nci.security.authorization.domainobjects.ProtectionElement;
-import gov.nih.nci.security.dao.ProtectionElementSearchCriteria;
 
 /**
  * 
