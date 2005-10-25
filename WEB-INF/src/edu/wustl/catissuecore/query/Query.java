@@ -1,6 +1,7 @@
 
 package edu.wustl.catissuecore.query;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -11,7 +12,6 @@ import java.util.Vector;
 import edu.wustl.catissuecore.dao.DAOFactory;
 import edu.wustl.catissuecore.dao.JDBCDAO;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
@@ -153,54 +153,56 @@ public abstract class Query
 	    resultView.add(position,dataElement);
 	}
 	
-	public String [] setViewElements(String aliasName) throws DAOException
+	public List setViewElements(Set aliasNameSet) throws DAOException
 	{
+	    Vector vector = new Vector();
+	    List columnList = new ArrayList();
+	    
 	    try
 	    {
-	        String sql =" SELECT tableData2.ALIAS_NAME, temp.COLUMN_NAME, temp.DISPLAY_NAME " +
-				        " from CATISSUE_QUERY_INTERFACE_TABLE_DATA tableData2 join " +
-				        " ( SELECT  columnData.COLUMN_NAME, columnData.TABLE_ID, displayData.DISPLAY_NAME " +
-				        " FROM CATISSUE_QUERY_INTERFACE_COLUMN_DATA columnData, " +
-				        " CATISSUE_TABLE_RELATION relationData, " +
-				        " CATISSUE_QUERY_INTERFACE_TABLE_DATA tableData, " +
-				        " CATISSUE_SEARCH_DISPLAY_DATA displayData " +
-				        " where relationData.CHILD_TABLE_ID = columnData.TABLE_ID and " +
-				        " relationData.PARENT_TABLE_ID = tableData.TABLE_ID and " +
-				        " relationData.RELATIONSHIP_ID = displayData.RELATIONSHIP_ID and " +
-				        " columnData.IDENTIFIER = displayData.COL_ID and " +
-				        " tableData.ALIAS_NAME = '"+aliasName+"') as temp " +
-				        " on temp.TABLE_ID = tableData2.TABLE_ID";
-	        
-//	        if (pageOf.equals(Constants.PAGEOF_SIMPLE_QUERY_INTERFACE))
-//	        {
-//	            sql = 
-//	        }
-	        
-	        Logger.out.debug("DATA ELEMENT SQL : "+sql);
-		    
 		    JDBCDAO jdbcDao = new JDBCDAO();
 	        jdbcDao.openSession(null);
-	        List list = jdbcDao.executeQuery(sql, null, Constants.INSECURE_RETRIEVE, null,null);
-	        jdbcDao.closeSession();
+	        
+	        Iterator aliasNameIterator = aliasNameSet.iterator();
+	        while (aliasNameIterator.hasNext())
+	        {
+	            String aliasName = (String) aliasNameIterator.next();
+	            
+	            String sql =" SELECT tableData2.ALIAS_NAME, temp.COLUMN_NAME, temp.DISPLAY_NAME " +
+		        " from CATISSUE_QUERY_INTERFACE_TABLE_DATA tableData2 join " +
+		        " ( SELECT  columnData.COLUMN_NAME, columnData.TABLE_ID, displayData.DISPLAY_NAME " +
+		        " FROM CATISSUE_QUERY_INTERFACE_COLUMN_DATA columnData, " +
+		        " CATISSUE_TABLE_RELATION relationData, " +
+		        " CATISSUE_QUERY_INTERFACE_TABLE_DATA tableData, " +
+		        " CATISSUE_SEARCH_DISPLAY_DATA displayData " +
+		        " where relationData.CHILD_TABLE_ID = columnData.TABLE_ID and " +
+		        " relationData.PARENT_TABLE_ID = tableData.TABLE_ID and " +
+		        " relationData.RELATIONSHIP_ID = displayData.RELATIONSHIP_ID and " +
+		        " columnData.IDENTIFIER = displayData.COL_ID and " +
+		        " tableData.ALIAS_NAME = '"+aliasName+"') as temp " +
+		        " on temp.TABLE_ID = tableData2.TABLE_ID";
+    
+			    Logger.out.debug("DATA ELEMENT SQL : "+sql);
+			    
+			    List list = jdbcDao.executeQuery(sql, null, Constants.INSECURE_RETRIEVE, null,null);
+			    
+			    Logger.out.debug("list.size()************************"+list.size());
+			    String [] columnNames = new String[list.size()];
+			    Iterator iterator = list.iterator();
+			    int i = 0;
+			    while(iterator.hasNext())
+			    {
+			        List rowList = (List) iterator.next();
+			        DataElement dataElement = new DataElement();
+			        dataElement.setTable((String)rowList.get(0));
+			        dataElement.setField((String)rowList.get(1));
+			        vector.add(dataElement);
+			        columnList.add((String)rowList.get(2));
+			        Logger.out.debug("columnList..................."+columnList.get(i++));
+			    }
+	        }
 		    
-		    Vector vector = new Vector();
-		    Logger.out.debug("list.size()************************"+list.size());
-		    String [] columnNames = new String[list.size()];
-		    Iterator iterator = list.iterator();
-		    int i = 0;
-		    while(iterator.hasNext())
-		    {
-		        List rowList = (List) iterator.next();
-		        DataElement dataElement = new DataElement();
-		        dataElement.setTable((String)rowList.get(0));
-		        dataElement.setField((String)rowList.get(1));
-		        vector.add(dataElement);
-		        columnNames[i++] = (String)rowList.get(2);
-		    }
-		    
-		    setResultView(vector);
-		    
-		    return columnNames;
+		    jdbcDao.closeSession();
 	    }
 	    catch(DAOException daoExp)
 	    {
@@ -210,6 +212,12 @@ public abstract class Query
 	    {
 	        throw new DAOException(classExp.getMessage(),classExp);
 	    }
+	    
+	    //Setting the view column names.
+	    setResultView(vector);
+	    
+	    return columnList;
+
 	}
 	
 	/**
