@@ -1311,4 +1311,17 @@ public class Constants
 	};
 
 	
+	//Tree related
+	//public static final String PARTICIPANT ='Participant';
+	public static final String COLLECTION_PROTOCOL ="CollectionProtocol";
+	public static final String SPECIMEN_COLLECTION_GROUP ="SpecimenCollectionGroup";
+	public static final String DISTRIBUTION = "Distribution";
+	public static final String DISTRIBUTION_PROTOCOL = "DistributionProtocol";
+	public static final String CP = "CP";
+	public static final String SCG = "SCG";
+	public static final String D = "D";
+	public static final String DP = "DP";
+	public static final String C = "C";
+	public static final String S = "S";
+	public static final String P = "P";
 }
