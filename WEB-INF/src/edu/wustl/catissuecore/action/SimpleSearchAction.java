@@ -57,6 +57,7 @@ public class SimpleSearchAction extends BaseAction
 		SimpleQueryInterfaceForm simpleQueryInterfaceForm = (SimpleQueryInterfaceForm) form;
 		String counter = simpleQueryInterfaceForm.getCounter();
 		HttpSession session = request.getSession();
+		//Set form attributes in session for configuration after Search
 		if(counter!=null)
 			session.setAttribute(Constants.SIMPLE_QUERY_COUNTER,simpleQueryInterfaceForm.getCounter());
 		Map map=null;
@@ -77,6 +78,7 @@ public class SimpleSearchAction extends BaseAction
 		
 		try
 		{
+			//If map from session is null get the map values from form
 			if(map==null)
 			{
 				map = simpleQueryInterfaceForm.getValuesMap();
@@ -200,7 +202,10 @@ public class SimpleSearchAction extends BaseAction
 				query.setTableSet(fromTables);
 				
 				String[] selectedColumns = simpleQueryInterfaceForm.getSelectedColumnNames();
-				List tempColumnNames = query.setViewElements(fromTables);
+				//List tempColumnNames = query.setViewElements(fromTables);
+				
+				//Set the result view for the query
+				List tempColumnNames = getColumnNames(selectedColumns,query,fromTables);
 				Set tableSet;
 				
 				if(Constants.switchSecurity)
@@ -458,28 +463,31 @@ public class SimpleSearchAction extends BaseAction
 			return vector;
 		}
 	 
-//	 private String[] getColumnNames(String[] selectedColumns,Query query,String viewAliasName) throws DAOException
-//	 {
-//		String tempColumnNames[];
-//	 	if(selectedColumns==null)
-//			tempColumnNames	= query.setViewElements(viewAliasName);
-//		else
-//		{
-//			Vector resultViewVector = setViewElements(selectedColumns); 
-//			query.setResultView(resultViewVector);
-//			Iterator itr = resultViewVector.iterator();
-//			tempColumnNames = new String[resultViewVector.size()];
-//			int columnCount = 0;
-//			while(itr.hasNext())
-//			{
-//				DataElement dataElement = (DataElement)itr.next();
-//				String column = dataElement.getField();
-//				Logger.out.debug("column in the data element"+column);
-//				tempColumnNames[columnCount]=column;
-//				columnCount++;
-//			}
-//		}
-//	 	return tempColumnNames;
-//	 }
+	 private List getColumnNames(String[] selectedColumns,Query query,Set tableSet) throws DAOException
+	 {
+	 	//set the result view for the query 
+		List tempColumnNames;
+		//If columns not conigured, set to default
+	 	if(selectedColumns==null)
+			tempColumnNames	= query.setViewElements(tableSet);
+	 	//else set to the configured columns
+		else
+		{
+			Vector resultViewVector = setViewElements(selectedColumns); 
+			query.setResultView(resultViewVector);
+			Iterator itr = resultViewVector.iterator();
+			tempColumnNames = new ArrayList();
+			int columnCount = 0;
+			while(itr.hasNext())
+			{
+				DataElement dataElement = (DataElement)itr.next();
+				String column = dataElement.getField();
+				Logger.out.debug("column in the data element"+column);
+				tempColumnNames.add(column);
+				columnCount++;
+			}
+		}
+	 	return tempColumnNames;
+	 }
 	 
 }
