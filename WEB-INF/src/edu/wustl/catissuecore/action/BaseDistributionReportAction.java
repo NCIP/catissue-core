@@ -20,6 +20,7 @@ import edu.wustl.catissuecore.actionForm.ConfigureResultViewForm;
 import edu.wustl.catissuecore.actionForm.DistributionReportForm;
 import edu.wustl.catissuecore.bizlogic.AbstractBizLogic;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
+import edu.wustl.catissuecore.bizlogic.QueryBizLogic;
 import edu.wustl.catissuecore.domain.DistributedItem;
 import edu.wustl.catissuecore.domain.Distribution;
 import edu.wustl.catissuecore.domain.Specimen;
@@ -62,28 +63,48 @@ public abstract class BaseDistributionReportAction extends BaseAction
 		return columnNames;
 	}
 	
-    private Vector setViewElements(String []selectedColumnsList) 
+    /*private Vector setViewElements(String []selectedColumnsList) 
 	{
     	/*Split the string which is in the form TableAlias.columnNames.columnDisplayNames 
     	 * and set the dataelement object.
     	 */
-	    Vector vector = new Vector();
+	    /*Vector vector = new Vector();
 	    for(int i=0;i<selectedColumnsList.length;i++)
 	    {
 	    	StringTokenizer st= new StringTokenizer(selectedColumnsList[i],".");
 	    	DataElement dataElement = new DataElement();
+	    	String tableInPath = null;
 	    	while (st.hasMoreTokens())
 			{
 	    		dataElement.setTable(st.nextToken());
 	    		dataElement.setField(st.nextToken());
 	    		st.nextToken();
+	    		
 	    		if(st.hasMoreTokens())
-	    			st.nextToken();
+	    			tableInPath=st.nextToken();
 	    	}
+	    	if (tableInPath != null)
+			{
+			    StringTokenizer tableInPathTokenizer = new StringTokenizer(tableInPath, ":");
+			    String aliasName = null;
+				while (tableInPathTokenizer.hasMoreTokens())
+				{
+				    Long tableId = Long.valueOf(tableInPathTokenizer.nextToken());
+				    QueryBizLogic bizLogic = (QueryBizLogic)BizLogicFactory
+				    							.getBizLogic(Constants.SIMPLE_QUERY_INTERFACE_ID);
+				    aliasName = bizLogic.getAliasNameFromTableId(tableId);
+				    Logger.out.debug("aliasName for from Set**************************"+aliasName);
+				}
+				
+				if (aliasName != null)
+				{
+				    fromTables.add(aliasName);
+				}
+			}
 	        vector.add(dataElement);
 	    }
 		return vector;
-	}
+	}*/
     
 	protected DistributionReportForm getDistributionReportForm(Distribution dist)
 	{
@@ -164,9 +185,46 @@ public abstract class BaseDistributionReportAction extends BaseAction
     		tableSet.add("SpecimenCollectionGroup");
     		tableSet.add("DistributedItem");
 			tableSet.add("SpecimenCharacteristics");
-    		query.setTableSet(tableSet);
-    		
-    		Vector vector = setViewElements(selectedColumns);
+    		//Vector vector = setViewElements(selectedColumns);
+
+			//Set the resultViewVector
+    	    Vector vector = new Vector();
+    	    for(i=0;i<selectedColumns.length;i++)
+    	    {
+    	    	StringTokenizer st= new StringTokenizer(selectedColumns[i],".");
+    	    	DataElement dataElement = new DataElement();
+    	    	String tableInPath = null;
+    	    	while (st.hasMoreTokens())
+    			{
+    	    		dataElement.setTable(st.nextToken());
+    	    		dataElement.setField(st.nextToken());
+    	    		st.nextToken();
+    	    		
+    	    		if(st.hasMoreTokens())
+    	    			tableInPath=st.nextToken();
+    	    	}
+    	    	//Include the tables in tableSet if tableInPath is not null.
+    	    	if (tableInPath != null)
+    			{
+    			    StringTokenizer tableInPathTokenizer = new StringTokenizer(tableInPath, ":");
+    			    String aliasName = null;
+    				while (tableInPathTokenizer.hasMoreTokens())
+    				{
+    				    Long tableId = Long.valueOf(tableInPathTokenizer.nextToken());
+    				    QueryBizLogic bizLogic = (QueryBizLogic)BizLogicFactory
+    				    							.getBizLogic(Constants.SIMPLE_QUERY_INTERFACE_ID);
+    				    aliasName = bizLogic.getAliasNameFromTableId(tableId);
+    				    Logger.out.debug("aliasName for from Set**************************"+aliasName);
+    				}
+    				
+    				if (aliasName != null)
+    				{
+    					tableSet.add(aliasName);
+    				}
+    			}
+    	        vector.add(dataElement);
+    	    }
+    	    query.setTableSet(tableSet);
     		query.setResultView(vector);
     		
     		List list1 = query.execute(null,Constants.INSECURE_RETRIEVE,null,null);
