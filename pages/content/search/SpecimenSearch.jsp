@@ -187,7 +187,7 @@
 	<td class="formField">
 		<html:text styleClass="formFieldSized10" styleId="postionD1" property="<%=postionD1%>"/>
 						&nbsp;To&nbsp;
-		<html:text styleClass="formFieldSized10" styleId="postionD12" property="<%=postionD12%> disabled="true""/>
+		<html:text styleClass="formFieldSized10" styleId="postionD12" property="<%=postionD12%> disabled="true"/>
 	</td>
 </tr>
 
