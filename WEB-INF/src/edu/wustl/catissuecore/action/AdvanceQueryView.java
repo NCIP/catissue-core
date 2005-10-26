@@ -59,6 +59,8 @@ public class AdvanceQueryView extends BaseAction
 			DefaultMutableTreeNode n = (DefaultMutableTreeNode)node.getChildAt(i);
 			AdvancedConditionsNode advConditionNode = (AdvancedConditionsNode)n.getUserObject();
 			Vector v = advConditionNode.getObjectConditions();
+			String tableName = advConditionNode.getObjectName();
+			Logger.out.debug("object name for advance node"+tableName);
 			Logger.out.debug("size-->"+v.size());
 			String str = "";
 			Condition con = null;
@@ -75,7 +77,7 @@ public class AdvanceQueryView extends BaseAction
 		        	str = str +" "+"<font color='red'>AND</font>"+" "+data.getField()+" "+op.getOperator() + " "+con.getValue();
 		    }
 			if(data != null)
-				str = str +  "|" + data.getTable();
+				str = str +  "|" + tableName;
 			
 			if(con == null){
 				str = temp + "|" + count + "|" + "ANY" + advConditionNode.getObjectName();

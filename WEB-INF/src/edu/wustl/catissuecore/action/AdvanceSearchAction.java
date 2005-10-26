@@ -56,7 +56,8 @@ public class AdvanceSearchAction extends DispatchAction
         List conditionNodeCollection = parser.parseCondition(map);
         HttpSession session = request.getSession();
         DefaultMutableTreeNode root = (DefaultMutableTreeNode)session.getAttribute("root");
-        root = parser.createAdvancedQueryObj(conditionNodeCollection,root);
+        String objectName = advanceSearchForm.getObjectName();
+        root = parser.createAdvancedQueryObj(conditionNodeCollection,root,objectName);
         
         //Query query = QueryFactory.getInstance().newQuery(Query.ADVANCED_QUERY, aliasName);
         session.setAttribute("root",root);

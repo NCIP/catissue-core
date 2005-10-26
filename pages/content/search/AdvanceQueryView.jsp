@@ -60,6 +60,13 @@
 			item.className="linkChange";
 			item.innerHTML = "<a HREF='<%=util.getLink("Participant")%>' target='searchPageFrame'><%=Constants.PARTICIPANT%></a>";
 		}
+		//Poornima:Added CP link
+		if(itemCount == 2){
+			DisableAll();
+			var item = document.getElementById('<%=Constants.CP%>');
+			item.className="linkChange";
+			item.innerHTML = "<a HREF='<%=util.getLink("CollectionProtocol")%>' target='searchPageFrame'><%=Constants.COLLECTION_PROTOCOL%></a>";
+		}
 		else
 			EnableItem(nodeCount);
 		//}
@@ -145,9 +152,13 @@
 			
 			var item2 = '<%=Constants.COLLECTION_PROTOCOL%>'+"_"+i;
 			if((document.getElementById(item2)!= null) && (document.getElementById(item2).checked==true)){
-				var item = document.getElementById('<%=Constants.SCG%>');
+				//temporary comment by Poornima
+				/*var item = document.getElementById('<%=Constants.SCG%>');
 				item.className="linkChange";
-				item.innerHTML ="<a HREF='#'><%=Constants.SPECIMEN_COLLECTION_GROUP%></a>";
+				item.innerHTML ="<a HREF='#'><%=Constants.SPECIMEN_COLLECTION_GROUP%></a>";*/
+				var item = document.getElementById('<%=Constants.S%>');
+				item.className="linkChange";
+				item.innerHTML ="<a HREF='#'><%=Constants.SPECIMEN%></a>";
 				count2++;
 				
 			}
@@ -171,9 +182,13 @@
 			
 			var item6 = '<%=Constants.SPECIMEN%>'+"_"+i;
 			if((document.getElementById(item6)!= null) && (document.getElementById(item6).checked==true)){
-				var item = document.getElementById('<%=Constants.S%>');
+			//temporary comment by Poornima
+				/*var item = document.getElementById('<%=Constants.S%>');
 				item.className="linkChange";
-				item.innerHTML ="<a HREF='#'><%=Constants.SPECIMEN%></a>";
+				item.innerHTML ="<a HREF='#'><%=Constants.SPECIMEN%></a>";*/
+				var item = document.getElementById('<%=Constants.SCG%>');
+				item.className="linkChange";
+				item.innerHTML ="<a HREF='#'><%=Constants.SPECIMEN_COLLECTION_GROUP%></a>";
 				count5++;
 			}
 			

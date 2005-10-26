@@ -56,14 +56,14 @@ public class ConditionMapParser
 						value = (String)conditionMap.get(aliasName+":"+columnName);
 						if(operator.equals(Operator.NOT_BETWEEN))
 						{
-							operator1 = Operator.LESS_THAN;
-							operator2 = Operator.GREATER_THAN;
+							operator1 = Operator.LESS_THAN_OR_EQUALS;
+							operator2 = Operator.GREATER_THAN_OR_EQUALS;
 							value2 = (String)conditionMap.get(aliasName+":"+columnName+":"+"HLIMIT");
 						}
 						if(operator.equals(Operator.BETWEEN))
 						{
-							operator1 = Operator.GREATER_THAN;
-							operator2 = Operator.LESS_THAN;
+							operator1 = Operator.GREATER_THAN_OR_EQUALS;
+							operator2 = Operator.LESS_THAN_OR_EQUALS;
 							value2 = (String)conditionMap.get(aliasName+":"+columnName+":"+"HLIMIT");
 						}
 					}
@@ -71,14 +71,14 @@ public class ConditionMapParser
 					Condition condition = new Condition(dataElement,new Operator(operator),value);
 					if(operator.equals(Operator.NOT_BETWEEN))
 					{
-						condition = new Condition(dataElement,new Operator(operator1),value);
-						Condition condition1 = new Condition(dataElement,new Operator(operator2),value2);
+						condition = new Condition(dataElement,new Operator(operator2),value2);
+						Condition condition1 = new Condition(dataElement,new Operator(operator1),value);
 						conditionList.add(condition1);
 					}
 					if(operator.equals(Operator.BETWEEN))
 					{
-						condition = new Condition(dataElement,new Operator(operator1),value);
-						Condition condition1 = new Condition(dataElement,new Operator(operator2),value2);
+						condition = new Condition(dataElement,new Operator(operator2),value2);
+						Condition condition1 = new Condition(dataElement,new Operator(operator1),value);
 						conditionList.add(condition1);
 					}
 					conditionList.add(condition);
@@ -87,15 +87,15 @@ public class ConditionMapParser
 		}
 		return conditionList;
 	}
-	public DefaultMutableTreeNode createAdvancedQueryObj(List list,DefaultMutableTreeNode root) 
+	public DefaultMutableTreeNode createAdvancedQueryObj(List list,DefaultMutableTreeNode root,String objectName) 
 	{
 		//Query query = QueryFactory.getInstance().newQuery(Query.ADVANCED_QUERY,Query.PARTICIPANT);
 		 
 		Iterator itr = list.iterator();
 		Condition condition = (Condition)itr.next();
 		String prevTableObj;
-		String tableObject = condition.getDataElement().getTable();
-		AdvancedConditionsNode advancedConditionsNode = new AdvancedConditionsNode(tableObject);
+		//String tableObject = condition.getDataElement().getTable();
+		AdvancedConditionsNode advancedConditionsNode = new AdvancedConditionsNode(objectName);
 		advancedConditionsNode.addConditionToNode(condition);
 		while(itr.hasNext())
 		{
@@ -117,25 +117,25 @@ public class ConditionMapParser
 			{
 				DefaultMutableTreeNode child1 = (DefaultMutableTreeNode)children.nextElement();
 				AdvancedConditionsNode advNode = (AdvancedConditionsNode)child1.getUserObject();
-				Vector conditions = advNode.getObjectConditions();
-				Iterator itr1 = conditions.iterator();
+				presentTable = advNode.getObjectName();
+				/*Iterator itr1 = conditions.iterator();
 				while(itr1.hasNext())
 				{
 					Condition cond = (Condition)itr1.next();
 					presentTable = cond.getDataElement().getTable();
-				}
+				}*/
 			}
-			if(tableObject.equals(presentTable))
+			if(objectName.equals(presentTable))
 			{
 				root.add(child);
 			}
 			else
 			{
 				AdvancedConditionsNode advNode = (AdvancedConditionsNode)root.getLastLeaf().getUserObject();
-				List conditions = (List)advNode.getObjectConditions();
-				Condition parentCondition = (Condition)conditions.get(0);
-				presentTable = parentCondition.getDataElement().getTable();
-				if(tableObject.equals(presentTable))
+				presentTable = advNode.getObjectName();
+				/*Condition parentCondition = (Condition)conditions.get(0);
+				presentTable = parentCondition.getDataElement().getTable();*/
+				if(objectName.equals(presentTable))
 				{
 					DefaultMutableTreeNode parent = (DefaultMutableTreeNode)root.getLastLeaf().getParent();
 					parent.add(child);
@@ -186,12 +186,12 @@ public class ConditionMapParser
 		List dataCollection6 = conditionParser.parseCondition(map6);
 
 		DefaultMutableTreeNode root = new DefaultMutableTreeNode();
-		root = conditionParser.createAdvancedQueryObj(dataCollection1,root);
+		/*root = conditionParser.createAdvancedQueryObj(dataCollection1,root);
 		root = conditionParser.createAdvancedQueryObj(dataCollection2,root);
 		root = conditionParser.createAdvancedQueryObj(dataCollection3,root);
 		root = conditionParser.createAdvancedQueryObj(dataCollection4,root);
 		root = conditionParser.createAdvancedQueryObj(dataCollection5,root);
-		root = conditionParser.createAdvancedQueryObj(dataCollection6,root);
+		root = conditionParser.createAdvancedQueryObj(dataCollection6,root);*/
 		conditionParser.traverseTree(root);
 	}
 	private void traverseTree(DefaultMutableTreeNode tree)

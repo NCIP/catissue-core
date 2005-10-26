@@ -104,14 +104,15 @@ function addNode(parentNode, recursedNodes) {
 		var nodeValues = nodes[i].split("|");
 		//alert('nodeValues[1]--'+nodeValues[1]);
 		//alert('nodeValues[0]--'+nodeValues[0]);
-		if(nodeValues[1] == 0){
+		//temporary comment by Poornima
+		/*if(nodeValues[1] == 0){
 			document.write("<tr>");
 			document.write("<td class='tdTitle' colspan='4'>");
 			document.write("Rule#"+j);
 			document.write("</td>");
 			document.write("</tr>");
 			j++;
-		}
+		}*/
 		
 		if (nodeValues[1] == parentNode) {
 			

@@ -33,6 +33,8 @@ public class AdvanceSearchForm extends ActionForm
 {
     Map values = new HashMap();
     
+    String objectName=new String();
+    
     /**
      * No argument constructor for StorageTypeForm class 
      */
@@ -126,4 +128,16 @@ public class AdvanceSearchForm extends ActionForm
         
         return errors;
     }
+	/**
+	 * @return Returns the objectName.
+	 */
+	public String getObjectName() {
+		return objectName;
+	}
+	/**
+	 * @param objectName The objectName to set.
+	 */
+	public void setObjectName(String objectName) {
+		this.objectName = objectName;
+	}
 }
