@@ -173,7 +173,7 @@
 </tr>
 
 <!-- SIXTH ROW -->
-<tr>
+<%--tr>
 	<td class="formSerialNumberField" nowrap>
  		<label for="positionDimensionOne">
  			<b><bean:message key="specimen.positionDimensionOne"/>
@@ -184,12 +184,12 @@
 				<html:options collection="<%=Constants.DATE_NUMERIC_OPERATORS%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
-	<td class="formField">
+	<td class="formField" colspan="2">
 		<html:text styleClass="formFieldSized10" styleId="postionD1" property="<%=postionD1%>"/>
 						&nbsp;To&nbsp;
 		<html:text styleClass="formFieldSized10" styleId="postionD12" property="<%=postionD12%> disabled="true"/>
 	</td>
-</tr>
+</tr--%>
 
 <!-- SEVENTH ROW -->
 <tr>
