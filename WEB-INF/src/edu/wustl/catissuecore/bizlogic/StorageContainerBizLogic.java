@@ -92,6 +92,15 @@ public class StorageContainerBizLogic extends DefaultBizLogic
                 	{
                 		throw new DAOException(ApplicationProperties.getValue("errors.storageContainer.dimensionOverflow"));
                 	}
+                	
+                	// check for availability of position
+                	boolean canUse = isContainerAvailable( dao, container );
+                	
+                	if(!canUse)
+                	{
+                		throw new DAOException(ApplicationProperties.getValue("errors.storageContainer.inUse"));
+                	}
+                	
                     container.setParentContainer(pc);
                     
 //                  check for closed ParentSite
@@ -576,4 +585,41 @@ public class StorageContainerBizLogic extends DefaultBizLogic
         return true;
     }
 
+    // -- to check if storageContainer is available or used
+    private boolean isContainerAvailable( DAO dao, StorageContainer current)
+    {
+    	try
+		{
+    		String sourceObjectName = StorageContainer.class.getName();
+			String[] selectColumnName = {"systemIdentifier"}; 
+    	    String[] whereColumnName = {"positionDimensionOne","positionDimensionTwo","parentContainer"};	//"storageContainer."+Constants.SYSTEM_IDENTIFIER
+			String[] whereColumnCondition ={"=","=","="};
+    	    Object[] whereColumnValue = {current.getPositionDimensionOne()  ,current.getPositionDimensionTwo() , current.getParentContainer()   };
+			String joinCondition = Constants.AND_JOIN_CONDITION;
+				 	
+            List list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, 
+            		         		  whereColumnCondition, whereColumnValue, joinCondition);
+            Logger.out.debug("current.getParentContainer() :" + current.getParentContainer());
+            // check if StorageContainer exists with the given storageContainer information
+            if (list.size() != 0)
+            {
+               	Object obj = list.get(0);
+            	Logger.out.debug("**************IN isContainerAvailable : obj::::::: --------------- "+ obj);
+//            	Logger.out.debug((Long)obj[0] );
+//            	Logger.out.debug((Integer)obj[1]);
+//            	Logger.out.debug((Integer )obj[2]);
+     
+            	return false;
+            }
+    		
+    		return true;
+		}
+		catch(Exception e)
+		{
+			Logger.out.debug("Error in isContainerAvailable : " + e );
+			return false;
+		}
+    }
+
+    
 }
