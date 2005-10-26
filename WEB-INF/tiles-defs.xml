@@ -673,6 +673,10 @@
 	<definition name=".catissuecore.participantSearchDef" extends=".catissuecore.queryDataViewDef">
 		<put name="content" value="/pages/content/search/ParticipantSearch.jsp" />
 	</definition>
+	
+	<definition name=".catissuecore.specimenSearchDef" extends=".catissuecore.queryDataViewDef">
+		<put name="content" value="/pages/content/search/SpecimenSearch.jsp" />
+	</definition>
 
 	<definition name=".catissuecore.advanceQueryViewDef" extends=".catissuecore.queryDataViewDef">
 		<put name="content" value="/pages/content/search/AdvanceQueryView.jsp" />

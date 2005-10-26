@@ -1988,6 +1988,15 @@ PUBLIC
 			<forward name="access_denied" path="/Home.do" />
 		</action>
 		
+		<action path="/SpecimenAdvanceSearch"
+			type="edu.wustl.catissuecore.action.SpecimenSearchAction"
+			name="advanceSearchForm"
+			validate="false"
+			scope="request">
+			<forward name="pageOfSpecimenAdvanceSearch" path=".catissuecore.specimenSearchDef" />
+			<forward name="access_denied" path="/Home.do" />
+		</action>
+		
 		<action path="/AdvanceQueryView"
 			type="edu.wustl.catissuecore.action.AdvanceQueryView"
 			name="advanceSearchForm"
@@ -2013,14 +2022,14 @@ PUBLIC
 			<forward name="failure" path="/AdvanceQuery.do" />
 		</action>
 		
-		<!--Spreadshet Export Actions Begins -->
+		<!--Spreadsheet Export Actions Begins -->
         <action path="/SpreadsheetExport"
 			type="edu.wustl.catissuecore.action.SpreadsheetExportAction"
 			name="advanceSearchForm"
 			validate="false"
 			scope="request">
 		</action>
-		<!--Spreadshet Export Actions Ends -->
+		<!--Spreadsheet Export Actions Ends -->
 	
 	<!-- Advance Query Interface Actions Ends -->
 	</action-mappings>
