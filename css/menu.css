@@ -38,8 +38,7 @@ background-color: #c5c5c5;*/
 font-family:arial,helvetica,verdana,sans-serif;	
 font-size:0.8em;
 padding:0px;
-font-weight:bold;
-background-color:#5C5C5C; /* constant: dark gray */
+background-color:#A1A1A1; /* constant: dark gray */
 color:#FFFFFF; /* constant: white */
 border-top:1px solid #5C5C5C; /* constant: dark gray */
 border-left:1px solid #5C5C5C; /* constant: dark gray */
@@ -58,10 +57,10 @@ background-color: black;*/
 font-family:arial,helvetica,verdana,sans-serif;
 padding:0;
 font-size:0.8em;
-color: black;
+color: white;
 font-weight: bold;
 /*remove the following line for drop-down menu with images*/
-background-color: #c5c5c5;}
+background-color: #A1A1A1;}
 
 div.menuNormal
 {display: none;}
@@ -69,7 +68,7 @@ div.menuNormal
 
 div.menuHover
 {border: 1px black;
-background-color: #c5c5c5;
+background-color: #C0C0C0;
 display: inline;
 position: absolute;}
 
@@ -124,11 +123,30 @@ padding-left:0.8em;
 
 .linkChange{
 text-decoration: none;
-color: black;
-background-color: #c5c5c5;
+color: white;
+background-color: #A1A1A1;
 display: block;
 font-family:arial,helvetica,verdana,sans-serif;
 padding:0;
-font-size:0.8em;
+font-size:0.7em;
+border-bottom:1px solid #CCCCCC; /* constant: medium gray */
+}
+
+.onlyBottomBorder{ /* sets only bottom border for the table row */
+   #CCCCCC; /* constant: medium gray */
+  border-style: solid;
+  border-bottom-width: 1px;
+  border-bottom-color: #CCCCCC;
+}
+
+.linkChangeOnMouseOver{
+text-decoration: none;
+color: white;
+background-color: #A1A1A1;
+display: block;
+font-family:arial,helvetica,verdana,sans-serif;
+padding:0;
+font-size:0.7em;
 font-weight: bold;
+border-bottom:1px solid #CCCCCC; /* constant: medium gray */
 }

@@ -193,101 +193,68 @@
 <html>
 <body>
 	
-	<table cellpadding='0' cellspacing='0' border='0' width='85%'>
+	<table cellpadding='0' cellspacing='0' border='0' width='600'>
 		<tr>
-			<td class='formTitle' height='20' width='70%'>
+			<td class='formTitle' height='20' width='72%'>
 				<img src="images/arrow.GIF" alt="Rules" />Rules
 			</td>
-			<td class='menuNormal'  height='20' width='10%' onmouseover="expand(this);" onmouseout="collapse(this);" align='centre'>Add
+			<td class='formTitle'  height='20' width='8%' onmouseover="expand(this);" onmouseout="collapse(this);" align='centre'>Add 
 				<table class='menuNormal' border='0' cellpadding='0' cellspacing='0'>
 					<tr>
 						<td>
-							<div class='menuNormal' width='85'>
-								<table class='menuNormal' width='85' border='0' cellpadding='0' cellspacing='0'>
-									<tr>
-										<td>
-											<img src="images/Participant.GIF" alt="Participant" /> 
-										</td>
-										<td class='linkChange' id='P'>
-											
-											
+							<div class='menuNormal' width='140'>
+								<table class='menuNormal' width='140' border='0' cellpadding='3' cellspacing='1'>
+									<tr height='20'  valign="middle">
+										<td colspan=2 class='linkChange' id='P' noWrap  height='20' valign="middle"
+										onmouseover="changeMenuStyle(this,'linkChangeOnMouseOver')"
+										 onmouseout="changeMenuStyle(this,'linkChange')">
+											&nbsp;<img src="images/Participant.GIF" alt="Participant" /> &nbsp; 
 											<a HREF='<%=util.getLink("Participant")%>' target="searchPageFrame">
 												<%=Constants.PARTICIPANT%>
 											</a>
-											
-									</td>
-									</tr>
-									<tr>
-										<td>
-											<img src="images/CollectionProtocol.GIF" alt="CollectionProtocol" /> 
-										</td>
-										<td class='linkChange' id='CP'>	
-											<%=Constants.COLLECTION_PROTOCOL%>
-											<!-- a HREF='#' class='menuitem'>
-												CollectionProtocol 
-											</a-->
 										</td>
 									</tr>
-									<tr>
-										<td>
-											<img src="images/Specimen.GIF" alt="Specimen" /> 
-										</td>
-										<td class='linkChange' id='S'>
-											<%=Constants.SPECIMEN%>
-											<!--font size='2'>
-											<a HREF='#' class='menuitem'>
-												Specimen 
-											</a>
-											</font--> 
+									<tr height='20' valign="middle">
+										<td colspan=2 class='linkChange' id='CP' noWrap  height='20' valign="middle"
+										onmouseover="changeMenuStyle(this,'linkChangeOnMouseOver')"
+										 onmouseout="changeMenuStyle(this,'linkChange')">
+												&nbsp;<img src="images/CollectionProtocol.GIF" alt="CollectionProtocol" />  &nbsp;	<%=Constants.COLLECTION_PROTOCOL%>
 										</td>
 									</tr>
-									<tr>
-									<td>
-										<img src="images/SpecimenCollectionGroup.GIF" alt="Specimen Collection Group" /> 
-									</td>
-										<td class='linkChange' id='SCG'>
-											<%=Constants.SPECIMEN_COLLECTION_GROUP%>
-											<!--font size='2'>
-											<a HREF='#' class='menuitem'>
-												SpecimenCollectionGroup 
-											</a>
-											</font-->
+									<tr height='20' valign="middle">
+										<td colspan=2 class='linkChange' id='S' noWrap  height='20' valign="middle"
+										onmouseover="changeMenuStyle(this,'linkChangeOnMouseOver')"
+										 onmouseout="changeMenuStyle(this,'linkChange')">
+											&nbsp;<img src="images/Specimen.GIF" alt="Specimen" />   &nbsp; <%=Constants.SPECIMEN%>
 										</td>
 									</tr>
-									<tr>
-									<td>
-										<img src="images/Distribution.GIF" alt="Distribution" /> 
-									</td>
-										<td class='linkChange' id='D'>
-											<%=Constants.DISTRIBUTION%>
-											<!--font size='2'>
-											<a HREF='#' class='menuitem'>
-												Distribution 
-											</a>
-											</font-->
+									<tr height='20' valign="middle">
+										<td colspan=2 class='linkChange' id='SCG' noWrap  height='20' valign="middle"
+										onmouseover="changeMenuStyle(this,'linkChangeOnMouseOver')"
+										 onmouseout="changeMenuStyle(this,'linkChange')">
+											&nbsp;<img src="images/SpecimenCollectionGroup.GIF" alt="Specimen Collection Group" /> &nbsp; <%=Constants.SPECIMEN_COLLECTION_GROUP%>
 										</td>
 									</tr>
-									<tr>
-									<td>
-										<img src="images/DistributionProtocol.GIF" alt="DistributionProtocol" /> 
-									</td>
-										<td class='linkChange' id='DP'>
-											<%=Constants.DISTRIBUTION_PROTOCOL%>
-											<!--font size='2'>
-											<a HREF='#' class='menuitem'>
-												DistributionProtocol 
-											</a>
-											</font-->
+									<tr height='20' valign="middle">
+										<td colspan=2 class='linkChange' id='D' noWrap  height='20' valign="middle"
+										onmouseover="changeMenuStyle(this,'linkChangeOnMouseOver')"
+										 onmouseout="changeMenuStyle(this,'linkChange')">
+										&nbsp;<img src="images/Distribution.GIF" alt="Distribution" /> &nbsp; <%=Constants.DISTRIBUTION%>
 										</td>
 									</tr>
-									
+									<tr height='20' valign="middle">
+										<td colspan=2 class='linkChange' id='DP' noWrap  height='20' valign="middle"
+										onmouseover="changeMenuStyle(this,'linkChangeOnMouseOver')"
+										 onmouseout="changeMenuStyle(this,'linkChange')">
+										&nbsp;<img src="images/DistributionProtocol.GIF" alt="DistributionProtocol" /> &nbsp; <%=Constants.DISTRIBUTION_PROTOCOL%>
+										</td>
+									</tr>
 								</table>
 							</div>
 						</td>
 					</tr>
-				
 			</table>
-		
+			</td>
 		<td class='formTitle' height='20' width='10%'>Edit</td>
 		<td class='formTitle' height='20' width='10%'>Delete</td>
 	</tr>

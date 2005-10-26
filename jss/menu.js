@@ -14,6 +14,6 @@ function collapse(s)
   
   var d = td.getElementsByTagName("div").item(0);
 
-  td.className = "menuNormal";
+  td.className = "formTitle";
   d.className = "menuNormal";
 }
