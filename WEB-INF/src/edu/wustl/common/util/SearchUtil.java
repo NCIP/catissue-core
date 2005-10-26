@@ -92,7 +92,7 @@ public class SearchUtil
 	private void getMap(){
 		map.put("Participant","ParticipantAdvanceSearch.do?pageOf=pageOfParticipantAdvanceSearch");
 		map.put("CollectionProtocol","CollectionProtocolAdvanceSearch.do?pageOf=pageOfCollectionProtocolAdvanceSearch");
-		map.put("Specimen","#");
+		map.put("Specimen","SpecimenAdvanceSearch.do?pageOf=pageOfSpecimenAdvanceSearch");
 		map.put("SpecimenCollectionGroup","#");
 		map.put("Distribution","#");
 		map.put("DistributionProtocol","#");	
