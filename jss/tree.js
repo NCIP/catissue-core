@@ -166,6 +166,7 @@ function addNode(parentNode, recursedNodes) {
 			//}
 
 			var checkb = nodeValues[3] + "_" + nodeValues[0];
+			//alert("check box name in tree.js"+checkb);
 			document.write("<input type=checkbox name='"+checkb+"' id='"+ checkb + "' onClick = CheckNum('"+ checkb +"','"+nodeValues[3]+"',"+nodeCount+")" +">");
 			//document.write("&nbsp;<img src='images/"+nodeValues[3]+".GIF' alt='"+nodeValues[3]+"' />&nbsp;"+ nodeValues[2]);
 			document.write("&nbsp;"+nodeValues[2]);

@@ -57,8 +57,10 @@ public class AdvanceSearchAction extends DispatchAction
         HttpSession session = request.getSession();
         DefaultMutableTreeNode root = (DefaultMutableTreeNode)session.getAttribute("root");
         String objectName = advanceSearchForm.getObjectName();
-        root = parser.createAdvancedQueryObj(conditionNodeCollection,root,objectName);
-        
+        if(conditionNodeCollection.size()!=0)
+        {
+        	root = parser.createAdvancedQueryObj(conditionNodeCollection,root,objectName);
+        }
         //Query query = QueryFactory.getInstance().newQuery(Query.ADVANCED_QUERY, aliasName);
         session.setAttribute("root",root);
         //Get the view columns.
