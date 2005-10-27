@@ -72,8 +72,21 @@
 
 <!--  MAIN TITLE ROW -->
 <tr>
-	<td class="formTitle" height="25" colspan="3">
-	    <bean:message key="specimen.queryRule"/>
+	<td class="formTitle" height="25" nowrap>
+	&nbsp;<img src="images/Specimen.GIF" alt="Specimen" /> &nbsp;<bean:message key="specimen.queryRule"/>
+	</td>
+	<td nowrap align="right"  colspan="2" class="formTitle">
+		<html:submit property="addRule" styleClass="actionButton" >
+			<bean:message key="buttons.addRule"/>
+		</html:submit>
+		
+		<%--html:button property="search" styleClass="actionButton" onclick="">
+			<bean:message key="buttons.search"/>
+		</html:button--%>
+		&nbsp;&nbsp;
+		<html:button property="resetQuery" styleClass="actionButton" onclick="">
+			<bean:message key="buttons.resetQuery"/>
+		</html:button>
 	</td>
 </tr>
 

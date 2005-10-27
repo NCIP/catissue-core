@@ -200,6 +200,11 @@
 			DisableAll();
 		
 	}	
+	
+	function changeClass(element,styleName)
+	{
+		element.className = styleName;
+	}
 	</script>
 </head>
 
@@ -270,8 +275,8 @@
 					</tr>
 			</table>
 			</td>
-		<td class='formTitle' height='20' width='10%'>Edit</td>
-		<td class='formTitle' height='20' width='10%'>Delete</td>
+		<td class='formTitle' height='20' width='10%' onmouseover="changeClass(this,'menuHover');" onmouseout="changeClass(this,'formTitle');">Edit</td>
+		<td class='formTitle' height='20' width='10%' onmouseover="changeClass(this,'menuHover');" onmouseout="changeClass(this,'formTitle');">Delete</td>
 	</tr>
 
 	

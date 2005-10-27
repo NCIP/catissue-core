@@ -128,8 +128,22 @@
 </tr>
 <!--  MAIN TITLE ROW -->
 <tr>
-	<td class="formTitle" height="25" colspan="3">
+	<td class="formTitle" height="25" >
+	    &nbsp;<img src="images/Participant.GIF" alt="Participant" /> &nbsp;
 	    <bean:message key="participant.queryRule"/>
+	</td>
+	<td class="formTitle" nowrap align="right" colspan="2">
+		<html:submit property="addRule" styleClass="actionButton" >
+			<bean:message key="buttons.addRule"/>
+		</html:submit>
+		
+		<%--html:button property="search" styleClass="actionButton" onclick="">
+			<bean:message key="buttons.search"/>
+		</html:button--%>
+		&nbsp;&nbsp;
+		<html:button property="resetQuery" styleClass="actionButton" onclick="">
+			<bean:message key="buttons.resetQuery"/>
+		</html:button>
 	</td>
 </tr>
 
