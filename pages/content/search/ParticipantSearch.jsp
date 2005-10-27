@@ -30,93 +30,7 @@
 
 <head>
 	<script src="jss/script.js" type="text/javascript"></script>
-	<script language="JavaScript">
-		function onAddRule()
-		{
-			//parent.queryFrame.location.href = "/catissuecore/AdvanceSearch.do";
-			document.forms[0].action = "/catissuecore/AdvanceSearch.do";
-			document.forms[0].submit();
-		}
-		
-		//This is the wrapper function over show_calendar() that allows to select the date only if the operator is not 'ANY'
-		function onDate1()
-		{
-			var dateCombo = document.getElementById("birthDate");
-			
-			if(dateCombo.options[dateCombo.selectedIndex].value != "<%=Constants.ANY%>")
-			{
-				show_calendar('advanceSearchForm.birthDate1',null,null,'MM-DD-YYYY')
-			}
-		}
-
-		//This is the wrapper function over show_calendar() that allows to select the date only if the operator is 'BETWEEN' or 'NOT BETWEEN'
-		function onDate2()
-		{
-			var dateCombo = document.getElementById("birthDate");
-			
-			if(dateCombo.options[dateCombo.selectedIndex].value == "<%=Operator.BETWEEN%>" || dateCombo.options[dateCombo.selectedIndex].value == "<%=Operator.NOT_BETWEEN%>")
-			{
-				show_calendar('advanceSearchForm.birthDate2',null,null,'MM-DD-YYYY')
-			}
-		}
-
-		/*Generic function to enable/disable value fields as per the operator selected
-		  opratorListId : Id of the operators list box
-		  valueFieldId  : Id of the value field (Textbox/List) which is to be enabled/disabled
-		*/
-		function onOperatorChange(operatorListId,valueFieldId)
-		{
-			var opCombo  = document.getElementById(operatorListId);
-			var valField = document.getElementById(valueFieldId);
-			
-			if(opCombo.options[opCombo.selectedIndex].value == "<%=Constants.ANY%>")
-			{
-				if(valField.type == "text")
-				{
-					valField.value = "";
-					valField.disabled = true;
-				}
-				else
-				{
-					valField.disabled = true;
-				}
-			}
-			else
-			{
-				valField.disabled = false;
-			}
-		}
-		
-		//This function enables the second date field only if the operator is 'BETWEEN' or 'NOT BETWEEN'
-		//& disables both the date fields if operator is 'ANY'
-		function onDateOperatorChange(element)
-		{
-			var dateTxt1  = document.getElementById("birthDate1");
-			var dateTxt2  = document.getElementById("birthDate2");
-			
-			if(element.value == "<%=Operator.BETWEEN%>" || element.value == "<%=Operator.NOT_BETWEEN%>")
-			{
-				dateTxt1.disabled = false;
-				dateTxt2.disabled = false;
-			}
-			else if(element.value == "<%=Constants.ANY%>")
-			{
-				dateTxt1.value = "";
-				dateTxt1.disabled = true;
-
-				dateTxt2.value = "";
-				dateTxt2.disabled = true;
-			}
-			else
-			{
-				dateTxt1.disabled = false;
-
-				dateTxt2.value = "";
-				dateTxt2.disabled = true;
-			}
-		}
-		
-	</script>
+	<script src="jss/AdvancedSearchScripts.js" type="text/javascript"></script>
 </head>
 
 <html:errors />
@@ -206,7 +120,7 @@
 		</label>
 	</td>
 	<td class="formField">
-		<html:select property="<%=opBirthDate%>" styleClass="formFieldSized10" styleId="birthDate" size="1" onchange="onDateOperatorChange(this)">
+		<html:select property="<%=opBirthDate%>" styleClass="formFieldSized10" styleId="birthDate" size="1" onchange="onDateOperatorChange(this,'birthDate1','birthDate2')">
 			<html:options collection="<%=Constants.DATE_NUMERIC_OPERATORS%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
@@ -214,13 +128,13 @@
 		<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
 		<html:text styleClass="formDateSized10" size="10" styleId="birthDate1" property="<%=birthDate%>" disabled="true"/>
 					 &nbsp;
-		<a href="javascript:onDate1();">
+		<a href="javascript:onDate('birthDate','advanceSearchForm.birthDate1',false);">
 			<img src="images\calendar.gif" width=24 height=22 border=0>
 		</a>
 					&nbsp;To&nbsp;
 		<html:text styleClass="formDateSized10" size="10" styleId="birthDate2" property="<%=birthDate2%>" disabled="true"/>
 					 &nbsp;
-		<a href="javascript:onDate2();">
+		<a href="javascript:onDate('birthDate','advanceSearchForm.birthDate2',true);">
 			<img src="images\calendar.gif" width=24 height=22 border=0>
 		</a>
 	</td>
