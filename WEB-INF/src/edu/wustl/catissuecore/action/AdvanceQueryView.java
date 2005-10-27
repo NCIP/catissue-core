@@ -71,16 +71,18 @@ public class AdvanceQueryView extends BaseAction
 		        Operator op = con.getOperator();
 		        if(k == 0)
 		        	//str = temp + "|" + count + "|" +data.getTable()+": "+data.getField()+ " "+op.getOperator() + " "+con.getValue();
-		        	str = temp + "|" + count + "|" +data.getField()+ " "+op.getOperator() + " " + con.getValue();
+		        	str = temp + "|" + count + "|" +data.getField()+ " "+op.getOperator() + " '" + con.getValue()+ "'";
 		        else
 		        	//str = str +" "+"AND"+" "+data.getField()+" "+op.getOperator() + " "+con.getValue();
-		        	str = str +" "+"<font color='red'>AND</font>"+" "+data.getField()+" "+op.getOperator() + " "+con.getValue();
+		        	str = str +" "+"<font color='red'>AND</font>"+" "+data.getField()+" "+op.getOperator() + " '"+con.getValue()+ "'";
+		        // entered by Mandar for validation of single quotes around the values.
+		        Logger.out.debug( "STR :---------- : "+ str);
 		    }
 			if(data != null)
 				str = str +  "|" + tableName;
 			
 			if(con == null){
-				str = temp + "|" + count + "|" + "ANY" + advConditionNode.getObjectName();
+				str = temp + "|" + count + "|" + "ANY" + "|"+advConditionNode.getObjectName();
 			}
 				
 			tree.add(str);
