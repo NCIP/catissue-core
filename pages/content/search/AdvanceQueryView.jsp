@@ -58,14 +58,14 @@
 			DisableAll();
 			var item = document.getElementById('<%=Constants.P%>');
 			item.className="linkChange";
-			item.innerHTML = "<a HREF='<%=util.getLink("Participant")%>' target='searchPageFrame'><%=Constants.PARTICIPANT%></a>";
+			item.innerHTML = "&nbsp;<img src='images/Participant.GIF' alt='Participant' /> &nbsp;<a HREF='<%=util.getLink("Participant")%>' target='searchPageFrame'><%=Constants.PARTICIPANT%></a>";
 		}
 		//Poornima:Added CP link
 		if(itemCount == 2){
 			DisableAll();
 			var item = document.getElementById('<%=Constants.CP%>');
 			item.className="linkChange";
-			item.innerHTML = "<a HREF='<%=util.getLink("CollectionProtocol")%>' target='searchPageFrame'><%=Constants.COLLECTION_PROTOCOL%></a>";
+			item.innerHTML = "&nbsp;<img src='images/CollectionProtocol.GIF' alt='CollectionProtocol' />  &nbsp;<a HREF='<%=util.getLink("CollectionProtocol")%>' target='searchPageFrame'><%=Constants.COLLECTION_PROTOCOL%></a>";
 		}
 		else
 			EnableItem(nodeCount);
@@ -75,27 +75,27 @@
 	function DisableAll(){
 		var item = document.getElementById('<%=Constants.CP%>');
 		item.className="linkChange";
-		item.innerHTML = "<%=Constants.COLLECTION_PROTOCOL%>";
+		item.innerHTML = "&nbsp;<img src='images/CollectionProtocol.GIF' alt='CollectionProtocol' />  &nbsp;<%=Constants.COLLECTION_PROTOCOL%>";
 		
 		item = document.getElementById('<%=Constants.DP%>');
 		item.className="linkChange";
-		item.innerHTML = '<%=Constants.DISTRIBUTION_PROTOCOL%>';
+		item.innerHTML = "&nbsp;<img src='images/DistributionProtocol.GIF' alt='DistributionProtocol' /> &nbsp; <%=Constants.DISTRIBUTION_PROTOCOL%>";
 		
 		item = document.getElementById('<%=Constants.P%>');
 		item.className="linkChange";
-		item.innerHTML = "<%=Constants.PARTICIPANT%>";
+		item.innerHTML = "&nbsp;<img src='images/Participant.GIF' alt='Participant' /> &nbsp;<%=Constants.PARTICIPANT%>";
 		
 		item = document.getElementById('<%=Constants.S%>');
 		item.className="linkChange"
-		item.innerHTML = "<%=Constants.SPECIMEN%>";
+		item.innerHTML = "&nbsp;<img src='images/Specimen.GIF' alt='Specimen' /> &nbsp; <%=Constants.SPECIMEN%>";
 		
 		item = document.getElementById('<%=Constants.SCG%>');
 		item.className="linkChange";
-		item.innerHTML = "<%=Constants.SPECIMEN_COLLECTION_GROUP%>";
+		item.innerHTML = "&nbsp;<img src='images/SpecimenCollectionGroup.GIF' alt='Specimen Collection Group' /> &nbsp;<%=Constants.SPECIMEN_COLLECTION_GROUP%>";
 		
 		item = document.getElementById('<%=Constants.D%>');
 		item.className="linkChange";
-		item.innerHTML = "<%=Constants.DISTRIBUTION%>";
+		item.innerHTML = "&nbsp;<img src='images/Distribution.GIF' alt='Distribution' /> &nbsp; <%=Constants.DISTRIBUTION%>";
 		
 		
 	}
@@ -104,27 +104,27 @@
 	
 		var item = document.getElementById('<%=Constants.CP%>');
 		item.className="linkChange";
-		item.innerHTML = "<a HREF='#'><%=Constants.COLLECTION_PROTOCOL%></a>";;
+		item.innerHTML = "&nbsp;<img src='images/CollectionProtocol.GIF' alt='CollectionProtocol' />  &nbsp;<a HREF='#'><%=Constants.COLLECTION_PROTOCOL%></a>";;
 		
 		item = document.getElementById('<%=Constants.P%>');
 		item.className="linkChange";
-		item.innerHTML = "<a HREF='<%=util.getLink("Participant")%>' target='searchPageFrame'><%=Constants.PARTICIPANT%></a>";
+		item.innerHTML = "&nbsp;<img src='images/Participant.GIF' alt='Participant' /> &nbsp;<a HREF='<%=util.getLink("Participant")%>' target='searchPageFrame'><%=Constants.PARTICIPANT%></a>";
 		
 		item = document.getElementById('<%=Constants.S%>');
 		item.className="linkChange"
-		item.innerHTML = "<a HREF='#'><%=Constants.SPECIMEN%></a>";
+		item.innerHTML = "&nbsp;<img src='images/Specimen.GIF' alt='Specimen' /> &nbsp; <a HREF='#'><%=Constants.SPECIMEN%></a>";
 		
 		item = document.getElementById('<%=Constants.SCG%>');
 		item.className="linkChange";
-		item.innerHTML = "<a HREF='#'><%=Constants.SPECIMEN_COLLECTION_GROUP%></a>";
+		item.innerHTML = "&nbsp;<img src='images/SpecimenCollectionGroup.GIF' alt='Specimen Collection Group' /> &nbsp;<a HREF='#'><%=Constants.SPECIMEN_COLLECTION_GROUP%></a>";
 		
 		item = document.getElementById('<%=Constants.D%>');
 		item.className="linkChange";
-		item.innerHTML = "<a HREF='#'><%=Constants.DISTRIBUTION%></a>";
+		item.innerHTML = "&nbsp;<img src='images/Distribution.GIF' alt='Distribution' /> &nbsp; <a HREF='#'><%=Constants.DISTRIBUTION%></a>";
 		
 		item = document.getElementById('<%=Constants.DP%>');
 		item.className="linkChange";
-		item.innerHTML = "<a HREF='#'><%=Constants.DISTRIBUTION_PROTOCOL%></a>";
+		item.innerHTML = "&nbsp;<img src='images/DistributionProtocol.GIF' alt='DistributionProtocol' /> &nbsp; <a HREF='#'><%=Constants.DISTRIBUTION_PROTOCOL%></a>";
 	}
 	
 	function EnableItem(nodeCount){
@@ -141,11 +141,11 @@
 			if((document.getElementById(item1) != null) && (document.getElementById(item1).checked==true)){
 				var item = document.getElementById('<%=Constants.CP%>');
 				item.className="linkChange";
-				item.innerHTML ="<a HREF='#'><%=Constants.COLLECTION_PROTOCOL%></a>";
+				item.innerHTML ="&nbsp;<img src='images/CollectionProtocol.GIF' alt='CollectionProtocol' />  &nbsp;<a HREF='#'><%=Constants.COLLECTION_PROTOCOL%></a>";
 			
 				item = document.getElementById('<%=Constants.DP%>');
 				item.className="linkChange";
-				item.innerHTML = "<a HREF='#'><%=Constants.DISTRIBUTION_PROTOCOL%></a>";
+				item.innerHTML = "&nbsp;<img src='images/DistributionProtocol.GIF' alt='DistributionProtocol' /> &nbsp; <a HREF='#'><%=Constants.DISTRIBUTION_PROTOCOL%></a>";
 				count1++;
 				
 			}
@@ -155,10 +155,10 @@
 				//temporary comment by Poornima
 				/*var item = document.getElementById('<%=Constants.SCG%>');
 				item.className="linkChange";
-				item.innerHTML ="<a HREF='#'><%=Constants.SPECIMEN_COLLECTION_GROUP%></a>";*/
+				item.innerHTML ="&nbsp;<img src='images/SpecimenCollectionGroup.GIF' alt='Specimen Collection Group' /> &nbsp;<a HREF='#'><%=Constants.SPECIMEN_COLLECTION_GROUP%></a>";*/
 				var item = document.getElementById('<%=Constants.S%>');
 				item.className="linkChange";
-				item.innerHTML ="<a HREF='#'><%=Constants.SPECIMEN%></a>";
+				item.innerHTML ="&nbsp;<img src='images/Specimen.GIF' alt='Specimen' /> &nbsp; <a HREF='#'><%=Constants.SPECIMEN%></a>";
 				count2++;
 				
 			}
@@ -167,7 +167,7 @@
 			if((document.getElementById(item3)!= null) && (document.getElementById(item3).checked==true)){
 				var item = document.getElementById('<%=Constants.D%>');
 				item.className="linkChange";
-				item.innerHTML ="<a HREF='#'><%=Constants.DISTRIBUTION%></a>";
+				item.innerHTML ="&nbsp;<img src='images/Distribution.GIF' alt='Distribution' /> &nbsp; <a HREF='#'><%=Constants.DISTRIBUTION%></a>";
 				count3++;
 			}
 			
@@ -176,7 +176,7 @@
 			if(((document.getElementById(item4)!= null) && (document.getElementById(item4).checked==true)) ||((document.getElementById(item5)!= null) && (document.getElementById(item5).checked==true))){
 				var item = document.getElementById('<%=Constants.S%>');
 				item.className="linkChange";
-				item.innerHTML ="<a HREF='#'><%=Constants.SPECIMEN%></a>";
+				item.innerHTML ="&nbsp;<img src='images/Specimen.GIF' alt='Specimen' /> &nbsp; <a HREF='#'><%=Constants.SPECIMEN%></a>";
 				count4++;
 			}
 			
@@ -185,10 +185,10 @@
 			//temporary comment by Poornima
 				/*var item = document.getElementById('<%=Constants.S%>');
 				item.className="linkChange";
-				item.innerHTML ="<a HREF='#'><%=Constants.SPECIMEN%></a>";*/
+				item.innerHTML ="&nbsp;<img src='images/Specimen.GIF' alt='Specimen' /> &nbsp; <a HREF='#'><%=Constants.SPECIMEN%></a>";*/
 				var item = document.getElementById('<%=Constants.SCG%>');
 				item.className="linkChange";
-				item.innerHTML ="<a HREF='#'><%=Constants.SPECIMEN_COLLECTION_GROUP%></a>";
+				item.innerHTML ="&nbsp;<img src='images/SpecimenCollectionGroup.GIF' alt='Specimen Collection Group' /> &nbsp;<a HREF='#'><%=Constants.SPECIMEN_COLLECTION_GROUP%></a>";
 				count5++;
 			}
 			
@@ -219,8 +219,8 @@
 						<td>
 							<div class='menuNormal' width='140'>
 								<table class='menuNormal' width='140' border='0' cellpadding='3' cellspacing='1'>
-									<tr height='20'  valign="middle">
-										<td colspan=2 class='linkChange' id='P' noWrap  height='20' valign="middle"
+									<tr height='20'  vAlign="middle">
+										<td colspan=2 class='linkChange' id='P' noWrap  height='20' vAlign="middle"
 										onmouseover="changeMenuStyle(this,'linkChangeOnMouseOver')"
 										 onmouseout="changeMenuStyle(this,'linkChange')">
 											&nbsp;<img src="images/Participant.GIF" alt="Participant" /> &nbsp; 
@@ -229,36 +229,36 @@
 											</a>
 										</td>
 									</tr>
-									<tr height='20' valign="middle">
-										<td colspan=2 class='linkChange' id='CP' noWrap  height='20' valign="middle"
+									<tr height='20' vAlign="middle">
+										<td colspan=2 class='linkChange' id='CP' noWrap  height='20' vAlign="middle"
 										onmouseover="changeMenuStyle(this,'linkChangeOnMouseOver')"
 										 onmouseout="changeMenuStyle(this,'linkChange')">
 												&nbsp;<img src="images/CollectionProtocol.GIF" alt="CollectionProtocol" />  &nbsp;	<%=Constants.COLLECTION_PROTOCOL%>
 										</td>
 									</tr>
-									<tr height='20' valign="middle">
-										<td colspan=2 class='linkChange' id='S' noWrap  height='20' valign="middle"
+									<tr height='20' vAlign="middle">
+										<td colspan=2 class='linkChange' id='S' noWrap  height='20' vAlign="middle"
 										onmouseover="changeMenuStyle(this,'linkChangeOnMouseOver')"
 										 onmouseout="changeMenuStyle(this,'linkChange')">
-											&nbsp;<img src="images/Specimen.GIF" alt="Specimen" />   &nbsp; <%=Constants.SPECIMEN%>
+											&nbsp;<img src="images/Specimen.GIF" alt="Specimen" /> &nbsp; <%=Constants.SPECIMEN%>
 										</td>
 									</tr>
-									<tr height='20' valign="middle">
-										<td colspan=2 class='linkChange' id='SCG' noWrap  height='20' valign="middle"
+									<tr height='20' vAlign="middle">
+										<td colspan=2 class='linkChange' id='SCG' noWrap  height='20' vAlign="middle"
 										onmouseover="changeMenuStyle(this,'linkChangeOnMouseOver')"
 										 onmouseout="changeMenuStyle(this,'linkChange')">
 											&nbsp;<img src="images/SpecimenCollectionGroup.GIF" alt="Specimen Collection Group" /> &nbsp; <%=Constants.SPECIMEN_COLLECTION_GROUP%>
 										</td>
 									</tr>
-									<tr height='20' valign="middle">
-										<td colspan=2 class='linkChange' id='D' noWrap  height='20' valign="middle"
+									<tr height='20' vAlign="middle">
+										<td colspan=2 class='linkChange' id='D' noWrap  height='20' vAlign="middle"
 										onmouseover="changeMenuStyle(this,'linkChangeOnMouseOver')"
 										 onmouseout="changeMenuStyle(this,'linkChange')">
 										&nbsp;<img src="images/Distribution.GIF" alt="Distribution" /> &nbsp; <%=Constants.DISTRIBUTION%>
 										</td>
 									</tr>
-									<tr height='20' valign="middle">
-										<td colspan=2 class='linkChange' id='DP' noWrap  height='20' valign="middle"
+									<tr height='20' vAlign="middle">
+										<td colspan=2 class='linkChange' id='DP' noWrap  height='20' vAlign="middle"
 										onmouseover="changeMenuStyle(this,'linkChangeOnMouseOver')"
 										 onmouseout="changeMenuStyle(this,'linkChange')">
 										&nbsp;<img src="images/DistributionProtocol.GIF" alt="DistributionProtocol" /> &nbsp; <%=Constants.DISTRIBUTION_PROTOCOL%>
