@@ -38,7 +38,19 @@
 			document.forms[0].submit();
 		}
 		
-		function onDate()
+		//This is the wrapper function over show_calendar() that allows to select the date only if the operator is not 'ANY'
+		function onDate1()
+		{
+			var dateCombo = document.getElementById("birthDate");
+			
+			if(dateCombo.options[dateCombo.selectedIndex].value != "<%=Constants.ANY%>")
+			{
+				show_calendar('advanceSearchForm.birthDate1',null,null,'MM-DD-YYYY')
+			}
+		}
+
+		//This is the wrapper function over show_calendar() that allows to select the date only if the operator is 'BETWEEN' or 'NOT BETWEEN'
+		function onDate2()
 		{
 			var dateCombo = document.getElementById("birthDate");
 			
@@ -47,18 +59,58 @@
 				show_calendar('advanceSearchForm.birthDate2',null,null,'MM-DD-YYYY')
 			}
 		}
+
+		/*Generic function to enable/disable value fields as per the operator selected
+		  opratorListId : Id of the operators list box
+		  valueFieldId  : Id of the value field (Textbox/List) which is to be enabled/disabled
+		*/
+		function onOperatorChange(operatorListId,valueFieldId)
+		{
+			var opCombo  = document.getElementById(operatorListId);
+			var valField = document.getElementById(valueFieldId);
+			
+			if(opCombo.options[opCombo.selectedIndex].value == "<%=Constants.ANY%>")
+			{
+				if(valField.type == "text")
+				{
+					valField.value = "";
+					valField.disabled = true;
+				}
+				else
+				{
+					valField.disabled = true;
+				}
+			}
+			else
+			{
+				valField.disabled = false;
+			}
+		}
 		
+		//This function enables the second date field only if the operator is 'BETWEEN' or 'NOT BETWEEN'
+		//& disables both the date fields if operator is 'ANY'
 		function onDateOperatorChange(element)
 		{
+			var dateTxt1  = document.getElementById("birthDate1");
 			var dateTxt2  = document.getElementById("birthDate2");
 			
 			if(element.value == "<%=Operator.BETWEEN%>" || element.value == "<%=Operator.NOT_BETWEEN%>")
 			{
+				dateTxt1.disabled = false;
 				dateTxt2.disabled = false;
+			}
+			else if(element.value == "<%=Constants.ANY%>")
+			{
+				dateTxt1.value = "";
+				dateTxt1.disabled = true;
+
 				dateTxt2.value = "";
+				dateTxt2.disabled = true;
 			}
 			else
 			{
+				dateTxt1.disabled = false;
+
 				dateTxt2.value = "";
 				dateTxt2.disabled = true;
 			}
@@ -89,12 +141,12 @@
  		</label>
 	</td>
 	<td class="formField">
-		<html:select property="<%=opLastName%>" styleClass="formFieldSized10" styleId="<%=opLastName%>" size="1">
+		<html:select property="<%=opLastName%>" styleClass="formFieldSized10" styleId="lastNameCombo" size="1" onchange="onOperatorChange('lastNameCombo','lastName')">
 			<html:options collection="<%=Constants.STRING_OPERATORS%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
 	<td class="formField">
-		<html:text styleClass="formFieldSized10" styleId="lastName" property="<%=lastName%>"/>
+		<html:text styleClass="formFieldSized10" styleId="lastName" property="<%=lastName%>" disabled="true"/>
 	</td>
 </tr>
 
@@ -106,12 +158,12 @@
  		</label>
 	</td>
 	<td class="formField">
-		<html:select property="<%=opFirstName%>" styleClass="formFieldSized10" styleId="<%=opFirstName%>" size="1">
+		<html:select property="<%=opFirstName%>" styleClass="formFieldSized10" styleId="firstNameCombo" size="1" onchange="onOperatorChange('firstNameCombo','firstName')">
 			<html:options collection="<%=Constants.STRING_OPERATORS%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
 	<td class="formField">
-		<html:text styleClass="formFieldSized10" styleId="firstName" property="<%=firstName%>"/>
+		<html:text styleClass="formFieldSized10" styleId="firstName" property="<%=firstName%>" disabled="true"/>
 	</td>
 </tr>
 
@@ -123,12 +175,12 @@
  		</label>
 	</td>
 	<td class="formField">
-		<html:select property="<%=opMiddleName%>" styleClass="formFieldSized10" styleId="<%=opMiddleName%>" size="1">
+		<html:select property="<%=opMiddleName%>" styleClass="formFieldSized10" styleId="middleNameCombo" size="1" onchange="onOperatorChange('middleNameCombo','middleName')">
 			<html:options collection="<%=Constants.STRING_OPERATORS%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
 	<td class="formField">
-		<html:text styleClass="formFieldSized10" styleId="middleName" property="<%=middleName%>"/>
+		<html:text styleClass="formFieldSized10" styleId="middleName" property="<%=middleName%>" disabled="true"/>
 	</td>
 </tr>
 
@@ -146,15 +198,15 @@
 	</td>
 	<td class="formField" nowrap>
 		<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
-		<html:text styleClass="formDateSized10" size="10" styleId="birthDate1" property="<%=birthDate%>" />
+		<html:text styleClass="formDateSized10" size="10" styleId="birthDate1" property="<%=birthDate%>" disabled="true"/>
 					 &nbsp;
-		<a href="javascript:show_calendar('advanceSearchForm.birthDate1',null,null,'MM-DD-YYYY');">
+		<a href="javascript:onDate1();">
 			<img src="images\calendar.gif" width=24 height=22 border=0>
 		</a>
 					&nbsp;To&nbsp;
 		<html:text styleClass="formDateSized10" size="10" styleId="birthDate2" property="<%=birthDate2%>" disabled="true"/>
 					 &nbsp;
-		<a href="javascript:onDate();">
+		<a href="javascript:onDate2();">
 			<img src="images\calendar.gif" width=24 height=22 border=0>
 		</a>
 	</td>
@@ -168,12 +220,12 @@
  		</label>
 	</td>
 	<td class="formField">
-		<html:select property="<%=opGender%>" styleClass="formFieldSized10" styleId="<%=opGender%>" size="1">
+		<html:select property="<%=opGender%>" styleClass="formFieldSized10" styleId="genderCombo" size="1" onchange="onOperatorChange('genderCombo','gender')">
 			<html:options collection="<%=Constants.ENUMERATED_OPERATORS%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
 	<td class="formField">
-		<html:select property="<%=gender%>" styleClass="formFieldSized10" styleId="gender" size="1">
+		<html:select property="<%=gender%>" styleClass="formFieldSized10" styleId="gender" size="1" disabled="true">
 			<html:options collection="<%=Constants.GENDER_LIST%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
@@ -187,12 +239,12 @@
  		</label>
 	</td>
 	<td class="formField">
-		<html:select property="<%=opGenotype%>" styleClass="formFieldSized10" styleId="<%=opGenotype%>" size="1">
+		<html:select property="<%=opGenotype%>" styleClass="formFieldSized10" styleId="genotypeCombo" size="1" onchange="onOperatorChange('genotypeCombo','genotype')">
 				<html:options collection="<%=Constants.ENUMERATED_OPERATORS%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
 	<td class="formField">
-		<html:select property="<%=genotype%>" styleClass="formFieldSized10" styleId="genotype" size="1">
+		<html:select property="<%=genotype%>" styleClass="formFieldSized10" styleId="genotype" size="1" disabled="true">
 			<html:options collection="<%=Constants.GENOTYPE_LIST%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
@@ -206,12 +258,12 @@
  		</label>
 	</td>
 	<td class="formField">
-		<html:select property="<%=opRace%>" styleClass="formFieldSized10" styleId="<%=opRace%>" size="1">
+		<html:select property="<%=opRace%>" styleClass="formFieldSized10" styleId="raceCombo" size="1" onchange="onOperatorChange('raceCombo','race')">
 			<html:options collection="<%=Constants.ENUMERATED_OPERATORS%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
 	<td class="formField" nowrap>
-		<html:select property="<%=race%>" styleClass="formFieldSized10" styleId="race" size="1">
+		<html:select property="<%=race%>" styleClass="formFieldSized10" styleId="race" size="1" disabled="true">
 			<html:options collection="<%=Constants.RACELIST%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
@@ -225,12 +277,12 @@
      	</label>
 	</td>
 	<td class="formField">
-		<html:select property="<%=opEthnicity%>" styleClass="formFieldSized10" styleId="<%=opEthnicity%>" size="1">
+		<html:select property="<%=opEthnicity%>" styleClass="formFieldSized10" styleId="ethnicityCombo" size="1" onchange="onOperatorChange('ethnicityCombo','ethnicity')">
 			<html:options collection="<%=Constants.ENUMERATED_OPERATORS%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
 	<td class="formField">
-		<html:select property="<%=ethnicity%>" styleClass="formFieldSized10" styleId="ethnicity" size="1">
+		<html:select property="<%=ethnicity%>" styleClass="formFieldSized10" styleId="ethnicity" size="1" disabled="true">
 			<html:options collection="<%=Constants.ETHNICITY_LIST%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
@@ -244,12 +296,12 @@
      	</label>
 	</td>
 	<td class="formField">
-		<html:select property="<%=opSsn%>" styleClass="formFieldSized10" styleId="<%=opSsn%>" size="1">
+		<html:select property="<%=opSsn%>" styleClass="formFieldSized10" styleId="ssnCombo" size="1" onchange="onOperatorChange('ssnCombo','ssn')">
 			<html:options collection="<%=Constants.STRING_OPERATORS%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
 	<td class="formField">
-		<html:text styleClass="formFieldSized10" styleId="ssn" property="<%=ssn%>"/>
+		<html:text styleClass="formFieldSized10" styleId="ssn" property="<%=ssn%>" disabled="true"/>
 	</td>
 </tr>
 
