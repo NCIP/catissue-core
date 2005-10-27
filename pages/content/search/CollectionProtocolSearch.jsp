@@ -7,7 +7,6 @@
 
 <%
 	String principalInvestigator = "value(SpecimenProtocol:PRINCIPAL_INVESTIGATOR_ID)";
-	//String protocolCoordinator = "value(CollectionCoordinators:USER_ID)";
 	String title = "value(SpecimenProtocol:TITLE)";
 	String shortTitle = "value(SpecimenProtocol:SHORT_TITLE)";
 	String irbIdentifier = "value(SpecimenProtocol:IRB_IDENTIFIER)";
@@ -15,28 +14,19 @@
 	String startDate2 = "value(Participant:START_DATE:HLIMIT)";
 	String endDate = "value(SpecimenProtocol:END_DATE)";
 	String endDate2 = "value(Participant:END_DATE:HLIMIT)";
-	String enrollment = "value(SpecimenProtocol:ENROLLMENT)";
-	String descriptionURL = "value(SpecimenProtocol:DESCRIPTION_URL)";
-	String clinicalStatus = "value(CollectionProtocolEvent:CLINICAL_STATUS)";
-	String studyCalendarEventPoint = "value(CollectionProtocolEvent:STUDY_CALENDAR_EVENT_POINT)";
-	String specimenType = "value(SpecimenRequirement:SPECIMEN_TYPE)";
-	String tissueSite = "value(SpecimenRequirement:TISSUE_SITE)";
-	String pathologicalStatus = "value(SpecimenRequirement:PATHOLOGICAL_STATUS)";
-
+	String protocolParticipantId = "value(CollectionProtocolRegistration:PROTOCOL_PARTICIPANT_IDENTIFIER)";
+	String regDate = "value(SpecimenProtocol:REGISTRATION_DATE)";
+	String regDate2 = "value(Participant:REGISTRATION_DATE:HLIMIT)";
+	
+	
 	String opPrincipalInvestigator = "value(Operator:SpecimenProtocol:PRINCIPAL_INVESTIGATOR_ID)";
-	//String opProtocolCoordinator = "value(Operator:CollectionCoordinators:USER_ID)";
 	String opTitle = "value(Operator:SpecimenProtocol:TITLE)";
 	String opShortTitle = "value(Operator:SpecimenProtocol:SHORT_TITLE)";
 	String opIrbIdentifier = "value(Operator:SpecimenProtocol:IRB_IDENTIFIER)";
 	String opStartDate = "value(Operator:SpecimenProtocol:START_DATE)";
 	String opEndDate = "value(Operator:SpecimenProtocol:END_DATE)";
-	String opEnrollment = "value(Operator:SpecimenProtocol:ENROLLMENT)";
-	String opDescriptionURL = "value(Operator:SpecimenProtocol:DESCRIPTION_URL)";
-	String opClinicalStatus = "value(Operator:CollectionProtocolEvent:CLINICAL_STATUS)";
-	String opStudyCalendarEventPoint = "value(Operator:CollectionProtocolEvent:STUDY_CALENDAR_EVENT_POINT)";
-	String opSpecimenType = "value(Operator:SpecimenRequirement:SPECIMEN_TYPE)";
-	String opTissueSite = "value(Operator:SpecimenRequirement:TISSUE_SITE)";
-	String opPathologicalStatus = "value(Operator:SpecimenRequirement:PATHOLOGICAL_STATUS)";
+	String opProtocolParticipantId = "value(Operator:CollectionProtocolRegistration:PROTOCOL_PARTICIPANT_IDENTIFIER)";
+	String opRegDate = "value(Operator:SpecimenProtocol:REGISTRATION_DATE)";
 %>
 
 <head>
@@ -239,131 +229,50 @@
 		</a>
 	</td>
 </tr>
-
 <!-- SEVENTH ROW -->
 <tr>
 	<td class="formSerialNumberField" nowrap>
- 		<label for="enrollment">
- 			<b><bean:message key="collectionprotocol.participants"/>
+ 		<label for="protocolParticipantId">
+ 			<bean:message key="collectionProtocolReg.participantProtocolID"/>
  		</label>
 	</td>
 	<td class="formField">
-		<html:select property="<%=opEnrollment%>" styleClass="formFieldSized10" styleId="opEnrollment" size="1">
+		<html:select property="<%=opProtocolParticipantId%>" styleClass="formFieldSized10" styleId="<%=opProtocolParticipantId%>" size="1">
 			<html:options collection="<%=Constants.STRING_OPERATORS%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
 	<td class="formField">
-		<html:text styleClass="formFieldSized10" styleId="enrollment" property="<%=enrollment%>"/>
+		<html:text styleClass="formFieldSized10" styleId="protocolParticipantId" property="<%=protocolParticipantId%>"/>
 	</td>
 </tr>
+
 
 <!-- EIGHTH ROW -->
 <tr>
 	<td class="formSerialNumberField" nowrap>
- 		<label for="descriptionURL">
-     		<b><bean:message key="collectionprotocol.descriptionurl"/>
-     	</label>
+ 		<label for="endDate">
+ 			<b><bean:message key="collectionProtocolReg.participantRegistrationDate"/>
+ 		</label>
 	</td>
 	<td class="formField">
-		<html:select property="<%=opDescriptionURL%>" styleClass="formFieldSized10" styleId="<%=opDescriptionURL%>" size="1">
-			<html:options collection="<%=Constants.STRING_OPERATORS%>" labelProperty="name" property="value"/>
+		<html:select property="<%=opRegDate%>" styleClass="formFieldSized10" styleId="opRegDate" size="1" onchange="onDateOperatorChange(this)">
+			<html:options collection="<%=Constants.DATE_NUMERIC_OPERATORS%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
-	<td class="formField">
-		<html:text styleClass="formFieldSized10" styleId="descriptionURL" property="<%=descriptionURL%>"/>
+		<td class="formField" nowrap>
+		<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
+		<html:text styleClass="formDateSized10" size="10" styleId="regDate1" property="<%=regDate%>" />
+					 &nbsp;
+		<a href="javascript:show_calendar('advanceSearchForm.startDate1',null,null,'MM-DD-YYYY');">
+			<img src="images\calendar.gif" width=24 height=22 border=0>
+		</a>
+					&nbsp;To&nbsp;
+		<html:text styleClass="formDateSized10" size="10" styleId="regDate2" property="<%=regDate2%>" disabled="true"/>
+					 &nbsp;
+		<a href="javascript:onDate();">
+			<img src="images\calendar.gif" width=24 height=22 border=0>
+		</a>
 	</td>
-</tr>
-
-<!-- NINETH ROW -->
-<tr>
-	<td class="formSerialNumberField" nowrap>
- 		<label for="clinicalStatus">
-     		<b><bean:message key="collectionprotocol.clinicalstatus"/>
-     	</label>
-	</td>
-	<td class="formField">
-		<html:select property="<%=opClinicalStatus%>" styleClass="formFieldSized10" styleId="<%=opClinicalStatus%>" size="1">
-			<html:options collection="<%=Constants.ENUMERATED_OPERATORS%>" labelProperty="name" property="value"/>
-		</html:select>
-	</td>
-	<td class="formField">
-		<html:select property="<%=clinicalStatus%>" styleClass="formFieldSized10" styleId="clinicalStatus" size="1">
-			<html:options collection="<%=Constants.CLINICAL_STATUS_LIST%>" labelProperty="name" property="value"/>
-		</html:select>
-	</td>
-</tr>
-<!-- TENTH ROW -->
-<tr>
-	<td class="formSerialNumberField" nowrap>
- 		<label for="studyCalendarEventPoint">
-     		<b><bean:message key="collectionprotocol.studycalendartitle"/>
-     	</label>
-	</td>
-	<td class="formField">
-		<html:select property="<%=opStudyCalendarEventPoint%>" styleClass="formFieldSized10" styleId="<%=opStudyCalendarEventPoint%>" size="1">
-			<html:options collection="<%=Constants.STRING_OPERATORS%>" labelProperty="name" property="value"/>
-		</html:select>
-	</td>
-	<td class="formField">
-		<html:text styleClass="formFieldSized10" styleId="studyCalendarEventPoint" property="<%=studyCalendarEventPoint%>"/>
-	</td>
-</tr>
-<!-- ELEVENTH ROW -->
-<tr>
-	<td class="formSerialNumberField" nowrap>
- 		<label for="tissueSite">
-     		<b><bean:message key="collectionprotocol.specimensite"/>
-     	</label>
-	</td>
-	<td class="formField">
-		<html:select property="<%=opTissueSite%>" styleClass="formFieldSized10" styleId="<%=opTissueSite%>" size="1">
-			<html:options collection="<%=Constants.ENUMERATED_OPERATORS%>" labelProperty="name" property="value"/>
-		</html:select>
-	</td>
-	<td class="formField">
-		<html:select property="<%=tissueSite%>" styleClass="formFieldSized10" styleId="tissueSite" size="1">
-			<html:options collection="<%=Constants.TISSUE_SITE_LIST%>" labelProperty="name" property="value"/>
-		</html:select>
-	</td>
-</tr>
-<!-- TWELTH ROW -->
-<tr>
-	<td class="formSerialNumberField" nowrap>
- 		<label for="pathologicalStatus">
-     		<b><bean:message key="collectionprotocol.specimenstatus"/>
-     	</label>
-	</td>
-	<td class="formField">
-		<html:select property="<%=opPathologicalStatus%>" styleClass="formFieldSized10" styleId="<%=opPathologicalStatus%>" size="1">
-			<html:options collection="<%=Constants.ENUMERATED_OPERATORS%>" labelProperty="name" property="value"/>
-		</html:select>
-	</td>
-	<td class="formField">
-		<html:select property="<%=pathologicalStatus%>" styleClass="formFieldSized10" styleId="pathologicalStatus" size="1">
-			<html:options collection="<%=Constants.PATHOLOGICAL_STATUS_LIST%>" labelProperty="name" property="value"/>
-		</html:select>
-	</td>
-</tr>
-<!-- THIRTEENTH ROW -->
-<tr>
-	<td class="formSerialNumberField" nowrap>
- 		<label for="specimenType">
-     		<b><bean:message key="collectionprotocol.specimetype"/>
-     	</label>
-	</td>
-	<td class="formField">
-		<html:select property="<%=opSpecimenType%>" styleClass="formFieldSized10" styleId="<%=opSpecimenType%>" size="1">
-			<html:options collection="<%=Constants.ENUMERATED_OPERATORS%>" labelProperty="name" property="value"/>
-		</html:select>
-	</td>
-	<td class="formField">
-		<html:select property="<%=specimenType%>" styleClass="formFieldSized10" styleId="specimenType" size="1">
-			<html:options collection="<%=Constants.SPECIMEN_TYPE_LIST%>" labelProperty="name" property="value"/>
-		</html:select>
-	</td>
-</tr>
-<tr>
-	<td colspan="3">&nbsp;</td>
 </tr>
 
 
