@@ -90,24 +90,23 @@ public class ConditionMapParser
 	public DefaultMutableTreeNode createAdvancedQueryObj(List list,DefaultMutableTreeNode root,String objectName) 
 	{
 		//Query query = QueryFactory.getInstance().newQuery(Query.ADVANCED_QUERY,Query.PARTICIPANT);
-		 
-		Iterator itr = list.iterator();
-		Condition condition = (Condition)itr.next();
+//		String tableObject = condition.getDataElement().getTable();
+		
 		String prevTableObj;
-		//String tableObject = condition.getDataElement().getTable();
 		AdvancedConditionsNode advancedConditionsNode = new AdvancedConditionsNode(objectName);
-		advancedConditionsNode.addConditionToNode(condition);
+		
+		Iterator itr = list.iterator();
 		while(itr.hasNext())
 		{
-			condition = (Condition)itr.next();
+			Condition condition = (Condition)itr.next();
 			advancedConditionsNode.addConditionToNode(condition);
 		}
+		
 		DefaultMutableTreeNode child = new DefaultMutableTreeNode(advancedConditionsNode);
-		System.out.println("Child: "+child);
+		
 		if(root.getChildCount()==0)
 		{
 			root.add(child);
-			//System.out.println("Root: "+root.getLevel());
 		}
 		else
 		{
