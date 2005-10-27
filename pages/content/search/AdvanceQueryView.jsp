@@ -28,15 +28,28 @@
 	var itemCount = 1;
 	
 	
-	function CheckNum(checkName,itemName,nodeCount){
+	/*function CheckNum(checkName,itemName,nodeCount){
 	
+		
+		alert("node count"+nodeCount);
 		if(document.getElementById(checkName).checked==true){
-			DisableAll();
+			//DisableAll();
 			if(itemName == '<%=Constants.PARTICIPANT%>'){
-				itemCount++;
+				//itemCount++;
+				//DisableAll();
+			var item = document.getElementById('<%=Constants.P%>');
+			item.className="linkChange";
+			item.innerHTML = "<a HREF='<%=util.getLink("Participant")%>' target='searchPageFrame'><%=Constants.PARTICIPANT%></a>";
+			EnableItem(nodeCount);
 			}
 			if(itemName == '<%=Constants.COLLECTION_PROTOCOL%>'){
-				itemCount++;
+				//itemCount++;
+				//DisableAll();
+				EnableItem(nodeCount);
+			var item = document.getElementById('<%=Constants.CP%>');
+			item.className="linkChange";
+			item.innerHTML = "<a HREF='<%=util.getLink("CollectionProtocol")%>' target='searchPageFrame'><%=Constants.COLLECTION_PROTOCOL%></a>";
+			
 			}
 			if(itemName == '<%=Constants.DISTRIBUTION_PROTOCOL%>'){
 				itemCount++;
@@ -44,8 +57,15 @@
 			if((itemName == '<%=Constants.SPECIMEN_COLLECTION_GROUP%>') || (itemName == '<%=Constants.DISTRIBUTION%>') ){
 				itemCount++;
 			}
-			if(itemName == '<%=Constants.SPECIMEN%>')
-				itemCount++;
+			if(itemName == '<%=Constants.SPECIMEN%>'){
+				//itemCount++;
+				//DisableAll();
+				EnableItem(nodeCount);
+			var item = document.getElementById('<%=Constants.S%>');
+			item.className="linkChange";
+			item.innerHTML = "<a HREF='<%=util.getLink("Specimen")%>' target='searchPageFrame'><%=Constants.SPECIMEN%></a>";
+			
+			}
 		}
 		else
 			itemCount--;
@@ -54,23 +74,33 @@
 		//DisableAll();
 	//}
 	//else{
+	alert("itemCount"+itemCount);
+	alert("check box name"+checkName);
+	alert("item name"+itemName);
 		if(itemCount == 1){
 			DisableAll();
 			var item = document.getElementById('<%=Constants.P%>');
 			item.className="linkChange";
-			item.innerHTML = "&nbsp;<img src='images/Participant.GIF' alt='Participant' /> &nbsp;<a HREF='<%=util.getLink("Participant")%>' target='searchPageFrame'><%=Constants.PARTICIPANT%></a>";
+			item.innerHTML = "<a HREF='<%=util.getLink("Participant")%>' target='searchPageFrame'><%=Constants.PARTICIPANT%></a>";
 		}
-		//Poornima:Added CP link
+		//Poornima:Added CP link and S link
 		if(itemCount == 2){
 			DisableAll();
 			var item = document.getElementById('<%=Constants.CP%>');
 			item.className="linkChange";
-			item.innerHTML = "&nbsp;<img src='images/CollectionProtocol.GIF' alt='CollectionProtocol' />  &nbsp;<a HREF='<%=util.getLink("CollectionProtocol")%>' target='searchPageFrame'><%=Constants.COLLECTION_PROTOCOL%></a>";
+			item.innerHTML = "<a HREF='<%=util.getLink("CollectionProtocol")%>' target='searchPageFrame'><%=Constants.COLLECTION_PROTOCOL%></a>";
+		}
+			
+		if(itemCount == 3){
+			DisableAll();
+			var item = document.getElementById('<%=Constants.S%>');
+			item.className="linkChange";
+			item.innerHTML = "<a HREF='<%=util.getLink("Specimen")%>' target='searchPageFrame'><%=Constants.SPECIMEN%></a>";
 		}
 		else
 			EnableItem(nodeCount);
 		//}
-	}	
+	}*/	
 
 	function DisableAll(){
 		var item = document.getElementById('<%=Constants.CP%>');
@@ -104,7 +134,7 @@
 	
 		var item = document.getElementById('<%=Constants.CP%>');
 		item.className="linkChange";
-		item.innerHTML = "&nbsp;<img src='images/CollectionProtocol.GIF' alt='CollectionProtocol' />  &nbsp;<a HREF='#'><%=Constants.COLLECTION_PROTOCOL%></a>";;
+		item.innerHTML = "&nbsp;<img src='images/CollectionProtocol.GIF' alt='CollectionProtocol' />  &nbsp;<a HREF='<%=util.getLink("CollectionProtocol")%>' target='searchPageFrame'><%=Constants.COLLECTION_PROTOCOL%></a>";
 		
 		item = document.getElementById('<%=Constants.P%>');
 		item.className="linkChange";
@@ -112,7 +142,7 @@
 		
 		item = document.getElementById('<%=Constants.S%>');
 		item.className="linkChange"
-		item.innerHTML = "&nbsp;<img src='images/Specimen.GIF' alt='Specimen' /> &nbsp; <a HREF='#'><%=Constants.SPECIMEN%></a>";
+		item.innerHTML ="&nbsp;<img src='images/Specimen.GIF' alt='Specimen' /> &nbsp; <a HREF='<%=util.getLink("Specimen")%>' target='searchPageFrame'><%=Constants.SPECIMEN%></a>";
 		
 		item = document.getElementById('<%=Constants.SCG%>');
 		item.className="linkChange";
@@ -127,78 +157,80 @@
 		item.innerHTML = "&nbsp;<img src='images/DistributionProtocol.GIF' alt='DistributionProtocol' /> &nbsp; <a HREF='#'><%=Constants.DISTRIBUTION_PROTOCOL%></a>";
 	}
 	
-	function EnableItem(nodeCount){
+	function checkStatus(item, counter)
+	{
+		if(document.getElementById(item) != null)
+		{
+			if(document.getElementById(item).checked==true)
+			{
+				counter = counter + 1;
+			}
+		}
+		return counter; 
+	}
+	
+//	function EnableItem(nodeCount){
+	function CheckNum(checkName,itemName,nodeCount)
+	{
 		var count1 = 0;
 		var count2 = 0;
 		var count3 = 0;
 		var count4 = 0;
 		var count5 = 0;
+		var count6 = 0;
 							
-		for(var i = 1; i <= nodeCount; i++){
-			
+		/*alert("node count"+nodeCount);
+		alert("itemCount"+itemCount);
+		alert("check box name"+checkName);
+		alert("item name"+itemName);*/
+								
+		for(var i = 1; i <= nodeCount; i++)
+		{
 			var item1 = '<%=Constants.PARTICIPANT%>'+"_"+i;
-			
-			if((document.getElementById(item1) != null) && (document.getElementById(item1).checked==true)){
-				var item = document.getElementById('<%=Constants.CP%>');
-				item.className="linkChange";
-				item.innerHTML ="&nbsp;<img src='images/CollectionProtocol.GIF' alt='CollectionProtocol' />  &nbsp;<a HREF='#'><%=Constants.COLLECTION_PROTOCOL%></a>";
-			
-				item = document.getElementById('<%=Constants.DP%>');
-				item.className="linkChange";
-				item.innerHTML = "&nbsp;<img src='images/DistributionProtocol.GIF' alt='DistributionProtocol' /> &nbsp; <a HREF='#'><%=Constants.DISTRIBUTION_PROTOCOL%></a>";
-				count1++;
-				
-			}
+			count1 = checkStatus(item1, count1);
 			
 			var item2 = '<%=Constants.COLLECTION_PROTOCOL%>'+"_"+i;
-			if((document.getElementById(item2)!= null) && (document.getElementById(item2).checked==true)){
-				//temporary comment by Poornima
-				/*var item = document.getElementById('<%=Constants.SCG%>');
-				item.className="linkChange";
-				item.innerHTML ="&nbsp;<img src='images/SpecimenCollectionGroup.GIF' alt='Specimen Collection Group' /> &nbsp;<a HREF='#'><%=Constants.SPECIMEN_COLLECTION_GROUP%></a>";*/
-				var item = document.getElementById('<%=Constants.S%>');
-				item.className="linkChange";
-				item.innerHTML ="&nbsp;<img src='images/Specimen.GIF' alt='Specimen' /> &nbsp; <a HREF='#'><%=Constants.SPECIMEN%></a>";
-				count2++;
-				
-			}
+			//alert("item2 in loop"+item2);
+			count2 = checkStatus(item2, count2);
 			
 			var item3 = '<%=Constants.DISTRIBUTION_PROTOCOL%>'+"_"+i;
-			if((document.getElementById(item3)!= null) && (document.getElementById(item3).checked==true)){
-				var item = document.getElementById('<%=Constants.D%>');
-				item.className="linkChange";
-				item.innerHTML ="&nbsp;<img src='images/Distribution.GIF' alt='Distribution' /> &nbsp; <a HREF='#'><%=Constants.DISTRIBUTION%></a>";
-				count3++;
-			}
+			count3 = checkStatus(item3, count3);
 			
 			var item4 = '<%=Constants.SPECIMEN_COLLECTION_GROUP%>'+"_"+i;
+			count4 = checkStatus(item4, count4);
+			
 			var item5 = '<%=Constants.DISTRIBUTION%>'+"_"+i;
-			if(((document.getElementById(item4)!= null) && (document.getElementById(item4).checked==true)) ||((document.getElementById(item5)!= null) && (document.getElementById(item5).checked==true))){
-				var item = document.getElementById('<%=Constants.S%>');
-				item.className="linkChange";
-				item.innerHTML ="&nbsp;<img src='images/Specimen.GIF' alt='Specimen' /> &nbsp; <a HREF='#'><%=Constants.SPECIMEN%></a>";
-				count4++;
-			}
+			count5 = checkStatus(item5, count5);
 			
 			var item6 = '<%=Constants.SPECIMEN%>'+"_"+i;
-			if((document.getElementById(item6)!= null) && (document.getElementById(item6).checked==true)){
-			//temporary comment by Poornima
-				/*var item = document.getElementById('<%=Constants.S%>');
-				item.className="linkChange";
-				item.innerHTML ="&nbsp;<img src='images/Specimen.GIF' alt='Specimen' /> &nbsp; <a HREF='#'><%=Constants.SPECIMEN%></a>";*/
-				var item = document.getElementById('<%=Constants.SCG%>');
-				item.className="linkChange";
-				item.innerHTML ="&nbsp;<img src='images/SpecimenCollectionGroup.GIF' alt='Specimen Collection Group' /> &nbsp;<a HREF='#'><%=Constants.SPECIMEN_COLLECTION_GROUP%></a>";
-				count5++;
-			}
-			
+			count6 = checkStatus(item6, count6);
 		}
-		var sum = count1 + count2 + count3 + count4 + count5;
-		if( (count1 == sum) || (count2 == sum) || (count3 == sum) || (count4 == sum) ||(count5 == sum) )
-			return;
+		
+		var sum = count1 + count2 + count3 + count4 + count5 + count6;
+		
+		//alert("count1 "+count1+" count2 "+count2 );
+		//alert("sum "+sum);
+		
+		if(count1 == sum) 
+		{
+			//alert("participant rule");
+			var item = document.getElementById('<%=Constants.CP%>');
+			item.className="linkChange";
+			item.innerHTML ="&nbsp;<img src='images/CollectionProtocol.GIF' alt='CollectionProtocol' />  &nbsp;<a HREF='<%=util.getLink("CollectionProtocol")%>' target='searchPageFrame'><%=Constants.COLLECTION_PROTOCOL%></a>";
+		
+			item = document.getElementById('<%=Constants.DP%>');
+			item.className="linkChange";
+			item.innerHTML = "&nbsp;<img src='images/DistributionProtocol.GIF' alt='DistributionProtocol' /> &nbsp;<a HREF='#'><%=Constants.DISTRIBUTION_PROTOCOL%></a>";
+		}
+		else if(count2 == sum)
+		{
+			//alert("clicked coll prot");
+			var item = document.getElementById('<%=Constants.S%>');
+			item.className="linkChange";
+			item.innerHTML ="&nbsp;<img src='images/Specimen.GIF' alt='Specimen' /> &nbsp;<a HREF='<%=util.getLink("Specimen")%>' target='searchPageFrame'><%=Constants.SPECIMEN%></a>";
+		}
 		else
 			DisableAll();
-		
 	}	
 	
 	function changeClass(element,styleName)
