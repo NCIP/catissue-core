@@ -897,3 +897,8 @@ td.formFieldNoBorders{ /* for the cell that contains the form elements */
   color:#000000; /* constant: black */
 }
 
+.formLabelNoBackGround{ /* for the non-required form labels */
+  font-family:arial,helvetica,verdana,sans-serif;
+  font-size:0.8em;
+  color:#000000; /* constant: black */
+} 

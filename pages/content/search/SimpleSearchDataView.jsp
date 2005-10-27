@@ -173,7 +173,7 @@ if(dataList.size() != 0)
 			<tr>
 				<td width="10%" nowrap>
 					<input type='checkbox' name='checkAll1' id='checkAll1' onClick='checkAll(this)'>
-					<bean:message key="buttons.checkAll" />
+					<span class="formLabelNoBackGround"><bean:message key="buttons.checkAll" /></span>
 				</td>
 				<td width="80%">
 					&nbsp;
@@ -260,7 +260,7 @@ if(dataList.size() != 0)
 			<tr>
 				<td width="10%" nowrap>
 					<input type='checkbox' name='checkAll2' id='checkAll2' onClick='checkAll(this)'>
-					<bean:message key="buttons.checkAll" />
+					<span class="formLabelNoBackGround"><bean:message key="buttons.checkAll" /></span>
 				</td>
 				<td width="80%">
 					&nbsp;
