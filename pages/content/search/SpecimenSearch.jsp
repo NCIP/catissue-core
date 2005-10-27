@@ -70,6 +70,9 @@
 <html:form action="AdvanceSearch.do">
 <table summary="" cellpadding="5" cellspacing="0" border="0" width="600">
 
+<tr>
+	<td><html:hidden property="objectName" value="Specimen"/></td>
+</tr>
 <!--  MAIN TITLE ROW -->
 <tr>
 	<td class="formTitle" height="25" nowrap>
