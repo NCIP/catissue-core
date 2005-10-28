@@ -36,22 +36,30 @@ public class SpecimenSearchAction extends BaseAction
             HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException
     {
+    	//Setting Specimen Class list
     	List specimenClassList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_SPECIMEN_CLASS,null);
     	request.setAttribute(Constants.SPECIMEN_CLASS_LIST, specimenClassList);
     	
     	List specimenTypeList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_SPECIMEN_TYPE,null);
     	request.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
     	
+    	//Setting Tissue Site list
     	NameValueBean undefinedVal = new NameValueBean(Constants.UNDEFINED,Constants.UNDEFINED);
     	List tissueSiteList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_TISSUE_SITE,undefinedVal);
     	request.setAttribute(Constants.TISSUE_SITE_LIST, tissueSiteList);
     	
+    	//Setting Tissue Side list
     	NameValueBean unknownVal = new NameValueBean(Constants.UNKNOWN,Constants.UNKNOWN);
     	List tissueSideList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_TISSUE_SIDE,unknownVal);
     	request.setAttribute(Constants.TISSUE_SIDE_LIST, tissueSideList);
         
+    	//Setting Pathological Status list
     	List pathologicalStatusList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_PATHOLOGICAL_STATUS,null);
     	request.setAttribute(Constants.PATHOLOGICAL_STATUS_LIST, pathologicalStatusList);
+    	
+    	//Setting Biohazard type list
+    	List biohazardList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_BIOHAZARD,null);
+    	request.setAttribute(Constants.BIOHAZARD_TYPE_LIST, biohazardList);
     	
     	//Setting the operators list in request scope
         request.setAttribute(Constants.STRING_OPERATORS,SearchUtil.getOperatorList(SearchUtil.DATATYPE_STRING));
