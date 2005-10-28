@@ -53,7 +53,6 @@ public class SimpleSearchAction extends BaseAction
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		Logger.out.debug("SimpleSearchAction");
 		SimpleQueryInterfaceForm simpleQueryInterfaceForm = (SimpleQueryInterfaceForm) form;
 		String counter = simpleQueryInterfaceForm.getCounter();
 		HttpSession session = request.getSession();
@@ -74,18 +73,19 @@ public class SimpleSearchAction extends BaseAction
 		}
 		else
 			session.setAttribute(Constants.SIMPLE_QUERY_ALIAS_NAME,viewAliasName);
-
+		
 		Logger.out.debug("viewAliasName"+viewAliasName);
 		String target = Constants.SUCCESS;
 		
 		try
 		{
-			//If map from session is null get the map values from form
+			//If map from session is null get the map values from form.
 			if(map==null)
 			{
 				map = simpleQueryInterfaceForm.getValuesMap();
 				session.setAttribute(Constants.SIMPLE_QUERY_MAP,map);
 			}
+			
 			Logger.out.debug("map size"+map.size());
 			MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.query");
 			
@@ -93,16 +93,16 @@ public class SimpleSearchAction extends BaseAction
 			Iterator iterator = simpleConditionNodeCollection.iterator();
 			
 			Set fromTables = new HashSet();
-			Set aliasNameSet = new HashSet(); 
 			
 			//Aarti: identifiers of the objects that need to be checked for object level privileges.
 			String[][] objectIdentifiers;
 			
 			//Adding single quotes to strings and date values.
 			SimpleConditionsNode simpleConditionsNode = null;
+			
 			while (iterator.hasNext())
 			{
-				simpleConditionsNode = (SimpleConditionsNode) iterator.next();
+				simpleConditionsNode = (SimpleConditionsNode) iterator.next(); 
 				String columnName = simpleConditionsNode.getCondition().getDataElement().getField();
 				StringTokenizer stringToken = new StringTokenizer(columnName, ".");
 				simpleConditionsNode.getCondition().getDataElement().setTable(stringToken.nextToken());
@@ -142,7 +142,6 @@ public class SimpleSearchAction extends BaseAction
 					    QueryBizLogic bizLogic = (QueryBizLogic)BizLogicFactory
 					    							.getBizLogic(Constants.SIMPLE_QUERY_INTERFACE_ID);
 					    aliasName = bizLogic.getAliasNameFromTableId(tableId);
-					    Logger.out.debug("aliasName for from Set**************************"+aliasName);
 					}
 					
 					if (aliasName != null)
@@ -151,10 +150,7 @@ public class SimpleSearchAction extends BaseAction
 					}
 				}
 				
-				//Creating aliasName set with full package names.
-				//Required for checking the activityStatus.
-				aliasNameSet.add("edu.wustl.catissuecore.domain."
-				        		+ simpleConditionsNode.getCondition().getDataElement().getTable());
+				fromTables.add(simpleConditionsNode.getCondition().getDataElement().getTable());
 			}
 			
 			//Add all the objects selected in UI to the fromtables Set. 
@@ -167,9 +163,38 @@ public class SimpleSearchAction extends BaseAction
 				fromTables.add(fromAliasNameValue);
 			}
 			
-			//Activity Status condition nodes.
+            // Instanciating the query object. 
+			Query query = QueryFactory.getInstance().newQuery(Query.SIMPLE_QUERY, viewAliasName);
+			
+			// Get the configured result view columns else is null. 
+			String[] selectedColumns = simpleQueryInterfaceForm.getSelectedColumnNames();
+			
+			// Set the result view for the query.
+			List columnNames = getColumnNames(selectedColumns, query, fromTables);
+			
+			// Getting the DataElement for select columns of the query.
+			Vector selectDataElements = query.getResultView();
+			
+			// Getting the aliasNames of the table ids in the tables in path.
+			Set forFromSet = configureSelectDataElements(selectDataElements, query);
+			fromTables.addAll(forFromSet);
+			
+			// Set the from tables in the query.
+			query.setTableSet(fromTables);
+			
+			// Creating aliasName set with full package names.
+			// Required for checking the activityStatus.
+			Set fromTablesWithPackageNames = new HashSet();
+			Iterator fromTableSetIterator = fromTables.iterator();
+			while (fromTableSetIterator.hasNext())
+			{
+			    String tableName = "edu.wustl.catissuecore.domain."+fromTableSetIterator.next();
+			    fromTablesWithPackageNames.add(tableName);
+			}
+			
+			// Activity Status condition nodes.
 			List activityStatusConditionList = new ArrayList();
-			Iterator aliasNameIterator = aliasNameSet.iterator();
+			Iterator aliasNameIterator = fromTablesWithPackageNames.iterator();
 		    while (aliasNameIterator.hasNext())
 		    {
 		        String fullyQualifiedClassName = (String) aliasNameIterator.next();
@@ -181,55 +206,20 @@ public class SimpleSearchAction extends BaseAction
 		        }
 		    }
 		    
-            if(activityStatusConditionList.isEmpty() == false)
+            if (activityStatusConditionList.isEmpty() == false)
             {
                 simpleConditionsNode.getOperator().setOperator(Constants.AND_JOIN_CONDITION);
                 simpleConditionNodeCollection.addAll(activityStatusConditionList);
             }
             
-            // Forming the query.
-			Query query = QueryFactory.getInstance().newQuery(Query.SIMPLE_QUERY, viewAliasName);
-			
-			// Adding the condition objects from user.
+            // Adding the condition objects from user.
 			((SimpleQuery) query).addConditions(simpleConditionNodeCollection);
+			
+			// List of results the query will return on execution.
 			List list = null;
-			
-			// Get the view columns.
-			List columnNames = null;
-			
-						Iterator iterator1 = fromTables.iterator();
-			            while (iterator1.hasNext())
-			            {
-			                Logger.out.debug("From tABLES before............................."+iterator1.next());
-			            }
-			
 			if (simpleQueryInterfaceForm.getPageOf()
 					.equals(Constants.PAGEOF_SIMPLE_QUERY_INTERFACE))
 			{
-				String[] selectedColumns = simpleQueryInterfaceForm.getSelectedColumnNames();
-				
-				//Set the result view for the query
-				List tempColumnNames = getColumnNames(selectedColumns,query,fromTables);
-
-				//Getting the DataElement for select columns of the query.
-				Vector selectDataElements = query.getResultView();
-				
-				//Getting the aliasNames of the table ids in the tables in path.
-				Set forFromSet = configureSelectDataElements(selectDataElements, query);
-				fromTables.addAll(forFromSet);
-				
-//				iterator1 = fromTables.iterator();
-//	            while (iterator1.hasNext())
-//	            {
-//	                Logger.out.debug("From tABLES. after............................"+iterator1.next());
-//	            }
-				
-				// Set the from tables in the query.
-				query.setTableSet(fromTables);
-				
-				Logger.out.debug("Show tables Set..............");
-				query.showTableSet();
-				
 				Set tableSet;
 				if(Constants.switchSecurity)
 				{
@@ -240,7 +230,6 @@ public class SimpleSearchAction extends BaseAction
 					tableSet = new HashSet();
 				}
 				
-				columnNames = new ArrayList();
 				objectIdentifiers = new String[tableSet.size()][2];
 				Iterator fromTablesIterator = tableSet.iterator();
 				DataElement identifierDataElement;
@@ -253,11 +242,6 @@ public class SimpleSearchAction extends BaseAction
 					identifierDataElement = new DataElement(tableName,"IDENTIFIER");
 					query.addElementToView(i,identifierDataElement);
 					columnNames.add(tableName+" ID");
-				}
-				
-				for(int i=0, j= tableSet.size(); i<tempColumnNames.size();i++,j++)
-				{
-					columnNames.add((String)tempColumnNames.get(i));
 				}
 				
 				//Setting column ids for the corresponding table Aliases.
@@ -274,27 +258,6 @@ public class SimpleSearchAction extends BaseAction
 			}
 			else
 			{
-				columnNames = query.setViewElements(fromTables);
-				
-				//Getting the DataElement for select columns of the query.
-				Vector selectDataElements = query.getResultView();
-				
-				//Getting the aliasNames of the table ids in the tables in path.
-				Set forFromSet = configureSelectDataElements(selectDataElements, query);
-				fromTables.addAll(forFromSet);
-				
-				//Set the from tables in the query.
-				query.setTableSet(fromTables);
-				
-//				Logger.out.debug("Show tables Set..............");
-//				query.showTableSet();
-//				
-//				iterator1 = fromTables.iterator();
-//	            while (iterator1.hasNext())
-//	            {
-//	                Logger.out.debug("From tABLES. after............................"+iterator1.next());
-//	            }
-				
 				list = query.execute(getSessionData(request),Constants.INSECURE_RETRIEVE,null,null);
 			}
 			
@@ -309,8 +272,7 @@ public class SimpleSearchAction extends BaseAction
 				if(alias==null)
 					alias = simpleQueryInterfaceForm.getAliasName();
 				String path = "SimpleQueryInterface.do?pageOf="
-						+ simpleQueryInterfaceForm.getPageOf() + "&aliasName="
-						+ alias;
+						+ simpleQueryInterfaceForm.getPageOf() + "&aliasName=" + alias;
 				simpleQueryInterfaceForm.setValues(map);
 				
 				RequestDispatcher requestDispatcher = request.getRequestDispatcher(path);
@@ -346,103 +308,6 @@ public class SimpleSearchAction extends BaseAction
 		return mapping.findForward(target);
 	}
 
-//	/**
-//	 * Returns true if the object named aliasName contains the activityStatus 
-//	 * data member, else returns false.
-//	 * @param aliasName
-//	 * @return
-//	 */
-//	private boolean hasActivityStatus(String aliasName)
-//	{
-//		try
-//		{
-//			Class className = Class.forName("edu.wustl.catissuecore.domain." + aliasName);
-//
-//			if (className.equals(CollectionProtocol.class)
-//					|| className.equals(DistributionProtocol.class)
-//					|| className.equals(Specimen.class))
-//				return true;
-//
-//			Logger.out.debug("Class.................." + className.getName());
-//			Field[] objectFields = className.getDeclaredFields();
-//			Logger.out.debug("Field Size..........................." + objectFields.length);
-//			for (int i = 0; i < objectFields.length; i++)
-//			{
-//				Logger.out.debug("objectFields[i].getName().............................."
-//						+ objectFields[i].getName());
-//				if (objectFields[i].getName().equals(Constants.ACTIVITY_STATUS))
-//				{
-//					return true;
-//				}
-//			}
-//		}
-//		catch (ClassNotFoundException classNotExcp)
-//		{
-//			Logger.out.debug(classNotExcp.getMessage(), classNotExcp);
-//		}
-//
-//		return false;
-//	}
-
-//	/**
-//	 * Returns SimpleConditionsNode if the object named aliasName contains the activityStatus 
-//	 * data member, else returns false.
-//	 * @param aliasName
-//	 * @return
-//	 */
-//	private List getActivityStatusCondition(String fullyQualifiedClassName)
-//	{
-//		SimpleConditionsNode activityStatusCondition = null;
-//		List activityStatusList = new ArrayList();
-//		
-//		try
-//		{
-//			Class className = Class.forName(fullyQualifiedClassName);
-//			Field[] objectFields = className.getDeclaredFields();
-//
-//			for (int i = 0; i < objectFields.length; i++)
-//			{
-//				if (objectFields[i].getName().equals(Constants.ACTIVITY_STATUS))
-//				{
-//
-//					activityStatusCondition = new SimpleConditionsNode();
-//					activityStatusCondition.getCondition().getDataElement().setTable(Utility.parseClassName(fullyQualifiedClassName));
-//					activityStatusCondition.getCondition().getDataElement().setField("ACTIVITY_STATUS");
-//					activityStatusCondition.getCondition().getOperator().setOperator("=");
-//					activityStatusCondition.getCondition().setValue("'" + Constants.ACTIVITY_STATUS_ACTIVE + "'");
-//					activityStatusCondition.getOperator().setOperator(Constants.OR_JOIN_CONDITION);
-//					
-//					activityStatusList.add(activityStatusCondition);
-//					
-//					activityStatusCondition = new SimpleConditionsNode();
-//					activityStatusCondition.getCondition().getDataElement().setTable(Utility.parseClassName(fullyQualifiedClassName));
-//					activityStatusCondition.getCondition().getDataElement().setField("ACTIVITY_STATUS");
-//					activityStatusCondition.getCondition().getOperator().setOperator("=");
-//					activityStatusCondition.getCondition().setValue("'" + Constants.ACTIVITY_STATUS_CLOSED + "'");
-//
-//					activityStatusList.add(activityStatusCondition);
-//				}
-//			}
-//
-//			if ((activityStatusCondition == null)&&
-//					(className.getSuperclass().getName().equals(
-//							"edu.wustl.catissuecore.domain.AbstractDomainObject") == false))
-//			{
-//			    activityStatusList = getActivityStatusCondition(className.getSuperclass()
-//						.getName());
-//			}
-//		}
-//
-//		catch (ClassNotFoundException classNotExcp)
-//		{
-//			Logger.out.debug(classNotExcp.getMessage(), classNotExcp);
-//
-//		}
-//
-//		return activityStatusList;
-//
-//	}
-	
 	/**
 	 * Returns SimpleConditionsNode if the object named aliasName contains the activityStatus 
 	 * data member, else returns false.
@@ -512,8 +377,10 @@ public class SimpleSearchAction extends BaseAction
 		    	}
 		        vector.add(dataElement);
 		    }
+		    
 			return vector;
 		}
+	 
 	 private List getColumnDisplayNames(String []selectedColumnsList) 
 		{
 	    	/*Split the string which is in the form TableAlias.columnNames.columnDisplayNames 
@@ -540,13 +407,13 @@ public class SimpleSearchAction extends BaseAction
 	 
 	 private List getColumnNames(String[] selectedColumns,Query query,Set tableSet) throws DAOException
 	 {
-	 	//set the result view for the query 
+	 	//set the result view for the query. 
 		List tempColumnNames;
 		
-		//If columns not conigured, set to default
+		//If columns not conigured, set to default.
 	 	if(selectedColumns==null)
 			tempColumnNames	= query.setViewElements(tableSet);
-	 	//else set to the configured columns
+	 	//else set to the configured columns.
 		else
 		{
 			Vector resultViewVector = setViewElements(selectedColumns); 
@@ -555,7 +422,6 @@ public class SimpleSearchAction extends BaseAction
 		}
 	 	return tempColumnNames;
 	 }
-	 
 	 
 	 private Set configureSelectDataElements(Vector selectDataElements, Query query) throws DAOException
 	 {
@@ -568,9 +434,9 @@ public class SimpleSearchAction extends BaseAction
 	     {
 	         DataElement dataElement = (DataElement) iterator.next();
 	         String fieldName = dataElement.getField();
-	         Logger.out.debug("Field with the table id in configureSelectDataElements......."+fieldName);
 	         StringTokenizer stringToken = new StringTokenizer(dataElement.getField(), ".");
 	         dataElement.setField(stringToken.nextToken());
+	         forFromSet.add(dataElement.getTable());
 //	         Logger.out.debug("..........................."+stringToken.nextToken());
 	         
 	         if (stringToken.hasMoreElements())
@@ -580,11 +446,14 @@ public class SimpleSearchAction extends BaseAction
 		         {
 		             Long tableId = Long.valueOf(pathIdToken.nextToken());
 		             String aliasName = bizLogic.getAliasNameFromTableId(tableId);
-		             Logger.out.debug("configureSelectDataElements..............aliasName.."+aliasName);
 		             forFromSet.add(aliasName);
 		         }
 	         }
 	     }
+	     
+//	     //DataElements from the SimpleConditionsNodes.  
+//	     selectDataElements.addAll(forSelectDataElementFromConditions);
+	     
 	     query.setResultView(selectDataElements);
 	     
 	     return forFromSet;
