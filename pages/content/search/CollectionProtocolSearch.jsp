@@ -31,62 +31,7 @@
 
 <head>
 	<script src="jss/script.js" type="text/javascript"></script>
-	<script language="JavaScript">
-		function onAddRule(action)
-		{
-			document.forms[0].action=action;
-			document.forms[0].sumbit();
-		}
-		function onDate()
-		{
-			var dateCombo = document.getElementById("startDate");
-			
-			if(dateCombo.options[dateCombo.selectedIndex].value == "<%=Operator.BETWEEN%>" || dateCombo.options[dateCombo.selectedIndex].value == "<%=Operator.NOT_BETWEEN%>")
-			{
-				show_calendar('advanceSearchForm.startDate2',null,null,'MM-DD-YYYY')
-			}
-		}
-		function onDateOperatorChange(element)
-		{
-			var dateTxt2  = document.getElementById("startDate2");
-			
-			if(element.value == "<%=Operator.BETWEEN%>" || element.value == "<%=Operator.NOT_BETWEEN%>")
-			{
-				dateTxt2.disabled = false;
-				dateTxt2.value = "";
-			}
-			else
-			{
-				dateTxt2.value = "";
-				dateTxt2.disabled = true;
-			}
-		}
-		function onDate()
-		{
-			var dateCombo = document.getElementById("endDate");
-			
-			if(dateCombo.options[dateCombo.selectedIndex].value == "<%=Operator.BETWEEN%>" || dateCombo.options[dateCombo.selectedIndex].value == "<%=Operator.NOT_BETWEEN%>")
-			{
-				show_calendar('advanceSearchForm.endDate2',null,null,'MM-DD-YYYY')
-			}
-		}
-		
-		function onDateOperatorChange(element)
-		{
-			var dateTxt2  = document.getElementById("endDate2");
-			
-			if(element.value == "<%=Operator.BETWEEN%>" || element.value == "<%=Operator.NOT_BETWEEN%>")
-			{
-				dateTxt2.disabled = false;
-				dateTxt2.value = "";
-			}
-			else
-			{
-				dateTxt2.value = "";
-				dateTxt2.disabled = true;
-			}
-		}
-	</script>
+	<script src="jss/AdvancedSearchScripts.js" type="text/javascript"></script>
 </head>
 
 <html:errors />
@@ -95,6 +40,7 @@
 <table summary="" cellpadding="5" cellspacing="0" border="0" width="600">
 <tr>
 	<td><html:hidden property="objectName" value="CollectionProtocol"/></td>
+	<td><html:hidden property="selectedNode" /></td>
 </tr>
 <!--  MAIN TITLE ROW -->
 <tr>
@@ -120,17 +66,17 @@
 <!--  FIRST ROW -->
 <tr>
 	<td class="formSerialNumberField" nowrap>
- 		<label for="principalInvestigator">
+ 		<label for="principalinvestigator">
  			<bean:message key="collectionprotocol.principalinvestigator"/>
  		</label>
 	</td>
 	<td class="formField">
-		<html:select property="<%=opPrincipalInvestigator%>" styleClass="formFieldSized10" styleId="<%=opPrincipalInvestigator%>" size="1">
+		<html:select property="<%=opPrincipalInvestigator%>" styleClass="formFieldSized10" styleId="principalInvestigatorCombo" size="1" onchange="onOperatorChange('principalInvestigatorCombo','principalInvestigator')">
 			<html:options collection="<%=Constants.ENUMERATED_OPERATORS%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
 	<td class="formField">
-		<html:select property="<%=principalInvestigator%>" styleClass="formFieldSized10" styleId="principalInvestigator" size="1">
+		<html:select property="<%=principalInvestigator%>" styleClass="formFieldSized10" styleId="principalInvestigator" size="1" disabled="true">
 			<html:options collection="<%=Constants.USERLIST%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
@@ -144,12 +90,12 @@
  		</label>
 	</td>
 	<td class="formField">
-		<html:select property="<%=opTitle%>" styleClass="formFieldSized10" styleId="<%=opTitle%>" size="1">
+		<html:select property="<%=opTitle%>" styleClass="formFieldSized10" styleId="titleCombo" size="1" onchange="onOperatorChange('titleCombo','title')">
 			<html:options collection="<%=Constants.STRING_OPERATORS%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
 	<td class="formField">
-		<html:text styleClass="formFieldSized10" styleId="title" property="<%=title%>"/>
+		<html:text styleClass="formFieldSized10" styleId="title" property="<%=title%>" disabled="true" />
 	</td>
 </tr>
 
@@ -161,12 +107,12 @@
  		</label>
 	</td>
 	<td class="formField">
-		<html:select property="<%=opShortTitle%>" styleClass="formFieldSized10" styleId="<%=opShortTitle%>" size="1">
+		<html:select property="<%=opShortTitle%>" styleClass="formFieldSized10" styleId="shortTitleCombo" size="1" onchange="onOperatorChange('shortTitleCombo','shortTitle')">
 			<html:options collection="<%=Constants.STRING_OPERATORS%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
 	<td class="formField">
-		<html:text styleClass="formFieldSized10" styleId="shortTitle" property="<%=shortTitle%>"/>
+		<html:text styleClass="formFieldSized10" styleId="shortTitle" property="<%=shortTitle%>" disabled="true"/>
 	</td>
 </tr>
 
@@ -178,12 +124,12 @@
 		</label>
 	</td>
 	<td class="formField">
-		<html:select property="<%=opIrbIdentifier%>" styleClass="formFieldSized10" styleId="<%=opIrbIdentifier%>" size="1">
+		<html:select property="<%=opIrbIdentifier%>" styleClass="formFieldSized10" styleId="irbIdentifierCombo" size="1" onchange="onOperatorChange('irbIdentifierCombo','irbIdentifier')">
 			<html:options collection="<%=Constants.STRING_OPERATORS%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
 	<td class="formField">
-		<html:text styleClass="formFieldSized10" styleId="irbIdentifier" property="<%=irbIdentifier%>"/>
+		<html:text styleClass="formFieldSized10" styleId="irbIdentifier" property="<%=irbIdentifier%>" disabled="true"/>
 	</td>
 </tr>
 
@@ -191,25 +137,25 @@
 <tr>
 	<td class="formSerialNumberField" nowrap>
  		<label for="startDate">
- 			<b><bean:message key="collectionprotocol.startdate"/>
- 		</label>
+			<b><bean:message key="collectionprotocol.startdate"/>
+		</label>
 	</td>
 	<td class="formField">
-		<html:select property="<%=opStartDate%>" styleClass="formFieldSized10" styleId="opStartDate" size="1" onchange="onDateOperatorChange(this)">
+		<html:select property="<%=opStartDate%>" styleClass="formFieldSized10" styleId="startDate" size="1" onchange="onDateOperatorChange(this,'startDate1','startDate2')">
 			<html:options collection="<%=Constants.DATE_NUMERIC_OPERATORS%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
-		<td class="formField" nowrap>
+	<td class="formField" nowrap>
 		<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
-		<html:text styleClass="formDateSized10" size="10" styleId="startDate1" property="<%=startDate%>" />
+		<html:text styleClass="formDateSized10" size="10" styleId="startDate1" property="<%=startDate%>" disabled="true"/>
 					 &nbsp;
-		<a href="javascript:show_calendar('advanceSearchForm.startDate1',null,null,'MM-DD-YYYY');">
+		<a href="javascript:onDate('startDate','advanceSearchForm.startDate1',false);">
 			<img src="images\calendar.gif" width=24 height=22 border=0>
 		</a>
 					&nbsp;To&nbsp;
 		<html:text styleClass="formDateSized10" size="10" styleId="startDate2" property="<%=startDate2%>" disabled="true"/>
 					 &nbsp;
-		<a href="javascript:onDate();">
+		<a href="javascript:onDate('startDate','advanceSearchForm.startDate2',true);">
 			<img src="images\calendar.gif" width=24 height=22 border=0>
 		</a>
 	</td>
@@ -219,25 +165,25 @@
 <tr>
 	<td class="formSerialNumberField" nowrap>
  		<label for="endDate">
- 			<b><bean:message key="collectionprotocol.enddate"/>
- 		</label>
+			<b><bean:message key="collectionprotocol.enddate"/>
+		</label>
 	</td>
 	<td class="formField">
-		<html:select property="<%=opEndDate%>" styleClass="formFieldSized10" styleId="opEndDate" size="1" onchange="onDateOperatorChange(this)">
+		<html:select property="<%=opEndDate%>" styleClass="formFieldSized10" styleId="endDate" size="1" onchange="onDateOperatorChange(this,'endDate1','endDate2')">
 			<html:options collection="<%=Constants.DATE_NUMERIC_OPERATORS%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
-		<td class="formField" nowrap>
+	<td class="formField" nowrap>
 		<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
-		<html:text styleClass="formDateSized10" size="10" styleId="endDate1" property="<%=endDate%>" />
+		<html:text styleClass="formDateSized10" size="10" styleId="endDate1" property="<%=endDate%>" disabled="true"/>
 					 &nbsp;
-		<a href="javascript:show_calendar('advanceSearchForm.startDate1',null,null,'MM-DD-YYYY');">
+		<a href="javascript:onDate('endDate','advanceSearchForm.endDate1',false);">
 			<img src="images\calendar.gif" width=24 height=22 border=0>
 		</a>
 					&nbsp;To&nbsp;
 		<html:text styleClass="formDateSized10" size="10" styleId="endDate2" property="<%=endDate2%>" disabled="true"/>
 					 &nbsp;
-		<a href="javascript:onDate();">
+		<a href="javascript:onDate('endDate','advanceSearchForm.endDate2',true);">
 			<img src="images\calendar.gif" width=24 height=22 border=0>
 		</a>
 	</td>
@@ -250,12 +196,12 @@
  		</label>
 	</td>
 	<td class="formField">
-		<html:select property="<%=opProtocolParticipantId%>" styleClass="formFieldSized10" styleId="<%=opProtocolParticipantId%>" size="1">
+		<html:select property="<%=opProtocolParticipantId%>" styleClass="formFieldSized10" styleId="protocolParticipantIdCombo%>" size="1" onchange="onOperatorChange('protocolParticipantIdCombo','protocolParticipantId')">
 			<html:options collection="<%=Constants.STRING_OPERATORS%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
 	<td class="formField">
-		<html:text styleClass="formFieldSized10" styleId="protocolParticipantId" property="<%=protocolParticipantId%>"/>
+		<html:text styleClass="formFieldSized10" styleId="protocolParticipantId" property="<%=protocolParticipantId%>" disabled="true"/>
 	</td>
 </tr>
 
@@ -263,26 +209,26 @@
 <!-- EIGHTH ROW -->
 <tr>
 	<td class="formSerialNumberField" nowrap>
- 		<label for="endDate">
- 			<b><bean:message key="collectionProtocolReg.participantRegistrationDate"/>
- 		</label>
+ 		<label for="regDate">
+			<b><bean:message key="collectionProtocolReg.participantRegistrationDate"/>
+		</label>
 	</td>
 	<td class="formField">
-		<html:select property="<%=opRegDate%>" styleClass="formFieldSized10" styleId="opRegDate" size="1" onchange="onDateOperatorChange(this)">
+		<html:select property="<%=opRegDate%>" styleClass="formFieldSized10" styleId="regDate" size="1" onchange="onDateOperatorChange(this,'regDate1','regDate2')">
 			<html:options collection="<%=Constants.DATE_NUMERIC_OPERATORS%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
-		<td class="formField" nowrap>
+	<td class="formField" nowrap>
 		<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
-		<html:text styleClass="formDateSized10" size="10" styleId="regDate1" property="<%=regDate%>" />
+		<html:text styleClass="formDateSized10" size="10" styleId="regDate1" property="<%=regDate%>" disabled="true"/>
 					 &nbsp;
-		<a href="javascript:show_calendar('advanceSearchForm.startDate1',null,null,'MM-DD-YYYY');">
+		<a href="javascript:onDate('regDate','advanceSearchForm.regDate1',false);">
 			<img src="images\calendar.gif" width=24 height=22 border=0>
 		</a>
 					&nbsp;To&nbsp;
 		<html:text styleClass="formDateSized10" size="10" styleId="regDate2" property="<%=regDate2%>" disabled="true"/>
 					 &nbsp;
-		<a href="javascript:onDate();">
+		<a href="javascript:onDate('startDate','advanceSearchForm.startDate2',true);">
 			<img src="images\calendar.gif" width=24 height=22 border=0>
 		</a>
 	</td>
