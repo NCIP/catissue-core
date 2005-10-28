@@ -10,6 +10,7 @@
     <property name="target.dir" value="${base.dir}/WEB-INF/classes"/>
     <property name="lib.dir" value="${base.dir}/WEB-INF/lib"/>
     <property name="build.dir" value="${base.dir}/build"/>
+    <property name="applet.dir" value="${base.dir}/Applet"/>
 	<property name="hbm.dir" value="${src.dir}/edu/wustl/catissuecore/hbm"/>
 	<property name="tomcat.dir" value="CATALINA_HOME"/>
 	<property name="deploy.dir" value="E:\Program_Files\jboss-4.0.0\server\default\deploy"/>
@@ -65,7 +66,7 @@
 	      	 excludes="**/catissuecore.tar,**/build/"/>
 	</target> 
 	
-	<target name="WarApp" depends="init">
+	<target name="WarApp" depends="init,Appletjar">
 		<delete file="catissuecore.war"/>
 		<war destfile="catissuecore.war" webxml="WEB-INF/web.xml">
 			<fileset dir="${base.dir}">
@@ -85,10 +86,10 @@
             	<include name="*.jar"/>
         	</lib-->
 		</war>
-		<delete file="E:\Program_Files\jboss-4.0.0RC\server\default\deploy\catissuecore.war"/>
+		<delete file="E:\Program_Files\jboss-4.0.0\server\default\deploy\catissuecore.war"/>
 		 
-		<copy file="catissuecore.war" todir="E:\Program_Files\jboss-4.0.0RC\server\default\deploy"/>
-		<sleep seconds="1"/>
+		<copy file="catissuecore.war" todir="E:\Program_Files\jboss-4.0.0\server\default\deploy"/>
+		<sleep seconds="2"/>
 	</target>
 
 
@@ -148,6 +149,62 @@
             <fileset dir="${target.dir}" includes="**/*"/>
         </jar>
     </target>
+
+    <!-- Create the Applet JAR Begins-->
+    <target name="Appletjar" depends="compile" >
+    	<delete>
+            <fileset dir="${applet.dir}">
+	            <exclude name="**/CVS*"/>
+	            <exclude name="**/java.policy.applet*"/>
+            </fileset>
+        </delete>
+        
+        <copy todir="${applet.dir}">
+        	<fileset dir="${target.dir}">
+            	<include name="**/QueryTree.class"/>
+				<include name="**/NodeSelectionListener.class"/>
+				<include name="**/StorageLocationViewListener.class"/>
+				<include name="**/TissueSiteTreeNodeListener.class"/>
+        	</fileset>
+        </copy>
+        <copy todir="${applet.dir}/edu/wustl/catissuecore/query">
+        	<fileset dir="${target.dir}/edu/wustl/catissuecore/query">
+	    	    <include name="**/QueryTreeNodeMap.class"/>
+	    	    <include name="**/TreeNodeData.class"/>
+    		</fileset>
+    	</copy>
+        <copy todir="${applet.dir}/edu/wustl/catissuecore/storage">	
+    		<fileset dir="${target.dir}/edu/wustl/catissuecore/storage">
+	    	    <include name="**/GenerateTree.class"/>
+	    	    <include name="**/StorageContainerGridObject.class"/>
+	    	    <include name="**/StorageContainerTreeNode.class"/>
+    		</fileset>
+    	</copy>
+        <copy todir="${applet.dir}/edu/wustl/catissuecore/tissuesite">	
+    		<fileset dir="${target.dir}/edu/wustl/catissuecore/tissuesite">
+	    	    <include name="**/TissueSiteTreeNode.class"/>
+    		</fileset>
+    	</copy>
+        <copy todir="${applet.dir}/edu/wustl/catissuecore/util/global">	
+    		<fileset dir="${target.dir}/edu/wustl/catissuecore/util/global">
+	    	    <include name="**/Constants.class"/>
+    		</fileset>
+    	</copy>
+    	<copy todir="${applet.dir}/edu/wustl/catissuecore/vo">	
+    		<fileset dir="${target.dir}/edu/wustl/catissuecore/vo">
+	    	    <include name="**/TreeNode.class"/>
+	    	    <include name="**/TreeNodeFactory.class"/>
+    		</fileset>
+    	</copy>
+    	
+        <jar taskname="buildJar" jarfile="${applet.dir}/QueryTree.jar">
+            <fileset dir="${applet.dir}">
+	            <exclude name="**/CVS*"/>
+	            <exclude name="**/java.policy.applet*"/>
+            </fileset>
+        </jar>
+    </target>
+	<!-- Create the Applet JAR Ends-->
     
     <!--Create executable required Structure-->
     <!--target name="createExe">
