@@ -1,4 +1,4 @@
-/*This is the wrapper function over show_calendar() that allows to select the date only if the operator is not 'ANY'
+/*This is the wrapper function over show_calendar() that allows to select the date only if the operator is Not 'ANY'
   opratorListId : Id of the date-operators list box
   formNameAndDateFieldId : A string that contains the form name & date field's id
   isSecondDateField : A boolean variable that tells whether the date field is first or second
@@ -15,7 +15,7 @@ function onDate(operatorListId,formNameAndDateFieldId,isSecondDateField)
 		}
 		else
 		{
-			if(dateCombo.options[dateCombo.selectedIndex].value == "between" || dateCombo.options[dateCombo.selectedIndex].value == "not between")
+			if(dateCombo.options[dateCombo.selectedIndex].value == "Between" || dateCombo.options[dateCombo.selectedIndex].value == "Not Between")
 			{
 				show_calendar(formNameAndDateFieldId,null,null,'MM-DD-YYYY');
 			}
@@ -41,6 +41,7 @@ function onOperatorChange(operatorListId,valueFieldId)
 		}
 		else
 		{
+			valField.options[0].selected = true;
 			valField.disabled = true;
 		}
 	}
@@ -50,7 +51,7 @@ function onOperatorChange(operatorListId,valueFieldId)
 	}
 }
 
-/*This function enables the second date field only if the operator is 'BETWEEN' or 'NOT BETWEEN'
+/*This function enables the second date field only if the operator is 'Between' or 'Not Between'
   & disables both the date fields if operator is 'ANY'
   element : An object of type list
   dateFiled1 : An id of date field one
@@ -61,7 +62,7 @@ function onDateOperatorChange(element,dateFiled1,dateFiled2)
 	var dateTxt1  = document.getElementById(dateFiled1);
 	var dateTxt2  = document.getElementById(dateFiled2);
 	
-	if(element.value == "between" || element.value == "not between")
+	if(element.value == "Between" || element.value == "Not Between")
 	{
 		dateTxt1.disabled = false;
 		dateTxt2.disabled = false;
