@@ -32,9 +32,7 @@ public class SearchUtil
      * Constant for datatype NUMERIC
      */
     public static final int DATATYPE_NUMERIC = 2;
-    
-    private HashMap map = new HashMap();
-    
+        
     /**
      * Constant for datatype STRING
      */
@@ -44,6 +42,8 @@ public class SearchUtil
      * Constant for datatype STRING
      */
     public static final int DATATYPE_ENUMERATED = 4;
+    
+    private HashMap map = new HashMap();
     
     
 	//Function returns the list of operators as per the datatype.
@@ -56,27 +56,27 @@ public class SearchUtil
 		{
 			case DATATYPE_DATE:
 			case DATATYPE_NUMERIC:		
-				operatorList.add(new NameValueBean(Operator.EQUAL,Operator.EQUAL));
-				operatorList.add(new NameValueBean(Operator.NOT_EQUALS,Operator.NOT_EQUALS));
+				operatorList.add(new NameValueBean("Equals",Operator.EQUAL));
+				operatorList.add(new NameValueBean("Not Equals",Operator.NOT_EQUALS));
 				operatorList.add(new NameValueBean(Operator.LESS_THAN,Operator.LESS_THAN));
 				operatorList.add(new NameValueBean(Operator.LESS_THAN_OR_EQUALS,Operator.LESS_THAN_OR_EQUALS));
 				operatorList.add(new NameValueBean(Operator.GREATER_THAN,Operator.GREATER_THAN));
 				operatorList.add(new NameValueBean(Operator.GREATER_THAN_OR_EQUALS,Operator.GREATER_THAN_OR_EQUALS));
-				operatorList.add(new NameValueBean("BETWEEN",Operator.BETWEEN));
-				operatorList.add(new NameValueBean("NOT BETWEEN",Operator.NOT_BETWEEN));
+				operatorList.add(new NameValueBean(Operator.BETWEEN,Operator.BETWEEN));
+				operatorList.add(new NameValueBean(Operator.NOT_BETWEEN,Operator.NOT_BETWEEN));
 				break;
 			
 			case DATATYPE_STRING:
-				operatorList.add(new NameValueBean("STARTS WITH",Operator.LIKE));
-				operatorList.add(new NameValueBean("ENDS WITH",Operator.LIKE));
-				operatorList.add(new NameValueBean("CONTAINS",Operator.LIKE));
-				operatorList.add(new NameValueBean(Operator.EQUAL,Operator.EQUAL));
-				operatorList.add(new NameValueBean(Operator.NOT_EQUALS,Operator.NOT_EQUALS));
+				operatorList.add(new NameValueBean(Operator.STARTS_WITH,Operator.STARTS_WITH));
+				operatorList.add(new NameValueBean(Operator.ENDS_WITH,Operator.ENDS_WITH));
+				operatorList.add(new NameValueBean(Operator.CONTAINS,Operator.CONTAINS));
+				operatorList.add(new NameValueBean("Equals",Operator.EQUAL));
+				operatorList.add(new NameValueBean("Not Equals",Operator.NOT_EQUALS));
 				break;
 				
 			case DATATYPE_ENUMERATED:
-				operatorList.add(new NameValueBean(Operator.EQUAL,Operator.EQUAL));
-				operatorList.add(new NameValueBean(Operator.NOT_EQUALS,Operator.NOT_EQUALS));
+				operatorList.add(new NameValueBean("Equals",Operator.EQUAL));
+				operatorList.add(new NameValueBean("Not Equals",Operator.NOT_EQUALS));
 				break;
 		}
 		
