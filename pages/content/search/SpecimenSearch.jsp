@@ -11,58 +11,28 @@
 	String tissueSite = "value(SpecimenCharacteristics:TISSUE_SITE)";
 	String tissueSide = "value(SpecimenCharacteristics:TISSUE_SIDE)";
 	String pathologicalStatus = "value(SpecimenCharacteristics:PATHOLOGICAL_STATUS)";
-	String postionD1 = "value(Specimen:POSITION_DIMENSION_ONE)";
-	String postionD12 = "value(Specimen:POSITION_DIMENSION_ONE:HLIMIT)";
-	String postionD2 = "value(Specimen:POSITION_DIMENSION_TWO)";
-	String postionD22 = "value(Specimen:POSITION_DIMENSION_TWO:HLIMIT)";
-	String barcode = "value(Specimen:BARCODE)";
+	String concentration1 = "value(Specimen:CONCENTRATION)";
+	String concentration2 = "value(Specimen:CONCENTRATION:HLIMIT)";
+	String quantity1 = "value(Specimen:QUANTITY)";
+	String quantity2 = "value(Specimen:QUANTITY:HLIMIT)";
+	String biohazardType = "value(Biohazard:TYPE)";
+	String biohazardName = "value(Biohazard:NAME)";
 
 	String opClassName = "value(Operator:Specimen:CLASS_NAME)";
 	String opType = "value(Operator:Specimen:TYPE)";
 	String opTissueSite = "value(Operator:SpecimenCharacteristics:TISSUE_SITE)";
 	String opTissueSide = "value(Operator:SpecimenCharacteristics:TISSUE_SIDE)";
 	String opPathologicalStatus = "value(Operator:SpecimenCharacteristics:PATHOLOGICAL_STATUS)";
-	String opPostionD1 = "value(Operator:Specimen:POSITION_DIMENSION_ONE)";
-	String opPostionD2 = "value(Operator:Specimen:POSITION_DIMENSION_TWO)";
+	String opConcentration = "value(Operator:Specimen:CONCENTRATION)";
+	String opQuantity = "value(Operator:Specimen:QUANTITY)";
 	String opBarcode = "value(Operator:Specimen:BARCODE)";
+	String opBiohazardType = "value(Operator:Biohazard:TYPE)";
+	String opBiohazardName = "value(Operator:Biohazard:NAME)";
 %>
 
 <head>
 	<script src="jss/script.js" type="text/javascript"></script>
-	<script language="JavaScript">
-		function onAddRule()
-		{
-			//parent.queryFrame.location.href = "/catissuecore/AdvanceSearch.do";
-			document.forms[0].action = "/catissuecore/AdvanceSearch.do";
-			document.forms[0].submit();
-		}
-				
-		function onDimensionOperatorChange(element)
-		{
-			var dimULimit = null;
-			
-			if(element.id == "dimension1")
-			{
-				dimULimit = document.getElementById("postionD12");
-			}
-			else
-			{
-				dimULimit = document.getElementById("postionD22");
-			}
-						
-			if(element.value == "<%=Operator.BETWEEN%>" || element.value == "<%=Operator.NOT_BETWEEN%>")
-			{
-				dimULimit.disabled = false;
-				dimULimit.value = "";
-			}
-			else
-			{
-				dimULimit.value = "";
-				dimULimit.disabled = true;
-			}
-		}
-		
-	</script>
+	<script src="jss/AdvancedSearchScripts.js" type="text/javascript"></script>
 </head>
 
 <html:errors />
@@ -101,12 +71,12 @@
  		</label>
 	</td>
 	<td class="formField">
-		<html:select property="<%=opClassName%>" styleClass="formFieldSized10" styleId="<%=opClassName%>" size="1">
+		<html:select property="<%=opClassName%>" styleClass="formFieldSized10" styleId="opClassName" size="1" onchange="onOperatorChange('opClassName','className')">
 			<html:options collection="<%=Constants.ENUMERATED_OPERATORS%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
 	<td class="formField">
-		<html:select property="<%=className%>" styleClass="formFieldSized10" styleId="className" size="1">
+		<html:select property="<%=className%>" styleClass="formFieldSized10" styleId="className" size="1" disabled="true">
 			<html:options collection="<%=Constants.SPECIMEN_CLASS_LIST%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
@@ -120,12 +90,12 @@
  		</label>
 	</td>
 	<td class="formField">
-		<html:select property="<%=opType%>" styleClass="formFieldSized10" styleId="<%=opType%>" size="1">
+		<html:select property="<%=opType%>" styleClass="formFieldSized10" styleId="opType" size="1" onchange="onOperatorChange('opType','type')">
 			<html:options collection="<%=Constants.ENUMERATED_OPERATORS%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
 	<td class="formField">
-		<html:select property="<%=type%>" styleClass="formFieldSized10" styleId="type" size="1">
+		<html:select property="<%=type%>" styleClass="formFieldSized10" styleId="type" size="1" disabled="true">
 			<html:options collection="<%=Constants.SPECIMEN_TYPE_LIST%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
@@ -139,12 +109,12 @@
  		</label>
 	</td>
 	<td class="formField">
-		<html:select property="<%=opTissueSite%>" styleClass="formFieldSized10" styleId="<%=opTissueSite%>" size="1">
+		<html:select property="<%=opTissueSite%>" styleClass="formFieldSized10" styleId="opTissueSite" size="1" onchange="onOperatorChange('opTissueSite','tissueSite')">
 			<html:options collection="<%=Constants.ENUMERATED_OPERATORS%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
 	<td class="formField">
-		<html:select property="<%=tissueSite%>" styleClass="formFieldSized10" styleId="tissueSite" size="1">
+		<html:select property="<%=tissueSite%>" styleClass="formFieldSized10" styleId="tissueSite" size="1" disabled="true">
 			<html:options collection="<%=Constants.TISSUE_SITE_LIST%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
@@ -158,12 +128,12 @@
  		</label>
 	</td>
 	<td class="formField">
-		<html:select property="<%=opTissueSide%>" styleClass="formFieldSized10" styleId="<%=opTissueSide%>" size="1">
+		<html:select property="<%=opTissueSide%>" styleClass="formFieldSized10" styleId="opTissueSide" size="1" onchange="onOperatorChange('opTissueSide','tissueSide')">
 			<html:options collection="<%=Constants.ENUMERATED_OPERATORS%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
 	<td class="formField">
-		<html:select property="<%=tissueSide%>" styleClass="formFieldSized10" styleId="tissueSide" size="1">
+		<html:select property="<%=tissueSide%>" styleClass="formFieldSized10" styleId="tissueSide" size="1" disabled="true">
 			<html:options collection="<%=Constants.TISSUE_SIDE_LIST%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
@@ -177,12 +147,12 @@
  		</label>
 	</td>
 	<td class="formField">
-		<html:select property="<%=opPathologicalStatus%>" styleClass="formFieldSized10" styleId="<%=opPathologicalStatus%>" size="1">
+		<html:select property="<%=opPathologicalStatus%>" styleClass="formFieldSized10" styleId="opPathologicalStatus" size="1" onchange="onOperatorChange('opPathologicalStatus','pathologicalStatus')">
 			<html:options collection="<%=Constants.ENUMERATED_OPERATORS%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
 	<td class="formField">
-		<html:select property="<%=pathologicalStatus%>" styleClass="formFieldSized10" styleId="pathologicalStatus" size="1">
+		<html:select property="<%=pathologicalStatus%>" styleClass="formFieldSized10" styleId="pathologicalStatus" size="1" disabled="true">
 			<html:options collection="<%=Constants.PATHOLOGICAL_STATUS_LIST%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
@@ -191,55 +161,74 @@
 <!-- SIXTH ROW -->
 <tr>
 	<td class="formSerialNumberField" nowrap>
- 		<label for="positionDimensionOne">
- 			<b><bean:message key="specimen.positionDimensionOne"/>
+ 		<label for="concentration">
+ 			<b><bean:message key="specimen.concentration"/>
  		</label>
 	</td>
 	<td class="formField">
-		<html:select property="<%=opPostionD1%>" styleClass="formFieldSized10" styleId="dimenstion1" size="1" onchange="onDimensionOperatorChange(this)">
+		<html:select property="<%=opConcentration%>" styleClass="formFieldSized10" styleId="opConcentration" size="1" onchange="onDateOperatorChange(this,'concentration1','concentration2')">
 				<html:options collection="<%=Constants.DATE_NUMERIC_OPERATORS%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
 	<td class="formField">
-		<html:text styleClass="formFieldSized10" styleId="postionD1" property="<%=postionD1%>"/>
+		<html:text styleClass="formFieldSized10" styleId="concentration1" property="<%=concentration1%>" disabled="true"/>
 						&nbsp;To&nbsp;
-		<html:text styleClass="formFieldSized10" styleId="postionD12" property="<%=postionD12%>" disabled="true"/>
+		<html:text styleClass="formFieldSized10" styleId="concentration2" property="<%=concentration2%>" disabled="true"/>
 	</td>
 </tr>
 
 <!-- SEVENTH ROW -->
 <tr>
 	<td class="formSerialNumberField" nowrap>
- 		<label for="positionDimensionTwo">
- 			<b><bean:message key="specimen.positionDimensionTwo"/>
+ 		<label for="quatity">
+ 			<b><bean:message key="specimen.quantity"/>
  		</label>
 	</td>
 	<td class="formField">
-		<html:select property="<%=opPostionD2%>" styleClass="formFieldSized10" styleId="dimenstion2" size="1" onchange="onDimensionOperatorChange(this)">
+		<html:select property="<%=opQuantity%>" styleClass="formFieldSized10" styleId="opQuantity" size="1" onchange="onDateOperatorChange(this,'quantity1','quantity2')">
 			<html:options collection="<%=Constants.DATE_NUMERIC_OPERATORS%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
 	<td class="formField" nowrap>
-		<html:text styleClass="formFieldSized10" styleId="postionD2" property="<%=postionD2%>"/>
+		<html:text styleClass="formFieldSized10" styleId="quantity1" property="<%=quantity1%>" disabled="true"/>
 						&nbsp;To&nbsp;
-		<html:text styleClass="formFieldSized10" styleId="postionD22" property="<%=postionD22%>" disabled="true"/>
+		<html:text styleClass="formFieldSized10" styleId="quantity2" property="<%=quantity2%>" disabled="true"/>
 	</td>
 </tr>
 
 <!-- EIGHTH ROW -->
 <tr>
 	<td class="formSerialNumberField" nowrap>
- 		<label for="barcode">
-     		<b><bean:message key="specimen.barcode"/>
+ 		<label for="biohazardType">
+     		<b><bean:message key="specimen.biohazardType"/>
      	</label>
 	</td>
 	<td class="formField">
-		<html:select property="<%=opBarcode%>" styleClass="formFieldSized10" styleId="<%=opBarcode%>" size="1">
+		<html:select property="<%=opBiohazardType%>" styleClass="formFieldSized10" styleId="opBiohazardType" size="1" onchange="onOperatorChange('opBiohazardType','biohazardType')">
 			<html:options collection="<%=Constants.STRING_OPERATORS%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
 	<td class="formField">
-		<html:text styleClass="formFieldSized10" styleId="barcode" property="<%=barcode%>"/>
+		<html:select property="<%=biohazardType%>" styleClass="formFieldSized10" styleId="biohazardType" size="1" disabled="true">
+			<html:options collection="<%=Constants.BIOHAZARD_TYPE_LIST%>" labelProperty="name" property="value"/>
+		</html:select>
+	</td>
+</tr>
+
+<!-- NINETH ROW -->
+<tr>
+	<td class="formSerialNumberField" nowrap>
+ 		<label for="biohazardName">
+     		<b><bean:message key="specimen.biohazardName"/>
+     	</label>
+	</td>
+	<td class="formField">
+		<html:select property="<%=opBiohazardName%>" styleClass="formFieldSized10" styleId="opBiohazardName" size="1" onchange="onOperatorChange('opBiohazardName','biohazardName')">
+			<html:options collection="<%=Constants.STRING_OPERATORS%>" labelProperty="name" property="value"/>
+		</html:select>
+	</td>
+	<td class="formField">
+		<html:text styleClass="formFieldSized10" styleId="biohazardName" property="<%=biohazardName%>" disabled="true"/>
 	</td>
 </tr>
 
