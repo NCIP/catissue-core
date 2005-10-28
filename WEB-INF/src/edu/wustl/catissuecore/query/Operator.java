@@ -77,12 +77,27 @@ public class Operator
     /**
      * BETWEEN constant
      */
-    public static final String BETWEEN = "between";
+    public static final String BETWEEN = "Between";
     
     /**
-     * BETWEEN constant
+     * NOT BETWEEN constant
      */
-    public static final String NOT_BETWEEN = "not between";
+    public static final String NOT_BETWEEN = "Not Between";
+    
+    /**
+     * STARTS WITH constant
+     */
+    public static final String STARTS_WITH = "Starts With";
+    
+    /**
+     * ENDS WITH constant
+     */
+    public static final String ENDS_WITH = "Ends With";
+    
+    /**
+     * CONTAINS WITH constant
+     */
+    public static final String CONTAINS = "Contains";
     
     /**
      * Operator String
