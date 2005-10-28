@@ -16,7 +16,7 @@
 	String endDate2 = "value(Participant:END_DATE:HLIMIT)";
 	String protocolParticipantId = "value(CollectionProtocolRegistration:PROTOCOL_PARTICIPANT_IDENTIFIER)";
 	String regDate = "value(SpecimenProtocol:REGISTRATION_DATE)";
-	String regDate2 = "value(Participant:REGISTRATION_DATE:HLIMIT)";
+	String regDate2 = "value(SpecimenProtocol:REGISTRATION_DATE:HLIMIT)";
 	
 	
 	String opPrincipalInvestigator = "value(Operator:SpecimenProtocol:PRINCIPAL_INVESTIGATOR_ID)";
@@ -40,7 +40,7 @@
 <table summary="" cellpadding="5" cellspacing="0" border="0" width="600">
 <tr>
 	<td><html:hidden property="objectName" value="CollectionProtocol"/></td>
-	<td><html:hidden property="selectedNode" /></td>
+	<%--td><html:hidden property="selectedNode" /></td--%>
 </tr>
 <!--  MAIN TITLE ROW -->
 <tr>
@@ -196,7 +196,7 @@
  		</label>
 	</td>
 	<td class="formField">
-		<html:select property="<%=opProtocolParticipantId%>" styleClass="formFieldSized10" styleId="protocolParticipantIdCombo%>" size="1" onchange="onOperatorChange('protocolParticipantIdCombo','protocolParticipantId')">
+		<html:select property="<%=opProtocolParticipantId%>" styleClass="formFieldSized10" styleId="protocolParticipantIdCombo" size="1" onchange="onOperatorChange('protocolParticipantIdCombo','protocolParticipantId')">
 			<html:options collection="<%=Constants.STRING_OPERATORS%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
@@ -228,7 +228,7 @@
 					&nbsp;To&nbsp;
 		<html:text styleClass="formDateSized10" size="10" styleId="regDate2" property="<%=regDate2%>" disabled="true"/>
 					 &nbsp;
-		<a href="javascript:onDate('startDate','advanceSearchForm.startDate2',true);">
+		<a href="javascript:onDate('regDate','advanceSearchForm.regDate2',true);">
 			<img src="images\calendar.gif" width=24 height=22 border=0>
 		</a>
 	</td>
