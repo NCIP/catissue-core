@@ -308,11 +308,25 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 					}
 				}
 			// ---------END-----------------------------------------
-			 if(this.protocolCoordinatorIds == null || this.protocolCoordinatorIds.length <1)
+			 if(this.protocolCoordinatorIds == null)
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("collectionprotocol.protocolcoordinator")));
 				}
-			 
+			 else
+			 {
+			 	if( this.protocolCoordinatorIds.length <1)
+			 	{
+			 		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("collectionprotocol.protocolcoordinator")));
+			 	}
+				 for(int ind=0; ind < protocolCoordinatorIds.length ; ind++ )
+				 {
+				 	if(protocolCoordinatorIds[ind] == -1 )
+				 	{
+						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("collectionprotocol.protocolcoordinator")));
+				 	}
+				 }
+			 }
+			 Logger.out.debug("Protocol Coordinators : " + protocolCoordinatorIds ); 
 			Iterator it = this.values.keySet().iterator();
 			
 			boolean bClinicalStatus = false;
