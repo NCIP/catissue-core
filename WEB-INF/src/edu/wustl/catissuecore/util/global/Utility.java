@@ -182,6 +182,30 @@ public class Utility
         }
     }
 	
+    /**
+     * @param selectedMenuID Menu that is clicked
+     * @param currentMenuID Menu that is being checked
+     * @param normalMenuClass style class for normal menu
+     * @param selectedMenuClass style class for selected menu 
+     * @param menuHoverClass  style class for hover effect
+     * @return The String generated for the TD tag. Creates the selected menu or normal menu.
+     */
+    public static String setSelectedMenuItem(int selectedMenuID, int currentMenuID, String normalMenuClass , String selectedMenuClass , String menuHoverClass)
+    {
+    	String returnStr = "";
+    	if(selectedMenuID == currentMenuID)
+    	{
+    		returnStr ="<td class=\"" + selectedMenuClass + "\" onmouseover=\"changeMenuStyle(this,\'" + menuHoverClass + "\')\" onmouseout=\"changeMenuStyle(this,\'" + selectedMenuClass + "\')\">";
+    	}
+    	else
+    	{
+    		returnStr ="<td class=\"" + normalMenuClass + "\" onmouseover=\"changeMenuStyle(this,\'" + menuHoverClass + "\')\" onmouseout=\"changeMenuStyle(this,\'" + normalMenuClass + "\')\">";
+    	}
+    	 
+    	return returnStr;
+    }
+    
+    
 	//	public static void main(String[] args)
 //  {
 //	    try{
