@@ -1,5 +1,17 @@
 <td class="subMenuPrimaryItemsWithBorder" onmouseover="changeMenuStyle(this,'subMenuPrimaryItemsWithBorderOver')" onmouseout="changeMenuStyle(this,'subMenuPrimaryItemsWithBorder')">		
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
+<%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
+<%
+	String selectMenu = (String) request.getAttribute("menuSelected");
+	int selectMenuID = 0;
+	if(selectMenu != null)
+	{
+		selectMenuID = Integer.parseInt(selectMenu);
+	}
+	String selectedMenuClass = "subMenuPrimaryItemsHover";
+	String normalMenuClass = "subMenuPrimaryItemsWithBorder";
+	String hoverMenuClass = "subMenuPrimaryItemsWithBorderOver";
+%>
 
 	<script language="JavaScript">
 		
@@ -22,110 +34,136 @@
 		<a href="#content">
     		<img src="images/shim.gif" alt="Skip Menu" width="1" height="1" border="0" />
     	</a>
+    	
 	</td>
 </tr>
 
+<!-- menu id : 1 -->
+<%
+	String strMouseOut ="";
+	strMouseOut = Utility.setSelectedMenuItem(selectMenuID, 1, normalMenuClass , selectedMenuClass , hoverMenuClass);
+%>
 <tr>
-	<td class="subMenuPrimaryItemsWithBorder" onmouseover="changeMenuStyle(this,'subMenuPrimaryItemsWithBorderOver')" onmouseout="changeMenuStyle(this,'subMenuPrimaryItemsWithBorder')">				
+	<%=strMouseOut%>	
 		<div>
 			<!--img src="images/subMenuArrow.gif" width="7" height="7" alt="" /--> 
 				<b> <bean:message key="app.user" /> </b>
 		</div>		
 		<div>
-			<a class="subMenuPrimary" href="User.do?operation=add&amp;pageOf=pageOfUserAdmin"><bean:message key="app.add" /></a> | 
-			<a class="subMenuPrimary" href="SimpleQueryInterface.do?pageOf=pageOfUserAdmin&aliasName=User" >
+			<a class="subMenuPrimary" href="User.do?operation=add&amp;pageOf=pageOfUserAdmin&menuSelected=1"><bean:message key="app.add" /></a> | 
+			<a class="subMenuPrimary" href="SimpleQueryInterface.do?pageOf=pageOfUserAdmin&aliasName=User&menuSelected=1" >
 				<bean:message key="app.edit" />
 			</a> | 
-			<a class="subMenuPrimary" href="ApproveUserShow.do?pageNum=1"> 
+			<a class="subMenuPrimary" href="ApproveUserShow.do?pageNum=1&menuSelected=1"> 
 					<bean:message key="app.approveUser" />
 			</a>
 		</div>
 	</td>
 </tr>
+<!-- menu id : 2 -->
+<%
+	strMouseOut ="";
+	strMouseOut = Utility.setSelectedMenuItem(selectMenuID, 2, normalMenuClass , selectedMenuClass , hoverMenuClass);
+%>
 <tr>
-	<td class="subMenuPrimaryItemsWithBorder" onmouseover="changeMenuStyle(this,'subMenuPrimaryItemsWithBorderOver')" onmouseout="changeMenuStyle(this,'subMenuPrimaryItemsWithBorder')">				
+	<%=strMouseOut%>
 		<div>
 			<!--img src="images/subMenuArrow.gif" width="7" height="7" alt="" /--> 
 				<b> <bean:message key="app.institution" /> </b>
 		</div>
 		<div>
-			<a class="subMenuPrimary" href="Institution.do?operation=add&pageOf=pageOfInstitution"><bean:message key="app.add" /></a> | 
-			<a class="subMenuPrimary" href="SimpleQueryInterface.do?pageOf=pageOfInstitution&aliasName=Institution" >
+			<a class="subMenuPrimary" href="Institution.do?operation=add&pageOf=pageOfInstitution&menuSelected=2"><bean:message key="app.add" /></a> | 
+			<a class="subMenuPrimary" href="SimpleQueryInterface.do?pageOf=pageOfInstitution&aliasName=Institution&menuSelected=2" >
 				<bean:message key="app.edit" />
 			</a>
 		</div>
 	</td>
 </tr>
-</tr>
+<!-- menu id : 3 -->
+<%
+	strMouseOut = Utility.setSelectedMenuItem(selectMenuID, 3, normalMenuClass , selectedMenuClass , hoverMenuClass);
+%>
 <tr>
-	<td class="subMenuPrimaryItemsWithBorder" onmouseover="changeMenuStyle(this,'subMenuPrimaryItemsWithBorderOver')" onmouseout="changeMenuStyle(this,'subMenuPrimaryItemsWithBorder')">				
+	<%=strMouseOut%>
 		<div>
 			<!--img src="images/subMenuArrow.gif" width="7" height="7" alt="" /--> 
 				<b> <bean:message key="app.department" /></b>
 		</div>
 		<div>
-		<a class="subMenuPrimary" href="Department.do?operation=add&pageOf=pageOfDepartment"><bean:message key="app.add" /></a> | 
-		<a class="subMenuPrimary" href="SimpleQueryInterface.do?pageOf=pageOfDepartment&aliasName=Department">
+		<a class="subMenuPrimary" href="Department.do?operation=add&pageOf=pageOfDepartment&menuSelected=3"><bean:message key="app.add" /></a> | 
+		<a class="subMenuPrimary" href="SimpleQueryInterface.do?pageOf=pageOfDepartment&aliasName=Department&menuSelected=3">
 			<bean:message key="app.edit" />
 		</a>
 		</div>
 	</td>
 </tr>
+<!-- menu id : 4 -->
+<%
+	strMouseOut = Utility.setSelectedMenuItem(selectMenuID, 4, normalMenuClass , selectedMenuClass , hoverMenuClass);
+%>
 <tr>
-	<td class="subMenuPrimaryItemsWithBorder" onmouseover="changeMenuStyle(this,'subMenuPrimaryItemsWithBorderOver')" onmouseout="changeMenuStyle(this,'subMenuPrimaryItemsWithBorder')">		
-
+	<%=strMouseOut%>
 		<div>
 			<!--img src="images/subMenuArrow.gif" width="7" height="7" alt="" /--> 
 				<b><bean:message key="app.cancerResearchGroup" /> </b>
 		</div>
 		<div>
-			<a class="subMenuPrimary" href="CancerResearchGroup.do?operation=add&pageOf=pageOfCancerResearchGroup">
+			<a class="subMenuPrimary" href="CancerResearchGroup.do?operation=add&pageOf=pageOfCancerResearchGroup&menuSelected=4">
 				<bean:message key="app.add" />
 			</a> | 
-			<a class="subMenuPrimary" href="SimpleQueryInterface.do?pageOf=pageOfCancerResearchGroup&aliasName=CancerResearchGroup" ><bean:message key="app.edit" /></a>
+			<a class="subMenuPrimary" href="SimpleQueryInterface.do?pageOf=pageOfCancerResearchGroup&aliasName=CancerResearchGroup&menuSelected=4" ><bean:message key="app.edit" /></a>
 		</div>
 	</td>
 </tr>
+<!-- menu id : 5 -->
+<%
+	strMouseOut = Utility.setSelectedMenuItem(selectMenuID, 5, normalMenuClass , selectedMenuClass , hoverMenuClass);
+%>
 <tr>
-	<td class="subMenuPrimaryItemsWithBorder" onmouseover="changeMenuStyle(this,'subMenuPrimaryItemsWithBorderOver')" onmouseout="changeMenuStyle(this,'subMenuPrimaryItemsWithBorder')">				
-		
+	<%=strMouseOut%>
 		<div>
 			<!--img src="images/subMenuArrow.gif" width="7" height="7" alt="" /--> 
 				<b><bean:message key="app.site" /></b>
 		</div>
 		<div>
-			<a class="subMenuPrimary" href="Site.do?operation=add&pageOf=pageOfSite"><bean:message key="app.add" /></a> | 
-			<a class="subMenuPrimary" href="SimpleQueryInterface.do?pageOf=pageOfSite&aliasName=Site" >
+			<a class="subMenuPrimary" href="Site.do?operation=add&pageOf=pageOfSite&menuSelected=5"><bean:message key="app.add" /></a> | 
+			<a class="subMenuPrimary" href="SimpleQueryInterface.do?pageOf=pageOfSite&aliasName=Site&menuSelected=5" >
 				<bean:message key="app.edit" />
 			</a>
 		</div>
 	</td>
 </tr>
+<!-- menu id : 6 -->
+<%
+	strMouseOut = Utility.setSelectedMenuItem(selectMenuID, 6, normalMenuClass , selectedMenuClass , hoverMenuClass);
+%>
 <tr>
-	<td class="subMenuPrimaryItemsWithBorder" onmouseover="changeMenuStyle(this,'subMenuPrimaryItemsWithBorderOver')" onmouseout="changeMenuStyle(this,'subMenuPrimaryItemsWithBorder')">				
-		
+	<%=strMouseOut%>
 		<div>
 			<!--img src="images/subMenuArrow.gif" width="7" height="7" alt="" /--> 
 				<b><bean:message key="app.storagetype" /></b>
 		</div>
 		<div>
-			<a class="subMenuPrimary" href="StorageType.do?operation=add&pageOf=pageOfStorageType"><bean:message key="app.add" /></a> | 
-			<a class="subMenuPrimary" href="SimpleQueryInterface.do?pageOf=pageOfStorageType&aliasName=StorageType" >
+			<a class="subMenuPrimary" href="StorageType.do?operation=add&pageOf=pageOfStorageType&menuSelected=6"><bean:message key="app.add" /></a> | 
+			<a class="subMenuPrimary" href="SimpleQueryInterface.do?pageOf=pageOfStorageType&aliasName=StorageType&menuSelected=6" >
 				<bean:message key="app.edit" />
 			</a>
 		</div>
 	</td>
 </tr>
+<!-- menu id : 7 -->
+<%
+	strMouseOut = Utility.setSelectedMenuItem(selectMenuID, 7, normalMenuClass , selectedMenuClass , hoverMenuClass);
+%>
 <tr>
-	<td class="subMenuPrimaryItemsWithBorder" onmouseover="changeMenuStyle(this,'subMenuPrimaryItemsWithBorderOver')" onmouseout="changeMenuStyle(this,'subMenuPrimaryItemsWithBorder')">				
-
+	<%=strMouseOut%>
 		<div>
 			<!--img src="images/subMenuArrow.gif" width="7" height="7" alt="" /--> 
 				<b><bean:message key="app.storageContainer" /></b>
 		</div>
 		<div>
-			<a class="subMenuPrimary" href="StorageContainer.do?operation=add&pageOf=pageOfStorageContainer"><bean:message key="app.add" /></a> | 
-			<a class="subMenuPrimary" href="SimpleQueryInterface.do?pageOf=pageOfStorageContainer&aliasName=StorageContainer" >
+			<a class="subMenuPrimary" href="StorageContainer.do?operation=add&pageOf=pageOfStorageContainer&menuSelected=7"><bean:message key="app.add" /></a> | 
+			<a class="subMenuPrimary" href="SimpleQueryInterface.do?pageOf=pageOfStorageContainer&aliasName=StorageContainer&menuSelected=7" >
 				<bean:message key="app.edit" />
 			</a> | 
 			<a class="subMenuPrimary" href="#" onclick="javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfSpecimen','name','810','320','yes');return false" >
@@ -134,59 +172,74 @@
 		</div>
 	</td>
 </tr>
+<!-- menu id : 8 -->
+<%
+	strMouseOut = Utility.setSelectedMenuItem(selectMenuID, 8, normalMenuClass , selectedMenuClass , hoverMenuClass);
+%>
 <tr>
-	<td class="subMenuPrimaryItemsWithBorder" onmouseover="changeMenuStyle(this,'subMenuPrimaryItemsWithBorderOver')" onmouseout="changeMenuStyle(this,'subMenuPrimaryItemsWithBorder')">				
-		
+	<%=strMouseOut%>
 		<div>
 			<!--img src="images/subMenuArrow.gif" width="7" height="7" alt="" /--> 
 				<b><bean:message key="app.biohazard" /></b>
 		</div>
 		<div>
-			<a class="subMenuPrimary" href="Biohazard.do?operation=add&pageOf=pageOfBioHazard"><bean:message key="app.add" /></a> | 
-			<a class="subMenuPrimary" href="SimpleQueryInterface.do?pageOf=pageOfBioHazard&aliasName=BioHazard" >
+			<a class="subMenuPrimary" href="Biohazard.do?operation=add&pageOf=pageOfBioHazard&menuSelected=8"><bean:message key="app.add" /></a> | 
+			<a class="subMenuPrimary" href="SimpleQueryInterface.do?pageOf=pageOfBioHazard&aliasName=BioHazard&menuSelected=8" >
 				<bean:message key="app.edit" />
 			</a>
 		</div>
 	</td>
 </tr>
+<!-- menu id : 9 -->
+<%
+	strMouseOut = Utility.setSelectedMenuItem(selectMenuID, 9, normalMenuClass , selectedMenuClass , hoverMenuClass);
+%>
 <tr>
-	<td class="subMenuPrimaryItemsWithBorder" onmouseover="changeMenuStyle(this,'subMenuPrimaryItemsWithBorderOver')" onmouseout="changeMenuStyle(this,'subMenuPrimaryItemsWithBorder')">				
+	<%=strMouseOut%>
 		<div>
 			<!--img src="images/subMenuArrow.gif" width="7" height="7" alt="" /-->  
 				<b><bean:message key="app.collectionProtocol" /></b>
 		</div>
 		<div>
-			<a class="subMenuPrimary" href="CollectionProtocol.do?operation=add&pageOf=pageOfCollectionProtocol"><bean:message key="app.add" /></a> | 
-			<a class="subMenuPrimary" href="SimpleQueryInterface.do?pageOf=pageOfCollectionProtocol&aliasName=CollectionProtocol" >
+			<a class="subMenuPrimary" href="CollectionProtocol.do?operation=add&pageOf=pageOfCollectionProtocol&menuSelected=9"><bean:message key="app.add" /></a> | 
+			<a class="subMenuPrimary" href="SimpleQueryInterface.do?pageOf=pageOfCollectionProtocol&aliasName=CollectionProtocol&menuSelected=9" >
 				<bean:message key="app.edit" /> 
 			</a>
 		</div>
 	</td>
 </tr>
+<!-- menu id : 10 -->
+<%
+	strMouseOut = Utility.setSelectedMenuItem(selectMenuID, 10, normalMenuClass , selectedMenuClass , hoverMenuClass);
+%>
 <tr>
-	<td class="subMenuPrimaryItemsWithBorder" onmouseover="changeMenuStyle(this,'subMenuPrimaryItemsWithBorderOver')" onmouseout="changeMenuStyle(this,'subMenuPrimaryItemsWithBorder')">				
+	<%=strMouseOut%>
 		<div>
 			
 			<!--img src="images/subMenuArrow.gif" width="7" height="7" alt="" /-->  
 				<b> <bean:message key="app.distributionProtocol" /></b>
 		</div>
 		<div>
-			<a class="subMenuPrimary" href="DistributionProtocol.do?operation=add&pageOf=pageOfDistributionProtocol"><bean:message key="app.add" /></a> | 
-			<a class="subMenuPrimary" href="SimpleQueryInterface.do?pageOf=pageOfDistributionProtocol&aliasName=DistributionProtocol" >
+			<a class="subMenuPrimary" href="DistributionProtocol.do?operation=add&pageOf=pageOfDistributionProtocol&menuSelected=10"><bean:message key="app.add" /></a> | 
+			<a class="subMenuPrimary" href="SimpleQueryInterface.do?pageOf=pageOfDistributionProtocol&aliasName=DistributionProtocol&menuSelected=10" >
 				<bean:message key="app.edit" /> 
 			</a>
 		</div>
 	</td>
 </tr>
+<!-- menu id : 11 -->
+<%
+	strMouseOut = Utility.setSelectedMenuItem(selectMenuID, 11, normalMenuClass , selectedMenuClass , hoverMenuClass);
+%>
 <tr>
-	<td class="subMenuPrimaryItemsWithBorder" onmouseover="changeMenuStyle(this,'subMenuPrimaryItemsWithBorderOver')" onmouseout="changeMenuStyle(this,'subMenuPrimaryItemsWithBorder')">				
+	<%=strMouseOut%>
 		<div>
 			
 			<!--img src="images/subMenuArrow.gif" width="7" height="7" alt="" /-->  
 				<b><bean:message key="app.reportedProblems" /></b>
 		</div>
 		<div>
-			<a class="subMenuPrimary" href="ReportedProblemShow.do?pageNum=1">
+			<a class="subMenuPrimary" href="ReportedProblemShow.do?pageNum=1&menuSelected=11">
 				<bean:message key="app.view" />
 			</a> 
 		</div>
