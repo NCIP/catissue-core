@@ -902,3 +902,15 @@ td.formFieldNoBorders{ /* for the cell that contains the form elements */
   font-size:0.8em;
   color:#000000; /* constant: black */
 } 
+
+td.subMenuPrimaryItemsHover{ /* SubMenu Hover effect */
+  font-size:0.6em;
+  background-color:#800000; 
+  color:#FFFFFF;
+  font-weight:normal;
+  padding-top:0.3em;
+  padding-bottom:0.3em;
+  padding-left:0.8em;
+  border-right:1px solid #CCCCCC; /* constant: medium gray */
+  border-bottom:1px solid #CCCCCC; /* constant: medium gray */
+}
