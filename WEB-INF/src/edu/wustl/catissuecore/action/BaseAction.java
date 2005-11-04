@@ -13,10 +13,11 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import edu.wustl.catissuecore.actionForm.StorageContainerForm;
+import edu.wustl.catissuecore.actionForm.AbstractActionForm;
 import edu.wustl.catissuecore.exception.UserNotAuthenticatedException;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.util.logger.Logger;
 
 
 /**
@@ -53,6 +54,7 @@ public abstract class BaseAction extends Action  {
 			throw new UserNotAuthenticatedException();
 		}
 		setRequestData(request);
+		setSelectedMenu(request);
 		return executeAction(mapping, form, request, response);
 	}
 
@@ -193,4 +195,16 @@ public abstract class BaseAction extends Action  {
 	public abstract ActionForward executeAction(ActionMapping mapping,
 			ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception;
+	
+	public void setSelectedMenu(HttpServletRequest request)
+	{
+		Logger.out.debug("Inside setSelectedMenu.....");
+		Logger.out.debug("#######################################################################");
+		String strMenu = request.getParameter("menuSelected" );
+		if(strMenu != null )
+		{
+			request.setAttribute("menuSelected" ,strMenu);
+			Logger.out.debug("menuSelected " +strMenu +" set successfully");
+		}
+	}
 }
