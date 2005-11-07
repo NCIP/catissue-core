@@ -415,14 +415,14 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 					{
         				if(!validator.isEmpty(value) && !validator.isNumeric(value ))
         				{
-        					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocol.quantity")));
+        					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("collectionprotocol.quantity")));
         				}
 					}
 					else
 					{
 						if(!validator.isEmpty(value) && !validator.isDouble(value ))
         				{
-        					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocol.quantity")));
+        					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("collectionprotocol.quantity")));
         				}
 					}
 				} // if  quantity
