@@ -16,7 +16,7 @@
     String callAction;
     if(pageOf.equals(Constants.PAGEOF_SIMPLE_QUERY_INTERFACE))
 	{
-		callAction=Constants.SIMPLE_SEARCH_ACTION+"?pageOf="+Constants.PAGEOF_SIMPLE_QUERY_INTERFACE;
+		callAction=Constants.SIMPLE_SEARCH_AFTER_CONFIGURE_ACTION+"?pageOf="+Constants.PAGEOF_SIMPLE_QUERY_INTERFACE;
 	}
 	else
 	{

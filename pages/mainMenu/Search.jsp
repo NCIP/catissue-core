@@ -29,8 +29,9 @@
               </td>
              <!-- link 3 ends -->
               <td><img src="images/mainMenuSeparator.gif" width="1" height="16" alt="" /></td>
+		      
 		      <!-- link 4 begins -->
-              <td height="20" class="mainMenuItemOver" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'mainMenuItemOver'),hideCursor()" onclick="document.location.href='Search.do'">
+		      <td height="20" class="mainMenuItemSelected" onclick="document.location.href='Search.do'">
                 <html:link styleClass="mainMenuLink" page="/Search.do">
                 	<bean:message key="app.search" />
                 </html:link>

@@ -55,10 +55,11 @@ public class SimpleSearchAction extends BaseAction
 	{
 		SimpleQueryInterfaceForm simpleQueryInterfaceForm = (SimpleQueryInterfaceForm) form;
 		String counter = simpleQueryInterfaceForm.getCounter();
+		
 		HttpSession session = request.getSession();
 		if(counter==null)
 			counter = (String)session.getAttribute(Constants.SIMPLE_QUERY_COUNTER);
-		//Set form attributes in session for configuration after Search
+		//Set form attributes in session for configuration after Search.
 		else
 			session.setAttribute(Constants.SIMPLE_QUERY_COUNTER,simpleQueryInterfaceForm.getCounter());
 		Map map=null;
@@ -99,7 +100,6 @@ public class SimpleSearchAction extends BaseAction
 			
 			//Adding single quotes to strings and date values.
 			SimpleConditionsNode simpleConditionsNode = null;
-			
 			while (iterator.hasNext())
 			{
 				simpleConditionsNode = (SimpleConditionsNode) iterator.next(); 
@@ -110,6 +110,7 @@ public class SimpleSearchAction extends BaseAction
 				String fieldType = stringToken.nextToken();
 				String value = simpleConditionsNode.getCondition().getValue();
 				String tableInPath = null;
+				
 				if (stringToken.hasMoreTokens())
 				{
 				    tableInPath = stringToken.nextToken();

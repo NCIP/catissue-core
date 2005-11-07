@@ -1,17 +1,8 @@
 <td class="subMenuPrimaryItemsWithBorder" onmouseover="changeMenuStyle(this,'subMenuPrimaryItemsWithBorderOver')" onmouseout="changeMenuStyle(this,'subMenuPrimaryItemsWithBorder')">		
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
-<%
-	String selectMenu = (String) request.getAttribute("menuSelected");
-	int selectMenuID = 0;
-	if(selectMenu != null)
-	{
-		selectMenuID = Integer.parseInt(selectMenu);
-	}
-	String selectedMenuClass = "subMenuPrimaryItemsHover";
-	String normalMenuClass = "subMenuPrimaryItemsWithBorder";
-	String hoverMenuClass = "subMenuPrimaryItemsWithBorderOver";
-%>
+
+<%@ include file="/pages/subMenu/SelectMenu.jsp" %>
 
 	<script language="JavaScript">
 		
@@ -40,7 +31,6 @@
 
 <!-- menu id : 1 -->
 <%
-	String strMouseOut ="";
 	strMouseOut = Utility.setSelectedMenuItem(selectMenuID, 1, normalMenuClass , selectedMenuClass , hoverMenuClass);
 %>
 <tr>

@@ -196,7 +196,7 @@ if(dataList.size() != 0)
 						<bean:message key="buttons.export"/>
 					</html:button>
 				</td> 
-				<%String configAction = "callAction('"+Constants.CONFIGURE_SIMPLE_QUERY_ACTION+"')";%>
+				<%String configAction = "callAction('"+Constants.CONFIGURE_SIMPLE_QUERY_NON_VALIDATE_ACTION+"')";%>
 				<td>
 					<html:button styleClass="actionButton" property="configureButton" onclick="<%=configAction%>">
 						<bean:message  key="buttons.configure" />

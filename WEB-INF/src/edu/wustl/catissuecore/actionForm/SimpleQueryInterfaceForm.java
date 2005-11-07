@@ -31,11 +31,11 @@ public class SimpleQueryInterfaceForm extends ActionForm
     String counter;
 
     String pageOf;
-
+    
     String aliasName;
     
     String showCalendar="";
-
+    
     //Variables neccessary for Configuration of SImple Search 
    
     private String tableName;
@@ -146,38 +146,74 @@ public class SimpleQueryInterfaceForm extends ActionForm
         ActionErrors errors = new ActionErrors();
         Validator validator = new Validator();
         
+        boolean tableError = false, attributeError = false, conditionValue = false;
         for (int i = 1;i<=Integer.parseInt(counter);i++)
         {
-            String key = "SimpleConditionsNode:"+i+"_Condition_value";
+            String key = "SimpleConditionsNode:"+i+"_Condition_DataElement_table";
             String enteredValue = (String)getValue(key);
-            String nextOperator = "SimpleConditionsNode:"+i+"_Operator_operator";
-            if (validator.isEmpty(enteredValue))
+            if ((tableError == false) && (validator.isValidOption(enteredValue) == false))
             {
                 errors.add(ActionErrors.GLOBAL_ERROR, 
-                        new ActionError("simpleQuery.value.required"));
-            }
-            else
-            {
-	            //---------- DataType validation
-	            String dataElement = "SimpleConditionsNode:"+i+"_Condition_DataElement_field";
-	            String selectedField = (String)getValue(dataElement);
-	            int lastInd = selectedField.lastIndexOf(".");
-	            String dataType = selectedField.substring(lastInd+1);
-//	            System.out.println("\n\n\n\n*******"+ dataType + "\n\n\n\n*******\n");
-	            if((dataType.trim().equals("bigint" ) || dataType.trim().equals("integer" )) && !validator.isNumeric(enteredValue,0))
-	            {
-	            	 errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("simpleQuery.intvalue.required"));
-	            }// integer or long
-	            else if((dataType.trim().equals("double" )) && !validator.isDouble(enteredValue))
-	            {
-	            	 errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("simpleQuery.decvalue.required"));
-	            } // double
-	        }
+                        new ActionError("simpleQuery.object.required"));
+                tableError = true;
+            }    
             
+            key = "SimpleConditionsNode:"+i+"_Condition_DataElement_field";
+            enteredValue = (String)getValue(key);
+            if ((attributeError == false) && (validator.isValidOption(enteredValue) == false))
+            {
+                errors.add(ActionErrors.GLOBAL_ERROR, 
+                        new ActionError("simpleQuery.attribute.required"));
+                attributeError = true;
+            }
+            
+            if (conditionValue == false)
+            {
+                key = "SimpleConditionsNode:"+i+"_Condition_value";
+                enteredValue = (String)getValue(key);
+                String nextOperator = "SimpleConditionsNode:"+i+"_Operator_operator";
+                if ((validator.isEmpty(enteredValue)))
+                {
+                    errors.add(ActionErrors.GLOBAL_ERROR, 
+                            new ActionError("simpleQuery.value.required"));
+                    conditionValue = true;
+                }
+                else
+                {
+    	            //---------- DataType validation
+    	            String dataElement = "SimpleConditionsNode:"+i+"_Condition_DataElement_field";
+    	            String selectedField = (String)getValue(dataElement);
+    	            int lastInd = selectedField.lastIndexOf(".");
+    	            String dataType = selectedField.substring(lastInd+1);
+
+    	            if((dataType.trim().equals("bigint" ) || dataType.trim().equals("integer" )) && !validator.isNumeric(enteredValue,0))
+    	            {
+    	            	 errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("simpleQuery.intvalue.required"));
+    	            	 conditionValue = true;
+    	            }// integer or long
+    	            else if((dataType.trim().equals("double" )) && !validator.isDouble(enteredValue))
+    	            {
+    	            	 errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("simpleQuery.decvalue.required"));
+    	            	 conditionValue = true;
+    	            } // double
+    	        }
+            }
         }
+        
+//        String key = "SimpleConditionsNode:"+(Integer.parseInt(counter)-1)+"_Condition_DataElement_table";
+//        String enteredValue = (String)getValue(key);
+//        Logger.out.debug("enteredValue Last Operator..............................."+enteredValue);
+//        if (validator.isValidOption(enteredValue) == false)
+//        {
+//            errors.add(ActionErrors.GLOBAL_ERROR, 
+//                    new ActionError("simpleQuery.object.required"));
+//            Logger.out.debug("6......................");
+//            conditionValue = true;
+//        }
         
         return errors;
     }
+    
 	/**
 	 * @return Returns the selectedColumnNames.
 	 */

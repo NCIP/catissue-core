@@ -19,6 +19,9 @@
 	String dateClass = "hideTD";
 	Object obj = request.getAttribute("simpleQueryInterfaceForm");
 	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
+	
+	String selectMenu = (String) request.getAttribute("menuSelected");
+	
 	if(obj != null && obj instanceof SimpleQueryInterfaceForm)
 	{
 		SimpleQueryInterfaceForm form = (SimpleQueryInterfaceForm)obj;
@@ -113,6 +116,7 @@ function showDateColumn(element,valueField,colID)
 				<tr>
 					<td>
 						<html:hidden property="aliasName" value="<%=aliasName%>"/>
+						<html:hidden property="menuSelected" value="<%=selectMenu%>"/>
 					</td>
 				</tr>
 				<tr>

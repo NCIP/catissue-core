@@ -13,7 +13,7 @@
               <!-- link 1 ends -->
 			   <td><img src="images/mainMenuSeparator.gif" width="1" height="16" alt="" /></td>
 			  <!-- link 2 begins -->
-              <td height="20" class="mainMenuItemOver" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'mainMenuItemOver'),hideCursor()" onclick="document.location.href='ManageAdministrativeData.do'">
+              <td height="20" class="mainMenuItemSelected" onclick="document.location.href='ManageAdministrativeData.do'">
                 <html:link styleClass="mainMenuLink" page="/ManageAdministrativeData.do">
                 	<bean:message key="app.administrativeData" />
                 </html:link>

@@ -1,4 +1,6 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
+<%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
+<%@ include file="/pages/subMenu/SelectMenu.jsp" %>
 
 <tr>
     <td class="subMenuPrimaryTitle" height="22">
@@ -8,17 +10,21 @@
 	</td>
   </tr>
   
+<!-- menu id : 17 -->
+<%
+	strMouseOut = Utility.setSelectedMenuItem(selectMenuID, 17, normalMenuClass , selectedMenuClass , hoverMenuClass);
+%>
 <tr>
-	<td class="subMenuPrimaryItemsWithBorder" onmouseover="changeMenuStyle(this,'subMenuPrimaryItemsWithBorderOver')" onmouseout="changeMenuStyle(this,'subMenuPrimaryItemsWithBorder')">				
+	<%=strMouseOut%>	
 		<div>
 			<b> <bean:message key="app.search" /> </b>
 		</div>		
 		
 		<div>
-			<a class="subMenuPrimary" href="SimpleQueryInterface.do?pageOf=pageOfSimpleQueryInterface">
+			<a class="subMenuPrimary" href="SimpleQueryInterface.do?pageOf=pageOfSimpleQueryInterface&menuSelected=17">
 				<bean:message key="app.simpleSearch" />
 			</a> |  
-			<a class="subMenuPrimary" href="AdvanceQueryInterface.do?pageOf=pageOfAdvanceQueryInterface">
+			<a class="subMenuPrimary" href="AdvanceQueryInterface.do?pageOf=pageOfAdvanceQueryInterface&menuSelected=17">
 					<bean:message key="app.advancedSearch" />
 			</a>			
 		</div>
@@ -45,8 +51,12 @@
 	</td>
 </tr--%>
 
+<!-- menu id : 18 -->
+<%
+	strMouseOut = Utility.setSelectedMenuItem(selectMenuID, 18, normalMenuClass , selectedMenuClass , hoverMenuClass);
+%>
 <tr>
-	<td class="subMenuPrimaryItemsWithBorder" onmouseover="changeMenuStyle(this,'subMenuPrimaryItemsWithBorderOver')" onmouseout="changeMenuStyle(this,'subMenuPrimaryItemsWithBorder')">				
+	<%=strMouseOut%>	
 		<div>
 			<b> <bean:message key="app.shoppingCart" /> </b>
 		</div>		

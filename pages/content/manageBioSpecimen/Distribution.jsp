@@ -9,14 +9,19 @@
 <%@ page import="edu.wustl.common.beans.NameValueBean"%>
 
 <%!
-	private String changeUnit(String specimenType)
+	private String changeUnit(String specimenType, String subType)
 	{
 		if (specimenType == null)
 			return "";
 		if(specimenType.equals("Fluid"))
 			return Constants.UNIT_ML;
 		else if(specimenType.equals("Tissue"))
-			return Constants.UNIT_GM;
+		{
+			if(subType.equals(Constants.SLIDE) || subType.equals(Constants.PARAFFIN_BLOCK) || subType.equals(Constants.FROZEN_BLOCK))
+				return " ";
+			else
+				return Constants.UNIT_GM;
+		}
 		else if(specimenType.equals("Cell"))
 			return Constants.UNIT_CC;
 		else if(specimenType.equals("Molecular"))
@@ -466,7 +471,9 @@
 					//String idValue=(String)formBean.getValue(srKeyName);
 					//String strUnitValue = ""+(String)formBean.getValue(unitProperty);
 					String classValue = (String)formBean.getValue(key);
-					String strUnitValue = changeUnit(classValue);
+					key = "DistributedItem:" + i + "_Specimen_type";
+					String typeValue = (String)formBean.getValue(key);
+					String strUnitValue = changeUnit(classValue,typeValue);
 					String check = "chk_" + i;
 				%>
 				 <tr>

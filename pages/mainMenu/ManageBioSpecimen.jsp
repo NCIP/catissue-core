@@ -22,7 +22,7 @@
 			 <td><img src="images/mainMenuSeparator.gif" width="1" height="16" alt="" /></td>
 			  
               <!-- link 3 begins -->
-              <td height="20" class="mainMenuItemOver" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'mainMenuItemOver'),hideCursor()" onclick="document.location.href='ManageBioSpecimen.do'">
+              <td height="20" class="mainMenuItemSelected" onclick="document.location.href='ManageBioSpecimen.do'">
                 <html:link styleClass="mainMenuLink" page="/ManageBioSpecimen.do">
                 	<bean:message key="app.biospecimen" />
                 </html:link>

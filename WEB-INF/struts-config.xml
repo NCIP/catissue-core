@@ -211,7 +211,6 @@ PUBLIC
 		<!-- Participant Actions Ends -->
 		
 		<!-- Collection Protocol Registration Actions Begins -->
-		
         <action path="/CollectionProtocolRegistration"
 			type="edu.wustl.catissuecore.action.CollectionProtocolRegistrationAction"
 			scope="request">
@@ -261,7 +260,7 @@ PUBLIC
 			<forward name="failure" path=".catissuecore.institutionDef" />
 			<forward name="access_denied" path="/ManageAdministrativeData.do" />
 		</action>
-
+		
 		<action path="/InstitutionAdd"
 			type="edu.wustl.catissuecore.action.CommonAddEditAction"
 			name="institutionForm"
@@ -271,7 +270,7 @@ PUBLIC
 			<forward name="success" path="/Institution.do?operation=edit&amp;pageOf=pageOfInstitution&amp;menuSelected=2" />
 			<forward name="failure" path="/Institution.do?operation=add&amp;pageOf=pageOfInstitution&amp;menuSelected=2" />
 		</action>
-
+		
 		<action path="/InstitutionEdit"
 			type="edu.wustl.catissuecore.action.CommonAddEditAction"
 			name="institutionForm"
@@ -281,7 +280,7 @@ PUBLIC
 			<forward name="success" path="/Institution.do?operation=edit&amp;pageOf=pageOfInstitution&amp;menuSelected=2" />
 			<forward name="failure" path="/Institution.do?operation=edit&amp;pageOf=pageOfInstitution&amp;menuSelected=2" />
 		</action>
-
+		
 		<action path="/InstitutionSearch"
 		    type="edu.wustl.catissuecore.action.CommonSearchAction"
 			name="institutionForm"
@@ -292,7 +291,7 @@ PUBLIC
 			<forward name="failure" path="/Institution.do?operation=edit&amp;pageOf=pageOfInstitution&amp;menuSelected=2"/>
 		</action>    
 		<!-- Institution Actions Ends-->
-
+		
 		<!-- User Actions Begins-->
 		<action path="/User"
 			type="edu.wustl.catissuecore.action.UserAction"
@@ -303,7 +302,7 @@ PUBLIC
 			<forward name="failure" path=".catissuecore.userDef" />
 			<forward name="access_denied" path="/ManageAdministrativeData.do" />
 		</action>
-
+		
 		<action path="/UserAdd"
 			type="edu.wustl.catissuecore.action.CommonAddEditAction"
 			name="userForm"
@@ -313,7 +312,7 @@ PUBLIC
 			<forward name="success" path="/User.do?operation=edit&amp;pageOf=pageOfUserAdmin&amp;menuSelected=1" />
 			<forward name="failure" path="/User.do?operation=add&amp;pageOf=pageOfUserAdmin&amp;menuSelected=1" />
 		</action>
-
+		
 		<action path="/UserEdit"
 			type="edu.wustl.catissuecore.action.CommonAddEditAction"
 			name="userForm"
@@ -1694,24 +1693,11 @@ PUBLIC
 		<action path="/SimpleQueryInterface"
 			type="edu.wustl.catissuecore.action.SimpleQueryInterfaceAction"
 			name="simpleQueryInterfaceForm"
+			input="/SimpleQueryInterface.do"
 			validate="false"
 			scope="request">
 			<forward name="pageOfSimpleQueryInterface" path=".catissuecore.simpleQueryInterfaceDef" />
-			<forward name="pageOfInstitution" path=".catissuecore.editSearchPageDef"/>
-			<forward name="pageOfDepartment" path=".catissuecore.editSearchPageDef"/>
-			<forward name="pageOfCancerResearchGroup" path=".catissuecore.editSearchPageDef"/>
-			<forward name="pageOfCollectionProtocol" path=".catissuecore.editSearchPageDef"/>
-			<forward name="pageOfDistributionProtocol" path=".catissuecore.editSearchPageDef"/>
-			<forward name="pageOfStorageType" path=".catissuecore.editSearchPageDef"/>
-			<forward name="pageOfStorageContainer" path=".catissuecore.editSearchPageDef"/>
-			<forward name="pageOfSite" path=".catissuecore.editSearchPageDef"/>
-			<forward name="pageOfBioHazard" path=".catissuecore.editSearchPageDef"/>
-			<forward name="pageOfUserAdmin" path=".catissuecore.editSearchPageDef"/>
-			<forward name="pageOfParticipant" path=".catissuecore.editBioSpecimenSearchPageDef"/>
-			<forward name="pageOfCollectionProtocolRegistration" path=".catissuecore.editBioSpecimenSearchPageDef"/>
-			<forward name="pageOfNewSpecimen" path=".catissuecore.editBioSpecimenSearchPageDef"/>
-			<forward name="pageOfSpecimenCollectionGroup" path=".catissuecore.editBioSpecimenSearchPageDef"/>
-			<forward name="pageOfDistribution" path=".catissuecore.editBioSpecimenSearchPageDef"/>						
+			<forward name="pageOfEditObject" path=".catissuecore.editSearchPageDef"/>
 			<forward name="failure" path=".catissuecore.simpleQueryInterfaceDef" />
 			<forward name="access_denied_admin" path="/ManageAdministrativeData.do" />
 			<forward name="access_denied_biospecimen" path="/ManageBioSpecimen.do" />
@@ -1719,6 +1705,16 @@ PUBLIC
 		</action>
 
 		<action path="/ConfigureSimpleQuery"
+			type="edu.wustl.catissuecore.action.ConfigureSimpleQueryAction"
+			name="simpleQueryInterfaceForm"
+			validate="true"
+			input="/SimpleQueryInterface.do"
+			scope="request">
+			<forward name="success" path="/ConfigureSimpleSearchView.do?pageOf=pageOfSimpleQueryInterface" />
+			<forward name="failure" path="/SimpleQueryInterface.do" />
+		</action>
+		
+		<action path="/ConfigureSimpleQueryNonValidate"
 			type="edu.wustl.catissuecore.action.ConfigureSimpleQueryAction"
 			name="simpleQueryInterfaceForm"
 			validate="false"
@@ -1738,12 +1734,21 @@ PUBLIC
 		<action path="/SimpleSearch"
 			type="edu.wustl.catissuecore.action.SimpleSearchAction"
 			name="simpleQueryInterfaceForm"
-			validate="false"
+			validate="true"
+			input="/SimpleQueryInterface.do"
 			scope="request">
 			<forward name="success" path="/SpreadsheetView.do" />
 			<forward name="failure" path="/SimpleQueryInterface.do" />
 		</action>
 		
+		<action path="/SimpleSearchAfterConfigure"
+			type="edu.wustl.catissuecore.action.SimpleSearchAction"
+			name="simpleQueryInterfaceForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path="/SpreadsheetView.do" />
+			<forward name="failure" path="/SimpleQueryInterface.do" />
+		</action>
 		
 		<action path="/SpreadsheetView"
 			type="edu.wustl.catissuecore.action.SpreadsheetViewAction"
@@ -1765,23 +1770,6 @@ PUBLIC
 			<forward name="pageOfSpecimenCollectionGroup" path=".catissuecore.editBioSpecimenSearchResultsDef"/>
 			<forward name="pageOfDistribution" path=".catissuecore.editBioSpecimenSearchResultsDef"/>
 			<forward name="failure" path=".catissuecore.simpleSearchResultsDef" />
-		</action>
-		
-		<action path="/QueryDepartment"
-			type="edu.wustl.catissuecore.action.DepartmentAction"
-			scope="request">
-			<forward name="success" path=".catissuecore.simpleSearchDepartmentDef" />
-			<forward name="failure" path=".catissuecore.simpleSearchDepartmentDef" />
-		</action>
-		
-		<action path="/QueryDepartmentSearch"
-		    type="edu.wustl.catissuecore.action.CommonSearchAction"
-			name="departmentForm"
-			validate="true"
-			input="/Department.do?operation=edit"
-			scope="session">
-			<forward name="success" path="/QueryDepartment.do?operation=edit"/>
-			<forward name="failure" path="/QueryDepartment.do?operation=edit"/>
 		</action>
 		<!--Simple Query Interface Actions End-->		
 		
