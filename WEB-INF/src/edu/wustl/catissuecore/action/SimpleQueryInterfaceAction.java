@@ -22,8 +22,6 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.SimpleQueryInterfaceForm;
-import edu.wustl.catissuecore.bizlogic.AbstractBizLogic;
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.dao.DAOFactory;
 import edu.wustl.catissuecore.dao.JDBCDAO;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -46,7 +44,6 @@ public class SimpleQueryInterfaceAction extends SecureAction
     {
     	SimpleQueryInterfaceForm simpleQueryInterfaceForm = (SimpleQueryInterfaceForm) form;
         int counter = Integer.parseInt(simpleQueryInterfaceForm.getCounter());
-        AbstractBizLogic dao = BizLogicFactory.getBizLogic(Constants.USER_FORM_ID);
         
         for (int i=1;i<=counter;i++)
         {
@@ -70,12 +67,12 @@ public class SimpleQueryInterfaceAction extends SecureAction
                 }
             }
             
-            String sql = 	" select TABLE_A.ALIAS_NAME, TABLE_A.DISPLAY_NAME " +
-				            " from catissue_table_relation TABLE_R, " +
-				            " CATISSUE_QUERY_INTERFACE_TABLE_DATA TABLE_A, " +
-				            " CATISSUE_QUERY_INTERFACE_TABLE_DATA TABLE_B " +
-				            " where TABLE_R.PARENT_TABLE_ID = TABLE_A.TABLE_ID and " +
-				            " TABLE_R.CHILD_TABLE_ID = TABLE_B.TABLE_ID ";
+            String sql = " select TABLE_A.ALIAS_NAME, TABLE_A.DISPLAY_NAME " +
+            			 " from catissue_table_relation TABLE_R, " +
+            			 " CATISSUE_QUERY_INTERFACE_TABLE_DATA TABLE_A, " +
+            			 " CATISSUE_QUERY_INTERFACE_TABLE_DATA TABLE_B " +
+            			 " where TABLE_R.PARENT_TABLE_ID = TABLE_A.TABLE_ID and " +
+            			 " TABLE_R.CHILD_TABLE_ID = TABLE_B.TABLE_ID ";
             
 			Logger.out.debug("Check sql....................."+sql);
 			
@@ -251,6 +248,7 @@ public class SimpleQueryInterfaceAction extends SecureAction
             //Adding the NameValueBean of previous selected object.
             JDBCDAO jdbcDAO = (JDBCDAO)DAOFactory.getDAO(Constants.JDBC_DAO);
             jdbcDAO.openSession(null);
+            
             sql = "select DISPLAY_NAME from CATISSUE_QUERY_INTERFACE_TABLE_DATA where ALIAS_NAME='"+prevValue+"'";
             List prevValueDisplayNameList = jdbcDAO.executeQuery(sql,null,Constants.INSECURE_RETRIEVE,null,null);
             jdbcDAO.closeSession();
@@ -368,27 +366,27 @@ public class SimpleQueryInterfaceAction extends SecureAction
 			
 			if ((aliasName != null) && (!"".equals(aliasName)))
 			{
-			objectDisplayNames = new String[tableList.size()];
-			objectAliasNames = new String[tableList.size()];
-			setColumnNames(request,1,aliasName);
+				objectDisplayNames = new String[tableList.size()];
+				objectAliasNames = new String[tableList.size()];
+				setColumnNames(request,1,aliasName);
 			}
 			else
 			{
-			objectDisplayNames = new String[tableList.size()+1];
-			objectAliasNames = new String[tableList.size()+1];
-			
-			objectAliasNames[i] = "-1";
-			objectDisplayNames[i] = Constants.SELECT_OPTION;
-			i++;
+				objectDisplayNames = new String[tableList.size()+1];
+				objectAliasNames = new String[tableList.size()+1];
+				
+				objectAliasNames[i] = "-1";
+				objectDisplayNames[i] = Constants.SELECT_OPTION;
+				i++;
 			}
 			
 			Iterator objIterator = tableList.iterator();
 			while (objIterator.hasNext())
 			{
-			List row = (List) objIterator.next();
-			objectDisplayNames[i] = (String)row.get(0);
-			objectAliasNames[i] = (String)row.get(1);
-			i++;
+				List row = (List) objIterator.next();
+				objectDisplayNames[i] = (String)row.get(0);
+				objectAliasNames[i] = (String)row.get(1);
+				i++;
 			}
 			
 			request.setAttribute(Constants.OBJECT_DISPLAY_NAME_LIST, objectDisplayNames);
