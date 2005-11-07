@@ -1693,11 +1693,52 @@ PUBLIC
 		<action path="/SimpleQueryInterface"
 			type="edu.wustl.catissuecore.action.SimpleQueryInterfaceAction"
 			name="simpleQueryInterfaceForm"
-			input="/SimpleQueryInterface.do"
 			validate="false"
 			scope="request">
 			<forward name="pageOfSimpleQueryInterface" path=".catissuecore.simpleQueryInterfaceDef" />
-			<forward name="pageOfEditObject" path=".catissuecore.editSearchPageDef"/>
+			<forward name="pageOfInstitution" path=".catissuecore.editSearchPageDef"/>
+			<forward name="pageOfDepartment" path=".catissuecore.editSearchPageDef"/>
+			<forward name="pageOfCancerResearchGroup" path=".catissuecore.editSearchPageDef"/>
+			<forward name="pageOfCollectionProtocol" path=".catissuecore.editSearchPageDef"/>
+			<forward name="pageOfDistributionProtocol" path=".catissuecore.editSearchPageDef"/>
+			<forward name="pageOfStorageType" path=".catissuecore.editSearchPageDef"/>
+			<forward name="pageOfStorageContainer" path=".catissuecore.editSearchPageDef"/>
+			<forward name="pageOfSite" path=".catissuecore.editSearchPageDef"/>
+			<forward name="pageOfBioHazard" path=".catissuecore.editSearchPageDef"/>
+			<forward name="pageOfUserAdmin" path=".catissuecore.editSearchPageDef"/>
+			<forward name="pageOfParticipant" path=".catissuecore.editBioSpecimenSearchPageDef"/>
+			<forward name="pageOfCollectionProtocolRegistration" path=".catissuecore.editBioSpecimenSearchPageDef"/>
+			<forward name="pageOfNewSpecimen" path=".catissuecore.editBioSpecimenSearchPageDef"/>
+			<forward name="pageOfSpecimenCollectionGroup" path=".catissuecore.editBioSpecimenSearchPageDef"/>
+			<forward name="pageOfDistribution" path=".catissuecore.editBioSpecimenSearchPageDef"/>
+			<forward name="failure" path=".catissuecore.simpleQueryInterfaceDef" />
+			<forward name="access_denied_admin" path="/ManageAdministrativeData.do" />
+			<forward name="access_denied_biospecimen" path="/ManageBioSpecimen.do" />
+			<forward name="access_denied" path="/ManageAdministrativeData.do" />
+		</action>
+		
+		<action path="/SimpleQueryInterfaceValidate"
+			type="edu.wustl.catissuecore.action.SimpleQueryInterfaceAction"
+			name="simpleQueryInterfaceForm"
+			validate="true"
+			input="/SimpleQueryInterface.do"
+			scope="request">
+			<forward name="pageOfSimpleQueryInterface" path=".catissuecore.simpleQueryInterfaceDef" />
+			<forward name="pageOfInstitution" path=".catissuecore.editSearchPageDef"/>
+			<forward name="pageOfDepartment" path=".catissuecore.editSearchPageDef"/>
+			<forward name="pageOfCancerResearchGroup" path=".catissuecore.editSearchPageDef"/>
+			<forward name="pageOfCollectionProtocol" path=".catissuecore.editSearchPageDef"/>
+			<forward name="pageOfDistributionProtocol" path=".catissuecore.editSearchPageDef"/>
+			<forward name="pageOfStorageType" path=".catissuecore.editSearchPageDef"/>
+			<forward name="pageOfStorageContainer" path=".catissuecore.editSearchPageDef"/>
+			<forward name="pageOfSite" path=".catissuecore.editSearchPageDef"/>
+			<forward name="pageOfBioHazard" path=".catissuecore.editSearchPageDef"/>
+			<forward name="pageOfUserAdmin" path=".catissuecore.editSearchPageDef"/>
+			<forward name="pageOfParticipant" path=".catissuecore.editBioSpecimenSearchPageDef"/>
+			<forward name="pageOfCollectionProtocolRegistration" path=".catissuecore.editBioSpecimenSearchPageDef"/>
+			<forward name="pageOfNewSpecimen" path=".catissuecore.editBioSpecimenSearchPageDef"/>
+			<forward name="pageOfSpecimenCollectionGroup" path=".catissuecore.editBioSpecimenSearchPageDef"/>
+			<forward name="pageOfDistribution" path=".catissuecore.editBioSpecimenSearchPageDef"/>
 			<forward name="failure" path=".catissuecore.simpleQueryInterfaceDef" />
 			<forward name="access_denied_admin" path="/ManageAdministrativeData.do" />
 			<forward name="access_denied_biospecimen" path="/ManageBioSpecimen.do" />

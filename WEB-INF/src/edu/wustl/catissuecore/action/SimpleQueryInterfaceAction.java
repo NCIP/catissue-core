@@ -42,7 +42,7 @@ public class SimpleQueryInterfaceAction extends SecureAction
     public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response) throws Exception
     {
-    	SimpleQueryInterfaceForm simpleQueryInterfaceForm = (SimpleQueryInterfaceForm) form;
+        SimpleQueryInterfaceForm simpleQueryInterfaceForm = (SimpleQueryInterfaceForm) form;
         int counter = Integer.parseInt(simpleQueryInterfaceForm.getCounter());
         
         for (int i=1;i<=counter;i++)
@@ -128,14 +128,8 @@ public class SimpleQueryInterfaceAction extends SecureAction
         
         String pageOf = request.getParameter(Constants.PAGEOF);
         request.setAttribute(Constants.PAGEOF, pageOf);
-        String target = Constants.PAGEOF_EDIT_OBJECT;
-        if (Constants.PAGEOF_SIMPLE_QUERY_INTERFACE.equals(pageOf))
-            target = Constants.PAGEOF_SIMPLE_QUERY_INTERFACE;
         
-        if(pageOf != null && pageOf.equals("pageOfSimpleQueryInterface" )  )
-        	request.setAttribute("menuSelected",new String("17") ); 
-        
-        return mapping.findForward(target);
+        return mapping.findForward(pageOf);
     }
     
     /**
