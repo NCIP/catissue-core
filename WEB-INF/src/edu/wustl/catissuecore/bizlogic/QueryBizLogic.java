@@ -280,7 +280,6 @@ public class QueryBizLogic extends DefaultBizLogic
             {
                 List row = (List) list.get(0);
                 aliasName = (String) row.get(0);
-                Logger.out.debug("QueryBizLogic getAliasNameFromTableId............................"+aliasName);
             }
             
             return aliasName;
