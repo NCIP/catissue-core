@@ -12,6 +12,9 @@
 <script src="runtime/formats/number.js"></script>
 
 <head>
+<style>
+.active-column-1 {width:200px}
+</style>
 <%
 	String[] columnList = Constants.EVENT_PARAMETERS_COLUMNS;
 	String title = null;
