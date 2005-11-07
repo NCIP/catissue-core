@@ -264,4 +264,20 @@ public class SimpleQueryInterfaceForm extends ActionForm
 	public void setValues(Map values) {
 		this.values = values;
 	}
+	
+	// -------------  variable to store the menu selected --------------------------
+	private String menuSelected="";
+	
+	/**
+	 * @return Returns the menuSelected.
+	 */
+	public String getMenuSelected() {
+		return menuSelected;
+	}
+	/**
+	 * @param menuSelected The menuSelected to set.
+	 */
+	public void setMenuSelected(String menuSelected) {
+		this.menuSelected = menuSelected;
+	}
 }

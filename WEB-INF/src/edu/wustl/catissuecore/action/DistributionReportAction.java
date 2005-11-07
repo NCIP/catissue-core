@@ -50,7 +50,7 @@ public class DistributionReportAction extends BaseDistributionReportAction
 		request.setAttribute(Constants.DISTRIBUTION_REPORT_FORM, distributionReportForm);
     	request.setAttribute(Constants.COLUMN_NAMES_LIST, columnNames);
     	request.setAttribute(Constants.DISTRIBUTED_ITEMS_DATA, listOfData);
-    	
+    	setSelectedMenuRequestAttribute(request);
 		return (mapping.findForward("Success"));
 	}
 }

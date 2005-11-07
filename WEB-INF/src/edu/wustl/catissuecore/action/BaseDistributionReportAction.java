@@ -258,5 +258,10 @@ public abstract class BaseDistributionReportAction extends BaseAction
     public abstract ActionForward executeAction(ActionMapping mapping,
 			ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception;
-  
+
+    protected void setSelectedMenuRequestAttribute(HttpServletRequest request)
+    {
+    	request.setAttribute("menuSelected",new String("16") );
+    }
+    
 }

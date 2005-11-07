@@ -119,7 +119,7 @@ public class ListSpecimenEventParametersAction  extends SecureAction
 		{
         	Logger.out.error(e.getMessage(),e);
 		}
-    	
+        request.setAttribute("menuSelected",new String("15") );
         return mapping.findForward((String)request.getParameter(Constants.PAGEOF));
     }
     

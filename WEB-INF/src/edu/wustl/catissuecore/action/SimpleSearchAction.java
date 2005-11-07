@@ -54,8 +54,13 @@ public class SimpleSearchAction extends BaseAction
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		SimpleQueryInterfaceForm simpleQueryInterfaceForm = (SimpleQueryInterfaceForm) form;
-		String counter = simpleQueryInterfaceForm.getCounter();
+		// -------- set the selected menu ------- start 
+			String strMenu = simpleQueryInterfaceForm.getMenuSelected();
+			request.setAttribute("menuSelected",strMenu  );
+			Logger.out.debug("menuSelected set in SimpleSearch Action : -- "+ strMenu  ); 
+		// -------- set the selected menu ------- end
 		
+		String counter = simpleQueryInterfaceForm.getCounter();		
 		HttpSession session = request.getSession();
 		if(counter==null)
 			counter = (String)session.getAttribute(Constants.SIMPLE_QUERY_COUNTER);

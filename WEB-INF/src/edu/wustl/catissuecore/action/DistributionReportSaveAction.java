@@ -47,6 +47,7 @@ public class DistributionReportSaveAction extends BaseDistributionReportAction
 		String selectedColumns[] = getSelectedColumns(action,configForm);
 		String []columnNames = getColumnNames(selectedColumns);
 		
+		setSelectedMenuRequestAttribute(request);
 		//Save the report as a CSV file at the client side
 		try
 		{

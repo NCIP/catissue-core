@@ -1630,7 +1630,7 @@ PUBLIC
 			validate="true"
 			input="/Distribution.do?operation=add&amp;pageOf=pageOfDistribution&amp;menuSelected=16"
 			scope="request">
-			<forward name="success" path="/DistributionReport.do&amp;menuSelected=16" />
+			<forward name="success" path="/DistributionReport.do" />
 			<forward name="failure" path="/Distribution.do?operation=add&amp;pageOf=pageOfDistribution&amp;menuSelected=16" />
 		</action>
 		
@@ -1640,7 +1640,7 @@ PUBLIC
 			validate="true"
 			input="/Distribution.do?operation=edit&amp;pageOf=pageOfDistribution&amp;menuSelected=16"
 			scope="request">
-			<forward name="success" path="/DistributionReport.do&amp;menuSelected=16" />
+			<forward name="success" path="/DistributionReport.do" />
 			<forward name="failure" path="/Distribution.do?operation=edit&amp;pageOf=pageOfDistribution&amp;menuSelected=16" />
 		</action>
 		
