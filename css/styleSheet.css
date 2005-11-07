@@ -45,7 +45,7 @@ HDR AND FTR BEGINS
   background-color:#A90101; /* constant: red */
 }
 .subhdrBG{ /* for the cell that contains the application header */
-  background-color:#6E81A6; /* darker */
+  background-color:#475B82; /* darker */
 }
 .ftrTable{ /* for the table that contains the footer */
   padding-top:0.4em;
@@ -93,12 +93,12 @@ td.footerMenuItem{ /* for the off state of the footer menu (bottom) cells */
 td.footerMenuItemOver{ /* for the over state of the footer menu (bottom) cells */
   font-size:0.6em;
   font-weight:bold;
-  background-color:#6E81A6; /* darker */
+  background-color:#475B82; /* darker */
   padding-left:1em;
   padding-right:1em;
 }
 td.subMenu{ /* for the basic style of the sub-menu area */
-  background-color:#475B82; /* lighter */
+  background-color:#6E81A6; /* lighter */
   font-family:arial,helvetica,verdana,sans-serif;
 }
 td.subMenuPrimaryTitle{ /* for the title elements of the sub menu (left-side) */
@@ -113,7 +113,7 @@ td.subMenuPrimaryTitle{ /* for the title elements of the sub menu (left-side) */
 }
 td.subMenuPrimaryItems{ /* for the items under the sub-menu title elements */
   font-size:0.6em;
-  background-color:#475B82; /* constant: white */
+  background-color:#6E81A6; /* constant: white */
   color:#FFFFFF;
   font-weight:bold;
   padding-top:0.8em;
@@ -708,7 +708,7 @@ p,.p{ /* for paragraphs */
   color:#000000; /* constant: black */
 }
 .bannerHome{ /* for the banner area of the home page */
-  background-color:#6E81A6; /* darker */
+  background-color:#475B82; /* darker */
   border-right:1px solid #CCCCCC; /* constant: light gray */
 }
 .txtHighlight{ /* adds emphasis to text */
@@ -905,7 +905,7 @@ td.formFieldNoBorders{ /* for the cell that contains the form elements */
 
 td.subMenuPrimaryItemsHover{ /* SubMenu Hover effect */
   font-size:0.6em;
-  background-color:#804040; 
+  background-color:#475B82; 
   color:#FFFFFF;
   font-weight:normal;
   padding-top:0.3em;
@@ -918,7 +918,7 @@ td.subMenuPrimaryItemsHover{ /* SubMenu Hover effect */
 td.mainMenuItemSelected{ /* for the selected main menu (top) cells */
   font-size:0.6em;
   font-weight:bold;
-  background-color:#804040; /* darker */
+  background-color:#475B82; /* darker */
   padding-left:1em;
   padding-right:1em;
 }
