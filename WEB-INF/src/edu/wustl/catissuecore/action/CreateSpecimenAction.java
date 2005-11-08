@@ -77,19 +77,23 @@ public class CreateSpecimenAction extends SecureAction
         try
 		{
             String [] fields = {"systemIdentifier"};
+            
+            //Setting the parent specimen list
             List parentSpecimenList = dao.getList(Specimen.class.getName(), fields, fields[0], true); 	 	
     	 	request.setAttribute(Constants.PARENT_SPECIMEN_ID_LIST,parentSpecimenList);
     	 	
+    	 	//Setting the specimen class list
     	 	List specimenClassList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_SPECIMEN_CLASS,null);
         	request.setAttribute(Constants.SPECIMEN_CLASS_LIST, specimenClassList);
         	
+        	//Setting the specimen type list
         	List specimenTypeList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_SPECIMEN_TYPE,null);
         	request.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
             
+        	//Setting biohazard list
         	List biohazardList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_BIOHAZARD,null);
         	request.setAttribute(Constants.BIOHAZARD_TYPE_LIST, biohazardList);
         	
-        	 //----------------------------------------
         	try
     		{
             	Logger.out.debug("1");
@@ -103,6 +107,7 @@ public class CreateSpecimenAction extends SecureAction
     	    	Map subTypeMap = new HashMap();
     	    	Logger.out.debug("\n\n\n\n**********MAP DATA************\n");
     	    	specimenClassList.add(new NameValueBean(Constants.SELECT_OPTION,"-1"));
+    	    	
     	    	while(itr.hasNext())
     	    	{
     	    		List innerList =  new ArrayList();
@@ -142,14 +147,11 @@ public class CreateSpecimenAction extends SecureAction
             	return mapping.findForward(Constants.FAILURE);
     		}
 
-        	//----------------------------------------
-//            String specimenId = request.getParameter("specimenId");
-//            Logger.out.debug("SpecimenId : "+ specimenId);
-            String pSpecimenId = (String)request.getAttribute(Constants.PARENT_SPECIMEN_ID  );
+            String pSpecimenId = (String)request.getAttribute(Constants.PARENT_SPECIMEN_ID);
             request.setAttribute("parentSpecimenId",pSpecimenId);
             if(pSpecimenId != null)
             {
-            	createForm.setParentSpecimenId(pSpecimenId  );
+            	createForm.setParentSpecimenId(pSpecimenId);
             	createForm.setPositionInStorageContainer("" );
             	createForm.setQuantity("");
             	createForm.setPositionDimensionOne("" );

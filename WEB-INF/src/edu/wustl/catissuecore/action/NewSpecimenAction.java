@@ -117,7 +117,7 @@ public class NewSpecimenAction  extends SecureAction
         
         try
 		{	
-        	if(specimenForm.isParentPresent())
+        	if(specimenForm.isParentPresent())//If parent specimen is present then
         	{
         		String [] fields = {Constants.SYSTEM_IDENTIFIER};
                 List parentSpecimenList = bizLogic.getList(Specimen.class.getName(), fields, Constants.SYSTEM_IDENTIFIER, true); 	 	
@@ -131,6 +131,8 @@ public class NewSpecimenAction  extends SecureAction
         	String selectColNames[] = {Constants.SYSTEM_IDENTIFIER,"name","type"}; 
         	List biohazardList = bizLogic.retrieve(Biohazard.class.getName(), selectColNames);
         	Iterator iterator = biohazardList.iterator();
+        	
+        	//Creating & setting the biohazard name, id & type list
         	if(biohazardList!=null && !biohazardList.isEmpty())
         	{
 	        	bhIdArray =  new String[biohazardList.size() + 1];
@@ -166,8 +168,8 @@ public class NewSpecimenAction  extends SecureAction
 			request.setAttribute(Constants.SPECIMEN_COLLECTION_GROUP_LIST, specimenList);
 			
 			// -- set ForwardTo list
-			List forwardToList = getForwardToList(Constants.SPECIMEN_FORWARD_TO_LIST );
-			request.setAttribute(Constants.FORWARDLIST,forwardToList   ); 
+			List forwardToList = getForwardToList(Constants.SPECIMEN_FORWARD_TO_LIST);
+			request.setAttribute(Constants.FORWARDLIST,forwardToList); 
 		}
         catch(Exception e)
 		{
@@ -175,27 +177,32 @@ public class NewSpecimenAction  extends SecureAction
         	return mapping.findForward(Constants.FAILURE);
 		}
         
+        //Setting the specimen class list
         List specimenClassList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_SPECIMEN_CLASS,null);
     	request.setAttribute(Constants.SPECIMEN_CLASS_LIST, specimenClassList);
     	
+    	//Setting the specimen type list
     	List specimenTypeList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_SPECIMEN_TYPE,null);
     	request.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
         
+    	//Setting tissue site list
     	NameValueBean undefinedVal = new NameValueBean(Constants.UNDEFINED,Constants.UNDEFINED);
     	List tissueSiteList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_TISSUE_SITE,undefinedVal);
     	request.setAttribute(Constants.TISSUE_SITE_LIST, tissueSiteList);
 
-    	
+    	//Setting tissue side list
     	NameValueBean unknownVal = new NameValueBean(Constants.UNKNOWN,Constants.UNKNOWN);
     	List tissueSideList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_TISSUE_SIDE,unknownVal);
     	request.setAttribute(Constants.TISSUE_SIDE_LIST, tissueSideList);
         
+    	//Setting pathological status list
     	List pathologicalStatusList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_PATHOLOGICAL_STATUS,null);
     	request.setAttribute(Constants.PATHOLOGICAL_STATUS_LIST, pathologicalStatusList);
         
+    	//Setting biohazard list
     	List biohazardList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_BIOHAZARD,null);
     	request.setAttribute(Constants.BIOHAZARD_TYPE_LIST, biohazardList);
-        //----------------------------------------
+    	
     	try
 		{
         	Logger.out.debug("1");
@@ -209,6 +216,7 @@ public class NewSpecimenAction  extends SecureAction
 	    	Map subTypeMap = new HashMap();
 	    	Logger.out.debug("\n\n\n\n**********MAP DATA************\n");
 	    	specimenClassList.add(new NameValueBean(Constants.SELECT_OPTION,"-1"));
+	    	
 	    	while(itr.hasNext())
 	    	{
 	    		List innerList =  new ArrayList();
@@ -248,13 +256,11 @@ public class NewSpecimenAction  extends SecureAction
         	return mapping.findForward(Constants.FAILURE);
 		}
 
-        
-    	//----------------------------------------
     	return mapping.findForward(pageOf);
     }
     
 
-    // ----------- creates a list of NameValue Bean for the ForwardTo element  
+    //This function creates a list of NameValue Bean for the ForwardTo element  
     private List getForwardToList(String [][] nameValueList)
     {
     	List returnList = new ArrayList() ;
