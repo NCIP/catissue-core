@@ -9,6 +9,7 @@
 
 package edu.wustl.catissuecore.bizlogic;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -21,6 +22,7 @@ import edu.wustl.catissuecore.query.Operator;
 import edu.wustl.catissuecore.query.Relation;
 import edu.wustl.catissuecore.query.RelationCondition;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
@@ -284,4 +286,245 @@ public class QueryBizLogic extends DefaultBizLogic
             
             return aliasName;
     }
+    
+    /**
+     * Sets column names depending on the table name selected for that condition.
+     * @param request HttpServletRequest
+     * @param i number of row.
+     * @param value table name.
+     * @throws DAOException
+     * @throws ClassNotFoundException
+     */
+    public List getColumnNames(String value) throws DAOException, ClassNotFoundException
+    {
+        String sql = 	" SELECT tableData2.ALIAS_NAME, temp.COLUMN_NAME, temp.ATTRIBUTE_TYPE, temp.TABLES_IN_PATH, temp.DISPLAY_NAME " +
+				        " from CATISSUE_QUERY_INTERFACE_TABLE_DATA tableData2 join " +
+				        " ( SELECT  columnData.COLUMN_NAME, columnData.TABLE_ID, columnData.ATTRIBUTE_TYPE, " +
+				        " displayData.DISPLAY_NAME, relationData.TABLES_IN_PATH " +
+				        " FROM CATISSUE_QUERY_INTERFACE_COLUMN_DATA columnData, " +
+				        " CATISSUE_TABLE_RELATION relationData, " +
+				        " CATISSUE_QUERY_INTERFACE_TABLE_DATA tableData, " +
+				        " CATISSUE_SEARCH_DISPLAY_DATA displayData " +
+				        " where relationData.CHILD_TABLE_ID = columnData.TABLE_ID and " +
+				        " relationData.PARENT_TABLE_ID = tableData.TABLE_ID and " +
+				        " relationData.RELATIONSHIP_ID = displayData.RELATIONSHIP_ID and " +
+				        " columnData.IDENTIFIER = displayData.COL_ID and " +
+				        " tableData.ALIAS_NAME = '"+value+"') as temp " +
+				        " on temp.TABLE_ID = tableData2.TABLE_ID ";
+        
+        Logger.out.debug("SQL*****************************"+sql);
+        
+        JDBCDAO jdbcDao = new JDBCDAO();
+        jdbcDao.openSession(null);
+        List list = jdbcDao.executeQuery(sql, null, Constants.INSECURE_RETRIEVE, null,null);
+        jdbcDao.closeSession();
+        
+        List columnNameValueBeanList = new ArrayList();
+        
+        Iterator iterator = list.iterator();
+        int j = 0;
+        while (iterator.hasNext())
+        {
+            List rowList = (List)iterator.next();
+            String columnValue = (String)rowList.get(j++)+"."+(String)rowList.get(j++)
+            					+"."+(String)rowList.get(j++);
+            String tablesInPath = (String)rowList.get(j++);
+            if ((tablesInPath != null) && ("".equals(tablesInPath) == false))
+            {
+                columnValue = columnValue+"."+tablesInPath;
+            }
+            
+            String columnName = (String)rowList.get(j++);
+            NameValueBean nameValueBean = new NameValueBean();
+            nameValueBean.setName(columnName);
+            nameValueBean.setValue(columnValue);
+            columnNameValueBeanList.add(nameValueBean);
+            j = 0;
+        }
+        
+        return columnNameValueBeanList;
+    }
+    
+    /**
+     * Sets the next table names depending on the table in the previous row. 
+     * @param request
+     * @param i
+     * @param prevValue previous table name.
+     * @param nextOperatorValue
+     * @param checkList
+     * @throws DAOException
+     * @throws ClassNotFoundException
+     */
+    public List getNextTableNames(String prevValue) throws DAOException, ClassNotFoundException
+    {
+        List objectList = new ArrayList();
+        
+        String sql =" (select temp.ALIAS_NAME, temp.DISPLAY_NAME " +
+        			" from " +
+			        " (select relationData.FIRST_TABLE_ID, tableData.ALIAS_NAME, tableData.DISPLAY_NAME " +
+			        " from CATISSUE_QUERY_INTERFACE_TABLE_DATA tableData join " +
+			        " CATISSUE_RELATED_TABLES_MAP relationData " +
+			        " on tableData.TABLE_ID = relationData.SECOND_TABLE_ID) as temp join CATISSUE_QUERY_INTERFACE_TABLE_DATA tableData2 " +
+			        " on temp.FIRST_TABLE_ID = tableData2.TABLE_ID " +
+			        " where tableData2.ALIAS_NAME = '"+prevValue+"') " +
+			        " union " +
+			        " (select temp1.ALIAS_NAME, temp1.DISPLAY_NAME " +
+			        " from " +
+			        " (select relationData1.SECOND_TABLE_ID, tableData4.ALIAS_NAME, tableData4.DISPLAY_NAME " +
+			        " from CATISSUE_QUERY_INTERFACE_TABLE_DATA tableData4 join " +
+			        " CATISSUE_RELATED_TABLES_MAP relationData1 " +
+			        " on tableData4.TABLE_ID = relationData1.FIRST_TABLE_ID) as temp1 join CATISSUE_QUERY_INTERFACE_TABLE_DATA tableData3 " +
+			        " on temp1.SECOND_TABLE_ID = tableData3.TABLE_ID " +
+			        " where tableData3.ALIAS_NAME = '"+prevValue+"')";		
+            
+            Logger.out.debug("TABLE SQL*****************************"+sql);
+            
+            JDBCDAO jdbcDao = (JDBCDAO)DAOFactory.getDAO(Constants.JDBC_DAO);
+            jdbcDao.openSession(null);
+            List list = jdbcDao.executeQuery(sql,null,Constants.INSECURE_RETRIEVE,null,null);
+            jdbcDao.closeSession();
+            
+            //Adding NameValueBean of select option.
+            NameValueBean nameValueBean = new NameValueBean();
+            nameValueBean.setName(Constants.SELECT_OPTION);
+            nameValueBean.setValue("-1");
+            objectList.add(nameValueBean);
+            
+            //Adding the NameValueBean of previous selected object.
+            JDBCDAO jdbcDAO = (JDBCDAO)DAOFactory.getDAO(Constants.JDBC_DAO);
+            jdbcDAO.openSession(null);
+            
+            sql = "select DISPLAY_NAME from CATISSUE_QUERY_INTERFACE_TABLE_DATA where ALIAS_NAME='"+prevValue+"'";
+            List prevValueDisplayNameList = jdbcDAO.executeQuery(sql,null,Constants.INSECURE_RETRIEVE,null,null);
+            jdbcDAO.closeSession();
+            
+            if (!prevValueDisplayNameList.isEmpty())
+            {
+                List rowList = (List)prevValueDisplayNameList.get(0);
+                nameValueBean = new NameValueBean();
+                nameValueBean.setName((String)rowList.get(0));
+                nameValueBean.setValue(prevValue);
+                objectList.add(nameValueBean);
+            }
+            
+            List checkList = getCheckList();
+            Iterator iterator = list.iterator();
+            while (iterator.hasNext())
+            {
+                int j=0;
+                List rowList = (List)iterator.next();
+                if (checkForTable(rowList, checkList))
+                {
+                    nameValueBean = new NameValueBean();
+                    nameValueBean.setValue((String)rowList.get(j++));
+                    nameValueBean.setName((String)rowList.get(j));
+                    objectList.add(nameValueBean);
+                }
+            }
+            
+            return objectList;
+    }
+    
+    private List getCheckList() throws DAOException, ClassNotFoundException
+    {
+        String sql = " select TABLE_A.ALIAS_NAME, TABLE_A.DISPLAY_NAME " +
+		 " from catissue_table_relation TABLE_R, " +
+		 " CATISSUE_QUERY_INTERFACE_TABLE_DATA TABLE_A, " +
+		 " CATISSUE_QUERY_INTERFACE_TABLE_DATA TABLE_B " +
+		 " where TABLE_R.PARENT_TABLE_ID = TABLE_A.TABLE_ID and " +
+		 " TABLE_R.CHILD_TABLE_ID = TABLE_B.TABLE_ID ";
+
+		JDBCDAO jdbcDao = (JDBCDAO)DAOFactory.getDAO(Constants.JDBC_DAO);
+		jdbcDao.openSession(null);
+		List checkList = jdbcDao.executeQuery(sql,null,Constants.INSECURE_RETRIEVE,null,null);
+		jdbcDao.closeSession();
+		
+		return checkList;
+    }
+    
+    private boolean checkForTable(List rowList, List checkList)
+    {
+        String aliasName = (String)rowList.get(0), displayName = (String)rowList.get(1);
+        Iterator iterator = checkList.iterator();
+        while (iterator.hasNext())
+        {
+            List row = (List) iterator.next();
+            if (aliasName.equals((String) row.get(0)) && displayName.equals((String) row.get(1)))
+            {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
+    /**
+     * Returns the display name of the aliasName passed.
+     * @param value
+     * @return
+     * @throws DAOException
+     * @throws ClassNotFoundException
+     */
+    public String getDisplayName(String aliasName) throws DAOException, ClassNotFoundException
+    {
+        String prevValueDisplayName = null;
+        
+        JDBCDAO jdbcDAO = (JDBCDAO)DAOFactory.getDAO(Constants.JDBC_DAO);
+        jdbcDAO.openSession(null);
+        String sql = "select DISPLAY_NAME from CATISSUE_QUERY_INTERFACE_TABLE_DATA where ALIAS_NAME='"+aliasName+"'";
+        List list = jdbcDAO.executeQuery(sql,null,Constants.INSECURE_RETRIEVE,null,null);
+        jdbcDAO.closeSession();
+        
+        if (!list.isEmpty())
+        {
+            List rowList = (List)list.get(0);
+            prevValueDisplayName = (String)rowList.get(0);
+        }
+        return prevValueDisplayName;
+    }
+    
+    /**
+ 	* Returns all the tables in the simple query interface.
+ 	* @param request
+ 	* @throws DAOException
+ 	* @throws ClassNotFoundException
+ 	*/
+	public List getAllTableNames(String aliasName)throws DAOException, ClassNotFoundException
+	{
+    	String sql = " select distinct tableData.DISPLAY_NAME, tableData.ALIAS_NAME " +
+    				 " from CATISSUE_TABLE_RELATION tableRelation join CATISSUE_QUERY_INTERFACE_TABLE_DATA " +
+    				 " tableData on tableRelation.PARENT_TABLE_ID = tableData.TABLE_ID ";
+
+		if ((aliasName != null) && (!"".equals(aliasName)))
+		{
+			sql = sql + " where tableData.ALIAS_NAME = '"+ aliasName +"'";
+		}
+		sql = sql + " ORDER BY tableData.DISPLAY_NAME ";
+		
+		JDBCDAO jdbcDAO = (JDBCDAO)DAOFactory.getDAO(Constants.JDBC_DAO);
+		jdbcDAO.openSession(null);
+		List tableList = jdbcDAO.executeQuery(sql,null,Constants.INSECURE_RETRIEVE,null,null);
+		jdbcDAO.closeSession();
+		
+		List objectNameValueBeanList = new ArrayList();
+		if (aliasName == null || "".equals(aliasName))
+		{
+		    NameValueBean nameValueBean = new NameValueBean();
+		    nameValueBean.setValue("-1");
+		    nameValueBean.setName(Constants.SELECT_OPTION);
+		    objectNameValueBeanList.add(nameValueBean);
+		}
+		
+		Iterator objIterator = tableList.iterator();
+		while (objIterator.hasNext())
+		{
+			List row = (List) objIterator.next();
+			NameValueBean nameValueBean = new NameValueBean();
+		    nameValueBean.setName((String)row.get(0));
+		    nameValueBean.setValue((String)row.get(1));
+		    objectNameValueBeanList.add(nameValueBean);
+		}
+		
+		return objectNameValueBeanList;
+	}
 }
