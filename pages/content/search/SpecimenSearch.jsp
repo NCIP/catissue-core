@@ -2,8 +2,12 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 
+<%@ page import="java.util.*"%>
+<%@ page import="edu.wustl.common.beans.NameValueBean"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.catissuecore.query.Operator"%>
+
+<%@ include file="/pages/content/common/SpecimenCommonScripts.jsp" %>
 
 <%
 	String className = "value(Specimen:CLASS_NAME)";
@@ -28,11 +32,87 @@
 	String opBarcode = "value(Operator:Specimen:BARCODE)";
 	String opBiohazardType = "value(Operator:Biohazard:TYPE)";
 	String opBiohazardName = "value(Operator:Biohazard:NAME)";
+
+	String unitSpecimen = "";
 %>
 
 <head>
 	<script src="jss/script.js" type="text/javascript"></script>
 	<script src="jss/AdvancedSearchScripts.js" type="text/javascript"></script>
+	
+	<script language="JavaScript">
+		function onClassChange(element)
+		{
+			var unit = document.getElementById("unitSpan");
+			var unitSpecimen = "";
+
+			var concCombo = document.getElementById("opConcentration");
+			var concentration1 = document.getElementById("concentration1");
+			var concentration2 = document.getElementById("concentration2");
+			var opClassCombo = document.getElementById("opClassName");
+
+			concCombo.options[0].selected = true;
+			concCombo.disabled = true;
+			concentration1.value = "";
+			concentration2.value = "";
+			concentration1.disabled = true;
+			concentration2.disabled = true;
+			
+			var subtype = document.getElementById("type");
+			
+			if(element.value == "Tissue")
+			{
+				unitSpecimen = "<%=Constants.UNIT_GM%>";
+				document.forms[0].unit.value = "<%=Constants.UNIT_GM%>";
+				typeChange(TissueArray);
+			}
+			else if(element.value == "Fluid")
+			{
+				unitSpecimen = "<%=Constants.UNIT_ML%>";
+				document.forms[0].unit.value = "<%=Constants.UNIT_ML%>";
+				typeChange(FluidArray);
+			}
+			else if(element.value == "Cell")
+			{
+				unitSpecimen = "<%=Constants.UNIT_CC%>";
+				document.forms[0].unit.value = "<%=Constants.UNIT_CC%>";
+				subtype.options.length = 0;
+				subtype.options[0] = new Option('<%=Constants.SELECT_OPTION%>','<%=Constants.SELECT_OPTION%>');
+			}
+			else if(element.value == "Molecular")
+			{
+				unitSpecimen = "<%=Constants.UNIT_MG%>";
+				document.forms[0].unit.value = "<%=Constants.UNIT_MG%>";
+				typeChange(MolecularArray);
+				if(opClassCombo.options[opClassCombo.selectedIndex].text == "Equals")
+					concCombo.disabled = false;
+			}
+			
+			unit.innerHTML = unitSpecimen;
+		}
+		
+		function afterChange(element)
+		{
+			var concCombo = document.getElementById("opConcentration");
+			var concentration1 = document.getElementById("concentration1");
+			var concentration2 = document.getElementById("concentration2");
+			var classCombo = document.getElementById("className");
+			
+			if(element.options[element.selectedIndex].text == "Equals" && classCombo.options[classCombo.selectedIndex].text == "Molecular")
+			{
+				concCombo.disabled = false;
+			}
+			else
+			{
+				concCombo.options[0].selected = true;
+				concCombo.disabled = true;
+				concentration1.value = "";
+				concentration2.value = "";
+				concentration1.disabled = true;
+				concentration2.disabled = true;
+			}
+		}
+	</script>
 </head>
 
 <html:errors />
@@ -71,12 +151,12 @@
  		</label>
 	</td>
 	<td class="formField">
-		<html:select property="<%=opClassName%>" styleClass="formFieldSized10" styleId="opClassName" size="1" onchange="onOperatorChange('opClassName','className')">
+		<html:select property="<%=opClassName%>" styleClass="formFieldSized10" styleId="opClassName" size="1" onchange="onOperatorChange('opClassName','className'); afterChange(this)">
 			<html:options collection="<%=Constants.ENUMERATED_OPERATORS%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
 	<td class="formField">
-		<html:select property="<%=className%>" styleClass="formFieldSized10" styleId="className" size="1" disabled="true">
+		<html:select property="<%=className%>" styleClass="formFieldSized10" styleId="className" size="1" disabled="true" onchange="onClassChange(this)">
 			<html:options collection="<%=Constants.SPECIMEN_CLASS_LIST%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
@@ -166,7 +246,7 @@
  		</label>
 	</td>
 	<td class="formField">
-		<html:select property="<%=opConcentration%>" styleClass="formFieldSized10" styleId="opConcentration" size="1" onchange="onDateOperatorChange(this,'concentration1','concentration2')">
+		<html:select property="<%=opConcentration%>" styleClass="formFieldSized10" styleId="opConcentration" size="1" onchange="onDateOperatorChange(this,'concentration1','concentration2')" disabled="true">
 				<html:options collection="<%=Constants.DATE_NUMERIC_OPERATORS%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
@@ -174,13 +254,14 @@
 		<html:text styleClass="formFieldSized10" styleId="concentration1" property="<%=concentration1%>" disabled="true"/>
 						&nbsp;To&nbsp;
 		<html:text styleClass="formFieldSized10" styleId="concentration2" property="<%=concentration2%>" disabled="true"/>
+		<bean:message key="specimen.concentrationUnit"/>
 	</td>
 </tr>
 
 <!-- SEVENTH ROW -->
 <tr>
 	<td class="formSerialNumberField" nowrap>
- 		<label for="quatity">
+ 		<label for="quantity">
  			<b><bean:message key="specimen.quantity"/>
  		</label>
 	</td>
@@ -193,6 +274,9 @@
 		<html:text styleClass="formFieldSized10" styleId="quantity1" property="<%=quantity1%>" disabled="true"/>
 						&nbsp;To&nbsp;
 		<html:text styleClass="formFieldSized10" styleId="quantity2" property="<%=quantity2%>" disabled="true"/>
+		<span id="unitSpan"><%=unitSpecimen%></span>
+     	<%--html:hidden property="value(Specimen:unit)"/--%>
+     	<input type="hidden" name="unit">
 	</td>
 </tr>
 
