@@ -46,10 +46,10 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 
 			List toContainerList = dao.getList(sourceObjectName, displayNameFields, valueField, true);
 			request.setAttribute(Constants.TOCONTAINERLIST, toContainerList);
-			
+			  
 			// ---------------------------------------------
-			String operation = request.getParameter("operation");
-			if(operation.equals("add") )
+			String operation = request.getParameter(Constants.OPERATION);
+			if(operation.equals(Constants.ADD) )
 			{
 				String specimenId = request.getParameter(Constants.SPECIMEN_ID); 
 		      	DefaultBizLogic bizLogic = BizLogicFactory.getDefaultBizLogic();
@@ -61,39 +61,39 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 		    	Logger.out.debug("\t\t*******************************SpecimenID : "+identifier );
 		    	List specimenList = bizLogic.retrieve(Specimen.class.getName(),Constants.SYSTEM_IDENTIFIER,identifier);
 		    	
-		    	String posOne = null;
-		    	String posTwo = null;
-		    	String storContId = null;
+		    	String positionOne = null;
+		    	String positionTwo = null;
+		    	String storageContainerID = null;
 		    	String fromPositionData = null;
 		    	if(specimenList!=null && specimenList.size() != 0)
 		    	{
 		    		Specimen specimen = (Specimen)specimenList.get(0);
-		    		posOne = specimen.getPositionDimensionOne().toString();
-		    		posTwo = specimen.getPositionDimensionTwo().toString();
+		    		positionOne = specimen.getPositionDimensionOne().toString();
+		    		positionTwo = specimen.getPositionDimensionTwo().toString();
 		    		
 		    		StorageContainer container = specimen.getStorageContainer();
-		    		storContId = container.getSystemIdentifier().toString();
+		    		storageContainerID = container.getSystemIdentifier().toString();
 		    		fromPositionData = container.getStorageType().getType() + " : " 
-					+ storContId + " Pos(" + posOne + "," + posTwo + ")";
+					+ storageContainerID + " Pos(" + positionOne + "," + positionTwo + ")";
 		    		
 		            Logger.out.debug("\t\t************************************");
 		            Logger.out.debug("\t\t*******************************SPID : "+specimenId );
 		            Logger.out.debug("\t\t*******************************fromPosData : "+fromPositionData );
-		            Logger.out.debug("\t\t*******************************Pos 1 : " + posOne );
-		            Logger.out.debug("\t\t*******************************Pos 2 : " + posTwo );
+		            Logger.out.debug("\t\t*******************************Pos 1 : " + positionOne );
+		            Logger.out.debug("\t\t*******************************Pos 2 : " + positionTwo );
 					 //The fromPositionData(storageContainer Info) of specimen of this event.
 			        request.setAttribute(Constants.FROM_POSITION_DATA, fromPositionData);
 			        
 			        //POSITION 1
-			        request.setAttribute(Constants.POS_ONE, posOne);
+			        request.setAttribute(Constants.POS_ONE, positionOne);
 			        
 			        //POSITION 2
-			        request.setAttribute(Constants.POS_TWO, posTwo);
+			        request.setAttribute(Constants.POS_TWO, positionTwo);
 	
 			        //storagecontainer info
-			        request.setAttribute(Constants.STORAGE_CONTAINER_ID, storContId);
+			        request.setAttribute(Constants.STORAGE_CONTAINER_ID, storageContainerID);
 		    	}
-			} // operation=edit
+			} // operation=add
 			// ---------------------------------------------
 
 	        

@@ -1,6 +1,6 @@
 /**
- * <p>Title: FrozenEventParametersAction Class>
- * <p>Description:	This class initializes the fields in the FrozenEventParameters Add/Edit webpage.</p>
+ * <p>Title: SpecimenEventParametersAction Class>
+ * <p>Description:	This class initializes the fields in the SpecimenEventParametersAction Add/Edit webpage.</p>
  * Copyright:    Copyright (c) year
  * Company: Washington University, School of Medicine, St. Louis.
  * @author Mandar Deshmukh
@@ -31,7 +31,8 @@ import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.util.logger.Logger;
 
 /**
- * This class initializes the fields in the FrozenEventParameters Add/Edit webpage.
+ * This class initializes the fields in the SpecimenEventParameters Add/Edit webpage.
+ * It is a parent class for some Event Parameter Classes.
  * @author mandar deshmukh
  */
 public class SpecimenEventParametersAction  extends SecureAction
@@ -76,8 +77,7 @@ public class SpecimenEventParametersAction  extends SecureAction
         }
 	}
     /**
-     * Overrides the execute method of Action class.
-     * Sets the various fields in FrozenEventParameters Add/Edit webpage.
+     * Overrides the executeSecureAction method of SecureAction class.
      * */
     public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
@@ -87,6 +87,7 @@ public class SpecimenEventParametersAction  extends SecureAction
     	
     	EventParametersForm eventParametersForm = (EventParametersForm)form;
     	
+    	//	 if operation is add
     	if(eventParametersForm.isAddOperation())
     	{
 	    	SessionDataBean sessionData = getSessionData(request);
@@ -95,7 +96,8 @@ public class SpecimenEventParametersAction  extends SecureAction
 	    		long userId = sessionData.getUserId().longValue();
 	    		eventParametersForm.setUserId(userId);
 	    	}
-	    	
+
+	    	// set the current Date and Time for the event.
 			Calendar cal = Calendar.getInstance();
 			eventParametersForm.setDateOfEvent(Utility.parseDateToString(cal.getTime(), Constants.DATE_PATTERN_MM_DD_YYYY));
 			eventParametersForm.setTimeInHours(Integer.toString(cal.get(Calendar.HOUR_OF_DAY)));

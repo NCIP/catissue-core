@@ -28,7 +28,5 @@ public class TissueSpecimenReviewEventParametersAction extends SpecimenEventPara
 		
 //		set array of histological quality
 		request.setAttribute(Constants.HISTOLOGICALQUALITYLIST , Constants.HISTOLOGICALQUALITYARRAY );
-//		List embeddingMediumList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_EMBEDDING_MEDIUM);
-//    	request.setAttribute(Constants.EMBEDDINGMEDIUMLIST, embeddingMediumList);
 	}
 }

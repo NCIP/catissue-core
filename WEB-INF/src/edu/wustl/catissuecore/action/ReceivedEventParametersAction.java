@@ -1,6 +1,6 @@
 /**
- * <p>Title: CollectionEventParametersAction Class>
- * <p>Description:	This class initializes the fields in the CollectionEventParameters Add/Edit webpage.</p>
+ * <p>Title: ReceivedEventParametersAction Class>
+ * <p>Description:	This class initializes the fields in the ReceivedEventParameters Add/Edit webpage.</p>
  * Copyright:    Copyright (c) year
  * Company: Washington University, School of Medicine, St. Louis.
  * @author Mandar Deshmukh
@@ -20,7 +20,7 @@ import edu.wustl.common.cde.CDEManager;
 /**
  * @author mandar_deshmukh
  *
- * This class initializes the fields in the CollectionEventParameters Add/Edit webpage.
+ * This class initializes the fields in the ReceivedEventParameters Add/Edit webpage.
  */
 public class ReceivedEventParametersAction extends SpecimenEventParametersAction
 {
@@ -28,6 +28,7 @@ public class ReceivedEventParametersAction extends SpecimenEventParametersAction
 	{
 		super.setRequestParameters(request);
 		
+		// set the ReceivedQuality List.
 		List qualityList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_RECEIVED_QUALITY,null);
     	request.setAttribute(Constants.RECEIVED_QUALITY_LIST, qualityList);
 	}
