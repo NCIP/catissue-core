@@ -174,7 +174,7 @@
 		</html:select>
 	</td>
 	<td class="formField" nowrap>
-		<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
+		<div id="overDiv1" style="position:absolute; visibility:hidden; z-index:1000;"></div>
 		<html:text styleClass="formDateSized10" size="10" styleId="endDate1" property="<%=endDate%>" disabled="true"/>
 					 &nbsp;
 		<a href="javascript:onDate('endDate','advanceSearchForm.endDate1',false);">
@@ -219,7 +219,7 @@
 		</html:select>
 	</td>
 	<td class="formField" nowrap>
-		<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
+		<div id="overDiv2" style="position:absolute; visibility:hidden; z-index:1000;"></div>
 		<html:text styleClass="formDateSized10" size="10" styleId="regDate1" property="<%=regDate%>" disabled="true"/>
 					 &nbsp;
 		<a href="javascript:onDate('regDate','advanceSearchForm.regDate1',false);">
