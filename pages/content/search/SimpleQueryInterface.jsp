@@ -126,8 +126,12 @@ function showDateColumn(element,valueField,colID)
 				</tr>
 				<tr>
 					<td>
-						<%%>
 						<html:hidden property="pageOf" value="<%=pageOf%>"/>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<html:hidden property="andOrOperation" />
 					</td>
 				</tr>
 				<tr>
@@ -165,7 +169,7 @@ function showDateColumn(element,valueField,colID)
 					%>
 						<html:select property="<%=objectName%>" styleClass="formFieldSized15" styleId="<%=objectName%>" size="1" onchange="<%=attributeAction%>">
 							<logic:notPresent name="<%=objectNameList%>">			
-								<html:options name="objectAliasNameList" labelName="objectDisplayNameList" />
+								<html:options collection="objectNameList" labelProperty="name" property="value"/>
 							</logic:notPresent>	
 							<logic:present name="<%=objectNameList%>">		
 								<html:options collection="<%=objectNameList%>" labelProperty="name" property="value"/>
@@ -174,11 +178,11 @@ function showDateColumn(element,valueField,colID)
 					</td>
 					<td class="formField">
 						<html:select property="<%=attributeName%>" styleClass="formFieldSized15" styleId="<%=attributeName%>" size="1" onchange="<%=functionName%>">
-							<logic:notPresent name="<%=attributeNameList%>">			
+							<logic:notPresent name="<%=attributeNameList%>">
 								<html:options name="attributeNameList" labelName="attributeNameList" />
 							</logic:notPresent>	
 							<logic:present name="<%=attributeNameList%>">		
-								<html:options name="<%=attributeNameList%>" labelName="<%=attributeDisplayNameList%>" />
+								<html:options collection="<%=attributeNameList%>" labelProperty="name" property="value"/>
 							</logic:present>	
 						</html:select>
 					</td>
@@ -206,7 +210,6 @@ function showDateColumn(element,valueField,colID)
 						<html:hidden property="<%=nextOperator%>"/>
 					</td>
 					<td class="formField">
-					<div>	
 					  <%if (nextOperatorValue != null && (false == nextOperatorValue.equals(""))){
 							if (nextOperatorValue.equals(Constants.AND_JOIN_CONDITION))
 							{%><bean:message key="simpleQuery.and" />	
@@ -214,16 +217,15 @@ function showDateColumn(element,valueField,colID)
 							<bean:message key="simpleQuery.or" />
 							<%}%>
 						<%}else{ %>					
-							<%String andLink = "setPropertyValue('"+nextOperator+"','"+Constants.AND_JOIN_CONDITION+"');incrementCounter();callAction('SimpleQueryInterface.do?pageOf="+pageOf+"')"; %>
+							<%String andLink = "setPropertyValue('"+nextOperator+"','"+Constants.AND_JOIN_CONDITION+"');setPropertyValue('andOrOperation','true');incrementCounter();callAction('SimpleQueryInterfaceValidate.do?pageOf="+pageOf+"');"; %>
 							<a href="#" onclick="<%=andLink%>">
 								<bean:message key="simpleQuery.and" />
 							</a>|
-							<%String orLink = "setPropertyValue('"+nextOperator+"','"+Constants.OR_JOIN_CONDITION+"');incrementCounter();callAction('SimpleQueryInterface.do?pageOf="+pageOf+"')"; %>
+							<%String orLink = "setPropertyValue('"+nextOperator+"','"+Constants.OR_JOIN_CONDITION+"');setPropertyValue('andOrOperation','true');incrementCounter();callAction('SimpleQueryInterfaceValidate.do?pageOf="+pageOf+"');"; %>
 							<a href="#" onclick="<%=orLink%>">
 								<bean:message key="simpleQuery.or" />
 							</a>
 						<%}%>	
-					</div>
 					</td>	
 					</logic:equal>
 				</tr>
