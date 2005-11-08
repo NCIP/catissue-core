@@ -56,8 +56,8 @@ public class SimpleSearchAction extends BaseAction
 		SimpleQueryInterfaceForm simpleQueryInterfaceForm = (SimpleQueryInterfaceForm) form;
 		// -------- set the selected menu ------- start 
 			String strMenu = simpleQueryInterfaceForm.getMenuSelected();
-			request.setAttribute("menuSelected",strMenu  );
-			Logger.out.debug("menuSelected set in SimpleSearch Action : -- "+ strMenu  ); 
+			request.setAttribute(Constants.MENU_SELECTED,strMenu  );
+			Logger.out.debug(Constants.MENU_SELECTED+" set in SimpleSearch Action : -- "+ strMenu  ); 
 		// -------- set the selected menu ------- end
 		
 		String counter = simpleQueryInterfaceForm.getCounter();		

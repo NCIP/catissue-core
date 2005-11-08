@@ -47,8 +47,8 @@ public class AdvanceQueryInterfaceAction extends BaseAction
     		Logger.out.debug("child count in init action:"+root.getChildCount());
     	}
     	String pageOf = (String)request.getParameter(Constants.PAGEOF);
-    	request.setAttribute("menuSelected",new String("17") );
-    	Logger.out.debug("menuSelected set in Advance Query Interface Action : 17  -- "  ); 
+    	request.setAttribute(Constants.MENU_SELECTED,new String("17") );
+    	Logger.out.debug(Constants.MENU_SELECTED +" set in Advance Query Interface Action : 17  -- "  ); 
     	return mapping.findForward(pageOf);
     }
 }

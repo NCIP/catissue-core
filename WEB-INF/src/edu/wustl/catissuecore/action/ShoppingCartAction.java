@@ -140,8 +140,8 @@ public class ShoppingCartAction  extends BaseAction
         //Sets the operation attribute to be used in the Add/Edit Shopping Cart Page. 
         request.setAttribute(Constants.OPERATION, operation);
         
-    	request.setAttribute("menuSelected",new String("18") );
-    	Logger.out.debug("menuSelected set in ShoppingCart Action : 18  -- "  ); 
+    	request.setAttribute(Constants.MENU_SELECTED,new String("18") );
+    	Logger.out.debug(Constants.MENU_SELECTED + " set in ShoppingCart Action : 18  -- "  ); 
 
         
         return mapping.findForward(Constants.SUCCESS);

@@ -20,7 +20,7 @@
 	Object obj = request.getAttribute("simpleQueryInterfaceForm");
 	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
 	
-	String selectMenu = (String) request.getAttribute("menuSelected");
+	String selectMenu = (String) request.getAttribute(Constants.MENU_SELECTED);
 	
 	if(obj != null && obj instanceof SimpleQueryInterfaceForm)
 	{
@@ -116,7 +116,7 @@ function showDateColumn(element,valueField,colID)
 				<tr>
 					<td>
 						<html:hidden property="aliasName" value="<%=aliasName%>"/>
-						<html:hidden property="menuSelected" value="<%=selectMenu%>"/>
+						<html:hidden property="<%=Constants.MENU_SELECTED%>" value="<%=selectMenu%>"/>
 					</td>
 				</tr>
 				<tr>

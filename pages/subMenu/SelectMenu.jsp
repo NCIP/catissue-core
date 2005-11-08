@@ -1,5 +1,5 @@
 <%
-	String selectMenu = (String) request.getAttribute("menuSelected");
+	String selectMenu = (String) request.getAttribute(Constants.MENU_SELECTED);
 	int selectMenuID = 0;
 	if(selectMenu != null)
 	{

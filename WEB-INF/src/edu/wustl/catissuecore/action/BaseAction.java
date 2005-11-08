@@ -200,11 +200,11 @@ public abstract class BaseAction extends Action  {
 	{
 		Logger.out.debug("Inside setSelectedMenu.....");
 		Logger.out.debug("#######################################################################");
-		String strMenu = request.getParameter("menuSelected" );
+		String strMenu = request.getParameter(Constants.MENU_SELECTED );
 		if(strMenu != null )
 		{
-			request.setAttribute("menuSelected" ,strMenu);
-			Logger.out.debug("menuSelected " +strMenu +" set successfully");
+			request.setAttribute(Constants.MENU_SELECTED ,strMenu);
+			Logger.out.debug(Constants.MENU_SELECTED + " " +strMenu +" set successfully");
 		}
 	}
 }

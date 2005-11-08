@@ -261,7 +261,7 @@ public abstract class BaseDistributionReportAction extends BaseAction
 
     protected void setSelectedMenuRequestAttribute(HttpServletRequest request)
     {
-    	request.setAttribute("menuSelected",new String("16") );
+    	request.setAttribute(Constants.MENU_SELECTED,new String("16") );
     }
     
 }
