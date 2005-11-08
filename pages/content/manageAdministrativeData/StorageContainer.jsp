@@ -469,8 +469,8 @@ function insRow(subdivtag)
 					</tr>
 					
 					<tr>
-						<td class="formRequiredNotice" width="5">&nbsp;</td>
-						<td class="formLabel" colspan="2">
+						<td class="formRequiredNotice" width="5">*</td>
+						<td class="formRequiredLabel" colspan="2">
 							&nbsp;<%=label1%>
 						</td>
 						<td class="formField" colspan="2">
