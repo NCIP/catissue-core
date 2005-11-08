@@ -1,3 +1,4 @@
+<%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%
 	String selectMenu = (String) request.getAttribute(Constants.MENU_SELECTED);
 	int selectMenuID = 0;
