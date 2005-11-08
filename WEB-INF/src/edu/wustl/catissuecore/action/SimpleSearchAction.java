@@ -148,11 +148,11 @@ public class SimpleSearchAction extends BaseAction
 					    QueryBizLogic bizLogic = (QueryBizLogic)BizLogicFactory
 					    							.getBizLogic(Constants.SIMPLE_QUERY_INTERFACE_ID);
 					    aliasName = bizLogic.getAliasNameFromTableId(tableId);
-					}
-					
-					if (aliasName != null)
-					{
-					    fromTables.add(aliasName);
+					    
+					    if (aliasName != null)
+						{
+						    fromTables.add(aliasName);
+						}
 					}
 				}
 				
