@@ -209,7 +209,7 @@ public class StorageType extends AbstractDomainObject implements Serializable
 	        StorageTypeForm storageTypeForm = (StorageTypeForm) abstractForm;
 	        
 	        this.systemIdentifier = new Long(storageTypeForm.getSystemIdentifier());
-	        this.type = storageTypeForm.getType();
+	        this.type = storageTypeForm.getType().trim() ;
 	        
 	        if(storageTypeForm.getDefaultTemperature()!=null && storageTypeForm.getDefaultTemperature().trim().length() >0 )
 	        	this.defaultTempratureInCentigrade = new Double(storageTypeForm.getDefaultTemperature());

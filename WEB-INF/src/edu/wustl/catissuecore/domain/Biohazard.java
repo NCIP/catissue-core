@@ -190,7 +190,7 @@ public class Biohazard extends AbstractDomainObject implements Serializable
         {
             BiohazardForm form 	= (BiohazardForm) abstractForm;
             this.comments = form.getComments();
-            this.name = form.getName();
+            this.name = form.getName().trim() ;
             this.type = form.getType();
         }
         catch (Exception excp)

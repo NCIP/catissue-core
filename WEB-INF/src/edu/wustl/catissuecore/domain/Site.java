@@ -231,7 +231,7 @@ public class Site extends AbstractDomainObject implements java.io.Serializable
         	Validator validator = new Validator();
             SiteForm form 	= (SiteForm) abstractForm;
             this.systemIdentifier = new Long(form.getSystemIdentifier());
-            this.name 		= form.getName();
+            this.name 		= form.getName().trim() ;
             this.type 		= form.getType();
             
             this.emailAddress = form.getEmailAddress();            
