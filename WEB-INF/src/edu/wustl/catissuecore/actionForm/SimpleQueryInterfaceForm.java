@@ -18,6 +18,7 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Validator;
 
 /**
@@ -325,4 +326,13 @@ public class SimpleQueryInterfaceForm extends ActionForm
 	public void setMenuSelected(String menuSelected) {
 		this.menuSelected = menuSelected;
 	}
+	
+	 /**
+     * Returns the id assigned to form bean.
+     * @return the id assigned to form bean
+     */
+    public int getFormId()
+    {
+        return Constants.SIMPLE_QUERY_INTERFACE_ID;
+    }
 }
