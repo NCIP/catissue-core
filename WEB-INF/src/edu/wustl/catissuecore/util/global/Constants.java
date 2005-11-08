@@ -1330,4 +1330,7 @@ public class Constants
 	public static final String C = "C";
 	public static final String S = "S";
 	public static final String P = "P";
+	
+	// -- menu selection related
+	public static final String MENU_SELECTED = "menuSelected";
 }
