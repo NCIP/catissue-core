@@ -678,6 +678,10 @@
 		<put name="content" value="/pages/content/search/SpecimenSearch.jsp" />
 	</definition>
 	
+	<definition name=".catissuecore.specimenCollectionGroupSearchDef" extends=".catissuecore.queryDataViewDef">
+		<put name="content" value="/pages/content/search/SpecimenCollectionGroupSearch.jsp" />
+	</definition>
+	
 	<definition name=".catissuecore.collectionProtocolSearchDef" extends=".catissuecore.queryDataViewDef">
 		<put name="content" value="/pages/content/search/CollectionProtocolSearch.jsp" />
 	</definition>
