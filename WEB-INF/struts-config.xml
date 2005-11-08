@@ -2017,6 +2017,15 @@ PUBLIC
 			<forward name="access_denied" path="/Home.do" />
 		</action>
 
+		<action path="/SpecimenCollectionGroupAdvanceSearch"
+			type="edu.wustl.catissuecore.action.SpecimenCollectionGroupSearchAction"
+			name="advanceSearchForm"
+			validate="false"
+			scope="request">
+			<forward name="pageOfSpecimenCollectionGroupAdvanceSearch" path=".catissuecore.specimenCollectionGroupSearchDef" />
+			<forward name="access_denied" path="/Home.do" />
+		</action>
+
 		<action path="/SpecimenAdvanceSearch"
 			type="edu.wustl.catissuecore.action.SpecimenSearchAction"
 			name="advanceSearchForm"
