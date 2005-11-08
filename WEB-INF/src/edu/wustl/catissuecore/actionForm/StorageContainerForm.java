@@ -61,7 +61,7 @@ public class StorageContainerForm extends AbstractActionForm
 	/**
 	 * A default temperature of the storage container.
 	 */
-	private double defaultTemperature;
+	private String defaultTemperature;
 
 	/**
 	 * Capacity in dimension one.
@@ -190,7 +190,7 @@ public class StorageContainerForm extends AbstractActionForm
 			if(container.getSite()!= null)
 				this.siteId = container.getSite().getSystemIdentifier().longValue();
 
-			this.defaultTemperature = container.getTempratureInCentigrade().doubleValue();
+			this.defaultTemperature = Utility.toString( container.getTempratureInCentigrade());
 			this.oneDimensionCapacity = container.getStorageContainerCapacity()
 					.getOneDimensionCapacity().intValue();
 			this.twoDimensionCapacity = container.getStorageContainerCapacity()
@@ -269,7 +269,7 @@ public class StorageContainerForm extends AbstractActionForm
 	 * @return double the default temperature of the storage container to be set.
 	 * @see #setDefaultTemperature(double)
 	 */
-	public double getDefaultTemperature()
+	public String getDefaultTemperature()
 	{
 		return this.defaultTemperature;
 	}
@@ -279,7 +279,7 @@ public class StorageContainerForm extends AbstractActionForm
 	 * @param defaultTemperature the default temperature of the storage container to be set.
 	 * @see #getDefaultTemperature()
 	 */
-	public void setDefaultTemperature(double defaultTemperature)
+	public void setDefaultTemperature(String defaultTemperature)
 	{
 		this.defaultTemperature = defaultTemperature;
 	}
@@ -492,6 +492,12 @@ public class StorageContainerForm extends AbstractActionForm
             	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("storageContainer.twoDimension")));
             }
     
+
+            // validations for temperature
+            if (!validator.isEmpty(defaultTemperature ) && (!validator.isDouble(defaultTemperature,0)))
+            {
+            	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("storageContainer.temperature")));
+            }
 			
 			
 			//Validations for External Identifier Add-More Block.
