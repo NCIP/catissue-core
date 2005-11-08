@@ -10,6 +10,10 @@
 
 package edu.wustl.catissuecore.util.global;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -484,6 +488,34 @@ public class Validator
 		Logger.out.debug("CheckDate : "+result);
     	return result;
     }
+    
+    public boolean compareDateWithCurrent(String dateToCheck)
+    {
+    	boolean result = true;
+    	try
+		{
+    		Date currentDate = Calendar.getInstance().getTime();
+    		System.out.println("1 : -- "+ dateToCheck );
+    		System.out.println("currentDate : "+ currentDate );
+    		String pattern="MM-dd-yyyy";
+			SimpleDateFormat dF = new SimpleDateFormat(pattern);
+    		Date toCheck = 	dF.parse(dateToCheck );
+
+    		System.out.println("2");
+    		System.out.println("toCheck : "+ toCheck);
+    		int dateCheckResult = currentDate.compareTo(toCheck );
+//    		Logger.out.debug("currentDate.compareTo(toCheck ) : " + dateCheckResult );
+    		if(dateCheckResult < 0 )
+    			result = false;
+		}
+    	catch(Exception exp)
+		{
+			//Logger.out.error("compareDateWithCurrent : " + dateToCheck + " : exp : "+ exp);
+			result = false;
+		}
+
+    	return result;
+    }
     // ------------------------------Date Validation ends-----------------------------------------------------------------------
     
     
@@ -496,22 +528,34 @@ public class Validator
 //        System.out.println(ssn);
 //        validator.isValidSSN(ssn );
 //        ssn = "111-11-1111";
-        String sdate = "00-00-0000";
-        validator.checkDate(sdate );
-
-        sdate = "18-13-1901";
-        validator.checkDate(sdate );
+//        String sdate = "00-00-0000";
+//        validator.checkDate(sdate );
+//
+//        sdate = "18-13-1901";
+//        validator.checkDate(sdate );
+//        
+//        sdate = "12-43-1901";
+//        validator.checkDate(sdate );
+//
+//        sdate = "02-30-1901";
+//        validator.checkDate(sdate );
+//        
+//        sdate = "02-13-1901";
+//        validator.checkDate(sdate );
+//
+        // -- Check code for date comparison	
+        String dt = "12-12-2005";
+        System.out.println("validator.compareDateWithCurrent(dt) : " + validator.compareDateWithCurrent(dt) );
+        dt = "12-23-2005";
+        System.out.println("validator.compareDateWithCurrent(dt) : " + validator.compareDateWithCurrent(dt) );
+        dt = "10-23-2005";
+        System.out.println("validator.compareDateWithCurrent(dt) : " + validator.compareDateWithCurrent(dt) );
+        dt = "11-08-2005";
+        System.out.println("validator.compareDateWithCurrent(dt) : " + validator.compareDateWithCurrent(dt) );
+        dt = "ssf";
+        System.out.println("validator.compareDateWithCurrent(dt) : " + validator.compareDateWithCurrent(dt) );
         
-        sdate = "12-43-1901";
-        validator.checkDate(sdate );
-
-        sdate = "02-30-1901";
-        validator.checkDate(sdate );
         
-        sdate = "02-13-1901";
-        validator.checkDate(sdate );
-
-
 
 //        String str = "mandar; deshmukh";
 //        String delim=";,";
