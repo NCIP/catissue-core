@@ -93,6 +93,6 @@ public class Department extends AbstractDomainObject implements java.io.Serializ
 	{
 		DepartmentForm departmentForm = (DepartmentForm)abstractForm;
 		
-		this.name = departmentForm.getName();
+		this.name = departmentForm.getName().trim();
 	}
 }

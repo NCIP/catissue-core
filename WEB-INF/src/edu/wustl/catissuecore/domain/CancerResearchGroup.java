@@ -95,6 +95,6 @@ public class CancerResearchGroup extends AbstractDomainObject implements Seriali
     {
     	CancerResearchGroupForm cancerResearchGroupForm = (CancerResearchGroupForm)abstractForm;
 		
-		this.name = cancerResearchGroupForm.getName();
+		this.name = cancerResearchGroupForm.getName().trim();
     }
 }
