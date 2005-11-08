@@ -43,6 +43,9 @@ public class StorageContainerAction  extends SecureAction
             throws IOException, ServletException
     {
 		StorageContainerForm storageContainerForm = (StorageContainerForm) form;
+
+		//	set the menu selection 
+    	request.setAttribute(Constants.MENU_SELECTED, "7"  ); 
 		
 		//List of keys used in map of ActionForm
 		List key = new ArrayList();

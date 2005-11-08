@@ -47,7 +47,8 @@ public class SpecimenCollectionGroupAction  extends SecureAction
             HttpServletRequest request, HttpServletResponse response) throws Exception
     {
     	SpecimenCollectionGroupForm  specimenCollectionGroupForm = (SpecimenCollectionGroupForm)form;
-    	
+    	//	set the menu selection 
+    	request.setAttribute(Constants.MENU_SELECTED, "14"  ); 
 		try
 		{
 			boolean isOnChange = false; 
