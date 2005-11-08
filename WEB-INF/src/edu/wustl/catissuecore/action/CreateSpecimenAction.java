@@ -152,6 +152,9 @@ public class CreateSpecimenAction extends SecureAction
             	createForm.setParentSpecimenId(pSpecimenId  );
             	createForm.setPositionInStorageContainer("" );
             	createForm.setQuantity("");
+            	createForm.setPositionDimensionOne("" );
+            	createForm.setPositionDimensionTwo( "");
+            	createForm.setStorageContainer("" ); 
             	map.clear(); 
             	createForm.setExternalIdentifier(map);
             	createForm.setExIdCounter(1 ); 
