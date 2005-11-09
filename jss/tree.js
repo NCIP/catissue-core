@@ -102,23 +102,22 @@ function addNode(parentNode, recursedNodes) {
 	for (var i = 0; i < nodes.length; i++) {
 
 		var nodeValues = nodes[i].split("|");
-		//alert('nodeValues[1]--'+nodeValues[1]);
-		//alert('nodeValues[0]--'+nodeValues[0]);
 		
-		/*if(nodeValues[1] == 0){
-			document.write("<tr>");
-			document.write("<td class='tdTitle' colspan='4'>");
-			document.write("Rule#"+j);
-			document.write("</td>");
-			document.write("</tr>");
-			j++;
-		}*/
 		
 		if (nodeValues[1] == parentNode) {
 			
 			var ls	= lastSibling(nodeValues[0], nodeValues[1]);  //1|0
 			var hcn	= hasChildNode(nodeValues[0]);
 			var ino = isNodeOpen(nodeValues[0]);
+			
+			if(parentNode == 0){
+			document.write("<tr>");
+			document.write("<td class='tdTitle' colspan='4'>");
+			document.write("Rule#"+j);
+			document.write("</td>");
+			document.write("</tr>");
+			j++;
+		}
 
 			// Write out line & empty icons
 			if(i == 0 || (i%2 == 0))
@@ -166,11 +165,11 @@ function addNode(parentNode, recursedNodes) {
 			//}
 
 			var checkb = nodeValues[3] + "_" + nodeValues[0];
-			//alert("check box name in tree.js"+checkb);
+			
 			document.write("<input type=checkbox name='"+checkb+"' id='"+ checkb + "' onClick = CheckNum('"+ checkb +"','"+nodeValues[3]+"',"+nodeCount+")" +">");
 			//document.write("&nbsp;<img src='images/"+nodeValues[3]+".GIF' alt='"+nodeValues[3]+"' />&nbsp;"+ nodeValues[2]);
 			document.write("&nbsp;"+nodeValues[2]);
-			//alert('nodeValues[0]-'+nodeValues[0]);
+			
 			document.write("</td></tr>");
 			//document.write("<td colspan='2'><img src='images/"+nodeValues[3]+".GIF' alt='"+nodeValues[3]+"' /></td></tr> ");
 			
