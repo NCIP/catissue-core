@@ -1320,7 +1320,7 @@ public class Constants
 	//Tree related
 	//public static final String PARTICIPANT ='Participant';
 	public static final String COLLECTION_PROTOCOL ="CollectionProtocol";
-	public static final String SPECIMEN_COLLECTION_GROUP ="SpecimenGroup";
+	public static final String SPECIMEN_COLLECTION_GROUP ="SpecimenCollectionGroup";
 	public static final String DISTRIBUTION = "Distribution";
 	public static final String DISTRIBUTION_PROTOCOL = "DistributionProtocol";
 	public static final String CP = "CP";
