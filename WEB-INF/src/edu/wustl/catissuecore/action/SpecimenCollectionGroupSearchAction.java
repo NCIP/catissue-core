@@ -22,6 +22,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.actionForm.AdvanceSearchForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.DefaultBizLogic;
 import edu.wustl.catissuecore.domain.Site;
@@ -70,6 +71,11 @@ public class SpecimenCollectionGroupSearchAction extends BaseAction
 		NameValueBean undefinedBean = new NameValueBean(Constants.UNDEFINED,Constants.UNDEFINED);
         List clinicalStatusList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_CLINICAL_STATUS,undefinedBean);
     	request.setAttribute(Constants.CLINICAL_STATUS_LIST, clinicalStatusList);
+    	
+//    	Set the selected node from the query tree
+    	String nodeCount = (String)request.getParameter("selectedNode");
+    	AdvanceSearchForm aForm = (AdvanceSearchForm)form;
+    	aForm.setSelectedNode(nodeCount);
     	
     	//Setting the operators list in request scope
         request.setAttribute(Constants.STRING_OPERATORS,SearchUtil.getOperatorList(SearchUtil.DATATYPE_STRING));

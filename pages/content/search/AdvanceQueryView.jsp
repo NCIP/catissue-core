@@ -181,7 +181,7 @@
 		//var j=0;
 		//var selectedNode = new Array(nodeCount);
 		var selectedNode=0;
-							
+		alert("inside checknum");					
 		/*alert("node count"+nodeCount);
 		alert("itemCount"+itemCount);
 		alert("check box name"+checkName);
@@ -281,7 +281,7 @@
 		}
 		else if(count2 == sum)
 		{
-			//alert("clicked coll prot");
+			alert("clicked coll prot");
 			
 			var item = document.getElementById('<%=Constants.CP%>');
 			item.className="linkChange";
@@ -297,7 +297,7 @@
 		}
 		else if(count4 == sum)
 		{
-			//alert("clicked coll prot");
+			alert("clicked specimen group");
 			var item = document.getElementById('<%=Constants.S%>');
 			item.className="linkChange";
 			var link = "<%=util.getLink("Specimen")%>"+ selectedNode;
