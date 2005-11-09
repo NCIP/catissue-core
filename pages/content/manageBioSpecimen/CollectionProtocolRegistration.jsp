@@ -23,6 +23,11 @@
 			var row = document.getElementById("row1");
 			var cell1 = row.cells[0];
 			var cell2 = row.cells[1];
+
+			//	 Changes as per bug id 709
+	    	var row0 = document.getElementById("row0");
+			var cell10 = row0.cells[0];
+			var cell20 = row0.cells[1];
 			
 		    if(element.checked==true)
 		    { 
@@ -30,11 +35,16 @@
 			    cell2.className="formLabel";
 			    
 		    	document.forms[0].participantID.disabled = false;
+	           	cell10.innerHTML="*";
+	           	cell20.className="formRequiredLabel";
       		}
            	else
            	{
 	           	cell1.innerHTML="*";
 	           	cell2.className="formRequiredLabel";
+
+		    	cell10.innerHTML=" &nbsp; ";
+			    cell20.className="formLabel";
 	           	
 	           	document.forms[0].participantID.disabled = true;
       		}
@@ -130,8 +140,9 @@
 					</td>
 				</tr>
 					
-				<tr>
-			    	<td class="formRequiredNotice" width="5">&nbsp;</td>					
+				<tr id="row0">
+				<logic:equal name="collectionProtocolRegistrationForm" property="checkedButton" value="true">
+			    	<td class="formRequiredNotice" width="5">*</td>					
       	 	       	<td class="formRequiredLabel" nowrap>
                    		<html:checkbox property="checkedButton" onclick="onCheckboxButtonClick(this)">
 							<label for="participantID">
@@ -139,6 +150,18 @@
 							</label>
 						</html:checkbox>
 					</td>
+				</logic:equal>
+				<logic:equal name="collectionProtocolRegistrationForm" property="checkedButton" value="false">
+			    	<td class="formRequiredNotice" width="5">&nbsp;</td>					
+      	 	       	<td class="formLabel" nowrap>
+                   		<html:checkbox property="checkedButton" onclick="onCheckboxButtonClick(this)">
+							<label for="participantID">
+								<bean:message key="collectionProtocolReg.participantName" />
+							</label>
+						</html:checkbox>
+					</td>
+				</logic:equal>
+
 					<td class="formField">
 						<logic:equal name="collectionProtocolRegistrationForm" property="checkedButton" value="true">
 							<html:select property="participantID" styleClass="formFieldSized" styleId="participantID" size="1">
