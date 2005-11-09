@@ -8,6 +8,8 @@
  */ 
 package edu.wustl.common.util;
 
+import java.util.Random;
+
 import edu.wustl.common.util.logger.Logger;
 
 
@@ -21,8 +23,35 @@ import edu.wustl.common.util.logger.Logger;
  *@version 1.0
  */
 
-public class PasswordEncoderDecoder
+public class PasswordManager
 {
+	/**
+     * Generate random alpha numeric password.
+     * @param loginName the loginName of a user.
+     * @return Returns the generated password.
+     */
+    public static String generatePassword()
+    {
+    	//Define a Constants alpha-numeric String 
+    	final String CHAR_STRING = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    	
+    	// Generate password of length 6
+    	final int PASSWORD_LENGTH = 6;
+    	
+    	Random random = new Random();
+    	StringBuffer passwordBuff = new StringBuffer(); 
+    	
+    	for (int i = 0; i < PASSWORD_LENGTH ; i++)
+		{
+    		//Generate a random number from 0(inclusive) to lenght of CHAR_STRING(exclusive).
+    		int randomVal = random.nextInt(CHAR_STRING.length());
+    		
+    		//Get the character corrosponding to random number and append it to password buffer.
+    		passwordBuff.append(CHAR_STRING.charAt(randomVal));
+		}
+    	return passwordBuff.toString();
+    }
+    
     public static String encode(String input)
     {
 
