@@ -26,7 +26,6 @@ import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.Roles;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.GeneratePassword;
 import edu.wustl.catissuecore.util.global.SendEmail;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SecurityDataBean;
@@ -34,7 +33,7 @@ import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
-import edu.wustl.common.util.PasswordEncoderDecoder;
+import edu.wustl.common.util.PasswordManager;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 import gov.nih.nci.security.authorization.domainobjects.Role;
@@ -101,8 +100,7 @@ public class UserBizLogic extends DefaultBizLogic
                 csmUser.setFirstName(user.getFirstName());
                 csmUser.setEmailId(user.getEmailAddress());
                 csmUser.setStartDate(user.getStartDate());
-                csmUser.setPassword(PasswordEncoderDecoder.encode(GeneratePassword
-                        .getPassword()));
+                csmUser.setPassword(PasswordManager.encode(PasswordManager.generatePassword()));
                 Logger.out.debug("Password generated:" + csmUser.getPassword());
                 
                 SecurityManager.getInstance(UserBizLogic.class).createUser(csmUser);
@@ -174,7 +172,7 @@ public class UserBizLogic extends DefaultBizLogic
             {
                 body = body + "\n\n" + ApplicationProperties.getValue("userRegistration.loginDetails")
 				  + "\n\tLogin Name : " + user.getLoginName()
-				  + "\n\tPassword : " + PasswordEncoderDecoder.decode(user.getPassword());
+				  + "\n\tPassword : " + PasswordManager.decode(user.getPassword());
             }
             
             if (emailBodyEndKey != null)
@@ -277,12 +275,12 @@ public class UserBizLogic extends DefaultBizLogic
 
             if (user.getPageOf().equals(Constants.PAGEOF_CHANGE_PASSWORD))
             {
-                if (!user.getOldPassword().equals(PasswordEncoderDecoder.decode(csmUser.getPassword())))
+                if (!user.getOldPassword().equals(PasswordManager.decode(csmUser.getPassword())))
                 {
                     throw new DAOException(ApplicationProperties.getValue("errors.oldPassword.wrong"));
                 }
                 
-                csmUser.setPassword(PasswordEncoderDecoder.encode(user.getPassword()));
+                csmUser.setPassword(PasswordManager.encode(user.getPassword()));
                 user.setPassword(csmUser.getPassword());
             }
             else

@@ -22,14 +22,13 @@ import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.Roles;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.GeneratePassword;
 import edu.wustl.catissuecore.util.global.SendEmail;
 import edu.wustl.common.beans.SecurityDataBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
-import edu.wustl.common.util.PasswordEncoderDecoder;
+import edu.wustl.common.util.PasswordManager;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 import gov.nih.nci.security.authorization.domainobjects.Role;
@@ -63,8 +62,7 @@ public class ApproveUserBizLogic extends DefaultBizLogic
                 csmUser.setEmailId(user.getEmailAddress());
                 if (user.getActivityStatus().equals(
                         Constants.ACTIVITY_STATUS_ACTIVE))
-                    csmUser.setPassword(PasswordEncoderDecoder
-                            .encode(GeneratePassword.getPassword()));
+                    csmUser.setPassword(PasswordManager.encode(PasswordManager.generatePassword()));
                 csmUser.setStartDate(Calendar.getInstance().getTime());
 
                 SecurityManager.getInstance(ApproveUserBizLogic.class).createUser(csmUser);
@@ -117,7 +115,7 @@ public class ApproveUserBizLogic extends DefaultBizLogic
 	                    + "\n\n"+ ApplicationProperties.getValue("userRegistration.approved.body.start")
 	                    + ApplicationProperties.getValue("userRegistration.loginDetails")
 	                    + "\n\tLogin Name : " + user.getLoginName()
-	                    + "\n\tPassword : " + PasswordEncoderDecoder.decode(user.getPassword())
+	                    + "\n\tPassword : " + PasswordManager.decode(user.getPassword())
 	                    + "\n\n" + ApplicationProperties.getValue("email.catissuecore.team");
 	          
 	            if (Constants.ACTIVITY_STATUS_REJECT.equals(user.getActivityStatus()))
