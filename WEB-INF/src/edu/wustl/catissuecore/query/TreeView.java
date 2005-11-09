@@ -19,19 +19,17 @@ import edu.wustl.common.util.logger.Logger;
  * TODO To change the template for this generated type comment go to
  * Window - Preferences - Java - Code Style - Code Templates
  */
-public class TreeView {
+public class TreeView 
+{
 	private int nodeId=0;
-	public void arrangeTree(DefaultMutableTreeNode node,int parentId,Vector tree,Map advancedConditionNodesMap){
-		
+	public void arrangeTree(DefaultMutableTreeNode node,int parentId,Vector tree,Map advancedConditionNodesMap)
+	{
 		nodeId++;
 		Logger.out.debug("after incre--"+nodeId);
-		
-		
-		for(int i = 0; i < node.getChildCount();i++){
-			//nodeCount++;
+		for(int i = 0; i < node.getChildCount();i++)
+		{
 			DefaultMutableTreeNode n = (DefaultMutableTreeNode)node.getChildAt(i);
 			AdvancedConditionsNode advConditionNode = (AdvancedConditionsNode)n.getUserObject();
-			
 			advancedConditionNodesMap.put(new Integer(nodeId),n);
 			
 			Vector v = advConditionNode.getObjectConditions();
@@ -43,7 +41,8 @@ public class TreeView {
 			DataElement data = null;
 			Logger.out.debug("before str--"+nodeId);
 			
-			for(int k = 0; k < v.size(); k++){
+			for(int k = 0; k < v.size(); k++)
+			{
 				con = (Condition)v.get(k);
 				data = con.getDataElement();
 		        Operator op = con.getOperator();
@@ -59,16 +58,14 @@ public class TreeView {
 			if(data != null)
 				str = str +  "|" + tableName;
 			
-			if(con == null){
+			if(con == null)
 				str = nodeId + "|" + parentId + "|" + "ANY" + "|"+advConditionNode.getObjectName();
-			}
-				
+			
 			tree.add(str);
 			Logger.out.debug("before arrangetree--"+nodeId);
 			if(n.isLeaf())
 			{
 				nodeId++;
-				
 				Logger.out.debug("inside leaf loop"+nodeId);
 			}
 			else
