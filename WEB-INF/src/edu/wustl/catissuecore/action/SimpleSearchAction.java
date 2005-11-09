@@ -59,14 +59,16 @@ public class SimpleSearchAction extends BaseAction
 			request.setAttribute(Constants.MENU_SELECTED,strMenu  );
 			Logger.out.debug(Constants.MENU_SELECTED+" set in SimpleSearch Action : -- "+ strMenu  ); 
 		// -------- set the selected menu ------- end
-		
-		String counter = simpleQueryInterfaceForm.getCounter();		
 		HttpSession session = request.getSession();
+		String counter = (String)session.getAttribute(Constants.SIMPLE_QUERY_COUNTER);		
+		
 		if(counter==null)
-			counter = (String)session.getAttribute(Constants.SIMPLE_QUERY_COUNTER);
-		//Set form attributes in session for configuration after Search.
-		else
+		{
+			counter = simpleQueryInterfaceForm.getCounter();
 			session.setAttribute(Constants.SIMPLE_QUERY_COUNTER,simpleQueryInterfaceForm.getCounter());
+		}
+		//Set form attributes in session for configuration after Search.
+		
 		Map map=null;
 		
 		//	Get the aliasName.

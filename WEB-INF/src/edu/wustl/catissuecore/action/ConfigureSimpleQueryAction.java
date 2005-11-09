@@ -46,11 +46,12 @@ public class ConfigureSimpleQueryAction extends Action
     			Logger.out.debug("map size"+map.size());
     		}
     		Iterator iterator = map.keySet().iterator();
-    		String counter = simpleQueryInterfaceForm.getCounter();
+    		String counter = (String)session.getAttribute(Constants.SIMPLE_QUERY_COUNTER);
     		if(counter==null)
-    			counter = (String)session.getAttribute(Constants.SIMPLE_QUERY_COUNTER);
+    			counter = simpleQueryInterfaceForm.getCounter();
+    		Logger.out.debug("No. of tables in the query "+counter);
     		int size = Integer.parseInt(counter);
-    		String[] selectedTables = new String[size+1]; 
+    		String[] selectedTables = new String[size]; 
     		int tableCount=0;
     		while (iterator.hasNext())
     		{
@@ -58,8 +59,21 @@ public class ConfigureSimpleQueryAction extends Action
     			Logger.out.debug("map key"+key);
     			if(key.endsWith("_table"))
     			{
-    				selectedTables[tableCount]= (String)map.get(key);
-    				tableCount++;
+    				String table = (String)map.get(key);
+    				boolean exists = false;
+    				for(int arrayCount=0;arrayCount<selectedTables.length;arrayCount++)
+    				{
+    					if(selectedTables[arrayCount]!=null)
+    					{
+    						if(selectedTables[arrayCount].equals(table))
+    							exists = true;
+    					}
+    				}
+    				if(!exists)
+    					{
+    						selectedTables[tableCount]= table;
+    						tableCount++;
+    					}
     			}
     		}
     		
