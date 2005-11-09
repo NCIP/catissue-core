@@ -90,10 +90,10 @@ public class SearchUtil
 	
 	}
 	private void getMap(){
-		map.put("Participant","ParticipantAdvanceSearch.do?pageOf=pageOfParticipantAdvanceSearch");
-		map.put("CollectionProtocol","CollectionProtocolAdvanceSearch.do?pageOf=pageOfCollectionProtocolAdvanceSearch");
-		map.put("Specimen","SpecimenAdvanceSearch.do?pageOf=pageOfSpecimenAdvanceSearch");
-		map.put("SpecimenCollectionGroup","#");
+		map.put("Participant","ParticipantAdvanceSearch.do?pageOf=pageOfParticipantAdvanceSearch&selectedNode=");
+		map.put("CollectionProtocol","CollectionProtocolAdvanceSearch.do?pageOf=pageOfCollectionProtocolAdvanceSearch&selectedNode=");
+		map.put("Specimen","SpecimenAdvanceSearch.do?pageOf=pageOfSpecimenAdvanceSearch&selectedNode=");
+		map.put("SpecimenCollectionGroup","SpecimenCollectionGroupAdvanceSearch.do?pageOf=pageOfSpecimenCollectionGroupAdvanceSearch&selectedNode=");
 		map.put("Distribution","#");
 		map.put("DistributionProtocol","#");	
 		

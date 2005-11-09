@@ -5,6 +5,8 @@
 
 package edu.wustl.catissuecore.action;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,6 +22,7 @@ import edu.wustl.catissuecore.query.AdvancedConditionsNode;
 import edu.wustl.catissuecore.query.Condition;
 import edu.wustl.catissuecore.query.DataElement;
 import edu.wustl.catissuecore.query.Operator;
+import edu.wustl.catissuecore.query.TreeView;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
 
@@ -35,29 +38,42 @@ public class AdvanceQueryView extends BaseAction
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 	{
-		
 		HttpSession session = request.getSession();
        	DefaultMutableTreeNode root = (DefaultMutableTreeNode)session.getAttribute("root");
        	int childCount = root.getChildCount();
        	Logger.out.debug("child count in tree view action"+childCount);
 		Vector tree=new Vector();
-		
+		//int nodeCount = 0;
+		Map advancedConditionNodesMap = new HashMap();
 		if(childCount==0)
 		{
 			tree.add(""); 
 		}
 		else
-			arrangeTree(root,0,tree,0);
+		{
+			TreeView view = new TreeView();
+			view.arrangeTree(root,0,tree,advancedConditionNodesMap);
+			Logger.out.debug("advancedConditionNodesMap in AdvanceQueryViewAction"+advancedConditionNodesMap);
+			Logger.out.debug("Size of advancedConditionNodesMap in AdvanceQueryViewAction"+advancedConditionNodesMap.size());
+		}
+		session.setAttribute("advancedConditionNodesMap",advancedConditionNodesMap);
 		Logger.out.debug("Vector size of the tree"+tree);
 		request.setAttribute("vector",tree);
 		return (mapping.findForward(Constants.SUCCESS));
 	}
-	public void arrangeTree(DefaultMutableTreeNode node,int count,Vector tree,int temp){
+	/*public void arrangeTree(DefaultMutableTreeNode node,int count,Vector tree,int temp,Map advancedConditionNodesMap,int nodeCount){
 		
 		temp++;
+		Logger.out.debug("after incre--"+temp);
+		
+		
 		for(int i = 0; i < node.getChildCount();i++){
+			nodeCount++;
 			DefaultMutableTreeNode n = (DefaultMutableTreeNode)node.getChildAt(i);
 			AdvancedConditionsNode advConditionNode = (AdvancedConditionsNode)n.getUserObject();
+			Logger.out.debug("nodeCount!!!!!!!!!!!"+nodeCount);
+			advancedConditionNodesMap.put(new Integer(nodeCount),n);
+			
 			Vector v = advConditionNode.getObjectConditions();
 			String tableName = advConditionNode.getObjectName();
 			Logger.out.debug("object name for advance node"+tableName);
@@ -65,6 +81,8 @@ public class AdvanceQueryView extends BaseAction
 			String str = "";
 			Condition con = null;
 			DataElement data = null;
+			Logger.out.debug("before str--"+temp);
+			
 			for(int k = 0; k < v.size(); k++){
 				con = (Condition)v.get(k);
 				data = con.getDataElement();
@@ -86,13 +104,19 @@ public class AdvanceQueryView extends BaseAction
 			}
 				
 			tree.add(str);
+			Logger.out.debug("before arrangetree--"+temp);
 			if(n.isLeaf())
+			{
 				temp++;
+				
+				Logger.out.debug("inside leaf loop"+temp);
+			}
 			else
-				arrangeTree(n,temp,tree,temp);
+				arrangeTree(n,temp,tree,temp,advancedConditionNodesMap,nodeCount);
+			Logger.out.debug("temp after rec"+temp);
 		}
 	
-	}
+	}*/
 
 }
 

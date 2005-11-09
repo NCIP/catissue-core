@@ -33,8 +33,23 @@ public class AdvanceSearchForm extends ActionForm
 {
     Map values = new HashMap();
     
+    //Objectname of the advancedConditionNode Object
     String objectName=new String();
     
+    //Selected node from the query tree
+    String selectedNode = new String();
+	/**
+	 * @return Returns the selectedNode.
+	 */
+	public String getSelectedNode() {
+		return selectedNode;
+	}
+	/**
+	 * @param selectedNode The selectedNode to set.
+	 */
+	public void setSelectedNode(String selectedNode) {
+		this.selectedNode = selectedNode;
+	}
     /**
      * No argument constructor for StorageTypeForm class 
      */

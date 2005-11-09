@@ -21,6 +21,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.actionForm.AdvanceSearchForm;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.cde.CDEManager;
@@ -52,6 +53,11 @@ public class ParticipantSearchAction extends BaseAction
         //Sets the raceList attribute to be used in the Participant Advance Search Page.
         List raceList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_RACE,unknownVal);
         request.setAttribute(Constants.RACELIST, raceList);
+        
+    	//Set the selected node from the query tree
+        String nodeCount = (String)request.getParameter("selectedNode");
+    	AdvanceSearchForm aForm = (AdvanceSearchForm)form;
+    	aForm.setSelectedNode(nodeCount);
         
         //Setting the operators list in request scope
         request.setAttribute(Constants.STRING_OPERATORS,SearchUtil.getOperatorList(SearchUtil.DATATYPE_STRING));

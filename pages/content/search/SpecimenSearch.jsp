@@ -122,6 +122,7 @@
 
 <tr>
 	<td><html:hidden property="objectName" value="Specimen"/></td>
+	<td><html:hidden property="selectedNode" /></td>
 </tr>
 <!--  MAIN TITLE ROW -->
 <tr>
