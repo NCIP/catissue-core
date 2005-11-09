@@ -65,13 +65,11 @@
 	</td>
 	<td class="formField">
 		<html:select property="<%=opSiteName%>" styleClass="formFieldSized10" styleId="opSiteName" size="1" onchange="onOperatorChange('opSiteName','siteName')">
-			<html:options collection="<%=Constants.ENUMERATED_OPERATORS%>" labelProperty="name" property="value"/>
+			<html:options collection="<%=Constants.STRING_OPERATORS%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
 	<td class="formField">
-		<html:select property="<%=siteName%>" styleClass="formFieldSized10" styleId="siteName" size="1" disabled="true">
-			<html:options collection="<%=Constants.SITELIST%>" labelProperty="name" property="value"/>
-		</html:select>
+		<html:text styleClass="formFieldSized10" styleId="siteName" property="<%=siteName%>" disabled="true"/>
 	</td>
 </tr>
 
