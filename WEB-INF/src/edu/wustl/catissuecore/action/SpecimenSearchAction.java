@@ -26,6 +26,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.actionForm.AdvanceSearchForm;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.cde.CDE;
@@ -43,7 +44,7 @@ public class SpecimenSearchAction extends BaseAction
     public ActionForward executeAction(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException
-    {    	
+    {
     	//Setting the Sepecimen Type list
     	List specimenTypeList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_SPECIMEN_TYPE,null);
     	request.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
@@ -65,6 +66,14 @@ public class SpecimenSearchAction extends BaseAction
     	//Setting Biohazard type list
     	List biohazardList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_BIOHAZARD,null);
     	request.setAttribute(Constants.BIOHAZARD_TYPE_LIST, biohazardList);
+    	
+    	//Set the selected node from the query tree
+    	String nodeCount = (String)request.getParameter("selectedNode");
+    	Logger.out.debug("nodecount from getParameter"+nodeCount);
+    	AdvanceSearchForm aForm = (AdvanceSearchForm)form;
+    	aForm.setSelectedNode(nodeCount);
+    	
+    	
     	
     	//Setting the operators list in request scope
         request.setAttribute(Constants.STRING_OPERATORS,SearchUtil.getOperatorList(SearchUtil.DATATYPE_STRING));
