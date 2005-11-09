@@ -11,7 +11,6 @@
 package edu.wustl.catissuecore.action;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -23,14 +22,10 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.AdvanceSearchForm;
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
-import edu.wustl.catissuecore.bizlogic.DefaultBizLogic;
-import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.util.SearchUtil;
-import edu.wustl.common.util.logger.Logger;
 
 public class SpecimenCollectionGroupSearchAction extends BaseAction
 {
@@ -42,27 +37,6 @@ public class SpecimenCollectionGroupSearchAction extends BaseAction
             HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException
     {
-    	DefaultBizLogic bizLogic = BizLogicFactory.getDefaultBizLogic();
-    	
-    	//Setting the site list
-    	List siteList = null;
-    	
-    	try
-		{
-		   	String displayFields[] = {"name"};
-		   	siteList = bizLogic.getList(Site.class.getName(),displayFields,Constants.SYSTEM_IDENTIFIER, true);
-		}
-    	catch(Exception e)
-		{
-    		siteList = new ArrayList();
-    		siteList.add(new NameValueBean(Constants.SELECT_OPTION,"-1"));
-    		Logger.out.debug(e.getMessage(),e);
-		}
-    	finally
-		{
-		   	request.setAttribute(Constants.SITELIST, siteList);
-		}
-	   	
     	//Setting the clinical diagnosis list
     	List clinicalDiagnosisList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_CLINICAL_DIAGNOSIS,null);
 		request.setAttribute(Constants.CLINICAL_DIAGNOSIS_LIST, clinicalDiagnosisList);
