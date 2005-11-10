@@ -10,7 +10,7 @@
 	<script language="javascript" src="jss/menu.js"></script>
 	<script type="text/javascript">
 	<%
-		Vector Treelist = (Vector)request.getAttribute("vector");
+		Vector Treelist = (Vector)request.getAttribute(Constants.TREE_VECTOR);
 	%>
 	var Tree = [<%int k;%><%for (k=0;k < (Treelist.size()-1);k++){%>"<%=Treelist.get(k)%>",<%}%>"<%=Treelist.get(k)%>"];
 	<% SearchUtil util = new SearchUtil(); %>
@@ -160,6 +160,7 @@
 //	function EnableItem(nodeCount){
 	function CheckNum(checkName,itemName,nodeCount)
 	{
+		DisableAll();
 		var ParticipantCount = 0;
 		var CProtocolCount = 0;
 		var DProtocolCount = 0;
@@ -251,10 +252,10 @@
 		
 		if(ParticipantCount == sum) 
 		{
-			var PItem = document.getElementById('<%=Constants.P%>');
+			/*var PItem = document.getElementById('<%=Constants.P%>');
 			PItem.className="linkChange";
 			var link = "<%=util.getLink("Participant")%>"+ selectedNode;
-			PItem.innerHTML ="&nbsp;<img src='images/Participant.GIF' alt='Participant' />  &nbsp;<a HREF='"+link+"' target='searchPageFrame'><%=Constants.PARTICIPANT%></a>";
+			PItem.innerHTML ="&nbsp;<img src='images/Participant.GIF' alt='Participant' />  &nbsp;<a HREF='"+link+"' target='searchPageFrame'><%=Constants.PARTICIPANT%></a>";*/
 			
 			//alert("participant rule");
 			var CPItem = document.getElementById('<%=Constants.CP%>');
@@ -266,6 +267,9 @@
 			DPItem.className="linkChange";
 			//var link = "<%=util.getLink("DistributionProtocol")%>"+ selectedNode;
 			DPItem.innerHTML = "&nbsp;<img src='images/DistributionProtocol.GIF' alt='DistributionProtocol' /> &nbsp;<a HREF='#'><%=Constants.DISTRIBUTION_PROTOCOL%></a>";
+			
+			var deleteItem = document.getElementById('<%=Constants.DELETE%>');
+			deleteItem.innerHTML = "&nbsp;<a HREF='#'>Delete</a>";
 		}
 		else if(CProtocolCount == sum)
 		{
@@ -303,9 +307,6 @@
 	}
 	</script>
 </head>
-
-
-
 <html>
 <body>
 	
@@ -325,7 +326,7 @@
 										onmouseover="changeMenuStyle(this,'linkChangeOnMouseOver')"
 										 onmouseout="changeMenuStyle(this,'linkChange')">
 											&nbsp;<img src="images/Participant.GIF" alt="Participant" /> &nbsp; 
-											
+												<a HREF='<%=util.getLink("Participant")%>' target='searchPageFrame'>
 												<%=Constants.PARTICIPANT%>
 											</a>
 										</td>
@@ -372,7 +373,7 @@
 			</table>
 			</td>
 		<td class='formTitle' height='20' width='10%' onmouseover="changeClass(this,'menuHover');" onmouseout="changeClass(this,'formTitle');">Edit</td>
-		<td class='formTitle' height='20' width='10%' onmouseover="changeClass(this,'menuHover');" onmouseout="changeClass(this,'formTitle');">Delete</td>
+		<td class='formTitle' id='delete' height='20' width='10%' onmouseover="changeClass(this,'menuHover');" onmouseout="changeClass(this,'formTitle');">Delete</td>
 	</tr>
 
 	

@@ -1,6 +1,6 @@
 /*
  * Created on Sep 1, 2005
- * This class is used to redirect the user to the Home / SignIn Page after session is timedOut.
+ * This class is used to display tree in the Query view in the Advance Search Action
  */
 
 package edu.wustl.catissuecore.action;
@@ -29,95 +29,38 @@ import edu.wustl.common.util.logger.Logger;
 /**
  * @author mandar_deshmukh
  *
- * This class is used to redirect the user to the Home / SignIn Page after session is timedOut.
+ * This class is used to display tree in the Query view in the Advance Search Action
  */
 public class AdvanceQueryView extends BaseAction
 {
-	//private Vector element = new Vector();
- 	//private int temp =0;
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 	{
 		HttpSession session = request.getSession();
-       	DefaultMutableTreeNode root = (DefaultMutableTreeNode)session.getAttribute("root");
+       	DefaultMutableTreeNode root = (DefaultMutableTreeNode)session.getAttribute(Constants.ADVANCED_CONDITIONS_ROOT);
        	int childCount = root.getChildCount();
        	Logger.out.debug("child count in tree view action"+childCount);
 		Vector tree=new Vector();
-		//int nodeCount = 0;
 		Map advancedConditionNodesMap = new HashMap();
+		advancedConditionNodesMap.put(new Integer(0),root);
+		//First time the Advance Search page loads, the tree is empty
 		if(childCount==0)
 		{
 			tree.add(""); 
 		}
 		else
 		{
+			//Create tree for Query View
 			TreeView view = new TreeView();
 			view.arrangeTree(root,0,tree,advancedConditionNodesMap);
 			Logger.out.debug("advancedConditionNodesMap in AdvanceQueryViewAction"+advancedConditionNodesMap);
 			Logger.out.debug("Size of advancedConditionNodesMap in AdvanceQueryViewAction"+advancedConditionNodesMap.size());
 		}
-		session.setAttribute("advancedConditionNodesMap",advancedConditionNodesMap);
+		session.setAttribute(Constants.ADVANCED_CONDITION_NODES_MAP,advancedConditionNodesMap);
 		Logger.out.debug("Vector size of the tree"+tree);
-		request.setAttribute("vector",tree);
+		request.setAttribute(Constants.TREE_VECTOR,tree);
 		return (mapping.findForward(Constants.SUCCESS));
 	}
-	/*public void arrangeTree(DefaultMutableTreeNode node,int count,Vector tree,int temp,Map advancedConditionNodesMap,int nodeCount){
-		
-		temp++;
-		Logger.out.debug("after incre--"+temp);
-		
-		
-		for(int i = 0; i < node.getChildCount();i++){
-			nodeCount++;
-			DefaultMutableTreeNode n = (DefaultMutableTreeNode)node.getChildAt(i);
-			AdvancedConditionsNode advConditionNode = (AdvancedConditionsNode)n.getUserObject();
-			Logger.out.debug("nodeCount!!!!!!!!!!!"+nodeCount);
-			advancedConditionNodesMap.put(new Integer(nodeCount),n);
-			
-			Vector v = advConditionNode.getObjectConditions();
-			String tableName = advConditionNode.getObjectName();
-			Logger.out.debug("object name for advance node"+tableName);
-			Logger.out.debug("size-->"+v.size());
-			String str = "";
-			Condition con = null;
-			DataElement data = null;
-			Logger.out.debug("before str--"+temp);
-			
-			for(int k = 0; k < v.size(); k++){
-				con = (Condition)v.get(k);
-				data = con.getDataElement();
-		        Operator op = con.getOperator();
-		        if(k == 0)
-		        	//str = temp + "|" + count + "|" +data.getTable()+": "+data.getField()+ " "+op.getOperator() + " "+con.getValue();
-		        	str = temp + "|" + count + "|" +data.getField()+ " "+op.getOperator() + " '" + con.getValue()+ "'";
-		        else
-		        	//str = str +" "+"AND"+" "+data.getField()+" "+op.getOperator() + " "+con.getValue();
-		        	str = str +" "+"<font color='red'>AND</font>"+" "+data.getField()+" "+op.getOperator() + " '"+con.getValue()+ "'";
-		        // entered by Mandar for validation of single quotes around the values.
-		        Logger.out.debug( "STR :---------- : "+ str);
-		    }
-			if(data != null)
-				str = str +  "|" + tableName;
-			
-			if(con == null){
-				str = temp + "|" + count + "|" + "ANY" + "|"+advConditionNode.getObjectName();
-			}
-				
-			tree.add(str);
-			Logger.out.debug("before arrangetree--"+temp);
-			if(n.isLeaf())
-			{
-				temp++;
-				
-				Logger.out.debug("inside leaf loop"+temp);
-			}
-			else
-				arrangeTree(n,temp,tree,temp,advancedConditionNodesMap,nodeCount);
-			Logger.out.debug("temp after rec"+temp);
-		}
-	
-	}*/
-
 }
 
 

@@ -18,9 +18,14 @@ import org.apache.struts.actions.DispatchAction;
 import edu.wustl.catissuecore.actionForm.AdvanceSearchForm;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.ConditionMapParser;
+/**
+ * @author poornima_govindrao
+ *
+ *This class is for Advanced Search Action
+ * 
+ */
 
-
-public class AdvanceSearchAction extends DispatchAction
+public class AdvanceSearchAction extends DispatchAction 
 {
     
     public ActionForward execute(ActionMapping mapping, ActionForm form,
@@ -34,19 +39,19 @@ public class AdvanceSearchAction extends DispatchAction
         
         //Get the Map values from UI
         Map map = advanceSearchForm.getValues();
+        
+        //Parse the conditions to for the advancedConditionNode
         ConditionMapParser parser = new ConditionMapParser();
         List conditionNodeCollection = parser.parseCondition(map);
         HttpSession session = request.getSession();
-        DefaultMutableTreeNode root = (DefaultMutableTreeNode)session.getAttribute("root");
+        DefaultMutableTreeNode root = (DefaultMutableTreeNode)session.getAttribute(Constants.ADVANCED_CONDITIONS_ROOT);
         String objectName = advanceSearchForm.getObjectName();
         String selectedNode = advanceSearchForm.getSelectedNode();
-        Map advancedConditionNodesMap = (Map)session.getAttribute("advancedConditionNodesMap");
-        if(conditionNodeCollection.size()!=0)
-        {
-        	root = parser.createAdvancedQueryObj(conditionNodeCollection,root,objectName,selectedNode,advancedConditionNodesMap);
-        }
-        //Query query = QueryFactory.getInstance().newQuery(Query.ADVANCED_QUERY, aliasName);
-        session.setAttribute("root",root);
+        Map advancedConditionNodesMap = (Map)session.getAttribute(Constants.ADVANCED_CONDITION_NODES_MAP);
+       	root = parser.createAdvancedQueryObj(conditionNodeCollection,root,objectName,selectedNode,advancedConditionNodesMap);
+        	
+       //Query query = QueryFactory.getInstance().newQuery(Query.ADVANCED_QUERY, aliasName);
+        session.setAttribute(Constants.ADVANCED_CONDITIONS_ROOT,root);
         //Get the view columns.
         //String [] columnNames = query.setViewElements(aliasName);
         

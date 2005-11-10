@@ -1330,6 +1330,9 @@ public class Constants
 	public static final String C = "C";
 	public static final String S = "S";
 	public static final String P = "P";
+	public static final String ADVANCED_CONDITION_NODES_MAP = "advancedConditionNodesMap";
+	public static final String TREE_VECTOR = "treeVector";
+	public static final String ADVANCED_CONDITIONS_ROOT = "advancedCondtionsRoot";
 	
 	// -- menu selection related
 	public static final String MENU_SELECTED = "menuSelected";

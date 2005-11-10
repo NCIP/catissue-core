@@ -37,14 +37,15 @@ public class AdvanceQueryInterfaceAction extends BaseAction
     {         
     	String operation = (String)request.getParameter("operation");
     	Logger.out.debug("Advanced operation "+operation);
+    	//First time the Advance Search page loads set the Query view root as empty
     	if(operation==null)
     	{
     		Logger.out.debug("Inside initialization of root node");
     		DefaultMutableTreeNode root = new DefaultMutableTreeNode();;
     		HttpSession session = request.getSession();
-    		session.setAttribute("root",root);
-    		root = (DefaultMutableTreeNode)session.getAttribute("root");
-    		Logger.out.debug("child count in init action:"+root.getChildCount());
+    		session.setAttribute(Constants.ADVANCED_CONDITIONS_ROOT,root);
+    		//root = (DefaultMutableTreeNode)session.getAttribute(Constants.ADVANCED_CONDITIONS_ROOT);
+    		//Logger.out.debug("child count in init action:"+root.getChildCount());
     	}
     	String pageOf = (String)request.getParameter(Constants.PAGEOF);
     	request.setAttribute(Constants.MENU_SELECTED,new String("17") );

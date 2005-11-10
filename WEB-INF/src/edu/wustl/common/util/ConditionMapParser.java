@@ -125,7 +125,10 @@ public class ConditionMapParser
 		else
 		{
 			int nodeCount=0;
-			addNode(root,Integer.parseInt(selectedNode),nodeCount,child,objectName,advancedConditionNodesMap);
+			if(selectedNode.equals(""))
+				addNode(root,0,nodeCount,child,objectName,advancedConditionNodesMap);
+			else
+				addNode(root,Integer.parseInt(selectedNode),nodeCount,child,objectName,advancedConditionNodesMap);
 			Logger.out.debug("root size"+root.getDepth());
 			
 		}
@@ -206,22 +209,28 @@ public class ConditionMapParser
 		//DefaultMutableTreeNode child = new DefaultMutableTreeNode();
 		DefaultMutableTreeNode parent = new DefaultMutableTreeNode();
 		DefaultMutableTreeNode selectedAdvNode = (DefaultMutableTreeNode) advancedConditionNodesMap.get(new Integer(selectedNode));
-		String presentObjectName =((AdvancedConditionsNode)selectedAdvNode.getUserObject()).getObjectName();
-		Logger.out.debug("selectedAdvNode's object name"+((AdvancedConditionsNode)selectedAdvNode.getUserObject()).getObjectName());
 
-		if(objectName.equals(Constants.PARTICIPANT))
+		if(selectedNode==0)
 		{
-			selectedAdvNode = (DefaultMutableTreeNode) advancedConditionNodesMap.get(new Integer(1));
-			parent =(DefaultMutableTreeNode) selectedAdvNode.getParent();
-			parent.add(presentNode);
+			selectedAdvNode = (DefaultMutableTreeNode) advancedConditionNodesMap.get(new Integer(0));
+			selectedAdvNode.add(presentNode);
 		}
-		else if(objectName.equals(presentObjectName))
-		{
-			parent =(DefaultMutableTreeNode) selectedAdvNode.getParent();
-			parent.add(presentNode);
-		
+		else
+		{		
+			parent = new DefaultMutableTreeNode();
+			selectedAdvNode = (DefaultMutableTreeNode) advancedConditionNodesMap.get(new Integer(selectedNode));
+			String presentObjectName =((AdvancedConditionsNode)selectedAdvNode.getUserObject()).getObjectName();
+			Logger.out.debug("selectedAdvNode's object name"+((AdvancedConditionsNode)selectedAdvNode.getUserObject()).getObjectName());
+			
+			
+			if(objectName.equals(presentObjectName))
+			{
+				parent =(DefaultMutableTreeNode) selectedAdvNode.getParent();
+				parent.add(presentNode);
+				
+			}
+			else		
+				selectedAdvNode.add(presentNode);
 		}
-		else		
-		selectedAdvNode.add(presentNode);
 	}
 }

@@ -16,36 +16,39 @@ import edu.wustl.common.util.logger.Logger;
 /**
  * @author poornima_govindrao
  *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Style - Code Templates
+ *This class is for diplaying the tree in query view of Advanced Search 
+ * 
  */
-public class TreeView 
-{
+public class TreeView {
+	
+	//Variable which holds node ID in the tree. 
 	private int nodeId=0;
-	public void arrangeTree(DefaultMutableTreeNode node,int parentId,Vector tree,Map advancedConditionNodesMap)
-	{
+	
+	//Recursive function to create the tree
+	public void arrangeTree(DefaultMutableTreeNode node,int parentId,Vector tree,Map advancedConditionNodesMap){
+		
 		nodeId++;
-		Logger.out.debug("after incre--"+nodeId);
-		for(int i = 0; i < node.getChildCount();i++)
-		{
-			DefaultMutableTreeNode n = (DefaultMutableTreeNode)node.getChildAt(i);
-			AdvancedConditionsNode advConditionNode = (AdvancedConditionsNode)n.getUserObject();
-			advancedConditionNodesMap.put(new Integer(nodeId),n);
-			
-			Vector v = advConditionNode.getObjectConditions();
+		
+		//Loop for all the children for the current node.
+		for(int i = 0; i < node.getChildCount();i++){
+			//nodeCount++;
+			DefaultMutableTreeNode child = (DefaultMutableTreeNode)node.getChildAt(i);
+			AdvancedConditionsNode advConditionNode = (AdvancedConditionsNode)child.getUserObject();
+			advancedConditionNodesMap.put(new Integer(nodeId),child);
+			Vector vectorOfCondtions = advConditionNode.getObjectConditions();
 			String tableName = advConditionNode.getObjectName();
 			Logger.out.debug("object name for advance node"+tableName);
-			Logger.out.debug("size-->"+v.size());
+			Logger.out.debug("size-->"+vectorOfCondtions.size());
 			String str = "";
 			Condition con = null;
 			DataElement data = null;
 			Logger.out.debug("before str--"+nodeId);
 			
-			for(int k = 0; k < v.size(); k++)
-			{
-				con = (Condition)v.get(k);
+			for(int k = 0; k < vectorOfCondtions.size(); k++){
+				con = (Condition)vectorOfCondtions.get(k);
 				data = con.getDataElement();
 		        Operator op = con.getOperator();
+		        String column = data.getField();
 		        if(k == 0)
 		        	//str = temp + "|" + parentId + "|" +data.getTable()+": "+data.getField()+ " "+op.getOperator() + " "+con.getValue();
 		        	str = nodeId + "|" + parentId + "|" +data.getField()+ " "+op.getOperator() + " '" + con.getValue()+ "'";
@@ -58,19 +61,16 @@ public class TreeView
 			if(data != null)
 				str = str +  "|" + tableName;
 			
-			if(con == null)
+			if(con == null){
 				str = nodeId + "|" + parentId + "|" + "ANY" + "|"+advConditionNode.getObjectName();
-			
+			}
 			tree.add(str);
-			Logger.out.debug("before arrangetree--"+nodeId);
-			if(n.isLeaf())
+			if(child.isLeaf())
 			{
 				nodeId++;
-				Logger.out.debug("inside leaf loop"+nodeId);
 			}
 			else
-				arrangeTree(n,nodeId,tree,advancedConditionNodesMap);
-			Logger.out.debug("temp after rec"+nodeId);
+				arrangeTree(child,nodeId,tree,advancedConditionNodesMap);
 		}
 	
 	}
