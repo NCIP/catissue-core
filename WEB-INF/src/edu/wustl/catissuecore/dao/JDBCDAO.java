@@ -10,6 +10,7 @@
 package edu.wustl.catissuecore.dao;
 import java.io.Serializable;
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -68,7 +69,10 @@ public class JDBCDAO extends AbstractDAO
     	}
     	catch(Exception sqlExp)
     	{
-    	    throw new DAOException(sqlExp.getMessage(),sqlExp);
+    	    //throw new DAOException(sqlExp.getMessage(),sqlExp);
+        	Logger.out.error(sqlExp.getMessage(),sqlExp);
+        	throw new DAOException(Constants.GENERIC_DATABASE_ERROR, sqlExp);
+    	    
     	}
     }
     /**
@@ -87,7 +91,10 @@ public class JDBCDAO extends AbstractDAO
         }
         catch(Exception sqlExp)
         {
-            new DAOException(sqlExp.getMessage(),sqlExp);
+//            new DAOException(sqlExp.getMessage(),sqlExp);
+        	Logger.out.error(sqlExp.getMessage(),sqlExp);
+        	throw new DAOException(Constants.GENERIC_DATABASE_ERROR, sqlExp);
+        	
         }
     }
     /**
@@ -108,7 +115,8 @@ public class JDBCDAO extends AbstractDAO
         catch (SQLException dbex)
         {
         	Logger.out.error(dbex.getMessage(),dbex);
-        	throw new DAOException("Error in commit", dbex);
+        	//throw new DAOException("Error in commit", dbex);
+        	throw new DAOException(Constants.GENERIC_DATABASE_ERROR, dbex);
         }
     }
     /**
@@ -126,7 +134,8 @@ public class JDBCDAO extends AbstractDAO
         catch (SQLException dbex)
         {
         	Logger.out.error(dbex.getMessage(),dbex);
-        	new DAOException("Error in rollback", dbex);
+        	//new DAOException("Error in rollback", dbex);
+        	throw new DAOException(Constants.GENERIC_DATABASE_ERROR, dbex);
         }
     }
     
@@ -336,7 +345,9 @@ public class JDBCDAO extends AbstractDAO
         }
         catch(SQLException sqlExp)
         {
-            throw new DAOException(sqlExp.getMessage(), sqlExp);
+            //throw new DAOException(sqlExp.getMessage(), sqlExp);
+        	Logger.out.error(sqlExp.getMessage(), sqlExp);
+        	throw new DAOException(Constants.GENERIC_DATABASE_ERROR, sqlExp);
         }
         finally
 		{
@@ -350,7 +361,9 @@ public class JDBCDAO extends AbstractDAO
 			}
         	catch(SQLException ex)
 			{
-        		throw new DAOException(ex.getMessage(), ex);
+        		//throw new DAOException(ex.getMessage(), ex);
+            	Logger.out.error(ex.getMessage(), ex);
+        		throw new DAOException(Constants.GENERIC_DATABASE_ERROR, ex);
 			}
 		}
         return list;
@@ -519,7 +532,7 @@ public class JDBCDAO extends AbstractDAO
 	    catch (Exception hibExp)
 	    {
 	        Logger.out.error(hibExp.getMessage(),hibExp);
-	        throw new DAOException("Error in retrieve " + hibExp.getMessage(),hibExp);
+	        throw new DAOException(Constants.GENERIC_DATABASE_ERROR ,hibExp);
 	    }
 	}
     
@@ -546,6 +559,7 @@ public class JDBCDAO extends AbstractDAO
         }
         catch(SQLException sqlExp)
         {
+        	
             throw new DAOException(sqlExp.getMessage(), sqlExp);
         }
         finally
