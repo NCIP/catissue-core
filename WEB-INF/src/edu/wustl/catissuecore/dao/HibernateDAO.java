@@ -11,8 +11,11 @@
 package edu.wustl.catissuecore.dao;
 
 import java.io.Serializable;
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -21,6 +24,7 @@ import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.Transaction;
+import net.sf.hibernate.exception.ConstraintViolationException;
 
 import org.apache.log4j.PropertyConfigurator;
 
@@ -35,6 +39,7 @@ import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.exception.AuditException;
 import edu.wustl.catissuecore.util.Permissions;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.security.SecurityManager;
@@ -42,6 +47,7 @@ import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.dbManager.DBUtil;
+import edu.wustl.common.util.dbManager.HibernateMetaData;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -65,6 +71,7 @@ public class HibernateDAO extends AbstractDAO
         try
         {
             session = DBUtil.currentSession();
+       
             transaction = session.beginTransaction();
             
             auditManager = new AuditManager();
@@ -82,7 +89,7 @@ public class HibernateDAO extends AbstractDAO
         catch (HibernateException dbex)
         {
             Logger.out.error(dbex.getMessage(), dbex);
-            throw handleError("Error in opening connection: ", dbex);
+            throw handleError(Constants.GENERIC_DATABASE_ERROR, dbex);
         }
     }
 
@@ -100,7 +107,7 @@ public class HibernateDAO extends AbstractDAO
         catch (HibernateException dx)
         {
             Logger.out.error(dx.getMessage(), dx);
-            throw handleError("Error in closing connection: ", dx);
+            throw handleError(Constants.GENERIC_DATABASE_ERROR, dx);
         }
         session = null;
         transaction = null;
@@ -225,6 +232,33 @@ public class HibernateDAO extends AbstractDAO
                 throw new UserNotAuthorizedException("Not Authorized to insert");
             }
         }
+        catch (ConstraintViolationException cvExp) // Added by Sri
+        {
+        	// In case of constraint voliations, we should report a better error
+        	// message than just the SQL expection
+        	String column = "";
+        	try
+			{
+        		//Get the tablename, given the class name
+        		String tableName = HibernateMetaData.getTableName(obj.getClass());
+        		
+        		// Get the SQL message from the exception
+        		String sqlMsg =generateErrorMessage("", cvExp);
+        		
+        		// Get the column name for which the contraint failed
+        		column = getIndexName(tableName,sqlMsg,session.connection());
+			}
+        	catch(Exception ex)
+			{
+        		// If getindexname itself throws an exception, then cant do much
+        		throw new DAOException(ex.getMessage(),ex);
+			}
+        	
+        	Object[] arguments = {Utility.parseClassName(obj.getClass().getName()),column};
+        	String errMsg = MessageFormat.format(Constants.CONSTRAINT_VOILATION_ERROR,arguments);
+        	throw new DAOException(errMsg, cvExp);
+        }
+
         catch (HibernateException hibExp)
         {
             throw handleError("", hibExp);
@@ -258,6 +292,7 @@ public class HibernateDAO extends AbstractDAO
             {
                 for (int i = 0; i < str.length; i++)
                 {
+                	Logger.out.debug("str:" + str[i]);
                     message.append(str[i] + " ");
                 }
             }
