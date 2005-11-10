@@ -65,7 +65,7 @@ function incrementCounter()
 	document.forms[0].counter.value = parseInt(document.forms[0].counter.value) + 1;
 }
 
-function showDateColumn(element,valueField,columnID,showCalendarID)
+function showDateColumn(element,valueField,columnID,showCalendarID,fieldValue)
 {
 	var dataStr = element.options[element.selectedIndex].value;
 	var dataValue = new String(dataStr);
@@ -84,14 +84,18 @@ function showDateColumn(element,valueField,columnID,showCalendarID)
 		if (dataType == "date")
 		{
 			var td = document.getElementById(columnID);
-			td.className="formField";
-			txtField.readOnly="readOnly";
+			txtField.readOnly="";
 			calendarShow.value = "Show";
+			var innerStr = "<div id='overDiv' style='position:absolute; visibility:hidden; z-index:1000;'></div>";
+			innerStr = innerStr + "<a href=\"javascript:show_calendar('"+fieldValue+"',null,null,'MM-DD-YYYY');\">";
+			innerStr = innerStr + "<img src=\"images\\calendar.gif\" width=24 height=22 border=0>";
+			innerStr = innerStr + "</a>";
+			td.innerHTML = innerStr;
 		}
 		else
 		{
 			var td = document.getElementById(columnID);
-			td.className="hideTD";
+			td.innerHTML = "&nbsp;";
 			txtField.readOnly="";
 			calendarShow.value = "";
 		}	
@@ -156,7 +160,8 @@ function showDateColumn(element,valueField,columnID,showCalendarID)
 						String columnID = "calTD"+i;
 						String showCalendarKey = "SimpleConditionsNode:"+i+"_showCalendar";			
 						String showCalendarValue = "showCalendar(SimpleConditionsNode:"+i+"_showCalendar)";
-						String functionName = "showDateColumn(this,'"+ attributeValueID +"','" + columnID + "','" + showCalendarValue + "')";
+						String fieldName = "simpleQueryInterfaceForm."+attributeValueID;
+						String functionName = "showDateColumn(this,'"+ attributeValueID +"','" + columnID + "','" + showCalendarValue + "','"+fieldName+"')";
 				%>					
 				<tr>
 					<td class="formRequiredNotice" width="5">&nbsp;</td>
@@ -198,31 +203,30 @@ function showDateColumn(element,valueField,columnID,showCalendarID)
 					</td>
 				<!--  ********************* MD Code ********************** -->	
 				<!-- ***** Code added to check multiple rows for Calendar icon ***** -->
+					<td class="onlyBottomBorder" id="<%=columnID%>">
 				<%
 					showCal = "";
-					dateClass = "hideTD";
-					
 					showCal = (String)form.getShowCalendar(showCalendarKey);
 					if(showCal != null && showCal.trim().length()>0)
 					{
-						dateClass = "formField";
-					}	
 				%>
-					<td id="<%=columnID%>" class="<%=dateClass%>">
-					<%	
-						String fieldName = "simpleQueryInterfaceForm."+attributeValueID;
-					%>
 						<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
 						<a href="javascript:show_calendar('<%=fieldName%>',null,null,'MM-DD-YYYY');">
 							<img src="images\calendar.gif" width=24 height=22 border=0>
 						</a>
+				<%		
+					}
+					else
+					{
+				%>
+						&nbsp;					
+				<%						
+					}	
+				%>
 					</td>
-					<logic:equal name="pageOf" value="<%=Constants.PAGEOF_SIMPLE_QUERY_INTERFACE%>">
-					<!-- td class="formSmallField">
-						
-					</td -->
 					<td class="formField">
-					<html:hidden property="<%=nextOperator%>"/>
+						<html:hidden property="<%=nextOperator%>"/>
+					<logic:equal name="pageOf" value="<%=Constants.PAGEOF_SIMPLE_QUERY_INTERFACE%>">
 					  <%if (nextOperatorValue != null && (false == nextOperatorValue.equals(""))){
 							if (nextOperatorValue.equals(Constants.AND_JOIN_CONDITION))
 							{%><bean:message key="simpleQuery.and" />	
