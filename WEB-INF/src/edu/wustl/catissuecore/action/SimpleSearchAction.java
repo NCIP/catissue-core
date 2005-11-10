@@ -95,6 +95,7 @@ public class SimpleSearchAction extends BaseAction
 			}
 			
 			Logger.out.debug("map size"+map.size());
+			Logger.out.debug("map : " + map.toString());
 			MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.query");
 			
 			Collection simpleConditionNodeCollection = parser.generateData(map, true);
