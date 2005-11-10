@@ -26,11 +26,7 @@
 	{
 		SimpleQueryInterfaceForm form = (SimpleQueryInterfaceForm)obj;
 		noOfRows = form.getCounter();
-		showCal = form.getShowCalendar();
 	}
-	
-	if(showCal != null && showCal.trim().length()>0)
-		dateClass = "formField";
         
 	String title = (String)request.getAttribute(Constants.SIMPLE_QUERY_INTERFACE_TITLE);
 	
@@ -69,7 +65,7 @@ function incrementCounter()
 	document.forms[0].counter.value = parseInt(document.forms[0].counter.value) + 1;
 }
 
-function showDateColumn(element,valueField,colID)
+function showDateColumn(element,valueField,columnID,showCalendarID)
 {
 	var dataStr = element.options[element.selectedIndex].value;
 	var dataValue = new String(dataStr);
@@ -83,19 +79,21 @@ function showDateColumn(element,valueField,colID)
 		var txtField = document.getElementById(valueField);
 		txtField.value="";
 
+		var calendarShow = document.getElementById(showCalendarID);
+
 		if (dataType == "date")
 		{
-			var td = document.getElementById(colID);
+			var td = document.getElementById(columnID);
 			td.className="formField";
 			txtField.readOnly="readOnly";
-			document.forms[0].showCalendar.value = "Show";
+			calendarShow.value = "Show";
 		}
 		else
 		{
-			var td = document.getElementById(colID);
+			var td = document.getElementById(columnID);
 			td.className="hideTD";
 			txtField.readOnly="";
-			document.forms[0].showCalendar.value = "";
+			calendarShow.value = "";
 		}	
 	}	
 }
@@ -147,6 +145,7 @@ function showDateColumn(element,valueField,colID)
 						String attributeName = "value(SimpleConditionsNode:"+i+"_Condition_DataElement_field)";
 						String attributeCondition = "value(SimpleConditionsNode:"+i+"_Condition_Operator_operator)";
 						String attributeValue = "value(SimpleConditionsNode:"+i+"_Condition_value)";
+						String attributeValueID = "SimpleConditionsNode"+i+"_Condition_value_ID";
 						String nextOperator = "value(SimpleConditionsNode:"+i+"_Operator_operator)";			
 						String attributeNameList = "attributeNameList"+i;
 						String attributeDisplayNameList = "attributeDisplayNameList"+i;
@@ -154,8 +153,10 @@ function showDateColumn(element,valueField,colID)
 						String objectDisplayNameList = "objectDisplayNameList"+i;
 						SimpleQueryInterfaceForm form = (SimpleQueryInterfaceForm)obj;
 						String nextOperatorValue = (String)form.getValue("SimpleConditionsNode:"+i+"_Operator_operator");
-						String colID = "calTD"+i;
-						String functionName = "showDateColumn(this,'"+ attributeValue +"','" + colID + "')";
+						String columnID = "calTD"+i;
+						String showCalendarKey = "SimpleConditionsNode:"+i+"_showCalendar";			
+						String showCalendarValue = "showCalendar(SimpleConditionsNode:"+i+"_showCalendar)";
+						String functionName = "showDateColumn(this,'"+ attributeValueID +"','" + columnID + "','" + showCalendarValue + "')";
 				%>					
 				<tr>
 					<td class="formRequiredNotice" width="5">&nbsp;</td>
@@ -192,13 +193,24 @@ function showDateColumn(element,valueField,colID)
 						</html:select>
 					</td>
 					<td class="formField">
-						<html:text styleClass="formFieldSized10" size="30" styleId="<%=attributeValue%>" property="<%=attributeValue%>" />
-						<html:hidden property="showCalendar" />
+						<html:text styleClass="formFieldSized10" size="30" styleId="<%=attributeValueID%>" property="<%=attributeValue%>" />
+						<html:hidden property="<%=showCalendarValue%>" styleId="<%=showCalendarValue%>" />
 					</td>
 				<!--  ********************* MD Code ********************** -->	
-					<td id="<%=colID%>" class="<%=dateClass%>">
+				<!-- ***** Code added to check multiple rows for Calendar icon ***** -->
+				<%
+					showCal = "";
+					dateClass = "hideTD";
+					
+					showCal = (String)form.getShowCalendar(showCalendarKey);
+					if(showCal != null && showCal.trim().length()>0)
+					{
+						dateClass = "formField";
+					}	
+				%>
+					<td id="<%=columnID%>" class="<%=dateClass%>">
 					<%	
-						String fieldName = "simpleQueryInterfaceForm."+attributeValue;
+						String fieldName = "simpleQueryInterfaceForm."+attributeValueID;
 					%>
 						<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
 						<a href="javascript:show_calendar('<%=fieldName%>',null,null,'MM-DD-YYYY');">
@@ -206,10 +218,11 @@ function showDateColumn(element,valueField,colID)
 						</a>
 					</td>
 					<logic:equal name="pageOf" value="<%=Constants.PAGEOF_SIMPLE_QUERY_INTERFACE%>">
-					<td class="formSmallField">
-						<html:hidden property="<%=nextOperator%>"/>
-					</td>
+					<!-- td class="formSmallField">
+						
+					</td -->
 					<td class="formField">
+					<html:hidden property="<%=nextOperator%>"/>
 					  <%if (nextOperatorValue != null && (false == nextOperatorValue.equals(""))){
 							if (nextOperatorValue.equals(Constants.AND_JOIN_CONDITION))
 							{%><bean:message key="simpleQuery.and" />	
