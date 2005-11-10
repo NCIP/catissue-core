@@ -1336,4 +1336,12 @@ public class Constants
 	
 	// -- menu selection related
 	public static final String MENU_SELECTED = "menuSelected";
+	public static final String CONSTRAINT_VOILATION_ERROR = "Submission failed since a {0} with the same {1} already exists";
+	public static final String GENERIC_DATABASE_ERROR = "An error occured during a database operation. Please report this problem to the adminstrator";
+
+	// The unique key voilation message is "Duplicate entry %s for key %d"
+	// This string is used for searching " for key " string in the above error message
+	public static final String MYSQL_DUPL_KEY_MSG = " for key ";
+
+	
 }
