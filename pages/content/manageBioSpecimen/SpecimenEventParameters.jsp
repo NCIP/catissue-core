@@ -104,6 +104,9 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 </head>
 
 <html:errors />
+<html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
+	<%=messageKey%>
+</html:messages>
 
 <html:form action="<%=Constants.SPECIMEN_ADD_ACTION%>">
 <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="500">
