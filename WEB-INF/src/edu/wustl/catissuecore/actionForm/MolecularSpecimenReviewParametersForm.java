@@ -50,17 +50,17 @@ public class MolecularSpecimenReviewParametersForm extends SpecimenEventParamete
 	/**
      * A number corresponding to the gel on which the specimen was analyzed for QA purposes.
      */
-	protected int gelNumber;
+	protected String gelNumber;
 	
 	/**
      * Absorbance of the specimen at 260 nanometers.
      */
-	protected double absorbanceAt260;
+	protected String absorbanceAt260;
 	
 	/**
      * Absorbance of the specimen at 280 nanometers.
      */
-	protected double absorbanceAt280;
+	protected String absorbanceAt280;
 	
 	protected String isRNA = "false";
 	
@@ -135,7 +135,7 @@ public class MolecularSpecimenReviewParametersForm extends SpecimenEventParamete
      * @return A number corresponding to the gel on which the specimen was analyzed for QA purposes.
      * @see #setGelNumber(Integer)
      */
-	public int getGelNumber()
+	public String getGelNumber()
 	{
 		return gelNumber;
 	}
@@ -145,7 +145,7 @@ public class MolecularSpecimenReviewParametersForm extends SpecimenEventParamete
      * @param gelNumber a number corresponding to the gel on which the specimen was analyzed for QA purposes.
      * @see #getGelNumber()
      */
-	public void setGelNumber(int gelNumber)
+	public void setGelNumber(String gelNumber)
 	{
 		this.gelNumber = gelNumber;
 	}
@@ -155,7 +155,7 @@ public class MolecularSpecimenReviewParametersForm extends SpecimenEventParamete
      * @return Absorbance of the specimen at 260 nanometers.
      * @see #setAbsorbanceAt260(double)
      */
-	public double getAbsorbanceAt260()
+	public String getAbsorbanceAt260()
 	{
 		return absorbanceAt260;
 	}
@@ -165,7 +165,7 @@ public class MolecularSpecimenReviewParametersForm extends SpecimenEventParamete
      * @param absorbanceAt260 absorbance of the specimen at 260 nanometers.
      * @see #getAbsorbanceAt260()
      */
-	public void setAbsorbanceAt260(double absorbanceAt260)
+	public void setAbsorbanceAt260(String absorbanceAt260)
 	{
 		this.absorbanceAt260 = absorbanceAt260;
 	}
@@ -175,7 +175,7 @@ public class MolecularSpecimenReviewParametersForm extends SpecimenEventParamete
      * @return Absorbance of the specimen at 280 nanometers.
      * @see #setAbsorbanceAt280(double)
      */
-	public double getAbsorbanceAt280()
+	public String getAbsorbanceAt280()
 	{
 		return absorbanceAt280;
 	}
@@ -185,7 +185,7 @@ public class MolecularSpecimenReviewParametersForm extends SpecimenEventParamete
      * @param absorbanceAt280 absorbance of the specimen at 280 nanometers.
      * @see #getAbsorbanceAt280()
      */
-	public void setAbsorbanceAt280(double absorbanceAt280)
+	public void setAbsorbanceAt280(String absorbanceAt280)
 	{
 		this.absorbanceAt280 = absorbanceAt280;
 	}
@@ -232,9 +232,9 @@ public class MolecularSpecimenReviewParametersForm extends SpecimenEventParamete
 			this.gelImageURL = Utility.toString(molecularSpecimenReviewParametersObject.getGelImageURL()) ;
 			this.qualityIndex = Utility.toString(molecularSpecimenReviewParametersObject.getQualityIndex());
 			this.laneNumber = Utility.toString(molecularSpecimenReviewParametersObject.getLaneNumber()) ;
-			this.gelNumber = molecularSpecimenReviewParametersObject.getGelNumber().intValue() ;
-			this.absorbanceAt260 = molecularSpecimenReviewParametersObject.getAbsorbanceAt260().doubleValue() ;
-			this.absorbanceAt280 = molecularSpecimenReviewParametersObject.getAbsorbanceAt280().doubleValue();  
+			this.gelNumber = Utility.toString(molecularSpecimenReviewParametersObject.getGelNumber()) ;
+			this.absorbanceAt260 = Utility.toString(molecularSpecimenReviewParametersObject.getAbsorbanceAt260());
+			this.absorbanceAt280 = Utility.toString(molecularSpecimenReviewParametersObject.getAbsorbanceAt280());  
 			this.ratio28STo18S = Utility.toString(molecularSpecimenReviewParametersObject.getRatio28STo18S()) ; 
 			if(this.ratio28STo18S.trim().length()>0  )
 			{
@@ -284,25 +284,25 @@ public class MolecularSpecimenReviewParametersForm extends SpecimenEventParamete
 //            }
 
           	Logger.out.info("gelNumber: "+ gelNumber  );
-//            //	 checks the gelNumber
-//         	if (gelNumber <= 0 )
-//            {
-//           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("molecularspecimenreviewparameters.gelnumber")));
-//            }
+            //	 checks the gelNumber
+         	if (!validator.isEmpty(gelNumber) && !validator.isNumeric(gelNumber,0 )  )
+            {
+           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("molecularspecimenreviewparameters.gelnumber")));
+            }
 
           	Logger.out.info("absorbanceAt260: "+ absorbanceAt260  );
-//            //	 checks the absorbanceAt260
-//         	if (!validator.isDouble(""+absorbanceAt260))
-//            {
-//           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("molecularspecimenreviewparameters.absorbanceat260")));
-//            }
+            //	 checks the absorbanceAt260
+         	if (!validator.isEmpty(absorbanceAt260) && !validator.isDouble(absorbanceAt260,0))
+            {
+           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("molecularspecimenreviewparameters.absorbanceat260")));
+            }
 
           	Logger.out.info("absorbanceAt280: "+ absorbanceAt280  );
-//            //	 checks the absorbanceAt280
-//         	if (!validator.isDouble(""+absorbanceAt280))
-//            {
-//           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("molecularspecimenreviewparameters.absorbanceat280")));
-//            }
+            //	 checks the absorbanceAt280
+         	if (!validator.isEmpty(absorbanceAt280) && !validator.isDouble(absorbanceAt280,0))
+            {
+           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("molecularspecimenreviewparameters.absorbanceat280")));
+            }
 
          	Logger.out.info("ratio28STo18S : "+ ratio28STo18S   );
 //            //	 checks the ratio28STo18S 
