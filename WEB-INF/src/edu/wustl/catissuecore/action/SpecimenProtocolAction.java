@@ -1,9 +1,9 @@
 /**
- * <p>Title: CollectionProtocolAction Class>
- * <p>Description:	This class initializes the fields in the User Add/Edit webpage.</p>
+ * <p>Title: SpecimenProtocolAction Class</p>
+ * <p>Description:	This class initializes the fields in the Collection / Distribution Add/Edit webpage.</p>
  * Copyright:    Copyright (c) year
  * Company: Washington University, School of Medicine, St. Louis.
- * @author Gautam Shetty
+ * @author Mandar Deshmukh
  * @version 1.00
  * Created on Mar 22, 2005
  */
@@ -34,22 +34,23 @@ import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.cde.CDE;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.cde.PermissibleValue;
+import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
 /**
- * This class initializes the fields in the User Add/Edit webpage.
- * @author gautam_shetty
+ * This class initializes the fields in the Collection / Distribution Add/Edit webpage.
+ * @author Mandar Deshmukh
  */
 public class SpecimenProtocolAction  extends SecureAction
 {
 
     /**
      * Overrides the execute method of Action class.
-     * Sets the various fields in User Add/Edit webpage.
+     * Sets the various fields in Collection / Distribution Add/Edit webpage.
      * */
     public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
-            throws IOException, ServletException
+            throws IOException, ServletException, DAOException
     {
         //Gets the value of the operation parameter.
         String operation = request.getParameter(Constants.OPERATION);
@@ -60,11 +61,9 @@ public class SpecimenProtocolAction  extends SecureAction
         //Sets the activityStatusList attribute to be used in the Site Add/Edit Page.
         request.setAttribute(Constants.ACTIVITYSTATUSLIST, Constants.ACTIVITY_STATUS_VALUES);
   
-        try
-		{
         	UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getBizLogic(Constants.USER_FORM_ID);
-        	Collection coll =  userBizLogic.getUsers();
-        	request.setAttribute(Constants.USERLIST, coll);
+        	Collection userCollection =  userBizLogic.getUsers();
+        	request.setAttribute(Constants.USERLIST, userCollection);
         	Logger.out.debug("1");
         	// get the Specimen class and type from the cde
 	    	List specimenTypeList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_SPECIMEN_TYPE,null);
@@ -80,6 +79,9 @@ public class SpecimenProtocolAction  extends SecureAction
 	    	Map subTypeMap = new HashMap();
 	    	Logger.out.debug("\n\n\n\n**********MAP DATA************\n");
 	    	specimenClassList.add(new NameValueBean(Constants.SELECT_OPTION,"-1"));
+
+	    	// Fill the Map with Specimen as Keys and Subtypes as values.
+	    	// Used for dynamically generation of JavaScript arrays for Specimen Type.
 	    	while(itr.hasNext())
 	    	{
 	    		List innerList =  new ArrayList();
@@ -118,11 +120,6 @@ public class SpecimenProtocolAction  extends SecureAction
 	    	
 	    	List pathologyStatusList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_PATHOLOGICAL_STATUS,null);
 	    	request.setAttribute(Constants.PATHOLOGICAL_STATUS_LIST, pathologyStatusList);
-		}
-        catch(Exception e)
-		{
-        	Logger.out.error(e.getMessage(),e);
-		}
         
         return mapping.findForward((String)request.getParameter(Constants.PAGEOF));
     }

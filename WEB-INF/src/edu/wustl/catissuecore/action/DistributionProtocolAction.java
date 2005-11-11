@@ -1,9 +1,9 @@
 /**
- * <p>Title: CollectionProtocolAction Class>
- * <p>Description:	This class initializes the fields in the User Add/Edit webpage.</p>
+ * <p>Title: DistributionProtocolAction Class>
+ * <p>Description:	This class initializes the fields in the DistributionProtocol Add/Edit webpage.</p>
  * Copyright:    Copyright (c) year
  * Company: Washington University, School of Medicine, St. Louis.
- * @author Gautam Shetty
+ * @author Mandar Deshmukh
  * @version 1.00
  * Created on Mar 22, 2005
  */
@@ -25,11 +25,12 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.DistributionProtocolForm;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
 
 /**
- * This class initializes the fields in the Distribution Add/Edit webpage.
+ * This class initializes the fields in the DistributionProtocol Add/Edit webpage.
  * @author Mandar Deshmukh
  */
 public class DistributionProtocolAction extends SpecimenProtocolAction 
@@ -37,11 +38,11 @@ public class DistributionProtocolAction extends SpecimenProtocolAction
 
     /**
      * Overrides the execute method of Action class.
-     * Sets the various fields in Distribution Add/Edit webpage.
+     * Sets the various fields in DistributionProtocol Add/Edit webpage.
      * */
     public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
-            throws IOException, ServletException
+            throws IOException, ServletException, DAOException
     {     
     	DistributionProtocolForm distributionProtocolForm = (DistributionProtocolForm) form;
     	
@@ -59,7 +60,7 @@ public class DistributionProtocolAction extends SpecimenProtocolAction
     	//Calling DeleteRow of BaseAction class
     	DeleteRow(key,map,request);
     	
-    	// ---------- Add new
+    	// ----------For Add new
 		String reqPath = request.getParameter(Constants.REQ_PATH);
 		if (reqPath != null)
 			request.setAttribute(Constants.REQ_PATH, reqPath);

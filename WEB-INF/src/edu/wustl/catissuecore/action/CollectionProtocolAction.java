@@ -1,9 +1,9 @@
 /**
  * <p>Title: CollectionProtocolAction Class>
- * <p>Description:	This class initializes the fields in the User Add/Edit webpage.</p>
+ * <p>Description:	This class initializes the fields in the CollectionProtocol Add/Edit webpage.</p>
  * Copyright:    Copyright (c) year
  * Company: Washington University, School of Medicine, St. Louis.
- * @author Gautam Shetty
+ * @author Mandar Deshmukh
  * @version 1.00
  * Created on Mar 22, 2005
  */
@@ -27,21 +27,22 @@ import edu.wustl.catissuecore.actionForm.CollectionProtocolForm;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.cde.CDEManager;
+import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
 /**
- * This class initializes the fields in the User Add/Edit webpage.
- * @author gautam_shetty
+ * This class initializes the fields in the CollectionProtocol Add/Edit webpage.
+ * @author Mandar Deshmukh
  */
 public class CollectionProtocolAction extends SpecimenProtocolAction 
 {
     /**
      * Overrides the execute method of Action class.
-     * Sets the various fields in User Add/Edit webpage.
+     * Sets the various fields in CollectionProtocol Add/Edit webpage.
      * */
     public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
-            throws IOException, ServletException
+            throws IOException, ServletException,DAOException
     {
     	super.executeSecureAction(mapping, form, request, response);
     	
@@ -80,7 +81,7 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
     	List clinicalStatusList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_CLINICAL_STATUS,undefinedVal);
     	request.setAttribute(Constants.CLINICAL_STATUS_LIST, clinicalStatusList);
 	    	
-    	 // ---------- Add new
+    	 // ---------- Used for Add new
 		String reqPath = request.getParameter(Constants.REQ_PATH);
 		if (reqPath != null)
 			request.setAttribute(Constants.REQ_PATH, reqPath);
