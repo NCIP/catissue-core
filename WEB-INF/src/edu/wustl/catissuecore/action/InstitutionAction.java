@@ -1,9 +1,9 @@
 /**
  * <p>Title: InstitutionAction Class>
- * <p>Description:	This class initializes the fields in the Institute.jsp Page</p>
+ * <p>Description:	This class initializes the fields in the Institution.jsp Page</p>
  * Copyright:    Copyright (c) year
  * Company: Washington University, School of Medicine, St. Louis.
- * @author Gautam Shetty
+ * @author Mandar Deshmukh
  * @version 1.00
  * Created on Mar 22, 2005
  */
@@ -26,7 +26,7 @@ public class InstitutionAction extends SecureAction
 {
     /**
      * Overrides the execute method of Action class.
-     * Initializes the various drop down fields in Institute.jsp Page.
+     * Initializes the various drop down fields in Institution.jsp Page.
      * */
     public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
@@ -35,7 +35,7 @@ public class InstitutionAction extends SecureAction
         //Gets the value of the operation parameter.
         String operation = request.getParameter(Constants.OPERATION);
         
-        //Sets the operation attribute to be used in the Add/Edit Institute Page. 
+        //Sets the operation attribute to be used in the Add/Edit Institution Page. 
         request.setAttribute(Constants.OPERATION, operation);
         
         return mapping.findForward((String)request.getParameter(Constants.PAGEOF));

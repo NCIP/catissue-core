@@ -1,6 +1,6 @@
 /**
- * <p>Title: DepartmentAction Class</p>
- * <p>Description:	This class initializes the fields in the Department Add/Edit webpage.</p>
+ * <p>Title: CancerResearchGroupAction Class</p>
+ * <p>Description:	This class initializes the fields in the CancerResearchGroup Add/Edit webpage.</p>
  * Copyright:    Copyright (c) year
  * Company: Washington University, School of Medicine, St. Louis.
  * @author Mandar Deshmukh
@@ -23,15 +23,15 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.util.global.Constants;
 
 /**
- * This class initializes the fields in the User Add/Edit webpage.
- * @author gautam_shetty
+ * This class initializes the fields in the CancerResearchGroup Add/Edit webpage.
+ * @author Mandar Deshmukh
  */
 
 public class CancerResearchGroupAction extends SecureAction
 {
     /**
      * Overrides the execute method of Action class.
-     * Sets the various fields in Department Add/Edit webpage.
+     * Sets the various fields in CancerResearchGroup Add/Edit webpage.
      * */
     public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
@@ -40,7 +40,7 @@ public class CancerResearchGroupAction extends SecureAction
         //Gets the value of the operation parameter.
         String operation = request.getParameter(Constants.OPERATION);
         
-        //Sets the operation attribute to be used in the Add/Edit User Page. 
+        //Sets the operation attribute to be used in the Add/Edit Department Page. 
         request.setAttribute(Constants.OPERATION,operation);
         
         return mapping.findForward((String)request.getParameter(Constants.PAGEOF));

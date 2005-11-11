@@ -55,7 +55,7 @@ public class SpecimenProtocolAction  extends SecureAction
         //Gets the value of the operation parameter.
         String operation = request.getParameter(Constants.OPERATION);
 
-        //Sets the operation attribute to be used in the Add/Edit User Page. 
+        //Sets the operation attribute to be used in the Add/Edit Collection / Distribution Page. 
         request.setAttribute(Constants.OPERATION, operation);
         
         //Sets the activityStatusList attribute to be used in the Site Add/Edit Page.

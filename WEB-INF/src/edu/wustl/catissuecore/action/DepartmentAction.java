@@ -23,8 +23,8 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.util.global.Constants;
 
 /**
- * This class initializes the fields in the User Add/Edit webpage.
- * @author gautam_shetty
+ * This class initializes the fields in the Department Add/Edit webpage.
+ * @author Mandar Deshmukh
  */
 
 public class DepartmentAction extends SecureAction
@@ -40,7 +40,7 @@ public class DepartmentAction extends SecureAction
         //Gets the value of the operation parameter.
         String operation = request.getParameter(Constants.OPERATION);
         
-        //Sets the operation attribute to be used in the Add/Edit User Page. 
+        //Sets the operation attribute to be used in the Add/Edit Department Page. 
         request.setAttribute(Constants.OPERATION,operation);
         
         return mapping.findForward((String)request.getParameter(Constants.PAGEOF));
