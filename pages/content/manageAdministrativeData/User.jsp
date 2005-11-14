@@ -355,7 +355,7 @@ function handleStatus(status)
 					<logic:equal name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGEOF_APPROVE_USER%>">
 					<tr>
 						<td class="formRequiredNotice" width="5">*</td>
-							<td class="formRequiredLabel" width>
+							<td class="formRequiredLabel" width="140">
 								<label for="status">
 									<bean:message key="user.approveOperation" />
 								</label>
@@ -370,21 +370,21 @@ function handleStatus(status)
 										
 					<tr>
 						<td class="formRequiredNotice" width="5">*</td>
-						<td class="formRequiredLabel">
+						<td class="formRequiredLabel" width="140">
 							<label for="role">
 								<bean:message key="user.role" />
 							</label>
 						</td>
 						<td class="formField">
 							<html:select property="role" styleClass="formFieldSized" styleId="role" size="1" disabled="<%=roleStatus%>">
-								<html:options name="roleIdList" labelName="roleList" />
+								<html:options collection="roleList" labelProperty="name" property="value"/>
 							</html:select>
 						</td>
 					</tr>
 					
     				 <tr>
 			     		<td class="formRequiredNotice" width="5">&nbsp;</td>
-				    	<td class="formLabel">
+				    	<td class="formLabel" width="140">
 							<label for="comments">
 								<bean:message key="user.comments"/>
 							</label>
@@ -400,7 +400,7 @@ function handleStatus(status)
 					<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
 					<tr>
 						<td class="formRequiredNotice" width="5">*</td>
-							<td class="formRequiredLabel">
+							<td class="formRequiredLabel" width="140">
 								<label for="activityStatus">
 									<bean:message key="user.activityStatus" />
 								</label>
