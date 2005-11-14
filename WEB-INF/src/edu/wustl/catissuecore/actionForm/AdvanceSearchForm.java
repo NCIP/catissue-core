@@ -77,7 +77,26 @@ public class AdvanceSearchForm extends ActionForm
     {
         return values.get(key);
     }
-    
+    //Bug 700: changed the method name for setting the map values as it was same in both AdvanceSearchForm and SimpleQueryInterfaceForm
+    /**
+     * Associates the specified object with the specified key in the map.
+     * @param key the key to which the object is mapped.
+     * @param value the object which is mapped.
+     */
+    public void setValue1(String key, Object value) 
+    {    	
+    	values.put(key, value);
+    }
+    /**
+     * Returns the object to which this map maps the specified key.
+     * @param key the required key.
+     * @return the object to which this map maps the specified key.
+     */
+    public Object getValue1(String key) 
+    {
+        return values.get(key);
+    }
+
 	
 	/**
 	 * @return Returns the values.
