@@ -17,11 +17,8 @@ import edu.wustl.catissuecore.actionForm.SpecimenForm;
 import edu.wustl.common.util.logger.Logger;
 
 /**
- * A molecular derivative (I.e. RNA / DNA / Protein Lysate) 
- * obtained from a specimen.
- * @hibernate.joined-subclass table="CATISSUE_MOLECULAR_SPECIMEN"
- * @hibernate.joined-subclass-key column="IDENTIFIER" 
- * @author gautam_shetty
+ * A molecular derivative (I.e. RNA / DNA / Protein Lysate) obtained from a specimen.
+ * @hibernate.subclass name="MolecularSpecimen" discriminator-value="Molecular"
  */
 public class MolecularSpecimen extends Specimen implements Serializable
 {
@@ -58,7 +55,7 @@ public class MolecularSpecimen extends Specimen implements Serializable
      * Returns the concentration of liquid molecular specimen measured 
      * in microgram per microlitter.
      * @hibernate.property name="concentrationInMicrogramPerMicroliter" type="double" 
-     * column="CONCENTRATION_IN_MICROGRAM_PER_MICROLITER" length="50"
+     * column="CONCENTRATION" length="50"
      * @return the concentration of liquid molecular specimen measured 
      * in microgram per microlitter. 
      * directly collected from participant or created from another specimen.
@@ -84,7 +81,7 @@ public class MolecularSpecimen extends Specimen implements Serializable
     /**
      * Returns the initial amount of specimen created from another specimen.
      * @hibernate.property name="quantityInMicrogram" type="double" 
-     * column="QUANTITY_IN_MICROGRAM" length="50"
+     * column="QUANTITY" length="50"
      * @return the initial amount of specimen created from another specimen.
      * @see #setQuantityInMicroGram(Double)
      */
@@ -107,7 +104,7 @@ public class MolecularSpecimen extends Specimen implements Serializable
      * Returns the current available quantity of the specimen. 
      * Available mass of the molecular specimen in tissue bank.
      * @hibernate.property name="availableQuantityInMicrogram" type="double" 
-     * column="AVAILABLE_QUANTITY_IN_MICROGRAM" length="50"
+     * column="AVAILABLE_QUANTITY" length="50"
      * @return the current available quantity of the specimen.
      * @see #setAvailableQuantityInMicroGram(Double)
      */

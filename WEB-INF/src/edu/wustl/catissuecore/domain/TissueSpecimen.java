@@ -19,9 +19,7 @@ import edu.wustl.common.util.logger.Logger;
 /**
  * A single unit of tissue specimen 
  * that is collected or created from a Participant.
- * @hibernate.joined-subclass table="CATISSUE_TISSUE_SPECIMEN"
- * @hibernate.joined-subclass-key column="IDENTIFIER" 
- * @author gautam_shetty
+ * @hibernate.subclass name="TissueSpecimen" discriminator-value="Tissue"
  */
 public class TissueSpecimen extends Specimen implements Serializable
 {
@@ -54,7 +52,7 @@ public class TissueSpecimen extends Specimen implements Serializable
      * Returns the initial amount of specimen either directly collected from participant 
      * or created from another specimen.
      * @hibernate.property name="quantityInGram" type="double" 
-     * column="QUANTITY_IN_GRAM" length="50"
+     * column="QUANTITY" length="50"
      * @return the initial amount of specimen either directly collected from participant 
      * or created from another specimen.
      * @see #setQuantityInGram(Double)
@@ -79,7 +77,7 @@ public class TissueSpecimen extends Specimen implements Serializable
     /**
      * Returns the current available quantity of the specimen.
      * @hibernate.property name="availableQuantityInGram" type="double" 
-     * column="AVAILABLE_QUANTITY_IN_GRAM" length="50"
+     * column="AVAILABLE_QUANTITY" length="50"
      * @return the current available quantity of the specimen.
      * @see #setAvailableQuantityInGram(Double)
      */

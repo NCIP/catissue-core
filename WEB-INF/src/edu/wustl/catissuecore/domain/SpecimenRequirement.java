@@ -20,6 +20,7 @@ import edu.wustl.catissuecore.exception.AssignDataException;
  * @author mandar_deshmukh
  * Required generic attributes for a Specimen associated with a Collection or Distribution Protocol.
  * @hibernate.class table="CATISSUE_SPECIMEN_REQUIREMENT"
+ * @hibernate.discriminator column="SPECIMEN_CLASS" 
  */
 public abstract class SpecimenRequirement  extends AbstractDomainObject implements java.io.Serializable
 {
@@ -55,10 +56,13 @@ public abstract class SpecimenRequirement  extends AbstractDomainObject implemen
 	 */
 	protected Collection collectionProtocolEventCollection = new HashSet();
 	
+	/**
+	 * NOTE: Do not delete this constructor. Hibernet uses this by reflection API.
+	 **/
 	public SpecimenRequirement()
 	{
-		
 	}
+	
 	/**
 	 * Returns the systemIdentifier.
 	 * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"

@@ -19,9 +19,7 @@ import edu.wustl.common.util.logger.Logger;
 /**
  * A biospecimen composed of purified single cells not in the 
  * context of a tissue or other biospecimen fluid.
- * @hibernate.joined-subclass table="CATISSUE_CELL_SPECIMEN"
- * @hibernate.joined-subclass-key column="IDENTIFIER" 
- * @author gautam_shetty
+ * @hibernate.subclass name="CellSpecimen" discriminator-value = "Cell"
  */
 public class CellSpecimen extends Specimen implements Serializable
 {
@@ -53,7 +51,7 @@ public class CellSpecimen extends Specimen implements Serializable
      * Returns the absolute number of cells contained in the biospecimen
      * at the time of its generation.
      * @hibernate.property name="quantityInCellCount" type="int" 
-     * column="QUANTITY_IN_CELL_COUNT" length="50"
+     * column="QUANTITY" length="50"
      * @return the absolute number of cells contained in the biospecimen
      * at the time of its generation.
      * @see #setQuantityInCellCount(Integer)
@@ -76,7 +74,7 @@ public class CellSpecimen extends Specimen implements Serializable
     /**
      * Returns the absolute number of cells remaining in the biospecimen.
      * @hibernate.property name="availableQuantityInCellCount" type="int" 
-     * column="AVAILABLE_QUANTITY_IN_CELL_COUNT" length="50"
+     * column="AVAILABLE_QUANTITY" length="50"
      * @return the absolute number of cells remaining in the biospecimen.
      * @see #setAvailableQuantityInCellCount(Integer)
      */

@@ -12,11 +12,10 @@ package edu.wustl.catissuecore.domain;
 
 /**
  * Required  attributes for a fluid Specimen associated with a Collection or Distribution Protocol.
- * @hibernate.joined-subclass table="CATISSUE_FLUID_SPECIMEN_REQUIREMENT"
- * @hibernate.joined-subclass-key column="IDENTIFIER"
- * @author Mandar Deshmukh
- */
-public class FluidSpecimenRequirement extends SpecimenRequirement implements java.io.Serializable
+ * @hibernate.subclass name="FluidSpecimenRequirement" discriminator-value="Fluid"
+ */ 
+
+public class FluidSpecimenRequirement extends SpecimenRequirement
 {
 	private static final long serialVersionUID = 1234567890L;
 
@@ -28,7 +27,7 @@ public class FluidSpecimenRequirement extends SpecimenRequirement implements jav
 	/**
 	 * Returns the quantity In MiliLiter.
 	 * @hibernate.property name="quantityInMilliliter" type="double"
-	 * column="QUANTITY_IN_MILILITER" length="50"
+	 * column="QUANTITY" length="50"
 	 * @return Returns the quantity In MiliLiter.
 	 */
 	public Double getQuantityInMilliliter()

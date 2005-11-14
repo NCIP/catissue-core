@@ -27,7 +27,7 @@ import edu.wustl.common.util.logger.Logger;
  * A single unit of tissue, body fluid, or derivative biological macromolecule 
  * that is collected or created from a Participant
  * @hibernate.class table="CATISSUE_SPECIMEN"
- * @author gautam_shetty
+ * @hibernate.discriminator column="SPECIMEN_CLASS" 
  */
 public class Specimen extends AbstractDomainObject implements Serializable
 {

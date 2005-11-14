@@ -17,11 +17,8 @@ import edu.wustl.catissuecore.actionForm.SpecimenForm;
 import edu.wustl.common.util.logger.Logger;
 
 /**
- * A single unit of body fluid specimen that is 
- * collected or created from a Participant.
- * @hibernate.joined-subclass table="CATISSUE_FLUID_SPECIMEN"
- * @hibernate.joined-subclass-key column="IDENTIFIER" 
- * @author gautam_shetty
+ * A single unit of body fluid specimen that is collected or created from a Participant.
+ * @hibernate.subclass name="FluidSpecimen" discriminator-value="Fluid" 
  */
 public class FluidSpecimen extends Specimen implements Serializable
 {
@@ -53,7 +50,7 @@ public class FluidSpecimen extends Specimen implements Serializable
      * Returns the initial amount of specimen either 
      * directly collected from participant or created from another specimen.
      * @hibernate.property name="quantityInMilliliter" type="double" 
-	 * column="QUANTITY_IN_MILILITER" length="50"
+	 * column="QUANTITY" length="50"
      * @return the initial amount of specimen either 
      * directly collected from participant or created from another specimen.
      * @see #setQuantityInMiliLiter(Double)
@@ -78,7 +75,7 @@ public class FluidSpecimen extends Specimen implements Serializable
     /**
      * Returns the current available quantity of the specimen.
      * @hibernate.property name="availableQuantityInMilliliter" type="double" 
-	 * column="AVAILABLE_QUANTITY_IN_MILILITER" length="50"
+	 * column="AVAILABLE_QUANTITY" length="50"
      * @return the current available quantity of the specimen.
      * @see #setAvailableQuantityInMiliLiter(Double)
      */

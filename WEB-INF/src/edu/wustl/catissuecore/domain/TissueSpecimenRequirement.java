@@ -12,11 +12,9 @@ package edu.wustl.catissuecore.domain;
 
 /**
  * Required  attributes for a tissue Specimen associated with a Collection or Distribution Protocol.
- * @hibernate.joined-subclass table="CATISSUE_TISSUE_SPECIMEN_REQUIREMENT"
- * @hibernate.joined-subclass-key column="IDENTIFIER" 
- * @author Mandar Deshmukh
- */
-public class TissueSpecimenRequirement extends SpecimenRequirement implements java.io.Serializable
+ * @hibernate.subclass name="TissueSpecimenRequirement" discriminator-value="Tissue"
+ **/
+public class TissueSpecimenRequirement extends SpecimenRequirement
 {
 	private static final long serialVersionUID = 1234567890L;
 	
@@ -28,7 +26,7 @@ public class TissueSpecimenRequirement extends SpecimenRequirement implements ja
 	/**
 	 * Returns the quantity in grams.
 	 * @hibernate.property name="quantityInGram" type="double"
-	 * column="QUANTITY_IN_GRAM" length="50"
+	 * column="QUANTITY" length="50"
 	 * @return Returns the quantity in grams.
 	 */
 	public Double getQuantityInGram()

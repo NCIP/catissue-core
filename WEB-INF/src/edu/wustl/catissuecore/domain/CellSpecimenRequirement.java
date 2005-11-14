@@ -11,12 +11,9 @@ package edu.wustl.catissuecore.domain;
 
 /**
  * Required attributes for a cell Specimen associated with a Collection or Distribution Protocol.
- * 
- * @hibernate.joined-subclass table="CATISSUE_CELL_SPECIMEN_REQUIREMENT"
- * @hibernate.joined-subclass-key column="IDENTIFIER"
- * @author Mandar Deshmukh
+ * @hibernate.subclass name="CellSpecimenRequirement" discriminator-value = "Cell"
  */
-public class CellSpecimenRequirement extends SpecimenRequirement implements java.io.Serializable
+public class CellSpecimenRequirement extends SpecimenRequirement
 {
 	private static final long serialVersionUID = 1234567890L;
 
@@ -28,7 +25,7 @@ public class CellSpecimenRequirement extends SpecimenRequirement implements java
 	/**
 	 * Returns the studyCalendarEventPoint.
 	 * @hibernate.property name="quantityInCellCount" type="int"
-	 * column="QUANTITY_IN_CELL_COUNT" length="50"
+	 * column="QUANTITY" length="50"
 	 * @return Returns the studyCalendarEventPoint.
 	 */
 	public Integer getQuantityInCellCount()
