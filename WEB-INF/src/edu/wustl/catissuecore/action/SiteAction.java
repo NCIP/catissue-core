@@ -25,9 +25,9 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.actionForm.SiteForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
+import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.cde.CDEManager;
-import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -91,12 +91,17 @@ public class SiteAction  extends SecureAction
         	{
         	    String emailAddress ="";
 	        	    Logger.out.debug("Id of Coordinator of Site : " + siteForm.getCoordinatorId() );
-	        	    gov.nih.nci.security.authorization.domainobjects.User user = SecurityManager.getInstance(SiteAction.class ).getUserById(String.valueOf(siteForm.getCoordinatorId() ) );
-	        		if (user != null)
-	        		{
-	        		    emailAddress = user.getEmailId(); 
-	        		    Logger.out.debug("Email Id of Coordinator of Site : " + emailAddress );
-	        		}
+//	        	    gov.nih.nci.security.authorization.domainobjects.User user = SecurityManager.getInstance(SiteAction.class ).getUserById(String.valueOf(siteForm.getCoordinatorId() ) );
+	        	    List userList = userBizLogic.retrieve(User.class.getName(),Constants.SYSTEM_IDENTIFIER , new Long(siteForm.getCoordinatorId()));
+	        	    if(userList.size()>0)
+	        	    {
+	        	    	User user = (User)userList.get(0); 	
+	        	    	if (user != null)
+		        		{
+		        		    emailAddress = user.getEmailAddress() ; 
+		        		    Logger.out.debug("Email Id of Coordinator of Site : " + emailAddress );
+		        		}
+	        	    }
         		siteForm.setEmailAddress(emailAddress); 
         	}        
         	// ------------------------------------------------------------------
