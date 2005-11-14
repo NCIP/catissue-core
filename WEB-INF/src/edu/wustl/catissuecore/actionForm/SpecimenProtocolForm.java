@@ -330,23 +330,25 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
                 {
                 	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocol.irbid")));
                 }
-                
-                if (validator.isEmpty(startDate))
-                {
-                	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocol.startdate")));
-                }
-				else
-				{
-				    if (!validator.checkDate(startDate))
-				    {
-				    	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.invalid",ApplicationProperties.getValue("collectionprotocol.startdate")));
-				    }
-				}
-                if (!validator.isEmpty(endDate) &&  !validator.checkDate(endDate))
-                {
-                	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.invalid",ApplicationProperties.getValue("collectionprotocol.enddate")));
-                }
-             
+
+// --- startdate
+                //  date validation according to bug id  722 and 730
+        		String errorKey = validator.validateDate(startDate );
+        		if(errorKey.trim().length() >0  )
+        		{
+        			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(errorKey,ApplicationProperties.getValue("collectionprotocol.startdate")));
+        		}
+
+//  --- end date        		
+             	if (!validator.isEmpty(endDate) )
+    			{
+    	         	//  date validation according to bug id  722 and 730
+    	    		errorKey = validator.validateDate(endDate );
+    	    		if(errorKey.trim().length() >0  )
+    	    		{
+    	    			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(errorKey,ApplicationProperties.getValue("collectionprotocol.enddate")));
+    	    		}
+    			}
                 
       			// code added as per bug id 235 
     			// code to validate startdate less than end date

@@ -177,16 +177,12 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocolregistration.protocoltitle")));
 		  	}
-			
-			//			 date validations modified. bug id 707
-		  	//check if date is empty. else check for valid date
-			if(validator.isEmpty(registrationDate))
+
+			//  date validation according to bug id 707, 722 and 730
+			String errorKey = validator.validateDate(registrationDate );
+			if(errorKey.trim().length() >0  )
 			{
-			    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocolregistration.date")));
-			}
-			else if (!validator.checkDate(registrationDate))
-			{
-			    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("collectionprotocolregistration.date")));
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(errorKey,ApplicationProperties.getValue("collectionprotocolregistration.date")));
 			}
 			
 			// changes as per Bugzilla Bug 287 

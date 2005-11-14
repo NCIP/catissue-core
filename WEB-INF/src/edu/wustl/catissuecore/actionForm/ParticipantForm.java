@@ -429,18 +429,17 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 //			{
 //			    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("participant.middleName")));
 //			}
-			  
-			if (!validator.isEmpty(birthDate) && !validator.checkDate(birthDate ) )
-			{
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.invalid",ApplicationProperties.getValue("participant.birthDate")));
-			}
-			// ---- BirthDate is greater than current date	
-			if (!validator.isEmpty(birthDate) && validator.checkDate(birthDate ) && !validator.compareDateWithCurrent(birthDate )  )
-			{
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.invalid.date",ApplicationProperties.getValue("participant.birthDate")));
-			}
 
-//			
+         	if (!validator.isEmpty(birthDate) )
+			{
+	         	//  date validation according to bug id  722 and 730
+	    		String errorKey = validator.validateDate(birthDate );
+	    		if(errorKey.trim().length() >0  )
+	    		{
+	    			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(errorKey,ApplicationProperties.getValue("participant.birthDate")));
+	    		}
+			}
+			
 //			if(!validator.isValidOption(gender))
 //			{
 //				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("participant.gender")));

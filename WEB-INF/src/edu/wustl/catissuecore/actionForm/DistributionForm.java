@@ -139,10 +139,14 @@ public class DistributionForm extends SpecimenEventParametersForm
        		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("distribution.distributedBy")));
         }
 		
-		//			 date validations modified. bug id 722
-	  	//check if date is empty. else check for valid date
-		validator.validateDateData(dateOfEvent, errors,"eventparameters.dateofevent" );
-
+		
+		//  date validation according to bug id  722 and 730
+		String errorKey = validator.validateDate(dateOfEvent );
+		if(errorKey.trim().length() >0  )
+		{
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(errorKey,ApplicationProperties.getValue("eventparameters.dateofevent")));
+		}
+		
 		if(!validator.isValidOption(distributionProtocolId))
 		{
 			Logger.out.debug("dist prot");
