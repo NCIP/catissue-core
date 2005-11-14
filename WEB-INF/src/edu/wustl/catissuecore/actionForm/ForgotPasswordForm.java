@@ -22,21 +22,21 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Validator;
 
 /**
+ * ForgotPasswordForm Class is used to encapsulate all the request parameters passed 
+ * from ForgotPassword webpage.
  * @author gautam_shetty
- *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Style - Code Templates
  */
 public class ForgotPasswordForm extends AbstractActionForm
 {
 
     /**
-     * EmailAddress Address of the user whose password is to be searched.
+     * EmailAddress of the user whose password is to be searched.
      */
     private String emailAddress;
 
     /**
-     * @return Returns the emailAddress.
+     * Returns the emailAddress of the user whose password is to be searched.
+     * @return the emailAddress of the user whose password is to be searched.
      */
     public String getEmailAddress()
     {
@@ -44,32 +44,33 @@ public class ForgotPasswordForm extends AbstractActionForm
     }
 
     /**
-     * @param emailAddress The emailAddress to set.
+     * Sets the emailAddress of the user whose password is to be searched.
+     * @param emailAddress the emailAddress of the user whose password is to be searched.
      */
     public void setEmailAddress(String emailAddress)
     {
         this.emailAddress = emailAddress;
     }
 
-    /* (non-Javadoc)
-     * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#getFormId()
+    /**
+     * The form id of ForgotPasswordForm.
      */
     public int getFormId()
     {
         return Constants.FORGOT_PASSWORD_FORM_ID;
     }
 
-    /* (non-Javadoc)
-     * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#setAllValues(edu.wustl.catissuecore.domain.AbstractDomainObject)
+    /**
+     * Populates all the fields from the domain object to the form bean. 
      */
     public void setAllValues(AbstractDomainObject abstractDomain)
     {
-        // TODO Auto-generated method stub
-
+        
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.struts.action.ActionForm#validate(org.apache.struts.action.ActionMapping, javax.servlet.http.HttpServletRequest)
+    /**
+     * Overrides the validate method from Action class.
+     * Validates the fields in the ForgotPasswordForm.
      */
     public ActionErrors validate(ActionMapping arg0, HttpServletRequest arg1)
     {
@@ -95,8 +96,8 @@ public class ForgotPasswordForm extends AbstractActionForm
         return errors;
     }
     
-	/* (non-Javadoc)
-	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#reset()
+	/**
+	 * Overrides the method in the AbstractActionForm.
 	 */
 	protected void reset()
 	{

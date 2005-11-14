@@ -1,8 +1,11 @@
-/*
- * Created on Aug 10, 2005
- *
- * TODO To change the template for this generated file go to
- * Window - Preferences - Java - Code Style - Code Templates
+/**
+ * <p>Title: SimpleQueryInterfaceForm Class>
+ * <p>Description:  SimpleQueryInterfaceForm Class is used to encapsulate all the request parameters passed 
+ * from simple query interface webpage. </p>
+ * Copyright:    Copyright (c) year
+ * Company: Washington University, School of Medicine, St. Louis.
+ * @author Gautam Shetty
+ * @version 1.00
  */
 
 package edu.wustl.catissuecore.actionForm;
@@ -23,17 +26,19 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Validator;
 
 /**
+ * SimpleQueryInterfaceForm Class is used to encapsulate all the request parameters passed 
+ * from simple query interface webpage.
  * @author gautam_shetty
  */
 public class SimpleQueryInterfaceForm extends ActionForm
 {
-
+    
     boolean mutable = true;
     
     Map values = new TreeMap();
-
+    
     String counter;
-
+    
     String pageOf;
     
     String aliasName;
@@ -62,6 +67,9 @@ public class SimpleQueryInterfaceForm extends ActionForm
         this.mutable = mutable;
     }
     
+    /**
+     * Default constructor.
+     */
     public SimpleQueryInterfaceForm()
     {
         this.counter = "1";
