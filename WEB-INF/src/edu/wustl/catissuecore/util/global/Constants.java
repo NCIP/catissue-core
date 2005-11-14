@@ -1165,6 +1165,7 @@ public class Constants
 	// constants for Data required in query
 	public static final String ALIAS_NAME_TABLE_NAME_MAP="objectTableNames";
 	public static final String SYSTEM_IDENTIFIER = "systemIdentifier";
+	public static final String NAME = "name";
 	
 	
 	public static final String EVENT_PARAMETERS[] = {	Constants.SELECT_OPTION,
