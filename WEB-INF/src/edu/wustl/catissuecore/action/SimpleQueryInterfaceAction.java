@@ -11,6 +11,7 @@ package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -46,17 +47,9 @@ public class SimpleQueryInterfaceAction extends SecureAction
         
         for (int i=1;i<=counter;i++)
         {
-            //Key of previous object.
-            String prevKey = "SimpleConditionsNode:"+(i-1)+"_Condition_DataElement_table";
-            String prevValue = (String)simpleQueryInterfaceForm.getValue(prevKey);
-            
             //Key of present object.
             String key = "SimpleConditionsNode:"+i+"_Condition_DataElement_table";
             String value = (String)simpleQueryInterfaceForm.getValue(key);
-            
-            //Key of the next operator (AND/OR).
-            String nextOperatorKey = "SimpleConditionsNode:"+i+"_Operator_operator";
-            String nextOperatorValue = (String)simpleQueryInterfaceForm.getValue(nextOperatorKey);
             
             Validator validator = new Validator();
             if ((value != null) && (validator.isValidOption(value)))
@@ -71,10 +64,14 @@ public class SimpleQueryInterfaceAction extends SecureAction
             
             if (i == counter) 
             {
+                //Key of previous object.
+                String prevKey = "SimpleConditionsNode:"+(i-1)+"_Condition_DataElement_table";
+                String prevValue = (String)simpleQueryInterfaceForm.getValue(prevKey);
+                
                 //If previous table name is not null, get the list of table name related to it.
                 if (prevValue != null)
                 {
-                    List nextTableNameList = queryBizLogic.getNextTableNames(prevValue);
+                    Set nextTableNameList = queryBizLogic.getNextTableNames(prevValue);
                     if (nextTableNameList.isEmpty() == false)
                     {
                         String objectNameList = "objectList"+i;
@@ -87,7 +84,7 @@ public class SimpleQueryInterfaceAction extends SecureAction
                     request.setAttribute(Constants.TABLE_ALIAS_NAME,aliasName);
                     
                     // Get all the table names.  
-                    List objectNameValueBeanList = queryBizLogic.getAllTableNames(aliasName);
+                    Set objectNameValueBeanList = queryBizLogic.getAllTableNames(aliasName);
                     if (objectNameValueBeanList.isEmpty() == false)
                     {
                         request.setAttribute(Constants.OBJECT_NAME_LIST, objectNameValueBeanList);
@@ -106,6 +103,10 @@ public class SimpleQueryInterfaceAction extends SecureAction
             }
             else
             {
+                //Key of the next operator (AND/OR).
+                String nextOperatorKey = "SimpleConditionsNode:"+i+"_Operator_operator";
+                String nextOperatorValue = (String)simpleQueryInterfaceForm.getValue(nextOperatorKey);
+                
                 if (nextOperatorValue != null && !"".equals(nextOperatorValue))
                 {
                     String objectNameValueBeanList = "objectList"+i;

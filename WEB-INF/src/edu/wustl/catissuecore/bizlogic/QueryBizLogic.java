@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import edu.wustl.catissuecore.dao.DAOFactory;
 import edu.wustl.catissuecore.dao.JDBCDAO;
@@ -355,9 +357,9 @@ public class QueryBizLogic extends DefaultBizLogic
      * @throws DAOException
      * @throws ClassNotFoundException
      */
-    public List getNextTableNames(String prevValue) throws DAOException, ClassNotFoundException
+    public Set getNextTableNames(String prevValue) throws DAOException, ClassNotFoundException
     {
-        List objectList = new ArrayList();
+        Set objectList = new TreeSet();
         
         String sql =" (select temp.ALIAS_NAME, temp.DISPLAY_NAME " +
         			" from " +
@@ -489,7 +491,7 @@ public class QueryBizLogic extends DefaultBizLogic
  	* @throws DAOException
  	* @throws ClassNotFoundException
  	*/
-	public List getAllTableNames(String aliasName)throws DAOException, ClassNotFoundException
+	public Set getAllTableNames(String aliasName)throws DAOException, ClassNotFoundException
 	{
     	String sql = " select distinct tableData.DISPLAY_NAME, tableData.ALIAS_NAME " +
     				 " from CATISSUE_TABLE_RELATION tableRelation join CATISSUE_QUERY_INTERFACE_TABLE_DATA " +
@@ -499,14 +501,13 @@ public class QueryBizLogic extends DefaultBizLogic
 		{
 			sql = sql + " where tableData.ALIAS_NAME = '"+ aliasName +"'";
 		}
-		sql = sql + " ORDER BY tableData.DISPLAY_NAME ";
-		
+
 		JDBCDAO jdbcDAO = (JDBCDAO)DAOFactory.getDAO(Constants.JDBC_DAO);
 		jdbcDAO.openSession(null);
 		List tableList = jdbcDAO.executeQuery(sql,null,Constants.INSECURE_RETRIEVE,null,null);
 		jdbcDAO.closeSession();
 		
-		List objectNameValueBeanList = new ArrayList();
+		Set objectNameValueBeanList = new TreeSet();
 		if (aliasName == null || "".equals(aliasName))
 		{
 		    NameValueBean nameValueBean = new NameValueBean();
