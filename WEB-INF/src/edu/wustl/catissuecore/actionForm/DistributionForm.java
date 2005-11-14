@@ -138,10 +138,18 @@ public class DistributionForm extends SpecimenEventParametersForm
         {
        		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("distribution.distributedBy")));
         }
-       	if (!validator.checkDate( dateOfEvent ) )
-       	{
-       		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("eventparameters.dateofevent")));
-       	}
+		
+		//			 date validations modified. bug id 722
+	  	//check if date is empty. else check for valid date
+		if(validator.isEmpty(dateOfEvent))
+		{
+		    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("eventparameters.dateofevent")));
+		}
+		else if (!validator.checkDate(dateOfEvent))
+		{
+		    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("eventparameters.dateofevent")));
+		}
+
 		if(!validator.isValidOption(distributionProtocolId))
 		{
 			Logger.out.debug("dist prot");
