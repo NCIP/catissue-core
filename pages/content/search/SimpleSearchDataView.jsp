@@ -45,19 +45,21 @@
 if(dataList.size() != 0)
 {
 %>
-
+	
 	<script>
 		var myData = [<%int xx;%><%for (xx=0;xx<(dataList.size()-1);xx++){%>
 	<%
 		List row = (List)dataList.get(xx);
   		int j;
-		String chkName = "value(CHK_" + xx + ")";
+  		//Bug 700: changed the variable name for the map values as it was same in both AdvanceSearchForm and SimpleQueryInterfaceForm
+		String chkName = "value1(CHK_" + xx + ")";
 	%>
 		["<INPUT TYPE='CHECKBOX' NAME='<%=chkName%>' id='<%=xx%>' onClick='changeData(this)'>",<%for (j=0;j < (row.size()-1);j++){%>"<%=row.get(j)%>",<%}%>"<%=row.get(j)%>","1"],<%}%>
 	<%
 		List row = (List)dataList.get(xx);
   		int j;
-		String chkName = "value(CHK_" + xx + ")";
+  		//Bug 700: changed the variable name for the map values as it was same in both AdvanceSearchForm and SimpleQueryInterfaceForm
+		String chkName = "value1(CHK_" + xx + ")";
 	%>
 		["<INPUT TYPE='CHECKBOX' NAME='<%=chkName%>' id='<%=xx%>' onClick='changeData(this)'>",<%for (j=0;j < (row.size()-1);j++){%>"<%=row.get(j)%>",<%}%>"<%=row.get(j)%>","1"]
 		];
@@ -115,6 +117,14 @@ if(dataList.size() != 0)
 				document.forms[0].target = "_blank";
 				document.forms[0].submit();
 			}
+		}
+		//function that is called on click of Define View button for the configuration of search results
+		function onConfigure()
+		{
+				action="ConfigureSimpleQueryNonValidate.do";
+				document.forms[0].action = action;
+				document.forms[0].target = "_parent";
+				document.forms[0].submit();
 		}
 		
 		var selected;
@@ -196,9 +206,9 @@ if(dataList.size() != 0)
 						<bean:message key="buttons.export"/>
 					</html:button>
 				</td> 
-				<%String configAction = "callAction('"+Constants.CONFIGURE_SIMPLE_QUERY_NON_VALIDATE_ACTION+"')";%>
+				
 				<td>
-					<html:button styleClass="actionButton" property="configureButton" onclick="<%=configAction%>">
+					<html:button styleClass="actionButton" property="configureButton" onclick="onConfigure()">
 						<bean:message  key="buttons.configure" />
 					</html:button>
 				</td>
@@ -284,7 +294,7 @@ if(dataList.size() != 0)
 					</html:button>
 				</td>
 				<td>
-					<html:button styleClass="actionButton" property="configureButton" onclick="<%=configAction%>">
+					<html:button styleClass="actionButton" property="configureButton" onclick="onConfigure()">
 						<bean:message  key="buttons.configure" />
 					</html:button>
 				</td>
