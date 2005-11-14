@@ -23,6 +23,11 @@
             </generator>
         </id>
 
+        <discriminator
+            column="SPECIMEN_CLASS"
+            type="string"
+        />
+
         <property
             name="type"
             type="string"
@@ -206,22 +211,18 @@
                 hibernate-properties-Specimen.xml
             containing the additional properties and place it in your merge dir.
         -->
-
-        <joined-subclass
+        <subclass
             name="edu.wustl.catissuecore.domain.FluidSpecimen"
-            table="CATISSUE_FLUID_SPECIMEN"
             dynamic-update="false"
             dynamic-insert="false"
+            discriminator-value="Fluid"
         >
-        <key
-            column="IDENTIFIER"
-        />
         <property
             name="quantityInMilliliter"
             type="double"
             update="true"
             insert="true"
-            column="QUANTITY_IN_MILILITER"
+            column="QUANTITY"
             length="50"
         />
 
@@ -230,26 +231,29 @@
             type="double"
             update="true"
             insert="true"
-            column="AVAILABLE_QUANTITY_IN_MILILITER"
+            column="AVAILABLE_QUANTITY"
             length="50"
         />
 
-        </joined-subclass>
-        <joined-subclass
+	    <!--
+            	To add non XDoclet property mappings, create a file named
+                hibernate-properties-FluidSpecimen.xml
+		containing the additional properties and place it in your merge dir.
+	    -->
+
+        </subclass>
+        <subclass
             name="edu.wustl.catissuecore.domain.CellSpecimen"
-            table="CATISSUE_CELL_SPECIMEN"
             dynamic-update="false"
             dynamic-insert="false"
+            discriminator-value="Cell"
         >
-        <key
-            column="IDENTIFIER"
-        />
         <property
             name="quantityInCellCount"
             type="int"
             update="true"
             insert="true"
-            column="QUANTITY_IN_CELL_COUNT"
+            column="QUANTITY"
             length="50"
         />
 
@@ -258,26 +262,29 @@
             type="int"
             update="true"
             insert="true"
-            column="AVAILABLE_QUANTITY_IN_CELL_COUNT"
+            column="AVAILABLE_QUANTITY"
             length="50"
         />
 
-        </joined-subclass>
-        <joined-subclass
+	    <!--
+            	To add non XDoclet property mappings, create a file named
+                hibernate-properties-CellSpecimen.xml
+		containing the additional properties and place it in your merge dir.
+	    -->
+
+        </subclass>
+        <subclass
             name="edu.wustl.catissuecore.domain.MolecularSpecimen"
-            table="CATISSUE_MOLECULAR_SPECIMEN"
             dynamic-update="false"
             dynamic-insert="false"
+            discriminator-value="Molecular"
         >
-        <key
-            column="IDENTIFIER"
-        />
         <property
             name="concentrationInMicrogramPerMicroliter"
             type="double"
             update="true"
             insert="true"
-            column="CONCENTRATION_IN_MICROGRAM_PER_MICROLITER"
+            column="CONCENTRATION"
             length="50"
         />
 
@@ -286,7 +293,7 @@
             type="double"
             update="true"
             insert="true"
-            column="QUANTITY_IN_MICROGRAM"
+            column="QUANTITY"
             length="50"
         />
 
@@ -295,26 +302,29 @@
             type="double"
             update="true"
             insert="true"
-            column="AVAILABLE_QUANTITY_IN_MICROGRAM"
+            column="AVAILABLE_QUANTITY"
             length="50"
         />
 
-        </joined-subclass>
-        <joined-subclass
+	    <!--
+            	To add non XDoclet property mappings, create a file named
+                hibernate-properties-MolecularSpecimen.xml
+		containing the additional properties and place it in your merge dir.
+	    -->
+
+        </subclass>
+        <subclass
             name="edu.wustl.catissuecore.domain.TissueSpecimen"
-            table="CATISSUE_TISSUE_SPECIMEN"
             dynamic-update="false"
             dynamic-insert="false"
+            discriminator-value="Tissue"
         >
-        <key
-            column="IDENTIFIER"
-        />
         <property
             name="quantityInGram"
             type="double"
             update="true"
             insert="true"
-            column="QUANTITY_IN_GRAM"
+            column="QUANTITY"
             length="50"
         />
 
@@ -323,11 +333,17 @@
             type="double"
             update="true"
             insert="true"
-            column="AVAILABLE_QUANTITY_IN_GRAM"
+            column="AVAILABLE_QUANTITY"
             length="50"
         />
 
-        </joined-subclass>
+	    <!--
+            	To add non XDoclet property mappings, create a file named
+                hibernate-properties-TissueSpecimen.xml
+		containing the additional properties and place it in your merge dir.
+	    -->
+
+        </subclass>
 
     </class>
 
