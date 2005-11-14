@@ -10,13 +10,15 @@
 
 package edu.wustl.catissuecore.util.global;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 
 import edu.wustl.common.util.logger.Logger;
 
@@ -462,19 +464,6 @@ public class Validator
     			if(isValidDatePattern(checkDate ))
     			{
     				result = isDate(checkDate ); 
-    				
-//    				SimpleDateFormat dF = new SimpleDateFormat(Constants.DATE_PATTERN_MM_DD_YYYY);
-//					Date sDate = dF.parse(checkDate );
-//					Logger.out.debug("Date : " + sDate.toString() );
-//					Logger.out.debug(sDate.getDate());
-//					Logger.out.debug(sDate.getDay() );
-//					Logger.out.debug(sDate.getHours()) ;
-//					Logger.out.debug(sDate.getMinutes());
-//					Logger.out.debug(sDate.getMonth() );
-//					Logger.out.debug(sDate.getSeconds()) ;
-//					Logger.out.debug(sDate.getYear()) ;
-//					Logger.out.debug(sDate.getTime()) ;
-					
     			}
     			else
     				result = false;
@@ -516,6 +505,35 @@ public class Validator
 
     	return result;
     }
+    
+    // --- method to check date and format the errors accordingly.
+    // Error messages for empty date, Invalid date, and Future dates are formatted . 
+    public void validateDateData(String checkDate,ActionErrors errors, String messageKey )
+    {
+   		Logger.out.debug("handleDateData checkDate : " + checkDate); 
+		if(isEmpty(checkDate))
+		{
+			 errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue(messageKey)));
+		}
+		else
+		{
+			if(isValidDatePattern(checkDate ))
+			{
+				if(isDate(checkDate) )
+				{
+					if(!compareDateWithCurrent(checkDate ))
+					{
+						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.invalid.date",ApplicationProperties.getValue(messageKey )));
+					}
+				}
+				else
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue(messageKey )));
+			}
+			else
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue(messageKey )));
+			
+		}
+    }
     // ------------------------------Date Validation ends-----------------------------------------------------------------------
     
     
@@ -544,18 +562,18 @@ public class Validator
 //        validator.checkDate(sdate );
 //
         // -- Check code for date comparison	
-        String dt = "12-12-2005";
-        System.out.println("validator.compareDateWithCurrent(dt) : " + validator.compareDateWithCurrent(dt) );
-        dt = "12-23-2005";
-        System.out.println("validator.compareDateWithCurrent(dt) : " + validator.compareDateWithCurrent(dt) );
-        dt = "10-23-2005";
-        System.out.println("validator.compareDateWithCurrent(dt) : " + validator.compareDateWithCurrent(dt) );
-        dt = "11-08-2005";
-        System.out.println("validator.compareDateWithCurrent(dt) : " + validator.compareDateWithCurrent(dt) );
-        dt = "ssf";
-        System.out.println("validator.compareDateWithCurrent(dt) : " + validator.compareDateWithCurrent(dt) );
-        
-        
+//        String dt = "12-12-2005";
+//        System.out.println("validator.compareDateWithCurrent(dt) : " + validator.compareDateWithCurrent(dt) );
+//        dt = "12-23-2005";
+//        System.out.println("validator.compareDateWithCurrent(dt) : " + validator.compareDateWithCurrent(dt) );
+//        dt = "10-23-2005";
+//        System.out.println("validator.compareDateWithCurrent(dt) : " + validator.compareDateWithCurrent(dt) );
+//        dt = "11-08-2005";
+//        System.out.println("validator.compareDateWithCurrent(dt) : " + validator.compareDateWithCurrent(dt) );
+//        dt = "ssf";
+//        System.out.println("validator.compareDateWithCurrent(dt) : " + validator.compareDateWithCurrent(dt) );
+//        
+//        
 
 //        String str = "mandar; deshmukh";
 //        String delim=";,";
