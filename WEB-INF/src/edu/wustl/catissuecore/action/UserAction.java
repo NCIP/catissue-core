@@ -11,6 +11,7 @@
 package edu.wustl.catissuecore.action;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Vector;
@@ -30,8 +31,10 @@ import edu.wustl.catissuecore.domain.CancerResearchGroup;
 import edu.wustl.catissuecore.domain.Department;
 import edu.wustl.catissuecore.domain.Institution;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.security.SecurityManager;
+import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.util.logger.Logger;
 import gov.nih.nci.security.authorization.domainobjects.Role;
 
@@ -52,30 +55,29 @@ public class UserAction extends SecureAction
     {
         //Gets the value of the operation parameter.
         String operation = request.getParameter(Constants.OPERATION);
-
+        
         //Sets the operation attribute to be used in the Add/Edit User Page. 
         request.setAttribute(Constants.OPERATION, operation);
-
+        
         //Sets the stateList attribute to be used in the Add/Edit User Page.
         request.setAttribute(Constants.STATELIST, Constants.STATEARRAY);
-
+        
         //Sets the countryList attribute to be used in the Add/Edit User Page.
         request.setAttribute(Constants.COUNTRYLIST, Constants.COUNTRYARRAY);
-
-        //Sets the pageOf attribute (for Add,Edit or Query Interface)
+        
+        //Sets the pageOf attribute (for Add,Edit or Query Interface).
         String pageOf  = request.getParameter(Constants.PAGEOF);
         request.setAttribute(Constants.PAGEOF,pageOf);
+        String target = pageOf;
         
         try
         {
             AbstractBizLogic dao = BizLogicFactory.getBizLogic(Constants.USER_FORM_ID);
-            ListIterator iterator = null;
-            int i;
             
             //Sets the instituteList attribute to be used in the Add/Edit User Page.
             String sourceObjectName = Institution.class.getName();
-            String[] displayNameFields = {"name"};
-            String valueField = "systemIdentifier";
+            String[] displayNameFields = {Constants.NAME};
+            String valueField = Constants.SYSTEM_IDENTIFIER;
             
             List instituteList = dao.getList(sourceObjectName, displayNameFields, valueField, false);
             request.setAttribute(Constants.INSTITUTIONLIST, instituteList);
@@ -89,37 +91,24 @@ public class UserAction extends SecureAction
             sourceObjectName = CancerResearchGroup.class.getName();
             List cancerResearchGroupList = dao.getList(sourceObjectName, displayNameFields, valueField, false);
             request.setAttribute(Constants.CANCER_RESEARCH_GROUP_LIST, cancerResearchGroupList);
-
+            
+            //Populate the activity status dropdown if the operation is edit 
+            //and the user page is of administrative tab.
             if (operation.equals(Constants.EDIT) && pageOf.equals(Constants.PAGEOF_USER_ADMIN))
             {
                 request.setAttribute(Constants.ACTIVITYSTATUSLIST,
-                        Constants.USER_ACTIVITY_STATUS_VALUES);
+                        			 Constants.USER_ACTIVITY_STATUS_VALUES);
             }
             
+            //Populate the role dropdown if the page is of approve user or (Add/Edit) user page of adminitraive tab. 
             if (pageOf.equals(Constants.PAGEOF_APPROVE_USER) || pageOf.equals(Constants.PAGEOF_USER_ADMIN))
             {
-                //Sets the roleList attribute to be used in the Add/Edit User Page.
-                Vector roleList = SecurityManager.getInstance(UserAction.class).getRoles();
+                List roleNameValueBeanList = getRoles();
                 
-                String[] roleNameArray = new String[roleList.size()+1];
-                String[] roleIdArray = new String[roleList.size()+1];
-                iterator = roleList.listIterator();
-                i = 0;
-                roleNameArray[i] = Constants.SELECT_OPTION;
-                roleIdArray[i] = String.valueOf(i);
-                i++;
-                while (iterator.hasNext())
-                {
-                    Role role = (Role) iterator.next();
-                    roleNameArray[i] = role.getName();
-                    roleIdArray[i] = String.valueOf(role.getId());
-                    i++;
-                }
-                
-                request.setAttribute(Constants.ROLEIDLIST, roleIdArray);
-                request.setAttribute(Constants.ROLELIST, roleNameArray);
+                request.setAttribute(Constants.ROLELIST, roleNameValueBeanList);
             }
             
+            //Populate the status dropdown for approve user page.(Approve,Reject,Pending)
             if (pageOf.equals(Constants.PAGEOF_APPROVE_USER))
             {
                 request.setAttribute(Constants.APPROVE_USER_STATUS_LIST,Constants.APPROVE_USER_STATUS_VALUES);
@@ -129,25 +118,53 @@ public class UserAction extends SecureAction
             
             // ------------- add new
             String reqPath = request.getParameter(Constants.REQ_PATH);
-
+            
 			request.setAttribute(Constants.REQ_PATH, reqPath);
             
-            AbstractActionForm aForm = (AbstractActionForm )form; 
+            AbstractActionForm aForm = (AbstractActionForm )form;
             if(reqPath != null && aForm !=null )
             	aForm.setRedirectTo(reqPath);
             
             Logger.out.debug("USerAction redirect :---------- "+ reqPath  );
-               
-            
         }
         catch (Exception exc)
         {
+            target = Constants.FAILURE;
             Logger.out.error(exc.getMessage());
         }
-
-        return mapping.findForward(pageOf);
+        
+        return mapping.findForward(target);
     }
     
+    /**
+     * Returns a list of all roles that can be assigned to a user.
+     * @return a list of all roles that can be assigned to a user.
+     * @throws SMException
+     */
+    private List getRoles() throws SMException
+    {
+        //Sets the roleList attribute to be used in the Add/Edit User Page.
+        Vector roleList = SecurityManager.getInstance(UserAction.class).getRoles();
+        
+        ListIterator iterator = roleList.listIterator();
+        
+        List roleNameValueBeanList = new ArrayList();
+        NameValueBean nameValueBean = new NameValueBean();
+        nameValueBean.setName(Constants.SELECT_OPTION);
+        nameValueBean.setValue("-1");
+        roleNameValueBeanList.add(nameValueBean);
+        
+        while (iterator.hasNext())
+        {
+            Role role = (Role) iterator.next();
+            nameValueBean = new NameValueBean();
+            nameValueBean.setName(role.getName());
+            nameValueBean.setValue(String.valueOf(role.getId()));
+            roleNameValueBeanList.add(nameValueBean);
+        }
+        return roleNameValueBeanList;
+    }
+
     /* (non-Javadoc)
      * @see edu.wustl.catissuecore.action.SecureAction#isAuthorizedToExecute(javax.servlet.http.HttpServletRequest)
      */
