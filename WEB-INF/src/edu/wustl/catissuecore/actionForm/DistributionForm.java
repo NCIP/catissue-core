@@ -141,7 +141,7 @@ public class DistributionForm extends SpecimenEventParametersForm
 		
 		
 		//  date validation according to bug id  722 and 730
-		String errorKey = validator.validateDate(dateOfEvent );
+		String errorKey = validator.validateDate(dateOfEvent,true );
 		if(errorKey.trim().length() >0  )
 		{
 			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(errorKey,ApplicationProperties.getValue("eventparameters.dateofevent")));

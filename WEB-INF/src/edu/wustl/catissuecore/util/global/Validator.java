@@ -508,7 +508,7 @@ public class Validator
     
     // --- method to check date and format the errors accordingly.
     // Error messages for empty date, Invalid date, and Future dates are formatted .
-    public String validateDate(String strDate)
+    public String validateDate(String strDate, boolean checkFutureDate)
     {
     	String returnString = "";
    		Logger.out.debug("handleDateData checkDate : " + strDate); 
@@ -522,10 +522,13 @@ public class Validator
 			{
 				if(isDate(strDate) )
 				{
-					if(!compareDateWithCurrent(strDate ))
+					if(checkFutureDate)
 					{
-						returnString = "errors.invalid.date";
-					}
+						if(!compareDateWithCurrent(strDate ))
+						{
+							returnString = "errors.invalid.date";
+						}
+					}	
 				}
 				else
 					returnString = "errors.item.format";

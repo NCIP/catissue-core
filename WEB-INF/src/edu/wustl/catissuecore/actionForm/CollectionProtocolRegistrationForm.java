@@ -179,7 +179,7 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 		  	}
 
 			//  date validation according to bug id 707, 722 and 730
-			String errorKey = validator.validateDate(registrationDate );
+			String errorKey = validator.validateDate(registrationDate,true );
 			if(errorKey.trim().length() >0  )
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(errorKey,ApplicationProperties.getValue("collectionprotocolregistration.date")));

@@ -433,7 +433,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
          	if (!validator.isEmpty(birthDate) )
 			{
 	         	//  date validation according to bug id  722 and 730
-	    		String errorKey = validator.validateDate(birthDate );
+	    		String errorKey = validator.validateDate(birthDate,true );
 	    		if(errorKey.trim().length() >0  )
 	    		{
 	    			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(errorKey,ApplicationProperties.getValue("participant.birthDate")));
