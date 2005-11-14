@@ -1,6 +1,6 @@
 /**
  * <p>Title: ApproveUserBizLogic Class>
- * <p>Description:	ApproveUserBizLogic is the bizLogic class for Approve Users.</p>
+ * <p>Description:	ApproveUserBizLogic is the bizLogic class for approve users.</p>
  * Copyright:    Copyright (c) year
  * Company: Washington University, School of Medicine, St. Louis.
  * @author Gautam Shetty
@@ -19,10 +19,9 @@ import java.util.Vector;
 import edu.wustl.catissuecore.dao.DAO;
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.util.EmailHandler;
 import edu.wustl.catissuecore.util.Roles;
-import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.SendEmail;
 import edu.wustl.common.beans.SecurityDataBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.security.SecurityManager;
@@ -34,22 +33,21 @@ import edu.wustl.common.util.logger.Logger;
 import gov.nih.nci.security.authorization.domainobjects.Role;
 
 /**
+ * ApproveUserBizLogic is the bizLogic class for approve users.
  * @author gautam_shetty
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Style - Code Templates
  */
 public class ApproveUserBizLogic extends DefaultBizLogic
 {
 
     /**
-     * Overrides the insert method of DefaultBizLogic 
+     * Overrides the insert method of DefaultBizLogic. 
      */
-    protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
+    protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean) 
+    											throws DAOException, UserNotAuthorizedException
     {
         Logger.out.debug("In Approve user BizLogic ..................");
         User user = (User) obj;
-        List list = null;
-
+        
         try
         {
             //If the activity status is Active, create a csm user.
@@ -64,9 +62,9 @@ public class ApproveUserBizLogic extends DefaultBizLogic
                         Constants.ACTIVITY_STATUS_ACTIVE))
                     csmUser.setPassword(PasswordManager.encode(PasswordManager.generatePassword()));
                 csmUser.setStartDate(Calendar.getInstance().getTime());
-
+                
                 SecurityManager.getInstance(ApproveUserBizLogic.class).createUser(csmUser);
-
+                
                 if (user.getRoleId() != null)
                 {
                     SecurityManager.getInstance(ApproveUserBizLogic.class)
@@ -77,10 +75,11 @@ public class ApproveUserBizLogic extends DefaultBizLogic
                 user.setCsmUserId(csmUser.getUserId());
                 user.setPassword(csmUser.getPassword());
             }
-
+            
+            //Update the user record in catissue table.
             dao.update(user.getAddress(), sessionDataBean, true, false, false);
 	        dao.update(user, sessionDataBean, true, true, true);
-
+	        
             //Audit of User Update during approving user.
             User oldUser = (User) oldObj;
             dao.audit(user.getAddress(), oldUser.getAddress(),sessionDataBean,true);
@@ -100,72 +99,25 @@ public class ApproveUserBizLogic extends DefaultBizLogic
                 }
             }
             
-            //Send mail to administrator and user.
-            if (Constants.ACTIVITY_STATUS_ACTIVE.equals(user.getActivityStatus()) 
-	                || Constants.ACTIVITY_STATUS_REJECT.equals(user.getActivityStatus()))
+            //If user is approved send approval and login details emails to the user and administrator.
+            if (Constants.ACTIVITY_STATUS_ACTIVE.equals(user.getActivityStatus()))
 	        {
-	            //Send email to administrator and cc it to the user registered.
-	            SendEmail email = new SendEmail();
-	            
-	            String subject = ApplicationProperties
-	                    .getValue("userRegistration.approve.subject");
-	            
-	            String body = "Dear " + user.getFirstName()
-	                    + " " + user.getLastName()
-	                    + "\n\n"+ ApplicationProperties.getValue("userRegistration.approved.body.start")
-	                    + ApplicationProperties.getValue("userRegistration.loginDetails")
-	                    + "\n\tLogin Name : " + user.getLoginName()
-	                    + "\n\tPassword : " + PasswordManager.decode(user.getPassword())
-	                    + "\n\n" + ApplicationProperties.getValue("email.catissuecore.team");
-	          
-	            if (Constants.ACTIVITY_STATUS_REJECT.equals(user.getActivityStatus()))
-	            {
-	                subject = ApplicationProperties.getValue("userRegistration.reject.subject");
-	                
-	                body = "Dear " + user.getFirstName()
-                    + " " + user.getLastName()
-                    + "\n\n"+ ApplicationProperties.getValue("userRegistration.reject.body.start");
-	                
-	                if ((user.getComments() != null) 
-	                        && ("".equals(user.getComments()) == false))
-	                {
-	                    body = body + "\n\n" + ApplicationProperties.getValue("userRegistration.reject.comments")
-	                    					 + user.getComments();
-	                }
-                    
-                    body = body + "\n\n"+ ApplicationProperties.getValue("userRegistration.reject.body.end")
-                    			+ "\n\n" + ApplicationProperties.getValue("email.catissuecore.team");
-	            }
-	            
-	            String adminEmailAddress = ApplicationProperties
-	                    .getValue("email.administrative.emailAddress");
-	            String technicalSupportEmailAddress = ApplicationProperties
-	                    .getValue("email.technicalSupport.emailAddress");
-	            String mailServer = ApplicationProperties
-	                    .getValue("email.mailServer");
-	            
-	            boolean emailStatus = email.sendmail(user
-	                    .getEmailAddress(), adminEmailAddress, null, technicalSupportEmailAddress,
-	                    mailServer, subject, body);
-	            
-	            if (emailStatus)
-	            {
-	                Logger.out.info(ApplicationProperties
-	                        .getValue("userRegistration.email.success")
-	                        + user.getFirstName() + " " + user.getLastName());
-	            }
-	            else
-	            {
-	                Logger.out.info(ApplicationProperties
-	                        .getValue("userRegistration.email.failure")
-	                        + user.getFirstName() + " " + user.getLastName());
-	            }
+                EmailHandler emailHandler = new EmailHandler(); 
+                
+                //Send approval email to the user and administrator.
+                emailHandler.sendApprovalEmail(user);
+	        }
+            else//If user is rejected send rejection email to the user and administrator.
+	        {
+                EmailHandler emailHandler = new EmailHandler();
+                
+                //Send rejection email to the user and administrator.
+                emailHandler.sendRejectionEmail(user);
 	        }
         }
         catch (SMException smex)
         {
-            Logger.out.debug("Exception in CSM user creation:"
-                    + smex.getMessage(), smex);
+            Logger.out.debug(smex.getMessage(), smex);
             throw new DAOException(smex.getCause().getMessage());
         }
     }
@@ -213,6 +165,10 @@ public class ApproveUserBizLogic extends DefaultBizLogic
         return authorizationData;
     }
     
+    /**
+     * Returns the list of users according to the column name and value passed.
+     * @return the list of users according to the column name and value passed.
+     */
     public List retrieve(String className, String colName, Object colValue) throws DAOException
     {
         List userList = null;

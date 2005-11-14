@@ -10,6 +10,7 @@
 
 package edu.wustl.catissuecore.bizlogic;
 
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -17,16 +18,17 @@ import java.util.Set;
 import java.util.Vector;
 
 import edu.wustl.catissuecore.action.DomainObjectListAction;
+import edu.wustl.catissuecore.action.ForgotPasswordSearchAction;
 import edu.wustl.catissuecore.dao.DAO;
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.domain.CancerResearchGroup;
 import edu.wustl.catissuecore.domain.Department;
 import edu.wustl.catissuecore.domain.Institution;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.util.EmailHandler;
 import edu.wustl.catissuecore.util.Roles;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.SendEmail;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SecurityDataBean;
 import edu.wustl.common.beans.SessionDataBean;
@@ -78,7 +80,7 @@ public class UserBizLogic extends DefaultBizLogic
             {
                 institution = (Institution) list.get(0);
             }
-
+            
             list = dao.retrieve(CancerResearchGroup.class.getName(),
                     "systemIdentifier", user.getCancerResearchGroup()
                             .getSystemIdentifier());
@@ -86,7 +88,7 @@ public class UserBizLogic extends DefaultBizLogic
             {
                 cancerResearchGroup = (CancerResearchGroup) list.get(0);
             }
-
+            
             user.setDepartment(department);
             user.setInstitution(institution);
             user.setCancerResearchGroup(cancerResearchGroup);
@@ -112,6 +114,7 @@ public class UserBizLogic extends DefaultBizLogic
                 
                 user.setCsmUserId(csmUser.getUserId());
                 user.setPassword(csmUser.getPassword());
+                
             }
             
             dao.insert(user.getAddress(), sessionDataBean, true, false);
@@ -123,86 +126,28 @@ public class UserBizLogic extends DefaultBizLogic
             {
                 SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null,protectionObjects,null);
             }
-            catch (SMException e)
+            catch (SMException smExp)
             {
-                Logger.out.error("Exception in Authorization: "+e.getMessage(),e);
+                Logger.out.error(smExp.getMessage(),smExp);
             }
             
-            //Send email to administrator and cc it to the user registered.
-            SendEmail email = new SendEmail();
-            
-            String adminEmailAddress = ApplicationProperties
-                    .getValue("email.administrative.emailAddress");
-            String technicalSupportEmailAddress = ApplicationProperties
-                    .getValue("email.technicalSupport.emailAddress");
-            String mailServer = ApplicationProperties
-                    .getValue("email.mailServer");
-            
-            String subjectKey = "userRegistration.request.subject";
-            String emailBodyStartKey = "userRegistration.request.body.start";
-            String emailBodyEndKey = "userRegistration.request.body.end";
-            
-            if (Constants.PAGEOF_USER_ADMIN.equals(user.getPageOf()))
+            // Send the user registration email to user and the administrator.
+            if (Constants.PAGEOF_SIGNUP.equals(user.getPageOf()))
             {
-                subjectKey = "createUser.subject";
-                emailBodyStartKey = "createUser.body.start";
-                emailBodyEndKey = null;
+                EmailHandler emailHandler = new EmailHandler();
+                
+                emailHandler.sendUserSignUpEmail(user);
             }
-            
-            String subject = ApplicationProperties.getValue(subjectKey);
-            
-            String body = "Dear "+ user.getFirstName()+" "+ user.getLastName()+"\n\n"+
-						  ApplicationProperties.getValue(emailBodyStartKey) +"\n"+
-						  "\n\n" + ApplicationProperties.getValue("user.loginName")+ Constants.SEPARATOR + user.getLoginName() + 
-						  "\n\n" + ApplicationProperties.getValue("user.lastName")+ Constants.SEPARATOR + user.getLastName() +
-						  "\n\n" + ApplicationProperties.getValue("user.firstName")+ Constants.SEPARATOR + user.getFirstName() +
-						  "\n\n" + ApplicationProperties.getValue("user.street")+ Constants.SEPARATOR + user.getAddress().getStreet() +
-						  "\n\n" + ApplicationProperties.getValue("user.city")+ Constants.SEPARATOR + user.getAddress().getCity() +
-						  "\n\n" + ApplicationProperties.getValue("user.zipCode")+ Constants.SEPARATOR + user.getAddress().getZipCode() +
-						  "\n\n" + ApplicationProperties.getValue("user.state")+ Constants.SEPARATOR + user.getAddress().getState() +
-						  "\n\n" + ApplicationProperties.getValue("user.country")+ Constants.SEPARATOR + user.getAddress().getCountry() +
-						  "\n\n" + ApplicationProperties.getValue("user.phoneNumber")+ Constants.SEPARATOR + user.getAddress().getPhoneNumber() +
-						  "\n\n" + ApplicationProperties.getValue("user.faxNumber")+ Constants.SEPARATOR + user.getAddress().getFaxNumber() +
-						  "\n\n" + ApplicationProperties.getValue("user.emailAddress")+ Constants.SEPARATOR + user.getEmailAddress() +
-						  "\n\n" + ApplicationProperties.getValue("user.institution")+ Constants.SEPARATOR + institution.getName() +
-						  "\n\n" + ApplicationProperties.getValue("user.department")+ Constants.SEPARATOR + department.getName() +
-						  "\n\n" + ApplicationProperties.getValue("user.cancerResearchGroup")+ Constants.SEPARATOR + cancerResearchGroup.getName();
-            
-            if (Constants.PAGEOF_USER_ADMIN.equals(user.getPageOf()))
+            else// Send the user creation email to user and the administrator.
             {
-                body = body + "\n\n" + ApplicationProperties.getValue("userRegistration.loginDetails")
-				  + "\n\tLogin Name : " + user.getLoginName()
-				  + "\n\tPassword : " + PasswordManager.decode(user.getPassword());
-            }
-            
-            if (emailBodyEndKey != null)
-            {
-                body = body + "\n\n\t" + ApplicationProperties.getValue(emailBodyEndKey);
-            }
-
-            body = body + "\n\n" + "\n\n" + ApplicationProperties.getValue("email.catissuecore.team");
-            
-            boolean emailStatus = email.sendmail(user
-                    .getEmailAddress(), adminEmailAddress, null, technicalSupportEmailAddress,
-                    mailServer, subject, body);
-
-            if (emailStatus)
-            {
-                Logger.out.info(ApplicationProperties
-                        .getValue("userRegistration.email.success")
-                        + user.getFirstName() + " " + user.getLastName());
-            }
-            else
-            {
-                Logger.out.info(ApplicationProperties
-                        .getValue("userRegistration.email.failure")
-                        + user.getFirstName() + " " + user.getLastName());
+                EmailHandler emailHandler = new EmailHandler();
+                
+                emailHandler.sendApprovalEmail(user);
             }
         }
         catch (SMException smex)
         {
-            Logger.out.debug("Exception in CSM user creation:"
-                    + smex.getMessage(), smex);
+            Logger.out.debug(smex.getMessage(), smex);
             throw new DAOException(smex.getCause().getMessage(),smex);
         }  
     }
@@ -269,10 +214,9 @@ public class UserBizLogic extends DefaultBizLogic
                 csmUserId = user.getCsmUserId().toString(); 
             }
             
-            Logger.out.debug("In UserBizLogic.......................csmUserId........."+csmUserId);
             gov.nih.nci.security.authorization.domainobjects.User csmUser = SecurityManager
-                    .getInstance(DomainObjectListAction.class).getUserById(csmUserId);
-
+                				.getInstance(DomainObjectListAction.class).getUserById(csmUserId);
+            
             if (user.getPageOf().equals(Constants.PAGEOF_CHANGE_PASSWORD))
             {
                 if (!user.getOldPassword().equals(PasswordManager.decode(csmUser.getPassword())))
@@ -289,6 +233,15 @@ public class UserBizLogic extends DefaultBizLogic
                 csmUser.setLastName(user.getLastName());
                 csmUser.setFirstName(user.getFirstName());
                 csmUser.setEmailId(user.getEmailAddress());
+                if (Constants.PAGEOF_APPROVE_USER.equals(user.getPageOf()))
+                {
+                    if (user.getActivityStatus().equals(
+                            Constants.ACTIVITY_STATUS_ACTIVE))
+                        csmUser.setPassword(PasswordManager.encode(PasswordManager.generatePassword()));
+                    csmUser.setStartDate(Calendar.getInstance().getTime());
+
+                    SecurityManager.getInstance(ApproveUserBizLogic.class).createUser(csmUser);
+                }
                 
                 
                 if ((Constants.PAGEOF_USER_PROFILE.equals(user.getPageOf()) == false)
@@ -332,48 +285,13 @@ public class UserBizLogic extends DefaultBizLogic
         }
     }
     
-    
-    
-    
-    //    public Vector getList(String sourceObjectName, String[] displayNameFields, String valueField, String[] whereColumnName,
-    //            String[] whereColumnCondition, Object[] whereColumnValue,
-    //            String joinCondition, String separatorBetweenFields) throws DAOException
-    //            {
-    //        		AbstractDAO dao = DAOFactory.getDAO(Constants.HIBERNATE_DAO);
-    //        		List users = dao.retrieve(User.class.getName());
-    //        		Vector nameValuePairs = new Vector();
-    //        		List csmUsers;
-    //        		try
-    //                {
-    //                     csmUsers=SecurityManager.getInstance(UserBizLogic.class).getUsers();
-    //                }
-    //                catch (SMException e)
-    //                {
-    //                    Logger.out.debug("Unable to get all users: Exception: "+e.getMessage());
-    //        	        throw new DAOException (e.getMessage(), e);
-    //                }
-    //                
-    //                // Set CSM users for the user objects retrieved
-    //                User user;
-    //                gov.nih.nci.security.authorization.domainobjects.User csmUser;
-    //                for(int i=0;i<users.size();i++)
-    //                {
-    //                    user = (User) users.get(i);
-    //                    for(int j=0; j<csmUsers.size();j++)
-    //                    {
-    //                        csmUser =  (gov.nih.nci.security.authorization.domainobjects.User) csmUsers.get(j);
-    //                        if(csmUser.getUserId() == user.getSystemIdentifier())
-    //                        {
-    //                            user.setUser(csmUser);
-    //                            break;
-    //                        }
-    //                    }
-    //                }
-    //                
-    //                
-    //                return nameValuePairs;
-    //            }
-
+    /**
+     * Returns the list of NameValueBeans with name as "LastName,Firstname" 
+     * and value as systemtIdentifier, of all users who are not disabled. 
+     * @return the list of NameValueBeans with name as "LastName,Firstname" 
+     * and value as systemtIdentifier, of all users who are not disabled.
+     * @throws DAOException
+     */
     public Vector getUsers() throws DAOException
     {
     	String sourceObjectName = User.class.getName();
@@ -383,24 +301,21 @@ public class UserBizLogic extends DefaultBizLogic
         Object[] whereColumnValue = {Constants.ACTIVITY_STATUS_DISABLED};
         String joinCondition = Constants.AND_JOIN_CONDITION;
 		
+        //Retrieve the users whose activity status is not disabled.
         List users = retrieve(sourceObjectName, selectColumnName, whereColumnName,
                 whereColumnCondition, whereColumnValue, joinCondition);
-				
+        
         Vector nameValuePairs = new Vector();
         nameValuePairs.add(new NameValueBean(Constants.SELECT_OPTION, "-1"));
         
-        // Set CSM users for the user objects retrieved
-        User user = null;
-        if (users != null)
+        // If the list of users retrieved is not empty. 
+        if (users.isEmpty() == false)
         {
-
-            // Creating name value beans based on Activity Status passed 
-            NameValueBean nameValueBean;
-
+            // Creating name value beans.
             for (int i = 0; i < users.size(); i++)
             {
-                user = (User) users.get(i);
-                nameValueBean = new NameValueBean();
+                User user = (User) users.get(i);
+                NameValueBean nameValueBean = new NameValueBean();
                 nameValueBean.setName(user.getLastName() + ", "
                         + user.getFirstName());
                 nameValueBean.setValue(String.valueOf(user
@@ -409,29 +324,16 @@ public class UserBizLogic extends DefaultBizLogic
                 nameValuePairs.add(nameValueBean);
             }
         }
+        
         return nameValuePairs;
     }
 
-    //    public static void main(String args[])
-    //    {
-    //        String [] whereColumnName = {"country"};
-    //        String [] whereColumnCondition = {"LIKE"};
-    //        String [] whereColumnValue = {"United States"};
-    //        
-    //        try
-    //        {
-    //            List list = retrieve(Address.class.getName(),whereColumnName,
-    //                    whereColumnCondition,whereColumnValue,null);
-    //            
-    //            System.out.println("LIST SIZE..............."+list.size());
-    //        }
-    //        catch(DAOException daoExp)
-    //        {
-    //            daoExp.printStackTrace();
-    //        }
-    //        
-    //    }
-    
+    /**
+     * Returns a list of users according to the column name and value.
+     * @param colName column name on the basis of which the user list is to be retrieved.
+     * @param colValue Value for the column name.
+     * @throws DAOException
+     */
     public List retrieve(String className, String colName, Object colValue) throws DAOException
     {
         List userList = null;
@@ -464,5 +366,81 @@ public class UserBizLogic extends DefaultBizLogic
         }
         
         return userList; 
+    }
+    
+    /**
+     * Retrieves and sends the login details email to the user whose email address is passed 
+     * else returns the error key in case of an error.  
+     * @param emailAddress the email address of the user whose password is to be sent.
+     * @return the error key in case of an error.
+     * @throws DAOException
+     */
+    public String sendForgotPassword(String emailAddress) throws DAOException
+    {
+        String statusMessageKey = null;
+        try
+        {
+            List list = null;
+            gov.nih.nci.security.authorization.domainobjects.User csmUser = null;
+            
+            //Retrieve the user using email address from csm user table.
+            List csmList = SecurityManager.getInstance(
+                    ForgotPasswordSearchAction.class).getUsersByEmail(
+                    emailAddress);
+            
+            if (!csmList.isEmpty())
+            {
+                csmUser = (gov.nih.nci.security.authorization.domainobjects.User) csmList.get(0);
+                //Retrieve the user using csm user id from catissue user table.
+                list = retrieve(User.class.getName(), "csmUserId",
+                        String.valueOf(csmUser.getUserId()));
+            }
+            
+            //If the user is present.
+            if ((csmUser != null) && (!list.isEmpty()))
+            {
+                User user = (User) list.get(0);
+                
+                //If the user is Active send the password to the user to  
+                //the email address provided while registration.
+                if (user.getActivityStatus().equals(
+                        Constants.ACTIVITY_STATUS_ACTIVE))
+                {
+                    EmailHandler emailHandler = new EmailHandler();
+                    
+                    //Get the role of the user. 
+                    String roleOfUser = SecurityManager.getInstance(ApproveUserBizLogic.class)
+											.getUserRole(csmUser.getUserId().longValue()).getName();
+                    
+                    //Send the login details email to the user.
+                    boolean emailStatus = emailHandler.sendLoginDetailsEmail(user, null);
+                    
+                    if (emailStatus)
+                    {
+                        statusMessageKey = "password.send.success";
+                    }
+                    else
+                    {
+                        statusMessageKey = "password.send.failure";
+                    }
+                }
+                else
+                {
+                    //Error key if the user is not active.
+                    statusMessageKey = "errors.forgotpassword.user.notApproved";
+                }
+            }
+            else
+            {
+                //Error key if the user is not present.
+                statusMessageKey = "errors.forgotpassword.user.unknown";
+            }
+        }
+        catch (SMException smExp)
+        {
+            throw new DAOException(smExp.getMessage(),smExp);
+        }
+        
+        return statusMessageKey;
     }
 }
