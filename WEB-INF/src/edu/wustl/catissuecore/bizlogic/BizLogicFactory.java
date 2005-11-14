@@ -29,6 +29,7 @@ public class BizLogicFactory
         
         switch(FORM_TYPE)
         {
+            case Constants.FORGOT_PASSWORD_FORM_ID:
             case Constants.USER_FORM_ID:
                 abstractBizLogic = new UserBizLogic();
             	break;
