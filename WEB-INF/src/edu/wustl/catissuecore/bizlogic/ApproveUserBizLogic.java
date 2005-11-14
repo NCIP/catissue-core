@@ -107,8 +107,8 @@ public class ApproveUserBizLogic extends DefaultBizLogic
                 //Send approval email to the user and administrator.
                 emailHandler.sendApprovalEmail(user);
 	        }
-            else//If user is rejected send rejection email to the user and administrator.
-	        {
+            else if (Constants.ACTIVITY_STATUS_REJECT.equals(user.getActivityStatus()))
+	        {//If user is rejected send rejection email to the user and administrator.
                 EmailHandler emailHandler = new EmailHandler();
                 
                 //Send rejection email to the user and administrator.
