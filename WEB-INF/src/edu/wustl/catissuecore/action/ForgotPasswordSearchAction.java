@@ -22,7 +22,8 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.ForgotPasswordForm;
-import edu.wustl.catissuecore.bizlogic.ForgotPasswordBizLogic;
+import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
+import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
@@ -47,8 +48,11 @@ public class ForgotPasswordSearchAction extends Action
         try
         {
             ForgotPasswordForm forgotPasswordForm = (ForgotPasswordForm) form;
-            ForgotPasswordBizLogic bizLogic = new ForgotPasswordBizLogic();
-            String message = bizLogic.getForgotPassword(forgotPasswordForm.getEmailAddress());
+            UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getBizLogic(forgotPasswordForm.getFormId());
+            
+            //Retrieves and sends the password to the user whose email address is passed 
+            //else returns the error key in case of an error.
+            String message = userBizLogic.sendForgotPassword(forgotPasswordForm.getEmailAddress());
             
             request.setAttribute(Constants.STATUS_MESSAGE_KEY,message);
             
