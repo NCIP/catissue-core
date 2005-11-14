@@ -507,33 +507,61 @@ public class Validator
     }
     
     // --- method to check date and format the errors accordingly.
-    // Error messages for empty date, Invalid date, and Future dates are formatted . 
-    public void validateDateData(String checkDate,ActionErrors errors, String messageKey )
+    // Error messages for empty date, Invalid date, and Future dates are formatted .
+    public String validateDate(String strDate)
     {
-   		Logger.out.debug("handleDateData checkDate : " + checkDate); 
-		if(isEmpty(checkDate))
+    	String returnString = "";
+   		Logger.out.debug("handleDateData checkDate : " + strDate); 
+		if(isEmpty(strDate))
 		{
-			 errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue(messageKey)));
+			returnString = "errors.item.required";
 		}
 		else
 		{
-			if(isValidDatePattern(checkDate ))
+			if(isValidDatePattern(strDate ))
 			{
-				if(isDate(checkDate) )
+				if(isDate(strDate) )
 				{
-					if(!compareDateWithCurrent(checkDate ))
+					if(!compareDateWithCurrent(strDate ))
 					{
-						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.invalid.date",ApplicationProperties.getValue(messageKey )));
+						returnString = "errors.invalid.date";
 					}
 				}
 				else
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue(messageKey )));
+					returnString = "errors.item.format";
 			}
 			else
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue(messageKey )));
-			
+				returnString = "errors.item.format";
 		}
+		return returnString;
     }
+
+				//    public void validateDateData(String checkDate,ActionErrors errors, String messageKey )
+				//    {
+				//   		Logger.out.debug("handleDateData checkDate : " + checkDate); 
+				//		if(isEmpty(checkDate))
+				//		{
+				//			 errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue(messageKey)));
+				//		}
+				//		else
+				//		{
+				//			if(isValidDatePattern(checkDate ))
+				//			{
+				//				if(isDate(checkDate) )
+				//				{
+				//					if(!compareDateWithCurrent(checkDate ))
+				//					{
+				//						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.invalid.date",ApplicationProperties.getValue(messageKey )));
+				//					}
+				//				}
+				//				else
+				//					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue(messageKey )));
+				//			}
+				//			else
+				//				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue(messageKey )));
+				//			
+				//		}
+				//    }
     // ------------------------------Date Validation ends-----------------------------------------------------------------------
     
     
