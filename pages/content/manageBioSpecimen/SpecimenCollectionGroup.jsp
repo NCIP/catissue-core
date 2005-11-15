@@ -80,7 +80,7 @@
 		
         function onChangeEvent(element)
 		{
-			var action = "/catissuecore/SpecimenCollectionGroup.do?operation=<%=operation%>&pageOf=pageOfSpecimenCollectionGroup&isOnChange=true";
+			var action = "SpecimenCollectionGroup.do?operation=<%=operation%>&pageOf=pageOfSpecimenCollectionGroup&isOnChange=true";
 			document.forms[0].action = action;
 			document.forms[0].submit();
 		}
@@ -302,7 +302,7 @@
 						</label>
 					</td>
 				    <td class="formField" noWrap="true">
-				     	<html:text styleClass="formFieldSized" size="30" styleId="surgicalPathologyNumber" property="surgicalPathologyNumber" readonly="<%=readOnlyForAll%>"/>
+				     	<html:text styleClass="formFieldSized" size="30"  maxlength="50"  styleId="surgicalPathologyNumber" property="surgicalPathologyNumber" readonly="<%=readOnlyForAll%>"/>
 					     	&nbsp;
 							<html:submit styleClass="actionButton" disabled="true">
 								<bean:message key="buttons.getPathologyReport"/>

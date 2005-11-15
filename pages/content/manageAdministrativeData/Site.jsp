@@ -45,7 +45,7 @@
 <script>
 	function onCoordinatorChange()
 	{
-		var action = "/catissuecore/Site.do?operation="+document.forms[0].operation.value+"&pageOf=pageOfSite&isOnChange=true";
+		var action = "Site.do?operation="+document.forms[0].operation.value+"&pageOf=pageOfSite&isOnChange=true";
 		document.forms[0].action = action;
 		document.forms[0].submit();
 	}
@@ -101,7 +101,7 @@
 							</label>
 						</td>
 						<td class="formField">
-							<html:text styleClass="formFieldSized" size="30" styleId="name" property="name"/>
+							<html:text styleClass="formFieldSized" maxlength="50" size="30" styleId="name" property="name"/>
 						</td>
 					</tr>
 			
@@ -150,7 +150,7 @@
 							</label>
 						</td>
 						<td class="formField">
-							<html:text styleClass="formFieldSized" size="30" styleId="emailAddress" property="emailAddress" />
+							<html:text styleClass="formFieldSized"  maxlength="150"  size="30" styleId="emailAddress" property="emailAddress" />
 						</td>
 					</tr>
 									
@@ -162,7 +162,7 @@
 							</label>
 						</td>
 						<td class="formField">
-							<html:text styleClass="formFieldSized" size="30" styleId="street" property="street" />
+							<html:text styleClass="formFieldSized"  maxlength="50"  size="30" styleId="street" property="street" />
 						</td>
 					</tr>
 					
@@ -174,7 +174,7 @@
 							</label>
 						</td>
 						<td class="formField">
-							<html:text styleClass="formFieldSized" size="30" styleId="city" property="city" />
+							<html:text styleClass="formFieldSized"  maxlength="50"  size="30" styleId="city" property="city" />
 						</td>
 					</tr>
 					
@@ -215,7 +215,7 @@
 							</label>
 						</td>
 						<td class="formField">
-							<html:text styleClass="formFieldSized" size="30" styleId="zipCode" property="zipCode" />
+							<html:text styleClass="formFieldSized"  maxlength="30"  size="30" styleId="zipCode" property="zipCode" />
 						</td>
 					</tr>
 					
@@ -227,7 +227,7 @@
 							</label>
 						</td>
 						<td class="formField">
-							<html:text styleClass="formFieldSized" size="30" styleId="phoneNumber" property="phoneNumber" />
+							<html:text styleClass="formFieldSized"  maxlength="50"  size="30" styleId="phoneNumber" property="phoneNumber" />
 						</td>
 					</tr>
 					
@@ -239,7 +239,7 @@
 							</label>
 						</td>
 						<td class="formField">
-							<html:text styleClass="formFieldSized" size="30" styleId="faxNumber" property="faxNumber" />
+							<html:text styleClass="formFieldSized"  maxlength="50"  size="30" styleId="faxNumber" property="faxNumber" />
 						</td>
 					</tr>
 					

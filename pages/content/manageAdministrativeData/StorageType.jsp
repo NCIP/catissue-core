@@ -77,7 +77,7 @@
 				</label>
 			</td>
 			<td class="formField">
-				<html:text styleClass="formFieldSized10" size="30" styleId="type" property="type"/>
+				<html:text styleClass="formFieldSized10"  maxlength="50"  size="30" styleId="type" property="type"/>
 			</td>
 		</tr>
 
@@ -89,7 +89,7 @@
 				</label>
 			</td>
 			<td class="formField">
-				<html:text styleClass="formFieldSized10" size="30" styleId="defaultTemperature" property="defaultTemperature"/>
+				<html:text styleClass="formFieldSized10"  maxlength="10"  size="30" styleId="defaultTemperature" property="defaultTemperature"/>
 				°C
 			</td>
 		</tr>
@@ -111,7 +111,7 @@
 				</label>
 			</td>
 			<td class="formField">
-					<html:text styleClass="formFieldSized10" size="10" styleId="oneDimensionCapacity" property="oneDimensionCapacity"/>
+					<html:text styleClass="formFieldSized10"  maxlength="10"  size="10" styleId="oneDimensionCapacity" property="oneDimensionCapacity"/>
 			</td>
 		</tr>
 
@@ -123,7 +123,7 @@
 				</label>
 			</td>
 			<td class="formField">
-				<html:text styleClass="formFieldSized10" size="30" styleId="oneDimensionLabel" property="oneDimensionLabel"/>
+				<html:text styleClass="formFieldSized10"  maxlength="50"  size="30" styleId="oneDimensionLabel" property="oneDimensionLabel"/>
 			</td>
 		</tr>
 
@@ -135,7 +135,7 @@
 				</label>
 			</td>
 			<td class="formField">
-				<html:text styleClass="formFieldSized10" size="10" styleId="twoDimensionCapacity" property="twoDimensionCapacity"/>
+				<html:text styleClass="formFieldSized10"  maxlength="10"  size="10" styleId="twoDimensionCapacity" property="twoDimensionCapacity"/>
 			</td>
 		</tr>
 
@@ -147,7 +147,7 @@
 				</label>
 			</td>
 			<td class="formField">
-				<html:text styleClass="formFieldSized10" size="30" styleId="twoDimensionLabel" property="twoDimensionLabel"/>
+				<html:text styleClass="formFieldSized10"  maxlength="50" size="30" styleId="twoDimensionLabel" property="twoDimensionLabel"/>
 			</td>
 		</tr>
 

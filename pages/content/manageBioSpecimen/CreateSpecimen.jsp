@@ -54,7 +54,7 @@
 			sname="";
 			
 			var name = "externalIdentifierValue(ExternalIdentifier:" + rowno +"_name)";
-			sname="<input type='text' name='" + name + "' class='formFieldSized10' id='" + name + "'>";      
+			sname="<input type='text' name='" + name + "' maxlength='50'  class='formFieldSized10' id='" + name + "'>";      
 		
 		
 			spreqtype.innerHTML="" + sname;
@@ -68,7 +68,7 @@
 			name = "externalIdentifierValue(ExternalIdentifier:" + rowno +"_value)";
 			sname= "";
 			
-			sname="<input type='text' name='" + name + "' class='formFieldSized10' id='" + name + "'>"   
+			sname="<input type='text' name='" + name + "' maxlength='50'  class='formFieldSized10' id='" + name + "'>"   
 		
 			spreqsubtype.innerHTML="" + sname;
 			
@@ -284,7 +284,7 @@
 						{
 					%>
 							<td class="formField" colspan="2">
-				     			<html:text styleClass="formFieldSized15" size="30" styleId="concentration" property="concentration" readonly="<%=readOnlyForAll%>" disabled="true"/>
+				     			<html:text styleClass="formFieldSized15" size="30" maxlength="10"  styleId="concentration" property="concentration" readonly="<%=readOnlyForAll%>" disabled="true"/>
 				     			&nbsp;<bean:message key="specimen.concentrationUnit"/>
 				    		</td>
 					<%
@@ -302,7 +302,7 @@
 						</label>
 					</td>
 				    <td class="formField" colspan="2">
-				     	<html:text styleClass="formFieldSized15" size="30" styleId="quantity" property="quantity" readonly="<%=readOnlyForAll%>"/>
+				     	<html:text styleClass="formFieldSized15" size="30" maxlength="10"  styleId="quantity" property="quantity" readonly="<%=readOnlyForAll%>"/>
 				     	<span id="unitSpan"><%=unitSpecimen%></span>
 				     	<html:hidden property="unit"/>
 				    </td>
@@ -316,11 +316,11 @@
 					   </label>
 					</td>
 				 	<td class="formField">
-		     			<html:text styleClass="formFieldSized3" styleId="storageContainer" property="storageContainer" />
+		     			<html:text styleClass="formFieldSized3" maxlength="10"  styleId="storageContainer" property="storageContainer" />
 		     			-
-		     			<html:text styleClass="formFieldSized3" styleId="positionDimensionOne" property="positionDimensionOne" />
+		     			<html:text styleClass="formFieldSized3"  maxlength="10" styleId="positionDimensionOne" property="positionDimensionOne" />
 		     			-
-		     			<html:text styleClass="formFieldSized3" styleId="positionDimensionTwo" property="positionDimensionTwo" />
+		     			<html:text styleClass="formFieldSized3" maxlength="10"  styleId="positionDimensionTwo" property="positionDimensionTwo" />
 					</td>
 					<td class="formField">
 						<html:button property="mapButton" styleClass="actionButton" styleId="Map"
@@ -338,7 +338,7 @@
 						</label>
 					</td>
 				    <td class="formField" colspan="2">
-						<html:text styleClass="formFieldSized" size="30" styleId="barcode" property="barcode" readonly="<%=readOnlyForAll%>" />
+						<html:text styleClass="formFieldSized"  maxlength="50" size="30" styleId="barcode" property="barcode" readonly="<%=readOnlyForAll%>" />
 		        	</td>
 				 </tr>
 				 
@@ -364,7 +364,7 @@
 				     	</html:button>
 				    </td>
 				    <td class="formTitle" align="Right">
-							<html:button property="deleteValue" styleClass="actionButton" onclick="deleteChecked('addExternalIdentifier','/catissuecore/CreateSpecimen.do?operation=<%=operation%>&pageOf=&status=true',document.forms[0].exIdCounter,'chk_',false)">
+							<html:button property="deleteValue" styleClass="actionButton" onclick="deleteChecked('addExternalIdentifier','CreateSpecimen.do?operation=<%=operation%>&pageOf=&status=true',document.forms[0].exIdCounter,'chk_',false)">
 								<bean:message key="buttons.delete"/>
 							</html:button>
 						</td>
@@ -397,10 +397,10 @@
 					<tr>
 					 	<td class="formSerialNumberField" width="5"><%=i%>.</td>
 					    <td class="formField">
-				     		<html:text styleClass="formFieldSized10" styleId="<%=exName%>" property="<%=exName%>" readonly="<%=readOnlyForAll%>"/>
+				     		<html:text styleClass="formFieldSized10"  maxlength="50" styleId="<%=exName%>" property="<%=exName%>" readonly="<%=readOnlyForAll%>"/>
 				    	</td>
 				    	<td class="formField">
-				     		<html:text styleClass="formFieldSized10" styleId="<%=exValue%>" property="<%=exValue%>" readonly="<%=readOnlyForAll%>"/>
+				     		<html:text styleClass="formFieldSized10"  maxlength="50" styleId="<%=exValue%>" property="<%=exValue%>" readonly="<%=readOnlyForAll%>"/>
 				    	</td>
 				    	<%
 							String key = "";

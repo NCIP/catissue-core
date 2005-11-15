@@ -362,11 +362,11 @@ function insRow(subdivtag)
 						</td>
 						<td class="formField" colspan="2">
 	 						<logic:equal name="storageContainerForm" property="checkedButton" value="1">							
-				     			<html:text styleClass="formFieldSized3" styleId="parentContainerId" property="parentContainerId" disabled = "true"/>
+				     			<html:text styleClass="formFieldSized3" maxlength="10" styleId="parentContainerId" property="parentContainerId" disabled = "true"/>
 				     			-
-				     			<html:text styleClass="formFieldSized3" styleId="positionDimensionOne" property="positionDimensionOne" disabled = "true"/>
+				     			<html:text styleClass="formFieldSized3" maxlength="10"  styleId="positionDimensionOne" property="positionDimensionOne" disabled = "true"/>
 				     			-
-				     			<html:text styleClass="formFieldSized3" styleId="positionDimensionTwo" property="positionDimensionTwo" disabled = "true"/>
+				     			<html:text styleClass="formFieldSized3" maxlength="10"  styleId="positionDimensionTwo" property="positionDimensionTwo" disabled = "true"/>
 							&nbsp;
 							<html:button property="mapButton" styleClass="actionButton" styleId="Map" 
 								onclick="NewWindow('ShowFramedPage.do?pageOf=pageOfStorageLocation&amp;storageType=','name','810','320','yes');return false" disabled="true" >
@@ -377,11 +377,11 @@ function insRow(subdivtag)
 							
 							<logic:equal name="storageContainerForm" property="checkedButton" value="2">
 							
-			     			<html:text styleClass="formFieldSized3" styleId="parentContainerId" property="parentContainerId" />
+			     			<html:text styleClass="formFieldSized3" maxlength="10"  styleId="parentContainerId" property="parentContainerId" />
 			     			-
-			     			<html:text styleClass="formFieldSized3" styleId="positionDimensionOne" property="positionDimensionOne" />
+			     			<html:text styleClass="formFieldSized3" maxlength="10"  styleId="positionDimensionOne" property="positionDimensionOne" />
 			     			-
-			     			<html:text styleClass="formFieldSized3" styleId="positionDimensionTwo" property="positionDimensionTwo" />
+			     			<html:text styleClass="formFieldSized3" maxlength="10"  styleId="positionDimensionTwo" property="positionDimensionTwo" />
 							&nbsp;
 							<html:button property="mapButton" styleClass="actionButton" styleId="Map" 
 								onclick="NewWindow('ShowFramedPage.do?pageOf=pageOfStorageLocation&amp;storageType=','name','810','320','yes');return false" >
@@ -402,7 +402,7 @@ function insRow(subdivtag)
 							</label>
 						</td>
 						<td class="formField" colspan="2">
-							<html:text styleClass="formFieldSized10" size="30" styleId="noOfContainers" property="noOfContainers" readonly="<%=readOnlyValue%>" onchange="onContainerChange(this)"/>
+							<html:text styleClass="formFieldSized10"  maxlength="10" size="30" styleId="noOfContainers" property="noOfContainers" readonly="<%=readOnlyValue%>" onchange="onContainerChange(this)"/>
 						</td>
 					</tr>
 					</logic:notEqual>
@@ -415,7 +415,7 @@ function insRow(subdivtag)
 							</label>
 						</td>
 						<td class="formField" colspan="2">
-							<html:text styleClass="formFieldSized10" size="30" styleId="startNumber" property="startNumber" readonly="TRUE"/>
+							<html:text styleClass="formFieldSized10" maxlength="10"  size="30" styleId="startNumber" property="startNumber" readonly="TRUE"/>
 						</td>
 					</tr>
 					
@@ -427,7 +427,7 @@ function insRow(subdivtag)
 							</label>
 						</td>
 						<td class="formField" colspan="2">
-							<html:text styleClass="formFieldSized10" size="30" styleId="barcode" property="barcode"/>
+							<html:text styleClass="formFieldSized10" maxlength="50"  size="30" styleId="barcode" property="barcode"/>
 						</td>
 					</tr>
 					
@@ -439,7 +439,7 @@ function insRow(subdivtag)
 							</label>
 						</td>
 						<td class="formField" colspan="2">
-							<html:text styleClass="formFieldSized10" size="30" styleId="defaultTemperature" property="defaultTemperature"/>
+							<html:text styleClass="formFieldSized10"  maxlength="10" size="30" styleId="defaultTemperature" property="defaultTemperature"/>
 							°C
 						</td>
 					</tr>
@@ -474,7 +474,7 @@ function insRow(subdivtag)
 							&nbsp;<%=label1%>
 						</td>
 						<td class="formField" colspan="2">
-							<html:text styleClass="formFieldSized10" size="30" styleId="oneDimensionCapacity" property="oneDimensionCapacity"/>
+							<html:text styleClass="formFieldSized10" maxlength="10"  size="30" styleId="oneDimensionCapacity" property="oneDimensionCapacity"/>
 						</td>
 					</tr>
 					
@@ -492,7 +492,7 @@ function insRow(subdivtag)
 							%>
 						</td>
 						<td class="formField" colspan="2">
-							<html:text styleClass="formFieldSized10" size="30" styleId="twoDimensionCapacity" property="twoDimensionCapacity"/>
+							<html:text styleClass="formFieldSized10" maxlength="10"  size="30" styleId="twoDimensionCapacity" property="twoDimensionCapacity"/>
 						</td>
 					</tr>
 					
@@ -509,7 +509,7 @@ function insRow(subdivtag)
 						<html:hidden property="counter"/>
 						</td>
 						<td class="formTitle" align="Right">
-							<html:button property="deleteValue" styleClass="actionButton" onclick="deleteChecked('addMore','/catissuecore/StorageContainer.do?operation=<%=operation%>&pageOf=pageOfStorageContainer&status=true',document.forms[0].counter,'chk_',false)">
+							<html:button property="deleteValue" styleClass="actionButton" onclick="deleteChecked('addMore','StorageContainer.do?operation=<%=operation%>&pageOf=pageOfStorageContainer&status=true',document.forms[0].counter,'chk_',false)">
 								<bean:message key="buttons.delete"/>
 							</html:button>
 						</td>
@@ -549,10 +549,10 @@ function insRow(subdivtag)
 							<html:hidden property="<%=identifier%>" />
 						</td>
 						<td class="formField" colspan="2">
-							<html:text styleClass="formFieldSized10" size="30" styleId="<%=keyName%>" property="<%=keyName%>"/>
+							<html:text styleClass="formFieldSized10" maxlength="50"  size="30" styleId="<%=keyName%>" property="<%=keyName%>"/>
 						</td>
 						<td class="formField">
-							<html:text styleClass="formFieldSized10" size="30" styleId="<%=valueName%>" property="<%=valueName%>"/>
+							<html:text styleClass="formFieldSized10" maxlength="50"  size="30" styleId="<%=valueName%>" property="<%=valueName%>"/>
 						</td>
 						<%
 							String key = "StorageContainerDetails:" + rowCount +"_systemIdentifier";

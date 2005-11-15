@@ -87,7 +87,7 @@ if(dataList.size() != 0)
 		    
 		    if(isChecked == "true")
 		    {
-				//var action = "/catissuecore/ShoppingCart.do?operation=add";
+				//var action = "ShoppingCart.do?operation=add";
 				//document.forms[0].operation.value="add";
 				//document.forms[0].action = action;
 				//document.forms[0].target = "_parent";

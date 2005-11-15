@@ -225,7 +225,7 @@ function insRow(subdivtag,iCounter,blockCounter)
 	sname="";
 	objname = subdivname + "_SpecimenRequirement:"+rowno+"_quantityIn)";
 
-	sname="<input type='text' name='" + objname + "' value='' class='formFieldSized5' id='" + objname + "'>"        	
+	sname="<input type='text' name='" + objname + "' value=''  maxlength='10' class='formFieldSized5' id='" + objname + "'>"        	
 	sname = sname + "&nbsp;<span id='" + objunit + "'>&nbsp;</span>"
 					
 	spreqqty.innerHTML="" + sname;
@@ -372,7 +372,7 @@ function getSubDivCount(subdivtag)
 							</label>
 						</td>
 						<td class="formField" colspan=2>
-							<html:text styleClass="formFieldSized" size="30" styleId="title" property="title" readonly="<%=readOnlyValue%>" />
+							<html:text styleClass="formFieldSized" maxlength="50"  size="30" styleId="title" property="title" readonly="<%=readOnlyValue%>" />
 						</td>
 					</tr>
 
@@ -385,7 +385,7 @@ function getSubDivCount(subdivtag)
 							</label>
 						</td>
 						<td class="formField" colspan=2>
-							<html:text styleClass="formFieldSized" size="30" styleId="shortTitle" property="shortTitle" readonly="<%=readOnlyValue%>" />
+							<html:text styleClass="formFieldSized" maxlength="50"  size="30" styleId="shortTitle" property="shortTitle" readonly="<%=readOnlyValue%>" />
 						</td>
 					</tr>
 					
@@ -398,7 +398,7 @@ function getSubDivCount(subdivtag)
 							</label>
 						</td>
 						<td class="formField" colspan=2>
-							<html:text styleClass="formFieldSized" size="30" styleId="irbID" property="irbID" readonly="<%=readOnlyValue%>" />
+							<html:text styleClass="formFieldSized" maxlength="50"  size="30" styleId="irbID" property="irbID" readonly="<%=readOnlyValue%>" />
 						</td>
 					</tr>
 
@@ -413,7 +413,7 @@ function getSubDivCount(subdivtag)
 			
 						<td class="formField" colspan=2>
 							<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
-						 	<html:text styleClass="formDateSized15" size="15" styleId="startDate" property="startDate" />
+						 	<html:text styleClass="formDateSized15" maxlength="10"  size="15" styleId="startDate" property="startDate" />
 						 	&nbsp;<bean:message key="page.dateFormat" />&nbsp;
 							<a href="javascript:show_calendar('collectionProtocolForm.startDate',null,null,'MM-DD-YYYY');">
 								<img src="images\calendar.gif" width=24 height=22 border=0></a>
@@ -431,7 +431,7 @@ function getSubDivCount(subdivtag)
 			
 						 <td class="formField" colspan=2>
 						 <div id="enddateDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
-						 <html:text styleClass="formDateSized15" size="35" styleId="endDate" property="endDate" />
+						 <html:text styleClass="formDateSized15" maxlength="10"  size="35" styleId="endDate" property="endDate" />
 						 &nbsp;<bean:message key="page.dateFormat" />&nbsp;
 							<a href="javascript:show_calendar('collectionProtocolForm.endDate',null,null,'MM-DD-YYYY');">
 								<img src="images\calendar.gif" width=24 height=22 border=0></a>
@@ -447,7 +447,7 @@ function getSubDivCount(subdivtag)
 							</label>
 						</td>
 						<td class="formField" colspan=2>
-							<html:text styleClass="formFieldSized" size="30" styleId="enrollment" property="enrollment" readonly="<%=readOnlyValue%>" />
+							<html:text styleClass="formFieldSized" maxlength="10"  size="30" styleId="enrollment" property="enrollment" readonly="<%=readOnlyValue%>" />
 						</td>
 					</tr>
 
@@ -460,7 +460,7 @@ function getSubDivCount(subdivtag)
 							</label>
 						</td>
 						<td class="formField" colspan=2>
-							<html:text styleClass="formFieldSized" size="30" styleId="descriptionURL" property="descriptionURL" readonly="<%=readOnlyValue%>" />
+							<html:text styleClass="formFieldSized" maxlength="200"  size="30" styleId="descriptionURL" property="descriptionURL" readonly="<%=readOnlyValue%>" />
 						</td>
 					</tr>
 
@@ -500,7 +500,7 @@ function getSubDivCount(subdivtag)
 			<html:hidden property="outerCounter"/>	
 	</td>
 	<td class="formTitle" align="Right">
-		<html:button property="deleteCollectionProtocolEvents" styleClass="actionButton" onclick="deleteChecked('outerdiv','/catissuecore/CollectionProtocol.do?operation=<%=operation%>&pageOf=pageOfCollectionProtocol&status=true&button=deleteCollectionProtocolEvents',document.forms[0].outerCounter,'chk_proto_',true)">
+		<html:button property="deleteCollectionProtocolEvents" styleClass="actionButton" onclick="deleteChecked('outerdiv','CollectionProtocol.do?operation=<%=operation%>&pageOf=pageOfCollectionProtocol&status=true&button=deleteCollectionProtocolEvents',document.forms[0].outerCounter,'chk_proto_',true)">
 			<bean:message key="buttons.delete"/>
 		</html:button>
 	</td>
@@ -604,7 +604,7 @@ function getSubDivCount(subdivtag)
 			        
 			        <td colspan="2" class="formFieldAddMore">
 			        	<html:text styleClass="formFieldSized5" size="30" 
-			        			styleId="<%=fldName%>" 
+			        			styleId="<%=fldName%>"  maxlength="10" 
 			        			property="<%=fldName%>" 
 			        			readonly="<%=readOnlyValue%>"
 			        			value="<%=valueStudyPoint%>" /> 
@@ -644,7 +644,7 @@ function getSubDivCount(subdivtag)
 			        <td class="formSubTitle" align="Right">
 			        		<% String temp = "deleteChecked('";
 			        			temp = temp + commonLabel+"',";
-			        			temp = temp + "'/catissuecore/CollectionProtocol.do?operation="+operation+"&pageOf=pageOfCollectionProtocol&status=true&button=deleteSpecimenReq&blockCounter="+counter+"',";
+			        			temp = temp + "'CollectionProtocol.do?operation="+operation+"&pageOf=pageOfCollectionProtocol&status=true&button=deleteSpecimenReq&blockCounter="+counter+"',";
 			        			temp = temp +"'"+ cid + "'" +",";
 			        			temp = temp + "'chk_spec_"+ counter +"_',false)";
 			        			
@@ -792,7 +792,7 @@ function getSubDivCount(subdivtag)
 						%>
 
 			        	<html:text styleClass="formFieldSized5" size="30" 
-			        			styleId="<%=fName%>" 
+			        			styleId="<%=fName%>"  maxlength="10" 
 			        			property="<%=fName%>" 
 			        			readonly="<%=readOnlyValue%>" />
 		        			
@@ -899,7 +899,7 @@ function getSubDivCount(subdivtag)
 			        
 			        <td colspan="2" class="formFieldAddMore">
 			        	<html:text styleClass="formFieldSized5" size="30" 
-			        			styleId="value(CollectionProtocolEvent:`_studyCalendarEventPoint)" 
+			        			styleId="value(CollectionProtocolEvent:`_studyCalendarEventPoint)"  maxlength="10" 
 			        			property="value(CollectionProtocolEvent:`_studyCalendarEventPoint)" 
 			        			readonly="<%=readOnlyValue%>"
 			        			value="1" /> 
@@ -932,7 +932,7 @@ function getSubDivCount(subdivtag)
 			     		<html:hidden styleId="<%=hiddenCounter%>" property="<%=hiddenCounter%>" value="1"/>
 			        </td>
 			        <td class="formSubTitle" align="Right">
-							<html:button property="deleteSpecimenReq" styleClass="actionButton" onclick="deleteChecked('value(CollectionProtocolEvent:`','/catissuecore/CollectionProtocol.do?operation=<%=operation%>&pageOf=pageOfCollectionProtocol&status=true&button=deleteSpecimenReq&blockCounter=`','ivl(`)','chk_spec_`_',false)">
+							<html:button property="deleteSpecimenReq" styleClass="actionButton" onclick="deleteChecked('value(CollectionProtocolEvent:`','CollectionProtocol.do?operation=<%=operation%>&pageOf=pageOfCollectionProtocol&status=true&button=deleteSpecimenReq&blockCounter=`','ivl(`)','chk_spec_`_',false)">
 								<bean:message key="buttons.delete"/>
 							</html:button>
 					</td>
@@ -1015,7 +1015,7 @@ function getSubDivCount(subdivtag)
 			        </td>
 			        
 			        <td class="formFieldAddMore">
-			        	<html:text styleClass="formFieldSized5" size="30" 
+			        	<html:text styleClass="formFieldSized5" size="30"  maxlength="10" 
 			        			styleId="value(CollectionProtocolEvent:`_SpecimenRequirement:1_quantityIn)" 
 			        			property="value(CollectionProtocolEvent:`_SpecimenRequirement:1_quantityIn)" 
 			        			readonly="<%=readOnlyValue%>" />

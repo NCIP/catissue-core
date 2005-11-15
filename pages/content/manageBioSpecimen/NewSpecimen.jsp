@@ -33,27 +33,6 @@ Map map = form.getExternalIdentifier();
 
 	
 		var win = null;
-		
-		function onSpecimenEventUpdate(element)
-		{
-			var identifier = "<%=form.getSystemIdentifier()%>";
-			var action = "/catissuecore/ListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParameters&specimenId=" + identifier;
-			document.forms[0].action = action;
-			document.forms[0].submit();
-		}
-
-		// for create from existing
-		function onCreateFromExisting(element)
-		{
-			var identifier = "<%=form.getSystemIdentifier()%>";
-//			var action = "/catissuecore/CreateSpecimen.do?operation=add&pageOf="+"&specimenId=" + identifier;
-			var action ="createNew";
-			changeSubmitTo(action );
-//			document.forms[0].action = action;
-			document.forms[0].submit();
-		}
-
-		
 		function NewWindow(mypage,myname,w,h,scroll)
 		{
 			LeftPosition = (screen.width) ? (screen.width-w)/2 : 0;
@@ -90,72 +69,6 @@ Map map = form.getExternalIdentifier();
 		%>
 		
 		
-		function onParameterChange(element)
-		{
-			<% if(form != null) { %>
-				var specimenIdentifier = "<%=form.getSystemIdentifier()%>";
-				var fromPositionData = "<%=form.getPositionInStorageContainer()%>";
-				var posOne = "<%=form.getPositionDimensionOne()%>";
-				var posTwo = "<%=form.getPositionDimensionTwo()%>";
-				var storContId = "<%=form.getStorageContainer()%>";
-				var subTypeData = "<%=form.getType()%>";
-				var isRNA="false";
-				if (subTypeData=="RNA")
-					isRNA = "true";
-				
-			<% } %>
-			
-			var action = "";
-			var addNew = document.getElementById("sepAdd");
-			addNew.target="_blank";
-			
-			if(element.value == "Cell Specimen Review")
-				action = "/catissuecore/CellSpecimenReviewParameters.do?operation=add&pageOf=pageOfCellSpecimenReviewParameters";
-			else if(element.value == "Check In Check Out")
-				action = "/catissuecore/CheckInCheckOutEventParameters.do?operation=add&pageOf=pageOfCheckInCheckOutEventParameters";
-			else if(element.value == "Collection")
-				action = "/catissuecore/CollectionEventParameters.do?operation=add&pageOf=pageOfCollectionEventParameters";
-			else if(element.value == "Disposal")
-				action = "/catissuecore/DisposalEventParameters.do?operation=add&pageOf=pageOfDisposalEventParameters";
-			else if(element.value == "Embedded")
-				action = "/catissuecore/EmbeddedEventParameters.do?operation=add&pageOf=pageOfEmbeddedEventParameters";
-			else if(element.value == "Fixed")
-				action = "/catissuecore/FixedEventParameters.do?operation=add&pageOf=pageOfFixedEventParameters";
-			else if(element.value == "Fluid Specimen Review")
-				action = "/catissuecore/FluidSpecimenReviewEventParameters.do?operation=add&pageOf=pageOfFluidSpecimenReviewParameters";
-			else if(element.value == "Frozen")
-				action = "/catissuecore/FrozenEventParameters.do?operation=add&pageOf=pageOfFrozenEventParameters";
-			else if(element.value == "Molecular Specimen Review")
-				action = "/catissuecore/MolecularSpecimenReviewParameters.do?operation=add&pageOf=pageOfMolecularSpecimenReviewParameters";
-			else if(element.value == "Procedure")
-				action = "/catissuecore/ProcedureEventParameters.do?operation=add&pageOf=pageOfProcedureEventParameters";
-			else if(element.value == "Received")
-				action = "/catissuecore/ReceivedEventParameters.do?operation=add&pageOf=pageOfReceivedEventParameters";
-			else if(element.value == "Spun")
-				action = "/catissuecore/SpunEventParameters.do?operation=add&pageOf=pageOfSpunEventParameters";
-			else if(element.value == "Thaw")
-				action = "/catissuecore/ThawEventParameters.do?operation=add&pageOf=pageOfThawEventParameters";
-			else if(element.value == "Tissue Specimen Review")
-				action = "/catissuecore/TissueSpecimenReviewEventParameters.do?operation=add&pageOf=pageOfTissueSpecimenReviewParameters";
-			else if(element.value == "Transfer")
-			{
-				action = "/catissuecore/TransferEventParameters.do?operation=add&pageOf=pageOfTransferEventParameters";
-				action = action + "&fromPositionData=" + fromPositionData;			
-				action = action + "&posOne=" + posOne;
-				action = action + "&posTwo=" + posTwo;
-				action = action + "&storContId=" + storContId;			
-				
-			}	
-			action = action + "&specimenId=" + specimenIdentifier;
-			action = action + "&isRNA=" + isRNA;
-			addNew.href = action;
-			
-			if(element.value == "<%=Constants.SELECT_OPTION%>")
-			{
-				addNew.href = "#";
-				addNew.target="_parent";
-			}
-		}
 		
 
 		//ADD MORE -------- EXTERNAL IDENTIFIER
@@ -187,7 +100,7 @@ Map map = form.getExternalIdentifier();
 			sname="";
 			
 			var name = "externalIdentifierValue(ExternalIdentifier:" + rowno +"_name)";
-			sname="<input type='text' name='" + name + "' class='formFieldSized15' id='" + name + "'>";      
+			sname="<input type='text' name='" + name + "'  maxlength='50' class='formFieldSized15' id='" + name + "'>";      
 		
 		
 			spreqtype.innerHTML="" + sname;
@@ -201,7 +114,7 @@ Map map = form.getExternalIdentifier();
 			name = "externalIdentifierValue(ExternalIdentifier:" + rowno +"_value)";
 			sname= "";
 			
-			sname="<input type='text' name='" + name + "' class='formFieldSized15' id='" + name + "'>"   
+			sname="<input type='text' name='" + name + "' maxlength='50'  class='formFieldSized15' id='" + name + "'>"   
 		
 			spreqsubtype.innerHTML="" + sname;
 			
@@ -574,7 +487,7 @@ Map map = form.getExternalIdentifier();
 						if(unitSpecimen.equals(Constants.UNIT_MG))
 							concentrationDisabled = false;
 					%>
-			     		<html:text styleClass="formFieldSized15" size="30" styleId="concentration" property="concentration" 
+			     		<html:text styleClass="formFieldSized15" maxlength="10"  size="30" styleId="concentration" property="concentration" 
 			     		readonly="<%=readOnlyForAll%>" disabled="<%=concentrationDisabled%>"/>
 						&nbsp;<bean:message key="specimen.concentrationUnit"/>
 					</td>
@@ -590,7 +503,7 @@ Map map = form.getExternalIdentifier();
 						</label>
 					</td>
 				    <td class="formField" colspan="4">
-				     	<html:text styleClass="formFieldSized15" size="30" styleId="quantity" property="quantity" readonly="<%=readOnlyForAll%>"/>
+				     	<html:text styleClass="formFieldSized15" size="30" maxlength="10"  styleId="quantity" property="quantity" readonly="<%=readOnlyForAll%>"/>
 				     	<span id="unitSpan"><%=unitSpecimen%></span>
 				     	<html:hidden property="unit"/>
 				    </td>
@@ -620,7 +533,7 @@ Map map = form.getExternalIdentifier();
 						</label>
 					</td>
 					<td class="formField" colspan="3">
-						<html:text styleClass="formFieldSized15" size="30" styleId="availableQuantity" property="availableQuantity" readonly="<%=readOnlyForAll%>" />
+						<html:text styleClass="formFieldSized15" maxlength="10"  size="30" styleId="availableQuantity" property="availableQuantity" readonly="<%=readOnlyForAll%>" />
 					</td>
 				</tr>
 				</logic:equal>
@@ -638,11 +551,11 @@ Map map = form.getExternalIdentifier();
 							readOnly=false;
 					%>
 				 	<td class="formField">
-		     			<html:text styleClass="formFieldSized3" styleId="storageContainer" property="storageContainer"  readonly="<%=readOnly%>" />
+		     			<html:text styleClass="formFieldSized3" styleId="storageContainer" maxlength="10"  property="storageContainer"  readonly="<%=readOnly%>" />
 		     			-
-		     			<html:text styleClass="formFieldSized3" styleId="positionDimensionOne" property="positionDimensionOne" readonly="<%=readOnly%>" />
+		     			<html:text styleClass="formFieldSized3" styleId="positionDimensionOne" maxlength="10"  property="positionDimensionOne" readonly="<%=readOnly%>" />
 		     			-
-		     			<html:text styleClass="formFieldSized3" styleId="positionDimensionTwo" property="positionDimensionTwo" readonly="<%=readOnly%>" />
+		     			<html:text styleClass="formFieldSized3" styleId="positionDimensionTwo" maxlength="10"  property="positionDimensionTwo" readonly="<%=readOnly%>" />
 						&nbsp;
 					</td>
 					
@@ -664,7 +577,7 @@ Map map = form.getExternalIdentifier();
 						</label>
 					</td>
 				    <td class="formField" colspan="4">
-						<html:text styleClass="formFieldSized" size="30" styleId="barcode" property="barcode" readonly="<%=readOnlyForAll%>" />
+						<html:text styleClass="formFieldSized" maxlength="50"  size="30" styleId="barcode" property="barcode" readonly="<%=readOnlyForAll%>" />
 		        	</td>
 				 </tr>
 				 
@@ -676,7 +589,7 @@ Map map = form.getExternalIdentifier();
 						</label>
 					</td>
 				    <td class="formField" colspan="4">
-				    	<html:textarea styleClass="formFieldSized" rows="3" styleId="comments" property="comments" readonly="<%=readOnlyForAll%>"/>
+				    	<html:textarea styleClass="formFieldSized"  rows="3" styleId="comments" property="comments" readonly="<%=readOnlyForAll%>"/>
 				    </td>
 				 </tr>
 					
@@ -707,7 +620,7 @@ Map map = form.getExternalIdentifier();
 				     	</html:button>
 				    </td>
 				    <td class="formTitle" align="Right">
-							<html:button property="deleteExId" styleClass="actionButton" onclick="deleteChecked('addExternalIdentifier','/catissuecore/NewSpecimen.do?operation=<%=operation%>&pageOf=pageOfNewSpecimen&status=true&button=deleteExId',document.forms[0].exIdCounter,'chk_ex_',false)">
+							<html:button property="deleteExId" styleClass="actionButton" onclick="deleteChecked('addExternalIdentifier','NewSpecimen.do?operation=<%=operation%>&pageOf=pageOfNewSpecimen&status=true&button=deleteExId',document.forms[0].exIdCounter,'chk_ex_',false)">
 								<bean:message key="buttons.delete"/>
 							</html:button>
 					</td>
@@ -743,10 +656,10 @@ Map map = form.getExternalIdentifier();
 				 			<html:hidden property="<%=exIdentifier%>" />
 				 		</td>
 					    <td class="formField">
-				     		<html:text styleClass="formFieldSized15" styleId="<%=exName%>" property="<%=exName%>" readonly="<%=readOnlyForAll%>"/>
+				     		<html:text styleClass="formFieldSized15" maxlength="50"  styleId="<%=exName%>" property="<%=exName%>" readonly="<%=readOnlyForAll%>"/>
 				    	</td>
 				    	<td class="formField" colspan="2">
-				     		<html:text styleClass="formFieldSized15" styleId="<%=exValue%>" property="<%=exValue%>" readonly="<%=readOnlyForAll%>"/>
+				     		<html:text styleClass="formFieldSized15" maxlength="50"  styleId="<%=exValue%>" property="<%=exValue%>" readonly="<%=readOnlyForAll%>"/>
 				    	</td>
 				    	<%
 							String exKey = "ExternalIdentifier:" + i +"_systemIdentifier";
@@ -773,7 +686,7 @@ Map map = form.getExternalIdentifier();
 				     	</html:button>
 				    </td>
 				    <td class="formTitle" align="Right">
-							<html:button property="deleteBiohazard" styleClass="actionButton" onclick="deleteChecked('addBiohazardRow','/catissuecore/NewSpecimen.do?operation=<%=operation%>&pageOf=pageOfNewSpecimen&status=true&button=deleteBiohazard',document.forms[0].bhCounter,'chk_bio_',false)">
+							<html:button property="deleteBiohazard" styleClass="actionButton" onclick="deleteChecked('addBiohazardRow','NewSpecimen.do?operation=<%=operation%>&pageOf=pageOfNewSpecimen&status=true&button=deleteBiohazard',document.forms[0].bhCounter,'chk_bio_',false)">
 								<bean:message key="buttons.delete"/>
 							</html:button>
 					</td>

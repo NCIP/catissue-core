@@ -195,7 +195,7 @@ function insRow(subdivtag)
 	sname="";
 	objname = "value(SpecimenRequirement:"+rowno+"_quantityIn)";
 
-	sname="<input type='text' name='" + objname + "' value='' class='formFieldSized5' id='" + objname + "'>"        	
+	sname="<input type='text' name='" + objname + "' value=''  maxlength='10'  class='formFieldSized5' id='" + objname + "'>"        	
 	sname = sname + "&nbsp;<span id='" + objunit + "'>&nbsp;</span>"
 					
 	spreqqty.innerHTML="" + sname;
@@ -298,7 +298,7 @@ function insRow(subdivtag)
 							</label>
 						</td>
 						<td class="formField" colspan=2>
-							<html:text styleClass="formFieldSized" size="30" styleId="title" property="title" readonly="<%=readOnlyValue%>" />
+							<html:text styleClass="formFieldSized" maxlength="50"  size="30" styleId="title" property="title" readonly="<%=readOnlyValue%>" />
 						</td>
 					</tr>
 
@@ -311,7 +311,7 @@ function insRow(subdivtag)
 							</label>
 						</td>
 						<td class="formField" colspan=2>
-							<html:text styleClass="formFieldSized" size="30" styleId="shortTitle" property="shortTitle" readonly="<%=readOnlyValue%>" />
+							<html:text styleClass="formFieldSized" maxlength="50"  size="30" styleId="shortTitle" property="shortTitle" readonly="<%=readOnlyValue%>" />
 						</td>
 					</tr>
 					
@@ -324,7 +324,7 @@ function insRow(subdivtag)
 							</label>
 						</td>
 						<td class="formField" colspan=2>
-							<html:text styleClass="formFieldSized" size="30" styleId="irbID" property="irbID" readonly="<%=readOnlyValue%>" />
+							<html:text styleClass="formFieldSized" maxlength="50"  size="30" styleId="irbID" property="irbID" readonly="<%=readOnlyValue%>" />
 						</td>
 					</tr>
 
@@ -339,7 +339,7 @@ function insRow(subdivtag)
 			
 						<td class="formField" colspan=2>
 							<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
-						 	<html:text styleClass="formDateSized15" size="35" styleId="startDate" property="startDate" />
+						 	<html:text styleClass="formDateSized15" maxlength="10"  size="35" styleId="startDate" property="startDate" />
 						 	&nbsp;<bean:message key="page.dateFormat" />&nbsp;
 							<a href="javascript:show_calendar('distributionProtocolForm.startDate',null,null,'MM-DD-YYYY');">
 								<img src="images\calendar.gif" width=24 height=22 border=0></a>
@@ -357,7 +357,7 @@ function insRow(subdivtag)
 			
 						 <td class="formField" colspan=2>
 						 <div id="enddateDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
-						 <html:text styleClass="formDateSized15" size="35" styleId="endDate" property="endDate" />
+						 <html:text styleClass="formDateSized15" maxlength="10"  size="35" styleId="endDate" property="endDate" />
 						 &nbsp;<bean:message key="page.dateFormat" />&nbsp;
 							<a href="javascript:show_calendar('distributionProtocolForm.endDate',null,null,'MM-DD-YYYY');">
 								<img src="images\calendar.gif" width=24 height=22 border=0></a>
@@ -373,7 +373,7 @@ function insRow(subdivtag)
 							</label>
 						</td>
 						<td class="formField" colspan=2>
-							<html:text styleClass="formFieldSized" size="30" styleId="enrollment" property="enrollment" readonly="<%=readOnlyValue%>" />
+							<html:text styleClass="formFieldSized" maxlength="10"  size="30" styleId="enrollment" property="enrollment" readonly="<%=readOnlyValue%>" />
 						</td>
 					</tr>
 
@@ -386,7 +386,7 @@ function insRow(subdivtag)
 							</label>
 						</td>
 						<td class="formField" colspan=2>
-							<html:text styleClass="formFieldSized" size="30" styleId="descriptionURL" property="descriptionURL" readonly="<%=readOnlyValue%>" />
+							<html:text styleClass="formFieldSized"  maxlength="200" size="30" styleId="descriptionURL" property="descriptionURL" readonly="<%=readOnlyValue%>" />
 						</td>
 					</tr>
 
@@ -428,7 +428,7 @@ function insRow(subdivtag)
 						<html:button property="addDistributionProtocolEvents" styleClass="actionButton" onclick="insRow('SpecimenRequirementData')">Add More</html:button>
 				</td> 
 				<td class="formTitle" align="Right">
-					<html:button property="deleteValue" styleClass="actionButton" onclick="deleteChecked('SpecimenRequirementData','/catissuecore/DistributionProtocol.do?operation=<%=operation%>&pageOf=pageOfDistributionProtocol&status=true',document.forms[0].counter,'chk_',false)">
+					<html:button property="deleteValue" styleClass="actionButton" onclick="deleteChecked('SpecimenRequirementData','DistributionProtocol.do?operation=<%=operation%>&pageOf=pageOfDistributionProtocol&status=true',document.forms[0].counter,'chk_',false)">
 					<bean:message key="buttons.delete"/>
 					</html:button>
 				</td>
@@ -567,7 +567,7 @@ function insRow(subdivtag)
 		        		
 			    
 					<html:text styleClass="formFieldSized5" 
-								styleId="<%=objname%>" 
+								styleId="<%=objname%>"  maxlength="10" 
 								property="<%=objname%>"
 								readonly="<%=readOnlyValue%>" />
 						&nbsp;

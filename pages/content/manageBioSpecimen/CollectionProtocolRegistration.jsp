@@ -198,7 +198,7 @@
 						</label>
 					</td>
 					<td class="formField">
-						<html:text styleClass="formFieldSized" size="30" styleId="participantProtocolID" property="participantProtocolID" readonly="<%=readOnlyValue%>" />
+						<html:text styleClass="formFieldSized" maxlength="50"  size="30" styleId="participantProtocolID" property="participantProtocolID" readonly="<%=readOnlyValue%>" />
 					</td>
 				</tr>
 	
@@ -212,7 +212,7 @@
 					</td>
 					<td class="formField">
 				           <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
-				           <html:text styleClass="formDateSized15" size="15" styleId="registrationDate" property="registrationDate" />
+				           <html:text styleClass="formDateSized15" maxlength="10"  size="15" styleId="registrationDate" property="registrationDate" />
 				           &nbsp;<bean:message key="page.dateFormat" />&nbsp;
 					       <a href="javascript:show_calendar('collectionProtocolRegistrationForm.registrationDate',null,null,'MM-DD-YYYY');">
 						         <img src="images\calendar.gif" width=24 height=22 border=0></a>

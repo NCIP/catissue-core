@@ -55,36 +55,36 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 		//var addNew = document.getElementById("sepAdd");
 		
 		if(element.value == "Cell Specimen Review")
-			action = "/catissuecore/CellSpecimenReviewParameters.do?operation=add&pageOf=pageOfCellSpecimenReviewParameters";
+			action = "CellSpecimenReviewParameters.do?operation=add&pageOf=pageOfCellSpecimenReviewParameters";
 		else if(element.value == "Check In Check Out")
-			action = "/catissuecore/CheckInCheckOutEventParameters.do?operation=add&pageOf=pageOfCheckInCheckOutEventParameters";
+			action = "CheckInCheckOutEventParameters.do?operation=add&pageOf=pageOfCheckInCheckOutEventParameters";
 		else if(element.value == "Collection")
-			action = "/catissuecore/CollectionEventParameters.do?operation=add&pageOf=pageOfCollectionEventParameters";
+			action = "CollectionEventParameters.do?operation=add&pageOf=pageOfCollectionEventParameters";
 		else if(element.value == "Disposal")
-			action = "/catissuecore/DisposalEventParameters.do?operation=add&pageOf=pageOfDisposalEventParameters";
+			action = "DisposalEventParameters.do?operation=add&pageOf=pageOfDisposalEventParameters";
 		else if(element.value == "Embedded")
-			action = "/catissuecore/EmbeddedEventParameters.do?operation=add&pageOf=pageOfEmbeddedEventParameters";
+			action = "EmbeddedEventParameters.do?operation=add&pageOf=pageOfEmbeddedEventParameters";
 		else if(element.value == "Fixed")
-			action = "/catissuecore/FixedEventParameters.do?operation=add&pageOf=pageOfFixedEventParameters";
+			action = "FixedEventParameters.do?operation=add&pageOf=pageOfFixedEventParameters";
 		else if(element.value == "Fluid Specimen Review")
-			action = "/catissuecore/FluidSpecimenReviewEventParameters.do?operation=add&pageOf=pageOfFluidSpecimenReviewParameters";
+			action = "FluidSpecimenReviewEventParameters.do?operation=add&pageOf=pageOfFluidSpecimenReviewParameters";
 		else if(element.value == "Frozen")
-			action = "/catissuecore/FrozenEventParameters.do?operation=add&pageOf=pageOfFrozenEventParameters";
+			action = "FrozenEventParameters.do?operation=add&pageOf=pageOfFrozenEventParameters";
 		else if(element.value == "Molecular Specimen Review")
-			action = "/catissuecore/MolecularSpecimenReviewParameters.do?operation=add&pageOf=pageOfMolecularSpecimenReviewParameters";
+			action = "MolecularSpecimenReviewParameters.do?operation=add&pageOf=pageOfMolecularSpecimenReviewParameters";
 		else if(element.value == "Procedure")
-			action = "/catissuecore/ProcedureEventParameters.do?operation=add&pageOf=pageOfProcedureEventParameters";
+			action = "ProcedureEventParameters.do?operation=add&pageOf=pageOfProcedureEventParameters";
 		else if(element.value == "Received")
-			action = "/catissuecore/ReceivedEventParameters.do?operation=add&pageOf=pageOfReceivedEventParameters";
+			action = "ReceivedEventParameters.do?operation=add&pageOf=pageOfReceivedEventParameters";
 		else if(element.value == "Spun")
-			action = "/catissuecore/SpunEventParameters.do?operation=add&pageOf=pageOfSpunEventParameters";
+			action = "SpunEventParameters.do?operation=add&pageOf=pageOfSpunEventParameters";
 		else if(element.value == "Thaw")
-			action = "/catissuecore/ThawEventParameters.do?operation=add&pageOf=pageOfThawEventParameters";
+			action = "ThawEventParameters.do?operation=add&pageOf=pageOfThawEventParameters";
 		else if(element.value == "Tissue Specimen Review")
-			action = "/catissuecore/TissueSpecimenReviewEventParameters.do?operation=add&pageOf=pageOfTissueSpecimenReviewParameters";
+			action = "TissueSpecimenReviewEventParameters.do?operation=add&pageOf=pageOfTissueSpecimenReviewParameters";
 		else if(element.value == "Transfer")
 		{
-			action = "/catissuecore/TransferEventParameters.do?operation=add&pageOf=pageOfTransferEventParameters";			
+			action = "TransferEventParameters.do?operation=add&pageOf=pageOfTransferEventParameters";			
 		}	
 		
 		var specimenIdentifier = "<%=specimenIdentifier%>";

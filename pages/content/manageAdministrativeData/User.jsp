@@ -177,7 +177,7 @@ function handleStatus(status)
 							</label>
 						</td>
 						<td class="formField">
-							<html:text styleClass="formFieldSized" size="30" styleId="emailAddress" property="emailAddress" />
+							<html:text styleClass="formFieldSized" maxlength="100"  size="30" styleId="emailAddress" property="emailAddress" />
 						</td>
 					</tr>
 
@@ -189,7 +189,7 @@ function handleStatus(status)
 							</label>
 						</td>
 						<td class="formField">
-							<html:text styleClass="formFieldSized" size="30" styleId="lastName" property="lastName" />
+							<html:text styleClass="formFieldSized" maxlength="50" size="30" styleId="lastName" property="lastName" />
 						</td>
 					</tr>
 					
@@ -201,7 +201,7 @@ function handleStatus(status)
 							</label>
 						</td>
 						<td class="formField">
-							<html:text styleClass="formFieldSized" size="30" styleId="firstName" property="firstName" />
+							<html:text styleClass="formFieldSized" maxlength="50"  size="30" styleId="firstName" property="firstName" />
 						</td>
 					</tr>
 					
@@ -213,7 +213,7 @@ function handleStatus(status)
 							</label>
 						</td>
 						<td class="formField">
-							<html:text styleClass="formFieldSized" size="30" styleId="street" property="street" />
+							<html:text styleClass="formFieldSized" maxlength="50"  size="30" styleId="street" property="street" />
 						</td>
 					</tr>
 					
@@ -225,7 +225,7 @@ function handleStatus(status)
 							</label>
 						</td>
 						<td class="formField">
-							<html:text styleClass="formFieldSized" size="30" styleId="city" property="city" />
+							<html:text styleClass="formFieldSized" maxlength="50"  size="30" styleId="city" property="city" />
 						</td>
 					</tr>
 					
@@ -251,7 +251,7 @@ function handleStatus(status)
 							</label>
 						</td>
 						<td class="formField">
-							<html:text styleClass="formFieldSized" size="30" styleId="zipCode" property="zipCode" />
+							<html:text styleClass="formFieldSized"  maxlength="30" size="30" styleId="zipCode" property="zipCode" />
 						</td>
 					</tr>
 					
@@ -278,7 +278,7 @@ function handleStatus(status)
 							</label>
 						</td>
 						<td class="formField">
-							<html:text styleClass="formFieldSized" size="30" styleId="phoneNumber" property="phoneNumber" />
+							<html:text styleClass="formFieldSized"  maxlength="50" size="30" styleId="phoneNumber" property="phoneNumber" />
 						</td>
 					</tr>
 					
@@ -290,7 +290,7 @@ function handleStatus(status)
 							</label>
 						</td>
 						<td class="formField">
-							<html:text styleClass="formFieldSized" size="30" styleId="faxNumber" property="faxNumber" />
+							<html:text styleClass="formFieldSized" maxlength="50"  size="30" styleId="faxNumber" property="faxNumber" />
 						</td>
 					</tr>
 					<tr>

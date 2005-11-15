@@ -101,7 +101,7 @@
 		
 			name = "value(ParticipantMedicalIdentifier:" + (q+1) + "_medicalRecordNumber)";
 			sname= "";
-			sname="<input type='text' name='" + name + "' size='30'  class='formFieldSized15' id='" + name + "'>";
+			sname="<input type='text' name='" + name + "' size='30' maxlength='50'  class='formFieldSized15' id='" + name + "'>";
 			spreqsubtype.innerHTML="" + sname;
 			
 			//Fourth Cell
@@ -268,7 +268,9 @@
 				     		<bean:message key="user.lastName"/>
 				     	</label>
 				     </td>
-				     <td class="formField" colspan="2"><html:text styleClass="formFieldSized" size="30" styleId="lastName" property="lastName" readonly="<%=readOnlyForAll%>"/></td>
+				     <td class="formField" colspan="2">
+				     <html:text styleClass="formFieldSized" maxlength="50" size="30" styleId="lastName" property="lastName" readonly="<%=readOnlyForAll%>"/>
+				     </td>
 				 </tr>
 				  <tr>
 					<td class="formRequiredNotice" width="5">&nbsp;</td>
@@ -277,7 +279,9 @@
 				     		<bean:message key="user.firstName"/>
 				     	</label>
 				     </td>
-				     <td class="formField" colspan="2"><html:text styleClass="formFieldSized" size="30" styleId="firstName" property="firstName" readonly="<%=readOnlyForAll%>"/></td>
+				     <td class="formField" colspan="2">
+				     	<html:text styleClass="formFieldSized" maxlength="50" size="30" styleId="firstName" property="firstName" readonly="<%=readOnlyForAll%>"/>
+				     </td>
 				 </tr>
 				 <tr>
 					<td class="formRequiredNotice" width="5">&nbsp;</td>
@@ -286,7 +290,9 @@
 				     		<bean:message key="participant.middleName"/>
 				     	</label>
 				     </td>
-				     <td class="formField" colspan="2"><html:text styleClass="formFieldSized" size="30" styleId="middleName" property="middleName" readonly="<%=readOnlyForAll%>"/></td>
+				     <td class="formField" colspan="2">
+				     <html:text styleClass="formFieldSized" maxlength="50" size="30" styleId="middleName" property="middleName" readonly="<%=readOnlyForAll%>"/>
+				     </td>
 				 </tr>
 				 <tr>
 					<td class="formRequiredNotice" width="5">&nbsp;</td>
@@ -298,7 +304,7 @@
 					 
 					 <td class="formField" colspan="2">
 					 <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
-					 <html:text styleClass="formDateSized15" size="15" styleId="birthDate" property="birthDate" />
+					 <html:text styleClass="formDateSized15" maxlength="10"  size="15" styleId="birthDate" property="birthDate" />
 					 &nbsp;<bean:message key="page.dateFormat" />&nbsp;
 						<a href="javascript:show_calendar('participantForm.birthDate',null,null,'MM-DD-YYYY');">
 							<img src="images\calendar.gif" width=24 height=22 border=0></a>
@@ -394,7 +400,7 @@
 						</html:button>
 				    </td>
 				    <td class="formTitle" align="Right">
-						<html:button property="deleteValue" styleClass="actionButton" onclick="deleteChecked('addMore','/catissuecore/Participant.do?operation=<%=operation%>&pageOf=pageOfParticipant&status=true',document.forms[0].counter,'chk_',false)">
+						<html:button property="deleteValue" styleClass="actionButton" onclick="deleteChecked('addMore','Participant.do?operation=<%=operation%>&pageOf=pageOfParticipant&status=true',document.forms[0].counter,'chk_',false)">
 							<bean:message key="buttons.delete"/>
 						</html:button>
 					</td>
@@ -435,7 +441,7 @@
 						</html:select>
 					</td>
 				    <td class="formField">
-				     	<html:text styleClass="formFieldSized15" size="30" styleId="<%=medicalRecordNumber%>" property="<%=medicalRecordNumber%>" readonly="<%=readOnlyForAll%>"/>
+				     	<html:text styleClass="formFieldSized15" maxlength="50" size="30" styleId="<%=medicalRecordNumber%>" property="<%=medicalRecordNumber%>" readonly="<%=readOnlyForAll%>"/>
 				    </td>
 				    <%
 							String key = "ParticipantMedicalIdentifier:" + i +"_systemIdentifier";
