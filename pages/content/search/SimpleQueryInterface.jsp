@@ -45,7 +45,7 @@
 
 function callAction(action)
 {
-	document.forms[0].action = "/catissuecore/"+action;
+	document.forms[0].action = action;
 	document.forms[0].submit();
 }
 
