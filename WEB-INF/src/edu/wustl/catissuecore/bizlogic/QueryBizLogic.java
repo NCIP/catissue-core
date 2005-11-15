@@ -78,7 +78,7 @@ public class QueryBizLogic extends DefaultBizLogic
         {
             dao = new JDBCDAO();
             dao.openSession(null);
-            list = dao.executeQuery(ALIAS_NAME_TABLE_NAME_MAP_QUERY, null, Constants.INSECURE_RETRIEVE, null);
+            list = dao.executeQuery(ALIAS_NAME_TABLE_NAME_MAP_QUERY, null, Constants.INSECURE_RETRIEVE, null,null);
 
             Iterator iterator = list.iterator();
             while (iterator.hasNext())
@@ -128,7 +128,7 @@ public class QueryBizLogic extends DefaultBizLogic
         {
             dao = new JDBCDAO();
             dao.openSession(null);
-            list = dao.executeQuery(ALIAS_NAME_PRIVILEGE_TYPE_MAP_QUERY, null, Constants.INSECURE_RETRIEVE, null);
+            list = dao.executeQuery(ALIAS_NAME_PRIVILEGE_TYPE_MAP_QUERY, null, Constants.INSECURE_RETRIEVE, null,null);
 
             Iterator iterator = list.iterator();
             while (iterator.hasNext())
@@ -181,7 +181,7 @@ public class QueryBizLogic extends DefaultBizLogic
         {
             dao = new JDBCDAO();
             dao.openSession(null);
-            list = dao.executeQuery(GET_RELATION_DATA, null, Constants.INSECURE_RETRIEVE, null);
+            list = dao.executeQuery(GET_RELATION_DATA, null, Constants.INSECURE_RETRIEVE, null,null);
 
             Iterator iterator = list.iterator();
             
@@ -197,7 +197,7 @@ public class QueryBizLogic extends DefaultBizLogic
                     continue;
                 }
                 
-                columnDataList = dao.executeQuery(GET_TABLE_ALIAS+parentTableColumnID, null, Constants.INSECURE_RETRIEVE, null);
+                columnDataList = dao.executeQuery(GET_TABLE_ALIAS+parentTableColumnID, null, Constants.INSECURE_RETRIEVE, null,null);
                 if(columnDataList.size() <=0 )
                 {
                     continue;
@@ -209,7 +209,7 @@ public class QueryBizLogic extends DefaultBizLogic
                 }
                 tableAlias1 = (String) row.get(0);
                 
-                columnDataList = dao.executeQuery(GET_TABLE_ALIAS+childTableColumnID, null, Constants.INSECURE_RETRIEVE, null);
+                columnDataList = dao.executeQuery(GET_TABLE_ALIAS+childTableColumnID, null, Constants.INSECURE_RETRIEVE, null,null);
                 if(columnDataList.size() <=0 )
                 {
                     continue;
@@ -444,7 +444,7 @@ public class QueryBizLogic extends DefaultBizLogic
 
 		JDBCDAO jdbcDao = (JDBCDAO)DAOFactory.getDAO(Constants.JDBC_DAO);
 		jdbcDao.openSession(null);
-		List checkList = jdbcDao.executeQuery(sql,null,Constants.INSECURE_RETRIEVE,null);
+		List checkList = jdbcDao.executeQuery(sql,null,Constants.INSECURE_RETRIEVE,null,null);
 		jdbcDao.closeSession();
 		
 		return checkList;
@@ -480,7 +480,7 @@ public class QueryBizLogic extends DefaultBizLogic
         JDBCDAO jdbcDAO = (JDBCDAO)DAOFactory.getDAO(Constants.JDBC_DAO);
         jdbcDAO.openSession(null);
         String sql = "select DISPLAY_NAME from CATISSUE_QUERY_INTERFACE_TABLE_DATA where ALIAS_NAME='"+aliasName+"'";
-        List list = jdbcDAO.executeQuery(sql,null,Constants.INSECURE_RETRIEVE,null);
+        List list = jdbcDAO.executeQuery(sql,null,Constants.INSECURE_RETRIEVE,null,null);
         jdbcDAO.closeSession();
         
         if (!list.isEmpty())
@@ -556,7 +556,7 @@ public class QueryBizLogic extends DefaultBizLogic
         {
             dao = new JDBCDAO();
             dao.openSession(null);
-            list = dao.executeQuery(sql, null, Constants.INSECURE_RETRIEVE, null);
+            list = dao.executeQuery(sql, null, Constants.INSECURE_RETRIEVE, null,null);
 
             Iterator iterator = list.iterator();
             while (iterator.hasNext())
@@ -609,7 +609,7 @@ public class QueryBizLogic extends DefaultBizLogic
         {
             dao = new JDBCDAO();
             dao.openSession(null);
-            list = dao.executeQuery(GET_RELATED_TABLE_ALIAS+"'"+aliasName+"'", null, Constants.INSECURE_RETRIEVE, null);
+            list = dao.executeQuery(GET_RELATED_TABLE_ALIAS+"'"+aliasName+"'", null, Constants.INSECURE_RETRIEVE, null,null);
 
             Iterator iterator = list.iterator();
             while (iterator.hasNext())
