@@ -47,7 +47,7 @@ public class SearchUtil
     
     
 	//Function returns the list of operators as per the datatype.
-	public static final List getOperatorList(int dataType)
+	public static List getOperatorList(int dataType)
 	{
 		List operatorList = new ArrayList();
 		operatorList.add(new NameValueBean(Constants.ANY,Constants.ANY));
