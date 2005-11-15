@@ -105,8 +105,6 @@ public class StorageLocationViewListener implements TreeSelectionListener
 
             try
             {
-                String urlSuffix = null;
-
                 if ((!treeNode.getStorageContainerName().equals(
                         Constants.CATISSUE_CORE))
                         && (treeNode.getStorageContainerType() != null))
@@ -114,15 +112,16 @@ public class StorageLocationViewListener implements TreeSelectionListener
                     String protocol = codeBase.getProtocol();
                     String host = codeBase.getHost();
                     int port = codeBase.getPort();
+                    String applicationPath = codeBase.getPath();
 
-                    urlSuffix = Constants.SHOW_STORAGE_CONTAINER_GRID_VIEW_ACTION
+                    String urlSuffix = applicationPath + Constants.SHOW_STORAGE_CONTAINER_GRID_VIEW_ACTION
                             + "?" + Constants.SYSTEM_IDENTIFIER + "=" + treeNode.getStorageContainerIdentifier()
                             + "&" + Constants.STORAGE_CONTAINER_TYPE + "=" + this.getStorageContainerType()
                             + "&" + Constants.PAGEOF + "=" + this.pageOf;
                     
                     if (pageOf.equals(Constants.PAGEOF_SPECIMEN))
                     {
-                    	urlSuffix = Constants.SHOW_STORAGE_CONTAINER_GRID_VIEW_ACTION
+                    	urlSuffix = applicationPath + Constants.SHOW_STORAGE_CONTAINER_GRID_VIEW_ACTION
                         + "?" + Constants.SYSTEM_IDENTIFIER + "=" + treeNode.getStorageContainerIdentifier()
                         + "&" + Constants.PAGEOF + "=" + this.pageOf;
                     }

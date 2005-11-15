@@ -69,7 +69,7 @@ public class QueryTree extends JApplet
                 treeType = Constants.QUERY_RESULTS_TREE_ID;
             else if (pageOf.equals(Constants.PAGEOF_TISSUE_SITE))
                 propertyName = this.getParameter(Constants.PROPERTY_NAME);
-
+            
             // If storage container tree, take care of positions and parent container
             // ID edit boxes.
             if(treeType == Constants.STORAGE_CONTAINER_TREE_ID)
@@ -90,9 +90,10 @@ public class QueryTree extends JApplet
 	            }
 	            position = this.getParameter(Constants.STORAGE_CONTAINER_POSITION);
             }
-
             
-            String urlSuffix = Constants.TREE_DATA_ACTION+"?"+Constants.PAGEOF+"="+pageOf;
+            String applicationPath = codeBase.getPath();
+            
+            String urlSuffix = applicationPath+Constants.TREE_DATA_ACTION+"?"+Constants.PAGEOF+"="+pageOf;
             URL dataURL = new URL(protocol, host, port, urlSuffix);
             
             //Establish connection with the TreeDataAction and get the JTree object. 
@@ -101,7 +102,7 @@ public class QueryTree extends JApplet
             
             in = new ObjectInputStream(connection.getInputStream());
             Vector treeDataVector = (Vector) in.readObject();
-
+            
             GenerateTree generateTree = new GenerateTree();
             JTree tree = generateTree.createTree(treeDataVector, treeType,selectedNode);
 
@@ -174,7 +175,7 @@ public class QueryTree extends JApplet
             // This is used to auto select the node
             if(false == selectedNode.equals(new Long(0)))
             {
-                urlSuffix = Constants.SHOW_STORAGE_CONTAINER_GRID_VIEW_ACTION
+                urlSuffix = applicationPath + Constants.SHOW_STORAGE_CONTAINER_GRID_VIEW_ACTION
 	            + "?" + Constants.IDENTIFIER + "=" + selectedNode.toString()
 	            + "&" + Constants.STORAGE_CONTAINER_TYPE + "=" + storageContainerType
 	            + "&" + Constants.STORAGE_CONTAINER_POSITION + "=" + position
@@ -184,8 +185,6 @@ public class QueryTree extends JApplet
 
 	            this.getAppletContext().showDocument(dataURL,Constants.DATA_VIEW_FRAME);
             }
-
-            
         }
         catch (MalformedURLException malExp)
         {
