@@ -118,7 +118,7 @@
 		
 		function onTypeChange(element)
 		{
-			var action = "/catissuecore/StorageContainer.do?operation="+document.forms[0].operation.value+"&pageOf=pageOfStorageContainer&isOnChange=true";
+			var action = "StorageContainer.do?operation="+document.forms[0].operation.value+"&pageOf=pageOfStorageContainer&isOnChange=true";
 			document.forms[0].action = action;
 			document.forms[0].submit();
 		}
@@ -127,7 +127,7 @@
 		{
 			var list = document.getElementById('typeId');
 			var type = list.options[list.selectedIndex].value;
-			var action = "/catissuecore/StorageContainer.do?operation="+document.forms[0].operation.value+"&pageOf=pageOfStorageContainer&isOnChange=true";
+			var action = "StorageContainer.do?operation="+document.forms[0].operation.value+"&pageOf=pageOfStorageContainer&isOnChange=true";
 			document.forms[0].action = action;
 			document.forms[0].submit();
 		}
