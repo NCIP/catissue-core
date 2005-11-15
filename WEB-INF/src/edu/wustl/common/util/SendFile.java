@@ -26,7 +26,7 @@ public class SendFile
 				if (f.exists())
 				{
 					response.setContentType(contentType);
-					response.setHeader("Content-Disposition", " filename=\""+fileName+"\";");
+					response.setHeader("Content-Disposition", "attachment;filename=\""+fileName+"\";");
 					response.setContentLength((int) f.length());
 					try
 					{
