@@ -111,7 +111,7 @@ if(dataList.size() != 0)
 		    
 		    if(isChecked == "true")
 		    {
-				var action = "/catissuecore/SpreadsheetExport.do";
+				var action = "SpreadsheetExport.do";
 				document.forms[0].operation.value="export";
 				document.forms[0].action = action;
 				document.forms[0].target = "_blank";
@@ -159,7 +159,7 @@ if(dataList.size() != 0)
 		}
 		function callAction(action)
 		{
-			document.forms[0].action = "/catissuecore/"+action;
+			document.forms[0].action = action;
 			document.forms[0].submit();
 		}
 	</script>
