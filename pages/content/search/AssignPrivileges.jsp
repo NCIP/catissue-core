@@ -23,7 +23,7 @@
 		function onObjectTypeChange(element)
 		{
 			selectAll(element);
-			var action = "/catissuecore/AssignPrivilegesPage.do?pageOf=pageOfAssignPrivilegesPage";
+			var action = "AssignPrivilegesPage.do?pageOf=pageOfAssignPrivilegesPage";
 			document.forms[0].action = action;
 			document.forms[0].submit();
 		}
@@ -53,7 +53,7 @@
 
 		function assign()
 		{
-			var action = "/catissuecore/AssignPrivileges.do?pageOf=pageOfAssignPrivileges";
+			var action = "AssignPrivileges.do?pageOf=pageOfAssignPrivileges";
 			document.forms[0].action = action;
 			document.forms[0].submit();
 		}

@@ -76,7 +76,7 @@ if(dataList.size() != 0)
 				var flag = confirm("Are you sure you want to delete the selected item(s)?");
 				if(flag)
 				{
-					var action = "/catissuecore/ShoppingCart.do?operation=delete";
+					var action = "ShoppingCart.do?operation=delete";
 					document.forms[0].operation.value="delete";
 					document.forms[0].action = action;
 					document.forms[0].target = "_parent";
@@ -101,7 +101,7 @@ if(dataList.size() != 0)
 		    
 		    if(isChecked == "true")
 		    {
-				var action = "/catissuecore/ShoppingCart.do?operation=export";
+				var action = "ShoppingCart.do?operation=export";
 				document.forms[0].operation.value="export";
 				document.forms[0].action = action;
 				document.forms[0].target = "_blank";
