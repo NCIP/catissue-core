@@ -225,7 +225,7 @@ public class Constants
 	public static final String STORAGE_CONTAINER_ADD_ACTION = "StorageContainerAdd.do";
 	public static final String STORAGE_CONTAINER_EDIT_ACTION = "StorageContainerEdit.do";
 	
-	public static final String SHOW_STORAGE_CONTAINER_GRID_VIEW_ACTION = "/catissuecore/ShowStorageGridView.do";
+	public static final String SHOW_STORAGE_CONTAINER_GRID_VIEW_ACTION = "../ShowStorageGridView.do";
 	
 	//Constants required in Site.jsp Page
 	public static final String SITE_SEARCH_ACTION = "SiteSearch.do";
@@ -391,7 +391,7 @@ public class Constants
 	public static final String APPLET_VIEW_FRAME = "appletViewFrame";
 	
 	//NodeSelectionlistener - Query Results Tree node selection (For spreadsheet or individual view).
-	public static final String DATA_VIEW_ACTION = "/catissuecore/DataView.do?nodeName=";
+	public static final String DATA_VIEW_ACTION = "DataView.do?nodeName=";
 	public static final String VIEW_TYPE = "viewType";
 	
 	//TissueSite Tree View Constants.
@@ -413,7 +413,7 @@ public class Constants
 	public static final String SELECT_COLUMN_LIST = "selectColumnList";
 	
 	//Tree Data Action
-	public static final String TREE_DATA_ACTION = "/catissuecore/Data.do";
+	public static final String TREE_DATA_ACTION = "../Data.do";
 	
 	public static final String SPECIMEN = "Specimen";
 	public static final String SEGMENT = "Segment";
