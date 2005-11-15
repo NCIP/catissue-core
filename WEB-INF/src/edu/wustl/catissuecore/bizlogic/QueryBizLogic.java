@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Vector;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -61,6 +62,12 @@ public class QueryBizLogic extends DefaultBizLogic
     private static final String GET_TABLE_ALIAS =
         "select ALIAS_NAME from CATISSUE_QUERY_INTERFACE_TABLE_DATA " +
         "where TABLE_ID=";
+    
+    private static final String GET_RELATED_TABLE_ALIAS = "SELECT table2.alias_name "+
+    " from catissue_table_relation relation, catissue_query_interface_table_data table1, "+
+	" catissue_query_interface_table_data table2 "+
+	" where relation.parent_table_id = table1.table_id and relation.child_table_id = table2.table_id "+
+	" and table1.alias_name = ";
 
     public static HashMap getQueryObjectNameTableNameMap()
     {
@@ -71,7 +78,7 @@ public class QueryBizLogic extends DefaultBizLogic
         {
             dao = new JDBCDAO();
             dao.openSession(null);
-            list = dao.executeQuery(ALIAS_NAME_TABLE_NAME_MAP_QUERY, null, Constants.INSECURE_RETRIEVE, null,null);
+            list = dao.executeQuery(ALIAS_NAME_TABLE_NAME_MAP_QUERY, null, Constants.INSECURE_RETRIEVE, null);
 
             Iterator iterator = list.iterator();
             while (iterator.hasNext())
@@ -121,7 +128,7 @@ public class QueryBizLogic extends DefaultBizLogic
         {
             dao = new JDBCDAO();
             dao.openSession(null);
-            list = dao.executeQuery(ALIAS_NAME_PRIVILEGE_TYPE_MAP_QUERY, null, Constants.INSECURE_RETRIEVE, null,null);
+            list = dao.executeQuery(ALIAS_NAME_PRIVILEGE_TYPE_MAP_QUERY, null, Constants.INSECURE_RETRIEVE, null);
 
             Iterator iterator = list.iterator();
             while (iterator.hasNext())
@@ -174,7 +181,7 @@ public class QueryBizLogic extends DefaultBizLogic
         {
             dao = new JDBCDAO();
             dao.openSession(null);
-            list = dao.executeQuery(GET_RELATION_DATA, null, Constants.INSECURE_RETRIEVE, null,null);
+            list = dao.executeQuery(GET_RELATION_DATA, null, Constants.INSECURE_RETRIEVE, null);
 
             Iterator iterator = list.iterator();
             
@@ -190,7 +197,7 @@ public class QueryBizLogic extends DefaultBizLogic
                     continue;
                 }
                 
-                columnDataList = dao.executeQuery(GET_TABLE_ALIAS+parentTableColumnID, null, Constants.INSECURE_RETRIEVE, null,null);
+                columnDataList = dao.executeQuery(GET_TABLE_ALIAS+parentTableColumnID, null, Constants.INSECURE_RETRIEVE, null);
                 if(columnDataList.size() <=0 )
                 {
                     continue;
@@ -202,7 +209,7 @@ public class QueryBizLogic extends DefaultBizLogic
                 }
                 tableAlias1 = (String) row.get(0);
                 
-                columnDataList = dao.executeQuery(GET_TABLE_ALIAS+childTableColumnID, null, Constants.INSECURE_RETRIEVE, null,null);
+                columnDataList = dao.executeQuery(GET_TABLE_ALIAS+childTableColumnID, null, Constants.INSECURE_RETRIEVE, null);
                 if(columnDataList.size() <=0 )
                 {
                     continue;
@@ -288,7 +295,6 @@ public class QueryBizLogic extends DefaultBizLogic
             
             return aliasName;
     }
-    
     /**
      * Sets column names depending on the table name selected for that condition.
      * @param request HttpServletRequest
@@ -438,7 +444,7 @@ public class QueryBizLogic extends DefaultBizLogic
 
 		JDBCDAO jdbcDao = (JDBCDAO)DAOFactory.getDAO(Constants.JDBC_DAO);
 		jdbcDao.openSession(null);
-		List checkList = jdbcDao.executeQuery(sql,null,Constants.INSECURE_RETRIEVE,null,null);
+		List checkList = jdbcDao.executeQuery(sql,null,Constants.INSECURE_RETRIEVE,null);
 		jdbcDao.closeSession();
 		
 		return checkList;
@@ -474,7 +480,7 @@ public class QueryBizLogic extends DefaultBizLogic
         JDBCDAO jdbcDAO = (JDBCDAO)DAOFactory.getDAO(Constants.JDBC_DAO);
         jdbcDAO.openSession(null);
         String sql = "select DISPLAY_NAME from CATISSUE_QUERY_INTERFACE_TABLE_DATA where ALIAS_NAME='"+aliasName+"'";
-        List list = jdbcDAO.executeQuery(sql,null,Constants.INSECURE_RETRIEVE,null,null);
+        List list = jdbcDAO.executeQuery(sql,null,Constants.INSECURE_RETRIEVE,null);
         jdbcDAO.closeSession();
         
         if (!list.isEmpty())
@@ -485,7 +491,7 @@ public class QueryBizLogic extends DefaultBizLogic
         return prevValueDisplayName;
     }
     
-    /**
+     /**
  	* Returns all the tables in the simple query interface.
  	* @param request
  	* @throws DAOException
@@ -528,4 +534,115 @@ public class QueryBizLogic extends DefaultBizLogic
 		
 		return objectNameValueBeanList;
 	}
+    
+	 /**
+ 	* Returns all the tables in the simple query interface.
+ 	* @param request
+ 	* @throws DAOException
+ 	* @throws ClassNotFoundException
+ 	*/
+	public static Vector getMainObjectsOfQuery()throws DAOException
+	{
+    	String sql = " select distinct tableData.ALIAS_NAME " +
+    				 " from CATISSUE_TABLE_RELATION tableRelation join CATISSUE_QUERY_INTERFACE_TABLE_DATA " +
+    				 " tableData on tableRelation.PARENT_TABLE_ID = tableData.TABLE_ID ";
+
+		
+		
+    	List list = null;
+        java.util.Vector mainObjects = new java.util.Vector();
+        JDBCDAO dao =null;
+        try
+        {
+            dao = new JDBCDAO();
+            dao.openSession(null);
+            list = dao.executeQuery(sql, null, Constants.INSECURE_RETRIEVE, null);
+
+            Iterator iterator = list.iterator();
+            while (iterator.hasNext())
+            {
+                List row = (List) iterator.next();
+                mainObjects.add(row.get(0));
+                Logger.out.info("Main Objects:" +row.get(0));
+            }
+
+            
+        }
+        catch (DAOException daoExp)
+        {
+            Logger.out.debug("Could not obtain main objects. Exception:"
+                    + daoExp.getMessage(), daoExp);
+        }
+        catch (ClassNotFoundException classExp)
+        {
+            Logger.out.debug("Could not obtain main objects. Exception:"
+                    + classExp.getMessage(), classExp);
+        }
+        finally
+        {
+            try
+            {
+                dao.closeSession();
+            }
+            catch (DAOException e)
+            {
+                Logger.out.debug(e.getMessage(),e);
+            }
+        }
+        return mainObjects;
+	}
+	
+	/**
+	 * This method returns all tables that are related to 
+	 * the aliasname passed as parameter
+	 * @author aarti_sharma
+	 * @param aliasName
+	 * @return
+	 * @throws DAOException
+	 */
+    public static Vector getRelatedTableAliases(String aliasName)throws DAOException
+    {
+    	List list = null;
+        java.util.Vector relatedTableAliases = new java.util.Vector();
+        JDBCDAO dao =null;
+        try
+        {
+            dao = new JDBCDAO();
+            dao.openSession(null);
+            list = dao.executeQuery(GET_RELATED_TABLE_ALIAS+"'"+aliasName+"'", null, Constants.INSECURE_RETRIEVE, null);
+
+            Iterator iterator = list.iterator();
+            while (iterator.hasNext())
+            {
+                List row = (List) iterator.next();
+                relatedTableAliases.add(row.get(0));
+                Logger.out.info("aliasName:"+aliasName+" Related Table: "+row.get(0));
+            }
+
+            
+        }
+        catch (DAOException daoExp)
+        {
+            Logger.out.debug("Could not obtain related tables. Exception:"
+                    + daoExp.getMessage(), daoExp);
+        }
+        catch (ClassNotFoundException classExp)
+        {
+            Logger.out.debug("Could not obtain related tables. Exception:"
+                    + classExp.getMessage(), classExp);
+        }
+        finally
+        {
+            try
+            {
+                dao.closeSession();
+            }
+            catch (DAOException e)
+            {
+                Logger.out.debug(e.getMessage(),e);
+            }
+        }
+        return relatedTableAliases;
+    }
+    
 }
