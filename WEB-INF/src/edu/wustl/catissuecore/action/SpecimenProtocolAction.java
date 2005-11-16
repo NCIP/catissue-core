@@ -10,7 +10,6 @@
 
 package edu.wustl.catissuecore.action;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -19,7 +18,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -34,7 +32,6 @@ import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.cde.CDE;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.cde.PermissibleValue;
-import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -48,9 +45,9 @@ public class SpecimenProtocolAction  extends SecureAction
      * Overrides the execute method of Action class.
      * Sets the various fields in Collection / Distribution Add/Edit webpage.
      * */
-    public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
+    protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
-            throws IOException, ServletException, DAOException
+            throws Exception
     {
         //Gets the value of the operation parameter.
         String operation = request.getParameter(Constants.OPERATION);

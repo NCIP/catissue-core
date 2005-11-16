@@ -10,12 +10,10 @@
 
 package edu.wustl.catissuecore.action;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -28,7 +26,6 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.util.MapDataParser;
-import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -41,9 +38,9 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
      * Overrides the execute method of Action class.
      * Sets the various fields in CollectionProtocol Add/Edit webpage.
      * */
-    public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
+    protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
-            throws IOException, ServletException,DAOException
+            throws Exception
     {
     	super.executeSecureAction(mapping, form, request, response);
     	

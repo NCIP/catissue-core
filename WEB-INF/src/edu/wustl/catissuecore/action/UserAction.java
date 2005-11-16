@@ -10,13 +10,11 @@
 
 package edu.wustl.catissuecore.action;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Vector;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -49,9 +47,8 @@ public class UserAction extends SecureAction
      * Overrides the execute method of Action class.
      * Sets the various fields in User Add/Edit webpage.
      * */
-    public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
-            HttpServletRequest request, HttpServletResponse response)
-            throws IOException, ServletException
+    protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
+            HttpServletRequest request, HttpServletResponse response) throws Exception
     {
         //Gets the value of the operation parameter.
         String operation = request.getParameter(Constants.OPERATION);
@@ -70,69 +67,61 @@ public class UserAction extends SecureAction
         request.setAttribute(Constants.PAGEOF,pageOf);
         String target = pageOf;
         
-        try
+        AbstractBizLogic bizLogic = BizLogicFactory.getBizLogic(Constants.USER_FORM_ID);
+        
+        //Sets the instituteList attribute to be used in the Add/Edit User Page.
+        String sourceObjectName = Institution.class.getName();
+        String[] displayNameFields = {Constants.NAME};
+        String valueField = Constants.SYSTEM_IDENTIFIER;
+        
+        List instituteList = bizLogic.getList(sourceObjectName, displayNameFields, valueField, false);
+        request.setAttribute(Constants.INSTITUTIONLIST, instituteList);
+        
+        //Sets the departmentList attribute to be used in the Add/Edit User Page.
+        sourceObjectName = Department.class.getName();
+        List departmentList = bizLogic.getList(sourceObjectName, displayNameFields, valueField, false);
+        request.setAttribute(Constants.DEPARTMENTLIST, departmentList);
+        	
+        //Sets the cancerResearchGroupList attribute to be used in the Add/Edit User Page.
+        sourceObjectName = CancerResearchGroup.class.getName();
+        List cancerResearchGroupList = bizLogic.getList(sourceObjectName, displayNameFields, valueField, false);
+        request.setAttribute(Constants.CANCER_RESEARCH_GROUP_LIST, cancerResearchGroupList);
+        
+        //Populate the activity status dropdown if the operation is edit 
+        //and the user page is of administrative tab.
+        if (operation.equals(Constants.EDIT) && pageOf.equals(Constants.PAGEOF_USER_ADMIN))
         {
-            AbstractBizLogic dao = BizLogicFactory.getBizLogic(Constants.USER_FORM_ID);
-            
-            //Sets the instituteList attribute to be used in the Add/Edit User Page.
-            String sourceObjectName = Institution.class.getName();
-            String[] displayNameFields = {Constants.NAME};
-            String valueField = Constants.SYSTEM_IDENTIFIER;
-            
-            List instituteList = dao.getList(sourceObjectName, displayNameFields, valueField, false);
-            request.setAttribute(Constants.INSTITUTIONLIST, instituteList);
-            
-            //Sets the departmentList attribute to be used in the Add/Edit User Page.
-            sourceObjectName = Department.class.getName();
-            List departmentList = dao.getList(sourceObjectName, displayNameFields, valueField, false);
-            request.setAttribute(Constants.DEPARTMENTLIST, departmentList);
-            	
-            //Sets the cancerResearchGroupList attribute to be used in the Add/Edit User Page.
-            sourceObjectName = CancerResearchGroup.class.getName();
-            List cancerResearchGroupList = dao.getList(sourceObjectName, displayNameFields, valueField, false);
-            request.setAttribute(Constants.CANCER_RESEARCH_GROUP_LIST, cancerResearchGroupList);
-            
-            //Populate the activity status dropdown if the operation is edit 
-            //and the user page is of administrative tab.
-            if (operation.equals(Constants.EDIT) && pageOf.equals(Constants.PAGEOF_USER_ADMIN))
-            {
-                request.setAttribute(Constants.ACTIVITYSTATUSLIST,
-                        			 Constants.USER_ACTIVITY_STATUS_VALUES);
-            }
-            
-            //Populate the role dropdown if the page is of approve user or (Add/Edit) user page of adminitraive tab. 
-            if (pageOf.equals(Constants.PAGEOF_APPROVE_USER) || pageOf.equals(Constants.PAGEOF_USER_ADMIN))
-            {
-                List roleNameValueBeanList = getRoles();
-                
-                request.setAttribute(Constants.ROLELIST, roleNameValueBeanList);
-            }
-            
-            //Populate the status dropdown for approve user page.(Approve,Reject,Pending)
-            if (pageOf.equals(Constants.PAGEOF_APPROVE_USER))
-            {
-                request.setAttribute(Constants.APPROVE_USER_STATUS_LIST,Constants.APPROVE_USER_STATUS_VALUES);
-            }
-            
-            Logger.out.debug("pageOf :---------- "+ pageOf );
-            
-            // ------------- add new
-            String reqPath = request.getParameter(Constants.REQ_PATH);
-            
-			request.setAttribute(Constants.REQ_PATH, reqPath);
-            
-            AbstractActionForm aForm = (AbstractActionForm )form;
-            if(reqPath != null && aForm !=null )
-            	aForm.setRedirectTo(reqPath);
-            
-            Logger.out.debug("USerAction redirect :---------- "+ reqPath  );
-        }
-        catch (Exception exc)
-        {
-            target = Constants.FAILURE;
-            Logger.out.error(exc.getMessage());
+            request.setAttribute(Constants.ACTIVITYSTATUSLIST,
+                    			 Constants.USER_ACTIVITY_STATUS_VALUES);
         }
         
+        //Populate the role dropdown if the page is of approve user or (Add/Edit) user page of adminitraive tab. 
+        if (pageOf.equals(Constants.PAGEOF_APPROVE_USER) || pageOf.equals(Constants.PAGEOF_USER_ADMIN))
+        {
+            List roleNameValueBeanList = getRoles();
+            
+            request.setAttribute(Constants.ROLELIST, roleNameValueBeanList);
+        }
+        
+        //Populate the status dropdown for approve user page.(Approve,Reject,Pending)
+        if (pageOf.equals(Constants.PAGEOF_APPROVE_USER))
+        {
+            request.setAttribute(Constants.APPROVE_USER_STATUS_LIST,Constants.APPROVE_USER_STATUS_VALUES);
+        }
+        
+        Logger.out.debug("pageOf :---------- "+ pageOf );
+        
+        // ------------- add new
+        String reqPath = request.getParameter(Constants.REQ_PATH);
+        
+		request.setAttribute(Constants.REQ_PATH, reqPath);
+        
+        AbstractActionForm aForm = (AbstractActionForm )form;
+        if(reqPath != null && aForm !=null )
+        	aForm.setRedirectTo(reqPath);
+        
+        Logger.out.debug("USerAction redirect :---------- "+ reqPath  );
+            
         return mapping.findForward(target);
     }
     

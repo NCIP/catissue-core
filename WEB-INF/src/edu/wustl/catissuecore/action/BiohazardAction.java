@@ -10,10 +10,8 @@
 
 package edu.wustl.catissuecore.action;
 
-import java.io.IOException;
 import java.util.List;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -30,9 +28,9 @@ public class BiohazardAction  extends SecureAction
      * Overrides the execute method of Action class.
      * Initializes the various fields in Biohazard.jsp Page.
      * */
-    public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
+	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
-            throws IOException, ServletException
+            throws Exception
     {
         //Gets the value of the operation parameter.
         String operation = request.getParameter(Constants.OPERATION);
