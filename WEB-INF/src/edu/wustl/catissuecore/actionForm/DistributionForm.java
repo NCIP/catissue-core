@@ -37,7 +37,7 @@ import edu.wustl.catissuecore.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
 /**
-  *
+ *
  * Description:  This Class handles the Distribution..
  */
 public class DistributionForm extends SpecimenEventParametersForm
@@ -62,7 +62,7 @@ public class DistributionForm extends SpecimenEventParametersForm
 	{
 		return Constants.DISTRIBUTION_FORM_ID;
 	}
-
+	
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
 		super.setAllValues(abstractDomain);
@@ -103,7 +103,7 @@ public class DistributionForm extends SpecimenEventParametersForm
 				
 				Double quantity = dItem.getQuantity();
 				//dItem.setPreviousQty(quantity);
-
+				
 				values.put(key1,dItem.getSystemIdentifier());
 				values.put(key2,specimen.getSystemIdentifier());
 				values.put(key3,quantity);
@@ -135,9 +135,9 @@ public class DistributionForm extends SpecimenEventParametersForm
 		Validator validator = new Validator();
 		Logger.out.debug("Inside validate function");
 		if ((userId) == -1L)
-        {
-       		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("distribution.distributedBy")));
-        }
+		{
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("distribution.distributedBy")));
+		}
 		
 		
 		//  date validation according to bug id  722 and 730
@@ -152,7 +152,7 @@ public class DistributionForm extends SpecimenEventParametersForm
 			Logger.out.debug("dist prot");
 			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("distribution.protocol")));
 		}
-
+		
 		if(!validator.isValidOption(fromSite))
 		{
 			Logger.out.debug("from site");
@@ -166,60 +166,32 @@ public class DistributionForm extends SpecimenEventParametersForm
 		}
 		
 		//Validations for Add-More Block
-        
-        try
+		if (this.values.keySet().isEmpty())
 		{
-        	if (this.values.keySet().isEmpty())
-			{
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.one.item.required",ApplicationProperties.getValue("distribution.distributedItem")));
-			}
-        	
-			Iterator it = this.values.keySet().iterator();
-			while (it.hasNext())
-			{
-				String key = (String)it.next();
-				String value = (String)values.get(key);
-				
-				if(key.indexOf("Specimen_systemIdentifier")!=-1 && !validator.isValidOption( value))
-				{
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.distribution.missing",ApplicationProperties.getValue("itemrecord.specimenId")));
-				}
-				
-				
-				/*if(key.indexOf("Specimen_className")!=-1 && !validator.isValidOption( value))
-				{
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.distribution.missing",ApplicationProperties.getValue("distribution.specimenType")));
-				}
-				if(key.indexOf("quantity")!=-1)
-				{
-					String classKey = key.substring(0,key.lastIndexOf("_") );
-					classKey = classKey + "_specimenClass";
-					String classValue = (String)getValue(classKey );
-					if (classValue.trim().equals("Cell"))
-					{*/
-        		if(key.indexOf("_quantity")!=-1  && (validator.isEmpty(value) ))
-        		{
-        			Logger.out.debug("Quantity empty**************");
-        			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.distribution.missing",ApplicationProperties.getValue("itemrecord.quantity")));
-        		}
-					
-				/*else
-				{
-					if(key.indexOf("_quantity")!=-1  && !(validator.isEmpty(value) && !validator.isNumeric(value)))
-        			{
-						Logger.out.debug("Quantity invalid**************");
-						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("itemrecord.quantity")));
-        			}
-				}*/
-				//}  if  quantity
-			}
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.one.item.required",ApplicationProperties.getValue("distribution.distributedItem")));
 		}
-		catch (Exception excp)
+		
+		Iterator it = this.values.keySet().iterator();
+		while (it.hasNext())
 		{
-	    	// use of logger as per bug 79
-	    	Logger.out.error(excp.getMessage(),excp); 
-			errors = new ActionErrors();
+			String key = (String)it.next();
+			String value = (String)values.get(key);
+			
+			if(key.indexOf("Specimen_systemIdentifier")!=-1 && !validator.isValidOption( value))
+			{
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.distribution.missing",ApplicationProperties.getValue("itemrecord.specimenId")));
+			}
+			
+			
+			if(key.indexOf("_quantity")!=-1  && (validator.isEmpty(value) ))
+			{
+				Logger.out.debug("Quantity empty**************");
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.distribution.missing",ApplicationProperties.getValue("itemrecord.quantity")));
+			}
+			
+			//}  if  quantity
 		}
+		
 		return errors;
 	}
 	/**
@@ -243,14 +215,14 @@ public class DistributionForm extends SpecimenEventParametersForm
 	public String getFromSite() {
 		return fromSite;
 	}
-
+	
 	/**
 	 * @param fromSite
 	 */
 	public void setFromSite(String fromSite) {
 		this.fromSite = fromSite;
 	}
-
+	
 	/**
 	 * @return
 	 */
@@ -269,7 +241,7 @@ public class DistributionForm extends SpecimenEventParametersForm
 	public String getToSite() {
 		return toSite;
 	}
-
+	
 	/**
 	 * @param toSite
 	 */
@@ -278,50 +250,50 @@ public class DistributionForm extends SpecimenEventParametersForm
 	}
 	
 	/**
-		 * Associates the specified object with the specified key in the map.
-		 * @param key the key to which the object is mapped.
-		 * @param value the object which is mapped.
-		 */
-		public void setValue(String key, Object value)
-		{
-			values.put(key, value);
-		}
-
-		/**
-		 * Returns the object to which this map maps the specified key.
-		 * 
-		 * @param key the required key.
-		 * @return the object to which this map maps the specified key.
-		 */
-		public Object getValue(String key)
-		{
-			return values.get(key);
-		}		
-
-		/**
-		 * @param values The values to set.
-		 */
-		public void setValues(Map values)
-		{
-			this.values = values;
-		}
-
+	 * Associates the specified object with the specified key in the map.
+	 * @param key the key to which the object is mapped.
+	 * @param value the object which is mapped.
+	 */
+	public void setValue(String key, Object value)
+	{
+		values.put(key, value);
+	}
+	
+	/**
+	 * Returns the object to which this map maps the specified key.
+	 * 
+	 * @param key the required key.
+	 * @return the object to which this map maps the specified key.
+	 */
+	public Object getValue(String key)
+	{
+		return values.get(key);
+	}		
+	
+	/**
+	 * @param values The values to set.
+	 */
+	public void setValues(Map values)
+	{
+		this.values = values;
+	}
+	
 	/**
 	 * @return
 	 */
 	public Map getValues() {
 		return values;
 	}
-
+	
 	protected void reset()
-    {
-//        super.reset();
-//        this.distributionProtocolId = null;
-//        this.fromSite = null;
-//        this.toSite = null;
-//        this.counter =1;
-		  
-    }
+	{
+		//        super.reset();
+		//        this.distributionProtocolId = null;
+		//        this.fromSite = null;
+		//        this.toSite = null;
+		//        this.counter =1;
+		
+	}
 	/**
 	 * @return Returns the idChange.
 	 */
@@ -372,6 +344,7 @@ public class DistributionForm extends SpecimenEventParametersForm
 	}
 	public Object getAvailableQty(Specimen specimen)
 	{
+		//Retrieve the Available quantity for the particular specimen
 		if(specimen instanceof TissueSpecimen)
 		{
 			
