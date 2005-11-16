@@ -118,7 +118,7 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 
 <tr>
  <td>
-  	 <table summary="" cellpadding="3" cellspacing="0" border="0" width="500">
+  	 <table summary="" cellpadding="3" cellspacing="0" border="0" width="550">
 
 <%
 	if(dataList!=null && dataList.size() != 0)
