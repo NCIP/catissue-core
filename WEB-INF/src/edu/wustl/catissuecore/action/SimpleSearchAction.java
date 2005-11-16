@@ -65,14 +65,7 @@ public class SimpleSearchAction extends BaseAction
 			Logger.out.debug(Constants.MENU_SELECTED+" set in SimpleSearch Action : -- "+ strMenu  ); 
 		// -------- set the selected menu ------- end
 		HttpSession session = request.getSession();
-		String counter = (String)session.getAttribute(Constants.SIMPLE_QUERY_COUNTER);		
-		
-		if(counter==null)
-		{
-			counter = simpleQueryInterfaceForm.getCounter();
-			session.setAttribute(Constants.SIMPLE_QUERY_COUNTER,simpleQueryInterfaceForm.getCounter());
-		}
-		
+
 		String target = Constants.SUCCESS;
 		try
 		{
