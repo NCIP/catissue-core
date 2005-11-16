@@ -11,12 +11,12 @@
 	String shortTitle = "value(SpecimenProtocol:SHORT_TITLE)";
 	String irbIdentifier = "value(SpecimenProtocol:IRB_IDENTIFIER)";
 	String startDate = "value(SpecimenProtocol:START_DATE)";
-	String startDate2 = "value(Participant:START_DATE:HLIMIT)";
+	String startDate2 = "value(SpecimenProtocol:START_DATE:HLIMIT)";
 	String endDate = "value(SpecimenProtocol:END_DATE)";
-	String endDate2 = "value(Participant:END_DATE:HLIMIT)";
+	String endDate2 = "value(SpecimenProtocol:END_DATE:HLIMIT)";
 	String protocolParticipantId = "value(CollectionProtocolRegistration:PROTOCOL_PARTICIPANT_IDENTIFIER)";
-	String regDate = "value(SpecimenProtocol:REGISTRATION_DATE)";
-	String regDate2 = "value(SpecimenProtocol:REGISTRATION_DATE:HLIMIT)";
+	String regDate = "value(CollectionProtocolRegistration:REGISTRATION_DATE)";
+	String regDate2 = "value(CollectionProtocolRegistration:REGISTRATION_DATE:HLIMIT)";
 	
 	
 	String opPrincipalInvestigator = "value(Operator:SpecimenProtocol:PRINCIPAL_INVESTIGATOR_ID)";
@@ -26,7 +26,7 @@
 	String opStartDate = "value(Operator:SpecimenProtocol:START_DATE)";
 	String opEndDate = "value(Operator:SpecimenProtocol:END_DATE)";
 	String opProtocolParticipantId = "value(Operator:CollectionProtocolRegistration:PROTOCOL_PARTICIPANT_IDENTIFIER)";
-	String opRegDate = "value(Operator:SpecimenProtocol:REGISTRATION_DATE)";
+	String opRegDate = "value(Operator:CollectionProtocolRegistration:REGISTRATION_DATE)";
 %>
 
 <head>
@@ -36,7 +36,7 @@
 
 <html:errors />
 
-<html:form action="AdvanceSearch.do">
+<html:form action="<%=Constants.ADVANCED_SEARCH_ACTION%>">
 <table summary="" cellpadding="5" cellspacing="0" border="0" width="600">
 <tr>
 	<td><html:hidden property="objectName" value="CollectionProtocol"/></td>
