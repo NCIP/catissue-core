@@ -35,11 +35,11 @@ import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.util.logger.Logger;
 
 /**
- * This is the Base action class the Distribution report actions
+ * This is the Base action class for the Distribution report actions
  * @author Poornima Govindrao
  *  
  */
-public abstract class BaseDistributionReportAction extends BaseAction
+public abstract class BaseDistributionReportAction extends SecureAction
 {
 	protected String []getColumnNames(String []selectedColumnsList)
 	{
@@ -63,61 +63,11 @@ public abstract class BaseDistributionReportAction extends BaseAction
 		return columnNames;
 	}
 	
-    /*private Vector setViewElements(String []selectedColumnsList) 
-	{
-    	/*Split the string which is in the form TableAlias.columnNames.columnDisplayNames 
-    	 * and set the dataelement object.
-    	 */
-	    /*Vector vector = new Vector();
-	    for(int i=0;i<selectedColumnsList.length;i++)
-	    {
-	    	StringTokenizer st= new StringTokenizer(selectedColumnsList[i],".");
-	    	DataElement dataElement = new DataElement();
-	    	String tableInPath = null;
-	    	while (st.hasMoreTokens())
-			{
-	    		dataElement.setTable(st.nextToken());
-	    		dataElement.setField(st.nextToken());
-	    		st.nextToken();
-	    		
-	    		if(st.hasMoreTokens())
-	    			tableInPath=st.nextToken();
-	    	}
-	    	if (tableInPath != null)
-			{
-			    StringTokenizer tableInPathTokenizer = new StringTokenizer(tableInPath, ":");
-			    String aliasName = null;
-				while (tableInPathTokenizer.hasMoreTokens())
-				{
-				    Long tableId = Long.valueOf(tableInPathTokenizer.nextToken());
-				    QueryBizLogic bizLogic = (QueryBizLogic)BizLogicFactory
-				    							.getBizLogic(Constants.SIMPLE_QUERY_INTERFACE_ID);
-				    aliasName = bizLogic.getAliasNameFromTableId(tableId);
-				    Logger.out.debug("aliasName for from Set**************************"+aliasName);
-				}
-				
-				if (aliasName != null)
-				{
-				    fromTables.add(aliasName);
-				}
-			}
-	        vector.add(dataElement);
-	    }
-		return vector;
-	}*/
-    
-	protected DistributionReportForm getDistributionReportForm(Distribution dist)
+	protected DistributionReportForm getDistributionReportForm(Distribution dist) throws Exception
 	{
 		//For a given Distribution object set the values for Distribution report.
 		DistributionReportForm distributionReportForm = new DistributionReportForm();
-		try
-		{
-			distributionReportForm.setAllValues(dist);
-		}
-		catch(Exception ex)
-		{
-			Logger.out.error(ex.getMessage(),ex);
-		}
+		distributionReportForm.setAllValues(dist);
 		return distributionReportForm;
 	}
 	
@@ -255,7 +205,7 @@ public abstract class BaseDistributionReportAction extends BaseAction
     	}
     	
     }
-    public abstract ActionForward executeAction(ActionMapping mapping,
+    protected abstract ActionForward executeSecureAction(ActionMapping mapping,
 			ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception;
 

@@ -30,7 +30,7 @@ import edu.wustl.common.util.logger.Logger;
 
 public class DistributionReportSaveAction extends BaseDistributionReportAction
 {
-	public ActionForward executeAction(ActionMapping mapping, ActionForm form,HttpServletRequest request,
+	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,HttpServletRequest request,
 									HttpServletResponse response)throws Exception 
 	{
 		ConfigureResultViewForm configForm = (ConfigureResultViewForm)form;
@@ -49,22 +49,15 @@ public class DistributionReportSaveAction extends BaseDistributionReportAction
 		
 		setSelectedMenuRequestAttribute(request);
 		//Save the report as a CSV file at the client side
-		try
+		HttpSession session=request.getSession();
+		if(session!=null)
 		{
-			HttpSession session=request.getSession();
-			if(session!=null)
-			{
-				String filePath = Variables.catissueHome+System.getProperty("file.separator")+"DistributionReport_"+session.getId()+".csv";
-				saveReport(distributionReportForm,listOfData,filePath,columnNames);
-				String fileName = Constants.DISTRIBUTION_REPORT_NAME;
-				String contentType= "application/csv";
-				SendFile.sendFileToClient(response,filePath,fileName,contentType);
-			}
+			String filePath = Variables.catissueHome+System.getProperty("file.separator")+"DistributionReport_"+session.getId()+".csv";
+			saveReport(distributionReportForm,listOfData,filePath,columnNames);
+			String fileName = Constants.DISTRIBUTION_REPORT_NAME;
+			String contentType= "application/csv";
+			SendFile.sendFileToClient(response,filePath,fileName,contentType);
 		}
-		catch (IOException e)
-		{
-			Logger.out.error(e.getMessage(),e);
-		}  
 		return null;
 	}
 	

@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -30,9 +29,9 @@ import edu.wustl.common.util.logger.Logger;
  * @author Poornima Govindrao
  *  
  */
-public class ConfigureResultViewAction extends Action  {
+public class ConfigureResultViewAction extends BaseAction  {
 
-	public final ActionForward execute(ActionMapping mapping, ActionForm form,
+	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 			
@@ -119,7 +118,7 @@ public class ConfigureResultViewAction extends Action  {
             tableName = (String)rowList.get(j++);
             columnName = (String)rowList.get(j++);
             columnDisplayName = (String)rowList.get(j++);
-            //Name ValueBean Value in the for of tableAlias..columnName.columnDisplayName 
+            //Name ValueBean Value in the for of tableAlias.columnName.columnDisplayName 
             String columnValue = tableName+"."+columnName+"."+columnDisplayName;
             Logger.out.debug("columnValue in configurationresultviewaction"+columnValue);
             String tablesInPath = (String)rowList.get(j++);
@@ -130,7 +129,6 @@ public class ConfigureResultViewAction extends Action  {
                 columnValue = columnValue+"."+tablesInPath;
                 Logger.out.debug("columnValue in config"+columnValue);
             }
-            
             
             NameValueBean columns = new NameValueBean(columnDisplayName,columnValue);
             columnList.add(columns);
