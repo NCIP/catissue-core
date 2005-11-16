@@ -21,10 +21,8 @@ import edu.wustl.catissuecore.util.global.Constants;
  */
 public class CheckInCheckOutEventParametersAction extends SpecimenEventParametersAction
 {
-	protected void setRequestParameters(HttpServletRequest request)
+	protected void setRequestParameters(HttpServletRequest request) throws Exception
 	{
-		super.setRequestParameters(request);
-		
 		//set array of CheckInCheckOutEventParameters
 		request.setAttribute(Constants.STORAGESTATUSLIST, Constants.STORAGESTATUSARRAY);
 	}

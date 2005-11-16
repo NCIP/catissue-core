@@ -10,11 +10,9 @@
 
 package edu.wustl.catissuecore.action;
 
-import java.io.IOException;
 import java.util.Calendar;
 import java.util.Collection;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -35,9 +33,15 @@ import edu.wustl.common.util.logger.Logger;
  * It is a parent class for some Event Parameter Classes.
  * @author mandar deshmukh
  */
+
 public class SpecimenEventParametersAction  extends SecureAction
 {
-	protected void setRequestParameters(HttpServletRequest request)
+	/**
+	 * This method sets all the common parameters for the SpecimenEventParameter pages
+	 * @param request HttpServletRequest instance in which the data will be set. 
+	 * @throws Exception Throws Exception. Helps in handling exceptions at one common point.
+	 */
+	private void setCommonRequestParameters(HttpServletRequest request) throws Exception
 	{
         //Gets the value of the operation parameter.
         String operation = request.getParameter(Constants.OPERATION);
@@ -54,37 +58,31 @@ public class SpecimenEventParametersAction  extends SecureAction
         //The id of specimen of this event.
         String specimenId = request.getParameter(Constants.SPECIMEN_ID); 
         request.setAttribute(Constants.SPECIMEN_ID, specimenId);
-        Logger.out.debug("\t\t************************************");
         Logger.out.debug("\t\t************************************ : "+specimenId );
         String isRNA = request.getParameter(Constants.IS_RNA); 
         request.setAttribute(Constants.IS_RNA, isRNA);
         
         //The Add/Edit status message
         request.setAttribute(Constants.STATUS_MESSAGE_KEY, request.getAttribute(Constants.STATUS_MESSAGE_KEY));
-       
-                
-       try
-       {
-           	UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getBizLogic(Constants.USER_FORM_ID);
-        	Collection coll =  userBizLogic.getUsers();
+   
+       	UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getBizLogic(Constants.USER_FORM_ID);
+    	Collection coll =  userBizLogic.getUsers();
+    	
+    	request.setAttribute(Constants.USERLIST, coll);
+    	
+    	// This method will be overridden by the sub classes
+    	setRequestParameters( request);
         	
-        	request.setAttribute(Constants.USERLIST, coll);
-        }
-        catch (Exception exc)
-        {
-            Logger.out.error(exc.getMessage());
-            exc.printStackTrace();
-        }
 	}
     /**
      * Overrides the executeSecureAction method of SecureAction class.
      * */
     public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
-            throws IOException, ServletException
+            throws Exception
     {
-    	setRequestParameters(request);
-    	
+    	setCommonRequestParameters(request);
+
     	EventParametersForm eventParametersForm = (EventParametersForm)form;
     	
     	//	 if operation is add
@@ -106,4 +104,11 @@ public class SpecimenEventParametersAction  extends SecureAction
     	
     	return mapping.findForward((String)request.getParameter(Constants.PAGEOF));
     }
+    
+    //  This method will be overridden by the sub classes
+    // It is called from setCommonRequestParameters().
+    // It will be used to set the SubClass specific parameters. 
+    protected void setRequestParameters(HttpServletRequest request) throws Exception
+	{
+	}
 }

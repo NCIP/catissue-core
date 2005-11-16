@@ -24,10 +24,8 @@ import edu.wustl.common.cde.CDEManager;
  */
 public class CollectionEventParametersAction extends SpecimenEventParametersAction
 {
-	protected void setRequestParameters(HttpServletRequest request)
+	protected void setRequestParameters(HttpServletRequest request) throws Exception
 	{
-		super.setRequestParameters(request);
-		
 		// set the procedure lists
 		List procedureList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_COLLECTION_PROCEDURE,null);
     	request.setAttribute(Constants.PROCEDURELIST, procedureList);
