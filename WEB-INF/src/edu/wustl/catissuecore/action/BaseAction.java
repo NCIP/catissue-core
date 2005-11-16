@@ -2,9 +2,6 @@ package edu.wustl.catissuecore.action;
 
 
 
-import java.util.List;
-import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -13,7 +10,6 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import edu.wustl.catissuecore.actionForm.AbstractActionForm;
 import edu.wustl.catissuecore.exception.UserNotAuthenticatedException;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
@@ -30,11 +26,8 @@ import edu.wustl.common.util.logger.Logger;
  * @author Aarti Sharma
  *  
  */
-
-public abstract class BaseAction extends Action  {
-
-
-
+public abstract class BaseAction extends Action  
+{
 	/*
 	 * Method ensures that the user is authenticated before calling the
 	 * executeAction of the subclass. If the User is not authenticated then an
@@ -46,13 +39,15 @@ public abstract class BaseAction extends Action  {
 	 *      javax.servlet.http.HttpServletResponse)
 	 */
 	public final ActionForward execute(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
-		if (getSessionData(request) == null) {
+			HttpServletRequest request, HttpServletResponse response) throws Exception 
+	{
+	    /* The case of session time out */
+		if (getSessionData(request) == null) 
+		{
 			//Forward to the Login
-		   
 			throw new UserNotAuthenticatedException();
 		}
+		
 		setRequestData(request);
 		setSelectedMenu(request);
 		return executeAction(mapping, form, request, response);
@@ -70,22 +65,19 @@ public abstract class BaseAction extends Action  {
 	}
 	/**
 	 * Returns the current User authenticated by CSM Authentication.
-	 * 
-	 * @param request
-	 * @return
 	 */
-	protected String getUserLoginName(HttpServletRequest request) {
-		Object obj = request.getSession().getAttribute(Constants.SESSION_DATA);
-		if(obj!=null)
-		{
-			SessionDataBean sessionData = (SessionDataBean) obj;
-			return  sessionData.getUserName();
-		}
-		return null;
-		//return (String) request.getSession().getAttribute(Constants.SESSION_DATA);
+	protected String getUserLoginName(HttpServletRequest request) 
+	{
+	    SessionDataBean sessionData = getSessionData(request);
+	    if(sessionData != null)
+	    {
+	        sessionData.getUserName();
+	    }
+	    return null;
 	}
 	
-	protected SessionDataBean getSessionData(HttpServletRequest request) {
+	protected SessionDataBean getSessionData(HttpServletRequest request) 
+	{
 		Object obj = request.getSession().getAttribute(Constants.SESSION_DATA);
 		if(obj!=null)
 		{
@@ -93,94 +85,8 @@ public abstract class BaseAction extends Action  {
 			return  sessionData;
 		}
 		return null;
-		//return (String) request.getSession().getAttribute(Constants.SESSION_DATA);
 	}
-	
-	protected void DeleteRow(List list,Map map,
-			HttpServletRequest request){
-		
-		DeleteRow(list,map,request,null);
-	}
-	/**
-	 * Returns boolean used for diabling/enabling checkbox in jsp Page and
-	 * rearranging rows
-	 */
-	protected void DeleteRow(List list,Map map,
-			HttpServletRequest request,String outer){
-		
-		//whether delete button is clicked or not
-		String status = request.getParameter("status");
-    	if(status == null){
-    		status = Constants.FALSE;
-    	}
-    	
-    	String text;
-       	for(int k = 0; k < list.size(); k++){
-       		text = (String)list.get(k);
-    		String first = text.substring(0,text.indexOf(":"));
-    		String second = text.substring(text.indexOf("_"));
-    		
-    		//condition for creating ids for innerTable
-    		boolean condition = false;
-    		String third = "",fourth = "";
-    		
-    		//checking whether key is inneTable'key or not
-    		if(second.indexOf(":") != -1){
-    			condition = true;
-    			third = second.substring(0,second.indexOf(":"));
-    			fourth = second.substring(second.lastIndexOf("_"));
-    			
-    		}
-    		
-    		if(status.equals(Constants.TRUE)){
-    			Map values = map;
-    			
-    			//for outerTable
-    			int outerCount = 1;
-    			
-    			//for innerTable
-    			int innerCount = 1;
-    			for(int i = 1; i <= values.size() ; i++){
-    				String id = "";
-    				String mapId = "";
-    				
-    				//for innerTable key's rearrangement
-    				if(condition){
-    					if(outer != null){
-    						id = first + ":"+ outer + third + ":"+ i + fourth;
-    						mapId = first + ":"+ outer + third + ":"+ innerCount + fourth;
-    					}
-    					else {
-    						//for outer key's rearrangement
-    						for(int j = 1; j <= values.size() ; j++){
-    							id = first + ":"+ i + third + ":"+ j + fourth;
-    							mapId = first + ":"+ outerCount + third + ":"+ j + fourth;
-    							
-    							//checking whether map from form contains keys or not
-    							if(values.containsKey(id)){
-    								values.put(mapId,map.get(id));
-    		    					outerCount++;
-    		    				}
-    						}
-    					}
-    					
-    				}
-    	    			
-    	    		else {
-    	    			id = first + ":" + i + second;
-    	    			mapId = first + ":" +innerCount + second;
-    	    		}
-    				
-    				//rearranging key's
-    				if(values.containsKey(id)){
-    					values.put(mapId,map.get(id));
-    					innerCount++;
-    				}
-    			}
-    		}
-    	}
-	}
-	
+
 	/**
 	 * Subclasses should implement the action's business logic in this method
 	 * and can be sure that an authenticated user is present.
@@ -192,14 +98,12 @@ public abstract class BaseAction extends Action  {
 	 * @return
 	 * @throws Exception
 	 */
-	public abstract ActionForward executeAction(ActionMapping mapping,
-			ActionForm form, HttpServletRequest request,
-			HttpServletResponse response) throws Exception;
+	protected abstract ActionForward executeAction(ActionMapping mapping,
+			ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception;
 	
-	public void setSelectedMenu(HttpServletRequest request)
+	protected void setSelectedMenu(HttpServletRequest request)
 	{
 		Logger.out.debug("Inside setSelectedMenu.....");
-		Logger.out.debug("#######################################################################");
 		String strMenu = request.getParameter(Constants.MENU_SELECTED );
 		if(strMenu != null )
 		{
