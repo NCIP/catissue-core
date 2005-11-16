@@ -22,10 +22,8 @@ import edu.wustl.catissuecore.util.global.Constants;
  */
 public class TissueSpecimenReviewEventParametersAction extends SpecimenEventParametersAction
 {
-	protected void setRequestParameters(HttpServletRequest request)
+	protected void setRequestParameters(HttpServletRequest request) throws Exception
 	{
-		super.setRequestParameters(request);
-		
 //		set array of histological quality
 		request.setAttribute(Constants.HISTOLOGICALQUALITYLIST , Constants.HISTOLOGICALQUALITYARRAY );
 	}

@@ -23,10 +23,8 @@ import edu.wustl.common.cde.CDEManager;
  */
 public class EmbeddedEventParametersAction extends SpecimenEventParametersAction
 {
-	protected void setRequestParameters(HttpServletRequest request)
+	protected void setRequestParameters(HttpServletRequest request) throws Exception
 	{
-		super.setRequestParameters(request);
-		
 		//set array of EmbeddingMedium
 		List embeddingMediumList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_EMBEDDING_MEDIUM,null);
     	request.setAttribute(Constants.EMBEDDINGMEDIUMLIST, embeddingMediumList);

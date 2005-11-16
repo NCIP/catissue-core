@@ -77,7 +77,7 @@ public class SpecimenEventParametersAction  extends SecureAction
     /**
      * Overrides the executeSecureAction method of SecureAction class.
      * */
-    public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
+    protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
             throws Exception
     {

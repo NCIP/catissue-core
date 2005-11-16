@@ -24,10 +24,8 @@ import edu.wustl.common.cde.CDEManager;
  */
 public class ReceivedEventParametersAction extends SpecimenEventParametersAction
 {
-	protected void setRequestParameters(HttpServletRequest request)
+	protected void setRequestParameters(HttpServletRequest request) throws Exception
 	{
-		super.setRequestParameters(request);
-		
 		// set the ReceivedQuality List.
 		List qualityList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_RECEIVED_QUALITY,null);
     	request.setAttribute(Constants.RECEIVED_QUALITY_LIST, qualityList);

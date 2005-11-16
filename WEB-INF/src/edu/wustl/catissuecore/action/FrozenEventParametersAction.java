@@ -23,10 +23,8 @@ import edu.wustl.common.cde.CDEManager;
  */
 public class FrozenEventParametersAction extends SpecimenEventParametersAction
 {
-	protected void setRequestParameters(HttpServletRequest request)
+	protected void setRequestParameters(HttpServletRequest request) throws Exception
 	{
-		super.setRequestParameters(request);
-		
 		//set array of methods
         List methodList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_METHOD,null);
     	request.setAttribute(Constants.METHODLIST, methodList);

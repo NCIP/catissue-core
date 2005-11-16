@@ -23,10 +23,8 @@ import edu.wustl.common.cde.CDEManager;
  */
 public class FixedEventParametersAction extends SpecimenEventParametersAction
 {
-	protected void setRequestParameters(HttpServletRequest request)
+	protected void setRequestParameters(HttpServletRequest request) throws Exception
 	{
-		super.setRequestParameters(request);
-
 		// SETS THE FIXATION LIST
 		List fixationList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_FIXATION_TYPE,null);
     	request.setAttribute(Constants.FIXATIONLIST, fixationList);
