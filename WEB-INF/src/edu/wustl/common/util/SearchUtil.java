@@ -56,8 +56,8 @@ public class SearchUtil
 		{
 			case DATATYPE_DATE:
 			case DATATYPE_NUMERIC:		
-				operatorList.add(new NameValueBean("Equals",Operator.EQUAL));
-				operatorList.add(new NameValueBean("Not Equals",Operator.NOT_EQUALS));
+				operatorList.add(new NameValueBean(Operator.EQUALS_CONDITION,Operator.EQUAL));
+				operatorList.add(new NameValueBean(Operator.NOT_EQUALS_CONDITION,Operator.NOT_EQUALS));
 				operatorList.add(new NameValueBean(Operator.LESS_THAN,Operator.LESS_THAN));
 				operatorList.add(new NameValueBean(Operator.LESS_THAN_OR_EQUALS,Operator.LESS_THAN_OR_EQUALS));
 				operatorList.add(new NameValueBean(Operator.GREATER_THAN,Operator.GREATER_THAN));
@@ -70,13 +70,13 @@ public class SearchUtil
 				operatorList.add(new NameValueBean(Operator.STARTS_WITH,Operator.STARTS_WITH));
 				operatorList.add(new NameValueBean(Operator.ENDS_WITH,Operator.ENDS_WITH));
 				operatorList.add(new NameValueBean(Operator.CONTAINS,Operator.CONTAINS));
-				operatorList.add(new NameValueBean("Equals",Operator.EQUAL));
-				operatorList.add(new NameValueBean("Not Equals",Operator.NOT_EQUALS));
+				operatorList.add(new NameValueBean(Operator.EQUALS_CONDITION,Operator.EQUAL));
+				operatorList.add(new NameValueBean(Operator.NOT_EQUALS_CONDITION,Operator.NOT_EQUALS));
 				break;
 				
 			case DATATYPE_ENUMERATED:
-				operatorList.add(new NameValueBean("Equals",Operator.EQUAL));
-				operatorList.add(new NameValueBean("Not Equals",Operator.NOT_EQUALS));
+				operatorList.add(new NameValueBean(Operator.EQUALS_CONDITION,Operator.EQUAL));
+				operatorList.add(new NameValueBean(Operator.NOT_EQUALS_CONDITION,Operator.NOT_EQUALS));
 				break;
 		}
 		
