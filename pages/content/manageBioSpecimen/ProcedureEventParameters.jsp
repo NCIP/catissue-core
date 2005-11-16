@@ -95,7 +95,7 @@
 			</td>
 			<td class="formField">
 				 <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
-					<html:text styleClass="formDateSized15" size="15" styleId="dateOfEvent" property="dateOfEvent" />
+					<html:text styleClass="formDateSized15"  maxlength="10" size="15" styleId="dateOfEvent" property="dateOfEvent" />
 					&nbsp;<bean:message key="page.dateFormat" />&nbsp;
 						<a href="javascript:show_calendar('procedureEventParametersForm.dateOfEvent',null,null,'MM-DD-YYYY');">
 							<img src="images\calendar.gif" width=24 height=22 border=0>
@@ -137,7 +137,7 @@
 				</label>
 			</td>
 			<td class="formField">
-				<html:text styleClass="formFieldSized"  styleId="url" property="url" />
+				<html:text styleClass="formFieldSized"  maxlength="200"  styleId="url" property="url" />
 			</td>
 		</tr>
 	
@@ -151,7 +151,7 @@
 				</label>
 			</td>
 			<td class="formField">
-				<html:text styleClass="formFieldSized"  styleId="name" property="name" />
+				<html:text styleClass="formFieldSized"  maxlength="50"  styleId="name" property="name" />
 			</td>
 		</tr>
 	

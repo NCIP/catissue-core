@@ -103,7 +103,7 @@
 				     	</label>
 				     </td>
 				     <td class="formField">
-				     	<html:text styleClass="formFieldSized" size="30" styleId="from" property="from" readonly="<%=readOnlyValue%>"/>
+				     	<html:text styleClass="formFieldSized"  maxlength="50"  size="30" styleId="from" property="from" readonly="<%=readOnlyValue%>"/>
 				     </td>
 				 </tr>
 <!-- nameOfReporter -->
@@ -115,7 +115,7 @@
 				     	</label>
 				     </td>
 				     <td class="formField">
-				     	<html:text styleClass="formFieldSized" size="30" styleId="nameOfReporter" property="nameOfReporter" readonly="<%=readOnlyValue%>"/>
+				     	<html:text styleClass="formFieldSized" maxlength="200"  size="30" styleId="nameOfReporter" property="nameOfReporter" readonly="<%=readOnlyValue%>"/>
 				     </td>
 				 </tr>
 <!-- affiliation -->
@@ -127,7 +127,7 @@
 				     	</label>
 				     </td>
 				     <td class="formField">
-				     	<html:text styleClass="formFieldSized" size="30" styleId="affiliation" property="affiliation" readonly="<%=readOnlyValue%>"/>
+				     	<html:text styleClass="formFieldSized" maxlength="200"  size="30" styleId="affiliation" property="affiliation" readonly="<%=readOnlyValue%>"/>
 				     </td>
 				 </tr>
 
@@ -139,7 +139,7 @@
 				     	</label>
 				     </td>
 				     <td class="formField">
-				     	<html:text styleClass="formFieldSized" size="30" styleId="subject" property="subject" readonly="<%=readOnlyValue%>"/>
+				     	<html:text styleClass="formFieldSized"  maxlength="100" size="30" styleId="subject" property="subject" readonly="<%=readOnlyValue%>"/>
 				     </td>
 				 </tr>
 				 <tr>
@@ -177,7 +177,7 @@
 					<td class="formField">
 						<html:textarea styleClass="formFieldSized" rows="10" styleId="comments" property="comments" />
 					</td>
-				</tr>
+				</tr> 
 				</logic:equal>
 				<tr>
 				  <td align="right" colspan="3">

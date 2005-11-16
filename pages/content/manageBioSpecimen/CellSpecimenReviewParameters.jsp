@@ -89,7 +89,7 @@
 			</td>
 			<td class="formField">
 				 <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
-					<html:text styleClass="formDateSized15" size="15" styleId="dateOfEvent" property="dateOfEvent" />
+					<html:text styleClass="formDateSized15" maxlength="10"  size="15" styleId="dateOfEvent" property="dateOfEvent" />
 					&nbsp;<bean:message key="page.dateFormat" />&nbsp;
 						<a href="javascript:show_calendar('cellSpecimenReviewParametersForm.dateOfEvent',null,null,'MM-DD-YYYY');">
 							<img src="images\calendar.gif" width=24 height=22 border=0>
@@ -130,7 +130,7 @@
 				</label>
 			</td>
 			<td class="formField">
-				<html:text styleClass="formDateSized" size="35" styleId="neoplasticCellularityPercentage" property="neoplasticCellularityPercentage" />
+				<html:text styleClass="formDateSized" maxlength="10"  size="35" styleId="neoplasticCellularityPercentage" property="neoplasticCellularityPercentage" />
 			</td>
 		</tr>
 
@@ -143,7 +143,7 @@
 				</label>
 			</td>
 			<td class="formField">
-				<html:text styleClass="formDateSized" size="35" styleId="viableCellPercentage" property="viableCellPercentage" />
+				<html:text styleClass="formDateSized" maxlength="10"  size="35" styleId="viableCellPercentage" property="viableCellPercentage" />
 			</td>
 		</tr>
 

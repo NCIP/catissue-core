@@ -147,7 +147,7 @@
 		
 			name = "value(DistributedItem:" + rowno + "_quantity)";
 			sname= "";
-			sname="<input type='text' name='" + name + "' size='30'  class='formFieldSmallSized3' id='" + name + "'>";
+			sname="<input type='text' name='" + name + "' size='30' maxlength='10' class='formFieldSmallSized3' id='" + name + "'>";
 			var unitName ="value(DistributedItem:"+rowno+"_unitSpan)";
 			//var unitValue = changeUnit(document.forms[0].className.value)
 			sname = sname + "&nbsp;<span id='"+unitName+"'>&nbsp;</span>";
@@ -289,7 +289,7 @@
 			</td>
 			<td class="formField">
 				 <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
-				<html:text styleClass="formDateSized15" size="15" styleId="dateOfEvent" property="dateOfEvent" />
+				<html:text styleClass="formDateSized15" maxlength="10"  size="15" styleId="dateOfEvent" property="dateOfEvent" />
 				&nbsp;<bean:message key="page.dateFormat" />&nbsp;
 				<a href="javascript:show_calendar('distributionForm.dateOfEvent',null,null,'MM-DD-YYYY');">
 					<img src="images\calendar.gif" width=24 height=22 border=0></a>
@@ -509,7 +509,7 @@
 						<html:hidden property="<%=previousQuantity%>" />	
 				    </td>
 				    <td class="formField" nowrap>
-				     	<html:text styleClass="formFieldSmallSized3" size="30" styleId="<%=quantity%>" property="<%=quantity%>" disabled="<%=readOnlyForAll%>" readonly="<%=readOnlyForAll%>"/>
+				     	<html:text styleClass="formFieldSmallSized3" maxlength="10"  size="30" styleId="<%=quantity%>" property="<%=quantity%>" disabled="<%=readOnlyForAll%>" readonly="<%=readOnlyForAll%>"/>
 				     	<span id="<%=unitSpan%>">&nbsp;<%=strUnitValue%></span>
 				    </td>
 				    <%

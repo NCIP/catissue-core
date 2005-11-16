@@ -100,7 +100,7 @@
 			</td>
 			<td class="formField">
 				 <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
-					<html:text styleClass="formDateSized15" size="15" styleId="dateOfEvent" property="dateOfEvent" />
+					<html:text styleClass="formDateSized15" maxlength="10"  size="15" styleId="dateOfEvent" property="dateOfEvent" />
 					&nbsp;<bean:message key="page.dateFormat" />&nbsp;
 						<a href="javascript:show_calendar('spunEventParametersForm.dateOfEvent',null,null,'MM-DD-YYYY');">
 							<img src="images\calendar.gif" width=24 height=22 border=0>
@@ -143,7 +143,7 @@
 				</label>
 			</td>
 			<td class="formField">
-				<html:text styleClass="formFieldSized"  styleId="gravityForce" property="gravityForce" />
+				<html:text styleClass="formFieldSized"  maxlength="10"  styleId="gravityForce" property="gravityForce" />
 			</td>
 		</tr>
 
@@ -156,7 +156,7 @@
 				</label>
 			</td>
 			<td class="formField">
-				<html:text styleClass="formFieldSized"  styleId="durationInMinutes" property="durationInMinutes" />
+				<html:text styleClass="formFieldSized"  maxlength="10"  styleId="durationInMinutes" property="durationInMinutes" />
 			</td>
 		</tr>
 	

@@ -105,7 +105,7 @@
 			</td>
 			<td class="formField">
 				 <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
-					<html:text styleClass="formDateSized15" size="15" styleId="dateOfEvent" property="dateOfEvent" />
+					<html:text styleClass="formDateSized15" maxlength="10"  size="15" styleId="dateOfEvent" property="dateOfEvent" />
 					&nbsp;<bean:message key="page.dateFormat" />&nbsp;
 						<a href="javascript:show_calendar('molecularSpecimenReviewParametersForm.dateOfEvent',null,null,'MM-DD-YYYY');">
 							<img src="images\calendar.gif" width=24 height=22 border=0>
@@ -146,7 +146,7 @@
 				</label>
 			</td>
 			<td class="formField">
-				<html:text styleClass="formDateSized" size="35" styleId="gelImageURL" property="gelImageURL" />
+				<html:text styleClass="formDateSized" maxlength="200"  size="35" styleId="gelImageURL" property="gelImageURL" />
 			</td>
 		</tr>
 
@@ -159,7 +159,7 @@
 				</label>
 			</td>
 			<td class="formField">
-				<html:text styleClass="formDateSized" size="35" styleId="qualityIndex" property="qualityIndex" />
+				<html:text styleClass="formDateSized" maxlength="50"  size="35" styleId="qualityIndex" property="qualityIndex" />
 			</td>
 		</tr>
 
@@ -172,7 +172,7 @@
 				</label>
 			</td>
 			<td class="formField">
-				<html:text styleClass="formDateSized" size="35" styleId="laneNumber" property="laneNumber" />
+				<html:text styleClass="formDateSized" maxlength="50"  size="35" styleId="laneNumber" property="laneNumber" />
 			</td>
 		</tr>
 
@@ -185,7 +185,7 @@
 				</label>
 			</td>
 			<td class="formField">
-				<html:text styleClass="formDateSized" size="35" styleId="gelNumber" property="gelNumber" />
+				<html:text styleClass="formDateSized" maxlength="10"  size="35" styleId="gelNumber" property="gelNumber" />
 			</td>
 		</tr>
 
@@ -198,7 +198,7 @@
 				</label>
 			</td>
 			<td class="formField">
-				<html:text styleClass="formDateSized" size="35" styleId="absorbanceAt260" property="absorbanceAt260" />
+				<html:text styleClass="formDateSized" maxlength="10"  size="35" styleId="absorbanceAt260" property="absorbanceAt260" />
 			</td>
 		</tr>
 
@@ -211,7 +211,7 @@
 				</label>
 			</td>
 			<td class="formField">
-				<html:text styleClass="formDateSized" size="35" styleId="absorbanceAt280" property="absorbanceAt280" />
+				<html:text styleClass="formDateSized" maxlength="10"  size="35" styleId="absorbanceAt280" property="absorbanceAt280" />
 			</td>
 		</tr>
 
@@ -230,7 +230,7 @@
 				</label>
 			</td>
 			<td class="formField">
-				<html:text styleClass="formDateSized" size="35" styleId="ratio28STo18S" property="ratio28STo18S" />
+				<html:text styleClass="formDateSized" maxlength="10"  size="35" styleId="ratio28STo18S" property="ratio28STo18S" />
 			</td>
 		</tr>
 	<%
