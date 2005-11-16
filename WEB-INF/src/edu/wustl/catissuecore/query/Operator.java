@@ -44,15 +44,10 @@ public class Operator
      */
     public static final String GREATER_THAN = ">";
     
-    //public static final String LIKE = "Like";
     
-    public static final String OR_CONDITION = "OR";
-    public static final String AND_CONDITION = "AND";
-	public static final String EXISTS_CONDITION = "EXISTS";
-	public static final String EQUALS_CONDITION = "EQUAL" ;
-	public static final String LESS_THAN_CONDITION = "LESS_THAN";
-	public static final String GREATER_THAN_CONDITION = "GREATER_THAN";
-	public static final String LIKE_CONDITION = "LIKE";
+	public static final String EQUALS_CONDITION = "Equals" ;
+	
+	public static final String NOT_EQUALS_CONDITION = "Not Equals" ;
 
     /**
      * LIKE constant
@@ -144,18 +139,19 @@ public class Operator
     {
         this.operator = operator;
     }
-    public static String getOperator(String operatorString)
+    public static String getOperator(String operator)
     {
     	Map operators = new HashMap();
-    	operators.put(Operator.OR_CONDITION,Operator.OR);
-    	operators.put(Operator.AND_CONDITION,Operator.AND) ;
-		operators.put(Operator.EXISTS_CONDITION,Operator.EXIST);
-		operators.put(Operator.EQUALS_CONDITION,Operator.EQUAL) ;
-		operators.put(Operator.LESS_THAN_CONDITION,Operator.LESS_THAN);
+    	operators.put(Operator.STARTS_WITH,Operator.LIKE);
+    	operators.put(Operator.ENDS_WITH,Operator.LIKE) ;
+		operators.put(Operator.CONTAINS,Operator.LIKE);
+		operators.put(Operator.NOT_EQUALS_CONDITION,Operator.NOT_EQUALS);
+		operators.put(Operator.EQUALS_CONDITION,Operator.EQUAL);
+		
+		/*operators.put(Operator.LESS_THAN_CONDITION,Operator.LESS_THAN);
 		operators.put(Operator.GREATER_THAN_CONDITION,Operator.GREATER_THAN) ;
-		operators.put(Operator.LIKE_CONDITION,Operator.LIKE);
-		String value=(String)operators.get(operatorString);
+		operators.put(Operator.LIKE_CONDITION,Operator.LIKE);*/
+		String value=(String)operators.get(operator);
 		return value;
     }
-
 }
