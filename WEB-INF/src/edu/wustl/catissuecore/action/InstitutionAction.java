@@ -10,9 +10,6 @@
 
 package edu.wustl.catissuecore.action;
 
-import java.io.IOException;
-
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -28,9 +25,9 @@ public class InstitutionAction extends SecureAction
      * Overrides the execute method of Action class.
      * Initializes the various drop down fields in Institution.jsp Page.
      * */
-    public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
+    protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
-            throws IOException, ServletException
+            throws Exception
     {
         //Gets the value of the operation parameter.
         String operation = request.getParameter(Constants.OPERATION);

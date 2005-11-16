@@ -10,9 +10,6 @@
 
 package edu.wustl.catissuecore.action;
 
-import java.io.IOException;
-
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -33,9 +30,8 @@ public class DepartmentAction extends SecureAction
      * Overrides the execute method of Action class.
      * Sets the various fields in Department Add/Edit webpage.
      * */
-    public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
-            HttpServletRequest request, HttpServletResponse response)
-            throws IOException, ServletException
+    protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
+            HttpServletRequest request, HttpServletResponse response) throws Exception
     {
         //Gets the value of the operation parameter.
         String operation = request.getParameter(Constants.OPERATION);
