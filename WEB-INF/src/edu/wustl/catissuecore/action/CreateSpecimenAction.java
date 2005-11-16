@@ -32,6 +32,7 @@ import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.cde.CDE;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.cde.PermissibleValue;
+import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.logger.Logger;
 
 
@@ -59,7 +60,7 @@ public class CreateSpecimenAction extends SecureAction
     	Map map = createForm.getExternalIdentifier();
     	
     	//Calling DeleteRow of BaseAction class
-    	DeleteRow(key,map,request);
+    	MapDataParser.deleteRow(key,map,request.getParameter("status"));
     	
         //Gets the value of the operation parameter.
         String operation = request.getParameter(Constants.OPERATION);

@@ -29,6 +29,7 @@ import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.logger.Logger;
 
 
@@ -55,7 +56,7 @@ public class StorageContainerAction  extends SecureAction
     	//Gets the map from ActionForm
     	Map map = storageContainerForm.getValues();
     	//Calling DeleteRow of BaseAction class
-    	DeleteRow(key,map,request);
+    	MapDataParser.deleteRow(key,map,request.getParameter("status"));
     
         //Gets the value of the operation parameter.
         String operation = request.getParameter(Constants.OPERATION);

@@ -34,6 +34,7 @@ import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -99,7 +100,7 @@ public class  DistributionAction extends SpecimenEventParametersAction
     	Map map = dForm.getValues();
     	
     	//Calling DeleteRow of BaseAction class
-    	DeleteRow(key,map,request);
+    	MapDataParser.deleteRow(key,map,request.getParameter("status"));
     	
 		//Populate Distributed Items data in the Distribution page if specimen ID is changed. 
 		if(dForm.isIdChange())

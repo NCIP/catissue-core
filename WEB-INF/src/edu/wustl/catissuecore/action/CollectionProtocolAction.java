@@ -27,6 +27,7 @@ import edu.wustl.catissuecore.actionForm.CollectionProtocolForm;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.cde.CDEManager;
+import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
@@ -67,13 +68,13 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
         
          if(button != null){
          	if(button.equals("deleteSpecimenReq"))
-         		DeleteRow(key,map,request,outer);
+         	   MapDataParser.deleteRow(key,map,request.getParameter("status"),outer);
          	
          	else {
          		//keys of outer block
          		key.add("CollectionProtocolEvent:outer_clinicalStatus");
          		key.add("CollectionProtocolEvent:outer_studyCalendarEventPoint");
-     	        DeleteRow(key,map,request);
+         		MapDataParser.deleteRow(key,map,request.getParameter("status"));
          	}
          }
     	

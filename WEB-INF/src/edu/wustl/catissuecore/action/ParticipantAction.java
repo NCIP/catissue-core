@@ -29,6 +29,7 @@ import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.cde.CDEManager;
+import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.logger.Logger;
 
 import edu.wustl.catissuecore.actionForm.ParticipantForm;
@@ -57,7 +58,7 @@ public class ParticipantAction  extends SecureAction
     	Map map = participantForm.getValues();
     	
 //    	Calling DeleteRow of BaseAction class
-    	DeleteRow(key,map,request);
+    	MapDataParser.deleteRow(key,map,request.getParameter("status"));
     	
         //Gets the value of the operation parameter.
         String operation = request.getParameter(Constants.OPERATION);

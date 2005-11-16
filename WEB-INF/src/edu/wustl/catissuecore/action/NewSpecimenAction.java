@@ -34,6 +34,7 @@ import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.cde.CDE;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.cde.PermissibleValue;
+import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.logger.Logger;
 
 
@@ -63,7 +64,7 @@ public class NewSpecimenAction  extends SecureAction
     	
         		//Gets the map from ActionForm
         		map = specimenForm.getExternalIdentifier();
-        		DeleteRow(key,map,request);
+        		MapDataParser.deleteRow(key,map,request.getParameter("status"));
         	}
         	else {
         		List key = new ArrayList();
@@ -72,7 +73,7 @@ public class NewSpecimenAction  extends SecureAction
     	
         		//Gets the map from ActionForm
         		map = specimenForm.getBiohazard();
-        		DeleteRow(key,map,request);
+        		MapDataParser.deleteRow(key,map,request.getParameter("status"));
         	}
         }
         

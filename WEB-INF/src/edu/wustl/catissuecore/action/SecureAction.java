@@ -32,17 +32,14 @@ import edu.wustl.common.util.logger.Logger;
  */
 public abstract class SecureAction extends BaseAction
 {
-
     /*
      * Authorizes the user and executes the secure workflow. If authorization
      * fails, the user is denied access to the secured action
      * 
      */
-    public ActionForward executeAction(ActionMapping mapping, ActionForm form,
-            HttpServletRequest request, HttpServletResponse response)
-            throws Exception
+    protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
+            HttpServletRequest request, HttpServletResponse response) throws Exception
     {
-
         if (isAuthorizedToExecute(request))
         {
             return executeSecureAction(mapping, form, request, response);
@@ -53,13 +50,11 @@ public abstract class SecureAction extends BaseAction
 
         ActionErrors errors = new ActionErrors();
 
-        ActionError error = new ActionError("access.execute.action.denied"
-                );
+        ActionError error = new ActionError("access.execute.action.denied");
         errors.add(ActionErrors.GLOBAL_ERROR, error);
         saveErrors(request, errors);
 
         return getActionForward(request,mapping);
-
     }
 
     /**
@@ -78,7 +73,6 @@ public abstract class SecureAction extends BaseAction
      */
     protected boolean isAuthorizedToExecute(HttpServletRequest request) throws Exception
     {
-        Logger.out.debug("in here");
         return SecurityManager.getInstance(this.getClass())
                 .isAuthorizedToExecuteAction(getUserLoginName(request),getObjectIdForSecureMethodAccess(request));
     }
@@ -95,7 +89,6 @@ public abstract class SecureAction extends BaseAction
     }
 
     /**
-     * 
      * Subclasses should implement this method to execute the Action logic.
      * 
      * @param mapping
@@ -105,8 +98,6 @@ public abstract class SecureAction extends BaseAction
      * @return
      * @throws Exception
      */
-    public abstract ActionForward executeSecureAction(ActionMapping mapping,
-            ActionForm form, HttpServletRequest request,
-            HttpServletResponse response) throws Exception;
-
+    protected abstract ActionForward executeSecureAction(ActionMapping mapping,
+            ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception;
 }

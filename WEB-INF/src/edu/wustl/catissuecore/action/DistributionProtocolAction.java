@@ -25,6 +25,7 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.DistributionProtocolForm;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
@@ -58,7 +59,7 @@ public class DistributionProtocolAction extends SpecimenProtocolAction
     	Map map = distributionProtocolForm.getValues();
     	
     	//Calling DeleteRow of BaseAction class
-    	DeleteRow(key,map,request);
+    	MapDataParser.deleteRow(key,map,request.getParameter("status"));
     	
     	// ----------For Add new
 		String reqPath = request.getParameter(Constants.REQ_PATH);
