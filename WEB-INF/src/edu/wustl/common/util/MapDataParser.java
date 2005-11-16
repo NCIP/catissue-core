@@ -246,6 +246,13 @@ public class MapDataParser
 		}
 		return dataList;
 	}
+	public int parseKeyAndGetRowNo(String key)
+	{
+		int start = key.indexOf(":");
+		int end = key.indexOf("_");
+		int rowNo = Integer.parseInt(key.substring(start+1,end));
+		return rowNo;
+	}
 	
 	public static void main(String[] args) throws Exception
 	{
