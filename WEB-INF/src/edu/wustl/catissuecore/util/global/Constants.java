@@ -1317,7 +1317,7 @@ public class Constants
 			{"New Specimen Collection Group",			"createSpecimenCollectionGroup"}
 	};
 
-	
+	//Constants Required for Advance Search
 	//Tree related
 	//public static final String PARTICIPANT ='Participant';
 	public static final String COLLECTION_PROTOCOL ="CollectionProtocol";
@@ -1334,6 +1334,8 @@ public class Constants
 	public static final String ADVANCED_CONDITION_NODES_MAP = "advancedConditionNodesMap";
 	public static final String TREE_VECTOR = "treeVector";
 	public static final String ADVANCED_CONDITIONS_ROOT = "advancedCondtionsRoot";
+	public static final String ADVANCED_CONDITIONS_QUERY_VIEW = "advancedCondtionsQueryView";
+	public static final String ADVANCED_SEARCH_ACTION = "AdvanceSearch.do";
 	
 	// -- menu selection related
 	public static final String MENU_SELECTED = "menuSelected";
