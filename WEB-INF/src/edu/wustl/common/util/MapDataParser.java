@@ -9,9 +9,12 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
+
+import edu.wustl.catissuecore.util.global.Constants;
 
 public class MapDataParser 
 {
@@ -257,5 +260,91 @@ public class MapDataParser
 	
 	
 	
+	
+	////////////////
+	public static void deleteRow(List list,Map map, String status)
+	{
+		deleteRow(list,map,status,null);
+	}
+	/**
+	 * Returns boolean used for diabling/enabling checkbox in jsp Page and
+	 * rearranging rows
+	 */
+	public static void deleteRow(List list,Map map, String status, String outer)
+	{
+		
+		//whether delete button is clicked or not
+		//String status = request.getParameter("status");
+    	if(status == null)
+    	{
+    		status = Constants.FALSE;
+    	}
+    	
+    	String text;
+       	for(int k = 0; k < list.size(); k++){
+       		text = (String)list.get(k);
+    		String first = text.substring(0,text.indexOf(":"));
+    		String second = text.substring(text.indexOf("_"));
+    		
+    		//condition for creating ids for innerTable
+    		boolean condition = false;
+    		String third = "",fourth = "";
+    		
+    		//checking whether key is inneTable'key or not
+    		if(second.indexOf(":") != -1){
+    			condition = true;
+    			third = second.substring(0,second.indexOf(":"));
+    			fourth = second.substring(second.lastIndexOf("_"));
+    			
+    		}
+    		
+    		if(status.equals(Constants.TRUE)){
+    			Map values = map;
+    			
+    			//for outerTable
+    			int outerCount = 1;
+    			
+    			//for innerTable
+    			int innerCount = 1;
+    			for(int i = 1; i <= values.size() ; i++){
+    				String id = "";
+    				String mapId = "";
+    				
+    				//for innerTable key's rearrangement
+    				if(condition){
+    					if(outer != null){
+    						id = first + ":"+ outer + third + ":"+ i + fourth;
+    						mapId = first + ":"+ outer + third + ":"+ innerCount + fourth;
+    					}
+    					else {
+    						//for outer key's rearrangement
+    						for(int j = 1; j <= values.size() ; j++){
+    							id = first + ":"+ i + third + ":"+ j + fourth;
+    							mapId = first + ":"+ outerCount + third + ":"+ j + fourth;
+    							
+    							//checking whether map from form contains keys or not
+    							if(values.containsKey(id)){
+    								values.put(mapId,map.get(id));
+    		    					outerCount++;
+    		    				}
+    						}
+    					}
+    					
+    				}
+    	    			
+    	    		else {
+    	    			id = first + ":" + i + second;
+    	    			mapId = first + ":" +innerCount + second;
+    	    		}
+    				
+    				//rearranging key's
+    				if(values.containsKey(id)){
+    					values.put(mapId,map.get(id));
+    					innerCount++;
+    				}
+    			}
+    		}
+    	}
+	}
 
 }
