@@ -105,9 +105,10 @@ public class SpecimenEventParametersAction  extends SecureAction
     	return mapping.findForward((String)request.getParameter(Constants.PAGEOF));
     }
     
-    //  This method will be overridden by the sub classes
-    // It is called from setCommonRequestParameters().
-    // It will be used to set the SubClass specific parameters. 
+    /*  This method will be overridden by the sub classes
+     * It is called from setCommonRequestParameters().
+     * It will be used to set the SubClass specific parameters.
+     */  
     protected void setRequestParameters(HttpServletRequest request) throws Exception
 	{
 	}
