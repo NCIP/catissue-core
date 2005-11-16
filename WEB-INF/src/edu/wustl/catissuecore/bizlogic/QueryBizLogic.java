@@ -11,11 +11,13 @@ package edu.wustl.catissuecore.bizlogic;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.StringTokenizer;
 
 import edu.wustl.catissuecore.dao.DAOFactory;
 import edu.wustl.catissuecore.dao.JDBCDAO;
@@ -534,7 +536,6 @@ public class QueryBizLogic extends DefaultBizLogic
 		
 		return objectNameValueBeanList;
 	}
-    
 	 /**
  	* Returns all the tables in the simple query interface.
  	* @param request
@@ -645,4 +646,144 @@ public class QueryBizLogic extends DefaultBizLogic
         return relatedTableAliases;
     }
     
+	 /**
+     * Sets column display name depending on the table name and column name.
+     * @param request HttpServletRequest
+     * @param i number of row.
+     * @param value table name.
+     * @throws DAOException
+     * @throws ClassNotFoundException
+     */
+    public String getColumnDisplayNames(String aliasName,String columnName) throws DAOException, ClassNotFoundException
+    {
+        String sql = 	" SELECT  temp.DISPLAY_NAME " +
+				        " from CATISSUE_QUERY_INTERFACE_TABLE_DATA tableData2 join " +
+				        " ( SELECT  columnData.COLUMN_NAME, columnData.TABLE_ID, columnData.ATTRIBUTE_TYPE, " +
+				        " displayData.DISPLAY_NAME, relationData.TABLES_IN_PATH " +
+				        " FROM CATISSUE_QUERY_INTERFACE_COLUMN_DATA columnData, " +
+				        " CATISSUE_TABLE_RELATION relationData, " +
+				        " CATISSUE_QUERY_INTERFACE_TABLE_DATA tableData, " +
+				        " CATISSUE_SEARCH_DISPLAY_DATA displayData " +
+				        " where relationData.CHILD_TABLE_ID = columnData.TABLE_ID and " +
+				        " relationData.PARENT_TABLE_ID = tableData.TABLE_ID and " +
+				        " relationData.RELATIONSHIP_ID = displayData.RELATIONSHIP_ID and " +
+				        " columnData.IDENTIFIER = displayData.COL_ID and " +
+				        " tableData.ALIAS_NAME = '"+aliasName+"' and columnData.COLUMN_NAME = '"+columnName+"'" +
+		        		"  ) as temp on temp.TABLE_ID = tableData2.TABLE_ID ";
+        
+        Logger.out.debug("SQL*****************************"+sql);
+        
+        JDBCDAO jdbcDao = new JDBCDAO();
+        jdbcDao.openSession(null);
+        List list = jdbcDao.executeQuery(sql, null, Constants.INSECURE_RETRIEVE, null,null);
+        jdbcDao.closeSession();
+        String columnDisplayName  = new String();
+        Iterator iterator = list.iterator();
+        while (iterator.hasNext())
+        {
+            List rowList = (List)iterator.next();
+            columnDisplayName = (String)rowList.get(0);
+        }
+        return columnDisplayName;
+    }
+    /**
+     * Returns the tables in path depending on the parent table Id and child table Id 
+     * @param tableId Table Id.
+     * @throws DAOException
+     * @throws ClassNotFoundException
+     */
+    public Set setTablesInPath(Long parentTableId,Long childTableId) throws DAOException, ClassNotFoundException
+    {
+        String sql = 	" SELECT TABLES_IN_PATH FROM CATISSUE_TABLE_RELATION WHERE "+
+						" PARENT_TABLE_ID = '"+parentTableId+"' and " +
+						" CHILD_TABLE_ID = '"+childTableId+"'";
+        
+        Logger.out.debug("SQL*****************************"+sql);
+        
+        JDBCDAO jdbcDao = new JDBCDAO();
+        jdbcDao.openSession(null);
+        List list = jdbcDao.executeQuery(sql, null, Constants.INSECURE_RETRIEVE, null,null);
+        jdbcDao.closeSession();
+        
+        Set tablePathSet = new HashSet();
+        QueryBizLogic bizLogic = (QueryBizLogic)BizLogicFactory.getBizLogic(Constants.SIMPLE_QUERY_INTERFACE_ID);
+        Iterator iterator = list.iterator();
+        while (iterator.hasNext())
+        {
+            List rowList = (List)iterator.next();
+            String tablePath = (String)rowList.get(0);
+            Logger.out.debug("tableinpath with ids as from database:"+tablePath);
+           	StringTokenizer pathIdToken = new StringTokenizer(tablePath, ":");
+           	Logger.out.debug("no. of tables in path:"+pathIdToken.countTokens());
+       		while (pathIdToken.hasMoreTokens())
+       		{
+       			Long tableIdinPath = Long.valueOf(pathIdToken.nextToken());
+       			String tableName = bizLogic.getAliasNameFromTableId(tableIdinPath);
+       			Logger.out.debug("table in path:"+tableName);
+       			tablePathSet.add(tableName);
+       		}
+       	}
+        return tablePathSet;
+  
+    }
+	 /**
+     * Returns the attribute type for the given column name
+     * @param columnName Column Name.
+     * @throws DAOException
+     * @throws ClassNotFoundException
+     */
+    public String getAttributeType(String columnName) throws DAOException, ClassNotFoundException
+    {
+        String sql = 	" Select ATTRIBUTE_TYPE FROM "+
+        				" CATISSUE_QUERY_INTERFACE_COLUMN_DATA"+
+						" WHERE COLUMN_NAME = '"+columnName+"'";
+						
+        Logger.out.debug("SQL*****************************"+sql);
+        
+        JDBCDAO jdbcDao = new JDBCDAO();
+        jdbcDao.openSession(null);
+        List list = jdbcDao.executeQuery(sql, null, Constants.INSECURE_RETRIEVE, null,null);
+        jdbcDao.closeSession();
+        QueryBizLogic bizLogic = (QueryBizLogic)BizLogicFactory.getBizLogic(Constants.SIMPLE_QUERY_INTERFACE_ID);
+        String atrributeType = new String();
+        Iterator iterator = list.iterator();
+        while (iterator.hasNext())
+        {
+            List rowList = (List)iterator.next();
+            atrributeType = (String)rowList.get(0);
+           	
+       	}
+        return atrributeType;
+    }
+    /**
+     * Returns the table Id of the table given the table alias name.
+     * @param tableId
+     * @return
+     * @throws DAOException
+     */
+    public String getTableIdFromAliasName(String aliasName) throws DAOException
+    {
+        	
+            JDBCDAO jdbcDAO = (JDBCDAO)DAOFactory.getDAO(Constants.JDBC_DAO);
+            jdbcDAO.openSession(null);
+            String [] selectColumnNames = {"TABLE_ID"};
+            String [] whereColumnNames = {"ALIAS_NAME"};
+            String [] whereColumnConditions = {"="};
+            String [] whereColumnValues = {"'"+aliasName+"'"};
+            List list = jdbcDAO.retrieve("CATISSUE_QUERY_INTERFACE_TABLE_DATA", selectColumnNames, 
+                    	whereColumnNames, whereColumnConditions, whereColumnValues, null);
+            jdbcDAO.closeSession();
+            Logger.out.debug("List of Ids size: "+list.size()+" list "+list);
+            String tableIdString=new String();
+            Iterator iterator = list.iterator();
+            while (iterator.hasNext())
+            {
+               List rowList = (List)iterator.next();
+               Logger.out.debug("RowList of Ids size: "+rowList.size()+" Rowlist "+rowList);
+               //Logger.out.debug("RowList element "+rowList.get(0));
+               tableIdString = (String) rowList.get(0);
+               Logger.out.debug("tableId before converting to Long:"+tableIdString);
+            }
+            return tableIdString;
+    }
 }
