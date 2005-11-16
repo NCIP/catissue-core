@@ -128,8 +128,6 @@ public class SimpleQueryInterfaceAction extends SecureAction
         request.setAttribute(Constants.ATTRIBUTE_CONDITION_LIST, Constants.ATTRIBUTE_CONDITION_ARRAY);
         
         HttpSession session = request.getSession();
-        session.setAttribute(Constants.SIMPLE_QUERY_ALIAS_NAME,null);
-        session.setAttribute(Constants.SIMPLE_QUERY_COUNTER,null);
         session.setAttribute(Constants.SIMPLE_QUERY_MAP,null);
         
         String pageOf = request.getParameter(Constants.PAGEOF);
