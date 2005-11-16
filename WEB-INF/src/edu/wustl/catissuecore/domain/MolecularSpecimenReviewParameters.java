@@ -246,15 +246,25 @@ public class MolecularSpecimenReviewParameters extends ReviewEventParameters
         try
         {
         	MolecularSpecimenReviewParametersForm form = (MolecularSpecimenReviewParametersForm) abstractForm;
-        	this.gelImageURL = form.getGelImageURL();
-        	this.qualityIndex = form.getQualityIndex() ;
-        	this.laneNumber =form.getLaneNumber();
-        	this.gelNumber = new Integer(form.getGelNumber());
-        	this.absorbanceAt260 = new Double(form.getAbsorbanceAt260());
-        	this.absorbanceAt280 = new Double(form.getAbsorbanceAt280());
-        	if (Utility.toString(form.getRatio28STo18S()).trim().length() > 0  )
-        	this.ratio28STo18S = new Double(form.getRatio28STo18S());
-
+        	this.gelImageURL =Utility.toString(  form.getGelImageURL());
+        	this.qualityIndex = Utility.toString( form.getQualityIndex()) ;
+        	this.laneNumber =Utility.toString( form.getLaneNumber());
+        	if (Utility.toString(form.getGelNumber()).trim().length() > 0  )
+        	{
+        		this.gelNumber = new Integer(form.getGelNumber());
+        	}
+       		if (Utility.toString(form.getAbsorbanceAt260()).trim().length() > 0  )
+       		{
+        		this.absorbanceAt260 = new Double(form.getAbsorbanceAt260());
+       		}
+       		if (Utility.toString(form.getAbsorbanceAt280()).trim().length() > 0  )
+       		{
+        		this.absorbanceAt280 = new Double(form.getAbsorbanceAt280());
+       		}
+       		if (Utility.toString(form.getRatio28STo18S()).trim().length() > 0  )
+       		{
+        		this.ratio28STo18S = new Double(form.getRatio28STo18S());
+       		}	
         	super.setAllValues(form);
         }
         catch (Exception excp)
