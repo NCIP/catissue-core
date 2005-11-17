@@ -1,6 +1,6 @@
 /**
  * <p>Title: UserBizLogic Class>
- * <p>Description:	UserHDAO is used to add user information into the database using Hibernate.</p>
+ * <p>Description:	UserBizLogic is used to add user information into the database using Hibernate.</p>
  * Copyright:    Copyright (c) year
  * Company: Washington University, School of Medicine, St. Louis.
  * @author Gautam Shetty
@@ -10,7 +10,6 @@
 
 package edu.wustl.catissuecore.bizlogic;
 
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -41,7 +40,7 @@ import edu.wustl.common.util.logger.Logger;
 import gov.nih.nci.security.authorization.domainobjects.Role;
 
 /**
- * UserHDAO is used to add user information into the database using Hibernate.
+ * UserBizLogic is used to add user information into the database using Hibernate.
  * @author kapil_kaveeshwar
  */
 public class UserBizLogic extends DefaultBizLogic
@@ -56,34 +55,35 @@ public class UserBizLogic extends DefaultBizLogic
     protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean)
             throws DAOException, UserNotAuthorizedException
     {
-        
         User user = (User) obj;
-        
-        Department department = null;
-        Institution institution = null;
-        CancerResearchGroup cancerResearchGroup = null;
         
         try
         {
             
             List list = dao.retrieve(Department.class.getName(),
-                    "systemIdentifier", user.getDepartment()
+                    Constants.SYSTEM_IDENTIFIER, user.getDepartment()
                             .getSystemIdentifier());
+            
+            Department department = null;
             if (list.size() != 0)
             {
                 department = (Department) list.get(0);
             }
             list = dao.retrieve(Institution.class.getName(),
-                    "systemIdentifier", user.getInstitution()
+                    Constants.SYSTEM_IDENTIFIER, user.getInstitution()
                             .getSystemIdentifier());
+            
+            Institution institution = null;
             if (list.size() != 0)
             {
                 institution = (Institution) list.get(0);
             }
             
             list = dao.retrieve(CancerResearchGroup.class.getName(),
-                    "systemIdentifier", user.getCancerResearchGroup()
+                    Constants.SYSTEM_IDENTIFIER, user.getCancerResearchGroup()
                             .getSystemIdentifier());
+            
+            CancerResearchGroup cancerResearchGroup = null;
             if (list.size() != 0)
             {
                 cancerResearchGroup = (CancerResearchGroup) list.get(0);
@@ -93,6 +93,7 @@ public class UserBizLogic extends DefaultBizLogic
             user.setInstitution(institution);
             user.setCancerResearchGroup(cancerResearchGroup);
             
+            // If the page is of signup user don't create the csm user.
             if (user.getPageOf().equals(Constants.PAGEOF_SIGNUP) == false)
             {
                 gov.nih.nci.security.authorization.domainobjects.User csmUser = new gov.nih.nci.security.authorization.domainobjects.User();
@@ -103,7 +104,6 @@ public class UserBizLogic extends DefaultBizLogic
                 csmUser.setEmailId(user.getEmailAddress());
                 csmUser.setStartDate(user.getStartDate());
                 csmUser.setPassword(PasswordManager.encode(PasswordManager.generatePassword()));
-                Logger.out.debug("Password generated:" + csmUser.getPassword());
                 
                 SecurityManager.getInstance(UserBizLogic.class).createUser(csmUser);
                 
@@ -114,9 +114,9 @@ public class UserBizLogic extends DefaultBizLogic
                 
                 user.setCsmUserId(csmUser.getUserId());
                 user.setPassword(csmUser.getPassword());
-                
             }
             
+            // Create address and the user in catissue tables.
             dao.insert(user.getAddress(), sessionDataBean, true, false);
             dao.insert(user, sessionDataBean, true, false);
             
@@ -208,6 +208,7 @@ public class UserBizLogic extends DefaultBizLogic
         
         try
         {
+            // Get the csm userId if present. 
             String csmUserId = null;
             if (user.getCsmUserId() != null)
             {
@@ -217,6 +218,8 @@ public class UserBizLogic extends DefaultBizLogic
             gov.nih.nci.security.authorization.domainobjects.User csmUser = SecurityManager
                 				.getInstance(DomainObjectListAction.class).getUserById(csmUserId);
             
+            // If the page is of change password, 
+            // update the password of the user in csm and catissue tables. 
             if (user.getPageOf().equals(Constants.PAGEOF_CHANGE_PASSWORD))
             {
                 if (!user.getOldPassword().equals(PasswordManager.decode(csmUser.getPassword())))
@@ -233,20 +236,13 @@ public class UserBizLogic extends DefaultBizLogic
                 csmUser.setLastName(user.getLastName());
                 csmUser.setFirstName(user.getFirstName());
                 csmUser.setEmailId(user.getEmailAddress());
-                if (Constants.PAGEOF_APPROVE_USER.equals(user.getPageOf()))
-                {
-                    if (user.getActivityStatus().equals(
-                            Constants.ACTIVITY_STATUS_ACTIVE))
-                        csmUser.setPassword(PasswordManager.encode(PasswordManager.generatePassword()));
-                    csmUser.setStartDate(Calendar.getInstance().getTime());
-
-                    SecurityManager.getInstance(ApproveUserBizLogic.class).createUser(csmUser);
-                }
                 
-                
+                // Assign Role only if the page is of Administrative user edit.
                 if ((Constants.PAGEOF_USER_PROFILE.equals(user.getPageOf()) == false)
                         && (Constants.PAGEOF_CHANGE_PASSWORD.equals(user.getPageOf()) == false))
                 {
+                    Logger.out.debug("csmUser..........................."+csmUser);
+                    Logger.out.debug("user................................."+user);
                     SecurityManager.getInstance(UserBizLogic.class).assignRoleToUser(
                             csmUser.getLoginName(), user.getRoleId());
                 }
@@ -258,12 +254,13 @@ public class UserBizLogic extends DefaultBizLogic
                 dao.audit(user.getAddress(), oldUser.getAddress(),sessionDataBean,true);
             }
             
+            // Modify the csm user.
+            SecurityManager.getInstance(UserBizLogic.class).modifyUser(csmUser);
+            
 	        dao.update(user, sessionDataBean, true, true, true);
 	        
 	        //Audit of user.
             dao.audit(obj, oldObj,sessionDataBean,true);
-            
-            SecurityManager.getInstance(UserBizLogic.class).modifyUser(csmUser);
             
             if (Constants.ACTIVITY_STATUS_ACTIVE.equals(user.getActivityStatus()))
             {
@@ -440,7 +437,7 @@ public class UserBizLogic extends DefaultBizLogic
         {
             throw new DAOException(smExp.getMessage(),smExp);
         }
-        
+
         return statusMessageKey;
     }
 }
