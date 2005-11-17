@@ -39,6 +39,11 @@ public class Client
 	 * This maps the table alias with the type of privilege on that table
 	 */
     public static HashMap privilegeTypeMap = new HashMap();
+    
+    /**
+     * This maps the table alias with the vector of Identified data fields it has
+     */
+    public static HashMap identifiedDataMap = new HashMap();
 
     public static void initialize()
     {
