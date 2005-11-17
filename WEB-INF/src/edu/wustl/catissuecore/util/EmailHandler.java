@@ -13,6 +13,7 @@ import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.SendEmail;
+import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.util.PasswordManager;
@@ -188,6 +189,7 @@ public class EmailHandler
 				+ "\n\t "+ ApplicationProperties.getValue("user.loginName")+ Constants.SEPARATOR + user.getLoginName()
 			    + "\n\t "+ ApplicationProperties.getValue("user.password")+ Constants.SEPARATOR + PasswordManager.decode(user.getPassword())
 			    + "\n\t "+ ApplicationProperties.getValue("user.role")+ Constants.SEPARATOR + roleOfUser
+			    + "\n\n\n" + ApplicationProperties.getValue("loginDetails.catissue.url.message") + "\n\t" + Variables.catissueURL
 			    + "\n\n" + ApplicationProperties.getValue("email.catissuecore.team");
 			
 			emailStatus = sendEmailToUser(user.getEmailAddress(), subject, body);
