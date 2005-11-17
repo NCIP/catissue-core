@@ -76,8 +76,6 @@ public class NewSpecimenAction  extends SecureAction
         		MapDataParser.deleteRow(key,map,request.getParameter("status"));
         	}
         }
-        
-    	
 
     	// ----------- redirected from specimencollection group
         String specimenCollectionGroupId = (String)request.getAttribute(Constants.SPECIMEN_COLLECTION_GROUP_ID);
@@ -116,67 +114,59 @@ public class NewSpecimenAction  extends SecureAction
         
         NewSpecimenBizLogic bizLogic = (NewSpecimenBizLogic)BizLogicFactory.getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
         
-        try
-		{	
-        	if(specimenForm.isParentPresent())//If parent specimen is present then
+        if(specimenForm.isParentPresent())//If parent specimen is present then
+    	{
+    		String [] fields = {Constants.SYSTEM_IDENTIFIER};
+            List parentSpecimenList = bizLogic.getList(Specimen.class.getName(), fields, Constants.SYSTEM_IDENTIFIER, true); 	 	
+    	 	request.setAttribute(Constants.PARENT_SPECIMEN_ID_LIST, parentSpecimenList);
+    	}
+    	
+    	String [] bhIdArray =  {"-1"};
+    	String [] bhTypeArray =  {Constants.SELECT_OPTION};
+    	String [] bhNameArray =  {Constants.SELECT_OPTION};
+    	
+    	String selectColNames[] = {Constants.SYSTEM_IDENTIFIER,"name","type"}; 
+    	List biohazardList = bizLogic.retrieve(Biohazard.class.getName(), selectColNames);
+    	Iterator iterator = biohazardList.iterator();
+    	
+    	//Creating & setting the biohazard name, id & type list
+    	if(biohazardList!=null && !biohazardList.isEmpty())
+    	{
+        	bhIdArray =  new String[biohazardList.size() + 1];
+        	bhTypeArray =  new String[biohazardList.size() + 1];
+        	bhNameArray =  new String[biohazardList.size() + 1];
+        	
+        	bhIdArray[0] = "-1";
+        	bhTypeArray[0] = "";
+        	bhNameArray[0] = Constants.SELECT_OPTION;
+        	
+        	int i=1;
+        	
+        	while(iterator.hasNext())
         	{
-        		String [] fields = {Constants.SYSTEM_IDENTIFIER};
-                List parentSpecimenList = bizLogic.getList(Specimen.class.getName(), fields, Constants.SYSTEM_IDENTIFIER, true); 	 	
-        	 	request.setAttribute(Constants.PARENT_SPECIMEN_ID_LIST, parentSpecimenList);
+        		Object hazard[] = (Object[])iterator.next();
+        		bhIdArray[i] = String.valueOf(hazard[0]);
+        		bhNameArray[i] = (String)hazard[1];
+        		bhTypeArray[i] = (String)hazard[2];
+        		i++;
         	}
-        	
-        	String [] bhIdArray =  {"-1"};
-        	String [] bhTypeArray =  {Constants.SELECT_OPTION};
-        	String [] bhNameArray =  {Constants.SELECT_OPTION};
-        	
-        	String selectColNames[] = {Constants.SYSTEM_IDENTIFIER,"name","type"}; 
-        	List biohazardList = bizLogic.retrieve(Biohazard.class.getName(), selectColNames);
-        	Iterator iterator = biohazardList.iterator();
-        	
-        	//Creating & setting the biohazard name, id & type list
-        	if(biohazardList!=null && !biohazardList.isEmpty())
-        	{
-	        	bhIdArray =  new String[biohazardList.size() + 1];
-	        	bhTypeArray =  new String[biohazardList.size() + 1];
-	        	bhNameArray =  new String[biohazardList.size() + 1];
-	        	
-	        	bhIdArray[0] = "-1";
-	        	bhTypeArray[0] = "";
-	        	bhNameArray[0] = Constants.SELECT_OPTION;
-	        	
-	        	int i=1;
-	        	
-	        	while(iterator.hasNext())
-	        	{
-	        		Object hazard[] = (Object[])iterator.next();
-	        		bhIdArray[i] = String.valueOf(hazard[0]);
-	        		bhNameArray[i] = (String)hazard[1];
-	        		bhTypeArray[i] = (String)hazard[2];
-	        		i++;
-	        	}
-        	}
-        	
-        	request.setAttribute(Constants.BIOHAZARD_NAME_LIST, bhNameArray);
-        	request.setAttribute(Constants.BIOHAZARD_ID_LIST, bhIdArray);
-        	request.setAttribute(Constants.BIOHAZARD_TYPES_LIST, bhTypeArray);
-        	
-        	//Setting Secimen Collection Group
-			String sourceObjectName = SpecimenCollectionGroup.class.getName();
-			String[] displayNameFields = {Constants.SYSTEM_IDENTIFIER};
-			String valueField = Constants.SYSTEM_IDENTIFIER;
-	
-			List specimenList = bizLogic.getList(sourceObjectName, displayNameFields, valueField, true);
-			request.setAttribute(Constants.SPECIMEN_COLLECTION_GROUP_LIST, specimenList);
-			
-			// -- set ForwardTo list
-			List forwardToList = getForwardToList(Constants.SPECIMEN_FORWARD_TO_LIST);
-			request.setAttribute(Constants.FORWARDLIST,forwardToList); 
-		}
-        catch(Exception e)
-		{
-        	Logger.out.error(e.getMessage(),e);
-        	return mapping.findForward(Constants.FAILURE);
-		}
+    	}
+    	
+    	request.setAttribute(Constants.BIOHAZARD_NAME_LIST, bhNameArray);
+    	request.setAttribute(Constants.BIOHAZARD_ID_LIST, bhIdArray);
+    	request.setAttribute(Constants.BIOHAZARD_TYPES_LIST, bhTypeArray);
+    	
+    	//Setting Secimen Collection Group
+		String sourceObjectName = SpecimenCollectionGroup.class.getName();
+		String[] displayNameFields = {Constants.SYSTEM_IDENTIFIER};
+		String valueField = Constants.SYSTEM_IDENTIFIER;
+
+		List specimenList = bizLogic.getList(sourceObjectName, displayNameFields, valueField, true);
+		request.setAttribute(Constants.SPECIMEN_COLLECTION_GROUP_LIST, specimenList);
+		
+		// -- set ForwardTo list
+		List forwardToList = getForwardToList(Constants.SPECIMEN_FORWARD_TO_LIST);
+		request.setAttribute(Constants.FORWARDLIST,forwardToList); 
         
         //Setting the specimen class list
         List specimenClassList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_SPECIMEN_CLASS,null);
@@ -201,61 +191,53 @@ public class NewSpecimenAction  extends SecureAction
     	request.setAttribute(Constants.PATHOLOGICAL_STATUS_LIST, pathologicalStatusList);
         
     	//Setting biohazard list
-    	List biohazardList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_BIOHAZARD,null);
+    	biohazardList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_BIOHAZARD,null);
     	request.setAttribute(Constants.BIOHAZARD_TYPE_LIST, biohazardList);
     	
-    	try
-		{
-        	Logger.out.debug("1");
-        	// get the Specimen class and type from the cde
-        	CDE specimenClassCDE = CDEManager.getCDEManager().getCDE(Constants.CDE_NAME_SPECIMEN_CLASS);
-	    	Set setPV = specimenClassCDE.getPermissibleValues();
-	    	Logger.out.debug("2");
-	    	Iterator itr = setPV.iterator();
-	    
-	    	specimenClassList =  new ArrayList();
-	    	Map subTypeMap = new HashMap();
-	    	Logger.out.debug("\n\n\n\n**********MAP DATA************\n");
-	    	specimenClassList.add(new NameValueBean(Constants.SELECT_OPTION,"-1"));
-	    	
-	    	while(itr.hasNext())
-	    	{
-	    		List innerList =  new ArrayList();
-	    		Object obj = itr.next();
-	    		PermissibleValue pv = (PermissibleValue)obj;
-	    		String tmpStr = pv.getValue();
-	    		Logger.out.debug(tmpStr);
-	    		specimenClassList.add(new NameValueBean( tmpStr,tmpStr));
-	    		
-				Set list1 = pv.getSubPermissibleValues();
-				Logger.out.debug("list1 "+list1);
-	        	Iterator itr1 = list1.iterator();
-	        	innerList.add(new NameValueBean(Constants.SELECT_OPTION,"-1"));
-	        	while(itr1.hasNext())
-	        	{
-	        		Object obj1 = itr1.next();
-	        		PermissibleValue pv1 = (PermissibleValue)obj1;
-	        		// set specimen type
-	        		String tmpInnerStr = pv1.getValue(); 
-	        		Logger.out.debug("\t\t"+tmpInnerStr);
-	        		innerList.add(new NameValueBean( tmpInnerStr,tmpInnerStr));  
-	        	}
-	        	subTypeMap.put(pv.getValue(),innerList);
-	    	} // class and values set
-	    	Logger.out.debug("\n\n\n\n**********MAP DATA************\n");
-	    	
-	    	// sets the Class list
-	    	request.setAttribute(Constants.SPECIMEN_CLASS_LIST, specimenClassList);
+    	Logger.out.debug("1");
+    	// get the Specimen class and type from the cde
+    	CDE specimenClassCDE = CDEManager.getCDEManager().getCDE(Constants.CDE_NAME_SPECIMEN_CLASS);
+    	Set setPV = specimenClassCDE.getPermissibleValues();
+    	Logger.out.debug("2");
+    	Iterator itr = setPV.iterator();
+    
+    	specimenClassList =  new ArrayList();
+    	Map subTypeMap = new HashMap();
+    	Logger.out.debug("\n\n\n\n**********MAP DATA************\n");
+    	specimenClassList.add(new NameValueBean(Constants.SELECT_OPTION,"-1"));
+    	
+    	while(itr.hasNext())
+    	{
+    		List innerList =  new ArrayList();
+    		Object obj = itr.next();
+    		PermissibleValue pv = (PermissibleValue)obj;
+    		String tmpStr = pv.getValue();
+    		Logger.out.debug(tmpStr);
+    		specimenClassList.add(new NameValueBean( tmpStr,tmpStr));
+    		
+			Set list1 = pv.getSubPermissibleValues();
+			Logger.out.debug("list1 "+list1);
+        	Iterator itr1 = list1.iterator();
+        	innerList.add(new NameValueBean(Constants.SELECT_OPTION,"-1"));
+        	while(itr1.hasNext())
+        	{
+        		Object obj1 = itr1.next();
+        		PermissibleValue pv1 = (PermissibleValue)obj1;
+        		// set specimen type
+        		String tmpInnerStr = pv1.getValue(); 
+        		Logger.out.debug("\t\t"+tmpInnerStr);
+        		innerList.add(new NameValueBean( tmpInnerStr,tmpInnerStr));  
+        	}
+        	subTypeMap.put(pv.getValue(),innerList);
+    	} // class and values set
+    	Logger.out.debug("\n\n\n\n**********MAP DATA************\n");
+    	
+    	// sets the Class list
+    	request.setAttribute(Constants.SPECIMEN_CLASS_LIST, specimenClassList);
 
-	    	// set the map to subtype
-	    	request.setAttribute(Constants.SPECIMEN_TYPE_MAP, subTypeMap);
-	    	Logger.out.debug("************************************\n\n\nDone**********\n");
-		}
-        catch(Exception excp)
-		{
-        	Logger.out.error(excp.getMessage(),excp);
-        	return mapping.findForward(Constants.FAILURE);
-		}
+    	// set the map to subtype
+    	request.setAttribute(Constants.SPECIMEN_TYPE_MAP, subTypeMap);
+    	Logger.out.debug("************************************\n\n\nDone**********\n");
 
     	return mapping.findForward(pageOf);
     }
