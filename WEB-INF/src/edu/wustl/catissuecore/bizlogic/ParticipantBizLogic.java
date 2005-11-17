@@ -55,6 +55,7 @@ public class ParticipantBizLogic extends DefaultBizLogic
 			participantMedicalIdentifierCollection.add(participantMedicalIdentifier);
 		}
 		
+		//Inserting medical identifiers in the database after setting the participant associated.
 		Iterator it = participantMedicalIdentifierCollection.iterator();
 		while(it.hasNext())
 		{
@@ -85,6 +86,7 @@ public class ParticipantBizLogic extends DefaultBizLogic
 		Collection participantMedicalIdentifierCollection = participant.getParticipantMedicalIdentifierCollection();
 		Iterator it = participantMedicalIdentifierCollection.iterator();
 		
+		//Updating the medical identifiers of the participant
 		while(it.hasNext())
 		{
 			ParticipantMedicalIdentifier pmIdentifier = (ParticipantMedicalIdentifier)it.next();
@@ -124,6 +126,7 @@ public class ParticipantBizLogic extends DefaultBizLogic
     }
 
 	/**
+	 * Assigns the privilege to related objects for Collection Protocol Registration.
 	 * @param dao
 	 * @param privilegeName
 	 * @param longs

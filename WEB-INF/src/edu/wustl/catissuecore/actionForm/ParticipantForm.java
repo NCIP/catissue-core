@@ -44,7 +44,6 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 {
     
     private static final long serialVersionUID = 1234567890L;
-
  
     /**
      * Last Name of the Participant.
@@ -95,7 +94,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 
  
     /**
-	 * Map to handle values of all the CollectionProtocol Events
+	 * Map to handle values of all the Participant Medical Identifiers
 	 */
 	protected Map values = new HashMap();
     
@@ -147,12 +146,12 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
         this.birthDate = Utility.parseDateToString(participant.getBirthDate(),Constants.DATE_PATTERN_MM_DD_YYYY);
         this.gender = participant.getGender();
         this.genotype = participant.getGenotype();
-        //this.socialSecurityNumber = Utility.toString( participant.getSocialSecurityNumber());
         setSSN(participant.getSocialSecurityNumber());
         this.race = participant.getRace();
         this.activityStatus = participant.getActivityStatus();
         this.ethnicity = participant.getEthnicity();
         
+        //Populating the map with the participant medical identifiers data 
         Collection medicalIdentifierCollection = participant.getParticipantMedicalIdentifierCollection();
         
         if(medicalIdentifierCollection != null)
@@ -170,10 +169,15 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 				String key3 = "ParticipantMedicalIdentifier:" + i +"_systemIdentifier";
 
 				Site site = participantMedicalIdentifier.getSite();
+				
 				if(site!=null)
+				{
 					values.put(key1,Utility.toString(site.getSystemIdentifier()));
+				}
 				else
+				{
 					values.put(key1,Utility.toString(Constants.SELECT_OPTION));
+				}
 				
 				values.put(key2,Utility.toString(participantMedicalIdentifier.getMedicalRecordNumber()));
 				values.put(key3,Utility.toString(participantMedicalIdentifier.getSystemIdentifier()));
@@ -182,6 +186,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
         	}
         	counter = medicalIdentifierCollection.size();
         }
+        
         //At least one row should be displayed in ADD MORE therefore
 		if(counter == 0)
 			counter = 1;
@@ -309,26 +314,6 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
         this.gender = gender;
     }
 
-//    /**
-//     * Returns the Social Security Number of the Participant.
-//     * @return String the Social Security Number of the Participant.
-//     * @see #setSocialSecurityNumber(String)
-//     */
-//    public String getSocialSecurityNumber()
-//    {
-//        return socialSecurityNumber;
-//    }
-//
-//    /**
-//     * Sets the Social Security Number of the Participant.
-//     * @param birthDate String the Social Security Number of the Participant.
-//     * @see #getSocialSecurityNumber()
-//     */
-//    public void setSocialSecurityNumber(String socialSecurityNumber)
-//    {
-//        this.socialSecurityNumber = socialSecurityNumber;
-//    }
-
     /**
      * Returns the race of the Participant.
      * @return String the race of the Participant.
@@ -408,62 +393,16 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
          try
          {
          	setRedirectValue(validator);
-//         	String cf = getRedirectTo();
-//         	if(validator.isEmpty(cf ) )
-//         		cf = "";
-//         	setRedirectTo(cf );
-//          -----------------------------------------------------   
-         	
-         	
-//            if (validator.isEmpty(lastName))
-// 			{
-// 			    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("user.lastName")));
-// 			}
-//             
-//			if (validator.isEmpty(firstName))
-//			{
-//			    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("user.firstName")));
-//			}
-			
-//			if (validator.isEmpty(middleName))
-//			{
-//			    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("participant.middleName")));
-//			}
 
          	if (!validator.isEmpty(birthDate) )
 			{
-	         	//  date validation according to bug id  722 and 730
+	         	// date validation according to bug id  722 and 730
 	    		String errorKey = validator.validateDate(birthDate,true );
-	    		if(errorKey.trim().length() >0  )
+	    		if(errorKey.trim().length() > 0)
 	    		{
 	    			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(errorKey,ApplicationProperties.getValue("participant.birthDate")));
 	    		}
 			}
-			
-//			if(!validator.isValidOption(gender))
-//			{
-//				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("participant.gender")));
-//			}
-//			
-//			if(!validator.isValidOption(genotype))
-//			{
-//				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("participant.genotype")));
-//			}
-//			
-//			if(!validator.isValidOption(race))
-//			{
-//				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("participant.race")));
-//			}
-//			
-//			if(!validator.isValidOption(ethnicity))
-//			{
-//				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("participant.ethnicity")));
-//			}
-//			
-//			if (!validator.isValidOption(activityStatus))
-//			{
-//			    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("participant.activityStatus")));
-//			}
 
 			String socialSecurityNumber = socialSecurityNumberPartA+"-"+socialSecurityNumberPartB+"-"+socialSecurityNumberPartC; 
          	if(!validator.isEmpty(socialSecurityNumberPartA+socialSecurityNumberPartB+socialSecurityNumberPartC) && !validator.isValidSSN(socialSecurityNumber ) )
@@ -477,8 +416,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 			String key2 = "_medicalRecordNumber";
 			String key3 = "_systemIdentifier";
 			int index = 1;
-			boolean isError = false;
-			
+
 			while(true)
 			{
 				String keyOne = className + index + key1;
@@ -492,23 +430,18 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 				{
 					break;
 				}
-				else if(value1.equals("-1") && value2.equals(""))
+				else if(!validator.isValidOption(value1) && value2.trim().equals(""))
 				{
 					values.remove(keyOne);
 					values.remove(keyTwo);
 					values.remove(keyThree);
 				}
-				else if((!value1.equals("-1") && value2.equals("")) || (value1.equals("-1") && !value2.equals("")))
+				else if((validator.isValidOption(value1) && value2.trim().equals("")) || (!validator.isValidOption(value1) && !value2.trim().equals("")))
 				{
-					isError = true;
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.participant.missing",ApplicationProperties.getValue("participant.msg")));
 					break;
 				}
 				index++;
-			}
-			
-			if(isError)
-			{
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.participant.missing",ApplicationProperties.getValue("participant.msg")));
 			}
 		}
 		catch(Exception excp)
@@ -565,41 +498,81 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
  		return this.values;
  	}
  	
-	/**
-	 * @return Returns the counter.
-	 */
+ 	/**
+     * Returns the counter.
+     * @return int the counter.
+     * @see #setCounter(int)
+     */
 	public int getCounter()
 	{
 		return counter;
 	}
 	
 	/**
-	 * @param counter The counter to set.
-	 */
+     * Sets the counter.
+     * @param counter The counter.
+     * @see #getCounter()
+     */
 	public void setCounter(int counter)
 	{
 		this.counter = counter;
 	}
+	
+	/**
+     * Returns the first part of Social Security Number.
+     * @return String First part of Social Security Number.
+     * @see #setSocialSecurityNumberPartA(String)
+     */
 	public String getSocialSecurityNumberPartA()
 	{
 		return socialSecurityNumberPartA;
 	}
+	
+	/**
+     * Sets the first part of Social Security Number.
+     * @param socialSecurityNumberPartA First part of Social Security Number.
+     * @see #getSocialSecurityNumberPartA()
+     */
 	public void setSocialSecurityNumberPartA(String socialSecurityNumberPartA)
 	{
 		this.socialSecurityNumberPartA = socialSecurityNumberPartA;
 	}
+	
+	/**
+     * Returns the second part of Social Security Number.
+     * @return String Second part of Social Security Number.
+     * @see #setSocialSecurityNumberPartB(String)
+     */
 	public String getSocialSecurityNumberPartB()
 	{
 		return socialSecurityNumberPartB;
 	}
+	
+	/**
+     * Sets the second part of Social Security Number.
+     * @param socialSecurityNumberPartB Second part of Social Security Number.
+     * @see #getSocialSecurityNumberPartB()
+     */
 	public void setSocialSecurityNumberPartB(String socialSecurityNumberPartB)
 	{
 		this.socialSecurityNumberPartB = socialSecurityNumberPartB;
 	}
+	
+	/**
+     * Returns the third part of Social Security Number.
+     * @return String Third part of Social Security Number.
+     * @see #setSocialSecurityNumberPartC(String)
+     */
 	public String getSocialSecurityNumberPartC()
 	{
 		return socialSecurityNumberPartC;
 	}
+	
+	/**
+     * Sets the third part of Social Security Number.
+     * @param socialSecurityNumberPartC Third part of Social Security Number.
+     * @see #getSocialSecurityNumberPartC()
+     */
 	public void setSocialSecurityNumberPartC(String socialSecurityNumberPartC)
 	{
 		this.socialSecurityNumberPartC = socialSecurityNumberPartC;
