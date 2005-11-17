@@ -175,8 +175,8 @@ public class QueryTree extends JApplet
             // This is used to auto select the node
             if(false == selectedNode.equals(new Long(0)))
             {
-                urlSuffix = applicationPath + Constants.SHOW_STORAGE_CONTAINER_GRID_VIEW_ACTION
-	            + "?" + Constants.IDENTIFIER + "=" + selectedNode.toString()
+                urlSuffix = Constants.SHOW_STORAGE_CONTAINER_GRID_VIEW_ACTION
+	            + "?" + Constants.SYSTEM_IDENTIFIER + "=" + selectedNode.toString()
 	            + "&" + Constants.STORAGE_CONTAINER_TYPE + "=" + storageContainerType
 	            + "&" + Constants.STORAGE_CONTAINER_POSITION + "=" + position
 	            + "&" + Constants.PAGEOF + "=" + pageOf;
