@@ -81,7 +81,6 @@ public class SimpleQueryInterfaceAction extends SecureAction
                 else
                 {
                     String aliasName = request.getParameter(Constants.TABLE_ALIAS_NAME);
-                    request.setAttribute(Constants.TABLE_ALIAS_NAME,aliasName);
                     
                     // Get all the table names.  
                     Set objectNameValueBeanList = queryBizLogic.getAllTableNames(aliasName);
@@ -92,6 +91,8 @@ public class SimpleQueryInterfaceAction extends SecureAction
                     
                     if ((aliasName != null) && (!"".equals(aliasName)))
             		{
+                        request.setAttribute(Constants.TABLE_ALIAS_NAME,aliasName);
+                        
             		    List columnNameValueBeanList = queryBizLogic.getColumnNames(aliasName);
                         if (columnNameValueBeanList.isEmpty() == false)
                         {
