@@ -10,20 +10,26 @@
 package edu.wustl.common.security;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
+import edu.wustl.catissuecore.query.Client;
 import edu.wustl.catissuecore.util.Permissions;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
+import edu.wustl.common.beans.QueryResultObjectData;
 import edu.wustl.common.beans.SecurityDataBean;
+import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.SMTransactionException;
 import edu.wustl.common.util.Utility;
+import edu.wustl.common.util.dbManager.HibernateMetaData;
 import edu.wustl.common.util.logger.Logger;
 import gov.nih.nci.security.AuthenticationManager;
 import gov.nih.nci.security.AuthorizationManager;
@@ -875,7 +881,6 @@ public class SecurityManager implements Permissions {
 			for (it = protectionObjects.iterator(); it.hasNext();) {
 				protectionElement = new ProtectionElement();
 				protectionObject = (AbstractDomainObject) it.next();
-
 				protectionElement.setObjectId(protectionObject.getClass()
 						.getName()
 						+ "_" + protectionObject.getSystemIdentifier());
@@ -1744,6 +1749,182 @@ public class SecurityManager implements Permissions {
 					"Could not deassign Protection elements to protection group",
 					csex);
 		}
+	}
+	
+	/**
+	 * @param sessionDataBean
+	 * @param queryResultObjectDataMap
+	 * @param aList
+	 */
+	public void filterRow(SessionDataBean sessionDataBean, Map queryResultObjectDataMap, List aList) {
+		//boolean that indicated whether user has privilege on main object
+		boolean isAuthorizedForMain=false;
+		
+//		boolean that indicated whether user has privilege on related object
+		boolean isAuthorizedForRelated=false;
+		
+		//boolean that indicates whether user has privilege on identified data
+		boolean hasPrivilegeOnIdentifiedData = false;
+		
+		Vector objectColumnIds;
+		Set keySet = queryResultObjectDataMap.keySet();
+		Iterator keyIterator = keySet.iterator();
+		QueryResultObjectData queryResultObjectData2;
+		QueryResultObjectData queryResultObjectData3;
+		Vector queryObjects;
+		Map columnIdsMap = new HashMap();
+		
+		
+		
+		//Aarti: For all objects in objectIdentifiers check permission on the objects
+		//In case user is not authorized to access an object make 
+		//value of all the columns that are dependent on this object ##
+//		for(int j=0; j< objectIdentifiers.length; j++)
+//		{
+//			isAuthorized = checkPermission(sessionDataBean.getUserName(),objectIdentifiers[j][0],aList.get(Integer.parseInt(objectIdentifiers[j][1])));
+//			if(!isAuthorized)
+//			{
+//				objectColumnIds = (Vector)columnIdsMap.get(objectIdentifiers[j][0]);
+//				if(objectColumnIds!=null)
+//				{
+//					for(int k=0; k<objectColumnIds.size();k++)
+//					{
+//						aList.set(((Integer)objectColumnIds.get(k)).intValue()-1,"##");
+//					}
+//				}
+//			}
+//		}
+		
+		for(;keyIterator.hasNext();)
+		{
+			queryResultObjectData2 = (QueryResultObjectData) queryResultObjectDataMap.get(keyIterator.next());
+			
+			
+			isAuthorizedForMain = checkPermission(sessionDataBean.getUserName(),queryResultObjectData2.getAliasName(),aList.get(queryResultObjectData2.getIdentifierColumnId()),Permissions.READ);
+			Logger.out.debug("Main object:"+queryResultObjectData2.getAliasName()+" isAuthorizedForMain:"+isAuthorizedForMain);
+			
+			//Remove the data from the fields directly related to main object
+			if(!isAuthorizedForMain)
+			{
+				removeUnauthorizedFieldsData(aList, queryResultObjectData2, false);
+			}
+			else
+			{
+				hasPrivilegeOnIdentifiedData = checkPermission(sessionDataBean.getUserName(),queryResultObjectData2.getAliasName(),aList.get(queryResultObjectData2.getIdentifierColumnId()),Permissions.IDENTIFIED_DATA_ACCESS);
+				Logger.out.debug("hasPrivilegeOnIdentifiedData:"+hasPrivilegeOnIdentifiedData);
+				if(!hasPrivilegeOnIdentifiedData)
+				{
+					removeUnauthorizedFieldsData(aList, queryResultObjectData2, true);
+				}
+			}
+			
+			queryObjects = queryResultObjectData2.getRelatedQueryResultObjects();
+			for(int j = 0 ; j<queryObjects.size();j++)
+			{
+				queryResultObjectData3 = (QueryResultObjectData) queryObjects.get(j);
+				Logger.out.debug("isAuthorized:"+isAuthorizedForMain);
+				
+				//If authorized to see the main object then check for authorization on dependent object
+				if(isAuthorizedForMain)
+				{
+					isAuthorizedForRelated = checkPermission(sessionDataBean.getUserName(),queryResultObjectData3.getAliasName(),aList.get(queryResultObjectData3.getIdentifierColumnId()),Permissions.READ);
+				}
+				//else set it false
+				else
+				{
+					isAuthorizedForRelated = false;
+				}
+				Logger.out.debug("Related object:"+queryResultObjectData3.getAliasName()+" isAuthorizedForRelated:"+isAuthorizedForRelated);
+				
+				//If not authorized to see related objects 
+				//remove the data from the fields directly related to related object
+				if(!isAuthorizedForRelated)
+					{
+						removeUnauthorizedFieldsData(aList, queryResultObjectData3, false);
+					}
+				else
+				{
+					hasPrivilegeOnIdentifiedData = checkPermission(sessionDataBean.getUserName(),queryResultObjectData3.getAliasName(),aList.get(queryResultObjectData3.getIdentifierColumnId()),Permissions.IDENTIFIED_DATA_ACCESS);
+					if(!hasPrivilegeOnIdentifiedData)
+					{
+						removeUnauthorizedFieldsData(aList, queryResultObjectData3, true);
+					}
+				}
+			}
+			
+		}
+	}
+	
+
+	
+
+	/**
+	 * @param aList
+	 * @param queryResultObjectData3
+	 */
+	private void removeUnauthorizedFieldsData(List aList, QueryResultObjectData queryResultObjectData3, boolean removeOnlyIdentifiedData) {
+		
+		Logger.out.debug(" Table:"+queryResultObjectData3.getAliasName()+" removeOnlyIdentifiedData:"+removeOnlyIdentifiedData);
+		Vector objectColumnIds;
+		
+		//If removeOnlyIdentifiedData is true then get Identified data column ids
+		//else get all column Ids to remove them
+		if(removeOnlyIdentifiedData)
+		{
+			objectColumnIds = queryResultObjectData3.getIdentifiedDataColumnIds();
+		}
+		else
+		{
+			objectColumnIds = queryResultObjectData3.getDependentColumnIds();
+		}
+		Logger.out.debug("objectColumnIds:"+objectColumnIds);
+		if(objectColumnIds!=null)
+		{
+			for(int k=0; k<objectColumnIds.size();k++)
+			{
+				aList.set(((Integer)objectColumnIds.get(k)).intValue()-1,"##");
+			}
+		}
+	}
+
+	/**
+	 * @param string
+	 * @param object
+	 */
+	public boolean checkPermission(String userName, String tableAlias, Object identifier, String permission) {
+		boolean isAuthorized=false;
+		String tableName = (String) Client.objectTableNames.get(tableAlias);
+		Logger.out.debug(" AliasName:"+tableAlias+" tableName:"+tableName+ " Identifier:"+identifier+" Permission:"+permission);
+		
+		String className=HibernateMetaData.getClassName(tableName);
+		if(className == null)
+		{
+			return isAuthorized;
+		}
+//		 checking whether object has class level or object level privilege
+		int privilegeType = Integer.parseInt((String)Client.privilegeTypeMap.get(tableAlias));
+		Logger.out.debug(" privilege type:"+privilegeType);
+		
+		try {
+			if(privilegeType == Constants.CLASS_LEVEL_SECURE_RETRIEVE)
+			{
+				isAuthorized = SecurityManager.getInstance(this.getClass()).isAuthorized(userName,className,permission);
+			}
+			else if (privilegeType == Constants.OBJECT_LEVEL_SECURE_RETRIEVE)
+			{
+				isAuthorized = SecurityManager.getInstance(this.getClass()).checkPermission(userName,className,String.valueOf(identifier),permission);
+			}
+			else if (privilegeType == Constants.INSECURE_RETRIEVE)
+			{
+				isAuthorized = true;
+			}
+		
+			
+		} catch (SMException e) {
+			Logger.out.debug(" Exception while checking permission:"+e.getMessage(),e);
+			return isAuthorized;
+		}
+		return isAuthorized;
 	}
 
 }
