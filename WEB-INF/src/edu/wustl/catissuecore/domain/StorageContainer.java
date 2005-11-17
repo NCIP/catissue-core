@@ -16,6 +16,7 @@ import java.util.Map;
 import edu.wustl.catissuecore.actionForm.AbstractActionForm;
 import edu.wustl.catissuecore.actionForm.StorageContainerForm;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.logger.Logger;
 
@@ -504,8 +505,10 @@ public class StorageContainer extends AbstractDomainObject implements java.io.Se
 	        
 	        this.number 				= new Integer(form.getStartNumber());
 	        this.startNo				= new Integer(form.getStartNumber());
-	        this.tempratureInCentigrade	= new Double(form.getDefaultTemperature());
-	        
+	        if (Utility.toString(form.getDefaultTemperature()).trim().length() > 0  )
+        	{
+	        	this.tempratureInCentigrade	= new Double(form.getDefaultTemperature());
+        	}
 	        if(!form.getBarcode().trim().equals(""))
 	        	this.barcode			= form.getBarcode();
 	        else
