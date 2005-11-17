@@ -361,11 +361,12 @@ function insRow(subdivtag)
 							</html:radio>							
 						</td>
 						<td class="formField" colspan="2">
-	 						<logic:equal name="storageContainerForm" property="checkedButton" value="1">							
+	 						<logic:equal name="storageContainerForm" property="checkedButton" value="1">	
+	 							&nbsp;<bean:message key="storageContainer.parentID" />						
 				     			<html:text styleClass="formFieldSized3" maxlength="10" styleId="parentContainerId" property="parentContainerId" disabled = "true"/>
-				     			-
+				     			&nbsp;<bean:message key="storageContainer.positionOne" />
 				     			<html:text styleClass="formFieldSized3" maxlength="10"  styleId="positionDimensionOne" property="positionDimensionOne" disabled = "true"/>
-				     			-
+				     			&nbsp;<bean:message key="storageContainer.positionTwo" />
 				     			<html:text styleClass="formFieldSized3" maxlength="10"  styleId="positionDimensionTwo" property="positionDimensionTwo" disabled = "true"/>
 							&nbsp;
 							<html:button property="mapButton" styleClass="actionButton" styleId="Map" 
@@ -376,11 +377,11 @@ function insRow(subdivtag)
 				        	</logic:equal>
 							
 							<logic:equal name="storageContainerForm" property="checkedButton" value="2">
-							
+							&nbsp;<bean:message key="storageContainer.parentID" />													
 			     			<html:text styleClass="formFieldSized3" maxlength="10"  styleId="parentContainerId" property="parentContainerId" />
-			     			-
+			     			&nbsp;<bean:message key="storageContainer.positionOne" />
 			     			<html:text styleClass="formFieldSized3" maxlength="10"  styleId="positionDimensionOne" property="positionDimensionOne" />
-			     			-
+			     			&nbsp;<bean:message key="storageContainer.positionTwo" />
 			     			<html:text styleClass="formFieldSized3" maxlength="10"  styleId="positionDimensionTwo" property="positionDimensionTwo" />
 							&nbsp;
 							<html:button property="mapButton" styleClass="actionButton" styleId="Map" 
