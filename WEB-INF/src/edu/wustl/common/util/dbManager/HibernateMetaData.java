@@ -42,6 +42,13 @@ public class HibernateMetaData
 		cfg = configuration;
 	}
 	
+	/**
+	 * This method returns the list of subclasses of the className
+	 * @author aarti_sharma
+	 * @param className
+	 * @return
+	 * @throws ClassNotFoundException
+	 */
 	public static List getSubClassList(String className) throws ClassNotFoundException
 	{
 		List list = new ArrayList();
@@ -57,6 +64,52 @@ public class HibernateMetaData
 		}
 		return list;
 	}
+	
+	/**
+	 * This method returns the super class of the obj passed
+	 * @author aarti_sharma
+	 * @param objClass
+	 * @return
+	 */
+	public static Class getSuperClass(Object  obj)
+	{
+		Class objClass = obj.getClass();
+		PersistentClass persistentClass = cfg.getClassMapping(objClass);
+		PersistentClass superClass = persistentClass.getSuperclass();
+		return superClass.getClass();
+	}
+	
+	/**
+	 * This method returns the supermost class
+	 * of the class passed that is in the same package as class
+	 * @author aarti_sharma
+	 * @param objClass
+	 * @return
+	 */
+	public static Class getSupermostClassInPackage(Object obj) {
+		Class objClass = obj.getClass();
+		Package objPackage = objClass.getPackage();
+		Logger.out.debug("Input Class: " + objClass.getName()+" Package:"+objPackage.getName());
+		
+		PersistentClass persistentClass = cfg.getClassMapping(objClass);
+		PersistentClass superClass;
+		if (persistentClass != null && persistentClass.getSuperclass()!=null) {
+			superClass = persistentClass;
+			Logger.out.debug(objPackage.getName()+" "+persistentClass.getName()+"*********"+persistentClass.getSuperclass().getMappedClass().getPackage().getName()
+					);
+			Logger.out.debug("!!!!!!!!!!! "+persistentClass.getSuperclass().getMappedClass().getPackage().getName()
+					.equals(objPackage.getName()));
+			do {
+				persistentClass = persistentClass.getSuperclass();
+			}while(persistentClass !=null);
+			Logger.out.debug("Supermost class in the same package:"
+					+ persistentClass.getMappedClass().getName());
+		} else {
+			return objClass;
+		}
+		return persistentClass.getMappedClass();
+	}
+	
 	
 	public static String getTableName(Class classObj)
 	{
