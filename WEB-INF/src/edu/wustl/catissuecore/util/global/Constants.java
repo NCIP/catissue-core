@@ -225,7 +225,7 @@ public class Constants
 	public static final String STORAGE_CONTAINER_ADD_ACTION = "StorageContainerAdd.do";
 	public static final String STORAGE_CONTAINER_EDIT_ACTION = "StorageContainerEdit.do";
 	
-	public static final String SHOW_STORAGE_CONTAINER_GRID_VIEW_ACTION = "../ShowStorageGridView.do";
+	public static final String SHOW_STORAGE_CONTAINER_GRID_VIEW_ACTION = "ShowStorageGridView.do";
 	
 	//Constants required in Site.jsp Page
 	public static final String SITE_SEARCH_ACTION = "SiteSearch.do";
@@ -413,7 +413,7 @@ public class Constants
 	public static final String SELECT_COLUMN_LIST = "selectColumnList";
 	
 	//Tree Data Action
-	public static final String TREE_DATA_ACTION = "../Data.do";
+	public static final String TREE_DATA_ACTION = "Data.do";
 	
 	public static final String SPECIMEN = "Specimen";
 	public static final String SEGMENT = "Segment";
@@ -1165,6 +1165,7 @@ public class Constants
 	// constants for Data required in query
 	public static final String ALIAS_NAME_TABLE_NAME_MAP="objectTableNames";
 	public static final String SYSTEM_IDENTIFIER = "systemIdentifier";
+	public static final String SYSTEM_IDENTIFIER_COLUMN_NAME = "IDENTIFIER";
 	public static final String NAME = "name";
 	
 	
