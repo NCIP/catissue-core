@@ -18,4 +18,5 @@ public interface Permissions {
 	public static final String USE = "USE";
 	public static final String ASSIGN_READ = "ASSIGN_READ";
 	public static final String ASSIGN_USE = "ASSIGN_USE";
+	public static final String IDENTIFIED_DATA_ACCESS = "IDENTIFIED_DATA_ACCESS";
 }
