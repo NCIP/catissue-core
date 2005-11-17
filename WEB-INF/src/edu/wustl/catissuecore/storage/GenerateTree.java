@@ -92,7 +92,7 @@ public class GenerateTree
                 	targetParentNode.add(nextNode);
                 	
                 	//Sri: Select the path of the node to be selected
-                	if(nodeToBeSelected.equals((Long)treeNode.getIdentifier()))
+                	if(nodeToBeSelected.equals(treeNode.getIdentifier()))
                 	{
                 		pathToRoot  = new TreePath(nextNode.getPath());   
                 	}
