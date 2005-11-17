@@ -96,7 +96,8 @@ public class SimpleSearchAction extends BaseAction
 			String[] selectedColumns = simpleQueryInterfaceForm.getSelectedColumnNames();
 			
 			// Set the result view for the query.
-			List columnNames = getColumnNames(selectedColumns, query, fromTables);
+			List columnNames = null;
+			setResultColumns(selectedColumns, query, fromTables,columnNames);
 			
 			// Getting the aliasNames of the table ids in the tables in path.
 			Set forFromSet = configureSelectDataElements(query);
@@ -446,23 +447,19 @@ public class SimpleSearchAction extends BaseAction
 		    }
 			return columnDisplayNames;
 		}
-	 
-	 private List getColumnNames(String[] selectedColumns,Query query,Set tableSet) throws DAOException
+	 //set the result view for the query. 
+	 private void setResultColumns(String[] selectedColumns,Query query,Set tableSet,List columnNames) throws DAOException
 	 {
-	 	//set the result view for the query. 
-		List tempColumnNames;
-		
 		//If columns not conigured, set to default.
 	 	if(selectedColumns==null)
-			tempColumnNames	= query.setViewElements(tableSet);
+			columnNames	= query.setViewElements(tableSet);
 	 	//else set to the configured columns.
 		else
 		{
 			Vector resultViewVector = setViewElements(selectedColumns); 
 			query.setResultView(resultViewVector);
-			tempColumnNames = getColumnDisplayNames(selectedColumns); 
+			columnNames = getColumnDisplayNames(selectedColumns); 
 		}
-	 	return tempColumnNames;
 	 }
 	 
 	 /**
