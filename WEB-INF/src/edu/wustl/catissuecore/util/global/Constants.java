@@ -62,7 +62,7 @@ public class Constants
 	//Constants required for Forgot Password
 	public static final String FORGOT_PASSWORD = "forgotpassword";
 	
-	public static final String IDENTIFIER = "systemIdentifier";
+	public static final String IDENTIFIER = "IDENTIFIER";
 	public static final String LOGINNAME = "loginName";
 	public static final String LASTNAME = "lastName";
 	public static final String FIRSTNAME = "firstName";
@@ -196,7 +196,7 @@ public class Constants
 	public static final String FROM_POSITION_DATA = "fromPositionData";
 	public static final String POS_ONE ="posOne";
 	public static final String POS_TWO ="posTwo";
-	public static final boolean switchSecurity = false;
+	public static final boolean switchSecurity = true;
 	public static final String STORAGE_CONTAINER_ID ="storContId";
 	public static final String IS_RNA = "isRNA";
 	
