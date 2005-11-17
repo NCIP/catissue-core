@@ -11,11 +11,13 @@ import edu.wustl.catissuecore.bizlogic.QueryBizLogic;
 import edu.wustl.catissuecore.domain.Address;
 import edu.wustl.catissuecore.domain.CellSpecimen;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
+import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.DistributionProtocol;
 import edu.wustl.catissuecore.domain.FluidSpecimen;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.Site;
+import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.StorageContainer;
@@ -107,18 +109,22 @@ public class CatissueCoreServletContextListener
                 new String[] {SUPERVISORS_DATA_GROUP});
         protectionGroupsForObjectTypes.put(CollectionProtocol.class.getName(),
                 new String[] {ADMINISTRATORS_DATA_GROUP});
+        protectionGroupsForObjectTypes.put(CollectionProtocolRegistration.class.getName(),
+                new String[] {SUPERVISORS_DATA_GROUP});
         protectionGroupsForObjectTypes.put(SpecimenCollectionGroup.class.getName(),
-                new String[] {ADMINISTRATORS_DATA_GROUP});
+                new String[] {SUPERVISORS_DATA_GROUP});
+        protectionGroupsForObjectTypes.put(Specimen.class.getName(),
+                new String[] {SUPERVISORS_DATA_GROUP});
         protectionGroupsForObjectTypes.put(FluidSpecimen.class.getName(),
-                new String[] {ADMINISTRATORS_DATA_GROUP});
+                new String[] {SUPERVISORS_DATA_GROUP});
         protectionGroupsForObjectTypes.put(TissueSpecimen.class.getName(),
-                new String[] {ADMINISTRATORS_DATA_GROUP});
+                new String[] {SUPERVISORS_DATA_GROUP});
         protectionGroupsForObjectTypes.put(MolecularSpecimen.class.getName(),
-                new String[] {ADMINISTRATORS_DATA_GROUP});
+                new String[] {SUPERVISORS_DATA_GROUP});
         protectionGroupsForObjectTypes.put(CellSpecimen.class.getName(),
-                new String[] {ADMINISTRATORS_DATA_GROUP});
+                new String[] {SUPERVISORS_DATA_GROUP});
         protectionGroupsForObjectTypes.put(SpecimenCharacteristics.class.getName(),
-                new String[] {ADMINISTRATORS_DATA_GROUP});
+                new String[] {SUPERVISORS_DATA_GROUP});
         
         Constants.STATIC_PROTECTION_GROUPS_FOR_OBJECT_TYPES.putAll(protectionGroupsForObjectTypes);
         
