@@ -39,7 +39,7 @@ import edu.wustl.common.util.logger.Logger;
  * @author Poornima Govindrao
  *  
  */
-public abstract class BaseDistributionReportAction extends SecureAction
+public abstract class BaseDistributionReportAction extends BaseAction
 {
 	protected String []getColumnNames(String []selectedColumnsList)
 	{
@@ -205,7 +205,7 @@ public abstract class BaseDistributionReportAction extends SecureAction
     	}
     	
     }
-    protected abstract ActionForward executeSecureAction(ActionMapping mapping,
+    protected abstract ActionForward executeAction(ActionMapping mapping,
 			ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception;
 

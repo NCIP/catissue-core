@@ -111,8 +111,8 @@ public class  DistributionAction extends SpecimenEventParametersAction
 			
 			//int a = Integer.parseInt()
 			Logger.out.debug("row number of the dist item: "+rowNo);
-			List list = dao.retrieve(Specimen.class.getName(),Constants.SYSTEM_IDENTIFIER,dForm.getValue(specimenIdKey));
-			Logger.out.debug("DistributedItem:1_Specimen_systemIdentifier"+dForm.getValue(specimenIdKey));
+			List list = dao.retrieve(Specimen.class.getName(),Constants.SYSTEM_IDENTIFIER,dForm.getValue("DistributedItem:"+rowNo+"_Specimen_systemIdentifier"));
+			Logger.out.debug("DistributedItem:1_Specimen_systemIdentifier"+dForm.getValue("DistributedItem:"+rowNo+"_Specimen_systemIdentifier"));
 			Specimen specimen =(Specimen)list.get(0);
 			SpecimenCharacteristics specimenCharacteristics = specimen.getSpecimenCharacteristics();
 			

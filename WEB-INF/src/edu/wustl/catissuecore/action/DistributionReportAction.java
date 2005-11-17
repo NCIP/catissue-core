@@ -23,7 +23,7 @@ import edu.wustl.common.util.logger.Logger;
 
 public class DistributionReportAction extends BaseDistributionReportAction
 {
-	protected ActionForward executeSecureAction(ActionMapping mapping,ActionForm form, HttpServletRequest request,
+	protected ActionForward executeAction(ActionMapping mapping,ActionForm form, HttpServletRequest request,
 															HttpServletResponse response) throws Exception
 	{
 		ConfigureResultViewForm configForm = (ConfigureResultViewForm)form;
