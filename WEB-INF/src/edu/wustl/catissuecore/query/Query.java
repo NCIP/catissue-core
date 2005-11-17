@@ -1,7 +1,6 @@
 
 package edu.wustl.catissuecore.query;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -151,71 +150,6 @@ public abstract class Query
 	public void addElementToView(int position,DataElement dataElement)
 	{
 	    resultView.add(position,dataElement);
-	}
-	
-	public List setViewElements(Set aliasNameSet) throws DAOException
-	{
-	    Vector vector = new Vector();
-	    List columnList = new ArrayList();
-	    
-	    try
-	    {
-		    JDBCDAO jdbcDao = new JDBCDAO();
-	        jdbcDao.openSession(null);
-	        
-	        Iterator aliasNameIterator = aliasNameSet.iterator();
-	        while (aliasNameIterator.hasNext())
-	        {
-	            String aliasName = (String) aliasNameIterator.next();
-	            
-	            String sql =" SELECT tableData2.ALIAS_NAME, temp.COLUMN_NAME, temp.TABLES_IN_PATH, temp.DISPLAY_NAME " +
-					        " from CATISSUE_QUERY_INTERFACE_TABLE_DATA tableData2 join " +
-					        " ( SELECT  columnData.COLUMN_NAME, columnData.TABLE_ID, displayData.DISPLAY_NAME, relationData.TABLES_IN_PATH " +
-					        " FROM CATISSUE_QUERY_INTERFACE_COLUMN_DATA columnData, " +
-					        " CATISSUE_TABLE_RELATION relationData, " +
-					        " CATISSUE_QUERY_INTERFACE_TABLE_DATA tableData, " +
-					        " CATISSUE_SEARCH_DISPLAY_DATA displayData " +
-					        " where relationData.CHILD_TABLE_ID = columnData.TABLE_ID and " +
-					        " relationData.PARENT_TABLE_ID = tableData.TABLE_ID and " +
-					        " relationData.RELATIONSHIP_ID = displayData.RELATIONSHIP_ID and " +
-					        " columnData.IDENTIFIER = displayData.COL_ID and " +
-					        " tableData.ALIAS_NAME = '"+aliasName+"') as temp " +
-					        " on temp.TABLE_ID = tableData2.TABLE_ID";
-	            
-			    Logger.out.debug("DATA ELEMENT SQL : "+sql);
-			    
-			    List list = jdbcDao.executeQuery(sql, null, Constants.INSECURE_RETRIEVE, null,null);
-			    
-			    Logger.out.debug("list.size()************************"+list.size());
-			    String [] columnNames = new String[list.size()];
-			    Iterator iterator = list.iterator();
-			    int i = 0;
-			    while(iterator.hasNext())
-			    {
-			        List rowList = (List) iterator.next();
-			        DataElement dataElement = new DataElement();
-			        dataElement.setTable((String)rowList.get(0));
-			        dataElement.setField((String)rowList.get(1)+"."+(String)rowList.get(2));
-			        vector.add(dataElement);
-			        columnList.add((String)rowList.get(3));
-			    }
-	        }
-		    
-		    jdbcDao.closeSession();
-	    }
-	    catch(DAOException daoExp)
-	    {
-	        throw new DAOException(daoExp.getMessage(),daoExp);
-	    }
-	    catch(ClassNotFoundException classExp)
-	    {
-	        throw new DAOException(classExp.getMessage(),classExp);
-	    }
-	    
-	    //Setting the view column names.
-	    setResultView(vector);
-	    
-	    return columnList;
 	}
 	
 	/**
@@ -507,6 +441,7 @@ public abstract class Query
         Logger.out.debug("Tables related to "+aliasName+" "+relatedTableNames.toString());
         return relatedTableNames;
     }
+    
     /**
      * @return Returns the tableSet.
      */
