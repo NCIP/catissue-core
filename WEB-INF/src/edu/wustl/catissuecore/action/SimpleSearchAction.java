@@ -65,142 +65,135 @@ public class SimpleSearchAction extends BaseAction
 			Logger.out.debug(Constants.MENU_SELECTED+" set in SimpleSearch Action : -- "+ strMenu  ); 
 		// -------- set the selected menu ------- end
 		HttpSession session = request.getSession();
-
+		
 		String target = Constants.SUCCESS;
-		try
-		{
-		    Map map= (Map)session.getAttribute(Constants.SIMPLE_QUERY_MAP);
 		    
-			//If map from session is null get the map values from form.
-			if(map==null)
+		Map map= (Map)session.getAttribute(Constants.SIMPLE_QUERY_MAP);
+	    
+		//If map from session is null get the map values from form.
+		if(map==null)
+		{
+			map = simpleQueryInterfaceForm.getValuesMap();
+			session.setAttribute(Constants.SIMPLE_QUERY_MAP,map);
+		}
+		
+		MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.query");
+		Collection simpleConditionNodeCollection = parser.generateData(map, true);
+		
+		// Get the alias name of the first object in the condition.  
+		String viewAliasName = (String)map.get("SimpleConditionsNode:1_Condition_DataElement_table");
+		
+		// Instantiating the query object. 
+		Query query = QueryFactory.getInstance().newQuery(Query.SIMPLE_QUERY, viewAliasName);
+		
+		// Puts the single quotes for attributes of type string and date and 
+		// returns the Set of objects to which the attributes belong.
+		Set fromTables = new HashSet();
+		handleStringAndDateConditions(simpleConditionNodeCollection, fromTables);
+		
+		// Get the configured result view columns else is null. 
+		String[] selectedColumns = simpleQueryInterfaceForm.getSelectedColumnNames();
+		
+		// Set the result view for the query.
+		List columnNames = new ArrayList();
+		setResultColumns(selectedColumns, query, fromTables,columnNames);
+		
+		// Set the from tables in the query.
+		query.setTableSet(fromTables);
+		
+		// Checks and gets the activity status conditions for all the objects in the from clause
+		// and adds it in the simple conditions node collection.
+		addActivityStatusConditions(simpleConditionNodeCollection, fromTables);
+		
+        // Sets the condition objects from user in the query object.
+		((SimpleQuery) query).addConditions(simpleConditionNodeCollection);
+		
+		// List of results the query will return on execution.
+		List list = null;
+		if (simpleQueryInterfaceForm.getPageOf()
+				.equals(Constants.PAGEOF_SIMPLE_QUERY_INTERFACE))
+		{
+			Set tableSet;
+			if(Constants.switchSecurity)
 			{
-				map = simpleQueryInterfaceForm.getValuesMap();
-				session.setAttribute(Constants.SIMPLE_QUERY_MAP,map);
-			}
-			
-			MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.query");
-			Collection simpleConditionNodeCollection = parser.generateData(map, true);
-			
-			// Get the alias name of the first object in the condition.  
-			String viewAliasName = (String)map.get("SimpleConditionsNode:1_Condition_DataElement_table");
-			
-			// Instantiating the query object. 
-			Query query = QueryFactory.getInstance().newQuery(Query.SIMPLE_QUERY, viewAliasName);
-			
-			// Puts the single quotes for attributes of type string and date and 
-			// returns the Set of objects to which the attributes belong.
-			Set fromTables = new HashSet();
-			handleStringAndDateConditions(simpleConditionNodeCollection, fromTables);
-			
-			// Get the configured result view columns else is null. 
-			String[] selectedColumns = simpleQueryInterfaceForm.getSelectedColumnNames();
-			
-			// Set the result view for the query.
-			List columnNames = null;
-			setResultColumns(selectedColumns, query, fromTables,columnNames);
-			
-			// Getting the aliasNames of the table ids in the tables in path.
-			Set forFromSet = configureSelectDataElements(query);
-			fromTables.addAll(forFromSet);
-			
-			// Set the from tables in the query.
-			query.setTableSet(fromTables);
-			
-			// Checks and gets the activity status conditions for all the objects in the from clause
-			// and adds it in the simple conditions node collection.
-			addActivityStatusConditions(simpleConditionNodeCollection, fromTables);
-			
-            // Sets the condition objects from user in the query object.
-			((SimpleQuery) query).addConditions(simpleConditionNodeCollection);
-			
-			// List of results the query will return on execution.
-			List list = null;
-			if (simpleQueryInterfaceForm.getPageOf()
-					.equals(Constants.PAGEOF_SIMPLE_QUERY_INTERFACE))
-			{
-				Set tableSet;
-				if(Constants.switchSecurity)
-				{
-					tableSet = query.getTableSet();
-				}
-				else
-				{
-					tableSet = new HashSet();
-				}
-				
-				// Aarti: identifiers of the objects that need to be checked for object level privileges.
-				String[][] objectIdentifiers = new String[tableSet.size()][2];
-				Iterator fromTablesIterator = tableSet.iterator();
-				DataElement identifierDataElement;
-				String tableName;
-				for(int i =0; i<tableSet.size(); i++)
-				{
-					tableName = (String) fromTablesIterator.next();
-					objectIdentifiers[i][0] = tableName;
-					objectIdentifiers[i][1] = String.valueOf(i);
-					identifierDataElement = new DataElement(tableName,"IDENTIFIER");
-					query.addElementToView(i,identifierDataElement);
-					columnNames.add(tableName+" ID");
-				}
-				
-				//Setting column ids for the corresponding table aliases.
-				fromTablesIterator = tableSet.iterator();
-				Map columnIdsMap = new HashMap();
-				for(int i =0; i<tableSet.size(); i++)
-				{
-					tableName = (String) fromTablesIterator.next();
-					columnIdsMap.put(tableName,query.getColumnIds(tableName));
-				}
-				
-				list = query.execute(getSessionData(request),
-				        Constants.OBJECT_LEVEL_SECURE_RETRIEVE,objectIdentifiers,columnIdsMap);
+				tableSet = query.getTableSet();
 			}
 			else
 			{
-				list = query.execute(getSessionData(request),Constants.INSECURE_RETRIEVE,null,null);
+				tableSet = new HashSet();
 			}
 			
-			if (list.isEmpty())
+			// Aarti: identifiers of the objects that need to be checked for object level privileges.
+			String[][] objectIdentifiers = new String[tableSet.size()][2];
+			Iterator fromTablesIterator = tableSet.iterator();
+			DataElement identifierDataElement;
+			String tableName;
+			for(int i =0; i<tableSet.size(); i++)
 			{
-				ActionErrors errors = new ActionErrors();
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-								"simpleQuery.noRecordsFound"));
-				saveErrors(request, errors);
-				String alias = (String)session.getAttribute(Constants.SIMPLE_QUERY_ALIAS_NAME);
-				if(alias==null)
-					alias = simpleQueryInterfaceForm.getAliasName();
-				String path = "SimpleQueryInterface.do?pageOf="
-						+ simpleQueryInterfaceForm.getPageOf() + "&aliasName=" + alias;
-				simpleQueryInterfaceForm.setValues(map);
-				Logger.out.debug("path*************************"+path); 
-				RequestDispatcher requestDispatcher = request.getRequestDispatcher(path);
+				tableName = (String) fromTablesIterator.next();
+				objectIdentifiers[i][0] = tableName;
+				objectIdentifiers[i][1] = String.valueOf(i);
+				identifierDataElement = new DataElement(tableName,Constants.SYSTEM_IDENTIFIER_COLUMN_NAME);
+				query.addElementToView(i,identifierDataElement);
+				columnNames.add(tableName+" ID");
+			}
+			
+			//Setting column ids for the corresponding table aliases.
+			fromTablesIterator = tableSet.iterator();
+			Map columnIdsMap = new HashMap();
+			for(int i =0; i<tableSet.size(); i++)
+			{
+				tableName = (String) fromTablesIterator.next();
+				columnIdsMap.put(tableName,query.getColumnIds(tableName));
+			}
+			
+			list = query.execute(getSessionData(request),
+			        Constants.OBJECT_LEVEL_SECURE_RETRIEVE,objectIdentifiers,columnIdsMap);
+		}
+		else
+		{
+			list = query.execute(getSessionData(request),Constants.INSECURE_RETRIEVE,null,null);
+		}
+		
+		// If the result contains no data, show error message.
+		if (list.isEmpty())
+		{
+			ActionErrors errors = new ActionErrors();
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+							"simpleQuery.noRecordsFound"));
+			saveErrors(request, errors);
+			String alias = (String)session.getAttribute(Constants.SIMPLE_QUERY_ALIAS_NAME);
+			if(alias==null)
+				alias = simpleQueryInterfaceForm.getAliasName();
+			String path = "SimpleQueryInterface.do?pageOf="
+					+ simpleQueryInterfaceForm.getPageOf() + "&aliasName=" + alias;
+			simpleQueryInterfaceForm.setValues(map);
+			
+			RequestDispatcher requestDispatcher = request.getRequestDispatcher(path);
+			requestDispatcher.forward(request, response);
+		}
+		else
+		{
+		    // If the result contains only one row and the page is of edit  
+		    // then show the result in the edit page.
+			if ((list.size() == 1) 
+			        && (Constants.PAGEOF_SIMPLE_QUERY_INTERFACE.equals(simpleQueryInterfaceForm.getPageOf()) == false))
+			{
+				List rowList = (List) list.get(0);
+				String action = "SearchObject.do?pageOf="
+						+ simpleQueryInterfaceForm.getPageOf()
+						+ "&operation=search&systemIdentifier=" + rowList.get(0);
+				
+				RequestDispatcher requestDispatcher = request.getRequestDispatcher(action);
 				requestDispatcher.forward(request, response);
 			}
 			else
 			{
-				if ((list.size() == 1) 
-				        && (Constants.PAGEOF_SIMPLE_QUERY_INTERFACE.equals(simpleQueryInterfaceForm.getPageOf()) == false))
-				{
-					List rowList = (List) list.get(0);
-					String action = "SearchObject.do?pageOf="
-							+ simpleQueryInterfaceForm.getPageOf()
-							+ "&operation=search&systemIdentifier=" + rowList.get(0);
-					
-					RequestDispatcher requestDispatcher = request.getRequestDispatcher(action);
-					requestDispatcher.forward(request, response);
-				}
-				else
-				{
-					request.setAttribute(Constants.PAGEOF, simpleQueryInterfaceForm.getPageOf());
-					request.setAttribute(Constants.SPREADSHEET_DATA_LIST, list);
-					request.setAttribute(Constants.SPREADSHEET_COLUMN_LIST, columnNames);
-				}
+			    // If results contain more than one result, show the spreadsheet view.  
+				request.setAttribute(Constants.PAGEOF, simpleQueryInterfaceForm.getPageOf());
+				request.setAttribute(Constants.SPREADSHEET_DATA_LIST, list);
+				request.setAttribute(Constants.SPREADSHEET_COLUMN_LIST, columnNames);
 			}
-		}
-		catch (DAOException daoExp)
-		{
-			Logger.out.debug(daoExp.getMessage(), daoExp);
-			target = Constants.FAILURE;
 		}
 
 		return mapping.findForward(target);
@@ -326,6 +319,7 @@ public class SimpleSearchAction extends BaseAction
         {
             String fullyQualifiedClassName = (String) aliasNameIterator.next();
             SimpleConditionsNode activityStatusCondition = getActivityStatusCondition(fullyQualifiedClassName);
+            
             if (activityStatusCondition != null)
             {
                 activityStatusCondition.getOperator().setOperator(Constants.AND_JOIN_CONDITION);
@@ -447,19 +441,29 @@ public class SimpleSearchAction extends BaseAction
 		    }
 			return columnDisplayNames;
 		}
+	 
 	 //set the result view for the query. 
-	 private void setResultColumns(String[] selectedColumns,Query query,Set tableSet,List columnNames) throws DAOException
+	 private void setResultColumns(String[] selectedColumns, Query query, Set tableSet, List columnNames) throws DAOException
 	 {
+	     Vector selectDataElements = null;
 		//If columns not conigured, set to default.
 	 	if(selectedColumns==null)
-			columnNames	= query.setViewElements(tableSet);
+	 	{
+	 	  QueryBizLogic bizLogic = (QueryBizLogic)BizLogicFactory.getBizLogic(Constants.SIMPLE_QUERY_INTERFACE_ID); 
+	 	  selectDataElements = bizLogic.getSelectDataElements(tableSet, columnNames);
+	 	}
 	 	//else set to the configured columns.
 		else
 		{
-			Vector resultViewVector = setViewElements(selectedColumns); 
-			query.setResultView(resultViewVector);
+			selectDataElements = setViewElements(selectedColumns); 
 			columnNames = getColumnDisplayNames(selectedColumns); 
 		}
+	 	
+	 	// Getting the aliasNames of the table ids in the tables in path.
+		Set forFromSet = configureSelectDataElements(selectDataElements);
+		tableSet.addAll(forFromSet);
+		
+	 	query.setResultView(selectDataElements);
 	 }
 	 
 	 /**
@@ -469,10 +473,8 @@ public class SimpleSearchAction extends BaseAction
 	  * @return Set of objects of that attributes to be added in the from clause.
 	  * @throws DAOException
 	  */
-	 private Set configureSelectDataElements(Query query) throws DAOException
+	 private Set configureSelectDataElements(Vector selectDataElements) throws DAOException
 	 {
-	     // Getting the DataElement for select columns of the query.
-		 Vector selectDataElements = query.getResultView();
 	     Set forFromSet = new HashSet();
 	     
 	     Iterator iterator = selectDataElements.iterator();
@@ -493,19 +495,6 @@ public class SimpleSearchAction extends BaseAction
 	         }
 	     }
 	     
-	     query.setResultView(selectDataElements);
-	     
 	     return forFromSet;
 	 }
-	 
-//	 private void displayConditions(Collection coll)
-//	 {
-//	     Iterator iterator = coll.iterator();
-//	     
-//	     while (iterator.hasNext())
-//	     {
-//	         SimpleConditionsNode s = (SimpleConditionsNode)iterator.next();
-//	         Logger.out.debug("Next Operator*********************"+s.getOperator().getOperator());
-//	     }
-//	 }
 }
