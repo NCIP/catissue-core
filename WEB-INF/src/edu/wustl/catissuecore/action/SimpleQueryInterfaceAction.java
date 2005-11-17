@@ -47,7 +47,7 @@ public class SimpleQueryInterfaceAction extends SecureAction
         
         for (int i=1;i<=counter;i++)
         {
-            //Key of present object.
+            // Key of present object.
             String key = "SimpleConditionsNode:"+i+"_Condition_DataElement_table";
             String value = (String)simpleQueryInterfaceForm.getValue(key);
             
@@ -62,6 +62,7 @@ public class SimpleQueryInterfaceAction extends SecureAction
                 }
             }
             
+            // For the last condition row.  
             if (i == counter) 
             {
                 //Key of previous object.
@@ -76,9 +77,10 @@ public class SimpleQueryInterfaceAction extends SecureAction
                     {
                         String objectNameList = "objectList"+i;
                         request.setAttribute(objectNameList, nextTableNameList);
+                        request.setAttribute(Constants.ATTRIBUTE_NAME_LIST, Constants.ATTRIBUTE_NAME_ARRAY);
                     }
                 }
-                else
+                else//If there is only one condition row. 
                 {
                     String aliasName = request.getParameter(Constants.TABLE_ALIAS_NAME);
                     
@@ -87,6 +89,7 @@ public class SimpleQueryInterfaceAction extends SecureAction
                     if (objectNameValueBeanList.isEmpty() == false)
                     {
                         request.setAttribute(Constants.OBJECT_NAME_LIST, objectNameValueBeanList);
+                        request.setAttribute(Constants.ATTRIBUTE_NAME_LIST, Constants.ATTRIBUTE_NAME_ARRAY);
                     }
                     
                     if ((aliasName != null) && (!"".equals(aliasName)))
@@ -102,7 +105,7 @@ public class SimpleQueryInterfaceAction extends SecureAction
             		}
                 }
             }
-            else
+            else// For rows other than last, show only the object selected.
             {
                 //Key of the next operator (AND/OR).
                 String nextOperatorKey = "SimpleConditionsNode:"+i+"_Operator_operator";
@@ -125,7 +128,6 @@ public class SimpleQueryInterfaceAction extends SecureAction
             }
         }
         
-        request.setAttribute(Constants.ATTRIBUTE_NAME_LIST, Constants.ATTRIBUTE_NAME_ARRAY);
         request.setAttribute(Constants.ATTRIBUTE_CONDITION_LIST, Constants.ATTRIBUTE_CONDITION_ARRAY);
         
         HttpSession session = request.getSession();
