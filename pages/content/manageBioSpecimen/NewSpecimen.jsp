@@ -551,10 +551,11 @@ Map map = form.getExternalIdentifier();
 							readOnly=false;
 					%>
 				 	<td class="formField">
+					 	&nbsp;<bean:message key="storageContainer.parentID" />	
 		     			<html:text styleClass="formFieldSized3" styleId="storageContainer" maxlength="10"  property="storageContainer"  readonly="<%=readOnly%>" />
-		     			-
+		     			&nbsp;<bean:message key="storageContainer.positionOne" />
 		     			<html:text styleClass="formFieldSized3" styleId="positionDimensionOne" maxlength="10"  property="positionDimensionOne" readonly="<%=readOnly%>" />
-		     			-
+		     			&nbsp;<bean:message key="storageContainer.positionTwo" />
 		     			<html:text styleClass="formFieldSized3" styleId="positionDimensionTwo" maxlength="10"  property="positionDimensionTwo" readonly="<%=readOnly%>" />
 						&nbsp;
 					</td>

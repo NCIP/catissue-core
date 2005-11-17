@@ -186,10 +186,11 @@
 				</label>
 			</td>
 			<td class="formField">
+				&nbsp;<bean:message key="storageContainer.parentID" />
      			<html:text styleClass="formFieldSized3" maxlength="10"  styleId="storageContainer" property="storageContainer" />
-     			-
+     			&nbsp;<bean:message key="storageContainer.positionOne" />
      			<html:text styleClass="formFieldSized3" maxlength="10"  styleId="positionDimensionOne" property="positionDimensionOne" />
-     			-
+     			&nbsp;<bean:message key="storageContainer.positionTwo" />
      			<html:text styleClass="formFieldSized3" maxlength="10"  styleId="positionDimensionTwo" property="positionDimensionTwo" />
 
 				<html:hidden property="positionInStorageContainer" />
