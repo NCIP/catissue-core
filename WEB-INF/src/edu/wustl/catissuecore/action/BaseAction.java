@@ -71,7 +71,7 @@ public abstract class BaseAction extends Action
 	    SessionDataBean sessionData = getSessionData(request);
 	    if(sessionData != null)
 	    {
-	        sessionData.getUserName();
+	        return sessionData.getUserName();
 	    }
 	    return null;
 	}
