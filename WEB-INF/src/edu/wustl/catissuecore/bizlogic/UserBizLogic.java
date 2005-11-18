@@ -56,6 +56,8 @@ public class UserBizLogic extends DefaultBizLogic
             throws DAOException, UserNotAuthorizedException
     {
         User user = (User) obj;
+        gov.nih.nci.security.authorization.domainobjects.User csmUser = 
+            				new gov.nih.nci.security.authorization.domainobjects.User();
         
         try
         {
@@ -96,8 +98,6 @@ public class UserBizLogic extends DefaultBizLogic
             // If the page is of signup user don't create the csm user.
             if (user.getPageOf().equals(Constants.PAGEOF_SIGNUP) == false)
             {
-                gov.nih.nci.security.authorization.domainobjects.User csmUser = new gov.nih.nci.security.authorization.domainobjects.User();
-
                 csmUser.setLoginName(user.getLoginName());
                 csmUser.setLastName(user.getLastName());
                 csmUser.setFirstName(user.getFirstName());
@@ -145,11 +145,26 @@ public class UserBizLogic extends DefaultBizLogic
                 emailHandler.sendApprovalEmail(user);
             }
         }
-        catch (SMException smex)
+        catch (Exception exp)
         {
-            Logger.out.debug(smex.getMessage(), smex);
-            throw new DAOException(smex.getCause().getMessage(),smex);
-        }  
+            Logger.out.debug(exp.getMessage(), exp);
+            try
+            {
+                if (csmUser.getUserId() != null)
+                {
+                    SecurityManager.getInstance(ApproveUserBizLogic.class)
+                    					.removeUser(csmUser.getUserId().toString());
+                }
+            }
+            catch(SMException smExp)
+            {
+                Logger.out.debug(ApplicationProperties.getValue("errors.user.delete")
+                        				+smExp.getMessage(), smExp);
+                throw new DAOException(smExp.getMessage(), smExp);
+            }
+            throw new DAOException(ApplicationProperties.getValue("errors.user.approve")
+                    					+exp.getMessage(), exp);
+        }
     }
     
     /**
@@ -241,8 +256,6 @@ public class UserBizLogic extends DefaultBizLogic
                 if ((Constants.PAGEOF_USER_PROFILE.equals(user.getPageOf()) == false)
                         && (Constants.PAGEOF_CHANGE_PASSWORD.equals(user.getPageOf()) == false))
                 {
-                    Logger.out.debug("csmUser..........................."+csmUser);
-                    Logger.out.debug("user................................."+user);
                     SecurityManager.getInstance(UserBizLogic.class).assignRoleToUser(
                             csmUser.getLoginName(), user.getRoleId());
                 }

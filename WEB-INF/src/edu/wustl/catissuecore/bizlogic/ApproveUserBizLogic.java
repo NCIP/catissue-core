@@ -21,6 +21,7 @@ import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.EmailHandler;
 import edu.wustl.catissuecore.util.Roles;
+import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SecurityDataBean;
 import edu.wustl.common.beans.SessionDataBean;
@@ -45,15 +46,16 @@ public class ApproveUserBizLogic extends DefaultBizLogic
     protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean) 
     											throws DAOException, UserNotAuthorizedException
     {
-        Logger.out.debug("In Approve user BizLogic ..................");
         User user = (User) obj;
+
+        gov.nih.nci.security.authorization.domainobjects.User csmUser = 
+            					new gov.nih.nci.security.authorization.domainobjects.User();
         
         try
         {
             //If the activity status is Active, create a csm user.
             if (Constants.ACTIVITY_STATUS_ACTIVE.equals(user.getActivityStatus()))
             {
-                gov.nih.nci.security.authorization.domainobjects.User csmUser = new gov.nih.nci.security.authorization.domainobjects.User();
                 csmUser.setLoginName(user.getLoginName());
                 csmUser.setLastName(user.getLastName());
                 csmUser.setFirstName(user.getFirstName());
@@ -115,10 +117,25 @@ public class ApproveUserBizLogic extends DefaultBizLogic
                 emailHandler.sendRejectionEmail(user);
 	        }
         }
-        catch (SMException smex)
+        catch (Exception exp)
         {
-            Logger.out.debug(smex.getMessage(), smex);
-            throw new DAOException(smex.getCause().getMessage());
+            Logger.out.debug(exp.getMessage(), exp);
+            try
+            {
+                if (csmUser.getUserId() != null)
+                {
+                    SecurityManager.getInstance(ApproveUserBizLogic.class)
+                    					.removeUser(csmUser.getUserId().toString());
+                }
+            }
+            catch(SMException smExp)
+            {
+                Logger.out.debug(ApplicationProperties.getValue("errors.user.delete")
+                        				+smExp.getMessage(), smExp);
+                throw new DAOException(smExp.getMessage(), smExp);
+            }
+            throw new DAOException(ApplicationProperties.getValue("errors.user.approve")
+                    					+exp.getMessage(), exp);
         }
     }
     
