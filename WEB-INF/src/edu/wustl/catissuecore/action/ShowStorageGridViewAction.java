@@ -53,7 +53,7 @@ public class ShowStorageGridViewAction  extends BaseAction
             HttpServletRequest request, HttpServletResponse response)
             throws Exception
     {
-        String systemIdentifier = request.getParameter(Constants.IDENTIFIER);
+        String systemIdentifier = request.getParameter(Constants.SYSTEM_IDENTIFIER);
         
         // Aarti: Check whether user has use permission on the storage container
 		// or not

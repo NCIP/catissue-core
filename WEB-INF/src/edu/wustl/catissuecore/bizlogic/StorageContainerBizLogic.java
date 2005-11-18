@@ -478,7 +478,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic
 
         List list = null;
         try{
-        list = dao.executeQuery(queryStr, null, Constants.INSECURE_RETRIEVE, null,null);
+        list = dao.executeQuery(queryStr, null, false, null);
         }
         catch(Exception ex)
 		{

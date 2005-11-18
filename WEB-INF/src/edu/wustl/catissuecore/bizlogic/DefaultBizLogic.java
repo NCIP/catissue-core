@@ -325,6 +325,7 @@ public class  DefaultBizLogic extends AbstractBizLogic
 		
 		List list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, 
 				whereColumnCondition, whereColumnValue, joinCondition);
+		list = Utility.removeNull(list);
 		Logger.out.debug(sourceClass.getName()+" Related objects to "+edu.wustl.common.util.Utility.getArrayString(objIDArr)+" are "+list);
 		return list;
     }
@@ -345,6 +346,7 @@ public class  DefaultBizLogic extends AbstractBizLogic
 		Logger.out.debug(sourceClass.getName() + " Related objects to "
 				+ edu.wustl.common.util.Utility.getArrayString(objIDArr)
 				+ " are " + list);
+		list = Utility.removeNull(list);
 		return list;
 	}
     

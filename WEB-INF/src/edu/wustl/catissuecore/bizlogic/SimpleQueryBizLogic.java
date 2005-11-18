@@ -12,18 +12,22 @@ package edu.wustl.catissuecore.bizlogic;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
 import edu.wustl.catissuecore.dao.JDBCDAO;
 import edu.wustl.catissuecore.query.DataElement;
+import edu.wustl.catissuecore.query.Query;
 import edu.wustl.catissuecore.query.SimpleConditionsNode;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.common.beans.QueryResultObjectData;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
@@ -61,6 +65,9 @@ public class SimpleQueryBizLogic extends DefaultBizLogic
         	}
         	
         	fromTables.add(simpleConditionsNode.getCondition().getDataElement().getTable());
+        	
+        	
+        	
         }
         return fromTables;
     }
@@ -371,7 +378,7 @@ public class SimpleQueryBizLogic extends DefaultBizLogic
 		            
 				    Logger.out.debug("DATA ELEMENT SQL : "+sql);
 				    
-				    List list = jdbcDao.executeQuery(sql, null, Constants.INSECURE_RETRIEVE, null,null);
+				    List list = jdbcDao.executeQuery(sql, null, false, null);
 				    
 				    Logger.out.debug("list.size()************************"+list.size());
 				    String [] columnNames = new String[list.size()];
@@ -397,5 +404,123 @@ public class SimpleQueryBizLogic extends DefaultBizLogic
 		    
 		    return vector;
 		}
+	    
+	    
+
+		/**
+		 * @param fromAliasNameValue
+		 * @return
+		 * @throws DAOException
+		 */
+		public QueryResultObjectData createQueryResultObjectData(String fromAliasNameValue) throws DAOException {
+			QueryResultObjectData queryResultObjectData;
+			queryResultObjectData = new QueryResultObjectData();
+			queryResultObjectData.setAliasName(fromAliasNameValue);
+			//Aarti: getting related tables that should be dependent 
+			//on main object for authorization
+			Vector relatedTables = new Vector();
+			relatedTables = QueryBizLogic
+					.getRelatedTableAliases(fromAliasNameValue);
+//					Aarti: Get main query objects which should have individual checks
+			//for authorization and should not be dependent on others
+			Vector mainQueryObjects = QueryBizLogic.getMainObjectsOfQuery();
+			
+			String queryObject;
+			//Aarti: remove independent query objects from related objects
+			//vector and add them to tableSet so that their authorization
+			//is checked individually
+			for (int i = 0; i < mainQueryObjects.size(); i++) {
+				queryObject = (String) mainQueryObjects.get(i);
+				if (relatedTables.contains(queryObject)) {
+					relatedTables.remove(queryObject);
+//							tableSet.add(queryObject);
+					if(!queryObject.equals(fromAliasNameValue))
+					{
+						queryResultObjectData.addRelatedQueryResultObject(new QueryResultObjectData(queryObject));
+					}
+				}
+			}
+			
+			//Aarti: Map all related tables to the main table
+//					relatedTablesMap.put(fromAliasNameValue, relatedTables);
+			queryResultObjectData.setDependentObjectAliases(relatedTables);
+			return queryResultObjectData;
+		}
+
+		/**
+		 * @param queryResultObjectDataMap
+		 * @param query
+		 */
+		public List addObjectIdentifierColumnsToQuery(Map queryResultObjectDataMap, Query query) {
+			DataElement identifierDataElement;
+			
+			List columnNames = new ArrayList();
+			Set keySet = queryResultObjectDataMap.keySet();
+			Iterator keyIterator = keySet.iterator();
+			QueryResultObjectData queryResultObjectData2;
+			QueryResultObjectData queryResultObjectData3;
+			Vector queryObjects;
+			Map columnIdsMap = new HashMap();
+			int columnId =0;
+			for(int i=0;keyIterator.hasNext();i++)
+			{
+				queryResultObjectData2 = (QueryResultObjectData) queryResultObjectDataMap.get(keyIterator.next());
+				queryObjects = queryResultObjectData2.getIndependentQueryObjects();
+				for(int j = 0 ; j<queryObjects.size();j++)
+				{
+					queryResultObjectData3 = (QueryResultObjectData) queryObjects.get(j);
+					identifierDataElement = new DataElement(queryResultObjectData3.getAliasName(),
+						Constants.IDENTIFIER);
+					query.addElementToView(columnId, identifierDataElement);
+					queryResultObjectData3.setIdentifierColumnId(columnId++);
+					columnNames.add(queryResultObjectData3.getAliasName() + " ID");
+				}
+				
+			}
+			return columnNames;
+		}
+
+		/**
+		 * @param queryResultObjectDataMap
+		 * @param query
+		 */
+		public void setDependentIdentifiedColumnIds(Map queryResultObjectDataMap, Query query) {
+			Iterator keyIterator;
+			QueryResultObjectData queryResultObjectData2;
+			QueryResultObjectData queryResultObjectData3;
+			Vector queryObjects;
+			Set keySet2 = queryResultObjectDataMap.keySet();
+			keyIterator = keySet2.iterator();
+			for(int i=0;keyIterator.hasNext();i++)
+			{
+				queryResultObjectData2 = (QueryResultObjectData) queryResultObjectDataMap.get(keyIterator.next());
+				queryObjects = queryResultObjectData2.getIndependentQueryObjects();
+				for(int j = 0 ; j<queryObjects.size();j++)
+				{
+					queryResultObjectData3 = (QueryResultObjectData) queryObjects.get(j);
+					queryResultObjectData3.setDependentColumnIds(query.getColumnIds(queryResultObjectData3.getAliasName(),queryResultObjectData3.getDependentObjectAliases()));
+					queryResultObjectData3.setIdentifiedDataColumnIds(query.getIdentifiedColumnIds(queryResultObjectData3.getAliasName(),queryResultObjectData3.getDependentObjectAliases()));
+					Logger.out.debug(" table:"+queryResultObjectData3.getAliasName()+" columnIds:"+queryResultObjectData3.getDependentColumnIds());
+				}
+				
+			}
+		}
+
+		/**
+		 * @param fromTables
+		 * @param queryResultObjectDataMap
+		 */
+		public void createQueryResultObjectData(Set fromTables, Map queryResultObjectDataMap) throws DAOException{
+			Iterator iterator = fromTables.iterator();
+			String tableAlias;
+			QueryResultObjectData queryResultObjectData;
+	        while (iterator.hasNext())
+	        {
+	        	tableAlias = (String) iterator.next();
+	        	queryResultObjectData = createQueryResultObjectData(tableAlias);
+	        	queryResultObjectDataMap.put(tableAlias,queryResultObjectData);
+	        }
+		}
+	    
 
 }

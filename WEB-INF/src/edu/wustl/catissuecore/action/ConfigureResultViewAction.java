@@ -103,7 +103,7 @@ public class ConfigureResultViewAction extends BaseAction  {
         
         JDBCDAO jdbcDao = new JDBCDAO();
         jdbcDao.openSession(null);
-        List list = jdbcDao.executeQuery(sql, null, Constants.INSECURE_RETRIEVE, null,null);
+        List list = jdbcDao.executeQuery(sql, null, false, null);
         jdbcDao.closeSession();
         String tableName = new String();
         String columnName = new String();

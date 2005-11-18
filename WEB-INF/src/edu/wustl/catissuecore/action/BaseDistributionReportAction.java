@@ -177,7 +177,7 @@ public abstract class BaseDistributionReportAction extends BaseAction
     	    query.setTableSet(tableSet);
     		query.setResultView(vector);
     		
-    		List list1 = query.execute(null,Constants.INSECURE_RETRIEVE,null,null);
+    		List list1 = query.execute(null,false, null);
     		Logger.out.debug("Size of the Data from the database" +list1.size());
     		Iterator listItr = list1.iterator();
     		while(listItr.hasNext())
