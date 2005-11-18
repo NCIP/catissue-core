@@ -425,6 +425,10 @@ public class Constants
 	public static final String SEGMENT_ID_COLUMN = "SEGMENT_ID";
 	public static final String SAMPLE_ID_COLUMN = "SAMPLE_ID";
 	
+	//SimpleSearchAction
+	public static final String SIMPLE_QUERY_NO_RESULTS = "noResults";
+	public static final String SIMPLE_QUERY_SINGLE_RESULT = "singleResult";
+	
 	//Identifiers for various Form beans
 	public static final int USER_FORM_ID = 1;
 	public static final int PARTICIPANT_FORM_ID = 2;
@@ -571,6 +575,8 @@ public class Constants
 	public static final String SHOPPING_CART = "shoppingCart";
 	
 	public static final String SELECT_OPTION = "-- Select --";
+	public static final int SELECT_OPTION_VALUE = -1;
+	
 	
 //	public static final String[] TISSUE_SITE_ARRAY = {
 //	        SELECT_OPTION,"Sex","male","female",
