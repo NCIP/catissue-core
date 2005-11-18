@@ -275,6 +275,8 @@ public class Constants
 	//Query Results view Actions
 	public static final String TREE_VIEW_ACTION = "TreeView.do";
 	public static final String DATA_VIEW_FRAME_ACTION = "SpreadsheetView.do";
+	public static final String SIMPLE_QUERY_INTERFACE_ACTION = "/SimpleQueryInterface.do";
+	public static final String SEARCH_OBJECT_ACTION = "/SearchObject.do";
 	
 	//New Specimen Data Actions.
 	public static final String SPECIMEN_ADD_ACTION = "NewSpecimenAdd.do";
