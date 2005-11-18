@@ -109,17 +109,18 @@ public abstract class Query
 
 	/**
 	 * This method executes the query string formed from getString method and creates a temporary table.
+	 * @param isSecureExecute TODO
 	 * @param columnIdsMap
 	 * @return Returns true in case everything is successful else false
 	 */
-	public List execute(SessionDataBean sessionDataBean, int securityParam, String[][] objectIdentifiers, Map columnIdsMap) throws DAOException
+	public List execute(SessionDataBean sessionDataBean, boolean isSecureExecute, Map queryResultObjectDataMap) throws DAOException
 	{
 	    try
 	    {
 	    	JDBCDAO dao = (JDBCDAO)DAOFactory.getDAO(Constants.JDBC_DAO);
 	        dao.openSession(null);
 	        Logger.out.debug("SQL************"+getString());
-			List list = dao.executeQuery(getString(), sessionDataBean, securityParam, objectIdentifiers, columnIdsMap);
+			List list = dao.executeQuery(getString(), sessionDataBean, isSecureExecute, queryResultObjectDataMap);
 			dao.closeSession();
 	        return list;
 	    }
@@ -151,7 +152,7 @@ public abstract class Query
 	{
 	    resultView.add(position,dataElement);
 	}
-	
+		
 	/**
 	 * Returns the SQL representation of this query object
 	 * @return
@@ -417,7 +418,7 @@ public abstract class Query
                     + "where relationData.PARENT_TABLE_ID = tableData.TABLE_ID and tableData.ALIAS_NAME = '"
                     + aliasName
                     + "') as relatedTables  on relatedTables.CHILD_TABLE_ID = tableData2.TABLE_ID";
-            list = dao.executeQuery(getString(), null, Constants.INSECURE_RETRIEVE, null,null);
+            list = dao.executeQuery(getString(), null, false, null);
 
             Iterator iterator = list.iterator();
             while (iterator.hasNext())
@@ -485,14 +486,31 @@ public abstract class Query
         }
     }
     
-    public Vector getColumnIds(String tableAlias)
+    /**
+     * This method returns all the column numbers in the query
+     * that belong to tableAlias and the related 
+     * tables passed as parameter
+     * @param tableAlias
+     * @param relatedTables
+     * @return
+     */
+    public Vector getColumnIds(String tableAlias, Vector relatedTables)
     {
+    	Logger.out.debug(" tableAlias:"+tableAlias+" relatedTables:"+relatedTables);
+    	if(relatedTables == null)
+    	{
+    		relatedTables = new Vector();
+    	}
     	Vector columnIds = new Vector();
     	DataElement dataElement;
+    	String dataElementTableName;
     	for(int i =0;i<resultView.size();i++)
     	{
     		dataElement = (DataElement) resultView.get(i);
-    		if(dataElement.getTable().equals(tableAlias))
+    		dataElementTableName = dataElement.getTable();
+    		
+    		//I
+    		if(dataElementTableName.equals(tableAlias) || relatedTables.contains(dataElementTableName))
     		{
     			columnIds.add(new Integer(i+1));
     			Logger.out.debug("tableAlias:"+tableAlias+" columnId:"+(i+1));
@@ -501,6 +519,56 @@ public abstract class Query
     	
     	return columnIds;
     }
+    
+    /**
+     * This method returns all the column numbers in the query
+     * that belong to tableAlias and the related and are Identified Columns
+     * tables passed as parameter
+     * @param tableAlias
+     * @param relatedTables
+     * @return
+     */
+    public Vector getIdentifiedColumnIds(String tableAlias, Vector relatedTables)
+    {
+    	Logger.out.debug(" tableAlias:"+tableAlias+" relatedTables:"+relatedTables);
+    	if(relatedTables == null)
+    	{
+    		relatedTables = new Vector();
+    	}
+    	Vector columnIds = new Vector();
+    	DataElement dataElement;
+    	String dataElementTableName;
+    	String dataElementFieldName;
+    	Vector identifiedData;
+    	for(int i =0;i<resultView.size();i++)
+    	{
+    		dataElement = (DataElement) resultView.get(i);
+    		dataElementTableName = dataElement.getTable();
+    		dataElementFieldName = dataElement.getField();
+    		//I
+    		if(dataElementTableName.equals(tableAlias) || relatedTables.contains(dataElementTableName))
+    		{
+    			identifiedData = (Vector) Client.identifiedDataMap.get(dataElementTableName);
+    			Logger.out.debug("Table:"+dataElementTableName+" Identified Data:"+identifiedData);
+    			if(identifiedData != null)
+    			{
+    				Logger.out.debug(" identifiedData not null..."+identifiedData);
+    				Logger.out.debug(" dataElementFieldName:"+dataElementFieldName);
+    				Logger.out.debug(" identifiedData.contains(dataElementFieldName)***** "+identifiedData.contains(dataElementFieldName));
+    				if(identifiedData.contains(dataElementFieldName))
+    				{
+    					Logger.out.debug(" identifiedData.contains(dataElementFieldName)***** "+identifiedData.contains(dataElementFieldName));
+    					columnIds.add(new Integer(i+1));
+    					Logger.out.debug("tableAlias:"+tableAlias+" Identified column:"+dataElementFieldName+" Identified columnId:"+(i+1));
+    				}
+    			}
+    			
+    		}
+    	}
+    	
+    	return columnIds;
+    }
+    
 	/**
 	 * @return Returns the whereConditions.
 	 */
