@@ -63,7 +63,8 @@
 			UserForm userForm = (UserForm)obj;
 			if (pageOf.equals(Constants.PAGEOF_APPROVE_USER) &&
 			   (userForm.getStatus().equals(Constants.APPROVE_USER_PENDING_STATUS) || 
-				userForm.getStatus().equals(Constants.APPROVE_USER_REJECT_STATUS)))
+				userForm.getStatus().equals(Constants.APPROVE_USER_REJECT_STATUS) ||
+				userForm.getStatus().equals(Constants.SELECT_OPTION)))
 			{
 				roleStatus = true;
 				if (userForm.getStatus().equals(Constants.APPROVE_USER_PENDING_STATUS))
@@ -78,7 +79,7 @@
 //If the administrator keeps the user status pending update the user record and disable role.
 function handleStatus(status)
 {
-	document.forms[0].role.value=0;
+	document.forms[0].role.value=<%=Constants.SELECT_OPTION_VALUE%>;
 	document.forms[0].role.disabled=true;
 	if (status.value == "<%=Constants.APPROVE_USER_APPROVE_STATUS%>")
 	{
