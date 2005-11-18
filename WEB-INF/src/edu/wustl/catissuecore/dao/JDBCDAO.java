@@ -10,21 +10,25 @@
 package edu.wustl.catissuecore.dao;
 import java.io.Serializable;
 import java.sql.Connection;
-import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Vector;
 
 import edu.wustl.catissuecore.audit.AuditManager;
 import edu.wustl.catissuecore.query.Client;
+import edu.wustl.catissuecore.query.DataElement;
 import edu.wustl.catissuecore.util.Permissions;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.beans.QueryResultObjectData;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
@@ -230,7 +234,7 @@ public class JDBCDAO extends AbstractDAO
                         + whereColumnCondition[i] + " " + whereColumnValue[i]);
             }
             Logger.out.debug("JDBC Query "+query);
-            list = executeQuery(query.toString(), null,Constants.INSECURE_RETRIEVE, null,null);
+            list = executeQuery(query.toString(), null,false, null);
         }
         catch (ClassNotFoundException classExp)
         {
@@ -244,17 +248,16 @@ public class JDBCDAO extends AbstractDAO
      * Executes the query.
      * @param query
      * @param sessionDataBean TODO
-     * @param securityParam TODO
-     * @param objectIdentifiers TODO
+     * @param isSecureExecute TODO
      * @param columnIdsMap
      * @return
      * @throws ClassNotFoundException
      * @throws SQLException
      */
-    public List executeQuery(String query, SessionDataBean sessionDataBean, int securityParam, String[][] objectIdentifiers, Map columnIdsMap) throws ClassNotFoundException, DAOException
+    public List executeQuery(String query, SessionDataBean sessionDataBean, boolean isSecureExecute, Map queryResultObjectDataMap) throws ClassNotFoundException, DAOException
     {
     	//Aarti: Security checks
-    	if(securityParam != Constants.INSECURE_RETRIEVE)
+    	if(Constants.switchSecurity && isSecureExecute)
     	{
     		if(sessionDataBean==null )
     		{
@@ -318,26 +321,10 @@ public class JDBCDAO extends AbstractDAO
                 	i++;
                 }
                 
-//                Aarti: Checking object level privileges on each record
-            	if(Constants.switchSecurity && securityParam == Constants.OBJECT_LEVEL_SECURE_RETRIEVE && objectIdentifiers != null)
+                //Aarti: Checking object level privileges on each record
+            	if(Constants.switchSecurity && isSecureExecute)
             	{
-            		boolean isAuthorized=false;
-            		Vector objectColumnIds;
-            		for(int j=0; j< objectIdentifiers.length; j++)
-            		{
-            			isAuthorized = checkPermission(sessionDataBean.getUserName(),objectIdentifiers[j][0],aList.get(Integer.parseInt(objectIdentifiers[j][1])));
-            			if(!isAuthorized)
-            			{
-            				objectColumnIds = (Vector)columnIdsMap.get(objectIdentifiers[j][0]);
-            				if(objectColumnIds!=null)
-            				{
-            					for(int k=0; k<objectColumnIds.size();k++)
-            					{
-            						aList.set(((Integer)objectColumnIds.get(k)).intValue()-1,"##");
-            					}
-            				}
-            			}
-            		}
+    				SecurityManager.getInstance(this.getClass()).filterRow(sessionDataBean, queryResultObjectDataMap, aList);
             	}
                 
                 list.add(aList);
@@ -370,45 +357,7 @@ public class JDBCDAO extends AbstractDAO
     }
     
     
-    /**
-	 * @param string
-	 * @param object
-	 */
-	private boolean checkPermission(String userName, String tableAlias, Object identifier) {
-		boolean isAuthorized=false;
-		String tableName = (String) Client.objectTableNames.get(tableAlias);
-		Logger.out.debug(" AliasName:"+tableAlias+" tableName:"+tableName);
-		
-		String className=HibernateMetaData.getClassName(tableName);
-		if(className == null)
-		{
-			return isAuthorized;
-		}
-//		 checking whether object has class level or object level privilege
-		int privilegeType = Integer.parseInt((String)Client.privilegeTypeMap.get(tableAlias));
-		Logger.out.debug(" privielge type:"+privilegeType);
-		
-		try {
-			if(privilegeType == Constants.CLASS_LEVEL_SECURE_RETRIEVE)
-			{
-				isAuthorized = SecurityManager.getInstance(this.getClass()).isAuthorized(userName,className,Permissions.READ);
-			}
-			else if (privilegeType == Constants.OBJECT_LEVEL_SECURE_RETRIEVE)
-			{
-				isAuthorized = SecurityManager.getInstance(this.getClass()).checkPermission(userName,className,String.valueOf(identifier),Permissions.READ);
-			}
-			else if (privilegeType == Constants.INSECURE_RETRIEVE)
-			{
-				isAuthorized = true;
-			}
-		
-			
-		} catch (SMException e) {
-			Logger.out.debug(" Exception while checking permission:"+e.getMessage(),e);
-			return isAuthorized;
-		}
-		return isAuthorized;
-	}
+    
 	/* (non-Javadoc)
      * @see edu.wustl.catissuecore.dao.DAO#retrieve(java.lang.String, java.lang.String, java.lang.Object)
      */
