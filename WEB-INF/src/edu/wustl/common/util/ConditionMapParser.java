@@ -143,6 +143,12 @@ public class ConditionMapParser
 	}
 	public static void main(String[] args) throws Exception
 	{
+		Map map = new HashMap();
+		map.put("EventName_1","CellSpecimenReviewEventParameters");
+		map.put("EventColumnName_1","CellSpecimenReviewEventParameters.IDENTIFIER.bigint");
+		map.put("EventColumnOperator_1","=");
+		map.put("EventColumnValue_1","1");
+		
 		ConditionMapParser conditionParser = new ConditionMapParser();
 		String keys1[] = {"Participant:LAST_NAME","Participant:GENDER","Operator:Participant:LAST_NAME","Operator:Participant:GENDER"};
 		String values1[] = {"Part","Male","LIKE","EQUALS"};
@@ -232,5 +238,55 @@ public class ConditionMapParser
 			else		
 				selectedAdvNode.add(presentNode);
 		}
+	}
+	
+	/**
+     * This function parses the event parameter map & returns it in a format
+     * suitable to parseCondition() function.
+     * @param eventMap A map of specimen event parameters that is to be parsed.
+     * @return Map the parsed map suitable for parseCondition().
+     */
+	public static Map parseEventParameterMap(Map eventMap)
+	{
+		Map newMap = new HashMap();
+		
+		if(eventMap != null)
+		{
+			int rows = eventMap.size() / 4;
+			
+			//Constants for eventMap keys
+			String columnKeyConstant = "EventColumnName_";
+			String columnValConstant = "EventColumnValue_";
+			String operatorConstant = "EventColumnOperator_";
+				
+			for(int i=1;i<=rows;i++)
+			{
+				//Preparing the eventMap keys
+				String columnKey = columnKeyConstant + i;
+				String columnValKey = columnValConstant + i;
+				String operatorKey = operatorConstant + i;
+
+				String columnKeyValue = (String)eventMap.get(columnKey);				
+				StringTokenizer tokenizer = new StringTokenizer(columnKeyValue,".");
+				
+				//Extracting alias name & column name
+				String aliasName = tokenizer.nextToken();
+				String columnName = tokenizer.nextToken();
+				
+				//Extracting actual column value & operator value
+				String columnValue = (String)eventMap.get(columnValKey);
+				String operatorValue = (String)eventMap.get(operatorKey);
+				
+				//Preparing keys for new map
+				String newValKey = aliasName + ":" + columnName;
+				String newOpKey = "Operator:" + aliasName + ":" + columnName;
+				
+				//Setting values in new map
+				newMap.put(newValKey,columnValue);
+				newMap.put(newOpKey,operatorValue);
+			}
+		}
+		
+		return newMap;
 	}
 }
