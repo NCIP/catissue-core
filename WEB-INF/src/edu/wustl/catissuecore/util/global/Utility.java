@@ -11,10 +11,12 @@ package edu.wustl.catissuecore.util.global;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import edu.wustl.common.util.logger.Logger;
@@ -204,6 +206,22 @@ public class Utility
     	 
     	return returnStr;
     }
+
+	/**
+	 * @param list
+	 * @return
+	 */
+	public static List removeNull(List list) {
+		List nullFreeList = new ArrayList();
+		for(int i=0; i< list.size(); i++)
+		{
+			if(list.get(i)!= null)
+			{
+				nullFreeList.add(list.get(i));
+			}
+		}
+		return nullFreeList;
+	}
     
     
 	//	public static void main(String[] args)
