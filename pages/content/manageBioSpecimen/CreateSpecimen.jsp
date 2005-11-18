@@ -393,10 +393,13 @@
 				  	{
 						String exName = "externalIdentifierValue(ExternalIdentifier:" + i + "_name)";
 						String exValue = "externalIdentifierValue(ExternalIdentifier:" + i + "_value)";
+						String exIdentifier = "externalIdentifierValue(ExternalIdentifier:" + i +"_systemIdentifier)";
 						String check = "chk_"+i;
 				  %>
 					<tr>
-					 	<td class="formSerialNumberField" width="5"><%=i%>.</td>
+					 	<td class="formSerialNumberField" width="5"><%=i%>.
+					 		<html:hidden property="<%=exIdentifier%>" />
+					 	</td>
 					    <td class="formField">
 				     		<html:text styleClass="formFieldSized10"  maxlength="50" styleId="<%=exName%>" property="<%=exName%>" readonly="<%=readOnlyForAll%>"/>
 				    	</td>
