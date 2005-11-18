@@ -250,7 +250,7 @@
 			
 			//First Cell
 			var firstCell=x.insertCell(0);
-			firstCell.className="formField";
+			firstCell.className="formSerialNumberField";
 			var comboName = "EventName_" + val;
 			var sname="<select name='eventMap(" + comboName + ")' size='1' onchange='onEventChange(this)' class='formFieldSized15' id='" + comboName + "'>";
 			var opt = "";
@@ -525,7 +525,7 @@
 
 
 <tr>
-	<td class="formField" nowrap>
+	<td class="formSerialNumberField" nowrap>
 		<html:select property="<%=eventClassName%>" styleClass="formFieldSized15" styleId="<%=classNameId%>" size="1" onchange="onEventChange(this)">
 			<html:options collection="<%=Constants.ALIAS_NAME_TABLE_NAME_MAP%>" labelProperty="name" property="value"/>
 		</html:select>
