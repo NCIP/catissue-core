@@ -90,17 +90,21 @@ public class CreateSpecimenBizLogic extends DefaultBizLogic
 		
 		//Setting the External Identifier Collection
 		Collection externalIdentifierCollection = specimen.getExternalIdentifierCollection();
-		if(externalIdentifierCollection != null)
+		// -- MD : code to add an empty External Identifier if externalIdentifier is not added.
+		if(externalIdentifierCollection.isEmpty()  )
 		{
-			Iterator it = externalIdentifierCollection.iterator();
-			
-			while(it.hasNext())
-			{
-				ExternalIdentifier exId = (ExternalIdentifier)it.next();
-				exId.setSpecimen(specimen);
-				dao.insert(exId,sessionDataBean, true,true);
+			ExternalIdentifier externalIdentifierObject = new  ExternalIdentifier();
+			externalIdentifierObject.setSpecimen(specimen);
+			externalIdentifierCollection.add(externalIdentifierObject  ); 
+		}
+		Iterator it = externalIdentifierCollection.iterator();
+		
+		while(it.hasNext())
+		{
+			ExternalIdentifier exId = (ExternalIdentifier)it.next();
+			exId.setSpecimen(specimen);
+			dao.insert(exId,sessionDataBean, true,true);
 //				protectionObjects.add(exId);
-			}
 		}
 		
 //		if(parentSpecimen != null)
