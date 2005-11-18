@@ -17,9 +17,6 @@ import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
-
 import edu.wustl.common.util.logger.Logger;
 
 
