@@ -165,8 +165,11 @@ public class SimpleSearchAction extends BaseAction
 				alias = simpleQueryInterfaceForm.getAliasName();
 			simpleQueryInterfaceForm.setValues(map);
 			
-			return getActionForward(Constants.SIMPLE_QUERY_NO_RESULTS, "/SimpleQueryInterface.do?pageOf="
-					+ simpleQueryInterfaceForm.getPageOf() + "&aliasName=" + alias);
+			String path = Constants.SIMPLE_QUERY_INTERFACE_ACTION+"?"+Constants.PAGEOF+"="
+								+ simpleQueryInterfaceForm.getPageOf()
+								+"&"+Constants.TABLE_ALIAS_NAME+"="+alias;
+			
+			return getActionForward(Constants.SIMPLE_QUERY_NO_RESULTS, path);
 		}
 		else
 		{
@@ -177,21 +180,22 @@ public class SimpleSearchAction extends BaseAction
 			{
 				List rowList = (List) list.get(0);
 				
-				return getActionForward(Constants.SIMPLE_QUERY_SINGLE_RESULT, "/SearchObject.do?pageOf="
-						+ simpleQueryInterfaceForm.getPageOf()
-						+ "&operation=search&systemIdentifier=" + rowList.get(0));
+				String path = Constants.SEARCH_OBJECT_ACTION+"?"+Constants.PAGEOF+"="
+									+ simpleQueryInterfaceForm.getPageOf()
+									+ "&"+Constants.OPERATION+"="+Constants.SEARCH+"&"
+									+Constants.SYSTEM_IDENTIFIER+"=" + rowList.get(0);
+				
+				return getActionForward(Constants.SIMPLE_QUERY_SINGLE_RESULT, path);
 			}
 			else
 			{
-			    Logger.out.debug("columnNames..........................."+columnNames.size());
-			    Logger.out.debug("list..........................."+list.size());
 			    // If results contain more than one result, show the spreadsheet view.  
 				request.setAttribute(Constants.PAGEOF, simpleQueryInterfaceForm.getPageOf());
 				request.setAttribute(Constants.SPREADSHEET_DATA_LIST, list);
 				request.setAttribute(Constants.SPREADSHEET_COLUMN_LIST, columnNames);
 			}
 		}
-
+		
 		return mapping.findForward(target);
 	}
 	
