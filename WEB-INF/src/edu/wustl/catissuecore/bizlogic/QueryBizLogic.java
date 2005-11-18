@@ -21,6 +21,9 @@ import java.util.StringTokenizer;
 
 import edu.wustl.catissuecore.dao.DAOFactory;
 import edu.wustl.catissuecore.dao.JDBCDAO;
+import edu.wustl.catissuecore.domain.ClinicalReport;
+import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
+import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.query.Client;
 import edu.wustl.catissuecore.query.DataElement;
 import edu.wustl.catissuecore.query.Operator;
@@ -65,11 +68,15 @@ public class QueryBizLogic extends DefaultBizLogic
         "select ALIAS_NAME from CATISSUE_QUERY_INTERFACE_TABLE_DATA " +
         "where TABLE_ID=";
     
-    private static final String GET_RELATED_TABLE_ALIAS = "SELECT table2.alias_name "+
+    private static final String GET_RELATED_TABLE_ALIAS_PART1 = "SELECT table2.alias_name "+
     " from catissue_table_relation relation, catissue_query_interface_table_data table1, "+
 	" catissue_query_interface_table_data table2 "+
 	" where relation.parent_table_id = table1.table_id and relation.child_table_id = table2.table_id "+
 	" and table1.alias_name = ";
+    
+    private static final String GET_RELATED_TABLE_ALIAS_PART2 =" and exists " +
+    		"(select * from catissue_search_display_data displayData "+
+    	    " where relation.RELATIONSHIP_ID = displayData.RELATIONSHIP_ID)";
 
     public static HashMap getQueryObjectNameTableNameMap()
     {
@@ -80,7 +87,7 @@ public class QueryBizLogic extends DefaultBizLogic
         {
             dao = new JDBCDAO();
             dao.openSession(null);
-            list = dao.executeQuery(ALIAS_NAME_TABLE_NAME_MAP_QUERY, null, Constants.INSECURE_RETRIEVE, null,null);
+            list = dao.executeQuery(ALIAS_NAME_TABLE_NAME_MAP_QUERY, null, false, null);
 
             Iterator iterator = list.iterator();
             while (iterator.hasNext())
@@ -130,7 +137,7 @@ public class QueryBizLogic extends DefaultBizLogic
         {
             dao = new JDBCDAO();
             dao.openSession(null);
-            list = dao.executeQuery(ALIAS_NAME_PRIVILEGE_TYPE_MAP_QUERY, null, Constants.INSECURE_RETRIEVE, null,null);
+            list = dao.executeQuery(ALIAS_NAME_PRIVILEGE_TYPE_MAP_QUERY, null, false, null);
 
             Iterator iterator = list.iterator();
             while (iterator.hasNext())
@@ -183,7 +190,7 @@ public class QueryBizLogic extends DefaultBizLogic
         {
             dao = new JDBCDAO();
             dao.openSession(null);
-            list = dao.executeQuery(GET_RELATION_DATA, null, Constants.INSECURE_RETRIEVE, null,null);
+            list = dao.executeQuery(GET_RELATION_DATA, null, false, null);
 
             Iterator iterator = list.iterator();
             
@@ -199,7 +206,7 @@ public class QueryBizLogic extends DefaultBizLogic
                     continue;
                 }
                 
-                columnDataList = dao.executeQuery(GET_TABLE_ALIAS+parentTableColumnID, null, Constants.INSECURE_RETRIEVE, null,null);
+                columnDataList = dao.executeQuery(GET_TABLE_ALIAS+parentTableColumnID, null, false, null);
                 if(columnDataList.size() <=0 )
                 {
                     continue;
@@ -211,7 +218,7 @@ public class QueryBizLogic extends DefaultBizLogic
                 }
                 tableAlias1 = (String) row.get(0);
                 
-                columnDataList = dao.executeQuery(GET_TABLE_ALIAS+childTableColumnID, null, Constants.INSECURE_RETRIEVE, null,null);
+                columnDataList = dao.executeQuery(GET_TABLE_ALIAS+childTableColumnID, null, false, null);
                 if(columnDataList.size() <=0 )
                 {
                     continue;
@@ -267,6 +274,32 @@ public class QueryBizLogic extends DefaultBizLogic
         Client.objectTableNames = QueryBizLogic.getQueryObjectNameTableNameMap();
         Client.relationConditionsForRelatedTables = QueryBizLogic.getRelationData();
         Client.privilegeTypeMap = QueryBizLogic.getPivilegeTypeMap();
+        Vector identifiedData = new Vector();
+        
+        //For Participant
+        identifiedData.add("FIRST_NAME");
+        identifiedData.add("LAST_NAME");
+        identifiedData.add("MIDDLE_NAME");
+        identifiedData.add("BIRTH_DATE");
+        identifiedData.add("SOCIAL_SECURITY_NUMBER");
+        Client.identifiedDataMap.put("Participant",identifiedData);
+        
+        
+        //For CollectionProtocolRegistration
+        identifiedData = new Vector();
+        identifiedData.add("REGISTRATION_DATE");
+        Client.identifiedDataMap.put("CollectionProtocolRegistration",identifiedData);
+        
+        //For CollectionProtocolRegistration
+        identifiedData = new Vector();
+        identifiedData.add("MEDICAL_RECORD_NUMBER");
+        Client.identifiedDataMap.put("ParticipantMedicalIdentifier",identifiedData);
+        
+//      For CollectionProtocolRegistration
+        identifiedData = new Vector();
+        identifiedData.add("SURGICAL_PATHOLOGICAL_NUMBER");
+        Client.identifiedDataMap.put("ClinicalReport",identifiedData);
+        
     }
     
     /**
@@ -325,7 +358,7 @@ public class QueryBizLogic extends DefaultBizLogic
         
         JDBCDAO jdbcDao = new JDBCDAO();
         jdbcDao.openSession(null);
-        List list = jdbcDao.executeQuery(sql, null, Constants.INSECURE_RETRIEVE, null,null);
+        List list = jdbcDao.executeQuery(sql, null, false, null);
         jdbcDao.closeSession();
         
         List columnNameValueBeanList = new ArrayList();
@@ -390,7 +423,7 @@ public class QueryBizLogic extends DefaultBizLogic
             
             JDBCDAO jdbcDao = (JDBCDAO)DAOFactory.getDAO(Constants.JDBC_DAO);
             jdbcDao.openSession(null);
-            List list = jdbcDao.executeQuery(sql,null,Constants.INSECURE_RETRIEVE,null,null);
+            List list = jdbcDao.executeQuery(sql,null,false, null);
             jdbcDao.closeSession();
             
             //Adding NameValueBean of select option.
@@ -404,7 +437,7 @@ public class QueryBizLogic extends DefaultBizLogic
             jdbcDAO.openSession(null);
             
             sql = "select DISPLAY_NAME from CATISSUE_QUERY_INTERFACE_TABLE_DATA where ALIAS_NAME='"+prevValue+"'";
-            List prevValueDisplayNameList = jdbcDAO.executeQuery(sql,null,Constants.INSECURE_RETRIEVE,null,null);
+            List prevValueDisplayNameList = jdbcDAO.executeQuery(sql,null,false, null);
             jdbcDAO.closeSession();
             
             if (!prevValueDisplayNameList.isEmpty())
@@ -445,7 +478,7 @@ public class QueryBizLogic extends DefaultBizLogic
 
 		JDBCDAO jdbcDao = (JDBCDAO)DAOFactory.getDAO(Constants.JDBC_DAO);
 		jdbcDao.openSession(null);
-		List checkList = jdbcDao.executeQuery(sql,null,Constants.INSECURE_RETRIEVE,null,null);
+		List checkList = jdbcDao.executeQuery(sql,null,false, null);
 		jdbcDao.closeSession();
 		
 		return checkList;
@@ -482,7 +515,7 @@ public class QueryBizLogic extends DefaultBizLogic
         JDBCDAO jdbcDAO = (JDBCDAO)DAOFactory.getDAO(Constants.JDBC_DAO);
         jdbcDAO.openSession(null);
         String sql = "select DISPLAY_NAME from CATISSUE_QUERY_INTERFACE_TABLE_DATA where ALIAS_NAME='"+aliasName+"'";
-        List list = jdbcDAO.executeQuery(sql,null,Constants.INSECURE_RETRIEVE,null,null);
+        List list = jdbcDAO.executeQuery(sql,null,false, null);
         jdbcDAO.closeSession();
         
         if (!list.isEmpty())
@@ -512,7 +545,7 @@ public class QueryBizLogic extends DefaultBizLogic
 
 		JDBCDAO jdbcDAO = (JDBCDAO)DAOFactory.getDAO(Constants.JDBC_DAO);
 		jdbcDAO.openSession(null);
-		List tableList = jdbcDAO.executeQuery(sql,null,Constants.INSECURE_RETRIEVE,null,null);
+		List tableList = jdbcDAO.executeQuery(sql,null,false, null);
 		jdbcDAO.closeSession();
 		
 		Set objectNameValueBeanList = new TreeSet();
@@ -556,8 +589,8 @@ public class QueryBizLogic extends DefaultBizLogic
         {
             dao = new JDBCDAO();
             dao.openSession(null);
-            list = dao.executeQuery(sql, null, Constants.INSECURE_RETRIEVE, null,null);
-            
+            list = dao.executeQuery(sql, null, false, null);
+
             Iterator iterator = list.iterator();
             while (iterator.hasNext())
             {
@@ -609,7 +642,7 @@ public class QueryBizLogic extends DefaultBizLogic
         {
             dao = new JDBCDAO();
             dao.openSession(null);
-            list = dao.executeQuery(GET_RELATED_TABLE_ALIAS+"'"+aliasName+"'", null, Constants.INSECURE_RETRIEVE, null,null);
+            list = dao.executeQuery(GET_RELATED_TABLE_ALIAS_PART1+"'"+aliasName+"'"+GET_RELATED_TABLE_ALIAS_PART2, null, false, null);
 
             Iterator iterator = list.iterator();
             while (iterator.hasNext())
@@ -674,7 +707,7 @@ public class QueryBizLogic extends DefaultBizLogic
         
         JDBCDAO jdbcDao = new JDBCDAO();
         jdbcDao.openSession(null);
-        List list = jdbcDao.executeQuery(sql, null, Constants.INSECURE_RETRIEVE, null,null);
+        List list = jdbcDao.executeQuery(sql, null, false, null);
         jdbcDao.closeSession();
         String columnDisplayName  = new String();
         Iterator iterator = list.iterator();
@@ -701,7 +734,7 @@ public class QueryBizLogic extends DefaultBizLogic
         
         JDBCDAO jdbcDao = new JDBCDAO();
         jdbcDao.openSession(null);
-        List list = jdbcDao.executeQuery(sql, null, Constants.INSECURE_RETRIEVE, null,null);
+        List list = jdbcDao.executeQuery(sql, null, false, null);
         jdbcDao.closeSession();
         
         Set tablePathSet = new HashSet();
@@ -741,7 +774,7 @@ public class QueryBizLogic extends DefaultBizLogic
         
         JDBCDAO jdbcDao = new JDBCDAO();
         jdbcDao.openSession(null);
-        List list = jdbcDao.executeQuery(sql, null, Constants.INSECURE_RETRIEVE, null,null);
+        List list = jdbcDao.executeQuery(sql, null, false, null);
         jdbcDao.closeSession();
         QueryBizLogic bizLogic = (QueryBizLogic)BizLogicFactory.getBizLogic(Constants.SIMPLE_QUERY_INTERFACE_ID);
         String atrributeType = new String();
@@ -784,5 +817,5 @@ public class QueryBizLogic extends DefaultBizLogic
                Logger.out.debug("tableId before converting to Long:"+tableIdString);
             }
             return tableIdString;
-    }
-}
+    }   
+  }
