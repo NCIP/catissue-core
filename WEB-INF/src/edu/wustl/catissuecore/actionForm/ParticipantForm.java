@@ -412,9 +412,9 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 			  
 			//Validations for Add-More Block
 			String className = "ParticipantMedicalIdentifier:";
-			String key1 = "_Site_systemIdentifier";
+			String key1 = "_Site_" + Constants.SYSTEM_IDENTIFIER;
 			String key2 = "_medicalRecordNumber";
-			String key3 = "_systemIdentifier";
+			String key3 = "_" + Constants.SYSTEM_IDENTIFIER;
 			int index = 1;
 
 			while(true)
