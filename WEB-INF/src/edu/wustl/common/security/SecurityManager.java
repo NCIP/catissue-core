@@ -1889,7 +1889,11 @@ public class SecurityManager implements Permissions {
 	}
 
 	/**
-	 * 
+	 * This method removes data from list aList.
+	 * It could be all data related to QueryResultObjectData
+	 * or only the identified fields depending on 
+	 * the value of boolean removeOnlyIdentifiedData
+	 * user
 	 * @param aList
 	 * @param queryResultObjectData3
 	 * @param removeOnlyIdentifiedData
