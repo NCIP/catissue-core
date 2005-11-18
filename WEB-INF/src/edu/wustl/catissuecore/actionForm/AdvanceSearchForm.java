@@ -31,25 +31,47 @@ import edu.wustl.catissuecore.util.global.Validator;
  */
 public class AdvanceSearchForm extends ActionForm
 {
-    Map values = new HashMap();
+	/**
+	 * A map that handles all the values of Advanced Search pages
+	 */
+    private Map values = new HashMap();
     
-    //Objectname of the advancedConditionNode Object
-    String objectName=new String();
+    /**
+	 * A map that handles event parameters' data
+	 */
+    private Map eventMap = new HashMap();
     
-    //Selected node from the query tree
-    String selectedNode = new String();
+    /**
+	 * Objectname of the advancedConditionNode Object
+	 */
+    private String objectName=new String();
+    
+    /**
+	 * Selected node from the query tree
+	 */
+    private String selectedNode = new String();
+    
+    /**
+	 * A counter that holds the number of event parameter rows
+	 */
+    private int eventCounter = 1;
+    
 	/**
 	 * @return Returns the selectedNode.
 	 */
-	public String getSelectedNode() {
+	public String getSelectedNode()
+	{
 		return selectedNode;
 	}
+	
 	/**
 	 * @param selectedNode The selectedNode to set.
 	 */
-	public void setSelectedNode(String selectedNode) {
+	public void setSelectedNode(String selectedNode)
+	{
 		this.selectedNode = selectedNode;
 	}
+	
     /**
      * No argument constructor for StorageTypeForm class 
      */
@@ -77,6 +99,7 @@ public class AdvanceSearchForm extends ActionForm
     {
         return values.get(key);
     }
+    
     //Bug 700: changed the method name for setting the map values as it was same in both AdvanceSearchForm and SimpleQueryInterfaceForm
     /**
      * Associates the specified object with the specified key in the map.
@@ -153,8 +176,8 @@ public class AdvanceSearchForm extends ActionForm
     }
 
     /**
-    * Overrides the validate method of ActionForm.
-    * */
+     * Overrides the validate method of ActionForm.
+     */
     public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
     {
         ActionErrors errors = new ActionErrors();
@@ -162,16 +185,60 @@ public class AdvanceSearchForm extends ActionForm
         
         return errors;
     }
+    
 	/**
 	 * @return Returns the objectName.
 	 */
-	public String getObjectName() {
+	public String getObjectName()
+	{
 		return objectName;
 	}
+	
 	/**
 	 * @param objectName The objectName to set.
 	 */
-	public void setObjectName(String objectName) {
+	public void setObjectName(String objectName)
+	{
 		this.objectName = objectName;
+	}
+	
+	/**
+     * Associates the specified object with the specified key in the map.
+     * @param key the key to which the object is mapped.
+     * @param value the object which is mapped.
+     */
+    public void setEventMap(String key, Object value) 
+    {    	
+    	eventMap.put(key, value);
+    }
+
+    /**
+     * Returns the object to which this map maps the specified key.
+     * @param key the required key.
+     * @return the object to which this map maps the specified key.
+     */
+    public Object getEventMap(String key) 
+    {
+        return eventMap.get(key);
+    }
+    
+    /**
+     * Returns the no. of rows of event parameters.
+     * @return int The no. of rows of event parameters.
+     * @see #setEventCounter(int)
+     */
+	public int getEventCounter()
+	{
+		return eventCounter;
+	}
+	
+	/**
+     * Sets the no. of rows of event parameters.
+     * @param eventCounter The no. of rows of event parameters.
+     * @see #getEventCounter()
+     */
+	public void setEventCounter(int eventCounter)
+	{
+		this.eventCounter = eventCounter;
 	}
 }
