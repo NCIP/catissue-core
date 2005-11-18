@@ -36,7 +36,7 @@ import edu.wustl.catissuecore.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
 /**
- * CreateSpecimenForm Class is used to encapsulate all the request parameters passed 
+ * SpecimenForm Class is used to encapsulate all the request parameters passed 
  * from New/Create Specimen webpage.
  * @author aniruddha_phadnis
  */
@@ -111,10 +111,15 @@ public class SpecimenForm extends AbstractActionForm
 
     protected String positionInStorageContainer;
 
+    /**
+	 * Map to handle all the data of external identifiers.
+	 */
     protected Map externalIdentifier = new HashMap();
 
     /**
-     * @return Returns the concentration.
+     * Returns the concentration. 
+     * @return String the concentration.
+     * @see #setConcentration(String)
      */
     public String getConcentration()
     {
@@ -122,7 +127,9 @@ public class SpecimenForm extends AbstractActionForm
     }
 
     /**
-     * @param concentration The concentration to set.
+     * Sets the concentration.
+     * @param concentration The concentration.
+     * @see #getConcentration()
      */
     public void setConcentration(String concentration)
     {
@@ -150,7 +157,8 @@ public class SpecimenForm extends AbstractActionForm
     }
 
     /**
-     * @return Returns the values.
+     * Returns all the values in the map.
+     * @return Collection all the values in the map.
      */
     public Collection getAllExternalIdentifiers()
     {
@@ -158,8 +166,9 @@ public class SpecimenForm extends AbstractActionForm
     }
 
     /**
-     * @param values
-     * The values to set.
+     * Sets the map.
+     * @param externalIdentifier the map to be set.
+     * @see #getExternalIdentifier()
      */
     public void setExternalIdentifier(Map externalIdentifier)
     {
@@ -167,8 +176,9 @@ public class SpecimenForm extends AbstractActionForm
     }
 
     /**
-     * @param values
-     * Returns the map.
+     * Returns the map of external identifiers. 
+     * @return Map the map of external identifiers.
+     * @see #setExternalIdentifier(Map)
      */
     public Map getExternalIdentifier()
     {
@@ -176,7 +186,9 @@ public class SpecimenForm extends AbstractActionForm
     }
 
     /**
-     * @return Returns the comments.
+     * Returns the comments. 
+     * @return String the comments.
+     * @see #setComments(String)
      */
     public String getComments()
     {
@@ -184,15 +196,19 @@ public class SpecimenForm extends AbstractActionForm
     }
 
     /**
-     * @param comments The comments to set.
+     * Sets the comments.
+     * @param comments The comments.
+     * @see #getComments()
      */
-    public void setComments(String notes)
+    public void setComments(String comments)
     {
-        this.comments = notes;
+        this.comments = comments;
     }
 
     /**
-     * @return Returns the positionDimensionOne.
+     * Returns the position dimension one. 
+     * @return String the position dimension one.
+     * @see #setPositionDimensionOne(String)
      */
     public String getPositionDimensionOne()
     {
@@ -200,7 +216,9 @@ public class SpecimenForm extends AbstractActionForm
     }
 
     /**
-     * @param positionDimensionOne The positionDimensionOne to set.
+     * Sets the position dimension one.
+     * @param positionDimensionOne The position dimension one.
+     * @see #getPositionDimensionOne()
      */
     public void setPositionDimensionOne(String positionDimensionOne)
     {
@@ -208,7 +226,9 @@ public class SpecimenForm extends AbstractActionForm
     }
 
     /**
-     * @return Returns the positionDimensionTwo.
+     * Returns the position dimension two. 
+     * @return String the position dimension two.
+     * @see #setPositionDimensionTwo(String)
      */
     public String getPositionDimensionTwo()
     {
@@ -216,7 +236,9 @@ public class SpecimenForm extends AbstractActionForm
     }
 
     /**
-     * @param positionDimensionTwo The positionDimensionTwo to set.
+     * Sets the position dimension two.
+     * @param positionDimensionTwo The position dimension two.
+     * @see #getPositionDimensionTwo()
      */
     public void setPositionDimensionTwo(String positionDimensionTwo)
     {
@@ -224,7 +246,9 @@ public class SpecimenForm extends AbstractActionForm
     }
 
     /**
-     * @return Returns the barcode.
+     * Returns the barcode of this specimen. 
+     * @return String the barcode of this specimen.
+     * @see #setBarcode(String)
      */
     public String getBarcode()
     {
@@ -232,7 +256,9 @@ public class SpecimenForm extends AbstractActionForm
     }
     
     /**
-     * @param barcode The barcode to set.
+     * Sets the barcode of this specimen.
+     * @param barcode The barcode of this specimen.
+     * @see #getBarcode()
      */
     public void setBarcode(String barcode)
     {
@@ -240,7 +266,9 @@ public class SpecimenForm extends AbstractActionForm
     }
     
     /**
-     * @return Returns the quantity.
+     * Returns the quantity. 
+     * @return String the quantity.
+     * @see #setQuantity(String)
      */
     public String getQuantity()
     {
@@ -248,7 +276,9 @@ public class SpecimenForm extends AbstractActionForm
     }
 
     /**
-     * @param quantity The quantity to set.
+     * Sets the quantity.
+     * @param quantity The quantity.
+     * @see #getQuantity()
      */
     public void setQuantity(String quantity)
     {
@@ -256,7 +286,9 @@ public class SpecimenForm extends AbstractActionForm
     }
     
     /**
-     * @return Returns the availableQuantity.
+     * Returns the available quantity. 
+     * @return String the available quantity.
+     * @see #setAvailableQuantity(String)
      */
     public String getAvailableQuantity()
     {
@@ -264,7 +296,9 @@ public class SpecimenForm extends AbstractActionForm
     }
 
     /**
-     * @param availableQuantity The Available Quantity to set.
+     * Sets the available quantity.
+     * @param availableQuantity The available quantity.
+     * @see #getAvailableQuantity()
      */
     public void setAvailableQuantity(String availableQuantity)
     {
@@ -272,7 +306,9 @@ public class SpecimenForm extends AbstractActionForm
     }
 
     /**
-     * @return Returns the quantity.
+     * Returns the unit of this specimen. 
+     * @return String the unit of this specimen.
+     * @see #setUnit(String)
      */
     public String getUnit()
     {
@@ -280,7 +316,9 @@ public class SpecimenForm extends AbstractActionForm
     }
 
     /**
-     * @param unit The quantity to set.
+     * Sets the unit of this specimen.
+     * @param unit The unit of this specimen.
+     * @see #getUnit()
      */
     public void setUnit(String unit)
     {
@@ -288,7 +326,9 @@ public class SpecimenForm extends AbstractActionForm
     }
 
     /**
-     * @return Returns the storageContainer.
+     * Returns the storage container of this specimen. 
+     * @return String the storage container of this specimen.
+     * @see #setStorageContainer(String)
      */
     public String getStorageContainer()
     {
@@ -296,7 +336,9 @@ public class SpecimenForm extends AbstractActionForm
     }
 
     /**
-     * @param storageContainer The storageContainer to set.
+     * Sets the storage container of this specimen.
+     * @param storageContainer The storage container of this specimen.
+     * @see #getStorageContainer()
      */
     public void setStorageContainer(String storageContainer)
     {
@@ -304,7 +346,9 @@ public class SpecimenForm extends AbstractActionForm
     }
 
     /**
-     * @return Returns the subType.
+     * Returns the subtype of this specimen. 
+     * @return String the subtype of this specimen.
+     * @see #setType(String)
      */
     public String getType()
     {
@@ -312,7 +356,9 @@ public class SpecimenForm extends AbstractActionForm
     }
 
     /**
-     * @param subType The subType to set.
+     * Sets the subtype of this specimen.
+     * @param subType The subtype of this specimen.
+     * @see #getType()
      */
     public void setType(String subType)
     {
@@ -320,7 +366,9 @@ public class SpecimenForm extends AbstractActionForm
     }
 
     /**
-     * @return Returns the type.
+     * Returns the className of this specimen. 
+     * @return String the className of this specimen.
+     * @see #setClassName(String)
      */
     public String getClassName()
     {
@@ -328,11 +376,13 @@ public class SpecimenForm extends AbstractActionForm
     }
 
     /**
-     * @param type The type to set.
+     * Sets the className of this specimen.
+     * @param className The className of this specimen.
+     * @see #getClassName()
      */
-    public void setClassName(String type)
+    public void setClassName(String className)
     {
-        this.className = type;
+        this.className = className;
     }
 
     protected void reset()
@@ -353,7 +403,7 @@ public class SpecimenForm extends AbstractActionForm
     }
 
     /**
-     * This function Copies the data from an site object to a SiteForm object.
+     * This function Copies the data from an Specimen object to a SpecimenForm object.
      * @param site An object containing the information about site.  
      */
     public void setAllValues(AbstractDomainObject abstractDomain)
@@ -494,14 +544,6 @@ public class SpecimenForm extends AbstractActionForm
                                     .getValue("specimen.subType")));
                 }
 
-//                if (className.equals("Molecular"))
-//                {
-//                    if (!validator.isDouble(concentration))
-//                        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-//                                "errors.item.format", ApplicationProperties
-//                                        .getValue("specimen.concentration")));
-//                }
-
                 if (validator.isEmpty(quantity))
                 {
                     errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
@@ -531,26 +573,13 @@ public class SpecimenForm extends AbstractActionForm
                     }
                 	
                 }
-				
-//                if (validator.isEmpty(positionInStorageContainer))
-//                {
-//                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-//                            "errors.item.required", ApplicationProperties
-//                                    .getValue("specimen.positionInStorageContainer")));
-//                }
-
-                
-//                if (validator.isEmpty(barcode))
-//                {
-//                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-//                            "errors.item.required", ApplicationProperties
-//                                    .getValue("specimen.barcode")));
-//                }
 
                 //Validations for External Identifier Add-More Block
                 String className = "ExternalIdentifier:";
                 String key1 = "_name";
                 String key2 = "_value";
+                String key3 = "_" + Constants.SYSTEM_IDENTIFIER;
+                
                 int index = 1;
                 boolean isError = false;
 
@@ -558,6 +587,8 @@ public class SpecimenForm extends AbstractActionForm
                 {
                     String keyOne = className + index + key1;
                     String keyTwo = className + index + key2;
+                    String keyThree = className + index + key3;
+                    
                     String value1 = (String) externalIdentifier.get(keyOne);
                     String value2 = (String) externalIdentifier.get(keyTwo);
 
@@ -569,6 +600,7 @@ public class SpecimenForm extends AbstractActionForm
                     {
                         externalIdentifier.remove(keyOne);
                         externalIdentifier.remove(keyTwo);
+                        externalIdentifier.remove(keyThree);
                     }
                     else if ((!value1.equals("") && value2.equals(""))
                             || (value1.equals("") && !value2.equals("")))

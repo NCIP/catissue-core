@@ -26,7 +26,6 @@ import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.StorageContainer;
-import edu.wustl.catissuecore.domain.StorageContainerCapacity;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
@@ -59,23 +58,35 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		dao.insert(specimen.getSpecimenCharacteristics(),sessionDataBean, true, true);
 		dao.insert(specimen,sessionDataBean, true, true);
 		protectionObjects.add(specimen);
+		
 		if(specimen.getSpecimenCharacteristics()!=null)
 		{
 		    protectionObjects.add(specimen.getSpecimenCharacteristics());
 		}
 		
 		Collection externalIdentifierCollection = specimen.getExternalIdentifierCollection();
+		
 		if(externalIdentifierCollection != null)
 		{
+			if(externalIdentifierCollection.isEmpty()) //Dummy entry added for query
+			{
+				ExternalIdentifier exId = new ExternalIdentifier();
+				
+				exId.setName(null);
+				exId.setValue(null);
+				
+				externalIdentifierCollection.add(exId);
+			}
+			
 			Iterator it = externalIdentifierCollection.iterator();
 			while(it.hasNext())
 			{
 				ExternalIdentifier exId = (ExternalIdentifier)it.next();
 				exId.setSpecimen(specimen);
 				dao.insert(exId,sessionDataBean, true, true);
-//				protectionObjects.add(exId);
 			}
 		}
+		
 		//Inserting data for Authorization
 		try
         {
@@ -175,11 +186,6 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			// check for closed ParentSpecimen
 			checkStatus(dao, specimen.getParentSpecimen(), "Parent Specimen" );
 			
-        	
-//        	Specimen parentSpecimen = (Specimen) dao.retrieve(Specimen.class.getName(), specimen.getParentSpecimen().getSystemIdentifier());
-//        	specimen.setParentSpecimen(parentSpecimen);
-//        	specimen.setSpecimenCollectionGroup(parentSpecimen.getSpecimenCollectionGroup());
-//        	specimen.setSpecimenCharacteristics(parentSpecimen.getSpecimenCharacteristics());
         	SpecimenCollectionGroup scg = loadSpecimenCollectionGroup(specimen.getParentSpecimen().getSystemIdentifier(), dao);
         	
         	specimen.setSpecimenCollectionGroup(scg);

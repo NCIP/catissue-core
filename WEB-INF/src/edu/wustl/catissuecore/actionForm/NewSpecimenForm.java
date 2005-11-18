@@ -342,8 +342,7 @@ public class NewSpecimenForm extends SpecimenForm
          try
          {
              if (operation.equals(Constants.ADD) || operation.equals(Constants.EDIT))
-             {           
-             	System.out.println("\n\n\n\n\n\n\n\n\n\n\n : :- " + specimenCollectionGroupId);
+             {
              	if (specimenCollectionGroupId.equals("-1"))
                 {
                     errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("specimen.specimenCollectionGroupId")));
@@ -366,10 +365,9 @@ public class NewSpecimenForm extends SpecimenForm
              	//Validations for Biohazard Add-More Block
                 String className = "Biohazard:";
                 String key1 = "_type";
-                String key2 = "_systemIdentifier";
+                String key2 = "_" + Constants.SYSTEM_IDENTIFIER;
                 String key3 = "_persisted";
                 int index = 1;
-                boolean isError = false;
                 
                 while(true)
                 {
@@ -385,25 +383,19 @@ public class NewSpecimenForm extends SpecimenForm
                 	{
                 		break;
                 	}
-                	else if(!validator.isValidOption(value1) && !validator.isValidOption( value2))
+                	else if(!validator.isValidOption(value1) && !validator.isValidOption(value2))
                 	{
                 		biohazard.remove(keyOne);
                 		biohazard.remove(keyTwo);
                 		biohazard.remove(keyThree);
                 	}
-//                	else if(!validator.isValidOption(value1) ||  (!validator.isValidOption(value2)))
                 	else if((validator.isValidOption(value1) && !validator.isValidOption(value2)) 
                 			|| (!validator.isValidOption(value1) && validator.isValidOption( value2)))   		
                 	{
-                		isError = true;
+                		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.newSpecimen.biohazard.missing",ApplicationProperties.getValue("newSpecimen.msg")));
                 		break;
                 	}
                 	index++;
-                }
-                
-                if(isError)
-                {
-                	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.newSpecimen.biohazard.missing",ApplicationProperties.getValue("newSpecimen.msg")));
                 }
              }
          }
