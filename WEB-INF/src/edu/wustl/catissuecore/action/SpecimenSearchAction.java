@@ -10,7 +10,6 @@
 
 package edu.wustl.catissuecore.action;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -18,7 +17,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -27,12 +25,15 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.AdvanceSearchForm;
+import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
+import edu.wustl.catissuecore.bizlogic.QueryBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.cde.CDE;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.cde.PermissibleValue;
 import edu.wustl.common.util.SearchUtil;
+import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
 public class SpecimenSearchAction extends BaseAction
@@ -41,9 +42,8 @@ public class SpecimenSearchAction extends BaseAction
      * Overrides the execute method of Action class.
      * Initializes the various fields in SpecimenSearch.jsp Page.
      * */
-    public ActionForward executeAction(ActionMapping mapping, ActionForm form,
-            HttpServletRequest request, HttpServletResponse response)
-            throws IOException, ServletException
+    protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
+            HttpServletRequest request, HttpServletResponse response) throws Exception
     {
     	//Setting the Sepecimen Type list
     	List specimenTypeList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_SPECIMEN_TYPE,null);
@@ -68,19 +68,18 @@ public class SpecimenSearchAction extends BaseAction
     	request.setAttribute(Constants.BIOHAZARD_TYPE_LIST, biohazardList);
     	
     	//Set the selected node from the query tree
-    	String nodeCount = (String)request.getParameter("selectedNode");
+    	String nodeCount = request.getParameter("selectedNode");
     	Logger.out.debug("nodecount from getParameter"+nodeCount);
     	AdvanceSearchForm aForm = (AdvanceSearchForm)form;
     	aForm.setSelectedNode(nodeCount);
-    	
-    	
     	
     	//Setting the operators list in request scope
         request.setAttribute(Constants.STRING_OPERATORS,SearchUtil.getOperatorList(SearchUtil.DATATYPE_STRING));
         request.setAttribute(Constants.DATE_NUMERIC_OPERATORS,SearchUtil.getOperatorList(SearchUtil.DATATYPE_NUMERIC));
         request.setAttribute(Constants.ENUMERATED_OPERATORS,SearchUtil.getOperatorList(SearchUtil.DATATYPE_ENUMERATED));
 
-    	try
+    	//TO DO : To be moved to common utility class
+        try
 		{
         	// get the Specimen class and type from the cde
         	CDE specimenClassCDE = CDEManager.getCDEManager().getCDE(Constants.CDE_NAME_SPECIMEN_CLASS);
@@ -128,7 +127,59 @@ public class SpecimenSearchAction extends BaseAction
         	return mapping.findForward(Constants.FAILURE);
 		}
         
+        //Preparing the data for Specimen Event Parameters
+        QueryBizLogic bizLogic = (QueryBizLogic)BizLogicFactory.getBizLogic(Constants.SIMPLE_QUERY_INTERFACE_ID);
+        List eventParametersTables = getEventParametersTables(bizLogic);
+        Map map = getEventParametersMap(bizLogic,eventParametersTables);
+        
+        request.setAttribute(Constants.ALIAS_NAME_TABLE_NAME_MAP,eventParametersTables);
+        request.setAttribute(Constants.TABLE_COLUMN_DATA_MAP,map);
+        
     	String pageOf = (String)request.getParameter(Constants.PAGEOF);
     	return mapping.findForward(pageOf);
     }
+    
+    //This function returns the map of event parameters to their column names
+    private Map getEventParametersMap(QueryBizLogic bizLogic, List tableList) throws DAOException,ClassNotFoundException
+    {
+    	HashMap tableColumnMap = new HashMap();
+		
+    	//Extracting column names per table name
+    	for(int i=1;i<tableList.size();i++)
+    	{
+    		NameValueBean bean = (NameValueBean)tableList.get(i);
+    		String className = bean.getValue();
+    		
+    		tableColumnMap.put(className,bizLogic.getColumnNames(className));
+    	}
+    	
+    	return tableColumnMap;
+    }
+    
+    /*This function returns a list of Name-Value beans which contains the table names with corresponding alias names.
+      The list contains all the tables associated with Event Parameters only.*/
+    private List getEventParametersTables(QueryBizLogic bizLogic) throws DAOException,ClassNotFoundException
+    {
+    	Set tableSet = bizLogic.getAllTableNames("");
+    	List newTableList = new ArrayList();
+    	
+    	//Adding SELECT Option
+    	newTableList.add(new NameValueBean(Constants.SELECT_OPTION,"-1"));
+    	
+    	Iterator it = tableSet.iterator();
+    	
+    	while(it.hasNext())
+    	{
+    		NameValueBean bean = (NameValueBean) it.next();
+    		
+    		//Adding tables related to Event Parameters only.
+    		if(bean.getName().endsWith("Parameters") || bean.getName().endsWith("Parameter"))
+    		{
+    			newTableList.add(bean);
+    		}
+    	}
+    	
+    	return newTableList;
+    }
+	
 }
