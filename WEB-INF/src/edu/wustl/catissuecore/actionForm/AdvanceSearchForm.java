@@ -18,13 +18,10 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-//import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 
-import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Validator;
 
 /**
@@ -184,10 +181,7 @@ public class AdvanceSearchForm extends ActionForm
     {
         ActionErrors errors = new ActionErrors();
         Validator validator = new Validator();
-        
-        if(eventCounter > 1)
-        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("biohazard.type")));
-        
+               
         return errors;
     }
     
