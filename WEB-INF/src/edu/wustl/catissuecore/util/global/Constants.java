@@ -169,8 +169,8 @@ public class Constants
 	
 	//event parameters lists
 	public static final String METHODLIST = "methodList";
-	public static final String HOURLIST = "hourList";
-	public static final String MINUTESLIST = "minutesList";
+	public static final String HOUR_LIST = "hourList";
+	public static final String MINUTES_LIST = "minutesList";
 	public static final String EMBEDDINGMEDIUMLIST = "embeddingMediumList";
 	public static final String PROCEDURELIST = "procedureList";
 	public static final String PROCEDUREIDLIST = "procedureIdList";
@@ -1293,9 +1293,12 @@ public class Constants
 	public static final String UNDEFINED = "Undefined";
 	public static final String UNKNOWN = "Unknown";
 	
+//	MD : LightYellow and Green colors
+//	public static final String ODD_COLOR = "#FEFB85";
+//	public static final String EVEN_COLOR = "#A7FEAB"; 
 	public static final String ODD_COLOR = "#E5E5E5";
 	public static final String EVEN_COLOR = "#F7F7F7"; 
-	
+		
 	//	Aarti: Constants for security parameter required 
 	//while retrieving data from DAOs
 	public static final int INSECURE_RETRIEVE = 0;
