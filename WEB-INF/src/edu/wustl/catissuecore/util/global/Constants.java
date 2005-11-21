@@ -187,7 +187,7 @@ public class Constants
 	public static final String MOLECULAR_SPECIMEN_ID_LIST="molecularSpecimenIdList";
 	public static final String CELL_SPECIMEN_ID_LIST="cellSpecimenIdList";
 	public static final String FLUID_SPECIMEN_ID_LIST="fluidSpecimenIdList";
-	public static final String STORAGESTATUSLIST="storageStatusList";
+	public static final String STORAGE_STATUS_LIST="storageStatusList";
 	public static final String CLINICAL_DIAGNOSIS_LIST = "clinicalDiagnosisList";
 	public static final String HISTOLOGICALQUALITYLIST="histologicalQualityList";
 	
@@ -199,6 +199,8 @@ public class Constants
 	public static final boolean switchSecurity = false;
 	public static final String STORAGE_CONTAINER_ID ="storContId";
 	public static final String IS_RNA = "isRNA";
+	public static final String MOLECULAR = "Molecular";
+	public static final String RNA = "RNA";
 	
 	//Constants required in User.jsp Page
 	public static final String USER_SEARCH_ACTION = "UserSearch.do";
@@ -1150,7 +1152,7 @@ public class Constants
 	public static final String DATE_NUMERIC_OPERATORS = "DateNumericOperators";
 	public static final String ENUMERATED_OPERATORS = "EnumeratedOperators";
 	
-	public static final String [] STORAGESTATUSARRAY = {
+	public static final String [] STORAGE_STATUS_ARRAY = {
 	        SELECT_OPTION,
 			"CHECK IN",
 			"CHECK OUT"
