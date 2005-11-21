@@ -76,7 +76,8 @@ public class QueryTree extends JApplet
             {
 	            String selectedNodeStr = this.getParameter(Constants.STORAGE_CONTAINER_TO_BE_SELECTED);
 	            
-	            if((null != selectedNodeStr) && (false == selectedNodeStr.equals("")))
+	            if((null != selectedNodeStr) && (false == "".equals(selectedNodeStr)) 
+	                    && ("null".equals(selectedNodeStr) == false))
 	            {
 	            	try
 					{
@@ -92,11 +93,12 @@ public class QueryTree extends JApplet
             }
             
             String applicationPath = codeBase.getPath();
-            
+            System.out.println("applicationPath....................."+applicationPath);
             String urlSuffix = applicationPath+Constants.TREE_DATA_ACTION+"?"+Constants.PAGEOF+"="+pageOf;
+            System.out.println("TREE_DATA_ACTION......................."+urlSuffix);
             URL dataURL = new URL(protocol, host, port, urlSuffix);
             
-            //Establish connection with the TreeDataAction and get the JTree object. 
+            //Establish connection with the TreeDataAction and get the JTree object.
             URLConnection connection = dataURL.openConnection();
             connection.setUseCaches(false);
             
@@ -105,7 +107,7 @@ public class QueryTree extends JApplet
             
             GenerateTree generateTree = new GenerateTree();
             JTree tree = generateTree.createTree(treeDataVector, treeType,selectedNode);
-
+            
             Container contentPane = getContentPane();
             contentPane.setLayout(new BorderLayout());
             
