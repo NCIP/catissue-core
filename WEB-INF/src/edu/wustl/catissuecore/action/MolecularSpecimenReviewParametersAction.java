@@ -29,8 +29,8 @@ public class MolecularSpecimenReviewParametersAction extends SpecimenEventParame
 	protected void setRequestParameters(HttpServletRequest request) throws Exception
 	{
 		/** 
-		* Sets the isRNA attribute. Used to display concentration field
-		* only for Specimen of Type=Molecular and subType=RNA. 
+		* Sets the isRNA attribute. It is used to display "Ratio 28S To 18S" field
+		* only for Specimen of Type = "Molecular" and subType = "RNA". 
 		*/
         String specimenID = (String)request.getAttribute(Constants.SPECIMEN_ID); 
 
