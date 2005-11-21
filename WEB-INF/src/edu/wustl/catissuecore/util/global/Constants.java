@@ -981,7 +981,7 @@ public class Constants
 	        "Molecular"
 	};
 	
-	public static final String [] HOURARRAY = {
+	public static final String [] HOUR_ARRAY = {
 			"00",
 			"1",
 	        "2",
@@ -1010,7 +1010,7 @@ public class Constants
 	};
 
 	
-	public static final String [] MINUTESARRAY = {
+	public static final String [] MINUTES_ARRAY = {
 	 		"00",
 			"01",
 			"02",
