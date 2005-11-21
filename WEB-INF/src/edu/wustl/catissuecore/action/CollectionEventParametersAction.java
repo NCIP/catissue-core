@@ -28,10 +28,10 @@ public class CollectionEventParametersAction extends SpecimenEventParametersActi
 	{
 		// set the procedure lists
 		List procedureList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_COLLECTION_PROCEDURE,null);
-    	request.setAttribute(Constants.PROCEDURELIST, procedureList);
+    	request.setAttribute(Constants.PROCEDURE_LIST, procedureList);
 	    
 	    // set the container lists
     	List containerList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_CONTAINER,null);
-    	request.setAttribute(Constants.CONTAINERLIST, containerList);
+    	request.setAttribute(Constants.CONTAINER_LIST, containerList);
 	}
 }

@@ -172,9 +172,9 @@ public class Constants
 	public static final String HOUR_LIST = "hourList";
 	public static final String MINUTES_LIST = "minutesList";
 	public static final String EMBEDDINGMEDIUMLIST = "embeddingMediumList";
-	public static final String PROCEDURELIST = "procedureList";
+	public static final String PROCEDURE_LIST = "procedureList";
 	public static final String PROCEDUREIDLIST = "procedureIdList";
-	public static final String CONTAINERLIST = "containerList";
+	public static final String CONTAINER_LIST = "containerList";
 	public static final String CONTAINERIDLIST = "containerIdList";
 	public static final String FROMCONTAINERLIST="fromContainerList";
 	public static final String TOCONTAINERLIST="toContainerList";
