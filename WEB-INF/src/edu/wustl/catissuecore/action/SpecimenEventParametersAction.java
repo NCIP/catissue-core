@@ -59,8 +59,6 @@ public class SpecimenEventParametersAction  extends SecureAction
         String specimenId = request.getParameter(Constants.SPECIMEN_ID); 
         request.setAttribute(Constants.SPECIMEN_ID, specimenId);
         Logger.out.debug("\t\t************************************ : "+specimenId );
-        String isRNA = request.getParameter(Constants.IS_RNA); 
-        request.setAttribute(Constants.IS_RNA, isRNA);
         
        	UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getBizLogic(Constants.USER_FORM_ID);
     	Collection userCollection =  userBizLogic.getUsers();

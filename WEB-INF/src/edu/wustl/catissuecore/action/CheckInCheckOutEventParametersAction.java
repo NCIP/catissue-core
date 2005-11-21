@@ -24,6 +24,6 @@ public class CheckInCheckOutEventParametersAction extends SpecimenEventParameter
 	protected void setRequestParameters(HttpServletRequest request) throws Exception
 	{
 		//set array of CheckInCheckOutEventParameters
-		request.setAttribute(Constants.STORAGESTATUSLIST, Constants.STORAGESTATUSARRAY);
+		request.setAttribute(Constants.STORAGE_STATUS_LIST, Constants.STORAGE_STATUS_ARRAY);
 	}
 }
