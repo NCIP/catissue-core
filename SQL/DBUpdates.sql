@@ -1,0 +1,3 @@
+# --- insert commands for MolecularSpecimenReviewParametersAction of CSM.
+INSERT INTO `CSM_PROTECTION_ELEMENT` (`PROTECTION_ELEMENT_ID`,`PROTECTION_ELEMENT_NAME`,`PROTECTION_ELEMENT_DESCRIPTION`,`OBJECT_ID`,`ATTRIBUTE`,`PROTECTION_ELEMENT_TYPE_ID`,`APPLICATION_ID`,`UPDATE_DATE`) VALUES (273,'edu.wustl.catissuecore.action.MolecularSpecimenReviewParametersAction','edu.wustl.catissuecore.action.MolecularSpecimenReviewParametersAction','edu.wustl.catissuecore.action.MolecularSpecimenReviewParametersAction',NULL,NULL,1,'2005-08-31');
+INSERT INTO `CSM_PG_PE` (`PG_PE_ID`,`PROTECTION_GROUP_ID`,`PROTECTION_ELEMENT_ID`,`UPDATE_DATE`) VALUES (303,19,273,'0000-00-00');
