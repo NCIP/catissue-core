@@ -1321,7 +1321,7 @@ PUBLIC
 		
 		<!-- MolecularSpecimenReviewParameters Actions Begins -->
         <action path="/MolecularSpecimenReviewParameters"
-			type="edu.wustl.catissuecore.action.SpecimenEventParametersAction"
+			type="edu.wustl.catissuecore.action.MolecularSpecimenReviewParametersAction"
 			name="molecularSpecimenReviewParametersForm"
 			validate="false"
 			scope="request">
