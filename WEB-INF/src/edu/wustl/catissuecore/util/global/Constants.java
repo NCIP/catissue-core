@@ -168,17 +168,17 @@ public class Constants
 	public static final String CHILD_CONTAINER_SYSTEM_IDENTIFIERS = "childContainerSystemIdentifiers";
 	
 	//event parameters lists
-	public static final String METHODLIST = "methodList";
+	public static final String METHOD_LIST = "methodList";
 	public static final String HOUR_LIST = "hourList";
 	public static final String MINUTES_LIST = "minutesList";
-	public static final String EMBEDDINGMEDIUMLIST = "embeddingMediumList";
+	public static final String EMBEDDING_MEDIUM_LIST = "embeddingMediumList";
 	public static final String PROCEDURE_LIST = "procedureList";
 	public static final String PROCEDUREIDLIST = "procedureIdList";
 	public static final String CONTAINER_LIST = "containerList";
 	public static final String CONTAINERIDLIST = "containerIdList";
 	public static final String FROMCONTAINERLIST="fromContainerList";
 	public static final String TOCONTAINERLIST="toContainerList";
-	public static final String FIXATIONLIST = "fixationList";	
+	public static final String FIXATION_LIST = "fixationList";	
 	public static final String FROMSITELIST="fromsiteList";
 	public static final String TOSITELIST="tositeList";	
 	public static final String ITEMLIST="itemList";

@@ -139,7 +139,7 @@
 			<td class="formField">
 				<html:select property="method" styleClass="formFieldSized" styleId="method" size="1">
 					<%--html:options name="methodList" labelName="methodList" /--%>
-					<html:options collection="<%=Constants.METHODLIST%>" labelProperty="name" property="value"/>
+					<html:options collection="<%=Constants.METHOD_LIST%>" labelProperty="name" property="value"/>
 				</html:select>
 
 			</td>

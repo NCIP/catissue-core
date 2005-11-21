@@ -137,8 +137,8 @@
 			</td>
 			<td class="formField">
 				<html:select property="embeddingMedium" styleClass="formFieldSized" styleId="embeddingMedium" size="1">
-					<%--html:options name="<%=Constants.EMBEDDINGMEDIUMLIST%>" labelName="<%=Constants.EMBEDDINGMEDIUMLIST%>" /--%>
-					<html:options collection="<%=Constants.EMBEDDINGMEDIUMLIST%>" labelProperty="name" property="value"/>
+					<%--html:options name="<%=Constants.EMBEDDING_MEDIUM_LIST%>" labelName="<%=Constants.EMBEDDING_MEDIUM_LIST%>" /--%>
+					<html:options collection="<%=Constants.EMBEDDING_MEDIUM_LIST%>" labelProperty="name" property="value"/>
 				</html:select>
 
 			</td>

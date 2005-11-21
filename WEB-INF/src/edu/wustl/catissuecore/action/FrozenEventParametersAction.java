@@ -27,6 +27,6 @@ public class FrozenEventParametersAction extends SpecimenEventParametersAction
 	{
 		//set array of methods
         List methodList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_METHOD,null);
-    	request.setAttribute(Constants.METHODLIST, methodList);
+    	request.setAttribute(Constants.METHOD_LIST, methodList);
 	}
 }

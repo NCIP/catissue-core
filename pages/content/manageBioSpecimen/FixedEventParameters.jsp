@@ -137,7 +137,7 @@
 			</td>
 			<td class="formField">
 				<html:select property="fixationType" styleClass="formFieldSized" styleId="fixationType" size="1">
-					<html:options collection="<%=Constants.FIXATIONLIST%>" labelProperty="name" property="value"/>
+					<html:options collection="<%=Constants.FIXATION_LIST%>" labelProperty="name" property="value"/>
 				</html:select>
 			</td>
 		</tr>
