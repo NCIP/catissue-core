@@ -139,7 +139,7 @@
 			</td>
 			<td class="formField">
 				<html:select property="storageStatus" styleClass="formFieldSized" styleId="storageStatus" size="1">
-					<html:options name="<%=Constants.STORAGESTATUSLIST%>" labelName="<%=Constants.STORAGESTATUSLIST%>" />
+					<html:options name="<%=Constants.STORAGE_STATUS_LIST%>" labelName="<%=Constants.STORAGE_STATUS_LIST%>" />
 				</html:select>
 			</td>
 		</tr>
