@@ -189,7 +189,7 @@ public class Constants
 	public static final String FLUID_SPECIMEN_ID_LIST="fluidSpecimenIdList";
 	public static final String STORAGE_STATUS_LIST="storageStatusList";
 	public static final String CLINICAL_DIAGNOSIS_LIST = "clinicalDiagnosisList";
-	public static final String HISTOLOGICALQUALITYLIST="histologicalQualityList";
+	public static final String HISTOLOGICAL_QUALITY_LIST="histologicalQualityList";
 	
 	//For Specimen Event Parameters.
 	public static final String SPECIMEN_ID = "specimenId";
@@ -1165,7 +1165,7 @@ public class Constants
 			"CLINICALDIAGNOSIS 3"
 	};
 	
-	public static final String [] HISTOLOGICALQUALITYARRAY = {
+	public static final String [] HISTOLOGICAL_QUALITY_ARRAY = {
 	        SELECT_OPTION,
 			"GOOD",
 			"OK",
