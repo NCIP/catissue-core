@@ -189,7 +189,6 @@ public class EmailHandler
 				+ "\n\t "+ ApplicationProperties.getValue("user.loginName")+ Constants.SEPARATOR + user.getLoginName()
 			    + "\n\t "+ ApplicationProperties.getValue("user.password")+ Constants.SEPARATOR + PasswordManager.decode(user.getPassword())
 			    + "\n\t "+ ApplicationProperties.getValue("user.role")+ Constants.SEPARATOR + roleOfUser
-			    + "\n\n\n" + ApplicationProperties.getValue("loginDetails.catissue.url.message") + "\n\t" + Variables.catissueURL
 			    + "\n\n" + ApplicationProperties.getValue("email.catissuecore.team");
 			
 			emailStatus = sendEmailToUser(user.getEmailAddress(), subject, body);
@@ -230,6 +229,8 @@ public class EmailHandler
 		String technicalSupportEmailAddress = ApplicationProperties
 		        .getValue("email.technicalSupport.emailAddress");
 		
+		body = body + "\n\n" + ApplicationProperties.getValue("loginDetails.catissue.url.message") + Variables.catissueURL;
+		
 		SendEmail email = new SendEmail();
         boolean emailStatus = email.sendmail(userEmailAddress, technicalSupportEmailAddress,
 				                				mailServer, subject, body);
@@ -252,6 +253,8 @@ public class EmailHandler
         		.getValue("email.technicalSupport.emailAddress");
         String mailServer = ApplicationProperties
                 .getValue("email.mailServer");
+        
+        body = body + "\n\n" + ApplicationProperties.getValue("loginDetails.catissue.url.message") + Variables.catissueURL;
          
         SendEmail email = new SendEmail();
         boolean emailStatus = email.sendmail(userEmailAddress, adminEmailAddress, 
@@ -274,6 +277,8 @@ public class EmailHandler
         		.getValue("email.technicalSupport.emailAddress");
         String mailServer = ApplicationProperties
                 .getValue("email.mailServer");
+        
+        body = body + "\n\n" + ApplicationProperties.getValue("loginDetails.catissue.url.message") + Variables.catissueURL;
          
         SendEmail email = new SendEmail();
         boolean emailStatus = email.sendmail(adminEmailAddress, 
