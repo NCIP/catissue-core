@@ -43,18 +43,13 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 	    	
 	    	if(specimenList!=null && specimenList.size() != 0)
 	    	{
-		    	String positionOne = null;
-		    	String positionTwo = null;
-		    	String storageContainerID = null;
-		    	String fromPositionData = null;
-
 	    		Specimen specimen = (Specimen)specimenList.get(0);
-	    		positionOne = specimen.getPositionDimensionOne().toString();
-	    		positionTwo = specimen.getPositionDimensionTwo().toString();
+	    		String positionOne = specimen.getPositionDimensionOne().toString();
+	    		String positionTwo = specimen.getPositionDimensionTwo().toString();
 	    		
 	    		StorageContainer container = specimen.getStorageContainer();
-	    		storageContainerID = container.getSystemIdentifier().toString();
-	    		fromPositionData = container.getStorageType().getType() + " : " 
+	    		String storageContainerID = container.getSystemIdentifier().toString();
+	    		String fromPositionData = container.getStorageType().getType() + " : " 
 				+ storageContainerID + " Pos(" + positionOne + "," + positionTwo + ")";
 	    		
 				 //The fromPositionData(storageContainer Info) of specimen of this event.
