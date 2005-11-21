@@ -50,10 +50,10 @@ public class SpecimenEventParametersAction  extends SecureAction
         request.setAttribute(Constants.OPERATION, operation);
         
         //Sets the minutesList attribute to be used in the Add/Edit FrozenEventParameters Page.
-        request.setAttribute(Constants.MINUTESLIST, Constants.MINUTESARRAY);
+        request.setAttribute(Constants.MINUTES_LIST, Constants.MINUTES_ARRAY);
 
         //Sets the hourList attribute to be used in the Add/Edit FrozenEventParameters Page.
-        request.setAttribute(Constants.HOURLIST, Constants.HOURARRAY);
+        request.setAttribute(Constants.HOUR_LIST, Constants.HOUR_ARRAY);
         
         //The id of specimen of this event.
         String specimenId = request.getParameter(Constants.SPECIMEN_ID); 
@@ -62,13 +62,10 @@ public class SpecimenEventParametersAction  extends SecureAction
         String isRNA = request.getParameter(Constants.IS_RNA); 
         request.setAttribute(Constants.IS_RNA, isRNA);
         
-        //The Add/Edit status message
-        request.setAttribute(Constants.STATUS_MESSAGE_KEY, request.getAttribute(Constants.STATUS_MESSAGE_KEY));
-   
        	UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getBizLogic(Constants.USER_FORM_ID);
-    	Collection coll =  userBizLogic.getUsers();
+    	Collection userCollection =  userBizLogic.getUsers();
     	
-    	request.setAttribute(Constants.USERLIST, coll);
+    	request.setAttribute(Constants.USERLIST, userCollection);
     	
     	// This method will be overridden by the sub classes
     	setRequestParameters( request);
