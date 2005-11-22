@@ -9,8 +9,7 @@ package edu.wustl.catissuecore.bizlogic;
 
 import edu.wustl.catissuecore.dao.DAO;
 import edu.wustl.catissuecore.domain.ReportedProblem;
-import edu.wustl.catissuecore.util.global.ApplicationProperties;
-import edu.wustl.catissuecore.util.global.SendEmail;
+import edu.wustl.catissuecore.util.EmailHandler;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
@@ -30,25 +29,12 @@ public class ReportedProblemBizLogic extends DefaultBizLogic
 	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
     {
         ReportedProblem reportedProblem = (ReportedProblem) obj;
-
+        
         dao.insert(obj,sessionDataBean, true, false);
-
-        //Send the reported problem to administrator and the user who reported it.
-        SendEmail email = new SendEmail();
-        String body = ApplicationProperties.getValue("email.reportProblem.body.start") + 
-        			  "\n " + ApplicationProperties.getValue("reportedProblem.from") + " : " + reportedProblem.getFrom() + 
-        			  "\n " + ApplicationProperties.getValue("reportedProblem.title") + " : " + reportedProblem.getSubject() + 
-        			  "\n " + ApplicationProperties.getValue("reportedProblem.message") + " : " + reportedProblem.getMessageBody() +
-        			  "\n\n" + ApplicationProperties.getValue("email.catissuecore.team");
         
-        String adminEmailAddress = ApplicationProperties.getValue("email.administrative.emailAddress");
-        String subject = ApplicationProperties.getValue("email.reportProblem.subject");
-        String technicalSupportEmailAddress = ApplicationProperties.getValue("email.technicalSupport.emailAddress");
-        String mailServer = ApplicationProperties.getValue("email.mailServer");
-        
-        boolean mailStatus = email.sendmail(adminEmailAddress,reportedProblem.getFrom(),null,
-                			 technicalSupportEmailAddress,mailServer,subject,
-                			 body);
+        // Send the reported problem to the administrator and the user who reported it.
+        EmailHandler emailHandler = new EmailHandler();
+        emailHandler.sendReportedProblemEmail(reportedProblem);
     }
     
     
