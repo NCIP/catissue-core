@@ -117,25 +117,40 @@ public class ApproveUserBizLogic extends DefaultBizLogic
                 emailHandler.sendRejectionEmail(user);
 	        }
         }
-        catch (Exception exp)
+        catch(DAOException daoExp)
+        {
+            Logger.out.debug(daoExp.getMessage(), daoExp);
+            deleteCSMUser(csmUser);
+            throw new DAOException(daoExp.getMessage(), daoExp);
+        }
+        catch (SMException exp)
         {
             Logger.out.debug(exp.getMessage(), exp);
-            try
+            deleteCSMUser(csmUser);
+            throw new DAOException(exp.getMessage(), exp);
+        }
+    }
+    
+    /**
+     * Deletes the csm user from the csm user table.
+     * @param csmUser The csm user to be deleted.
+     * @throws DAOException
+     */
+    private void deleteCSMUser(gov.nih.nci.security.authorization.domainobjects.User csmUser) throws DAOException
+    {
+        try
+        {
+            if (csmUser.getUserId() != null)
             {
-                if (csmUser.getUserId() != null)
-                {
-                    SecurityManager.getInstance(ApproveUserBizLogic.class)
-                    					.removeUser(csmUser.getUserId().toString());
-                }
+                SecurityManager.getInstance(ApproveUserBizLogic.class)
+                					.removeUser(csmUser.getUserId().toString());
             }
-            catch(SMException smExp)
-            {
-                Logger.out.debug(ApplicationProperties.getValue("errors.user.delete")
-                        				+smExp.getMessage(), smExp);
-                throw new DAOException(smExp.getMessage(), smExp);
-            }
-            throw new DAOException(ApplicationProperties.getValue("errors.user.approve")
-                    					+exp.getMessage(), exp);
+        }
+        catch(SMException smExp)
+        {
+            Logger.out.debug(ApplicationProperties.getValue("errors.user.delete")+
+                    				smExp.getMessage(), smExp);
+            throw new DAOException(smExp.getMessage(), smExp);
         }
     }
     

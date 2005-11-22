@@ -124,7 +124,8 @@ public class UserBizLogic extends DefaultBizLogic
             protectionObjects.add(user);
     	    try
             {
-                SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null,protectionObjects,null);
+                SecurityManager.getInstance(this.getClass())
+                			.insertAuthorizationData(null,protectionObjects,null);
             }
             catch (SMException smExp)
             {
@@ -145,28 +146,43 @@ public class UserBizLogic extends DefaultBizLogic
                 emailHandler.sendApprovalEmail(user);
             }
         }
-        catch (Exception exp)
+        catch(DAOException daoExp)
+        {
+            Logger.out.debug(daoExp.getMessage(), daoExp);
+            deleteCSMUser(csmUser);
+            throw new DAOException(daoExp.getMessage(), daoExp);
+        }
+        catch (SMException exp)
         {
             Logger.out.debug(exp.getMessage(), exp);
-            try
-            {
-                if (csmUser.getUserId() != null)
-                {
-                    SecurityManager.getInstance(ApproveUserBizLogic.class)
-                    					.removeUser(csmUser.getUserId().toString());
-                }
-            }
-            catch(SMException smExp)
-            {
-                Logger.out.debug(ApplicationProperties.getValue("errors.user.delete")
-                        				+smExp.getMessage(), smExp);
-                throw new DAOException(smExp.getMessage(), smExp);
-            }
-            throw new DAOException(ApplicationProperties.getValue("errors.user.approve")
-                    					+exp.getMessage(), exp);
+            deleteCSMUser(csmUser);
+            throw new DAOException(exp.getMessage(), exp);
         }
     }
     
+    /**
+     * Deletes the csm user from the csm user table.
+     * @param csmUser The csm user to be deleted.
+     * @throws DAOException
+     */
+    private void deleteCSMUser(gov.nih.nci.security.authorization.domainobjects.User csmUser) throws DAOException
+    {
+        try
+        {
+            if (csmUser.getUserId() != null)
+            {
+                SecurityManager.getInstance(ApproveUserBizLogic.class)
+                					.removeUser(csmUser.getUserId().toString());
+            }
+        }
+        catch(SMException smExp)
+        {
+            Logger.out.debug(ApplicationProperties.getValue("errors.user.delete")+
+                    				smExp.getMessage(), smExp);
+            throw new DAOException(smExp.getMessage(), smExp);
+        }
+    }
+
     /**
      * This method returns collection of UserGroupRoleProtectionGroup objects that speciefies the 
      * user group protection group linkage through a role. It also specifies the groups the protection  
@@ -306,7 +322,7 @@ public class UserBizLogic extends DefaultBizLogic
     {
     	String sourceObjectName = User.class.getName();
     	String[] selectColumnName = null;
-    	String[] whereColumnName = {"activityStatus"};
+    	String[] whereColumnName = {Constants.ACTIVITY_STATUS};
         String[] whereColumnCondition = {"!="};
         Object[] whereColumnValue = {Constants.ACTIVITY_STATUS_DISABLED};
         String joinCondition = Constants.AND_JOIN_CONDITION;
@@ -316,7 +332,7 @@ public class UserBizLogic extends DefaultBizLogic
                 whereColumnCondition, whereColumnValue, joinCondition);
         
         Vector nameValuePairs = new Vector();
-        nameValuePairs.add(new NameValueBean(Constants.SELECT_OPTION, "-1"));
+        nameValuePairs.add(new NameValueBean(Constants.SELECT_OPTION, String.valueOf(Constants.SELECT_OPTION_VALUE)));
         
         // If the list of users retrieved is not empty. 
         if (users.isEmpty() == false)
@@ -402,7 +418,7 @@ public class UserBizLogic extends DefaultBizLogic
             {
                 csmUser = (gov.nih.nci.security.authorization.domainobjects.User) csmList.get(0);
                 //Retrieve the user using csm user id from catissue user table.
-                list = retrieve(User.class.getName(), "csmUserId",
+                list = retrieve(User.class.getName(), Constants.CSM_USER_ID,
                         String.valueOf(csmUser.getUserId()));
             }
             
