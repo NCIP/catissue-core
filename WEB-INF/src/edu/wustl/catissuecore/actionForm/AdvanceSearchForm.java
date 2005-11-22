@@ -55,17 +55,21 @@ public class AdvanceSearchForm extends ActionForm
 	 */
     private int eventCounter = 1;
     
-	/**
-	 * @return Returns the selectedNode.
-	 */
+    /**
+     * Returns the selected node from a query tree.
+     * @return The selected node from a query tree.
+     * @see #setSelectedNode(String)
+     */
 	public String getSelectedNode()
 	{
 		return selectedNode;
 	}
 	
 	/**
-	 * @param selectedNode The selectedNode to set.
-	 */
+     * Sets the selected node of a query tree.
+     * @param selectedNode the selected node of a query tree.
+     * @see #getSelectedNode()
+     */
 	public void setSelectedNode(String selectedNode)
 	{
 		this.selectedNode = selectedNode;
@@ -109,6 +113,7 @@ public class AdvanceSearchForm extends ActionForm
     {    	
     	values.put(key, value);
     }
+    
     /**
      * Returns the object to which this map maps the specified key.
      * @param key the required key.
@@ -118,29 +123,31 @@ public class AdvanceSearchForm extends ActionForm
     {
         return values.get(key);
     }
-
 	
-	/**
-	 * @return Returns the values.
-	 */
+    /**
+     * Returns all the values of the map.
+     * @return the values of the map.
+     */
 	public Collection getAllValues() 
 	{
 		return values.values();
 	}
 
 	/**
-	 * @param values
-	 * The values to set.
-	 */
+     * Sets the map.
+     * @param values the map.
+     * @see #getValues()
+     */
 	public void setValues(Map values)
 	{
 		this.values = values;
 	}
 	
 	/**
-	 * @param values
-	 * The values to set.
-	 */
+     * Returns the map.
+     * @return the map.
+     * @see #setValues(Map)
+     */
 	public Map getValues()
 	{
 		return this.values;
@@ -181,20 +188,23 @@ public class AdvanceSearchForm extends ActionForm
     {
         ActionErrors errors = new ActionErrors();
         Validator validator = new Validator();
-               
         return errors;
     }
     
-	/**
-	 * @return Returns the objectName.
-	 */
+    /**
+     * Returns the object name.
+     * @return the object name.
+     * @see #setObjectName(String)
+     */
 	public String getObjectName()
 	{
 		return objectName;
 	}
 	
 	/**
-	 * @param objectName The objectName to set.
+	 * Sets the object name.
+	 * @param objectName The object name to be set.
+	 * @see #getObjectName()
 	 */
 	public void setObjectName(String objectName)
 	{
@@ -232,7 +242,7 @@ public class AdvanceSearchForm extends ActionForm
     
     /**
      * Returns the no. of rows of event parameters.
-     * @return int The no. of rows of event parameters.
+     * @return The no. of rows of event parameters.
      * @see #setEventCounter(int)
      */
 	public int getEventCounter()
