@@ -77,6 +77,7 @@ public class Constants
 	public static final String OPERATION = "operation";
 	public static final String ACTIVITY_STATUS = "activityStatus";
 	public static final String NEXT_CONTAINER_NO = "startNumber";
+	public static final String CSM_USER_ID = "csmUserId";
 	
 	public static final String INSTITUTIONLIST = "institutionList";
 	public static final String DEPARTMENTLIST = "departmentList";
