@@ -21,7 +21,6 @@ import edu.wustl.catissuecore.exception.AssignDataException;
 public class QueryTableData extends AbstractDomainObject
         implements Serializable
 {
-
     /**
      * System Identifier
      */
@@ -43,10 +42,15 @@ public class QueryTableData extends AbstractDomainObject
 	private String aliasName;
 	
 	/**
+	 * Privilege Identifier
+	 */
+	private Integer privilegeIdentifier;
+	
+	/**
      * A collection of all the columns of a table
      */
 	private Collection columnDataCollection = new HashSet();
-
+	
     /**
      * Display name of Table.
      * @hibernate.property name="displayName" type="string" column="DISPLAY_NAME" length="50"
@@ -112,7 +116,7 @@ public class QueryTableData extends AbstractDomainObject
 
     /**
      * Returns the system identifier.
-     * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"
+     * @hibernate.id name="systemIdentifier" column="TABLE_ID" type="long" length="20"
      * unsaved-value="null" generator-class="native"
      * @return Returns the system identifier.
      */
@@ -129,6 +133,25 @@ public class QueryTableData extends AbstractDomainObject
     	this.systemIdentifier = systemIdentifier;
     }
     
+    /**
+     * Returns the privilege identifier.
+     * @hibernate.id name="privilegeIdentifier" column="PRIVILEGE_ID" type="int" length="1"
+     * unsaved-value="null" generator-class="native"
+     * @return Returns the Privilege Identifier.
+     */
+    public Integer getPrivilegeIdentifier()
+	{
+		return privilegeIdentifier;
+	}
+	
+    /**
+     * @param privilegeIdentifier The Privilege Identifier.
+     */
+	public void setPrivilegeIdentifier(Integer privilegeIdentifier)
+	{
+		this.privilegeIdentifier = privilegeIdentifier;
+	}
+	
     /**
 	 * Returns collection of all the columns of this table.
 	 * @return collection of all the columns of this table.

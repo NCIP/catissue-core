@@ -42,7 +42,7 @@ public class QueryColumnData extends AbstractDomainObject
 
     /**
      * Returns the systemIdentifier.
-     * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"
+     * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="20"
      * unsaved-value="null" generator-class="native"
      * @return Returns the identifier.
      */
