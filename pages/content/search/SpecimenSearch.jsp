@@ -510,6 +510,8 @@
 	AdvanceSearchForm form = (AdvanceSearchForm)request.getAttribute("advanceSearchForm");
 	int counter = form.getEventCounter();
 
+	Map eventParametersMap = (Map)form.getEventValues();
+
 	for(int i=1;i<=counter;i++)
 	{
 		String eventClassName = "eventMap(EventName_" + i + ")";
@@ -521,6 +523,15 @@
 		String columnId = "EventColumnName_" + i;
 		String operatorId = "EventColumnOperator_" + i;
 		String valueId = "EventColumnValue_" + i;
+
+		String eventParameter = (String)eventParametersMap.get(classNameId);
+		List columnNamesList = (List)tableColumnMap.get(eventParameter);
+		String operatorType = (String)eventParametersMap.get(columnId);
+
+		if(operatorType != null)
+		{
+			operatorType = operatorType.substring(operatorType.lastIndexOf(".") + 1);
+		}
 %>
 
 
@@ -533,11 +544,45 @@
 	<td class="formField" nowrap>
 		<html:select property="<%=eventColumn%>" styleClass="formFieldSized15" styleId="<%=columnId%>" size="1" onchange="onEventColumnChange(this)">
 			<html:option value="-1"><%=Constants.SELECT_OPTION%></html:option>
+			<%
+			if(columnNamesList != null)
+			{
+				for(int no=0;no<columnNamesList.size();no++)
+				{
+					NameValueBean nvBean = (NameValueBean)columnNamesList.get(no);
+			%>
+					<html:option value="<%=nvBean.getValue()%>"><%=nvBean.getName()%></html:option>
+			<%
+				}
+			}
+			%>
 		</html:select>
 	</td>
 	<td class="formField" nowrap>
 		<html:select property="<%=eventOperator%>" styleClass="formFieldSized10" styleId="<%=operatorId%>" size="1">
 			<html:option value="<%=Constants.ANY%>"><%=Constants.ANY%></html:option>
+			<%
+			if(operatorType != null)
+			if(operatorType.equals("varchar") || operatorType.equals("text"))
+			{
+			%>
+				<html:option value="<%=Operator.STARTS_WITH%>"><%=Operator.STARTS_WITH%></html:option>
+				<html:option value="<%=Operator.ENDS_WITH%>"><%=Operator.ENDS_WITH%></html:option>
+				<html:option value="<%=Operator.CONTAINS%>"><%=Operator.CONTAINS%></html:option>
+				<html:option value="<%=Operator.EQUAL%>">Equals</html:option>
+				<html:option value="<%=Operator.NOT_EQUALS%>">Not Equals</html:option>
+			<%
+			}else{
+			%>
+				<html:option value="<%=Operator.EQUAL%>">Equals</html:option>
+				<html:option value="<%=Operator.NOT_EQUALS%>">Not Equals</html:option>
+				<html:option value="<%=Operator.LESS_THAN%>"><%=Operator.LESS_THAN%></html:option>
+				<html:option value="<%=Operator.LESS_THAN_OR_EQUALS%>"><%=Operator.LESS_THAN_OR_EQUALS%></html:option>
+				<html:option value="<%=Operator.GREATER_THAN%>"><%=Operator.GREATER_THAN%></html:option>
+				<html:option value="<%=Operator.GREATER_THAN_OR_EQUALS%>"><%=Operator.GREATER_THAN_OR_EQUALS%></html:option>
+			<%
+			}
+			%>
 		</html:select>
 	</td>
 	<td class="formField" nowrap>
