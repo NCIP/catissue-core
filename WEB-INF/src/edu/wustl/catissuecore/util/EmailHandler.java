@@ -9,6 +9,7 @@
 
 package edu.wustl.catissuecore.util;
 
+import edu.wustl.catissuecore.domain.ReportedProblem;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -212,6 +213,35 @@ public class EmailHandler
         }
         
         return emailStatus;
+    }
+    
+    /**
+     * Sends email to the administrator and the user who reported the problem.
+     * @param reportedProblem The problem reported.
+     */
+    public void sendReportedProblemEmail(ReportedProblem reportedProblem)
+    {
+        // Send the reported problem to administrator and the user who reported it.
+        String body = ApplicationProperties.getValue("email.reportProblem.body.start") + 
+        			  "\n " + ApplicationProperties.getValue("reportedProblem.from") + " : " + reportedProblem.getFrom() + 
+        			  "\n " + ApplicationProperties.getValue("reportedProblem.title") + " : " + reportedProblem.getSubject() + 
+        			  "\n " + ApplicationProperties.getValue("reportedProblem.message") + " : " + reportedProblem.getMessageBody() +
+        			  "\n\n" + ApplicationProperties.getValue("email.catissuecore.team");
+        
+        String subject = ApplicationProperties.getValue("email.reportProblem.subject");
+        
+        boolean emailStatus = sendEmailToUserAndAdministrator(reportedProblem.getFrom(), subject, body);
+        
+        if (emailStatus)
+		{
+			Logger.out.info(ApplicationProperties
+			    .getValue("reportedProblem.email.success"));
+		}
+		else
+		{
+			Logger.out.info(ApplicationProperties
+			    .getValue("reportedProblem.email.failure"));
+		}
     }
     
     /**
