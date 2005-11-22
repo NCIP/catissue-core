@@ -8,6 +8,8 @@
 package edu.wustl.catissuecore.domain;
 
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.HashSet;
 
 import edu.wustl.catissuecore.actionForm.AbstractActionForm;
 import edu.wustl.catissuecore.exception.AssignDataException;
@@ -17,17 +19,33 @@ import edu.wustl.catissuecore.exception.AssignDataException;
  * @author gautam_shetty
  */
 public class QueryTableData extends AbstractDomainObject
-        implements
-            Serializable
+        implements Serializable
 {
 
-    private long identifier;
+    /**
+     * System Identifier
+     */
+	private Long systemIdentifier;
 
-    private String tableName;
+	/**
+     * Name of the table
+     */
+	private String tableName;
 
-    private String displayName;
+	/**
+     * Display name of the table
+     */
+	private String displayName;
 
-    private String aliasName;
+	/**
+     * Alias name of the table
+     */
+	private String aliasName;
+	
+	/**
+     * A collection of all the columns of a table
+     */
+	private Collection columnDataCollection = new HashSet();
 
     /**
      * Display name of Table.
@@ -45,25 +63,6 @@ public class QueryTableData extends AbstractDomainObject
     public void setDisplayName(String displayName)
     {
         this.displayName = displayName;
-    }
-
-    /**
-     * Returns the systemIdentifier.
-     * @hibernate.id name="identifier" column="TABLE_ID" type="long" length="30"
-     * unsaved-value="null" generator-class="native"
-     * @return Returns the identifier.
-     */
-    public long getIdentifier()
-    {
-        return identifier;
-    }
-
-    /**
-     * @param identifier The identifier to set.
-     */
-    public void setIdentifier(long identifier)
-    {
-        this.identifier = identifier;
     }
 
     /**
@@ -111,20 +110,44 @@ public class QueryTableData extends AbstractDomainObject
 
     }
 
-    /* (non-Javadoc)
-     * @see edu.wustl.catissuecore.domain.AbstractDomainObject#getSystemIdentifier()
+    /**
+     * Returns the system identifier.
+     * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"
+     * unsaved-value="null" generator-class="native"
+     * @return Returns the system identifier.
      */
     public Long getSystemIdentifier()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return this.systemIdentifier;
     }
 
-    /* (non-Javadoc)
-     * @see edu.wustl.catissuecore.domain.AbstractDomainObject#setSystemIdentifier(java.lang.Long)
+    /**
+     * @param systemIdentifier The System Identifier.
      */
     public void setSystemIdentifier(Long systemIdentifier)
     {
-
+    	this.systemIdentifier = systemIdentifier;
     }
+    
+    /**
+	 * Returns collection of all the columns of this table.
+	 * @return collection of all the columns of this table.
+	 * @hibernate.set name="columnDataCollection" table="CATISSUE_QUERY_INTERFACE_COLUMN_DATA"
+	 * cascade="save-update" inverse="true" lazy="false"
+	 * @hibernate.collection-key column="TABLE_ID"
+	 * @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.QueryColumnData"
+	 * @see setColumnDataCollection(Collection)
+	 */
+    public Collection getColumnDataCollection()
+	{
+		return columnDataCollection;
+	}
+    
+    /**
+     * @param columnDataCollection The collection of all the columns of this table.
+     */
+	public void setColumnDataCollection(Collection columnDataCollection)
+	{
+		this.columnDataCollection = columnDataCollection;
+	}
 }
