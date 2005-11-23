@@ -108,6 +108,11 @@ public class SpecimenForm extends AbstractActionForm
      * Number of external identifier rows.
      */
     protected int exIdCounter = 1;
+    
+    /**
+     * Parent Container Identifier.
+     */
+    private String parentContainerId;
 
     protected String positionInStorageContainer;
 
@@ -581,7 +586,6 @@ public class SpecimenForm extends AbstractActionForm
                 String key3 = "_" + Constants.SYSTEM_IDENTIFIER;
                 
                 int index = 1;
-                boolean isError = false;
 
                 while (true)
                 {
@@ -605,17 +609,12 @@ public class SpecimenForm extends AbstractActionForm
                     else if ((!value1.equals("") && value2.equals(""))
                             || (value1.equals("") && !value2.equals("")))
                     {
-                        isError = true;
+                    	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+                                "errors.specimen.externalIdentifier.missing",
+                                ApplicationProperties.getValue("specimen.msg")));
                         break;
                     }
                     index++;
-                }
-
-                if (isError)
-                {
-                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-                            "errors.specimen.externalIdentifier.missing",
-                            ApplicationProperties.getValue("specimen.msg")));
                 }
             }
         }
@@ -627,7 +626,9 @@ public class SpecimenForm extends AbstractActionForm
     }
 
     /**
-     * @return Returns the exIdCounter.
+     * Returns the counter that holds no. of external identifier rows. 
+     * @return The counter that holds no. of external identifier rows.
+     * @see #setExIdCounter(int)
      */
     public int getExIdCounter()
     {
@@ -635,7 +636,9 @@ public class SpecimenForm extends AbstractActionForm
     }
 
     /**
-     * @param exIdCounter The exIdCounter to set.
+     * Sets the counter that holds no. of external identifier rows.
+     * @param exIdCounter The counter that holds no. of external identifier rows.
+     * @see #getExIdCounter()
      */
     public void setExIdCounter(int exIdCounter)
     {
@@ -643,7 +646,9 @@ public class SpecimenForm extends AbstractActionForm
     }
 
     /**
-     * @return Returns the positionInStorageContainer.
+     * Returns the position in storage container. 
+     * @return The position in storage container.
+     * @see #setPositionInStorageContainer(String)
      */
     public String getPositionInStorageContainer()
     {
@@ -651,42 +656,52 @@ public class SpecimenForm extends AbstractActionForm
     }
 
     /**
-     * @param positionInStorageContainer The positionInStorageContainer to set.
+     * Sets the position in storage container.
+     * @param positionInStorageContainer The position in storage container.
+     * @see #getPositionInStorageContainer()
      */
     public void setPositionInStorageContainer(String positionInStorageContainer)
     {
         this.positionInStorageContainer = positionInStorageContainer;
     }
     
-	/**
-	 * @return Returns the available.
-	 */
+    /**
+     * Returns True/False, whether the quatity is available or not. 
+     * @return True/False, whether the quatity is available or not.
+     * @see #setAvailable(boolean)
+     */
 	public boolean isAvailable()
 	{
 		return available;
 	}
+	
 	/**
-	 * @param available The available to set.
-	 */
+     * Sets True/False depending upon the availability of the quantity.
+     * @param available True/False depending upon the availability of the quantity.
+     * @see #getAvailable()
+     */
 	public void setAvailable(boolean available)
 	{
 		this.available = available;
 	}
 	
-	
-	
-	private String parentContainerId;
-	
 	/**
-	 * @return Returns the parentContainerId.
-	 */
-	public String getParentContainerId() {
+     * Returns the parent container id. 
+     * @return The parent container id.
+     * @see #setParentContainerId(String)
+     */
+	public String getParentContainerId()
+	{
 		return parentContainerId;
 	}
+	
 	/**
-	 * @param parentContainerId The parentContainerId to set.
-	 */
-	public void setParentContainerId(String parentContainerId) {
+     * Sets the parent container id.
+     * @param parentContainerId The parent container id.
+     * @see #getParentContainerId()
+     */
+	public void setParentContainerId(String parentContainerId)
+	{
 		this.parentContainerId = parentContainerId;
 	}
 	
