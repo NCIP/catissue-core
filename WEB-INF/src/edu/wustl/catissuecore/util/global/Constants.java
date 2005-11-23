@@ -197,7 +197,7 @@ public class Constants
 	public static final String FROM_POSITION_DATA = "fromPositionData";
 	public static final String POS_ONE ="posOne";
 	public static final String POS_TWO ="posTwo";
-	public static final boolean switchSecurity = false;
+	public static final boolean switchSecurity = true;
 	public static final String STORAGE_CONTAINER_ID ="storContId";
 	public static final String IS_RNA = "isRNA";
 	public static final String MOLECULAR = "Molecular";
