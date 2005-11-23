@@ -14,16 +14,13 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Vector;
 import java.util.Set;
-import java.util.TreeSet;
 import java.util.StringTokenizer;
+import java.util.TreeSet;
+import java.util.Vector;
 
 import edu.wustl.catissuecore.dao.DAOFactory;
 import edu.wustl.catissuecore.dao.JDBCDAO;
-import edu.wustl.catissuecore.domain.ClinicalReport;
-import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
-import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.query.Client;
 import edu.wustl.catissuecore.query.DataElement;
 import edu.wustl.catissuecore.query.Operator;
@@ -526,7 +523,7 @@ public class QueryBizLogic extends DefaultBizLogic
         return prevValueDisplayName;
     }
     
-     /**
+   /**
  	* Returns all the tables in the simple query interface.
  	* @param request
  	* @throws DAOException
@@ -534,18 +531,28 @@ public class QueryBizLogic extends DefaultBizLogic
  	*/
 	public Set getAllTableNames(String aliasName)throws DAOException, ClassNotFoundException
 	{
-    	String sql = " select distinct tableData.DISPLAY_NAME, tableData.ALIAS_NAME " +
-    				 " from CATISSUE_TABLE_RELATION tableRelation join CATISSUE_QUERY_INTERFACE_TABLE_DATA " +
-    				 " tableData on tableRelation.PARENT_TABLE_ID = tableData.TABLE_ID ";
+	    String [] selectColumnNames = {Constants.TABLE_DISPLAY_NAME_COLUMN, Constants.TABLE_ALIAS_NAME_COLUMN};
+	    String [] whereColumnNames = {Constants.TABLE_FOR_SQI_COLUMN};
+	    String [] whereColumnConditions = {"="};
+	    String [] whereColumnValues = {"1"};
 
 		if ((aliasName != null) && (!"".equals(aliasName)))
 		{
-			sql = sql + " where tableData.ALIAS_NAME = '"+ aliasName +"'";
+			whereColumnNames = new String[2];
+			whereColumnNames[0] = Constants.TABLE_FOR_SQI_COLUMN;
+			whereColumnNames[1] = Constants.TABLE_ALIAS_NAME_COLUMN;
+			whereColumnConditions = new String[2];
+			whereColumnConditions[0]= "=";
+			whereColumnConditions[1]="=";
+			whereColumnValues = new String[2];
+			whereColumnValues[0]="1";
+			aliasName = "'" + aliasName + "'";
+			whereColumnValues[1]=aliasName;
 		}
 
 		JDBCDAO jdbcDAO = (JDBCDAO)DAOFactory.getDAO(Constants.JDBC_DAO);
 		jdbcDAO.openSession(null);
-		List tableList = jdbcDAO.executeQuery(sql,null,false, null);
+		List tableList = jdbcDAO.retrieve(Constants.TABLE_DATA_TABLE_NAME, selectColumnNames, whereColumnNames, whereColumnConditions, whereColumnValues, null);
 		jdbcDAO.closeSession();
 		
 		Set objectNameValueBeanList = new TreeSet();
@@ -817,5 +824,5 @@ public class QueryBizLogic extends DefaultBizLogic
                Logger.out.debug("tableId before converting to Long:"+tableIdString);
             }
             return tableIdString;
-    }   
+    }
   }
