@@ -178,11 +178,9 @@ public abstract class Query
                 dataElement = (DataElement) resultView.get(i);
 //                set.add(dataElement.getTable());
                 if (i != resultView.size() - 1)
-                    query.append(dataElement.getTable() + tableSufix + "."
-                            + dataElement.getField() + ", ");
+                    query.append(dataElement.toSQLString(tableSufix) + " "+dataElement.getColumnNameString(tableSufix)+", ");
                 else
-                    query.append(dataElement.getTable() + tableSufix + "."
-                            + dataElement.getField() + " ");
+                    query.append(dataElement.toSQLString(tableSufix)+ " "+dataElement.getColumnNameString(tableSufix));
             }
         }
 
