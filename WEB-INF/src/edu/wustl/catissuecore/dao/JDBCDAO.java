@@ -256,15 +256,15 @@ public class JDBCDAO extends AbstractDAO
      */
     public List executeQuery(String query, SessionDataBean sessionDataBean, boolean isSecureExecute, Map queryResultObjectDataMap) throws ClassNotFoundException, DAOException
     {
-//    	//Aarti: Security checks
-//    	if(Constants.switchSecurity && isSecureExecute)
-//    	{
-//    		if(sessionDataBean==null )
-//    		{
-//    			Logger.out.debug("Session data is null");
-//				return null;
-//    		}
-//    	}
+    	//Aarti: Security checks
+    	if(Constants.switchSecurity && isSecureExecute)
+    	{
+    		if(sessionDataBean==null )
+    		{
+    			Logger.out.debug("Session data is null");
+				return null;
+    		}
+    	}
 //    	
     	PreparedStatement stmt = null;
     	ResultSet resultSet = null;
@@ -321,11 +321,11 @@ public class JDBCDAO extends AbstractDAO
                 	i++;
                 }
                 
-//                //Aarti: Checking object level privileges on each record
-//            	if(Constants.switchSecurity && isSecureExecute)
-//            	{
-//    				SecurityManager.getInstance(this.getClass()).filterRow(sessionDataBean, queryResultObjectDataMap, aList);
-//            	}
+                //Aarti: Checking object level privileges on each record
+            	if(Constants.switchSecurity && isSecureExecute)
+            	{
+    				SecurityManager.getInstance(this.getClass()).filterRow(sessionDataBean, queryResultObjectDataMap, aList);
+            	}
                 
                 list.add(aList);
             }
