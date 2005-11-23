@@ -11,9 +11,9 @@
         {
             formName = Constants.REPORTED_PROBLEM_EDIT_ACTION;
 			Long identifier = (Long)request.getAttribute(Constants.PREVIOUS_PAGE);
-			prevPage = Constants.PROBLEM_DETAILS_ACTION+"?"+Constants.IDENTIFIER+"="+identifier;
+			prevPage = Constants.PROBLEM_DETAILS_ACTION+"?"+Constants.SYSTEM_IDENTIFIER+"="+identifier;
 			identifier = (Long)request.getAttribute(Constants.NEXT_PAGE);
-			nextPage = Constants.PROBLEM_DETAILS_ACTION+"?"+Constants.IDENTIFIER+"="+identifier;
+			nextPage = Constants.PROBLEM_DETAILS_ACTION+"?"+Constants.SYSTEM_IDENTIFIER+"="+identifier;
             readOnlyValue = true;
         }
         else
