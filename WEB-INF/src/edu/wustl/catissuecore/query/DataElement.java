@@ -50,7 +50,12 @@ public class DataElement
      */
     public String toSQLString(int tableSufix)
     {
-        return table + tableSufix + "." + field;
+        return table + tableSufix + "." + field+" ";
+    }
+    
+    public String getColumnNameString(int tableSufix)
+    {
+        return table + tableSufix + "_" + field+" ";
     }
     
     public boolean equals(Object obj)
