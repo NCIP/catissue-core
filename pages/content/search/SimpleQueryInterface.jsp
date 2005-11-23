@@ -66,7 +66,7 @@ function incrementCounter()
 	document.forms[0].counter.value = parseInt(document.forms[0].counter.value) + 1;
 }
 
-function showDateColumn(element,valueField,columnID,showCalendarID,fieldValue)
+function showDateColumn(element,valueField,columnID,showCalendarID,fieldValue,overDiv)
 {
 	var dataStr = element.options[element.selectedIndex].value;
 	var dataValue = new String(dataStr);
@@ -87,7 +87,7 @@ function showDateColumn(element,valueField,columnID,showCalendarID,fieldValue)
 			var td = document.getElementById(columnID);
 			txtField.readOnly="";
 			calendarShow.value = "Show";
-			var innerStr = "<div id='overDiv' style='position:absolute; visibility:hidden; z-index:1000;'></div>";
+			var innerStr = "<div id='"+ overDiv +"' style='position:absolute; visibility:hidden; z-index:1000;'></div>";
 			innerStr = innerStr + "<a href=\"javascript:show_calendar('"+fieldValue+"',null,null,'MM-DD-YYYY');\">";
 			innerStr = innerStr + "<img src=\"images\\calendar.gif\" width=24 height=22 border=0>";
 			innerStr = innerStr + "</a>";
@@ -197,10 +197,16 @@ function onAttributeChange(element,opComboName)
 						String showCalendarKey = "SimpleConditionsNode:"+i+"_showCalendar";			
 						String showCalendarValue = "showCalendar(SimpleConditionsNode:"+i+"_showCalendar)";
 						String fieldName = "simpleQueryInterfaceForm."+attributeValueID;
-						String functionName = "showDateColumn(this,'"+ attributeValueID +"','" + columnID + "','" + showCalendarValue + "','"+fieldName+"')";
+						String overDiv = "overDiv";
+						if(i>1)
+						{
+							overDiv = overDiv + "" + i;
+						}
+						String functionName = "showDateColumn(this,'"+ attributeValueID +"','" + columnID + "','" + showCalendarValue + "','"+fieldName+"','"+overDiv+"')";
 						String attributeId = "attribute" + i;
 						String operatorId = "operator" + i;
 						String onAttributeChange = "onAttributeChange(this,'" + operatorId + "'); " + functionName;
+						
 				%>					
 				<tr>
 					<td class="formRequiredNotice" width="5">&nbsp;</td>
@@ -287,7 +293,7 @@ function onAttributeChange(element,opComboName)
 					if(showCal != null && showCal.trim().length()>0)
 					{
 				%>
-						<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
+						<div id="<%=overDiv%>" style="position:absolute; visibility:hidden; z-index:1000;"></div>
 						<a href="javascript:show_calendar('<%=fieldName%>',null,null,'MM-DD-YYYY');">
 							<img src="images\calendar.gif" width=24 height=22 border=0>
 						</a>
