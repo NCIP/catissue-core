@@ -1,6 +1,7 @@
 
 package edu.wustl.catissuecore.query;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -565,6 +566,45 @@ public abstract class Query
     	}
     	
     	return columnIds;
+    }
+    
+    public Map getIdentifierColumnIds(Vector tableAliasVector)
+    {
+    	Logger.out.debug(" tableAliasVector:"+tableAliasVector);
+    	
+    	Map columnIdsMap = new HashMap();
+    	DataElement dataElement;
+    	String dataElementTableName;
+    	String dataElementFieldName;
+    	String tableAlias;
+    	DataElement identifierDataElement;
+    	
+    	for(int j=0; j<tableAliasVector.size(); j++)
+    	{
+    		tableAlias=(String) tableAliasVector.get(j);
+	    	for(int i =0;i<resultView.size();i++)
+	    	{
+	    		dataElement = (DataElement) resultView.get(i);
+	    		dataElementTableName = dataElement.getTable();
+	    		dataElementFieldName = dataElement.getField();
+	    		
+	    		if(dataElementTableName.equals(tableAlias) && dataElementFieldName.equals(Constants.IDENTIFIER))
+	    		{
+	    			columnIdsMap.put(tableAlias,new Integer(i+1));
+	    			Logger.out.debug("tableAlias:"+tableAlias+" Identifier columnId:"+(i+1));
+	    			break;
+	    		}
+	    	}
+	    	if(columnIdsMap.get(tableAlias)== null)
+	    	{
+	    		identifierDataElement= new DataElement(tableAlias,Constants.IDENTIFIER);
+	    		this.resultView.add(identifierDataElement);
+	    		columnIdsMap.put(tableAlias,new Integer(resultView.size()));
+	    		Logger.out.debug("tableAlias:"+tableAlias+" Identifier columnId:"+resultView.size());
+	    	}
+    	}
+    	
+    	return columnIdsMap;
     }
     
 	/**
