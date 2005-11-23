@@ -2,7 +2,7 @@
 <%
 	String selectMenu = (String) request.getAttribute(Constants.MENU_SELECTED);
 	int selectMenuID = 0;
-	if(selectMenu != null)
+	if(selectMenu != null && !selectMenu.equals(""))
 	{
 		selectMenuID = Integer.parseInt(selectMenu);
 	}
