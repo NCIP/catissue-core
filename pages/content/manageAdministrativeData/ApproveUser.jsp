@@ -81,7 +81,7 @@
 								<%
         								User user = (User) currentUser;
 										String identifier = user.getSystemIdentifier().toString();
-										String userDetailsLink = Constants.USER_DETAILS_SHOW_ACTION+"?"+Constants.IDENTIFIER+"="+identifier;
+										String userDetailsLink = Constants.USER_DETAILS_SHOW_ACTION+"?"+Constants.SYSTEM_IDENTIFIER+"="+identifier;
         						%>
 								<td class="dataCellText">
 									<%=i%>

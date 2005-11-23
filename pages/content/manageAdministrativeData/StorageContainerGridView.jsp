@@ -67,13 +67,13 @@ function closeFramedWindow()
 							if (pageOf.equals(Constants.PAGEOF_SPECIMEN))
 							{
 								openStorageContainer = Constants.SHOW_STORAGE_CONTAINER_GRID_VIEW_ACTION
-                    			+ "?" + Constants.IDENTIFIER + "=" + childContainerSystemIdentifiers[i][j]
+                    			+ "?" + Constants.SYSTEM_IDENTIFIER + "=" + childContainerSystemIdentifiers[i][j]
                     			+ "&" + Constants.PAGEOF + "=" + pageOf;
 							}
 							else
 							{
 								openStorageContainer = Constants.SHOW_STORAGE_CONTAINER_GRID_VIEW_ACTION
-                    			+ "?" + Constants.IDENTIFIER + "=" + childContainerSystemIdentifiers[i][j]
+                    			+ "?" + Constants.SYSTEM_IDENTIFIER + "=" + childContainerSystemIdentifiers[i][j]
                     			+ "&" + Constants.STORAGE_CONTAINER_TYPE + "=" + storageContainerType
 								+ "&" + Constants.PAGEOF + "=" + pageOf;
 							}

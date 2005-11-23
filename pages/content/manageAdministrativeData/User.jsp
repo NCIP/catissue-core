@@ -17,9 +17,9 @@
 		if (pageOf.equals(Constants.PAGEOF_APPROVE_USER))
 		{
 			Long identifier = (Long)request.getAttribute(Constants.PREVIOUS_PAGE);
-			prevPage = Constants.USER_DETAILS_SHOW_ACTION+"?"+Constants.IDENTIFIER+"="+identifier;
+			prevPage = Constants.USER_DETAILS_SHOW_ACTION+"?"+Constants.SYSTEM_IDENTIFIER+"="+identifier;
 			identifier = (Long)request.getAttribute(Constants.NEXT_PAGE);
-			nextPage = Constants.USER_DETAILS_SHOW_ACTION+"?"+Constants.IDENTIFIER+"="+identifier;
+			nextPage = Constants.USER_DETAILS_SHOW_ACTION+"?"+Constants.SYSTEM_IDENTIFIER+"="+identifier;
 		}
 
         if (operation.equals(Constants.EDIT))
