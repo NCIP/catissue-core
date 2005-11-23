@@ -201,12 +201,6 @@ function onAttributeChange(element,opComboName)
 						String attributeId = "attribute" + i;
 						String operatorId = "operator" + i;
 						String onAttributeChange = "onAttributeChange(this,'" + operatorId + "'); " + functionName;
-
-						String attributeNameKey = "SimpleConditionsNode:"+i+"_Condition_DataElement_field";
-						String attributeNameValue = (String)form.getValue(attributeNameKey);
-						String attributeType = null;
-						if(attributeNameValue != null)
-							attributeType = attributeNameValue.substring(attributeNameValue.lastIndexOf(".") + 1);
 				%>					
 				<tr>
 					<td class="formRequiredNotice" width="5">&nbsp;</td>
@@ -240,8 +234,12 @@ function onAttributeChange(element,opComboName)
 					<td class="formField">
 						<html:select property="<%=attributeCondition%>" styleClass="formFieldSized10" styleId="<%=operatorId%>" size="1">
 						<%
+							String attributeNameKey = "SimpleConditionsNode:"+i+"_Condition_DataElement_field";
+							String attributeNameValue = (String)form.getValue(attributeNameKey);
+							String attributeType = null;
 							if(attributeNameValue != null)
 							{
+							attributeType = attributeNameValue.substring(attributeNameValue.lastIndexOf(".") + 1);
 							if(attributeType.equals("varchar") || attributeType.equals("text"))
 							{
 						%>
@@ -265,7 +263,12 @@ function onAttributeChange(element,opComboName)
 							else
 							{
 						%>
-							<html:option value="-1"><%=Constants.SELECT_OPTION%></html:option>
+							<html:option value="<%=Operator.EQUAL%>">Equals</html:option>
+							<html:option value="<%=Operator.NOT_EQUALS%>">Not Equals</html:option>
+							<html:option value="<%=Operator.LESS_THAN%>"><%=Operator.LESS_THAN%></html:option>
+							<html:option value="<%=Operator.LESS_THAN_OR_EQUALS%>"><%=Operator.LESS_THAN_OR_EQUALS%></html:option>
+							<html:option value="<%=Operator.GREATER_THAN%>"><%=Operator.GREATER_THAN%></html:option>
+							<html:option value="<%=Operator.GREATER_THAN_OR_EQUALS%>"><%=Operator.GREATER_THAN_OR_EQUALS%></html:option>
 						<%
 							}
 						%>
