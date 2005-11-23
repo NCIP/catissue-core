@@ -391,6 +391,12 @@ public class Constants
 	        
 	};
 	
+	public static final String TABLE_DATA_TABLE_NAME = "CATISSUE_QUERY_INTERFACE_TABLE_DATA";
+	public static final String TABLE_DISPLAY_NAME_COLUMN = "DISPLAY_NAME";
+	public static final String TABLE_ALIAS_NAME_COLUMN = "ALIAS_NAME";
+	public static final String TABLE_FOR_SQI_COLUMN = "FOR_SQI";
+	
+	
 	//Frame names in Query Results page.
 	public static final String DATA_VIEW_FRAME = "myframe1";
 	public static final String APPLET_VIEW_FRAME = "appletViewFrame";
