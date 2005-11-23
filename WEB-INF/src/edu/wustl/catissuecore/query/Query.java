@@ -568,6 +568,15 @@ public abstract class Query
     	return columnIds;
     }
     
+    /**
+     * This method returns table alias -> identifier column id 
+     * map of all the objects in tableAliasVector.
+     * In case there is no identifier column in the query for 
+     * some table alias om the vector then that column is 
+     * by default included in the resultant query
+     * @param tableAliasVector
+     * @return
+     */
     public Map getIdentifierColumnIds(Vector tableAliasVector)
     {
     	Logger.out.debug(" tableAliasVector:"+tableAliasVector);
