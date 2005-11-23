@@ -17,46 +17,37 @@ import edu.wustl.catissuecore.exception.AssignDataException;
  * @hibernate.class table="CATISSUE_QUERY_INTERFACE_COLUMN_DATA"
  */
 public class QueryColumnData extends AbstractDomainObject
-        implements Serializable
+        implements
+            Serializable
 {
 
-	/**
-     * System Identifier
-     */
-	private Long systemIdentifier;
+    private long identifier;
 
-	/**
-     * Table of this column
-     */
-	private QueryTableData tableData = new QueryTableData();
+    private QueryTableData tableData = new QueryTableData();
 
-    /**
-     * Name of this column
-     */
     private String columnName;
 
-    /**
-     * Datatype of this column
-     */
+    private String displayName;
+
     private String columnType;
 
     /**
      * Returns the systemIdentifier.
-     * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="20"
+     * @hibernate.id name="identifier" column="IDENTIFIER" type="long" length="30"
      * unsaved-value="null" generator-class="native"
      * @return Returns the identifier.
      */
-    public Long getSystemIdentifier()
+    public long getIdentifier()
     {
-        return systemIdentifier;
+        return identifier;
     }
 
     /**
-     * @param systemIdentifier The identifier to set.
+     * @param identifier The identifier to set.
      */
-    public void setSystemIdentifier(Long systemIdentifier)
+    public void setIdentifier(long identifier)
     {
-        this.systemIdentifier = systemIdentifier;
+        this.identifier = identifier;
     }
 
     /**
@@ -68,7 +59,23 @@ public class QueryColumnData extends AbstractDomainObject
     {
         return tableData;
     }
-    
+
+    /**
+     * @return Returns the columnType.
+     */
+    public String getColumnType()
+    {
+        return columnType;
+    }
+
+    /**
+     * @param columnType The columnType to set.
+     */
+    public void setColumnType(String columnType)
+    {
+        this.columnType = columnType;
+    }
+
     /**
      * @param tableData The tableData to set.
      */
@@ -87,28 +94,28 @@ public class QueryColumnData extends AbstractDomainObject
     }
 
     /**
-     * @param columnName The columnName to set.
+     * @param tableName The tableName to set.
      */
     public void setColumnName(String columnName)
     {
         this.columnName = columnName;
     }
-    
+
     /**
-     * @hibernate.property name="columnType" type="string" column="ATTRIBUTE_TYPE" length="30"
-     * @return Returns the columnType.
+     * @hibernate.property name="displayName" type="string" column="DISPLAY_NAME" length="50"
+     * @return Returns the displayName.
      */
-    public String getColumnType()
+    public String getDisplayName()
     {
-        return columnType;
+        return displayName;
     }
 
     /**
-     * @param columnType The columnType to set.
+     * @param displayName The displayName to set.
      */
-    public void setColumnType(String columnType)
+    public void setDisplayName(String displayName)
     {
-        this.columnType = columnType;
+        this.displayName = displayName;
     }
 
     /* (non-Javadoc)
@@ -118,6 +125,23 @@ public class QueryColumnData extends AbstractDomainObject
             throws AssignDataException
     {
         // TODO Auto-generated method stub
+
+    }
+
+    /* (non-Javadoc)
+     * @see edu.wustl.catissuecore.domain.AbstractDomainObject#getSystemIdentifier()
+     */
+    public Long getSystemIdentifier()
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    /* (non-Javadoc)
+     * @see edu.wustl.catissuecore.domain.AbstractDomainObject#setSystemIdentifier(java.lang.Long)
+     */
+    public void setSystemIdentifier(Long systemIdentifier)
+    {
 
     }
 }

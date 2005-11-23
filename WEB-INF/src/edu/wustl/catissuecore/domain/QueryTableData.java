@@ -8,8 +8,6 @@
 package edu.wustl.catissuecore.domain;
 
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.HashSet;
 
 import edu.wustl.catissuecore.actionForm.AbstractActionForm;
 import edu.wustl.catissuecore.exception.AssignDataException;
@@ -19,38 +17,18 @@ import edu.wustl.catissuecore.exception.AssignDataException;
  * @author gautam_shetty
  */
 public class QueryTableData extends AbstractDomainObject
-        implements Serializable
+        implements
+            Serializable
 {
-    /**
-     * System Identifier
-     */
-	private Long systemIdentifier;
 
-	/**
-     * Name of the table
-     */
-	private String tableName;
+    private long identifier;
 
-	/**
-     * Display name of the table
-     */
-	private String displayName;
+    private String tableName;
 
-	/**
-     * Alias name of the table
-     */
-	private String aliasName;
-	
-	/**
-	 * Privilege Identifier
-	 */
-	private Integer privilegeIdentifier;
-	
-	/**
-     * A collection of all the columns of a table
-     */
-	private Collection columnDataCollection = new HashSet();
-	
+    private String displayName;
+
+    private String aliasName;
+
     /**
      * Display name of Table.
      * @hibernate.property name="displayName" type="string" column="DISPLAY_NAME" length="50"
@@ -67,6 +45,25 @@ public class QueryTableData extends AbstractDomainObject
     public void setDisplayName(String displayName)
     {
         this.displayName = displayName;
+    }
+
+    /**
+     * Returns the systemIdentifier.
+     * @hibernate.id name="identifier" column="TABLE_ID" type="long" length="30"
+     * unsaved-value="null" generator-class="native"
+     * @return Returns the identifier.
+     */
+    public long getIdentifier()
+    {
+        return identifier;
+    }
+
+    /**
+     * @param identifier The identifier to set.
+     */
+    public void setIdentifier(long identifier)
+    {
+        this.identifier = identifier;
     }
 
     /**
@@ -114,63 +111,20 @@ public class QueryTableData extends AbstractDomainObject
 
     }
 
-    /**
-     * Returns the system identifier.
-     * @hibernate.id name="systemIdentifier" column="TABLE_ID" type="long" length="20"
-     * unsaved-value="null" generator-class="native"
-     * @return Returns the system identifier.
+    /* (non-Javadoc)
+     * @see edu.wustl.catissuecore.domain.AbstractDomainObject#getSystemIdentifier()
      */
     public Long getSystemIdentifier()
     {
-        return this.systemIdentifier;
+        // TODO Auto-generated method stub
+        return null;
     }
 
-    /**
-     * @param systemIdentifier The System Identifier.
+    /* (non-Javadoc)
+     * @see edu.wustl.catissuecore.domain.AbstractDomainObject#setSystemIdentifier(java.lang.Long)
      */
     public void setSystemIdentifier(Long systemIdentifier)
     {
-    	this.systemIdentifier = systemIdentifier;
+
     }
-    
-    /**
-     * Returns the privilege identifier.
-     * @hibernate.id name="privilegeIdentifier" column="PRIVILEGE_ID" type="int" length="1"
-     * unsaved-value="null" generator-class="native"
-     * @return Returns the Privilege Identifier.
-     */
-    public Integer getPrivilegeIdentifier()
-	{
-		return privilegeIdentifier;
-	}
-	
-    /**
-     * @param privilegeIdentifier The Privilege Identifier.
-     */
-	public void setPrivilegeIdentifier(Integer privilegeIdentifier)
-	{
-		this.privilegeIdentifier = privilegeIdentifier;
-	}
-	
-    /**
-	 * Returns collection of all the columns of this table.
-	 * @return collection of all the columns of this table.
-	 * @hibernate.set name="columnDataCollection" table="CATISSUE_QUERY_INTERFACE_COLUMN_DATA"
-	 * cascade="save-update" inverse="true" lazy="false"
-	 * @hibernate.collection-key column="TABLE_ID"
-	 * @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.QueryColumnData"
-	 * @see setColumnDataCollection(Collection)
-	 */
-    public Collection getColumnDataCollection()
-	{
-		return columnDataCollection;
-	}
-    
-    /**
-     * @param columnDataCollection The collection of all the columns of this table.
-     */
-	public void setColumnDataCollection(Collection columnDataCollection)
-	{
-		this.columnDataCollection = columnDataCollection;
-	}
 }
