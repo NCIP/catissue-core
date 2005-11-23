@@ -2,6 +2,7 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants,edu.wustl.catissuecore.actionForm.SimpleQueryInterfaceForm,java.util.List,edu.wustl.common.beans.NameValueBean"%>
+<%@ page import="edu.wustl.catissuecore.query.Operator"%>
 
 <head>
 <style>
@@ -102,6 +103,41 @@ function showDateColumn(element,valueField,columnID,showCalendarID,fieldValue)
 	}	
 }
 
+function onAttributeChange(element,opComboName)
+{
+	var columnValue = element.options[element.selectedIndex].value;
+	var index = columnValue.lastIndexOf(".");
+	
+	var opCombo = document.getElementById(opComboName);
+	opCombo.options.length=0;
+
+	if(element.value == "<%=Constants.SELECT_OPTION%>")
+	{
+		opCombo.options[0] = new Option("<%=Constants.SELECT_OPTION%>","-1");
+	}
+	else
+	{
+		//If the datatype of selected column "varchar" or "text"
+		if(columnValue.substring(index+1,columnValue.length) == "varchar" || columnValue.substring(index+1,columnValue.length) == "text")
+		{
+			opCombo.options[0] = new Option("<%=Operator.STARTS_WITH%>","<%=Operator.STARTS_WITH%>");
+			opCombo.options[1] = new Option("<%=Operator.ENDS_WITH%>","<%=Operator.ENDS_WITH%>");
+			opCombo.options[2] = new Option("<%=Operator.CONTAINS%>","<%=Operator.CONTAINS%>");
+			opCombo.options[3] = new Option("Equals","<%=Operator.EQUAL%>");
+			opCombo.options[4] = new Option("Not Equals","<%=Operator.NOT_EQUALS%>");
+		}
+		else
+		{
+			opCombo.options[0] = new Option("Equals","<%=Operator.EQUAL%>");
+			opCombo.options[1] = new Option("Not Equals","<%=Operator.NOT_EQUALS%>");
+			opCombo.options[2] = new Option("<%=Operator.LESS_THAN%>","<%=Operator.LESS_THAN%>");
+			opCombo.options[3] = new Option("<%=Operator.LESS_THAN_OR_EQUALS%>","<%=Operator.LESS_THAN_OR_EQUALS%>");
+			opCombo.options[4] = new Option("<%=Operator.GREATER_THAN%>","<%=Operator.GREATER_THAN%>");
+			opCombo.options[5] = new Option("<%=Operator.GREATER_THAN_OR_EQUALS%>","<%=Operator.GREATER_THAN_OR_EQUALS%>");
+		}
+	}
+}
+
 </script>
 
 <html:errors />
@@ -162,6 +198,15 @@ function showDateColumn(element,valueField,columnID,showCalendarID,fieldValue)
 						String showCalendarValue = "showCalendar(SimpleConditionsNode:"+i+"_showCalendar)";
 						String fieldName = "simpleQueryInterfaceForm."+attributeValueID;
 						String functionName = "showDateColumn(this,'"+ attributeValueID +"','" + columnID + "','" + showCalendarValue + "','"+fieldName+"')";
+						String attributeId = "attribute" + i;
+						String operatorId = "operator" + i;
+						String onAttributeChange = "onAttributeChange(this,'" + operatorId + "'); " + functionName;
+
+						String attributeNameKey = "SimpleConditionsNode:"+i+"_Condition_DataElement_field";
+						String attributeNameValue = (String)form.getValue(attributeNameKey);
+						String attributeType = null;
+						if(attributeNameValue != null)
+							attributeType = attributeNameValue.substring(attributeNameValue.lastIndexOf(".") + 1);
 				%>					
 				<tr>
 					<td class="formRequiredNotice" width="5">&nbsp;</td>
@@ -183,7 +228,7 @@ function showDateColumn(element,valueField,columnID,showCalendarID,fieldValue)
 						</html:select>
 					</td>
 					<td class="formField">
-						<html:select property="<%=attributeName%>" styleClass="formFieldSized15" styleId="<%=attributeName%>" size="1" onchange="<%=functionName%>">
+						<html:select property="<%=attributeName%>" styleClass="formFieldSized15" styleId="<%=attributeId%>" size="1" onchange="<%=onAttributeChange%>">
 							<logic:notPresent name="<%=attributeNameList%>">
 								<html:options name="attributeNameList" labelName="attributeNameList" />
 							</logic:notPresent>	
@@ -193,8 +238,37 @@ function showDateColumn(element,valueField,columnID,showCalendarID,fieldValue)
 						</html:select>
 					</td>
 					<td class="formField">
-						<html:select property="<%=attributeCondition%>" styleClass="formFieldSized10" styleId="<%=attributeCondition%>" size="1">
-							<html:options name="attributeConditionList" labelName="attributeConditionList" />
+						<html:select property="<%=attributeCondition%>" styleClass="formFieldSized10" styleId="<%=operatorId%>" size="1">
+						<%
+							if(attributeNameValue != null)
+							{
+							if(attributeType.equals("varchar") || attributeType.equals("text"))
+							{
+						%>
+							<html:option value="<%=Operator.STARTS_WITH%>"><%=Operator.STARTS_WITH%></html:option>
+							<html:option value="<%=Operator.ENDS_WITH%>"><%=Operator.ENDS_WITH%></html:option>
+							<html:option value="<%=Operator.CONTAINS%>"><%=Operator.CONTAINS%></html:option>
+							<html:option value="<%=Operator.EQUAL%>">Equals</html:option>
+							<html:option value="<%=Operator.NOT_EQUALS%>">Not Equals</html:option>
+						<%
+							}else{
+						%>
+							<html:option value="<%=Operator.EQUAL%>">Equals</html:option>
+							<html:option value="<%=Operator.NOT_EQUALS%>">Not Equals</html:option>
+							<html:option value="<%=Operator.LESS_THAN%>"><%=Operator.LESS_THAN%></html:option>
+							<html:option value="<%=Operator.LESS_THAN_OR_EQUALS%>"><%=Operator.LESS_THAN_OR_EQUALS%></html:option>
+							<html:option value="<%=Operator.GREATER_THAN%>"><%=Operator.GREATER_THAN%></html:option>
+							<html:option value="<%=Operator.GREATER_THAN_OR_EQUALS%>"><%=Operator.GREATER_THAN_OR_EQUALS%></html:option>
+						<%
+							}
+							}
+							else
+							{
+						%>
+							<html:option value="-1"><%=Constants.SELECT_OPTION%></html:option>
+						<%
+							}
+						%>
 						</html:select>
 					</td>
 					<td class="formField">
