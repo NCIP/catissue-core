@@ -123,15 +123,6 @@ public class UserBizLogic extends DefaultBizLogic
             
             Set protectionObjects=new HashSet();
             protectionObjects.add(user);
-    	    try
-            {
-                SecurityManager.getInstance(this.getClass())
-                			.insertAuthorizationData(null,protectionObjects,null);
-            }
-            catch (SMException smExp)
-            {
-                Logger.out.error(smExp.getMessage(),smExp);
-            }
             
             // Send the user registration email to user and the administrator.
             if (Constants.PAGEOF_SIGNUP.equals(user.getPageOf()))
@@ -139,12 +130,31 @@ public class UserBizLogic extends DefaultBizLogic
                 EmailHandler emailHandler = new EmailHandler();
                 
                 emailHandler.sendUserSignUpEmail(user);
+                try
+                {
+                    SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null,protectionObjects,null);
+                }
+                catch (SMException smExp)
+                {
+                    Logger.out.error(smExp.getMessage(),smExp);
+                }
+                
             }
             else// Send the user creation email to user and the administrator.
             {
                 EmailHandler emailHandler = new EmailHandler();
                 
                 emailHandler.sendApprovalEmail(user);
+                
+               
+        	    try
+                {
+                    SecurityManager.getInstance(this.getClass()).insertAuthorizationData(getAuthorizationData(user),protectionObjects,null);
+                }
+                catch (SMException smExp)
+                {
+                    Logger.out.error(smExp.getMessage(),smExp);
+                }
             }
         }
         catch(DAOException daoExp)
