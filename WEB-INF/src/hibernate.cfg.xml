@@ -44,8 +44,8 @@
 		<mapping resource="edu/wustl/catissuecore/hbm/User.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/CDEImpl.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/PermissibleValueImpl.hbm.xml"/>
-		<mapping resource="edu/wustl/catissuecore/hbm/QueryColumnData.hbm.xml"/>
-		<mapping resource="edu/wustl/catissuecore/hbm/QueryTableData.hbm.xml"/>
+		<!--mapping resource="edu/wustl/catissuecore/hbm/QueryColumnData.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/QueryTableData.hbm.xml"/-->
     </session-factory>
     
 </hibernate-configuration>
