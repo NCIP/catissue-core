@@ -23,6 +23,7 @@ import java.util.Vector;
 
 import edu.wustl.catissuecore.dao.JDBCDAO;
 import edu.wustl.catissuecore.query.DataElement;
+import edu.wustl.catissuecore.query.Operator;
 import edu.wustl.catissuecore.query.Query;
 import edu.wustl.catissuecore.query.SimpleConditionsNode;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -65,9 +66,6 @@ public class SimpleQueryBizLogic extends DefaultBizLogic
         	}
         	
         	fromTables.add(simpleConditionsNode.getCondition().getDataElement().getTable());
-        	
-        	
-        	
         }
         return fromTables;
     }
@@ -114,6 +112,21 @@ public class SimpleQueryBizLogic extends DefaultBizLogic
         if (stringToken.hasMoreTokens())
         {
             tableInPath = stringToken.nextToken();
+        }
+        
+        // For operators STARTS_WITH, ENDS_WITH, CONTAINS. 
+        String operator = simpleConditionsNode.getCondition().getOperator().getOperator();
+        if(operator.equals(Operator.STARTS_WITH)){
+            simpleConditionsNode.getCondition().setValue(value+"%");
+            simpleConditionsNode.getCondition().getOperator().setOperator(Operator.LIKE);
+        }
+        else if(operator.equals(Operator.ENDS_WITH)){
+            simpleConditionsNode.getCondition().setValue("%"+value);
+            simpleConditionsNode.getCondition().getOperator().setOperator(Operator.LIKE);
+        }
+        else if(operator.equals(Operator.CONTAINS)){
+            simpleConditionsNode.getCondition().setValue("%"+value+"%");
+            simpleConditionsNode.getCondition().getOperator().setOperator(Operator.LIKE);
         }
         
         if (fieldType.equalsIgnoreCase(Constants.FIELD_TYPE_VARCHAR)
