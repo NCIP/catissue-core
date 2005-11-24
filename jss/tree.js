@@ -181,8 +181,8 @@ function addNode(parentNode, recursedNodes)
 			//}
 
 			var checkb = nodeValues[3] + "_" + nodeValues[0];
-			//treeItem.innerHTML = "<input type=checkbox name='"+checkb+"' id='"+ checkb + "' onClick = CheckNum('"+ checkb +"','"+nodeValues[3]+"',"+nodeCount+")" +">";
-			document.write("<input type=checkbox name='"+checkb+"' id='"+ checkb + "' onClick = CheckNum('"+ checkb +"',"+nodeValues[0]+","+nodeCount+ ")" +">");
+			//treeItem.innerHTML = "<input type=checkbox name='"+checkb+"' id='"+ checkb + "' onClick = checkNum('"+ checkb +"','"+nodeValues[3]+"',"+nodeCount+")" +">";
+			document.write("<input type=checkbox name='"+checkb+"' id='"+ checkb + "' onClick = checkNum('"+ checkb +"',"+nodeValues[0]+","+nodeCount+ ")" +">");
 			//treeItem.innerHTML = "&nbsp;"+nodeValues[2];
 			document.write("&nbsp;"+nodeValues[2]);
 			//treeItem.innerHTML = "</td></tr>";
