@@ -112,17 +112,9 @@ public class ConditionMapParser
 		if(nodeId == null)
 		{
 			AdvancedConditionsNode advancedConditionsNode = new AdvancedConditionsNode(objectName);
-			
-//			Iterator itr = list.iterator();
-//			while(itr.hasNext())
-//			{
-//				Condition condition = (Condition)itr.next();
-//				advancedConditionsNode.addConditionToNode(condition);
-//			}
 			advancedConditionsNode.setObjectConditions(objectConditions);
 			DefaultMutableTreeNode child = new DefaultMutableTreeNode(advancedConditionsNode);
 			
-	
 			if(root.getChildCount()==0)
 			{
 				root.add(child);
@@ -146,27 +138,8 @@ public class ConditionMapParser
 			advancedConditionsNode.setObjectConditions(objectConditions);
 		}
 		
-		/**** Delete Function starts *****/
-		/*if(delete)
-		{
-			//Map deleteNodeMap = new HashMap();
-			TraverseTree traverseTree = new TraverseTree();
-			DefaultMutableTreeNode node = traverseTree.getSelectedNode(root,nodeId);
-			
-			AdvancedConditionsNode advNode1 = (AdvancedConditionsNode)node.getUserObject();
-			Vector conditions1 = advNode1.getObjectConditions();
-			Iterator itr1 = conditions1.iterator();
-			while(itr1.hasNext())
-			{
-				Condition condition1 = (Condition)itr1.next();
-				Logger.out.debug("Column Name: "+condition1.getDataElement().getField());
-			}
-			DefaultMutableTreeNode parent = (DefaultMutableTreeNode)node.getParent();
-			int position = parent.getIndex(node);
-			Logger.out.debug("position--"+position);
-			//parent.remove(position);
-			//Logger.out.debug("position using tree--"+root.getIndex(node));
-		}*/
+		
+		
 		//((AdvancedConditionsImpl)((AdvancedQuery)query).whereConditions).setWhereCondition(root);
 		//advQueryObj.setTableSet(fromTables);
 		//List dataList = query.execute();
@@ -177,6 +150,19 @@ public class ConditionMapParser
 		return root;
 	}
 	
+	public void deleteSelectedNode(Integer nodeId,Map advancedConditionNodesMap)
+	{
+		//Gets node to be deleted from Map
+		DefaultMutableTreeNode node = (DefaultMutableTreeNode)advancedConditionNodesMap.get(nodeId);
+		DefaultMutableTreeNode parent = (DefaultMutableTreeNode)node.getParent();
+		
+		 //Position of node to be deleted from its parent node
+		int position = parent.getIndex(node);
+		
+		//remove node and its subnode from parent
+		parent.remove(position);
+		
+	}
 	
 	
 	public static void main(String[] args) throws Exception

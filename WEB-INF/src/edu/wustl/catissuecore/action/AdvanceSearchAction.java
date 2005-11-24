@@ -50,7 +50,7 @@ public class AdvanceSearchAction extends DispatchAction
         String objectName = advanceSearchForm.getObjectName();
         String selectedNode = advanceSearchForm.getSelectedNode();
         Map advancedConditionNodesMap = (Map)session.getAttribute(Constants.ADVANCED_CONDITION_NODES_MAP);
-        Logger.out.debug("advancedConditionNodesMap--"+advancedConditionNodesMap);
+      
         
         //ItemNode Id represents id of checked checbox used in Edit operation
         String str = advanceSearchForm.getItemNodeId();
@@ -62,14 +62,29 @@ public class AdvanceSearchAction extends DispatchAction
         }
         
         /** Delete function**/
-        /*String strDelete = request.getParameter("delete");
-        boolean delete = false;
-        if((strDelete != null) && (strDelete.equals(Constants.TRUE)))
+        //Represents whether delete is true or not
+        String strDelete = request.getParameter("delete");
+        
+        //Represents node to be deleted
+        String deleteNode = request.getParameter("itemId");
+        
+        if((strDelete != null && deleteNode != null))
         {
-        	delete = true;
-        }*/
+        	 nodeId = Integer.decode(deleteNode);
+        	 //Delete function
+        	 parser.deleteSelectedNode(nodeId,advancedConditionNodesMap);
+        }
+        else
+        {
+        	//Add or Edit function
+        	root = parser.createAdvancedQueryObj(conditionNodeCollection,root,objectName,selectedNode,advancedConditionNodesMap,nodeId);
+        }
+        
+        
+        
+        
        
-        root = parser.createAdvancedQueryObj(conditionNodeCollection,root,objectName,selectedNode,advancedConditionNodesMap,nodeId);
+       
         	
        //Query query = QueryFactory.getInstance().newQuery(Query.ADVANCED_QUERY, aliasName);
         session.setAttribute(Constants.ADVANCED_CONDITIONS_ROOT,root);
