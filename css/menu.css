@@ -80,19 +80,19 @@ display: block;}
 
 a.menuitem:visited
 {text-decoration: none;
-color: black;
+color: white;
 background-color: #c5c5c5;
 display: block;}
 
 a.menuitem:hover
 {text-decoration: none;
-color: black;
+color: white;
 background-color: #f1f1f1;
 display: block;}
 
 a.menuitem:active
 {text-decoration: none;
-color: black;
+color: white;
 background-color: #f1f1f1;
 display: block;}
 
