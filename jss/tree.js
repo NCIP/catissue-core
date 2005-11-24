@@ -14,10 +14,7 @@ function preloadIcons()
 	icons[2].src = "images/minus.gif";
 	icons[3] = new Image();
 	icons[3].src = "images/minusbottom.gif";
-	icons[4] = new Image();
-	icons[4].src = "img/folder.gif";
-	icons[5] = new Image();
-	icons[5].src = "img/folderopen.gif";
+	
 }
 // Create the tree
 function createTree(arrName, startNode, openNode) 
@@ -32,6 +29,8 @@ function createTree(arrName, startNode, openNode)
 		if (startNode !=0) 
 		{
 			var nodeValues = TreeNodes[getArrayId(startNode)].split("|");
+			var treeItem = document.getElementById('tree');
+			//treeItem.innerHTML = "<a href=\"" + nodeValues[3] + "\" onmouseover=\"window.status='" + nodeValues[2] + "';return true;\" onmouseout=\"window.status=' ';return true;\"><img src=\"img/folderopen.gif\" align=\"absbottom\" alt=\"\" />" + nodeValues[2] + "</a><br />";
 			document.write("<a href=\"" + nodeValues[3] + "\" onmouseover=\"window.status='" + nodeValues[2] + "';return true;\" onmouseout=\"window.status=' ';return true;\"><img src=\"img/folderopen.gif\" align=\"absbottom\" alt=\"\" />" + nodeValues[2] + "</a><br />");
 		} //else document.write("<img src=\"img/base.gif\" align=\"absbottom\" alt=\"\" />Website<br />");
 	
@@ -99,6 +98,8 @@ function addNode(parentNode, recursedNodes)
 {
 	var nodeCount = TreeNodes.length;
 	var j = 1;
+	//var treeItem = document.getElementById('tree');
+			
 	for (var i = 0; i < TreeNodes.length; i++) 
 	{
 
@@ -111,6 +112,7 @@ function addNode(parentNode, recursedNodes)
 			
 			if(parentNode == 0)
 			{
+				//treeItem.innerHTML = "<tr><td class='tdTitle' colspan='4'>Rule#"+j+"</td></tr>";
 				document.write("<tr>");
 				document.write("<td class='tdTitle' colspan='4'>");
 				document.write("Rule#"+j);
@@ -121,15 +123,19 @@ function addNode(parentNode, recursedNodes)
 
 			// Write out line & empty icons
 			if(i == 0 || (i%2 == 0))
+				//treeItem.innerHTML = "<tr><td class='tdoneColor' colspan='4'><img src='images/"+nodeValues[3]+".GIF' alt='"+nodeValues[3]+"' />&nbsp;";
 				document.write("<tr><td class='tdoneColor' colspan='4'><img src='images/"+nodeValues[3]+".GIF' alt='"+nodeValues[3]+"' />&nbsp;");
 			else
+				//treeItem.innerHTML = "<tr><td class='tdsecondColor' colspan='4'><img src='images/"+nodeValues[3]+".GIF' alt='"+nodeValues[3]+"' />&nbsp;";
 				document.write("<tr><td class='tdsecondColor' colspan='4'><img src='images/"+nodeValues[3]+".GIF' alt='"+nodeValues[3]+"' />&nbsp;");
 				
 			for (g=0; g<recursedNodes.length; g++) 
 			{
 				if (recursedNodes[g] == 1) 
+					//treeItem.innerHTML = "<img src=\"images/line.gif\" align=\"absbottom\" alt=\"\" />";
 					document.write("<img src=\"images/line.gif\" align=\"absbottom\" alt=\"\" />");
 				else 
+					//treeItem.innerHTML = "<img src=\"images/empty.gif\" align=\"absbottom\" alt=\"\" />";
 					 document.write("<img src=\"images/empty.gif\" align=\"absbottom\" alt=\"\" />");
 			}
 			
@@ -167,24 +173,33 @@ function addNode(parentNode, recursedNodes)
 			//} else {
 				
 				if (ls)
+					//treeItem.innerHTML = "<img src=\"images/joinbottom.gif\" align=\"absbottom\" alt=\"\" />";
 					 document.write("<img src=\"images/joinbottom.gif\" align=\"absbottom\" alt=\"\" />");
 				else 
+					//treeItem.innerHTML = "<img src=\"images/join.gif\" align=\"absbottom\" alt=\"\" />";
 					document.write("<img src=\"images/join.gif\" align=\"absbottom\" alt=\"\" />");
 			//}
 
 			var checkb = nodeValues[3] + "_" + nodeValues[0];
-			document.write("<input type=checkbox name='"+checkb+"' id='"+ checkb + "' onClick = CheckNum('"+ checkb +"','"+nodeValues[3]+"',"+nodeCount+")" +">");
+			//treeItem.innerHTML = "<input type=checkbox name='"+checkb+"' id='"+ checkb + "' onClick = CheckNum('"+ checkb +"','"+nodeValues[3]+"',"+nodeCount+")" +">";
+			document.write("<input type=checkbox name='"+checkb+"' id='"+ checkb + "' onClick = CheckNum('"+ checkb +"',"+nodeValues[0]+","+nodeCount+ ")" +">");
+			//treeItem.innerHTML = "&nbsp;"+nodeValues[2];
 			document.write("&nbsp;"+nodeValues[2]);
+			//treeItem.innerHTML = "</td></tr>";
 			document.write("</td></tr>");
 			
 			// If node has children write out divs and go deeper
 			if (hcn) 
 			{
+				//treeItem.innerHTML = "<div id=\"div" + nodeValues[0] + "\"";
 				document.write("<div id=\"div" + nodeValues[0] + "\"");
 				if (!ino)
+					//treeItem.innerHTML = " style=\"display: none;\">";
 					document.write(" style=\"display: none;\"");
+				
 				document.write(">");
 				addNode(nodeValues[0], recursedNodes);
+				//treeItem.innerHTML = "</div>";
 				document.write("</div>");
 			}
 			
