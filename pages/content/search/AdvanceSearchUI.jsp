@@ -7,7 +7,7 @@
 
 <%
 	AdvanceSearchUI advSearch = (AdvanceSearchUI)request.getAttribute("AdvanceSearchUI");
-	SearchFieldData[] searchFieldData = advSearch.searchFieldData;
+	SearchFieldData[] searchFieldData = advSearch.getSearchFieldData();
 	int div = 0;
 	String tempDiv = "overDiv";
 	String overDiv = tempDiv;
@@ -21,19 +21,18 @@
 </head>
 
 <html:errors />
-
 <html:form action="AdvanceSearch.do">
 <table summary="" cellpadding="5" cellspacing="0" border="0" width="600">
 <tr>
-	<td><html:hidden property="objectName" value="<%=advSearch.iconAltText%>"/></td>
+	<td><html:hidden property="objectName" value="<%=advSearch.getIconAltText()%>"/></td>
 	<td><html:hidden property="selectedNode" /></td>
 	<td><html:hidden property="itemNodeId" /></td>
 </tr>
 <!--  MAIN TITLE ROW -->
 <tr>
 	<td class="formTitle" height="25" nowrap>
-	    &nbsp;<img src="<%=advSearch.iconSrc%>" alt="<%=advSearch.iconAltText%>" /> &nbsp;
-	    <bean:message key="<%=advSearch.titleKey%>"/>
+	    &nbsp;<img src="<%=advSearch.getIconSrc()%>" alt="<%=advSearch.getIconAltText()%>" /> &nbsp;
+	    <bean:message key="<%=advSearch.getTitleKey()%>"/>
 	</td>
 	<td class="formTitle" nowrap align="right" colspan="2">
 		<html:submit property="addRule" styleClass="actionButton" >
@@ -55,25 +54,25 @@
 %>
 		<tr>
 			<td class="formSerialNumberField" nowrap>
-		 		<label for="<%=searchFieldData[i].oprationField.id%>">
-		 			<b><bean:message key="<%=searchFieldData[i].labelKey%>"/>
+		 		<label for="<%=searchFieldData[i].getOprationField().getId()%>">
+		 			<b><bean:message key="<%=searchFieldData[i].getLabelKey()%>"/>
 		 		</label>
 			</td>
 			
 			<td class="formField">
-				<html:select property="<%=searchFieldData[i].oprationField.name%>" styleClass="formFieldSized10" styleId="<%=searchFieldData[i].oprationField.id%>" size="1" onchange="<%= searchFieldData[i].functionName%>">
-					<html:options collection="<%=searchFieldData[i].oprationField.dataListName%>" labelProperty="name" property="value"/>
+				<html:select property="<%=searchFieldData[i].getOprationField().getName()%>" styleClass="formFieldSized10" styleId="<%=searchFieldData[i].getOprationField().getId()%>" size="1" onchange="<%= searchFieldData[i].getFunctionName()%>">
+					<html:options collection="<%=searchFieldData[i].getOprationField().getDataListName()%>" labelProperty="name" property="value"/>
 				</html:select>
 			</td>
 		
 		<%
-		if((searchFieldData[i].dataType).equals(SearchUtil.STRING))
+		if((searchFieldData[i].getDataType()).equals(SearchUtil.STRING))
 		{
-			if((searchFieldData[i].valueField.dataListName).equals(""))
+			if((searchFieldData[i].getValueField().getDataListName()).equals(""))
 			{
 		%>
 				<td class="formField">
-					<html:text styleClass="formFieldSized10" styleId="<%=searchFieldData[i].valueField.id%>" property="<%=searchFieldData[i].valueField.name%>" disabled="<%=searchFieldData[i].valueField.isDisabled%>"/>
+					<html:text styleClass="formFieldSized10" styleId="<%=searchFieldData[i].getValueField().getId()%>" property="<%=searchFieldData[i].getValueField().getName()%>" disabled="<%=searchFieldData[i].getValueField().isDisabled()%>"/>
 				</td>
 		<%
 			}
@@ -81,28 +80,28 @@
 			{	
 		%>
 			<td class="formField">
-				<html:select property="<%=searchFieldData[i].valueField.name%>" styleClass="formFieldSized10" styleId="<%=searchFieldData[i].valueField.id%>" size="1" disabled="<%=searchFieldData[i].valueField.isDisabled%>">
-					<html:options collection="<%=searchFieldData[i].valueField.dataListName%>" labelProperty="name" property="value"/>
+				<html:select property="<%=searchFieldData[i].getValueField().getName()%>" styleClass="formFieldSized10" styleId="<%=searchFieldData[i].getValueField().getId()%>" size="1" disabled="<%=searchFieldData[i].getValueField().isDisabled()%>">
+					<html:options collection="<%=searchFieldData[i].getValueField().getDataListName()%>" labelProperty="name" property="value"/>
 				</html:select>
 			</td>
 		<%
 			}
 		}
-		else if((searchFieldData[i].dataType).equals(SearchUtil.DATE))
+		else if((searchFieldData[i].getDataType()).equals(SearchUtil.DATE))
 		{
 			 
 		%>
 			<td class="formField" nowrap>
 				<div id="<%=overDiv%>" style="position:absolute; visibility:hidden; z-index:1000;"></div>
-				<html:text styleClass="formDateSized10" size="10" styleId="<%=searchFieldData[i].valueField.id + 1%>" property="<%=searchFieldData[i].valueField.name + ")"%>" disabled="<%=searchFieldData[i].valueField.isDisabled%>"/>
+				<html:text styleClass="formDateSized10" size="10" styleId="<%=searchFieldData[i].getValueField().getId() + 1%>" property="<%=searchFieldData[i].getValueField().getName() + ")"%>" disabled="<%=searchFieldData[i].getValueField().isDisabled()%>"/>
 							 &nbsp;
-				<a href="javascript:onDate('<%=searchFieldData[i].oprationField.id %>','<%=(advSearch.formName +"." + searchFieldData[i].valueField.id + 1)%>',false);">
+				<a href="javascript:onDate('<%=searchFieldData[i].getOprationField().getId() %>','<%=(advSearch.getFormName() +"." + searchFieldData[i].getValueField().getId() + 1)%>',false);">
 					<img src="images\calendar.gif" width=24 height=22 border=0>
 				</a>
 							&nbsp;To&nbsp;
-				<html:text styleClass="formDateSized10" size="10" styleId="<%=searchFieldData[i].valueField.id + 2%>" property="<%=searchFieldData[i].valueField.name + ":HLIMIT)"%>" disabled="<%=searchFieldData[i].valueField.isDisabled%>"/>
+				<html:text styleClass="formDateSized10" size="10" styleId="<%=searchFieldData[i].getValueField().getId() + 2%>" property="<%=searchFieldData[i].getValueField().getName() + ":HLIMIT)"%>" disabled="<%=searchFieldData[i].getValueField().isDisabled()%>"/>
 							 &nbsp;
-				<a href="javascript:onDate('<%=searchFieldData[i].oprationField.id%>','<%=(advSearch.formName +"." + searchFieldData[i].valueField.id + 2)%>',true);">
+				<a href="javascript:onDate('<%=searchFieldData[i].getOprationField().getId()%>','<%=(advSearch.getFormName() +"." + searchFieldData[i].getValueField().getId() + 2)%>',true);">
 					<img src="images\calendar.gif" width=24 height=22 border=0>
 				</a>
 			</td>
@@ -111,14 +110,14 @@
 			div++;
 			overDiv = tempDiv + div;
 		}
-		else if((searchFieldData[i].dataType).equals(SearchUtil.NUMERIC))
+		else if((searchFieldData[i].getDataType()).equals(SearchUtil.NUMERIC))
 		{
 		%>
 			<td class="formField">
-				<html:text styleClass="formFieldSized10" styleId="<%=searchFieldData[i].valueField.id + 1%>" property="<%=searchFieldData[i].valueField.name + 1%>" disabled="<%=searchFieldData[i].valueField.isDisabled%>"/> 
+				<html:text styleClass="formFieldSized10" styleId="<%=searchFieldData[i].getValueField().getId() + 1%>" property="<%=searchFieldData[i].getValueField().getName() + 1%>" disabled="<%=searchFieldData[i].getValueField().isDisabled()%>"/> 
 								&nbsp;To&nbsp;
-				<html:text styleClass="formFieldSized10" styleId="<%=searchFieldData[i].valueField.id + 2%>" property="<%=searchFieldData[i].valueField.name + 2%>" disabled="<%=searchFieldData[i].valueField.isDisabled%>"/> 
-				<bean:message key="<%=searchFieldData[i].unitFieldKey%>"/>
+				<html:text styleClass="formFieldSized10" styleId="<%=searchFieldData[i].getValueField().getId() + 2%>" property="<%=searchFieldData[i].getValueField().getName() + 2%>" disabled="<%=searchFieldData[i].getValueField().isDisabled()%>"/> 
+				<bean:message key="<%=searchFieldData[i].getUnitFieldKey()%>"/>
 			</td>
 		<%
 		}

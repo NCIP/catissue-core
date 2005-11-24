@@ -197,10 +197,10 @@ public abstract class AdvanceSearchUIAction extends BaseAction
 		for(int i = 0; i < searchFieldData.length ; i++)
 		{
 			//Represents name of field i.e value(...)
-			String temp = searchFieldData[i].valueField.name;
+			String temp = searchFieldData[i].getValueField().getName();
 			
 			//DataType of field
-			String	dType = searchFieldData[i].dataType;
+			String	dType = searchFieldData[i].getDataType();
 			String name = "";
 			
 			//Condition for removing brackets as valueField's name in Date case contains only '('
@@ -217,11 +217,11 @@ public abstract class AdvanceSearchUIAction extends BaseAction
 			Object element = map.get(name);
 			if( (element == null) || (  element.equals("Any")  ) )
 			{
-				searchFieldData[i].valueField.isDisabled = true;
+				searchFieldData[i].getValueField().setDisabled(true) ;
 			}
 			else
 			{
-				searchFieldData[i].valueField.isDisabled = false;;
+				searchFieldData[i].getValueField().setDisabled(false) ;
 			}
 		}
 	}
