@@ -19,6 +19,7 @@ import java.util.Set;
 import java.util.Vector;
 
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
+import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.query.Client;
 import edu.wustl.catissuecore.util.Permissions;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -896,9 +897,7 @@ public class SecurityManager implements Permissions {
 			for (it = protectionObjects.iterator(); it.hasNext();) {
 				protectionElement = new ProtectionElement();
 				protectionObject = (AbstractDomainObject) it.next();
-				protectionElement.setObjectId(protectionObject.getClass()
-						.getName()
-						+ "_" + protectionObject.getSystemIdentifier());
+				protectionElement.setObjectId(getObjectId(protectionObject));
 
 				try {
 
@@ -924,11 +923,7 @@ public class SecurityManager implements Permissions {
 										.getClass().getName()
 										+ " object");
 						protectionElement
-								.setProtectionElementName(protectionObject
-										.getClass().getName()
-										+ "_"
-										+ protectionObject
-												.getSystemIdentifier());
+								.setProtectionElementName(getObjectId(protectionObject));
 						/**
 						 * Adding protection elements to static groups they
 						 * should be added to
@@ -985,6 +980,22 @@ public class SecurityManager implements Permissions {
 			}
 		}
 		return protectionElements;
+	}
+
+	/**
+	 * @param protectionObject
+	 * @return
+	 */
+	private String getObjectId(AbstractDomainObject protectionObject) {
+		if(protectionObject instanceof Specimen)
+		{
+			Logger.out.debug(protectionObject.getClass().getName()+" is an instance of Specimen class");
+			return Specimen.class.getName()
+			+ "_" + protectionObject.getSystemIdentifier();
+		}
+		return protectionObject.getClass()
+				.getName()
+				+ "_" + protectionObject.getSystemIdentifier();
 	}
 
 	/**
@@ -1079,8 +1090,7 @@ public class SecurityManager implements Permissions {
 		ProtectionGroup protectionGroup;
 		ProtectionElement protectionElement;
 		String name = null;
-		String protectionElementName = obj.getClass().getName() + "_"
-				+ obj.getSystemIdentifier();
+		String protectionElementName = getObjectId(obj);
 		try {
 			protectionElement = getAuthorizationManager().getProtectionElement(
 					protectionElementName);
@@ -1941,12 +1951,21 @@ public class SecurityManager implements Permissions {
 		String tableName = (String) Client.objectTableNames.get(tableAlias);
 		Logger.out.debug(" AliasName:" + tableAlias + " tableName:" + tableName
 				+ " Identifier:" + identifier + " Permission:" + permission);
-
+		
+		String className;
+		if(tableName.equals(Constants.CATISSUE_SPECIMEN))
+		{
+			className = Specimen.class.getName();
+		}
 		//Get classname mapping to tableAlias
-		String className = HibernateMetaData.getClassName(tableName);
+		else
+		{
+			className = HibernateMetaData.getClassName(tableName);
+		}
 		if (className == null) {
 			return isAuthorized;
 		}
+		
 
 		//checking privilege type on class.
 		//whether it is class level / object level / no privilege
