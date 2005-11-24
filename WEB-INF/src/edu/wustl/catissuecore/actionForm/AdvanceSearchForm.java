@@ -55,6 +55,9 @@ public class AdvanceSearchForm extends ActionForm
 	 */
     private int eventCounter = 1;
     
+    
+    String itemNodeId = "";
+    
     /**
      * Returns the selected node from a query tree.
      * @return The selected node from a query tree.
@@ -258,5 +261,14 @@ public class AdvanceSearchForm extends ActionForm
 	public void setEventCounter(int eventCounter)
 	{
 		this.eventCounter = eventCounter;
+	}
+	
+	
+	public String getItemNodeId() {
+		return itemNodeId;
+	}
+	
+	public void setItemNodeId(String itemId) {
+		this.itemNodeId = itemId;
 	}
 }
