@@ -7,19 +7,19 @@ package edu.wustl.catissuecore.vo;
 public class AdvanceSearchUI 
 {
 	//Source of the icon for a page
-	public String iconSrc;
+	private String iconSrc;
 	
 	//Alternate text for images
-	public String iconAltText;
+	private String iconAltText;
 	
 	//Title key of page displayed as table's title
-	public String titleKey;
+	private String titleKey;
 	
 	//class used for setting value of field's data of each row 
-	public SearchFieldData[] searchFieldData;
+	private SearchFieldData[] searchFieldData;
 	
 	//Form Name used in javascript function only in case of date field
-	public String formName = "";
+	private String formName = "";
 	
 	
 	/**
@@ -36,5 +36,90 @@ public class AdvanceSearchUI
 		this.titleKey = titleKey;
 		this.searchFieldData = searchFieldData;
 		this.formName = formName;
+	}
+
+
+	/**
+	 * Form Name used in javascript function only in case of date field
+	 * @return String
+	 */
+	public String getFormName() {
+		return formName;
+	}
+
+
+	/**
+	 * @param formName to set
+	 */
+	public void setFormName(String formName) {
+		this.formName = formName;
+	}
+
+
+	/**
+	 * Alternate text for images
+	 * @return String
+	 */
+	public String getIconAltText() {
+		return iconAltText;
+	}
+
+
+	/**
+	 * @param iconAltText to set
+	 */
+	public void setIconAltText(String iconAltText) {
+		this.iconAltText = iconAltText;
+	}
+
+
+	/**
+	 * Source of the icon   
+	 * @return String
+	 */
+	public String getIconSrc() {
+		return iconSrc;
+	}
+
+
+	/**
+	 * @param iconSrc to set
+	 */
+	public void setIconSrc(String iconSrc) {
+		this.iconSrc = iconSrc;
+	}
+
+
+	/**
+	 * setting value of field's data of each row 
+	 * @return SearchFieldData[]
+	 */
+	public SearchFieldData[] getSearchFieldData() {
+		return searchFieldData;
+	}
+
+
+	/**
+	 * @param searchFieldData to set
+	 */
+	public void setSearchFieldData(SearchFieldData[] searchFieldData) {
+		this.searchFieldData = searchFieldData;
+	}
+
+
+	/**
+	 * Title key of page displayed as table's title
+	 * @return String
+	 */
+	public String getTitleKey() {
+		return titleKey;
+	}
+
+
+	/**
+	 * @param titleKey to set
+	 */
+	public void setTitleKey(String titleKey) {
+		this.titleKey = titleKey;
 	}
 }
