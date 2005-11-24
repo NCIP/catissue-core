@@ -280,6 +280,7 @@ public class Constants
 	public static final String DATA_VIEW_FRAME_ACTION = "SpreadsheetView.do";
 	public static final String SIMPLE_QUERY_INTERFACE_ACTION = "/SimpleQueryInterface.do";
 	public static final String SEARCH_OBJECT_ACTION = "/SearchObject.do";
+	public static final String SIMPLE_QUERY_INTERFACE_URL = "SimpleQueryInterface.do?pageOf=pageOfSimpleQueryInterface&menuSelected=17";
 	
 	//New Specimen Data Actions.
 	public static final String SPECIMEN_ADD_ACTION = "NewSpecimenAdd.do";
