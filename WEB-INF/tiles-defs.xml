@@ -671,7 +671,7 @@
 	</definition>
 	
 	<definition name=".catissuecore.participantSearchDef" extends=".catissuecore.queryDataViewDef">
-		<put name="content" value="/pages/content/search/ParticipantSearch.jsp" />
+		<put name="content" value="/pages/content/search/AdvanceSearchUI.jsp" />
 	</definition>
 
 	<definition name=".catissuecore.specimenSearchDef" extends=".catissuecore.queryDataViewDef">
@@ -679,11 +679,11 @@
 	</definition>
 	
 	<definition name=".catissuecore.specimenCollectionGroupSearchDef" extends=".catissuecore.queryDataViewDef">
-		<put name="content" value="/pages/content/search/SpecimenCollectionGroupSearch.jsp" />
+		<put name="content" value="/pages/content/search/AdvanceSearchUI.jsp" />
 	</definition>
 	
 	<definition name=".catissuecore.collectionProtocolSearchDef" extends=".catissuecore.queryDataViewDef">
-		<put name="content" value="/pages/content/search/CollectionProtocolSearch.jsp" />
+		<put name="content" value="/pages/content/search/AdvanceSearchUI.jsp" />
 	</definition>
 
 	<definition name=".catissuecore.advanceQueryViewDef" extends=".catissuecore.queryDataViewDef">
