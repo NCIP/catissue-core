@@ -19,6 +19,7 @@ import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Participant;
+import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.SessionDataBean;
@@ -104,6 +105,29 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 			}
 		}
 		
+		/**
+		 * Case: While updating the registration if the participant is deselected then 
+		 * we need to maintain the link between registration and participant by adding a dummy participant
+		 * for query module. 
+		 */
+		if(collectionProtocolRegistration.getParticipant() == null)
+		{
+			Participant oldParticipant = oldCollectionProtocolRegistration.getParticipant();
+			
+			//Check for if the older participant was also a dummy, if true use the same participant, 
+			//otherwise create an another dummay participant 
+			if(oldParticipant != null && oldParticipant.getLastName().equals("") && oldParticipant.getFirstName().equals(""))
+			{
+				collectionProtocolRegistration.setParticipant(oldParticipant);
+			}
+			else  
+			{
+				//create dummy participant.
+				Participant participant = addDummyParticipant(dao, sessionDataBean);
+				collectionProtocolRegistration.setParticipant(participant);
+			}
+		}
+		
 		//Update registration
 		dao.update(collectionProtocolRegistration, sessionDataBean, true, true, false);
 		
@@ -166,15 +190,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 		}
 		else
 		{
-			participant = new Participant();
-			
-			participant.setLastName("");
-			participant.setFirstName("");
-			participant.setMiddleName("");
-			participant.setSocialSecurityNumber(null);
-			participant.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
-			
-			dao.insert(participant, sessionDataBean, true, true);
+			participant = addDummyParticipant(dao, sessionDataBean);
 		}
 		
 		collectionProtocolRegistration.setParticipant(participant);
@@ -186,6 +202,33 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 			collectionProtocolRegistration.setCollectionProtocol(collectionProtocol);
 		}
 	}
+    
+    /** Add a dummy participant when participant is registed to a protocol using 
+	 * participant protocol id */
+    private Participant addDummyParticipant(DAO dao,SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
+    {
+    	Participant participant = new Participant();
+		
+		participant.setLastName("");
+		participant.setFirstName("");
+		participant.setMiddleName("");
+		participant.setSocialSecurityNumber(null);
+		participant.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
+		
+		//Create a dummy participant medical identifier.
+		Set partMedIdentifierColl = new HashSet();
+		ParticipantMedicalIdentifier partMedIdentifier = new ParticipantMedicalIdentifier();
+		partMedIdentifier.setMedicalRecordNumber(null);
+		partMedIdentifier.setSite(null);
+		partMedIdentifierColl.add(partMedIdentifier);
+		
+		dao.insert(participant, sessionDataBean, true, true);
+		
+		partMedIdentifier.setParticipant(participant);
+		dao.insert(partMedIdentifier, sessionDataBean, true, true);
+		
+		return participant;
+    }
     
     /**
      * Disable all the related collection protocol regitration for a given array of participant ids. 
