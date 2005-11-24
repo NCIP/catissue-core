@@ -236,7 +236,7 @@ public class SimpleQueryInterfaceForm extends ActionForm
         	            	 errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("simpleQuery.intvalue.required"));
         	            	 conditionError = true;
         	            }// integer or long
-        	            else if((dataType.trim().equals("double" )) && !validator.isDouble(enteredValue))
+        	            else if((dataType.trim().equals("double" )) && !validator.isDouble(enteredValue,0))
         	            {
         	            	 errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("simpleQuery.decvalue.required"));
         	            	 conditionError = true;
