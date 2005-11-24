@@ -26,9 +26,9 @@
 		item.className="linkChange";
 		item.innerHTML = "&nbsp;<img src='images/CollectionProtocol.GIF' alt='CollectionProtocol' />  &nbsp;<%=Constants.COLLECTION_PROTOCOL%>";
 		
-		item = document.getElementById('<%=Constants.DP%>');
+		/*item = document.getElementById('<%=Constants.DP%>');
 		item.className="linkChange";
-		item.innerHTML = "&nbsp;<img src='images/DistributionProtocol.GIF' alt='DistributionProtocol' /> &nbsp; <%=Constants.DISTRIBUTION_PROTOCOL%>";
+		item.innerHTML = "&nbsp;<img src='images/DistributionProtocol.GIF' alt='DistributionProtocol' /> &nbsp; <%=Constants.DISTRIBUTION_PROTOCOL%>";*/
 		
 		item = document.getElementById('<%=Constants.P%>');
 		item.className="linkChange";
@@ -42,9 +42,9 @@
 		item.className="linkChange";
 		item.innerHTML = "&nbsp;<img src='images/SpecimenCollectionGroup.GIF' alt='Specimen Collection Group' /> &nbsp;<%=Constants.SPECIMEN_COLLECTION_GROUP%>";
 		
-		item = document.getElementById('<%=Constants.D%>');
+		/*item = document.getElementById('<%=Constants.D%>');
 		item.className="linkChange";
-		item.innerHTML = "&nbsp;<img src='images/Distribution.GIF' alt='Distribution' /> &nbsp; <%=Constants.DISTRIBUTION%>";
+		item.innerHTML = "&nbsp;<img src='images/Distribution.GIF' alt='Distribution' /> &nbsp; <%=Constants.DISTRIBUTION%>";*/
 		
 		item = document.getElementById('<%=Constants.EDIT%>');
 		item.className = "linkChange";
@@ -54,18 +54,49 @@
 		deleteItem.className = "linkChange";
 		deleteItem.innerHTML = "Delete";
 		
+		item = document.getElementById('<%=Constants.S%>');
+		item.className="linkChange"
+		item.innerHTML ="&nbsp;<img src='images/Specimen.GIF' alt='Specimen' /> &nbsp; <a HREF='<%=util.getLink("Specimen")%>' target='searchPageFrame'><%=Constants.SPECIMEN%></a>";
+		
+		item = document.getElementById('<%=Constants.SCG%>');
+		item.className="linkChange";
+		item.innerHTML = "&nbsp;<img src='images/SpecimenCollectionGroup.GIF' alt='Specimen Collection Group' /> &nbsp;<a HREF='<%=util.getLink("SpecimenCollectionGroup")%>' target='searchPageFrame'><%=Constants.SPECIMEN_COLLECTION_GROUP%></a>";
+		
+		/*item = document.getElementById('<%=Constants.D%>');
+		item.className="linkChange";
+		item.innerHTML = "&nbsp;<img src='images/Distribution.GIF' alt='Distribution' /> &nbsp; <a HREF='#'><%=Constants.DISTRIBUTION%></a>";
+		
+		item = document.getElementById('<%=Constants.DP%>');
+		item.className="linkChange";
+		item.innerHTML = "&nbsp;<img src='images/DistributionProtocol.GIF' alt='DistributionProtocol' /> &nbsp; <a HREF='#'><%=Constants.DISTRIBUTION_PROTOCOL%></a>";*/
 	}
 
-	function checkNum(checkName,itemId,nodeCount,documentForm)
+	/*function checkNum(checkName,itemId,nodeCount,documentForm)
+	{
+		if(document.getElementById(item) != null)
+		{
+			if(document.getElementById(item).checked==true)
+			{
+				counter = counter + 1;
+				selectedNode=i;
+			}
+		}
+		return counter; 
+	}*/
+	
+//	function EnableItem(nodeCount){
+	function CheckNum(checkName,itemName,nodeCount)
 	{
 		disableAll();
-		var participantCount = 0;
-		var cprotocolCount = 0;
-		var dProtocolCount = 0;
-		var scGroupCount = 0;
-		var distributionCount = 0;
-		var specimenCount = 0;
-		var selectedNode=0;
+		var ParticipantCount = 0;
+		var CProtocolCount = 0;
+		//var CProtocolCount = 0;
+		var SCGroupCount = 0;
+		//var DistributionCount = 0;
+		var SpecimenCount = 0;
+		//var j=0;
+		//var selectedNode = new Array(nodeCount);
+		var selectedNode="";
 								
 		for(var i = 1; i <= nodeCount; i++)
 		{
@@ -74,8 +105,8 @@
 			{
 				if(document.getElementById(participantItem).checked==true)
 				{
-					participantCount = participantCount + 1;
-					selectedNode=i;
+					ParticipantCount = ParticipantCount + 1;
+					selectedNode=selectedNode+","+i;
 				}
 			}
 			
@@ -84,52 +115,56 @@
 			{
 				if(document.getElementById(cProtocolItem).checked==true)
 				{
-					cprotocolCount = cprotocolCount + 1;
-					selectedNode=i;
+					CProtocolCount = CProtocolCount + 1;
+					selectedNode=selectedNode+","+i;
 				}
 			}
 			
-			var dProtocolItem = '<%=Constants.DISTRIBUTION_PROTOCOL%>'+"_"+i;
-			if(document.getElementById(dProtocolItem) != null)
+			/*var DProtocolItem = '<%=Constants.DISTRIBUTION_PROTOCOL%>'+"_"+i;
+			//DProtocolCount = checkStatus(item3, count3,selectedNode);
+			if(document.getElementById(DProtocolItem) != null)
 			{
 				if(document.getElementById(dProtocolItem).checked==true)
 				{
-					dProtocolCount = dProtocolCount + 1;
-					selectedNode=i;
+					DProtocolCount = DProtocolCount + 1;
+					selectedNode=selectedNode+","+i;
 				}
-			}
+			}*/
 			
 			var sCGroupItem = '<%=Constants.SPECIMEN_COLLECTION_GROUP%>'+"_"+i;
 			if(document.getElementById(sCGroupItem) != null)
 			{
 				if(document.getElementById(sCGroupItem).checked==true)
 				{
-					scGroupCount = scGroupCount + 1;
-					selectedNode=i;
+					SCGroupCount = SCGroupCount + 1;
+					selectedNode=selectedNode+","+i;
 				}
 			}
 			
-			var distributionItem = '<%=Constants.DISTRIBUTION%>'+"_"+i;
-			if(document.getElementById(distributionItem) != null)
+			/*var DistributionItem = '<%=Constants.DISTRIBUTION%>'+"_"+i;
+			//count5 = checkStatus(item5, count5,selectedNode,i);
+			if(document.getElementById(DistributionItem) != null)
 			{
 				if(document.getElementById(distributionItem).checked==true)
 				{
-					distributionCount = distributionCount + 1;
-					selectedNode=i;
+					DistributionCount = DistributionCount + 1;
+					selectedNode=selectedNode+","+i;
 				}
-			}
-			var specimenItem = '<%=Constants.SPECIMEN%>'+"_"+i;
-			if(document.getElementById(specimenItem) != null)
+			}*/
+			var SpecimenItem = '<%=Constants.SPECIMEN%>'+"_"+i;
+			//count6 = checkStatus(item6, count6,selectedNode,i);
+			if(document.getElementById(SpecimenItem) != null)
 			{
 				if(document.getElementById(specimenItem).checked==true)
 				{
-					specimenCount = specimenCount + 1;
-					selectedNode=i;
+					SpecimenCount = SpecimenCount + 1;
+					selectedNode=selectedNode+","+i;
 				}
 			}
 		}
 		
-		var sum = participantCount + cprotocolCount + dProtocolCount + scGroupCount + distributionCount + specimenCount;
+		//var sum = ParticipantCount + CProtocolCount + DProtocolCount + SCGroupCount + DistributionCount + SpecimenCount;
+		var sum = ParticipantCount + CProtocolCount +  SCGroupCount +  SpecimenCount;
 		
 		if(participantCount == sum) 
 		{
@@ -143,10 +178,10 @@
 			var link = "<%=util.getLink("CollectionProtocol")%>"+ selectedNode;
 			cpItem.innerHTML ="&nbsp;<img src='images/CollectionProtocol.GIF' alt='CollectionProtocol' />  &nbsp;<a HREF='"+link+"' target='searchPageFrame'><%=Constants.COLLECTION_PROTOCOL%></a>";
 		
-			dpItem = document.getElementById('<%=Constants.DP%>');
-			dpItem.className="linkChange";
+			/*DPItem = document.getElementById('<%=Constants.DP%>');
+			DPItem.className="linkChange";
 			//var link = "<%=util.getLink("DistributionProtocol")%>"+ selectedNode;
-			dpItem.innerHTML = "&nbsp;<img src='images/DistributionProtocol.GIF' alt='DistributionProtocol' /> &nbsp;<a HREF='#'><%=Constants.DISTRIBUTION_PROTOCOL%></a>";
+			DPItem.innerHTML = "&nbsp;<img src='images/DistributionProtocol.GIF' alt='DistributionProtocol' /> &nbsp;<a HREF='#'><%=Constants.DISTRIBUTION_PROTOCOL%></a>";*/
 			
 			var editItem = document.getElementById('<%=Constants.EDIT%>');
 			var editLink = "<%=util.getLink("Participant")%>"+ selectedNode +"&itemId="+itemId;
@@ -160,10 +195,11 @@
 		}
 		else if(cprotocolCount == sum)
 		{
-		
-			/*var link = "<%=util.getLink("CollectionProtocol")%>"+ selectedNode; 
-			var CPItem = document.getElementById('<%=Constants.CP%>');
+			//alert("clicked coll prot");
+			
+			/*var CPItem = document.getElementById('<%=Constants.CP%>');
 			CPItem.className="linkChange";
+			var link = "<%=util.getLink("CollectionProtocol")%>"+ selectedNode;
 			CPItem.innerHTML ="&nbsp;<img src='images/CollectionProtocol.GIF' alt='CollectionProtocol' />  &nbsp;<a HREF='"+link+"' target='searchPageFrame'><%=Constants.COLLECTION_PROTOCOL%></a>";*/
 			
 			var scGItem = document.getElementById('<%=Constants.SCG%>');
@@ -219,7 +255,7 @@
 </head>
 <html>
 <body>
-	
+
 	<table cellpadding='0' cellspacing='0' border='0' width='600'>
 		<tr>
 			<td class='formTitle' height='20' width='72%'>
@@ -251,20 +287,21 @@
 										</td>
 									</tr>
 									<tr height='20' vAlign="middle">
-										<td colspan=2 class='linkChange' id='S' noWrap  height='20' vAlign="middle"
-										onmouseover="changeMenuStyle(this,'linkChangeOnMouseOver')"
-										 onmouseout="changeMenuStyle(this,'linkChange')">
-											&nbsp;<img src="images/Specimen.GIF" alt="Specimen" /> &nbsp; <%=Constants.SPECIMEN%>
-										</td>
-									</tr>
-									<tr height='20' vAlign="middle">
 										<td colspan=2 class='linkChange' id='SCG' noWrap  height='20' vAlign="middle"
 										onmouseover="changeMenuStyle(this,'linkChangeOnMouseOver')"
 										 onmouseout="changeMenuStyle(this,'linkChange')">
 											&nbsp;<img src="images/SpecimenCollectionGroup.GIF" alt="Specimen Collection Group" /> &nbsp; <%=Constants.SPECIMEN_COLLECTION_GROUP%>
 										</td>
 									</tr>
+									
 									<tr height='20' vAlign="middle">
+										<td colspan=2 class='linkChange' id='S' noWrap  height='20' vAlign="middle"
+										onmouseover="changeMenuStyle(this,'linkChangeOnMouseOver')"
+										 onmouseout="changeMenuStyle(this,'linkChange')">
+											&nbsp;<img src="images/Specimen.GIF" alt="Specimen" /> &nbsp; <%=Constants.SPECIMEN%>
+										</td>
+									</tr>
+									<!--tr height='20' vAlign="middle">
 										<td colspan=2 class='linkChange' id='D' noWrap  height='20' vAlign="middle"
 										onmouseover="changeMenuStyle(this,'linkChangeOnMouseOver')"
 										 onmouseout="changeMenuStyle(this,'linkChange')">
@@ -277,7 +314,7 @@
 										 onmouseout="changeMenuStyle(this,'linkChange')">
 										&nbsp;<img src="images/DistributionProtocol.GIF" alt="DistributionProtocol" /> &nbsp; <%=Constants.DISTRIBUTION_PROTOCOL%>
 										</td>
-									</tr>
+									</tr-->
 								</table>
 							</div>
 						</td>
@@ -288,13 +325,17 @@
 		<td class='formTitle' id='delete' height='20' width='10%' onmouseover="changeClass(this,'menuHover');" onmouseout="changeClass(this,'formTitle');">Delete</td>
 	</tr>
 
-	
-		<div class="tree">
-			<script type="text/javascript">
-				createTree(tree);
-			</script>
-		</div>
-	</table>	
-	</body>
+			<div class="tree">
+				<script type="text/javascript">
+					createTree(Tree);
+				</script>
+			</div>
+			
+
+
+
+</table>
+
+</body>
 </html>
 
