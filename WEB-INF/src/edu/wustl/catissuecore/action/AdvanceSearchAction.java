@@ -22,7 +22,7 @@ import edu.wustl.common.util.logger.Logger;
 /**
  * @author poornima_govindrao
  *
- *This class is for Advanced Search Action
+ *This class is Advanced Search Action which forms the root node to form the query. 
  * 
  */
 
@@ -39,14 +39,32 @@ public class AdvanceSearchAction extends DispatchAction
         String target = Constants.SUCCESS;
         
         //Get the Map values from UI
-        Map map = advanceSearchForm.getValues();
+        Map conditionsMap = advanceSearchForm.getValues();
+        Map eventParametersConditionsMap = advanceSearchForm.getEventValues();
+        Logger.out.debug("eventParametersConditionsMap "+eventParametersConditionsMap);
         
         //Parse the conditions to for the advancedConditionNode
         ConditionMapParser parser = new ConditionMapParser();
-        List conditionNodeCollection = parser.parseCondition(map);
-        
+        //List conditionNodeCollectionForView = parser.parseConditionForQueryView(map);
+        List conditionNodeCollectionForQuery = parser.parseConditionForQuery(conditionsMap);
+        //Get the conditions list for event parameters if there are any conditions selected from the UI
+        if(!eventParametersConditionsMap.isEmpty())
+        {
+        	String value = (String)eventParametersConditionsMap.get("EventName_1");
+        	Logger.out.debug("value of first key:"+value);
+        	if(!value.equals("-1"))
+        	{
+        		//Parse the eventParameters map suitable for parseConditionForQuery method.
+        		Map eventMap = ConditionMapParser.parseEventParameterMap(eventParametersConditionsMap);
+        		List eventConditions = parser.parseConditionForQuery(eventMap);
+        		conditionNodeCollectionForQuery.addAll(eventConditions);
+        	}
+        }
         HttpSession session = request.getSession();
+        //session object for query results
         DefaultMutableTreeNode root = (DefaultMutableTreeNode)session.getAttribute(Constants.ADVANCED_CONDITIONS_ROOT);
+        //session object for query view
+        //DefaultMutableTreeNode queryViewRoot = (DefaultMutableTreeNode)session.getAttribute(Constants.ADVANCED_CONDITIONS_QUERY_VIEW);
         String objectName = advanceSearchForm.getObjectName();
         String selectedNode = advanceSearchForm.getSelectedNode();
         Map advancedConditionNodesMap = (Map)session.getAttribute(Constants.ADVANCED_CONDITION_NODES_MAP);
@@ -86,16 +104,8 @@ public class AdvanceSearchAction extends DispatchAction
        
        
         	
-       //Query query = QueryFactory.getInstance().newQuery(Query.ADVANCED_QUERY, aliasName);
         session.setAttribute(Constants.ADVANCED_CONDITIONS_ROOT,root);
-        //Get the view columns.
-        //String [] columnNames = query.setViewElements(aliasName);
-        
-        //((AdvancedConditionsImpl)((AdvancedQuery)query).getWhereConditions()).setWhereCondition(root);
-        //          List list = query.execute();
-        /*List list = new ArrayList();
-         Logger.out.debug("List......................"+list+" List Size..................."+list.size());
-         }*/
+        //session.setAttribute(Constants.ADVANCED_CONDITIONS_QUERY_VIEW,root);
 
         return mapping.findForward(target);
     }
