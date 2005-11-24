@@ -1,6 +1,9 @@
 <%@ page import="java.util.*"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.common.util.SearchUtil"%>
+<%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
+<%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
+<%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 
 <head>
 
@@ -13,17 +16,19 @@
 		Vector Treelist = (Vector)request.getAttribute(Constants.TREE_VECTOR);
 	%>
 	var Tree = [<%int k;%><%for (k=0;k < (Treelist.size()-1);k++){%>"<%=Treelist.get(k)%>",<%}%>"<%=Treelist.get(k)%>"];
-	<% SearchUtil util = new SearchUtil(); %>
+	<% SearchUtil util = new SearchUtil(); 
+	   String itemId = "";
+	%>
 		
 	/*function CheckNum(checkName,itemName,nodeCount){
 	
 		
 		alert("node count"+nodeCount);
 		if(document.getElementById(checkName).checked==true){
-			//DisableAll();
+			//disableAll();
 			if(itemName == '<%//=Constants.PARTICIPANT%>'){
 				//itemCount++;
-				//DisableAll();
+				//disableAll();
 			var item = document.getElementById('<%//=Constants.P%>');
 			item.className="linkChange";
 			item.innerHTML = "<a HREF='<%//=util.getLink("Participant")%>' target='searchPageFrame'><%//=Constants.PARTICIPANT%></a>";
@@ -31,7 +36,7 @@
 			}
 			if(itemName == '<%//=Constants.COLLECTION_PROTOCOL%>'){
 				//itemCount++;
-				//DisableAll();
+				//disableAll();
 				EnableItem(nodeCount);
 			var item = document.getElementById('<%//=Constants.CP%>');
 			item.className="linkChange";
@@ -46,7 +51,7 @@
 			}
 			if(itemName == '<%//=Constants.SPECIMEN%>'){
 				//itemCount++;
-				//DisableAll();
+				//disableAll();
 				EnableItem(nodeCount);
 			var item = document.getElementById('<%//=Constants.S%>');
 			item.className="linkChange";
@@ -58,28 +63,28 @@
 			itemCount--;
 			
 	//if(itemCount > 2){
-		//DisableAll();
+		//disableAll();
 	//}
 	//else{
 	alert("itemCount"+itemCount);
 	alert("check box name"+checkName);
 	alert("item name"+itemName);
 		if(itemCount == 1){
-			DisableAll();
+			disableAll();
 			var item = document.getElementById('<%//=Constants.P%>');
 			item.className="linkChange";
 			item.innerHTML = "<a HREF='<%//=util.getLink("Participant")%>' target='searchPageFrame'><%//=Constants.PARTICIPANT%></a>";
 		}
 		//Poornima:Added CP link and S link
 		if(itemCount == 2){
-			DisableAll();
+			disableAll();
 			var item = document.getElementById('<%//=Constants.CP%>');
 			item.className="linkChange";
 			item.innerHTML = "<a HREF='<%//=util.getLink("CollectionProtocol")%>' target='searchPageFrame'><%//=Constants.COLLECTION_PROTOCOL%></a>";
 		}
 			
 		if(itemCount == 3){
-			DisableAll();
+			disableAll();
 			var item = document.getElementById('<%//=Constants.S%>');
 			item.className="linkChange";
 			item.innerHTML = "<a HREF='<%//=util.getLink("Specimen")%>' target='searchPageFrame'><%//=Constants.SPECIMEN%></a>";
@@ -89,7 +94,7 @@
 		//}
 	}*/	
 
-	function DisableAll()
+	function disableAll()
 	{
 		var item = document.getElementById('<%=Constants.CP%>');
 		item.className="linkChange";
@@ -115,8 +120,17 @@
 		item.className="linkChange";
 		item.innerHTML = "&nbsp;<img src='images/Distribution.GIF' alt='Distribution' /> &nbsp; <%=Constants.DISTRIBUTION%>";
 		
+		item = document.getElementById('<%=Constants.EDIT%>');
+		item.className = "linkChange";
+		item.innerHTML = "Edit";
+		
+		var deleteItem = document.getElementById('<%=Constants.DELETE%>');
+		deleteItem.innerHTML = "&nbsp;<a HREF='#'>Delete</a>";
+		
+		
+		
 	}
-	function EnableAll()
+	function enableAll()
 	{
 	
 		var item = document.getElementById('<%=Constants.CP%>');
@@ -158,9 +172,10 @@
 	}*/
 	
 //	function EnableItem(nodeCount){
-	function CheckNum(checkName,itemName,nodeCount)
+	function CheckNum(checkName,itemId,nodeCount,documentForm)
 	{
-		DisableAll();
+		
+		disableAll();
 		var ParticipantCount = 0;
 		var CProtocolCount = 0;
 		var DProtocolCount = 0;
@@ -175,6 +190,7 @@
 		alert("itemCount"+itemCount);
 		alert("check box name"+checkName);
 		alert("item name"+itemName);*/
+		
 								
 		for(var i = 1; i <= nodeCount; i++)
 		{
@@ -186,6 +202,8 @@
 				{
 					ParticipantCount = ParticipantCount + 1;
 					selectedNode=i;
+					
+					
 				}
 			}
 			
@@ -198,6 +216,7 @@
 				{
 					CProtocolCount = CProtocolCount + 1;
 					selectedNode=i;
+					
 				}
 			}
 			
@@ -209,6 +228,7 @@
 				{
 					DProtocolCount = DProtocolCount + 1;
 					selectedNode=i;
+					//document.forms[0].itemId = i;
 				}
 			}
 			
@@ -220,6 +240,7 @@
 				{
 					SCGroupCount = SCGroupCount + 1;
 					selectedNode=i;
+					//document.forms[0].itemId = i;
 				}
 			}
 			
@@ -231,6 +252,7 @@
 				{
 					DistributionCount = DistributionCount + 1;
 					selectedNode=i;
+					//document.forms[0].itemId = i;
 				}
 			}
 			var SpecimenItem = '<%=Constants.SPECIMEN%>'+"_"+i;
@@ -241,6 +263,7 @@
 				{
 					SpecimenCount = SpecimenCount + 1;
 					selectedNode=i;
+					//document.forms[0].itemId = i;
 				}
 			}
 		}
@@ -248,8 +271,7 @@
 		var sum = ParticipantCount + CProtocolCount + DProtocolCount + SCGroupCount + DistributionCount + SpecimenCount;
 		
 		//alert("count1 "+count1+" count2 "+count2 );
-		//alert("sum "+sum);
-		
+				
 		if(ParticipantCount == sum) 
 		{
 			/*var PItem = document.getElementById('<%=Constants.P%>');
@@ -258,47 +280,78 @@
 			PItem.innerHTML ="&nbsp;<img src='images/Participant.GIF' alt='Participant' />  &nbsp;<a HREF='"+link+"' target='searchPageFrame'><%=Constants.PARTICIPANT%></a>";*/
 			
 			//alert("participant rule");
-			var CPItem = document.getElementById('<%=Constants.CP%>');
-			CPItem.className="linkChange";
+			var cpItem = document.getElementById('<%=Constants.CP%>');
+			cpItem.className="linkChange";
 			var link = "<%=util.getLink("CollectionProtocol")%>"+ selectedNode;
-			CPItem.innerHTML ="&nbsp;<img src='images/CollectionProtocol.GIF' alt='CollectionProtocol' />  &nbsp;<a HREF='"+link+"' target='searchPageFrame'><%=Constants.COLLECTION_PROTOCOL%></a>";
+			cpItem.innerHTML ="&nbsp;<img src='images/CollectionProtocol.GIF' alt='CollectionProtocol' />  &nbsp;<a HREF='"+link+"' target='searchPageFrame'><%=Constants.COLLECTION_PROTOCOL%></a>";
 		
-			DPItem = document.getElementById('<%=Constants.DP%>');
-			DPItem.className="linkChange";
+			dpItem = document.getElementById('<%=Constants.DP%>');
+			dpItem.className="linkChange";
 			//var link = "<%=util.getLink("DistributionProtocol")%>"+ selectedNode;
-			DPItem.innerHTML = "&nbsp;<img src='images/DistributionProtocol.GIF' alt='DistributionProtocol' /> &nbsp;<a HREF='#'><%=Constants.DISTRIBUTION_PROTOCOL%></a>";
+			dpItem.innerHTML = "&nbsp;<img src='images/DistributionProtocol.GIF' alt='DistributionProtocol' /> &nbsp;<a HREF='#'><%=Constants.DISTRIBUTION_PROTOCOL%></a>";
+			
+			var editItem = document.getElementById('<%=Constants.EDIT%>');
+			var editLink = "<%=util.getLink("Participant")%>"+ selectedNode +"&itemId="+itemId;
+			var s = "<a HREF='" + editLink + "' target='searchPageFrame'>Edit</a>"
+			editItem.innerHTML = "" + s;
 			
 			var deleteItem = document.getElementById('<%=Constants.DELETE%>');
-			deleteItem.innerHTML = "&nbsp;<a HREF='#'>Delete</a>";
+			var deleteLink = "AdvanceSearch.do?delete=true&itemId="+itemId;
+			//deleteItem.innerHTML = "&nbsp;<a HREF='" + deleteLink + "'>Delete</a>";
+			
 		}
 		else if(CProtocolCount == sum)
 		{
-			//alert("clicked coll prot");
-			
+		
+			/*var link = "<%=util.getLink("CollectionProtocol")%>"+ selectedNode; 
 			var CPItem = document.getElementById('<%=Constants.CP%>');
 			CPItem.className="linkChange";
-			var link = "<%=util.getLink("CollectionProtocol")%>"+ selectedNode;
-			CPItem.innerHTML ="&nbsp;<img src='images/CollectionProtocol.GIF' alt='CollectionProtocol' />  &nbsp;<a HREF='"+link+"' target='searchPageFrame'><%=Constants.COLLECTION_PROTOCOL%></a>";
+			CPItem.innerHTML ="&nbsp;<img src='images/CollectionProtocol.GIF' alt='CollectionProtocol' />  &nbsp;<a HREF='"+link+"' target='searchPageFrame'><%=Constants.COLLECTION_PROTOCOL%></a>";*/
 			
-			var SCGItem = document.getElementById('<%=Constants.SCG%>');
-			SCGItem.className="linkChange";
+			var scGItem = document.getElementById('<%=Constants.SCG%>');
+			scGItem.className="linkChange";
 			var link = "<%=util.getLink("SpecimenCollectionGroup")%>"+ selectedNode;
-			SCGItem.innerHTML ="&nbsp;<img src='images/SpecimenCollectionGroup.GIF' alt='SpecimenCollectionGroup' />  &nbsp;<a HREF='"+link+"' target='searchPageFrame'><%=Constants.SPECIMEN_COLLECTION_GROUP%></a>";
+			scGItem.innerHTML ="&nbsp;<img src='images/SpecimenCollectionGroup.GIF' alt='SpecimenCollectionGroup' />  &nbsp;<a HREF='"+link+"' target='searchPageFrame'><%=Constants.SPECIMEN_COLLECTION_GROUP%></a>";
 			
+			var editItem = document.getElementById('<%=Constants.EDIT%>');
+			var editLink = "<%=util.getLink("CollectionProtocol")%>"+ selectedNode +"&itemId="+itemId;
+			var s = "<a HREF='" + editLink + "' target='searchPageFrame'>Edit</a>"
+			editItem.innerHTML = "" + s;
+			
+			var deleteItem = document.getElementById('<%=Constants.DELETE%>');
+			//deleteItem.innerHTML = "&nbsp;<a HREF='AdvanceSearch.do?delete=true'>Delete</a>";
 			
 		}
 		else if(SCGroupCount == sum)
 		{
 			//alert("clicked specimen group");
-			var SItem = document.getElementById('<%=Constants.S%>');
-			SItem.className="linkChange";
+					
+			var sItem = document.getElementById('<%=Constants.S%>');
+			sItem.className="linkChange";
 			var link = "<%=util.getLink("Specimen")%>"+ selectedNode;
 			//alert(link);
-			SItem.innerHTML ="&nbsp;<img src='images/Specimen.GIF' alt='Specimen' /> &nbsp;<a HREF='"+link+"' target='searchPageFrame'><%=Constants.SPECIMEN%></a>";
+			sItem.innerHTML ="&nbsp;<img src='images/Specimen.GIF' alt='Specimen' /> &nbsp;<a HREF='"+link+"' target='searchPageFrame'><%=Constants.SPECIMEN%></a>";
 			
-		}		
+			var editItem = document.getElementById('<%=Constants.EDIT%>');
+			var editLink = "<%=util.getLink("SpecimenCollectionGroup")%>"+ selectedNode +"&itemId="+itemId;
+			var s = "<a HREF='" + editLink + "' target='searchPageFrame'>Edit</a>"
+			editItem.innerHTML = "" + s;
+			
+			var deleteItem = document.getElementById('<%=Constants.DELETE%>');
+			//deleteItem.innerHTML = "&nbsp;<a HREF='AdvanceSearch.do?delete=true'>Delete</a>";
+			
+		}
 		else
-			DisableAll();
+			disableAll();
+			
+		if(sum == 0)
+		{
+			disableAll();
+			var PItem = document.getElementById('<%=Constants.P%>');
+			PItem.className="linkChange";
+			var link = "<%=util.getLink("Participant")%>"+ selectedNode;
+			PItem.innerHTML ="&nbsp;<img src='images/Participant.GIF' alt='Participant' />  &nbsp;<a HREF='"+link+"' target='searchPageFrame'><%=Constants.PARTICIPANT%></a>";
+		}	
 	}	
 	
 	function changeClass(element,styleName)
@@ -315,6 +368,8 @@
 			<td class='formTitle' height='20' width='72%'>
 				<img src="images/arrow.GIF" alt="Rules" />Rules
 			</td>
+			
+			
 			<td class='formTitle'  height='20' width='8%' onmouseover="expand(this);" onmouseout="collapse(this);" align='centre'>Add 
 				<table class='menuNormal' border='0' cellpadding='0' cellspacing='0'>
 					<tr>
@@ -372,7 +427,7 @@
 					</tr>
 			</table>
 			</td>
-		<td class='formTitle' height='20' width='10%' onmouseover="changeClass(this,'menuHover');" onmouseout="changeClass(this,'formTitle');">Edit</td>
+		<td class='formTitle' id='edit' height='20' width='10%' onmouseover="changeClass(this,'menuHover');" onmouseout="changeClass(this,'formTitle');">Edit</td>
 		<td class='formTitle' id='delete' height='20' width='10%' onmouseover="changeClass(this,'menuHover');" onmouseout="changeClass(this,'formTitle');">Delete</td>
 	</tr>
 
@@ -382,7 +437,6 @@
 				createTree(Tree);
 			</script>
 		</div>
-	
 	</table>	
 	</body>
 </html>
