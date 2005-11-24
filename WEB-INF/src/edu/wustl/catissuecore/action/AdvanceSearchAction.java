@@ -18,6 +18,7 @@ import org.apache.struts.actions.DispatchAction;
 import edu.wustl.catissuecore.actionForm.AdvanceSearchForm;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.ConditionMapParser;
+import edu.wustl.common.util.logger.Logger;
 /**
  * @author poornima_govindrao
  *
@@ -43,12 +44,32 @@ public class AdvanceSearchAction extends DispatchAction
         //Parse the conditions to for the advancedConditionNode
         ConditionMapParser parser = new ConditionMapParser();
         List conditionNodeCollection = parser.parseCondition(map);
+        
         HttpSession session = request.getSession();
         DefaultMutableTreeNode root = (DefaultMutableTreeNode)session.getAttribute(Constants.ADVANCED_CONDITIONS_ROOT);
         String objectName = advanceSearchForm.getObjectName();
         String selectedNode = advanceSearchForm.getSelectedNode();
         Map advancedConditionNodesMap = (Map)session.getAttribute(Constants.ADVANCED_CONDITION_NODES_MAP);
-       	root = parser.createAdvancedQueryObj(conditionNodeCollection,root,objectName,selectedNode,advancedConditionNodesMap);
+        Logger.out.debug("advancedConditionNodesMap--"+advancedConditionNodesMap);
+        
+        //ItemNode Id represents id of checked checbox used in Edit operation
+        String str = advanceSearchForm.getItemNodeId();
+        Integer nodeId = null;
+        
+        if(!str.equals(""))
+        {
+        	nodeId = Integer.decode(str);
+        }
+        
+        /** Delete function**/
+        /*String strDelete = request.getParameter("delete");
+        boolean delete = false;
+        if((strDelete != null) && (strDelete.equals(Constants.TRUE)))
+        {
+        	delete = true;
+        }*/
+       
+        root = parser.createAdvancedQueryObj(conditionNodeCollection,root,objectName,selectedNode,advancedConditionNodesMap,nodeId);
         	
        //Query query = QueryFactory.getInstance().newQuery(Query.ADVANCED_QUERY, aliasName);
         session.setAttribute(Constants.ADVANCED_CONDITIONS_ROOT,root);
