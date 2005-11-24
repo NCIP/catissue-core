@@ -43,6 +43,21 @@ public class SearchUtil
      */
     public static final int DATATYPE_ENUMERATED = 4;
     
+    /**
+     * Constant for datatype STRING
+     */
+    public static final String STRING = "String";
+    
+    /**
+     * Constant for datatype DATE
+     */
+    public static final String DATE = "Date";
+    
+    /**
+     * Constant for datatype NUMERIC
+     */
+    public static final String NUMERIC = "Numeric";
+    
     private HashMap map = new HashMap();
     
     
@@ -85,7 +100,6 @@ public class SearchUtil
 	public String getLink(String item){
 		getMap();
 		String link = (String)map.get(item);
-		System.out.println("link--->"+link);
 		return link;
 	
 	}
