@@ -12,6 +12,7 @@ package edu.wustl.catissuecore.action;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -23,11 +24,14 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.AdvanceSearchForm;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.vo.AdvanceSearchUI;
+import edu.wustl.catissuecore.vo.SearchFieldData;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.util.SearchUtil;
+import edu.wustl.common.util.logger.Logger;
 
-public class SpecimenCollectionGroupSearchAction extends BaseAction
+public class SpecimenCollectionGroupSearchAction extends AdvanceSearchUIAction
 {
     /**
      * Overrides the execute method of Action class.
@@ -55,6 +59,37 @@ public class SpecimenCollectionGroupSearchAction extends BaseAction
         request.setAttribute(Constants.STRING_OPERATORS,SearchUtil.getOperatorList(SearchUtil.DATATYPE_STRING));
         request.setAttribute(Constants.DATE_NUMERIC_OPERATORS,SearchUtil.getOperatorList(SearchUtil.DATATYPE_NUMERIC));
         request.setAttribute(Constants.ENUMERATED_OPERATORS,SearchUtil.getOperatorList(SearchUtil.DATATYPE_ENUMERATED));
+        
+//      Class for intializing value of JSP
+        SearchFieldData[] searchFieldData = new SearchFieldData[6];
+        searchFieldData[0] = initSearchUIData(SearchUtil.STRING, "specimenCollectionGroup.site","SpecimenCollectionGroup","SITE_ID","siteName",Constants.STRING_OPERATORS,"","");//SITE_ID will be SITE_NAME
+        searchFieldData[1] = initSearchUIData(SearchUtil.DATE,"specimenCollectionGroup.studyCalendarEventPoint","CollectionProtocolEvent","STUDY_CALENDAR_EVENT_POINT","studyCalendarEventPoint",Constants.DATE_NUMERIC_OPERATORS,"","");
+        searchFieldData[2] = initSearchUIData(SearchUtil.STRING,"specimenCollectionGroup.clinicalDiagnosis","SpecimenCollectionGroup","CLINICAL_DIAGNOSIS","clinicalDiagnosis",Constants.ENUMERATED_OPERATORS,Constants.CLINICAL_DIAGNOSIS_LIST,"");
+        searchFieldData[3] = initSearchUIData(SearchUtil.STRING,"specimenCollectionGroup.clinicalStatus","SpecimenCollectionGroup","CLINICAL_STATUS","clinicalStatus",Constants.ENUMERATED_OPERATORS,Constants.CLINICAL_STATUS_LIST,"");
+        searchFieldData[4] = initSearchUIData(SearchUtil.STRING,"specimenCollectionGroup.medicalRecordNumber","ParticipantMedicalIdentifier","MEDICAL_RECORD_NUMBER","medicalRecordNo",Constants.STRING_OPERATORS,"","");
+        searchFieldData[5] = initSearchUIData(SearchUtil.STRING,"specimenCollectionGroup.surgicalPathologyNumber","ClinicalReport","SURGICAL_PATHOLOGICAL_NUMBER","surgicalPathologyNo",Constants.STRING_OPERATORS,"","");
+        
+    	 
+        //Represents id of checked checkbox
+        String str = request.getParameter("itemId");
+        if(str != null)
+        {
+        	setMapValue(aForm,str,request);
+        	aForm.setItemNodeId(str);
+        }
+		
+        Map map = aForm.getValues();
+        
+        Logger.out.debug("map-"+map);
+        
+        //Checking map contains value or not
+    	if( map != null)
+    	{
+    		setIsDisableValue(searchFieldData,map);
+    	}
+    		
+    	AdvanceSearchUI advSearchUI = new AdvanceSearchUI("images/SpecimenCollectionGroup.GIF","SpecimenCollectionGroup","spg.queryRule",searchFieldData,"advanceSearchForm");
+    	request.setAttribute("AdvanceSearchUI",advSearchUI);
     	
     	String pageOf = (String)request.getParameter(Constants.PAGEOF);
     	return mapping.findForward(pageOf);
