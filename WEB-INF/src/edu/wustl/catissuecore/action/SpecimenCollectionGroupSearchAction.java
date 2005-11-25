@@ -60,14 +60,8 @@ public class SpecimenCollectionGroupSearchAction extends AdvanceSearchUIAction
         request.setAttribute(Constants.DATE_NUMERIC_OPERATORS,SearchUtil.getOperatorList(SearchUtil.DATATYPE_NUMERIC));
         request.setAttribute(Constants.ENUMERATED_OPERATORS,SearchUtil.getOperatorList(SearchUtil.DATATYPE_ENUMERATED));
         
-//      Class for intializing value of JSP
-        SearchFieldData[] searchFieldData = new SearchFieldData[6];
-        searchFieldData[0] = initSearchUIData(SearchUtil.STRING, "specimenCollectionGroup.site","SpecimenCollectionGroup","SITE_ID","siteName",Constants.STRING_OPERATORS,"","");//SITE_ID will be SITE_NAME
-        searchFieldData[1] = initSearchUIData(SearchUtil.DATE,"specimenCollectionGroup.studyCalendarEventPoint","CollectionProtocolEvent","STUDY_CALENDAR_EVENT_POINT","studyCalendarEventPoint",Constants.DATE_NUMERIC_OPERATORS,"","");
-        searchFieldData[2] = initSearchUIData(SearchUtil.STRING,"specimenCollectionGroup.clinicalDiagnosis","SpecimenCollectionGroup","CLINICAL_DIAGNOSIS","clinicalDiagnosis",Constants.ENUMERATED_OPERATORS,Constants.CLINICAL_DIAGNOSIS_LIST,"");
-        searchFieldData[3] = initSearchUIData(SearchUtil.STRING,"specimenCollectionGroup.clinicalStatus","SpecimenCollectionGroup","CLINICAL_STATUS","clinicalStatus",Constants.ENUMERATED_OPERATORS,Constants.CLINICAL_STATUS_LIST,"");
-        searchFieldData[4] = initSearchUIData(SearchUtil.STRING,"specimenCollectionGroup.medicalRecordNumber","ParticipantMedicalIdentifier","MEDICAL_RECORD_NUMBER","medicalRecordNo",Constants.STRING_OPERATORS,"","");
-        searchFieldData[5] = initSearchUIData(SearchUtil.STRING,"specimenCollectionGroup.surgicalPathologyNumber","ClinicalReport","SURGICAL_PATHOLOGICAL_NUMBER","surgicalPathologyNo",Constants.STRING_OPERATORS,"","");
+        //An array required for intializing values of SpecimenCollectionGroupSearch.jsp
+        SearchFieldData[] searchFieldData = SearchUtil.getSearchFieldData(Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID);
         
     	 
         //Represents id of checked checkbox

@@ -10,11 +10,9 @@
 
 package edu.wustl.catissuecore.action;
 
-import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -60,15 +58,8 @@ public class CollectionProtocolSearchAction extends AdvanceSearchUIAction
         request.setAttribute(Constants.DATE_NUMERIC_OPERATORS,SearchUtil.getOperatorList(SearchUtil.DATATYPE_NUMERIC));
         request.setAttribute(Constants.ENUMERATED_OPERATORS,SearchUtil.getOperatorList(SearchUtil.DATATYPE_ENUMERATED));
 
-    	SearchFieldData[] searchFieldData = new SearchFieldData[8];
-    	searchFieldData[0] = initSearchUIData(SearchUtil.STRING, "collectionprotocol.principalinvestigator","SpecimenProtocol","PRINCIPAL_INVESTIGATOR_ID","principalInvestigator",Constants.ENUMERATED_OPERATORS,Constants.USERLIST,"");
-    	searchFieldData[1] = initSearchUIData(SearchUtil.STRING,"collectionprotocol.protocoltitle","SpecimenProtocol","TITLE","title",Constants.STRING_OPERATORS,"","");
-    	searchFieldData[2] = initSearchUIData(SearchUtil.STRING, "collectionprotocol.shorttitle","SpecimenProtocol","SHORT_TITLE","shortTitle",Constants.STRING_OPERATORS,"","");
-    	searchFieldData[3] = initSearchUIData(SearchUtil.STRING, "collectionprotocol.irbid","SpecimenProtocol","IRB_IDENTIFIER","irbIdentifier",Constants.STRING_OPERATORS,"","");
-    	searchFieldData[4] = initSearchUIData(SearchUtil.DATE, "collectionprotocol.startdate","SpecimenProtocol","START_DATE","startDate",Constants.DATE_NUMERIC_OPERATORS,"","");
-    	searchFieldData[5] = initSearchUIData(SearchUtil.DATE, "collectionprotocol.enddate","SpecimenProtocol","END_DATE","endDate",Constants.DATE_NUMERIC_OPERATORS,"","");
-    	searchFieldData[6] = initSearchUIData(SearchUtil.STRING, "collectionProtocolReg.participantProtocolID","CollectionProtocolRegistration","PROTOCOL_PARTICIPANT_IDENTIFIER","protocolParticipantId",Constants.STRING_OPERATORS,"","");
-    	searchFieldData[7] = initSearchUIData(SearchUtil.DATE, "collectionProtocolReg.participantRegistrationDate","CollectionProtocolRegistration","REGISTRATION_DATE","regDate",Constants.DATE_NUMERIC_OPERATORS,"","");
+    	//An array required for intializing values of CollectionProtocolRegistrationSearch.jsp
+        SearchFieldData[] searchFieldData = SearchUtil.getSearchFieldData(Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
     	
      	String str = request.getParameter("itemId");
          Logger.out.debug("itemid-"+str);
