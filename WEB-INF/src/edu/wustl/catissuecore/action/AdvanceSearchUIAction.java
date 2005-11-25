@@ -21,75 +21,10 @@ import edu.wustl.catissuecore.query.Condition;
 import edu.wustl.catissuecore.query.DataElement;
 import edu.wustl.catissuecore.query.Operator;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.vo.HTMLField;
 import edu.wustl.catissuecore.vo.SearchFieldData;
-import edu.wustl.common.util.SearchUtil;
-import edu.wustl.common.util.logger.Logger;
+
 public abstract class AdvanceSearchUIAction extends BaseAction 
 {
-	
-	/**
-	 * Used for creating key of field which is further used for mapping
-	 * @param tableName Used for creating key of field
-	 * @param fieldName Represents name of field
-	 * @param isOperator Checking whether the key is of operator field or not
-	 * @param dataType Datatype of field
-	 * @return
-	 */
-	
-	private String createKey(String tableName,String fieldName,boolean isOperator,String dataType)
-    {
-		//Checking whether the key is of operator field or not
-    	if(isOperator)
-    	{
-    		return "value(Operator:" + tableName + ":" + fieldName +")";
-    	}
-    	else
-    	{
-    		return "value(" + tableName + ":" + fieldName + ")";
-    	}
-    }
-   
-	
-	/**
-	 * Used for initializing HTMLField class which set the value of each field(text,comboBox etc)
-	 * @param dataType  Datatype of field
-	 * @param msgKey  Label of row
-	 * @param tblName  Used for creating key of field
-	 * @param colName  Represents name of field
-	 * @param id  Represents id of field
-	 * @param opList  For populating value of comboBox
-	 * @param valueList  For populating value in case of comboBox in 3rd column of table
-	 * @param unitFieldKey  Used for specimen page only 
-	 * @return  instance of SearchFieldData
-	 */
-	
-	protected SearchFieldData initSearchUIData(String dataType,String msgKey, String tblName,String colName,String id,
-    		String opList,String valueList,String unitFieldKey)
-    {
-		//Initializing HTMLField class
-    	HTMLField oprationField = new HTMLField(createKey(tblName,colName,true,dataType),id+"Combo",opList);
-    	HTMLField valueField = new HTMLField(createKey(tblName,colName,false,dataType),id,valueList);
-    	
-    	//Function Name used according to dataType of field
-    	String funcName = "";
-    	
-    	//Condition for diffent function name for enabing/disabling next field
-    	if( dataType.equals(SearchUtil.DATE) || (dataType).equals(SearchUtil.NUMERIC))
-    	{
-    		//Passing 3 parameters out of this two are representing id of textbox
-			funcName = "onDateOperatorChange(this,'" + id + "1','" + id + "2')";
-    	}
-    	else
-    	{
-    		//passing id of field from where function is called and next field's id
-    		funcName = "onOperatorChange('" + (id+"Combo") + "','" + id +"')";
-    	}
-    	
-    	return new SearchFieldData(dataType, msgKey ,oprationField,valueField,funcName,unitFieldKey);
-    }
-    
-	
 	/**
 	 * Used for setting value of map of form in edit case
 	 * @param aForm Common form form for all Search Pages
