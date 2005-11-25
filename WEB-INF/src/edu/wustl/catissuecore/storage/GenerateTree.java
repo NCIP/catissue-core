@@ -16,6 +16,7 @@ import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
+import edu.wustl.catissuecore.query.TreeNodeData;
 import edu.wustl.catissuecore.vo.TreeNode;
 import edu.wustl.catissuecore.vo.TreeNodeFactory;
 
@@ -46,6 +47,7 @@ public class GenerateTree
 
                 DefaultMutableTreeNode nextNode = new DefaultMutableTreeNode(treeNode);
                 DefaultMutableTreeNode targetParentNode = null;
+                TreeNodeData nodeData = (TreeNodeData) treeNode;
                 if (treeNode.getParentIdentifier() == null)
                 {
                 	boolean parentNodeFound = false;
@@ -61,17 +63,16 @@ public class GenerateTree
                             break;
                         }
                     }
-
-                    if(false == parentNodeFound) // 
+                    
+                    if(false == parentNodeFound)
                     {
-                       	// Add missing parent node
+                       	// Add missing parent node.
                     	TreeNode siteNode = treeNode.getParentTreeNode();
                        	DefaultMutableTreeNode siteTreeNode = new DefaultMutableTreeNode(siteNode);
                        	parentNode.add(siteTreeNode);
                        	
                        	targetParentNode = siteTreeNode;
                     }
-
                 }
                 else
                 {
@@ -79,7 +80,6 @@ public class GenerateTree
                     {
                         DefaultMutableTreeNode site = (DefaultMutableTreeNode)parentNode.getChildAt(i);
                         node = getChildNode(site,treeNode);
-                        
                         if (node != null)
                         {                        	
                         	targetParentNode = node;
@@ -87,9 +87,14 @@ public class GenerateTree
                         }
                     }
                 }
+                
                 if(null != targetParentNode)
                 {
-                	targetParentNode.add(nextNode);
+                    TreeNode nextTreeNode = (TreeNode)nextNode.getUserObject();
+                    if (nextTreeNode.isPresentIn(targetParentNode) == false)
+                    {
+                        targetParentNode.add(nextNode);
+                    }
                 	
                 	//Sri: Select the path of the node to be selected
                 	if(nodeToBeSelected.equals(treeNode.getIdentifier()))
@@ -97,7 +102,6 @@ public class GenerateTree
                 		pathToRoot  = new TreePath(nextNode.getPath());   
                 	}
                 }
-             
             }
         }
         

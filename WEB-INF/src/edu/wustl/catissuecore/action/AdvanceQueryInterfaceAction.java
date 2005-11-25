@@ -42,8 +42,10 @@ public class AdvanceQueryInterfaceAction extends BaseAction
     	{
     		Logger.out.debug("Inside initialization of root node");
     		DefaultMutableTreeNode root = new DefaultMutableTreeNode();;
+    		//DefaultMutableTreeNode queryViewRoot = new DefaultMutableTreeNode();;
     		HttpSession session = request.getSession();
     		session.setAttribute(Constants.ADVANCED_CONDITIONS_ROOT,root);
+    		//session.setAttribute(Constants.ADVANCED_CONDITIONS_QUERY_VIEW,queryViewRoot);
     		//root = (DefaultMutableTreeNode)session.getAttribute(Constants.ADVANCED_CONDITIONS_ROOT);
     		//Logger.out.debug("child count in init action:"+root.getChildCount());
     	}

@@ -14,7 +14,6 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.QueryBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -29,9 +28,8 @@ public class TreeView {
 	private int nodeId=0;
 	
 	//Recursive function to create the tree
-	public void arrangeTree(DefaultMutableTreeNode node,int parentId,Vector tree,Map advancedConditionNodesMap)
+	public void arrangeTree(DefaultMutableTreeNode node,int parentId,Vector tree,Map advancedConditionNodesMap) throws Exception
 	{
-		try {
 			nodeId++;
 			
 			//Loop for all the children for the current node.
@@ -56,11 +54,21 @@ public class TreeView {
 			        Operator op = con.getOperator();
 			        String value = con.getValue();
 			        String columnName = data.getField();
+			        String table = data.getTable();
+			        //split column name in case of Specimen event parameters to remove aliasName
+			        //StringTokenizer columnNameTokenizer = new StringTokenizer(columnName,".");
 			        QueryBizLogic bizLogic = (QueryBizLogic)BizLogicFactory
 														.getBizLogic(Constants.SIMPLE_QUERY_INTERFACE_ID);
-			        String columnDisplayName = bizLogic.getColumnDisplayNames(tableName,columnName);
+			        String columnDisplayName = bizLogic.getColumnDisplayNames(table,columnName);
+			        //append table name to the column name in case of event parameters conditions.
+			        if(table.indexOf("Parameter")>0)
+			        	columnDisplayName = table+"."+columnName;
+			        if(columnDisplayName.equals(""))
+			        {
+			        	columnDisplayName=columnName;
+			        }
 			        Logger.out.debug("Column Display name in tree view:"+columnDisplayName);
-			        //Change the operator to starts with or ends with or contains if it is 'Like' operator
+			        //Change the operator to 'starts with' or 'ends with' or 'contains' if it is 'Like' operator
 			        if((op.getOperator()).equals(Operator.LIKE))
 					{
 			        	if((value.startsWith("'%")) && (value.endsWith("%'")))
@@ -116,15 +124,6 @@ public class TreeView {
 					arrangeTree(child,nodeId,tree,advancedConditionNodesMap);
 			}
 		} 
-		catch (DAOException e) 
-		{
-			Logger.out.error(e.getMessage(),e);
-		} 
-		catch (ClassNotFoundException e) 
-		{
-			Logger.out.error(e.getMessage(),e);
-		}
 	
-	}
 
 }

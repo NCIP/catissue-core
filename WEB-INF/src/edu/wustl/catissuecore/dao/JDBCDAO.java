@@ -538,4 +538,46 @@ public class JDBCDAO extends AbstractDAO
     {
         
     }
+    /**
+     * Creates a table with the query specified.
+     * @param query Query create table.
+     * @throws DAOException
+     */
+    public void createTable(String query) throws DAOException
+    {
+        Logger.out.debug("Create Table Query "+query.toString());
+        executeUpdate(query.toString());
+    }
+    /**
+     * Alters table to add new columns.
+     * @param tableName Table Name to be altered.
+     * @param columnDescription Column Description to be added.
+     * @throws DAOException
+     */
+	
+    public void alterTable(String tableName,String columnDescription) throws Exception
+    {
+    	String query = "ALTER TABLE "+tableName +" ADD "+columnDescription+" ";
+    	Logger.out.debug("Alter table query:"+query);
+    	executeUpdate(query.toString());
+    }
+    /**
+     * (non-Javadoc)
+     * @see edu.wustl.catissuecore.dao.AbstractDAO#insert(java.lang.Object)
+     */
+    public void insertValues(String tableName, List columnValues) throws DAOException
+    {
+
+        StringBuffer query = new StringBuffer("INSERT INTO "+tableName+" values(");
+        int i;
+	    for (i=0;i<columnValues.size()-1;i++)
+	    {
+	        query.append("'"+columnValues.get(i)+"',");
+	    }	
+	        
+	    query.append("'"+columnValues.get(i)+"');");
+	    Logger.out.debug("Insert Statement........."+query);    
+	    executeUpdate(query.toString());
+    }
+
 }

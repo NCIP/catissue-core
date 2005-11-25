@@ -6,6 +6,7 @@
  */
 package edu.wustl.catissuecore.vo;
 
+import edu.wustl.catissuecore.query.TreeNodeData;
 import edu.wustl.catissuecore.storage.StorageContainerTreeNode;
 import edu.wustl.catissuecore.tissuesite.TissueSiteTreeNode;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -31,6 +32,7 @@ public class TreeNodeFactory
                 treeNode = new StorageContainerTreeNode();
             	break;
             case Constants.QUERY_RESULTS_TREE_ID:
+            	treeNode = new TreeNodeData();
                 break;
         }
         

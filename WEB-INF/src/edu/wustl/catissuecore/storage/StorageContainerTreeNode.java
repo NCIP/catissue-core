@@ -9,6 +9,8 @@ package edu.wustl.catissuecore.storage;
 
 import java.io.Serializable;
 
+import javax.swing.tree.DefaultMutableTreeNode;
+
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.vo.TreeNode;
 
@@ -214,5 +216,11 @@ public class StorageContainerTreeNode implements Serializable, TreeNode
     {
         return this.getParentStorageContainerIdentifier();
     }
-    
+  
+    /* (non-Javadoc)
+	 * @see edu.wustl.catissuecore.vo.TreeNode#isPresentIn(javax.swing.tree.DefaultMutableTreeNode)
+	 */
+	public boolean isPresentIn(DefaultMutableTreeNode parentNode) {
+		return false;
+	}
  }

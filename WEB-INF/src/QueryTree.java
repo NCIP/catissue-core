@@ -58,7 +58,6 @@ public class QueryTree extends JApplet
             //Sri: Added for selecting node in the storage tree
             Long selectedNode = new Long(0);
             String position = null;
-            
             if (pageOf.equals(Constants.PAGEOF_STORAGE_LOCATION)) 
             {
                 storageContainerType = this.getParameter(Constants.STORAGE_CONTAINER_TYPE);
@@ -93,9 +92,7 @@ public class QueryTree extends JApplet
             }
             
             String applicationPath = codeBase.getPath();
-            System.out.println("applicationPath....................."+applicationPath);
             String urlSuffix = applicationPath+Constants.TREE_DATA_ACTION+"?"+Constants.PAGEOF+"="+pageOf;
-            System.out.println("TREE_DATA_ACTION......................."+urlSuffix);
             URL dataURL = new URL(protocol, host, port, urlSuffix);
             
             //Establish connection with the TreeDataAction and get the JTree object.
@@ -104,10 +101,8 @@ public class QueryTree extends JApplet
             
             in = new ObjectInputStream(connection.getInputStream());
             Vector treeDataVector = (Vector) in.readObject();
-            
             GenerateTree generateTree = new GenerateTree();
             JTree tree = generateTree.createTree(treeDataVector, treeType,selectedNode);
-            
             Container contentPane = getContentPane();
             contentPane.setLayout(new BorderLayout());
             
@@ -182,7 +177,6 @@ public class QueryTree extends JApplet
 	            + "&" + Constants.STORAGE_CONTAINER_TYPE + "=" + storageContainerType
 	            + "&" + Constants.STORAGE_CONTAINER_POSITION + "=" + position
 	            + "&" + Constants.PAGEOF + "=" + pageOf;
-                System.out.println("urlSuffix: "+ urlSuffix);
                 dataURL = new URL(protocol, host, port, urlSuffix);
 
 	            this.getAppletContext().showDocument(dataURL,Constants.DATA_VIEW_FRAME);

@@ -6,6 +6,8 @@
  */
 package edu.wustl.catissuecore.vo;
 
+import javax.swing.tree.DefaultMutableTreeNode;
+
 
 /**
  * @author gautam_shetty
@@ -27,5 +29,7 @@ public interface TreeNode
     public Object getParentIdentifier();
 
     public Object getIdentifier();
+    
+    public boolean isPresentIn(DefaultMutableTreeNode parentNode);
     
 }

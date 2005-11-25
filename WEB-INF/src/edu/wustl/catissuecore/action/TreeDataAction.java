@@ -21,7 +21,9 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.bizlogic.AdvanceQueryBizlogic;
 import edu.wustl.catissuecore.bizlogic.CDEBizLogic;
+import edu.wustl.catissuecore.bizlogic.QueryBizLogic;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.bizlogic.TreeDataInterface;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -46,19 +48,13 @@ public class TreeDataAction extends Action
 
         try
         {
-            //Builds the tree from the result set.
-//            ResultData resultData = new ResultData();
-//            Vector dataList = resultData.getTreeViewData();
-            
-//            AbstractBizLogic bizlLogic = BizLogicFactory.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
-            
             String pageOf = request.getParameter(Constants.PAGEOF);
             TreeDataInterface bizLogic = new StorageContainerBizLogic();
             
             if (pageOf.equals(Constants.PAGEOF_TISSUE_SITE))
                 bizLogic = new CDEBizLogic();
-//            else if (pageOf.equals(Constants.PAGEOF_QUERY_RESULTS))
-//                bizLogic = new CDEBizLogic();	
+            else if (pageOf.equals(Constants.PAGEOF_QUERY_RESULTS))
+                bizLogic = new AdvanceQueryBizlogic();	
             
             Vector dataList = bizLogic.getTreeViewData();
             String contentType = "application/x-java-serialized-object";

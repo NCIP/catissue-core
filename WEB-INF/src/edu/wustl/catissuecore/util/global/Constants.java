@@ -483,6 +483,7 @@ public class Constants
 	public static final int SHOPPING_CART_FORM_ID = 39;
 	public static final int SIMPLE_QUERY_INTERFACE_ID = 40;
 	public static final int CONFIGURE_RESULT_VIEW_ID = 41;
+	public static final int ADVANCE_QUERY_INTERFACE_ID = 42;
 	
 	//Misc
 	public static final String SEPARATOR = " : ";
@@ -1359,6 +1360,9 @@ public class Constants
 	public static final String ADVANCED_CONDITIONS_QUERY_VIEW = "advancedCondtionsQueryView";
 	public static final String ADVANCED_SEARCH_ACTION = "AdvanceSearch.do";
 	
+	public static final String COLUMN_ID_MAP = "columnIdsMap";
+	
+
 	// -- menu selection related
 	public static final String MENU_SELECTED = "menuSelected";
 	public static final String CONSTRAINT_VOILATION_ERROR = "Submission failed since a {0} with the same {1} already exists";

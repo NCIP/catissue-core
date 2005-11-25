@@ -635,7 +635,7 @@
 	</definition>
 	
 	<definition name=".catissuecore.queryResultsSpreadsheetViewDef" extends=".catissuecore.queryDataViewDef">
-		<put name="content" value="/pages/content/search/DataView.jsp"/>
+		<put name="content" value="/pages/content/search/SimpleSearchDataView.jsp"/>
 	</definition>
 	
 	<definition name=".catissuecore.storageLocationViewDef" extends=".catissuecore.queryDataViewDef">

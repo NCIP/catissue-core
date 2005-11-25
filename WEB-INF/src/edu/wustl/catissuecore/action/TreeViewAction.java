@@ -35,6 +35,7 @@ public class TreeViewAction extends Action
     {
         //Sets the pageOf attribute (for Add,Edit or Query Interface)
         String pageOf  = request.getParameter(Constants.PAGEOF);
+        Logger.out.debug("pageOf in treeview........"+pageOf);
         request.setAttribute(Constants.PAGEOF,pageOf);
         
         if (pageOf.equals(Constants.PAGEOF_STORAGE_LOCATION))

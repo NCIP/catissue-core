@@ -18,10 +18,6 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import edu.wustl.catissuecore.query.AdvancedConditionsNode;
-import edu.wustl.catissuecore.query.Condition;
-import edu.wustl.catissuecore.query.DataElement;
-import edu.wustl.catissuecore.query.Operator;
 import edu.wustl.catissuecore.query.TreeView;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
@@ -34,7 +30,7 @@ import edu.wustl.common.util.logger.Logger;
 public class AdvanceQueryView extends BaseAction
 {
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
+			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		HttpSession session = request.getSession();
        	DefaultMutableTreeNode root = (DefaultMutableTreeNode)session.getAttribute(Constants.ADVANCED_CONDITIONS_ROOT);

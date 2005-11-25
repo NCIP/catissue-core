@@ -1795,6 +1795,7 @@ PUBLIC
 			type="edu.wustl.catissuecore.action.SpreadsheetViewAction"
 			scope="request">
 			<forward name="pageOfSimpleQueryInterface" path=".catissuecore.simpleSearchResultsDef" />
+			<forward name="pageOfQueryResults" path=".catissuecore.queryResultsSpreadsheetViewDef" />
 			<forward name="pageOfInstitution" path=".catissuecore.editSearchResultsDef"/>
 			<forward name="pageOfDepartment" path=".catissuecore.editSearchResultsDef"/>
 			<forward name="pageOfCancerResearchGroup" path=".catissuecore.editSearchResultsDef"/>
@@ -1856,7 +1857,9 @@ PUBLIC
 		
 		<!--Query Result View Actions Begin-->
 		<action path="/ShowFramedPage"
-			type="edu.wustl.catissuecore.action.ShowFramedPageAction">
+			type="edu.wustl.catissuecore.action.ShowFramedPageAction"
+			name="advanceSearchForm"
+			scope="request">
 			<forward name="pageOfQueryResults" path=".catissuecore.queryResultsDef"/>
 			<forward name="pageOfStorageLocation" path=".catissuecore.storageLocationViewDef"/>
 			<forward name="pageOfSpecimen" path=".catissuecore.storageLocationViewDef"/>
@@ -1870,8 +1873,10 @@ PUBLIC
 			<forward name="success" path=".catissuecore.queryResultsTreeViewDef" />
 		</action>
 		<action path="/DataView"
-			type="edu.wustl.catissuecore.action.DataViewAction">
-			<forward name="success" path=".catissuecore.queryResultsSpreadsheetViewDef" />
+			type="edu.wustl.catissuecore.action.DataViewAction"
+			name="advanceSearchForm"
+			scope="request">
+			<forward name="success" path="/SpreadsheetView.do" />
 		</action>
 		
 		<action path="/ShowStorageGridView"
@@ -2067,6 +2072,14 @@ PUBLIC
 			scope="request">
 			<forward name="success" path=".catissuecore.advanceQueryRedirectDef" />
 			<forward name="failure" path="/AdvanceQuery.do" />
+		</action>
+		
+		<action path="/AdvanceSearchResults"
+			type="edu.wustl.catissuecore.action.AdvanceSearchResultsAction"
+			name="advanceSearchForm"
+			scope="request">
+			<forward name="success" path="/ShowFramedPage.do?pageOf=pageOfQueryResults" />
+			<forward name="failure" path="/AdvanceSearchResults.do" />
 		</action>
 		
 		<!--Spreadshet Export Actions Begins -->

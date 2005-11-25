@@ -18,6 +18,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.util.logger.Logger;
 
 
 /**
@@ -38,15 +39,21 @@ public class SpreadsheetViewAction extends Action
         List list = (List)request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
         List columnNames = (List)request.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
         String pageOf = (String)request.getAttribute(Constants.PAGEOF);
+        Logger.out.debug("Pageof in spreadsheetviewaction.........:"+pageOf);
+        HttpSession session = request.getSession();
 
         if (Constants.PAGEOF_SIMPLE_QUERY_INTERFACE.equals(pageOf))
         {
             //Putting the results view column names and data in session.
             //Required for Export functionality in simple query interface.
-            HttpSession session = request.getSession();
             session.setAttribute(Constants.SPREADSHEET_COLUMN_LIST,columnNames);
             session.setAttribute(Constants.SPREADSHEET_DATA_LIST,list);
         }
+        else if (Constants.PAGEOF_QUERY_RESULTS.equals(pageOf)) 
+        {
+            session.setAttribute(Constants.SPREADSHEET_COLUMN_LIST,columnNames);
+            session.setAttribute(Constants.SPREADSHEET_DATA_LIST,list);
+		}
         else
         {
             //In case of edit functionality putting it in request.

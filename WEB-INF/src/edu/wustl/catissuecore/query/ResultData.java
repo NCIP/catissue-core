@@ -59,25 +59,28 @@ public class ResultData
     public List getSpreadsheetViewData(String name, int id, String[] columnList, SessionDataBean sessionDataBean, int securityParam)
     {
         
-        String[] whereColumnName = {getColumnName(name)};
+    	tmpResultsTableName = Constants.QUERY_RESULTS_TABLE+"_null";
+    	String[] whereColumnName = {getColumnName(name)};
         String[] whereColumnCondition = {"="};
         String[] whereColumnValue = {String.valueOf(id)};
         
         if (name.equals(Constants.ROOT))
         {
-            whereColumnName = null;
+        	Logger.out.debug("inside root condition........."+name);
+        	//columnList = null;
+        	whereColumnName = null;
             whereColumnCondition = null;
             whereColumnValue = null;
         }
-        
         List dataList = null;
-        
         try
         {
             AbstractDAO dao = DAOFactory.getDAO(Constants.JDBC_DAO);
+            dao.openSession(sessionDataBean);
             dataList = dao.retrieve(tmpResultsTableName,columnList,
                     				 whereColumnName,whereColumnCondition,
                     				 whereColumnValue,null);
+            dao.closeSession();
         }
         catch (DAOException sqlExp)
         {
