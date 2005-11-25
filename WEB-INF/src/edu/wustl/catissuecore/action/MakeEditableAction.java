@@ -31,7 +31,7 @@ public class MakeEditableAction extends Action
     public ActionForward execute(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response) throws Exception
     {
-        String target = target = new String(Constants.EDIT);
+        String target = new String(Constants.EDIT);
         request.setAttribute(mapping.getAttribute(),form);
         
         String editable = request.getParameter(Constants.EDITABLE);
