@@ -85,7 +85,7 @@
 	}*/
 	
 //	function EnableItem(nodeCount){
-	function checkNum(checkName,itemName,nodeCount)
+	function checkNum(checkName,itemId,nodeCount)
 	{
 		disableAll();
 		var participantCount = 0;
@@ -151,9 +151,9 @@
 					selectedNode=selectedNode+","+i;
 				}
 			}*/
-			var SpecimenItem = '<%=Constants.SPECIMEN%>'+"_"+i;
+			var specimenItem = '<%=Constants.SPECIMEN%>'+"_"+i;
 			//count6 = checkStatus(item6, count6,selectedNode,i);
-			if(document.getElementById(SpecimenItem) != null)
+			if(document.getElementById(specimenItem) != null)
 			{
 				if(document.getElementById(specimenItem).checked==true)
 				{
