@@ -179,9 +179,9 @@ public abstract class Query
                 dataElement = (DataElement) resultView.get(i);
 //                set.add(dataElement.getTable());
                 if (i != resultView.size() - 1)
-                    query.append(dataElement.toSQLString(tableSufix) + " "+dataElement.getColumnNameString(tableSufix)+", ");
+                    query.append(dataElement.toSQLString(tableSufix) + " "+dataElement.getColumnNameString(tableSufix)+i+" , ");
                 else
-                    query.append(dataElement.toSQLString(tableSufix)+ " "+dataElement.getColumnNameString(tableSufix));
+                    query.append(dataElement.toSQLString(tableSufix)+ " "+dataElement.getColumnNameString(tableSufix)+i+" ");
             }
         }
 

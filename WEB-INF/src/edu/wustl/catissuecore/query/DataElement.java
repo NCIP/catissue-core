@@ -55,7 +55,7 @@ public class DataElement
     
     public String getColumnNameString(int tableSufix)
     {
-        return table + tableSufix + "_" + field+" ";
+        return table + tableSufix + "_" + field;
     }
     
     public boolean equals(Object obj)
