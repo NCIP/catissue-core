@@ -16,10 +16,7 @@
 		Vector treeList = (Vector)request.getAttribute(Constants.TREE_VECTOR);
 	%>
 	var tree = [<%int k;%><%for (k=0;k < (treeList.size()-1);k++){%>"<%=treeList.get(k)%>",<%}%>"<%=treeList.get(k)%>"];
-	<% 
-		SearchUtil util = new SearchUtil(); 
-	%>
-		
+			
 	function disableAll()
 	{
 		var item = document.getElementById('<%=Constants.CP%>');
@@ -56,11 +53,11 @@
 		
 		item = document.getElementById('<%=Constants.S%>');
 		item.className="linkChange"
-		item.innerHTML ="&nbsp;<img src='images/Specimen.GIF' alt='Specimen' /> &nbsp; <a HREF='<%=util.getLink("Specimen")%>' target='searchPageFrame'><%=Constants.SPECIMEN%></a>";
+		item.innerHTML ="&nbsp;<img src='images/Specimen.GIF' alt='Specimen' /> &nbsp; <a HREF='<%=SearchUtil.getLink("Specimen")%>' target='searchPageFrame'><%=Constants.SPECIMEN%></a>";
 		
 		item = document.getElementById('<%=Constants.SCG%>');
 		item.className="linkChange";
-		item.innerHTML = "&nbsp;<img src='images/SpecimenCollectionGroup.GIF' alt='Specimen Collection Group' /> &nbsp;<a HREF='<%=util.getLink("SpecimenCollectionGroup")%>' target='searchPageFrame'><%=Constants.SPECIMEN_COLLECTION_GROUP%></a>";
+		item.innerHTML = "&nbsp;<img src='images/SpecimenCollectionGroup.GIF' alt='Specimen Collection Group' /> &nbsp;<a HREF='<%=SearchUtil.getLink("SpecimenCollectionGroup")%>' target='searchPageFrame'><%=Constants.SPECIMEN_COLLECTION_GROUP%></a>";
 		
 		/*item = document.getElementById('<%=Constants.D%>');
 		item.className="linkChange";
@@ -170,21 +167,21 @@
 		{
 			/*var PItem = document.getElementById('<%=Constants.P%>');
 			PItem.className="linkChange";
-			var link = "<%=util.getLink("Participant")%>"+ selectedNode;
+			var link = "<%=SearchUtil.getLink("Participant")%>"+ selectedNode;
 			PItem.innerHTML ="&nbsp;<img src='images/Participant.GIF' alt='Participant' />  &nbsp;<a HREF='"+link+"' target='searchPageFrame'><%=Constants.PARTICIPANT%></a>";*/
 			
 			var cpItem = document.getElementById('<%=Constants.CP%>');
 			cpItem.className="linkChange";
-			var link = "<%=util.getLink("CollectionProtocol")%>"+ selectedNode;
+			var link = "<%=SearchUtil.getLink("CollectionProtocol")%>"+ selectedNode;
 			cpItem.innerHTML ="&nbsp;<img src='images/CollectionProtocol.GIF' alt='CollectionProtocol' />  &nbsp;<a HREF='"+link+"' target='searchPageFrame'><%=Constants.COLLECTION_PROTOCOL%></a>";
 		
 			/*DPItem = document.getElementById('<%=Constants.DP%>');
 			DPItem.className="linkChange";
-			//var link = "<%=util.getLink("DistributionProtocol")%>"+ selectedNode;
+			//var link = "<%=SearchUtil.getLink("DistributionProtocol")%>"+ selectedNode;
 			DPItem.innerHTML = "&nbsp;<img src='images/DistributionProtocol.GIF' alt='DistributionProtocol' /> &nbsp;<a HREF='#'><%=Constants.DISTRIBUTION_PROTOCOL%></a>";*/
 			
 			var editItem = document.getElementById('<%=Constants.EDIT%>');
-			var editLink = "<%=util.getLink("Participant")%>"+ selectedNode +"&itemId="+itemId;
+			var editLink = "<%=SearchUtil.getLink("Participant")%>"+ selectedNode +"&itemId="+itemId;
 			var s = "<a HREF='" + editLink + "' target='searchPageFrame'>Edit</a>"
 			editItem.innerHTML = "" + s;
 			
@@ -199,16 +196,16 @@
 			
 			/*var CPItem = document.getElementById('<%=Constants.CP%>');
 			CPItem.className="linkChange";
-			var link = "<%=util.getLink("CollectionProtocol")%>"+ selectedNode;
+			var link = "<%=SearchUtil.getLink("CollectionProtocol")%>"+ selectedNode;
 			CPItem.innerHTML ="&nbsp;<img src='images/CollectionProtocol.GIF' alt='CollectionProtocol' />  &nbsp;<a HREF='"+link+"' target='searchPageFrame'><%=Constants.COLLECTION_PROTOCOL%></a>";*/
 			
 			var scGItem = document.getElementById('<%=Constants.SCG%>');
 			scGItem.className="linkChange";
-			var link = "<%=util.getLink("SpecimenCollectionGroup")%>"+ selectedNode;
+			var link = "<%=SearchUtil.getLink("SpecimenCollectionGroup")%>"+ selectedNode;
 			scGItem.innerHTML ="&nbsp;<img src='images/SpecimenCollectionGroup.GIF' alt='SpecimenCollectionGroup' />  &nbsp;<a HREF='"+link+"' target='searchPageFrame'><%=Constants.SPECIMEN_COLLECTION_GROUP%></a>";
 			
 			var editItem = document.getElementById('<%=Constants.EDIT%>');
-			var editLink = "<%=util.getLink("CollectionProtocol")%>"+ selectedNode +"&itemId="+itemId;
+			var editLink = "<%=SearchUtil.getLink("CollectionProtocol")%>"+ selectedNode +"&itemId="+itemId;
 			var s = "<a HREF='" + editLink + "' target='searchPageFrame'>Edit</a>"
 			editItem.innerHTML = "" + s;
 			
@@ -221,11 +218,11 @@
 		{
 			var sItem = document.getElementById('<%=Constants.S%>');
 			sItem.className="linkChange";
-			var link = "<%=util.getLink("Specimen")%>"+ selectedNode;
+			var link = "<%=SearchUtil.getLink("Specimen")%>"+ selectedNode;
 			sItem.innerHTML ="&nbsp;<img src='images/Specimen.GIF' alt='Specimen' /> &nbsp;<a HREF='"+link+"' target='searchPageFrame'><%=Constants.SPECIMEN%></a>";
 			
 			var editItem = document.getElementById('<%=Constants.EDIT%>');
-			var editLink = "<%=util.getLink("SpecimenCollectionGroup")%>"+ selectedNode +"&itemId="+itemId;
+			var editLink = "<%=SearchUtil.getLink("SpecimenCollectionGroup")%>"+ selectedNode +"&itemId="+itemId;
 			var s = "<a HREF='" + editLink + "' target='searchPageFrame'>Edit</a>"
 			editItem.innerHTML = "" + s;
 			
@@ -242,7 +239,7 @@
 			disableAll();
 			var pItem = document.getElementById('<%=Constants.P%>');
 			pItem.className="linkChange";
-			var link = "<%=util.getLink("Participant")%>"+ selectedNode;
+			var link = "<%=SearchUtil.getLink("Participant")%>"+ selectedNode;
 			pItem.innerHTML ="&nbsp;<img src='images/Participant.GIF' alt='Participant' />  &nbsp;<a HREF='"+link+"' target='searchPageFrame'><%=Constants.PARTICIPANT%></a>";
 		}	
 	}	
@@ -274,7 +271,7 @@
 										onmouseover="changeMenuStyle(this,'linkChangeOnMouseOver')"
 										 onmouseout="changeMenuStyle(this,'linkChange')">
 											&nbsp;<img src="images/Participant.GIF" alt="Participant" /> &nbsp; 
-												<a HREF='<%=util.getLink("Participant")%>' target='searchPageFrame'>
+												<a HREF='<%=SearchUtil.getLink("Participant")%>' target='searchPageFrame'>
 												<%=Constants.PARTICIPANT%>
 											</a>
 										</td>
