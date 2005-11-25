@@ -14,15 +14,20 @@ package edu.wustl.catissuecore.actionForm;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Validator;
+import edu.wustl.common.beans.NameValueBean;
+import edu.wustl.common.util.SearchUtil;
 
 /**
  * This Class is used to encapsulate all the request parameters passed from Search Pages.
@@ -191,6 +196,93 @@ public class AdvanceSearchForm extends ActionForm
     {
         ActionErrors errors = new ActionErrors();
         Validator validator = new Validator();
+
+        String opConstant = "Operator:";
+        Iterator it = values.keySet().iterator();
+
+        if(objectName != null && !objectName.equals(""))
+        {
+        	Map resourceBundleMap = SearchUtil.getResourceBundleMap(objectName);
+        	
+        	System.out.println("******** " + resourceBundleMap);
+        	
+        	Iterator iterator = resourceBundleMap.keySet().iterator();
+        	
+        	while(iterator.hasNext())
+        	{
+        		String valKey = (String)iterator.next(); //Value Key - ALIAS_NAME:COLUMN_NAME
+        		String opKey  = opConstant + valKey; //Operator Key - OPERATOR:ALIAS_NAME:COLUMN_NAME
+        		
+        		String opValue = (String)values.get(opKey); //Operator Value
+        		
+        		if(validator.isOperator(opValue)) //IF the operator is a valid operator
+        		{
+        			String value = (String)values.get(valKey);
+        			NameValueBean bean = (NameValueBean)resourceBundleMap.get(valKey);
+        			String labelName = bean.getName(); //A key in ApplicationResources.properties
+        			
+        			if(!validator.isValue(value)) //IF the value is a valid value
+        			{
+        				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.missing",ApplicationProperties.getValue(labelName)));
+        			}
+        			else
+        			{
+        				if(!SearchUtil.STRING.equals(bean.getValue())) //IF the datatype is not STRING
+        				{
+        					if(SearchUtil.DATE.equals(bean.getValue())) //IF the datatype is DATE
+        					{
+        						if(!validator.checkDate(value)) //IF the start date is improper
+        						{
+									errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue(labelName)));
+        						}
+        						else
+        						{
+        							valKey = valKey + ":HLIMIT"; //Key for second field
+        							value = (String)values.get(valKey);
+        							
+        							if(!validator.isValue(value)) //IF the value is a valid value
+        		        			{
+        		        				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.missing",ApplicationProperties.getValue(labelName)));
+        		        			}
+        							else
+        							{
+        								if(value!= null && !validator.checkDate(value)) //IF the end date is improper
+                						{
+        									errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue(labelName)));
+                						}
+        							}
+        						}
+        					}
+        					else if(SearchUtil.NUMERIC.equals(bean.getValue())) //IF the datatype is NUMERIC
+        					{
+        						if(!validator.isDouble(value)) //IF the numeric value is improper
+        						{
+        							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue(labelName)));
+        						}
+        						else
+        						{
+        							valKey = valKey + ":HLIMIT"; //Key for second field
+        							value = (String)values.get(valKey);
+        							
+        							if(!validator.isValue(value)) //IF the value is a valid value
+        		        			{
+        		        				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.missing",ApplicationProperties.getValue(labelName)));
+        		        			}
+        							else
+        							{
+        								if(value!= null && !validator.isDouble(value)) //IF the end value is improper
+                						{
+        									errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue(labelName)));
+                						}
+        							}
+        						}
+        					}
+        				}
+        			}
+        		}
+        	}
+        }
+       
         return errors;
     }
     
