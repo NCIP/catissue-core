@@ -13,24 +13,20 @@
 	String tempDiv = "overDiv";
 	String overDiv = tempDiv;
 	String actionName = "";
-	String temp = advSearch.getIconAltText();
+	String iconText = advSearch.getIconAltText();
 	
-	if(temp.equals(Constants.PARTICIPANT))
+	if(iconText.equals(Constants.PARTICIPANT))
 	{
 		actionName = "AdvanceSearchP.do";
 	}
-	else if(temp.equals(Constants.COLLECTION_PROTOCOL))
+	else if(iconText.equals(Constants.COLLECTION_PROTOCOL))
 	{
 		actionName = "AdvanceSearchCP.do";
 	}
-	else if(temp.equals(Constants.SPECIMEN_COLLECTION_GROUP))
+	else if(iconText.equals(Constants.SPECIMEN_COLLECTION_GROUP))
 	{
 		actionName = "AdvanceSearchSCG.do";
-	} 
-	else if(temp.equals(Constants.SPECIMEN))
-	{
-		actionName = "AdvanceSearchS.do";
-	} 
+	}
 
 	System.out.println("formname--"+actionName);
 	
@@ -43,7 +39,7 @@
 </head>
 
 <html:errors />
-<html:form action="<%actionName%>">
+<html:form action="<%=actionName%>">
 <table summary="" cellpadding="5" cellspacing="0" border="0" width="600">
 <tr>
 	<td><html:hidden property="objectName" value="<%=advSearch.getIconAltText()%>"/></td>
