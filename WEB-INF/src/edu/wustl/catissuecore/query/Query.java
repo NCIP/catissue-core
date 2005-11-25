@@ -85,11 +85,11 @@ public abstract class Query
     public static final String CANCER_RESEARCH_GROUP = "CancerResearchGroup";
     public static final String USER = "User";
     public static final String ADDRESS = "Address";
-    public static final String CSM_USER = "CsmUser";
+    public static final String CSM_USER = "User";
     public static final String SITE = "Site";
     public static final String STORAGE_TYPE = "StorageType";
     public static final String STORAGE_CONTAINER_CAPACITY = "StorageContainerCapacity";
-    public static final String BIO_HAZARD = "BioHazard";
+    public static final String BIO_HAZARD = "Biohazard";
     public static final String SPECIMEN_PROTOCOL = "SpecimenProtocol";
     public static final String COLLECTION_COORDINATORS = "CollectionCoordinators";
     public static final String SPECIMEN_REQUIREMENT = "SpecimenRequirement";
@@ -615,6 +615,14 @@ public abstract class Query
     	
     	return columnIdsMap;
     }
+    
+    public Map getIdentifierColumnIds(Set tableAliasSet)
+    {
+    	Vector tableAliasVector = new Vector();
+    	tableAliasVector.addAll(tableAliasSet);
+    	return getIdentifierColumnIds(tableAliasVector);
+    }
+    
     
 	/**
 	 * @return Returns the whereConditions.

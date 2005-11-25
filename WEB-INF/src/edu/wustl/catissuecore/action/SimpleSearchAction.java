@@ -88,11 +88,7 @@ public class SimpleSearchAction extends BaseAction {
 		simpleQueryBizLogic.handleStringAndDateConditions(
 				simpleConditionNodeCollection, fromTables);
 
-		//
-		if (Constants.switchSecurity) {
-			simpleQueryBizLogic.createQueryResultObjectData(fromTables,
-					queryResultObjectDataMap);
-		}
+		
 
 		// Get the configured result view columns else is null.
 		String[] selectedColumns = simpleQueryInterfaceForm
@@ -121,6 +117,10 @@ public class SimpleSearchAction extends BaseAction {
 		if (simpleQueryInterfaceForm.getPageOf().equals(
 				Constants.PAGEOF_SIMPLE_QUERY_INTERFACE)
 				&& Constants.switchSecurity) {
+	
+				simpleQueryBizLogic.createQueryResultObjectData(fromTables,
+						queryResultObjectDataMap,query);
+			
 			List identifierColumnNames = new ArrayList();
 			identifierColumnNames = simpleQueryBizLogic
 					.addObjectIdentifierColumnsToQuery(
@@ -129,10 +129,14 @@ public class SimpleSearchAction extends BaseAction {
 					queryResultObjectDataMap, query);
 
 			//Aarti: adding other columns to the result view
-			for (int i = 0; i < columnNames.size(); i++) {
-				identifierColumnNames.add((String) columnNames.get(i));
+//			for (int i = 0; i < columnNames.size(); i++) {
+//				identifierColumnNames.add((String) columnNames.get(i));
+//			}
+			
+			for (int i = 0; i < identifierColumnNames.size(); i++) {
+				columnNames.add((String) identifierColumnNames.get(i));
 			}
-			columnNames = identifierColumnNames;
+//			columnNames = identifierColumnNames;
 
 			list = query.execute(getSessionData(request), true,
 					queryResultObjectDataMap);

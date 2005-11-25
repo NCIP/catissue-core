@@ -29,6 +29,7 @@ import edu.wustl.catissuecore.query.SimpleConditionsNode;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.QueryResultObjectData;
+import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
@@ -473,22 +474,34 @@ public class SimpleQueryBizLogic extends DefaultBizLogic
 			QueryResultObjectData queryResultObjectData2;
 			QueryResultObjectData queryResultObjectData3;
 			Vector queryObjects;
-			Map columnIdsMap = new HashMap();
+			Vector queryObjectNames;
+			int initialColumnNumbers = query.getResultView().size();
+			Map columnIdsMap;
+			
 			int columnId =0;
+			
 			for(int i=0;keyIterator.hasNext();i++)
 			{
 				queryResultObjectData2 = (QueryResultObjectData) queryResultObjectDataMap.get(keyIterator.next());
 				queryObjects = queryResultObjectData2.getIndependentQueryObjects();
+				queryObjectNames = queryResultObjectData2.getIndependentObjectAliases();
 				for(int j = 0 ; j<queryObjects.size();j++)
 				{
+					columnIdsMap = query.getIdentifierColumnIds(queryObjectNames);
 					queryResultObjectData3 = (QueryResultObjectData) queryObjects.get(j);
 					identifierDataElement = new DataElement(queryResultObjectData3.getAliasName(),
 						Constants.IDENTIFIER);
-					query.addElementToView(columnId, identifierDataElement);
-					queryResultObjectData3.setIdentifierColumnId(columnId++);
-					columnNames.add(queryResultObjectData3.getAliasName() + " ID");
+//					query.addElementToView(columnId, identifierDataElement);
+//					queryResultObjectData3.setIdentifierColumnId(columnId++);
+					queryResultObjectData3.setIdentifierColumnId(((Integer)columnIdsMap.get(queryResultObjectData3.getAliasName())).intValue()-1);
+//					columnNames.add(queryResultObjectData3.getAliasName() + " ID");
 				}
 				
+			}
+			int columnsAdded = query.getResultView().size() - initialColumnNumbers;
+			for(int i=0;i<columnsAdded;i++)
+			{
+				columnNames.add(" ID");
 			}
 			return columnNames;
 		}
@@ -522,8 +535,9 @@ public class SimpleQueryBizLogic extends DefaultBizLogic
 		/**
 		 * @param fromTables
 		 * @param queryResultObjectDataMap
+		 * @param query
 		 */
-		public void createQueryResultObjectData(Set fromTables, Map queryResultObjectDataMap) throws DAOException{
+		public void createQueryResultObjectData(Set fromTables, Map queryResultObjectDataMap, Query query) throws DAOException{
 			Iterator iterator = fromTables.iterator();
 			String tableAlias;
 			QueryResultObjectData queryResultObjectData;
@@ -531,7 +545,12 @@ public class SimpleQueryBizLogic extends DefaultBizLogic
 	        {
 	        	tableAlias = (String) iterator.next();
 	        	queryResultObjectData = createQueryResultObjectData(tableAlias);
-	        	queryResultObjectDataMap.put(tableAlias,queryResultObjectData);
+	        	if(query.getColumnIds(tableAlias,queryResultObjectData.getDependentObjectAliases()).size()!=0)
+	        	{
+	        		queryResultObjectDataMap.put(tableAlias,queryResultObjectData);
+	        	}
+	        	
+	        	
 	        }
 		}
 	    
