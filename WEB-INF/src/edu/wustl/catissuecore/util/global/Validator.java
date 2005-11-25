@@ -536,6 +536,44 @@ public class Validator
 		return returnString;
     }
 
+    //Returns TRUE if operator is valid else return FALSE
+    public boolean isOperator(String value)
+    {
+    	if(value == null)
+    	{
+    		return false;
+    	}
+    	else if(value.equals(Constants.ANY) || value.equals("-1"))
+    	{
+    		return false;
+    	}
+    	else
+    	{
+    		return true;
+    	}
+    }
+    
+    public boolean isValue(String value)
+    {
+    	//Purposefully not checked for value==null.
+    	if(value == null)
+    	{
+    		return true;
+    	}
+    	else if(value.trim().length() == 0)
+    	{
+    		return false;
+    	}
+    	else if(value.equals("-1") || value.equals(Constants.SELECT_OPTION))
+    	{
+    		return false;
+    	}
+    	else
+    	{
+    		return true;
+    	}
+    }
+    
 				//    public void validateDateData(String checkDate,ActionErrors errors, String messageKey )
 				//    {
 				//   		Logger.out.debug("handleDateData checkDate : " + checkDate); 
