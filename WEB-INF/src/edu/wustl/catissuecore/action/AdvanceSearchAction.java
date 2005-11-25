@@ -95,7 +95,7 @@ public class AdvanceSearchAction extends DispatchAction
         else
         {
         	//Add or Edit function
-        	root = parser.createAdvancedQueryObj(conditionNodeCollection,root,objectName,selectedNode,advancedConditionNodesMap,nodeId);
+        	root = parser.createAdvancedQueryObj(conditionNodeCollectionForQuery,root,objectName,selectedNode,advancedConditionNodesMap,nodeId);
         }
         
         
