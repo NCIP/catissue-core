@@ -2074,6 +2074,46 @@ PUBLIC
 			<forward name="failure" path="/AdvanceQuery.do" />
 		</action>
 		
+		<action path="/AdvanceSearchP"
+			type="edu.wustl.catissuecore.action.AdvanceSearchAction"
+			name="advanceSearchForm"
+			validate="true"
+			input="/ParticipantAdvanceSearch.do?pageOf=pageOfParticipantAdvanceSearch"
+			scope="request">
+			<forward name="success" path=".catissuecore.advanceQueryRedirectDef" />
+			<forward name="failure" path="/AdvanceQuery.do" />
+		</action>
+		
+		<action path="/AdvanceSearchCP"
+			type="edu.wustl.catissuecore.action.AdvanceSearchAction"
+			name="advanceSearchForm"
+			validate="true"
+			input="/CollectionProtocolAdvanceSearch.do?pageOf=pageOfCollectionProtocolAdvanceSearch"
+			scope="request">
+			<forward name="success" path=".catissuecore.advanceQueryRedirectDef" />
+			<forward name="failure" path="/AdvanceQuery.do" />
+		</action>
+		
+		<action path="/AdvanceSearchSCG"
+			type="edu.wustl.catissuecore.action.AdvanceSearchAction"
+			name="advanceSearchForm"
+			validate="true"
+			input="/SpecimenCollectionGroupAdvanceSearch.do?pageOf=pageOfSpecimenCollectionGroupAdvanceSearch"
+			scope="request">
+			<forward name="success" path=".catissuecore.advanceQueryRedirectDef" />
+			<forward name="failure" path="/AdvanceQuery.do" />
+		</action>
+		
+		<action path="/AdvanceSearchS"
+			type="edu.wustl.catissuecore.action.AdvanceSearchAction"
+			name="advanceSearchForm"
+			validate="true"
+			input="/SpecimenAdvanceSearch.do?pageOf=pageOfSpecimenAdvanceSearch"
+			scope="request">
+			<forward name="success" path=".catissuecore.advanceQueryRedirectDef" />
+			<forward name="failure" path="/AdvanceQuery.do" />
+		</action>
+		
 		<action path="/AdvanceSearchResults"
 			type="edu.wustl.catissuecore.action.AdvanceSearchResultsAction"
 			name="advanceSearchForm"
