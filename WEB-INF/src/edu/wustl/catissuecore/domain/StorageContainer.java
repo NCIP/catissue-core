@@ -544,6 +544,15 @@ public class StorageContainer extends AbstractDomainObject implements java.io.Se
         			{
         				isParentChanged = true;
         			}
+        			// code to check if the position of the container is changed
+        			else
+        			{
+        				if(positionDimensionOne.intValue() != form.getPositionDimensionOne() ||
+        						positionDimensionTwo.intValue() != form.getPositionDimensionOne()	)
+        				{
+        					positionChanged = true; 
+        				}
+        			}
         		}
         	}
 	        
@@ -576,5 +585,22 @@ public class StorageContainer extends AbstractDomainObject implements java.io.Se
 	    {
 	        Logger.out.error(excp.getMessage(),excp);
 	    }
+	}
+	
+	
+	// -------- To check for changed position in the same container.
+	private boolean positionChanged = false;
+	
+	/**
+	 * @return Returns the positionChanged.
+	 */
+	public boolean isPositionChanged() {
+		return positionChanged;
+	}
+	/**
+	 * @param positionChanged The positionChanged to set.
+	 */
+	public void setPositionChanged(boolean positionChanged) {
+		this.positionChanged = positionChanged;
 	}
 }
