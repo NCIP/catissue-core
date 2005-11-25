@@ -46,15 +46,7 @@ public abstract class AdvanceSearchUIAction extends BaseAction
     	}
     	else
     	{
-    		if(dataType.equals("Date"))
-    		{
-   			//Condition for date & numeric as ')' will be appended in JSP
-    			return "value(" + tableName + ":" + fieldName;
-    		}
-    		else
-    		{
-    			return "value(" + tableName + ":" + fieldName + ")";
-    		}
+    		return "value(" + tableName + ":" + fieldName + ")";
     	}
     }
    
@@ -124,9 +116,20 @@ public abstract class AdvanceSearchUIAction extends BaseAction
     	Condition con = null;
 		DataElement dataElement = null;
 		Operator op = null;
+		
+		//Fieldname of page
 		String column = "";
+		
+		//Temporary variable for checking kay of map
 		String temp ="";
+		
+		//Temporary variabale for putting value Between & Not between in page
 		String tempOperator = "";
+		
+		//Provides condition of putting value of valueKey in the map
+		boolean boolValuekey = false;
+		
+		//Temporary map for all the valyes of page
 		Map map = new HashMap();
 		Iterator it = vectorOfCondtions.iterator();
 		
@@ -141,19 +144,21 @@ public abstract class AdvanceSearchUIAction extends BaseAction
 	        op = con.getOperator();
 	        column = dataElement.getField();
 	        String valuekey = "";
-	        
+	       
 	        //Condition for checking date values as operator keys are same
 	        if(map.containsKey(temp))
 	        {
 	        	//Key for value field ie 3rd column
 		        valuekey = tableName+":"+column + ":HLIMIT";
-	        	
+		        boolValuekey = true;
+		               	
 	        }
 	        else 
 	        {
 //	        	Key for value field ie 3rd column
 		        valuekey = tableName+":"+column;
-	        }
+		        boolValuekey = false;
+		    }
 	        
 	        //Key for value field ie 3rd column
 			String opKey = "Operator:" + tableName+":"+column;
@@ -176,12 +181,18 @@ public abstract class AdvanceSearchUIAction extends BaseAction
 			
 			//Setting value of map in edit case
 			map.put(valuekey,con.getValue());
-			temp = valuekey;
+			
+			if(boolValuekey)
+			{
+				temp = "";
+			}
+			else
+				temp = valuekey;
 		}
 		
 		//Setting map in form
 		aForm.setValues(map);
-		setMapOfNodes(map);
+		//setMapOfNodes(map);
 		
     }
 	
@@ -199,19 +210,8 @@ public abstract class AdvanceSearchUIAction extends BaseAction
 			//Represents name of field i.e value(...)
 			String temp = searchFieldData[i].getValueField().getName();
 			
-			//DataType of field
-			String	dType = searchFieldData[i].getDataType();
-			String name = "";
-			
-			//Condition for removing brackets as valueField's name in Date case contains only '('
-			if(dType.equals(SearchUtil.DATE))
-			{
-				name = temp.substring(temp.indexOf("(")+1);
-			}
-			else	
-			{
-				name = temp.substring(temp.indexOf("(")+1,temp.indexOf(")"));
-			}
+			//Removing brackets from valueField's name 
+			String name = temp.substring(temp.indexOf("(")+1,temp.indexOf(")"));
 			
 			//Enabling or disabling the field according condition whether map contains value or not
 			Object element = map.get(name);
@@ -226,9 +226,5 @@ public abstract class AdvanceSearchUIAction extends BaseAction
 		}
 	}
 	
-	
-	private void setMapOfNodes(Map map)
-	{
-		
-	}
+
 }
