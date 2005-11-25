@@ -89,17 +89,19 @@
 		}
 		else if((searchFieldData[i].getDataType()).equals(SearchUtil.DATE))
 		{
+			String temp = searchFieldData[i].getValueField().getName();
+			String hlimitName = temp.replaceFirst("[)]",":HLIMIT)");
 			 
 		%>
 			<td class="formField" nowrap>
 				<div id="<%=overDiv%>" style="position:absolute; visibility:hidden; z-index:1000;"></div>
-				<html:text styleClass="formDateSized10" size="10" styleId="<%=searchFieldData[i].getValueField().getId() + 1%>" property="<%=searchFieldData[i].getValueField().getName() + ")"%>" disabled="<%=searchFieldData[i].getValueField().isDisabled()%>"/>
+				<html:text styleClass="formDateSized10" size="10" styleId="<%=searchFieldData[i].getValueField().getId() + 1%>" property="<%=searchFieldData[i].getValueField().getName()%>" disabled="<%=searchFieldData[i].getValueField().isDisabled()%>"/>
 							 &nbsp;
 				<a href="javascript:onDate('<%=searchFieldData[i].getOprationField().getId() %>','<%=(advSearch.getFormName() +"." + searchFieldData[i].getValueField().getId() + 1)%>',false);">
 					<img src="images\calendar.gif" width=24 height=22 border=0>
 				</a>
 							&nbsp;To&nbsp;
-				<html:text styleClass="formDateSized10" size="10" styleId="<%=searchFieldData[i].getValueField().getId() + 2%>" property="<%=searchFieldData[i].getValueField().getName() + ":HLIMIT)"%>" disabled="<%=searchFieldData[i].getValueField().isDisabled()%>"/>
+				<html:text styleClass="formDateSized10" size="10" styleId="<%=searchFieldData[i].getValueField().getId() + 2%>" property="<%=hlimitName%>" disabled="<%=searchFieldData[i].getValueField().isDisabled()%>"/>
 							 &nbsp;
 				<a href="javascript:onDate('<%=searchFieldData[i].getOprationField().getId()%>','<%=(advSearch.getFormName() +"." + searchFieldData[i].getValueField().getId() + 2)%>',true);">
 					<img src="images\calendar.gif" width=24 height=22 border=0>
