@@ -1367,6 +1367,7 @@ public class Constants
 	// The unique key voilation message is "Duplicate entry %s for key %d"
 	// This string is used for searching " for key " string in the above error message
 	public static final String MYSQL_DUPL_KEY_MSG = " for key ";
+	public static final String CATISSUE_SPECIMEN = "CATISSUE_SPECIMEN";
 
 	
 }
