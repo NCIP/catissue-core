@@ -40,7 +40,7 @@ import edu.wustl.common.util.logger.Logger;
  *@version 1.0
  */
 
-public class QueryBizLogic extends DefaultBizLogic
+public class QueryBizLogic extends DefaultBizLogic 
 {
 
     private static final String ALIAS_NAME_TABLE_NAME_MAP_QUERY = 
@@ -695,20 +695,14 @@ public class QueryBizLogic extends DefaultBizLogic
      */
     public String getColumnDisplayNames(String aliasName,String columnName) throws DAOException, ClassNotFoundException
     {
-        String sql = 	" SELECT  temp.DISPLAY_NAME " +
-				        " from CATISSUE_QUERY_INTERFACE_TABLE_DATA tableData2 join " +
-				        " ( SELECT  columnData.COLUMN_NAME, columnData.TABLE_ID, columnData.ATTRIBUTE_TYPE, " +
-				        " displayData.DISPLAY_NAME, relationData.TABLES_IN_PATH " +
-				        " FROM CATISSUE_QUERY_INTERFACE_COLUMN_DATA columnData, " +
-				        " CATISSUE_TABLE_RELATION relationData, " +
-				        " CATISSUE_QUERY_INTERFACE_TABLE_DATA tableData, " +
-				        " CATISSUE_SEARCH_DISPLAY_DATA displayData " +
-				        " where relationData.CHILD_TABLE_ID = columnData.TABLE_ID and " +
-				        " relationData.PARENT_TABLE_ID = tableData.TABLE_ID and " +
-				        " relationData.RELATIONSHIP_ID = displayData.RELATIONSHIP_ID and " +
-				        " columnData.IDENTIFIER = displayData.COL_ID and " +
-				        " tableData.ALIAS_NAME = '"+aliasName+"' and columnData.COLUMN_NAME = '"+columnName+"'" +
-		        		"  ) as temp on temp.TABLE_ID = tableData2.TABLE_ID ";
+        String sql = 	"SELECT displayData.DISPLAY_NAME FROM  "+
+						"CATISSUE_SEARCH_DISPLAY_DATA displayData ,"+
+						"CATISSUE_QUERY_INTERFACE_COLUMN_DATA columnData,"+
+						"CATISSUE_QUERY_INTERFACE_TABLE_DATA tableData where "+
+						"tableData.TABLE_ID = columnData.TABLE_ID AND" +
+						" columnData.IDENTIFIER = displayData.COL_ID AND " +
+						"tableData.ALIAS_NAME = '"+aliasName+"' AND" +
+						" columnData.COLUMN_NAME = '"+columnName+"'";
         
         Logger.out.debug("SQL*****************************"+sql);
         
@@ -763,19 +757,20 @@ public class QueryBizLogic extends DefaultBizLogic
        		}
        	}
         return tablePathSet;
-  
     }
 	 /**
-     * Returns the attribute type for the given column name
+     * Returns the attribute type for the given column name and table alias name
      * @param columnName Column Name.
      * @throws DAOException
      * @throws ClassNotFoundException
      */
-    public String getAttributeType(String columnName) throws DAOException, ClassNotFoundException
+    public String getAttributeType(String columnName,String aliasName) throws DAOException, ClassNotFoundException
     {
-        String sql = 	" Select ATTRIBUTE_TYPE FROM "+
-        				" CATISSUE_QUERY_INTERFACE_COLUMN_DATA"+
-						" WHERE COLUMN_NAME = '"+columnName+"'";
+        String sql = 	" select columnData.ATTRIBUTE_TYPE from " +
+        				" CATISSUE_QUERY_INTERFACE_COLUMN_DATA columnData, "+
+						" CATISSUE_QUERY_INTERFACE_TABLE_DATA tableData "+
+						" where  columnData.TABLE_ID = tableData.TABLE_ID and "+ 
+						"  columnData.COLUMN_NAME = '"+columnName+"' and tableData.ALIAS_NAME = '"+aliasName+"' ";
 						
         Logger.out.debug("SQL*****************************"+sql);
         
@@ -783,7 +778,6 @@ public class QueryBizLogic extends DefaultBizLogic
         jdbcDao.openSession(null);
         List list = jdbcDao.executeQuery(sql, null, false, null);
         jdbcDao.closeSession();
-        QueryBizLogic bizLogic = (QueryBizLogic)BizLogicFactory.getBizLogic(Constants.SIMPLE_QUERY_INTERFACE_ID);
         String atrributeType = new String();
         Iterator iterator = list.iterator();
         while (iterator.hasNext())
@@ -821,7 +815,6 @@ public class QueryBizLogic extends DefaultBizLogic
                Logger.out.debug("RowList of Ids size: "+rowList.size()+" Rowlist "+rowList);
                //Logger.out.debug("RowList element "+rowList.get(0));
                tableIdString = (String) rowList.get(0);
-               Logger.out.debug("tableId before converting to Long:"+tableIdString);
             }
             return tableIdString;
     }
