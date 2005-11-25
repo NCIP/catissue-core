@@ -409,7 +409,7 @@ public class  DefaultBizLogic extends AbstractBizLogic
         if (list.size() != 0)
         {
         	Object[] obj =(Object[]) list.get(0);
-        	Logger.out.debug("**************obj::::::: --------------- "+ obj);
+        	Logger.out.debug("**********SC found for given ID ****obj::::::: --------------- "+ obj);
         	Logger.out.debug((Long)obj[0] );
         	Logger.out.debug((Integer)obj[1]);
         	Logger.out.debug((Integer )obj[2]);
@@ -462,8 +462,9 @@ public class  DefaultBizLogic extends AbstractBizLogic
     		Logger.out.debug("storageContainer.getPositionDimensionTwo() : " + storageContainer.getPositionDimensionTwo());
 	        int positionDimensionOne = (storageContainer.getPositionDimensionOne() != null ? storageContainer.getPositionDimensionOne().intValue():-1);
 	        int positionDimensionTwo =(storageContainer.getPositionDimensionTwo() != null ? storageContainer.getPositionDimensionTwo().intValue():-1);
-	        if((positionDimensionOne < Integer.parseInt(posOne)) ||
-	           (positionDimensionTwo < Integer.parseInt(posTwo)))
+	      
+	        if(((positionDimensionOne-1) < Integer.parseInt(posOne)) ||
+	           ((positionDimensionTwo-1) < Integer.parseInt(posTwo)))
 	        {
 	        	return false;
 	        }
@@ -502,7 +503,24 @@ public class  DefaultBizLogic extends AbstractBizLogic
      
             	return false;
             }
-    		
+            else
+            {
+        		sourceObjectName = StorageContainer.class.getName();
+    			String[] whereColumnName1 = {"positionDimensionOne","positionDimensionTwo","parentContainer"};	//"storageContainer."+Constants.SYSTEM_IDENTIFIER
+    			String[] whereColumnCondition1 ={"=","=","="};
+        	    Object[] whereColumnValue1 = {posOne ,posTwo, storageContainer.getSystemIdentifier()  };
+    				 	
+                list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName1, 
+                		         		  whereColumnCondition1, whereColumnValue1, joinCondition);
+                Logger.out.debug("storageContainer.getSystemIdentifier() :" +storageContainer.getSystemIdentifier());
+                // check if Specimen exists with the given storageContainer information
+                if (list.size() != 0)
+                {
+                   	Object obj = list.get(0);
+                	Logger.out.debug("**********IN isPositionAvailable : obj::::: --------- "+ obj);
+                	return false;
+                }
+            }
     		return true;
 		}
 		catch(Exception e)
