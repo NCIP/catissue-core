@@ -174,16 +174,27 @@ public abstract class Query
         else
         {
             DataElement dataElement;
+            String dataElementString;
             for (int i = 0; i < resultView.size(); i++)
             {
                 dataElement = (DataElement) resultView.get(i);
+                dataElementString = dataElement.toSQLString(tableSufix) + " "+dataElement.getColumnNameString(tableSufix)+i;
+                if(dataElementString.length()>=20)
+                {
+                	dataElementString = dataElement.toSQLString(tableSufix) + " Column"+i;
+                }
 //                set.add(dataElement.getTable());
                 if (i != resultView.size() - 1)
-                    query.append(dataElement.toSQLString(tableSufix) + " "+dataElement.getColumnNameString(tableSufix)+i+" , ");
-                else
-                    query.append(dataElement.toSQLString(tableSufix)+ " "+dataElement.getColumnNameString(tableSufix)+i+" ");
+                {
+                	
+                	query.append(dataElementString+" , ");
+                }
+	             else
+	             {
+	             	query.append(dataElementString+" ");
+	             }
             }
-        }
+        }	
 
         /**
          * Forming FROM part of query
