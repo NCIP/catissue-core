@@ -10,7 +10,7 @@
 		else if(specimenType.equals("Tissue"))
 		{
 			if(subTypeValue.equals(Constants.SLIDE) || subTypeValue.equals(Constants.PARAFFIN_BLOCK) || subTypeValue.equals(Constants.FROZEN_BLOCK))
-				return " ";
+				return Constants.UNIT_CN;
 			else	
 				return Constants.UNIT_GM;
 		}
@@ -84,13 +84,13 @@
 	var subTypeData3 = "<%=Constants.FROZEN_BLOCK%>";
 
 // units array
-	var ugul = new Array(4);
+	var ugul = new Array(5);
 	ugul[0]=" ";
 	ugul[1]="<%=Constants.UNIT_ML%>";
 	ugul[2]="<%=Constants.UNIT_GM%>";
 	ugul[3]="<%=Constants.UNIT_CC%>";
 	ugul[4]="<%=Constants.UNIT_MG%>";
-
+	ugul[5]="<%=Constants.UNIT_CN%>";
 	
 // Changes unit on subtype list changed
 	function onSubTypeChangeUnit(typeList,element,unitspan)
@@ -101,7 +101,7 @@
 	
 		if(className == "Tissue" && (selectedOption == subTypeData1 || selectedOption == subTypeData2 || selectedOption == subTypeData3))
 		{
-			document.getElementById(unitspan).innerHTML = ugul[0];
+			document.getElementById(unitspan).innerHTML = ugul[5];
 		}	
 		else 
 		{

@@ -58,12 +58,13 @@
 	
 
 // units array
-	var ugul = new Array(4);
+	var ugul = new Array(5);
 	ugul[0]=" ";
 	ugul[1]="<%=Constants.UNIT_ML%>";
 	ugul[2]="<%=Constants.UNIT_GM%>";
 	ugul[3]="<%=Constants.UNIT_CC%>";
 	ugul[4]="<%=Constants.UNIT_MG%>";
+	ugul[5]="<%=Constants.UNIT_CN%>";
 
 	
 // Changes unit on subtype list changed
@@ -75,8 +76,8 @@
 	
 		if(className == "Tissue" && (selectedOption == subTypeData1 || selectedOption == subTypeData2 || selectedOption == subTypeData3))
 		{
-			document.getElementById(unitspan).innerHTML = "";
-			document.forms[0].unit.value = "";
+			document.getElementById(unitspan).innerHTML = "<%=Constants.UNIT_CN%>";
+			document.forms[0].unit.value = "<%=Constants.UNIT_CN%>";
 		}	
 		else 
 		{
