@@ -12,7 +12,6 @@ package edu.wustl.catissuecore.bizlogic;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -29,7 +28,6 @@ import edu.wustl.catissuecore.query.SimpleConditionsNode;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.QueryResultObjectData;
-import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
@@ -117,16 +115,19 @@ public class SimpleQueryBizLogic extends DefaultBizLogic
         
         // For operators STARTS_WITH, ENDS_WITH, CONTAINS. 
         String operator = simpleConditionsNode.getCondition().getOperator().getOperator();
-        if(operator.equals(Operator.STARTS_WITH)){
-            simpleConditionsNode.getCondition().setValue(value+"%");
+        if(operator.equals(Operator.STARTS_WITH))
+        {
+            value = value+"%";
             simpleConditionsNode.getCondition().getOperator().setOperator(Operator.LIKE);
         }
-        else if(operator.equals(Operator.ENDS_WITH)){
-            simpleConditionsNode.getCondition().setValue("%"+value);
+        else if(operator.equals(Operator.ENDS_WITH))
+        {
+            value = "%"+value;
             simpleConditionsNode.getCondition().getOperator().setOperator(Operator.LIKE);
         }
-        else if(operator.equals(Operator.CONTAINS)){
-            simpleConditionsNode.getCondition().setValue("%"+value+"%");
+        else if(operator.equals(Operator.CONTAINS))
+        {
+            value = "%"+value+"%";
             simpleConditionsNode.getCondition().getOperator().setOperator(Operator.LIKE);
         }
         
