@@ -18,7 +18,7 @@
 		else if(specimenType.equals("Tissue"))
 		{
 			if(subType.equals(Constants.SLIDE) || subType.equals(Constants.PARAFFIN_BLOCK) || subType.equals(Constants.FROZEN_BLOCK))
-				return " ";
+				return Constants.UNIT_CN;
 			else
 				return Constants.UNIT_GM;
 		}
