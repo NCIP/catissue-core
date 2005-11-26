@@ -543,13 +543,18 @@ public class SimpleQueryBizLogic extends DefaultBizLogic
 			Iterator iterator = fromTables.iterator();
 			String tableAlias;
 			QueryResultObjectData queryResultObjectData;
+			Vector mainQueryObjects = QueryBizLogic.getMainObjectsOfQuery();
 	        while (iterator.hasNext())
 	        {
 	        	tableAlias = (String) iterator.next();
-	        	queryResultObjectData = createQueryResultObjectData(tableAlias);
-	        	if(query.getColumnIds(tableAlias,queryResultObjectData.getDependentObjectAliases()).size()!=0)
+	        	Logger.out.debug("*********** table obtained from fromTables set:"+tableAlias);
+	        	if(mainQueryObjects.contains(tableAlias))
 	        	{
-	        		queryResultObjectDataMap.put(tableAlias,queryResultObjectData);
+		        	queryResultObjectData = createQueryResultObjectData(tableAlias);
+		        	if(query.getColumnIds(tableAlias,queryResultObjectData.getDependentObjectAliases()).size()!=0)
+		        	{
+		        		queryResultObjectDataMap.put(tableAlias,queryResultObjectData);
+		        	}
 	        	}
 	        	
 	        	
