@@ -51,7 +51,7 @@ public class TreeDataAction extends BaseAction
         {
             String pageOf = request.getParameter(Constants.PAGEOF);
             TreeDataInterface bizLogic = new StorageContainerBizLogic();
-            Vector dataList=new Vector();
+            Vector dataList = bizLogic.getTreeViewData();
             
             if (pageOf.equals(Constants.PAGEOF_TISSUE_SITE))
             {
@@ -67,7 +67,7 @@ public class TreeDataAction extends BaseAction
                 dataList = bizLogic.getTreeViewData(sessionData,columnIdsMap);
             }
             
-            //Vector dataList = bizLogic.getTreeViewData();
+            
             String contentType = "application/x-java-serialized-object";
             response.setContentType(contentType);
             out = new ObjectOutputStream(response.getOutputStream());
