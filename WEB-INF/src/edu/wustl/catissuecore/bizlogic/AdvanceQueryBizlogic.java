@@ -8,6 +8,7 @@ package edu.wustl.catissuecore.bizlogic;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
 import edu.wustl.catissuecore.dao.JDBCDAO;
@@ -29,11 +30,10 @@ public class AdvanceQueryBizlogic extends DefaultBizLogic implements TreeDataInt
 	public void createTempTable(String searchQuery,String tempTableName,SessionDataBean sessionData) throws Exception
 	{
  		String sql = "Create table "+tempTableName+" as "+"("+searchQuery+")";
- 		//String sql = "Create table test_department as (Select * from catissue_department)";
  		Logger.out.debug("sql for create table"+sql);
  		JDBCDAO jdbcDao = new JDBCDAO();
-        //jdbcDao.openSession(sessionData);
- 		jdbcDao.openSession(null);
+        jdbcDao.openSession(sessionData);
+ 		//jdbcDao.openSession(null);
        	jdbcDao.delete(tempTableName);
         jdbcDao.createTable(sql);
         jdbcDao.commit();
@@ -41,27 +41,36 @@ public class AdvanceQueryBizlogic extends DefaultBizLogic implements TreeDataInt
 	}
 	/* Get the data for tree view from temporary table and create tree nodes.
 	 */
-	public Vector getTreeViewData() throws DAOException
+	public Vector getTreeViewData(SessionDataBean sessionData,Map columnIdsMap) throws DAOException
 	{
-
-	 	//SessionDataBean sessionData = new SessionDataBean();
-		//String tempTableName = Constants.QUERY_RESULTS_TABLE+"_"+sessionData.getUserId();
+		String tempTableName = Constants.QUERY_RESULTS_TABLE+"_"+sessionData.getUserId();
 		JDBCDAO jdbcDao = new JDBCDAO();
-        jdbcDao.openSession(null);
-        String[] columnNames = {"Participant1_IDENTIFIER","CollectionProtocol1_IDENTIFIER","SpecimenCollectionGroup1_IDENTIFIER","Specimen1_IDENTIFIER"};
-		List dataList =  jdbcDao.retrieve("catissue_query_results_null",columnNames);
+        jdbcDao.openSession(sessionData);
+        
+        //Retrieve all the data from the temporary table 
+		List dataList =  jdbcDao.retrieve(tempTableName);
 		Logger.out.debug("List of data for identifiers:"+dataList);
-		//Set set = cde.getPermissibleValues();
 		
-        Vector vector = new Vector();
+		//Get column idetifiers from the map.
+		int participantColumnId =  ((Integer)columnIdsMap.get(Constants.PARTICIPANT)).intValue()-1;
+		int collectionProtocolColumnId =  ((Integer)columnIdsMap.get(Constants.COLLECTION_PROTOCOL)).intValue()-1;
+		int specimenCollGrpColumnId =  ((Integer)columnIdsMap.get(Constants.SPECIMEN_COLLECTION_GROUP)).intValue()-1;
+		int specimenColumnId = ((Integer)columnIdsMap.get(Constants.SPECIMEN)).intValue()-1;
+        
+		Vector vector = new Vector();
         Iterator iterator = dataList.iterator();
+        
+        //Create tree nodes
         while (iterator.hasNext())
         {
         	List rowList = (List)iterator.next();
         	//setQueryTreeNode((String) rowList.get(0),Constants.PARTICIPANT,null,null,vector);
-			setQueryTreeNode((String) rowList.get(1), Constants.COLLECTION_PROTOCOL,null,null,(String) rowList.get(0), Constants.PARTICIPANT,vector);
-			setQueryTreeNode((String) rowList.get(2), Constants.SPECIMEN_COLLECTION_GROUP,(String)  rowList.get(1), Constants.COLLECTION_PROTOCOL,null,null,vector);
-			setQueryTreeNode((String) rowList.get(3), Constants.SPECIMEN,(String)  rowList.get(2),Constants.SPECIMEN_COLLECTION_GROUP,null,null,vector);
+			setQueryTreeNode((String) rowList.get(collectionProtocolColumnId), 
+						Constants.COLLECTION_PROTOCOL,null,null,(String) rowList.get(participantColumnId), Constants.PARTICIPANT,vector);
+			setQueryTreeNode((String) rowList.get(specimenCollGrpColumnId), Constants.SPECIMEN_COLLECTION_GROUP,(String) 
+						rowList.get(collectionProtocolColumnId), Constants.COLLECTION_PROTOCOL,null,null,vector);
+			setQueryTreeNode((String) rowList.get(specimenColumnId), Constants.SPECIMEN,(String)  
+						rowList.get(specimenCollGrpColumnId),Constants.SPECIMEN_COLLECTION_GROUP,null,null,vector);
         }
         jdbcDao.closeSession();
         return vector;
@@ -78,5 +87,12 @@ public class AdvanceQueryBizlogic extends DefaultBizLogic implements TreeDataInt
         treeNode.setCombinedParentObjectName(combinedParentObjectName);
 
         vector.add(treeNode);
+	}
+	/* (non-Javadoc)
+	 * @see edu.wustl.catissuecore.bizlogic.TreeDataInterface#getTreeViewData()
+	 */
+	public Vector getTreeViewData() throws DAOException {
+
+		return null;
 	}
 }

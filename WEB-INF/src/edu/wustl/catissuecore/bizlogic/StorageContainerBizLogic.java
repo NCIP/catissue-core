@@ -14,6 +14,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
@@ -775,6 +776,14 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 			Logger.out.debug("Error in isContainerAvailable : " + e);
 			return false;
 		}
+	}
+
+	/* (non-Javadoc)
+	 * @see edu.wustl.catissuecore.bizlogic.TreeDataInterface#getTreeViewData(edu.wustl.common.beans.SessionDataBean, java.util.Map)
+	 */
+	public Vector getTreeViewData(SessionDataBean sessionData, Map map) throws DAOException {
+
+		return null;
 	}
 
 }

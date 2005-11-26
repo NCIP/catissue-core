@@ -10,6 +10,7 @@ package edu.wustl.catissuecore.bizlogic;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
@@ -112,5 +113,13 @@ public class CDEBizLogic extends DefaultBizLogic implements TreeDataInterface
         }
         
         return treeNode; 
+	}
+
+	/* (non-Javadoc)
+	 * @see edu.wustl.catissuecore.bizlogic.TreeDataInterface#getTreeViewData(edu.wustl.common.beans.SessionDataBean, java.util.Map)
+	 */
+	public Vector getTreeViewData(SessionDataBean sessionData, Map map) throws DAOException {
+
+		return null;
 	}
 }

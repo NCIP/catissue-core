@@ -6,8 +6,10 @@
  */
 package edu.wustl.catissuecore.bizlogic;
 
+import java.util.Map;
 import java.util.Vector;
 
+import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.util.dbManager.DAOException;
 
 
@@ -20,4 +22,5 @@ import edu.wustl.common.util.dbManager.DAOException;
 public interface TreeDataInterface
 {
     public abstract Vector getTreeViewData() throws DAOException;
+    public abstract Vector getTreeViewData(SessionDataBean sessionData,Map map) throws DAOException;
 }

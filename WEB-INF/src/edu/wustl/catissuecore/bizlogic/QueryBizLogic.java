@@ -816,4 +816,59 @@ public class QueryBizLogic extends DefaultBizLogic
             }
             return tableIdString;
     }
+	//Retrieves columnNames corresponding to a table aliasName
+	public List setColumnNames(String aliasName) throws DAOException, ClassNotFoundException
+    {
+        String sql = 	" SELECT tableData2.ALIAS_NAME, temp.COLUMN_NAME,  temp.DISPLAY_NAME, temp.TABLES_IN_PATH  " +
+				        " from CATISSUE_QUERY_INTERFACE_TABLE_DATA tableData2 join " +
+				        " ( SELECT  columnData.COLUMN_NAME, columnData.TABLE_ID, columnData.ATTRIBUTE_TYPE, " +
+				        " displayData.DISPLAY_NAME, relationData.TABLES_IN_PATH " +
+				        " FROM CATISSUE_QUERY_INTERFACE_COLUMN_DATA columnData, " +
+				        " CATISSUE_TABLE_RELATION relationData, " +
+				        " CATISSUE_QUERY_INTERFACE_TABLE_DATA tableData, " +
+				        " CATISSUE_SEARCH_DISPLAY_DATA displayData " +
+				        " where relationData.CHILD_TABLE_ID = columnData.TABLE_ID and " +
+				        " relationData.PARENT_TABLE_ID = tableData.TABLE_ID and " +
+				        " relationData.RELATIONSHIP_ID = displayData.RELATIONSHIP_ID and " +
+				        " columnData.IDENTIFIER = displayData.COL_ID and " +
+				        " tableData.ALIAS_NAME = '"+aliasName+"') as temp " +
+				        " on temp.TABLE_ID = tableData2.TABLE_ID ";
+        
+        Logger.out.debug("SQL*****************************"+sql);
+        
+        JDBCDAO jdbcDao = new JDBCDAO();
+        jdbcDao.openSession(null);
+        List list = jdbcDao.executeQuery(sql, null, false, null);
+        jdbcDao.closeSession();
+        String tableName = new String();
+        String columnName = new String();
+        String columnDisplayName = new String();
+        List columnList = new ArrayList();
+        Iterator iterator = list.iterator();
+        int j=0,k=0;
+        while (iterator.hasNext())
+        {
+        	
+            List rowList = (List)iterator.next();
+            tableName = (String)rowList.get(j++);
+            columnName = (String)rowList.get(j++);
+            columnDisplayName = (String)rowList.get(j++);
+            
+            //Name ValueBean Value in the for of tableAlias.columnName.columnDisplayName.tablesInPath 
+            String columnValue = tableName+"."+columnName+"."+columnDisplayName;
+            String tablesInPath = (String)rowList.get(j++);
+			
+            if ((tablesInPath != null) && ("".equals(tablesInPath) == false))
+            {
+                columnValue = columnValue+"."+tablesInPath;
+            }
+            
+            NameValueBean columns = new NameValueBean(columnDisplayName,columnValue);
+            columnList.add(columns);
+            j = 0;
+            k++;
+        }
+        
+        return columnList;
+    }
   }
