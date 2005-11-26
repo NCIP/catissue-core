@@ -8,9 +8,7 @@
  */
 package edu.wustl.catissuecore.query;
 
-import java.sql.SQLException;
 import java.util.List;
-import java.util.Vector;
 
 import edu.wustl.catissuecore.dao.AbstractDAO;
 import edu.wustl.catissuecore.dao.DAOFactory;
@@ -29,37 +27,12 @@ public class ResultData
     /**
      * Query results temporary table.
      */
-    private String tmpResultsTableName = Constants.QUERY_RESULTS_TABLE;
-    
-    /**
-     * Builds a JTree from the ResultSet passed.
-     * @param sessionDataBean TODO
-     * @param securityParam TODO
-     * @param rs The ResultSet object.
-     * @return Returns the built JTree.
-     * @throws SQLException
-     */
-//    public Vector getTreeViewData() throws SQLException
-//    {
-//        String[] selectColumnName = Constants.DEFAULT_TREE_SELECT_COLUMNS;
-//        Vector dataList = new Vector();
-//        
-//        try
-//        {
-//            AbstractDAO dao = DAOFactory.getDAO(Constants.JDBC_DAO);
-//            dataList = (Vector)dao.retrieve(tmpResultsTableName, selectColumnName, sessionDataBean, securityParam);
-//        }
-//        catch (Exception exp)
-//        {
-//        }
-//
-//        return dataList;
-//    }
-    
+    private String tmpResultsTableName = new String();
+
     public List getSpreadsheetViewData(String name, int id, String[] columnList, SessionDataBean sessionDataBean, int securityParam)
     {
         
-    	tmpResultsTableName = Constants.QUERY_RESULTS_TABLE+"_null";
+    	tmpResultsTableName = Constants.QUERY_RESULTS_TABLE+"_"+sessionDataBean.getUserId();
     	String[] whereColumnName = {getColumnName(name)};
         String[] whereColumnCondition = {"="};
         String[] whereColumnValue = {String.valueOf(id)};
@@ -67,7 +40,7 @@ public class ResultData
         if (name.equals(Constants.ROOT))
         {
         	Logger.out.debug("inside root condition........."+name);
-        	//columnList = null;
+        	columnList = null;
         	whereColumnName = null;
             whereColumnCondition = null;
             whereColumnValue = null;
@@ -80,7 +53,7 @@ public class ResultData
             dataList = dao.retrieve(tmpResultsTableName,columnList,
                     				 whereColumnName,whereColumnCondition,
                     				 whereColumnValue,null);
-            dao.closeSession();
+             dao.closeSession();
         }
         catch (DAOException sqlExp)
         {
@@ -90,33 +63,6 @@ public class ResultData
         {
             Logger.out.error(exp.getMessage(),exp);
         }
-        
-        return dataList;
-    }
-    
-    /**
-     * Returns all the data in the temporary table of query results.
-     * @return list of all the data in the temporary table of query results. 
-     */
-    public List getSpreadsheetViewData()
-    {
-        List dataList = null;
-        
-//        try
-//        {
-//            AbstractDAO dao = DAOFactory.getDAO(Constants.JDBC_DAO);
-//            dao.openSession();
-//            dataList = dao.retrieve(tmpResultsTableName);
-//            dao.closeSession();
-//        }
-//        catch (DAOException sqlExp)
-//        {
-//            Logger.out.error(sqlExp.getMessage(),sqlExp);
-//        }
-//        catch (Exception exp)
-//        {
-//            Logger.out.error(exp.getMessage(),exp);
-//        }
         
         return dataList;
     }
