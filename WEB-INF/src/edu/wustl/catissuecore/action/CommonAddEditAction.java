@@ -30,6 +30,7 @@ import edu.wustl.catissuecore.actionForm.AbstractActionForm;
 import edu.wustl.catissuecore.actionForm.DistributionForm;
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.actionForm.SpecimenEventParametersForm;
+import edu.wustl.catissuecore.actionForm.UserForm;
 import edu.wustl.catissuecore.bizlogic.AbstractBizLogic;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
@@ -43,6 +44,7 @@ import edu.wustl.catissuecore.exception.BizLogicException;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
+import edu.wustl.common.util.PasswordManager;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
@@ -199,8 +201,11 @@ public class CommonAddEditAction extends Action
             }
             else
             {
-                //If operation is edit, update the data in the database.
                 
+            	//If operation is edit, update the data in the database.
+                
+            	
+            	
                 List list = bizLogic.retrieve(objectName, Constants.SYSTEM_IDENTIFIER,
 										  new Long(abstractForm.getSystemIdentifier()));
                 if (!list.isEmpty())
@@ -216,7 +221,18 @@ public class CommonAddEditAction extends Action
                     
                     
                     bizLogic.update(abstractDomain, abstractDomainOld, Constants.HIBERNATE_DAO, getSessionData(request));
-      
+                    
+                    // if password change add Boolean(true) object in attribute list of session object
+                    // so the PasswordManager.validate() can check whether password is changed in session   
+                    if(abstractForm instanceof UserForm)
+                	{
+                		if(abstractForm.getPageOf().equals(Constants.PAGEOF_CHANGE_PASSWORD))
+                		{
+                			Logger.out.debug("Added password attr in session");
+                			request.getSession().setAttribute(Constants.PASSWORD_CHANGE_IN_SESSION,new Boolean(true));
+                		}
+                	}
+                    
                     // -- Direct to Main Menu if record is disabled
                     if((abstractForm.getActivityStatus() != null) &&
                             (Constants.ACTIVITY_STATUS_DISABLED.equals(abstractForm.getActivityStatus())))
