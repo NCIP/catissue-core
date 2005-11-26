@@ -11,6 +11,7 @@
 package edu.wustl.catissuecore.action;
 
 import java.io.ObjectOutputStream;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
 
@@ -46,27 +47,25 @@ public class TreeDataAction extends BaseAction
             throws Exception
     {
         ObjectOutputStream out = null;
-
+        SessionDataBean sessionData = getSessionData(request);
+        Map columnIdsMap = new HashMap();
         try
         {
             String pageOf = request.getParameter(Constants.PAGEOF);
             TreeDataInterface bizLogic = new StorageContainerBizLogic();
-            Vector dataList = bizLogic.getTreeViewData();
-            
+            Vector dataList =  new Vector();
             if (pageOf.equals(Constants.PAGEOF_TISSUE_SITE))
-            {
                 bizLogic = new CDEBizLogic();
-                dataList = bizLogic.getTreeViewData();
-            }
             else if (pageOf.equals(Constants.PAGEOF_QUERY_RESULTS))
             {
                 bizLogic = new AdvanceQueryBizlogic();
-                SessionDataBean sessionData = getSessionData(request);
                 HttpSession session = request.getSession();
-                Map columnIdsMap = (Map)session.getAttribute(Constants.COLUMN_ID_MAP);
-                dataList = bizLogic.getTreeViewData(sessionData,columnIdsMap);
+                columnIdsMap = (Map)session.getAttribute(Constants.COLUMN_ID_MAP);
             }
-            
+            if (pageOf.equals(Constants.PAGEOF_QUERY_RESULTS))
+            	dataList = bizLogic.getTreeViewData(sessionData,columnIdsMap);
+            else
+            	dataList= bizLogic.getTreeViewData();
             
             String contentType = "application/x-java-serialized-object";
             response.setContentType(contentType);
