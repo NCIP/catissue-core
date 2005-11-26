@@ -585,9 +585,7 @@ public class QueryBizLogic extends DefaultBizLogic
  	*/
 	public static Vector getMainObjectsOfQuery()throws DAOException
 	{
-    	String sql = " select distinct tableData.ALIAS_NAME " +
-    				 " from CATISSUE_TABLE_RELATION tableRelation join CATISSUE_QUERY_INTERFACE_TABLE_DATA " +
-    				 " tableData on tableRelation.PARENT_TABLE_ID = tableData.TABLE_ID ";
+    	String sql = " select alias_name from catissue_query_interface_table_data where FOR_SQI=1";
 		
     	List list = null;
         java.util.Vector mainObjects = new java.util.Vector();
