@@ -51,7 +51,7 @@
 		deleteItem.className = "linkChange";
 		deleteItem.innerHTML = "Delete";
 		
-		item = document.getElementById('<%=Constants.S%>');
+		/*item = document.getElementById('<%=Constants.S%>');
 		item.className="linkChange"
 		item.innerHTML ="&nbsp;<img src='images/Specimen.GIF' alt='Specimen' /> &nbsp; <a HREF='<%=SearchUtil.getLink("Specimen")%>' target='searchPageFrame'><%=Constants.SPECIMEN%></a>";
 		
@@ -59,7 +59,7 @@
 		item.className="linkChange";
 		item.innerHTML = "&nbsp;<img src='images/SpecimenCollectionGroup.GIF' alt='Specimen Collection Group' /> &nbsp;<a HREF='<%=SearchUtil.getLink("SpecimenCollectionGroup")%>' target='searchPageFrame'><%=Constants.SPECIMEN_COLLECTION_GROUP%></a>";
 		
-		/*item = document.getElementById('<%=Constants.D%>');
+		item = document.getElementById('<%=Constants.D%>');
 		item.className="linkChange";
 		item.innerHTML = "&nbsp;<img src='images/Distribution.GIF' alt='Distribution' /> &nbsp; <a HREF='#'><%=Constants.DISTRIBUTION%></a>";
 		
@@ -234,14 +234,14 @@
 		else
 			disableAll();
 			
-		if(sum == 0)
+		/*if(sum == 0)
 		{
 			disableAll();
 			var pItem = document.getElementById('<%=Constants.P%>');
 			pItem.className="linkChange";
 			var link = "<%=SearchUtil.getLink("Participant")%>"+ selectedNode;
 			pItem.innerHTML ="&nbsp;<img src='images/Participant.GIF' alt='Participant' />  &nbsp;<a HREF='"+link+"' target='searchPageFrame'><%=Constants.PARTICIPANT%></a>";
-		}	
+		}*/	
 	}	
 	
 	function changeClass(element,styleName)
