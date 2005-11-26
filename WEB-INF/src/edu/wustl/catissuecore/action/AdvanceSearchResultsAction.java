@@ -75,8 +75,8 @@ public class AdvanceSearchResultsAction extends BaseAction
 	 	query.setResultView(selectDataElements);
 	 	
 	 	SessionDataBean sessionData = getSessionData(request);
-		//String tempTableName = Constants.QUERY_RESULTS_TABLE+"_"+sessionData.getUserId();
-	 	String tempTableName = Constants.QUERY_RESULTS_TABLE+"_null";
+	 	//Temporary table name with userID attached
+		String tempTableName = Constants.QUERY_RESULTS_TABLE+"_"+sessionData.getUserId();
 		
 		//Set Identifier of participant,Collection Protocol, Specimen Collection Group and Specimen if not existing in the resultView
 		Vector tablesVector = new Vector();
@@ -85,14 +85,18 @@ public class AdvanceSearchResultsAction extends BaseAction
 		tablesVector.add(Constants.SPECIMEN_COLLECTION_GROUP);
 		tablesVector.add(Constants.SPECIMEN);
 		Map columnIdsMap = query.getIdentifierColumnIds(tablesVector);
+		session.setAttribute(Constants.COLUMN_ID_MAP,columnIdsMap);
 		
 		//Create temporary table with the data from the Advance Query Search 
 		AdvanceQueryBizlogic advBizLogic = (AdvanceQueryBizlogic)BizLogicFactory
 												.getBizLogic(Constants.ADVANCE_QUERY_INTERFACE_ID);
 		String sql = query.getString();
 	 	Logger.out.debug("Advance Query Sql"+sql);
-		//advBizLogic.createTempTable(sql,tempTableName,sessionData);
-		session.setAttribute(Constants.COLUMN_ID_MAP,columnIdsMap);
+		advBizLogic.createTempTable(sql,tempTableName,sessionData);
+		
+		//Set tables for Configuration.
+		Object selectedTables[] = tableSet.toArray();
+		session.setAttribute(Constants.TABLE_ALIAS_NAME,selectedTables);
 		
 		request.setAttribute(Constants.PAGEOF, pageOf);
 		return mapping.findForward("success");
@@ -111,22 +115,17 @@ public class AdvanceSearchResultsAction extends BaseAction
 			AdvancedConditionsNode parentAdvNode = (AdvancedConditionsNode)parent.getUserObject();
 			String parentTable = parentAdvNode.getObjectName();
 			tableSet.add(parentTable);
-
+			//Set tablesInPath between parent & child if child exists.
 			if(!parent.isLeaf())
 			{
 				child = (DefaultMutableTreeNode)parent.getFirstChild();
 				AdvancedConditionsNode childAdvNode = (AdvancedConditionsNode)child.getUserObject();
 				String childTable = childAdvNode.getObjectName();
-				Logger.out.debug("parent Table Name in the root object: "+parentTable);
-				Logger.out.debug("child Table Name in the root object: "+childTable);
-				//tableSet.add("CollectionProtocolRegistration");
 				tableSet.add(childTable);
 				QueryBizLogic bizLogic = (QueryBizLogic)BizLogicFactory
 												.getBizLogic(Constants.SIMPLE_QUERY_INTERFACE_ID);
 				String parentTableId = bizLogic.getTableIdFromAliasName(parentTable);
-				Logger.out.debug("parent Table id in the root object: "+parentTableId);
 				String childTableId = bizLogic.getTableIdFromAliasName(childTable);
-				Logger.out.debug("child Table id in the root object: "+childTableId);
 				Set tablesInPath = bizLogic.setTablesInPath(Long.valueOf(parentTableId),Long.valueOf(childTableId));
 				Logger.out.debug("tablesInPath after method call:"+tablesInPath);
 				tableSet.addAll(tablesInPath);
