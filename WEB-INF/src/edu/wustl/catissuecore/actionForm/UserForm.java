@@ -22,6 +22,8 @@ import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Validator;
+import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.util.PasswordManager;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -674,6 +676,33 @@ public class UserForm extends AbstractActionForm
                             errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.confirmNewPassword.reType"));
                         }
                     }
+                    /*
+                     * begin: Added for Password validation
+                     */          			
+        			Logger.out.debug("before if of Validate password " + newPassword + " " + oldPassword);
+        			if (!validator.isEmpty(newPassword) && !validator.isEmpty(oldPassword))
+                    {
+                    	int result=-1;
+            			// Call static method PasswordManager.validate() where params are
+            			// new password,old password,user name
+            			// returns int value.
+            			result=PasswordManager.validate(newPassword,oldPassword,request.getSession());
+            			Logger.out.debug("return from Password validate " + result);
+            			// if validate method returns value greater than zero then validation fails  
+            			if(result!=PasswordManager.SUCCESS)  
+            			{
+            				// get error message of validation failure where param is result of validate() method
+            				String errorMessage=PasswordManager.getErrorMessage(result);
+            				Logger.out.debug("error from Password validate " + errorMessage);
+            				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item",errorMessage));
+            			}
+                    }
+            		
+                    
+                    Logger.out.debug("after call to Validate password");
+                    /*
+                     * end: Password validation 
+                     */
                 }
                 else
                 {
@@ -747,52 +776,55 @@ public class UserForm extends AbstractActionForm
                             }
                         }
 
-                        if (validator.isValidOption(String.valueOf(institutionId)) == false)
+                        if (institutionId == -1)
                         {
                             errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
                                     "errors.item.required", ApplicationProperties
                                             .getValue("user.institution")));
                         }
 
-                        if (validator.isValidOption(String.valueOf(departmentId)) == false)
+                        if (departmentId == -1)
                         {
                             errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
                                     "errors.item.required", ApplicationProperties
                                             .getValue("user.department")));
                         }
                         
-                        if (validator.isValidOption(String.valueOf(cancerResearchGroupId)) == false)
+                        if (cancerResearchGroupId == -1)
                         {
                             errors.add(ActionErrors.GLOBAL_ERROR,
                                             new ActionError("errors.item.required",
                                                     ApplicationProperties.getValue("user.cancerResearchGroup")));
                         }
 
-                        if(validator.isValidOption(activityStatus) == false)
+                        if(!validator.isValidOption(activityStatus))
                         {
                         	errors.add(ActionErrors.GLOBAL_ERROR,
                                     new ActionError("errors.item.required",
                                             ApplicationProperties.getValue("user.activityStatus")));
                         }
-                        
-                        if (pageOf.equals(Constants.PAGEOF_USER_ADMIN) || pageOf.equals(Constants.PAGEOF_APPROVE_USER))
+                    }
+
+                    if (pageOf.equals(Constants.PAGEOF_USER_ADMIN) || pageOf.equals(Constants.PAGEOF_APPROVE_USER))
+                    {
+                        if (role != null)
                         {
-                            if (validator.isValidOption(role) == false)
+                            if (role.trim().equals("0"))
     	                    {
     	                        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
     	                                "errors.item.required", ApplicationProperties
     	                                        .getValue("user.role")));
     	                    }
                         }
-                        
-                        if (pageOf.equals(Constants.PAGEOF_APPROVE_USER))
+                    }
+
+                    if (pageOf.equals(Constants.PAGEOF_APPROVE_USER))
+                    {
+                        if (status.trim().equals(Constants.SELECT_OPTION))
                         {
-                            if (validator.isValidOption(status) == false)
-                            {
-                                errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-                                        "errors.item.required", ApplicationProperties
-                                                .getValue("user.approveOperation")));
-                            }
+                            errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+                                    "errors.item.required", ApplicationProperties
+                                            .getValue("user.approveOperation")));
                         }
                     }
                 }
