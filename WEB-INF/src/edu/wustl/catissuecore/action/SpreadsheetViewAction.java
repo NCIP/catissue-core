@@ -42,18 +42,14 @@ public class SpreadsheetViewAction extends Action
         Logger.out.debug("Pageof in spreadsheetviewaction.........:"+pageOf);
         HttpSession session = request.getSession();
 
-        if (Constants.PAGEOF_SIMPLE_QUERY_INTERFACE.equals(pageOf))
+        if (Constants.PAGEOF_SIMPLE_QUERY_INTERFACE.equals(pageOf) || 
+        						(Constants.PAGEOF_QUERY_RESULTS.equals(pageOf)))
         {
             //Putting the results view column names and data in session.
-            //Required for Export functionality in simple query interface.
+            //Required for Export functionality in simple query interface and Advanced Search.
             session.setAttribute(Constants.SPREADSHEET_COLUMN_LIST,columnNames);
             session.setAttribute(Constants.SPREADSHEET_DATA_LIST,list);
         }
-        else if (Constants.PAGEOF_QUERY_RESULTS.equals(pageOf)) 
-        {
-            session.setAttribute(Constants.SPREADSHEET_COLUMN_LIST,columnNames);
-            session.setAttribute(Constants.SPREADSHEET_DATA_LIST,list);
-		}
         else
         {
             //In case of edit functionality putting it in request.
