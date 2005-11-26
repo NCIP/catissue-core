@@ -16,26 +16,17 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.Vector;
 
 import edu.wustl.catissuecore.audit.AuditManager;
-import edu.wustl.catissuecore.query.Client;
-import edu.wustl.catissuecore.query.DataElement;
-import edu.wustl.catissuecore.util.Permissions;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.beans.QueryResultObjectData;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.dbManager.DBUtil;
-import edu.wustl.common.util.dbManager.HibernateMetaData;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -547,37 +538,6 @@ public class JDBCDAO extends AbstractDAO
     {
         Logger.out.debug("Create Table Query "+query.toString());
         executeUpdate(query.toString());
-    }
-    /**
-     * Alters table to add new columns.
-     * @param tableName Table Name to be altered.
-     * @param columnDescription Column Description to be added.
-     * @throws DAOException
-     */
-	
-    public void alterTable(String tableName,String columnDescription) throws Exception
-    {
-    	String query = "ALTER TABLE "+tableName +" ADD "+columnDescription+" ";
-    	Logger.out.debug("Alter table query:"+query);
-    	executeUpdate(query.toString());
-    }
-    /**
-     * (non-Javadoc)
-     * @see edu.wustl.catissuecore.dao.AbstractDAO#insert(java.lang.Object)
-     */
-    public void insertValues(String tableName, List columnValues) throws DAOException
-    {
-
-        StringBuffer query = new StringBuffer("INSERT INTO "+tableName+" values(");
-        int i;
-	    for (i=0;i<columnValues.size()-1;i++)
-	    {
-	        query.append("'"+columnValues.get(i)+"',");
-	    }	
-	        
-	    query.append("'"+columnValues.get(i)+"');");
-	    Logger.out.debug("Insert Statement........."+query);    
-	    executeUpdate(query.toString());
     }
 
 }
