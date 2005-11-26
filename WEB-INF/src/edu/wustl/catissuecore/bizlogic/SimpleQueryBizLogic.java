@@ -135,7 +135,8 @@ public class SimpleQueryBizLogic extends DefaultBizLogic
         		|| fieldType.equalsIgnoreCase(Constants.FIELD_TYPE_DATE) 
         		|| fieldType.equalsIgnoreCase(Constants.FIELD_TYPE_TEXT))
         {
-        	if (fieldType.equalsIgnoreCase(Constants.FIELD_TYPE_VARCHAR))
+        	if (fieldType.equalsIgnoreCase(Constants.FIELD_TYPE_VARCHAR) 
+        	        	|| fieldType.equalsIgnoreCase(Constants.FIELD_TYPE_TEXT))
         	{
         		value = "'" + value + "'";
         	}
