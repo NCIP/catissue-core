@@ -1360,6 +1360,7 @@ public class Constants
 	public static final String ADVANCED_CONDITIONS_ROOT = "advancedCondtionsRoot";
 	public static final String ADVANCED_CONDITIONS_QUERY_VIEW = "advancedCondtionsQueryView";
 	public static final String ADVANCED_SEARCH_ACTION = "AdvanceSearch.do";
+	public static final String ADVANCED_SEARCH_RESULTS_ACTION = "AdvanceSearchResults.do";
 	
 	public static final String COLUMN_ID_MAP = "columnIdsMap";
 	
