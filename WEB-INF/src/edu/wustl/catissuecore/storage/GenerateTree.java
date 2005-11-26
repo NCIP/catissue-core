@@ -47,7 +47,6 @@ public class GenerateTree
 
                 DefaultMutableTreeNode nextNode = new DefaultMutableTreeNode(treeNode);
                 DefaultMutableTreeNode targetParentNode = null;
-                TreeNodeData nodeData = (TreeNodeData) treeNode;
                 if (treeNode.getParentIdentifier() == null)
                 {
                 	boolean parentNodeFound = false;
