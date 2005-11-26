@@ -8,8 +8,26 @@
  */ 
 package edu.wustl.common.util;
 
+import java.text.MessageFormat;
+import java.util.List;
 import java.util.Random;
 
+import javax.servlet.http.HttpSession;
+
+import edu.wustl.catissuecore.action.DomainObjectListAction;
+import edu.wustl.catissuecore.action.LoginAction;
+import edu.wustl.catissuecore.actionForm.AbstractActionForm;
+import edu.wustl.catissuecore.actionForm.UserForm;
+import edu.wustl.catissuecore.bizlogic.AbstractBizLogic;
+import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
+import edu.wustl.catissuecore.domain.AbstractDomainObject;
+import edu.wustl.catissuecore.domain.DomainObjectFactory;
+import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.util.global.ApplicationProperties;
+import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.security.SecurityManager;
+import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
 
@@ -25,12 +43,23 @@ import edu.wustl.common.util.logger.Logger;
 
 public class PasswordManager
 {
+	public static final int PASSWORD_MIN_LENGTH=6;
+	public static final int SUCCESS=0;
+	public static final int FAIL_LENGTH=1;
+	public static final int FAIL_SAME_AS_OLD=2;
+	public static final int FAIL_SAME_AS_USERNAME=3;
+	public static final int FAIL_IN_PATTERN=4;
+	public static final int FAIL_SAME_SESSION=5;
+	public static final int FAIL_WRONG_OLD_PASSWORD=6;
+	public static final int FAIL_INVALID_SESSION=7;
+	
+	
 	/**
      * Generate random alpha numeric password.
      * @param loginName the loginName of a user.
      * @return Returns the generated password.
      */
-    public static String generatePassword()
+	public static String generatePassword()
     {
     	//Define a Constants alpha-numeric String 
     	final String CHAR_STRING = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -129,7 +158,198 @@ public class PasswordManager
         }
         return null;
     }
-    
+    /**
+     * 
+     * @param newPassword New Password value
+     * @param oldPassword Old Password value
+     * @param httpSession HttpSession object
+     * @param abstractForm UserForm object  
+     * @return SUCCESS (constant int 0) if all condition passed 
+     *   else return respective error code (constant int) value  
+     */
+    public static int validate(String newPassword,String oldPassword,HttpSession httpSession)
+	{
+    	// get SessionDataBean objet from session 
+    	Object obj = httpSession.getAttribute(Constants.SESSION_DATA);
+        SessionDataBean sessionData=null;
+        String userName="";
+        if(obj!=null)
+		{
+        	sessionData = (SessionDataBean) obj;
+        	// get User Name
+        	userName=sessionData.getUserName();
+		}
+        else
+        {
+        	return FAIL_INVALID_SESSION;
+        }
+    	// to check whether user entered correct old password
+    	
+    	
+    	try
+    	{
+    		// retrieve User DomainObject by user name
+    		
+    		AbstractBizLogic bizLogic = BizLogicFactory.getBizLogic(Constants.USER_FORM_ID);
+    		List userList = bizLogic.retrieve(User.class.getName(), "loginName",userName);
+    		User user= null;
+    		if(userList!=null && !userList.isEmpty())
+    		{
+    			user =(User)userList.get(0);
+    			Logger.out.debug("got user domain obj---"+user);
+    		}
+	        // compare password stored in database with value of old password currently entered by 
+    		// user for Change Password operation
+    		Logger.out.debug("User name from domainobg--"+user.getLoginName());
+    		if (!oldPassword.equals(PasswordManager.decode(user.getPassword())))
+	        {
+	            return FAIL_WRONG_OLD_PASSWORD; //retun value is int 6
+	        }
+    	}
+       	catch(Exception e)
+    	{
+    		// if error occured during password comparision
+       		Logger.out.error(e.getMessage(),e);
+    		return FAIL_WRONG_OLD_PASSWORD;
+    	}
+       	
+    	// to check whether password change in same session
+       	// get attribute (Boolean) from session object stored when password is changed successfully 
+    	Boolean b = null;
+    	b = (Boolean)httpSession.getAttribute(Constants.PASSWORD_CHANGE_IN_SESSION);
+    	Logger.out.debug("b---" + b);
+    	if(b!=null && b.booleanValue()==true)
+    	{
+    		// return error code if attribute (Boolean) is in session   
+    		Logger.out.debug("Attempt to change Password in same session Returning FAIL_SAME_SESSION");
+    		return FAIL_SAME_SESSION; // return int value 5
+    	}
+    	// to Check length of password,if not valid return FAIL_LENGTH = 2
+    	if(newPassword.length()<PASSWORD_MIN_LENGTH)
+		{
+    		Logger.out.debug("Password is not valid returning FAIL_LENGHT");
+    		return FAIL_LENGTH; // return int value 1
+		}
+
+    	// to Check new password is different as old password ,if bot are same return FAIL_SAME_AS_OLD = 3    	
+		if(newPassword.equals(oldPassword))
+		{
+			Logger.out.debug("Password is not valid returning FAIL_SAME_AS_OLD");
+			return FAIL_SAME_AS_OLD; //return int value 2
+		}
+		
+		// to check password is differnt than user name if same return FAIL_SAME_AS_USERNAME =4
+		// eg. username=abc@abc.com newpassword=abc is not valid
+		int usernameBeforeMailaddress=userName.indexOf('@');
+		// get substring of username before '@' character    
+		String name=userName.substring(0,usernameBeforeMailaddress);
+		Logger.out.debug("usernameBeforeMailaddress---" + name);
+		if(name!=null && newPassword.equals(name))
+		{
+			Logger.out.debug("Password is not valid returning FAIL_SAME_AS_USERNAME");
+			return FAIL_SAME_AS_USERNAME; // return int value 3
+		}
+		//to check password is differnt than user name if same return FAIL_SAME_AS_USERNAME =4
+		// eg. username=abc@abc.com newpassword=abc@abc.com is not valid
+		if(newPassword.equals(userName))
+		{
+			Logger.out.debug("Password is not valid returning FAIL_SAME_AS_USERNAME");
+			return FAIL_SAME_AS_USERNAME; // return int value 3
+		}
+		
+		
+		// following is to checks pattern i.e password must include atleast one UCase,LCASE and Number
+		// and must not contain space charecter.
+		// define get char array whose length is equal to length of new password string.
+		char dest[]=new char[newPassword.length()]; 
+		// get char array where values get stores in dest[]
+		newPassword.getChars(0,newPassword.length(),dest,0);
+		boolean foundUCase=false; // boolean to check UCase character found in string
+		boolean foundLCase=false; // boolean to check LCase character found in string
+		boolean foundNumber=false; // boolean to check Digit/Number character found in string
+		boolean foundSpace=false;
+		 
+		for(int i=0;i<dest.length;i++)
+		{
+			// to check if character is a Space. if true break from loop
+			if(Character.isSpaceChar(dest[i]))
+			{
+				foundSpace=true;
+				Logger.out.debug("Found Space in Password");
+				break;
+			}
+			// to check whether char is Upper Case. 
+			if(foundUCase==false&&Character.isUpperCase(dest[i])==true)
+			{
+				//foundUCase=true if char is Upper Case and Upper Case is not found in previous char.
+				foundUCase=true;
+				Logger.out.debug("Found UCase in Password");
+			}
+			
+			// to check whether char is Lower Case 
+			if(foundLCase==false&&Character.isLowerCase(dest[i])==true)
+			{
+				//foundLCase=true if char is Lower Case and Lower Case is not found in previous char.
+				foundLCase=true;
+				Logger.out.debug("Found LCase in Password");
+			}
+			
+			// to check whether char is Number/Digit
+			if(foundNumber==false&&Character.isDigit(dest[i])==true)
+			{
+			//	foundNumber=true if char is Digit and Digit is not found in previous char.
+				foundNumber=true;
+				Logger.out.debug("Found Number in Password");
+			}	
+		}
+		// condition to check whether all above condotion is satisfied
+		if(foundUCase==false||foundLCase==false||foundNumber==false||foundSpace==true)
+		{
+			Logger.out.debug("Password is is valid returning FAIL_IN_PATTERN");
+			return FAIL_IN_PATTERN; // return int value 4
+		}
+		Logger.out.debug("Password is Valid returning SUCCESS");
+		return SUCCESS;
+	}
+    /**
+     * 
+     * @param errorCode int value return by validate() method
+     * @return String error message with respect to error code 
+     */
+    public static String getErrorMessage(int errorCode)
+    {
+    	String errMsg="";
+    	
+    	switch(errorCode)
+    	{
+    		case FAIL_LENGTH:
+    			errMsg=ApplicationProperties.getValue("errors.newPassword.length");
+    			break;
+    		case FAIL_SAME_AS_OLD:
+    			errMsg=ApplicationProperties.getValue("errors.newPassword.sameAsOld");
+    			break;
+    		case FAIL_SAME_AS_USERNAME:
+    			errMsg=ApplicationProperties.getValue("errors.newPassword.sameAsUserName");
+    			break;
+    		case FAIL_IN_PATTERN:
+    			errMsg=ApplicationProperties.getValue("errors.newPassword.pattern");
+    			break;	
+    		case FAIL_SAME_SESSION:
+    			errMsg=ApplicationProperties.getValue("errors.newPassword.sameSession");
+    			break;
+    		case FAIL_WRONG_OLD_PASSWORD:
+    			errMsg=ApplicationProperties.getValue("errors.oldPassword.wrong");
+    			break;
+    		case FAIL_INVALID_SESSION:
+    			errMsg=ApplicationProperties.getValue("errors.newPassword.genericmessage");
+				break;
+    		default:
+    			errMsg=ApplicationProperties.getValue("errors.newPassword.genericmessage");
+				break;
+    	}	
+    	return errMsg;
+    	
+    }
 //    public static void main(String[] args)
 //    {
 //    	String pwd = "forgot";
