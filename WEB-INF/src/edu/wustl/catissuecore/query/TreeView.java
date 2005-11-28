@@ -68,37 +68,6 @@ public class TreeView {
 			        	columnDisplayName=columnName;
 			        }
 			        Logger.out.debug("Column Display name in tree view:"+columnDisplayName);
-			        //Change the operator to 'starts with' or 'ends with' or 'contains' if it is 'Like' operator
-			        if((op.getOperator()).equals(Operator.LIKE))
-					{
-			        	if((value.startsWith("'%")) && (value.endsWith("%'")))
-			        	{
-			        		op = new Operator(Operator.CONTAINS);
-			        		value = value.replaceAll("%","");
-			        	}
-			        	else if(value.endsWith("%'"))
-			        	{
-			        		op = new Operator(Operator.STARTS_WITH);
-			        		value = value.replaceAll("%","");
-			        	}
-			        	else if(value.startsWith("'%"))
-			        	{
-			        		op = new Operator(Operator.ENDS_WITH);
-			        		value = value.replaceAll("%","");
-			        	}
-					}
-			        if(value.startsWith("STR_TO_DATE"))
-			        {
-			        	value=value.substring(12,24);
-			        }
-			        if((op.getOperator()).equals(Operator.EQUAL))
-					{
-			        	op = new Operator(Operator.EQUALS_CONDITION);
-					}
-			        if((op.getOperator()).equals(Operator.NOT_EQUALS))
-					{
-			        	op = new Operator(Operator.NOT_EQUALS_CONDITION);
-					}
 			        String column = data.getField();
 			        if(k == 0)
 			        	//str = temp + "|" + parentId + "|" +data.getTable()+": "+data.getField()+ " "+op.getOperator() + " "+con.getValue();
@@ -124,6 +93,4 @@ public class TreeView {
 					arrangeTree(child,nodeId,tree,advancedConditionNodesMap);
 			}
 		} 
-	
-
 }

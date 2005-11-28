@@ -60,9 +60,6 @@ public class ConditionMapParser
 							columnName = aliasName+"."+columnName;*/
 						Logger.out.debug("column name in the condition parser "+columnName);
 						dataElement.setField(columnName);
-						QueryBizLogic bizLogic = (QueryBizLogic)BizLogicFactory
-																.getBizLogic(Constants.SIMPLE_QUERY_INTERFACE_ID);
-						String attributeType = bizLogic.getAttributeType(columnName,aliasName);
 						
 						//Create two different conditions in case of Between and Not Between operators.
 						if(operator.equals(Operator.NOT_BETWEEN))
@@ -76,35 +73,6 @@ public class ConditionMapParser
 							operator1 = Operator.GREATER_THAN_OR_EQUALS;
 							operator2 = Operator.LESS_THAN_OR_EQUALS;
 							value2 = (String)conditionMap.get(aliasName+":"+columnName+":"+"HLIMIT");
-						}
-						//Converting to operator = 'Like' when it is STARTS WITH, ENDS WITH and CONTAINS
-						else if(Operator.getOperator(operator)!=null)
-						{
-							if(operator.equals(Operator.STARTS_WITH))
-								value = value+"%";
-							else if(operator.equals(Operator.ENDS_WITH))
-								value = "%"+value;
-							else if(operator.equals(Operator.CONTAINS))
-								value = "%"+value+"%";
-							operator = Operator.getOperator(operator);
-						}
-						if (attributeType.equalsIgnoreCase(Constants.FIELD_TYPE_VARCHAR)
-								|| attributeType.equalsIgnoreCase(Constants.FIELD_TYPE_DATE) 
-								|| attributeType.equalsIgnoreCase(Constants.FIELD_TYPE_TEXT))
-						{
-							//Add Quotes for String values
-							if (attributeType.equalsIgnoreCase(Constants.FIELD_TYPE_VARCHAR))
-							{
-								value = "'" + value + "'";
-								value2 = "'" + value2 + "'";
-							}
-							//Change the date format
-							else
-							{
-								value = "STR_TO_DATE('" + value + "','" + Constants.MYSQL_DATE_PATTERN + "')";
-								value2 = "STR_TO_DATE('" + value2 + "','" + Constants.MYSQL_DATE_PATTERN + "')";
-							}
-							
 						}
 						Logger.out.debug("After changing value of condition obj:value1-"+value+" value2-"+value2);
 					}
@@ -243,10 +211,10 @@ public class ConditionMapParser
 //		root = conditionParser.createAdvancedQueryObj(dataCollection4,root,"SpecimenCollectionGroup","");
 //		root = conditionParser.createAdvancedQueryObj(dataCollection5,root,"Participant","");
 //		root = conditionParser.createAdvancedQueryObj(dataCollection6,root,"Specimen","");
-		conditionParser.traverseTree(root);
+//		conditionParser.traverseTree(root);
 	}
 	//Traverse root and display map contents.
-	private void traverseTree(DefaultMutableTreeNode tree)
+	/*private void traverseTree(DefaultMutableTreeNode tree)
 	{
 		DefaultMutableTreeNode child = new DefaultMutableTreeNode();
 		int childCount = tree.getChildCount();
@@ -264,7 +232,7 @@ public class ConditionMapParser
 			}
 			traverseTree(child);
 		}
-	}
+	}*/
 	//Add advancedConditionNode
 	private void addNode(Integer []selectedNode,DefaultMutableTreeNode presentNode,Map advancedConditionNodesMap)
 	{
