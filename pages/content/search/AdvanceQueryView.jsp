@@ -231,17 +231,15 @@
 			deleteItem.innerHTML = "&nbsp;<a HREF='" + deleteLink + "'>Delete</a>";
 			
 		}
-		else
-			disableAll();
-			
-		/*if(sum == 0)
+		if(sum == 0)
 		{
 			disableAll();
 			var pItem = document.getElementById('<%=Constants.P%>');
 			pItem.className="linkChange";
 			var link = "<%=SearchUtil.getLink("Participant")%>"+ selectedNode;
 			pItem.innerHTML ="&nbsp;<img src='images/Participant.GIF' alt='Participant' />  &nbsp;<a HREF='"+link+"' target='searchPageFrame'><%=Constants.PARTICIPANT%></a>";
-		}*/	
+		}
+		
 	}	
 	
 	function changeClass(element,styleName)
