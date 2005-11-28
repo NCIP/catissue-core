@@ -160,7 +160,7 @@ public class SpecimenSearchAction extends BaseAction
       The list contains all the tables associated with Event Parameters only.*/
     private List getEventParametersTables(QueryBizLogic bizLogic) throws DAOException,ClassNotFoundException
     {
-    	Set tableSet = bizLogic.getAllTableNames("");
+    	Set tableSet = bizLogic.getAllTableNames("", Constants.ADVANCE_QUERY_TABLES);
     	List newTableList = new ArrayList();
     	
     	//Adding SELECT Option

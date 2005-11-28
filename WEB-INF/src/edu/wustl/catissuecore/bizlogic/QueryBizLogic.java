@@ -529,12 +529,12 @@ public class QueryBizLogic extends DefaultBizLogic
  	* @throws DAOException
  	* @throws ClassNotFoundException
  	*/
-	public Set getAllTableNames(String aliasName)throws DAOException, ClassNotFoundException
+	public Set getAllTableNames(String aliasName, int forQI)throws DAOException, ClassNotFoundException
 	{
 	    String [] selectColumnNames = {Constants.TABLE_DISPLAY_NAME_COLUMN, Constants.TABLE_ALIAS_NAME_COLUMN};
 	    String [] whereColumnNames = {Constants.TABLE_FOR_SQI_COLUMN};
 	    String [] whereColumnConditions = {"="};
-	    String [] whereColumnValues = {"1"};
+	    String [] whereColumnValues = {String.valueOf(forQI)};
 
 		if ((aliasName != null) && (!"".equals(aliasName)))
 		{
@@ -545,14 +545,15 @@ public class QueryBizLogic extends DefaultBizLogic
 			whereColumnConditions[0]= "=";
 			whereColumnConditions[1]="=";
 			whereColumnValues = new String[2];
-			whereColumnValues[0]="1";
+			whereColumnValues[0]=String.valueOf(forQI);
 			aliasName = "'" + aliasName + "'";
 			whereColumnValues[1]=aliasName;
 		}
-
+		
 		JDBCDAO jdbcDAO = (JDBCDAO)DAOFactory.getDAO(Constants.JDBC_DAO);
 		jdbcDAO.openSession(null);
-		List tableList = jdbcDAO.retrieve(Constants.TABLE_DATA_TABLE_NAME, selectColumnNames, whereColumnNames, whereColumnConditions, whereColumnValues, null);
+		List tableList = jdbcDAO.retrieve(Constants.TABLE_DATA_TABLE_NAME, 
+		        			selectColumnNames, whereColumnNames, whereColumnConditions, whereColumnValues, null);
 		jdbcDAO.closeSession();
 		
 		Set objectNameValueBeanList = new TreeSet();
