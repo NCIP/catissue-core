@@ -8,6 +8,7 @@ package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -29,6 +30,8 @@ import edu.wustl.catissuecore.bizlogic.SimpleQueryBizLogic;
 import edu.wustl.catissuecore.query.AdvancedConditionsImpl;
 import edu.wustl.catissuecore.query.AdvancedConditionsNode;
 import edu.wustl.catissuecore.query.AdvancedQuery;
+import edu.wustl.catissuecore.query.Condition;
+import edu.wustl.catissuecore.query.Operator;
 import edu.wustl.catissuecore.query.Query;
 import edu.wustl.catissuecore.query.QueryFactory;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -54,7 +57,8 @@ public class AdvanceSearchResultsAction extends BaseAction
 		//Get the advance query root object from session 
 		HttpSession session = request.getSession();
 		DefaultMutableTreeNode root = (DefaultMutableTreeNode)session.getAttribute(Constants.ADVANCED_CONDITIONS_ROOT);
-		
+		//change the values in the conditions for the query-adding quotes to string & changing date format
+		traverseTree(root);
 		//Create Advance Query object
 		Query query = QueryFactory.getInstance().newQuery(Query.ADVANCED_QUERY, aliasName);
 		
@@ -131,6 +135,61 @@ public class AdvanceSearchResultsAction extends BaseAction
 				tableSet.addAll(tablesInPath);
 			}
 			setTables(parent,tableSet);
+		}
+	}
+	//Parse the tree and change the value as required by the query object
+	private void traverseTree(DefaultMutableTreeNode tree) throws Exception
+	{
+		DefaultMutableTreeNode child;
+		int childCount = tree.getChildCount();
+		Logger.out.debug("childCount"+childCount);
+		for(int i=0;i<childCount;i++)
+		{
+			child = (DefaultMutableTreeNode)tree.getChildAt(i);
+			AdvancedConditionsNode advNode = (AdvancedConditionsNode)child.getUserObject();
+			Vector conditions = advNode.getObjectConditions();
+			Iterator conditionsItr = conditions.iterator();
+			while(conditionsItr.hasNext())
+			{
+				Condition condition = (Condition)conditionsItr.next();
+				String columnName = condition.getDataElement().getField();
+				String aliasName = condition.getDataElement().getTable();
+				QueryBizLogic bizLogic = (QueryBizLogic)BizLogicFactory.getBizLogic(Constants.SIMPLE_QUERY_INTERFACE_ID);
+				String attributeType = bizLogic.getAttributeType(columnName,aliasName);
+
+				String value = condition.getValue();
+				String operator = (condition.getOperator()).getOperator();
+				//Converting to operator = 'Like' when it is STARTS WITH, ENDS WITH and CONTAINS
+				if(Operator.getOperator(operator)!=null)
+				{
+					if(operator.equals(Operator.STARTS_WITH))
+						value = value+"%";
+					else if(operator.equals(Operator.ENDS_WITH))
+						value = "%"+value;
+					else if(operator.equals(Operator.CONTAINS))
+						value = "%"+value+"%";
+					operator = Operator.getOperator(operator);
+				}
+				if (attributeType.equalsIgnoreCase(Constants.FIELD_TYPE_VARCHAR)
+						|| attributeType.equalsIgnoreCase(Constants.FIELD_TYPE_DATE) 
+						|| attributeType.equalsIgnoreCase(Constants.FIELD_TYPE_TEXT))
+				{
+					//Add Quotes for String values
+					if (attributeType.equalsIgnoreCase(Constants.FIELD_TYPE_VARCHAR))
+					{
+						value = "'" + value + "'";
+					}
+					//Change the date format
+					else
+					{
+						value = "STR_TO_DATE('" + value + "','" + Constants.MYSQL_DATE_PATTERN + "')";
+					}
+				}
+				condition.setValue(value);
+				condition.setOperator(new Operator(operator));
+			}
+			
+			traverseTree(child);
 		}
 	}
 }
