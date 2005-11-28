@@ -22,6 +22,7 @@ import edu.wustl.catissuecore.query.DataElement;
 import edu.wustl.catissuecore.query.Operator;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.vo.SearchFieldData;
+import edu.wustl.common.util.logger.Logger;
 
 public abstract class AdvanceSearchUIAction extends BaseAction 
 {
@@ -81,53 +82,46 @@ public abstract class AdvanceSearchUIAction extends BaseAction
 	        String valuekey = "";
 	       
 	        //Condition for checking date values as operator keys are same
-	        if(map.containsKey(temp))
-	        {
-	        	//Key for value field ie 3rd column
+	       if(temp.equals(tableName+":"+column))
+	        	{
+	        	//Key for value field 
 		        valuekey = tableName+":"+column + ":HLIMIT";
 		        boolValuekey = true;
 		               	
 	        }
 	        else 
 	        {
-//	        	Key for value field ie 3rd column
+	        	//Key for value field 
 		        valuekey = tableName+":"+column;
 		        boolValuekey = false;
 		    }
 	        
 	        //Key for value field ie 3rd column
 			String opKey = "Operator:" + tableName+":"+column;
-			
-			//Explicitly setting operator keys value as they are same
-			if(map.containsKey(temp))
-	        {
 				
-				if(tempOperator.equals(Operator.GREATER_THAN_OR_EQUALS))
-					map.put(opKey,"Between");
-				else
-					map.put(opKey,"Not Between");
-				
-	        }
-			else
-			{
-				map.put(opKey,op.getOperator());
-				tempOperator = op.getOperator();
-			}
-			
 			//Setting value of map in edit case
 			map.put(valuekey,con.getValue());
 			
 			if(boolValuekey)
 			{
+//				Explicitly setting operator keys value as they are same
+				if(tempOperator.equals(Operator.GREATER_THAN_OR_EQUALS))
+					map.put(opKey,"Between");
+				else
+					map.put(opKey,"Not Between");
 				temp = "";
 			}
 			else
+			{
+				map.put(opKey,op.getOperator());
+				tempOperator = op.getOperator();
 				temp = valuekey;
+			}
 		}
 		
 		//Setting map in form
 		aForm.setValues(map);
-		//setMapOfNodes(map);
+		
 		
     }
 	
