@@ -6,11 +6,9 @@ import java.util.Calendar;
 
 import org.apache.struts.action.ActionForm;
 
-import edu.wustl.catissuecore.action.LoginAction;
 import edu.wustl.catissuecore.domain.Distribution;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
-import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -61,10 +59,9 @@ public class DistributionReportForm extends ActionForm
 	public void setAllValues(Distribution distribution) throws Exception
 	{
 		this.distributionProtocolTitle = String.valueOf(distribution.getDistributionProtocol().getTitle());
-		gov.nih.nci.security.authorization.domainobjects.User userData = SecurityManager.getInstance(
-				LoginAction.class).getUserById(distribution.getUser().getSystemIdentifier().toString());
-		String lName = userData.getLastName();
- 		String fName = userData.getFirstName();
+		
+		String lName = (String)distribution.getUser().getLastName();
+ 		String fName = (String)distribution.getUser().getFirstName();
  		Logger.out.debug("User's name"+lName+" "+fName );
  		this.userName = lName + ", " + fName;
  		Calendar calender = Calendar.getInstance();
