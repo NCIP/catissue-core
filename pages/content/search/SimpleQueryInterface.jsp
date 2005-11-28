@@ -360,12 +360,14 @@ function onAttributeChange(element,opComboName)
 									<bean:message  key="buttons.reset" />
 								</html:button>
 							</td>
+							<%if (Integer.parseInt(noOfRows) > 1){%>
 							<td>
-							<%String deleteAction = "decrementCounter();setPropertyValue('value(SimpleConditionsNode:"+(Integer.parseInt(noOfRows)-1)+"_Operator_operator)','');"+"callAction('SimpleQueryInterface.do?pageOf="+pageOf+"');"; %>
-							<html:button property="deleteRow" styleClass="actionButton" onclick="<%=deleteAction%>">
-								<bean:message key="buttons.deleteLast"/>
-							</html:button>
+								<%String deleteAction = "decrementCounter();setPropertyValue('value(SimpleConditionsNode:"+(Integer.parseInt(noOfRows)-1)+"_Operator_operator)','');"+"callAction('SimpleQueryInterface.do?pageOf="+pageOf+"');"; %>
+								<html:button property="deleteRow" styleClass="actionButton" onclick="<%=deleteAction%>">
+									<bean:message key="buttons.deleteLast"/>
+								</html:button>
 							</td>
+							<%}%>
 							<%}%>
 							
 						</tr>
