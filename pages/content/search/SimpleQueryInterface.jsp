@@ -43,7 +43,6 @@
 %>
 <script>
 
-
 function callAction(action)
 {
 	document.forms[0].action = action;
@@ -64,6 +63,10 @@ function setPropertyValue(propertyName, value)
 function incrementCounter()
 {
 	document.forms[0].counter.value = parseInt(document.forms[0].counter.value) + 1;
+}
+function decrementCounter()
+{
+	document.forms[0].counter.value = parseInt(document.forms[0].counter.value) - 1;
 }
 
 function showDateColumn(element,valueField,columnID,showCalendarID,fieldValue,overDiv)
@@ -357,7 +360,14 @@ function onAttributeChange(element,opComboName)
 									<bean:message  key="buttons.reset" />
 								</html:button>
 							</td>
+							<td>
+							<%String deleteAction = "decrementCounter();setPropertyValue('value(SimpleConditionsNode:"+(Integer.parseInt(noOfRows)-1)+"_Operator_operator)','');"+"callAction('SimpleQueryInterface.do?pageOf="+pageOf+"');"; %>
+							<html:button property="deleteRow" styleClass="actionButton" onclick="<%=deleteAction%>">
+								<bean:message key="buttons.deleteLast"/>
+							</html:button>
+							</td>
 							<%}%>
+							
 						</tr>
 					</table>
 					<!-- action buttons end -->
