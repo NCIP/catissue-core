@@ -85,7 +85,7 @@ public class SimpleQueryInterfaceAction extends SecureAction
                     String aliasName = request.getParameter(Constants.TABLE_ALIAS_NAME);
                     
                     // Get all the table names.  
-                    Set objectNameValueBeanList = queryBizLogic.getAllTableNames(aliasName);
+                    Set objectNameValueBeanList = queryBizLogic.getAllTableNames(aliasName, Constants.SIMPLE_QUERY_TABLES);
                     if (objectNameValueBeanList.isEmpty() == false)
                     {
                         request.setAttribute(Constants.OBJECT_NAME_LIST, objectNameValueBeanList);

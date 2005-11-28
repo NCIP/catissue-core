@@ -441,6 +441,10 @@ public class Constants
 	public static final String SIMPLE_QUERY_NO_RESULTS = "noResults";
 	public static final String SIMPLE_QUERY_SINGLE_RESULT = "singleResult";
 	
+	//For getting the tables for Simple Query and Advance Query.
+	public static final int SIMPLE_QUERY_TABLES = 1;
+	public static final int ADVANCE_QUERY_TABLES = 2;
+	
 	//Identifiers for various Form beans
 	public static final int USER_FORM_ID = 1;
 	public static final int PARTICIPANT_FORM_ID = 2;
