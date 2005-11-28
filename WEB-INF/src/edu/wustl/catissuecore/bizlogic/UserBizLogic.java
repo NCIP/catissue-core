@@ -10,7 +10,6 @@
 
 package edu.wustl.catissuecore.bizlogic;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -18,7 +17,6 @@ import java.util.Set;
 import java.util.Vector;
 
 import edu.wustl.catissuecore.action.DomainObjectListAction;
-import edu.wustl.catissuecore.action.ForgotPasswordSearchAction;
 import edu.wustl.catissuecore.dao.DAO;
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.domain.CancerResearchGroup;
@@ -62,7 +60,6 @@ public class UserBizLogic extends DefaultBizLogic
         
         try
         {
-            
             List list = dao.retrieve(Department.class.getName(),
                     Constants.SYSTEM_IDENTIFIER, user.getDepartment()
                             .getSystemIdentifier());
@@ -205,16 +202,12 @@ public class UserBizLogic extends DefaultBizLogic
         Logger.out.debug("--------------- In here ---------------");
         Vector authorizationData = new Vector();
         Set group = new HashSet();
-        SecurityDataBean userGroupRoleProtectionGroupBean;
-        String protectionGroupName;
-        gov.nih.nci.security.authorization.domainobjects.User user ;
-        Collection coordinators;
         User aUser = (User)obj;
         String userId = String.valueOf(aUser.getCsmUserId());
         try
         {
-            user = new gov.nih.nci.security.authorization.domainobjects.User();
-            user = SecurityManager.getInstance(this.getClass()).getUserById(userId);
+            gov.nih.nci.security.authorization.domainobjects.User user = 
+            		SecurityManager.getInstance(this.getClass()).getUserById(userId);
             Logger.out.debug(" User: "+user.getLoginName());
             group.add(user);
         }
@@ -224,8 +217,8 @@ public class UserBizLogic extends DefaultBizLogic
         }
         
         // Protection group of PI
-        protectionGroupName = Constants.getUserPGName(aUser.getSystemIdentifier());
-        userGroupRoleProtectionGroupBean = new SecurityDataBean();
+        String protectionGroupName = Constants.getUserPGName(aUser.getSystemIdentifier());
+        SecurityDataBean userGroupRoleProtectionGroupBean = new SecurityDataBean();
         userGroupRoleProtectionGroupBean.setUser(userId);
         userGroupRoleProtectionGroupBean.setRoleName(Roles.UPDATE_ONLY);
         userGroupRoleProtectionGroupBean.setGroupName(Constants.getUserGroupName(aUser.getSystemIdentifier()));
@@ -415,69 +408,37 @@ public class UserBizLogic extends DefaultBizLogic
     public String sendForgotPassword(String emailAddress) throws DAOException
     {
         String statusMessageKey = null;
-        try
+        List list = retrieve(User.class.getName(), "emailAddress", emailAddress);
+        if (!list.isEmpty())
         {
-            List list = null;
-            gov.nih.nci.security.authorization.domainobjects.User csmUser = null;
-            
-            //Retrieve the user using email address from csm user table.
-            List csmList = SecurityManager.getInstance(
-                    ForgotPasswordSearchAction.class).getUsersByEmail(
-                    emailAddress);
-            
-            if (!csmList.isEmpty())
+        	User user = (User) list.get(0);
+        	if (user.getActivityStatus().equals(Constants.ACTIVITY_STATUS_ACTIVE))
             {
-                csmUser = (gov.nih.nci.security.authorization.domainobjects.User) csmList.get(0);
-                //Retrieve the user using csm user id from catissue user table.
-                list = retrieve(User.class.getName(), Constants.CSM_USER_ID,
-                        String.valueOf(csmUser.getUserId()));
-            }
-            
-            //If the user is present.
-            if ((csmUser != null) && (!list.isEmpty()))
-            {
-                User user = (User) list.get(0);
+                EmailHandler emailHandler = new EmailHandler();
                 
-                //If the user is Active send the password to the user to  
-                //the email address provided while registration.
-                if (user.getActivityStatus().equals(
-                        Constants.ACTIVITY_STATUS_ACTIVE))
+                //Send the login details email to the user.
+                boolean emailStatus = emailHandler.sendLoginDetailsEmail(user, null);
+                
+                if (emailStatus)
                 {
-                    EmailHandler emailHandler = new EmailHandler();
-                    
-                    //Get the role of the user. 
-                    String roleOfUser = SecurityManager.getInstance(ApproveUserBizLogic.class)
-											.getUserRole(csmUser.getUserId().longValue()).getName();
-                    
-                    //Send the login details email to the user.
-                    boolean emailStatus = emailHandler.sendLoginDetailsEmail(user, null);
-                    
-                    if (emailStatus)
-                    {
-                        statusMessageKey = "password.send.success";
-                    }
-                    else
-                    {
-                        statusMessageKey = "password.send.failure";
-                    }
+                    statusMessageKey = "password.send.success";
                 }
                 else
                 {
-                    //Error key if the user is not active.
-                    statusMessageKey = "errors.forgotpassword.user.notApproved";
+                    statusMessageKey = "password.send.failure";
                 }
             }
             else
             {
-                //Error key if the user is not present.
-                statusMessageKey = "errors.forgotpassword.user.unknown";
-            }
+                //Error key if the user is not active.
+                statusMessageKey = "errors.forgotpassword.user.notApproved";
+            }            	
         }
-        catch (SMException smExp)
+        else
         {
-            throw new DAOException(smExp.getMessage(),smExp);
+        	// Error key if the user is not present.
+            statusMessageKey = "errors.forgotpassword.user.unknown";
         }
-
         return statusMessageKey;
     }
 }

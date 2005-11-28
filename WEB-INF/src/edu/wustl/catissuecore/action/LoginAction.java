@@ -23,7 +23,6 @@ import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.security.SecurityManager;
-import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.util.PasswordManager;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
@@ -90,17 +89,13 @@ public class LoginAction extends Action
 	                
 	                session.setAttribute(Constants.SESSION_DATA,sessionData);
 
-	                Logger.out.info(">>>>>>>>>>>>> SUCESSFUL LOGIN B <<<<<<<<< ");
-	                
 	                return mapping.findForward(Constants.SUCCESS);
 	            }
 	            else
 	            {
-	                Logger.out.info("User " + loginName
-	                        + " Invalid user. Sending back to the login Page");
+	                Logger.out.info("User " + loginName + " Invalid user. Sending back to the login Page");
 	                ActionErrors errors = new ActionErrors();
-	                errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-	                        "errors.incorrectLoginNamePassword"));
+	                errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.incorrectLoginNamePassword"));
 	
 	                //Report any errors we have discovered
 	                if (!errors.isEmpty())
@@ -111,29 +106,25 @@ public class LoginAction extends Action
 	            }
         	} // if valid user
         	else
-        	{                Logger.out.info("User " + loginName
-                    + " Invalid user. Sending back to the login Page");
-            ActionErrors errors = new ActionErrors();
-            errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-                    "errors.incorrectLoginNamePassword"));
+        	{                
+        		Logger.out.info("User " + loginName + " Invalid user. Sending back to the login Page");
+        		ActionErrors errors = new ActionErrors();
+        		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.incorrectLoginNamePassword"));
 
-            //Report any errors we have discovered
-            if (!errors.isEmpty())
-            {
-                saveErrors(request, errors);
-            }
-           	System.out.println("\n\n\n\n****** Invalid User : " + loginName + "\n\n\n\n\n****");
-            return (mapping.findForward(Constants.FAILURE));
-
-
+	            //Report any errors we have discovered
+	            if (!errors.isEmpty())
+	            {
+	                saveErrors(request, errors);
+	            }
+	           	System.out.println("\n\n\n\n****** Invalid User : " + loginName + "\n\n\n\n\n****");
+	            return (mapping.findForward(Constants.FAILURE));
         	} // invalid user
        	}
         catch (Exception e)
         {
-            Logger.out.info("Exception: " + e.getMessage());
+            Logger.out.info("Exception: " + e.getMessage(), e);
             ActionErrors errors = new ActionErrors();
-            errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-                    "errors.incorrectLoginNamePassword"));
+            errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.incorrectLoginNamePassword"));
             //Report any errors we have discovered
             if (!errors.isEmpty())
             {
@@ -145,42 +136,19 @@ public class LoginAction extends Action
     
     private User getUser(String loginName) throws DAOException
     {
-    	System.out.println("\n\n\n\n****** User : " + loginName + "\n\n\n\n\n****");
-        gov.nih.nci.security.authorization.domainobjects.User csmUser = null;
-        try
-        {
-            csmUser = SecurityManager.getInstance(UserBizLogic.class).getUser(loginName);
-            
-            if (csmUser != null)
-            {
-            	Long uidCSM = csmUser.getUserId();
-            	
-            	UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getBizLogic(Constants.USER_FORM_ID);
-            	String[] whereColumnName = {"activityStatus","csmUserId"};
-            	String[] whereColumnCondition = {"=","="};
-            	String[] whereColumnValue = {Constants.ACTIVITY_STATUS_ACTIVE, uidCSM.toString()};
-            	List users = userBizLogic.retrieve(User.class.getName(), whereColumnName, whereColumnCondition, whereColumnValue,Constants.AND_JOIN_CONDITION);
-            	Logger.out.debug("USERS...........users.isEmpty()......."+users.isEmpty());
-            	if (users.isEmpty() == false)
-            	{
-            	    User validUser = (User)users.get(0);
-            	    return validUser;
-            	}
-            }
-            
-            return null;
-        }
-        catch (SMException e)
-        {
-//        	System.out.println("\n\n\n\n****** error : " + e + "\n\n\n\n\n****");
-            Logger.out.debug("Unable to get user : " + e.getMessage());
-            return null;
-        }
-        catch (Exception e1)
-        {
-//        	System.out.println("\n\n\n\n****** error : " + e1 + "\n\n\n\n\n****");
-            Logger.out.debug("Unable to get user : " + e1.getMessage());
-            return null;
-        }
+    	UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getBizLogic(Constants.USER_FORM_ID);
+    	String[] whereColumnName = {"activityStatus","loginName"};
+    	String[] whereColumnCondition = {"=","="};
+    	String[] whereColumnValue = {Constants.ACTIVITY_STATUS_ACTIVE, loginName};
+    	
+    	List users = userBizLogic.retrieve(User.class.getName(), whereColumnName, 
+    			whereColumnCondition, whereColumnValue,Constants.AND_JOIN_CONDITION);
+    	
+    	if (!users.isEmpty())
+    	{
+    	    User validUser = (User)users.get(0);
+    	    return validUser;
+    	}
+        return null;
     }
 }

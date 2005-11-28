@@ -181,8 +181,7 @@ public class CollectionProtocolBizLogic extends DefaultBizLogic implements Roles
         String userId = new String();
         try
         {
-            user = new gov.nih.nci.security.authorization.domainobjects.User();
-            userId = String.valueOf(collectionProtocol.getPrincipalInvestigator().getSystemIdentifier());
+            userId = String.valueOf(collectionProtocol.getPrincipalInvestigator().getCsmUserId());
             Logger.out.debug(" PI ID: "+userId);
             user = SecurityManager.getInstance(this.getClass()).getUserById(userId);
             Logger.out.debug(" PI: "+user.getLoginName());
@@ -212,7 +211,7 @@ public class CollectionProtocolBizLogic extends DefaultBizLogic implements Roles
             for(Iterator it = coordinators.iterator();it.hasNext();)
             {
                  aUser  =(User)it.next();
-                 userId = String.valueOf(aUser.getSystemIdentifier());
+                 userId = String.valueOf(aUser.getCsmUserId());
                  Logger.out.debug(" COORDINATOR ID: "+userId);
                  user = SecurityManager.getInstance(this.getClass()).getUserById(userId);
                  Logger.out.debug(" COORDINATOR: "+user.getLoginName());

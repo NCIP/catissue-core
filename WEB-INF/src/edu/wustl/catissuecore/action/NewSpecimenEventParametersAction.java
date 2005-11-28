@@ -24,7 +24,6 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.DefaultBizLogic;
 import edu.wustl.catissuecore.domain.CellSpecimenReviewParameters;
@@ -44,11 +43,10 @@ import edu.wustl.catissuecore.domain.SpunEventParameters;
 import edu.wustl.catissuecore.domain.ThawEventParameters;
 import edu.wustl.catissuecore.domain.TissueSpecimenReviewEventParameters;
 import edu.wustl.catissuecore.domain.TransferEventParameters;
+import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
-import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.util.logger.Logger;
-import gov.nih.nci.security.authorization.domainobjects.User;
 
 public class NewSpecimenEventParametersAction  extends SecureAction
 {
@@ -99,8 +97,7 @@ public class NewSpecimenEventParametersAction  extends SecureAction
 	            			rowData.add(String.valueOf(eventParameters.getSystemIdentifier()));
 	            			rowData.add(events[0]);//Event Name
 	            			            			
-	            			User user = SecurityManager.getInstance(NewSpecimenForm.class).getUserById(String.valueOf(eventParameters.getUser().getSystemIdentifier()));
-							
+	            			User user = eventParameters.getUser();
 	            			rowData.add(user.getLastName() + ", " + user.getFirstName());
 	            			rowData.add(Utility.parseDateToString(eventParameters.getTimestamp(),Constants.DATE_PATTERN_MM_DD_YYYY));
 	            			rowData.add(events[1]);//pageOf

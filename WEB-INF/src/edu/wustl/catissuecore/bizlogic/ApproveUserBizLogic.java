@@ -60,18 +60,20 @@ public class ApproveUserBizLogic extends DefaultBizLogic
                 csmUser.setLastName(user.getLastName());
                 csmUser.setFirstName(user.getFirstName());
                 csmUser.setEmailId(user.getEmailAddress());
-                if (user.getActivityStatus().equals(
-                        Constants.ACTIVITY_STATUS_ACTIVE))
-                    csmUser.setPassword(PasswordManager.encode(PasswordManager.generatePassword()));
                 csmUser.setStartDate(Calendar.getInstance().getTime());
+                
+                if (user.getActivityStatus().equals(Constants.ACTIVITY_STATUS_ACTIVE))
+                {
+                    csmUser.setPassword(PasswordManager.encode(PasswordManager.generatePassword()));
+                }
+                
                 
                 SecurityManager.getInstance(ApproveUserBizLogic.class).createUser(csmUser);
                 
                 if (user.getRoleId() != null)
                 {
                     SecurityManager.getInstance(ApproveUserBizLogic.class)
-                            .assignRoleToUser(csmUser.getLoginName(),
-                                    user.getRoleId());
+                            .assignRoleToUser(csmUser.getLoginName(), user.getRoleId());
                 }
                 
                 user.setCsmUserId(csmUser.getUserId());
@@ -101,18 +103,16 @@ public class ApproveUserBizLogic extends DefaultBizLogic
                 }
             }
             
+            EmailHandler emailHandler = new EmailHandler(); 
+            
             //If user is approved send approval and login details emails to the user and administrator.
             if (Constants.ACTIVITY_STATUS_ACTIVE.equals(user.getActivityStatus()))
 	        {
-                EmailHandler emailHandler = new EmailHandler(); 
-                
                 //Send approval email to the user and administrator.
                 emailHandler.sendApprovalEmail(user);
 	        }
             else if (Constants.ACTIVITY_STATUS_REJECT.equals(user.getActivityStatus()))
 	        {//If user is rejected send rejection email to the user and administrator.
-                EmailHandler emailHandler = new EmailHandler();
-                
                 //Send rejection email to the user and administrator.
                 emailHandler.sendRejectionEmail(user);
 	        }
@@ -167,14 +167,13 @@ public class ApproveUserBizLogic extends DefaultBizLogic
         Set group = new HashSet();
         SecurityDataBean userGroupRoleProtectionGroupBean;
         String protectionGroupName;
-        gov.nih.nci.security.authorization.domainobjects.User user ;
         Collection coordinators;
         User aUser = (User)obj;
         String userId = String.valueOf(aUser.getCsmUserId());
         try
         {
-            user = new gov.nih.nci.security.authorization.domainobjects.User();
-            user = SecurityManager.getInstance(this.getClass()).getUserById(userId);
+            gov.nih.nci.security.authorization.domainobjects.User user = 
+            				SecurityManager.getInstance(this.getClass()).getUserById(userId);
             Logger.out.debug(" User: "+user.getLoginName());
             group.add(user);
         }
