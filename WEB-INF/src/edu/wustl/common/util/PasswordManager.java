@@ -8,26 +8,17 @@
  */ 
 package edu.wustl.common.util;
 
-import java.text.MessageFormat;
 import java.util.List;
 import java.util.Random;
 
 import javax.servlet.http.HttpSession;
 
-import edu.wustl.catissuecore.action.DomainObjectListAction;
-import edu.wustl.catissuecore.action.LoginAction;
-import edu.wustl.catissuecore.actionForm.AbstractActionForm;
-import edu.wustl.catissuecore.actionForm.UserForm;
 import edu.wustl.catissuecore.bizlogic.AbstractBizLogic;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
-import edu.wustl.catissuecore.domain.AbstractDomainObject;
-import edu.wustl.catissuecore.domain.DomainObjectFactory;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.security.SecurityManager;
-import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
 
@@ -350,12 +341,12 @@ public class PasswordManager
     	return errMsg;
     	
     }
-//    public static void main(String[] args)
-//    {
-//    	String pwd = "forgot";
-//    	String encodedPWD = encode(pwd);
-//    	System.out.println("encodedPWD "+encodedPWD);
-//    	
-//        System.out.println(decode(encodedPWD));
-//    }
+    public static void main(String[] args)
+    {
+    	String pwd = "forgot";
+    	String encodedPWD = encode(pwd);
+    	System.out.println("encodedPWD "+encodedPWD);
+    	
+        System.out.println(decode("644147577165776c6b636f6f"));
+    }
 }
