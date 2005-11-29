@@ -1382,6 +1382,8 @@ public class Constants
 	public static final String GENERIC_SECURITYMANAGER_ERROR = "The Security Violation error occured during a database operation. Please report this problem to the adminstrator";
 	public static final String  DATABASE_IN_USED = "MYSQL";
 	
-	public static final String PASSWORD_CHANGE_IN_SESSION = "changepassword"; 
+	public static final String PASSWORD_CHANGE_IN_SESSION = "changepassword";
 	
+	public static final String BOOLEAN_YES = "Yes";
+	public static final String BOOLEAN_NO = "No";
 }
