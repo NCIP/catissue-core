@@ -231,6 +231,17 @@
 			deleteItem.innerHTML = "&nbsp;<a HREF='" + deleteLink + "'>Delete</a>";
 			
 		}
+		else if(specimenCount = sum)
+		{
+			var editItem = document.getElementById('<%=Constants.EDIT%>');
+			var editLink = "<%=SearchUtil.getLink("Specimen")%>"+ selectedNode +"&itemId="+itemId;
+			var s = "<a HREF='" + editLink + "' target='searchPageFrame'>Edit</a>"
+			editItem.innerHTML = "" + s;
+			
+			var deleteItem = document.getElementById('<%=Constants.DELETE%>');
+			var deleteLink = "AdvanceSearch.do?delete=true&itemId="+itemId;
+			deleteItem.innerHTML = "&nbsp;<a HREF='" + deleteLink + "'>Delete</a>";
+		}
 		if(sum == 0)
 		{
 			disableAll();
