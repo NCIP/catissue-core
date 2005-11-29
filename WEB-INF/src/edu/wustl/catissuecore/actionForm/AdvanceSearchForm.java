@@ -36,6 +36,42 @@ import edu.wustl.common.util.SearchUtil;
 public class AdvanceSearchForm extends ActionForm
 {
 	/**
+	 * @return Returns the columnNames.
+	 */
+	public String[] getColumnNames() {
+		return columnNames;
+	}
+	/**
+	 * @param columnNames The columnNames to set.
+	 */
+	public void setColumnNames(String[] columnNames) {
+		this.columnNames = columnNames;
+	}
+	/**
+	 * @return Returns the selectedColumnNames.
+	 */
+	public String[] getSelectedColumnNames() {
+		return selectedColumnNames;
+	}
+	/**
+	 * @param selectedColumnNames The selectedColumnNames to set.
+	 */
+	public void setSelectedColumnNames(String[] selectedColumnNames) {
+		this.selectedColumnNames = selectedColumnNames;
+	}
+	/**
+	 * @return Returns the tableName.
+	 */
+	public String getTableName() {
+		return tableName;
+	}
+	/**
+	 * @param tableName The tableName to set.
+	 */
+	public void setTableName(String tableName) {
+		this.tableName = tableName;
+	}
+	/**
 	 * A map that handles all the values of Advanced Search pages
 	 */
     private Map values = new HashMap();
@@ -62,6 +98,12 @@ public class AdvanceSearchForm extends ActionForm
     
     
     String itemNodeId = "";
+    
+    //Variables neccessary for Configuration of Advance Search Results 
+    
+     private String tableName;
+     private String []selectedColumnNames;
+     private String []columnNames;
     
     /**
      * Returns the selected node from a query tree.
