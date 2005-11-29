@@ -23,6 +23,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.actionForm.AdvanceSearchForm;
 import edu.wustl.catissuecore.bizlogic.AdvanceQueryBizlogic;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.QueryBizLogic;
@@ -50,6 +51,8 @@ public class AdvanceSearchResultsAction extends BaseAction
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
+		
+		AdvanceSearchForm advSearchForm = (AdvanceSearchForm)form;
 		//Query Start object
 		String aliasName = Constants.PARTICIPANT;
 		String pageOf=Constants.PAGEOF_QUERY_RESULTS;
@@ -57,8 +60,6 @@ public class AdvanceSearchResultsAction extends BaseAction
 		//Get the advance query root object from session 
 		HttpSession session = request.getSession();
 		DefaultMutableTreeNode root = (DefaultMutableTreeNode)session.getAttribute(Constants.ADVANCED_CONDITIONS_ROOT);
-		//change the values in the conditions for the query-adding quotes to string & changing date format
-		traverseTree(root);
 		//Create Advance Query object
 		Query query = QueryFactory.getInstance().newQuery(Query.ADVANCED_QUERY, aliasName);
 		
@@ -74,20 +75,29 @@ public class AdvanceSearchResultsAction extends BaseAction
 		List columnNames = new ArrayList();
 		SimpleQueryBizLogic bizLogic = new SimpleQueryBizLogic(); 
 		
+		String []selectedColumns = advSearchForm.getSelectedColumnNames();
+		//change the values in the conditions for the query-adding quotes to string 
+		//& changing date format only when the spreadsheet loads the first time.	
+		if(selectedColumns==null)
+		{
+			traverseTree(root);
+		}
+
 		//Set the result view for Advance Search
-	 	Vector selectDataElements = bizLogic.getSelectDataElements(null,tableSet, columnNames);
+	 	Vector selectDataElements = bizLogic.getSelectDataElements(selectedColumns,tableSet, columnNames);
 	 	query.setResultView(selectDataElements);
 	 	
 	 	SessionDataBean sessionData = getSessionData(request);
 	 	//Temporary table name with userID attached
 		String tempTableName = Constants.QUERY_RESULTS_TABLE+"_"+sessionData.getUserId();
 		
-		//Set Identifier of participant,Collection Protocol, Specimen Collection Group and Specimen if not existing in the resultView
+		//Set Identifier of Participant,Collection Protocol, Specimen Collection Group and Specimen if not existing in the resultView
 		Vector tablesVector = new Vector();
 		tablesVector.add(Constants.PARTICIPANT);
 		tablesVector.add(Constants.COLLECTION_PROTOCOL);
 		tablesVector.add(Constants.SPECIMEN_COLLECTION_GROUP);
 		tablesVector.add(Constants.SPECIMEN);
+		tablesVector.add(Constants.COLLECTION_PROTOCOL_REGISTRATION);
 		Map columnIdsMap = query.getIdentifierColumnIds(tablesVector);
 		session.setAttribute(Constants.COLUMN_ID_MAP,columnIdsMap);
 		
@@ -102,8 +112,11 @@ public class AdvanceSearchResultsAction extends BaseAction
 		Object selectedTables[] = tableSet.toArray();
 		session.setAttribute(Constants.TABLE_ALIAS_NAME,selectedTables);
 		
+		//Remove shopping cart attribute from session
+		//session.removeAttribute(Constants.SHOPPING_CART);
+		
 		request.setAttribute(Constants.PAGEOF, pageOf);
-		return mapping.findForward("success");
+		return mapping.findForward(Constants.SUCCESS);
 	}
 
 	//Recursive function to Traverse root and set tables in path
@@ -159,7 +172,7 @@ public class AdvanceSearchResultsAction extends BaseAction
 
 				String value = condition.getValue();
 				String operator = (condition.getOperator()).getOperator();
-				//Converting to operator = 'Like' when it is STARTS WITH, ENDS WITH and CONTAINS
+				//Converting to operator = 'Like' when it is STARTS WITH, ENDS WITH and CONTAINS and adding '%' to value
 				if(Operator.getOperator(operator)!=null)
 				{
 					if(operator.equals(Operator.STARTS_WITH))
@@ -175,7 +188,7 @@ public class AdvanceSearchResultsAction extends BaseAction
 						|| attributeType.equalsIgnoreCase(Constants.FIELD_TYPE_TEXT))
 				{
 					//Add Quotes for String values
-					if (attributeType.equalsIgnoreCase(Constants.FIELD_TYPE_VARCHAR))
+					if (attributeType.equalsIgnoreCase(Constants.FIELD_TYPE_VARCHAR) || attributeType.equalsIgnoreCase(Constants.FIELD_TYPE_TEXT))
 					{
 						value = "'" + value + "'";
 					}
