@@ -602,8 +602,48 @@ public class Validator
 				//    }
     // ------------------------------Date Validation ends-----------------------------------------------------------------------
     
+    /**
+     * returns true if zip code is valid else returns false
+     */
+    public boolean isValidZipCode(String zipCode)
+    {
+    	boolean result=false;
+    	try
+    	{
+    		// valid format for zip code are '99999-9999' or '99999'
+    		Pattern p = Pattern.compile("\\d{5}\\-\\d{4}|\\d{5}"); 
+			Matcher m = p.matcher(zipCode);
+			result = m.matches();
+    	}	
+		catch(Exception exp)
+		{
+			Logger.out.error("Check Zip Code : exp : "+ exp);
+			result = false;
+		}
+		return result;
+    }
     
-    
+    /**
+     * returns true if Phone/Fax number is valid else returns false
+     */
+    public boolean isValidPhoneNumber(String phoneNumber)
+    {
+    	boolean result=false;
+    	try
+    	{
+    		// valid format for phone/fax number ar '(999)999-9999' or '999-999-9999'
+    		Pattern p = Pattern.compile("\\(\\d{3}\\)\\d{3}-\\d{4}|\\d{3}\\-\\d{3}-\\d{4}"); // for fax and phone
+			Matcher m = p.matcher(phoneNumber);
+			result = m.matches();
+    	}	
+		catch(Exception exp)
+		{
+			Logger.out.error("Check Phone/Fax Number : exp : "+ exp);
+			result = false;
+		}
+		return result;
+    }
+
     public static void main(String[] args)
     {
         Validator validator = new Validator();
