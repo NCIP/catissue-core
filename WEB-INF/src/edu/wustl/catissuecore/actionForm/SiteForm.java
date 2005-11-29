@@ -425,8 +425,36 @@ public class SiteForm extends AbstractActionForm
                                  .getValue("site.city")));
              }
              
-             checkValidNumber(zipCode, "site.zipCode", errors, validator);
+             //checkValidNumber(zipCode, "site.zipCode", errors, validator); // commented as validation is done in following code
+             // added for zip code , phone and fax number validation
+             if (validator.isEmpty(zipCode))
+             {
+                 errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+                         "errors.item.required", ApplicationProperties
+                                 .getValue("site.zipCode")));
+             }
+             else
+             {
+            	 if(!validator.isValidZipCode(zipCode))
+             	 {
+             		errors.add(ActionErrors.GLOBAL_ERROR,
+                             new ActionError("errors.zipCode.format",
+                                     ApplicationProperties.getValue("site.zipCode")));
+             	 }	
+             }
              
+             if(!validator.isEmpty(phoneNumber)&& !validator.isValidPhoneNumber(phoneNumber))
+         	 {
+         		errors.add(ActionErrors.GLOBAL_ERROR,
+                         new ActionError("errors.phoneNumber.format",
+                                 ApplicationProperties.getValue("site.phoneNumber")));
+         	 }
+             if(!validator.isEmpty(faxNumber)&& !validator.isValidPhoneNumber(faxNumber))
+             {
+             	errors.add(ActionErrors.GLOBAL_ERROR,
+                         new ActionError("errors.phoneNumber.format",
+                                 ApplicationProperties.getValue("site.faxNumber")));
+             }
              if(operation.equals(Constants.EDIT) && !validator.isValidOption(activityStatus))
              {
              	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("site.activityStatus")));

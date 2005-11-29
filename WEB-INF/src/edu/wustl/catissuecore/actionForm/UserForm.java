@@ -744,7 +744,15 @@ public class UserForm extends AbstractActionForm
                                     "errors.item.required", ApplicationProperties
                                             .getValue("user.zipCode")));
                         }
-
+                        else
+                        {
+                        	if(!validator.isValidZipCode(zipCode))
+                        	{
+                        		errors.add(ActionErrors.GLOBAL_ERROR,
+                                        new ActionError("errors.zipCode.format",
+                                                ApplicationProperties.getValue("user.zipCode")));
+                        	}
+                        }
                         if(!validator.isValidOption(country))
                         {
                             errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
@@ -758,7 +766,21 @@ public class UserForm extends AbstractActionForm
                                     "errors.item.required", ApplicationProperties
                                             .getValue("user.phoneNumber")));
                         }
-
+                        else
+                        {
+                        	if(!validator.isValidPhoneNumber(phoneNumber))
+                        	{
+                        		errors.add(ActionErrors.GLOBAL_ERROR,
+                                        new ActionError("errors.phoneNumber.format",
+                                                ApplicationProperties.getValue("user.phoneNumber")));
+                        	}
+                        }
+                        if(!validator.isEmpty(faxNumber)&& !validator.isValidPhoneNumber(faxNumber))
+                        {
+                        	errors.add(ActionErrors.GLOBAL_ERROR,
+                                    new ActionError("errors.phoneNumber.format",
+                                            ApplicationProperties.getValue("user.faxNumber")));
+                        }
                         if (validator.isEmpty(emailAddress))
                         {
                             errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
