@@ -308,6 +308,9 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 					}
 				}
 			// ---------END-----------------------------------------
+			
+			//  Protocol Coordinators  not mandatory - Part of bug 813
+			/*
 			 if(this.protocolCoordinatorIds == null)
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("collectionprotocol.protocolcoordinator")));
@@ -326,7 +329,8 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 				 	}
 				 }
 			 }
-			 Logger.out.debug("Protocol Coordinators : " + protocolCoordinatorIds ); 
+			 Logger.out.debug("Protocol Coordinators : " + protocolCoordinatorIds );
+			 */ 
 			Iterator it = this.values.keySet().iterator();
 			
 			boolean bClinicalStatus = false;
