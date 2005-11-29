@@ -85,9 +85,13 @@ public class SimpleConditionsImpl extends ConditionsImpl {
         }
         
         //Adding activity status fields in the end
-        if(activityStatusConditions.size() > 0)
+        if(activityStatusConditions.size() > 0 && hasConditionsExceptActivityStatus())
         {
         	whereConditionsString.append(" "+Operator.AND+" ");
+        }
+        else
+        {
+        	whereConditionsString.append(" ");
         }
         for(int i=0; i < activityStatusConditions.size(); i++)
         {
