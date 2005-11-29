@@ -241,6 +241,14 @@ public class SimpleQueryInterfaceForm extends ActionForm
         	            	 errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("simpleQuery.decvalue.required"));
         	            	 conditionError = true;
         	            } // double
+        	            else if(dataType.trim().equals("tinyint"))
+        	            {
+        	            	if(!enteredValue.trim().equalsIgnoreCase(Constants.BOOLEAN_YES) && !enteredValue.trim().equalsIgnoreCase(Constants.BOOLEAN_NO))
+        	            	{
+        	            		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("simpleQuery.tinyint.format"));
+       	            	 		conditionError = true;
+        	            	}
+        	            }
         	        }
                 }
             }
