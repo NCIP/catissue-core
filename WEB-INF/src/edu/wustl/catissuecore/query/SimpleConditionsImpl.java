@@ -63,7 +63,7 @@ public class SimpleConditionsImpl extends ConditionsImpl {
         for(int i=0; i < whereConditions.size(); i++)
         {
         	simpleConditionsNode = (SimpleConditionsNode)whereConditions.get(i);
-        	if(i==0)
+        	if(i==0 && hasConditionsExceptActivityStatus())
         		whereConditionsString.append(" ( ");
         	
         	// Separating the activity status fields from rest of the fields so that 
@@ -79,7 +79,7 @@ public class SimpleConditionsImpl extends ConditionsImpl {
         	}
             if(i != whereConditions.size()-1 && !((SimpleConditionsNode)whereConditions.get(i+1)).getCondition().getDataElement().getField().equals(Constants.ACTIVITY_STATUS_COLUMN))
                 whereConditionsString.append((simpleConditionsNode).toSQLString(tableSufix));
-            else
+            else if(hasConditionsExceptActivityStatus())
                 whereConditionsString.append((simpleConditionsNode).getCondition().toSQLString(tableSufix)+" ) ");
             whereConditionsString.append(" ");
         }
@@ -152,6 +152,37 @@ public HashSet getQueryObjects()
         }
     }
     return queryObjects;
+}
+
+/* (non-Javadoc)
+ * @see edu.wustl.catissuecore.query.ConditionsImpl#hasConditions()
+ */
+public boolean hasConditions() {
+	boolean hasConditions = false;
+	if(whereConditions.size()>0)
+	{
+		hasConditions = true;
+	}
+	return hasConditions;
+}
+
+/**
+ * Returns true if there are conditions other than activity status condition in query
+ * @return
+ */
+public boolean hasConditionsExceptActivityStatus() {
+	boolean hasConditions = false;
+	SimpleConditionsNode simpleConditionsNode;
+	for(int i=0; i< whereConditions.size(); i++)
+	{
+		simpleConditionsNode = (SimpleConditionsNode) whereConditions.get(i);
+		if(!simpleConditionsNode.getCondition().getDataElement().getField().equals(Constants.ACTIVITY_STATUS_COLUMN))
+				{
+					hasConditions = true;
+					break;
+				}
+	}
+	return hasConditions;
 }
 
     
