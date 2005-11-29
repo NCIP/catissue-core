@@ -430,7 +430,7 @@ public class Constants
 	public static final String SPECIMEN = "Specimen";
 	public static final String SEGMENT = "Segment";
 	public static final String SAMPLE = "Sample";
-	
+	public static final String COLLECTION_PROTOCOL_REGISTRATION = "CollectionProtocolRegistration";
 	public static final String PARTICIPANT_ID_COLUMN = "PARTICIPANT_ID";
 	public static final String ACCESSION_ID_COLUMN = "ACCESSION_ID";
 	public static final String SPECIMEN_ID_COLUMN = "SPECIMEN_ID";
