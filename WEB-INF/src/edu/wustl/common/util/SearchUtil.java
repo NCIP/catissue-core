@@ -222,7 +222,7 @@ public class SearchUtil
 		        break;
 			case Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID :
 				searchFieldData = new SearchFieldData[6];
-		        searchFieldData[0] = initSearchUIData(SearchUtil.STRING, "specimenCollectionGroup.site","SpecimenCollectionGroup","SITE_ID","siteName",Constants.STRING_OPERATORS,"","");//SITE_ID will be SITE_NAME
+		        searchFieldData[0] = initSearchUIData(SearchUtil.STRING, "specimenCollectionGroup.site","SpecimenCollectionGroup","NAME","siteName",Constants.STRING_OPERATORS,"","");//SITE_ID will be SITE_NAME
 		        searchFieldData[1] = initSearchUIData(SearchUtil.DATE,"specimenCollectionGroup.studyCalendarEventPoint","CollectionProtocolEvent","STUDY_CALENDAR_EVENT_POINT","studyCalendarEventPoint",Constants.DATE_NUMERIC_OPERATORS,"","");
 		        searchFieldData[2] = initSearchUIData(SearchUtil.STRING,"specimenCollectionGroup.clinicalDiagnosis","SpecimenCollectionGroup","CLINICAL_DIAGNOSIS","clinicalDiagnosis",Constants.ENUMERATED_OPERATORS,Constants.CLINICAL_DIAGNOSIS_LIST,"");
 		        searchFieldData[3] = initSearchUIData(SearchUtil.STRING,"specimenCollectionGroup.clinicalStatus","SpecimenCollectionGroup","CLINICAL_STATUS","clinicalStatus",Constants.ENUMERATED_OPERATORS,Constants.CLINICAL_STATUS_LIST,"");
@@ -231,7 +231,7 @@ public class SearchUtil
 				break;
 			case Constants.NEW_SPECIMEN_FORM_ID :
 				searchFieldData = new SearchFieldData[9];
-				searchFieldData[0] = initSearchUIData(SearchUtil.STRING, "specimen.type","Specimen","CLASS_NAME","className",Constants.ENUMERATED_OPERATORS,Constants.SPECIMEN_CLASS_LIST,"");
+				searchFieldData[0] = initSearchUIData(SearchUtil.STRING, "specimen.type","Specimen","SPECIMEN_CLASS","className",Constants.ENUMERATED_OPERATORS,Constants.SPECIMEN_CLASS_LIST,"");
 				searchFieldData[1] = initSearchUIData(SearchUtil.STRING,"specimen.subType","Specimen","TYPE","type",Constants.ENUMERATED_OPERATORS,Constants.SPECIMEN_TYPE_LIST,"");
 				searchFieldData[2] = initSearchUIData(SearchUtil.STRING, "specimen.tissueSite","SpecimenCharacteristics","TISSUE_SITE","tissueSite",Constants.ENUMERATED_OPERATORS,Constants.TISSUE_SITE_LIST,"");
 				searchFieldData[3] = initSearchUIData(SearchUtil.STRING,"specimen.tissueSide","SpecimenCharacteristics","TISSUE_SIDE","tissueSide",Constants.ENUMERATED_OPERATORS,Constants.TISSUE_SIDE_LIST,"");
