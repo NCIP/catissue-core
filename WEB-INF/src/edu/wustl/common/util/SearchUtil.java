@@ -72,8 +72,8 @@ public class SearchUtil
 		{
 			case DATATYPE_DATE:
 			case DATATYPE_NUMERIC:		
-				operatorList.add(new NameValueBean(Operator.EQUALS_CONDITION,Operator.EQUAL));
-				operatorList.add(new NameValueBean(Operator.NOT_EQUALS_CONDITION,Operator.NOT_EQUALS));
+				operatorList.add(new NameValueBean(Operator.EQUALS_CONDITION,Operator.EQUALS_CONDITION));
+				operatorList.add(new NameValueBean(Operator.NOT_EQUALS_CONDITION,Operator.NOT_EQUALS_CONDITION));
 				operatorList.add(new NameValueBean(Operator.LESS_THAN,Operator.LESS_THAN));
 				operatorList.add(new NameValueBean(Operator.LESS_THAN_OR_EQUALS,Operator.LESS_THAN_OR_EQUALS));
 				operatorList.add(new NameValueBean(Operator.GREATER_THAN,Operator.GREATER_THAN));
@@ -86,13 +86,13 @@ public class SearchUtil
 				operatorList.add(new NameValueBean(Operator.STARTS_WITH,Operator.STARTS_WITH));
 				operatorList.add(new NameValueBean(Operator.ENDS_WITH,Operator.ENDS_WITH));
 				operatorList.add(new NameValueBean(Operator.CONTAINS,Operator.CONTAINS));
-				operatorList.add(new NameValueBean(Operator.EQUALS_CONDITION,Operator.EQUAL));
-				operatorList.add(new NameValueBean(Operator.NOT_EQUALS_CONDITION,Operator.NOT_EQUALS));
+				operatorList.add(new NameValueBean(Operator.EQUALS_CONDITION,Operator.EQUALS_CONDITION));
+				operatorList.add(new NameValueBean(Operator.NOT_EQUALS_CONDITION,Operator.NOT_EQUALS_CONDITION));
 				break;
 				
 			case DATATYPE_ENUMERATED:
-				operatorList.add(new NameValueBean(Operator.EQUALS_CONDITION,Operator.EQUAL));
-				operatorList.add(new NameValueBean(Operator.NOT_EQUALS_CONDITION,Operator.NOT_EQUALS));
+				operatorList.add(new NameValueBean(Operator.EQUALS_CONDITION,Operator.EQUALS_CONDITION));
+				operatorList.add(new NameValueBean(Operator.NOT_EQUALS_CONDITION,Operator.NOT_EQUALS_CONDITION));
 				break;
 		}
 		
@@ -222,7 +222,7 @@ public class SearchUtil
 		        break;
 			case Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID :
 				searchFieldData = new SearchFieldData[6];
-		        searchFieldData[0] = initSearchUIData(SearchUtil.STRING, "specimenCollectionGroup.site","SpecimenCollectionGroup","NAME","siteName",Constants.STRING_OPERATORS,"","");//SITE_ID will be SITE_NAME
+		        searchFieldData[0] = initSearchUIData(SearchUtil.STRING, "specimenCollectionGroup.site","Site","NAME","siteName",Constants.STRING_OPERATORS,"","");//SITE_ID will be SITE_NAME
 		        searchFieldData[1] = initSearchUIData(SearchUtil.DATE,"specimenCollectionGroup.studyCalendarEventPoint","CollectionProtocolEvent","STUDY_CALENDAR_EVENT_POINT","studyCalendarEventPoint",Constants.DATE_NUMERIC_OPERATORS,"","");
 		        searchFieldData[2] = initSearchUIData(SearchUtil.STRING,"specimenCollectionGroup.clinicalDiagnosis","SpecimenCollectionGroup","CLINICAL_DIAGNOSIS","clinicalDiagnosis",Constants.ENUMERATED_OPERATORS,Constants.CLINICAL_DIAGNOSIS_LIST,"");
 		        searchFieldData[3] = initSearchUIData(SearchUtil.STRING,"specimenCollectionGroup.clinicalStatus","SpecimenCollectionGroup","CLINICAL_STATUS","clinicalStatus",Constants.ENUMERATED_OPERATORS,Constants.CLINICAL_STATUS_LIST,"");
