@@ -1,6 +1,7 @@
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
+<%@ page import="java.util.StringTokenizer"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants,edu.wustl.catissuecore.actionForm.SimpleQueryInterfaceForm,java.util.List,edu.wustl.common.beans.NameValueBean"%>
 <%@ page import="edu.wustl.catissuecore.query.Operator"%>
 
@@ -47,6 +48,17 @@ function callAction(action)
 {
 	document.forms[0].action = action;
 	document.forms[0].submit();
+}
+
+function onObjectChange(element,action)
+{
+	var index = element.name.indexOf("(");
+	var lastIndex = element.name.lastIndexOf(")");
+	
+	var saveObject = document.getElementById("objectChanged");
+	saveObject.value = element.name.substring(index+1,lastIndex);
+	
+	callAction(action);
 }
 
 function setPropertyValue(propertyName, value)
@@ -121,7 +133,8 @@ function onAttributeChange(element,opComboName)
 	else
 	{
 		//If the datatype of selected column "varchar" or "text"
-		if(columnValue.substring(index+1,columnValue.length) == "varchar" || columnValue.substring(index+1,columnValue.length) == "text")
+		//alert(columnValue.substring(index+1,columnValue.length));
+		if(columnValue.match("varchar") == "varchar" || columnValue.match("text") == "text")
 		{
 			opCombo.options[0] = new Option("<%=Operator.STARTS_WITH%>","<%=Operator.STARTS_WITH%>");
 			opCombo.options[1] = new Option("<%=Operator.ENDS_WITH%>","<%=Operator.ENDS_WITH%>");
@@ -158,6 +171,7 @@ function onAttributeChange(element,opComboName)
 					<td>
 						<html:hidden property="aliasName" value="<%=aliasName%>"/>
 						<html:hidden property="<%=Constants.MENU_SELECTED%>" value="<%=selectMenu%>"/>
+						<input type="hidden" name="objectChanged" id="objectChanged" value="">
 					</td>
 				</tr>
 				<tr>
@@ -215,7 +229,7 @@ function onAttributeChange(element,opComboName)
 					<td class="formRequiredNotice" width="5">&nbsp;</td>
 					<td class="formField">
 					<%
-						String attributeAction = "javascript:callAction('SimpleQueryInterface.do?pageOf="+pageOf;
+						String attributeAction = "javascript:onObjectChange(this,'SimpleQueryInterface.do?pageOf="+pageOf;
 						if (aliasName != null)
 							attributeAction = attributeAction + "&aliasName="+aliasName+"')";
 						else
@@ -248,7 +262,15 @@ function onAttributeChange(element,opComboName)
 							String attributeType = null;
 							if(attributeNameValue != null)
 							{
-							attributeType = attributeNameValue.substring(attributeNameValue.lastIndexOf(".") + 1);
+							StringTokenizer tokenizer = new StringTokenizer(attributeNameValue,".");
+							int tokenCount = 1;
+							while(tokenizer.hasMoreTokens())
+							{
+								attributeType = tokenizer.nextToken();
+								if(tokenCount == 3) break;
+								tokenCount++;
+							}
+
 							if(attributeType.equals("varchar") || attributeType.equals("text"))
 							{
 						%>

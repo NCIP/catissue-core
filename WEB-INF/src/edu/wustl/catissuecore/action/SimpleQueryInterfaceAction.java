@@ -11,6 +11,7 @@ package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -44,6 +45,23 @@ public class SimpleQueryInterfaceAction extends SecureAction
         SimpleQueryInterfaceForm simpleQueryInterfaceForm = (SimpleQueryInterfaceForm) form;
         int counter = Integer.parseInt(simpleQueryInterfaceForm.getCounter());
         QueryBizLogic queryBizLogic = (QueryBizLogic) BizLogicFactory.getBizLogic(simpleQueryInterfaceForm.getFormId());  
+        
+        //Patch for Bug : 806
+        String objectChanged = request.getParameter("objectChanged");
+        
+        if(objectChanged != null)
+        {
+        	Map map = simpleQueryInterfaceForm.getValues();
+        	
+        	if(map.containsKey(objectChanged))
+        	{
+        		String objectValue = (String)map.get(objectChanged);
+        		String newFieldValue = objectValue + ".IDENTIFIER.bigint";
+        		
+        		String fieldKey = objectChanged.replaceAll("table","field");
+        		map.put(fieldKey,newFieldValue);
+        	}
+        }
         
         for (int i=1;i<=counter;i++)
         {
