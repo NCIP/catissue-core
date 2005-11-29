@@ -11,7 +11,7 @@
 <%@ include file="/pages/content/common/SpecimenCommonScripts.jsp" %>
 
 <%
-	String className = "value(Specimen:CLASS_NAME)";
+	String className = "value(Specimen:SPECIMEN_CLASS)";
 	String type = "value(Specimen:TYPE)";
 	String tissueSite = "value(SpecimenCharacteristics:TISSUE_SITE)";
 	String tissueSide = "value(SpecimenCharacteristics:TISSUE_SIDE)";
@@ -23,7 +23,7 @@
 	String biohazardType = "value(Biohazard:TYPE)";
 	String biohazardName = "value(Biohazard:NAME)";
 
-	String opClassName = "value(Operator:Specimen:CLASS_NAME)";
+	String opClassName = "value(Operator:Specimen:SPECIMEN_CLASS)";
 	String opType = "value(Operator:Specimen:TYPE)";
 	String opTissueSite = "value(Operator:SpecimenCharacteristics:TISSUE_SITE)";
 	String opTissueSide = "value(Operator:SpecimenCharacteristics:TISSUE_SIDE)";
