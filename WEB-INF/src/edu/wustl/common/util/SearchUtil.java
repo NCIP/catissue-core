@@ -119,6 +119,10 @@ public class SearchUtil
 		{
 			link = "SpecimenCollectionGroupAdvanceSearch.do?pageOf=pageOfSpecimenCollectionGroupAdvanceSearch&selectedNode=";
 		}
+		else if(objectName.equals("Specimen"))
+		{
+			link = "SpecimenAdvanceSearch.do?pageOf=pageOfSpecimenAdvanceSearch&selectedNode=";
+		}
 		
 		return link;
 	}
