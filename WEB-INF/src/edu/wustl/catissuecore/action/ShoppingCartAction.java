@@ -10,7 +10,6 @@
 
 package edu.wustl.catissuecore.action;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -18,7 +17,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -30,10 +28,12 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.actionForm.ShoppingCartForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.ShoppingCartBizLogic;
+import edu.wustl.catissuecore.dao.JDBCDAO;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.query.ShoppingCart;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;
+import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.util.ExportReport;
 import edu.wustl.common.util.SendFile;
 import edu.wustl.common.util.logger.Logger;
@@ -44,9 +44,9 @@ public class ShoppingCartAction  extends BaseAction
      * Overrides the execute method of Action class.
      * Initializes the various fields in ShoppingCart.jsp Page.
      * */
-    public ActionForward executeAction(ActionMapping mapping, ActionForm form,
+    protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
-            throws IOException, ServletException
+            throws Exception
     {
         //Gets the value of the operation parameter.
         String operation = (String)request.getParameter(Constants.OPERATION);
@@ -63,51 +63,58 @@ public class ShoppingCartAction  extends BaseAction
         
         if(operation == null)
         {
-        	try
-			{
-        		List specimenList = bizLogic.retrieve(Specimen.class.getName());
-        		Iterator it = specimenList.iterator();
-        		
-        		while(it.hasNext())
-        		{
-        			Specimen specimen = (Specimen)it.next();
-        			cart.add(specimen);
-        		}
-        		
-        		session.setAttribute(Constants.SHOPPING_CART,cart);
-        		
-        		request.setAttribute(Constants.SPREADSHEET_DATA_LIST,makeGridData(cart));        		
-			}
-        	catch(Exception e)
-			{
-        		e.printStackTrace();
-			}
+        	List specimenList = bizLogic.retrieve(Specimen.class.getName());
+        	Iterator it = specimenList.iterator();
+        	
+        	while(it.hasNext())
+        	{
+        		Specimen specimen = (Specimen)it.next();
+        		cart.add(specimen);
+        	}
+        	
+        	session.setAttribute(Constants.SHOPPING_CART,cart);
+        	
+        	request.setAttribute(Constants.SPREADSHEET_DATA_LIST,makeGridData(cart));        		
         }
         else
         {
         	if(operation.equals(Constants.ADD)) //IF OPERATION IS "ADD"
 	        {
-        		Map map = shopForm.getValues();
+        		//AdvanceSearchForm advForm = (AdvanceSearchForm)form;
+        		//Map map = advForm.getValues();
+	        	//Logger.out.debug("map of shopping form:"+map);
+        		SessionDataBean sessionDataBean = getSessionData(request);
+        		Map columnIdsMap = (Map)session.getAttribute(Constants.COLUMN_ID_MAP);
+        		Logger.out.debug("column ids map in shopping cart"+columnIdsMap);
+        		Integer specimenColumnId = (Integer)columnIdsMap.get(Constants.SPECIMEN+"."+Constants.IDENTIFIER);
+        		Logger.out.debug("specimen column id in shopping cart"+specimenColumnId);
+        		String tempTableName = Constants.QUERY_RESULTS_TABLE+"_"+sessionDataBean.getUserId();
+        		JDBCDAO jdbcDao = new JDBCDAO();
+                jdbcDao.openSession(sessionDataBean);
+                
+                //Retrieve all the data from the temporary table 
+        		List data =  jdbcDao.retrieve(tempTableName);
+        		Iterator dataItr = data.iterator();
+        		Object []specimenIds = new Object[data.size()];
+        		int i=0;
+				while(dataItr.hasNext())
+				{
+					List rowList =(List)dataItr.next(); 
+					specimenIds[i++]=(String)rowList.get(specimenColumnId.intValue()-1);
+				}
         		
-        		if(map != null)
-        		{
-        			List dataList = (List) session.getAttribute(Constants.SPREADSHEET_DATA_LIST);
-        			
-        			Object [] keys = map.keySet().toArray();
-        			
-        			for(int i=0;i<keys.length;i++)
-        			{
-        				System.out.println("********************* " + keys[i].toString());
-        				System.out.println("********************* " + map.get(keys[i].toString()));
-        			}
-        		}
+        		bizLogic.add(cart,specimenIds);
+        		session.setAttribute(Constants.SHOPPING_CART,cart);
+       			List dataList = (List) session.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 	        }
 	        else if(operation.equals(Constants.DELETE)) //IF OPERATION IS "DELETE"
 	        {
+	        	
 	        	//Extracting map from formbean that gives rows to be deleted
 	        	Map map = shopForm.getValues();
+	        	Logger.out.debug("map of shopping form:"+map);
 	        	Object obj[] = map.keySet().toArray();
-	        	
+	        	Logger.out.debug("cart in shopping cart action "+cart.getCart());
 	        	/*Deleting the selected rows from Shopping Cart object & setting
 	        	 *it again in the session 
 	        	 */
