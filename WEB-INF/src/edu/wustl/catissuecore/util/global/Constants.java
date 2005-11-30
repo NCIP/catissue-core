@@ -167,6 +167,8 @@ public class Constants
 	public static final String STORAGE_CONTAINER_CHILDREN_STATUS = "storageContainerChildrenStatus";
 	public static final String START_NUMBER = "startNumber";
 	public static final String CHILD_CONTAINER_SYSTEM_IDENTIFIERS = "childContainerSystemIdentifiers";
+	public static final int STORAGE_CONTAINER_FIRST_ROW = 1;
+	public static final int STORAGE_CONTAINER_FIRST_COLUMN = 1;
 	
 	//event parameters lists
 	public static final String METHOD_LIST = "methodList";
