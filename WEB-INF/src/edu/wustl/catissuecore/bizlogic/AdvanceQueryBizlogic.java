@@ -6,6 +6,7 @@
  */
 package edu.wustl.catissuecore.bizlogic;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -52,25 +53,45 @@ public class AdvanceQueryBizlogic extends DefaultBizLogic implements TreeDataInt
 		Logger.out.debug("List of data for identifiers:"+dataList);
 		
 		//Get column idetifiers from the map.
-		int participantColumnId =  ((Integer)columnIdsMap.get(Constants.PARTICIPANT)).intValue()-1;
-		int collectionProtocolColumnId =  ((Integer)columnIdsMap.get(Constants.COLLECTION_PROTOCOL)).intValue()-1;
-		int specimenCollGrpColumnId =  ((Integer)columnIdsMap.get(Constants.SPECIMEN_COLLECTION_GROUP)).intValue()-1;
-		int specimenColumnId = ((Integer)columnIdsMap.get(Constants.SPECIMEN)).intValue()-1;
-        
+		int participantColumnId =  ((Integer)columnIdsMap.get(Constants.PARTICIPANT+"."+Constants.IDENTIFIER)).intValue()-1;
+		int collectionProtocolColumnId =  ((Integer)columnIdsMap.get(Constants.COLLECTION_PROTOCOL+"."+Constants.IDENTIFIER)).intValue()-1;
+		int specimenCollGrpColumnId =  ((Integer)columnIdsMap.get(Constants.SPECIMEN_COLLECTION_GROUP+"."+Constants.IDENTIFIER)).intValue()-1;
+		int specimenColumnId = ((Integer)columnIdsMap.get(Constants.SPECIMEN+"."+Constants.IDENTIFIER)).intValue()-1;
+        int parentSpecimenColumnId = ((Integer)columnIdsMap.get(Constants.SPECIMEN+"."+Constants.PARENT_SPECIMEN_ID_COLUMN)).intValue()-1;
 		Vector vector = new Vector();
         Iterator iterator = dataList.iterator();
-        
+        List rowList = new ArrayList();
+        String previousSpecimenId = new String();
+        //int i=0;
         //Create tree nodes
         while (iterator.hasNext())
         {
-        	List rowList = (List)iterator.next();
+        	//i++;
+        	/*if(rowList.size()!=0)
+        		previousSpecimenId = (String) rowList.get(specimenColumnId);*/
+        	//Logger.out.debug("previousSpecimenId"+previousSpecimenId+":"+i);
+            rowList = (List)iterator.next();
         	//setQueryTreeNode((String) rowList.get(0),Constants.PARTICIPANT,null,null,vector);
 			setQueryTreeNode((String) rowList.get(collectionProtocolColumnId), 
 						Constants.COLLECTION_PROTOCOL,null,null,(String) rowList.get(participantColumnId), Constants.PARTICIPANT,vector);
 			setQueryTreeNode((String) rowList.get(specimenCollGrpColumnId), Constants.SPECIMEN_COLLECTION_GROUP,(String) 
 						rowList.get(collectionProtocolColumnId), Constants.COLLECTION_PROTOCOL,null,null,vector);
-			setQueryTreeNode((String) rowList.get(specimenColumnId), Constants.SPECIMEN,(String)  
+			String parentSpecimenId = (String) rowList.get(parentSpecimenColumnId);
+			Logger.out.debug("parentSpecimenId"+parentSpecimenId);
+			if(parentSpecimenId.equals(""))
+			{
+				Logger.out.debug("parent specimen not present");
+				setQueryTreeNode((String) rowList.get(specimenColumnId), Constants.SPECIMEN,(String)  
 						rowList.get(specimenCollGrpColumnId),Constants.SPECIMEN_COLLECTION_GROUP,null,null,vector);
+			}
+			else
+			{
+				Logger.out.debug("parent specimen present");
+				setQueryTreeNode((String) rowList.get(specimenColumnId), Constants.SPECIMEN,parentSpecimenId,
+									Constants.SPECIMEN,null,null,vector);
+			}
+			
+			
         }
         jdbcDao.closeSession();
         return vector;
