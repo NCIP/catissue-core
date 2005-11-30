@@ -97,13 +97,6 @@ public class AdvanceSearchAction extends DispatchAction
         	//Add or Edit function
         	root = parser.createAdvancedQueryObj(conditionNodeCollectionForQuery,root,objectName,selectedNode,advancedConditionNodesMap,nodeId);
         }
-        
-        
-        
-        
-       
-       
-        	
         session.setAttribute(Constants.ADVANCED_CONDITIONS_ROOT,root);
         //session.setAttribute(Constants.ADVANCED_CONDITIONS_QUERY_VIEW,root);
 
