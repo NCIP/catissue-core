@@ -23,7 +23,6 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import edu.wustl.catissuecore.actionForm.AdvanceSearchForm;
 import edu.wustl.catissuecore.bizlogic.AdvanceQueryBizlogic;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.QueryBizLogic;
@@ -32,6 +31,7 @@ import edu.wustl.catissuecore.query.AdvancedConditionsImpl;
 import edu.wustl.catissuecore.query.AdvancedConditionsNode;
 import edu.wustl.catissuecore.query.AdvancedQuery;
 import edu.wustl.catissuecore.query.Condition;
+import edu.wustl.catissuecore.query.DataElement;
 import edu.wustl.catissuecore.query.Operator;
 import edu.wustl.catissuecore.query.Query;
 import edu.wustl.catissuecore.query.QueryFactory;
@@ -52,7 +52,6 @@ public class AdvanceSearchResultsAction extends BaseAction
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		
-		AdvanceSearchForm advSearchForm = (AdvanceSearchForm)form;
 		//Query Start object
 		String aliasName = Constants.PARTICIPANT;
 		String pageOf=Constants.PAGEOF_QUERY_RESULTS;
@@ -75,16 +74,19 @@ public class AdvanceSearchResultsAction extends BaseAction
 		List columnNames = new ArrayList();
 		SimpleQueryBizLogic bizLogic = new SimpleQueryBizLogic(); 
 		
-		String []selectedColumns = advSearchForm.getSelectedColumnNames();
-		//change the values in the conditions for the query-adding quotes to string 
-		//& changing date format only when the spreadsheet loads the first time.	
-		if(selectedColumns==null)
-		{
-			traverseTree(root);
-		}
-
+		//String []selectedColumns = advSearchForm.getSelectedColumnNames();
+		/*change the values in the conditions for the query-adding quotes to string 
+		**& changing date format only when the spreadsheet loads the first time.
+		*/	
+		changeValueFormat(root);
 		//Set the result view for Advance Search
-	 	Vector selectDataElements = bizLogic.getSelectDataElements(selectedColumns,tableSet, columnNames);
+	 	Vector selectDataElements = bizLogic.getSelectDataElements(null,tableSet, columnNames);
+	 	//Add parent specimen id column to the dataElement required for the hierarchy of the treeView in Advance Search result view 
+        DataElement dataElement = new DataElement();
+        dataElement.setTable(Constants.SPECIMEN);
+        dataElement.setField(Constants.PARENT_SPECIMEN_ID_COLUMN);
+        selectDataElements.add(dataElement);
+	 	
 	 	query.setResultView(selectDataElements);
 	 	
 	 	SessionDataBean sessionData = getSessionData(request);
@@ -98,9 +100,11 @@ public class AdvanceSearchResultsAction extends BaseAction
 		tablesVector.add(Constants.SPECIMEN_COLLECTION_GROUP);
 		tablesVector.add(Constants.SPECIMEN);
 		tablesVector.add(Constants.COLLECTION_PROTOCOL_REGISTRATION);
-		Map columnIdsMap = query.getIdentifierColumnIds(tablesVector);
-		session.setAttribute(Constants.COLUMN_ID_MAP,columnIdsMap);
+		query.getIdentifierColumnIds(tablesVector);
 		
+		Map columnIdsMap = query.getColumnIdsMap();
+		session.setAttribute(Constants.COLUMN_ID_MAP,columnIdsMap);
+		Logger.out.debug("map of column ids:"+columnIdsMap);
 		//Create temporary table with the data from the Advance Query Search 
 		AdvanceQueryBizlogic advBizLogic = (AdvanceQueryBizlogic)BizLogicFactory
 												.getBizLogic(Constants.ADVANCE_QUERY_INTERFACE_ID);
@@ -108,12 +112,15 @@ public class AdvanceSearchResultsAction extends BaseAction
 	 	Logger.out.debug("Advance Query Sql"+sql);
 		advBizLogic.createTempTable(sql,tempTableName,sessionData);
 		
+		//Set the columnDisplayNames in session
+		session.setAttribute(Constants.COLUMN_DISPLAY_NAMES,columnNames);
+		
 		//Set tables for Configuration.
 		Object selectedTables[] = tableSet.toArray();
 		session.setAttribute(Constants.TABLE_ALIAS_NAME,selectedTables);
 		
 		//Remove shopping cart attribute from session
-		//session.removeAttribute(Constants.SHOPPING_CART);
+		session.removeAttribute(Constants.SHOPPING_CART);
 		
 		request.setAttribute(Constants.PAGEOF, pageOf);
 		return mapping.findForward(Constants.SUCCESS);
@@ -151,7 +158,7 @@ public class AdvanceSearchResultsAction extends BaseAction
 		}
 	}
 	//Parse the tree and change the value as required by the query object
-	private void traverseTree(DefaultMutableTreeNode tree) throws Exception
+	private void changeValueFormat(DefaultMutableTreeNode tree) throws Exception
 	{
 		DefaultMutableTreeNode child;
 		int childCount = tree.getChildCount();
@@ -202,7 +209,7 @@ public class AdvanceSearchResultsAction extends BaseAction
 				condition.setOperator(new Operator(operator));
 			}
 			
-			traverseTree(child);
+			changeValueFormat(child);
 		}
 	}
 }
