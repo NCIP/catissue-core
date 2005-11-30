@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 
-import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.util.global.Constants;
 
 public class MapDataParser 
 {

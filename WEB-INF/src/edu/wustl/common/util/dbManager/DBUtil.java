@@ -11,7 +11,7 @@ import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.SessionFactory;
 import net.sf.hibernate.cfg.Configuration;
-import edu.wustl.catissuecore.util.global.Variables;
+import edu.wustl.common.util.global.Variables;
 import edu.wustl.common.util.logger.Logger;
 
 /**

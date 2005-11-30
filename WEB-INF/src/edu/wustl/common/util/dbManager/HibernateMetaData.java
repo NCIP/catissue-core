@@ -16,15 +16,6 @@ import net.sf.hibernate.mapping.PersistentClass;
 import net.sf.hibernate.mapping.Property;
 import net.sf.hibernate.mapping.Subclass;
 import net.sf.hibernate.mapping.Table;
-
-import org.apache.log4j.PropertyConfigurator;
-
-import edu.wustl.catissuecore.bizlogic.AbstractBizLogic;
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
-import edu.wustl.catissuecore.domain.CollectionProtocol;
-import edu.wustl.catissuecore.domain.Specimen;
-import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.util.logger.Logger;
 
 
@@ -197,20 +188,20 @@ public class HibernateMetaData
 		}
 	}
 	
-	public static void main(String[] args) throws Exception
-	{
-		Variables.catissueHome = System.getProperty("user.dir");
-		Logger.out = org.apache.log4j.Logger.getLogger("");
-		PropertyConfigurator.configure(Variables.catissueHome+"\\WEB-INF\\src\\"+"ApplicationResources.properties");
-		
-		AbstractBizLogic bizLogic = BizLogicFactory.getBizLogic(Constants.COLLECTION_PROTOCOL_FORM_ID);
-		bizLogic.retrieve(CollectionProtocol.class.getName(),Constants.SYSTEM_IDENTIFIER,new Long(1));
-		
-		//HibernateMetaData.getDATA(CollectionProtocol.class);
-		HibernateMetaData.getSubClassList(Specimen.class.getName());
-		//System.out.println(str);
-		
-		System.out.println(HibernateMetaData.getClassName("CATISSUE_MOLECULAR_SPECIMEN"));
-		
-	}
+//	public static void main(String[] args) throws Exception
+//	{
+//		Variables.catissueHome = System.getProperty("user.dir");
+//		Logger.out = org.apache.log4j.Logger.getLogger("");
+//		PropertyConfigurator.configure(Variables.catissueHome+"\\WEB-INF\\src\\"+"ApplicationResources.properties");
+//		
+//		AbstractBizLogic bizLogic = BizLogicFactory.getBizLogic(Constants.COLLECTION_PROTOCOL_FORM_ID);
+//		bizLogic.retrieve(CollectionProtocol.class.getName(),Constants.SYSTEM_IDENTIFIER,new Long(1));
+//		
+//		//HibernateMetaData.getDATA(CollectionProtocol.class);
+//		HibernateMetaData.getSubClassList(Specimen.class.getName());
+//		//System.out.println(str);
+//		
+//		System.out.println(HibernateMetaData.getClassName("CATISSUE_MOLECULAR_SPECIMEN"));
+//		
+//	}
 }
