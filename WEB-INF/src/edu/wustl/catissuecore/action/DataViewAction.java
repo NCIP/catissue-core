@@ -9,7 +9,6 @@
  */
 package edu.wustl.catissuecore.action;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -24,6 +23,7 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.query.ResultData;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * DataViewAction is used to show the query results data 
@@ -39,7 +39,8 @@ public class DataViewAction extends BaseAction
     public ActionForward executeAction(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response) throws Exception
     {
-        String nodeName = request.getParameter("nodeName");
+        String target = Constants.SUCCESS;
+    	String nodeName = request.getParameter("nodeName");
         StringTokenizer str = new StringTokenizer(nodeName,":");
         String name = str.nextToken();
         int id = 0;
@@ -55,7 +56,7 @@ public class DataViewAction extends BaseAction
             List list = null;
             String[] columnList= null;
             //String[] columnList = {"Participant1_IDENTIFIER","CollectionProtocol1_IDENTIFIER","SpecimenCollectionGroup1_IDENTIFIER","Specimen1_IDENTIFIER"};
-            List columnDisplayNames =new ArrayList();
+            
 
             ResultData resultData = new ResultData();
             HttpSession session = request.getSession();
@@ -67,16 +68,37 @@ public class DataViewAction extends BaseAction
             }
             
             list = resultData.getSpreadsheetViewData(name,id,columnList, getSessionData(request), Constants.OBJECT_LEVEL_SECURE_RETRIEVE);
-            
-            //Created temporary column display names for the spreadsheet view
-            List rowList = (List)list.get(0);
-            int columnSize=rowList.size();
-            for(int i=0;i<columnSize;i++)
-            	columnDisplayNames.add("Column"+i);
-
-            request.setAttribute(Constants.SPREADSHEET_COLUMN_LIST,columnDisplayNames);
-            request.setAttribute(Constants.SPREADSHEET_DATA_LIST,list);
-            request.setAttribute(Constants.PAGEOF,Constants.PAGEOF_QUERY_RESULTS);
+            Logger.out.debug("list of data after advance search"+list);
+     		// If the result contains no data, show error message.
+//    		if (list.isEmpty()) {
+//    			Logger.out.debug("inside if condition for empty list");
+//    			ActionErrors errors = new ActionErrors();
+//    			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+//    					"advanceQuery.noRecordsFound"));
+//    			saveErrors(request, errors);
+//    			target = "advanceSearchFailure";
+//    			
+//    			
+//    		} else {
+            if (!list.isEmpty()) {
+    			//Get column display names from session which is set in session in AdvanceSearchResultsAction
+            	List columnDisplayNames = (List)session.getAttribute(Constants.COLUMN_DISPLAY_NAMES);
+    			
+            	//Created temporary column display names for the spreadsheet view
+            	/*List rowList = (List)list.get(0);
+    			int columnSize=rowList.size();
+    			for(int i=0;i<columnSize;i++)
+    				columnDisplayNames.add("Column"+i);
+            	Map columnIdsMap = (Map)session.getAttribute(Constants.COLUMN_ID_MAP);
+            	Set keySet = columnIdsMap.keySet();
+            	//Split the keys which is in the form of aliasName.columnNames to get the column Names 
+            	Iterator keySetitr = keySet.iterator();
+            	List columnDisplayNames = new ArrayList(keySet);*/
+    			
+    			request.setAttribute(Constants.SPREADSHEET_COLUMN_LIST,columnDisplayNames);
+    			request.setAttribute(Constants.SPREADSHEET_DATA_LIST,list);
+    			request.setAttribute(Constants.PAGEOF,Constants.PAGEOF_QUERY_RESULTS);
+    		}
         }
         else
         {
@@ -95,9 +117,10 @@ public class DataViewAction extends BaseAction
             
             RequestDispatcher requestDispatcher = request.getRequestDispatcher(url);
             requestDispatcher.forward(request,response);
+            
         }
         
-        return mapping.findForward(Constants.SUCCESS);
+        return mapping.findForward(target);
     }
 
 }
