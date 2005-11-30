@@ -1367,8 +1367,15 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String ADVANCED_CONDITIONS_QUERY_VIEW = "advancedCondtionsQueryView";
 	public static final String ADVANCED_SEARCH_ACTION = "AdvanceSearch.do";
 	public static final String ADVANCED_SEARCH_RESULTS_ACTION = "AdvanceSearchResults.do";
+	public static final String CONFIGURE_ADVANCED_SEARCH_RESULTS_ACTION = "ConfigureAdvanceSearchResults.do";
 	
+	
+	public static final String IDENTIFIER_COLUMN_ID_MAP = "identifierColumnIdsMap";
 	public static final String COLUMN_ID_MAP = "columnIdsMap";
+	public static final String PARENT_SPECIMEN_ID_COLUMN = "PARENT_SPECIMEN_ID";
+	public static final String COLUMN = "Column";
+	public static final String COLUMN_DISPLAY_NAMES = "columnDisplayNames";
+	
 	
 
 	// -- menu selection related
