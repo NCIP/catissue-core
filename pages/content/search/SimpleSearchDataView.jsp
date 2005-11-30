@@ -32,7 +32,7 @@
 
 	boolean isSpecimenData = false;
 
-	for(int i=0;i<columnList.size();i++)
+	/*for(int i=0;i<columnList.size();i++)
 	{
 		String columnName = (String)columnList.get(i);
 		if(columnName.equalsIgnoreCase("Specimen Id"))
@@ -40,7 +40,7 @@
 			isSpecimenData = true;
 			break;
 		}
-	}
+	}*/
 
 if(dataList.size() != 0)
 {
@@ -87,11 +87,11 @@ if(dataList.size() != 0)
 		    
 		    if(isChecked == "true")
 		    {
-				//var action = "ShoppingCart.do?operation=add";
-				//document.forms[0].operation.value="add";
-				//document.forms[0].action = action;
-				//document.forms[0].target = "_parent";
-				//document.forms[0].submit();
+				var action = "ShoppingCart.do?operation=add";
+				document.forms[0].operation.value="add";
+				document.forms[0].action = action;
+				document.forms[0].target = "myframe1";
+				document.forms[0].submit();
 			}
 		}
 		
@@ -119,11 +119,19 @@ if(dataList.size() != 0)
 			}
 		}
 		//function that is called on click of Define View button for the configuration of search results
-		function onConfigure()
+		function onSimpleConfigure()
 		{
-				action="ConfigureSimpleQueryNonValidate.do";
+				action="ConfigureSimpleQuery.do?pageOf=pageOfSimpleQueryInterface";
 				document.forms[0].action = action;
 				document.forms[0].target = "_parent";
+				document.forms[0].submit();
+		}
+
+		function onAdvanceConfigure()
+		{
+				action="ConfigureSimpleQuery.do?pageOf=pageOfQueryResults";
+				document.forms[0].action = action;
+				document.forms[0].target = "myframe1";
 				document.forms[0].submit();
 		}
 		
@@ -163,6 +171,14 @@ if(dataList.size() != 0)
 			document.forms[0].submit();
 		}
 	</script>
+<%
+	String configAction = new String();
+	if(pageOf.equals(Constants.PAGEOF_SIMPLE_QUERY_INTERFACE))
+		configAction = "onSimpleConfigure()";
+	else
+		configAction = "onAdvanceConfigure()";
+%>
+
 </head>
 
 <table summary="" cellpadding="0" cellspacing="0" border="0" width="100%" height="100%">
@@ -189,11 +205,11 @@ if(dataList.size() != 0)
 					&nbsp;
 				</td>
 				
-				<%if(isSpecimenData){%>
+				<%if(pageOf.equals(Constants.PAGEOF_QUERY_RESULTS)){%>
 				<td width="5%" nowrap align="right">
-					<%--html:button styleClass="actionButton" property="addToCart" onclick="onAddToCart()">
+					<html:button styleClass="actionButton" property="addToCart" onclick="onAddToCart()">
 						<bean:message key="buttons.addToCart"/>
-					</html:button--%>&nbsp;
+					</html:button>&nbsp;
 				</td>
 				<%}else{%>
 				<td width="5%" nowrap align="right">
@@ -208,8 +224,8 @@ if(dataList.size() != 0)
 				</td> 
 				
 				<td>
-					<html:button styleClass="actionButton" property="configureButton" onclick="onConfigure()">
-						<bean:message  key="buttons.configure" />
+					<html:button styleClass="actionButton" property="configureButton" onclick="<%=configAction%>">
+					<bean:message  key="buttons.configure" />
 					</html:button>
 				</td>
 			</tr>
@@ -276,11 +292,11 @@ if(dataList.size() != 0)
 					&nbsp;
 				</td>
 				
-				<%if(isSpecimenData){%>
+				<%if(pageOf.equals(Constants.PAGEOF_QUERY_RESULTS)){%>
 				<td width="5%" nowrap align="right">
-					<%--html:button styleClass="actionButton" property="addToCart" onclick="onAddToCart()">
+					<html:button styleClass="actionButton" property="addToCart" onclick="onAddToCart()">
 						<bean:message key="buttons.addToCart"/>
-					</html:button--%>&nbsp;
+					</html:button>&nbsp;
 				</td>
 				<%}else{%>
 				<td width="5%" nowrap align="right">
@@ -294,10 +310,12 @@ if(dataList.size() != 0)
 					</html:button>
 				</td>
 				<td>
-					<html:button styleClass="actionButton" property="configureButton" onclick="onConfigure()">
+					<html:button styleClass="actionButton" property="configureButton" onclick="<%=configAction%>">
 						<bean:message  key="buttons.configure" />
 					</html:button>
 				</td>
+				
+				
 			</tr>
 			</table>
 		</td>
