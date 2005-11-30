@@ -11,7 +11,7 @@
 	<script type="text/javascript" src="jss/tree.js"></script>
 	<LINK REL="StyleSheet" HREF="css/menu.css">
 	<script language="javascript" src="jss/menu.js"></script>
-	<script type="text/javascript">
+	<script type="text/javascript"><!--
 	<%
 		Vector treeList = (Vector)request.getAttribute(Constants.TREE_VECTOR);
 	%>
@@ -44,13 +44,13 @@
 		item.innerHTML = "&nbsp;<img src='images/Distribution.GIF' alt='Distribution' /> &nbsp; <%=Constants.DISTRIBUTION%>";*/
 		
 		item = document.getElementById('<%=Constants.EDIT%>');
-		item.className = "linkChange";
+		item.className = "formTitle";
 		item.innerHTML = "Edit";
-		
+				
 		var deleteItem = document.getElementById('<%=Constants.DELETE%>');
-		deleteItem.className = "linkChange";
+		deleteItem.className = "formTitle";
 		deleteItem.innerHTML = "Delete";
-		
+				
 		/*item = document.getElementById('<%=Constants.S%>');
 		item.className="linkChange"
 		item.innerHTML ="&nbsp;<img src='images/Specimen.GIF' alt='Specimen' /> &nbsp; <a HREF='<%=SearchUtil.getLink("Specimen")%>' target='searchPageFrame'><%=Constants.SPECIMEN%></a>";
@@ -104,6 +104,7 @@
 				{
 					participantCount = participantCount + 1;
 					selectedNode=selectedNode+","+i;
+					itemId = i;
 				}
 			}
 			
@@ -114,6 +115,7 @@
 				{
 					cProtocolCount = cProtocolCount + 1;
 					selectedNode=selectedNode+","+i;
+					itemId = i;
 				}
 			}
 			
@@ -135,6 +137,7 @@
 				{
 					sCGroupCount = sCGroupCount + 1;
 					selectedNode=selectedNode+","+i;
+					itemId = i;
 				}
 			}
 			
@@ -156,6 +159,7 @@
 				{
 					specimenCount = specimenCount + 1;
 					selectedNode=selectedNode+","+i;
+					itemId = i;
 				}
 			}
 		}
@@ -181,13 +185,18 @@
 			DPItem.innerHTML = "&nbsp;<img src='images/DistributionProtocol.GIF' alt='DistributionProtocol' /> &nbsp;<a HREF='#'><%=Constants.DISTRIBUTION_PROTOCOL%></a>";*/
 			
 			var editItem = document.getElementById('<%=Constants.EDIT%>');
+			editItem.className="formTitle";
 			var editLink = "<%=SearchUtil.getLink("Participant")%>"+ selectedNode +"&itemId="+itemId;
-			var s = "<a HREF='" + editLink + "' target='searchPageFrame'>Edit</a>"
+			var s = "<a HREF='" + editLink + "' target='searchPageFrame'><font color='white'>Edit</font></a>"
 			editItem.innerHTML = "" + s;
 			
+			
 			var deleteItem = document.getElementById('<%=Constants.DELETE%>');
+			deleteItem.className="formTitle";
 			var deleteLink = "AdvanceSearch.do?delete=true&itemId="+itemId;
-			deleteItem.innerHTML = "&nbsp;<a HREF='" + deleteLink + "'>Delete</a>";
+			deleteItem.innerHTML = "&nbsp;<a HREF='" + deleteLink + "'><font color='white'>Delete</font></a>";
+			
+			
 			
 		}
 		else if(cProtocolCount == sum)
@@ -205,14 +214,16 @@
 			scGItem.innerHTML ="&nbsp;<img src='images/SpecimenCollectionGroup.GIF' alt='SpecimenCollectionGroup' />  &nbsp;<a HREF='"+link+"' target='searchPageFrame'><%=Constants.SPECIMEN_COLLECTION_GROUP%></a>";
 			
 			var editItem = document.getElementById('<%=Constants.EDIT%>');
+			editItem.className="formTitle";
 			var editLink = "<%=SearchUtil.getLink("CollectionProtocol")%>"+ selectedNode +"&itemId="+itemId;
-			var s = "<a HREF='" + editLink + "' target='searchPageFrame'>Edit</a>"
+			var s = "<a HREF='" + editLink + "' target='searchPageFrame'><font color='white'>Edit</font></a>"
 			editItem.innerHTML = "" + s;
-			
+						
 			var deleteItem = document.getElementById('<%=Constants.DELETE%>');
+			deleteItem.className="formTitle";
 			var deleteLink = "AdvanceSearch.do?delete=true&itemId="+itemId;
-			deleteItem.innerHTML = "&nbsp;<a HREF='" + deleteLink + "'>Delete</a>";
-			
+			deleteItem.innerHTML = "&nbsp;<a HREF='" + deleteLink + "'><font color='white'>Delete</font></a>";
+						
 		}
 		else if(sCGroupCount == sum)
 		{
@@ -222,26 +233,36 @@
 			sItem.innerHTML ="&nbsp;<img src='images/Specimen.GIF' alt='Specimen' /> &nbsp;<a HREF='"+link+"' target='searchPageFrame'><%=Constants.SPECIMEN%></a>";
 			
 			var editItem = document.getElementById('<%=Constants.EDIT%>');
+			editItem.className="formTitle";
 			var editLink = "<%=SearchUtil.getLink("SpecimenCollectionGroup")%>"+ selectedNode +"&itemId="+itemId;
-			var s = "<a HREF='" + editLink + "' target='searchPageFrame'>Edit</a>"
+			var s = "<a HREF='" + editLink + "' target='searchPageFrame'><font color='white'>Edit</font></a>"
 			editItem.innerHTML = "" + s;
 			
 			var deleteItem = document.getElementById('<%=Constants.DELETE%>');
+			deleteItem.className="formTitle";
 			var deleteLink = "AdvanceSearch.do?delete=true&itemId="+itemId;
-			deleteItem.innerHTML = "&nbsp;<a HREF='" + deleteLink + "'>Delete</a>";
+			deleteItem.innerHTML = "&nbsp;<a HREF='" + deleteLink + "'><font color='white'>Delete</font></a>";
+			
 			
 		}
-		else if(specimenCount = sum)
+		else if(specimenCount == sum)
 		{
 			var editItem = document.getElementById('<%=Constants.EDIT%>');
+			editItem.className="formTitle";
 			var editLink = "<%=SearchUtil.getLink("Specimen")%>"+ selectedNode +"&itemId="+itemId;
-			var s = "<a HREF='" + editLink + "' target='searchPageFrame'>Edit</a>"
+			var s = "<a HREF='" + editLink + "' target='searchPageFrame'><font color='white'>Edit</font></a>"
 			editItem.innerHTML = "" + s;
 			
+			
 			var deleteItem = document.getElementById('<%=Constants.DELETE%>');
+			deleteItem.className="formTitle";
 			var deleteLink = "AdvanceSearch.do?delete=true&itemId="+itemId;
-			deleteItem.innerHTML = "&nbsp;<a HREF='" + deleteLink + "'>Delete</a>";
+			deleteItem.innerHTML = "&nbsp;<a HREF='" + deleteLink + "'><font color='white'>Delete</font></a>";
+			
 		}
+		else 
+			disableAll();
+			
 		if(sum == 0)
 		{
 			disableAll();
@@ -257,7 +278,7 @@
 	{
 		element.className = styleName;
 	}
-	</script>
+	--></script>
 </head>
 <html>
 <body>
