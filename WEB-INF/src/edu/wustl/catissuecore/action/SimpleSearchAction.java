@@ -58,13 +58,15 @@ public class SimpleSearchAction extends BaseAction {
 
 		String target = Constants.SUCCESS;
 
-		Map map = (Map) session.getAttribute(Constants.SIMPLE_QUERY_MAP);
+		Map map = simpleQueryInterfaceForm.getValuesMap();
 
 		//If map from session is null get the map values from form.
-		if (map == null) {
-			map = simpleQueryInterfaceForm.getValuesMap();
-			session.setAttribute(Constants.SIMPLE_QUERY_MAP, map);
-		}
+		if (map.size() == 0) 
+			map = (Map) session.getAttribute(Constants.SIMPLE_QUERY_MAP);
+
+		session.setAttribute(Constants.SIMPLE_QUERY_MAP, map);
+		Logger.out.debug("map after setting in session"+map);
+		
 
 		MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.query");
 		Collection simpleConditionNodeCollection = parser.generateData(map,
