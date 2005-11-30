@@ -17,7 +17,7 @@ import java.util.HashMap;
  * @author gautam_shetty
  */
 
-public class Constants
+public class Constants extends edu.wustl.common.util.global.Constants
 {	
  
     //Constants used for authentication module.
@@ -41,8 +41,8 @@ public class Constants
 	public static final int HIBERNATE_DAO = 1;
 	public static final int JDBC_DAO = 2;
 	
-	public static final String TRUE = "true";
-	public static final String FALSE = "false";
+	//public static final String TRUE = "true";
+	//public static final String FALSE = "false";
 	public static final String SUCCESS = "success";
 	public static final String FAILURE = "failure";
 	public static final String ADD = "add";
@@ -593,7 +593,7 @@ public class Constants
 	//Shopping Cart
 	public static final String SHOPPING_CART = "shoppingCart";
 	
-	public static final String SELECT_OPTION = "-- Select --";
+	//public static final String SELECT_OPTION = "-- Select --";
 	public static final int SELECT_OPTION_VALUE = -1;
 	
 	
@@ -1142,7 +1142,7 @@ public class Constants
 	public static final  HashMap STATIC_PROTECTION_GROUPS_FOR_OBJECT_TYPES = new HashMap();
 
 	
-	public static final String CDE_CONF_FILE = "CDEConfig.xml";
+	//public static final String CDE_CONF_FILE = "CDEConfig.xml";
 	public static final String CDE_NAME_TISSUE_SITE = "Tissue Site";
 	public static final String CDE_NAME_CLINICAL_STATUS = "Clinical Status";
 	public static final String CDE_NAME_GENDER = "Gender";
@@ -1239,7 +1239,7 @@ public class Constants
 	public static final String ATTRIBUTES = "attributes";
 	public static final String GROUPS = "groups";
 	public static final String ASSIGN_PRIVILEGES_ACTION = "AssignPrivileges.do";
-	public static final String ANY = "Any";
+	//public static final String ANY = "Any";
 	public static final int CONTAINER_IN_ANOTHER_CONTAINER = 2;
 	    /**
      * @param systemIdentifier
@@ -1282,7 +1282,7 @@ public class Constants
 	public static final String DISTRIBUTION_ID = "distributionId";
 	public static final String CONFIGURE_DISTRIBUTION_ACTION = "ConfigureDistribution.do";
 	public static final String DISTRIBUTION_REPORT_ACTION = "DistributionReport.do";
-	public static final String DELIMETER = ",";
+	//public static final String DELIMETER = ",";
 	public static final String DISTRIBUTION_REPORT_SAVE_ACTION="DistributionReportSave.do";
 	public static final String SELECTED_COLUMNS[] = {"Specimen.IDENTIFIER.Specimen Identifier",
 													"Specimen.TYPE.Specimen Type",
