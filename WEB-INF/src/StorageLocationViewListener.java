@@ -94,45 +94,53 @@ public class StorageLocationViewListener implements TreeSelectionListener
     {
         Object object = event.getSource();
         JTree tree = null;
-
+        
         if (object instanceof JTree)
         {
             tree = (JTree) object;
             DefaultMutableTreeNode node = (DefaultMutableTreeNode) tree
                     .getLastSelectedPathComponent();
-            StorageContainerTreeNode treeNode = (StorageContainerTreeNode) node
-                    .getUserObject();
-
-            try
+            
+            if (node != null)
             {
-                if ((!treeNode.getStorageContainerName().equals(
-                        Constants.CATISSUE_CORE))
-                        && (treeNode.getStorageContainerType() != null))
+                StorageContainerTreeNode treeNode = (StorageContainerTreeNode) node.getUserObject();
+
+                try
                 {
-                    String protocol = codeBase.getProtocol();
-                    String host = codeBase.getHost();
-                    int port = codeBase.getPort();
-                    String applicationPath = codeBase.getPath();
-
-                    String urlSuffix = applicationPath + Constants.SHOW_STORAGE_CONTAINER_GRID_VIEW_ACTION
-                            + "?" + Constants.SYSTEM_IDENTIFIER + "=" + treeNode.getStorageContainerIdentifier()
-                            + "&" + Constants.STORAGE_CONTAINER_TYPE + "=" + this.getStorageContainerType()
-                            + "&" + Constants.PAGEOF + "=" + this.pageOf;
-                    
-                    if (pageOf.equals(Constants.PAGEOF_SPECIMEN))
+                    if ((!Constants.CATISSUE_CORE.equals(treeNode.getStorageContainerName()))
+                            	&& (treeNode.getStorageContainerType() != null))
                     {
-                    	urlSuffix = applicationPath + Constants.SHOW_STORAGE_CONTAINER_GRID_VIEW_ACTION
-                        + "?" + Constants.SYSTEM_IDENTIFIER + "=" + treeNode.getStorageContainerIdentifier()
-                        + "&" + Constants.PAGEOF + "=" + this.pageOf;
+                        String protocol = codeBase.getProtocol();
+                        String host = codeBase.getHost();
+		                int port = codeBase.getPort();
+		                String applicationPath = codeBase.getPath();
+		                
+		                if(applicationPath.indexOf('/',1)!=-1){ //indexOf returns -1 if no match found
+		    				String newApplicationPath=null;
+		    				newApplicationPath = applicationPath.substring(0,applicationPath.indexOf('/',1)+1);
+		    				applicationPath=newApplicationPath;
+		                }
+                
+		                String urlSuffix = applicationPath + Constants.SHOW_STORAGE_CONTAINER_GRID_VIEW_ACTION
+					                        + "?" + Constants.SYSTEM_IDENTIFIER + "=" + treeNode.getStorageContainerIdentifier()
+					                        + "&" + Constants.STORAGE_CONTAINER_TYPE + "=" + this.getStorageContainerType()
+					                        + "&" + Constants.PAGEOF + "=" + this.pageOf;
+                
+		                if (pageOf.equals(Constants.PAGEOF_SPECIMEN))
+		                {
+		                	urlSuffix = applicationPath + Constants.SHOW_STORAGE_CONTAINER_GRID_VIEW_ACTION
+		                    + "?" + Constants.SYSTEM_IDENTIFIER + "=" + treeNode.getStorageContainerIdentifier()
+		                    + "&" + Constants.PAGEOF + "=" + this.pageOf;
+		                }
+		
+		                URL dataURL = new URL(protocol, host, port, urlSuffix);
+		                appletContext.showDocument(dataURL,
+		                        				   Constants.DATA_VIEW_FRAME);
                     }
-
-                    URL dataURL = new URL(protocol, host, port, urlSuffix);
-                    appletContext.showDocument(dataURL,
-                            				   Constants.DATA_VIEW_FRAME);
-                }
-            }
-            catch (MalformedURLException malExp)
-            {
+		        }
+		        catch (MalformedURLException malExp)
+		        {
+		        }
             }
         }
     }
