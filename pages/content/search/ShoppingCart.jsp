@@ -79,7 +79,7 @@ if(dataList.size() != 0)
 					var action = "ShoppingCart.do?operation=delete";
 					document.forms[0].operation.value="delete";
 					document.forms[0].action = action;
-					document.forms[0].target = "_parent";
+					document.forms[0].target = "myframe1";
 					document.forms[0].submit();
 				}
 			}
