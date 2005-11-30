@@ -88,19 +88,22 @@ public class AdvancedConditionsImpl extends ConditionsImpl {
        
             int childCount =whereCondition.getChildCount();
             
-            whereConditionsString.append(" \n(");
-            Object obj =whereCondition.getUserObject();
+            
+//            Object obj =whereCondition.getUserObject();
             
             AdvancedConditionsNode currentNodeData = null;
-            if (obj != null)
+            currentNodeData = (AdvancedConditionsNode)(whereCondition).getUserObject();
+            if (currentNodeData != null && currentNodeData.getObjectConditions().size()>0)
             {
-                currentNodeData = (AdvancedConditionsNode)(whereCondition).getUserObject();
+            	whereConditionsString.append(" \n(");
+                
 	            whereConditionsString.append(currentNodeData.toSQLString(tableSufix));
-	            if(currentNodeData.getObjectConditions().size()>0 && childCount>0)
+	            if(currentNodeData.getObjectConditions().size()>0 && childCount>0 && hasConditions())
 	                whereConditionsString.append(" "+Operator.AND+" ");
             }
-	        if(childCount > 0)
+	        if(childCount > 0 && hasConditions())
 	        {
+//	        	whereConditionsString.append(" "+Operator.AND+" ");
 	            /**
 	             * In case operation with children is EXIST a subquery is formed
 	             */
@@ -118,7 +121,10 @@ public class AdvancedConditionsImpl extends ConditionsImpl {
 	                    ((AdvancedConditionsImpl)((AdvancedQuery)query).whereConditions).setWhereCondition(child);
 	                    whereConditionsString.append(query.getString());
 	                    whereConditionsString.append(" \n)"); //End of one child subquery
-	                    whereConditionsString.append("\n"+Operator.AND+"\n");
+	                    if(i != childCount-1)
+	                    {
+	                    	whereConditionsString.append("\n"+Operator.AND+"\n");
+	                    }
 		            }
 	            }
 	            
@@ -136,10 +142,70 @@ public class AdvancedConditionsImpl extends ConditionsImpl {
 	            }
 	            whereConditionsString.append(")");
 	        }
-	        whereConditionsString.append(")");
+	        if(currentNodeData!=null && currentNodeData.getObjectConditions().size()>0)
+	        {
+	        	whereConditionsString.append(")");
+	        }
        
         return whereConditionsString.toString();
     }
+    
+    public boolean hasConditions()
+    {
+//    	boolean hasCondition = false;
+//    	Enumeration children = whereCondition.children();
+//    	DefaultMutableTreeNode child;
+//    	Vector conditions;
+//    	AdvancedConditionsNode advancedConditionsNode;
+//    	while(children.hasMoreElements())
+//    	{
+//    		child = (DefaultMutableTreeNode) children.nextElement();
+//    		
+//    		advancedConditionsNode = (AdvancedConditionsNode) child.getUserObject();
+//    		if(advancedConditionsNode!=null )
+//    		{
+//    			conditions = advancedConditionsNode.getObjectConditions();
+//    			if(conditions != null && conditions.size()>0)
+//    			{
+//    				hasCondition = true;
+//    			}
+//    			break;
+//    		}
+//    	}
+    	return hasConditions(whereCondition);
+    }
+    
+    public boolean hasConditions(DefaultMutableTreeNode treeNode)
+    {
+    	boolean hasCondition = false;
+    	Enumeration children = treeNode.children();
+    	DefaultMutableTreeNode child;
+    	Vector conditions;
+    	AdvancedConditionsNode advancedConditionsNode;
+    	while(children.hasMoreElements())
+    	{
+    		child = (DefaultMutableTreeNode) children.nextElement();
+    		
+    		advancedConditionsNode = (AdvancedConditionsNode) child.getUserObject();
+    		if(advancedConditionsNode!=null )
+    		{
+    			conditions = advancedConditionsNode.getObjectConditions();
+    			if(conditions != null && conditions.size()>0)
+    			{
+    				hasCondition = true;
+    				break;
+    			}
+    			
+    		}
+    		hasCondition = hasConditions(child);
+    		if(hasCondition)
+    		{
+    			break;
+    		}
+    	}
+    	return hasCondition;
+    }
+    
 
     public DefaultMutableTreeNode getWhereCondition()
     {
@@ -182,6 +248,9 @@ public class AdvancedConditionsImpl extends ConditionsImpl {
         }
         return set;
     }
+    
+    
+   
 
     /* (non-Javadoc)
      * @see edu.wustl.caTISSUECore.query.ConditionsImpl#getConditionObjects()
