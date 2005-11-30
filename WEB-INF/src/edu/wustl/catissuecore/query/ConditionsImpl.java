@@ -32,4 +32,11 @@ public abstract class ConditionsImpl {
 //	public abstract HashSet getConditionObjects();
 
 	public abstract HashSet getQueryObjects();
+	
+	/**
+	 * This method returns true if there are conditions
+	 * present for where part
+	 * @return
+	 */
+	public abstract boolean hasConditions();
 }
