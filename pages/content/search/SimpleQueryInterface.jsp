@@ -370,7 +370,7 @@ function onAttributeChange(element,opComboName)
 							<%
 							if(pageOf.equals(Constants.PAGEOF_SIMPLE_QUERY_INTERFACE))
 							{
-							String configAction = "callAction('"+Constants.CONFIGURE_SIMPLE_QUERY_ACTION+"')";%>
+							String configAction = "callAction('"+Constants.CONFIGURE_SIMPLE_QUERY_ACTION+"?pageOf=pageOfSimpleQueryInterface')";%>
 							<td>
 								<html:button styleClass="actionButton" property="configureButton" onclick="<%=configAction%>">
 									<bean:message  key="buttons.configure" />
