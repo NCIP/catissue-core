@@ -12,18 +12,23 @@
 <%
     HashMap tableDataMap = (HashMap) request.getAttribute(Constants.TABLE_COLUMN_DATA_MAP);
     Set tableNamesList = tableDataMap.keySet();
-    String pageOf = (String)request.getParameter("pageOf");
-    String callAction;
+    String pageOf = (String)request.getAttribute("pageOf");
+    String callAction = new String();
     if(pageOf.equals(Constants.PAGEOF_SIMPLE_QUERY_INTERFACE))
 	{
 		callAction=Constants.SIMPLE_SEARCH_AFTER_CONFIGURE_ACTION+"?pageOf="+Constants.PAGEOF_SIMPLE_QUERY_INTERFACE;
 	}
-	else
+	else if(pageOf.equals(Constants.PAGEOF_DISTRIBUTION))
 	{
 		callAction=Constants.DISTRIBUTION_REPORT_ACTION;
 	}
+	else if(pageOf.equals(Constants.PAGEOF_QUERY_RESULTS))
+	{
+		callAction = Constants.CONFIGURE_ADVANCED_SEARCH_RESULTS_ACTION;
+	}
 %>
 <SCRIPT LANGUAGE="JavaScript">
+	//var pageOf = <%=pageOf%>;
     var size = <%=(tableNamesList.size()-1)%>;
     var tableDataArray=new Array(size);
 	<%
@@ -220,6 +225,10 @@
 	{
 		selectOptions(document.forms[0].selectedColumnNames);
 		document.forms[0].action = action;
+		if(action == "AdvanceSearchResults.do")
+		{
+			document.forms[0].target = "_parent";
+		}
 		document.forms[0].submit();
 	}
 	
