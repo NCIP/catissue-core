@@ -92,6 +92,15 @@ public class QueryTree extends JApplet
             }
             
             String applicationPath = codeBase.getPath();
+            // modify applicationPath String ...
+			
+            if(applicationPath.indexOf('/',1)!=-1){ //indexOf returns -1 if no match found
+				String newApplicationPath=null;
+				newApplicationPath = applicationPath.substring(0,applicationPath.indexOf('/',1)+1);
+				applicationPath=newApplicationPath;
+				
+            }
+			
             String urlSuffix = applicationPath+Constants.TREE_DATA_ACTION+"?"+Constants.PAGEOF+"="+pageOf;
             URL dataURL = new URL(protocol, host, port, urlSuffix);
             
