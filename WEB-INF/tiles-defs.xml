@@ -649,7 +649,7 @@
 	
 		
 	<!-- ShoppingCart -->
-	<definition name=".catissuecore.shoppingCartDef" extends=".catissuecore.searchHomeDef">
+	<definition name=".catissuecore.shoppingCartDef" extends=".catissuecore.queryDataViewDef">
 		<put name="content" value="/pages/content/search/ShoppingCart.jsp" />
 	</definition>
 	<!-- ShoppingCart -->
@@ -701,6 +701,12 @@
 	<definition name=".catissuecore.advanceQueryRedirectDef" extends=".catissuecore.queryDataViewDef">
 		<put name="content" value="/pages/content/search/RedirectAdvancedSearch.jsp" />
 	</definition>
+	
+	<definition name=".catissuecore.advanceConfigurationSuccessDef" extends=".catissuecore.queryDataViewDef">
+		<put name="content" value="/pages/content/search/ConfigureResultView.jsp" />
+	</definition>
+
+	
 	
 	<!-- ADVANCE QUERY INTERFACE -->
 	

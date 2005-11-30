@@ -1677,7 +1677,7 @@ PUBLIC
 			name="configureResultViewForm"
 			validate="false"
 			scope="request">
-			<forward name="Success" path=".catissuecore.configurationSuccessDef" />
+			<forward name="pageOfDistribution" path=".catissuecore.configurationSuccessDef" />			
 		</action>
 		
 		<action path="/DistributionReportSave"
@@ -1748,19 +1748,10 @@ PUBLIC
 		<action path="/ConfigureSimpleQuery"
 			type="edu.wustl.catissuecore.action.ConfigureSimpleQueryAction"
 			name="simpleQueryInterfaceForm"
-			validate="true"
-			input="/SimpleQueryInterface.do"
-			scope="request">
-			<forward name="success" path="/ConfigureSimpleSearchView.do?pageOf=pageOfSimpleQueryInterface" />
-			<forward name="failure" path="/SimpleQueryInterface.do" />
-		</action>
-		
-		<action path="/ConfigureSimpleQueryNonValidate"
-			type="edu.wustl.catissuecore.action.ConfigureSimpleQueryAction"
-			name="simpleQueryInterfaceForm"
 			validate="false"
 			scope="request">
-			<forward name="success" path="/ConfigureSimpleSearchView.do?pageOf=pageOfSimpleQueryInterface" />
+			<forward name="pageOfSimpleQueryInterface" path="/ConfigureSimpleSearchView.do?pageOf=pageOfSimpleQueryInterface" />
+			<forward name="pageOfQueryResults" path="/ConfigureAdvanceSearchView.do?pageOf=pageOfQueryResults" />
 			<forward name="failure" path="/SimpleQueryInterface.do" />
 		</action>
 		
@@ -1769,7 +1760,7 @@ PUBLIC
 			name="simpleQueryInterfaceForm"
 			validate="false"
 			scope="request">
-			<forward name="Success" path=".catissuecore.configurationSuccessDef" />
+			<forward name="pageOfSimpleQueryInterface" path=".catissuecore.configurationSuccessDef" />
 		</action>
 		
 		<action path="/SimpleSearch"
@@ -2121,6 +2112,24 @@ PUBLIC
 			<forward name="success" path="/ShowFramedPage.do?pageOf=pageOfQueryResults" />
 			<forward name="failure" path="/AdvanceSearchResults.do" />
 		</action>
+		
+		<action path="/ConfigureAdvanceSearchView"
+			type="edu.wustl.catissuecore.action.ConfigureResultViewAction"
+			name="advanceSearchForm"
+			validate="false"
+			scope="request">
+			<forward name="pageOfQueryResults" path=".catissuecore.advanceConfigurationSuccessDef" />
+		</action>
+		
+		<action path="/ConfigureAdvanceSearchResults"
+			type="edu.wustl.catissuecore.action.ConfigureAdvanceSearchResultsAction"
+			name="advanceSearchForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path="/SpreadsheetView.do" />
+		</action>
+		
+		
 		
 		<!--Spreadshet Export Actions Begins -->
         <action path="/SpreadsheetExport"
