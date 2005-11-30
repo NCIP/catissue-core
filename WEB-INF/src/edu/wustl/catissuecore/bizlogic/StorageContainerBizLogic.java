@@ -41,7 +41,6 @@ import edu.wustl.common.util.logger.Logger;
 /**
  * StorageContainerHDAO is used to add Storage Container information into the
  * database using Hibernate.
- * 
  * @author aniruddha_phadnis
  */
 public class StorageContainerBizLogic extends DefaultBizLogic implements
@@ -63,15 +62,15 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 
 		//Setting the Parent Container if applicable
 		int posOneCapacity = 1, posTwoCapacity = 1;
-		int positionDimensionOne = 0, positionDimensionTwo = 0;
+		int positionDimensionOne = Constants.STORAGE_CONTAINER_FIRST_ROW, positionDimensionTwo = Constants.STORAGE_CONTAINER_FIRST_COLUMN;
 		boolean fullStatus[][] = null;
 		int noOfContainers = container.getNoOfContainers().intValue();
-
+		
 		if (container.getParentContainer() != null) {
 			List list = dao.retrieve(StorageContainer.class.getName(),
 					"systemIdentifier", container.getParentContainer()
 							.getSystemIdentifier());
-
+			
 			if (list.size() != 0) {
 				StorageContainer pc = (StorageContainer) list.get(0);
 
@@ -105,7 +104,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 					}
 
 					container.setParentContainer(pc);
-
+					
 					//                  check for closed ParentSite
 					checkStatus(dao, pc.getSite(), "Parent Site");
 
@@ -115,7 +114,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 							.getOneDimensionCapacity().intValue();
 					posTwoCapacity = pc.getStorageContainerCapacity()
 							.getTwoDimensionCapacity().intValue();
-
+					
 					fullStatus = getStorageContainerFullStatus(dao, container
 							.getParentContainer().getSystemIdentifier());
 					positionDimensionOne = container.getPositionDimensionOne()
@@ -168,12 +167,20 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 			if (container.getParentContainer() != null) {
 				Logger.out.debug("In if: ");
 				do {
-					if (positionDimensionTwo == (posTwoCapacity - 1)) {
-						positionDimensionOne = (positionDimensionOne + 1)
-								% posOneCapacity;
+					if (positionDimensionTwo == posTwoCapacity) {
+					    if (positionDimensionOne == posOneCapacity)
+					        positionDimensionOne = Constants.STORAGE_CONTAINER_FIRST_ROW;
+					    else
+					        positionDimensionOne = (positionDimensionOne + 1)
+					        							% (posOneCapacity+1);
+					    
+						positionDimensionTwo = Constants.STORAGE_CONTAINER_FIRST_COLUMN;
 					}
-					positionDimensionTwo = (positionDimensionTwo + 1)
-							% posTwoCapacity;
+					else
+					{
+					    positionDimensionTwo = positionDimensionTwo + 1;
+					}
+					
 					Logger.out.debug("positionDimensionTwo: "
 							+ positionDimensionTwo);
 					Logger.out.debug("positionDimensionOne: "
@@ -234,7 +241,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 					throw new DAOException(	ApplicationProperties
 									.getValue("errors.storageContainer.dimensionOverflow"));
 				}
-
+				
 				// MD : code added for validation bug id 666. 24-11-2005  start
 				boolean canUse = isContainerAvailable( dao, container );
             	Logger.out.debug("canUse : "+canUse );
@@ -349,7 +356,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 			throw new DAOException(ApplicationProperties
 					.getValue("errors.storageContainer.cannotReduce"));
 		}
-
+		
 		//Check for closed Site
 		if ((container.getSite() != null) && (oldContainer.getSite() != null)) {
 			if ((container.getSite().getSystemIdentifier() != null)
@@ -384,7 +391,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 			StorageContainerDetails oldStorageContainerDetails = (StorageContainerDetails) getCorrespondingOldObject(
 					oldStorageContainerDetailsCollection,
 					storageContainerDetails.getSystemIdentifier());
-
+			
 			dao.audit(storageContainerDetails, oldStorageContainerDetails,
 					sessionDataBean, true);
 		}
@@ -397,11 +404,11 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 			Logger.out.debug("container.getActivityStatus() "
 					+ container.getActivityStatus());
 			Long containerIDArr[] = { container.getSystemIdentifier() };
-
+			
 			disableSubStorageContainer(dao, containerIDArr);
 		}
 	}
-
+	
 	public void setPrivilege(DAO dao, String privilegeName, Class objectType,
 			Long[] objectIds, Long userId, String roleId, boolean assignToUser)
 			throws SMException, DAOException {
@@ -609,13 +616,13 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 					treeNode.setParentStorageContainerIdentifier(Long
 							.valueOf((String) rowList.get(0)));
 				}
-				treeNode.setSiteSystemIdentifier(Long.valueOf((String) rowList
-						.get(2)));
+				treeNode.setSiteSystemIdentifier(Long.valueOf((String) rowList.get(2)));
 				treeNode.setSiteName((String) rowList.get(3));
 				treeNode.setSiteType((String) rowList.get(4));
 				vector.add(treeNode);
 			}
 		}
+		
 		return vector;
 	}
 
@@ -631,20 +638,16 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 					.getStorageContainerCapacity().getOneDimensionCapacity();
 			Integer twoDimensionCapacity = storageContainer
 					.getStorageContainerCapacity().getTwoDimensionCapacity();
-			fullStatus = new boolean[oneDimensionCapacity.intValue()][twoDimensionCapacity
-					.intValue()];
+			fullStatus = new boolean[oneDimensionCapacity.intValue() + 1][twoDimensionCapacity
+					.intValue() + 1];
 
 			if (storageContainer.getChildrenContainerCollection() != null) {
 				Iterator iterator = storageContainer
 						.getChildrenContainerCollection().iterator();
-				Logger.out
-						.debug("storageContainer.getChildrenContainerCollection().size(): "
-								+ storageContainer
-										.getChildrenContainerCollection()
-										.size());
+				Logger.out.debug("storageContainer.getChildrenContainerCollection().size(): "
+								+ storageContainer.getChildrenContainerCollection().size());
 				while (iterator.hasNext()) {
-					StorageContainer childStorageContainer = (StorageContainer) iterator
-							.next();
+					StorageContainer childStorageContainer = (StorageContainer) iterator.next();
 					Integer positionDimensionOne = childStorageContainer
 							.getPositionDimensionOne();
 					Integer positionDimensionTwo = childStorageContainer
@@ -699,12 +702,13 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 		Logger.out.debug("validatePosition C : " + positionDimensionOne + " : " + positionDimensionTwo);
 		Logger.out.debug("validatePosition P : " + posOneCapacity + " : " + posTwoCapacity);
 		
-		if ((positionDimensionOne > (posOneCapacity - 1))
-				|| (positionDimensionTwo > (posTwoCapacity - 1))) 
+		if ((positionDimensionOne > posOneCapacity)
+				|| (positionDimensionTwo > posTwoCapacity)) 
 		{
 			Logger.out.debug("validatePosition false");
 			return false;
 		}
+		
 		Logger.out.debug("validatePosition true");
 		return true;
 	}

@@ -50,9 +50,9 @@ function closeFramedWindow()
 					<td>
 					<table summary="Enter summary of data here" cellpadding="3" 
 							cellspacing="0" border="0" class="dataTable" width="100%">
-					<% for (int i=0;i<storageContainerGridObject.getOneDimensionCapacity().intValue();i++){%>
+					<% for (int i = Constants.STORAGE_CONTAINER_FIRST_ROW;i<=storageContainerGridObject.getOneDimensionCapacity().intValue();i++){%>
 						<tr class="dataRowLight">	
-					<% for (int j=0;j<storageContainerGridObject.getTwoDimensionCapacity().intValue();j++){
+					<% for (int j = Constants.STORAGE_CONTAINER_FIRST_COLUMN;j<=storageContainerGridObject.getTwoDimensionCapacity().intValue();j++){
 					String styleClassName = "dataCellText"; // Default cell boundary
 					if(((null != positionOne) && (null != positionTwo) &&
           				(-1 != positionOne.intValue()) && (-1 != positionTwo.intValue())) && // means nothing entered by the user

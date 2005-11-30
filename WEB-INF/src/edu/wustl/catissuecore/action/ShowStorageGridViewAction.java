@@ -18,7 +18,6 @@ import java.util.StringTokenizer;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
@@ -28,14 +27,12 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
-import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.storage.StorageContainerGridObject;
 import edu.wustl.catissuecore.util.Permissions;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.security.SecurityManager;
-import edu.wustl.common.util.logger.Logger;
 
 /**
  * ShowStorageGridViewAction shows the grid view of the map according to the
@@ -117,12 +114,12 @@ public class ShowStorageGridViewAction  extends BaseAction
             Integer twoDimensionCapacity = storageContainer
  							.getStorageContainerCapacity().getTwoDimensionCapacity();
             
-            childContainerSystemIdentifiers = new int[oneDimensionCapacity.intValue()][twoDimensionCapacity.intValue()];
+            childContainerSystemIdentifiers = new int[oneDimensionCapacity.intValue()+1][twoDimensionCapacity.intValue()+1];
             storageContainerGridObject.setOneDimensionCapacity(oneDimensionCapacity);
             storageContainerGridObject.setTwoDimensionCapacity(storageContainer
                     		.getStorageContainerCapacity().getTwoDimensionCapacity());
             
-            fullStatus = new int[oneDimensionCapacity.intValue()][twoDimensionCapacity.intValue()];
+            fullStatus = new int[oneDimensionCapacity.intValue()+1][twoDimensionCapacity.intValue()+1];
             
             if (storageContainer.getChildrenContainerCollection() != null)
             {
