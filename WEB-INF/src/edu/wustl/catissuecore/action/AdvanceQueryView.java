@@ -37,6 +37,8 @@ public class AdvanceQueryView extends BaseAction
        	int childCount = root.getChildCount();
        	Logger.out.debug("child count in tree view action"+childCount);
 		Vector tree=new Vector();
+		String tempCheckedNode = request.getParameter("itemId");
+		String operator = request.getParameter("operator");
 		Map advancedConditionNodesMap = new HashMap();
 		advancedConditionNodesMap.put(new Integer(0),root);
 		//First time the Advance Search page loads, the tree is empty
@@ -48,15 +50,26 @@ public class AdvanceQueryView extends BaseAction
 		{
 			//Create tree for Query View
 			TreeView view = new TreeView();
-			view.arrangeTree(root,0,tree,advancedConditionNodesMap);
+			if(tempCheckedNode != null && operator!= null)
+			{
+				int checkedNode = Integer.parseInt(tempCheckedNode);
+				view.arrangeTree(root,0,tree,advancedConditionNodesMap,checkedNode,operator);
+			}
+			else
+			{
+				view.arrangeTree(root,0,tree,advancedConditionNodesMap,0,null);
+			}
 			Logger.out.debug("advancedConditionNodesMap in AdvanceQueryViewAction"+advancedConditionNodesMap);
 			Logger.out.debug("Size of advancedConditionNodesMap in AdvanceQueryViewAction"+advancedConditionNodesMap.size());
 		}
+		session.setAttribute(Constants.ADVANCED_CONDITIONS_ROOT,root);
 		session.setAttribute(Constants.ADVANCED_CONDITION_NODES_MAP,advancedConditionNodesMap);
 		Logger.out.debug("Vector size of the tree"+tree);
 		request.setAttribute(Constants.TREE_VECTOR,tree);
 		return (mapping.findForward(Constants.SUCCESS));
 	}
+	
+	
 }
 
 
