@@ -6,9 +6,12 @@
  */
 package edu.wustl.catissuecore.query;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
@@ -26,9 +29,10 @@ public class TreeView {
 	
 	//Variable which holds node ID in the tree. 
 	private int nodeId=0;
+	private boolean andOrBool = false;
 	
 	//Recursive function to create the tree
-	public void arrangeTree(DefaultMutableTreeNode node,int parentId,Vector tree,Map advancedConditionNodesMap) throws Exception
+	public void arrangeTree(DefaultMutableTreeNode node,int parentId,Vector tree,Map advancedConditionNodesMap,int checkedNode,String operation) throws Exception
 	{
 			nodeId++;
 			
@@ -36,8 +40,38 @@ public class TreeView {
 			for(int i = 0; i < node.getChildCount();i++){
 				//nodeCount++;
 				DefaultMutableTreeNode child = (DefaultMutableTreeNode)node.getChildAt(i);
+				DefaultMutableTreeNode parent = (DefaultMutableTreeNode)child.getParent();
+				
+				if(!parent.isRoot())
+				{
+					AdvancedConditionsNode parentAdvConditionNode = (AdvancedConditionsNode)parent.getUserObject();
+					String temp = parentAdvConditionNode.getOperationWithChildCondition().getOperator();
+					if(temp.equals(Operator.AND))
+					{
+						andOrBool = true;
+					}
+					else
+					{
+						andOrBool = false;
+					}
+					
+				}
 				AdvancedConditionsNode advConditionNode = (AdvancedConditionsNode)child.getUserObject();
 				advancedConditionNodesMap.put(new Integer(nodeId),child);
+								
+				if(nodeId == checkedNode)
+				{
+//					if(operation !)
+					if(operation.equals(Operator.AND))
+					{
+						advConditionNode.setOperationWithChildCondition(new Operator(Operator.AND));
+					}
+					else
+					{
+						advConditionNode.setOperationWithChildCondition(new Operator(Operator.OR));
+					}
+				}
+				
 				Vector vectorOfCondtions = advConditionNode.getObjectConditions();
 				String tableName = advConditionNode.getObjectName();
 				Logger.out.debug("object name for advance node"+tableName);
@@ -45,7 +79,6 @@ public class TreeView {
 				String str = "";
 				Condition con = null;
 				DataElement data = null;
-				Logger.out.debug("before str--"+nodeId);
 				
 				for(int k = 0; k < vectorOfCondtions.size(); k++)
 				{
@@ -70,8 +103,11 @@ public class TreeView {
 			        Logger.out.debug("Column Display name in tree view:"+columnDisplayName);
 			        String column = data.getField();
 			        if(k == 0)
+			        {
+			        	
 			        	//str = temp + "|" + parentId + "|" +data.getTable()+": "+data.getField()+ " "+op.getOperator() + " "+con.getValue();
 			        	str = nodeId + "|" + parentId + "|" +columnDisplayName+ " "+ op.getOperator() + " " + value+ "";
+			        }
 			        else
 			        	//str = str +" "+"AND"+" "+data.getField()+" "+op.getOperator() + " "+con.getValue();
 			        	str = str +" "+"<font color='red'>AND</font>"+" "+columnDisplayName+" "+op.getOperator() + " "+value+ "";
@@ -79,18 +115,36 @@ public class TreeView {
 			        Logger.out.debug( "STR :---------- : "+ str);
 			    }
 				if(data != null)
-					str = str +  "|" + tableName;
+					if(andOrBool)
+		        	{
+						str = str +  "|" + tableName + "|true";
+		        	}
+					else
+					{
+						str = str +  "|" + tableName + "|false";
+					}
 				
-				if(con == null){
-					str = nodeId + "|" + parentId + "|" + "ANY" + "|"+advConditionNode.getObjectName();
+				if(con == null)
+				{
+					if(andOrBool)
+		        	{
+						str = nodeId + "|" + parentId + "|" + "ANY" + "|"+advConditionNode.getObjectName() + "|true";
+		        	}
+					else
+					{
+						str = nodeId + "|" + parentId + "|" + "ANY" + "|"+advConditionNode.getObjectName() + "|false";
+					}
 				}
+				Logger.out.debug("STR in TREVIEW--"+str);
 				tree.add(str);
 				if(child.isLeaf())
 				{
 					nodeId++;
 				}
 				else
-					arrangeTree(child,nodeId,tree,advancedConditionNodesMap);
+					arrangeTree(child,nodeId,tree,advancedConditionNodesMap,checkedNode,operation);
 			}
 		} 
+	
+	
 }
