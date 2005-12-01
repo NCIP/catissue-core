@@ -4,7 +4,7 @@
 <%@ page import="edu.wustl.catissuecore.vo.SearchFieldData"%>
 <%@ page import="edu.wustl.catissuecore.vo.AdvanceSearchUI"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
-<%@ page import="edu.wustl.common.util.SearchUtil"%>
+<%@ page import="edu.wustl.catissuecore.util.SearchUtil"%>
 
 <%
 	AdvanceSearchUI advSearch = (AdvanceSearchUI)request.getAttribute("AdvanceSearchUI");

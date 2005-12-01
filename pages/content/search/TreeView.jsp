@@ -45,9 +45,9 @@
 	}
 </script>
 
-<OBJECT classid="clsid:CAFEEFAC-0014-0002-0000-ABCDEFFEDCBA"
+<OBJECT classid="clsid:8AD9C840-044E-11D1-B3E9-00805F499D93"
     width="<%=width%>" height="<%=height%>" align="top" name="<%=Constants.TREE_APPLET_NAME%>"
-    codebase="http://java.sun.com/products/plugin/autodl/jinstall-1_4_2-windows-i586.cab#Version=1,4,2,0">
+    codebase="http://java.sun.com/products/plugin/autodl/jinstall-1_4-windows-i586.cab#Version=1,4,0,0">
 	<PARAM name="<%=Constants.PROPERTY_NAME%>" value="<%=propertyName%>">
     <PARAM name="code" value="<%=Constants.QUERY_TREE_APPLET%>">
 	<PARAM name="archive" value="Applet/QueryTree.jar">
@@ -58,11 +58,11 @@
 	<PARAM name="<%=Constants.STORAGE_CONTAINER_POSITION%>" value="<%=position%>">
 	<PARAM name="name" value="<%=Constants.TREE_APPLET_NAME%>">
 	<COMMENT>
-		<EMBED type="application/x-java-applet;version=1.4.2" width="180"
+		<EMBED type="application/x-java-applet;version=1.4.1" width="180"
 			name="<%=Constants.TREE_APPLET_NAME%>"
 			height="300" code="<%=Constants.QUERY_TREE_APPLET%>"
 			codebase="<%=Constants.APPLET_CODEBASE%>"
-			pluginspage="http://java.sun.com/j2se/1.4.2/download.html"
+			pluginspage="http://java.sun.com/j2se/1.4.1/download.html"
 			archive="Applet/QueryTree.jar"
 			pageOf="<%=pageOf%>"
 			storageType="<%=storageContainerType%>"
