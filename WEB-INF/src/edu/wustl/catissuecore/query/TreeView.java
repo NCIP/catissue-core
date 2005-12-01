@@ -46,7 +46,7 @@ public class TreeView {
 				{
 					AdvancedConditionsNode parentAdvConditionNode = (AdvancedConditionsNode)parent.getUserObject();
 					String temp = parentAdvConditionNode.getOperationWithChildCondition().getOperator();
-					if(temp.equals(Operator.AND))
+					if(temp.equals(Operator.EXIST))
 					{
 						andOrBool = true;
 					}
@@ -62,9 +62,9 @@ public class TreeView {
 				if(nodeId == checkedNode)
 				{
 //					if(operation !)
-					if(operation.equals(Operator.AND))
+					if(operation.equals(Operator.EXIST))
 					{
-						advConditionNode.setOperationWithChildCondition(new Operator(Operator.AND));
+						advConditionNode.setOperationWithChildCondition(new Operator(Operator.EXIST));
 					}
 					else
 					{
