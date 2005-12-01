@@ -154,8 +154,9 @@ public abstract class Query {
 		try {
 			JDBCDAO dao = (JDBCDAO) DAOFactory.getDAO(Constants.JDBC_DAO);
 			dao.openSession(null);
-			Logger.out.debug("SQL************" + getString());
-			List list = dao.executeQuery(getString(), sessionDataBean,
+			String sql =  getString();
+			Logger.out.debug("SQL************" + sql);
+			List list = dao.executeQuery(sql, sessionDataBean,
 					isSecureExecute, queryResultObjectDataMap);
 			dao.closeSession();
 			return list;
