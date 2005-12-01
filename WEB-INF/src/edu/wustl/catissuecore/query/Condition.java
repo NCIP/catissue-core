@@ -1,5 +1,8 @@
 package edu.wustl.catissuecore.query;
 
+import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.util.logger.Logger;
+
 
 
 
@@ -53,7 +56,46 @@ public class Condition {
 	 */
 	public String toSQLString(int tableSufix)
 	{
-	    return new String(dataElement.toSQLString(tableSufix)+" "+ operator.toSQLString() + " " + value.toString() + " ");
+	    String newValue = new String(value);
+	    String newOperator = new String(operator.getOperator());
+	    Logger.out.debug("newValue..................."+newValue);
+	    Logger.out.debug("newOperator..................."+newOperator);
+	    if(newOperator.equals(Operator.STARTS_WITH))
+        {
+	        newValue = newValue+"%";
+	        newOperator = Operator.LIKE;
+        }
+        else if(newOperator.equals(Operator.ENDS_WITH))
+        {
+            newValue = "%"+newValue;
+            newOperator = Operator.LIKE;
+        }
+        else if(newOperator.equals(Operator.CONTAINS))
+        {
+            newValue = "%"+newValue+"%";
+            newOperator = Operator.LIKE;
+        }
+        Logger.out.debug("dataElement......................"+dataElement.getFieldType());
+        
+        if (dataElement.getFieldType().equalsIgnoreCase(Constants.FIELD_TYPE_VARCHAR)
+        		|| dataElement.getFieldType().equalsIgnoreCase(Constants.FIELD_TYPE_DATE) 
+        		|| dataElement.getFieldType().equalsIgnoreCase(Constants.FIELD_TYPE_TEXT))
+        {
+        	if (dataElement.getFieldType().equalsIgnoreCase(Constants.FIELD_TYPE_VARCHAR) 
+        	        	|| dataElement.getFieldType().equalsIgnoreCase(Constants.FIELD_TYPE_TEXT))
+        	{
+        	    newValue = "'" + newValue + "'";
+        	}
+        	else
+        	{
+        	    newValue = "STR_TO_DATE('" + newValue + "','" + Constants.MYSQL_DATE_PATTERN + "')";
+        	}
+        }
+        
+        Logger.out.debug("newOperator.........................."+newOperator);
+        
+        Logger.out.debug("newValue..........................."+newValue);
+	    return new String(dataElement.toSQLString(tableSufix)+" "+ newOperator + " " + newValue.toString() + " ");
 	}
 
     public boolean equals(Object obj)
