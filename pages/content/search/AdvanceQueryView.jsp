@@ -50,6 +50,16 @@
 		var deleteItem = document.getElementById('<%=Constants.DELETE%>');
 		deleteItem.className = "formTitle";
 		deleteItem.innerHTML = "Delete";
+		
+		var andItem = document.getElementById('and');
+		andItem.className="linkChange";
+		//var link = "AdvanceQueryView.do?operator=AND&itemId="+itemId;
+		andItem.innerHTML ="<img src='images/point.gif' alt='And' />&nbsp;And";
+			
+		var orItem = document.getElementById('or');
+		orItem.className="linkChange";
+		//var link = "AdvanceQueryView.do?operator=OR&itemId="+itemId;
+		orItem.innerHTML ="&nbsp;&nbsp;&nbsp;Or";
 				
 		/*item = document.getElementById('<%=Constants.S%>');
 		item.className="linkChange"
@@ -86,6 +96,7 @@
 	{
 		disableAll();
 		var participantCount = 0;
+		var chk = "";
 		var cProtocolCount = 0;
 		//var cProtocolCount = 0;
 		var sCGroupCount = 0;
@@ -105,6 +116,7 @@
 					participantCount = participantCount + 1;
 					selectedNode=selectedNode+","+i;
 					itemId = i;
+					chk = participantItem
 				}
 			}
 			
@@ -116,6 +128,7 @@
 					cProtocolCount = cProtocolCount + 1;
 					selectedNode=selectedNode+","+i;
 					itemId = i;
+					chk = cProtocolItem;
 				}
 			}
 			
@@ -138,6 +151,7 @@
 					sCGroupCount = sCGroupCount + 1;
 					selectedNode=selectedNode+","+i;
 					itemId = i;
+					chk = sCGroupItem;
 				}
 			}
 			
@@ -160,6 +174,7 @@
 					specimenCount = specimenCount + 1;
 					selectedNode=selectedNode+","+i;
 					itemId = i;
+					chk = specimenItem;
 				}
 			}
 		}
@@ -196,6 +211,15 @@
 			var deleteLink = "AdvanceSearch.do?delete=true&itemId="+itemId;
 			deleteItem.innerHTML = "&nbsp;<a HREF='" + deleteLink + "'><font color='white'>Delete</font></a>";
 			
+			var andItem = document.getElementById('and');
+			andItem.className="linkChange";
+			var link = "AdvanceQueryView.do?operator=AND&itemId="+itemId;
+			andItem.innerHTML ="<img src='images/point.gif' alt='And' />&nbsp;<a HREF='"+link+"'>And</a>"
+			
+			var orItem = document.getElementById('or');
+			orItem.className="linkChange";
+			var link = "AdvanceQueryView.do?operator=OR&itemId="+itemId;
+			orItem.innerHTML ="&nbsp;<a HREF='"+link+"'>Or</a>"
 			
 			
 		}
@@ -223,6 +247,16 @@
 			deleteItem.className="formTitle";
 			var deleteLink = "AdvanceSearch.do?delete=true&itemId="+itemId;
 			deleteItem.innerHTML = "&nbsp;<a HREF='" + deleteLink + "'><font color='white'>Delete</font></a>";
+			
+			var andItem = document.getElementById('and');
+			andItem.className="linkChange";
+			var link = "AdvanceQueryView.do?operator=AND&itemId="+itemId;
+			andItem.innerHTML ="<img src='images/point.gif' alt='And' />&nbsp;<a HREF='"+link+"'>And</a>"
+			
+			var orItem = document.getElementById('or');
+			orItem.className="linkChange";
+			var link = "AdvanceQueryView.do?operator=OR&itemId="+itemId;
+			orItem.innerHTML ="&nbsp;<a HREF='"+link+"'>Or</a>"
 						
 		}
 		else if(sCGroupCount == sum)
@@ -243,6 +277,16 @@
 			var deleteLink = "AdvanceSearch.do?delete=true&itemId="+itemId;
 			deleteItem.innerHTML = "&nbsp;<a HREF='" + deleteLink + "'><font color='white'>Delete</font></a>";
 			
+			var andItem = document.getElementById('and');
+			andItem.className="linkChange";
+			var link = "AdvanceQueryView.do?operator=AND&itemId="+itemId;
+			andItem.innerHTML ="<img src='images/point.gif' alt='And' />&nbsp;<a HREF='"+link+"'>And</a>"
+			
+			var orItem = document.getElementById('or');
+			orItem.className="linkChange";
+			var link = "AdvanceQueryView.do?operator=OR&itemId="+itemId;
+			orItem.innerHTML ="&nbsp;<a HREF='"+link+"'>Or</a>"
+			
 			
 		}
 		else if(specimenCount == sum)
@@ -258,6 +302,16 @@
 			deleteItem.className="formTitle";
 			var deleteLink = "AdvanceSearch.do?delete=true&itemId="+itemId;
 			deleteItem.innerHTML = "&nbsp;<a HREF='" + deleteLink + "'><font color='white'>Delete</font></a>";
+			
+			var andItem = document.getElementById('and');
+			andItem.className="linkChange";
+			//var link = "AdvanceQueryView.do?operator=AND&itemId="+itemId;
+			andItem.innerHTML ="<img src='images/point.gif' alt='And' />&nbsp;And";
+			
+			var orItem = document.getElementById('or');
+			orItem.className="linkChange";
+			//var link = "AdvanceQueryView.do?operator=OR&itemId="+itemId;
+			orItem.innerHTML ="&nbsp;&nbsp;&nbsp;Or";
 			
 		}
 		else 
@@ -285,12 +339,12 @@
 
 	<table cellpadding='0' cellspacing='0' border='0' width='600'>
 		<tr>
-			<td class='formTitle' height='20' width='72%'>
+			<td class='formTitle' height='20' width='60%'>
 				<img src="images/arrow.GIF" alt="Rules" />Rules
 			</td>
 			
 			
-			<td class='formTitle'  height='20' width='8%' onmouseover="expand(this);" onmouseout="collapse(this);" align='centre'>Add 
+			<td class='formTitle'  height='20' width='10%' onmouseover="expand(this);" onmouseout="collapse(this);" align='centre'><%=Constants.ADVANCED_QUERY_ADD%> 
 				<table class='menuNormal' border='0' cellpadding='0' cellspacing='0'>
 					<tr>
 						<td>
@@ -348,8 +402,38 @@
 					</tr>
 			</table>
 			</td>
-		<td class='formTitle' id='edit' height='20' width='10%' onmouseover="changeClass(this,'menuHover');" onmouseout="changeClass(this,'formTitle');">Edit</td>
-		<td class='formTitle' id='delete' height='20' width='10%' onmouseover="changeClass(this,'menuHover');" onmouseout="changeClass(this,'formTitle');">Delete</td>
+		<td class='formTitle' id='edit' height='20' width='10%' onmouseover="changeClass(this,'menuHover');" onmouseout="changeClass(this,'formTitle');"><%=Constants.ADVANCED_QUERY_EDIT%></td>
+		
+		<td class='formTitle' id='delete' height='20' width='10%' onmouseover="changeClass(this,'menuHover');" onmouseout="changeClass(this,'formTitle');"><%=Constants.ADVANCED_QUERY_DELETE%></td>
+		
+		<td class='formTitle'  height='20' width='10%' onmouseover="expand(this);" onmouseout="collapse(this);" align='centre'><%=Constants.ADVANCED_QUERY_OPERATOR%> 
+			<table class='menuNormal' border='0' cellpadding='0' cellspacing='0'>
+				<tr>
+					<td>
+						<div class='menuNormal' width='140'>
+							<table class='menuNormal' width='100' border='0' cellpadding='3' cellspacing='1'>
+								<tr height='20'  vAlign="middle">
+									<td colspan=2 class='linkChange' id='and' noWrap  height='20' vAlign="middle" 
+										onmouseover="changeMenuStyle(this,'linkChangeOnMouseOver')"
+										onmouseout="changeMenuStyle(this,'linkChange')">
+											&nbsp;<img src="images/point.gif" alt="And" /> &nbsp; 
+											And
+									</td>
+								</tr>
+								<tr height='20'  vAlign="middle">
+									<td colspan=2 class='linkChange' id='or' noWrap  height='20' vAlign="middle" 
+										onmouseover="changeMenuStyle(this,'linkChangeOnMouseOver')"
+										onmouseout="changeMenuStyle(this,'linkChange')">
+											&nbsp;&nbsp;Or
+									</td>
+								</tr>
+							</table>
+						</div>
+					</td>
+				</tr>
+			</table>
+		</td>
+			
 	</tr>
 
 			<div class="tree">
