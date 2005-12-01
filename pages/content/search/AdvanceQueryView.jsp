@@ -213,7 +213,7 @@
 			
 			var andItem = document.getElementById('and');
 			andItem.className="linkChange";
-			var link = "AdvanceQueryView.do?operator=AND&itemId="+itemId;
+			var link = "AdvanceQueryView.do?operator=EXIST&itemId="+itemId;
 			andItem.innerHTML ="<img src='images/point.gif' alt='And' />&nbsp;<a HREF='"+link+"'>And</a>"
 			
 			var orItem = document.getElementById('or');
@@ -250,7 +250,7 @@
 			
 			var andItem = document.getElementById('and');
 			andItem.className="linkChange";
-			var link = "AdvanceQueryView.do?operator=AND&itemId="+itemId;
+			var link = "AdvanceQueryView.do?operator=EXIST&itemId="+itemId;
 			andItem.innerHTML ="<img src='images/point.gif' alt='And' />&nbsp;<a HREF='"+link+"'>And</a>"
 			
 			var orItem = document.getElementById('or');
@@ -279,7 +279,7 @@
 			
 			var andItem = document.getElementById('and');
 			andItem.className="linkChange";
-			var link = "AdvanceQueryView.do?operator=AND&itemId="+itemId;
+			var link = "AdvanceQueryView.do?operator=EXIST&itemId="+itemId;
 			andItem.innerHTML ="<img src='images/point.gif' alt='And' />&nbsp;<a HREF='"+link+"'>And</a>"
 			
 			var orItem = document.getElementById('or');
