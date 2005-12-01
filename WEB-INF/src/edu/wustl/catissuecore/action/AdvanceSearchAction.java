@@ -17,7 +17,7 @@ import org.apache.struts.actions.DispatchAction;
 
 import edu.wustl.catissuecore.actionForm.AdvanceSearchForm;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.util.ConditionMapParser;
+import edu.wustl.catissuecore.util.ConditionMapParser;
 import edu.wustl.common.util.logger.Logger;
 /**
  * @author poornima_govindrao
@@ -97,6 +97,13 @@ public class AdvanceSearchAction extends DispatchAction
         	//Add or Edit function
         	root = parser.createAdvancedQueryObj(conditionNodeCollectionForQuery,root,objectName,selectedNode,advancedConditionNodesMap,nodeId);
         }
+        
+        
+        
+        
+       
+       
+        	
         session.setAttribute(Constants.ADVANCED_CONDITIONS_ROOT,root);
         //session.setAttribute(Constants.ADVANCED_CONDITIONS_QUERY_VIEW,root);
 

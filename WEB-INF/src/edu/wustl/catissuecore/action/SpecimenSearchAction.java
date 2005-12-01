@@ -32,7 +32,7 @@ import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.cde.CDE;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.cde.PermissibleValue;
-import edu.wustl.common.util.SearchUtil;
+import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 

@@ -28,7 +28,7 @@ import edu.wustl.catissuecore.vo.AdvanceSearchUI;
 import edu.wustl.catissuecore.vo.SearchFieldData;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.cde.CDEManager;
-import edu.wustl.common.util.SearchUtil;
+import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.common.util.logger.Logger;
 
 public class SpecimenCollectionGroupSearchAction extends AdvanceSearchUIAction
