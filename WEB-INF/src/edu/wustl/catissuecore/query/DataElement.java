@@ -28,6 +28,12 @@ public class DataElement
      */
     private String field;
     
+    /*
+     * 
+     */
+    private String fieldType;
+            
+    
     public DataElement()
     {
     }
@@ -86,10 +92,28 @@ public class DataElement
     {
         this.field = field;
     }
+    
+    /**
+     * @return Returns the fieldType.
+     */
+    public String getFieldType()
+    {
+        return fieldType;
+    }
+    
+    /**
+     * @param fieldType The fieldType to set.
+     */
+    public void setFieldType(String fieldType)
+    {
+        this.fieldType = fieldType;
+    }
+    
     public String getTable()
     {
         return table;
     }
+    
     public void setTable(String table)
     {
         this.table = table;
