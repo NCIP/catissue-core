@@ -17,7 +17,7 @@ import edu.wustl.catissuecore.util.global.SendEmail;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
-import edu.wustl.common.util.PasswordManager;
+import edu.wustl.catissuecore.util.PasswordManager;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
