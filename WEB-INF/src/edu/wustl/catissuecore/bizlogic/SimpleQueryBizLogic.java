@@ -441,11 +441,13 @@ public class SimpleQueryBizLogic extends DefaultBizLogic
 			//remove all the related objects that are not part of the current query
 			for(int i=0; i<relatedTables.size();i++)
 			{
-				if(fromTables.contains(relatedTables.get(i)))
+				if(!fromTables.contains(relatedTables.get(i)))
 				{
 					relatedTables.remove(i--);
 				}
 			}
+			
+			Logger.out.debug("After removing tablesnot in query relatedTable:"+relatedTables);
 //					Aarti: Get main query objects which should have individual checks
 			//for authorization and should not be dependent on others
 			Vector mainQueryObjects = QueryBizLogic.getMainObjectsOfQuery();
@@ -553,6 +555,7 @@ public class SimpleQueryBizLogic extends DefaultBizLogic
 			String tableAlias;
 			QueryResultObjectData queryResultObjectData;
 			Vector mainQueryObjects = QueryBizLogic.getMainObjectsOfQuery();
+			Logger.out.debug(" tables in query:"+fromTables);
 	        while (iterator.hasNext())
 	        {
 	        	tableAlias = (String) iterator.next();
