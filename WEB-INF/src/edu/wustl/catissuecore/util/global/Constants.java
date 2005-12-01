@@ -443,7 +443,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String SIMPLE_QUERY_NO_RESULTS = "noResults";
 	public static final String SIMPLE_QUERY_SINGLE_RESULT = "singleResult";
 	
-	//For getting the tables for Simple Query and Advance Query.
+	//For getting the tables for Simple Query and Fcon Query.
 	public static final int SIMPLE_QUERY_TABLES = 1;
 	public static final int ADVANCE_QUERY_TABLES = 2;
 	
@@ -1368,6 +1368,10 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String ADVANCED_SEARCH_ACTION = "AdvanceSearch.do";
 	public static final String ADVANCED_SEARCH_RESULTS_ACTION = "AdvanceSearchResults.do";
 	public static final String CONFIGURE_ADVANCED_SEARCH_RESULTS_ACTION = "ConfigureAdvanceSearchResults.do";
+	public static final String ADVANCED_QUERY_ADD = "Add";
+	public static final String ADVANCED_QUERY_EDIT = "Edit";
+	public static final String ADVANCED_QUERY_DELETE = "Delete";
+	public static final String ADVANCED_QUERY_OPERATOR = "Operator";
 	
 	
 	public static final String IDENTIFIER_COLUMN_ID_MAP = "identifierColumnIdsMap";
