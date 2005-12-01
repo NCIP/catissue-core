@@ -425,10 +425,11 @@ public class SimpleQueryBizLogic extends DefaultBizLogic
 
 		/**
 		 * @param fromAliasNameValue
+		 * @param fromTables
 		 * @return
 		 * @throws DAOException
 		 */
-		public QueryResultObjectData createQueryResultObjectData(String fromAliasNameValue) throws DAOException {
+		public QueryResultObjectData createQueryResultObjectData(String fromAliasNameValue, Set fromTables) throws DAOException {
 			QueryResultObjectData queryResultObjectData;
 			queryResultObjectData = new QueryResultObjectData();
 			queryResultObjectData.setAliasName(fromAliasNameValue);
@@ -437,6 +438,14 @@ public class SimpleQueryBizLogic extends DefaultBizLogic
 			Vector relatedTables = new Vector();
 			relatedTables = QueryBizLogic
 					.getRelatedTableAliases(fromAliasNameValue);
+			//remove all the related objects that are not part of the current query
+			for(int i=0; i<relatedTables.size();i++)
+			{
+				if(fromTables.contains(relatedTables.get(i)))
+				{
+					relatedTables.remove(i--);
+				}
+			}
 //					Aarti: Get main query objects which should have individual checks
 			//for authorization and should not be dependent on others
 			Vector mainQueryObjects = QueryBizLogic.getMainObjectsOfQuery();
@@ -550,7 +559,7 @@ public class SimpleQueryBizLogic extends DefaultBizLogic
 	        	Logger.out.debug("*********** table obtained from fromTables set:"+tableAlias);
 	        	if(mainQueryObjects.contains(tableAlias))
 	        	{
-		        	queryResultObjectData = createQueryResultObjectData(tableAlias);
+		        	queryResultObjectData = createQueryResultObjectData(tableAlias,fromTables);
 		        	if(query.getColumnIds(tableAlias,queryResultObjectData.getDependentObjectAliases()).size()!=0)
 		        	{
 		        		queryResultObjectDataMap.put(tableAlias,queryResultObjectData);
