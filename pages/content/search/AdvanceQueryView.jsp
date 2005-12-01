@@ -54,12 +54,12 @@
 		var andItem = document.getElementById('and');
 		andItem.className="linkChange";
 		//var link = "AdvanceQueryView.do?operator=AND&itemId="+itemId;
-		andItem.innerHTML ="<img src='images/point.gif' alt='And' />&nbsp;And";
+		andItem.innerHTML ="<img src='images/point.gif' alt='And' />&nbsp;AND";
 			
 		var orItem = document.getElementById('or');
 		orItem.className="linkChange";
 		//var link = "AdvanceQueryView.do?operator=OR&itemId="+itemId;
-		orItem.innerHTML ="&nbsp;&nbsp;&nbsp;Or";
+		orItem.innerHTML ="<img src='images/graydot.gif' alt='OR' />&nbsp;OR";
 				
 		/*item = document.getElementById('<%=Constants.S%>');
 		item.className="linkChange"
@@ -214,12 +214,12 @@
 			var andItem = document.getElementById('and');
 			andItem.className="linkChange";
 			var link = "AdvanceQueryView.do?operator=EXIST&itemId="+itemId;
-			andItem.innerHTML ="<img src='images/point.gif' alt='And' />&nbsp;<a HREF='"+link+"'>And</a>"
+			andItem.innerHTML ="<img src='images/point.gif' alt='AND' />&nbsp;<a HREF='"+link+"'>AND</a>"
 			
 			var orItem = document.getElementById('or');
 			orItem.className="linkChange";
 			var link = "AdvanceQueryView.do?operator=OR&itemId="+itemId;
-			orItem.innerHTML ="&nbsp;<a HREF='"+link+"'>Or</a>"
+			orItem.innerHTML ="<img src='images/graydot.gif' alt='OR' /><a HREF='"+link+"'>OR</a>"
 			
 			
 		}
@@ -251,12 +251,12 @@
 			var andItem = document.getElementById('and');
 			andItem.className="linkChange";
 			var link = "AdvanceQueryView.do?operator=EXIST&itemId="+itemId;
-			andItem.innerHTML ="<img src='images/point.gif' alt='And' />&nbsp;<a HREF='"+link+"'>And</a>"
+			andItem.innerHTML ="<img src='images/point.gif' alt='And' />&nbsp;<a HREF='"+link+"'>AND</a>"
 			
 			var orItem = document.getElementById('or');
 			orItem.className="linkChange";
 			var link = "AdvanceQueryView.do?operator=OR&itemId="+itemId;
-			orItem.innerHTML ="&nbsp;<a HREF='"+link+"'>Or</a>"
+			orItem.innerHTML ="<img src='images/graydot.gif' alt='OR' /><a HREF='"+link+"'>OR</a>"
 						
 		}
 		else if(sCGroupCount == sum)
@@ -280,12 +280,12 @@
 			var andItem = document.getElementById('and');
 			andItem.className="linkChange";
 			var link = "AdvanceQueryView.do?operator=EXIST&itemId="+itemId;
-			andItem.innerHTML ="<img src='images/point.gif' alt='And' />&nbsp;<a HREF='"+link+"'>And</a>"
+			andItem.innerHTML ="<img src='images/point.gif' alt='And' />&nbsp;<a HREF='"+link+"'>AND</a>"
 			
 			var orItem = document.getElementById('or');
 			orItem.className="linkChange";
 			var link = "AdvanceQueryView.do?operator=OR&itemId="+itemId;
-			orItem.innerHTML ="&nbsp;<a HREF='"+link+"'>Or</a>"
+			orItem.innerHTML ="<img src='images/graydot.gif' alt='OR' /><a HREF='"+link+"'>OR</a>"
 			
 			
 		}
@@ -306,12 +306,12 @@
 			var andItem = document.getElementById('and');
 			andItem.className="linkChange";
 			//var link = "AdvanceQueryView.do?operator=AND&itemId="+itemId;
-			andItem.innerHTML ="<img src='images/point.gif' alt='And' />&nbsp;And";
+			andItem.innerHTML ="<img src='images/point.gif' alt='And' />&nbsp;AND";
 			
 			var orItem = document.getElementById('or');
 			orItem.className="linkChange";
 			//var link = "AdvanceQueryView.do?operator=OR&itemId="+itemId;
-			orItem.innerHTML ="&nbsp;&nbsp;&nbsp;Or";
+			orItem.innerHTML ="<img src='images/graydot.gif' alt='OR' />&nbsp;OR"
 			
 		}
 		else 
@@ -416,15 +416,16 @@
 									<td colspan=2 class='linkChange' id='and' noWrap  height='20' vAlign="middle" 
 										onmouseover="changeMenuStyle(this,'linkChangeOnMouseOver')"
 										onmouseout="changeMenuStyle(this,'linkChange')">
-											&nbsp;<img src="images/point.gif" alt="And" /> &nbsp; 
-											And
+											&nbsp;<img src="images/point.gif" alt="AND" /> &nbsp; 
+											AND
 									</td>
 								</tr>
 								<tr height='20'  vAlign="middle">
 									<td colspan=2 class='linkChange' id='or' noWrap  height='20' vAlign="middle" 
 										onmouseover="changeMenuStyle(this,'linkChangeOnMouseOver')"
 										onmouseout="changeMenuStyle(this,'linkChange')">
-											&nbsp;&nbsp;Or
+											&nbsp;<img src="images/graydot.gif" alt="OR" /> &nbsp;
+											OR
 									</td>
 								</tr>
 							</table>
