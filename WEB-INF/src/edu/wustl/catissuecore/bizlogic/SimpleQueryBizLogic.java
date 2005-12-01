@@ -22,7 +22,6 @@ import java.util.Vector;
 
 import edu.wustl.catissuecore.dao.JDBCDAO;
 import edu.wustl.catissuecore.query.DataElement;
-import edu.wustl.catissuecore.query.Operator;
 import edu.wustl.catissuecore.query.Query;
 import edu.wustl.catissuecore.query.SimpleConditionsNode;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -51,7 +50,6 @@ public class SimpleQueryBizLogic extends DefaultBizLogic
         while (iterator.hasNext())
         {
             SimpleConditionsNode simpleConditionsNode = (SimpleConditionsNode) iterator.next();
-        	
         	// Add all the objects selected in UI to the fromtables Set. 
         	fromTables.add(simpleConditionsNode.getCondition().getDataElement().getTable());
         	
@@ -63,7 +61,7 @@ public class SimpleQueryBizLogic extends DefaultBizLogic
         	{
         	    addTablesInPathToFromSet(fromTables, tableInPath);
         	}
-        	
+        	Logger.out.debug("fromTables............................."+simpleConditionsNode.getCondition().getDataElement().getTable());
         	fromTables.add(simpleConditionsNode.getCondition().getDataElement().getTable());
         }
         return fromTables;
@@ -104,48 +102,12 @@ public class SimpleQueryBizLogic extends DefaultBizLogic
         StringTokenizer stringToken = new StringTokenizer(columnName, ".");
         simpleConditionsNode.getCondition().getDataElement().setTable(stringToken.nextToken());
         simpleConditionsNode.getCondition().getDataElement().setField(stringToken.nextToken());
-        String fieldType = stringToken.nextToken();
-        String value = simpleConditionsNode.getCondition().getValue();
+        simpleConditionsNode.getCondition().getDataElement().setFieldType(stringToken.nextToken());
         String tableInPath = null;
         
         if (stringToken.hasMoreTokens())
         {
             tableInPath = stringToken.nextToken();
-        }
-        
-        // For operators STARTS_WITH, ENDS_WITH, CONTAINS. 
-        String operator = simpleConditionsNode.getCondition().getOperator().getOperator();
-        if(operator.equals(Operator.STARTS_WITH))
-        {
-            value = value+"%";
-            simpleConditionsNode.getCondition().getOperator().setOperator(Operator.LIKE);
-        }
-        else if(operator.equals(Operator.ENDS_WITH))
-        {
-            value = "%"+value;
-            simpleConditionsNode.getCondition().getOperator().setOperator(Operator.LIKE);
-        }
-        else if(operator.equals(Operator.CONTAINS))
-        {
-            value = "%"+value+"%";
-            simpleConditionsNode.getCondition().getOperator().setOperator(Operator.LIKE);
-        }
-        
-        if (fieldType.equalsIgnoreCase(Constants.FIELD_TYPE_VARCHAR)
-        		|| fieldType.equalsIgnoreCase(Constants.FIELD_TYPE_DATE) 
-        		|| fieldType.equalsIgnoreCase(Constants.FIELD_TYPE_TEXT))
-        {
-        	if (fieldType.equalsIgnoreCase(Constants.FIELD_TYPE_VARCHAR) 
-        	        	|| fieldType.equalsIgnoreCase(Constants.FIELD_TYPE_TEXT))
-        	{
-        		value = "'" + value + "'";
-        	}
-        	else
-        	{
-        		value = "STR_TO_DATE('" + value + "','" + Constants.MYSQL_DATE_PATTERN + "')";
-        	}
-        	
-        	simpleConditionsNode.getCondition().setValue(value);
         }
         
         return tableInPath;
@@ -175,6 +137,8 @@ public class SimpleQueryBizLogic extends DefaultBizLogic
         while (aliasNameIterator.hasNext())
         {
             String fullyQualifiedClassName = (String) aliasNameIterator.next();
+            if (fullyQualifiedClassName.equals("edu.wustl.catissuecore.domain.ReportedProblem"))
+                continue;
             SimpleConditionsNode activityStatusCondition = getActivityStatusCondition(fullyQualifiedClassName);
             
             if (activityStatusCondition != null)
@@ -228,8 +192,8 @@ public class SimpleQueryBizLogic extends DefaultBizLogic
 					activityStatusCondition.getCondition().getDataElement().setField(
 							Constants.ACTIVITY_STATUS_COLUMN);
 					activityStatusCondition.getCondition().getOperator().setOperator("!=");
-					activityStatusCondition.getCondition().setValue(
-							"'" + Constants.ACTIVITY_STATUS_DISABLED + "'");
+					activityStatusCondition.getCondition().setValue(Constants.ACTIVITY_STATUS_DISABLED);
+					activityStatusCondition.getCondition().getDataElement().setFieldType(Constants.FIELD_TYPE_VARCHAR);
 				}
 			}
 			
@@ -319,6 +283,12 @@ public class SimpleQueryBizLogic extends DefaultBizLogic
 	 	
 	 	// Getting the aliasNames of the table ids in the tables in path.
 		Set forFromSet = configureSelectDataElements(selectDataElements);
+		Logger.out.debug("In getSelectDataElements************************");
+		Iterator iterator = forFromSet.iterator();
+		while(iterator.hasNext())
+		{
+		    Logger.out.debug("forFromSet......................"+iterator.next());
+		}
 		tableSet.addAll(forFromSet);
 		
 		return selectDataElements;
@@ -377,7 +347,7 @@ public class SimpleQueryBizLogic extends DefaultBizLogic
 		        while (aliasNameIterator.hasNext())
 		        {
 		            String aliasName = (String) aliasNameIterator.next();
-		            
+		            Logger.out.debug("Alias Name : ............."+aliasName);
 		            String sql =" SELECT tableData2.ALIAS_NAME, temp.COLUMN_NAME, temp.TABLES_IN_PATH, temp.DISPLAY_NAME " +
 						        " from CATISSUE_QUERY_INTERFACE_TABLE_DATA tableData2 join " +
 						        " ( SELECT  columnData.COLUMN_NAME, columnData.TABLE_ID, displayData.DISPLAY_NAME, relationData.TABLES_IN_PATH " +
@@ -406,6 +376,8 @@ public class SimpleQueryBizLogic extends DefaultBizLogic
 				        DataElement dataElement = new DataElement();
 				        dataElement.setTable((String)rowList.get(0));
 				        dataElement.setField((String)rowList.get(1)+"."+(String)rowList.get(2));
+				        Logger.out.debug(" Table Name : ..................."+dataElement.getTable());
+				        Logger.out.debug(" Field Name : ..................."+dataElement.getField());
 				        vector.add(dataElement);
 				        columnList.add((String)rowList.get(3));
 				    }
