@@ -114,20 +114,20 @@ function addNode(parentNode, recursedNodes)
 			{
 				//treeItem.innerHTML = "<tr><td class='tdTitle' colspan='4'>Rule#"+j+"</td></tr>";
 				document.write("<tr>");
-				document.write("<td class='tdTitle' colspan='4'>");
+				document.write("<td class='tdTitle' colspan='5'>");
 				document.write("Rule#"+j);
 				document.write("</td>");
 				document.write("</tr>");
 				j++;
 			}
-
+			
 			// Write out line & empty icons
 			if(i == 0 || (i%2 == 0))
 				//treeItem.innerHTML = "<tr><td class='tdoneColor' colspan='4'><img src='images/"+nodeValues[3]+".GIF' alt='"+nodeValues[3]+"' />&nbsp;";
-				document.write("<tr><td class='tdoneColor' colspan='4'><img src='images/"+nodeValues[3]+".GIF' alt='"+nodeValues[3]+"' />&nbsp;");
+				document.write("<tr><td class='tdoneColor' colspan='5'><img src='images/"+nodeValues[3]+".GIF' alt='"+nodeValues[3]+"' />&nbsp;");
 			else
 				//treeItem.innerHTML = "<tr><td class='tdsecondColor' colspan='4'><img src='images/"+nodeValues[3]+".GIF' alt='"+nodeValues[3]+"' />&nbsp;";
-				document.write("<tr><td class='tdsecondColor' colspan='4'><img src='images/"+nodeValues[3]+".GIF' alt='"+nodeValues[3]+"' />&nbsp;");
+				document.write("<tr><td class='tdsecondColor' colspan='5'><img src='images/"+nodeValues[3]+".GIF' alt='"+nodeValues[3]+"' />&nbsp;");
 				
 			for (g=0; g<recursedNodes.length; g++) 
 			{
@@ -179,11 +179,22 @@ function addNode(parentNode, recursedNodes)
 					//treeItem.innerHTML = "<img src=\"images/join.gif\" align=\"absbottom\" alt=\"\" />";
 					document.write("<img src=\"images/join.gif\" align=\"absbottom\" alt=\"\" />");
 			//}
+			
+			if(nodeValues[4] == "true")
+			{ 
+				//document.write("<img src='images/lineH.gif' align='absbottom' alt='Add' />");
+				document.write("<img src='images/point.gif' alt='Add' />");
+			}
+			/*else
+			{
+				document.write("<img src='images/graydot.gif' alt='Add' />");
+			}*/
 
 			var checkb = nodeValues[3] + "_" + nodeValues[0];
 			//treeItem.innerHTML = "<input type=checkbox name='"+checkb+"' id='"+ checkb + "' onClick = checkNum('"+ checkb +"','"+nodeValues[3]+"',"+nodeCount+")" +">";
 			document.write("<input type=checkbox name='"+checkb+"' id='"+ checkb + "' onClick = checkNum('"+ checkb +"',"+nodeValues[0]+","+nodeCount+ ")" +">");
 			//treeItem.innerHTML = "&nbsp;"+nodeValues[2];
+			
 			document.write("&nbsp;"+nodeValues[2]);
 			//treeItem.innerHTML = "</td></tr>";
 			document.write("</td></tr>");
