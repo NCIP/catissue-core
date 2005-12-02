@@ -1379,9 +1379,9 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String PARENT_SPECIMEN_ID_COLUMN = "PARENT_SPECIMEN_ID";
 	public static final String COLUMN = "Column";
 	public static final String COLUMN_DISPLAY_NAMES = "columnDisplayNames";
+	public static final String PAGEOF_PARTICIPANT_QUERY= "pageOfParticipantQuery";
 	
 	
-
 	// -- menu selection related
 	public static final String MENU_SELECTED = "menuSelected";
 	public static final String CONSTRAINT_VOILATION_ERROR = "Submission failed since a {0} with the same {1} already exists";
