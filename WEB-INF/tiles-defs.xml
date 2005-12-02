@@ -649,7 +649,7 @@
 	
 		
 	<!-- ShoppingCart -->
-	<definition name=".catissuecore.shoppingCartDef" extends=".catissuecore.queryDataViewDef">
+	<definition name=".catissuecore.shoppingCartDef" extends=".catissuecore.searchHomeDef">
 		<put name="content" value="/pages/content/search/ShoppingCart.jsp" />
 	</definition>
 	<!-- ShoppingCart -->
