@@ -75,6 +75,14 @@ public class Condition {
             newValue = "%"+newValue+"%";
             newOperator = Operator.LIKE;
         }
+        else if(newOperator.equals(Operator.EQUALS_CONDITION))
+        {
+            newOperator = Operator.EQUAL;
+        }
+        else if(newOperator.equals(Operator.NOT_EQUALS_CONDITION))
+        {
+            newOperator = Operator.NOT_EQUALS;
+        }
         Logger.out.debug("dataElement......................"+dataElement.getFieldType());
         
         if (dataElement.getFieldType().equalsIgnoreCase(Constants.FIELD_TYPE_VARCHAR)
