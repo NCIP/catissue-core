@@ -142,9 +142,9 @@ public class Operator
     public static String getOperator(String operator)
     {
     	Map operators = new HashMap();
-    	operators.put(Operator.STARTS_WITH,Operator.LIKE);
-    	operators.put(Operator.ENDS_WITH,Operator.LIKE) ;
-		operators.put(Operator.CONTAINS,Operator.LIKE);
+//    	operators.put(Operator.STARTS_WITH,Operator.LIKE);
+//    	operators.put(Operator.ENDS_WITH,Operator.LIKE) ;
+//		operators.put(Operator.CONTAINS,Operator.LIKE);
 		operators.put(Operator.NOT_EQUALS_CONDITION,Operator.NOT_EQUALS);
 		operators.put(Operator.EQUALS_CONDITION,Operator.EQUAL);
 		
