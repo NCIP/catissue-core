@@ -246,8 +246,6 @@ public class AdvanceSearchForm extends ActionForm
         {
         	Map resourceBundleMap = SearchUtil.getResourceBundleMap(objectName);
         	
-        	System.out.println("******** " + resourceBundleMap);
-        	
         	Iterator iterator = resourceBundleMap.keySet().iterator();
         	
         	while(iterator.hasNext())
@@ -322,6 +320,11 @@ public class AdvanceSearchForm extends ActionForm
         				}
         			}
         		}
+        	}
+        	
+        	if(objectName.equals("Specimen"))
+        	{
+        		validateEventParameters(validator,errors);
         	}
         }
        
@@ -404,5 +407,56 @@ public class AdvanceSearchForm extends ActionForm
 	
 	public void setItemNodeId(String itemId) {
 		this.itemNodeId = itemId;
+	}
+	
+	//This method validates the Event-Parameters Block in Specimen Search Page
+	private void validateEventParameters(Validator validator,ActionErrors errors)
+	{
+		//Constants for EventMap keys
+		String eventName = "EventName_";
+		String eventColumn = "EventColumnName_";
+		String eventOperator = "EventColumnOperator_";
+		String eventValue = "EventColumnValue_";
+	System.out.println("****MAP****\n"+values);
+		for(int i=1;i<=eventCounter;i++)
+		{
+			String name = (String)eventMap.get(eventName + i);
+			String column = (String)eventMap.get(eventColumn + i);
+			
+			if(validator.isValidOption(name) && validator.isValidOption(column))
+			{
+				String value = (String)eventMap.get(eventValue + i);
+				
+				String fieldName = column.substring(column.indexOf(".")+1,column.lastIndexOf("."));
+				String dataType = column.substring(column.lastIndexOf(".")+1);
+				String errorKey = name + " : " + fieldName;
+				
+				if(value.trim().equals(""))
+				{
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.missing",errorKey));
+				}
+				else if(dataType.equals("bigint") || dataType.equals("integer"))
+				{
+					if(!validator.isNumeric(value,0))
+					{
+						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",errorKey));
+					}
+				}
+				else if(dataType.equals("double"))
+				{
+					if(!validator.isDouble(value))
+					{
+						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",errorKey));
+					}
+				}
+				else if(dataType.equals("timestamp"))
+				{
+					if(!validator.checkDate(value))
+					{
+						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",errorKey));
+					}
+				}
+			}
+		}
 	}
 }
