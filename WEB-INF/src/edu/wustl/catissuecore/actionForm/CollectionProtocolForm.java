@@ -308,30 +308,40 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 					}
 				}
 			// ---------END-----------------------------------------
-			
-			//  Protocol Coordinators  not mandatory - Part of bug 813
-			/*
-			 if(this.protocolCoordinatorIds == null)
+			// Commentes as coordinators is not a mandetory field.
+//			if(this.protocolCoordinatorIds == null)
+//			{
+//				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("collectionprotocol.protocolcoordinator")));
+//			}
+//			else
+//			{
+//				if( this.protocolCoordinatorIds.length <1)
+//			 	{
+//			 		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("collectionprotocol.protocolcoordinator")));
+//			 	}
+//				for(int ind=0; ind < protocolCoordinatorIds.length ; ind++ )
+//				{
+//				 	if(protocolCoordinatorIds[ind] == -1 )
+//				 	{
+//						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("collectionprotocol.protocolcoordinator")));
+//				 	}
+//				}
+//			}
+				
+			//Check for PI can not be coordinator of the protocol.
+			if(this.protocolCoordinatorIds != null && this.principalInvestigatorId!=-1)
+			{
+				for(int ind=0; ind < protocolCoordinatorIds.length ; ind++ )
 				{
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("collectionprotocol.protocolcoordinator")));
-				}
-			 else
-			 {
-			 	if( this.protocolCoordinatorIds.length <1)
-			 	{
-			 		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("collectionprotocol.protocolcoordinator")));
-			 	}
-				 for(int ind=0; ind < protocolCoordinatorIds.length ; ind++ )
-				 {
-				 	if(protocolCoordinatorIds[ind] == -1 )
+				 	if(protocolCoordinatorIds[ind] == this.principalInvestigatorId )
 				 	{
-						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("collectionprotocol.protocolcoordinator")));
+						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.pi.coordinator.same"));
+						break;
 				 	}
-				 }
-			 }
-			 Logger.out.debug("Protocol Coordinators : " + protocolCoordinatorIds );
-			 */ 
-			Iterator it = this.values.keySet().iterator();
+				}
+			}
+				
+			Logger.out.debug("Protocol Coordinators : " + protocolCoordinatorIds ); 
 			
 			boolean bClinicalStatus = false;
 			boolean bStudyPoint = false;
@@ -340,6 +350,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 			boolean bTissueSite = false;
 			boolean bPathologyStatus = false;
 			
+			Iterator it = this.values.keySet().iterator();
 			while (it.hasNext())
 			{
 				String key = (String)it.next();
