@@ -37,7 +37,6 @@ import edu.wustl.catissuecore.query.Query;
 import edu.wustl.catissuecore.query.QueryFactory;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -55,20 +54,21 @@ public class AdvanceSearchResultsAction extends BaseAction
 		//Query Start object
 		String aliasName = Constants.PARTICIPANT;
 		String pageOf=Constants.PAGEOF_QUERY_RESULTS;
-		
+		AdvanceQueryBizlogic advBizLogic = (AdvanceQueryBizlogic)BizLogicFactory.getBizLogic(Constants.ADVANCE_QUERY_INTERFACE_ID);
 		//Get the advance query root object from session 
 		HttpSession session = request.getSession();
 		DefaultMutableTreeNode root = (DefaultMutableTreeNode)session.getAttribute(Constants.ADVANCED_CONDITIONS_ROOT);
 		//Create Advance Query object
 		Query query = QueryFactory.getInstance().newQuery(Query.ADVANCED_QUERY, aliasName);
-		
+		//DefaultMutableTreeNode queryRootObject = new  DefaultMutableTreeNode();
+		//queryRootObject = root.;
 		//Set the root object as the where conditions
 		((AdvancedConditionsImpl)((AdvancedQuery)query).getWhereConditions()).setWhereCondition(root);
 		
 		//Set the table set for join Condition 
 		Set tableSet = new HashSet();
-		setTables(root,tableSet);
-		
+		advBizLogic.setTables(root,tableSet);
+		setTablesDownTheHeirarchy(tableSet);
 		Logger.out.debug("no. of tables in tableSet "+tableSet.size());
 		query.setTableSet(tableSet);
 		List columnNames = new ArrayList();
@@ -106,17 +106,15 @@ public class AdvanceSearchResultsAction extends BaseAction
 		session.setAttribute(Constants.COLUMN_ID_MAP,columnIdsMap);
 		Logger.out.debug("map of column ids:"+columnIdsMap);
 		//Create temporary table with the data from the Advance Query Search 
-		AdvanceQueryBizlogic advBizLogic = (AdvanceQueryBizlogic)BizLogicFactory
-												.getBizLogic(Constants.ADVANCE_QUERY_INTERFACE_ID);
 		String sql = query.getString();
 	 	Logger.out.debug("Advance Query Sql"+sql);
 		advBizLogic.createTempTable(sql,tempTableName,sessionData);
-		
+		Logger.out.debug("column display names "+columnNames+":size"+columnNames.size());
 		//Set the columnDisplayNames in session
 		session.setAttribute(Constants.COLUMN_DISPLAY_NAMES,columnNames);
 		
 		//Set tables for Configuration.
-		Object selectedTables[] = tableSet.toArray();
+		Object selectedTables[] = query.getTableSet().toArray();
 		session.setAttribute(Constants.TABLE_ALIAS_NAME,selectedTables);
 		
 		//Remove shopping cart attribute from session
@@ -126,36 +124,24 @@ public class AdvanceSearchResultsAction extends BaseAction
 		return mapping.findForward(Constants.SUCCESS);
 	}
 
-	//Recursive function to Traverse root and set tables in path
-	private void setTables(DefaultMutableTreeNode tree,Set tableSet)throws DAOException, ClassNotFoundException
+	private void setTablesDownTheHeirarchy(Set tableSet)
 	{
-		DefaultMutableTreeNode parent = new DefaultMutableTreeNode();
-		DefaultMutableTreeNode child = new DefaultMutableTreeNode();
-		int childCount = tree.getChildCount();
-		//Logger.out.debug("childCount"+childCount);
-		for(int i=0;i<childCount;i++)
+		if(!tableSet.contains(Constants.COLLECTION_PROTOCOL))
 		{
-			parent = (DefaultMutableTreeNode)tree.getChildAt(i);
-			AdvancedConditionsNode parentAdvNode = (AdvancedConditionsNode)parent.getUserObject();
-			String parentTable = parentAdvNode.getObjectName();
-			tableSet.add(parentTable);
-			//Set tablesInPath between parent & child if child exists.
-			if(!parent.isLeaf())
-			{
-				child = (DefaultMutableTreeNode)parent.getFirstChild();
-				AdvancedConditionsNode childAdvNode = (AdvancedConditionsNode)child.getUserObject();
-				String childTable = childAdvNode.getObjectName();
-				tableSet.add(childTable);
-				QueryBizLogic bizLogic = (QueryBizLogic)BizLogicFactory
-												.getBizLogic(Constants.SIMPLE_QUERY_INTERFACE_ID);
-				String parentTableId = bizLogic.getTableIdFromAliasName(parentTable);
-				String childTableId = bizLogic.getTableIdFromAliasName(childTable);
-				Set tablesInPath = bizLogic.setTablesInPath(Long.valueOf(parentTableId),Long.valueOf(childTableId));
-				Logger.out.debug("tablesInPath after method call:"+tablesInPath);
-				tableSet.addAll(tablesInPath);
-			}
-			setTables(parent,tableSet);
+			tableSet.add(Constants.COLLECTION_PROTOCOL);
+			tableSet.add(Constants.SPECIMEN_COLLECTION_GROUP);
+			tableSet.add(Constants.SPECIMEN);
 		}
+		else if(!tableSet.contains(Constants.SPECIMEN_COLLECTION_GROUP))
+		{
+			tableSet.add(Constants.SPECIMEN_COLLECTION_GROUP);
+			tableSet.add(Constants.SPECIMEN);
+		}
+		else if(!tableSet.contains(Constants.SPECIMEN))
+		{
+			tableSet.add(Constants.SPECIMEN);
+		}
+		
 	}
 	//Parse the tree and change the value as required by the query object
 	private void changeValueFormat(DefaultMutableTreeNode tree) throws Exception
@@ -176,11 +162,10 @@ public class AdvanceSearchResultsAction extends BaseAction
 				String aliasName = condition.getDataElement().getTable();
 				QueryBizLogic bizLogic = (QueryBizLogic)BizLogicFactory.getBizLogic(Constants.SIMPLE_QUERY_INTERFACE_ID);
 				String attributeType = bizLogic.getAttributeType(columnName,aliasName);
-
-				String value = condition.getValue();
 				String operator = (condition.getOperator()).getOperator();
+				/*String value = condition.getValue();
 				//Converting to operator = 'Like' when it is STARTS WITH, ENDS WITH and CONTAINS and adding '%' to value
-				if(Operator.getOperator(operator)!=null)
+ 				if(Operator.getOperator(operator)!=null)
 				{
 					if(operator.equals(Operator.STARTS_WITH))
 						value = value+"%";
@@ -188,8 +173,9 @@ public class AdvanceSearchResultsAction extends BaseAction
 						value = "%"+value;
 					else if(operator.equals(Operator.CONTAINS))
 						value = "%"+value+"%";
-					operator = Operator.getOperator(operator);
+						operator = Operator.getOperator(operator);
 				}
+					
 				if (attributeType.equalsIgnoreCase(Constants.FIELD_TYPE_VARCHAR)
 						|| attributeType.equalsIgnoreCase(Constants.FIELD_TYPE_DATE) 
 						|| attributeType.equalsIgnoreCase(Constants.FIELD_TYPE_TEXT))
@@ -204,9 +190,15 @@ public class AdvanceSearchResultsAction extends BaseAction
 					{
 						value = "STR_TO_DATE('" + value + "','" + Constants.MYSQL_DATE_PATTERN + "')";
 					}
+				}*/
+				if(Operator.getOperator(operator)!=null)
+				{
+					operator = Operator.getOperator(operator);
+					
 				}
-				condition.setValue(value);
 				condition.setOperator(new Operator(operator));
+				//condition.setValue(value);
+				condition.getDataElement().setFieldType(attributeType);
 			}
 			
 			changeValueFormat(child);
