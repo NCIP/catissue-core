@@ -8,8 +8,6 @@
  */ 
 package edu.wustl.catissuecore.query;
 
-import java.util.HashMap;
-import java.util.Map;
 
 
 public class Operator
@@ -138,20 +136,5 @@ public class Operator
     public void setOperator(String operator)
     {
         this.operator = operator;
-    }
-    public static String getOperator(String operator)
-    {
-    	Map operators = new HashMap();
-//    	operators.put(Operator.STARTS_WITH,Operator.LIKE);
-//    	operators.put(Operator.ENDS_WITH,Operator.LIKE) ;
-//		operators.put(Operator.CONTAINS,Operator.LIKE);
-		operators.put(Operator.NOT_EQUALS_CONDITION,Operator.NOT_EQUALS);
-		operators.put(Operator.EQUALS_CONDITION,Operator.EQUAL);
-		
-		/*operators.put(Operator.LESS_THAN_CONDITION,Operator.LESS_THAN);
-		operators.put(Operator.GREATER_THAN_CONDITION,Operator.GREATER_THAN) ;
-		operators.put(Operator.LIKE_CONDITION,Operator.LIKE);*/
-		String value=(String)operators.get(operator);
-		return value;
     }
 }
