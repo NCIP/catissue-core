@@ -10,9 +10,13 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Vector;
 
+import javax.swing.tree.DefaultMutableTreeNode;
+
 import edu.wustl.catissuecore.dao.JDBCDAO;
+import edu.wustl.catissuecore.query.AdvancedConditionsNode;
 import edu.wustl.catissuecore.query.TreeNodeData;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
@@ -115,5 +119,37 @@ public class AdvanceQueryBizlogic extends DefaultBizLogic implements TreeDataInt
 	public Vector getTreeViewData() throws DAOException {
 
 		return null;
+	}
+	
+	//Recursive function to Traverse root and set tables in path
+	public void setTables(DefaultMutableTreeNode tree,Set tableSet)throws DAOException, ClassNotFoundException
+	{
+		DefaultMutableTreeNode parent = new DefaultMutableTreeNode();
+		DefaultMutableTreeNode child = new DefaultMutableTreeNode();
+		int childCount = tree.getChildCount();
+		//Logger.out.debug("childCount"+childCount);
+		for(int i=0;i<childCount;i++)
+		{
+			parent = (DefaultMutableTreeNode)tree.getChildAt(i);
+			AdvancedConditionsNode parentAdvNode = (AdvancedConditionsNode)parent.getUserObject();
+			String parentTable = parentAdvNode.getObjectName();
+			tableSet.add(parentTable);
+			//Set tablesInPath between parent & child if child exists.
+			if(!parent.isLeaf())
+			{
+				child = (DefaultMutableTreeNode)parent.getFirstChild();
+				AdvancedConditionsNode childAdvNode = (AdvancedConditionsNode)child.getUserObject();
+				String childTable = childAdvNode.getObjectName();
+				tableSet.add(childTable);
+				QueryBizLogic bizLogic = (QueryBizLogic)BizLogicFactory
+												.getBizLogic(Constants.SIMPLE_QUERY_INTERFACE_ID);
+				String parentTableId = bizLogic.getTableIdFromAliasName(parentTable);
+				String childTableId = bizLogic.getTableIdFromAliasName(childTable);
+				Set tablesInPath = bizLogic.setTablesInPath(Long.valueOf(parentTableId),Long.valueOf(childTableId));
+				Logger.out.debug("tablesInPath after method call:"+tablesInPath);
+				tableSet.addAll(tablesInPath);
+			}
+			setTables(parent,tableSet);
+		}
 	}
 }
