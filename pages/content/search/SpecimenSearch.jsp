@@ -38,6 +38,9 @@
 
 	Map tableColumnMap = (Map)request.getAttribute(Constants.TABLE_COLUMN_DATA_MAP);
 	List aliasNameList = (List)request.getAttribute(Constants.ALIAS_NAME_TABLE_NAME_MAP);
+
+	AdvanceSearchForm form = (AdvanceSearchForm)request.getAttribute("advanceSearchForm");
+	Map specimenDataMap = form.getValues();
 %>
 
 <head>
@@ -66,6 +69,12 @@
 			concentration2.disabled = true;
 			
 			var subtype = document.getElementById("type");
+			var subtypeCombo = document.getElementById("opType");
+
+			if(opClassCombo.options[opClassCombo.selectedIndex].value != "<%=Operator.NOT_EQUALS_CONDITION%>")
+			{
+				subtypeCombo.disabled = false;
+			}
 			
 			if(element.value == "Tissue")
 			{
@@ -85,13 +94,17 @@
 				document.forms[0].unit.value = "<%=Constants.UNIT_CC%>";
 				subtype.options.length = 0;
 				subtype.options[0] = new Option('<%=Constants.SELECT_OPTION%>','<%=Constants.SELECT_OPTION%>');
+				
+				subtype.disabled = true;
+				subtypeCombo.options[0].selected = true;
+				subtypeCombo.disabled = true;
 			}
 			else if(element.value == "Molecular")
 			{
 				unitSpecimen = "<%=Constants.UNIT_MG%>";
 				document.forms[0].unit.value = "<%=Constants.UNIT_MG%>";
 				typeChange(MolecularArray);
-				if(opClassCombo.options[opClassCombo.selectedIndex].text == "Equals")
+				if(opClassCombo.options[opClassCombo.selectedIndex].text == "<%=Operator.EQUALS_CONDITION%>")
 					concCombo.disabled = false;
 			}
 			
@@ -107,9 +120,17 @@
 			var concentration2 = document.getElementById("concentration2");
 			var classCombo = document.getElementById("className");
 			
-			if(element.options[element.selectedIndex].text == "Equals" && classCombo.options[classCombo.selectedIndex].text == "Molecular")
+			var opTypeCombo = document.getElementById("opType");
+			var typeCombo = document.getElementById("type");
+			
+			if(element.options[element.selectedIndex].text == "<%=Operator.EQUALS_CONDITION%>")
 			{
-				concCombo.disabled = false;
+				if(classCombo.options[classCombo.selectedIndex].text == "Molecular")
+				{
+					concCombo.disabled = false;
+				}
+				
+				opTypeCombo.disabled = false;
 			}
 			else
 			{
@@ -119,6 +140,11 @@
 				concentration2.value = "";
 				concentration1.disabled = true;
 				concentration2.disabled = true;
+				
+				opTypeCombo.options[0].selected = true;
+				typeCombo.options[0].selected = true;
+				opTypeCombo.disabled = true;
+				typeCombo.disabled = true;
 			}
 		}
 	</script>
@@ -192,37 +218,27 @@
 			var operatorCombo = "EventColumnOperator_" + comboBoxNo;
 
 			var columnValue = element.value;
-			var index = columnValue.lastIndexOf(".");
 			
 			var opCombo = document.getElementById(operatorCombo);
 			opCombo.options.length=0;
 			
-			if(element.value == "<%=Constants.SELECT_OPTION%>")
+			//If the datatype of selected column "varchar" or "text"
+			if(columnValue.match("varchar") == "varchar" || columnValue.match("text") == "text")
 			{
-				opCombo.options[0] = new Option("<%=Constants.ANY%>","<%=Constants.ANY%>");
+				opCombo.options[0] = new Option("<%=Operator.STARTS_WITH%>","<%=Operator.STARTS_WITH%>");
+				opCombo.options[1] = new Option("<%=Operator.ENDS_WITH%>","<%=Operator.ENDS_WITH%>");
+				opCombo.options[2] = new Option("<%=Operator.CONTAINS%>","<%=Operator.CONTAINS%>");
+				opCombo.options[3] = new Option("<%=Operator.EQUALS_CONDITION%>","<%=Operator.EQUALS_CONDITION%>");
+				opCombo.options[4] = new Option("<%=Operator.NOT_EQUALS_CONDITION%>","<%=Operator.NOT_EQUALS_CONDITION%>");
 			}
 			else
 			{
-				//If the datatype of selected column "varchar" or "text"
-				if(columnValue.substring(index+1,columnValue.length) == "varchar" || columnValue.substring(index+1,columnValue.length) == "text")
-				{
-					opCombo.options[0] = new Option("<%=Constants.ANY%>","<%=Constants.ANY%>");
-					opCombo.options[1] = new Option("<%=Operator.STARTS_WITH%>","<%=Operator.STARTS_WITH%>");
-					opCombo.options[2] = new Option("<%=Operator.ENDS_WITH%>","<%=Operator.ENDS_WITH%>");
-					opCombo.options[3] = new Option("<%=Operator.CONTAINS%>","<%=Operator.CONTAINS%>");
-					opCombo.options[4] = new Option("Equals","<%=Operator.EQUAL%>");
-					opCombo.options[5] = new Option("Not Equals","<%=Operator.NOT_EQUALS%>");
-				}
-				else
-				{
-					opCombo.options[0] = new Option("<%=Constants.ANY%>","<%=Constants.ANY%>");
-					opCombo.options[1] = new Option("Equals","<%=Operator.EQUAL%>");
-					opCombo.options[2] = new Option("Not Equals","<%=Operator.NOT_EQUALS%>");
-					opCombo.options[3] = new Option("<%=Operator.LESS_THAN%>","<%=Operator.LESS_THAN%>");
-					opCombo.options[4] = new Option("<%=Operator.LESS_THAN_OR_EQUALS%>","<%=Operator.LESS_THAN_OR_EQUALS%>");
-					opCombo.options[5] = new Option("<%=Operator.GREATER_THAN%>","<%=Operator.GREATER_THAN%>");
-					opCombo.options[6] = new Option("<%=Operator.GREATER_THAN_OR_EQUALS%>","<%=Operator.GREATER_THAN_OR_EQUALS%>");
-				}
+				opCombo.options[0] = new Option("<%=Operator.EQUALS_CONDITION%>","<%=Operator.EQUALS_CONDITION%>");
+				opCombo.options[1] = new Option("<%=Operator.NOT_EQUALS_CONDITION%>","<%=Operator.NOT_EQUALS_CONDITION%>");
+				opCombo.options[2] = new Option("<%=Operator.LESS_THAN%>","<%=Operator.LESS_THAN%>");
+				opCombo.options[3] = new Option("<%=Operator.LESS_THAN_OR_EQUALS%>","<%=Operator.LESS_THAN_OR_EQUALS%>");
+				opCombo.options[4] = new Option("<%=Operator.GREATER_THAN%>","<%=Operator.GREATER_THAN%>");
+				opCombo.options[5] = new Option("<%=Operator.GREATER_THAN_OR_EQUALS%>","<%=Operator.GREATER_THAN_OR_EQUALS%>");
 			}
 		}
 		
@@ -282,8 +298,7 @@
 			var thirdCell = x.insertCell(2);
 			thirdCell.className="formField";
 			comboName = "EventColumnOperator_" + val;
-			sname = "<select name='eventMap(" + comboName + ")' size='1' class='formFieldSized10' id='" + comboName + "'><option value='Any'>Any</option></select>";
-			
+			sname = "<select name='eventMap(" + comboName + ")' size='1' class='formFieldSized10' id='" + comboName + "'><option value='<%=Operator.EQUALS_CONDITION%>'><%=Operator.EQUALS_CONDITION%></option><option value='<%=Operator.NOT_EQUALS_CONDITION%>'><%=Operator.NOT_EQUALS_CONDITION%></option><option value='<%=Operator.LESS_THAN%>'><%=Operator.LESS_THAN%></option><option value='<%=Operator.LESS_THAN_OR_EQUALS%>'><%=Operator.LESS_THAN_OR_EQUALS%></option><option value='<%=Operator.GREATER_THAN%>'><%=Operator.GREATER_THAN%></option><option value='<%=Operator.GREATER_THAN_OR_EQUALS%>'><%=Operator.GREATER_THAN_OR_EQUALS%></option></select>";
 			thirdCell.innerHTML="" + sname;
 			
 			//Fourth Cell
@@ -306,7 +321,7 @@
 
 <tr>
 	<td><html:hidden property="objectName" value="Specimen"/></td>
-	<td><input type="hidden" name="eventCounter" value="1" id="eventCounter"><html:hidden property="selectedNode" /></td>
+	<td><html:hidden property="eventCounter"/><html:hidden property="selectedNode" /></td>
 </tr>
 <!--  MAIN TITLE ROW -->
 <tr>
@@ -336,8 +351,14 @@
 			<html:options collection="<%=Constants.ENUMERATED_OPERATORS%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
+	
+	<%
+		String opValue = (String)specimenDataMap.get("Operator:Specimen:SPECIMEN_CLASS");
+		boolean disabled = (opValue == null || opValue.equals(Constants.ANY));
+	%>
+	
 	<td class="formField">
-		<html:select property="<%=className%>" styleClass="formFieldSized10" styleId="className" size="1" disabled="true" onchange="onClassChange(this)">
+		<html:select property="<%=className%>" styleClass="formFieldSized10" styleId="className" size="1" disabled="<%=disabled%>" onchange="onClassChange(this)">
 			<html:options collection="<%=Constants.SPECIMEN_CLASS_LIST%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
@@ -350,13 +371,30 @@
  			<b><bean:message key="specimen.subType"/>
  		</label>
 	</td>
+	
+	<%
+		String classValue = (String)specimenDataMap.get("Specimen:SPECIMEN_CLASS");
+		disabled = ((opValue != null && opValue.equals(Operator.NOT_EQUALS_CONDITION)) || (classValue != null && classValue.equals("Cell")));
+	%>
+	
 	<td class="formField">
-		<html:select property="<%=opType%>" styleClass="formFieldSized10" styleId="opType" size="1" onchange="onOperatorChange('opType','type')">
+		<html:select property="<%=opType%>" styleClass="formFieldSized10" styleId="opType" size="1" onchange="onOperatorChange('opType','type')" disabled="<%=disabled%>">
 			<html:options collection="<%=Constants.ENUMERATED_OPERATORS%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
+	
+	<%
+		String opTypeValue = (String)specimenDataMap.get("Operator:Specimen:TYPE");
+		disabled = (opTypeValue == null || opTypeValue.equals(Constants.ANY) || opValue == null || opValue.equals(Operator.NOT_EQUALS_CONDITION));
+
+		if(!disabled)
+		{
+			disabled = (classValue != null && classValue.equals("Cell"));
+		}
+	%>
+	
 	<td class="formField">
-		<html:select property="<%=type%>" styleClass="formFieldSized10" styleId="type" size="1" disabled="true">
+		<html:select property="<%=type%>" styleClass="formFieldSized10" styleId="type" size="1" disabled="<%=disabled%>">
 			<html:options collection="<%=Constants.SPECIMEN_TYPE_LIST%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
@@ -374,8 +412,14 @@
 			<html:options collection="<%=Constants.ENUMERATED_OPERATORS%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
+	
+	<%
+		opValue = (String)specimenDataMap.get("Operator:SpecimenCharacteristics:TISSUE_SITE");
+		disabled = (opValue == null || opValue.equals(Constants.ANY));
+	%>
+	
 	<td class="formField">
-		<html:select property="<%=tissueSite%>" styleClass="formFieldSized10" styleId="tissueSite" size="1" disabled="true">
+		<html:select property="<%=tissueSite%>" styleClass="formFieldSized10" styleId="tissueSite" size="1" disabled="<%=disabled%>">
 			<html:options collection="<%=Constants.TISSUE_SITE_LIST%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
@@ -393,8 +437,14 @@
 			<html:options collection="<%=Constants.ENUMERATED_OPERATORS%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
+	
+	<%
+		opValue = (String)specimenDataMap.get("Operator:SpecimenCharacteristics:TISSUE_SIDE");
+		disabled = (opValue == null || opValue.equals(Constants.ANY));
+	%>
+	
 	<td class="formField">
-		<html:select property="<%=tissueSide%>" styleClass="formFieldSized10" styleId="tissueSide" size="1" disabled="true">
+		<html:select property="<%=tissueSide%>" styleClass="formFieldSized10" styleId="tissueSide" size="1" disabled="<%=disabled%>">
 			<html:options collection="<%=Constants.TISSUE_SIDE_LIST%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
@@ -412,8 +462,14 @@
 			<html:options collection="<%=Constants.ENUMERATED_OPERATORS%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
+	
+	<%
+		opValue = (String)specimenDataMap.get("Operator:SpecimenCharacteristics:PATHOLOGICAL_STATUS");
+		disabled = (opValue == null || opValue.equals(Constants.ANY));
+	%>
+	
 	<td class="formField">
-		<html:select property="<%=pathologicalStatus%>" styleClass="formFieldSized10" styleId="pathologicalStatus" size="1" disabled="true">
+		<html:select property="<%=pathologicalStatus%>" styleClass="formFieldSized10" styleId="pathologicalStatus" size="1" disabled="<%=disabled%>">
 			<html:options collection="<%=Constants.PATHOLOGICAL_STATUS_LIST%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
@@ -426,15 +482,46 @@
  			<b><bean:message key="specimen.concentration"/>
  		</label>
 	</td>
+	
+	<%
+		boolean disabled2 = true;
+		boolean opDisabled = false;
+		opValue = (String)specimenDataMap.get("Operator:Specimen:SPECIMEN_CLASS");
+		String opValConcentration = (String)specimenDataMap.get("Operator:Specimen:CONCENTRATION");
+		
+		if(classValue != null && classValue.equals("Molecular") && opValue.equals(Operator.EQUALS_CONDITION))
+		{
+			if(opValConcentration != null && (opValConcentration.equals(Operator.BETWEEN) || opValConcentration.equals(Operator.NOT_BETWEEN)))
+			{
+				disabled = false;
+				disabled2 = false;
+				opDisabled = false;
+			}
+			else if(!opValConcentration.equals(Constants.ANY))
+			{
+				disabled = false;
+				disabled2 = true;
+				opDisabled = false;
+			}
+		}
+		else
+		{
+			disabled = true;
+			disabled2 = true;
+			opDisabled = true;
+		}
+	%>
+	
 	<td class="formField">
-		<html:select property="<%=opConcentration%>" styleClass="formFieldSized10" styleId="opConcentration" size="1" onchange="onDateOperatorChange(this,'concentration1','concentration2')" disabled="true">
+		<html:select property="<%=opConcentration%>" styleClass="formFieldSized10" styleId="opConcentration" size="1" onchange="onDateOperatorChange(this,'concentration1','concentration2')" disabled="<%=opDisabled%>">
 				<html:options collection="<%=Constants.DATE_NUMERIC_OPERATORS%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
+	
 	<td class="formField">
-		<html:text styleClass="formFieldSized10" styleId="concentration1" property="<%=concentration1%>" disabled="true"/>
+		<html:text styleClass="formFieldSized10" styleId="concentration1" property="<%=concentration1%>" disabled="<%=disabled%>"/>
 						&nbsp;To&nbsp;
-		<html:text styleClass="formFieldSized10" styleId="concentration2" property="<%=concentration2%>" disabled="true"/>
+		<html:text styleClass="formFieldSized10" styleId="concentration2" property="<%=concentration2%>" disabled="<%=disabled2%>"/>
 		<bean:message key="specimen.concentrationUnit"/>
 	</td>
 </tr>
@@ -451,10 +538,30 @@
 			<html:options collection="<%=Constants.DATE_NUMERIC_OPERATORS%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
+	
+	<%
+		opValue = (String)specimenDataMap.get("Operator:Specimen:QUANTITY");
+		if(opValue == null || opValue.equals(Constants.ANY))
+		{
+			disabled = true;
+			disabled2= true;
+		}
+		else if(opValue.equals(Operator.BETWEEN) || opValue.equals(Operator.NOT_BETWEEN))
+		{
+			disabled = false;
+			disabled2= false;
+		}
+		else
+		{
+			disabled = false;
+			disabled2= true;
+		}
+	%>
+	
 	<td class="formField" nowrap>
-		<html:text styleClass="formFieldSized10" styleId="quantity1" property="<%=quantity1%>" disabled="true"/>
+		<html:text styleClass="formFieldSized10" styleId="quantity1" property="<%=quantity1%>" disabled="<%=disabled%>"/>
 						&nbsp;To&nbsp;
-		<html:text styleClass="formFieldSized10" styleId="quantity2" property="<%=quantity2%>" disabled="true"/>
+		<html:text styleClass="formFieldSized10" styleId="quantity2" property="<%=quantity2%>" disabled="<%=disabled2%>"/>
 		<span id="unitSpan"><%=unitSpecimen%></span>
      	<%--html:hidden property="value(Specimen:unit)"/--%>
      	<input type="hidden" name="unit">
@@ -473,8 +580,14 @@
 			<html:options collection="<%=Constants.STRING_OPERATORS%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
+	
+	<%
+		opValue = (String)specimenDataMap.get("Operator:Biohazard:TYPE");
+		disabled = (opValue == null || opValue.equals(Constants.ANY));
+	%>
+	
 	<td class="formField">
-		<html:select property="<%=biohazardType%>" styleClass="formFieldSized10" styleId="biohazardType" size="1" disabled="true">
+		<html:select property="<%=biohazardType%>" styleClass="formFieldSized10" styleId="biohazardType" size="1" disabled="<%=disabled%>">
 			<html:options collection="<%=Constants.BIOHAZARD_TYPE_LIST%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
@@ -492,8 +605,14 @@
 			<html:options collection="<%=Constants.STRING_OPERATORS%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
+	
+	<%
+		opValue = (String)specimenDataMap.get("Operator:Biohazard:NAME");
+		disabled = (opValue == null || opValue.equals(Constants.ANY));
+	%>
+	
 	<td class="formField">
-		<html:text styleClass="formFieldSized10" styleId="biohazardName" property="<%=biohazardName%>" disabled="true"/>
+		<html:text styleClass="formFieldSized10" styleId="biohazardName" property="<%=biohazardName%>" disabled="<%=disabled%>"/>
 	</td>
 </tr>
 </table>
@@ -507,7 +626,6 @@
 </tr>
 
 <%
-	AdvanceSearchForm form = (AdvanceSearchForm)request.getAttribute("advanceSearchForm");
 	int counter = form.getEventCounter();
 
 	Map eventParametersMap = (Map)form.getEventValues();
@@ -527,6 +645,7 @@
 		String eventParameter = (String)eventParametersMap.get(classNameId);
 		List columnNamesList = (List)tableColumnMap.get(eventParameter);
 		String operatorType = (String)eventParametersMap.get(columnId);
+		String divId = "div" + i;
 
 		if(operatorType != null)
 		{
@@ -560,22 +679,34 @@
 	</td>
 	<td class="formField" nowrap>
 		<html:select property="<%=eventOperator%>" styleClass="formFieldSized10" styleId="<%=operatorId%>" size="1">
-			<html:option value="<%=Constants.ANY%>"><%=Constants.ANY%></html:option>
 			<%
 			if(operatorType != null)
+			{
 			if(operatorType.equals("varchar") || operatorType.equals("text"))
 			{
 			%>
 				<html:option value="<%=Operator.STARTS_WITH%>"><%=Operator.STARTS_WITH%></html:option>
 				<html:option value="<%=Operator.ENDS_WITH%>"><%=Operator.ENDS_WITH%></html:option>
 				<html:option value="<%=Operator.CONTAINS%>"><%=Operator.CONTAINS%></html:option>
-				<html:option value="<%=Operator.EQUAL%>">Equals</html:option>
-				<html:option value="<%=Operator.NOT_EQUALS%>">Not Equals</html:option>
+				<html:option value="<%=Operator.EQUALS_CONDITION%>"><%=Operator.EQUALS_CONDITION%></html:option>
+				<html:option value="<%=Operator.NOT_EQUALS_CONDITION%>"><%=Operator.NOT_EQUALS_CONDITION%></html:option>
 			<%
 			}else{
 			%>
-				<html:option value="<%=Operator.EQUAL%>">Equals</html:option>
-				<html:option value="<%=Operator.NOT_EQUALS%>">Not Equals</html:option>
+				<html:option value="<%=Operator.EQUALS_CONDITION%>"><%=Operator.EQUALS_CONDITION%></html:option>
+				<html:option value="<%=Operator.NOT_EQUALS_CONDITION%>"><%=Operator.NOT_EQUALS_CONDITION%></html:option>
+				<html:option value="<%=Operator.LESS_THAN%>"><%=Operator.LESS_THAN%></html:option>
+				<html:option value="<%=Operator.LESS_THAN_OR_EQUALS%>"><%=Operator.LESS_THAN_OR_EQUALS%></html:option>
+				<html:option value="<%=Operator.GREATER_THAN%>"><%=Operator.GREATER_THAN%></html:option>
+				<html:option value="<%=Operator.GREATER_THAN_OR_EQUALS%>"><%=Operator.GREATER_THAN_OR_EQUALS%></html:option>
+			<%
+			}
+			}
+			else
+			{
+			%>
+				<html:option value="<%=Operator.EQUALS_CONDITION%>"><%=Operator.EQUALS_CONDITION%></html:option>
+				<html:option value="<%=Operator.NOT_EQUALS_CONDITION%>"><%=Operator.NOT_EQUALS_CONDITION%></html:option>
 				<html:option value="<%=Operator.LESS_THAN%>"><%=Operator.LESS_THAN%></html:option>
 				<html:option value="<%=Operator.LESS_THAN_OR_EQUALS%>"><%=Operator.LESS_THAN_OR_EQUALS%></html:option>
 				<html:option value="<%=Operator.GREATER_THAN%>"><%=Operator.GREATER_THAN%></html:option>
@@ -588,10 +719,23 @@
 	<td class="formField" nowrap>
 		<html:text styleClass="formFieldSized10" styleId="<%=valueId%>" property="<%=eventValue%>"/>
 		&nbsp;&nbsp;
-		<span id="div1">
-			<a href="#" onClick="addMore('newEventRow')">
+		<span id="<%=divId%>">
+		<%
+			if(i == counter)
+			{
+		%>
+				<a href="#" onClick="addMore('newEventRow')">
+					<bean:message key="simpleQuery.and"/>
+				</a>
+		<%
+			}
+			else
+			{
+		%>
 				<bean:message key="simpleQuery.and"/>
-			</a>
+		<%
+			}
+		%>
 		</span>
 	</td>
 </tr>
