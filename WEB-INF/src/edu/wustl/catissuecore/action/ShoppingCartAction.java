@@ -50,7 +50,7 @@ public class ShoppingCartAction  extends BaseAction
     {
         //Gets the value of the operation parameter.
         String operation = (String)request.getParameter(Constants.OPERATION);
-        
+        String target = Constants.SUCCESS;
         HttpSession session = request.getSession(true);
         ShoppingCart cart = (ShoppingCart)session.getAttribute(Constants.SHOPPING_CART);
         ShoppingCartBizLogic bizLogic = (ShoppingCartBizLogic)BizLogicFactory.getBizLogic(Constants.SHOPPING_CART_FORM_ID);
@@ -63,7 +63,7 @@ public class ShoppingCartAction  extends BaseAction
         
         if(operation == null)
         {
-        	List specimenList = bizLogic.retrieve(Specimen.class.getName());
+        	/*List specimenList = bizLogic.retrieve(Specimen.class.getName());
         	Iterator it = specimenList.iterator();
         	
         	while(it.hasNext())
@@ -72,7 +72,7 @@ public class ShoppingCartAction  extends BaseAction
         		cart.add(specimen);
         	}
         	
-        	session.setAttribute(Constants.SHOPPING_CART,cart);
+        	session.setAttribute(Constants.SHOPPING_CART,cart);*/
         	
         	request.setAttribute(Constants.SPREADSHEET_DATA_LIST,makeGridData(cart));        		
         }
@@ -83,6 +83,7 @@ public class ShoppingCartAction  extends BaseAction
         		//AdvanceSearchForm advForm = (AdvanceSearchForm)form;
         		//Map map = advForm.getValues();
 	        	//Logger.out.debug("map of shopping form:"+map);
+        		//request.getp
         		SessionDataBean sessionDataBean = getSessionData(request);
         		Map columnIdsMap = (Map)session.getAttribute(Constants.COLUMN_ID_MAP);
         		Logger.out.debug("column ids map in shopping cart"+columnIdsMap);
@@ -106,6 +107,7 @@ public class ShoppingCartAction  extends BaseAction
         		bizLogic.add(cart,specimenIds);
         		session.setAttribute(Constants.SHOPPING_CART,cart);
        			List dataList = (List) session.getAttribute(Constants.SPREADSHEET_DATA_LIST);
+       			//target="addShoppingCart";
 	        }
 	        else if(operation.equals(Constants.DELETE)) //IF OPERATION IS "DELETE"
 	        {
@@ -143,15 +145,15 @@ public class ShoppingCartAction  extends BaseAction
 	        
         	request.setAttribute(Constants.SPREADSHEET_DATA_LIST,makeGridData(cart));
         }
-        
         //Sets the operation attribute to be used in the Add/Edit Shopping Cart Page. 
         request.setAttribute(Constants.OPERATION, operation);
+        
         
     	request.setAttribute(Constants.MENU_SELECTED,new String("18") );
     	Logger.out.debug(Constants.MENU_SELECTED + " set in ShoppingCart Action : 18  -- "  ); 
 
         
-        return mapping.findForward(Constants.SUCCESS);
+        return mapping.findForward(target);
     }
     
     //This function prepares the data in Grid Format
