@@ -345,8 +345,8 @@ function getSubDivCount(subdivtag)
 
 <!-- protocol coordinators -->	
 					<tr>
-						<td class="formRequiredNotice" width="5">*</td>
-						<td class="formRequiredLabel">
+						<td class="formRequiredNotice" width="5">&nbsp;</td>
+						<td class="formLabel">
 							<label for="protocolCoordinatorIds">
 								<bean:message key="collectionprotocol.protocolcoordinator" />
 							</label>
