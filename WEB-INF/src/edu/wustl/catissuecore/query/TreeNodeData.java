@@ -176,7 +176,7 @@ public class TreeNodeData implements TreeNode, Serializable
 	{
 		String nodeName = this.objectName;
 		if (this.identifier != null)
-			nodeName = nodeName  + " : " + this.identifier;
+			nodeName = nodeName  + ":" + this.identifier;
 		
 		return nodeName;
 	}
