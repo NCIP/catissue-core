@@ -114,12 +114,14 @@ public abstract class BaseDistributionReportAction extends BaseAction
     		simpleConditionsNode.getCondition().setValue(specimenIds[j]);
     		simpleConditionsNode.getCondition().getDataElement().setTable("Specimen");
     		simpleConditionsNode.getCondition().getDataElement().setField("Identifier");
+    		simpleConditionsNode.getCondition().getDataElement().setFieldType(Constants.FIELD_TYPE_BIGINT);
     		simpleConditionsNode.getCondition().getOperator().setOperator("=");
     		
     		
     		SimpleConditionsNode simpleConditionsNode1 = new SimpleConditionsNode();
     		simpleConditionsNode1.getCondition().getDataElement().setTable("DistributedItem");
     		simpleConditionsNode1.getCondition().getDataElement().setField("Distribution_Id");
+    		simpleConditionsNode1.getCondition().getDataElement().setFieldType(Constants.FIELD_TYPE_BIGINT);
     		simpleConditionsNode1.getCondition().getOperator().setOperator("=");
     		simpleConditionsNode1.getCondition().setValue(dist.getSystemIdentifier().toString());
     		simpleConditionsNode1.setOperator(new Operator(Constants.AND_JOIN_CONDITION));
