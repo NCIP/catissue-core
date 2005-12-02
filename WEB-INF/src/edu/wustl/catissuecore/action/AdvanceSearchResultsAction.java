@@ -32,7 +32,6 @@ import edu.wustl.catissuecore.query.AdvancedConditionsNode;
 import edu.wustl.catissuecore.query.AdvancedQuery;
 import edu.wustl.catissuecore.query.Condition;
 import edu.wustl.catissuecore.query.DataElement;
-import edu.wustl.catissuecore.query.Operator;
 import edu.wustl.catissuecore.query.Query;
 import edu.wustl.catissuecore.query.QueryFactory;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -55,13 +54,13 @@ public class AdvanceSearchResultsAction extends BaseAction
 		String aliasName = Constants.PARTICIPANT;
 		String pageOf=Constants.PAGEOF_QUERY_RESULTS;
 		AdvanceQueryBizlogic advBizLogic = (AdvanceQueryBizlogic)BizLogicFactory.getBizLogic(Constants.ADVANCE_QUERY_INTERFACE_ID);
+
 		//Get the advance query root object from session 
 		HttpSession session = request.getSession();
 		DefaultMutableTreeNode root = (DefaultMutableTreeNode)session.getAttribute(Constants.ADVANCED_CONDITIONS_ROOT);
 		//Create Advance Query object
 		Query query = QueryFactory.getInstance().newQuery(Query.ADVANCED_QUERY, aliasName);
-		//DefaultMutableTreeNode queryRootObject = new  DefaultMutableTreeNode();
-		//queryRootObject = root.;
+
 		//Set the root object as the where conditions
 		((AdvancedConditionsImpl)((AdvancedQuery)query).getWhereConditions()).setWhereCondition(root);
 		
@@ -74,13 +73,12 @@ public class AdvanceSearchResultsAction extends BaseAction
 		List columnNames = new ArrayList();
 		SimpleQueryBizLogic bizLogic = new SimpleQueryBizLogic(); 
 		
-		//String []selectedColumns = advSearchForm.getSelectedColumnNames();
-		/*change the values in the conditions for the query-adding quotes to string 
-		**& changing date format only when the spreadsheet loads the first time.
-		*/	
-		changeValueFormat(root);
+		//Set attribute type in the DataElement	
+		setAttributeType(root);
+		
 		//Set the result view for Advance Search
 	 	Vector selectDataElements = bizLogic.getSelectDataElements(null,tableSet, columnNames);
+
 	 	//Add parent specimen id column to the dataElement required for the hierarchy of the treeView in Advance Search result view 
         DataElement dataElement = new DataElement();
         dataElement.setTable(Constants.SPECIMEN);
@@ -90,6 +88,7 @@ public class AdvanceSearchResultsAction extends BaseAction
 	 	query.setResultView(selectDataElements);
 	 	
 	 	SessionDataBean sessionData = getSessionData(request);
+	 	
 	 	//Temporary table name with userID attached
 		String tempTableName = Constants.QUERY_RESULTS_TABLE+"_"+sessionData.getUserId();
 		
@@ -110,11 +109,12 @@ public class AdvanceSearchResultsAction extends BaseAction
 	 	Logger.out.debug("Advance Query Sql"+sql);
 		advBizLogic.createTempTable(sql,tempTableName,sessionData);
 		Logger.out.debug("column display names "+columnNames+":size"+columnNames.size());
+		
 		//Set the columnDisplayNames in session
 		session.setAttribute(Constants.COLUMN_DISPLAY_NAMES,columnNames);
 		
 		//Set tables for Configuration.
-		Object selectedTables[] = query.getTableSet().toArray();
+		Object selectedTables[] = tableSet.toArray();
 		session.setAttribute(Constants.TABLE_ALIAS_NAME,selectedTables);
 		
 		//Remove shopping cart attribute from session
@@ -143,8 +143,8 @@ public class AdvanceSearchResultsAction extends BaseAction
 		}
 		
 	}
-	//Parse the tree and change the value as required by the query object
-	private void changeValueFormat(DefaultMutableTreeNode tree) throws Exception
+	//Parse the root and set the attribute type in the DataElement
+	private void setAttributeType(DefaultMutableTreeNode tree) throws Exception
 	{
 		DefaultMutableTreeNode child;
 		int childCount = tree.getChildCount();
@@ -162,46 +162,9 @@ public class AdvanceSearchResultsAction extends BaseAction
 				String aliasName = condition.getDataElement().getTable();
 				QueryBizLogic bizLogic = (QueryBizLogic)BizLogicFactory.getBizLogic(Constants.SIMPLE_QUERY_INTERFACE_ID);
 				String attributeType = bizLogic.getAttributeType(columnName,aliasName);
-				String operator = (condition.getOperator()).getOperator();
-				/*String value = condition.getValue();
-				//Converting to operator = 'Like' when it is STARTS WITH, ENDS WITH and CONTAINS and adding '%' to value
- 				if(Operator.getOperator(operator)!=null)
-				{
-					if(operator.equals(Operator.STARTS_WITH))
-						value = value+"%";
-					else if(operator.equals(Operator.ENDS_WITH))
-						value = "%"+value;
-					else if(operator.equals(Operator.CONTAINS))
-						value = "%"+value+"%";
-						operator = Operator.getOperator(operator);
-				}
-					
-				if (attributeType.equalsIgnoreCase(Constants.FIELD_TYPE_VARCHAR)
-						|| attributeType.equalsIgnoreCase(Constants.FIELD_TYPE_DATE) 
-						|| attributeType.equalsIgnoreCase(Constants.FIELD_TYPE_TEXT))
-				{
-					//Add Quotes for String values
-					if (attributeType.equalsIgnoreCase(Constants.FIELD_TYPE_VARCHAR) || attributeType.equalsIgnoreCase(Constants.FIELD_TYPE_TEXT))
-					{
-						value = "'" + value + "'";
-					}
-					//Change the date format
-					else
-					{
-						value = "STR_TO_DATE('" + value + "','" + Constants.MYSQL_DATE_PATTERN + "')";
-					}
-				}*/
-				if(Operator.getOperator(operator)!=null)
-				{
-					operator = Operator.getOperator(operator);
-					
-				}
-				condition.setOperator(new Operator(operator));
-				//condition.setValue(value);
 				condition.getDataElement().setFieldType(attributeType);
 			}
-			
-			changeValueFormat(child);
+			setAttributeType(child);
 		}
 	}
 }
