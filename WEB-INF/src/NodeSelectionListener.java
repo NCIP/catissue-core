@@ -19,6 +19,7 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 
+import edu.wustl.catissuecore.query.TreeNodeData;
 import edu.wustl.catissuecore.util.global.Constants;
 
 /**
@@ -84,14 +85,16 @@ public class NodeSelectionListener implements TreeSelectionListener, ActionListe
      */
     public void valueChanged(TreeSelectionEvent e)
     {
-        Object object = e.getSource();
+       
+    	Object object = e.getSource();
         JTree t = null;
         if (object instanceof JTree)
         {
             t = (JTree) object;
             DefaultMutableTreeNode node = (DefaultMutableTreeNode)
             							   t.getLastSelectedPathComponent();
-            this.nodeName = (String) node.getUserObject();
+            TreeNodeData treeNodeData = (TreeNodeData) node.getUserObject();
+            this.nodeName = treeNodeData.toString();
             
             try
             {
@@ -119,8 +122,18 @@ public class NodeSelectionListener implements TreeSelectionListener, ActionListe
     	String protocol = codeBase.getProtocol();
     	String host = codeBase.getHost();
         int port = codeBase.getPort();
+        
+        String applicationPath = codeBase.getPath();
+        // modify applicationPath String ...
+		
+        if(applicationPath.indexOf('/',1)!=-1){ //indexOf returns -1 if no match found
+			String newApplicationPath=null;
+			newApplicationPath = applicationPath.substring(0,applicationPath.indexOf('/',1)+1);
+			applicationPath=newApplicationPath;
+			
+        }
 
-        String urlSuffix = Constants.DATA_VIEW_ACTION + nodeName + 
+        String urlSuffix = applicationPath + Constants.DATA_VIEW_ACTION + nodeName + 
         			   "&"+ Constants.VIEW_TYPE + "=" + viewType;
         
         URL dataURL = new URL(protocol,host,port,urlSuffix);

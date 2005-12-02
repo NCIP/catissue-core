@@ -115,9 +115,10 @@ public class QueryTree extends JApplet
             Container contentPane = getContentPane();
             contentPane.setLayout(new BorderLayout());
             
+            
             if (pageOf.equals(Constants.PAGEOF_QUERY_RESULTS))
             {
-                //Preparing radio buttons for configuring different views.
+            	//Preparing radio buttons for configuring different views.
                 JPanel radioButtonPanel = new JPanel(new GridLayout(2, 1));
 
                 JRadioButton spreadsheetViewRadioButton = new JRadioButton(
@@ -142,6 +143,16 @@ public class QueryTree extends JApplet
                 
                 //Put the radioButton panel on the Applet.
                 contentPane.add(radioButtonPanel,BorderLayout.PAGE_START);
+
+            	// Add listeners for the tree.
+                NodeSelectionListener nodeSelectionListener = new NodeSelectionListener(
+                        this.getCodeBase(), this.getAppletContext());
+	            tree.addTreeSelectionListener(nodeSelectionListener);
+
+                //Add listeners for the radio buttons.
+	            spreadsheetViewRadioButton.addActionListener(nodeSelectionListener);
+                individualViewRadioButton.addActionListener(nodeSelectionListener);
+
             }
             
             JPanel treePanel = new JPanel(new GridLayout(1, 0));
@@ -150,17 +161,13 @@ public class QueryTree extends JApplet
             treePanel.setOpaque(true);
             treePanel.setVisible(true);
             
-            //Add listeners for the tree.
-            NodeSelectionListener nodeSelectionListener = new NodeSelectionListener(
-                    this.getCodeBase(), this.getAppletContext());
-            
             if (pageOf.equals(Constants.PAGEOF_TISSUE_SITE))
             {
                 TissueSiteTreeNodeListener tissueSiteListener = new TissueSiteTreeNodeListener();
 	            tissueSiteListener.setAppletContext(this.getAppletContext());
 	            tree.addTreeSelectionListener(tissueSiteListener);
             }
-            else
+            else if (pageOf.equals(Constants.PAGEOF_STORAGE_LOCATION))
             {
                 StorageLocationViewListener viewListener 
         			= new StorageLocationViewListener(this.getCodeBase(), this.getAppletContext());
@@ -168,10 +175,6 @@ public class QueryTree extends JApplet
 		        viewListener.setPageOf(pageOf);
 		        tree.addTreeSelectionListener(viewListener);
             } 
-            
-            //Add listeners for the radio buttons.
-//            spreadsheetViewRadioButton.addActionListener(nodeSelectionListener);
-//            individualViewRadioButton.addActionListener(nodeSelectionListener);
             
             //Put the tree panel on the Applet.
             contentPane.add(treePanel, BorderLayout.CENTER);
