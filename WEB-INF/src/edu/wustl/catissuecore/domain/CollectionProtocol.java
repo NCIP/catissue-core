@@ -136,15 +136,18 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
         	
         	userCollection.clear();
         	long [] coordinatorsArr = cpForm.getProtocolCoordinatorIds();
-        	for (int i = 0; i < coordinatorsArr.length; i++)
-			{
-        		if(coordinatorsArr[i]!=-1)
-        		{
-	        		User coordinator = new User();
-	        		coordinator.setSystemIdentifier(new Long(coordinatorsArr[i]));
-	        		userCollection.add(coordinator);
-        		}
-			}
+        	if(coordinatorsArr!=null)
+        	{
+	        	for (int i = 0; i < coordinatorsArr.length; i++)
+				{
+	        		if(coordinatorsArr[i]!=-1)
+	        		{
+		        		User coordinator = new User();
+		        		coordinator.setSystemIdentifier(new Long(coordinatorsArr[i]));
+		        		userCollection.add(coordinator);
+	        		}
+				}
+        	}
         	
 	        Map map = cpForm.getValues();
 	        Logger.out.debug("PRE FIX MAP "+map);
