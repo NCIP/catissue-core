@@ -72,8 +72,11 @@ public class CreateSpecimenBizLogic extends DefaultBizLogic
 			// check for closed Storage Container
 			checkStatus(dao, container, "Storage Container" );
 			
+			StorageContainerBizLogic storageContainerBizLogic 
+							= (StorageContainerBizLogic)BizLogicFactory
+									.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID); 
 			// --- check for all validations on the storage container.
-			checkContainer(dao,container.getSystemIdentifier().toString(),
+			storageContainerBizLogic.checkContainer(dao,container.getSystemIdentifier().toString(),
 					specimen.getPositionDimensionOne().toString(),specimen.getPositionDimensionTwo().toString());
 
 			specimen.setStorageContainer(container);

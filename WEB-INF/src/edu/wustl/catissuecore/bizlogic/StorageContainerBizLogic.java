@@ -790,4 +790,145 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 		return null;
 	}
 
+	//	 Will check only for valid range of the StorageContainer
+    protected boolean validatePosition(StorageContainer storageContainer, String posOne, String posTwo)
+    {
+    	try
+		{
+    		Logger.out.debug("storageContainer.getPositionDimensionOne() : " + storageContainer.getPositionDimensionOne());
+    		Logger.out.debug("storageContainer.getPositionDimensionTwo() : " + storageContainer.getPositionDimensionTwo());
+	        int positionDimensionOne = (storageContainer.getPositionDimensionOne() != null ? storageContainer.getPositionDimensionOne().intValue():-1);
+	        int positionDimensionTwo =(storageContainer.getPositionDimensionTwo() != null ? storageContainer.getPositionDimensionTwo().intValue():-1);
+	        if(((positionDimensionOne) < Integer.parseInt(posOne)) ||
+	           ((positionDimensionTwo) < Integer.parseInt(posTwo)))
+	        {
+	        	return false;
+	        }
+	        return true;
+		}
+    	catch(Exception e)
+		{
+    		Logger.out.debug("Error in validatePosition : " + e );
+    		return false;
+		}
+	}
+    
+//  Will check only for Position is used or not.
+    protected boolean isPositionAvailable(DAO dao, StorageContainer storageContainer, String posOne, String posTwo)
+    {
+    	try
+		{
+    		String sourceObjectName = Specimen.class.getName();
+			String[] selectColumnName = {"systemIdentifier"}; 
+    	    String[] whereColumnName = {"positionDimensionOne","positionDimensionTwo","storageContainer.systemIdentifier"};	//"storageContainer."+Constants.SYSTEM_IDENTIFIER
+			String[] whereColumnCondition ={"=","=","="};
+    	    Object[] whereColumnValue = {posOne ,posTwo, storageContainer.getSystemIdentifier()  };
+			String joinCondition = Constants.AND_JOIN_CONDITION;
+				 	
+            List list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, 
+            		         		  whereColumnCondition, whereColumnValue, joinCondition);
+            Logger.out.debug("storageContainer.getSystemIdentifier() :" +storageContainer.getSystemIdentifier());
+            // check if Specimen exists with the given storageContainer information
+            if (list.size() != 0)
+            {
+               	Object obj = list.get(0);
+            	Logger.out.debug("**************IN isPositionAvailable : obj::::::: --------------- "+ obj);
+//            	Logger.out.debug((Long)obj[0] );
+//            	Logger.out.debug((Integer)obj[1]);
+//            	Logger.out.debug((Integer )obj[2]);
+     
+            	return false;
+            }
+            else
+            {
+        		sourceObjectName = StorageContainer.class.getName();
+    			String[] whereColumnName1 = {"positionDimensionOne","positionDimensionTwo","parentContainer"};	//"storageContainer."+Constants.SYSTEM_IDENTIFIER
+    			String[] whereColumnCondition1 ={"=","=","="};
+        	    Object[] whereColumnValue1 = {posOne ,posTwo, storageContainer.getSystemIdentifier()  };
+    				 	
+                list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName1, 
+                		         		  whereColumnCondition1, whereColumnValue1, joinCondition);
+                Logger.out.debug("storageContainer.getSystemIdentifier() :" +storageContainer.getSystemIdentifier());
+                // check if Specimen exists with the given storageContainer information
+                if (list.size() != 0)
+                {
+                   	Object obj = list.get(0);
+                	Logger.out.debug("**********IN isPositionAvailable : obj::::: --------- "+ obj);
+                	return false;
+                }
+            }
+    		return true;
+		}
+		catch(Exception e)
+		{
+			Logger.out.debug("Error in isPositionAvailable : " + e );
+			return false;
+		}
+    }
+    
+//	 -- storage container validation for specimen
+    
+    public void checkContainer(DAO dao, String storageContainerID, String positionOne, String positionTwo) throws DAOException
+    {
+//        List list = dao.retrieve(StorageContainer.class.getName(),
+//                "systemIdentifier",storageContainerID  );
+
+		String sourceObjectName = StorageContainer.class.getName();
+		String[] selectColumnName = {Constants.SYSTEM_IDENTIFIER,"storageContainerCapacity.oneDimensionCapacity",
+				"storageContainerCapacity.twoDimensionCapacity"}; 
+	    String[] whereColumnName = {Constants.SYSTEM_IDENTIFIER  };
+		String[] whereColumnCondition ={"="};
+	    Object[] whereColumnValue = {storageContainerID };
+		String joinCondition = Constants.AND_JOIN_CONDITION;
+			 	
+        List list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, 
+        		         		  whereColumnCondition, whereColumnValue, joinCondition);
+    	
+        // check if StorageContainer exists with the given ID
+        if (list.size() != 0)
+        {
+        	Object[] obj =(Object[]) list.get(0);
+        	Logger.out.debug("**********SC found for given ID ****obj::::::: --------------- "+ obj);
+        	Logger.out.debug((Long)obj[0] );
+        	Logger.out.debug((Integer)obj[1]);
+        	Logger.out.debug((Integer )obj[2]);
+        	
+        	StorageContainer pc = new StorageContainer();
+        	pc.setSystemIdentifier((Long)obj[0] );
+        	
+            	if(obj[1] !=null)
+                	pc.setPositionDimensionOne((Integer)obj[1] );
+               	if(obj[2] !=null)
+                	pc.setPositionDimensionTwo((Integer )obj[2] );
+        	
+            
+            // check for closed Container
+			checkStatus(dao, pc, "Storage Container" );
+			
+			// check for valid position
+			boolean isValidPosition = validatePosition(pc, positionOne ,positionTwo  );
+			Logger.out.debug("isValidPosition : " + isValidPosition);
+			if(isValidPosition)		//	if position is valid 
+			{
+				boolean canUsePosition = isPositionAvailable(dao, pc, positionOne, positionTwo);
+				Logger.out.debug("canUsePosition : " + canUsePosition  );
+				if(canUsePosition)		// position empty. can be used 
+				{
+					
+				}
+				else		// position already in use
+				{
+		        	throw new DAOException(ApplicationProperties.getValue("errors.storageContainer.inUse"));
+				}
+			}
+			else			// position is invalid
+			{
+	        	throw new DAOException(ApplicationProperties.getValue("errors.storageContainer.dimensionOverflow"));
+			}
+        }
+        else		//	storageContainer does not exist
+        {
+        	throw new DAOException(ApplicationProperties.getValue("errors.storageContainerExist"));
+        }
+   }
 }

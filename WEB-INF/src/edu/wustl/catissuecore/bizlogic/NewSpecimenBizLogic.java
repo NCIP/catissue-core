@@ -21,6 +21,7 @@ import edu.wustl.catissuecore.dao.DAO;
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.domain.Address;
 import edu.wustl.catissuecore.domain.Biohazard;
+import edu.wustl.catissuecore.domain.DistributedItem;
 import edu.wustl.catissuecore.domain.ExternalIdentifier;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
@@ -330,8 +331,12 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			// check for closed Storage Container
 			checkStatus(dao,container, "Storage Container");
 			
+			StorageContainerBizLogic storageContainerBizLogic 
+									= (StorageContainerBizLogic)BizLogicFactory
+											.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
+			
 			// --- check for all validations on the storage container.
-			checkContainer(dao,container.getSystemIdentifier().toString(),
+			storageContainerBizLogic.checkContainer(dao,container.getSystemIdentifier().toString(),
 					specimen.getPositionDimensionOne().toString(),specimen.getPositionDimensionTwo().toString());
 			
 			specimen.setStorageContainer(container);
@@ -447,5 +452,25 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
     }
     
 // validation code here
-    
+    /**
+     * @see AbstractBizLogic#setPrivilege(DAO, String, Class, Long[], Long, String, boolean)
+     * @param dao
+     * @param privilegeName
+     * @param objectIds
+     * @param userId
+     * @param roleId
+     * @param assignToUser
+     * @throws SMException
+     * @throws DAOException
+     */
+    public void assignPrivilegeToRelatedObjectsForDistributedItem(DAO dao, String privilegeName, Long[] objectIds, Long userId, String roleId, boolean assignToUser)throws SMException, DAOException
+    {
+        String [] selectColumnNames = {"specimen.systemIdentifier"};
+        String [] whereColumnNames = {"systemIdentifier"};
+        List listOfSubElement = super.getRelatedObjects(dao, DistributedItem.class, selectColumnNames, whereColumnNames, objectIds);
+    	if(!listOfSubElement.isEmpty())
+    	{
+    	    super.setPrivilege(dao,privilegeName,Specimen.class,Utility.toLongArray(listOfSubElement),userId,roleId, assignToUser);
+    	}
+    }
 }
