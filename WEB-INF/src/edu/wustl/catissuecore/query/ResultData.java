@@ -29,13 +29,13 @@ public class ResultData
      */
     private String tmpResultsTableName = new String();
 
-    public List getSpreadsheetViewData(String name, int id, String[] columnList, SessionDataBean sessionDataBean, int securityParam)
+    public List getSpreadsheetViewData(String name, String id, String[] columnList, SessionDataBean sessionDataBean, int securityParam)
     {
         
     	tmpResultsTableName = Constants.QUERY_RESULTS_TABLE+"_"+sessionDataBean.getUserId();
-    	String[] whereColumnName = {getColumnName(name)};
+    	String[] whereColumnName = {name};
         String[] whereColumnCondition = {"="};
-        String[] whereColumnValue = {String.valueOf(id)};
+        String[] whereColumnValue = {id};
         
         if (name.equals(Constants.ROOT))
         {
@@ -53,6 +53,7 @@ public class ResultData
             dataList = dao.retrieve(tmpResultsTableName,columnList,
                     				 whereColumnName,whereColumnCondition,
                     				 whereColumnValue,null);
+            Logger.out.debug("List of spreadsheet data for advance search:"+dataList);
              dao.closeSession();
         }
         catch (DAOException sqlExp)
@@ -65,29 +66,5 @@ public class ResultData
         }
         
         return dataList;
-    }
-    
-    public String getColumnName(String name)
-    {
-        String columnName = null;
-        
-        if (name.equals(Constants.PARTICIPANT))
-        {
-            columnName = Constants.PARTICIPANT_ID_COLUMN;
-        }else if (name.equals(Constants.ACCESSION))
-        {
-            columnName = Constants.ACCESSION_ID_COLUMN;
-        }else if (name.equals(Constants.SPECIMEN))
-        {
-            columnName = Constants.SPECIMEN_ID_COLUMN;
-        }else if (name.equals(Constants.SEGMENT))
-        {
-            columnName = Constants.SEGMENT_ID_COLUMN;
-        }else if (name.equals(Constants.SAMPLE))
-        {
-            columnName = Constants.SAMPLE_ID_COLUMN;
-        }
-        
-        return columnName;
     }
 }

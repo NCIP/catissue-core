@@ -10,6 +10,7 @@
 package edu.wustl.catissuecore.action;
 
 import java.util.List;
+import java.util.Map;
 import java.util.StringTokenizer;
 
 import javax.servlet.RequestDispatcher;
@@ -17,6 +18,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -41,46 +44,61 @@ public class DataViewAction extends BaseAction
     {
         String target = Constants.SUCCESS;
     	String nodeName = request.getParameter("nodeName");
+    	Logger.out.debug("nodename of selected node"+nodeName);
         StringTokenizer str = new StringTokenizer(nodeName,":");
-        String name = str.nextToken();
-        int id = 0;
+        String name = str.nextToken().trim();
+        HttpSession session = request.getSession();
+        String id = new String();
         
         if (!name.equals(Constants.ROOT))
-            id = Integer.parseInt(str.nextToken());
+        {
+        	id = str.nextToken();
+        }
 
         //get the type of view to show (spreadsheet/individual)
         String viewType = request.getParameter(Constants.VIEW_TYPE);
         
         if (viewType.equals(Constants.SPREADSHEET_VIEW))
         {
-            List list = null;
+            if (!name.equals(Constants.ROOT))
+            {
+                Map columnIdsMap = (Map)session.getAttribute(Constants.COLUMN_ID_MAP);
+                Logger.out.debug("alias name of selected node in adv tree:"+name);
+                Logger.out.debug("column ids map in data view action"+columnIdsMap);
+                String key = name+"."+Constants.IDENTIFIER;
+                int columnId = ((Integer)columnIdsMap.get(name+"."+Constants.IDENTIFIER)).intValue()-1;
+                Logger.out.debug("columnid of selected node:"+columnId+"in the map for key:"+key);
+                name=Constants.COLUMN+columnId;
+                Logger.out.debug("Column name of the selected column in the tree:"+name);
+            }
+        	List list = null;
             String[] columnList= null;
             //String[] columnList = {"Participant1_IDENTIFIER","CollectionProtocol1_IDENTIFIER","SpecimenCollectionGroup1_IDENTIFIER","Specimen1_IDENTIFIER"};
             
 
             ResultData resultData = new ResultData();
-            HttpSession session = request.getSession();
+            
             //columnList = (String[]) session.getAttribute(Constants.SELECT_COLUMN_LIST);
             
-            if (columnList == null)
+            /*if (columnList == null)
             {
                 columnList = Constants.DEFAULT_SPREADSHEET_COLUMNS;
-            }
+            }*/
             
             list = resultData.getSpreadsheetViewData(name,id,columnList, getSessionData(request), Constants.OBJECT_LEVEL_SECURE_RETRIEVE);
             Logger.out.debug("list of data after advance search"+list);
      		// If the result contains no data, show error message.
-//    		if (list.isEmpty()) {
-//    			Logger.out.debug("inside if condition for empty list");
-//    			ActionErrors errors = new ActionErrors();
-//    			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-//    					"advanceQuery.noRecordsFound"));
-//    			saveErrors(request, errors);
-//    			target = "advanceSearchFailure";
-//    			
-//    			
-//    		} else {
-            if (!list.isEmpty()) {
+    		if (list.isEmpty()) 
+    		{
+    			Logger.out.debug("inside if condition for empty list");
+    			ActionErrors errors = new ActionErrors();
+    			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("advanceQuery.noRecordsFound"));
+    			saveErrors(request, errors);
+    			//target = Constants.FAILURE;
+    		}
+    		else
+    		{
+            
     			//Get column display names from session which is set in session in AdvanceSearchResultsAction
             	List columnDisplayNames = (List)session.getAttribute(Constants.COLUMN_DISPLAY_NAMES);
     			
@@ -100,12 +118,16 @@ public class DataViewAction extends BaseAction
     			request.setAttribute(Constants.PAGEOF,Constants.PAGEOF_QUERY_RESULTS);
     		}
         }
+        
         else
         {
             String url = null;
+            Logger.out.debug("selected node name in object view:"+name+"object");
             if (name.equals(Constants.PARTICIPANT))
             {
-                url = new String(Constants.QUERY_PARTICIPANT_SEARCH_ACTION+id);
+            	Logger.out.debug("indside participant object view");
+                url = new String(Constants.QUERY_PARTICIPANT_SEARCH_ACTION+id+"&"+Constants.PAGEOF+"="+
+                														Constants.PAGEOF_PARTICIPANT_QUERY);
             }
             else
             {
@@ -114,7 +136,7 @@ public class DataViewAction extends BaseAction
                     url = new String(Constants.QUERY_ACCESSION_SEARCH_ACTION+id);
                 }
             }
-            
+            Logger.out.debug("url of object view:"+url);
             RequestDispatcher requestDispatcher = request.getRequestDispatcher(url);
             requestDispatcher.forward(request,response);
             
