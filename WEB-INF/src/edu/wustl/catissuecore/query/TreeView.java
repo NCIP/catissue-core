@@ -61,10 +61,10 @@ public class TreeView {
 								
 				if(nodeId == checkedNode)
 				{
-//					if(operation !)
 					if(operation.equals(Operator.EXIST))
 					{
-						advConditionNode.setOperationWithChildCondition(new Operator(Operator.EXIST));
+						if(child.getChildCount() > 0)
+							advConditionNode.setOperationWithChildCondition(new Operator(Operator.EXIST));
 					}
 					else
 					{
