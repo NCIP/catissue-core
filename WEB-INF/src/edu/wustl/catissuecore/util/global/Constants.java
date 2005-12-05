@@ -540,6 +540,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	//Edit Object Constants.
 	public static final String TABLE_ALIAS_NAME = "aliasName"; 
 	public static final String FIELD_TYPE_VARCHAR = "varchar";
+	public static final String FIELD_TYPE_BIGINT = "bigint";
 	public static final String FIELD_TYPE_DATE = "date";
 	public static final String FIELD_TYPE_TEXT = "text";
 	
