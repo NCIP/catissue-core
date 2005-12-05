@@ -7,8 +7,7 @@
 package edu.wustl.common.util;
 
 import java.lang.reflect.Method;
-
-import edu.wustl.common.util.logger.Logger;
+import java.util.StringTokenizer;
 
 
 /**
@@ -71,5 +70,33 @@ public class Utility
         
         return className;
     }
-	
+    
+    /**
+     * Changes the format of the string compatible to Grid Format, 
+     * removing escape characters and special characters from the string
+     * @param obj - Unformatted obj to be printed in Grid Format
+     * @return obj - Foratted obj to print in Grid Format
+     */
+    public static Object toGridFormat(Object obj)
+    {
+        if(obj instanceof String)
+        {
+            String objString=(String)obj;
+            StringBuffer tokenedString=new StringBuffer();
+            
+            StringTokenizer tokenString=new StringTokenizer(objString,"\n\r\f"); 
+            
+            while(tokenString.hasMoreTokens())
+            {
+               tokenedString.append(tokenString.nextToken()+" ");
+            }
+            
+            String gridFormattedStr=new String(tokenedString);
+            
+            obj=gridFormattedStr.replaceAll("\"","\\\\\"");
+        }
+ 
+        return obj;
+    }
+    
 }
