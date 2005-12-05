@@ -6,6 +6,8 @@
 <%@ page import="java.util.Map,java.util.List,java.util.ListIterator"%>
 <%@ page import="edu.wustl.common.beans.NameValueBean"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.ConfigureResultViewForm"%>
+<%@ page import="edu.wustl.catissuecore.actionForm.AdvanceSearchForm"%>
+<%@ page import="edu.wustl.catissuecore.actionForm.SimpleQueryInterfaceForm"%>
 <%@ page import="java.util.*"%>
 
 <head>
@@ -14,18 +16,48 @@
     Set tableNamesList = tableDataMap.keySet();
     String pageOf = (String)request.getAttribute("pageOf");
     String callAction = new String();
+    String selectedColumns[] = null;
+    String [] columnNames=null;
+
     if(pageOf.equals(Constants.PAGEOF_SIMPLE_QUERY_INTERFACE))
 	{
 		callAction=Constants.SIMPLE_SEARCH_AFTER_CONFIGURE_ACTION+"?pageOf="+Constants.PAGEOF_SIMPLE_QUERY_INTERFACE;
+	    SimpleQueryInterfaceForm form = (SimpleQueryInterfaceForm)request.getAttribute("simpleQueryInterfaceForm");
+	    selectedColumns = form.getSelectedColumnNames();
+
 	}
 	else if(pageOf.equals(Constants.PAGEOF_DISTRIBUTION))
 	{
 		callAction=Constants.DISTRIBUTION_REPORT_ACTION;
+		ConfigureResultViewForm form = (ConfigureResultViewForm)request.getAttribute("configureResultViewForm");
+		selectedColumns = form.getSelectedColumnNames();
+
 	}
 	else if(pageOf.equals(Constants.PAGEOF_QUERY_RESULTS))
 	{
 		callAction = Constants.CONFIGURE_ADVANCED_SEARCH_RESULTS_ACTION;
+		AdvanceSearchForm form = (AdvanceSearchForm)request.getAttribute("advanceSearchForm");
+		selectedColumns = form.getSelectedColumnNames();
+
 	}
+    if(selectedColumns!=null)
+    {	    
+    	columnNames=new String[selectedColumns.length];
+    	for(int i=0;i<selectedColumns.length;i++)
+    	{
+    		//Split the string which is in the form TableAlias.columnNames.columnDisplayNames
+    		StringTokenizer st= new StringTokenizer(selectedColumns[i],".");
+    		while (st.hasMoreTokens())
+    		{
+    			st.nextToken();
+    			st.nextToken();
+    			columnNames[i]=st.nextToken();
+	    		if(st.hasMoreTokens())
+	    			st.nextToken();
+
+    		}
+    	}
+    }
 %>
 <SCRIPT LANGUAGE="JavaScript">
 	//var pageOf = <%=pageOf%>;
@@ -233,28 +265,7 @@
 	}
 	
 </script>
-<%
-    /*if(pageOf.equals(Constants.PAGEOF_DISTRIBUTION))
-	{
-	    ConfigureResultViewForm form = (ConfigureResultViewForm)request.getAttribute("configureResultViewForm");
-	    String selectedColumns[] = form.getSelectedColumnNames();
-		if(selectedColumns!=null)
-	   {	    
-		    String [] columnNames=new String[selectedColumns.length];
-			for(int i=0;i<selectedColumns.length;i++)
-		    {
-		    	//Split the string which is in the form TableAlias.columnNames.columnDisplayNames
-				StringTokenizer st= new StringTokenizer(selectedColumns[i],".");
-		    	while (st.hasMoreTokens())
-		    	{
-		    		st.nextToken();
-		    		st.nextToken();
-		    		columnNames[i]=st.nextToken();
-		    	}
-		   	}
-	   	}
-   	}*/
-%>
+
 </head>
 <html:errors/>
 <html:form action="<%=Constants.DISTRIBUTION_REPORT_ACTION%>">
@@ -337,7 +348,16 @@
 			            </td>
 			            <td class="formField">
 			                <html:select property="selectedColumnNames" styleClass="formFieldSized" styleId="selectedColumnNames" size="10" multiple="true">
-                 
+							<% if(selectedColumns!=null)
+						      {
+						    	for(int i=0;i<selectedColumns.length;i++) {
+			                %>
+			                	<option value="<%=selectedColumns[i]%>"><%=columnNames[i]%></option>  
+			                <%
+			                	}
+			                  }
+			                %>  
+
 			                </html:select>
 			            </td>
 			            <td align="center" valign="middle">
