@@ -25,54 +25,18 @@ public class TissueSiteTreeNode implements TreeNode, Serializable
 	private static final long serialVersionUID = 1234567890L;
 	
     private String identifier;
-
     private String value;
-
     private String parentIdentifier;
 
-    private String cdeLongName;
-
-    private String cdePublicId;
-
+    public TissueSiteTreeNode(String identifier,String value,String parentIdentifier)
+    {
+        this.identifier = identifier;
+        this.value = value;
+        this.parentIdentifier = parentIdentifier;
+    }
     public TissueSiteTreeNode()
     {
-        identifier = null;
-        value = null;
-        parentIdentifier = null;
-        cdeLongName = null;
-        cdePublicId = null;
-    }
-    
-    /**
-     * @return Returns the cdeLongName.
-     */
-    public String getCdeLongName()
-    {
-        return cdeLongName;
-    }
-
-    /**
-     * @param cdeLongName The cdeLongName to set.
-     */
-    public void setCdeLongName(String cdeLongName)
-    {
-        this.cdeLongName = cdeLongName;
-    }
-
-    /**
-     * @return Returns the cdePublicId.
-     */
-    public String getCdePublicId()
-    {
-        return cdePublicId;
-    }
-
-    /**
-     * @param cdePublicId The cdePublicId to set.
-     */
-    public void setCdePublicId(String cdePublicId)
-    {
-        this.cdePublicId = cdePublicId;
+        this(null,"DUMMY",null);
     }
 
     /**
@@ -124,10 +88,7 @@ public class TissueSiteTreeNode implements TreeNode, Serializable
     
     public String toString()
     {
-        String nodeName = this.value;
-        if ((this.cdePublicId != null) && (this.identifier == null))
-            nodeName = this.cdeLongName;
-        return nodeName;
+        return this.value;
     }
     
     public void initialiseRoot()
@@ -138,27 +99,29 @@ public class TissueSiteTreeNode implements TreeNode, Serializable
     public TreeNode getParentTreeNode()
     {
         TissueSiteTreeNode treeNode = new TissueSiteTreeNode();
-        treeNode.setCdePublicId(this.getCdePublicId());
-        treeNode.setCdeLongName(this.getCdeLongName());
+        treeNode.setParentIdentifier(parentIdentifier); 
         return treeNode;
     }
     
     public boolean isChildOf(TreeNode treeNode)
     {
         TissueSiteTreeNode tissueSiteTreeNode = (TissueSiteTreeNode) treeNode;
-        return this.getParentIdentifier().equals(tissueSiteTreeNode.getIdentifier().toString());
+        return this.parentIdentifier.equals(tissueSiteTreeNode.getIdentifier());
     }
     
     public boolean hasEqualParents(TreeNode treeNode)
     {
         TissueSiteTreeNode tissueSiteTreeNode = (TissueSiteTreeNode) treeNode; 
-        return this.getCdePublicId().trim().equals(tissueSiteTreeNode.getCdePublicId().trim());
+        if(parentIdentifier==null)
+            return true;
+        return (parentIdentifier.equals(tissueSiteTreeNode.parentIdentifier));
     }
     
     /* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.vo.TreeNode#isPresentIn(javax.swing.tree.DefaultMutableTreeNode)
 	 */
-	public boolean isPresentIn(DefaultMutableTreeNode parentNode) {
+	public boolean isPresentIn(DefaultMutableTreeNode parentNode) 
+	{
 		return false;
 	}
 }
