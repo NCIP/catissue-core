@@ -14,12 +14,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import edu.wustl.catissuecore.query.Operator;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.vo.HTMLField;
 import edu.wustl.catissuecore.vo.SearchFieldData;
 import edu.wustl.common.beans.NameValueBean;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * @author aniruddha_phadnis
@@ -119,11 +121,11 @@ public class SearchUtil
 		{
 			link = "SpecimenCollectionGroupAdvanceSearch.do?pageOf=pageOfSpecimenCollectionGroupAdvanceSearch&selectedNode=";
 		}
-		else if(objectName.equals("Specimen"))
-		{
-			link = "SpecimenAdvanceSearch.do?pageOf=pageOfSpecimenAdvanceSearch&selectedNode=";
-		}
-		
+//		else if(objectName.equals("Specimen"))
+//		{
+//			link = "SpecimenAdvanceSearch.do?pageOf=pageOfSpecimenAdvanceSearch&selectedNode=";
+//		}
+//		
 		return link;
 	}
 	
@@ -143,8 +145,8 @@ public class SearchUtil
     		String opList,String valueList,String unitFieldKey)
     {
 		//Initializing HTMLField class
-    	HTMLField oprationField = new HTMLField(createKey(tblName,colName,true,dataType),id+"Combo",opList);
-    	HTMLField valueField = new HTMLField(createKey(tblName,colName,false,dataType),id,valueList);
+    	HTMLField oprationField = new HTMLField(createKey(tblName,colName,true),id+"Combo",opList);
+    	HTMLField valueField = new HTMLField(createKey(tblName,colName,false),id,valueList);
     	
     	//Function Name used according to dataType of field
     	String funcName = "";
@@ -172,7 +174,7 @@ public class SearchUtil
 	 * @param dataType Datatype of field
 	 * @return
 	 */	
-	private static String createKey(String tableName,String fieldName,boolean isOperator,String dataType)
+	private static String createKey(String tableName,String fieldName,boolean isOperator)
     {
 		//Checking whether the key is of operator field or not
     	if(isOperator)
@@ -303,5 +305,57 @@ public class SearchUtil
 //		/******** TO BE REMOVED LATER *****************/
 		
 		return map;
+	}
+	
+	public static String getColumnDisplayName(int formId,String tableName,String columnName)
+	{
+		SearchFieldData[] searchFieldData = getSearchFieldData(formId);
+		String columnDisplayName = "";
+		if(searchFieldData != null)
+		{
+			String name = createKey(tableName,columnName,false);
+			Logger.out.debug("name in SearchUtil--"+name);
+			
+			for(int i = 0; i < searchFieldData.length; i++)
+			{
+				String key = searchFieldData[i].getValueField().getName();
+				Logger.out.debug("key in SearchUtil--"+key);
+				if(key.equals(name))
+				{
+					columnDisplayName = searchFieldData[i].getLabelKey();
+					break;
+				}
+			}
+			
+		}
+		
+		Logger.out.debug("columnDisplayName--"+columnDisplayName);
+		ResourceBundle myResources =ResourceBundle.getBundle("ApplicationResources");
+		Logger.out.debug("property value--"+myResources.getString(columnDisplayName));
+		return myResources.getString(columnDisplayName);
+		
+		
+	}
+	public static int getFormId(String aliasName)
+	{
+		int formId = 0;
+		if(aliasName.equals("Participant"))
+		{
+			formId = Constants.PARTICIPANT_FORM_ID;
+		}
+		else if(aliasName.equals("CollectionProtocol"))
+		{
+			formId = Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID;
+		}
+		else if(aliasName.equals("Specimen"))
+		{
+			formId = Constants.NEW_SPECIMEN_FORM_ID;
+		}
+		else if(aliasName.equals("SpecimenCollectionGroup"))
+		{
+			formId = Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID;
+		}
+		
+		return formId;
 	}
 }
