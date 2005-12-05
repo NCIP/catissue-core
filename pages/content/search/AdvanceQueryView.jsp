@@ -11,7 +11,7 @@
 	<script type="text/javascript" src="jss/tree.js"></script>
 	<LINK REL="StyleSheet" HREF="css/menu.css">
 	<script language="javascript" src="jss/menu.js"></script>
-	<script type="text/javascript"><!--
+	<script type="text/javascript">
 	<%
 		Vector treeList = (Vector)request.getAttribute(Constants.TREE_VECTOR);
 	%>
@@ -54,12 +54,12 @@
 		var andItem = document.getElementById('and');
 		andItem.className="linkChange";
 		//var link = "AdvanceQueryView.do?operator=AND&itemId="+itemId;
-		andItem.innerHTML ="<img src='images/point.gif' alt='And' />&nbsp;AND";
+		andItem.innerHTML ="&nbsp;<img src='images/point.gif' alt='And' />&nbsp;<%=Constants.ADVANCED_QUERY_AND%>";
 			
 		var orItem = document.getElementById('or');
 		orItem.className="linkChange";
 		//var link = "AdvanceQueryView.do?operator=OR&itemId="+itemId;
-		orItem.innerHTML ="<img src='images/graydot.gif' alt='OR' />&nbsp;OR";
+		orItem.innerHTML ="&nbsp;&nbsp;<img src='images/graydot.gif' alt='OR' />&nbsp;&nbsp;<%=Constants.ADVANCED_QUERY_OR%>";
 				
 		/*item = document.getElementById('<%=Constants.S%>');
 		item.className="linkChange"
@@ -214,12 +214,12 @@
 			var andItem = document.getElementById('and');
 			andItem.className="linkChange";
 			var link = "AdvanceQueryView.do?operator=EXIST&itemId="+itemId;
-			andItem.innerHTML ="<img src='images/point.gif' alt='AND' />&nbsp;<a HREF='"+link+"'>AND</a>"
+			andItem.innerHTML ="&nbsp;<img src='images/point.gif' alt='AND' />&nbsp;<a HREF='"+link+"'><%=Constants.ADVANCED_QUERY_AND%></a>"
 			
 			var orItem = document.getElementById('or');
 			orItem.className="linkChange";
 			var link = "AdvanceQueryView.do?operator=OR&itemId="+itemId;
-			orItem.innerHTML ="<img src='images/graydot.gif' alt='OR' /><a HREF='"+link+"'>OR</a>"
+			orItem.innerHTML ="&nbsp;&nbsp;<img src='images/graydot.gif' alt='OR' />&nbsp;&nbsp;<a HREF='"+link+"'><%=Constants.ADVANCED_QUERY_OR%></a>"
 			
 			
 		}
@@ -251,12 +251,12 @@
 			var andItem = document.getElementById('and');
 			andItem.className="linkChange";
 			var link = "AdvanceQueryView.do?operator=EXIST&itemId="+itemId;
-			andItem.innerHTML ="<img src='images/point.gif' alt='And' />&nbsp;<a HREF='"+link+"'>AND</a>"
+			andItem.innerHTML ="&nbsp;<img src='images/point.gif' alt='AND' />&nbsp;<a HREF='"+link+"'><%=Constants.ADVANCED_QUERY_AND%></a>"
 			
 			var orItem = document.getElementById('or');
 			orItem.className="linkChange";
 			var link = "AdvanceQueryView.do?operator=OR&itemId="+itemId;
-			orItem.innerHTML ="<img src='images/graydot.gif' alt='OR' /><a HREF='"+link+"'>OR</a>"
+			orItem.innerHTML ="&nbsp;&nbsp;<img src='images/graydot.gif' alt='OR' />&nbsp;&nbsp;<a HREF='"+link+"'><%=Constants.ADVANCED_QUERY_OR%></a>"
 						
 		}
 		else if(sCGroupCount == sum)
@@ -280,12 +280,12 @@
 			var andItem = document.getElementById('and');
 			andItem.className="linkChange";
 			var link = "AdvanceQueryView.do?operator=EXIST&itemId="+itemId;
-			andItem.innerHTML ="<img src='images/point.gif' alt='And' />&nbsp;<a HREF='"+link+"'>AND</a>"
+			andItem.innerHTML ="&nbsp;<img src='images/point.gif' alt='AND' />&nbsp;<a HREF='"+link+"'><%=Constants.ADVANCED_QUERY_AND%></a>"
 			
 			var orItem = document.getElementById('or');
 			orItem.className="linkChange";
 			var link = "AdvanceQueryView.do?operator=OR&itemId="+itemId;
-			orItem.innerHTML ="<img src='images/graydot.gif' alt='OR' /><a HREF='"+link+"'>OR</a>"
+			orItem.innerHTML ="&nbsp;&nbsp;<img src='images/graydot.gif' alt='OR' />&nbsp;&nbsp;<a HREF='"+link+"'><%=Constants.ADVANCED_QUERY_OR%></a>"
 			
 			
 		}
@@ -306,12 +306,12 @@
 			var andItem = document.getElementById('and');
 			andItem.className="linkChange";
 			//var link = "AdvanceQueryView.do?operator=AND&itemId="+itemId;
-			andItem.innerHTML ="<img src='images/point.gif' alt='And' />&nbsp;AND";
+			andItem.innerHTML ="&nbsp;<img src='images/point.gif' alt='AND' />&nbsp;<%=Constants.ADVANCED_QUERY_AND%>";
 			
 			var orItem = document.getElementById('or');
 			orItem.className="linkChange";
 			//var link = "AdvanceQueryView.do?operator=OR&itemId="+itemId;
-			orItem.innerHTML ="<img src='images/graydot.gif' alt='OR' />&nbsp;OR"
+			orItem.innerHTML ="&nbsp;<img src='images/graydot.gif' alt='OR' />&nbsp;&nbsp;<%=Constants.ADVANCED_QUERY_OR%>"
 			
 		}
 		else 
@@ -417,15 +417,15 @@
 										onmouseover="changeMenuStyle(this,'linkChangeOnMouseOver')"
 										onmouseout="changeMenuStyle(this,'linkChange')">
 											&nbsp;<img src="images/point.gif" alt="AND" /> &nbsp; 
-											AND
+											<%=Constants.ADVANCED_QUERY_AND%>
 									</td>
 								</tr>
 								<tr height='20'  vAlign="middle">
 									<td colspan=2 class='linkChange' id='or' noWrap  height='20' vAlign="middle" 
 										onmouseover="changeMenuStyle(this,'linkChangeOnMouseOver')"
 										onmouseout="changeMenuStyle(this,'linkChange')">
-											&nbsp;<img src="images/graydot.gif" alt="OR" /> &nbsp;
-											OR
+											&nbsp;&nbsp;<img src="images/graydot.gif" alt="OR" /> &nbsp;&nbsp;
+											<%=Constants.ADVANCED_QUERY_OR%>
 									</td>
 								</tr>
 							</table>
