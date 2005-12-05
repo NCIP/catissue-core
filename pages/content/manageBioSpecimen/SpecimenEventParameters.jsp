@@ -4,6 +4,7 @@
 
 <%@ page import="java.util.List"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
+<%@ page import="edu.wustl.common.util.Utility"%>
 
 <link href="runtime/styles/xp/grid.css" rel="stylesheet" type="text/css" ></link>
 <script src="runtime/lib/grid.js"></script>
@@ -33,12 +34,12 @@ var myData = [<%int xx;%><%for (xx=0;xx<(dataList.size()-1);xx++){%>
 	List row = (List)dataList.get(xx);
   	int j;
 %>
-[<%for (j=0;j < (row.size()-1);j++){%>"<%=row.get(j)%>",<%}%>"<%=row.get(j)%>"],<%}%>
+[<%for (j=0;j < (row.size()-1);j++){%>"<%=Utility.toGridFormat(row.get(j))%>",<%}%>"<%=Utility.toGridFormat(row.get(j))%>"],<%}%>
 <%
 	List row = (List)dataList.get(xx);
   	int j;
 %>
-[<%for (j=0;j < (row.size()-1);j++){%>"<%=row.get(j)%>",<%}%>"<%=row.get(j)%>"]
+[<%for (j=0;j < (row.size()-1);j++){%>"<%=Utility.toGridFormat(row.get(j))%>",<%}%>"<%=Utility.toGridFormat(row.get(j))%>"]
 ];
 
 var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnList[k]%>",<%}%>"<%=columnList[k]%>"];

@@ -1,7 +1,7 @@
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 
-<%@ page import="java.util.List,edu.wustl.catissuecore.util.global.Constants"%>
+<%@ page import="java.util.List,edu.wustl.catissuecore.util.global.Constants,edu.wustl.common.util.Utility"%>
 
 <link href="runtime/styles/xp/grid.css" rel="stylesheet" type="text/css" ></link>
 <script src="runtime/lib/grid.js"></script>
@@ -21,12 +21,12 @@ var myData = [<%int i;%><%for (i=0;i<(dataList.size()-1);i++){%>
 	List row = (List)dataList.get(i);
   	int j;
 %>
-[<%for (j=0;j < (row.size()-1);j++){%>"<%=row.get(j)%>",<%}%>"<%=row.get(j)%>"],<%}%>
+[<%for (j=0;j < (row.size()-1);j++){%>"<%=Utility.toGridFormat(row.get(j))%>",<%}%>"<%=Utility.toGridFormat(row.get(j))%>"],<%}%>
 <%
 	List row = (List)dataList.get(i);
   	int j;
 %>
-[<%for (j=0;j < (row.size()-1);j++){%>"<%=row.get(j)%>",<%}%>"<%=row.get(j)%>"]
+[<%for (j=0;j < (row.size()-1);j++){%>"<%=Utility.toGridFormat(row.get(j))%>",<%}%>"<%=Utility.toGridFormat(row.get(j))%>"]
 ];
 
 var columns = [<%int k;%><%for (k=0;k < (columnList.size()-1);k++){%>"<%=columnList.get(k)%>",<%}%>"<%=columnList.get(k)%>"];
