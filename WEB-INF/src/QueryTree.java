@@ -37,7 +37,8 @@ import edu.wustl.catissuecore.util.global.Constants;
 public class QueryTree extends JApplet
 {
 
-    /**
+   
+	/**
      * Initializes the applet.
      */
     public void init()
@@ -109,9 +110,12 @@ public class QueryTree extends JApplet
             connection.setUseCaches(false);
             
             in = new ObjectInputStream(connection.getInputStream());
+            
             Vector treeDataVector = (Vector) in.readObject();
+            
             GenerateTree generateTree = new GenerateTree();
             JTree tree = generateTree.createTree(treeDataVector, treeType,selectedNode);
+            
             Container contentPane = getContentPane();
             contentPane.setLayout(new BorderLayout());
             
@@ -163,9 +167,12 @@ public class QueryTree extends JApplet
             
             if (pageOf.equals(Constants.PAGEOF_TISSUE_SITE))
             {
-                TissueSiteTreeNodeListener tissueSiteListener = new TissueSiteTreeNodeListener();
+             // changed for double click event
+            	TissueSiteTreeNodeListener tissueSiteListener = new TissueSiteTreeNodeListener();
 	            tissueSiteListener.setAppletContext(this.getAppletContext());
-	            tree.addTreeSelectionListener(tissueSiteListener);
+	         // tree.addTreeSelectionListener(tissueSiteListener);
+	            tree.addMouseListener(tissueSiteListener);
+	            
             }
             else if (pageOf.equals(Constants.PAGEOF_STORAGE_LOCATION))
             {
