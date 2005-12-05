@@ -55,9 +55,7 @@ public class CDEBizLogic extends DefaultBizLogic implements TreeDataInterface
     
     public Vector getTreeViewData() throws DAOException
     {
-        
-        CDE cde = CDEManager.getCDEManager().getCDE(
-                Constants.CDE_NAME_TISSUE_SITE);
+        CDE cde = CDEManager.getCDEManager().getCDE(Constants.CDE_NAME_TISSUE_SITE);
         Set set = cde.getPermissibleValues();
         Vector vector = new Vector();
         Iterator iterator = set.iterator();
@@ -91,27 +89,18 @@ public class CDEBizLogic extends DefaultBizLogic implements TreeDataInterface
 	
 	private TissueSiteTreeNode getTissueSiteTreeNode(PermissibleValueImpl permissibleValueImpl)
 	{
-	    TissueSiteTreeNode treeNode = new TissueSiteTreeNode();
-	    
-        treeNode.setIdentifier(permissibleValueImpl.getIdentifier());
-        treeNode.setValue(permissibleValueImpl.getValue());
-        
-        if (permissibleValueImpl.getParentPermissibleValue() != null)
+	    String id = permissibleValueImpl.getIdentifier();
+	    String val = permissibleValueImpl.getValue();
+	    String parentId = null;
+	        
+	    if (permissibleValueImpl.getParentPermissibleValue() != null)
         {
             PermissibleValueImpl parentPermissibleValue = (PermissibleValueImpl) permissibleValueImpl
                     .getParentPermissibleValue();
-
-            treeNode.setParentIdentifier(parentPermissibleValue
-                    .getIdentifier());
+            parentId = parentPermissibleValue.getIdentifier();
         }
-        else
-        {
-            treeNode.setCdeLongName(permissibleValueImpl.getCde()
-                    .getLongName());
-            treeNode.setCdePublicId(permissibleValueImpl.getCde()
-                    .getPublicId());
-        }
-        
+	    
+	    TissueSiteTreeNode treeNode = new TissueSiteTreeNode(id,val,parentId);
         return treeNode; 
 	}
 
