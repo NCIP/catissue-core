@@ -1373,7 +1373,8 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String ADVANCED_QUERY_EDIT = "Edit";
 	public static final String ADVANCED_QUERY_DELETE = "Delete";
 	public static final String ADVANCED_QUERY_OPERATOR = "Operator";
-	
+	public static final String ADVANCED_QUERY_OR = "OR";
+	public static final String ADVANCED_QUERY_AND = "AND";
 	
 	public static final String IDENTIFIER_COLUMN_ID_MAP = "identifierColumnIdsMap";
 	public static final String COLUMN_ID_MAP = "columnIdsMap";
