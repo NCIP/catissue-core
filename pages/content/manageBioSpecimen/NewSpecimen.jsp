@@ -227,8 +227,38 @@ Map map = form.getExternalIdentifier();
 			exIdRows = form.getExIdCounter();
 			bhRows	 = form.getBhCounter();
 			if(form.getUnit() != null)
+			{
 				unitSpecimen = form.getUnit();
-				
+				System.out.println("\n\n\nunitSpecimen : " +unitSpecimen);
+			}	
+			else
+			{
+				if(form.getClassName().equals("Tissue"))
+				{
+					if((form.getType()!=null) && (form.getType().equals(Constants.SLIDE)||form.getType().equals(Constants.PARAFFIN_BLOCK)||form.getType().equals(Constants.FROZEN_BLOCK)))
+					{
+						unitSpecimen = Constants.UNIT_CN;
+					}
+					else 
+					{
+						unitSpecimen = Constants.UNIT_GM;
+					}
+						
+				}
+				if(form.getClassName().equals("Fluid"))
+				{
+					unitSpecimen = Constants.UNIT_ML;
+				}
+				if(form.getClassName().equals("Cell"))
+				{
+					unitSpecimen = Constants.UNIT_CC;
+				}
+				if(form.getClassName().equals("Molecular"))
+				{
+					unitSpecimen = Constants.UNIT_MG;
+				}
+				System.out.println("\n\n\nunitSpecimen in else: " +unitSpecimen);
+			}
 		System.out.println("\n\n\nparentPresent : " + form.isParentPresent());
 				
 		}
@@ -484,7 +514,7 @@ Map map = form.getExternalIdentifier();
 					<%
 						boolean concentrationDisabled = true;
 						
-						if(unitSpecimen.equals(Constants.UNIT_MG))
+						if(form.getClassName().equals("Molecular"))
 							concentrationDisabled = false;
 					%>
 			     		<html:text styleClass="formFieldSized15" maxlength="10"  size="30" styleId="concentration" property="concentration" 
@@ -534,6 +564,7 @@ Map map = form.getExternalIdentifier();
 					</td>
 					<td class="formField" colspan="3">
 						<html:text styleClass="formFieldSized15" maxlength="10"  size="30" styleId="availableQuantity" property="availableQuantity" readonly="<%=readOnlyForAll%>" />
+						<span id="unitSpan1"><%=unitSpecimen%></span>
 					</td>
 				</tr>
 				</logic:equal>
