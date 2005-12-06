@@ -77,6 +77,12 @@
 		if(className == "Tissue" && (selectedOption == subTypeData1 || selectedOption == subTypeData2 || selectedOption == subTypeData3))
 		{
 			document.getElementById(unitspan).innerHTML = "<%=Constants.UNIT_CN%>";
+			// added for Available quantity
+			var unit1= document.getElementById("unitSpan1");
+			if(unit1!=null)
+			{
+				unit1.innerHTML = "<%=Constants.UNIT_CN%>";
+			}
 			document.forms[0].unit.value = "<%=Constants.UNIT_CN%>";
 		}	
 		else 
@@ -84,6 +90,12 @@
 			if(className == "Tissue")
 			{
 				document.getElementById(unitspan).innerHTML = "<%=Constants.UNIT_GM%>";
+				// added for Available quantity
+				var unit1= document.getElementById("unitSpan1");
+				if(unit1!=null)
+				{
+					unit1.innerHTML = "<%=Constants.UNIT_GM%>";
+				}
 				document.forms[0].unit.value = "<%=Constants.UNIT_GM%>";
 			}	
 		}
@@ -93,6 +105,7 @@
 		function onTypeChange(element)
 		{
 			var unit = document.getElementById("unitSpan");
+			var unit1 = document.getElementById("unitSpan1");
 			var unitSpecimen = "";
 			document.forms[0].concentration.disabled = true;
 			var subType = document.getElementById("type");
@@ -126,6 +139,10 @@
 				typeChange(MolecularArray);
 			}
 			unit.innerHTML = unitSpecimen;
+			if(unit1!=null)
+			{
+				unit1.innerHTML = unitSpecimen;
+			}				
 		}
 
 // biohazard selection
