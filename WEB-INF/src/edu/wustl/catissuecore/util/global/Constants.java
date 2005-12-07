@@ -419,7 +419,10 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String PARTICIPANT = "Participant";
 	public static final String ACCESSION = "Accession";
 	public static final String QUERY_PARTICIPANT_SEARCH_ACTION = "QueryParticipantSearch.do?systemIdentifier=";
-	public static final String QUERY_ACCESSION_SEARCH_ACTION = "QueryAccessionSearch.do?systemIdentifier=";
+	public static final String QUERY_COLLECTION_PROTOCOL_SEARCH_ACTION = "QueryCollectionProtocolSearch.do?systemIdentifier=";
+	public static final String QUERY_SPECIMEN_COLLECTION_GROUP_SEARCH_ACTION = "QuerySpecimenCollectionGroupSearch.do?systemIdentifier=";
+	public static final String QUERY_SPECIMEN_SEARCH_ACTION = "QuerySpecimenSearch.do?systemIdentifier=";
+	//public static final String QUERY_ACCESSION_SEARCH_ACTION = "QueryAccessionSearch.do?systemIdentifier=";
 	
 	//Individual view Constants in DataViewAction.
 	public static final String SPREADSHEET_COLUMN_LIST = "spreadsheetColumnList";
@@ -1382,6 +1385,9 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String COLUMN = "Column";
 	public static final String COLUMN_DISPLAY_NAMES = "columnDisplayNames";
 	public static final String PAGEOF_PARTICIPANT_QUERY= "pageOfParticipantQuery";
+	public static final String PAGEOF_COLLECTION_PROTOCOL_QUERY= "pageOfCollectionProtocolQuery";
+	public static final String PAGEOF_SPECIMEN_COLLECTION_GROUP_QUERY= "pageOfSpecimenCollectionGroupQuery";
+	public static final String PAGEOF_SPECIMEN_QUERY= "pageOfSpecimenQuery";
 	
 	
 	// -- menu selection related

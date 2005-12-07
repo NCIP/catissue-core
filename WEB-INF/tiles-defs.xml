@@ -630,8 +630,16 @@
 		<put name="content" value="/pages/content/manageBioSpecimen/Participant.jsp" />
 	</definition>
 
-	<definition name=".catissuecore.queryAccessionViewDef" extends=".catissuecore.queryDataViewDef">
-		<put name="content" value="/pages/content/manageBioSpecimen/Accession.jsp" />
+	<definition name=".catissuecore.queryCollectionProtocolViewDef" extends=".catissuecore.queryDataViewDef">
+		<put name="content" value="/pages/content/manageAdministrativeData/CollectionProtocol.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.querySpecimenCollectionGroupViewDef" extends=".catissuecore.queryDataViewDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/SpecimenCollectionGroup.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.querySpecimenViewDef" extends=".catissuecore.queryDataViewDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/NewSpecimen.jsp" />
 	</definition>
 	
 	<definition name=".catissuecore.queryResultsSpreadsheetViewDef" extends=".catissuecore.queryDataViewDef">
@@ -646,6 +654,23 @@
 	<definition name=".catissuecore.storageLocationGridViewDef" extends=".catissuecore.queryDataViewDef">
 		<put name="content" value="/pages/content/manageAdministrativeData/StorageContainerGridView.jsp" />
 	</definition>
+	
+	<definition name=".catissuecore.participantEditDef" extends=".catissuecore.queryDataViewDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/Participant.jsp" />
+	</definition>
+	
+	<definition name=".catissuecore.collectionProtocolEditDef" extends=".catissuecore.queryDataViewDef">
+		<put name="content" value="/pages/content/manageAdministrativeData/CollectionProtocol.jsp" />
+	</definition>
+	
+	<definition name=".catissuecore.specimenCollectionGroupEditDef" extends=".catissuecore.queryDataViewDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/SpecimenCollectionGroup.jsp" />
+	</definition>
+	
+	<definition name=".catissuecore.specimenEditDef" extends=".catissuecore.queryDataViewDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/NewSpecimen.jsp" />
+	</definition>
+	
 	
 		
 	<!-- ShoppingCart -->
