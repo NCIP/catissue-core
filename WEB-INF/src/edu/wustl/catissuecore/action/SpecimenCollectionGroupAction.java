@@ -49,6 +49,16 @@ public class SpecimenCollectionGroupAction  extends SecureAction
     	SpecimenCollectionGroupForm  specimenCollectionGroupForm = (SpecimenCollectionGroupForm)form;
     	//	set the menu selection 
     	request.setAttribute(Constants.MENU_SELECTED, "14"  ); 
+    	
+    	//pageOf and operation attributes required for Advance Query Object view.
+		String pageOf = request.getParameter(Constants.PAGEOF);
+		
+        //Gets the value of the operation parameter.
+        String operation = (String)request.getParameter(Constants.OPERATION);
+        
+        //Sets the operation attribute to be used in the Edit/View Specimen Collection Group Page in Advance Search Object View. 
+        request.setAttribute(Constants.OPERATION,operation);
+
 		
     	boolean isOnChange = false; 
 		String str = request.getParameter("isOnChange");
@@ -67,8 +77,8 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 		String valueField = Constants.SYSTEM_IDENTIFIER;
 	  	List list = bizLogic.getList(sourceObjectName,displayNameFields,valueField, true);
 		request.setAttribute(Constants.PROTOCOL_LIST, list);
-	
-       	//Populating the Site Type bean
+
+		//Populating the Site Type bean
 	   	sourceObjectName = Site.class.getName();
 	   	String siteDisplaySiteFields[] = {"name"};
 	   	list = bizLogic.getList(sourceObjectName,siteDisplaySiteFields,valueField, true);
@@ -152,9 +162,10 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 
 			}
 		}
-			
+		request.setAttribute(Constants.PAGEOF,pageOf);
+		Logger.out.debug("page of in Specimen coll grp action:"+request.getParameter(Constants.PAGEOF));
 		// -------called from Collection Protocol Registration end -------------------------------
-		return mapping.findForward(request.getParameter(Constants.PAGEOF));
+		return mapping.findForward(pageOf);
     }
     
 	private void loadPaticipants(long protocolID, AbstractBizLogic bizLogic, HttpServletRequest request) throws Exception

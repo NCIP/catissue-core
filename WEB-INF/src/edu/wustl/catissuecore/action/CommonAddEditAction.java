@@ -297,9 +297,17 @@ public class CommonAddEditAction extends Action
                     	target = forwardTo; 
                     }
 
+                    //Forward the page to edit success in the Advance query search if the edit is through Object view of Advance Search
                     
-                    
-                    
+                   String pageOf = (String)request.getParameter(Constants.PAGEOF);
+                   Logger.out.debug("pageof for query edit"+pageOf);
+                   if(pageOf != null)
+                   {
+                   	if(pageOf.equals(Constants.QUERY))
+                   	{
+                   		target = pageOf;
+                   	}
+                   }
                    // target = new String(Constants.SUCCESS);
                     
                     //The successful edit message.

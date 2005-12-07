@@ -174,7 +174,7 @@ public class QueryTree extends JApplet
 	            tree.addMouseListener(tissueSiteListener);
 	            
             }
-            else if (pageOf.equals(Constants.PAGEOF_STORAGE_LOCATION))
+            else if (pageOf.equals(Constants.PAGEOF_STORAGE_LOCATION) ||  (pageOf.equals(Constants.PAGEOF_SPECIMEN)) )
             {
                 StorageLocationViewListener viewListener 
         			= new StorageLocationViewListener(this.getCodeBase(), this.getAppletContext());

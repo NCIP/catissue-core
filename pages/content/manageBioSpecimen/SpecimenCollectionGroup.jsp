@@ -10,6 +10,7 @@
 <% 
 		String operation = (String)request.getAttribute(Constants.OPERATION);
 		String reqPath = (String)request.getAttribute(Constants.REQ_PATH);
+		String pageOf = (String)request.getAttribute(Constants.PAGEOF);
 		String appendingPath = "/SpecimenCollectionGroup.do?operation=add&pageOf=pageOfSpecimenCollectionGroup";
 		if (reqPath != null)
 			appendingPath = reqPath + "|/SpecimenCollectionGroup.do?operation=add&pageOf=pageOfSpecimenCollectionGroup";
@@ -35,13 +36,17 @@
 		   	}
 	   	}
 			
-		String formName, pageView = operation;
+		String formName, pageView = operation ,editViewButton="buttons."+Constants.EDIT;
 		boolean readOnlyValue=false,readOnlyForAll=false;
 
 		if(operation.equals(Constants.EDIT))
 		{
+			editViewButton="buttons."+Constants.VIEW;
 			formName = Constants.SPECIMEN_COLLECTION_GROUP_EDIT_ACTION;
 			readOnlyValue=true;
+			if(pageOf.equals(Constants.QUERY))
+				formName = formName + "?pageOf="+pageOf;
+
 		}
 		else
 		{
@@ -97,6 +102,37 @@
 
 	<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
 		<!-- NEW SPECIMEN COLLECTION GROUP REGISTRATION BEGINS-->
+		<logic:equal name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
+		<tr>
+	    <td>
+	 	 <table summary="" cellpadding="3" cellspacing="0" border="0">
+				<tr>
+		  	<td align="right" colspan="3">
+			<%
+				String changeAction = "setFormAction('MakeSpecimenCollectionGroupEditable.do?"+Constants.EDITABLE+"="+!readOnlyForAll+"')";
+		 	%>
+			<!-- action buttons begins -->
+			<table cellpadding="4" cellspacing="0" border="0">
+				<tr>
+				   	<td>
+				   		<html:submit styleClass="actionButton" onclick="<%=changeAction%>">
+				   			<bean:message key="<%=editViewButton%>"/>
+				   		</html:submit>
+				   	</td>
+					<td>
+						<html:reset styleClass="actionButton">
+							<bean:message key="buttons.export"/>
+						</html:reset>
+					</td>
+				</tr>
+			</table>
+			<!-- action buttons end -->
+		  </td>
+		  </tr>
+		</table>
+	   </td>
+	</tr>
+	</logic:equal>	
 	    <tr><td>
 			<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
 				 <tr>
@@ -112,16 +148,21 @@
 				 	<td class="formMessage" colspan="4">* indicates a required field</td>
 				 </tr>
 				 
-				 <tr>
-					<td class="formTitle" height="20" colspan="3">
-						<logic:equal name="operation" value="<%=Constants.ADD%>">
-							<bean:message key="specimenCollectionGroup.add.title"/>
-						</logic:equal>
-						<logic:equal name="operation" value="<%=Constants.EDIT%>">
-								<bean:message key="specimenCollectionGroup.edit.title"/>&nbsp;<bean:message key="for.identifier"/>&nbsp;<bean:write name="specimenCollectionGroupForm" property="systemIdentifier" />
-						</logic:equal>
+					<tr>
+					<td class="formTitle" height="20" colspan="4">
+						<%String title = "specimenCollectionGroup."+pageView+".title";%>
+							<bean:message key="<%=title%>"/>
+						<%
+						if(pageView.equals("edit"))
+						{
+							%>
+								&nbsp;<bean:message key="for.identifier"/>&nbsp;<bean:write name="specimenCollectionGroupForm" property="systemIdentifier" />
+						    <%
+						}
+						%>
 					</td>
-				 </tr>
+				</tr>
+
 				 
 				 <!--Collection Protocol -->
 				 <tr>

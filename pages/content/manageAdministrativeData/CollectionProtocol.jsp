@@ -13,11 +13,12 @@
 
 <%
 	List tissueSiteList = (List) request.getAttribute(Constants.TISSUE_SITE_LIST);
-
+	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
 	List pathologyStatusList = (List) request.getAttribute(Constants.PATHOLOGICAL_STATUS_LIST);
 	
     String operation = (String) request.getAttribute(Constants.OPERATION);
-    String formName;
+    
+    String formName, pageView=operation,editViewButton="buttons."+Constants.EDIT;;
 
 		String reqPath = (String)request.getAttribute(Constants.REQ_PATH);
 		String appendingPath = "/CollectionProtocol.do?operation=add&pageOf=pageOfCollectionProtocol";
@@ -36,17 +37,27 @@
 		System.out.println("CP JSP : ----- " + appendingPath);
 		
 
-    boolean readOnlyValue;
+    boolean readOnlyValue, readOnlyForAll=false;
     if (operation.equals(Constants.EDIT))
     {
-        formName = Constants.COLLECTIONPROTOCOL_EDIT_ACTION;
+    	editViewButton="buttons."+Constants.VIEW;
+    	formName = Constants.COLLECTIONPROTOCOL_EDIT_ACTION;
         readOnlyValue = false;
+		if(pageOf.equals(Constants.QUERY))
+			formName = formName + "?pageOf="+pageOf;
+
     }
     else
     {
         formName = Constants.COLLECTIONPROTOCOL_ADD_ACTION;
         readOnlyValue = false;
     }
+    
+	if (operation.equals(Constants.VIEW))
+	{
+		readOnlyForAll=true;
+	}
+
 %>
 
 <%@ include file="/pages/content/common/CommonScripts.jsp" %>
@@ -288,6 +299,41 @@ function getSubDivCount(subdivtag)
 <!-- table 1 -->
 <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="100%">
 <!-- NEW COLLECTIONPROTOCOL ENTRY BEGINS-->
+<logic:equal name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
+	<tr>
+    <td>
+ 	 <table summary="" cellpadding="3" cellspacing="0" border="0">
+			<tr>
+	  	<td align="right" colspan="3">
+		<%
+			String changeAction = "setFormAction('MakeCollectionProtocolEditable.do?"+Constants.EDITABLE+"="+!readOnlyForAll+"')";
+	 	%>
+		<!-- action buttons begins -->
+		<table cellpadding="4" cellspacing="0" border="0">
+			<tr>
+			   	<td>
+			   		<html:submit styleClass="actionButton" onclick="<%=changeAction%>">
+			   			<bean:message key="<%=editViewButton%>"/>
+			   		</html:submit>
+			   	</td>
+				<td>
+					<html:reset styleClass="actionButton">
+						<bean:message key="buttons.export"/>
+					</html:reset>
+				</td>
+			</tr>
+		</table>
+		<!-- action buttons end -->
+	  </td>
+	  </tr>
+	</table>
+   </td>
+</tr>
+</logic:equal>	
+
+<!-- If operation is equal to edit or search but,the page is for query the identifier field is not shown -->
+
+	<%--logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>"--%>
 		<tr>
 		<td colspan="3">
 		<!-- table 4 -->
@@ -305,17 +351,22 @@ function getSubDivCount(subdivtag)
 					<tr>
 						<td class="formMessage" colspan="4">* indicates a required field</td>
 					</tr>
-<!-- page title -->					
+<!-- page title -->	
 					<tr>
 						<td class="formTitle" height="20" colspan="4">
-							<logic:equal name="operation" value="<%=Constants.ADD%>">
-								<bean:message key="collectionprotocol.title"/>
-							</logic:equal>
-							<logic:equal name="operation" value="<%=Constants.EDIT%>">
-								<bean:message key="collectionprotocol.editTitle"/>&nbsp;<bean:message key="for.identifier"/>&nbsp;<bean:write name="collectionProtocolForm" property="systemIdentifier" />
-							</logic:equal>
+							<%String title = "collectionprotocol."+pageView+".title";%>
+								<bean:message key="<%=title%>"/>
+							<%
+							if(pageView.equals("edit"))
+							{
+								%>
+									&nbsp;<bean:message key="for.identifier"/>&nbsp;<bean:write name="collectionProtocolForm" property="systemIdentifier" />
+							    <%
+							}
+							%>
 						</td>
 					</tr>
+
 					
 <!-- principal investigator -->	
 					<tr>
@@ -830,7 +881,8 @@ function getSubDivCount(subdivtag)
 %>
 </div>	<!-- outermostdiv  -->
 
-<table width="100%">		
+<table width="100%">	
+	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">
 	<!-- to keep -->
 		<tr>
 			<td align="right" colspan="3">
@@ -856,6 +908,7 @@ function getSubDivCount(subdivtag)
 		</tr>
 
 	<!-- NEW COLLECTIONPROTOCOL ENTRY ends-->
+	</logic:notEqual>
 </table>
 </html:form>
 

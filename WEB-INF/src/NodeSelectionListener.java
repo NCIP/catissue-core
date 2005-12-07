@@ -95,6 +95,16 @@ public class NodeSelectionListener implements TreeSelectionListener, ActionListe
             							   t.getLastSelectedPathComponent();
             TreeNodeData treeNodeData = (TreeNodeData) node.getUserObject();
             this.nodeName = treeNodeData.toString();
+            /* if node selected is collection protocol, send the parentId and objectName as Collection Protocol & Participant have 
+             * many to many relation
+             */
+            if(treeNodeData.getCombinedParentObjectName()!=null)
+       		{
+            	if(treeNodeData.getObjectName().equals(Constants.COLLECTION_PROTOCOL))
+            	{
+            		this.nodeName = treeNodeData.toString()+":"+treeNodeData.getCombinedParentObjectName()+":"+treeNodeData.getCombinedParentIdentifier();
+            	}
+       		}
             
             try
             {

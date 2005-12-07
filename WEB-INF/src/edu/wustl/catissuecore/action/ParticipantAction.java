@@ -45,7 +45,6 @@ public class ParticipantAction extends SecureAction
             HttpServletRequest request, HttpServletResponse response) throws Exception
     {
     	ParticipantForm participantForm = (ParticipantForm) form;
-		
     	//List of keys used in map of ActionForm
 		List key = new ArrayList();
     	key.add("ParticipantMedicalIdentifier:i_Site_systemIdentifier");
@@ -56,9 +55,8 @@ public class ParticipantAction extends SecureAction
     	
     	//Calling DeleteRow of BaseAction class
     	MapDataParser.deleteRow(key,map,request.getParameter("status"));
-    	
-        //Gets the value of the operation parameter.
-        String operation = request.getParameter(Constants.OPERATION);
+    	//Gets the value of the operation parameter.
+    	String operation = request.getParameter(Constants.OPERATION);
         
         //Sets the operation attribute to be used in the Add/Edit Participant Page. 
         request.setAttribute(Constants.OPERATION,operation);

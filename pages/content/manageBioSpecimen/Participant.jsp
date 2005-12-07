@@ -17,12 +17,14 @@
 		String operation = (String)request.getAttribute(Constants.OPERATION);
 		String formName, pageView=operation,editViewButton="buttons."+Constants.EDIT;
 		boolean readOnlyValue=false,readOnlyForAll=false;
-
+		String pageOf = (String)request.getAttribute(Constants.PAGEOF);
 		if(operation.equals(Constants.EDIT))
 		{
 			editViewButton="buttons."+Constants.VIEW;
 			formName = Constants.PARTICIPANT_EDIT_ACTION;
 			readOnlyValue=true;
+			if(pageOf.equals(Constants.QUERY))
+				formName = formName + "?pageOf="+pageOf;
 		}
 		else
 		{
@@ -34,8 +36,6 @@
 		{
 			readOnlyForAll=true;
 		}
-
-		String pageOf = (String)request.getAttribute(Constants.PAGEOF);
 
 		Object obj = request.getAttribute("participantForm");
 		int noOfRows=0;
@@ -304,7 +304,7 @@
 					 
 					 <td class="formField" colspan="2">
 					 <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
-					 <html:text styleClass="formDateSized15" maxlength="10"  size="15" styleId="birthDate" property="birthDate" />
+					 <html:text styleClass="formDateSized15" maxlength="10"  size="15" styleId="birthDate" property="birthDate" disabled="<%=readOnlyForAll%>"/>
 					 &nbsp;<bean:message key="page.dateFormat" />&nbsp;
 						<a href="javascript:show_calendar('participantForm.birthDate',null,null,'MM-DD-YYYY');">
 							<img src="images\calendar.gif" width=24 height=22 border=0></a>

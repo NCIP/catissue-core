@@ -52,6 +52,13 @@ public class NewSpecimenAction  extends SecureAction
     {
         NewSpecimenForm specimenForm = (NewSpecimenForm)form;   
         
+        //Gets the value of the operation parameter.
+        String operation = (String)request.getParameter(Constants.OPERATION);
+        
+        //Sets the operation attribute to be used in the Edit/View Specimen Page in Advance Search Object View. 
+        request.setAttribute(Constants.OPERATION,operation);
+
+        
         //Name of button clicked
         String button = request.getParameter("button");
         Map map = null;

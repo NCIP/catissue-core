@@ -206,6 +206,9 @@ Map map = form.getExternalIdentifier();
 			editViewButton="buttons."+Constants.VIEW;
 			formName = Constants.SPECIMEN_EDIT_ACTION;
 			readOnlyValue=true;
+			if(pageOf.equals(Constants.QUERY))
+				formName = formName + "?pageOf="+pageOf;
+
 		}
 		else
 		{
@@ -284,7 +287,7 @@ Map map = form.getExternalIdentifier();
 		   			<tr>
 				  	<td align="right" colspan="3">
 					<%
-						String changeAction = "setFormAction('MakeParticipantEditable.do?"+Constants.EDITABLE+"="+!readOnlyForAll+"')";
+						String changeAction = "setFormAction('MakeSpecimenEditable.do?"+Constants.EDITABLE+"="+!readOnlyForAll+"')";
 				 	%>
 					<!-- action buttons begins -->
 					<table cellpadding="4" cellspacing="0" border="0">
@@ -795,7 +798,7 @@ Map map = form.getExternalIdentifier();
 				  <% } %>
 				 </tbody>
 				 <!-- Bio-hazards End here -->	
-		
+				 <logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">
 			   	 	<tr>
 				  		<td align="right" colspan="4">
 							<%
@@ -861,6 +864,7 @@ Map map = form.getExternalIdentifier();
 							<!-- action buttons end -->
 				  		</td>
 				 	</tr>
+				 </logic:notEqual>
 	</table>
   </td>
 </tr>

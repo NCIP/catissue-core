@@ -29,6 +29,7 @@ import edu.wustl.catissuecore.actionForm.AbstractActionForm;
 import edu.wustl.catissuecore.bizlogic.AbstractBizLogic;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
+import edu.wustl.catissuecore.domain.Distribution;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.dbManager.DAOException;
@@ -56,7 +57,6 @@ public class CommonSearchAction extends Action
         String target = null;
         
         AbstractActionForm abstractForm = (AbstractActionForm) form;
-
         /* Get the systemIdentifier whose information is to be searched */
         Long identifier = ((Long)request.getAttribute(Constants.SYSTEM_IDENTIFIER));
         if(identifier == null )
@@ -72,7 +72,7 @@ public class CommonSearchAction extends Action
             String objName = AbstractDomainObject.getDomainObjectName(abstractForm.getFormId());
             Logger.out.debug("object name to be retrieved:"+objName+" identifier:"+identifier);
             list= bizLogic.retrieve(objName,Constants.SYSTEM_IDENTIFIER, identifier.toString());
-
+            
             if (list.size() != 0)
             {
                 /* If the record searched is present in the database,
@@ -86,6 +86,11 @@ public class CommonSearchAction extends Action
                 target = pageOf;
                 abstractForm.setMutable(false);
                 Logger.out.debug("Search Action ...................pageOf........."+pageOf);
+                
+                String operation = (String)request.getAttribute(Constants.OPERATION);
+                Logger.out.debug("Common Search Action ...................operation........."+operation);
+                request.setAttribute(Constants.OPERATION,operation);
+                
             }
             else
             {

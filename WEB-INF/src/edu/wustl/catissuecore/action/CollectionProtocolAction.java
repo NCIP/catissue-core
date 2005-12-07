@@ -44,6 +44,17 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
     {
     	super.executeSecureAction(mapping, form, request, response);
     	
+    	
+    	//pageOf required for Advance Search Object View.
+    	String pageOf = (String)request.getParameter(Constants.PAGEOF);
+    	
+        //Gets the value of the operation attribute.
+    	String operation = (String)request.getParameter(Constants.OPERATION);
+        Logger.out.debug("operation in coll prot action"+operation);
+        //Sets the operation attribute to be used in the Edit/View Collection Protocol Page in Advance Search Object View. 
+        request.setAttribute(Constants.OPERATION,operation);
+
+    	
     	CollectionProtocolForm collectionProtocolForm = (CollectionProtocolForm)form; 
     	
     	//Name of delete button clicked
@@ -84,8 +95,8 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 		if (reqPath != null)
 			request.setAttribute(Constants.REQ_PATH, reqPath);
 		Logger.out.debug("CP Action reqPath : " + reqPath ); 
-    	
-    	
-        return mapping.findForward((String)request.getParameter(Constants.PAGEOF));
+		Logger.out.debug("page of in collectionProtocol action:"+pageOf);
+		request.setAttribute(Constants.PAGEOF,pageOf);
+        return mapping.findForward(pageOf);
     }
 }
