@@ -29,22 +29,21 @@ public class ResultData
      */
     private String tmpResultsTableName = new String();
 
-    public List getSpreadsheetViewData(String name, String id, String[] columnList, SessionDataBean sessionDataBean, int securityParam)
+    public List getSpreadsheetViewData(String[] whereColumnName, String[] whereColumnValue, String[] whereColumnCondition,String[] columnList, SessionDataBean sessionDataBean, int securityParam)
     {
         
     	tmpResultsTableName = Constants.QUERY_RESULTS_TABLE+"_"+sessionDataBean.getUserId();
-    	String[] whereColumnName = {name};
-        String[] whereColumnCondition = {"="};
-        String[] whereColumnValue = {id};
         
-        if (name.equals(Constants.ROOT))
+        if (whereColumnName[0].equals(Constants.ROOT))
         {
-        	Logger.out.debug("inside root condition........."+name);
+        	Logger.out.debug("inside root condition........."+whereColumnName[0]);
         	columnList = null;
         	whereColumnName = null;
             whereColumnCondition = null;
             whereColumnValue = null;
         }
+        /*if(whereColumnName.length==2)
+        	Logger.out.debug("arrayvalues:"+whereColumnName[0]+":"+whereColumnName[1]+":"+whereColumnValue[0]+":"+whereColumnValue[1]);*/
         List dataList = null;
         try
         {
