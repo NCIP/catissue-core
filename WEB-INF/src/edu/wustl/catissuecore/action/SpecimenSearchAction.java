@@ -129,7 +129,8 @@ public class SpecimenSearchAction extends BaseAction
         
         //Preparing the data for Specimen Event Parameters
         QueryBizLogic bizLogic = (QueryBizLogic)BizLogicFactory.getBizLogic(Constants.SIMPLE_QUERY_INTERFACE_ID);
-        List eventParametersTables = getEventParametersTables(bizLogic);
+        
+        List eventParametersTables = SearchUtil.getEventParametersTables(bizLogic);
         Map map = getEventParametersMap(bizLogic,eventParametersTables);
         
         request.setAttribute(Constants.ALIAS_NAME_TABLE_NAME_MAP,eventParametersTables);
@@ -149,37 +150,9 @@ public class SpecimenSearchAction extends BaseAction
     	{
     		NameValueBean bean = (NameValueBean)tableList.get(i);
     		String className = bean.getValue();
-    		
     		tableColumnMap.put(className,bizLogic.getColumnNames(className));
     	}
     	
     	return tableColumnMap;
     }
-    
-    /*This function returns a list of Name-Value beans which contains the table names with corresponding alias names.
-      The list contains all the tables associated with Event Parameters only.*/
-    private List getEventParametersTables(QueryBizLogic bizLogic) throws DAOException,ClassNotFoundException
-    {
-    	Set tableSet = bizLogic.getAllTableNames("", Constants.ADVANCE_QUERY_TABLES);
-    	List newTableList = new ArrayList();
-    	
-    	//Adding SELECT Option
-    	newTableList.add(new NameValueBean(Constants.SELECT_OPTION,"-1"));
-    	
-    	Iterator it = tableSet.iterator();
-    	
-    	while(it.hasNext())
-    	{
-    		NameValueBean bean = (NameValueBean) it.next();
-    		
-    		//Adding tables related to Event Parameters only.
-    		if(bean.getName().endsWith("Parameters") || bean.getName().endsWith("Parameter"))
-    		{
-    			newTableList.add(bean);
-    		}
-    	}
-    	
-    	return newTableList;
-    }
-	
 }
