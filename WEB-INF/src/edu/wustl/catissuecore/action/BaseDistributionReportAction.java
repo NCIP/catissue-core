@@ -181,11 +181,6 @@ public abstract class BaseDistributionReportAction extends BaseAction
     		
     		List list1 = query.execute(null,false, null);
     		Logger.out.debug("Size of the Data from the database" +list1.size());
-    		Iterator listItr = list1.iterator();
-    		while(listItr.hasNext())
-    		{
-    			Logger.out.debug("Data from the database according to the selected columns"+ listItr.next());
-    		}
     		listOfData.add(list1);
     	}
     	return listOfData;
