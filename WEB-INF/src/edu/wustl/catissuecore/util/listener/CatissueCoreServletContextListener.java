@@ -12,6 +12,7 @@ import edu.wustl.catissuecore.domain.Address;
 import edu.wustl.catissuecore.domain.CellSpecimen;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
+import edu.wustl.catissuecore.domain.Distribution;
 import edu.wustl.catissuecore.domain.DistributionProtocol;
 import edu.wustl.catissuecore.domain.FluidSpecimen;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
@@ -102,6 +103,8 @@ public class CatissueCoreServletContextListener
         protectionGroupsForObjectTypes.put(StorageContainer.class.getName(),
                 new String[] {ADMINISTRATORS_DATA_GROUP});
         protectionGroupsForObjectTypes.put(DistributionProtocol.class.getName(),
+                new String[] {TECHNICIANS_DATA_GROUP});
+        protectionGroupsForObjectTypes.put(Distribution.class.getName(),
                 new String[] {TECHNICIANS_DATA_GROUP});
         protectionGroupsForObjectTypes.put(User.class.getName(),
                 new String[] {ADMINISTRATORS_DATA_GROUP});
