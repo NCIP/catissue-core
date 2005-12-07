@@ -24,9 +24,13 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
+import edu.wustl.catissuecore.bizlogic.QueryBizLogic;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Validator;
 import edu.wustl.common.beans.NameValueBean;
+import edu.wustl.common.util.logger.Logger;
 import edu.wustl.catissuecore.util.SearchUtil;
 
 /**
@@ -417,7 +421,19 @@ public class AdvanceSearchForm extends ActionForm
 		String eventColumn = "EventColumnName_";
 		String eventOperator = "EventColumnOperator_";
 		String eventValue = "EventColumnValue_";
-	System.out.println("****MAP****\n"+values);
+
+		QueryBizLogic bizLogic = (QueryBizLogic)BizLogicFactory.getBizLogic(Constants.SIMPLE_QUERY_INTERFACE_ID);
+		Map eventParameterDisplayNames = null;
+		
+		try
+		{
+			eventParameterDisplayNames = SearchUtil.getEventParametersDisplayNames(bizLogic,SearchUtil.getEventParametersTables(bizLogic));
+		}
+		catch(Exception e)
+		{
+			Logger.out.debug("Exception in AdvanceSearchForm ",e);
+		}
+		
 		for(int i=1;i<=eventCounter;i++)
 		{
 			String name = (String)eventMap.get(eventName + i);
@@ -429,7 +445,12 @@ public class AdvanceSearchForm extends ActionForm
 				
 				String fieldName = column.substring(column.indexOf(".")+1,column.lastIndexOf("."));
 				String dataType = column.substring(column.lastIndexOf(".")+1);
-				String errorKey = name + " : " + fieldName;
+				String errorKey = name + "." + fieldName;
+				
+				if(eventParameterDisplayNames != null && eventParameterDisplayNames.get(errorKey) != null)
+				{
+					errorKey = (String)eventParameterDisplayNames.get(errorKey);
+				}
 				
 				if(value.trim().equals(""))
 				{
