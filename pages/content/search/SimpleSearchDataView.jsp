@@ -44,7 +44,7 @@
 		}
 	}*/
 
-if(dataList.size() != 0)
+if(dataList != null && dataList.size() != 0)
 {
 %>
 	
@@ -185,8 +185,15 @@ if(dataList.size() != 0)
 
 <table summary="" cellpadding="0" cellspacing="0" border="0" width="100%" height="100%">
 <html:form action="<%=Constants.SPREADSHEET_EXPORT_ACTION%>">
+
 <%
-		if(dataList.size() != 0)
+		if(dataList == null && pageOf.equals(Constants.PAGEOF_QUERY_RESULTS))
+		{
+%>
+			<bean:message key="advanceQuery.noRecordsFound"/>
+<%
+		}
+		else if(dataList != null && dataList.size() != 0)
 		{
 %>
 	<tr height="5%">
