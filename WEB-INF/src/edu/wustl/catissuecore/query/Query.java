@@ -319,10 +319,10 @@ public abstract class Query {
 		//If subquery then join with the superquery
 		if (tableSufix > 1) {
 			relationCondition = (RelationCondition) Client.relationConditionsForRelatedTables
-					.get(new Relation(this.parentOfQueryStartObject,
-							this.queryStartObject));
+					.get(getJoinRelationWithParent());
 
 			if (relationCondition != null) {
+				tableSet.add(relationCondition.getRightDataElement().getTable());
 				joinConditionString.append(" "
 						+ relationCondition.getRightDataElement().toSQLString(
 								tableSufix));
@@ -371,6 +371,17 @@ public abstract class Query {
 	}
 
 	/**
+	 * @return
+	 */
+	private Relation getJoinRelationWithParent() {
+		Map JOIN_RELATION_MAP = new HashMap();
+		JOIN_RELATION_MAP.put(new Relation(Query.PARTICIPANT,Query.COLLECTION_PROTOCOL),new Relation(Query.PARTICIPANT,Query.COLLECTION_PROTOCOL_REGISTRATION));
+		JOIN_RELATION_MAP.put(new Relation(Query.COLLECTION_PROTOCOL,Query.SPECIMEN_COLLECTION_GROUP),new Relation(Query.COLLECTION_PROTOCOL_EVENT,Query.SPECIMEN_COLLECTION_GROUP));
+		JOIN_RELATION_MAP.put(new Relation(Query.SPECIMEN_COLLECTION_GROUP,Query.SPECIMEN),new Relation(Query.SPECIMEN_COLLECTION_GROUP,Query.SPECIMEN));
+		return (Relation) JOIN_RELATION_MAP.get(new Relation(this.getParentOfQueryStartObject(),this.queryStartObject));
+	}
+
+	/**
 	 * This method returns the string of table names in set that forms FROM part
 	 * of query which forms the FROM part of the query
 	 * 
@@ -379,8 +390,17 @@ public abstract class Query {
 	 * @return A comma separated list of the tables in the set
 	 */
 	private String formFromString(final HashSet set) {
+		
+		if (tableSufix > 1) {
+			RelationCondition relationCondition = (RelationCondition) Client.relationConditionsForRelatedTables
+					.get(getJoinRelationWithParent());
+			
+			set.add(relationCondition.getRightDataElement().getTable());
+		}
+		
 		StringBuffer fromString = new StringBuffer();
 		Iterator it = set.iterator();
+		
 		Object tableAlias;
 		while (it.hasNext()) {
 			fromString.append(" ");
@@ -521,13 +541,19 @@ public abstract class Query {
 		Vector columnIds = new Vector();
 		DataElement dataElement;
 		String dataElementTableName;
+		String dataElementFieldName;
 		for (int i = 0; i < resultView.size(); i++) {
 			dataElement = (DataElement) resultView.get(i);
 			dataElementTableName = dataElement.getTable();
+			dataElementFieldName = dataElement.getField();
 
 			//I
 			if (dataElementTableName.equals(tableAlias)
 					|| relatedTables.contains(dataElementTableName)) {
+				if(dataElementTableName.equals(tableAlias) && dataElementFieldName.equals(Constants.IDENTIFIER))
+				{
+					continue;
+				}
 				columnIds.add(new Integer(i + 1));
 				Logger.out.debug("tableAlias:" + tableAlias + " columnId:"
 						+ (i + 1));

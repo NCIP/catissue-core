@@ -12,7 +12,14 @@ package edu.wustl.catissuecore.query;
 import java.util.HashMap;
 import java.util.Vector;
 
+import javax.swing.tree.DefaultMutableTreeNode;
+
+import org.apache.log4j.PropertyConfigurator;
+
 import edu.wustl.catissuecore.bizlogic.QueryBizLogic;
+import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Variables;
+import edu.wustl.common.util.logger.Logger;
 
 public class Client
 {
@@ -47,8 +54,9 @@ public class Client
 
     public static void initialize()
     {
-        objectTableNames = QueryBizLogic.getQueryObjectNameTableNameMap();
-        relationConditionsForRelatedTables = QueryBizLogic.getRelationData();
+    	QueryBizLogic.initializeQueryData();
+//        objectTableNames = QueryBizLogic.getQueryObjectNameTableNameMap();
+//        relationConditionsForRelatedTables = QueryBizLogic.getRelationData();
     }
 
     public static void setRelationConditionsForRelatedTables()
@@ -247,6 +255,15 @@ public class Client
                                 Query.STORAGE_CONTAINER,
                                 "STORAGE_CONTAINER_CAPACITY_ID")));
         
+        relationConditionsForRelatedTables.put(new Relation(
+                Query.COLLECTION_PROTOCOL,
+                Query.SPECIMEN),
+                new RelationCondition(new DataElement(
+                        Query.COLLECTION_PROTOCOL, "Identifier"),
+                        new Operator(Operator.EQUAL), new DataElement(
+                                Query.SPECIMEN,
+                                "COLLECTION_PROTOCOL_ID")));
+        
 
     }
 
@@ -324,261 +341,278 @@ public class Client
 
     public static void main(String[] args)
     {
+    	Variables.catissueHome = System.getProperty("user.dir");
+		Logger.out = org.apache.log4j.Logger.getLogger("");
+		PropertyConfigurator.configure(Variables.catissueHome+"\\WEB-INF\\src\\"+"ApplicationResources.properties");
+		
+		System.out.println("here");
         initialize();
         //        relations.put(Query.PARTICIPANT,Query.ACCESSION);
         //        relations.put(Query.ACCESSION,Query.SPECIMEN);
         //        relations.put(Query.SPECIMEN,Query.SEGMENT);
         //        relations.put(Query.SEGMENT,Query.SAMPLE);
+        
+        relationConditionsForRelatedTables.put(new Relation(
+                Query.COLLECTION_PROTOCOL,
+                Query.SPECIMEN),
+                new RelationCondition(new DataElement(
+                        Query.COLLECTION_PROTOCOL, "Identifier"),
+                        new Operator(Operator.EQUAL), new DataElement(
+                                Query.SPECIMEN,
+                                "COLLECTION_PROTOCOL_ID")));
 
         Query query;
-        SimpleConditionsNode simpleConditionsNode;
+//        SimpleConditionsNode simpleConditionsNode;
+//
+//        query = QueryFactory.getInstance().newQuery(Query.SIMPLE_QUERY,
+//                Query.PARTICIPANT);
+//        query
+//                .addElementToView(new DataElement(Query.PARTICIPANT,
+//                        "IDENTIFIER"));
+//        query.addElementToView(new DataElement(
+//                Query.PARTICIPANT_MEDICAL_IDENTIFIER, "IDENTIFIER"));
+//        //        query.addElementToView(new DataElement(Query.COLLECTION_PROTOCOL,"IDENTIFIER"));
+//        //        query.addElementToView(new DataElement(Query.SPECIMEN,"IDENTIFIER"));
+//        simpleConditionsNode = new SimpleConditionsNode(new Condition(
+//                new DataElement("Participant", "LAST_NAME"), new Operator(
+//                        Operator.EQUAL), "'SHARMA'"),
+//                new Operator(Operator.AND));
+//        ((SimpleQuery) query).addCondition(simpleConditionsNode);
+//        simpleConditionsNode = new SimpleConditionsNode(new Condition(
+//                new DataElement("Participant", "FIRST_NAME"), new Operator(
+//                        Operator.EQUAL), "'aarti'"), new Operator(Operator.AND));
+//        ((SimpleQuery) query).addCondition(simpleConditionsNode);
+//
+//        simpleConditionsNode = new SimpleConditionsNode(new Condition(
+//                new DataElement(Query.COLLECTION_PROTOCOL_REGISTRATION,
+//                        "REGISTRATION_DATE"), new Operator(Operator.EQUAL),
+//                "'2005-08-16'"), new Operator(Operator.AND));
+//        ((SimpleQuery) query).addCondition(simpleConditionsNode);
+//
+//        System.out.println("Query:\n" + query.getString());
+//
+//        /**
+//         * Query for user
+//         */
+//        /*---------------------------------------------------------------- */
+//        query = QueryFactory.getInstance().newQuery(Query.SIMPLE_QUERY,
+//                Query.USER);
+//        query.addElementToView(new DataElement(Query.CSM_USER, "FIRST_NAME"));
+//        query.addElementToView(new DataElement(Query.INSTITUTION, "NAME"));
+//        simpleConditionsNode = new SimpleConditionsNode(new Condition(
+//                new DataElement(Query.CSM_USER, "LAST_NAME"), new Operator(
+//                        Operator.EQUAL), "'SHARMA'"),
+//                new Operator(Operator.AND));
+//        ((SimpleQuery) query).addCondition(simpleConditionsNode);
+//        System.out.println("\nQuery:\n" + query.getString());
+//
+//        /*---------------------------------------------------------------- */
+//
+//        query = QueryFactory.getInstance().newQuery(Query.SIMPLE_QUERY,
+//                Query.USER);
+//        query.addElementToView(new DataElement(Query.CSM_USER, "FIRST_NAME"));
+//        query.addElementToView(new DataElement(Query.INSTITUTION, "NAME"));
+//        query.addElementToView(new DataElement(Query.DEPARTMENT, "NAME"));
+//        query.addElementToView(new DataElement(Query.CANCER_RESEARCH_GROUP,
+//                "NAME"));
+//        simpleConditionsNode = new SimpleConditionsNode(new Condition(
+//                new DataElement(Query.ADDRESS, "COUNTRY"), new Operator(
+//                        Operator.EQUAL), "'United States'"), new Operator(
+//                Operator.AND));
+//        ((SimpleQuery) query).addCondition(simpleConditionsNode);
+//        System.out.println("\nQuery:\n" + query.getString());
+//
+//        /*---------------------------------------------------------------- */
+//
+//        /**
+//         * Query for institution
+//         */
+//        query = QueryFactory.getInstance().newQuery(Query.SIMPLE_QUERY,
+//                Query.INSTITUTION);
+//        query.addElementToView(new DataElement(Query.INSTITUTION, "NAME"));
+//        simpleConditionsNode = new SimpleConditionsNode(new Condition(
+//                new DataElement(Query.INSTITUTION, "NAME"), new Operator(
+//                        Operator.EQUAL), "'as'"), new Operator(Operator.AND));
+//        ((SimpleQuery) query).addCondition(simpleConditionsNode);
+//        System.out.println("\nQuery:\n" + query.getString());
+//
+//        /*---------------------------------------------------------------- */
+//
+//        /**
+//         * Query for institution
+//         */
+//        query = QueryFactory.getInstance().newQuery(Query.SIMPLE_QUERY,
+//                Query.DEPARTMENT);
+//        query.addElementToView(new DataElement(Query.DEPARTMENT, "NAME"));
+//        simpleConditionsNode = new SimpleConditionsNode(new Condition(
+//                new DataElement(Query.DEPARTMENT, "NAME"), new Operator(
+//                        Operator.EQUAL), "'AAA'"), new Operator(Operator.AND));
+//        ((SimpleQuery) query).addCondition(simpleConditionsNode);
+//        System.out.println("\nQuery:\n" + query.getString());
+//
+//        /*---------------------------------------------------------------- */
+//
+//        /**
+//         * Query for cancer research group
+//         */
+//        query = QueryFactory.getInstance().newQuery(Query.SIMPLE_QUERY,
+//                Query.CANCER_RESEARCH_GROUP);
+//        query.addElementToView(new DataElement(Query.CANCER_RESEARCH_GROUP,
+//                "NAME"));
+//        simpleConditionsNode = new SimpleConditionsNode(new Condition(
+//                new DataElement(Query.CANCER_RESEARCH_GROUP, "NAME"),
+//                new Operator(Operator.EQUAL), "'crg1'"), new Operator(
+//                Operator.AND));
+//        ((SimpleQuery) query).addCondition(simpleConditionsNode);
+//        System.out.println("\nQuery:\n" + query.getString());
+//
+//        /*---------------------------------------------------------------- */
+//
+//        /**
+//         * Query for site
+//         */
+//        query = QueryFactory.getInstance().newQuery(Query.SIMPLE_QUERY,
+//                Query.SITE);
+//        query.addElementToView(new DataElement(Query.SITE, "NAME"));
+//        //        query.addElementToView(new DataElement(Query.CSM_USER,"first_name"));
+//        query.addElementToView(new DataElement(Query.ADDRESS, "COUNTRY"));
+//        simpleConditionsNode = new SimpleConditionsNode(new Condition(
+//                new DataElement(Query.SITE, "TYPE"), new Operator(
+//                        Operator.EQUAL), "'Hospital'"), new Operator(
+//                Operator.AND));
+//        ((SimpleQuery) query).addCondition(simpleConditionsNode);
+//        System.out.println("\nQuery:\n" + query.getString());
+//
+//        /*---------------------------------------------------------------- */
+//
+//        /**
+//         * Query for storage type
+//         */
+//        query = QueryFactory.getInstance().newQuery(Query.SIMPLE_QUERY,
+//                Query.STORAGE_TYPE);
+//        query.addElementToView(new DataElement(Query.STORAGE_TYPE, "TYPE"));
+//        query.addElementToView(new DataElement(
+//                Query.STORAGE_CONTAINER_CAPACITY, "ONE_DIMENSION_LABEL"));
+//        simpleConditionsNode = new SimpleConditionsNode(new Condition(
+//                new DataElement(Query.STORAGE_TYPE, "TYPE"), new Operator(
+//                        Operator.EQUAL), "'Freezer1'"), new Operator(
+//                Operator.AND));
+//        ((SimpleQuery) query).addCondition(simpleConditionsNode);
+//        System.out.println("\nQuery:\n" + query.getString());
+//
+//        /*---------------------------------------------------------------- */
+//
+//        /**
+//         * Query for bio hazard
+//         */
+//        query = QueryFactory.getInstance().newQuery(Query.SIMPLE_QUERY,
+//                Query.BIO_HAZARD);
+//        query.addElementToView(new DataElement(Query.BIO_HAZARD, "NAME"));
+//        simpleConditionsNode = new SimpleConditionsNode(new Condition(
+//                new DataElement(Query.BIO_HAZARD, Constants.ACTIVITY_STATUS_COLUMN), new Operator(
+//                        Operator.EQUAL), "'"+Constants.ACTIVITY_STATUS_CLOSED+"'"), new Operator(
+//                Operator.AND));
+//        ((SimpleQuery) query).addCondition(simpleConditionsNode);
+//        System.out.println("\nQuery:\n" + query.getString());
+//        
+//        
+//        /*---------------------------------------------------------------- */
+//
+//        /**
+//         * Query for collection protocol
+//         */
+//        query = QueryFactory.getInstance().newQuery(Query.SIMPLE_QUERY,
+//                Query.COLLECTION_PROTOCOL);
+//        query.addElementToView(new DataElement(Query.SPECIMEN_PROTOCOL, "TITLE"));
+//        query.addElementToView(new DataElement(Query.USER, "identifier"));
+//        query.addElementToView(new DataElement(Query.CSM_USER, "first_name"));
+//        query.addElementToView(new DataElement(Query.COLLECTION_PROTOCOL_EVENT, "CLINICAL_STATUS"));
+//        query.addElementToView(new DataElement(Query.SPECIMEN_REQUIREMENT, "SPECIMEN_TYPE"));
+//        simpleConditionsNode = new SimpleConditionsNode(new Condition(
+//                new DataElement(Query.SPECIMEN_REQUIREMENT, "SPECIMEN_TYPE"), new Operator(
+//                        Operator.EQUAL), "'Blood'"), new Operator(
+//                Operator.AND));
+//        ((SimpleQuery) query).addCondition(simpleConditionsNode);
+//        System.out.println("\nQuery:\n" + query.getString());
+//
+//                simpleConditionsNode = new SimpleConditionsNode(new Condition(new DataElement(Query.SPECIMEN,"TYPE"),
+//          			   new Operator(Operator.EQUAL),"'Fluid'"),new Operator(Operator.AND));
+//                 ((SimpleQuery)query).addCondition(simpleConditionsNode);
 
-        query = QueryFactory.getInstance().newQuery(Query.SIMPLE_QUERY,
-                Query.PARTICIPANT);
-        query
-                .addElementToView(new DataElement(Query.PARTICIPANT,
-                        "IDENTIFIER"));
-        query.addElementToView(new DataElement(
-                Query.PARTICIPANT_MEDICAL_IDENTIFIER, "IDENTIFIER"));
-        //        query.addElementToView(new DataElement(Query.COLLECTION_PROTOCOL,"IDENTIFIER"));
-        //        query.addElementToView(new DataElement(Query.SPECIMEN,"IDENTIFIER"));
-        simpleConditionsNode = new SimpleConditionsNode(new Condition(
-                new DataElement("Participant", "LAST_NAME"), new Operator(
-                        Operator.EQUAL), "'SHARMA'"),
-                new Operator(Operator.AND));
-        ((SimpleQuery) query).addCondition(simpleConditionsNode);
-        simpleConditionsNode = new SimpleConditionsNode(new Condition(
-                new DataElement("Participant", "FIRST_NAME"), new Operator(
-                        Operator.EQUAL), "'aarti'"), new Operator(Operator.AND));
-        ((SimpleQuery) query).addCondition(simpleConditionsNode);
+                query = QueryFactory.getInstance().newQuery(Query.ADVANCED_QUERY,Query.PARTICIPANT);
+                query.addElementToView(new DataElement(Query.PARTICIPANT,"IDENTIFIER"));
+                query.addElementToView(new DataElement(Query.COLLECTION_PROTOCOL,"IDENTIFIER"));
+                query.addElementToView(new DataElement(Query.SPECIMEN_COLLECTION_GROUP,"IDENTIFIER"));
+                query.addElementToView(new DataElement(Query.SPECIMEN,"PARENT_SPECIMEN_ID"));
+                query.addElementToView(new DataElement(Query.SPECIMEN,"IDENTIFIER"));
+                
+                DefaultMutableTreeNode root = new DefaultMutableTreeNode();
+                DefaultMutableTreeNode child1 ;
+                DefaultMutableTreeNode child2 ;
+                DefaultMutableTreeNode child3 ;
+                DefaultMutableTreeNode child4 ;
+                DefaultMutableTreeNode child5 ;
+                DefaultMutableTreeNode child6 ;
+                DefaultMutableTreeNode child7 ;
+                DefaultMutableTreeNode child8 ;
+                
+                AdvancedConditionsNode advancedConditionsNode =new AdvancedConditionsNode(Query.PARTICIPANT);
+                advancedConditionsNode.addConditionToNode(new Condition(new DataElement("Participant","gender",Constants.FIELD_TYPE_VARCHAR),
+                        								  new Operator(Operator.EQUAL),"'Female'"));
+                advancedConditionsNode.setOperationWithChildCondition(new Operator(Operator.OR));
+                child1 = new DefaultMutableTreeNode(advancedConditionsNode);
+                
+                AdvancedConditionsNode advancedConditionsNode4 =new AdvancedConditionsNode(Query.COLLECTION_PROTOCOL); 
+                advancedConditionsNode4.setOperationWithChildCondition(new Operator(Operator.OR));
+                child4 = new DefaultMutableTreeNode(advancedConditionsNode4);
+                
+                AdvancedConditionsNode advancedConditionsNode5 =new AdvancedConditionsNode(Query.SPECIMEN_COLLECTION_GROUP); 
+//                advancedConditionsNode5.addConditionToNode(new Condition(new DataElement(Query.SPECIMEN,"tissue_site"),new Operator(Operator.EQUAL),"'lung'"));
+//                advancedConditionsNode5.addConditionToNode(new Condition(new DataElement(Query.SPECIMEN,"SPECIMEN_TYPE"),new Operator(Operator.EQUAL),"'tumor'"));
+                advancedConditionsNode5.setOperationWithChildCondition(new Operator(Operator.OR));
+                child5 = new DefaultMutableTreeNode(advancedConditionsNode5);
+                
+                AdvancedConditionsNode advancedConditionsNode6 =new AdvancedConditionsNode(Query.SPECIMEN); 
+//                advancedConditionsNode6.addConditionToNode(new Condition(new DataElement(Query.SPECIMEN,"SPECIMEN_TYPE"),new Operator(Operator.EQUAL),"'non-malignant'"));
+                advancedConditionsNode6.setOperationWithChildCondition(new Operator(Operator.EXIST));
+                child6 = new DefaultMutableTreeNode(advancedConditionsNode6);
+                
+                AdvancedConditionsNode advancedConditionsNode7 =new AdvancedConditionsNode(Query.SPECIMEN); 
+                advancedConditionsNode7.addConditionToNode(new Condition(new DataElement(Query.SPECIMEN,"tissue_site",Constants.FIELD_TYPE_TEXT),new Operator(Operator.EQUAL),"lung"));
+                advancedConditionsNode7.addConditionToNode(new Condition(new DataElement(Query.SPECIMEN,"SPECIMEN_TYPE",Constants.FIELD_TYPE_TEXT),new Operator(Operator.EQUAL),"'tumor'"));
+                advancedConditionsNode7.setOperationWithChildCondition(new Operator(Operator.OR));
+                child7 = new DefaultMutableTreeNode(advancedConditionsNode7);
 
-        simpleConditionsNode = new SimpleConditionsNode(new Condition(
-                new DataElement(Query.COLLECTION_PROTOCOL_REGISTRATION,
-                        "REGISTRATION_DATE"), new Operator(Operator.EQUAL),
-                "'2005-08-16'"), new Operator(Operator.AND));
-        ((SimpleQuery) query).addCondition(simpleConditionsNode);
-
-        System.out.println("Query:\n" + query.getString());
-
-        /**
-         * Query for user
-         */
-        /*---------------------------------------------------------------- */
-        query = QueryFactory.getInstance().newQuery(Query.SIMPLE_QUERY,
-                Query.USER);
-        query.addElementToView(new DataElement(Query.CSM_USER, "FIRST_NAME"));
-        query.addElementToView(new DataElement(Query.INSTITUTION, "NAME"));
-        simpleConditionsNode = new SimpleConditionsNode(new Condition(
-                new DataElement(Query.CSM_USER, "LAST_NAME"), new Operator(
-                        Operator.EQUAL), "'SHARMA'"),
-                new Operator(Operator.AND));
-        ((SimpleQuery) query).addCondition(simpleConditionsNode);
-        System.out.println("\nQuery:\n" + query.getString());
-
-        /*---------------------------------------------------------------- */
-
-        query = QueryFactory.getInstance().newQuery(Query.SIMPLE_QUERY,
-                Query.USER);
-        query.addElementToView(new DataElement(Query.CSM_USER, "FIRST_NAME"));
-        query.addElementToView(new DataElement(Query.INSTITUTION, "NAME"));
-        query.addElementToView(new DataElement(Query.DEPARTMENT, "NAME"));
-        query.addElementToView(new DataElement(Query.CANCER_RESEARCH_GROUP,
-                "NAME"));
-        simpleConditionsNode = new SimpleConditionsNode(new Condition(
-                new DataElement(Query.ADDRESS, "COUNTRY"), new Operator(
-                        Operator.EQUAL), "'United States'"), new Operator(
-                Operator.AND));
-        ((SimpleQuery) query).addCondition(simpleConditionsNode);
-        System.out.println("\nQuery:\n" + query.getString());
-
-        /*---------------------------------------------------------------- */
-
-        /**
-         * Query for institution
-         */
-        query = QueryFactory.getInstance().newQuery(Query.SIMPLE_QUERY,
-                Query.INSTITUTION);
-        query.addElementToView(new DataElement(Query.INSTITUTION, "NAME"));
-        simpleConditionsNode = new SimpleConditionsNode(new Condition(
-                new DataElement(Query.INSTITUTION, "NAME"), new Operator(
-                        Operator.EQUAL), "'as'"), new Operator(Operator.AND));
-        ((SimpleQuery) query).addCondition(simpleConditionsNode);
-        System.out.println("\nQuery:\n" + query.getString());
-
-        /*---------------------------------------------------------------- */
-
-        /**
-         * Query for institution
-         */
-        query = QueryFactory.getInstance().newQuery(Query.SIMPLE_QUERY,
-                Query.DEPARTMENT);
-        query.addElementToView(new DataElement(Query.DEPARTMENT, "NAME"));
-        simpleConditionsNode = new SimpleConditionsNode(new Condition(
-                new DataElement(Query.DEPARTMENT, "NAME"), new Operator(
-                        Operator.EQUAL), "'AAA'"), new Operator(Operator.AND));
-        ((SimpleQuery) query).addCondition(simpleConditionsNode);
-        System.out.println("\nQuery:\n" + query.getString());
-
-        /*---------------------------------------------------------------- */
-
-        /**
-         * Query for cancer research group
-         */
-        query = QueryFactory.getInstance().newQuery(Query.SIMPLE_QUERY,
-                Query.CANCER_RESEARCH_GROUP);
-        query.addElementToView(new DataElement(Query.CANCER_RESEARCH_GROUP,
-                "NAME"));
-        simpleConditionsNode = new SimpleConditionsNode(new Condition(
-                new DataElement(Query.CANCER_RESEARCH_GROUP, "NAME"),
-                new Operator(Operator.EQUAL), "'crg1'"), new Operator(
-                Operator.AND));
-        ((SimpleQuery) query).addCondition(simpleConditionsNode);
-        System.out.println("\nQuery:\n" + query.getString());
-
-        /*---------------------------------------------------------------- */
-
-        /**
-         * Query for site
-         */
-        query = QueryFactory.getInstance().newQuery(Query.SIMPLE_QUERY,
-                Query.SITE);
-        query.addElementToView(new DataElement(Query.SITE, "NAME"));
-        //        query.addElementToView(new DataElement(Query.CSM_USER,"first_name"));
-        query.addElementToView(new DataElement(Query.ADDRESS, "COUNTRY"));
-        simpleConditionsNode = new SimpleConditionsNode(new Condition(
-                new DataElement(Query.SITE, "TYPE"), new Operator(
-                        Operator.EQUAL), "'Hospital'"), new Operator(
-                Operator.AND));
-        ((SimpleQuery) query).addCondition(simpleConditionsNode);
-        System.out.println("\nQuery:\n" + query.getString());
-
-        /*---------------------------------------------------------------- */
-
-        /**
-         * Query for storage type
-         */
-        query = QueryFactory.getInstance().newQuery(Query.SIMPLE_QUERY,
-                Query.STORAGE_TYPE);
-        query.addElementToView(new DataElement(Query.STORAGE_TYPE, "TYPE"));
-        query.addElementToView(new DataElement(
-                Query.STORAGE_CONTAINER_CAPACITY, "ONE_DIMENSION_LABEL"));
-        simpleConditionsNode = new SimpleConditionsNode(new Condition(
-                new DataElement(Query.STORAGE_TYPE, "TYPE"), new Operator(
-                        Operator.EQUAL), "'Freezer1'"), new Operator(
-                Operator.AND));
-        ((SimpleQuery) query).addCondition(simpleConditionsNode);
-        System.out.println("\nQuery:\n" + query.getString());
-
-        /*---------------------------------------------------------------- */
-
-        /**
-         * Query for bio hazard
-         */
-        query = QueryFactory.getInstance().newQuery(Query.SIMPLE_QUERY,
-                Query.BIO_HAZARD);
-        query.addElementToView(new DataElement(Query.BIO_HAZARD, "NAME"));
-        simpleConditionsNode = new SimpleConditionsNode(new Condition(
-                new DataElement(Query.BIO_HAZARD, "TYPE"), new Operator(
-                        Operator.EQUAL), "'Carcinogen'"), new Operator(
-                Operator.AND));
-        ((SimpleQuery) query).addCondition(simpleConditionsNode);
-        System.out.println("\nQuery:\n" + query.getString());
+                ((AdvancedQuery)query).addCondition(advancedConditionsNode);
+                AdvancedConditionsNode advancedConditionsNode2 =new AdvancedConditionsNode(Query.SPECIMEN); 
+                advancedConditionsNode2.addConditionToNode(new Condition(new DataElement("Sample","Type"),new Operator(Operator.EQUAL),"'RNA'"));
+                advancedConditionsNode2.addConditionToNode(new Condition(new DataElement("Sample","Quantity"),new Operator(Operator.GREATER_THAN),"5"));
+                child2 = new DefaultMutableTreeNode(advancedConditionsNode2);
         
-        
-        /*---------------------------------------------------------------- */
+                //        System.out.println(((AdvancedQuery)query).addCondition(advancedConditionsNode,advancedConditionsNode2));
+                AdvancedConditionsNode advancedConditionsNode3 =new AdvancedConditionsNode(Query.SPECIMEN); 
+                advancedConditionsNode3.addConditionToNode(new Condition(new DataElement("Sample","Type"),new Operator(Operator.EQUAL),"'DNA'"));
+                advancedConditionsNode3.addConditionToNode(new Condition(new DataElement("Sample","Quantity"),new Operator(Operator.GREATER_THAN),"5"));
+                child3 = new DefaultMutableTreeNode(advancedConditionsNode3);
+        //        System.out.println(((AdvancedQuery)query).addCondition(advancedConditionsNode,advancedConditionsNode3));
+                
+                
+                AdvancedConditionsNode advancedConditionsNode8 =new AdvancedConditionsNode(Query.SPECIMEN); 
+                advancedConditionsNode8.addConditionToNode(new Condition(new DataElement("Sample","Type"),new Operator(Operator.EQUAL),"'DNA'"));
+                advancedConditionsNode8.addConditionToNode(new Condition(new DataElement("Sample","Quantity"),new Operator(Operator.GREATER_THAN),"5"));
+                child8 = new DefaultMutableTreeNode(advancedConditionsNode8);
 
-        /**
-         * Query for collection protocol
-         */
-        query = QueryFactory.getInstance().newQuery(Query.SIMPLE_QUERY,
-                Query.COLLECTION_PROTOCOL);
-        query.addElementToView(new DataElement(Query.SPECIMEN_PROTOCOL, "TITLE"));
-        query.addElementToView(new DataElement(Query.USER, "identifier"));
-        query.addElementToView(new DataElement(Query.CSM_USER, "first_name"));
-        query.addElementToView(new DataElement(Query.COLLECTION_PROTOCOL_EVENT, "CLINICAL_STATUS"));
-        query.addElementToView(new DataElement(Query.SPECIMEN_REQUIREMENT, "SPECIMEN_TYPE"));
-        simpleConditionsNode = new SimpleConditionsNode(new Condition(
-                new DataElement(Query.SPECIMEN_REQUIREMENT, "SPECIMEN_TYPE"), new Operator(
-                        Operator.EQUAL), "'Blood'"), new Operator(
-                Operator.AND));
-        ((SimpleQuery) query).addCondition(simpleConditionsNode);
-        System.out.println("\nQuery:\n" + query.getString());
-
-        //        simpleConditionsNode = new SimpleConditionsNode(new Condition(new DataElement(Query.SPECIMEN,"TYPE"),
-        //  			   new Operator(Operator.EQUAL),"'Fluid'"),new Operator(Operator.AND));
-        //         ((SimpleQuery)query).addCondition(simpleConditionsNode);
-
-        //        query = QueryFactory.getInstance().newQuery(Query.ADVANCED_QUERY,Query.PARTICIPANT);
-        //        query.addElementToView(new DataElement(Query.PARTICIPANT,"IDENTIFIER"));
-        //        query.addElementToView(new DataElement(Query.COLLECTION_PROTOCOL,"IDENTIFIER"));
-        //        query.addElementToView(new DataElement(Query.SPECIMEN,"IDENTIFIER"));
-        //        
-        //        DefaultMutableTreeNode root = new DefaultMutableTreeNode();
-        //        DefaultMutableTreeNode child1 ;
-        //        DefaultMutableTreeNode child2 ;
-        //        DefaultMutableTreeNode child3 ;
-        //        DefaultMutableTreeNode child4 ;
-        //        DefaultMutableTreeNode child5 ;
-        //        DefaultMutableTreeNode child6 ;
-        //        DefaultMutableTreeNode child7 ;
-        //        DefaultMutableTreeNode child8 ;
-        //        
-        //        AdvancedConditionsNode advancedConditionsNode =new AdvancedConditionsNode(Query.PARTICIPANT);
-        //        advancedConditionsNode.addConditionToNode(new Condition(new DataElement("Participant","gender"),
-        //                								  new Operator(Operator.EQUAL),"'Female'"));
-        //        advancedConditionsNode.setOperationWithChildCondition(new Operator(Operator.OR));
-        //        child1 = new DefaultMutableTreeNode(advancedConditionsNode);
-        //        
-        //        AdvancedConditionsNode advancedConditionsNode4 =new AdvancedConditionsNode(Query.COLLECTION_PROTOCOL); 
-        //        advancedConditionsNode4.setOperationWithChildCondition(new Operator(Operator.OR));
-        //        child4 = new DefaultMutableTreeNode(advancedConditionsNode4);
-        //        
-        //        AdvancedConditionsNode advancedConditionsNode5 =new AdvancedConditionsNode(Query.SPECIMEN); 
-        //        advancedConditionsNode5.addConditionToNode(new Condition(new DataElement(Query.SPECIMEN,"tissue_site"),new Operator(Operator.EQUAL),"'lung'"));
-        //        advancedConditionsNode5.addConditionToNode(new Condition(new DataElement(Query.SPECIMEN,"SPECIMEN_TYPE"),new Operator(Operator.EQUAL),"'tumor'"));
-        //        advancedConditionsNode5.setOperationWithChildCondition(new Operator(Operator.OR));
-        //        child5 = new DefaultMutableTreeNode(advancedConditionsNode5);
-        //        
-        //        AdvancedConditionsNode advancedConditionsNode6 =new AdvancedConditionsNode(Query.SPECIMEN); 
-        //        advancedConditionsNode6.addConditionToNode(new Condition(new DataElement(Query.SPECIMEN,"SPECIMEN_TYPE"),new Operator(Operator.EQUAL),"'non-malignant'"));
-        //        advancedConditionsNode6.setOperationWithChildCondition(new Operator(Operator.EXIST));
-        //        child6 = new DefaultMutableTreeNode(advancedConditionsNode6);
-        //        
-        //        AdvancedConditionsNode advancedConditionsNode7 =new AdvancedConditionsNode(Query.SPECIMEN); 
-        //        advancedConditionsNode7.addConditionToNode(new Condition(new DataElement(Query.SPECIMEN,"tissue_site"),new Operator(Operator.EQUAL),"'lung'"));
-        //        advancedConditionsNode7.addConditionToNode(new Condition(new DataElement(Query.SPECIMEN,"SPECIMEN_TYPE"),new Operator(Operator.EQUAL),"'tumor'"));
-        //        advancedConditionsNode7.setOperationWithChildCondition(new Operator(Operator.OR));
-        //        child7 = new DefaultMutableTreeNode(advancedConditionsNode7);
-
-        //        ((AdvancedQuery)query).addCondition(advancedConditionsNode);
-        //        AdvancedConditionsNode advancedConditionsNode2 =new AdvancedConditionsNode(Query.SPECIMEN); 
-        //        advancedConditionsNode2.addConditionToNode(new Condition(new DataElement("Sample","Type"),new Operator(Operator.EQUAL),"'RNA'"));
-        //        advancedConditionsNode2.addConditionToNode(new Condition(new DataElement("Sample","Quantity"),new Operator(Operator.GREATER_THAN),"5"));
-        //        child2 = new DefaultMutableTreeNode(advancedConditionsNode2);
-        //
-        //        //        System.out.println(((AdvancedQuery)query).addCondition(advancedConditionsNode,advancedConditionsNode2));
-        //        AdvancedConditionsNode advancedConditionsNode3 =new AdvancedConditionsNode(Query.SPECIMEN); 
-        //        advancedConditionsNode3.addConditionToNode(new Condition(new DataElement("Sample","Type"),new Operator(Operator.EQUAL),"'DNA'"));
-        //        advancedConditionsNode3.addConditionToNode(new Condition(new DataElement("Sample","Quantity"),new Operator(Operator.GREATER_THAN),"5"));
-        //        child3 = new DefaultMutableTreeNode(advancedConditionsNode3);
-        ////        System.out.println(((AdvancedQuery)query).addCondition(advancedConditionsNode,advancedConditionsNode3));
-        //        
-        //        
-        //        AdvancedConditionsNode advancedConditionsNode8 =new AdvancedConditionsNode(Query.SPECIMEN); 
-        //        advancedConditionsNode8.addConditionToNode(new Condition(new DataElement("Sample","Type"),new Operator(Operator.EQUAL),"'DNA'"));
-        //        advancedConditionsNode8.addConditionToNode(new Condition(new DataElement("Sample","Quantity"),new Operator(Operator.GREATER_THAN),"5"));
-        //        child8 = new DefaultMutableTreeNode(advancedConditionsNode8);
-
-        //        root.add(child1);
-        //        child1.add(child4);
-        //        child4.add(child6);
-        //        child4.add(child7);
-        ////        child7.add(child8);
-        ////        child6.add(child2);
-        ////        child6.add(child3);
-        //        
-        //        ((AdvancedConditionsImpl)((AdvancedQuery)query).whereConditions).setWhereCondition(root);
-        //        System.out.println(query.getString()+"\n\n");
+                root.add(child1);
+                child1.add(child4);
+                child4.add(child5);
+                child5.add(child6);
+                child5.add(child7);
+        //        child7.add(child8);
+        //        child6.add(child2);
+        //        child6.add(child3);
+                
+                ((AdvancedConditionsImpl)((AdvancedQuery)query).whereConditions).setWhereCondition(root);
+                System.out.println("\n\n"+query.getString()+"\n\n");
     }
    
 }

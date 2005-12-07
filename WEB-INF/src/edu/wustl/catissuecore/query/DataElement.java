@@ -49,6 +49,13 @@ public class DataElement
         this.field = field;
     }
     
+    public DataElement(String table, String field, String fieldType)
+    {
+        this.table = table;
+        this.field = field;
+        this.fieldType = fieldType;
+    }
+    
     /**
      * SQL string representation
      * @param tableSufix sufix for table name

@@ -98,7 +98,7 @@ public class AdvancedConditionsImpl extends ConditionsImpl {
             	whereConditionsString.append(" \n(");
                 
 	            whereConditionsString.append(currentNodeData.toSQLString(tableSufix));
-	            if(currentNodeData.getObjectConditions().size()>0 && childCount>0 && hasConditions())
+	            if(currentNodeData.getObjectConditions().size()>0 && childCount>0 && childHasConditions())
 	                whereConditionsString.append(" "+Operator.AND+" ");
             }
 	        if(childCount > 0 && hasConditions())
@@ -127,20 +127,39 @@ public class AdvancedConditionsImpl extends ConditionsImpl {
 	                    }
 		            }
 	            }
-	            
-	            /**
-	             * start of children
-	             */
-	            whereConditionsString.append("(");
-	            for(int i = 0; i< childCount;i++)
+	            else
 	            {
-	                AdvancedConditionsImpl advancedConditionsImpl = new AdvancedConditionsImpl();
-	                advancedConditionsImpl.setWhereCondition((DefaultMutableTreeNode)whereCondition.getChildAt(i));
-	                whereConditionsString.append("\n "+advancedConditionsImpl.getString(tableSufix)+" ");
-	                if(i != childCount -1 )
-	                    whereConditionsString.append(Operator.OR);
+	            
+		            /**
+		             * start of children
+		             */
+		            
+		            DefaultMutableTreeNode child;
+		            AdvancedConditionsImpl advancedConditionsImpl;
+		            boolean prevChildHasCondition;
+		            for(int i = 0; i< childCount;i++)
+		            {
+		            	child=(DefaultMutableTreeNode)whereCondition.getChildAt(i);
+		            	if(child != null && hasConditions(child))
+		            	{
+		            		whereConditionsString.append("(");
+		            		advancedConditionsImpl = new AdvancedConditionsImpl();
+		            		advancedConditionsImpl.setWhereCondition(child);
+		            		whereConditionsString.append("\n "+advancedConditionsImpl.getString(tableSufix)+" ");
+		            		whereConditionsString.append(")");
+		            		prevChildHasCondition = true;
+		            	}
+		            	else
+		            	{
+		            		prevChildHasCondition = false;
+		            	}
+		                if(i != childCount -1 && prevChildHasCondition)
+		                {
+		                    whereConditionsString.append(Operator.OR);
+		                }
+		            }
+		            
 	            }
-	            whereConditionsString.append(")");
 	        }
 	        if(currentNodeData!=null && currentNodeData.getObjectConditions().size()>0)
 	        {
@@ -178,10 +197,71 @@ public class AdvancedConditionsImpl extends ConditionsImpl {
     public boolean hasConditions(DefaultMutableTreeNode treeNode)
     {
     	boolean hasCondition = false;
-    	Enumeration children = treeNode.children();
-    	DefaultMutableTreeNode child;
+    	
     	Vector conditions;
     	AdvancedConditionsNode advancedConditionsNode;
+    	
+    	//Check whether treenode itself has conditions or not
+    	advancedConditionsNode = (AdvancedConditionsNode) treeNode.getUserObject();
+    	if(advancedConditionsNode!=null )
+		{
+			conditions = advancedConditionsNode.getObjectConditions();
+			if(conditions != null && conditions.size()>0)
+			{
+				hasCondition = true;
+				return hasCondition;
+			}
+			
+		}
+    	
+    	//check if children have conditions
+    	Enumeration children = treeNode.children();
+    	DefaultMutableTreeNode child;
+    	while(children.hasMoreElements())
+    	{
+    		child = (DefaultMutableTreeNode) children.nextElement();
+    		
+    		advancedConditionsNode = (AdvancedConditionsNode) child.getUserObject();
+    		if(advancedConditionsNode!=null )
+    		{
+    			conditions = advancedConditionsNode.getObjectConditions();
+    			if(conditions != null && conditions.size()>0)
+    			{
+    				hasCondition = true;
+    				break;
+    			}
+    			
+    		}
+    		hasCondition = hasConditions(child);
+    		if(hasCondition)
+    		{
+    			break;
+    		}
+    	}
+    	return hasCondition;
+    }
+    
+    public boolean childHasConditions()
+    {
+    	return childHasConditions(whereCondition);
+    }
+    
+    public boolean childHasConditions(DefaultMutableTreeNode treeNode)
+    {
+    	boolean hasCondition = false;
+    	
+    	Vector conditions;
+    	AdvancedConditionsNode advancedConditionsNode;
+    	
+    	if(treeNode == null)
+    	{
+    		hasCondition = false;
+    		return hasCondition;
+    	}
+    	
+    	//check if children have conditions
+    	Enumeration children = treeNode.children();
+    	DefaultMutableTreeNode child;
     	while(children.hasMoreElements())
     	{
     		child = (DefaultMutableTreeNode) children.nextElement();
