@@ -58,6 +58,7 @@ public class AdvanceSearchResultsAction extends BaseAction
 		//Get the advance query root object from session 
 		HttpSession session = request.getSession();
 		DefaultMutableTreeNode root = (DefaultMutableTreeNode)session.getAttribute(Constants.ADVANCED_CONDITIONS_ROOT);
+		
 		//Create Advance Query object
 		Query query = QueryFactory.getInstance().newQuery(Query.ADVANCED_QUERY, aliasName);
 
@@ -68,30 +69,14 @@ public class AdvanceSearchResultsAction extends BaseAction
 		Set tableSet = new HashSet();
 		advBizLogic.setTables(root,tableSet);
 		setTablesDownTheHeirarchy(tableSet);
-		Logger.out.debug("no. of tables in tableSet "+tableSet.size());
 		query.setTableSet(tableSet);
+		
 		List columnNames = new ArrayList();
 		SimpleQueryBizLogic bizLogic = new SimpleQueryBizLogic(); 
 		
 		//Set attribute type in the DataElement	
 		setAttributeType(root);
-		
-		//Set the result view for Advance Search
-	 	Vector selectDataElements = bizLogic.getSelectDataElements(null,tableSet, columnNames);
 
-	 	//Add parent specimen id column to the dataElement required for the hierarchy of the treeView in Advance Search result view 
-        DataElement dataElement = new DataElement();
-        dataElement.setTable(Constants.SPECIMEN);
-        dataElement.setField(Constants.PARENT_SPECIMEN_ID_COLUMN);
-        selectDataElements.add(dataElement);
-	 	
-	 	query.setResultView(selectDataElements);
-	 	
-	 	SessionDataBean sessionData = getSessionData(request);
-	 	
-	 	//Temporary table name with userID attached
-		String tempTableName = Constants.QUERY_RESULTS_TABLE+"_"+sessionData.getUserId();
-		
 		//Set Identifier of Participant,Collection Protocol, Specimen Collection Group and Specimen if not existing in the resultView
 		Vector tablesVector = new Vector();
 		tablesVector.add(Constants.PARTICIPANT);
@@ -101,21 +86,41 @@ public class AdvanceSearchResultsAction extends BaseAction
 		tablesVector.add(Constants.COLLECTION_PROTOCOL_REGISTRATION);
 		query.getIdentifierColumnIds(tablesVector);
 		
+		
+		//Set tables for Configuration.
+		Object selectedTables[] = query.getTableSet().toArray();
+		session.setAttribute(Constants.TABLE_ALIAS_NAME,selectedTables);
+		
+		//Set the result view for Advance Search
+	 	Vector selectDataElements = bizLogic.getSelectDataElements(null,query.getTableSet(), columnNames);
+		Logger.out.debug("column display names "+columnNames+":"+columnNames.size());
+	 	
+	 	//Add parent specimen id column to the dataElement required for the hierarchy of the treeView in Advance Search result view 
+        /*DataElement dataElement = new DataElement();
+        dataElement.setTable(Constants.SPECIMEN);
+        dataElement.setField(Constants.PARENT_SPECIMEN_ID_COLUMN);
+        selectDataElements.add(dataElement);*/
+        
+	 	query.setResultView(selectDataElements);
+	 	
 		Map columnIdsMap = query.getColumnIdsMap();
 		session.setAttribute(Constants.COLUMN_ID_MAP,columnIdsMap);
-		Logger.out.debug("map of column ids:"+columnIdsMap);
+		Logger.out.debug("map of column ids:"+columnIdsMap+":"+columnIdsMap.size());
+
+	 	SessionDataBean sessionData = getSessionData(request);
+	 	//Temporary table name with userID attached
+		String tempTableName = Constants.QUERY_RESULTS_TABLE+"_"+sessionData.getUserId();
+		
 		//Create temporary table with the data from the Advance Query Search 
 		String sql = query.getString();
+		Logger.out.debug("no. of tables in tableSet after table created"+query.getTableSet().size()+":"+query.getTableSet());
 	 	Logger.out.debug("Advance Query Sql"+sql);
 		advBizLogic.createTempTable(sql,tempTableName,sessionData);
-		Logger.out.debug("column display names "+columnNames+":size"+columnNames.size());
-		
+
 		//Set the columnDisplayNames in session
 		session.setAttribute(Constants.COLUMN_DISPLAY_NAMES,columnNames);
 		
-		//Set tables for Configuration.
-		Object selectedTables[] = tableSet.toArray();
-		session.setAttribute(Constants.TABLE_ALIAS_NAME,selectedTables);
+
 		
 		//Remove shopping cart attribute from session
 		session.removeAttribute(Constants.SHOPPING_CART);
