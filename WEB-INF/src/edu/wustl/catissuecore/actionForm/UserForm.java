@@ -797,28 +797,28 @@ public class UserForm extends AbstractActionForm
                             }
                         }
 
-                        if (institutionId == -1)
+                        if (validator.isValidOption(String.valueOf(institutionId)) == false)
                         {
                             errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
                                     "errors.item.required", ApplicationProperties
                                             .getValue("user.institution")));
                         }
 
-                        if (departmentId == -1)
+                        if (validator.isValidOption(String.valueOf(departmentId)) == false)
                         {
                             errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
                                     "errors.item.required", ApplicationProperties
                                             .getValue("user.department")));
                         }
                         
-                        if (cancerResearchGroupId == -1)
+                        if (validator.isValidOption(String.valueOf(cancerResearchGroupId)) == false)
                         {
                             errors.add(ActionErrors.GLOBAL_ERROR,
                                             new ActionError("errors.item.required",
                                                     ApplicationProperties.getValue("user.cancerResearchGroup")));
                         }
 
-                        if(!validator.isValidOption(activityStatus))
+                        if(validator.isValidOption(activityStatus) == false)
                         {
                         	errors.add(ActionErrors.GLOBAL_ERROR,
                                     new ActionError("errors.item.required",
@@ -830,7 +830,7 @@ public class UserForm extends AbstractActionForm
                     {
                         if (role != null)
                         {
-                            if (role.trim().equals("0"))
+                            if (validator.isValidOption(role) == false)
     	                    {
     	                        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
     	                                "errors.item.required", ApplicationProperties
@@ -841,7 +841,7 @@ public class UserForm extends AbstractActionForm
 
                     if (pageOf.equals(Constants.PAGEOF_APPROVE_USER))
                     {
-                        if (status.trim().equals(Constants.SELECT_OPTION))
+                        if (validator.isValidOption(status) == false)
                         {
                             errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
                                     "errors.item.required", ApplicationProperties
