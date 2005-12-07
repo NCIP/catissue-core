@@ -16,6 +16,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,6 +26,9 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+
+
+import edu.wustl.catissuecore.actionForm.AdvanceSearchForm;
 import edu.wustl.catissuecore.actionForm.ShoppingCartForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.ShoppingCartBizLogic;
@@ -54,7 +58,8 @@ public class ShoppingCartAction  extends BaseAction
         HttpSession session = request.getSession(true);
         ShoppingCart cart = (ShoppingCart)session.getAttribute(Constants.SHOPPING_CART);
         ShoppingCartBizLogic bizLogic = (ShoppingCartBizLogic)BizLogicFactory.getBizLogic(Constants.SHOPPING_CART_FORM_ID);
-        ShoppingCartForm shopForm = (ShoppingCartForm)form;
+        //ShoppingCartForm shopForm = (ShoppingCartForm)form;
+        AdvanceSearchForm advForm = (AdvanceSearchForm)form;
      
         if(cart == null)
         {
@@ -81,10 +86,11 @@ public class ShoppingCartAction  extends BaseAction
         	if(operation.equals(Constants.ADD)) //IF OPERATION IS "ADD"
 	        {
         		//AdvanceSearchForm advForm = (AdvanceSearchForm)form;
-        		//Map map = advForm.getValues();
-	        	//Logger.out.debug("map of shopping form:"+map);
-        		//request.getp
-        		SessionDataBean sessionDataBean = getSessionData(request);
+        		Map map = advForm.getValues();
+	        	Logger.out.debug("map of shopping form:"+map);
+	        	Object obj[] = map.keySet().toArray();
+	        	
+	        	SessionDataBean sessionDataBean = getSessionData(request);
         		Map columnIdsMap = (Map)session.getAttribute(Constants.COLUMN_ID_MAP);
         		Logger.out.debug("column ids map in shopping cart"+columnIdsMap);
         		Integer specimenColumnId = (Integer)columnIdsMap.get(Constants.SPECIMEN+"."+Constants.IDENTIFIER);
@@ -103,17 +109,32 @@ public class ShoppingCartAction  extends BaseAction
 					List rowList =(List)dataItr.next(); 
 					specimenIds[i++]=(String)rowList.get(specimenColumnId.intValue()-1);
 				}
+				//Add to cart the selected specified Ids.  
+				Object []selectedSpecimenIds = new Object[obj.length];
+				for(int j=0;j<obj.length;j++)
+				{
+		        	String str = obj[j].toString();
+		        	StringTokenizer strTokens = new StringTokenizer(str,"_");
+		        	strTokens.nextToken();
+		        	int index = Integer.parseInt(strTokens.nextToken());
+		        	Logger.out.debug("index selected :"+index);
+		        	selectedSpecimenIds[j]=specimenIds[index];
+		        	Logger.out.debug("specimen id to be added to cart :"+selectedSpecimenIds[j]);
+				}	
         		
-        		bizLogic.add(cart,specimenIds);
+        		bizLogic.add(cart,selectedSpecimenIds);
         		session.setAttribute(Constants.SHOPPING_CART,cart);
-       			List dataList = (List) session.getAttribute(Constants.SPREADSHEET_DATA_LIST);
-       			//target="addShoppingCart";
+       			//List dataList = (List) session.getAttribute(Constants.SPREADSHEET_DATA_LIST);
+        		List columnList = (List)session.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
+        		request.setAttribute(Constants.SPREADSHEET_COLUMN_LIST,columnList);
+        		request.setAttribute(Constants.PAGEOF,Constants.PAGEOF_QUERY_RESULTS);
+       			target=Constants.SHOPPING_CART_ADD;
 	        }
 	        else if(operation.equals(Constants.DELETE)) //IF OPERATION IS "DELETE"
 	        {
 	        	
 	        	//Extracting map from formbean that gives rows to be deleted
-	        	Map map = shopForm.getValues();
+	        	Map map = advForm.getValues();
 	        	Logger.out.debug("map of shopping form:"+map);
 	        	Object obj[] = map.keySet().toArray();
 	        	Logger.out.debug("cart in shopping cart action "+cart.getCart());
@@ -127,7 +148,7 @@ public class ShoppingCartAction  extends BaseAction
 	        	String fileName = Variables.catissueHome + System.getProperty("file.separator") + session.getId() + ".csv";
 	        	
 	        	//Extracting map from formbean that gives rows to be exported
-	        	Map map = shopForm.getValues();
+	        	Map map = advForm.getValues();
 	        	Object obj[] = map.keySet().toArray();
 	        	
 	        	List cartList = bizLogic.export(cart,obj,fileName);
