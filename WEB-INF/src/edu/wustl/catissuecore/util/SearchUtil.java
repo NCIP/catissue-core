@@ -12,15 +12,20 @@ package edu.wustl.catissuecore.util;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.Set;
+import java.util.StringTokenizer;
 
+import edu.wustl.catissuecore.bizlogic.QueryBizLogic;
 import edu.wustl.catissuecore.query.Operator;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.vo.HTMLField;
 import edu.wustl.catissuecore.vo.SearchFieldData;
 import edu.wustl.common.beans.NameValueBean;
+import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -261,19 +266,19 @@ public class SearchUtil
 	{
 		SearchFieldData[] searchFieldData = null;
 		
-		if(pageName.equals("CollectionProtocol"))
+		if(pageName.equals(Constants.COLLECTION_PROTOCOL))
 		{
 			searchFieldData = getSearchFieldData(Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
 		}
-		else if(pageName.equals("Participant"))
+		else if(pageName.equals(Constants.PARTICIPANT))
 		{
 			searchFieldData = getSearchFieldData(Constants.PARTICIPANT_FORM_ID);
 		}
-		else if(pageName.equals("SpecimenCollectionGroup"))
+		else if(pageName.equals(Constants.SPECIMEN_COLLECTION_GROUP))
 		{
 			searchFieldData = getSearchFieldData(Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID);
 		}
-		else if(pageName.equals("Specimen"))
+		else if(pageName.equals(Constants.SPECIMEN))
 		{
 			searchFieldData = getSearchFieldData(Constants.NEW_SPECIMEN_FORM_ID);
 		}
@@ -290,19 +295,6 @@ public class SearchUtil
 			
 			map.put(key,new NameValueBean(labelName,dataType));
 		}
-		
-//		/******** TO BE REMOVED LATER *****************/
-//		map = new HashMap();
-//		map.put("Participant:RACE",new NameValueBean("participant.race","String"));
-//		map.put("Participant:GENOTYPE",new NameValueBean("participant.genotype","String"));
-//		map.put("Participant:MIDDLE_NAME",new NameValueBean("participant.genotype","String"));
-//		map.put("Participant:FIRST_NAME",new NameValueBean("user.firstName","String"));
-//		map.put("Participant:ETHNICITY",new NameValueBean("participant.ethnicity","String"));
-//		map.put("Participant:GENDER",new NameValueBean("participant.gender","String"));
-//		map.put("Participant:LAST_NAME",new NameValueBean("user.lastName","String"));
-//		map.put("Participant:SOCIAL_SECURITY_NUMBER",new NameValueBean("participant.socialSecurityNumber","String"));
-//		map.put("Participant:BIRTH_DATE",new NameValueBean("participant.birthDate","Date"));
-//		/******** TO BE REMOVED LATER *****************/
 		
 		return map;
 	}
@@ -336,6 +328,7 @@ public class SearchUtil
 		
 		
 	}
+	
 	public static int getFormId(String aliasName)
 	{
 		int formId = 0;
@@ -357,5 +350,68 @@ public class SearchUtil
 		}
 		
 		return formId;
+	}
+	
+	/**
+	 * Returns a list of Name-Value beans which contains the table names with corresponding alias names.
+	 * The list contains all the tables associated with Event Parameters only.
+	 * @param bizLogic The object of class QueryBizLogic
+	 * @return a list of table names.
+	 */
+	 public static List getEventParametersTables(QueryBizLogic bizLogic) throws DAOException,ClassNotFoundException
+	 {
+	  	Set tableSet = bizLogic.getAllTableNames("", Constants.ADVANCE_QUERY_TABLES);
+	  	List newTableList = new ArrayList();
+	  	
+	  	//Adding SELECT Option
+	  	newTableList.add(new NameValueBean(Constants.SELECT_OPTION,"-1"));
+	  	
+	  	Iterator it = tableSet.iterator();
+	  	
+	  	while(it.hasNext())
+	  	{
+	  		NameValueBean bean = (NameValueBean) it.next();
+	  		
+	  		//Adding tables related to Event Parameters only.
+	  		if(bean.getName().endsWith("Parameters") || bean.getName().endsWith("Parameter"))
+	  		{
+	  			newTableList.add(bean);
+	  		}
+	  	}
+	  	
+	  	return newTableList;
+	}
+	 
+	public static Map getEventParametersDisplayNames(QueryBizLogic bizLogic, List tableList) throws DAOException,ClassNotFoundException
+	{
+		HashMap displayNamesMap = new HashMap();
+		
+		//Extracting column names per table name & generating the map
+    	for(int i=1;i<tableList.size();i++)
+    	{
+    		NameValueBean bean = (NameValueBean)tableList.get(i);
+    		String aliasName = bean.getValue();
+    		String tableDisplayName = bean.getName();
+    		
+    		List columnList = bizLogic.getColumnNames(aliasName);
+    		
+    		for(int j=0;j<columnList.size();j++)
+    		{
+    			NameValueBean colBean = (NameValueBean)columnList.get(j);
+    			String columnName = colBean.getName();
+    			
+    			StringTokenizer tokenizer = new StringTokenizer(colBean.getValue(),".");
+    			
+    			tokenizer.nextToken();
+    			String columnValue = tokenizer.nextToken();
+    			
+    			String key = aliasName + "." + columnValue;
+    			String value = tableDisplayName + "." + columnName;
+    			
+    			displayNamesMap.put(key,value);
+    		}
+    	}
+		
+		return displayNamesMap;
 	}
 }
