@@ -229,13 +229,15 @@ Map map = form.getExternalIdentifier();
 		{
 			exIdRows = form.getExIdCounter();
 			bhRows	 = form.getBhCounter();
-			if(form.getUnit() != null)
-			{
-				unitSpecimen = form.getUnit();
-				System.out.println("\n\n\nunitSpecimen : " +unitSpecimen);
-			}	
-			else
-			{
+			System.out.println("form.getAvailableQuantity()--"+form.getAvailableQuantity());
+			System.out.println("form.getQuantity()--"+form.getQuantity());
+	//		if(form.getUnit() != null)
+	//		{
+	//			unitSpecimen = form.getUnit();
+	//			System.out.println("\n\n\nunitSpecimen : " +unitSpecimen);
+	//		}	
+	//		else
+	//		{
 				if(form.getClassName().equals("Tissue"))
 				{
 					if((form.getType()!=null) && (form.getType().equals(Constants.SLIDE)||form.getType().equals(Constants.PARAFFIN_BLOCK)||form.getType().equals(Constants.FROZEN_BLOCK)))
@@ -261,7 +263,7 @@ Map map = form.getExternalIdentifier();
 					unitSpecimen = Constants.UNIT_MG;
 				}
 				System.out.println("\n\n\nunitSpecimen in else: " +unitSpecimen);
-			}
+		//	}
 		System.out.println("\n\n\nparentPresent : " + form.isParentPresent());
 				
 		}
@@ -566,7 +568,7 @@ Map map = form.getExternalIdentifier();
 						</label>
 					</td>
 					<td class="formField" colspan="3">
-						<html:text styleClass="formFieldSized15" maxlength="10"  size="30" styleId="availableQuantity" property="availableQuantity" readonly="<%=readOnlyForAll%>" />
+						<html:text styleClass="formFieldSized15" maxlength="10"  size="30" styleId="availableQuantity" property="availableQuantity" readonly="true" />
 						<span id="unitSpan1"><%=unitSpecimen%></span>
 					</td>
 				</tr>
