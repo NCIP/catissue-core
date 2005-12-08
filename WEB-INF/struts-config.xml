@@ -1763,6 +1763,18 @@ PUBLIC
 			<forward name="failure" path="/SimpleQueryInterface.do" />
 		</action>
 		
+		<action path="/ConfigureSimpleQueryValidate"
+			type="edu.wustl.catissuecore.action.ConfigureSimpleQueryAction"
+			name="simpleQueryInterfaceForm"
+			input="/SimpleQueryInterface.do"
+			validate="true"
+			scope="request">
+			<forward name="pageOfSimpleQueryInterface" path="/ConfigureSimpleSearchView.do?pageOf=pageOfSimpleQueryInterface" />
+			<forward name="pageOfQueryResults" path="/ConfigureAdvanceSearchView.do?pageOf=pageOfQueryResults" />
+			<forward name="failure" path="/SimpleQueryInterface.do" />
+		</action>
+		
+		
 		<action path="/ConfigureSimpleSearchView"
 			type="edu.wustl.catissuecore.action.ConfigureResultViewAction"
 			name="simpleQueryInterfaceForm"
