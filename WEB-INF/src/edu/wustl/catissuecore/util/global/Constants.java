@@ -1302,7 +1302,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	
 	//constants for Simple Query Interface Configuration
 	public static final String CONFIGURE_SIMPLE_QUERY_ACTION = "ConfigureSimpleQuery.do";
-	public static final String CONFIGURE_SIMPLE_QUERY_NON_VALIDATE_ACTION = "ConfigureSimpleQueryNonValidate.do";
+	public static final String CONFIGURE_SIMPLE_QUERY_VALIDATE_ACTION = "ConfigureSimpleQueryValidate.do";
 	public static final String CONFIGURE_SIMPLE_SEARCH_ACTION = "ConfigureSimpleSearch.do";
 	public static final String SIMPLE_SEARCH_ACTION = "SimpleSearch.do";
 	public static final String SIMPLE_SEARCH_AFTER_CONFIGURE_ACTION = "SimpleSearchAfterConfigure.do";
