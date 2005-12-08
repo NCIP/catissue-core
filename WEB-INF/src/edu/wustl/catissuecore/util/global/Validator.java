@@ -235,7 +235,7 @@ public class Validator
             }
             if(positiveCheck >0 )
             {
- 	            if (dblValue <= 0)
+ 	            if (dblValue < 0)
  	            {
  	                return false;
  	            }
