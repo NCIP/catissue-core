@@ -91,7 +91,7 @@ public class FluidSpecimenReviewEventParametersForm extends SpecimenEventParamet
          {
  
 //         	// checks the cellCount
-           	if (!validator.isEmpty(cellCount) && !validator.isDouble(cellCount,0) )
+           	if (!validator.isEmpty(cellCount) && !validator.isDouble(cellCount,false) )
             {
            		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("fluidspecimenrevieweventparameters.cellcount")));
             }

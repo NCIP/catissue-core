@@ -293,7 +293,7 @@ public class StorageTypeForm extends AbstractActionForm
             }
             // code as per bug id 233 
             // checking for double value if present
-            if (!validator.isEmpty(defaultTemperature) && !validator.isDouble(defaultTemperature,0  )  )
+            if (!validator.isEmpty(defaultTemperature) && !validator.isDouble(defaultTemperature,false  )  )
             {
                 errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("storageType.defaultTemperature")));
             }

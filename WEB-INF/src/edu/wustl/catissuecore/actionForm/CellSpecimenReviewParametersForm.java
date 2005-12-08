@@ -112,14 +112,14 @@ public class CellSpecimenReviewParametersForm extends SpecimenEventParametersFor
          try
          {
          	// checks the neoplasticCellularityPercentage
-           	if (!validator.isEmpty(neoplasticCellularityPercentage)  &&  !validator.isDouble(neoplasticCellularityPercentage,0) )
+           	if (!validator.isEmpty(neoplasticCellularityPercentage)  &&  !validator.isDouble(neoplasticCellularityPercentage,false) )
             {
            		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("cellspecimenreviewparameters.neoplasticcellularitypercentage")));
             }
 
 
          	// checks the viableCellPercentage
-           	if (!validator.isEmpty(viableCellPercentage) && !validator.isDouble(viableCellPercentage,0) )
+           	if (!validator.isEmpty(viableCellPercentage) && !validator.isDouble(viableCellPercentage,false) )
             {
            		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("cellspecimenreviewparameters.viablecellpercentage")));
             }

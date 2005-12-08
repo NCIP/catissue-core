@@ -292,14 +292,14 @@ public class MolecularSpecimenReviewParametersForm extends SpecimenEventParamete
 
           	Logger.out.info("absorbanceAt260: "+ absorbanceAt260  );
             //	 checks the absorbanceAt260
-         	if (!validator.isEmpty(absorbanceAt260) && !validator.isDouble(absorbanceAt260,0))
+         	if (!validator.isEmpty(absorbanceAt260) && !validator.isDouble(absorbanceAt260,false))
             {
            		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("molecularspecimenreviewparameters.absorbanceat260")));
             }
 
           	Logger.out.info("absorbanceAt280: "+ absorbanceAt280  );
             //	 checks the absorbanceAt280
-         	if (!validator.isEmpty(absorbanceAt280) && !validator.isDouble(absorbanceAt280,0))
+         	if (!validator.isEmpty(absorbanceAt280) && !validator.isDouble(absorbanceAt280,false))
             {
            		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("molecularspecimenreviewparameters.absorbanceat280")));
             }

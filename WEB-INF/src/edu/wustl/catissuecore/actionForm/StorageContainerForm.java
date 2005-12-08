@@ -494,7 +494,7 @@ public class StorageContainerForm extends AbstractActionForm
     
 
             // validations for temperature
-            if (!validator.isEmpty(defaultTemperature ) && (!validator.isDouble(defaultTemperature,0)))
+            if (!validator.isEmpty(defaultTemperature ) && (!validator.isDouble(defaultTemperature,false)))
             {
             	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("storageContainer.temperature")));
             }

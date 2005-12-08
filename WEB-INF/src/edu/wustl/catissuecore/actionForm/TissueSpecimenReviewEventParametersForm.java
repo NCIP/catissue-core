@@ -200,21 +200,21 @@ public class TissueSpecimenReviewEventParametersForm extends SpecimenEventParame
          {
  
 //         	// checks the neoplasticCellularityPercentage
-           	if (!validator.isEmpty( neoplasticCellularityPercentage) && !validator.isDouble( neoplasticCellularityPercentage,0 ) )
+           	if (!validator.isEmpty( neoplasticCellularityPercentage) && !validator.isDouble( neoplasticCellularityPercentage,false ) )
             {
            		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("tissuespecimenrevieweventparameters.neoplasticcellularitypercentage")));
             }
 //
  
 //         	// checks the necrosisPercentage
-           	if (!validator.isEmpty(necrosisPercentage) && !validator.isDouble(necrosisPercentage,0) )
+           	if (!validator.isEmpty(necrosisPercentage) && !validator.isDouble(necrosisPercentage,false) )
             {
            		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("tissuespecimenrevieweventparameters.necrosispercentage")));
             }
 //
  
 //         	// checks the lymphocyticPercentage
-           	if (!validator.isEmpty(lymphocyticPercentage) && !validator.isDouble(lymphocyticPercentage,0) )
+           	if (!validator.isEmpty(lymphocyticPercentage) && !validator.isDouble(lymphocyticPercentage,false) )
 
             {
            		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("tissuespecimenrevieweventparameters.lymphocyticpercentage")));
@@ -222,7 +222,7 @@ public class TissueSpecimenReviewEventParametersForm extends SpecimenEventParame
 //
  
 //         	// checks the totalCellularityPercentage
-       		if (!validator.isEmpty(totalCellularityPercentage) && !validator.isDouble(totalCellularityPercentage,0) )
+       		if (!validator.isEmpty(totalCellularityPercentage) && !validator.isDouble(totalCellularityPercentage,false) )
             {
            		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("tissuespecimenrevieweventparameters.totalcellularitypercentage")));
             }

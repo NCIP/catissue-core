@@ -223,7 +223,7 @@ public class Validator
     	
     }
 
-    public boolean isDouble(String dblString,int positiveCheck)
+    public boolean isDouble(String dblString,boolean positiveCheck)
     {
         try
         {
@@ -233,7 +233,7 @@ public class Validator
             {
                 return false;
             }
-            if(positiveCheck >0 )
+            if(positiveCheck)
             {
  	            if (dblValue < 0)
  	            {
