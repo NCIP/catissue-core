@@ -16,12 +16,14 @@ import javax.servlet.http.HttpSession;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import edu.wustl.catissuecore.actionForm.AdvanceSearchForm;
+import edu.wustl.catissuecore.bizlogic.QueryBizLogic;
 import edu.wustl.catissuecore.query.AdvancedConditionsNode;
 import edu.wustl.catissuecore.query.Condition;
 import edu.wustl.catissuecore.query.DataElement;
 import edu.wustl.catissuecore.query.Operator;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.vo.SearchFieldData;
+import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
 public abstract class AdvanceSearchUIAction extends BaseAction 
@@ -32,7 +34,7 @@ public abstract class AdvanceSearchUIAction extends BaseAction
 	 * @param str represents id as string
 	 * @param request HttpServletRequest
 	 */
-	protected void setMapValue(AdvanceSearchForm aForm,String str,HttpServletRequest request)
+	protected void setMapValue(AdvanceSearchForm aForm,String str,HttpServletRequest request) throws Exception
     {
 		//Represents checked checbox's id
     	Integer nodeId = Integer.decode(str);
@@ -52,6 +54,8 @@ public abstract class AdvanceSearchUIAction extends BaseAction
     	Condition con = null;
 		DataElement dataElement = null;
 		Operator op = null;
+		
+		int eventCounter = 1;
 		
 		//Fieldname of page
 		String column = "";
@@ -98,7 +102,9 @@ public abstract class AdvanceSearchUIAction extends BaseAction
 	        
 	        //Key for value field ie 3rd column
 			String opKey = "Operator:" + tableName+":"+column;
-				
+			
+			Logger.out.debug("opKey--"+opKey);
+			Logger.out.debug("valuekey--"+valuekey);
 			//Setting value of map in edit case
 			map.put(valuekey,con.getValue());
 			
@@ -117,8 +123,14 @@ public abstract class AdvanceSearchUIAction extends BaseAction
 				tempOperator = op.getOperator();
 				temp = valuekey;
 			}
+			if(tableName.indexOf("Parameter")>0)
+			{
+				setEventParameterMap(aForm,tableName,column,op.getOperator(),con.getValue(),eventCounter);
+				eventCounter++;
+			}
+			
 		}
-		
+		Logger.out.debug("map in advSearchUIAction----******-->"+map);
 		//Setting map in form
 		aForm.setValues(map);
 		
@@ -155,5 +167,26 @@ public abstract class AdvanceSearchUIAction extends BaseAction
 		}
 	}
 	
+	protected void setEventParameterMap(AdvanceSearchForm aForm,String tableName,String column,String operatorVal,String value,int counter) throws Exception
+	{
+//		Map map = new HashMap();
+//		Map eventParametersMap = (Map)aForm.getEventValues();
+//		Logger.out.debug("eventParametersMap in advSUI****-->"+eventParametersMap);
+//		for(int i=1;i<=counter;i++)
+//		{
+		QueryBizLogic bizlogic = new QueryBizLogic();
+		Logger.out.debug("dispaly name***"+bizlogic.getColumnDisplayNames(tableName,column));
+		Logger.out.debug("counter**"+counter);
+			String eventClassName = "EventName_" + counter;
+			String eventColumn = "EventColumnName_" + counter;
+			String eventOperator = "EventColumnOperator_" + counter;
+			String eventValue = "EventColumnValue_" + counter;
+			
+			aForm.setEventMap(eventColumn,tableName+"."+column+".bigint");//bizlogic.getColumnDisplayNames(tableName,column
+			aForm.setEventMap(eventClassName,tableName);
+			aForm.setEventMap(eventOperator,operatorVal);
+			aForm.setEventMap(eventValue,value);
+		//}
+	}
 
 }
