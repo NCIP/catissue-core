@@ -403,13 +403,19 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 	    			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(errorKey,ApplicationProperties.getValue("participant.birthDate")));
 	    		}
 			}
-
-			String socialSecurityNumber = socialSecurityNumberPartA+"-"+socialSecurityNumberPartB+"-"+socialSecurityNumberPartC; 
+         	
+         	String socialSecurityNumber = socialSecurityNumberPartA+"-"+socialSecurityNumberPartB+"-"+socialSecurityNumberPartC; 
          	if(!validator.isEmpty(socialSecurityNumberPartA+socialSecurityNumberPartB+socialSecurityNumberPartC) && !validator.isValidSSN(socialSecurityNumber ) )
          	{
          		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.invalid",ApplicationProperties.getValue("participant.socialSecurityNumber")));
          	}
-			  
+			
+         	//Validation for Blank Participant 
+         	if(validator.isEmpty(lastName) && validator.isEmpty(firstName) && validator.isEmpty(middleName) && validator.isEmpty(birthDate) && gender.equals("-1") && genotype.equals("-1") && race.equals("-1") && ethnicity.equals("-1") && validator.isEmpty(socialSecurityNumberPartA+socialSecurityNumberPartB+socialSecurityNumberPartC))
+         	{
+         	   errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.participant.atLeastOneFieldRequired"));
+         	}
+         	         	
 			//Validations for Add-More Block
 			String className = "ParticipantMedicalIdentifier:";
 			String key1 = "_Site_" + Constants.SYSTEM_IDENTIFIER;
