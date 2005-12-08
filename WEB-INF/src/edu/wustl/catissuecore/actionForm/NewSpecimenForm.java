@@ -347,6 +347,12 @@ public class NewSpecimenForm extends SpecimenForm
                 {
                     errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("specimen.specimenCollectionGroupId")));
                 }
+             	
+             	if(parentPresent && !validator.isValidOption(parentSpecimenId))
+             	{
+             		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("createSpecimen.parent")));
+             	}
+             	
              	if (tissueSite.equals("-1"))
                 {
                     errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("specimen.tissueSite")));
