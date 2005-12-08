@@ -411,7 +411,19 @@ Map map = form.getExternalIdentifier();
 				    </td>
 				    <td class="formField" colspan="4">
 				     	<html:select property="className" styleClass="formFieldSized15" styleId="className" size="1" disabled="<%=readOnlyForAll%>" onchange="onTypeChange(this)">
-							<html:options collection="<%=Constants.SPECIMEN_CLASS_LIST%>" labelProperty="name" property="value"/>
+				     	<%
+							String classValue = form.getClassName();
+							if(operation.equals(Constants.EDIT))
+							{
+						%>
+								<html:option value="<%=classValue%>"><%=classValue%></html:option>
+						<%
+							}else{
+						%>
+								<html:options collection="<%=Constants.SPECIMEN_CLASS_LIST%>" labelProperty="name" property="value"/>
+						<%
+							}
+						%>
 						</html:select>
 		        	</td>
 				 </tr>

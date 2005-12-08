@@ -36,7 +36,6 @@
 	   	}
 		System.out.println("CP JSP : ----- " + appendingPath);
 		
-
     boolean readOnlyValue, readOnlyForAll=false;
     if (operation.equals(Constants.EDIT))
     {
@@ -756,6 +755,22 @@ function getSubDivCount(subdivtag)
 						
 						String innerCheck = "chk_spec_" + counter + "_"+ iCnt;
 						
+						String specimenClassKey = "CollectionProtocolEvent:" + counter + "_SpecimenRequirement:" + innerCounter + "_specimenClass";
+						String specimenClassValue = (String)map.get(specimenClassKey);
+						String identifierKey = "CollectionProtocolEvent:" + counter + "_SpecimenRequirement:" + innerCounter + "_systemIdentifier";
+						String idValue = String.valueOf(map.get(identifierKey));
+
+						int sysId = 0;
+
+						try
+						{
+							sysId = Integer.parseInt(idValue);
+						}
+						catch(Exception e) //Exception is handled. If NumberFormatException or NullPointerException then identfier value = 0
+						{
+							sysId = 0;
+						}
+
 					%>
 			        
 			        <td class="formFieldAddMore">
@@ -769,7 +784,18 @@ function getSubDivCount(subdivtag)
 										styleClass="formFieldSized10" 
 										styleId="<%=fName%>" size="1"
 										onchange="<%=onChangeFun%>">
-							<html:options collection="<%=Constants.SPECIMEN_CLASS_LIST%>" labelProperty="name" property="value"/>
+						<%
+							if(operation.equals(Constants.EDIT) && sysId > 0)
+							{
+						%>
+								<html:option value="<%=specimenClassValue%>"><%=specimenClassValue%></html:option>
+						<%
+							}else{
+						%>
+								<html:options collection="<%=Constants.SPECIMEN_CLASS_LIST%>" labelProperty="name" property="value"/>
+						<%
+							}
+						%>
 						</html:select>
 			        </td>
 			        

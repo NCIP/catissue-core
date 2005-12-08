@@ -482,6 +482,21 @@ function insRow(subdivtag)
 					String objsubTypeName = "value(SpecimenRequirement:" + counter + "_specimenType)";
 					String identifier = "value(SpecimenRequirement:"+ counter +"_systemIdentifier)";
 					String check = "chk_"+counter;
+					String mapIdKey = "SpecimenRequirement:" + counter + "_systemIdentifier";
+
+					String idValue = String.valueOf((map.get(mapIdKey)));
+					int sysId = 0;
+
+					try
+					{
+						sysId = Integer.parseInt(idValue);
+					}
+					catch(Exception e) //Exception is handled. If NumberFormatException or NullPointerException then identfier value = 0
+					{
+						sysId = 0;
+					}
+
+					String classValue = (String)map.get(srKeyName);
 			%>
 			<TR> 
 				<td class="tabrightmostcell">
@@ -494,14 +509,28 @@ function insRow(subdivtag)
 			%>	
 				<td class="formField">
 					<html:select property="<%=objname%>" styleClass="formFieldSized10" styleId="<%=objname%>" size="1" onchange="<%=functionName%>" >
+					<%
+
+						if(operation.equals(Constants.EDIT) && sysId > 0)
+						{
+					%>
+							<html:option value="<%=classValue%>"><%=classValue%></html:option>
+					<%
+						}
+						else
+						{
+					%>
 						<html:options collection="<%=Constants.SPECIMEN_CLASS_LIST%>" labelProperty="name" property="value"/>
+					<%
+						}
+					%>
 					</html:select>
 		        </td>
 		        
 		        <td class="formField">
 					<%
 					
-						String classValue = (String)form.getValue(srKeyName);
+						//String classValue = (String)form.getValue(srKeyName);
 						
 						specimenTypeList = (List)specimenTypeMap.get(classValue);
 						boolean subListEnabled = false;
@@ -514,7 +543,7 @@ function insRow(subdivtag)
 							specimenTypeList = new ArrayList();
 							specimenTypeList.add(new NameValueBean(Constants.SELECT_OPTION,"-1"));
 						}
-						pageContext.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);						
+						pageContext.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
 						String tmpSpecimenClass = objname;
 						
 						objname="";
