@@ -40,10 +40,12 @@ public class TreeView {
 				DefaultMutableTreeNode child = (DefaultMutableTreeNode)node.getChildAt(i);
 				DefaultMutableTreeNode parent = (DefaultMutableTreeNode)child.getParent();
 				
+				//Condition that allow to start from Participant as a parent node
 				if(!parent.isRoot())
 				{
 					AdvancedConditionsNode parentAdvConditionNode = (AdvancedConditionsNode)parent.getUserObject();
 					String temp = parentAdvConditionNode.getOperationWithChildCondition().getOperator();
+					//Condition to provide Psudo And 
 					if(temp.equals(Operator.EXIST))
 					{
 						andOrBool = true;
@@ -61,6 +63,7 @@ public class TreeView {
 				{
 					if(operation.equals(Operator.EXIST))
 					{
+						//Condition to set value only when selected node has child
 						if(child.getChildCount() > 0)
 							advConditionNode.setOperationWithChildCondition(new Operator(Operator.EXIST));
 					}
@@ -72,8 +75,6 @@ public class TreeView {
 				
 				Vector vectorOfCondtions = advConditionNode.getObjectConditions();
 				String tableName = advConditionNode.getObjectName();
-				Logger.out.debug("object name for advance node"+tableName);
-				Logger.out.debug("size-->"+vectorOfCondtions.size());
 				String str = "";
 				Condition con = null;
 				DataElement data = null;
@@ -139,6 +140,7 @@ public class TreeView {
 				}
 				Logger.out.debug("STR in TREVIEW--"+str);
 				tree.add(str);
+				andOrBool = false;
 				if(child.isLeaf())
 				{
 					nodeId++;
