@@ -322,6 +322,7 @@
 <tr>
 	<td><html:hidden property="objectName" value="Specimen"/></td>
 	<td><html:hidden property="eventCounter"/><html:hidden property="selectedNode" /></td>
+	<td><html:hidden property="itemNodeId" /></td>
 </tr>
 <!--  MAIN TITLE ROW -->
 <tr>
@@ -497,7 +498,7 @@
 				disabled2 = false;
 				opDisabled = false;
 			}
-			else if(!opValConcentration.equals(Constants.ANY))
+			else if(opValConcentration != null && !opValConcentration.equals(Constants.ANY))
 			{
 				disabled = false;
 				disabled2 = true;
@@ -629,6 +630,7 @@
 	int counter = form.getEventCounter();
 
 	Map eventParametersMap = (Map)form.getEventValues();
+	System.out.println("map in jsp***"+eventParametersMap);
 
 	for(int i=1;i<=counter;i++)
 	{
@@ -735,6 +737,7 @@
 				<bean:message key="simpleQuery.and"/>
 		<%
 			}
+		System.out.println("counter****"+form.getEventCounter());
 		%>
 		</span>
 	</td>
