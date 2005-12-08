@@ -36,7 +36,7 @@ import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
-public class SpecimenSearchAction extends BaseAction
+public class SpecimenSearchAction extends AdvanceSearchUIAction
 {
     /**
      * Overrides the execute method of Action class.
@@ -126,7 +126,7 @@ public class SpecimenSearchAction extends BaseAction
         	Logger.out.error(excp.getMessage(),excp);
         	return mapping.findForward(Constants.FAILURE);
 		}
-        
+       
         //Preparing the data for Specimen Event Parameters
         QueryBizLogic bizLogic = (QueryBizLogic)BizLogicFactory.getBizLogic(Constants.SIMPLE_QUERY_INTERFACE_ID);
         
@@ -136,6 +136,21 @@ public class SpecimenSearchAction extends BaseAction
         request.setAttribute(Constants.ALIAS_NAME_TABLE_NAME_MAP,eventParametersTables);
         request.setAttribute(Constants.TABLE_COLUMN_DATA_MAP,map);
         
+      //  Represents id of checked checkbox
+        String str = request.getParameter("itemId");
+        
+        if(str != null)
+        {
+        	setMapValue(aForm,str,request);
+        	//setEventParameterMap(aForm);
+        	aForm.setItemNodeId(str);
+        }
+        Logger.out.debug("event map***"+aForm.getEventValues());
+        if(!aForm.getEventValues().isEmpty())
+        {
+        	aForm.setEventCounter(aForm.getEventValues().size()/4);
+        }
+       
     	String pageOf = (String)request.getParameter(Constants.PAGEOF);
     	return mapping.findForward(pageOf);
     }
