@@ -39,7 +39,7 @@ public class SpecimenCollectionGroupSearchAction extends AdvanceSearchUIAction
      * */
     public ActionForward executeAction(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
-            throws IOException, ServletException
+            throws Exception //IOException, ServletException
     {
     	//Setting the clinical diagnosis list
     	List clinicalDiagnosisList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_CLINICAL_DIAGNOSIS,null);
