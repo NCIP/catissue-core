@@ -368,6 +368,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 				{
 					if(key.indexOf("studyCalendarEventPoint")!=-1 )
 					{
+						//As study Calendar Event Point can be an empty value
 						if(validator.isEmpty(value))
 						{
 							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocol.studycalendartitle")));
@@ -375,11 +376,12 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 						}
 						else
 						{
-							 if(!validator.isDouble(value,1))
-							 {
+							 //Allow study Calendar Event Point as -ve value
+						 	if(!validator.isDouble(value,false))
+							{
 								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.studycalendarpoint",ApplicationProperties.getValue("collectionprotocol.studycalendartitle")));
 								bStudyPoint = true;
-							 }
+							}
 						}
 					}
 				}
