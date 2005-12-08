@@ -306,12 +306,10 @@ public class SearchUtil
 		if(searchFieldData != null)
 		{
 			String name = createKey(tableName,columnName,false);
-			Logger.out.debug("name in SearchUtil--"+name);
-			
+						
 			for(int i = 0; i < searchFieldData.length; i++)
 			{
 				String key = searchFieldData[i].getValueField().getName();
-				Logger.out.debug("key in SearchUtil--"+key);
 				if(key.equals(name))
 				{
 					columnDisplayName = searchFieldData[i].getLabelKey();
@@ -321,10 +319,13 @@ public class SearchUtil
 			
 		}
 		
-		Logger.out.debug("columnDisplayName--"+columnDisplayName);
-		ResourceBundle myResources =ResourceBundle.getBundle("ApplicationResources");
-		Logger.out.debug("property value--"+myResources.getString(columnDisplayName));
-		return myResources.getString(columnDisplayName);
+		if(!columnDisplayName.equals(""))
+		{
+			ResourceBundle myResources =ResourceBundle.getBundle("ApplicationResources");
+			return myResources.getString(columnDisplayName);
+		}
+		else 
+			return columnDisplayName;
 		
 		
 	}
