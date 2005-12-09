@@ -95,7 +95,7 @@ public class AdvanceQueryBizlogic extends DefaultBizLogic implements TreeDataInt
 			setQueryTreeNode((String) rowList.get(collectionProtocolColumnId), 
 						Constants.COLLECTION_PROTOCOL,null,null,(String) rowList.get(participantColumnId), Constants.PARTICIPANT,vector);
 			setQueryTreeNode((String) rowList.get(specimenCollGrpColumnId), Constants.SPECIMEN_COLLECTION_GROUP,(String) 
-						rowList.get(collectionProtocolColumnId), Constants.COLLECTION_PROTOCOL,null,null,vector);
+						rowList.get(collectionProtocolColumnId), Constants.COLLECTION_PROTOCOL,(String) rowList.get(participantColumnId),Constants.PARTICIPANT,vector);
 			String parentSpecimenId = (String) rowList.get(parentSpecimenColumnId);
 			//Logger.out.debug("parentSpecimenId"+parentSpecimenId);
 			if(parentSpecimenId.equals(""))
