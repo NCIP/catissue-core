@@ -38,16 +38,17 @@
 			
 			if(element.options[element.selectedIndex].text == "READ")
 			{
-				objectCombo.options[0] = new Option("Participant","edu.wustl.catissuecore.domain.Participant");
-				objectCombo.options[1] = new Option("Collection Protocol","edu.wustl.catissuecore.domain.CollectionProtocol");
-				objectCombo.options[2] = new Option("Distribution Protocol","edu.wustl.catissuecore.domain.DistributionProtocol");
-				objectCombo.options[3] = new Option("Specimen Collection","edu.wustl.catissuecore.domain.SpecimenCollectionGroup");
-				objectCombo.options[4] = new Option("Specimen","edu.wustl.catissuecore.domain.Specimen");
+				// Gautam : Commented as per Marks comments.
+				//objectCombo.options[0] = new Option("Participant","edu.wustl.catissuecore.domain.Participant");
+				objectCombo.options[0] = new Option("Collection Protocol","edu.wustl.catissuecore.domain.CollectionProtocol");
+				//objectCombo.options[1] = new Option("Distribution Protocol","edu.wustl.catissuecore.domain.DistributionProtocol");
+				//objectCombo.options[3] = new Option("Specimen Collection","edu.wustl.catissuecore.domain.SpecimenCollectionGroup");
+				//objectCombo.options[4] = new Option("Specimen","edu.wustl.catissuecore.domain.Specimen");
 			}
 			else if(element.options[element.selectedIndex].text == "USE")
 			{
 				objectCombo.options[0] = new Option("Site","edu.wustl.catissuecore.domain.Site");
-				objectCombo.options[1] = new Option("Storage","edu.wustl.catissuecore.domain.StorageContainer");
+				objectCombo.options[1] = new Option("Storage Container","edu.wustl.catissuecore.domain.StorageContainer");
 			}
 		}
 
@@ -137,7 +138,7 @@
 			<html:options collection="<%=Constants.OBJECT_TYPES%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
-
+	
 	<td class="formField">
      	<html:select property="recordIds" styleClass="formFieldSized15" styleId="recordIds" size="10" multiple="true" onchange="selectAll(this)">
 			<html:options collection="<%=Constants.RECORD_IDS%>" labelProperty="name" property="value"/>
