@@ -115,6 +115,12 @@ public class TreeNodeData implements TreeNode, Serializable
 	public boolean isChildOf(TreeNode treeNode) 
 	{
 		TreeNodeData node = (TreeNodeData)treeNode;
+		if ((this.getCombinedParentIdentifier() != null) && (this.getParentIdentifier() != null))
+		{
+		    return ((this.parentObjectIdentifier.equals(node.getIdentifier()) && this.parentObjectName.equals(node.getObjectName()))
+		            && (this.combinedParentIdentifier.equals(node.getCombinedParentIdentifier()) && this.combinedParentObjectName.equals(node.getCombinedParentObjectName())));
+		}
+		
 		return (this.parentObjectIdentifier.equals(node.getIdentifier()) && this.parentObjectName.equals(node.getObjectName()));
 	}
 	public boolean hasEqualParents(TreeNode treeNode) 
