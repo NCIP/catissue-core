@@ -1888,7 +1888,7 @@ PUBLIC
 			name="advanceSearchForm"
 			scope="request">
 			<forward name="success" path="/SpreadsheetView.do" />
-			<forward name="failure" path=".catissuecore.advanceQueryInterfaceDef"/>
+			<forward name="failure" path=".catissuecore.commonErrorDetailsDef"/>
 		</action>
 		
 		<action path="/ShowStorageGridView"
