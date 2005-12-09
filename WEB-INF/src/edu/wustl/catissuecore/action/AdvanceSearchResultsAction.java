@@ -87,66 +87,16 @@ public class AdvanceSearchResultsAction extends BaseAction
 		tablesVector.add(Constants.COLLECTION_PROTOCOL_REGISTRATION);
 		query.getIdentifierColumnIds(tablesVector);
 		
-		Logger.out.debug("tableSet from query before setting resultview :"+query.getTableSet());
+		
 		//Set tables for Configuration.
 		Object selectedTables[] = query.getTableSet().toArray();
 		session.setAttribute(Constants.TABLE_ALIAS_NAME,selectedTables);
-		
+		Logger.out.debug("tableSet from query before setting resultview :"+query.getTableSet());
 		//Set the result view for Advance Search
-	 	Vector selectDataElements = new Vector();
-	 	
-	 	//Add parent specimen id column to the dataElement required for the hierarchy of the treeView in Advance Search result view 
-        /*DataElement dataElement = new DataElement();
-        dataElement.setTable(Constants.SPECIMEN);
-        dataElement.setField(Constants.PARENT_SPECIMEN_ID_COLUMN);
-        selectDataElements.add(dataElement);*/
-        
-	 	Vector individualObjectDataElements = new Vector();
-		//Set the resultView one by one for all 4 objects to maintain separate list of columnNames for each object
-		Set queryTables = new HashSet();
-		queryTables.add(Constants.PARTICIPANT);
-		//Get Columns For Participant
-		List participantColumnDisplayNames = new ArrayList();
-		individualObjectDataElements = bizLogic.getSelectDataElements(null,queryTables, participantColumnDisplayNames);
-		Logger.out.debug("column display names for Participant"+participantColumnDisplayNames+":"+participantColumnDisplayNames.size());
-	 	selectDataElements.addAll(individualObjectDataElements);
-	 	columnNames.addAll(participantColumnDisplayNames);
-	 	session.setAttribute(Constants.PARTICIPANT_COLUMNS,participantColumnDisplayNames);
-	 	
-	 	queryTables = new HashSet();
-	 	queryTables.add(Constants.COLLECTION_PROTOCOL);
-	 	queryTables.add(Constants.COLLECTION_PROTOCOL_REGISTRATION);
-		//Get Columns For Collection Protocol and Collection Protocol Registration
-	 	List collectionProtocolColumnDisplayNames = new ArrayList();
-	 	individualObjectDataElements = bizLogic.getSelectDataElements(null,queryTables, collectionProtocolColumnDisplayNames);
-	 	Logger.out.debug("column display names for CP"+collectionProtocolColumnDisplayNames+":"+collectionProtocolColumnDisplayNames.size());
-	 	selectDataElements.addAll(individualObjectDataElements);
-	 	columnNames.addAll(collectionProtocolColumnDisplayNames);
-	 	session.setAttribute(Constants.COLLECTION_PROTOCOL_COLUMNS,collectionProtocolColumnDisplayNames);
-	 	
-	 	queryTables = new HashSet();
-	 	queryTables.add(Constants.SPECIMEN_COLLECTION_GROUP);
-	 	List specimenCollectionGroupColumnDisplayNames = new ArrayList();
-		//Get Columns For Specimen Collection Group
-	 	individualObjectDataElements = bizLogic.getSelectDataElements(null,queryTables, specimenCollectionGroupColumnDisplayNames);
-	 	Logger.out.debug("column display names for SCG"+specimenCollectionGroupColumnDisplayNames+":"+specimenCollectionGroupColumnDisplayNames.size());
-	 	selectDataElements.addAll(individualObjectDataElements);
-	 	columnNames.addAll(specimenCollectionGroupColumnDisplayNames);
-	 	session.setAttribute(Constants.SPECIMEN_COLLECTION_GROUP_COLUMNS,specimenCollectionGroupColumnDisplayNames);
-	 	
-	 	queryTables = new HashSet();
-	 	queryTables.add(Constants.SPECIMEN);
-		//Get Columns For Specimen
-	 	List specimenColumnDisplayNames = new ArrayList();
-	 	individualObjectDataElements = bizLogic.getSelectDataElements(null,queryTables, specimenColumnDisplayNames);
-	 	Logger.out.debug("column display names for S"+specimenColumnDisplayNames+":"+specimenColumnDisplayNames.size());
-	 	selectDataElements.addAll(individualObjectDataElements);
-	 	columnNames.addAll(specimenColumnDisplayNames);
-	 	session.setAttribute(Constants.SPECIMEN_COLUMNS,specimenColumnDisplayNames);
-	 	
-	 	Logger.out.debug("selectDataElements size:"+selectDataElements.size());
-	 	Logger.out.debug("Column names for root:"+columnNames);
-	 	query.setResultView(selectDataElements);
+	 	Vector selectDataElements = bizLogic.getSelectDataElements(null,query.getTableSet(), columnNames);
+		Logger.out.debug("column display names "+columnNames+":"+columnNames.size());
+
+		query.setResultView(selectDataElements);
 	 	
 		Map columnIdsMap = query.getColumnIdsMap();
 		session.setAttribute(Constants.COLUMN_ID_MAP,columnIdsMap);
