@@ -24,10 +24,11 @@ public class SessionDataBean
 	private String firstName = new String();
 	private String lastName  = new String();
 	
+	private String csmUserId = new String();
     private String userName=new String();
     private String ipAddress=new String();
     private Long userId = null;
-
+    
     /**
      * @return Returns the userName.
      */
@@ -42,6 +43,23 @@ public class SessionDataBean
     {
         this.userName = userName;
     }
+    
+    /**
+     * @return Returns the csmUserId.
+     */
+    public String getCsmUserId()
+    {
+        return csmUserId;
+    }
+    
+    /**
+     * @param csmUserId The csmUserId to set.
+     */
+    public void setCsmUserId(String csmUserId)
+    {
+        this.csmUserId = csmUserId;
+    }
+    
     /**
      * @return Returns the ipAddress.
      */
