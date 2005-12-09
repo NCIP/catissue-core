@@ -83,18 +83,30 @@ public class SpecimenEventParametersAction  extends SecureAction
     	//	 if operation is add
     	if(eventParametersForm.isAddOperation())
     	{
-	    	SessionDataBean sessionData = getSessionData(request);
-	    	if(sessionData!=null && sessionData.getUserId()!=null)
-	    	{
-	    		long userId = sessionData.getUserId().longValue();
-	    		eventParametersForm.setUserId(userId);
-	    	}
-
-	    	// set the current Date and Time for the event.
+    		if(eventParametersForm.getUserId()==0)
+    		{
+    			SessionDataBean sessionData = getSessionData(request);
+    			if(sessionData!=null && sessionData.getUserId()!=null)
+    			{
+    				long userId = sessionData.getUserId().longValue();
+    				eventParametersForm.setUserId(userId);
+    			}
+    		}
+    		// set the current Date and Time for the event.
 			Calendar cal = Calendar.getInstance();
-			eventParametersForm.setDateOfEvent(Utility.parseDateToString(cal.getTime(), Constants.DATE_PATTERN_MM_DD_YYYY));
-			eventParametersForm.setTimeInHours(Integer.toString(cal.get(Calendar.HOUR_OF_DAY)));
-			eventParametersForm.setTimeInMinutes(Integer.toString(cal.get(Calendar.MINUTE)));
+			if(eventParametersForm.getDateOfEvent()==null)
+			{
+				eventParametersForm.setDateOfEvent(Utility.parseDateToString(cal.getTime(), Constants.DATE_PATTERN_MM_DD_YYYY));
+			}
+			if(eventParametersForm.getTimeInHours()==null)
+			{
+				eventParametersForm.setTimeInHours(Integer.toString(cal.get(Calendar.HOUR_OF_DAY)));
+			}
+			if(eventParametersForm.getTimeInMinutes()==null)
+			{
+				eventParametersForm.setTimeInMinutes(Integer.toString(cal.get(Calendar.MINUTE)));
+			}
+	
     	}
     	
     	return mapping.findForward((String)request.getParameter(Constants.PAGEOF));
