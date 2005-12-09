@@ -9,8 +9,11 @@
  */
 package edu.wustl.catissuecore.action;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 import javax.servlet.RequestDispatcher;
@@ -52,9 +55,19 @@ public class DataViewAction extends BaseAction
         String parentName = new String();
     	String parentId = new String();
         
-		//Get column display names from session which is set in session in AdvanceSearchResultsAction
-    	List columnDisplayNames = (List)session.getAttribute(Constants.COLUMN_DISPLAY_NAMES);
+    	
+    	//Get the column display names and select column names if it is configured and set in session
+    	List columnDisplayNames=(List)session.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
+    	Logger.out.debug("ColumnDisplayNames from configuration"+columnDisplayNames);
+    	String[] columnList= (String[])session.getAttribute(Constants.CONFIGURED_SELECT_COLUMN_LIST);
+    	
     	/*List filteredColumnDisplayNames = new ArrayList();
+    	//Get column display names from session which is set in session in AdvanceSearchResultsAction
+    	if(columnDisplayNames==null)
+    		columnDisplayNames = (List)session.getAttribute(Constants.COLUMN_DISPLAY_NAMES);
+    	else
+    		filteredColumnDisplayNames = columnDisplayNames;
+    	
         
     	if (name.equals(Constants.ROOT)|| name.equals(Constants.PARTICIPANT))
         {
@@ -78,14 +91,16 @@ public class DataViewAction extends BaseAction
         
         if (viewType.equals(Constants.SPREADSHEET_VIEW))
         {
-        	String[] columnList= null;
         	
         	if (!name.equals(Constants.ROOT))
             {	
         		Map columnIdsMap = (Map)session.getAttribute(Constants.COLUMN_ID_MAP);
-                /*if (!name.equals(Constants.PARTICIPANT))
+                /*if (!name.equals(Constants.PARTICIPANT) && columnList==null)
                 {
-                	columnList = getColumnNames(name,columnIdsMap,columnDisplayNames,filteredColumnDisplayNames);
+                	Logger.out.debug("Inside if condition of filtercolumns");
+                	columnList = getColumnNames(name,columnIdsMap,columnDisplayNames,filteredColumnDisplayNames,session);
+                	Logger.out.debug("select column list size:"+columnList.length);
+                	Logger.out.debug("filteredColumnDisplayNames after func call"+filteredColumnDisplayNames);
                 }*/
                 
                 Logger.out.debug("alias name of selected node in adv tree:"+name);
@@ -126,17 +141,8 @@ public class DataViewAction extends BaseAction
 
         	List list = null;
             
-            //String[] columnList = {"Participant1_IDENTIFIER","CollectionProtocol1_IDENTIFIER","SpecimenCollectionGroup1_IDENTIFIER","Specimen1_IDENTIFIER"};
-            
 
             ResultData resultData = new ResultData();
-            
-            //columnList = (String[]) session.getAttribute(Constants.SELECT_COLUMN_LIST);
-            
-            /*if (columnList == null)
-            {
-                columnList = Constants.DEFAULT_SPREADSHEET_COLUMNS;
-            }*/
             
             list = resultData.getSpreadsheetViewData(whereColumnName,whereColumnValue,whereColumnCondition,columnList, getSessionData(request), Constants.OBJECT_LEVEL_SECURE_RETRIEVE);
             Logger.out.debug("list of data after advance search"+list);
@@ -178,30 +184,27 @@ public class DataViewAction extends BaseAction
             Logger.out.debug("selected node name in object view:"+name+"object");
             if (name.equals(Constants.PARTICIPANT))
             {
-            	Logger.out.debug("indside participant object view");
                 url = new String(Constants.QUERY_PARTICIPANT_SEARCH_ACTION+id+"&"+Constants.PAGEOF+"="+
-                														Constants.PAGEOF_PARTICIPANT_QUERY);
+                														Constants.PAGEOF_PARTICIPANT_QUERY_EDIT);
             }
             else if (name.equals(Constants.COLLECTION_PROTOCOL))
             {
             	url = new String(Constants.QUERY_COLLECTION_PROTOCOL_SEARCH_ACTION+id+"&"+Constants.PAGEOF+"="+
-            															Constants.PAGEOF_COLLECTION_PROTOCOL_QUERY);
+            															Constants.PAGEOF_COLLECTION_PROTOCOL_QUERY_EDIT);
             			
             }
             else if (name.equals(Constants.SPECIMEN_COLLECTION_GROUP))
             {
             	url = new String(Constants.QUERY_SPECIMEN_COLLECTION_GROUP_SEARCH_ACTION+id+"&"+Constants.PAGEOF+"="+
-            															Constants.PAGEOF_SPECIMEN_COLLECTION_GROUP_QUERY);
+            															Constants.PAGEOF_SPECIMEN_COLLECTION_GROUP_QUERY_EDIT);
             			
             }
             else if (name.equals(Constants.SPECIMEN))
             {
             	url = new String(Constants.QUERY_SPECIMEN_SEARCH_ACTION+id+"&"+Constants.PAGEOF+"="+
-            															Constants.PAGEOF_SPECIMEN_QUERY);
+            															Constants.PAGEOF_SPECIMEN_QUERY_EDIT);
             			
             }
-            //request.setAttribute(Constants.OPERATION,Constants.VIEW);
-            Logger.out.debug("url of object view:"+url);
             RequestDispatcher requestDispatcher = request.getRequestDispatcher(url);
             requestDispatcher.forward(request,response);
             
@@ -210,50 +213,54 @@ public class DataViewAction extends BaseAction
         return mapping.findForward(target);
     }
     //Function for filtering column names for Spreadsheet view for individual objects.
-   /* private String[] getColumnNames(String name,Map columnIdsMap,List columnDisplayNames,List filteredColumnDisplayNames)
+    /*private String[] getColumnNames(String name,Map columnIdsMap,List columnDisplayNames,List filteredColumnDisplayNames,HttpSession session)
     {
-    	String[] columnNames = new String[columnIdsMap.size()];
-    	Set columnIdsKeySet = columnIdsMap.keySet();
-    	Iterator columnKeysItr = columnIdsKeySet.iterator();
-    	Logger.out.debug("size of columnids map:"+columnIdsMap.size());
-    	Logger.out.debug("size of column display names list:"+columnDisplayNames.size());
-    	//Logger.out.debug("size of columnids map:"+columnIdsMap.size());
-    	//List filteredColumnDisplayNames = new ArrayList();
-    	int i=0;
-    	while(columnKeysItr.hasNext())
-    	{
-    		String key = (String)columnKeysItr.next();
-    		Logger.out.debug("key in map for column list:"+key);
-    		Logger.out.debug("value in map for column list:"+columnIdsMap.get(key));
-    		if(name.equals(Constants.COLLECTION_PROTOCOL))
-    		{
-    			if(!key.startsWith(Constants.PARTICIPANT))
-    			{
-    				int columnId = ((Integer)columnIdsMap.get(key)).intValue()-1;
-    				Logger.out.debug("column id inside if condition"+columnId);
-    				columnNames[i++] = Constants.COLUMN+columnId;
-    				filteredColumnDisplayNames.add(columnDisplayNames.get(columnId));
-    			}
-    		}
-    		else if(name.equals(Constants.SPECIMEN_COLLECTION_GROUP))
-    		{
-    			if(!key.startsWith(Constants.PARTICIPANT) && !key.startsWith(Constants.COLLECTION_PROTOCOL))
-    			{
-    				int columnId = ((Integer)columnIdsMap.get(key)).intValue()-1;
-    				columnNames[i++] = Constants.COLUMN+columnId;
-    				filteredColumnDisplayNames.add(columnDisplayNames.get(columnId));
-    			}
-    		}
-    		else if(name.equals(Constants.SPECIMEN))
-    		{
-    			if(key.startsWith(Constants.SPECIMEN))
-    			{
-    				int columnId = ((Integer)columnIdsMap.get(key)).intValue()-1;
-    				columnNames[i++] = Constants.COLUMN+columnId;
-    				filteredColumnDisplayNames.add(columnDisplayNames.get(columnId));
-    			}
-    		}
-    	}
+    	List participantColumnDisplayNames = (List)session.getAttribute(Constants.PARTICIPANT_COLUMNS);
+    	int noOfParticpantColumns = participantColumnDisplayNames.size();
+    	List collectionProtocolColumnDisplayNames = (List)session.getAttribute(Constants.COLLECTION_PROTOCOL_COLUMNS);
+    	int noOfCollectionProtocolColumns = collectionProtocolColumnDisplayNames.size();
+    	List specimenCollectionGroupDisplayNames = (List)session.getAttribute(Constants.SPECIMEN_COLLECTION_GROUP_COLUMNS);
+    	int noOfSpecimenCollectionGroupColumns = specimenCollectionGroupDisplayNames.size();
+    	List specimenColumnDisplayNames = (List)session.getAttribute(Constants.SPECIMEN_COLUMNS);
+    	int noOfSpecimenColumns = specimenColumnDisplayNames.size();
+    	
+    	int total = noOfParticpantColumns+noOfCollectionProtocolColumns+noOfSpecimenCollectionGroupColumns+noOfSpecimenColumns;
+    	Logger.out.debug("total no. of display names"+total);
+    	
+    	int mapSize = columnIdsMap.size();
+    	String[] columnNames = new String[mapSize];
+    	
+    	int j=0;
+    	if(name.equals(Constants.COLLECTION_PROTOCOL))
+		{
+    		columnNames = new String[columnIdsMap.size()-noOfParticpantColumns];
+    		for(int i=noOfParticpantColumns;i<mapSize;i++)
+    			columnNames[j++]=Constants.COLUMN+i;
+    		filteredColumnDisplayNames.removeAll(filteredColumnDisplayNames);
+    		filteredColumnDisplayNames.addAll(collectionProtocolColumnDisplayNames);
+    		filteredColumnDisplayNames.addAll(specimenCollectionGroupDisplayNames);
+    		filteredColumnDisplayNames.addAll(specimenColumnDisplayNames);
+    		Logger.out.debug("display names for CP:"+filteredColumnDisplayNames);
+		}
+		else if(name.equals(Constants.SPECIMEN_COLLECTION_GROUP))
+		{
+			columnNames= new String[noOfCollectionProtocolColumns+noOfSpecimenColumns];
+    		for(int i=noOfParticpantColumns+noOfCollectionProtocolColumns;i<mapSize;i++)
+    			columnNames[j++]=Constants.COLUMN+i;
+    		filteredColumnDisplayNames.removeAll(filteredColumnDisplayNames);
+			filteredColumnDisplayNames.addAll(specimenCollectionGroupDisplayNames);
+			filteredColumnDisplayNames.addAll(specimenColumnDisplayNames);
+			Logger.out.debug("display names for SCG:"+filteredColumnDisplayNames);
+		}
+		else if(name.equals(Constants.SPECIMEN))
+		{
+			columnNames= new String[noOfSpecimenColumns];
+    		for(int i=total-noOfSpecimenColumns;i<mapSize;i++)
+    			columnNames[j++]=Constants.COLUMN+i;
+    		filteredColumnDisplayNames.removeAll(filteredColumnDisplayNames);
+			filteredColumnDisplayNames.addAll(specimenColumnDisplayNames);
+			Logger.out.debug("display names for S:"+filteredColumnDisplayNames);
+		}
     	return columnNames;
     }*/
 
