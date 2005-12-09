@@ -37,7 +37,7 @@ public class ResultData
         if (whereColumnName[0].equals(Constants.ROOT))
         {
         	Logger.out.debug("inside root condition........."+whereColumnName[0]);
-        	columnList = null;
+        	//columnList = null;
         	whereColumnName = null;
             whereColumnCondition = null;
             whereColumnValue = null;
