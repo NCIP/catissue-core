@@ -433,6 +433,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String SPREADSHEET_DATA_LIST = "spreadsheetDataList";
 	public static final String SELECT_COLUMN_LIST = "selectColumnList";
 	public static final String CONFIGURED_SELECT_COLUMN_LIST = "configuredSelectColumnList";
+	public static final String CONFIGURED_COLUMN_DISPLAY_NAMES = "configuredColumnDisplayNames";
 	
 	//Tree Data Action
 	public static final String TREE_DATA_ACTION = "Data.do";
