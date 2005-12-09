@@ -35,7 +35,7 @@ public class DAOException extends Exception
 	/**
 	 * @return Returns the wrapException.
 	 */
-	private Exception getWrapException()
+	public Exception getWrapException()
 	{
 		return wrapException;
 	}
