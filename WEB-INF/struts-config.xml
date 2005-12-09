@@ -738,7 +738,7 @@ PUBLIC
 			validate="false"
 			scope="request">
 			<forward name="pageOfNewSpecimen" path=".catissuecore.newSpecimenDef" />
-			<forward name="pageOfSpecimenQuery" path=".catissuecore.specimenEditDef" />
+			<forward name="query" path=".catissuecore.specimenEditDef" />
 			<forward name="failure" path=".catissuecore.newSpecimenDef" />
 			<forward name="access_denied" path="/ManageBioSpecimen.do" />
 		</action>
@@ -767,7 +767,7 @@ PUBLIC
 			<forward name="failure" path="/NewSpecimen.do?operation=edit&amp;pageOf=pageOfNewSpecimen&amp;menuSelected=15" />
 			<forward name="createNew" path="/CreateSpecimen.do?operation=add&amp;pageOf=&amp;menuSelected=15" />
 			<forward name="sameCollectionGroup" path="/NewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimen&amp;menuSelected=15" />
-			<forward name="query" path="/NewSpecimen.do?operation=edit&amp;pageOf=pageOfSpecimenQuery&amp;menuSelected=12" />
+			<forward name="query" path="/NewSpecimen.do?operation=edit&amp;pageOf=query&amp;menuSelected=12" />
 			<forward name="eventParameters" path="/ListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParameters&amp;menuSelected=15" />
 			
 		</action>
@@ -1758,11 +1758,9 @@ PUBLIC
 		<action path="/ConfigureSimpleQuery"
 			type="edu.wustl.catissuecore.action.ConfigureSimpleQueryAction"
 			name="simpleQueryInterfaceForm"
-			validate="true"
-			input="/SimpleQueryInterface.do"
+			validate="false"
 			scope="request">
 			<forward name="pageOfSimpleQueryInterface" path="/ConfigureSimpleSearchView.do?pageOf=pageOfSimpleQueryInterface" />
-			<forward name="pageOfQueryResults" path="/ConfigureAdvanceSearchView.do?pageOf=pageOfQueryResults" />
 			<forward name="failure" path="/SimpleQueryInterface.do" />
 		</action>
 		
@@ -1773,7 +1771,6 @@ PUBLIC
 			validate="true"
 			scope="request">
 			<forward name="pageOfSimpleQueryInterface" path="/ConfigureSimpleSearchView.do?pageOf=pageOfSimpleQueryInterface" />
-			<forward name="pageOfQueryResults" path="/ConfigureAdvanceSearchView.do?pageOf=pageOfQueryResults" />
 			<forward name="failure" path="/SimpleQueryInterface.do" />
 		</action>
 		
@@ -1952,7 +1949,6 @@ PUBLIC
 			name="participantForm"
 			validate="false"
 			scope="request">
-			<forward name="pageOfParticipantQuery" path="/QueryParticipant.do?operation=view&amp;pageOf=query"/>
 			<forward name="pageOfParticipantQueryEdit" path="/QueryParticipant.do?operation=edit&amp;pageOf=query"/>
 			<forward name="failure" path="/QueryParticipant.do?pageOf=query"/>
 		</action>
@@ -1973,7 +1969,6 @@ PUBLIC
 			name="collectionProtocolForm"
 			validate="false"
 			scope="request">
-			<forward name="pageOfCollectionProtocolQuery" path="/QueryCollectionProtocol.do?operation=view&amp;pageOf=query"/>
 			<forward name="pageOfCollectionProtocolQueryEdit" path="/QueryCollectionProtocol.do?operation=edit&amp;pageOf=query"/>
 			<forward name="failure" path="/QueryCollectionProtocol.do?pageOf=query"/>
 		</action>
@@ -1994,7 +1989,6 @@ PUBLIC
 			name="specimenCollectionGroupForm"
 			validate="false"
 			scope="request">
-			<forward name="pageOfSpecimenCollectionGroupQuery" path="/QuerySpecimenCollectionGroup.do?operation=view&amp;pageOf=query"/>
 			<forward name="pageOfSpecimenCollectionGroupQueryEdit" path="/QuerySpecimenCollectionGroup.do?operation=edit&amp;pageOf=query"/>
 			<forward name="failure" path="/QuerySpecimenCollectionGroup.do?pageOf=query"/>
 		</action>
@@ -2015,50 +2009,11 @@ PUBLIC
 			name="newSpecimenForm"
 			validate="false"						
 			scope="request">
-			<forward name="pageOfSpecimenQuery" path="/QuerySpecimen.do?operation=view&amp;pageOf=query"/>
 			<forward name="pageOfSpecimenQueryEdit" path="/QuerySpecimen.do?operation=edit&amp;pageOf=query"/>
 			<forward name="failure" path="/QuerySpecimen.do?pageOf=query"/>
 		</action>
 		<!--Specimen Object View Actions End-->
 		
-		<!-- Actions to make the fields editable in the Query Results Object View Begin -->
-		<action path="/MakeParticipantEditable"
-		    type="edu.wustl.catissuecore.action.MakeEditableAction"
-			name="participantForm"
-			validate="false"						
-			scope="request">
-			<forward name="edit" path="/QueryParticipantSearch.do?pageOf=pageOfParticipantQueryEdit"/>
-			<forward name="view" path="/QueryParticipantSearch.do?pageOf=pageOfParticipantQuery"/>
-		</action>
-		
-		<action path="/MakeCollectionProtocolEditable"
-		    type="edu.wustl.catissuecore.action.MakeEditableAction"
-			name="collectionProtocolForm"
-			validate="false"						
-			scope="request">
-			<forward name="edit" path="/QueryCollectionProtocolSearch.do?pageOf=pageOfCollectionProtocolQueryEdit"/>
-			<forward name="view" path="/QueryCollectionProtocolSearch.do?pageOf=pageOfCollectionProtocolQuery"/>
-		</action>
-
-		<action path="/MakeSpecimenCollectionGroupEditable"
-		    type="edu.wustl.catissuecore.action.MakeEditableAction"
-			name="specimenCollectionGroupForm"
-			validate="false"									
-			scope="request">
-			<forward name="edit" path="/QuerySpecimenCollectionGroupSearch.do?pageOf=pageOfSpecimenCollectionGroupQueryEdit"/>
-			<forward name="view" path="/QuerySpecimenCollectionGroupSearch.do?pageOf=pageOfSpecimenCollectionGroupQuery"/>
-		</action>
-		
-		<action path="/MakeSpecimenEditable"
-		    type="edu.wustl.catissuecore.action.MakeEditableAction"
-			name="newSpecimenForm"
-			validate="false"									
-			scope="request">
-			<forward name="edit" path="/QuerySpecimenSearch.do?pageOf=pageOfSpecimenQueryEdit"/>
-			<forward name="view" path="/QuerySpecimenSearch.do?pageOf=pageOfSpecimenQuery"/>
-		</action>
-		
-		<!-- Actions to make the fields editable in the Query Results Object View End -->
 		
 		<!-- Shopping Cart Actions Begins -->
         <action path="/ShoppingCart"
