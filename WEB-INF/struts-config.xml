@@ -218,6 +218,8 @@ PUBLIC
 		<!-- Collection Protocol Registration Actions Begins -->
         <action path="/CollectionProtocolRegistration"
 			type="edu.wustl.catissuecore.action.CollectionProtocolRegistrationAction"
+			name="collectionProtocolRegistrationForm"
+			validate="false"
 			scope="request">
 			<forward name="pageOfCollectionProtocolRegistration" path=".catissuecore.collectionProtocolRegistrationDef" />
 			<forward name="failure" path=".catissuecore.collectionProtocolRegistrationDef" />
