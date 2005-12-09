@@ -7,7 +7,6 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Constants,edu.wustl.common.util.Utility"%>
 <%@ page import="edu.wustl.common.util.Utility"%>
 
-
 <link href="runtime/styles/xp/grid.css" rel="stylesheet" type="text/css" ></link>
 <script src="runtime/lib/grid.js"></script>
 <script src="runtime/lib/gridcheckbox.js"></script>
@@ -26,8 +25,11 @@
 %>
 <head>
 <%
-	List columnList = (List) request.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
+	List columnList = (List) session.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
+	if(columnList==null)
+		columnList = (List) request.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
 	List dataList = (List) session.getAttribute(Constants.SPREADSHEET_DATA_LIST);
+
 	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
 
 	String title = pageOf + ".searchResultTitle";
@@ -131,7 +133,7 @@ if(dataList != null && dataList.size() != 0)
 
 		function onAdvanceConfigure()
 		{
-				action="ConfigureSimpleQuery.do?pageOf=pageOfQueryResults";
+				action="ConfigureAdvanceSearchView.do?pageOf=pageOfQueryResults";
 				document.forms[0].action = action;
 				document.forms[0].target = "myframe1";
 				document.forms[0].submit();
