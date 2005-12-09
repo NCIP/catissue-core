@@ -333,7 +333,7 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 
 // --- startdate
                 //  date validation according to bug id  722 and 730
-        		String errorKey = validator.validateDate(startDate ,true);
+        		String errorKey = validator.validateDate(startDate ,false);
         		if(errorKey.trim().length() >0  )
         		{
         			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(errorKey,ApplicationProperties.getValue("collectionprotocol.startdate")));
@@ -343,7 +343,7 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
              	if (!validator.isEmpty(endDate) )
     			{
     	         	//  date validation according to bug id  722 and 730
-    	    		errorKey = validator.validateDate(endDate ,true);
+    	    		errorKey = validator.validateDate(endDate ,false);
     	    		if(errorKey.trim().length() >0  )
     	    		{
     	    			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(errorKey,ApplicationProperties.getValue("collectionprotocol.enddate")));
