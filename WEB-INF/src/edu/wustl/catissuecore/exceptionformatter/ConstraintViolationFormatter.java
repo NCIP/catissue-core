@@ -53,7 +53,7 @@ public class ConstraintViolationFormatter implements ExceptionFormatter
 			objExcp = (Exception)objExcp.getCause();
 			Logger.out.debug(objExcp);
 		}
-		
+		String dispTableName=null;
 		String tableName=null; // stores Table_Name for which column name to be found 
 		String columnName=null; //stores Column_Name of table  
 		String formattedErrMsg=null; // Formatted Error Message return by this method
@@ -71,6 +71,20 @@ public class ConstraintViolationFormatter implements ExceptionFormatter
 			tableName=new String("Unknown Table");
 		}
 		Logger.out.debug("Table Name:" + tableName);
+		dispTableName=tableName;
+		if(args.length>2)
+		{
+			if(args[2]!=null)
+			{
+				dispTableName = (String)args[2];
+			}
+			else
+			{
+				Logger.out.debug("Table Name not specified");
+				System.out.println("Error Message: Table Name not given" );
+				dispTableName=tableName;
+			}
+		}	
 		try
 		{
 			// Generate Error Message by appending all messages of previous cause Exceptions
@@ -142,7 +156,7 @@ public class ConstraintViolationFormatter implements ExceptionFormatter
         	
         	// Create arrays of object containing data to insert in CONSTRAINT_VOILATION_ERROR
         	Object[] arguments = new Object[2];
-			arguments[0]=tableName;
+			arguments[0]=dispTableName;
 			
 			if(found)
         	{
