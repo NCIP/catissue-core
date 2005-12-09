@@ -33,10 +33,12 @@ import edu.wustl.catissuecore.actionForm.SpecimenEventParametersForm;
 import edu.wustl.catissuecore.actionForm.UserForm;
 import edu.wustl.catissuecore.bizlogic.AbstractBizLogic;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
+import edu.wustl.catissuecore.bizlogic.QueryBizLogic;
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Distribution;
 import edu.wustl.catissuecore.domain.DomainObjectFactory;
+import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.exception.AssignDataException;
@@ -69,7 +71,8 @@ public class CommonAddEditAction extends Action
         {
             AbstractActionForm abstractForm = (AbstractActionForm) form;
             AbstractBizLogic bizLogic = BizLogicFactory.getBizLogic(abstractForm.getFormId());
-            
+            QueryBizLogic queryBizLogic=(QueryBizLogic)BizLogicFactory.getBizLogic(Constants.QUERY_INTERFACE_ID);
+
             if(abstractForm instanceof SpecimenEventParametersForm)
             {
             	String specimenId = String.valueOf(((SpecimenEventParametersForm)abstractForm).getSpecimenId());
@@ -119,6 +122,11 @@ public class CommonAddEditAction extends Action
                 	}
                 }
                 
+                if(abstractDomain instanceof Participant)
+                {
+                	request.setAttribute(Constants.PARTICIPANT_ID,String.valueOf(abstractDomain.getSystemIdentifier()));
+	            }
+                
             	if(abstractDomain instanceof Distribution)
                 {
                 	//Setting Distribution ID as request parameter
@@ -142,10 +150,19 @@ public class CommonAddEditAction extends Action
                 	request.setAttribute(Constants.COLLECTION_REGISTRATION_ID,abstractDomain.getSystemIdentifier().toString());
                 }	
                 
-                //The successful add messages.
+                // The successful add messages. Changes done according to bug# 945, 947
                 messages = new ActionMessages();
-                messages.add(ActionErrors.GLOBAL_MESSAGE,new ActionMessage("object.add.success",
-                        	 AbstractDomainObject.parseClassName(objectName), abstractDomain.getSystemIdentifier()));
+                try
+                {
+                    messages.add(ActionErrors.GLOBAL_MESSAGE,new ActionMessage("object.add.success",
+                        queryBizLogic.getDisplayName(AbstractDomainObject.parseClassName(objectName)), abstractDomain.getSystemIdentifier()));
+                }
+                catch(Exception excp)
+                {
+                    messages.add(ActionErrors.GLOBAL_MESSAGE,new ActionMessage("object.add.success",
+                            AbstractDomainObject.parseClassName(objectName), abstractDomain.getSystemIdentifier()));
+                    Logger.out.error(excp.getMessage(), excp);
+                }
                 
                 if (abstractDomain.getSystemIdentifier() != null)
                 {
@@ -260,6 +277,11 @@ public class CommonAddEditAction extends Action
                         	request.setAttribute(Constants.SPECIMEN_ID,String.valueOf(abstractDomain.getSystemIdentifier()));
                     }
                     
+                    if(abstractDomain instanceof Participant)
+                    {
+                    	request.setAttribute(Constants.PARTICIPANT_ID,String.valueOf(abstractDomain.getSystemIdentifier()));
+                    }
+                    
                     // SpecimenCollectionGroup values
                     if(abstractDomain instanceof SpecimenCollectionGroup)
                     {
@@ -311,10 +333,20 @@ public class CommonAddEditAction extends Action
                    }
                    // target = new String(Constants.SUCCESS);
                     
-                    //The successful edit message.
-                    messages = new ActionMessages();
-                    messages.add(ActionErrors.GLOBAL_MESSAGE,new ActionMessage("object.edit.success",
-                       	 AbstractDomainObject.parseClassName(objectName), abstractDomain.getSystemIdentifier()));
+                   // The successful edit message. Changes done according to bug# 945, 947
+                   messages = new ActionMessages();
+                   try
+                   {
+                       messages.add(ActionErrors.GLOBAL_MESSAGE,new ActionMessage("object.edit.success", 
+                           queryBizLogic.getDisplayName(AbstractDomainObject.parseClassName(objectName)), abstractDomain.getSystemIdentifier()));
+                   }
+                   catch(Exception excp)
+                   {
+                       messages.add(ActionErrors.GLOBAL_MESSAGE,new ActionMessage("object.edit.success", 
+                               AbstractDomainObject.parseClassName(objectName), abstractDomain.getSystemIdentifier()));
+                       
+                       Logger.out.error(excp.getMessage(), excp);
+                   }
                 }
                 else
                 {
