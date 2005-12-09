@@ -7,6 +7,7 @@
 package edu.wustl.catissuecore.query;
 
 import java.util.Map;
+import java.util.StringTokenizer;
 import java.util.Vector;
 
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -89,8 +90,8 @@ public class TreeView {
 			        String table = data.getTable();
 			        //split column name in case of Specimen event parameters to remove aliasName
 			        //StringTokenizer columnNameTokenizer = new StringTokenizer(columnName,".");
-//			        QueryBizLogic bizLogic = (QueryBizLogic)BizLogicFactory
-//														.getBizLogic(Constants.SIMPLE_QUERY_INTERFACE_ID);
+			        QueryBizLogic bizLogic = (QueryBizLogic)BizLogicFactory
+														.getBizLogic(Constants.SIMPLE_QUERY_INTERFACE_ID);
 //			        String columnDisplayName = bizLogic.getColumnDisplayNames(table,columnName);
 			        
 			        int formId = SearchUtil.getFormId(tableName);
@@ -98,7 +99,18 @@ public class TreeView {
 			      
 			        //append table name to the column name in case of event parameters conditions.
 			        if(table.indexOf("Parameter")>0)
-			        	columnDisplayName = table+"."+columnName;
+		        	{
+						StringTokenizer tableTokens = new StringTokenizer(table,".");
+						String superTable = new String();
+						if(tableTokens.countTokens()==2)
+						{
+							table = tableTokens.nextToken();
+							superTable = tableTokens.nextToken();
+						}
+			        	Map eventParameterDisplayNames = SearchUtil.getEventParametersDisplayNames(bizLogic,SearchUtil.getEventParametersTables(bizLogic));
+			        	columnDisplayName = (String)eventParameterDisplayNames.get(table+"."+columnName);
+			        	Logger.out.debug("column display name for event parameters"+columnDisplayName);
+		        	}
 			        if(columnDisplayName.equals(""))
 			        {
 			        	columnDisplayName=columnName;
