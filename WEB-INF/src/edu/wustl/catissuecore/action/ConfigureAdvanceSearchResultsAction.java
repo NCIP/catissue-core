@@ -54,6 +54,9 @@ public class ConfigureAdvanceSearchResultsAction extends BaseAction
 			Logger.out.debug("column id of configured column"+columnId);
 			columnDisplayNames.add(selectedColumnsTokens.nextToken());
 			selectColumns[i] = Constants.COLUMN+columnId;
+    		/*if(selectedColumnsTokens.hasMoreTokens())
+    			selectedColumnsTokens.nextToken();*/
+
 		}
 		SessionDataBean sessionData = getSessionData(request);
 		//temporary table name
@@ -63,6 +66,8 @@ public class ConfigureAdvanceSearchResultsAction extends BaseAction
         String [] selectColumnNames = selectColumns;
         List list = jdbcDAO.retrieve(tableName, selectColumnNames); 
         jdbcDAO.closeSession();
+        
+        session.setAttribute(Constants.CONFIGURED_SELECT_COLUMN_LIST,selectColumnNames);
         request.setAttribute(Constants.SPREADSHEET_DATA_LIST,list);
     	
         request.setAttribute(Constants.SPREADSHEET_COLUMN_LIST,columnDisplayNames);
