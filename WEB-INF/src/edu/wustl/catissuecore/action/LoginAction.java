@@ -20,10 +20,10 @@ import edu.wustl.catissuecore.actionForm.LoginForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.util.PasswordManager;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.security.SecurityManager;
-import edu.wustl.catissuecore.util.PasswordManager;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
@@ -47,40 +47,38 @@ public class LoginAction extends Action
             HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException
     {
-        
-        String loginName = null;
-        String password = null;
-        HttpSession session = null;
-
         if (form == null)
         {
             Logger.out.debug("Form is Null");
             return (mapping.findForward(Constants.FAILURE));
         }
-
+        
+        HttpSession prevSession = request.getSession();
+        if(prevSession!=null)
+        	prevSession.invalidate();
+		
         LoginForm loginForm = (LoginForm) form;
         Logger.out.info("Inside Login Action, Just before validation");
 
-        loginName = loginForm.getLoginName();
-        password = PasswordManager.encode(loginForm.getPassword());
-        String ipAddress = null;
-        SessionDataBean sessionData = new SessionDataBean();
-        Long userId = null;
+        String loginName = loginForm.getLoginName();
+        String password = PasswordManager.encode(loginForm.getPassword());
+        
         try
         {
         	User validUser = getUser(loginName);
         	
         	if (validUser != null)
         	{
-	            boolean loginOK = SecurityManager.getInstance(LoginAction.class)
-	                    .login(loginName, password);
+	            boolean loginOK = SecurityManager.getInstance(LoginAction.class).login(loginName, password);
 	            if (loginOK)
 	            {
 	                Logger.out.info(">>>>>>>>>>>>> SUCESSFUL LOGIN A <<<<<<<<< ");
-	                session = request.getSession(true);
+	                HttpSession session = request.getSession(true);
 	                
-	                userId = validUser.getSystemIdentifier();
-	                ipAddress = request.getRemoteAddr();
+	                Long userId = validUser.getSystemIdentifier();
+	                String ipAddress = request.getRemoteAddr();
+	                
+	                SessionDataBean sessionData = new SessionDataBean();
 	                sessionData.setUserName(loginName);
 	                sessionData.setIpAddress(ipAddress);
 	                sessionData.setUserId(userId);
@@ -94,43 +92,33 @@ public class LoginAction extends Action
 	            else
 	            {
 	                Logger.out.info("User " + loginName + " Invalid user. Sending back to the login Page");
-	                ActionErrors errors = new ActionErrors();
-	                errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.incorrectLoginNamePassword"));
-	
-	                //Report any errors we have discovered
-	                if (!errors.isEmpty())
-	                {
-	                    saveErrors(request, errors);
-	                }
+	                handleError(request, "errors.incorrectLoginNamePassword");
 	                return (mapping.findForward(Constants.FAILURE));
 	            }
         	} // if valid user
         	else
         	{                
         		Logger.out.info("User " + loginName + " Invalid user. Sending back to the login Page");
-        		ActionErrors errors = new ActionErrors();
-        		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.incorrectLoginNamePassword"));
-
-	            //Report any errors we have discovered
-	            if (!errors.isEmpty())
-	            {
-	                saveErrors(request, errors);
-	            }
-	           	System.out.println("\n\n\n\n****** Invalid User : " + loginName + "\n\n\n\n\n****");
+        		handleError(request, "errors.incorrectLoginNamePassword");
 	            return (mapping.findForward(Constants.FAILURE));
         	} // invalid user
        	}
         catch (Exception e)
         {
             Logger.out.info("Exception: " + e.getMessage(), e);
-            ActionErrors errors = new ActionErrors();
-            errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.incorrectLoginNamePassword"));
-            //Report any errors we have discovered
-            if (!errors.isEmpty())
-            {
-                saveErrors(request, errors);
-            }
+            handleError(request, "errors.incorrectLoginNamePassword");
             return (mapping.findForward(Constants.FAILURE));
+        }
+    }
+    
+    private void handleError(HttpServletRequest request, String errorKey)
+    {
+        ActionErrors errors = new ActionErrors();
+        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(errorKey));
+        //Report any errors we have discovered
+        if (!errors.isEmpty())
+        {
+            saveErrors(request, errors);
         }
     }
     
