@@ -578,6 +578,10 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String QUERY_RESULTS_SPECIMEN_ID = "SPECIMEN_ID";
 	public static final String QUERY_RESULTS_SPECIMEN_TYPE = "SPECIMEN_TYPE";
 	
+	// Assign Privilege Constants.
+	public static final boolean PRIVILEGE_ASSIGN = true;
+	public static final boolean PRIVILEGE_DEASSIGN = false;
+	
 	//Constants for default column names to be shown for query result.
 	public static final String[] DEFAULT_SPREADSHEET_COLUMNS = {
 //	        	QUERY_RESULTS_PARTICIPANT_ID,QUERY_RESULTS_COLLECTION_PROTOCOL_ID,
@@ -1223,14 +1227,58 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	
 	public static final String getCollectionProtocolPIGroupName(Long identifier)
 	{
-	    return "COLLECTION_PROTOCOL_"+identifier;
+	    if(identifier == null)
+	    {
+	        return "PI_COLLECTION_PROTOCOL_";
+	    }
+	    return "PI_COLLECTION_PROTOCOL_"+identifier;
 	}
 	
 	public static final String getCollectionProtocolCoordinatorGroupName(Long identifier)
 	{
-	    return "COLLECTION_PROTOCOL_"+identifier;
+	    if(identifier == null)
+	    {
+	        return "COORDINATORS_COLLECTION_PROTOCOL_";
+	    }
+	    return "COORDINATORS_COLLECTION_PROTOCOL_"+identifier;
 	}
-
+	
+	public static final String getDistributionProtocolPGName(Long identifier)
+	{
+	    if(identifier == null)
+	    {
+	        return "DISTRIBUTION_PROTOCOL_";
+	    }
+	    return "DISTRIBUTION_PROTOCOL_"+identifier;
+	}
+	
+	public static final String getStorageContainerPGName(Long identifier)
+	{
+	    if(identifier == null)
+	    {
+	        return "STORAGE_CONTAINER_";
+	    }
+	    return "STORAGE_CONTAINER_"+identifier;
+	}
+	
+	public static final String getSitePGName(Long identifier)
+	{
+	    if(identifier == null)
+	    {
+	        return "SITE_";
+	    }
+	    return "SITE_"+identifier;
+	}
+	
+	public static final String getDistributionProtocolPIGroupName(Long identifier)
+	{
+	    if(identifier == null)
+	    {
+	        return "PI_DISTRIBUTION_PROTOCOL_";
+	    }
+	    return "PI_DISTRIBUTION_PROTOCOL_"+identifier;
+	}
+	
 	public static final String ACCESS_DENIED_ADMIN = "access_denied_admin";
 	public static final String ACCESS_DENIED_BIOSPECIMEN = "access_denied_biospecimen";
 	
