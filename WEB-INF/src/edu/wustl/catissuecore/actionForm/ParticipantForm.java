@@ -411,7 +411,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
          	}
 			
          	//Validation for Blank Participant 
-         	if(validator.isEmpty(lastName) && validator.isEmpty(firstName) && validator.isEmpty(middleName) && validator.isEmpty(birthDate) && gender.equals("-1") && genotype.equals("-1") && race.equals("-1") && ethnicity.equals("-1") && validator.isEmpty(socialSecurityNumberPartA+socialSecurityNumberPartB+socialSecurityNumberPartC))
+         	if(validator.isEmpty(lastName) && validator.isEmpty(firstName) && validator.isEmpty(middleName) && validator.isEmpty(birthDate) && (validator.isValidOption(gender) == false) && (validator.isValidOption(genotype) == false)&& (validator.isValidOption(race) == false)&& ethnicity.equals("-1") && validator.isEmpty(socialSecurityNumberPartA+socialSecurityNumberPartB+socialSecurityNumberPartC))
          	{
          	   errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.participant.atLeastOneFieldRequired"));
          	}
