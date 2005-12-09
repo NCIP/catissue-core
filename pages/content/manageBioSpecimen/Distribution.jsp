@@ -506,6 +506,7 @@
 				    </td>
 				    <td class="formField">
 				     	<html:text styleClass="formFieldSmallSized3" size="30" styleId="<%=availableQuantity%>" property="<%=availableQuantity%>" readonly="true"/>
+						<span id="<%=unitSpan%>">&nbsp;<%=strUnitValue%></span>
 						<html:hidden property="<%=previousQuantity%>" />	
 				    </td>
 				    <td class="formField" nowrap>
