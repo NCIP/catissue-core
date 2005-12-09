@@ -276,15 +276,17 @@ public class ConditionMapParser
 			String columnKeyConstant = "EventColumnName_";
 			String columnValConstant = "EventColumnValue_";
 			String operatorConstant = "EventColumnOperator_";
-				
+			String eventNameConstant = "EventName_";
+			
 			for(int i=1;i<=rows;i++)
 			{
 				//Preparing the eventMap keys
 				String columnKey = columnKeyConstant + i;
 				String columnValKey = columnValConstant + i;
 				String operatorKey = operatorConstant + i;
-
-				String columnKeyValue = (String)eventMap.get(columnKey);				
+				String eventNameKey = eventNameConstant + i;
+				
+				String columnKeyValue = (String)eventMap.get(columnKey);    
 				StringTokenizer tokenizer = new StringTokenizer(columnKeyValue,".");
 				
 				//Extracting alias name & column name
@@ -296,9 +298,10 @@ public class ConditionMapParser
 				Logger.out.debug("value of event parameters condition:"+columnValue);
 				String operatorValue = (String)eventMap.get(operatorKey);
 				Logger.out.debug("operator of event parameters condition:"+operatorValue);
+				String eventName = (String)eventMap.get(eventNameKey);
 				//Preparing keys for new map
-				String newValKey = aliasName + ":" + columnName;
-				String newOpKey = "Operator:" + aliasName + ":" + columnName;
+				String newValKey = eventName + "." + aliasName + ":" + columnName;
+				String newOpKey = "Operator:" +eventName  + "." + aliasName + ":" + columnName;
 				
 				//Setting values in new map
 				newMap.put(newValKey,columnValue);
