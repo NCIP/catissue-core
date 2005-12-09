@@ -61,11 +61,11 @@ public class DataViewAction extends BaseAction
     	Logger.out.debug("ColumnDisplayNames from configuration"+columnDisplayNames);
     	String[] columnList= (String[])session.getAttribute(Constants.CONFIGURED_SELECT_COLUMN_LIST);
     	
-    	/*List filteredColumnDisplayNames = new ArrayList();
+    	//List filteredColumnDisplayNames = new ArrayList();
     	//Get column display names from session which is set in session in AdvanceSearchResultsAction
     	if(columnDisplayNames==null)
     		columnDisplayNames = (List)session.getAttribute(Constants.COLUMN_DISPLAY_NAMES);
-    	else
+    	/*else
     		filteredColumnDisplayNames = columnDisplayNames;
     	
         
