@@ -37,6 +37,9 @@ import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.exception.AuditException;
+import edu.wustl.catissuecore.exceptionformatter.DefaultExceptionFormatter;
+import edu.wustl.catissuecore.exceptionformatter.ExceptionFormatter;
+import edu.wustl.catissuecore.exceptionformatter.ExceptionFormatterFactory;
 import edu.wustl.catissuecore.util.Permissions;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
@@ -232,33 +235,6 @@ public class HibernateDAO extends AbstractDAO
                 throw new UserNotAuthorizedException("Not Authorized to insert");
             }
         }
-        catch (ConstraintViolationException cvExp) // Added by Sri
-        {
-        	// In case of constraint voliations, we should report a better error
-        	// message than just the SQL expection
-        	String column = "";
-        	try
-			{
-        		//Get the tablename, given the class name
-        		String tableName = HibernateMetaData.getTableName(obj.getClass());
-        		
-        		// Get the SQL message from the exception
-        		String sqlMsg =generateErrorMessage("", cvExp);
-        		
-        		// Get the column name for which the contraint failed
-        		column = getIndexName(tableName,sqlMsg,session.connection());
-			}
-        	catch(Exception ex)
-			{
-        		// If getindexname itself throws an exception, then cant do much
-        		throw new DAOException(ex.getMessage(),ex);
-			}
-        	
-        	Object[] arguments = {Utility.parseClassName(obj.getClass().getName()),column};
-        	String errMsg = MessageFormat.format(Constants.CONSTRAINT_VOILATION_ERROR,arguments);
-        	throw new DAOException(errMsg, cvExp);
-        }
-
         catch (HibernateException hibExp)
         {
             throw handleError("", hibExp);
