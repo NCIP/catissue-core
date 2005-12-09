@@ -11,12 +11,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.StringTokenizer;
 import java.util.Vector;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import edu.wustl.catissuecore.dao.JDBCDAO;
 import edu.wustl.catissuecore.query.AdvancedConditionsNode;
+import edu.wustl.catissuecore.query.Condition;
 import edu.wustl.catissuecore.query.TreeNodeData;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
@@ -32,15 +34,28 @@ import edu.wustl.common.util.logger.Logger;
 public class AdvanceQueryBizlogic extends DefaultBizLogic implements TreeDataInterface
 {
 	//Creates a temporary table containing the Advance Query Search results given the AdvanceSearchQuery.
-	public void createTempTable(String searchQuery,String tempTableName,SessionDataBean sessionData) throws Exception
+	public void createTempTable(String searchQuery,String tempTableName,SessionDataBean sessionData,Map queryResultObjectDataMap) throws Exception
 	{
- 		String sql = "Create table "+tempTableName+" as "+"("+searchQuery+")";
+ 		//String sql = "Create table "+tempTableName+" as "+"("+searchQuery+" AND Participant1.GENDER = 'XXX')";
+		String sql = "Create table "+tempTableName+" as "+"("+searchQuery+")";
  		Logger.out.debug("sql for create table"+sql);
  		JDBCDAO jdbcDao = new JDBCDAO();
         jdbcDao.openSession(sessionData);
  		//jdbcDao.openSession(null);
+        //Delete if there is any tbale existing with same name
        	jdbcDao.delete(tempTableName);
+       	//Create empty temporary table
         jdbcDao.createTable(sql);
+        //Insert list of data into the temporary table created.
+        /*List dataList = jdbcDao.executeQuery(searchQuery,sessionData,true,queryResultObjectDataMap);
+        Logger.out.debug("full list to be inserted"+dataList);
+        Iterator dataListItr = dataList.iterator();
+        while(dataListItr.hasNext())
+        {
+        	List rowList = (List)dataListItr.next();
+        	Logger.out.debug("list size to be inserted"+rowList.size()+":"+rowList);
+        	jdbcDao.insert(tempTableName,rowList);
+        }*/
         jdbcDao.commit();
         jdbcDao.closeSession();
 	}
@@ -51,9 +66,10 @@ public class AdvanceQueryBizlogic extends DefaultBizLogic implements TreeDataInt
 		String tempTableName = Constants.QUERY_RESULTS_TABLE+"_"+sessionData.getUserId();
 		JDBCDAO jdbcDao = new JDBCDAO();
         jdbcDao.openSession(sessionData);
-        
+        Logger.out.debug("Temp table in adv bizlogic:"+tempTableName);
         //Retrieve all the data from the temporary table 
 		List dataList =  jdbcDao.retrieve(tempTableName);
+		jdbcDao.closeSession();
 		Logger.out.debug("List of data for identifiers:"+dataList);
 		
 		//Get column idetifiers from the map.
@@ -81,23 +97,23 @@ public class AdvanceQueryBizlogic extends DefaultBizLogic implements TreeDataInt
 			setQueryTreeNode((String) rowList.get(specimenCollGrpColumnId), Constants.SPECIMEN_COLLECTION_GROUP,(String) 
 						rowList.get(collectionProtocolColumnId), Constants.COLLECTION_PROTOCOL,null,null,vector);
 			String parentSpecimenId = (String) rowList.get(parentSpecimenColumnId);
-			Logger.out.debug("parentSpecimenId"+parentSpecimenId);
+			//Logger.out.debug("parentSpecimenId"+parentSpecimenId);
 			if(parentSpecimenId.equals(""))
 			{
-				Logger.out.debug("parent specimen not present");
+				//Logger.out.debug("parent specimen not present");
 				setQueryTreeNode((String) rowList.get(specimenColumnId), Constants.SPECIMEN,(String)  
 						rowList.get(specimenCollGrpColumnId),Constants.SPECIMEN_COLLECTION_GROUP,null,null,vector);
 			}
 			else
 			{
-				Logger.out.debug("parent specimen present");
+				//Logger.out.debug("parent specimen present");
 				setQueryTreeNode((String) rowList.get(specimenColumnId), Constants.SPECIMEN,parentSpecimenId,
 									Constants.SPECIMEN,null,null,vector);
 			}
 			
 			
         }
-        jdbcDao.closeSession();
+        
         return vector;
 	}   
 	//Create TreeNode given the Tree node data.
@@ -133,6 +149,25 @@ public class AdvanceQueryBizlogic extends DefaultBizLogic implements TreeDataInt
 			parent = (DefaultMutableTreeNode)tree.getChildAt(i);
 			AdvancedConditionsNode parentAdvNode = (AdvancedConditionsNode)parent.getUserObject();
 			String parentTable = parentAdvNode.getObjectName();
+			if(parentTable.equals(Constants.SPECIMEN))
+			{
+				AdvancedConditionsNode specimenAdvNode = (AdvancedConditionsNode)parent.getUserObject();
+				Vector conditions = specimenAdvNode.getObjectConditions();
+				Iterator conditionsItr = conditions.iterator();
+				while(conditionsItr.hasNext())
+				{
+					Condition condition = (Condition)conditionsItr.next();
+					String table = condition.getDataElement().getTable();
+					StringTokenizer tableTokens = new StringTokenizer(table,".");
+					if(tableTokens.countTokens()==2)
+					{
+						String objectName = tableTokens.nextToken();
+						String tableName = tableTokens.nextToken();
+						//tableSet.add(objectName);
+						condition.getDataElement().setTable(tableName);
+					}
+				}
+			}
 			tableSet.add(parentTable);
 			//Set tablesInPath between parent & child if child exists.
 			if(!parent.isLeaf())
