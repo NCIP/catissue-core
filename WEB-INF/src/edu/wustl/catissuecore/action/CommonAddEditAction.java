@@ -44,7 +44,6 @@ import edu.wustl.catissuecore.exception.BizLogicException;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
-import edu.wustl.catissuecore.util.PasswordManager;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
@@ -76,6 +75,7 @@ public class CommonAddEditAction extends Action
             	String specimenId = String.valueOf(((SpecimenEventParametersForm)abstractForm).getSpecimenId());
             	request.setAttribute(Constants.SPECIMEN_ID,specimenId);
             }
+            
             if(abstractForm instanceof DistributionForm)
             {
             	//Setting Distribution ID as request parameter
@@ -135,13 +135,13 @@ public class CommonAddEditAction extends Action
 	                	Logger.out.debug("SpecimenCollectionGroup ID :-- : "+ String.valueOf(abstractDomain.getSystemIdentifier()) );
                 	}	
                 }	
-
+                
                 // CollectionProtocolRegistration values
                 if(abstractDomain instanceof CollectionProtocolRegistration)
                 {
                 	request.setAttribute(Constants.COLLECTION_REGISTRATION_ID,abstractDomain.getSystemIdentifier().toString());
                 }	
-
+                
                 //The successful add messages.
                 messages = new ActionMessages();
                 messages.add(ActionErrors.GLOBAL_MESSAGE,new ActionMessage("object.add.success",
@@ -149,8 +149,9 @@ public class CommonAddEditAction extends Action
                 
                 if (abstractDomain.getSystemIdentifier() != null)
                 {
-                    //Setting the system identifier after inserting the object in the DB.
+                    // Setting the system identifier after inserting the object in the DB.
                     abstractForm.setSystemIdentifier(abstractDomain.getSystemIdentifier().longValue());
+                    request.setAttribute(Constants.SYSTEM_IDENTIFIER, abstractDomain.getSystemIdentifier());
                     abstractForm.setMutable(false);
                 }
                 
@@ -197,7 +198,7 @@ public class CommonAddEditAction extends Action
 	           	target = forwardTo; 
                 //return (mapping.findForward(forwardTo));
 	           }
-	               
+	           
             }
             else
             {
