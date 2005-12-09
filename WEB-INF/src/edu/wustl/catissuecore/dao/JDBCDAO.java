@@ -396,13 +396,13 @@ public class JDBCDAO extends AbstractDAO
 
         StringBuffer query = new StringBuffer("INSERT INTO "+tableName+" values(");
         int i;
-	    for (i=0;i<(Constants.DEFAULT_SPREADSHEET_COLUMNS.length-1);i++)
+	    for (i=0;i<columnValues.size()-1;i++)
 	    {
-	        query.append("'"+columnValues.get(i)+"',");
+	        query.append("\""+columnValues.get(i)+"\",");
 	    }	
 	        
-	    query.append("'"+columnValues.get(i)+"');");
-	        
+	    query.append("\""+columnValues.get(i)+"\");");
+	    Logger.out.debug("Insert query:"+query.toString());    
 	    executeUpdate(query.toString());
     }
     
