@@ -553,6 +553,11 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String FIELD_TYPE_BIGINT = "bigint";
 	public static final String FIELD_TYPE_DATE = "date";
 	public static final String FIELD_TYPE_TEXT = "text";
+	public static final String FIELD_TYPE_TINY_INT = "tinyint";
+	
+	public static final String CONDITION_VALUE_YES = "yes";
+	public static final String TINY_INT_VALUE_ONE = "1";
+	public static final String TINY_INT_VALUE_ZERO = "0";
 	
 	//Query Interface Results View Constants
 	public static final String PAGEOF = "pageOf";
