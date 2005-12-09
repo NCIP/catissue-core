@@ -417,7 +417,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	
 	//Constants for type of query results view.
 	public static final String SPREADSHEET_VIEW = "Spreadsheet View";
-	public static final String OBJECT_VIEW = "Object View";
+	public static final String OBJECT_VIEW = "Edit View";
 	
 	//Spreadsheet view Constants in DataViewAction.
 	public static final String PARTICIPANT = "Participant";
@@ -1471,4 +1471,6 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	
 	public static final String BOOLEAN_YES = "Yes";
 	public static final String BOOLEAN_NO = "No";
+	
+	public static final String PACKAGE_DOMAIN = "edu.wustl.catissuecore.domain";
 }
