@@ -58,8 +58,7 @@ public class Condition {
 	{
 	    String newValue = new String(value);
 	    String newOperator = new String(operator.getOperator());
-	    Logger.out.debug("newValue..................."+newValue);
-	    Logger.out.debug("newOperator..................."+newOperator);
+
 	    if(newOperator.equals(Operator.STARTS_WITH))
         {
 	        newValue = newValue+"%";
@@ -83,7 +82,18 @@ public class Condition {
         {
             newOperator = Operator.NOT_EQUALS;
         }
-        Logger.out.debug("dataElement......................"+dataElement.getFieldType());
+        
+        if (dataElement.getFieldType().equalsIgnoreCase(Constants.FIELD_TYPE_TINY_INT))
+        {
+            if (newValue.equalsIgnoreCase(Constants.CONDITION_VALUE_YES))
+            {
+                newValue = Constants.TINY_INT_VALUE_ONE;
+            }
+            else
+            {
+                newValue = Constants.TINY_INT_VALUE_ZERO;
+            }
+        }
         
         if (dataElement.getFieldType().equalsIgnoreCase(Constants.FIELD_TYPE_VARCHAR)
         		|| dataElement.getFieldType().equalsIgnoreCase(Constants.FIELD_TYPE_DATE) 
