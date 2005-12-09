@@ -77,6 +77,18 @@
 		</tr>
 
 		<!-- Name of the distribution -->
+<!-- Distribution Protocol Identifier -->		
+		<tr>
+			
+			<td class="formRequiredLabel" width="200">
+				<label for="type">
+					<bean:message key="distribution.identifier"/> 
+				</label>	
+			</td>	
+			<td class="formField" width="300">
+				<%=distForm.getDistributionId()%>				
+			</td>	
+		</tr>		
 <!-- Distribution Protocol Title -->		
 		<tr>
 			
