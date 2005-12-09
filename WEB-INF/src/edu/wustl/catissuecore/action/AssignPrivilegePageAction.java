@@ -28,7 +28,6 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.actionForm.AssignPrivilegesForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
-import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
@@ -58,14 +57,17 @@ public class AssignPrivilegePageAction extends BaseAction
         if(privilegesForm.getPrivilege() == null || (privilegesForm.getPrivilege()).equals("READ"))
         {
 	        objectTypes.add(new NameValueBean("Collection Protocol","edu.wustl.catissuecore.domain.CollectionProtocol"));
-	        objectTypes.add(new NameValueBean("Collection Protocol Registration",CollectionProtocolRegistration.class.getName()));
-	        objectTypes.add(new NameValueBean("Specimen Collection","edu.wustl.catissuecore.domain.SpecimenCollectionGroup"));
-	        objectTypes.add(new NameValueBean("Specimen","edu.wustl.catissuecore.domain.Specimen"));
+	        
+	        // Gautam : Commented as per Marks comments.
+//	        objectTypes.add(new NameValueBean("Collection Protocol Registration",CollectionProtocolRegistration.class.getName()));
+//	        objectTypes.add(new NameValueBean("Specimen Collection","edu.wustl.catissuecore.domain.SpecimenCollectionGroup"));
+//	        objectTypes.add(new NameValueBean("Specimen","edu.wustl.catissuecore.domain.Specimen"));
+//	        objectTypes.add(new NameValueBean("Distribution Protocol","edu.wustl.catissuecore.domain.DistributionProtocol"));
         }
         else
         {
 	        objectTypes.add(new NameValueBean("Site","edu.wustl.catissuecore.domain.Site"));
-	        objectTypes.add(new NameValueBean("Storage","edu.wustl.catissuecore.domain.StorageContainer"));
+	        objectTypes.add(new NameValueBean("Storage Container","edu.wustl.catissuecore.domain.StorageContainer"));
         }
         
         //String [] attributes = {Constants.ANY,"De-Id"};
@@ -74,7 +76,7 @@ public class AssignPrivilegePageAction extends BaseAction
 		{
         	//SETTING THE USER LIST
        		UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getBizLogic(Constants.USER_FORM_ID);
-        	Collection userCollection =  userBizLogic.getUsers();
+        	Collection userCollection =  userBizLogic.getCSMUsers();
         	
         	if(userCollection != null && userCollection.size() !=0)
         	{
@@ -92,12 +94,12 @@ public class AssignPrivilegePageAction extends BaseAction
         				((Vector) userCollection).add(i,new NameValueBean(role.getName(),id));
         			}
         		}
-        		        		
+        		
         		request.setAttribute(Constants.GROUPS,userCollection);
         	}
         	
-        	request.setAttribute(Constants.ASSIGN,assignOperation);        
-            
+        	request.setAttribute(Constants.ASSIGN,assignOperation);
+        	
             SessionDataBean bean = getSessionData(request);
             
             //SETTING THE PRIVILEGES LIST
@@ -110,29 +112,32 @@ public class AssignPrivilegePageAction extends BaseAction
             //SETTING THE RECORD IDS AS PER THE OBJECT TYPES
             String [] privilegeName = {privilegesForm.getPrivilege()};
             String [] objects =null;
-            try {
-            	if(privilegesForm.getObjectType()!=null)
+            
+            try 
+            {
+            	if (privilegesForm.getObjectType()!=null)
             	{
-				List subclassList = HibernateMetaData.getSubClassList(privilegesForm.getObjectType());
-				objects = new String[subclassList.size()+1];
-				Iterator subclassIt = subclassList.iterator();
-				objects[0] = privilegesForm.getObjectType();
-				for(int i =0;subclassIt.hasNext();i++)
-				{
-					objects[i+1] = (String) subclassIt.next();
-				}
+					List subclassList = HibernateMetaData.getSubClassList(privilegesForm.getObjectType());
+					objects = new String[subclassList.size()+1];
+					Iterator subclassIt = subclassList.iterator();
+					objects[0] = privilegesForm.getObjectType();
+					for(int i =0;subclassIt.hasNext();i++)
+					{
+						objects[i+1] = (String) subclassIt.next();
+					}
             	}
             	else
             	{
             		objects = new String[]{privilegesForm.getObjectType()};
             	}
-			
-			} catch (ClassNotFoundException e1) {
+			}
+            catch (ClassNotFoundException e1) 
+			{
 				Logger.out.debug("Exception:"+e1.getMessage(),e1);
 				objects = new String[]{privilegesForm.getObjectType()};
 			}
             
-            Set recordIds = SecurityManager.getInstance(AssignPrivilegePageAction.class).getObjectsForAssignPrivilege(String.valueOf(bean.getUserId()),objects,privilegeName);
+            Set recordIds = SecurityManager.getInstance(AssignPrivilegePageAction.class).getObjectsForAssignPrivilege(String.valueOf(bean.getCsmUserId()),objects,privilegeName);
         	            
             request.setAttribute(Constants.RECORD_IDS,recordIds);
         	
