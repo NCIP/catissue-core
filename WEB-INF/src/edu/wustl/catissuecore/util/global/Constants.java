@@ -134,6 +134,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String UPDATE_OPERATION = "UPDATE";
 	public static final String ACTIVITY_STATUS_COLUMN = "ACTIVITY_STATUS";
 	
+	
 	//SpecimenCollecionGroup lists.
 	public static final String PROTOCOL_TITLE_LIST = "protocolTitleList";
 	public static final String PARTICIPANT_NAME_LIST = "participantNameList";
@@ -204,6 +205,9 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String IS_RNA = "isRNA";
 	public static final String MOLECULAR = "Molecular";
 	public static final String RNA = "RNA";
+	
+	//	New Participant Event Parameters
+	public static final String PARTICIPANT_ID="participantId";
 	
 	//Constants required in User.jsp Page
 	public static final String USER_SEARCH_ACTION = "UserSearch.do";
@@ -493,6 +497,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final int SIMPLE_QUERY_INTERFACE_ID = 40;
 	public static final int CONFIGURE_RESULT_VIEW_ID = 41;
 	public static final int ADVANCE_QUERY_INTERFACE_ID = 42;
+	public static final int QUERY_INTERFACE_ID = 43;
 	
 	//Misc
 	public static final String SEPARATOR = " : ";
@@ -1399,6 +1404,11 @@ public class Constants extends edu.wustl.common.util.global.Constants
 			{"New Specimen Collection Group",			"createSpecimenCollectionGroup"}
 	};
 
+	public static final String [][] PARTICIPANT_FORWARD_TO_LIST = {
+			{"Normal Submit",					"success"},
+			{"New Participant Registration",	"createParticipantRegistration"}
+	};
+	
 	//Constants Required for Advance Search
 	//Tree related
 	//public static final String PARTICIPANT ='Participant';
