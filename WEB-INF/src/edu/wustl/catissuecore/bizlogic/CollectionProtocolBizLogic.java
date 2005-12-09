@@ -73,6 +73,7 @@ public class CollectionProtocolBizLogic extends DefaultBizLogic implements Roles
 				dao.insert(specimenRequirement,sessionDataBean, true, true);
 			}
 		}
+		
 		HashSet protectionObjects= new HashSet();
 		protectionObjects.add(collectionProtocol);
 		protectionObjects.add(collectionProtocol.getPrincipalInvestigator());
@@ -120,12 +121,15 @@ public class CollectionProtocolBizLogic extends DefaultBizLogic implements Roles
 		dao.audit(obj, oldObj, sessionDataBean, true);
 		
 		Collection oldCollectionProtocolEventCollection 
-				= oldCollectionProtocol.getCollectionProtocolEventCollection();  
+				= oldCollectionProtocol.getCollectionProtocolEventCollection();
+		Logger.out.debug("collectionProtocol.getCollectionProtocolEventCollection Size................ : "
+		        +collectionProtocol.getCollectionProtocolEventCollection().size());
 		
 		it = collectionProtocol.getCollectionProtocolEventCollection().iterator();		
 		while(it.hasNext())
 		{
 			CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent)it.next();
+			Logger.out.debug("CollectionProtocolEvent Id ............... : "+collectionProtocolEvent.getSystemIdentifier());
 			collectionProtocolEvent.setCollectionProtocol(collectionProtocol);
 			dao.update(collectionProtocolEvent, sessionDataBean, true, true, false);
 			
@@ -157,8 +161,6 @@ public class CollectionProtocolBizLogic extends DefaultBizLogic implements Roles
 			CollectionProtocolRegistrationBizLogic bizLogic = (CollectionProtocolRegistrationBizLogic)BizLogicFactory.getBizLogic(Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
 			bizLogic.disableRelatedObjectsForCollectionProtocol(dao,collectionProtocolIDArr);
 		}
-		
-		
     }
 
     /**
@@ -198,11 +200,10 @@ public class CollectionProtocolBizLogic extends DefaultBizLogic implements Roles
         userGroupRoleProtectionGroupBean = new SecurityDataBean();
         userGroupRoleProtectionGroupBean.setUser(userId);
         userGroupRoleProtectionGroupBean.setRoleName(PI);
-        userGroupRoleProtectionGroupBean.setGroupName("PI_COLLECTION_PROTOCOL_"+collectionProtocol.getSystemIdentifier());
+        userGroupRoleProtectionGroupBean.setGroupName(Constants.getCollectionProtocolPIGroupName(collectionProtocol.getSystemIdentifier()));
         userGroupRoleProtectionGroupBean.setProtectionGroupName(protectionGroupName);
         userGroupRoleProtectionGroupBean.setGroup(group);
         authorizationData.add(userGroupRoleProtectionGroupBean);
-        
         
         // Protection group of coordinators
         try
@@ -228,7 +229,7 @@ public class CollectionProtocolBizLogic extends DefaultBizLogic implements Roles
         userGroupRoleProtectionGroupBean = new SecurityDataBean();
         userGroupRoleProtectionGroupBean.setUser(userId);
         userGroupRoleProtectionGroupBean.setRoleName(READ_ONLY);
-        userGroupRoleProtectionGroupBean.setGroupName("COORDINATORS_COLLECTION_PROTOCOL_"+collectionProtocol.getSystemIdentifier());
+        userGroupRoleProtectionGroupBean.setGroupName(Constants.getCollectionProtocolCoordinatorGroupName(collectionProtocol.getSystemIdentifier()));
         userGroupRoleProtectionGroupBean.setProtectionGroupName(protectionGroupName);
         userGroupRoleProtectionGroupBean.setGroup(group);
         authorizationData.add(userGroupRoleProtectionGroupBean);
@@ -315,12 +316,12 @@ public class CollectionProtocolBizLogic extends DefaultBizLogic implements Roles
 		collectionProtocol.setUserCollection(coordinatorColl);
 	}
     
-	public void setPrivilege(DAO dao, String privilegeName, Class objectType, Long[] objectIds, Long userId, String roleId, boolean assignToUser) throws SMException, DAOException
+	public void setPrivilege(DAO dao, String privilegeName, Class objectType, Long[] objectIds, Long userId, String roleId, boolean assignToUser, boolean assignOperation) throws SMException, DAOException
     {
-	    super.setPrivilege(dao,privilegeName,objectType,objectIds,userId, roleId, assignToUser);
+	    super.setPrivilege(dao,privilegeName,objectType,objectIds,userId, roleId, assignToUser, assignOperation);
 	   
-		CollectionProtocolRegistrationBizLogic bizLogic = (CollectionProtocolRegistrationBizLogic)BizLogicFactory.getBizLogic(Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
-		bizLogic.assignPrivilegeToRelatedObjectsForCP(dao,privilegeName,objectIds,userId, roleId, assignToUser);
+//		CollectionProtocolRegistrationBizLogic bizLogic = (CollectionProtocolRegistrationBizLogic)BizLogicFactory.getBizLogic(Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
+//		bizLogic.assignPrivilegeToRelatedObjectsForCP(dao,privilegeName,objectIds,userId, roleId, assignToUser);
     }
 	
 	private boolean hasCoordinator(User coordinator, CollectionProtocol collectionProtocol)

@@ -130,13 +130,13 @@ public class ParticipantBizLogic extends DefaultBizLogic
 	/**
 	 * @see AbstractBizLogic#setPrivilege(DAO, String, Class, Long[], Long, String, boolean)
 	 */
-	public void setPrivilege(DAO dao, String privilegeName, Class objectType, Long[] objectIds, Long userId, String roleId, boolean assignToUser) throws SMException, DAOException
+	public void setPrivilege(DAO dao, String privilegeName, Class objectType, Long[] objectIds, Long userId, String roleId, boolean assignToUser, boolean assignOperation) throws SMException, DAOException
     {
 	    Logger.out.debug(" privilegeName:"+privilegeName+" objectType:"+objectType+" objectIds:"+edu.wustl.common.util.Utility.getArrayString(objectIds)+" userId:"+userId+" roleId:"+roleId+" assignToUser:"+assignToUser);
-	    super.setPrivilege(dao,privilegeName,objectType,objectIds,userId, roleId, assignToUser);
+	    super.setPrivilege(dao,privilegeName,objectType,objectIds,userId, roleId, assignToUser, assignOperation);
 	    
 	    CollectionProtocolRegistrationBizLogic bizLogic = (CollectionProtocolRegistrationBizLogic)BizLogicFactory.getBizLogic(Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
-		bizLogic.assignPrivilegeToRelatedObjectsForParticipant(dao,privilegeName,objectIds,userId,roleId,assignToUser );
+		bizLogic.assignPrivilegeToRelatedObjectsForParticipant(dao,privilegeName,objectIds,userId,roleId,assignToUser, assignOperation);
     }
 
 	/**
@@ -150,13 +150,13 @@ public class ParticipantBizLogic extends DefaultBizLogic
 	 * @throws DAOException
 	 * @throws SMException
 	 */
-	public void assignPrivilegeToRelatedObjectsForCPR(DAO dao, String privilegeName, Long[] objectIds, Long userId, String roleId, boolean assignToUser) throws SMException, DAOException {
+	public void assignPrivilegeToRelatedObjectsForCPR(DAO dao, String privilegeName, Long[] objectIds, Long userId, String roleId, boolean assignToUser, boolean assignOperation) throws SMException, DAOException {
 		 List listOfSubElement = super.getRelatedObjects(dao, CollectionProtocolRegistration.class, new String[] {Constants.PARTICIPANT_IDENTIFIER_IN_CPR+"."+Constants.SYSTEM_IDENTIFIER}, new String[] {Constants.SYSTEM_IDENTIFIER}, 
    			 objectIds);
     Logger.out.debug(" CPR Ids:"+edu.wustl.common.util.Utility.getArrayString(objectIds)+" Related Participant Ids:"+listOfSubElement);  
    	if(!listOfSubElement.isEmpty())
    	{
-   	    super.setPrivilege(dao,privilegeName,Participant.class,Utility.toLongArray(listOfSubElement),userId, roleId, assignToUser);
+   	    super.setPrivilege(dao,privilegeName,Participant.class,Utility.toLongArray(listOfSubElement),userId, roleId, assignToUser, assignOperation);
    	}
 	}
 }
