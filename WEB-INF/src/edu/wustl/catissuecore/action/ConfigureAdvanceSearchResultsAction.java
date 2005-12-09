@@ -68,6 +68,7 @@ public class ConfigureAdvanceSearchResultsAction extends BaseAction
         jdbcDAO.closeSession();
         
         session.setAttribute(Constants.CONFIGURED_SELECT_COLUMN_LIST,selectColumnNames);
+        session.setAttribute(Constants.CONFIGURED_COLUMN_DISPLAY_NAMES,columnDisplayNames);
         request.setAttribute(Constants.SPREADSHEET_DATA_LIST,list);
     	
         request.setAttribute(Constants.SPREADSHEET_COLUMN_LIST,columnDisplayNames);
