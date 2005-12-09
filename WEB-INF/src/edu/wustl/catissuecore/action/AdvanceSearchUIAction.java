@@ -9,6 +9,7 @@ package edu.wustl.catissuecore.action;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.StringTokenizer;
 import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
@@ -80,6 +81,13 @@ public abstract class AdvanceSearchUIAction extends BaseAction
 			
 			//Used for creating key of field
 			String tableName = dataElement.getTable();
+			StringTokenizer tableTokens = new StringTokenizer(tableName,".");
+			String superTable = new String();
+			if(tableTokens.countTokens()==2)
+			{
+				tableName = tableTokens.nextToken();
+				superTable = tableTokens.nextToken();
+			}
 			
 	        op = con.getOperator();
 	        column = dataElement.getField();
@@ -125,7 +133,7 @@ public abstract class AdvanceSearchUIAction extends BaseAction
 			}
 			if(tableName.indexOf("Parameter")>0)
 			{
-				setEventParameterMap(aForm,tableName,column,op.getOperator(),con.getValue(),eventCounter);
+				setEventParameterMap(aForm,tableName,column,op.getOperator(),con.getValue(),eventCounter,superTable);
 				eventCounter++;
 			}
 			
@@ -167,22 +175,28 @@ public abstract class AdvanceSearchUIAction extends BaseAction
 		}
 	}
 	
-	protected void setEventParameterMap(AdvanceSearchForm aForm,String tableName,String column,String operatorVal,String value,int counter) throws Exception
+	protected void setEventParameterMap(AdvanceSearchForm aForm,String tableName,String column,String operatorVal,String value,int counter,String superTable) throws Exception
 	{
 //		Map map = new HashMap();
 //		Map eventParametersMap = (Map)aForm.getEventValues();
 //		Logger.out.debug("eventParametersMap in advSUI****-->"+eventParametersMap);
 //		for(int i=1;i<=counter;i++)
 //		{
-		QueryBizLogic bizlogic = new QueryBizLogic();
-		Logger.out.debug("dispaly name***"+bizlogic.getColumnDisplayNames(tableName,column));
-		Logger.out.debug("counter**"+counter);
+			QueryBizLogic bizlogic = new QueryBizLogic();
 			String eventClassName = "EventName_" + counter;
 			String eventColumn = "EventColumnName_" + counter;
 			String eventOperator = "EventColumnOperator_" + counter;
 			String eventValue = "EventColumnValue_" + counter;
-			
-			aForm.setEventMap(eventColumn,tableName+"."+column+".bigint");//bizlogic.getColumnDisplayNames(tableName,column
+			String dataType = new String();
+			if(superTable.equals(""))
+				dataType = bizlogic.getAttributeType(column,tableName);
+			else
+				dataType = bizlogic.getAttributeType(column,superTable);
+			Logger.out.debug("Key for event map"+tableName+"."+column+"."+dataType);
+			if(superTable.equals(""))
+				aForm.setEventMap(eventColumn,tableName+"."+column+"."+dataType);//bizlogic.getColumnDisplayNames(tableName,column
+			else
+				aForm.setEventMap(eventColumn,superTable+"."+column+"."+dataType);
 			aForm.setEventMap(eventClassName,tableName);
 			aForm.setEventMap(eventOperator,operatorVal);
 			aForm.setEventMap(eventValue,value);
