@@ -182,7 +182,8 @@ PUBLIC
 			validate="true"
 			input="/Participant.do?operation=add&amp;pageOf=pageOfParticipant&amp;menuSelected=12"
 			scope="request">
-			<forward name="success" path="/Participant.do?operation=edit&amp;pageOf=pageOfParticipant&amp;menuSelected=12" />
+			<!-- forward name="success" path="/Participant.do?operation=edit&amp;pageOf=pageOfParticipant&amp;menuSelected=12" /-->
+			<forward name="success" path="/ParticipantSearch.do?pageOf=pageOfParticipant" />
 			<forward name="pageOfSCGParticipant" path="/SpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroup&amp;menuSelected=14" />
 			<forward name="failure" path="/Participant.do?operation=add&amp;pageOf=pageOfParticipant&amp;menuSelected=12" />
 			<forward name="specimenCollectionGroup" path="/SpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroup&amp;menuSelected=14" />
@@ -229,7 +230,8 @@ PUBLIC
 			validate="true"
 			input="/CollectionProtocolRegistration.do?operation=add&amp;pageOf=pageOfCollectionProtocolRegistration&amp;menuSelected=13"
 			scope="request">
-			<forward name="success" path="/CollectionProtocolRegistration.do?operation=edit&amp;pageOf=pageOfCollectionProtocolRegistration&amp;menuSelected=13" />
+			<!-- forward name="success" path="/CollectionProtocolRegistration.do?operation=edit&amp;pageOf=pageOfCollectionProtocolRegistration&amp;menuSelected=13" /-->
+			<forward name="success" path="/CollectionProtocolRegistrationSearch.do?pageOf=pageOfCollectionProtocolRegistration" />
 			<forward name="failure" path="/CollectionProtocolRegistration.do?operation=add&amp;pageOf=pageOfCollectionProtocolRegistration&amp;menuSelected=13" />
 			<forward name="createSpecimenCollectionGroup" path="/SpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroup&amp;menuSelected=14" />
 		</action>
@@ -271,7 +273,8 @@ PUBLIC
 			validate="true"
 			input="/Institution.do?operation=add&amp;pageOf=pageOfInstitution&amp;menuSelected=2"
 			scope="request">
-			<forward name="success" path="/Institution.do?operation=edit&amp;pageOf=pageOfInstitution&amp;menuSelected=2" />
+			<!-- forward name="success" path="/Institution.do?operation=edit&amp;pageOf=pageOfInstitution&amp;menuSelected=2" /-->
+			<forward name="success" path="/InstitutionSearch.do?pageOf=pageOfInstitution" />
 			<forward name="failure" path="/Institution.do?operation=add&amp;pageOf=pageOfInstitution&amp;menuSelected=2" />
 		</action>
 		
@@ -313,7 +316,8 @@ PUBLIC
 			validate="true"
 			input="/User.do?operation=add&amp;pageOf=pageOfUserAdmin&amp;menuSelected=1"
 			scope="request">
-			<forward name="success" path="/User.do?operation=edit&amp;pageOf=pageOfUserAdmin&amp;menuSelected=1" />
+			<!--forward name="success" path="/User.do?operation=edit&amp;pageOf=pageOfUserAdmin&amp;menuSelected=1" /-->
+			<forward name="success" path="/UserSearch.do?pageOf=pageOfUserAdmin" />
 			<forward name="failure" path="/User.do?operation=add&amp;pageOf=pageOfUserAdmin&amp;menuSelected=1" />
 		</action>
 		
@@ -444,7 +448,8 @@ PUBLIC
 			validate="true"
 			input="/CancerResearchGroup.do?operation=add&amp;pageOf=pageOfCancerResearchGroup&amp;menuSelected=4" 
 			scope="request">
-			<forward name="success" path="/CancerResearchGroup.do?operation=edit&amp;pageOf=pageOfCancerResearchGroup&amp;menuSelected=4" />
+			<!-- forward name="success" path="/CancerResearchGroup.do?operation=edit&amp;pageOf=pageOfCancerResearchGroup&amp;menuSelected=4" /-->
+			<forward name="success" path="/CancerResearchGroupSearch.do?pageOf=pageOfCancerResearchGroup" />
 			<forward name="failure" path="/CancerResearchGroup.do?operation=add&amp;pageOf=pageOfCancerResearchGroup&amp;menuSelected=4" />
 		</action>
 
@@ -538,7 +543,7 @@ PUBLIC
 			validate="true"
 			input="/DistributionProtocol.do?operation=add&amp;pageOf=pageOfDistributionProtocol&amp;menuSelected=10"
 			scope="request">
-			<forward name="success" path="/DistributionProtocol.do?operation=edit&amp;pageOf=pageOfDistributionProtocol&amp;menuSelected=10" />
+			<forward name="success" path="/DistributionProtocolSearch.do?pageOf=pageOfDistributionProtocol" />
 			<forward name="failure" path="/DistributionProtocol.do?operation=add&amp;pageOf=pageOfDistributionProtocol&amp;menuSelected=10" />
 		</action>
 
@@ -659,7 +664,8 @@ PUBLIC
 			validate="true"
 			input="/SpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroup&amp;menuSelected=14"
 			scope="request">
-			<forward name="success" path="/SpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroup&amp;menuSelected=14" />
+			<!-- forward name="success" path="/SpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroup&amp;menuSelected=14" /-->
+			<forward name="success" path="/SpecimenCollectionGroupSearch.do?pageOf=pageOfSpecimenCollectionGroup" />
 			<forward name="failure" path="/SpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroup&amp;menuSelected=14" />
 			<forward name="createNewSpecimen" path="/NewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimen&amp;menuSelected=15" />
 		</action>
@@ -749,7 +755,8 @@ PUBLIC
 			validate="true"
 			input="/NewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimen&amp;menuSelected=15"
 			scope="request">
-			<forward name="success" path="/NewSpecimen.do?operation=edit&amp;pageOf=pageOfNewSpecimen&amp;menuSelected=15" />
+			<!-- forward name="success" path="/NewSpecimen.do?operation=edit&amp;pageOf=pageOfNewSpecimen&amp;menuSelected=15" /-->
+			<forward name="success" path="/NewSpecimenSearch.do?pageOf=pageOfNewSpecimen" />
 			<forward name="failure" path="/NewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimen&amp;menuSelected=15" />
 			<forward name="createNew" path="/CreateSpecimen.do?operation=add&amp;pageOf=&amp;menuSelected=15" />
 			<forward name="sameCollectionGroup" path="/NewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimen&amp;menuSelected=15" />
@@ -842,7 +849,8 @@ PUBLIC
 			validate="true"
 			input="/StorageType.do?operation=add&amp;pageOf=pageOfStorageType&amp;menuSelected=6"
 			scope="request">
-			<forward name="success" path="/StorageType.do?operation=edit&amp;pageOf=pageOfStorageType&amp;menuSelected=6" />
+			<!-- forward name="success" path="/StorageType.do?operation=edit&amp;pageOf=pageOfStorageType&amp;menuSelected=6" /-->
+			<forward name="success" path="/StorageTypeSearch.do?pageOf=pageOfStorageType" />
 			<forward name="failure" path="/StorageType.do?operation=add&amp;pageOf=pageOfStorageType&amp;menuSelected=6" />
 		</action>
 		
@@ -885,7 +893,8 @@ PUBLIC
 			validate="true"
 			input="/StorageContainer.do?operation=add&amp;pageOf=pageOfStorageContainer&amp;menuSelected=7"
 			scope="request">
-			<forward name="success" path="/StorageContainer.do?operation=edit&amp;pageOf=pageOfStorageContainer&amp;menuSelected=7" />
+			<!--forward name="success" path="/StorageContainer.do?operation=edit&amp;pageOf=pageOfStorageContainer&amp;menuSelected=7" /-->
+			<forward name="success" path="/StorageContainerSearch.do?pageOf=pageOfStorageContainer" />
 			<forward name="failure" path="/StorageContainer.do?operation=add&amp;pageOf=pageOfStorageContainer&amp;menuSelected=7" />
 		</action>
 		
@@ -927,7 +936,8 @@ PUBLIC
 			validate="true"
 			input="/Site.do?operation=add&amp;pageOf=pageOfSite&amp;menuSelected=5"
 			scope="request">
-			<forward name="success" path="/Site.do?operation=edit&amp;pageOf=pageOfSite&amp;menuSelected=5" />
+			<!-- forward name="success" path="/Site.do?operation=edit&amp;pageOf=pageOfSite&amp;menuSelected=5" /-->
+			<forward name="success" path="/SiteSearch.do?pageOf=pageOfSite" />
 			<forward name="failure" path="/Site.do?operation=add&amp;pageOf=pageOfSite&amp;menuSelected=5" />
 		</action>
 		
@@ -977,7 +987,8 @@ PUBLIC
 			validate="true"
 			input="/Biohazard.do?operation=edit&amp;pageOf=pageOfBioHazard&amp;menuSelected=8"
 			scope="request">
-			<forward name="success" path="/Biohazard.do?operation=edit&amp;pageOf=pageOfBioHazard&amp;menuSelected=8" />
+			<!-- forward name="success" path="/Biohazard.do?operation=edit&amp;pageOf=pageOfBioHazard&amp;menuSelected=8" /-->
+			<forward name="success" path="/BiohazardSearch.do?pageOf=pageOfBioHazard" />
 			<forward name="failure" path="/Biohazard.do?operation=edit&amp;pageOf=pageOfBioHazard&amp;menuSelected=8" />
 		</action>
 		
@@ -1640,7 +1651,8 @@ PUBLIC
 			validate="true"
 			input="/Distribution.do?operation=add&amp;pageOf=pageOfDistribution&amp;menuSelected=16"
 			scope="request">
-			<forward name="success" path="/DistributionReport.do" />
+			<!-- forward name="success" path="/DistributionReport.do" /-->
+			<forward name="success" path="/DistributionSearch.do?pageOf=pageOfDistribution" />
 			<forward name="failure" path="/Distribution.do?operation=add&amp;pageOf=pageOfDistribution&amp;menuSelected=16" />
 		</action>
 		
