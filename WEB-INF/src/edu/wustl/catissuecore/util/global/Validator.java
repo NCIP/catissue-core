@@ -528,10 +528,10 @@ public class Validator
 					}	
 				}
 				else
-					returnString = "errors.item.format";
+					returnString = "errors.date.format";
 			}
 			else
-				returnString = "errors.item.format";
+				returnString = "errors.date.format";
 		}
 		return returnString;
     }
