@@ -463,8 +463,6 @@ public class SimpleQueryBizLogic extends DefaultBizLogic
 			int initialColumnNumbers = query.getResultView().size();
 			Map columnIdsMap;
 			
-			int columnId =0;
-			
 			for(int i=0;keyIterator.hasNext();i++)
 			{
 				queryResultObjectData2 = (QueryResultObjectData) queryResultObjectDataMap.get(keyIterator.next());
@@ -474,12 +472,7 @@ public class SimpleQueryBizLogic extends DefaultBizLogic
 				{
 					columnIdsMap = query.getIdentifierColumnIds(queryObjectNames);
 					queryResultObjectData3 = (QueryResultObjectData) queryObjects.get(j);
-					identifierDataElement = new DataElement(queryResultObjectData3.getAliasName(),
-						Constants.IDENTIFIER);
-//					query.addElementToView(columnId, identifierDataElement);
-//					queryResultObjectData3.setIdentifierColumnId(columnId++);
 					queryResultObjectData3.setIdentifierColumnId(((Integer)columnIdsMap.get(queryResultObjectData3.getAliasName())).intValue()-1);
-//					columnNames.add(queryResultObjectData3.getAliasName() + " ID");
 				}
 				
 			}
