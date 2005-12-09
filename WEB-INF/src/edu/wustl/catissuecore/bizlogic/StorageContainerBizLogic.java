@@ -129,9 +129,9 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 		} else {
 			loadSite(dao, container);
 		}
-
+		
 		loadStorageType(dao, container);
-
+		
 		for (int i = 0; i < noOfContainers; i++) {
 			StorageContainer cont = new StorageContainer(container);
 			if (cont.getParentContainer() != null) {
@@ -187,21 +187,49 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 							+ positionDimensionOne);
 				} while (fullStatus[positionDimensionOne][positionDimensionTwo] != false);
 			}
-
+			
 			//Inserting authorization data
 			Set protectionObjects = new HashSet();
 			protectionObjects.add(cont);
-			try {
+			try
+			{
 				SecurityManager.getInstance(this.getClass())
 						.insertAuthorizationData(null, protectionObjects, null);
-			} catch (SMException e) {
+			} catch (SMException e) 
+			{
 				Logger.out.error("Exception in Authorization: "
 						+ e.getMessage(), e);
 			}
 		}
-
 	}
-
+	
+//	public Set getProtectionObjects(AbstractDomainObject obj)
+//    {
+//        Set protectionObjects = new HashSet();
+//        
+//        StorageContainer storageContainer = (StorageContainer) obj;
+//        protectionObjects.add(storageContainer);
+//        
+//        Iterator storageContainerIterator = storageContainer.getChildrenContainerCollection().iterator();
+//        while (storageContainerIterator.hasNext())
+//        {
+//            StorageContainer childContainer = (StorageContainer) storageContainerIterator.next();
+//            protectionObjects.add(childContainer);
+//        }
+//        
+//        Logger.out.debug(protectionObjects.toString());
+//        return protectionObjects;
+//    }
+//	
+//	public String[] getDynamicGroups(AbstractDomainObject obj)
+//    {
+//        String[] dynamicGroups=null;
+//        StorageContainer storageContainer = (StorageContainer) obj;
+//        dynamicGroups = new String[1];
+//        dynamicGroups[0] = Constants.getStorageContainerPGName(storageContainer.getSystemIdentifier());
+//        return dynamicGroups;
+//    }
+	
 	/**
 	 * Updates the persistent object in the database.
 	 * 
@@ -410,22 +438,24 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 	}
 	
 	public void setPrivilege(DAO dao, String privilegeName, Class objectType,
-			Long[] objectIds, Long userId, String roleId, boolean assignToUser)
-			throws SMException, DAOException {
+			Long[] objectIds, Long userId, String roleId, boolean assignToUser, boolean assignOperation)
+			throws SMException, DAOException 
+	{
 		Logger.out.debug(" privilegeName:" + privilegeName + " objectType:"
 				+ objectType + " objectIds:"
 				+ edu.wustl.common.util.Utility.getArrayString(objectIds)
 				+ " userId:" + userId + " roleId:" + roleId + " assignToUser:"
 				+ assignToUser);
 		super.setPrivilege(dao, privilegeName, objectType, objectIds, userId,
-				roleId, assignToUser);
+				roleId, assignToUser, assignOperation);
+		
 		assignPrivilegeToSubStorageContainer(dao, privilegeName, objectIds,
-				userId, roleId, assignToUser);
+				userId, roleId, assignToUser, assignOperation);
 	}
-
+	
 	private void assignPrivilegeToSubStorageContainer(DAO dao,
 			String privilegeName, Long[] storageContainerIDArr, Long userId,
-			String roleId, boolean assignToUser) throws SMException,
+			String roleId, boolean assignToUser, boolean assignOperation) throws SMException,
 			DAOException {
 
 		List listOfSubStorageContainerId = super.getRelatedObjects(dao,
@@ -437,13 +467,13 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 
 		super.setPrivilege(dao, privilegeName, StorageContainer.class, Utility
 				.toLongArray(listOfSubStorageContainerId), userId, roleId,
-				assignToUser);
+				assignToUser, assignOperation);
 		assignPrivilegeToSubStorageContainer(dao, privilegeName, Utility
 				.toLongArray(listOfSubStorageContainerId), userId, roleId,
-				assignToUser);
+				assignToUser, assignOperation);
 
 	}
-
+	
 	// This method sets the Storage Type & Site (if applicable) of this
 	// container.
 	private void loadSite(DAO dao, StorageContainer container)

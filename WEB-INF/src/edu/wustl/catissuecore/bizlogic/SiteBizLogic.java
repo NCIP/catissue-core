@@ -15,11 +15,8 @@ import java.util.List;
 import java.util.Set;
 
 import edu.wustl.catissuecore.dao.DAO;
-import edu.wustl.catissuecore.domain.Address;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.User;
-import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
@@ -101,14 +98,14 @@ public class SiteBizLogic extends DefaultBizLogic
 		}
 	}
 	
-	public void setPrivilege(DAO dao, String privilegeName, Class objectType, Long[] objectIds, Long userId, String roleId, boolean assignToUser) throws SMException, DAOException
+	public void setPrivilege(DAO dao, String privilegeName, Class objectType, Long[] objectIds, Long userId, String roleId, boolean assignToUser,boolean assignOperation) throws SMException, DAOException
     {
 	    Logger.out.debug(" privilegeName:"+privilegeName+" objectType:"+objectType+" objectIds:"+edu.wustl.common.util.Utility.getArrayString(objectIds)+" userId:"+userId+" roleId:"+roleId+" assignToUser:"+assignToUser);
-	    super.setPrivilege(dao,privilegeName,objectType,objectIds,userId, roleId, assignToUser);
+	    super.setPrivilege(dao,privilegeName,objectType,objectIds,userId, roleId, assignToUser,assignOperation);
 	    
-	    //Giving privilege on related object ids as well
-	    List relatedAddressObjectsIds = super.getRelatedObjects(dao,Site.class,new String[] {"address."+Constants.SYSTEM_IDENTIFIER},new String[] {Constants.SYSTEM_IDENTIFIER}, objectIds);
-	    super.setPrivilege(dao,privilegeName,Address.class,Utility.toLongArray(relatedAddressObjectsIds),userId, roleId, assignToUser);
+//	    //Giving privilege on related object ids as well
+//	    List relatedAddressObjectsIds = super.getRelatedObjects(dao,Site.class,new String[] {"address."+Constants.SYSTEM_IDENTIFIER},new String[] {Constants.SYSTEM_IDENTIFIER}, objectIds);
+//	    super.setPrivilege(dao,privilegeName,Address.class,Utility.toLongArray(relatedAddressObjectsIds),userId, roleId, assignToUser, assignOperation);
     }
 	
 	
