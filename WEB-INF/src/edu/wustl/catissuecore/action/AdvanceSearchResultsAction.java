@@ -98,20 +98,30 @@ public class AdvanceSearchResultsAction extends BaseAction
 
 		query.setResultView(selectDataElements);
 	 	
-		Map columnIdsMap = query.getColumnIdsMap();
-		session.setAttribute(Constants.COLUMN_ID_MAP,columnIdsMap);
-		Logger.out.debug("map of column ids:"+columnIdsMap+":"+columnIdsMap.size());
+		
 
 	 	SessionDataBean sessionData = getSessionData(request);
 	 	//Temporary table name with userID attached
 		String tempTableName = Constants.QUERY_RESULTS_TABLE+"_"+sessionData.getUserId();
 		
+		
 		Map queryResultObjectDataMap = new HashMap();
-		/*SimpleQueryBizLogic simpleQueryBizLogic = new SimpleQueryBizLogic();
-		simpleQueryBizLogic.createQueryResultObjectData(query.getTableSet(),
-				queryResultObjectDataMap,query);
-		simpleQueryBizLogic.setDependentIdentifiedColumnIds(
-				queryResultObjectDataMap, query);*/
+
+        SimpleQueryBizLogic simpleQueryBizLogic = new SimpleQueryBizLogic();
+
+        simpleQueryBizLogic.createQueryResultObjectData(query.getTableSet(),
+
+                                queryResultObjectDataMap,query);
+        simpleQueryBizLogic.addObjectIdentifierColumnsToQuery(
+				queryResultObjectDataMap, query);
+
+        simpleQueryBizLogic.setDependentIdentifiedColumnIds(
+
+                                queryResultObjectDataMap, query);
+        
+        Map columnIdsMap = query.getColumnIdsMap();
+		session.setAttribute(Constants.COLUMN_ID_MAP,columnIdsMap);
+		Logger.out.debug("map of column ids:"+columnIdsMap+":"+columnIdsMap.size());
 
 		//Create temporary table with the data from the Advance Query Search 
 		String sql = query.getString();
