@@ -36,6 +36,8 @@ public class ConfigureResultViewAction extends BaseAction  {
 			//String target = new String();
 			AbstractBizLogic dao = BizLogicFactory.getBizLogic(Constants.CONFIGURE_RESULT_VIEW_ID);
 			String pageOf = (String) request.getAttribute(Constants.PAGEOF);
+			if(pageOf == null)
+				pageOf = (String) request.getParameter(Constants.PAGEOF);
 			//String []tables = (String [])request.getAttribute(Constants.TABLE_ALIAS_NAME);
 			HttpSession session =request.getSession();
     		
