@@ -16,12 +16,17 @@ import edu.wustl.catissuecore.dao.DAO;
 import edu.wustl.catissuecore.dao.DAOFactory;
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.exception.BizLogicException;
+import edu.wustl.catissuecore.exceptionformatter.DefaultExceptionFormatter;
+import edu.wustl.catissuecore.exceptionformatter.ExceptionFormatter;
+import edu.wustl.catissuecore.exceptionformatter.ExceptionFormatterFactory;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.dbManager.DBUtil;
+import edu.wustl.common.util.dbManager.HibernateMetaData;
 import edu.wustl.common.util.logger.Logger;
 
 
@@ -90,6 +95,8 @@ public abstract class AbstractBizLogic
 		}
 		catch(DAOException ex)
 		{
+			
+			String errMsg=formatException(ex.getWrapException(),obj);
 			try
 			{
 				dao.rollback();
@@ -101,7 +108,8 @@ public abstract class AbstractBizLogic
 			}
 			Logger.out.debug("Error in insert");
 			//TODO ERROR Handling
-			throw new BizLogicException(ex.getMessage(), ex);
+			throw new BizLogicException(errMsg, ex);
+			//throw new BizLogicException(ex.getMessage(), ex);
 		}
 		finally
 		{
@@ -128,6 +136,10 @@ public abstract class AbstractBizLogic
 		}
 		catch(DAOException ex)
 		{
+			//added to format constrainviolation message
+			
+			String errMsg=formatException(ex.getWrapException(),currentObj);
+        	
 			try
 			{
 				dao.rollback();
@@ -139,7 +151,7 @@ public abstract class AbstractBizLogic
 				//throw new BizLogicException(ex.getMessage(), ex);
 			}
 			//TODO ERROR Handling
-			throw new BizLogicException(ex.getMessage(), ex);
+			throw new BizLogicException(errMsg, ex);
 		}
 		finally
 		{
@@ -222,4 +234,36 @@ public abstract class AbstractBizLogic
 			}
 		}
     }
+	private String formatException(Exception ex,Object obj)
+	{
+		String errMsg="";
+		String roottableName=HibernateMetaData.getRootTableName(obj.getClass());
+		String tableName=HibernateMetaData.getTableName(obj.getClass());
+    	try
+    	{   				
+			// Get ExceptionFormatter
+        	ExceptionFormatter ef = ExceptionFormatterFactory.getFormatter(ex);
+			// call for Formating Message
+			if(ef!=null)
+			{
+				Object[] arguments = {roottableName,DBUtil.currentSession().connection(),tableName};
+				errMsg = ef.formatMessage(ex,arguments);
+			}
+			else
+			{
+				// if ExceptionFormatter not found Format message through Default Formatter 
+				String arg[]={"Updating",tableName};
+	            errMsg = new DefaultExceptionFormatter().getErrorMessage("Err.SMException.01",arg);
+			}
+    	}
+    	catch(Exception e)
+    	{
+    		Logger.out.error(ex.getMessage(),ex);
+    		// if Error occured while formating message then get message
+    		// formatted through Default Formatter
+    		String arg[]={"Updating",tableName};
+            errMsg = new DefaultExceptionFormatter().getErrorMessage("Err.SMException.01",arg);   
+    	}
+    	return errMsg;
+	}
 }

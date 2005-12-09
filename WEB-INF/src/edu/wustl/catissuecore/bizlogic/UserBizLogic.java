@@ -23,10 +23,8 @@ import edu.wustl.catissuecore.domain.CancerResearchGroup;
 import edu.wustl.catissuecore.domain.Department;
 import edu.wustl.catissuecore.domain.Institution;
 import edu.wustl.catissuecore.domain.User;
-import edu.wustl.catissuecore.exceptionformatter.DefaultExceptionFormatter;
-import edu.wustl.catissuecore.exceptionformatter.ExceptionFormatter;
-import edu.wustl.catissuecore.exceptionformatter.ExceptionFormatterFactory;
 import edu.wustl.catissuecore.util.EmailHandler;
+import edu.wustl.catissuecore.util.PasswordManager;
 import edu.wustl.catissuecore.util.Roles;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -36,10 +34,7 @@ import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
-import edu.wustl.catissuecore.util.PasswordManager;
 import edu.wustl.common.util.dbManager.DAOException;
-import edu.wustl.common.util.dbManager.DBUtil;
-import edu.wustl.common.util.dbManager.HibernateMetaData;
 import edu.wustl.common.util.logger.Logger;
 import gov.nih.nci.security.authorization.domainobjects.Role;
 
@@ -169,36 +164,9 @@ public class UserBizLogic extends DefaultBizLogic
         {
             Logger.out.debug(exp.getMessage(), exp);
             // added to format constrainviolation message
-          
-        	String errMsg="";
-            try
-        	{   				
-				// Get ExceptionFormatter  
-				ExceptionFormatter ef = ExceptionFormatterFactory.getFormatter((Exception)exp.getCause());
-				// call for Formating Message
-				if(ef!=null)
-				{
-					String tableName = HibernateMetaData.getTableName(obj.getClass());
-					Object[] arguments = {tableName,DBUtil.currentSession().connection()};
-					errMsg = ef.formatMessage((Exception)exp.getCause(),arguments);
-				}
-				else
-				{
-					// if ExceptionFormatter not found Format message through Default Formatter 
-					String arg[]={"Inserting","CSM User"};
-		            errMsg = new DefaultExceptionFormatter().getErrorMessage("Err.SMException.01",arg);
-				}
-        	}
-        	catch(Exception ex)
-        	{
-        		Logger.out.error(ex.getMessage(),ex);
-        		// if Error occured while formating message then get message
-        		// formatted through Default Formatter
-        		String arg[]={"Inserting","CSM User"};
-	            errMsg = new DefaultExceptionFormatter().getErrorMessage("Err.SMException.01",arg);   
-        	}
             deleteCSMUser(csmUser);
-            throw new DAOException(errMsg, exp);
+            //throw new DAOException(errMsg,(Exception)exp.getCause());
+            throw new DAOException(exp.getCause().getMessage(),(Exception)exp.getCause());
             //throw new DAOException(exp.getMessage(), exp);
         }
     }
@@ -347,35 +315,8 @@ public class UserBizLogic extends DefaultBizLogic
         catch (SMException smExp)
         {
 //        	 added to format constrainviolation message
-            
-        	String errMsg="";
-            try
-        	{   				
-				// Get ExceptionFormatter  
-				ExceptionFormatter ef = ExceptionFormatterFactory.getFormatter((Exception)smExp.getCause());
-				// call for Formating Message
-				if(ef!=null)
-				{
-					String tableName = HibernateMetaData.getTableName(obj.getClass());
-					Object[] arguments = {tableName,DBUtil.currentSession().connection()};
-					errMsg = ef.formatMessage((Exception)smExp.getCause(),arguments);
-				}
-				else
-				{
-					// if ExceptionFormatter not found Format message through Default Formatter 
-					String arg[]={"Updating","CSM User"};
-		            errMsg = new DefaultExceptionFormatter().getErrorMessage("Err.SMException.01",arg);
-				}
-        	}
-        	catch(Exception ex)
-        	{
-        		Logger.out.error(ex.getMessage(),ex);
-        		// if Error occured while formating message then get message
-        		// formatted through Default Formatter
-        		String arg[]={"Updating","CSM User"};
-	            errMsg = new DefaultExceptionFormatter().getErrorMessage("Err.SMException.01",arg);   
-        	}
-            throw new DAOException(errMsg, smExp);
+           // throw new DAOException(errMsg, (Exception)smExp.getCause());
+        	 throw new DAOException(smExp.getCause().getMessage(), (Exception)smExp.getCause());
         	// throw new DAOException(smExp.getMessage(), smExp);
         }
     }
