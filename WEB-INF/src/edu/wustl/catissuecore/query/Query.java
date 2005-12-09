@@ -550,7 +550,8 @@ public abstract class Query {
 			//I
 			if (dataElementTableName.equals(tableAlias)
 					|| relatedTables.contains(dataElementTableName)) {
-				if(dataElementTableName.equals(tableAlias) && dataElementFieldName.equals(Constants.IDENTIFIER))
+				if(dataElementTableName.equals(tableAlias) && (dataElementFieldName.equals(Constants.IDENTIFIER)|| 
+						dataElementFieldName.equals(Constants.PARENT_SPECIMEN_ID_COLUMN)))
 				{
 					continue;
 				}
@@ -661,7 +662,7 @@ public abstract class Query {
 				this.resultView.add(identifierDataElement);
 				columnIdsMap.put(tableAlias, new Integer(resultView.size()));
 				Logger.out.debug("tableAlias:" + tableAlias
-						+ " Identifier columnId:" + resultView.size());
+						+ " Added Identifier columnId:" + resultView.size());
 			}
 		}
 
