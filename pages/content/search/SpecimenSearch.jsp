@@ -392,11 +392,26 @@
 		{
 			disabled = (classValue != null && classValue.equals("Cell"));
 		}
+
+		List typesList = null;
 	%>
 	
 	<td class="formField">
 		<html:select property="<%=type%>" styleClass="formFieldSized10" styleId="type" size="1" disabled="<%=disabled%>">
+		<%
+			if(classValue != null)
+			{
+				typesList = (List)specimenTypeMap.get(classValue);
+				pageContext.setAttribute(Constants.SPECIMEN_TYPE_LIST,typesList);
+		%>
 			<html:options collection="<%=Constants.SPECIMEN_TYPE_LIST%>" labelProperty="name" property="value"/>
+		<%
+			}
+			else
+			{
+		%>
+			<html:options collection="<%=Constants.SPECIMEN_TYPE_LIST%>" labelProperty="name" property="value"/>
+		<% } %>
 		</html:select>
 	</td>
 </tr>
