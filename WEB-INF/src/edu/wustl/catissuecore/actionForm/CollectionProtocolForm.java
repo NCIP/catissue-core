@@ -67,6 +67,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	{
 		return innerLoopValues;
 	}
+	
 	/**
 	 * @param innerLoopValues The innerLoopValues to set.
 	 */
@@ -82,7 +83,8 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	 */
 	public void setIvl(String key, Object value)
 	{
-		innerLoopValues.put(key, value);
+	    if (isMutable())
+	        innerLoopValues.put(key, value);
 	}
 
 	/**
@@ -179,7 +181,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 					values.put(keyClinicalStatus,Utility.toString(cpEvent.getClinicalStatus()));
 					values.put(keyStudyCalendarEventPoint, Utility.toString(cpEvent.getStudyCalendarEventPoint()));
 					values.put(keyCPESystemIdentifier,Utility.toString(cpEvent.getSystemIdentifier()));
-					
+					Logger.out.debug("In Form keyCPESystemIdentifier..............."+values.get(keyCPESystemIdentifier));
 					Collection specimenRequirementCollection = cpEvent.getSpecimenRequirementCollection();
 					
 					populateSpecimenRequirement(specimenRequirementCollection, i);

@@ -64,7 +64,8 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 	 */
 	public void setValue(String key, Object value)
 	{
-		values.put(key, value);
+	    if (isMutable())
+	        values.put(key, value);
 	}
 
 	/**
