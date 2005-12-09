@@ -29,7 +29,6 @@ import edu.wustl.catissuecore.actionForm.AbstractActionForm;
 import edu.wustl.catissuecore.bizlogic.AbstractBizLogic;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.domain.AbstractDomainObject;
-import edu.wustl.catissuecore.domain.Distribution;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.dbManager.DAOException;
