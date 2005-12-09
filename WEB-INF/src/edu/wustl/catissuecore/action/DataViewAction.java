@@ -27,8 +27,12 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.domain.Participant;
+import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.query.ResultData;
+import edu.wustl.catissuecore.util.Permissions;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -182,6 +186,20 @@ public class DataViewAction extends BaseAction
         {
             String url = null;
             Logger.out.debug("selected node name in object view:"+name+"object");
+            
+//       	 Aarti: Check whether user has use permission to update this object
+    		// or not
+            if(!SecurityManager.getInstance(this.getClass()).isAuthorized(getUserLoginName(request)
+            		,Constants.PACKAGE_DOMAIN+"."+name,Permissions.UPDATE))
+    		{
+            	ActionErrors errors = new ActionErrors();
+             	ActionError error = new ActionError("access.edit.object.denied",getUserLoginName(request),Constants.PACKAGE_DOMAIN+"."+name
+             	        				);
+             	errors.add(ActionErrors.GLOBAL_ERROR,error);
+             	saveErrors(request,errors);
+            	return mapping.findForward(Constants.FAILURE);
+    		}
+            
             if (name.equals(Constants.PARTICIPANT))
             {
                 url = new String(Constants.QUERY_PARTICIPANT_SEARCH_ACTION+id+"&"+Constants.PAGEOF+"="+
