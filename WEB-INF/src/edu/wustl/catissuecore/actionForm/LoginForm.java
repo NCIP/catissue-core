@@ -3,6 +3,7 @@
 package edu.wustl.catissuecore.actionForm;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
@@ -64,6 +65,10 @@ public class LoginForm extends ActionForm
         
         public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
         {
+        	HttpSession prevSession = request.getSession();
+            if(prevSession!=null)
+            	prevSession.invalidate();
+            
             ActionErrors errors = new ActionErrors();
             Validator validator = new Validator();
             if (validator.isEmpty(loginName))
@@ -77,8 +82,7 @@ public class LoginForm extends ActionForm
                     errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("user.loginName")));
                 }
             }
-            
-            if (validator.isEmpty(loginName))
+            if (validator.isEmpty(password))
             {
                 errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("user.password")));
             }
