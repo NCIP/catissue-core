@@ -432,6 +432,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String SPREADSHEET_COLUMN_LIST = "spreadsheetColumnList";
 	public static final String SPREADSHEET_DATA_LIST = "spreadsheetDataList";
 	public static final String SELECT_COLUMN_LIST = "selectColumnList";
+	public static final String CONFIGURED_SELECT_COLUMN_LIST = "configuredSelectColumnList";
 	
 	//Tree Data Action
 	public static final String TREE_DATA_ACTION = "Data.do";
@@ -1442,10 +1443,15 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String PARENT_SPECIMEN_ID_COLUMN = "PARENT_SPECIMEN_ID";
 	public static final String COLUMN = "Column";
 	public static final String COLUMN_DISPLAY_NAMES = "columnDisplayNames";
-	public static final String PAGEOF_PARTICIPANT_QUERY= "pageOfParticipantQuery";
-	public static final String PAGEOF_COLLECTION_PROTOCOL_QUERY= "pageOfCollectionProtocolQuery";
-	public static final String PAGEOF_SPECIMEN_COLLECTION_GROUP_QUERY= "pageOfSpecimenCollectionGroupQuery";
-	public static final String PAGEOF_SPECIMEN_QUERY= "pageOfSpecimenQuery";
+	public static final String PAGEOF_PARTICIPANT_QUERY_EDIT= "pageOfParticipantQueryEdit";
+	public static final String PAGEOF_COLLECTION_PROTOCOL_QUERY_EDIT= "pageOfCollectionProtocolQueryEdit";
+	public static final String PAGEOF_SPECIMEN_COLLECTION_GROUP_QUERY_EDIT= "pageOfSpecimenCollectionGroupQueryEdit";
+	public static final String PAGEOF_SPECIMEN_QUERY_EDIT= "pageOfSpecimenQueryEdit";
+	public static final String PARTICIPANT_COLUMNS = "particpantColumns";
+	public static final String COLLECTION_PROTOCOL_COLUMNS = "collectionProtocolColumns";
+	public static final String SPECIMEN_COLLECTION_GROUP_COLUMNS = "SpecimenCollectionGroupColumns";
+	public static final String SPECIMEN_COLUMNS = "SpecimenColumns";
+	
 	
 	
 	// -- menu selection related
