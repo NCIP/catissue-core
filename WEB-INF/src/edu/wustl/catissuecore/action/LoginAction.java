@@ -84,9 +84,11 @@ public class LoginAction extends Action
 	                sessionData.setUserId(userId);
 	                sessionData.setFirstName(validUser.getFirstName());
 	                sessionData.setLastName(validUser.getLastName());
+	                Logger.out.debug("CSM USer ID ....................... : "+validUser.getCsmUserId());
+	                sessionData.setCsmUserId(validUser.getCsmUserId().toString());
 	                
 	                session.setAttribute(Constants.SESSION_DATA,sessionData);
-
+	                
 	                return mapping.findForward(Constants.SUCCESS);
 	            }
 	            else
