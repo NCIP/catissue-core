@@ -401,7 +401,7 @@ PUBLIC
 			validate="true"
 			input="/Department.do?operation=add&amp;pageOf=pageOfDepartment&amp;menuSelected=3"
 			scope="request">
-			<forward name="success" path="/Department.do?operation=edit&amp;pageOf=pageOfDepartment&amp;menuSelected=3" />
+			<forward name="success" path="/DepartmentSearch.do?pageOf=pageOfDepartment" />
 			<forward name="failure" path="/Department.do?operation=add&amp;pageOf=pageOfDepartment&amp;menuSelected=3" />
 		</action>
 		
@@ -493,7 +493,7 @@ PUBLIC
 			validate="true"
 			input="/CollectionProtocol.do?operation=add&amp;pageOf=pageOfCollectionProtocol&amp;menuSelected=9"
 			scope="request">
-			<forward name="success" path="/CollectionProtocol.do?operation=edit&amp;pageOf=pageOfCollectionProtocol&amp;menuSelected=9" />
+			<forward name="success" path="/CollectionProtocolSearch.do?pageOf=pageOfCollectionProtocol" />
 			<forward name="failure" path="/CollectionProtocol.do?operation=add&amp;pageOf=pageOfCollectionProtocol&amp;menuSelected=9" />
 		</action>
 
@@ -1756,7 +1756,8 @@ PUBLIC
 		<action path="/ConfigureSimpleQuery"
 			type="edu.wustl.catissuecore.action.ConfigureSimpleQueryAction"
 			name="simpleQueryInterfaceForm"
-			validate="false"
+			validate="true"
+			input="/SimpleQueryInterface.do"
 			scope="request">
 			<forward name="pageOfSimpleQueryInterface" path="/ConfigureSimpleSearchView.do?pageOf=pageOfSimpleQueryInterface" />
 			<forward name="pageOfQueryResults" path="/ConfigureAdvanceSearchView.do?pageOf=pageOfQueryResults" />
