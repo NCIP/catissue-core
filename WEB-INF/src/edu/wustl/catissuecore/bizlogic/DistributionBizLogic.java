@@ -11,11 +11,14 @@
 package edu.wustl.catissuecore.bizlogic;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import net.sf.hibernate.HibernateException;
 import edu.wustl.catissuecore.dao.DAO;
+import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.domain.CellSpecimen;
 import edu.wustl.catissuecore.domain.DistributedItem;
 import edu.wustl.catissuecore.domain.Distribution;
@@ -26,7 +29,11 @@ import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
+import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.security.SecurityManager;
+import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
@@ -70,7 +77,7 @@ public class DistributionBizLogic extends DefaultBizLogic
 			Site site = (Site)siteObj;
 			dist.setToSite(site);
 		}
-
+		
 		dao.insert(dist,sessionDataBean, true, true);
 		Collection distributedItemCollection = dist.getDistributedItemCollection();		
 		Iterator it = distributedItemCollection.iterator();
@@ -92,7 +99,43 @@ public class DistributionBizLogic extends DefaultBizLogic
 			item.setDistribution(dist);
 			dao.insert(item,sessionDataBean, true, true);
 		}
+		
+		try
+        {
+            SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null,getProtectionObjects(dist),getDynamicGroups(dist));
+        }
+        catch (SMException e)
+        {
+            Logger.out.error("Exception in Authorization: "+e.getMessage(),e);
+        }
 	}
+	
+	public Set getProtectionObjects(AbstractDomainObject obj)
+    {
+        Set protectionObjects = new HashSet();
+        
+        Distribution distribution = (Distribution) obj;
+        protectionObjects.add(distribution);
+        
+        Iterator distributedItemIterator = distribution.getDistributedItemCollection().iterator();
+        while (distributedItemIterator.hasNext())
+        {
+            DistributedItem distributedItem = (DistributedItem) distributedItemIterator.next();  
+            protectionObjects.add(distributedItem.getSpecimen());
+        }
+        
+        return protectionObjects;
+    }
+	
+    public String[] getDynamicGroups(AbstractDomainObject obj)
+    {
+        String[] dynamicGroups=null;
+        Distribution distribution = (Distribution) obj;
+        dynamicGroups = new String[1];
+        dynamicGroups[0] = Constants.getDistributionProtocolPGName(distribution.getDistributionProtocol().getSystemIdentifier());
+        
+        return dynamicGroups;
+    }
 	
 	/**
      * Updates the persistent object in the database.
@@ -208,5 +251,44 @@ public class DistributionBizLogic extends DefaultBizLogic
     {
     	List listOfSubElement = super.disableObjects(dao, Distribution.class, "distributionProtocol", 
     			"CATISSUE_DISTRIBUTION", "DISTRIBUTION_PROTOCOL_ID", distributionProtocolIDArr);
+    }
+	
+	/**
+     * @see AbstractBizLogic#setPrivilege(DAO, String, Class, Long[], Long, String, boolean)
+     * @param dao
+     * @param privilegeName
+     * @param objectIds
+     * @param userId
+     * @param roleId
+     * @param assignToUser
+     * @throws SMException
+     * @throws DAOException
+     */
+    public void assignPrivilegeToRelatedObjectsForDP(DAO dao, String privilegeName, Long[] objectIds, Long userId, String roleId, boolean assignToUser, boolean assignOperation)throws SMException, DAOException
+    {
+        List listOfSubElement = super.getRelatedObjects(dao, Distribution.class, "distributionProtocol",objectIds);
+        Logger.out.debug("Distribution................"+listOfSubElement.size());
+    	if(!listOfSubElement.isEmpty())
+    	{
+    	    Logger.out.debug("Distribution Id : ................"+listOfSubElement.get(0));
+    	    super.setPrivilege(dao,privilegeName,Distribution.class,Utility.toLongArray(listOfSubElement),userId,roleId, assignToUser, assignOperation);
+    	    
+			assignPrivilegeToRelatedObjectsForDistribution(dao,privilegeName,Utility.toLongArray(listOfSubElement),userId, roleId, assignToUser, assignOperation);
+    	}
+    }
+    
+    public void assignPrivilegeToRelatedObjectsForDistribution(DAO dao, String privilegeName, Long[] objectIds, Long userId, String roleId, boolean assignToUser, boolean assignOperation)throws SMException, DAOException
+    {
+        List listOfSubElement = super.getRelatedObjects(dao, DistributedItem.class, "distribution",objectIds);
+        Logger.out.debug("Distributed Item................"+listOfSubElement.size());
+        if(!listOfSubElement.isEmpty())
+    	{
+            Logger.out.debug("Distribution Item Id : ................"+listOfSubElement.get(0));
+    	    super.setPrivilege(dao,privilegeName,DistributedItem.class,Utility.toLongArray(listOfSubElement),userId,roleId, assignToUser, assignOperation);
+    	    
+    	    NewSpecimenBizLogic bizLogic = (NewSpecimenBizLogic)BizLogicFactory.getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
+    	    bizLogic.assignPrivilegeToRelatedObjectsForDistributedItem(dao,privilegeName,Utility.toLongArray(listOfSubElement),userId, roleId, assignToUser, assignOperation);
+    	}
+        
     }
 }
