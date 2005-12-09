@@ -256,7 +256,8 @@ public class DistributionForm extends SpecimenEventParametersForm
 	 */
 	public void setValue(String key, Object value)
 	{
-		values.put(key, value);
+		if (isMutable())
+			values.put(key, value);
 	}
 	
 	/**

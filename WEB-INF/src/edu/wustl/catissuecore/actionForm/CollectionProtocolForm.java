@@ -81,7 +81,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	 * @param key the key to which the object is mapped.
 	 * @param value the object which is mapped.
 	 */
-	public void setIvl(String key, Object value)
+	public void setIvl(String key, Object value)///changes here
 	{
 	    if (isMutable())
 	        innerLoopValues.put(key, value);

@@ -113,7 +113,8 @@ public class NewSpecimenForm extends SpecimenForm
 	 */
 	public void setBiohazardValue(String key, Object value)
 	{
-		biohazard.put(key, value);
+		if (isMutable())
+			biohazard.put(key, value);
 	}
 
 	/**

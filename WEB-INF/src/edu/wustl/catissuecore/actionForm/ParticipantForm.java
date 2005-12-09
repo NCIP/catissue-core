@@ -464,7 +464,8 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
       */
      public void setValue(String key, Object value) 
      {
-         values.put(key, value);
+    	 if (isMutable())
+    		 values.put(key, value);
      }
 
      /**

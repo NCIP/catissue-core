@@ -148,7 +148,8 @@ public class SpecimenForm extends AbstractActionForm
      */
     public void setExternalIdentifierValue(String key, Object value)
     {
-        externalIdentifier.put(key, value);
+    	if (isMutable())
+    		externalIdentifier.put(key, value);
     }
 
     /**
