@@ -108,7 +108,10 @@ public class BizLogicFactory
         	case Constants.ADVANCE_QUERY_INTERFACE_ID:
         	    abstractBizLogic = new AdvanceQueryBizlogic();
         		break;
-        	
+        	case Constants.QUERY_INTERFACE_ID:
+        	    abstractBizLogic = new QueryBizLogic();
+    			break;
+    			
             default:
                 abstractBizLogic = new DefaultBizLogic();
             	break;
