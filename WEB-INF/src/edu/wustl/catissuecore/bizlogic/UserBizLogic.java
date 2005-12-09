@@ -422,6 +422,43 @@ public class UserBizLogic extends DefaultBizLogic
         Collections.sort(nameValuePairs) ;
         return nameValuePairs;
     }
+    
+    /**
+     * Returns the list of NameValueBeans with name as "LastName,Firstname" 
+     * and value as systemtIdentifier, of all users who are not disabled. 
+     * @return the list of NameValueBeans with name as "LastName,Firstname" 
+     * and value as systemtIdentifier, of all users who are not disabled.
+     * @throws DAOException
+     */
+    public Vector getCSMUsers() throws DAOException, SMException
+    {
+        //Retrieve the users whose activity status is not disabled.
+        List users = SecurityManager.getInstance(UserBizLogic.class).getUsers();
+        
+        Vector nameValuePairs = new Vector();
+        nameValuePairs.add(new NameValueBean(Constants.SELECT_OPTION, String.valueOf(Constants.SELECT_OPTION_VALUE)));
+        
+        // If the list of users retrieved is not empty. 
+        if (users.isEmpty() == false)
+        {
+            // Creating name value beans.
+            for (int i = 0; i < users.size(); i++)
+            {
+                gov.nih.nci.security.authorization.domainobjects.User user 
+                			= (gov.nih.nci.security.authorization.domainobjects.User) users.get(i);
+                NameValueBean nameValueBean = new NameValueBean();
+                nameValueBean.setName(user.getLastName() + ", "
+                        + user.getFirstName());
+                nameValueBean.setValue(String.valueOf(user
+                        .getUserId()));
+                Logger.out.debug(nameValueBean.toString());
+                nameValuePairs.add(nameValueBean);
+            }
+        }
+        
+        Collections.sort(nameValuePairs) ;
+        return nameValuePairs;
+    }
 
     /**
      * Returns a list of users according to the column name and value.
