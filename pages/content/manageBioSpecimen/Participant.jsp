@@ -32,10 +32,6 @@
 			readOnlyValue=false;
 		}
 
-		if (operation.equals(Constants.VIEW))
-		{
-			readOnlyForAll=true;
-		}
 
 		Object obj = request.getAttribute("participantForm");
 		int noOfRows=0;
@@ -147,37 +143,6 @@
 <html:form action="<%=formName%>">
 	<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
 		   		   
-	   <logic:equal name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
-	   	<tr>
-		    <td>
-		 	 <table summary="" cellpadding="3" cellspacing="0" border="0">
-	   			<tr>
-			  	<td align="right" colspan="3">
-				<%
-					String changeAction = "setFormAction('MakeParticipantEditable.do?"+Constants.EDITABLE+"="+!readOnlyForAll+"')";
-			 	%>
-				<!-- action buttons begins -->
-				<table cellpadding="4" cellspacing="0" border="0">
-					<tr>
-					   	<td>
-					   		<html:submit styleClass="actionButton" onclick="<%=changeAction%>">
-					   			<bean:message key="<%=editViewButton%>"/>
-					   		</html:submit>
-					   	</td>
-						<td>
-							<html:reset styleClass="actionButton">
-								<bean:message key="buttons.export"/>
-							</html:reset>
-						</td>
-					</tr>
-				</table>
-				<!-- action buttons end -->
-			  </td>
-			  </tr>
-			</table>
-		   </td>
-		</tr>
-		</logic:equal>		 
 			
 		<!-- If operation is equal to edit or search but,the page is for query the identifier field is not shown -->
 		<%--logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>">
@@ -238,15 +203,14 @@
 					<td><html:hidden property="counter"/></td>
 					<td><html:hidden property="onSubmit"/></td>
 					<td><html:hidden property="systemIdentifier" /><html:hidden property="redirectTo"/></td>
-<td><html:hidden property="pageOf" value="<%=pageOf%>"/></td>
+					<td><html:hidden property="pageOf" value="<%=pageOf%>"/></td>
 				 </tr>
 				 
 				<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.SEARCH%>">
-					<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">
 				 		<tr>
 				     		<td class="formMessage" colspan="3">* indicates a required field</td>
 				 		</tr>
-				 	</logic:notEqual>
+
 				 <tr>
 				     <td class="formTitle" height="20" colspan="4">
 				     <%String title = "participant."+pageView+".title";%>
@@ -462,7 +426,6 @@
 				 </tbody>
 				 
 				 <!-- Medical Identifiers End here -->
- 			   	 <logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">
 				 	<tr>
 				  		<td align="right" colspan="4">
 							<%
@@ -497,7 +460,6 @@
 							<!-- action buttons end -->
 				  		</td>
 				 	</tr>
-				 </logic:notEqual>
 				 
 				</logic:notEqual>
 				</table>

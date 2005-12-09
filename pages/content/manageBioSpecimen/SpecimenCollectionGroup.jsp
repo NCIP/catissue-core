@@ -54,10 +54,6 @@
 			readOnlyValue=false;
 		}
 
-		if (operation.equals(Constants.VIEW))
-		{
-			readOnlyForAll=true;
-		}
 %>
 
 
@@ -102,37 +98,7 @@
 
 	<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
 		<!-- NEW SPECIMEN COLLECTION GROUP REGISTRATION BEGINS-->
-		<logic:equal name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
-		<tr>
-	    <td>
-	 	 <table summary="" cellpadding="3" cellspacing="0" border="0">
-				<tr>
-		  	<td align="right" colspan="3">
-			<%
-				String changeAction = "setFormAction('MakeSpecimenCollectionGroupEditable.do?"+Constants.EDITABLE+"="+!readOnlyForAll+"')";
-		 	%>
-			<!-- action buttons begins -->
-			<table cellpadding="4" cellspacing="0" border="0">
-				<tr>
-				   	<td>
-				   		<html:submit styleClass="actionButton" onclick="<%=changeAction%>">
-				   			<bean:message key="<%=editViewButton%>"/>
-				   		</html:submit>
-				   	</td>
-					<td>
-						<html:reset styleClass="actionButton">
-							<bean:message key="buttons.export"/>
-						</html:reset>
-					</td>
-				</tr>
-			</table>
-			<!-- action buttons end -->
-		  </td>
-		  </tr>
-		</table>
-	   </td>
-	</tr>
-	</logic:equal>	
+
 	    <tr><td>
 			<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
 				 <tr>
@@ -368,7 +334,6 @@
 				</tr>
 				</logic:equal>
 					
- 			   	 <logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">		
 				 		<tr>
 				  		<td align="right" colspan="3">
 							<%
@@ -418,7 +383,6 @@
 							<!-- action buttons end -->
 				  		</td>
 				 	</tr>
-				</logic:notEqual>
 				 
 			</table>
 		</td></tr>

@@ -216,10 +216,6 @@ Map map = form.getExternalIdentifier();
 			readOnlyValue=false;
 		}
 
-		if (operation.equals(Constants.VIEW))
-		{
-			readOnlyForAll=true;
-		}
 
 		int exIdRows=1;
 		int bhRows=1;
@@ -282,37 +278,6 @@ Map map = form.getExternalIdentifier();
 
 		<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="500">
 			   
-		   <logic:equal name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
-		   	<tr>
-    		    <td>
-			 	 <table summary="" cellpadding="3" cellspacing="0" border="0">
-		   			<tr>
-				  	<td align="right" colspan="3">
-					<%
-						String changeAction = "setFormAction('MakeSpecimenEditable.do?"+Constants.EDITABLE+"="+!readOnlyForAll+"')";
-				 	%>
-					<!-- action buttons begins -->
-					<table cellpadding="4" cellspacing="0" border="0">
-						<tr>
-						   	<td>
-						   		<html:submit styleClass="actionButton" onclick="<%=changeAction%>">
-						   			<bean:message key="<%=editViewButton%>"/>
-						   		</html:submit>
-						   	</td>
-							<td>
-								<html:reset styleClass="actionButton">
-									<bean:message key="buttons.export"/>
-								</html:reset>
-							</td>
-						</tr>
-					</table>
-					<!-- action buttons end -->
-				  </td>
-				  </tr>
-				</table>
-			   </td>
-			</tr>
-			</logic:equal>		 
 			
 			<!-- If operation is equal to edit or search but,the page is for query the identifier field is not shown -->
 			   	
@@ -812,7 +777,6 @@ Map map = form.getExternalIdentifier();
 				  <% } %>
 				 </tbody>
 				 <!-- Bio-hazards End here -->	
-				 <logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">
 			   	 	<tr>
 				  		<td align="right" colspan="4">
 							<%
@@ -822,6 +786,7 @@ Map map = form.getExternalIdentifier();
 							<table cellpadding="4" cellspacing="0" border="0">
 								<tr>
 									<td>
+									<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
 										<table>
 											<tr>
 												<td rowspan=2 class="formFieldNoBorders" nowrap>
@@ -861,6 +826,7 @@ Map map = form.getExternalIdentifier();
 												</td>								
 											</tr>
 										</table>
+									</logic:notEqual>
 									</td>					
 						   			<td>
 						   				<html:submit styleClass="actionButton" onclick="<%=changeAction%>">
@@ -878,7 +844,6 @@ Map map = form.getExternalIdentifier();
 							<!-- action buttons end -->
 				  		</td>
 				 	</tr>
-				 </logic:notEqual>
 	</table>
   </td>
 </tr>
