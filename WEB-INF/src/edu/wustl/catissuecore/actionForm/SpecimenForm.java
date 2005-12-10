@@ -571,7 +571,7 @@ public class SpecimenForm extends AbstractActionForm
                 }
                 else
                 {
-                    if(!validator.isNumeric(positionDimensionOne,0) || !validator.isNumeric(positionDimensionTwo,0) || !validator.isNumeric(storageContainer ,0))
+                    if(!validator.isNumeric(positionDimensionOne,1) || !validator.isNumeric(positionDimensionTwo,1) || !validator.isNumeric(storageContainer,1))
                     {
     	                  errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
     	                  "errors.item.format", ApplicationProperties
