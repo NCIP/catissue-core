@@ -158,7 +158,8 @@ public class UserBizLogic extends DefaultBizLogic
         {
             Logger.out.debug(daoExp.getMessage(), daoExp);
             deleteCSMUser(csmUser);
-            throw new DAOException(daoExp.getMessage(), daoExp);
+            //throw new DAOException(daoExp.getMessage(), daoExp.getWrapException());
+            throw daoExp;
         }
         catch (SMException exp)
         {
