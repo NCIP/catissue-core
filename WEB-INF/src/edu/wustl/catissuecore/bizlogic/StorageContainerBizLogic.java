@@ -66,12 +66,14 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 		boolean fullStatus[][] = null;
 		int noOfContainers = container.getNoOfContainers().intValue();
 		
-		if (container.getParentContainer() != null) {
+		if (container.getParentContainer() != null) 
+		{
 			List list = dao.retrieve(StorageContainer.class.getName(),
 					"systemIdentifier", container.getParentContainer()
 							.getSystemIdentifier());
 			
-			if (list.size() != 0) {
+			if (list.size() != 0) 
+			{
 				StorageContainer pc = (StorageContainer) list.get(0);
 
 				// check for closed ParentContainer
@@ -85,7 +87,9 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 						.size()) > totalCapacity) {
 					throw new DAOException(ApplicationProperties
 							.getValue("errors.storageContainer.overflow"));
-				} else {
+				} 
+				else 
+				{
 					//Check if position specified is within the parent
 					// container's
 					//capacity
@@ -151,11 +155,23 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 			// for edit.
 			container.setSystemIdentifier(cont.getSystemIdentifier());
 
-			Collection storageContainerDetailsCollection = cont
-					.getStorageContainerDetailsCollection();
-			if (storageContainerDetailsCollection.size() > 0) {
+			Collection storageContainerDetailsCollection = cont.getStorageContainerDetailsCollection();
+			
+			
+			if(storageContainerDetailsCollection.isEmpty())
+			{
+				//add a dummy container details for Query.
+				StorageContainerDetails storageContainerDetails = new StorageContainerDetails();
+				storageContainerDetails.setParameterName("");
+				storageContainerDetails.setParameterValue("");
+				storageContainerDetailsCollection.add(storageContainerDetails);
+			}
+			
+			if (storageContainerDetailsCollection.size() > 0) 
+			{
 				Iterator it = storageContainerDetailsCollection.iterator();
-				while (it.hasNext()) {
+				while (it.hasNext()) 
+				{
 					StorageContainerDetails storageContainerDetails = (StorageContainerDetails) it
 							.next();
 					storageContainerDetails.setStorageContainer(cont);
@@ -164,10 +180,13 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 				}
 			}
 
-			if (container.getParentContainer() != null) {
+			if (container.getParentContainer() != null) 
+			{
 				Logger.out.debug("In if: ");
-				do {
-					if (positionDimensionTwo == posTwoCapacity) {
+				do 
+				{
+					if (positionDimensionTwo == posTwoCapacity) 
+					{
 					    if (positionDimensionOne == posOneCapacity)
 					        positionDimensionOne = Constants.STORAGE_CONTAINER_FIRST_ROW;
 					    else
