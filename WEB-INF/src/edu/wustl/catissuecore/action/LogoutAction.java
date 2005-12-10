@@ -9,7 +9,9 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.dao.JDBCDAO;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.beans.SessionDataBean;
 
 /**
  * 
@@ -23,9 +25,19 @@ import edu.wustl.catissuecore.util.global.Constants;
 public class LogoutAction  extends BaseAction  {
 
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response) {
+			HttpServletRequest request, HttpServletResponse response) throws Exception{
 		
 		HttpSession session = request.getSession();
+		
+		//Delete Advance Query table if exists
+	 	SessionDataBean sessionData = getSessionData(request);
+	 	//Advance Query table name with userID attached
+		String tempTableName = Constants.QUERY_RESULTS_TABLE+"_"+sessionData.getUserId();
+
+ 		JDBCDAO jdbcDao = new JDBCDAO();
+        jdbcDao.openSession(sessionData);
+       	jdbcDao.delete(tempTableName);
+        jdbcDao.closeSession();
 
 		session.invalidate();
 
