@@ -2208,7 +2208,7 @@ PUBLIC
 			name="advanceSearchForm"
 			validate="false"
 			scope="request">
-			<forward name="success" path="/SpreadsheetView.do" />
+			<forward name="success" path="/DataView.do" />
 		</action>
 		
 		
