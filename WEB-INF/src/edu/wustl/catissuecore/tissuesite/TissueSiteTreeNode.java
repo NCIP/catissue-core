@@ -36,7 +36,7 @@ public class TissueSiteTreeNode implements TreeNode, Serializable
     }
     public TissueSiteTreeNode()
     {
-        this(null,"DUMMY",null);
+        this(null,Constants.TISSUE_SITE,null);
     }
 
     /**
