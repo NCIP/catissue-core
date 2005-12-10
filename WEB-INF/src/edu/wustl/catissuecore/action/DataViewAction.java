@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.StringTokenizer;
 
 import javax.servlet.RequestDispatcher;
@@ -27,15 +26,13 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import edu.wustl.catissuecore.domain.Participant;
-import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.QueryBizLogic;
 import edu.wustl.catissuecore.query.ResultData;
 import edu.wustl.catissuecore.util.Permissions;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.beans.NameValueBean;
+import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
@@ -53,21 +50,29 @@ public class DataViewAction extends BaseAction
     public ActionForward executeAction(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response) throws Exception
     {
-        String target = Constants.SUCCESS;
+    	HttpSession session = request.getSession();
+    	String target = Constants.SUCCESS;
     	String nodeName = request.getParameter("nodeName");
+    	if(nodeName==null)
+    		nodeName = (String)session.getAttribute(Constants.SELECTED_NODE);
+    		
     	Logger.out.debug("nodename of selected node"+nodeName);
         StringTokenizer str = new StringTokenizer(nodeName,":");
         String name = str.nextToken().trim();
-        HttpSession session = request.getSession();
+        
         String id = new String();
         String parentName = new String();
     	String parentId = new String();
-        
     	
     	//Get the column display names and select column names if it is configured and set in session
     	List filteredColumnDisplayNames=(List)session.getAttribute(Constants.CONFIGURED_COLUMN_DISPLAY_NAMES);
     	Logger.out.debug("ColumnDisplayNames from configuration"+filteredColumnDisplayNames);
     	String[] columnList= (String[])session.getAttribute(Constants.CONFIGURED_SELECT_COLUMN_LIST);
+    	if(columnList!=null)
+    	{
+    		Logger.out.debug("size of configured columns from session:"+columnList.length);
+    		session.setAttribute(Constants.CONFIGURED_SELECT_COLUMN_LIST,columnList);
+    	}
     	
 //    	List filteredColumnDisplayNames = new ArrayList();
     	//Get column display names from session which is set in session in AdvanceSearchResultsAction
@@ -97,12 +102,15 @@ public class DataViewAction extends BaseAction
 
         //get the type of view to show (spreadsheet/individual)
         String viewType = request.getParameter(Constants.VIEW_TYPE);
-        
+        if(viewType==null)
+        	viewType=Constants.SPREADSHEET_VIEW;
         if (viewType.equals(Constants.SPREADSHEET_VIEW))
         {
+    		Map columnIdsMap = (Map)session.getAttribute(Constants.COLUMN_ID_MAP);
         	if (!name.equals(Constants.ROOT))
             {	
-        		Map columnIdsMap = (Map)session.getAttribute(Constants.COLUMN_ID_MAP);
+        		Logger.out.debug("node name selected inside if condition:"+name);
+        		Logger.out.debug("column list inside if condition::"+columnList);
                 if (!name.equals(Constants.PARTICIPANT) && columnList==null)
                 {
                 	Logger.out.debug("Inside if condition of filtercolumns");
@@ -124,9 +132,38 @@ public class DataViewAction extends BaseAction
                     key = parentName+"."+Constants.IDENTIFIER;
                     columnId = ((Integer)columnIdsMap.get(parentName+"."+Constants.IDENTIFIER)).intValue()-1;
                     parentName=Constants.COLUMN+columnId;
-
                 }
             }
+    		//Add specimen identifier column if it is not there,required for shopping cart action
+            int specimenColumnId = ((Integer)columnIdsMap.get(Constants.SPECIMEN+"."+Constants.IDENTIFIER)).intValue()-1;
+            Logger.out.debug("specimenColumnId for adding compulsory specimen id:"+specimenColumnId);
+            String specimenColumn = Constants.COLUMN+specimenColumnId;
+            Logger.out.debug("specimenColumn for adding compulsory specimen id:"+specimenColumn);
+            boolean exists = false;
+            if(columnList!=null)
+            {
+            	for(int i=0;i<columnList.length;i++)
+            	{
+            		Logger.out.debug("column loop :"+columnList[i]);
+            		if(columnList[i].equals(specimenColumn))
+            		{
+            			Logger.out.debug("Specimen id column does not exist");
+            			exists=true;
+            		}
+            	}
+                if(!exists)
+                {
+                	String columnListWithoutSpecimenId[] = columnList;
+                	columnList = new String[columnListWithoutSpecimenId.length+1];
+                    for(int i=0;i<columnListWithoutSpecimenId.length;i++)
+                    {
+                    	columnList[i] = columnListWithoutSpecimenId[i];
+                    }
+                    columnList[columnListWithoutSpecimenId.length]=specimenColumn;
+                	//filteredColumnDisplayNames.add("Identifier");
+                }
+            }
+            Logger.out.debug("column names before func call to resultdata"+filteredColumnDisplayNames);
         	String[] whereColumnName= new String[1]; 
         	
             String[] whereColumnValue = new String[1];
@@ -149,12 +186,11 @@ public class DataViewAction extends BaseAction
             whereColumnCondition[0]="=";
 
         	List list = null;
-            
-
             ResultData resultData = new ResultData();
             
             list = resultData.getSpreadsheetViewData(whereColumnName,whereColumnValue,whereColumnCondition,columnList, getSessionData(request), Constants.OBJECT_LEVEL_SECURE_RETRIEVE);
             Logger.out.debug("list of data after advance search"+list);
+            Logger.out.debug("column list after advance search"+filteredColumnDisplayNames);
      		// If the result contains no data, show error message.
     		if (list.isEmpty()) 
     		{
@@ -163,30 +199,25 @@ public class DataViewAction extends BaseAction
     			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("advanceQuery.noRecordsFound"));
     			saveErrors(request, errors);
     			request.setAttribute(Constants.PAGEOF,Constants.PAGEOF_QUERY_RESULTS);
-    			
     			//target = Constants.FAILURE;
     		}
     		else
     		{
-    			
-            	//Created temporary column display names for the spreadsheet view
-            	/*List rowList = (List)list.get(0);
-    			int columnSize=rowList.size();
-    			for(int i=0;i<columnSize;i++)
-    				columnDisplayNames.add("Column"+i);
-            	Map columnIdsMap = (Map)session.getAttribute(Constants.COLUMN_ID_MAP);
-            	Set keySet = columnIdsMap.keySet();
-            	//Split the keys which is in the form of aliasName.columnNames to get the column Names 
-            	Iterator keySetitr = keySet.iterator();
-            	List columnDisplayNames = new ArrayList(keySet);*/
-    			
+    	        Logger.out.debug("List of data in dataview action:"+list);
+    	        Logger.out.debug("column names in dataview action:"+filteredColumnDisplayNames);
+    	        //if specimen id is added to the columns then add display name identifier to the filteredColumnDisplayNames
+    	        if(columnList!=null)
+    	        {
+    	        	if(columnList.length-filteredColumnDisplayNames.size()==1)
+    	        		filteredColumnDisplayNames.add("Identifier");
+    	        }
     			request.setAttribute(Constants.SPREADSHEET_COLUMN_LIST,filteredColumnDisplayNames);
-    			//request.setAttribute(Constants.SPREADSHEET_COLUMN_LIST,columnDisplayNames);
     			request.setAttribute(Constants.SPREADSHEET_DATA_LIST,list);
     			request.setAttribute(Constants.PAGEOF,Constants.PAGEOF_QUERY_RESULTS);
+        		session.setAttribute(Constants.SELECT_COLUMN_LIST,columnList);
+    			session.setAttribute(Constants.SELECTED_NODE,nodeName);
     		}
         }
-        
         else
         {
             String url = null;
@@ -230,9 +261,7 @@ public class DataViewAction extends BaseAction
             }
             RequestDispatcher requestDispatcher = request.getRequestDispatcher(url);
             requestDispatcher.forward(request,response);
-            
         }
-        
         return mapping.findForward(target);
     }
 
