@@ -31,7 +31,6 @@ import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
-import edu.wustl.catissuecore.exception.BizLogicException;
 import edu.wustl.catissuecore.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
@@ -167,7 +166,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	  	}
 	  	return null;
 	}
-	private void setAvailableQuantity(Specimen obj, Specimen oldObj) throws BizLogicException
+	private void setAvailableQuantity(Specimen obj, Specimen oldObj) throws DAOException
 	{
 		if(obj instanceof TissueSpecimen)
 		{
@@ -192,7 +191,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			Logger.out.debug("Dist Qty: " +distQty+" New Available Qty: " +newAvailableQty);
 			if(newAvailableQty<0)
 			{
-				throw new BizLogicException("Newly modified Quantity '" + newQty + "' should not be less than current Distributed Quantity '" + distQty + "'");
+				throw new DAOException("Newly modified Quantity '" + newQty + "' should not be less than current Distributed Quantity '" + distQty + "'");
 			}
 			else
 			{
@@ -224,7 +223,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			Logger.out.debug("Dist Qty: " +distQty+" New Available Qty: " +newAvailableQty);
 			if(newAvailableQty<0)
 			{
-				throw new BizLogicException("Newly modified Quantity '" + newQty + "' should not be less than current Distributed Quantity '" + distQty + "'");
+				throw new DAOException("Newly modified Quantity '" + newQty + "' should not be less than current Distributed Quantity '" + distQty + "'");
 			}
 			else
 			{
@@ -255,7 +254,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			Logger.out.debug("Dist Qty: " +distQty+" New Available Qty: " +newAvailableQty);
 			if(newAvailableQty<0)
 			{
-				throw new BizLogicException("Newly modified Quantity '" + newQty + "' should not be less than current Distributed Quantity '" + distQty + "'");
+				throw new DAOException("Newly modified Quantity '" + newQty + "' should not be less than current Distributed Quantity '" + distQty + "'");
 			}
 			else
 			{
@@ -286,7 +285,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			Logger.out.debug("Dist Qty: " +distQty+" New Available Qty: " +newAvailableQty);
 			if(newAvailableQty<0)
 			{
-				throw new BizLogicException("Newly modified Quantity '" + newQty + "' should not be less than current Distributed Quantity '" + distQty + "'");
+				throw new DAOException("Newly modified Quantity '" + newQty + "' should not be less than current Distributed Quantity '" + distQty + "'");
 			}
 			else
 			{
@@ -306,15 +305,15 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
     	Specimen specimen = (Specimen)obj;
     	Specimen specimenOld = (Specimen)oldObj;
     	Logger.out.debug("Specimen Type: " +obj+" ----- "+oldObj);
-    	try
-    	{
+//    	try
+//    	{
     		setAvailableQuantity(specimen,specimenOld);
-    	}
-    	catch(BizLogicException e)
-    	{
-    		Logger.out.error(e.getMessage(),e);
-    		throw new DAOException(e.getMessage(),e); 
-    	}
+//    	}
+//    	catch(BizLogicException e)
+//    	{
+//    		Logger.out.error(e.getMessage(),e);
+//    		throw new DAOException(e.getMessage(),e); 
+//    	}
     	if(specimen.isParentChanged())
         {
         	//Check whether continer is moved to one of its sub container.
