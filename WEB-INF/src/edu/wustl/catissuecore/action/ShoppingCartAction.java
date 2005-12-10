@@ -26,10 +26,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-
-
 import edu.wustl.catissuecore.actionForm.AdvanceSearchForm;
-import edu.wustl.catissuecore.actionForm.ShoppingCartForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.ShoppingCartBizLogic;
 import edu.wustl.catissuecore.dao.JDBCDAO;
@@ -92,33 +89,31 @@ public class ShoppingCartAction  extends BaseAction
 	        	
 	        	SessionDataBean sessionDataBean = getSessionData(request);
         		Map columnIdsMap = (Map)session.getAttribute(Constants.COLUMN_ID_MAP);
+        		String[] selectedColumns = (String[])session.getAttribute(Constants.SELECT_COLUMN_LIST);
+        		List spreadsheetData = (List)session.getAttribute(Constants.SPREADSHEET_DATA_LIST);
+        		
         		Logger.out.debug("column ids map in shopping cart"+columnIdsMap);
-        		Integer specimenColumnId = (Integer)columnIdsMap.get(Constants.SPECIMEN+"."+Constants.IDENTIFIER);
+        		int specimenColumnId = ((Integer)columnIdsMap.get(Constants.SPECIMEN+"."+Constants.IDENTIFIER)).intValue()-1;
         		Logger.out.debug("specimen column id in shopping cart"+specimenColumnId);
-        		String tempTableName = Constants.QUERY_RESULTS_TABLE+"_"+sessionDataBean.getUserId();
-        		JDBCDAO jdbcDao = new JDBCDAO();
-                jdbcDao.openSession(sessionDataBean);
-                
-                //Retrieve all the data from the temporary table 
-        		List data =  jdbcDao.retrieve(tempTableName);
-        		Iterator dataItr = data.iterator();
-        		Object []specimenIds = new Object[data.size()];
-        		int i=0;
-				while(dataItr.hasNext())
-				{
-					List rowList =(List)dataItr.next(); 
-					specimenIds[i++]=(String)rowList.get(specimenColumnId.intValue()-1);
-				}
+        		int spreadsheetSpecimenIndex = 0;
+        		//get the column in which the specimen column id is displayed in the spreadsheet data
+        		for(int k=0;k<selectedColumns.length;k++)
+        		{
+        			if(selectedColumns[k].equals(Constants.COLUMN+specimenColumnId))
+        				spreadsheetSpecimenIndex=k;
+        		}
+        		
 				//Add to cart the selected specified Ids.  
 				Object []selectedSpecimenIds = new Object[obj.length];
 				for(int j=0;j<obj.length;j++)
 				{
-		        	String str = obj[j].toString();
+					String str = obj[j].toString();
 		        	StringTokenizer strTokens = new StringTokenizer(str,"_");
 		        	strTokens.nextToken();
 		        	int index = Integer.parseInt(strTokens.nextToken());
+		        	List selectedRow = (List)spreadsheetData.get(index);
 		        	Logger.out.debug("index selected :"+index);
-		        	selectedSpecimenIds[j]=specimenIds[index];
+		        	selectedSpecimenIds[j]=selectedRow.get(spreadsheetSpecimenIndex);
 		        	Logger.out.debug("specimen id to be added to cart :"+selectedSpecimenIds[j]);
 				}	
         		
