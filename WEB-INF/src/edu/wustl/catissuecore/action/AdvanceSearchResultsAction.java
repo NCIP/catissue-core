@@ -32,7 +32,6 @@ import edu.wustl.catissuecore.query.AdvancedConditionsImpl;
 import edu.wustl.catissuecore.query.AdvancedConditionsNode;
 import edu.wustl.catissuecore.query.AdvancedQuery;
 import edu.wustl.catissuecore.query.Condition;
-import edu.wustl.catissuecore.query.DataElement;
 import edu.wustl.catissuecore.query.Query;
 import edu.wustl.catissuecore.query.QueryFactory;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -132,16 +131,21 @@ public class AdvanceSearchResultsAction extends BaseAction
 		//Set the columnDisplayNames in session
 		session.setAttribute(Constants.COLUMN_DISPLAY_NAMES,columnNames);
 		
-
-		
 		//Remove shopping cart attribute from session
-		session.removeAttribute(Constants.SHOPPING_CART);
+		session.setAttribute(Constants.SHOPPING_CART,null);
 		
 		//Remove configured columns from session for previous query in same session
-		session.removeAttribute(Constants.CONFIGURED_SELECT_COLUMN_LIST);
+		session.setAttribute(Constants.CONFIGURED_SELECT_COLUMN_LIST,null);
+		session.setAttribute(Constants.CONFIGURED_COLUMN_DISPLAY_NAMES,null);
 		
 		//Remove the spreadsheet column display names from session
-		session.removeAttribute(Constants.SPREADSHEET_COLUMN_LIST);
+		session.setAttribute(Constants.SPREADSHEET_COLUMN_LIST,null);
+		
+		//Remove selected node from session
+		session.setAttribute(Constants.SELECTED_NODE,null);
+		
+		//Remove select columnList from Session
+		session.setAttribute(Constants.SELECT_COLUMN_LIST,null);
 		
 		request.setAttribute(Constants.PAGEOF, pageOf);
 		return mapping.findForward(Constants.SUCCESS);
