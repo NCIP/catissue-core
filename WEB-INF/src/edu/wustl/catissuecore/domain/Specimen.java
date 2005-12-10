@@ -12,7 +12,9 @@ package edu.wustl.catissuecore.domain;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -590,12 +592,15 @@ public class Specimen extends AbstractDomainObject implements Serializable
 		        Collection extCollection = parser.generateData(extMap);
 		        this.externalIdentifierCollection = extCollection;
 		        
+		        Map bioMap = form.getBiohazard();
+		        Logger.out.debug("PRE FIX MAP "+bioMap);
+		        bioMap = fixMap(bioMap);
+		        Logger.out.debug("POST FIX MAP "+bioMap);
+		        
 		        //Getting the Map of Biohazards
 		        parser = new MapDataParser("edu.wustl.catissuecore.domain");
-		        Map bioMap = form.getBiohazard();
-		        Logger.out.debug("\n\n\n\n\nBIOMAP : " + bioMap );
 		        Collection bioCollection = parser.generateData(bioMap);
-		        Logger.out.debug("\n\n\n\n\nBIO-COL : " + bioCollection );
+		        Logger.out.debug("BIO-COL : " + bioCollection );
 
 		        this.biohazardCollection = bioCollection;
             }
@@ -642,6 +647,26 @@ public class Specimen extends AbstractDomainObject implements Serializable
             Logger.out.error(excp.getMessage(),excp);
         }
     }
+    
+    protected Map fixMap(Map orgMap)
+	{
+		Map newMap = new HashMap();
+		Iterator it = orgMap.keySet().iterator();
+		while(it.hasNext())
+		{
+			String key = (String)it.next();
+			String value = (String)orgMap.get(key);
+			
+			//Logger.out.debug("key "+key);
+			
+			if(key.indexOf("persisted")==-1)
+			{
+				newMap.put(key,value);
+			}
+		}		
+		return newMap;
+	}
+    
     
     /**
      * This function returns the actual type of the specimen i.e Cell / Fluid / Molecular / Tissue.
