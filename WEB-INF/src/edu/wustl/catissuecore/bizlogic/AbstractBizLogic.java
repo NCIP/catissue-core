@@ -96,7 +96,11 @@ public abstract class AbstractBizLogic
 		catch(DAOException ex)
 		{
 			
-			String errMsg=formatException(ex.getWrapException(),obj);
+			String errMsg=formatException(ex.getWrapException(),obj,"Inserting");
+			if(errMsg==null)
+			{
+				errMsg=ex.getMessage();
+			}
 			try
 			{
 				dao.rollback();
@@ -138,8 +142,11 @@ public abstract class AbstractBizLogic
 		{
 			//added to format constrainviolation message
 			
-			String errMsg=formatException(ex.getWrapException(),currentObj);
-        	
+			String errMsg=formatException(ex.getWrapException(),currentObj,"Updating");
+			if(errMsg==null)
+			{
+				errMsg=ex.getMessage();
+			}
 			try
 			{
 				dao.rollback();
@@ -234,9 +241,13 @@ public abstract class AbstractBizLogic
 			}
 		}
     }
-	private String formatException(Exception ex,Object obj)
+	private String formatException(Exception ex,Object obj,String operation)
 	{
 		String errMsg="";
+		if(ex==null)
+		{
+			return null;
+		}
 		String roottableName=HibernateMetaData.getRootTableName(obj.getClass());
 		String tableName=HibernateMetaData.getTableName(obj.getClass());
     	try
@@ -252,8 +263,9 @@ public abstract class AbstractBizLogic
 			else
 			{
 				// if ExceptionFormatter not found Format message through Default Formatter 
-				String arg[]={"Updating",tableName};
-	            errMsg = new DefaultExceptionFormatter().getErrorMessage("Err.SMException.01",arg);
+				//String arg[]={operation,tableName};
+	            //errMsg = new DefaultExceptionFormatter().getErrorMessage("Err.SMException.01",arg);
+				errMsg=ex.getMessage();
 			}
     	}
     	catch(Exception e)
@@ -261,7 +273,7 @@ public abstract class AbstractBizLogic
     		Logger.out.error(ex.getMessage(),ex);
     		// if Error occured while formating message then get message
     		// formatted through Default Formatter
-    		String arg[]={"Updating",tableName};
+    		String arg[]={operation,tableName};
             errMsg = new DefaultExceptionFormatter().getErrorMessage("Err.SMException.01",arg);   
     	}
     	return errMsg;
