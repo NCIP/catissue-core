@@ -24,7 +24,6 @@ import edu.wustl.catissuecore.query.DataElement;
 import edu.wustl.catissuecore.query.Operator;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.vo.SearchFieldData;
-import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
 public abstract class AdvanceSearchUIAction extends BaseAction 
