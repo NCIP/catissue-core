@@ -434,6 +434,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String SELECT_COLUMN_LIST = "selectColumnList";
 	public static final String CONFIGURED_SELECT_COLUMN_LIST = "configuredSelectColumnList";
 	public static final String CONFIGURED_COLUMN_DISPLAY_NAMES = "configuredColumnDisplayNames";
+	public static final String SELECTED_NODE = "selectedNode";
 	
 	//Tree Data Action
 	public static final String TREE_DATA_ACTION = "Data.do";
