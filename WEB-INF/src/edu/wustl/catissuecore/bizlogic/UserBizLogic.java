@@ -107,7 +107,7 @@ public class UserBizLogic extends DefaultBizLogic
                 
                 if (user.getRoleId() != null)
                     SecurityManager.getInstance(UserBizLogic.class)
-                            .assignRoleToUser(csmUser.getLoginName(),
+                            .assignRoleToUser(csmUser.getUserId().toString(),
                                     user.getRoleId());
                 
                 user.setCsmUserId(csmUser.getUserId());
@@ -280,7 +280,7 @@ public class UserBizLogic extends DefaultBizLogic
                         && (Constants.PAGEOF_CHANGE_PASSWORD.equals(user.getPageOf()) == false))
                 {
                     SecurityManager.getInstance(UserBizLogic.class).assignRoleToUser(
-                            csmUser.getLoginName(), user.getRoleId());
+                    		csmUser.getUserId().toString(), user.getRoleId());
                 }
                 
                 dao.update(user.getAddress(), sessionDataBean, true, false, false);

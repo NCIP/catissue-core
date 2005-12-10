@@ -335,15 +335,16 @@ public class SecurityManager implements Permissions {
 	 *            The id of the Role which is to be assigned to the user
 	 * @throws SMException
 	 */
-	public void assignRoleToUser(String userName, String roleID)
+	public void assignRoleToUser(String userID, String roleID)
 			throws SMException {
-		Logger.out.debug("UserName: " + userName + " Role ID:" + roleID);
+		Logger.out.debug("UserName: " + userID + " Role ID:" + roleID);
 		UserProvisioningManager userProvisioningManager = null;
 		User user;
 		String groupId;
 		try {
 			userProvisioningManager = getUserProvisioningManager();
-			user = userProvisioningManager.getUser(userName);
+			//user = userProvisioningManager.getUser(userName);
+			user = userProvisioningManager.getUserById(userID);
 
 			//Remove user from any other role if he is assigned some
 			userProvisioningManager.removeUserFromGroup(ADMINISTRATOR_ROLE,

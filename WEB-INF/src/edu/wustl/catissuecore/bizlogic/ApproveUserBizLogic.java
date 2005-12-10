@@ -73,7 +73,7 @@ public class ApproveUserBizLogic extends DefaultBizLogic
                 if (user.getRoleId() != null)
                 {
                     SecurityManager.getInstance(ApproveUserBizLogic.class)
-                            .assignRoleToUser(csmUser.getLoginName(), user.getRoleId());
+                            .assignRoleToUser(csmUser.getUserId().toString(), user.getRoleId());
                 }
                 
                 user.setCsmUserId(csmUser.getUserId());
