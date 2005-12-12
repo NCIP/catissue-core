@@ -1265,24 +1265,6 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	    return "DISTRIBUTION_PROTOCOL_"+identifier;
 	}
 	
-	public static final String getStorageContainerPGName(Long identifier)
-	{
-	    if(identifier == null)
-	    {
-	        return "STORAGE_CONTAINER_";
-	    }
-	    return "STORAGE_CONTAINER_"+identifier;
-	}
-	
-	public static final String getSitePGName(Long identifier)
-	{
-	    if(identifier == null)
-	    {
-	        return "SITE_";
-	    }
-	    return "SITE_"+identifier;
-	}
-	
 	public static final String getDistributionProtocolPIGroupName(Long identifier)
 	{
 	    if(identifier == null)
