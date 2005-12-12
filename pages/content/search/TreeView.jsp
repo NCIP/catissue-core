@@ -6,8 +6,6 @@
 	String storageContainerID = null;
 	String position = null;
 	String propertyName = null;
-	int width = 180;
-	int height = 300;
 	if (pageOf.equals(Constants.PAGEOF_STORAGE_LOCATION) ||
 	     pageOf.equals(Constants.PAGEOF_SPECIMEN))
 	{
@@ -19,11 +17,6 @@
 	else if (pageOf.equals(Constants.PAGEOF_TISSUE_SITE))
 	{
 		propertyName = request.getParameter(Constants.PROPERTY_NAME);
-	}
-	else if(pageOf.equals(Constants.PAGEOF_QUERY_RESULTS))
-	{
-		width = 250;
-		height = 625;
 	}
 %>
 
@@ -46,7 +39,7 @@
 </script>
 
 <OBJECT classid="clsid:8AD9C840-044E-11D1-B3E9-00805F499D93"
-    width="<%=width%>" height="<%=height%>" align="top" name="<%=Constants.TREE_APPLET_NAME%>"
+    width="100%" height="100%" align="top" name="<%=Constants.TREE_APPLET_NAME%>"
     codebase="http://java.sun.com/products/plugin/autodl/jinstall-1_4-windows-i586.cab#Version=1,4,0,0">
 	<PARAM name="<%=Constants.PROPERTY_NAME%>" value="<%=propertyName%>">
     <PARAM name="code" value="<%=Constants.QUERY_TREE_APPLET%>">
