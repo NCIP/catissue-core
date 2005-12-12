@@ -16,6 +16,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -23,6 +25,7 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.actionForm.AssignPrivilegesForm;
 import edu.wustl.catissuecore.bizlogic.AbstractBizLogic;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
+import edu.wustl.catissuecore.exception.BizLogicException;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.util.logger.Logger;
@@ -38,6 +41,7 @@ public class AssignPrivilegeAction extends BaseAction
             throws IOException, ServletException
     {
     	AssignPrivilegesForm privilegeForm = (AssignPrivilegesForm)form;
+    	String target = (String)request.getParameter(Constants.PAGEOF);
     	
     	try
 		{
@@ -58,7 +62,6 @@ public class AssignPrivilegeAction extends BaseAction
     		SessionDataBean bean = getSessionData(request);
 
     		boolean assignOperation = Constants.PRIVILEGE_ASSIGN;
-    		Logger.out.debug("Operation....................................."+privilegeForm.getAssignOperation());
     		if (privilegeForm.getAssignOperation().equals("Disallow"))
 			{
 			    assignOperation = Constants.PRIVILEGE_DEASSIGN;
@@ -87,15 +90,23 @@ public class AssignPrivilegeAction extends BaseAction
     				bizLogic.setPrivilege(Constants.HIBERNATE_DAO,privileges[0],classObject,objectIdentifiers,userId,bean,null,true, assignOperation);
     			}
     		}
-
     		request.setAttribute(Constants.STATUS_MESSAGE_KEY,"38.true");
 		}
+    	catch (BizLogicException excp)
+        {
+        	ActionErrors errors = new ActionErrors();
+        	ActionError error = new ActionError("errors.item",excp.getMessage());
+        	errors.add(ActionErrors.GLOBAL_ERROR,error);
+        	saveErrors(request,errors);
+            target = Constants.FAILURE;
+            Logger.out.error(excp.getMessage(), excp);
+        }
     	catch(Exception e)
 		{
     		Logger.out.debug(e.getMessage(),e);
     		request.setAttribute(Constants.STATUS_MESSAGE_KEY,"38.false");
 		}
     	
-    	return mapping.findForward((String)request.getParameter(Constants.PAGEOF));
+    	return mapping.findForward(target);
     }
 }
