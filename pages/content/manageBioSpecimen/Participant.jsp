@@ -434,6 +434,22 @@
 							<!-- action buttons begins -->
 							<table cellpadding="4" cellspacing="0" border="0">
 								<tr>
+						   			<td nowrap class="formFieldNoBorders">
+										<html:radio styleClass="" property="forwardTo" value="<%=Constants.PARTICIPANT_FORWARD_TO_LIST[0][1]%>">
+										<label for="<%=Constants.PARTICIPANT_FORWARD_TO_LIST[0][0]%>">
+											<%=Constants.PARTICIPANT_FORWARD_TO_LIST[0][0]%>
+										</label>
+										</html:radio>
+									</td>
+
+									<td nowrap class="formFieldNoBorders">
+										<html:radio styleClass=""  property="forwardTo" value="<%=Constants.PARTICIPANT_FORWARD_TO_LIST[1][1]%>">
+										<label for="<%=Constants.PARTICIPANT_FORWARD_TO_LIST[1][0]%>">
+											<%=Constants.PARTICIPANT_FORWARD_TO_LIST[1][0]%>
+										</label>
+										</html:radio>
+									</td>
+									
 						   			<td>
 						   				<html:submit styleClass="actionButton" disabled="true">
 						   					<bean:message key="buttons.getClinicalData"/>
