@@ -1,7 +1,7 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
-<%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
+<%@ page import="edu.wustl.catissuecore.util.global.Constants,edu.wustl.common.beans.SessionDataBean;"%>
 
 <table summary="" cellpadding="0" cellspacing="0" border="0" width="100%" height="100%">
     <tr>
@@ -97,12 +97,20 @@
 						      </td>
 						    </tr>	
 		
-
 						</html:form>
 						</logic:empty>
 						<logic:notEmpty scope="session"	name="<%=Constants.SESSION_DATA%>">
-								<tr>
-									<TD class="welcomeContent"><bean:message key="app.welcomeNote"/></TD>
+							<tr>
+								<TD class="welcomeContent">
+		
+						<%Object obj = request.getSession().getAttribute(Constants.SESSION_DATA);
+						  if(obj!=null){
+						      SessionDataBean sessionData = (SessionDataBean) obj;
+						 %>
+						
+				<%=sessionData.getFirstName()%>&nbsp;<%=sessionData.getLastName()%>&nbsp;
+						 <%}%>			
+									<bean:message key="app.welcomeNote"/></TD>
 								</tr>			
 						</logic:notEmpty>
                           </table>
