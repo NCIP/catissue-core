@@ -459,10 +459,14 @@ public class StorageContainerForm extends AbstractActionForm
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 						ApplicationProperties.getValue("storageContainer.site")));
 			}
-			else if (checkedButton == 2 && parentContainerId == 0)
+			else if (checkedButton == 2)
 			{
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
-						ApplicationProperties.getValue("storageContainer.parentContainer")));
+                if(!validator.isNumeric(String.valueOf(positionDimensionOne),1) || !validator.isNumeric(String.valueOf(positionDimensionTwo),1) || !validator.isNumeric(String.valueOf(parentContainerId),1))
+                {
+	                  errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+	                  "errors.item.format", ApplicationProperties
+	                          .getValue("storageContainer.parentContainer")));
+                }
 			}
 
 			checkValidNumber(String.valueOf(noOfContainers), "storageContainer.noOfContainers",
@@ -473,26 +477,6 @@ public class StorageContainerForm extends AbstractActionForm
             	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("site.activityStatus")));
             }
 			
-			// VALIDATIONS FOR DIMENSION 1.
-            if (validator.isEmpty(String.valueOf(oneDimensionCapacity)))
-            {
-                errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("storageContainer.oneDimension")));
-            }
-            else
-            {
-            	if(!validator.isNumeric(String.valueOf(oneDimensionCapacity)))
-            	{
-            		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("storageContainer.oneDimension")));
-            	}
-            }
-
-            // validations for dimension 2
-            if (!validator.isEmpty(String.valueOf(twoDimensionCapacity)) && (!validator.isNumeric(String.valueOf(twoDimensionCapacity))))
-            {
-            	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("storageContainer.twoDimension")));
-            }
-    
-
             // validations for temperature
             if (!validator.isEmpty(defaultTemperature ) && (!validator.isDouble(defaultTemperature,false)))
             {

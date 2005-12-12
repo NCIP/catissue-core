@@ -271,12 +271,7 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
             {
            		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("transfereventparameters.fromposition")));
             }
-         	
-//          check the TO position
-//         	if (validator.isEmpty(String.valueOf(positionInStorageContainer )))
-//            {
-//           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("transfereventparameters.toposition")));
-//            }
+    
             if(validator.isEmpty(positionDimensionOne) || validator.isEmpty(positionDimensionTwo) || validator.isEmpty(storageContainer ))
             {
                   errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
@@ -285,7 +280,7 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
             }
             else
             {
-                if(!validator.isNumeric(positionDimensionOne,0) || !validator.isNumeric(positionDimensionTwo,0) || !validator.isNumeric(storageContainer ,0))
+                if(!validator.isNumeric(positionDimensionOne,1) || !validator.isNumeric(positionDimensionTwo,1) || !validator.isNumeric(storageContainer ,1))
                 {
 	                  errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 	                  "errors.item.format", ApplicationProperties
@@ -293,41 +288,6 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
                 }
             	
             }
-
-         	
-//            //	 checks the fromPositionDimensionOne 
-//         	if (!validator.isNumeric(String.valueOf(fromPositionDimensionOne)))
-//            {
-//           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("transfereventparameters.frompositiondimensionone")));
-//            }
-//
-//            //	 checks the fromPositionDimensionTwo 
-//         	if (!validator.isNumeric(String.valueOf(fromPositionDimensionTwo) ))
-//            {
-//           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("transfereventparameters.frompositiondimensiontwo")));
-//            }
-//
-//         	//	 checks the toPositionDimensionOne 
-//         	if (!validator.isNumeric(String.valueOf(toPositionDimensionOne)) )
-//            {
-//           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("transfereventparameters.topositiondimensionone")));
-//            }
-//            //	 checks the toPositionDimensionTwo 
-//         	if (!validator.isNumeric(String.valueOf(toPositionDimensionTwo)))
-//            {
-//           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("transfereventparameters.topositiondimensiontwo")));
-//            }
-//             //	 checks the fromStorageContainerId 
-//         	if (fromStorageContainerId <= 0 )
-//            {
-//           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("transfereventparameters.fromstoragecontainerid")));
-//            }
-//            //	 checks the toStorageContainerId
-//         	if (toStorageContainerId  <= 0 )
-//            {
-//           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("transfereventparameters.tostoragecontainerid")));
-//            }
-
          }
          catch(Exception excp)
          {
