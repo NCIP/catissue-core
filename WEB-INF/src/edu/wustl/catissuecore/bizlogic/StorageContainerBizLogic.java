@@ -465,6 +465,37 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 				+ edu.wustl.common.util.Utility.getArrayString(objectIds)
 				+ " userId:" + userId + " roleId:" + roleId + " assignToUser:"
 				+ assignToUser);
+		Logger.out.debug("assignOeration..................."+assignOperation);
+		if (assignOperation == Constants.PRIVILEGE_DEASSIGN)
+		{
+		    String [] selectColumnNames = {"parentContainer.systemIdentifier","site.systemIdentifier"};
+	        String [] whereColumnNames = {"systemIdentifier"};
+	        List listOfSubElement = super.getRelatedObjects(dao, StorageContainer.class, selectColumnNames, whereColumnNames, objectIds);
+
+	        Iterator iterator = listOfSubElement.iterator();
+	        String userName = SecurityManager.getInstance(StorageContainerBizLogic.class).getUserById(userId.toString()).getLoginName();
+	        while (iterator.hasNext())
+	        {
+	            Object[] row = (Object[]) iterator.next();
+	            if ((row[0] == null) || (row[0].equals("")))
+	            {
+	                boolean permission = SecurityManager.getInstance(StorageContainerBizLogic.class).checkPermission(userName,Site.class.getName(),row[1].toString(),privilegeName);
+	                if (permission == true)
+	                {
+	                    throw new DAOException("Error : First de-assign privilege of the Parent Site with system identifier "+row[1].toString());
+	                }
+	            }
+	            else
+	            {
+	                boolean permission = SecurityManager.getInstance(StorageContainerBizLogic.class).checkPermission(userName,objectType.getName(),row[0].toString(),privilegeName);
+	                if (permission == true)
+	                {
+	                    throw new DAOException("Error : First de-assign privilege of the Parent Container with system identifier "+row[0].toString());
+	                }
+	            }
+	        }
+		}
+		
 		super.setPrivilege(dao, privilegeName, objectType, objectIds, userId,
 				roleId, assignToUser, assignOperation);
 		
@@ -493,6 +524,24 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 
 	}
 	
+	/**
+     * @param dao
+     * @param objectIds
+     * @param assignToUser
+     * @param roleId
+     * @throws DAOException
+     * @throws SMException
+     */
+    public void assignPrivilegeToRelatedObjectsForSite(DAO dao, String privilegeName, Long[] objectIds, Long userId, String roleId, boolean assignToUser, boolean assignOperation) throws SMException, DAOException
+    {
+        List listOfSubElement = super.getRelatedObjects(dao, StorageContainer.class, "site", objectIds);
+        
+    	if(!listOfSubElement.isEmpty())
+    	{
+    	    super.setPrivilege(dao,privilegeName,StorageContainer.class,Utility.toLongArray(listOfSubElement),userId, roleId, assignToUser, assignOperation);
+    	}
+    }
+    
 	// This method sets the Storage Type & Site (if applicable) of this
 	// container.
 	private void loadSite(DAO dao, StorageContainer container)
