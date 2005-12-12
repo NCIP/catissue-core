@@ -13,7 +13,6 @@ import edu.wustl.catissuecore.actionForm.ConfigureResultViewForm;
 import edu.wustl.catissuecore.actionForm.DistributionReportForm;
 import edu.wustl.catissuecore.domain.Distribution;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.util.logger.Logger;
 
 /**
  * This is the action class for displaying the Distribution report
@@ -27,16 +26,25 @@ public class DistributionReportAction extends BaseDistributionReportAction
 															HttpServletResponse response) throws Exception
 	{
 		ConfigureResultViewForm configForm = (ConfigureResultViewForm)form;
-		//Retrieve the distribution ID
+		
+		//Retrieve the distribution ID which is set in CommonAddEdit Action 
 		Long distributionId = (Long)request.getAttribute(Constants.DISTRIBUTION_ID);
+		
+		//retrieve from configuration form if it is null
 		if(distributionId==null)
-			distributionId = new Long(request.getParameter(Constants.SYSTEM_IDENTIFIER));
-		Logger.out.debug("distributionId "+distributionId);
-		if(distributionId!=null)
-    		configForm.setDistributionId(distributionId);
-    	else
     		distributionId = configForm.getDistributionId();
 		
+		/*Retrieve from request parameter if it null. This request parameter is set in Distribution page incase the Report button 
+		 *is clicked from Distribution Edit page
+		 */ 
+		if(distributionId==null)
+		{
+			distributionId = new Long(request.getParameter(Constants.SYSTEM_IDENTIFIER));
+		}
+		
+		//Set it in configuration form if it is not null 
+		if(distributionId!=null)
+    		configForm.setDistributionId(distributionId);
 			
     	Distribution dist =  getDistribution(distributionId, getSessionData(request), Constants.CLASS_LEVEL_SECURE_RETRIEVE);
     	
