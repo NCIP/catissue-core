@@ -533,6 +533,8 @@ create table CATISSUE_USER (
    STATUS_COMMENT text,
    primary key (IDENTIFIER)
 );
+insert into catissue_user (IDENTIFIER, LOGIN_NAME, PASSWORD, FIRST_NAME, LAST_NAME, ACTIVITY_STATUS, CSM_USER_ID) values (1,'admin@admin.com','6c416f576765696c6e63316f326d3365','Admin','Admin','Active',1);
+
 create table CATISSUE_STORAGE_CONTAINER_CAPACITY (
    IDENTIFIER bigint not null auto_increment,
    ONE_DIMENSION_CAPACITY integer,
