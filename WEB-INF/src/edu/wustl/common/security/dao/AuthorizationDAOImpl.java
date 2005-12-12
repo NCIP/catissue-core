@@ -25,14 +25,17 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
 
+import net.sf.hibernate.Criteria;
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.SessionFactory;
 import net.sf.hibernate.Transaction;
+import net.sf.hibernate.expression.Expression;
 
 /**
  * @author aarti_sharma
@@ -210,135 +213,98 @@ public class AuthorizationDAOImpl extends
 	}
 	
 	
-	public void deAssignProtectionElements(String protectionGroupName,
-			String protectionElementObjectId) throws CSTransactionException {
+
+	//changes to load the object and then delete it
+	//else it throws exception
+	public void removeProtectionElementsFromProtectionGroup(
+			String protectionGroupId, String[] protectionElementIds)
+			throws CSTransactionException {
+		Session s = null;
+		Transaction t = null;
 
 		try {
-			ProtectionGroup protectionGroup = this
-					.getProtectionGroup(protectionGroupName);
+			s = sf.openSession();
+			t = s.beginTransaction();
 
-			ProtectionElement protectionElement = this
-					.getProtectionElement(protectionElementObjectId);
+			ProtectionGroup protectionGroup = (ProtectionGroup) this
+					.getObjectByPrimaryKey(s, ProtectionGroup.class, new Long(
+							protectionGroupId));
 
-//			String pgId = protectionGroup.getProtectionGroupId().toString();
-//			String[] peIds = { protectionElement.getProtectionElementId()
-//					.toString() };
-			
-			
-			Set protectionElementsSet = protectionGroup.getProtectionElements();
-			protectionElementsSet.remove(protectionElement);
-			protectionGroup.setProtectionElements(protectionElementsSet);
-			modifyObject(protectionGroup);
+			for (int i = 0; i < protectionElementIds.length; i++) {
+				ProtectionGroupProtectionElement intersection = new ProtectionGroupProtectionElement();
 
-//			this.removeProtectionElementsFromProtectionGroup(pgId, peIds);
-		} catch (Exception ex) {
-			if (log.isDebugEnabled()) {
-				log
-						.debug("Authorization|||deAssignProtectionElements|Failure|Error Occured in deassigning Protection Group "
-								+ protectionGroupName
-								+ " and Protection Element "
-								+ protectionElementObjectId
-								+ "|"
-								+ ex.getMessage());
+				List list =  s.find("from gov.nih.nci.security.dao.hibernate.ProtectionGroupProtectionElement protectionGroupProtectionElement" +
+						" where protectionGroupProtectionElement.protectionElement.protectionElementId="+protectionElementIds[i]+
+						" and protectionGroupProtectionElement.protectionGroup.protectionGroupId="+protectionGroupId);
+				if(list!=null && list.size()>0)
+					this.removeObject(list.get(0));
+				
 			}
-			throw new CSTransactionException(
-					"An error occured in deassigning Protection Element from Protection Group\n"
-							+ ex.getMessage(), ex);
-		}
-		if (log.isDebugEnabled())
+			
+			
+			
+			t.commit();
+			
+
+		} catch (Exception ex) {
+			log.error(ex);
+			try {
+				t.rollback();
+			} catch (Exception ex3) {
+				if (log.isDebugEnabled())
+					log
+							.debug("Authorization|||removeProtectionElementsFromProtectionGroup|Failure|Error in Rolling Back Transaction|"
+									+ ex3.getMessage());
+			}
 			log
-					.debug("Authorization|||deAssignProtectionElements|Success|Successful in deassigning Protection Group "
-							+ protectionGroupName
-							+ " and Protection Element "
-							+ protectionElementObjectId + "|");
+					.debug("Authorization|||removeProtectionElementsFromProtectionGroup|Failure|Error Occured in deassigning Protection Elements "
+							+ StringUtilities
+									.stringArrayToString(protectionElementIds)
+							+ " to Protection Group"
+							+ protectionGroupId
+							+ "|"
+							+ ex.getMessage());
+			throw new CSTransactionException(
+					"An error occured in deassigning Protection Elements from Protection Group\n"
+							+ ex.getMessage(), ex);
+		} finally {
+			try {
+				s.close();
+			} catch (Exception ex2) {
+				if (log.isDebugEnabled())
+					log
+							.debug("Authorization|||removeProtectionElementsFromProtectionGroup|Failure|Error in Closing Session |"
+									+ ex2.getMessage());
+			}
+		}
+		log
+				.debug("Authorization|||removeProtectionElementsFromProtectionGroup|Success|Success in deassigning Protection Elements "
+						+ StringUtilities
+								.stringArrayToString(protectionElementIds)
+						+ " to Protection Group" + protectionGroupId + "|");
 	}
 	
-//	public void removeProtectionElementsFromProtectionGroup(
-//			String protectionGroupId, String[] protectionElementIds)
-//			throws CSTransactionException {
-//		Session s = null;
-//		Transaction t = null;
-//
-//		try {
-//			s = sf.openSession();
-//			t = s.beginTransaction();
-//
-//			ProtectionGroup protectionGroup = (ProtectionGroup) this
-//					.getObjectByPrimaryKey(s, ProtectionGroup.class, new Long(
-//							protectionGroupId));
-//			Set protectionElementsSet = protectionGroup.getProtectionElements();
-//
-//			for (int i = 0; i < protectionElementIds.length; i++) {
-//				ProtectionElement protectionElement = (ProtectionElement) this
-//						.getObjectByPrimaryKey(s, ProtectionElement.class,
-//								new Long(protectionElementIds[i]));
-//				protectionElementsSet.remove(protectionElement);
-//			}
-//			protectionGroup.setProtectionElements(protectionElementsSet);
-//			modifyObject(protectionGroup);
-//			
-//			t.commit();
-//			
-//
-//		} catch (Exception ex) {
-//			log.error(ex);
-//			try {
-//				t.rollback();
-//			} catch (Exception ex3) {
-//				if (log.isDebugEnabled())
-//					log
-//							.debug("Authorization|||removeProtectionElementsFromProtectionGroup|Failure|Error in Rolling Back Transaction|"
-//									+ ex3.getMessage());
-//			}
-//			log
-//					.debug("Authorization|||removeProtectionElementsFromProtectionGroup|Failure|Error Occured in deassigning Protection Elements "
-//							+ StringUtilities
-//									.stringArrayToString(protectionElementIds)
-//							+ " to Protection Group"
-//							+ protectionGroupId
-//							+ "|"
-//							+ ex.getMessage());
-//			throw new CSTransactionException(
-//					"An error occured in deassigning Protection Elements from Protection Group\n"
-//							+ ex.getMessage(), ex);
-//		} finally {
-//			try {
-//				s.close();
-//			} catch (Exception ex2) {
-//				if (log.isDebugEnabled())
-//					log
-//							.debug("Authorization|||removeProtectionElementsFromProtectionGroup|Failure|Error in Closing Session |"
-//									+ ex2.getMessage());
-//			}
-//		}
-//		log
-//				.debug("Authorization|||removeProtectionElementsFromProtectionGroup|Success|Success in deassigning Protection Elements "
-//						+ StringUtilities
-//								.stringArrayToString(protectionElementIds)
-//						+ " to Protection Group" + protectionGroupId + "|");
-//	}
-//	
-//	
-//	private Object getObjectByPrimaryKey(Session s, Class objectType,
-//			Long primaryKey) throws HibernateException,
-//			CSObjectNotFoundException {
-//
-//		if (primaryKey == null) {
-//			throw new CSObjectNotFoundException("The primary key can't be null");
-//		}
-//		Object obj = s.load(objectType, primaryKey);
-//
-//		if (obj == null) {
-//			log
-//					.debug("Authorization|||getObjectByPrimaryKey|Failure|Not found object of type "
-//							+ objectType.getName() + "|");
-//			throw new CSObjectNotFoundException(objectType.getName()
-//					+ " not found");
-//		}
-//		log
-//				.debug("Authorization|||getObjectByPrimaryKey|Success|Success in retrieving object of type "
-//						+ objectType.getName() + "|");
-//		return obj;
-//	}
+	
+	private Object getObjectByPrimaryKey(Session s, Class objectType,
+			Long primaryKey) throws HibernateException,
+			CSObjectNotFoundException {
+
+		if (primaryKey == null) {
+			throw new CSObjectNotFoundException("The primary key can't be null");
+		}
+		Object obj = s.load(objectType, primaryKey);
+
+		if (obj == null) {
+			log
+					.debug("Authorization|||getObjectByPrimaryKey|Failure|Not found object of type "
+							+ objectType.getName() + "|");
+			throw new CSObjectNotFoundException(objectType.getName()
+					+ " not found");
+		}
+		log
+				.debug("Authorization|||getObjectByPrimaryKey|Success|Success in retrieving object of type "
+						+ objectType.getName() + "|");
+		return obj;
+	}
 
 }
