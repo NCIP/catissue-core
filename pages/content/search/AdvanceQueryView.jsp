@@ -182,7 +182,7 @@
 		//var sum = participantCount + cProtocolCount + DProtocolCount + sCGroupCount + distributionCount + specimenCount;
 		var sum = participantCount + cProtocolCount +  sCGroupCount +  specimenCount;
 		
-		if(participantCount == sum) 
+		if( (participantCount == sum) && (participantCount == 1) ) 
 		{
 			/*var PItem = document.getElementById('<%=Constants.P%>');
 			PItem.className="linkChange";
@@ -223,7 +223,7 @@
 			
 			
 		}
-		else if(cProtocolCount == sum)
+		else if( (cProtocolCount == sum) && (cProtocolCount == 1) )
 		{
 			//alert("clicked coll prot");
 			
@@ -259,7 +259,7 @@
 			orItem.innerHTML ="&nbsp;&nbsp;<img src='images/graydot.gif' alt='OR' />&nbsp;&nbsp;<a HREF='"+link+"'><%=Constants.ADVANCED_QUERY_OR%></a>"
 						
 		}
-		else if(sCGroupCount == sum)
+		else if( (sCGroupCount == sum) && (sCGroupCount == 1))
 		{
 			var sItem = document.getElementById('<%=Constants.S%>');
 			sItem.className="linkChange";
@@ -289,7 +289,7 @@
 			
 			
 		}
-		else if(specimenCount == sum)
+		else if( (specimenCount == sum) && (specimenCount == 1))
 		{
 			var editItem = document.getElementById('<%=Constants.EDIT%>');
 			editItem.className="formTitle";
