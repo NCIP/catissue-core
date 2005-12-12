@@ -54,6 +54,10 @@ public abstract class AbstractBizLogic
      */
     protected abstract void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException;
     
+    public abstract List retrieve(String sourceObjectName, String[] selectColumnName, String[] whereColumnName,
+            String[] whereColumnCondition, Object[] whereColumnValue,
+            String joinCondition) throws DAOException;
+            
     /**
      * Retrieves the records for class name in sourceObjectName according to field values passed.
      * @param whereColumnName An array of field names.
