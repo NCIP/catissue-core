@@ -13,7 +13,6 @@ package edu.wustl.catissuecore.action;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
@@ -29,12 +28,10 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.actionForm.AdvanceSearchForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.ShoppingCartBizLogic;
-import edu.wustl.catissuecore.dao.JDBCDAO;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.query.ShoppingCart;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;
-import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.util.ExportReport;
 import edu.wustl.common.util.SendFile;
 import edu.wustl.common.util.logger.Logger;
@@ -82,17 +79,23 @@ public class ShoppingCartAction  extends BaseAction
         {
         	if(operation.equals(Constants.ADD)) //IF OPERATION IS "ADD"
 	        {
-        		//AdvanceSearchForm advForm = (AdvanceSearchForm)form;
+        		//Get the checkbox map values
         		Map map = advForm.getValues();
 	        	Logger.out.debug("map of shopping form:"+map);
 	        	Object obj[] = map.keySet().toArray();
 	        	
-	        	SessionDataBean sessionDataBean = getSessionData(request);
+	        	//Get the column Ids from session
         		Map columnIdsMap = (Map)session.getAttribute(Constants.COLUMN_ID_MAP);
+        		
+        		//Get the select column List from session to get the specimen data
         		String[] selectedColumns = (String[])session.getAttribute(Constants.SELECT_COLUMN_LIST);
+        		
+        		//Get the current spreasheet data to retrieve the specimen id data
         		List spreadsheetData = (List)session.getAttribute(Constants.SPREADSHEET_DATA_LIST);
         		
         		Logger.out.debug("column ids map in shopping cart"+columnIdsMap);
+        		
+        		//get the specimen column id from the map
         		int specimenColumnId = ((Integer)columnIdsMap.get(Constants.SPECIMEN+"."+Constants.IDENTIFIER)).intValue()-1;
         		Logger.out.debug("specimen column id in shopping cart"+specimenColumnId);
         		int spreadsheetSpecimenIndex = 0;
