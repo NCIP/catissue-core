@@ -29,12 +29,15 @@ public class DistributionReportAction extends BaseDistributionReportAction
 		ConfigureResultViewForm configForm = (ConfigureResultViewForm)form;
 		//Retrieve the distribution ID
 		Long distributionId = (Long)request.getAttribute(Constants.DISTRIBUTION_ID);
+		if(distributionId==null)
+			distributionId = new Long(request.getParameter(Constants.SYSTEM_IDENTIFIER));
 		Logger.out.debug("distributionId "+distributionId);
 		if(distributionId!=null)
     		configForm.setDistributionId(distributionId);
     	else
     		distributionId = configForm.getDistributionId();
-    	
+		
+			
     	Distribution dist =  getDistribution(distributionId, getSessionData(request), Constants.CLASS_LEVEL_SECURE_RETRIEVE);
     	
     	//Retrieve the distributed items data
