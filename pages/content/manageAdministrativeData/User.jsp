@@ -170,6 +170,13 @@ function handleStatus(status)
 						</td>
 					</tr>
 					
+					<%
+						boolean readOnlyEmail = false;
+						if (operation.equals(Constants.EDIT))
+						{
+							readOnlyEmail = true;
+						}
+					%>
 					<tr>
 						<td class="formRequiredNotice" width="5">*</td>
 						<td class="formRequiredLabel">
@@ -178,7 +185,7 @@ function handleStatus(status)
 							</label>
 						</td>
 						<td class="formField">
-							<html:text styleClass="formFieldSized" maxlength="100"  size="30" styleId="emailAddress" property="emailAddress" />
+							<html:text styleClass="formFieldSized" maxlength="100"  size="30" styleId="emailAddress" property="emailAddress" readonly="<%=readOnlyEmail%>" />
 						</td>
 					</tr>
 
