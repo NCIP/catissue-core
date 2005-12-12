@@ -10,7 +10,11 @@ import gov.nih.nci.security.authorization.ObjectPrivilegeMap;
 import gov.nih.nci.security.authorization.domainobjects.Application;
 import gov.nih.nci.security.authorization.domainobjects.Privilege;
 import gov.nih.nci.security.authorization.domainobjects.ProtectionElement;
+import gov.nih.nci.security.authorization.domainobjects.ProtectionGroup;
+import gov.nih.nci.security.dao.hibernate.ProtectionGroupProtectionElement;
 import gov.nih.nci.security.exceptions.CSException;
+import gov.nih.nci.security.exceptions.CSObjectNotFoundException;
+import gov.nih.nci.security.exceptions.CSTransactionException;
 import gov.nih.nci.security.util.StringUtilities;
 
 import java.sql.Connection;
@@ -19,12 +23,16 @@ import java.sql.ResultSet;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Iterator;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 
+import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.SessionFactory;
+import net.sf.hibernate.Transaction;
 
 /**
  * @author aarti_sharma
@@ -199,6 +207,95 @@ public class AuthorizationDAOImpl extends
 		}
 
 		return result;
+	}
+	
+	
+	public void removeProtectionElementsFromProtectionGroup(
+			String protectionGroupId, String[] protectionElementIds)
+			throws CSTransactionException {
+		Session s = null;
+		Transaction t = null;
+
+		try {
+			s = sf.openSession();
+			t = s.beginTransaction();
+
+			ProtectionGroup protectionGroup = (ProtectionGroup) this
+					.getObjectByPrimaryKey(s, ProtectionGroup.class, new Long(
+							protectionGroupId));
+			Set protectionElementsSet = protectionGroup.getProtectionElements();
+
+			for (int i = 0; i < protectionElementIds.length; i++) {
+				ProtectionElement protectionElement = (ProtectionElement) this
+						.getObjectByPrimaryKey(s, ProtectionElement.class,
+								new Long(protectionElementIds[i]));
+				protectionElementsSet.remove(protectionElement);
+			}
+			protectionGroup.setProtectionElements(protectionElementsSet);
+			modifyObject(protectionGroup);
+			
+			t.commit();
+			
+
+		} catch (Exception ex) {
+			log.error(ex);
+			try {
+				t.rollback();
+			} catch (Exception ex3) {
+				if (log.isDebugEnabled())
+					log
+							.debug("Authorization|||removeProtectionElementsFromProtectionGroup|Failure|Error in Rolling Back Transaction|"
+									+ ex3.getMessage());
+			}
+			log
+					.debug("Authorization|||removeProtectionElementsFromProtectionGroup|Failure|Error Occured in deassigning Protection Elements "
+							+ StringUtilities
+									.stringArrayToString(protectionElementIds)
+							+ " to Protection Group"
+							+ protectionGroupId
+							+ "|"
+							+ ex.getMessage());
+			throw new CSTransactionException(
+					"An error occured in deassigning Protection Elements from Protection Group\n"
+							+ ex.getMessage(), ex);
+		} finally {
+			try {
+				s.close();
+			} catch (Exception ex2) {
+				if (log.isDebugEnabled())
+					log
+							.debug("Authorization|||removeProtectionElementsFromProtectionGroup|Failure|Error in Closing Session |"
+									+ ex2.getMessage());
+			}
+		}
+		log
+				.debug("Authorization|||removeProtectionElementsFromProtectionGroup|Success|Success in deassigning Protection Elements "
+						+ StringUtilities
+								.stringArrayToString(protectionElementIds)
+						+ " to Protection Group" + protectionGroupId + "|");
+	}
+	
+	
+	private Object getObjectByPrimaryKey(Session s, Class objectType,
+			Long primaryKey) throws HibernateException,
+			CSObjectNotFoundException {
+
+		if (primaryKey == null) {
+			throw new CSObjectNotFoundException("The primary key can't be null");
+		}
+		Object obj = s.load(objectType, primaryKey);
+
+		if (obj == null) {
+			log
+					.debug("Authorization|||getObjectByPrimaryKey|Failure|Not found object of type "
+							+ objectType.getName() + "|");
+			throw new CSObjectNotFoundException(objectType.getName()
+					+ " not found");
+		}
+		log
+				.debug("Authorization|||getObjectByPrimaryKey|Success|Success in retrieving object of type "
+						+ objectType.getName() + "|");
+		return obj;
 	}
 
 }
