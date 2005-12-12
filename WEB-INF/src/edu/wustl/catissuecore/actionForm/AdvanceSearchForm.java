@@ -328,7 +328,7 @@ public class AdvanceSearchForm extends ActionForm
         	
         	if(objectName.equals("Specimen"))
         	{
-        		validateEventParameters(validator,errors);
+        		//validateEventParameters(validator,errors);
         	}
         }
        
