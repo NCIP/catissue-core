@@ -2071,7 +2071,7 @@ PUBLIC
 			validate="true"
 			scope="request">
 			<forward name="pageOfAssignPrivileges" path=".catissuecore.assignPrivilegesDef" />
-			<forward name="failure" path=".catissuecore.assignPrivilegesPageDef" />
+			<forward name="failure" path="/AssignPrivilegesPage.do?pageOf=pageOfAssignPrivilegesPage" />
 			<forward name="access_denied" path="/Home.do" />
 		</action>
 		<!-- Assign Privileges Actions Ends -->
