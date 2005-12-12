@@ -127,10 +127,10 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 	   
 	   for(int i=0; i<listOfParticipant.size(); i++)
 	   {
-	       NameValueBean nameValueBean =(NameValueBean)listOfParticipant.get(i);
+	       NameValueBean participantBean =(NameValueBean)listOfParticipant.get(i);
 	       boolean isParticipantDisable=false;
 	       
-	       if(Long.parseLong(nameValueBean.getValue()) == -1)
+	       if(Long.parseLong(participantBean.getValue()) == -1)
 	       {
 	           listOfActiveParticipant.add(listOfParticipant.get(i));
 	           continue;
@@ -141,14 +141,11 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 	           if(Long.parseLong(((NameValueBean)listOfDisabledParticipant.get(j)).getValue()) == -1)
 	               continue;
 	          
-	           if(Long.parseLong(nameValueBean.getValue()) == Long.parseLong(((NameValueBean)listOfDisabledParticipant.get(j)).getValue()) )
+	           NameValueBean disabledParticipant = (NameValueBean)listOfDisabledParticipant.get(j);
+	           if(participantBean.getValue().equals(disabledParticipant.getValue()))
 	           {
 	               isParticipantDisable=true;
 	               break;
-	           }
-	           else
-	           {
-	               isParticipantDisable =false;
 	           }
 	       }
 	       if(isParticipantDisable==false)

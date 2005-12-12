@@ -225,9 +225,11 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 	           if(Long.parseLong(((NameValueBean)listOfParticipants.get(j)).getValue()) == -1)
 	               continue;
 	          
-	           if(Long.parseLong(nameValueBean.getValue()) == Long.parseLong(((NameValueBean)listOfParticipants.get(j)).getValue()) )
+	           NameValueBean participantsBean = (NameValueBean)listOfParticipants.get(j);
+	           if( nameValueBean.getValue().equals(participantsBean.getValue()) )
 	           {
 	               listOfActiveParticipant.add(listOfParticipants.get(j));
+	               break;
 	           }
 	       }
 	   }
