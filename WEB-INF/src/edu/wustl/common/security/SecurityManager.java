@@ -576,11 +576,11 @@ public class SecurityManager implements Permissions {
 		return list;
 	}
 
-	public void assignUserToGroup(String protectionGroupname, String userId)throws SMException
+	public void assignUserToGroup(String userGroupname, String userId)throws SMException
 	{
-	    Logger.out.debug(" userId: " + userId + " protectionGroupname:" + protectionGroupname);
+	    Logger.out.debug(" userId: " + userId + " userGroupname:" + userGroupname);
 	    
-	    if (userId == null || protectionGroupname == null)
+	    if (userId == null || userGroupname == null)
 	    {
 			Logger.out.debug(" Null or insufficient Parameters passed");
 			throw new SMException("Null or insufficient Parameters passed");
@@ -590,10 +590,17 @@ public class SecurityManager implements Permissions {
 		{
 		    UserProvisioningManager userProvisioningManager = getUserProvisioningManager();
 		    
-		    ProtectionGroup protectionGroup = getProtectionGroup(protectionGroupname);
-		    String[] groupIds = {protectionGroup.getProtectionGroupId().toString()};
-		    
-		    assignAdditionalGroupsToUser(userId, groupIds);
+		    Group group = getUserGroup(userGroupname);
+		    if (group != null)
+		    {
+		        String[] groupIds = {group.getGroupId().toString()};
+			    
+			    assignAdditionalGroupsToUser(userId, groupIds);
+		    }
+		    else
+		    {
+		        Logger.out.debug("No user group with name "+userGroupname+" is present");
+		    }
 		}
 		catch(CSException ex)
 		{
@@ -604,11 +611,11 @@ public class SecurityManager implements Permissions {
 		}
 	}
 	
-	public void removeUserFromGroup(String protectionGroupname, String userId)throws SMException
+	public void removeUserFromGroup(String userGroupname, String userId)throws SMException
 	{
-	    Logger.out.debug(" userId: " + userId + " protectionGroupname:" + protectionGroupname);
+	    Logger.out.debug(" userId: " + userId + " userGroupname:" + userGroupname);
 	    
-	    if (userId == null || protectionGroupname == null)
+	    if (userId == null || userGroupname == null)
 	    {
 			Logger.out.debug(" Null or insufficient Parameters passed");
 			throw new SMException("Null or insufficient Parameters passed");
@@ -618,8 +625,16 @@ public class SecurityManager implements Permissions {
 		{
 		    UserProvisioningManager userProvisioningManager = getUserProvisioningManager();
 		    
-		    ProtectionGroup protectionGroup = getProtectionGroup(protectionGroupname);
-		    userProvisioningManager.removeUserFromGroup(protectionGroup.getProtectionGroupId().toString(), userId);
+		    Group group = getUserGroup(userGroupname);
+		    
+		    if (group != null)
+		    {
+		        userProvisioningManager.removeUserFromGroup(group.getGroupId().toString(), userId);
+		    }
+		    else
+		    {
+		        Logger.out.debug("No user group with name "+userGroupname+" is present");
+		    }
 		}
 		catch(CSException ex)
 		{
@@ -630,7 +645,30 @@ public class SecurityManager implements Permissions {
 		}
 	}
 	
-	public void assignAdditionalGroupsToUser(String userId, String[] groupIds)
+	/**
+     * @param userGroupname
+     * @return
+     * @throws SMException
+     * @throws CSException
+     */
+    private Group getUserGroup(String userGroupname) throws SMException, CSException
+    {
+        Group group = new Group();
+        group.setGroupName(userGroupname);
+        SearchCriteria searchCriteria = new GroupSearchCriteria(group);
+        List list = getObjects(searchCriteria);
+        if (list.isEmpty() == false)
+        {
+            Logger.out.debug("list size********************"+list.size());
+            group = (Group) list.get(0);
+            
+            return group;
+        }
+        
+        return null;
+    }
+
+    public void assignAdditionalGroupsToUser(String userId, String[] groupIds)
 			throws SMException {
 		if (userId == null || groupIds == null || groupIds.length < 1) {
 			Logger.out.debug(" Null or insufficient Parameters passed");
