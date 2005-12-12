@@ -103,17 +103,18 @@
 							<tr>
 								<TD class="welcomeContent">
 		
-						<%Object obj = request.getSession().getAttribute(Constants.SESSION_DATA);
-						  if(obj!=null){
-						      SessionDataBean sessionData = (SessionDataBean) obj;
-						 %>
-						
-				<%=sessionData.getFirstName()%>&nbsp;<%=sessionData.getLastName()%>&nbsp;
-						 <%}%>			
-									<bean:message key="app.welcomeNote"/></TD>
-								</tr>			
+									<%Object obj = request.getSession().getAttribute(Constants.SESSION_DATA);
+									  if(obj!=null){
+									      SessionDataBean sessionData = (SessionDataBean) obj;
+									 %>
+									
+							         Dear <%=sessionData.getLastName()%>&nbsp;<%=sessionData.getFirstName()%>, <br>
+									 <%}%>			
+										<bean:message key="app.welcomeNote"/>
+								</TD>
+							</tr>			
 						</logic:notEmpty>
-                          </table>
+                        </table>
                         </td>
                       </tr>
 					 
