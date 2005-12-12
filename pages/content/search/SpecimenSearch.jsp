@@ -635,6 +635,7 @@
 
 <!--  SPECIMEN EVENT PARAMETERS -->
 <table summary="" cellpadding="5" cellspacing="0" border="0" width="650">
+<%--
 <tr>
 	<td class="formTitle" height="25" nowrap colspan="4">
 		<bean:message key="buttons.specimenEventParameters"/>
@@ -764,7 +765,7 @@
 
 <tbody id="newEventRow">
 </tbody>
-
+--%>
 <tr>
 	<td colspan="4">&nbsp;</td>
 </tr>
