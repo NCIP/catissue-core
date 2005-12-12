@@ -576,6 +576,60 @@ public class SecurityManager implements Permissions {
 		return list;
 	}
 
+	public void assignUserToGroup(String protectionGroupname, String userId)throws SMException
+	{
+	    Logger.out.debug(" userId: " + userId + " protectionGroupname:" + protectionGroupname);
+	    
+	    if (userId == null || protectionGroupname == null)
+	    {
+			Logger.out.debug(" Null or insufficient Parameters passed");
+			throw new SMException("Null or insufficient Parameters passed");
+		}
+	    
+		try
+		{
+		    UserProvisioningManager userProvisioningManager = getUserProvisioningManager();
+		    
+		    ProtectionGroup protectionGroup = getProtectionGroup(protectionGroupname);
+		    String[] groupIds = {protectionGroup.getProtectionGroupId().toString()};
+		    
+		    assignAdditionalGroupsToUser(userId, groupIds);
+		}
+		catch(CSException ex)
+		{
+		    Logger.out.fatal("The Security Service encountered "
+					+ "a fatal exception.", ex);
+			throw new SMException(
+					"The Security Service encountered a fatal exception.", ex);
+		}
+	}
+	
+	public void removeUserFromGroup(String protectionGroupname, String userId)throws SMException
+	{
+	    Logger.out.debug(" userId: " + userId + " protectionGroupname:" + protectionGroupname);
+	    
+	    if (userId == null || protectionGroupname == null)
+	    {
+			Logger.out.debug(" Null or insufficient Parameters passed");
+			throw new SMException("Null or insufficient Parameters passed");
+		}
+	    
+		try
+		{
+		    UserProvisioningManager userProvisioningManager = getUserProvisioningManager();
+		    
+		    ProtectionGroup protectionGroup = getProtectionGroup(protectionGroupname);
+		    userProvisioningManager.removeUserFromGroup(protectionGroup.getProtectionGroupId().toString(), userId);
+		}
+		catch(CSException ex)
+		{
+		    Logger.out.fatal("The Security Service encountered "
+					+ "a fatal exception.", ex);
+			throw new SMException(
+					"The Security Service encountered a fatal exception.", ex);
+		}
+	}
+	
 	public void assignAdditionalGroupsToUser(String userId, String[] groupIds)
 			throws SMException {
 		if (userId == null || groupIds == null || groupIds.length < 1) {
@@ -873,7 +927,7 @@ public class SecurityManager implements Permissions {
 			}
 		}
 	}
-
+	
 	/**
 	 * This method creates protection elements from the protection objects
 	 * passed and associate them with respective static groups they should be
@@ -1300,7 +1354,7 @@ public class SecurityManager implements Permissions {
 	//            Logger.out.debug("user:" + user + " username:" + userName);
 	//        }
 	//    }
-
+	
 	/**
 	 * This method assigns privilege by privilegeName to the user identified by
 	 * userId on the objects identified by objectIds
@@ -1345,14 +1399,25 @@ public class SecurityManager implements Permissions {
 				if (privilegeName.equals("USE"))
 			    {
 				    protectionGroupName = "PG_" + userId + "_ROLE_" + role.getId();
-				    protectionGroup = getProtectionGroup(protectionGroupName);
 				    
-			        Logger.out.debug("Assign Protection elements");
-					//Assign Protection elements to Protection Group
-					assignProtectionElements(protectionGroup
-							.getProtectionGroupName(), objectType, objectIds);
-					
-					assignUserRoleToProtectionGroup(userId, roles, protectionGroup, assignOperation);
+					if (assignOperation == Constants.PRIVILEGE_ASSIGN)
+					{
+					    Logger.out.debug("Assign Protection elements");
+					    
+					    protectionGroup = getProtectionGroup(protectionGroupName);
+					    
+					    // Assign Protection elements to Protection Group
+					    assignProtectionElements(protectionGroup
+								.getProtectionGroupName(), objectType, objectIds);
+					    
+					    assignUserRoleToProtectionGroup(userId, roles, protectionGroup, assignOperation);
+					}
+					else
+					{
+					    Logger.out.debug("De Assign Protection elements");
+					    Logger.out.debug("protectionGroupName : "+protectionGroupName+" objectType : "+objectType+" objectIds : "+Utility.getArrayString(objectIds)); 
+					    deAssignProtectionElements(protectionGroupName,objectType,objectIds);
+					}
 			    }
 				else
 				{
@@ -1502,33 +1567,61 @@ public class SecurityManager implements Permissions {
 				roleName = privilegeName + "_ONLY";
 				role = getRole(roleName);
 				
-				for (int i = 0; i < objectIds.length;i++)
-				{
-
-					//Getting Appropriate Group
-					// Protection Group Name is generated as
-					// PG_<<userID>>_ROLE_<<roleID>>
-	//				protectionGroupName = "PG_GROUP_" + groupId + "_ROLE_"
-	//						+ role.getId();
-					Logger.out.debug("objectType............................"+objectType);
-				    if (objectType.getName().equals("edu.wustl.catissuecore.domain.CollectionProtocol"))
-				        protectionGroupName = Constants.getCollectionProtocolPGName(objectIds[i]);
-				    else if (objectType.getName().equals("edu.wustl.catissuecore.domain.DistributionProtocol"))
-				        protectionGroupName = Constants.getDistributionProtocolPGName(objectIds[i]);
+				Set roles = new HashSet();
+				roles.add(role);
+				
+				if (privilegeName.equals("USE"))
+			    {
+				    protectionGroupName = "PG_GROUP_" + groupId + "_ROLE_" + role.getId();
 				    
-					protectionGroup = getProtectionGroup(protectionGroupName);
+				    if (assignOperation == Constants.PRIVILEGE_ASSIGN)
+					{
+				        protectionGroup = getProtectionGroup(protectionGroupName);
+					    
+				        Logger.out.debug("Assign Protection elements");
+						//Assign Protection elements to Protection Group
+						assignProtectionElements(protectionGroup
+								.getProtectionGroupName(), objectType, objectIds);
+					    
+					    assignGroupRoleToProtectionGroup(Long.valueOf(groupId), roles,
+								protectionGroup, assignOperation);
+					}
+					else
+					{
+					    Logger.out.debug("De Assign Protection elements");
+					    
+					    deAssignProtectionElements(protectionGroupName, objectType, objectIds);
+					}
+			    }
+				else
+				{
+				
+					for (int i = 0; i < objectIds.length;i++)
+					{
 	
-	//				Logger.out.debug("Assign Protection elements");
-	//				//Assign Protection elements to Protection Group
-	//				assignProtectionElements(protectionGroup
-	//						.getProtectionGroupName(), objectType, objectIds);
-	
-					Logger.out.debug("Assign Group Role To Protection Group");
-					//Assign User Role To Protection Group
-					Set roles = new HashSet();
-					roles.add(role);
-					assignGroupRoleToProtectionGroup(Long.valueOf(groupId), roles,
-							protectionGroup, assignOperation);
+						//Getting Appropriate Group
+						// Protection Group Name is generated as
+						// PG_<<userID>>_ROLE_<<roleID>>
+		//				protectionGroupName = "PG_GROUP_" + groupId + "_ROLE_"
+		//						+ role.getId();
+						Logger.out.debug("objectType............................"+objectType);
+					    if (objectType.getName().equals("edu.wustl.catissuecore.domain.CollectionProtocol"))
+					        protectionGroupName = Constants.getCollectionProtocolPGName(objectIds[i]);
+					    else if (objectType.getName().equals("edu.wustl.catissuecore.domain.DistributionProtocol"))
+					        protectionGroupName = Constants.getDistributionProtocolPGName(objectIds[i]);
+					    
+						protectionGroup = getProtectionGroup(protectionGroupName);
+		
+		//				Logger.out.debug("Assign Protection elements");
+		//				//Assign Protection elements to Protection Group
+		//				assignProtectionElements(protectionGroup
+		//						.getProtectionGroupName(), objectType, objectIds);
+		
+						Logger.out.debug("Assign Group Role To Protection Group");
+						//Assign User Role To Protection Group
+						assignGroupRoleToProtectionGroup(Long.valueOf(groupId), roles,
+								protectionGroup, assignOperation);
+					}
 				}
 
 			} catch (CSException csex) {
