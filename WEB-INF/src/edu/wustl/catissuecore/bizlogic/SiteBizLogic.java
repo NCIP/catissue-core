@@ -17,6 +17,7 @@ import java.util.Set;
 import edu.wustl.catissuecore.dao.DAO;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
@@ -103,6 +104,8 @@ public class SiteBizLogic extends DefaultBizLogic
 	    Logger.out.debug(" privilegeName:"+privilegeName+" objectType:"+objectType+" objectIds:"+edu.wustl.common.util.Utility.getArrayString(objectIds)+" userId:"+userId+" roleId:"+roleId+" assignToUser:"+assignToUser);
 	    super.setPrivilege(dao,privilegeName,objectType,objectIds,userId, roleId, assignToUser,assignOperation);
 	    
+	    StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) BizLogicFactory.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
+	    storageContainerBizLogic.assignPrivilegeToRelatedObjectsForSite(dao, privilegeName, objectIds, userId, roleId, assignToUser, assignOperation);
 //	    //Giving privilege on related object ids as well
 //	    List relatedAddressObjectsIds = super.getRelatedObjects(dao,Site.class,new String[] {"address."+Constants.SYSTEM_IDENTIFIER},new String[] {Constants.SYSTEM_IDENTIFIER}, objectIds);
 //	    super.setPrivilege(dao,privilegeName,Address.class,Utility.toLongArray(relatedAddressObjectsIds),userId, roleId, assignToUser, assignOperation);
