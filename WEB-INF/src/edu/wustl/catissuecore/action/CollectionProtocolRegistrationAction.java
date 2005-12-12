@@ -128,7 +128,8 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 	   for(int i=0; i<listOfParticipant.size(); i++)
 	   {
 	       NameValueBean nameValueBean =(NameValueBean)listOfParticipant.get(i);
-	      	
+	       boolean isParticipantDisable=false;
+	       
 	       if(Long.parseLong(nameValueBean.getValue()) == -1)
 	       {
 	           listOfActiveParticipant.add(listOfParticipant.get(i));
@@ -140,11 +141,18 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 	           if(Long.parseLong(((NameValueBean)listOfDisabledParticipant.get(j)).getValue()) == -1)
 	               continue;
 	          
-	           if(Long.parseLong(nameValueBean.getValue()) != Long.parseLong(((NameValueBean)listOfDisabledParticipant.get(j)).getValue()) )
+	           if(Long.parseLong(nameValueBean.getValue()) == Long.parseLong(((NameValueBean)listOfDisabledParticipant.get(j)).getValue()) )
 	           {
-	               listOfActiveParticipant.add(listOfParticipant.get(i));
+	               isParticipantDisable=true;
+	               break;
+	           }
+	           else
+	           {
+	               isParticipantDisable =false;
 	           }
 	       }
+	       if(isParticipantDisable==false)
+	           listOfActiveParticipant.add(listOfParticipant.get(i));
 	   }
 	   
 	   Logger.out.debug("No.Of Active Participants ~~~~~~~~~~~~~~~~~~~~~~~>"+listOfActiveParticipant.size());
