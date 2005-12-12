@@ -64,33 +64,27 @@ public class DataViewAction extends BaseAction
         String parentName = new String();
     	String parentId = new String();
     	
-    	//Get the column display names and select column names if it is configured and set in session
+    	//Get the listData, column display names and select column names if it is configured and set in session
     	List filteredColumnDisplayNames=(List)session.getAttribute(Constants.CONFIGURED_COLUMN_DISPLAY_NAMES);
     	Logger.out.debug("ColumnDisplayNames from configuration"+filteredColumnDisplayNames);
     	String[] columnList= (String[])session.getAttribute(Constants.CONFIGURED_SELECT_COLUMN_LIST);
+    	
+    	//Retrieve the columnIdsMap from session
     	Map columnIdsMap = (Map)session.getAttribute(Constants.COLUMN_ID_MAP);
-    	if(columnList!=null)
-    	{
-    		Logger.out.debug("size of configured columns from session:"+columnList.length);
-    		session.setAttribute(Constants.CONFIGURED_SELECT_COLUMN_LIST,columnList);
-    	}
     	
-//    	List filteredColumnDisplayNames = new ArrayList();
-    	//Get column display names from session which is set in session in AdvanceSearchResultsAction
-//    	if(columnDisplayNames==null)
-//    		columnDisplayNames = (List)session.getAttribute(Constants.COLUMN_DISPLAY_NAMES);
-//    	else
-//    		filteredColumnDisplayNames = columnDisplayNames;
-    	
-    	
+    	//Set default select column list and column display names in case of Root and Participant nodes are selected
     	if (name.equals(Constants.ROOT)|| name.equals(Constants.PARTICIPANT))
         {
-    		columnList=new String[columnIdsMap.size()];
+    		
     		if(filteredColumnDisplayNames==null)
     			filteredColumnDisplayNames = (List)session.getAttribute(Constants.COLUMN_DISPLAY_NAMES);
-    		for(int count=0;count<columnIdsMap.size();count++)
+    		if(columnList==null)
     		{
-    			columnList[count]=Constants.COLUMN+count;
+    			columnList=new String[columnIdsMap.size()];
+    			for(int count=0;count<columnIdsMap.size();count++)
+    			{
+    				columnList[count]=Constants.COLUMN+count;
+    			}
     		}
     		
         }
@@ -161,6 +155,7 @@ public class DataViewAction extends BaseAction
             	}
                 if(!exists)
                 {
+                	Logger.out.debug("add specimen id column");
                 	String columnListWithoutSpecimenId[] = columnList;
                 	columnList = new String[columnListWithoutSpecimenId.length+1];
                     for(int i=0;i<columnListWithoutSpecimenId.length;i++)
@@ -221,7 +216,7 @@ public class DataViewAction extends BaseAction
     	        		filteredColumnDisplayNames.add("Identifier");
     	        }
     			request.setAttribute(Constants.SPREADSHEET_COLUMN_LIST,filteredColumnDisplayNames);
-    			request.setAttribute(Constants.SPREADSHEET_DATA_LIST,list);
+   				request.setAttribute(Constants.SPREADSHEET_DATA_LIST,list);
     			request.setAttribute(Constants.PAGEOF,Constants.PAGEOF_QUERY_RESULTS);
     			Logger.out.debug("columnList in dataview:"+columnList);
         		session.setAttribute(Constants.SELECT_COLUMN_LIST,columnList);
