@@ -10,6 +10,7 @@
 
 package edu.wustl.catissuecore.action;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,6 +26,7 @@ import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
+import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -172,22 +174,69 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 	{
 		//get list of Participant's names
 		String sourceObjectName = CollectionProtocolRegistration.class.getName();
-	  	String [] displayParticipantFields = {"participant.lastName" , "participant.firstName"};
+	  	String [] displayParticipantFields = {"participant.systemIdentifier"};
 	  	String valueField = "participant."+Constants.SYSTEM_IDENTIFIER;
-	  	String whereColumnName[] = {"collectionProtocol."+Constants.SYSTEM_IDENTIFIER,"participant.lastName" , "participant.firstName"};
-	  	String whereColumnCondition[] = {"=","!=","!="};
-	  	Object[] whereColumnValue = {new Long(protocolID),"",""};
+	  	String whereColumnName[] = {"collectionProtocol."+Constants.SYSTEM_IDENTIFIER,"participant.systemIdentifier"};
+	  	String whereColumnCondition[] = {"=","is not"};
+	  	Object[] whereColumnValue = {new Long(protocolID),null};
 	  	String joinCondition = Constants.AND_JOIN_CONDITION;
 	  	String separatorBetweenFields = ", ";
 	  	
 	  	List list = bizLogic.getList(sourceObjectName, displayParticipantFields, valueField, whereColumnName,
 				  whereColumnCondition, whereColumnValue, joinCondition, separatorBetweenFields, true);
-	
+	  	
+	  	
+	  	//get list of Participant's names
+	  	valueField = Constants.SYSTEM_IDENTIFIER;
+		sourceObjectName = Participant.class.getName();
+		String[] participantsFields = {"lastName","firstName","birthDate","socialSecurityNumber"};
+		String[] whereColumnName2 = {"lastName","firstName","birthDate","socialSecurityNumber"};
+		String[] whereColumnCondition2 = {"!=","!=","is not","is not"};
+		Object[] whereColumnValue2 = {"","",null,null};
+		String joinCondition2 = Constants.OR_JOIN_CONDITION;
+		String separatorBetweenFields2 = ", ";
+		
+		List listOfParticipants = bizLogic.getList(sourceObjectName, participantsFields, valueField, whereColumnName2,
+	            whereColumnCondition2, whereColumnValue2, joinCondition2, separatorBetweenFields, false);
+	  		  	
+		// removing blank participants from the list of Participants
+		list=removeBlankParticipant(list, listOfParticipants);
+		
 	  	Logger.out.debug("Paticipants List"+list);
 	  	request.setAttribute(Constants.PARTICIPANT_LIST, list);
 	}
     
-    
+	private List removeBlankParticipant(List list, List listOfParticipants)
+	{
+	   List listOfActiveParticipant=new ArrayList();
+	   
+	   for(int i=0; i<list.size(); i++)
+	   {
+	       NameValueBean nameValueBean =(NameValueBean)list.get(i);
+	      	
+	       if(Long.parseLong(nameValueBean.getValue()) == -1)
+	       {
+	           listOfActiveParticipant.add(list.get(i));
+	           continue;
+	       }
+	       
+	       for(int j=0; j<listOfParticipants.size(); j++)
+	       {
+	           if(Long.parseLong(((NameValueBean)listOfParticipants.get(j)).getValue()) == -1)
+	               continue;
+	          
+	           if(Long.parseLong(nameValueBean.getValue()) == Long.parseLong(((NameValueBean)listOfParticipants.get(j)).getValue()) )
+	           {
+	               listOfActiveParticipant.add(listOfParticipants.get(j));
+	           }
+	       }
+	   }
+	   
+	   Logger.out.debug("No.Of Active Participants Registered with Protocol~~~~~~~~~~~~~~~~~~~~~~~>"+listOfActiveParticipant.size());
+	   
+	   return listOfActiveParticipant;
+	}
+	
 	private void loadPaticipantNumberList(long protocolID, AbstractBizLogic bizLogic, HttpServletRequest request) throws Exception
 	{
 		//get list of Participant's names
@@ -203,10 +252,12 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 		List list = bizLogic.getList(sourceObjectName, displayParticipantNumberFields, valueField, whereColumnName,
 					whereColumnCondition, whereColumnValue, joinCondition, separatorBetweenFields, true);
 		
+		
+		
 		Logger.out.debug("Paticipant Number List"+list);
 		request.setAttribute(Constants.PROTOCOL_PARTICIPANT_NUMBER_LIST, list);
-	}    
-    
+	}
+	
 	private void loadCollectionProtocolEvent(long protocolID, AbstractBizLogic bizLogic, HttpServletRequest request) throws Exception
 	{
 		String sourceObjectName = CollectionProtocolEvent.class.getName();

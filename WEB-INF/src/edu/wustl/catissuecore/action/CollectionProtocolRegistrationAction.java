@@ -11,6 +11,7 @@
 package edu.wustl.catissuecore.action;
 
 import java.util.List;
+import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,11 +20,13 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.actionForm.CollectionProtocolRegistrationForm;
 import edu.wustl.catissuecore.bizlogic.AbstractBizLogic;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -70,21 +73,82 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 
 		//get list of Participant's names
 		sourceObjectName = Participant.class.getName();
-		String[] participantsFields = {"lastName","firstName"};
-		String[] whereColumnName = {"lastName","firstName"};
-		String[] whereColumnCondition = {"!=","!="};
-		Object[] whereColumnValue = {"",""};
-		String joinCondition = Constants.AND_JOIN_CONDITION;
-		String separatorBetweenFields = ",";
+		String[] participantsFields = {"lastName","firstName","birthDate","socialSecurityNumber"};
+		String[] whereColumnName = {"lastName","firstName","birthDate","socialSecurityNumber"};
+		String[] whereColumnCondition = {"!=","!=","is not","is not"};
+		Object[] whereColumnValue = {"","",null,null};
+		String joinCondition = Constants.OR_JOIN_CONDITION;
+		String separatorBetweenFields = ", ";
 		
 		list = bizLogic.getList(sourceObjectName, participantsFields, valueField, whereColumnName,
-	            whereColumnCondition, whereColumnValue, joinCondition, separatorBetweenFields, true);
-
+	            whereColumnCondition, whereColumnValue, joinCondition, separatorBetweenFields, false);
+		
+		
+		//get list of Disabled Participants
+		String[] participantsFields2 = {Constants.SYSTEM_IDENTIFIER};
+		String[] whereColumnName2 = {"activityStatus"};
+		String[] whereColumnCondition2 = {"="};
+		String[] whereColumnValue2 = {Constants.ACTIVITY_STATUS_DISABLED};
+		String joinCondition2 = Constants.AND_JOIN_CONDITION;
+		String separatorBetweenFields2 = ",";
+		
+		List listOfDisabledParticipant = bizLogic.getList(sourceObjectName, participantsFields2, valueField, whereColumnName2,
+	            whereColumnCondition2, whereColumnValue2, joinCondition2, separatorBetweenFields2, false);
+		
+		//removing disabled participants from the list of Participants
+		list=removeDisabledParticipant(list, listOfDisabledParticipant);
+		
+		// Sets the participantList attribute to be used in the Site Add/Edit Page.
 		request.setAttribute(Constants.PARTICIPANT_LIST, list);
 		
 		//Sets the activityStatusList attribute to be used in the Site Add/Edit Page.
         request.setAttribute(Constants.ACTIVITYSTATUSLIST, Constants.ACTIVITY_STATUS_VALUES);
-	        
+	    
+        if(request.getAttribute(Constants.PARTICIPANT_ID)!=null)
+        {
+            String participantId=(String)request.getAttribute(Constants.PARTICIPANT_ID);
+            if((request.getParameter("firstName").trim().length()>0) || (request.getParameter("lastName").trim().length()>0) || (request.getParameter("birthDate").trim().length()>0) ||( (request.getParameter("socialSecurityNumberPartA").trim().length()>0) && (request.getParameter("socialSecurityNumberPartB").trim().length()>0) && (request.getParameter("socialSecurityNumberPartC").trim().length()>0))) 
+            {    
+                CollectionProtocolRegistrationForm cprForm=(CollectionProtocolRegistrationForm)form;
+                cprForm.setParticipantID(Long.parseLong(participantId));
+                cprForm.setCheckedButton(true);
+            }
+        }
+                
 		return mapping.findForward(pageOf);
+	}
+	
+	private List removeDisabledParticipant(List listOfParticipant, List listOfDisabledParticipant)
+	{
+	   List listOfActiveParticipant=new ArrayList();
+	   
+	   Logger.out.debug("No. Of Participants ~~~~~~~~~~~~~~~~~~~~~~~>"+listOfParticipant.size());
+	   Logger.out.debug("No. Of Disabled Participants ~~~~~~~~~~~~~~~~~~~~~~~>"+listOfDisabledParticipant.size());
+	   
+	   for(int i=0; i<listOfParticipant.size(); i++)
+	   {
+	       NameValueBean nameValueBean =(NameValueBean)listOfParticipant.get(i);
+	      	
+	       if(Long.parseLong(nameValueBean.getValue()) == -1)
+	       {
+	           listOfActiveParticipant.add(listOfParticipant.get(i));
+	           continue;
+	       }
+	       
+	       for(int j=0; j<listOfDisabledParticipant.size(); j++)
+	       {
+	           if(Long.parseLong(((NameValueBean)listOfDisabledParticipant.get(j)).getValue()) == -1)
+	               continue;
+	          
+	           if(Long.parseLong(nameValueBean.getValue()) != Long.parseLong(((NameValueBean)listOfDisabledParticipant.get(j)).getValue()) )
+	           {
+	               listOfActiveParticipant.add(listOfParticipant.get(i));
+	           }
+	       }
+	   }
+	   
+	   Logger.out.debug("No.Of Active Participants ~~~~~~~~~~~~~~~~~~~~~~~>"+listOfActiveParticipant.size());
+	   
+	   return listOfActiveParticipant;
 	}
 }
