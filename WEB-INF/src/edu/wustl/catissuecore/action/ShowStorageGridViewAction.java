@@ -137,20 +137,33 @@ public class ShowStorageGridViewAction  extends BaseAction
             
             NewSpecimenBizLogic specimenBizLogic = (NewSpecimenBizLogic)BizLogicFactory
             							.getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
-            list = specimenBizLogic.retrieve(Specimen.class.getName(),
-                    "storageContainer.systemIdentifier", systemIdentifier);
             
+            String sourceObjectName = Specimen.class.getName();
+			String[] selectColumnName = {"systemIdentifier","positionDimensionOne", "positionDimensionTwo"};
+			String[] whereColumnName = {"storageContainer.systemIdentifier"};
+            String[] whereColumnCondition = {"="};
+			Object[] whereColumnValue = {systemIdentifier};
+            String joinCondition = Constants.AND_JOIN_CONDITION;
+			
+            list = specimenBizLogic.retrieve(sourceObjectName, selectColumnName, whereColumnName,
+                    whereColumnCondition, whereColumnValue, joinCondition);
+
+					
             if (list != null)
             {
                 Iterator iterator = list.iterator();
                 while(iterator.hasNext())
                 {
-                    Specimen specimen = (Specimen)iterator.next();
-                    Integer positionDimensionOne = specimen.getPositionDimensionOne();
-                    Integer positionDimensionTwo = specimen.getPositionDimensionTwo();
+                    //Specimen specimen = (Specimen)iterator.next();
+                	Object obj[] =  (Object[])iterator.next();
+                	
+                	Long specimenID = (Long)obj[0]; 
+                    Integer positionDimensionOne = (Integer)obj[1];
+                    Integer positionDimensionTwo = (Integer)obj[2];
+                    
                     fullStatus[positionDimensionOne.intValue()][positionDimensionTwo.intValue()] = 2;
                     childContainerSystemIdentifiers[positionDimensionOne.intValue()][positionDimensionTwo.intValue()]
-                                                   = specimen.getSystemIdentifier().intValue();
+                                                   = specimenID.intValue();
                 }
             }
         }
