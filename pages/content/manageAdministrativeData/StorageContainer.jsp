@@ -281,6 +281,9 @@ function insRow(subdivtag)
 				<tr>
 					<td><html:hidden property="positionInParentContainer" /></td>
 				</tr>
+				<tr>
+					<td><html:hidden property="onSubmit" /></td>
+				</tr>
 					<tr>
 						<td class="formMessage" colspan="4">* indicates a required field</td>
 					</tr>
