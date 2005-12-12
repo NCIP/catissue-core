@@ -125,6 +125,7 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 	   Logger.out.debug("No. Of Participants ~~~~~~~~~~~~~~~~~~~~~~~>"+listOfParticipant.size());
 	   Logger.out.debug("No. Of Disabled Participants ~~~~~~~~~~~~~~~~~~~~~~~>"+listOfDisabledParticipant.size());
 	   
+	   listOfActiveParticipant.add(new NameValueBean(Constants.SELECT_OPTION,"-1"));
 	   for(int i=0; i<listOfParticipant.size(); i++)
 	   {
 	       NameValueBean participantBean =(NameValueBean)listOfParticipant.get(i);
@@ -132,7 +133,7 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 	       
 	       if(Long.parseLong(participantBean.getValue()) == -1)
 	       {
-	           listOfActiveParticipant.add(listOfParticipant.get(i));
+	           //listOfActiveParticipant.add(listOfParticipant.get(i));
 	           continue;
 	       }
 	       
