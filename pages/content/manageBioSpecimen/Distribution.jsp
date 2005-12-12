@@ -162,10 +162,6 @@
 			sname="<input type='checkbox' name='" + name +"' id='" + name +"' value='C'>"
 			checkb.innerHTML=""+sname;	
 		}
-		function changeAction()
-		{
-			setFormAction("<%=Constants.DISTRIBUTION_REPORT_ACTION%>");
-		}
 		</script>
 </head>
 
@@ -231,6 +227,7 @@
 			<td><html:hidden property="systemIdentifier" /></td>
 			<td><html:hidden property="idChange"/></td>
 			<td><html:hidden property="onSubmit"/></td>
+			
 		</tr>
 		
 		<tr>
@@ -543,9 +540,12 @@
 				<%
 					if (operation.equals(Constants.EDIT))
         			{
+						formName = Constants.DISTRIBUTION_REPORT_ACTION+"?systemIdentifier="+formBean.getSystemIdentifier();
+						changeAction = "setFormAction('" + formName + "');";
+						
         		%>
 					<td>
-						<html:submit styleClass="actionButton" value="Report"/>
+						<html:submit styleClass="actionButton" value="Report" onclick="<%=changeAction%>"/>
 					</td>
 			    <%
         			}
