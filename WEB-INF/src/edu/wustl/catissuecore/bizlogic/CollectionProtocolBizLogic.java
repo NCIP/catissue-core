@@ -13,6 +13,7 @@ package edu.wustl.catissuecore.bizlogic;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 
@@ -97,7 +98,10 @@ public class CollectionProtocolBizLogic extends DefaultBizLogic implements Roles
     {
     	CollectionProtocol collectionProtocol = (CollectionProtocol)obj;
     	CollectionProtocol collectionProtocolOld = (CollectionProtocol)oldObj;
-		
+    	Logger.out.debug("PI OB*****************8"+collectionProtocol.getPrincipalInvestigator());
+    	Logger.out.debug("PI Identifier................."+collectionProtocol.getPrincipalInvestigator().getSystemIdentifier());
+    	Logger.out.debug("Email Address*****************8"+collectionProtocol.getPrincipalInvestigator().getEmailAddress());
+		Logger.out.debug("Principal Investigator*****************8"+collectionProtocol.getPrincipalInvestigator().getCsmUserId());
     	if(!collectionProtocol.getPrincipalInvestigator().getSystemIdentifier().equals(collectionProtocolOld.getPrincipalInvestigator().getSystemIdentifier()))
 			checkStatus(dao, collectionProtocol.getPrincipalInvestigator(), "Principal Investigator");
     	
@@ -117,11 +121,10 @@ public class CollectionProtocolBizLogic extends DefaultBizLogic implements Roles
 		dao.update(collectionProtocol, sessionDataBean, true, true, false);
 		
 		//Audit of Collection Protocol.
-		CollectionProtocol oldCollectionProtocol = (CollectionProtocol)oldObj;
 		dao.audit(obj, oldObj, sessionDataBean, true);
 		
 		Collection oldCollectionProtocolEventCollection 
-				= oldCollectionProtocol.getCollectionProtocolEventCollection();
+				= collectionProtocolOld.getCollectionProtocolEventCollection();
 		Logger.out.debug("collectionProtocol.getCollectionProtocolEventCollection Size................ : "
 		        +collectionProtocol.getCollectionProtocolEventCollection().size());
 		
@@ -161,8 +164,89 @@ public class CollectionProtocolBizLogic extends DefaultBizLogic implements Roles
 			CollectionProtocolRegistrationBizLogic bizLogic = (CollectionProtocolRegistrationBizLogic)BizLogicFactory.getBizLogic(Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
 			bizLogic.disableRelatedObjectsForCollectionProtocol(dao,collectionProtocolIDArr);
 		}
+		
+		try
+		{
+		    updatePIAndCoordinatorGroup(dao, collectionProtocolOld, true);
+			
+//		    UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getBizLogic(Constants.USER_FORM_ID);
+		    Long csmUserId = getCSMUserId(dao, collectionProtocol.getPrincipalInvestigator());
+		    if (csmUserId != null)
+		    {
+		        collectionProtocol.getPrincipalInvestigator().setCsmUserId(csmUserId);
+		        Logger.out.debug("PI ....."+collectionProtocol.getPrincipalInvestigator().getCsmUserId());
+		        updatePIAndCoordinatorGroup(dao, collectionProtocol, false);
+		    }
+		}
+		catch (SMException smExp)
+		{
+		    Logger.out.debug(smExp.getMessage(), smExp);
+		}
     }
-
+    
+    private void updatePIAndCoordinatorGroup(DAO dao, CollectionProtocol collectionProtocol, boolean operation)throws SMException, DAOException
+    {
+        Long principalInvestigatorId = collectionProtocol.getPrincipalInvestigator().getCsmUserId();
+        Logger.out.debug("principalInvestigatorId.........................."+principalInvestigatorId);
+        String userGroupName = Constants.getCollectionProtocolPIGroupName(collectionProtocol.getSystemIdentifier());
+        Logger.out.debug("userGroupName.........................."+userGroupName);
+        if (operation)
+        {
+            SecurityManager.getInstance(CollectionProtocolBizLogic.class).removeUserFromGroup(userGroupName,principalInvestigatorId.toString());
+        }
+        else
+        {
+            SecurityManager.getInstance(CollectionProtocolBizLogic.class).assignUserToGroup(userGroupName,principalInvestigatorId.toString());
+        }
+        
+        userGroupName = Constants.getCollectionProtocolCoordinatorGroupName(collectionProtocol.getSystemIdentifier());
+            
+        UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getBizLogic(Constants.USER_FORM_ID);
+        Iterator iterator = collectionProtocol.getUserCollection().iterator();
+        while (iterator.hasNext())
+        {
+            User user = (User)iterator.next();
+            if (operation)
+            {
+                SecurityManager.getInstance(CollectionProtocolBizLogic.class).removeUserFromGroup(userGroupName,user.getCsmUserId().toString());
+            }
+            else
+            {
+                Long csmUserId = getCSMUserId(dao, user);
+    		    if (csmUserId != null)
+    		    {
+    		        Logger.out.debug("Co-ord ....."+csmUserId);
+    		        SecurityManager.getInstance(CollectionProtocolBizLogic.class).assignUserToGroup(userGroupName, csmUserId.toString());
+    		    }
+            }
+        }
+    }
+    
+    /**
+     * @param collectionProtocol
+     * @return
+     * @throws DAOException
+     */
+    private Long getCSMUserId(DAO dao, User user) throws DAOException
+    {
+        String [] selectColumnNames = {Constants.CSM_USER_ID};
+        String [] whereColumnNames = {Constants.SYSTEM_IDENTIFIER};
+        String [] whereColumnCondition = {"="};
+        String [] whereColumnValues = {user.getSystemIdentifier().toString()};
+        List csmUserIdList = dao.retrieve(User.class.getName(),selectColumnNames,whereColumnNames,
+                				whereColumnCondition,whereColumnValues,Constants.AND_JOIN_CONDITION);
+        Logger.out.debug("csmUserIdList##########################Size........."+csmUserIdList.size());
+        
+        if (csmUserIdList.isEmpty() == false)
+        {
+            Long csmUserId = (Long) csmUserIdList.get(0);
+            
+            return csmUserId;
+        }
+        
+        return null;
+    }
+    
     /**
      * This method returns collection of UserGroupRoleProtectionGroup objects that speciefies the 
      * user group protection group linkage through a role. It also specifies the groups the protection  
