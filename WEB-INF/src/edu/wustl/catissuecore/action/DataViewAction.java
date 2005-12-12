@@ -68,6 +68,7 @@ public class DataViewAction extends BaseAction
     	List filteredColumnDisplayNames=(List)session.getAttribute(Constants.CONFIGURED_COLUMN_DISPLAY_NAMES);
     	Logger.out.debug("ColumnDisplayNames from configuration"+filteredColumnDisplayNames);
     	String[] columnList= (String[])session.getAttribute(Constants.CONFIGURED_SELECT_COLUMN_LIST);
+    	Map columnIdsMap = (Map)session.getAttribute(Constants.COLUMN_ID_MAP);
     	if(columnList!=null)
     	{
     		Logger.out.debug("size of configured columns from session:"+columnList.length);
@@ -81,11 +82,17 @@ public class DataViewAction extends BaseAction
 //    	else
 //    		filteredColumnDisplayNames = columnDisplayNames;
     	
-        
+    	
     	if (name.equals(Constants.ROOT)|| name.equals(Constants.PARTICIPANT))
         {
+    		columnList=new String[columnIdsMap.size()];
     		if(filteredColumnDisplayNames==null)
     			filteredColumnDisplayNames = (List)session.getAttribute(Constants.COLUMN_DISPLAY_NAMES);
+    		for(int count=0;count<columnIdsMap.size();count++)
+    		{
+    			columnList[count]=Constants.COLUMN+count;
+    		}
+    		
         }
         if (!name.equals(Constants.ROOT))
         {
@@ -106,7 +113,7 @@ public class DataViewAction extends BaseAction
         	viewType=Constants.SPREADSHEET_VIEW;
         if (viewType.equals(Constants.SPREADSHEET_VIEW))
         {
-    		Map columnIdsMap = (Map)session.getAttribute(Constants.COLUMN_ID_MAP);
+    		
         	if (!name.equals(Constants.ROOT))
             {	
         		Logger.out.debug("node name selected inside if condition:"+name);
@@ -119,7 +126,7 @@ public class DataViewAction extends BaseAction
                 	Logger.out.debug("select column list size:"+columnList.length);
                 	Logger.out.debug("filteredColumnDisplayNames after func call"+filteredColumnDisplayNames);
                 }
-                
+                Logger.out.debug("columnList in dataview:"+columnList);
                 Logger.out.debug("alias name of selected node in adv tree:"+name);
                 Logger.out.debug("column ids map in data view action"+columnIdsMap);
                 String key = name+"."+Constants.IDENTIFIER;
@@ -140,6 +147,7 @@ public class DataViewAction extends BaseAction
             String specimenColumn = Constants.COLUMN+specimenColumnId;
             Logger.out.debug("specimenColumn for adding compulsory specimen id:"+specimenColumn);
             boolean exists = false;
+            Logger.out.debug("columnList in dataview:"+columnList);
             if(columnList!=null)
             {
             	for(int i=0;i<columnList.length;i++)
@@ -163,6 +171,7 @@ public class DataViewAction extends BaseAction
                 	//filteredColumnDisplayNames.add("Identifier");
                 }
             }
+            Logger.out.debug("columnList in dataview:"+columnList);
             Logger.out.debug("column names before func call to resultdata"+filteredColumnDisplayNames);
         	String[] whereColumnName= new String[1]; 
         	
@@ -187,7 +196,7 @@ public class DataViewAction extends BaseAction
 
         	List list = null;
             ResultData resultData = new ResultData();
-            
+            Logger.out.debug("columnList in dataview:"+columnList);
             list = resultData.getSpreadsheetViewData(whereColumnName,whereColumnValue,whereColumnCondition,columnList, getSessionData(request), Constants.OBJECT_LEVEL_SECURE_RETRIEVE);
             Logger.out.debug("list of data after advance search"+list);
             Logger.out.debug("column list after advance search"+filteredColumnDisplayNames);
@@ -214,6 +223,7 @@ public class DataViewAction extends BaseAction
     			request.setAttribute(Constants.SPREADSHEET_COLUMN_LIST,filteredColumnDisplayNames);
     			request.setAttribute(Constants.SPREADSHEET_DATA_LIST,list);
     			request.setAttribute(Constants.PAGEOF,Constants.PAGEOF_QUERY_RESULTS);
+    			Logger.out.debug("columnList in dataview:"+columnList);
         		session.setAttribute(Constants.SELECT_COLUMN_LIST,columnList);
     			session.setAttribute(Constants.SELECTED_NODE,nodeName);
     		}
