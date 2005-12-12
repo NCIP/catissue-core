@@ -88,8 +88,9 @@ public class AdvanceSearchResultsAction extends BaseAction
 		
 		
 		//Set tables for Configuration.
-		Object selectedTables[] = query.getTableSet().toArray();
+		Object selectedTables[] = tablesVector.toArray();
 		session.setAttribute(Constants.TABLE_ALIAS_NAME,selectedTables);
+		
 		Logger.out.debug("tableSet from query before setting resultview :"+query.getTableSet());
 		//Set the result view for Advance Search
 	 	Vector selectDataElements = bizLogic.getSelectDataElements(null,query.getTableSet(), columnNames);
@@ -97,13 +98,6 @@ public class AdvanceSearchResultsAction extends BaseAction
 
 		query.setResultView(selectDataElements);
 	 	
-		
-
-	 	SessionDataBean sessionData = getSessionData(request);
-	 	//Temporary table name with userID attached
-		String tempTableName = Constants.QUERY_RESULTS_TABLE+"_"+sessionData.getUserId();
-		
-		
 		Map queryResultObjectDataMap = new HashMap();
 
         SimpleQueryBizLogic simpleQueryBizLogic = new SimpleQueryBizLogic();
@@ -121,7 +115,11 @@ public class AdvanceSearchResultsAction extends BaseAction
         Map columnIdsMap = query.getColumnIdsMap();
 		session.setAttribute(Constants.COLUMN_ID_MAP,columnIdsMap);
 		Logger.out.debug("map of column ids:"+columnIdsMap+":"+columnIdsMap.size());
-
+		
+	 	SessionDataBean sessionData = getSessionData(request);
+	 	//Temporary table name with userID attached
+		String tempTableName = Constants.QUERY_RESULTS_TABLE+"_"+sessionData.getUserId();
+		
 		//Create temporary table with the data from the Advance Query Search 
 		String sql = query.getString();
 		Logger.out.debug("no. of tables in tableSet after table created"+query.getTableSet().size()+":"+query.getTableSet());
