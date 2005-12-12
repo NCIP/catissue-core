@@ -209,6 +209,9 @@
 		   		appendingPath = "/DistributionSearch.do?operation=search&pageOf=pageOfDistribution&systemIdentifier="+form1.getSystemIdentifier() ;
 		   	}
 	   	}
+	   	String reportFormName = new String();
+		String reportChangeAction = new String();
+		
 				
 %>	
 			
@@ -540,12 +543,12 @@
 				<%
 					if (operation.equals(Constants.EDIT))
         			{
-						formName = Constants.DISTRIBUTION_REPORT_ACTION+"?systemIdentifier="+formBean.getSystemIdentifier();
-						changeAction = "setFormAction('" + formName + "');";
+						reportFormName = Constants.DISTRIBUTION_REPORT_ACTION+"?systemIdentifier="+formBean.getSystemIdentifier();
+						reportChangeAction = "setFormAction('" + reportFormName + "');";
 						
         		%>
 					<td>
-						<html:submit styleClass="actionButton" value="Report" onclick="<%=changeAction%>"/>
+						<html:submit styleClass="actionButton" value="Report" onclick="<%=reportChangeAction%>"/>
 					</td>
 			    <%
         			}
