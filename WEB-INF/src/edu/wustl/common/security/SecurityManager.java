@@ -1211,6 +1211,50 @@ public class SecurityManager implements Permissions {
 		return name;
 
 	}
+	
+	/**
+	 * This method returns name of the Protection groupwhich consists of obj as
+	 * Protection Element and whose name consists of string nameConsistingOf
+	 * 
+	 * @param obj
+	 * @param nameConsistingOf
+	 * @return @throws
+	 *         SMException
+	 */
+	public String[] getProtectionGroupByName(AbstractDomainObject obj
+			) throws SMException {
+		Set protectionGroups;
+		Iterator it;
+		ProtectionGroup protectionGroup;
+		ProtectionElement protectionElement;
+		String name = null;
+		String[] names = null;
+		String protectionElementName = getObjectId(obj);
+		try {
+			protectionElement = getAuthorizationManager().getProtectionElement(
+					protectionElementName);
+			protectionGroups = getAuthorizationManager().getProtectionGroups(
+					protectionElement.getProtectionElementId().toString());
+			it = protectionGroups.iterator();
+			names = new String[protectionGroups.size()];
+			int i=0;
+			while (it.hasNext()) {
+				protectionGroup = (ProtectionGroup) it.next();
+				names[i++] = protectionGroup.getProtectionGroupName();
+				
+			}
+		} catch (CSException e) {
+			Logger.out.debug("Unable to get protection group by name "
+					+  " for Protection Element "
+					+ protectionElementName + e.getMessage());
+			throw new SMException(e.getMessage(), e);
+		}
+		return names;
+
+	}
+	
+	
+	
 
 	/**
 	 * Returns name value beans corresponding to all privileges that can be
