@@ -214,7 +214,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 			try
 			{
 				SecurityManager.getInstance(this.getClass())
-						.insertAuthorizationData(null, protectionObjects, null);
+						.insertAuthorizationData(null, protectionObjects, getDynamicGroups(cont));
 			} catch (SMException e) 
 			{
 				Logger.out.error("Exception in Authorization: "
@@ -251,11 +251,11 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
         {
             if (storageContainer.getParentContainer() != null)
             {
-                dynamicGroups = SecurityManager.getInstance(this.getClass()).getProtectionGroupByName(storageContainer.getParentContainer(),Constants.getStorageContainerPGName());
+                dynamicGroups = SecurityManager.getInstance(this.getClass()).getProtectionGroupByName(storageContainer.getParentContainer());
             }
             else
             {
-                dynamicGroups = SecurityManager.getInstance(this.getClass()).getProtectionGroupByName(storageContainer.getSite(), Constants.getStorageContainerPGName());
+                dynamicGroups = SecurityManager.getInstance(this.getClass()).getProtectionGroupByName(storageContainer.getSite());
             }
             
         }
