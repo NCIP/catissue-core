@@ -22,6 +22,7 @@ import edu.wustl.catissuecore.dao.AbstractDAO;
 import edu.wustl.catissuecore.dao.DAO;
 import edu.wustl.catissuecore.dao.DAOFactory;
 import edu.wustl.catissuecore.dao.JDBCDAO;
+import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.StorageContainer;
@@ -239,15 +240,32 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 //        Logger.out.debug(protectionObjects.toString());
 //        return protectionObjects;
 //    }
-//	
-//	public String[] getDynamicGroups(AbstractDomainObject obj)
-//    {
-//        String[] dynamicGroups=null;
-//        StorageContainer storageContainer = (StorageContainer) obj;
-//        dynamicGroups = new String[1];
-//        dynamicGroups[0] = Constants.getStorageContainerPGName(storageContainer.getSystemIdentifier());
-//        return dynamicGroups;
-//    }
+	
+	public String[] getDynamicGroups(AbstractDomainObject obj)
+    {
+        String[] dynamicGroups=null;
+        StorageContainer storageContainer = (StorageContainer) obj;
+        dynamicGroups = null;
+        
+        try
+        {
+            if (storageContainer.getParentContainer() != null)
+            {
+                dynamicGroups = SecurityManager.getInstance(this.getClass()).getProtectionGroupByName(storageContainer.getParentContainer(),Constants.getStorageContainerPGName());
+            }
+            else
+            {
+                dynamicGroups = SecurityManager.getInstance(this.getClass()).getProtectionGroupByName(storageContainer.getSite(), Constants.getStorageContainerPGName());
+            }
+            
+        }
+        catch (SMException e)
+        {
+            Logger.out.error("Exception in Authorization: "+e.getMessage(),e);
+        }
+        
+        return dynamicGroups;
+    }
 	
 	/**
 	 * Updates the persistent object in the database.
@@ -415,9 +433,9 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 			}
 		}
 		setSiteForSubContainers(container, container.getSite());
-
+		
 		dao.update(container, sessionDataBean, true, true, false);
-
+		
 		//Audit of update of storage container.
 		dao.audit(obj, oldObj, sessionDataBean, true);
 		dao.audit(container.getStorageContainerCapacity(), oldContainer
@@ -442,7 +460,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 			dao.audit(storageContainerDetails, oldStorageContainerDetails,
 					sessionDataBean, true);
 		}
-
+		
 		Logger.out.debug("container.getActivityStatus() "
 				+ container.getActivityStatus());
 		if (container.getActivityStatus().equals(
@@ -819,8 +837,8 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 		Logger.out.debug("validatePosition C : " + positionDimensionOne + " : " + positionDimensionTwo);
 		Logger.out.debug("validatePosition P : " + posOneCapacity + " : " + posTwoCapacity);
 		
-		if ((positionDimensionOne > (posOneCapacity - 1))
-				|| (positionDimensionTwo > (posTwoCapacity - 1))) 
+		if ((positionDimensionOne > posOneCapacity)
+				|| (positionDimensionTwo > posTwoCapacity)) 
 		{
 			Logger.out.debug("validatePosition false");
 			return false;
