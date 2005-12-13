@@ -1178,13 +1178,14 @@ public class SecurityManager implements Permissions {
 	 * @return @throws
 	 *         SMException
 	 */
-	public String getProtectionGroupByName(AbstractDomainObject obj,
+	public String[] getProtectionGroupByName(AbstractDomainObject obj,
 			String nameConsistingOf) throws SMException {
 		Set protectionGroups;
 		Iterator it;
 		ProtectionGroup protectionGroup;
 		ProtectionElement protectionElement;
-		String name = null;
+		String name= null;
+		Vector names = new Vector();
 		String protectionElementName = getObjectId(obj);
 		try {
 			protectionElement = getAuthorizationManager().getProtectionElement(
@@ -1199,7 +1200,7 @@ public class SecurityManager implements Permissions {
 					Logger.out.debug("protection group by name "
 							+ nameConsistingOf + " for Protection Element "
 							+ protectionElementName + " is " + name);
-					return name;
+					names.add(name);
 				}
 			}
 		} catch (CSException e) {
@@ -1208,7 +1209,7 @@ public class SecurityManager implements Permissions {
 					+ protectionElementName + e.getMessage());
 			throw new SMException(e.getMessage(), e);
 		}
-		return name;
+		return (String[]) names.toArray();
 
 	}
 

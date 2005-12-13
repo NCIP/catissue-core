@@ -102,7 +102,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
         
         try
         {
-            dynamicGroups[0] = SecurityManager.getInstance(this.getClass()).getProtectionGroupByName(specimenEventParametersObject.getSpecimen(),Constants.getCollectionProtocolPGName(null));
+            dynamicGroups = SecurityManager.getInstance(this.getClass()).getProtectionGroupByName(specimenEventParametersObject.getSpecimen(),Constants.getCollectionProtocolPGName(null));
         }
         catch (SMException e)
         {
