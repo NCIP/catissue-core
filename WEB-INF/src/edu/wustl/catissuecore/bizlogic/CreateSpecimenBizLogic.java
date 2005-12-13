@@ -146,7 +146,7 @@ public class CreateSpecimenBizLogic extends DefaultBizLogic
         
         try
         {
-            dynamicGroups = SecurityManager.getInstance(this.getClass()).getProtectionGroupByName(specimen.getParentSpecimen(),Constants.getCollectionProtocolPGName(null));
+            dynamicGroups[0] = SecurityManager.getInstance(this.getClass()).getProtectionGroupByName(specimen.getParentSpecimen(),Constants.getCollectionProtocolPGName(null));
         }
         catch (SMException e)
         {
