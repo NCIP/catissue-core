@@ -95,6 +95,9 @@ public class SimpleSearchAction extends BaseAction {
 		// Get the configured result view columns else is null.
 		String[] selectedColumns = simpleQueryInterfaceForm
 				.getSelectedColumnNames();
+		if(selectedColumns!=null)
+			session.setAttribute(Constants.CONFIGURED_SELECT_COLUMN_LIST,selectedColumns);
+			
 
 		// Set the result view for the query.
 		List columnNames = new ArrayList();
