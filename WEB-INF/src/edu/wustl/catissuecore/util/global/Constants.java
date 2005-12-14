@@ -32,6 +32,8 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String DATE_PATTERN_MM_DD_YYYY = "MM-dd-yyyy";
 	// Mandar: Used for Date Validations in Validator Class
 	public static final String DATE_SEPARATOR = "-";
+	public static final String DATE_SEPARATOR_DOT = ".";
+	public static final String DATE_SEPARATOR_SLASH = "/";
 	public static final String MIN_YEAR = "1900";
 	public static final String MAX_YEAR = "9999";
 	
@@ -1358,11 +1360,12 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String UNDEFINED = "Undefined";
 	public static final String UNKNOWN = "Unknown";
 	
-//	MD : LightYellow and Green colors
-//	public static final String ODD_COLOR = "#FEFB85";
-//	public static final String EVEN_COLOR = "#A7FEAB"; 
-	public static final String ODD_COLOR = "#E5E5E5";
-	public static final String EVEN_COLOR = "#F7F7F7"; 
+//	MD : LightYellow and Green colors for CollectionProtocol SpecimenRequirements. Bug id: 587 
+	public static final String ODD_COLOR = "#FEFB85";
+	public static final String EVEN_COLOR = "#A7FEAB";
+//	Light and dark shades of GREY.
+//	public static final String ODD_COLOR = "#E5E5E5";
+//	public static final String EVEN_COLOR = "#F7F7F7"; 
 		
 	//	Aarti: Constants for security parameter required 
 	//while retrieving data from DAOs
