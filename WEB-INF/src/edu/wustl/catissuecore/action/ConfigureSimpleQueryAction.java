@@ -1,7 +1,9 @@
 package edu.wustl.catissuecore.action;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,7 +15,10 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.SimpleQueryInterfaceForm;
+import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
+import edu.wustl.catissuecore.bizlogic.QueryBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.logger.Logger;
 
@@ -73,6 +78,32 @@ public class ConfigureSimpleQueryAction extends BaseAction
 						tableCount++;
 					}
 				}
+			}
+			//Set the selected columns for population in the list of ConfigureResultView.jsp
+			String[] selectedColumns = simpleQueryInterfaceForm.getSelectedColumnNames();
+			if(selectedColumns==null)
+			{
+				selectedColumns = (String[])session.getAttribute(Constants.CONFIGURED_SELECT_COLUMN_LIST);
+				if(selectedColumns==null)
+				{
+					QueryBizLogic bizLogic = (QueryBizLogic) BizLogicFactory
+					.getBizLogic(Constants.SIMPLE_QUERY_INTERFACE_ID);
+					List columnNameValueBeans = new ArrayList();
+					int i;
+					for(i=0;i<selectedTables.length;i++)
+					{
+						columnNameValueBeans.addAll(bizLogic.setColumnNames(selectedTables[i]));
+					}
+					selectedColumns = new String[columnNameValueBeans.size()];
+					Iterator columnNameValueBeansItr = columnNameValueBeans.iterator();
+					i=0;
+					while(columnNameValueBeansItr.hasNext())
+					{
+						selectedColumns[i]=((NameValueBean)columnNameValueBeansItr.next()).getValue();
+						i++;
+					}
+				}
+				simpleQueryInterfaceForm.setSelectedColumnNames(selectedColumns);
 			}
 			session.setAttribute(Constants.TABLE_ALIAS_NAME,selectedTables);
 			session.setAttribute(Constants.SIMPLE_QUERY_MAP,map);
