@@ -198,6 +198,19 @@ public class CommonAddEditAction extends Action
 	               		
 	               		Logger.out.debug("tmpurl -- :  : " + tmpreDirectUrl);
 	               		
+	               		// --- 14-12-2005 start for messages
+	                    if (messages != null)
+	                    {
+	                        saveMessages(request,messages);
+	                    }
+	                    
+	                    //Status message key.
+	                    String statusMessageKey = String.valueOf(abstractForm.getFormId() +
+	        					"."+String.valueOf(abstractForm.isAddOperation()));
+	                    
+	                    request.setAttribute(Constants.STATUS_MESSAGE_KEY,statusMessageKey);
+	               		// --- 14-12-2005 end------------
+	                    
 	               		ActionForward reDirectForward = new ActionForward();
 	//               		reDirectForward.setName("reDirectTo");
 	               		reDirectForward.setPath(tmpreDirectUrl);
