@@ -13,6 +13,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Random;
 
 import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
@@ -142,9 +143,10 @@ public class NodeSelectionListener implements TreeSelectionListener, ActionListe
 			applicationPath=newApplicationPath;
 			
         }
-
+        Random random = new Random();
+        int dummyParameter = random.nextInt();
         String urlSuffix = applicationPath + Constants.DATA_VIEW_ACTION + nodeName + 
-        			   "&"+ Constants.VIEW_TYPE + "=" + viewType;
+        			   "&"+ Constants.VIEW_TYPE + "=" + viewType+"&dummyParameter="+dummyParameter;
         
         URL dataURL = new URL(protocol,host,port,urlSuffix);
         appletContext.showDocument(dataURL,Constants.DATA_VIEW_FRAME);
