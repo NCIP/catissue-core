@@ -324,7 +324,7 @@
 			</td>
 			<td class="formField">
 				<html:select property="fromSite" styleClass="formFieldSized" styleId="fromSite" size="1">
-					<html:options collection="<%=Constants.FROMSITELIST%>" labelProperty="name" property="value"/>
+					<html:options collection="<%=Constants.FROM_SITE_LIST%>" labelProperty="name" property="value"/>
 				</html:select>
 				&nbsp;
 				<%
@@ -347,7 +347,7 @@
 			</td>
 			<td class="formField">
 				<html:select property="toSite" styleClass="formFieldSized" styleId="toSite" size="1">
-					<html:options collection="<%=Constants.TOSITELIST%>" labelProperty="name" property="value"/>
+					<html:options collection="<%=Constants.TO_SITE_LIST%>" labelProperty="name" property="value"/>
 				</html:select>
 				&nbsp;
 			<html:link page="<%=urlToGo%>" styleId="newSite" onclick="<%=onClickPath%>">
