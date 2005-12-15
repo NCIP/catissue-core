@@ -1,18 +1,13 @@
 package edu.wustl.common.util;
 
 import java.io.BufferedWriter;
- 
- /**
- * * This class creates a file for a given list of data.
- * @author Poornima Govindrao
- *  
- */
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
 import edu.wustl.common.util.global.Constants;
+import edu.wustl.common.util.logger.Logger;
 
 public class ExportReport 
 {
@@ -32,7 +27,7 @@ public class ExportReport
 			Iterator rowItr = rowValues.iterator();
 			while(rowItr.hasNext())
 			{
-				String data = rowItr.next()+Constants.DELIMETER;
+				String data = rowItr.next()+ Constants.TAB_DELIMETER;
 				temp.write(data);
 			}
 			temp.write(newLine);
