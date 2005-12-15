@@ -1346,7 +1346,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 													"DistributedItem.QUANTITY.Specimen Quantity"};
 	public static final String SPECIMEN_ID_LIST = "specimenIdList";
 	public static final String DISTRIBUTION_ACTION = "Distribution.do?operation=add&pageOf=pageOfDistribution&specimenIdKey=";
-	public static final String DISTRIBUTION_REPORT_NAME = "Distribution Report.csv";
+	public static final String DISTRIBUTION_REPORT_NAME = "Distribution Report.tsv";
 	public static final String DISTRIBUTION_REPORT_FORM="distributionReportForm";
 	public static final String DISTRIBUTED_ITEMS_DATA = "distributedItemsData";
 	
@@ -1364,6 +1364,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	
 	public static final String UNDEFINED = "Undefined";
 	public static final String UNKNOWN = "Unknown";
+	public static final String SEARCH_RESULT = "SearchResult.tsv";
 	
 //	MD : LightYellow and Green colors for CollectionProtocol SpecimenRequirements. Bug id: 587 
 	public static final String ODD_COLOR = "#FEFB85";

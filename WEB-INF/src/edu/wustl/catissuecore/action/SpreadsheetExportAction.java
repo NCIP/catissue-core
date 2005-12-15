@@ -44,7 +44,7 @@ public class SpreadsheetExportAction  extends BaseAction
     {
     	AdvanceSearchForm searchForm = (AdvanceSearchForm)form;
     	HttpSession session = request.getSession();
-    	String fileName = Variables.catissueHome + System.getProperty("file.separator") + session.getId() + ".csv";
+    	String fileName = Variables.catissueHome + System.getProperty("file.separator") + session.getId() + ".tsv";
     	
     	//Extracting map from formbean which gives the serial numbers of selected rows
     	Map map = searchForm.getValues();
@@ -72,7 +72,7 @@ public class SpreadsheetExportAction  extends BaseAction
 		report.writeData(exportList);
 		report.closeFile();
     	 
-    	SendFile.sendFileToClient(response,fileName,"SimpleSearch.csv","application/csv");
+    	SendFile.sendFileToClient(response,fileName,Constants.SEARCH_RESULT,"application/download");
     	
     	return null;
     }

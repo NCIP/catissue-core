@@ -52,10 +52,10 @@ public class DistributionReportSaveAction extends BaseDistributionReportAction
 		HttpSession session=request.getSession();
 		if(session!=null)
 		{
-			String filePath = Variables.catissueHome+System.getProperty("file.separator")+"DistributionReport_"+session.getId()+".csv";
+			String filePath = Variables.catissueHome+System.getProperty("file.separator")+"DistributionReport_"+session.getId()+".tsv";
 			saveReport(distributionReportForm,listOfData,filePath,columnNames);
 			String fileName = Constants.DISTRIBUTION_REPORT_NAME;
-			String contentType= "application/csv";
+			String contentType= "application/download";
 			SendFile.sendFileToClient(response,filePath,fileName,contentType);
 		}
 		return null;
