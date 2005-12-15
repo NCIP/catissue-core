@@ -185,8 +185,8 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String FROMCONTAINERLIST="fromContainerList";
 	public static final String TOCONTAINERLIST="toContainerList";
 	public static final String FIXATION_LIST = "fixationList";	
-	public static final String FROMSITELIST="fromsiteList";
-	public static final String TOSITELIST="tositeList";	
+	public static final String FROM_SITE_LIST="fromsiteList";
+	public static final String TO_SITE_LIST="tositeList";	
 	public static final String ITEMLIST="itemList";
 	public static final String DISTRIBUTIONPROTOCOLLIST="distributionProtocolList";
 	public static final String TISSUE_SPECIMEN_ID_LIST="tissueSpecimenIdList";
@@ -1471,4 +1471,9 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String BOOLEAN_NO = "No";
 	
 	public static final String PACKAGE_DOMAIN = "edu.wustl.catissuecore.domain";
+	
+	//Constants for isAuditable and isSecureUpdate required for Dao methods in Bozlogic
+	public static final boolean IS_AUDITABLE_TRUE = true;
+	public static final boolean IS_SECURE_UPDATE_TRUE = true;
+	public static final boolean HAS_OBJECT_LEVEL_PRIVILEGE_FALSE = false;
 }

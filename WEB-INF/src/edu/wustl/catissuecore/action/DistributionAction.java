@@ -51,8 +51,8 @@ public class  DistributionAction extends SpecimenEventParametersAction
 		
 		List siteList = dao.getList(sourceObjectName, displayNameFields, valueField, true);
 		
-		request.setAttribute(Constants.FROMSITELIST, siteList);
-		request.setAttribute(Constants.TOSITELIST, siteList);
+		request.setAttribute(Constants.FROM_SITE_LIST, siteList);
+		request.setAttribute(Constants.TO_SITE_LIST, siteList);
 		
 		//Sets the Distribution Protocol Id List.
 		sourceObjectName = DistributionProtocol.class.getName();

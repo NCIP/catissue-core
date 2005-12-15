@@ -134,7 +134,7 @@ public class DistributionForm extends SpecimenEventParametersForm
 		ActionErrors errors = new ActionErrors();
 		Validator validator = new Validator();
 		Logger.out.debug("Inside validate function");
-		if ((userId) == -1L)
+		if (!validator.isValidOption(""+userId))
 		{
 			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("distribution.distributedBy")));
 		}
@@ -319,7 +319,7 @@ public class DistributionForm extends SpecimenEventParametersForm
 	public void setRowNo(int rowNo) {
 		this.rowNo = rowNo;
 	}
-	public static String getUnitSpan(Specimen specimen)
+	private static String getUnitSpan(Specimen specimen)
 	{
 		
 		if(specimen instanceof TissueSpecimen)

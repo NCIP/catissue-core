@@ -78,7 +78,7 @@ public class DistributionBizLogic extends DefaultBizLogic
 			dist.setToSite(site);
 		}
 		
-		dao.insert(dist,sessionDataBean, true, true);
+		dao.insert(dist,sessionDataBean, Constants.IS_AUDITABLE_TRUE,Constants.IS_SECURE_UPDATE_TRUE);
 		Collection distributedItemCollection = dist.getDistributedItemCollection();		
 		Iterator it = distributedItemCollection.iterator();
 		while(it.hasNext())
@@ -94,10 +94,10 @@ public class DistributionBizLogic extends DefaultBizLogic
             }
 			else
 			{
-				dao.update(specimenObj,sessionDataBean,true,true,false);
+				dao.update(specimenObj,sessionDataBean,Constants.IS_AUDITABLE_TRUE,Constants.IS_SECURE_UPDATE_TRUE,Constants.HAS_OBJECT_LEVEL_PRIVILEGE_FALSE);
 			}
 			item.setDistribution(dist);
-			dao.insert(item,sessionDataBean, true, true);
+			dao.insert(item,sessionDataBean, Constants.IS_AUDITABLE_TRUE,Constants.IS_SECURE_UPDATE_TRUE);
 		}
 		
 		try
@@ -147,10 +147,10 @@ public class DistributionBizLogic extends DefaultBizLogic
 	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException 
     {
 		Distribution distribution = (Distribution)obj;
-		dao.update(obj, sessionDataBean, true, true, false);
+		dao.update(obj, sessionDataBean, Constants.IS_AUDITABLE_TRUE,Constants.IS_SECURE_UPDATE_TRUE, Constants.HAS_OBJECT_LEVEL_PRIVILEGE_FALSE);
 		
 		//Audit of Distribution.
-		dao.audit(obj, oldObj, sessionDataBean, true);
+		dao.audit(obj, oldObj, sessionDataBean, Constants.IS_AUDITABLE_TRUE);
 		
 		Distribution oldDistribution = (Distribution)oldObj;
 		Collection oldDistributedItemCollection = oldDistribution.getDistributedItemCollection();
@@ -178,20 +178,20 @@ public class DistributionBizLogic extends DefaultBizLogic
             }
 			else
 			{
-				dao.update(specimenObj,sessionDataBean,true,true,false);
+				dao.update(specimenObj,sessionDataBean,Constants.IS_AUDITABLE_TRUE,Constants.IS_SECURE_UPDATE_TRUE, Constants.HAS_OBJECT_LEVEL_PRIVILEGE_FALSE);
 				
 				//Audit of Specimen.
-				dao.audit(specimenObj, oldItem.getSpecimen(), sessionDataBean, true);
+				dao.audit(specimenObj, oldItem.getSpecimen(), sessionDataBean, Constants.IS_AUDITABLE_TRUE);
 			}
 			item.setDistribution(distribution);
 			
-			dao.update(item, sessionDataBean, true, true, false);
+			dao.update(item, sessionDataBean,Constants.IS_AUDITABLE_TRUE,Constants.IS_SECURE_UPDATE_TRUE,  Constants.HAS_OBJECT_LEVEL_PRIVILEGE_FALSE);
 			
 			//Audit of Distributed Item.
-			dao.audit(item, oldItem, sessionDataBean, true);
+			dao.audit(item, oldItem, sessionDataBean, Constants.IS_AUDITABLE_TRUE);
 		}
     }
-	public boolean checkAvailableQty(Specimen specimen, double quantity)
+	private boolean checkAvailableQty(Specimen specimen, double quantity)
 	{
 		if(specimen instanceof TissueSpecimen)
 		{
