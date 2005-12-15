@@ -23,6 +23,7 @@ public class Constants
 	public static final String CDE_CONF_FILE = "CDEConfig.xml";
 	public static final String ANY = "Any";
 	public static final String DELIMETER = ",";
+	public static final String TAB_DELIMETER = "\t";
 	public static final String TRUE = "true";
 	public static final String FALSE = "false";
 }
