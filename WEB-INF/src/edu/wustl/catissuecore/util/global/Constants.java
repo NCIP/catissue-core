@@ -1276,6 +1276,11 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	    return "PI_DISTRIBUTION_PROTOCOL_"+identifier;
 	}
 	
+	public static final String getStorageContainerPGName()
+	{
+	    return "USER_";
+	}
+	
 	public static final String ACCESS_DENIED_ADMIN = "access_denied_admin";
 	public static final String ACCESS_DENIED_BIOSPECIMEN = "access_denied_biospecimen";
 	
