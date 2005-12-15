@@ -172,7 +172,7 @@ function handleStatus(status)
 					
 					<%
 						boolean readOnlyEmail = false;
-						if (operation.equals(Constants.EDIT))
+						if (operation.equals(Constants.EDIT) && pageOf.equals(Constants.PAGEOF_USER_PROFILE))
 						{
 							readOnlyEmail = true;
 						}
