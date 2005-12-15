@@ -109,17 +109,17 @@ function handleStatus(status)
 							<td>
 								<a class="contentLink" href="<%=backPage%>">Approve User Home</a>
 							</td>
-							
+							&nbsp;
 							<td>
 								<logic:notEmpty name="prevpage">
-									<a class="contentLink" href="<%=prevPage%>">
+								&nbsp;&nbsp;|&nbsp;<a class="contentLink" href="<%=prevPage%>">
 										<bean:message key="approveUser.previous"/>
-									</a>
-								</logic:notEmpty> |
+									</a>&nbsp;
+								</logic:notEmpty>
 								<logic:notEmpty name="nextPage">
-									<a class="contentLink" href="<%=nextPage%>">
+								&nbsp;&nbsp;|&nbsp;<a class="contentLink" href="<%=nextPage%>">
 										<bean:message key="approveUser.next"/>
-									</a>
+									</a>&nbsp;
 								</logic:notEmpty> 
 							</td>
 						</tr>
