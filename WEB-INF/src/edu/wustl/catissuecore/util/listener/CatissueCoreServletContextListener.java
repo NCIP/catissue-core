@@ -95,39 +95,41 @@ public class CatissueCoreServletContextListener
             ;
         }
         
+        
+        //All users should be able to view all data by default
         Map protectionGroupsForObjectTypes = new HashMap();
         protectionGroupsForObjectTypes.put(Site.class.getName(),
-                new String[] {ADMINISTRATORS_DATA_GROUP});
+                new String[] {PUBLIC_DATA_GROUP});
         protectionGroupsForObjectTypes.put(Address.class.getName(),
-                new String[] {ADMINISTRATORS_DATA_GROUP});
+                new String[] {PUBLIC_DATA_GROUP});
         protectionGroupsForObjectTypes.put(StorageContainer.class.getName(),
-                new String[] {ADMINISTRATORS_DATA_GROUP});
+                new String[] {PUBLIC_DATA_GROUP});
         protectionGroupsForObjectTypes.put(DistributionProtocol.class.getName(),
-                new String[] {TECHNICIANS_DATA_GROUP});
+                new String[] {PUBLIC_DATA_GROUP});
         protectionGroupsForObjectTypes.put(Distribution.class.getName(),
-                new String[] {TECHNICIANS_DATA_GROUP});
+                new String[] {PUBLIC_DATA_GROUP});
         protectionGroupsForObjectTypes.put(User.class.getName(),
-                new String[] {ADMINISTRATORS_DATA_GROUP});
+                new String[] {PUBLIC_DATA_GROUP});
         protectionGroupsForObjectTypes.put(Participant.class.getName(),
-                new String[] {SUPERVISORS_DATA_GROUP});
+                new String[] {PUBLIC_DATA_GROUP});
         protectionGroupsForObjectTypes.put(CollectionProtocol.class.getName(),
-                new String[] {ADMINISTRATORS_DATA_GROUP});
+                new String[] {PUBLIC_DATA_GROUP});
         protectionGroupsForObjectTypes.put(CollectionProtocolRegistration.class.getName(),
-                new String[] {SUPERVISORS_DATA_GROUP});
+                new String[] {PUBLIC_DATA_GROUP});
         protectionGroupsForObjectTypes.put(SpecimenCollectionGroup.class.getName(),
-                new String[] {SUPERVISORS_DATA_GROUP});
+                new String[] {PUBLIC_DATA_GROUP});
         protectionGroupsForObjectTypes.put(Specimen.class.getName(),
-                new String[] {SUPERVISORS_DATA_GROUP});
+                new String[] {PUBLIC_DATA_GROUP});
         protectionGroupsForObjectTypes.put(FluidSpecimen.class.getName(),
-                new String[] {SUPERVISORS_DATA_GROUP});
+                new String[] {PUBLIC_DATA_GROUP});
         protectionGroupsForObjectTypes.put(TissueSpecimen.class.getName(),
-                new String[] {SUPERVISORS_DATA_GROUP});
+                new String[] {PUBLIC_DATA_GROUP});
         protectionGroupsForObjectTypes.put(MolecularSpecimen.class.getName(),
-                new String[] {SUPERVISORS_DATA_GROUP});
+                new String[] {PUBLIC_DATA_GROUP});
         protectionGroupsForObjectTypes.put(CellSpecimen.class.getName(),
-                new String[] {SUPERVISORS_DATA_GROUP});
+                new String[] {PUBLIC_DATA_GROUP});
         protectionGroupsForObjectTypes.put(SpecimenCharacteristics.class.getName(),
-                new String[] {SUPERVISORS_DATA_GROUP});
+                new String[] {PUBLIC_DATA_GROUP});
         
         Constants.STATIC_PROTECTION_GROUPS_FOR_OBJECT_TYPES.putAll(protectionGroupsForObjectTypes);
         
