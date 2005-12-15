@@ -38,7 +38,7 @@ public class EmailHandler
         					.getValue("userRegistration.approve.subject");
         
         String body = "Dear " + user.getLastName() +
-			        " " + user.getFirstName() +
+			        "," + user.getFirstName() +
 			        "\n\n"+ ApplicationProperties.getValue("userRegistration.approved.body.start") +
 			        getUserDetailsEmailBody(user); // Get the user details in the body of the email.
 			        
@@ -98,8 +98,8 @@ public class EmailHandler
     {
         String subject = ApplicationProperties.getValue("userRegistration.reject.subject");
         
-        String body = "Dear " + user.getFirstName()
-        + " " + user.getLastName()
+        String body = "Dear " + user.getLastName()
+        + "," + user.getFirstName()
         + "\n\n"+ ApplicationProperties.getValue("userRegistration.reject.body.start");
         
         //Append the comments given by the administrator, if any.
@@ -137,7 +137,7 @@ public class EmailHandler
     {
         String subject = ApplicationProperties.getValue("userRegistration.request.subject");
         
-        String body = "Dear "+ user.getLastName()+" "+ user.getFirstName() + "\n\n" +
+        String body = "Dear "+ user.getLastName()+","+ user.getFirstName() + "\n\n" +
 					  ApplicationProperties.getValue("userRegistration.request.body.start") + "\n" +
 					  getUserDetailsEmailBody(user) +
 					  "\n\n\t" + ApplicationProperties.getValue("userRegistration.request.body.end") +
