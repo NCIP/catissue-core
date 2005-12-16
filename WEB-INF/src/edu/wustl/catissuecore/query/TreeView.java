@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
+import javax.servlet.http.HttpSession;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
@@ -31,12 +32,13 @@ public class TreeView {
 	private boolean andOrBool = false;
 	
 	//Recursive function to create the tree
-	public void arrangeTree(DefaultMutableTreeNode node,int parentId,Vector tree,Map advancedConditionNodesMap,int checkedNode,String operation) throws Exception
+	public void arrangeTree(DefaultMutableTreeNode node,int parentId,Vector tree,Map advancedConditionNodesMap,int checkedNode,String operation,HttpSession session) throws Exception
 	{
 			nodeId++;
 			
 			//Loop for all the children for the current node.
-			for(int i = 0; i < node.getChildCount();i++){
+			for(int i = 0; i < node.getChildCount();i++)
+			{
 				//nodeCount++;
 				DefaultMutableTreeNode child = (DefaultMutableTreeNode)node.getChildAt(i);
 				DefaultMutableTreeNode parent = (DefaultMutableTreeNode)child.getParent();
@@ -59,6 +61,12 @@ public class TreeView {
 				}
 				AdvancedConditionsNode advConditionNode = (AdvancedConditionsNode)child.getUserObject();
 				advancedConditionNodesMap.put(new Integer(nodeId),child);
+				
+				AdvancedConditionsNode temp = (AdvancedConditionsNode)session.getAttribute("tempAdvConditionNode");
+				if(advConditionNode.getObjectName().equals(temp.getObjectName()))
+				{
+					session.setAttribute("lastNodeId",(""+nodeId));
+				}
 								
 				if(nodeId == checkedNode)
 				{
@@ -158,7 +166,7 @@ public class TreeView {
 					nodeId++;
 				}
 				else
-					arrangeTree(child,nodeId,tree,advancedConditionNodesMap,checkedNode,operation);
+					arrangeTree(child,nodeId,tree,advancedConditionNodesMap,checkedNode,operation,session);
 			}
 		} 
 	
