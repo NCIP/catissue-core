@@ -1,8 +1,4 @@
-import java.sql.Connection;
-import java.sql.DriverManager;
-
 import net.sf.hibernate.Session;
-
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.util.dbManager.DBUtil;
 

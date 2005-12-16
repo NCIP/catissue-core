@@ -1,16 +1,10 @@
 import java.applet.Applet;
 import java.applet.AppletContext;
-import java.awt.Component;
 import java.awt.event.MouseEvent;
 
-import javax.swing.JOptionPane;
 import javax.swing.JTree;
 import javax.swing.event.MouseInputListener;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreeNode;
-import javax.swing.tree.TreePath;
 
 import netscape.javascript.JSObject;
 import edu.wustl.catissuecore.tissuesite.TissueSiteTreeNode;
