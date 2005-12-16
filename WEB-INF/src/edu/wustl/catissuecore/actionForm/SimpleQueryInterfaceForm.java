@@ -249,6 +249,22 @@ public class SimpleQueryInterfaceForm extends ActionForm
        	            	 		conditionError = true;
         	            	}
         	            }
+        	            else if (dataType.trim().equals(Constants.FIELD_TYPE_TIMESTAMP_TIME))
+        	            {
+        	                if (validator.isValidTime(enteredValue, Constants.TIME_PATTERN_HH_MM_SS) == false)
+        	                {
+        	                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("simpleQuery.time.format"));
+       	            	 		conditionError = true;
+        	                }
+        	            }
+        	            else if (dataType.trim().equals(Constants.FIELD_TYPE_DATE) || dataType.trim().equals(Constants.FIELD_TYPE_TIMESTAMP_DATE))
+        	            {
+        	                if (validator.checkDate(enteredValue) == false)
+        	                {
+        	                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("simpleQuery.date.format"));
+       	            	 		conditionError = true;
+        	                }
+        	            }
         	        }
                 }
             }
