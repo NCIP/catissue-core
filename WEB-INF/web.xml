@@ -43,13 +43,23 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
     </init-param>     
     <load-on-startup>2</load-on-startup>
    </servlet>
-	
+
+   <servlet>
+     <servlet-name>ResponseServlet</servlet-name>
+     <servlet-class>edu.wustl.common.struts.ResponseServlet</servlet-class>
+   </servlet>
+   
  <!-- Standard Action Servlet Mapping -->
   <servlet-mapping>
      <servlet-name>action</servlet-name>
      <url-pattern>*.do</url-pattern>
   </servlet-mapping>
 	
+	<servlet-mapping>
+     <servlet-name>ResponseServlet</servlet-name>
+     <url-pattern>/ResponseServlet</url-pattern>
+  </servlet-mapping>
+  
  <!--Usual Welcome-file-list-->
   <welcome-file-list>
 	 <welcome-file>/pages/index.jsp</welcome-file>
