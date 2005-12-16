@@ -342,6 +342,7 @@
 							<!-- action buttons begins -->
 							<table cellpadding="4" cellspacing="0" border="0">
 								<tr>
+								<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
 									<td>
 										<table>
 											<tr>
@@ -367,7 +368,7 @@
 											</tr>
 										</table>
 									</td>					
-
+									</logic:notEqual>
 						   			<td>
 						   				<html:submit styleClass="actionButton" onclick="<%=changeAction%>">
 						   					<bean:message key="buttons.submit"/>
