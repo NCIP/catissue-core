@@ -8,6 +8,8 @@
  */ 
 package edu.wustl.catissuecore.query;
 
+import edu.wustl.catissuecore.util.global.Constants;
+
 
 /**
  * @author aarti_sharma
@@ -63,12 +65,22 @@ public class DataElement
      */
     public String toSQLString(int tableSufix)
     {
-        return table + tableSufix + "." + field+" ";
+        String fieldName = table + tableSufix + "." + field+" ";
+        if ((fieldType != null) && (Constants.FIELD_TYPE_TIMESTAMP_TIME.equalsIgnoreCase(fieldType)))
+		{
+            fieldName = Constants.MYSQL_TIME_FORMAT_FUNCTION + "(" + fieldName + ",'" + Constants.MYSQL_TIME_PATTERN + "') ";
+		}
+		else if ((fieldType != null) && (Constants.FIELD_TYPE_TIMESTAMP_DATE.equalsIgnoreCase(fieldType)))
+		{
+		    fieldName = Constants.MYSQL_DATE_FORMAT_FUNCTION + "(" + fieldName + ",'" + Constants.MYSQL_DATE_PATTERN + "') ";
+		}
+		
+        return fieldName;
     }
     
     public String getColumnNameString(int tableSufix)
     {
-        return table + tableSufix + "_" + field;
+        return table + tableSufix + "_" + field;  
     }
     
     public boolean equals(Object obj)
