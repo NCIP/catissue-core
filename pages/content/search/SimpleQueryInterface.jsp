@@ -97,7 +97,7 @@ function showDateColumn(element,valueField,columnID,showCalendarID,fieldValue,ov
 
 		var calendarShow = document.getElementById(showCalendarID);
 
-		if (dataType == "date")
+		if (dataType == <%=Constants.FIELD_TYPE_DATE%> || dataType == <%=Constants.FIELD_TYPE_TIMESTAMP_DATE%>)
 		{
 			var td = document.getElementById(columnID);
 			txtField.readOnly="";
