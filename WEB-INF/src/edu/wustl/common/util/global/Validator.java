@@ -10,6 +10,7 @@
 
 package edu.wustl.common.util.global;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -17,6 +18,7 @@ import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.util.logger.Logger;
 
 
@@ -751,6 +753,28 @@ public class Validator
 
         
         
+    }
+    
+    /**
+     * Returns true if the time is in invalid pattern else returns false.
+     * @param time the time to be validated.
+     * @param pattern the pattern in which it is to be validated.
+     * @return true if the time is in invalid pattern else returns false.
+     */
+    public boolean isValidTime(String time, String pattern)
+    {
+        boolean isValid = true;
+        
+        try
+        {
+            Utility.parseDate(time, pattern);
+        }
+        catch (ParseException parseExp)
+        {
+            isValid = false;
+        }
+        
+        return isValid;
     }
 
 }
