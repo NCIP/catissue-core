@@ -78,21 +78,7 @@
 		item.innerHTML = "&nbsp;<img src='images/DistributionProtocol.GIF' alt='DistributionProtocol' /> &nbsp; <a HREF='#'><%=Constants.DISTRIBUTION_PROTOCOL%></a>";*/
 	}
 
-	/*function checkNum(checkName,itemId,nodeCount,documentForm)
-	{
-		if(document.getElementById(item) != null)
-		{
-			if(document.getElementById(item).checked==true)
-			{
-				counter = counter + 1;
-				selectedNode=i;
-			}
-		}
-		return counter; 
-	}*/
-	
-//	function EnableItem(nodeCount){
-	function checkNum(checkName,itemId,nodeCount)
+	function checkNum(nodeCount)//checkName,itemId,
 	{
 		disableAll();
 		var participantCount = 0;
@@ -105,6 +91,7 @@
 		//var j=0;
 		//var selectedNode = new Array(nodeCount);
 		var selectedNode="";
+		var itemId = 0;
 								
 		for(var i = 1; i <= nodeCount; i++)
 		{
@@ -440,6 +427,8 @@
 			<div class="tree">
 				<script type="text/javascript">
 					createTree(tree);
+					checkNum(tree.length);
+					
 				</script>
 			</div>
 			
