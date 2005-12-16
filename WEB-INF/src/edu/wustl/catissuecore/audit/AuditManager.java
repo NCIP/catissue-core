@@ -24,6 +24,7 @@ import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.exception.AuditException;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;
+import edu.wustl.common.audit.Auditable;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.dbManager.DAOException;

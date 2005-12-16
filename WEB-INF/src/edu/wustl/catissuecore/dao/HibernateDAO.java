@@ -11,11 +11,8 @@
 package edu.wustl.catissuecore.dao;
 
 import java.io.Serializable;
-import java.sql.DatabaseMetaData;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -24,33 +21,27 @@ import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.Transaction;
-import net.sf.hibernate.exception.ConstraintViolationException;
 
 import org.apache.log4j.PropertyConfigurator;
 
 import edu.wustl.catissuecore.audit.AuditManager;
-import edu.wustl.catissuecore.audit.Auditable;
 import edu.wustl.catissuecore.bizlogic.AbstractBizLogic;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
-import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.exception.AuditException;
-import edu.wustl.catissuecore.exceptionformatter.DefaultExceptionFormatter;
-import edu.wustl.catissuecore.exceptionformatter.ExceptionFormatter;
-import edu.wustl.catissuecore.exceptionformatter.ExceptionFormatterFactory;
-import edu.wustl.catissuecore.util.Permissions;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.catissuecore.util.global.Variables;
+import edu.wustl.common.audit.Auditable;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
+import edu.wustl.common.util.Permissions;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.dbManager.DBUtil;
-import edu.wustl.common.util.dbManager.HibernateMetaData;
 import edu.wustl.common.util.logger.Logger;
 
 /**

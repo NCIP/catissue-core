@@ -13,14 +13,12 @@ package edu.wustl.catissuecore.dao;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
+import java.util.HashMap;
 
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
-import edu.wustl.catissuecore.util.global.Constants;
-import java.util.Vector;
-import java.util.HashMap;
-import java.util.Iterator;
 
 
 /**
