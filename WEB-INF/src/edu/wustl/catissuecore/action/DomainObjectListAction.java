@@ -21,11 +21,11 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import edu.wustl.catissuecore.actionForm.AbstractActionForm;
 import edu.wustl.catissuecore.bizlogic.AbstractBizLogic;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
-import edu.wustl.catissuecore.domain.AbstractDomainObject;
+import edu.wustl.catissuecore.domain.DomainObjectFactory;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.actionForm.AbstractActionForm;
 
 /**
  * DomainObjectListAction is used to show the list of all 
@@ -67,12 +67,12 @@ public class DomainObjectListAction extends SecureAction
                 String [] whereColumnNames = {"activityStatus","activityStatus"};
                 String [] whereColumnConditions = {"=","="};
                 String [] whereColumnValues = {"New","Pending"};
-                list = abstractBizLogic.retrieve(AbstractDomainObject.getDomainObjectName(abstractForm.getFormId()),
+                list = abstractBizLogic.retrieve(DomainObjectFactory.getDomainObjectName(abstractForm.getFormId()),
     					whereColumnNames,whereColumnConditions,whereColumnValues,Constants.OR_JOIN_CONDITION);
             }
             else
             {
-                list = abstractBizLogic.retrieve(AbstractDomainObject.getDomainObjectName(abstractForm.getFormId()),
+                list = abstractBizLogic.retrieve(DomainObjectFactory.getDomainObjectName(abstractForm.getFormId()),
     					"activityStatus","Pending");
             }
             

@@ -25,13 +25,14 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import edu.wustl.catissuecore.actionForm.AbstractActionForm;
 import edu.wustl.catissuecore.bizlogic.AbstractBizLogic;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
-import edu.wustl.catissuecore.domain.AbstractDomainObject;
-import edu.wustl.catissuecore.util.global.ApplicationProperties;
+import edu.wustl.catissuecore.domain.DomainObjectFactory;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.logger.Logger;
 
 
@@ -68,7 +69,7 @@ public class CommonSearchAction extends Action
             AbstractDomainObject abstractDomain = null;
             List list = null;
             
-            String objName = AbstractDomainObject.getDomainObjectName(abstractForm.getFormId());
+            String objName = DomainObjectFactory.getDomainObjectName(abstractForm.getFormId());
             Logger.out.debug("object name to be retrieved:"+objName+" identifier:"+identifier);
             list= bizLogic.retrieve(objName,Constants.SYSTEM_IDENTIFIER, identifier.toString());
             
