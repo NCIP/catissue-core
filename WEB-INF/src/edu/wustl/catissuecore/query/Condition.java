@@ -1,7 +1,6 @@
 package edu.wustl.catissuecore.query;
 
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.util.logger.Logger;
 
 
 
@@ -95,25 +94,19 @@ public class Condition {
             }
         }
         
-        if (dataElement.getFieldType().equalsIgnoreCase(Constants.FIELD_TYPE_VARCHAR)
-        		|| dataElement.getFieldType().equalsIgnoreCase(Constants.FIELD_TYPE_DATE) 
-        		|| dataElement.getFieldType().equalsIgnoreCase(Constants.FIELD_TYPE_TEXT))
-        {
-        	if (dataElement.getFieldType().equalsIgnoreCase(Constants.FIELD_TYPE_VARCHAR) 
-        	        	|| dataElement.getFieldType().equalsIgnoreCase(Constants.FIELD_TYPE_TEXT))
-        	{
-        	    newValue = "'" + newValue + "'";
-        	}
-        	else
-        	{
-        	    newValue = "STR_TO_DATE('" + newValue + "','" + Constants.MYSQL_DATE_PATTERN + "')";
-        	}
-        }
+        if (dataElement.getFieldType().equalsIgnoreCase(Constants.FIELD_TYPE_VARCHAR) 
+	        	|| dataElement.getFieldType().equalsIgnoreCase(Constants.FIELD_TYPE_TEXT)
+	        	|| dataElement.getFieldType().equalsIgnoreCase(Constants.FIELD_TYPE_TIMESTAMP_TIME)
+	        	|| dataElement.getFieldType().equalsIgnoreCase(Constants.FIELD_TYPE_TIMESTAMP_DATE))
+		{
+		    newValue = "'" + newValue + "'";
+		}
+		else if (dataElement.getFieldType().equalsIgnoreCase(Constants.FIELD_TYPE_DATE))
+		{
+		    newValue = Constants.MYSQL_STR_TO_DATE_FUNCTION + "('" + newValue + "','" + Constants.MYSQL_DATE_PATTERN + "')";
+		}
         
-        Logger.out.debug("newOperator.........................."+newOperator);
-        
-        Logger.out.debug("newValue..........................."+newValue);
-	    return new String(dataElement.toSQLString(tableSufix)+" "+ newOperator + " " + newValue.toString() + " ");
+	    return new String(dataElement.toSQLString(tableSufix) + " "+ newOperator + " " + newValue.toString() + " ");
 	}
 
     public boolean equals(Object obj)
