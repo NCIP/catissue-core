@@ -10,7 +10,6 @@
 
 package edu.wustl.catissuecore.util.global;
 
-import java.util.HashMap;
 
 /**
  * This class stores the constants used in the operations in the application.
@@ -37,17 +36,15 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String MIN_YEAR = "1900";
 	public static final String MAX_YEAR = "9999";
 	
+	
 	//Database constants.
 	public static final String MYSQL_DATE_PATTERN = "%m-%d-%Y";
 	//DAO Constants.
 	public static final int HIBERNATE_DAO = 1;
 	public static final int JDBC_DAO = 2;
 	
-	//public static final String TRUE = "true";
-	//public static final String FALSE = "false";
 	public static final String SUCCESS = "success";
 	public static final String FAILURE = "failure";
-	public static final String ADD = "add";
 	public static final String EDIT = "edit";
 	public static final String VIEW = "view";
 	public static final String SEARCH = "search";
@@ -514,7 +511,6 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final int QUERY_RESULT_TREE_JDBC_DAO = 1;
 	
 	//Activity Status values
-	public static final String ACTIVITY_STATUS_ACTIVE = "Active";
 	public static final String ACTIVITY_STATUS_APPROVE = "Approve";
 	public static final String ACTIVITY_STATUS_REJECT = "Reject";
 	public static final String ACTIVITY_STATUS_NEW = "New";
@@ -594,7 +590,6 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String QUERY_RESULTS_SPECIMEN_TYPE = "SPECIMEN_TYPE";
 	
 	// Assign Privilege Constants.
-	public static final boolean PRIVILEGE_ASSIGN = true;
 	public static final boolean PRIVILEGE_DEASSIGN = false;
 	
 	//Constants for default column names to be shown for query result.
@@ -616,7 +611,6 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	//Shopping Cart
 	public static final String SHOPPING_CART = "shoppingCart";
 	
-	//public static final String SELECT_OPTION = "-- Select --";
 	public static final int SELECT_OPTION_VALUE = -1;
 	
 	
@@ -1162,10 +1156,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 			"FIXATION 3"
 	};
 	
-	public static final  HashMap STATIC_PROTECTION_GROUPS_FOR_OBJECT_TYPES = new HashMap();
-
-	
-	//public static final String CDE_CONF_FILE = "CDEConfig.xml";
+		
 	public static final String CDE_NAME_TISSUE_SITE = "Tissue Site";
 	public static final String CDE_NAME_CLINICAL_STATUS = "Clinical Status";
 	public static final String CDE_NAME_GENDER = "Gender";
@@ -1231,56 +1222,6 @@ public class Constants extends edu.wustl.common.util.global.Constants
 													"Type", "Subtype", "Tissue Site", "Tissue Side", "Pathological Status"}; 
 	
 	
-	public static final String getCollectionProtocolPGName(Long identifier)
-	{
-	    if(identifier == null)
-	    {
-	        return "COLLECTION_PROTOCOL_";
-	    }
-	    return "COLLECTION_PROTOCOL_"+identifier;
-	}
-	
-	public static final String getCollectionProtocolPIGroupName(Long identifier)
-	{
-	    if(identifier == null)
-	    {
-	        return "PI_COLLECTION_PROTOCOL_";
-	    }
-	    return "PI_COLLECTION_PROTOCOL_"+identifier;
-	}
-	
-	public static final String getCollectionProtocolCoordinatorGroupName(Long identifier)
-	{
-	    if(identifier == null)
-	    {
-	        return "COORDINATORS_COLLECTION_PROTOCOL_";
-	    }
-	    return "COORDINATORS_COLLECTION_PROTOCOL_"+identifier;
-	}
-	
-	public static final String getDistributionProtocolPGName(Long identifier)
-	{
-	    if(identifier == null)
-	    {
-	        return "DISTRIBUTION_PROTOCOL_";
-	    }
-	    return "DISTRIBUTION_PROTOCOL_"+identifier;
-	}
-	
-	public static final String getDistributionProtocolPIGroupName(Long identifier)
-	{
-	    if(identifier == null)
-	    {
-	        return "PI_DISTRIBUTION_PROTOCOL_";
-	    }
-	    return "PI_DISTRIBUTION_PROTOCOL_"+identifier;
-	}
-	
-	public static final String getStorageContainerPGName()
-	{
-	    return "USER_";
-	}
-	
 	public static final String ACCESS_DENIED_ADMIN = "access_denied_admin";
 	public static final String ACCESS_DENIED_BIOSPECIMEN = "access_denied_biospecimen";
 	
@@ -1293,7 +1234,6 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String ATTRIBUTES = "attributes";
 	public static final String GROUPS = "groups";
 	public static final String ASSIGN_PRIVILEGES_ACTION = "AssignPrivileges.do";
-	//public static final String ANY = "Any";
 	public static final int CONTAINER_IN_ANOTHER_CONTAINER = 2;
 	    /**
      * @param systemIdentifier
@@ -1336,7 +1276,6 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String DISTRIBUTION_ID = "distributionId";
 	public static final String CONFIGURE_DISTRIBUTION_ACTION = "ConfigureDistribution.do";
 	public static final String DISTRIBUTION_REPORT_ACTION = "DistributionReport.do";
-	//public static final String DELIMETER = ",";
 	public static final String DISTRIBUTION_REPORT_SAVE_ACTION="DistributionReportSave.do";
 	public static final String SELECTED_COLUMNS[] = {"Specimen.IDENTIFIER.Specimen Identifier",
 													"Specimen.TYPE.Specimen Type",
@@ -1373,11 +1312,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 //	public static final String ODD_COLOR = "#E5E5E5";
 //	public static final String EVEN_COLOR = "#F7F7F7"; 
 		
-	//	Aarti: Constants for security parameter required 
-	//while retrieving data from DAOs
-	public static final int INSECURE_RETRIEVE = 0;
-	public static final int CLASS_LEVEL_SECURE_RETRIEVE = 1; 
-	public static final int OBJECT_LEVEL_SECURE_RETRIEVE = 2; 
+	
 	
 	// TO FORWARD THE REQUEST ON SUBMIT IF STATUS IS DISABLED
 	public static final String BIO_SPECIMEN = "/ManageBioSpecimen.do";
@@ -1460,7 +1395,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	// The unique key voilation message is "Duplicate entry %s for key %d"
 	// This string is used for searching " for key " string in the above error message
 	public static final String MYSQL_DUPL_KEY_MSG = " for key ";
-	public static final String CATISSUE_SPECIMEN = "CATISSUE_SPECIMEN";
+	
 
 	public static final String GENERIC_SECURITYMANAGER_ERROR = "The Security Violation error occured during a database operation. Please report this problem to the adminstrator";
 	public static final String  DATABASE_IN_USED = "MYSQL";
