@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
+import javax.servlet.http.HttpSession;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import edu.wustl.catissuecore.query.AdvancedConditionsNode;
@@ -96,7 +97,7 @@ public class ConditionMapParser
 	}
 	
 	//Given a list of conditions, creates an advancedConditionNode and adds it to the root.
-	public DefaultMutableTreeNode createAdvancedQueryObj(List list,DefaultMutableTreeNode root,String objectName,String selectedNode,Map advancedConditionNodesMap,Integer nodeId) 
+	public DefaultMutableTreeNode createAdvancedQueryObj(List list,DefaultMutableTreeNode root,String objectName,String selectedNode,Map advancedConditionNodesMap,Integer nodeId,HttpSession session) 
 	{
 		//String tableObject = condition.getDataElement().getTable();
 		Logger.out.debug("selectedNode"+selectedNode);
@@ -120,6 +121,7 @@ public class ConditionMapParser
 		if(nodeId == null)
 		{
 			AdvancedConditionsNode advancedConditionsNode = new AdvancedConditionsNode(objectName);
+			session.setAttribute("tempAdvConditionNode",advancedConditionsNode);
 			advancedConditionsNode.setObjectConditions(objectConditions);
 		
 		DefaultMutableTreeNode child = new DefaultMutableTreeNode(advancedConditionsNode);
@@ -247,8 +249,16 @@ public class ConditionMapParser
 			Logger.out.debug("AdvanceQueryMap: "+advancedConditionNodesMap);
 			for(int i=0;i<selectedNode.length;i++)
 			{
-				
-				selectedAdvNode = (DefaultMutableTreeNode) advancedConditionNodesMap.get(selectedNode[i]);
+				AdvancedConditionsNode advConditionNode = (AdvancedConditionsNode)presentNode.getUserObject();
+				if(advConditionNode.getObjectName().equals(Constants.PARTICIPANT))
+				{
+					selectedAdvNode = (DefaultMutableTreeNode) advancedConditionNodesMap.get(new Integer(0));
+				}
+				else
+				{
+					Logger.out.debug("selectedNode[i]-->"+selectedNode[i]);
+					selectedAdvNode = (DefaultMutableTreeNode) advancedConditionNodesMap.get(selectedNode[i]);
+				}
 				Logger.out.debug("AdvanceQueryMap for: "+selectedNode[i]+":"+advancedConditionNodesMap.get(selectedNode[i]));
 				selectedAdvNode.add(presentNode);
 				//DefaultMutableTreeNode selectedTreeNode =(DefaultMutableTreeNode) selectedAdvNode;
