@@ -50,18 +50,20 @@ public class AdvanceQueryView extends BaseAction
 		{
 			//Create tree for Query View
 			TreeView view = new TreeView();
+			//To use Pseudo AND
 			if(tempCheckedNode != null && operator!= null)
 			{
 				int checkedNode = Integer.parseInt(tempCheckedNode);
-				view.arrangeTree(root,0,tree,advancedConditionNodesMap,checkedNode,operator);
+				view.arrangeTree(root,0,tree,advancedConditionNodesMap,checkedNode,operator,session);
 			}
 			else
 			{
-				view.arrangeTree(root,0,tree,advancedConditionNodesMap,0,null);
+				view.arrangeTree(root,0,tree,advancedConditionNodesMap,0,null,session);
 			}
 			Logger.out.debug("advancedConditionNodesMap in AdvanceQueryViewAction"+advancedConditionNodesMap);
 			Logger.out.debug("Size of advancedConditionNodesMap in AdvanceQueryViewAction"+advancedConditionNodesMap.size());
 		}
+		
 		session.setAttribute(Constants.ADVANCED_CONDITIONS_ROOT,root);
 		session.setAttribute(Constants.ADVANCED_CONDITION_NODES_MAP,advancedConditionNodesMap);
 		Logger.out.debug("Vector size of the tree"+tree);
