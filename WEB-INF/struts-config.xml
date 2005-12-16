@@ -2236,7 +2236,7 @@ PUBLIC
 	<!-- Advance Query Interface Actions Ends -->
 	</action-mappings>
 	
-	<controller processorClass="edu.wustl.common.struts.ApplicationRequestProcessor" />
+	<!--controller processorClass="edu.wustl.common.struts.ApplicationRequestProcessor" /-->
 	
 	<message-resources parameter="ApplicationResources" />
 	
