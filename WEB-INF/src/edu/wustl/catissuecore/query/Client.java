@@ -18,6 +18,7 @@ import org.apache.log4j.PropertyConfigurator;
 import edu.wustl.catissuecore.bizlogic.QueryBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;
+import edu.wustl.common.query.AbstractClient;
 import edu.wustl.common.util.logger.Logger;
 
 public class Client extends AbstractClient
