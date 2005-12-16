@@ -18,21 +18,18 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
-import edu.wustl.catissuecore.domain.AbstractDomainObject;
-import edu.wustl.catissuecore.domain.CollectionProtocol;
-import edu.wustl.catissuecore.domain.DistributionProtocol;
-import edu.wustl.catissuecore.domain.Specimen;
-import edu.wustl.catissuecore.query.Client;
-import edu.wustl.catissuecore.util.Permissions;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.QueryResultObjectData;
 import edu.wustl.common.beans.SecurityDataBean;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.query.AbstractClient;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.SMTransactionException;
+import edu.wustl.common.util.Permissions;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.dbManager.HibernateMetaData;
+import edu.wustl.common.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
 import gov.nih.nci.security.AuthenticationManager;
 import gov.nih.nci.security.AuthorizationManager;
@@ -992,7 +989,7 @@ public class SecurityManager implements Permissions {
 			for (it = protectionObjects.iterator(); it.hasNext();) {
 				protectionElement = new ProtectionElement();
 				protectionObject = (AbstractDomainObject) it.next();
-				protectionElement.setObjectId(getObjectId(protectionObject));
+				protectionElement.setObjectId(protectionObject.getObjectId());
 
 				try {
 
@@ -1018,7 +1015,7 @@ public class SecurityManager implements Permissions {
 										.getClass().getName()
 										+ " object");
 						protectionElement
-								.setProtectionElementName(getObjectId(protectionObject));
+								.setProtectionElementName(protectionObject.getObjectId());
 						/**
 						 * Adding protection elements to static groups they
 						 * should be added to
@@ -1081,17 +1078,17 @@ public class SecurityManager implements Permissions {
 	 * @param protectionObject
 	 * @return
 	 */
-	private String getObjectId(AbstractDomainObject protectionObject) {
-		if(protectionObject instanceof Specimen)
-		{
-			Logger.out.debug(protectionObject.getClass().getName()+" is an instance of Specimen class");
-			return Specimen.class.getName()
-			+ "_" + protectionObject.getSystemIdentifier();
-		}
-		return protectionObject.getClass()
-				.getName()
-				+ "_" + protectionObject.getSystemIdentifier();
-	}
+//	private String getObjectId(AbstractDomainObject protectionObject) {
+//		if(protectionObject instanceof Specimen)
+//		{
+//			Logger.out.debug(protectionObject.getClass().getName()+" is an instance of Specimen class");
+//			return Specimen.class.getName()
+//			+ "_" + protectionObject.getSystemIdentifier();
+//		}
+//		return protectionObject.getClass()
+//				.getName()
+//				+ "_" + protectionObject.getSystemIdentifier();
+//	}
 
 	/**
 	 * @param protectionElement
@@ -1185,7 +1182,7 @@ public class SecurityManager implements Permissions {
 		ProtectionGroup protectionGroup;
 		ProtectionElement protectionElement;
 		String name = null;
-		String protectionElementName = getObjectId(obj);
+		String protectionElementName = obj.getObjectId();
 		try {
 			protectionElement = getAuthorizationManager().getProtectionElement(
 					protectionElementName);
@@ -1229,7 +1226,7 @@ public class SecurityManager implements Permissions {
 		ProtectionElement protectionElement;
 		String name = null;
 		String[] names = null;
-		String protectionElementName = getObjectId(obj);
+		String protectionElementName = obj.getObjectId();
 		try {
 			protectionElement = getAuthorizationManager().getProtectionElement(
 					protectionElementName);
@@ -1510,9 +1507,11 @@ public class SecurityManager implements Permissions {
 						// PG_<<userID>>_ROLE_<<roleID>>
 					    
 					    Logger.out.debug("objectType............................"+objectType);
-					    if (objectType.getName().equals(CollectionProtocol.class.getName()))
+					    //changed by ajay
+					    
+					    if (objectType.getName().equals("edu.wustl.catissuecore.domain.CollectionProtocol"))
 					        protectionGroupName = Constants.getCollectionProtocolPGName(objectIds[i]);
-					    else if (objectType.getName().equals(DistributionProtocol.class.getName()))
+					    else if (objectType.getName().equals("edu.wustl.catissuecore.domain.DistributionProtocol"))
 					        protectionGroupName = Constants.getDistributionProtocolPGName(objectIds[i]);
 					    
 					    protectionGroup = getProtectionGroup(protectionGroupName);
@@ -2151,14 +2150,15 @@ public class SecurityManager implements Permissions {
 	public boolean checkPermission(String userName, String tableAlias,
 			Object identifier, String permission) {
 		boolean isAuthorized = false;
-		String tableName = (String) Client.objectTableNames.get(tableAlias);
+		String tableName = (String) AbstractClient.objectTableNames.get(tableAlias);
 		Logger.out.debug(" AliasName:" + tableAlias + " tableName:" + tableName
 				+ " Identifier:" + identifier + " Permission:" + permission);
 		
 		String className;
 		if(tableName.equals(Constants.CATISSUE_SPECIMEN))
 		{
-			className = Specimen.class.getName();
+			//modified by ajay
+			className = "edu.wustl.catissuecore.domain.Specimen";
 		}
 		//Get classname mapping to tableAlias
 		else
@@ -2172,7 +2172,7 @@ public class SecurityManager implements Permissions {
 
 		//checking privilege type on class.
 		//whether it is class level / object level / no privilege
-		int privilegeType = Integer.parseInt((String) Client.privilegeTypeMap
+		int privilegeType = Integer.parseInt((String) AbstractClient.privilegeTypeMap
 				.get(tableAlias));
 		Logger.out.debug(" privilege type:" + privilegeType);
 
@@ -2191,7 +2191,8 @@ public class SecurityManager implements Permissions {
 								String.valueOf(identifier), permission);
 			}
 			//else no privilege needs to be checked
-			else if (privilegeType == Constants.INSECURE_RETRIEVE) {
+			else if (privilegeType == Constants.INSECURE_RETRIEVE) 
+			{
 				isAuthorized = true;
 			}
 
