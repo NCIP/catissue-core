@@ -13,8 +13,9 @@ package edu.wustl.catissuecore.domain;
 import java.util.Collection;
 import java.util.HashSet;
 
-import edu.wustl.catissuecore.actionForm.AbstractActionForm;
-import edu.wustl.catissuecore.exception.AssignDataException;
+import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.exception.AssignDataException;
 
 /**
  * @author mandar_deshmukh

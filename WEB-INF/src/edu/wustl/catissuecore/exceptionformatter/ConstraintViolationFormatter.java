@@ -9,15 +9,9 @@ import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.text.MessageFormat;
 
-import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.security.exceptions.SMException;
-import edu.wustl.common.security.exceptions.SMTransactionException;
-import edu.wustl.common.util.logger.Logger;
-import gov.nih.nci.security.exceptions.CSTransactionException;
 import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.Session;
-import net.sf.hibernate.SessionFactory;
-import net.sf.hibernate.cfg.Configuration;
+import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.util.logger.Logger;
 
 public class ConstraintViolationFormatter implements ExceptionFormatter 
 {

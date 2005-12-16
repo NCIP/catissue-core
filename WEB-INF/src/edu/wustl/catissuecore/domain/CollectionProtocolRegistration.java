@@ -12,11 +12,12 @@ package edu.wustl.catissuecore.domain;
 import java.io.Serializable;
 import java.util.Date;
 
-import edu.wustl.catissuecore.actionForm.AbstractActionForm;
 import edu.wustl.catissuecore.actionForm.CollectionProtocolRegistrationForm;
-import edu.wustl.catissuecore.exception.AssignDataException;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.util.logger.Logger;
 
 /**

@@ -20,8 +20,8 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import edu.wustl.catissuecore.actionForm.AbstractActionForm;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.util.logger.Logger;
 
 public class StorageTypeAction  extends SecureAction

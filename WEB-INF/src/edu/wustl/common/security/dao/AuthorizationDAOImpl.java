@@ -7,7 +7,6 @@
 package edu.wustl.common.security.dao;
 
 import gov.nih.nci.security.authorization.ObjectPrivilegeMap;
-import gov.nih.nci.security.authorization.domainobjects.Application;
 import gov.nih.nci.security.authorization.domainobjects.Privilege;
 import gov.nih.nci.security.authorization.domainobjects.ProtectionElement;
 import gov.nih.nci.security.authorization.domainobjects.ProtectionGroup;
@@ -20,22 +19,17 @@ import gov.nih.nci.security.util.StringUtilities;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
-import org.apache.log4j.Logger;
-
-import net.sf.hibernate.Criteria;
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.SessionFactory;
 import net.sf.hibernate.Transaction;
-import net.sf.hibernate.expression.Expression;
+
+import org.apache.log4j.Logger;
 
 /**
  * @author aarti_sharma

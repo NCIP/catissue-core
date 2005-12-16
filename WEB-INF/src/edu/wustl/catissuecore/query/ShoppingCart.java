@@ -11,7 +11,7 @@ package edu.wustl.catissuecore.query;
 
 import java.util.Hashtable;
 
-import edu.wustl.catissuecore.domain.AbstractDomainObject;
+import edu.wustl.common.domain.AbstractDomainObject;
 
 /**
  * This class models the shopping cart of the user.

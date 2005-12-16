@@ -16,8 +16,8 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
 
 import edu.wustl.catissuecore.actionForm.AdvanceSearchForm;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.ConditionMapParser;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
 /**
  * @author poornima_govindrao

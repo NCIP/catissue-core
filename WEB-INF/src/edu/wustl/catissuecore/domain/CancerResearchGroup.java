@@ -11,8 +11,9 @@ package edu.wustl.catissuecore.domain;
 
 import java.io.Serializable;
 
-import edu.wustl.catissuecore.actionForm.AbstractActionForm;
 import edu.wustl.catissuecore.actionForm.CancerResearchGroupForm;
+import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.domain.AbstractDomainObject;
 
 /**
  * A collection of scientist and/or clinician users with a common research objective related to biospecimen collection and utilization.

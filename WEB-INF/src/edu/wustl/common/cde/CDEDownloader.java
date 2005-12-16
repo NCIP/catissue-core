@@ -28,7 +28,6 @@ import gov.nih.nci.system.applicationservice.ApplicationService;
 import java.net.Authenticator;
 import java.net.PasswordAuthentication;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;

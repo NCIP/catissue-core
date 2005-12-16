@@ -11,7 +11,6 @@ import java.util.Map;
 import java.util.Set;
 
 import edu.wustl.common.cde.xml.XMLCDE;
-import edu.wustl.common.cde.xml.impl.XMLCDEImpl;
 
 
 /**

@@ -18,11 +18,12 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import edu.wustl.catissuecore.actionForm.AbstractActionForm;
 import edu.wustl.catissuecore.actionForm.CreateSpecimenForm;
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
-import edu.wustl.catissuecore.util.global.Validator;
+import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.MapDataParser;
+import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -695,4 +696,10 @@ public class Specimen extends AbstractDomainObject implements Serializable
     	
     	return className;
     }
+    
+    public String getObjectId(AbstractDomainObject protectionObject) 
+    {
+		Logger.out.debug(protectionObject.getClass().getName()+" is an instance of Specimen class");
+		return Specimen.class.getName() + "_" + protectionObject.getSystemIdentifier();
+	}
 }

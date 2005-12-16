@@ -9,9 +9,9 @@
  */
 package edu.wustl.catissuecore.domain;
 
-import edu.wustl.catissuecore.actionForm.AbstractActionForm;
 import edu.wustl.catissuecore.actionForm.MolecularSpecimenReviewParametersForm;
 import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.util.logger.Logger;
 
 /**

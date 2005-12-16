@@ -23,11 +23,11 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.actionForm.AdvanceSearchForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
+import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.vo.AdvanceSearchUI;
 import edu.wustl.catissuecore.vo.SearchFieldData;
 import edu.wustl.common.beans.NameValueBean;
-import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.common.util.logger.Logger;
 
 public class CollectionProtocolSearchAction extends AdvanceSearchUIAction

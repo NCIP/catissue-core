@@ -26,7 +26,6 @@ import edu.wustl.catissuecore.vo.HTMLField;
 import edu.wustl.catissuecore.vo.SearchFieldData;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.util.dbManager.DAOException;
-import edu.wustl.common.util.logger.Logger;
 
 /**
  * @author aniruddha_phadnis

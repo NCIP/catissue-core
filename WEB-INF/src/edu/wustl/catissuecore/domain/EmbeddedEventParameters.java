@@ -11,8 +11,8 @@
  */
 package edu.wustl.catissuecore.domain;
 
-import edu.wustl.catissuecore.actionForm.AbstractActionForm;
 import edu.wustl.catissuecore.actionForm.EmbeddedEventParametersForm;
+import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.util.logger.Logger;
 
 /**

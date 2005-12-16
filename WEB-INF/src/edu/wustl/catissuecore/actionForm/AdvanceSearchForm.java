@@ -26,12 +26,12 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.QueryBizLogic;
-import edu.wustl.catissuecore.util.global.ApplicationProperties;
-import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Validator;
-import edu.wustl.common.beans.NameValueBean;
-import edu.wustl.common.util.logger.Logger;
 import edu.wustl.catissuecore.util.SearchUtil;
+import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.beans.NameValueBean;
+import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.Validator;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * This Class is used to encapsulate all the request parameters passed from Search Pages.

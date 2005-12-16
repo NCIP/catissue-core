@@ -13,8 +13,9 @@ import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 
-import edu.wustl.catissuecore.actionForm.AbstractActionForm;
 import edu.wustl.catissuecore.actionForm.ReportedProblemForm;
+import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.domain.AbstractDomainObject;
 
 
 /**

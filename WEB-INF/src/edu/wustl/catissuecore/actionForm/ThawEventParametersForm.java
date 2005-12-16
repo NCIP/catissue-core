@@ -11,9 +11,9 @@
 
 package edu.wustl.catissuecore.actionForm;
 
-import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.domain.ThawEventParameters;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.domain.AbstractDomainObject;
 
 /**
  *

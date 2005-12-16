@@ -18,8 +18,8 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 
-import edu.wustl.catissuecore.util.global.ApplicationProperties;
-import edu.wustl.catissuecore.util.global.Validator;
+import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.Validator;
 
 /**
  * This Class is used to encapsulate all the request parameters passed from AssignPrivileges.jsp page.

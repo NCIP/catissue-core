@@ -2,7 +2,7 @@ package edu.wustl.catissuecore.exceptionformatter;
 
 import java.text.MessageFormat;
 
-import edu.wustl.catissuecore.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.ApplicationProperties;
 
 public class DefaultExceptionFormatter implements ExceptionFormatter {
 

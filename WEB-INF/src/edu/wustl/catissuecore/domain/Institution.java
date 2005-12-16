@@ -11,8 +11,9 @@ package edu.wustl.catissuecore.domain;
 
 import java.io.Serializable;
 
-import edu.wustl.catissuecore.actionForm.AbstractActionForm;
 import edu.wustl.catissuecore.actionForm.InstitutionForm;
+import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.domain.AbstractDomainObject;
 
 /**
  * An institution to which a user belongs to.

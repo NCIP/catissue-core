@@ -6,7 +6,7 @@ package edu.wustl.catissuecore.exceptionformatter;
  */
 
 import java.io.FileInputStream;
-import java.util.*;
+import java.util.Properties;
 
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.util.logger.Logger;

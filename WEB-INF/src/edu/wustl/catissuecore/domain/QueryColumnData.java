@@ -9,8 +9,9 @@ package edu.wustl.catissuecore.domain;
 
 import java.io.Serializable;
 
-import edu.wustl.catissuecore.actionForm.AbstractActionForm;
-import edu.wustl.catissuecore.exception.AssignDataException;
+import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.exception.AssignDataException;
 
 /**
  * @author gautam_shetty

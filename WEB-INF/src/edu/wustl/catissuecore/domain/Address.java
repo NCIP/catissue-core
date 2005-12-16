@@ -10,7 +10,8 @@
 
 package edu.wustl.catissuecore.domain;
 
-import edu.wustl.catissuecore.actionForm.AbstractActionForm;
+import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.domain.AbstractDomainObject;
 
 /**
  * A set of attributes that defines the physical location of a User or Site.

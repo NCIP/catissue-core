@@ -14,8 +14,8 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 
-import edu.wustl.catissuecore.actionForm.AbstractActionForm;
 import edu.wustl.catissuecore.actionForm.CollectionProtocolForm;
+import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.logger.Logger;
 

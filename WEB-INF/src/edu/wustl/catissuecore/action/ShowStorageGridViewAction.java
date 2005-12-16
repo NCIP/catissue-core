@@ -30,9 +30,9 @@ import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.storage.StorageContainerGridObject;
-import edu.wustl.catissuecore.util.Permissions;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.security.SecurityManager;
+import edu.wustl.common.util.Permissions;
 
 /**
  * ShowStorageGridViewAction shows the grid view of the map according to the

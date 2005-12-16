@@ -6,8 +6,8 @@
  */
 package edu.wustl.catissuecore.actionForm;
 
-import edu.wustl.catissuecore.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
+import edu.wustl.common.domain.AbstractDomainObject;
 
 
 /**

@@ -15,8 +15,9 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
 
-import edu.wustl.catissuecore.actionForm.AbstractActionForm;
 import edu.wustl.catissuecore.actionForm.BiohazardForm;
+import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.logger.Logger;
 
 /**

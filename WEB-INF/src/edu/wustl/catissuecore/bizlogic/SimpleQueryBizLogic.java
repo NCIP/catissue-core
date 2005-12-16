@@ -199,7 +199,7 @@ public class SimpleQueryBizLogic extends DefaultBizLogic
 			
 			if ((activityStatusCondition == null) &&
 					(className.getSuperclass().getName().equals(
-							"edu.wustl.catissuecore.domain.AbstractDomainObject") == false))
+							"edu.wustl.common.domain.AbstractDomainObject") == false))
 			{
 				activityStatusCondition = getActivityStatusCondition(className.getSuperclass()
 						.getName());

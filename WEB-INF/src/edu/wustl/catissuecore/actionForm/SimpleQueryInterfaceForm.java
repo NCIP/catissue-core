@@ -23,7 +23,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Validator;
+import edu.wustl.common.util.global.Validator;
 
 /**
  * SimpleQueryInterfaceForm Class is used to encapsulate all the request parameters passed 
