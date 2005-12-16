@@ -348,9 +348,11 @@ public class SimpleQueryBizLogic extends DefaultBizLogic
 		        {
 		            String aliasName = (String) aliasNameIterator.next();
 		            Logger.out.debug("Alias Name : ............."+aliasName);
-		            String sql =" SELECT tableData2.ALIAS_NAME, temp.COLUMN_NAME, temp.TABLES_IN_PATH, temp.DISPLAY_NAME " +
+		            String sql =" SELECT tableData2.ALIAS_NAME, temp.COLUMN_NAME, temp.TABLES_IN_PATH, " +
+		            			" temp.DISPLAY_NAME, temp.ATTRIBUTE_TYPE " +
 						        " from CATISSUE_QUERY_INTERFACE_TABLE_DATA tableData2 join " +
-						        " ( SELECT  columnData.COLUMN_NAME, columnData.TABLE_ID, displayData.DISPLAY_NAME, relationData.TABLES_IN_PATH " +
+						        " ( SELECT  columnData.COLUMN_NAME, columnData.TABLE_ID, displayData.DISPLAY_NAME, " +
+						        " relationData.TABLES_IN_PATH, columnData.ATTRIBUTE_TYPE " +
 						        " FROM CATISSUE_QUERY_INTERFACE_COLUMN_DATA columnData, " +
 						        " CATISSUE_TABLE_RELATION relationData, " +
 						        " CATISSUE_QUERY_INTERFACE_TABLE_DATA tableData, " +
@@ -375,9 +377,12 @@ public class SimpleQueryBizLogic extends DefaultBizLogic
 				        List rowList = (List) iterator.next();
 				        DataElement dataElement = new DataElement();
 				        dataElement.setTable((String)rowList.get(0));
-				        dataElement.setField((String)rowList.get(1)+"."+(String)rowList.get(2));
-				        Logger.out.debug(" Table Name : ..................."+dataElement.getTable());
-				        Logger.out.debug(" Field Name : ..................."+dataElement.getField());
+				        String fieldName = (String)rowList.get(1);
+				        
+				        Logger.out.debug("fieldName*********************"+fieldName);    
+				        dataElement.setField(fieldName+"."+(String)rowList.get(2));
+				        dataElement.setFieldType((String)rowList.get(4));
+				        
 				        vector.add(dataElement);
 				        columnList.add((String)rowList.get(3));
 				    }
