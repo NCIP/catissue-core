@@ -29,6 +29,8 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String TIMESTAMP_PATTERN = "MM-dd-yyyy HH:mm";
 	public static final String DATE_PATTERN_YYYY_MM_DD = "yyyy-MM-dd";
 	public static final String DATE_PATTERN_MM_DD_YYYY = "MM-dd-yyyy";
+	public static final String TIME_PATTERN_HH_MM_SS = "HH:mm:ss";
+	
 	// Mandar: Used for Date Validations in Validator Class
 	public static final String DATE_SEPARATOR = "-";
 	public static final String DATE_SEPARATOR_DOT = ".";
@@ -36,9 +38,12 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String MIN_YEAR = "1900";
 	public static final String MAX_YEAR = "9999";
 	
-	
-	//Database constants.
+	//Mysql Database constants.
 	public static final String MYSQL_DATE_PATTERN = "%m-%d-%Y";
+	public static final String MYSQL_TIME_PATTERN = "%H:%i:%s";
+	public static final String MYSQL_TIME_FORMAT_FUNCTION = "TIME_FORMAT";
+	public static final String MYSQL_DATE_FORMAT_FUNCTION = "DATE_FORMAT";
+	public static final String MYSQL_STR_TO_DATE_FUNCTION = "STR_TO_DATE";
 	//DAO Constants.
 	public static final int HIBERNATE_DAO = 1;
 	public static final int JDBC_DAO = 2;
@@ -551,6 +556,8 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String FIELD_TYPE_VARCHAR = "varchar";
 	public static final String FIELD_TYPE_BIGINT = "bigint";
 	public static final String FIELD_TYPE_DATE = "date";
+	public static final String FIELD_TYPE_TIMESTAMP_TIME = "timestamptime";
+	public static final String FIELD_TYPE_TIMESTAMP_DATE = "timestampdate";
 	public static final String FIELD_TYPE_TEXT = "text";
 	public static final String FIELD_TYPE_TINY_INT = "tinyint";
 	
