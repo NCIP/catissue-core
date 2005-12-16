@@ -66,10 +66,10 @@ public class SpreadsheetExportAction  extends BaseAction
     		int index = Integer.parseInt(obj[i].toString().substring(indexOf));
     		exportList.add((List)dataList.get(index));
     	}
-    	
+    	String delimiter = Constants.TAB_DELIMETER;
     	//Exporting the data to the given file & sending it to user
     	ExportReport report = new ExportReport(fileName);
-		report.writeData(exportList);
+		report.writeData(exportList,delimiter);
 		report.closeFile();
     	 
     	SendFile.sendFileToClient(response,fileName,Constants.SEARCH_RESULT,"application/download");

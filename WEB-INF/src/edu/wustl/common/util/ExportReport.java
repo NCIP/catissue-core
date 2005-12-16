@@ -5,9 +5,13 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
-
-import edu.wustl.common.util.global.Constants;
-import edu.wustl.common.util.logger.Logger;
+/**
+ * This class for creating a file with a given list of data.
+ * It creates the file according to delimeter specified.
+ * For eg: if comma is the delimter specified then a CSV file is created. 
+ * @author Poornima Govindrao
+ *  
+ */
 
 public class ExportReport 
 {
@@ -16,9 +20,9 @@ public class ExportReport
 	{
 		temp =  new BufferedWriter(new FileWriter(fileName));
 	}
-	public void writeData(List values) throws IOException
+	public void writeData(List values,String delimiter) throws IOException
 	{
-		//Writes the list of data into file as CSV 
+		//Writes the list of data into file 
 		String newLine = System.getProperty(("line.separator"));
 		Iterator itr = values.iterator();
 		while(itr.hasNext())
@@ -27,7 +31,7 @@ public class ExportReport
 			Iterator rowItr = rowValues.iterator();
 			while(rowItr.hasNext())
 			{
-				String data = rowItr.next()+ Constants.TAB_DELIMETER;
+				String data = rowItr.next()+ delimiter;
 				temp.write(data);
 			}
 			temp.write(newLine);

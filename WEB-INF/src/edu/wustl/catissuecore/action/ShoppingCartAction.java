@@ -150,10 +150,10 @@ public class ShoppingCartAction  extends BaseAction
 	        	Object obj[] = map.keySet().toArray();
 	        	
 	        	List cartList = bizLogic.export(cart,obj,fileName);
-	        	
+	        	String delimiter = Constants.TAB_DELIMETER;
 	        	//Exporting the data to shopping cart file & sending it to user
 	        	ExportReport report = new ExportReport(fileName);
-	    		report.writeData(cartList);
+	    		report.writeData(cartList,delimiter);
 	    		report.closeFile();
 	        	 
 	        	SendFile.sendFileToClient(response,fileName,"ShoppingCart.csv","application/csv");
