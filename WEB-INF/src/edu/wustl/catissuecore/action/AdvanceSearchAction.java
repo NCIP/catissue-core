@@ -63,20 +63,26 @@ public class AdvanceSearchAction extends DispatchAction
         HttpSession session = request.getSession();
         //session object for query results
         DefaultMutableTreeNode root = (DefaultMutableTreeNode)session.getAttribute(Constants.ADVANCED_CONDITIONS_ROOT);
+        
         //session object for query view
         //DefaultMutableTreeNode queryViewRoot = (DefaultMutableTreeNode)session.getAttribute(Constants.ADVANCED_CONDITIONS_QUERY_VIEW);
         String objectName = advanceSearchForm.getObjectName();
+        
         String selectedNode = advanceSearchForm.getSelectedNode();
+        Logger.out.debug("selectedNode--"+selectedNode);
         Map advancedConditionNodesMap = (Map)session.getAttribute(Constants.ADVANCED_CONDITION_NODES_MAP);
-      
         
-        //ItemNode Id represents id of checked checbox used in Edit operation
-        String str = advanceSearchForm.getItemNodeId();
-        Integer nodeId = null;
-        
-        if(!str.equals(""))
+        String temp = (String)session.getAttribute("lastNodeId");
+        if(temp != null && selectedNode.equals(""))
         {
-        	nodeId = Integer.decode(str);
+        	selectedNode = temp;
+        }
+        //ItemNode Id represents id of checked checbox used in Edit operation
+        String editStr = advanceSearchForm.getItemNodeId();
+        Integer nodeId = null;
+        if(!editStr.equals(""))
+        {
+        	nodeId = Integer.decode(editStr);
         }
         
         /** Delete function**/
@@ -95,7 +101,7 @@ public class AdvanceSearchAction extends DispatchAction
         else
         {
         	//Add or Edit function
-        	root = parser.createAdvancedQueryObj(conditionNodeCollectionForQuery,root,objectName,selectedNode,advancedConditionNodesMap,nodeId);
+        	root = parser.createAdvancedQueryObj(conditionNodeCollectionForQuery,root,objectName,selectedNode,advancedConditionNodesMap,nodeId,session);
         }
         	
         session.setAttribute(Constants.ADVANCED_CONDITIONS_ROOT,root);
