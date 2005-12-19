@@ -6,8 +6,6 @@
 <%@ page import="java.util.*"%>
 <%@ page import="edu.wustl.common.beans.NameValueBean"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
-<%@ page import="java.util.*"%>
-
 
 <%@ include file="/pages/content/common/AdminCommonCode.jsp" %>
 <head>
@@ -61,28 +59,9 @@
 		   		System.out.println("---------- DP JSP appendingPath -------- : "+ appendingPath);
 		   	}
 	   	}
-
 %>
 
 <%@ include file="/pages/content/common/CommonScripts.jsp" %>
-
-<SCRIPT LANGUAGE="JavaScript">
-
-
-	var win = null;
-	function NewWindow(mypage,myname,w,h,scroll)
-	{
-		LeftPosition = (screen.width) ? (screen.width-w)/2 : 0;
-		TopPosition = (screen.height) ? (screen.height-h)/2 : 0;
-
-		settings =
-			'height='+h+',width='+w+',top='+TopPosition+',left='+LeftPosition+',scrollbars='+scroll+',resizable'
-		win = open(mypage,myname,settings)
-		if (win.opener == null)
-			win.opener = self;
-	}
-//code for units end
-</SCRIPT>
 
 <SCRIPT LANGUAGE="JavaScript">
 	var search1='`';

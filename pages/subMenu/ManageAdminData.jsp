@@ -4,22 +4,6 @@
 
 <%@ include file="/pages/subMenu/SelectMenu.jsp" %>
 
-	<script language="JavaScript">
-		
-		var win = null;
-		function NewWindow(mypage,myname,w,h,scroll)
-		{
-			LeftPosition = (screen.width) ? (screen.width-w)/2 : 0;
-			TopPosition = (screen.height) ? (screen.height-h)/2 : 0;
-
-			//mypage=mypage+document.forms[0].typeId.value;
-			settings =
-				'height='+h+',width='+w+',top='+TopPosition+',left='+LeftPosition+',scrollbars='+scroll+',resizable'
-			win = open(mypage,myname,settings)
-			if (win.opener == null)
-				win.opener = self;
-		}
-	</script>
 <tr>
 	<td class="subMenuPrimaryTitle" height="22">
 		<a href="#content">

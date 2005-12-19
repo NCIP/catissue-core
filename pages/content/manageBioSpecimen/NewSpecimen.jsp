@@ -32,24 +32,6 @@ Map map = form.getExternalIdentifier();
 <script language="JavaScript">
 
 	
-		var win = null;
-		function NewWindow(mypage,myname,w,h,scroll)
-		{
-			LeftPosition = (screen.width) ? (screen.width-w)/2 : 0;
-			TopPosition = (screen.height) ? (screen.height-h)/2 : 0;
-
-//			mypage=mypage+document.forms[0].typeId.value + 
-//					"&storageToBeSelected="+ document.forms[0].parentContainerId.value +
-//					"&position=" + document.forms[0].positionDimensionOne.value + 
-//					":" + document.forms[0].positionDimensionTwo.value;
-
-			settings =
-				'height='+h+',width='+w+',top='+TopPosition+',left='+LeftPosition+',scrollbars='+scroll+',resizable'
-			win = open(mypage,myname,settings)
-			if (win.opener == null)
-				win.opener = self;
-		}
-	
 		var idArray = new Array();
 		var nameArray = new Array();
 		var typeArray = new Array();

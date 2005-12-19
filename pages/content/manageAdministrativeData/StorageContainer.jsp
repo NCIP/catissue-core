@@ -6,7 +6,6 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
 <%@ page import="java.util.*"%>
 
-
 <%@ include file="/pages/content/common/AdminCommonCode.jsp" %>
 <%
         String operation = (String) request.getAttribute(Constants.OPERATION);
@@ -70,30 +69,8 @@
 
 <head>
 	<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
-	<script language="JavaScript" src="jss/script.js" type="text/javascript"></script>
 	<script language="JavaScript">
 		
-		var win = null;
-	
-		
-		function NewWindow(mypage,myname,w,h,scroll)
-		{
-			LeftPosition = (screen.width) ? (screen.width-w)/2 : 0;
-			TopPosition = (screen.height) ? (screen.height-h)/2 : 0;
-
-			// Sri: Added position one and two as parameters
-            // with format positionOne:positionTwo
-			mypage=mypage+document.forms[0].typeId.value + 
-					"&storageToBeSelected="+ document.forms[0].parentContainerId.value +
-					"&position=" + document.forms[0].positionDimensionOne.value + 
-					":" + document.forms[0].positionDimensionTwo.value;
-			settings =
-				'height='+h+',width='+w+',top='+TopPosition+',left='+LeftPosition+',scrollbars='+scroll+',resizable'
-			win = open(mypage,myname,settings)
-			if (win.opener == null)
-				win.opener = self;
-		}
-
 		function onRadioButtonClick(element)
 		{
 			if(element.value == 1)
@@ -373,7 +350,7 @@ function insRow(subdivtag)
 				     			<html:text styleClass="formFieldSized3" maxlength="10"  styleId="positionDimensionTwo" property="positionDimensionTwo" disabled = "true"/>
 							&nbsp;
 							<html:button property="mapButton" styleClass="actionButton" styleId="Map" 
-								onclick="NewWindow('ShowFramedPage.do?pageOf=pageOfStorageLocation&amp;storageType=','name','810','320','yes');return false" disabled="true" >
+								onclick="StorageMapWindow('ShowFramedPage.do?pageOf=pageOfStorageLocation&amp;storageType=','name','810','320','yes');return false" disabled="true" >
 								<bean:message key="buttons.map"/>
 							</html:button>
 
@@ -388,7 +365,7 @@ function insRow(subdivtag)
 			     			<html:text styleClass="formFieldSized3" maxlength="10"  styleId="positionDimensionTwo" property="positionDimensionTwo" />
 							&nbsp;
 							<html:button property="mapButton" styleClass="actionButton" styleId="Map" 
-								onclick="NewWindow('ShowFramedPage.do?pageOf=pageOfStorageLocation&amp;storageType=','name','810','320','yes');return false" >
+								onclick="StorageMapWindow('ShowFramedPage.do?pageOf=pageOfStorageLocation&amp;storageType=','name','810','320','yes');return false" >
 								<bean:message key="buttons.map"/>
 							</html:button>
 							

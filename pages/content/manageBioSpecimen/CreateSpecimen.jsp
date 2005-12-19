@@ -14,19 +14,6 @@
 <head>
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 	<script language="JavaScript">
-		var win = null;
-		function NewWindow(mypage,myname,w,h,scroll)
-		{
-			LeftPosition = (screen.width) ? (screen.width-w)/2 : 0;
-			TopPosition = (screen.height) ? (screen.height-h)/2 : 0;
-
-			settings =
-				'height='+h+',width='+w+',top='+TopPosition+',left='+LeftPosition+',scrollbars='+scroll+',resizable'
-			win = open(mypage,myname,settings)
-			if (win.opener == null)
-				win.opener = self;
-		}
-		
 	
 		//ADD MORE -------- EXTERNAL IDENTIFIER
 		function insExIdRow(subdivtag)
