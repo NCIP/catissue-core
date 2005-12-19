@@ -439,7 +439,19 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 					}
 					else
 					{
-						if(!validator.isEmpty(value) && !validator.isDouble(value ))
+						// -------MD: 19-12-2005
+						String typeKey = key.substring(0,key.lastIndexOf("_") );
+						typeKey = typeKey + "_specimenType";
+						String typeValue = (String)getValue(typeKey );
+						Logger.out.debug("TypeKey : "+ typeKey  + " : Type Value : " + typeValue  );
+						if (typeValue.trim().equals(Constants.SLIDE) || typeValue.trim().equals(Constants.PARAFFIN_BLOCK) || typeValue.trim().equals(Constants.FROZEN_BLOCK ))
+						{
+	        				if(!validator.isEmpty(value) && !validator.isNumeric(value ))
+	        				{
+	        					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("collectionprotocol.quantity")));
+	        				}
+						}
+						else if(!validator.isEmpty(value) && !validator.isDouble(value ))
         				{
         					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("collectionprotocol.quantity")));
         				}
@@ -451,6 +463,8 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 		{
 	    	// use of logger as per bug 79
 	    	Logger.out.error(excp.getMessage(),excp); 
+	    	Logger.out.debug(excp);
+	    	System.out.println(excp);
 			errors = new ActionErrors();
 		}
 		return errors;
