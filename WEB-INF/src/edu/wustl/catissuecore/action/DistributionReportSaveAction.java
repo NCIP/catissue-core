@@ -52,7 +52,7 @@ public class DistributionReportSaveAction extends BaseDistributionReportAction
 		HttpSession session=request.getSession();
 		if(session!=null)
 		{
-			String filePath = Variables.catissueHome+System.getProperty("file.separator")+"DistributionReport_"+session.getId()+".tsv";
+			String filePath = Variables.catissueHome+System.getProperty("file.separator")+"DistributionReport_"+session.getId()+".csv";
 			saveReport(distributionReportForm,listOfData,filePath,columnNames);
 			String fileName = Constants.DISTRIBUTION_REPORT_NAME;
 			String contentType= "application/download";
@@ -83,7 +83,7 @@ public class DistributionReportSaveAction extends BaseDistributionReportAction
 		distributionData = createList("distribution.toSite",distributionReportForm.getToSite(),distributionData);
 		
 		distributionData = createList("eventparameters.comments",distributionReportForm.getComments(),distributionData);
-		String delimiter = Constants.TAB_DELIMETER;
+		String delimiter = Constants.DELIMETER;
 		ExportReport report = new ExportReport(fileName);
 		report.writeData(distributionData,delimiter);
 		List distributedItemsColumns = new ArrayList();

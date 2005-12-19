@@ -44,7 +44,7 @@ public class SpreadsheetExportAction  extends BaseAction
     {
     	AdvanceSearchForm searchForm = (AdvanceSearchForm)form;
     	HttpSession session = request.getSession();
-    	String fileName = Variables.catissueHome + System.getProperty("file.separator") + session.getId() + ".tsv";
+    	String fileName = Variables.catissueHome + System.getProperty("file.separator") + session.getId() + ".csv";
     	
     	//Extracting map from formbean which gives the serial numbers of selected rows
     	Map map = searchForm.getValues();
@@ -66,7 +66,7 @@ public class SpreadsheetExportAction  extends BaseAction
     		int index = Integer.parseInt(obj[i].toString().substring(indexOf));
     		exportList.add((List)dataList.get(index));
     	}
-    	String delimiter = Constants.TAB_DELIMETER;
+    	String delimiter = Constants.DELIMETER;
     	//Exporting the data to the given file & sending it to user
     	ExportReport report = new ExportReport(fileName);
 		report.writeData(exportList,delimiter);
