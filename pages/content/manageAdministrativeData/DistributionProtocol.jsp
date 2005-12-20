@@ -189,6 +189,25 @@ function insRow(subdivtag)
 	checkb.innerHTML=""+sname;
 }
 
+function confirmDisable()
+{
+	if(document.forms[0].activityStatus.value == "Disabled")
+	{
+		 var go = confirm("<bean:message key="allPage.disableConfirm" />");
+		 if (go==true)
+		 {
+			 document.forms[0].action = "<%=formName%>";
+			 document.forms[0].submit();
+		 }
+	
+	}
+	else
+	{
+		document.forms[0].action = "<%=formName%>";
+		document.forms[0].submit();
+	}		
+}
+
 //-->
 </SCRIPT>
 
@@ -615,11 +634,17 @@ function insRow(subdivtag)
 				<!-- table 6 -->
 				<table cellpadding="4" cellspacing="0" border="0">
 					<tr>
-						<td>
+						<!--td>
 							<html:submit styleClass="actionButton">
 								<bean:message  key="buttons.submit" />
 							</html:submit>
+						</td-->
+						<td>
+						   	<html:button styleClass="actionButton" property="submitPage" onclick="confirmDisable()">
+						   		<bean:message key="buttons.submit"/>
+						   	</html:button>
 						</td>
+
 						<td>
 							<html:reset styleClass="actionButton" >
 								<bean:message  key="buttons.reset" />

@@ -30,11 +30,25 @@
 			return " ";
 			
 	}
+	String formName;
 %>
 <%@ include file="/pages/content/common/BioSpecimenCommonCode.jsp" %>
 <%
 	List specimenIdList = (List)request.getAttribute(Constants.SPECIMEN_ID_LIST);
 	DistributionForm formBean = (DistributionForm)request.getAttribute("distributionForm");
+	String operation = (String) request.getAttribute(Constants.OPERATION);
+    boolean readOnlyValue=false,readOnlyForAll=false;
+   
+    if (operation.equals(Constants.EDIT))
+    {
+        formName = Constants.DISTRIBUTION_EDIT_ACTION;
+        readOnlyValue = true;
+    }
+    else
+    {
+        formName = Constants.DISTRIBUTION_ADD_ACTION;
+        readOnlyValue = false;
+    }
 %>
 <head>
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
@@ -162,27 +176,28 @@
 			sname="<input type='checkbox' name='" + name +"' id='" + name +"' value='C'>"
 			checkb.innerHTML=""+sname;	
 		}
+	function confirmDisable()
+	{
+		if(document.forms[0].activityStatus.value == "Disabled")
+		{
+			 var go = confirm("<bean:message key="allPage.disableConfirm" />");
+		 	if (go==true)
+		 	{
+				 document.forms[0].action = "<%=formName%>";
+			 	document.forms[0].submit();
+		 	}
+		}
+		else
+		{
+			document.forms[0].action = "<%=formName%>";
+			document.forms[0].submit();
+		}		
+	}
 		</script>
 </head>
 
 
 <%
-        String operation = (String) request.getAttribute(Constants.OPERATION);
-        String formName;
-
-		boolean readOnlyValue=false,readOnlyForAll=false;
-       
-        if (operation.equals(Constants.EDIT))
-        {
-            formName = Constants.DISTRIBUTION_EDIT_ACTION;
-            readOnlyValue = true;
-        }
-        else
-        {
-            formName = Constants.DISTRIBUTION_ADD_ACTION;
-            readOnlyValue = false;
-        }
-		
 		String pageOf = (String)request.getAttribute(Constants.PAGEOF);
 	
 		Object obj = request.getAttribute("distributionForm");
@@ -553,8 +568,13 @@
 			    <%
         			}
         		%>
-					<td>
+					<!--td>
 						<html:submit styleClass="actionButton" value="Submit" onclick="<%=changeAction%>" />
+					</td-->
+					<td>
+						<html:button styleClass="actionButton" property="submitPage" onclick="confirmDisable()">
+							<bean:message key="buttons.submit"/>
+						</html:button>
 					</td>
 					<td><html:reset styleClass="actionButton"/></td> 
 				</tr>

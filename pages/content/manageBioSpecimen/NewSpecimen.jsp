@@ -26,6 +26,28 @@ Map map = form.getExternalIdentifier();
 	String[] columnList = (String[]) request.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
 	List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
+
+	String operation = (String)request.getAttribute(Constants.OPERATION);
+	String formName,pageView=operation,editViewButton="buttons."+Constants.EDIT;
+	boolean readOnlyValue=false,readOnlyForAll=false;
+
+	if(operation.equals(Constants.EDIT))
+	{
+		editViewButton="buttons."+Constants.VIEW;
+		formName = Constants.SPECIMEN_EDIT_ACTION;
+		readOnlyValue=true;
+		if(pageOf.equals(Constants.QUERY))
+			formName = formName + "?pageOf="+pageOf;
+
+	}
+	else
+	{
+		formName = Constants.SPECIMEN_ADD_ACTION;
+		readOnlyValue=false;
+	}
+
+
+	
 %>
 <%@ include file="/pages/content/common/SpecimenCommonScripts.jsp" %>
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
@@ -174,31 +196,29 @@ Map map = form.getExternalIdentifier();
 			sname="<input type='checkbox' name='" + name +"' id='" + name +"' value='C'>"
 			checkb.innerHTML=""+sname;
 		}
+		
+		function confirmDisable()
+		{
+			if(document.forms[0].activityStatus.value == "Disabled")
+			{
+				 var go = confirm("<bean:message key="allPage.disableConfirm" />");
+		 		if (go==true)
+		 		{
+					document.forms[0].action = "<%=formName%>";
+			 		document.forms[0].submit();
+		 		}
+			}
+			else
+			{
+				document.forms[0].action = "<%=formName%>";
+				document.forms[0].submit();
+			}		
+		}
 	
 	</script>
 </head>
 
 <% 
-		String operation = (String)request.getAttribute(Constants.OPERATION);
-		String formName,pageView=operation,editViewButton="buttons."+Constants.EDIT;
-		boolean readOnlyValue=false,readOnlyForAll=false;
-
-		if(operation.equals(Constants.EDIT))
-		{
-			editViewButton="buttons."+Constants.VIEW;
-			formName = Constants.SPECIMEN_EDIT_ACTION;
-			readOnlyValue=true;
-			if(pageOf.equals(Constants.QUERY))
-				formName = formName + "?pageOf="+pageOf;
-
-		}
-		else
-		{
-			formName = Constants.SPECIMEN_ADD_ACTION;
-			readOnlyValue=false;
-		}
-
-
 		int exIdRows=1;
 		int bhRows=1;
 
@@ -810,11 +830,17 @@ Map map = form.getExternalIdentifier();
 										</table>
 									</logic:notEqual>
 									</td>					
-						   			<td>
+						   			<!-- td>
 						   				<html:submit styleClass="actionButton" onclick="<%=changeAction%>">
 						   					<bean:message key="buttons.submit"/>
 						   				</html:submit>
-						   			</td>
+						   			</td-->
+						   			<td>
+										<html:button styleClass="actionButton" property="submitPage" onclick="confirmDisable()">
+											<bean:message key="buttons.submit"/>
+										</html:button>
+									</td>
+									
 									<td colspan="2">
 										<html:reset styleClass="actionButton">
 											<bean:message key="buttons.reset"/>

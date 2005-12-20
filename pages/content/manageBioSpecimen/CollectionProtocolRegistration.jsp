@@ -14,6 +14,26 @@
 			{
 				form = (CollectionProtocolRegistrationForm)obj;
 			}	
+			
+			  String operation = (String) request.getAttribute(Constants.OPERATION);
+		        String reqPath = (String)request.getAttribute(Constants.REQ_PATH);
+		        String appendingPath = "/CollectionProtocolRegistration.do?operation=add&pageOf=pageOfCollectionProtocolRegistration";
+				if (reqPath != null)
+					appendingPath = reqPath + "|/CollectionProtocolRegistration.do?operation=add&pageOf=pageOfCollectionProtocolRegistration";
+		        
+		        String formName;
+
+		        boolean readOnlyValue;
+		        if (operation.equals(Constants.EDIT))
+		        {						
+		            formName = Constants.COLLECTION_PROTOCOL_REGISTRATION_EDIT_ACTION;
+		            readOnlyValue = false;
+		        }
+		        else
+		        {
+		            formName = Constants.COLLECTIONP_ROTOCOL_REGISTRATION_ADD_ACTION;
+		            readOnlyValue = false;
+		        }
 %>
 <head>
 <script language="JavaScript">
@@ -57,28 +77,27 @@
 			changeSubmitTo(action );
 			document.forms[0].submit();
 		}
+		
+		function confirmDisable()
+	{
+		if(document.forms[0].activityStatus.value == "Disabled")
+		{
+			 var go = confirm("<bean:message key="allPage.disableConfirm" />");
+		 	if (go==true)
+		 	{
+				 document.forms[0].action = "<%=formName%>";
+			 	document.forms[0].submit();
+		 	}
+		}
+		else
+		{
+			document.forms[0].action = "<%=formName%>";
+			document.forms[0].submit();
+		}		
+	}
 </script>		
 </head>
 <%
-        String operation = (String) request.getAttribute(Constants.OPERATION);
-        String reqPath = (String)request.getAttribute(Constants.REQ_PATH);
-        String appendingPath = "/CollectionProtocolRegistration.do?operation=add&pageOf=pageOfCollectionProtocolRegistration";
-		if (reqPath != null)
-			appendingPath = reqPath + "|/CollectionProtocolRegistration.do?operation=add&pageOf=pageOfCollectionProtocolRegistration";
-        
-        String formName;
-
-        boolean readOnlyValue;
-        if (operation.equals(Constants.EDIT))
-        {						
-            formName = Constants.COLLECTION_PROTOCOL_REGISTRATION_EDIT_ACTION;
-            readOnlyValue = false;
-        }
-        else
-        {
-            formName = Constants.COLLECTIONP_ROTOCOL_REGISTRATION_ADD_ACTION;
-            readOnlyValue = false;
-        }
 %>
 
 <html:errors />
@@ -98,7 +117,7 @@
 					<td><html:hidden property="systemIdentifier"/>
 					<td><html:hidden property="onSubmit"/></td>
 					<html:hidden property="redirectTo" value="<%=reqPath%>"/>
-					</td>
+					
 				</tr>
 
 				<tr>
@@ -184,6 +203,7 @@
 				</tr>
 
 				<tr id="row1">
+					
 						<logic:equal name="collectionProtocolRegistrationForm" property="checkedButton" value="true">
 		         		    <td class="formRequiredNotice" width="5">&nbsp;</td>					
 							<td class="formLabel">
@@ -271,9 +291,16 @@
 								</table>
 							</td>					
 						
-							<td>
+							<!-- td>
 								<html:submit styleClass="actionButton" value="Submit" onclick="<%=changeAction%>" />
-							</td>
+							</td-->
+							
+							<td>
+						   		<html:button styleClass="actionButton" property="submitPage" onclick="confirmDisable()">
+						   			<bean:message key="buttons.submit"/>
+						   		</html:button>
+						   	</td>
+						   		
 							<td>
 								<html:reset styleClass="actionButton" />
 							</td>

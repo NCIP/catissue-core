@@ -85,6 +85,24 @@
 			document.forms[0].action = action;
 			document.forms[0].submit();
 		}
+		
+		function confirmDisable()
+	{
+		if(document.forms[0].activityStatus.value == "Disabled")
+		{
+			 var go = confirm("<bean:message key="allPage.disableConfirm" />");
+		 	if (go==true)
+		 	{
+				 document.forms[0].action = "<%=formName%>";
+			 	document.forms[0].submit();
+		 	}
+		}
+		else
+		{
+			document.forms[0].action = "<%=formName%>";
+			document.forms[0].submit();
+		}		
+	}
 
 	</script>
 </head>
@@ -369,11 +387,17 @@
 										</table>
 									</td>					
 									</logic:notEqual>
-						   			<td>
+						   			<!-- td>
 						   				<html:submit styleClass="actionButton" onclick="<%=changeAction%>">
 						   					<bean:message key="buttons.submit"/>
 						   				</html:submit>
-						   			</td>
+						   			</td-->
+						   			<td>
+										<html:button styleClass="actionButton" property="submitPage" onclick="confirmDisable()">
+											<bean:message key="buttons.submit"/>
+										</html:button>
+									</td>
+									
 									<td>
 										<html:reset styleClass="actionButton">
 											<bean:message key="buttons.reset"/>
