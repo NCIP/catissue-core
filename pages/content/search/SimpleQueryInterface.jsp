@@ -97,7 +97,7 @@ function showDateColumn(element,valueField,columnID,showCalendarID,fieldValue,ov
 
 		var calendarShow = document.getElementById(showCalendarID);
 
-		if (dataType == <%=Constants.FIELD_TYPE_DATE%> || dataType == <%=Constants.FIELD_TYPE_TIMESTAMP_DATE%>)
+		if (dataType == "<%=Constants.FIELD_TYPE_DATE%>" || dataType == "<%=Constants.FIELD_TYPE_TIMESTAMP_DATE%>")
 		{
 			var td = document.getElementById(columnID);
 			txtField.readOnly="";
@@ -141,6 +141,11 @@ function onAttributeChange(element,opComboName)
 			opCombo.options[2] = new Option("<%=Operator.CONTAINS%>","<%=Operator.CONTAINS%>");
 			opCombo.options[3] = new Option("Equals","<%=Operator.EQUAL%>");
 			opCombo.options[4] = new Option("Not Equals","<%=Operator.NOT_EQUALS%>");
+		}
+		else if (columnValue.match("<%=Constants.FIELD_TYPE_TINY_INT%>") == "<%=Constants.FIELD_TYPE_TINY_INT%>")
+		{
+			opCombo.options[0] = new Option("Equals","<%=Operator.EQUAL%>");
+			opCombo.options[1] = new Option("Not Equals","<%=Operator.NOT_EQUALS%>");
 		}
 		else
 		{
@@ -262,34 +267,42 @@ function onAttributeChange(element,opComboName)
 							String attributeType = null;
 							if(attributeNameValue != null)
 							{
-							StringTokenizer tokenizer = new StringTokenizer(attributeNameValue,".");
-							int tokenCount = 1;
-							while(tokenizer.hasMoreTokens())
-							{
-								attributeType = tokenizer.nextToken();
-								if(tokenCount == 3) break;
-								tokenCount++;
-							}
-
-							if(attributeType.equals("varchar") || attributeType.equals("text"))
-							{
-						%>
-							<html:option value="<%=Operator.STARTS_WITH%>"><%=Operator.STARTS_WITH%></html:option>
-							<html:option value="<%=Operator.ENDS_WITH%>"><%=Operator.ENDS_WITH%></html:option>
-							<html:option value="<%=Operator.CONTAINS%>"><%=Operator.CONTAINS%></html:option>
-							<html:option value="<%=Operator.EQUAL%>">Equals</html:option>
-							<html:option value="<%=Operator.NOT_EQUALS%>">Not Equals</html:option>
-						<%
-							}else{
-						%>
-							<html:option value="<%=Operator.EQUAL%>">Equals</html:option>
-							<html:option value="<%=Operator.NOT_EQUALS%>">Not Equals</html:option>
-							<html:option value="<%=Operator.LESS_THAN%>"><%=Operator.LESS_THAN%></html:option>
-							<html:option value="<%=Operator.LESS_THAN_OR_EQUALS%>"><%=Operator.LESS_THAN_OR_EQUALS%></html:option>
-							<html:option value="<%=Operator.GREATER_THAN%>"><%=Operator.GREATER_THAN%></html:option>
-							<html:option value="<%=Operator.GREATER_THAN_OR_EQUALS%>"><%=Operator.GREATER_THAN_OR_EQUALS%></html:option>
-						<%
-							}
+								StringTokenizer tokenizer = new StringTokenizer(attributeNameValue,".");
+								int tokenCount = 1;
+								while(tokenizer.hasMoreTokens())
+								{
+									attributeType = tokenizer.nextToken();
+									if(tokenCount == 3) break;
+									tokenCount++;
+								}
+	
+								if(attributeType.equals("varchar") || attributeType.equals("text"))
+								{
+							%>
+								<html:option value="<%=Operator.STARTS_WITH%>"><%=Operator.STARTS_WITH%></html:option>
+								<html:option value="<%=Operator.ENDS_WITH%>"><%=Operator.ENDS_WITH%></html:option>
+								<html:option value="<%=Operator.CONTAINS%>"><%=Operator.CONTAINS%></html:option>
+								<html:option value="<%=Operator.EQUAL%>">Equals</html:option>
+								<html:option value="<%=Operator.NOT_EQUALS%>">Not Equals</html:option>
+							<%
+								}
+								else if (attributeType.equals(Constants.FIELD_TYPE_TINY_INT))
+								{
+							%>
+								<html:option value="<%=Operator.EQUAL%>">Equals</html:option>
+								<html:option value="<%=Operator.NOT_EQUALS%>">Not Equals</html:option>
+							<%
+								}
+								else{
+							%>
+								<html:option value="<%=Operator.EQUAL%>">Equals</html:option>
+								<html:option value="<%=Operator.NOT_EQUALS%>">Not Equals</html:option>
+								<html:option value="<%=Operator.LESS_THAN%>"><%=Operator.LESS_THAN%></html:option>
+								<html:option value="<%=Operator.LESS_THAN_OR_EQUALS%>"><%=Operator.LESS_THAN_OR_EQUALS%></html:option>
+								<html:option value="<%=Operator.GREATER_THAN%>"><%=Operator.GREATER_THAN%></html:option>
+								<html:option value="<%=Operator.GREATER_THAN_OR_EQUALS%>"><%=Operator.GREATER_THAN_OR_EQUALS%></html:option>
+							<%
+								}
 							}
 							else
 							{
