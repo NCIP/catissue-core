@@ -2222,21 +2222,32 @@ PUBLIC
 		</action>
 		<!--Spreadshet Export Actions Ends -->
 	
-		<action path="/InstituteAddHTTP"
+	<!-- ************** HTTP API ***************** -->
+		<action path="/InstituteHTTP"
 			type="edu.wustl.catissuecore.action.CommonAddEditAction"
 			name="institutionForm"
-			validate="false"
-			input="/Institution.do?operation=add&amp;pageOf=pageOfInstitution&amp;menuSelected=2"
+			validate="true"
+			input="/ResponseServlet"
 			scope="request">
-			<!-- forward name="success" path="/Institution.do?operation=edit&amp;pageOf=pageOfInstitution&amp;menuSelected=2" /-->
 			<forward name="success" path="/ResponseServlet" />
+			<forward name="failure" path="/ResponseServlet" />
 		</action>
 		
+		<action path="/LoginHTTP"
+			type="edu.wustl.catissuecore.action.LoginAction"
+			name="loginForm"
+			validate="true"
+			input="/ResponseServlet"
+			scope="request">
+			<forward name="success" path="/ResponseServlet" />
+			<forward name="failure" path="/ResponseServlet" />
+		</action>
+	<!-- ************** HTTP API ***************** -->		
 		
 	<!-- Advance Query Interface Actions Ends -->
 	</action-mappings>
 	
-	<!--controller processorClass="edu.wustl.common.struts.ApplicationRequestProcessor" /-->
+	<controller processorClass="edu.wustl.common.struts.ApplicationRequestProcessor" />
 	
 	<message-resources parameter="ApplicationResources" />
 	
