@@ -1418,4 +1418,8 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final boolean IS_AUDITABLE_TRUE = true;
 	public static final boolean IS_SECURE_UPDATE_TRUE = true;
 	public static final boolean HAS_OBJECT_LEVEL_PRIVILEGE_FALSE = false;
+	
+	//Constants for HTTP-API
+	public static final String CONTENT_TYPE = "CONTENT-TYPE";
+	public static final String HTTP_API = "HTTPAPI";
 }
