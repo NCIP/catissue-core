@@ -235,24 +235,45 @@ public class DistributionProtocolForm extends SpecimenProtocolForm
     				{
 	    				if(key.indexOf("quantityIn")!=-1)
 	    				{
-	    					String classKey = key.substring(0,key.lastIndexOf("_") );
-	    					classKey = classKey + "_specimenClass";
-	    					String classValue = (String)getValue(classKey );
-	    					if (classValue.trim().equals("Cell"))
+	    					// check for empty quantity
+	    					if(validator.isEmpty(value))
 	    					{
-	            				if(key.indexOf("quantityIn")!=-1  && (validator.isEmpty(value) || !validator.isNumeric(value )))
-	            				{
-	            					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocol.quantity")));
-	            					bQuantity = true;
-	            				}
+            					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocol.quantity")));
+            					bQuantity = true;
 	    					}
 	    					else
 	    					{
-	   							if(key.indexOf("quantityIn")!=-1  && (validator.isEmpty(value) || !validator.isDouble(value )))
-		        				{
-		        					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocol.quantity")));
-		        					bQuantity = true;
-		        				}
+		    					String classKey = key.substring(0,key.lastIndexOf("_") );
+		    					classKey = classKey + "_specimenClass";
+		    					String classValue = (String)getValue(classKey );
+		    					
+	    						// -------MD: 20-12-2005
+	    						String typeKey = key.substring(0,key.lastIndexOf("_") );
+	    						typeKey = typeKey + "_specimenType";
+	    						String typeValue = (String)getValue(typeKey );
+	    						Logger.out.debug("TypeKey : "+ typeKey  + " : Type Value : " + typeValue  );
+	    						
+	    						/*
+	    						 *  if class is cell or type is slide,paraffinblock, 
+	    						 *  frozen block then qty is in integer
+	    						 */
+		    					if (classValue.trim().equals("Cell") || typeValue.trim().equals(Constants.SLIDE) ||
+		    							typeValue.trim().equals(Constants.PARAFFIN_BLOCK) || typeValue.trim().equals(Constants.FROZEN_BLOCK ))
+		    					{
+		            				if(!validator.isNumeric(value ))
+		            				{
+		            					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("distributionprotocol.quantity")));
+		            					bQuantity = true;
+		            				}
+		    					}
+		    					else
+		    					{
+		    						if(!validator.isDouble(value ))
+			        				{
+			        					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("distributionprotocol.quantity")));
+			        					bQuantity = true;
+			        				}
+		    					}
 	    					}
 	    				} // if  quantity
     				}
