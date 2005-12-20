@@ -47,7 +47,7 @@
 	<script src="jss/script.js" type="text/javascript"></script>
 	<script src="jss/Hashtable.js" type="text/javascript"></script>
 	<script src="jss/AdvancedSearchScripts.js" type="text/javascript"></script>
-	
+		
 	<script language="JavaScript">
 		//This function changes the unit as per the class name selected. It also enbles the concentration fields
 		//if the class name is "Molecular".
@@ -308,9 +308,28 @@
 			sname = "<input type='text' name='eventMap(" + comboName + ")' value='' class='formFieldSized10' id='" + comboName + "'> &nbsp;&nbsp;";
 			var divId = "div" + val;
 			sname = sname + " <span id='" + divId + "'><a href='#' onClick=addMore('" + divTag + "')>AND</a></span>";
-			
 			fourthCell.innerHTML="" + sname;
+			
+			document.forms[0].deleteRow.disabled = false;
 		}
+		
+		function deleteLast(subdivtag)
+	{
+		/** element of tbody    **/
+		var element = document.getElementById(subdivtag);
+		
+		/** getting table ref from tbody    **/
+		pNode = element.parentNode;
+		
+		if (pNode.rows.length > 4) 
+		{
+			/** deleting row from table **/
+			pNode.deleteRow(pNode.rows.length - 3);
+			document.forms[0].eventCounter.value = parseInt(document.forms[0].eventCounter.value) - 1;
+			document.forms[0].action = "SpecimenAdvanceSearch.do?pageOf=pageOfSpecimenAdvanceSearch";
+			document.forms[0].submit();
+		}
+	}
 	</script>
 </head>
 
@@ -635,7 +654,6 @@
 
 <!--  SPECIMEN EVENT PARAMETERS -->
 <table summary="" cellpadding="5" cellspacing="0" border="0" width="650">
-<%--
 <tr>
 	<td class="formTitle" height="25" nowrap colspan="4">
 		<bean:message key="buttons.specimenEventParameters"/>
@@ -644,10 +662,8 @@
 
 <%
 	int counter = form.getEventCounter();
-
 	Map eventParametersMap = (Map)form.getEventValues();
-	System.out.println("map in jsp***"+eventParametersMap);
-
+	
 	for(int i=1;i<=counter;i++)
 	{
 		String eventClassName = "eventMap(EventName_" + i + ")";
@@ -753,7 +769,6 @@
 				<bean:message key="simpleQuery.and"/>
 		<%
 			}
-		System.out.println("counter****"+form.getEventCounter());
 		%>
 		</span>
 	</td>
@@ -765,14 +780,14 @@
 
 <tbody id="newEventRow">
 </tbody>
---%>
+
 <tr>
 	<td colspan="4">&nbsp;</td>
 </tr>
 
 <!-- TENTH ROW -->
 <tr>
-	<td colspan="3">&nbsp</td>
+	<td colspan="2">&nbsp</td>
 	<td nowrap align="right">
 		<html:submit property="addRule" styleClass="actionButton" >
 			<bean:message key="buttons.addRule"/>
@@ -781,7 +796,14 @@
 		<html:button property="resetQuery" styleClass="actionButton" onclick="">
 			<bean:message key="buttons.resetQuery"/>
 		</html:button>
+		
 	</td>
+	<td>
+		<html:button property="deleteRow" styleClass="actionButton" onclick="deleteLast('newEventRow')" disabled="<%=(counter == 1)%>">
+			<bean:message key="buttons.deleteLast"/>
+		</html:button>
+	</td>
+	
 </tr>
 
 </table>
