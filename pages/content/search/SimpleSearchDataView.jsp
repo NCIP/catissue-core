@@ -121,6 +121,10 @@ if(dataList != null && dataList.size() != 0)
 				document.forms[0].target = "_blank";
 				document.forms[0].submit();
 			}
+			else
+			{
+				alert("Please Select atleast one checkbox");
+			}
 		}
 		//function that is called on click of Define View button for the configuration of search results
 		function onSimpleConfigure()
