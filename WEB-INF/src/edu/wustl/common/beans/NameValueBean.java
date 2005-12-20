@@ -81,7 +81,7 @@ public class NameValueBean implements Comparable
 		if(obj instanceof NameValueBean)
 		{
 			NameValueBean nameValueBean = (NameValueBean)obj;
-			return name.compareTo(nameValueBean.getName());
+			return name.toLowerCase().compareTo(nameValueBean.getName().toLowerCase());
 		}
 		return 0;
 	}
