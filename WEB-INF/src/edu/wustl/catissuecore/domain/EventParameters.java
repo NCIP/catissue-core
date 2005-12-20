@@ -13,7 +13,6 @@ import java.util.Calendar;
 import java.util.Date;
 
 import edu.wustl.catissuecore.actionForm.EventParametersForm;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
@@ -156,7 +155,7 @@ public abstract class EventParameters extends AbstractDomainObject implements ja
 			{
 				Calendar calendar = Calendar.getInstance();
 				
-				Date date = Utility.parseDate(form.getDateOfEvent(),Constants.DATE_PATTERN_MM_DD_YYYY);
+				Date date = Utility.parseDate(form.getDateOfEvent(),Utility.datePattern(form.getDateOfEvent()));
 				calendar.setTime(date);
 				calendar.set(Calendar.HOUR_OF_DAY,Integer.parseInt(form.getTimeInHours()));
 				calendar.set(Calendar.MINUTE,Integer.parseInt(form.getTimeInMinutes()));

@@ -16,7 +16,6 @@ import java.util.Iterator;
 import java.util.Map;
 
 import edu.wustl.catissuecore.actionForm.SpecimenProtocolForm;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
@@ -286,8 +285,8 @@ public abstract class SpecimenProtocol extends AbstractDomainObject implements j
         	this.shortTitle = spForm.getShortTitle();
         	this.irbIdentifier = spForm.getIrbID();
         	
-        	this.startDate = Utility.parseDate(spForm.getStartDate(),Constants.DATE_PATTERN_MM_DD_YYYY);        		
-        	this.endDate = Utility.parseDate(spForm.getEndDate(),Constants.DATE_PATTERN_MM_DD_YYYY);        		
+        	this.startDate = Utility.parseDate(spForm.getStartDate() ,Utility.datePattern(spForm.getStartDate()));       		
+        	this.endDate = Utility.parseDate(spForm.getEndDate(),Utility.datePattern(spForm.getEndDate()));        		
 
         	if(spForm.getEnrollment() != null && spForm.getEnrollment().trim().length()>0 )
         		this.enrollment = new Integer(spForm.getEnrollment());

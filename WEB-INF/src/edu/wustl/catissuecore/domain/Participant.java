@@ -16,7 +16,6 @@ import java.util.HashSet;
 import java.util.Map;
 
 import edu.wustl.catissuecore.actionForm.ParticipantForm;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
@@ -441,7 +440,7 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 	        else
 	        	this.socialSecurityNumber = null;
 	        
-	        this.birthDate = Utility.parseDate(form.getBirthDate(),Constants.DATE_PATTERN_MM_DD_YYYY);
+	        this.birthDate = Utility.parseDate(form.getBirthDate(),Utility.datePattern(form.getBirthDate()));
 	        
 	        Map map = form.getValues();
 	        Logger.out.debug("Map "+map);

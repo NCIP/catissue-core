@@ -13,7 +13,6 @@ import java.io.Serializable;
 import java.util.Date;
 
 import edu.wustl.catissuecore.actionForm.CollectionProtocolRegistrationForm;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
@@ -243,7 +242,7 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 			if(protocolParticipantIdentifier.equals(""))
 				this.protocolParticipantIdentifier = null;
 			
-			this.registrationDate = Utility.parseDate(form.getRegistrationDate(), Constants.DATE_PATTERN_MM_DD_YYYY);
+			this.registrationDate = Utility.parseDate(form.getRegistrationDate(),Utility.datePattern(form.getRegistrationDate()));
 		}
 		catch (Exception e)
 		{

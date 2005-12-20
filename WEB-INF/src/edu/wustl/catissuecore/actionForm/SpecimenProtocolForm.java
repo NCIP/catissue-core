@@ -6,9 +6,7 @@
  */
 package edu.wustl.catissuecore.actionForm;
 
-import java.text.SimpleDateFormat;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -338,6 +336,7 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
         		String errorKey = validator.validateDate(startDate ,false);
         		if(errorKey.trim().length() >0  )
         		{
+        			Logger.out.debug("startdate errorKey : " +errorKey );
         			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(errorKey,ApplicationProperties.getValue("collectionprotocol.startdate")));
         		}
 
@@ -346,8 +345,9 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
     			{
     	         	//  date validation according to bug id  722 and 730 and 939
     	    		errorKey = validator.validateDate(endDate ,false);
-    	    		if(errorKey.trim().length() >0  )
+    	    		if(errorKey.trim().length() >0 && !errorKey.equals("" )   )
     	    		{
+            			Logger.out.debug("enddate errorKey: " + errorKey );
     	    			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(errorKey,ApplicationProperties.getValue("collectionprotocol.enddate")));
     	    		}
     			}
@@ -357,27 +357,10 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
     			// check the start date less than end date
     			if (validator.checkDate(startDate) && validator.checkDate(endDate )  )
     			{
-    				try
-					{
-    					String pattern="MM-dd-yyyy";
-    					SimpleDateFormat dF = new SimpleDateFormat(pattern);
-    					Date sDate = dF.parse(this.startDate );
-    					Date eDate = dF.parse(this.endDate );
-    						
-    					int check = sDate.compareTo(eDate );
-    					
-    					if(check>0)
-    					{
-    						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("specimenprotocol.invaliddate",ApplicationProperties.getValue("specimenprotocol.invaliddate")));
-    					}
-    					
-					} // try
-    				catch (Exception excp1)
-					{
+    				if(!validator.compareDates(startDate,endDate   ) )
+    				{
     					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("specimenprotocol.invaliddate",ApplicationProperties.getValue("specimenprotocol.invaliddate")));
-						errors = new ActionErrors();
-					}
-    				
+    				}
     			}
     			if (!validator.isNumeric(enrollment) && !validator.isEmpty(enrollment ))
                 {
@@ -388,7 +371,7 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 		catch (Exception excp)
 		{
 	    	// use of logger as per bug 79
-	    	Logger.out.error(excp.getMessage(),excp); 
+	    	Logger.out.error("error in SPForm : " + excp.getMessage(),excp); 
 			errors = new ActionErrors();
 		}
 		return errors;
