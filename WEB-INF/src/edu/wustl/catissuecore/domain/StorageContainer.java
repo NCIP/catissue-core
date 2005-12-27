@@ -121,7 +121,7 @@ public class StorageContainer extends AbstractDomainObject implements java.io.Se
 		this.setActivityStatus(oldContainer.getActivityStatus());
 		this.setParentContainer(oldContainer.getParentContainer());
 		this.setNumber(oldContainer.getNumber());
-		
+		this.setIsFull(oldContainer.getIsFull()   );
 		if(parentContainer!=null)
 		{
 			parentContainer.getChildrenContainerCollection().add(this);
@@ -516,6 +516,7 @@ public class StorageContainer extends AbstractDomainObject implements java.io.Se
 	        	this.barcode			= null;
 	        
 	        this.isFull					= new Boolean(form.getIsFull());
+	        Logger.out.debug("SC Domain : "+ this.isFull + " :-: form.getIsFull() : " + form.getIsFull()  );
 	        this.activityStatus			= form.getActivityStatus();
 	        this.noOfContainers			= new Integer(form.getNoOfContainers());
 	        
