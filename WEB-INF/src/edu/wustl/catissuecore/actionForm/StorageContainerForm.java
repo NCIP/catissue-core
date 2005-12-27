@@ -112,7 +112,7 @@ public class StorageContainerForm extends AbstractActionForm
 	/**
 	 * Tells whether this container is full or not.
 	 */
-	private String isFull;
+	private String isFull = "False" ;
 
 	/**
 	 * Map to handle values of all the CollectionProtocol Events
@@ -171,7 +171,8 @@ public class StorageContainerForm extends AbstractActionForm
 			this.activityStatus = Utility.toString(container.getActivityStatus());
 			this.startNumber = Utility.toString(container.getNumber());
 			
-			isFull = Utility.toString(container.getIsFull());
+			isFull = Utility.initCap( Utility.toString(container.getIsFull()));
+			Logger.out.debug("isFULL />/>/> "+ isFull);
 			
 			this.typeId = container.getStorageType().getSystemIdentifier().longValue();
 			
@@ -455,6 +456,16 @@ public class StorageContainerForm extends AbstractActionForm
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 						ApplicationProperties.getValue("storageContainer.type")));
 			}
+			
+//			if(operation.equalsIgnoreCase(Constants.EDIT   ) )
+//			{
+				if(!validator.isValidOption(isFull) )
+				{
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",
+							ApplicationProperties.getValue("storageContainer.isContainerFull")));
+				}
+//			}
+			
 			if (checkedButton == 1 && siteId == -1)
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
