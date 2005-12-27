@@ -1431,4 +1431,12 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	//Constants for HTTP-API
 	public static final String CONTENT_TYPE = "CONTENT-TYPE";
 	public static final String HTTP_API = "HTTPAPI";
+	
+	// For StorageContainer isFull status
+	public static final String IS_CONTAINER_FULL_LIST = "isContainerFullList";
+	public static final String [] IS_CONTAINER_FULL_VALUES = {
+	        SELECT_OPTION,
+	        "True",
+	        "False"
+	};
 }

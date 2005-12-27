@@ -63,7 +63,11 @@ public class StorageContainerAction  extends SecureAction
         
         //Sets the activityStatusList attribute to be used in the Site Add/Edit Page.
         request.setAttribute(Constants.ACTIVITYSTATUSLIST, Constants.ACTIVITY_STATUS_VALUES);
-       
+
+        //Sets the isContainerFullList attribute to be used in the StorageContainer Add/Edit Page.
+        request.setAttribute(Constants.IS_CONTAINER_FULL_LIST, Constants.IS_CONTAINER_FULL_VALUES );
+
+        
     	StorageContainerBizLogic bizLogic = (StorageContainerBizLogic)BizLogicFactory.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
         
     	String []displayField = {"type"};  
