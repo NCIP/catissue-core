@@ -261,7 +261,11 @@ function insRow(subdivtag)
 					<td><html:hidden property="positionInParentContainer" /></td>
 				</tr>
 				<tr>
-					<td><html:hidden property="onSubmit" /></td>
+					<td><html:hidden property="onSubmit" />
+						<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>">
+							<html:hidden property="isFull" />
+						</logic:equal>
+					</td>
 				</tr>
 					<tr>
 						<td class="formMessage" colspan="4">* indicates a required field</td>
@@ -426,7 +430,25 @@ function insRow(subdivtag)
 							°C
 						</td>
 					</tr>
-					
+<%-- MD : Code for isContainerfull
+     Bug id 1007
+ --%>			
+ 					<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
+					<tr>
+						<td class="formRequiredNotice" width="5">*</td>
+						<td class="formRequiredLabel" colspan="2">
+							<label for="activityStatus">
+								<bean:message key="storageContainer.isContainerFull" />
+							</label>
+						</td>
+						<td class="formField" colspan="2">
+							<html:select property="isFull" styleClass="formFieldSized10" styleId="isFull" size="1" >
+								<html:options name="<%=Constants.IS_CONTAINER_FULL_LIST%>" labelName="<%=Constants.IS_CONTAINER_FULL_LIST%>" />
+							</html:select>
+						</td>
+					</tr>
+					</logic:equal>
+ 		
 					<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
 					<tr>
 						<td class="formRequiredNotice" width="5">*</td>
