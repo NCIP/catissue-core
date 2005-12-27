@@ -261,7 +261,28 @@ public class Utility
     	Logger.out.debug("datePattern returned : "+ datePattern  );
 		return datePattern; 
 	}
-    
+	
+	/**
+	 * @param str String to be converted to Proper case.
+	 * @return The String in Proper case.
+	 */
+	public static String initCap(String str)
+	{
+		String retStr="";
+		if(str!=null && str.trim().length() >0 )
+		{
+			String firstCharacter = str.substring(0,1 );
+			String otherData = str.substring(1 );
+			retStr = firstCharacter.toUpperCase()+otherData.toLowerCase();
+		}
+		else
+		{
+			Logger.out.debug("Utility.initCap : - String provided is either empty or null" + str );
+		}
+		
+		return retStr;
+	}
+   
 	//	public static void main(String[] args)
 //  {
 //	    try{
