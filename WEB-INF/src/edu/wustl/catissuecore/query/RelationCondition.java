@@ -56,6 +56,15 @@ public class RelationCondition
     }
     
     /**
+	 * @param relationCondition
+	 */
+	public RelationCondition(RelationCondition relationCondition) {
+		this.leftDataElement = new DataElement(relationCondition.leftDataElement);
+        this.operator = new Operator(relationCondition.operator);
+        this.rightDataElement = new DataElement(relationCondition.rightDataElement);
+	}
+
+	/**
      * SQL string representation of this relation condition
      * @param tableSufix
      * @return
@@ -88,4 +97,29 @@ public class RelationCondition
     {
         this.rightDataElement = rightDataElement;
     }
+    
+    public String toString()
+    {
+        return leftDataElement.toSQLString(0) +" "+ operator.toSQLString() + " " + rightDataElement.toSQLString(0)+" ";
+    }
+    
+    
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	public boolean equals(Object obj) {
+		 if (obj instanceof RelationCondition) {
+		 	RelationCondition relationCondition = (RelationCondition)obj;
+            if(!leftDataElement.equals(relationCondition.leftDataElement))
+                return false;
+            if(!rightDataElement.equals(relationCondition.rightDataElement))
+                return false;
+            if(!operator.equals((relationCondition.operator)))
+            	return false;
+            return true;
+	    }
+        
+       else
+           return false;
+	}
 }

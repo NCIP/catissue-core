@@ -62,4 +62,24 @@ public abstract class AbstractDomainObject implements Auditable
 	 * @see #getIdentifier()
 	 * */
     public abstract void setSystemIdentifier(Long systemIdentifier);
+    
+    /**
+	 * Returns the unique systemIdentifier assigned to the domain object.
+     * @return returns a unique systemIdentifier assigned to the domain object.
+     * @see #setIdentifier(Long)
+	 * */
+    public Long getId()
+    {
+    	return getSystemIdentifier();
+    }
+
+    /**
+	 * Sets an systemIdentifier for the domain object.
+	 * @param systemIdentifier systemIdentifier for the domain object.
+	 * @see #getIdentifier()
+	 * */
+    public void setId(Long id)
+    {
+    	setSystemIdentifier(id);
+    }
 }

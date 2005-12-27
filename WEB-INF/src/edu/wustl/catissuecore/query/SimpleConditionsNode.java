@@ -69,6 +69,6 @@ public class SimpleConditionsNode {
     
     public String getConditionObject()
     {
-        return condition.getDataElement().getTable();
+        return condition.getDataElement().getTableAliasName();
     }
 }

@@ -19,6 +19,11 @@ public abstract class ConditionsImpl {
 	public ConditionsImpl(){
 
 	}
+	
+	public void formatTree()
+	{
+		
+	}
 
 	/**
 	 * Returns String representation of itself 

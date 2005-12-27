@@ -32,7 +32,7 @@ public class ConditionMapParser
 		List conditionList=new ArrayList();
 		Iterator keyItr = conditionMap.keySet().iterator();
 		while(keyItr.hasNext())
-		{
+		{ 
 			DataElement dataElement = new DataElement();
 			String key = (String)keyItr.next();
 			//Check for the keys of operators which is in the form Operator:TableAliasName:ColumnName
@@ -51,7 +51,7 @@ public class ConditionMapParser
 						st.nextToken();
 						String aliasName = st.nextToken();
 						//Logger.out.debug("table name in condition obj"+aliasName);
-						dataElement.setTable(aliasName);
+						dataElement.setTableName(aliasName);
 						String columnName = st.nextToken();
 						value = (String)conditionMap.get(aliasName+":"+columnName);
 						//Append the Event Parameters object name to the column name in the conditions.

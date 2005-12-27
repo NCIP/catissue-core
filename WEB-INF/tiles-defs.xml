@@ -61,6 +61,10 @@
 		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>
 	
+	<definition name=".catissuecore.redirectToLoginPageDef" extends=".catissuecore.queryDataViewDef">
+		<put name="content" value="/pages/content/common/RedirectToLoginPage.jsp" />
+	</definition>
+	
 	<!-- Home tab pages definitions end -->
 
 	<!-- Manage Administrative Data tab pages definitions start -->

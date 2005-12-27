@@ -18,6 +18,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
+import edu.wustl.catissuecore.domain.CollectionProtocol;
+import edu.wustl.catissuecore.domain.DistributionProtocol;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.QueryResultObjectData;
 import edu.wustl.common.beans.SecurityDataBean;
@@ -29,7 +31,7 @@ import edu.wustl.common.security.exceptions.SMTransactionException;
 import edu.wustl.common.util.Permissions;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.dbManager.HibernateMetaData;
-import edu.wustl.common.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
 import gov.nih.nci.security.AuthenticationManager;
 import gov.nih.nci.security.AuthorizationManager;
@@ -1271,7 +1273,7 @@ public class SecurityManager implements Permissions {
 		privileges.add(nameValueBean);
 		return privileges;
 	}
-
+	
 	/**
 	 * This method returns NameValueBeans for all the objects of type objectType
 	 * on which user with identifier userID has privilege ASSIGN_ <
@@ -1324,7 +1326,6 @@ public class SecurityManager implements Permissions {
 							break;
 						}
 					}
-
 				}
 			}
 		}
@@ -1469,17 +1470,21 @@ public class SecurityManager implements Permissions {
 				
 				//Getting Appropriate Role
 				//role name is generated as <<privilegeName>>_ONLY
-				roleName = privilegeName + "_ONLY";
+			    if (privilegeName.equals(Permissions.READ))
+			        roleName = Permissions.READ_DENIED;
+			    else
+			        roleName = privilegeName + "_ONLY";
 				role = getRole(roleName);
+				Logger.out.debug("Operation>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+(assignOperation == true?"Remove READ_DENIED":"Add READ_DENIED"));
 				
 				Set roles = new HashSet();
 				roles.add(role);
 				
-				if (privilegeName.equals("USE"))
+				if (privilegeName.equals(Permissions.USE))
 			    {
 				    protectionGroupName = "PG_" + userId + "_ROLE_" + role.getId();
 				    
-					if (assignOperation == Constants.PRIVILEGE_ASSIGN)
+					if (assignOperation == edu.wustl.catissuecore.util.global.Constants.PRIVILEGE_ASSIGN)
 					{
 					    Logger.out.debug("Assign Protection elements");
 					    
@@ -1500,6 +1505,10 @@ public class SecurityManager implements Permissions {
 			    }
 				else
 				{
+				    // In case of assign remove the READ_DENIED privilege of the user
+				    // and in case of de-assign add the READ_DENIED privilege to the user.
+				    assignOperation = ! assignOperation;
+				    
 				    for (int i = 0; i < objectIds.length;i++)
 					{
 					    // Getting Appropriate Group
@@ -1509,14 +1518,15 @@ public class SecurityManager implements Permissions {
 					    Logger.out.debug("objectType............................"+objectType);
 					    //changed by ajay
 					    
-					    if (objectType.getName().equals("edu.wustl.catissuecore.domain.CollectionProtocol"))
+					    if (objectType.getName().equals(CollectionProtocol.class.getName()))
 					        protectionGroupName = Constants.getCollectionProtocolPGName(objectIds[i]);
-					    else if (objectType.getName().equals("edu.wustl.catissuecore.domain.DistributionProtocol"))
+					    else if (objectType.getName().equals(DistributionProtocol.class.getName()))
 					        protectionGroupName = Constants.getDistributionProtocolPGName(objectIds[i]);
 					    
 					    protectionGroup = getProtectionGroup(protectionGroupName);
-						
+					    
 						Logger.out.debug("Assign User Role To Protection Group");
+						
 						//Assign User Role To Protection Group
 						assignUserRoleToProtectionGroup(userId, roles, protectionGroup, assignOperation);
 					}
@@ -1645,7 +1655,10 @@ public class SecurityManager implements Permissions {
 				
 				//Getting Appropriate Role
 				//role name is generated as <<privilegeName>>_ONLY
-				roleName = privilegeName + "_ONLY";
+				if (privilegeName.equals(Permissions.READ))
+			        roleName = Permissions.READ_DENIED;
+			    else
+			        roleName = privilegeName + "_ONLY";
 				role = getRole(roleName);
 				
 				Set roles = new HashSet();
@@ -1655,7 +1668,7 @@ public class SecurityManager implements Permissions {
 			    {
 				    protectionGroupName = "PG_GROUP_" + groupId + "_ROLE_" + role.getId();
 				    
-				    if (assignOperation == Constants.PRIVILEGE_ASSIGN)
+				    if (assignOperation == edu.wustl.catissuecore.util.global.Constants.PRIVILEGE_ASSIGN)
 					{
 				        protectionGroup = getProtectionGroup(protectionGroupName);
 					    
@@ -1676,6 +1689,13 @@ public class SecurityManager implements Permissions {
 			    }
 				else
 				{
+					Logger.out.debug("Value Before#####################"+assignOperation);
+
+				    // In case of assign remove the READ_DENIED privilege of the group
+				    // and in case of de-assign add the READ_DENIED privilege to the group.
+				    assignOperation = ! assignOperation;
+				    
+				    Logger.out.debug("Value After#####################"+assignOperation);
 				
 					for (int i = 0; i < objectIds.length;i++)
 					{
@@ -1686,19 +1706,20 @@ public class SecurityManager implements Permissions {
 		//				protectionGroupName = "PG_GROUP_" + groupId + "_ROLE_"
 		//						+ role.getId();
 						Logger.out.debug("objectType............................"+objectType);
-					    if (objectType.getName().equals("edu.wustl.catissuecore.domain.CollectionProtocol"))
+					    if (objectType.getName().equals(CollectionProtocol.class.getName()))
 					        protectionGroupName = Constants.getCollectionProtocolPGName(objectIds[i]);
-					    else if (objectType.getName().equals("edu.wustl.catissuecore.domain.DistributionProtocol"))
+					    else if (objectType.getName().equals(DistributionProtocol.class.getName()))
 					        protectionGroupName = Constants.getDistributionProtocolPGName(objectIds[i]);
 					    
 						protectionGroup = getProtectionGroup(protectionGroupName);
-		
+						
 		//				Logger.out.debug("Assign Protection elements");
 		//				//Assign Protection elements to Protection Group
 		//				assignProtectionElements(protectionGroup
 		//						.getProtectionGroupName(), objectType, objectIds);
 		
 						Logger.out.debug("Assign Group Role To Protection Group");
+						
 						//Assign User Role To Protection Group
 						assignGroupRoleToProtectionGroup(Long.valueOf(groupId), roles,
 								protectionGroup, assignOperation);
@@ -1803,7 +1824,7 @@ public class SecurityManager implements Permissions {
 			}
 			
 			// if the operation is assign, add the roles to be assigned.
-			if (assignOperation == Constants.PRIVILEGE_ASSIGN)
+			if (assignOperation == edu.wustl.catissuecore.util.global.Constants.PRIVILEGE_ASSIGN)
 			{
 			    aggregatedRoles.addAll(roles);
 			}
@@ -1880,7 +1901,7 @@ public class SecurityManager implements Permissions {
 			}
 
 			// if the operation is assign, add the roles to be assigned.
-			if (assignOperation == Constants.PRIVILEGE_ASSIGN)
+			if (assignOperation == edu.wustl.catissuecore.util.global.Constants.PRIVILEGE_ASSIGN)
 			{
 			    aggregatedRoles.addAll(roles);
 			}
@@ -1985,16 +2006,17 @@ public class SecurityManager implements Permissions {
 	 * @param aList
 	 */
 	public void filterRow(SessionDataBean sessionDataBean,
-			Map queryResultObjectDataMap, List aList) {
-		//boolean that indicated whether user has privilege on main object
+			Map queryResultObjectDataMap, List aList) 
+	{
+	    // boolean that indicated whether user has privilege on main object
 		boolean isAuthorizedForMain = false;
-
-		//		boolean that indicated whether user has privilege on related object
+		
+		// boolean that indicated whether user has privilege on related object
 		boolean isAuthorizedForRelated = false;
-
-		//boolean that indicates whether user has privilege on identified data
+		
+		// boolean that indicates whether user has privilege on identified data
 		boolean hasPrivilegeOnIdentifiedData = false;
-
+		
 		Vector objectColumnIds;
 		Set keySet = queryResultObjectDataMap.keySet();
 		Iterator keyIterator = keySet.iterator();
@@ -2023,80 +2045,95 @@ public class SecurityManager implements Permissions {
 		//				}
 		//			}
 		//		}
-
-		for (; keyIterator.hasNext();) {
+		
+		for (; keyIterator.hasNext();) 
+		{
 			queryResultObjectData2 = (QueryResultObjectData) queryResultObjectDataMap
 					.get(keyIterator.next());
-
-			isAuthorizedForMain = checkPermission(
-					sessionDataBean.getUserName(), queryResultObjectData2
+			isAuthorizedForMain = checkPermission(sessionDataBean.getUserName(), queryResultObjectData2
 							.getAliasName(), aList.get(queryResultObjectData2
-							.getIdentifierColumnId()), Permissions.READ);
+							.getIdentifierColumnId()), Permissions.READ_DENIED);
+			
+			isAuthorizedForMain = !isAuthorizedForMain;
 			Logger.out.debug("Main object:"
 					+ queryResultObjectData2.getAliasName()
 					+ " isAuthorizedForMain:" + isAuthorizedForMain);
-
+			
 			//Remove the data from the fields directly related to main object
-			if (!isAuthorizedForMain) {
-				removeUnauthorizedFieldsData(aList, queryResultObjectData2,
-						false);
-			} else {
+			if (!isAuthorizedForMain) 
+			{
+			    Logger.out.debug("Removed Main Object Fields...................");
+				removeUnauthorizedFieldsData(aList, queryResultObjectData2, false);
+			} 
+			else 
+			{
 				hasPrivilegeOnIdentifiedData = checkPermission(sessionDataBean
 						.getUserName(), queryResultObjectData2.getAliasName(),
-						aList.get(queryResultObjectData2
-								.getIdentifierColumnId()),
+						aList.get(queryResultObjectData2.getIdentifierColumnId()),
 						Permissions.IDENTIFIED_DATA_ACCESS);
+				
 				Logger.out.debug("hasPrivilegeOnIdentifiedData:"
 						+ hasPrivilegeOnIdentifiedData);
-				if (!hasPrivilegeOnIdentifiedData) {
-					removeUnauthorizedFieldsData(aList, queryResultObjectData2,
-							true);
+				
+				if (!hasPrivilegeOnIdentifiedData) 
+				{
+					removeUnauthorizedFieldsData(aList, queryResultObjectData2, true);
 				}
 			}
 
-			queryObjects = queryResultObjectData2
-					.getRelatedQueryResultObjects();
-			for (int j = 0; j < queryObjects.size(); j++) {
-				queryResultObjectData3 = (QueryResultObjectData) queryObjects
-						.get(j);
-				Logger.out.debug("isAuthorized:" + isAuthorizedForMain);
+			Logger.out.debug("isAuthorizedForMain***********************"+isAuthorizedForMain);
+			// Check the privilege on related objects when the privilege on main object is de-assigned.
+//			if (isAuthorizedForMain == false)
+			{
+			    Logger.out.debug("Check Permission of Related Objects..................");
+			    queryObjects = queryResultObjectData2.getRelatedQueryResultObjects();
+				for (int j = 0; j < queryObjects.size(); j++) 
+				{
+					queryResultObjectData3 = (QueryResultObjectData) queryObjects.get(j);
+					
+					//If authorized to see the main object then check for
+					// authorization on dependent object
+					if (isAuthorizedForMain) 
+					{
+						isAuthorizedForRelated = checkPermission(sessionDataBean
+								.getUserName(), queryResultObjectData3
+								.getAliasName(), aList.get(queryResultObjectData3
+								.getIdentifierColumnId()), Permissions.READ_DENIED);
+						isAuthorizedForRelated = !isAuthorizedForRelated;
+					}
+					//else set it false
+					else 
+					{
+						isAuthorizedForRelated = false;
+					}
+					
+					Logger.out.debug("Related object:"
+							+ queryResultObjectData3.getAliasName()
+							+ " isAuthorizedForRelated:" + isAuthorizedForRelated);
 
-				//If authorized to see the main object then check for
-				// authorization on dependent object
-				if (isAuthorizedForMain) {
-					isAuthorizedForRelated = checkPermission(sessionDataBean
-							.getUserName(), queryResultObjectData3
-							.getAliasName(), aList.get(queryResultObjectData3
-							.getIdentifierColumnId()), Permissions.READ);
-				}
-				//else set it false
-				else {
-					isAuthorizedForRelated = false;
-				}
-				Logger.out.debug("Related object:"
-						+ queryResultObjectData3.getAliasName()
-						+ " isAuthorizedForRelated:" + isAuthorizedForRelated);
-
-				//If not authorized to see related objects
-				//remove the data from the fields directly related to related
-				// object
-				if (!isAuthorizedForRelated) {
-					removeUnauthorizedFieldsData(aList, queryResultObjectData3,
-							false);
-				} else {
-					hasPrivilegeOnIdentifiedData = checkPermission(
-							sessionDataBean.getUserName(),
-							queryResultObjectData3.getAliasName(), aList
-									.get(queryResultObjectData3
-											.getIdentifierColumnId()),
-							Permissions.IDENTIFIED_DATA_ACCESS);
-					if (!hasPrivilegeOnIdentifiedData) {
-						removeUnauthorizedFieldsData(aList,
-								queryResultObjectData3, true);
+					//If not authorized to see related objects
+					//remove the data from the fields directly related to related
+					// object
+					if (!isAuthorizedForRelated) 
+					{
+						removeUnauthorizedFieldsData(aList, queryResultObjectData3,
+								false);
+					} 
+					else 
+					{
+						hasPrivilegeOnIdentifiedData = checkPermission(
+								sessionDataBean.getUserName(),
+								queryResultObjectData3.getAliasName(), aList
+										.get(queryResultObjectData3.getIdentifierColumnId()),
+								Permissions.IDENTIFIED_DATA_ACCESS);
+						
+						if (!hasPrivilegeOnIdentifiedData) 
+						{
+							removeUnauthorizedFieldsData(aList,queryResultObjectData3, true);
+						}
 					}
 				}
 			}
-
 		}
 	}
 
@@ -2130,8 +2167,7 @@ public class SecurityManager implements Permissions {
 		Logger.out.debug("objectColumnIds:" + objectColumnIds);
 		if (objectColumnIds != null) {
 			for (int k = 0; k < objectColumnIds.size(); k++) {
-				aList.set(((Integer) objectColumnIds.get(k)).intValue() - 1,
-						"##");
+				aList.set(((Integer) objectColumnIds.get(k)).intValue() - 1, "##");
 			}
 		}
 	}

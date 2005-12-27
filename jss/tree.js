@@ -124,10 +124,10 @@ function addNode(parentNode, recursedNodes)
 			// Write out line & empty icons
 			if(i == 0 || (i%2 == 0))
 				//treeItem.innerHTML = "<tr><td class='tdoneColor' colspan='4'><img src='images/"+nodeValues[3]+".GIF' alt='"+nodeValues[3]+"' />&nbsp;";
-				document.write("<tr valign='middle'><td class='tdoneColor' colspan='5'><img src='images/"+nodeValues[3]+".GIF' alt='"+nodeValues[3]+"' />&nbsp;");
+				document.write("<tr valign='middle'><td class='tdoneColor' colspan='5'><img src='images/"+ nodeValues[3] +".GIF' alt='"+nodeValues[3]+"' />&nbsp;");
 			else
 				//treeItem.innerHTML = "<tr><td class='tdsecondColor' colspan='4'><img src='images/"+nodeValues[3]+".GIF' alt='"+nodeValues[3]+"' />&nbsp;";
-				document.write("<tr valign='middle'><td class='tdsecondColor' colspan='5'><img src='images/"+nodeValues[3]+".GIF' alt='"+nodeValues[3]+"' />&nbsp;");
+				document.write("<tr valign='middle'><td class='tdsecondColor' colspan='5'><img src='images/"+ nodeValues[3] +".GIF' alt='"+nodeValues[3]+"' />&nbsp;");
 				
 			for (g=0; g<recursedNodes.length; g++) 
 			{

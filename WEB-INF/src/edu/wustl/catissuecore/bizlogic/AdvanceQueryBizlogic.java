@@ -111,6 +111,8 @@ public class AdvanceQueryBizlogic extends DefaultBizLogic implements TreeDataInt
 				setQueryTreeNode((String) rowList.get(specimenColumnId), Constants.SPECIMEN,parentSpecimenId,
 									Constants.SPECIMEN,null,null,vector);
 			}
+			Logger.out.debug("Tree Data:"+rowList.get(participantColumnId)+" "+rowList.get(collectionProtocolColumnId)+" "+
+					rowList.get(specimenCollGrpColumnId)+" "+rowList.get(parentSpecimenColumnId)+" "+ rowList.get(specimenColumnId));
 			
 			
         }
@@ -158,14 +160,14 @@ public class AdvanceQueryBizlogic extends DefaultBizLogic implements TreeDataInt
 				while(conditionsItr.hasNext())
 				{
 					Condition condition = (Condition)conditionsItr.next();
-					String table = condition.getDataElement().getTable();
+					String table = condition.getDataElement().getTableAliasName();
 					StringTokenizer tableTokens = new StringTokenizer(table,".");
 					if(tableTokens.countTokens()==2)
 					{
 						String objectName = tableTokens.nextToken();
 						String tableName = tableTokens.nextToken();
 						//tableSet.add(objectName);
-						condition.getDataElement().setTable(tableName);
+						condition.getDataElement().setTableName(tableName);
 					}
 				}
 			}

@@ -65,7 +65,7 @@
 			checkb.colSpan=2;
 			sname="";
 			var name = "chk_"+ rowno;
-			sname="<input type='checkbox' name='" + name +"' id='" + name +"' value='C'>"
+			sname="<input type='checkbox' name='" + name +"' id='" + name +"' value='C' onClick=\"enableButton(document.forms[0].deleteValue,document.forms[0].exIdCounter,'chk_')\">";
 			checkb.innerHTML=""+sname;
 		}
 		
@@ -352,7 +352,7 @@
 				     	</html:button>
 				    </td>
 				    <td class="formTitle" align="Right">
-							<html:button property="deleteValue" styleClass="actionButton" onclick="deleteChecked('addExternalIdentifier','CreateSpecimen.do?operation=<%=operation%>&pageOf=&status=true',document.forms[0].exIdCounter,'chk_',false)">
+							<html:button property="deleteValue" styleClass="actionButton" onclick="deleteChecked('addExternalIdentifier','CreateSpecimen.do?operation=<%=operation%>&pageOf=&status=true',document.forms[0].exIdCounter,'chk_',false)" disabled="true">
 								<bean:message key="buttons.delete"/>
 							</html:button>
 						</td>
@@ -402,7 +402,7 @@
 
 						%>
 						<td class="formField" width="5">
-							<input type=checkbox name="<%=check %>" id="<%=check %>" <%=condition%>>		
+							<input type=checkbox name="<%=check %>" id="<%=check %>" <%=condition%> onClick="enableButton(document.forms[0].deleteValue,document.forms[0].exIdCounter,'chk_')">		
 						</td>
 					 </tr>
 				  <% } %>

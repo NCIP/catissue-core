@@ -185,28 +185,10 @@ function insRow(subdivtag)
 	checkb.colSpan=2;
 	sname="";
 	var name = "chk_"+rowno;
-	sname="<input type='checkbox' name='" + name +"' id='" + name +"' value='C'>"
+	sname="<input type='checkbox' name='" + name +"' id='" + name +"' value='C' onClick=\"enableButton(document.forms[0].deleteValue,document.forms[0].counter,'chk_')\">";
 	checkb.innerHTML=""+sname;
 }
 
-function confirmDisable()
-{
-	if(document.forms[0].activityStatus.value == "Disabled")
-	{
-		 var go = confirm("<bean:message key="allPage.disableConfirm" />");
-		 if (go==true)
-		 {
-			 document.forms[0].action = "<%=formName%>";
-			 document.forms[0].submit();
-		 }
-	
-	}
-	else
-	{
-		document.forms[0].action = "<%=formName%>";
-		document.forms[0].submit();
-	}		
-}
 
 //-->
 </SCRIPT>
@@ -355,10 +337,10 @@ function confirmDisable()
 			
 						 <td class="formField" colspan=2>
 						 <div id="enddateDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
-						 <html:text styleClass="formDateSized15" maxlength="10"  size="35" styleId="endDate" property="endDate" />
+						 <html:text styleClass="formDateSized15" maxlength="10"  size="35" styleId="endDate" property="endDate" readonly="true" />
 						 &nbsp;<bean:message key="page.dateFormat" />&nbsp;
-							<a href="javascript:show_calendar('distributionProtocolForm.endDate',null,null,'MM-DD-YYYY');">
-								<img src="images\calendar.gif" width=24 height=22 border=0></a>
+							<!-- a href="javascript:show_calendar('distributionProtocolForm.endDate',null,null,'MM-DD-YYYY');">
+								<img src="images\calendar.gif" width=24 height=22 border=0></a -->
 						 </td>
 					</tr>
 
@@ -426,7 +408,7 @@ function confirmDisable()
 						<html:button property="addDistributionProtocolEvents" styleClass="actionButton" onclick="insRow('SpecimenRequirementData')">Add More</html:button>
 				</td> 
 				<td class="formTitle" align="Right">
-					<html:button property="deleteValue" styleClass="actionButton" onclick="deleteChecked('SpecimenRequirementData','DistributionProtocol.do?operation=<%=operation%>&pageOf=pageOfDistributionProtocol&status=true',document.forms[0].counter,'chk_',false)">
+					<html:button property="deleteValue" styleClass="actionButton" onclick="deleteChecked('SpecimenRequirementData','DistributionProtocol.do?operation=<%=operation%>&pageOf=pageOfDistributionProtocol&status=true',document.forms[0].counter,'chk_',false)" disabled="true">
 					<bean:message key="buttons.delete"/>
 					</html:button>
 				</td>
@@ -611,7 +593,7 @@ function confirmDisable()
 
 						%>
 						<td class="formField" width="5">
-							<input type=checkbox name="<%=check %>" id="<%=check %>" <%=condition%>>		
+							<input type=checkbox name="<%=check %>" id="<%=check %>" <%=condition%> onClick="enableButton(document.forms[0].deleteValue,document.forms[0].counter,'chk_')">		
 						</td>
 			</tr>	
 							
@@ -640,7 +622,10 @@ function confirmDisable()
 							</html:submit>
 						</td-->
 						<td>
-						   	<html:button styleClass="actionButton" property="submitPage" onclick="confirmDisable()">
+						<%
+						   	String action = "confirmDisable('" + formName +"',document.forms[0].activityStatus)";
+						%>
+						   	<html:button styleClass="actionButton" property="submitPage" onclick="<%=action%>">
 						   		<bean:message key="buttons.submit"/>
 						   	</html:button>
 						</td>

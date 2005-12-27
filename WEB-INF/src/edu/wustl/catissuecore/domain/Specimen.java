@@ -697,9 +697,9 @@ public class Specimen extends AbstractDomainObject implements Serializable
     	return className;
     }
     
-    public String getObjectId(AbstractDomainObject protectionObject) 
+    public String getObjectId() 
     {
-		Logger.out.debug(protectionObject.getClass().getName()+" is an instance of Specimen class");
-		return Specimen.class.getName() + "_" + protectionObject.getSystemIdentifier();
+		Logger.out.debug(this.getClass().getName()+" is an instance of Specimen class");
+		return Specimen.class.getName() + "_" + this.getSystemIdentifier();
 	}
 }

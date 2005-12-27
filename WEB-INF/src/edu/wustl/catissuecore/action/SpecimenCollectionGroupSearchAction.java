@@ -80,7 +80,7 @@ public class SpecimenCollectionGroupSearchAction extends AdvanceSearchUIAction
     		setIsDisableValue(searchFieldData,map);
     	}
     		
-    	AdvanceSearchUI advSearchUI = new AdvanceSearchUI("images/SpecimenCollectionGroup.GIF","SpecimenCollectionGroup","spg.queryRule",searchFieldData,"advanceSearchForm");
+    	AdvanceSearchUI advSearchUI = new AdvanceSearchUI("images/SpecimenCollectionGroup.GIF",Constants.SPECIMEN_COLLECTION_GROUP,"spg.queryRule",searchFieldData,"advanceSearchForm");
     	request.setAttribute("AdvanceSearchUI",advSearchUI);
     	
     	String pageOf = (String)request.getParameter(Constants.PAGEOF);

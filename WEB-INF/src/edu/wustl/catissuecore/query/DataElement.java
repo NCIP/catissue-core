@@ -23,7 +23,7 @@ public class DataElement
     /**
      * Table/object name
      */
-    private String table;
+    private Table table;
     
     /**
      * Field name
@@ -38,6 +38,7 @@ public class DataElement
     
     public DataElement()
     {
+    	this.table = new Table();
     }
     
     /**
@@ -47,11 +48,26 @@ public class DataElement
      */
     public DataElement(String table, String field)
     {
-        this.table = table;
+        this.table = new Table(table,table);
         this.field = field;
+        this.fieldType = Constants.FIELD_TYPE_TEXT;
     }
     
     public DataElement(String table, String field, String fieldType)
+    {
+        this.table = new Table(table,table);
+        this.field = field;
+        this.fieldType = fieldType;
+    }
+    
+    public DataElement(Table table, String field)
+    {
+        this.table = table;
+        this.field = field;
+        this.fieldType = Constants.FIELD_TYPE_TEXT;
+    }
+    
+    public DataElement(Table table, String field, String fieldType)
     {
         this.table = table;
         this.field = field;
@@ -59,13 +75,22 @@ public class DataElement
     }
     
     /**
+	 * @param leftDataElement
+	 */
+	public DataElement(DataElement leftDataElement) {
+		this.table = new Table(leftDataElement.getTable());
+        this.field = leftDataElement.field;
+        this.fieldType = leftDataElement.fieldType;
+	}
+
+	/**
      * SQL string representation
      * @param tableSufix sufix for table name
      * @return SQL string representation
      */
     public String toSQLString(int tableSufix)
     {
-        String fieldName = table + tableSufix + "." + field+" ";
+       String fieldName = table.toSQLString() + tableSufix + "." + field+" ";
         if ((fieldType != null) && (Constants.FIELD_TYPE_TIMESTAMP_TIME.equalsIgnoreCase(fieldType)))
 		{
             fieldName = Constants.MYSQL_TIME_FORMAT_FUNCTION + "(" + fieldName + ",'" + Constants.MYSQL_TIME_PATTERN + "') ";
@@ -80,7 +105,7 @@ public class DataElement
     
     public String getColumnNameString(int tableSufix)
     {
-        return table + tableSufix + "_" + field;  
+        return table.getTableName() + tableSufix + "_" + field;
     }
     
     public boolean equals(Object obj)
@@ -91,6 +116,7 @@ public class DataElement
                 return false;
             if(!field.equals(dataElement.field))
                 return false;
+            
            
             return true;
 	    }
@@ -128,13 +154,31 @@ public class DataElement
         this.fieldType = fieldType;
     }
     
-    public String getTable()
+    public String getTableAliasName()
+    {
+        return table.getTableName();
+    }
+    
+    public Table getTable()
     {
         return table;
     }
     
-    public void setTable(String table)
+    public void setTableName(String table)
+    {
+        this.table.setTableName(table);
+    }
+    
+    public void setTable(String tablename)
+    {
+        this.table = new Table(tablename);
+    }
+    
+    public void setTable(Table table)
     {
         this.table = table;
     }
+    
+    
+    
 }

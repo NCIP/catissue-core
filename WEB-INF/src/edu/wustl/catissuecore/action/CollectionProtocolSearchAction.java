@@ -78,7 +78,7 @@ public class CollectionProtocolSearchAction extends AdvanceSearchUIAction
     		setIsDisableValue(searchFieldData,map);
     	}
      	
-     	AdvanceSearchUI advSearchUI = new AdvanceSearchUI("images/CollectionProtocol.GIF","CollectionProtocol","collectionProtocol.queryRule",searchFieldData,"advanceSearchForm");
+     	AdvanceSearchUI advSearchUI = new AdvanceSearchUI("images/CollectionProtocol.GIF",Constants.COLLECTION_PROTOCOL,"collectionProtocol.queryRule",searchFieldData,"advanceSearchForm");
      	request.setAttribute("AdvanceSearchUI",advSearchUI);
          
      	String pageOf = (String)request.getParameter(Constants.PAGEOF);

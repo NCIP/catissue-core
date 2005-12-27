@@ -58,9 +58,9 @@ public class CommonSearchAction extends Action
         
         AbstractActionForm abstractForm = (AbstractActionForm) form;
         /* Get the systemIdentifier whose information is to be searched */
-        Long identifier = ((Long)request.getAttribute(Constants.SYSTEM_IDENTIFIER));
-        if(identifier == null )
-        	identifier = Long.valueOf(request.getParameter(Constants.SYSTEM_IDENTIFIER));
+        Long identifier = 	Long.valueOf(request.getParameter(Constants.SYSTEM_IDENTIFIER)); 
+        if(identifier == null || identifier.longValue() == 0  )
+        	identifier = ((Long)request.getAttribute(Constants.SYSTEM_IDENTIFIER)); 
         	
         try
         {
@@ -94,12 +94,13 @@ public class CommonSearchAction extends Action
             }
             else
             {
+            	String objectName = DomainObjectFactory.getDomainObjectName(abstractForm.getFormId());
                 /* If the searched record is not present in the database,  
                  * display an Error message.
-                 */
+                 */Logger.out.debug("MD --------___________------------- ");
                 ActionErrors errors = new ActionErrors();
                 errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.unknown",
-                        				ApplicationProperties.getValue("user.name")));
+                		AbstractDomainObject.parseClassName(objectName)));
                 saveErrors(request,errors);
                 target = new String(Constants.FAILURE);
             }

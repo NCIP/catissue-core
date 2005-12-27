@@ -53,18 +53,21 @@ PUBLIC
 		<form-bean name="distributionReportForm" type="edu.wustl.catissuecore.actionForm.DistributionReportForm"/>
 		
 		<form-bean name="advanceSearchForm" type="edu.wustl.catissuecore.actionForm.AdvanceSearchForm"/>
+		<form-bean name="abstractActionForm" type="edu.wustl.common.actionForm.AbstractActionForm"/>
 	</form-beans>
 	
 	<!-- Global Exception Definitions -->
 	<global-exceptions>
+		<!-- exception
+			type="edu.wustl.catissuecore.exception.UserNotAuthenticatedException"
+			key="" scope="request" path=".catissuecore.homePageDef" /-->
 		<exception
 			type="edu.wustl.catissuecore.exception.UserNotAuthenticatedException"
-			key="" scope="request" path=".catissuecore.homePageDef" />
+			key="" scope="request" path=".catissuecore.redirectToLoginPageDef" />
 		<exception
 			handler="edu.wustl.catissuecore.util.CommonExceptionHandler"
 			key="" scope="request" type="java.lang.Exception"
 			path=".catissuecore.errorPageDef" />
-		
 	</global-exceptions>
 	
 	<action-mappings>
@@ -81,6 +84,10 @@ PUBLIC
 					<forward name="success" path=".catissuecore.homePageDef" />
 		</action>
 
+		<action path="/RedirectHome"
+					type="org.apache.struts.actions.ForwardAction"
+					parameter=".catissuecore.homePageDef" />
+		
 		<action path="/ManageBioSpecimen"
 					type="edu.wustl.catissuecore.action.ForwardAction">
 					<forward name="success" path=".catissuecore.manageBioSpecimenHomeDef" />
@@ -2192,7 +2199,7 @@ PUBLIC
 			name="advanceSearchForm"
 			scope="request">
 			<forward name="success" path="/ShowFramedPage.do?pageOf=pageOfQueryResults" />
-			<forward name="failure" path="/AdvanceSearchResults.do" />
+			<forward name="failure" path="/AdvanceQueryInterface.do?pageOf=pageOfAdvanceQueryInterface" />
 		</action>
 		
 		<action path="/ConfigureAdvanceSearchView"
@@ -2223,9 +2230,9 @@ PUBLIC
 		<!--Spreadshet Export Actions Ends -->
 	
 	<!-- ************** HTTP API ***************** -->
-		<action path="/InstituteHTTP"
+		<action path="/OperationHTTP"
 			type="edu.wustl.catissuecore.action.CommonAddEditAction"
-			name="institutionForm"
+			name="abstractActionForm"
 			validate="true"
 			input="/ResponseServlet"
 			scope="request">

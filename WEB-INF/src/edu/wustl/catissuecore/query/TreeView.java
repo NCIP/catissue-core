@@ -95,7 +95,7 @@ public class TreeView {
 			        Operator op = con.getOperator();
 			        String value = con.getValue();
 			        String columnName = data.getField();
-			        String table = data.getTable();
+			        String table = data.getTableAliasName();
 			        //split column name in case of Specimen event parameters to remove aliasName
 			        //StringTokenizer columnNameTokenizer = new StringTokenizer(columnName,".");
 			        QueryBizLogic bizLogic = (QueryBizLogic)BizLogicFactory

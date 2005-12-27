@@ -218,7 +218,7 @@ public class SearchUtil
 			    break;
 			    	
 			case Constants.PARTICIPANT_FORM_ID :
-				searchFieldData = new SearchFieldData[9];
+				searchFieldData = new SearchFieldData[10];
 		        searchFieldData[0] = initSearchUIData(SearchUtil.STRING, "user.lastName","Participant","LAST_NAME","lastName",Constants.STRING_OPERATORS,"","");
 		        searchFieldData[1] = initSearchUIData(SearchUtil.STRING,"user.firstName","Participant","FIRST_NAME","firstName",Constants.STRING_OPERATORS,"","");
 		        searchFieldData[2] = initSearchUIData(SearchUtil.STRING, "participant.middleName","Participant","MIDDLE_NAME","middleName",Constants.STRING_OPERATORS,"","");
@@ -228,16 +228,16 @@ public class SearchUtil
 		        searchFieldData[6] = initSearchUIData(SearchUtil.STRING, "participant.race","Participant","RACE","race",Constants.ENUMERATED_OPERATORS,Constants.RACELIST,"");
 		        searchFieldData[7] = initSearchUIData(SearchUtil.STRING, "participant.ethnicity","Participant","ETHNICITY","ethnicity",Constants.ENUMERATED_OPERATORS,Constants.ETHNICITY_LIST,"");
 		        searchFieldData[8] = initSearchUIData(SearchUtil.STRING, "participant.socialSecurityNumber","Participant","SOCIAL_SECURITY_NUMBER","ssn",Constants.STRING_OPERATORS,"","");
+		        searchFieldData[9] = initSearchUIData(SearchUtil.STRING,"advanceQuery.specimenCollectionGroup.medicalRecordNumber","ParticipantMedicalIdentifier","MEDICAL_RECORD_NUMBER","medicalRecordNo",Constants.STRING_OPERATORS,"","");
 		        break;
 			
 			case Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID :
-				searchFieldData = new SearchFieldData[6];
+				searchFieldData = new SearchFieldData[5];
 		        searchFieldData[0] = initSearchUIData(SearchUtil.STRING, "advanceQuery.specimenCollectionGroup.site","Site","NAME","siteName",Constants.STRING_OPERATORS,"","");//SITE_ID will be SITE_NAME
 		        searchFieldData[1] = initSearchUIData(SearchUtil.DATE,"specimenCollectionGroup.studyCalendarEventPoint","CollectionProtocolEvent","STUDY_CALENDAR_EVENT_POINT","studyCalendarEventPoint",Constants.DATE_NUMERIC_OPERATORS,"","");
 		        searchFieldData[2] = initSearchUIData(SearchUtil.STRING,"specimenCollectionGroup.clinicalDiagnosis","SpecimenCollectionGroup","CLINICAL_DIAGNOSIS","clinicalDiagnosis",Constants.ENUMERATED_OPERATORS,Constants.CLINICAL_DIAGNOSIS_LIST,"");
 		        searchFieldData[3] = initSearchUIData(SearchUtil.STRING,"specimenCollectionGroup.clinicalStatus","SpecimenCollectionGroup","CLINICAL_STATUS","clinicalStatus",Constants.ENUMERATED_OPERATORS,Constants.CLINICAL_STATUS_LIST,"");
-		        searchFieldData[4] = initSearchUIData(SearchUtil.STRING,"advanceQuery.specimenCollectionGroup.medicalRecordNumber","ParticipantMedicalIdentifier","MEDICAL_RECORD_NUMBER","medicalRecordNo",Constants.STRING_OPERATORS,"","");
-		        searchFieldData[5] = initSearchUIData(SearchUtil.STRING,"specimenCollectionGroup.surgicalPathologyNumber","ClinicalReport","SURGICAL_PATHOLOGICAL_NUMBER","surgicalPathologyNo",Constants.STRING_OPERATORS,"","");
+		        searchFieldData[4] = initSearchUIData(SearchUtil.STRING,"specimenCollectionGroup.surgicalPathologyNumber","ClinicalReport","SURGICAL_PATHOLOGICAL_NUMBER","surgicalPathologyNo",Constants.STRING_OPERATORS,"","");
 				break;
 			
 			case Constants.NEW_SPECIMEN_FORM_ID :

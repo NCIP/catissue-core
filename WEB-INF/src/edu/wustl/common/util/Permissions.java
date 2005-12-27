@@ -11,6 +11,7 @@ package edu.wustl.common.util;
 public interface Permissions {
 
 	public static final String READ = "READ";
+	public static final String READ_DENIED = "READ_DENIED";
 	public static final String UPDATE = "UPDATE";
 	public static final String DELETE = "DELETE";
 	public static final String CREATE = "CREATE";

@@ -79,7 +79,7 @@ public abstract class AdvanceSearchUIAction extends BaseAction
 			dataElement = con.getDataElement();
 			
 			//Used for creating key of field
-			String tableName = dataElement.getTable();
+			String tableName = dataElement.getTableAliasName();
 			StringTokenizer tableTokens = new StringTokenizer(tableName,".");
 			String superTable = new String();
 			if(tableTokens.countTokens()==2)

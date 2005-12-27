@@ -18,7 +18,7 @@ public class AdvancedQuery extends Query {
      * @param queryStartObject - Start object for the query
      */
 	public AdvancedQuery(final String queryStartObject){
-	    this.whereConditions = new AdvancedConditionsImpl();
+	    this.whereConditions = new CatissueAdvancedConditionsImpl();
 	    this.queryStartObject = queryStartObject;
 	}
 

@@ -153,4 +153,8 @@ public class Condition {
     {
         this.value = value;
     }
+    public String toString()
+    {
+    	return toSQLString(1);
+    }
 }

@@ -86,9 +86,9 @@ public class SimpleSearchAction extends BaseAction {
 
 		// Puts the single quotes for attributes of type string and date and
 		// returns the Set of objects to which the attributes belong.
-		Set fromTables = new HashSet();
+		List fromTablesList = new ArrayList();
 		simpleQueryBizLogic.handleStringAndDateConditions(
-				simpleConditionNodeCollection, fromTables);
+				simpleConditionNodeCollection, fromTablesList);
 
 		
 
@@ -98,13 +98,15 @@ public class SimpleSearchAction extends BaseAction {
 		if(selectedColumns!=null)
 			session.setAttribute(Constants.CONFIGURED_SELECT_COLUMN_LIST,selectedColumns);
 			
-
 		// Set the result view for the query.
 		List columnNames = new ArrayList();
 		Vector selectDataElements = simpleQueryBizLogic.getSelectDataElements(
-				selectedColumns, fromTables, columnNames);
+				selectedColumns, fromTablesList, columnNames);
 		query.setResultView(selectDataElements);
-
+		
+		Set fromTables = new HashSet();
+		fromTables.addAll(fromTablesList);
+		
 		// Set the from tables in the query.
 		query.setTableSet(fromTables);
 
@@ -197,7 +199,7 @@ public class SimpleSearchAction extends BaseAction {
 
 		return mapping.findForward(target);
 	}
-
+	
 	private ActionForward getActionForward(String name, String path) {
 		ActionForward actionForward = new ActionForward();
 		actionForward.setName(name);
@@ -205,7 +207,7 @@ public class SimpleSearchAction extends BaseAction {
 
 		return actionForward;
 	}
-
+	
 	//	public ActionForward executeAction(ActionMapping mapping, ActionForm
 	// form,
 	//			HttpServletRequest request, HttpServletResponse response)

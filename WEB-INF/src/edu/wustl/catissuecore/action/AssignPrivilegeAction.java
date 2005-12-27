@@ -60,9 +60,9 @@ public class AssignPrivilegeAction extends BaseAction
     		}
     		
     		SessionDataBean bean = getSessionData(request);
-
+    		
     		boolean assignOperation = Constants.PRIVILEGE_ASSIGN;
-    		if (privilegeForm.getAssignOperation().equals("Disallow"))
+    		if (privilegeForm.getAssignOperation().equals(Constants.OPERATION_DISALLOW))
 			{
 			    assignOperation = Constants.PRIVILEGE_DEASSIGN;
 			}

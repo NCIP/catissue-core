@@ -331,6 +331,14 @@ public class Client extends AbstractClient
                         new Operator(Operator.EQUAL), new DataElement(
                                 Query.SPECIMEN,
                                 "COLLECTION_PROTOCOL_ID")));
+        relationConditionsForRelatedTables.put(new Relation(
+                Query.SPECIMEN,
+                Query.SPECIMEN),
+                new RelationCondition(new DataElement(
+                        Query.SPECIMEN, "Identifier"),
+                        new Operator(Operator.EQUAL), new DataElement(
+                                Query.SPECIMEN,
+                                "PARENT_SPECIMEN_ID")));
 
         Query query;
 //        SimpleConditionsNode simpleConditionsNode;
@@ -540,13 +548,18 @@ public class Client extends AbstractClient
                 AdvancedConditionsNode advancedConditionsNode5 =new AdvancedConditionsNode(Query.SPECIMEN_COLLECTION_GROUP); 
 //                advancedConditionsNode5.addConditionToNode(new Condition(new DataElement(Query.SPECIMEN,"tissue_site"),new Operator(Operator.EQUAL),"'lung'"));
 //                advancedConditionsNode5.addConditionToNode(new Condition(new DataElement(Query.SPECIMEN,"SPECIMEN_TYPE"),new Operator(Operator.EQUAL),"'tumor'"));
-                advancedConditionsNode5.setOperationWithChildCondition(new Operator(Operator.OR));
+                advancedConditionsNode5.setOperationWithChildCondition(new Operator(Operator.EXIST));
                 child5 = new DefaultMutableTreeNode(advancedConditionsNode5);
                 
                 AdvancedConditionsNode advancedConditionsNode6 =new AdvancedConditionsNode(Query.SPECIMEN); 
 //                advancedConditionsNode6.addConditionToNode(new Condition(new DataElement(Query.SPECIMEN,"SPECIMEN_TYPE"),new Operator(Operator.EQUAL),"'non-malignant'"));
-                advancedConditionsNode6.setOperationWithChildCondition(new Operator(Operator.EXIST));
+                advancedConditionsNode6.setOperationWithChildCondition(new Operator(Operator.OR));
                 child6 = new DefaultMutableTreeNode(advancedConditionsNode6);
+                
+                AdvancedConditionsNode advancedConditionsNode9 =new AdvancedConditionsNode(Query.CHECKIN_CHECKOUT_EVENT_PARAMETER); 
+                advancedConditionsNode9.addConditionToNode(new Condition(new DataElement(Query.CHECKIN_CHECKOUT_EVENT_PARAMETER,"STORAGE_STATUS",Constants.FIELD_TYPE_VARCHAR),new Operator(Operator.EQUAL),"'CHECK IN'"));
+                advancedConditionsNode9.setOperationWithChildCondition(new Operator(Operator.EXIST));
+              child2 = new DefaultMutableTreeNode(advancedConditionsNode9);
                 
                 AdvancedConditionsNode advancedConditionsNode7 =new AdvancedConditionsNode(Query.SPECIMEN); 
                 advancedConditionsNode7.addConditionToNode(new Condition(new DataElement(Query.SPECIMEN,"tissue_site",Constants.FIELD_TYPE_TEXT),new Operator(Operator.EQUAL),"lung"));
@@ -554,23 +567,23 @@ public class Client extends AbstractClient
                 advancedConditionsNode7.setOperationWithChildCondition(new Operator(Operator.OR));
                 child7 = new DefaultMutableTreeNode(advancedConditionsNode7);
 
-                ((AdvancedQuery)query).addCondition(advancedConditionsNode);
-                AdvancedConditionsNode advancedConditionsNode2 =new AdvancedConditionsNode(Query.SPECIMEN); 
-                advancedConditionsNode2.addConditionToNode(new Condition(new DataElement("Sample","Type"),new Operator(Operator.EQUAL),"'RNA'"));
-                advancedConditionsNode2.addConditionToNode(new Condition(new DataElement("Sample","Quantity"),new Operator(Operator.GREATER_THAN),"5"));
-                child2 = new DefaultMutableTreeNode(advancedConditionsNode2);
-        
-                //        System.out.println(((AdvancedQuery)query).addCondition(advancedConditionsNode,advancedConditionsNode2));
+//                ((AdvancedQuery)query).addCondition(advancedConditionsNode);
+//                AdvancedConditionsNode advancedConditionsNode2 =new AdvancedConditionsNode(Query.SPECIMEN); 
+//                advancedConditionsNode2.addConditionToNode(new Condition(new DataElement("Sample","Type"),new Operator(Operator.EQUAL),"'RNA'"));
+//                advancedConditionsNode2.addConditionToNode(new Condition(new DataElement("Sample","Quantity"),new Operator(Operator.GREATER_THAN),"5"));
+//                child2 = new DefaultMutableTreeNode(advancedConditionsNode2);
+//        
+//                //        System.out.println(((AdvancedQuery)query).addCondition(advancedConditionsNode,advancedConditionsNode2));
                 AdvancedConditionsNode advancedConditionsNode3 =new AdvancedConditionsNode(Query.SPECIMEN); 
-                advancedConditionsNode3.addConditionToNode(new Condition(new DataElement("Sample","Type"),new Operator(Operator.EQUAL),"'DNA'"));
-                advancedConditionsNode3.addConditionToNode(new Condition(new DataElement("Sample","Quantity"),new Operator(Operator.GREATER_THAN),"5"));
+                advancedConditionsNode3.addConditionToNode(new Condition(new DataElement(new Table(Query.SPECIMEN,Query.SPECIMEN+"1LEV",new Table(Query.SPECIMEN,Query.SPECIMEN)),"Type",Constants.FIELD_TYPE_TEXT),new Operator(Operator.EQUAL),"DNA"));
+                advancedConditionsNode3.addConditionToNode(new Condition(new DataElement(new Table(Query.SPECIMEN,Query.SPECIMEN+"1LEV",new Table(Query.SPECIMEN,Query.SPECIMEN)),"Quantity",Constants.FIELD_TYPE_BIGINT),new Operator(Operator.GREATER_THAN),"5"));
                 child3 = new DefaultMutableTreeNode(advancedConditionsNode3);
         //        System.out.println(((AdvancedQuery)query).addCondition(advancedConditionsNode,advancedConditionsNode3));
-                
-                
+//                
+//                
                 AdvancedConditionsNode advancedConditionsNode8 =new AdvancedConditionsNode(Query.SPECIMEN); 
-                advancedConditionsNode8.addConditionToNode(new Condition(new DataElement("Sample","Type"),new Operator(Operator.EQUAL),"'DNA'"));
-                advancedConditionsNode8.addConditionToNode(new Condition(new DataElement("Sample","Quantity"),new Operator(Operator.GREATER_THAN),"5"));
+                advancedConditionsNode8.addConditionToNode(new Condition(new DataElement(new Table(Query.SPECIMEN,Query.SPECIMEN+"1LEV",new Table(Query.SPECIMEN,Query.SPECIMEN)),"Type",Constants.FIELD_TYPE_TEXT),new Operator(Operator.EQUAL),"RNA"));
+                advancedConditionsNode8.addConditionToNode(new Condition(new DataElement(new Table(Query.SPECIMEN,Query.SPECIMEN+"1LEV",new Table(Query.SPECIMEN,Query.SPECIMEN)),"Quantity",Constants.FIELD_TYPE_BIGINT),new Operator(Operator.GREATER_THAN),"5"));
                 child8 = new DefaultMutableTreeNode(advancedConditionsNode8);
 
                 root.add(child1);
@@ -578,6 +591,8 @@ public class Client extends AbstractClient
                 child4.add(child5);
                 child5.add(child6);
                 child5.add(child7);
+                child7.add(child3);
+                child7.add(child8);
         //        child7.add(child8);
         //        child6.add(child2);
         //        child6.add(child3);

@@ -333,14 +333,13 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
         	specimen.setSpecimenCharacteristics(sc);
         	 
         }
-    	
     	//check for closed Specimen Collection Group
     	if(!specimen.getSpecimenCollectionGroup().getSystemIdentifier().equals(specimenOld.getSpecimenCollectionGroup().getSystemIdentifier()))
     		checkStatus(dao,specimen.getSpecimenCollectionGroup(), "Specimen Collection Group" );
 		
     	setSpecimenGroupForSubSpecimen(specimen,specimen.getSpecimenCollectionGroup(),specimen.getSpecimenCharacteristics());
     	
-		//dao.update(specimen.getSpecimenCharacteristics(), sessionDataBean, true, true, false);
+		dao.update(specimen.getSpecimenCharacteristics(), sessionDataBean, true, true, false);
 		
     	dao.update(specimen, sessionDataBean, true, true, false);
 		

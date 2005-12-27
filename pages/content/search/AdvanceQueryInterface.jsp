@@ -33,16 +33,13 @@
 	%>
 </head>
 
-<html:errors />
-
-
 <html:form action="<%=Constants.ADVANCED_SEARCH_RESULTS_ACTION%>">
 
 <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="100%" height="100%">
        
     <tr width="100%">
-        <td height="2%">
-           &nbsp;
+        <td height="5%">
+        	<html:errors />
         </td>
     </tr>
     
@@ -55,7 +52,7 @@
     
 
     <tr width="100%">
-        <td height="28%">
+        <td height="25%">
             <iframe name="queryFrame" id="queryFrame" src="AdvanceQueryView.do" width="100%" height="100%" frameborder="0" scrolling="auto">
             </iframe>
         </td>

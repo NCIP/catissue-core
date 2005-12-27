@@ -597,7 +597,9 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String QUERY_RESULTS_SPECIMEN_TYPE = "SPECIMEN_TYPE";
 	
 	// Assign Privilege Constants.
+	public static final boolean PRIVILEGE_ASSIGN = true;
 	public static final boolean PRIVILEGE_DEASSIGN = false;
+	public static final String OPERATION_DISALLOW = "Disallow";
 	
 	//Constants for default column names to be shown for query result.
 	public static final String[] DEFAULT_SPREADSHEET_COLUMNS = {
@@ -1353,6 +1355,10 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	//Constants Required for Advance Search
 	//Tree related
 	//public static final String PARTICIPANT ='Participant';
+	public static final String MENU_COLLECTION_PROTOCOL ="Collection Protocol";
+	public static final String MENU_SPECIMEN_COLLECTION_GROUP ="Specimen Collection Group";
+	public static final String MENU_DISTRIBUTION_PROTOCOL = "Distribution Protocol";
+	
 	public static final String COLLECTION_PROTOCOL ="CollectionProtocol";
 	public static final String SPECIMEN_COLLECTION_GROUP ="SpecimenCollectionGroup";
 	public static final String DISTRIBUTION = "Distribution";
@@ -1371,12 +1377,14 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String ADVANCED_SEARCH_ACTION = "AdvanceSearch.do";
 	public static final String ADVANCED_SEARCH_RESULTS_ACTION = "AdvanceSearchResults.do";
 	public static final String CONFIGURE_ADVANCED_SEARCH_RESULTS_ACTION = "ConfigureAdvanceSearchResults.do";
+	public static final String PAGEOF_ADVANCE_QUERY_INTERFACE = "pageOfAdvanceQueryInterface";
 	public static final String ADVANCED_QUERY_ADD = "Add";
 	public static final String ADVANCED_QUERY_EDIT = "Edit";
 	public static final String ADVANCED_QUERY_DELETE = "Delete";
 	public static final String ADVANCED_QUERY_OPERATOR = "Operator";
 	public static final String ADVANCED_QUERY_OR = "OR";
 	public static final String ADVANCED_QUERY_AND = "AND";
+	public static final String EVENT_CONDITIONS = "eventConditions";
 	
 	public static final String IDENTIFIER_COLUMN_ID_MAP = "identifierColumnIdsMap";
 	public static final String COLUMN_ID_MAP = "columnIdsMap";
@@ -1391,6 +1399,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String COLLECTION_PROTOCOL_COLUMNS = "collectionProtocolColumns";
 	public static final String SPECIMEN_COLLECTION_GROUP_COLUMNS = "SpecimenCollectionGroupColumns";
 	public static final String SPECIMEN_COLUMNS = "SpecimenColumns";
+	public static final String USER_ID_COLUMN = "USER_ID";
 	
 	
 	

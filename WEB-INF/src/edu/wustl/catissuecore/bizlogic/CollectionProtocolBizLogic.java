@@ -117,7 +117,7 @@ public class CollectionProtocolBizLogic extends DefaultBizLogic implements Roles
 			else
 				it.remove();
 		}
-		
+		checkForChangedStatus( collectionProtocol,  collectionProtocolOld  );
 		dao.update(collectionProtocol, sessionDataBean, true, true, false);
 		
 		//Audit of Collection Protocol.

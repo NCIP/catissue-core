@@ -106,7 +106,15 @@ public class Operator
         this.operator = operator;
     }
     
-    public String toSQLString()
+    /**
+	 * @param operator2
+	 */
+	public Operator(Operator operator2) {
+		
+		 this.operator = operator2.operator;
+	}
+
+	public String toSQLString()
     {
         return " "+operator+" ";
     }

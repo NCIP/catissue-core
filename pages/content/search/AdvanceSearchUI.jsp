@@ -116,9 +116,7 @@
 				<html:text styleClass="formDateSized10" size="10" styleId="<%=searchFieldData[i].getValueField().getId() + 1%>" property="<%=searchFieldData[i].getValueField().getName()%>" disabled="<%=searchFieldData[i].getValueField().isDisabled()%>"/>
 							 &nbsp;
 				<a href="javascript:onDate('<%=searchFieldData[i].getOprationField().getId() %>','<%=(advSearch.getFormName() +"." + searchFieldData[i].getValueField().getId() + 1)%>',false);">
-					<img src="images\calendar.gif" width=24 height=22 border=0>
-				</a>
-							&nbsp;To&nbsp;
+					<img src="images\calendar.gif" width=24 height=22 border=0></a>&nbsp;Thru&nbsp;
 				<html:text styleClass="formDateSized10" size="10" styleId="<%=searchFieldData[i].getValueField().getId() + 2%>" property="<%=hlimitName%>" disabled="<%=searchFieldData[i].getValueField().isDisabled()%>"/>
 							 &nbsp;
 				<a href="javascript:onDate('<%=searchFieldData[i].getOprationField().getId()%>','<%=(advSearch.getFormName() +"." + searchFieldData[i].getValueField().getId() + 2)%>',true);">

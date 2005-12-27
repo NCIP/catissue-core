@@ -14,7 +14,11 @@ import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 
+import net.sf.cglib.core.ReflectUtils;
+
+import edu.wustl.catissuecore.query.Table;
 import edu.wustl.common.util.global.Constants;
+import edu.wustl.common.util.logger.Logger;
 
 public class MapDataParser 
 {
@@ -97,6 +101,8 @@ public class MapDataParser
 				return new Integer(str);
 			else if(type.equals(Short.class))
 				return new Integer(str);
+			else if(type.equals(Table.class))
+				return new Table(str,str);
 		}
 		return str;
 	}
@@ -130,8 +136,13 @@ public class MapDataParser
 				String methodName =  Utility.createAccessorMethodName(attrName,true);
 				
 				Class objClass = obj.getClass();
+				
+				Logger.out.debug("methodName " +methodName);
+				Logger.out.debug("objClass " +objClass);
 
 				Method method = findMethod(objClass,methodName);
+				
+				Logger.out.debug("method parameter type " +method.getParameterTypes()[0]);
 				Object objArr[] = {toObject(value,method.getParameterTypes()[0])};
 				
 				method.invoke(obj,objArr);

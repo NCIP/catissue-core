@@ -224,28 +224,13 @@ function insRow(subdivtag,iCounter,blockCounter)
 	checkb.colSpan=2;
 	sname="";
 	var name = "chk_spec_"+ blockCounter +"_"+rowno;
-	sname="<input type='checkbox' name='" + name +"' id='" + name +"' value='C'>"
+	//var func = "enableButton(document.forms[0].deleteSpecimenReq,'ivl("+ blockCounter + ")','" +"chk_spec_" + blockCounter + "_ "+ "')";
+	sname="<input type='checkbox' name='" + name +"' id='" + name +"' value='C'>"; // onClick=" + func + ">";
 	checkb.innerHTML=""+sname;
 	
 }
 
-	function confirmDisable()
-	{
-		if(document.forms[0].activityStatus.value == "Disabled")
-		{
-			 var go = confirm("<bean:message key="allPage.disableConfirm" />");
-		 	if (go==true)
-		 	{
-				 document.forms[0].action = "<%=formName%>";
-			 	document.forms[0].submit();
-		 	}
-		}
-		else
-		{
-			document.forms[0].action = "<%=formName%>";
-			document.forms[0].submit();
-		}		
-	}
+	
 /*
 
 // function to set the row count in the array 
@@ -446,10 +431,10 @@ function getSubDivCount(subdivtag)
 			
 						 <td class="formField" colspan=2>
 						 <div id="enddateDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
-						 <html:text styleClass="formDateSized15" maxlength="10"  size="35" styleId="endDate" property="endDate" />
+						 <html:text styleClass="formDateSized15" maxlength="10"  size="35" styleId="endDate" property="endDate" readonly="true" />
 						 &nbsp;<bean:message key="page.dateFormat" />&nbsp;
-							<a href="javascript:show_calendar('collectionProtocolForm.endDate',null,null,'MM-DD-YYYY');">
-								<img src="images\calendar.gif" width=24 height=22 border=0></a>
+							<!-- a href="javascript:show_calendar('collectionProtocolForm.endDate',null,null,'MM-DD-YYYY');">
+								<img src="images\calendar.gif" width=24 height=22 border=0></a -->
 						 </td>
 					</tr>
 
@@ -515,7 +500,7 @@ function getSubDivCount(subdivtag)
 			<html:hidden property="outerCounter"/>	
 	</td>
 	<td class="formTitle" align="Right">
-		<html:button property="deleteCollectionProtocolEvents" styleClass="actionButton" onclick="deleteChecked('outerdiv','CollectionProtocol.do?operation=<%=operation%>&pageOf=pageOfCollectionProtocol&status=true&button=deleteCollectionProtocolEvents',document.forms[0].outerCounter,'chk_proto_',true)">
+		<html:button property="deleteCollectionProtocolEvents" styleClass="actionButton" onclick="deleteChecked('outerdiv','CollectionProtocol.do?operation=<%=operation%>&pageOf=pageOfCollectionProtocol&status=true&button=deleteCollectionProtocolEvents',document.forms[0].outerCounter,'chk_proto_',true)" disabled="true">
 			<bean:message key="buttons.delete"/>
 		</html:button>
 	</td>
@@ -639,7 +624,7 @@ function getSubDivCount(subdivtag)
 			</TABLE>
 		</td>
 		<td rowspan=2 class="tabrightmostcellAddMore">
-			<input type=checkbox name="<%=check%>" id="<%=check %>" <%=outerCondition%>>		
+			<input type=checkbox name="<%=check%>" id="<%=check %>" <%=outerCondition%> onClick="enableButton(document.forms[0].deleteCollectionProtocolEvents,document.forms[0].outerCounter,'chk_proto_')">		
 		</td>
 	</tr>
 
@@ -851,7 +836,10 @@ function getSubDivCount(subdivtag)
 
 						%>
 						<td class="formFieldAddMore" width="5">
-							<input type=checkbox name="<%=innerCheck%>" id="<%=innerCheck %>" <%=innerCondition%>>		
+						<%
+							//String func = "enableButton(document.forms[0].deleteSpecimenReq,'" + cid + "','" +"chk_spec_" + counter + "_ "+ "')";
+						%>
+							<input type=checkbox name="<%=innerCheck%>" id="<%=innerCheck %>" <%=innerCondition%>>
 						</td>
 				</TR>	<!-- SPECIMEN REQ DATA END -->
 				<%
@@ -887,7 +875,10 @@ function getSubDivCount(subdivtag)
 							</td-->
 							
 						<td>
-							<html:button styleClass="actionButton" property="submitPage" onclick="confirmDisable()">
+						<%
+						   	String action = "confirmDisable('" + formName +"',document.forms[0].activityStatus)";
+						%>
+							<html:button styleClass="actionButton" property="submitPage" onclick="<%=action%>">
 								<bean:message key="buttons.submit"/>
 							</html:button>
 						</td>
@@ -960,7 +951,7 @@ function getSubDivCount(subdivtag)
 		</td>
 		
 			<td rowspan=2 class="tabrightmostcellAddMore">
-				<input type=checkbox name="chk_proto_`" id="chk_proto_`">		
+				<input type=checkbox name="chk_proto_`" id="chk_proto_`" onClick="enableButton(document.forms[0].deleteCollectionProtocolEvents,document.forms[0].outerCounter,'chk_proto_')">		
 			</td>
 	</tr>
 
@@ -1074,7 +1065,8 @@ function getSubDivCount(subdivtag)
 					</td>
 					
 						<td class="formFieldAddMore" width="5">
-							<input type=checkbox name="chk_spec_`_1" id="chk_spec_`_1">		
+							<input type=checkbox name="chk_spec_`_1" id="chk_spec_`_1" ><!-- onClick="enableButton(document.forms[0].deleteSpecimenReq,'ivl(`)','chk_spec_`_ ')"-->	
+								
 						</td>
 					
 				</TR>	<!-- SPECIMEN REQ DATA END -->

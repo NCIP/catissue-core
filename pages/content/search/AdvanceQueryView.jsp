@@ -21,11 +21,11 @@
 	{
 		var item = document.getElementById('<%=Constants.CP%>');
 		item.className="linkChange";
-		item.innerHTML = "&nbsp;<img src='images/CollectionProtocol.GIF' alt='CollectionProtocol' />  &nbsp;<%=Constants.COLLECTION_PROTOCOL%>";
+		item.innerHTML = "&nbsp;<img src='images/CollectionProtocol.GIF' alt='CollectionProtocol' />  &nbsp;<%=Constants.MENU_COLLECTION_PROTOCOL%>";
 		
 		/*item = document.getElementById('<%=Constants.DP%>');
 		item.className="linkChange";
-		item.innerHTML = "&nbsp;<img src='images/DistributionProtocol.GIF' alt='DistributionProtocol' /> &nbsp; <%=Constants.DISTRIBUTION_PROTOCOL%>";*/
+		item.innerHTML = "&nbsp;<img src='images/DistributionProtocol.GIF' alt='DistributionProtocol' /> &nbsp; <%=Constants.MENU_DISTRIBUTION_PROTOCOL%>";*/
 		
 		item = document.getElementById('<%=Constants.P%>');
 		item.className="linkChange";
@@ -37,7 +37,7 @@
 		
 		item = document.getElementById('<%=Constants.SCG%>');
 		item.className="linkChange";
-		item.innerHTML = "&nbsp;<img src='images/SpecimenCollectionGroup.GIF' alt='Specimen Collection Group' /> &nbsp;<%=Constants.SPECIMEN_COLLECTION_GROUP%>";
+		item.innerHTML = "&nbsp;<img src='images/SpecimenCollectionGroup.GIF' alt='Specimen Collection Group' /> &nbsp;<%=Constants.MENU_SPECIMEN_COLLECTION_GROUP%>";
 		
 		/*item = document.getElementById('<%=Constants.D%>');
 		item.className="linkChange";
@@ -67,7 +67,7 @@
 		
 		item = document.getElementById('<%=Constants.SCG%>');
 		item.className="linkChange";
-		item.innerHTML = "&nbsp;<img src='images/SpecimenCollectionGroup.GIF' alt='Specimen Collection Group' /> &nbsp;<a HREF='<%=SearchUtil.getLink("SpecimenCollectionGroup")%>' target='searchPageFrame'><%=Constants.SPECIMEN_COLLECTION_GROUP%></a>";
+		item.innerHTML = "&nbsp;<img src='images/SpecimenCollectionGroup.GIF' alt='Specimen Collection Group' /> &nbsp;<a HREF='<%=SearchUtil.getLink("SpecimenCollectionGroup")%>' target='searchPageFrame'><%=Constants.MENU_SPECIMEN_COLLECTION_GROUP%></a>";
 		
 		item = document.getElementById('<%=Constants.D%>');
 		item.className="linkChange";
@@ -179,12 +179,12 @@
 			var cpItem = document.getElementById('<%=Constants.CP%>');
 			cpItem.className="linkChange";
 			var link = "<%=SearchUtil.getLink("CollectionProtocol")%>"+ selectedNode;
-			cpItem.innerHTML ="&nbsp;<img src='images/CollectionProtocol.GIF' alt='CollectionProtocol' />  &nbsp;<a HREF='"+link+"' target='searchPageFrame'><%=Constants.COLLECTION_PROTOCOL%></a>";
+			cpItem.innerHTML ="&nbsp;<img src='images/CollectionProtocol.GIF' alt='CollectionProtocol' />  &nbsp;<a HREF='"+link+"' target='searchPageFrame'><%=Constants.MENU_COLLECTION_PROTOCOL%></a>";
 		
 			/*DPItem = document.getElementById('<%=Constants.DP%>');
 			DPItem.className="linkChange";
 			//var link = "<%=SearchUtil.getLink("DistributionProtocol")%>"+ selectedNode;
-			DPItem.innerHTML = "&nbsp;<img src='images/DistributionProtocol.GIF' alt='DistributionProtocol' /> &nbsp;<a HREF='#'><%=Constants.DISTRIBUTION_PROTOCOL%></a>";*/
+			DPItem.innerHTML = "&nbsp;<img src='images/DistributionProtocol.GIF' alt='DistributionProtocol' /> &nbsp;<a HREF='#'><%=Constants.MENU_DISTRIBUTION_PROTOCOL%></a>";*/
 			
 			var editItem = document.getElementById('<%=Constants.EDIT%>');
 			editItem.className="formTitle";
@@ -217,12 +217,12 @@
 			/*var CPItem = document.getElementById('<%=Constants.CP%>');
 			CPItem.className="linkChange";
 			var link = "<%=SearchUtil.getLink("CollectionProtocol")%>"+ selectedNode;
-			CPItem.innerHTML ="&nbsp;<img src='images/CollectionProtocol.GIF' alt='CollectionProtocol' />  &nbsp;<a HREF='"+link+"' target='searchPageFrame'><%=Constants.COLLECTION_PROTOCOL%></a>";*/
+			CPItem.innerHTML ="&nbsp;<img src='images/CollectionProtocol.GIF' alt='CollectionProtocol' />  &nbsp;<a HREF='"+link+"' target='searchPageFrame'><%=Constants.MENU_COLLECTION_PROTOCOL%></a>";*/
 			
 			var scGItem = document.getElementById('<%=Constants.SCG%>');
 			scGItem.className="linkChange";
 			var link = "<%=SearchUtil.getLink("SpecimenCollectionGroup")%>"+ selectedNode;
-			scGItem.innerHTML ="&nbsp;<img src='images/SpecimenCollectionGroup.GIF' alt='SpecimenCollectionGroup' />  &nbsp;<a HREF='"+link+"' target='searchPageFrame'><%=Constants.SPECIMEN_COLLECTION_GROUP%></a>";
+			scGItem.innerHTML ="&nbsp;<img src='images/SpecimenCollectionGroup.GIF' alt='SpecimenCollectionGroup' />  &nbsp;<a HREF='"+link+"' target='searchPageFrame'><%=Constants.MENU_SPECIMEN_COLLECTION_GROUP%></a>";
 			
 			var editItem = document.getElementById('<%=Constants.EDIT%>');
 			editItem.className="formTitle";
@@ -278,6 +278,12 @@
 		}
 		else if( (specimenCount == sum) && (specimenCount == 1))
 		{
+		
+			var sItem = document.getElementById('<%=Constants.S%>');
+            sItem.className="linkChange";
+            var link = "<%=SearchUtil.getLink("Specimen")%>"+ selectedNode;
+            sItem.innerHTML ="&nbsp;<img src='images/Specimen.GIF' alt='Specimen' /> &nbsp;<a HREF='"+link+"' target='searchPageFrame'><%=Constants.SPECIMEN%></a>";
+			
 			var editItem = document.getElementById('<%=Constants.EDIT%>');
 			editItem.className="formTitle";
 			var editLink = "<%=SearchUtil.getLink("Specimen")%>"+ selectedNode +"&itemId="+itemId;
@@ -292,13 +298,13 @@
 			
 			var andItem = document.getElementById('and');
 			andItem.className="linkChange";
-			//var link = "AdvanceQueryView.do?operator=AND&itemId="+itemId;
-			andItem.innerHTML ="&nbsp;<img src='images/point.gif' alt='AND' />&nbsp;<%=Constants.ADVANCED_QUERY_AND%>";
+			var link = "AdvanceQueryView.do?operator=EXIST&itemId="+itemId;
+			andItem.innerHTML ="&nbsp;<img src='images/point.gif' alt='AND' />&nbsp;<a HREF='"+link+"'><%=Constants.ADVANCED_QUERY_AND%></a>"
 			
 			var orItem = document.getElementById('or');
 			orItem.className="linkChange";
-			//var link = "AdvanceQueryView.do?operator=OR&itemId="+itemId;
-			orItem.innerHTML ="&nbsp;<img src='images/graydot.gif' alt='OR' />&nbsp;&nbsp;<%=Constants.ADVANCED_QUERY_OR%>"
+			var link = "AdvanceQueryView.do?operator=OR&itemId="+itemId;
+			orItem.innerHTML ="&nbsp;&nbsp;<img src='images/graydot.gif' alt='OR' />&nbsp;&nbsp;<a HREF='"+link+"'><%=Constants.ADVANCED_QUERY_OR%></a>"
 			
 		}
 		else 
@@ -351,14 +357,14 @@
 										<td colspan=2 class='linkChange' id='CP' noWrap  height='20' vAlign="middle"
 										onmouseover="changeMenuStyle(this,'linkChangeOnMouseOver')"
 										 onmouseout="changeMenuStyle(this,'linkChange')">
-												&nbsp;<img src="images/CollectionProtocol.GIF" alt="CollectionProtocol" />  &nbsp;	<%=Constants.COLLECTION_PROTOCOL%>
+												&nbsp;<img src="images/CollectionProtocol.GIF" alt="CollectionProtocol" />  &nbsp;	<%=Constants.MENU_COLLECTION_PROTOCOL%>
 										</td>
 									</tr>
 									<tr height='20' vAlign="middle">
 										<td colspan=2 class='linkChange' id='SCG' noWrap  height='20' vAlign="middle"
 										onmouseover="changeMenuStyle(this,'linkChangeOnMouseOver')"
 										 onmouseout="changeMenuStyle(this,'linkChange')">
-											&nbsp;<img src="images/SpecimenCollectionGroup.GIF" alt="Specimen Collection Group" /> &nbsp; <%=Constants.SPECIMEN_COLLECTION_GROUP%>
+											&nbsp;<img src="images/SpecimenCollectionGroup.GIF" alt="Specimen Collection Group" /> &nbsp; <%=Constants.MENU_SPECIMEN_COLLECTION_GROUP%>
 										</td>
 									</tr>
 									
@@ -380,7 +386,7 @@
 										<td colspan=2 class='linkChange' id='DP' noWrap  height='20' vAlign="middle"
 										onmouseover="changeMenuStyle(this,'linkChangeOnMouseOver')"
 										 onmouseout="changeMenuStyle(this,'linkChange')">
-										&nbsp;<img src="images/DistributionProtocol.GIF" alt="DistributionProtocol" /> &nbsp; <%=Constants.DISTRIBUTION_PROTOCOL%>
+										&nbsp;<img src="images/DistributionProtocol.GIF" alt="DistributionProtocol" /> &nbsp; <%=Constants.MENU_DISTRIBUTION_PROTOCOL%>
 										</td>
 									</tr-->
 								</table>

@@ -169,28 +169,12 @@ function insRow(subdivtag)
 	checkb.colSpan=2;
 	sname="";
 	var name = "chk_"+(q+1);
-	sname="<input type='checkbox' name='" + name +"' id='" + name +"' value='C'>"
+	sname="<input type='checkbox' name='" + name +"' id='" + name +"' value='C' onClick=\"enableButton(document.forms[0].deleteValue,document.forms[0].counter,'chk_')\">";
 	checkb.innerHTML=""+sname;
+	
 }
 
-function confirmDisable()
-{
-	if(document.forms[0].activityStatus.value == "Disabled")
-	{
-		 var go = confirm("<bean:message key="allPage.disableConfirm" />");
-		 if (go==true)
-		 {
-			 document.forms[0].action = "<%=formName%>";
-			 document.forms[0].submit();
-		 }
-	
-	}
-	else
-	{
-		document.forms[0].action = "<%=formName%>";
-		document.forms[0].submit();
-	}		
-}
+
 /*
 // using createelement functions
 function insRow(subdivtag)
@@ -394,8 +378,8 @@ function insRow(subdivtag)
 
 					<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
 					<tr>
-						<td class="formRequiredNotice" width="5">&nbsp;</td>
-						<td class="formLabel" colspan="2">
+						<td class="formRequiredNotice" width="5">*</td>
+						<td class="formRequiredLabel" colspan="2">
 							<label for="noOfContainers">
 								<bean:message key="storageContainer.noOfContainers" />
 							</label>
@@ -508,7 +492,7 @@ function insRow(subdivtag)
 						<html:hidden property="counter"/>
 						</td>
 						<td class="formTitle" align="Right">
-							<html:button property="deleteValue" styleClass="actionButton" onclick="deleteChecked('addMore','StorageContainer.do?operation=<%=operation%>&pageOf=pageOfStorageContainer&status=true',document.forms[0].counter,'chk_',false)">
+							<html:button property="deleteValue" styleClass="actionButton" onclick="deleteChecked('addMore','StorageContainer.do?operation=<%=operation%>&pageOf=pageOfStorageContainer&status=true',document.forms[0].counter,'chk_',false,document.forms[0].deleteValue)"  disabled="true">
 								<bean:message key="buttons.delete"/>
 							</html:button>
 						</td>
@@ -562,7 +546,7 @@ function insRow(subdivtag)
 
 						%>
 						<td class="formField" width="5">
-							<input type=checkbox name="<%=check %>" id="<%=check %>" <%=condition%>>		
+							<input type=checkbox name="<%=check %>" id="<%=check %>" <%=condition%> onClick="enableButton(document.forms[0].deleteValue,document.forms[0].counter,'chk_')">		
 						</td>
 						
 					</tr>
@@ -581,7 +565,10 @@ function insRow(subdivtag)
 						<table cellpadding="4" cellspacing="0" border="0">
 							<tr>
 								<td>
-						   			<html:button styleClass="actionButton" property="submitPage" onclick="confirmDisable()">
+								<%
+						   			String action = "confirmDisable('" + formName +"',document.forms[0].activityStatus)";
+						   		%>
+						   			<html:button styleClass="actionButton" property="submitPage" onclick="<%=action%>">
 						   				<bean:message key="buttons.submit"/>
 						   			</html:button>
 						   		</td>

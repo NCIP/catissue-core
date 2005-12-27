@@ -43,15 +43,16 @@ public class SimpleQueryBizLogic extends DefaultBizLogic
      * @return the Set of objects to which the condition attributes belong.
      * @throws DAOException
      */
-    public Set handleStringAndDateConditions(Collection simpleConditionNodeCollection, Set fromTables) throws DAOException
+    public List handleStringAndDateConditions(Collection simpleConditionNodeCollection, List fromTables) throws DAOException
     {
         //Adding single quotes to strings and date values.
         Iterator iterator = simpleConditionNodeCollection.iterator();
         while (iterator.hasNext())
         {
             SimpleConditionsNode simpleConditionsNode = (SimpleConditionsNode) iterator.next();
+            
         	// Add all the objects selected in UI to the fromtables Set. 
-        	fromTables.add(simpleConditionsNode.getCondition().getDataElement().getTable());
+        	addInListIfNotPresent(fromTables, simpleConditionsNode.getCondition().getDataElement().getTableAliasName());
         	
         	// Adds single quotes to the value of attributes whose type is string or date.
             String tableInPath = addSingleQuotes(simpleConditionsNode);
@@ -61,8 +62,8 @@ public class SimpleQueryBizLogic extends DefaultBizLogic
         	{
         	    addTablesInPathToFromSet(fromTables, tableInPath);
         	}
-        	Logger.out.debug("fromTables............................."+simpleConditionsNode.getCondition().getDataElement().getTable());
-        	fromTables.add(simpleConditionsNode.getCondition().getDataElement().getTable());
+        	
+        	addInListIfNotPresent(fromTables, simpleConditionsNode.getCondition().getDataElement().getTableAliasName());
         }
         return fromTables;
     }
@@ -73,7 +74,7 @@ public class SimpleQueryBizLogic extends DefaultBizLogic
      * @param tableInPath The ids of tables in path separated by :
      * @throws DAOException
      */
-    private void addTablesInPathToFromSet(Set fromTables, String tableInPath) throws DAOException
+    private void addTablesInPathToFromSet(List fromTables, String tableInPath) throws DAOException
     {
         StringTokenizer tableInPathTokenizer = new StringTokenizer(tableInPath, ":");
         while (tableInPathTokenizer.hasMoreTokens())
@@ -85,7 +86,7 @@ public class SimpleQueryBizLogic extends DefaultBizLogic
             
             if (aliasName != null)
         	{
-        	    fromTables.add(aliasName);
+                addInListIfNotPresent(fromTables, aliasName);
         	}
         }
     }
@@ -100,7 +101,7 @@ public class SimpleQueryBizLogic extends DefaultBizLogic
     {
         String columnName = simpleConditionsNode.getCondition().getDataElement().getField();
         StringTokenizer stringToken = new StringTokenizer(columnName, ".");
-        simpleConditionsNode.getCondition().getDataElement().setTable(stringToken.nextToken());
+        simpleConditionsNode.getCondition().getDataElement().setTableName(stringToken.nextToken());
         simpleConditionsNode.getCondition().getDataElement().setField(stringToken.nextToken());
         simpleConditionsNode.getCondition().getDataElement().setFieldType(stringToken.nextToken());
         String tableInPath = null;
@@ -187,7 +188,7 @@ public class SimpleQueryBizLogic extends DefaultBizLogic
 				if (objectFields[i].getName().equals(Constants.ACTIVITY_STATUS))
 				{
 					activityStatusCondition = new SimpleConditionsNode();
-					activityStatusCondition.getCondition().getDataElement().setTable(
+					activityStatusCondition.getCondition().getDataElement().setTableName(
 							Utility.parseClassName(fullyQualifiedClassName));
 					activityStatusCondition.getCondition().getDataElement().setField(
 							Constants.ACTIVITY_STATUS_COLUMN);
@@ -221,7 +222,7 @@ public class SimpleQueryBizLogic extends DefaultBizLogic
 		    	DataElement dataElement = new DataElement();
 		    	while (st.hasMoreTokens())
 				{
-		    		dataElement.setTable(st.nextToken());
+		    		dataElement.setTableName(st.nextToken());
 		    		String field = st.nextToken();
 		    		Logger.out.debug(st.nextToken());
 		    		String tableInPath = null;
@@ -264,11 +265,11 @@ public class SimpleQueryBizLogic extends DefaultBizLogic
 		}
 	 
 	 //set the result view for the query. 
-	 public Vector getSelectDataElements(String[] selectedColumns, Set tableSet, List columnNames) throws DAOException
+	 public Vector getSelectDataElements(String[] selectedColumns, List tableSet, List columnNames) throws DAOException
 	 {
 	    Vector selectDataElements = null;
-	     
-		//If columns not conigured, set to default.
+
+	    //If columns not conigured, set to default.
 	 	if(selectedColumns==null)
 	 	{
 	 	    selectDataElements = getViewElements(tableSet, columnNames);
@@ -282,13 +283,9 @@ public class SimpleQueryBizLogic extends DefaultBizLogic
 		}
 	 	
 	 	// Getting the aliasNames of the table ids in the tables in path.
-		Set forFromSet = configureSelectDataElements(selectDataElements);
-		Logger.out.debug("In getSelectDataElements************************");
-		Iterator iterator = forFromSet.iterator();
-		while(iterator.hasNext())
-		{
-		    Logger.out.debug("forFromSet......................"+iterator.next());
-		}
+		List forFromSet = configureSelectDataElements(selectDataElements);
+		
+		forFromSet.removeAll(tableSet);
 		tableSet.addAll(forFromSet);
 		
 		return selectDataElements;
@@ -301,9 +298,9 @@ public class SimpleQueryBizLogic extends DefaultBizLogic
 	  * @return Set of objects of that attributes to be added in the from clause.
 	  * @throws DAOException
 	  */
-	 private Set configureSelectDataElements(Vector selectDataElements) throws DAOException
+	 private List configureSelectDataElements(Vector selectDataElements) throws DAOException
 	 {
-	     Set forFromSet = new HashSet();
+	     List forFromSet = new ArrayList();
 	     
 	     Iterator iterator = selectDataElements.iterator();
 	     QueryBizLogic bizLogic = (QueryBizLogic)BizLogicFactory
@@ -314,7 +311,8 @@ public class SimpleQueryBizLogic extends DefaultBizLogic
 	         String fieldName = dataElement.getField();
 	         StringTokenizer stringToken = new StringTokenizer(dataElement.getField(), ".");
 	         dataElement.setField(stringToken.nextToken());
-	         forFromSet.add(dataElement.getTable());
+	         
+	         addInListIfNotPresent(forFromSet, dataElement.getTableAliasName());
 	         
 	         if (stringToken.hasMoreElements())
 	         {
@@ -334,7 +332,7 @@ public class SimpleQueryBizLogic extends DefaultBizLogic
 	     * @return the Vector of DataElement objects for the select clause of the query.
 	     * @throws DAOException
 	     */
-	    public Vector getViewElements(Set aliasNameSet, List columnList) throws DAOException
+	    public Vector getViewElements(List aliasNameSet, List columnList) throws DAOException
 		{
 		    Vector vector = new Vector();
 		    
@@ -376,13 +374,12 @@ public class SimpleQueryBizLogic extends DefaultBizLogic
 				    {
 				        List rowList = (List) iterator.next();
 				        DataElement dataElement = new DataElement();
-				        dataElement.setTable((String)rowList.get(0));
+				        dataElement.setTableName((String)rowList.get(0));
 				        String fieldName = (String)rowList.get(1);
 				        
 				        Logger.out.debug("fieldName*********************"+fieldName);    
 				        dataElement.setField(fieldName+"."+(String)rowList.get(2));
 				        dataElement.setFieldType((String)rowList.get(4));
-				        
 				        vector.add(dataElement);
 				        columnList.add((String)rowList.get(3));
 				    }
@@ -538,10 +535,14 @@ public class SimpleQueryBizLogic extends DefaultBizLogic
 		        		queryResultObjectDataMap.put(tableAlias,queryResultObjectData);
 		        	}
 	        	}
-	        	
-	        	
 	        }
 		}
-	    
-
+	    	
+		private void addInListIfNotPresent(List list, String string)
+		{
+		    if (list.contains(string) == false)
+		    {
+		        list.add(string);
+		    }
+		}
 }

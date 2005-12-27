@@ -152,7 +152,7 @@ public HashSet getQueryObjects()
         condition = (SimpleConditionsNode) whereConditions.get(i);
         if(condition !=null)
         {
-            queryObjects.add(condition.getConditionObject());
+            queryObjects.add(new Table(condition.getConditionObject(),condition.getConditionObject()));
         }
     }
     return queryObjects;

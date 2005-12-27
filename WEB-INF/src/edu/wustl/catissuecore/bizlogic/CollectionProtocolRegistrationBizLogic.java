@@ -173,7 +173,8 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
         return dynamicGroups;
     }
     
-    private void registerParticipantAndProtocol(DAO dao, CollectionProtocolRegistration collectionProtocolRegistration, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
+    private void registerParticipantAndProtocol(DAO dao, CollectionProtocolRegistration collectionProtocolRegistration,
+    		    		SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 	{
     	//Case of registering Participant on its participant ID
     	Participant participant = null;

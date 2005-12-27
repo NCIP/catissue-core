@@ -26,10 +26,10 @@ import edu.wustl.common.util.logger.Logger;
  * 
  */
 
-public class AdvanceSearchAction extends DispatchAction 
+public class AdvanceSearchAction extends BaseAction//DispatchAction 
 {
     
-    public ActionForward execute(ActionMapping mapping, ActionForm form,
+    public ActionForward executeAction(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response) throws Exception
     {
         AdvanceSearchForm advanceSearchForm = (AdvanceSearchForm) form;

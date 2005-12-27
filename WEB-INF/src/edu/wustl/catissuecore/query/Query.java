@@ -51,7 +51,7 @@ public abstract class Query {
 	/**
 	 * Starting object from which all related objects can be part of the query
 	 */
-	protected String queryStartObject = new String();
+	protected String queryStartObject;
 
 	/**
 	 * Parent object of the queryStartObject i.e. the object from which the
@@ -77,6 +77,34 @@ public abstract class Query {
 	 * subquery object of same type
 	 */
 	protected int tableSufix = 1;
+	
+	/**
+	 * @return Returns the isParentDerivedSpecimen.
+	 */
+	public boolean isParentDerivedSpecimen() {
+		return isParentDerivedSpecimen;
+	}
+	/**
+	 * @param isParentDerivedSpecimen The isParentDerivedSpecimen to set.
+	 */
+	public void setParentDerivedSpecimen(boolean isParentDerivedSpecimen) {
+		this.isParentDerivedSpecimen = isParentDerivedSpecimen;
+	}
+	/**
+	 * @return Returns the levelOfParent.
+	 */
+	public int getLevelOfParent() {
+		return levelOfParent;
+	}
+	/**
+	 * @param levelOfParent The levelOfParent to set.
+	 */
+	public void setLevelOfParent(int levelOfParent) {
+		this.levelOfParent = levelOfParent;
+	}
+	protected int levelOfParent = 0;
+	
+	protected boolean isParentDerivedSpecimen = false;
 
 	/**
 	 * Participant object constant
@@ -139,6 +167,8 @@ public abstract class Query {
 
 	public static final String STORAGE_CONTAINER = "StorageContainer";
 
+	public static final String CHECKIN_CHECKOUT_EVENT_PARAMETER = "CheckinCheckoutEventParameter";
+
 	/**
 	 * This method executes the query string formed from getString method and
 	 * creates a temporary table.
@@ -195,6 +225,8 @@ public abstract class Query {
 	 * @return
 	 */
 	public String getString() {
+		
+		whereConditions.formatTree();
 		StringBuffer query = new StringBuffer();
 		HashSet set = new HashSet();
 
@@ -249,7 +281,7 @@ public abstract class Query {
 		//	        set.add(((DataElement)resultView.get(i)).getTable());
 		//	    }
 
-		System.out.println("Set : " + set.toString());
+		Logger.out.debug("Set : " + set.toString());
 		query.append("\nFROM ");
 		query.append(this.formFromString(set));
 
@@ -313,6 +345,13 @@ public abstract class Query {
 	 */
 	private String getJoinConditionString(final HashSet set) {
 		StringBuffer joinConditionString = new StringBuffer();
+//		Object[] tablesArray = new String[set.size()];
+//		Iterator it = set.iterator();
+//		for(int i=0; it.hasNext(); i++)
+//		{
+//			tablesArray[i] = ((Table)it.next()).getTableName();
+//		}
+		
 		Object[] tablesArray = set.toArray();
 		RelationCondition relationCondition = null;
 
@@ -322,25 +361,131 @@ public abstract class Query {
 					.get(getJoinRelationWithParent());
 
 			if (relationCondition != null) {
-				tableSet.add(relationCondition.getRightDataElement().getTable());
+				DataElement rightDataElement = new DataElement(relationCondition.getRightDataElement());
+				DataElement leftDataElement = new DataElement(relationCondition.getLeftDataElement());
+				
+				//If its a relation between two specimen
+				if(rightDataElement.getTable().getTableName().equals(Query.SPECIMEN)
+						&& leftDataElement.getTable().getTableName().equals(Query.SPECIMEN))
+				{
+					if(isParentDerivedSpecimen)
+					{
+						Logger.out.debug("Parent is derived specimen");
+						leftDataElement.setTable(new Table(Query.SPECIMEN,Query.SPECIMEN+levelOfParent+"L"));
+						leftDataElement.setTable(new Table(Query.SPECIMEN,Query.SPECIMEN+levelOfParent+"L"));
+						
+					}
+					else
+					{
+						Logger.out.debug("Parent is not derived specimen");
+					}
+				}
+				
+				tableSet.add(rightDataElement.getTableAliasName());
 				joinConditionString.append(" "
-						+ relationCondition.getRightDataElement().toSQLString(
+						+ rightDataElement.toSQLString(
 								tableSufix));
 				joinConditionString.append(Operator.EQUAL);
-				joinConditionString.append(relationCondition
-						.getRightDataElement().toSQLString(tableSufix - 1)
+				joinConditionString.append(leftDataElement.toSQLString(tableSufix - 1)
 						+ " ");
+				Logger.out.debug(rightDataElement.toSQLString(tableSufix)+Operator.EQUAL+leftDataElement.toSQLString(tableSufix - 1));
+				
 			}
 		}
 
 		//For all permutations of tables find the joining conditions
+		Table table1;
+		Table table2;
 		for (int i = 0; i < tablesArray.length; i++) {
-			for (int j = i + 1; j < tablesArray.length; j++) {
+			table1 = (Table) tablesArray[i];
+			if(table1.hasDifferentAlias())
+			{
 				relationCondition = (RelationCondition) Client.relationConditionsForRelatedTables
-						.get(new Relation((String) tablesArray[i],
-								(String) tablesArray[j]));
+				.get(new Relation((String) table1.getLinkingTable().getTableName(),
+						(String) table1.getTableName()));
+				Logger.out.debug("***************relationCondition:"+relationCondition);
 				if (relationCondition != null) {
-					System.out.println(tablesArray[i] + " " + tablesArray[j]
+					relationCondition = new RelationCondition(relationCondition);
+					relationCondition.getLeftDataElement().setTable(table1.getLinkingTable());
+					relationCondition.getRightDataElement().setTable(table1);
+					System.out.println(table1.getTableName() + " " +table1.getLinkingTable().getTableName()
+							+ " " + relationCondition.toSQLString(tableSufix));
+					if (joinConditionString.length() != 0) {
+						joinConditionString.append(Operator.AND + " ");
+					}
+					joinConditionString.append(relationCondition
+							.toSQLString(tableSufix));
+				}
+				else
+				{
+					relationCondition = (RelationCondition) Client.relationConditionsForRelatedTables
+					.get(new Relation((String) table1.getTableName(),
+							(String) table1.getLinkingTable().getTableName()));
+					Logger.out.debug("***************relationCondition:"+relationCondition);
+					if (relationCondition != null) {
+						relationCondition = new RelationCondition(relationCondition);
+						relationCondition.getLeftDataElement().setTable(table1);
+						relationCondition.getRightDataElement().setTable(table1.getLinkingTable());
+						System.out.println(table1.getTableName() + " " +table1.getLinkingTable().getTableName()
+								+ " " + relationCondition.toSQLString(tableSufix));
+						if (joinConditionString.length() != 0) {
+							joinConditionString.append(Operator.AND + " ");
+						}
+						joinConditionString.append(relationCondition
+								.toSQLString(tableSufix));
+					}
+				}
+				continue;
+			}
+			for (int j = i + 1; j < tablesArray.length; j++) {
+				
+				table2 = (Table) tablesArray[j];
+				
+				if(table2.hasDifferentAlias())
+				{
+					relationCondition = (RelationCondition) Client.relationConditionsForRelatedTables
+					.get(new Relation((String) table2.getLinkingTable().getTableName(),
+							(String) table2.getTableName()));
+					Logger.out.debug("***************relationCondition:"+relationCondition);
+					if (relationCondition != null) {
+						relationCondition = new RelationCondition(relationCondition);
+						relationCondition.getLeftDataElement().setTable(table2.getLinkingTable());
+						relationCondition.getRightDataElement().setTable(table2);
+						System.out.println(table2.getTableName() + " " +table2.getLinkingTable().getTableName()
+								+ " " + relationCondition.toSQLString(tableSufix));
+						if (joinConditionString.length() != 0) {
+							joinConditionString.append(Operator.AND + " ");
+						}
+						joinConditionString.append(relationCondition
+								.toSQLString(tableSufix));
+					}
+					else
+					{
+						relationCondition = (RelationCondition) Client.relationConditionsForRelatedTables
+						.get(new Relation((String) table2.getLinkingTable().getTableName(),
+								(String) table2.getTableName()));
+						Logger.out.debug("***************relationCondition:"+relationCondition);
+						if (relationCondition != null) {
+							relationCondition = new RelationCondition(relationCondition);
+							relationCondition.getLeftDataElement().setTable(table2.getLinkingTable());
+							relationCondition.getRightDataElement().setTable(table2);
+							System.out.println(table2.getTableName() + " " +table2.getLinkingTable().getTableName()
+									+ " " + relationCondition.toSQLString(tableSufix));
+							if (joinConditionString.length() != 0) {
+								joinConditionString.append(Operator.AND + " ");
+							}
+							joinConditionString.append(relationCondition
+									.toSQLString(tableSufix));
+						}
+					}
+					continue;
+				}
+				
+				relationCondition = (RelationCondition) Client.relationConditionsForRelatedTables
+						.get(new Relation((String) table1.getTableName(),
+								(String) table2.getTableName()));
+				if (relationCondition != null) {
+					System.out.println(table1.getTableName() + " " + table2.getTableName()
 							+ " " + relationCondition.toSQLString(tableSufix));
 					if (joinConditionString.length() != 0) {
 						joinConditionString.append(Operator.AND + " ");
@@ -350,12 +495,12 @@ public abstract class Query {
 
 				} else {
 					relationCondition = (RelationCondition) Client.relationConditionsForRelatedTables
-							.get(new Relation((String) tablesArray[j],
-									(String) tablesArray[i]));
+							.get(new Relation((String) table2.getTableName(),
+									(String) table1.getTableName()));
 
 					if (relationCondition != null) {
-						System.out.println(tablesArray[j] + " "
-								+ tablesArray[i] + " "
+						System.out.println(table2.getTableName() + " "
+								+table1.getTableName() + " "
 								+ relationCondition.toSQLString(tableSufix));
 						if (joinConditionString.length() != 0) {
 							joinConditionString.append(Operator.AND + " ");
@@ -378,6 +523,8 @@ public abstract class Query {
 		JOIN_RELATION_MAP.put(new Relation(Query.PARTICIPANT,Query.COLLECTION_PROTOCOL),new Relation(Query.PARTICIPANT,Query.COLLECTION_PROTOCOL_REGISTRATION));
 		JOIN_RELATION_MAP.put(new Relation(Query.COLLECTION_PROTOCOL,Query.SPECIMEN_COLLECTION_GROUP),new Relation(Query.COLLECTION_PROTOCOL_EVENT,Query.SPECIMEN_COLLECTION_GROUP));
 		JOIN_RELATION_MAP.put(new Relation(Query.SPECIMEN_COLLECTION_GROUP,Query.SPECIMEN),new Relation(Query.SPECIMEN_COLLECTION_GROUP,Query.SPECIMEN));
+		JOIN_RELATION_MAP.put(new Relation(Query.SPECIMEN,Query.SPECIMEN),new Relation(Query.SPECIMEN,Query.SPECIMEN));
+		Logger.out.debug(this.getParentOfQueryStartObject()+" "+this.queryStartObject);
 		return (Relation) JOIN_RELATION_MAP.get(new Relation(this.getParentOfQueryStartObject(),this.queryStartObject));
 	}
 
@@ -394,21 +541,23 @@ public abstract class Query {
 		if (tableSufix > 1) {
 			RelationCondition relationCondition = (RelationCondition) Client.relationConditionsForRelatedTables
 					.get(getJoinRelationWithParent());
+			Logger.out.debug("*********relationCondition:"+relationCondition+"  "+getJoinRelationWithParent());
 			
-			set.add(relationCondition.getRightDataElement().getTable());
+			set.add(new Table(relationCondition.getRightDataElement().getTableAliasName()));
 		}
 		
 		StringBuffer fromString = new StringBuffer();
 		Iterator it = set.iterator();
 		
 		Object tableAlias;
+		Table table;
 		while (it.hasNext()) {
 			fromString.append(" ");
-			tableAlias = it.next();
+			table = (Table) it.next();
 			fromString
-					.append(((String) Client.objectTableNames.get(tableAlias))
+					.append(((String) Client.objectTableNames.get(table.getTableName()))
 							.toUpperCase()
-							+ " " + tableAlias + tableSufix + " ");
+							+ " " + table.toSQLString() + tableSufix + " ");
 			if (it.hasNext()) {
 				fromString.append(",");
 			}
@@ -485,6 +634,42 @@ public abstract class Query {
 	/**
 	 * @return Returns the tableSet.
 	 */
+	public Set getTableNamesSet() {
+		Set set = new HashSet();
+		DataElement dataElement;
+		if (resultView != null) {
+			for (int i = 0; i < resultView.size(); i++) {
+				dataElement = (DataElement) resultView.get(i);
+				set.add(dataElement.getTableAliasName());
+
+			}
+		}
+		if (whereConditions != null) {
+			Set queryObjects = whereConditions.getQueryObjects();
+			if (queryObjects != null) {
+				Iterator it = queryObjects.iterator();
+				Table table;
+				while(it.hasNext())
+				{
+					table = (Table) it.next();
+					set.add(table.getTableName());
+				}
+			}
+		}
+		if (this.queryStartObject != null) {
+			set.add(this.queryStartObject);
+		}
+		if (tableSet != null) {
+			
+			set.addAll(tableSet);
+		}
+		Logger.out.debug("TableNamesSet:" + set);
+		return set;
+	}
+	
+	/**
+	 * @return Returns the tableSet.
+	 */
 	public Set getTableSet() {
 		Set set = new HashSet();
 		DataElement dataElement;
@@ -498,13 +683,21 @@ public abstract class Query {
 		if (whereConditions != null) {
 			set.addAll(whereConditions.getQueryObjects());
 		}
-		if (this.queryStartObject != null) {
-			set.add(this.queryStartObject);
-		}
+//		if (this.queryStartObject != null) {
+//			set.add(new Table(this.queryStartObject,this.queryStartObject));
+//		}
 		if (tableSet != null) {
-			set.addAll(tableSet);
+			
+			Iterator it = tableSet.iterator();
+			String tableName;
+			while(it.hasNext())
+			{
+				tableName = (String) it.next();
+				set.add(new Table(tableName,tableName));
+			}
+			
 		}
-		Logger.out.debug("TableSet:" + set.size());
+		Logger.out.debug("TableSet:" + set);
 		return set;
 	}
 
@@ -544,7 +737,7 @@ public abstract class Query {
 		String dataElementFieldName;
 		for (int i = 0; i < resultView.size(); i++) {
 			dataElement = (DataElement) resultView.get(i);
-			dataElementTableName = dataElement.getTable();
+			dataElementTableName = dataElement.getTableAliasName();
 			dataElementFieldName = dataElement.getField();
 
 			//I
@@ -586,7 +779,7 @@ public abstract class Query {
 		Vector identifiedData;
 		for (int i = 0; i < resultView.size(); i++) {
 			dataElement = (DataElement) resultView.get(i);
-			dataElementTableName = dataElement.getTable();
+			dataElementTableName = dataElement.getTableAliasName();
 			dataElementFieldName = dataElement.getField();
 			//I
 			if (dataElementTableName.equals(tableAlias)
@@ -645,7 +838,7 @@ public abstract class Query {
 			tableAlias = (String) tableAliasVector.get(j);
 			for (int i = 0; i < resultView.size(); i++) {
 				dataElement = (DataElement) resultView.get(i);
-				dataElementTableName = dataElement.getTable();
+				dataElementTableName = dataElement.getTableAliasName();
 				dataElementFieldName = dataElement.getField();
 
 				if (dataElementTableName.equals(tableAlias)
@@ -692,7 +885,7 @@ public abstract class Query {
 
 		for (int i = 0; i < resultView.size(); i++) {
 			dataElement = (DataElement) resultView.get(i);
-			dataElementTableName = dataElement.getTable();
+			dataElementTableName = dataElement.getTableAliasName();
 			dataElementFieldName = dataElement.getField();
 
 			columnIdsMap.put(dataElementTableName + "." + dataElementFieldName,

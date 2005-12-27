@@ -24,6 +24,54 @@ function addDiv(div,adstr)
 	alert(div.innerHTML);
 }
 
+function confirmDisable(action,formField)
+{
+	if((formField != undefined) && (formField.value == "Disabled"))
+		{
+			 var go = confirm("Are you sure,you want to disable?");
+			 if (go==true)
+			 {
+				document.forms[0].action = action;
+				document.forms[0].submit();
+			 }
+		}
+		else
+		{
+			document.forms[0].action = action;
+			document.forms[0].submit();
+		}
+			
+}
+	
+
+function enableButton(formButton,countElement,checkName)
+{
+	/** number of rows present    **/
+	var counts = countElement.value;
+	if(counts == undefined){
+		var cnt = document.getElementById(countElement);
+		
+	/** number of rows present(counts) when countElement is again element    **/
+	counts = cnt.value;
+	}
+	/** checking whether checkbox is checked or not **/
+	var status = false;
+	
+	for(i=1;i <= counts;i++)
+	{
+		/** creating checkbox name**/
+		var itemCheck = checkName+i;
+		var chk = document.getElementById(itemCheck);
+		if(document.all[itemCheck].checked==true)
+			status = true;
+			
+	}
+	if(status)
+		formButton.disabled = false;
+	else
+		formButton.disabled = true;
+}
+
 function  deleteChecked(subdivtag,action,countElement,checkName,isOuterTable)
 {
 	var r = new Array(); 
@@ -78,6 +126,7 @@ function  deleteChecked(subdivtag,action,countElement,checkName,isOuterTable)
 			
 			delCounts++;
 			status = true;
+			
 		}
 	}
 	

@@ -31,9 +31,6 @@ public class Constants
 	
 	public static final  HashMap STATIC_PROTECTION_GROUPS_FOR_OBJECT_TYPES = new HashMap();
 	
-	// Assign Privilege Constants.
-	public static final boolean PRIVILEGE_ASSIGN = true;
-	
 //	 Mandar: Used for Date Validations in Validator Class
 	public static final String DATE_SEPARATOR = "-";
 	public static final String MIN_YEAR = "1900";

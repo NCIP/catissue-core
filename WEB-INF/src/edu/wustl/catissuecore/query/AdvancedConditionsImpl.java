@@ -7,6 +7,8 @@ import java.util.Vector;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
+import edu.wustl.common.util.logger.Logger;
+
 
 
 
@@ -25,9 +27,18 @@ public class AdvancedConditionsImpl extends ConditionsImpl {
      */
 	private DefaultMutableTreeNode whereCondition = new DefaultMutableTreeNode();
 	
+	private int level = 1;
+	
+	private String parentObject = new String();
+	
 	public AdvancedConditionsImpl()
 	{
 
+	}
+	
+	public void formatTree()
+	{
+		
 	}
 
 	/**
@@ -84,9 +95,18 @@ public class AdvancedConditionsImpl extends ConditionsImpl {
      */
     public String getString(int tableSufix)
     {
+    	
         StringBuffer whereConditionsString = new StringBuffer();
        
             int childCount =whereCondition.getChildCount();
+            
+            DefaultMutableTreeNode parent1 = (DefaultMutableTreeNode) whereCondition.getParent();
+            AdvancedConditionsNode parentNode =null;
+            if(parent1 != null )
+            {
+            	parentNode = (AdvancedConditionsNode) parent1.getUserObject();
+            }
+            
             
             
 //            Object obj =whereCondition.getUserObject();
@@ -116,7 +136,33 @@ public class AdvancedConditionsImpl extends ConditionsImpl {
 	                    child = (DefaultMutableTreeNode)whereCondition.getChildAt(i);
 	                    Query query = QueryFactory.getInstance().newQuery(Query.ADVANCED_QUERY,((AdvancedConditionsNode)child.getUserObject()).getObjectName());
 		                query.setTableSufix(tableSufix+1);
-		                query.setParentOfQueryStartObject(currentNodeData.getObjectName());
+		                query.setLevelOfParent(this.level);
+		                
+		                
+		                //set isParentDerivedSpecimen attribute of child query to true 
+		                //if current node is a derived specimen
+		                if(currentNodeData.getObjectName().equals(Query.SPECIMEN) && parentObject.equals(Query.SPECIMEN) 
+		                		&& parentNode != null)
+		                {
+		                	
+		                		if(parentNode.getOperationWithChildCondition().getOperator().equals(Operator.EXIST))
+		                		{
+		                			query.setParentDerivedSpecimen(false);
+		                		}
+		                		else
+		                		{
+		                			query.setParentDerivedSpecimen(true);
+		                		}
+		                	
+		                }
+		                else
+		                {
+		                	query.setParentDerivedSpecimen(false);
+		                }
+		                if(currentNodeData != null)
+		                {
+		                	query.setParentOfQueryStartObject(currentNodeData.getObjectName());
+		                }
 	                    whereConditionsString.append(" \nEXISTS \n(");//start of one child subquery
 	                    ((AdvancedConditionsImpl)((AdvancedQuery)query).whereConditions).setWhereCondition(child);
 	                    whereConditionsString.append(query.getString());
@@ -145,6 +191,11 @@ public class AdvancedConditionsImpl extends ConditionsImpl {
 		            		whereConditionsString.append("(");
 		            		advancedConditionsImpl = new AdvancedConditionsImpl();
 		            		advancedConditionsImpl.setWhereCondition(child);
+		            		advancedConditionsImpl.setLevel(child.getLevel());
+		            		if(currentNodeData != null)
+			                {
+		            			advancedConditionsImpl.setParentObject(currentNodeData.getObjectName());
+			                }
 		            		whereConditionsString.append("\n "+advancedConditionsImpl.getString(tableSufix)+" ");
 		            		whereConditionsString.append(")");
 		            		prevChildHasCondition = true;
@@ -296,14 +347,14 @@ public class AdvancedConditionsImpl extends ConditionsImpl {
         this.whereCondition = whereCondition;
     }
 
-    /* (non-Javadoc)
-     * @see edu.wustl.catissuecore.query.ConditionsImpl#getQueryObjects(java.lang.String)
-     */
-    public HashSet getQueryObjects(String queryStartObject)
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
+//    /* (non-Javadoc)
+//     * @see edu.wustl.catissuecore.query.ConditionsImpl#getQueryObjects(java.lang.String)
+//     */
+//    public HashSet getQueryObjects(String queryStartObject)
+//    {
+//        // TODO Auto-generated method stub
+//        return null;
+//    }
 
     /* (non-Javadoc)
      * @see edu.wustl.catissuecore.query.ConditionsImpl#getQueryObjects()
@@ -313,26 +364,76 @@ public class AdvancedConditionsImpl extends ConditionsImpl {
     	HashSet set = new HashSet();
         
         Enumeration enum = whereCondition.depthFirstEnumeration();
+        DefaultMutableTreeNode treeNode;
+        DefaultMutableTreeNode parentNode;
+        AdvancedConditionsNode advancedConditionsNode;
+        AdvancedConditionsNode parentConditionsNode;
+        Table table;
         while(enum.hasMoreElements())
         {
-            AdvancedConditionsNode advancedConditionsNode=(AdvancedConditionsNode) ((DefaultMutableTreeNode) enum.nextElement()).getUserObject();
+        	treeNode = (DefaultMutableTreeNode) enum.nextElement();
+            advancedConditionsNode=(AdvancedConditionsNode) treeNode.getUserObject();
+            parentNode = (DefaultMutableTreeNode) treeNode.getParent();
             
             if(advancedConditionsNode != null)
             {
+            	if(parentNode != null)
+                {
+	                parentConditionsNode = (AdvancedConditionsNode) (parentNode).getUserObject();
+	                if(parentConditionsNode != null)
+	                {
+		            	if(isPartOfSubquery(treeNode))
+		            	{
+		            		Logger.out.debug("Parent has EXIST operation with children so not adding tables of the node in set");
+		            		continue;
+		            	}
+	                }
+                }
                 Vector conditions = advancedConditionsNode.getObjectConditions();
 	            for(int i=0;i < conditions.size() ; i++)
 	            {
-	                set.add(((Condition)conditions.get(i)).getDataElement().getTable());
+	            	Logger.out.debug(conditions.get(i));
+	            	table = ((Condition)conditions.get(i)).getDataElement().getTable();
+	            	Logger.out.debug(table);
+	                set.add(table);
+	                if(table.getLinkingTable() != null)
+	                	set.add(table.getLinkingTable());
 	            }
             }
         }
+        Logger.out.debug("set of tables in conditions:"+set);
         return set;
     }
     
     
    
 
-    /* (non-Javadoc)
+    /**
+ * @param treeNode
+ * @return
+ */
+private boolean isPartOfSubquery(DefaultMutableTreeNode treeNode) {
+	boolean isPartOfSubquery = false;
+//	DefaultMutableTreeNode parent = (DefaultMutableTreeNode)treeNode.getParent();
+	DefaultMutableTreeNode parent = (DefaultMutableTreeNode)treeNode.getParent();
+	AdvancedConditionsNode parentNode;
+	while(parent != null && !parent.equals(whereCondition.getParent()) )
+	{
+		
+		parentNode = (AdvancedConditionsNode) parent.getUserObject();
+		if(parentNode != null && parentNode.getOperationWithChildCondition().getOperator().equals(Operator.EXIST))
+		{
+			
+			isPartOfSubquery = true;
+			return isPartOfSubquery;
+		}
+		parent = (DefaultMutableTreeNode) parent.getParent();
+		
+	}
+	return isPartOfSubquery;
+}
+
+	/* (non-Javadoc)
      * @see edu.wustl.caTISSUECore.query.ConditionsImpl#getConditionObjects()
      */
 //    public HashSet getConditionObjects()
@@ -357,4 +458,28 @@ public class AdvancedConditionsImpl extends ConditionsImpl {
 //    }
 
    
+	/**
+	 * @return Returns the level.
+	 */
+	public int getLevel() {
+		return level;
+	}
+	/**
+	 * @param level The level to set.
+	 */
+	public void setLevel(int level) {
+		this.level = level;
+	}
+	/**
+	 * @return Returns the parentObject.
+	 */
+	public String getParentObject() {
+		return parentObject;
+	}
+	/**
+	 * @param parentObject The parentObject to set.
+	 */
+	public void setParentObject(String parentObject) {
+		this.parentObject = parentObject;
+	}
 }

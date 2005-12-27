@@ -18,7 +18,7 @@ import java.net.URLConnection;
 import java.util.List;
 
 import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.catissuecore.domain.Institution;
+import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 
@@ -28,7 +28,7 @@ public class CaTissueHTTPClient
 
 	public boolean connect(String userName, String password) throws Exception
 	{
-		//FIXME : Write a method say, getURL() which will return the corresponding URL as per domainObject
+		//FIXME : Needs to be defined in Constants.java or ApplicationResources.properties
 		String servletURL = "http://localhost:8080/catissuecore/LoginHTTP.do";
 		
 		//Opens a connection to the specific URL
@@ -72,7 +72,7 @@ public class CaTissueHTTPClient
 	
 	private Object doOperation(AbstractDomainObject domainObject,String operation) throws Exception
 	{
-		String servletURL = "http://localhost:8080/catissuecore/InstituteHTTP.do;jsessionid=" + httpSessionId; //FIXME : Use of getURL function
+		String servletURL = "http://localhost:8080/catissuecore/OperationHTTP.do;jsessionid=" + httpSessionId; //FIXME : Needs to be defined in Constants.java or ApplicationResources.properties
 		
 		//Opens a connection to the specific URL
 		URL url = new URL(servletURL);
@@ -116,10 +116,12 @@ public class CaTissueHTTPClient
 	public static void main(String [] args)
 	{
 		CaTissueHTTPClient client = new CaTissueHTTPClient();
-		Institution inst = new Institution();
+		Biohazard inst = new Biohazard();
 		
-		inst.setName("Persistent Systems");
+		inst.setName("New Hazard");
 		inst.setSystemIdentifier(new Long("0"));
+		inst.setComments("No Comments");
+		inst.setType("Mutagen");
 		
 		try
 		{

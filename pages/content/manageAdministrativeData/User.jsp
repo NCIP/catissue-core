@@ -286,7 +286,8 @@ function handleStatus(status)
 							</label>
 						</td>
 						<td class="formField">
-							<html:text styleClass="formFieldSized"  maxlength="50" size="30" styleId="phoneNumber" property="phoneNumber" />
+							<html:text styleClass="formFieldSized15"  maxlength="50" size="30" styleId="phoneNumber" property="phoneNumber" />
+							<bean:message key="format.phoneNumber" />
 						</td>
 					</tr>
 					

@@ -89,6 +89,7 @@ public class DistributionProtocolBizLogic extends DefaultBizLogic implements Rol
 			checkStatus(dao, distributionProtocol.getPrincipalInvestigator(), "Principal Investigator");
     	
 		setPrincipalInvestigator(dao,distributionProtocol);
+		checkForChangedStatus( distributionProtocol ,  distributionProtocolOld  );
 		dao.update(distributionProtocol, sessionDataBean, true, true, false);
 		
 		//Audit of Distribution Protocol.

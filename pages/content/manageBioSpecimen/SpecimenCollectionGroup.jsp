@@ -58,6 +58,7 @@
 
 
 <head>
+	<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
      <script language="JavaScript">
      
     	function onRadioButtonClick(element)
@@ -86,24 +87,6 @@
 			document.forms[0].submit();
 		}
 		
-		function confirmDisable()
-	{
-		if(document.forms[0].activityStatus.value == "Disabled")
-		{
-			 var go = confirm("<bean:message key="allPage.disableConfirm" />");
-		 	if (go==true)
-		 	{
-				 document.forms[0].action = "<%=formName%>";
-			 	document.forms[0].submit();
-		 	}
-		}
-		else
-		{
-			document.forms[0].action = "<%=formName%>";
-			document.forms[0].submit();
-		}		
-	}
-
 	</script>
 </head>
 
@@ -393,7 +376,10 @@
 						   				</html:submit>
 						   			</td-->
 						   			<td>
-										<html:button styleClass="actionButton" property="submitPage" onclick="confirmDisable()">
+						   			<%
+						   				String action = "confirmDisable('" + formName +"',document.forms[0].activityStatus)";
+						   			%>
+										<html:button styleClass="actionButton" property="submitPage" onclick="<%=action%>">
 											<bean:message key="buttons.submit"/>
 										</html:button>
 									</td>

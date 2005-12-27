@@ -173,26 +173,10 @@
 			checkb.colSpan=2;
 			sname="";
 			var name = "chk_"+ rowno;
-			sname="<input type='checkbox' name='" + name +"' id='" + name +"' value='C'>"
+			sname="<input type='checkbox' name='" + name +"' id='" + name +"' value='C' onClick=\"enableButton(document.forms[0].deleteValue,document.forms[0].counter,'chk_')\">";
 			checkb.innerHTML=""+sname;	
 		}
-	function confirmDisable()
-	{
-		if(document.forms[0].activityStatus.value == "Disabled")
-		{
-			 var go = confirm("<bean:message key="allPage.disableConfirm" />");
-		 	if (go==true)
-		 	{
-				 document.forms[0].action = "<%=formName%>";
-			 	document.forms[0].submit();
-		 	}
-		}
-		else
-		{
-			document.forms[0].action = "<%=formName%>";
-			document.forms[0].submit();
-		}		
-	}
+	
 		</script>
 </head>
 
@@ -420,7 +404,7 @@
 						</html:button>
 				    </td>
 				    <td class="formButtonField" align="Right">
-						<html:button property="deleteValue" styleClass="actionButton" onclick="deleteChecked('addMore','Distribution.do?operation=<%=operation%>&pageOf=pageOfDistribution&status=true',document.forms[0].counter,'chk_',false)">
+						<html:button property="deleteValue" styleClass="actionButton" onclick="deleteChecked('addMore','Distribution.do?operation=<%=operation%>&pageOf=pageOfDistribution&status=true',document.forms[0].counter,'chk_',false)" disabled="true">
 							<bean:message key="buttons.delete"/>
 						</html:button>
 					</td>
@@ -537,7 +521,7 @@
 
 						%>
 						<td class="formField" width="5">
-							<input type=checkbox name="<%=check %>" id="<%=check %>" <%=condition%>>		
+							<input type=checkbox name="<%=check %>" id="<%=check %>" <%=condition%> onClick="enableButton(document.forms[0].deleteValue,document.forms[0].counter,'chk_')">		
 						</td>
 				 			
 				 </tr>
@@ -572,7 +556,10 @@
 						<html:submit styleClass="actionButton" value="Submit" onclick="<%=changeAction%>" />
 					</td-->
 					<td>
-						<html:button styleClass="actionButton" property="submitPage" onclick="confirmDisable()">
+					<%
+						String action = "confirmDisable('" + formName +"',document.forms[0].activityStatus)";
+					%>
+						<html:button styleClass="actionButton" property="submitPage" onclick="<%=action%>">
 							<bean:message key="buttons.submit"/>
 						</html:button>
 					</td>

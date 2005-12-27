@@ -112,14 +112,14 @@ public abstract class BaseDistributionReportAction extends BaseAction
     		Logger.out.debug("Specimen ID" +specimenIds[j]);
     		SimpleConditionsNode simpleConditionsNode = new SimpleConditionsNode();
     		simpleConditionsNode.getCondition().setValue(specimenIds[j]);
-    		simpleConditionsNode.getCondition().getDataElement().setTable("Specimen");
+    		simpleConditionsNode.getCondition().getDataElement().setTableName("Specimen");
     		simpleConditionsNode.getCondition().getDataElement().setField("Identifier");
     		simpleConditionsNode.getCondition().getDataElement().setFieldType(Constants.FIELD_TYPE_BIGINT);
     		simpleConditionsNode.getCondition().getOperator().setOperator("=");
     		
     		
     		SimpleConditionsNode simpleConditionsNode1 = new SimpleConditionsNode();
-    		simpleConditionsNode1.getCondition().getDataElement().setTable("DistributedItem");
+    		simpleConditionsNode1.getCondition().getDataElement().setTableName("DistributedItem");
     		simpleConditionsNode1.getCondition().getDataElement().setField("Distribution_Id");
     		simpleConditionsNode1.getCondition().getDataElement().setFieldType(Constants.FIELD_TYPE_BIGINT);
     		simpleConditionsNode1.getCondition().getOperator().setOperator("=");
@@ -148,7 +148,7 @@ public abstract class BaseDistributionReportAction extends BaseAction
     	    	String tableInPath = null;
     	    	while (st.hasMoreTokens())
     			{
-    	    		dataElement.setTable(st.nextToken());
+    	    		dataElement.setTableName(st.nextToken());
     	    		dataElement.setField(st.nextToken());
     	    		st.nextToken();
     	    		

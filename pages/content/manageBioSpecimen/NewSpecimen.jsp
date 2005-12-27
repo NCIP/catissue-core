@@ -128,7 +128,7 @@ Map map = form.getExternalIdentifier();
 			checkb.colSpan=2;
 			sname="";
 			var name = "chk_ex_"+ rowno;
-			sname="<input type='checkbox' name='" + name +"' id='" + name +"' value='C'>"
+			sname="<input type='checkbox' name='" + name +"' id='" + name +"' value='C' onClick=\"enableButton(document.forms[0].deleteExId,document.forms[0].exIdCounter,'chk_ex_')\">";
 			checkb.innerHTML=""+sname;
 		}
 		
@@ -193,28 +193,11 @@ Map map = form.getExternalIdentifier();
 			checkb.colSpan=2;
 			sname="";
 			var name = "chk_bio_"+ (q+1);
-			sname="<input type='checkbox' name='" + name +"' id='" + name +"' value='C'>"
+			sname="<input type='checkbox' name='" + name +"' id='" + name +"' value='C' onClick=\"enableButton(document.forms[0].deleteBiohazard,document.forms[0].bhCounter,'chk_bio_')\">";
 			checkb.innerHTML=""+sname;
 		}
 		
-		function confirmDisable()
-		{
-			if(document.forms[0].activityStatus.value == "Disabled")
-			{
-				 var go = confirm("<bean:message key="allPage.disableConfirm" />");
-		 		if (go==true)
-		 		{
-					document.forms[0].action = "<%=formName%>";
-			 		document.forms[0].submit();
-		 		}
-			}
-			else
-			{
-				document.forms[0].action = "<%=formName%>";
-				document.forms[0].submit();
-			}		
-		}
-	
+		
 	</script>
 </head>
 
@@ -636,7 +619,7 @@ Map map = form.getExternalIdentifier();
 				     	</html:button>
 				    </td>
 				    <td class="formTitle" align="Right">
-							<html:button property="deleteExId" styleClass="actionButton" onclick="deleteChecked('addExternalIdentifier','NewSpecimen.do?operation=<%=operation%>&pageOf=pageOfNewSpecimen&status=true&button=deleteExId',document.forms[0].exIdCounter,'chk_ex_',false)">
+							<html:button property="deleteExId" styleClass="actionButton" onclick="deleteChecked('addExternalIdentifier','NewSpecimen.do?operation=<%=operation%>&pageOf=pageOfNewSpecimen&status=true&button=deleteExId',document.forms[0].exIdCounter,'chk_ex_',false)" disabled="true">
 								<bean:message key="buttons.delete"/>
 							</html:button>
 					</td>
@@ -686,7 +669,7 @@ Map map = form.getExternalIdentifier();
 
 						%>
 						<td class="formField" width="5">
-							<input type=checkbox name="<%=check %>" id="<%=check %>" <%=exCondition%>>		
+							<input type=checkbox name="<%=check %>" id="<%=check %>" <%=exCondition%> onClick="enableButton(document.forms[0].deleteExId,document.forms[0].exIdCounter,'chk_ex_')">		
 						</td>
 					 </tr>
 				  <% } %>
@@ -702,7 +685,7 @@ Map map = form.getExternalIdentifier();
 				     	</html:button>
 				    </td>
 				    <td class="formTitle" align="Right">
-							<html:button property="deleteBiohazard" styleClass="actionButton" onclick="deleteChecked('addBiohazardRow','NewSpecimen.do?operation=<%=operation%>&pageOf=pageOfNewSpecimen&status=true&button=deleteBiohazard',document.forms[0].bhCounter,'chk_bio_',false)">
+							<html:button property="deleteBiohazard" styleClass="actionButton" onclick="deleteChecked('addBiohazardRow','NewSpecimen.do?operation=<%=operation%>&pageOf=pageOfNewSpecimen&status=true&button=deleteBiohazard',document.forms[0].bhCounter,'chk_bio_',false)" disabled="true">
 								<bean:message key="buttons.delete"/>
 							</html:button>
 					</td>
@@ -773,7 +756,7 @@ Map map = form.getExternalIdentifier();
 								biohzCondition = "disabled='disabled'";
 						%>
 						<td class="formField" width="5">
-							<input type=checkbox name="<%=check %>" id="<%=check %>" <%=biohzCondition%>>		
+							<input type=checkbox name="<%=check %>" id="<%=check %>" <%=biohzCondition%> onClick="enableButton(document.forms[0].deleteBiohazard,document.forms[0].bhCounter,'chk_bio_')">		
 						</td>
 					 </tr>
 				  <% } %>
@@ -836,7 +819,10 @@ Map map = form.getExternalIdentifier();
 						   				</html:submit>
 						   			</td-->
 						   			<td>
-										<html:button styleClass="actionButton" property="submitPage" onclick="confirmDisable()">
+						   			<%
+						   				String action = "confirmDisable('" + formName +"',document.forms[0].activityStatus)";
+						   			%>
+										<html:button styleClass="actionButton" property="submitPage" onclick="<%=action%>">
 											<bean:message key="buttons.submit"/>
 										</html:button>
 									</td>
