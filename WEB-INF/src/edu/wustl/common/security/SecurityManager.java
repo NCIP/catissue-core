@@ -263,6 +263,34 @@ public class SecurityManager implements Permissions {
 			throw new SMException(e.getMessage(), e);
 		}
 	}
+	
+	/**
+	 * This method returns array of CSM user id of all users who are administrators
+	 * @return
+	 * @throws SMException
+	 */
+	public Long[] getAllAdministrators() throws SMException 
+	{
+		try {
+			Group group = new Group();
+			group.setGroupName(ADMINISTRATOR_GROUP);
+			GroupSearchCriteria groupSearchCriteria= new GroupSearchCriteria(group);
+			List list = getObjects(groupSearchCriteria);
+			group = (Group) list.get(0);
+			Set users = group.getUsers();
+			Long[] userId= new Long[users.size()];
+			Iterator it= users.iterator();
+			for(int i=0; i<users.size(); i++)
+			{
+				userId[i] =  ((User)it.next()).getUserId();
+			}
+			return userId;
+		} catch (CSException e) {
+			Logger.out
+					.debug("Unable to get users: Exception: " + e.getMessage());
+			throw new SMException(e.getMessage(), e);
+		}
+	}
 
 	/**
 	 * This method checks whether a user exists in the database or not
@@ -2239,6 +2267,10 @@ public class SecurityManager implements Permissions {
 		}
 		return isAuthorized;
 	}
+	
+	
 
 }
+
+
 
