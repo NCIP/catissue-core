@@ -98,6 +98,22 @@ PUBLIC
 					<forward name="success" path=".catissuecore.searchHomeDef" />
 		</action>
 		
+		<action path="/ContactUs"
+					type="org.apache.struts.actions.ForwardAction"
+					parameter=".catissuecore.contactUsDef" />
+		
+		<action path="/Accessibility"
+					type="org.apache.struts.actions.ForwardAction"
+					parameter=".catissuecore.accessibilityDef" />
+		
+		<action path="/Disclaimer"
+					type="org.apache.struts.actions.ForwardAction"
+					parameter=".catissuecore.disclaimerDef" />
+		
+		<action path="/PrivacyNotice"
+					type="org.apache.struts.actions.ForwardAction"
+					parameter=".catissuecore.privacyNoticeDef" />
+		
 
 	<!--	
 		<action path="/ManageAdministrativeData"
