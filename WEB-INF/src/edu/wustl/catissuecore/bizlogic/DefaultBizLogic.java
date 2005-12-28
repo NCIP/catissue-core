@@ -64,7 +64,10 @@ public class  DefaultBizLogic extends AbstractBizLogic
         dao.update(obj, sessionDataBean, true, true, false);
         dao.audit(obj,oldObj,sessionDataBean,true);
     }
-    
+    protected boolean validate(Object obj, DAO dao) throws DAOException
+    {
+    	return true;
+    }
     /**
      * Retrieves the records for class name in sourceObjectName according to field values passed.
      * @param sourceObjectName	source object name

@@ -54,6 +54,8 @@ public abstract class AbstractBizLogic
      */
     protected abstract void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException;
     
+    protected abstract boolean validate(Object obj, DAO dao) throws DAOException;
+    
     public abstract List retrieve(String sourceObjectName, String[] selectColumnName, String[] whereColumnName,
             String[] whereColumnCondition, Object[] whereColumnValue,
             String joinCondition) throws DAOException;
@@ -94,6 +96,7 @@ public abstract class AbstractBizLogic
 		try
 		{
 	        dao.openSession(sessionDataBean);
+	        validate(obj, dao);
 	        insert(obj, dao, sessionDataBean);
 	        dao.commit();
 		}
@@ -139,6 +142,7 @@ public abstract class AbstractBizLogic
 		try
 		{
 	        dao.openSession(sessionDataBean);
+	        validate(currentObj, dao);
 	        update(dao, currentObj, oldObj, sessionDataBean);
 	        dao.commit();
 		}

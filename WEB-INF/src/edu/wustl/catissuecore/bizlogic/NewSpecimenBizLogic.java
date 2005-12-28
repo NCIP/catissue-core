@@ -47,6 +47,12 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class NewSpecimenBizLogic extends DefaultBizLogic
 {
+	protected boolean validate(Object obj, DAO dao) throws DAOException
+    {
+		Specimen specimen = (Specimen)obj;
+		//Check for all cases
+    	return true;
+    }
 	/**
      * Saves the storageType object in the database.
 	 * @param obj The storageType object to be saved.
