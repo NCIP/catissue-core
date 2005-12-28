@@ -65,6 +65,22 @@
 		<put name="content" value="/pages/content/common/RedirectToLoginPage.jsp" />
 	</definition>
 	
+	<definition name=".catissuecore.contactUsDef" extends=".catissuecore.homePageDef">
+		<put name="content" value="/pages/content/common/ApplicationFooterTab.jsp" />
+	</definition>
+	
+	<definition name=".catissuecore.accessibilityDef" extends=".catissuecore.homePageDef">
+		<put name="content" value="/pages/content/common/ApplicationFooterTab.jsp" />
+	</definition>
+	
+	<definition name=".catissuecore.disclaimerDef" extends=".catissuecore.homePageDef">
+		<put name="content" value="/pages/content/common/ApplicationFooterTab.jsp" />
+	</definition>
+	
+	<definition name=".catissuecore.privacyNoticeDef" extends=".catissuecore.homePageDef">
+		<put name="content" value="/pages/content/common/ApplicationFooterTab.jsp" />
+	</definition>
+	
 	<!-- Home tab pages definitions end -->
 
 	<!-- Manage Administrative Data tab pages definitions start -->
