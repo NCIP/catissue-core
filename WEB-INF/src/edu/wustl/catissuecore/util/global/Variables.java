@@ -19,7 +19,7 @@ import java.util.Vector;
 
 public class Variables extends edu.wustl.common.util.global.Variables
 {
-    public static String catissueHome=new String();
+    //public static String catissueHome=new String();
     public static Vector databaseDefinitions=new Vector();
     public static String databaseDriver=new String();
     public static String[] databasenames;
