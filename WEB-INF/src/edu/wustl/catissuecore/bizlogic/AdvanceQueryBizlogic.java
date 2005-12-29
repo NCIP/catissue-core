@@ -36,7 +36,7 @@ public class AdvanceQueryBizlogic extends DefaultBizLogic implements TreeDataInt
 	//Creates a temporary table containing the Advance Query Search results given the AdvanceSearchQuery.
 	public void createTempTable(String searchQuery,String tempTableName,SessionDataBean sessionData,Map queryResultObjectDataMap) throws Exception
 	{
- 		String sql = "Create table "+tempTableName+" as "+"("+searchQuery+" AND Participant1.GENDER = 'XXX')";
+ 		String sql = "Create table "+tempTableName+" as "+"("+searchQuery+" AND 1!=1)";
 		//String sql = "Create table "+tempTableName+" as "+"("+searchQuery+")";
  		Logger.out.debug("sql for create table"+sql);
  		JDBCDAO jdbcDao = new JDBCDAO();
@@ -61,7 +61,7 @@ public class AdvanceQueryBizlogic extends DefaultBizLogic implements TreeDataInt
 	}
 	/* Get the data for tree view from temporary table and create tree nodes.
 	 */
-	public Vector getTreeViewData(SessionDataBean sessionData,Map columnIdsMap) throws DAOException
+	public Vector getTreeViewData(SessionDataBean sessionData,Map columnIdsMap) throws DAOException,ClassNotFoundException
 	{
 		String tempTableName = Constants.QUERY_RESULTS_TABLE+"_"+sessionData.getUserId();
 		JDBCDAO jdbcDao = new JDBCDAO();
@@ -107,16 +107,33 @@ public class AdvanceQueryBizlogic extends DefaultBizLogic implements TreeDataInt
 			}
 			else
 			{
-				Logger.out.debug("parent specimen present");
-				setQueryTreeNode((String) rowList.get(specimenColumnId), Constants.SPECIMEN,parentSpecimenId,
-									Constants.SPECIMEN,null,null,vector);
+//				Logger.out.debug("parent specimen present"+parentSpecimenId);
+				String specimenId= (String) rowList.get(specimenColumnId);
+//				Logger.out.debug("specimen id "+specimenId);
+//				setQueryTreeNode(specimenId, Constants.SPECIMEN,parentSpecimenId,Constants.SPECIMEN,null,null,vector);
+				List specimenIdsHeirarchy = getSpecimenHeirarchy(specimenId);
+				int noOfIds=specimenIdsHeirarchy.size();
+				if(noOfIds>0)
+				{
+					Logger.out.debug("last parent specimen id:"+(String)specimenIdsHeirarchy.get(noOfIds-1));
+					setQueryTreeNode((String)specimenIdsHeirarchy.get(noOfIds-1), Constants.SPECIMEN,(String)
+													rowList.get(specimenCollGrpColumnId),Constants.SPECIMEN_COLLECTION_GROUP,null,null,vector);
+				}
+				Logger.out.debug("list of parent specimen ids:"+specimenIdsHeirarchy);
+				Iterator specimenIdsHeirarchyItr=specimenIdsHeirarchy.iterator();
+				while(specimenIdsHeirarchyItr.hasNext())
+				{
+					String parentSpecimenIdInHeirarchy = (String)specimenIdsHeirarchyItr.next();
+					Logger.out.debug("specimen id in loop:"+specimenId);
+					Logger.out.debug("parent specimen id in loop:"+parentSpecimenIdInHeirarchy);
+					setQueryTreeNode(specimenId, Constants.SPECIMEN,parentSpecimenIdInHeirarchy,Constants.SPECIMEN,null,null,vector);
+					specimenId = parentSpecimenIdInHeirarchy;
+				}
 			}
 			Logger.out.debug("Tree Data:"+rowList.get(participantColumnId)+" "+rowList.get(collectionProtocolColumnId)+" "+
 					rowList.get(specimenCollGrpColumnId)+" "+rowList.get(parentSpecimenColumnId)+" "+ rowList.get(specimenColumnId));
-			
-			
         }
-        
+        Logger.out.debug("vector of tree nodes"+vector);
         return vector;
 	}   
 	//Create TreeNode given the Tree node data.
@@ -189,5 +206,35 @@ public class AdvanceQueryBizlogic extends DefaultBizLogic implements TreeDataInt
 			}
 			setTables(parent,tableSet);
 		}
+	}
+	private List getSpecimenHeirarchy(String specimenId) throws DAOException,ClassNotFoundException
+	{
+		List specimenIdsList = new ArrayList();
+		JDBCDAO jdbcDao = new JDBCDAO();
+        jdbcDao.openSession(null);
+		Long whereColumnValue=new Long(specimenId);
+		String sql =new String(); 
+		while(whereColumnValue!=null)
+		{
+			sql = "Select PARENT_SPECIMEN_ID from CATISSUE_SPECIMEN where IDENTIFIER = "+whereColumnValue;
+			List dataList =  jdbcDao.executeQuery(sql,null,false,null);
+			Logger.out.debug("list size in speci heirarchy:"+dataList.size()+" "+dataList);
+			List rowList = (List)dataList.get(0);
+			Logger.out.debug("rowList size"+rowList.size());
+			Logger.out.debug("rowList isempty"+rowList.isEmpty());
+			Logger.out.debug("rowList get(0)"+rowList.get(0));
+			Logger.out.debug("rowList get(0) equal to '' "+rowList.get(0).equals(""));
+			if(!rowList.get(0).equals(""))
+			{
+				whereColumnValue = new Long((String)rowList.get(0));
+				specimenIdsList.add(whereColumnValue.toString());
+			}
+			else
+				whereColumnValue=null;
+			
+		}
+		Logger.out.debug("List specimenIdsList "+specimenIdsList);
+		jdbcDao.closeSession();
+		return specimenIdsList;
 	}
 }
