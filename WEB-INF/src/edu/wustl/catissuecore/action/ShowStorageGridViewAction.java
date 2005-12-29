@@ -106,6 +106,14 @@ public class ShowStorageGridViewAction  extends BaseAction
         	storageContainerGridObject = new StorageContainerGridObject();
             StorageContainer storageContainer = (StorageContainer) list.get(0);
             
+            //MD : Labels for Dimensions  
+            String oneDimLabel = storageContainer.getStorageType().getOneDimensionLabel();
+            String twoDimLabel = storageContainer.getStorageType().getTwoDimensionLabel(); 
+            if(oneDimLabel == null )oneDimLabel = " ";
+            if(twoDimLabel == null )twoDimLabel = " ";
+            request.setAttribute(Constants.STORAGE_CONTAINER_DIM_ONE_LABEL ,oneDimLabel );
+            request.setAttribute(Constants.STORAGE_CONTAINER_DIM_TWO_LABEL ,twoDimLabel );
+            
             storageContainerGridObject.setSystemIdentifier(storageContainer.getSystemIdentifier().longValue());
             storageContainerGridObject.setType(storageContainer.getStorageType().getType());
             
