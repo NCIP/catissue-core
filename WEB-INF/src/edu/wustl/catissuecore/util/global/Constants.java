@@ -1439,4 +1439,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	        "True",
 	        "False"
 	};
+	
+	public static final String STORAGE_CONTAINER_DIM_ONE_LABEL = "oneDimLabel";
+	public static final String STORAGE_CONTAINER_DIM_TWO_LABEL = "twoDimLabel";
 }
