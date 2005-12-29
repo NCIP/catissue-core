@@ -27,6 +27,7 @@ function closeFramedWindow()
 	int [][]fullStatus = (int [][])request.getAttribute(Constants.STORAGE_CONTAINER_CHILDREN_STATUS);
 	int [][] childContainerSystemIdentifiers = (int [][])request.getAttribute(Constants.CHILD_CONTAINER_SYSTEM_IDENTIFIERS);
 	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
+	
 	String storageContainerType = null;
 	Integer startNumber = null;
 	Long positionOne = (Long)request.getAttribute(Constants.POS_ONE);
@@ -36,6 +37,12 @@ function closeFramedWindow()
 		storageContainerType = (String)request.getAttribute(Constants.STORAGE_CONTAINER_TYPE);
 		startNumber = (Integer)request.getAttribute(Constants.START_NUMBER);
 	}
+	
+	String oneDimLabel = (String)request.getAttribute(Constants.STORAGE_CONTAINER_DIM_ONE_LABEL);
+	String twoDimLabel = (String)request.getAttribute(Constants.STORAGE_CONTAINER_DIM_TWO_LABEL);
+	int rowSpanValue = storageContainerGridObject.getOneDimensionCapacity().intValue();
+	int colSpanValue = storageContainerGridObject.getTwoDimensionCapacity().intValue();
+	System.out.println("rowSpanValue : "+ rowSpanValue + " || colSpanValue : " + colSpanValue);  
 %>
 
 <html:errors/>
@@ -50,8 +57,27 @@ function closeFramedWindow()
 					<td>
 					<table summary="Enter summary of data here" cellpadding="3" 
 							cellspacing="0" border="0" class="dataTable" width="100%">
-					<% for (int i = Constants.STORAGE_CONTAINER_FIRST_ROW;i<=storageContainerGridObject.getOneDimensionCapacity().intValue();i++){%>
+						  <tr>
+						    <td colspan="2" rowspan="2">&nbsp;</td>
+						    <td colspan="<%=colSpanValue%>" align="left"><b> <%=twoDimLabel%>&rarr;</b></td>
+						  </tr>
+							
 						<tr class="dataRowLight">	
+					<% for (int i = Constants.STORAGE_CONTAINER_FIRST_ROW;i<=storageContainerGridObject.getTwoDimensionCapacity().intValue();i++){%>
+						<td><%=i%></td>
+					<%}%>				
+						</tr>	
+					<% for (int i = Constants.STORAGE_CONTAINER_FIRST_ROW;i<=storageContainerGridObject.getOneDimensionCapacity().intValue();i++){%>
+						<tr class="dataRowLight">
+						<%
+							if(i == 1)
+							{
+						%>
+						   <td rowspan="<%=rowSpanValue%>" valign ="top" width="8"><b> <%=oneDimLabel%>&darr;</b></td>
+						<%
+							}
+						%>
+							<td><%=i%></td>
 					<% for (int j = Constants.STORAGE_CONTAINER_FIRST_COLUMN;j<=storageContainerGridObject.getTwoDimensionCapacity().intValue();j++){
 					String styleClassName = "dataCellText"; // Default cell boundary
 					if(((null != positionOne) && (null != positionTwo) &&
