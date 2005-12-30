@@ -1293,7 +1293,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 													"SpecimenCharacteristics.PATHOLOGICAL_STATUS.Pathological Status",
 													"DistributedItem.QUANTITY.Specimen Quantity"};
 	public static final String SPECIMEN_ID_LIST = "specimenIdList";
-	public static final String DISTRIBUTION_ACTION = "Distribution.do?operation=add&pageOf=pageOfDistribution&specimenIdKey=";
+	public static final String DISTRIBUTION_ACTION = "Distribution.do?pageOf=pageOfDistribution";
 	public static final String DISTRIBUTION_REPORT_NAME = "Distribution Report.csv";
 	public static final String DISTRIBUTION_REPORT_FORM="distributionReportForm";
 	public static final String DISTRIBUTED_ITEMS_DATA = "distributedItemsData";
