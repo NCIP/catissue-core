@@ -89,7 +89,7 @@ public class ClinicalReport extends AbstractDomainObject implements java.io.Seri
 
     /**
      * Returns the medical record identification number that refers to a Participant.
-     * @hibernate.many-to-one column="PARTICIPENT_MEDICAL_IDENTIFIER_ID" 
+     * @hibernate.many-to-one column="PARTICIPENT_MEDI_IDENTIFIER_ID" 
      * class="edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier" constrained="true"
      * @return the medical record identification number that refers to a Participant.
      * @see #setParticipantMedicalIdentifier(ParticipantMedicalIdentifier)
