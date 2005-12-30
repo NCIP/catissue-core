@@ -16,6 +16,7 @@ import net.sf.hibernate.mapping.PersistentClass;
 import net.sf.hibernate.mapping.Property;
 import net.sf.hibernate.mapping.Subclass;
 import net.sf.hibernate.mapping.Table;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
 
 
@@ -175,7 +176,20 @@ public class HibernateMetaData
 		
 		return "";
 	}
-	
+	public static String getDataBaseName()
+	{
+		String dbName="";
+		String dialect = cfg.getProperty("hibernate.dialect");
+		if(dialect.toLowerCase().indexOf("oracle")>0)
+		{
+			dbName=Constants.ORACLE_DATABASE;
+		}
+		else
+		{
+			dbName=Constants.MYSQL_DATABASE;
+		}
+		return dbName;
+	}
 	public static void getDATA(Class classObj)
 	{
 		net.sf.hibernate.mapping.Collection coll = cfg.getCollectionMapping("edu.wustl.catissuecore.domain.CollectionProtocolEvent.specimenRequirementCollection");
