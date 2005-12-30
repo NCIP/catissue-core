@@ -15,7 +15,7 @@ import edu.wustl.common.exception.AssignDataException;
 
 /**
  * Capacity defined for a storage container.
- * @hibernate.class table="CATISSUE_STORAGE_CONTAINER_CAPACITY"
+ * @hibernate.class table="CATISSUE_STORAGE_CONT_CAPACITY"
  * @author Aniruddha Phadnis
  */
 public class StorageContainerCapacity extends AbstractDomainObject implements java.io.Serializable
