@@ -352,7 +352,7 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 	/**
 	 * Returns collection of medical identifiers associated with this participant.
 	 * @return collection of medical identifiers of this participant.
-	 * @hibernate.set name="participantMedicalIdentifierCollection" table="CATISSUE_PARTICIPANT_MEDICAL_IDENTIFIER"
+	 * @hibernate.set name="participantMedicalIdentifierCollection" table="CATISSUE_PART_MEDICAL_ID"
 	 * cascade="save-update" inverse="true" lazy="false"
 	 * @hibernate.collection-key column="PARTICIPANT_ID"
 	 * @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier"
@@ -376,7 +376,7 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 	/**
 	 * Returns collection of collection protocol registrations of this participant.
 	 * @return collection of collection protocol registrations of this participant.
-	 * @hibernate.set name="collectionProtocolRegistrationCollection" table="CATISSUE_COLLECTION_PROTOCOL_REGISTRATION"
+	 * @hibernate.set name="collectionProtocolRegistrationCollection" table="CATISSUE_COLL_PROT_REG"
 	 * @hibernate.collection-key column="PARTICIPANT_ID"
 	 * @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.CollectionProtocolRegistration"
 	 * @see setCollectionProtocolRegistrationCollection(Collection)
