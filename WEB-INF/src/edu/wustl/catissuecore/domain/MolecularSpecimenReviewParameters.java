@@ -16,7 +16,7 @@ import edu.wustl.common.util.logger.Logger;
 
 /**
  * Attributes associated with a review event of a molecular specimen.
- * @hibernate.joined-subclass table="CATISSUE_MOLECULAR_SPECIMEN_REVIEW_PARAMETERS"
+ * @hibernate.joined-subclass table="CATISSUE_MOL_SPE_REVIEW_PARAM"
  * @hibernate.joined-subclass-key column="IDENTIFIER" 
  * @author Aniruddha Phadnis
  */
