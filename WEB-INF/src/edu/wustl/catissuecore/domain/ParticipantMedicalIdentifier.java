@@ -15,7 +15,7 @@ import edu.wustl.common.exception.AssignDataException;
 
 /**
  * A medical record identification number that refers to a Participant.
- * @hibernate.class table="CATISSUE_PARTICIPANT_MEDICAL_IDENTIFIER"
+ * @hibernate.class table="CATISSUE_PART_MEDICAL_ID"
  */
 public class ParticipantMedicalIdentifier extends AbstractDomainObject implements java.io.Serializable
 {
