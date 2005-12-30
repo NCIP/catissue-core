@@ -15,7 +15,7 @@ import edu.wustl.common.util.logger.Logger;
 
 /**
  * Attributes associated with the received event of a specimen.
- * @hibernate.joined-subclass table="CATISSUE_RECEIVED_EVENT_PARAMETERS"
+ * @hibernate.joined-subclass table="CATISSUE_RECEIVED_EVENT_PARAM"
  * @hibernate.joined-subclass-key column="IDENTIFIER" 
  */
 public class ReceivedEventParameters extends SpecimenEventParameters
