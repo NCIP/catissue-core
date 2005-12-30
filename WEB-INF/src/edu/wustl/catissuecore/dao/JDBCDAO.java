@@ -10,23 +10,30 @@
 package edu.wustl.catissuecore.dao;
 import java.io.Serializable;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
 import edu.wustl.catissuecore.audit.AuditManager;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.dbManager.DBUtil;
+import edu.wustl.common.util.dbManager.HibernateMetaData;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -386,7 +393,26 @@ public class JDBCDAO extends AbstractDAO
     //        }
     //
     //    }
-
+private boolean isColumnValueDate(Object value)
+{
+	try
+	{
+		DateFormat formatter=new SimpleDateFormat("mm-dd-yyyy");;
+        java.util.Date date = formatter.parse((String)value);
+        Logger.out.debug("Column value: "+date);
+		if(value.toString().equals("")==false) 
+		{
+			Logger.out.debug("Return true: "+ value);
+			return true;
+		}
+	}
+	catch(Exception e)
+	{
+		
+	}
+	return false;
+}
+    
     /**
      * (non-Javadoc)
      * @see edu.wustl.catissuecore.dao.AbstractDAO#insert(java.lang.Object)
@@ -398,10 +424,24 @@ public class JDBCDAO extends AbstractDAO
         int i;
 	    for (i=0;i<columnValues.size()-1;i++)
 	    {
-	        query.append("\""+columnValues.get(i)+"\",");
+	        	//if(isColumnValueDate(columnValues.get(i))==true&&Variables.databaseName.equals(Constants.ORACLE_DATABASE)==true)
+	    		if(isColumnValueDate(columnValues.get(i))==true&&Variables.databaseName.equals(Constants.ORACLE_DATABASE)==true)
+	        	{
+	        		query.append(Variables.STR_TO_DATE_FUNCTION+"('"+columnValues.get(i)+"','"+Variables.DATE_PATTERN+"'),");
+	        	}
+	        	else
+	        	{
+	        		query.append("'"+columnValues.get(i)+"',");
+	        	}	
 	    }	
-	        
-	    query.append("\""+columnValues.get(i)+"\");");
+	    if(Variables.databaseName.equals(Constants.ORACLE_DATABASE)==true)
+	    {
+	    	query.append("'"+columnValues.get(i)+"')");
+	    }
+	    else
+	    {
+	    	query.append("'"+columnValues.get(i)+"');");
+	    }
 	    Logger.out.debug("Insert query:"+query.toString());    
 	    executeUpdate(query.toString());
     }
@@ -455,9 +495,38 @@ public class JDBCDAO extends AbstractDAO
      */
     public void delete(String tableName) throws DAOException
     {
-        StringBuffer query = new StringBuffer("DROP TABLE IF EXISTS "+tableName);
-            
-        executeUpdate(query.toString());
+    	StringBuffer query;
+    	if(Variables.databaseName.equals(Constants.MYSQL_DATABASE))
+    	{
+    		Logger.out.debug("MYSQL*****************************");
+    		query = new StringBuffer("DROP TABLE IF EXISTS "+tableName);
+    		executeUpdate(query.toString());
+    	}
+    	else
+    	{
+    		Logger.out.debug("ORACLE*****************************");
+    		query = new StringBuffer("select tname from tab where tname='"+tableName+"'");
+    		try
+    		{
+    			Statement statement=connection.createStatement();
+    			ResultSet rs = statement.executeQuery(query.toString());
+    			boolean isTableExists = rs.next();
+    			Logger.out.debug("ORACLE****"+query.toString()+isTableExists);
+    			if(isTableExists)
+    			{
+    				Logger.out.debug("Drop Table");
+    				executeUpdate("DROP TABLE "+tableName+" cascade constraints");
+    			}
+    			rs.close();
+    			statement.close();
+    		}
+    		catch(Exception sqlExp)
+    		{
+    			Logger.out.error(sqlExp.getMessage(),sqlExp);
+    	        throw new DAOException(Constants.GENERIC_DATABASE_ERROR ,sqlExp);
+    		}
+    	}
+        
     }
     
     /* (non-Javadoc)
