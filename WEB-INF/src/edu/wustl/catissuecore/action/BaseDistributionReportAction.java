@@ -132,15 +132,14 @@ public abstract class BaseDistributionReportAction extends BaseAction
     		simpleConditionNodeCollection.add(simpleConditionsNode1);
     		simpleConditionNodeCollection.add(simpleConditionsNode);
     		((SimpleQuery)query).addConditions(simpleConditionNodeCollection);
-    		
     		Set tableSet = new HashSet();
     		tableSet.add("Participant");
     		tableSet.add("Specimen");
-    		tableSet.add("CollectionProtocolRegistration");
+    		tableSet.add("CollectionProtReg");
     		tableSet.add("SpecimenCollectionGroup");
     		tableSet.add("DistributedItem");
 			tableSet.add("SpecimenCharacteristics");
-    		//Vector vector = setViewElements(selectedColumns);
+			//Vector vector = setViewElements(selectedColumns);
 
 			//Set the resultViewVector
     	    Vector vector = new Vector();
@@ -156,7 +155,9 @@ public abstract class BaseDistributionReportAction extends BaseAction
     	    		st.nextToken();
     	    		
     	    		if(st.hasMoreTokens())
+    	    		{
     	    			tableInPath=st.nextToken();
+    	    		}
     	    	}
     	    	//Include the tables in tableSet if tableInPath is not null.
     	    	if (tableInPath != null)
@@ -177,7 +178,7 @@ public abstract class BaseDistributionReportAction extends BaseAction
     					tableSet.add(aliasName);
     				}
     			}
-    	        vector.add(dataElement);
+    	    	vector.add(dataElement);
     	    }
     	    query.setTableSet(tableSet);
     		query.setResultView(vector);
