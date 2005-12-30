@@ -47,6 +47,7 @@ import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.dbManager.HibernateMetaData;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -154,8 +155,8 @@ public class CommonAddEditAction extends Action
                 messages = new ActionMessages();
                 try
                 {
-                    messages.add(ActionErrors.GLOBAL_MESSAGE,new ActionMessage("object.add.success",
-                        queryBizLogic.getDisplayName(AbstractDomainObject.parseClassName(objectName)), abstractDomain.getSystemIdentifier()));
+                	messages.add(ActionErrors.GLOBAL_MESSAGE,new ActionMessage("object.add.success",
+                			queryBizLogic.getDisplayNamebyTableName(HibernateMetaData.getTableName(abstractDomain.getClass())), abstractDomain.getSystemIdentifier()));
                 }
                 catch(Exception excp)
                 {
@@ -350,8 +351,8 @@ public class CommonAddEditAction extends Action
                    messages = new ActionMessages();
                    try
                    {
-                       messages.add(ActionErrors.GLOBAL_MESSAGE,new ActionMessage("object.edit.success", 
-                           queryBizLogic.getDisplayName(AbstractDomainObject.parseClassName(objectName)), abstractDomain.getSystemIdentifier()));
+                	   messages.add(ActionErrors.GLOBAL_MESSAGE,new ActionMessage("object.edit.success",
+                   			queryBizLogic.getDisplayNamebyTableName(HibernateMetaData.getTableName(abstractDomain.getClass())), abstractDomain.getSystemIdentifier()));
                    }
                    catch(Exception excp)
                    {
