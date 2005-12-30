@@ -26,6 +26,7 @@ import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.util.logger.Logger;
 
@@ -75,8 +76,22 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 		sourceObjectName = Participant.class.getName();
 		String[] participantsFields = {"lastName","firstName","birthDate","socialSecurityNumber"};
 		String[] whereColumnName = {"lastName","firstName","birthDate","socialSecurityNumber"};
-		String[] whereColumnCondition = {"!=","!=","is not","is not"};
-		Object[] whereColumnValue = {"","",null,null};
+		String[] whereColumnCondition;
+		Object[] whereColumnValue;
+		
+		// get Database name and set conditions 
+		if(Variables.databaseName.equals(Constants.MYSQL_DATABASE))
+		{
+			whereColumnCondition = new String[]{"!=","!=","is not","is not"};
+			whereColumnValue = new String[]{"","",null,null};
+		}
+		else
+		{
+			// for ORACLE
+			whereColumnCondition = new String[]{"!=","!=","is not null","is not null"};
+			whereColumnValue = new String[]{"",""};
+		}
+		
 		String joinCondition = Constants.OR_JOIN_CONDITION;
 		String separatorBetweenFields = ", ";
 		
