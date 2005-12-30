@@ -48,6 +48,7 @@ public class TreeView {
 				{
 					AdvancedConditionsNode parentAdvConditionNode = (AdvancedConditionsNode)parent.getUserObject();
 					String temp = parentAdvConditionNode.getOperationWithChildCondition().getOperator();
+					Logger.out.debug("operator "+temp);
 					//Condition to provide Psudo And 
 					if(temp.equals(Operator.EXIST))
 					{
@@ -70,8 +71,10 @@ public class TreeView {
 								
 				if(nodeId == checkedNode)
 				{
+					Logger.out.debug("operation inside if nodeid clicked"+operation);
 					if(operation.equals(Operator.EXIST))
 					{
+						Logger.out.debug("Setting the child condition");
 						//Condition to set value only when selected node has child
 						if(child.getChildCount() > 0)
 							advConditionNode.setOperationWithChildCondition(new Operator(Operator.EXIST));
@@ -100,25 +103,23 @@ public class TreeView {
 			        //StringTokenizer columnNameTokenizer = new StringTokenizer(columnName,".");
 			        QueryBizLogic bizLogic = (QueryBizLogic)BizLogicFactory
 														.getBizLogic(Constants.SIMPLE_QUERY_INTERFACE_ID);
-//			        String columnDisplayName = bizLogic.getColumnDisplayNames(table,columnName);
+			        //String columnDisplayName = bizLogic.getColumnDisplayNames(table,columnName);
 			        
 			        int formId = SearchUtil.getFormId(tableName);
 			        String columnDisplayName = SearchUtil.getColumnDisplayName(formId,table,columnName);
 			      
 			        //append table name to the column name in case of event parameters conditions.
-			        if(table.indexOf("Parameter")>0)
-		        	{
-						StringTokenizer tableTokens = new StringTokenizer(table,".");
-						String superTable = new String();
-						if(tableTokens.countTokens()==2)
-						{
-							table = tableTokens.nextToken();
-							superTable = tableTokens.nextToken();
-						}
+					StringTokenizer tableTokens = new StringTokenizer(table,".");
+					String superTable = new String();
+					if(tableTokens.countTokens()==2)
+					{
+						Logger.out.debug("table before tokenizing:"+table);
+						table = tableTokens.nextToken();
+						superTable = tableTokens.nextToken();
 			        	Map eventParameterDisplayNames = SearchUtil.getEventParametersDisplayNames(bizLogic,SearchUtil.getEventParametersTables(bizLogic));
 			        	columnDisplayName = (String)eventParameterDisplayNames.get(table+"."+columnName);
-			        	Logger.out.debug("column display name for event parameters"+columnDisplayName);
-		        	}
+					}
+		        	Logger.out.debug("column display name for event parameters"+columnDisplayName);
 			        if(columnDisplayName.equals(""))
 			        {
 			        	columnDisplayName=columnName;
