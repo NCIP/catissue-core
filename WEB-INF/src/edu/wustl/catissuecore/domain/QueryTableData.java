@@ -14,7 +14,7 @@ import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
 
 /**
- * @hibernate.class table="CATISSUE_QUERY_INTERFACE_TABLE_DATA"
+ * @hibernate.class table="CATISSUE_QUERY_TABLE_DATA"
  * @author gautam_shetty
  */
 public class QueryTableData extends AbstractDomainObject
