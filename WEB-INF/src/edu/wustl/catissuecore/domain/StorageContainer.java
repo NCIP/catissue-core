@@ -344,7 +344,7 @@ public class StorageContainer extends AbstractDomainObject implements java.io.Se
 	/**
 	 * Returns collection of storage container details.
 	 * @return Collection of storage container details.
-	 * @hibernate.set name="storageContainerDetailsCollection" table="CATISSUE_STORAGE_CONTAINER_DETAILS"
+	 * @hibernate.set name="storageContainerDetailsCollection" table="CATISSUE_STORAGE_CONT_DETAILS"
 	 * cascade="save-update" inverse="true" lazy="false"
 	 * @hibernate.collection-key column="STORAGE_CONTAINER_ID"
 	 * @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.StorageContainerDetails"
