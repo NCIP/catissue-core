@@ -262,15 +262,15 @@ public class Client extends AbstractClient
     {
         objectTableNames.put(Query.PARTICIPANT, "CATISSUE_PARTICIPANT");
         objectTableNames.put(Query.PARTICIPANT_MEDICAL_IDENTIFIER,
-                "catissue_participant_medical_identifier");
+                "CATISSUE_PART_MEDICAL_ID");
         objectTableNames.put(Query.COLLECTION_PROTOCOL_REGISTRATION,
-                "CATISSUE_COLLECTION_PROTOCOL_REGISTRATION");
+                "CATISSUE_COLL_PROT_REG");
         objectTableNames.put(Query.COLLECTION_PROTOCOL,
                 "CATISSUE_COLLECTION_PROTOCOL");
         objectTableNames.put(Query.COLLECTION_PROTOCOL_EVENT,
-                "CATISSUE_COLLECTION_PROTOCOL_EVENT");
+                "CATISSUE_COLL_PROT_EVENT");
         objectTableNames.put(Query.SPECIMEN_COLLECTION_GROUP,
-                "CATISSUE_SPECIMEN_COLLECTION_GROUP");
+                "CATISSUE_SPECIMEN_COLL_GROUP");
         objectTableNames.put(Query.SPECIMEN, "CATISSUE_SPECIMEN");
         objectTableNames.put(Query.DEPARTMENT, "CATISSUE_DEPARTMENT");
         objectTableNames.put(Query.INSTITUTION, "catissue_institution");
@@ -282,20 +282,20 @@ public class Client extends AbstractClient
         objectTableNames.put(Query.SITE, "catissue_site");
         objectTableNames.put(Query.STORAGE_TYPE, "catissue_storage_type");
         objectTableNames.put(Query.STORAGE_CONTAINER_CAPACITY,
-                "catissue_storage_container_capacity");
+                "CATISSUE_STORAGE_CONT_CAPACITY");
         objectTableNames.put(Query.BIO_HAZARD, "catissue_biohazard");
         objectTableNames.put(Query.SPECIMEN_PROTOCOL,
                 "catissue_specimen_protocol");
         objectTableNames.put(Query.COLLECTION_COORDINATORS,
-                "catissue_collection_coordinators");
+                "CATISSUE_COLL_COORDINATORS");
         objectTableNames.put(Query.SPECIMEN_REQUIREMENT,
                 "catissue_specimen_requirement");
         objectTableNames.put(Query.COLLECTION_SPECIMEN_REQUIREMENT,
-                "catissue_collection_specimen_requirement");
+                "CATISSUE_COLL_SPECIMEN_REQ");
         objectTableNames.put(Query.DISTRIBUTION_PROTOCOL,
                 "catissue_distribution_protocol");
         objectTableNames.put(Query.DISTRIBUTION_SPECIMEN_REQUIREMENT,
-                "catissue_distribution_specimen_requirement");
+                "CATISSUE_DISTRIBUTION_SPE_REQ");
         objectTableNames.put(Query.REPORTED_PROBLEM,
                 "catissue_reported_problem");
         objectTableNames.put(Query.CELL_SPECIMEN_REQUIREMENT,
