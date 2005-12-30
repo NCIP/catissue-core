@@ -19,7 +19,7 @@ import edu.wustl.common.util.logger.Logger;
  * An abbreviated set of written procedures that describe how a previously collected specimen will be 
  * utilized.  Note that specimen may be collected with one collection protocol and then later utilized 
  * by multiple different studies (Distribution protocol).
- * @hibernate.joined-subclass table="CATISSUE_EMBEDDED_EVENT_PARAMETERS"
+ * @hibernate.joined-subclass table="CATISSUE_EMBEDDED_EVENT_PARAM"
  * @hibernate.joined-subclass-key column="IDENTIFIER" 
  * @author Aniruddha Phadnis
  */
