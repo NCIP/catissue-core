@@ -51,7 +51,7 @@ public class DistributionProtocol extends SpecimenProtocol implements java.io.Se
 	// ---- Method section
 	/**
 	 * Returns the collection of SpecimenRequirements for this Protocol.
-	 * @hibernate.set name="specimenRequirementCollection" table="CATISSUE_DISTRIBUTION_SPECIMEN_REQUIREMENT" 
+	 * @hibernate.set name="specimenRequirementCollection" table="CATISSUE_DISTRIBUTION_SPE_REQ" 
 	 * cascade="save-update" inverse="false" lazy="false"
 	 * @hibernate.collection-key column="DISTRIBUTION_PROTOCOL_ID"
 	 * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.SpecimenRequirement" column="SPECIMEN_REQUIREMENT_ID"
@@ -73,7 +73,7 @@ public class DistributionProtocol extends SpecimenProtocol implements java.io.Se
 
 	/**
 	 * Returns the collection of Collectionprotocols for this DistributionProtocol.
-	 * @hibernate.set name="collectionProtocolCollection" table="CATISSUE_COLLECTION_DISTRIBUTION_RELATION" 
+	 * @hibernate.set name="collectionProtocolCollection" table="CATISSUE_COLL_DISTRIBUTION_REL" 
 	 * cascade="save-update" inverse="true" lazy="false"
 	 * @hibernate.collection-key column="DISTRIBUTION_PROTOCOL_ID"
 	 * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.CollectionProtocol" column="COLLECTION_PROTOCOL_ID"
