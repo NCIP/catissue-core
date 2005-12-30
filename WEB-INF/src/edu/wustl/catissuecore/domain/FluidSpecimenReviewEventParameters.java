@@ -15,7 +15,7 @@ import edu.wustl.common.util.logger.Logger;
 
 /**
  * Attributes associated with a review event of a fluid specimen.
- * @hibernate.joined-subclass table="CATISSUE_FLUID_SPECIMEN_REVIEW_EVENT_PARAMETERS"
+ * @hibernate.joined-subclass table="CATISSUE_FLUID_SPE_EVENT_PARAM"
  * @hibernate.joined-subclass-key column="IDENTIFIER" 
  * @author Aniruddha Phadnis
  */
