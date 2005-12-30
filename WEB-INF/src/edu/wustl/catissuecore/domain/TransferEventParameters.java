@@ -15,7 +15,7 @@ import edu.wustl.common.util.logger.Logger;
 
 /**
  * Attributes associated with moving specimen from one storage location to another.
- * @hibernate.joined-subclass table="CATISSUE_TRANSFER_EVENT_PARAMETER"
+ * @hibernate.joined-subclass table="CATISSUE_TRANSFER_EVENT_PARAM"
  * @hibernate.joined-subclass-key column="IDENTIFIER" 
  */
 public class TransferEventParameters extends SpecimenEventParameters implements java.io.Serializable
