@@ -346,22 +346,22 @@ public class SimpleQueryBizLogic extends DefaultBizLogic
 		        {
 		            String aliasName = (String) aliasNameIterator.next();
 		            Logger.out.debug("Alias Name : ............."+aliasName);
-		            String sql =" SELECT tableData2.ALIAS_NAME, temp.COLUMN_NAME, temp.TABLES_IN_PATH, " +
-		            			" temp.DISPLAY_NAME, temp.ATTRIBUTE_TYPE " +
-						        " from CATISSUE_QUERY_INTERFACE_TABLE_DATA tableData2 join " +
+
+		            String sql= " SELECT tableData2.ALIAS_NAME, temp.COLUMN_NAME, temp.TABLES_IN_PATH, " +
+			        			" temp.DISPLAY_NAME, temp.ATTRIBUTE_TYPE " +
+						        " from CATISSUE_QUERY_TABLE_DATA tableData2 join " +
 						        " ( SELECT  columnData.COLUMN_NAME, columnData.TABLE_ID, displayData.DISPLAY_NAME, " +
 						        " relationData.TABLES_IN_PATH, columnData.ATTRIBUTE_TYPE " +
-						        " FROM CATISSUE_QUERY_INTERFACE_COLUMN_DATA columnData, " +
+						        " FROM CATISSUE_INTERFACE_COLUMN_DATA columnData, " +
 						        " CATISSUE_TABLE_RELATION relationData, " +
-						        " CATISSUE_QUERY_INTERFACE_TABLE_DATA tableData, " +
+						        " CATISSUE_QUERY_TABLE_DATA tableData, " +
 						        " CATISSUE_SEARCH_DISPLAY_DATA displayData " +
 						        " where relationData.CHILD_TABLE_ID = columnData.TABLE_ID and " +
 						        " relationData.PARENT_TABLE_ID = tableData.TABLE_ID and " +
 						        " relationData.RELATIONSHIP_ID = displayData.RELATIONSHIP_ID and " +
 						        " columnData.IDENTIFIER = displayData.COL_ID and " +
-						        " tableData.ALIAS_NAME = '"+aliasName+"') as temp " +
+						        " tableData.ALIAS_NAME = '"+aliasName+"') temp " +
 						        " on temp.TABLE_ID = tableData2.TABLE_ID";
-		            
 				    Logger.out.debug("DATA ELEMENT SQL : "+sql);
 				    
 				    List list = jdbcDao.executeQuery(sql, null, false, null);
