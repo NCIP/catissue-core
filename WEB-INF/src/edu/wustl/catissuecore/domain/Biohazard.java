@@ -162,7 +162,7 @@ public class Biohazard extends AbstractDomainObject implements Serializable
 	 * @see #setParticipant(Site)
      */
     /**
-     * @hibernate.set name="specimenCollection" table="CATISSUE_SPECIMEN_BIOHAZARD_RELATIONSHIP"
+     * @hibernate.set name="specimenCollection" table="CATISSUE_SPECIMEN_BIOHZ_REL"
      * cascade="save-update" inverse="true" lazy="false"
      * @hibernate.collection-key column="BIOHAZARD_ID"
      * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.Specimen" column="SPECIMEN_ID"
