@@ -15,7 +15,7 @@ import edu.wustl.common.util.logger.Logger;
 
 /**
  * Attributes associated with a fixation event of a specimen.
- * @hibernate.joined-subclass table="CATISSUE_FIXED_EVENT_PARAMETERS"
+ * @hibernate.joined-subclass table="CATISSUE_FIXED_EVENT_PARAM"
  * @hibernate.joined-subclass-key column="IDENTIFIER" 
  */
 public class FixedEventParameters extends SpecimenEventParameters implements java.io.Serializable
