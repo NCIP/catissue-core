@@ -15,7 +15,7 @@ import edu.wustl.common.util.logger.Logger;
 
 /**
  * Attributes associated with a freezing event of a specimen.
- * @hibernate.joined-subclass table="CATISSUE_FROZEN_EVENT_PARAMETERS"
+ * @hibernate.joined-subclass table="CATISSUE_FROZEN_EVENT_PARAM"
  * @hibernate.joined-subclass-key column="IDENTIFIER" 
  * @author Aniruddha Phadnis
  */
