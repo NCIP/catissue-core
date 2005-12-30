@@ -20,7 +20,7 @@ import edu.wustl.common.exception.AssignDataException;
 /**
  * A required specimen collection event associated with a Collection Protocol.
  * 
- * @hibernate.class table="CATISSUE_COLLECTION_PROTOCOL_EVENT"
+ * @hibernate.class table="CATISSUE_COLL_PROT_EVENT"
  * @author Mandar Deshmukh
  */
 public class CollectionProtocolEvent extends AbstractDomainObject implements java.io.Serializable, Comparable
@@ -111,7 +111,7 @@ public class CollectionProtocolEvent extends AbstractDomainObject implements jav
 
 	/**
 	 * Returns the collection of SpecimenRequirements for this Protocol.
-	 * @hibernate.set name="specimenRequirementCollection" table="CATISSUE_COLLECTION_SPECIMEN_REQUIREMENT" 
+	 * @hibernate.set name="specimenRequirementCollection" table="CATISSUE_COLL_SPECIMEN_REQ" 
 	 * cascade="save-update" inverse="false" lazy="false"
 	 * @hibernate.collection-key column="COLLECTION_PROTOCOL_EVENT_ID"
 	 * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.SpecimenRequirement" column="SPECIMEN_REQUIREMENT_ID"
