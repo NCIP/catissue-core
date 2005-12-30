@@ -15,7 +15,7 @@ import edu.wustl.common.util.logger.Logger;
 
 /**
  * A binary event to indicate whether a specimen has been removed from or returned to its recorded storage location.
- * @hibernate.joined-subclass table="CATISSUE_CHECKIN_CHECKOUT_EVENT_PARAMETER"
+ * @hibernate.joined-subclass table="CATISSUE_IN_OUT_EVENT_PARAM"
  * @hibernate.joined-subclass-key column="IDENTIFIER" 
  */
 public class CheckInCheckOutEventParameter extends SpecimenEventParameters
