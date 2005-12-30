@@ -17,7 +17,7 @@ import edu.wustl.common.util.logger.Logger;
 
 /**
  * Attributes associated with a specific specimen event.
- * @hibernate.class table="CATISSUE_SPECIMEN_EVENT_PARAMETERS"
+ * @hibernate.class table="CATISSUE_SPECIMEN_EVENT_PARAM"
  * @author aniruddha_phadnis
  */
 public abstract class SpecimenEventParameters extends EventParameters
