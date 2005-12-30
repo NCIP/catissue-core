@@ -41,7 +41,7 @@
 		</div>
 		<div>
 			<a class="subMenuPrimary" href="CollectionProtocolRegistration.do?operation=add&pageOf=pageOfCollectionProtocolRegistration&menuSelected=13"><bean:message key="app.add" /></a> | 
-			<a class="subMenuPrimary" href="SimpleQueryInterface.do?pageOf=pageOfCollectionProtocolRegistration&aliasName=CollectionProtocolRegistration&menuSelected=13" >
+			<a class="subMenuPrimary" href="SimpleQueryInterface.do?pageOf=pageOfCollectionProtocolRegistration&aliasName=CollectionProtReg&menuSelected=13" >
 				<bean:message key="app.edit" />
 			</a>
 		</div>
