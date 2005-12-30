@@ -20,5 +20,12 @@ package edu.wustl.common.util.global;
 public class Variables {
 	/* To hold path of Catissue home directory */
 	public static String catissueHome=new String();
+	public static String databaseName=new String();
+	public static String DATE_PATTERN = new String();
+	public static String TIME_PATTERN = new String();
+	public static String TIME_FORMAT_FUNCTION = new String();
+	public static String DATE_FORMAT_FUNCTION = new String();
+	public static String STR_TO_DATE_FUNCTION = new String();;
+	public static String DATE_TO_STR_FUNCTION = new String();
 
 }
