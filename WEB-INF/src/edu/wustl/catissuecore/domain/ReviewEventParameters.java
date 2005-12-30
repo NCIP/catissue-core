@@ -11,7 +11,7 @@ package edu.wustl.catissuecore.domain;
 
 /**
  * Attributes related to quality review event of a specimen.
- * @hibernate.joined-subclass table="CATISSUE_REVIEW_EVENT_PARAMETERS"
+ * @hibernate.joined-subclass table="CATISSUE_EVENT_PARAM"
  * @hibernate.joined-subclass-key column="IDENTIFIER" 
  * @author Aniruddha Phadnis
  */
