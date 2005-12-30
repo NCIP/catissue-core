@@ -249,13 +249,15 @@
 				 <%			
 				 			List rowElements = (List)innerItr.next();
 				 			Iterator elementItr= rowElements.iterator();
-				 			while(elementItr.hasNext())
+				 			int j=0;
+				 			while(elementItr.hasNext() && j<columnNames.length)
 				 			{
 				 %>
 				 				<td class="formField">
 				 					&nbsp;<%=elementItr.next()%>	
 				 				</td>
 				 	<%
+								j++;
 				 			}
 				 			i++;
 				 	%>

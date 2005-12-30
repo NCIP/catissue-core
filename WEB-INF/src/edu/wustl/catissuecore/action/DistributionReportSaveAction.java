@@ -17,6 +17,7 @@ import edu.wustl.catissuecore.actionForm.DistributionReportForm;
 import edu.wustl.catissuecore.domain.Distribution;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;
+import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.util.ExportReport;
 import edu.wustl.common.util.SendFile;
 import edu.wustl.common.util.global.ApplicationProperties;
@@ -38,9 +39,9 @@ public class DistributionReportSaveAction extends BaseDistributionReportAction
 		Long distributionId =configForm.getDistributionId();;
 		
 		Distribution dist =  getDistribution(distributionId, getSessionData(request), Constants.CLASS_LEVEL_SECURE_RETRIEVE);
-    	
+    	SessionDataBean sessionData = getSessionData(request);
     	DistributionReportForm distributionReportForm = getDistributionReportForm(dist);
-    	List listOfData = getListOfData(dist, configForm) ;
+    	List listOfData = getListOfData(dist, configForm,sessionData) ;
     	
     	//Set the columns for Distribution report
     	String action = configForm.getNextAction();

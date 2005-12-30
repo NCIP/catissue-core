@@ -38,7 +38,6 @@
 	DistributionForm formBean = (DistributionForm)request.getAttribute("distributionForm");
 	String operation = (String) request.getAttribute(Constants.OPERATION);
     boolean readOnlyValue=false,readOnlyForAll=false;
-   
     if (operation.equals(Constants.EDIT))
     {
         formName = Constants.DISTRIBUTION_EDIT_ACTION;
@@ -56,7 +55,7 @@
 		function onSpecimenIdChange(element)
 		{	
 			document.forms[0].idChange.value="true";
-			setFormAction("<%=Constants.DISTRIBUTION_ACTION%>"+element.name);
+			setFormAction("<%=Constants.DISTRIBUTION_ACTION%>&operation="+"<%=operation%>&specimenIdKey="+element.name);
 			document.forms[0].submit();
 		}
 		//function to insert a row in the inner block
@@ -503,7 +502,7 @@
    				    <td class="formField">
 				     	<html:text styleClass="formField" styleId="<%=pathologicalStatus%>" property="<%=pathologicalStatus%>" readonly="true"/>
 				    </td>
-				    <td class="formField">
+				    <td class="formField" nowrap>
 				     	<html:text styleClass="formFieldSmallSized3" size="30" styleId="<%=availableQuantity%>" property="<%=availableQuantity%>" readonly="true"/>
 						<span id="<%=unitSpan%>">&nbsp;<%=strUnitValue%></span>
 						<html:hidden property="<%=previousQuantity%>" />	

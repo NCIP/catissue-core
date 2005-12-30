@@ -2,9 +2,11 @@ package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.Vector;
@@ -21,6 +23,7 @@ import edu.wustl.catissuecore.actionForm.DistributionReportForm;
 import edu.wustl.catissuecore.bizlogic.AbstractBizLogic;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.QueryBizLogic;
+import edu.wustl.catissuecore.bizlogic.SimpleQueryBizLogic;
 import edu.wustl.catissuecore.domain.DistributedItem;
 import edu.wustl.catissuecore.domain.Distribution;
 import edu.wustl.catissuecore.domain.Specimen;
@@ -81,7 +84,7 @@ public abstract class BaseDistributionReportAction extends BaseAction
     	return dist;
     }
     	
-    protected List getListOfData(Distribution dist, ConfigureResultViewForm configForm) throws Exception
+    protected List getListOfData(Distribution dist, ConfigureResultViewForm configForm,SessionDataBean sessionData) throws Exception
 	{
     	//Get the list of data for Distributed items data for the report.
     	List listOfData = new ArrayList();
@@ -179,9 +182,19 @@ public abstract class BaseDistributionReportAction extends BaseAction
     	    query.setTableSet(tableSet);
     		query.setResultView(vector);
     		
-    		List list1 = query.execute(null,false, null);
-    		Logger.out.debug("Size of the Data from the database" +list1.size());
-    		listOfData.add(list1);
+    		Map queryResultObjectDataMap = new HashMap();
+
+    		SimpleQueryBizLogic simpleQueryBizLogic = new SimpleQueryBizLogic();
+			simpleQueryBizLogic.createQueryResultObjectData(tableSet,
+												queryResultObjectDataMap,query);
+		
+			List identifierColumnNames = new ArrayList();
+			identifierColumnNames = simpleQueryBizLogic
+						.addObjectIdentifierColumnsToQuery(queryResultObjectDataMap, query);
+			simpleQueryBizLogic.setDependentIdentifiedColumnIds(queryResultObjectDataMap, query);
+
+			List list = query.execute(sessionData, true,queryResultObjectDataMap);
+    		listOfData.add(list);
     	}
     	return listOfData;
     }

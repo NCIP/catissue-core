@@ -13,6 +13,7 @@ import edu.wustl.catissuecore.actionForm.ConfigureResultViewForm;
 import edu.wustl.catissuecore.actionForm.DistributionReportForm;
 import edu.wustl.catissuecore.domain.Distribution;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.beans.SessionDataBean;
 
 /**
  * This is the action class for displaying the Distribution report
@@ -50,7 +51,8 @@ public class DistributionReportAction extends BaseDistributionReportAction
     	
     	//Retrieve the distributed items data
     	DistributionReportForm distributionReportForm = getDistributionReportForm(dist);
-    	List listOfData = getListOfData(dist, configForm) ;
+    	SessionDataBean sessionData = getSessionData(request);
+    	List listOfData = getListOfData(dist, configForm,sessionData) ;
     	
     	//Set the columns for Distribution report
 		String action = configForm.getNextAction();
