@@ -100,7 +100,7 @@
 
         <set
             name="storageContainerDetailsCollection"
-            table="CATISSUE_STORAGE_CONTAINER_DETAILS"
+            table="CATISSUE_STORAGE_CONT_DETAILS"
             lazy="false"
             inverse="true"
             cascade="save-update"

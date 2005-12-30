@@ -57,7 +57,7 @@
 
         <set
             name="distributionProtocolCollection"
-            table="CATISSUE_DISTRIBUTION_SPECIMEN_REQUIREMENT"
+            table="CATISSUE_DISTRIBUTION_SPE_REQ"
             lazy="false"
             inverse="true"
             cascade="save-update"
@@ -78,7 +78,7 @@
 
         <set
             name="collectionProtocolEventCollection"
-            table="CATISSUE_COLLECTION_SPECIMEN_REQUIREMENT"
+            table="CATISSUE_COLL_SPECIMEN_REQ"
             lazy="false"
             inverse="true"
             cascade="save-update"

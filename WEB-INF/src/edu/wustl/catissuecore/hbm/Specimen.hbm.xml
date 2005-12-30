@@ -103,7 +103,7 @@
 
         <set
             name="biohazardCollection"
-            table="CATISSUE_SPECIMEN_BIOHAZARD_RELATIONSHIP"
+            table="CATISSUE_SPECIMEN_BIOHZ_REL"
             lazy="false"
             inverse="false"
             cascade="none"

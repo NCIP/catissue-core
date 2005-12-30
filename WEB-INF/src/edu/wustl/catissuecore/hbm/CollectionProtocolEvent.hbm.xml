@@ -7,7 +7,7 @@
 <hibernate-mapping>
     <class
         name="edu.wustl.catissuecore.domain.CollectionProtocolEvent"
-        table="CATISSUE_COLLECTION_PROTOCOL_EVENT"
+        table="CATISSUE_COLL_PROT_EVENT"
         dynamic-update="false"
         dynamic-insert="false"
     >
@@ -43,7 +43,7 @@
 
         <set
             name="specimenRequirementCollection"
-            table="CATISSUE_COLLECTION_SPECIMEN_REQUIREMENT"
+            table="CATISSUE_COLL_SPECIMEN_REQ"
             lazy="false"
             inverse="false"
             cascade="save-update"

@@ -7,7 +7,7 @@
 <hibernate-mapping>
     <class
         name="edu.wustl.catissuecore.domain.SpecimenCollectionGroup"
-        table="CATISSUE_SPECIMEN_COLLECTION_GROUP"
+        table="CATISSUE_SPECIMEN_COLL_GROUP"
         dynamic-update="false"
         dynamic-insert="false"
     >
@@ -105,7 +105,7 @@
             outer-join="auto"
             update="true"
             insert="true"
-            column="COLLECTION_PROTOCOL_REGISTRATION_ID"
+            column="COLLECTION_PROTOCOL_REG_ID"
         />
 
         <!--

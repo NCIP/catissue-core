@@ -7,7 +7,7 @@
 <hibernate-mapping>
     <class
         name="edu.wustl.catissuecore.domain.SpecimenCharacteristics"
-        table="CATISSUE_SPECIMEN_CHARACTERISTICS"
+        table="CATISSUE_SPECIMEN_CHAR"
         dynamic-update="false"
         dynamic-insert="false"
     >

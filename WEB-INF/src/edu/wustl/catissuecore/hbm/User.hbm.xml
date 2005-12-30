@@ -129,7 +129,7 @@
 
         <set
             name="collectionProtocolCollection"
-            table="CATISSUE_COLLECTION_COORDINATORS"
+            table="CATISSUE_COLL_COORDINATORS"
             lazy="true"
             inverse="true"
             cascade="save-update"

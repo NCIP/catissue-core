@@ -54,7 +54,7 @@
 
         <set
             name="specimenCollection"
-            table="CATISSUE_SPECIMEN_BIOHAZARD_RELATIONSHIP"
+            table="CATISSUE_SPECIMEN_BIOHZ_REL"
             lazy="false"
             inverse="true"
             cascade="save-update"

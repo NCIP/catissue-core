@@ -39,7 +39,7 @@
             outer-join="auto"
             update="true"
             insert="true"
-            column="PARTICIPENT_MEDICAL_IDENTIFIER_ID"
+            column="PARTICIPENT_MEDI_IDENTIFIER_ID"
         />
 
         <!--

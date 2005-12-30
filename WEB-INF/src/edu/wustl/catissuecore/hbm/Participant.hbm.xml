@@ -115,7 +115,7 @@
 
         <set
             name="participantMedicalIdentifierCollection"
-            table="CATISSUE_PARTICIPANT_MEDICAL_IDENTIFIER"
+            table="CATISSUE_PART_MEDICAL_ID"
             lazy="false"
             inverse="true"
             cascade="save-update"
@@ -133,7 +133,7 @@
 
         <set
             name="collectionProtocolRegistrationCollection"
-            table="CATISSUE_COLLECTION_PROTOCOL_REGISTRATION"
+            table="CATISSUE_COLL_PROT_REG"
             lazy="false"
             inverse="false"
             cascade="none"

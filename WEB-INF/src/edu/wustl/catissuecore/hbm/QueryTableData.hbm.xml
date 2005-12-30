@@ -7,7 +7,7 @@
 <hibernate-mapping>
     <class
         name="edu.wustl.catissuecore.domain.QueryTableData"
-        table="CATISSUE_QUERY_INTERFACE_TABLE_DATA"
+        table="CATISSUE_QUERY_TABLE_DATA"
         dynamic-update="false"
         dynamic-insert="false"
     >

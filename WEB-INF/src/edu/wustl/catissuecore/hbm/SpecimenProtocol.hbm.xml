@@ -125,7 +125,7 @@
 
         <set
             name="distributionProtocolCollection"
-            table="CATISSUE_COLLECTION_DISTRIBUTION_RELATION"
+            table="CATISSUE_COLL_DISTRIBUTION_REL"
             lazy="false"
             inverse="false"
             cascade="save-update"
@@ -146,7 +146,7 @@
 
         <set
             name="userCollection"
-            table="CATISSUE_COLLECTION_COORDINATORS"
+            table="CATISSUE_COLL_COORDINATORS"
             lazy="false"
             inverse="false"
             cascade="none"
@@ -167,7 +167,7 @@
 
         <set
             name="collectionProtocolEventCollection"
-            table="CATISSUE_COLLECTION_PROTOCOL_EVENT"
+            table="CATISSUE_COLL_PROT_EVENT"
             lazy="false"
             inverse="true"
             cascade="save-update"
@@ -196,7 +196,7 @@
 
         <set
             name="specimenRequirementCollection"
-            table="CATISSUE_DISTRIBUTION_SPECIMEN_REQUIREMENT"
+            table="CATISSUE_DISTRIBUTION_SPE_REQ"
             lazy="false"
             inverse="false"
             cascade="save-update"
@@ -217,7 +217,7 @@
 
         <set
             name="collectionProtocolCollection"
-            table="CATISSUE_COLLECTION_DISTRIBUTION_RELATION"
+            table="CATISSUE_COLL_DISTRIBUTION_REL"
             lazy="false"
             inverse="true"
             cascade="save-update"

@@ -39,7 +39,7 @@
             type="double"
             update="true"
             insert="true"
-            column="DEFAULT_TEMPERATURE_IN_CENTIGRADE"
+            column="DEFAULT_TEMP_IN_CENTIGRADE"
             length="30"
         />
 

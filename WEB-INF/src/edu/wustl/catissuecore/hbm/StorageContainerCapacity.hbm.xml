@@ -7,7 +7,7 @@
 <hibernate-mapping>
     <class
         name="edu.wustl.catissuecore.domain.StorageContainerCapacity"
-        table="CATISSUE_STORAGE_CONTAINER_CAPACITY"
+        table="CATISSUE_STORAGE_CONT_CAPACITY"
         dynamic-update="false"
         dynamic-insert="false"
     >
