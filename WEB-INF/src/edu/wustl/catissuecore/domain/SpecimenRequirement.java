@@ -143,7 +143,7 @@ public abstract class SpecimenRequirement  extends AbstractDomainObject implemen
 	
 	/**
 	 * Returns the collection of Studies for this Protocol requirement.
-	 * @hibernate.set name="distributionProtocolCollection" table="CATISSUE_DISTRIBUTION_SPECIMEN_REQUIREMENT" 
+	 * @hibernate.set name="distributionProtocolCollection" table="CATISSUE_DISTRIBUTION_SPE_REQ" 
 	 * cascade="save-update" inverse="true" lazy="false"
 	 * @hibernate.collection-key column="SPECIMEN_REQUIREMENT_ID"
 	 * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.DistributionProtocol" column="DISTRIBUTION_PROTOCOL_ID"
@@ -163,7 +163,7 @@ public abstract class SpecimenRequirement  extends AbstractDomainObject implemen
 	}
 	
 	/**
-	 * @hibernate.set name="collectionProtocolCollection" table="CATISSUE_COLLECTION_SPECIMEN_REQUIREMENT" 
+	 * @hibernate.set name="collectionProtocolCollection" table="CATISSUE_COLL_SPECIMEN_REQ" 
 	 * cascade="save-update" inverse="true" lazy="false"
 	 * @hibernate.collection-key column="SPECIMEN_REQUIREMENT_ID"
 	 * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.CollectionProtocolEvent" column="COLLECTION_PROTOCOL_EVENT_ID"
