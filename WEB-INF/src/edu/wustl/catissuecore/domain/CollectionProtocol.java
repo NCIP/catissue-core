@@ -164,9 +164,4 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 	    	Logger.out.error(excp.getMessage(),excp); 
         }
     }
-    
-    private boolean contiansCoordinator(User coordinator)
-    {
-    	return userCollection.contains(coordinator);
-    }
 }
