@@ -39,11 +39,12 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String MAX_YEAR = "9999";
 	
 	//Mysql Database constants.
-	public static final String MYSQL_DATE_PATTERN = "%m-%d-%Y";
+	/*public static final String MYSQL_DATE_PATTERN = "%m-%d-%Y";
 	public static final String MYSQL_TIME_PATTERN = "%H:%i:%s";
 	public static final String MYSQL_TIME_FORMAT_FUNCTION = "TIME_FORMAT";
 	public static final String MYSQL_DATE_FORMAT_FUNCTION = "DATE_FORMAT";
-	public static final String MYSQL_STR_TO_DATE_FUNCTION = "STR_TO_DATE";
+	public static final String MYSQL_STR_TO_DATE_FUNCTION = "STR_TO_DATE";*/
+	
 	//DAO Constants.
 	public static final int HIBERNATE_DAO = 1;
 	public static final int JDBC_DAO = 2;
@@ -402,7 +403,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	        
 	};
 	
-	public static final String TABLE_DATA_TABLE_NAME = "CATISSUE_QUERY_INTERFACE_TABLE_DATA";
+	public static final String TABLE_DATA_TABLE_NAME = "CATISSUE_QUERY_TABLE_DATA";
 	public static final String TABLE_DISPLAY_NAME_COLUMN = "DISPLAY_NAME";
 	public static final String TABLE_ALIAS_NAME_COLUMN = "ALIAS_NAME";
 	public static final String TABLE_FOR_SQI_COLUMN = "FOR_SQI";
@@ -1407,15 +1408,15 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String MENU_SELECTED = "menuSelected";
 	public static final String CONSTRAINT_VOILATION_ERROR = "Submission failed since a {0} with the same {1} already exists";
 	public static final String GENERIC_DATABASE_ERROR = "An error occured during a database operation. Please report this problem to the adminstrator";
-
+	public static final String OBJECT_NOT_FOUND_ERROR = "Submission failed since a {0} with given {1}: \"{2}\" does not exists"; 
 	// The unique key voilation message is "Duplicate entry %s for key %d"
 	// This string is used for searching " for key " string in the above error message
 	public static final String MYSQL_DUPL_KEY_MSG = " for key ";
 	
 
 	public static final String GENERIC_SECURITYMANAGER_ERROR = "The Security Violation error occured during a database operation. Please report this problem to the adminstrator";
-	public static final String  DATABASE_IN_USED = "MYSQL";
-	
+	public static final String  ORACLE_DATABASE = "ORACLE";
+	public static final String  MYSQL_DATABASE = "MYSQL";
 	public static final String PASSWORD_CHANGE_IN_SESSION = "changepassword";
 	
 	public static final String BOOLEAN_YES = "Yes";
