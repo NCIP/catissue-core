@@ -15,7 +15,7 @@ import edu.wustl.common.util.logger.Logger;
 
 /**
  * Attributes associated with a review event of a tissue specimen.
- * @hibernate.joined-subclass table="CATISSUE_TISSUE_SPECIMEN_REVIEW_EVENT_PARAMETERS"
+ * @hibernate.joined-subclass table="CATISSUE_TIS_SPE_EVENT_PARAM"
  * @hibernate.joined-subclass-key column="IDENTIFIER" 
  * @author Aniruddha Phadnis
  */
@@ -56,7 +56,7 @@ public class TissueSpecimenReviewEventParameters extends ReviewEventParameters
      * @return The percentage of histologically evident neoplastic cells present in the tissue specimen.
      * @see #setNeoplasticCellularityPercentage(Double)
      * @hibernate.property name="neoplasticCellularityPercentage" type="double" 
-     * column="NEOPLASTIC_CELLULARITY_PERCENTAGE" length="30"
+     * column="NEOPLASTIC_CELLULARITY_PER" length="30"
      */
 	public Double getNeoplasticCellularityPercentage()
 	{
