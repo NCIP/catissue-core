@@ -716,7 +716,7 @@ public class HibernateDAO extends AbstractDAO
 		dao.openSession(null);
 		Statement st = dao.session.connection().createStatement();
 		//dao.session.createSQLQuery()
-		int count = st.executeUpdate("UPDATE catissue_specimen_collection_group set ACTIVITY_STATUS = 'A'");
+		int count = st.executeUpdate("UPDATE CATISSUE_SPECIMEN_COLL_GROUP set ACTIVITY_STATUS = 'A'");
 		//Query query = dao.session.createQuery("update edu.wustl.catissuecore.domain.SpecimenCollectionGroup specimenCollectionGroup set specimenCollectionGroup.activityStatus = 'A'");
 		System.out.println("count "+count);
 		dao.commit();
