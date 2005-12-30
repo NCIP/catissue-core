@@ -30,6 +30,7 @@ import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.util.logger.Logger;
@@ -177,8 +178,21 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 	  	String [] displayParticipantFields = {"participant.systemIdentifier"};
 	  	String valueField = "participant."+Constants.SYSTEM_IDENTIFIER;
 	  	String whereColumnName[] = {"collectionProtocol."+Constants.SYSTEM_IDENTIFIER,"participant.systemIdentifier"};
-	  	String whereColumnCondition[] = {"=","is not"};
-	  	Object[] whereColumnValue = {new Long(protocolID),null};
+	  	String whereColumnCondition[];
+	  	Object[] whereColumnValue; 
+	  	if(Variables.databaseName.equals(Constants.MYSQL_DATABASE))
+		{
+	  		whereColumnCondition = new String[]{"=","is not"};
+	  		whereColumnValue=new Object[]{new Long(protocolID),null};
+		}
+	  	else
+	  	{
+	  		// for ORACLE
+	  		whereColumnCondition = new String[]{"=","is not null"};
+	  		whereColumnValue=new Object[]{new Long(protocolID)};
+	  	}
+	  	
+	  	
 	  	String joinCondition = Constants.AND_JOIN_CONDITION;
 	  	String separatorBetweenFields = ", ";
 	  	
@@ -193,6 +207,18 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 		String[] whereColumnName2 = {"lastName","firstName","birthDate","socialSecurityNumber"};
 		String[] whereColumnCondition2 = {"!=","!=","is not","is not"};
 		Object[] whereColumnValue2 = {"","",null,null};
+		if(Variables.databaseName.equals(Constants.MYSQL_DATABASE))
+		{
+			whereColumnCondition2 = new String[]{"!=","!=","is not","is not"};
+	  		whereColumnValue2=new String[]{"","",null,null};
+		}
+	  	else
+	  	{
+	  		// for ORACLE
+	  		whereColumnCondition2 = new String[]{"!=","!=","is not null","is not null"};
+	  		whereColumnValue2=new String[]{"",""};
+	  	}
+		
 		String joinCondition2 = Constants.OR_JOIN_CONDITION;
 		String separatorBetweenFields2 = ", ";
 		
@@ -246,8 +272,19 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 		String displayParticipantNumberFields[] = {"protocolParticipantIdentifier"};
 		String valueField = "protocolParticipantIdentifier";
 		String whereColumnName[] = {"collectionProtocol."+Constants.SYSTEM_IDENTIFIER, "protocolParticipantIdentifier"};
-		String whereColumnCondition[] = {"=","!="};
-		Object[] whereColumnValue = {new Long(protocolID),"null"};
+		String whereColumnCondition[];// = {"=","!="};
+		Object[] whereColumnValue;// = {new Long(protocolID),"null"};
+		if(Variables.databaseName.equals(Constants.MYSQL_DATABASE))
+		{
+			whereColumnCondition = new String[]{"=","!="};
+			whereColumnValue = new Object[]{new Long(protocolID),"null"};
+		}
+		else
+		{
+			whereColumnCondition = new String[]{"=","!=null"};
+			whereColumnValue = new Object[]{new Long(protocolID),""};
+		}
+		
 		String joinCondition = Constants.AND_JOIN_CONDITION;
 		String separatorBetweenFields = "";
 			
