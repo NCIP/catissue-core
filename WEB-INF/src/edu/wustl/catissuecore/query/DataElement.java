@@ -9,6 +9,7 @@
 package edu.wustl.catissuecore.query;
 
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Variables;
 
 
 /**
@@ -91,15 +92,15 @@ public class DataElement
     public String toSQLString(int tableSufix)
     {
        String fieldName = table.toSQLString() + tableSufix + "." + field+" ";
-        if ((fieldType != null) && (Constants.FIELD_TYPE_TIMESTAMP_TIME.equalsIgnoreCase(fieldType)))
+       if ((fieldType != null) && (Constants.FIELD_TYPE_TIMESTAMP_TIME.equalsIgnoreCase(fieldType)))
 		{
-            fieldName = Constants.MYSQL_TIME_FORMAT_FUNCTION + "(" + fieldName + ",'" + Constants.MYSQL_TIME_PATTERN + "') ";
+            fieldName = Variables.TIME_FORMAT_FUNCTION + "(" + fieldName + ",'" + Variables.TIME_PATTERN + "') ";
 		}
 		else if ((fieldType != null) && (Constants.FIELD_TYPE_TIMESTAMP_DATE.equalsIgnoreCase(fieldType)))
 		{
-		    fieldName = Constants.MYSQL_DATE_FORMAT_FUNCTION + "(" + fieldName + ",'" + Constants.MYSQL_DATE_PATTERN + "') ";
+		    fieldName = Variables.DATE_FORMAT_FUNCTION + "(" + fieldName + ",'" + Variables.DATE_PATTERN + "') ";
 		}
-		
+       
         return fieldName;
     }
     
