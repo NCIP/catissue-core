@@ -29,6 +29,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.HibernateProperties;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.util.Permissions;
+import edu.wustl.common.util.dbManager.HibernateMetaData;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.logger.Logger;
 
@@ -248,12 +249,34 @@ public class CatissueCoreServletContextListener
 //        		protectionElement = (ProtectionElement) list.get(i);
 //        		Logger.out.debug(protectionElement.getObjectId());
 //        	}
+        	
+//        	 get database name and set variables used in query 
+            Variables.databaseName=HibernateMetaData.getDataBaseName();
+            if(Variables.databaseName.equals(Constants.ORACLE_DATABASE))
+            {
+            	//set string/function for oracle
+            	Variables.DATE_PATTERN = "mm-dd-yyyy";
+            	Variables.TIME_PATTERN = "hh-mi-ss";
+            	Variables.DATE_FORMAT_FUNCTION="TO_CHAR";
+            	Variables.TIME_FORMAT_FUNCTION="TO_CHAR";
+            	Variables.DATE_TO_STR_FUNCTION = "TO_CHAR";
+            	Variables.STR_TO_DATE_FUNCTION = "TO_DATE";
+            }
+            else
+            {
+            	Variables.DATE_PATTERN = "%m-%d-%Y";
+            	Variables.TIME_PATTERN = "%H:%i:%s";
+            	Variables.DATE_FORMAT_FUNCTION="DATE_FORMAT";
+            	Variables.TIME_FORMAT_FUNCTION="TIME_FORMAT";
+            	Variables.DATE_TO_STR_FUNCTION = "TO_CHAR";
+            	Variables.STR_TO_DATE_FUNCTION = "STR_TO_DATE";
+            }
         }
         catch (Exception e1)
         {
             e1.printStackTrace();
         }  
-
+        
     }
 
     /* (non-Javadoc)
