@@ -15,7 +15,7 @@ import edu.wustl.common.exception.AssignDataException;
 
 /**
  * @author gautam_shetty
- * @hibernate.class table="CATISSUE_QUERY_INTERFACE_COLUMN_DATA"
+ * @hibernate.class table="CATISSUE_INTERFACE_COLUMN_DATA"
  */
 public class QueryColumnData extends AbstractDomainObject
         implements
