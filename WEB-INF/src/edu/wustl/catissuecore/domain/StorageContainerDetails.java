@@ -15,7 +15,7 @@ import edu.wustl.common.exception.AssignDataException;
 
 /**
  * Attributes of a Storage Container in the form of key-value pair.
- * @hibernate.class table="CATISSUE_STORAGE_CONTAINER_DETAILS"
+ * @hibernate.class table="CATISSUE_STORAGE_CONT_DETAILS"
  * @author Aniruddha Phadnis
  */
 public class StorageContainerDetails extends AbstractDomainObject implements java.io.Serializable
