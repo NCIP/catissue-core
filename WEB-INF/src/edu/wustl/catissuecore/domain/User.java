@@ -377,7 +377,7 @@ public class User extends AbstractDomainObject implements Serializable
 
     /**
      * @return Returns the collectionProtocolCollection.
-     * @hibernate.set name="collectionProtocolCollection" table="CATISSUE_COLLECTION_COORDINATORS" 
+     * @hibernate.set name="collectionProtocolCollection" table="CATISSUE_COLL_COORDINATORS" 
      * cascade="save-update" inverse="true" lazy="true"
      * @hibernate.collection-key column="USER_ID"
      * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.CollectionProtocol" column="COLLECTION_PROTOCOL_ID"
