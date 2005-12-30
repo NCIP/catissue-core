@@ -15,7 +15,7 @@ import edu.wustl.common.util.logger.Logger;
 
 /**
  * Attributes associated with the collection event of a specimen from participant.
- * @hibernate.joined-subclass table="CATISSUE_COLLECTION_EVENT_PARAMETERS"
+ * @hibernate.joined-subclass table="CATISSUE_COLL_EVENT_PARAM"
  * @hibernate.joined-subclass-key column="IDENTIFIER" 
  */
 public class CollectionEventParameters extends SpecimenEventParameters
