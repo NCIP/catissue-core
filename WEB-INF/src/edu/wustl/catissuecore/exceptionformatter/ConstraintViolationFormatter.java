@@ -7,10 +7,13 @@ package edu.wustl.catissuecore.exceptionformatter;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.text.MessageFormat;
 
 import net.sf.hibernate.HibernateException;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Variables;
+import edu.wustl.common.util.dbManager.HibernateMetaData;
 import edu.wustl.common.util.logger.Logger;
 
 public class ConstraintViolationFormatter implements ExceptionFormatter 
@@ -27,9 +30,13 @@ public class ConstraintViolationFormatter implements ExceptionFormatter
 		
 		// Check which database is in used and called appropriate Format_Method
 		
-		if(Constants.DATABASE_IN_USED.equalsIgnoreCase("mysql")); 
+		if(Variables.databaseName.equals(Constants.MYSQL_DATABASE)) 
 		{
 			errMessage = MySQLformatMessage(objExcp,args); // method for MYSQL Database
+		}
+		else
+		{
+			errMessage = OracleformatMessage(objExcp,args); // method for ORACLE Database
 		}
 		
 		if(errMessage==null)
@@ -38,6 +45,68 @@ public class ConstraintViolationFormatter implements ExceptionFormatter
 		}
 		return errMessage;
 	}
+	private String OracleformatMessage(Exception objExcp, Object[] args) 
+    {
+        String tableName="";
+        String columnName="";
+        String formattedErrMsg=null; // Formatted Error Message return by this method
+		Logger.out.debug(objExcp.getClass().getName());
+        if(objExcp instanceof gov.nih.nci.security.exceptions.CSTransactionException)
+        {
+            
+            objExcp = (Exception)objExcp.getCause();
+            Logger.out.debug(objExcp);
+        }
+        try
+        {
+//        	 Get database metadata object for the connection
+        	Connection connection=null;
+        	if(args[1]!=null)
+            {
+                connection =(Connection)args[1];
+            }
+            else
+            {
+                Logger.out.debug("Error Message: Connection object not given");
+            }
+        	// Get Contraint Name from messages         		
+        	String sqlMessage = generateErrorMessage(objExcp);
+        	int tempstartIndexofMsg = sqlMessage.indexOf("(");
+            
+            String temp = sqlMessage.substring(tempstartIndexofMsg);
+            int startIndexofMsg = temp.indexOf(".");
+            int endIndexofMsg = temp.indexOf(")");
+            String strKey =temp.substring((startIndexofMsg+1),endIndexofMsg);
+            Logger.out.debug("Contraint Name: "+strKey);
+//            
+            String Query = "select COLUMN_NAME,TABLE_NAME from user_cons_columns where constraint_name = '"+strKey+"'";
+            Logger.out.debug("ExceptionFormatter Query: "+Query);
+            Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(Query);
+            while(rs.next())
+            {
+                	columnName+=rs.getString("COLUMN_NAME")+",";
+                	Logger.out.debug("columnName: "+columnName);
+                	tableName=rs.getString("TABLE_NAME");
+                	Logger.out.debug("tableName: "+tableName);
+            }
+            if(columnName.length()>0&&tableName.length()>0)
+            {
+            	columnName=columnName.substring(0,columnName.length()-1);
+            	Logger.out.debug("columnName befor formatting: "+columnName);
+            	Object[] arguments = new Object[]{tableName,columnName};
+            	formattedErrMsg = MessageFormat.format(Constants.CONSTRAINT_VOILATION_ERROR,arguments);
+            }	
+            rs.close();
+            statement.close();
+         }
+        catch(Exception e)
+        {
+            Logger.out.error(e.getMessage(),e);
+            formattedErrMsg = Constants.GENERIC_DATABASE_ERROR;  
+        }
+        return formattedErrMsg;
+    }
 	private String MySQLformatMessage(Exception objExcp, Object[] args)
 	{
 		Logger.out.debug(objExcp.getClass().getName());
@@ -145,7 +214,7 @@ public class ConstraintViolationFormatter implements ExceptionFormatter
         	Logger.out.debug("out of loop" );
         	// close the Database Connection
         	rs.close();
-        //	connection.close();
+        	//	connection.close();
         	//session.close();
         	
         	// Create arrays of object containing data to insert in CONSTRAINT_VOILATION_ERROR
