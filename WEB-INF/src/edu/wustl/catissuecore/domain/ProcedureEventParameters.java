@@ -15,7 +15,7 @@ import edu.wustl.common.util.logger.Logger;
 
 /**
  * Attributes associated with a customized procedure that is applied on a specimen to process it.
- * @hibernate.joined-subclass table="CATISSUE_PROCEDURE_EVENT_PARAMETERS"
+ * @hibernate.joined-subclass table="CATISSUE_PROCEDURE_EVENT_PARAM"
  * @hibernate.joined-subclass-key column="IDENTIFIER" 
  */
 public class ProcedureEventParameters extends SpecimenEventParameters
