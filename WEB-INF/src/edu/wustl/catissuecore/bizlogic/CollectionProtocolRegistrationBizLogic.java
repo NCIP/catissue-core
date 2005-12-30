@@ -236,7 +236,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
     public void disableRelatedObjectsForParticipant(DAO dao, Long participantIDArr[])throws DAOException 
     {
     	List listOfSubElement = super.disableObjects(dao, CollectionProtocolRegistration.class, "participant", 
-    			"CATISSUE_COLLECTION_PROTOCOL_REGISTRATION", "PARTICIPANT_ID", participantIDArr);
+    			"CATISSUE_COLL_PROT_REG", "PARTICIPANT_ID", participantIDArr);
     	if(!listOfSubElement.isEmpty())
     	{
     		SpecimenCollectionGroupBizLogic bizLogic = (SpecimenCollectionGroupBizLogic)BizLogicFactory.getBizLogic(Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID);
@@ -250,7 +250,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
     public void disableRelatedObjectsForCollectionProtocol(DAO dao, Long collectionProtocolIDArr[])throws DAOException 
     {
     	List listOfSubElement = super.disableObjects(dao, CollectionProtocolRegistration.class, "collectionProtocol", 
-    			"CATISSUE_COLLECTION_PROTOCOL_REGISTRATION", "COLLECTION_PROTOCOL_ID", collectionProtocolIDArr);
+    			"CATISSUE_COLL_PROT_REG", "COLLECTION_PROTOCOL_ID", collectionProtocolIDArr);
     	if(!listOfSubElement.isEmpty())
     	{
 			SpecimenCollectionGroupBizLogic bizLogic = (SpecimenCollectionGroupBizLogic)BizLogicFactory.getBizLogic(Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID);
