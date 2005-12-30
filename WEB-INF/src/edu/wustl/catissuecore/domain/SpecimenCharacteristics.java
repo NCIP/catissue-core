@@ -17,7 +17,7 @@ import edu.wustl.common.exception.AssignDataException;
 /**
  * The combined anatomic state and pathological 
  * disease classification of a specimen.
- * @hibernate.class table="CATISSUE_SPECIMEN_CHARACTERISTICS"
+ * @hibernate.class table="CATISSUE_SPECIMEN_CHAR"
  * @author gautam_shetty
  */
 public class SpecimenCharacteristics extends AbstractDomainObject implements java.io.Serializable
