@@ -15,7 +15,7 @@ import edu.wustl.common.util.logger.Logger;
 
 /**
  * Attributes related to disposal event of a specimen.
- * @hibernate.joined-subclass table="CATISSUE_DISPOSAL_EVENT_PARAMETERS"
+ * @hibernate.joined-subclass table="CATISSUE_DISPOSAL_EVENT_PARAM"
  * @hibernate.joined-subclass-key column="IDENTIFIER" 
  */
 public class DisposalEventParameters extends SpecimenEventParameters
