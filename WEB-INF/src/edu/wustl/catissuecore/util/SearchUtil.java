@@ -145,12 +145,12 @@ public class SearchUtil
 	 * @param unitFieldKey  Used for specimen page only 
 	 * @return  instance of SearchFieldData
 	 */	
-	public static SearchFieldData initSearchUIData(String dataType,String msgKey, String tblName,String colName,String id,
+	public static SearchFieldData initSearchUIData(String dataType,String msgKey, String aliasName,String colName,String id,
     		String opList,String valueList,String unitFieldKey)
     {
 		//Initializing HTMLField class
-    	HTMLField oprationField = new HTMLField(createKey(tblName,colName,true),id+"Combo",opList);
-    	HTMLField valueField = new HTMLField(createKey(tblName,colName,false),id,valueList);
+    	HTMLField oprationField = new HTMLField(createKey(aliasName,colName,true),id+"Combo",opList);
+    	HTMLField valueField = new HTMLField(createKey(aliasName,colName,false),id,valueList);
     	
     	//Function Name used according to dataType of field
     	String funcName = "";
@@ -210,8 +210,8 @@ public class SearchUtil
 			    searchFieldData[1] = initSearchUIData(SearchUtil.STRING, "advanceQuery.collectionprotocol.firstname","User","FIRST_NAME","firstName",Constants.STRING_OPERATORS,"","");
 			    searchFieldData[2] = initSearchUIData(SearchUtil.STRING,"collectionprotocol.protocoltitle","SpecimenProtocol","TITLE","title",Constants.STRING_OPERATORS,"","");
 			    searchFieldData[3] = initSearchUIData(SearchUtil.STRING, "collectionprotocol.shorttitle","SpecimenProtocol","SHORT_TITLE","shortTitle",Constants.STRING_OPERATORS,"","");
-			    searchFieldData[4] = initSearchUIData(SearchUtil.STRING, "collectionProtocolReg.participantProtocolID","CollectionProtocolRegistration","PROTOCOL_PARTICIPANT_IDENTIFIER","protocolParticipantId",Constants.STRING_OPERATORS,"","");
-			    searchFieldData[5] = initSearchUIData(SearchUtil.DATE, "collectionProtocolReg.participantRegistrationDate","CollectionProtocolRegistration","REGISTRATION_DATE","regDate",Constants.DATE_NUMERIC_OPERATORS,"","");
+			    searchFieldData[4] = initSearchUIData(SearchUtil.STRING, "collectionProtocolReg.participantProtocolID","CollectionProtReg","PROTOCOL_PARTICIPANT_ID","protocolParticipantId",Constants.STRING_OPERATORS,"","");
+			    searchFieldData[5] = initSearchUIData(SearchUtil.DATE, "collectionProtocolReg.participantRegistrationDate","CollectionProtReg","REGISTRATION_DATE","regDate",Constants.DATE_NUMERIC_OPERATORS,"","");
 			    searchFieldData[6] = initSearchUIData(SearchUtil.STRING, "collectionprotocol.irbid","SpecimenProtocol","IRB_IDENTIFIER","irbIdentifier",Constants.STRING_OPERATORS,"","");
 			    searchFieldData[7] = initSearchUIData(SearchUtil.DATE, "advanceQuery.collectionprotocol.startdate","SpecimenProtocol","START_DATE","startDate",Constants.DATE_NUMERIC_OPERATORS,"","");
 			    searchFieldData[8] = initSearchUIData(SearchUtil.DATE, "advanceQuery.collectionprotocol.enddate","SpecimenProtocol","END_DATE","endDate",Constants.DATE_NUMERIC_OPERATORS,"","");
@@ -228,7 +228,7 @@ public class SearchUtil
 		        searchFieldData[6] = initSearchUIData(SearchUtil.STRING, "participant.race","Participant","RACE","race",Constants.ENUMERATED_OPERATORS,Constants.RACELIST,"");
 		        searchFieldData[7] = initSearchUIData(SearchUtil.STRING, "participant.ethnicity","Participant","ETHNICITY","ethnicity",Constants.ENUMERATED_OPERATORS,Constants.ETHNICITY_LIST,"");
 		        searchFieldData[8] = initSearchUIData(SearchUtil.STRING, "participant.socialSecurityNumber","Participant","SOCIAL_SECURITY_NUMBER","ssn",Constants.STRING_OPERATORS,"","");
-		        searchFieldData[9] = initSearchUIData(SearchUtil.STRING,"advanceQuery.specimenCollectionGroup.medicalRecordNumber","ParticipantMedicalIdentifier","MEDICAL_RECORD_NUMBER","medicalRecordNo",Constants.STRING_OPERATORS,"","");
+		        searchFieldData[9] = initSearchUIData(SearchUtil.STRING,"advanceQuery.specimenCollectionGroup.medicalRecordNumber","ParticipantMedicalId","MEDICAL_RECORD_NUMBER","medicalRecordNo",Constants.STRING_OPERATORS,"","");
 		        break;
 			
 			case Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID :
