@@ -23,7 +23,7 @@ import edu.wustl.common.util.logger.Logger;
 /**
  * An event that results in the collection 
  * of one or more specimen from a participant.
- * @hibernate.class table="CATISSUE_SPECIMEN_COLLECTION_GROUP"
+ * @hibernate.class table="CATISSUE_SPECIMEN_COLL_GROUP"
  * @author gautam_shetty
  */
 public class SpecimenCollectionGroup extends AbstractDomainObject implements Serializable
@@ -288,7 +288,7 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
 
     /**
      * Returns the registration of a Participant to a Collection Protocol.
-     * @hibernate.many-to-one column="COLLECTION_PROTOCOL_REGISTRATION_ID" 
+     * @hibernate.many-to-one column="COLLECTION_PROTOCOL_REG_ID" 
      * class="edu.wustl.catissuecore.domain.CollectionProtocolRegistration" constrained="true"
      * @return the registration of a Participant to a Collection Protocol.
      * @see #setCollectionProtocolRegistration(CollectionProtocolRegistration)
