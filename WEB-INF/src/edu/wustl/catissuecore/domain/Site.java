@@ -12,7 +12,6 @@ package edu.wustl.catissuecore.domain;
 import edu.wustl.catissuecore.actionForm.SiteForm;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -229,7 +228,6 @@ public class Site extends AbstractDomainObject implements java.io.Serializable
     {
         try
         {
-        	Validator validator = new Validator();
             SiteForm form 	= (SiteForm) abstractForm;
             this.systemIdentifier = new Long(form.getSystemIdentifier());
             this.name 		= form.getName().trim() ;
