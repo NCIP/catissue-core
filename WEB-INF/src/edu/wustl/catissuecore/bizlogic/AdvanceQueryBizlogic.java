@@ -41,11 +41,12 @@ public class AdvanceQueryBizlogic extends DefaultBizLogic implements TreeDataInt
  		Logger.out.debug("sql for create table"+sql);
  		JDBCDAO jdbcDao = new JDBCDAO();
         jdbcDao.openSession(sessionData);
- 		//jdbcDao.openSession(null);
+
         //Delete if there is any tbale existing with same name
        	jdbcDao.delete(tempTableName);
        	//Create empty temporary table
         jdbcDao.createTable(sql);
+
         //Insert list of data into the temporary table created.
         List dataList = jdbcDao.executeQuery(searchQuery,sessionData,true,queryResultObjectDataMap);
         Logger.out.debug("full list to be inserted"+dataList);
@@ -67,74 +68,82 @@ public class AdvanceQueryBizlogic extends DefaultBizLogic implements TreeDataInt
 		JDBCDAO jdbcDao = new JDBCDAO();
         jdbcDao.openSession(sessionData);
         Logger.out.debug("Temp table in adv bizlogic:"+tempTableName);
+
         //Retrieve all the data from the temporary table 
 		List dataList =  jdbcDao.retrieve(tempTableName);
-		Logger.out.debug("List of data for identifiers:"+dataList);
 		jdbcDao.closeSession();
 		Logger.out.debug("List of data for identifiers:"+dataList);
 		
-		//Get column idetifiers from the map.
+		//Get column idetifiers from the column ids map.
 		int participantColumnId =  ((Integer)columnIdsMap.get(Constants.PARTICIPANT+"."+Constants.IDENTIFIER)).intValue()-1;
 		int collectionProtocolColumnId =  ((Integer)columnIdsMap.get(Constants.COLLECTION_PROTOCOL+"."+Constants.IDENTIFIER)).intValue()-1;
 		int specimenCollGrpColumnId =  ((Integer)columnIdsMap.get(Constants.SPECIMEN_COLLECTION_GROUP+"."+Constants.IDENTIFIER)).intValue()-1;
 		int specimenColumnId = ((Integer)columnIdsMap.get(Constants.SPECIMEN+"."+Constants.IDENTIFIER)).intValue()-1;
         int parentSpecimenColumnId = ((Integer)columnIdsMap.get(Constants.SPECIMEN+"."+Constants.PARENT_SPECIMEN_ID_COLUMN)).intValue()-1;
-		Vector vector = new Vector();
-        Iterator iterator = dataList.iterator();
+
+        Vector treeDataVector = new Vector();
+        Iterator dataListIterator = dataList.iterator();
         List rowList = new ArrayList();
-        String previousSpecimenId = new String();
-        //int i=0;
+        List disabledSpecimenIds = new ArrayList();
+        
         //Create tree nodes
-        while (iterator.hasNext())
+        while (dataListIterator.hasNext())
         {
-        	//i++;
-        	/*if(rowList.size()!=0)
-        		previousSpecimenId = (String) rowList.get(specimenColumnId);*/
-        	//Logger.out.debug("previousSpecimenId"+previousSpecimenId+":"+i);
-            rowList = (List)iterator.next();
+            rowList = (List)dataListIterator.next();
         	//setQueryTreeNode((String) rowList.get(0),Constants.PARTICIPANT,null,null,vector);
+            //Create tree nodes for Participant & Collection Protocol
 			setQueryTreeNode((String) rowList.get(collectionProtocolColumnId), 
-						Constants.COLLECTION_PROTOCOL,null,null,(String) rowList.get(participantColumnId), Constants.PARTICIPANT,vector);
+						Constants.COLLECTION_PROTOCOL,null,null,(String) rowList.get(participantColumnId), Constants.PARTICIPANT,treeDataVector);
+			//Create tree nodes for Specimen Collection Group
 			setQueryTreeNode((String) rowList.get(specimenCollGrpColumnId), Constants.SPECIMEN_COLLECTION_GROUP,(String) 
-						rowList.get(collectionProtocolColumnId), Constants.COLLECTION_PROTOCOL,(String) rowList.get(participantColumnId),Constants.PARTICIPANT,vector);
+						rowList.get(collectionProtocolColumnId), Constants.COLLECTION_PROTOCOL,(String) rowList.get(participantColumnId),Constants.PARTICIPANT,treeDataVector);
 			String parentSpecimenId = (String) rowList.get(parentSpecimenColumnId);
 			Logger.out.debug("parentSpecimenId"+parentSpecimenId);
+			//if parent specimen not present, form tree node directly under Specimen Collection group
 			if(parentSpecimenId.equals("")||parentSpecimenId.equals("0"))
 			{
 				Logger.out.debug("parent specimen not present");
 				setQueryTreeNode((String) rowList.get(specimenColumnId), Constants.SPECIMEN,(String)  
-						rowList.get(specimenCollGrpColumnId),Constants.SPECIMEN_COLLECTION_GROUP,null,null,vector);
+						rowList.get(specimenCollGrpColumnId),Constants.SPECIMEN_COLLECTION_GROUP,null,null,treeDataVector);
 			}
+			//if parent specimen id is present for the specimen heirarchy
 			else
 			{
-//				Logger.out.debug("parent specimen present"+parentSpecimenId);
 				String specimenId= (String) rowList.get(specimenColumnId);
-//				Logger.out.debug("specimen id "+specimenId);
-//				setQueryTreeNode(specimenId, Constants.SPECIMEN,parentSpecimenId,Constants.SPECIMEN,null,null,vector);
+				//get the specimen heirarchy above the current specimen
 				List specimenIdsHeirarchy = getSpecimenHeirarchy(specimenId);
-				int noOfIds=specimenIdsHeirarchy.size();
-				if(noOfIds>0)
-				{
-					Logger.out.debug("last parent specimen id:"+(String)specimenIdsHeirarchy.get(noOfIds-1));
-					setQueryTreeNode((String)specimenIdsHeirarchy.get(noOfIds-1), Constants.SPECIMEN,(String)
-													rowList.get(specimenCollGrpColumnId),Constants.SPECIMEN_COLLECTION_GROUP,null,null,vector);
-				}
+				specimenIdsHeirarchy.add(specimenId);
+				
 				Logger.out.debug("list of parent specimen ids:"+specimenIdsHeirarchy);
-				Iterator specimenIdsHeirarchyItr=specimenIdsHeirarchy.iterator();
-				while(specimenIdsHeirarchyItr.hasNext())
+				if(specimenIdsHeirarchy.size()>0)
 				{
+					setQueryTreeNode((String)specimenIdsHeirarchy.get(0), Constants.SPECIMEN,(String)
+							rowList.get(specimenCollGrpColumnId),Constants.SPECIMEN_COLLECTION_GROUP,null,null,treeDataVector);
+					
+					Iterator specimenIdsHeirarchyItr= specimenIdsHeirarchy.iterator();
 					String parentSpecimenIdInHeirarchy = (String)specimenIdsHeirarchyItr.next();
-					Logger.out.debug("specimen id in loop:"+specimenId);
-					Logger.out.debug("parent specimen id in loop:"+parentSpecimenIdInHeirarchy);
-					setQueryTreeNode(specimenId, Constants.SPECIMEN,parentSpecimenIdInHeirarchy,Constants.SPECIMEN,null,null,vector);
-					specimenId = parentSpecimenIdInHeirarchy;
+					while(specimenIdsHeirarchyItr.hasNext())
+					{
+						specimenId = (String)specimenIdsHeirarchyItr.next();
+						setQueryTreeNode(specimenId, Constants.SPECIMEN,parentSpecimenIdInHeirarchy,Constants.SPECIMEN,null,null,treeDataVector);
+						parentSpecimenIdInHeirarchy = specimenId;
+					}
 				}
+				//Find the specimen ids which are not satisfying the query condition to disbale in tree view.
+				//get the specimen ids present in temp table
+				List parentSpecimenIdsInTempTable = getParentSpecimensInTempTable(Constants.COLUMN+specimenColumnId,tempTableName); 
+				//list of specimens not satisfying the query but are shown in results tree view.
+				// These specimen ids have to be disabled.
+				specimenIdsHeirarchy.removeAll(parentSpecimenIdsInTempTable);
+				disabledSpecimenIds.addAll(specimenIdsHeirarchy);
+				Logger.out.debug("Specimen ids to be disabled in tree view"+specimenIdsHeirarchy);
 			}
 			Logger.out.debug("Tree Data:"+rowList.get(participantColumnId)+" "+rowList.get(collectionProtocolColumnId)+" "+
 					rowList.get(specimenCollGrpColumnId)+" "+rowList.get(parentSpecimenColumnId)+" "+ rowList.get(specimenColumnId));
         }
-        Logger.out.debug("vector of tree nodes"+vector);
-        return vector;
+        //disableSpecimenIds.addAll(disabledSpecimenIds);
+        Logger.out.debug("vector of tree nodes"+treeDataVector);
+        return treeDataVector;
 	}   
 	//Create TreeNode given the Tree node data.
 	private void setQueryTreeNode(String identifier,String objectName,String parentIdentifier,String parentObjectName,String combinedParentIdentifier,String combinedParentObjectName,Vector vector)
@@ -207,9 +216,11 @@ public class AdvanceQueryBizlogic extends DefaultBizLogic implements TreeDataInt
 			setTables(parent,tableSet);
 		}
 	}
+	//Get the specimen Ids heirarchy above a given specimen ids.
 	private List getSpecimenHeirarchy(String specimenId) throws DAOException,ClassNotFoundException
 	{
 		List specimenIdsList = new ArrayList();
+		List specimenIdsListInOrder = new ArrayList();
 		JDBCDAO jdbcDao = new JDBCDAO();
         jdbcDao.openSession(null);
 		Long whereColumnValue=new Long(specimenId);
@@ -220,10 +231,6 @@ public class AdvanceQueryBizlogic extends DefaultBizLogic implements TreeDataInt
 			List dataList =  jdbcDao.executeQuery(sql,null,false,null);
 			Logger.out.debug("list size in speci heirarchy:"+dataList.size()+" "+dataList);
 			List rowList = (List)dataList.get(0);
-			Logger.out.debug("rowList size"+rowList.size());
-			Logger.out.debug("rowList isempty"+rowList.isEmpty());
-			Logger.out.debug("rowList get(0)"+rowList.get(0));
-			Logger.out.debug("rowList get(0) equal to '' "+rowList.get(0).equals(""));
 			if(!rowList.get(0).equals(""))
 			{
 				whereColumnValue = new Long((String)rowList.get(0));
@@ -233,8 +240,36 @@ public class AdvanceQueryBizlogic extends DefaultBizLogic implements TreeDataInt
 				whereColumnValue=null;
 			
 		}
-		Logger.out.debug("List specimenIdsList "+specimenIdsList);
+		//Order the specimen ids in the order which the tree nodes have to be created
+		Logger.out.debug("List specimenIdsList before order"+specimenIdsList);
+		for(int i=specimenIdsList.size()-1;i>=0;i--)
+		{
+			specimenIdsListInOrder.add(specimenIdsList.get(i));
+			
+		}
+		Logger.out.debug("List specimenIdsList after order"+specimenIdsListInOrder);
 		jdbcDao.closeSession();
-		return specimenIdsList;
+		return specimenIdsListInOrder;
+	}
+	
+	//Get all the specimen ids in temp table to check the existence of all the specimens of the heirarchy 
+	//in the temp table
+	private List getParentSpecimensInTempTable(String specimenColumnId,String tempTable) throws DAOException,ClassNotFoundException
+	{
+		List parentSpecimenIdsList = new ArrayList();
+		
+		JDBCDAO jdbcDao = new JDBCDAO();
+        jdbcDao.openSession(null);
+		String sql = "Select "+specimenColumnId+" from "+tempTable;
+		List dataList =  jdbcDao.executeQuery(sql,null,false,null);
+		Logger.out.debug("list size in speci in temp table:"+dataList.size()+" "+dataList);
+		Iterator dataListItr = dataList.iterator();
+		while(dataListItr.hasNext())
+		{
+			List rowList = (List)dataListItr.next();
+			parentSpecimenIdsList.add(rowList.get(0));
+		}
+		jdbcDao.closeSession();
+		return parentSpecimenIdsList;
 	}
 }
