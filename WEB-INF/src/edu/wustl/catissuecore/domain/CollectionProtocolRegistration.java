@@ -21,7 +21,7 @@ import edu.wustl.common.util.logger.Logger;
 
 /**
  * A registration of a Participant to a Collection Protocol.
- * @hibernate.class table="CATISSUE_COLLECTION_PROTOCOL_REGISTRATION"
+ * @hibernate.class table="CATISSUE_COLL_PROT_REG"
  * @author gautam_shetty
  */
 public class CollectionProtocolRegistration extends AbstractDomainObject implements Serializable
@@ -100,7 +100,7 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 	 * Returns the unique number given by a User to a Participant 
 	 * registered to a Collection Protocol.
 	 * @hibernate.property name="protocolParticipantIdentifier" type="string"
-	 * column="PROTOCOL_PARTICIPANT_IDENTIFIER" length="50"
+	 * column="PROTOCOL_PARTICIPANT_ID" length="50"
 	 * @return the unique number given by a User to a Participant 
 	 * registered to a Collection Protocol.
 	 * @see #setProtocolParticipantIdentifier(Long)
