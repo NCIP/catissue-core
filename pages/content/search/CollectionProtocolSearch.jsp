@@ -14,7 +14,7 @@
 	String startDate2 = "value(SpecimenProtocol:START_DATE:HLIMIT)";
 	String endDate = "value(SpecimenProtocol:END_DATE)";
 	String endDate2 = "value(SpecimenProtocol:END_DATE:HLIMIT)";
-	String protocolParticipantId = "value(CollectionProtocolRegistration:PROTOCOL_PARTICIPANT_IDENTIFIER)";
+	String protocolParticipantId = "value(CollectionProtocolRegistration:PROTOCOL_PARTICIPANT_ID)";
 	String regDate = "value(CollectionProtocolRegistration:REGISTRATION_DATE)";
 	String regDate2 = "value(CollectionProtocolRegistration:REGISTRATION_DATE:HLIMIT)";
 	
@@ -25,7 +25,7 @@
 	String opIrbIdentifier = "value(Operator:SpecimenProtocol:IRB_IDENTIFIER)";
 	String opStartDate = "value(Operator:SpecimenProtocol:START_DATE)";
 	String opEndDate = "value(Operator:SpecimenProtocol:END_DATE)";
-	String opProtocolParticipantId = "value(Operator:CollectionProtocolRegistration:PROTOCOL_PARTICIPANT_IDENTIFIER)";
+	String opProtocolParticipantId = "value(Operator:CollectionProtocolRegistration:PROTOCOL_PARTICIPANT_ID)";
 	String opRegDate = "value(Operator:CollectionProtocolRegistration:REGISTRATION_DATE)";
 %>
 
