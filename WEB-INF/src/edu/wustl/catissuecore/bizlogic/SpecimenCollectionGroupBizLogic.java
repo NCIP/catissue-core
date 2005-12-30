@@ -252,7 +252,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 	public void disableRelatedObjects(DAO dao, Long collProtRegIDArr[])throws DAOException 
     {
     	List listOfSubElement = super.disableObjects(dao, SpecimenCollectionGroup.class, "collectionProtocolRegistration", 
-    			"CATISSUE_SPECIMEN_COLLECTION_GROUP", "COLLECTION_PROTOCOL_REGISTRATION_ID", collProtRegIDArr);
+    			"CATISSUE_SPECIMEN_COLL_GROUP", "COLLECTION_PROTOCOL_REG_ID", collProtRegIDArr);
     	if(!listOfSubElement.isEmpty())
     	{
 	    	NewSpecimenBizLogic bizLogic = (NewSpecimenBizLogic)BizLogicFactory.getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
