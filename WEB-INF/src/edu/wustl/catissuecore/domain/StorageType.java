@@ -113,7 +113,7 @@ public class StorageType extends AbstractDomainObject implements Serializable
 	/**
      * Returns the default temperature of a storage container in centigrade.
      * @hibernate.property name="defaultTempratureInCentigrade" type="double" 
-     * column="DEFAULT_TEMPERATURE_IN_CENTIGRADE" length="30"
+     * column="DEFAULT_TEMP_IN_CENTIGRADE" length="30"
      * @return The default temperature of a storage container in centigrade.
      * @see #setDefaultTempratureInCentigrade(Double)
      */
