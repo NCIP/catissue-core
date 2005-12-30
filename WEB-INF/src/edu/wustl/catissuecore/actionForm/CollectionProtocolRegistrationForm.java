@@ -70,8 +70,12 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
     		CollectionProtocolRegistration registration = (CollectionProtocolRegistration)abstractDomain;
     		this.activityStatus = registration.getActivityStatus();
     		this.collectionProtocolID = registration.getCollectionProtocol().getSystemIdentifier().longValue();
-  	
-		  	if((registration.getParticipant() != null) && (registration.getParticipant().getFirstName().trim().length()>0  ))
+    		if(registration.getParticipant().getFirstName()==null)
+    		{
+    			registration.getParticipant().setFirstName("");
+    		}
+    		Logger.out.debug("registration.getParticipant().getFirstName()--"+registration.getParticipant().getFirstName());
+    		if((registration.getParticipant() != null) && (registration.getParticipant().getFirstName().trim().length()>0  ))
 		  	{
 		  		this.participantID = registration.getParticipant().getSystemIdentifier().longValue();
 		  		checkedButton = true;
