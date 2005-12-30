@@ -59,7 +59,7 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 	
 	/**
 	 * Returns the collection of Studies for this Protocol.
-	 * @hibernate.set name="distributionProtocolCollection" table="CATISSUE_COLLECTION_DISTRIBUTION_RELATION" 
+	 * @hibernate.set name="distributionProtocolCollection" table="CATISSUE_COLL_DISTRIBUTION_REL" 
 	 * cascade="save-update" inverse="false" lazy="false"
 	 * @hibernate.collection-key column="COLLECTION_PROTOCOL_ID"
 	 * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.DistributionProtocol" column="DISTRIBUTION_PROTOCOL_ID"
@@ -80,7 +80,7 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 
 	/**
 	 * Returns the collection of Users(ProtocolCoordinators) for this Protocol.
-	 * @hibernate.set name="userCollection" table="CATISSUE_COLLECTION_COORDINATORS" 
+	 * @hibernate.set name="userCollection" table="CATISSUE_COLL_COORDINATORS" 
 	 * cascade="none" inverse="false" lazy="false"
 	 * @hibernate.collection-key column="COLLECTION_PROTOCOL_ID"
 	 * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.User" column="USER_ID"
@@ -102,7 +102,7 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 	/**
 	 * Returns the collection of CollectionProtocolEvents for this Protocol.
 	 * @hibernate.set name="collectionProtocolEventCollection"
-	 * table="CATISSUE_COLLECTION_PROTOCOL_EVENT" cascade="save-update"
+	 * table="CATISSUE_COLL_PROT_EVENT" cascade="save-update"
 	 * inverse="true" lazy="false"
 	 * @hibernate.collection-key column="COLLECTION_PROTOCOL_ID"
 	 * @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.CollectionProtocolEvent"
