@@ -1,6 +1,7 @@
 package edu.wustl.catissuecore.query;
 
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Variables;
 
 
 
@@ -103,7 +104,8 @@ public class Condition {
 		}
 		else if (dataElement.getFieldType().equalsIgnoreCase(Constants.FIELD_TYPE_DATE))
 		{
-		    newValue = Constants.MYSQL_STR_TO_DATE_FUNCTION + "('" + newValue + "','" + Constants.MYSQL_DATE_PATTERN + "')";
+			newValue = Variables.STR_TO_DATE_FUNCTION + "('" + newValue + "','" + Variables.DATE_PATTERN + "')";
+				
 		}
         
 	    return new String(dataElement.toSQLString(tableSufix) + " "+ newOperator + " " + newValue.toString() + " ");
