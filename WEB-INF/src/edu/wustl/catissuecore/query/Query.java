@@ -111,7 +111,7 @@ public abstract class Query {
 	 */
 	public static final String PARTICIPANT = "Participant";
 
-	public static final String COLLECTION_PROTOCOL_REGISTRATION = "CollectionProtocolRegistration";
+	public static final String COLLECTION_PROTOCOL_REGISTRATION = "CollectionProtReg";
 
 	public static final String COLLECTION_PROTOCOL = "CollectionProtocol";
 
@@ -121,7 +121,7 @@ public abstract class Query {
 
 	public static final String SPECIMEN = "Specimen";
 
-	public static final String PARTICIPANT_MEDICAL_IDENTIFIER = "ParticipantMedicalIdentifier";
+	public static final String PARTICIPANT_MEDICAL_IDENTIFIER = "ParticipantMedicalId";
 
 	public static final String INSTITUTION = "Institution";
 
@@ -151,7 +151,7 @@ public abstract class Query {
 
 	public static final String COLLECTION_SPECIMEN_REQUIREMENT = "CollectionSpecimenRequirement";
 
-	public static final String DISTRIBUTION_SPECIMEN_REQUIREMENT = "DistributionSpecimenRequirement";
+	public static final String DISTRIBUTION_SPECIMEN_REQUIREMENT = "DistributionSpecReq";
 
 	public static final String DISTRIBUTION_PROTOCOL = "DistributionProtocol";
 
@@ -604,9 +604,9 @@ public abstract class Query {
 		try {
 			JDBCDAO dao = new JDBCDAO();
 			dao.openSession(null);
-			String sqlString = "SELECT tableData2.ALIAS_NAME from CATISSUE_QUERY_INTERFACE_TABLE_DATA tableData2 "
+			String sqlString = "SELECT tableData2.ALIAS_NAME from CATISSUE_QUERY_TABLE_DATA tableData2 "
 					+ "join (SELECT CHILD_TABLE_ID FROM CATISSUE_TABLE_RELATION relationData,"
-					+ "CATISSUE_QUERY_INTERFACE_TABLE_DATA tableData "
+					+ "CATISSUE_QUERY_TABLE_DATA tableData "
 					+ "where relationData.PARENT_TABLE_ID = tableData.TABLE_ID and tableData.ALIAS_NAME = '"
 					+ aliasName
 					+ "') as relatedTables  on relatedTables.CHILD_TABLE_ID = tableData2.TABLE_ID";
