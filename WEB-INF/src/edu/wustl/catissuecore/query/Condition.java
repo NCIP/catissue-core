@@ -1,7 +1,14 @@
 package edu.wustl.catissuecore.query;
 
+import java.util.Calendar;
+import java.util.Date;
+
+import java.text.ParseException;
+
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.catissuecore.util.global.Variables;
+import edu.wustl.common.util.logger.Logger;
 
 
 
@@ -58,7 +65,7 @@ public class Condition {
 	{
 	    String newValue = new String(value);
 	    String newOperator = new String(operator.getOperator());
-
+	    
 	    if(newOperator.equals(Operator.STARTS_WITH))
         {
 	        newValue = newValue+"%";
@@ -97,18 +104,35 @@ public class Condition {
         
         if (dataElement.getFieldType().equalsIgnoreCase(Constants.FIELD_TYPE_VARCHAR) 
 	        	|| dataElement.getFieldType().equalsIgnoreCase(Constants.FIELD_TYPE_TEXT)
-	        	|| dataElement.getFieldType().equalsIgnoreCase(Constants.FIELD_TYPE_TIMESTAMP_TIME)
-	        	|| dataElement.getFieldType().equalsIgnoreCase(Constants.FIELD_TYPE_TIMESTAMP_DATE))
+	        	|| dataElement.getFieldType().equalsIgnoreCase(Constants.FIELD_TYPE_TIMESTAMP_TIME))
 		{
 		    newValue = "'" + newValue + "'";
 		}
-		else if (dataElement.getFieldType().equalsIgnoreCase(Constants.FIELD_TYPE_DATE))
+		else if (dataElement.getFieldType().equalsIgnoreCase(Constants.FIELD_TYPE_DATE)
+		        || dataElement.getFieldType().equalsIgnoreCase(Constants.FIELD_TYPE_TIMESTAMP_DATE))
 		{
-			newValue = Variables.STR_TO_DATE_FUNCTION + "('" + newValue + "','" + Variables.DATE_PATTERN + "')";
-				
+		    try
+		    {
+		        Date date = new Date();
+		        date = Utility.parseDate(newValue);
+		        
+		        Calendar calendar = Calendar.getInstance();
+			    calendar.setTime(date);
+			    String value = (calendar.get(Calendar.MONTH)+1) + "-" 
+			    			   + calendar.get(Calendar.DAY_OF_MONTH) + "-" 
+			    			   + calendar.get(Calendar.YEAR);
+			    
+			    newValue = Variables.STR_TO_DATE_FUNCTION 
+			    			+ "('" + value + "','" + Variables.DATE_PATTERN + "')";
+		    }
+		    catch (ParseException parseExp)
+		    {
+		        Logger.out.debug("Wrong Date Format");
+		    }
 		}
         
-	    return new String(dataElement.toSQLString(tableSufix) + " "+ newOperator + " " + newValue.toString() + " ");
+	    return new String(dataElement.toSQLString(tableSufix)
+	            		+ " "+ newOperator + " " + newValue.toString() + " ");
 	}
 
     public boolean equals(Object obj)
