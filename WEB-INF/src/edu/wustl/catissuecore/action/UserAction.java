@@ -140,7 +140,7 @@ public class UserAction extends SecureAction
         List roleNameValueBeanList = new ArrayList();
         NameValueBean nameValueBean = new NameValueBean();
         nameValueBean.setName(Constants.SELECT_OPTION);
-        nameValueBean.setValue("-1");
+        nameValueBean.setValue(String.valueOf(Constants.SELECT_OPTION_VALUE));
         roleNameValueBeanList.add(nameValueBean);
         
         while (iterator.hasNext())
@@ -161,7 +161,7 @@ public class UserAction extends SecureAction
             throws Exception
     {
         String pageOf  = request.getParameter(Constants.PAGEOF);
-        if(pageOf.equals("pageOfUserAdmin"))
+        if(pageOf.equals(Constants.PAGEOF_USER_ADMIN))
         {
             return super.isAuthorizedToExecute(request);
         }
@@ -173,7 +173,7 @@ public class UserAction extends SecureAction
     protected SessionDataBean getSessionData(HttpServletRequest request)
     {
         String pageOf  = request.getParameter(Constants.PAGEOF);
-        if(pageOf.equals("pageOfUserAdmin"))
+        if(pageOf.equals(Constants.PAGEOF_USER_ADMIN))
         {
             return super.getSessionData(request);
         }
