@@ -6,6 +6,7 @@
  */
 package edu.wustl.catissuecore.bizlogic;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
@@ -22,5 +23,5 @@ import edu.wustl.common.util.dbManager.DAOException;
 public interface TreeDataInterface
 {
     public abstract Vector getTreeViewData() throws DAOException;
-    public abstract Vector getTreeViewData(SessionDataBean sessionData,Map map) throws DAOException,ClassNotFoundException;
+    public abstract Vector getTreeViewData(SessionDataBean sessionData,Map map,List list) throws DAOException,ClassNotFoundException;
 }

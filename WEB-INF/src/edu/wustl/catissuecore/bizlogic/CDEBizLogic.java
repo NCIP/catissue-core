@@ -107,7 +107,7 @@ public class CDEBizLogic extends DefaultBizLogic implements TreeDataInterface
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.bizlogic.TreeDataInterface#getTreeViewData(edu.wustl.common.beans.SessionDataBean, java.util.Map)
 	 */
-	public Vector getTreeViewData(SessionDataBean sessionData, Map map) throws DAOException {
+	public Vector getTreeViewData(SessionDataBean sessionData, Map map,List list) throws DAOException {
 
 		return null;
 	}

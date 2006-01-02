@@ -898,14 +898,6 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.wustl.catissuecore.bizlogic.TreeDataInterface#getTreeViewData(edu.wustl.common.beans.SessionDataBean, java.util.Map)
-	 */
-	public Vector getTreeViewData(SessionDataBean sessionData, Map map) throws DAOException {
-
-		return null;
-	}
-
 	//	 Will check only for valid range of the StorageContainer
     protected boolean validatePosition(StorageContainer storageContainer, String posOne, String posTwo)
     {
@@ -1047,4 +1039,11 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
         	throw new DAOException(ApplicationProperties.getValue("errors.storageContainerExist"));
         }
    }
+	/* (non-Javadoc)
+	 * @see edu.wustl.catissuecore.bizlogic.TreeDataInterface#getTreeViewData(edu.wustl.common.beans.SessionDataBean, java.util.Map)
+	 */
+	public Vector getTreeViewData(SessionDataBean sessionData, Map map,List list) throws DAOException {
+
+		return null;
+	}
 }
