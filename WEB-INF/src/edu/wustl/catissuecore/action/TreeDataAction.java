@@ -11,7 +11,9 @@
 package edu.wustl.catissuecore.action;
 
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
@@ -54,6 +56,7 @@ public class TreeDataAction extends BaseAction
             String pageOf = request.getParameter(Constants.PAGEOF);
             TreeDataInterface bizLogic = new StorageContainerBizLogic();
             Vector dataList =  new Vector();
+            List disableSpecimenIdsList=new ArrayList();
             if (pageOf.equals(Constants.PAGEOF_TISSUE_SITE))
                 bizLogic = new CDEBizLogic();
             else if (pageOf.equals(Constants.PAGEOF_QUERY_RESULTS))
@@ -63,7 +66,9 @@ public class TreeDataAction extends BaseAction
                 columnIdsMap = (Map)session.getAttribute(Constants.COLUMN_ID_MAP);
             }
             if (pageOf.equals(Constants.PAGEOF_QUERY_RESULTS))
-            	dataList = bizLogic.getTreeViewData(sessionData,columnIdsMap);
+            {
+            	dataList = bizLogic.getTreeViewData(sessionData,columnIdsMap,disableSpecimenIdsList);
+            }
             else
             	dataList= bizLogic.getTreeViewData();
             
@@ -71,6 +76,7 @@ public class TreeDataAction extends BaseAction
             response.setContentType(contentType);
             out = new ObjectOutputStream(response.getOutputStream());
             out.writeObject(dataList);
+            out.writeObject(disableSpecimenIdsList);
         }
         catch (Exception exp)
         {
