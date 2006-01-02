@@ -71,3 +71,6 @@ Insert into CSM_USER (select * from catissuecore.CSM_USER);
 Insert into CSM_USER_GROUP (select * from catissuecore.CSM_USER_GROUP);
 Insert into CSM_USER_GROUP_ROLE_PG (select * from catissuecore.CSM_USER_GROUP_ROLE_PG);
 Insert into CSM_USER_PE (select * from catissuecore.CSM_USER_PE);
+
+#update the alias name
+update csm_protection_element set OBJECT_ID='edu.wustl.catissuecore.action.SimpleQueryInterfaceAction_CollectionProtReg' where PROTECTION_ELEMENT_ID = 264;
