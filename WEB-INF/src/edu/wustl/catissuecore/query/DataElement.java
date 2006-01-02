@@ -93,15 +93,18 @@ public class DataElement
     {
        String fieldName = table.toSQLString() + tableSufix + "." + field+" ";
        if ((fieldType != null) && (Constants.FIELD_TYPE_TIMESTAMP_TIME.equalsIgnoreCase(fieldType)))
-		{
-            fieldName = Variables.TIME_FORMAT_FUNCTION + "(" + fieldName + ",'" + Variables.TIME_PATTERN + "') ";
-		}
-		else if ((fieldType != null) && (Constants.FIELD_TYPE_TIMESTAMP_DATE.equalsIgnoreCase(fieldType)))
-		{
-		    fieldName = Variables.DATE_FORMAT_FUNCTION + "(" + fieldName + ",'" + Variables.DATE_PATTERN + "') ";
-		}
+       {
+       		fieldName = Variables.TIME_FORMAT_FUNCTION + "(" + fieldName + ",'" + Variables.TIME_PATTERN + "') ";
+       }
+       else if ((fieldType != null) && (Constants.FIELD_TYPE_TIMESTAMP_DATE.equalsIgnoreCase(fieldType)))
+       {
+           fieldName = Variables.STR_TO_DATE_FUNCTION + "(" 
+           				+ Variables.DATE_FORMAT_FUNCTION + "(" 
+           				+ fieldName + ",'" + Variables.DATE_PATTERN + "')"
+           				+ ",'" + Variables.DATE_PATTERN + "')";
+       }
        
-        return fieldName;
+       return fieldName;
     }
     
     public String getColumnNameString(int tableSufix)
