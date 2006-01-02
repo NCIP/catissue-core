@@ -45,7 +45,7 @@
 			break;
 		}
 	}*/
-
+int IDCount = 0;
 if(dataList != null && dataList.size() != 0)
 {
 %>
@@ -68,7 +68,7 @@ if(dataList != null && dataList.size() != 0)
 		["<INPUT TYPE='CHECKBOX' NAME='<%=chkName%>' id='<%=xx%>' onClick='changeData(this)'>",<%for (j=0;j < (row.size()-1);j++){%>"<%=Utility.toGridFormat(row.get(j))%>",<%}%>"<%=Utility.toGridFormat(row.get(j))%>","1"]
 		];
 		
-		var columns = ["",<%int k;%><%for (k=0;k < (columnList.size()-1);k++){%>"<%=columnList.get(k)%>",<%}%>"<%=columnList.get(k)%>"];
+		var columns = ["",<%int k;%><%for (k=0;k < (columnList.size()-1);k++){if (columnList.get(k).toString().trim().equals("ID")){IDCount++;}%>"<%=columnList.get(k)%>",<%}if (columnList.get(k).toString().trim().equals("ID")){IDCount++;}%>"<%=columnList.get(k)%>"];
 	</script>
 
 <% } %>
@@ -258,7 +258,7 @@ if(dataList != null && dataList.size() != 0)
 						
 						//	set number of rows/columns.
 						obj.setRowProperty("count", <%=dataList.size()%>);
-						obj.setColumnProperty("count", <%=columnList.size() + 1%>);
+						obj.setColumnProperty("count", <%=(columnList.size()-IDCount) + 1%>);
 						
 						//	provide cells and headers text
 						obj.setDataProperty("text", function(i, j){return myData[i][j]});
