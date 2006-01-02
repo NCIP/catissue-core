@@ -13,6 +13,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
 import java.util.Random;
 
 import javax.swing.JTree;
@@ -54,6 +55,11 @@ public class NodeSelectionListener implements TreeSelectionListener, ActionListe
      */
     private String nodeName = null;
     
+    //List of Ids to be disabled
+    private List disableSpecimenIds = null;
+    
+    private boolean isDisabled=false;
+    
     /**
      * Initializes an empty NodeSelectionListener.
      */
@@ -89,12 +95,15 @@ public class NodeSelectionListener implements TreeSelectionListener, ActionListe
        
     	Object object = e.getSource();
         JTree t = null;
+        
         if (object instanceof JTree)
         {
             t = (JTree) object;
             DefaultMutableTreeNode node = (DefaultMutableTreeNode)
             							   t.getLastSelectedPathComponent();
             TreeNodeData treeNodeData = (TreeNodeData) node.getUserObject();
+            this.isDisabled=isdisabledSpecimenId(this.disableSpecimenIds,treeNodeData);
+            
             this.nodeName = treeNodeData.toString();
             /* if node selected is collection protocol, send the parentId and objectName as Collection Protocol & Participant have 
              * many to many relation
@@ -110,11 +119,10 @@ public class NodeSelectionListener implements TreeSelectionListener, ActionListe
             try
             {
                 String urlSuffix = null;
-                
                 //If the node selected is Root and view is individual view, don't show anything.
-                if (!(nodeName.equals(Constants.ROOT) && viewType.equals(Constants.OBJECT_VIEW)))
+                if (!this.isDisabled && !(nodeName.equals(Constants.ROOT) && viewType.equals(Constants.OBJECT_VIEW) ))
                 {
-                    this.nodeSelectionStatus = true;
+                	this.nodeSelectionStatus = true;
                     showDataView();
                 }
             }
@@ -168,9 +176,9 @@ public class NodeSelectionListener implements TreeSelectionListener, ActionListe
             this.viewType = new String(Constants.OBJECT_VIEW);
         }
         
-        if (isNodeSelected() && !(nodeName.equals(Constants.ROOT)))
+        if (isNodeSelected() && !(nodeName.equals(Constants.ROOT)) && !this.isDisabled)
         {
-            try
+        	try
             {
                 showDataView();
             }
@@ -180,4 +188,25 @@ public class NodeSelectionListener implements TreeSelectionListener, ActionListe
             }
         }
     }
+	/**
+	 * @return Returns the disableSpecimenIds.
+	 */
+	public List getDisableSpecimenIds() {
+		return disableSpecimenIds;
+	}
+	/**
+	 * @param disableSpecimenIds The disableSpecimenIds to set.
+	 */
+	public void setDisableSpecimenIds(List disableSpecimenIds) {
+		this.disableSpecimenIds = disableSpecimenIds;
+	}
+	
+	private boolean isdisabledSpecimenId(List disableSpecimenIds,TreeNodeData treeNodeData)
+	{
+		if(disableSpecimenIds.contains(treeNodeData.getIdentifier()))
+				return true;
+		else 
+			return false;
+				
+	}
 }
