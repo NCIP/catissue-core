@@ -59,6 +59,20 @@ public class Utility
 	}
 	
 	/**
+     * Parses the string format of date in the given format and returns the Data object.
+     * @param date the string containing date.
+     * @param pattern the pattern in which the date is present.
+     * @return the string format of date in the given format and returns the Data object.
+     * @throws ParseException
+     */
+	public static Date parseDate(String date) throws ParseException
+	{
+	    String pattern = datePattern(date);
+	    
+	    return parseDate(date, pattern);
+	}
+	
+	/**
 	 * Parses the Date in given format and returns the string representation.
 	 * @param date the Date to be parsed.
 	 * @param pattern the pattern of the date.
