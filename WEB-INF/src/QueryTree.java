@@ -17,6 +17,7 @@ import java.io.ObjectInputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.List;
 import java.util.Vector;
 
 import javax.swing.ButtonGroup;
@@ -112,7 +113,7 @@ public class QueryTree extends JApplet
             in = new ObjectInputStream(connection.getInputStream());
             
             Vector treeDataVector = (Vector) in.readObject();
-            
+            List disableSpecimenIdsList=(List)in.readObject();
             GenerateTree generateTree = new GenerateTree();
             JTree tree = generateTree.createTree(treeDataVector, treeType,selectedNode);
             
@@ -147,12 +148,14 @@ public class QueryTree extends JApplet
                 
                 //Put the radioButton panel on the Applet.
                 contentPane.add(radioButtonPanel,BorderLayout.PAGE_START);
-
+                
+                
             	// Add listeners for the tree.
                 NodeSelectionListener nodeSelectionListener = new NodeSelectionListener(
                         this.getCodeBase(), this.getAppletContext());
 	            tree.addTreeSelectionListener(nodeSelectionListener);
-
+	            nodeSelectionListener.setDisableSpecimenIds(disableSpecimenIdsList);
+	            
                 //Add listeners for the radio buttons.
 	            spreadsheetViewRadioButton.addActionListener(nodeSelectionListener);
                 individualViewRadioButton.addActionListener(nodeSelectionListener);
