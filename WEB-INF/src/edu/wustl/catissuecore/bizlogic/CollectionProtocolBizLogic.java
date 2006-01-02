@@ -77,7 +77,7 @@ public class CollectionProtocolBizLogic extends DefaultBizLogic implements Roles
 		
 		HashSet protectionObjects= new HashSet();
 		protectionObjects.add(collectionProtocol);
-		protectionObjects.add(collectionProtocol.getPrincipalInvestigator());
+		
 		try
         {
             SecurityManager.getInstance(this.getClass()).insertAuthorizationData(getAuthorizationData(collectionProtocol),protectionObjects,getDynamicGroups(collectionProtocol));
