@@ -444,18 +444,18 @@ public class SiteForm extends AbstractActionForm
              	 }	
              }
              
-             if(!validator.isEmpty(phoneNumber)&& !validator.isValidPhoneNumber(phoneNumber))
-         	 {
-         		errors.add(ActionErrors.GLOBAL_ERROR,
-                         new ActionError("errors.phoneNumber.format",
-                                 ApplicationProperties.getValue("site.phoneNumber")));
-         	 }
-             if(!validator.isEmpty(faxNumber)&& !validator.isValidPhoneNumber(faxNumber))
-             {
-             	errors.add(ActionErrors.GLOBAL_ERROR,
-                         new ActionError("errors.phoneNumber.format",
-                                 ApplicationProperties.getValue("site.faxNumber")));
-             }
+//             if(!validator.isEmpty(phoneNumber)&& !validator.isValidPhoneNumber(phoneNumber))
+//         	 {
+//         		errors.add(ActionErrors.GLOBAL_ERROR,
+//                         new ActionError("errors.phoneNumber.format",
+//                                 ApplicationProperties.getValue("site.phoneNumber")));
+//         	 }
+//             if(!validator.isEmpty(faxNumber)&& !validator.isValidPhoneNumber(faxNumber))
+//             {
+//             	errors.add(ActionErrors.GLOBAL_ERROR,
+//                         new ActionError("errors.phoneNumber.format",
+//                                 ApplicationProperties.getValue("site.faxNumber")));
+//             }
              if(operation.equals(Constants.EDIT) && !validator.isValidOption(activityStatus))
              {
              	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("site.activityStatus")));
