@@ -217,13 +217,13 @@ public class SimpleQueryInterfaceForm extends ActionForm
                     key = "SimpleConditionsNode:"+i+"_Condition_value";
                     enteredValue = (String)getValue(key);
                     String nextOperator = "SimpleConditionsNode:"+i+"_Operator_operator";
-                    if ((validator.isEmpty(enteredValue)))
-                    {
-                        errors.add(ActionErrors.GLOBAL_ERROR, 
-                                new ActionError("simpleQuery.value.required"));
-                        conditionError = true;
-                    }
-                    else
+//                    if ((validator.isEmpty(enteredValue)))
+//                    {
+//                        errors.add(ActionErrors.GLOBAL_ERROR, 
+//                                new ActionError("simpleQuery.value.required"));
+//                        conditionError = true;
+//                    }
+//                    else
                     {
         	            //---------- DataType validation
         	            String dataElement = "SimpleConditionsNode:"+i+"_Condition_DataElement_field";
