@@ -62,7 +62,7 @@ public class AdvanceQueryBizlogic extends DefaultBizLogic implements TreeDataInt
 	}
 	/* Get the data for tree view from temporary table and create tree nodes.
 	 */
-	public Vector getTreeViewData(SessionDataBean sessionData,Map columnIdsMap) throws DAOException,ClassNotFoundException
+	public Vector getTreeViewData(SessionDataBean sessionData,Map columnIdsMap,List disableSpecimenIdsList) throws DAOException,ClassNotFoundException
 	{
 		String tempTableName = Constants.QUERY_RESULTS_TABLE+"_"+sessionData.getUserId();
 		JDBCDAO jdbcDao = new JDBCDAO();
@@ -141,7 +141,7 @@ public class AdvanceQueryBizlogic extends DefaultBizLogic implements TreeDataInt
 			Logger.out.debug("Tree Data:"+rowList.get(participantColumnId)+" "+rowList.get(collectionProtocolColumnId)+" "+
 					rowList.get(specimenCollGrpColumnId)+" "+rowList.get(parentSpecimenColumnId)+" "+ rowList.get(specimenColumnId));
         }
-        //disableSpecimenIds.addAll(disabledSpecimenIds);
+        disableSpecimenIdsList.addAll(disabledSpecimenIds);
         Logger.out.debug("vector of tree nodes"+treeDataVector);
         return treeDataVector;
 	}   
