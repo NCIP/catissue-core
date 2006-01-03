@@ -63,8 +63,24 @@ public class Condition {
 	 */
 	public String toSQLString(int tableSufix)
 	{
-	    String newValue = new String(value);
 	    String newOperator = new String(operator.getOperator());
+	    String newValue;
+		if(newOperator.equals(Operator.IS_NULL   ) )
+		{
+			newOperator = Operator.IS  ;
+		    newValue = new String(Constants.NULL );
+		}
+		else if(newOperator.equals(Operator.IS_NOT_NULL ) )
+		{
+			newOperator = Operator.IS_NOT;
+			newValue = new String(Constants.NULL );
+		}
+		else
+		{
+		    newValue = new String(value);			
+		}
+
+	    
 	    
 	    if(newOperator.equals(Operator.STARTS_WITH))
         {
@@ -98,56 +114,61 @@ public class Condition {
             newOperator = Operator.NOT_IN;
         }
         
-        if (dataElement.getFieldType().equalsIgnoreCase(Constants.FIELD_TYPE_TINY_INT))
+	    //MD : Execute for operator other (is null or is not null)
+	    if(!(newOperator.equalsIgnoreCase(Operator.IS) || newOperator.equalsIgnoreCase(Operator.IS_NOT)) )
         {
-            if (newValue.equalsIgnoreCase(Constants.CONDITION_VALUE_YES))
-            {
-                newValue = Constants.TINY_INT_VALUE_ONE;
-            }
-            else
-            {
-                newValue = Constants.TINY_INT_VALUE_ZERO;
-            }
+	        if (dataElement.getFieldType().equalsIgnoreCase(Constants.FIELD_TYPE_TINY_INT))
+	        {
+	            if (newValue.equalsIgnoreCase(Constants.CONDITION_VALUE_YES))
+	            {
+	                newValue = Constants.TINY_INT_VALUE_ONE;
+	            }
+	            else
+	            {
+	                newValue = Constants.TINY_INT_VALUE_ZERO;
+	            }
+	        }
+        
+	        if (dataElement.getFieldType().equalsIgnoreCase(Constants.FIELD_TYPE_VARCHAR) 
+		        	|| dataElement.getFieldType().equalsIgnoreCase(Constants.FIELD_TYPE_TEXT)
+		        	|| dataElement.getFieldType().equalsIgnoreCase(Constants.FIELD_TYPE_TIMESTAMP_TIME))
+			{
+	        	if(dataElement.getField().equals("TISSUE_SITE") && 
+	        			(newOperator.equals(Operator.IN) || newOperator.equals(Operator.NOT_IN)))
+	        	{
+	        		newValue = CDEManager.getCDEManager().getSubValueStr(Constants.CDE_NAME_TISSUE_SITE,newValue);
+	        	}
+	        	else
+	        	{
+	        		newValue = "'" + newValue + "'";
+	        	}
+	        		
+			}
+			else if (dataElement.getFieldType().equalsIgnoreCase(Constants.FIELD_TYPE_DATE)
+			        || dataElement.getFieldType().equalsIgnoreCase(Constants.FIELD_TYPE_TIMESTAMP_DATE))
+			{
+			    try
+			    {
+			        Date date = new Date();
+			        date = Utility.parseDate(newValue);
+			        
+			        Calendar calendar = Calendar.getInstance();
+				    calendar.setTime(date);
+				    String value = (calendar.get(Calendar.MONTH)+1) + "-" 
+				    			   + calendar.get(Calendar.DAY_OF_MONTH) + "-" 
+				    			   + calendar.get(Calendar.YEAR);
+				    
+				    newValue = Variables.STR_TO_DATE_FUNCTION 
+				    			+ "('" + value + "','" + Variables.DATE_PATTERN + "')";
+			    }
+			    catch (ParseException parseExp)
+			    {
+			        Logger.out.debug("Wrong Date Format");
+			    }
+			}
         }
-        
-        if (dataElement.getFieldType().equalsIgnoreCase(Constants.FIELD_TYPE_VARCHAR) 
-	        	|| dataElement.getFieldType().equalsIgnoreCase(Constants.FIELD_TYPE_TEXT)
-	        	|| dataElement.getFieldType().equalsIgnoreCase(Constants.FIELD_TYPE_TIMESTAMP_TIME))
-		{
-        	if(dataElement.getField().equals("TISSUE_SITE") && 
-        			(newOperator.equals(Operator.IN) || newOperator.equals(Operator.NOT_IN)))
-        	{
-        		newValue = CDEManager.getCDEManager().getSubValueStr(Constants.CDE_NAME_TISSUE_SITE,newValue);
-        	}
-        	else
-        	{
-        		newValue = "'" + newValue + "'";
-        	}
-        		
-		}
-		else if (dataElement.getFieldType().equalsIgnoreCase(Constants.FIELD_TYPE_DATE)
-		        || dataElement.getFieldType().equalsIgnoreCase(Constants.FIELD_TYPE_TIMESTAMP_DATE))
-		{
-		    try
-		    {
-		        Date date = new Date();
-		        date = Utility.parseDate(newValue);
-		        
-		        Calendar calendar = Calendar.getInstance();
-			    calendar.setTime(date);
-			    String value = (calendar.get(Calendar.MONTH)+1) + "-" 
-			    			   + calendar.get(Calendar.DAY_OF_MONTH) + "-" 
-			    			   + calendar.get(Calendar.YEAR);
-			    
-			    newValue = Variables.STR_TO_DATE_FUNCTION 
-			    			+ "('" + value + "','" + Variables.DATE_PATTERN + "')";
-		    }
-		    catch (ParseException parseExp)
-		    {
-		        Logger.out.debug("Wrong Date Format");
-		    }
-		}
-        
+        Logger.out.debug("---------->>>>>>>>>>>>>>>>>>>>... "+dataElement.toSQLString(tableSufix)
+        		+ " "+ newOperator + " " + newValue.toString() + " ");
 	    return new String(dataElement.toSQLString(tableSufix)
 	            		+ " "+ newOperator + " " + newValue.toString() + " ");
 	}

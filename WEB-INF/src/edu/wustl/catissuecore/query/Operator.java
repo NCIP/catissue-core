@@ -158,4 +158,13 @@ public class Operator
     {
         this.operator = operator;
     }
+    
+    // MD : operators for null
+	public static final String IS_NULL = "is Null";
+	public static final String IS_NOT_NULL = "is Not Null";
+	public static final String IS = "IS";
+//	public static final String NOT_NULL = "NOT NULL";
+	public static final String IS_NOT = "IS NOT";
+
+
 }
