@@ -28,6 +28,7 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.QueryBizLogic;
+import edu.wustl.catissuecore.query.Query;
 import edu.wustl.catissuecore.query.ResultData;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
@@ -113,7 +114,7 @@ public class DataViewAction extends BaseAction
             {	
         		Logger.out.debug("node name selected inside if condition:"+name);
         		Logger.out.debug("column list inside if condition::"+columnList);
-                if (!name.equals(Constants.PARTICIPANT) && columnList==null)
+                if (!name.equals(Query.PARTICIPANT) && columnList==null)
                 {
                 	Logger.out.debug("Inside if condition of filtercolumns");
                 	filteredColumnDisplayNames=new ArrayList();
@@ -263,21 +264,21 @@ public class DataViewAction extends BaseAction
     	QueryBizLogic bizLogic = (QueryBizLogic)BizLogicFactory.getBizLogic(Constants.SIMPLE_QUERY_INTERFACE_ID);
     	List columns =new ArrayList();
     	//Filter the data according to the node clicked. Show only the data lower in the heirarchy 
-    	if(aliasName.equals(Constants.COLLECTION_PROTOCOL))
+    	if(aliasName.equals(Query.COLLECTION_PROTOCOL))
 		{
-    		columns.addAll(bizLogic.setColumnNames(Constants.COLLECTION_PROTOCOL));
-    		columns.addAll(bizLogic.setColumnNames(Constants.COLLECTION_PROTOCOL_REGISTRATION));
-    		columns.addAll(bizLogic.setColumnNames(Constants.SPECIMEN_COLLECTION_GROUP));
-    		columns.addAll(bizLogic.setColumnNames(Constants.SPECIMEN));
+    		columns.addAll(bizLogic.setColumnNames(Query.COLLECTION_PROTOCOL));
+    		columns.addAll(bizLogic.setColumnNames(Query.COLLECTION_PROTOCOL_REGISTRATION));
+    		columns.addAll(bizLogic.setColumnNames(Query.SPECIMEN_COLLECTION_GROUP));
+    		columns.addAll(bizLogic.setColumnNames(Query.SPECIMEN));
 		}
-		else if(aliasName.equals(Constants.SPECIMEN_COLLECTION_GROUP))
+		else if(aliasName.equals(Query.SPECIMEN_COLLECTION_GROUP))
 		{
-    		columns.addAll(bizLogic.setColumnNames(Constants.SPECIMEN_COLLECTION_GROUP));
-    		columns.addAll(bizLogic.setColumnNames(Constants.SPECIMEN));
+    		columns.addAll(bizLogic.setColumnNames(Query.SPECIMEN_COLLECTION_GROUP));
+    		columns.addAll(bizLogic.setColumnNames(Query.SPECIMEN));
 		}
-		else if(aliasName.equals(Constants.SPECIMEN))
+		else if(aliasName.equals(Query.SPECIMEN))
 		{
-    		columns.addAll(bizLogic.setColumnNames(Constants.SPECIMEN));
+    		columns.addAll(bizLogic.setColumnNames(Query.SPECIMEN));
 		}
 		String selectColumnList[] = new String[columns.size()];
     	
