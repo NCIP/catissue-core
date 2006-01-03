@@ -119,7 +119,7 @@ public class AdvancedConditionsImpl extends ConditionsImpl {
                 
 	            whereConditionsString.append(currentNodeData.toSQLString(tableSufix));
 	            if(currentNodeData.getObjectConditions().size()>0 && childCount>0 && childHasConditions())
-	                whereConditionsString.append(" "+Operator.AND+" ");
+	                whereConditionsString.append(" "+Operator.AND+" (");
             }
 	        if(childCount > 0 && hasConditions())
 	        {
@@ -214,6 +214,8 @@ public class AdvancedConditionsImpl extends ConditionsImpl {
 	        }
 	        if(currentNodeData!=null && currentNodeData.getObjectConditions().size()>0)
 	        {
+	        	if(currentNodeData.getObjectConditions().size()>0 && childCount>0 && childHasConditions())
+	                whereConditionsString.append(" )");
 	        	whereConditionsString.append(")");
 	        }
        
