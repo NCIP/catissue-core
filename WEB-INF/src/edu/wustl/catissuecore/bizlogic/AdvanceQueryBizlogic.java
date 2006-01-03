@@ -169,8 +169,16 @@ public class AdvanceQueryBizlogic extends DefaultBizLogic implements TreeDataInt
 	//Recursive function to Traverse root and set tables in path
 	public void setTables(DefaultMutableTreeNode tree,Set tableSet)throws DAOException, ClassNotFoundException
 	{
+		//Set eventParametersTables=new HashSet();
+		/*Set all the tables selected in the condition.
+		 * Set all the tables in path between parent-child in the Advance query root object.
+		 * Sets all the tables in path between AdvanceCOnditionNode Object name and its related tables.    
+		 */
 		DefaultMutableTreeNode parent = new DefaultMutableTreeNode();
 		DefaultMutableTreeNode child = new DefaultMutableTreeNode();
+		QueryBizLogic bizLogic = (QueryBizLogic)BizLogicFactory
+										.getBizLogic(Constants.SIMPLE_QUERY_INTERFACE_ID);
+
 		int childCount = tree.getChildCount();
 		//Logger.out.debug("childCount"+childCount);
 		for(int i=0;i<childCount;i++)
@@ -178,23 +186,58 @@ public class AdvanceQueryBizlogic extends DefaultBizLogic implements TreeDataInt
 			parent = (DefaultMutableTreeNode)tree.getChildAt(i);
 			AdvancedConditionsNode parentAdvNode = (AdvancedConditionsNode)parent.getUserObject();
 			String parentTable = parentAdvNode.getObjectName();
+			String parentTableId = bizLogic.getTableIdFromAliasName(parentTable);
+			Logger.out.debug("parentTableId"+parentTableId);
+
+			AdvancedConditionsNode advNode = (AdvancedConditionsNode)parent.getUserObject();
+			Vector conditions = advNode.getObjectConditions();
+			String tableId=new String();
+			/*incase of Specimen conditions the specimen event paramters object names will have the all the tables in path in the object name
+			 * Check if there are more than 1 table, tokenize it and set proper table in DataElement
+			 * for eg: if CellSpecimenReviewParameters condition is selected for Specimen Id column then the 
+			 * object name will be CellSpecimenReviewParameters.SpecimenEventParamters
+			 */
+			
 			if(parentTable.equals(Constants.SPECIMEN))
 			{
-				AdvancedConditionsNode specimenAdvNode = (AdvancedConditionsNode)parent.getUserObject();
-				Vector conditions = specimenAdvNode.getObjectConditions();
 				Iterator conditionsItr = conditions.iterator();
 				while(conditionsItr.hasNext())
 				{
 					Condition condition = (Condition)conditionsItr.next();
 					String table = condition.getDataElement().getTableAliasName();
+					Logger.out.debug("table in specimen condition..."+table);
 					StringTokenizer tableTokens = new StringTokenizer(table,".");
 					if(tableTokens.countTokens()==2)
 					{
-						String objectName = tableTokens.nextToken();
 						String tableName = tableTokens.nextToken();
-						//tableSet.add(objectName);
-						condition.getDataElement().setTableName(tableName);
+						table = tableTokens.nextToken();
+//						Logger.out.debug("table in specimen condition token1..."+objectName);
+						Logger.out.debug("table in specimen condition  token2..."+tableName);
+//						eventParametersTables.add(tableName);
+						condition.getDataElement().setTableName(table);
+//						tableId = bizLogic.getTableIdFromAliasName(tableName);
+//						Set tablesInPath = bizLogic.setTablesInPath(Long.valueOf(parentTableId),Long.valueOf(tableId));
+//						Logger.out.debug("tablesinpath for specimen event tables:"+tablesInPath);
+//						tableSet.addAll(tablesInPath);
+
 					}
+					tableId = bizLogic.getTableIdFromAliasName(table);
+					Set tablesInPath = bizLogic.setTablesInPath(Long.valueOf(parentTableId),Long.valueOf(tableId));
+					Logger.out.debug("tablesinpath for specimen event tables:"+tablesInPath);
+					tableSet.addAll(tablesInPath);
+					//eventParametersTables.addAll(tablesInPath);
+				}
+			}
+			else
+			{
+				Iterator conditionsItr = conditions.iterator();
+				while(conditionsItr.hasNext())
+				{
+					Condition condition = (Condition)conditionsItr.next();
+					String table = condition.getDataElement().getTableAliasName();
+					tableId = bizLogic.getTableIdFromAliasName(table);
+					Set tablesInPath = bizLogic.setTablesInPath(Long.valueOf(parentTableId),Long.valueOf(tableId));
+					tableSet.addAll(tablesInPath);
 				}
 			}
 			tableSet.add(parentTable);
@@ -205,9 +248,6 @@ public class AdvanceQueryBizlogic extends DefaultBizLogic implements TreeDataInt
 				AdvancedConditionsNode childAdvNode = (AdvancedConditionsNode)child.getUserObject();
 				String childTable = childAdvNode.getObjectName();
 				tableSet.add(childTable);
-				QueryBizLogic bizLogic = (QueryBizLogic)BizLogicFactory
-												.getBizLogic(Constants.SIMPLE_QUERY_INTERFACE_ID);
-				String parentTableId = bizLogic.getTableIdFromAliasName(parentTable);
 				String childTableId = bizLogic.getTableIdFromAliasName(childTable);
 				Set tablesInPath = bizLogic.setTablesInPath(Long.valueOf(parentTableId),Long.valueOf(childTableId));
 				Logger.out.debug("tablesInPath after method call:"+tablesInPath);
@@ -215,7 +255,9 @@ public class AdvanceQueryBizlogic extends DefaultBizLogic implements TreeDataInt
 			}
 			setTables(parent,tableSet);
 		}
-	}
+//		Logger.out.debug("event tables before returning:"+eventParametersTables);
+//		return eventParametersTables;
+}
 	//Get the specimen Ids heirarchy above a given specimen ids.
 	private List getSpecimenHeirarchy(String specimenId) throws DAOException,ClassNotFoundException
 	{
