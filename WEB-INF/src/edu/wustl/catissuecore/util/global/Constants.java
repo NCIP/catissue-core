@@ -1191,6 +1191,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String STRING_OPERATORS = "StringOperators";
 	public static final String DATE_NUMERIC_OPERATORS = "DateNumericOperators";
 	public static final String ENUMERATED_OPERATORS = "EnumeratedOperators";
+	public static final String MULTI_ENUMERATED_OPERATORS = "MultiEnumeratedOperators";
 	
 	public static final String [] STORAGE_STATUS_ARRAY = {
 	        SELECT_OPTION,

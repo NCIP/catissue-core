@@ -1,13 +1,13 @@
 package edu.wustl.catissuecore.query;
 
+import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
-
-import java.text.ParseException;
 
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.catissuecore.util.global.Variables;
+import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.util.logger.Logger;
 
 
@@ -89,6 +89,14 @@ public class Condition {
         {
             newOperator = Operator.NOT_EQUALS;
         }
+        else if(newOperator.equals(Operator.IN_CONDITION))
+        {
+            newOperator = Operator.IN;
+        }
+        else if(newOperator.equals(Operator.NOT_IN_CONDITION))
+        {
+            newOperator = Operator.NOT_IN;
+        }
         
         if (dataElement.getFieldType().equalsIgnoreCase(Constants.FIELD_TYPE_TINY_INT))
         {
@@ -106,7 +114,16 @@ public class Condition {
 	        	|| dataElement.getFieldType().equalsIgnoreCase(Constants.FIELD_TYPE_TEXT)
 	        	|| dataElement.getFieldType().equalsIgnoreCase(Constants.FIELD_TYPE_TIMESTAMP_TIME))
 		{
-		    newValue = "'" + newValue + "'";
+        	if(dataElement.getField().equals("TISSUE_SITE") && 
+        			(newOperator.equals(Operator.IN) || newOperator.equals(Operator.NOT_IN)))
+        	{
+        		newValue = CDEManager.getCDEManager().getSubValueStr(Constants.CDE_NAME_TISSUE_SITE,newValue);
+        	}
+        	else
+        	{
+        		newValue = "'" + newValue + "'";
+        	}
+        		
 		}
 		else if (dataElement.getFieldType().equalsIgnoreCase(Constants.FIELD_TYPE_DATE)
 		        || dataElement.getFieldType().equalsIgnoreCase(Constants.FIELD_TYPE_TIMESTAMP_DATE))
