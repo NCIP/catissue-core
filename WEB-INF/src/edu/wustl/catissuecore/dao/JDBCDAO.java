@@ -435,7 +435,15 @@ private boolean isColumnValueDate(Object value)
         	}
         	else
         	{
-        		query.append("\""+columnValues.get(i)+"\",");
+        		if(isColumnValueDate(columnValues.get(i)))
+    			{
+    				query.append(Variables.STR_TO_DATE_FUNCTION+"(\""+columnValues.get(i)+"\",\""+Variables.DATE_PATTERN+"\"),");
+    			}
+    			else
+    			{
+    				query.append("\""+columnValues.get(i)+"\",");
+    			}
+        		
         	}	
 	    }	
 	    
