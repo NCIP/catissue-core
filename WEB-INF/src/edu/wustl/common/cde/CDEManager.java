@@ -56,6 +56,9 @@ public class CDEManager
             
             // unmarshal a root instance document into a tree of Java content
             // objects composed of classes from the pspl.cde package.
+//            Variables.catissueHome = System.getProperty("user.dir");
+//            File file = new File(Variables.catissueHome+System.getProperty("file.separator")+Constants.CDE_CONF_FILE);
+//            System.out.println(file.getAbsoluteFile());
             XMLCDECACHE root = 
                 (XMLCDECACHE)u.unmarshal( new FileInputStream( Variables.catissueHome+System.getProperty("file.separator")+Constants.CDE_CONF_FILE));
                 
@@ -109,10 +112,12 @@ public class CDEManager
 	public static void main(String[] args)
 	{
 		Variables.catissueHome = System.getProperty("user.dir");
+		System.out.println(Variables.catissueHome);
 		Logger.configure("Application.properties");
-		
-		List list = CDEManager.getCDEManager().getList("Tissue Site", null);
-		System.out.println("list "+list.size());
+//		Logger.out = org.apache.log4j.Logger.getLogger("");
+//		PropertyConfigurator.configure(Variables.catissueHome+"\\WEB-INF\\src\\"+"ApplicationResources.properties");
+
+		CDEManager.getCDEManager().getSubValueStr("Tissue Site", "STOMACH");
 //		CDEManager aCDEManager = new CDEManager();
 //		aCDEManager.refreshCache();
 	}
@@ -153,6 +158,105 @@ public class CDEManager
 			PermissibleValue subPermissibleValue = (PermissibleValue)iterator.next();
 			List subPVList = loadPermissibleValue(subPermissibleValue);
 			pvList.addAll(subPVList);
+		}
+		return pvList;
+	}
+	
+	
+	
+	
+	
+	public String getSubValueStr(String cdeName, String value)
+	{
+		List list = new ArrayList();
+		
+		CDE cde = getCDE(cdeName);
+		
+		boolean isParentFound = false;
+		Iterator iterator = cde.getPermissibleValues().iterator();
+		while(iterator.hasNext())
+		{
+			PermissibleValue permissibleValue = (PermissibleValue)iterator.next();
+			
+			if(value.equals(permissibleValue.getValue()))
+			{
+				System.out.println("permissibleValue "+permissibleValue.getValue());
+				isParentFound = true;
+				List pvList = loadPermissibleValue(permissibleValue, isParentFound, value);
+				list.addAll(pvList);
+				break;
+			}
+			else
+			{
+				List pvList = loadPermissibleValue(permissibleValue, isParentFound, value);
+				if(!pvList.isEmpty())
+				{
+					isParentFound = true;
+					list.addAll(pvList);
+					break;
+				}
+			}
+		}
+		System.out.println("list "+list.size());
+		System.out.println(list);
+		
+		StringBuffer buff = new StringBuffer("(");
+		Iterator it = list.iterator();
+		while(it.hasNext())
+		{
+			String val = (String)it.next();
+			val = val.replaceAll("'","''");
+			buff.append("'"+val+"'");
+			if(!it.hasNext())
+				buff.append(")");
+			else
+				buff.append(",");
+		}
+		System.out.println(buff);
+		return buff.toString();
+	}
+	
+	private List loadPermissibleValue(PermissibleValue permissibleValue, boolean isParentFound, String value)
+	{
+		List pvList = new ArrayList();
+		
+		if(isParentFound)
+			pvList.add(permissibleValue.getValue());
+		
+		Iterator iterator = permissibleValue.getSubPermissibleValues().iterator();
+		while(iterator.hasNext())
+		{
+			PermissibleValue subPermissibleValue = (PermissibleValue)iterator.next();
+			
+//			List subPVList = loadPermissibleValue(subPermissibleValue, isParentFound);
+//			pvList.addAll(subPVList);
+			
+			if(!isParentFound)
+			{
+				if(value.equals(subPermissibleValue.getValue()))
+				{
+					System.out.println(value);
+					isParentFound = true;
+					List subPVList = loadPermissibleValue(subPermissibleValue, isParentFound, value);
+					pvList.addAll(subPVList);
+					break;
+				}
+				else
+				{
+					List subPVList = loadPermissibleValue(subPermissibleValue, isParentFound, value);
+					if(!subPVList.isEmpty())
+					{
+						pvList.addAll(subPVList);
+						isParentFound = true;
+						break;
+					}
+				}
+			}
+			else
+			{
+				List subPVList = loadPermissibleValue(subPermissibleValue, isParentFound, value);
+				pvList.addAll(subPVList);
+			}
 		}
 		return pvList;
 	}
