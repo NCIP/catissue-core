@@ -22,6 +22,7 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.query.Operator;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.global.Validator;
 
@@ -212,60 +213,67 @@ public class SimpleQueryInterfaceForm extends ActionForm
                     attributeError = true;
                 }
                 
-                if (conditionError == false)
-                {
-                    key = "SimpleConditionsNode:"+i+"_Condition_value";
-                    enteredValue = (String)getValue(key);
-                    String nextOperator = "SimpleConditionsNode:"+i+"_Operator_operator";
-//                    if ((validator.isEmpty(enteredValue)))
-//                    {
-//                        errors.add(ActionErrors.GLOBAL_ERROR, 
-//                                new ActionError("simpleQuery.value.required"));
-//                        conditionError = true;
-//                    }
-//                    else
-                    {
-        	            //---------- DataType validation
-        	            String dataElement = "SimpleConditionsNode:"+i+"_Condition_DataElement_field";
-        	            String selectedField = (String)getValue(dataElement);
-        	            int lastInd = selectedField.lastIndexOf(".");
-        	            String dataType = selectedField.substring(lastInd+1);
-
-        	            if((dataType.trim().equals("bigint" ) || dataType.trim().equals("integer" )) && !validator.isNumeric(enteredValue,0))
-        	            {
-        	            	 errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("simpleQuery.intvalue.required"));
-        	            	 conditionError = true;
-        	            }// integer or long
-        	            else if((dataType.trim().equals("double" )) && !validator.isDouble(enteredValue,false))
-        	            {
-        	            	 errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("simpleQuery.decvalue.required"));
-        	            	 conditionError = true;
-        	            } // double
-        	            else if(dataType.trim().equals("tinyint"))
-        	            {
-        	            	if(!enteredValue.trim().equalsIgnoreCase(Constants.BOOLEAN_YES) && !enteredValue.trim().equalsIgnoreCase(Constants.BOOLEAN_NO))
-        	            	{
-        	            		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("simpleQuery.tinyint.format"));
-       	            	 		conditionError = true;
-        	            	}
-        	            }
-        	            else if (dataType.trim().equals(Constants.FIELD_TYPE_TIMESTAMP_TIME))
-        	            {
-        	                if (validator.isValidTime(enteredValue, Constants.TIME_PATTERN_HH_MM_SS) == false)
-        	                {
-        	                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("simpleQuery.time.format"));
-       	            	 		conditionError = true;
-        	                }
-        	            }
-        	            else if (dataType.trim().equals(Constants.FIELD_TYPE_DATE) || dataType.trim().equals(Constants.FIELD_TYPE_TIMESTAMP_DATE))
-        	            {
-        	                if (validator.checkDate(enteredValue) == false)
-        	                {
-        	                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("simpleQuery.date.format"));
-       	            	 		conditionError = true;
-        	                }
-        	            }
-        	        }
+                String operatorKey = "SimpleConditionsNode:"+i+"_Condition_Operator_operator";
+                String operatorValue = (String)getValue(operatorKey  );
+                if(!validator.isEmpty(operatorValue) && !(operatorValue.equals(Operator.IS_NULL ) || operatorValue.equals(Operator.IS_NOT_NULL)) )
+                {	
+		                if (conditionError == false)
+		                {
+		                    key = "SimpleConditionsNode:"+i+"_Condition_value";
+		                    enteredValue = (String)getValue(key);
+		                    String nextOperator = "SimpleConditionsNode:"+i+"_Operator_operator";
+		//                    if ((validator.isEmpty(enteredValue)))
+		//                    {
+		//                        errors.add(ActionErrors.GLOBAL_ERROR, 
+		//                                new ActionError("simpleQuery.value.required"));
+		//                        conditionError = true;
+		//                    }
+		//                    else
+		//                      {
+	        	            //---------- DataType validation
+//		                    if (!(validator.isEmpty(enteredValue)))
+//		                    {
+		        	            String dataElement = "SimpleConditionsNode:"+i+"_Condition_DataElement_field";
+		        	            String selectedField = (String)getValue(dataElement);
+		        	            int lastInd = selectedField.lastIndexOf(".");
+		        	            String dataType = selectedField.substring(lastInd+1);
+		
+		        	            if((dataType.trim().equals("bigint" ) || dataType.trim().equals("integer" )) && !validator.isNumeric(enteredValue,0))
+		        	            {
+		        	            	 errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("simpleQuery.intvalue.required"));
+		        	            	 conditionError = true;
+		        	            }// integer or long
+		        	            else if((dataType.trim().equals("double" )) && !validator.isDouble(enteredValue,false))
+		        	            {
+		        	            	 errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("simpleQuery.decvalue.required"));
+		        	            	 conditionError = true;
+		        	            } // double
+		        	            else if(dataType.trim().equals("tinyint"))
+		        	            {
+		        	            	if(!enteredValue.trim().equalsIgnoreCase(Constants.BOOLEAN_YES) && !enteredValue.trim().equalsIgnoreCase(Constants.BOOLEAN_NO))
+		        	            	{
+		        	            		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("simpleQuery.tinyint.format"));
+		       	            	 		conditionError = true;
+		        	            	}
+		        	            }
+		        	            else if (dataType.trim().equals(Constants.FIELD_TYPE_TIMESTAMP_TIME))
+		        	            {
+		        	                if (validator.isValidTime(enteredValue, Constants.TIME_PATTERN_HH_MM_SS) == false)
+		        	                {
+		        	                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("simpleQuery.time.format"));
+		       	            	 		conditionError = true;
+		        	                }
+		        	            }
+		        	            else if (dataType.trim().equals(Constants.FIELD_TYPE_DATE) || dataType.trim().equals(Constants.FIELD_TYPE_TIMESTAMP_DATE))
+		        	            {
+		        	                if (validator.checkDate(enteredValue) == false)
+		        	                {
+		        	                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("simpleQuery.date.format"));
+		       	            	 		conditionError = true;
+		        	                }
+		        	            }
+//		                    }
+	              }
                 }
             }
         }
