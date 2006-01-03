@@ -118,7 +118,7 @@ function showDateColumn(element,valueField,columnID,showCalendarID,fieldValue,ov
 	}	
 }
 
-function onAttributeChange(element,opComboName)
+function onAttributeChange(element,opComboName,txtFieldID)
 {
 	var columnValue = element.options[element.selectedIndex].value;
 	var index = columnValue.lastIndexOf(".");
@@ -126,6 +126,9 @@ function onAttributeChange(element,opComboName)
 	var opCombo = document.getElementById(opComboName);
 	opCombo.options.length=0;
 
+	var txtField = document.getElementById(txtFieldID);
+	txtField.disabled = false;
+	
 	if(element.value == "<%=Constants.SELECT_OPTION%>")
 	{
 		opCombo.options[0] = new Option("<%=Constants.SELECT_OPTION%>","-1");
@@ -156,8 +159,28 @@ function onAttributeChange(element,opComboName)
 			opCombo.options[4] = new Option("<%=Operator.GREATER_THAN%>","<%=Operator.GREATER_THAN%>");
 			opCombo.options[5] = new Option("<%=Operator.GREATER_THAN_OR_EQUALS%>","<%=Operator.GREATER_THAN_OR_EQUALS%>");
 		}
+
+		opCombo.options[opCombo.options.length] = new Option("<%=Operator.IS_NULL%>","<%=Operator.IS_NULL%>");
+		opCombo.options[opCombo.options.length] = new Option("<%=Operator.IS_NOT_NULL%>","<%=Operator.IS_NOT_NULL%>");
 	}
 }
+
+function showDatafield(element,txtFieldID)
+{
+	var dataStr = element.options[element.selectedIndex].value;
+	var dataValue = new String(dataStr);
+	var txtField = document.getElementById(txtFieldID);
+	
+	if(dataValue == "<%=Operator.IS_NULL%>" || dataValue == "<%=Operator.IS_NOT_NULL%>")
+	{
+		txtField.disabled = true;
+	}
+	else
+	{
+		txtField.disabled = false;
+	}
+}
+
 
 </script>
 
@@ -227,8 +250,9 @@ function onAttributeChange(element,opComboName)
 						String functionName = "showDateColumn(this,'"+ attributeValueID +"','" + columnID + "','" + showCalendarValue + "','"+fieldName+"','"+overDiv+"')";
 						String attributeId = "attribute" + i;
 						String operatorId = "operator" + i;
-						String onAttributeChange = "onAttributeChange(this,'" + operatorId + "'); " + functionName;
-						
+						String onAttributeChange = "onAttributeChange(this,'" + operatorId + "','" + attributeValueID + "'); " + functionName;
+						String operatorFunction = "showDatafield(this,'" + attributeValueID +"')";
+						String attributeConditionKey = "SimpleConditionsNode:"+i+"_Condition_Operator_operator";
 				%>					
 				<tr>
 					<td class="formRequiredNotice" width="5">&nbsp;</td>
@@ -260,7 +284,7 @@ function onAttributeChange(element,opComboName)
 						</html:select>
 					</td>
 					<td class="formField">
-						<html:select property="<%=attributeCondition%>" styleClass="formFieldSized10" styleId="<%=operatorId%>" size="1">
+						<html:select property="<%=attributeCondition%>" styleClass="formFieldSized10" styleId="<%=operatorId%>" size="1" onchange="<%=operatorFunction%>">
 						<%
 							String attributeNameKey = "SimpleConditionsNode:"+i+"_Condition_DataElement_field";
 							String attributeNameValue = (String)form.getValue(attributeNameKey);
@@ -275,7 +299,6 @@ function onAttributeChange(element,opComboName)
 									if(tokenCount == 3) break;
 									tokenCount++;
 								}
-	
 								if(attributeType.equals("varchar") || attributeType.equals("text"))
 								{
 							%>
@@ -316,10 +339,28 @@ function onAttributeChange(element,opComboName)
 						<%
 							}
 						%>
+							<html:option value="<%=Operator.IS_NULL%>"><%=Operator.IS_NULL%></html:option>
+							<html:option value="<%=Operator.IS_NOT_NULL%>"><%=Operator.IS_NOT_NULL%></html:option>
 						</html:select>
 					</td>
 					<td class="formField">
+					<%
+						String currentOperatorValue = (String)form.getValue(attributeConditionKey);
+						
+						
+						if((currentOperatorValue != null) && (currentOperatorValue.equals(Operator.IS_NOT_NULL) || currentOperatorValue.equals(Operator.IS_NULL)))
+						{
+					%>
+						<html:text styleClass="formFieldSized10" size="30" styleId="<%=attributeValueID%>" property="<%=attributeValue%>" disabled="true"/>
+					<%
+						}
+						else
+						{
+					%>
 						<html:text styleClass="formFieldSized10" size="30" styleId="<%=attributeValueID%>" property="<%=attributeValue%>" />
+					<%
+						}
+					%>
 						<html:hidden property="<%=showCalendarValue%>" styleId="<%=showCalendarValue%>" />
 					</td>
 				<!--  ********************* MD Code ********************** -->	
