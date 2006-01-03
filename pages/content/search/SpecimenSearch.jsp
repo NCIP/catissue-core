@@ -444,8 +444,8 @@
 	</td>
 	<td class="formField">
 		<html:select property="<%=opTissueSite%>" styleClass="formFieldSized10" styleId="opTissueSite" size="1" onchange="onOperatorChange('opTissueSite','tissueSite')">
-			<html:options collection="<%=Constants.ENUMERATED_OPERATORS%>" labelProperty="name" property="value"/>
-		</html:select>
+			<html:options collection="<%=Constants.MULTI_ENUMERATED_OPERATORS%>" labelProperty="name" property="value"/>
+		</html:select>			
 	</td>
 	
 	<%
@@ -457,6 +457,13 @@
 		<html:select property="<%=tissueSite%>" styleClass="formFieldSized10" styleId="tissueSite" size="1" disabled="<%=disabled%>">
 			<html:options collection="<%=Constants.TISSUE_SITE_LIST%>" labelProperty="name" property="value"/>
 		</html:select>
+		
+		<%
+			String url = "ShowFramedPage.do?pageOf=pageOfTissueSite&propertyName="+tissueSite;
+		%>
+		<a href="#" onclick="javascript:NewWindow('<%=url%>','name','250','330','no');return false">
+			<img src="images\Tree.gif" border="0" width="24" height="18">
+		</a>
 	</td>
 </tr>
 
