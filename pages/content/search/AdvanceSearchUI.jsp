@@ -131,11 +131,11 @@
 		else if((searchFieldData[i].getDataType()).equals(SearchUtil.NUMERIC))
 		{
 		%>
-			<td class="formField">
+			<td class="formField" nowrap>
 				<html:text styleClass="formFieldSized10" styleId="<%=searchFieldData[i].getValueField().getId() + 1%>" property="<%=searchFieldData[i].getValueField().getName() + 1%>" disabled="<%=searchFieldData[i].getValueField().isDisabled()%>"/> 
 								&nbsp;To&nbsp;
 				<html:text styleClass="formFieldSized10" styleId="<%=searchFieldData[i].getValueField().getId() + 2%>" property="<%=searchFieldData[i].getValueField().getName() + 2%>" disabled="<%=searchFieldData[i].getValueField().isDisabled()%>"/> 
-				<bean:message key="<%=searchFieldData[i].getUnitFieldKey()%>"/>
+				<!--bean:message key="<%=searchFieldData[i].getUnitFieldKey()%>"/-->
 			</td>
 		<%
 		}
