@@ -77,6 +77,7 @@ public class SpecimenSearchAction extends AdvanceSearchUIAction
         request.setAttribute(Constants.STRING_OPERATORS,SearchUtil.getOperatorList(SearchUtil.DATATYPE_STRING));
         request.setAttribute(Constants.DATE_NUMERIC_OPERATORS,SearchUtil.getOperatorList(SearchUtil.DATATYPE_NUMERIC));
         request.setAttribute(Constants.ENUMERATED_OPERATORS,SearchUtil.getOperatorList(SearchUtil.DATATYPE_ENUMERATED));
+        request.setAttribute(Constants.MULTI_ENUMERATED_OPERATORS,SearchUtil.getOperatorList(SearchUtil.DATATYPE_MULTI_ENUMERATED));
 
     	//TO DO : To be moved to common utility class
         try
