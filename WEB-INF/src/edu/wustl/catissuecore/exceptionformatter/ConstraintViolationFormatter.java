@@ -9,8 +9,10 @@ import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.text.MessageFormat;
+import java.util.HashMap;
 
 import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.exception.ConstraintViolationException;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.util.dbManager.HibernateMetaData;
@@ -78,7 +80,7 @@ public class ConstraintViolationFormatter implements ExceptionFormatter
             int endIndexofMsg = temp.indexOf(")");
             String strKey =temp.substring((startIndexofMsg+1),endIndexofMsg);
             Logger.out.debug("Contraint Name: "+strKey);
-//            
+           
             String Query = "select COLUMN_NAME,TABLE_NAME from user_cons_columns where constraint_name = '"+strKey+"'";
             Logger.out.debug("ExceptionFormatter Query: "+Query);
             Statement statement = connection.createStatement();
@@ -94,7 +96,9 @@ public class ConstraintViolationFormatter implements ExceptionFormatter
             {
             	columnName=columnName.substring(0,columnName.length()-1);
             	Logger.out.debug("columnName befor formatting: "+columnName);
-            	Object[] arguments = new Object[]{tableName,columnName};
+            	String displayName = ExceptionFormatterFactory.getDisplayName(tableName,connection);
+            	
+            	Object[] arguments = new Object[]{displayName,columnName};
             	formattedErrMsg = MessageFormat.format(Constants.CONSTRAINT_VOILATION_ERROR,arguments);
             }	
             rs.close();
@@ -120,8 +124,7 @@ public class ConstraintViolationFormatter implements ExceptionFormatter
 		String tableName=null; // stores Table_Name for which column name to be found 
 		String columnName=null; //stores Column_Name of table  
 		String formattedErrMsg=null; // Formatted Error Message return by this method
-		//SessionFactory sessionFactory=null;
-		///Session session=null;
+
 		Connection connection=null;
 		if(args[0]!=null)
 		{
@@ -130,7 +133,6 @@ public class ConstraintViolationFormatter implements ExceptionFormatter
 		else
 		{
 			Logger.out.debug("Table Name not specified");
-			System.out.println("Error Message: Table Name not given" );
 			tableName=new String("Unknown Table");
 		}
 		Logger.out.debug("Table Name:" + tableName);
@@ -144,10 +146,27 @@ public class ConstraintViolationFormatter implements ExceptionFormatter
 			else
 			{
 				Logger.out.debug("Table Name not specified");
-				System.out.println("Error Message: Table Name not given" );
 				dispTableName=tableName;
 			}
 		}	
+		try
+	     {
+	            //get Class name from message "could not insert [classname]"
+	            ConstraintViolationException  cEX = (ConstraintViolationException)objExcp;
+	            String message = cEX.getMessage();
+	            Logger.out.debug("message :"+message);
+	            int startIndex = message.indexOf("[");
+	            int endIndex = message.indexOf("]"); 
+	            String className = message.substring((startIndex+1),endIndex);
+	            Logger.out.debug("ClassName: "+className);
+	            Class classObj = Class.forName(className);
+	            // get table name from class 
+	            tableName = HibernateMetaData.getRootTableName(classObj);
+	     }
+		 catch(Exception e)
+		 {
+			 Logger.out.error(e.getMessage(),e);
+		 }
 		try
 		{
 			// Generate Error Message by appending all messages of previous cause Exceptions
@@ -169,14 +188,7 @@ public class ConstraintViolationFormatter implements ExceptionFormatter
 		 	// For the key extracted frm the string, get the column name on which the 
 			// costraint has failed
 			boolean found=false;
-			
-			// Create new Connection with database
-			/*
-			Configuration cfg = new Configuration();
-			sessionFactory = cfg.buildSessionFactory();
-			session = sessionFactory.openSession();
-			*/
-			//connection =session.connection();
+			// get connection from arguments
 			if(args[1]!=null)
 			{
 				connection =(Connection)args[1];
@@ -194,43 +206,59 @@ public class ConstraintViolationFormatter implements ExceptionFormatter
 			ResultSet rs = dbmd.getIndexInfo(connection.getCatalog(), null,
 					tableName, true, false);
 			
-        	int indexCount=1;
-        	
+        	HashMap indexDetails = new HashMap(); 
+        	StringBuffer columnNames=new StringBuffer("");
+			int indexCount = 1;
+			String constraintVoilated = "";
         	while(rs.next())
         	{
 				// In this loop, all the indexes are stored as key of the HashMap
 				// and the column names are stored as value.
-        		
-        		columnName = rs.getString("COLUMN_NAME");
-        		Logger.out.debug("Column Name: " + columnName);
         		Logger.out.debug("Key: " + indexCount);
         		if(key==indexCount)
         		{
+        			constraintVoilated=rs.getString("INDEX_NAME");
+        			Logger.out.debug("Constraint: "+constraintVoilated);
         			found=true; // column name for given key index found
-        			break;
+        			//break;
         		}
-        		indexCount++; // increment record count
+        		StringBuffer temp = (StringBuffer)indexDetails.get(rs.getString("INDEX_NAME"));
+        		if(temp!=null)
+        		{
+        			temp.append(rs.getString("COLUMN_NAME"));
+        			temp.append(",");
+        			indexDetails.remove(rs.getString("INDEX_NAME"));
+        			indexDetails.put(rs.getString("INDEX_NAME"),temp);
+        			Logger.out.debug("Column :"+temp.toString());
+        		}
+        		else
+        		{
+        			temp = new StringBuffer(rs.getString("COLUMN_NAME"));
+        			//temp.append(rs.getString("COLUMN_NAME"));
+        			temp.append(",");
+        			indexDetails.put(rs.getString("INDEX_NAME"),temp);
+        		}
+        		
+        		indexCount++; // increment record count*/
         	}
         	Logger.out.debug("out of loop" );
-        	// close the Database Connection
+        	if(found)
+    		{
+        		columnNames = (StringBuffer) indexDetails.get(constraintVoilated);
+        		columnName=columnNames.toString();
+        		Logger.out.debug("Column Name: " + columnNames.toString());
+				Logger.out.debug("Constraint: "+constraintVoilated);
+    		}
         	rs.close();
-        	//	connection.close();
-        	//session.close();
-        	
+ 	
         	// Create arrays of object containing data to insert in CONSTRAINT_VOILATION_ERROR
         	Object[] arguments = new Object[2];
+        	dispTableName = ExceptionFormatterFactory.getDisplayName(tableName,connection);
 			arguments[0]=dispTableName;
-			
-			if(found)
-        	{
-        		arguments[1]=columnName; 	
-        		Logger.out.debug("Column Name: " + columnName);
-        	}
-        	else
-        	{
-        		// Column_Name for given Key Index not found
-        		arguments[1]="Unknown Column";  
-        	}
+			columnName=columnNames.toString(); 
+			columnName=columnName.substring(0,columnName.length()-1);
+			arguments[1]=columnName; 	
+			Logger.out.debug("Column Name: " + columnNames.toString());
 			
 			// Insert Table_Name and Column_Name in  CONSTRAINT_VOILATION_ERROR message   
 			formattedErrMsg = MessageFormat.format(Constants.CONSTRAINT_VOILATION_ERROR,arguments);
