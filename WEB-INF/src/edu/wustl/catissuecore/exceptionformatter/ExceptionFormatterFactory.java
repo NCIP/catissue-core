@@ -6,11 +6,13 @@ package edu.wustl.catissuecore.exceptionformatter;
  */
 
 import java.io.FileInputStream;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.Properties;
 
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.util.logger.Logger;
-
 public class ExceptionFormatterFactory {
 	static Properties prop = new Properties();
 	static
@@ -63,5 +65,26 @@ public class ExceptionFormatterFactory {
 		}
 		return expFormatter;
 	}
-
+	public static String getDisplayName(String tableName,Connection  conn)
+	{
+		String displayName="";
+		String sql = "select DISPLAY_NAME from CATISSUE_QUERY_TABLE_DATA where TABLE_NAME='"+tableName+"'";
+		try
+		{
+			Statement st = conn.createStatement();
+			ResultSet rs = st.executeQuery(sql);
+			while(rs.next())
+			{
+				displayName=rs.getString("DISPLAY_NAME");
+				break;
+			}
+			rs.close();
+			st.close();
+		}
+		catch(Exception ex)
+		{
+			Logger.out.error(ex.getMessage(),ex);
+		}
+		return displayName;
+	}
 }

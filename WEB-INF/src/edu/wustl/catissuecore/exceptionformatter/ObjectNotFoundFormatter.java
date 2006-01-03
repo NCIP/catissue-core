@@ -1,12 +1,8 @@
 package edu.wustl.catissuecore.exceptionformatter;
 
 import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.text.MessageFormat;
 
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
-import edu.wustl.catissuecore.bizlogic.QueryBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.dbManager.HibernateMetaData;
 import edu.wustl.common.util.logger.Logger;
@@ -53,8 +49,8 @@ public class ObjectNotFoundFormatter implements ExceptionFormatter {
 			String className = message.substring(startIndex);
 			Logger.out.debug(className+"--"+className.length());
 			Class classObj = Class.forName(className);
-			// get table name from class 
-			String displayName = getDisplayName(HibernateMetaData.getTableName(classObj),connection);
+			// get table name from class
+			String displayName = ExceptionFormatterFactory.getDisplayName(HibernateMetaData.getTableName(classObj),connection);
 			
 			Object[] arguments = new Object[]{displayName,columnName,value};
 			
@@ -67,28 +63,7 @@ public class ObjectNotFoundFormatter implements ExceptionFormatter {
 		}
 		return formattedErrMsg;
 	}
-	private String getDisplayName(String tableName,Connection conn)
-	{
-		String displayName="";
-		String sql = "select DISPLAY_NAME from CATISSUE_QUERY_TABLE_DATA where TABLE_NAME='"+tableName+"'";
-		try
-		{
-			Statement st = conn.createStatement();
-			ResultSet rs = st.executeQuery(sql);
-			while(rs.next())
-			{
-				displayName=rs.getString("DISPLAY_NAME");
-				break;
-			}
-			rs.close();
-			st.close();
-		}
-		catch(Exception ex)
-		{
-			Logger.out.error(ex.getMessage(),ex);
-		}
-		return displayName;
-	}
+
 	public static void main(String args[])
 	{
 		String formattedErrMsg=null;
