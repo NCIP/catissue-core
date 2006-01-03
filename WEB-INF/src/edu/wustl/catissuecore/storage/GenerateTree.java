@@ -33,7 +33,7 @@ public class GenerateTree
         TreeNode rootNode = TreeNodeFactory.getTreeNode(treeType);
         rootNode.initialiseRoot();
         DefaultMutableTreeNode root = new DefaultMutableTreeNode(rootNode);
-        DefaultMutableTreeNode parentNode;
+        DefaultMutableTreeNode parentNode, tempNode = new DefaultMutableTreeNode();
         TreePath pathToRoot = null;
         synchronized (dataVector)
         {
@@ -68,17 +68,9 @@ public class GenerateTree
                        	// Add missing parent node.
                     	TreeNode siteNode = treeNode.getParentTreeNode();
                        	DefaultMutableTreeNode siteTreeNode = new DefaultMutableTreeNode(siteNode);
-                       	
-                       	if (treeType == Constants.TISSUE_SITE_TREE_ID)
-                       	{
-                       	    root = parentNode = siteTreeNode;
-                            
-                       	}
-                       	else
-                       	{
-                       	    parentNode.add(siteTreeNode);
-                       	}
-                       	
+                   	    parentNode.add(siteTreeNode);
+                   	    
+                       	tempNode = siteTreeNode;
                        	targetParentNode = siteTreeNode;
                     }
                 }
@@ -111,6 +103,11 @@ public class GenerateTree
                 	}
                 }
             }
+        }
+        
+        if (treeType == Constants.TISSUE_SITE_TREE_ID)
+        {
+            root = tempNode;
         }
         
         JTree tree = new JTree(root);
