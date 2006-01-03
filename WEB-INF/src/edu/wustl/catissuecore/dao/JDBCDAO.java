@@ -420,23 +420,32 @@ private boolean isColumnValueDate(Object value)
         int i;
 	    for (i=0;i<columnValues.size()-1;i++)
 	    {
-	        	//if(isColumnValueDate(columnValues.get(i))==true&&Variables.databaseName.equals(Constants.ORACLE_DATABASE)==true)
-	    		if(isColumnValueDate(columnValues.get(i))==true&&Variables.databaseName.equals(Constants.ORACLE_DATABASE)==true)
-	        	{
-	        		query.append(Variables.STR_TO_DATE_FUNCTION+"('"+columnValues.get(i)+"','"+Variables.DATE_PATTERN+"'),");
-	        	}
-	        	else
-	        	{
-	        		query.append("'"+columnValues.get(i)+"',");
-	        	}	
+        	//if(isColumnValueDate(columnValues.get(i))==true&&Variables.databaseName.equals(Constants.ORACLE_DATABASE)==true)
+    		
+    		if(Variables.databaseName.equals(Constants.ORACLE_DATABASE))
+        	{
+    			if(isColumnValueDate(columnValues.get(i)))
+    			{
+    				query.append(Variables.STR_TO_DATE_FUNCTION+"('"+columnValues.get(i)+"','"+Variables.DATE_PATTERN+"'),");
+    			}
+    			else
+    			{
+    				query.append("'"+columnValues.get(i)+"',");
+    			}
+        	}
+        	else
+        	{
+        		query.append("\""+columnValues.get(i)+"\",");
+        	}	
 	    }	
-	    if(Variables.databaseName.equals(Constants.ORACLE_DATABASE)==true)
+	    
+	    if(Variables.databaseName.equals(Constants.ORACLE_DATABASE))
 	    {
 	    	query.append("'"+columnValues.get(i)+"')");
 	    }
 	    else
 	    {
-	    	query.append("'"+columnValues.get(i)+"');");
+	    	query.append("\""+columnValues.get(i)+"\");");
 	    }
 	    Logger.out.debug("Insert query:"+query.toString());    
 	    executeUpdate(query.toString());
