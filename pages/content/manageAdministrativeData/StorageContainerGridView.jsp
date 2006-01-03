@@ -64,7 +64,7 @@ function closeFramedWindow()
 							
 						<tr class="dataRowLight">	
 					<% for (int i = Constants.STORAGE_CONTAINER_FIRST_ROW;i<=storageContainerGridObject.getTwoDimensionCapacity().intValue();i++){%>
-						<td><%=i%></td>
+						<td align="center" class="numberMapCol"><%=i%></td>
 					<%}%>				
 						</tr>	
 					<% for (int i = Constants.STORAGE_CONTAINER_FIRST_ROW;i<=storageContainerGridObject.getOneDimensionCapacity().intValue();i++){%>
@@ -77,7 +77,7 @@ function closeFramedWindow()
 						<%
 							}
 						%>
-							<td><%=i%></td>
+							<td class="numberMapRow"><%=i%></td>
 					<% for (int j = Constants.STORAGE_CONTAINER_FIRST_COLUMN;j<=storageContainerGridObject.getTwoDimensionCapacity().intValue();j++){
 					String styleClassName = "dataCellText"; // Default cell boundary
 					if(((null != positionOne) && (null != positionTwo) &&
