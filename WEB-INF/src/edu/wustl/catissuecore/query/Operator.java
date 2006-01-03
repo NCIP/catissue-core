@@ -28,6 +28,16 @@ public class Operator
     public static final String EQUAL = "=";
     
     /**
+     * IN constant
+     */
+    public static final String IN = "IN";
+    
+    /**
+     * NOT IN constant
+     */
+    public static final String NOT_IN = "NOT IN";
+
+    /**
      * LESS THAN constant
      */
     public static final String LESS_THAN = "<";
@@ -47,6 +57,9 @@ public class Operator
 	
 	public static final String NOT_EQUALS_CONDITION = "Not Equals" ;
 
+	public static final String IN_CONDITION = "In" ;
+	
+	public static final String NOT_IN_CONDITION = "Not In" ;
     /**
      * LIKE constant
      */

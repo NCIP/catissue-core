@@ -53,6 +53,11 @@ public class SearchUtil
     public static final int DATATYPE_ENUMERATED = 4;
     
     /**
+     * Constant for multi select enum
+     */
+    public static final int DATATYPE_MULTI_ENUMERATED = 5;
+    
+    /**
      * Constant for datatype STRING
      */
     public static final String STRING = "String";
@@ -99,6 +104,12 @@ public class SearchUtil
 			case DATATYPE_ENUMERATED:
 				operatorList.add(new NameValueBean(Operator.EQUALS_CONDITION,Operator.EQUALS_CONDITION));
 				operatorList.add(new NameValueBean(Operator.NOT_EQUALS_CONDITION,Operator.NOT_EQUALS_CONDITION));
+				break;
+			case DATATYPE_MULTI_ENUMERATED:
+				operatorList.add(new NameValueBean(Operator.EQUALS_CONDITION,Operator.EQUALS_CONDITION));
+				operatorList.add(new NameValueBean(Operator.NOT_EQUALS_CONDITION,Operator.NOT_EQUALS_CONDITION));
+				operatorList.add(new NameValueBean(Operator.IN_CONDITION,Operator.IN_CONDITION));
+				operatorList.add(new NameValueBean(Operator.NOT_IN_CONDITION,Operator.NOT_IN_CONDITION));
 				break;
 		}
 		
