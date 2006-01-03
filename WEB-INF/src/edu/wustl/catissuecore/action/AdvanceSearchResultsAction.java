@@ -91,21 +91,23 @@ public class AdvanceSearchResultsAction extends BaseAction
 
 			//Set Identifier of Participant,Collection Protocol, Specimen Collection Group and Specimen if not existing in the resultView
 			Vector tablesVector = new Vector();
-			tablesVector.add(Constants.PARTICIPANT);
-			tablesVector.add(Constants.COLLECTION_PROTOCOL);
-			tablesVector.add(Constants.SPECIMEN_COLLECTION_GROUP);
-			tablesVector.add(Constants.SPECIMEN);
-			tablesVector.add(Constants.COLLECTION_PROTOCOL_REGISTRATION);
+			tablesVector.add(Query.PARTICIPANT);
+			tablesVector.add(Query.COLLECTION_PROTOCOL);
+			tablesVector.add(Query.SPECIMEN_COLLECTION_GROUP);
+			tablesVector.add(Query.SPECIMEN);
+			tablesVector.add(Query.COLLECTION_PROTOCOL_REGISTRATION);
 			query.getIdentifierColumnIds(tablesVector);
 			
-			
 			//Set tables for Configuration.
+			/*if(query.getTableNamesSet().contains(Query.BIO_HAZARD))
+				tablesVector.add(Query.BIO_HAZARD);*/
 			Object selectedTables[] = tablesVector.toArray();
 			session.setAttribute(Constants.TABLE_ALIAS_NAME,selectedTables);
+
 			
 			Logger.out.debug("tableSet from query before setting resultview :"+query.getTableNamesSet());
 			//Set the result view for Advance Search
-			Vector selectDataElements = bizLogic.getSelectDataElements(null,new ArrayList(query.getTableNamesSet()), columnNames);
+			Vector selectDataElements = bizLogic.getSelectDataElements(null,new ArrayList(tablesVector), columnNames);
 			Logger.out.debug("column display names "+columnNames+":"+columnNames.size());
 
 			query.setResultView(selectDataElements);
@@ -138,6 +140,9 @@ public class AdvanceSearchResultsAction extends BaseAction
 			Logger.out.debug("Advance Query Sql"+sql);
 			advBizLogic.createTempTable(sql,tempTableName,sessionData,queryResultObjectDataMap);
 
+
+			
+			
 			//Set the columnDisplayNames in session
 			session.setAttribute(Constants.COLUMN_DISPLAY_NAMES,columnNames);
 			
