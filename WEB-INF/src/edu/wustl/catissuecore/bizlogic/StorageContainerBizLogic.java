@@ -37,6 +37,7 @@ import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -1039,11 +1040,42 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
         	throw new DAOException(ApplicationProperties.getValue("errors.storageContainerExist"));
         }
    }
-	/* (non-Javadoc)
-	 * @see edu.wustl.catissuecore.bizlogic.TreeDataInterface#getTreeViewData(edu.wustl.common.beans.SessionDataBean, java.util.Map)
-	 */
-	public Vector getTreeViewData(SessionDataBean sessionData, Map map,List list) throws DAOException {
-
+   
+   /* (non-Javadoc)
+	* @see edu.wustl.catissuecore.bizlogic.TreeDataInterface#getTreeViewData(edu.wustl.common.beans.SessionDataBean, java.util.Map)
+	*/
+	public Vector getTreeViewData(SessionDataBean sessionData, Map map,List list) throws DAOException
+	{
 		return null;
 	}
+	
+    /**
+     * Overriding the parent class's method to validate the enumerated attribute values
+     */
+	protected boolean validate(Object obj, DAO dao, String operation) throws DAOException
+    {
+		StorageContainer container = (StorageContainer)obj;
+
+		if(operation.equals(Constants.ADD))
+		{
+			if(!Constants.ACTIVITY_STATUS_ACTIVE.equals(container.getActivityStatus()))
+			{
+				throw new DAOException(ApplicationProperties.getValue("activityStatus.active.errMsg"));
+			}
+
+			if(container.getIsFull().booleanValue())
+			{
+				throw new DAOException(ApplicationProperties.getValue("storageContainer.isContainerFull.errMsg"));
+			}
+		}
+		else
+		{
+			if(!Validator.isEnumeratedValue(Constants.ACTIVITY_STATUS_VALUES,container.getActivityStatus()))
+			{
+				throw new DAOException(ApplicationProperties.getValue("activityStatus.errMsg"));
+			}
+		}
+		
+		return true;
+    }
 }
