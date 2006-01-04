@@ -208,7 +208,6 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final boolean switchSecurity = true;
 	public static final String STORAGE_CONTAINER_ID ="storContId";
 	public static final String IS_RNA = "isRNA";
-	public static final String MOLECULAR = "Molecular";
 	public static final String RNA = "RNA";
 	
 	//	New Participant Event Parameters
@@ -1016,13 +1015,17 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	        "Pending"
 	};
 
+	public static final String TISSUE = "Tissue";
+	public static final String FLUID = "Fluid";
+	public static final String CELL = "Cell";
+	public static final String MOLECULAR = "Molecular";
 	
 	public static final String [] SPECIMEN_TYPE_VALUES = {
 	        SELECT_OPTION,
-	        "Tissue",
-	        "Fluid",
-	        "Cell",
-	        "Molecular"
+	        TISSUE,
+	        FLUID,
+	        CELL,
+			MOLECULAR
 	};
 	
 	public static final String [] HOUR_ARRAY = {
