@@ -52,7 +52,7 @@ public class SpecimenForm extends AbstractActionForm
     /**
      * Sub Type of specimen. e.g. Serum, Plasma, Blood, Fresh Tissue etc.
      */
-    protected String type = "";
+    protected String type;
 
     /**
      * Concentration of specimen.
