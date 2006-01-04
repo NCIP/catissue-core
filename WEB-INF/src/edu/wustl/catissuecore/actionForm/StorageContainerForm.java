@@ -495,6 +495,24 @@ public class StorageContainerForm extends AbstractActionForm
             	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("storageContainer.temperature")));
             }
 			
+            //VALIDATIONS FOR DIMENSION 1.
+            if (validator.isEmpty(String.valueOf(oneDimensionCapacity)))
+            {
+            	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("storageContainer.oneDimension")));
+            }
+            else
+            {
+            	if(!validator.isNumeric(String.valueOf(oneDimensionCapacity)))
+            	{
+            		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("storageContainer.oneDimension")));
+            	}
+            }
+
+            //Validations for dimension 2
+            if (!validator.isEmpty(String.valueOf(twoDimensionCapacity)) && (!validator.isNumeric(String.valueOf(twoDimensionCapacity))))
+            {
+            	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("storageContainer.twoDimension")));
+            }
 			
 			//Validations for External Identifier Add-More Block.
             String className = "StorageContainerDetails:";
