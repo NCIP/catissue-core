@@ -14,12 +14,14 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.util.logger.Logger;
 
 
@@ -835,5 +837,116 @@ public class Validator
         
         return isValid;
     }
+    
+    /**
+     * Returns true if enumerated value is valid else false.
+     * @param list the list of enumerated values.
+     * @param value the value that is to be checked.
+     * @return true if enumerated value is valid else false.
+     */
+    public static boolean isEnumeratedValue(List list, String value)
+    {
+    	boolean isValid = false;
+		
+    	if(list!=null && value!=null)
+    	{
+			for(int i=1;i<list.size();i++)
+			{
+				NameValueBean bean = (NameValueBean)list.get(i);
+				
+				if(value.equals(bean.getValue()))
+				{
+					isValid = true;
+					break;
+				}
+			}
+    	}
+		
+		return isValid;
+    }
 
+    /**
+     * Returns true if enumerated value is valid else false.
+     * @param list the list of enumerated values.
+     * @param value the value that is to be checked.
+     * @return true if enumerated value is valid else false.
+     */
+    public static boolean isEnumeratedValue(String [] list, String value)
+    {
+    	boolean isValid = false;
+		
+    	if(list!=null && value!=null)
+    	{
+			for(int i=1;i<list.length;i++)
+			{	
+				if(value.equals(list[i]))
+				{
+					isValid = true;
+					break;
+				}
+			}
+    	}
+		
+		return isValid;
+    }
+    
+    /**
+     * Returns true if enumerated value is valid or null else false.
+     * @param list the list of enumerated values.
+     * @param value the value that is to be checked.
+     * @return true if enumerated value is valid or null else false.
+     */
+    public static boolean isEnumeratedOrNullValue(List list, String value)
+    {
+    	boolean isValid = false;
+		
+    	if(value == null)
+    	{
+    		return true;
+    	}
+    	else if(list!=null)
+    	{
+			for(int i=1;i<list.size();i++)
+			{
+				NameValueBean bean = (NameValueBean)list.get(i);
+				
+				if(value.equals(bean.getValue()))
+				{
+					isValid = true;
+					break;
+				}
+			}
+    	}
+		
+		return isValid;
+    }
+    
+    /**
+     * Returns true if enumerated value is valid or null else false.
+     * @param list the list of enumerated values.
+     * @param value the value that is to be checked.
+     * @return true if enumerated value is valid or null else false.
+     */
+    public static boolean isEnumeratedOrNullValue(String [] list, String value)
+    {
+    	boolean isValid = false;
+		
+    	if(value == null)
+    	{
+    		return true;
+    	}
+    	else if(list!=null)
+    	{
+			for(int i=1;i<list.length;i++)
+			{	
+				if(value.equals(list[i]))
+				{
+					isValid = true;
+					break;
+				}
+			}
+    	}
+		
+		return isValid;
+    }
 }
