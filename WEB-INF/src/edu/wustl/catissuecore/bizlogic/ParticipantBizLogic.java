@@ -22,11 +22,15 @@ import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -159,4 +163,55 @@ public class ParticipantBizLogic extends DefaultBizLogic
    	    super.setPrivilege(dao,privilegeName,Participant.class,Utility.toLongArray(listOfSubElement),userId, roleId, assignToUser, assignOperation);
    	}
 	}
+	
+	/**
+     * Overriding the parent class's method to validate the enumerated attribute values
+     */
+	protected boolean validate(Object obj, DAO dao, String operation) throws DAOException
+    {
+		Participant participant = (Participant)obj;
+		
+		NameValueBean unknownVal = new NameValueBean(Constants.UNKNOWN,Constants.UNKNOWN);
+        List genderList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_GENDER,unknownVal);
+        
+        if(!Validator.isEnumeratedOrNullValue(genderList,participant.getGender()))
+		{
+			throw new DAOException(ApplicationProperties.getValue("participant.gender.errMsg"));
+		}
+
+        List genotypeList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_GENOTYPE,unknownVal);
+        if(!Validator.isEnumeratedOrNullValue(genotypeList,participant.getGenotype()))
+		{
+			throw new DAOException(ApplicationProperties.getValue("participant.genotype.errMsg"));
+		}
+        
+        List raceList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_RACE,unknownVal);
+        if(!Validator.isEnumeratedOrNullValue(raceList,participant.getRace()))
+		{
+			throw new DAOException(ApplicationProperties.getValue("participant.race.errMsg"));
+		}
+
+        List ethnicityList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_ETHNICITY,unknownVal);
+        if(!Validator.isEnumeratedOrNullValue(ethnicityList,participant.getEthnicity()))
+		{
+			throw new DAOException(ApplicationProperties.getValue("participant.ethnicity.errMsg"));
+		}
+     
+        if(operation.equals(Constants.ADD))
+		{
+			if(!Constants.ACTIVITY_STATUS_ACTIVE.equals(participant.getActivityStatus()))
+			{
+				throw new DAOException(ApplicationProperties.getValue("activityStatus.active.errMsg"));
+			}
+		}
+		else
+		{
+			if(!Validator.isEnumeratedValue(Constants.ACTIVITY_STATUS_VALUES,participant.getActivityStatus()))
+			{
+				throw new DAOException(ApplicationProperties.getValue("activityStatus.errMsg"));
+			}
+		}
+        
+		return true;
+    }
 }

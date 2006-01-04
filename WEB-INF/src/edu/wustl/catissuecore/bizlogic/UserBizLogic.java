@@ -10,9 +10,11 @@
 
 package edu.wustl.catissuecore.bizlogic;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Set;
 import java.util.Vector;
 
@@ -35,6 +37,7 @@ import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 import gov.nih.nci.security.authorization.domainobjects.Role;
 
@@ -484,5 +487,82 @@ public class UserBizLogic extends DefaultBizLogic
             statusMessageKey = "errors.forgotpassword.user.unknown";
         }
         return statusMessageKey;
+    }
+    
+    /**
+     * Overriding the parent class's method to validate the enumerated attribute values
+     */
+	protected boolean validate(Object obj, DAO dao, String operation) throws DAOException
+    {
+		User user = (User)obj;
+		
+		if(!Validator.isEnumeratedValue(Constants.STATEARRAY,user.getAddress().getState()))
+		{
+			throw new DAOException(ApplicationProperties.getValue("state.errMsg"));
+		}
+		
+		if(!Validator.isEnumeratedValue(Constants.COUNTRYARRAY,user.getAddress().getCountry()))
+		{
+			throw new DAOException(ApplicationProperties.getValue("country.errMsg"));
+		}
+		
+		try
+		{
+			if(!Validator.isEnumeratedValue(getRoles(),user.getRoleId()))
+			{
+				throw new DAOException(ApplicationProperties.getValue("user.role.errMsg"));
+			}
+		}
+		catch(SMException e)
+		{
+			Logger.out.debug(e.getMessage(),e);
+			throw new DAOException(ApplicationProperties.getValue("user.role.dbErrMsg"));
+		}
+
+		if(operation.equals(Constants.ADD))
+		{
+			if(!Constants.ACTIVITY_STATUS_ACTIVE.equals(user.getActivityStatus()))
+			{
+				throw new DAOException(ApplicationProperties.getValue("activityStatus.active.errMsg"));
+			}
+		}
+		else
+		{
+			if(!Validator.isEnumeratedValue(Constants.USER_ACTIVITY_STATUS_VALUES,user.getActivityStatus()))
+			{
+				throw new DAOException(ApplicationProperties.getValue("activityStatus.errMsg"));
+			}
+		}
+		
+		return true;
+    }
+	
+	/**
+     * Returns a list of all roles that can be assigned to a user.
+     * @return a list of all roles that can be assigned to a user.
+     * @throws SMException
+     */
+    private List getRoles() throws SMException
+    {
+        //Sets the roleList attribute to be used in the Add/Edit User Page.
+        Vector roleList = SecurityManager.getInstance(UserBizLogic.class).getRoles();
+        
+        ListIterator iterator = roleList.listIterator();
+        
+        List roleNameValueBeanList = new ArrayList();
+        NameValueBean nameValueBean = new NameValueBean();
+        nameValueBean.setName(Constants.SELECT_OPTION);
+        nameValueBean.setValue("-1");
+        roleNameValueBeanList.add(nameValueBean);
+        
+        while (iterator.hasNext())
+        {
+            Role role = (Role) iterator.next();
+            nameValueBean = new NameValueBean();
+            nameValueBean.setName(role.getName());
+            nameValueBean.setValue(String.valueOf(role.getId()));
+            roleNameValueBeanList.add(nameValueBean);
+        }
+        return roleNameValueBeanList;
     }
 }

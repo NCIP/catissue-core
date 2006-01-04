@@ -24,12 +24,16 @@ import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -291,5 +295,43 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 	    
 	    NewSpecimenBizLogic bizLogic = (NewSpecimenBizLogic)BizLogicFactory.getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
 	    bizLogic.assignPrivilegeToRelatedObjectsForSCG(dao,privilegeName,objectIds,userId, roleId, assignToUser, assignOperation);
+    }
+    
+    /**
+     * Overriding the parent class's method to validate the enumerated attribute values
+     */
+	protected boolean validate(Object obj, DAO dao, String operation) throws DAOException
+    {
+		SpecimenCollectionGroup group = (SpecimenCollectionGroup)obj;
+
+		List clinicalDiagnosisList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_CLINICAL_DIAGNOSIS,null);
+		if(!Validator.isEnumeratedValue(clinicalDiagnosisList,group.getClinicalDiagnosis()))
+		{
+			throw new DAOException(ApplicationProperties.getValue("spg.clinicalDiagnosis.errMsg"));
+		}
+
+		NameValueBean undefinedVal = new NameValueBean(Constants.UNDEFINED,Constants.UNDEFINED);
+        List clinicalStatusList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_CLINICAL_STATUS,undefinedVal);
+        if(!Validator.isEnumeratedValue(clinicalStatusList,group.getClinicalStatus()))
+		{
+			throw new DAOException(ApplicationProperties.getValue("collectionProtocol.clinicalStatus.errMsg"));
+		}
+        
+        if(operation.equals(Constants.ADD))
+		{
+			if(!Constants.ACTIVITY_STATUS_ACTIVE.equals(group.getActivityStatus()))
+			{
+				throw new DAOException(ApplicationProperties.getValue("activityStatus.active.errMsg"));
+			}
+		}
+		else
+		{
+			if(!Validator.isEnumeratedValue(Constants.ACTIVITY_STATUS_VALUES,group.getActivityStatus()))
+			{
+				throw new DAOException(ApplicationProperties.getValue("activityStatus.errMsg"));
+			}
+		}
+        
+		return true;
     }
 }

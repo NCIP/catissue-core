@@ -54,7 +54,15 @@ public abstract class AbstractBizLogic
      */
     protected abstract void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException;
     
-    protected abstract boolean validate(Object obj, DAO dao) throws DAOException;
+    /**
+     * Validates the domain object for enumerated values.
+     * @param obj The domain object to be validated. 
+     * @param dao The DAO object
+     * @param operation The operation(Add/Edit) that is to be performed.
+     * @return True if all the enumerated value attributes contain valid values
+     * @throws DAOException
+     */
+    protected abstract boolean validate(Object obj, DAO dao, String operation) throws DAOException;
     
     public abstract List retrieve(String sourceObjectName, String[] selectColumnName, String[] whereColumnName,
             String[] whereColumnCondition, Object[] whereColumnValue,
@@ -96,7 +104,7 @@ public abstract class AbstractBizLogic
 		try
 		{
 	        dao.openSession(sessionDataBean);
-	        validate(obj, dao);
+	        validate(obj, dao, Constants.ADD);
 	        insert(obj, dao, sessionDataBean);
 	        dao.commit();
 		}
@@ -142,7 +150,7 @@ public abstract class AbstractBizLogic
 		try
 		{
 	        dao.openSession(sessionDataBean);
-	        validate(currentObj, dao);
+	        validate(currentObj, dao, Constants.EDIT);
 	        update(dao, currentObj, oldObj, sessionDataBean);
 	        dao.commit();
 		}

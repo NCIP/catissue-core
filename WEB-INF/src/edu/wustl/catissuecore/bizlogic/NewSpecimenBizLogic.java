@@ -32,13 +32,16 @@ import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -47,12 +50,6 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class NewSpecimenBizLogic extends DefaultBizLogic
 {
-	protected boolean validate(Object obj, DAO dao) throws DAOException
-    {
-		Specimen specimen = (Specimen)obj;
-		//Check for all cases
-    	return true;
-    }
 	/**
      * Saves the storageType object in the database.
 	 * @param obj The storageType object to be saved.
@@ -617,5 +614,87 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
     	{
     	    super.setPrivilege(dao,privilegeName,Specimen.class,Utility.toLongArray(listOfSubElement),userId,roleId, assignToUser, assignOperation);
     	}
+    }
+    
+    /**
+     * Overriding the parent class's method to validate the enumerated attribute values
+     */
+    protected boolean validate(Object obj, DAO dao, String operation) throws DAOException
+    {
+		Specimen specimen = (Specimen)obj;
+		
+		List specimenClassList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_SPECIMEN_CLASS,null);
+		String specimenClass = Utility.getSpecimenClassName(specimen);
+    	
+    	if(!Validator.isEnumeratedValue(specimenClassList,specimenClass))
+		{
+			throw new DAOException(ApplicationProperties.getValue("protocol.class.errMsg"));
+		}
+		
+    	if(specimenClass.equals(Constants.CELL))
+    	{
+    		if(specimen.getType() != null)
+    		{
+    			throw new DAOException(ApplicationProperties.getValue("protocol.type.errMsg"));
+    		}
+    	}
+		else if(!Validator.isEnumeratedValue(Utility.getSpecimenTypes(specimenClass),specimen.getType()))
+		{
+			throw new DAOException(ApplicationProperties.getValue("protocol.type.errMsg"));
+		}
+		
+		SpecimenCharacteristics characters = specimen.getSpecimenCharacteristics();
+
+		if(characters == null)
+		{
+			throw new DAOException(ApplicationProperties.getValue("specimen.characteristics.errMsg"));
+		}
+		else
+		{
+			NameValueBean undefinedVal = new NameValueBean(Constants.UNDEFINED,Constants.UNDEFINED);
+	    	List tissueSiteList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_TISSUE_SITE,undefinedVal);
+			
+	    	if(!Validator.isEnumeratedValue(tissueSiteList,characters.getTissueSite()))
+			{
+				throw new DAOException(ApplicationProperties.getValue("protocol.tissueSite.errMsg"));
+			}
+			
+	    	NameValueBean unknownVal = new NameValueBean(Constants.UNKNOWN,Constants.UNKNOWN);
+	    	List tissueSideList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_TISSUE_SIDE,unknownVal);
+
+			if(!Validator.isEnumeratedValue(tissueSideList,characters.getTissueSide()))
+			{
+				throw new DAOException(ApplicationProperties.getValue("specimen.tissueSide.errMsg"));
+			}
+			
+			List pathologicalStatusList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_PATHOLOGICAL_STATUS,null);
+			
+			if(!Validator.isEnumeratedValue(pathologicalStatusList,characters.getPathologicalStatus()))
+			{
+				throw new DAOException(ApplicationProperties.getValue("protocol.pathologyStatus.errMsg"));
+			}
+		}
+		
+		if(operation.equals(Constants.ADD))
+		{
+			if(!specimen.getAvailable().booleanValue())
+			{
+				throw new DAOException(ApplicationProperties.getValue("specimen.available.errMsg"));
+			}
+			
+			if(!Constants.ACTIVITY_STATUS_ACTIVE.equals(specimen.getActivityStatus()))
+			{
+				throw new DAOException(ApplicationProperties.getValue("activityStatus.active.errMsg"));
+			}
+		}
+		else
+		{
+			if(!Validator.isEnumeratedValue(Constants.ACTIVITY_STATUS_VALUES,specimen.getActivityStatus()))
+			{
+				throw new DAOException(ApplicationProperties.getValue("activityStatus.errMsg"));
+			}
+		}
+    	
+    	return true;
     }
 }

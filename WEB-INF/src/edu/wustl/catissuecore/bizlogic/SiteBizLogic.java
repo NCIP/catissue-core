@@ -19,10 +19,13 @@ import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -111,5 +114,45 @@ public class SiteBizLogic extends DefaultBizLogic
 //	    super.setPrivilege(dao,privilegeName,Address.class,Utility.toLongArray(relatedAddressObjectsIds),userId, roleId, assignToUser, assignOperation);
     }
 	
-	
+	/**
+     * Overriding the parent class's method to validate the enumerated attribute values
+     */
+	protected boolean validate(Object obj, DAO dao, String operation) throws DAOException
+    {
+		Site site = (Site)obj;
+		
+		List siteList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_SITE_TYPE, null);
+
+		if(!Validator.isEnumeratedValue(siteList,site.getType()))
+		{
+			throw new DAOException(ApplicationProperties.getValue("type.errMsg"));
+		}
+		
+		if(!Validator.isEnumeratedValue(Constants.STATEARRAY,site.getAddress().getState()))
+		{
+			throw new DAOException(ApplicationProperties.getValue("state.errMsg"));
+		}
+
+		if(!Validator.isEnumeratedValue(Constants.COUNTRYARRAY,site.getAddress().getCountry()))
+		{
+			throw new DAOException(ApplicationProperties.getValue("country.errMsg"));
+		}
+
+		if(operation.equals(Constants.ADD))
+		{
+			if(!Constants.ACTIVITY_STATUS_ACTIVE.equals(site.getActivityStatus()))
+			{
+				throw new DAOException(ApplicationProperties.getValue("activityStatus.active.errMsg"));
+			}
+		}
+		else
+		{
+			if(!Validator.isEnumeratedValue(Constants.SITE_ACTIVITY_STATUS_VALUES,site.getActivityStatus()))
+			{
+				throw new DAOException(ApplicationProperties.getValue("activityStatus.errMsg"));
+			}
+		}
+		
+    	return true;
+    }
 }

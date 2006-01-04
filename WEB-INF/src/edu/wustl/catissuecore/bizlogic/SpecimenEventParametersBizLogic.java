@@ -9,18 +9,29 @@ package edu.wustl.catissuecore.bizlogic;
 import java.util.List;
 
 import edu.wustl.catissuecore.dao.DAO;
+import edu.wustl.catissuecore.domain.CheckInCheckOutEventParameter;
+import edu.wustl.catissuecore.domain.CollectionEventParameters;
+import edu.wustl.catissuecore.domain.EmbeddedEventParameters;
+import edu.wustl.catissuecore.domain.FixedEventParameters;
+import edu.wustl.catissuecore.domain.FrozenEventParameters;
+import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.StorageContainer;
+import edu.wustl.catissuecore.domain.TissueSpecimenReviewEventParameters;
 import edu.wustl.catissuecore.domain.TransferEventParameters;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -159,4 +170,84 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 			//Audit.
 			dao.audit(obj, oldObj, sessionDataBean, true);
 		}
+		
+		/**
+	     * Overriding the parent class's method to validate the enumerated attribute values
+	     */
+		protected boolean validate(Object obj, DAO dao, String operation) throws DAOException
+	    {
+			SpecimenEventParameters eventParameter = (SpecimenEventParameters)obj;
+			
+			switch(Utility.getEventParametersFormId(eventParameter))
+			{
+				case Constants.CHECKIN_CHECKOUT_EVENT_PARAMETERS_FORM_ID:
+					String storageStatus = ((CheckInCheckOutEventParameter)eventParameter).getStorageStatus();
+					if(!Validator.isEnumeratedValue(Constants.STORAGE_STATUS_ARRAY,storageStatus))
+					{
+						throw new DAOException(ApplicationProperties.getValue("events.storageStatus.errMsg"));
+					}
+					break;
+					
+				case Constants.COLLECTION_EVENT_PARAMETERS_FORM_ID:
+					String procedure = ((CollectionEventParameters)eventParameter).getCollectionProcedure();
+					List procedureList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_COLLECTION_PROCEDURE,null);
+					if(!Validator.isEnumeratedValue(procedureList,procedure))
+					{
+						throw new DAOException(ApplicationProperties.getValue("events.collectionProcedure.errMsg"));
+					}
+					
+					String container = ((CollectionEventParameters)eventParameter).getContainer();
+					List containerList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_CONTAINER,null);
+					if(!Validator.isEnumeratedOrNullValue(containerList,container))
+					{
+						throw new DAOException(ApplicationProperties.getValue("events.container.errMsg"));
+					}
+					break;
+					
+				case Constants.EMBEDDED_EVENT_PARAMETERS_FORM_ID:
+					String embeddingMedium = ((EmbeddedEventParameters)eventParameter).getEmbeddingMedium();
+					List embeddingMediumList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_EMBEDDING_MEDIUM,null);
+					if(!Validator.isEnumeratedValue(embeddingMediumList,embeddingMedium))
+					{
+						throw new DAOException(ApplicationProperties.getValue("events.embeddingMedium.errMsg"));
+					}
+					break;
+					
+				case Constants.FIXED_EVENT_PARAMETERS_FORM_ID:
+					String fixationType = ((FixedEventParameters)eventParameter).getFixationType();
+					List fixationTypeList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_FIXATION_TYPE,null);
+					if(!Validator.isEnumeratedValue(fixationTypeList,fixationType))
+					{
+						throw new DAOException(ApplicationProperties.getValue("events.fixationType.errMsg"));
+					}
+					break;
+				
+				case Constants.FROZEN_EVENT_PARAMETERS_FORM_ID:
+					String method = ((FrozenEventParameters)eventParameter).getMethod();
+					List methodList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_METHOD,null);
+					if(!Validator.isEnumeratedValue(methodList,method))
+					{
+						throw new DAOException(ApplicationProperties.getValue("events.method.errMsg"));
+					}
+					break;
+				
+				case Constants.RECEIVED_EVENT_PARAMETERS_FORM_ID:
+					String quality = ((ReceivedEventParameters)eventParameter).getReceivedQuality();
+					List qualityList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_RECEIVED_QUALITY,null);
+					if(!Validator.isEnumeratedValue(qualityList,quality))
+					{
+						throw new DAOException(ApplicationProperties.getValue("events.receivedQuality.errMsg"));
+					}
+					break;
+				
+				case Constants.TISSUE_SPECIMEN_REVIEW_EVENT_PARAMETERS_FORM_ID:
+					String histQuality = ((TissueSpecimenReviewEventParameters)eventParameter).getHistologicalQuality();
+					if(!Validator.isEnumeratedOrNullValue(Constants.HISTOLOGICAL_QUALITY_ARRAY,histQuality))
+					{
+						throw new DAOException(ApplicationProperties.getValue("events.histologicalQuality.errMsg"));
+					}
+					break;
+			}
+			return true;
+	    }
 }

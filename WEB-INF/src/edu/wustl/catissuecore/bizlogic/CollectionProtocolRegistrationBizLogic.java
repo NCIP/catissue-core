@@ -27,6 +27,8 @@ import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -318,4 +320,29 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 		participantBizLogic.assignPrivilegeToRelatedObjectsForCPR(dao,privilegeName,objectIds,userId, roleId, assignToUser,assignOperation);
 	
 	}
+    
+    /**
+     * Overriding the parent class's method to validate the enumerated attribute values
+     */
+	protected boolean validate(Object obj, DAO dao, String operation) throws DAOException
+    {
+		CollectionProtocolRegistration registration = (CollectionProtocolRegistration)obj;
+
+		if(operation.equals(Constants.ADD))
+		{
+			if(!Constants.ACTIVITY_STATUS_ACTIVE.equals(registration.getActivityStatus()))
+			{
+				throw new DAOException(ApplicationProperties.getValue("activityStatus.active.errMsg"));
+			}
+		}
+		else
+		{
+			if(!Validator.isEnumeratedValue(Constants.ACTIVITY_STATUS_VALUES,registration.getActivityStatus()))
+			{
+				throw new DAOException(ApplicationProperties.getValue("activityStatus.errMsg"));
+			}
+		}
+		
+		return true;
+    }
 }

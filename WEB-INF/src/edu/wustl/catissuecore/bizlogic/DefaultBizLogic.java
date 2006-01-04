@@ -64,7 +64,8 @@ public class  DefaultBizLogic extends AbstractBizLogic
         dao.update(obj, sessionDataBean, true, true, false);
         dao.audit(obj,oldObj,sessionDataBean,true);
     }
-    protected boolean validate(Object obj, DAO dao) throws DAOException
+    
+    protected boolean validate(Object obj, DAO dao,String operation) throws DAOException
     {
     	return true;
     }

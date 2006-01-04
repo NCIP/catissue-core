@@ -111,7 +111,11 @@ public class BizLogicFactory
         	case Constants.QUERY_INTERFACE_ID:
         	    abstractBizLogic = new QueryBizLogic();
     			break;
-    			
+    		
+    		case Constants.BIOHAZARD_FORM_ID:
+    			abstractBizLogic = new BiohazardBizLogic();
+    			break;
+    		
             default:
                 abstractBizLogic = new DefaultBizLogic();
             	break;

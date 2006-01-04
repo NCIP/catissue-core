@@ -25,13 +25,18 @@ import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.Roles;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SecurityDataBean;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
 
@@ -421,4 +426,116 @@ public class CollectionProtocolBizLogic extends DefaultBizLogic implements Roles
 		}
 		return false;
 	}
+	
+	/**
+     * Overriding the parent class's method to validate the enumerated attribute values
+     */
+	protected boolean validate(Object obj, DAO dao, String operation) throws DAOException
+    {
+		CollectionProtocol protocol = (CollectionProtocol)obj;
+		Collection eventCollection = protocol.getCollectionProtocolEventCollection();
+		
+		if(eventCollection != null && eventCollection.size() != 0)
+		{
+			List specimenClassList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_SPECIMEN_CLASS,null);
+
+	    	NameValueBean undefinedVal = new NameValueBean(Constants.UNDEFINED,Constants.UNDEFINED);
+	    	List tissueSiteList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_TISSUE_SITE,undefinedVal);
+
+	    	List pathologicalStatusList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_PATHOLOGICAL_STATUS,null);
+	    	List clinicalStatusList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_CLINICAL_STATUS,undefinedVal);
+
+			Iterator eventIterator = eventCollection.iterator();
+			
+			while(eventIterator.hasNext())
+			{
+				CollectionProtocolEvent event = (CollectionProtocolEvent)eventIterator.next();
+				
+				if(event == null)
+				{
+					throw new DAOException(ApplicationProperties.getValue("collectionProtocol.eventsEmpty.errMsg"));
+				}
+				else
+				{
+					if(!Validator.isEnumeratedValue(clinicalStatusList,event.getClinicalStatus()))
+					{
+						throw new DAOException(ApplicationProperties.getValue("collectionProtocol.clinicalStatus.errMsg"));
+					}
+					
+					Collection reqCollection = event.getSpecimenRequirementCollection();
+					
+					if(reqCollection != null && reqCollection.size() != 0)
+					{
+						Iterator reqIterator = reqCollection.iterator();
+						
+						while(reqIterator.hasNext())
+						{
+							SpecimenRequirement requirement = (SpecimenRequirement)reqIterator.next();
+							
+							if(requirement == null)
+							{
+								throw new DAOException(ApplicationProperties.getValue("protocol.spReqEmpty.errMsg"));
+							}
+							else
+							{
+								String specimenClass = Utility.getSpecimenClassName(requirement);
+								
+								if(!Validator.isEnumeratedValue(specimenClassList,specimenClass))
+								{
+									throw new DAOException(ApplicationProperties.getValue("protocol.class.errMsg"));
+								}
+
+								if(specimenClass.equals(Constants.CELL))
+						    	{
+						    		if(requirement.getSpecimenType() != null)
+						    		{
+						    			throw new DAOException(ApplicationProperties.getValue("protocol.type.errMsg"));
+						    		}
+						    	}
+								else if(!Validator.isEnumeratedValue(Utility.getSpecimenTypes(specimenClass),requirement.getSpecimenType()))
+								{
+									throw new DAOException(ApplicationProperties.getValue("protocol.type.errMsg"));
+								}
+								
+								if(!Validator.isEnumeratedValue(tissueSiteList,requirement.getTissueSite()))
+								{
+									throw new DAOException(ApplicationProperties.getValue("protocol.tissueSite.errMsg"));
+								}
+								
+								if(!Validator.isEnumeratedValue(pathologicalStatusList,requirement.getPathologyStatus()))
+								{
+									throw new DAOException(ApplicationProperties.getValue("protocol.pathologyStatus.errMsg"));
+								}
+							}
+						}
+					}
+					else
+					{
+						throw new DAOException(ApplicationProperties.getValue("protocol.spReqEmpty.errMsg"));
+					}
+				}
+			}
+		}
+		else
+		{
+			throw new DAOException(ApplicationProperties.getValue("collectionProtocol.eventsEmpty.errMsg"));
+		}
+		
+		if(operation.equals(Constants.ADD))
+		{
+			if(!Constants.ACTIVITY_STATUS_ACTIVE.equals(protocol.getActivityStatus()))
+			{
+				throw new DAOException(ApplicationProperties.getValue("activityStatus.active.errMsg"));
+			}
+		}
+		else
+		{
+			if(!Validator.isEnumeratedValue(Constants.ACTIVITY_STATUS_VALUES,protocol.getActivityStatus()))
+			{
+				throw new DAOException(ApplicationProperties.getValue("activityStatus.errMsg"));
+			}
+		}
+		
+		return true;
+    }
 }

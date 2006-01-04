@@ -13,6 +13,7 @@ package edu.wustl.catissuecore.bizlogic;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 
@@ -22,13 +23,18 @@ import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.Roles;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SecurityDataBean;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -186,5 +192,88 @@ public class DistributionProtocolBizLogic extends DefaultBizLogic implements Rol
         
         Logger.out.debug(authorizationData.toString());
         return authorizationData;
+    }
+    
+    /**
+     * Overriding the parent class's method to validate the enumerated attribute values
+     */
+	protected boolean validate(Object obj, DAO dao, String operation) throws DAOException
+    {
+		DistributionProtocol protocol = (DistributionProtocol)obj;
+		Collection spReqCollection = protocol.getSpecimenRequirementCollection();
+
+		if(spReqCollection != null && spReqCollection.size() != 0)
+		{
+			List specimenClassList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_SPECIMEN_CLASS,null);
+
+	    	NameValueBean undefinedVal = new NameValueBean(Constants.UNDEFINED,Constants.UNDEFINED);
+	    	List tissueSiteList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_TISSUE_SITE,undefinedVal);
+
+	    	List pathologicalStatusList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_PATHOLOGICAL_STATUS,null);
+ 
+			Iterator it = spReqCollection.iterator();
+
+			while(it.hasNext())
+			{
+				SpecimenRequirement requirement = (SpecimenRequirement)it.next();
+				
+				if(requirement == null)
+				{
+					throw new DAOException(ApplicationProperties.getValue("protocol.spReqEmpty.errMsg"));
+				}
+				else
+				{
+					String specimenClass = Utility.getSpecimenClassName(requirement);
+					
+					if(!Validator.isEnumeratedValue(specimenClassList,specimenClass))
+					{
+						throw new DAOException(ApplicationProperties.getValue("protocol.class.errMsg"));
+					}
+
+					if(specimenClass.equals(Constants.CELL))
+			    	{
+			    		if(requirement.getSpecimenType() != null)
+			    		{
+			    			throw new DAOException(ApplicationProperties.getValue("protocol.type.errMsg"));
+			    		}
+			    	}
+					else if(!Validator.isEnumeratedValue(Utility.getSpecimenTypes(specimenClass),requirement.getSpecimenType()))
+					{
+						throw new DAOException(ApplicationProperties.getValue("protocol.type.errMsg"));
+					}
+					
+					if(!Validator.isEnumeratedValue(tissueSiteList,requirement.getTissueSite()))
+					{
+						throw new DAOException(ApplicationProperties.getValue("protocol.tissueSite.errMsg"));
+					}
+
+					if(!Validator.isEnumeratedValue(pathologicalStatusList,requirement.getPathologyStatus()))
+					{
+						throw new DAOException(ApplicationProperties.getValue("protocol.pathologyStatus.errMsg"));
+					}
+				}
+			}
+		}
+		else
+		{
+			throw new DAOException(ApplicationProperties.getValue("protocol.spReqEmpty.errMsg"));
+		}
+		
+		if(operation.equals(Constants.ADD))
+		{
+			if(!Constants.ACTIVITY_STATUS_ACTIVE.equals(protocol.getActivityStatus()))
+			{
+				throw new DAOException(ApplicationProperties.getValue("activityStatus.active.errMsg"));
+			}
+		}
+		else
+		{
+			if(!Validator.isEnumeratedValue(Constants.ACTIVITY_STATUS_VALUES,protocol.getActivityStatus()))
+			{
+				throw new DAOException(ApplicationProperties.getValue("activityStatus.errMsg"));
+			}
+		}
+		
+		return true;
     }
 }
