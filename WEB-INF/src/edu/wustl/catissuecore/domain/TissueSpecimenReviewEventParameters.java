@@ -11,6 +11,7 @@ package edu.wustl.catissuecore.domain;
 
 import edu.wustl.catissuecore.actionForm.TissueSpecimenReviewEventParametersForm;
 import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -189,7 +190,16 @@ public class TissueSpecimenReviewEventParameters extends ReviewEventParameters
         	if(form.getLymphocyticPercentage() != null && form.getLymphocyticPercentage().trim().length()>0 )
         		this.lymphocyticPercentage = new Double(form.getLymphocyticPercentage());
         	
-        	this.histologicalQuality = form.getHistologicalQuality() ;
+        	Validator validator = new Validator();
+        	if(!validator.isValidOption(form.getHistologicalQuality()))
+        	{
+        		this.histologicalQuality = null; //Purposefully set null for Edit Mode
+        	}
+        	else
+        	{
+        		this.histologicalQuality = form.getHistologicalQuality();
+        	}
+        	
            	super.setAllValues(form);
         }
         catch (Exception excp)

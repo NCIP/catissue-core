@@ -11,6 +11,7 @@ package edu.wustl.catissuecore.domain;
 
 import edu.wustl.catissuecore.actionForm.CollectionEventParametersForm;
 import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -97,7 +98,17 @@ public class CollectionEventParameters extends SpecimenEventParameters
         try
         {
         	CollectionEventParametersForm form = (CollectionEventParametersForm) abstractForm;
-        	this.container = form.getContainer();
+        	Validator validator = new Validator();
+        	
+        	if(!validator.isValidOption(form.getContainer()))
+        	{
+        		this.container = null; //Purposefully set null for Edit Mode
+        	}
+        	else
+        	{
+        		this.container = form.getContainer();
+        	}
+        	
         	this.collectionProcedure = form.getCollectionProcedure() ;
         	
         	super.setAllValues(form);
