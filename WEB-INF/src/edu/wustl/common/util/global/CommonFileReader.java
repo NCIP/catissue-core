@@ -4,8 +4,8 @@ package edu.wustl.common.util.global;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ResourceBundle;
+
 import edu.wustl.catissuecore.util.global.Variables;
-import edu.wustl.common.util.logger.Logger;
 
 public class CommonFileReader {
 

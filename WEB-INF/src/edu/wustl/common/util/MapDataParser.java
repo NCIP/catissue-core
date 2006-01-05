@@ -14,8 +14,6 @@ import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 
-import net.sf.cglib.core.ReflectUtils;
-
 import edu.wustl.catissuecore.query.Table;
 import edu.wustl.common.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
