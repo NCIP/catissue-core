@@ -88,6 +88,7 @@ public class NewSpecimenAction  extends SecureAction
         String specimenCollectionGroupId = (String)request.getAttribute(Constants.SPECIMEN_COLLECTION_GROUP_ID);
         if(specimenCollectionGroupId != null)
 		{
+        	Logger.out.debug("In redirect if>>>>>>>>>>>>>" );
         	specimenForm.setSpecimenCollectionGroupId( specimenCollectionGroupId); 
         	specimenForm.setParentSpecimenId("" );
         	specimenForm.setPositionInStorageContainer("" );
@@ -95,7 +96,10 @@ public class NewSpecimenAction  extends SecureAction
         	specimenForm.setClassName( "");
         	specimenForm.setTissueSide( "");
         	specimenForm.setTissueSite( "");
-        	specimenForm.setPathologicalStatus( "");
+        	specimenForm.setPathologicalStatus("");
+        	specimenForm.setPositionDimensionOne("");
+        	specimenForm.setPositionDimensionTwo("");
+        	specimenForm.setStorageContainer("" );
  		}
         else
         {
@@ -172,8 +176,8 @@ public class NewSpecimenAction  extends SecureAction
 		request.setAttribute(Constants.SPECIMEN_COLLECTION_GROUP_LIST, specimenList);
 		
 		// -- set ForwardTo list
-		List forwardToList = getForwardToList(Constants.SPECIMEN_FORWARD_TO_LIST);
-		request.setAttribute(Constants.FORWARDLIST,forwardToList); 
+//		List forwardToList = getForwardToList(Constants.SPECIMEN_FORWARD_TO_LIST);
+//		request.setAttribute(Constants.FORWARDLIST,forwardToList); 
         
         //Setting the specimen class list
         List specimenClassList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_SPECIMEN_CLASS,null);
@@ -251,13 +255,13 @@ public class NewSpecimenAction  extends SecureAction
     
 
     //This function creates a list of NameValue Bean for the ForwardTo element  
-    private List getForwardToList(String [][] nameValueList)
-    {
-    	List returnList = new ArrayList() ;
-    	for(int i=0;i<nameValueList.length ;i++  )
-    	{
-    		returnList.add( new NameValueBean(nameValueList[i][0],nameValueList[i][1]    ) );
-    	}
-    	return returnList;
-    }
+//    private List getForwardToList(String [][] nameValueList)
+//    {
+//    	List returnList = new ArrayList() ;
+//    	for(int i=0;i<nameValueList.length ;i++  )
+//    	{
+//    		returnList.add( new NameValueBean(nameValueList[i][0],nameValueList[i][1]    ) );
+//    	}
+//    	return returnList;
+//    }
 }
