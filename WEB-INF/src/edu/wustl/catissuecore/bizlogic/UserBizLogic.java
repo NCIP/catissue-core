@@ -506,31 +506,34 @@ public class UserBizLogic extends DefaultBizLogic
 			throw new DAOException(ApplicationProperties.getValue("country.errMsg"));
 		}
 		
-		try
+		if(Constants.PAGEOF_USER_ADMIN.equals(user.getPageOf()))
 		{
-			if(!Validator.isEnumeratedValue(getRoles(),user.getRoleId()))
+			try
 			{
-				throw new DAOException(ApplicationProperties.getValue("user.role.errMsg"));
+				if(!Validator.isEnumeratedValue(getRoles(),user.getRoleId()))
+				{
+					throw new DAOException(ApplicationProperties.getValue("user.role.errMsg"));
+				}
 			}
-		}
-		catch(SMException e)
-		{
-			Logger.out.debug(e.getMessage(),e);
-			throw new DAOException(ApplicationProperties.getValue("user.role.dbErrMsg"));
-		}
-
-		if(operation.equals(Constants.ADD))
-		{
-			if(!Constants.ACTIVITY_STATUS_ACTIVE.equals(user.getActivityStatus()))
+			catch(SMException e)
 			{
-				throw new DAOException(ApplicationProperties.getValue("activityStatus.active.errMsg"));
+				Logger.out.debug(e.getMessage(),e);
+				throw new DAOException(ApplicationProperties.getValue("user.role.dbErrMsg"));
 			}
-		}
-		else
-		{
-			if(!Validator.isEnumeratedValue(Constants.USER_ACTIVITY_STATUS_VALUES,user.getActivityStatus()))
+	
+			if(operation.equals(Constants.ADD))
 			{
-				throw new DAOException(ApplicationProperties.getValue("activityStatus.errMsg"));
+				if(!Constants.ACTIVITY_STATUS_ACTIVE.equals(user.getActivityStatus()))
+				{
+					throw new DAOException(ApplicationProperties.getValue("activityStatus.active.errMsg"));
+				}
+			}
+			else
+			{
+				if(!Validator.isEnumeratedValue(Constants.USER_ACTIVITY_STATUS_VALUES,user.getActivityStatus()))
+				{
+					throw new DAOException(ApplicationProperties.getValue("activityStatus.errMsg"));
+				}
 			}
 		}
 		
