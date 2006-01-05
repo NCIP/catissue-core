@@ -30,11 +30,20 @@ public class TreeView {
 	//Variable which holds node ID in the tree. 
 	private int nodeId=0;
 	private boolean andOrBool = false;
+	private boolean noOrBool = false;
 	
 	//Recursive function to create the tree
 	public void arrangeTree(DefaultMutableTreeNode node,int parentId,Vector tree,Map advancedConditionNodesMap,int checkedNode,String operation,HttpSession session) throws Exception
 	{
+			//viewChildNode(node);
 			nodeId++;
+			if(node.getChildCount() > 1)
+			{
+				Logger.out.debug("childcount::"+node.getChildCount());
+				noOrBool = true;
+			}
+			else
+				noOrBool = false;
 			
 			//Loop for all the children for the current node.
 			for(int i = 0; i < node.getChildCount();i++)
@@ -139,24 +148,36 @@ public class TreeView {
 			        Logger.out.debug( "STR :---------- : "+ str);
 			    }
 				if(data != null)
+				{
+					str = str +  "|" + tableName;
+					
 					if(andOrBool)
-		        	{
-						str = str +  "|" + tableName + "|true";
-		        	}
+					{
+						str = "|true";
+					}
 					else
 					{
-						str = str +  "|" + tableName + "|false";
+						if(noOrBool)
+							str = str + "|false";
+						else
+							str = str + "|default";
 					}
+				}
 				
 				if(con == null)
 				{
+					str = nodeId + "|" + parentId + "|" + "ANY" + "|"+advConditionNode.getObjectName();
+					
 					if(andOrBool)
 		        	{
-						str = nodeId + "|" + parentId + "|" + "ANY" + "|"+advConditionNode.getObjectName() + "|true";
+						str = str + "|true";
 		        	}
 					else
 					{
-						str = nodeId + "|" + parentId + "|" + "ANY" + "|"+advConditionNode.getObjectName() + "|false";
+						if(noOrBool)
+							str = str + "|false";
+						else
+							str = str + "|default";
 					}
 				}
 				Logger.out.debug("STR in TREVIEW--"+str);
@@ -170,6 +191,15 @@ public class TreeView {
 					arrangeTree(child,nodeId,tree,advancedConditionNodesMap,checkedNode,operation,session);
 			}
 		} 
+	
+	private void viewChildNode(DefaultMutableTreeNode node)
+	{
+		for(int i = 0; i < node.getChildCount();i++)
+		{
+			//nodeCount++;
+			DefaultMutableTreeNode child = (DefaultMutableTreeNode)node.getChildAt(i);
+		}
+	}
 	
 	
 }

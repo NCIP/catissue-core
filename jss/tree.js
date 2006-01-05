@@ -97,6 +97,7 @@ function lastSibling (node, parentNode)
 function addNode(parentNode, recursedNodes) 
 {
 	var nodeCount = TreeNodes.length;
+	
 	var j = 1;
 	//var treeItem = document.getElementById('tree');
 			
@@ -180,14 +181,18 @@ function addNode(parentNode, recursedNodes)
 					document.write("<img src=\"images/join.gif\" align=\"absbottom\" alt=\"\" />");
 			//}
 			
-			if(nodeValues[4] == "true")
-			{ 
-				//document.write("<img src='images/lineH.gif' align='absbottom' alt='Add' />");
-				document.write("<img src='images/point.gif' alt='Add' />");
-			}
-			else
+			if(nodeValues[4] != "default")
 			{
-				document.write("<img src='images/graydot.gif' alt='Add' />");
+				
+				if(nodeValues[4] == "true")
+				{ 
+				//document.write("<img src='images/lineH.gif' align='absbottom' alt='Add' />");
+					document.write("<img src='images/point.gif' alt='Add' />");
+				}
+				else
+				{
+					document.write("<img src='images/graydot.gif' alt='Add' />");
+				}
 			}
 
 			var checkb = nodeValues[3] + "_" + nodeValues[0];
