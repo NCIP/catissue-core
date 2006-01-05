@@ -14,6 +14,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.Vector;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
@@ -26,6 +27,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.actionForm.AdvanceSearchForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.QueryBizLogic;
 import edu.wustl.catissuecore.query.Query;
@@ -51,13 +53,14 @@ public class DataViewAction extends BaseAction
     public ActionForward executeAction(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response) throws Exception
     {
+    	AdvanceSearchForm advForm = (AdvanceSearchForm)form;
+    	String[] selectedColumns = advForm.getSelectedColumnNames();
     	HttpSession session = request.getSession();
     	String target = Constants.SUCCESS;
     	String nodeName = request.getParameter("nodeName");
     	if(nodeName==null)
     		nodeName = (String)session.getAttribute(Constants.SELECTED_NODE);
     		
-    	Logger.out.debug("nodename of selected node"+nodeName);
         StringTokenizer str = new StringTokenizer(nodeName,":");
         String name = str.nextToken().trim();
         
@@ -112,21 +115,14 @@ public class DataViewAction extends BaseAction
     		
         	if (!name.equals(Constants.ROOT))
             {	
-        		Logger.out.debug("node name selected inside if condition:"+name);
-        		Logger.out.debug("column list inside if condition::"+columnList);
                 if (!name.equals(Query.PARTICIPANT) && columnList==null)
                 {
-                	Logger.out.debug("Inside if condition of filtercolumns");
                 	filteredColumnDisplayNames=new ArrayList();
                 	columnList = getColumnNamesForFilter(name,filteredColumnDisplayNames,columnIdsMap);
-                	Logger.out.debug("select column list size:"+columnList.length);
-                	Logger.out.debug("filteredColumnDisplayNames after func call"+filteredColumnDisplayNames);
                 }
                 String key = name+"."+Constants.IDENTIFIER;
                 int columnId = ((Integer)columnIdsMap.get(name+"."+Constants.IDENTIFIER)).intValue()-1;
-                Logger.out.debug("columnid of selected node:"+columnId+"in the map for key:"+key);
                 name=Constants.COLUMN+columnId;
-                Logger.out.debug("Column name of the selected column in the tree:"+name);
                 if(!parentName.equals(""))
                 {
                     key = parentName+"."+Constants.IDENTIFIER;
@@ -142,16 +138,13 @@ public class DataViewAction extends BaseAction
             {
             	for(int i=0;i<columnList.length;i++)
             	{
-            		Logger.out.debug("column loop :"+columnList[i]);
             		if(columnList[i].equals(specimenColumn))
             		{
-            			Logger.out.debug("Specimen id column does not exist");
             			exists=true;
             		}
             	}
                 if(!exists)
                 {
-                	Logger.out.debug("add specimen id column");
                 	String columnListWithoutSpecimenId[] = columnList;
                 	columnList = new String[columnListWithoutSpecimenId.length+1];
                     for(int i=0;i<columnListWithoutSpecimenId.length;i++)
@@ -188,7 +181,6 @@ public class DataViewAction extends BaseAction
      		// If the result contains no data, show error message.
     		if (list.isEmpty()) 
     		{
-    			Logger.out.debug("inside if condition for empty list");
     			ActionErrors errors = new ActionErrors();
     			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("advanceQuery.noRecordsFound"));
     			saveErrors(request, errors);
@@ -197,12 +189,43 @@ public class DataViewAction extends BaseAction
     		}
     		else
     		{
- 	        //if specimen id is added to the columns then add display name identifier to the filteredColumnDisplayNames
-    	        if(columnList!=null)
+
+    			if(selectedColumns==null)
+    			{
+    				Vector tablesVector = new Vector();
+    				tablesVector.add(Query.PARTICIPANT);
+    				tablesVector.add(Query.COLLECTION_PROTOCOL);
+    				tablesVector.add(Query.COLLECTION_PROTOCOL_REGISTRATION);
+    				tablesVector.add(Query.SPECIMEN_COLLECTION_GROUP);
+    				tablesVector.add(Query.SPECIMEN);
+
+    				List selectedColumnNames = new ArrayList();
+    				QueryBizLogic queryBizLogic = (QueryBizLogic)BizLogicFactory.getBizLogic(Constants.SIMPLE_QUERY_INTERFACE_ID);
+    				Iterator tableVectorItr = tablesVector.iterator();
+    				while(tableVectorItr.hasNext())
+    				{
+    					String table = (String)tableVectorItr.next();
+    					selectedColumnNames.addAll(queryBizLogic.setColumnNames(table));
+    				}
+    				selectedColumns = new String[selectedColumnNames.size()];
+    				Iterator columnNameItr = selectedColumnNames.iterator();
+    				int i=0;
+    				while(columnNameItr.hasNext())
+    				{
+    					selectedColumns[i]=((NameValueBean)columnNameItr.next()).getValue();
+    					i++;
+    				}
+    				advForm.setSelectedColumnNames(selectedColumns);
+    				Logger.out.debug("size of the configure default columns after setting:"+selectedColumns.length);
+					
+    			}
+
+    			//if specimen id is added to the columns then add display name identifier to the filteredColumnDisplayNames
+    	        /*if(columnList!=null)
     	        {
     	        	if(columnList.length-filteredColumnDisplayNames.size()==1)
     	        		filteredColumnDisplayNames.add("Identifier");
-    	        }
+    	        }*/
     			request.setAttribute(Constants.SPREADSHEET_COLUMN_LIST,filteredColumnDisplayNames);
    				request.setAttribute(Constants.SPREADSHEET_DATA_LIST,list);
     			request.setAttribute(Constants.PAGEOF,Constants.PAGEOF_QUERY_RESULTS);

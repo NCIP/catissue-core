@@ -17,6 +17,10 @@
 
 <style>
 .active-column-0 {width:30px}
+tr#hiddenCombo
+{
+ display:none;
+}
 </style>
 
 
@@ -36,16 +40,7 @@
 
 	boolean isSpecimenData = false;
 
-	/*for(int i=0;i<columnList.size();i++)
-	{
-		String columnName = (String)columnList.get(i);
-		if(columnName.equalsIgnoreCase("Specimen Id"))
-		{
-			isSpecimenData = true;
-			break;
-		}
-	}*/
-int IDCount = 0;
+	int IDCount = 0;
 if(dataList != null && dataList.size() != 0)
 {
 %>
@@ -208,7 +203,7 @@ if(dataList != null && dataList.size() != 0)
 		 </td>
 	</tr>
 	
-	<tr height="5%">
+	<tr height="4%">
 		<td width="100%">
 			<table cellpadding="5" cellspacing="0" border="0" width="100%">
 			<tr>
@@ -247,6 +242,29 @@ if(dataList != null && dataList.size() != 0)
 			</table>
 		</td>
 	</tr>
+	<%
+	if(pageOf.equals(Constants.PAGEOF_QUERY_RESULTS))
+	{
+		
+		String []selectedColumns=form.getSelectedColumnNames();
+	%>
+	
+	<tr id="hiddenCombo" rowspan="4" height="1%">
+		<td class="formField" colspan="4">
+   			<html:select property="selectedColumnNames" styleClass="selectedColumnNames"  size="1" styleId="selectedColumnNames" multiple="true">
+   				<%
+				for(int j=0;j<selectedColumns.length;j++)
+   				{
+   				%>
+					<html:option value="<%=selectedColumns[j]%>"><%=selectedColumns[j]%></html:option>
+				<%
+   				}
+   				%>
+   	 		</html:select>
+		</td>
+	</tr>
+	<% } 
+	%>
 	
 	<tr height="85%">
 		<td width="100%">
