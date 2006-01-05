@@ -16,7 +16,31 @@
 		Vector treeList = (Vector)request.getAttribute(Constants.TREE_VECTOR);
 	%>
 	var tree = [<%int k;%><%for (k=0;k < (treeList.size()-1);k++){%>"<%=treeList.get(k)%>",<%}%>"<%=treeList.get(k)%>"];
+	
+	function enableCommonItems(selectedNode,itemId,linkName)
+	{
+		var editItem = document.getElementById('<%=Constants.EDIT%>');
+		editItem.className="formTitle";
+		var editLink = linkName + selectedNode +"&itemId="+itemId;
+		var s = "<a HREF='" + editLink + "' target='searchPageFrame'><font color='white'>Edit</font></a>"
+		editItem.innerHTML = "" + s;
 			
+		var deleteItem = document.getElementById('<%=Constants.DELETE%>');
+		deleteItem.className="formTitle";
+		var deleteLink = "AdvanceSearch.do?delete=true&itemId="+itemId;
+		deleteItem.innerHTML = "&nbsp;<a HREF='" + deleteLink + "'><font color='white'>Delete</font></a>";
+			
+		var andItem = document.getElementById('and');
+		andItem.className="linkChange";
+		var link = "AdvanceQueryView.do?operator=EXIST&itemId="+itemId;
+		andItem.innerHTML ="&nbsp;<img src='images/point.gif' alt='pAND' />&nbsp;<a HREF='"+link+"'><%=Constants.ADVANCED_QUERY_AND%></a>"
+			
+		var orItem = document.getElementById('or');
+		orItem.className="linkChange";
+		var link = "AdvanceQueryView.do?operator=OR&itemId="+itemId;
+		orItem.innerHTML ="&nbsp;&nbsp;<img src='images/graydot.gif' alt='OR' />&nbsp;&nbsp;<a HREF='"+link+"'><%=Constants.ADVANCED_QUERY_OR%></a>"
+		
+	}				
 	function disableAll()
 	{
 		var item = document.getElementById('<%=Constants.CP%>');
@@ -186,29 +210,8 @@
 			//var link = "<%=SearchUtil.getLink("DistributionProtocol")%>"+ selectedNode;
 			DPItem.innerHTML = "&nbsp;<img src='images/DistributionProtocol.GIF' alt='DistributionProtocol' /> &nbsp;<a HREF='#'><%=Constants.MENU_DISTRIBUTION_PROTOCOL%></a>";*/
 			
-			var editItem = document.getElementById('<%=Constants.EDIT%>');
-			editItem.className="formTitle";
-			var editLink = "<%=SearchUtil.getLink("Participant")%>"+ selectedNode +"&itemId="+itemId;
-			var s = "<a HREF='" + editLink + "' target='searchPageFrame'><font color='white'>Edit</font></a>"
-			editItem.innerHTML = "" + s;
-			
-			
-			var deleteItem = document.getElementById('<%=Constants.DELETE%>');
-			deleteItem.className="formTitle";
-			var deleteLink = "AdvanceSearch.do?delete=true&itemId="+itemId;
-			deleteItem.innerHTML = "&nbsp;<a HREF='" + deleteLink + "'><font color='white'>Delete</font></a>";
-			
-			var andItem = document.getElementById('and');
-			andItem.className="linkChange";
-			var link = "AdvanceQueryView.do?operator=EXIST&itemId="+itemId;
-			andItem.innerHTML ="&nbsp;<img src='images/point.gif' alt='AND' />&nbsp;<a HREF='"+link+"'><%=Constants.ADVANCED_QUERY_AND%></a>"
-			
-			var orItem = document.getElementById('or');
-			orItem.className="linkChange";
-			var link = "AdvanceQueryView.do?operator=OR&itemId="+itemId;
-			orItem.innerHTML ="&nbsp;&nbsp;<img src='images/graydot.gif' alt='OR' />&nbsp;&nbsp;<a HREF='"+link+"'><%=Constants.ADVANCED_QUERY_OR%></a>"
-			
-			
+			var linkName = "<%=SearchUtil.getLink("Participant")%>";
+			enableCommonItems(selectedNode,itemId,linkName);
 		}
 		else if( (cProtocolCount == sum) && (cProtocolCount == 1) )
 		{
@@ -224,27 +227,8 @@
 			var link = "<%=SearchUtil.getLink("SpecimenCollectionGroup")%>"+ selectedNode;
 			scGItem.innerHTML ="&nbsp;<img src='images/SpecimenCollectionGroup.GIF' alt='SpecimenCollectionGroup' />  &nbsp;<a HREF='"+link+"' target='searchPageFrame'><%=Constants.MENU_SPECIMEN_COLLECTION_GROUP%></a>";
 			
-			var editItem = document.getElementById('<%=Constants.EDIT%>');
-			editItem.className="formTitle";
-			var editLink = "<%=SearchUtil.getLink("CollectionProtocol")%>"+ selectedNode +"&itemId="+itemId;
-			var s = "<a HREF='" + editLink + "' target='searchPageFrame'><font color='white'>Edit</font></a>"
-			editItem.innerHTML = "" + s;
-						
-			var deleteItem = document.getElementById('<%=Constants.DELETE%>');
-			deleteItem.className="formTitle";
-			var deleteLink = "AdvanceSearch.do?delete=true&itemId="+itemId;
-			deleteItem.innerHTML = "&nbsp;<a HREF='" + deleteLink + "'><font color='white'>Delete</font></a>";
-			
-			var andItem = document.getElementById('and');
-			andItem.className="linkChange";
-			var link = "AdvanceQueryView.do?operator=EXIST&itemId="+itemId;
-			andItem.innerHTML ="&nbsp;<img src='images/point.gif' alt='AND' />&nbsp;<a HREF='"+link+"'><%=Constants.ADVANCED_QUERY_AND%></a>"
-			
-			var orItem = document.getElementById('or');
-			orItem.className="linkChange";
-			var link = "AdvanceQueryView.do?operator=OR&itemId="+itemId;
-			orItem.innerHTML ="&nbsp;&nbsp;<img src='images/graydot.gif' alt='OR' />&nbsp;&nbsp;<a HREF='"+link+"'><%=Constants.ADVANCED_QUERY_OR%></a>"
-						
+			var linkName = "<%=SearchUtil.getLink("CollectionProtocol")%>";
+			enableCommonItems(selectedNode,itemId,linkName);
 		}
 		else if( (sCGroupCount == sum) && (sCGroupCount == 1))
 		{
@@ -253,28 +237,8 @@
 			var link = "<%=SearchUtil.getLink("Specimen")%>"+ selectedNode;
 			sItem.innerHTML ="&nbsp;<img src='images/Specimen.GIF' alt='Specimen' /> &nbsp;<a HREF='"+link+"' target='searchPageFrame'><%=Constants.SPECIMEN%></a>";
 			
-			var editItem = document.getElementById('<%=Constants.EDIT%>');
-			editItem.className="formTitle";
-			var editLink = "<%=SearchUtil.getLink("SpecimenCollectionGroup")%>"+ selectedNode +"&itemId="+itemId;
-			var s = "<a HREF='" + editLink + "' target='searchPageFrame'><font color='white'>Edit</font></a>"
-			editItem.innerHTML = "" + s;
-			
-			var deleteItem = document.getElementById('<%=Constants.DELETE%>');
-			deleteItem.className="formTitle";
-			var deleteLink = "AdvanceSearch.do?delete=true&itemId="+itemId;
-			deleteItem.innerHTML = "&nbsp;<a HREF='" + deleteLink + "'><font color='white'>Delete</font></a>";
-			
-			var andItem = document.getElementById('and');
-			andItem.className="linkChange";
-			var link = "AdvanceQueryView.do?operator=EXIST&itemId="+itemId;
-			andItem.innerHTML ="&nbsp;<img src='images/point.gif' alt='AND' />&nbsp;<a HREF='"+link+"'><%=Constants.ADVANCED_QUERY_AND%></a>"
-			
-			var orItem = document.getElementById('or');
-			orItem.className="linkChange";
-			var link = "AdvanceQueryView.do?operator=OR&itemId="+itemId;
-			orItem.innerHTML ="&nbsp;&nbsp;<img src='images/graydot.gif' alt='OR' />&nbsp;&nbsp;<a HREF='"+link+"'><%=Constants.ADVANCED_QUERY_OR%></a>"
-			
-			
+			var linkName = "<%=SearchUtil.getLink("SpecimenCollectionGroup")%>";
+			enableCommonItems(selectedNode,itemId,linkName);
 		}
 		else if( (specimenCount == sum) && (specimenCount == 1))
 		{
@@ -284,28 +248,8 @@
             var link = "<%=SearchUtil.getLink("Specimen")%>"+ selectedNode;
             sItem.innerHTML ="&nbsp;<img src='images/Specimen.GIF' alt='Specimen' /> &nbsp;<a HREF='"+link+"' target='searchPageFrame'><%=Constants.SPECIMEN%></a>";
 			
-			var editItem = document.getElementById('<%=Constants.EDIT%>');
-			editItem.className="formTitle";
-			var editLink = "<%=SearchUtil.getLink("Specimen")%>"+ selectedNode +"&itemId="+itemId;
-			var s = "<a HREF='" + editLink + "' target='searchPageFrame'><font color='white'>Edit</font></a>"
-			editItem.innerHTML = "" + s;
-			
-			
-			var deleteItem = document.getElementById('<%=Constants.DELETE%>');
-			deleteItem.className="formTitle";
-			var deleteLink = "AdvanceSearch.do?delete=true&itemId="+itemId;
-			deleteItem.innerHTML = "&nbsp;<a HREF='" + deleteLink + "'><font color='white'>Delete</font></a>";
-			
-			var andItem = document.getElementById('and');
-			andItem.className="linkChange";
-			var link = "AdvanceQueryView.do?operator=EXIST&itemId="+itemId;
-			andItem.innerHTML ="&nbsp;<img src='images/point.gif' alt='AND' />&nbsp;<a HREF='"+link+"'><%=Constants.ADVANCED_QUERY_AND%></a>"
-			
-			var orItem = document.getElementById('or');
-			orItem.className="linkChange";
-			var link = "AdvanceQueryView.do?operator=OR&itemId="+itemId;
-			orItem.innerHTML ="&nbsp;&nbsp;<img src='images/graydot.gif' alt='OR' />&nbsp;&nbsp;<a HREF='"+link+"'><%=Constants.ADVANCED_QUERY_OR%></a>"
-			
+			var linkName = "<%=SearchUtil.getLink("Specimen")%>";
+			enableCommonItems(selectedNode,itemId,linkName);
 		}
 		else 
 			disableAll();
