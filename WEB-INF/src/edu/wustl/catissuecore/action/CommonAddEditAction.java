@@ -103,38 +103,25 @@ public class CommonAddEditAction extends Action
                 
                 if(abstractDomain instanceof Specimen)
                 {
-                	String forwardTo = abstractForm.getForwardTo();
                 	request.setAttribute(Constants.SPECIMEN_ID,String.valueOf(abstractDomain.getSystemIdentifier()));
-                	Logger.out.debug("ForwardTo in Specimen :-- : "+ forwardTo);
                 	Logger.out.debug("Specimen ID :-- : "+ String.valueOf(abstractDomain.getSystemIdentifier()) );
-
-                	if(forwardTo != null)
-                	{
-                		if(forwardTo.equals("createNew") )
-                		request.setAttribute(Constants.PARENT_SPECIMEN_ID,String.valueOf(abstractDomain.getSystemIdentifier()));
-                		
-	                    if(forwardTo.equals("sameCollectionGroup") )
-	                		request.setAttribute(Constants.SPECIMEN_COLLECTION_GROUP_ID,String.valueOf(((Specimen)abstractDomain).getSpecimenCollectionGroup().getSystemIdentifier()  ));
-	                    		
-	                    if(forwardTo.equals("eventParameters") )
-	                    	request.setAttribute(Constants.SPECIMEN_ID,String.valueOf(abstractDomain.getSystemIdentifier()));
-	 
-	                    request.setAttribute("newSpecimenForm",new NewSpecimenForm() );
-                	}
+                	
+                	forwardToInSpecimen(abstractForm,abstractDomain,request);
+	                request.setAttribute("newSpecimenForm",new NewSpecimenForm() );
                 }
                 
-                if(abstractDomain instanceof Participant)
+                else if(abstractDomain instanceof Participant)
                 {
                 	request.setAttribute(Constants.PARTICIPANT_ID,String.valueOf(abstractDomain.getSystemIdentifier()));
 	            }
                 
-            	if(abstractDomain instanceof Distribution)
+                else if(abstractDomain instanceof Distribution)
                 {
                 	//Setting Distribution ID as request parameter
                 	request.setAttribute(Constants.DISTRIBUTION_ID,abstractDomain.getSystemIdentifier());
                 }
             	
-                if(abstractDomain instanceof SpecimenCollectionGroup)
+                else if(abstractDomain instanceof SpecimenCollectionGroup)
                 {
                 	String forwardTo = abstractForm.getForwardTo();
                 	Logger.out.debug("ForwardTo in SCG :-- : "+ forwardTo);
@@ -146,7 +133,7 @@ public class CommonAddEditAction extends Action
                 }	
                 
                 // CollectionProtocolRegistration values
-                if(abstractDomain instanceof CollectionProtocolRegistration)
+                else if(abstractDomain instanceof CollectionProtocolRegistration)
                 {
                 	request.setAttribute(Constants.COLLECTION_REGISTRATION_ID,abstractDomain.getSystemIdentifier().toString());
                 }	
@@ -279,17 +266,7 @@ public class CommonAddEditAction extends Action
                     // specimen values
                     if(abstractDomain instanceof Specimen)
                     {
-                    	String forwardTo = abstractForm.getForwardTo(); 
-                    	Logger.out.debug("ForwardTo in Specimen :-- : "+ forwardTo);
-                    	if(forwardTo.equals("createNew") )
-                    		request.setAttribute(Constants.PARENT_SPECIMEN_ID,String.valueOf(abstractDomain.getSystemIdentifier()));
-                    		
-                        if(forwardTo.equals("sameCollectionGroup") )
-                    		request.setAttribute(Constants.SPECIMEN_COLLECTION_GROUP_ID,String.valueOf(((Specimen)abstractDomain).getSpecimenCollectionGroup().getSystemIdentifier()  ));
-                        		
-                        if(forwardTo.equals("eventParameters") )
-                        	request.setAttribute(Constants.SPECIMEN_ID,String.valueOf(abstractDomain.getSystemIdentifier()));
-                    }
+                    	forwardToInSpecimen(abstractForm,abstractDomain,request);                    }
                     
                     if(abstractDomain instanceof Participant)
                     {
@@ -444,4 +421,22 @@ public class CommonAddEditAction extends Action
 		return null;
 		//return (String) request.getSession().getAttribute(Constants.SESSION_DATA);
 	}
+    
+    // to set the attributes based on forward to parameter 
+     private void forwardToInSpecimen(AbstractActionForm abstractForm,AbstractDomainObject abstractDomain,HttpServletRequest request)
+     {
+     	String forwardTo = abstractForm.getForwardTo();
+    	Logger.out.debug("ForwardTo in Specimen :-- : "+ forwardTo);
+    	if(forwardTo != null)
+    	{
+    		if(forwardTo.equals("createNew") )
+    		request.setAttribute(Constants.PARENT_SPECIMEN_ID,String.valueOf(abstractDomain.getSystemIdentifier()));
+    		
+            if(forwardTo.equals("sameCollectionGroup") )
+        		request.setAttribute(Constants.SPECIMEN_COLLECTION_GROUP_ID,String.valueOf(((Specimen)abstractDomain).getSpecimenCollectionGroup().getSystemIdentifier()  ));
+            		
+            if(forwardTo.equals("eventParameters") )
+            	request.setAttribute(Constants.SPECIMEN_ID,String.valueOf(abstractDomain.getSystemIdentifier()));
+    	}
+     }
 }
