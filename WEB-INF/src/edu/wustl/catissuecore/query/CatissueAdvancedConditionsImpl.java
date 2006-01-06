@@ -1,9 +1,3 @@
-/*
- * Created on Dec 22, 2005
- *
- * TODO To change the template for this generated file go to
- * Window - Preferences - Java - Code Style - Code Templates
- */
 package edu.wustl.catissuecore.query;
 
 import java.util.Enumeration;
@@ -40,7 +34,7 @@ public class CatissueAdvancedConditionsImpl extends AdvancedConditionsImpl {
 				AdvancedConditionsNode advConditionNode = (AdvancedConditionsNode)child.getUserObject();
 				if(parentAdvConditionNode.getObjectName().equals(Query.SPECIMEN))
 				{
-					setTableAliasOfChild(parent,advConditionNode,operationWithChildren,child.getLevel());
+					setTableAliasOfChild(parent,advConditionNode,operationWithChildren,child.getLevel(),parent.getIndex(child));
 				}
 			}
 		}
@@ -52,7 +46,7 @@ public class CatissueAdvancedConditionsImpl extends AdvancedConditionsImpl {
 	 * @param depth
 	 */
 	private void setTableAliasOfChild(final TreeNode parentNode,final AdvancedConditionsNode advConditionNode,
-			String temp, int level) {
+			String temp, int level, int childIndex) {
 		
 		Vector vectorOfCondtions = advConditionNode.getObjectConditions();
 		String tableName = advConditionNode.getObjectName();
@@ -69,7 +63,7 @@ public class CatissueAdvancedConditionsImpl extends AdvancedConditionsImpl {
 		//If there is no condition add a condition Identifier > 0 so that specimen gets included in query
 		if(vectorOfCondtions.size() == 0)
 		{
-			vectorOfCondtions.add(getIdentifierCondition());
+			vectorOfCondtions.add(getIdentifierCondition(Query.SPECIMEN));
 		}
 		for (int k = 0; k < vectorOfCondtions.size(); k++) {
 			
@@ -103,8 +97,11 @@ public class CatissueAdvancedConditionsImpl extends AdvancedConditionsImpl {
 						table2.setLinkingTable(new Table(Query.SPECIMEN,
 							Query.SPECIMEN));
 					}
+					
+					table2.setTableAliasAppend(table2.getTableName() + level+"L");
 				}
-				else
+				//IF the condition belongs to specimen characteristics
+				else if(table2.getTableName().equals(Query.SPECIMEN_CHARACTERISTICS))
 				{
 					
 //					table2.setLinkingTable(new Table(Query.SPECIMEN,
@@ -127,20 +124,58 @@ public class CatissueAdvancedConditionsImpl extends AdvancedConditionsImpl {
 								Query.SPECIMEN+ level+"L",new Table(Query.SPECIMEN,
 							Query.SPECIMEN)));
 					}
+					
+					table2.setTableAliasAppend(table2.getTableName() + level+"L");
+				}
+				//else SpecimenEventParameters condition
+				else
+				{
+					
+					if(parent2.getObjectName().equals(Query.SPECIMEN) && !parent2.getOperationWithChildCondition().getOperator().equals(Operator.EXIST))
+					{
+						
+						Table parent2LinkingTable = getParentLinkingTable(parent2);
+						table2.setLinkingTable(new Table(Query.SPECIMEN_EVENT_PARAMETERS,
+								Query.SPECIMEN_EVENT_PARAMETERS_APPEND+table2.getTableName()+ level+"L"+childIndex+"C",new Table(Query.SPECIMEN,
+										Query.SPECIMEN+ level+"L",new Table(Query.SPECIMEN,
+												Query.SPECIMEN+(level-1)+"L",parent2LinkingTable))));
+					}
+					else
+					{
+						table2.setLinkingTable(new Table(Query.SPECIMEN_EVENT_PARAMETERS,
+								Query.SPECIMEN_EVENT_PARAMETERS_APPEND+table2.getTableName()+ level+"L"+childIndex+"C",new Table(Query.SPECIMEN,
+								Query.SPECIMEN+ level+"L",new Table(Query.SPECIMEN,
+							Query.SPECIMEN))));
+					}
+						
+					table2.setTableAliasAppend(table2.getTableName() + level+"L"+childIndex+"C");
 				}
 				
-				table2.setTableAliasAppend(table2.getTableName() + level+"L");
-				table2.setTableName(table2.getTableName());
+				
+//				table2.setTableName(table2.getTableName());
 				
 			} else {
 				
-				table2
-						.setLinkingTable(new Table(Query.SPECIMEN,
-								Query.SPECIMEN));
-				table2.setTableAliasAppend(table2.getTableName());
-				table2.setTableName(table2.getTableName());
+				//if event parameter tables
+				if(table2.getTableName().indexOf(Query.PARAM)!=-1)
+				{
+					table2.setLinkingTable(new Table(Query.SPECIMEN_EVENT_PARAMETERS,
+							Query.SPECIMEN_EVENT_PARAMETERS_APPEND+table2.getTableName()+ level+"L"+childIndex+"C",new Table(Query.SPECIMEN,
+							Query.SPECIMEN)));
+					table2.setTableAliasAppend(table2.getTableName() + level+"L"+childIndex+"C");
+				}
+				else
+				{
+					table2
+							.setLinkingTable(new Table(Query.SPECIMEN,
+									Query.SPECIMEN));
+					table2.setTableAliasAppend(table2.getTableName());
+					
+				}
 				
 			}
+			
+			table2.setTableName(table2.getTableName());
 			Logger.out.debug("table name:" + table2.getTableName()
 					+ " Alias:" + table2.getTableAliasAppend());
 
@@ -156,7 +191,7 @@ public class CatissueAdvancedConditionsImpl extends AdvancedConditionsImpl {
 		Vector parent2ConVector = parent2.getObjectConditions();
 		if(parent2ConVector.size() == 0)
 		{
-			parent2ConVector.add(getIdentifierCondition());
+			parent2ConVector.add(getIdentifierCondition(Query.SPECIMEN));
 		}
 		//Get table from any one of the conditions and set it as linking table
 		Condition parent2Con = (Condition) parent2ConVector.get(0);
@@ -170,12 +205,12 @@ public class CatissueAdvancedConditionsImpl extends AdvancedConditionsImpl {
 	/**
 	 * @return
 	 */
-	private Condition getIdentifierCondition() {
+	private Condition getIdentifierCondition(String ObjClass) {
 		Condition con;
 		DataElement data;
 		Logger.out.debug(" Zero conditions present in the node");
 		con = new Condition();
-		data = new DataElement(new Table(Query.SPECIMEN,Query.SPECIMEN),Constants.IDENTIFIER,Constants.FIELD_TYPE_BIGINT);
+		data = new DataElement(new Table(ObjClass,ObjClass),Constants.IDENTIFIER,Constants.FIELD_TYPE_BIGINT);
 		con.setDataElement(data);
 		con.setOperator(new Operator(Operator.GREATER_THAN));
 		con.setValue("0");

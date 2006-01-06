@@ -1,5 +1,6 @@
 package edu.wustl.catissuecore.query;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -7,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
+
+import javax.swing.text.TabExpander;
 
 import edu.wustl.catissuecore.dao.DAOFactory;
 import edu.wustl.catissuecore.dao.JDBCDAO;
@@ -139,6 +142,8 @@ public abstract class Query {
 
 	public static final String STORAGE_TYPE = "StorageType";
 
+	public static final String SPECIMEN_CHARACTERISTICS = "SpecimenCharacteristics";
+
 	public static final String STORAGE_CONTAINER_CAPACITY = "StorageContainerCapacity";
 
 	public static final String BIO_HAZARD = "Biohazard";
@@ -163,11 +168,17 @@ public abstract class Query {
 
 	public static final String TISSUE_SPECIMEN_REQUIREMENT = "TissueSpecimenRequirement";
 
+	public static final String SPECIMEN_EVENT_PARAMETERS = "SpecimenEventParameters";
+	
+	public static final String SPECIMEN_EVENT_PARAMETERS_APPEND = "S";
+
 	public static final String FLUID_SPECIMEN_REQUIREMENT = "FluidSpecimenRequirement";
 
 	public static final String STORAGE_CONTAINER = "StorageContainer";
 
-	public static final String CHECKIN_CHECKOUT_EVENT_PARAMETER = "CheckinCheckoutEventParameter";
+	public static final String CHECKIN_CHECKOUT_EVENT_PARAMETER = "CheckinCheckoutEventParam";
+
+	public static final String PARAM = "Param";
 
 	/**
 	 * This method executes the query string formed from getString method and
@@ -281,27 +292,56 @@ public abstract class Query {
 		//	        set.add(((DataElement)resultView.get(i)).getTable());
 		//	    }
 
+		set.addAll(getLinkingTables(set));
 		Logger.out.debug("Set : " + set.toString());
 		query.append("\nFROM ");
+		
+		String joinConditionString = this.getJoinConditionString(set);
 		query.append(this.formFromString(set));
 
 		/**
 		 * Forming WHERE part of the query
 		 */
 		query.append("\nWHERE ");
-		String joinConditionString = this.getJoinConditionString(set);
+		
 		query.append(joinConditionString);
 		//        String whereConditionsString = whereConditions.getString(tableSufix);
 		if (whereConditions.hasConditions()) {
 			if (joinConditionString != null
 					&& joinConditionString.length() != 0) {
-				query.append(" " + Operator.AND + " ");
+				query.append(" " + Operator.AND + " (");
 			}
 			query.append(whereConditions.getString(tableSufix));
+			if (joinConditionString != null
+					&& joinConditionString.length() != 0) {
+				query.append(" )");
+			}
 		}
 		return query.toString();
 	}
 
+	/**
+	 * @param set
+	 * @return
+	 */
+	private Set getLinkingTables(HashSet set) {
+		Set linkingTables = new HashSet();
+		Iterator it = set.iterator();
+		Table table;
+		while(it.hasNext())
+		{
+			table = (Table) it.next();
+			while(table.hasDifferentAlias())
+			{
+				Logger.out.debug("Linking table: "+table+" ---> "+table.getLinkingTable());
+				table = table.getLinkingTable();
+				linkingTables.add(table);
+			}
+			
+		}
+		Logger.out.debug("linking tables:"+linkingTables);
+		return linkingTables;
+	}
 	/**
 	 * This method returns set of all objects related to queryStartObject
 	 * transitively
@@ -415,6 +455,7 @@ public abstract class Query {
 					}
 					joinConditionString.append(relationCondition
 							.toSQLString(tableSufix));
+					set.add(table1.getLinkingTable());
 				}
 				else
 				{
@@ -433,6 +474,7 @@ public abstract class Query {
 						}
 						joinConditionString.append(relationCondition
 								.toSQLString(tableSufix));
+						set.add(table1.getLinkingTable());
 					}
 				}
 				continue;
@@ -554,6 +596,7 @@ public abstract class Query {
 		while (it.hasNext()) {
 			fromString.append(" ");
 			table = (Table) it.next();
+			Logger.out.debug(" Table name:"+table.getTableName());
 			fromString
 					.append(((String) Client.objectTableNames.get(table.getTableName()))
 							.toUpperCase()
@@ -664,7 +707,23 @@ public abstract class Query {
 			set.addAll(tableSet);
 		}
 		Logger.out.debug("TableNamesSet:" + set);
-		return set;
+		
+		//REmoving all event parameter tables
+		Iterator it = set.iterator();
+		String tableName;
+		Set newTableSet = new HashSet();
+		while(it.hasNext())
+		{
+			tableName = (String) it.next();
+			if(tableName.indexOf(Query.PARAM) == -1)
+			{
+				newTableSet.add(tableName);			
+			}
+		}
+		
+		Logger.out.debug("TableNamesSet after removing event parameter tables:" + newTableSet);
+		
+		return newTableSet;
 	}
 	
 	/**
@@ -680,6 +739,8 @@ public abstract class Query {
 
 			}
 		}
+		Logger.out.debug("TableSet after adding resultview:" + set);
+		
 		if (whereConditions != null) {
 			set.addAll(whereConditions.getQueryObjects());
 		}
@@ -697,7 +758,7 @@ public abstract class Query {
 			}
 			
 		}
-		Logger.out.debug("TableSet:" + set);
+		Logger.out.debug("Overall TableSet:" + set);
 		return set;
 	}
 
