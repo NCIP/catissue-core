@@ -128,7 +128,7 @@ public class UserBizLogic extends DefaultBizLogic
             if (Constants.PAGEOF_SIGNUP.equals(user.getPageOf()))
             {
                 EmailHandler emailHandler = new EmailHandler();
-                
+//                String cc = getInstitutionAdmins(user.getInstitution().getSystemIdentifier()  );
                 emailHandler.sendUserSignUpEmail(user);
                 try
                 {
@@ -336,10 +336,10 @@ public class UserBizLogic extends DefaultBizLogic
     {
     	String sourceObjectName = User.class.getName();
     	String[] selectColumnName = null;
-    	String[] whereColumnName = {Constants.ACTIVITY_STATUS};
-        String[] whereColumnCondition = {"!="};
-        Object[] whereColumnValue = {Constants.ACTIVITY_STATUS_DISABLED};
-        String joinCondition = Constants.AND_JOIN_CONDITION;
+    	String[] whereColumnName = {Constants.ACTIVITY_STATUS,Constants.ACTIVITY_STATUS};
+        String[] whereColumnCondition = {"=","="};
+        Object[] whereColumnValue = {Constants.ACTIVITY_STATUS_ACTIVE,Constants.ACTIVITY_STATUS_CLOSED };
+        String joinCondition = Constants.OR_JOIN_CONDITION ;
 		
         //Retrieve the users whose activity status is not disabled.
         List users = retrieve(sourceObjectName, selectColumnName, whereColumnName,
@@ -360,7 +360,7 @@ public class UserBizLogic extends DefaultBizLogic
                         + user.getFirstName());
                 nameValueBean.setValue(String.valueOf(user
                         .getSystemIdentifier()));
-                Logger.out.debug(nameValueBean.toString());
+                Logger.out.debug(nameValueBean.toString() + " : " + user.getActivityStatus() );
                 nameValuePairs.add(nameValueBean);
             }
         }
@@ -568,4 +568,41 @@ public class UserBizLogic extends DefaultBizLogic
         }
         return roleNameValueBeanList;
     }
+    
+//    //method to return a comma seperated list of emails of administrators of a particular institute
+//    
+//    private String getInstitutionAdmins(Long instID) throws DAOException,SMException 
+//    {
+//    	String retStr="";
+//    	String[] userEmail;
+//    	
+//    	Long[] csmAdminIDs = SecurityManager.getInstance(UserBizLogic.class).getAllAdministrators() ; 
+//    	  if (csmAdminIDs != null )
+//    	  {
+//        	for(int cnt=0;cnt<csmAdminIDs.length ;cnt++  )
+//        	{
+//            	String sourceObjectName = User.class.getName();
+//            	String[] selectColumnName = null;
+//            	String[] whereColumnName = {"institution","csmUserId"};
+//                String[] whereColumnCondition = {"=","="};
+//                Object[] whereColumnValue = {instID, csmAdminIDs[cnt] };
+//                String joinCondition = Constants.AND_JOIN_CONDITION;
+//        		
+//                //Retrieve the users for given institution and who are administrators.
+//                List users = retrieve(sourceObjectName, selectColumnName, whereColumnName,
+//                        whereColumnCondition, whereColumnValue, joinCondition);
+//                
+//                if(!users.isEmpty() )
+//                {
+//                	User adminUser = (User)users.get(0);
+//                	retStr = retStr + "," + adminUser.getEmailAddress();
+//                	Logger.out.debug(retStr);
+//                }
+//        	}
+//        	retStr = retStr.substring(retStr.indexOf(",")+1 );
+//        	Logger.out.debug(retStr);
+//    	  }
+//    	return retStr;
+//    }
+//    
 }
