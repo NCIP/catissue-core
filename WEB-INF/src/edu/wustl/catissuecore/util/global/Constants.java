@@ -438,6 +438,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String SELECT_COLUMN_LIST = "selectColumnList";
 	public static final String CONFIGURED_SELECT_COLUMN_LIST = "configuredSelectColumnList";
 	public static final String CONFIGURED_COLUMN_DISPLAY_NAMES = "configuredColumnDisplayNames";
+	public static final String CONFIGURED_COLUMN_NAMES = "configuredColumnNames";
 	public static final String SELECTED_NODE = "selectedNode";
 	
 	//Tree Data Action
@@ -1281,8 +1282,8 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	
 //	 constants required for Distribution Report
 	public static final String CONFIGURATION_TABLES = "configurationTables";
-	public static final String DISTRIBUTION_TABLE_AlIAS[] = {"CollectionProtocolRegistration","Participant","Specimen",
-															 "SpecimenCollectionGroup","DistributedItem"};
+	public static final String DISTRIBUTION_TABLE_AlIAS[] = {"CollectionProtReg","Participant","Specimen",
+															 "SpecimenCollectionGroup","Distribution"};
 	public static final String TABLE_COLUMN_DATA_MAP = "tableColumnDataMap";
 	public static final String CONFIGURE_RESULT_VIEW_ACTION = "ConfigureResultView.do";
 	public static final String TABLE_NAMES_LIST = "tableNamesList";
@@ -1291,12 +1292,12 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String CONFIGURE_DISTRIBUTION_ACTION = "ConfigureDistribution.do";
 	public static final String DISTRIBUTION_REPORT_ACTION = "DistributionReport.do";
 	public static final String DISTRIBUTION_REPORT_SAVE_ACTION="DistributionReportSave.do";
-	public static final String SELECTED_COLUMNS[] = {"Specimen.IDENTIFIER.Specimen Identifier",
-													"Specimen.TYPE.Specimen Type",
-													"SpecimenCharacteristics.TISSUE_SITE.Tissue Site",
-													"SpecimenCharacteristics.TISSUE_SIDE.Tissue Side",
-													"SpecimenCharacteristics.PATHOLOGICAL_STATUS.Pathological Status",
-													"DistributedItem.QUANTITY.Specimen Quantity"};
+	public static final String SELECTED_COLUMNS[] = {"Specimen.IDENTIFIER.Identifier : Specimen",
+													"Specimen.TYPE.Type : Specimen",
+													"SpecimenCharacteristics.TISSUE_SITE.Tissue Site : Specimen",
+													"SpecimenCharacteristics.TISSUE_SIDE.Tissue Side : Specimen",
+													"SpecimenCharacteristics.PATHOLOGICAL_STATUS.Pathological Status : Specimen",
+													"DistributedItem.QUANTITY.Quantity : Distribution"};
 	public static final String SPECIMEN_ID_LIST = "specimenIdList";
 	public static final String DISTRIBUTION_ACTION = "Distribution.do?pageOf=pageOfDistribution";
 	public static final String DISTRIBUTION_REPORT_NAME = "Distribution Report.csv";
