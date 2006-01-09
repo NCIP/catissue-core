@@ -35,15 +35,19 @@ public class TreeView {
 	//Recursive function to create the tree
 	public void arrangeTree(DefaultMutableTreeNode node,int parentId,Vector tree,Map advancedConditionNodesMap,int checkedNode,String operation,HttpSession session) throws Exception
 	{
-			//viewChildNode(node);
 			nodeId++;
+			//Checking whether parent rule has more than 1 child rule or not(OR condition)
 			if(node.getChildCount() > 1)
 			{
 				Logger.out.debug("childcount::"+node.getChildCount());
-				noOrBool = true;
+				AdvancedConditionsNode advConditionDefaultOrNode = (AdvancedConditionsNode)node.getUserObject();
+				Logger.out.debug("advConditionDefaultOrNode::"+advConditionDefaultOrNode);
+				
+				//Setting to true to display DOT image,symbol of OR condition
+				if(advConditionDefaultOrNode != null)
+					advConditionDefaultOrNode.setDefaultAndOr(true);
 			}
-			else
-				noOrBool = false;
+			
 			
 			//Loop for all the children for the current node.
 			for(int i = 0; i < node.getChildCount();i++)
@@ -68,6 +72,21 @@ public class TreeView {
 						andOrBool = false;
 					}
 					
+					//Boolean for setting value false in (String array)rule which will display DOT image 
+					if(parentAdvConditionNode.isDefaultAndOr())
+					{
+						noOrBool = true;
+					}
+					else
+						noOrBool = false;
+				}
+				else 
+				{
+					//Condition only when Parent is Root
+					if(parent.getChildCount() > 1)	
+						noOrBool = true;
+					else
+						noOrBool = false;
 				}
 				AdvancedConditionsNode advConditionNode = (AdvancedConditionsNode)child.getUserObject();
 				advancedConditionNodesMap.put(new Integer(nodeId),child);
@@ -77,7 +96,7 @@ public class TreeView {
 				{
 					session.setAttribute("lastNodeId",(""+nodeId));
 				}
-								
+				
 				if(nodeId == checkedNode)
 				{
 					Logger.out.debug("operation inside if nodeid clicked"+operation);
@@ -160,6 +179,7 @@ public class TreeView {
 						if(noOrBool)
 							str = str + "|false";
 						else
+							//Appending default which will not display any image
 							str = str + "|default";
 					}
 				}
@@ -192,14 +212,5 @@ public class TreeView {
 			}
 		} 
 	
-	private void viewChildNode(DefaultMutableTreeNode node)
-	{
-		for(int i = 0; i < node.getChildCount();i++)
-		{
-			//nodeCount++;
-			DefaultMutableTreeNode child = (DefaultMutableTreeNode)node.getChildAt(i);
-		}
-	}
-	
-	
+		
 }
