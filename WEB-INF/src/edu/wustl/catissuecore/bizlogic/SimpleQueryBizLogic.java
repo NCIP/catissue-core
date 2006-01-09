@@ -335,7 +335,6 @@ public class SimpleQueryBizLogic extends DefaultBizLogic
 	    public Vector getViewElements(List aliasNameSet, List columnList) throws DAOException
 		{
 		    Vector vector = new Vector();
-		    
 		    try
 		    {
 			    JDBCDAO jdbcDao = new JDBCDAO();
@@ -365,7 +364,15 @@ public class SimpleQueryBizLogic extends DefaultBizLogic
 				    Logger.out.debug("DATA ELEMENT SQL : "+sql);
 				    
 				    List list = jdbcDao.executeQuery(sql, null, false, null);
-				    
+			        String nameSql = "select DISPLAY_NAME from CATISSUE_QUERY_TABLE_DATA where ALIAS_NAME='"+aliasName+"'";
+			        List nameList = jdbcDao.executeQuery(nameSql,null,false, null);
+			        String tableDisplayName=new String();
+			        if (!nameList.isEmpty())
+			        {
+			            List rowNameList = (List)nameList.get(0);
+			            tableDisplayName = (String)rowNameList.get(0);
+			        }
+			        Logger.out.debug("tableDisplayName in getviewelements:"+tableDisplayName);
 				    Logger.out.debug("list.size()************************"+list.size());
 				    String [] columnNames = new String[list.size()];
 				    Iterator iterator = list.iterator();
@@ -381,10 +388,9 @@ public class SimpleQueryBizLogic extends DefaultBizLogic
 				        dataElement.setField(fieldName+"."+(String)rowList.get(2));
 				        dataElement.setFieldType((String)rowList.get(4));
 				        vector.add(dataElement);
-				        columnList.add((String)rowList.get(3));
+				        columnList.add((String)rowList.get(3)+" : "+tableDisplayName);
 				    }
 		        }
-			    
 			    jdbcDao.closeSession();
 		    }
 		    catch(ClassNotFoundException classExp)
