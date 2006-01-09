@@ -69,7 +69,10 @@ public class ConfigureAdvanceSearchResultsAction extends BaseAction
         
         session.setAttribute(Constants.CONFIGURED_SELECT_COLUMN_LIST,selectColumnNames);
         session.setAttribute(Constants.CONFIGURED_COLUMN_DISPLAY_NAMES,columnDisplayNames);
+        session.setAttribute(Constants.CONFIGURED_COLUMN_NAMES,configuredColumns);
+        
         request.setAttribute(Constants.SPREADSHEET_DATA_LIST,list);
+        
     	
         request.setAttribute(Constants.SPREADSHEET_COLUMN_LIST,columnDisplayNames);
         request.setAttribute(Constants.PAGEOF,Constants.PAGEOF_QUERY_RESULTS);
