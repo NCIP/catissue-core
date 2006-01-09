@@ -53,7 +53,7 @@ public abstract class SpecimenEventParametersForm extends EventParametersForm
 	 
 	 public void setAllValues(AbstractDomainObject abstractDomain)
  	 {
-	     super.setAllVal(abstractDomain);
+	     super.setAllValues(abstractDomain);
 		 
 	     SpecimenEventParameters specimenEventParameters = (SpecimenEventParameters)abstractDomain;
 		 
