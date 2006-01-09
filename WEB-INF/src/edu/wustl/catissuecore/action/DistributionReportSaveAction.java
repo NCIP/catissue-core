@@ -80,7 +80,7 @@ public class DistributionReportSaveAction extends BaseDistributionReportAction
 		distributionData = createList("eventparameters.dateofevent",distributionReportForm.getDateOfEvent(),distributionData);
 		distributionData = createList("eventparameters.time",distributionReportForm.getTimeInHours()
 				+":"+distributionReportForm.getTimeInMinutes(),distributionData);
-		distributionData = createList("distribution.fromSite",distributionReportForm.getFromSite(),distributionData);
+//		distributionData = createList("distribution.fromSite",distributionReportForm.getFromSite(),distributionData);
 		distributionData = createList("distribution.toSite",distributionReportForm.getToSite(),distributionData);
 		
 		distributionData = createList("eventparameters.comments",distributionReportForm.getComments(),distributionData);

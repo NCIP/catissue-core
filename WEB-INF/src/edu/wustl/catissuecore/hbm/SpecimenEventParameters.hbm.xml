@@ -117,16 +117,6 @@
         />
 
         <many-to-one
-            name="fromSite"
-            class="edu.wustl.catissuecore.domain.Site"
-            cascade="none"
-            outer-join="auto"
-            update="true"
-            insert="true"
-            column="FROM_SITE_ID"
-        />
-
-        <many-to-one
             name="distributionProtocol"
             class="edu.wustl.catissuecore.domain.DistributionProtocol"
             cascade="none"

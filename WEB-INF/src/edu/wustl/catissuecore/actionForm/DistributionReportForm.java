@@ -70,26 +70,26 @@ public class DistributionReportForm extends ActionForm
  		this.timeInMinutes = Utility.toString(Integer.toString(calender.get(Calendar.MINUTE)));
  		this.dateOfEvent = Utility.parseDateToString(distribution.getTimestamp(),Constants.DATE_PATTERN_MM_DD_YYYY);
  		this.systemIdentifier = distribution.getSystemIdentifier().longValue() ;
-		this.fromSite = String.valueOf(distribution.getFromSite().getName());
+		//this.fromSite = String.valueOf(distribution.getFromSite().getName());
 		this.toSite = String.valueOf(distribution.getToSite().getName());
 		this.comments  = Utility.toString(distribution.getComments());
 		distributionId = distribution.getSystemIdentifier();
 		
 	}
 	
-	/**
-	 * @return fromSite
-	 */ 
-	public String getFromSite() {
-		return fromSite;
-	}
-
-	/**
-	 * @param fromSite
-	 */
-	public void setFromSite(String fromSite) {
-		this.fromSite = fromSite;
-	}
+//	/**
+//	 * @return fromSite
+//	 */ 
+//	public String getFromSite() {
+//		return fromSite;
+//	}
+//
+//	/**
+//	 * @param fromSite
+//	 */
+//	public void setFromSite(String fromSite) {
+//		this.fromSite = fromSite;
+//	}
 
 	public String getToSite() {
 		return toSite;

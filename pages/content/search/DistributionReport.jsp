@@ -142,7 +142,7 @@
 			</td>
 		</tr>
 <!-- fromSite -->		
-		<tr>
+		<%--tr>
 			
 			<td class="formRequiredLabel" width="200">
 				<label for="fromSite">
@@ -152,7 +152,7 @@
 			<td class="formField" width="300">
 				<%=distForm.getFromSite()%>
 			</td>
-		</tr>
+		</tr--%>
 <!-- toSite -->		
 		<tr>
 			

@@ -43,7 +43,7 @@ import edu.wustl.common.util.logger.Logger;
 public class DistributionForm extends SpecimenEventParametersForm
 {
 	
-	private String fromSite;
+	//private String fromSite;
 	private String toSite;
 	
 	private int counter=1;
@@ -69,7 +69,7 @@ public class DistributionForm extends SpecimenEventParametersForm
 		Logger.out.debug("setAllValues of DistributionForm"); 
 		Distribution distributionObject = (Distribution)abstractDomain ;
 		this.distributionProtocolId = String.valueOf(distributionObject.getDistributionProtocol().getId());
-		this.fromSite = String.valueOf(distributionObject.getFromSite().getId());
+		//this.fromSite = String.valueOf(distributionObject.getFromSite().getId());
 		this.toSite = String.valueOf(distributionObject.getToSite().getId());
 		this.activityStatus = Utility.toString(distributionObject.getActivityStatus());
 		Logger.out.debug("this.activityStatus "+this.activityStatus);
@@ -136,7 +136,7 @@ public class DistributionForm extends SpecimenEventParametersForm
 		Logger.out.debug("setAllValues of DistributionForm"); 
 		
 		this.distributionProtocolId = String.valueOf(distributionObject.getDistributionProtocol().getId());
-		this.fromSite = String.valueOf(distributionObject.getFromSite().getId());
+		//this.fromSite = String.valueOf(distributionObject.getFromSite().getId());
 		this.toSite = String.valueOf(distributionObject.getToSite().getId());
 		this.activityStatus = Utility.toString(distributionObject.getActivityStatus());
 		Logger.out.debug("this.activityStatus "+this.activityStatus);
@@ -219,11 +219,11 @@ public class DistributionForm extends SpecimenEventParametersForm
 			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("distribution.protocol")));
 		}
 		
-		if(!validator.isValidOption(fromSite))
-		{
-			Logger.out.debug("from site");
-			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("distribution.fromSite")));
-		}
+//		if(!validator.isValidOption(fromSite))
+//		{
+//			Logger.out.debug("from site");
+//			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("distribution.fromSite")));
+//		}
 		
 		if(!validator.isValidOption(toSite))
 		{
@@ -275,19 +275,19 @@ public class DistributionForm extends SpecimenEventParametersForm
 		this.distributionProtocolId = distributionProtocolId;
 	}
 	
-	/**
-	 * @return fromSite
-	 */ 
-	public String getFromSite() {
-		return fromSite;
-	}
-	
-	/**
-	 * @param fromSite
-	 */
-	public void setFromSite(String fromSite) {
-		this.fromSite = fromSite;
-	}
+//	/**
+//	 * @return fromSite
+//	 */ 
+//	public String getFromSite() {
+//		return fromSite;
+//	}
+//	
+//	/**
+//	 * @param fromSite
+//	 */
+//	public void setFromSite(String fromSite) {
+//		this.fromSite = fromSite;
+//	}
 	
 	/**
 	 * @return

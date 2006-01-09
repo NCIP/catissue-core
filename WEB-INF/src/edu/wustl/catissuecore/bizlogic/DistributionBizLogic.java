@@ -64,15 +64,15 @@ public class DistributionBizLogic extends DefaultBizLogic
 		}
 		
 		//Load & set From Site
-		Object siteObj = dao.retrieve(Site.class.getName(), dist.getFromSite().getSystemIdentifier());
-		if(siteObj!=null)
-		{
-			Site site = (Site)siteObj;
-			dist.setFromSite(site);
-		}
+//		Object siteObj = dao.retrieve(Site.class.getName(), dist.getFromSite().getSystemIdentifier());
+//		if(siteObj!=null)
+//		{
+//			Site site = (Site)siteObj;
+//			dist.setFromSite(site);
+//		}
 
 		//Load & set the To Site
-		siteObj = dao.retrieve(Site.class.getName(), dist.getToSite().getSystemIdentifier());
+		Object siteObj = dao.retrieve(Site.class.getName(), dist.getToSite().getSystemIdentifier());
 		if(siteObj!=null )
 		{
 			Site site = (Site)siteObj;
