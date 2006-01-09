@@ -19,6 +19,7 @@ import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
+import edu.wustl.catissuecore.exceptionformatter.DefaultExceptionFormatter;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.SessionDataBean;
@@ -52,7 +53,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 
 		// Check for closed Participant
 		checkStatus(dao, collectionProtocolRegistration.getParticipant(), "Participant" );
-		
+		checkUniqueConstraint(dao,collectionProtocolRegistration, null);
 		registerParticipantAndProtocol(dao,collectionProtocolRegistration, sessionDataBean);
 		
 		dao.insert(collectionProtocolRegistration, sessionDataBean, true, true);
@@ -129,7 +130,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 				collectionProtocolRegistration.setParticipant(participant);
 			}
 		}
-		
+		checkUniqueConstraint(dao,collectionProtocolRegistration, oldCollectionProtocolRegistration);
 		//Update registration
 		dao.update(collectionProtocolRegistration, sessionDataBean, true, true, false);
 		
@@ -345,4 +346,76 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 		
 		return true;
     }
+	 public void  checkUniqueConstraint(DAO dao, CollectionProtocolRegistration collectionProtocolRegistration,
+	    		CollectionProtocolRegistration oldcollectionProtocolRegistration) throws DAOException
+	    {
+	    	CollectionProtocol objCollectionProtocol = collectionProtocolRegistration.getCollectionProtocol();
+	    	String sourceObjectName = collectionProtocolRegistration.getClass().getName();
+	    	String[] selectColumns=null;
+	    	String[] whereColumnName=null;
+	    	String[] whereColumnCondition =new String[]{"=","="};
+	    	Object[] whereColumnValue=null;
+	    	String arguments[]=null;
+	    	String errMsg="";
+	    	// check for update opeartion and old values equals to new values
+	    	int count =0;
+	    	if(oldcollectionProtocolRegistration!=null)
+	    	{
+	    		if(collectionProtocolRegistration.getParticipant()!=null&&oldcollectionProtocolRegistration.getParticipant()!=null)
+	    		{
+		    		if(collectionProtocolRegistration.getParticipant().getSystemIdentifier().equals(oldcollectionProtocolRegistration.getParticipant().getSystemIdentifier()))
+		    		{
+		    			count++;
+		    		}
+		    		if(collectionProtocolRegistration.getCollectionProtocol().getSystemIdentifier().equals(oldcollectionProtocolRegistration.getCollectionProtocol().getSystemIdentifier()))
+		    		{
+		    			count++;
+		    		}
+	    		}	
+	    		else if(collectionProtocolRegistration.getProtocolParticipantIdentifier()!=null&&oldcollectionProtocolRegistration.getProtocolParticipantIdentifier()!=null)
+	    		{
+	    			if(collectionProtocolRegistration.getProtocolParticipantIdentifier().equals(oldcollectionProtocolRegistration.getProtocolParticipantIdentifier()))
+	    			{
+	    				count++;
+	    			}
+	    			if(collectionProtocolRegistration.getCollectionProtocol().getSystemIdentifier().equals(oldcollectionProtocolRegistration.getCollectionProtocol().getSystemIdentifier()))
+		    		{
+		    			count++;
+		    		}
+	    		}
+	    		// if count=0 return i.e. old values equals new values 
+	    		if(count==2)
+	    			return;
+	    	}
+	    	if(collectionProtocolRegistration.getParticipant()!=null)
+	    	{
+	    		// build query for collectionProtocol_id AND participant_id
+	    		Participant objParticipant = collectionProtocolRegistration.getParticipant();
+	    		selectColumns = new String[]{"collectionProtocol.systemIdentifier","participant.systemIdentifier"};
+	    		whereColumnName = new String[]{"collectionProtocol.systemIdentifier","participant.systemIdentifier"};
+	    		whereColumnValue = new Object[]{objCollectionProtocol.getSystemIdentifier(),objParticipant.getSystemIdentifier()};
+	    		arguments = new String[]{"Collection Protocol Registration ","COLLECTION_PROTOCOL_ID,PARTICIPANT_ID"};
+	    	}
+	    	else
+	    	{
+//	    		 build query for collectionProtocol_id AND protocol_participant_id
+	    		selectColumns = new String[]{"collectionProtocol.systemIdentifier","protocolParticipantIdentifier"};
+	    		whereColumnName = new String[]{"collectionProtocol.systemIdentifier","protocolParticipantIdentifier"};
+	    		whereColumnValue = new Object[]{objCollectionProtocol.getSystemIdentifier(),collectionProtocolRegistration.getProtocolParticipantIdentifier()};
+	    		arguments = new String[]{"Collection Protocol Registration ","COLLECTION_PROTOCOL_ID,PROTOCOL_PARTICIPANT_ID"};
+	    	}
+	    	List l = dao.retrieve(sourceObjectName,selectColumns,whereColumnName,whereColumnCondition,whereColumnValue,Constants.AND_JOIN_CONDITION);
+	    	if(l.size()>0)
+	    	{
+	    		// if list is not empty the Constraint Violation occurs
+	    		Logger.out.debug("Unique Constraint Violated: " + l.get(0));
+	    		errMsg = new DefaultExceptionFormatter().getErrorMessage("Err.ConstraintViolation",arguments);
+	    		Logger.out.debug("Unique Constraint Violated: " + errMsg);
+	    		throw new DAOException(errMsg);
+	    	}
+	    	else
+	    	{
+	    		Logger.out.debug("Unique Constraint Passed");
+	    	}
+	    }
 }
