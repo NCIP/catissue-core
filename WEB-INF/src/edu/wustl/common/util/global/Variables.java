@@ -21,11 +21,11 @@ public class Variables {
 	/* To hold path of Catissue home directory */
 	public static String catissueHome=new String();
 	public static String databaseName=new String();
-	public static String DATE_PATTERN = new String();
-	public static String TIME_PATTERN = new String();
-	public static String TIME_FORMAT_FUNCTION = new String();
-	public static String DATE_FORMAT_FUNCTION = new String();
-	public static String STR_TO_DATE_FUNCTION = new String();;
-	public static String DATE_TO_STR_FUNCTION = new String();
-
+	public static String datePattern = new String();
+	public static String timePattern = new String();
+	public static String timeFormatFunction = new String();
+	public static String dateFormatFunction = new String();
+	public static String strTodateFunction = new String();
+	public static String dateTostrFunction = new String();
+	
 }
