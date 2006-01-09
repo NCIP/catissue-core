@@ -14,7 +14,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
-import java.util.Vector;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
@@ -55,6 +54,7 @@ public class DataViewAction extends BaseAction
     {
     	AdvanceSearchForm advForm = (AdvanceSearchForm)form;
     	String[] selectedColumns = advForm.getSelectedColumnNames();
+    	
     	HttpSession session = request.getSession();
     	String target = Constants.SUCCESS;
     	String nodeName = request.getParameter("nodeName");
@@ -72,27 +72,15 @@ public class DataViewAction extends BaseAction
     	List filteredColumnDisplayNames=(List)session.getAttribute(Constants.CONFIGURED_COLUMN_DISPLAY_NAMES);
     	Logger.out.debug("ColumnDisplayNames from configuration"+filteredColumnDisplayNames);
     	String[] columnList= (String[])session.getAttribute(Constants.CONFIGURED_SELECT_COLUMN_LIST);
-    	
-    	
+    	//boolean configured =true; 
+    	if(selectedColumns==null || columnList!=null)
+    	{
+    		selectedColumns = (String[])session.getAttribute(Constants.CONFIGURED_COLUMN_NAMES);
+    		advForm.setSelectedColumnNames(selectedColumns);
+    	}
     	//Retrieve the columnIdsMap from session
     	Map columnIdsMap = (Map)session.getAttribute(Constants.COLUMN_ID_MAP);
     	
-    	//Set default select column list and column display names in case of Root and Participant nodes are selected
-    	if (name.equals(Constants.ROOT)|| name.equals(Constants.PARTICIPANT))
-        {
-    		
-    		if(filteredColumnDisplayNames==null)
-    			filteredColumnDisplayNames = (List)session.getAttribute(Constants.COLUMN_DISPLAY_NAMES);
-    		if(columnList==null)
-    		{
-    			columnList=new String[filteredColumnDisplayNames.size()];
-    			for(int count=0;count<filteredColumnDisplayNames.size();count++)
-    			{
-    				columnList[count]=Constants.COLUMN+count;
-    			}
-    		}
-    		
-        }
         if (!name.equals(Constants.ROOT))
         {
         	id = str.nextToken();
@@ -112,14 +100,14 @@ public class DataViewAction extends BaseAction
         	viewType=Constants.SPREADSHEET_VIEW;
         if (viewType.equals(Constants.SPREADSHEET_VIEW))
         {
-    		
+    		if(columnList == null)
+    		{
+    			filteredColumnDisplayNames=new ArrayList();
+    			columnList = getColumnNamesForFilter(name,filteredColumnDisplayNames,columnIdsMap,selectedColumns,advForm);
+    			Logger.out.debug("name selected:"+name);
+   		}
         	if (!name.equals(Constants.ROOT))
             {	
-                if (!name.equals(Query.PARTICIPANT) && columnList==null)
-                {
-                	filteredColumnDisplayNames=new ArrayList();
-                	columnList = getColumnNamesForFilter(name,filteredColumnDisplayNames,columnIdsMap);
-                }
                 String key = name+"."+Constants.IDENTIFIER;
                 int columnId = ((Integer)columnIdsMap.get(name+"."+Constants.IDENTIFIER)).intValue()-1;
                 name=Constants.COLUMN+columnId;
@@ -190,42 +178,6 @@ public class DataViewAction extends BaseAction
     		else
     		{
 
-    			if(selectedColumns==null)
-    			{
-    				Vector tablesVector = new Vector();
-    				tablesVector.add(Query.PARTICIPANT);
-    				tablesVector.add(Query.COLLECTION_PROTOCOL);
-    				tablesVector.add(Query.COLLECTION_PROTOCOL_REGISTRATION);
-    				tablesVector.add(Query.SPECIMEN_COLLECTION_GROUP);
-    				tablesVector.add(Query.SPECIMEN);
-
-    				List selectedColumnNames = new ArrayList();
-    				QueryBizLogic queryBizLogic = (QueryBizLogic)BizLogicFactory.getBizLogic(Constants.SIMPLE_QUERY_INTERFACE_ID);
-    				Iterator tableVectorItr = tablesVector.iterator();
-    				while(tableVectorItr.hasNext())
-    				{
-    					String table = (String)tableVectorItr.next();
-    					selectedColumnNames.addAll(queryBizLogic.setColumnNames(table));
-    				}
-    				selectedColumns = new String[selectedColumnNames.size()];
-    				Iterator columnNameItr = selectedColumnNames.iterator();
-    				int i=0;
-    				while(columnNameItr.hasNext())
-    				{
-    					selectedColumns[i]=((NameValueBean)columnNameItr.next()).getValue();
-    					i++;
-    				}
-    				advForm.setSelectedColumnNames(selectedColumns);
-    				Logger.out.debug("size of the configure default columns after setting:"+selectedColumns.length);
-					
-    			}
-
-    			//if specimen id is added to the columns then add display name identifier to the filteredColumnDisplayNames
-    	        /*if(columnList!=null)
-    	        {
-    	        	if(columnList.length-filteredColumnDisplayNames.size()==1)
-    	        		filteredColumnDisplayNames.add("Identifier");
-    	        }*/
     			request.setAttribute(Constants.SPREADSHEET_COLUMN_LIST,filteredColumnDisplayNames);
    				request.setAttribute(Constants.SPREADSHEET_DATA_LIST,list);
     			request.setAttribute(Constants.PAGEOF,Constants.PAGEOF_QUERY_RESULTS);
@@ -281,30 +233,45 @@ public class DataViewAction extends BaseAction
     }
 
     //returns the filtered select column list to be shown when clicked on a node of the results tree
-    private String[] getColumnNamesForFilter(String aliasName,List filteredColumnDisplayNames,Map columnIdsMap) throws DAOException,ClassNotFoundException
+    private String[] getColumnNamesForFilter(String aliasName,List filteredColumnDisplayNames,Map columnIdsMap,String []selectedColumns,AdvanceSearchForm advForm) throws DAOException,ClassNotFoundException
     {
     	List columnDisplayNames=new ArrayList();
     	QueryBizLogic bizLogic = (QueryBizLogic)BizLogicFactory.getBizLogic(Constants.SIMPLE_QUERY_INTERFACE_ID);
+		List participantColumns=bizLogic.setColumnNames(Query.PARTICIPANT);
+		List collectionProtocolColumns=bizLogic.setColumnNames(Query.COLLECTION_PROTOCOL);
+		List collProtRegColumns=bizLogic.setColumnNames(Query.COLLECTION_PROTOCOL_REGISTRATION);
+		List specimenCollGrpColumns=bizLogic.setColumnNames(Query.SPECIMEN_COLLECTION_GROUP);
+		List specimenColumns=bizLogic.setColumnNames(Query.SPECIMEN);
+
     	List columns =new ArrayList();
     	//Filter the data according to the node clicked. Show only the data lower in the heirarchy 
-    	if(aliasName.equals(Query.COLLECTION_PROTOCOL))
+
+    	if(aliasName.equals(Query.PARTICIPANT) || aliasName.equals(Constants.ROOT))
 		{
-    		columns.addAll(bizLogic.setColumnNames(Query.COLLECTION_PROTOCOL));
-    		columns.addAll(bizLogic.setColumnNames(Query.COLLECTION_PROTOCOL_REGISTRATION));
-    		columns.addAll(bizLogic.setColumnNames(Query.SPECIMEN_COLLECTION_GROUP));
-    		columns.addAll(bizLogic.setColumnNames(Query.SPECIMEN));
+    		columns.addAll(participantColumns);
+    		columns.addAll(collectionProtocolColumns);
+    		columns.addAll(collProtRegColumns);
+    		columns.addAll(specimenCollGrpColumns);
+    		columns.addAll(specimenColumns);
+		}
+    	else if(aliasName.equals(Query.COLLECTION_PROTOCOL))
+		{
+    		columns.addAll(collectionProtocolColumns);
+    		columns.addAll(collProtRegColumns);
+    		columns.addAll(specimenCollGrpColumns);
+    		columns.addAll(specimenColumns);
 		}
 		else if(aliasName.equals(Query.SPECIMEN_COLLECTION_GROUP))
 		{
-    		columns.addAll(bizLogic.setColumnNames(Query.SPECIMEN_COLLECTION_GROUP));
-    		columns.addAll(bizLogic.setColumnNames(Query.SPECIMEN));
+    		columns.addAll(specimenCollGrpColumns);
+    		columns.addAll(specimenColumns);
 		}
 		else if(aliasName.equals(Query.SPECIMEN))
 		{
-    		columns.addAll(bizLogic.setColumnNames(Query.SPECIMEN));
+    		columns.addAll(specimenColumns);
 		}
 		String selectColumnList[] = new String[columns.size()];
-    	
+		selectedColumns = new String[columns.size()];
     	Iterator columnsItr = columns.iterator();
     	int i=0;
     	while(columnsItr.hasNext())
@@ -313,9 +280,12 @@ public class DataViewAction extends BaseAction
     		StringTokenizer columnsTokens = new StringTokenizer(columnsNameValues.getValue(),".");
     		Logger.out.debug("value in namevaluebean:"+columnsNameValues.getValue());
     		int columnId = ((Integer)columnIdsMap.get(columnsTokens.nextToken()+"."+columnsTokens.nextToken())).intValue()-1;
+    		selectedColumns[i]=columnsNameValues.getValue();
     		selectColumnList[i++]=(Constants.COLUMN+columnId);
     		columnDisplayNames.add(columnsTokens.nextToken());
     	}
+    	Logger.out.debug("size of the configure default columns after setting inside the method:"+selectedColumns.length);
+    	advForm.setSelectedColumnNames(selectedColumns);
     	filteredColumnDisplayNames.addAll(columnDisplayNames);
     	return selectColumnList;
     }
