@@ -243,7 +243,7 @@ public class NewSpecimenForm extends SpecimenForm
      */
     public void setAllValues(AbstractDomainObject abstractDomain)
     {
-        super.setAllVal(abstractDomain);
+        super.setAllValues(abstractDomain);
         
     	Specimen specimen = (Specimen) abstractDomain;
     	
