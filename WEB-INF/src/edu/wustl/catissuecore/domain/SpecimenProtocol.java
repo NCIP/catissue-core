@@ -348,7 +348,7 @@ public abstract class SpecimenProtocol extends AbstractDomainObject implements j
 			}
 			else
 			{
-				if(key.indexOf("specimenClass")==-1)
+				if(key.indexOf("specimenClass")==-1 && key.indexOf("unitspan")==-1)
 				{
 					String keyPart, newKeyPart;
 					if(key.indexOf("quantityIn")!=-1)
