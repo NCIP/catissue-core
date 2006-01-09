@@ -18,12 +18,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.tiles.TilesRequestProcessor;
 
-import edu.wustl.common.actionForm.AbstractActionForm;
-import edu.wustl.catissuecore.actionForm.ActionFormFactory;
-import edu.wustl.catissuecore.actionForm.LoginForm;
 import edu.wustl.catissuecore.client.HTTPWrapperObject;
-import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
 
@@ -51,26 +46,16 @@ public class ApplicationRequestProcessor extends TilesRequestProcessor
 				ObjectInputStream ois = new ObjectInputStream(request.getInputStream());
 				HTTPWrapperObject wrapperObject = (HTTPWrapperObject)ois.readObject();
 				
-				AbstractDomainObject domainObject = wrapperObject.getDomainObject();
 				String operation = wrapperObject.getOperation();
 				
-				ActionForm form = null;
+				ActionForm form = wrapperObject.getForm();
 				
 				if(operation.equals(Constants.LOGIN))
 				{
-					User user = (User)domainObject;
-					LoginForm loginForm = new LoginForm();
-					loginForm.setLoginName(user.getLoginName());
-					loginForm.setPassword(user.getPassword());
-					form = loginForm;
 					request.setAttribute(Constants.OPERATION,Constants.LOGIN);
 				}
 				else
 				{
-					AbstractActionForm abstractForm = ActionFormFactory.getFormBean(domainObject);
-					abstractForm.setOperation(operation);				
-					abstractForm.setAllValues(domainObject);
-					form = abstractForm;
 					request.setAttribute(Constants.OPERATION,operation);
 				}
 				
@@ -98,7 +83,7 @@ public class ApplicationRequestProcessor extends TilesRequestProcessor
 			return super.processActionForm(request, response, mapping);
 		}
 	}
-
+	
 	protected void processPopulate(HttpServletRequest request, HttpServletResponse response,
 			ActionForm form, ActionMapping mapping) throws ServletException
 	{

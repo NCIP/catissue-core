@@ -13,38 +13,51 @@ package edu.wustl.catissuecore.client;
 
 import java.io.Serializable;
 
-import edu.wustl.common.domain.AbstractDomainObject;
+import org.apache.struts.action.ActionForm;
+
+import edu.wustl.catissuecore.actionForm.ActionFormFactory;
+import edu.wustl.catissuecore.actionForm.DepartmentForm;
+import edu.wustl.catissuecore.actionForm.LoginForm;
+import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.actionForm.AbstractActionForm;
 
 public class HTTPWrapperObject implements Serializable
 {
-	private AbstractDomainObject domainObject;
+    private static final long serialVersionUID = -4958330782397508598L;
+    private ActionForm formBean;
 	private String operation;
 	
 	public HTTPWrapperObject(){}
 	
-	public HTTPWrapperObject(AbstractDomainObject domainObject,String operation)
+	public HTTPWrapperObject(Object domainObject,String operation) throws Exception
 	{
-		this.domainObject = domainObject;
+	    if(operation.equals(Constants.LOGIN))
+		{
+			User user = (User)domainObject;
+			LoginForm loginForm = new LoginForm();
+			loginForm.setLoginName(user.getLoginName());
+			loginForm.setPassword(user.getPassword());
+			formBean = loginForm;
+		}
+		else
+		{
+		    AbstractActionForm abstractForm = ActionFormFactory.getFormBean(domainObject);
+		    abstractForm.setOperation(operation);				
+			abstractForm.setAllVal(domainObject);
+			formBean = abstractForm;
+		}
+			
 		this.operation = operation;
-	}	
-	
-	public AbstractDomainObject getDomainObject()
-	{
-		return domainObject;
 	}
 	
-	public void setDomainObject(AbstractDomainObject domainObject)
+	public ActionForm getForm()
 	{
-		this.domainObject = domainObject;
+	    return formBean; 
 	}
 	
 	public String getOperation()
 	{
-		return operation;
-	}
-	
-	public void setOperation(String operation)
-	{
-		this.operation = operation;
+	    return this.operation;
 	}
 }
