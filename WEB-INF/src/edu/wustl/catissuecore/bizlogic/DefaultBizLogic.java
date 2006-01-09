@@ -377,7 +377,7 @@ public class  DefaultBizLogic extends AbstractBizLogic
 	 * Privilege is to be assigned to user or a role is identified by boolean assignToUser
 	 * 
 	 */
-    public void setPrivilege(DAO dao, String privilegeName,Class objectType, Long[] objectIds, Long userId, String roleId, boolean assignToUser, boolean assignOperation) throws SMException,DAOException
+    protected void setPrivilege(DAO dao, String privilegeName,Class objectType, Long[] objectIds, Long userId, String roleId, boolean assignToUser, boolean assignOperation) throws SMException,DAOException
     {
         Logger.out.debug(" privilegeName:"+privilegeName+" objectType:"+objectType+" objectIds:"+edu.wustl.common.util.Utility.getArrayString(objectIds)+" userId:"+userId+" roleId:"+roleId+" assignToUser:"+assignToUser);
         if(assignToUser)
@@ -590,5 +590,13 @@ public class  DefaultBizLogic extends AbstractBizLogic
 			setClosedDate(newObject  );
 		}
 	}
-
+	
+	protected DAOException handleSMException(SMException e)
+	{
+		Logger.out.error("Exception in Authorization: "+e.getMessage(),e);
+    	String message = "Security Exception: "+e.getMessage();
+    	if(e.getCause()!=null)
+    		message = message +" : "+e.getCause().getMessage();
+    	return new DAOException(message,e);
+	}
 }

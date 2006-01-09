@@ -45,20 +45,16 @@ import edu.wustl.common.util.logger.Logger;
  * database using Hibernate.
  * @author aniruddha_phadnis
  */
-public class StorageContainerBizLogic extends DefaultBizLogic implements
-		TreeDataInterface {
-
+public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDataInterface 
+{
 	/**
 	 * Saves the storageContainer object in the database.
-	 * 
-	 * @param obj
-	 *            The storageType object to be saved.
-	 * @param session
-	 *            The session in which the object is saved.
+	 * @param obj The storageType object to be saved.
+	 * @param session The session in which the object is saved.
 	 * @throws DAOException
 	 */
-	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean)
-			throws DAOException, UserNotAuthorizedException {
+	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException 
+	{
 		StorageContainer container = (StorageContainer) obj;
 		container.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
 
@@ -132,7 +128,9 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 				throw new DAOException(ApplicationProperties
 						.getValue("errors.storageContainerExist"));
 			}
-		} else {
+		} 
+		else 
+		{
 			loadSite(dao, container);
 		}
 		
@@ -214,13 +212,13 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 			protectionObjects.add(cont);
 			try
 			{
-				SecurityManager.getInstance(this.getClass())
-						.insertAuthorizationData(null, protectionObjects, getDynamicGroups(cont));
-			} catch (SMException e) 
-			{
-				Logger.out.error("Exception in Authorization: "
-						+ e.getMessage(), e);
-			}
+				SecurityManager.getInstance(this.getClass()).insertAuthorizationData(
+						null, protectionObjects, getDynamicGroups(cont));
+			} 
+			catch (SMException e)
+	        {
+				throw handleSMException(e);
+	        }
 		}
 	}
 	
@@ -242,43 +240,31 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 //        return protectionObjects;
 //    }
 	
-	public String[] getDynamicGroups(AbstractDomainObject obj)
+	private String[] getDynamicGroups(AbstractDomainObject obj) throws SMException
     {
-        String[] dynamicGroups=null;
+        String[] dynamicGroups = null;
         StorageContainer storageContainer = (StorageContainer) obj;
-        dynamicGroups = null;
         
-        try
+        if (storageContainer.getParentContainer() != null)
         {
-            if (storageContainer.getParentContainer() != null)
-            {
-                dynamicGroups = SecurityManager.getInstance(this.getClass()).getProtectionGroupByName(storageContainer.getParentContainer());
-            }
-            else
-            {
-                dynamicGroups = SecurityManager.getInstance(this.getClass()).getProtectionGroupByName(storageContainer.getSite());
-            }
-            
+            dynamicGroups = SecurityManager.getInstance(this.getClass()).getProtectionGroupByName(storageContainer.getParentContainer());
         }
-        catch (SMException e)
+        else
         {
-            Logger.out.error("Exception in Authorization: "+e.getMessage(),e);
+            dynamicGroups = SecurityManager.getInstance(this.getClass()).getProtectionGroupByName(storageContainer.getSite());
         }
-        
         return dynamicGroups;
     }
 	
 	/**
 	 * Updates the persistent object in the database.
 	 * 
-	 * @param obj
-	 *            The object to be updated.
-	 * @param session
-	 *            The session in which the object is saved.
+	 * @param obj The object to be updated.
+	 * @param session The session in which the object is saved.
 	 * @throws DAOException
 	 */
 	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean) 
-	 throws DAOException,UserNotAuthorizedException 
+	 									throws DAOException,UserNotAuthorizedException 
 	{
 		StorageContainer container = (StorageContainer) obj;
 		StorageContainer oldContainer = (StorageContainer) oldObj;
@@ -300,8 +286,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 						StorageContainer.class.getName(), container
 								.getParentContainer().getSystemIdentifier());
 
-				//Check if position specified is within the parent container's
-				//capacity
+				/* Check if position specified is within the parent container's capacity*/
 				if (false == validatePosition(pc, container)) 
 				{
 					throw new DAOException(	ApplicationProperties
@@ -475,7 +460,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 		}
 	}
 	
-	public void setPrivilege(DAO dao, String privilegeName, Class objectType,
+	protected void setPrivilege(DAO dao, String privilegeName, Class objectType,
 			Long[] objectIds, Long userId, String roleId, boolean assignToUser, boolean assignOperation)
 			throws SMException, DAOException 
 	{
@@ -485,6 +470,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 				+ " userId:" + userId + " roleId:" + roleId + " assignToUser:"
 				+ assignToUser);
 		Logger.out.debug("assignOeration..................."+assignOperation);
+		
 		if (assignOperation == Constants.PRIVILEGE_DEASSIGN)
 		{
 		    String [] selectColumnNames = {"parentContainer.systemIdentifier","site.systemIdentifier"};
@@ -524,23 +510,18 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 	
 	private void assignPrivilegeToSubStorageContainer(DAO dao,
 			String privilegeName, Long[] storageContainerIDArr, Long userId,
-			String roleId, boolean assignToUser, boolean assignOperation) throws SMException,
-			DAOException {
-
+			String roleId, boolean assignToUser, boolean assignOperation) throws SMException, DAOException 
+	{
 		List listOfSubStorageContainerId = super.getRelatedObjects(dao,
-				StorageContainer.class, "parentContainer",
-				storageContainerIDArr);
+				StorageContainer.class, "parentContainer", storageContainerIDArr);
 
 		if (listOfSubStorageContainerId.isEmpty())
 			return;
 
 		super.setPrivilege(dao, privilegeName, StorageContainer.class, Utility
-				.toLongArray(listOfSubStorageContainerId), userId, roleId,
-				assignToUser, assignOperation);
+				.toLongArray(listOfSubStorageContainerId), userId, roleId, assignToUser, assignOperation);
 		assignPrivilegeToSubStorageContainer(dao, privilegeName, Utility
-				.toLongArray(listOfSubStorageContainerId), userId, roleId,
-				assignToUser, assignOperation);
-
+				.toLongArray(listOfSubStorageContainerId), userId, roleId, assignToUser, assignOperation);
 	}
 	
 	/**

@@ -122,13 +122,10 @@ public abstract class AbstractBizLogic
 			}
 			catch(DAOException daoEx)
 			{
-				//TODO ERROR Handling
 				throw new BizLogicException(daoEx.getMessage(), daoEx);
 			}
 			Logger.out.debug("Error in insert");
-			//TODO ERROR Handling
 			throw new BizLogicException(errMsg, ex);
-			//throw new BizLogicException(ex.getMessage(), ex);
 		}
 		finally
 		{
@@ -192,7 +189,7 @@ public abstract class AbstractBizLogic
     
     public abstract List getRelatedObjects(DAO dao, Class sourceClass, String classIdentifier,Long objIDArr[])throws DAOException;
     
-    public abstract void setPrivilege(DAO dao,String privilegeName, Class objectType, Long[] objectIds, Long userId, String roleId, boolean assignToUser, boolean assignOperation) throws SMException,DAOException;
+    protected abstract void setPrivilege(DAO dao,String privilegeName, Class objectType, Long[] objectIds, Long userId, String roleId, boolean assignToUser, boolean assignOperation) throws SMException,DAOException;
     
     public final void setPrivilege(int daoType,String privilegeName, Class objectType, Long[] objectIds, Long userId, SessionDataBean sessionDataBean, String roleId, boolean assignToUser, boolean assignOperation) throws SMException, BizLogicException
     {
@@ -228,7 +225,7 @@ public abstract class AbstractBizLogic
 			catch(DAOException daoEx)
 			{
 				//TODO ERROR Handling
-				throw new BizLogicException();
+				throw new BizLogicException("Unknown Error");
 			}
 		}
     }

@@ -103,15 +103,16 @@ public class DistributionBizLogic extends DefaultBizLogic
 		
 		try
         {
-            SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null,getProtectionObjects(dist),getDynamicGroups(dist));
+            SecurityManager.getInstance(this.getClass()).insertAuthorizationData(
+            			null, getProtectionObjects(dist), getDynamicGroups(dist));
         }
-        catch (SMException e)
+		catch (SMException e)
         {
-            Logger.out.error("Exception in Authorization: "+e.getMessage(),e);
+			throw handleSMException(e);
         }
 	}
 	
-	public Set getProtectionObjects(AbstractDomainObject obj)
+	private Set getProtectionObjects(AbstractDomainObject obj)
     {
         Set protectionObjects = new HashSet();
         
@@ -128,12 +129,12 @@ public class DistributionBizLogic extends DefaultBizLogic
         return protectionObjects;
     }
 	
-    public String[] getDynamicGroups(AbstractDomainObject obj)
+    private String[] getDynamicGroups(AbstractDomainObject obj)
     {
-        String[] dynamicGroups=null;
         Distribution distribution = (Distribution) obj;
-        dynamicGroups = new String[1];
-        dynamicGroups[0] = Constants.getDistributionProtocolPGName(distribution.getDistributionProtocol().getSystemIdentifier());
+        String[] dynamicGroups = new String[1];
+        dynamicGroups[0] = Constants.getDistributionProtocolPGName(
+        		distribution.getDistributionProtocol().getSystemIdentifier());
         
         return dynamicGroups;
     }

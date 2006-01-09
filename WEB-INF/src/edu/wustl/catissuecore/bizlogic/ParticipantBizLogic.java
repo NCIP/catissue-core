@@ -75,11 +75,12 @@ public class ParticipantBizLogic extends DefaultBizLogic
         protectionObjects.add(participant);
         try
         {
-            SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null,protectionObjects,null);
+            SecurityManager.getInstance(this.getClass()).insertAuthorizationData(
+            		null, protectionObjects, null);
         }
-        catch (SMException smExp)
+        catch (SMException e)
         {
-            Logger.out.error(smExp.getMessage(),smExp);
+        	throw handleSMException(e);
         }
 	}
 	
@@ -134,7 +135,7 @@ public class ParticipantBizLogic extends DefaultBizLogic
 	/**
 	 * @see AbstractBizLogic#setPrivilege(DAO, String, Class, Long[], Long, String, boolean)
 	 */
-	public void setPrivilege(DAO dao, String privilegeName, Class objectType, Long[] objectIds, Long userId, String roleId, boolean assignToUser, boolean assignOperation) throws SMException, DAOException
+	protected void setPrivilege(DAO dao, String privilegeName, Class objectType, Long[] objectIds, Long userId, String roleId, boolean assignToUser, boolean assignOperation) throws SMException, DAOException
     {
 	    Logger.out.debug(" privilegeName:"+privilegeName+" objectType:"+objectType+" objectIds:"+edu.wustl.common.util.Utility.getArrayString(objectIds)+" userId:"+userId+" roleId:"+roleId+" assignToUser:"+assignToUser);
 	    super.setPrivilege(dao,privilegeName,objectType,objectIds,userId, roleId, assignToUser, assignOperation);

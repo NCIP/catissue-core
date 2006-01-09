@@ -60,11 +60,13 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 		
 		try
         {
-            SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null,getProtectionObjects(collectionProtocolRegistration),getDynamicGroups(collectionProtocolRegistration));
+            SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null,
+            		getProtectionObjects(collectionProtocolRegistration),
+					getDynamicGroups(collectionProtocolRegistration));
         }
-        catch (SMException e)
+		catch (SMException e)
         {
-            Logger.out.error("Exception in Authorization: "+e.getMessage(),e);
+			throw handleSMException(e);
         }
 	}
 	
@@ -149,7 +151,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 		}
 	}
 	
-	public Set getProtectionObjects(AbstractDomainObject obj)
+	private Set getProtectionObjects(AbstractDomainObject obj)
     {
         Set protectionObjects = new HashSet();
         
@@ -167,7 +169,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
         return protectionObjects;
     }
 	
-    public String[] getDynamicGroups(AbstractDomainObject obj)
+    private String[] getDynamicGroups(AbstractDomainObject obj)
     {
         String[] dynamicGroups=null;
         CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration) obj;

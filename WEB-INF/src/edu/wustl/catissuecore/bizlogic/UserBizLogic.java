@@ -63,29 +63,21 @@ public class UserBizLogic extends DefaultBizLogic
         
         try
         {
-            List list = dao.retrieve(Department.class.getName(),
-                    Constants.SYSTEM_IDENTIFIER, user.getDepartment()
-                            .getSystemIdentifier());
-            
+            List list = dao.retrieve(Department.class.getName(),Constants.SYSTEM_IDENTIFIER, user.getDepartment().getSystemIdentifier());
             Department department = null;
             if (list.size() != 0)
             {
                 department = (Department) list.get(0);
             }
-            list = dao.retrieve(Institution.class.getName(),
-                    Constants.SYSTEM_IDENTIFIER, user.getInstitution()
-                            .getSystemIdentifier());
             
+            list = dao.retrieve(Institution.class.getName(),Constants.SYSTEM_IDENTIFIER, user.getInstitution().getSystemIdentifier());
             Institution institution = null;
             if (list.size() != 0)
             {
                 institution = (Institution) list.get(0);
             }
             
-            list = dao.retrieve(CancerResearchGroup.class.getName(),
-                    Constants.SYSTEM_IDENTIFIER, user.getCancerResearchGroup()
-                            .getSystemIdentifier());
-            
+            list = dao.retrieve(CancerResearchGroup.class.getName(),Constants.SYSTEM_IDENTIFIER, user.getCancerResearchGroup().getSystemIdentifier());
             CancerResearchGroup cancerResearchGroup = null;
             if (list.size() != 0)
             {
@@ -109,9 +101,10 @@ public class UserBizLogic extends DefaultBizLogic
                 SecurityManager.getInstance(UserBizLogic.class).createUser(csmUser);
                 
                 if (user.getRoleId() != null)
+                {
                     SecurityManager.getInstance(UserBizLogic.class)
-                            .assignRoleToUser(csmUser.getUserId().toString(),
-                                    user.getRoleId());
+                            .assignRoleToUser(csmUser.getUserId().toString(),user.getRoleId());
+                }
                 
                 user.setCsmUserId(csmUser.getUserId());
                 user.setPassword(csmUser.getPassword());
@@ -121,57 +114,37 @@ public class UserBizLogic extends DefaultBizLogic
             dao.insert(user.getAddress(), sessionDataBean, true, false);
             dao.insert(user, sessionDataBean, true, false);
             
-            Set protectionObjects=new HashSet();
+            Set protectionObjects = new HashSet();
             protectionObjects.add(user);
             
+            EmailHandler emailHandler = new EmailHandler();
             // Send the user registration email to user and the administrator.
             if (Constants.PAGEOF_SIGNUP.equals(user.getPageOf()))
             {
-                EmailHandler emailHandler = new EmailHandler();
-//                String cc = getInstitutionAdmins(user.getInstitution().getSystemIdentifier()  );
-                emailHandler.sendUserSignUpEmail(user);
-                try
-                {
-                    SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null,protectionObjects,null);
-                }
-                catch (SMException smExp)
-                {
-                    Logger.out.error(smExp.getMessage(),smExp);
-                }
+            	SecurityManager.getInstance(this.getClass()).insertAuthorizationData(
+            			null, protectionObjects, null);
                 
+                emailHandler.sendUserSignUpEmail(user);
             }
             else// Send the user creation email to user and the administrator.
             {
-                EmailHandler emailHandler = new EmailHandler();
-                
+                SecurityManager.getInstance(this.getClass()).insertAuthorizationData(
+                		getAuthorizationData(user), protectionObjects, null);
+
                 emailHandler.sendApprovalEmail(user);
-                
-               
-        	    try
-                {
-                    SecurityManager.getInstance(this.getClass()).insertAuthorizationData(getAuthorizationData(user),protectionObjects,null);
-                }
-                catch (SMException smExp)
-                {
-                    Logger.out.error(smExp.getMessage(),smExp);
-                }
             }
         }
         catch(DAOException daoExp)
         {
             Logger.out.debug(daoExp.getMessage(), daoExp);
             deleteCSMUser(csmUser);
-            //throw new DAOException(daoExp.getMessage(), daoExp.getWrapException());
             throw daoExp;
         }
-        catch (SMException exp)
+        catch (SMException e)
         {
-            Logger.out.debug(exp.getMessage(), exp);
             // added to format constrainviolation message
             deleteCSMUser(csmUser);
-            //throw new DAOException(errMsg,(Exception)exp.getCause());
-            throw new DAOException(exp.getCause().getMessage(),(Exception)exp.getCause());
-            //throw new DAOException(exp.getMessage(), exp);
+            throw handleSMException(e);
         }
     }
     
@@ -192,9 +165,7 @@ public class UserBizLogic extends DefaultBizLogic
         }
         catch(SMException smExp)
         {
-            Logger.out.debug(ApplicationProperties.getValue("errors.user.delete")+
-                    				smExp.getMessage(), smExp);
-            throw new DAOException(smExp.getMessage(), smExp);
+        	throw handleSMException(smExp);
         }
     }
 
@@ -204,26 +175,21 @@ public class UserBizLogic extends DefaultBizLogic
      * elements returned by this class should be added to.
      * @return
      */
-    public Vector getAuthorizationData(AbstractDomainObject obj)
+    private Vector getAuthorizationData(AbstractDomainObject obj) throws SMException
     {
         Logger.out.debug("--------------- In here ---------------");
+        
         Vector authorizationData = new Vector();
         Set group = new HashSet();
         User aUser = (User)obj;
-        String userId = String.valueOf(aUser.getCsmUserId());
-        try
-        {
-            gov.nih.nci.security.authorization.domainobjects.User user = 
-            		SecurityManager.getInstance(this.getClass()).getUserById(userId);
-            Logger.out.debug(" User: "+user.getLoginName());
-            group.add(user);
-        }
-        catch (SMException e)
-        {
-            Logger.out.error("Exception in Authorization: "+e.getMessage(),e);
-        }
         
-        // Protection group of PI
+        String userId = String.valueOf(aUser.getCsmUserId());
+        gov.nih.nci.security.authorization.domainobjects.User user = 
+        			SecurityManager.getInstance(this.getClass()).getUserById(userId);
+        Logger.out.debug(" User: "+user.getLoginName());
+        group.add(user);
+        
+        // Protection group of User
         String protectionGroupName = Constants.getUserPGName(aUser.getSystemIdentifier());
         SecurityDataBean userGroupRoleProtectionGroupBean = new SecurityDataBean();
         userGroupRoleProtectionGroupBean.setUser(userId);
@@ -306,22 +272,13 @@ public class UserBizLogic extends DefaultBizLogic
             {
                 Set protectionObjects=new HashSet();
                 protectionObjects.add(user);
-        	    try
-                {
-                    SecurityManager.getInstance(this.getClass()).insertAuthorizationData(getAuthorizationData(user),protectionObjects,null);
-                }
-                catch (SMException e)
-                {
-                    Logger.out.error("Exception in Authorization: "+e.getMessage(),e);
-                }
+                SecurityManager.getInstance(this.getClass()).insertAuthorizationData(
+                		getAuthorizationData(user), protectionObjects, null);
             }
         }
-        catch (SMException smExp)
+        catch (SMException e)
         {
-//        	 added to format constrainviolation message
-           // throw new DAOException(errMsg, (Exception)smExp.getCause());
-        	 throw new DAOException(smExp.getCause().getMessage(), (Exception)smExp.getCause());
-        	// throw new DAOException(smExp.getMessage(), smExp);
+        	throw handleSMException(e);
         }
     }
     
@@ -436,10 +393,9 @@ public class UserBizLogic extends DefaultBizLogic
                 }
             }
         }
-        catch (SMException smExp)
+        catch (SMException e)
         {
-            Logger.out.debug(smExp.getMessage(), smExp);
-            throw new DAOException(smExp.getMessage(), smExp);
+        	throw handleSMException(e);
         }
         
         return userList; 
@@ -517,8 +473,7 @@ public class UserBizLogic extends DefaultBizLogic
 			}
 			catch(SMException e)
 			{
-				Logger.out.debug(e.getMessage(),e);
-				throw new DAOException(ApplicationProperties.getValue("user.role.dbErrMsg"));
+				throw handleSMException(e);
 			}
 	
 			if(operation.equals(Constants.ADD))
@@ -550,14 +505,13 @@ public class UserBizLogic extends DefaultBizLogic
         //Sets the roleList attribute to be used in the Add/Edit User Page.
         Vector roleList = SecurityManager.getInstance(UserBizLogic.class).getRoles();
         
-        ListIterator iterator = roleList.listIterator();
-        
         List roleNameValueBeanList = new ArrayList();
         NameValueBean nameValueBean = new NameValueBean();
         nameValueBean.setName(Constants.SELECT_OPTION);
         nameValueBean.setValue("-1");
         roleNameValueBeanList.add(nameValueBean);
         
+        ListIterator iterator = roleList.listIterator();
         while (iterator.hasNext())
         {
             Role role = (Role) iterator.next();

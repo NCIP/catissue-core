@@ -66,17 +66,18 @@ public class DistributionProtocolBizLogic extends DefaultBizLogic implements Rol
 			dao.insert(specimenRequirement,sessionDataBean, true, true);
 		}
 		
-//		Inserting authorization data
+		//Inserting authorization data
         Set protectionObjects=new HashSet();
         protectionObjects.add(distributionProtocol);
         
 	    try
         {
-            SecurityManager.getInstance(this.getClass()).insertAuthorizationData(getAuthorizationData(distributionProtocol),protectionObjects,null);
+            SecurityManager.getInstance(this.getClass()).insertAuthorizationData(
+            		getAuthorizationData(distributionProtocol), protectionObjects, null);
         }
-        catch (SMException e)
+	    catch (SMException e)
         {
-            Logger.out.error("Exception in Authorization: "+e.getMessage(),e);
+	    	throw handleSMException(e);
         }
 	}
 	
@@ -154,35 +155,24 @@ public class DistributionProtocolBizLogic extends DefaultBizLogic implements Rol
      * elements returned by this class should be added to.
      * @return
      */
-    public Vector getAuthorizationData(AbstractDomainObject obj)
+    private Vector getAuthorizationData(AbstractDomainObject obj) throws SMException 
     {
         Logger.out.debug("--------------- In here ---------------");
+     
         Vector authorizationData = new Vector();
         Set group = new HashSet();
-        SecurityDataBean userGroupRoleProtectionGroupBean;
-        String protectionGroupName;
-        gov.nih.nci.security.authorization.domainobjects.User user ;
-        Collection coordinators;
-        User aUser;
         
         DistributionProtocol distributionProtocol = (DistributionProtocol)obj;
-        String userId = new String();
-        try
-        {
-            userId = String.valueOf(distributionProtocol.getPrincipalInvestigator().getCsmUserId());
-            Logger.out.debug(" PI ID: "+userId);
-            user = SecurityManager.getInstance(this.getClass()).getUserById(userId);
-            Logger.out.debug(" PI: "+user.getLoginName());
-            group.add(user);
-        }
-        catch (SMException e)
-        {
-            Logger.out.error("Exception in Authorization: "+e.getMessage(),e);
-        }
+        
+    	String userId = String.valueOf(distributionProtocol.getPrincipalInvestigator().getCsmUserId());
+        Logger.out.debug(" PI ID: "+userId);
+        gov.nih.nci.security.authorization.domainobjects.User csmUser = SecurityManager.getInstance(this.getClass()).getUserById(userId);
+        Logger.out.debug(" PI: "+csmUser.getLoginName());
+        group.add(csmUser);
         
         // Protection group of PI
-        protectionGroupName = new String(Constants.getDistributionProtocolPGName(distributionProtocol.getSystemIdentifier()));
-        userGroupRoleProtectionGroupBean = new SecurityDataBean();
+        String protectionGroupName = new String(Constants.getDistributionProtocolPGName(distributionProtocol.getSystemIdentifier()));
+        SecurityDataBean userGroupRoleProtectionGroupBean = new SecurityDataBean();
         userGroupRoleProtectionGroupBean.setUser(userId);
         userGroupRoleProtectionGroupBean.setRoleName(PI);
         userGroupRoleProtectionGroupBean.setGroupName(Constants.getDistributionProtocolPIGroupName(distributionProtocol.getSystemIdentifier()));

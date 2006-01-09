@@ -130,31 +130,24 @@ public class CreateSpecimenBizLogic extends DefaultBizLogic
 		//Inserting data for Authorization
 		try
         {
-            SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null,protectionObjects,getDynamicGroups(specimen));
+            SecurityManager.getInstance(this.getClass()).insertAuthorizationData(
+            		null, protectionObjects, getDynamicGroups(specimen));
         }
-        catch (SMException e)
+		catch (SMException e)
         {
-            Logger.out.error("Exception in Authorization: "+e.getMessage(),e);
+			throw handleSMException(e);
         }
 	}
 	
-	public String[] getDynamicGroups(AbstractDomainObject obj)
+	private String[] getDynamicGroups(AbstractDomainObject obj) throws SMException
 	{
-        String[] dynamicGroups=null;
         Specimen specimen = (Specimen)obj;
-        dynamicGroups = new String[1];
+        String[] dynamicGroups = new String[1];
         
-        try
-        {
-            dynamicGroups[0] = SecurityManager.getInstance(this.getClass()).getProtectionGroupByName(specimen.getParentSpecimen(),Constants.getCollectionProtocolPGName(null));
-        }
-        catch (SMException e)
-        {
-            Logger.out.error("Exception in Authorization: "+e.getMessage(),e);
-        }
+        dynamicGroups[0] = SecurityManager.getInstance(this.getClass()).getProtectionGroupByName(
+        			specimen.getParentSpecimen(),
+					Constants.getCollectionProtocolPGName(null));
         Logger.out.debug("Dynamic Group name: "+dynamicGroups[0]);
         return dynamicGroups;
 	}
-	
-	
 }

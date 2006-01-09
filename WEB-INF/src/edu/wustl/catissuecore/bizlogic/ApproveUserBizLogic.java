@@ -29,7 +29,6 @@ import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
-import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.logger.Logger;
 import gov.nih.nci.security.authorization.domainobjects.Role;
 
@@ -93,14 +92,8 @@ public class ApproveUserBizLogic extends DefaultBizLogic
             {
                 Set protectionObjects=new HashSet();
                 protectionObjects.add(user);
-        	    try
-                {
-                    SecurityManager.getInstance(this.getClass()).insertAuthorizationData(getAuthorizationData(user),protectionObjects,null);
-                }
-                catch (SMException e)
-                {
-                    Logger.out.error("Exception in Authorization: "+e.getMessage(),e);
-                }
+                SecurityManager.getInstance(this.getClass()).insertAuthorizationData(
+                    		getAuthorizationData(user), protectionObjects, null);
             }
             
             EmailHandler emailHandler = new EmailHandler(); 
@@ -112,7 +105,8 @@ public class ApproveUserBizLogic extends DefaultBizLogic
                 emailHandler.sendApprovalEmail(user);
 	        }
             else if (Constants.ACTIVITY_STATUS_REJECT.equals(user.getActivityStatus()))
-	        {//If user is rejected send rejection email to the user and administrator.
+	        {
+            	//If user is rejected send rejection email to the user and administrator.
                 //Send rejection email to the user and administrator.
                 emailHandler.sendRejectionEmail(user);
 	        }
@@ -148,9 +142,7 @@ public class ApproveUserBizLogic extends DefaultBizLogic
         }
         catch(SMException smExp)
         {
-            Logger.out.debug(ApplicationProperties.getValue("errors.user.delete")+
-                    				smExp.getMessage(), smExp);
-            throw new DAOException(smExp.getMessage(), smExp);
+        	throw handleSMException(smExp);
         }
     }
     
@@ -160,7 +152,7 @@ public class ApproveUserBizLogic extends DefaultBizLogic
      * elements returned by this class should be added to.
      * @return
      */
-    public Vector getAuthorizationData(AbstractDomainObject obj)
+    private Vector getAuthorizationData(AbstractDomainObject obj) throws SMException
     {
         Logger.out.debug("--------------- In here ---------------");
         Vector authorizationData = new Vector();
@@ -170,17 +162,10 @@ public class ApproveUserBizLogic extends DefaultBizLogic
         Collection coordinators;
         User aUser = (User)obj;
         String userId = String.valueOf(aUser.getCsmUserId());
-        try
-        {
-            gov.nih.nci.security.authorization.domainobjects.User user = 
-            				SecurityManager.getInstance(this.getClass()).getUserById(userId);
-            Logger.out.debug(" User: "+user.getLoginName());
-            group.add(user);
-        }
-        catch (SMException e)
-        {
-            Logger.out.error("Exception in Authorization: "+e.getMessage(),e);
-        }
+        gov.nih.nci.security.authorization.domainobjects.User user = 
+        				SecurityManager.getInstance(this.getClass()).getUserById(userId);
+        Logger.out.debug(" User: "+user.getLoginName());
+        group.add(user);
         
         // Protection group of PI
         protectionGroupName = Constants.getUserPGName(aUser.getSystemIdentifier());
@@ -227,8 +212,7 @@ public class ApproveUserBizLogic extends DefaultBizLogic
         }
         catch (SMException smExp)
         {
-            Logger.out.debug(smExp.getMessage(), smExp);
-            throw new DAOException(smExp.getMessage(), smExp);
+        	throw handleSMException(smExp);
         }
         
         return userList; 

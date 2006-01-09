@@ -56,13 +56,13 @@ public class SiteBizLogic extends DefaultBizLogic
 	    protectionObjects.add(site.getAddress());
 	    try
         {
-            SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null,protectionObjects,null);
+            SecurityManager.getInstance(this.getClass()).insertAuthorizationData(
+            		null,protectionObjects,null);
         }
-        catch (SMException e)
+	    catch (SMException e)
         {
-            Logger.out.error("Exception in Authorization: "+e.getMessage(),e);
+	    	throw handleSMException(e);
         }
-		
 	}
 	
 	/**
@@ -102,7 +102,7 @@ public class SiteBizLogic extends DefaultBizLogic
 		}
 	}
 	
-	public void setPrivilege(DAO dao, String privilegeName, Class objectType, Long[] objectIds, Long userId, String roleId, boolean assignToUser,boolean assignOperation) throws SMException, DAOException
+	protected void setPrivilege(DAO dao, String privilegeName, Class objectType, Long[] objectIds, Long userId, String roleId, boolean assignToUser,boolean assignOperation) throws SMException, DAOException
     {
 	    Logger.out.debug(" privilegeName:"+privilegeName+" objectType:"+objectType+" objectIds:"+edu.wustl.common.util.Utility.getArrayString(objectIds)+" userId:"+userId+" roleId:"+roleId+" assignToUser:"+assignToUser);
 	    super.setPrivilege(dao,privilegeName,objectType,objectIds,userId, roleId, assignToUser,assignOperation);

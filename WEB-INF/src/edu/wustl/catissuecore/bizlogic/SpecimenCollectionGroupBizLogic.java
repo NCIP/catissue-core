@@ -81,47 +81,34 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		
 		try
         {
-            SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null,getProtectionObjects(specimenCollectionGroup),getDynamicGroups(specimenCollectionGroup));
+            SecurityManager.getInstance(this.getClass()).insertAuthorizationData(
+            		null, getProtectionObjects(specimenCollectionGroup), getDynamicGroups(specimenCollectionGroup));
         }
-        catch (SMException e)
+		catch (SMException e)
         {
-            Logger.out.error("Exception in Authorization: "+e.getMessage(),e);
+			throw handleSMException(e);
         }
-		
 	}
 	
-	public Set getProtectionObjects(AbstractDomainObject obj)
+	private Set getProtectionObjects(AbstractDomainObject obj)
     {
         Set protectionObjects = new HashSet();
         
         SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) obj;
         protectionObjects.add(specimenCollectionGroup);
         
-		Participant participant = null;
-//		//Case of registering Participant on its participant ID
-//		if(specimenCollectionGroup.getClinicalReport()!=null)
-//		{
-//		    protectionObjects.add(specimenCollectionGroup.getClinicalReport());
-//		}
-		
         Logger.out.debug(protectionObjects.toString());
         return protectionObjects;
     }
 
-    public String[] getDynamicGroups(AbstractDomainObject obj)
+    private String[] getDynamicGroups(AbstractDomainObject obj) throws SMException
     {
-        String[] dynamicGroups=null;
         SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) obj;
-        dynamicGroups = new String[1];
+        String[] dynamicGroups = new String[1];
         
-        try
-        {
-            dynamicGroups[0] = SecurityManager.getInstance(this.getClass()).getProtectionGroupByName(specimenCollectionGroup.getCollectionProtocolRegistration(),Constants.getCollectionProtocolPGName(null));
-        }
-        catch (SMException e)
-        {
-            Logger.out.error("Exception in Authorization: "+e.getMessage(),e);
-        }
+        dynamicGroups[0] = SecurityManager.getInstance(this.getClass()).getProtectionGroupByName(
+        			specimenCollectionGroup.getCollectionProtocolRegistration(),
+					Constants.getCollectionProtocolPGName(null));
         Logger.out.debug("Dynamic Group name: "+dynamicGroups[0]);
         return dynamicGroups;
         
@@ -143,7 +130,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		{
 			checkStatus(dao,specimenCollectionGroup.getSite(), "Site" );
 		}
-		// --------------- site check complete
+		//site check complete
 		
 		// -- check for closed CollectionProtocol
 		List list  =  dao.retrieve(CollectionProtocolEvent.class.getName(), Constants.SYSTEM_IDENTIFIER, specimenCollectionGroup.getCollectionProtocolEvent().getSystemIdentifier());
@@ -156,7 +143,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 			
 			specimenCollectionGroup.setCollectionProtocolEvent((CollectionProtocolEvent)list.get(0));
 		}
-		// ---------- CollectionProtocol check complete.
+		//CollectionProtocol check complete.
 		
 		
 		setCollectionProtocolRegistration(dao, specimenCollectionGroup, oldspecimenCollectionGroup);
@@ -289,7 +276,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
     /**
 	 * @see AbstractBizLogic#setPrivilege(DAO, String, Class, Long[], Long, String, boolean)
 	 */
-    public void setPrivilege(DAO dao, String privilegeName, Class objectType, Long[] objectIds, Long userId, String roleId, boolean assignToUser, boolean assignOperation) throws SMException, DAOException
+    protected void setPrivilege(DAO dao, String privilegeName, Class objectType, Long[] objectIds, Long userId, String roleId, boolean assignToUser, boolean assignOperation) throws SMException, DAOException
     {
 	    super.setPrivilege(dao,privilegeName,objectType,objectIds,userId, roleId, assignToUser, assignOperation);
 	    
