@@ -107,6 +107,7 @@ public class AdvanceSearchResultsAction extends BaseAction
 			Logger.out.debug("tableSet from query before setting resultview :"+query.getTableNamesSet());
 			//Set the result view for Advance Search
 			Vector selectDataElements = bizLogic.getSelectDataElements(null,new ArrayList(tablesVector), columnNames);
+			//Vector selectDataElements = bizLogic.getSelectDataElements(null,new ArrayList(query.getTableNamesSet()), columnNames);
 			Logger.out.debug("column display names "+columnNames+":"+columnNames.size());
 
 			query.setResultView(selectDataElements);
@@ -148,6 +149,7 @@ public class AdvanceSearchResultsAction extends BaseAction
 			//Remove configured columns from session for previous query in same session
 			session.setAttribute(Constants.CONFIGURED_SELECT_COLUMN_LIST,null);
 			session.setAttribute(Constants.CONFIGURED_COLUMN_DISPLAY_NAMES,null);
+			session.setAttribute(Constants.CONFIGURED_COLUMN_NAMES,null);
 			
 			//Remove the spreadsheet column display names from session
 			session.setAttribute(Constants.SPREADSHEET_COLUMN_LIST,null);
