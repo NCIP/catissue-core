@@ -32,6 +32,8 @@ public class AdvancedConditionsNode {
      * Operation with child nodes
      */
     private Operator operationBtwChildNodes = new Operator(Operator.OR);
+    
+    private boolean defaultAndOr = false;
 	
 	/**
 	 * Constructor
@@ -118,4 +120,12 @@ public class AdvancedConditionsNode {
     {
         this.objectName = objectName;
     }
+
+	public boolean isDefaultAndOr() {
+		return defaultAndOr;
+	}
+
+	public void setDefaultAndOr(boolean defaultAndOr) {
+		this.defaultAndOr = defaultAndOr;
+	}
 }
