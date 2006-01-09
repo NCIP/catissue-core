@@ -50,6 +50,7 @@ public class DistributedItem extends AbstractDomainObject implements java.io.Ser
      * @see #setSystemIdentifier(Long)
      * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"
      * unsaved-value="null" generator-class="native" 
+     * @hibernate.generator-param name="sequence" value="CATISSUE_DISTRIBUTED_ITEM_SEQ"
      */
 	public Long getSystemIdentifier()
 	{

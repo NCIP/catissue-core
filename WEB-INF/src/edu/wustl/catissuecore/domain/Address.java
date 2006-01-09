@@ -66,7 +66,8 @@ public class Address extends AbstractDomainObject implements java.io.Serializabl
 	 * Returns the identifier assigned to Address.
 	 * 
 	 * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"
-     * unsaved-value="null" generator-class="native" 
+     * unsaved-value="null" generator-class="native"
+     * @hibernate.generator-param name="sequence" value="CATISSUE_ADDRESS_SEQ" 
 	 * @return a unique systemIdentifier assigned to the address.
 	 */
 	public Long getSystemIdentifier()

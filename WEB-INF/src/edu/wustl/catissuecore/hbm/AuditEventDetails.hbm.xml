@@ -20,6 +20,7 @@
             unsaved-value="null"
         >
             <generator class="native">
+                <param name="sequence">CATISSUE_AUDIT_EVENT_DET_SEQ</param>
             </generator>
         </id>
 
@@ -29,7 +30,7 @@
             update="true"
             insert="true"
             column="ELEMENT_NAME"
-            length="50"
+            length="150"
         />
 
         <property
@@ -38,7 +39,7 @@
             update="true"
             insert="true"
             column="PREVIOUS_VALUE"
-            length="50"
+            length="150"
         />
 
         <property
@@ -47,7 +48,7 @@
             update="true"
             insert="true"
             column="CURRENT_VALUE"
-            length="50"
+            length="150"
         />
 
         <many-to-one

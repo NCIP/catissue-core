@@ -36,6 +36,7 @@ public class QueryColumnData extends AbstractDomainObject
      * Returns the systemIdentifier.
      * @hibernate.id name="identifier" column="IDENTIFIER" type="long" length="30"
      * unsaved-value="null" generator-class="native"
+     * @hibernate.generator-param name="sequence" value="CATISSUE_INTF_COLUMN_DATA_SEQ"
      * @return Returns the identifier.
      */
     public long getIdentifier()

@@ -72,6 +72,7 @@ public class Site extends AbstractDomainObject implements java.io.Serializable
      * Returns the system generated unique identifier.
      * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"
      * unsaved-value="null" generator-class="native"
+     * @hibernate.generator-param name="sequence" value="CATISSUE_SITE_SEQ"
      * @return the system generated unique identifier.
      * @see #setSystemIdentifier(Long)
      */

@@ -52,7 +52,8 @@ public class StorageContainerCapacity extends AbstractDomainObject implements ja
      * @return Long System generated unique systemIdentifier.
      * @see #setSystemIdentifier(Long)
      * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"
-     * unsaved-value="null" generator-class="native" 
+     * unsaved-value="null" generator-class="native"
+     * @hibernate.generator-param name="sequence" value="CATISSUE_STRG_CONT_CAPA_SEQ"
      */
 	public Long getSystemIdentifier()
 	{

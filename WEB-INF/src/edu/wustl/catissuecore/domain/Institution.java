@@ -50,6 +50,7 @@ public class Institution extends AbstractDomainObject implements Serializable
 	 * Returns the unique systemIdentifier assigned to institution.
 	 * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long"
 	 * length="30" unsaved-value="null" generator-class="native"
+	 * @hibernate.generator-param name="sequence" value="CATISSUE_INSTITUTION_SEQ"
 	 * @return A unique systemIdentifier assigned to the institution.
 	 * @see #setIdentifier(int)
 	 * */

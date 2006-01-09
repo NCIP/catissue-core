@@ -20,6 +20,7 @@
             unsaved-value="null"
         >
             <generator class="native">
+                <param name="sequence">CATISSUE_INTF_COLUMN_DATA_SEQ</param>
             </generator>
         </id>
 

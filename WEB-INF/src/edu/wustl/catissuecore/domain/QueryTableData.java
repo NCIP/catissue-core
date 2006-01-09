@@ -52,6 +52,7 @@ public class QueryTableData extends AbstractDomainObject
      * Returns the systemIdentifier.
      * @hibernate.id name="identifier" column="TABLE_ID" type="long" length="30"
      * unsaved-value="null" generator-class="native"
+     * @hibernate.generator-param name="sequence" value="CATISSUE_QUERY_TABLE_DATA_SEQ"
      * @return Returns the identifier.
      */
     public long getIdentifier()

@@ -20,6 +20,7 @@
             unsaved-value="null"
         >
             <generator class="native">
+                <param name="sequence">CATISSUE_INSTITUTION_SEQ</param>
             </generator>
         </id>
 

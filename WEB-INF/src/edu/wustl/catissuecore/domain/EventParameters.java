@@ -49,12 +49,10 @@ public abstract class EventParameters extends AbstractDomainObject implements ja
      */
 	protected String comments;
 
-	/**
+	/*
      * Returns System generated unique systemIdentifier.
      * @return System generated unique systemIdentifier.
      * @see #setSystemIdentifier(Integer)
-     * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"
-     * unsaved-value="null" generator-class="native" 
      */
 	public Long getSystemIdentifier()
 	{

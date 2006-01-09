@@ -141,6 +141,7 @@ public class User extends AbstractDomainObject implements Serializable
      * Returns the systemIdentifier assigned to user.
      * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"
      * unsaved-value="null" generator-class="native"
+     * @hibernate.generator-param name="sequence" value="CATISSUE_USER_SEQ"
      * @return Returns the systemIdentifier.
      */
     public Long getSystemIdentifier()

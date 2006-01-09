@@ -56,6 +56,7 @@ public class CollectionProtocolEvent extends AbstractDomainObject implements jav
 	 * Returns the systemIdentifier.
 	 * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"
 	 * unsaved-value="null" generator-class="native"
+	 * @hibernate.generator-param name="sequence" value="CATISSUE_COLL_PROT_EVENT_SEQ"
 	 * @return Returns the systemIdentifier.
 	 */
 	public Long getSystemIdentifier()

@@ -114,6 +114,7 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
      * @see #setSystemIdentifier(Long)
      * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"
      * unsaved-value="null" generator-class="native" 
+     * @hibernate.generator-param name="sequence" value="CATISSUE_PARTICIPANT_SEQ"
      */
 	public Long getSystemIdentifier()
 	{

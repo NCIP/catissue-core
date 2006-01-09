@@ -68,6 +68,7 @@ public abstract class SpecimenRequirement  extends AbstractDomainObject implemen
 	 * Returns the systemIdentifier.
 	 * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"
 	 * unsaved-value="null" generator-class="native"
+	 * @hibernate.generator-param name="sequence" value="CATISSUE_SPECIMEN_REQ_SEQ"
 	 * @return Returns the systemIdentifier.
 	 */
 	public Long getSystemIdentifier()

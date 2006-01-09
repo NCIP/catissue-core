@@ -149,6 +149,7 @@ public class ReportedProblem extends AbstractDomainObject implements Serializabl
      * @return the systemIdentifier assigned to the reported problem.
 	 * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"
      * unsaved-value="null" generator-class="native"
+     * @hibernate.generator-param name="sequence" value="CATISSUE_REPORTED_PROBLEM_SEQ"
      * @see #setIdentifier(Long)
      */
     public Long getSystemIdentifier()

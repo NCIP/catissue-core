@@ -15,6 +15,18 @@ public class AuditEvent extends EventParameters implements java.io.Serializable
 	protected Collection auditEventLogCollection = new HashSet();
 
 	/**
+     * Returns System generated unique systemIdentifier.
+     * @return System generated unique systemIdentifier.
+     * @see #setSystemIdentifier(Integer)
+     * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"
+     * unsaved-value="null" generator-class="native"
+     * @hibernate.generator-param name="sequence" value="CATISSUE_AUDIT_EVENT_PARAM_SEQ" 
+     */
+	public Long getSystemIdentifier()
+	{
+		return systemIdentifier;
+	}
+	/**
 	 * @hibernate.property name="ipAddress" type="string"
      * column="IP_ADDRESS" length="20" 
 	 **/

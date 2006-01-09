@@ -78,6 +78,7 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 	 * Returns the system generated unique systemIdentifier.
 	 * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"
 	 * unsaved-value="null" generator-class="native"
+	 * @hibernate.generator-param name="sequence" value="CATISSUE_COLL_PROT_REG_SEQ"
 	 * @return the system generated unique systemIdentifier.
 	 * @see #setSystemIdentifier(Long)
 	 * */

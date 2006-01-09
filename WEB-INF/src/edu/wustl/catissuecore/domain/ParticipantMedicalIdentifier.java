@@ -45,6 +45,7 @@ public class ParticipantMedicalIdentifier extends AbstractDomainObject implement
      * Returns System generated unique identifier.
      * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"
      * unsaved-value="null" generator-class="native"
+     * @hibernate.generator-param name="sequence" value="CATISSUE_PART_MEDICAL_ID_SEQ"
      * @return System generated unique systemIdentifier.
      * @see #setSystemIdentifier(Long)
      */

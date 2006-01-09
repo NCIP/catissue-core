@@ -44,6 +44,7 @@ public class ClinicalReport extends AbstractDomainObject implements java.io.Seri
      * Returns the system generated unique systemIdentifier.
      * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"
      * unsaved-value="null" generator-class="native"
+     * @hibernate.generator-param name="sequence" value="CATISSUE_CLINICAL_REPORT_SEQ"
      * @return the system generated unique systemIdentifier.
      * @see #setSystemIdentifier(Long)
      * */

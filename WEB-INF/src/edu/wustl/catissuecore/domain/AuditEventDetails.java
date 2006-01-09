@@ -19,6 +19,7 @@ public class AuditEventDetails implements java.io.Serializable
      * @see #setSystemIdentifier(Long)
      * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"
      * unsaved-value="null" generator-class="native" 
+     * @hibernate.generator-param name="sequence" value="CATISSUE_AUDIT_EVENT_DET_SEQ"
      */
 	public Long getSystemIdentifier()
 	{
@@ -32,7 +33,7 @@ public class AuditEventDetails implements java.io.Serializable
 
 	/**
 	 * @hibernate.property name="elementName" type="string"
-     * column="ELEMENT_NAME" length="50" 
+     * column="ELEMENT_NAME" length="150" 
 	 **/
 	public String getElementName()
 	{
@@ -46,7 +47,7 @@ public class AuditEventDetails implements java.io.Serializable
 
 	/**
 	 * @hibernate.property name="previousValue" type="string"
-     * column="PREVIOUS_VALUE" length="50" 
+     * column="PREVIOUS_VALUE" length="150" 
 	 **/
 	public String getPreviousValue()
 	{
@@ -60,7 +61,7 @@ public class AuditEventDetails implements java.io.Serializable
 
 	/**
 	 * @hibernate.property name="currentValue" type="string"
-     * column="CURRENT_VALUE" length="50" 
+     * column="CURRENT_VALUE" length="150" 
 	 **/
 	public String getCurrentValue()
 	{

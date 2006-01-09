@@ -95,6 +95,7 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
 	 * Returns the system generated unique systemIdentifier.
 	 * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"
 	 * unsaved-value="null" generator-class="native"
+	 * @hibernate.generator-param name="sequence" value="CATISSUE_SPECIMEN_COLL_GRP_SEQ"
 	 * @return the system generated unique systemIdentifier.
 	 * @see #setSystemIdentifier(Long)
 	 */

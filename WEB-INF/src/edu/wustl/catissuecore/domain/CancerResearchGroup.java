@@ -50,6 +50,7 @@ public class CancerResearchGroup extends AbstractDomainObject implements Seriali
 	 * Returns the unique systemIdentifier of the cancer research group.
 	 * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long"
 	 * length="30" unsaved-value="null" generator-class="native"
+	 * @hibernate.generator-param name="sequence" value="CATISSUE_CANCER_RES_GRP_SEQ"
 	 * @return a unique systemIdentifier assigned to the cancer research group.
 	 */
 	public Long getSystemIdentifier()

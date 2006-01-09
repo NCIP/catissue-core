@@ -48,6 +48,7 @@ public class Department extends AbstractDomainObject implements java.io.Serializ
 	 * 
 	 * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long"
 	 * length="30" unsaved-value="null" generator-class="native"
+	 * @hibernate.generator-param name="sequence" value="CATISSUE_DEPARTMENT_SEQ"
 	 * @return a unique systemIdentifier assigned to the department.
 	 */
 	public Long getSystemIdentifier()

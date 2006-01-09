@@ -71,7 +71,8 @@ public class StorageType extends AbstractDomainObject implements Serializable
      * @return System generated unique systemIdentifier.
      * @see #setSystemIdentifier(Integer)
      * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"
-     * unsaved-value="null" generator-class="native" 
+     * unsaved-value="null" generator-class="native"
+     * @hibernate.generator-param name="sequence" value="CATISSUE_STORAGE_TYPE_SEQ" 
      * */
 	public Long getSystemIdentifier()
 	{
