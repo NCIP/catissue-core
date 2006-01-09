@@ -1,5 +1,6 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <%@ taglib uri="/WEB-INF/struts-tiles.tld" prefix="tiles" %>
+<%@ page import="edu.wustl.common.util.global.ApplicationProperties" %>
 
 <table summary="" cellpadding="0" cellspacing="0" border="0" width="190" height="100%">
   <tiles:insert attribute="submenu"></tiles:insert>            
@@ -30,8 +31,9 @@
   </tr>
   
   <tr>
-  	<td class="subMenuSecondaryTitle" onmouseover="changeMenuStyle(this,'subMenuSecondaryTitleOver'),showCursor()" onmouseout="changeMenuStyle(this,'subMenuSecondaryTitle'),hideCursor()" height="20" onclick="document.location.href='#'">
-  		<a class="subMenuSecondary" href="#">
+  	<% String str = ApplicationProperties.getValue("allPage.sitHome"); %>
+  	<td class="subMenuSecondaryTitle" onmouseover="changeMenuStyle(this,'subMenuSecondaryTitleOver'),showCursor()" onmouseout="changeMenuStyle(this,'subMenuSecondaryTitle'),hideCursor()" height="20" onclick="document.location.href='<%=str %>'">
+  		<a class="subMenuSecondary" href="<%=str %>">
   			<bean:message key="app.siteHome" />
   		</a>
   	</td>
