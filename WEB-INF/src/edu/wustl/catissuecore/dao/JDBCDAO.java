@@ -397,6 +397,7 @@ private Timestamp isColumnValueDate(Object value)
 	try
 	{
 		DateFormat formatter=new SimpleDateFormat("mm-dd-yyyy");
+		formatter.setLenient(false);
         java.util.Date date = formatter.parse((String)value);
         Timestamp t = new Timestamp(date.getTime()); 
        // Date sqlDate = new Date(date.getTime());
