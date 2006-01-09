@@ -39,7 +39,7 @@ public class Distribution extends SpecimenEventParameters implements java.io.Ser
 	/**
 	 * Original location(site) of the item. 
 	 */
-	protected Site fromSite = new Site();
+	//protected Site fromSite = new Site();
 	
 	/**
 	 * DistributionProtocol associated with this Distribution.
@@ -88,25 +88,25 @@ public class Distribution extends SpecimenEventParameters implements java.io.Ser
 		this.toSite = toSite;
 	}
 
-	/**
-	 * Returns the original/source Site of the Distribution.
-	 * @hibernate.many-to-one column="FROM_SITE_ID"
-	 * class="edu.wustl.catissuecore.domain.Site" constrained="true"
-	 * @return the original/source Site of the Distribution.
-	 */
-	public Site getFromSite()
-	{
-		return fromSite;
-	}
-
-	/**
-	 * @param fromSite
-	 *  The fromSite to set.
-	 */
-	public void setFromSite(Site fromSite)
-	{
-		this.fromSite = fromSite;
-	}
+//	/**
+//	 * Returns the original/source Site of the Distribution.
+//	 * @hibernate.many-to-one column="FROM_SITE_ID"
+//	 * class="edu.wustl.catissuecore.domain.Site" constrained="true"
+//	 * @return the original/source Site of the Distribution.
+//	 */
+//	public Site getFromSite()
+//	{
+//		return fromSite;
+//	}
+//
+//	/**
+//	 * @param fromSite
+//	 *  The fromSite to set.
+//	 */
+//	public void setFromSite(Site fromSite)
+//	{
+//		this.fromSite = fromSite;
+//	}
 
 	/**
 	 * Returns the distributionProtocol of the distribution.
@@ -177,7 +177,7 @@ public class Distribution extends SpecimenEventParameters implements java.io.Ser
 	    	super.specimen = null;
 	    	DistributionForm form = (DistributionForm) abstractForm;
 	        toSite.setSystemIdentifier(new Long(form.getToSite()));
-	        fromSite.setSystemIdentifier(new Long(form.getFromSite()));
+	        //fromSite.setSystemIdentifier(new Long(form.getFromSite()));
 	        distributionProtocol.setSystemIdentifier(new Long(form.getDistributionProtocolId()));
 	        this.activityStatus = form.getActivityStatus();
 	        
