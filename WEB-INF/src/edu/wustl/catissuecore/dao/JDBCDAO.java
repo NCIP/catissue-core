@@ -15,9 +15,11 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -389,24 +391,28 @@ public class JDBCDAO extends AbstractDAO
     //        }
     //
     //    }
-private boolean isColumnValueDate(Object value)
+private Timestamp isColumnValueDate(Object value)
 {
+	 Logger.out.debug("Column value: "+value);
 	try
 	{
-		DateFormat formatter=new SimpleDateFormat("mm-dd-yyyy");;
+		DateFormat formatter=new SimpleDateFormat("mm-dd-yyyy");
         java.util.Date date = formatter.parse((String)value);
-        Logger.out.debug("Column value: "+date);
+        Timestamp t = new Timestamp(date.getTime()); 
+       // Date sqlDate = new Date(date.getTime());
+        
+        Logger.out.debug("Column date value: "+date);
 		if(value.toString().equals("")==false) 
 		{
 			Logger.out.debug("Return true: "+ value);
-			return true;
+			return t;
 		}
 	}
 	catch(Exception e)
 	{
 		
 	}
-	return false;
+	return null;
 }
     
     /**
@@ -418,45 +424,55 @@ private boolean isColumnValueDate(Object value)
 
         StringBuffer query = new StringBuffer("INSERT INTO "+tableName+" values(");
         int i;
-	    for (i=0;i<columnValues.size()-1;i++)
+        
+        Iterator it = columnValues.iterator();
+        while(it.hasNext())
 	    {
-        	//if(isColumnValueDate(columnValues.get(i))==true&&Variables.databaseName.equals(Constants.ORACLE_DATABASE)==true)
-    		
-    		if(Variables.databaseName.equals(Constants.ORACLE_DATABASE))
-        	{
-    			if(isColumnValueDate(columnValues.get(i)))
-    			{
-    				query.append(Variables.STR_TO_DATE_FUNCTION+"('"+columnValues.get(i)+"','"+Variables.DATE_PATTERN+"'),");
-    			}
-    			else
-    			{
-    				query.append("'"+columnValues.get(i)+"',");
-    			}
-        	}
-        	else
-        	{
-        		if(isColumnValueDate(columnValues.get(i)))
-    			{
-    				query.append(Variables.STR_TO_DATE_FUNCTION+"(\""+columnValues.get(i)+"\",\""+Variables.DATE_PATTERN+"\"),");
-    			}
-    			else
-    			{
-    				query.append("\""+columnValues.get(i)+"\",");
-    			}
-        		
-        	}	
+        	it.next();
+	    	query.append("?");
+	    	
+	    	if(it.hasNext())
+	    		query.append(",");
+	    	else
+	    		query.append(")");
 	    }	
 	    
-	    if(Variables.databaseName.equals(Constants.ORACLE_DATABASE))
-	    {
-	    	query.append("'"+columnValues.get(i)+"')");
-	    }
-	    else
-	    {
-	    	query.append("\""+columnValues.get(i)+"\");");
-	    }
-	    Logger.out.debug("Insert query:"+query.toString());    
-	    executeUpdate(query.toString());
+	    PreparedStatement stmt = null;
+        try
+        {
+        	stmt = connection.prepareStatement(query.toString());
+        	for (i=0;i<columnValues.size();i++)
+    	    {
+        		Object obj = columnValues.get(i);
+        		Timestamp date =  isColumnValueDate(obj);
+        		if(date!=null)
+        		{
+        			stmt.setObject(i+1,date);
+        			Logger.out.debug("t.toString(): "+"---"+date);
+				}
+        		else
+        		{
+        			stmt.setObject(i+1,obj);
+        		}	
+    	    }
+        	stmt.executeUpdate();
+        }
+        catch(SQLException sqlExp)
+        {
+            throw new DAOException(sqlExp.getMessage(), sqlExp);
+        }
+        finally
+		{
+        	try
+			{
+        		if(stmt!=null)
+            		stmt.close();
+			}
+        	catch(SQLException ex)
+			{
+        		throw new DAOException(ex.getMessage(), ex);
+			}
+		}
     }
     
     /**
