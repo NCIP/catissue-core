@@ -118,7 +118,7 @@ if(dataList != null && dataList.size() != 0)
 			}
 			else
 			{
-				alert("Please Select atleast one checkbox");
+				alert("Please select at least one checkbox");
 			}
 		}
 		//function that is called on click of Define View button for the configuration of search results
