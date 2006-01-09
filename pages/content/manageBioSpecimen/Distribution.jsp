@@ -312,7 +312,13 @@
 				</html:select>&nbsp;<bean:message key="eventparameters.timeinminutes"/>
 			</td>
 		</tr>
-<!-- fromSite -->		
+		
+		<%
+			String urlToGo = "/Site.do?operation=add&pageOf=pageOfSite";
+			String onClickPath = "changeUrl(this,'"+appendingPath+"')";
+		%>
+		
+<%-- fromSite
 		<tr>
 			<td class="formRequiredNotice" width="5">*</td>
 			<td class="formRequiredLabel">
@@ -335,6 +341,7 @@
 
 			</td>
 		</tr>
+--%>
 <!-- toSite -->		
 		<tr>
 			<td class="formRequiredNotice" width="5">*</td>
