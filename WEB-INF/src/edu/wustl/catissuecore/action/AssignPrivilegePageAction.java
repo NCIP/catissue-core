@@ -12,6 +12,7 @@ package edu.wustl.catissuecore.action;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -115,6 +116,8 @@ public class AssignPrivilegePageAction extends BaseAction
             
             try 
             {
+                Logger.out.debug("Object Type.............."+privilegesForm.getObjectType());
+                Set recordIds = new HashSet();
             	if (privilegesForm.getObjectType()!=null)
             	{
 					List subclassList = HibernateMetaData.getSubClassList(privilegesForm.getObjectType());
@@ -125,11 +128,11 @@ public class AssignPrivilegePageAction extends BaseAction
 					{
 						objects[i+1] = (String) subclassIt.next();
 					}
+					
+					recordIds = SecurityManager.getInstance(AssignPrivilegePageAction.class).getObjectsForAssignPrivilege(String.valueOf(bean.getCsmUserId()),objects,privilegeName);
             	}
-            	else
-            	{
-            		objects = new String[]{privilegesForm.getObjectType()};
-            	}
+            	
+            	request.setAttribute(Constants.RECORD_IDS, recordIds);
 			}
             catch (ClassNotFoundException e1) 
 			{
@@ -137,10 +140,6 @@ public class AssignPrivilegePageAction extends BaseAction
 				objects = new String[]{privilegesForm.getObjectType()};
 			}
             
-            Set recordIds = SecurityManager.getInstance(AssignPrivilegePageAction.class).getObjectsForAssignPrivilege(String.valueOf(bean.getCsmUserId()),objects,privilegeName);
-        	            
-            request.setAttribute(Constants.RECORD_IDS,recordIds);
-        	
             //request.setAttribute(Constants.ATTRIBUTES,attributes);
 		}
         catch(Exception e)
