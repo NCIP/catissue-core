@@ -69,7 +69,7 @@
         />
 
         <property
-            name="genotype"
+            name="sexGenotype"
             type="string"
             update="true"
             insert="true"

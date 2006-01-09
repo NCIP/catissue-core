@@ -181,7 +181,7 @@ public class ParticipantBizLogic extends DefaultBizLogic
 		}
 
         List genotypeList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_GENOTYPE,unknownVal);
-        if(!Validator.isEnumeratedOrNullValue(genotypeList,participant.getGenotype()))
+        if(!Validator.isEnumeratedOrNullValue(genotypeList,participant.getSexGenotype()))
 		{
 			throw new DAOException(ApplicationProperties.getValue("participant.genotype.errMsg"));
 		}

@@ -146,7 +146,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
         this.middleName = Utility.toString( participant.getMiddleName());
         this.birthDate = Utility.parseDateToString(participant.getBirthDate(),Constants.DATE_PATTERN_MM_DD_YYYY);
         this.gender = participant.getGender();
-        this.genotype = participant.getGenotype();
+        this.genotype = participant.getSexGenotype();
         setSSN(participant.getSocialSecurityNumber());
         this.race = participant.getRace();
         this.activityStatus = participant.getActivityStatus();

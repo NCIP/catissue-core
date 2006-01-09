@@ -66,7 +66,7 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 	/**
      * The genetic constitution of the individual.
      */
-	protected String genotype;
+	protected String sexGenotype;
 
 	/**
      * Participant's racial origination.
@@ -243,23 +243,23 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 	/**
      * Returns the genotype of a participant.
      * @return String representing the genotype of a participant.
-     * @see #setGender(String)
-     * @hibernate.property name="genotype" type="string" 
+     * @see #setSexGenotype(String)
+     * @hibernate.property name="sexGenotype" type="string" 
      * column="GENOTYPE" length="50"
      */
-	public String getGenotype()
+	public String getSexGenotype()
 	{
-		return genotype;
+		return sexGenotype;
 	}
 	
 	/**
      * Sets the genotype of a participant.
-     * @param genotype the genotype of a participant.
-     * @see #getGender()
+     * @param sexGenotype the genotype of a participant.
+     * @see #getSexGenotype()
      */
-	public void setGenotype(String genotype)
+	public void setSexGenotype(String sexGenotype)
 	{
-		this.genotype = genotype;
+		this.sexGenotype = sexGenotype;
 	}
 
 	/**
@@ -420,9 +420,9 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 	        	this.gender = null;
 	        
 	        if(validator.isValidOption(form.getGenotype()) )
-	        	this.genotype = form.getGenotype();
+	        	this.sexGenotype = form.getGenotype();
 	        else
-	        	this.genotype = null;
+	        	this.sexGenotype = null;
 
 	        if(validator.isValidOption(form.getEthnicity()) )
 	        	this.ethnicity = form.getEthnicity();
