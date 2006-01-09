@@ -166,14 +166,16 @@ public class DistributionBizLogic extends DefaultBizLogic
 			DistributedItem oldItem 
 				= (DistributedItem)getCorrespondingOldObject(oldDistributedItemCollection, 
 				        item.getSystemIdentifier());
-			
 			//update the available quantity
 			Object specimenObj = dao.retrieve(Specimen.class.getName(), item.getSpecimen().getSystemIdentifier());
 	        Double previousQuantity = (Double)item.getPreviousQuantity();
-	        Logger.out.debug("previousQuantity "+previousQuantity);
-			double quantity = item.getQuantity().doubleValue()-previousQuantity.doubleValue();
-			
-			boolean availability = checkAvailableQty((Specimen)specimenObj,quantity);
+	        double quantity = item.getQuantity().doubleValue();
+	        if(previousQuantity!=null)
+	        {
+	        	quantity = quantity-previousQuantity.doubleValue();
+	        }
+	        boolean availability = checkAvailableQty((Specimen)specimenObj,quantity);
+	        
 			if (!availability)
             {
                 throw new DAOException(ApplicationProperties.getValue("errors.distribution.quantity"));
@@ -181,9 +183,16 @@ public class DistributionBizLogic extends DefaultBizLogic
 			else
 			{
 				dao.update(specimenObj,sessionDataBean,Constants.IS_AUDITABLE_TRUE,Constants.IS_SECURE_UPDATE_TRUE, Constants.HAS_OBJECT_LEVEL_PRIVILEGE_FALSE);
-				
 				//Audit of Specimen.
-				dao.audit(specimenObj, oldItem.getSpecimen(), sessionDataBean, Constants.IS_AUDITABLE_TRUE);
+				//If a new specimen is distributed.
+				if(oldItem==null)
+				{
+					Object specimenObjPrev = dao.retrieve(Specimen.class.getName(), item.getSpecimen().getSystemIdentifier());
+					dao.audit(specimenObj, specimenObjPrev, sessionDataBean, Constants.IS_AUDITABLE_TRUE);
+				}
+				//if a distributed specimen is updated  
+				else
+					dao.audit(specimenObj, oldItem.getSpecimen(), sessionDataBean, Constants.IS_AUDITABLE_TRUE);
 			}
 			item.setDistribution(distribution);
 			
