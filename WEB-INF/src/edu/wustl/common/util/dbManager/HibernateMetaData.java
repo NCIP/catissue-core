@@ -180,11 +180,11 @@ public class HibernateMetaData
 	{
 		String dbName="";
 		String dialect = cfg.getProperty("hibernate.dialect");
-		if(dialect.toLowerCase().indexOf("oracle")>0)
+		if(dialect.toLowerCase().indexOf("oracle")!=-1)
 		{
 			dbName=Constants.ORACLE_DATABASE;
 		}
-		else
+		else if(dialect.toLowerCase().indexOf("mysql")!=-1)
 		{
 			dbName=Constants.MYSQL_DATABASE;
 		}

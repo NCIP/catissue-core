@@ -255,21 +255,22 @@ public class CatissueCoreServletContextListener
             if(Variables.databaseName.equals(Constants.ORACLE_DATABASE))
             {
             	//set string/function for oracle
-            	Variables.DATE_PATTERN = "mm-dd-yyyy";
-            	Variables.TIME_PATTERN = "hh-mi-ss";
-            	Variables.DATE_FORMAT_FUNCTION="TO_CHAR";
-            	Variables.TIME_FORMAT_FUNCTION="TO_CHAR";
-            	Variables.DATE_TO_STR_FUNCTION = "TO_CHAR";
-            	Variables.STR_TO_DATE_FUNCTION = "TO_DATE";
+            	
+            	Variables.datePattern = "mm-dd-yyyy";
+            	Variables.timePattern = "hh-mi-ss";
+            	Variables.dateFormatFunction="TO_CHAR";
+            	Variables.timeFormatFunction="TO_CHAR";
+            	Variables.dateTostrFunction = "TO_CHAR";
+            	Variables.strTodateFunction = "TO_DATE";
             }
             else
             {
-            	Variables.DATE_PATTERN = "%m-%d-%Y";
-            	Variables.TIME_PATTERN = "%H:%i:%s";
-            	Variables.DATE_FORMAT_FUNCTION="DATE_FORMAT";
-            	Variables.TIME_FORMAT_FUNCTION="TIME_FORMAT";
-            	Variables.DATE_TO_STR_FUNCTION = "TO_CHAR";
-            	Variables.STR_TO_DATE_FUNCTION = "STR_TO_DATE";
+            	Variables.datePattern = "%m-%d-%Y";
+            	Variables.timePattern = "%H:%i:%s";
+            	Variables.dateFormatFunction="DATE_FORMAT";
+            	Variables.timeFormatFunction="TIME_FORMAT";
+            	Variables.dateTostrFunction = "TO_CHAR";
+            	Variables.strTodateFunction = "STR_TO_DATE";
             }
         }
         catch (Exception e1)

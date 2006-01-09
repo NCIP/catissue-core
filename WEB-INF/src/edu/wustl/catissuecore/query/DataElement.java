@@ -94,14 +94,14 @@ public class DataElement
        String fieldName = table.toSQLString() + tableSufix + "." + field+" ";
        if ((fieldType != null) && (Constants.FIELD_TYPE_TIMESTAMP_TIME.equalsIgnoreCase(fieldType)))
        {
-       		fieldName = Variables.TIME_FORMAT_FUNCTION + "(" + fieldName + ",'" + Variables.TIME_PATTERN + "') ";
+       		fieldName = Variables.timeFormatFunction + "(" + fieldName + ",'" + Variables.timePattern + "') ";
        }
        else if ((fieldType != null) && (Constants.FIELD_TYPE_TIMESTAMP_DATE.equalsIgnoreCase(fieldType)))
        {
-           fieldName = Variables.STR_TO_DATE_FUNCTION + "(" 
-           				+ Variables.DATE_FORMAT_FUNCTION + "(" 
-           				+ fieldName + ",'" + Variables.DATE_PATTERN + "')"
-           				+ ",'" + Variables.DATE_PATTERN + "')";
+           fieldName = Variables.strTodateFunction + "(" 
+           				+ Variables.dateFormatFunction + "(" 
+           				+ fieldName + ",'" + Variables.datePattern + "')"
+           				+ ",'" + Variables.datePattern + "')";
        }
        
        return fieldName;

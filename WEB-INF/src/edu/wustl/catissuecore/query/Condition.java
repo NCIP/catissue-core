@@ -158,8 +158,8 @@ public class Condition {
 				    			   + calendar.get(Calendar.DAY_OF_MONTH) + "-" 
 				    			   + calendar.get(Calendar.YEAR);
 				    
-				    newValue = Variables.STR_TO_DATE_FUNCTION 
-				    			+ "('" + value + "','" + Variables.DATE_PATTERN + "')";
+				    newValue = Variables.strTodateFunction 
+				    			+ "('" + value + "','" + Variables.datePattern + "')";
 			    }
 			    catch (ParseException parseExp)
 			    {
