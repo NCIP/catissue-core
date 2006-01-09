@@ -158,7 +158,7 @@
 		</div>
 		<div>
 			<a class="subMenuPrimary" href="Biohazard.do?operation=add&pageOf=pageOfBioHazard&menuSelected=8"><bean:message key="app.add" /></a> | 
-			<a class="subMenuPrimary" href="SimpleQueryInterface.do?pageOf=pageOfBioHazard&aliasName=BioHazard&menuSelected=8" >
+			<a class="subMenuPrimary" href="SimpleQueryInterface.do?pageOf=pageOfBioHazard&aliasName=Biohazard&menuSelected=8" >
 				<bean:message key="app.edit" />
 			</a>
 		</div>
