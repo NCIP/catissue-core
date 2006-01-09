@@ -154,53 +154,87 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	   */
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
-		try
+//		if(operation.equals("add" ) )
+//			setMutable(true );
+			
+		SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) abstractDomain;
+			
+		systemIdentifier = specimenCollectionGroup.getId().longValue();
+		    
+		Logger.out.debug("specimenCollectionGroup.getClinicalDiagnosis() "+specimenCollectionGroup.getClinicalDiagnosis());
+		clinicalDiagnosis = Utility.toString(specimenCollectionGroup.getClinicalDiagnosis());
+		clinicalStatus = Utility.toString(specimenCollectionGroup.getClinicalStatus());
+		activityStatus = Utility.toString(specimenCollectionGroup.getActivityStatus());
+			
+		ClinicalReport clinicalReport = specimenCollectionGroup.getClinicalReport();
+		surgicalPathologyNumber = Utility.toString(clinicalReport.getSurgicalPathologyNumber());
+		
+		if(clinicalReport.getParticipantMedicalIdentifier()!=null)
+			participantsMedicalIdentifierId = clinicalReport.getParticipantMedicalIdentifier().getId().longValue();
+			
+		collectionProtocolId = specimenCollectionGroup.getCollectionProtocolRegistration().getCollectionProtocol().getId().longValue();
+		collectionProtocolEventId = specimenCollectionGroup.getCollectionProtocolEvent().getId().longValue();
+		
+		Participant participant = specimenCollectionGroup.getCollectionProtocolRegistration().getParticipant();
+		Logger.out.debug("SCgForm --------- Participant : -- "+ participant.toString() );
+		if(participant!=null)
 		{
-//			if(operation.equals("add" ) )
-//				setMutable(true );
-				
-			SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) abstractDomain;
-				
-			systemIdentifier = specimenCollectionGroup.getSystemIdentifier().longValue();
-			    
-			Logger.out.debug("specimenCollectionGroup.getClinicalDiagnosis() "+specimenCollectionGroup.getClinicalDiagnosis());
-			clinicalDiagnosis = Utility.toString(specimenCollectionGroup.getClinicalDiagnosis());
-			clinicalStatus = Utility.toString(specimenCollectionGroup.getClinicalStatus());
-			activityStatus = Utility.toString(specimenCollectionGroup.getActivityStatus());
-				
-			ClinicalReport clinicalReport = specimenCollectionGroup.getClinicalReport();
-			surgicalPathologyNumber = Utility.toString(clinicalReport.getSurgicalPathologyNumber());
-			
-			if(clinicalReport.getParticipantMedicalIdentifier()!=null)
-				participantsMedicalIdentifierId = clinicalReport.getParticipantMedicalIdentifier().getSystemIdentifier().longValue();
-				
-			collectionProtocolId = specimenCollectionGroup.getCollectionProtocolRegistration().getCollectionProtocol().getSystemIdentifier().longValue();
-			collectionProtocolEventId = specimenCollectionGroup.getCollectionProtocolEvent().getSystemIdentifier().longValue();
-			
-			Participant participant = specimenCollectionGroup.getCollectionProtocolRegistration().getParticipant();
-			Logger.out.debug("SCgForm --------- Participant : -- "+ participant.toString() );
-			if(participant!=null)
-			{
-				participantId = participant.getSystemIdentifier().longValue();
-				checkedButton = 1;
-			}
-			else
-			{
-				protocolParticipantIdentifier =  Utility.toString(specimenCollectionGroup.getCollectionProtocolRegistration().getProtocolParticipantIdentifier());
-				checkedButton = 2;
-			}
-			
-			Logger.out.debug("participantId.................................."+participantId);
-			Logger.out.debug("protocolParticipantIdentifier........................."+protocolParticipantIdentifier);
-			Logger.out.debug("SCgForm --------- checkButton : -- " + checkedButton );
-			siteId = specimenCollectionGroup.getSite().getSystemIdentifier().longValue();
+			participantId = participant.getId().longValue();
+			checkedButton = 1;
 		}
-		catch (Exception excp)
+		else
 		{
-	    	// use of logger as per bug 79
-	    	Logger.out.error(excp.getMessage(),excp); 
+			protocolParticipantIdentifier =  Utility.toString(specimenCollectionGroup.getCollectionProtocolRegistration().getProtocolParticipantIdentifier());
+			checkedButton = 2;
 		}
+		
+		Logger.out.debug("participantId.................................."+participantId);
+		Logger.out.debug("protocolParticipantIdentifier........................."+protocolParticipantIdentifier);
+		Logger.out.debug("SCgForm --------- checkButton : -- " + checkedButton );
+		siteId = specimenCollectionGroup.getSite().getId().longValue();
 	}
+	
+	public void setAllVal(Object obj)
+    {
+	//		if(operation.equals("add" ) )
+	//		setMutable(true );
+			
+	    edu.wustl.catissuecore.domainobject.SpecimenCollectionGroup specimenCollectionGroup = (edu.wustl.catissuecore.domainobject.SpecimenCollectionGroup) obj;
+			
+		systemIdentifier = specimenCollectionGroup.getId().longValue();
+		    
+		Logger.out.debug("specimenCollectionGroup.getClinicalDiagnosis() "+specimenCollectionGroup.getClinicalDiagnosis());
+		clinicalDiagnosis = Utility.toString(specimenCollectionGroup.getClinicalDiagnosis());
+		clinicalStatus = Utility.toString(specimenCollectionGroup.getClinicalStatus());
+		activityStatus = Utility.toString(specimenCollectionGroup.getActivityStatus());
+			
+		edu.wustl.catissuecore.domainobject.ClinicalReport clinicalReport = specimenCollectionGroup.getClinicalReport();
+		surgicalPathologyNumber = Utility.toString(clinicalReport.getSurgicalPathologyNumber());
+		
+		if(clinicalReport.getParticipantMedicalIdentifier()!=null)
+			participantsMedicalIdentifierId = clinicalReport.getParticipantMedicalIdentifier().getId().longValue();
+			
+		collectionProtocolId = specimenCollectionGroup.getCollectionProtocolRegistration().getCollectionProtocol().getId().longValue();
+		collectionProtocolEventId = specimenCollectionGroup.getCollectionProtocolEvent().getId().longValue();
+		
+		edu.wustl.catissuecore.domainobject.Participant participant = specimenCollectionGroup.getCollectionProtocolRegistration().getParticipant();
+		Logger.out.debug("SCgForm --------- Participant : -- "+ participant.toString() );
+		if(participant!=null)
+		{
+			participantId = participant.getId().longValue();
+			checkedButton = 1;
+		}
+		else
+		{
+			protocolParticipantIdentifier =  Utility.toString(specimenCollectionGroup.getCollectionProtocolRegistration().getProtocolParticipantIdentifier());
+			checkedButton = 2;
+		}
+		
+		Logger.out.debug("participantId.................................."+participantId);
+		Logger.out.debug("protocolParticipantIdentifier........................."+protocolParticipantIdentifier);
+		Logger.out.debug("SCgForm --------- checkButton : -- " + checkedButton );
+		siteId = specimenCollectionGroup.getSite().getId().longValue();
+    }
 	  
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#getFormId()

@@ -100,30 +100,43 @@ public class SiteForm extends AbstractActionForm
      */
     public void setAllValues(AbstractDomainObject abstractDomain)
     {
-        try
-        {
-            Site site = (Site) abstractDomain;
-            
-            this.systemIdentifier = site.getSystemIdentifier().longValue();
-            this.name 			= site.getName();
-            this.type			= site.getType();
-            this.emailAddress 	= site.getEmailAddress();
-            this.street 		= site.getAddress().getStreet();
-            this.city 			= site.getAddress().getCity();
-            this.state 			= site.getAddress().getState();
-            this.country 		= site.getAddress().getCountry();
-            this.zipCode 		= site.getAddress().getZipCode();
-            this.phoneNumber 	= site.getAddress().getPhoneNumber();
-            this.faxNumber 		= site.getAddress().getFaxNumber();
-            this.activityStatus = site.getActivityStatus();
-            this.coordinatorId	= site.getCoordinator().getSystemIdentifier().longValue();
-        }
-        catch (Exception excp)
-        {
-            Logger.out.error(excp.getMessage(),excp);
-        }
+        Site site = (Site)abstractDomain;
+        
+        this.systemIdentifier = site.getId().longValue();
+        this.name 			= site.getName();
+        this.type			= site.getType();
+        this.emailAddress 	= site.getEmailAddress();
+        this.street 		= site.getAddress().getStreet();
+        this.city 			= site.getAddress().getCity();
+        this.state 			= site.getAddress().getState();
+        this.country 		= site.getAddress().getCountry();
+        this.zipCode 		= site.getAddress().getZipCode();
+        this.phoneNumber 	= site.getAddress().getPhoneNumber();
+        this.faxNumber 		= site.getAddress().getFaxNumber();
+        this.activityStatus = site.getActivityStatus();
+        this.coordinatorId	= site.getCoordinator().getId().longValue();
+    }
+    
+    public void setAllVal(Object obj)
+    {
+        edu.wustl.catissuecore.domainobject.Site site=(edu.wustl.catissuecore.domainobject.Site) obj;
+        
+        this.systemIdentifier = site.getId().longValue();
+        this.name 			= site.getName();
+        this.type			= site.getType();
+        this.emailAddress 	= site.getEmailAddress();
+        this.street 		= site.getAddress().getStreet();
+        this.city 			= site.getAddress().getCity();
+        this.state 			= site.getAddress().getState();
+        this.country 		= site.getAddress().getCountry();
+        this.zipCode 		= site.getAddress().getZipCode();
+        this.phoneNumber 	= site.getAddress().getPhoneNumber();
+        this.faxNumber 		= site.getAddress().getFaxNumber();
+        this.activityStatus = site.getActivityStatus();
+        this.coordinatorId	= site.getCoordinator().getId().longValue();
     }
 
+    
 	/**
 	 * Returns the name of the site.
 	 * @return the name of the site.

@@ -257,29 +257,39 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 	 */
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
-		try
-		{
-			SpecimenProtocol protocol = (SpecimenProtocol)abstractDomain;
-			
-			this.systemIdentifier = protocol.getSystemIdentifier().longValue();
-			this.principalInvestigatorId = protocol.getPrincipalInvestigator()
-					.getSystemIdentifier().longValue();
-			this.title = Utility.toString(protocol.getTitle());
-			this.shortTitle = Utility.toString(protocol.getShortTitle());
-			this.startDate = Utility.parseDateToString(protocol.getStartDate(),Constants.DATE_PATTERN_MM_DD_YYYY);
-			this.endDate = Utility.parseDateToString(protocol.getEndDate(),Constants.DATE_PATTERN_MM_DD_YYYY);
-			this.irbID = Utility.toString(protocol.getIrbIdentifier());
-			this.enrollment = Utility.toString(protocol.getEnrollment());
-			this.descriptionURL = Utility.toString(protocol.getDescriptionURL());
-			
-			this.activityStatus = Utility.toString(protocol.getActivityStatus());
-		}
-		catch (Exception excp)
-		{
-	    	Logger.out.error(excp.getMessage(),excp); 
-		}
+	    SpecimenProtocol protocol = (SpecimenProtocol)abstractDomain;
+		
+		this.systemIdentifier = protocol.getId().longValue();
+		this.principalInvestigatorId = protocol.getPrincipalInvestigator()
+				.getId().longValue();
+		this.title = Utility.toString(protocol.getTitle());
+		this.shortTitle = Utility.toString(protocol.getShortTitle());
+		this.startDate = Utility.parseDateToString(protocol.getStartDate(),Constants.DATE_PATTERN_MM_DD_YYYY);
+		this.endDate = Utility.parseDateToString(protocol.getEndDate(),Constants.DATE_PATTERN_MM_DD_YYYY);
+		this.irbID = Utility.toString(protocol.getIrbIdentifier());
+		this.enrollment = Utility.toString(protocol.getEnrollment());
+		this.descriptionURL = Utility.toString(protocol.getDescriptionURL());
+		
+		this.activityStatus = Utility.toString(protocol.getActivityStatus());
 	}
 	
+	public void setAllVal(Object obj)
+    {
+	    edu.wustl.catissuecore.domainobject.SpecimenProtocol protocol=(edu.wustl.catissuecore.domainobject.SpecimenProtocol) obj;
+		this.systemIdentifier = protocol.getId().longValue();
+		this.principalInvestigatorId = protocol.getPrincipalInvestigator()
+				.getId().longValue();
+		this.title = Utility.toString(protocol.getTitle());
+		this.shortTitle = Utility.toString(protocol.getShortTitle());
+		this.startDate = Utility.parseDateToString(protocol.getStartDate(),Constants.DATE_PATTERN_MM_DD_YYYY);
+		this.endDate = Utility.parseDateToString(protocol.getEndDate(),Constants.DATE_PATTERN_MM_DD_YYYY);
+		this.irbID = Utility.toString(protocol.getIrbIdentifier());
+		this.enrollment = Utility.toString(protocol.getEnrollment());
+		this.descriptionURL = Utility.toString(protocol.getDescriptionURL());
+		
+		this.activityStatus = Utility.toString(protocol.getActivityStatus());
+	    
+    }
 
 
 	/**

@@ -77,23 +77,28 @@ public class StorageTypeForm extends AbstractActionForm
      */
     public void setAllValues(AbstractDomainObject abstractDomain)
     {
-        try
-        {
-            StorageType storageType = (StorageType) abstractDomain;
-            this.systemIdentifier = storageType.getSystemIdentifier().longValue();
-            this.type = storageType.getType();
-            this.defaultTemperature = Utility.toString( storageType.getDefaultTempratureInCentigrade());
-            this.oneDimensionCapacity = storageType.getDefaultStorageCapacity().getOneDimensionCapacity().intValue();
-            this.twoDimensionCapacity = storageType.getDefaultStorageCapacity().getTwoDimensionCapacity().intValue();
-            this.oneDimensionLabel = storageType.getOneDimensionLabel();
-            this.twoDimensionLabel = storageType.getTwoDimensionLabel();
-        }
-        catch (Exception excp)
-        {
-            Logger.out.error(excp.getMessage(),excp);
-        }
+        StorageType storageType = (StorageType) abstractDomain;
+        this.systemIdentifier = storageType.getId().longValue();
+        this.type = storageType.getType();
+        this.defaultTemperature = Utility.toString( storageType.getDefaultTempratureInCentigrade());
+        this.oneDimensionCapacity = storageType.getDefaultStorageCapacity().getOneDimensionCapacity().intValue();
+        this.twoDimensionCapacity = storageType.getDefaultStorageCapacity().getTwoDimensionCapacity().intValue();
+        this.oneDimensionLabel = storageType.getOneDimensionLabel();
+        this.twoDimensionLabel = storageType.getTwoDimensionLabel();
     }
 
+    public void setAllVal(Object obj)
+    {
+        edu.wustl.catissuecore.domainobject.StorageType storageType=(edu.wustl.catissuecore.domainobject.StorageType) obj;
+        this.systemIdentifier = storageType.getId().longValue();
+        this.type = storageType.getType();
+        this.defaultTemperature = Utility.toString( storageType.getDefaultTempratureInCentigrade());
+        this.oneDimensionCapacity = storageType.getDefaultStorageCapacity().getOneDimensionCapacity().intValue();
+        this.twoDimensionCapacity = storageType.getDefaultStorageCapacity().getTwoDimensionCapacity().intValue();
+        this.oneDimensionLabel = storageType.getOneDimensionLabel();
+        this.twoDimensionLabel = storageType.getTwoDimensionLabel();
+    }
+    
     /**
      * Returns the type of the storage.
      * @return String the type of the storage.

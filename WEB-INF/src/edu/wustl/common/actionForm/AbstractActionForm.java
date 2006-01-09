@@ -170,6 +170,12 @@ public abstract class AbstractActionForm extends ActionForm
     public abstract void setAllValues(AbstractDomainObject abstractDomain);
     
     /**
+     * Copies all the values from the Object object.
+     * @param obj The Object object.
+     */
+    public void setAllVal(Object object){};
+    
+    /**
      * Checks the validity of string value of the component and adds an ActionError object in the ActionErrors object.
      * @param componentName Component which is to be checked.
      * @param labelName Label of the component on the jsp page which is checked.

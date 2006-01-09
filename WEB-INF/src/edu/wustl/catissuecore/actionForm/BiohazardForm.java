@@ -59,19 +59,20 @@ public class BiohazardForm extends AbstractActionForm
      */
     public void setAllValues(AbstractDomainObject abstractDomain)
     {
-        try
-        {
-            Biohazard hazard = (Biohazard) abstractDomain;
-            
-            this.systemIdentifier = hazard.getSystemIdentifier().longValue();
-            this.name = hazard.getName();
-            this.type = hazard.getType();
-            this.comments = hazard.getComments();
-        }
-        catch (Exception excp)
-        {
-            Logger.out.error(excp.getMessage(),excp);
-        }
+        Biohazard hazard=(Biohazard)abstractDomain;
+        this.systemIdentifier = hazard.getId().longValue();
+        this.name = hazard.getName();
+        this.type = hazard.getType();
+        this.comments = hazard.getComments();
+    }
+    
+    public void setAllVal(Object obj)
+    {
+        edu.wustl.catissuecore.domainobject.Biohazard hazard=(edu.wustl.catissuecore.domainobject.Biohazard)obj;
+        this.systemIdentifier = hazard.getId().longValue();
+        this.name = hazard.getName();
+        this.type = hazard.getType();
+        this.comments = hazard.getComments();
     }
 
     /**

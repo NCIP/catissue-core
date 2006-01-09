@@ -140,7 +140,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
     public void setAllValues(AbstractDomainObject abstractDomain)
     {
     	Participant participant = (Participant) abstractDomain;
-        this.systemIdentifier = participant.getSystemIdentifier().longValue();
+        this.systemIdentifier = participant.getId().longValue();
         this.lastName = Utility.toString( participant.getLastName());
         this.firstName =  Utility.toString( participant.getFirstName());
         this.middleName = Utility.toString( participant.getMiddleName());
@@ -193,7 +193,63 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 			counter = 1;
    }
     
-    
+    public void setAllVal(Object obj)
+    {
+        edu.wustl.catissuecore.domainobject.Participant participant = (edu.wustl.catissuecore.domainobject.Participant) obj;
+        this.systemIdentifier = participant.getId().longValue();
+        this.lastName = Utility.toString( participant.getLastName());
+        this.firstName =  Utility.toString( participant.getFirstName());
+        this.middleName = Utility.toString( participant.getMiddleName());
+        this.birthDate = Utility.parseDateToString(participant.getBirthDate(),Constants.DATE_PATTERN_MM_DD_YYYY);
+        this.gender = participant.getGender();
+        this.genotype = participant.getSexGenotype();
+        setSSN(participant.getSocialSecurityNumber());
+        this.race = participant.getRace();
+        this.activityStatus = participant.getActivityStatus();
+        this.ethnicity = participant.getEthnicity();
+        
+        //Populating the map with the participant medical identifiers data 
+        Collection medicalIdentifierCollection = participant.getParticipantMedicalIdentifierCollection();
+        
+        if(medicalIdentifierCollection != null)
+        {
+        	values = new HashMap();
+        	int i = 1;
+        	
+        	Iterator it = medicalIdentifierCollection.iterator();
+        	while(it.hasNext())
+        	{
+        		ParticipantMedicalIdentifier participantMedicalIdentifier = (ParticipantMedicalIdentifier)it.next();
+        		
+        		String key1 = "ParticipantMedicalIdentifier:" + i +"_Site_systemIdentifier";
+				String key2 = "ParticipantMedicalIdentifier:" + i +"_medicalRecordNumber";
+				String key3 = "ParticipantMedicalIdentifier:" + i +"_systemIdentifier";
+
+				Site site = participantMedicalIdentifier.getSite();
+				
+				if(site!=null)
+				{
+					values.put(key1,Utility.toString(site.getSystemIdentifier()));
+				}
+				else
+				{
+					values.put(key1,Utility.toString(Constants.SELECT_OPTION));
+				}
+				
+				values.put(key2,Utility.toString(participantMedicalIdentifier.getMedicalRecordNumber()));
+				values.put(key3,Utility.toString(participantMedicalIdentifier.getSystemIdentifier()));
+				
+				i++;
+        	}
+        	counter = medicalIdentifierCollection.size();
+        }
+        
+        //At least one row should be displayed in ADD MORE therefore
+		if(counter == 0)
+			counter = 1;
+
+        
+    }
  
     /**
      * Returns the last name of the Participant. 

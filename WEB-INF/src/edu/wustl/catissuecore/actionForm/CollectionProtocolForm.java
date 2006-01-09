@@ -152,73 +152,129 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	 */
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
-		try
+		super.setAllValues(abstractDomain);
+		
+		CollectionProtocol cProtocol = (CollectionProtocol)abstractDomain;
+		Collection protocolEventCollection = cProtocol.getCollectionProtocolEventCollection(); 
+		
+		if(protocolEventCollection != null)
 		{
-			super.setAllValues(abstractDomain);
+			List eventList = new ArrayList(protocolEventCollection);
+			Collections.sort(eventList);
+			protocolEventCollection = eventList;
 			
-			CollectionProtocol cProtocol = (CollectionProtocol)abstractDomain;
-			Collection protocolEventCollection = cProtocol.getCollectionProtocolEventCollection(); 
+			values = new HashMap();
+			innerLoopValues = new HashMap();
 			
-			if(protocolEventCollection != null)
+			int i = 1;
+			Iterator it = protocolEventCollection.iterator();
+			while(it.hasNext())
 			{
-				List eventList = new ArrayList(protocolEventCollection);
-				Collections.sort(eventList);
-				protocolEventCollection = eventList;
+				CollectionProtocolEvent cpEvent = (CollectionProtocolEvent)it.next();
 				
-				values = new HashMap();
-				innerLoopValues = new HashMap();
+				String keyClinicalStatus = "CollectionProtocolEvent:" + i + "_clinicalStatus";
+				String keyStudyCalendarEventPoint = "CollectionProtocolEvent:" + i + "_studyCalendarEventPoint";
+				String keyCPESystemIdentifier = "CollectionProtocolEvent:" + i + "_systemIdentifier";
 				
-				int i = 1;
-				Iterator it = protocolEventCollection.iterator();
-				while(it.hasNext())
-				{
-					CollectionProtocolEvent cpEvent = (CollectionProtocolEvent)it.next();
-					
-					String keyClinicalStatus = "CollectionProtocolEvent:" + i + "_clinicalStatus";
-					String keyStudyCalendarEventPoint = "CollectionProtocolEvent:" + i + "_studyCalendarEventPoint";
-					String keyCPESystemIdentifier = "CollectionProtocolEvent:" + i + "_systemIdentifier";
-					
-					values.put(keyClinicalStatus,Utility.toString(cpEvent.getClinicalStatus()));
-					values.put(keyStudyCalendarEventPoint, Utility.toString(cpEvent.getStudyCalendarEventPoint()));
-					values.put(keyCPESystemIdentifier,Utility.toString(cpEvent.getSystemIdentifier()));
-					Logger.out.debug("In Form keyCPESystemIdentifier..............."+values.get(keyCPESystemIdentifier));
-					Collection specimenRequirementCollection = cpEvent.getSpecimenRequirementCollection();
-					
-					populateSpecimenRequirement(specimenRequirementCollection, i);
-					
-					i++;
-				}
+				values.put(keyClinicalStatus,Utility.toString(cpEvent.getClinicalStatus()));
+				values.put(keyStudyCalendarEventPoint, Utility.toString(cpEvent.getStudyCalendarEventPoint()));
+				values.put(keyCPESystemIdentifier,Utility.toString(cpEvent.getSystemIdentifier()));
+				Logger.out.debug("In Form keyCPESystemIdentifier..............."+values.get(keyCPESystemIdentifier));
+				Collection specimenRequirementCollection = cpEvent.getSpecimenRequirementCollection();
 				
-				outerCounter = protocolEventCollection.size();
+				populateSpecimenRequirement(specimenRequirementCollection, i);
+				
+				i++;
 			}
 			
-			//At least one outer row should be displayed in ADD MORE therefore
-			if(outerCounter == 0)
-				outerCounter = 1;
-			
-			//Populating the user-id array
-			Collection userCollection = cProtocol.getUserCollection();
-			
-			if(userCollection != null)
-			{
-				protocolCoordinatorIds = new long[userCollection.size()];
-				int i=0;
-
-				Iterator it = userCollection.iterator();
-				while(it.hasNext())
-				{
-					User user = (User)it.next();
-					protocolCoordinatorIds[i] = user.getSystemIdentifier().longValue();
-					i++;
-				}
-			}
+			outerCounter = protocolEventCollection.size();
 		}
-		catch (Exception excp)
+		
+		//At least one outer row should be displayed in ADD MORE therefore
+		if(outerCounter == 0)
+			outerCounter = 1;
+		
+		//Populating the user-id array
+		Collection userCollection = cProtocol.getUserCollection();
+		
+		if(userCollection != null)
 		{
-	    	Logger.out.error(excp.getMessage(),excp); 
+			protocolCoordinatorIds = new long[userCollection.size()];
+			int i=0;
+
+			Iterator it = userCollection.iterator();
+			while(it.hasNext())
+			{
+				User user = (User)it.next();
+				protocolCoordinatorIds[i] = user.getSystemIdentifier().longValue();
+				i++;
+			}
 		}
 	}
 	
+	public void setAllVal(Object obj)
+    {
+	    edu.wustl.catissuecore.domainobject.CollectionProtocol cProtocol = (edu.wustl.catissuecore.domainobject.CollectionProtocol)obj;
+	    
+	    super.setAllVal(cProtocol);
+	    
+		Collection protocolEventCollection = cProtocol.getCollectionProtocolEventCollection(); 
+		
+		if(protocolEventCollection != null)
+		{
+			List eventList = new ArrayList(protocolEventCollection);
+			Collections.sort(eventList);
+			protocolEventCollection = eventList;
+			
+			values = new HashMap();
+			innerLoopValues = new HashMap();
+			
+			int i = 1;
+			Iterator it = protocolEventCollection.iterator();
+			while(it.hasNext())
+			{
+				CollectionProtocolEvent cpEvent = (CollectionProtocolEvent)it.next();
+				
+				String keyClinicalStatus = "CollectionProtocolEvent:" + i + "_clinicalStatus";
+				String keyStudyCalendarEventPoint = "CollectionProtocolEvent:" + i + "_studyCalendarEventPoint";
+				String keyCPESystemIdentifier = "CollectionProtocolEvent:" + i + "_systemIdentifier";
+				
+				values.put(keyClinicalStatus,Utility.toString(cpEvent.getClinicalStatus()));
+				values.put(keyStudyCalendarEventPoint, Utility.toString(cpEvent.getStudyCalendarEventPoint()));
+				values.put(keyCPESystemIdentifier,Utility.toString(cpEvent.getSystemIdentifier()));
+				Logger.out.debug("In Form keyCPESystemIdentifier..............."+values.get(keyCPESystemIdentifier));
+				Collection specimenRequirementCollection = cpEvent.getSpecimenRequirementCollection();
+				
+				populateSpecimenRequirement(specimenRequirementCollection, i);
+				
+				i++;
+			}
+			
+			outerCounter = protocolEventCollection.size();
+		}
+		
+		//At least one outer row should be displayed in ADD MORE therefore
+		if(outerCounter == 0)
+			outerCounter = 1;
+		
+		//Populating the user-id array
+		Collection userCollection = cProtocol.getUserCollection();
+		
+		if(userCollection != null)
+		{
+			protocolCoordinatorIds = new long[userCollection.size()];
+			int i=0;
+
+			Iterator it = userCollection.iterator();
+			while(it.hasNext())
+			{
+				User user = (User)it.next();
+				protocolCoordinatorIds[i] = user.getSystemIdentifier().longValue();
+				i++;
+			}
+		}
+
+    }
 	private void populateSpecimenRequirement(Collection specimenRequirementCollection, int counter)
 	{
 		int innerCounter = 0;
@@ -242,7 +298,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 				values.put(key3,requirement.getSpecimenType());
 				values.put(key4,requirement.getTissueSite());
 				values.put(key5,requirement.getPathologyStatus());
-				values.put(key7,requirement.getSystemIdentifier());
+				values.put(key7,Utility.toString(requirement.getSystemIdentifier()));
 				
 				if(requirement instanceof TissueSpecimenRequirement)
 				{

@@ -65,29 +65,40 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 	 */	
     public void setAllValues(AbstractDomainObject abstractDomain)
     {
-    	try
+		CollectionProtocolRegistration registration = (CollectionProtocolRegistration)abstractDomain;
+		this.activityStatus = registration.getActivityStatus();
+		this.collectionProtocolID = registration.getCollectionProtocol().getId().longValue();
+		if(registration.getParticipant().getFirstName()==null)
 		{
-    		CollectionProtocolRegistration registration = (CollectionProtocolRegistration)abstractDomain;
-    		this.activityStatus = registration.getActivityStatus();
-    		this.collectionProtocolID = registration.getCollectionProtocol().getSystemIdentifier().longValue();
-    		if(registration.getParticipant().getFirstName()==null)
-    		{
-    			registration.getParticipant().setFirstName("");
-    		}
-    		Logger.out.debug("registration.getParticipant().getFirstName()--"+registration.getParticipant().getFirstName());
-    		if((registration.getParticipant() != null) && (registration.getParticipant().getFirstName().trim().length()>0  ))
-		  	{
-		  		this.participantID = registration.getParticipant().getSystemIdentifier().longValue();
-		  		checkedButton = true;
-		  	}
-		  	this.participantProtocolID = Utility.toString(registration.getProtocolParticipantIdentifier());
-  		  	this.registrationDate = Utility.parseDateToString(registration.getRegistrationDate(),Constants.DATE_PATTERN_MM_DD_YYYY);
+			registration.getParticipant().setFirstName("");
 		}
-    	catch (Exception excp)
+		Logger.out.debug("registration.getParticipant().getFirstName()--"+registration.getParticipant().getFirstName());
+		if((registration.getParticipant() != null) && (registration.getParticipant().getFirstName().trim().length()>0  ))
+	  	{
+	  		this.participantID = registration.getParticipant().getId().longValue();
+	  		checkedButton = true;
+	  	}
+	  	this.participantProtocolID = Utility.toString(registration.getProtocolParticipantIdentifier());
+	  	this.registrationDate = Utility.parseDateToString(registration.getRegistrationDate(),Constants.DATE_PATTERN_MM_DD_YYYY);
+    }
+    
+    public void setAllVal(Object obj)
+    {
+        edu.wustl.catissuecore.domainobject.CollectionProtocolRegistration registration = (edu.wustl.catissuecore.domainobject.CollectionProtocolRegistration)obj;
+		this.activityStatus = registration.getActivityStatus();
+		this.collectionProtocolID = registration.getCollectionProtocol().getId().longValue();
+		if(registration.getParticipant().getFirstName()==null)
 		{
-			// use of logger as per bug 79
-			Logger.out.error(excp.getMessage(),excp); 
+			registration.getParticipant().setFirstName("");
 		}
+		Logger.out.debug("registration.getParticipant().getFirstName()--"+registration.getParticipant().getFirstName());
+		if((registration.getParticipant() != null) && (registration.getParticipant().getFirstName().trim().length()>0  ))
+	  	{
+	  		this.participantID = registration.getParticipant().getId().longValue();
+	  		checkedButton = true;
+	  	}
+	  	this.participantProtocolID = Utility.toString(registration.getProtocolParticipantIdentifier());
+	  	this.registrationDate = Utility.parseDateToString(registration.getRegistrationDate(),Constants.DATE_PATTERN_MM_DD_YYYY);
     }
 	   
 	/**

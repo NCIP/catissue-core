@@ -190,17 +190,34 @@ public abstract class EventParametersForm extends AbstractActionForm
  	 */
  	public void setAllValues(AbstractDomainObject abstractDomain)
  	{
- 		EventParameters eventParametersObject = (EventParameters)abstractDomain ;
-  		this.comments  = Utility.toString(eventParametersObject.getComments());
- 		this.systemIdentifier = eventParametersObject.getSystemIdentifier().longValue() ;
+ 	   EventParameters eventParametersObject = (EventParameters)abstractDomain;
+ 	   this.comments  = Utility.toString(eventParametersObject.getComments());
+ 	   this.systemIdentifier = eventParametersObject.getId().longValue() ;
 		
- 		Calendar calender = Calendar.getInstance();
- 		calender.setTime(eventParametersObject.getTimestamp());
- 		this.timeInHours = Utility.toString(Integer.toString( calender.get(Calendar.HOUR_OF_DAY)));
- 		this.timeInMinutes = Utility.toString(Integer.toString(calender.get(Calendar.MINUTE)));
- 		this.userId = eventParametersObject.getUser().getSystemIdentifier().longValue() ;
- 		this.dateOfEvent = Utility.parseDateToString(eventParametersObject.getTimestamp(),Constants.DATE_PATTERN_MM_DD_YYYY);
- 		//this.dateOfEvent = (calender.get(Calendar.MONTH)+1)+"-"+calender.get(Calendar.DAY_OF_MONTH)+"-"+calender.get(Calendar.YEAR) ;
- 		Logger.out.debug("systemIdentifier:"+systemIdentifier+" timeInHours:"+timeInHours+" timeInMinutes:"+timeInMinutes+" userId:"+userId+" dateOfEvent:"+dateOfEvent);
+ 	   Calendar calender = Calendar.getInstance();
+ 	   calender.setTime(eventParametersObject.getTimestamp());
+ 	   this.timeInHours = Utility.toString(Integer.toString( calender.get(Calendar.HOUR_OF_DAY)));
+ 	   this.timeInMinutes = Utility.toString(Integer.toString(calender.get(Calendar.MINUTE)));
+ 	   this.userId = eventParametersObject.getUser().getId().longValue() ;
+ 	   this.dateOfEvent = Utility.parseDateToString(eventParametersObject.getTimestamp(),Constants.DATE_PATTERN_MM_DD_YYYY);
+ 	   //this.dateOfEvent = (calender.get(Calendar.MONTH)+1)+"-"+calender.get(Calendar.DAY_OF_MONTH)+"-"+calender.get(Calendar.YEAR) ;
+ 	   Logger.out.debug("systemIdentifier:"+systemIdentifier+" timeInHours:"+timeInHours+" timeInMinutes:"+timeInMinutes+" userId:"+userId+" dateOfEvent:"+dateOfEvent);
  	}
+ 	
+ 	public void setAllVal(Object obj)
+    {
+ 	    edu.wustl.catissuecore.domainobject.EventParameters eventParametersObject=(edu.wustl.catissuecore.domainobject.EventParameters) obj;
+ 		
+ 	    this.comments  = Utility.toString(eventParametersObject.getComments());
+		this.systemIdentifier = eventParametersObject.getId().longValue() ;
+		
+		Calendar calender = Calendar.getInstance();
+		calender.setTime(eventParametersObject.getTimestamp());
+		this.timeInHours = Utility.toString(Integer.toString( calender.get(Calendar.HOUR_OF_DAY)));
+		this.timeInMinutes = Utility.toString(Integer.toString(calender.get(Calendar.MINUTE)));
+		this.userId = eventParametersObject.getUser().getId().longValue() ;
+		this.dateOfEvent = Utility.parseDateToString(eventParametersObject.getTimestamp(),Constants.DATE_PATTERN_MM_DD_YYYY);
+		//this.dateOfEvent = (calender.get(Calendar.MONTH)+1)+"-"+calender.get(Calendar.DAY_OF_MONTH)+"-"+calender.get(Calendar.YEAR) ;
+		Logger.out.debug("systemIdentifier:"+systemIdentifier+" timeInHours:"+timeInHours+" timeInMinutes:"+timeInMinutes+" userId:"+userId+" dateOfEvent:"+dateOfEvent);
+    }
 }

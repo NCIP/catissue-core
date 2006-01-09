@@ -11,23 +11,23 @@
 
 package edu.wustl.catissuecore.actionForm;
 
+import java.util.List;
+
+import edu.wustl.catissuecore.domainobject.Biohazard;
+import edu.wustl.catissuecore.domainobject.CancerResearchGroup;
+import edu.wustl.catissuecore.domainobject.CollectionProtocol;
+import edu.wustl.catissuecore.domainobject.CollectionProtocolRegistration;
+import edu.wustl.catissuecore.domainobject.Department;
+import edu.wustl.catissuecore.domainobject.Distribution;
+import edu.wustl.catissuecore.domainobject.DistributionProtocol;
+import edu.wustl.catissuecore.domainobject.Institution;
+import edu.wustl.catissuecore.domainobject.Participant;
+import edu.wustl.catissuecore.domainobject.Site;
+import edu.wustl.catissuecore.domainobject.Specimen;
+import edu.wustl.catissuecore.domainobject.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.domainobject.StorageContainer;
+import edu.wustl.catissuecore.domainobject.StorageType;
 import edu.wustl.common.actionForm.AbstractActionForm;
-import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.catissuecore.domain.Biohazard;
-import edu.wustl.catissuecore.domain.CancerResearchGroup;
-import edu.wustl.catissuecore.domain.CollectionProtocol;
-import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
-import edu.wustl.catissuecore.domain.Department;
-import edu.wustl.catissuecore.domain.Distribution;
-import edu.wustl.catissuecore.domain.DistributionProtocol;
-import edu.wustl.catissuecore.domain.Institution;
-import edu.wustl.catissuecore.domain.Participant;
-import edu.wustl.catissuecore.domain.Site;
-import edu.wustl.catissuecore.domain.Specimen;
-import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
-import edu.wustl.catissuecore.domain.StorageContainer;
-import edu.wustl.catissuecore.domain.StorageType;
-import edu.wustl.catissuecore.domain.User;
 
 /**
  * ActionFormFactory is a factory that returns instances of action formbeans 
@@ -42,15 +42,15 @@ public class ActionFormFactory
      * @return the instance of formbean.
      * @see #setMessageList(List)
      */
-	public static AbstractActionForm getFormBean(AbstractDomainObject object)
+	public static AbstractActionForm getFormBean(Object object) throws Exception
 	{
 		AbstractActionForm form = null;
 
-		if(object instanceof User)
-		{
-			form = new UserForm();
-		}
-		else if(object instanceof Institution)
+//		if(object instanceof User)
+//		{
+//			form = new UserForm();
+//		}
+		if(object instanceof Institution)
 		{
 			form = new InstitutionForm();
 		}
@@ -106,8 +106,10 @@ public class ActionFormFactory
 		{
 			form = new DistributionForm();
 		}
-		
-		//form.setAllValues(object);
+	else
+		{
+		    throw new Exception("Invalid Object for Add/Edit Operation");
+		}
 		
 		return form;
 	}

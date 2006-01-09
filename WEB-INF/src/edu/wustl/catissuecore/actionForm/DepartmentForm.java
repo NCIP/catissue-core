@@ -51,18 +51,17 @@ public class DepartmentForm extends AbstractActionForm
      */
     public void setAllValues(AbstractDomainObject abstractDomain)
     {
-        try
-        {
-            Department department = (Department)abstractDomain;
-            this.systemIdentifier = department.getSystemIdentifier().longValue();
-            this.name = department.getName();
-        }
-        catch (Exception excp)
-        {
-	    	// use of logger as per bug 79
-	    	Logger.out.error(excp.getMessage(),excp); 
-            
-        }
+        Department department = (Department)abstractDomain;
+        this.systemIdentifier = department.getId().longValue();
+        this.name = department.getName();
+    }
+    
+        
+    public void setAllVal(Object obj)
+    {
+        edu.wustl.catissuecore.domainobject.Department department = (edu.wustl.catissuecore.domainobject.Department)obj;
+        this.systemIdentifier = department.getId().longValue();
+        this.name = department.getName();
     }
 
     /**

@@ -81,78 +81,138 @@ public class DistributionProtocolForm extends SpecimenProtocolForm
 	 */
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
-		try
+		super.setAllValues(abstractDomain);
+		
+		DistributionProtocol dProtocol = (DistributionProtocol)abstractDomain;
+		
+		Collection spcimenProtocolCollection = dProtocol.getSpecimenRequirementCollection();
+		
+		if(spcimenProtocolCollection != null)
 		{
-			super.setAllValues(abstractDomain);
+			values = new HashMap();
 			
-			DistributionProtocol dProtocol = (DistributionProtocol)abstractDomain;
+			Iterator it = spcimenProtocolCollection.iterator();
+			int i=1;
+			counter=0;
 			
-			Collection spcimenProtocolCollection = dProtocol.getSpecimenRequirementCollection();
-			
-			if(spcimenProtocolCollection != null)
+			while(it.hasNext())
 			{
-				values = new HashMap();
+				String key1 = "SpecimenRequirement:" + i +"_specimenClass";
+				String key2 = "SpecimenRequirement:" + i +"_unitspan";
+				String key3 = "SpecimenRequirement:" + i +"_specimenType";
+				String key4 = "SpecimenRequirement:" + i +"_tissueSite";
+				String key5 = "SpecimenRequirement:" + i +"_pathologyStatus";
+				String key6 = "SpecimenRequirement:" + i +"_quantityIn";
+				String key7 = "SpecimenRequirement:" + i +"_systemIdentifier";
 				
-				Iterator it = spcimenProtocolCollection.iterator();
-				int i=1;
-				counter=0;
+				SpecimenRequirement requirement = (SpecimenRequirement)it.next();
+				values.put(key3,requirement.getSpecimenType());
+				values.put(key4,requirement.getTissueSite());
+				values.put(key5,requirement.getPathologyStatus());
+				values.put(key7,requirement.getSystemIdentifier());
 				
-				while(it.hasNext())
+				if(requirement instanceof TissueSpecimenRequirement)
 				{
-					String key1 = "SpecimenRequirement:" + i +"_specimenClass";
-					String key2 = "SpecimenRequirement:" + i +"_unitspan";
-					String key3 = "SpecimenRequirement:" + i +"_specimenType";
-					String key4 = "SpecimenRequirement:" + i +"_tissueSite";
-					String key5 = "SpecimenRequirement:" + i +"_pathologyStatus";
-					String key6 = "SpecimenRequirement:" + i +"_quantityIn";
-					String key7 = "SpecimenRequirement:" + i +"_systemIdentifier";
-					
-					SpecimenRequirement requirement = (SpecimenRequirement)it.next();
-					values.put(key3,requirement.getSpecimenType());
-					values.put(key4,requirement.getTissueSite());
-					values.put(key5,requirement.getPathologyStatus());
-					values.put(key7,requirement.getSystemIdentifier());
-					
-					if(requirement instanceof TissueSpecimenRequirement)
-					{
-						values.put(key1,"Tissue");
-						values.put(key2,Constants.UNIT_GM);
-						values.put(key6,String.valueOf(((TissueSpecimenRequirement)requirement).getQuantityInGram()));
-					}
-					else if(requirement instanceof CellSpecimenRequirement)
-					{
-						values.put(key1,"Cell");
-						values.put(key2,Constants.UNIT_CC);
-						values.put(key6,String.valueOf(((CellSpecimenRequirement)requirement).getQuantityInCellCount()));
-					}
-					else if(requirement instanceof MolecularSpecimenRequirement)
-					{
-						values.put(key1,"Molecular");
-						values.put(key2,Constants.UNIT_MG);
-						values.put(key6,String.valueOf(((MolecularSpecimenRequirement)requirement).getQuantityInMicrogram()));
-					}
-					else if(requirement instanceof FluidSpecimenRequirement)
-					{
-						values.put(key1,"Fluid");
-						values.put(key2,Constants.UNIT_ML);
-						values.put(key6,String.valueOf(((FluidSpecimenRequirement)requirement).getQuantityInMilliliter()));
-					}
-					
-					i++;
-					counter++;
+					values.put(key1,"Tissue");
+					values.put(key2,Constants.UNIT_GM);
+					values.put(key6,String.valueOf(((TissueSpecimenRequirement)requirement).getQuantityInGram()));
+				}
+				else if(requirement instanceof CellSpecimenRequirement)
+				{
+					values.put(key1,"Cell");
+					values.put(key2,Constants.UNIT_CC);
+					values.put(key6,String.valueOf(((CellSpecimenRequirement)requirement).getQuantityInCellCount()));
+				}
+				else if(requirement instanceof MolecularSpecimenRequirement)
+				{
+					values.put(key1,"Molecular");
+					values.put(key2,Constants.UNIT_MG);
+					values.put(key6,String.valueOf(((MolecularSpecimenRequirement)requirement).getQuantityInMicrogram()));
+				}
+				else if(requirement instanceof FluidSpecimenRequirement)
+				{
+					values.put(key1,"Fluid");
+					values.put(key2,Constants.UNIT_ML);
+					values.put(key6,String.valueOf(((FluidSpecimenRequirement)requirement).getQuantityInMilliliter()));
 				}
 				
-				//At least one row should be displayed in ADD MORE therefore
-				if(counter == 0)
-					counter = 1;
+				i++;
+				counter++;
 			}
-		}
-		catch (Exception excp)
-		{
-	    	Logger.out.error(excp.getMessage(),excp); 
+			
+			//At least one row should be displayed in ADD MORE therefore
+			if(counter == 0)
+				counter = 1;
 		}
 	}
 	
+	 public void setAllVal(Object obj)
+     {
+	     edu.wustl.catissuecore.domainobject.DistributionProtocol dProtocol = (edu.wustl.catissuecore.domainobject.DistributionProtocol)obj;
+	     
+	     super.setAllVal(dProtocol);
+			
+		Collection spcimenProtocolCollection = dProtocol.getSpecimenRequirementCollection();
+		
+		if(spcimenProtocolCollection != null)
+		{
+			values = new HashMap();
+			
+			Iterator it = spcimenProtocolCollection.iterator();
+			int i=1;
+			counter=0;
+			
+			while(it.hasNext())
+			{
+				String key1 = "SpecimenRequirement:" + i +"_specimenClass";
+				String key2 = "SpecimenRequirement:" + i +"_unitspan";
+				String key3 = "SpecimenRequirement:" + i +"_specimenType";
+				String key4 = "SpecimenRequirement:" + i +"_tissueSite";
+				String key5 = "SpecimenRequirement:" + i +"_pathologyStatus";
+				String key6 = "SpecimenRequirement:" + i +"_quantityIn";
+				String key7 = "SpecimenRequirement:" + i +"_systemIdentifier";
+				
+				SpecimenRequirement requirement = (SpecimenRequirement)it.next();
+				values.put(key3,requirement.getSpecimenType());
+				values.put(key4,requirement.getTissueSite());
+				values.put(key5,requirement.getPathologyStatus());
+				values.put(key7,requirement.getSystemIdentifier());
+				
+				if(requirement instanceof TissueSpecimenRequirement)
+				{
+					values.put(key1,"Tissue");
+					values.put(key2,Constants.UNIT_GM);
+					values.put(key6,String.valueOf(((TissueSpecimenRequirement)requirement).getQuantityInGram()));
+				}
+				else if(requirement instanceof CellSpecimenRequirement)
+				{
+					values.put(key1,"Cell");
+					values.put(key2,Constants.UNIT_CC);
+					values.put(key6,String.valueOf(((CellSpecimenRequirement)requirement).getQuantityInCellCount()));
+				}
+				else if(requirement instanceof MolecularSpecimenRequirement)
+				{
+					values.put(key1,"Molecular");
+					values.put(key2,Constants.UNIT_MG);
+					values.put(key6,String.valueOf(((MolecularSpecimenRequirement)requirement).getQuantityInMicrogram()));
+				}
+				else if(requirement instanceof FluidSpecimenRequirement)
+				{
+					values.put(key1,"Fluid");
+					values.put(key2,Constants.UNIT_ML);
+					values.put(key6,String.valueOf(((FluidSpecimenRequirement)requirement).getQuantityInMilliliter()));
+				}
+				
+				i++;
+				counter++;
+			}
+			
+			//At least one row should be displayed in ADD MORE therefore
+			if(counter == 0)
+				counter = 1;
+		}
+    }
+	 
 	/**
 	 * Overrides the validate method of ActionForm.
 	 */

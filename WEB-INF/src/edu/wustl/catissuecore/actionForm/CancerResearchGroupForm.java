@@ -51,19 +51,18 @@ public class CancerResearchGroupForm extends AbstractActionForm
      */
     public void setAllValues(AbstractDomainObject abstractDomain)
     {
-        try
-        {
-        	CancerResearchGroup cancerResearchGroup = (CancerResearchGroup)abstractDomain;
-            this.systemIdentifier = cancerResearchGroup.getSystemIdentifier().longValue();
-            this.name = cancerResearchGroup.getName();
-        }
-        catch (Exception excp)
-        {
-	    	// use of logger as per bug 79
-	    	Logger.out.error(excp.getMessage(),excp); 
-        }
+        CancerResearchGroup cancerResearchGroup = (CancerResearchGroup)abstractDomain;
+        this.systemIdentifier = cancerResearchGroup.getId().longValue();
+        this.name = cancerResearchGroup.getName();
     }
 
+    public void setAllVal(Object obj)
+    {
+        edu.wustl.catissuecore.domainobject.CancerResearchGroup cancerResearchGroup=(edu.wustl.catissuecore.domainobject.CancerResearchGroup) obj;
+        this.systemIdentifier = cancerResearchGroup.getId().longValue();
+        this.name = cancerResearchGroup.getName();
+    }
+    
     /**
      * Returns the name of the CancerResearchGroup.
      * @return String representing the name of the CancerResearchGroup

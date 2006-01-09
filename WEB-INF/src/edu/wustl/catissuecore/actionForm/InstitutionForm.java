@@ -51,18 +51,18 @@ public class InstitutionForm extends AbstractActionForm
      */
     public void setAllValues(AbstractDomainObject abstractDomain)
     {
-        try
-        {
-            Institution institute = (Institution) abstractDomain;
-            this.systemIdentifier = institute.getSystemIdentifier().longValue();
-            this.name = institute.getName();
-        }
-        catch (Exception excp)
-        {
-            Logger.out.error(excp.getMessage(),excp);
-        }
+        Institution institute = (Institution) abstractDomain;
+        this.systemIdentifier = institute.getId().longValue();
+        this.name = institute.getName();
     }
 
+    public void setAllVal(Object obj)
+    {
+        edu.wustl.catissuecore.domainobject.Institution institute=(edu.wustl.catissuecore.domainobject.Institution) obj;
+        this.systemIdentifier = institute.getId().longValue();
+        this.name = institute.getName();
+    }
+    
     
     /**
      * Returns the login name of the institute.

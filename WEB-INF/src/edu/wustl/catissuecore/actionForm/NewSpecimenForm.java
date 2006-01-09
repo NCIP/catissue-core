@@ -243,62 +243,108 @@ public class NewSpecimenForm extends SpecimenForm
      */
     public void setAllValues(AbstractDomainObject abstractDomain)
     {
-        try
+        super.setAllVal(abstractDomain);
+        
+    	Specimen specimen = (Specimen) abstractDomain;
+    	
+    	this.parentPresent = false;
+    	SpecimenCollectionGroup specimenCollectionGroup = specimen.getSpecimenCollectionGroup();
+    	if(specimenCollectionGroup!=null)
+    		this.specimenCollectionGroupId = Utility.toString(specimenCollectionGroup.getId());
+    	
+    	if(specimen.getParentSpecimen() != null)
+    	{
+    		Logger.out.debug("ParentSpecimen : -- "+specimen.getParentSpecimen());
+    		this.parentSpecimenId = String.valueOf(specimen.getParentSpecimen().getId());
+    		this.parentPresent = true;
+    	}
+    	
+        SpecimenCharacteristics characteristic = specimen.getSpecimenCharacteristics();
+        this.pathologicalStatus = characteristic.getPathologicalStatus();
+        this.tissueSide = characteristic.getTissueSide();
+        this.tissueSite = characteristic.getTissueSite();
+        
+        Collection biohazardCollection = specimen.getBiohazardCollection();
+        bhCounter = 1;
+        
+        if(biohazardCollection != null && biohazardCollection.size() != 0)
         {
-            super.setAllValues(abstractDomain);
-            
-        	Specimen specimen = (Specimen) abstractDomain;
+        	biohazard = new HashMap();
         	
-        	this.parentPresent = false;
-        	SpecimenCollectionGroup specimenCollectionGroup = specimen.getSpecimenCollectionGroup();
-        	if(specimenCollectionGroup!=null)
-        		this.specimenCollectionGroupId = Utility.toString(specimenCollectionGroup.getSystemIdentifier());
+        	int i=1;
         	
-        	if(specimen.getParentSpecimen() != null)
+        	Iterator it = biohazardCollection.iterator();
+        	while(it.hasNext())
         	{
-        		Logger.out.debug("ParentSpecimen : -- "+specimen.getParentSpecimen());
-        		this.parentSpecimenId = String.valueOf(specimen.getParentSpecimen().getSystemIdentifier());
-        		this.parentPresent = true;
+        		String key1 = "Biohazard:" + i + "_type";
+				String key2 = "Biohazard:" + i + "_systemIdentifier";
+				String key3 = "Biohazard:" + i + "_persisted";
+				
+				Biohazard hazard = (Biohazard)it.next();
+				
+				biohazard.put(key1,hazard.getType());
+				biohazard.put(key2,hazard.getId());
+				
+				//boolean for showing persisted value
+				biohazard.put(key3,"true");
+				
+				i++;
         	}
         	
-            SpecimenCharacteristics characteristic = specimen.getSpecimenCharacteristics();
-            this.pathologicalStatus = characteristic.getPathologicalStatus();
-            this.tissueSide = characteristic.getTissueSide();
-            this.tissueSite = characteristic.getTissueSite();
-            
-            Collection biohazardCollection = specimen.getBiohazardCollection();
-            bhCounter = 1;
-            
-            if(biohazardCollection != null && biohazardCollection.size() != 0)
-            {
-            	biohazard = new HashMap();
-            	
-            	int i=1;
-            	
-            	Iterator it = biohazardCollection.iterator();
-            	while(it.hasNext())
-            	{
-            		String key1 = "Biohazard:" + i + "_type";
-    				String key2 = "Biohazard:" + i + "_systemIdentifier";
-    				String key3 = "Biohazard:" + i + "_persisted";
-    				
-    				Biohazard hazard = (Biohazard)it.next();
-    				
-    				biohazard.put(key1,hazard.getType());
-    				biohazard.put(key2,hazard.getSystemIdentifier());
-    				
-    				//boolean for showing persisted value
-    				biohazard.put(key3,"true");
-    				
-    				i++;
-            	}
-            	
-            	bhCounter = biohazardCollection.size();
-            }
+        	bhCounter = biohazardCollection.size();
         }
-        catch (Exception excp)
+    }
+    
+    public void setAllVal(Object obj)
+    {
+        edu.wustl.catissuecore.domainobject.Specimen specimen=(edu.wustl.catissuecore.domainobject.Specimen) obj;
+        super.setAllVal(specimen);
+        
+    	this.parentPresent = false;
+    	edu.wustl.catissuecore.domainobject.SpecimenCollectionGroup specimenCollectionGroup = specimen.getSpecimenCollectionGroup();
+    	if(specimenCollectionGroup!=null)
+    		this.specimenCollectionGroupId = Utility.toString(specimenCollectionGroup.getId());
+    	
+    	if(specimen.getParentSpecimen() != null)
+    	{
+    		Logger.out.debug("ParentSpecimen : -- "+specimen.getParentSpecimen());
+    		this.parentSpecimenId = String.valueOf(specimen.getParentSpecimen().getId());
+    		this.parentPresent = true;
+    	}
+    	
+    	edu.wustl.catissuecore.domainobject.SpecimenCharacteristics characteristic = specimen.getSpecimenCharacteristics();
+        this.pathologicalStatus = characteristic.getPathologicalStatus();
+        this.tissueSide = characteristic.getTissueSide();
+        this.tissueSite = characteristic.getTissueSite();
+        
+        Collection biohazardCollection = specimen.getBiohazardCollection();
+        bhCounter = 1;
+        
+        if(biohazardCollection != null && biohazardCollection.size() != 0)
         {
-            Logger.out.error(excp.getMessage(),excp);
+        	biohazard = new HashMap();
+        	
+        	int i=1;
+        	
+        	Iterator it = biohazardCollection.iterator();
+        	while(it.hasNext())
+        	{
+        		String key1 = "Biohazard:" + i + "_type";
+				String key2 = "Biohazard:" + i + "_systemIdentifier";
+				String key3 = "Biohazard:" + i + "_persisted";
+				
+				Biohazard hazard = (Biohazard)it.next();
+				
+				biohazard.put(key1,hazard.getType());
+				biohazard.put(key2,hazard.getId());
+				
+				//boolean for showing persisted value
+				biohazard.put(key3,"true");
+				
+				i++;
+        	}
+        	
+        	bhCounter = biohazardCollection.size();
         }
     }
     

@@ -53,9 +53,20 @@ public abstract class SpecimenEventParametersForm extends EventParametersForm
 	 
 	 public void setAllValues(AbstractDomainObject abstractDomain)
  	 {
-	 	super.setAllValues(abstractDomain);
-	 	SpecimenEventParameters specimenEventParameters = (SpecimenEventParameters)abstractDomain;
-	 	if(specimenEventParameters.getSpecimen()!=null)
-	 		specimenId = specimenEventParameters.getSpecimen().getSystemIdentifier().longValue();
+	     super.setAllVal(abstractDomain);
+		 
+	     SpecimenEventParameters specimenEventParameters = (SpecimenEventParameters)abstractDomain;
+		 
+		 if(specimenEventParameters.getSpecimen()!=null)
+		     specimenId = specimenEventParameters.getSpecimen().getId().longValue();
  	 }
+	 
+	 public void setAllVal(Object obj)
+	 {
+	     edu.wustl.catissuecore.domainobject.SpecimenEventParameters specimenEventParameters=(edu.wustl.catissuecore.domainobject.SpecimenEventParameters) obj;
+	     super.setAllVal(specimenEventParameters);
+		 
+		 if(specimenEventParameters.getSpecimen()!=null)
+		     specimenId = specimenEventParameters.getSpecimen().getId().longValue();
+	 }
 }

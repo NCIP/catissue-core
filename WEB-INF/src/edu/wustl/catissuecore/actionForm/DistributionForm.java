@@ -68,9 +68,9 @@ public class DistributionForm extends SpecimenEventParametersForm
 		super.setAllValues(abstractDomain);
 		Logger.out.debug("setAllValues of DistributionForm"); 
 		Distribution distributionObject = (Distribution)abstractDomain ;
-		this.distributionProtocolId = String.valueOf(distributionObject.getDistributionProtocol().getSystemIdentifier());
-		this.fromSite = String.valueOf(distributionObject.getFromSite().getSystemIdentifier());
-		this.toSite = String.valueOf(distributionObject.getToSite().getSystemIdentifier());
+		this.distributionProtocolId = String.valueOf(distributionObject.getDistributionProtocol().getId());
+		this.fromSite = String.valueOf(distributionObject.getFromSite().getId());
+		this.toSite = String.valueOf(distributionObject.getToSite().getId());
 		this.activityStatus = Utility.toString(distributionObject.getActivityStatus());
 		Logger.out.debug("this.activityStatus "+this.activityStatus);
 		Collection distributedItemCollection = distributionObject.getDistributedItemCollection();
@@ -127,6 +127,72 @@ public class DistributionForm extends SpecimenEventParametersForm
 			counter = 1;
 	}
 	
+	public void setAllVal(Object obj)
+    {
+	    edu.wustl.catissuecore.domainobject.Distribution distributionObject = (edu.wustl.catissuecore.domainobject.Distribution)obj;
+	    
+	    super.setAllVal(distributionObject);
+	    
+		Logger.out.debug("setAllValues of DistributionForm"); 
+		
+		this.distributionProtocolId = String.valueOf(distributionObject.getDistributionProtocol().getId());
+		this.fromSite = String.valueOf(distributionObject.getFromSite().getId());
+		this.toSite = String.valueOf(distributionObject.getToSite().getId());
+		this.activityStatus = Utility.toString(distributionObject.getActivityStatus());
+		Logger.out.debug("this.activityStatus "+this.activityStatus);
+		Collection distributedItemCollection = distributionObject.getDistributedItemCollection();
+		
+		if(distributedItemCollection != null)
+		{
+			values = new HashMap();
+			
+			Iterator it = distributedItemCollection.iterator();
+			int i=1;
+			
+			while(it.hasNext())
+			{
+				
+				String key1 = "DistributedItem:"+i+"_systemIdentifier";
+				String key2 = "DistributedItem:"+i+"_Specimen_systemIdentifier";
+				String key3 = "DistributedItem:"+i+"_quantity";
+				String key4 = "DistributedItem:"+i+"_unitSpan";
+				String key5 = "DistributedItem:"+i+"_tissueSite";
+				String key6 = "DistributedItem:"+i+"_tissueSide";
+				String key7 = "DistributedItem:"+i+"_pathologicalStatus";
+				String key8 = "DistributedItem:"+i+"_Specimen_className";	
+				String key9 = "DistributedItem:"+i+"_availableQty";
+				String key10 = "DistributedItem:"+i+"_previousQuantity";
+				String key11 = "DistributedItem:"+i+"_Specimen_type";
+				
+				DistributedItem dItem = (DistributedItem)it.next();
+				Specimen specimen =dItem.getSpecimen();
+				String unit= getUnitSpan(specimen);
+				
+				Double quantity = dItem.getQuantity();
+				//dItem.setPreviousQty(quantity);
+				
+				values.put(key1,dItem.getSystemIdentifier());
+				values.put(key2,specimen.getSystemIdentifier());
+				values.put(key3,quantity);
+				values.put(key4,unit);
+				values.put(key5,specimen.getSpecimenCharacteristics().getTissueSite());
+				values.put(key6,specimen.getSpecimenCharacteristics().getTissueSide());
+				values.put(key7,specimen.getSpecimenCharacteristics().getPathologicalStatus());
+				values.put(key8,specimen.getClassName());
+				values.put(key9,getAvailableQty(specimen));
+				values.put(key10,quantity);
+				values.put(key11,specimen.getType());
+				
+				i++;
+			}
+			Logger.out.debug("Display Map Values"+values); 
+			counter = distributedItemCollection.size();
+		}
+		
+		//At least one row should be displayed in ADD MORE therefore
+		if(counter == 0)
+			counter = 1;
+    }
 	
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
 	{

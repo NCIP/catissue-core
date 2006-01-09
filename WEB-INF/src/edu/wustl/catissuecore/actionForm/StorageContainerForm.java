@@ -163,87 +163,154 @@ public class StorageContainerForm extends AbstractActionForm
 	 */
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
-		try
-		{
-			StorageContainer container = (StorageContainer) abstractDomain;
+		StorageContainer container = (StorageContainer) abstractDomain;
 
-			this.systemIdentifier = container.getSystemIdentifier().longValue();
-			this.activityStatus = Utility.toString(container.getActivityStatus());
-			this.startNumber = Utility.toString(container.getNumber());
-			
-			isFull = Utility.initCap( Utility.toString(container.getIsFull()));
-			Logger.out.debug("isFULL />/>/> "+ isFull);
-			
-			this.typeId = container.getStorageType().getSystemIdentifier().longValue();
-			
-			if(container.getParentContainer() != null)
-			{
-				this.parentContainerId = container.getParentContainer().getSystemIdentifier().longValue();
-				this.checkedButton = 2;
-				this.positionInParentContainer = container.getParentContainer().getStorageType().getType() + " : " 
-								+ container.getParentContainer().getSystemIdentifier() + " Pos(" + container.getPositionDimensionOne() + ","
-								+ container.getPositionDimensionTwo() + ")";
-				
-				//Sri: Fix for bug #
-				this.positionDimensionOne = container.getPositionDimensionOne().intValue();
-				this.positionDimensionTwo = container.getPositionDimensionTwo().intValue();
-			}
-			
-			if(container.getSite()!= null)
-				this.siteId = container.getSite().getSystemIdentifier().longValue();
-
-			this.defaultTemperature = Utility.toString( container.getTempratureInCentigrade());
-			this.oneDimensionCapacity = container.getStorageContainerCapacity()
-					.getOneDimensionCapacity().intValue();
-			this.twoDimensionCapacity = container.getStorageContainerCapacity()
-					.getTwoDimensionCapacity().intValue();
-			this.oneDimensionLabel = container.getStorageType().getOneDimensionLabel();
-			this.twoDimensionLabel = container.getStorageType().getTwoDimensionLabel();
-			
-			if(container.getNoOfContainers() != null)
-				this.noOfContainers = container.getNoOfContainers().intValue();
-			
-			if(container.getStartNo() != null)
-				this.startNumber = String.valueOf(container.getStartNo().intValue());
-			
-			this.barcode = Utility.toString(container.getBarcode());
-			
-			Collection storageContainerDetails = container.getStorageContainerDetailsCollection();
-			
-			if(storageContainerDetails != null)
-			{
-				values = new HashMap();
-				
-				int i=1;
-				counter = storageContainerDetails.size();
-				
-				Iterator it = storageContainerDetails.iterator();
-				while(it.hasNext())
-				{
-					String key1 = "StorageContainerDetails:" + i +"_parameterName";
-					String key2 = "StorageContainerDetails:" + i +"_parameterValue";
-					String key3 = "StorageContainerDetails:" + i +"_systemIdentifier";
-					
-					StorageContainerDetails containerDetails = (StorageContainerDetails)it.next();
-					
-					values.put(key1,containerDetails.getParameterName());
-					values.put(key2,containerDetails.getParameterValue());
-					values.put(key3,containerDetails.getSystemIdentifier());
-					
-					i++;
-				}
-			}
-			Logger.out.debug("counter + "+counter);
-			//At least one row should be displayed in ADD MORE therefore
-			if(counter == 0)
-				counter = 1;
-		}
-		catch (Exception excp)
+		this.systemIdentifier = container.getId().longValue();
+		this.activityStatus = Utility.toString(container.getActivityStatus());
+		this.startNumber = Utility.toString(container.getNumber());
+		
+		isFull = Utility.initCap( Utility.toString(container.getIsFull()));
+		Logger.out.debug("isFULL />/>/> "+ isFull);
+		
+		this.typeId = container.getStorageType().getSystemIdentifier().longValue();
+		
+		if(container.getParentContainer() != null)
 		{
-			Logger.out.error(excp.getMessage(), excp);
+			this.parentContainerId = container.getParentContainer().getId().longValue();
+			this.checkedButton = 2;
+			this.positionInParentContainer = container.getParentContainer().getStorageType().getType() + " : " 
+							+ container.getParentContainer().getId() + " Pos(" + container.getPositionDimensionOne() + ","
+							+ container.getPositionDimensionTwo() + ")";
+			
+			//Sri: Fix for bug #
+			this.positionDimensionOne = container.getPositionDimensionOne().intValue();
+			this.positionDimensionTwo = container.getPositionDimensionTwo().intValue();
 		}
+		
+		if(container.getSite()!= null)
+			this.siteId = container.getSite().getId().longValue();
+
+		this.defaultTemperature = Utility.toString( container.getTempratureInCentigrade());
+		this.oneDimensionCapacity = container.getStorageContainerCapacity()
+				.getOneDimensionCapacity().intValue();
+		this.twoDimensionCapacity = container.getStorageContainerCapacity()
+				.getTwoDimensionCapacity().intValue();
+		this.oneDimensionLabel = container.getStorageType().getOneDimensionLabel();
+		this.twoDimensionLabel = container.getStorageType().getTwoDimensionLabel();
+		
+		if(container.getNoOfContainers() != null)
+			this.noOfContainers = container.getNoOfContainers().intValue();
+		
+		if(container.getStartNo() != null)
+			this.startNumber = String.valueOf(container.getStartNo().intValue());
+		
+		this.barcode = Utility.toString(container.getBarcode());
+		
+		Collection storageContainerDetails = container.getStorageContainerDetailsCollection();
+		
+		if(storageContainerDetails != null)
+		{
+			values = new HashMap();
+			
+			int i=1;
+			counter = storageContainerDetails.size();
+			
+			Iterator it = storageContainerDetails.iterator();
+			while(it.hasNext())
+			{
+				String key1 = "StorageContainerDetails:" + i +"_parameterName";
+				String key2 = "StorageContainerDetails:" + i +"_parameterValue";
+				String key3 = "StorageContainerDetails:" + i +"_systemIdentifier";
+				
+				StorageContainerDetails containerDetails = (StorageContainerDetails)it.next();
+				
+				values.put(key1,containerDetails.getParameterName());
+				values.put(key2,containerDetails.getParameterValue());
+				values.put(key3,containerDetails.getSystemIdentifier());
+				
+				i++;
+			}
+		}
+		Logger.out.debug("counter + "+counter);
+		//At least one row should be displayed in ADD MORE therefore
+		if(counter == 0)
+			counter = 1;
 	}
+	
+	 public void setAllVal(Object obj)
+	 {
+     	edu.wustl.catissuecore.domainobject.StorageContainer container = (edu.wustl.catissuecore.domainobject.StorageContainer) obj;
 
+		this.systemIdentifier = container.getId().longValue();
+		this.activityStatus = Utility.toString(container.getActivityStatus());
+		this.startNumber = Utility.toString(container.getNumber());
+		
+		isFull = Utility.initCap( Utility.toString(container.getIsFull()));
+		Logger.out.debug("isFULL />/>/> "+ isFull);
+		
+		this.typeId = container.getStorageType().getId().longValue();
+		
+		if(container.getParentContainer() != null)
+		{
+			this.parentContainerId = container.getParentContainer().getId().longValue();
+			this.checkedButton = 2;
+			this.positionInParentContainer = container.getParentContainer().getStorageType().getType() + " : " 
+							+ container.getParentContainer().getId() + " Pos(" + container.getPositionDimensionOne() + ","
+							+ container.getPositionDimensionTwo() + ")";
+			
+			//Sri: Fix for bug #
+			this.positionDimensionOne = container.getPositionDimensionOne().intValue();
+			this.positionDimensionTwo = container.getPositionDimensionTwo().intValue();
+		}
+		
+		if(container.getSite()!= null)
+			this.siteId = container.getSite().getId().longValue();
+
+		this.defaultTemperature = Utility.toString( container.getTempratureInCentigrade());
+		this.oneDimensionCapacity = container.getStorageContainerCapacity()
+				.getOneDimensionCapacity().intValue();
+		this.twoDimensionCapacity = container.getStorageContainerCapacity()
+				.getTwoDimensionCapacity().intValue();
+		this.oneDimensionLabel = container.getStorageType().getOneDimensionLabel();
+		this.twoDimensionLabel = container.getStorageType().getTwoDimensionLabel();
+		
+		this.noOfContainers = 1;
+		
+//				if(container.getStartNo() != null)
+//					this.startNumber = String.valueOf(container.getStartNo().intValue());
+		
+		this.barcode = Utility.toString(container.getBarcode());
+		
+		Collection storageContainerDetails = container.getStorageContainerDetailsCollection();
+		
+		if(storageContainerDetails != null)
+		{
+			values = new HashMap();
+			
+			int i=1;
+			counter = storageContainerDetails.size();
+			
+			Iterator it = storageContainerDetails.iterator();
+			while(it.hasNext())
+			{
+				String key1 = "StorageContainerDetails:" + i +"_parameterName";
+				String key2 = "StorageContainerDetails:" + i +"_parameterValue";
+				String key3 = "StorageContainerDetails:" + i +"_systemIdentifier";
+				
+				StorageContainerDetails containerDetails = (StorageContainerDetails)it.next();
+				
+				values.put(key1,containerDetails.getParameterName());
+				values.put(key2,containerDetails.getParameterValue());
+				values.put(key3,containerDetails.getSystemIdentifier());
+				
+				i++;
+			}
+		}
+		Logger.out.debug("counter + "+counter);
+		//At least one row should be displayed in ADD MORE therefore
+		if(counter == 0)
+			counter = 1;
+	 }
 
 
 	/**
