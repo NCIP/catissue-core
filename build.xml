@@ -14,9 +14,11 @@
 	<property name="hbm.dir" value="${src.dir}/edu/wustl/catissuecore/hbm"/>
 	<property name="tomcat.dir" value="CATALINA_HOME"/>
 	<property name="deploy.dir" value="E:\Program_Files\jboss-4.0.0\server\default\deploy"/>
-	
 	<property name="extra_lib.dir" value="${base.dir}/extra_lib"/>
-    
+	<property name="mysql.dir" value="${base.dir}/SQL/MySql"/>
+	<property name="oracle.dir" value="${base.dir}/SQL/Oracle"/>
+	<property name="common.dir" value="${base.dir}/SQL/Common"/>
+		
     <property name="generateforce" value="true"/>
     
 	<path id="app.classpath">
@@ -276,7 +278,48 @@
             </classpath>       
       	</java>
     </target>
-	
+	<target name="DBInitialized_MySQL">
+	    	<sql
+				driver="org.gjt.mm.mysql.Driver"
+			    url="jdbc:mysql://localhost:3306/catissuecoretest"
+			    userid="root"
+			    password="mysql123" 
+	    		onerror="continue">
+			  <transaction  src="${mysql.dir}/catissuecore.sql"/>
+			  <transaction  src="${mysql.dir}/InitDB_CreateTable.sql"/>
+			  <transaction  src="${common.dir}/initDB_Insert_Common.sql"/>
+			  <transaction  src="${common.dir}/AlterTable.sql"/>
+			  <transaction  src="${common.dir}/CDE_DummyData_Common.sql"/>
+			  <transaction  src="${mysql.dir}/csm_catissuecore.sql"/>
+			  <classpath>
+	            <fileset dir="${lib.dir}">
+	                  <include name="*.jar"/>
+	              </fileset>
+	            </classpath> 
+			</sql>
+	  	</target>
+		<target name="DBInitialized_Oracle">
+		    	<sql
+					driver="oracle.jdbc.driver.OracleDriver"
+				    url="jdbc:oracle:thin:@miramar.persistent.co.in:1521:chipdb"
+				    userid="catissue_core"
+				    password="catissue_core" 
+		    		onerror="continue">
+				  <transaction  src="${oracle.dir}/catissuecore.sql"/>
+				  <transaction  src="${oracle.dir}/InitDB_CreateTable.sql"/>
+				  <transaction  src="${common.dir}/initDB_Insert_Common.sql"/>
+				  <transaction  src="${common.dir}/AlterTable.sql"/>
+				  <transaction  src="${common.dir}/CDE_DummyData_Common.sql"/>
+				  <transaction  src="${oracle.dir}/CSM_Create_Oracle.sql"/>
+		    	  <transaction  src="${oracle.dir}/CSM_InsertData_Oracle.sql"/>	
+		   		  <transaction  src="${oracle.dir}/CSM_AddConstraints_Oracle.sql"/>
+				  <classpath>
+		            <fileset dir="${lib.dir}">
+		                  <include name="*.jar"/>
+		              </fileset>
+		            </classpath> 
+				</sql>
+		  	</target>
 	<!--target name="DBImport" depends="Genrate-Schema">
     	<java classname="edu.wustl.lims.db.DBImportUtil">
     		<classpath refid="eclipse.classpath"/>
