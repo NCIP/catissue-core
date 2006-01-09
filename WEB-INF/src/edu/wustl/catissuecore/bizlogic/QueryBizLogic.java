@@ -881,6 +881,7 @@ public class QueryBizLogic extends DefaultBizLogic
         List list = jdbcDao.executeQuery(sql, null, false, null);
         jdbcDao.closeSession();
         String tableName = new String();
+        String tableDisplayName = new String();
         String columnName = new String();
         String columnDisplayName = new String();
         List columnList = new ArrayList();
@@ -891,11 +892,12 @@ public class QueryBizLogic extends DefaultBizLogic
         	
             List rowList = (List)iterator.next();
             tableName = (String)rowList.get(j++);
+            tableDisplayName = getDisplayName(aliasName);
             columnName = (String)rowList.get(j++);
             columnDisplayName = (String)rowList.get(j++);
             
             //Name ValueBean Value in the for of tableAlias.columnName.columnDisplayName.tablesInPath 
-            String columnValue = tableName+"."+columnName+"."+columnDisplayName;
+            String columnValue = tableName+"."+columnName+"."+columnDisplayName+" : "+tableDisplayName;
             String tablesInPath = (String)rowList.get(j++);
 			
             if ((tablesInPath != null) && ("".equals(tablesInPath) == false))
