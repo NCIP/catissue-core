@@ -796,7 +796,7 @@ insert into CATISSUE_RELATED_TABLES_MAP values ( 8 , 62 , 'IDENTIFIER' , 'BIOHAZ
 
 insert into CATISSUE_RELATED_TABLES_MAP values ( 33, 28 , 'IDENTIFIER','SPECIMEN_ID');
 
-# Aarti:adding relationship between specimen and specimen event parameters for specimen event queries
+/* Aarti:adding relationship between specimen and specimen event parameters for specimen event queries*/
 INSERT INTO CATISSUE_RELATED_TABLES_MAP VALUES(33,63,'IDENTIFIER','SPECIMEN_ID');
 
 /********************************************************************************************************************************/
