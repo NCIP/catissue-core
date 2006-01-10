@@ -249,10 +249,17 @@ public class DistributionForm extends SpecimenEventParametersForm
 			}
 			
 			
-			if(key.indexOf("_quantity")!=-1  && (validator.isEmpty(value) ))
+			if(key.indexOf("_quantity")!=-1 )
 			{
-				Logger.out.debug("Quantity empty**************");
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.distribution.missing",ApplicationProperties.getValue("itemrecord.quantity")));
+				if((validator.isEmpty(value) ))
+				{
+					Logger.out.debug("Quantity empty**************");
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.distribution.missing",ApplicationProperties.getValue("itemrecord.quantity")));
+				}
+				if(!validator.isNumeric(value))
+				{
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.distribution.invalid",ApplicationProperties.getValue("itemrecord.quantity")));
+				}
 			}
 			
 			//}  if  quantity
