@@ -256,7 +256,7 @@ public class DistributionForm extends SpecimenEventParametersForm
 					Logger.out.debug("Quantity empty**************");
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("itemrecord.quantity")));
 				}
-				else if(!validator.isNumeric(value))
+				else if(!validator.isDouble(value))
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("itemrecord.quantity")));
 				}
