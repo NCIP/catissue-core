@@ -1283,7 +1283,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 //	 constants required for Distribution Report
 	public static final String CONFIGURATION_TABLES = "configurationTables";
 	public static final String DISTRIBUTION_TABLE_AlIAS[] = {"CollectionProtReg","Participant","Specimen",
-															 "SpecimenCollectionGroup","Distribution"};
+															 "SpecimenCollectionGroup","DistributedItem"};
 	public static final String TABLE_COLUMN_DATA_MAP = "tableColumnDataMap";
 	public static final String CONFIGURE_RESULT_VIEW_ACTION = "ConfigureResultView.do";
 	public static final String TABLE_NAMES_LIST = "tableNamesList";
