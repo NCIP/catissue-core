@@ -113,7 +113,7 @@ if(dataList != null && dataList.size() != 0)
 				var action = "SpreadsheetExport.do";
 				document.forms[0].operation.value="export";
 				document.forms[0].action = action;
-				document.forms[0].target = "_blank";
+				//document.forms[0].target = "_blank";
 				document.forms[0].submit();
 			}
 			else
