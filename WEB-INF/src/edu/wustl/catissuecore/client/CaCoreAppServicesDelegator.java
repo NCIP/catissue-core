@@ -13,6 +13,8 @@ package edu.wustl.catissuecore.client;
 
 import java.util.List;
 
+import edu.wustl.common.util.logger.Logger;
+
 /**
  * This class contains the basic methods that are required for HTTP APIs. 
  * It just passes on the request at proper place.
@@ -20,33 +22,39 @@ import java.util.List;
  */
 public class CaCoreAppServicesDelegator
 {
-	public boolean login(String userName,String password) throws Exception
+	public boolean delegateLogin(String userName,String password) throws Exception
+	{
+		CaTissueHTTPClient httpClient = CaTissueHTTPClient.getInstance();
+		
+		boolean status = httpClient.connect(userName,password);
+		Logger.out.debug("****************** HTTP LOGIN STATUS : " + status);
+		return status;
+	}
+	
+	public boolean delegateLogout() //throws Exception
 	{
 		return false;
 	}
 	
-	public boolean logout() throws Exception
+	public Object delegateAdd(Object obj) throws Exception
 	{
-		return false;
+		CaTissueHTTPClient httpClient = CaTissueHTTPClient.getInstance();
+		return httpClient.add(obj);
 	}
 	
-	public Object add(Object domainbject) throws Exception
+	public Object delegateEdit(Object obj) throws Exception
 	{
-		return null;
+		CaTissueHTTPClient httpClient = CaTissueHTTPClient.getInstance();
+		return httpClient.edit(obj);
 	}
 	
-	public Object edit(Object domainObject) throws Exception
+	public Object delegateDelete(Object obj) throws Exception
 	{
-		return null;
+		throw new Exception("Does not support delete");
 	}
 	
-	public Object delete(Object domainObject) throws Exception
+	public List delegateSearchFilter(List list) throws Exception
 	{
-		return null;
-	}
-	
-	public List search(String className, Object domainObject) throws Exception
-	{
-		return null;
+		return list;
 	}	
 }
