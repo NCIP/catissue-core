@@ -245,7 +245,7 @@ public class DistributionForm extends SpecimenEventParametersForm
 			
 			if(key.indexOf("Specimen_systemIdentifier")!=-1 && !validator.isValidOption( value))
 			{
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.distribution.missing",ApplicationProperties.getValue("itemrecord.specimenId")));
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("itemrecord.specimenId")));
 			}
 			
 			
@@ -254,11 +254,11 @@ public class DistributionForm extends SpecimenEventParametersForm
 				if((validator.isEmpty(value) ))
 				{
 					Logger.out.debug("Quantity empty**************");
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.distribution.missing",ApplicationProperties.getValue("itemrecord.quantity")));
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("itemrecord.quantity")));
 				}
-				if(!validator.isNumeric(value))
+				else if(!validator.isNumeric(value))
 				{
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.distribution.invalid",ApplicationProperties.getValue("itemrecord.quantity")));
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("itemrecord.quantity")));
 				}
 			}
 			
