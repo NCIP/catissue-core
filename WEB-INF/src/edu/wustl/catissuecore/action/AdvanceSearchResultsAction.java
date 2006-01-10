@@ -107,8 +107,6 @@ public class AdvanceSearchResultsAction extends BaseAction
 			Logger.out.debug("tableSet from query before setting resultview :"+query.getTableNamesSet());
 			//Set the result view for Advance Search
 			Vector selectDataElements = bizLogic.getSelectDataElements(null,new ArrayList(tablesVector), columnNames);
-			//Vector selectDataElements = bizLogic.getSelectDataElements(null,new ArrayList(query.getTableNamesSet()), columnNames);
-			Logger.out.debug("column display names "+columnNames+":"+columnNames.size());
 
 			query.setResultView(selectDataElements);
 			
@@ -117,14 +115,12 @@ public class AdvanceSearchResultsAction extends BaseAction
 			SimpleQueryBizLogic simpleQueryBizLogic = new SimpleQueryBizLogic();
 
 			simpleQueryBizLogic.createQueryResultObjectData(query.getTableNamesSet(),
-
-						queryResultObjectDataMap,query);
+											queryResultObjectDataMap,query);
 			simpleQueryBizLogic.addObjectIdentifierColumnsToQuery(
-						queryResultObjectDataMap, query);
+											queryResultObjectDataMap, query);
 
 			simpleQueryBizLogic.setDependentIdentifiedColumnIds(
-
-						queryResultObjectDataMap, query);
+											queryResultObjectDataMap, query);
 			
 			Map columnIdsMap = query.getColumnIdsMap();
 			session.setAttribute(Constants.COLUMN_ID_MAP,columnIdsMap);
@@ -142,9 +138,6 @@ public class AdvanceSearchResultsAction extends BaseAction
 
 			//Set the columnDisplayNames in session
 			session.setAttribute(Constants.COLUMN_DISPLAY_NAMES,columnNames);
-			
-			//Remove shopping cart attribute from session
-			session.setAttribute(Constants.SHOPPING_CART,null);
 			
 			//Remove configured columns from session for previous query in same session
 			session.setAttribute(Constants.CONFIGURED_SELECT_COLUMN_LIST,null);
