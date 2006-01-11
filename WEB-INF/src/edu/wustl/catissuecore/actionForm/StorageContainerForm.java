@@ -248,6 +248,9 @@ public class StorageContainerForm extends AbstractActionForm
 		isFull = Utility.initCap( Utility.toString(container.getIsFull()));
 		Logger.out.debug("isFULL />/>/> "+ isFull);
 		
+		System.out.println("StorageType in form--------->"+container.getStorageType());
+		System.out.println("StorageType ID in form--------->"+container.getStorageType().getId());
+		
 		this.typeId = container.getStorageType().getId().longValue();
 		
 		if(container.getParentContainer() != null)
@@ -297,11 +300,12 @@ public class StorageContainerForm extends AbstractActionForm
 				String key2 = "StorageContainerDetails:" + i +"_parameterValue";
 				String key3 = "StorageContainerDetails:" + i +"_systemIdentifier";
 				
-				StorageContainerDetails containerDetails = (StorageContainerDetails)it.next();
+				edu.wustl.catissuecore.domainobject.StorageContainerDetails containerDetails = 
+				    (edu.wustl.catissuecore.domainobject.StorageContainerDetails)it.next();
 				
 				values.put(key1,containerDetails.getParameterName());
 				values.put(key2,containerDetails.getParameterValue());
-				values.put(key3,containerDetails.getSystemIdentifier());
+				values.put(key3,containerDetails.getId());
 				
 				i++;
 			}
