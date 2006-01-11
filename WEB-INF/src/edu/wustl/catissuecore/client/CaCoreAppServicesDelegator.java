@@ -38,14 +38,30 @@ public class CaCoreAppServicesDelegator
 	
 	public Object delegateAdd(Object obj) throws Exception
 	{
-		CaTissueHTTPClient httpClient = CaTissueHTTPClient.getInstance();
-		return httpClient.add(obj);
+	    try
+	    {
+	        CaTissueHTTPClient httpClient = CaTissueHTTPClient.getInstance();
+	        return httpClient.add(obj);
+	    }
+	    catch(Exception e)
+	    {
+	        e.printStackTrace();
+	        throw e;
+	    }
 	}
 	
 	public Object delegateEdit(Object obj) throws Exception
 	{
-		CaTissueHTTPClient httpClient = CaTissueHTTPClient.getInstance();
-		return httpClient.edit(obj);
+		try
+		{
+		    CaTissueHTTPClient httpClient = CaTissueHTTPClient.getInstance();
+		    return httpClient.edit(obj);
+		}
+		catch(Exception e)
+		{
+		    e.printStackTrace();
+	        throw e;
+		}
 	}
 	
 	public Object delegateDelete(Object obj) throws Exception
