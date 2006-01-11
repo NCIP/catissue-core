@@ -181,11 +181,11 @@ public class DistributionProtocolForm extends SpecimenProtocolForm
 				String key6 = "SpecimenRequirement:" + i +"_quantityIn";
 				String key7 = "SpecimenRequirement:" + i +"_systemIdentifier";
 				
-				SpecimenRequirement requirement = (SpecimenRequirement)it.next();
+				edu.wustl.catissuecore.domainobject.SpecimenRequirement requirement = (edu.wustl.catissuecore.domainobject.SpecimenRequirement)it.next();
 				values.put(key3,requirement.getSpecimenType());
 				values.put(key4,requirement.getTissueSite());
 				values.put(key5,requirement.getPathologyStatus());
-				values.put(key7,requirement.getSystemIdentifier());
+				values.put(key7,requirement.getId());
 				
 				if(requirement instanceof TissueSpecimenRequirement)
 				{
