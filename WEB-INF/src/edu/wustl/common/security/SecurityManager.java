@@ -1147,7 +1147,7 @@ public class SecurityManager implements Permissions {
 									+ GroupsName
 									+ " to protectionElement"
 									+ protectionElement
-											.getProtectionElementName(), e);
+											.getProtectionElementName());
 		}
 	}
 
