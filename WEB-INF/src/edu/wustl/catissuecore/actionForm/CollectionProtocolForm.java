@@ -233,7 +233,8 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 			Iterator it = protocolEventCollection.iterator();
 			while(it.hasNext())
 			{
-				CollectionProtocolEvent cpEvent = (CollectionProtocolEvent)it.next();
+			    edu.wustl.catissuecore.domainobject.CollectionProtocolEvent cpEvent = 
+			        (edu.wustl.catissuecore.domainobject.CollectionProtocolEvent)it.next();
 				
 				String keyClinicalStatus = "CollectionProtocolEvent:" + i + "_clinicalStatus";
 				String keyStudyCalendarEventPoint = "CollectionProtocolEvent:" + i + "_studyCalendarEventPoint";
@@ -241,7 +242,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 				
 				values.put(keyClinicalStatus,Utility.toString(cpEvent.getClinicalStatus()));
 				values.put(keyStudyCalendarEventPoint, Utility.toString(cpEvent.getStudyCalendarEventPoint()));
-				values.put(keyCPESystemIdentifier,Utility.toString(cpEvent.getSystemIdentifier()));
+				values.put(keyCPESystemIdentifier,Utility.toString(cpEvent.getId()));
 				Logger.out.debug("In Form keyCPESystemIdentifier..............."+values.get(keyCPESystemIdentifier));
 				Collection specimenRequirementCollection = cpEvent.getSpecimenRequirementCollection();
 				
@@ -285,7 +286,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 			Iterator iterator = specimenRequirementCollection.iterator();
 			while(iterator.hasNext())
 			{
-				SpecimenRequirement requirement = (SpecimenRequirement)iterator.next();
+			    SpecimenRequirement requirement = (SpecimenRequirement)iterator.next();
 				
 				String key1 = "CollectionProtocolEvent:" + counter + "_SpecimenRequirement:" + j +"_specimenClass";
 				String key3 = "CollectionProtocolEvent:" + counter + "_SpecimenRequirement:" + j +"_specimenType";
@@ -298,7 +299,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 				values.put(key3,requirement.getSpecimenType());
 				values.put(key4,requirement.getTissueSite());
 				values.put(key5,requirement.getPathologyStatus());
-				values.put(key7,Utility.toString(requirement.getSystemIdentifier()));
+				values.put(key7,Utility.toString(requirement.getId()));
 				
 				if(requirement instanceof TissueSpecimenRequirement)
 				{
