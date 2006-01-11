@@ -304,7 +304,13 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 				{
 					values.put(key1,"Tissue");
 					values.put(key2,Constants.UNIT_GM);
-					values.put(key6,Utility.toString(((TissueSpecimenRequirement)requirement).getQuantityInGram()));
+					String tissueType = requirement.getSpecimenType();
+					if(tissueType.equalsIgnoreCase(Constants.SLIDE) || tissueType.equalsIgnoreCase(Constants.PARAFFIN_BLOCK) || tissueType.equalsIgnoreCase(Constants.FROZEN_BLOCK) )
+					{
+						values.put(key6,Utility.toString(new Integer(((TissueSpecimenRequirement) requirement).getQuantityInGram().intValue())));
+					}
+					else
+						values.put(key6,Utility.toString(((TissueSpecimenRequirement)requirement).getQuantityInGram()));
 				}
 				else if(requirement instanceof CellSpecimenRequirement)
 				{

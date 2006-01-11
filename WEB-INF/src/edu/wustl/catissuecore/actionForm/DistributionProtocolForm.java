@@ -28,6 +28,7 @@ import edu.wustl.catissuecore.domain.MolecularSpecimenRequirement;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.TissueSpecimenRequirement;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
@@ -115,7 +116,15 @@ public class DistributionProtocolForm extends SpecimenProtocolForm
 				{
 					values.put(key1,"Tissue");
 					values.put(key2,Constants.UNIT_GM);
-					values.put(key6,String.valueOf(((TissueSpecimenRequirement)requirement).getQuantityInGram()));
+					
+					String tissueType = requirement.getSpecimenType();
+					if(tissueType.equalsIgnoreCase(Constants.SLIDE) || tissueType.equalsIgnoreCase(Constants.PARAFFIN_BLOCK)
+							|| tissueType.equalsIgnoreCase(Constants.FROZEN_BLOCK) )
+					{
+						values.put(key6,Utility.toString(new Integer(((TissueSpecimenRequirement) requirement).getQuantityInGram().intValue())));
+					}
+					else
+						values.put(key6,String.valueOf(((TissueSpecimenRequirement)requirement).getQuantityInGram()));
 				}
 				else if(requirement instanceof CellSpecimenRequirement)
 				{
