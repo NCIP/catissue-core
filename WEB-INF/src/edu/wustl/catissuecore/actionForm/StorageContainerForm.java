@@ -226,7 +226,7 @@ public class StorageContainerForm extends AbstractActionForm
 				
 				values.put(key1,containerDetails.getParameterName());
 				values.put(key2,containerDetails.getParameterValue());
-				values.put(key3,containerDetails.getSystemIdentifier());
+				values.put(key3,Utility.toString(containerDetails.getSystemIdentifier()));
 				
 				i++;
 			}
@@ -305,7 +305,7 @@ public class StorageContainerForm extends AbstractActionForm
 				
 				values.put(key1,containerDetails.getParameterName());
 				values.put(key2,containerDetails.getParameterValue());
-				values.put(key3,containerDetails.getId());
+				values.put(key3,Utility.toString(containerDetails.getId()));
 				
 				i++;
 			}
