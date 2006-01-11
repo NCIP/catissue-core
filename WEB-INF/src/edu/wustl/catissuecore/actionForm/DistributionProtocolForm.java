@@ -185,31 +185,31 @@ public class DistributionProtocolForm extends SpecimenProtocolForm
 				values.put(key3,requirement.getSpecimenType());
 				values.put(key4,requirement.getTissueSite());
 				values.put(key5,requirement.getPathologyStatus());
-				values.put(key7,requirement.getId());
+				values.put(key7,Utility.toString(requirement.getId()));
 				
-				if(requirement instanceof TissueSpecimenRequirement)
+				if(requirement instanceof edu.wustl.catissuecore.domainobject.TissueSpecimenRequirement)
 				{
 					values.put(key1,"Tissue");
 					values.put(key2,Constants.UNIT_GM);
-					values.put(key6,String.valueOf(((TissueSpecimenRequirement)requirement).getQuantityInGram()));
+					values.put(key6,String.valueOf(((edu.wustl.catissuecore.domainobject.TissueSpecimenRequirement)requirement).getQuantityInGram()));
 				}
-				else if(requirement instanceof CellSpecimenRequirement)
+				else if(requirement instanceof edu.wustl.catissuecore.domainobject.CellSpecimenRequirement)
 				{
 					values.put(key1,"Cell");
 					values.put(key2,Constants.UNIT_CC);
-					values.put(key6,String.valueOf(((CellSpecimenRequirement)requirement).getQuantityInCellCount()));
+					values.put(key6,String.valueOf(((edu.wustl.catissuecore.domainobject.CellSpecimenRequirement)requirement).getQuantityInCellCount()));
 				}
-				else if(requirement instanceof MolecularSpecimenRequirement)
+				else if(requirement instanceof edu.wustl.catissuecore.domainobject.MolecularSpecimenRequirement)
 				{
 					values.put(key1,"Molecular");
 					values.put(key2,Constants.UNIT_MG);
-					values.put(key6,String.valueOf(((MolecularSpecimenRequirement)requirement).getQuantityInMicrogram()));
+					values.put(key6,String.valueOf(((edu.wustl.catissuecore.domainobject.MolecularSpecimenRequirement)requirement).getQuantityInMicrogram()));
 				}
-				else if(requirement instanceof FluidSpecimenRequirement)
+				else if(requirement instanceof edu.wustl.catissuecore.domainobject.FluidSpecimenRequirement)
 				{
 					values.put(key1,"Fluid");
 					values.put(key2,Constants.UNIT_ML);
-					values.put(key6,String.valueOf(((FluidSpecimenRequirement)requirement).getQuantityInMilliliter()));
+					values.put(key6,String.valueOf(((edu.wustl.catissuecore.domainobject.FluidSpecimenRequirement)requirement).getQuantityInMilliliter()));
 				}
 				
 				i++;
