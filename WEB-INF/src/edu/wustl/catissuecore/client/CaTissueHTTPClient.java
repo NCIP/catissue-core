@@ -15,13 +15,11 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
-import gov.nih.nci.system.applicationservice.ApplicationService;
 
 public class CaTissueHTTPClient
 {
@@ -409,35 +407,35 @@ public class CaTissueHTTPClient
 		*/
 	}
 	
-	private static Object searchObj(String className, Object obj)
-	{
-	    List resultList=new ArrayList();
-	    
-	    Object resultObj=new Object();
-	    
-	    String packageHierarchy="edu.wustl.catissuecore.domain."; 
-	    
-	    ApplicationService appService = ApplicationService.getRemoteInstance("http://localhost:8000/caTISSUE_CORE_API/server/HTTPServer");
-	    
-	    try
-	    {
-	        resultList=appService.search(packageHierarchy+className, obj);
-	        if(resultList.size()>0)
-	        {
-	            resultObj=resultList.get(0);
-	            return resultObj;
-	        }
-	        else
-	        {
-	            resultObj=new String("No "+className+" matched...");
-	        }
-	    }
-	    catch(Exception e)
-	    {
-	        e.printStackTrace();
-	        System.out.println("in serachObj");
-	    }
-	    return resultObj;
-	}
+//	private static Object searchObj(String className, Object obj)
+//	{
+//	    List resultList=new ArrayList();
+//	    
+//	    Object resultObj=new Object();
+//	    
+//	    String packageHierarchy="edu.wustl.catissuecore.domain."; 
+//	    
+//	    ApplicationService appService = ApplicationService.getRemoteInstance("http://localhost:8000/caTISSUE_CORE_API/server/HTTPServer");
+//	    
+//	    try
+//	    {
+//	        resultList=appService.search(packageHierarchy+className, obj);
+//	        if(resultList.size()>0)
+//	        {
+//	            resultObj=resultList.get(0);
+//	            return resultObj;
+//	        }
+//	        else
+//	        {
+//	            resultObj=new String("No "+className+" matched...");
+//	        }
+//	    }
+//	    catch(Exception e)
+//	    {
+//	        e.printStackTrace();
+//	        System.out.println("in serachObj");
+//	    }
+//	    return resultObj;
+//	}
 	
 }
