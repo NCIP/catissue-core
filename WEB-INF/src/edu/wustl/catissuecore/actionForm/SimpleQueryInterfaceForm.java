@@ -13,6 +13,7 @@ package edu.wustl.catissuecore.actionForm;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.StringTokenizer;
 import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
@@ -235,8 +236,19 @@ public class SimpleQueryInterfaceForm extends ActionForm
 //		                    {
 		        	            String dataElement = "SimpleConditionsNode:"+i+"_Condition_DataElement_field";
 		        	            String selectedField = (String)getValue(dataElement);
-		        	            int lastInd = selectedField.lastIndexOf(".");
-		        	            String dataType = selectedField.substring(lastInd+1);
+		        	            StringTokenizer strTok = new StringTokenizer(selectedField,".");
+		        	    		int tokenCnt=1;
+		        	    		String dataType = "";
+		        	    		while(strTok.hasMoreTokens())
+		        	    		{
+		        	    			if(tokenCnt == 3)
+		        	    				dataType = strTok.nextToken();
+		        	    			else
+		        	    				strTok.nextToken();
+		        	    			tokenCnt++;
+		        	    		}
+//		        	            int lastInd = selectedField.lastIndexOf(".");
+//		        	            String dataType = selectedField.substring(lastInd+1);
 		
 		        	            if((dataType.trim().equals("bigint" ) || dataType.trim().equals("integer" )) && !validator.isNumeric(enteredValue,0))
 		        	            {
