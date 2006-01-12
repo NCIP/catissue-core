@@ -19,6 +19,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import edu.wustl.catissuecore.dao.JDBCDAO;
 import edu.wustl.catissuecore.query.AdvancedConditionsNode;
 import edu.wustl.catissuecore.query.Condition;
+import edu.wustl.catissuecore.query.Operator;
 import edu.wustl.catissuecore.query.TreeNodeData;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
@@ -313,5 +314,20 @@ public class AdvanceQueryBizlogic extends DefaultBizLogic implements TreeDataInt
 		}
 		jdbcDao.closeSession();
 		return parentSpecimenIdsList;
+	}
+	//Sets the activity status conditions for the query to filter disbaled data
+	public String formActivityStatusConditions(Vector tablesVector,int tableSuffix)
+	{
+		StringBuffer activityStatusConditions=new StringBuffer();
+		Iterator tablesVectorItr = tablesVector.iterator();
+		int i=0;
+		while(tablesVectorItr.hasNext())
+		{
+			activityStatusConditions.append(" "+Operator.AND+" "+tablesVectorItr.next()+tableSuffix+"."+Constants.ACTIVITY_STATUS_COLUMN+" "+
+								Operator.NOT_EQUALS+" '"+Constants.ACTIVITY_STATUS_DISABLED+"' ");
+			i++;
+		}
+		
+		return activityStatusConditions.toString();
 	}
 }

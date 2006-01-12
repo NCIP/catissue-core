@@ -76,6 +76,15 @@ public class AdvanceSearchResultsAction extends BaseAction
 
 			//Set the root object as the where conditions
 			((AdvancedConditionsImpl)((AdvancedQuery)query).getWhereConditions()).setWhereCondition(root);
+			//Set activity Status conditions to filter data which are disabled 
+			Vector tablesVector = new Vector();
+			tablesVector.add(Query.PARTICIPANT);
+			tablesVector.add(Query.SPECIMEN_PROTOCOL);
+			tablesVector.add(Query.COLLECTION_PROTOCOL_REGISTRATION);
+			tablesVector.add(Query.SPECIMEN_COLLECTION_GROUP);
+			tablesVector.add(Query.SPECIMEN);
+			String activityStatusConditions = advBizLogic.formActivityStatusConditions(tablesVector,query.getTableSufix());
+			query.setActivityStatusConditions(activityStatusConditions);
 			
 			//Set the table set for join Condition 
 			Set tableSet = new HashSet();
@@ -90,12 +99,8 @@ public class AdvanceSearchResultsAction extends BaseAction
 			setAttributeType(root);
 
 			//Set Identifier of Participant,Collection Protocol, Specimen Collection Group and Specimen if not existing in the resultView
-			Vector tablesVector = new Vector();
-			tablesVector.add(Query.PARTICIPANT);
+			tablesVector.remove(Query.SPECIMEN_PROTOCOL);
 			tablesVector.add(Query.COLLECTION_PROTOCOL);
-			tablesVector.add(Query.COLLECTION_PROTOCOL_REGISTRATION);
-			tablesVector.add(Query.SPECIMEN_COLLECTION_GROUP);
-			tablesVector.add(Query.SPECIMEN);
 			query.getIdentifierColumnIds(tablesVector);
 			
 			//Set tables for Configuration.
@@ -158,25 +163,6 @@ public class AdvanceSearchResultsAction extends BaseAction
 		return mapping.findForward(target);
 	}
 
-	/*private void setTablesDownTheHeirarchy(Set tableSet)
-	{
-		if(!tableSet.contains(Constants.COLLECTION_PROTOCOL))
-		{
-			tableSet.add(Constants.COLLECTION_PROTOCOL);
-			tableSet.add(Constants.SPECIMEN_COLLECTION_GROUP);
-			tableSet.add(Constants.SPECIMEN);
-		}
-		else if(!tableSet.contains(Constants.SPECIMEN_COLLECTION_GROUP))
-		{
-			tableSet.add(Constants.SPECIMEN_COLLECTION_GROUP);
-			tableSet.add(Constants.SPECIMEN);
-		}
-		else if(!tableSet.contains(Constants.SPECIMEN))
-		{
-			tableSet.add(Constants.SPECIMEN);
-		}
-		
-	}*/
 	//Parse the root and set the attribute type in the DataElement
 	private void setAttributeType(DefaultMutableTreeNode tree) throws Exception
 	{

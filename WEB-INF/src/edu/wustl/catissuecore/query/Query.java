@@ -1,6 +1,5 @@
 package edu.wustl.catissuecore.query;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -8,8 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
-
-import javax.swing.text.TabExpander;
 
 import edu.wustl.catissuecore.dao.DAOFactory;
 import edu.wustl.catissuecore.dao.JDBCDAO;
@@ -108,6 +105,8 @@ public abstract class Query {
 	protected int levelOfParent = 0;
 	
 	protected boolean isParentDerivedSpecimen = false;
+	
+	private String activityStatusConditions = new String();
 
 	/**
 	 * Participant object constant
@@ -297,6 +296,7 @@ public abstract class Query {
 		query.append("\nFROM ");
 		
 		String joinConditionString = this.getJoinConditionString(set);
+		
 		query.append(this.formFromString(set));
 
 		/**
@@ -305,6 +305,12 @@ public abstract class Query {
 		query.append("\nWHERE ");
 		
 		query.append(joinConditionString);
+		activityStatusConditions = this.getActivityStatusConditions();
+		if (activityStatusConditions != null)
+		{
+			query.append(" " + activityStatusConditions);
+		}
+		
 		//        String whereConditionsString = whereConditions.getString(tableSufix);
 		if (whereConditions.hasConditions()) {
 			if (joinConditionString != null
@@ -963,5 +969,17 @@ public abstract class Query {
 	 */
 	public ConditionsImpl getWhereConditions() {
 		return whereConditions;
+	}
+	/**
+	 * @return Returns the activityStatusConditions.
+	 */
+	public String getActivityStatusConditions() {
+		return activityStatusConditions;
+	}
+	/**
+	 * @param activityStatusConditions The activityStatusConditions to set.
+	 */
+	public void setActivityStatusConditions(String activityStatusConditions) {
+		this.activityStatusConditions = activityStatusConditions;
 	}
 }
