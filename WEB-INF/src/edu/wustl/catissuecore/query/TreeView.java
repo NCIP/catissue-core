@@ -172,7 +172,7 @@ public class TreeView {
 					
 					if(andOrBool)
 					{
-						str = "|true";
+						str = str + "|true";
 					}
 					else
 					{
