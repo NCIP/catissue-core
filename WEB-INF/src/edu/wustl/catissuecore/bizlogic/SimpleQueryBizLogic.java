@@ -20,14 +20,15 @@ import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
+import edu.wustl.catissuecore.dao.DAOFactory;
 import edu.wustl.catissuecore.dao.JDBCDAO;
 import edu.wustl.catissuecore.query.DataElement;
 import edu.wustl.catissuecore.query.Query;
 import edu.wustl.catissuecore.query.SimpleConditionsNode;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.QueryResultObjectData;
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.dbManager.HibernateMetaData;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -120,7 +121,7 @@ public class SimpleQueryBizLogic extends DefaultBizLogic
      * @param fromTables Set of tables in the from clause of the query.
      * @param simpleConditionsNode The last condition in the simpleConditionNode's Collection.
      */
-    public void addActivityStatusConditions(Collection simpleConditionNodeCollection, Set fromTables)
+    public void addActivityStatusConditions(Collection simpleConditionNodeCollection, Set fromTables) throws DAOException,ClassNotFoundException
     {
         // Creating aliasName set with full package names.
         // Required for checking the activityStatus.
@@ -128,10 +129,9 @@ public class SimpleQueryBizLogic extends DefaultBizLogic
         Iterator fromTableSetIterator = fromTables.iterator();
         while (fromTableSetIterator.hasNext())
         {
-            String tableName = "edu.wustl.catissuecore.domain."+fromTableSetIterator.next();
+            String tableName = getClassName((String)fromTableSetIterator.next());
             fromTablesWithPackageNames.add(tableName);
         }
-        
         // Check and get the activity status conditions for all the objects in the conditions.
         List activityStatusConditionList = new ArrayList();
         Iterator aliasNameIterator = fromTablesWithPackageNames.iterator();
@@ -173,7 +173,7 @@ public class SimpleQueryBizLogic extends DefaultBizLogic
 	 * @return SimpleConditionsNode if the object named aliasName contains the activityStatus 
 	 * data member, else returns null.
 	 */
-	private SimpleConditionsNode getActivityStatusCondition(String fullyQualifiedClassName)
+	private SimpleConditionsNode getActivityStatusCondition(String fullyQualifiedClassName) throws DAOException,ClassNotFoundException
 	{
 		SimpleConditionsNode activityStatusCondition = null;
 
@@ -189,7 +189,7 @@ public class SimpleQueryBizLogic extends DefaultBizLogic
 				{
 					activityStatusCondition = new SimpleConditionsNode();
 					activityStatusCondition.getCondition().getDataElement().setTableName(
-							Utility.parseClassName(fullyQualifiedClassName));
+							getAliasName(HibernateMetaData.getTableName(className)));
 					activityStatusCondition.getCondition().getDataElement().setField(
 							Constants.ACTIVITY_STATUS_COLUMN);
 					activityStatusCondition.getCondition().getOperator().setOperator("!=");
@@ -550,5 +550,43 @@ public class SimpleQueryBizLogic extends DefaultBizLogic
 		    {
 		        list.add(string);
 		    }
+		}
+		private String getClassName(String aliasName) throws DAOException,ClassNotFoundException
+		{
+			String tableName = getTableName(aliasName);
+			String className = HibernateMetaData.getClassName(tableName);
+			return className;
+		}
+		public String getTableName(String aliasName) throws DAOException,ClassNotFoundException
+		{
+			String tableName = new String();
+	        JDBCDAO jdbcDAO = (JDBCDAO)DAOFactory.getDAO(Constants.JDBC_DAO);
+	        jdbcDAO.openSession(null);
+	        String sql = "select TABLE_NAME from CATISSUE_QUERY_TABLE_DATA where ALIAS_NAME='"+aliasName+"'";
+	        List list = jdbcDAO.executeQuery(sql,null,false, null);
+	        jdbcDAO.closeSession();
+	        
+	        if (!list.isEmpty())
+	        {
+	            List rowList = (List)list.get(0);
+	            tableName = (String)rowList.get(0);
+	        }
+			return tableName;
+		}
+		public String getAliasName(String tableName) throws DAOException,ClassNotFoundException
+		{
+			String aliasName = new String();
+	        JDBCDAO jdbcDAO = (JDBCDAO)DAOFactory.getDAO(Constants.JDBC_DAO);
+	        jdbcDAO.openSession(null);
+	        String sql = "select ALIAS_NAME from CATISSUE_QUERY_TABLE_DATA where TABLE_NAME='"+tableName+"'";
+	        List list = jdbcDAO.executeQuery(sql,null,false, null);
+	        jdbcDAO.closeSession();
+	        
+	        if (!list.isEmpty())
+	        {
+	            List rowList = (List)list.get(0);
+	            aliasName = (String)rowList.get(0);
+	        }
+			return aliasName;
 		}
 }
