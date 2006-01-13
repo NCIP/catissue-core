@@ -196,7 +196,7 @@ public class StorageContainerForm extends AbstractActionForm
 		this.twoDimensionCapacity = container.getStorageContainerCapacity()
 				.getTwoDimensionCapacity().intValue();
 		this.oneDimensionLabel = container.getStorageType().getOneDimensionLabel();
-		this.twoDimensionLabel = container.getStorageType().getTwoDimensionLabel();
+		this.twoDimensionLabel = Utility.toString(container.getStorageType().getTwoDimensionLabel());
 		
 		if(container.getNoOfContainers() != null)
 			this.noOfContainers = container.getNoOfContainers().intValue();
