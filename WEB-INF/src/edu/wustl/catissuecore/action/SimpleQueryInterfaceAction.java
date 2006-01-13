@@ -194,7 +194,7 @@ public class SimpleQueryInterfaceAction extends SecureAction
         {
             return mapping.findForward(Constants.ACCESS_DENIED_ADMIN);
         }
-        else if(aliasName.equals("Participant") ||aliasName.equals("CollectionProtocolRegistration") ||aliasName.equals("SpecimenCollectionGroup") ||aliasName.equals("Specimen") ||aliasName.equals("Distribution"))
+        else if(aliasName.equals("Participant") ||aliasName.equals("CollectionProtReg") ||aliasName.equals("SpecimenCollectionGroup") ||aliasName.equals("Specimen") ||aliasName.equals("Distribution"))
         {
             return mapping.findForward(Constants.ACCESS_DENIED_BIOSPECIMEN);
         }
