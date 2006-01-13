@@ -27,6 +27,7 @@ import edu.wustl.catissuecore.domainobject.Specimen;
 import edu.wustl.catissuecore.domainobject.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domainobject.StorageContainer;
 import edu.wustl.catissuecore.domainobject.StorageType;
+import edu.wustl.catissuecore.domainobject.User;
 import edu.wustl.common.actionForm.AbstractActionForm;
 
 /**
@@ -46,11 +47,11 @@ public class ActionFormFactory
 	{
 		AbstractActionForm form = null;
 
-//		if(object instanceof User)
-//		{
-//			form = new UserForm();
-//		}
-		if(object instanceof Institution)
+		if(object instanceof User)
+		{
+			form = new UserForm();
+		}
+		else if(object instanceof Institution)
 		{
 			form = new InstitutionForm();
 		}
