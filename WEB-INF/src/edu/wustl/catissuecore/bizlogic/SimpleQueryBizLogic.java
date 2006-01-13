@@ -101,8 +101,10 @@ public class SimpleQueryBizLogic extends DefaultBizLogic
     private String addSingleQuotes(SimpleConditionsNode simpleConditionsNode)
     {
         String columnName = simpleConditionsNode.getCondition().getDataElement().getField();
+        Logger.out.debug(" columnName:"+columnName);
         StringTokenizer stringToken = new StringTokenizer(columnName, ".");
-        simpleConditionsNode.getCondition().getDataElement().setTableName(stringToken.nextToken());
+        simpleConditionsNode.getCondition().getDataElement().setTable(stringToken.nextToken());
+        Logger.out.debug("tablename:"+simpleConditionsNode.getCondition().getDataElement().getTableAliasName());
         simpleConditionsNode.getCondition().getDataElement().setField(stringToken.nextToken());
         simpleConditionsNode.getCondition().getDataElement().setFieldType(stringToken.nextToken());
         String tableInPath = null;
@@ -111,6 +113,8 @@ public class SimpleQueryBizLogic extends DefaultBizLogic
         {
             tableInPath = stringToken.nextToken();
         }
+        
+        Logger.out.debug("^^^^^^^^^^^Condition:"+simpleConditionsNode.getCondition());
         
         return tableInPath;
     }
