@@ -68,15 +68,6 @@ public class Distribution extends SpecimenEventParameters implements java.io.Ser
 	// ---- Method Section
 
 	/**
-	 * @hibernate
-	 * @see #setParticipant(Site)
-     */
-//	public Specimen getSpecimen() 
-//	{
-//		return specimen;
-//	}
-	
-	/**
 	 * Returns the destination/target Site of the Distribution.
 	 * @hibernate.many-to-one column="TO_SITE_ID" 
 	 * class="edu.wustl.catissuecore.domain.Site" constrained="true"
