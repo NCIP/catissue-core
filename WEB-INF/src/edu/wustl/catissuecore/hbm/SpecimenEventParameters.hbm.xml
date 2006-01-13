@@ -97,64 +97,6 @@
 
         </joined-subclass>
         <joined-subclass
-            name="edu.wustl.catissuecore.domain.Distribution"
-            table="CATISSUE_DISTRIBUTION"
-            dynamic-update="false"
-            dynamic-insert="false"
-        >
-        <key
-            column="IDENTIFIER"
-        />
-
-        <many-to-one
-            name="toSite"
-            class="edu.wustl.catissuecore.domain.Site"
-            cascade="none"
-            outer-join="auto"
-            update="true"
-            insert="true"
-            column="TO_SITE_ID"
-        />
-
-        <many-to-one
-            name="distributionProtocol"
-            class="edu.wustl.catissuecore.domain.DistributionProtocol"
-            cascade="none"
-            outer-join="auto"
-            update="true"
-            insert="true"
-            column="DISTRIBUTION_PROTOCOL_ID"
-        />
-
-        <set
-            name="distributedItemCollection"
-            table="CATISSUE_DISTRIBUTED_ITEM"
-            lazy="false"
-            inverse="true"
-            cascade="save-update"
-            sort="unsorted"
-        >
-
-              <key
-                  column="DISTRIBUTION_ID"
-              />
-
-              <one-to-many
-                  class="edu.wustl.catissuecore.domain.DistributedItem"
-              />
-        </set>
-
-        <property
-            name="activityStatus"
-            type="string"
-            update="true"
-            insert="true"
-            column="ACTIVITY_STATUS"
-            length="50"
-        />
-
-        </joined-subclass>
-        <joined-subclass
             name="edu.wustl.catissuecore.domain.FrozenEventParameters"
             table="CATISSUE_FROZEN_EVENT_PARAM"
             dynamic-update="false"

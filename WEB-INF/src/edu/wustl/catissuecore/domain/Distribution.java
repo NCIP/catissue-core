@@ -23,8 +23,7 @@ import edu.wustl.common.util.logger.Logger;
 
 /**
  * An event that results in transfer of a specimen from a Repository to a Laboratory.
- * @hibernate.joined-subclass table="CATISSUE_DISTRIBUTION"
- * @hibernate.joined-subclass-key column="IDENTIFIER" 
+ * @hibernate.class table="CATISSUE_DISTRIBUTION"
  * @author Mandar Deshmukh
  */
 public class Distribution extends SpecimenEventParameters implements java.io.Serializable
@@ -68,6 +67,15 @@ public class Distribution extends SpecimenEventParameters implements java.io.Ser
 	
 	// ---- Method Section
 
+	/**
+	 * @hibernate
+	 * @see #setParticipant(Site)
+     */
+//	public Specimen getSpecimen() 
+//	{
+//		return specimen;
+//	}
+	
 	/**
 	 * Returns the destination/target Site of the Distribution.
 	 * @hibernate.many-to-one column="TO_SITE_ID" 
