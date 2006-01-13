@@ -564,73 +564,134 @@ public class UserForm extends AbstractActionForm
      */
     public void setAllValues(AbstractDomainObject abstractDomain)
     {
-        try
+        if (Constants.PAGEOF_CHANGE_PASSWORD.equals(pageOf) == false)
         {
-            if (Constants.PAGEOF_CHANGE_PASSWORD.equals(pageOf) == false)
+            User user = (User) abstractDomain;
+            
+            this.systemIdentifier = user.getSystemIdentifier().longValue();
+            this.lastName = user.getLastName();
+            this.firstName = user.getFirstName();
+            this.institutionId = user.getInstitution().getSystemIdentifier()
+                    .longValue();
+            this.emailAddress = user.getEmailAddress();
+            this.departmentId = user.getDepartment().getSystemIdentifier()
+                    .longValue();
+            this.cancerResearchGroupId = user.getCancerResearchGroup()
+            		.getSystemIdentifier().longValue();
+            
+            this.street = user.getAddress().getStreet();
+            this.city = user.getAddress().getCity();
+            this.state = user.getAddress().getState();
+            this.country = user.getAddress().getCountry();
+            this.zipCode = user.getAddress().getZipCode();
+            this.phoneNumber = user.getAddress().getPhoneNumber();
+            this.faxNumber = user.getAddress().getFaxNumber();
+            
+            //Populate the activity status, comments and role for approve user and user edit.  
+            if ((getFormId() == Constants.APPROVE_USER_FORM_ID) || 
+                    ((pageOf != null) && (Constants.PAGEOF_USER_ADMIN.equals(pageOf))))
             {
-                User user = (User) abstractDomain;
+                this.activityStatus = user.getActivityStatus();
+                this.comments = user.getComments();
+                this.role = user.getRoleId();
                 
-                this.systemIdentifier = user.getSystemIdentifier().longValue();
-                this.lastName = user.getLastName();
-                this.firstName = user.getFirstName();
-                this.institutionId = user.getInstitution().getSystemIdentifier()
-                        .longValue();
-                this.emailAddress = user.getEmailAddress();
-                this.departmentId = user.getDepartment().getSystemIdentifier()
-                        .longValue();
-                this.cancerResearchGroupId = user.getCancerResearchGroup()
-                		.getSystemIdentifier().longValue();
-                
-                this.street = user.getAddress().getStreet();
-                this.city = user.getAddress().getCity();
-                this.state = user.getAddress().getState();
-                this.country = user.getAddress().getCountry();
-                this.zipCode = user.getAddress().getZipCode();
-                this.phoneNumber = user.getAddress().getPhoneNumber();
-                this.faxNumber = user.getAddress().getFaxNumber();
-                
-                //Populate the activity status, comments and role for approve user and user edit.  
-                if ((getFormId() == Constants.APPROVE_USER_FORM_ID) || 
-                        ((pageOf != null) && (Constants.PAGEOF_USER_ADMIN.equals(pageOf))))
+                if (getFormId() == Constants.APPROVE_USER_FORM_ID)
                 {
-                    this.activityStatus = user.getActivityStatus();
-                    this.comments = user.getComments();
-                    this.role = user.getRoleId();
-                    
-                    if (getFormId() == Constants.APPROVE_USER_FORM_ID)
+                    this.status = user.getActivityStatus();
+                    if (activityStatus.equals(Constants.ACTIVITY_STATUS_ACTIVE))
                     {
-                        this.status = user.getActivityStatus();
-                        if (activityStatus.equals(Constants.ACTIVITY_STATUS_ACTIVE))
-                        {
-                            this.status = Constants.APPROVE_USER_APPROVE_STATUS;
-                        }
-                        else if (activityStatus.equals(Constants.ACTIVITY_STATUS_CLOSED))
-                        {
-                            this.status = Constants.APPROVE_USER_REJECT_STATUS;
-                        }
-                        else if (activityStatus.equals(Constants.ACTIVITY_STATUS_NEW))
-                        {
-                            this.status = Constants.APPROVE_USER_PENDING_STATUS;
-                        }
+                        this.status = Constants.APPROVE_USER_APPROVE_STATUS;
                     }
-                }
-                
-                if (Constants.PAGEOF_USER_ADMIN.equals(pageOf))
-                {
-                    this.setCsmUserId(user.getCsmUserId());
+                    else if (activityStatus.equals(Constants.ACTIVITY_STATUS_CLOSED))
+                    {
+                        this.status = Constants.APPROVE_USER_REJECT_STATUS;
+                    }
+                    else if (activityStatus.equals(Constants.ACTIVITY_STATUS_NEW))
+                    {
+                        this.status = Constants.APPROVE_USER_PENDING_STATUS;
+                    }
                 }
             }
             
-            Logger.out.debug("this.activityStatus............."+this.activityStatus);
-            Logger.out.debug("this.comments"+this.comments);
-            Logger.out.debug("this.role"+this.role);
-            Logger.out.debug("this.status"+this.status);
-            Logger.out.debug("this.csmUserid"+this.csmUserId);
+            if (Constants.PAGEOF_USER_ADMIN.equals(pageOf))
+            {
+                this.setCsmUserId(user.getCsmUserId());
+            }
         }
-        catch (Exception excp)
+        
+        Logger.out.debug("this.activityStatus............."+this.activityStatus);
+        Logger.out.debug("this.comments"+this.comments);
+        Logger.out.debug("this.role"+this.role);
+        Logger.out.debug("this.status"+this.status);
+        Logger.out.debug("this.csmUserid"+this.csmUserId);
+    }
+    
+    public void setAllVal(Object obj)
+    {
+        this.pageOf=Constants.PAGEOF_USER_ADMIN;
+        
+        if (Constants.PAGEOF_CHANGE_PASSWORD.equals(pageOf) == false)
         {
-            Logger.out.error(excp.getMessage());
+            edu.wustl.catissuecore.domainobject.User user = (edu.wustl.catissuecore.domainobject.User) obj;
+            
+            this.systemIdentifier = user.getId().longValue();
+            this.lastName = user.getLastName();
+            this.firstName = user.getFirstName();
+            this.institutionId = user.getInstitution().getId()
+                    .longValue();
+            this.emailAddress = user.getEmailAddress();
+            this.departmentId = user.getDepartment().getId()
+                    .longValue();
+            this.cancerResearchGroupId = user.getCancerResearchGroup()
+            		.getId().longValue();
+            
+            this.street = user.getAddress().getStreet();
+            this.city = user.getAddress().getCity();
+            this.state = user.getAddress().getState();
+            this.country = user.getAddress().getCountry();
+            this.zipCode = user.getAddress().getZipCode();
+            this.phoneNumber = user.getAddress().getPhoneNumber();
+            this.faxNumber = user.getAddress().getFaxNumber();
+             
+            //Populate the activity status, comments and role for approve user and user edit.  
+            if ((getFormId() == Constants.APPROVE_USER_FORM_ID) || 
+                    ((pageOf != null) && (Constants.PAGEOF_USER_ADMIN.equals(pageOf))))
+            {
+                this.activityStatus = user.getActivityStatus();
+                this.comments = user.getComments();
+//                this.role = user.getRoleId();
+//              remove following line later... Hard-Coded value for Role as getRoleId() is not available for edu.wustl.catissuecore.domainobject.User
+                this.role = "2"; 
+                
+                if (getFormId() == Constants.APPROVE_USER_FORM_ID)
+                {
+                    this.status = user.getActivityStatus();
+                    if (activityStatus.equals(Constants.ACTIVITY_STATUS_ACTIVE))
+                    {
+                        this.status = Constants.APPROVE_USER_APPROVE_STATUS;
+                    }
+                    else if (activityStatus.equals(Constants.ACTIVITY_STATUS_CLOSED))
+                    {
+                        this.status = Constants.APPROVE_USER_REJECT_STATUS;
+                    }
+                    else if (activityStatus.equals(Constants.ACTIVITY_STATUS_NEW))
+                    {
+                        this.status = Constants.APPROVE_USER_PENDING_STATUS;
+                    }
+                }
+            }
+            
+            if (Constants.PAGEOF_USER_ADMIN.equals(pageOf))
+            {
+                this.setCsmUserId(user.getCsmUserId());
+            }
         }
+        
+        Logger.out.debug("this.activityStatus............."+this.activityStatus);
+        Logger.out.debug("this.comments"+this.comments);
+        Logger.out.debug("this.role"+this.role);
+        Logger.out.debug("this.status"+this.status);
+        Logger.out.debug("this.csmUserid"+this.csmUserId);
     }
     
     /**
