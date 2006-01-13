@@ -60,6 +60,18 @@ public class Distribution extends SpecimenEventParameters implements java.io.Ser
 	{
 	}
 	
+	/**
+     * Returns System generated unique systemIdentifier.
+     * @return System generated unique systemIdentifier.
+     * @see #setSystemIdentifier(Integer)
+     * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"
+     * unsaved-value="null" generator-class="native"
+     * @hibernate.generator-param name="sequence" value="CATISSUE_DISTRIBUTION_SEQ" 
+     */
+	public Long getSystemIdentifier()
+	{
+		return systemIdentifier;
+	}
 	public Distribution(AbstractActionForm form)
 	{
 		setAllValues(form);
