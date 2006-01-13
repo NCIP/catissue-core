@@ -223,7 +223,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 		if(protocolEventCollection != null)
 		{
 			List eventList = new ArrayList(protocolEventCollection);
-			Collections.sort(eventList);
+//			Collections.sort(eventList);
 			protocolEventCollection = eventList;
 			
 			values = new HashMap();
@@ -246,7 +246,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 				Logger.out.debug("In Form keyCPESystemIdentifier..............."+values.get(keyCPESystemIdentifier));
 				Collection specimenRequirementCollection = cpEvent.getSpecimenRequirementCollection();
 				
-				populateSpecimenRequirement(specimenRequirementCollection, i);
+				populateDomainObjectSpecimenRequirement(specimenRequirementCollection, i);
 				
 				i++;
 			}
@@ -330,6 +330,79 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 					values.put(key1,"Fluid");
 					values.put(key2,Constants.UNIT_ML);
 					values.put(key6,Utility.toString(((FluidSpecimenRequirement)requirement).getQuantityInMilliliter()));
+				}
+				
+				j++;
+			}
+			
+			innerCounter = specimenRequirementCollection.size();
+		}
+		
+		//At least one inner row should be displayed in ADD MORE therefore
+		if(innerCounter == 0)
+			innerCounter = 1;
+		
+		String innerCounterKey = String.valueOf(counter);
+		innerLoopValues.put(innerCounterKey,String.valueOf(innerCounter));
+	}
+	
+	/**
+	 *This method populates Specimen Requirements objects of edu.wustl.catissuecore.domainobject.SpecimenRequirement
+	 */
+	private void populateDomainObjectSpecimenRequirement(Collection specimenRequirementCollection, int counter)
+	{
+	    int innerCounter = 0;
+		if(specimenRequirementCollection != null)
+		{
+			int j = 1;
+
+			Iterator iterator = specimenRequirementCollection.iterator();
+			while(iterator.hasNext())
+			{
+			    edu.wustl.catissuecore.domainobject.SpecimenRequirement requirement = (edu.wustl.catissuecore.domainobject.SpecimenRequirement)iterator.next();
+				
+				String key1 = "CollectionProtocolEvent:" + counter + "_SpecimenRequirement:" + j +"_specimenClass";
+				String key3 = "CollectionProtocolEvent:" + counter + "_SpecimenRequirement:" + j +"_specimenType";
+				String key4 = "CollectionProtocolEvent:" + counter + "_SpecimenRequirement:" + j +"_tissueSite";
+				String key5 = "CollectionProtocolEvent:" + counter + "_SpecimenRequirement:" + j +"_pathologyStatus";
+				String key6 = "CollectionProtocolEvent:" + counter + "_SpecimenRequirement:" + j +"_quantityIn";
+				String key7 = "CollectionProtocolEvent:" + counter + "_SpecimenRequirement:" + j +"_systemIdentifier";
+				String key2 = "CollectionProtocolEvent:" + counter + "_SpecimenRequirement:" + j +"_unitspan";
+				
+				values.put(key3,requirement.getSpecimenType());
+				values.put(key4,requirement.getTissueSite());
+				values.put(key5,requirement.getPathologyStatus());
+				values.put(key7,Utility.toString(requirement.getId()));
+				
+				if(requirement instanceof edu.wustl.catissuecore.domainobject.TissueSpecimenRequirement)
+				{
+					values.put(key1,"Tissue");
+					values.put(key2,Constants.UNIT_GM);
+					String tissueType = requirement.getSpecimenType();
+					if(tissueType.equalsIgnoreCase(Constants.SLIDE) || tissueType.equalsIgnoreCase(Constants.PARAFFIN_BLOCK) || tissueType.equalsIgnoreCase(Constants.FROZEN_BLOCK) )
+					{
+						values.put(key6,Utility.toString(new Integer(((edu.wustl.catissuecore.domainobject.TissueSpecimenRequirement) requirement).getQuantityInGram().intValue())));
+					}
+					else
+						values.put(key6,Utility.toString(((edu.wustl.catissuecore.domainobject.TissueSpecimenRequirement)requirement).getQuantityInGram()));
+				}
+				else if(requirement instanceof edu.wustl.catissuecore.domainobject.CellSpecimenRequirement)
+				{
+					values.put(key1,"Cell");
+					values.put(key2,Constants.UNIT_CC);
+					values.put(key6,Utility.toString(((edu.wustl.catissuecore.domainobject.CellSpecimenRequirement)requirement).getQuantityInCellCount()));
+				}
+				else if(requirement instanceof edu.wustl.catissuecore.domainobject.MolecularSpecimenRequirement)
+				{
+					values.put(key1,"Molecular");
+					values.put(key2,Constants.UNIT_MG);
+					values.put(key6,Utility.toString(((edu.wustl.catissuecore.domainobject.MolecularSpecimenRequirement)requirement).getQuantityInMicrogram()));
+				}
+				else if(requirement instanceof edu.wustl.catissuecore.domainobject.FluidSpecimenRequirement)
+				{
+					values.put(key1,"Fluid");
+					values.put(key2,Constants.UNIT_ML);
+					values.put(key6,Utility.toString(((edu.wustl.catissuecore.domainobject.FluidSpecimenRequirement)requirement).getQuantityInMilliliter()));
 				}
 				
 				j++;
