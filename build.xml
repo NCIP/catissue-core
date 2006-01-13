@@ -12,13 +12,11 @@
     <property name="build.dir" value="${base.dir}/build"/>
     <property name="applet.dir" value="${base.dir}/Applet"/>
 	<property name="hbm.dir" value="${src.dir}/edu/wustl/catissuecore/hbm"/>
-	<property name="tomcat.dir" value="CATALINA_HOME"/>
 	<property name="deploy.dir" value="E:\Program_Files\jboss-4.0.0\server\default\deploy"/>
 	<property name="extra_lib.dir" value="${base.dir}/extra_lib"/>
 	<property name="mysql.dir" value="${base.dir}/SQL/MySql"/>
 	<property name="oracle.dir" value="${base.dir}/SQL/Oracle"/>
 	<property name="common.dir" value="${base.dir}/SQL/Common"/>
-		
     <property name="generateforce" value="true"/>
     
 	<path id="app.classpath">
@@ -29,7 +27,6 @@
 	
 	<path id="xdoclet.classpath">
 		<path refid="app.classpath"/>
-
         <pathelement location="${extra_lib.dir}/commons-net-1.2.2.jar"/>
 		<pathelement location="${extra_lib.dir}/hibernate-tools.jar"/>
 		<pathelement location="${extra_lib.dir}/servlet-api.jar"/>
@@ -41,10 +38,6 @@
 		<pathelement location="${extra_lib.dir}/xsdlib.jar"/>
 	</path>
 	
-    <!--Build the complete project-->
-    <!--target name="build" depends="compile,generateHBM,copy-resources,buildjar,createExe">
-    </target-->
-	
 	<!-- sub tasks -->    
 	<target name="init">
     	<!-- Create the time stamp -->
@@ -54,20 +47,6 @@
 	    <mkdir dir="${build.dir}"/>
   	</target>
   	
-	<target name="FTPUpload" description="Upload the build file to ftp server">
-		<ftp server="paftp.persistent.co.in" userid="washu" password="washu123"
-		   	 remotedir = "/catissuecore/" action = "put"			
-			 binary="yes" passive="no">
-	    		<fileset dir="${build.dir}"/>
-		</ftp>
-	</target>
-	
-	<target name="TarApp" depends="init">
-		<tar destfile="${build.dir}/catissuecore.tar"
-	      	 basedir="${base.dir}"
-	      	 excludes="**/catissuecore.tar,**/build/"/>
-	</target> 
-	
 	<target name="WarApp" depends="init,Appletjar">
 		<delete file="catissuecore.war"/>
 		<war destfile="catissuecore.war" webxml="WEB-INF/web.xml">
@@ -88,31 +67,15 @@
             	<include name="*.jar"/>
         	</lib-->
 		</war>
-		<delete file="E:\Program_Files\jboss-4.0.0\server\default\deploy\catissuecore.war"/>
+		<delete file="E:\Program_Files\jboss-4.0.0RC\server\default\deploy\catissuecore.war"/>
 		 
-		<copy file="catissuecore.war" todir="E:\Program_Files\jboss-4.0.0\server\default\deploy"/>
+		<copy file="catissuecore.war" todir="E:\Program_Files\jboss-4.0.0RC\server\default\deploy"/>
 		<sleep seconds="2"/>
 	</target>
 
 
 	
-	<target name="AppSetup" depends="compile,TarApp,FTPUpload">
-		</target>
-<!--includes="**css/*,**/images/*,**/jss/*,**/pages/*,**/WEB-INF/*,*.jsp"-->
-	<target name="StartTomcat">
-	    <echo>"${tomcat.dir}"/</echo>
-  	</target>
-
-	<target name="imvishnu">
-	  <sshexec host="im-vishnu.wustl.edu"
-		username="clususer"
-		password="cl~user4vishnu"
-		command="pwd"/>
-	</target>
-	
-	
-	
-    		<!-- Compile all files, generated and hand-written -->
+    <!-- Compile all files, generated and hand-written -->
     <target name="compile" depends="init">
         <javac destdir="${target.dir}" includes="**/*.*" includeAntRuntime="false">
             <src path="${src.dir}"/>
@@ -124,23 +87,6 @@
         </javac>
     </target>
     
-    <!--Copy required resources-->
-    <!--target name="copy-resources">
-        <copy todir="${target.dir}">
-        <fileset dir="${src.dir}">
-            <exclude name="**/*.java"/>
-        </fileset>
-    	</copy>
-    </target-->
-    
-	
-	
-	<!-- sshexec host="somehost"
-		username="dude"
-		password="yo"
-		command="touch somefile"/-->
-
-	
     <!-- Create the application JAR -->
     <target name="buildjar" depends="compile" >
         <delete>
@@ -208,23 +154,6 @@
     </target>
 	<!-- Create the Applet JAR Ends-->
     
-    <!--Create executable required Structure-->
-    <!--target name="createExe">
-	    <copy todir="${build.dir}">
-        	<fileset dir="${base.dir}">
-            	<include name="hibernate.properties"/>
-        	</fileset>
-    	</copy>
-		
-    	<copy todir="${base.dir}/${icons.dir}">
-    		<fileset dir="${icons.dir}"/>
-    	</copy>
-    	
-    	<copy todir="${base.dir}/${lib.dir}">
-    		<fileset dir="${lib.dir}"/>
-    	</copy>
-    </target-->
- 
     <target name="generateHBM" description="Generates Hibernate class descriptor files.">
     	<!-- Define the hibernatedoclet task -->    	
     	<taskdef name="hibernatedoclet" classname="xdoclet.modules.hibernate.HibernateDocletTask">
@@ -265,11 +194,10 @@
         </delete>
     </target>
 
-	<!--Not Complete, YET TO DO-->
 	<!--target name="Genrate-Schema" depends="buildjar, generateHBM"-->
 	<target name="Genrate-Schema" depends="buildjar">
     	<java classname="edu.wustl.common.util.dbManager.GenerateSchema">
-    		<arg value="true"/>	
+    		<arg value="false"/>	
             <classpath>
 	            <pathelement location="${build.dir}/catissuecore.jar"/>
             	<fileset dir="${lib.dir}">
@@ -278,80 +206,49 @@
             </classpath>       
       	</java>
     </target>
+
 	<target name="DBInitialized_MySQL">
 	    	<sql
 				driver="org.gjt.mm.mysql.Driver"
 			    url="jdbc:mysql://localhost:3306/catissuecoretest"
 			    userid="root"
-			    password="mysql123" 
+			    password="" 
 	    		onerror="continue">
 			  <transaction  src="${mysql.dir}/catissuecore.sql"/>
-			  <transaction  src="${mysql.dir}/InitDB_CreateTable.sql"/>
+   			  <transaction  src="${mysql.dir}/csm_catissuecore.sql"/>	
+	    	  <transaction  src="${mysql.dir}/InitDB_CreateTable.sql"/>
+	    	  <transaction  src="${common.dir}/AlterTable.sql"/>
 			  <transaction  src="${common.dir}/initDB_Insert_Common.sql"/>
-			  <transaction  src="${common.dir}/AlterTable.sql"/>
+			  
 			  <transaction  src="${common.dir}/CDE_DummyData_Common.sql"/>
-			  <transaction  src="${mysql.dir}/csm_catissuecore.sql"/>
+			  
 			  <classpath>
 	            <fileset dir="${lib.dir}">
 	                  <include name="*.jar"/>
 	              </fileset>
 	            </classpath> 
 			</sql>
-	  	</target>
-		<target name="DBInitialized_Oracle">
-		    	<sql
-					driver="oracle.jdbc.driver.OracleDriver"
-				    url="jdbc:oracle:thin:@miramar.persistent.co.in:1521:chipdb"
-				    userid="catissue_core"
-				    password="catissue_core" 
-		    		onerror="continue">
-				  <transaction  src="${oracle.dir}/catissuecore.sql"/>
-				  <transaction  src="${oracle.dir}/InitDB_CreateTable.sql"/>
-				  <transaction  src="${common.dir}/initDB_Insert_Common.sql"/>
-				  <transaction  src="${common.dir}/AlterTable.sql"/>
-				  <transaction  src="${common.dir}/CDE_DummyData_Common.sql"/>
-				  <transaction  src="${oracle.dir}/CSM_Create_Oracle.sql"/>
-		    	  <transaction  src="${oracle.dir}/CSM_InsertData_Oracle.sql"/>	
-		   		  <transaction  src="${oracle.dir}/CSM_AddConstraints_Oracle.sql"/>
-				  <classpath>
-		            <fileset dir="${lib.dir}">
-		                  <include name="*.jar"/>
-		              </fileset>
-		            </classpath> 
-				</sql>
-		  	</target>
-	<!--target name="DBImport" depends="Genrate-Schema">
-    	<java classname="edu.wustl.lims.db.DBImportUtil">
-    		<classpath refid="eclipse.classpath"/>
-            <classpath>
-	            <pathelement location="${LIMSPlugin.dir}/lims.jar"/>
-            	
-            	<fileset dir="${lib.dir}">
+	</target>
+	<target name="DBInitialized_Oracle">
+    	<sql
+			driver="oracle.jdbc.driver.OracleDriver"
+		    url="jdbc:oracle:thin:@miramar.persistent.co.in:1521:chipdb"
+		    userid="catissue_core"
+		    password="catissue_core" 
+    		onerror="continue">
+		  <transaction  src="${oracle.dir}/catissuecore.sql"/>
+		  <transaction  src="${oracle.dir}/InitDB_CreateTable.sql"/>
+		  <transaction  src="${common.dir}/initDB_Insert_Common.sql"/>
+		  <transaction  src="${common.dir}/AlterTable.sql"/>
+		  <transaction  src="${common.dir}/CDE_DummyData_Common.sql"/>
+		  <transaction  src="${oracle.dir}/CSM_Create_Oracle.sql"/>
+    	  <transaction  src="${oracle.dir}/CSM_InsertData_Oracle.sql"/>	
+   		  <transaction  src="${oracle.dir}/CSM_AddConstraints_Oracle.sql"/>
+		  <classpath>
+            <fileset dir="${lib.dir}">
                   <include name="*.jar"/>
               </fileset>
-            </classpath>       
-      	</java>
-    </target-->
-    
-	<!--target name="GenerateDB" depends="DBImport">
-    </target-->
-      		
-    <!--target name="schemaexport">
-    	<taskdef name="schemaexport" classname="net.sf.hibernate.tool.hbm2ddl.SchemaExportTask">
-	    	<classpath>
-		   		<pathelement path="${target.dir}"/>
-            	<fileset dir="${lib.dir}">
-                	  <include name="*.jar"/>
-                	  <include name="*.class"/>
-	            </fileset>
-    	 	</classpath>       
-   		</taskdef>
-    
-    	<schemaexport properties="hibernate.properties"
-        		quiet="yes" text="no" drop="no" delimiter=";" output="schema-export.sql">
-        	<fileset dir="./bin">
-            	<include name="*.hbm.xml"/>
-        	</fileset>
-    	</schemaexport>
-	</target-->
+            </classpath> 
+		</sql>
+	</target>
 </project>
