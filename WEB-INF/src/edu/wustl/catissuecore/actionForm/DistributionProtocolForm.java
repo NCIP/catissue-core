@@ -189,9 +189,17 @@ public class DistributionProtocolForm extends SpecimenProtocolForm
 				
 				if(requirement instanceof edu.wustl.catissuecore.domainobject.TissueSpecimenRequirement)
 				{
-					values.put(key1,"Tissue");
+				    values.put(key1,"Tissue");
 					values.put(key2,Constants.UNIT_GM);
-					values.put(key6,String.valueOf(((edu.wustl.catissuecore.domainobject.TissueSpecimenRequirement)requirement).getQuantityInGram()));
+					
+					String tissueType = requirement.getSpecimenType();
+					if(tissueType.equalsIgnoreCase(Constants.SLIDE) || tissueType.equalsIgnoreCase(Constants.PARAFFIN_BLOCK)
+							|| tissueType.equalsIgnoreCase(Constants.FROZEN_BLOCK) )
+					{
+						values.put(key6,Utility.toString(new Integer(((edu.wustl.catissuecore.domainobject.TissueSpecimenRequirement) requirement).getQuantityInGram().intValue())));
+					}
+					else
+						values.put(key6,String.valueOf(((edu.wustl.catissuecore.domainobject.TissueSpecimenRequirement)requirement).getQuantityInGram()));
 				}
 				else if(requirement instanceof edu.wustl.catissuecore.domainobject.CellSpecimenRequirement)
 				{
