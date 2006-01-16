@@ -132,19 +132,29 @@ PUBLIC
                     type="org.apache.struts.actions.ForwardAction"
                     parameter=".catissuecore.searchHomeDef" />
 	-->				
-                    
+    
+        <action path="/Summary" type="edu.wustl.catissuecore.action.SummaryAction">
+            <forward name="success" path=".catissuecore.summaryHomeDef" />
+            <forward name="failure" path=".catissuecore.homePageDef" />
+		</action>
+
+<!--
 		 <action path="/Summary"
                     type="org.apache.struts.actions.ForwardAction"
                     parameter=".catissuecore.summaryHomeDef" />
-                    
+-->                    
          <action path="/Help"
                     type="org.apache.struts.actions.ForwardAction"
                     parameter=".catissuecore.helpHomeDef" />
                     
          <action path="/LoggedInSummary"
-                    type="org.apache.struts.actions.ForwardAction"
-                    parameter=".catissuecore.summaryLoggedInDef" />
+            type="edu.wustl.catissuecore.action.SummaryAction">
+            <forward name="success" path=".catissuecore.summaryHomeDef" />
+            <forward name="failure" path=".catissuecore.homePageDef" />
+		 </action>
                     
+            
+  
          <action path="/LoggedInHelp"
                     type="org.apache.struts.actions.ForwardAction"
                     parameter=".catissuecore.helpLoggedInDef" />
