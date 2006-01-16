@@ -274,16 +274,16 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 		String whereColumnName[] = {"collectionProtocol."+Constants.SYSTEM_IDENTIFIER, "protocolParticipantIdentifier"};
 		String whereColumnCondition[];// = {"=","!="};
 		Object[] whereColumnValue;// = {new Long(protocolID),"null"};
-		if(Variables.databaseName.equals(Constants.MYSQL_DATABASE))
-		{
+//		if(Variables.databaseName.equals(Constants.MYSQL_DATABASE))
+//		{
 			whereColumnCondition = new String[]{"=","!="};
 			whereColumnValue = new Object[]{new Long(protocolID),"null"};
-		}
-		else
-		{
-			whereColumnCondition = new String[]{"=","!=null"};
-			whereColumnValue = new Object[]{new Long(protocolID),""};
-		}
+//		}
+//		else
+//		{
+//			whereColumnCondition = new String[]{"=","!=null"};
+//			whereColumnValue = new Object[]{new Long(protocolID),""};
+//		}
 		
 		String joinCondition = Constants.AND_JOIN_CONDITION;
 		String separatorBetweenFields = "";
