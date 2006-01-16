@@ -27,6 +27,7 @@ import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.logger.Logger;
 
@@ -107,7 +108,7 @@ public class StorageContainerAction  extends SecureAction
             		storageContainerForm.setOneDimensionCapacity(type.getDefaultStorageCapacity().getOneDimensionCapacity().intValue());
             		storageContainerForm.setTwoDimensionCapacity(type.getDefaultStorageCapacity().getTwoDimensionCapacity().intValue());
             		storageContainerForm.setOneDimensionLabel(type.getOneDimensionLabel());
-            		storageContainerForm.setTwoDimensionLabel(type.getTwoDimensionLabel());
+            		storageContainerForm.setTwoDimensionLabel(Utility.toString(type.getTwoDimensionLabel()));
             	}
             }
             else
@@ -134,7 +135,7 @@ public class StorageContainerAction  extends SecureAction
         	    Logger.out.debug("storageContainerForm.getTypeId()......................."+storageContainerForm.getTypeId());
         		startNumber = bizLogic.getNextContainerNumber(Long.parseLong(request.getParameter("parentContainerId")),storageContainerForm.getTypeId(),false);
         	}
-        	
+        	Logger.out.debug("Start Number : " + startNumber); 
         	storageContainerForm.setStartNumber(String.valueOf(startNumber));
     	}     
         	
