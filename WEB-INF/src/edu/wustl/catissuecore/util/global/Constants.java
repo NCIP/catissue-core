@@ -1450,4 +1450,19 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String STORAGE_CONTAINER_DIM_TWO_LABEL = "twoDimLabel";
 	
 	public static final String NULL = "NULL";
+	
+	
+//    public static final String SPECIMEN_TYPE_TISSUE = "Tissue";
+//    public static final String SPECIMEN_TYPE_FLUID = "Fluid";
+//    public static final String SPECIMEN_TYPE_CELL = "Cell";
+//    public static final String SPECIMEN_TYPE_MOL = "Molecular";
+    public static final String SPECIMEN_TYPE_COUNT = "Count";
+    public static final String SPECIMEN_TYPE_QUANTITY = "Quantity";
+    public static final String SPECIMEN_TYPE_DETAILS = "Details";
+    public static final String SPECIMEN_COUNT = "totalSpecimenCount";
+    public static final String TOTAL = "Total";
+    public static final String SPECIMENS = "Specimens";
+
+    
+
 }
