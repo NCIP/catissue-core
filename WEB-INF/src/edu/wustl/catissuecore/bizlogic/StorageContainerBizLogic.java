@@ -478,27 +478,35 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 	        List listOfSubElement = super.getRelatedObjects(dao, StorageContainer.class, selectColumnNames, whereColumnNames, objectIds);
 
 	        Iterator iterator = listOfSubElement.iterator();
-	        String userName = SecurityManager.getInstance(StorageContainerBizLogic.class).getUserById(userId.toString()).getLoginName();
-	        while (iterator.hasNext())
+	        if (assignToUser == true)
 	        {
-	            Object[] row = (Object[]) iterator.next();
-	            if ((row[0] == null) || (row[0].equals("")))
-	            {
-	                boolean permission = SecurityManager.getInstance(StorageContainerBizLogic.class).checkPermission(userName,Site.class.getName(),row[1].toString(),privilegeName);
-	                if (permission == true)
-	                {
-	                    throw new DAOException("Error : First de-assign privilege of the Parent Site with system identifier "+row[1].toString());
-	                }
-	            }
-	            else
-	            {
-	                boolean permission = SecurityManager.getInstance(StorageContainerBizLogic.class).checkPermission(userName,objectType.getName(),row[0].toString(),privilegeName);
-	                if (permission == true)
-	                {
-	                    throw new DAOException("Error : First de-assign privilege of the Parent Container with system identifier "+row[0].toString());
-	                }
-	            }
+	            String userName = SecurityManager.getInstance(StorageContainerBizLogic.class)
+	            							.getUserById(userId.toString()).getLoginName();
+	            while (iterator.hasNext())
+		        {
+		            Object[] row = (Object[]) iterator.next();
+		            if ((row[0] == null) || (row[0].equals("")))
+		            {
+		                boolean permission = SecurityManager.getInstance(StorageContainerBizLogic.class).checkPermission(userName,Site.class.getName(),row[1].toString(),privilegeName);
+		                if (permission == true)
+		                {
+		                    throw new DAOException("Error : First de-assign privilege of the Parent Site with system identifier "+row[1].toString());
+		                }
+		            }
+		            else
+		            {
+		                boolean permission = SecurityManager.getInstance(StorageContainerBizLogic.class).checkPermission(userName,objectType.getName(),row[0].toString(),privilegeName);
+		                if (permission == true)
+		                {
+		                    throw new DAOException("Error : First de-assign privilege of the Parent Container with system identifier "+row[0].toString());
+		                }
+		            }
+		        }
 	        }
+//	        else
+//	        {
+//	            
+//	        }
 		}
 		
 		super.setPrivilege(dao, privilegeName, objectType, objectIds, userId,
