@@ -930,3 +930,60 @@ td.mainMenuItemSelected{ /* for the selected main menu (top) cells */
   border-bottom:1px solid #5C5C5C; /* constant: dark gray */
 }
 
+/* Summary classes */
+
+.mainTotal{ /* for main total of  specimens */
+  font-family:arial,helvetica,verdana,sans-serif;
+  font-size:0.8em;
+  font-weight:bold;
+  padding-left:0.8em;
+  background-color:#7C7C7C; /* constant: dark gray */
+  color:#FFFFFF; /* constant: white */
+  border-top:1px solid #5C5C5C; /* constant: dark gray */
+  border-left:1px solid #5C5C5C; /* constant: dark gray */
+  border-right:1px solid #5C5C5C; /* constant: dark gray */
+}
+
+.classTotalText{ /* for class total of specimens */
+  font-family:arial,helvetica,verdana,sans-serif;
+  font-size:0.7em;
+  font-weight:bold;
+  padding-left:0.8em;
+  background-color:#F1F1F1; /* constant: medium gray */
+  color:#000000; /* constant: black */
+  border-bottom:1px solid #5C5C5C; /* constant: dark gray */
+  border-right:1px solid #5C5C5C; /* constant: dark gray */
+  text-align:left;
+}
+
+.classTotalData{ /* for class total number of specimens */
+  font-family:arial,helvetica,verdana,sans-serif;
+  font-size:0.7em;
+  font-weight:bold;
+  padding-left:0.8em;
+  background-color:#F1F1F1; /* constant: medium gray */
+  color:#000000; /* constant: black */
+  border-bottom:1px solid #5C5C5C; /* constant: dark gray */
+  text-align:left;
+}
+
+.detailsData{ /* for details of a class of specimens */
+  font-family:arial,helvetica,verdana,sans-serif;
+  font-size:0.7em;
+  padding-left:0.8em;
+  background-color:#D3D3D6; /* constant: medium gray */
+  color:#000000; /* constant: black */
+  border-bottom:1px solid #5C5C5C; /* constant: dark gray */
+  border-right:1px solid #5C5C5C; /* constant: dark gray */
+  text-align:left;
+}
+
+.detailsCount{ /* for details of a class of specimens */
+  font-family:arial,helvetica,verdana,sans-serif;
+  font-size:0.7em;
+  padding-left:0.8em;
+  background-color:#D3D3D6; /* constant: medium gray */
+  color:#000000; /* constant: black */
+  border-bottom:1px solid #5C5C5C; /* constant: dark gray */
+  text-align:left;
+}
