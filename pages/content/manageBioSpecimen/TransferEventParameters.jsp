@@ -169,12 +169,21 @@
 				</label>
 			</td>
 			<td class="formField">
+			<%
+				boolean isReadOnly = true ;
+					if(operation.equals("add"))
+					{
+						isReadOnly = false ;
+					}
+					
+			
+			%>
 				&nbsp;<bean:message key="storageContainer.parentID" />
-     			<html:text styleClass="formFieldSized3" maxlength="10"  styleId="storageContainer" property="storageContainer" />
+     			<html:text styleClass="formFieldSized3" maxlength="10"  styleId="storageContainer" property="storageContainer" readonly="<%=isReadOnly%>" />
      			&nbsp;<bean:message key="storageContainer.positionOne" />
-     			<html:text styleClass="formFieldSized3" maxlength="10"  styleId="positionDimensionOne" property="positionDimensionOne" />
+     			<html:text styleClass="formFieldSized3" maxlength="10"  styleId="positionDimensionOne" property="positionDimensionOne" readonly="<%=isReadOnly%>" />
      			&nbsp;<bean:message key="storageContainer.positionTwo" />
-     			<html:text styleClass="formFieldSized3" maxlength="10"  styleId="positionDimensionTwo" property="positionDimensionTwo" />
+     			<html:text styleClass="formFieldSized3" maxlength="10"  styleId="positionDimensionTwo" property="positionDimensionTwo" readonly="<%=isReadOnly%>" />
 
 				<html:hidden property="positionInStorageContainer" />
 				<%
