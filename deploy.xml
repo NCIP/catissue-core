@@ -1,0 +1,341 @@
+<?xml version ="1.0"?>
+
+<!--Ant Script for create Build for caTISSUE Core-->
+
+<project name="caTISSUE Core Installation" default="Deploy">
+	
+	<!--define require dir and Properties -->	
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
+	<classpath>
+	    <pathelement location="./extra_lib/ant-contrib.jar"/>
+	  </classpath>
+	</taskdef>
+
+	<property file="caTISSUEInstall.properties"/>
+	<property name="base.dir" value="."/>
+	<property name="temp.dir" value="./tempCatissuecore"/>
+    <property name="lib.dir" value="${base.dir}/WEB-INF/lib"/>
+    <property name="mysql.sql.dir" value="${base.dir}/SQL/MySql"/>
+	<property name="oracle.sql.dir" value="${base.dir}/SQL/Oracle"/>
+	<property name="common.sql.dir" value="${base.dir}/SQL/Common"/>
+
+	<!--Change value of arg1 to true if want to create Oracle Table Space-->
+	<condition property="ismysqldb">
+			<equals arg1="mysql" arg2="${database.type}"/>
+	</condition>
+	<condition property="isoracledb">
+				<equals arg1="oracle" arg2="${database.type}"/>
+	</condition>
+		
+	<property name="oracle.dialect.string" value="net.sf.hibernate.dialect.Oracle9Dialect"/>
+	<property name="mysql.dialect.string" value="net.sf.hibernate.dialect.MySQLDialect"/>
+	<!--path id="app.classpath">
+		<fileset dir="${lib.dir}">
+			<include name="*.jar"/>
+		</fileset>
+	</path-->
+	
+
+	<!--Extrct WAR and copy Configuration files to temp directory--> 
+	<target name="init">
+		<echo message="Initializing installation..."/>
+		<copy todir="${temp.dir}/catissuecore-properties" overwrite="true">
+			<fileset dir="${base.dir}/catissuecore-properties"/>
+		</copy>
+		<copy file="catissuecore-ds.xml" todir="${temp.dir}" overwrite="true"/>
+		<!--copy todir="${temp.dir}/SQL" overwrite="true">
+			<fileset dir="${base.dir}/SQL"/>
+		</copy-->
+		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>
+		
+ 	</target>
+	
+	<!--Modify Configuration such as Session Timeout and Admin details-->
+	<target name="ConfigureWar">
+		<echo message="Modifying caTISSUECore Configuration File..."/>
+		<replace dir="${temp.dir}/catissuecore/WEB-INF"> 
+			<include name="src/ApplicationResources.properties"/>
+			<include name="classes/ApplicationResources.properties"/>
+		  <replacefilter 
+		    token="email.administrative.emailAddress=gautam_shetty@persistent.co.in" 
+		    value="email.administrative.emailAddress=${email.administrative.emailAddress}"/>
+		  <replacefilter 
+		    token="email.technicalSupport.emailAddress=gautam_shetty@persistent.co.in" 
+		  	value="email.technicalSupport.emailAddress=${email.technicalSupport.emailAddress}"/>
+		  <replacefilter 
+			token="email.mailServer=www.persistent.co.in" 
+		  	value="email.mailServer=${email.mailServer}"/>	
+		</replace>
+		<replace file="${temp.dir}/catissuecore/WEB-INF/web.xml"> 
+			<replacefilter 
+				token="&lt;session-timeout>10&lt;/session-timeout>" 
+			  	value="&lt;session-timeout>${session.timeout}&lt;/session-timeout>"/>
+		</replace>
+	</target>
+	
+	<!--Modify Configuration For MySQL-->
+	<target name="mysqlConfig">
+		<echo message="Modifying caTISSUECore MySQL specific Configuration File..."/>
+		<replace dir="${temp.dir}/catissuecore-properties" propertyfile="caTISSUEInstall.properties"> 
+	  		<include name="upt.hibernate.cfg.xml"/>
+			<include name="catissuecore.hibernate.cfg.xml"/>
+			<replacefilter 
+				token="@@dialect@@" 
+			  	value="${mysql.dialect.string}"/>
+		</replace>
+		<replace dir="${temp.dir}" propertyfile="caTISSUEInstall.properties"> 
+			<include name="catissuecore-ds.xml"/>
+			<replacefilter 
+				token="@@databaseurl@@" 
+			  	value="jdbc:mysql://${database.host}:${database.port}/${database.name}"/>
+			<replacefilter 
+				token="@@username@@" 
+			  	value="${database.username}"/>
+			<replacefilter 
+				token="@@pasword@@" 
+			  	value="${database.password}"/>
+			<replacefilter 
+				token="@@databasedriver@@" 
+			  	value="org.gjt.mm.mysql.Driver"/>
+		</replace>
+		<replace file="${temp.dir}/catissuecore/WEB-INF/src/hibernate.cfg.xml">
+			<replacefilter 
+				token="${mysql.dialect.string}" 
+			  	value="${mysql.dialect.string}"/>
+		</replace>
+		<replace file="${temp.dir}/catissuecore/WEB-INF/classes/hibernate.cfg.xml">
+			<replacefilter 
+				token="${mysql.dialect.string}" 
+			  	value="${mysql.dialect.string}"/>
+		</replace>
+	</target>
+	
+	<!--Modify Configuration For Oracle-->
+	<target name="oracleConfig">
+		<echo message="Modifying caTISSUECore Oracle specific Configuration File..."/>
+		<replace dir="${temp.dir}/catissuecore-properties" propertyfile="caTISSUEInstall.properties"> 
+	  		<include name="upt.hibernate.cfg.xml"/>
+			<include name="catissuecore.hibernate.cfg.xml"/>
+			<replacefilter 
+				token="@@dialect@@" 
+			  	value="${oracle.dialect.string}"/>
+		</replace>
+		<replace dir="${temp.dir}" propertyfile="caTISSUEInstall.properties"> 
+			<include name="catissuecore-ds.xml"/>
+			<replacefilter 
+				token="@@databaseurl@@" 
+			  	value="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}"/>
+			<replacefilter 
+				token="@@username@@" 
+			  	value="${database.username}"/>
+			<replacefilter 
+				token="@@pasword@@" 
+			  	value="${database.password}"/>
+			<replacefilter 
+				token="@@databasedriver@@" 
+			  	value="oracle.jdbc.driver.OracleDriver"/>
+		</replace>
+		<replace file="${temp.dir}/catissuecore/WEB-INF/src/hibernate.cfg.xml">
+			<replacefilter 
+				token="${mysql.dialect.string}" 
+			  	value="${oracle.dialect.string}"/>
+		</replace>
+		<replace file="${temp.dir}/catissuecore/WEB-INF/classes/hibernate.cfg.xml">
+			<replacefilter 
+				token="${mysql.dialect.string}" 
+			  	value="${oracle.dialect.string}"/>
+		</replace>
+	</target>  
+	
+	<!--Buid New WAR File-->
+	<target name="BuildWar">
+		<echo message="Creating New Web Application Archieve File..."/>
+		<delete file="${temp.dir}/catissuecore.war"/>
+		<war destfile="${temp.dir}/catissuecore.war" webxml="${temp.dir}/catissuecore/WEB-INF/web.xml">
+			<fileset dir="${temp.dir}/catissuecore">
+				<exclude name="**/*build*"/>
+				<exclude name="**/*WEB-INF*"/>
+				<exclude name="**/*servlet.jar*"/>
+				<exclude name="**/*log4j-1.2.9.jar*"/>
+				<exclude name="**/*hibernate2.jar*"/>
+				<exclude name="**/*jta.jar*"/>
+				<exclude name="**/.*"/>
+				<exclude name="**/*.sql"/>
+				<exclude name="**/CVS*"/>
+			</fileset>
+			<!--fileset dir="${base.dir}"/-->
+		  	<!--lib dir="${lib.dir}">
+            	<include name="*.jar"/>
+        	</lib-->
+		</war>
+	</target>
+	
+	<!--Copy WAR and Configuration Files to JBOSS Directory-->
+	<target name="CopyFiles">
+		<echo message="Copying caTISSUECore Application Components..."/>
+		<!--<mkdir dir="${jboss.home.dir}/server/default/catissuecore-properties"/>-->
+		<copy todir="${jboss.home.dir}/server/default/catissuecore-properties" overwrite="true">
+			<fileset dir="${temp.dir}/catissuecore-properties">
+				<include name="**/*"/>
+			</fileset>	
+		</copy>
+<!--		<copy todir="${jboss.home.dir}/server/default/conf">
+  			<fileset dir="${base.dir}">
+   				<include name="**/log4j.xml"/>
+  				<include name="**/login-config.xml"/>
+   			</fileset>
+  		</copy> -->
+		<copy todir="${jboss.home.dir}/server/default/deploy" overwrite="true">
+  			<fileset dir="${temp.dir}">
+  				<include name="catissuecore.war"/>
+  				<include name="catissuecore-ds.xml"/>
+   			</fileset>
+  		</copy>
+<!--		<copy todir="${jboss.home.dir}/server/default/deploy" overwrite="true">
+  			<fileset dir="${base.dir}">
+  				<include name="**/properties-service.xml"/>
+  			</fileset>
+  		</copy> -->
+		<replace dir="${jboss.home.dir}/server/default/catissuecore-properties"> 
+	  		<include name="ApplicationSecurityConfig.xml"/>
+			<replacefilter 
+					token="@@hibernate-config-file@@" 
+				  	value="${jboss.home.dir}/server/default/catissuecore-properties/catissuecore.hibernate.cfg.xml"/>
+		</replace>
+		<!--<if>
+			<equals arg1="oracle" arg2="${database.type}"/>		
+			<then>
+				<move file="${jboss.home.dir}/server/default/deploy/mysql-ds.xml" tofile="${jboss.home.dir}/server/default/deploy/oracle-ds.xml"/>
+			</then>
+		</if>	-->
+  	</target>
+	
+	<!--Target for Deployment -->
+	<target name="Deploy" >
+		<ant antfile="build.xml" target="WarApp"/>
+		<antcall target="init"/>
+		<antcall target="ConfigureWar"/>	
+		<if>
+			<equals arg1="mysql" arg2="${database.type}"/>		
+			<then>
+				<antcall target="mysqlConfig"/>
+			</then>
+			<elseif>	
+				<equals arg1="oracle" arg2="${database.type}"/>		
+				<then>
+					<antcall target="oracleConfig"/>
+				</then>
+			</elseif>	
+		</if>
+		<antcall target="BuildWar"/>
+		<antcall target="CopyFiles"/>
+		<delete dir="${temp.dir}"/>
+	</target>
+	
+	<!--Target for Database Creation-->
+	<target name="DBInitialize">
+		<if>
+			<equals arg1="mysql" arg2="${database.type}"/>		
+			<then>
+				<antcall target="DBInitialized_MySQL"/>
+			</then>
+			<elseif>	
+				<equals arg1="oracle" arg2="${database.type}"/>		
+				<then>
+					<antcall target="DBInitialized_Oracle"/>
+				</then>
+			</elseif>
+			<else>
+				<echo message="DATABASE INITIALIZATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error"/>
+			</else>
+		</if>
+	</target>
+
+	<!--Target call for both Deployment and Database Creation-->
+	<target name="DeployAll">
+		<antcall target="Deploy"/>
+		<antcall target="DBInitialize"/>
+	</target>
+
+	<!--MySQL Database Creation -->
+	<target name="DBInitialized_MySQL" if="ismysqldb">
+		<echo message="Initializing MySQL Database for caTISSUECore Application..."/>
+		<sql
+			driver="org.gjt.mm.mysql.Driver"
+		    url="jdbc:mysql://${database.host}:${database.port}/${database.name}"
+		    userid="${database.username}"
+		    password="${database.password}" 
+			onerror="continue">
+			<transaction  src="${mysql.sql.dir}/catissuecore.sql"/>
+			<transaction  src="${mysql.sql.dir}/InitDB_CreateTable.sql"/>
+			<transaction  src="${common.sql.dir}/initDB_Insert_Common.sql"/>
+			<transaction  src="${common.sql.dir}/AlterTable.sql"/>
+			<transaction  src="${common.sql.dir}/CDE_DummyData_Common.sql"/>
+			<transaction  src="${mysql.sql.dir}/csm_catissuecore.sql"/>
+			<transaction>commit;</transaction>
+			<classpath>
+			<fileset dir="${lib.dir}">
+			  <include name="*.jar"/>
+			  </fileset>
+			</classpath> 
+		</sql>
+  	</target>
+	
+	<!--Oracle Database Creation -->
+	<target name="DBInitialized_Oracle" if="isoracledb">
+		<echo message="Initializing Oracle Database for caTISSUECore Application..."/>
+		<sql 
+			driver="oracle.jdbc.driver.OracleDriver"
+		    url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}"
+		    userid="${database.username}"
+		    password="${database.password}" 
+    		onerror="continue"
+    		rdbms="oracle">
+		  <transaction  src="${oracle.sql.dir}/catissuecore.sql"/>
+		  <transaction  src="${oracle.sql.dir}/InitDB_CreateTable.sql"/>
+		  <transaction  src="${common.sql.dir}/initDB_Insert_Common.sql"/>
+		  <transaction  src="${common.sql.dir}/AlterTable.sql"/>
+		  <transaction  src="${common.sql.dir}/CDE_DummyData_Common.sql"/>
+		  <transaction  src="${oracle.sql.dir}/CSM_Create_Oracle.sql"/>
+		  <transaction>commit;</transaction>	
+    	  <classpath>
+            <fileset dir="${lib.dir}">
+                  <include name="*.jar"/>
+              </fileset>
+            </classpath> 
+		</sql>
+		<sql
+			driver="oracle.jdbc.driver.OracleDriver"
+		    url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}"
+		    userid="${database.username}"
+		    password="${database.password}" 
+    		onerror="continue"
+    		rdbms="oracle" 
+			delimiter="/"
+		    delimitertype="row"
+		    keepformat="yes">
+		  <transaction  src="${oracle.sql.dir}/CSM_Trigger_Oracle.sql"/>
+		  <classpath>
+            <fileset dir="${lib.dir}">
+                  <include name="*.jar"/>
+              </fileset>
+            </classpath> 
+		</sql>
+		<sql
+			driver="oracle.jdbc.driver.OracleDriver"
+		    url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}"
+		    userid="${database.username}"
+		    password="${database.password}" 
+    		onerror="continue"
+    		rdbms="oracle">
+		  <transaction  src="${oracle.sql.dir}/CSM_InsertData_Oracle.sql"/>	
+   		  <transaction  src="${oracle.sql.dir}/CSM_AddConstraints_Oracle.sql"/>
+		  <transaction>commit;</transaction>	
+		  <classpath>
+            <fileset dir="${lib.dir}">
+                  <include name="*.jar"/>
+              </fileset>
+            </classpath> 
+		</sql>
+	</target>
+</project>
