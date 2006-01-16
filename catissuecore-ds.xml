@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<datasources>
+
+	<local-tx-datasource>
+		<jndi-name>catissuecore</jndi-name>
+		<connection-url>@@databaseurl@@</connection-url>
+		<user-name>@@username@@</user-name>
+		<password>@@pasword@@</password>
+		<driver-class>@@databasedriver@@</driver-class>
+		<check-valid-connection-sql>select count(*) from csm_user</check-valid-connection-sql>
+	</local-tx-datasource>
+</datasources>
