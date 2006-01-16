@@ -913,4 +913,107 @@ public class QueryBizLogic extends DefaultBizLogic
         
         return columnList;
     }
+	
+	// For Summary
+    /**
+     * Returns the count of speciman of the type passed.
+     * @param value
+     * @return 
+     * @throws DAOException
+     * @throws ClassNotFoundException
+     */
+    public String getSpecimenTypeCount(String specimanType) throws DAOException, ClassNotFoundException
+    {
+        String prevValueDisplayName = "0";
+        
+        JDBCDAO jdbcDAO = (JDBCDAO)DAOFactory.getDAO(Constants.JDBC_DAO);
+        jdbcDAO.openSession(null);
+        String sql = "select count(*) from CATISSUE_SPECIMEN where SPECIMEN_CLASS='"+specimanType+"'";
+        List list = jdbcDAO.executeQuery(sql,null,false, null);
+        jdbcDAO.closeSession();
+        
+        if (!list.isEmpty())
+        {
+            List rowList = (List)list.get(0);
+            prevValueDisplayName = (String)rowList.get(0);
+        }
+        return prevValueDisplayName;
+    }
+    
+    /**
+     * Returns the count of speciman of the type passed.
+     * @param value
+     * @return 
+     * @throws DAOException
+     * @throws ClassNotFoundException
+     */
+    public String getSpecimenTypeQuantity(String specimanType) throws DAOException, ClassNotFoundException
+    {
+        String prevValueDisplayName = "0";
+        
+        JDBCDAO jdbcDAO = (JDBCDAO)DAOFactory.getDAO(Constants.JDBC_DAO);
+        jdbcDAO.openSession(null);
+        String sql = "select sum(QUANTITY) from CATISSUE_SPECIMEN where SPECIMEN_CLASS='"+specimanType+"'";
+        List list = jdbcDAO.executeQuery(sql,null,false, null);
+        jdbcDAO.closeSession();
+        
+        if (!list.isEmpty())
+        {
+            List rowList = (List)list.get(0);
+            prevValueDisplayName = (String)rowList.get(0);
+        }
+        return prevValueDisplayName;
+    }
+/**
+ * 
+ * @param specimenType Class whose details are to be retrieved
+ * @return Vector of type and count name value bean
+ * @throws DAOException
+ * @throws ClassNotFoundException
+ */
+    public Vector getSpecimenTypeDetailsCount(String specimenType) throws DAOException, ClassNotFoundException
+    {
+        JDBCDAO jdbcDAO = (JDBCDAO)DAOFactory.getDAO(Constants.JDBC_DAO);
+        jdbcDAO.openSession(null);
+//        String sql = "select count(*) from CATISSUE_SPECIMEN where SPECIMEN_CLASS='"+specimanType+"'";
+        String sql = "select type,count(*) from catissue_specimen where specimen_class='"+specimenType+"' group by type order by type";
+        List list = jdbcDAO.executeQuery(sql,null,false, null);
+        jdbcDAO.closeSession();
+        
+        Vector nameValuePairs = new Vector();
+        if (!list.isEmpty())
+        {
+           // Creating name value beans.
+          for (int i = 0; i < list.size(); i++)
+          {
+              List detailList =(List) list.get(i );
+              
+              NameValueBean nameValueBean = new NameValueBean();
+              nameValueBean.setName((String)detailList.get(0 ) );
+              nameValueBean.setValue((String)detailList.get(1 ));
+              Logger.out.debug(i + " : "+nameValueBean.toString() );
+              nameValuePairs.add(nameValueBean);
+          }
+        }
+        return nameValuePairs;
+    }
+
+    public String getTotalSpecimenCount() throws DAOException, ClassNotFoundException
+    {
+        String prevValueDisplayName = "0";
+        
+        JDBCDAO jdbcDAO = (JDBCDAO)DAOFactory.getDAO(Constants.JDBC_DAO);
+        jdbcDAO.openSession(null);
+        String sql = "select count(*) from CATISSUE_SPECIMEN";
+        List list = jdbcDAO.executeQuery(sql,null,false, null);
+        jdbcDAO.closeSession();
+        
+        if (!list.isEmpty())
+        {
+            List rowList = (List)list.get(0);
+            prevValueDisplayName = (String)rowList.get(0);
+        }
+        return prevValueDisplayName;
+    }
+
   }
