@@ -17,6 +17,9 @@
 	<property name="mysql.dir" value="${base.dir}/SQL/MySql"/>
 	<property name="oracle.dir" value="${base.dir}/SQL/Oracle"/>
 	<property name="common.dir" value="${base.dir}/SQL/Common"/>
+	<property name="oracle.url" value="jdbc:oracle:thin:@miramar.persistent.co.in:1521:chipdb"/>
+	<property name="oracle.user" value="catissue_core"/>
+	<property name="oracle.password" value="catissue_core"/>
     <property name="generateforce" value="true"/>
     
 	<path id="app.classpath">
@@ -229,26 +232,58 @@
 	            </classpath> 
 			</sql>
 	</target>
+
 	<target name="DBInitialized_Oracle">
-    	<sql
-			driver="oracle.jdbc.driver.OracleDriver"
-		    url="jdbc:oracle:thin:@miramar.persistent.co.in:1521:chipdb"
-		    userid="catissue_core"
-		    password="catissue_core" 
-    		onerror="continue">
-		  <transaction  src="${oracle.dir}/catissuecore.sql"/>
-		  <transaction  src="${oracle.dir}/InitDB_CreateTable.sql"/>
-		  <transaction  src="${common.dir}/initDB_Insert_Common.sql"/>
-		  <transaction  src="${common.dir}/AlterTable.sql"/>
-		  <transaction  src="${common.dir}/CDE_DummyData_Common.sql"/>
-		  <transaction  src="${oracle.dir}/CSM_Create_Oracle.sql"/>
-    	  <transaction  src="${oracle.dir}/CSM_InsertData_Oracle.sql"/>	
-   		  <transaction  src="${oracle.dir}/CSM_AddConstraints_Oracle.sql"/>
-		  <classpath>
-            <fileset dir="${lib.dir}">
-                  <include name="*.jar"/>
-              </fileset>
-            </classpath> 
-		</sql>
+			<sql 
+				driver="oracle.jdbc.driver.OracleDriver"
+			    url="${oracle.url}"
+			    userid="${oracle.user}"
+			    password="${oracle.password}" 
+	    		onerror="continue"
+	    		rdbms="oracle">
+			  <transaction  src="${oracle.dir}/catissuecore.sql"/>
+			  <transaction  src="${oracle.dir}/InitDB_CreateTable.sql"/>
+			  <transaction  src="${common.dir}/initDB_Insert_Common.sql"/>
+			  <transaction  src="${common.dir}/AlterTable.sql"/>
+			  <transaction  src="${common.dir}/CDE_DummyData_Common.sql"/>
+			  <transaction  src="${oracle.dir}/CSM_Create_Oracle.sql"/>
+	    	  <classpath>
+	            <fileset dir="${lib.dir}">
+	                  <include name="*.jar"/>
+	              </fileset>
+	            </classpath> 
+			</sql>
+			<sql
+				driver="oracle.jdbc.driver.OracleDriver"
+			    url="${oracle.url}"
+			    userid="${oracle.user}"
+			    password="${oracle.password}" 
+	    		onerror="continue"
+	    		rdbms="oracle" 
+				delimiter="/"
+			    delimitertype="row"
+			    keepformat="yes">
+			  <transaction  src="${oracle.dir}/CSM_Trigger_Oracle.sql"/>
+			  <classpath>
+	            <fileset dir="${lib.dir}">
+	                  <include name="*.jar"/>
+	              </fileset>
+	            </classpath> 
+			</sql>
+			<sql
+				driver="oracle.jdbc.driver.OracleDriver"
+			    url="${oracle.url}"
+			    userid="${oracle.user}"
+			    password="${oracle.password}" 
+	    		onerror="continue"
+	    		rdbms="oracle">
+			  <transaction  src="${oracle.dir}/CSM_InsertData_Oracle.sql"/>	
+	   		  <transaction  src="${oracle.dir}/CSM_AddConstraints_Oracle.sql"/>
+			  <classpath>
+	            <fileset dir="${lib.dir}">
+	                  <include name="*.jar"/>
+	              </fileset>
+	            </classpath> 
+			</sql>
 	</target>
 </project>
