@@ -18,15 +18,6 @@
     <property name="mysql.sql.dir" value="${base.dir}/SQL/MySql"/>
 	<property name="oracle.sql.dir" value="${base.dir}/SQL/Oracle"/>
 	<property name="common.sql.dir" value="${base.dir}/SQL/Common"/>
-
-	<!--Change value of arg1 to true if want to create Oracle Table Space-->
-	<condition property="ismysqldb">
-			<equals arg1="mysql" arg2="${database.type}"/>
-	</condition>
-	<condition property="isoracledb">
-				<equals arg1="oracle" arg2="${database.type}"/>
-	</condition>
-		
 	<property name="oracle.dialect.string" value="net.sf.hibernate.dialect.Oracle9Dialect"/>
 	<property name="mysql.dialect.string" value="net.sf.hibernate.dialect.MySQLDialect"/>
 	<!--path id="app.classpath">
@@ -258,7 +249,7 @@
 	</target>
 
 	<!--MySQL Database Creation -->
-	<target name="DBInitialized_MySQL" if="ismysqldb">
+	<target name="DBInitialized_MySQL">
 		<echo message="Initializing MySQL Database for caTISSUECore Application..."/>
 		<sql
 			driver="org.gjt.mm.mysql.Driver"
@@ -282,7 +273,7 @@
   	</target>
 	
 	<!--Oracle Database Creation -->
-	<target name="DBInitialized_Oracle" if="isoracledb">
+	<target name="DBInitialized_Oracle">
 		<echo message="Initializing Oracle Database for caTISSUECore Application..."/>
 		<sql 
 			driver="oracle.jdbc.driver.OracleDriver"
