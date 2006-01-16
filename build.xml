@@ -12,7 +12,7 @@
     <property name="build.dir" value="${base.dir}/build"/>
     <property name="applet.dir" value="${base.dir}/Applet"/>
 	<property name="hbm.dir" value="${src.dir}/edu/wustl/catissuecore/hbm"/>
-	<property name="deploy.dir" value="E:\Program_Files\jboss-4.0.0\server\default\deploy"/>
+	<property name="deploy.dir" value="E:\Program_Files\jboss-4.0.0RC\server\default\deploy"/>
 	<property name="extra_lib.dir" value="${base.dir}/extra_lib"/>
 	<property name="mysql.dir" value="${base.dir}/SQL/MySql"/>
 	<property name="oracle.dir" value="${base.dir}/SQL/Oracle"/>
@@ -71,7 +71,6 @@
         	</lib-->
 		</war>
 		<delete file="E:\Program_Files\jboss-4.0.0RC\server\default\deploy\catissuecore.war"/>
-		 
 		<copy file="catissuecore.war" todir="E:\Program_Files\jboss-4.0.0RC\server\default\deploy"/>
 		<sleep seconds="2"/>
 	</target>
