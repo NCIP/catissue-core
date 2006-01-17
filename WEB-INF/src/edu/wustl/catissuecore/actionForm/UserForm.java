@@ -20,11 +20,14 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.PasswordManager;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
+import gov.nih.nci.security.authorization.domainobjects.Role;
 
 /**
  * UserForm Class is used to encapsulate all the request parameters passed 
@@ -628,7 +631,10 @@ public class UserForm extends AbstractActionForm
     
     public void setAllVal(Object obj)
     {
-        this.pageOf=Constants.PAGEOF_USER_ADMIN;
+        if(this.operation.equals(Constants.ADD))
+            this.pageOf = Constants.PAGEOF_SIGNUP;
+        else if(this.operation.equals(Constants.EDIT))
+            this.pageOf = Constants.PAGEOF_USER_ADMIN;
         
         if (Constants.PAGEOF_CHANGE_PASSWORD.equals(pageOf) == false)
         {
@@ -659,9 +665,17 @@ public class UserForm extends AbstractActionForm
             {
                 this.activityStatus = user.getActivityStatus();
                 this.comments = user.getComments();
-//                this.role = user.getRoleId();
-//              remove following line later... Hard-Coded value for Role as getRoleId() is not available for edu.wustl.catissuecore.domainobject.User
-                this.role = "2"; 
+                
+                try
+                {
+                    SecurityManager securityManager=SecurityManager.getInstance(this.getClass());
+                    Role role=securityManager.getUserRole(user.getCsmUserId().longValue());
+                    this.role= Utility.toString(role.getId());
+                }
+                catch(Exception e)
+                {
+                    Logger.out.error(e.getMessage(), e);
+                }
                 
                 if (getFormId() == Constants.APPROVE_USER_FORM_ID)
                 {
