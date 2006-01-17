@@ -45,7 +45,7 @@
 			formName = Constants.SPECIMEN_COLLECTION_GROUP_EDIT_ACTION;
 			readOnlyValue=true;
 			if(pageOf.equals(Constants.QUERY))
-				formName = formName + "?pageOf="+pageOf;
+				formName = Constants.QUERY_SPECIMEN_COLLECTION_GROUP_EDIT_ACTION + "?pageOf="+pageOf;
 
 		}
 		else

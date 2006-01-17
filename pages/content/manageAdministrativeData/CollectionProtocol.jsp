@@ -43,7 +43,7 @@
     	formName = Constants.COLLECTIONPROTOCOL_EDIT_ACTION;
         readOnlyValue = false;
 		if(pageOf.equals(Constants.QUERY))
-			formName = formName + "?pageOf="+pageOf;
+			formName = Constants.QUERY_COLLECTION_PROTOCOL_EDIT_ACTION + "?pageOf="+pageOf;
 
     }
     else

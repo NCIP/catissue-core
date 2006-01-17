@@ -24,7 +24,7 @@
 			formName = Constants.PARTICIPANT_EDIT_ACTION;
 			readOnlyValue=true;
 			if(pageOf.equals(Constants.QUERY))
-				formName = formName + "?pageOf="+pageOf;
+				formName = Constants.QUERY_PARTICIPANT_EDIT_ACTION + "?pageOf="+pageOf;
 		}
 		else
 		{
