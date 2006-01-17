@@ -427,9 +427,13 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String PARTICIPANT = "Participant";
 	public static final String ACCESSION = "Accession";
 	public static final String QUERY_PARTICIPANT_SEARCH_ACTION = "QueryParticipantSearch.do?systemIdentifier=";
+	public static final String QUERY_PARTICIPANT_EDIT_ACTION = "QueryParticipantEdit.do";
 	public static final String QUERY_COLLECTION_PROTOCOL_SEARCH_ACTION = "QueryCollectionProtocolSearch.do?systemIdentifier=";
+	public static final String QUERY_COLLECTION_PROTOCOL_EDIT_ACTION = "QueryCollectionProtocolEdit.do";
 	public static final String QUERY_SPECIMEN_COLLECTION_GROUP_SEARCH_ACTION = "QuerySpecimenCollectionGroupSearch.do?systemIdentifier=";
+	public static final String QUERY_SPECIMEN_COLLECTION_GROUP_EDIT_ACTION = "QuerySpecimenCollectionGroupEdit.do";
 	public static final String QUERY_SPECIMEN_SEARCH_ACTION = "QuerySpecimenSearch.do?systemIdentifier=";
+	public static final String QUERY_SPECIMEN_EDIT_ACTION = "QuerySpecimenEdit.do";
 	//public static final String QUERY_ACCESSION_SEARCH_ACTION = "QueryAccessionSearch.do?systemIdentifier=";
 	
 	//Individual view Constants in DataViewAction.
@@ -1248,6 +1252,8 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String RECORD_IDS = "recordIds";
 	public static final String ATTRIBUTES = "attributes";
 	public static final String GROUPS = "groups";
+	public static final String USERS_FOR_USE_PRIVILEGE = "usersForUsePrivilege";
+	public static final String USERS_FOR_READ_PRIVILEGE = "usersForReadPrivilege";
 	public static final String ASSIGN_PRIVILEGES_ACTION = "AssignPrivileges.do";
 	public static final int CONTAINER_IN_ANOTHER_CONTAINER = 2;
 	    /**
@@ -1303,7 +1309,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String DISTRIBUTION_REPORT_NAME = "Distribution Report.csv";
 	public static final String DISTRIBUTION_REPORT_FORM="distributionReportForm";
 	public static final String DISTRIBUTED_ITEMS_DATA = "distributedItemsData";
-	
+	public static final String DISTRIBUTED_ITEM = "DistributedItem";
 	//constants for Simple Query Interface Configuration
 	public static final String CONFIGURE_SIMPLE_QUERY_ACTION = "ConfigureSimpleQuery.do";
 	public static final String CONFIGURE_SIMPLE_QUERY_VALIDATE_ACTION = "ConfigureSimpleQueryValidate.do";
@@ -1451,7 +1457,6 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	
 	public static final String NULL = "NULL";
 	
-	
 //    public static final String SPECIMEN_TYPE_TISSUE = "Tissue";
 //    public static final String SPECIMEN_TYPE_FLUID = "Fluid";
 //    public static final String SPECIMEN_TYPE_CELL = "Cell";
@@ -1463,6 +1468,9 @@ public class Constants extends edu.wustl.common.util.global.Constants
     public static final String TOTAL = "Total";
     public static final String SPECIMENS = "Specimens";
 
-    
-
+	//User Roles
+	public static final String ADMINISTRATOR = "Administrator";
+	public static final String TECHNICIAN = "Technician";
+	public static final String SUPERVISOR = "Supervisor";
+	public static final String SCIENTIST = "Scientist";
 }
