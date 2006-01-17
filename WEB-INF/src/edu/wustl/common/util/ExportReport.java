@@ -5,8 +5,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
-
-import edu.wustl.common.util.logger.Logger;
 /**
  * This class for creating a file with a given list of data.
  * It creates the file according to delimeter specified.
@@ -37,7 +35,6 @@ public class ExportReport
 				if(tempStr.indexOf(',') > 0)
 					tempStr = "\"" +tempStr + "\"";
 				String data = tempStr+ delimiter;
-				Logger.out.debug("data of file***"+data);
 				temp.write(data);
 			}
 			temp.write(newLine);
