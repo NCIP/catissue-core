@@ -88,8 +88,8 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 		else
 		{
 			// for ORACLE
-			whereColumnCondition = new String[]{"!=","!=","is not null","is not null"};
-			whereColumnValue = new String[]{"",""};
+			whereColumnCondition = new String[]{"is not null","is not null","is not null","is not null"};
+			whereColumnValue = new String[]{};
 		}
 		
 		String joinCondition = Constants.OR_JOIN_CONDITION;

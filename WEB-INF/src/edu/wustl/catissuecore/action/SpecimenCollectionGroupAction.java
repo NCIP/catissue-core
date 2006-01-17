@@ -215,8 +215,8 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 	  	else
 	  	{
 	  		// for ORACLE
-	  		whereColumnCondition2 = new String[]{"!=","!=","is not null","is not null"};
-	  		whereColumnValue2=new String[]{"",""};
+	  		whereColumnCondition2 = new String[]{"is not null","is not null","is not null","is not null"};
+	  		whereColumnValue2=new String[]{};
 	  	}
 		
 		String joinCondition2 = Constants.OR_JOIN_CONDITION;
