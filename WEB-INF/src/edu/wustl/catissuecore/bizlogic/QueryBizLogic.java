@@ -289,23 +289,23 @@ public class QueryBizLogic extends DefaultBizLogic
         identifiedData.add("MIDDLE_NAME");
         identifiedData.add("BIRTH_DATE");
         identifiedData.add("SOCIAL_SECURITY_NUMBER");
-        Client.identifiedDataMap.put("Participant",identifiedData);
+        Client.identifiedDataMap.put(Query.PARTICIPANT,identifiedData);
         
         
         //For CollectionProtocolRegistration
         identifiedData = new Vector();
         identifiedData.add("REGISTRATION_DATE");
-        Client.identifiedDataMap.put("CollectionProtocolRegistration",identifiedData);
+        Client.identifiedDataMap.put(Query.COLLECTION_PROTOCOL_REGISTRATION,identifiedData);
         
         //For CollectionProtocolRegistration
         identifiedData = new Vector();
         identifiedData.add("MEDICAL_RECORD_NUMBER");
-        Client.identifiedDataMap.put("ParticipantMedicalIdentifier",identifiedData);
+        Client.identifiedDataMap.put(Query.PARTICIPANT_MEDICAL_IDENTIFIER,identifiedData);
         
 //      For CollectionProtocolRegistration
         identifiedData = new Vector();
         identifiedData.add("SURGICAL_PATHOLOGICAL_NUMBER");
-        Client.identifiedDataMap.put("ClinicalReport",identifiedData);
+        Client.identifiedDataMap.put(Query.CLINICAL_REPORT,identifiedData);
         
     }
     
