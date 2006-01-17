@@ -111,21 +111,21 @@ public abstract class BaseDistributionReportAction extends BaseAction
     	for(int j=0;j<specimenIds.length;j++)
     	{
     		Collection simpleConditionNodeCollection = new ArrayList();
-    		Query query = QueryFactory.getInstance().newQuery(Query.SIMPLE_QUERY, "Participant");
+    		Query query = QueryFactory.getInstance().newQuery(Query.SIMPLE_QUERY, Query.PARTICIPANT);
     		Logger.out.debug("Specimen ID" +specimenIds[j]);
     		SimpleConditionsNode simpleConditionsNode = new SimpleConditionsNode();
     		simpleConditionsNode.getCondition().setValue(specimenIds[j]);
-    		simpleConditionsNode.getCondition().getDataElement().setTableName("Specimen");
+    		simpleConditionsNode.getCondition().getDataElement().setTableName(Query.SPECIMEN);
     		simpleConditionsNode.getCondition().getDataElement().setField("Identifier");
     		simpleConditionsNode.getCondition().getDataElement().setFieldType(Constants.FIELD_TYPE_BIGINT);
-    		simpleConditionsNode.getCondition().getOperator().setOperator("=");
+    		simpleConditionsNode.getCondition().getOperator().setOperator(Operator.EQUAL);
     		
     		
     		SimpleConditionsNode simpleConditionsNode1 = new SimpleConditionsNode();
-    		simpleConditionsNode1.getCondition().getDataElement().setTableName("DistributedItem");
+    		simpleConditionsNode1.getCondition().getDataElement().setTableName(Constants.DISTRIBUTED_ITEM);
     		simpleConditionsNode1.getCondition().getDataElement().setField("Distribution_Id");
     		simpleConditionsNode1.getCondition().getDataElement().setFieldType(Constants.FIELD_TYPE_BIGINT);
-    		simpleConditionsNode1.getCondition().getOperator().setOperator("=");
+    		simpleConditionsNode1.getCondition().getOperator().setOperator(Operator.EQUAL);
     		simpleConditionsNode1.getCondition().setValue(dist.getSystemIdentifier().toString());
     		simpleConditionsNode1.setOperator(new Operator(Constants.AND_JOIN_CONDITION));
     		
@@ -133,12 +133,12 @@ public abstract class BaseDistributionReportAction extends BaseAction
     		simpleConditionNodeCollection.add(simpleConditionsNode);
     		((SimpleQuery)query).addConditions(simpleConditionNodeCollection);
     		Set tableSet = new HashSet();
-    		tableSet.add("Participant");
-    		tableSet.add("Specimen");
-    		tableSet.add("CollectionProtReg");
-    		tableSet.add("SpecimenCollectionGroup");
-    		tableSet.add("DistributedItem");
-			tableSet.add("SpecimenCharacteristics");
+    		tableSet.add(Query.PARTICIPANT);
+    		tableSet.add(Query.SPECIMEN);
+    		tableSet.add(Query.COLLECTION_PROTOCOL_REGISTRATION);
+    		tableSet.add(Query.SPECIMEN_COLLECTION_GROUP);
+    		tableSet.add(Constants.DISTRIBUTED_ITEM);
+			tableSet.add(Query.SPECIMEN_CHARACTERISTICS);
 			//Vector vector = setViewElements(selectedColumns);
 
 			//Set the resultViewVector
