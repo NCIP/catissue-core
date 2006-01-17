@@ -35,7 +35,7 @@ public class AssignPrivilegesForm extends ActionForm
     /**
      * A String array containing the list of privileges.
      * */
-    private String privilege;
+    private String privilege="READ";
     
     /**
      * A String array containing the list of object-types.
