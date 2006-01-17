@@ -177,6 +177,8 @@ public abstract class Query {
 
 	public static final String CHECKIN_CHECKOUT_EVENT_PARAMETER = "CheckinCheckoutEventParam";
 
+	public static final String CLINICAL_REPORT = "ClinicalReport";
+	
 	public static final String PARAM = "Param";
 
 	/**
