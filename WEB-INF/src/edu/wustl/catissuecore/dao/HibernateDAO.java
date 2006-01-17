@@ -478,7 +478,7 @@ public class HibernateDAO extends AbstractDAO
 
             if ((whereColumnName != null && whereColumnName.length > 0)
                     && (whereColumnCondition != null && whereColumnCondition.length == whereColumnName.length)
-                    && (whereColumnValue != null && whereColumnName.length == whereColumnValue.length))
+                    && (whereColumnValue != null))
             {
                 if (joinCondition == null)
                     joinCondition = Constants.AND_JOIN_CONDITION;
@@ -501,6 +501,10 @@ public class HibernateDAO extends AbstractDAO
                     			sqlBuff.append(", ");
 						}
                     	sqlBuff.append(") ");
+                    }
+                    else if(whereColumnCondition[i].indexOf("is not null")!=-1)
+                    {
+                    	sqlBuff.append(whereColumnCondition[i]);
                     }
                     else
                     {
