@@ -58,51 +58,52 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
      */
 	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 	{
-	    Set protectionObjects = new HashSet();
-		Specimen specimen = (Specimen)obj;
-		
-		setSpecimenAttributes(dao,specimen);
-				
-		dao.insert(specimen.getSpecimenCharacteristics(),sessionDataBean, true, true);
-		dao.insert(specimen,sessionDataBean, true, true);
-		protectionObjects.add(specimen);
-		
-		if(specimen.getSpecimenCharacteristics()!=null)
+		try
 		{
-		    protectionObjects.add(specimen.getSpecimenCharacteristics());
-		}
-		
-		Collection externalIdentifierCollection = specimen.getExternalIdentifierCollection();
-		
-		if(externalIdentifierCollection != null)
-		{
-			if(externalIdentifierCollection.isEmpty()) //Dummy entry added for query
+			Set protectionObjects = new HashSet();
+			Specimen specimen = (Specimen)obj;
+			
+			setSpecimenAttributes(dao,specimen,sessionDataBean);
+			specimen.getStorageContainer();		
+			dao.insert(specimen.getSpecimenCharacteristics(),sessionDataBean, true, true);
+			dao.insert(specimen,sessionDataBean, true, true);
+			protectionObjects.add(specimen);
+			
+			if(specimen.getSpecimenCharacteristics()!=null)
 			{
-				ExternalIdentifier exId = new ExternalIdentifier();
-				
-				exId.setName(null);
-				exId.setValue(null);
-				
-				externalIdentifierCollection.add(exId);
+				protectionObjects.add(specimen.getSpecimenCharacteristics());
 			}
 			
-			Iterator it = externalIdentifierCollection.iterator();
-			while(it.hasNext())
+			Collection externalIdentifierCollection = specimen.getExternalIdentifierCollection();
+			
+			if(externalIdentifierCollection != null)
 			{
-				ExternalIdentifier exId = (ExternalIdentifier)it.next();
-				exId.setSpecimen(specimen);
-				dao.insert(exId,sessionDataBean, true, true);
+				if(externalIdentifierCollection.isEmpty()) //Dummy entry added for query
+				{
+					ExternalIdentifier exId = new ExternalIdentifier();
+					
+					exId.setName(null);
+					exId.setValue(null);
+					
+					externalIdentifierCollection.add(exId);
+				}
+				
+				Iterator it = externalIdentifierCollection.iterator();
+				while(it.hasNext())
+				{
+					ExternalIdentifier exId = (ExternalIdentifier)it.next();
+					exId.setSpecimen(specimen);
+					dao.insert(exId,sessionDataBean, true, true);
+				}
 			}
+			
+			//Inserting data for Authorization
+			
+			SecurityManager.getInstance(this.getClass()).insertAuthorizationData(
+					null, protectionObjects, getDynamicGroups(specimen));
 		}
-		
-		//Inserting data for Authorization
-		try
-        {
-            SecurityManager.getInstance(this.getClass()).insertAuthorizationData(
-            		null, protectionObjects, getDynamicGroups(specimen));
-        }
 		catch (SMException e)
-        {
+		{
 			throw handleSMException(e);
         }
 	}
@@ -427,7 +428,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
         }
     }
     
-    private void setSpecimenAttributes(DAO dao, Specimen specimen) throws DAOException
+    private void setSpecimenAttributes(DAO dao, Specimen specimen,SessionDataBean sessionDataBean) throws DAOException,SMException
 	{
     	//Load & set Specimen Collection Group if present
 		if(specimen.getSpecimenCollectionGroup() != null)
@@ -472,7 +473,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			
 			// --- check for all validations on the storage container.
 			storageContainerBizLogic.checkContainer(dao,container.getSystemIdentifier().toString(),
-					specimen.getPositionDimensionOne().toString(),specimen.getPositionDimensionTwo().toString());
+					specimen.getPositionDimensionOne().toString(),specimen.getPositionDimensionTwo().toString(),sessionDataBean);
 			
 			specimen.setStorageContainer(container);
 		}
