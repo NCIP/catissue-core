@@ -96,12 +96,25 @@ public class DistributionReportSaveAction extends BaseDistributionReportAction
 		}
 		distributedItemsColumns.add(columns);
 		report.writeData(distributedItemsColumns,delimiter);
-		Iterator listItr = listOfData.iterator();
-		Logger.out.debug("List of Data in save action "+listOfData);
-		while(listItr.hasNext())
-		{
-			report.writeData((List)listItr.next(),delimiter);
-		}
+    	Iterator dataListItr = listOfData.iterator();
+    	while(dataListItr.hasNext())
+    	{
+    		List rowList = (List)dataListItr.next();
+    		List data  = (List)rowList.get(0);
+			int extraColumns = data.size()-((List)distributedItemsColumns.get(0)).size();
+			//Remove extra ID columns
+			if(extraColumns>0)
+			{
+				int size = data.size()-1;
+				for(int j=1;j<=extraColumns;j++)
+				{
+					data.remove(size);
+					size--;
+				}
+			}
+			report.writeData(rowList,delimiter);
+    	}
+    	
 		report.closeFile();
 	}
 	private List createList(String key,String value,List list)
