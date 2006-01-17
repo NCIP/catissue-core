@@ -104,7 +104,7 @@ public class ObjectNotFoundFormatter implements ExceptionFormatter {
 			Object[] arguments = new Object[]{displayName,columnName,value};
 			
 			formattedErrMsg = MessageFormat.format(Constants.OBJECT_NOT_FOUND_ERROR,arguments);
-			System.out.println(formattedErrMsg);
+			Logger.out.debug(formattedErrMsg);
 			}
 		catch(Exception e)
 		{

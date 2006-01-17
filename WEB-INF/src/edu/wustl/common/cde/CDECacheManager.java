@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Set;
 
 import edu.wustl.common.cde.xml.XMLCDE;
+import edu.wustl.common.util.logger.Logger;
 
 
 /**
@@ -37,7 +38,7 @@ public class CDECacheManager
 				try
 				{
 					CDE cde = cdeDownloader.loadCDE(cdeCon,xmlCDE,"NCI_Thesaurus",10);
-					System.out.println("cde "+cde);
+					Logger.out.debug("cde "+cde);
 				}
 				catch(Exception ex)
 				{

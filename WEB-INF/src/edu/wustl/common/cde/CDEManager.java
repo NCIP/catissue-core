@@ -180,7 +180,7 @@ public class CDEManager
 			
 			if(value.equals(permissibleValue.getValue()))
 			{
-				System.out.println("permissibleValue "+permissibleValue.getValue());
+				Logger.out.debug("permissibleValue "+permissibleValue.getValue());
 				isParentFound = true;
 				List pvList = loadPermissibleValue(permissibleValue, isParentFound, value);
 				list.addAll(pvList);
@@ -197,8 +197,8 @@ public class CDEManager
 				}
 			}
 		}
-		System.out.println("list "+list.size());
-		System.out.println(list);
+		Logger.out.debug("list "+list.size());
+		Logger.out.debug(list);
 		
 		StringBuffer buff = new StringBuffer("(");
 		Iterator it = list.iterator();
@@ -212,7 +212,7 @@ public class CDEManager
 			else
 				buff.append(",");
 		}
-		System.out.println(buff);
+		Logger.out.debug(buff);
 		return buff.toString();
 	}
 	
@@ -235,7 +235,7 @@ public class CDEManager
 			{
 				if(value.equals(subPermissibleValue.getValue()))
 				{
-					System.out.println(value);
+					Logger.out.debug(value);
 					isParentFound = true;
 					List subPVList = loadPermissibleValue(subPermissibleValue, isParentFound, value);
 					pvList.addAll(subPVList);

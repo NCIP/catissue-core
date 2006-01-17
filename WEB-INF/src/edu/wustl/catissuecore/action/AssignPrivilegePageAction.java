@@ -144,7 +144,6 @@ public class AssignPrivilegePageAction extends BaseAction
 		}
         catch(Exception e)
 		{
-        	System.out.println(e);
         	Logger.out.error(e.getMessage(),e);
 		}
         

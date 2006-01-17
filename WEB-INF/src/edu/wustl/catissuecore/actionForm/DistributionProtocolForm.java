@@ -270,7 +270,7 @@ public class DistributionProtocolForm extends SpecimenProtocolForm
     			{
     				String key = (String)it.next();
     				String value = (String)values.get(key);
-    				System.out.println(key+ " : " + value);
+    				Logger.out.debug(key+ " : " + value);
     				
     				if(!bSpecimenClass)
     				{

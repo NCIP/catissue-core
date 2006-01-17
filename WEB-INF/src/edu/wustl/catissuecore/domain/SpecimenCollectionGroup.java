@@ -87,7 +87,7 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
     
 	public SpecimenCollectionGroup(AbstractActionForm form) throws AssignDataException
 	{
-	    System.out.println("<<< Before setting Values >>>");
+		Logger.out.debug("<<< Before setting Values >>>");
 		setAllValues(form);
 	}
 

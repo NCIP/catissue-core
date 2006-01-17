@@ -454,7 +454,7 @@ public abstract class Query {
 					relationCondition = new RelationCondition(relationCondition);
 					relationCondition.getLeftDataElement().setTable(table1.getLinkingTable());
 					relationCondition.getRightDataElement().setTable(table1);
-					System.out.println(table1.getTableName() + " " +table1.getLinkingTable().getTableName()
+					Logger.out.debug(table1.getTableName() + " " +table1.getLinkingTable().getTableName()
 							+ " " + relationCondition.toSQLString(tableSufix));
 					if (joinConditionString.length() != 0) {
 						joinConditionString.append(Operator.AND + " ");
@@ -473,7 +473,7 @@ public abstract class Query {
 						relationCondition = new RelationCondition(relationCondition);
 						relationCondition.getLeftDataElement().setTable(table1);
 						relationCondition.getRightDataElement().setTable(table1.getLinkingTable());
-						System.out.println(table1.getTableName() + " " +table1.getLinkingTable().getTableName()
+						Logger.out.debug(table1.getTableName() + " " +table1.getLinkingTable().getTableName()
 								+ " " + relationCondition.toSQLString(tableSufix));
 						if (joinConditionString.length() != 0) {
 							joinConditionString.append(Operator.AND + " ");
@@ -499,7 +499,7 @@ public abstract class Query {
 						relationCondition = new RelationCondition(relationCondition);
 						relationCondition.getLeftDataElement().setTable(table2.getLinkingTable());
 						relationCondition.getRightDataElement().setTable(table2);
-						System.out.println(table2.getTableName() + " " +table2.getLinkingTable().getTableName()
+						Logger.out.debug(table2.getTableName() + " " +table2.getLinkingTable().getTableName()
 								+ " " + relationCondition.toSQLString(tableSufix));
 						if (joinConditionString.length() != 0) {
 							joinConditionString.append(Operator.AND + " ");
@@ -517,7 +517,7 @@ public abstract class Query {
 							relationCondition = new RelationCondition(relationCondition);
 							relationCondition.getLeftDataElement().setTable(table2.getLinkingTable());
 							relationCondition.getRightDataElement().setTable(table2);
-							System.out.println(table2.getTableName() + " " +table2.getLinkingTable().getTableName()
+							Logger.out.debug(table2.getTableName() + " " +table2.getLinkingTable().getTableName()
 									+ " " + relationCondition.toSQLString(tableSufix));
 							if (joinConditionString.length() != 0) {
 								joinConditionString.append(Operator.AND + " ");
@@ -533,7 +533,7 @@ public abstract class Query {
 						.get(new Relation((String) table1.getTableName(),
 								(String) table2.getTableName()));
 				if (relationCondition != null) {
-					System.out.println(table1.getTableName() + " " + table2.getTableName()
+					Logger.out.debug(table1.getTableName() + " " + table2.getTableName()
 							+ " " + relationCondition.toSQLString(tableSufix));
 					if (joinConditionString.length() != 0) {
 						joinConditionString.append(Operator.AND + " ");
@@ -547,7 +547,7 @@ public abstract class Query {
 									(String) table1.getTableName()));
 
 					if (relationCondition != null) {
-						System.out.println(table2.getTableName() + " "
+						Logger.out.debug(table2.getTableName() + " "
 								+table1.getTableName() + " "
 								+ relationCondition.toSQLString(tableSufix));
 						if (joinConditionString.length() != 0) {

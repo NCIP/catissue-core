@@ -248,8 +248,8 @@ public class StorageContainerForm extends AbstractActionForm
 		isFull = Utility.initCap( Utility.toString(container.getIsFull()));
 		Logger.out.debug("isFULL />/>/> "+ isFull);
 		
-		System.out.println("StorageType in form--------->"+container.getStorageType());
-		System.out.println("StorageType ID in form--------->"+container.getStorageType().getId());
+		Logger.out.debug("StorageType in form--------->"+container.getStorageType());
+		Logger.out.debug("StorageType ID in form--------->"+container.getStorageType().getId());
 		
 		this.typeId = container.getStorageType().getId().longValue();
 		
@@ -644,7 +644,7 @@ public class StorageContainerForm extends AbstractActionForm
 		catch (Exception excp)
 		{
 			System.out.println("\n\n*******Error*********\n\n");
-			Logger.out.error(excp.getMessage());
+			Logger.out.error(excp.getMessage(),excp);
 		}
 		return errors;
 	}

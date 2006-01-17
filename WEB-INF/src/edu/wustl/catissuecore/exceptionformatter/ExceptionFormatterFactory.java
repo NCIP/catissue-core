@@ -27,7 +27,7 @@ public class ExceptionFormatterFactory {
 			//prop.load(new FileInputStream("D:\\Example\\catissuecore\\WEB-INF\\classes\\ExceptionFormatter.properties"));
 			prop.load(new FileInputStream(Variables.catissueHome+System.getProperty("file.separator")+"WEB-INF"+System.getProperty("file.separator")+"src"+System.getProperty("file.separator")+"ExceptionFormatter.properties"));
 			
-			System.out.println("File Loaded");
+			Logger.out.debug("File Loaded");
 		}
 		catch(Exception e)
 		{

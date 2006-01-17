@@ -323,14 +323,14 @@ public class AuditManager
 
 		
 		aAuditManager.compare(storageContainerCurr,storageContainerOld,"UPDATE");
-		System.out.println(aAuditManager.auditEvent.getAuditEventLogCollection());
+		Logger.out.debug(aAuditManager.auditEvent.getAuditEventLogCollection());
 		
 		
 		Institution a = new Institution();
 		a.setName("AA");
 		aAuditManager.compare(a,null, "INSERT");
 		
-		System.out.println(aAuditManager.auditEvent.getAuditEventLogCollection());
+		Logger.out.debug(aAuditManager.auditEvent.getAuditEventLogCollection());
 	}
 	
 	public void addAuditEventLogs(Collection auditEventLogsCollection)

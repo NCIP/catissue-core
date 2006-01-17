@@ -108,7 +108,6 @@ public class InstitutionForm extends AbstractActionForm
     * */
     public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
     {
-    	System.out.println("here in validate");
         ActionErrors errors = new ActionErrors();
         Validator validator = new Validator();
         try

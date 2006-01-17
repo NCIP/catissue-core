@@ -17,6 +17,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * ShowFramedPageAction is used to display the query results view
@@ -46,7 +47,7 @@ public class ShowFramedPageAction extends Action
             
         }else if (pageOf.equals(Constants.PAGEOF_TISSUE_SITE))
         {
-            System.out.println("In ShowFramedPageAction in PAGEOF_TISSUE_SITE***********************");
+        	Logger.out.debug("In ShowFramedPageAction in PAGEOF_TISSUE_SITE***********************");
             String propertyName = request.getParameter(Constants.PROPERTY_NAME);
             request.setAttribute(Constants.PROPERTY_NAME,propertyName);
         }

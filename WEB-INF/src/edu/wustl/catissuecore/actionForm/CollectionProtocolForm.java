@@ -600,7 +600,6 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	    	// use of logger as per bug 79
 	    	Logger.out.error(excp.getMessage(),excp); 
 	    	Logger.out.debug(excp);
-	    	System.out.println(excp);
 			errors = new ActionErrors();
 		}
 		return errors;

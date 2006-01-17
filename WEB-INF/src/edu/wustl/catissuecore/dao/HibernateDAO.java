@@ -495,7 +495,7 @@ public class HibernateDAO extends AbstractDAO
                     	Object valArr[] = (Object [])whereColumnValue[i];
                     	for (int j = 0; j < valArr.length; j++)
 						{
-                    		System.out.println(sqlBuff);
+                    		Logger.out.debug(sqlBuff);
                     		sqlBuff.append("? ");
                     		if((j+1)<valArr.length)
                     			sqlBuff.append(", ");
@@ -511,7 +511,7 @@ public class HibernateDAO extends AbstractDAO
                         sqlBuff.append(" " + joinCondition + " ");
                 }
 
-                System.out.println(sqlBuff.toString());
+                Logger.out.debug(sqlBuff.toString());
 
                 query = session.createQuery(sqlBuff.toString());
 

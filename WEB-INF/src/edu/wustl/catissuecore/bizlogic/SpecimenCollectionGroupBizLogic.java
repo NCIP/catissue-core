@@ -202,7 +202,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		{
 			whereColumnName[1] = "protocolParticipantIdentifier";
 			whereColumnValue[1] = specimenCollectionGroup.getCollectionProtocolRegistration().getProtocolParticipantIdentifier();
-			System.out.println("Value returned:"+whereColumnValue[1]);
+			Logger.out.debug("Value returned:"+whereColumnValue[1]);
 		}
 		
 		

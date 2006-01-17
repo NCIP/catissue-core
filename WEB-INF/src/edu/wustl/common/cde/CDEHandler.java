@@ -16,6 +16,7 @@ import edu.wustl.catissuecore.bizlogic.AbstractBizLogic;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.common.cde.xml.XMLCDE;
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * @author kapil_kaveeshwar
@@ -72,7 +73,7 @@ public class CDEHandler
 		if(obj!= null)
 		{
 			XMLCDE xmlCDE = (XMLCDE)obj;
-			System.out.println("xmlCDE "+xmlCDE.getName());
+			Logger.out.debug("xmlCDE "+xmlCDE.getName());
 			
 			/** Retrieve CDE from cache */
 			if(xmlCDE.isCache())

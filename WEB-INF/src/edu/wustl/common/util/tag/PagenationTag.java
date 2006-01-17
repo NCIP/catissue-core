@@ -6,6 +6,8 @@ import java.io.IOException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
 
+import edu.wustl.common.util.logger.Logger;
+
 /**
  *<p>Title: </p>
  *<p>Description:  </p>
@@ -155,11 +157,11 @@ public class PagenationTag extends TagSupport
         }
         catch (IOException ioe)
         {
-            System.out.println("Error generating prime: " + ioe);
+        	Logger.out.debug("Error generating prime: " + ioe, ioe);
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+        	Logger.out.debug(e.getMessage(),e);
         }
         return (SKIP_BODY);
     }

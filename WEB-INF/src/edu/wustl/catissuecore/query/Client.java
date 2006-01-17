@@ -316,7 +316,7 @@ public class Client extends AbstractClient
 		Logger.out = org.apache.log4j.Logger.getLogger("");
 		PropertyConfigurator.configure(Variables.catissueHome+"\\WEB-INF\\src\\"+"ApplicationResources.properties");
 		
-		System.out.println("here");
+		Logger.out.debug("here");
         initialize();
         //        relations.put(Query.PARTICIPANT,Query.ACCESSION);
         //        relations.put(Query.ACCESSION,Query.SPECIMEN);
@@ -598,7 +598,7 @@ public class Client extends AbstractClient
         //        child6.add(child3);
                 
                 ((AdvancedConditionsImpl)((AdvancedQuery)query).whereConditions).setWhereCondition(root);
-                System.out.println("\n\n"+query.getString()+"\n\n");
+                Logger.out.debug("\n\n"+query.getString()+"\n\n");
     }
    
 }

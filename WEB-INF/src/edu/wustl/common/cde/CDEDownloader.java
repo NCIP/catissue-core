@@ -40,7 +40,7 @@ public class CDEDownloader
 			// the connection with the databse server.
 			//createPasswordAuthentication(proxyhost, proxyport, username, password);
 
-			System.out.println("appService");
+			Logger.out.debug("appService");
 			
 //			appService = ApplicationService.getRemoteInstance(dbserver);
 			
