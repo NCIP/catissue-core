@@ -35,6 +35,7 @@ import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
+import edu.wustl.common.util.Permissions;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
@@ -63,7 +64,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		int positionDimensionOne = Constants.STORAGE_CONTAINER_FIRST_ROW, positionDimensionTwo = Constants.STORAGE_CONTAINER_FIRST_COLUMN;
 		boolean fullStatus[][] = null;
 		int noOfContainers = container.getNoOfContainers().intValue();
-		
+
 		if (container.getParentContainer() != null) 
 		{
 			List list = dao.retrieve(StorageContainer.class.getName(),
@@ -88,9 +89,10 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 				} 
 				else 
 				{
+					
 					//Check if position specified is within the parent
 					// container's
-					//capacity
+					//capacity  
 					if (false == validatePosition(pc, container)) {
 						throw new DAOException(
 								ApplicationProperties
@@ -269,6 +271,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		StorageContainer container = (StorageContainer) obj;
 		StorageContainer oldContainer = (StorageContainer) oldObj;
 		Logger.out.debug( "container.isParentChanged() : "+ container.isParentChanged());
+
 		if (container.isParentChanged()) 
 		{
 			if (container.getParentContainer() != null)
@@ -543,7 +546,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
     public void assignPrivilegeToRelatedObjectsForSite(DAO dao, String privilegeName, Long[] objectIds, Long userId, String roleId, boolean assignToUser, boolean assignOperation) throws SMException, DAOException
     {
         List listOfSubElement = super.getRelatedObjects(dao, StorageContainer.class, "site", objectIds);
-        
+
     	if(!listOfSubElement.isEmpty())
     	{
     	    super.setPrivilege(dao,privilegeName,StorageContainer.class,Utility.toLongArray(listOfSubElement),userId, roleId, assignToUser, assignOperation);
@@ -790,7 +793,21 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		disableSubStorageContainer(dao, Utility
 				.toLongArray(listOfSubStorageContainerId));
 	}
+	// Checks for whether the user is trying to use a container without privilege to use it
+	// This is needed since now users can enter the values in the edit box
+	private boolean validateContainerAccess(StorageContainer container,SessionDataBean sessionDataBean) throws SMException
+	{
+		Logger.out.debug("validateContainerAccess..................");
+		String userName = sessionDataBean.getUserName();
+        if(!SecurityManager.getInstance(this.getClass()).isAuthorized(userName
+        		,StorageContainer.class.getName()+"_"+container.getId(),Permissions.USE))
+		{
+        	return false;
+		}
 
+        else
+        	return true;
+	}
 	// Checks for whether the user is trying to place the container in a
 	// position
 	// outside the range of parent container
@@ -814,7 +831,6 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			Logger.out.debug("validatePosition false");
 			return false;
 		}
-		
 		Logger.out.debug("validatePosition true");
 		return true;
 	}
@@ -966,7 +982,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
     
 //	 -- storage container validation for specimen
     
-    public void checkContainer(DAO dao, String storageContainerID, String positionOne, String positionTwo) throws DAOException
+    public void checkContainer(DAO dao, String storageContainerID, String positionOne, String positionTwo,SessionDataBean sessionDataBean) throws DAOException,SMException
     {
 //        List list = dao.retrieve(StorageContainer.class.getName(),
 //                "systemIdentifier",storageContainerID  );
@@ -994,12 +1010,19 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
         	StorageContainer pc = new StorageContainer();
         	pc.setSystemIdentifier((Long)obj[0] );
         	
-            	if(obj[1] !=null)
-                	pc.setPositionDimensionOne((Integer)obj[1] );
-               	if(obj[2] !=null)
-                	pc.setPositionDimensionTwo((Integer )obj[2] );
+        	if(obj[1] !=null)
+        		pc.setPositionDimensionOne((Integer)obj[1] );
+        	if(obj[2] !=null)
+        		pc.setPositionDimensionTwo((Integer )obj[2] );
         	
-            
+        	//check if user has privilege to use the container
+        	boolean hasAccess =  validateContainerAccess(pc,sessionDataBean);
+        	Logger.out.debug("hasAccess..............."+hasAccess);	
+        	if (!hasAccess) {
+        		throw new DAOException(
+        				ApplicationProperties
+						.getValue("access.use.object.denied"));
+        	}
             // check for closed Container
 			checkStatus(dao, pc, "Storage Container" );
 			
@@ -1044,7 +1067,6 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 	protected boolean validate(Object obj, DAO dao, String operation) throws DAOException
     {
 		StorageContainer container = (StorageContainer)obj;
-
 		if(operation.equals(Constants.ADD))
 		{
 			if(!Constants.ACTIVITY_STATUS_ACTIVE.equals(container.getActivityStatus()))
