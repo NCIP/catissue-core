@@ -9,6 +9,8 @@
  */
 
 package edu.wustl.catissuecore.actionForm;
+import java.util.Date;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts.action.ActionError;
@@ -177,10 +179,37 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 		
 		Participant participant = specimenCollectionGroup.getCollectionProtocolRegistration().getParticipant();
 		Logger.out.debug("SCgForm --------- Participant : -- "+ participant.toString() );
-		if(participant!=null)
+		//if(participant!=null)
+		String firstName = null;
+		String lastName = null;
+		String birthDate = null;
+		String ssn = null;
+		
+		if(participant.getFirstName()==null)
+			firstName ="";
+		else
+			firstName = participant.getFirstName();
+		
+		if(participant.getLastName()==null)
+			lastName ="";
+		else
+			lastName = participant.getLastName();
+		
+		if(participant.getBirthDate()==null)
+			birthDate ="";
+		else
+			birthDate = participant.getBirthDate().toString();
+		
+		if(participant.getSocialSecurityNumber()==null)
+			ssn ="";
+		else
+			ssn = participant.getSocialSecurityNumber();
+		
+	
+		if(firstName.length()>0 || lastName.length()>0 || birthDate.length()>0 || ssn.length()>0)
 		{
-			participantId = participant.getId().longValue();
-			checkedButton = 1;
+				participantId = participant.getId().longValue();
+				checkedButton = 1;
 		}
 		else
 		{
