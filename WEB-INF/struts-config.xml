@@ -1849,11 +1849,12 @@ PUBLIC
 			<forward name="failure" path="/SimpleQueryInterface.do" />
 		</action>
 		
+		
 		<action path="/SpreadsheetView"
 			type="edu.wustl.catissuecore.action.SpreadsheetViewAction"
 			scope="request">
 			<forward name="pageOfSimpleQueryInterface" path=".catissuecore.simpleSearchResultsDef" />
-			<forward name="pageOfQueryResults" path=".catissuecore.queryResultsSpreadsheetViewDef" />
+			<forward name="pageOfQueryResults" path=".catissuecore.queryResultsSpreadsheetViewDef" />	
 			<forward name="pageOfInstitution" path=".catissuecore.editSearchResultsDef"/>
 			<forward name="pageOfDepartment" path=".catissuecore.editSearchResultsDef"/>
 			<forward name="pageOfCancerResearchGroup" path=".catissuecore.editSearchResultsDef"/>
@@ -1999,6 +2000,18 @@ PUBLIC
 			<forward name="pageOfParticipantQueryEdit" path="/QueryParticipant.do?operation=edit&amp;pageOf=query"/>
 			<forward name="failure" path="/QueryParticipant.do?pageOf=query"/>
 		</action>
+		
+		<action path="/QueryParticipantEdit"
+			type="edu.wustl.catissuecore.action.CommonAddEditAction"
+			name="participantForm"
+			validate="true"
+			input="/QueryParticipant.do?operation=edit&amp;pageOf=query"
+			scope="request">
+			<forward name="query" path="/Participant.do?operation=edit&amp;pageOf=pageOfParticipantQuery&amp;menuSelected=12" />
+			<forward name="failure" path="/Participant.do?operation=edit&amp;pageOf=pageOfParticipant&amp;menuSelected=12" />
+		</action>
+
+		
 		<!--Participant Object View Actions End-->
 		
 		<!--Collection Protocol Object View Actions Begin-->
@@ -2019,6 +2032,17 @@ PUBLIC
 			<forward name="pageOfCollectionProtocolQueryEdit" path="/QueryCollectionProtocol.do?operation=edit&amp;pageOf=query"/>
 			<forward name="failure" path="/QueryCollectionProtocol.do?pageOf=query"/>
 		</action>
+		
+		<action path="/QueryCollectionProtocolEdit"
+			type="edu.wustl.catissuecore.action.CommonAddEditAction"
+			name="collectionProtocolForm"
+			validate="true"
+			input="/QueryCollectionProtocol.do?operation=edit&amp;pageOf=query"
+			scope="request">
+			<forward name="query" path="/CollectionProtocol.do?operation=edit&amp;pageOf=pageOfCollectionProtocolQuery&amp;menuSelected=12" />
+			<forward name="failure" path="/CollectionProtocol.do?operation=edit&amp;pageOf=pageOfCollectionProtocol&amp;menuSelected=12" />
+		</action>
+		
 		<!--Collection Protocol Object View Actions End-->
 		
 		<!--Specimen Collection Group Object View Actions Begin-->
@@ -2039,6 +2063,17 @@ PUBLIC
 			<forward name="pageOfSpecimenCollectionGroupQueryEdit" path="/QuerySpecimenCollectionGroup.do?operation=edit&amp;pageOf=query"/>
 			<forward name="failure" path="/QuerySpecimenCollectionGroup.do?pageOf=query"/>
 		</action>
+		
+		<action path="/QuerySpecimenCollectionGroupEdit"
+			type="edu.wustl.catissuecore.action.CommonAddEditAction"
+			name="specimenCollectionGroupForm"
+			validate="true"
+			input="/QuerySpecimenCollectionGroup.do?operation=edit&amp;pageOf=query"
+			scope="request">
+			<forward name="query" path="/SpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroupQuery&amp;menuSelected=12" />
+			<forward name="failure" path="/SpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroup&amp;menuSelected=12" />
+		</action>
+		
 		<!--Specimen Collection Group Object View Actions End-->
 		
 		<!--Specimen Object View Actions Begin-->
@@ -2059,6 +2094,19 @@ PUBLIC
 			<forward name="pageOfSpecimenQueryEdit" path="/QuerySpecimen.do?operation=edit&amp;pageOf=query"/>
 			<forward name="failure" path="/QuerySpecimen.do?pageOf=query"/>
 		</action>
+		
+	
+		<action path="/QuerySpecimenEdit"
+			type="edu.wustl.catissuecore.action.CommonAddEditAction"
+			name="newSpecimenForm"
+			validate="true"
+			input="/QuerySpecimen.do?operation=edit&amp;pageOf=query"
+			scope="request">
+			<forward name="query" path="/NewSpecimen.do?operation=edit&amp;pageOf=query&amp;menuSelected=12" />
+			<forward name="failure" path="/NewSpecimen.do?operation=edit&amp;pageOf=pageOfNewSpecimen&amp;menuSelected=15" />
+		</action>
+		
+		
 		<!--Specimen Object View Actions End-->
 		
 		
@@ -2244,7 +2292,7 @@ PUBLIC
 			<forward name="success" path="/DataView.do" />
 		</action>
 		
-		
+		<!-- Advance Query Interface Actions Ends -->
 		
 		<!--Spreadshet Export Actions Begins -->
         <action path="/SpreadsheetExport"
@@ -2277,7 +2325,6 @@ PUBLIC
 		</action>
 	<!-- ************** HTTP API ***************** -->		
 		
-	<!-- Advance Query Interface Actions Ends -->
 	</action-mappings>
 	
 	<controller processorClass="edu.wustl.common.struts.ApplicationRequestProcessor" />
