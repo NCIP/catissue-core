@@ -140,6 +140,7 @@ public class Condition {
 	        	}
 	        	else
 	        	{
+	        		newValue = checkQuotes(newValue );
 	        		newValue = "'" + newValue + "'";
 	        	}
 	        		
@@ -221,4 +222,19 @@ public class Condition {
     {
     	return toSQLString(1);
     }
+    
+	private String checkQuotes(String strToCheck)
+	{
+		Logger.out.debug("String passed : " + strToCheck);
+		String strToReturn = "";
+		
+		if(strToCheck != null && strToCheck.trim().length() > 0   )
+		{
+			strToReturn = strToCheck.replaceAll("'","''" ); 
+		}
+		Logger.out.debug("String returned : " + strToReturn);
+		return strToReturn;
+	}
+
+
 }
