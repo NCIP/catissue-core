@@ -11,6 +11,7 @@
 package edu.wustl.catissuecore.action;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -39,7 +40,7 @@ import gov.nih.nci.security.authorization.domainobjects.Role;
 
 public class AssignPrivilegePageAction extends BaseAction
 {
-    /**
+	/**
      * Overrides the execute method of Action class.
      * Initializes the various fields in AssignPrivileges.jsp Page.
      * */
@@ -82,22 +83,56 @@ public class AssignPrivilegePageAction extends BaseAction
         	if(userCollection != null && userCollection.size() !=0)
         	{
         		((Vector) userCollection).remove(0);//Removing SELECT Option
-        		
-        		//Extracting RoleNames & their Ids
+//        		Extracting RoleNames & their Ids
         		Vector roles = SecurityManager.getInstance(AssignPrivilegePageAction.class).getRoles();
-        		
+            	List usersForUsePrivilege = new ArrayList();
+            	List usersForReadPrivilege = new ArrayList();
+
         		if(roles != null && roles.size() != 0)
         		{
         			for(int i=0;i<roles.size();i++)
         			{
         				Role role = (Role)roles.get(i);
         				String id = "Role_" + role.getId();
-        				((Vector) userCollection).add(i,new NameValueBean(role.getName(),id));
+        				String roleName = role.getName();
+        				if(roleName.equals(Constants.TECHNICIAN))
+        				{
+       						usersForUsePrivilege.add(new NameValueBean(roleName,id));
+        				}
+        				if(role.getName().equals(Constants.SCIENTIST))
+        				{
+        					usersForReadPrivilege.add(new NameValueBean(role.getName(),id));
+        				}
         			}
         		}
-        		
+
+            	SessionDataBean sessionData = getSessionData(request);
+            	Long loginUserId = sessionData.getUserId();
+            	Iterator userCollectionItr = userCollection.iterator();
+            	while(userCollectionItr.hasNext())
+            	{
+            		
+            		NameValueBean userNameValue = (NameValueBean)userCollectionItr.next();
+            		long userId = Long.parseLong(userNameValue.getValue());
+            		Role role = SecurityManager.getInstance(AssignPrivilegePageAction.class).getUserRole(userId);
+            		String roleName = role.getName();
+            		//Make a list of technicians
+            		if(roleName.equals(Constants.TECHNICIAN))
+            			usersForUsePrivilege.add(userNameValue);
+            		//Make a list of Scientists
+            		if(roleName.equals(Constants.SCIENTIST))
+            			usersForReadPrivilege.add(userNameValue);
+            		//Remove the user who has logged in, from the users list.
+            		if(userNameValue.getValue().equals(String.valueOf(loginUserId)))
+            			userCollectionItr.remove();
+            	}
         		request.setAttribute(Constants.GROUPS,userCollection);
+        		//Set users for Read privilege - group of Scientists only
+        		request.setAttribute(Constants.USERS_FOR_READ_PRIVILEGE,usersForReadPrivilege);
+        		//Set users for Use privilege - group of Technicians only
+            	request.setAttribute(Constants.USERS_FOR_USE_PRIVILEGE,usersForUsePrivilege);
         	}
+ 
         	
         	request.setAttribute(Constants.ASSIGN,assignOperation);
         	
@@ -128,7 +163,8 @@ public class AssignPrivilegePageAction extends BaseAction
 					{
 						objects[i+1] = (String) subclassIt.next();
 					}
-					
+					Logger.out.debug("privilege type:"+privilegesForm.getPrivilege());
+					Logger.out.debug("user group:"+privilegesForm.getGroups());
 					recordIds = SecurityManager.getInstance(AssignPrivilegePageAction.class).getObjectsForAssignPrivilege(String.valueOf(bean.getCsmUserId()),objects,privilegeName);
             	}
             	
