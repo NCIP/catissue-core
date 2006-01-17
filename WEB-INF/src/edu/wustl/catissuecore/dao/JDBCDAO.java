@@ -400,7 +400,7 @@ private Timestamp isColumnValueDate(Object value)
 		formatter.setLenient(false);
         java.util.Date date = formatter.parse((String)value);
         Timestamp t = new Timestamp(date.getTime()); 
-       // Date sqlDate = new Date(date.getTime());
+        // Date sqlDate = new Date(date.getTime());
         
         Logger.out.debug("Column date value: "+date);
 		if(value.toString().equals("")==false) 
@@ -420,10 +420,25 @@ private Timestamp isColumnValueDate(Object value)
      * (non-Javadoc)
      * @see edu.wustl.catissuecore.dao.AbstractDAO#insert(java.lang.Object)
      */
-    public void insert(String tableName, List columnValues) throws DAOException
+    public void insert(String tableName, List columnValues) throws DAOException,SQLException
     {
-
-        StringBuffer query = new StringBuffer("INSERT INTO "+tableName+" values(");
+        //Get metadate for temp table to set default values in date fields
+        String sql = "Select * from "+tableName;
+		Statement statement=connection.createStatement();
+		ResultSet resultSet = statement.executeQuery(sql.toString());
+		ResultSetMetaData metaData = resultSet.getMetaData();
+		List columnTypes=new ArrayList();
+		//Make a list of Date columns
+		for(int i =1;i<metaData.getColumnCount();i++)
+		{
+			String type = metaData.getColumnTypeName(i);
+			
+			if(type.equals("DATE"))
+				columnTypes.add(new Integer(i));
+		}
+		resultSet.close();
+		statement.close();
+    	StringBuffer query = new StringBuffer("INSERT INTO "+tableName+" values(");
         int i;
         
         Iterator it = columnValues.iterator();
@@ -445,7 +460,12 @@ private Timestamp isColumnValueDate(Object value)
         	for (i=0;i<columnValues.size();i++)
     	    {
         		Object obj = columnValues.get(i);
-        		Timestamp date =  isColumnValueDate(obj);
+        		//if column value is ## and it is a date field, replace value with default value("00-00-0000")
+        		if(columnTypes.contains(new Integer(i+1)) && obj.toString().equals("##"))
+        		{
+        			obj = "00-00-0000";
+        		}
+        		Timestamp date =  isColumnValueDate(obj);	
         		if(date!=null)
         		{
         			stmt.setObject(i+1,date);
