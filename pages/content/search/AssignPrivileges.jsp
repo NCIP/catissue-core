@@ -3,10 +3,46 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
+<%@ page import="java.util.*"%>
+<%@ page import="edu.wustl.common.beans.NameValueBean"%>
+<%@ page import="edu.wustl.catissuecore.actionForm.AssignPrivilegesForm"%>
 
 <head>
+<%
+List usersForUse = (List) request.getAttribute(Constants.USERS_FOR_USE_PRIVILEGE);
+List usersForRead = (List) request.getAttribute(Constants.USERS_FOR_READ_PRIVILEGE);
+AssignPrivilegesForm form = (AssignPrivilegesForm)request.getAttribute("assignPrivilegesForm");
+%>
 	<SCRIPT language="JavaScript">
+	var usersNamesForRead = new Array();
+	var usersIdsForRead = new Array();
+	var i=0;
 
+	<%
+		Iterator usersForReadItr = usersForRead.iterator();
+		while(usersForReadItr.hasNext())
+		{	NameValueBean  nameIdBean = (NameValueBean)usersForReadItr.next();
+			%>
+			usersNamesForRead[i]="<%=nameIdBean.getName()%>";
+			usersIdsForRead[i]="<%=nameIdBean.getValue()%>";
+			i++;
+	<%	} %>
+	var usersNamesForUse = new Array();
+	var usersIdsForUse= new Array();
+
+	i=0;
+	<%
+		Iterator usersForUseItr = usersForUse.iterator();
+		while(usersForUseItr.hasNext())
+		{	NameValueBean  nameIdBean = (NameValueBean)usersForUseItr.next();
+			%>
+			usersNamesForUse[i]="<%=nameIdBean.getName()%>";
+			usersIdsForUse[i]="<%=nameIdBean.getValue()%>";
+			i++
+	<%	} %>
+
+	
+	
 		function selectAll(element)
 		{
 			if(element.options[element.selectedIndex].text == "<%=Constants.ANY%>")
@@ -32,6 +68,7 @@
 		{
 			var objectCombo = document.getElementById("objectTypes");
 			var recordCombo = document.getElementById("recordIds");
+			var userCombo = document.getElementById("groups");
 			
 			objectCombo.options.length = 0;
 			recordCombo.options.length = 0;
@@ -44,11 +81,23 @@
 				//objectCombo.options[1] = new Option("Distribution Protocol","edu.wustl.catissuecore.domain.DistributionProtocol");
 				//objectCombo.options[3] = new Option("Specimen Collection","edu.wustl.catissuecore.domain.SpecimenCollectionGroup");
 				//objectCombo.options[4] = new Option("Specimen","edu.wustl.catissuecore.domain.Specimen");
+				userCombo.options.length = 0;
+				for(var i=0;i<usersNamesForRead.length;i++)
+				{
+					userCombo.options[i] = new Option(usersNamesForRead[i],usersIdsForRead[i]);
+				}
+
 			}
 			else if(element.options[element.selectedIndex].text == "USE")
 			{
 				objectCombo.options[0] = new Option("Site","edu.wustl.catissuecore.domain.Site");
 				objectCombo.options[1] = new Option("Storage Container","edu.wustl.catissuecore.domain.StorageContainer");
+				userCombo.options.length = 0;
+				for(var i=0;i<usersNamesForRead.length;i++)
+				{
+					
+					userCombo.options[i] = new Option(usersNamesForUse[i],usersIdsForUse[i]);
+				}
 			}
 		}
 
@@ -147,7 +196,18 @@
 
 	<td class="formField">
      	<html:select property="groups" styleClass="formFieldSized15" styleId="groups" size="10" multiple="true">
-			<html:options collection="<%=Constants.GROUPS%>" labelProperty="name" property="value"/>
+		<% if(form.getPrivilege()!=null )
+			{
+			 if(form.getPrivilege().equals("READ")) 
+			 {
+		%>
+			<html:options collection="<%=Constants.USERS_FOR_READ_PRIVILEGE%>" labelProperty="name" property="value"/>
+		<%	} else if(form.getPrivilege().equals("USE")){
+		%>
+			<html:options collection="<%=Constants.USERS_FOR_USE_PRIVILEGE%>" labelProperty="name" property="value"/>
+		<% } }
+		%>
+			
 		</html:select>
 	</td>
 </tr>
