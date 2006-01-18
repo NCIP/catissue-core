@@ -2323,6 +2323,11 @@ PUBLIC
 			<forward name="success" path="/ResponseServlet" />
 			<forward name="failure" path="/ResponseServlet" />
 		</action>
+		
+		<action path="/LogoutHTTP"
+			type="edu.wustl.catissuecore.action.LogoutAction">
+			<forward name="success" path="/ResponseServlet" />
+		</action>
 	<!-- ************** HTTP API ***************** -->		
 		
 	</action-mappings>
