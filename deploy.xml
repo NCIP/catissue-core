@@ -23,14 +23,8 @@
 	<property name="mysql.dialect.string" value="net.sf.hibernate.dialect.MySQLDialect"/>
 	<property name="oracle.driver.string" value="oracle.jdbc.driver.OracleDriver"/>
 	<property name="mysql.driver.string" value="org.gjt.mm.mysql.Driver"/>
-	
-	<!--path id="app.classpath">
-		<fileset dir="${lib.dir}">
-			<include name="*.jar"/>
-		</fileset>
-	</path-->
-	
-
+	<property name="mysql.lib" value="mysql-connector-java-3.0.16-ga-bin.jar"/>
+	<property name="oracle.lib" value="oracleDriver.jar"/>
 	<!--Extrct WAR and copy Configuration files to temp directory--> 
 	<target name="init">
 		<echo message="Initializing installation..."/>
@@ -38,9 +32,6 @@
 			<fileset dir="${base.dir}/catissuecore-properties"/>
 		</copy>
 		<copy file="catissuecore-ds.xml" todir="${temp.dir}" overwrite="true"/>
-		<!--copy todir="${temp.dir}/SQL" overwrite="true">
-			<fileset dir="${base.dir}/SQL"/>
-		</copy-->
 		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>
 		<unwar src="${base.dir}/catissuecorecsm.war" dest="${temp.dir}/tempcsm"/>
  	</target>
@@ -201,10 +192,6 @@
 				<exclude name="**/*.sql"/>
 				<exclude name="**/CVS*"/>
 			</fileset>
-			<!--fileset dir="${base.dir}"/-->
-		  	<!--lib dir="${lib.dir}">
-            	<include name="*.jar"/>
-        	</lib-->
 		</war>
 		<delete file="${temp.dir}/catissuecorecsm.war"/>
 		<war destfile="${temp.dir}/catissuecorecsm.war" webxml="${csm.dir}/WEB-INF/web.xml">
@@ -215,18 +202,12 @@
 	<!--Copy WAR and Configuration Files to JBOSS Directory-->
 	<target name="CopyFiles">
 		<echo message="Copying caTISSUECore Application Components..."/>
-		<!--<mkdir dir="${jboss.home.dir}/server/default/catissuecore-properties"/>-->
+
 		<copy todir="${jboss.home.dir}/server/default/catissuecore-properties" overwrite="true">
 			<fileset dir="${temp.dir}/catissuecore-properties">
 				<include name="**/*"/>
 			</fileset>	
 		</copy>
-<!--		<copy todir="${jboss.home.dir}/server/default/conf">
-  			<fileset dir="${base.dir}">
-   				<include name="**/log4j.xml"/>
-  				<include name="**/login-config.xml"/>
-   			</fileset>
-  		</copy> -->
 		<copy todir="${jboss.home.dir}/server/default/deploy" overwrite="true">
   			<fileset dir="${temp.dir}">
   				<include name="catissuecore.war"/>
@@ -234,29 +215,18 @@
   				<include name="catissuecorecsm.war"/>
    			</fileset>
   		</copy>
-		<copy todir="${jboss.home.dir}/server/default/deploy" overwrite="true">
-			<fileset dir="${csm.dir}">
-				<include name="catissuecore.war"/>
-				<include name="catissuecore-ds.xml"/>
-			</fileset>
-		</copy>
-<!--		<copy todir="${jboss.home.dir}/server/default/deploy" overwrite="true">
-  			<fileset dir="${base.dir}">
-  				<include name="**/properties-service.xml"/>
-  			</fileset>
-  		</copy> -->
 		<replace dir="${jboss.home.dir}/server/default/catissuecore-properties"> 
 	  		<include name="ApplicationSecurityConfig.xml"/>
 			<replacefilter 
 					token="@@hibernate-config-file@@" 
 				  	value="${jboss.home.dir}/server/default/catissuecore-properties/catissuecore.hibernate.cfg.xml"/>
 		</replace>
-		<!--<if>
-			<equals arg1="oracle" arg2="${database.type}"/>		
-			<then>
-				<move file="${jboss.home.dir}/server/default/deploy/mysql-ds.xml" tofile="${jboss.home.dir}/server/default/deploy/oracle-ds.xml"/>
-			</then>
-		</if>	-->
+		<copy todir="${jboss.home.dir}/server/all/lib" >
+			<fileset dir="${lib.dir}">
+				<include name="${mysql.lib}"/>
+				<include name="${oracle.lib}"/>
+			</fileset>
+		</copy>
   	</target>
 	
 	<!--Target for Deployment -->
