@@ -16,7 +16,6 @@ import java.io.Serializable;
 import org.apache.struts.action.ActionForm;
 
 import edu.wustl.catissuecore.actionForm.ActionFormFactory;
-import edu.wustl.catissuecore.actionForm.DepartmentForm;
 import edu.wustl.catissuecore.actionForm.LoginForm;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
