@@ -100,8 +100,14 @@ public class ResponseServlet extends HttpServlet
 			httpMessage.addMessage(new String("Successful Login"));
 			httpMessage.setSessionId(req.getSession(true).getId());
 		}
+		else if(operation.equals(Constants.LOGOUT))
+		{
+		    httpMessage.setResponseStatus(Constants.SUCCESS);
+			httpMessage.addMessage(new String("Successful Logout"));
+			httpMessage.setSessionId(null);
+		}
 		
-		if(!operation.equals(Constants.LOGIN))
+		if(!operation.equals(Constants.LOGIN) && !operation.equals(Constants.LOGOUT))
 		{
 		    Logger.out.debug("SystemIdentifier in ResponseServlet-->"+req.getAttribute(Constants.SYSTEM_IDENTIFIER));
 		
