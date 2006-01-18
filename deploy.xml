@@ -14,12 +14,16 @@
 	<property file="caTISSUEInstall.properties"/>
 	<property name="base.dir" value="."/>
 	<property name="temp.dir" value="./tempCatissuecore"/>
-    <property name="lib.dir" value="${base.dir}/WEB-INF/lib"/>
+	<property name="csm.dir" value="${temp.dir}/tempcsm"/>
+	<property name="lib.dir" value="${base.dir}/WEB-INF/lib"/>
     <property name="mysql.sql.dir" value="${base.dir}/SQL/MySql"/>
 	<property name="oracle.sql.dir" value="${base.dir}/SQL/Oracle"/>
 	<property name="common.sql.dir" value="${base.dir}/SQL/Common"/>
 	<property name="oracle.dialect.string" value="net.sf.hibernate.dialect.Oracle9Dialect"/>
 	<property name="mysql.dialect.string" value="net.sf.hibernate.dialect.MySQLDialect"/>
+	<property name="oracle.driver.string" value="oracle.jdbc.driver.OracleDriver"/>
+	<property name="mysql.driver.string" value="org.gjt.mm.mysql.Driver"/>
+	
 	<!--path id="app.classpath">
 		<fileset dir="${lib.dir}">
 			<include name="*.jar"/>
@@ -38,7 +42,7 @@
 			<fileset dir="${base.dir}/SQL"/>
 		</copy-->
 		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>
-		
+		<unwar src="${base.dir}/catissuecorecsm.war" dest="${temp.dir}/tempcsm"/>
  	</target>
 	
 	<!--Modify Configuration such as Session Timeout and Admin details-->
@@ -89,6 +93,27 @@
 				token="@@databasedriver@@" 
 			  	value="org.gjt.mm.mysql.Driver"/>
 		</replace>
+		<!-- Configuring CSM hibernate property File-->
+		<replace dir="${csm.dir}/WEB-INF" propertyfile="caTISSUEInstall.properties"> 
+			<include name="classes/hibernate.properties"/>
+			<include name="conf/hibernate.properties"/>
+			<replacefilter 
+				token="hibernate.dialect org.hibernate.dialect.MySQLDialect" 
+			  	value="hibernate.dialect ${mysql.dialect.string}"/>
+			<replacefilter 
+				token="hibernate.connection.driver_class com.mysql.jdbc.Driver" 
+			  	value="hibernate.connection.driver_class ${mysql.driver.string}"/>
+			
+			<replacefilter 
+				token="hibernate.connection.url jdbc:mysql://ps0154:3306/catissuecore_mysql" 
+			  	value="hibernate.connection.url jdbc:mysql://${database.host}:${database.port}/${database.name}"/>
+			<replacefilter 
+				token="hibernate.connection.username catissue_core" 
+			  	value="hibernate.connection.username ${database.username}"/>
+			<replacefilter 
+				token="hibernate.connection.password catissue_core" 
+			  	value="hibernate.connection.password ${database.password}"/>
+		</replace>
 		<replace file="${temp.dir}/catissuecore/WEB-INF/src/hibernate.cfg.xml">
 			<replacefilter 
 				token="${mysql.dialect.string}" 
@@ -111,6 +136,7 @@
 				token="@@dialect@@" 
 			  	value="${oracle.dialect.string}"/>
 		</replace>
+		<!-- Configuring Data Source File-->
 		<replace dir="${temp.dir}" propertyfile="caTISSUEInstall.properties"> 
 			<include name="catissuecore-ds.xml"/>
 			<replacefilter 
@@ -125,6 +151,27 @@
 			<replacefilter 
 				token="@@databasedriver@@" 
 			  	value="oracle.jdbc.driver.OracleDriver"/>
+		</replace>
+		<!-- Configuring CSM hibernate property File-->
+		<replace dir="${csm.dir}/WEB-INF" propertyfile="caTISSUEInstall.properties"> 
+			<include name="classes/hibernate.properties"/>
+			<include name="conf/hibernate.properties"/>
+			<replacefilter 
+				token="hibernate.dialect org.hibernate.dialect.MySQLDialect" 
+			  	value="hibernate.dialect ${oracle.dialect.string}"/>
+			<replacefilter 
+				token="hibernate.connection.driver_class com.mysql.jdbc.Driver" 
+			  	value="hibernate.connection.driver_class ${oracle.driver.string}"/>
+			
+			<replacefilter 
+				token="hibernate.connection.url jdbc:mysql://ps0154:3306/catissuecore_mysql" 
+			  	value="hibernate.connection.url jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}"/>
+			<replacefilter 
+				token="hibernate.connection.username catissue_core" 
+			  	value="hibernate.connection.username ${database.username}"/>
+			<replacefilter 
+				token="hibernate.connection.password catissue_core" 
+			  	value="hibernate.connection.password ${database.password}"/>
 		</replace>
 		<replace file="${temp.dir}/catissuecore/WEB-INF/src/hibernate.cfg.xml">
 			<replacefilter 
@@ -159,6 +206,10 @@
             	<include name="*.jar"/>
         	</lib-->
 		</war>
+		<delete file="${temp.dir}/catissuecorecsm.war"/>
+		<war destfile="${temp.dir}/catissuecorecsm.war" webxml="${csm.dir}/WEB-INF/web.xml">
+			<fileset dir="${csm.dir}"/>
+		</war>
 	</target>
 	
 	<!--Copy WAR and Configuration Files to JBOSS Directory-->
@@ -180,8 +231,15 @@
   			<fileset dir="${temp.dir}">
   				<include name="catissuecore.war"/>
   				<include name="catissuecore-ds.xml"/>
+  				<include name="catissuecorecsm.war"/>
    			</fileset>
   		</copy>
+		<copy todir="${jboss.home.dir}/server/default/deploy" overwrite="true">
+			<fileset dir="${csm.dir}">
+				<include name="catissuecore.war"/>
+				<include name="catissuecore-ds.xml"/>
+			</fileset>
+		</copy>
 <!--		<copy todir="${jboss.home.dir}/server/default/deploy" overwrite="true">
   			<fileset dir="${base.dir}">
   				<include name="**/properties-service.xml"/>
@@ -203,6 +261,7 @@
 	
 	<!--Target for Deployment -->
 	<target name="Deploy" >
+		<delete dir="${temp.dir}"/>
 		<ant antfile="build.xml" target="WarApp"/>
 		<antcall target="init"/>
 		<antcall target="ConfigureWar"/>	
