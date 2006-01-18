@@ -30,6 +30,7 @@ import org.apache.struts.util.MessageResources;
 
 import edu.wustl.catissuecore.client.HTTPMessage;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * This servlet generates & sends the response to the HTTP API Client 
@@ -99,7 +100,21 @@ public class ResponseServlet extends HttpServlet
 			httpMessage.addMessage(new String("Successful Login"));
 			httpMessage.setSessionId(req.getSession(true).getId());
 		}
-				
+		
+		if(!operation.equals(Constants.LOGIN))
+		{
+		    Logger.out.debug("SystemIdentifier in ResponseServlet-->"+req.getAttribute(Constants.SYSTEM_IDENTIFIER));
+		
+		    if(req.getAttribute(Constants.SYSTEM_IDENTIFIER) != null)
+		    {
+		        httpMessage.setDomainObjectId((Long)req.getAttribute(Constants.SYSTEM_IDENTIFIER));
+		    }
+		    else
+		    {
+		        httpMessage.setDomainObjectId(null);
+		    }
+		}
+		
 		res.setContentType(Constants.HTTP_API);
 		
 		ObjectOutputStream oos = new ObjectOutputStream(res.getOutputStream());
