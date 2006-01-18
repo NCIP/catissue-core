@@ -657,12 +657,11 @@ public class Specimen extends AbstractDomainObject implements Serializable
 		while(it.hasNext())
 		{
 			String key = (String)it.next();
-			String value = (String)orgMap.get(key);
-			
 			//Logger.out.debug("key "+key);
 			
 			if(key.indexOf("persisted")==-1)
 			{
+				String value = String.valueOf(orgMap.get(key));
 				newMap.put(key,value);
 			}
 		}		
