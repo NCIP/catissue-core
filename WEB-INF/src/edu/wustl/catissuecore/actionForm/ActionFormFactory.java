@@ -40,6 +40,7 @@ import edu.wustl.catissuecore.domainobject.SpunEventParameters;
 import edu.wustl.catissuecore.domainobject.StorageContainer;
 import edu.wustl.catissuecore.domainobject.StorageType;
 import edu.wustl.catissuecore.domainobject.ThawEventParameters;
+import edu.wustl.catissuecore.domainobject.TissueSpecimenReviewEventParameters;
 import edu.wustl.catissuecore.domainobject.TransferEventParameters;
 import edu.wustl.catissuecore.domainobject.User;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -194,6 +195,10 @@ public class ActionFormFactory
 		else if(object instanceof TransferEventParameters)
 		{
 			form = new TransferEventParametersForm();
+		}
+		else if(object instanceof TissueSpecimenReviewEventParameters)
+		{
+			form = new TissueSpecimenReviewEventParametersForm();
 		}
 		else
 		{
