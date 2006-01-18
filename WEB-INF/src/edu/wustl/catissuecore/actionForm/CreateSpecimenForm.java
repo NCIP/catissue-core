@@ -77,16 +77,17 @@ public class CreateSpecimenForm extends SpecimenForm
      */
     public void setAllValues(AbstractDomainObject abstractDomain)
     {
-        try
-        {
-            Specimen specimen = (Specimen) abstractDomain;
-            
-            super.setAllValues(specimen);
-        }
-        catch (Exception excp)
-        {
-            Logger.out.error(excp.getMessage(),excp);
-        }
+        Specimen specimen = (Specimen) abstractDomain;
+        super.setAllValues(specimen);
+    }
+    
+    public void setAllVal(Object object)
+    {
+    	edu.wustl.catissuecore.domainobject.Specimen specimen=(edu.wustl.catissuecore.domainobject.Specimen) object;
+    	
+    	super.setAllVal(object);
+    	
+    	this.parentSpecimenId = String.valueOf(specimen.getParentSpecimen().getId());
     }
     	
 	/**
