@@ -54,6 +54,10 @@ public class ApplicationRequestProcessor extends TilesRequestProcessor
 				{
 					request.setAttribute(Constants.OPERATION,Constants.LOGIN);
 				}
+				else if(operation.equals(Constants.LOGOUT))
+				{
+				    request.setAttribute(Constants.OPERATION,Constants.LOGOUT);
+				}
 				else
 				{
 					request.setAttribute(Constants.OPERATION,operation);
@@ -63,12 +67,19 @@ public class ApplicationRequestProcessor extends TilesRequestProcessor
 
 				if ("request".equals(mapping.getScope()))
 				{
-					request.setAttribute(mapping.getAttribute(), form);
+				    if(form !=null)
+					{
+				        request.setAttribute(mapping.getAttribute(), form);
+					}
 				}
 				else
 				{
 					HttpSession session = request.getSession();
-					session.setAttribute(mapping.getAttribute(), form);
+					
+					if(form !=null)
+					{
+					    session.setAttribute(mapping.getAttribute(), form);
+					}
 				}
 				return form;
 			}
