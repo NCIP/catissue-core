@@ -39,6 +39,10 @@ public class HTTPWrapperObject implements Serializable
 			loginForm.setPassword(user.getPassword());
 			formBean = loginForm;
 		}
+	    else if(operation.equals(Constants.LOGOUT))
+	    {
+	        formBean= null;
+	    }
 		else
 		{
 		    AbstractActionForm abstractForm = ActionFormFactory.getFormBean(domainObject,operation);
