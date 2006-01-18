@@ -39,9 +39,9 @@ import edu.wustl.catissuecore.domainobject.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domainobject.SpunEventParameters;
 import edu.wustl.catissuecore.domainobject.StorageContainer;
 import edu.wustl.catissuecore.domainobject.StorageType;
-import edu.wustl.catissuecore.domainobject.User;
 import edu.wustl.catissuecore.domainobject.ThawEventParameters;
 import edu.wustl.catissuecore.domainobject.TransferEventParameters;
+import edu.wustl.catissuecore.domainobject.User;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 

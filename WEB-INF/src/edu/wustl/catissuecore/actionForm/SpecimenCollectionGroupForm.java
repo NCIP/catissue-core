@@ -9,8 +9,6 @@
  */
 
 package edu.wustl.catissuecore.actionForm;
-import java.util.Date;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts.action.ActionError;

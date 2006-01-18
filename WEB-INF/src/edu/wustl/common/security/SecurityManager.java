@@ -20,6 +20,7 @@ import java.util.Vector;
 
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.DistributionProtocol;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.QueryResultObjectData;
 import edu.wustl.common.beans.SecurityDataBean;
@@ -31,7 +32,6 @@ import edu.wustl.common.security.exceptions.SMTransactionException;
 import edu.wustl.common.util.Permissions;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.dbManager.HibernateMetaData;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
 import gov.nih.nci.security.AuthenticationManager;
 import gov.nih.nci.security.AuthorizationManager;
@@ -196,25 +196,23 @@ public class SecurityManager implements Permissions {
 
 	/**
 	 * Returns true or false depending on the person gets authenticated or not.
-	 * 
 	 * @param requestingClass
-	 * @param loginName
-	 *            login name
-	 * @param password
-	 *            password
-	 * @return @throws
-	 *         CSException
+	 * @param loginName login name
+	 * @param password password
+	 * @return @throws CSException
 	 */
-	public boolean login(String loginName, String password) throws SMException {
+	public boolean login(String loginName, String password) throws SMException 
+	{
 		boolean loginSuccess = false;
-		try {
-			Logger.out.debug("login name: " + loginName + " passowrd: "
-					+ password);
+		try 
+		{
+			Logger.out.debug("login name: " + loginName + " passowrd: " + password);
 			AuthenticationManager authMngr = getAuthenticationManager();
 			loginSuccess = authMngr.login(loginName, password);
-		} catch (CSException ex) {
-			Logger.out
-					.debug("Authentication|"
+		} 
+		catch (CSException ex) 
+		{
+			Logger.out.debug("Authentication|"
 							+ requestingClass
 							+ "|"
 							+ loginName
