@@ -33,6 +33,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.cde.CDEManager;
+import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.logger.Logger;
 
 
@@ -147,11 +148,14 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 
 				//Populating the participants registered to a given protocol
 					loadPaticipants(cpID , bizLogic, request);
-					if(cpr.getParticipant().getFirstName().trim().length()>0 )
+					if(!Utility.isNull(cpr.getParticipant()) && !Utility.isNull(cpr.getParticipant().getFirstName()) )
 					{
-						specimenCollectionGroupForm.setParticipantId(pID );
-						specimenCollectionGroupForm.setCheckedButton(1 ); 
-					}	
+						if(cpr.getParticipant().getFirstName().trim().length()>0 )
+						{
+							specimenCollectionGroupForm.setParticipantId(pID );
+							specimenCollectionGroupForm.setCheckedButton(1 ); 
+						}	
+					}
 				//Populating the protocol participants id registered to a given protocol
 					loadPaticipantNumberList(specimenCollectionGroupForm.getCollectionProtocolId(),bizLogic,request);
 					if(cpr.getProtocolParticipantIdentifier() != null)
