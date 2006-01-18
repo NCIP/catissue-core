@@ -217,7 +217,7 @@ public abstract class EventParametersForm extends AbstractActionForm
 		this.timeInMinutes = Utility.toString(Integer.toString(calender.get(Calendar.MINUTE)));
 		this.userId = eventParametersObject.getUser().getId().longValue() ;
 		this.dateOfEvent = Utility.parseDateToString(eventParametersObject.getTimestamp(),Constants.DATE_PATTERN_MM_DD_YYYY);
-		System.out.println("*************IN EPF *******************"+dateOfEvent);
+
 		//this.dateOfEvent = (calender.get(Calendar.MONTH)+1)+"-"+calender.get(Calendar.DAY_OF_MONTH)+"-"+calender.get(Calendar.YEAR) ;
 		Logger.out.debug("systemIdentifier:"+systemIdentifier+" timeInHours:"+timeInHours+" timeInMinutes:"+timeInMinutes+" userId:"+userId+" dateOfEvent:"+dateOfEvent);
     }
