@@ -15,19 +15,34 @@ import java.util.List;
 
 import edu.wustl.catissuecore.domainobject.Biohazard;
 import edu.wustl.catissuecore.domainobject.CancerResearchGroup;
+import edu.wustl.catissuecore.domainobject.CellSpecimenReviewParameters;
+import edu.wustl.catissuecore.domainobject.CheckInCheckOutEventParameter;
+import edu.wustl.catissuecore.domainobject.CollectionEventParameters;
 import edu.wustl.catissuecore.domainobject.CollectionProtocol;
 import edu.wustl.catissuecore.domainobject.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domainobject.Department;
+import edu.wustl.catissuecore.domainobject.DisposalEventParameters;
 import edu.wustl.catissuecore.domainobject.Distribution;
 import edu.wustl.catissuecore.domainobject.DistributionProtocol;
+import edu.wustl.catissuecore.domainobject.EmbeddedEventParameters;
+import edu.wustl.catissuecore.domainobject.FixedEventParameters;
+import edu.wustl.catissuecore.domainobject.FluidSpecimenReviewEventParameters;
+import edu.wustl.catissuecore.domainobject.FrozenEventParameters;
 import edu.wustl.catissuecore.domainobject.Institution;
+import edu.wustl.catissuecore.domainobject.MolecularSpecimenReviewParameters;
 import edu.wustl.catissuecore.domainobject.Participant;
+import edu.wustl.catissuecore.domainobject.ProcedureEventParameters;
+import edu.wustl.catissuecore.domainobject.ReceivedEventParameters;
 import edu.wustl.catissuecore.domainobject.Site;
 import edu.wustl.catissuecore.domainobject.Specimen;
 import edu.wustl.catissuecore.domainobject.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.domainobject.SpunEventParameters;
 import edu.wustl.catissuecore.domainobject.StorageContainer;
 import edu.wustl.catissuecore.domainobject.StorageType;
 import edu.wustl.catissuecore.domainobject.User;
+import edu.wustl.catissuecore.domainobject.ThawEventParameters;
+import edu.wustl.catissuecore.domainobject.TransferEventParameters;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 
 /**
@@ -40,10 +55,11 @@ public class ActionFormFactory
 	/**
      * Returns the instance of formbean as per given domain object.
      * @param object The instance of domain object
+     * @param operation The operation(Add/Edit) that is to be performed
      * @return the instance of formbean.
      * @see #setMessageList(List)
      */
-	public static AbstractActionForm getFormBean(Object object) throws Exception
+	public static AbstractActionForm getFormBean(Object object,String operation) throws Exception
 	{
 		AbstractActionForm form = null;
 
@@ -101,13 +117,85 @@ public class ActionFormFactory
 		}
 		else if(object instanceof Specimen)
 		{
-			form = new NewSpecimenForm();
+			if(operation.equals(Constants.EDIT))
+			{
+				form = new NewSpecimenForm();
+			}
+			else
+			{
+				Specimen specimen = (Specimen)object;
+
+				if(specimen.getSpecimenCollectionGroup() != null)
+				{
+					form = new NewSpecimenForm();
+				}
+				else
+				{
+					form = new CreateSpecimenForm();
+				}
+			}
 		}
 		else if(object instanceof Distribution)
 		{
 			form = new DistributionForm();
 		}
-	else
+		else if(object instanceof CellSpecimenReviewParameters)
+		{
+			form = new CellSpecimenReviewParametersForm();
+		}
+		else if(object instanceof CheckInCheckOutEventParameter)
+		{
+			form = new CheckInCheckOutEventParametersForm();
+		}
+		else if(object instanceof CollectionEventParameters)
+		{
+			form = new CollectionEventParametersForm();
+		}
+		else if(object instanceof DisposalEventParameters)
+		{
+			form = new DisposalEventParametersForm();
+		}
+		else if(object instanceof EmbeddedEventParameters)
+		{
+			form = new EmbeddedEventParametersForm();
+		}
+		else if(object instanceof FixedEventParameters)
+		{
+			form = new FixedEventParametersForm();
+		}
+		else if(object instanceof FluidSpecimenReviewEventParameters)
+		{
+			form = new FluidSpecimenReviewEventParametersForm();
+		}
+		else if(object instanceof FrozenEventParameters)
+		{
+			form = new FrozenEventParametersForm();
+		}
+		else if(object instanceof MolecularSpecimenReviewParameters)
+		{
+			form = new MolecularSpecimenReviewParametersForm();
+		}
+		else if(object instanceof ProcedureEventParameters)
+		{
+			form = new ProcedureEventParametersForm();
+		}
+		else if(object instanceof ReceivedEventParameters)
+		{
+			form = new ReceivedEventParametersForm();
+		}
+		else if(object instanceof SpunEventParameters)
+		{
+			form = new SpunEventParametersForm();
+		}
+		else if(object instanceof ThawEventParameters)
+		{
+			form = new ThawEventParametersForm();
+		}
+		else if(object instanceof TransferEventParameters)
+		{
+			form = new TransferEventParametersForm();
+		}
+		else
 		{
 		    throw new Exception("Invalid Object for Add/Edit Operation");
 		}
