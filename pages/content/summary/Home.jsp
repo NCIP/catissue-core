@@ -14,6 +14,17 @@
               		<td class="welcomeTitle" ><bean:message key="summary.page.welcome"/></td>
             	</tr>
             	<tr>
+              		<td class="formMessage">&nbsp;</td>
+            	</tr>
+            	<tr>
+              		<td  class="formMessage"><bean:message key="summary.page.description"/></td>
+            	</tr>
+            	<tr>
+              		<td class="formMessage">&nbsp;</td>
+            	</tr>
+
+
+            	<tr>
             		<td>
                   		<table class="tbBorders" summary="" cellpadding="0" cellspacing="0" border="0" width="80%" >
 <!-- FIRST ROW total specimens -->	
