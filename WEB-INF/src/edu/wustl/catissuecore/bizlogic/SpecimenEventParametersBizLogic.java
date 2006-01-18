@@ -209,7 +209,35 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 					throw new DAOException(ApplicationProperties.getValue("events.histologicalQuality.errMsg"));
 				}
 				break;
+			
+			case Constants.TRANSFER_EVENT_PARAMETERS_FORM_ID:
+				if(Constants.EDIT.equals(operation))
+				{
+					//validateTransferEventParameters(eventParameter);
+				}
+				break;
 		}
 		return true;
     }
+	
+	private void validateTransferEventParameters(SpecimenEventParameters eventParameter) throws DAOException
+	{
+		TransferEventParameters parameter = (TransferEventParameters)eventParameter;
+		List list = (List)retrieve(TransferEventParameters.class.getName(),
+							Constants.SYSTEM_IDENTIFIER,parameter.getSystemIdentifier());
+		if(list.size() != 0)
+		{
+			TransferEventParameters parameterCopy = (TransferEventParameters)list.get(0);
+			String positionDimensionOne = parameterCopy.getToPositionDimensionOne().toString();
+			String positionDimensionTwo = parameterCopy.getToPositionDimensionTwo().toString();
+			String storageContainer = parameterCopy.getToStorageContainer().getSystemIdentifier().toString();
+			
+			if(!positionDimensionOne.equals(parameter.getToPositionDimensionOne().toString())
+					|| !positionDimensionTwo.equals(parameter.getToPositionDimensionTwo().toString())
+					|| !storageContainer.equals(parameter.getToStorageContainer().getId().toString()))
+			{
+				throw new DAOException(ApplicationProperties.getValue("events.toPosition.errMsg"));
+			}
+		}
+	}
 }
