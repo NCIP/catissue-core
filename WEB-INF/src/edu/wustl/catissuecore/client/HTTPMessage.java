@@ -26,6 +26,8 @@ public class HTTPMessage implements Serializable
 	
 	private String sessionId;
 	
+	private Long domainObjectId;
+	
 	public HTTPMessage()
 	{
 		messageList = new ArrayList();
@@ -86,5 +88,15 @@ public class HTTPMessage implements Serializable
 	public void setSessionId(String sessionId)
 	{
 		this.sessionId = sessionId;
+	}
+	
+	public void setDomainObjectId(Long domainObjectId)
+	{
+	    this.domainObjectId=domainObjectId;
+	}
+	
+	public Long getDomainObjectId()
+	{
+	    return this.domainObjectId;
 	}
 }
