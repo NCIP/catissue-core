@@ -41,6 +41,7 @@ import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.domain.TissueSpecimenRequirement;
 import edu.wustl.catissuecore.domain.TissueSpecimenReviewEventParameters;
+import edu.wustl.catissuecore.domain.TransferEventParameters;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.cde.CDE;
 import edu.wustl.common.cde.CDEManager;
@@ -439,6 +440,10 @@ public class Utility
 		else if(eventParameter instanceof TissueSpecimenReviewEventParameters)
 		{
 			return Constants.TISSUE_SPECIMEN_REVIEW_EVENT_PARAMETERS_FORM_ID;
+		}
+		else if(eventParameter instanceof TransferEventParameters)
+		{
+			return Constants.TRANSFER_EVENT_PARAMETERS_FORM_ID;
 		}
 		
 		return -1;
