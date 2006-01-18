@@ -645,27 +645,30 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		}
 		else
 		{
-			NameValueBean undefinedVal = new NameValueBean(Constants.UNDEFINED,Constants.UNDEFINED);
-	    	List tissueSiteList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_TISSUE_SITE,undefinedVal);
-			
-	    	if(!Validator.isEnumeratedValue(tissueSiteList,characters.getTissueSite()))
+			if(specimen.getSpecimenCollectionGroup() != null)
 			{
-				throw new DAOException(ApplicationProperties.getValue("protocol.tissueSite.errMsg"));
-			}
-			
-	    	NameValueBean unknownVal = new NameValueBean(Constants.UNKNOWN,Constants.UNKNOWN);
-	    	List tissueSideList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_TISSUE_SIDE,unknownVal);
-
-			if(!Validator.isEnumeratedValue(tissueSideList,characters.getTissueSide()))
-			{
-				throw new DAOException(ApplicationProperties.getValue("specimen.tissueSide.errMsg"));
-			}
-			
-			List pathologicalStatusList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_PATHOLOGICAL_STATUS,null);
-			
-			if(!Validator.isEnumeratedValue(pathologicalStatusList,characters.getPathologicalStatus()))
-			{
-				throw new DAOException(ApplicationProperties.getValue("protocol.pathologyStatus.errMsg"));
+				NameValueBean undefinedVal = new NameValueBean(Constants.UNDEFINED,Constants.UNDEFINED);
+		    	List tissueSiteList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_TISSUE_SITE,undefinedVal);
+				
+		    	if(!Validator.isEnumeratedValue(tissueSiteList,characters.getTissueSite()))
+				{
+					throw new DAOException(ApplicationProperties.getValue("protocol.tissueSite.errMsg"));
+				}
+				
+		    	NameValueBean unknownVal = new NameValueBean(Constants.UNKNOWN,Constants.UNKNOWN);
+		    	List tissueSideList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_TISSUE_SIDE,unknownVal);
+	
+				if(!Validator.isEnumeratedValue(tissueSideList,characters.getTissueSide()))
+				{
+					throw new DAOException(ApplicationProperties.getValue("specimen.tissueSide.errMsg"));
+				}
+				
+				List pathologicalStatusList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_PATHOLOGICAL_STATUS,null);
+				
+				if(!Validator.isEnumeratedValue(pathologicalStatusList,characters.getPathologicalStatus()))
+				{
+					throw new DAOException(ApplicationProperties.getValue("protocol.pathologyStatus.errMsg"));
+				}
 			}
 		}
 		
