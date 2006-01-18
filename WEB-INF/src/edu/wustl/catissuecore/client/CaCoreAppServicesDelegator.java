@@ -45,7 +45,7 @@ public class CaCoreAppServicesDelegator
 	    }
 	    catch(Exception e)
 	    {
-	        e.printStackTrace();
+	        Logger.out.error("Delegate Add-->" + e.getMessage());
 	        throw e;
 	    }
 	}
@@ -59,7 +59,7 @@ public class CaCoreAppServicesDelegator
 		}
 		catch(Exception e)
 		{
-		    e.printStackTrace();
+		    Logger.out.error("Delegate Edit"+ e.getMessage());
 	        throw e;
 		}
 	}
