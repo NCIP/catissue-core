@@ -63,6 +63,8 @@
 				<exclude name="**/.*"/>
 				<exclude name="**/*.sql"/>
 				<exclude name="**/CVS*"/>
+				<exclude name="**/catissuecorecsm.war"/>
+				<exclude name="**/catissuecore.war"/>
 			</fileset>
 			
 			<!--fileset dir="${base.dir}"/-->
