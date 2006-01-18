@@ -302,7 +302,7 @@
 	</target>
 
 	<!--Target call for both Deployment and Database Creation-->
-	<target name="DeployAll">
+	<target name="Deploy-all">
 		<antcall target="Deploy"/>
 		<antcall target="DBInitialize"/>
 	</target>
