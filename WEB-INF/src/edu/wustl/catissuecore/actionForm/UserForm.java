@@ -28,7 +28,6 @@ import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 import gov.nih.nci.security.authorization.domainobjects.Role;
-
 /**
  * UserForm Class is used to encapsulate all the request parameters passed 
  * from User Add/Edit webpage.
@@ -574,28 +573,39 @@ public class UserForm extends AbstractActionForm
             this.systemIdentifier = user.getSystemIdentifier().longValue();
             this.lastName = user.getLastName();
             this.firstName = user.getFirstName();
-            this.institutionId = user.getInstitution().getSystemIdentifier()
-                    .longValue();
-            this.emailAddress = user.getEmailAddress();
-            this.departmentId = user.getDepartment().getSystemIdentifier()
-                    .longValue();
-            this.cancerResearchGroupId = user.getCancerResearchGroup()
-            		.getSystemIdentifier().longValue();
+
+            // Check for null entries (for admin)
+            if(!edu.wustl.common.util.Utility.isNull(user.getInstitution()) )
+            	this.institutionId = user.getInstitution().getSystemIdentifier().longValue();
             
-            this.street = user.getAddress().getStreet();
-            this.city = user.getAddress().getCity();
-            this.state = user.getAddress().getState();
-            this.country = user.getAddress().getCountry();
-            this.zipCode = user.getAddress().getZipCode();
-            this.phoneNumber = user.getAddress().getPhoneNumber();
-            this.faxNumber = user.getAddress().getFaxNumber();
+            this.emailAddress = user.getEmailAddress();
+            
+            if(!edu.wustl.common.util.Utility.isNull(user.getDepartment()) )
+            	this.departmentId = user.getDepartment().getSystemIdentifier().longValue();
+            
+            if(!edu.wustl.common.util.Utility.isNull(user.getCancerResearchGroup()) )
+            	this.cancerResearchGroupId = user.getCancerResearchGroup().getSystemIdentifier().longValue();
+
+            if(!edu.wustl.common.util.Utility.isNull(user.getAddress()) )
+            {
+                this.street = user.getAddress().getStreet();
+                this.city = user.getAddress().getCity();
+                this.state = user.getAddress().getState();
+                this.country = user.getAddress().getCountry();
+                this.zipCode = user.getAddress().getZipCode();
+                this.phoneNumber = user.getAddress().getPhoneNumber();
+                this.faxNumber = user.getAddress().getFaxNumber();
+            }
             
             //Populate the activity status, comments and role for approve user and user edit.  
             if ((getFormId() == Constants.APPROVE_USER_FORM_ID) || 
                     ((pageOf != null) && (Constants.PAGEOF_USER_ADMIN.equals(pageOf))))
             {
                 this.activityStatus = user.getActivityStatus();
-                this.comments = user.getComments();
+                
+                if(!edu.wustl.common.util.Utility.isNull(user.getComments()) )
+                	this.comments = user.getComments();
+                
                 this.role = user.getRoleId();
                 
                 if (getFormId() == Constants.APPROVE_USER_FORM_ID)
