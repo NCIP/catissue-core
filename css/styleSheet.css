@@ -970,7 +970,7 @@ td.mainMenuItemSelected{ /* for the selected main menu (top) cells */
 .detailsData{ /* for details of a class of specimens */
   font-family:arial,helvetica,verdana,sans-serif;
   font-size:0.7em;
-  padding-left:0.8em;
+  padding-left:1.6em;
   background-color:#D3D3D6; /* constant: medium gray */
   color:#000000; /* constant: black */
   border-bottom:1px solid #5C5C5C; /* constant: dark gray */
