@@ -188,6 +188,19 @@ public class TissueSpecimenReviewEventParametersForm extends SpecimenEventParame
 						
 	}
 	
+	public void setAllVal(Object object)
+	{
+		super.setAllVal(object);
+		edu.wustl.catissuecore.domainobject.TissueSpecimenReviewEventParameters parameter
+				= (edu.wustl.catissuecore.domainobject.TissueSpecimenReviewEventParameters)object;
+		
+		this.neoplasticCellularityPercentage = String.valueOf(parameter.getNeoplasticCellularityPercentage());
+		this.necrosisPercentage = String.valueOf(parameter.getNecrosisPercentage() );
+		this.lymphocyticPercentage =String.valueOf(parameter.getLymphocyticPercentage());
+		this.totalCellularityPercentage =String.valueOf(parameter.getTotalCellularityPercentage());
+		this.histologicalQuality = String.valueOf(parameter.getHistologicalQuality());
+	}
+	
 	/**
      * Overrides the validate method of ActionForm.
      * */

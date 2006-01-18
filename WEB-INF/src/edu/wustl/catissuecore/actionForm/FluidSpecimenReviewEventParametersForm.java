@@ -79,6 +79,15 @@ public class FluidSpecimenReviewEventParametersForm extends SpecimenEventParamet
 		Logger.out.debug("############################## : ");
 	}
 	
+	public void setAllVal(Object object)
+	{
+		super.setAllVal(object);
+		edu.wustl.catissuecore.domainobject.FluidSpecimenReviewEventParameters parameter
+				= (edu.wustl.catissuecore.domainobject.FluidSpecimenReviewEventParameters)object;
+		
+		this.cellCount = Utility.toString(parameter.getCellCount());
+	}
+	
 	/**
      * Overrides the validate method of ActionForm.
      * */

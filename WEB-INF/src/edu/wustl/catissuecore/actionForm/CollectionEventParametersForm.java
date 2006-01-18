@@ -98,7 +98,17 @@ public class CollectionEventParametersForm extends SpecimenEventParametersForm
 		super.setAllValues(abstractDomain);
 		CollectionEventParameters collectionEventParameterObject = (CollectionEventParameters)abstractDomain ;
 		this.collectionProcedure =  Utility.toString(collectionEventParameterObject.getCollectionProcedure()) ;
-		this.container = Utility.toString(collectionEventParameterObject.getContainer()); 
+		this.container = Utility.toString(collectionEventParameterObject.getContainer());
+	}
+	
+	public void setAllVal(Object object)
+	{
+		super.setAllVal(object);
+		edu.wustl.catissuecore.domainobject.CollectionEventParameters parameter
+				= (edu.wustl.catissuecore.domainobject.CollectionEventParameters)object;
+		
+		this.collectionProcedure = Utility.toString(parameter.getCollectionProcedure());
+		this.container = parameter.getContainer();
 	}
 	
 	/**

@@ -71,6 +71,15 @@ public class DisposalEventParametersForm extends SpecimenEventParametersForm
 		this.reason = Utility.toString(disposalEventParametersObject.getReason());
 	}
 	
+	public void setAllVal(Object object)
+	{
+		super.setAllVal(object);
+		edu.wustl.catissuecore.domainobject.DisposalEventParameters parameter
+				= (edu.wustl.catissuecore.domainobject.DisposalEventParameters)object;
+		
+		this.reason = Utility.toString(parameter.getReason());
+	}
+	
 	/**
      * Overrides the validate method of ActionForm.
      * */

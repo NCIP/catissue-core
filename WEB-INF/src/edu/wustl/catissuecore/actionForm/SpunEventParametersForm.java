@@ -107,6 +107,33 @@ public class SpunEventParametersForm extends SpecimenEventParametersForm
 	    }
 	}
 	
+	public void setAllVal(Object object)
+	{
+		super.setAllVal(object);
+		edu.wustl.catissuecore.domainobject.SpunEventParameters parameter
+				= (edu.wustl.catissuecore.domainobject.SpunEventParameters)object;
+		
+		if(parameter.getGForce() == null)
+		{
+			//Purposefully set to -1 to throw an error in validate()
+			this.gravityForce = -1;
+		}
+		else
+		{
+			this.gravityForce = parameter.getGForce().doubleValue();
+		}
+		
+		if(parameter.getDurationInMinutes() == null)
+		{
+			//Purposefully set to -1 to throw an error in validate
+			this.durationInMinutes = -1;
+		}
+		else
+		{
+			this.durationInMinutes = parameter.getDurationInMinutes().intValue();
+		}
+	}
+	
 	/**
     * Overrides the validate method of ActionForm.
     * */

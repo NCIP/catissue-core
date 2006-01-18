@@ -102,6 +102,16 @@ public class FixedEventParametersForm extends SpecimenEventParametersForm
 	    }
 	}
 	
+	public void setAllVal(Object object)
+	{
+		super.setAllVal(object);
+		edu.wustl.catissuecore.domainobject.FixedEventParameters parameter
+				= (edu.wustl.catissuecore.domainobject.FixedEventParameters)object;
+		
+		this.fixationType = Utility.toString(parameter.getFixationType());
+		this.durationInMinutes = parameter.getDurationInMinutes().intValue();
+	}
+	
 	/**
      * Overrides the validate method of ActionForm.
      * */

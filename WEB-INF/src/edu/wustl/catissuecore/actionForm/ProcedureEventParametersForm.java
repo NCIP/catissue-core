@@ -79,6 +79,16 @@ public class ProcedureEventParametersForm extends SpecimenEventParametersForm {
 	this.url = Utility.toString(procedureEventParametersObject.getUrl());
 	this.name = Utility.toString(procedureEventParametersObject.getName());
 	}
+	
+	public void setAllVal(Object object)
+	{
+		super.setAllVal(object);
+		edu.wustl.catissuecore.domainobject.ProcedureEventParameters parameter
+				= (edu.wustl.catissuecore.domainobject.ProcedureEventParameters)object;
+		
+		this.url = Utility.toString(parameter.getUrl());
+		this.name = Utility.toString(parameter.getName());
+	}
 
 	/**
 	 * Overrides the validate method of ActionForm.

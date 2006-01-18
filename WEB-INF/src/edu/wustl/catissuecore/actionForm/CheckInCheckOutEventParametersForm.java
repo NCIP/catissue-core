@@ -73,6 +73,15 @@ public class CheckInCheckOutEventParametersForm extends SpecimenEventParametersF
 		this.storageStatus = Utility.toString(checkInCheckOutEventParameterObject.getStorageStatus()); 
 	}
 	
+	public void setAllVal(Object object)
+	{
+		super.setAllVal(object);
+		edu.wustl.catissuecore.domainobject.CheckInCheckOutEventParameter parameter
+				= (edu.wustl.catissuecore.domainobject.CheckInCheckOutEventParameter)object;
+		
+		this.storageStatus = Utility.toString(parameter.getStorageStatus());
+	}
+	
 	/**
 	 * Overrides the validate method of ActionForm.
      * */

@@ -66,6 +66,7 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
     public void setAllValues(AbstractDomainObject abstractDomain)
     {
 		CollectionProtocolRegistration registration = (CollectionProtocolRegistration)abstractDomain;
+		this.systemIdentifier = registration.getSystemIdentifier().longValue();
 		this.activityStatus = registration.getActivityStatus();
 		this.collectionProtocolID = registration.getCollectionProtocol().getId().longValue();
 		if(registration.getParticipant().getFirstName()==null)
@@ -87,13 +88,14 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
         edu.wustl.catissuecore.domainobject.CollectionProtocolRegistration registration = (edu.wustl.catissuecore.domainobject.CollectionProtocolRegistration)obj;
 		this.activityStatus = registration.getActivityStatus();
 		this.collectionProtocolID = registration.getCollectionProtocol().getId().longValue();
-		if(registration.getParticipant().getFirstName()==null)
-		{
-			registration.getParticipant().setFirstName("");
-		}
-		Logger.out.debug("registration.getParticipant().getFirstName()--"+registration.getParticipant().getFirstName());
-		if((registration.getParticipant() != null) && (registration.getParticipant().getFirstName().trim().length()>0  ))
+		this.systemIdentifier = registration.getId().longValue();
+		
+		if((registration.getParticipant() != null) && (registration.getParticipant().getId().longValue()>0  ))
 	  	{
+			if(registration.getParticipant().getFirstName()==null)
+			{
+				registration.getParticipant().setFirstName("");
+			}
 	  		this.participantID = registration.getParticipant().getId().longValue();
 	  		checkedButton = true;
 	  	}

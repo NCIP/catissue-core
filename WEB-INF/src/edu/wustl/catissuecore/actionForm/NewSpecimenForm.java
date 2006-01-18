@@ -303,7 +303,7 @@ public class NewSpecimenForm extends SpecimenForm
     	this.parentPresent = false;
     	edu.wustl.catissuecore.domainobject.SpecimenCollectionGroup specimenCollectionGroup = specimen.getSpecimenCollectionGroup();
     	if(specimenCollectionGroup!=null)
-    		this.specimenCollectionGroupId = Utility.toString(specimenCollectionGroup.getId());
+    		this.specimenCollectionGroupId = String.valueOf(specimenCollectionGroup.getId());
     	
     	if(specimen.getParentSpecimen() != null)
     	{
@@ -333,8 +333,7 @@ public class NewSpecimenForm extends SpecimenForm
 				String key2 = "Biohazard:" + i + "_systemIdentifier";
 				String key3 = "Biohazard:" + i + "_persisted";
 				
-				Biohazard hazard = (Biohazard)it.next();
-				
+				edu.wustl.catissuecore.domainobject.Biohazard hazard = (edu.wustl.catissuecore.domainobject.Biohazard)it.next();
 				biohazard.put(key1,hazard.getType());
 				biohazard.put(key2,hazard.getId());
 				

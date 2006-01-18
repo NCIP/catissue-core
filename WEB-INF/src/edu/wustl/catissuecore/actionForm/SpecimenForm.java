@@ -30,6 +30,7 @@ import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.global.ApplicationProperties;
@@ -548,38 +549,38 @@ public class SpecimenForm extends AbstractActionForm
         
         this.barcode = specimen.getBarcode();
         
-        if (specimen instanceof CellSpecimen)
+        if (specimen instanceof edu.wustl.catissuecore.domainobject.CellSpecimen)
         {
             this.className = "Cell";
-            this.quantity = String.valueOf(((CellSpecimen) specimen)
+            this.quantity = String.valueOf(((edu.wustl.catissuecore.domainobject.CellSpecimen) specimen)
                     .getQuantityInCellCount());
-            this.availableQuantity = String.valueOf(((CellSpecimen) specimen).getAvailableQuantityInCellCount());
+            this.availableQuantity = String.valueOf(((edu.wustl.catissuecore.domainobject.CellSpecimen) specimen).getAvailableQuantityInCellCount());
         }
-        else if (specimen instanceof FluidSpecimen)
+        else if (specimen instanceof edu.wustl.catissuecore.domainobject.FluidSpecimen)
         {
             this.className = "Fluid";
-            this.quantity = String.valueOf(((FluidSpecimen) specimen)
+            this.quantity = String.valueOf(((edu.wustl.catissuecore.domainobject.FluidSpecimen) specimen)
                     .getQuantityInMilliliter());
-            this.availableQuantity = String.valueOf(((FluidSpecimen) specimen).getAvailableQuantityInMilliliter());
+            this.availableQuantity = String.valueOf(((edu.wustl.catissuecore.domainobject.FluidSpecimen) specimen).getAvailableQuantityInMilliliter());
         }
-        else if (specimen instanceof MolecularSpecimen)
+        else if (specimen instanceof edu.wustl.catissuecore.domainobject.MolecularSpecimen)
         {
             this.className = "Molecular";
-            this.quantity = String.valueOf(((MolecularSpecimen) specimen)
+            this.quantity = String.valueOf(((edu.wustl.catissuecore.domainobject.MolecularSpecimen) specimen)
                     .getQuantityInMicrogram());
-            this.availableQuantity = String.valueOf(((MolecularSpecimen) specimen).getAvailableQuantityInMicrogram());
-            if (((MolecularSpecimen) specimen)
+            this.availableQuantity = String.valueOf(((edu.wustl.catissuecore.domainobject.MolecularSpecimen) specimen).getAvailableQuantityInMicrogram());
+            if (((edu.wustl.catissuecore.domainobject.MolecularSpecimen) specimen)
                     .getConcentrationInMicrogramPerMicroliter() != null)
                 this.concentration = String
-                        .valueOf(((MolecularSpecimen) specimen)
+                        .valueOf(((edu.wustl.catissuecore.domainobject.MolecularSpecimen) specimen)
                                 .getConcentrationInMicrogramPerMicroliter());
         }
-        else if (specimen instanceof TissueSpecimen)
+        else if (specimen instanceof edu.wustl.catissuecore.domainobject.TissueSpecimen)
         {
             this.className = "Tissue";
-            this.quantity = String.valueOf(((TissueSpecimen) specimen)
+            this.quantity = String.valueOf(((edu.wustl.catissuecore.domainobject.TissueSpecimen) specimen)
                     .getQuantityInGram());
-            this.availableQuantity = String.valueOf(((TissueSpecimen) specimen).getAvailableQuantityInGram());
+            this.availableQuantity = String.valueOf(((edu.wustl.catissuecore.domainobject.TissueSpecimen) specimen).getAvailableQuantityInGram());
         }
                     
         edu.wustl.catissuecore.domainobject.SpecimenCharacteristics characteristic = specimen
@@ -604,17 +605,16 @@ public class SpecimenForm extends AbstractActionForm
                 String key3 = "ExternalIdentifier:" + i
                         + "_systemIdentifier";
 
-                ExternalIdentifier externalId = (ExternalIdentifier) it
-                        .next();
+                edu.wustl.catissuecore.domainobject.ExternalIdentifier externalId = 
+                		(edu.wustl.catissuecore.domainobject.ExternalIdentifier) it.next();
 
                 externalIdentifier.put(key1, externalId.getName());
                 externalIdentifier.put(key2, externalId.getValue());
-                externalIdentifier.put(key3, String.valueOf(externalId
-                        .getSystemIdentifier()));
+                externalIdentifier.put(key3, Utility.toString(externalId.getId()));
 
                 i++;
             }
-
+            
             exIdCounter = externalIdentifierCollection.size();
         }
 

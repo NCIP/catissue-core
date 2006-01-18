@@ -256,6 +256,58 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 	    }
 	}
 	
+	public void setAllVal(Object object)
+	{
+		super.setAllVal(object);
+		edu.wustl.catissuecore.domainobject.TransferEventParameters parameter
+				= (edu.wustl.catissuecore.domainobject.TransferEventParameters)object;
+		
+		this.fromPositionDimensionOne = parameter.getFromPositionDimensionOne().intValue();
+		this.fromPositionDimensionTwo = parameter.getFromPositionDimensionTwo().intValue();
+		this.positionDimensionOne = parameter.getToPositionDimensionOne().toString();
+		this.positionDimensionTwo = parameter.getToPositionDimensionTwo().toString();
+		this.fromStorageContainerId = parameter.getFromStorageContainer().getId().longValue();
+		this.storageContainer = parameter.getToStorageContainer().getId().toString();
+		System.out.println("******************** STORAGECONTAINER :"+parameter.getToStorageContainer().getId().doubleValue());
+		this.positionInStorageContainer = parameter.getToStorageContainer().getStorageType().getType() + " : " 
+			+ this.storageContainer + " Pos(" + this.positionDimensionOne + ","
+			+ this.positionDimensionTwo + ")";
+		this.fromPosition = parameter.getFromStorageContainer().getStorageType().getType() + " : " 
+		+ this.fromStorageContainerId + " Pos(" + this.fromPositionDimensionOne + ","
+		+ this.fromPositionDimensionTwo + ")";
+		
+		
+		String specimenId = parameter.getSpecimen().getId().toString(); 
+      	DefaultBizLogic bizLogic = BizLogicFactory.getDefaultBizLogic();;
+    	
+    	String identifier = specimenId ;
+    	
+    	try
+		{
+	    	List specimenList = bizLogic.retrieve(Specimen.class.getName(),Constants.SYSTEM_IDENTIFIER,identifier);
+	    	
+	    	String posOne = null;
+	    	String posTwo = null;
+	    	String storContId = null;
+	    	String fromPositionData = null;
+	    	if(specimenList!=null && specimenList.size() != 0)
+	    	{
+	    		Specimen specimen = (Specimen)specimenList.get(0);
+	    		posOne = specimen.getPositionDimensionOne().toString();
+	    		posTwo = specimen.getPositionDimensionTwo().toString();
+	    		
+	    		StorageContainer container = specimen.getStorageContainer();
+	    		storContId = container.getSystemIdentifier().toString();
+	    		fromPositionData = container.getStorageType().getType() + " : " 
+				+ storContId + " Pos(" + posOne + "," + posTwo + ")";
+	    	}
+		}
+    	catch(Exception e)
+		{
+    		Logger.out.debug(e.getMessage(),e);
+		}
+	}
+	
 	/**
      * Overrides the validate method of ActionForm.
      * */

@@ -101,6 +101,16 @@ public class CellSpecimenReviewParametersForm extends SpecimenEventParametersFor
 		this.viableCellPercentage = Utility.toString(cellSpecimenReviewParametersObject.getViableCellPercentage()) ; 
 	}
 	
+	public void setAllVal(Object object)
+	{
+		super.setAllVal(object);
+		edu.wustl.catissuecore.domainobject.CellSpecimenReviewParameters parameter 
+					= (edu.wustl.catissuecore.domainobject.CellSpecimenReviewParameters)object;
+		
+		this.neoplasticCellularityPercentage = Utility.toString(parameter.getNeoplasticCellularityPercentage());
+		this.viableCellPercentage = Utility.toString(parameter.getViableCellPercentage());
+	}
+	
 	/**
      * Overrides the validate method of ActionForm.
      * */
