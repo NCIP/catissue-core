@@ -93,7 +93,7 @@ AssignPrivilegesForm form = (AssignPrivilegesForm)request.getAttribute("assignPr
 				objectCombo.options[0] = new Option("Site","edu.wustl.catissuecore.domain.Site");
 				objectCombo.options[1] = new Option("Storage Container","edu.wustl.catissuecore.domain.StorageContainer");
 				userCombo.options.length = 0;
-				for(var i=0;i<usersNamesForRead.length;i++)
+				for(var i=0;i<usersNamesForUse.length;i++)
 				{
 					
 					userCombo.options[i] = new Option(usersNamesForUse[i],usersIdsForUse[i]);
