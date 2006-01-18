@@ -27,13 +27,21 @@ public class CaCoreAppServicesDelegator
 		CaTissueHTTPClient httpClient = CaTissueHTTPClient.getInstance();
 		
 		boolean status = httpClient.connect(userName,password);
+		
 		Logger.out.debug("****************** HTTP LOGIN STATUS : " + status);
+		
 		return status;
 	}
 	
-	public boolean delegateLogout() //throws Exception
+	public boolean delegateLogout() throws Exception
 	{
-		return false;
+	    CaTissueHTTPClient httpClient = CaTissueHTTPClient.getInstance();
+		
+		boolean status = httpClient.disConnect();
+		
+		Logger.out.debug("****************** HTTP LOGOUT STATUS : " + status);
+		
+		return status;
 	}
 	
 	public Object delegateAdd(Object obj) throws Exception
