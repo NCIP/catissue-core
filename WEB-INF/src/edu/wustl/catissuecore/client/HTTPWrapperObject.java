@@ -41,7 +41,7 @@ public class HTTPWrapperObject implements Serializable
 		}
 		else
 		{
-		    AbstractActionForm abstractForm = ActionFormFactory.getFormBean(domainObject);
+		    AbstractActionForm abstractForm = ActionFormFactory.getFormBean(domainObject,operation);
 		    abstractForm.setOperation(operation);				
 			abstractForm.setAllVal(domainObject);
 			formBean = abstractForm;
