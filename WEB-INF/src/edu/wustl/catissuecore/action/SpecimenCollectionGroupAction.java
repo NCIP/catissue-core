@@ -30,10 +30,10 @@ import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.cde.CDEManager;
-import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.logger.Logger;
 
 
@@ -148,17 +148,20 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 
 				//Populating the participants registered to a given protocol
 					loadPaticipants(cpID , bizLogic, request);
-					if(!Utility.isNull(cpr.getParticipant()) && !Utility.isNull(cpr.getParticipant().getFirstName()) )
-					{
-						if(cpr.getParticipant().getFirstName().trim().length()>0 )
-						{
-							specimenCollectionGroupForm.setParticipantId(pID );
-							specimenCollectionGroupForm.setCheckedButton(1 ); 
-						}	
-					}
-				//Populating the protocol participants id registered to a given protocol
 					loadPaticipantNumberList(specimenCollectionGroupForm.getCollectionProtocolId(),bizLogic,request);
-					if(cpr.getProtocolParticipantIdentifier() != null)
+					
+					String firstName = Utility.toString(cpr.getParticipant().getFirstName());;
+					String lastName = Utility.toString(cpr.getParticipant().getLastName());
+					String birthDate = Utility.toString(cpr.getParticipant().getBirthDate());
+					String ssn = Utility.toString(cpr.getParticipant().getSocialSecurityNumber());
+					if(firstName.trim().length()>0 || lastName.trim().length()>0 || birthDate.trim().length()>0 || ssn.trim().length()>0)
+					{
+						specimenCollectionGroupForm.setParticipantId(pID );
+						specimenCollectionGroupForm.setCheckedButton(1 ); 
+					}	
+				//Populating the protocol participants id registered to a given protocol
+					
+					else if(cpr.getProtocolParticipantIdentifier() != null)
 					{
 						specimenCollectionGroupForm.setProtocolParticipantIdentifier(ppID );
 						specimenCollectionGroupForm.setCheckedButton(2 ); 
