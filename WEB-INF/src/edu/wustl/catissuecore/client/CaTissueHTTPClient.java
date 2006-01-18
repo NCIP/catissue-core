@@ -58,6 +58,20 @@ public class CaTissueHTTPClient
 		return false;
 	}
 	
+	public boolean disConnect() throws Exception
+	{
+	    HTTPWrapperObject wrapperObject = new HTTPWrapperObject(null, Constants.LOGOUT);
+	    
+	    HTTPMessage httpMessage =(HTTPMessage)sendData(wrapperObject, servletURL+"LogoutHTTP.do;jsessionid="+httpSessionId);
+	    
+	    if(Constants.SUCCESS.equals(httpMessage.getResponseStatus()))
+		{
+			return true;
+		}
+		
+		return false;
+	}
+	
 	private Object doOperation(Object domainObject,String operation) throws Exception
 	{
 	    HTTPWrapperObject wrapperObject = new HTTPWrapperObject(domainObject,operation);
