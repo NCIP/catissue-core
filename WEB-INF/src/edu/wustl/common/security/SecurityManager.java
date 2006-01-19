@@ -1277,26 +1277,26 @@ public class SecurityManager implements Permissions {
 		return names;
 
 	}
-	
-	
-	
 
 	/**
 	 * Returns name value beans corresponding to all privileges that can be
 	 * assigned for Assign Privileges Page
 	 * 
-	 * @param userName
-	 *            login name of user logged in
+	 * @param roleName
+	 *            role name of user logged in
 	 * @return
 	 */
-	public Vector getPrivilegesForAssignPrivilege(String userName) {
+	public Vector getPrivilegesForAssignPrivilege(String roleName) {
 		Vector privileges = new Vector();
 		NameValueBean nameValueBean;
 		nameValueBean = new NameValueBean(Permissions.READ, Permissions.READ);
 		privileges.add(nameValueBean);
-		
-		nameValueBean = new NameValueBean(Permissions.USE, Permissions.USE);
-		privileges.add(nameValueBean);
+		//Use privilege only provided to Administrtor in Assing privileges page.
+		if(roleName.equals(Constants.ADMINISTRATOR))
+		{
+			nameValueBean = new NameValueBean(Permissions.USE, Permissions.USE);
+			privileges.add(nameValueBean);
+		}
 		return privileges;
 	}
 	

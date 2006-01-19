@@ -49,6 +49,9 @@ public class AssignPrivilegePageAction extends BaseAction
             throws IOException, ServletException
     {
         AssignPrivilegesForm privilegesForm = (AssignPrivilegesForm)form;
+        SessionDataBean sessionData = getSessionData(request);
+        //User ID of the user who has logged in
+        Long loginUserId = sessionData.getUserId();
         
         //Constants that are required to populate lists in AssignPrivileges.jsp
         String [] assignOperation = {"Allow","Disallow"};
@@ -85,6 +88,7 @@ public class AssignPrivilegePageAction extends BaseAction
         		((Vector) userCollection).remove(0);//Removing SELECT Option
 //        		Extracting RoleNames & their Ids
         		Vector roles = SecurityManager.getInstance(AssignPrivilegePageAction.class).getRoles();
+        		//Create list of users for Use and Read privilege.
             	List usersForUsePrivilege = new ArrayList();
             	List usersForReadPrivilege = new ArrayList();
 
@@ -106,25 +110,25 @@ public class AssignPrivilegePageAction extends BaseAction
         			}
         		}
 
-            	SessionDataBean sessionData = getSessionData(request);
-            	Long loginUserId = sessionData.getUserId();
             	Iterator userCollectionItr = userCollection.iterator();
             	while(userCollectionItr.hasNext())
             	{
-            		
             		NameValueBean userNameValue = (NameValueBean)userCollectionItr.next();
             		long userId = Long.parseLong(userNameValue.getValue());
             		Role role = SecurityManager.getInstance(AssignPrivilegePageAction.class).getUserRole(userId);
-            		String roleName = role.getName();
-            		//Make a list of technicians
-            		if(roleName.equals(Constants.TECHNICIAN))
-            			usersForUsePrivilege.add(userNameValue);
-            		//Make a list of Scientists
-            		if(roleName.equals(Constants.SCIENTIST))
-            			usersForReadPrivilege.add(userNameValue);
+            		if(role!=null)
+            		{
+            			String roleName = role.getName();
+            			//Make a list of technicians
+            			if(roleName.equals(Constants.TECHNICIAN))
+            				usersForUsePrivilege.add(userNameValue);
+            			//Make a list of Scientists
+            			if(roleName.equals(Constants.SCIENTIST))
+            				usersForReadPrivilege.add(userNameValue);
+            		}
             		//Remove the user who has logged in, from the users list.
             		if(userNameValue.getValue().equals(String.valueOf(loginUserId)))
-            			userCollectionItr.remove();
+            				userCollectionItr.remove();
             	}
         		request.setAttribute(Constants.GROUPS,userCollection);
         		//Set users for Read privilege - group of Scientists only
@@ -133,13 +137,12 @@ public class AssignPrivilegePageAction extends BaseAction
             	request.setAttribute(Constants.USERS_FOR_USE_PRIVILEGE,usersForUsePrivilege);
         	}
  
-        	
         	request.setAttribute(Constants.ASSIGN,assignOperation);
-        	
-            SessionDataBean bean = getSessionData(request);
-            
+
+        	//Get the privileges list according to the role of the user who has logged in.
+        	Role loginUserRole = SecurityManager.getInstance(AssignPrivilegePageAction.class).getUserRole(loginUserId.longValue());
             //SETTING THE PRIVILEGES LIST
-            Vector privileges = SecurityManager.getInstance(AssignPrivilegePageAction.class).getPrivilegesForAssignPrivilege(bean.getUserName());		
+            Vector privileges = SecurityManager.getInstance(AssignPrivilegePageAction.class).getPrivilegesForAssignPrivilege(loginUserRole.getName());		
             request.setAttribute(Constants.PRIVILEGES,privileges);
             
             //SETTING THE OBJECT TYPES LIST            
@@ -163,9 +166,7 @@ public class AssignPrivilegePageAction extends BaseAction
 					{
 						objects[i+1] = (String) subclassIt.next();
 					}
-					Logger.out.debug("privilege type:"+privilegesForm.getPrivilege());
-					Logger.out.debug("user group:"+privilegesForm.getGroups());
-					recordIds = SecurityManager.getInstance(AssignPrivilegePageAction.class).getObjectsForAssignPrivilege(String.valueOf(bean.getCsmUserId()),objects,privilegeName);
+					recordIds = SecurityManager.getInstance(AssignPrivilegePageAction.class).getObjectsForAssignPrivilege(String.valueOf(sessionData.getCsmUserId()),objects,privilegeName);
             	}
             	
             	request.setAttribute(Constants.RECORD_IDS, recordIds);
