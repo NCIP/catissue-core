@@ -464,17 +464,21 @@ private Timestamp isColumnValueDate(Object value)
         		if(dateColumns.contains(new Integer(i+1)) && obj.toString().equals("##"))
         		{
         			obj = null;
+        			stmt.setDate(i+1,(java.sql.Date)obj);
         		}
-        		Timestamp date =  isColumnValueDate(obj);	
-        		if(date!=null)
-        		{
-        			stmt.setObject(i+1,date);
-        			Logger.out.debug("t.toString(): "+"---"+date);
-				}
         		else
         		{
-        			stmt.setObject(i+1,obj);
-        		}	
+        			Timestamp date =  isColumnValueDate(obj);	
+        			if(date!=null)
+        			{
+        				stmt.setObject(i+1,date);
+        				Logger.out.debug("t.toString(): "+"---"+date);
+        			}
+        			else
+        			{
+        				stmt.setObject(i+1,obj);
+        			}	
+        		}
     	    }
         	stmt.executeUpdate();
         }
