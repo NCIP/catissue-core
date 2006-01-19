@@ -120,11 +120,18 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 			Participant oldParticipant = oldCollectionProtocolRegistration.getParticipant();
 			
 			//Check for if the older participant was also a dummy, if true use the same participant, 
-			//otherwise create an another dummay participant 
-			if(oldParticipant != null && oldParticipant.getLastName().equals("") && oldParticipant.getFirstName().equals(""))
+			//otherwise create an another dummay participant
+			if(oldParticipant != null)
 			{
-				collectionProtocolRegistration.setParticipant(oldParticipant);
-			}
+				String firstName = Utility.toString(oldParticipant.getFirstName());
+				String lastName = Utility.toString(oldParticipant.getLastName());
+				String birthDate = Utility.toString(oldParticipant.getBirthDate());
+				String ssn = Utility.toString(oldParticipant.getSocialSecurityNumber());
+				if(firstName.trim().length() == 0 && lastName.trim().length() == 0 && birthDate.trim().length() == 0 && ssn.trim().length() == 0)
+				{
+					collectionProtocolRegistration.setParticipant(oldParticipant);
+				}
+			} // oldpart != null
 			else  
 			{
 				//create dummy participant.
