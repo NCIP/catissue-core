@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- $Id: Sample-properties-service.xml,v 1.1 2006/01/18 10:14:36 sachin_lale Exp $ -->
+<!-- $Id: Sample-properties-service.xml,v 1.2 2006/01/19 05:39:12 Kapil Exp $ -->
 
 <server>
 
@@ -53,7 +53,9 @@
 
     <attribute name="Properties">
 
-        gov.nih.nci.security.configFile=E:/Program_Files/jboss-4.0.0RC/server/default/catissuecore-properties/ApplicationSecurityConfig.xml
+		gov.nih.nci.sdk.remote.catissuecore.securityLevel=0
+		gov.nih.nci.sdk.applications.session.timeout=3000
+		gov.nih.nci.security.configFile=E:/Program_Files/jboss-4.0.0RC/server/default/catissuecore-properties/ApplicationSecurityConfig.xml
 
     </attribute>
      
