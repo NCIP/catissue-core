@@ -427,14 +427,14 @@ private Timestamp isColumnValueDate(Object value)
 		Statement statement=connection.createStatement();
 		ResultSet resultSet = statement.executeQuery(sql.toString());
 		ResultSetMetaData metaData = resultSet.getMetaData();
-		List columnTypes=new ArrayList();
 		//Make a list of Date columns
+		List dateColumns=new ArrayList();
 		for(int i =1;i<metaData.getColumnCount();i++)
 		{
 			String type = metaData.getColumnTypeName(i);
 			
 			if(type.equals("DATE"))
-				columnTypes.add(new Integer(i));
+				dateColumns.add(new Integer(i));
 		}
 		resultSet.close();
 		statement.close();
@@ -461,9 +461,9 @@ private Timestamp isColumnValueDate(Object value)
     	    {
         		Object obj = columnValues.get(i);
         		//if column value is ## and it is a date field, replace value with default value("00-00-0000")
-        		if(columnTypes.contains(new Integer(i+1)) && obj.toString().equals("##"))
+        		if(dateColumns.contains(new Integer(i+1)) && obj.toString().equals("##"))
         		{
-        			obj = "00-00-0000";
+        			obj = null;
         		}
         		Timestamp date =  isColumnValueDate(obj);	
         		if(date!=null)
