@@ -223,7 +223,7 @@
 					token="@@hibernate-config-file@@" 
 				  	value="${jboss.home.dir}/server/default/catissuecore-properties/catissuecore.hibernate.cfg.xml"/>
 		</replace>
-		<copy todir="${jboss.home.dir}/server/all/lib" >
+		<copy todir="${jboss.home.dir}/server/default/lib" >
 			<fileset dir="${lib.dir}">
 				<include name="${mysql.lib}"/>
 				<include name="${oracle.lib}"/>
