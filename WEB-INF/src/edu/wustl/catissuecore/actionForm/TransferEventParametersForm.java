@@ -268,7 +268,6 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 		this.positionDimensionTwo = parameter.getToPositionDimensionTwo().toString();
 		this.fromStorageContainerId = parameter.getFromStorageContainer().getId().longValue();
 		this.storageContainer = parameter.getToStorageContainer().getId().toString();
-		System.out.println("******************** STORAGECONTAINER :"+parameter.getToStorageContainer().getId().doubleValue());
 		this.positionInStorageContainer = parameter.getToStorageContainer().getStorageType().getType() + " : " 
 			+ this.storageContainer + " Pos(" + this.positionDimensionOne + ","
 			+ this.positionDimensionTwo + ")";
