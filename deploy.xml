@@ -34,6 +34,8 @@
 		<copy file="catissuecore-ds.xml" todir="${temp.dir}" overwrite="true"/>
 		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>
 		<unwar src="${base.dir}/catissuecorecsm.war" dest="${temp.dir}/tempcsm"/>
+		<copy file="${csm.dir}/WEB-INF/classes/DAOConfig.xml" todir="${temp.dir}">
+		</copy>
  	</target>
 	
 	<!--Modify Configuration such as Session Timeout and Admin details-->
@@ -227,6 +229,11 @@
 				<include name="${oracle.lib}"/>
 			</fileset>
 		</copy>
+		<copy todir="${jboss.home.dir}/bin" overwrite="true">
+			<fileset dir="${temp.dir}">
+				<include name="DAOConfig.xml"/>
+			</fileset>
+		</copy>	
   	</target>
 	
 	<!--Target for Deployment -->
