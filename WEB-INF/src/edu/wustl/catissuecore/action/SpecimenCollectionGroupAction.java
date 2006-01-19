@@ -51,6 +51,8 @@ public class SpecimenCollectionGroupAction  extends SecureAction
             HttpServletRequest request, HttpServletResponse response) throws Exception
     {
     	SpecimenCollectionGroupForm  specimenCollectionGroupForm = (SpecimenCollectionGroupForm)form;
+		Logger.out.debug("SCGA : " + specimenCollectionGroupForm.getSystemIdentifier() );
+
     	//	set the menu selection 
     	request.setAttribute(Constants.MENU_SELECTED, "14"  ); 
     	
@@ -62,7 +64,11 @@ public class SpecimenCollectionGroupAction  extends SecureAction
         
         //Sets the operation attribute to be used in the Edit/View Specimen Collection Group Page in Advance Search Object View. 
         request.setAttribute(Constants.OPERATION,operation);
-
+        if(operation.equalsIgnoreCase(Constants.ADD ) )
+        {
+        	specimenCollectionGroupForm.setSystemIdentifier(0);
+        	Logger.out.debug("SCGA : set to 0 "+ specimenCollectionGroupForm.getSystemIdentifier() );
+        }
 		
     	boolean isOnChange = false; 
 		String str = request.getParameter("isOnChange");

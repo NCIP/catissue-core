@@ -49,7 +49,11 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 
 		//Sets the operation attribute to be used in the Add/Edit User Page. 
 		request.setAttribute(Constants.OPERATION, operation);
-		
+        if(operation.equalsIgnoreCase(Constants.ADD ) )
+        {
+        	((CollectionProtocolRegistrationForm)form).setSystemIdentifier(0);
+        }
+
 		//Sets the pageOf attribute
         String pageOf  = request.getParameter(Constants.PAGEOF);
         
