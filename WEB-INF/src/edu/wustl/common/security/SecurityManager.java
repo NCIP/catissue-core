@@ -42,6 +42,7 @@ import gov.nih.nci.security.authorization.domainobjects.Application;
 import gov.nih.nci.security.authorization.domainobjects.Group;
 import gov.nih.nci.security.authorization.domainobjects.Privilege;
 import gov.nih.nci.security.authorization.domainobjects.ProtectionElement;
+import gov.nih.nci.security.authorization.domainobjects.ProtectionElementPrivilegeContext;
 import gov.nih.nci.security.authorization.domainobjects.ProtectionGroup;
 import gov.nih.nci.security.authorization.domainobjects.ProtectionGroupRoleContext;
 import gov.nih.nci.security.authorization.domainobjects.Role;
@@ -274,8 +275,11 @@ public class SecurityManager implements Permissions {
 			group.setGroupName(ADMINISTRATOR_GROUP);
 			GroupSearchCriteria groupSearchCriteria= new GroupSearchCriteria(group);
 			List list = getObjects(groupSearchCriteria);
+			Logger.out.debug("Group Size: "+list.size());
 			group = (Group) list.get(0);
+			Logger.out.debug("Group : "+group.getGroupName());
 			Set users = group.getUsers();
+			Logger.out.debug("Users : "+users);
 			Long[] userId= new Long[users.size()];
 			Iterator it= users.iterator();
 			for(int i=0; i<users.size(); i++)
@@ -284,12 +288,11 @@ public class SecurityManager implements Permissions {
 			}
 			return userId;
 		} catch (CSException e) {
-			Logger.out
-					.debug("Unable to get users: Exception: " + e.getMessage());
+			Logger.out.debug("Unable to get users: Exception: " + e.getMessage());
 			throw new SMException(e.getMessage(), e);
 		}
 	}
-
+	
 	/**
 	 * This method checks whether a user exists in the database or not
 	 * 
@@ -808,7 +811,7 @@ public class SecurityManager implements Permissions {
 			 * Assigning protection elements to dynamic groups
 			 */
 			assignProtectionElementsToGroups(protectionElements, dynamicGroups);
-
+			
 			Logger.out
 					.debug("************** Inserted authorization Data ***************");
 
@@ -1176,16 +1179,97 @@ public class SecurityManager implements Permissions {
 			throw new SMException(e.getMessage(), e);
 		}
 	}
+	
+	/**
+	 * Checks whether the user group of id (groupid) has permission 
+	 * over the object of type (objectType) with the given identifier (objectIdentifier).
+	 * @param groupId The user group to be checked.
+	 * @param objectType The object type.
+	 * @param objectIdentifier The iedntifier of the object.
+	 * @return Returns true if the user group has permission over the object, else returns false.
+	 * @throws SMException
+	 */
+	public boolean checkPermission(String groupId, String objectType,
+			String objectIdentifier) throws SMException 
+	{
+	    Logger.out.debug("Check Privilege for user group.................................");
+	    String protectionElementName = objectType + "_" + objectIdentifier; 
+	    Logger.out.debug("protectionElementName>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+protectionElementName);
+	    
+	    try
+	    {
+	        UserProvisioningManager userProvisioningManager = getUserProvisioningManager();  
+		    Set privilegeContextForGroup = userProvisioningManager
+		    								.getProtectionElementPrivilegeContextForGroup(groupId);
+		    Iterator iterator = privilegeContextForGroup.iterator();
+		    while (iterator.hasNext())
+		    {
+		        ProtectionElementPrivilegeContext pePrivilegeContext = (ProtectionElementPrivilegeContext) iterator.next();
+		        if (pePrivilegeContext.getProtectionElement().getProtectionElementName().equals(protectionElementName))
+		        {
+		            return true;
+		        }
+		    }
+	    }
+	    catch (CSObjectNotFoundException csObjNotExp)
+	    {
+	        throw new SMException(csObjNotExp.getMessage(), csObjNotExp);
+	    }
+	    catch (CSException csExp)
+	    {
+	        throw new SMException(csExp.getMessage(), csExp);
+	    }
+	    
+	    return false;
+	}
 
 	public boolean checkPermission(String userName, String objectType,
 			String objectIdentifier, String privilegeName) throws SMException {
 		try {
+		    Logger.out.debug(" User:" + userName + "objectType:" + objectType
+					+ " objectId:" + objectIdentifier + " privilegeName:"
+					+ privilegeName);
+		    
+//		    String protectionElementName = objectType + "_" + objectIdentifier;
+//		    
+//			ProtectionElement protectionElement = getAuthorizationManager().getProtectionElement(
+//					protectionElementName);
+//			
+//			List peList = new ArrayList();
+//			peList.add(protectionElement);
+//			
+//			Collection pMap = getAuthorizationManager().getPrivilegeMap(userName, peList);
+//			Iterator it1 = pMap.iterator();
+//			while (it1.hasNext())
+//			{
+//			    ObjectPrivilegeMap map = (ObjectPrivilegeMap) it1.next();
+//			    Logger.out.debug("PE Privileges>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+map.getPrivileges().toString());
+//			    Logger.out.debug("PE Privileges Size>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+map.getPrivileges().size());
+//			    Iterator it2 = map.getPrivileges().iterator();
+//			    while (it2.hasNext())
+//			    {
+//			        Privilege pr = (Privilege)it2.next();
+//			        Logger.out.debug("Privilege ****************************"+pr.getName());
+//			    }
+//			}
+//			
+//			Set protectionGroups = getAuthorizationManager().getProtectionGroups(
+//					protectionElement.getProtectionElementId().toString());
+//			Iterator it = protectionGroups.iterator();
+//			while (it.hasNext()) {
+//				ProtectionGroup protectionGroup = (ProtectionGroup) it.next();
+//				String name = protectionGroup.getProtectionGroupName();
+//				Logger.out.debug("Protection group Name : ############################"+name);
+//			}
+			
 			boolean isAuthorized = getAuthorizationManager().checkPermission(
 					userName, objectType + "_" + objectIdentifier,
 					privilegeName);
+			
 			Logger.out.debug(" User:" + userName + "objectType:" + objectType
 					+ " objectId:" + objectIdentifier + " privilegeName:"
 					+ privilegeName + " isAuthorized:" + isAuthorized);
+			
 			return isAuthorized;
 		} catch (CSException e) {
 			Logger.out.debug("Unable to get all users: Exception: "
@@ -1193,7 +1277,7 @@ public class SecurityManager implements Permissions {
 			throw new SMException(e.getMessage(), e);
 		}
 	}
-
+	
 	/**
 	 * This method returns name of the Protection groupwhich consists of obj as
 	 * Protection Element and whose name consists of string nameConsistingOf
@@ -1332,7 +1416,8 @@ public class SecurityManager implements Permissions {
 				objectPrivilegeMap = (ObjectPrivilegeMap) iterator.next();
 				objectId = objectPrivilegeMap.getProtectionElement()
 						.getObjectId();
-				Logger.out.debug(objectId);
+				Logger.out.debug("PE Name .................."+objectPrivilegeMap.getProtectionElement().getProtectionElementName());
+				Logger.out.debug("PE objectId : "+objectId);
 				if (objectId.indexOf(objectType + "_") != -1) {
 					privileges = objectPrivilegeMap.getPrivileges();
 					Logger.out.debug("Privileges:" + privileges.size());
@@ -1500,6 +1585,7 @@ public class SecurityManager implements Permissions {
 			        roleName = Permissions.READ_DENIED;
 			    else
 			        roleName = privilegeName + "_ONLY";
+			    
 				role = getRole(roleName);
 				Logger.out.debug("Operation>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+(assignOperation == true?"Remove READ_DENIED":"Add READ_DENIED"));
 				
@@ -1674,7 +1760,8 @@ public class SecurityManager implements Permissions {
 			List list;
 //			ProtectionGroupSearchCriteria protectionGroupSearchCriteria;
 			ProtectionGroup protectionGroup;
-			try {
+			try
+			{
 				//Get user group for the corresponding role
 				groupId = getGroupIdForRole(roleId);
 				userProvisioningManager = getUserProvisioningManager();
@@ -1699,6 +1786,7 @@ public class SecurityManager implements Permissions {
 				        protectionGroup = getProtectionGroup(protectionGroupName);
 					    
 				        Logger.out.debug("Assign Protection elements");
+				        
 						//Assign Protection elements to Protection Group
 						assignProtectionElements(protectionGroup
 								.getProtectionGroupName(), objectType, objectIds);
@@ -2025,7 +2113,7 @@ public class SecurityManager implements Permissions {
 					csex);
 		}
 	}
-
+	
 	/**
 	 * @param sessionDataBean
 	 * @param queryResultObjectDataMap
@@ -2050,7 +2138,7 @@ public class SecurityManager implements Permissions {
 		QueryResultObjectData queryResultObjectData3;
 		Vector queryObjects;
 		Map columnIdsMap = new HashMap();
-
+		
 		//Aarti: For all objects in objectIdentifiers check permission on the
 		// objects
 		//In case user is not authorized to access an object make
@@ -2091,8 +2179,10 @@ public class SecurityManager implements Permissions {
 			    Logger.out.debug("Removed Main Object Fields...................");
 				removeUnauthorizedFieldsData(aList, queryResultObjectData2, false);
 			} 
-			else 
+			else
 			{
+			    Logger.out.debug("For Identified Data : User : "+sessionDataBean.getUserName()+" Alias Name : "
+			            			+queryResultObjectData2.getAliasName()+"Identifed Column : "+aList.get(queryResultObjectData2.getIdentifierColumnId()));
 				hasPrivilegeOnIdentifiedData = checkPermission(sessionDataBean
 						.getUserName(), queryResultObjectData2.getAliasName(),
 						aList.get(queryResultObjectData2.getIdentifierColumnId()),
@@ -2106,57 +2196,54 @@ public class SecurityManager implements Permissions {
 					removeUnauthorizedFieldsData(aList, queryResultObjectData2, true);
 				}
 			}
-
+			
 			Logger.out.debug("isAuthorizedForMain***********************"+isAuthorizedForMain);
 			// Check the privilege on related objects when the privilege on main object is de-assigned.
-//			if (isAuthorizedForMain == false)
+			Logger.out.debug("Check Permission of Related Objects..................");
+		    queryObjects = queryResultObjectData2.getRelatedQueryResultObjects();
+			for (int j = 0; j < queryObjects.size(); j++) 
 			{
-			    Logger.out.debug("Check Permission of Related Objects..................");
-			    queryObjects = queryResultObjectData2.getRelatedQueryResultObjects();
-				for (int j = 0; j < queryObjects.size(); j++) 
+				queryResultObjectData3 = (QueryResultObjectData) queryObjects.get(j);
+				
+				//If authorized to see the main object then check for
+				// authorization on dependent object
+				if (isAuthorizedForMain) 
 				{
-					queryResultObjectData3 = (QueryResultObjectData) queryObjects.get(j);
-					
-					//If authorized to see the main object then check for
-					// authorization on dependent object
-					if (isAuthorizedForMain) 
-					{
-						isAuthorizedForRelated = checkPermission(sessionDataBean
-								.getUserName(), queryResultObjectData3
-								.getAliasName(), aList.get(queryResultObjectData3
-								.getIdentifierColumnId()), Permissions.READ_DENIED);
-						isAuthorizedForRelated = !isAuthorizedForRelated;
-					}
-					//else set it false
-					else 
-					{
-						isAuthorizedForRelated = false;
-					}
-					
-					Logger.out.debug("Related object:"
-							+ queryResultObjectData3.getAliasName()
-							+ " isAuthorizedForRelated:" + isAuthorizedForRelated);
+					isAuthorizedForRelated = checkPermission(sessionDataBean
+							.getUserName(), queryResultObjectData3
+							.getAliasName(), aList.get(queryResultObjectData3
+							.getIdentifierColumnId()), Permissions.READ_DENIED);
+					isAuthorizedForRelated = !isAuthorizedForRelated;
+				}
+				//else set it false
+				else 
+				{
+					isAuthorizedForRelated = false;
+				}
+				
+				Logger.out.debug("Related object:"
+						+ queryResultObjectData3.getAliasName()
+						+ " isAuthorizedForRelated:" + isAuthorizedForRelated);
 
-					//If not authorized to see related objects
-					//remove the data from the fields directly related to related
-					// object
-					if (!isAuthorizedForRelated) 
+				//If not authorized to see related objects
+				//remove the data from the fields directly related to related
+				// object
+				if (!isAuthorizedForRelated) 
+				{
+					removeUnauthorizedFieldsData(aList, queryResultObjectData3,
+							false);
+				} 
+				else 
+				{
+					hasPrivilegeOnIdentifiedData = checkPermission(
+							sessionDataBean.getUserName(),
+							queryResultObjectData3.getAliasName(), aList
+									.get(queryResultObjectData3.getIdentifierColumnId()),
+							Permissions.IDENTIFIED_DATA_ACCESS);
+					
+					if (!hasPrivilegeOnIdentifiedData) 
 					{
-						removeUnauthorizedFieldsData(aList, queryResultObjectData3,
-								false);
-					} 
-					else 
-					{
-						hasPrivilegeOnIdentifiedData = checkPermission(
-								sessionDataBean.getUserName(),
-								queryResultObjectData3.getAliasName(), aList
-										.get(queryResultObjectData3.getIdentifierColumnId()),
-								Permissions.IDENTIFIED_DATA_ACCESS);
-						
-						if (!hasPrivilegeOnIdentifiedData) 
-						{
-							removeUnauthorizedFieldsData(aList,queryResultObjectData3, true);
-						}
+						removeUnauthorizedFieldsData(aList,queryResultObjectData3, true);
 					}
 				}
 			}
@@ -2214,30 +2301,32 @@ public class SecurityManager implements Permissions {
 		boolean isAuthorized = false;
 		String tableName = (String) AbstractClient.objectTableNames.get(tableAlias);
 		Logger.out.debug(" AliasName:" + tableAlias + " tableName:" + tableName
-				+ " Identifier:" + identifier + " Permission:" + permission);
+				+ " Identifier:" + identifier + " Permission:" + permission + " userName" + userName);
 		
-		String className;
+		String className = HibernateMetaData.getClassName(tableName);
 		if(tableName.equals(Constants.CATISSUE_SPECIMEN))
 		{
-			//modified by ajay
-			className = "edu.wustl.catissuecore.domain.Specimen";
+		    try
+		    {
+		        Class classObject = Class.forName(className);
+				className = classObject.getSuperclass().getName();
+		    }
+		    catch (ClassNotFoundException classNotExp)
+		    {
+		        Logger.out.debug("Class "+className+" not present.");
+		    }
 		}
+		
 		//Get classname mapping to tableAlias
-		else
-		{
-			className = HibernateMetaData.getClassName(tableName);
-		}
 		if (className == null) {
 			return isAuthorized;
 		}
 		
-
 		//checking privilege type on class.
 		//whether it is class level / object level / no privilege
-		int privilegeType = Integer.parseInt((String) AbstractClient.privilegeTypeMap
-				.get(tableAlias));
+		int privilegeType = Integer.parseInt((String) AbstractClient.privilegeTypeMap.get(tableAlias));
 		Logger.out.debug(" privilege type:" + privilegeType);
-
+		
 		try {
 			//If type of privilege is class level check user's privilege on
 			// class
@@ -2266,8 +2355,6 @@ public class SecurityManager implements Permissions {
 		return isAuthorized;
 	}
 	
-	
-
 }
 
 
