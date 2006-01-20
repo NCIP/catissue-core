@@ -407,6 +407,8 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String TABLE_DISPLAY_NAME_COLUMN = "DISPLAY_NAME";
 	public static final String TABLE_ALIAS_NAME_COLUMN = "ALIAS_NAME";
 	public static final String TABLE_FOR_SQI_COLUMN = "FOR_SQI";
+	public static final String TABLE_ID_COLUMN = "TABLE_ID";
+	public static final String TABLE_NAME_COLUMN = "TABLE_NAME";
 	
 	
 	//Frame names in Query Results page.
