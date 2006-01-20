@@ -214,6 +214,9 @@
 %>	
 			
 <html:errors/>
+<html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
+	<%=messageKey%>
+</html:messages>
 <html:form action="<%=Constants.DISTRIBUTION_ADD_ACTION%>">    
 	<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="100%">
 
