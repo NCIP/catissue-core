@@ -169,7 +169,7 @@ public abstract class BaseDistributionReportAction extends BaseAction
     				    Long tableId = Long.valueOf(tableInPathTokenizer.nextToken());
     				    QueryBizLogic bizLogic = (QueryBizLogic)BizLogicFactory
     				    							.getBizLogic(Constants.SIMPLE_QUERY_INTERFACE_ID);
-    				    aliasName = bizLogic.getAliasNameFromTableId(tableId);
+    				    aliasName = bizLogic.getAliasName(Constants.TABLE_ID_COLUMN, tableId);
     				    Logger.out.debug("aliasName for from Set**************************"+aliasName);
     				}
     				

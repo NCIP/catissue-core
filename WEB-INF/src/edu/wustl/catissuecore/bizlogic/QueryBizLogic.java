@@ -283,14 +283,33 @@ public class QueryBizLogic extends DefaultBizLogic
                                 Query.SPECIMEN,
                                 "PARENT_SPECIMEN_ID")));
         
+//        identifiedData.add("firstName");
+//        identifiedData.add("lastName");
+//        identifiedData.add("middleName");
+//        identifiedData.add("birthDate");
+//        identifiedData.add("socialSecurityNumber");
+//        Client.identifiedFieldsMap.put(Participant.class.getName(), identifiedData);
+//        
+//        identifiedData = new Vector();
+//        identifiedData.add("registrationDate");
+//        Client.identifiedFieldsMap.put(CollectionProtocolRegistration.class.getName(), identifiedData);
+//        
+//        identifiedData = new Vector();
+//        identifiedData.add("medicalRecordNumber");
+//        Client.identifiedFieldsMap.put(ParticipantMedicalIdentifier.class.getName(), identifiedData);
+//        
+//        identifiedData = new Vector();
+//        identifiedData.add("surgicalPathologyNumber");
+//        Client.identifiedFieldsMap.put(ClinicalReport.class.getName(), identifiedData);
+        
         //For Participant
+        //identifiedData = new Vector();
         identifiedData.add("FIRST_NAME");
         identifiedData.add("LAST_NAME");
         identifiedData.add("MIDDLE_NAME");
         identifiedData.add("BIRTH_DATE");
         identifiedData.add("SOCIAL_SECURITY_NUMBER");
         Client.identifiedDataMap.put(Query.PARTICIPANT,identifiedData);
-        
         
         //For CollectionProtocolRegistration
         identifiedData = new Vector();
@@ -302,11 +321,15 @@ public class QueryBizLogic extends DefaultBizLogic
         identifiedData.add("MEDICAL_RECORD_NUMBER");
         Client.identifiedDataMap.put(Query.PARTICIPANT_MEDICAL_IDENTIFIER,identifiedData);
         
-//      For CollectionProtocolRegistration
+        //For CollectionProtocolRegistration
         identifiedData = new Vector();
         identifiedData.add("SURGICAL_PATHOLOGICAL_NUMBER");
         Client.identifiedDataMap.put(Query.CLINICAL_REPORT,identifiedData);
         
+//        Client.identifiedClassNames.add(Participant.class.getName());
+//        Client.identifiedClassNames.add(CollectionProtocolRegistration.class.getName());
+//        Client.identifiedClassNames.add(SpecimenCollectionGroup.class.getName());
+//        Client.identifiedClassNames.add(Specimen.class.getName());
     }
     
     /**
@@ -315,15 +338,15 @@ public class QueryBizLogic extends DefaultBizLogic
      * @return
      * @throws DAOException
      */
-    public String getAliasNameFromTableId(Long tableId) throws DAOException
+    public String getAliasName(String columnName, Object columnValue) throws DAOException
     {
             JDBCDAO jdbcDAO = (JDBCDAO)DAOFactory.getDAO(Constants.JDBC_DAO);
             jdbcDAO.openSession(null);
-            String [] selectColumnNames = {"ALIAS_NAME"};
-            String [] whereColumnNames = {"TABLE_ID"};
+            String [] selectColumnNames = {Constants.TABLE_ALIAS_NAME_COLUMN};
+            String [] whereColumnNames = {columnName};
             String [] whereColumnConditions = {"="};
-            Long [] whereColumnValues = {tableId};
-            List list = jdbcDAO.retrieve("CATISSUE_QUERY_TABLE_DATA", selectColumnNames, 
+            Object [] whereColumnValues = {columnValue};
+            List list = jdbcDAO.retrieve(Constants.TABLE_DATA_TABLE_NAME,selectColumnNames, 
                     	whereColumnNames, whereColumnConditions, whereColumnValues, null);
             jdbcDAO.closeSession();
             
@@ -789,7 +812,7 @@ public class QueryBizLogic extends DefaultBizLogic
        		while (pathIdToken.hasMoreTokens())
        		{
        			Long tableIdinPath = Long.valueOf(pathIdToken.nextToken());
-       			String tableName = bizLogic.getAliasNameFromTableId(tableIdinPath);
+       			String tableName = bizLogic.getAliasName(Constants.TABLE_ID_COLUMN, tableIdinPath);
        			Logger.out.debug("table in path:"+tableName);
        			tablePathSet.add(tableName);
        		}
@@ -1015,5 +1038,4 @@ public class QueryBizLogic extends DefaultBizLogic
         }
         return prevValueDisplayName;
     }
-
   }
