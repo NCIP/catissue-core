@@ -256,7 +256,7 @@ public class EmailHandler
         String mailServer = ApplicationProperties
         		.getValue("email.mailServer");
 		String technicalSupportEmailAddress = ApplicationProperties
-		        .getValue("email.technicalSupport.emailAddress");
+		        .getValue("email.sendEmailFrom.emailAddress");
 		
 		body = body + "\n\n" + ApplicationProperties.getValue("loginDetails.catissue.url.message") + Variables.catissueURL;
 		
@@ -279,7 +279,7 @@ public class EmailHandler
         String adminEmailAddress = ApplicationProperties
         		.getValue("email.administrative.emailAddress");
         String technicalSupportEmailAddress = ApplicationProperties
-        		.getValue("email.technicalSupport.emailAddress");
+        		.getValue("email.sendEmailFrom.emailAddress");
         String mailServer = ApplicationProperties
                 .getValue("email.mailServer");
         
@@ -303,7 +303,7 @@ public class EmailHandler
         String adminEmailAddress = ApplicationProperties
         		.getValue("email.administrative.emailAddress");
         String technicalSupportEmailAddress = ApplicationProperties
-        		.getValue("email.technicalSupport.emailAddress");
+        		.getValue("email.sendEmailFrom.emailAddress");
         String mailServer = ApplicationProperties
                 .getValue("email.mailServer");
         
