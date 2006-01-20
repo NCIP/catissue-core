@@ -30,6 +30,13 @@ public class CaTissueHTTPClient
     
     private String httpSessionId;
     
+    private String userName;
+    
+    public String getLoggedInUserName()
+    {
+        return userName;
+    }
+    
     private CaTissueHTTPClient()
     {
         
@@ -52,6 +59,7 @@ public class CaTissueHTTPClient
 		if(Constants.SUCCESS.equals(httpMessage.getResponseStatus()))
 		{
 			httpSessionId = httpMessage.getSessionId();
+			this.userName = userName;
 			return true;
 		}
 		
