@@ -310,7 +310,11 @@ public class SpecimenForm extends AbstractActionForm
      */
     public void setAvailableQuantity(String availableQuantity)
     {
-        this.availableQuantity = availableQuantity;
+    	if (isMutable())
+    	{
+    		this.availableQuantity = availableQuantity;
+    	}
+        
     }
 
     /**
