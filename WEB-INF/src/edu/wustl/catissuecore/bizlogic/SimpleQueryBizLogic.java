@@ -83,7 +83,7 @@ public class SimpleQueryBizLogic extends DefaultBizLogic
             Long tableId = Long.valueOf(tableInPathTokenizer.nextToken());
             QueryBizLogic bizLogic = (QueryBizLogic)BizLogicFactory
             							.getBizLogic(Constants.SIMPLE_QUERY_INTERFACE_ID);
-            String aliasName = bizLogic.getAliasNameFromTableId(tableId);
+            String aliasName = bizLogic.getAliasName(Constants.TABLE_ID_COLUMN, tableId);
             
             if (aliasName != null)
         	{
@@ -413,7 +413,8 @@ public class SimpleQueryBizLogic extends DefaultBizLogic
 		 * @return
 		 * @throws DAOException
 		 */
-		public QueryResultObjectData createQueryResultObjectData(String fromAliasNameValue, Set fromTables) throws DAOException {
+		public QueryResultObjectData createQueryResultObjectData(String fromAliasNameValue, Set fromTables) throws DAOException 
+		{
 			QueryResultObjectData queryResultObjectData;
 			queryResultObjectData = new QueryResultObjectData();
 			queryResultObjectData.setAliasName(fromAliasNameValue);
@@ -431,7 +432,7 @@ public class SimpleQueryBizLogic extends DefaultBizLogic
 				}
 			}
 			
-			Logger.out.debug("After removing tablesnot in query relatedTable:"+relatedTables);
+			Logger.out.debug("After removing tables not in query relatedTable:"+relatedTables);
 //					Aarti: Get main query objects which should have individual checks
 			//for authorization and should not be dependent on others
 			Vector mainQueryObjects = QueryBizLogic.getMainObjectsOfQuery();
@@ -547,7 +548,7 @@ public class SimpleQueryBizLogic extends DefaultBizLogic
 	        	}
 	        }
 		}
-	    	
+		
 		private void addInListIfNotPresent(List list, String string)
 		{
 		    if (list.contains(string) == false)
