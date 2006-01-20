@@ -48,8 +48,8 @@
 		    token="email.administrative.emailAddress=gautam_shetty@persistent.co.in" 
 		    value="email.administrative.emailAddress=${email.administrative.emailAddress}"/>
 		  <replacefilter 
-		    token="email.technicalSupport.emailAddress=gautam_shetty@persistent.co.in" 
-		  	value="email.technicalSupport.emailAddress=${email.technicalSupport.emailAddress}"/>
+		    token="email.sendEmailFrom.emailAddress=gautam_shetty@persistent.co.in" 
+		  	value="email.sendEmailFrom.emailAddress=${email.sendEmailFrom.emailAddress}"/>
 		  <replacefilter 
 			token="email.mailServer=www.persistent.co.in" 
 		  	value="email.mailServer=${email.mailServer}"/>	
