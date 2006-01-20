@@ -23,6 +23,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.actionForm.CollectionProtocolRegistrationForm;
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
@@ -57,6 +58,11 @@ public class NewSpecimenAction  extends SecureAction
         
         //Sets the operation attribute to be used in the Edit/View Specimen Page in Advance Search Object View. 
         request.setAttribute(Constants.OPERATION,operation);
+        
+        if(operation.equalsIgnoreCase(Constants.ADD ) )
+        {
+        	specimenForm.setSystemIdentifier(0);
+        }
 
         
         //Name of button clicked
