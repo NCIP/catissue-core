@@ -21,6 +21,9 @@
 	<property name="common.sql.dir" value="${base.dir}/SQL/Common"/>
 	<property name="oracle.dialect.string" value="net.sf.hibernate.dialect.Oracle9Dialect"/>
 	<property name="mysql.dialect.string" value="net.sf.hibernate.dialect.MySQLDialect"/>
+	
+	<property name="oracle.dialect.h3.string" value="org.hibernate.dialect.Oracle9Dialect"/>
+	<property name="mysql.dialect.h3.string" value="org.hibernate.dialect.MySQLDialect"/>
 	<property name="oracle.driver.string" value="oracle.jdbc.driver.OracleDriver"/>
 	<property name="mysql.driver.string" value="org.gjt.mm.mysql.Driver"/>
 	<property name="mysql.lib" value="mysql-connector-java-3.0.16-ga-bin.jar"/>
@@ -92,7 +95,7 @@
 			<include name="conf/hibernate.properties"/>
 			<replacefilter 
 				token="hibernate.dialect org.hibernate.dialect.MySQLDialect" 
-			  	value="hibernate.dialect ${mysql.dialect.string}"/>
+			  	value="hibernate.dialect ${mysql.dialect.h3.string}"/>
 			<replacefilter 
 				token="hibernate.connection.driver_class com.mysql.jdbc.Driver" 
 			  	value="hibernate.connection.driver_class ${mysql.driver.string}"/>
@@ -151,7 +154,7 @@
 			<include name="conf/hibernate.properties"/>
 			<replacefilter 
 				token="hibernate.dialect org.hibernate.dialect.MySQLDialect" 
-			  	value="hibernate.dialect ${oracle.dialect.string}"/>
+			  	value="hibernate.dialect ${oracle.dialect.h3.string}"/>
 			<replacefilter 
 				token="hibernate.connection.driver_class com.mysql.jdbc.Driver" 
 			  	value="hibernate.connection.driver_class ${oracle.driver.string}"/>
@@ -339,8 +342,7 @@
     		onerror="continue"
     		rdbms="oracle" 
 			delimiter="/"
-		    delimitertype="row"
-		    keepformat="yes">
+		    delimitertype="row">
 		  <transaction  src="${oracle.sql.dir}/CSM_Trigger_Oracle.sql"/>
 		  <classpath>
             <fileset dir="${lib.dir}">
