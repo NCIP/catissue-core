@@ -1,10 +1,11 @@
 <?xml version ="1.0"?>
 
 <!--Ant Script for create Build for caTISSUE Core-->
-
 <project name="caTISSUE_Core" default="compile">
 	
 	<!--define require dir and Properties -->	
+	<property file="caTISSUEInstall.properties"/>
+	
 	<property name="base.dir" value="."/>
     <property name="src.dir" value="${base.dir}/WEB-INF/src"/>
     <property name="target.dir" value="${base.dir}/WEB-INF/classes"/>
@@ -12,16 +13,13 @@
     <property name="build.dir" value="${base.dir}/build"/>
     <property name="applet.dir" value="${base.dir}/Applet"/>
 	<property name="hbm.dir" value="${src.dir}/edu/wustl/catissuecore/hbm"/>
-	<property name="deploy.dir" value="E:\Program_Files\jboss-4.0.0RC\server\default\deploy"/>
 	<property name="extra_lib.dir" value="${base.dir}/extra_lib"/>
+	<property name="generateforce" value="true"/>
+		
 	<property name="mysql.dir" value="${base.dir}/SQL/MySql"/>
 	<property name="oracle.dir" value="${base.dir}/SQL/Oracle"/>
 	<property name="common.dir" value="${base.dir}/SQL/Common"/>
-	<property name="oracle.url" value="jdbc:oracle:thin:@miramar.persistent.co.in:1521:chipdb"/>
-	<property name="oracle.user" value="catissue_core"/>
-	<property name="oracle.password" value="catissue_core"/>
-    <property name="generateforce" value="true"/>
-    
+	
 	<path id="app.classpath">
 		<fileset dir="${lib.dir}">
 			<include name="*.jar"/>
@@ -49,37 +47,8 @@
 	    <mkdir dir="${target.dir}"/>
 	    <mkdir dir="${build.dir}"/>
   	</target>
-  	
-	<target name="WarApp" depends="init,Appletjar">
-		<delete file="catissuecore.war"/>
-		<war destfile="catissuecore.war" webxml="WEB-INF/web.xml">
-			<fileset dir="${base.dir}">
-				<exclude name="**/*build*"/>
-				<exclude name="**/*WEB-INF*"/>
-				<exclude name="**/*servlet.jar*"/>
-				<exclude name="**/*log4j-1.2.9.jar*"/>
-				<exclude name="**/*hibernate2.jar*"/>
-				<exclude name="**/*jta.jar*"/>
-				<exclude name="**/.*"/>
-				<exclude name="**/*.sql"/>
-				<exclude name="**/CVS*"/>
-				<exclude name="**/catissuecorecsm.war"/>
-				<exclude name="**/catissuecore.war"/>
-			</fileset>
-			
-			<!--fileset dir="${base.dir}"/-->
-		  	<!--lib dir="${lib.dir}">
-            	<include name="*.jar"/>
-        	</lib-->
-		</war>
-		<delete file="E:\Program_Files\jboss-4.0.0RC\server\default\deploy\catissuecore.war"/>
-		<copy file="catissuecore.war" todir="E:\Program_Files\jboss-4.0.0RC\server\default\deploy"/>
-		<sleep seconds="2"/>
-	</target>
-
-
 	
-    <!-- Compile all files, generated and hand-written -->
+	<!-- Compile all files, generated and hand-written -->
     <target name="compile" depends="init">
         <javac destdir="${target.dir}" includes="**/*.*" includeAntRuntime="false">
             <src path="${src.dir}"/>
@@ -90,20 +59,9 @@
             </classpath>       
         </javac>
     </target>
-    
-    <!-- Create the application JAR -->
-    <target name="buildjar" depends="compile" >
-        <delete>
-            <fileset dir="${build.dir}" includes="**/*"/>
-        </delete>
-        
-        <jar taskname="buildJar" jarfile="${build.dir}/catissuecore.jar">
-            <fileset dir="${target.dir}" includes="**/*"/>
-        </jar>
-    </target>
-
-    <!-- Create the Applet JAR Begins-->
-    <target name="Appletjar" depends="compile" >
+  	
+	<!-- Create the Applet JAR Begins-->
+    <target name="AppletJAR" depends="compile" >
     	<delete>
             <fileset dir="${applet.dir}">
 	            <exclude name="**/CVS*"/>
@@ -157,7 +115,50 @@
         </jar>
     </target>
 	<!-- Create the Applet JAR Ends-->
+	
+	<!-- Create the application JAR -->
+    <target name="BuildAppJAR" depends="compile" >
+        <delete>
+            <fileset dir="${build.dir}" includes="**/*"/>
+        </delete>
+        
+        <jar taskname="buildJar" jarfile="${build.dir}/catissuecore.jar">
+            <fileset dir="${target.dir}" includes="**/*"/>
+        </jar>
+    </target>
+	
+	<!-- Creates the WAR (Web Application Archive) file of the application -->
+	<target name="BuildAppWAR" depends="init,AppletJAR">
+		<delete file="catissuecore.war"/>
+		<war destfile="catissuecore.war" webxml="WEB-INF/web.xml">
+			<fileset dir="${base.dir}">
+				<exclude name="**/*build*"/>
+				<exclude name="**/*WEB-INF*"/>
+				<exclude name="**/*servlet.jar*"/>
+				<exclude name="**/*log4j-1.2.9.jar*"/>
+				<exclude name="**/*hibernate2.jar*"/>
+				<exclude name="**/*jta.jar*"/>
+				<exclude name="**/.*"/>
+				<exclude name="**/*.sql"/>
+				<exclude name="**/CVS*"/>
+				<exclude name="**/catissuecorecsm.war"/>
+				<exclude name="**/catissuecore.war"/>
+			</fileset>
+		</war>
+	</target>
+
+	<!--Deploys the application war file at JBOSS server by coping it to deploy directory of application server-->
+	<target name="Deploy" >
+		<antcall target="BuildWAR"/>
+		
+		<delete file="${jboss.home.dir}/server/default/deploy/catissuecore.war"/>
+		<copy file="catissuecore.war" todir="${jboss.home.dir}/server/default/deploy"/>
+		<sleep seconds="2"/>
+	</target>
     
+	<!-- Generates the Hibernate mapping (HBM) files which are used in mapping 
+		 the domain objects to database schema of the application. 
+		 This generates the HBM files from the XDoclet tags written in the domain object classes. -->
     <target name="generateHBM" description="Generates Hibernate class descriptor files.">
     	<!-- Define the hibernatedoclet task -->    	
     	<taskdef name="hibernatedoclet" classname="xdoclet.modules.hibernate.HibernateDocletTask">
@@ -185,10 +186,10 @@
 	    
 	    <copy todir="${hbm.dir}">
 	    	<fileset dir="${src.dir}/edu/wustl/catissuecore/domain">
-	    	            	<include name="*.hbm.xml"/>
+	    		<include name="*.hbm.xml"/>
     		</fileset>
 	    	<fileset dir="${src.dir}/edu/wustl/common/cde">
-	    	            	<include name="*.hbm.xml"/>
+	    		<include name="*.hbm.xml"/>
 	       	</fileset>
 	    </copy>
     	
@@ -198,93 +199,74 @@
         </delete>
     </target>
 
-	<!--target name="Genrate-Schema" depends="buildjar, generateHBM"-->
-	<target name="Genrate-Schema" depends="buildjar">
-    	<java classname="edu.wustl.common.util.dbManager.GenerateSchema">
-    		<arg value="false"/>	
-            <classpath>
-	            <pathelement location="${build.dir}/catissuecore.jar"/>
-            	<fileset dir="${lib.dir}">
-                  <include name="*.jar"/>
-              </fileset>
-            </classpath>       
-      	</java>
-    </target>
-
 	<target name="DBInitialized_MySQL">
-	    	<sql
-				driver="org.gjt.mm.mysql.Driver"
-			    url="jdbc:mysql://localhost:3306/catissuecoretest"
-			    userid="root"
-			    password="" 
-	    		onerror="continue">
-			  <transaction  src="${mysql.dir}/catissuecore.sql"/>
-   			  <transaction  src="${mysql.dir}/csm_catissuecore.sql"/>	
-	    	  <transaction  src="${mysql.dir}/InitDB_CreateTable.sql"/>
-	    	  <transaction  src="${common.dir}/AlterTable.sql"/>
-			  <transaction  src="${common.dir}/initDB_Insert_Common.sql"/>
+	    <sql
+	    	driver="org.gjt.mm.mysql.Driver"
+			url="jdbc:mysql://${database.host}:${database.port}/${database.name}"
+			userid="${database.username}" password="${database.password}"  onerror="continue">
+	    	
+			<transaction src="${mysql.dir}/catissuecore.sql"/>
+			<transaction src="${mysql.dir}/csm_catissuecore.sql"/>	
+			<transaction src="${mysql.dir}/InitDB_CreateTable.sql"/>
+			<transaction src="${common.dir}/AlterTable.sql"/>
+			<transaction src="${common.dir}/initDB_Insert_Common.sql"/>
+			<transaction  src="${common.dir}/CDE_DummyData_Common.sql"/>
 			  
-			  <transaction  src="${common.dir}/CDE_DummyData_Common.sql"/>
-			  
-			  <classpath>
-	            <fileset dir="${lib.dir}">
-	                  <include name="*.jar"/>
-	              </fileset>
-	            </classpath> 
-			</sql>
+			<classpath>
+	        	<fileset dir="${lib.dir}">
+	            	<include name="*.jar"/>
+				</fileset>
+			</classpath> 
+		</sql>
 	</target>
 
 	<target name="DBInitialized_Oracle">
-			<sql 
-				driver="oracle.jdbc.driver.OracleDriver"
-			    url="${oracle.url}"
-			    userid="${oracle.user}"
-			    password="${oracle.password}" 
-	    		onerror="continue"
-	    		rdbms="oracle">
-			  <transaction  src="${oracle.dir}/catissuecore.sql"/>
-			  <transaction  src="${oracle.dir}/InitDB_CreateTable.sql"/>
-			  <transaction  src="${common.dir}/initDB_Insert_Common.sql"/>
-			  <transaction  src="${common.dir}/AlterTable.sql"/>
-			  <transaction  src="${common.dir}/CDE_DummyData_Common.sql"/>
-			  <transaction  src="${oracle.dir}/CSM_Create_Oracle.sql"/>
-	    	  <classpath>
-	            <fileset dir="${lib.dir}">
-	                  <include name="*.jar"/>
-	              </fileset>
+		<sql 
+			driver="oracle.jdbc.driver.OracleDriver"
+			url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}"
+			userid="${database.username}" password="${database.password}" onerror="continue"
+	    	rdbms="oracle">
+			<transaction  src="${oracle.dir}/catissuecore.sql"/>
+			<transaction  src="${oracle.dir}/InitDB_CreateTable.sql"/>
+			<transaction  src="${common.dir}/initDB_Insert_Common.sql"/>
+			<transaction  src="${common.dir}/AlterTable.sql"/>
+			<transaction  src="${common.dir}/CDE_DummyData_Common.sql"/>
+			<transaction  src="${oracle.dir}/CSM_Create_Oracle.sql"/>
+	    	
+			<classpath>
+	        	<fileset dir="${lib.dir}">
+	            	<include name="*.jar"/>
+	             </fileset>
+			</classpath> 
+		</sql>
+		
+		<sql
+			driver="oracle.jdbc.driver.OracleDriver"
+			url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}"
+			userid="${database.username}" password="${database.password}" onerror="continue"
+			delimiter="/" delimitertype="row" keepformat="yes">
+			
+			<transaction  src="${oracle.dir}/CSM_Trigger_Oracle.sql"/>
+				<classpath>
+		            <fileset dir="${lib.dir}">
+		            	<include name="*.jar"/>
+		            </fileset>
 	            </classpath> 
 			</sql>
-			<sql
-				driver="oracle.jdbc.driver.OracleDriver"
-			    url="${oracle.url}"
-			    userid="${oracle.user}"
-			    password="${oracle.password}" 
-	    		onerror="continue"
-	    		rdbms="oracle" 
-				delimiter="/"
-			    delimitertype="row"
-			    keepformat="yes">
-			  <transaction  src="${oracle.dir}/CSM_Trigger_Oracle.sql"/>
-			  <classpath>
-	            <fileset dir="${lib.dir}">
-	                  <include name="*.jar"/>
-	              </fileset>
-	            </classpath> 
-			</sql>
-			<sql
-				driver="oracle.jdbc.driver.OracleDriver"
-			    url="${oracle.url}"
-			    userid="${oracle.user}"
-			    password="${oracle.password}" 
-	    		onerror="continue"
-	    		rdbms="oracle">
-			  <transaction  src="${oracle.dir}/CSM_InsertData_Oracle.sql"/>	
-	   		  <transaction  src="${oracle.dir}/CSM_AddConstraints_Oracle.sql"/>
-			  <classpath>
-	            <fileset dir="${lib.dir}">
-	                  <include name="*.jar"/>
-	              </fileset>
-	            </classpath> 
-			</sql>
+			
+		<sql
+			driver="oracle.jdbc.driver.OracleDriver"
+			url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}"
+			userid="${database.username}" password="${database.password}" onerror="continue"
+    		rdbms="oracle">
+		  	
+		  	<transaction  src="${oracle.dir}/CSM_InsertData_Oracle.sql"/>	
+   		 	<transaction  src="${oracle.dir}/CSM_AddConstraints_Oracle.sql"/>
+		  	<classpath>
+            	<fileset dir="${lib.dir}">
+                	<include name="*.jar"/>
+              	</fileset>
+            </classpath> 
+		</sql>
 	</target>
 </project>
