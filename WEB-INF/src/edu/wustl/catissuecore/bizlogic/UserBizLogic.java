@@ -450,44 +450,47 @@ public class UserBizLogic extends DefaultBizLogic
      */
 	protected boolean validate(Object obj, DAO dao, String operation) throws DAOException
     {
+	    
 		User user = (User)obj;
-		
-		if(!Validator.isEnumeratedValue(Constants.STATEARRAY,user.getAddress().getState()))
+		if (Constants.PAGEOF_CHANGE_PASSWORD.equals(user.getPageOf()) == false)
 		{
-			throw new DAOException(ApplicationProperties.getValue("state.errMsg"));
-		}
-		
-		if(!Validator.isEnumeratedValue(Constants.COUNTRYARRAY,user.getAddress().getCountry()))
-		{
-			throw new DAOException(ApplicationProperties.getValue("country.errMsg"));
-		}
-		
-		if(Constants.PAGEOF_USER_ADMIN.equals(user.getPageOf()))
-		{
-			try
+		    if(!Validator.isEnumeratedValue(Constants.STATEARRAY,user.getAddress().getState()))
 			{
-				if(!Validator.isEnumeratedValue(getRoles(),user.getRoleId()))
+				throw new DAOException(ApplicationProperties.getValue("state.errMsg"));
+			}
+			
+			if(!Validator.isEnumeratedValue(Constants.COUNTRYARRAY,user.getAddress().getCountry()))
+			{
+				throw new DAOException(ApplicationProperties.getValue("country.errMsg"));
+			}
+			
+			if(Constants.PAGEOF_USER_ADMIN.equals(user.getPageOf()))
+			{
+				try
 				{
-					throw new DAOException(ApplicationProperties.getValue("user.role.errMsg"));
+					if(!Validator.isEnumeratedValue(getRoles(),user.getRoleId()))
+					{
+						throw new DAOException(ApplicationProperties.getValue("user.role.errMsg"));
+					}
 				}
-			}
-			catch(SMException e)
-			{
-				throw handleSMException(e);
-			}
-	
-			if(operation.equals(Constants.ADD))
-			{
-				if(!Constants.ACTIVITY_STATUS_ACTIVE.equals(user.getActivityStatus()))
+				catch(SMException e)
 				{
-					throw new DAOException(ApplicationProperties.getValue("activityStatus.active.errMsg"));
+					throw handleSMException(e);
 				}
-			}
-			else
-			{
-				if(!Validator.isEnumeratedValue(Constants.USER_ACTIVITY_STATUS_VALUES,user.getActivityStatus()))
+		
+				if(operation.equals(Constants.ADD))
 				{
-					throw new DAOException(ApplicationProperties.getValue("activityStatus.errMsg"));
+					if(!Constants.ACTIVITY_STATUS_ACTIVE.equals(user.getActivityStatus()))
+					{
+						throw new DAOException(ApplicationProperties.getValue("activityStatus.active.errMsg"));
+					}
+				}
+				else
+				{
+					if(!Validator.isEnumeratedValue(Constants.USER_ACTIVITY_STATUS_VALUES,user.getActivityStatus()))
+					{
+						throw new DAOException(ApplicationProperties.getValue("activityStatus.errMsg"));
+					}
 				}
 			}
 		}
