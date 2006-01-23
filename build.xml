@@ -149,7 +149,7 @@
 
 	<!--Deploys the application war file at JBOSS server by coping it to deploy directory of application server-->
 	<target name="Deploy" >
-		<antcall target="BuildWAR"/>
+		<antcall target="BuildAppWAR"/>
 		
 		<delete file="${jboss.home.dir}/server/default/deploy/catissuecore.war"/>
 		<copy file="catissuecore.war" todir="${jboss.home.dir}/server/default/deploy"/>
