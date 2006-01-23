@@ -116,17 +116,6 @@
     </target>
 	<!-- Create the Applet JAR Ends-->
 	
-	<!-- Create the application JAR -->
-    <target name="BuildAppJAR" depends="compile" >
-        <delete>
-            <fileset dir="${build.dir}" includes="**/*"/>
-        </delete>
-        
-        <jar taskname="buildJar" jarfile="${build.dir}/catissuecore.jar">
-            <fileset dir="${target.dir}" includes="**/*"/>
-        </jar>
-    </target>
-	
 	<!-- Creates the WAR (Web Application Archive) file of the application -->
 	<target name="BuildAppWAR" depends="init,AppletJAR">
 		<delete file="catissuecore.war"/>
