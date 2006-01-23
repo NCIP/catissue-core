@@ -239,7 +239,7 @@
 	<!--Target for Deployment -->
 	<target name="Deploy" >
 		<delete dir="${temp.dir}"/>
-		<ant antfile="build.xml" target="WarApp"/>
+		<ant antfile="Build.xml" target="WarApp"/>
 		<antcall target="init"/>
 		<antcall target="ConfigureWar"/>	
 		<if>
