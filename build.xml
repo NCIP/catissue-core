@@ -60,9 +60,10 @@
         </javac>
     	<copy todir="${target.dir}">
     		<fileset dir="${src.dir}">
-    			<include name="*.properties"/>
-    			<include name="*.xml"/>
+    			<include name="**/*.properties"/>
+    			<include name="**/*.xml"/>
     			<include name="**/*.hbm.xml"/>
+    			<include name="**/*.ser"/>
 	    	</fileset>
     	</copy>
     	
