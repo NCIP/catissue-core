@@ -109,6 +109,7 @@
 				 <tr>
 					<td><html:hidden property="systemIdentifier"/></td>
 					<td><html:hidden property="onSubmit"/></td>
+					<td><html:hidden property="redirectTo" value="<%=reqPath%>"/></td>
 				 </tr>
 
 				 <tr>

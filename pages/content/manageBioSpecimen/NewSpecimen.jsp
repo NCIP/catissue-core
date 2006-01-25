@@ -18,6 +18,21 @@ String bhTypeArray [] = (String []) request.getAttribute(Constants.BIOHAZARD_TYP
 List biohazardList = (List)request.getAttribute(Constants.BIOHAZARD_TYPE_LIST);
 NewSpecimenForm form = (NewSpecimenForm)request.getAttribute("newSpecimenForm");
 
+String operation = (String)request.getAttribute(Constants.OPERATION);
+String reqPath = (String)request.getAttribute(Constants.REQ_PATH);
+String appendingPath = "/NewSpecimen.do?operation=add&pageOf=pageOfNewSpecimen";
+if (reqPath != null)
+	appendingPath = reqPath + "|/NewSpecimen.do?operation=add&pageOf=pageOfNewSpecimen";
+
+   	if(!operation.equals(Constants.ADD) )
+   	{
+   		if(form != null)
+   		{
+	   		appendingPath = "/NewSpecimenSearch.do?operation=search&pageOf=pageOfNewSpecimen&systemIdentifier="+form.getSystemIdentifier() ;
+	   		System.out.println("---------- NSP JSP -------- : "+ appendingPath);
+	   	}
+   	}
+
 Map map = form.getExternalIdentifier();
 %>
 <head>
@@ -27,7 +42,7 @@ Map map = form.getExternalIdentifier();
 	List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
 
-	String operation = (String)request.getAttribute(Constants.OPERATION);
+	
 	String formName,pageView=operation,editViewButton="buttons."+Constants.EDIT;
 	boolean readOnlyValue=false,readOnlyForAll=false;
 
@@ -329,10 +344,17 @@ Map map = form.getExternalIdentifier();
 								<html:options collection="<%=Constants.SPECIMEN_COLLECTION_GROUP_LIST%>" 
 									labelProperty="name" property="value"/>		
 							</html:select>
-
-			        		<a href="SpecimenCollectionGroup.do?operation=add&pageOf=pageOfSpecimenCollectionGroup">
+					<%
+						String onClickPath = "changeUrl(this,'"+appendingPath+"')";
+						String url = "/SpecimenCollectionGroup.do?operation=add&pageOf=pageOfSpecimenCollectionGroup";
+					%>
+							<html:link page="<%=url%>" styleId="newParticipant" onclick="<%=onClickPath%>">
+		 						<bean:message key="buttons.addNew" />
+	 						</html:link>					   
+			     <!--   		<a href="SpecimenCollectionGroup.do?operation=add&pageOf=pageOfSpecimenCollectionGroup">
 	      						<bean:message key="app.addNew" />
-	   						</a>
+	   						</a> 
+	   			-->			
 			        	</td>
 		        	</logic:equal>
 		        	
