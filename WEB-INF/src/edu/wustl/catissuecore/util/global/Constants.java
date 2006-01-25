@@ -207,7 +207,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String POS_ONE ="posOne";
 	public static final String POS_TWO ="posTwo";
 	public static final boolean switchSecurity = true;
-	public static final String STORAGE_CONTAINER_ID ="storContId";
+	public static final String STORAGE_CONTAINER_ID ="storContId";	
 	public static final String IS_RNA = "isRNA";
 	public static final String RNA = "RNA";
 	
@@ -1476,4 +1476,12 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String TECHNICIAN = "Technician";
 	public static final String SUPERVISOR = "Supervisor";
 	public static final String SCIENTIST = "Scientist";
+	
+	// for Add New
+	public static final String ADD_NEW_STORAGE_TYPE_ID ="addNewStorageTypeId";
+	public static final String ADD_NEW_COLLECTION_PROTOCOL_ID ="addNewCollectionProtocolId";
+	public static final String ADD_NEW_SITE_ID ="addNewSiteId";
+	public static final String ADD_NEW_USER_ID ="addNewUserId";
+	public static final String ADD_NEW_USER_TO ="addNewUserTo";
+
 }
