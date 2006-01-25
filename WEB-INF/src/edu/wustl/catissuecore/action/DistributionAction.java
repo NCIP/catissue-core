@@ -84,6 +84,15 @@ public class  DistributionAction extends SpecimenEventParametersAction
     	key.add("DistributedItem:i_Specimen_systemIdentifier");
     	key.add("DistributedItem:i_quantity");
     	
+		// MD : code for Addnew Site data 24-Jan-06
+		String siteID = (String)request.getAttribute(Constants.ADD_NEW_SITE_ID);
+		if(siteID != null && siteID.trim().length() > 0 )
+		{
+			Logger.out.debug(">>>>>>>>>>><<<<<<<<<<<<<<<<>>>>>>>>>>>>> ToSite ID in Distribution Action : "+ siteID  );
+			dForm.setToSite(siteID);
+		}
+		// -- 24-Jan-06 end
+  	
     	//Gets the map from ActionForm
     	Map map = dForm.getValues();
     	

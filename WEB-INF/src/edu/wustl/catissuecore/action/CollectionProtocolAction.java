@@ -97,6 +97,35 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 		Logger.out.debug("CP Action reqPath : " + reqPath ); 
 		Logger.out.debug("page of in collectionProtocol action:"+pageOf);
 		request.setAttribute(Constants.PAGEOF,pageOf);
+
+		// MD : code for Addnew PI data 24-Jan-06
+		String addNewUserTo = request.getParameter(Constants.ADD_NEW_USER_TO);
+		if (addNewUserTo != null)
+		{
+			if(addNewUserTo.trim().length() > 0 && addNewUserTo.equalsIgnoreCase("PI" ))
+			{
+				String principalInvestigatorID = (String)request.getAttribute(Constants.ADD_NEW_USER_ID);
+				if(principalInvestigatorID != null && principalInvestigatorID.trim().length() > 0 )
+				{
+					Logger.out.debug(">>>>>>>>>>><<<<<<<<<<<<<<<<>>>>>>>>>>>>> User ID in CP for PI : "+ principalInvestigatorID  );
+					collectionProtocolForm.setPrincipalInvestigatorId(Long.parseLong(principalInvestigatorID ) ); 
+				}
+			}
+			if(addNewUserTo.trim().length() > 0 && addNewUserTo.equalsIgnoreCase("PC" ))
+			{
+				String coordinatorID = (String)request.getAttribute(Constants.ADD_NEW_USER_ID);
+				if(coordinatorID != null && coordinatorID.trim().length() > 0 )
+				{
+					Logger.out.debug(">>>>>>>>>>><<<<<<<<<<<<<<<<>>>>>>>>>>>>> User ID in CP for PI : "+ coordinatorID  );
+					long pcoordIDs[] = {Long.parseLong(coordinatorID )};
+					collectionProtocolForm.setProtocolCoordinatorIds(pcoordIDs ); 
+				}
+			}
+
+		}
+		// -- 24-Jan-06 end
+
+		
         return mapping.findForward(pageOf);
     }
 }

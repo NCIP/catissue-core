@@ -33,12 +33,16 @@ import edu.wustl.catissuecore.actionForm.UserForm;
 import edu.wustl.catissuecore.bizlogic.AbstractBizLogic;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.QueryBizLogic;
+import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Distribution;
 import edu.wustl.catissuecore.domain.DomainObjectFactory;
 import edu.wustl.catissuecore.domain.Participant;
+import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.domain.StorageType;
+import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.exception.BizLogicException;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
@@ -113,6 +117,27 @@ public class CommonAddEditAction extends Action
                 else if(abstractDomain instanceof Participant)
                 {
                 	request.setAttribute(Constants.PARTICIPANT_ID,String.valueOf(abstractDomain.getSystemIdentifier()));
+	            }
+
+                // StorageType
+                else if(abstractDomain instanceof StorageType )
+                {
+                	request.setAttribute(Constants.ADD_NEW_STORAGE_TYPE_ID,String.valueOf(abstractDomain.getSystemIdentifier()));
+	            }
+                // CollectionProtocol
+                else if(abstractDomain instanceof CollectionProtocol )
+                {
+                	request.setAttribute(Constants.ADD_NEW_COLLECTION_PROTOCOL_ID,String.valueOf(abstractDomain.getSystemIdentifier()));
+	            }
+                // Site
+                else if(abstractDomain instanceof Site )
+                {
+                	request.setAttribute(Constants.ADD_NEW_SITE_ID,String.valueOf(abstractDomain.getSystemIdentifier()));
+	            }
+                // User
+                else if(abstractDomain instanceof User )
+                {
+                	request.setAttribute(Constants.ADD_NEW_USER_ID,String.valueOf(abstractDomain.getSystemIdentifier()));
 	            }
                 
                 else if(abstractDomain instanceof Distribution)

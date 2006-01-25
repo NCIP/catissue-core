@@ -262,7 +262,7 @@ public class StorageTypeForm extends AbstractActionForm
                 String delimitedString = validator.delimiterExcludingGiven(s );
                 if (validator.containsSpecialCharacters(type,delimitedString  ))
                 {
-                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("storageType.type")));
+                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.valid.data",ApplicationProperties.getValue("storageType.type")));
                 }  
             	
             }

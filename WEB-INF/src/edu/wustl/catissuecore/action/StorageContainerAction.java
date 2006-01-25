@@ -88,13 +88,30 @@ public class StorageContainerAction  extends SecureAction
 		{
 			isOnChange = true; 
 		}
+		// MD : code for Addnew Storage Type data 23-Jan-06
+		String storageTypeID = (String)request.getAttribute(Constants.ADD_NEW_STORAGE_TYPE_ID);
+		if(storageTypeID != null && storageTypeID.trim().length() > 0 )
+		{
+			Logger.out.debug(">>>>>>>>>>><<<<<<<<<<<<<<<<>>>>>>>>>>>>> ST : "+ storageTypeID  );
+			storageContainerForm.setTypeId(Long.parseLong(storageTypeID) );
+		}
+		// -- 23-Jan-06 end
+		// MD : code for Addnew Site data 24-Jan-06
+		String siteID = (String)request.getAttribute(Constants.ADD_NEW_SITE_ID);
+		if(siteID != null && siteID.trim().length() > 0 )
+		{
+			Logger.out.debug(">>>>>>>>>>><<<<<<<<<<<<<<<<>>>>>>>>>>>>> ToSite ID in Distribution Action : "+ siteID  );
+			storageContainerForm.setSiteId(Long.parseLong(siteID));
+		}
+		// -- 24-Jan-06 end
+  
 		
     	if(isOnChange)
     	{
 
         	long typeSelected=-1;
         	String selectedType = String.valueOf(storageContainerForm.getTypeId());
-        	
+        	Logger.out.debug(">>>>>>>>>>><<<<<<<<<<<<<<<<>>>>>>>>>>>>> ST : "+ selectedType  );
         	if(selectedType != null && !selectedType.equals("-1"))
             {
             	typeSelected = Long.parseLong(selectedType);

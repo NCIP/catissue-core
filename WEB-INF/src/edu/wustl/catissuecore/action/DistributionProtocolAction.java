@@ -63,6 +63,17 @@ public class DistributionProtocolAction extends SpecimenProtocolAction
 		if (reqPath != null)
 			request.setAttribute(Constants.REQ_PATH, reqPath);
 		Logger.out.debug("DP Action reqPath : ---- " + reqPath );
+		
+		// MD : code for Addnew Coordinator data 24-Jan-06
+		String coordinatorID = (String)request.getAttribute(Constants.ADD_NEW_USER_ID);
+		if(coordinatorID != null && coordinatorID.trim().length() > 0 )
+		{
+			Logger.out.debug(">>>>>>>>>>><<<<<<<<<<<<<<<<>>>>>>>>>>>>> User ID in DP : "+ coordinatorID  );
+			distributionProtocolForm.setPrincipalInvestigatorId(Long.parseLong(coordinatorID ) ) ;
+		}
+		// -- 24-Jan-06 end
+
+		
     	return super.executeSecureAction(mapping, form, request, response);
     }
 }

@@ -132,6 +132,7 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 		String reqPath = request.getParameter(Constants.REQ_PATH);
 		if (reqPath != null)
 			request.setAttribute(Constants.REQ_PATH, reqPath);
+		Logger.out.debug(" reqPath in SCGA : "+ reqPath  ); 
 
 		// -------called from Collection Protocol Registration start-------------------------------
 		String cprId =(String) request.getAttribute(Constants.COLLECTION_REGISTRATION_ID );

@@ -58,6 +58,15 @@ public class CollectionProtocolRegistrationAction extends SecureAction
         String pageOf  = request.getParameter(Constants.PAGEOF);
         
         request.setAttribute(Constants.PAGEOF,pageOf);
+        
+		// MD : code for Addnew Collection Protocol data 24-Jan-06
+		String collectionProtocolID = (String)request.getAttribute(Constants.ADD_NEW_COLLECTION_PROTOCOL_ID);
+		if(collectionProtocolID != null && collectionProtocolID.trim().length() > 0 )
+		{
+			Logger.out.debug(">>>>>>>>>>><<<<<<<<<<<<<<<<>>>>>>>>>>>>> CP ID in CPR : "+ collectionProtocolID  );
+			((CollectionProtocolRegistrationForm)form).setCollectionProtocolID(Long.parseLong(collectionProtocolID));
+		}
+		// -- 24-Jan-06 end
 
         String reqPath = request.getParameter(Constants.REQ_PATH);
 		if (reqPath != null)
