@@ -335,12 +335,12 @@ function getSubDivCount(subdivtag)
 								String urlToGo = "/User.do?operation=add&pageOf=pageOfUserAdmin";
 								String appendingPath1 = appendingPath + "&"+Constants.ADD_NEW_USER_TO+"=PI";
 								String onClickPath = "changeUrl(this,'"+appendingPath1+"')";
-								System.out.println("CP URL TO GO  :-- " + urlToGo);
-								System.out.println("onClickPath : " + onClickPath);
 							%>
+							<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
 							<html:link page="<%=urlToGo%>" onclick="<%=onClickPath%>">
 		 						<bean:message key="buttons.addNew" />
 	 						</html:link>
+	 						</logic:notEqual>
 						</td>
 					</tr>
 
@@ -363,9 +363,12 @@ function getSubDivCount(subdivtag)
 								onClickPath = "changeUrl(this,'"+appendingPath2+"')";
 								System.out.println("onClickPath PC : " + onClickPath);
 							%>
+
+							<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
 							<html:link page="<%=urlToGo%>" onclick="<%=onClickPath%>">
 		 						<bean:message key="buttons.addNew" />
 	 						</html:link>
+	 						</logic:notEqual>
 						</td>
 					</tr>
 

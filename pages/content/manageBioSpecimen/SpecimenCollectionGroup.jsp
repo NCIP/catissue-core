@@ -192,9 +192,11 @@
 							String url = "/CollectionProtocolRegistration.do?operation=add&pageOf=pageOfCollectionProtocolRegistration";
 							String onClickPath = "changeUrl(this,'"+appendingPath+"')";
 						%>
+						<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
 			  		    <html:link page="<%=url%>" styleId="newParticipant" onclick="<%=onClickPath%>">
 	 						<bean:message key="buttons.addNew" />
  						</html:link>
+ 						</logic:notEqual>
 					</td>
   					
 				 </tr>
@@ -230,10 +232,11 @@
 						<%
 							String url1 = "/CollectionProtocolRegistration.do?operation=add&pageOf=pageOfCollectionProtocolRegistration";
 						%>
-
+						<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
  						<html:link page="<%=url1%>" styleId="newParticpantRegistration" onclick="<%=onClickPath%>">
 		 						<bean:message key="buttons.addNew" />
 	 					</html:link>
+	 					</logic:notEqual>
 		        	</td>
 				 </tr>
 				 

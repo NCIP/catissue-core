@@ -348,9 +348,12 @@ Map map = form.getExternalIdentifier();
 						String onClickPath = "changeUrl(this,'"+appendingPath+"')";
 						String url = "/SpecimenCollectionGroup.do?operation=add&pageOf=pageOfSpecimenCollectionGroup";
 					%>
+
+							<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
 							<html:link page="<%=url%>" styleId="newParticipant" onclick="<%=onClickPath%>">
 		 						<bean:message key="buttons.addNew" />
 	 						</html:link>					   
+	   						</logic:notEqual>
 			     <!--   		<a href="SpecimenCollectionGroup.do?operation=add&pageOf=pageOfSpecimenCollectionGroup">
 	      						<bean:message key="app.addNew" />
 	   						</a> 
