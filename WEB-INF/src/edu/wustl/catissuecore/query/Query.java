@@ -175,7 +175,7 @@ public abstract class Query {
 
 	public static final String STORAGE_CONTAINER = "StorageContainer";
 
-	public static final String CHECKIN_CHECKOUT_EVENT_PARAMETER = "CheckinCheckoutEventParam";
+	public static final String CHECKIN_CHECKOUT_EVENT_PARAMETER = "CheckinoutEventParam";
 
 	public static final String CLINICAL_REPORT = "ClinicalReport";
 	
