@@ -107,6 +107,10 @@ if(dataList.size() != 0)
 				//document.forms[0].target = "_blank";
 				document.forms[0].submit();
 			}
+			else
+			{
+				alert("Please select at least one checkbox");
+			}
 		}
 		
 		var selected;
