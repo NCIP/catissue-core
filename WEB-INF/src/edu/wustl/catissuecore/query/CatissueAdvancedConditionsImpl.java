@@ -27,14 +27,24 @@ public class CatissueAdvancedConditionsImpl extends AdvancedConditionsImpl {
 		{
 			child = (DefaultMutableTreeNode) enum.nextElement();
 			parent = (DefaultMutableTreeNode) child.getParent();
-			if(parent != null && !parent.isRoot())
+			
+			if(parent != null)
 			{
-				AdvancedConditionsNode parentAdvConditionNode = (AdvancedConditionsNode)parent.getUserObject();
-				String operationWithChildren = parentAdvConditionNode.getOperationWithChildCondition().getOperator();
 				AdvancedConditionsNode advConditionNode = (AdvancedConditionsNode)child.getUserObject();
-				if(parentAdvConditionNode.getObjectName().equals(Query.SPECIMEN))
+				Vector vectorOfCondtions = advConditionNode.getObjectConditions();
+				//If there is no condition add a condition Identifier > 0 
+				if(vectorOfCondtions.size() == 0)
 				{
-					setTableAliasOfChild(parent,advConditionNode,operationWithChildren,child.getLevel(),parent.getIndex(child));
+					vectorOfCondtions.add(getIdentifierCondition(advConditionNode.getObjectName()));
+				}
+				if( !parent.isRoot())
+				{
+					AdvancedConditionsNode parentAdvConditionNode = (AdvancedConditionsNode)parent.getUserObject();
+					String operationWithChildren = parentAdvConditionNode.getOperationWithChildCondition().getOperator();
+					if(parentAdvConditionNode.getObjectName().equals(Query.SPECIMEN))
+					{
+						setTableAliasOfChild(parent,advConditionNode,operationWithChildren,child.getLevel(),parent.getIndex(child));
+					}
 				}
 			}
 		}
@@ -60,11 +70,7 @@ public class CatissueAdvancedConditionsImpl extends AdvancedConditionsImpl {
 		AdvancedConditionsNode parent2 = (AdvancedConditionsNode) ((DefaultMutableTreeNode)((DefaultMutableTreeNode)parentNode).getParent()).getUserObject();
 		Logger.out.debug( "parents operation on children:"+temp);
 		
-		//If there is no condition add a condition Identifier > 0 so that specimen gets included in query
-		if(vectorOfCondtions.size() == 0)
-		{
-			vectorOfCondtions.add(getIdentifierCondition(Query.SPECIMEN));
-		}
+		
 		for (int k = 0; k < vectorOfCondtions.size(); k++) {
 			
 			con = (Condition) vectorOfCondtions.get(k);
