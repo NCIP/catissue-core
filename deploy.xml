@@ -90,13 +90,13 @@
 		<replace dir="${temp.dir}/catissuecore/WEB-INF"> 
 			<include name="classes/ApplicationResources.properties"/>
 		  <replacefilter 
-		    token="email.administrative.emailAddress=gautam_shetty@persistent.co.in" 
+		    token="email.administrative.emailAddress=@@email.administrative.emailAddress@@" 
 		    value="email.administrative.emailAddress=${email.administrative.emailAddress}"/>
 		  <replacefilter 
-		    token="email.sendEmailFrom.emailAddress=gautam_shetty@persistent.co.in" 
+		    token="email.sendEmailFrom.emailAddress=@@email.sendEmailFrom.emailAddress@@" 
 		  	value="email.sendEmailFrom.emailAddress=${email.sendEmailFrom.emailAddress}"/>
 		  <replacefilter 
-			token="email.mailServer=www.persistent.co.in" 
+			token="email.mailServer=@@email.mailServer@@" 
 		  	value="email.mailServer=${email.mailServer}"/>	
 		</replace>
 		<replace file="${temp.dir}/catissuecore/WEB-INF/web.xml"> 
