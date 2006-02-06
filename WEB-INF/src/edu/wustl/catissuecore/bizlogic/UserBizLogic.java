@@ -213,6 +213,11 @@ public class UserBizLogic extends DefaultBizLogic
             throws DAOException, UserNotAuthorizedException
     {
         User user = (User) obj;
+        User oldUser = (User) oldObj;
+        if (Constants.ACTIVITY_STATUS_REJECT.equals(oldUser.getActivityStatus()))
+        {
+            throw new DAOException(ApplicationProperties.getValue("errors.editRejectedUser"));
+        }
         
         try
         {
@@ -255,8 +260,7 @@ public class UserBizLogic extends DefaultBizLogic
                 
                 dao.update(user.getAddress(), sessionDataBean, true, false, false);
                 
-                //Audit of user address.
-                User oldUser = (User) oldObj;
+                // Audit of user address.
                 dao.audit(user.getAddress(), oldUser.getAddress(),sessionDataBean,true);
             }
             
