@@ -214,9 +214,16 @@ public class UserBizLogic extends DefaultBizLogic
     {
         User user = (User) obj;
         User oldUser = (User) oldObj;
+        
+        //If the user is rejected, its record cannot be updated.
         if (Constants.ACTIVITY_STATUS_REJECT.equals(oldUser.getActivityStatus()))
         {
             throw new DAOException(ApplicationProperties.getValue("errors.editRejectedUser"));
+        }
+        else if (Constants.ACTIVITY_STATUS_NEW.equals(oldUser.getActivityStatus())
+                 || Constants.ACTIVITY_STATUS_PENDING.equals(oldUser.getActivityStatus()))
+        {//If the user is not approved yet, its record cannot be updated.
+            throw new DAOException(ApplicationProperties.getValue("errors.editNewPendingUser"));
         }
         
         try
