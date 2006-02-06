@@ -15,7 +15,7 @@
 	<property name="base.dir" value="."/>
 	<property name="temp.dir" value="./tempCatissuecore"/>
 	<property name="csm.dir" value="${temp.dir}/tempcsm"/>
-	<property name="lib.dir" value="${base.dir}/WEB-INF/lib"/>
+	<property name="lib.dir" value="${base.dir}/extra_lib"/>
     <property name="mysql.sql.dir" value="${base.dir}/SQL/MySql"/>
 	<property name="oracle.sql.dir" value="${base.dir}/SQL/Oracle"/>
 	<property name="common.sql.dir" value="${base.dir}/SQL/Common"/>
@@ -28,6 +28,49 @@
 	<property name="mysql.driver.string" value="org.gjt.mm.mysql.Driver"/>
 	<property name="mysql.lib" value="mysql-connector-java-3.0.16-ga-bin.jar"/>
 	<property name="oracle.lib" value="oracleDriver.jar"/>
+	
+	<target name="assert">
+		<if>
+			<equals arg1="" arg2="${jboss.home.dir}"/>
+			<then>
+				<fail message="The property 'jboss.home.dir' should not be empty"/>
+			</then>
+		</if>
+		<if>
+			<or>
+				<equals arg1="mysql" arg2="${database.type}"/>
+				<equals arg1="oracle" arg2="${database.type}"/>	
+			</or>
+			<then/>
+			<else>
+				<fail message="The value of property 'database.type' should be mysql or oracle"/>
+			</else>	
+		</if>
+		<if>
+			<equals arg1="" arg2="${database.host}"/>
+			<then>
+				<fail message="The property 'database.host' should not be empty"/>
+			</then>
+		</if>
+		<if>
+			<equals arg1="" arg2="${database.port}"/>
+			<then>
+				<fail message="The property 'database.port' should not be empty"/>
+			</then>
+		</if>
+		<if>
+			<equals arg1="" arg2="${database.name}"/>
+			<then>
+				<fail message="The property 'database.name' should not be empty"/>
+			</then>
+		</if>
+		<if>
+			<equals arg1="" arg2="${database.username}"/>
+			<then>
+				<fail message="The property 'database.username' should not be empty"/>
+			</then>
+		</if>			
+	</target>
 	<!--Extrct WAR and copy Configuration files to temp directory--> 
 	<target name="init">
 		<echo message="Initializing installation..."/>
@@ -45,7 +88,6 @@
 	<target name="ConfigureWar">
 		<echo message="Modifying caTISSUECore Configuration File..."/>
 		<replace dir="${temp.dir}/catissuecore/WEB-INF"> 
-			<include name="src/ApplicationResources.properties"/>
 			<include name="classes/ApplicationResources.properties"/>
 		  <replacefilter 
 		    token="email.administrative.emailAddress=gautam_shetty@persistent.co.in" 
@@ -87,7 +129,7 @@
 			  	value="${database.password}"/>
 			<replacefilter 
 				token="@@databasedriver@@" 
-			  	value="org.gjt.mm.mysql.Driver"/>
+			  	value="${mysql.driver.string}"/>
 		</replace>
 		<!-- Configuring CSM hibernate property File-->
 		<replace dir="${csm.dir}/WEB-INF" propertyfile="caTISSUEInstall.properties"> 
@@ -109,11 +151,6 @@
 			<replacefilter 
 				token="hibernate.connection.password catissue_core" 
 			  	value="hibernate.connection.password ${database.password}"/>
-		</replace>
-		<replace file="${temp.dir}/catissuecore/WEB-INF/src/hibernate.cfg.xml">
-			<replacefilter 
-				token="${mysql.dialect.string}" 
-			  	value="${mysql.dialect.string}"/>
 		</replace>
 		<replace file="${temp.dir}/catissuecore/WEB-INF/classes/hibernate.cfg.xml">
 			<replacefilter 
@@ -146,7 +183,7 @@
 			  	value="${database.password}"/>
 			<replacefilter 
 				token="@@databasedriver@@" 
-			  	value="oracle.jdbc.driver.OracleDriver"/>
+			  	value="${oracle.driver.string}"/>
 		</replace>
 		<!-- Configuring CSM hibernate property File-->
 		<replace dir="${csm.dir}/WEB-INF" propertyfile="caTISSUEInstall.properties"> 
@@ -169,11 +206,6 @@
 				token="hibernate.connection.password catissue_core" 
 			  	value="hibernate.connection.password ${database.password}"/>
 		</replace>
-		<replace file="${temp.dir}/catissuecore/WEB-INF/src/hibernate.cfg.xml">
-			<replacefilter 
-				token="${mysql.dialect.string}" 
-			  	value="${oracle.dialect.string}"/>
-		</replace>
 		<replace file="${temp.dir}/catissuecore/WEB-INF/classes/hibernate.cfg.xml">
 			<replacefilter 
 				token="${mysql.dialect.string}" 
@@ -195,7 +227,7 @@
 				<exclude name="**/*jta.jar*"/>
 				<exclude name="**/.*"/>
 				<exclude name="**/*.sql"/>
-				<exclude name="**/CVS*"/>
+				<exclude name="**/CVS*"/>	
 			</fileset>
 		</war>
 		<delete file="${temp.dir}/catissuecorecsm.war"/>
@@ -241,8 +273,8 @@
 	
 	<!--Target for Deployment -->
 	<target name="Deploy" >
+		<antcall target="assert"/>
 		<delete dir="${temp.dir}"/>
-		<ant antfile="Build.xml" target="BuildAppWAR"/>
 		<antcall target="init"/>
 		<antcall target="ConfigureWar"/>	
 		<if>
@@ -255,10 +287,11 @@
 				<then>
 					<antcall target="oracleConfig"/>
 				</then>
-			</elseif>	
+			</elseif>
 		</if>
 		<antcall target="BuildWar"/>
 		<antcall target="CopyFiles"/>
+		<antcall target="SendMail"/>
 		<delete dir="${temp.dir}"/>
 	</target>
 	
@@ -291,7 +324,7 @@
 	<target name="DBInitialized_MySQL">
 		<echo message="Initializing MySQL Database for caTISSUECore Application..."/>
 		<sql
-			driver="org.gjt.mm.mysql.Driver"
+			driver="${mysql.driver.string}"
 		    url="jdbc:mysql://${database.host}:${database.port}/${database.name}"
 		    userid="${database.username}"
 		    password="${database.password}" 
@@ -315,7 +348,7 @@
 	<target name="DBInitialized_Oracle">
 		<echo message="Initializing Oracle Database for caTISSUECore Application..."/>
 		<sql 
-			driver="oracle.jdbc.driver.OracleDriver"
+			driver="${oracle.driver.string}"
 		    url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}"
 		    userid="${database.username}"
 		    password="${database.password}" 
@@ -335,7 +368,7 @@
             </classpath> 
 		</sql>
 		<sql
-			driver="oracle.jdbc.driver.OracleDriver"
+			driver="${oracle.driver.string}"
 		    url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}"
 		    userid="${database.username}"
 		    password="${database.password}" 
@@ -351,7 +384,7 @@
             </classpath> 
 		</sql>
 		<sql
-			driver="oracle.jdbc.driver.OracleDriver"
+			driver="${oracle.driver.string}"
 		    url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}"
 		    userid="${database.username}"
 		    password="${database.password}" 
@@ -366,5 +399,29 @@
               </fileset>
             </classpath> 
 		</sql>
+	</target>
+	<target name="SendMail">
+		<echo message="Sending mail to: ${email.administrative.emailAddress}"/>
+		<echo message="Sending mail from: ${email.sendEmailFrom.emailAddress}"/>
+		<mail mailhost="${email.mailServer}" subject="caTISSUE Core Successfully Deployed" encoding="plain"
+			failonerror="true">
+			<from address="${email.sendEmailFrom.emailAddress}"/>
+			<to address="${email.administrative.emailAddress}"/>
+			<message>
+Greetings,
+	This mail is to validate the Administrative Email Address.
+				
+caTISSUE Core Application is successfully deployed at location 
+${jboss.home.dir}.
+				
+Thanking You.
+			</message>
+		</mail>
+		<echo>
+			Please check the Email of ${email.administrative.emailAddress}.
+			If the Deployment mail is not received please check your 
+			email.administrative.emailAddress and email.sendEmailFrom.emailAddress 
+			properties in caTISSUEInstall.properties and Re-deploy the Application.
+		</echo>	
 	</target>
 </project>
