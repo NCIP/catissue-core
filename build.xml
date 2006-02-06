@@ -132,6 +132,7 @@
 			<fileset dir="${base.dir}">
 				<exclude name="**/*build*"/>
 				<exclude name="**/*WEB-INF*"/>
+				<exclude name="**/WEB-INF/src*/**"/>
 				<exclude name="**/*servlet.jar*"/>
 				<exclude name="**/*log4j-1.2.9.jar*"/>
 				<exclude name="**/*hibernate2.jar*"/>
