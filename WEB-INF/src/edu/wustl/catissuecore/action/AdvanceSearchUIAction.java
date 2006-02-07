@@ -22,6 +22,7 @@ import edu.wustl.catissuecore.query.AdvancedConditionsNode;
 import edu.wustl.catissuecore.query.Condition;
 import edu.wustl.catissuecore.query.DataElement;
 import edu.wustl.catissuecore.query.Operator;
+import edu.wustl.catissuecore.query.Query;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.vo.SearchFieldData;
 import edu.wustl.common.util.logger.Logger;
@@ -130,7 +131,7 @@ public abstract class AdvanceSearchUIAction extends BaseAction
 				tempOperator = op.getOperator();
 				temp = valuekey;
 			}
-			if(tableName.indexOf("Parameter")>0)
+			if(tableName.indexOf(Query.PARAM)!=-1)
 			{
 				setEventParameterMap(aForm,tableName,column,op.getOperator(),con.getValue(),eventCounter,superTable);
 				eventCounter++;
