@@ -20,13 +20,16 @@ import java.util.List;
 
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.logger.Logger;
 
 public class CaTissueHTTPClient
 {
     private static CaTissueHTTPClient caTissueHTTPClient = new CaTissueHTTPClient();
+    
+    private static final String port = ApplicationProperties.getValue("server.port");
 
-    private static final String servletURL="http://localhost:8080/catissuecore/";
+    private static final String servletURL="http://localhost:" + port + "/catissuecore/";
     
     private String httpSessionId;
     
