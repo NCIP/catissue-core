@@ -219,17 +219,17 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
         	Iterator it = medicalIdentifierCollection.iterator();
         	while(it.hasNext())
         	{
-        		ParticipantMedicalIdentifier participantMedicalIdentifier = (ParticipantMedicalIdentifier)it.next();
+        		edu.wustl.catissuecore.domainobject.ParticipantMedicalIdentifier participantMedicalIdentifier = (edu.wustl.catissuecore.domainobject.ParticipantMedicalIdentifier)it.next();
         		
         		String key1 = "ParticipantMedicalIdentifier:" + i +"_Site_systemIdentifier";
 				String key2 = "ParticipantMedicalIdentifier:" + i +"_medicalRecordNumber";
 				String key3 = "ParticipantMedicalIdentifier:" + i +"_systemIdentifier";
 
-				Site site = participantMedicalIdentifier.getSite();
+				edu.wustl.catissuecore.domainobject.Site site = participantMedicalIdentifier.getSite();
 				
 				if(site!=null)
 				{
-					values.put(key1,Utility.toString(site.getSystemIdentifier()));
+					values.put(key1,Utility.toString(site.getId()));
 				}
 				else
 				{
@@ -237,7 +237,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 				}
 				
 				values.put(key2,Utility.toString(participantMedicalIdentifier.getMedicalRecordNumber()));
-				values.put(key3,Utility.toString(participantMedicalIdentifier.getSystemIdentifier()));
+				values.put(key3,Utility.toString(participantMedicalIdentifier.getId()));
 				
 				i++;
         	}
@@ -247,8 +247,6 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
         //At least one row should be displayed in ADD MORE therefore
 		if(counter == 0)
 			counter = 1;
-
-        
     }
  
     /**
