@@ -59,7 +59,7 @@ public class SpecimenProtocolAction  extends SecureAction
         request.setAttribute(Constants.ACTIVITYSTATUSLIST, Constants.ACTIVITY_STATUS_VALUES);
   
         	UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getBizLogic(Constants.USER_FORM_ID);
-        	Collection userCollection =  userBizLogic.getUsers();
+        	Collection userCollection =  userBizLogic.getUsers(operation);
         	request.setAttribute(Constants.USERLIST, userCollection);
         	Logger.out.debug("1");
         	// get the Specimen class and type from the cde

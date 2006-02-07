@@ -46,7 +46,7 @@ public class CollectionProtocolSearchAction extends AdvanceSearchUIAction
         	
         //Sets the Principal Investigator attribute list
         UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getBizLogic(Constants.USER_FORM_ID);
-        Collection coll =  userBizLogic.getUsers();
+        Collection coll =  userBizLogic.getUsers(request.getParameter(Constants.OPERATION));
         request.setAttribute(Constants.USERLIST, coll);
 
         //Set the selected node from the query tree

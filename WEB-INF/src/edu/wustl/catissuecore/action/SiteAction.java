@@ -67,7 +67,7 @@ public class SiteAction  extends SecureAction
         request.setAttribute(Constants.SITETYPELIST, siteList);
         
     	UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getBizLogic(Constants.USER_FORM_ID);
-    	Collection coll =  userBizLogic.getUsers();
+    	Collection coll =  userBizLogic.getUsers(operation);
     	request.setAttribute(Constants.USERLIST, coll);
     	
     	// ------------------------------------------------------------------

@@ -300,14 +300,40 @@ public class UserBizLogic extends DefaultBizLogic
      * and value as systemtIdentifier, of all users who are not disabled.
      * @throws DAOException
      */
-    public Vector getUsers() throws DAOException
+    public Vector getUsers(String operation) throws DAOException
     {
     	String sourceObjectName = User.class.getName();
     	String[] selectColumnName = null;
-    	String[] whereColumnName = {Constants.ACTIVITY_STATUS,Constants.ACTIVITY_STATUS};
-        String[] whereColumnCondition = {"=","="};
-        Object[] whereColumnValue = {Constants.ACTIVITY_STATUS_ACTIVE,Constants.ACTIVITY_STATUS_CLOSED };
-        String joinCondition = Constants.OR_JOIN_CONDITION ;
+    	String[] whereColumnName;
+    	String[] whereColumnCondition;
+    	Object[] whereColumnValue;
+    	String joinCondition ;
+    	if(operation !=null && operation.equalsIgnoreCase(Constants.ADD))
+    	{
+    		String tmpArray1[] = {Constants.ACTIVITY_STATUS};
+    		String tmpArray2[] =  {"="};
+    		String tmpArray3[] =  {Constants.ACTIVITY_STATUS_ACTIVE };
+        	whereColumnName = tmpArray1;
+            whereColumnCondition = tmpArray2;
+            whereColumnValue = tmpArray3 ;
+            joinCondition = null ;
+    	}
+    	else
+    	{
+    		String tmpArray1[] = {Constants.ACTIVITY_STATUS,Constants.ACTIVITY_STATUS};
+    		String tmpArray2[] = {"=","="};
+    		String tmpArray3[] = {Constants.ACTIVITY_STATUS_ACTIVE,Constants.ACTIVITY_STATUS_CLOSED };
+        	whereColumnName = tmpArray1;
+            whereColumnCondition = tmpArray2;
+            whereColumnValue = tmpArray3 ;
+            joinCondition =  Constants.OR_JOIN_CONDITION ;
+
+//    		whereColumnName = {Constants.ACTIVITY_STATUS,Constants.ACTIVITY_STATUS};
+//    		whereColumnCondition = {"=","="};
+//    		whereColumnValue = {Constants.ACTIVITY_STATUS_ACTIVE,Constants.ACTIVITY_STATUS_CLOSED };
+//    		joinCondition = Constants.OR_JOIN_CONDITION ;
+
+    	}
 		
         //Retrieve the users whose activity status is not disabled.
         List users = retrieve(sourceObjectName, selectColumnName, whereColumnName,
