@@ -987,3 +987,58 @@ td.mainMenuItemSelected{ /* for the selected main menu (top) cells */
   border-bottom:1px solid #5C5C5C; /* constant: dark gray */
   text-align:left;
 }
+
+/*  classes For map start*/
+
+.borderForMap{/* for border in map*/
+  border-right:1px solid #5C5C5C; /* constant: dark gray */
+  border-bottom:1px solid #5C5C5C; /* constant: dark gray */
+  border-left:1px solid #5C5C5C; /* constant: dark gray */
+  border-top:1px solid #5C5C5C; /* constant: dark gray */
+}
+.dataTableMap
+{
+  font-family:arial,helvetica,verdana,sans-serif;
+  font-size:0.7em;
+  color:#000000; /* constant: black */
+	
+}
+
+  
+
+.mapTdred{
+	background-color:#F1F1F1; /* constant: medium gray */
+	width: 10em;
+	height: 8em;
+	font-size:0.7em;
+  	border-style: ridge;
+  	border-right:1px solid #5C5C5C; /* constant: dark gray */
+    border-bottom:1px solid #5C5C5C; /* constant: dark gray */
+   text-align:center;	
+}
+.mapTdblue{
+	background-color:#9FA2BA;
+	width: 10em;
+	height: 8em;
+	font-size:0.7em;
+  	border-style: ridge;
+  	border-right:1px solid #5C5C5C; /* constant: dark gray */
+    border-bottom:1px solid #5C5C5C; /* constant: dark gray */
+    text-align:center;	
+}
+.mapTdspe{
+	background-color:#FFFFFF;
+	width: 10em;
+	height: 8em;
+	font-size:0.7em;
+  	border-style: ridge;
+  	border-right:1px solid #5C5C5C; /* constant: dark gray */
+    border-bottom:1px solid #5C5C5C; /* constant: dark gray */
+    text-align:center;	
+}
+tdDesc{
+	font-family:arial,helvetica,verdana,sans-serif;
+	font-size:0.6em;
+	text-align:left;	
+}
+/*  classes For map end*/
