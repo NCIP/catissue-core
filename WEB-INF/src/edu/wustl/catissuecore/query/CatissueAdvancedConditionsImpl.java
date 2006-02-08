@@ -16,7 +16,7 @@ import edu.wustl.common.util.logger.Logger;
  * Window - Preferences - Java - Code Style - Code Templates
  */
 public class CatissueAdvancedConditionsImpl extends AdvancedConditionsImpl {
-
+	
 	public void formatTree()
 	{
 		DefaultMutableTreeNode root = this.getWhereCondition();
@@ -41,7 +41,7 @@ public class CatissueAdvancedConditionsImpl extends AdvancedConditionsImpl {
 				{
 					AdvancedConditionsNode parentAdvConditionNode = (AdvancedConditionsNode)parent.getUserObject();
 					String operationWithChildren = parentAdvConditionNode.getOperationWithChildCondition().getOperator();
-					if(parentAdvConditionNode.getObjectName().equals(Query.SPECIMEN))
+					if(parentAdvConditionNode.getObjectName().equals(Query.SPECIMEN) || parentAdvConditionNode.getObjectName().equals(Query.SPECIMEN_COLLECTION_GROUP))
 					{
 						setTableAliasOfChild(parent,advConditionNode,operationWithChildren,child.getLevel(),parent.getIndex(child));
 					}
@@ -69,8 +69,6 @@ public class CatissueAdvancedConditionsImpl extends AdvancedConditionsImpl {
 		//second level parent
 		AdvancedConditionsNode parent2 = (AdvancedConditionsNode) ((DefaultMutableTreeNode)((DefaultMutableTreeNode)parentNode).getParent()).getUserObject();
 		Logger.out.debug( "parents operation on children:"+temp);
-		
-		
 		for (int k = 0; k < vectorOfCondtions.size(); k++) {
 			
 			con = (Condition) vectorOfCondtions.get(k);
@@ -81,65 +79,87 @@ public class CatissueAdvancedConditionsImpl extends AdvancedConditionsImpl {
 			String table = data.getTableAliasName();
 			
 			//If children of specimen node then change aliasname of children
-
+			
 			Table table2 = data.getTable();
 			
 			if (temp.equals(Operator.OR)) {
 				
-				if(table2.getTableName().equals(Query.SPECIMEN) )
+				if(table2.getTableName().equals(Query.SPECIMEN))
 				{
 					//If parents parent is also Specimen
 					if(parent2.getObjectName().equals(Query.SPECIMEN) && !parent2.getOperationWithChildCondition().getOperator().equals(Operator.EXIST))
 					{
-//						//third level parent
-//						AdvancedConditionsNode parent1 = (AdvancedConditionsNode) ((DefaultMutableTreeNode)parentNode).getUserObject();
+						//						//third level parent
+						//						AdvancedConditionsNode parent1 = (AdvancedConditionsNode) ((DefaultMutableTreeNode)parentNode).getUserObject();
 						//parent3 conditions vector
 						Table parent2LinkingTable = getParentLinkingTable(parent2);
 						table2.setLinkingTable(new Table(Query.SPECIMEN,
 								Query.SPECIMEN+(level-1)+"L",parent2LinkingTable));
+						table2.setTableAliasAppend(table2.getTableName() + level+"L");
+					}
+					else if(parent1.getObjectName().equals(Query.SPECIMEN_COLLECTION_GROUP) && !parent1.getOperationWithChildCondition().getOperator().equals(Operator.EXIST))
+					{
+						table2.setLinkingTable(new Table(Query.SPECIMEN_COLLECTION_GROUP,Query.SPECIMEN_COLLECTION_GROUP));
 					}
 					else
 					{
-						table2.setLinkingTable(new Table(Query.SPECIMEN,
-							Query.SPECIMEN));
+						table2.setLinkingTable(new Table(Query.SPECIMEN,Query.SPECIMEN));
+						table2.setTableAliasAppend(table2.getTableName() + level+"L");
 					}
-					
-					table2.setTableAliasAppend(table2.getTableName() + level+"L");
 				}
 				//IF the condition belongs to specimen characteristics
 				else if(table2.getTableName().equals(Query.SPECIMEN_CHARACTERISTICS))
 				{
 					
-//					table2.setLinkingTable(new Table(Query.SPECIMEN,
-//							Query.SPECIMEN+ level+"L",new Table(Query.SPECIMEN,
-//									Query.SPECIMEN)));
-//					If parents parent is also Specimen
+					//					table2.setLinkingTable(new Table(Query.SPECIMEN,
+					//							Query.SPECIMEN+ level+"L",new Table(Query.SPECIMEN,
+					//									Query.SPECIMEN)));
+					//					If parents parent is also Specimen
 					if(parent2.getObjectName().equals(Query.SPECIMEN) && !parent2.getOperationWithChildCondition().getOperator().equals(Operator.EXIST))
 					{
-//						//third level parent
-//						AdvancedConditionsNode parent1 = (AdvancedConditionsNode) ((DefaultMutableTreeNode)parentNode).getUserObject();
+						//						//third level parent
+						//						AdvancedConditionsNode parent1 = (AdvancedConditionsNode) ((DefaultMutableTreeNode)parentNode).getUserObject();
 						//parent3 conditions vector
 						Table parent2LinkingTable = getParentLinkingTable(parent2);
 						table2.setLinkingTable(new Table(Query.SPECIMEN,
 								Query.SPECIMEN+ level+"L",new Table(Query.SPECIMEN,
-								Query.SPECIMEN+(level-1)+"L",parent2LinkingTable)));
+										Query.SPECIMEN+(level-1)+"L",parent2LinkingTable)));
+						table2.setTableAliasAppend(table2.getTableName() + level+"L");
+					}
+					else if(parent1.getObjectName().equals(Query.SPECIMEN_COLLECTION_GROUP) && !parent1.getOperationWithChildCondition().getOperator().equals(Operator.EXIST))
+					{
+						table2.setLinkingTable(new Table(Query.SPECIMEN_COLLECTION_GROUP,Query.SPECIMEN_COLLECTION_GROUP));
 					}
 					else
 					{
 						table2.setLinkingTable(new Table(Query.SPECIMEN,
 								Query.SPECIMEN+ level+"L",new Table(Query.SPECIMEN,
-							Query.SPECIMEN)));
+										Query.SPECIMEN)));
+						table2.setTableAliasAppend(table2.getTableName() + level+"L");
 					}
 					
-					table2.setTableAliasAppend(table2.getTableName() + level+"L");
+					
 				}
 				//else SpecimenEventParameters condition
 				else
 				{
-					
-					if(parent2.getObjectName().equals(Query.SPECIMEN) && !parent2.getOperationWithChildCondition().getOperator().equals(Operator.EXIST))
+					if(parent1.getObjectName().equals(Query.SPECIMEN_COLLECTION_GROUP) && !parent1.getOperationWithChildCondition().getOperator().equals(Operator.EXIST))
 					{
-						
+						if(table2.getTableName().equals(Query.SPECIMEN_EVENT_PARAMETERS))
+						{
+							table2.setLinkingTable(new Table(Query.SPECIMEN,
+									Query.SPECIMEN));
+						}
+						else if(table2.getTableName().indexOf(Query.PARAM)!=-1) 
+						{
+							table2.setLinkingTable(new Table(Query.SPECIMEN_EVENT_PARAMETERS,
+									Query.SPECIMEN_EVENT_PARAMETERS_APPEND+table2.getTableName()+ level+"L"+childIndex+"C",new Table(Query.SPECIMEN,
+											Query.SPECIMEN)));
+						}
+					}
+					
+					else if(parent2.getObjectName().equals(Query.SPECIMEN) && !parent2.getOperationWithChildCondition().getOperator().equals(Operator.EXIST))
+					{
 						Table parent2LinkingTable = getParentLinkingTable(parent2);
 						table2.setLinkingTable(new Table(Query.SPECIMEN_EVENT_PARAMETERS,
 								Query.SPECIMEN_EVENT_PARAMETERS_APPEND+table2.getTableName()+ level+"L"+childIndex+"C",new Table(Query.SPECIMEN,
@@ -148,47 +168,40 @@ public class CatissueAdvancedConditionsImpl extends AdvancedConditionsImpl {
 					}
 					else
 					{
+						
 						table2.setLinkingTable(new Table(Query.SPECIMEN_EVENT_PARAMETERS,
 								Query.SPECIMEN_EVENT_PARAMETERS_APPEND+table2.getTableName()+ level+"L"+childIndex+"C",new Table(Query.SPECIMEN,
-								Query.SPECIMEN+ level+"L",new Table(Query.SPECIMEN,
-							Query.SPECIMEN))));
+										Query.SPECIMEN+ level+"L",new Table(Query.SPECIMEN,
+												Query.SPECIMEN))));
 					}
-						
 					table2.setTableAliasAppend(table2.getTableName() + level+"L"+childIndex+"C");
+					
 				}
-				
-				
-//				table2.setTableName(table2.getTableName());
-				
-			} else {
+			} 
+			else 
+			{
 				
 				//if event parameter tables
 				if(table2.getTableName().indexOf(Query.PARAM)!=-1)
 				{
 					table2.setLinkingTable(new Table(Query.SPECIMEN_EVENT_PARAMETERS,
 							Query.SPECIMEN_EVENT_PARAMETERS_APPEND+table2.getTableName()+ level+"L"+childIndex+"C",new Table(Query.SPECIMEN,
-							Query.SPECIMEN)));
+									Query.SPECIMEN,new Table(Query.SPECIMEN_COLLECTION_GROUP,Query.SPECIMEN_COLLECTION_GROUP))));
 					table2.setTableAliasAppend(table2.getTableName() + level+"L"+childIndex+"C");
 				}
-				else
+				else 
 				{
-					table2
-							.setLinkingTable(new Table(Query.SPECIMEN,
-									Query.SPECIMEN));
+					table2.setLinkingTable(new Table(Query.SPECIMEN,Query.SPECIMEN));
 					table2.setTableAliasAppend(table2.getTableName());
-					
 				}
-				
 			}
 			
 			table2.setTableName(table2.getTableName());
-			Logger.out.debug("table name:" + table2.getTableName()
-					+ " Alias:" + table2.getTableAliasAppend());
-
+			Logger.out.debug("table name........:" + table2.getTableName()
+					+ " Alias...........:" + table2.getTableAliasAppend());
 		}
-
 	}
-
+	
 	/**
 	 * @param parent2
 	 * @return
@@ -197,17 +210,17 @@ public class CatissueAdvancedConditionsImpl extends AdvancedConditionsImpl {
 		Vector parent2ConVector = parent2.getObjectConditions();
 		if(parent2ConVector.size() == 0)
 		{
-			parent2ConVector.add(getIdentifierCondition(Query.SPECIMEN));
+			if(parent2.getObjectName().equals(Query.SPECIMEN))
+				parent2ConVector.add(getIdentifierCondition(Query.SPECIMEN));
+			else if(parent2.getObjectName().equals(Query.SPECIMEN_COLLECTION_GROUP))
+				parent2ConVector.add(getIdentifierCondition(Query.SPECIMEN_COLLECTION_GROUP));
 		}
 		//Get table from any one of the conditions and set it as linking table
 		Condition parent2Con = (Condition) parent2ConVector.get(0);
-		
-		
-		
 		Table parent2LinkingTable = parent2Con.getDataElement().getTable();
 		return parent2LinkingTable;
 	}
-
+	
 	/**
 	 * @return
 	 */
@@ -222,5 +235,5 @@ public class CatissueAdvancedConditionsImpl extends AdvancedConditionsImpl {
 		con.setValue("0");
 		return con;
 	} 
-
+	
 }
