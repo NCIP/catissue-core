@@ -84,7 +84,7 @@
 		</copy>
  	</target>
 	
-	<!--Modify Configuration such as Session Timeout and Admin details-->
+	<!--Modify Configuration such as Session Timeout, Admin details and JBoss server port-->
 	<target name="ConfigureWar">
 		<echo message="Modifying caTISSUECore Configuration File..."/>
 		<replace dir="${temp.dir}/catissuecore/WEB-INF"> 
@@ -98,6 +98,9 @@
 		  <replacefilter 
 			token="email.mailServer=@@email.mailServer@@" 
 		  	value="email.mailServer=${email.mailServer}"/>	
+		  <replacefilter 
+			token="server.port=@@server.port@@" 
+		  	value="server.port=${jboss.server.port}"/>	
 		</replace>
 		<replace file="${temp.dir}/catissuecore/WEB-INF/web.xml"> 
 			<replacefilter 
