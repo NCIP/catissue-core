@@ -7,7 +7,7 @@
 	<!--define require dir and Properties -->	
 	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
 	<classpath>
-	    <pathelement location="./extra_lib/ant-contrib.jar"/>
+	    <pathelement location="./lib/ant-contrib.jar"/>
 	  </classpath>
 	</taskdef>
 
@@ -15,7 +15,7 @@
 	<property name="base.dir" value="."/>
 	<property name="temp.dir" value="./tempCatissuecore"/>
 	<property name="csm.dir" value="${temp.dir}/tempcsm"/>
-	<property name="lib.dir" value="${base.dir}/extra_lib"/>
+	<property name="lib.dir" value="${base.dir}/lib"/>
     <property name="mysql.sql.dir" value="${base.dir}/SQL/MySql"/>
 	<property name="oracle.sql.dir" value="${base.dir}/SQL/Oracle"/>
 	<property name="common.sql.dir" value="${base.dir}/SQL/Common"/>
