@@ -60,10 +60,11 @@ public class TreeView {
 				if(!parent.isRoot())
 				{
 					AdvancedConditionsNode parentAdvConditionNode = (AdvancedConditionsNode)parent.getUserObject();
-					String temp = parentAdvConditionNode.getOperationWithChildCondition().getOperator();
+					Operator operator = parentAdvConditionNode.getOperationWithChildCondition();
+					String temp = operator.getOperator();
 					Logger.out.debug("operator "+temp);
 					//Condition to provide Psudo And 
-					if(temp.equals(Operator.EXIST))
+					if(temp.equals(Operator.EXIST) && operator.getOperatorParams()[0].equals(Operator.AND))
 					{
 						andOrBool = true;
 					}

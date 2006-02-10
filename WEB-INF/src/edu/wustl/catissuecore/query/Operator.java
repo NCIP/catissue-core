@@ -110,6 +110,11 @@ public class Operator
      */
     private String operator;
     
+    /**
+     * Additional parameters if any for an operator
+     */
+    private String[] operatorParams;
+    
     public Operator()
     {
     }
@@ -117,6 +122,10 @@ public class Operator
     public Operator(String operator)
     {
         this.operator = operator;
+        if(operator.equals(Operator.EXIST))
+        {
+        	operatorParams = new String[] {Operator.AND};
+        }
     }
     
     /**
@@ -125,6 +134,7 @@ public class Operator
 	public Operator(Operator operator2) {
 		
 		 this.operator = operator2.operator;
+		 this.operatorParams = operator2.operatorParams;
 	}
 
 	public String toSQLString()
@@ -167,4 +177,16 @@ public class Operator
 	public static final String IS_NOT = "IS NOT";
 
 
+	/**
+	 * @return Returns the operatorParams.
+	 */
+	public String[] getOperatorParams() {
+		return operatorParams;
+	}
+	/**
+	 * @param operatorParams The operatorParams to set.
+	 */
+	public void setOperatorParams(String[] operatorParams) {
+		this.operatorParams = operatorParams;
+	}
 }

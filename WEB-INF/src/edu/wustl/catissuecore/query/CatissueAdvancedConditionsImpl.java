@@ -23,14 +23,43 @@ public class CatissueAdvancedConditionsImpl extends AdvancedConditionsImpl {
 		Enumeration enum = root.breadthFirstEnumeration();
 		DefaultMutableTreeNode child;
 		DefaultMutableTreeNode parent;
+		
+		Operator operator;
+		
+		//For all the nodes that are either specimen nodes or
+		//Specimen Collection Group nodes and have operationWithChildCondition as "OR"
+		//make the operation as 'EXIST' with parameter 'OR' to it.
+		//This would solve the problem of Specimen Event parameters as mentioned in bug# 960
+		while(enum.hasMoreElements())
+		{
+			child = (DefaultMutableTreeNode) enum.nextElement();
+			parent = (DefaultMutableTreeNode) child.getParent();
+			AdvancedConditionsNode advConditionNode = null;
+			advConditionNode = (AdvancedConditionsNode)child.getUserObject();
+			if(advConditionNode != null)
+			{
+				if((advConditionNode.getObjectName().equals(Query.SPECIMEN) || 
+						advConditionNode.getObjectName().equals(Query.SPECIMEN_COLLECTION_GROUP)) 
+						&& advConditionNode.getOperationWithChildCondition().getOperator().equals(Operator.OR))
+				{
+					operator = new Operator(Operator.EXIST);
+					operator.setOperatorParams(new String[] {Operator.OR});
+					advConditionNode.setOperationWithChildCondition(operator);
+				}
+			}
+		}
+		
+		enum = root.breadthFirstEnumeration();
 		while(enum.hasMoreElements())
 		{
 			child = (DefaultMutableTreeNode) enum.nextElement();
 			parent = (DefaultMutableTreeNode) child.getParent();
 			
+			
 			if(parent != null)
 			{
-				AdvancedConditionsNode advConditionNode = (AdvancedConditionsNode)child.getUserObject();
+				AdvancedConditionsNode advConditionNode = null;
+				advConditionNode = (AdvancedConditionsNode)child.getUserObject();
 				Vector vectorOfCondtions = advConditionNode.getObjectConditions();
 				//If there is no condition add a condition Identifier > 0 
 				if(vectorOfCondtions.size() == 0)
@@ -178,9 +207,10 @@ public class CatissueAdvancedConditionsImpl extends AdvancedConditionsImpl {
 					
 				}
 			} 
+			
+			//if operation is EXIST
 			else 
 			{
-				
 				//if event parameter tables
 				if(table2.getTableName().indexOf(Query.PARAM)!=-1)
 				{
@@ -197,8 +227,8 @@ public class CatissueAdvancedConditionsImpl extends AdvancedConditionsImpl {
 			}
 			
 			table2.setTableName(table2.getTableName());
-			Logger.out.debug("table name........:" + table2.getTableName()
-					+ " Alias...........:" + table2.getTableAliasAppend());
+			Logger.out.debug("table name: " + table2.getTableName()
+					+ " Alias: " + table2.getTableAliasAppend()+" Linking table:"+table2.getLinkingTable());
 		}
 	}
 	

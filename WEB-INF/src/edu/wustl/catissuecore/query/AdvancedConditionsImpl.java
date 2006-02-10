@@ -169,7 +169,7 @@ public class AdvancedConditionsImpl extends ConditionsImpl {
 	                    whereConditionsString.append(" \n)"); //End of one child subquery
 	                    if(i != childCount-1)
 	                    {
-	                    	whereConditionsString.append("\n"+Operator.AND+"\n");
+	                    	whereConditionsString.append("\n"+currentNodeData.getOperationWithChildCondition().getOperatorParams()[0]+"\n");
 	                    }
 		            }
 	            }

@@ -405,8 +405,19 @@ public abstract class Query {
 
 		//If subquery then join with the superquery
 		if (tableSufix > 1) {
-			relationCondition = (RelationCondition) Client.relationConditionsForRelatedTables
+			
+			//this maps the specimen to the one in the upper query
+			//this is to support event queries with 'OR' condition
+			if(this.getParentOfQueryStartObject().equals(Query.SPECIMEN_COLLECTION_GROUP))
+			{
+				relationCondition = new RelationCondition(new DataElement(Query.SPECIMEN,Constants.IDENTIFIER),
+						new Operator(Operator.EQUAL),new DataElement(Query.SPECIMEN,Constants.IDENTIFIER));
+			}
+			else
+			{
+				relationCondition = (RelationCondition) Client.relationConditionsForRelatedTables
 					.get(getJoinRelationWithParent());
+			}
 
 			if (relationCondition != null) {
 				DataElement rightDataElement = new DataElement(relationCondition.getRightDataElement());
@@ -572,7 +583,7 @@ public abstract class Query {
 		Map JOIN_RELATION_MAP = new HashMap();
 		JOIN_RELATION_MAP.put(new Relation(Query.PARTICIPANT,Query.COLLECTION_PROTOCOL),new Relation(Query.PARTICIPANT,Query.COLLECTION_PROTOCOL_REGISTRATION));
 		JOIN_RELATION_MAP.put(new Relation(Query.COLLECTION_PROTOCOL,Query.SPECIMEN_COLLECTION_GROUP),new Relation(Query.COLLECTION_PROTOCOL_EVENT,Query.SPECIMEN_COLLECTION_GROUP));
-		JOIN_RELATION_MAP.put(new Relation(Query.SPECIMEN_COLLECTION_GROUP,Query.SPECIMEN),new Relation(Query.SPECIMEN_COLLECTION_GROUP,Query.SPECIMEN));
+		JOIN_RELATION_MAP.put(new Relation(Query.SPECIMEN_COLLECTION_GROUP,Query.SPECIMEN),new Relation(Query.SPECIMEN,Query.SPECIMEN));
 		JOIN_RELATION_MAP.put(new Relation(Query.SPECIMEN,Query.SPECIMEN),new Relation(Query.SPECIMEN,Query.SPECIMEN));
 		Logger.out.debug(this.getParentOfQueryStartObject()+" "+this.queryStartObject);
 		return (Relation) JOIN_RELATION_MAP.get(new Relation(this.getParentOfQueryStartObject(),this.queryStartObject));
