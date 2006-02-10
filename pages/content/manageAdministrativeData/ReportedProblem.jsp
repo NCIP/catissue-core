@@ -18,6 +18,7 @@
 	class="contentPage" width="600">
 	<tr>
 		<td>
+<html:form action="/ReportedProblemShow">
 		<table summary="" cellpadding="0" cellspacing="0" border="0">
 				<tr>
 					<td class="dataTablePrimaryLabel" height="20">
@@ -88,6 +89,7 @@
 					</td>
 				</tr>
 		</table>
+</html:form>
 		</td>
 	</tr>
 </table>
