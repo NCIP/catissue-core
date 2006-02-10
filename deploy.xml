@@ -29,6 +29,7 @@
 	<property name="mysql.lib" value="mysql-connector-java-3.0.16-ga-bin.jar"/>
 	<property name="oracle.lib" value="oracleDriver.jar"/>
 	
+	<!-- Check for required properties -->
 	<target name="assert">
 		<if>
 			<equals arg1="" arg2="${jboss.home.dir}"/>
