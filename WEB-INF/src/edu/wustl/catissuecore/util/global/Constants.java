@@ -1483,5 +1483,8 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String ADD_NEW_SITE_ID ="addNewSiteId";
 	public static final String ADD_NEW_USER_ID ="addNewUserId";
 	public static final String ADD_NEW_USER_TO ="addNewUserTo";
-
+	
+	public static final String CHILD_CONTAINER_TYPE = "childContainerType";
+	public static final String UNUSED = "Unused";
+	public static final String TYPE = "Type";
 }
