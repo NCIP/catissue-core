@@ -100,6 +100,7 @@ public class ShowStorageGridViewAction  extends BaseAction
         StorageContainerGridObject storageContainerGridObject = null;
         int [][]fullStatus = null;
         int [][] childContainerSystemIdentifiers = null;
+        String [][] childContainerType = null;
         
         if ((list != null) && (list.size() > 0))
         {
@@ -108,9 +109,11 @@ public class ShowStorageGridViewAction  extends BaseAction
             
             //MD : Labels for Dimensions  
             String oneDimLabel = storageContainer.getStorageType().getOneDimensionLabel();
-            String twoDimLabel = storageContainer.getStorageType().getTwoDimensionLabel(); 
+            String twoDimLabel = storageContainer.getStorageType().getTwoDimensionLabel();
+            
             if(oneDimLabel == null )oneDimLabel = " ";
             if(twoDimLabel == null )twoDimLabel = " ";
+            
             request.setAttribute(Constants.STORAGE_CONTAINER_DIM_ONE_LABEL ,oneDimLabel );
             request.setAttribute(Constants.STORAGE_CONTAINER_DIM_TWO_LABEL ,twoDimLabel );
             
@@ -128,6 +131,7 @@ public class ShowStorageGridViewAction  extends BaseAction
                     		.getStorageContainerCapacity().getTwoDimensionCapacity());
             
             fullStatus = new int[oneDimensionCapacity.intValue()+1][twoDimensionCapacity.intValue()+1];
+            childContainerType = new String[oneDimensionCapacity.intValue()+1][twoDimensionCapacity.intValue()+1];
             
             if (storageContainer.getChildrenContainerCollection() != null)
             {
@@ -140,6 +144,9 @@ public class ShowStorageGridViewAction  extends BaseAction
                     fullStatus[positionDimensionOne.intValue()][positionDimensionTwo.intValue()] = 1;
                     childContainerSystemIdentifiers[positionDimensionOne.intValue()][positionDimensionTwo.intValue()]
                                                    = childStorageContainer.getSystemIdentifier().intValue();
+                    childContainerType[positionDimensionOne.intValue()][positionDimensionTwo.intValue()] 
+                                                   = childStorageContainer.getStorageType().getType();
+                                                  
                 }
             }          
             
@@ -147,7 +154,7 @@ public class ShowStorageGridViewAction  extends BaseAction
             							.getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
             
             String sourceObjectName = Specimen.class.getName();
-			String[] selectColumnName = {"systemIdentifier","positionDimensionOne", "positionDimensionTwo"};
+			String[] selectColumnName = {"systemIdentifier","positionDimensionOne", "positionDimensionTwo","type"};
 			String[] whereColumnName = {"storageContainer.systemIdentifier"};
             String[] whereColumnCondition = {"="};
 			Object[] whereColumnValue = {systemIdentifier};
@@ -168,10 +175,13 @@ public class ShowStorageGridViewAction  extends BaseAction
                 	Long specimenID = (Long)obj[0]; 
                     Integer positionDimensionOne = (Integer)obj[1];
                     Integer positionDimensionTwo = (Integer)obj[2];
+                    String specimenType = (String)obj[3];
                     
                     fullStatus[positionDimensionOne.intValue()][positionDimensionTwo.intValue()] = 2;
                     childContainerSystemIdentifiers[positionDimensionOne.intValue()][positionDimensionTwo.intValue()]
                                                    = specimenID.intValue();
+                    childContainerType[positionDimensionOne.intValue()][positionDimensionTwo.intValue()] 
+                                                                        = specimenType;
                 }
             }
         }
@@ -188,6 +198,7 @@ public class ShowStorageGridViewAction  extends BaseAction
          
         request.setAttribute(Constants.PAGEOF, pageOf);
         request.setAttribute(Constants.CHILD_CONTAINER_SYSTEM_IDENTIFIERS, childContainerSystemIdentifiers);
+        request.setAttribute(Constants.CHILD_CONTAINER_TYPE, childContainerType);
         request.setAttribute(Constants.STORAGE_CONTAINER_CHILDREN_STATUS,fullStatus);
         request.setAttribute(Constants.STORAGE_CONTAINER_GRID_OBJECT,
                 storageContainerGridObject);
