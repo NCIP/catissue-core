@@ -238,7 +238,11 @@ public abstract class Query {
 	 */
 	public String getString() {
 		
-		whereConditions.formatTree();
+		//Formatting is required only the first time
+		if(this.queryStartObject.equals(Query.PARTICIPANT))
+		{
+			whereConditions.formatTree();
+		}
 		StringBuffer query = new StringBuffer();
 		HashSet set = new HashSet();
 
