@@ -88,6 +88,7 @@ public class CatissueAdvancedConditionsImpl extends AdvancedConditionsImpl {
 			String temp, int level, int childIndex) {
 		
 		Vector vectorOfCondtions = advConditionNode.getObjectConditions();
+		Vector additionalConditions = new Vector();
 		String tableName = advConditionNode.getObjectName();
 		String str = "";
 		Condition con = null;
@@ -97,7 +98,7 @@ public class CatissueAdvancedConditionsImpl extends AdvancedConditionsImpl {
 		AdvancedConditionsNode parent1 = (AdvancedConditionsNode) ((DefaultMutableTreeNode)parentNode).getUserObject();
 		//second level parent
 		AdvancedConditionsNode parent2 = (AdvancedConditionsNode) ((DefaultMutableTreeNode)((DefaultMutableTreeNode)parentNode).getParent()).getUserObject();
-		Logger.out.debug( "parents operation on children:"+temp);
+		Logger.out.debug( "tablename:"+tableName+" parents operation on children:"+temp);
 		for (int k = 0; k < vectorOfCondtions.size(); k++) {
 			
 			con = (Condition) vectorOfCondtions.get(k);
@@ -212,13 +213,35 @@ public class CatissueAdvancedConditionsImpl extends AdvancedConditionsImpl {
 			else 
 			{
 				//if event parameter tables
-				if(table2.getTableName().indexOf(Query.PARAM)!=-1)
+				//if attribute is of the base SpecimenEventParameter class
+				if(table2.getTableName().equals(Query.SPECIMEN_EVENT_PARAMETERS))
+				{
+					//Aarti: A condition corresponding to actual event is added 
+					//so that a link is obtained between actual event parameter class and specimenEventParameter
+					Condition actualEventIdentifierCondition = getIdentifierCondition(table2.getLinkingTable().getTableName());
+					Table eventTable = actualEventIdentifierCondition.getDataElement().getTable();
+					eventTable.setLinkingTable(new Table(Query.SPECIMEN_EVENT_PARAMETERS,
+							Query.SPECIMEN_EVENT_PARAMETERS_APPEND+eventTable.getTableName()+ level+"L"+childIndex+"C",new Table(Query.SPECIMEN,
+									Query.SPECIMEN,new Table(Query.SPECIMEN_COLLECTION_GROUP,Query.SPECIMEN_COLLECTION_GROUP))));
+					eventTable.setTableAliasAppend(eventTable.getTableName() + level+"L"+childIndex+"C");
+					Logger.out.debug("table:"+table2+ " Linking table:"+table2.getLinkingTable().getTableName()+" event table:"+eventTable);
+					table2.setTableAliasAppend(table2.getTableName() + level+"L"+childIndex+"C");
+					additionalConditions.add(actualEventIdentifierCondition);
+//					advConditionNode.addConditionToNode(actualEventIdentifierCondition);
+					table2.setLinkingTable(new Table(Query.SPECIMEN,
+							Query.SPECIMEN));
+					table2.setTableAliasAppend(Query.SPECIMEN_EVENT_PARAMETERS_APPEND+eventTable.getTableName()+ level+"L"+childIndex+"C");
+					
+				}
+				//if attribute chosen belongs to the derived event class itself
+				else if(table2.getTableName().indexOf(Query.PARAM)!=-1)
 				{
 					table2.setLinkingTable(new Table(Query.SPECIMEN_EVENT_PARAMETERS,
 							Query.SPECIMEN_EVENT_PARAMETERS_APPEND+table2.getTableName()+ level+"L"+childIndex+"C",new Table(Query.SPECIMEN,
 									Query.SPECIMEN,new Table(Query.SPECIMEN_COLLECTION_GROUP,Query.SPECIMEN_COLLECTION_GROUP))));
 					table2.setTableAliasAppend(table2.getTableName() + level+"L"+childIndex+"C");
 				}
+				//else when its not any event condition
 				else 
 				{
 					table2.setLinkingTable(new Table(Query.SPECIMEN,Query.SPECIMEN));
@@ -229,6 +252,12 @@ public class CatissueAdvancedConditionsImpl extends AdvancedConditionsImpl {
 			table2.setTableName(table2.getTableName());
 			Logger.out.debug("table name: " + table2.getTableName()
 					+ " Alias: " + table2.getTableAliasAppend()+" Linking table:"+table2.getLinkingTable());
+		}
+		
+		for(int i=0; i< additionalConditions.size(); i++)
+		{
+			Logger.out.debug(" additional condition added:"+(Condition) additionalConditions.get(i));
+			advConditionNode.addConditionToNode((Condition) additionalConditions.get(i));
 		}
 	}
 	
