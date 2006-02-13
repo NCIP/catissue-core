@@ -31,6 +31,7 @@ public class HTTPWrapperObject implements Serializable
 	
 	public HTTPWrapperObject(Object domainObject,String operation) throws Exception
 	{
+	    //creating instance of LoginForm for LOGIN operation
 	    if(operation.equals(Constants.LOGIN))
 		{
 			User user = (User)domainObject;
@@ -39,10 +40,12 @@ public class HTTPWrapperObject implements Serializable
 			loginForm.setPassword(user.getPassword());
 			formBean = loginForm;
 		}
+	    //assigning formBean value as null for LOGOUT operation
 	    else if(operation.equals(Constants.LOGOUT))
 	    {
 	        formBean= null;
 	    }
+	    //creating instance of Form-Bean according to type of the domainObject using ActionFormFactory
 		else
 		{
 		    AbstractActionForm abstractForm = ActionFormFactory.getFormBean(domainObject,operation);
@@ -53,12 +56,18 @@ public class HTTPWrapperObject implements Serializable
 			
 		this.operation = operation;
 	}
-	
+
+	/**
+	 * Returns FormBean object
+	 */
 	public ActionForm getForm()
 	{
 	    return formBean; 
 	}
 	
+	/**
+	 * Returns Operation value
+	 */
 	public String getOperation()
 	{
 	    return this.operation;

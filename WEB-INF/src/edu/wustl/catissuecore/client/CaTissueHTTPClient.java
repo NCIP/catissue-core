@@ -44,11 +44,22 @@ public class CaTissueHTTPClient
     {
         
     }
+    
+    /**
+     * This function returns instance of CaTissueHTTPClient
+     * @return the CaTissueHTTPClient instance
+     */
     public static CaTissueHTTPClient getInstance()
     {
         return caTissueHTTPClient;
     }
     
+    /**
+     * This function connects User to caTISSUE Core Application 
+     * @param userName userName of the User to connect to caTISSUE Core Application
+     * @param password password of the User to connect to caTISSUE Core Application
+     * @return returns the status of login to caTISSUE Core Application
+     */
 	public boolean connect(String userName, String password) throws Exception
 	{
 	    User user = new User();
@@ -69,26 +80,41 @@ public class CaTissueHTTPClient
 		return false;
 	}
 	
+	/**
+	 * This function disconnects User from caTISSUE Core Application
+	 * @return returns the status of logout to caTISSUE Core Application
+	 */
 	public boolean disConnect() throws Exception
 	{
-	    HTTPWrapperObject wrapperObject = new HTTPWrapperObject(null, Constants.LOGOUT);
-	    
-	    HTTPMessage httpMessage =(HTTPMessage)sendData(wrapperObject, servletURL+"LogoutHTTP.do;jsessionid="+httpSessionId);
-	    
-	    if(Constants.SUCCESS.equals(httpMessage.getResponseStatus()))
-		{
-			return true;
-		}
+	    if(httpSessionId != null)
+	    {
+		    HTTPWrapperObject wrapperObject = new HTTPWrapperObject(null, Constants.LOGOUT);
+		    
+		    HTTPMessage httpMessage =(HTTPMessage)sendData(wrapperObject, servletURL+"LogoutHTTP.do;jsessionid="+httpSessionId);
+		    
+		    if(Constants.SUCCESS.equals(httpMessage.getResponseStatus()))
+			{
+				return true;
+			}
+	    }
 		
 		return false;
 	}
 	
+	/**
+	 * This function creates HTTPWrapperObject to send to caTISSUE Core Application for different operations and
+	 * returns updated Object of the caCORE List application or Exception Object containing exceptions while performing operation
+	 * @param domainObject the caCORE Like Object 
+	 * @param operation the operation to do on caCORE Like Object
+	 * @return the updated Object of the caCORE Like application or Exception Object containing exceptions while performing operation 
+	 */
 	private Object doOperation(Object domainObject,String operation) throws Exception
 	{
 	    HTTPWrapperObject wrapperObject = new HTTPWrapperObject(domainObject,operation);
 	    
 	    HTTPMessage httpMessage =(HTTPMessage)sendData(wrapperObject, servletURL+"OperationHTTP.do;jsessionid="+httpSessionId);
 	    
+	    //setting Id of the domainObject using Reflection if Add operatoin is Successfull
 	    if ( (operation.equals(Constants.ADD)) && (httpMessage.getResponseStatus().equals(Constants.SUCCESS))  && 
 	         (httpMessage.getDomainObjectId() != null) )
 	    {
@@ -100,6 +126,7 @@ public class CaTissueHTTPClient
 		    
 		    setIdMethod.invoke(domainObject, arguments);
 	    }
+	    //creating Exception object containing response messages if operation fails
 	    else if(httpMessage.getResponseStatus().equals(Constants.FAILURE))
 	    {
 	        String exceptions=new String();
@@ -117,9 +144,16 @@ public class CaTissueHTTPClient
 	    return domainObject;
 	}
 	
+	/**
+	 * This function opens a connection with caTISSUE Core Applicatoin and sends HTTPWrapperObject to do operation
+	 * and also returns response Object
+	 * @param wrapperObject the HTTPWrapperObject to send to caTISSUE Core Application
+	 * @param urlString the URL Connection string of caTISSUE Core Applicatoin
+	 * @return the response Object-HTTPMessage received from ResponseServlet 
+	 */
 	private Object sendData(HTTPWrapperObject wrapperObject, String urlString) throws Exception
 	{
-	    // Opens a connection to the specific URL
+	    // Opens a connection to the caTissueCore Application URL
 		URL url = new URL(urlString);
 		URLConnection con = url.openConnection();
 		
@@ -147,11 +181,21 @@ public class CaTissueHTTPClient
 		return httpMessage;
 	}
 	
+	/**
+	 * Adds caCore Like domain object in the database.
+	 * @param domainObject the caCore Like object to add using HTTP API
+	 * @return returns the Added caCore Like object/Exception object if exception occurs performing Add operation
+	 */
 	public Object add(Object domainObject) throws Exception
 	{
 		return doOperation(domainObject,Constants.ADD);
 	}
 	
+	/**
+	 * Edits caCore Like domain object in the database.
+	 * @param domainObject the caCore Like object to edit using HTTP API
+	 * @return returns the Edited caCore Like object/Exception object if exception occurs performing Edit operation
+	 */
 	public Object edit(Object domainObject) throws Exception
 	{
 		return doOperation(domainObject,Constants.EDIT);

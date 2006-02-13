@@ -42,7 +42,14 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class CaCoreAppServicesDelegator
 {
-	public boolean delegateLogin(String userName,String password) throws Exception
+	/**
+	 * Passes User credentials to CaTissueHTTPClient to connect User with caTISSUE Core Application
+	 * @param userName userName of the User to connect to caTISSUE Core Application
+	 * @param password password of the User to connect to caTISSUE Core Application
+	 * @return the status of login to caTISSUE Core Application
+	 * @throws Exception 
+	 */
+    public boolean delegateLogin(String userName,String password) throws Exception
 	{
 		CaTissueHTTPClient httpClient = CaTissueHTTPClient.getInstance();
 		
@@ -53,6 +60,10 @@ public class CaCoreAppServicesDelegator
 		return status;
 	}
 	
+    /**
+     * Disconnects User from caTISSUE Core Application
+     * @return returns the status of logout to caTISSUE Core Application
+     */
 	public boolean delegateLogout()// throws Exception
 	{
 	    try
@@ -71,6 +82,12 @@ public class CaCoreAppServicesDelegator
 		return false;
 	}
 	
+	/**
+	 * Passes caCore Like domain object to CaTissueHTTPClient to perform Add operation.
+	 * @param obj the caCore Like object to add using HTTP API
+	 * @return returns the Added caCore Like object/Exception object if exception occurs performing Add operation
+	 * @throws Exception
+	 */
 	public Object delegateAdd(Object obj) throws Exception
 	{
 	    try
@@ -85,6 +102,12 @@ public class CaCoreAppServicesDelegator
 	    }
 	}
 	
+	/**
+	 * Passes caCore Like domain object to CaTissueHTTPClient to perform Edit operation.
+	 * @param obj the caCore Like object to edit using HTTP API
+	 * @return returns the Edited caCore Like object/Exception object if exception occurs performing Edit operation
+	 * @throws Exception
+	 */
 	public Object delegateEdit(Object obj) throws Exception
 	{
 		try
@@ -99,6 +122,12 @@ public class CaCoreAppServicesDelegator
 		}
 	}
 	
+	/**
+	 * Returns Exception object as Delete operation is not supported by CaTissue Core Application.
+	 * @param obj the caCore Like object to delete using HTTP API
+	 * @return returns Exception object as Delete operation is not supported by CaTissue Core Application.
+	 * @throws Exception
+	 */
 	public Object delegateDelete(Object obj) throws Exception
 	{
 		throw new Exception("Does not support delete");

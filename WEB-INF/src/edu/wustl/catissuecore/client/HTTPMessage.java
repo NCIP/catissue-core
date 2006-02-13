@@ -69,32 +69,55 @@ public class HTTPMessage implements Serializable
 		messageList.add(object);
 	}
 	
-	
+	/**
+	 * Returns the Response Status of the operation
+	 * @return the Response Status of the operation
+	 */
 	public String getResponseStatus()
 	{
 		return responseStatus;
 	}
 	
+	/**
+	 * Sets Response Status of the operation 
+	 * @param responseStatus Response Status of the operation
+	 */
 	public void setResponseStatus(String responseStatus)
 	{
 		this.responseStatus = responseStatus;
 	}
 
+	/**
+	 * Returns the Session ID 
+	 * @return the Session ID
+	 */
 	public String getSessionId()
 	{
 		return sessionId;
 	}
 	
+	/**
+	 * Sets the Session ID
+	 * @param sessionId the Session ID
+	 */
 	public void setSessionId(String sessionId)
 	{
 		this.sessionId = sessionId;
 	}
 	
+	/**
+	 * Sets the ID of Domain Object
+	 * @param domainObjectId the ID of Domain Object
+	 */
 	public void setDomainObjectId(Long domainObjectId)
 	{
 	    this.domainObjectId=domainObjectId;
 	}
 	
+	/**
+	 * Returns the ID of Domain Object
+	 * @return the ID of Domain Object
+	 */
 	public Long getDomainObjectId()
 	{
 	    return this.domainObjectId;
