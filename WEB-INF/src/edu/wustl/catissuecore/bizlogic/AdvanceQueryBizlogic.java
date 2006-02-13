@@ -20,6 +20,7 @@ import edu.wustl.catissuecore.dao.JDBCDAO;
 import edu.wustl.catissuecore.query.AdvancedConditionsNode;
 import edu.wustl.catissuecore.query.Condition;
 import edu.wustl.catissuecore.query.Operator;
+import edu.wustl.catissuecore.query.Table;
 import edu.wustl.catissuecore.query.TreeNodeData;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
@@ -192,6 +193,9 @@ public class AdvanceQueryBizlogic extends DefaultBizLogic implements TreeDataInt
 
 			AdvancedConditionsNode advNode = (AdvancedConditionsNode)parent.getUserObject();
 			Vector conditions = advNode.getObjectConditions();
+			
+			
+			Table table;
 			String tableId=new String();
 			/*incase of Specimen conditions the specimen event paramters object names will have the all the tables in path in the object name
 			 * Check if there are more than 1 table, tokenize it and set proper table in DataElement
@@ -205,24 +209,26 @@ public class AdvanceQueryBizlogic extends DefaultBizLogic implements TreeDataInt
 				while(conditionsItr.hasNext())
 				{
 					Condition condition = (Condition)conditionsItr.next();
-					String table = condition.getDataElement().getTableAliasName();
-					Logger.out.debug("table in specimen condition..."+table);
-					StringTokenizer tableTokens = new StringTokenizer(table,".");
+					table = condition.getDataElement().getTable();
+					String tableName = condition.getDataElement().getTableAliasName();
+					Logger.out.debug("table in specimen condition..."+tableName);
+					StringTokenizer tableTokens = new StringTokenizer(tableName,".");
 					if(tableTokens.countTokens()==2)
 					{
-						String tableName = tableTokens.nextToken();
-						table = tableTokens.nextToken();
+						String firstTableName = tableTokens.nextToken();
+						tableName = tableTokens.nextToken();
 //						Logger.out.debug("table in specimen condition token1..."+objectName);
-						Logger.out.debug("table in specimen condition  token2..."+tableName);
+						Logger.out.debug("table in specimen condition  token2..."+firstTableName);
 //						eventParametersTables.add(tableName);
-						condition.getDataElement().setTableName(table);
+						condition.getDataElement().setTableName(tableName);
+						table.setLinkingTable(new Table(firstTableName));
 //						tableId = bizLogic.getTableIdFromAliasName(tableName);
 //						Set tablesInPath = bizLogic.setTablesInPath(Long.valueOf(parentTableId),Long.valueOf(tableId));
 //						Logger.out.debug("tablesinpath for specimen event tables:"+tablesInPath);
 //						tableSet.addAll(tablesInPath);
 
 					}
-					tableId = bizLogic.getTableIdFromAliasName(table);
+					tableId = bizLogic.getTableIdFromAliasName(tableName);
 					Set tablesInPath = bizLogic.setTablesInPath(Long.valueOf(parentTableId),Long.valueOf(tableId));
 					Logger.out.debug("tablesinpath for specimen event tables:"+tablesInPath);
 					tableSet.addAll(tablesInPath);
@@ -235,8 +241,8 @@ public class AdvanceQueryBizlogic extends DefaultBizLogic implements TreeDataInt
 				while(conditionsItr.hasNext())
 				{
 					Condition condition = (Condition)conditionsItr.next();
-					String table = condition.getDataElement().getTableAliasName();
-					tableId = bizLogic.getTableIdFromAliasName(table);
+					String tableName = condition.getDataElement().getTableAliasName();
+					tableId = bizLogic.getTableIdFromAliasName(tableName);
 					Set tablesInPath = bizLogic.setTablesInPath(Long.valueOf(parentTableId),Long.valueOf(tableId));
 					tableSet.addAll(tablesInPath);
 				}
