@@ -434,19 +434,17 @@
 							<!-- action buttons begins -->
 							<table cellpadding="4" cellspacing="0" border="0">
 								<tr>
+									<td rowspan=2 class="formFieldNoBorders" nowrap>
+										<label for="proceedWith">
+											<bean:message key="proceedWith"/>
+										</label>
+									</td>
+
 								<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
 						   			<td nowrap class="formFieldNoBorders">
 										<html:radio styleClass="" property="forwardTo" value="<%=Constants.PARTICIPANT_FORWARD_TO_LIST[0][1]%>">
 										<label for="<%=Constants.PARTICIPANT_FORWARD_TO_LIST[0][0]%>">
 											<%=Constants.PARTICIPANT_FORWARD_TO_LIST[0][0]%>
-										</label>
-										</html:radio>
-									</td>
-
-									<td nowrap class="formFieldNoBorders">
-										<html:radio styleClass=""  property="forwardTo" value="<%=Constants.PARTICIPANT_FORWARD_TO_LIST[1][1]%>">
-										<label for="<%=Constants.PARTICIPANT_FORWARD_TO_LIST[1][0]%>">
-											<%=Constants.PARTICIPANT_FORWARD_TO_LIST[1][0]%>
 										</label>
 										</html:radio>
 									</td>
@@ -456,12 +454,6 @@
 						   					<bean:message key="buttons.getClinicalData"/>
 						   				</html:submit>
 						   			</td>
-
-						   			<!-- td>
-						   				<html:submit styleClass="actionButton" onclick="<%=changeAction%>">
-						   					<bean:message key="buttons.submit"/>
-						   				</html:submit>
-						   			</td-->
 						   			
 						   			<td>
 						   			<%
@@ -470,17 +462,22 @@
 						   				<html:button styleClass="actionButton" property="submitPage" onclick="<%=action%>">
 						   					<bean:message key="buttons.submit"/>
 						   				</html:button>
-						   		</td>
+							   		</td>
 									<td colspan="3">
 										<html:reset styleClass="actionButton">
 											<bean:message key="buttons.reset"/>
 										</html:reset>
 									</td> 
-									<%--td>
-										<html:submit styleClass="actionButton">
-											<bean:message key="buttons.submitAndRegisterParticipant"/>
-										</html:submit>
-									</td--%> 
+								<tr>
+									<td nowrap class="formFieldNoBorders">
+									<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
+										<html:radio styleClass=""  property="forwardTo" value="<%=Constants.PARTICIPANT_FORWARD_TO_LIST[1][1]%>">
+										<label for="<%=Constants.PARTICIPANT_FORWARD_TO_LIST[1][0]%>">
+											<%=Constants.PARTICIPANT_FORWARD_TO_LIST[1][0]%>
+										</label>
+										</html:radio>
+									</logic:notEqual>	
+									</td>
 								</tr>
 							</table>
 							<!-- action buttons end -->
