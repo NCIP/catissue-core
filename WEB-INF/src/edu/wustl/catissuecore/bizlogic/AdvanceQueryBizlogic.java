@@ -221,6 +221,11 @@ public class AdvanceQueryBizlogic extends DefaultBizLogic implements TreeDataInt
 						Logger.out.debug("table in specimen condition  token2..."+firstTableName);
 //						eventParametersTables.add(tableName);
 						condition.getDataElement().setTableName(tableName);
+						
+						//Aarti: Changes to add actual event table also to the query 
+						//when the attribute selected belongs to the base specimen event parameters class.
+						//this linking table is used to get the actual event the query was made on while 
+						//formatting tree in catissuecoreAdvancedQueryImpl
 						table.setLinkingTable(new Table(firstTableName));
 //						tableId = bizLogic.getTableIdFromAliasName(tableName);
 //						Set tablesInPath = bizLogic.setTablesInPath(Long.valueOf(parentTableId),Long.valueOf(tableId));
