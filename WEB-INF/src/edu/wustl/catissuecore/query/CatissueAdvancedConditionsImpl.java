@@ -20,7 +20,7 @@ public class CatissueAdvancedConditionsImpl extends AdvancedConditionsImpl {
 	public void formatTree()
 	{
 		DefaultMutableTreeNode root = this.getWhereCondition();
-		Enumeration enum = root.breadthFirstEnumeration();
+		Enumeration rootIterator = root.breadthFirstEnumeration();
 		DefaultMutableTreeNode child;
 		DefaultMutableTreeNode parent;
 		
@@ -30,9 +30,9 @@ public class CatissueAdvancedConditionsImpl extends AdvancedConditionsImpl {
 		//Specimen Collection Group nodes and have operationWithChildCondition as "OR"
 		//make the operation as 'EXIST' with parameter 'OR' to it.
 		//This would solve the problem of Specimen Event parameters as mentioned in bug# 960
-		while(enum.hasMoreElements())
+		while(rootIterator.hasMoreElements())
 		{
-			child = (DefaultMutableTreeNode) enum.nextElement();
+			child = (DefaultMutableTreeNode) rootIterator.nextElement();
 			parent = (DefaultMutableTreeNode) child.getParent();
 			AdvancedConditionsNode advConditionNode = null;
 			advConditionNode = (AdvancedConditionsNode)child.getUserObject();
@@ -49,10 +49,10 @@ public class CatissueAdvancedConditionsImpl extends AdvancedConditionsImpl {
 			}
 		}
 		
-		enum = root.breadthFirstEnumeration();
-		while(enum.hasMoreElements())
+		rootIterator = root.breadthFirstEnumeration();
+		while(rootIterator.hasMoreElements())
 		{
-			child = (DefaultMutableTreeNode) enum.nextElement();
+			child = (DefaultMutableTreeNode) rootIterator.nextElement();
 			parent = (DefaultMutableTreeNode) child.getParent();
 			
 			
@@ -214,7 +214,7 @@ public class CatissueAdvancedConditionsImpl extends AdvancedConditionsImpl {
 			{
 				//if event parameter tables
 				//if attribute is of the base SpecimenEventParameter class
-				if(table2.getTableName().equals(Query.SPECIMEN_EVENT_PARAMETERS))
+				if(table2.getTableName().equals(Query.SPECIMEN_EVENT_PARAMETERS) || table2.getTableName().equals(Query.USER))
 				{
 					//Aarti: A condition corresponding to actual event is added 
 					//so that a link is obtained between actual event parameter class and specimenEventParameter
@@ -228,10 +228,19 @@ public class CatissueAdvancedConditionsImpl extends AdvancedConditionsImpl {
 					table2.setTableAliasAppend(table2.getTableName() + level+"L"+childIndex+"C");
 					additionalConditions.add(actualEventIdentifierCondition);
 //					advConditionNode.addConditionToNode(actualEventIdentifierCondition);
-					table2.setLinkingTable(new Table(Query.SPECIMEN,
-							Query.SPECIMEN));
-					table2.setTableAliasAppend(Query.SPECIMEN_EVENT_PARAMETERS_APPEND+eventTable.getTableName()+ level+"L"+childIndex+"C");
-					
+					if(table2.getTableName().equals(Query.SPECIMEN_EVENT_PARAMETERS))
+					{
+						table2.setLinkingTable(new Table(Query.SPECIMEN,
+								Query.SPECIMEN));
+						table2.setTableAliasAppend(Query.SPECIMEN_EVENT_PARAMETERS_APPEND+eventTable.getTableName()+ level+"L"+childIndex+"C");
+					}
+					else
+					{
+						table2.setLinkingTable(new Table(Query.SPECIMEN_EVENT_PARAMETERS,
+								Query.SPECIMEN_EVENT_PARAMETERS_APPEND+eventTable.getTableName()+ level+"L"+childIndex+"C",new Table(Query.SPECIMEN,
+										Query.SPECIMEN,new Table(Query.SPECIMEN_COLLECTION_GROUP,Query.SPECIMEN_COLLECTION_GROUP))));
+						Table table1 = table2.getLinkingTable();
+					}
 				}
 				//if attribute chosen belongs to the derived event class itself
 				else if(table2.getTableName().indexOf(Query.PARAM)!=-1)
