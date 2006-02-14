@@ -186,12 +186,12 @@ public class ShoppingCartAction  extends BaseAction
 			
 			if(cartTable != null && cartTable.size() != 0)
 			{				
-				Enumeration enum = cartTable.keys();
+				Enumeration cartIterator = cartTable.keys();
 				int id = 0;
 				
-				while(enum.hasMoreElements())
+				while(cartIterator.hasMoreElements())
 				{
-					String key = (String)enum.nextElement();
+					String key = (String)cartIterator.nextElement();
 					Specimen specimen = (Specimen)cartTable.get(key);
 					
 					List rowData = new ArrayList();

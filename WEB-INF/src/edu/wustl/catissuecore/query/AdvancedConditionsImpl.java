@@ -365,15 +365,15 @@ public class AdvancedConditionsImpl extends ConditionsImpl {
     {
     	HashSet set = new HashSet();
         
-        Enumeration enum = whereCondition.depthFirstEnumeration();
+        Enumeration conditionIterator = whereCondition.depthFirstEnumeration();
         DefaultMutableTreeNode treeNode;
         DefaultMutableTreeNode parentNode;
         AdvancedConditionsNode advancedConditionsNode;
         AdvancedConditionsNode parentConditionsNode;
         Table table;
-        while(enum.hasMoreElements())
+        while(conditionIterator.hasMoreElements())
         {
-        	treeNode = (DefaultMutableTreeNode) enum.nextElement();
+        	treeNode = (DefaultMutableTreeNode) conditionIterator.nextElement();
             advancedConditionsNode=(AdvancedConditionsNode) treeNode.getUserObject();
             parentNode = (DefaultMutableTreeNode) treeNode.getParent();
             
