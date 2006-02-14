@@ -13,6 +13,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.StringTokenizer;
 import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
@@ -181,6 +182,13 @@ public class AdvanceSearchResultsAction extends BaseAction
 				String columnName = condition.getDataElement().getField();
 				String aliasName = condition.getDataElement().getTableAliasName();
 				QueryBizLogic bizLogic = (QueryBizLogic)BizLogicFactory.getBizLogic(Constants.SIMPLE_QUERY_INTERFACE_ID);
+				StringTokenizer tableTokens = new StringTokenizer(aliasName,".");
+				if(tableTokens.countTokens()==2)
+				{
+					aliasName = tableTokens.nextToken();
+					tableTokens.nextToken();
+				}
+
 				String attributeType = bizLogic.getAttributeType(columnName,aliasName);
 				condition.getDataElement().setFieldType(attributeType);
 			}
