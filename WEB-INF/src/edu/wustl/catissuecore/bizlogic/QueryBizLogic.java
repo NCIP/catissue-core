@@ -827,12 +827,21 @@ public class QueryBizLogic extends DefaultBizLogic
      */
     public String getAttributeType(String columnName,String aliasName) throws DAOException, ClassNotFoundException
     {
-        String sql = 	" select columnData.ATTRIBUTE_TYPE from " +
-        				" CATISSUE_INTERFACE_COLUMN_DATA columnData, "+
-						" CATISSUE_QUERY_TABLE_DATA tableData "+
-						" where  columnData.TABLE_ID = tableData.TABLE_ID and "+ 
-						"  columnData.COLUMN_NAME = '"+columnName+"' and tableData.ALIAS_NAME = '"+aliasName+"' ";
-						
+    	String sql = 	"SELECT temp.ATTRIBUTE_TYPE "+
+						"from CATISSUE_QUERY_TABLE_DATA tableData2 join "+
+						"( SELECT  columnData.COLUMN_NAME, columnData.TABLE_ID, columnData.ATTRIBUTE_TYPE, "+
+						"displayData.DISPLAY_NAME, relationData.TABLES_IN_PATH "+
+						"FROM CATISSUE_INTERFACE_COLUMN_DATA columnData, "+
+						"CATISSUE_TABLE_RELATION relationData, "+
+						"CATISSUE_QUERY_TABLE_DATA tableData, "+
+						"CATISSUE_SEARCH_DISPLAY_DATA displayData "+
+						"where relationData.CHILD_TABLE_ID = columnData.TABLE_ID and "+
+						"relationData.PARENT_TABLE_ID = tableData.TABLE_ID and "+
+						"relationData.RELATIONSHIP_ID = displayData.RELATIONSHIP_ID and "+
+						"columnData.IDENTIFIER = displayData.COL_ID and "+
+						"tableData.ALIAS_NAME = '"+aliasName+"' and columnData.COLUMN_NAME = '"+columnName+"') temp "+
+						"on temp.TABLE_ID = tableData2.TABLE_ID";
+    	
         Logger.out.debug("SQL*****************************"+sql);
         
         JDBCDAO jdbcDao = new JDBCDAO();
