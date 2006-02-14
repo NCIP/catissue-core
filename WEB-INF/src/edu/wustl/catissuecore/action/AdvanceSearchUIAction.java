@@ -120,9 +120,9 @@ public abstract class AdvanceSearchUIAction extends BaseAction
 			{
 //				Explicitly setting operator keys value as they are same
 				if(tempOperator.equals(Operator.GREATER_THAN_OR_EQUALS))
-					map.put(opKey,"Between");
+					map.put(opKey,Operator.BETWEEN);
 				else
-					map.put(opKey,"Not Between");
+					map.put(opKey,Operator.NOT_BETWEEN);
 				temp = "";
 			}
 			else
@@ -141,8 +141,6 @@ public abstract class AdvanceSearchUIAction extends BaseAction
 		Logger.out.debug("map in advSearchUIAction----******-->"+map);
 		//Setting map in form
 		aForm.setValues(map);
-		
-		
     }
 	
 	
@@ -188,18 +186,16 @@ public abstract class AdvanceSearchUIAction extends BaseAction
 			String eventOperator = "EventColumnOperator_" + counter;
 			String eventValue = "EventColumnValue_" + counter;
 			String dataType = new String();
-			if(superTable.equals(""))
-				dataType = bizlogic.getAttributeType(column,tableName);
-			else
-				dataType = bizlogic.getAttributeType(column,superTable);
+			dataType = bizlogic.getAttributeType(column,tableName);
+			
 			Logger.out.debug("Key for event map"+tableName+"."+column+"."+dataType);
-			if(superTable.equals(""))
-				aForm.setEventMap(eventColumn,tableName+"."+column+"."+dataType);//bizlogic.getColumnDisplayNames(tableName,column
-			else
-				aForm.setEventMap(eventColumn,superTable+"."+column+"."+dataType);
+			aForm.setEventMap(eventColumn,superTable+"."+column+"."+dataType);//bizlogic.getColumnDisplayNames(tableName,column
 			aForm.setEventMap(eventClassName,tableName);
 			aForm.setEventMap(eventOperator,operatorVal);
 			aForm.setEventMap(eventValue,value);
+			Map eventParametersMap = (Map)aForm.getEventValues();
+			Logger.out.debug("eventParametersMap in advSUI****-->"+eventParametersMap);
+
 		//}
 	}
 
