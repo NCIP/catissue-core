@@ -6,7 +6,7 @@
 			</a>
 		  </td>
 		  <td height="37" align="right">
-          	<a href="http://www.siteman.wustl.edu">
+          	<a href="@@institution.url@@">
           		<img class=logo alt="Cancer Biomedical Informatics Center" src="images/sccLogo.gif" width="259" height="45" border="0">
 			</a>
 		  </td>
