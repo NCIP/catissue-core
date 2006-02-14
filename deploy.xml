@@ -110,6 +110,23 @@
 		</replace>
 	</target>
 	
+	<!--Modify Adopter's Institution images, URL of Institution website and Contact Us, Privacy Notice, Disclaimer, Accessibility Text Files-->
+	<target name="AdopterConfiguration">
+		<echo message="Updating Site Images and Contact Us, Privacy Notice, Disclaimer, Accessibility Text Files"/>
+		<copy todir="${temp.dir}/catissuecore/images" overwrite="true">
+			<fileset dir="${base.dir}/images"/>
+		</copy>
+		<copy todir="${temp.dir}/catissuecore" overwrite="true">
+			<fileset dir="${base.dir}/configuration"/>
+		</copy>
+		<replace file="${temp.dir}/catissuecore/pages/MainHeader.jsp">
+			<include name="classes/ApplicationResources.properties"/> 
+			<replacefilter 
+				token="&lt;a href=@@institution.url@@>"
+				value="&lt;a href=http://${institution.url}>"/>
+		</replace>
+	</target>
+	
 	<!--Modify Configuration For MySQL-->
 	<target name="mysqlConfig">
 		<echo message="Modifying caTISSUECore MySQL specific Configuration File..."/>
@@ -280,7 +297,8 @@
 		<antcall target="assert"/>
 		<delete dir="${temp.dir}"/>
 		<antcall target="init"/>
-		<antcall target="ConfigureWar"/>	
+		<antcall target="ConfigureWar"/>
+		<antcall target="AdopterConfiguration"/>
 		<if>
 			<equals arg1="mysql" arg2="${database.type}"/>		
 			<then>
