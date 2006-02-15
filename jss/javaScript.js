@@ -21,7 +21,7 @@ function addDiv(div,adstr)
 {
 	var x = div.innerHTML;
 	div.innerHTML = div.innerHTML +adstr;
-	alert(div.innerHTML);
+	
 }
 
 function confirmDisable(action,formField)
@@ -57,14 +57,18 @@ function enableButton(formButton,countElement,checkName)
 	/** checking whether checkbox is checked or not **/
 	var status = false;
 	
-	for(i=1;i <= counts;i++)
+	for(var i=1;i <= counts;i++)
 	{
+		
 		/** creating checkbox name**/
 		var itemCheck = checkName+i;
 		var chk = document.getElementById(itemCheck);
-		if(document.all[itemCheck].checked==true)
-			status = true;
-			
+	        if (chk.checked == true)
+	        {
+				
+	        	status = true;
+	        	break;
+	        }
 	}
 	if(status)
 		formButton.disabled = false;
@@ -99,7 +103,7 @@ function  deleteChecked(subdivtag,action,countElement,checkName,isOuterTable)
 		var chk = document.getElementById(itemCheck);
 		
 		
-		if(document.all[itemCheck].checked==true){
+		if(chk.checked==true){
 			var pNode = null;
 			var k = 0;
 			
