@@ -1324,6 +1324,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String SIMPLE_QUERY_MAP = "simpleQueryMap";
 	public static final String SIMPLE_QUERY_ALIAS_NAME = "simpleQueryAliasName";
 	public static final String SIMPLE_QUERY_COUNTER = "simpleQueryCount";
+	public static final String IDENTIFIER_FIELD_INDEX = "identifierFieldIndex";
 	
 	public static final String UNDEFINED = "Undefined";
 	public static final String UNKNOWN = "Unknown";
