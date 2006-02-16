@@ -55,9 +55,9 @@ public class SimpleSearchAction extends BaseAction {
 				+ " set in SimpleSearch Action : -- " + strMenu);
 		// -------- set the selected menu ------- end
 		HttpSession session = request.getSession();
-
+		
 		String target = Constants.SUCCESS;
-
+		
 		Map map = simpleQueryInterfaceForm.getValuesMap();
 
 		//If map from session is null get the map values from form.
@@ -67,7 +67,7 @@ public class SimpleSearchAction extends BaseAction {
 		session.setAttribute(Constants.SIMPLE_QUERY_MAP, map);
 		Logger.out.debug("map after setting in session"+map);
 		
-
+		
 		MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.query");
 		Collection simpleConditionNodeCollection = parser.generateData(map,
 				true);
@@ -89,7 +89,6 @@ public class SimpleSearchAction extends BaseAction {
 		List fromTablesList = new ArrayList();
 		simpleQueryBizLogic.handleStringAndDateConditions(
 				simpleConditionNodeCollection, fromTablesList);
-
 		
 
 		// Get the configured result view columns else is null.
@@ -109,7 +108,7 @@ public class SimpleSearchAction extends BaseAction {
 		
 		// Set the from tables in the query.
 		query.setTableSet(fromTables);
-
+		
 		// Checks and gets the activity status conditions for all the objects in
 		// the from clause
 		// and adds it in the simple conditions node collection.
@@ -121,6 +120,7 @@ public class SimpleSearchAction extends BaseAction {
 
 		// List of results the query will return on execution.
 		List list = null;
+		int identifierIndex=0;
 		if (simpleQueryInterfaceForm.getPageOf().equals(
 				Constants.PAGEOF_SIMPLE_QUERY_INTERFACE)
 				&& Constants.switchSecurity) {
@@ -148,6 +148,17 @@ public class SimpleSearchAction extends BaseAction {
 			list = query.execute(getSessionData(request), true,
 					queryResultObjectDataMap);
 		} else {
+		    // Get the index of Identifier field of main object.
+			Vector tableAliasNames = new Vector();
+			tableAliasNames.add(viewAliasName);
+			Map tableMap = query.getIdentifierColumnIds(tableAliasNames);
+			if (tableMap != null)
+			{
+			    identifierIndex = Integer.parseInt(tableMap.get(viewAliasName).toString())-1;
+			    request.setAttribute(Constants.IDENTIFIER_FIELD_INDEX, new Integer(identifierIndex));
+			    Logger.out.debug("identifierIndex.........................."+identifierIndex);
+			}
+			
 			list = query.execute(getSessionData(request), false, null);
 		}
 
@@ -176,7 +187,7 @@ public class SimpleSearchAction extends BaseAction {
 			if ((list.size() == 1)
 					&& (Constants.PAGEOF_SIMPLE_QUERY_INTERFACE
 							.equals(simpleQueryInterfaceForm.getPageOf()) == false)) {
-				List rowList = (List) list.get(0);
+				List rowList = (List) list.get(identifierIndex);
 
 				String path = Constants.SEARCH_OBJECT_ACTION + "?"
 						+ Constants.PAGEOF + "="
