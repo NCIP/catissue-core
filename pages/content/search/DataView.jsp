@@ -10,9 +10,8 @@
 	List columnList = (List) request.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
 	List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
-
+	Integer identifierFieldIndex = (Integer)request.getAttribute(Constants.IDENTIFIER_FIELD_INDEX);
 	String title = pageOf + ".searchResultTitle";
-	
 %>
 
 <script>
@@ -65,7 +64,7 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.size()-1);k++){%>"<%=columnL
 			
 			obj.setTemplate("row", row);
 	   		obj.setAction("myAction", 
-				function(src){window.location.href = 'SearchObject.do?pageOf=<%=pageOf%>&operation=search&systemIdentifier='+myData[this.getSelectionProperty("index")][0]}); 
+				function(src){window.location.href = 'SearchObject.do?pageOf=<%=pageOf%>&operation=search&systemIdentifier='+myData[this.getSelectionProperty("index")][<%=identifierFieldIndex.intValue()%>]}); 
 			<%}%>
 			
 			//	write grid html to the page.
