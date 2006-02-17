@@ -83,6 +83,11 @@ public class  DistributionAction extends SpecimenEventParametersAction
     	key.add("DistributedItem:i_Specimen_className");
     	key.add("DistributedItem:i_Specimen_systemIdentifier");
     	key.add("DistributedItem:i_quantity");
+    	key.add("DistributedItem:i_tissueSite");
+    	key.add("DistributedItem:i_tissueSide");
+    	key.add("DistributedItem:i_pathologicalStatus");
+    	key.add("DistributedItem:i_availableQty");
+    	key.add("DistributedItem:i_Specimen_type");
     	
 		// MD : code for Addnew Site data 24-Jan-06
 		String siteID = (String)request.getAttribute(Constants.ADD_NEW_SITE_ID);
