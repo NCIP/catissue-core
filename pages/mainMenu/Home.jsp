@@ -48,8 +48,8 @@
 			 	 	
 			 <!-- link 4 begins -->
 			 <td height="20" class="mainMenuItem" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()"
-				onmouseout="changeMenuStyle(this,'mainMenuItem'),hideCursor()" onclick="document.location.href='Search.do'">
-				<html:link styleClass="mainMenuLink" page="/Search.do">
+				onmouseout="changeMenuStyle(this,'mainMenuItem'),hideCursor()" onclick="document.location.href='SimpleQueryInterface.do?pageOf=pageOfSimpleQueryInterface&menuSelected=17'">
+				<html:link styleClass="mainMenuLink" page="/SimpleQueryInterface.do?pageOf=pageOfSimpleQueryInterface&menuSelected=17">
 					<bean:message key="app.search" />
 				</html:link>
 			 </td>
