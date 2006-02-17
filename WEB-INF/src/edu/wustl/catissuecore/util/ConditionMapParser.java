@@ -301,7 +301,9 @@ public class ConditionMapParser
 				
 				//Extracting alias name & column name
 				String aliasName = tokenizer.nextToken();
-				String columnName = tokenizer.nextToken();
+				String columnName = new String();
+				if(tokenizer.hasMoreTokens())
+					columnName = tokenizer.nextToken();
 				
 				//Extracting actual column value & operator value
 				String columnValue = (String)eventMap.get(columnValKey);
