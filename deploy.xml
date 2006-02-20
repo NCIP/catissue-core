@@ -122,8 +122,14 @@
 		<replace file="${temp.dir}/catissuecore/pages/MainHeader.jsp">
 			<include name="classes/ApplicationResources.properties"/> 
 			<replacefilter 
-				token="&lt;a href=@@institution.url@@>"
-				value="&lt;a href=http://${institution.url}>"/>
+				token="@@institution.url@@"
+				value="${institution.url}"/>
+		</replace>
+		<replace file="${temp.dir}/catissuecore/pages/MainHeader.jsp">
+			<include name="classes/ApplicationResources.properties"/> 
+			<replacefilter 
+				token="@@institution.name@@"
+				value="${institution.name}"/>
 		</replace>
 	</target>
 	
