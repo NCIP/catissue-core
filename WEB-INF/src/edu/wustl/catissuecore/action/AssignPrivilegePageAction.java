@@ -140,7 +140,7 @@ public class AssignPrivilegePageAction extends BaseAction
         	request.setAttribute(Constants.ASSIGN,assignOperation);
 
         	//Get the privileges list according to the role of the user who has logged in.
-        	Role loginUserRole = SecurityManager.getInstance(AssignPrivilegePageAction.class).getUserRole(loginUserId.longValue());
+        	Role loginUserRole = SecurityManager.getInstance(AssignPrivilegePageAction.class).getUserRole(Long.parseLong(sessionData.getCsmUserId()));
             //SETTING THE PRIVILEGES LIST
             Vector privileges = SecurityManager.getInstance(AssignPrivilegePageAction.class).getPrivilegesForAssignPrivilege(loginUserRole.getName());		
             request.setAttribute(Constants.PRIVILEGES,privileges);
