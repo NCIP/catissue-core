@@ -6,8 +6,8 @@
 			</a>
 		  </td>
 		  <td height="37" align="right">
-          	<a href="@@institution.url@@">
-          		<img class=logo alt="Cancer Biomedical Informatics Center" src="images/sccLogo.gif" width="259" height="45" border="0">
+          	<a href="http://@@institution.url@@">
+          		<img class=logo alt="@@institution.name@@" src="images/InstitutionLogo.gif" width="259" height="45" border="0">
 			</a>
 		  </td>
 </table>
