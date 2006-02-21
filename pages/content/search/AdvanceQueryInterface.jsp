@@ -39,31 +39,54 @@
        
     <tr width="100%">
         <td height="5%">
-        	<html:errors />
+			<table width="100%" height="100%">
+			<tr>
+				<td width="100%">
+		        	<html:errors />
+				</td>
+			</tr>
+			</table>
         </td>
     </tr>
     
      <tr width="100%">
        <td height="65%">
-            <iframe name="searchPageFrame" id="searchPageFrame" src="<%=action%>" width="100%" height="100%" frameborder="0" scrolling="auto">
-            </iframe>
+       		<table width="100%" height="100%"> 
+			<tr>
+				<td width="100%">
+				    <iframe name="searchPageFrame" id="searchPageFrame" src="<%=action%>" width="90%" height="100%" frameborder="0" scrolling="auto">
+		            </iframe>
+				</td>
+			</tr>
+			</table>
         </td>
      </tr>
-    
 
     <tr width="100%">
         <td height="25%">
-            <iframe name="queryFrame" id="queryFrame" src="AdvanceQueryView.do" width="100%" height="100%" frameborder="0" scrolling="auto">
-            </iframe>
+			<table width="100%" height="100%"> 
+			<tr>
+				<td width="100%">
+		            <iframe name="queryFrame" id="queryFrame" src="AdvanceQueryView.do" width="80%" height="100%" frameborder="0" scrolling="auto">
+        		    </iframe>
+				</td>
+			</tr>
+			</table>
         </td>
     </tr>
     
-     <tr width="100%">
-            <td height="5%">
-                <html:submit styleClass="actionButton" >
-                    <bean:message  key="buttons.search" />
-                </html:submit>
-            </td>
-        </tr>
+    <tr width="100%">
+        <td height="5%">
+			<table width="100%" height="100%">
+			<tr>
+				<td width="100%">
+		        	<html:submit styleClass="actionButton" >
+	        	    	<bean:message  key="buttons.search" />
+					</html:submit>
+				</td>
+			</tr>
+			</table>
+		</td>
+    </tr>
 </table>
 </html:form>
