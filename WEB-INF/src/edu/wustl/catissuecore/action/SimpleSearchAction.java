@@ -187,13 +187,13 @@ public class SimpleSearchAction extends BaseAction {
 			if ((list.size() == 1)
 					&& (Constants.PAGEOF_SIMPLE_QUERY_INTERFACE
 							.equals(simpleQueryInterfaceForm.getPageOf()) == false)) {
-				List rowList = (List) list.get(identifierIndex);
+				List rowList = (List) list.get(0);
 
 				String path = Constants.SEARCH_OBJECT_ACTION + "?"
 						+ Constants.PAGEOF + "="
 						+ simpleQueryInterfaceForm.getPageOf() + "&"
 						+ Constants.OPERATION + "=" + Constants.SEARCH + "&"
-						+ Constants.SYSTEM_IDENTIFIER + "=" + rowList.get(0);
+						+ Constants.SYSTEM_IDENTIFIER + "=" + rowList.get(identifierIndex);
 
 				return getActionForward(Constants.SIMPLE_QUERY_SINGLE_RESULT,
 						path);
