@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Vector;
 
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.util.logger.Logger;
  
 
 
@@ -187,6 +188,26 @@ public boolean hasConditionsExceptActivityStatus() {
 				}
 	}
 	return hasConditions;
+}
+
+/* (non-Javadoc)
+ * @see edu.wustl.catissuecore.query.ConditionsImpl#hasConditionOnIdentifiedField()
+ */
+public boolean hasConditionOnIdentifiedField() {
+	boolean hasConditionOnIdentifiedField = false;
+	SimpleConditionsNode simpleConditionsNode;
+	Condition condition;
+	for(int i=0; i< whereConditions.size(); i++)
+	{
+		simpleConditionsNode = (SimpleConditionsNode) whereConditions.get(i);
+		condition = (Condition) simpleConditionsNode.getCondition();
+		if(condition.isConditionOnIdentifiedField())
+		{
+			hasConditionOnIdentifiedField = true;
+			return hasConditionOnIdentifiedField;
+		}
+	}
+	return hasConditionOnIdentifiedField;
 }
 
     

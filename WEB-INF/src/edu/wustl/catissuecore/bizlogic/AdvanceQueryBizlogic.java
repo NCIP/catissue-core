@@ -36,7 +36,7 @@ import edu.wustl.common.util.logger.Logger;
 public class AdvanceQueryBizlogic extends DefaultBizLogic implements TreeDataInterface
 {
 	//Creates a temporary table containing the Advance Query Search results given the AdvanceSearchQuery.
-	public void createTempTable(String searchQuery,String tempTableName,SessionDataBean sessionData,Map queryResultObjectDataMap) throws Exception
+	public void createTempTable(String searchQuery,String tempTableName,SessionDataBean sessionData,Map queryResultObjectDataMap, boolean hasConditionOnIdentifiedField) throws Exception
 	{
  		String sql = "Create table "+tempTableName+" as "+"("+searchQuery+" AND 1!=1)";
 		//String sql = "Create table "+tempTableName+" as "+"("+searchQuery+")";
@@ -50,7 +50,7 @@ public class AdvanceQueryBizlogic extends DefaultBizLogic implements TreeDataInt
         jdbcDao.createTable(sql);
 
         //Insert list of data into the temporary table created.
-        List dataList = jdbcDao.executeQuery(searchQuery,sessionData,true,queryResultObjectDataMap);
+        List dataList = jdbcDao.executeQuery(searchQuery,sessionData,true,hasConditionOnIdentifiedField,queryResultObjectDataMap);
         Logger.out.debug("full list to be inserted"+dataList);
         Iterator dataListItr = dataList.iterator();
         while(dataListItr.hasNext())

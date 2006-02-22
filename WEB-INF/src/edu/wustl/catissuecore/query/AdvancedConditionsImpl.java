@@ -484,4 +484,36 @@ private boolean isPartOfSubquery(DefaultMutableTreeNode treeNode) {
 	public void setParentObject(String parentObject) {
 		this.parentObject = parentObject;
 	}
+
+	/* (non-Javadoc)
+	 * @see edu.wustl.catissuecore.query.ConditionsImpl#hasConditionOnIdentifiedField()
+	 */
+	public boolean hasConditionOnIdentifiedField() {
+		
+		boolean hasConditionOnIdentifiedField = false;
+		Enumeration conditionIterator = whereCondition.depthFirstEnumeration();
+		DefaultMutableTreeNode treeNode;
+		AdvancedConditionsNode advancedConditionsNode;
+		Condition condition;
+		while (conditionIterator.hasMoreElements()) {
+			treeNode = (DefaultMutableTreeNode) conditionIterator.nextElement();
+			advancedConditionsNode = (AdvancedConditionsNode) treeNode
+					.getUserObject();
+
+			if (advancedConditionsNode != null) {
+
+				Vector conditions = advancedConditionsNode
+						.getObjectConditions();
+				for (int i = 0; i < conditions.size(); i++) {
+					condition = (Condition) conditions.get(i);
+					if(condition.isConditionOnIdentifiedField())
+					{
+						hasConditionOnIdentifiedField = true;
+						return hasConditionOnIdentifiedField;
+					}
+				}
+			}
+		}
+		return hasConditionOnIdentifiedField;
+	}
 }

@@ -140,7 +140,7 @@ public class AdvanceSearchResultsAction extends BaseAction
 			String sql = query.getString();
 			Logger.out.debug("no. of tables in tableSet after table created"+query.getTableNamesSet().size()+":"+query.getTableNamesSet());
 			Logger.out.debug("Advance Query Sql"+sql);
-			advBizLogic.createTempTable(sql,tempTableName,sessionData,queryResultObjectDataMap);
+			advBizLogic.createTempTable(sql,tempTableName,sessionData,queryResultObjectDataMap, query.hasConditionOnIdentifiedField());
 
 			//Set the columnDisplayNames in session
 			session.setAttribute(Constants.COLUMN_DISPLAY_NAMES,columnNames);

@@ -3,6 +3,7 @@ package edu.wustl.catissuecore.query;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Vector;
 
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
@@ -234,6 +235,22 @@ public class Condition {
 		}
 		Logger.out.debug("String returned : " + strToReturn);
 		return strToReturn;
+	}
+	
+	/**
+	 * This method returns true if condition is on
+	 * identified field else false
+	 * @author aarti_sharma
+	 * @return
+	 */
+	public boolean isConditionOnIdentifiedField()
+	{
+		boolean isConditionOnIdentifiedField=false;
+		if(dataElement.isIdentifiedField())
+		{
+			isConditionOnIdentifiedField = true;
+		}
+		return isConditionOnIdentifiedField;
 	}
 
 

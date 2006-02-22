@@ -44,4 +44,14 @@ public abstract class ConditionsImpl {
 	 * @return
 	 */
 	public abstract boolean hasConditions();
+
+	/**
+	 * This method returns trueif there is atleast a single 
+	 * condition on any identified field else false
+	 * @return
+	 */
+	public abstract boolean hasConditionOnIdentifiedField();
+	
+	
+	
 }

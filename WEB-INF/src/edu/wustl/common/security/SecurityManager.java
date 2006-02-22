@@ -20,6 +20,7 @@ import java.util.Vector;
 
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.DistributionProtocol;
+import edu.wustl.catissuecore.query.Client;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.QueryResultObjectData;
@@ -2353,6 +2354,74 @@ public class SecurityManager implements Permissions {
 			return isAuthorized;
 		}
 		return isAuthorized;
+	}
+
+	/**
+	 * This method returns true if user has privilege on identified data in list
+	 * else false
+	 * @author aarti_sharma
+	 * @param sessionDataBean
+	 * @param queryResultObjectDataMap
+	 * @param list
+	 * @return
+	 */
+	public boolean hasPrivilegeOnIdentifiedData(
+			SessionDataBean sessionDataBean, Map queryResultObjectDataMap,
+			List aList) {
+		// boolean that indicates whether user has privilege on identified data
+		boolean hasPrivilegeOnIdentifiedData = true;
+
+		Set keySet = queryResultObjectDataMap.keySet();
+		Iterator keyIterator = keySet.iterator();
+		QueryResultObjectData queryResultObjectData2;
+
+		for (; keyIterator.hasNext();) {
+
+			queryResultObjectData2 = (QueryResultObjectData) queryResultObjectDataMap
+					.get(keyIterator.next());
+
+			if (hasAssociatedIdentifiedData(queryResultObjectData2.getAliasName())) {
+
+				hasPrivilegeOnIdentifiedData = checkPermission(sessionDataBean
+						.getUserName(), queryResultObjectData2.getAliasName(),
+						aList.get(queryResultObjectData2
+								.getIdentifierColumnId()),
+						Permissions.IDENTIFIED_DATA_ACCESS);
+				//if user does not have privilege on even a single identified
+				// data in row
+				//user does not have privilege on all the identified data in
+				// that row
+				if (!hasPrivilegeOnIdentifiedData) {
+					hasPrivilegeOnIdentifiedData = false;
+					return hasPrivilegeOnIdentifiedData;
+				}
+			}
+		}
+
+		return hasPrivilegeOnIdentifiedData;
+	}
+
+	/**
+	 * Checks whether an object type has any identified data associated with
+	 * it or not
+	 * @param aliasName
+	 * @return
+	 */
+	private boolean hasAssociatedIdentifiedData(String aliasName) {
+		boolean hasIdentifiedData = false;
+		String dataElementTableName;
+		Vector identifiedData = new Vector();
+		Logger.out.debug(this);
+		Logger.out.debug(aliasName);
+		identifiedData = (Vector) Client.identifiedDataMap.get(aliasName);
+		Logger.out.debug("Table:" + aliasName + " Identified Data:"
+				+ identifiedData);
+		if (identifiedData != null) {
+			Logger.out.debug(" identifiedData not null..." + identifiedData);
+			hasIdentifiedData = true;
+
+		}
+		return hasIdentifiedData;
 	}
 	
 }

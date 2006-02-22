@@ -261,11 +261,63 @@ public class JDBCDAO extends AbstractDAO
 				return null;
     		}
     	}
-//    	
-    	PreparedStatement stmt = null;
-    	ResultSet resultSet = null;
-        List list = null;
-        try
+        List list = getQueryResultList(query, sessionDataBean, isSecureExecute, false, queryResultObjectDataMap);
+        return list;
+    }
+    
+    
+    
+    /**
+     * Executes the query.
+     * @param query
+     * @param sessionDataBean TODO
+     * @param isSecureExecute TODO
+     * @param columnIdsMap
+     * @return
+     * @throws ClassNotFoundException
+     * @throws SQLException
+     */
+    public List executeQuery(String query, SessionDataBean sessionDataBean, boolean isSecureExecute, boolean hasConditionOnIdentifiedField, Map queryResultObjectDataMap) throws ClassNotFoundException, DAOException
+    {
+    	//Aarti: Security checks
+    	if(Constants.switchSecurity && isSecureExecute)
+    	{
+    		if(sessionDataBean==null )
+    		{
+    			Logger.out.debug("Session data is null");
+				return null;
+    		}
+    	}
+        List list = getQueryResultList(query, sessionDataBean, isSecureExecute, hasConditionOnIdentifiedField, queryResultObjectDataMap);
+        return list;
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+	/**
+	 * This method exeuted query, parses the result and returns List of rows after doing security checks
+	 * for user's right to view a record/field
+	 * @author aarti_sharma
+	 * @param query
+	 * @param sessionDataBean
+	 * @param isSecureExecute
+	 * @param hasConditionOnIdentifiedField
+	 * @param queryResultObjectDataMap
+	 * @param list
+	 * @return
+	 * @throws DAOException
+	 */
+	private List getQueryResultList(String query, SessionDataBean sessionDataBean, boolean isSecureExecute, boolean hasConditionOnIdentifiedField, Map queryResultObjectDataMap) throws DAOException {
+		PreparedStatement stmt = null;
+		ResultSet resultSet = null;
+		List list;
+		try
         {
         	stmt = connection.prepareStatement(query);
             resultSet = stmt.executeQuery();
@@ -317,6 +369,17 @@ public class JDBCDAO extends AbstractDAO
                 	i++;
                 }
                 
+                //Aarti: If query has condition on identified data then check user's permission
+                //on the record's identified data.
+                //If user does not have privilege don't add the record to results list
+                //bug#1413
+                if(Constants.switchSecurity  && hasConditionOnIdentifiedField && isSecureExecute)
+                {
+                	boolean hasPrivilegeOnIdentifiedData = SecurityManager.getInstance(this.getClass()).hasPrivilegeOnIdentifiedData(sessionDataBean, queryResultObjectDataMap, aList);
+                	if(!hasPrivilegeOnIdentifiedData)
+                		continue;
+                }
+                
                 //Aarti: Checking object level privileges on each record
             	if(Constants.switchSecurity && isSecureExecute)
             	{
@@ -349,11 +412,8 @@ public class JDBCDAO extends AbstractDAO
         		throw new DAOException(Constants.GENERIC_DATABASE_ERROR, ex);
 			}
 		}
-        return list;
-    }
-    
-    
-    
+		return list;
+	}
 	/* (non-Javadoc)
      * @see edu.wustl.catissuecore.dao.DAO#retrieve(java.lang.String, java.lang.String, java.lang.Object)
      */

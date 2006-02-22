@@ -146,7 +146,7 @@ public class SimpleSearchAction extends BaseAction {
 //			columnNames = identifierColumnNames;
 
 			list = query.execute(getSessionData(request), true,
-					queryResultObjectDataMap);
+					queryResultObjectDataMap, query.hasConditionOnIdentifiedField());
 		} else {
 		    // Get the index of Identifier field of main object.
 			Vector tableAliasNames = new Vector();
@@ -159,7 +159,7 @@ public class SimpleSearchAction extends BaseAction {
 			    Logger.out.debug("identifierIndex.........................."+identifierIndex);
 			}
 			
-			list = query.execute(getSessionData(request), false, null);
+			list = query.execute(getSessionData(request), false, null, false);
 		}
 
 		// If the result contains no data, show error message.

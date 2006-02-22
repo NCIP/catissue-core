@@ -8,8 +8,11 @@
  */ 
 package edu.wustl.catissuecore.query;
 
+import java.util.Vector;
+
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;
+import edu.wustl.common.util.logger.Logger;
 
 
 /**
@@ -183,6 +186,43 @@ public class DataElement
         this.table = table;
     }
     
+    /**
+     * Returns true if its an Identified data field else false
+     * @author aarti_sharma
+     * @return
+     */
+    public boolean isIdentifiedField()
+    {
+    	boolean isIdentifiedField = false;
+    	String dataElementTableName;
+		Vector identifiedData = new Vector();
+		Logger.out.debug(this);
+		dataElementTableName = table.getTableName();
+		Logger.out.debug(dataElementTableName);
+		identifiedData = (Vector) Client.identifiedDataMap
+				.get(dataElementTableName);
+		Logger.out.debug("Table:" + dataElementTableName
+				+ " Identified Data:" + identifiedData);
+		if (identifiedData != null) {
+			Logger.out.debug(" identifiedData not null..."
+					+ identifiedData);
+			Logger.out.debug(" dataElementFieldName:"
+					+ field);
+			Logger.out
+					.debug(" identifiedData.contains(dataElementFieldName)***** "
+							+ identifiedData
+									.contains(field));
+			if (identifiedData.contains(field)) {
+				Logger.out
+						.debug(" identifiedData.contains(dataElementFieldName)***** "
+								+ identifiedData
+										.contains(field));
+				isIdentifiedField = true;
+				
+			}
+		}
+		return isIdentifiedField;
+    }
     
     
 }

@@ -194,7 +194,7 @@ public abstract class BaseDistributionReportAction extends BaseAction
 						.addObjectIdentifierColumnsToQuery(queryResultObjectDataMap, query);
 			simpleQueryBizLogic.setDependentIdentifiedColumnIds(queryResultObjectDataMap, query);
 
-			List list = query.execute(sessionData, true,queryResultObjectDataMap);
+			List list = query.execute(sessionData, true,queryResultObjectDataMap, false);
     		listOfData.add(list);
     	}
     	return listOfData;

@@ -184,14 +184,15 @@ public abstract class Query {
 	/**
 	 * This method executes the query string formed from getString method and
 	 * creates a temporary table.
-	 * 
 	 * @param isSecureExecute
 	 *            TODO
+	 * @param hasConditionOnIdentifiedField TODO
 	 * @param columnIdsMap
+	 * 
 	 * @return Returns true in case everything is successful else false
 	 */
 	public List execute(SessionDataBean sessionDataBean,
-			boolean isSecureExecute, Map queryResultObjectDataMap)
+			boolean isSecureExecute, Map queryResultObjectDataMap, boolean hasConditionOnIdentifiedField)
 			throws DAOException {
 		try {
 			JDBCDAO dao = (JDBCDAO) DAOFactory.getDAO(Constants.JDBC_DAO);
@@ -199,7 +200,7 @@ public abstract class Query {
 			String sql =  getString();
 			Logger.out.debug("SQL************" + sql);
 			List list = dao.executeQuery(sql, sessionDataBean,
-					isSecureExecute, queryResultObjectDataMap);
+					isSecureExecute,hasConditionOnIdentifiedField, queryResultObjectDataMap);
 			dao.closeSession();
 			return list;
 		} catch (DAOException daoExp) {
@@ -998,5 +999,15 @@ public abstract class Query {
 	 */
 	public void setActivityStatusConditions(String activityStatusConditions) {
 		this.activityStatusConditions = activityStatusConditions;
+	}
+	
+	/**
+	 * This method returns true if the query made 
+	 * is on any of the identified fields else false 
+	 * @return
+	 */
+	public boolean hasConditionOnIdentifiedField()
+	{
+		return whereConditions.hasConditionOnIdentifiedField();
 	}
 }
