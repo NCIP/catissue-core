@@ -269,8 +269,8 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 			Iterator it = userCollection.iterator();
 			while(it.hasNext())
 			{
-				User user = (User)it.next();
-				protocolCoordinatorIds[i] = user.getSystemIdentifier().longValue();
+				edu.wustl.catissuecore.domainobject.User user = (edu.wustl.catissuecore.domainobject.User)it.next();
+				protocolCoordinatorIds[i] = user.getId().longValue();
 				i++;
 			}
 		}
