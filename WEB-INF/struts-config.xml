@@ -149,7 +149,7 @@ PUBLIC
                     
          <action path="/LoggedInSummary"
             type="edu.wustl.catissuecore.action.SummaryAction">
-            <forward name="success" path=".catissuecore.summaryHomeDef" />
+            <forward name="success" path=".catissuecore.summaryLoggedInDef" />
             <forward name="failure" path=".catissuecore.homePageDef" />
 		 </action>
                     
