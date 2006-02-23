@@ -31,6 +31,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.util.logger.Logger;
@@ -55,12 +56,15 @@ public class UserAction extends SecureAction
         
         //Sets the operation attribute to be used in the Add/Edit User Page. 
         request.setAttribute(Constants.OPERATION, operation);
+
+        //Sets the countryList attribute to be used in the Add/Edit User Page.
+        List countryList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_COUNTRY_LIST,null);
+        request.setAttribute(Constants.COUNTRYLIST, countryList);
         
         //Sets the stateList attribute to be used in the Add/Edit User Page.
-        request.setAttribute(Constants.STATELIST, Constants.STATEARRAY);
+        List stateList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_STATE_LIST,null);
+        request.setAttribute(Constants.STATELIST, stateList);
         
-        //Sets the countryList attribute to be used in the Add/Edit User Page.
-        request.setAttribute(Constants.COUNTRYLIST, Constants.COUNTRYARRAY);
         
         //Sets the pageOf attribute (for Add,Edit or Query Interface).
         String pageOf  = request.getParameter(Constants.PAGEOF);

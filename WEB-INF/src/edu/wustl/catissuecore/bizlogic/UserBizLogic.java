@@ -31,6 +31,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SecurityDataBean;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
@@ -491,12 +492,12 @@ public class UserBizLogic extends DefaultBizLogic
 		User user = (User)obj;
 		if (Constants.PAGEOF_CHANGE_PASSWORD.equals(user.getPageOf()) == false)
 		{
-		    if(!Validator.isEnumeratedValue(Constants.STATEARRAY,user.getAddress().getState()))
+		    if(!Validator.isEnumeratedValue(CDEManager.getCDEManager().getList(Constants.CDE_NAME_STATE_LIST,null),user.getAddress().getState()))
 			{
 				throw new DAOException(ApplicationProperties.getValue("state.errMsg"));
 			}
 			
-			if(!Validator.isEnumeratedValue(Constants.COUNTRYARRAY,user.getAddress().getCountry()))
+			if(!Validator.isEnumeratedValue(CDEManager.getCDEManager().getList(Constants.CDE_NAME_COUNTRY_LIST,null),user.getAddress().getCountry()))
 			{
 				throw new DAOException(ApplicationProperties.getValue("country.errMsg"));
 			}

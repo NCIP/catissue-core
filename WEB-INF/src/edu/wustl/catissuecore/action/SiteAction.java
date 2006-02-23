@@ -53,11 +53,14 @@ public class SiteAction  extends SecureAction
             request.setAttribute(Constants.OPERATION, operation);
         }
 
-        //Sets the stateList attribute to be used in the Add/Edit User Page.
-        request.setAttribute(Constants.STATELIST, Constants.STATEARRAY);
-
         //Sets the countryList attribute to be used in the Add/Edit User Page.
-        request.setAttribute(Constants.COUNTRYLIST, Constants.COUNTRYARRAY);
+        List countryList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_COUNTRY_LIST,null);
+        request.setAttribute(Constants.COUNTRYLIST, countryList);
+        
+        //Sets the stateList attribute to be used in the Add/Edit User Page.
+        List stateList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_STATE_LIST,null);
+        request.setAttribute(Constants.STATELIST, stateList);
+        
 
         //Sets the activityStatusList attribute to be used in the Site Add/Edit Page.
         request.setAttribute(Constants.ACTIVITYSTATUSLIST, Constants.SITE_ACTIVITY_STATUS_VALUES);

@@ -128,12 +128,12 @@ public class SiteBizLogic extends DefaultBizLogic
 			throw new DAOException(ApplicationProperties.getValue("type.errMsg"));
 		}
 		
-		if(!Validator.isEnumeratedValue(Constants.STATEARRAY,site.getAddress().getState()))
+		if(!Validator.isEnumeratedValue(CDEManager.getCDEManager().getList(Constants.CDE_NAME_STATE_LIST,null),site.getAddress().getState()))
 		{
 			throw new DAOException(ApplicationProperties.getValue("state.errMsg"));
 		}
 
-		if(!Validator.isEnumeratedValue(Constants.COUNTRYARRAY,site.getAddress().getCountry()))
+		if(!Validator.isEnumeratedValue(CDEManager.getCDEManager().getList(Constants.CDE_NAME_COUNTRY_LIST,null),site.getAddress().getCountry()))
 		{
 			throw new DAOException(ApplicationProperties.getValue("country.errMsg"));
 		}

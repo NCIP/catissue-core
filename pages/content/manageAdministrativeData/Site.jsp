@@ -187,7 +187,7 @@
 						</td>
 						<td class="formField">
 							<html:select property="state" styleClass="formFieldSized" styleId="state" size="1">
-								<html:options name="stateList" labelName="stateList" />
+								<html:options collection="<%=Constants.STATELIST%>" labelProperty="name" property="value"/>
 							</html:select>
 						</td>
 					</tr>
@@ -202,7 +202,7 @@
 
 						<td class="formField">
 							<html:select property="country" styleClass="formFieldSized" styleId="country" size="1">
-								<html:options name="countryList" labelName="countryList" />
+								<html:options collection="<%=Constants.COUNTRYLIST%>" labelProperty="name" property="value"/>
 							</html:select>
 						</td>
 					</tr>

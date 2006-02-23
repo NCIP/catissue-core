@@ -237,4 +237,27 @@
 		<depthOfHierarchyTree>6</depthOfHierarchyTree> 
 	</XMLPermissibleValues>
 	</XMLCDE>
+	
+	<XMLCDE cache="true" lazyLoading="false">
+	<name>States</name>
+	<publicId>2004200</publicId>
+	<XMLPermissibleValues>
+		<evsTerminology>NCI-THESAURAUS</evsTerminology>
+		<conceptCode>PV</conceptCode> 
+		<parentConceptCode></parentConceptCode>
+		<depthOfHierarchyTree>6</depthOfHierarchyTree> 
+	</XMLPermissibleValues>
+	</XMLCDE>
+	
+	<XMLCDE cache="true" lazyLoading="false">
+	<name>Countries</name>
+	<publicId>2004100</publicId>
+	<XMLPermissibleValues>
+		<evsTerminology>NCI-THESAURAUS</evsTerminology>
+		<conceptCode>PV</conceptCode> 
+		<parentConceptCode></parentConceptCode>
+		<depthOfHierarchyTree>6</depthOfHierarchyTree> 
+	</XMLPermissibleValues>
+	</XMLCDE>
+			
 </XMLCDE_CACHE>
