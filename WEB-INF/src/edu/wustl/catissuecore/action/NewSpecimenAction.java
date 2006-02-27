@@ -58,7 +58,7 @@ public class NewSpecimenAction  extends SecureAction
         //Sets the operation attribute to be used in the Edit/View Specimen Page in Advance Search Object View. 
         request.setAttribute(Constants.OPERATION,operation);
         
-        if(operation.equalsIgnoreCase(Constants.ADD ) )
+        if(operation != null && operation.equalsIgnoreCase(Constants.ADD ) )
         {
         	specimenForm.setSystemIdentifier(0);
         }
