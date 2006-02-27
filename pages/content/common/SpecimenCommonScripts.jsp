@@ -149,8 +149,11 @@
 		function onBiohazardTypeSelected(element)
 		{ 
 			var i = (element.name).indexOf("_");
-			var comboNo = (element.name).substring(i-1,i);
+			var indColon = (element.name).indexOf(":");
+			var comboNo = (element.name).substring(indColon+1,i);
+			
 			var comboToRefresh = "bhId" + comboNo;
+			
 			ele = document.getElementById(comboToRefresh);
 			//To Clear the Combo Box
 			ele.options.length = 0;
