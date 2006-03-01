@@ -25,9 +25,9 @@ public class StorageContainerTreeNode implements Serializable, TreeNode
 	private static final long serialVersionUID = 1234567890L;
 	
     private Long storageContainerIdentifier;
-
+    
     private String storageContainerName;
-
+    
     private String storageContainerType;
     
     private Long parentStorageContainerIdentifier;
@@ -51,7 +51,18 @@ public class StorageContainerTreeNode implements Serializable, TreeNode
         siteName = null;
         siteType = null;
     }
-
+    
+    public StorageContainerTreeNode(StorageContainerTreeNode treeNode)
+    {
+        storageContainerIdentifier = treeNode.getStorageContainerIdentifier();
+        storageContainerName = treeNode.getStorageContainerName();
+        storageContainerType = treeNode.getStorageContainerType();
+        parentStorageContainerIdentifier = treeNode.getParentStorageContainerIdentifier();
+        siteSystemIdentifier = treeNode.getSiteSystemIdentifier();
+        siteName = treeNode.getSiteName();
+        siteType = treeNode.getSiteType();
+    }
+    
     public StorageContainerTreeNode(Long identifier, 
     		String name, 
     		String type, 
@@ -190,6 +201,11 @@ public class StorageContainerTreeNode implements Serializable, TreeNode
         this.setParentStorageContainerIdentifier(new Long(0));
     }
     
+    public void initialiseRoot(String rootName)
+    {
+        initialiseRoot();
+    }
+    
     public TreeNode getParentTreeNode()
     {
         StorageContainerTreeNode treeNode = new StorageContainerTreeNode();
@@ -214,13 +230,29 @@ public class StorageContainerTreeNode implements Serializable, TreeNode
     
     public Object getParentIdentifier()
     {
-        return this.getParentStorageContainerIdentifier();
+        Object parentId = this.parentStorageContainerIdentifier;
+        if (parentId == null)
+        {
+            parentId = this.siteSystemIdentifier;
+        }
+        return parentId;
     }
-  
+    
     /* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.vo.TreeNode#isPresentIn(javax.swing.tree.DefaultMutableTreeNode)
 	 */
-	public boolean isPresentIn(DefaultMutableTreeNode parentNode) {
-		return false;
+	public boolean isPresentIn(DefaultMutableTreeNode parentNode) 
+	{
+	    for (int i=0;i<parentNode.getChildCount();i++)
+	    {
+	        DefaultMutableTreeNode childDefNode = (DefaultMutableTreeNode)parentNode.getChildAt(i);
+	        StorageContainerTreeNode childTreeNode = (StorageContainerTreeNode)childDefNode.getUserObject();
+	        if (this.siteSystemIdentifier.equals(childTreeNode.getSiteSystemIdentifier()))
+	        {
+	        	return true;
+	        }
+	    }
+	    
+	    return false;
 	}
  }
