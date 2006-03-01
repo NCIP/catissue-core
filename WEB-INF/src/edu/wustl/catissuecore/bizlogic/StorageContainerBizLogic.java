@@ -11,6 +11,7 @@
 package edu.wustl.catissuecore.bizlogic;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -62,26 +63,26 @@ public class StorageContainerBizLogic extends DefaultBizLogic
     {
         StorageContainer container = (StorageContainer) obj;
         container.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
-
+        
         //Setting the Parent Container if applicable
         int posOneCapacity = 1, posTwoCapacity = 1;
         int positionDimensionOne = Constants.STORAGE_CONTAINER_FIRST_ROW, positionDimensionTwo = Constants.STORAGE_CONTAINER_FIRST_COLUMN;
         boolean fullStatus[][] = null;
         int noOfContainers = container.getNoOfContainers().intValue();
-
+        
         if (container.getParentContainer() != null)
         {
             List list = dao.retrieve(StorageContainer.class.getName(),
                     "systemIdentifier", container.getParentContainer()
                             .getSystemIdentifier());
-
+            
             if (list.size() != 0)
             {
                 StorageContainer pc = (StorageContainer) list.get(0);
-
+                
                 // check for closed ParentContainer
                 checkStatus(dao, pc, "Parent Container");
-
+                
                 int totalCapacity = pc.getStorageContainerCapacity()
                         .getOneDimensionCapacity().intValue()
                         * pc.getStorageContainerCapacity()
@@ -94,7 +95,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic
                 }
                 else
                 {
-
+                    
                     //Check if position specified is within the parent
                     // container's
                     //capacity  
@@ -104,28 +105,28 @@ public class StorageContainerBizLogic extends DefaultBizLogic
                                 ApplicationProperties
                                         .getValue("errors.storageContainer.dimensionOverflow"));
                     }
-
+                    
                     // check for availability of position
                     boolean canUse = isContainerAvailable(dao, container);
-
+                    
                     if (!canUse)
                     {
                         throw new DAOException(ApplicationProperties
                                 .getValue("errors.storageContainer.inUse"));
                     }
-
+                    
                     container.setParentContainer(pc);
-
+                    
                     //                  check for closed ParentSite
                     checkStatus(dao, pc.getSite(), "Parent Site");
-
+                    
                     container.setSite(pc.getSite());
-
+                    
                     posOneCapacity = pc.getStorageContainerCapacity()
                             .getOneDimensionCapacity().intValue();
                     posTwoCapacity = pc.getStorageContainerCapacity()
                             .getTwoDimensionCapacity().intValue();
-
+                    
                     fullStatus = getStorageContainerFullStatus(dao, container
                             .getParentContainer().getSystemIdentifier());
                     positionDimensionOne = container.getPositionDimensionOne()
@@ -144,9 +145,9 @@ public class StorageContainerBizLogic extends DefaultBizLogic
         {
             loadSite(dao, container);
         }
-
+        
         loadStorageType(dao, container);
-
+        
         for (int i = 0; i < noOfContainers; i++)
         {
             StorageContainer cont = new StorageContainer(container);
@@ -155,22 +156,21 @@ public class StorageContainerBizLogic extends DefaultBizLogic
                 cont.setPositionDimensionOne(new Integer(positionDimensionOne));
                 cont.setPositionDimensionTwo(new Integer(positionDimensionTwo));
             }
-
+            
             if (container.getStartNo() != null)
                 cont.setNumber(new Integer(i
                         + container.getStartNo().intValue()));
-
-            dao.insert(cont.getStorageContainerCapacity(), sessionDataBean,
-                    true, true);
+            
+            dao.insert(cont.getStorageContainerCapacity(), sessionDataBean, true, true);
             dao.insert(cont, sessionDataBean, true, true);
-
+            
             //Used for showing the success message after insert and using it
             // for edit.
             container.setSystemIdentifier(cont.getSystemIdentifier());
-
+            
             Collection storageContainerDetailsCollection = cont
                     .getStorageContainerDetailsCollection();
-
+            
             if (storageContainerDetailsCollection.isEmpty())
             {
                 //add a dummy container details for Query.
@@ -179,7 +179,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic
                 storageContainerDetails.setParameterValue("");
                 storageContainerDetailsCollection.add(storageContainerDetails);
             }
-
+            
             if (storageContainerDetailsCollection.size() > 0)
             {
                 Iterator it = storageContainerDetailsCollection.iterator();
@@ -192,7 +192,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic
                             true);
                 }
             }
-
+            
             if (container.getParentContainer() != null)
             {
                 Logger.out.debug("In if: ");
@@ -212,7 +212,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic
                     {
                         positionDimensionTwo = positionDimensionTwo + 1;
                     }
-
+                    
                     Logger.out.debug("positionDimensionTwo: "
                             + positionDimensionTwo);
                     Logger.out.debug("positionDimensionOne: "
@@ -220,7 +220,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic
                 }
                 while (fullStatus[positionDimensionOne][positionDimensionTwo] != false);
             }
-
+            
             //Inserting authorization data
             Set protectionObjects = new HashSet();
             protectionObjects.add(cont);
@@ -236,7 +236,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic
             }
         }
     }
-
+    
     //	public Set getProtectionObjects(AbstractDomainObject obj)
     //    {
     //        Set protectionObjects = new HashSet();
@@ -836,21 +836,85 @@ public class StorageContainerBizLogic extends DefaultBizLogic
 
         return 1;
     }
-
+    
+    private Map createMap(List resultSet, Map containerMap)
+    {
+        Map containerRelationMap = new HashMap();
+        if (resultSet.isEmpty() == false)
+        {
+            for (int i = 0; i < resultSet.size(); i++)
+            {
+                List rowList = (List) resultSet.get(i);
+                StorageContainerTreeNode treeNode = new StorageContainerTreeNode();
+                treeNode.setStorageContainerIdentifier(Long.valueOf((String) rowList.get(1)));
+                treeNode.setStorageContainerName((String) rowList.get(6));
+                treeNode.setStorageContainerType((String) rowList.get(5));
+                
+                treeNode.setSiteSystemIdentifier(Long.valueOf((String) rowList.get(2)));
+                treeNode.setSiteName((String) rowList.get(3));
+                treeNode.setSiteType((String) rowList.get(4));
+                
+                if ((String) rowList.get(0) != "") // if parent is null in db
+                {
+                    treeNode.setParentStorageContainerIdentifier(Long
+                            .valueOf((String) rowList.get(0)));
+                }
+                
+                containerRelationMap.put(treeNode.getStorageContainerIdentifier(),
+                    	treeNode.getParentStorageContainerIdentifier());
+	            Logger.out.debug("Rel............. Parent : "+treeNode.getParentStorageContainerIdentifier());
+	            Logger.out.debug("Rel............. Child : "+treeNode.getStorageContainerIdentifier());
+                containerMap.put(treeNode.getStorageContainerIdentifier(), treeNode);
+                
+                Logger.out.debug("\n");
+            }
+        }
+        
+        return containerRelationMap;
+    }
+    
+    private void addAllContainersInHierarchy(Object parentContainer, Vector treeNodeVector, Map containerMap, Map containerRelationMap)
+    {
+        Object childContainer = containerRelationMap.get(parentContainer);
+        Logger.out.debug("childContainer................"+childContainer);
+        if (childContainer == null)
+        {
+            return;
+        }
+        else
+        {
+            Logger.out.debug("In Hierarchy................."+containerMap.get(childContainer));
+            treeNodeVector.add(containerMap.get(childContainer));
+        }
+        
+        addAllContainersInHierarchy(childContainer, treeNodeVector, containerMap, containerRelationMap);
+    }
+    
+    /* (non-Javadoc)
+     * @see edu.wustl.catissuecore.bizlogic.TreeDataInterface#getTreeViewData()
+     */
     public Vector getTreeViewData() throws DAOException
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+    
+    public Map getTreeViewData(Map containerMap) throws DAOException
     {
         //SRI: Made changes for performance enhancement of the
         //tree applet
         JDBCDAO dao = (JDBCDAO) DAOFactory.getDAO(Constants.JDBC_DAO);
         dao.openSession(null);
-
-        // Sri: Get all container, thier site details and storage type details
+        
+        // Sri: Get all container, their site details and storage type details.
         String queryStr = "select t1.PARENT_CONTAINER_ID,t1.IDENTIFIER, "
                 + "t1.SITE_ID, t2.NAME,t2.TYPE, t3.TYPE,CONTAINER_NUMBER "
                 + "from CATISSUE_STORAGE_CONTAINER t1, "
                 + "CATISSUE_SITE t2, "
                 + "catissue_storage_type t3 "
-                + "where t1.SITE_ID = t2.IDENTIFIER and t1.STORAGE_TYPE_ID = t3.IDENTIFIER";
+                + "where t1.SITE_ID = t2.IDENTIFIER and "
+                + " t1.STORAGE_TYPE_ID = t3.IDENTIFIER ";
+//                + " order by t1.SITE_ID, t1.PARENT_CONTAINER_ID";
 
         List list = null;
         try
@@ -863,32 +927,53 @@ public class StorageContainerBizLogic extends DefaultBizLogic
         }
 
         dao.closeSession();
+        
+        Map containerRelationMap = createMap(list, containerMap);
+        
+//        Set containerRelationMapSet = containerRelationMap.entrySet();
 
-        Vector vector = new Vector();
-        if (list != null)
-        {
-            for (int i = 0; i < list.size(); i++)
-            {
-                List rowList = (List) list.get(i);
-                StorageContainerTreeNode treeNode = new StorageContainerTreeNode();
-                treeNode.setStorageContainerIdentifier(Long
-                        .valueOf((String) rowList.get(1)));
-                treeNode.setStorageContainerName((String) rowList.get(6));
-                treeNode.setStorageContainerType((String) rowList.get(5));
-                if ((String) rowList.get(0) != "") // if parent is null in db
-                {
-                    treeNode.setParentStorageContainerIdentifier(Long
-                            .valueOf((String) rowList.get(0)));
-                }
-                treeNode.setSiteSystemIdentifier(Long.valueOf((String) rowList
-                        .get(2)));
-                treeNode.setSiteName((String) rowList.get(3));
-                treeNode.setSiteType((String) rowList.get(4));
-                vector.add(treeNode);
-            }
-        }
+//        Vector treeNodeVector = new Vector();
+//        
+//        for (Iterator iterator = containersUnderSite.iterator();iterator.hasNext();)
+//        {
+//            Object containerUnderSite = (Object) iterator.next();
+//            Logger.out.debug("containerUnderSite........................"+containerUnderSite);
+//            treeNodeVector.add(containerMap.get(containerUnderSite));
+//            
+//            addAllContainersInHierarchy(containerUnderSite, treeNodeVector, containerMap, containerRelationMap);
+//        }
+//        if (list != null)
+//        {
+//            for (int i = 0; i < list.size(); i++)
+//            {
+//                List rowList = (List) list.get(i);
+//                StorageContainerTreeNode treeNode = new StorageContainerTreeNode();
+//                treeNode.setStorageContainerIdentifier(Long
+//                        .valueOf((String) rowList.get(1)));
+//                Logger.out.debug("STORAGE CONTAINER ID : "+treeNode.getStorageContainerIdentifier());
+//                treeNode.setStorageContainerName((String) rowList.get(6));
+//                Logger.out.debug("STORAGE CONTAINER NAME : "+treeNode.getStorageContainerName());
+//                treeNode.setStorageContainerType((String) rowList.get(5));
+//                Logger.out.debug("STORAGE CONTAINER TYPE : "+treeNode.getStorageContainerType());
+//                if ((String) rowList.get(0) != "") // if parent is null in db
+//                {
+//                    treeNode.setParentStorageContainerIdentifier(Long
+//                            .valueOf((String) rowList.get(0)));
+//                    Logger.out.debug("PARENT STORAGE CONTAINER ID "+treeNode.getParentStorageContainerIdentifier());
+//                }
+//                treeNode.setSiteSystemIdentifier(Long.valueOf((String) rowList
+//                        	.get(2)));
+//                Logger.out.debug("SITE ID : "+treeNode.getSiteSystemIdentifier());
+//                treeNode.setSiteName((String) rowList.get(3));
+//                Logger.out.debug("SITE NAME : "+treeNode.getSiteName());
+//                treeNode.setSiteType((String) rowList.get(4));
+//                Logger.out.debug("SITE TYPE : "+treeNode.getSiteType());
+//                vector.add(treeNode);
+//                Logger.out.debug("\n");
+//            }
+//        }
 
-        return vector;
+        return containerRelationMap;
     }
 
     public boolean[][] getStorageContainerFullStatus(DAO dao,
