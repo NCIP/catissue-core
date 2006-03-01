@@ -17,7 +17,9 @@ import java.io.ObjectInputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.URLEncoder;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
 import javax.swing.ButtonGroup;
@@ -38,8 +40,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 public class QueryTree extends JApplet
 {
 
-   
-	/**
+    /**
      * Initializes the applet.
      */
     public void init()
@@ -64,7 +65,8 @@ public class QueryTree extends JApplet
             {
                 storageContainerType = this.getParameter(Constants.STORAGE_CONTAINER_TYPE);
                 treeType = Constants.STORAGE_CONTAINER_TREE_ID;                
-            }else if(pageOf.equals(Constants.PAGEOF_SPECIMEN))
+            }
+            else if(pageOf.equals(Constants.PAGEOF_SPECIMEN))
             	treeType = Constants.STORAGE_CONTAINER_TREE_ID;
             else if (pageOf.equals(Constants.PAGEOF_QUERY_RESULTS))
                 treeType = Constants.QUERY_RESULTS_TREE_ID;
@@ -100,10 +102,14 @@ public class QueryTree extends JApplet
 				String newApplicationPath=null;
 				newApplicationPath = applicationPath.substring(0,applicationPath.indexOf('/',1)+1);
 				applicationPath=newApplicationPath;
-				
             }
 			
-            String urlSuffix = applicationPath+Constants.TREE_DATA_ACTION+"?"+Constants.PAGEOF+"="+pageOf;
+            String urlSuffix = applicationPath+Constants.TREE_DATA_ACTION+"?"+Constants.PAGEOF+"="+URLEncoder.encode(pageOf, "UTF-8");
+            if (propertyName != null)
+            {
+                urlSuffix = urlSuffix + "&"+Constants.PROPERTY_NAME+"="+URLEncoder.encode(propertyName, "UTF-8");
+            }
+            
             URL dataURL = new URL(protocol, host, port, urlSuffix);
             
             //Establish connection with the TreeDataAction and get the JTree object.
@@ -112,43 +118,55 @@ public class QueryTree extends JApplet
             
             in = new ObjectInputStream(connection.getInputStream());
             
-            Vector treeDataVector = (Vector) in.readObject();
-            List disableSpecimenIdsList=(List)in.readObject();
-            GenerateTree generateTree = new GenerateTree();
-            JTree tree = generateTree.createTree(treeDataVector, treeType,selectedNode);
+            JTree tree = new JTree();
+            List disableSpecimenIdsList = null;
+            Vector treeDataVector = null;
+            if (pageOf.equals(Constants.PAGEOF_STORAGE_LOCATION) || pageOf.equals(Constants.PAGEOF_SPECIMEN))
+            {
+                Map containerMap = (Map) in.readObject();
+                Map containerRelationMap = (Map) in.readObject();
+                
+                GenerateTree generateTree = new GenerateTree();
+                tree = generateTree.createTree(containerRelationMap, containerMap, treeType, selectedNode);
+            }
+            else
+            {
+                treeDataVector = (Vector) in.readObject();
+                disableSpecimenIdsList=(List)in.readObject();
+                GenerateTree generateTree = new GenerateTree();
+                tree = generateTree.createTree(treeDataVector, treeType, selectedNode, propertyName);
+            }
             
             Container contentPane = getContentPane();
             contentPane.setLayout(new BorderLayout());
-            
             
             if (pageOf.equals(Constants.PAGEOF_QUERY_RESULTS))
             {
             	//Preparing radio buttons for configuring different views.
                 JPanel radioButtonPanel = new JPanel(new GridLayout(2, 1));
-
+                
                 JRadioButton spreadsheetViewRadioButton = new JRadioButton(
                         Constants.SPREADSHEET_VIEW);
                 spreadsheetViewRadioButton
                         .setActionCommand(Constants.SPREADSHEET_VIEW);
                 spreadsheetViewRadioButton.setSelected(true);
                 spreadsheetViewRadioButton.setPreferredSize(new Dimension(80, 40));
-
+                
                 JRadioButton individualViewRadioButton = new JRadioButton(
                         Constants.OBJECT_VIEW);
                 individualViewRadioButton.setActionCommand(Constants.OBJECT_VIEW);
                 individualViewRadioButton.setPreferredSize(new Dimension(80, 40));
-
+                
                 ButtonGroup radioButtonGroup = new ButtonGroup();
                 radioButtonGroup.add(spreadsheetViewRadioButton);
                 radioButtonGroup.add(individualViewRadioButton);
-
+                
                 radioButtonPanel.add(spreadsheetViewRadioButton);
                 radioButtonPanel.add(individualViewRadioButton);
                 //Radio buttons finish.
                 
                 //Put the radioButton panel on the Applet.
                 contentPane.add(radioButtonPanel,BorderLayout.PAGE_START);
-                
                 
             	// Add listeners for the tree.
                 NodeSelectionListener nodeSelectionListener = new NodeSelectionListener(
