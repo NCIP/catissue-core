@@ -7,6 +7,9 @@
 
 package edu.wustl.catissuecore.bizlogic;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -25,6 +28,7 @@ import edu.wustl.common.cde.PermissibleValue;
 import edu.wustl.common.cde.PermissibleValueImpl;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * @author gautam_shetty
@@ -53,16 +57,34 @@ public class CDEBizLogic extends DefaultBizLogic implements TreeDataInterface
         }
     }
     
+    
+    /* (non-Javadoc)
+     * @see edu.wustl.catissuecore.bizlogic.TreeDataInterface#getTreeViewData()
+     */
     public Vector getTreeViewData() throws DAOException
     {
-        CDE cde = CDEManager.getCDEManager().getCDE(Constants.CDE_NAME_TISSUE_SITE);
+        // TODO Auto-generated method stub
+        return null;
+    }
+    
+    public Vector getTreeViewData(String cdeName) throws DAOException
+    {
+        Logger.out.debug("CDE BIZ LOGIC................................"+cdeName);
+//        if (cdeName.equals("TissueSite"))
+//            cdeName = "Tissue Site";
+        try{
+        cdeName = URLDecoder.decode(cdeName, "UTF-8");
+        }catch(UnsupportedEncodingException encExp)
+        {
+        }
+        CDE cde = CDEManager.getCDEManager().getCDE(cdeName);
+//        CDE cde = CDEManager.getCDEManager().getCDE("Clinical Diagnosis");
         Set set = cde.getPermissibleValues();
         Vector vector = new Vector();
         Iterator iterator = set.iterator();
         while (iterator.hasNext())
         {
-            PermissibleValueImpl permissibleValueImpl = (PermissibleValueImpl) iterator
-                    .next();
+            PermissibleValueImpl permissibleValueImpl = (PermissibleValueImpl) iterator.next();
             TissueSiteTreeNode treeNode = getTissueSiteTreeNode(permissibleValueImpl);
             vector.add(treeNode);
             List subPVList = getSubPermissibleValues(permissibleValueImpl);
@@ -92,7 +114,7 @@ public class CDEBizLogic extends DefaultBizLogic implements TreeDataInterface
 	    String id = permissibleValueImpl.getIdentifier();
 	    String val = permissibleValueImpl.getValue();
 	    String parentId = null;
-	        
+	    
 	    if (permissibleValueImpl.getParentPermissibleValue() != null)
         {
             PermissibleValueImpl parentPermissibleValue = (PermissibleValueImpl) permissibleValueImpl
