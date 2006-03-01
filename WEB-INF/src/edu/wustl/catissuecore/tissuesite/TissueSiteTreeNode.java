@@ -27,6 +27,7 @@ public class TissueSiteTreeNode implements TreeNode, Serializable
     private String identifier;
     private String value;
     private String parentIdentifier;
+    private static String cdeName;
 
     public TissueSiteTreeNode(String identifier,String value,String parentIdentifier)
     {
@@ -34,6 +35,7 @@ public class TissueSiteTreeNode implements TreeNode, Serializable
         this.value = value;
         this.parentIdentifier = parentIdentifier;
     }
+    
     public TissueSiteTreeNode()
     {
         this(null,Constants.TISSUE_SITE,null);
@@ -88,6 +90,7 @@ public class TissueSiteTreeNode implements TreeNode, Serializable
     
     public String toString()
     {
+        System.out.println("to String.............................."+this.value);
         return this.value;
     }
     
@@ -96,10 +99,18 @@ public class TissueSiteTreeNode implements TreeNode, Serializable
         this.setValue(Constants.TISSUE_SITE);
     }
     
+    public void initialiseRoot(String rootName)
+    {
+        System.out.println("Initialise Root Name..............."+rootName);
+        this.setValue(rootName);
+        cdeName = rootName;
+    }
+    
     public TreeNode getParentTreeNode()
     {
         TissueSiteTreeNode treeNode = new TissueSiteTreeNode();
-        treeNode.setParentIdentifier(parentIdentifier); 
+        treeNode.setParentIdentifier(parentIdentifier);
+        treeNode.setValue(cdeName);
         return treeNode;
     }
     
