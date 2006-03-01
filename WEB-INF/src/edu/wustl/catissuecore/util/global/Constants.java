@@ -588,6 +588,8 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String PAGEOF_STORAGE_LOCATION = "pageOfStorageLocation";
 	public static final String PAGEOF_SPECIMEN = "pageOfSpecimen";
 	public static final String PAGEOF_TISSUE_SITE = "pageOfTissueSite";
+	
+	public static final String CDE_NAME = "cdeName";
 
 	//For Simple Query Interface and Edit.
 	public static final String PAGEOF_SIMPLE_QUERY_INTERFACE = "pageOfSimpleQueryInterface";

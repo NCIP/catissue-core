@@ -58,6 +58,11 @@ public class TreeNodeData implements TreeNode, Serializable
         this.identifier = identifier;
     }
     
+    public void initialiseRoot(String rootName)
+    {
+        initialiseRoot();
+    }
+    
     /**
      * Returns the systemIdentifier of the data this node represents.
      * @return the systemIdentifier of the data this node represents.
