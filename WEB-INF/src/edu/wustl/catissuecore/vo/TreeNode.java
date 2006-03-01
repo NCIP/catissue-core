@@ -20,6 +20,8 @@ public interface TreeNode
     
     public void initialiseRoot();
     
+    public void initialiseRoot(String rootName);
+    
     public TreeNode getParentTreeNode();
     
     public boolean isChildOf(TreeNode treeNode);
