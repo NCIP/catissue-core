@@ -72,6 +72,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String LOGINNAME = "loginName";
 	public static final String LASTNAME = "lastName";
 	public static final String FIRSTNAME = "firstName";
+	public static final String UPPER = "UPPER";
     public static final String ERROR_DETAIL = "Error Detail";
 	public static final String INSTITUTION = "institution";
 	public static final String EMAIL = "email";
