@@ -3,7 +3,6 @@ package edu.wustl.catissuecore.query;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Vector;
 
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
@@ -169,9 +168,23 @@ public class Condition {
 			    }
 			}
         }
-        Logger.out.debug("---------->>>>>>>>>>>>>>>>>>>>... "+dataElement.toSQLString(tableSufix)
+	    
+	    //Aarti: To make queries case insensitive condition is converted to
+	    //UPPER(<<fieldname>>) <<Operator>> UPPER(<<value>>)
+	    String dataElementString;
+	    if(dataElement.getFieldType().equalsIgnoreCase(Constants.FIELD_TYPE_VARCHAR) 
+		        	|| dataElement.getFieldType().equalsIgnoreCase(Constants.FIELD_TYPE_TEXT))
+	    {
+	    	newValue = Constants.UPPER +"("+newValue+")";
+	    	dataElementString = dataElement.toUpperSQLString(tableSufix);
+	    }
+	    else
+	    {
+	    	dataElementString = dataElement.toSQLString(tableSufix);
+	    }
+        Logger.out.debug("---------->>>>>>>>>>>>>>>>>>>>... "+dataElementString
         		+ " "+ newOperator + " " + newValue.toString() + " ");
-	    return new String(dataElement.toSQLString(tableSufix)
+	    return new String(dataElementString
 	            		+ " "+ newOperator + " " + newValue.toString() + " ");
 	}
 

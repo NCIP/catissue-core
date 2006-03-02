@@ -110,6 +110,28 @@ public class DataElement
        return fieldName;
     }
     
+    /**
+     * SQL string representation with an UPPER function applied on fieldname
+     * making it of the form UPPER(<<fieldname>>)
+     * @author aarti_sharma
+     * @param tableSufix sufix for table name
+     * @return SQL string representation
+     */
+    public String toUpperSQLString(int tableSufix)
+    {
+       String fieldName = toSQLString(tableSufix);
+       
+       //To make queries case insensitive
+       if ((fieldType != null) && (Constants.FIELD_TYPE_TEXT.equalsIgnoreCase(fieldType) 
+       		|| Constants.FIELD_TYPE_VARCHAR.equalsIgnoreCase(fieldType)))
+       {
+       		fieldName = Constants.UPPER +"("+fieldName+")";
+       }
+       
+       return fieldName;
+    }
+    
+    
     public String getColumnNameString(int tableSufix)
     {
         return table.getTableName() + tableSufix + "_" + field;
