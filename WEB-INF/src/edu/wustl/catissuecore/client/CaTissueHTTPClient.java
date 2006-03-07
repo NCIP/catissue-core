@@ -201,4 +201,12 @@ public class CaTissueHTTPClient
 		return doOperation(domainObject,Constants.EDIT);
 	}
 	
+	public String getHttpSessionId()
+	{
+		return httpSessionId;
+	}
+	public void setHttpSessionId(String httpSessionId)
+	{
+		this.httpSessionId = httpSessionId;
+	}
 }

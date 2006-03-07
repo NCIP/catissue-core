@@ -42,6 +42,18 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class CaCoreAppServicesDelegator
 {
+	public boolean checkLoginStatus() throws Exception
+	{
+		CaTissueHTTPClient httpClient = CaTissueHTTPClient.getInstance();
+		
+		String sessionID = httpClient.getHttpSessionId();
+		if(sessionID == null)
+		{
+			throw new Exception("Invalid session"); 
+		}
+		return true;
+	}
+	
 	/**
 	 * Passes User credentials to CaTissueHTTPClient to connect User with caTISSUE Core Application
 	 * @param userName userName of the User to connect to caTISSUE Core Application
@@ -92,6 +104,7 @@ public class CaCoreAppServicesDelegator
 	{
 	    try
 	    {
+	    	checkLoginStatus();
 	        CaTissueHTTPClient httpClient = CaTissueHTTPClient.getInstance();
 	        return httpClient.add(obj);
 	    }
@@ -112,6 +125,7 @@ public class CaCoreAppServicesDelegator
 	{
 		try
 		{
+			checkLoginStatus();
 		    CaTissueHTTPClient httpClient = CaTissueHTTPClient.getInstance();
 		    return httpClient.edit(obj);
 		}
