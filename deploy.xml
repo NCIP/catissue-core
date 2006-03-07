@@ -108,6 +108,11 @@
 				token="&lt;session-timeout>10&lt;/session-timeout>" 
 			  	value="&lt;session-timeout>${session.timeout}&lt;/session-timeout>"/>
 		</replace>
+		<replace file="${temp.dir}/catissuecore/WEB-INF/classes/remoteService.xml"> 
+			<replacefilter 
+				token="@@server.port@@" 
+			  	value="${jboss.server.port}"/>
+		</replace>
 	</target>
 	
 	<!--Modify Adopter's Institution images, URL of Institution website and Contact Us, Privacy Notice, Disclaimer, Accessibility Text Files-->
