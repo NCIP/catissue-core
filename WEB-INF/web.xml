@@ -22,6 +22,9 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
   <listener>
   	<listener-class>edu.wustl.catissuecore.util.listener.CatissueCoreServletContextListener</listener-class>
   </listener>
+  <listener>
+  	<listener-class>edu.wustl.catissuecore.util.listener.CatissueCoreSessionListener</listener-class>
+  </listener>
   
  <!-- Standard Action Servlet Configuration (with debugging) -->
 
