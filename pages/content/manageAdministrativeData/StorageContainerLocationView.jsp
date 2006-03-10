@@ -50,6 +50,14 @@ if(platformName.substring(0,3) == "Mac")
 	"<iframe name='" + "<%=Constants.DATA_VIEW_FRAME%>" + "' scrolling='yes' frameborder='1' width='350' height='350'>Your Browser doesn't support IFrames.</iframe>";
 	d2.innerHTML = str2;
 }
+else
+{
+	var str = "<iframe id='" + "<%=Constants.APPLET_VIEW_FRAME%>" + "' src='" + "<%=treeViewAction%>" + "' scrolling='no' frameborder='1' width='200' height='350'>";
+	str = str + "Your Browser doesn't support IFrames.</iframe>";
+	var str2 = 
+	"<iframe name='" + "<%=Constants.DATA_VIEW_FRAME%>" + "' scrolling='yes' frameborder='1' width='350' height='350'>Your Browser doesn't support IFrames.</iframe>";
+	
+}
 </script>
 
 

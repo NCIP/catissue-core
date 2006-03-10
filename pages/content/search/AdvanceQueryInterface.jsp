@@ -53,9 +53,9 @@
        <td height="65%">
        		<table width="100%" height="100%"> 
 			<tr>
-				<td width="100%">
+				<td width="100%"><div id="ifr1">
 				    <iframe name="searchPageFrame" id="searchPageFrame" src="<%=action%>" width="90%" height="100%" frameborder="0" scrolling="auto">
-		            </iframe>
+		            </iframe></div>
 				</td>
 			</tr>
 			</table>
@@ -66,9 +66,9 @@
         <td height="25%">
 			<table width="100%" height="100%"> 
 			<tr>
-				<td width="100%">
+				<td width="100%"><div id="ifr2">
 		            <iframe name="queryFrame" id="queryFrame" src="AdvanceQueryView.do" width="80%" height="100%" frameborder="0" scrolling="auto">
-        		    </iframe>
+        		    </iframe></div>
 				</td>
 			</tr>
 			</table>
@@ -89,4 +89,28 @@
 		</td>
     </tr>
 </table>
+<!-- Code to display iframe on Mac  -->
+<script type="text/javascript">
+var platformName = navigator.platform;
+//alert(platformName + " : " + platformName.substring(0,3));
+if(platformName.substring(0,3) == "Mac")
+{
+	var d1 = document.getElementById("ifr1");
+
+	var str = "<iframe name='searchPageFrame' id='searchPageFrame' src='" + "<%=action%>" + "' width='350' height='250' frameborder='0' scrolling='auto'></iframe>";
+	d1.innerHTML = str;
+
+	var d2 = document.getElementById("ifr2");
+	var str2 = "<iframe name='queryFrame' id='queryFrame' src='AdvanceQueryView.do' width='400' height='100' frameborder='0' scrolling='auto'></iframe>";
+	d2.innerHTML = str2;
+}
+else
+{
+	var str = "<iframe name='searchPageFrame' id='searchPageFrame' src='" + "<%=action%>" + "' width='90%' height='100%' frameborder='0' scrolling='auto'></iframe>";
+	var str2 = "<iframe name='queryFrame' id='queryFrame' src='AdvanceQueryView.do' width='80%' height='100%' frameborder='0' scrolling='auto'></iframe>";
+
+}
+</script>
+
+
 </html:form>
