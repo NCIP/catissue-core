@@ -22,10 +22,35 @@
 	}
 %>
 
-
+<div id="ifr1">
 <iframe id="<%=Constants.APPLET_VIEW_FRAME%>" src="<%=treeViewAction%>" scrolling="no" frameborder="1" width="35%" height="100%">
 	Your Browser doesn't support IFrames.
 </iframe>
+</div>
+<div id="ifr2">
 <iframe name="<%=Constants.DATA_VIEW_FRAME%>" scrolling="yes" frameborder="1" width="65%" height="100%">
 	Your Browser doesn't support IFrames.
 </iframe>
+</div>
+
+<!-- Code to display iframe on Mac  -->
+<script type="text/javascript">
+var platformName = navigator.platform;
+//alert(platformName + " : " + platformName.substring(0,3));
+if(platformName.substring(0,3) == "Mac")
+{
+	var d1 = document.getElementById("ifr1");
+
+	var str = "<iframe id='" + "<%=Constants.APPLET_VIEW_FRAME%>" + "' src='" + "<%=treeViewAction%>" + "' scrolling='no' frameborder='1' width='200' height='350'>";
+	str = str + "Your Browser doesn't support IFrames.</iframe>";
+	d1.innerHTML = str;
+
+	var d2 = document.getElementById("ifr2");
+	var str2 = 
+	"<iframe name='" + "<%=Constants.DATA_VIEW_FRAME%>" + "' scrolling='yes' frameborder='1' width='350' height='350'>Your Browser doesn't support IFrames.</iframe>";
+	d2.innerHTML = str2;
+}
+</script>
+
+
+
