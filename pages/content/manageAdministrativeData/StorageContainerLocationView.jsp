@@ -21,44 +21,36 @@
 						"&" + 	Constants.STORAGE_CONTAINER_POSITION + "=" + position;
 	}
 %>
-
-<div id="ifr1">
-<iframe id="<%=Constants.APPLET_VIEW_FRAME%>" src="<%=treeViewAction%>" scrolling="no" frameborder="1" width="35%" height="100%">
-	Your Browser doesn't support IFrames.
-</iframe>
-</div>
-<div id="ifr2">
-<iframe name="<%=Constants.DATA_VIEW_FRAME%>" scrolling="yes" frameborder="1" width="65%" height="100%">
-	Your Browser doesn't support IFrames.
-</iframe>
-</div>
-
+<SPAN id="ifr1"> <IFRAME id="<%=Constants.APPLET_VIEW_FRAME%>"
+	src="<%=treeViewAction%>" scrolling="no" frameborder="1" width="35%"
+	height="100%"> Your Browser doesn't support IFrames. </IFRAME> </SPAN>
+<SPAN id="ifr2"> <IFRAME name="<%=Constants.DATA_VIEW_FRAME%>"
+	scrolling="yes" frameborder="1" width="65%" height="100%"> Your Browser
+doesn't support IFrames. </IFRAME> </SPAN>
 <!-- Code to display iframe on Mac  -->
-<script type="text/javascript">
+<SCRIPT type="text/javascript">
 var platformName = navigator.platform;
 //alert(platformName + " : " + platformName.substring(0,3));
 if(platformName.substring(0,3) == "Mac")
 {
+	var w1 = Math.round(.25 * screen.availWidth);
+	var h1 = Math.round(.50 * screen.availHeight);
+
 	var d1 = document.getElementById("ifr1");
 
-	var str = "<iframe id='" + "<%=Constants.APPLET_VIEW_FRAME%>" + "' src='" + "<%=treeViewAction%>" + "' scrolling='no' frameborder='1' width='200' height='350'>";
+	var str = "<iframe id='" + "<%=Constants.APPLET_VIEW_FRAME%>" + "' src='" + "<%=treeViewAction%>" + "' scrolling='no' frameborder='1' width='"+w1+"' height='"+h1+"'>";
 	str = str + "Your Browser doesn't support IFrames.</iframe>";
 	d1.innerHTML = str;
 
+	var w2 = Math.round(.45 * screen.availWidth);
+	var h2 = Math.round(.50 * screen.availHeight);
+
 	var d2 = document.getElementById("ifr2");
 	var str2 = 
-	"<iframe name='" + "<%=Constants.DATA_VIEW_FRAME%>" + "' scrolling='yes' frameborder='1' width='350' height='350'>Your Browser doesn't support IFrames.</iframe>";
+	"<iframe name='" + "<%=Constants.DATA_VIEW_FRAME%>" + "' scrolling='yes' frameborder='1' width='" + w2 + "' height='"+h2+"'>Your Browser doesn't support IFrames.</iframe>";
 	d2.innerHTML = str2;
 }
-else
-{
-	var str = "<iframe id='" + "<%=Constants.APPLET_VIEW_FRAME%>" + "' src='" + "<%=treeViewAction%>" + "' scrolling='no' frameborder='1' width='200' height='350'>";
-	str = str + "Your Browser doesn't support IFrames.</iframe>";
-	var str2 = 
-	"<iframe name='" + "<%=Constants.DATA_VIEW_FRAME%>" + "' scrolling='yes' frameborder='1' width='350' height='350'>Your Browser doesn't support IFrames.</iframe>";
-	
-}
-</script>
+</SCRIPT>
 
 
 
