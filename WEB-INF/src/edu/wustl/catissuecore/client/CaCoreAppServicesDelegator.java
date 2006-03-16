@@ -42,47 +42,34 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class CaCoreAppServicesDelegator
 {
-	public boolean checkLoginStatus() throws Exception
-	{
-		CaTissueHTTPClient httpClient = CaTissueHTTPClient.getInstance();
-		
-		String sessionID = httpClient.getHttpSessionId();
-		if(sessionID == null)
-		{
-			throw new Exception("Invalid session"); 
-		}
-		return true;
-	}
 	
 	/**
 	 * Passes User credentials to CaTissueHTTPClient to connect User with caTISSUE Core Application
 	 * @param userName userName of the User to connect to caTISSUE Core Application
 	 * @param password password of the User to connect to caTISSUE Core Application
-	 * @return the status of login to caTISSUE Core Application
+	 * @return the sessionID of user if he/she has successfullyy logged in else null
 	 * @throws Exception 
 	 */
-    public boolean delegateLogin(String userName,String password) throws Exception
+    public String delegateLogin(String userName,String password) throws Exception
 	{
 		CaTissueHTTPClient httpClient = CaTissueHTTPClient.getInstance();
-		
-		boolean status = httpClient.connect(userName,password);
-		
-		Logger.out.debug("****************** HTTP LOGIN STATUS : " + status);
-		
-		return status;
+		String sessionID = httpClient.connect(userName,password);
+		Logger.out.debug("****************** HTTP LOGIN STATUS: Username:"+ userName + " sessionID" + sessionID);
+		return sessionID;
 	}
 	
     /**
      * Disconnects User from caTISSUE Core Application
+     * @param sessionKey
      * @return returns the status of logout to caTISSUE Core Application
      */
-	public boolean delegateLogout()// throws Exception
+	public boolean delegateLogout(String sessionKey)// throws Exception
 	{
 	    try
 		{
 			CaTissueHTTPClient httpClient = CaTissueHTTPClient.getInstance();
 		
-			boolean status = httpClient.disConnect();
+			boolean status = httpClient.disConnect(sessionKey);
 		
 			Logger.out.debug("****************** HTTP LOGOUT STATUS : " + status);
 		}
@@ -97,16 +84,16 @@ public class CaCoreAppServicesDelegator
 	/**
 	 * Passes caCore Like domain object to CaTissueHTTPClient to perform Add operation.
 	 * @param obj the caCore Like object to add using HTTP API
+	 * @param sessionKey
 	 * @return returns the Added caCore Like object/Exception object if exception occurs performing Add operation
 	 * @throws Exception
 	 */
-	public Object delegateAdd(Object obj) throws Exception
+	public Object delegateAdd(String sessionKey, Object obj) throws Exception
 	{
 	    try
 	    {
-	    	checkLoginStatus();
 	        CaTissueHTTPClient httpClient = CaTissueHTTPClient.getInstance();
-	        return httpClient.add(obj);
+	        return httpClient.add(sessionKey,obj);
 	    }
 	    catch(Exception e)
 	    {
@@ -118,16 +105,16 @@ public class CaCoreAppServicesDelegator
 	/**
 	 * Passes caCore Like domain object to CaTissueHTTPClient to perform Edit operation.
 	 * @param obj the caCore Like object to edit using HTTP API
+	 * @param sessionKey 
 	 * @return returns the Edited caCore Like object/Exception object if exception occurs performing Edit operation
 	 * @throws Exception
 	 */
-	public Object delegateEdit(Object obj) throws Exception
+	public Object delegateEdit(String sessionKey, Object obj) throws Exception
 	{
 		try
 		{
-			checkLoginStatus();
 		    CaTissueHTTPClient httpClient = CaTissueHTTPClient.getInstance();
-		    return httpClient.edit(obj);
+		    return httpClient.edit(sessionKey, obj);
 		}
 		catch(Exception e)
 		{
@@ -147,10 +134,8 @@ public class CaCoreAppServicesDelegator
 		throw new Exception("Does not support delete");
 	}
 	
-	public List delegateSearchFilter(List list) throws Exception
+	public List delegateSearchFilter(String userName,List list) throws Exception
 	{
-	    CaTissueHTTPClient httpClient = CaTissueHTTPClient.getInstance();
-	    String userName = httpClient.getLoggedInUserName();
 	    Logger.out.debug("User Name : "+userName);
 	    Logger.out.debug("list obtained from ApplicationService Search************** : "+list.getClass().getName());
 	    Logger.out.debug("Super Class ApplicationService Search************** : "+list.getClass().getSuperclass().getName());
