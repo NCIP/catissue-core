@@ -73,10 +73,10 @@ public class CatissueCoreServletContextListener
          */
         Variables.catissueHome = sce.getServletContext().getRealPath("");
 
-        HibernateProperties.initBundle(Variables.catissueHome +
-        			System.getProperty("file.separator") + "db.properties");
-
-        String str = HibernateProperties.getValue("hibernate.connection.driver_class");
+//        HibernateProperties.initBundle(Variables.catissueHome +
+//        			System.getProperty("file.separator") + "db.properties");
+//
+//        String str = HibernateProperties.getValue("hibernate.connection.driver_class");
         
         /**
          * Creating Logs Folder inside catissue home
@@ -155,7 +155,7 @@ public class CatissueCoreServletContextListener
         
         try
         {
-        	Logger.out.debug("hibernate.connection.driver_class "+str);
+//        	Logger.out.debug("hibernate.connection.driver_class "+str);
         	
             /*Logger.out
                     .debug("Create Perm to aarti on edu.wustl.catissuecore.domain.CollectionProtocol_37 "
