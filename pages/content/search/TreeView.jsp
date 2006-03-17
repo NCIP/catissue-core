@@ -5,7 +5,7 @@
 	String storageContainerType = null;
 	String storageContainerID = null;
 	String position = null;
-	String propertyName = null;
+	String propertyName = null, cdeName;
 	if (pageOf.equals(Constants.PAGEOF_STORAGE_LOCATION) ||
 	     pageOf.equals(Constants.PAGEOF_SPECIMEN))
 	{
@@ -17,6 +17,7 @@
 	else if (pageOf.equals(Constants.PAGEOF_TISSUE_SITE))
 	{
 		propertyName = request.getParameter(Constants.PROPERTY_NAME);
+		cdeName = request.getParameter(Constants.CDE_NAME);
 	}
 %>
 
@@ -42,6 +43,7 @@
     width="100%" height="100%" align="top" name="<%=Constants.TREE_APPLET_NAME%>"
     codebase="http://java.sun.com/products/plugin/autodl/jinstall-1_4-windows-i586.cab#Version=1,4,0,0">
 	<PARAM name="<%=Constants.PROPERTY_NAME%>" value="<%=propertyName%>">
+	<PARAM name="<%=Constants.CDE_NAME%>" value="<%=cdeName%>">
     <PARAM name="code" value="<%=Constants.QUERY_TREE_APPLET%>">
 	<PARAM name="archive" value="Applet/QueryTree.jar">
 	<PARAM name="type" value="application/x-java-applet;jpi-version=1.4.2">
@@ -61,8 +63,8 @@
 			storageType="<%=storageContainerType%>"
 			storageToBeSelected="<%=storageContainerID%>"
 			position="<%=position%>"
-			propertyName="<%=propertyName%>" MAYSCRIPT>
-			
+			propertyName="<%=propertyName%>" 
+			cdeName="<%=cdeName%>" MAYSCRIPT>
 			
 			<NOEMBED>
 				No Java 2 SDK support for APPLET!!
