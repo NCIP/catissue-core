@@ -185,7 +185,7 @@ function insRow(subdivtag,iCounter,blockCounter)
 		sname = sname + "<option value='<%=((NameValueBean)tissueSiteList.get(i)).getValue()%>'><%=((NameValueBean)tissueSiteList.get(i)).getName()%></option>";
 	<%}%>
 	sname = sname + "</select>"
-	var url = "ShowFramedPage.do?pageOf=pageOfTissueSite&propertyName="+objname;			
+	var url = "ShowFramedPage.do?pageOf=pageOfTissueSite&propertyName="+objname+"&cdeName=Tissue Site";
 	sname = sname + "<a href='#' onclick=javascript:NewWindow('" + url + "','name','250','330','no');return false>";
 	sname = sname + "<img src='images\\Tree.gif' border='0' width='26' height='22'></a>";
 	
@@ -797,7 +797,7 @@ function getSubDivCount(subdivtag)
 							<html:options collection="<%=Constants.TISSUE_SITE_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
 			        	<%
-							String url = "ShowFramedPage.do?pageOf=pageOfTissueSite&propertyName="+fName;			
+							String url = "ShowFramedPage.do?pageOf=pageOfTissueSite&propertyName="+fName+"&cdeName=Tissue Site";			
 						%>
 				        <a href="#" onclick="javascript:NewWindow('<%=url%>','name','250','330','no');return false">
 							<img src="images\Tree.gif" border="0" width="26" height="22">
@@ -1048,7 +1048,7 @@ function getSubDivCount(subdivtag)
 							<html:options collection="<%=Constants.TISSUE_SITE_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
 			<!-- ****************************************  -->
-				        <a href="#" onclick="javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfTissueSite&propertyName=value(CollectionProtocolEvent:`_SpecimenRequirement:1_tissueSite)','name','250','330','no');return false">
+				        <a href="#" onclick="javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfTissueSite&propertyName=value(CollectionProtocolEvent:`_SpecimenRequirement:1_tissueSite)','name','250','330','no')&cdeName=Tissue Site;return false">
 							<img src="images\Tree.gif" border="0" width="26" height="22">
 						</a>
 				     <%--   <a href="#">

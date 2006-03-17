@@ -5,7 +5,7 @@
 	String storageContainerType = null;
 	String storageContainerID = null;
 	String position = null;
-	String propertyName = null, cdeName;
+	String propertyName = null, cdeName=null;
 	if (pageOf.equals(Constants.PAGEOF_STORAGE_LOCATION) ||
 	     pageOf.equals(Constants.PAGEOF_SPECIMEN))
 	{
