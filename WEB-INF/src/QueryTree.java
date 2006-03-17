@@ -137,7 +137,7 @@ public class QueryTree extends JApplet
                 treeDataVector = (Vector) in.readObject();
                 disableSpecimenIdsList=(List)in.readObject();
                 GenerateTree generateTree = new GenerateTree();
-                tree = generateTree.createTree(treeDataVector, treeType, selectedNode, propertyName);
+                tree = generateTree.createTree(treeDataVector, treeType, selectedNode, cdeName);
             }
             
             Container contentPane = getContentPane();
