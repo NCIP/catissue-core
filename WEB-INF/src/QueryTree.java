@@ -46,7 +46,6 @@ public class QueryTree extends JApplet
     public void init()
     {
         ObjectInputStream in = null;
-
         try
         {
             URL codeBase = getCodeBase();
@@ -55,7 +54,7 @@ public class QueryTree extends JApplet
             int port = codeBase.getPort();
             
             String pageOf = this.getParameter(Constants.PAGEOF);
-            String storageContainerType = null,propertyName = null;
+            String storageContainerType = null,propertyName = null, cdeName = null;
             int treeType = Constants.TISSUE_SITE_TREE_ID;
             
             //Sri: Added for selecting node in the storage tree
@@ -71,7 +70,11 @@ public class QueryTree extends JApplet
             else if (pageOf.equals(Constants.PAGEOF_QUERY_RESULTS))
                 treeType = Constants.QUERY_RESULTS_TREE_ID;
             else if (pageOf.equals(Constants.PAGEOF_TISSUE_SITE))
+            {
                 propertyName = this.getParameter(Constants.PROPERTY_NAME);
+                cdeName = this.getParameter(Constants.CDE_NAME);
+            }
+                
             
             // If storage container tree, take care of positions and parent container
             // ID edit boxes.
@@ -105,9 +108,9 @@ public class QueryTree extends JApplet
             }
 			
             String urlSuffix = applicationPath+Constants.TREE_DATA_ACTION+"?"+Constants.PAGEOF+"="+URLEncoder.encode(pageOf, "UTF-8");
-            if (propertyName != null)
+            if (pageOf.equals(Constants.PAGEOF_TISSUE_SITE) == true)
             {
-                urlSuffix = urlSuffix + "&"+Constants.PROPERTY_NAME+"="+URLEncoder.encode(propertyName, "UTF-8");
+                urlSuffix = urlSuffix + "&"+Constants.PROPERTY_NAME+"="+URLEncoder.encode(propertyName, "UTF-8")+"&"+Constants.CDE_NAME+"="+URLEncoder.encode(cdeName, "UTF-8");
             }
             
             URL dataURL = new URL(protocol, host, port, urlSuffix);
@@ -206,7 +209,6 @@ public class QueryTree extends JApplet
             
             //Put the tree panel on the Applet.
             contentPane.add(treePanel, BorderLayout.CENTER);
-
             
             //Sri: Pass the position of the container to the next level
             // This is used to auto select the node
@@ -242,7 +244,10 @@ public class QueryTree extends JApplet
         {
             try
             {
-                in.close();
+                if (in != null)
+                {
+                    in.close();
+                }
             }
             catch (IOException ioExp)
             {
