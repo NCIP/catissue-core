@@ -453,7 +453,7 @@ Map map = form.getExternalIdentifier();
 							<html:options collection="<%=Constants.TISSUE_SITE_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
 						<%
-							String url = "ShowFramedPage.do?pageOf=pageOfTissueSite&propertyName=Tissue Site";
+							String url = "ShowFramedPage.do?pageOf=pageOfTissueSite&propertyName=tissueSite&cdeName=Tissue Site";
 						%>
 						<a href="#" onclick="javascript:NewWindow('<%=url%>','name','250','330','no');return false">
 							<img src="images\Tree.gif" border="0" width="24" height="18">

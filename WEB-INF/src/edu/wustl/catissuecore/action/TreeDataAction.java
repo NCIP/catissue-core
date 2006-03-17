@@ -52,6 +52,7 @@ public class TreeDataAction extends BaseAction
         ObjectOutputStream out = null;
         SessionDataBean sessionData = getSessionData(request);
         Map columnIdsMap = new HashMap();
+        
         try
         {
             String pageOf = URLDecoder.decode(request.getParameter(Constants.PAGEOF),"UTF-8");
@@ -63,7 +64,7 @@ public class TreeDataAction extends BaseAction
             {
                 	bizLogic = new CDEBizLogic();
                 	CDEBizLogic cdeBizLogic = (CDEBizLogic) bizLogic;
-                	String cdeName = request.getParameter(Constants.PROPERTY_NAME);
+                	String cdeName = request.getParameter(Constants.CDE_NAME);
                 	dataList= cdeBizLogic.getTreeViewData(cdeName);
             }
             else if (pageOf.equals(Constants.PAGEOF_QUERY_RESULTS))
@@ -76,7 +77,7 @@ public class TreeDataAction extends BaseAction
             else if (pageOf.equals(Constants.PAGEOF_STORAGE_LOCATION) || pageOf.equals(Constants.PAGEOF_SPECIMEN))
             {
                 StorageContainerBizLogic storageBizLogic = (StorageContainerBizLogic) bizLogic;
-                containerRelationMap = storageBizLogic.getTreeViewData(containerMap); 
+                containerRelationMap = storageBizLogic.getTreeViewData(containerMap);
             }
             
             String contentType = "application/x-java-serialized-object";
@@ -100,8 +101,11 @@ public class TreeDataAction extends BaseAction
         }
         finally
         {
-            out.flush();
-            out.close();
+            if (out != null)
+            {
+                out.flush();
+                out.close();
+            }
         }
         
         return mapping.findForward(Constants.SUCCESS);

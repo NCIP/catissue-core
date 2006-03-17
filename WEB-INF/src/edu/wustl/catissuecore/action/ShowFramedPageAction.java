@@ -10,6 +10,7 @@ package edu.wustl.catissuecore.action;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -47,9 +48,12 @@ public class ShowFramedPageAction extends Action
             
         }else if (pageOf.equals(Constants.PAGEOF_TISSUE_SITE))
         {
-        	Logger.out.debug("In ShowFramedPageAction in PAGEOF_TISSUE_SITE***********************");
             String propertyName = request.getParameter(Constants.PROPERTY_NAME);
             request.setAttribute(Constants.PROPERTY_NAME,propertyName);
+            
+            String cdeName = request.getParameter(Constants.CDE_NAME);
+            HttpSession session = request.getSession();
+            session.setAttribute(Constants.CDE_NAME, cdeName);
         }
         
         return mapping.findForward(pageOf);

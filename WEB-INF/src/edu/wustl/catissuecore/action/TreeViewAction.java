@@ -10,6 +10,7 @@ package edu.wustl.catissuecore.action;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -45,7 +46,14 @@ public class TreeViewAction extends Action
         	String storageContainerID = request.getParameter(Constants.STORAGE_CONTAINER_TO_BE_SELECTED);
         	request.setAttribute(Constants.STORAGE_CONTAINER_TO_BE_SELECTED,storageContainerID);
         	String position = request.getParameter(Constants.STORAGE_CONTAINER_POSITION);
-        	request.setAttribute(Constants.STORAGE_CONTAINER_POSITION,position);        	
+        	request.setAttribute(Constants.STORAGE_CONTAINER_POSITION,position); 	
+        }
+        else if (pageOf.equals(Constants.PAGEOF_TISSUE_SITE))
+        {
+            HttpSession session = request.getSession();
+            String cdeName = (String)session.getAttribute(Constants.CDE_NAME);
+            session.removeAttribute(Constants.CDE_NAME);
+            request.setAttribute(Constants.CDE_NAME, cdeName);
         }
         
         return mapping.findForward(Constants.SUCCESS);
