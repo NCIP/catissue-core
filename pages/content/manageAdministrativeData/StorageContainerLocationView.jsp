@@ -33,8 +33,8 @@ var platformName = navigator.platform;
 //alert(platformName + " : " + platformName.substring(0,3));
 if(platformName.substring(0,3) == "Mac")
 {
-	var w1 = Math.round(.25 * screen.availWidth);
-	var h1 = Math.round(.50 * screen.availHeight);
+	var w1 = Math.round(.20 * screen.availWidth);
+	var h1 = Math.round(.40 * screen.availHeight);
 
 	var d1 = document.getElementById("ifr1");
 
@@ -42,8 +42,8 @@ if(platformName.substring(0,3) == "Mac")
 	str = str + "Your Browser doesn't support IFrames.</iframe>";
 	d1.innerHTML = str;
 
-	var w2 = Math.round(.45 * screen.availWidth);
-	var h2 = Math.round(.50 * screen.availHeight);
+	var w2 = Math.round(.40 * screen.availWidth);
+	var h2 = Math.round(.40 * screen.availHeight);
 
 	var d2 = document.getElementById("ifr2");
 	var str2 = 
