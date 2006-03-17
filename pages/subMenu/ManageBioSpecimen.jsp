@@ -108,7 +108,7 @@
 
 <%
 	strMouseOut = Utility.setSelectedMenuItem(selectMenuID, 17, normalMenuClass , selectedMenuClass , hoverMenuClass);
-	String url = "ShowFramedPage.do?pageOf=pageOfTissueSite&propertyName=Clinical Diagnosis";
+	String url = "ShowFramedPage.do?pageOf=pageOfTissueSite&propertyName=ClinicalDiagnosis&cdeName=Clinical Diagnosis";
 %>
 <tr>
 	<%=strMouseOut%>
