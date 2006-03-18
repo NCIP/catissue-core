@@ -28,12 +28,9 @@ public class CaTissueHTTPClient
     private static CaTissueHTTPClient caTissueHTTPClient = new CaTissueHTTPClient();
     
     private static final String port = ApplicationProperties.getValue("server.port");
+    private static final String app_name = ApplicationProperties.getValue("app.name");
 
-    private static final String servletURL="http://localhost:" + port + "/catissuecore/";
-    
-    
-    
-    
+    private static final String servletURL="http://localhost:" + port + "/"+app_name+"/";
     
     private CaTissueHTTPClient()
     {
@@ -211,6 +208,4 @@ public class CaTissueHTTPClient
 	{
 		return doOperation(sessionKey, domainObject,Constants.EDIT);
 	}
-	
-	
 }
