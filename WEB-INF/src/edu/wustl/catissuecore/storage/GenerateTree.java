@@ -124,11 +124,8 @@ public class GenerateTree
     private void buildTree(Map containerRelationMap, Map containerMap,
             DefaultMutableTreeNode subTree, DefaultMutableTreeNode root)
     {
-        System.out.println("2");
         TreeNode childNode = (TreeNode)subTree.getUserObject();
-        System.out.println("Child Node..............."+childNode);
         Object parentId = containerRelationMap.get(childNode.getIdentifier());
-        System.out.println("parent Id before null......................."+parentId);
         
         if (parentId == null)
         {
@@ -160,7 +157,6 @@ public class GenerateTree
         parentDefNode = new DefaultMutableTreeNode(parentNode);
         parentDefNode.add(subTree);
         
-        System.out.println("3");
         buildTree(containerRelationMap, containerMap, parentDefNode, root);
     }
     
@@ -200,12 +196,8 @@ public class GenerateTree
                 DefaultMutableTreeNode node;
                 
                 TreeNode treeNode = (TreeNode) iterator.next();
-                System.out.println("TreeNode....................."+treeNode);
                 DefaultMutableTreeNode nextNode = new DefaultMutableTreeNode(treeNode);
                 DefaultMutableTreeNode targetParentNode = null;
-                System.out.println("storage container id : "+treeNode.getIdentifier());
-                System.out.println("storage container Parent id : "+treeNode.getParentIdentifier());
-//                System.out.println("Site id : "+treeNode.getParentTreeNode().getIdentifier());
                 if (treeNode.getParentIdentifier() == null)
                 {
                 	boolean parentNodeFound = false;
