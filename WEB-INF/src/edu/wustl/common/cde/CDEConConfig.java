@@ -16,13 +16,13 @@ package edu.wustl.common.cde;
 public class CDEConConfig
 {
 	//	used for connection
-    private String proxyhostip;
-    private String proxyport;
-    private String username;
-    private String password;
+    public static String proxyhostip;
+    public static String proxyport;
+    public static String username;
+    public static String password;
 
 	//	the dbserver to connect
-    private String dbserver;
+    public static String dbserver;
 
 
     /**
@@ -60,13 +60,13 @@ public class CDEConConfig
     {
         return username;
     }
-	public CDEConConfig(String proxyhostip, String proxyport, String username, String password, String dbserver)
-	{
-		this.proxyhostip = proxyhostip;
-		this.proxyport = proxyport;
-		this.username = username;
-		this.password = password;
-		this.dbserver = dbserver;
-	} // CDEConConfig constructor
+//	public CDEConConfig(String proxyhostip, String proxyport, String username, String password, String dbserver)
+//	{
+//		this.proxyhostip = proxyhostip;
+//		this.proxyport = proxyport;
+//		this.username = username;
+//		this.password = password;
+//		this.dbserver = dbserver;
+//	} // CDEConConfig constructor
 
 }
