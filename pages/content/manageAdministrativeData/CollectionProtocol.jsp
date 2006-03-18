@@ -1048,7 +1048,7 @@ function getSubDivCount(subdivtag)
 							<html:options collection="<%=Constants.TISSUE_SITE_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
 			<!-- ****************************************  -->
-				        <a href="#" onclick="javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfTissueSite&propertyName=value(CollectionProtocolEvent:`_SpecimenRequirement:1_tissueSite)','name','250','330','no')&cdeName=Tissue Site;return false">
+				        <a href="#" onclick="javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfTissueSite&propertyName=value(CollectionProtocolEvent:`_SpecimenRequirement:1_tissueSite)&cdeName=Tissue Site','name','250','330','no');return false">
 							<img src="images\Tree.gif" border="0" width="26" height="22">
 						</a>
 				     <%--   <a href="#">
