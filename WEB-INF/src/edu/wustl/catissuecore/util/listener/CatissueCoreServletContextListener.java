@@ -26,7 +26,6 @@ import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.ProtectionGroups;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.HibernateProperties;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.util.Permissions;
 import edu.wustl.common.util.dbManager.HibernateMetaData;

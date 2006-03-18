@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.Vector;
 
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.util.logger.Logger;
  
 
 

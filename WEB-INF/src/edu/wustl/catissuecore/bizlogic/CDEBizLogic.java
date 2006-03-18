@@ -9,7 +9,6 @@ package edu.wustl.catissuecore.bizlogic;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -19,7 +18,6 @@ import java.util.Vector;
 
 import edu.wustl.catissuecore.dao.DAO;
 import edu.wustl.catissuecore.tissuesite.TissueSiteTreeNode;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.cde.CDE;
 import edu.wustl.common.cde.CDEImpl;
