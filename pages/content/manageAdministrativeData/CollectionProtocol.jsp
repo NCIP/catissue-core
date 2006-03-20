@@ -75,8 +75,10 @@
 // variable to count the oter blocks
 var insno=1;
 var tblColor = "#123456";
-function addBlock(div,d0)
+function addBlock(tmpdiv,tmpd0)
 {
+var div = document.getElementById(tmpdiv);
+var d0 = document.getElementById(tmpd0);
 var val = parseInt(document.forms[0].outerCounter.value);
 		val = val + 1;
 		document.forms[0].outerCounter.value = val;
@@ -505,7 +507,7 @@ function getSubDivCount(subdivtag)
 			<b><bean:message key="collectionprotocol.eventtitle" /></b>
 	</td>
 	<td align="right" class="formTitle">		
-			<html:button property="addCollectionProtocolEvents" styleClass="actionButton" onclick="addBlock(outerdiv,d1)">Add More</html:button>
+			<html:button property="addCollectionProtocolEvents" styleClass="actionButton" onclick="addBlock('outerdiv','d1')">Add More</html:button>
 			<html:hidden property="outerCounter"/>	
 	</td>
 	<td class="formTitle" align="Right">
