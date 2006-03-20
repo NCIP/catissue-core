@@ -90,7 +90,6 @@ public class TissueSiteTreeNode implements TreeNode, Serializable
     
     public String toString()
     {
-        System.out.println("to String.............................."+this.value);
         return this.value;
     }
     
@@ -101,7 +100,6 @@ public class TissueSiteTreeNode implements TreeNode, Serializable
     
     public void initialiseRoot(String rootName)
     {
-        System.out.println("Initialise Root Name..............."+rootName);
         this.setValue(rootName);
         cdeName = rootName;
     }
