@@ -417,9 +417,6 @@ Map map = form.getExternalIdentifier();
 								
 								boolean subListEnabled = false;
 						
-								if(classValue != null && classValue.equals("Cell"))
-									subListEnabled = true;
-								
 								if(specimenTypeList == null)
 								{
 									specimenTypeList = new ArrayList();

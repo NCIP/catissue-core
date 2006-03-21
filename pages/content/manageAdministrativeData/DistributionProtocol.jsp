@@ -514,9 +514,6 @@ function insRow(subdivtag)
 						
 						specimenTypeList = (List)specimenTypeMap.get(classValue);
 						boolean subListEnabled = false;
-						
-						if(classValue != null && classValue.equals("Cell"))
-								subListEnabled = true;
 								
 						if(specimenTypeList == null)
 						{
