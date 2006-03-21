@@ -26,48 +26,28 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class CDEHandler 
 {
-	private Map inMemCacheMap = new HashMap(); 
+	private Map inMemCacheMap = new HashMap();
 	private Map cdeXMLMAP;
-	
 	
 	public CDEHandler(Map cdeXMLMAP)
 	{
 		this.cdeXMLMAP = cdeXMLMAP;
 	}
 	
-	public void loadCDE()
+	public void loadCDE() throws Exception
 	{
-		AbstractBizLogic bizLogic = BizLogicFactory.getBizLogic(-1);
+		inMemCacheMap = new HashMap();
 		
 		Set ketSet = cdeXMLMAP.keySet();
 		Iterator it = ketSet.iterator();
 		while(it.hasNext())
 		{
-			XMLCDE xmlCDE = (XMLCDE)it.next();
-			if(xmlCDE.isCache())
-			{
-				if(!xmlCDE.isLazyLoading())
-				{
-					try
-					{
-						List list = bizLogic.retrieve(CDEImpl.class.getName(),"publicid",xmlCDE.getPublicId());
-						if(!list.isEmpty())
-						{
-							CDE cde = (CDE)list.get(0);
-							inMemCacheMap.put(xmlCDE.getPublicId(),cde);
-						}
-					}
-					catch(DAOException ex)
-					{
-						ex.printStackTrace();
-					}
-				}
-			}
+		    String key = (String)it.next();
+		    retrieve(key);
 		}
 	}
 	
-	
-	public CDE retrieve(String CDEName)
+	public CDE retrieve(String CDEName) //throws Exception
 	{
 		Object obj = cdeXMLMAP.get(CDEName);
 		if(obj!= null)
@@ -99,22 +79,31 @@ public class CDEHandler
 						if(!list.isEmpty())
 						{
 							cde =  (CDE)list.get(0);
-							inMemCacheMap.put(publicID,cde);
+							inMemCacheMap.put(publicID, cde);
 						}
 					}
 					catch(DAOException ex)
 					{
-						ex.printStackTrace();
+						Logger.out.debug(ex.getMessage(), ex);
+						//throw new Exception("Could not load CDE "+CDEName+" from local DB database: "+ ex.getMessage(), ex);
 					}
 				}
 				return cde;
 			}
 			else /** Retrieve CDE from caDSR */
 			{
-				//Case Download from caDSR: 
-				//CDE = CDEDownloader.load(CDE_NAME);
-				//Return CDE; 
-				//CDEDownloader 
+				try
+				{
+					CDEDownloader cdeDownloader = new CDEDownloader();
+					cdeDownloader.connect();
+					CDE cde = cdeDownloader.downloadCDE(xmlCDE);
+					return cde; 
+				}
+				catch(Exception cdeExp)
+				{
+					Logger.out.error("Exception while retriving CDE." + cdeExp.getMessage()  );
+					//throw cdeExp;
+				}
 			}
 		}
 		return null;
