@@ -38,8 +38,8 @@ public class CDEManager
 	    Logger.out.debug("Initializing CDE Manager");
 		//Singleton instance of CDEManager 
 		cdeManager = new CDEManager();
-		//cdeManager.loadCDEInMemory();
-		cdeManager.refreshCache();
+		cdeManager.loadCDEInMemory();
+//		cdeManager.refreshCache();
 	}
 	
 	public static CDEManager getCDEManager()
