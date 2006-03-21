@@ -121,8 +121,8 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 		request.setAttribute(Constants.CLINICAL_DIAGNOSIS_LIST, clinicalDiagnosisList);
 
 		// populating clinical Status field
-		NameValueBean undefinedVal = new NameValueBean(Constants.UNDEFINED,Constants.UNDEFINED);
-        List clinicalStatusList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_CLINICAL_STATUS,undefinedVal);
+//		NameValueBean undefinedVal = new NameValueBean(Constants.UNDEFINED,Constants.UNDEFINED);
+        List clinicalStatusList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_CLINICAL_STATUS,null);
     	request.setAttribute(Constants.CLINICAL_STATUS_LIST, clinicalStatusList);
     	
     	//Sets the activityStatusList attribute to be used in the Site Add/Edit Page.

@@ -297,8 +297,8 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 			throw new DAOException(ApplicationProperties.getValue("spg.clinicalDiagnosis.errMsg"));
 		}
 
-		NameValueBean undefinedVal = new NameValueBean(Constants.UNDEFINED,Constants.UNDEFINED);
-        List clinicalStatusList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_CLINICAL_STATUS,undefinedVal);
+//		NameValueBean undefinedVal = new NameValueBean(Constants.UNDEFINED,Constants.UNDEFINED);
+        List clinicalStatusList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_CLINICAL_STATUS,null);
         if(!Validator.isEnumeratedValue(clinicalStatusList,group.getClinicalStatus()))
 		{
 			throw new DAOException(ApplicationProperties.getValue("collectionProtocol.clinicalStatus.errMsg"));

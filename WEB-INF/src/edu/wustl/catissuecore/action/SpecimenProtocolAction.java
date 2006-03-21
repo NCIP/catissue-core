@@ -111,8 +111,8 @@ public class SpecimenProtocolAction  extends SecureAction
 	    	// set the map to subtype
 	    	request.setAttribute(Constants.SPECIMEN_TYPE_MAP, subTypeMap);
 	    	
-	    	NameValueBean undefinedVal = new NameValueBean(Constants.UNDEFINED,Constants.UNDEFINED);
-	    	List tissueSiteList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_TISSUE_SITE,undefinedVal);
+//	    	NameValueBean undefinedVal = new NameValueBean(Constants.UNDEFINED,Constants.UNDEFINED);
+	    	List tissueSiteList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_TISSUE_SITE,null);
 	    	request.setAttribute(Constants.TISSUE_SITE_LIST, tissueSiteList);
 	    	
 	    	List pathologyStatusList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_PATHOLOGICAL_STATUS,null);

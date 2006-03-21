@@ -50,13 +50,13 @@ public class SpecimenSearchAction extends AdvanceSearchUIAction
     	request.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
     	
     	//Setting Tissue Site list
-    	NameValueBean undefinedVal = new NameValueBean(Constants.UNDEFINED,Constants.UNDEFINED);
-    	List tissueSiteList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_TISSUE_SITE,undefinedVal);
+//    	NameValueBean undefinedVal = new NameValueBean(Constants.UNDEFINED,Constants.UNDEFINED);
+    	List tissueSiteList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_TISSUE_SITE,null);
     	request.setAttribute(Constants.TISSUE_SITE_LIST, tissueSiteList);
     	
     	//Setting Tissue Side list
-    	NameValueBean unknownVal = new NameValueBean(Constants.UNKNOWN,Constants.UNKNOWN);
-    	List tissueSideList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_TISSUE_SIDE,unknownVal);
+//    	NameValueBean unknownVal = new NameValueBean(Constants.UNKNOWN,Constants.UNKNOWN);
+    	List tissueSideList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_TISSUE_SIDE,null);
     	request.setAttribute(Constants.TISSUE_SIDE_LIST, tissueSideList);
         
     	//Setting Pathological Status list
