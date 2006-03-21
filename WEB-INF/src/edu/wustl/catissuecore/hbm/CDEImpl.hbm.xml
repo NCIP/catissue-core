@@ -55,7 +55,7 @@
             table="CATISSUE_PERMISSIBLE_VALUE"
             lazy="false"
             inverse="false"
-            cascade="none"
+            cascade="all-delete-orphan"
             sort="unsorted"
         >
 
@@ -67,6 +67,14 @@
                   class="edu.wustl.common.cde.PermissibleValueImpl"
               />
         </set>
+
+        <property
+            name="dateLastModified"
+            type="timestamp"
+            update="true"
+            insert="true"
+            column="LAST_UPDATED"
+        />
 
         <!--
             To add non XDoclet property mappings, create a file named

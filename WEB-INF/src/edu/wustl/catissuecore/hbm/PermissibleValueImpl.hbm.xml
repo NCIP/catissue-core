@@ -15,11 +15,12 @@
         <id
             name="identifier"
             column="IDENTIFIER"
-            type="string"
+            type="long"
             length="30"
             unsaved-value="null"
         >
-            <generator class="assigned">
+            <generator class="native">
+                <param name="sequence">CATISSUE_PERMISSIBLE_VALUE_SEQ</param>
             </generator>
         </id>
 
@@ -38,15 +39,6 @@
             update="true"
             insert="true"
             column="DEFINITION"
-            length="500"
-        />
-
-        <property
-            name="evscode"
-            type="string"
-            update="true"
-            insert="true"
-            column="EVS_CODE"
             length="500"
         />
 
