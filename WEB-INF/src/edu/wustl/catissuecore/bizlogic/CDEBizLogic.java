@@ -42,6 +42,11 @@ public class CDEBizLogic extends DefaultBizLogic implements TreeDataInterface
     protected void insert(Object obj,DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
     {
         CDEImpl cde = (CDEImpl) obj;
+        
+        //Delete the previous CDE data from the database.
+        delete(cde, dao);
+        
+        //Insert the new CDE data in teh database.
         dao.insert(cde, sessionDataBean, false,false);
         Iterator iterator = cde.getPermissibleValues().iterator();
         while (iterator.hasNext())
