@@ -11,6 +11,7 @@
 
 package edu.wustl.common.cde;
 
+import java.util.Date;
 import java.util.Set;
 
 /**
@@ -52,10 +53,15 @@ public class CDEImpl implements CDE
      * permissibleValues is the List of all the Permissible Values for the CDE. 
      * */
     private Set permissibleValues;
-
+    
+    /**
+     * TimeStamp showing the date when the CDE was last updated.  
+     */
+    private Date dateLastModified = new Date();
+    
     /**
      * getPublicId method returns the public id of the CDE.
-     * @returns PublicID as a String Object of the CDE.   
+     * @returns PublicID as a String Object of the CDE.
      * @hibernate.id name="publicId" column="PUBLIC_ID" type="string"
      * length="30" unsaved-value="null" generator-class="assigned"
      * */
@@ -63,7 +69,7 @@ public class CDEImpl implements CDE
     {
         return this.publicId;
     }
-
+    
     /**
      * setPublicId method is used for setting the publicId of the CDE. 
      * @param accepts a String object.     
@@ -133,7 +139,7 @@ public class CDEImpl implements CDE
     /**
      * getPermissibleValues method returns the Permissible Values of the CDE.
      * @returns List of the PermissibleValues of the CDE.   
-     * @hibernate.set name="permissibleValues" table="CATISSUE_PERMISSIBLE_VALUE"
+     * @hibernate.set name="permissibleValues" table="CATISSUE_PERMISSIBLE_VALUE" cascade="all-delete-orphan"
      * @hibernate.collection-key column="PUBLIC_ID"
      * @hibernate.collection-one-to-many class="edu.wustl.common.cde.PermissibleValueImpl"
      * */
@@ -192,5 +198,24 @@ public class CDEImpl implements CDE
     public void setPreferredName(String preferredname)
     {
         this.preferredName = preferredname;
+    }
+    
+    /**
+     * Returns the date when the CDE was last updated.
+     * @return the date when the CDE was last updated.
+     * @hibernate.property name="dateLastModified" type="timestamp" column="LAST_UPDATED"
+     */
+    public Date getDateLastModified()
+    {
+        return dateLastModified;
+    }
+    
+    /**
+     * Sets the date when the CDE was last updated.
+     * @param dateLastModified the date when the CDE was last updated.
+     */
+    public void setDateLastModified(Date dateLastModified)
+    {
+        this.dateLastModified = dateLastModified;
     }
 }
