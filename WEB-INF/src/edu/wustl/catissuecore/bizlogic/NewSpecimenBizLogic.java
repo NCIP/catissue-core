@@ -647,16 +647,16 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		{
 			if(specimen.getSpecimenCollectionGroup() != null)
 			{
-				NameValueBean undefinedVal = new NameValueBean(Constants.UNDEFINED,Constants.UNDEFINED);
-		    	List tissueSiteList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_TISSUE_SITE,undefinedVal);
+//				NameValueBean undefinedVal = new NameValueBean(Constants.UNDEFINED,Constants.UNDEFINED);
+		    	List tissueSiteList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_TISSUE_SITE,null);
 				
 		    	if(!Validator.isEnumeratedValue(tissueSiteList,characters.getTissueSite()))
 				{
 					throw new DAOException(ApplicationProperties.getValue("protocol.tissueSite.errMsg"));
 				}
 				
-		    	NameValueBean unknownVal = new NameValueBean(Constants.UNKNOWN,Constants.UNKNOWN);
-		    	List tissueSideList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_TISSUE_SIDE,unknownVal);
+//		    	NameValueBean unknownVal = new NameValueBean(Constants.UNKNOWN,Constants.UNKNOWN);
+		    	List tissueSideList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_TISSUE_SIDE,null);
 	
 				if(!Validator.isEnumeratedValue(tissueSideList,characters.getTissueSide()))
 				{
