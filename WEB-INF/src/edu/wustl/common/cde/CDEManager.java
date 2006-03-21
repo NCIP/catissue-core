@@ -130,19 +130,22 @@ public class CDEManager
 		
 		CDE cde = getCDE(cdeName);
 		
-		Iterator iterator = cde.getPermissibleValues().iterator();
-		while(iterator.hasNext())
+		if(cde!=null)
 		{
-			PermissibleValue permissibleValue = (PermissibleValue)iterator.next();
-			List pvList = loadPermissibleValue(permissibleValue);
-			list.addAll(pvList);
+			Iterator iterator = cde.getPermissibleValues().iterator();
+			while(iterator.hasNext())
+			{
+				PermissibleValue permissibleValue = (PermissibleValue)iterator.next();
+				List pvList = loadPermissibleValue(permissibleValue);
+				list.addAll(pvList);
+			}
 		}
 		
 		Collections.sort(list);
 		
 		list.add(0,new NameValueBean(Constants.SELECT_OPTION,"-1"));
-		if(otherValue!=null)
-			list.add(1,otherValue);
+//		if(otherValue!=null)
+//			list.add(1,otherValue);
 		
 		return list;
 	}

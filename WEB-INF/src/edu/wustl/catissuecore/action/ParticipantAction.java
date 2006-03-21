@@ -26,7 +26,6 @@ import edu.wustl.catissuecore.bizlogic.ParticipantBizLogic;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
-import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.logger.Logger;
@@ -70,16 +69,16 @@ public class ParticipantAction extends SecureAction
         request.setAttribute(Constants.GENDER_LIST, genderList);
         
         //Sets the genotypeList attribute to be used in the Add/Edit Participant Page.
-        NameValueBean unknownVal = new NameValueBean(Constants.UNKNOWN,Constants.UNKNOWN);
-        List genotypeList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_GENOTYPE,unknownVal);
+        //NameValueBean unknownVal = new NameValueBean(Constants.UNKNOWN,Constants.UNKNOWN);
+        List genotypeList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_GENOTYPE,null);
         request.setAttribute(Constants.GENOTYPE_LIST, genotypeList);
         
         //Sets the ethnicityList attribute to be used in the Add/Edit Participant Page.
-        List ethnicityList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_ETHNICITY,unknownVal);
+        List ethnicityList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_ETHNICITY,null);
         request.setAttribute(Constants.ETHNICITY_LIST, ethnicityList);
   
         //Sets the raceList attribute to be used in the Add/Edit Participant Page.
-        List raceList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_RACE,unknownVal);
+        List raceList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_RACE,null);
         request.setAttribute(Constants.RACELIST, raceList);
         
         //Sets the activityStatusList attribute to be used in the Site Add/Edit Page.

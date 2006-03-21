@@ -25,7 +25,6 @@ import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.vo.AdvanceSearchUI;
 import edu.wustl.catissuecore.vo.SearchFieldData;
-import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.util.logger.Logger;
 
@@ -44,16 +43,16 @@ public class ParticipantSearchAction extends AdvanceSearchUIAction
         request.setAttribute(Constants.GENDER_LIST, genderList);
         
         //Sets the genotypeList attribute to be used in the Participant Advance Search Page.
-        NameValueBean unknownVal = new NameValueBean(Constants.UNKNOWN,Constants.UNKNOWN);
-        List genotypeList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_GENOTYPE,unknownVal);
+        //NameValueBean unknownVal = new NameValueBean(Constants.UNKNOWN,Constants.UNKNOWN);
+        List genotypeList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_GENOTYPE,null);
         request.setAttribute(Constants.GENOTYPE_LIST, genotypeList);
         
         //Sets the ethnicityList attribute to be used in the Participant Advance Search Page.
-        List ethnicityList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_ETHNICITY,unknownVal);
+        List ethnicityList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_ETHNICITY,null);
         request.setAttribute(Constants.ETHNICITY_LIST, ethnicityList);
   
         //Sets the raceList attribute to be used in the Participant Advance Search Page.
-        List raceList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_RACE,unknownVal);
+        List raceList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_RACE,null);
         request.setAttribute(Constants.RACELIST, raceList);
         
     	//Set the selected node from the query tree

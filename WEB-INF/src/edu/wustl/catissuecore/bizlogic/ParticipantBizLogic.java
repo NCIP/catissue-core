@@ -22,7 +22,6 @@ import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
-import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.security.SecurityManager;
@@ -179,20 +178,20 @@ public class ParticipantBizLogic extends DefaultBizLogic
 			throw new DAOException(ApplicationProperties.getValue("participant.gender.errMsg"));
 		}
 
-        NameValueBean unknownVal = new NameValueBean(Constants.UNKNOWN,Constants.UNKNOWN);
-        List genotypeList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_GENOTYPE,unknownVal);
+//        NameValueBean unknownVal = new NameValueBean(Constants.UNKNOWN,Constants.UNKNOWN);
+        List genotypeList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_GENOTYPE,null);
         if(!Validator.isEnumeratedOrNullValue(genotypeList,participant.getSexGenotype()))
 		{
 			throw new DAOException(ApplicationProperties.getValue("participant.genotype.errMsg"));
 		}
         
-        List raceList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_RACE,unknownVal);
+        List raceList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_RACE,null);
         if(!Validator.isEnumeratedOrNullValue(raceList,participant.getRace()))
 		{
 			throw new DAOException(ApplicationProperties.getValue("participant.race.errMsg"));
 		}
 
-        List ethnicityList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_ETHNICITY,unknownVal);
+        List ethnicityList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_ETHNICITY,null);
         if(!Validator.isEnumeratedOrNullValue(ethnicityList,participant.getEthnicity()))
 		{
 			throw new DAOException(ApplicationProperties.getValue("participant.ethnicity.errMsg"));
