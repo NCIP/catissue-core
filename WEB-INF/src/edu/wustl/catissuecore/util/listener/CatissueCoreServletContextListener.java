@@ -27,6 +27,7 @@ import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.ProtectionGroups;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;
+import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.util.Permissions;
 import edu.wustl.common.util.dbManager.HibernateMetaData;
 import edu.wustl.common.util.global.ApplicationProperties;
@@ -37,11 +38,9 @@ import edu.wustl.common.util.logger.Logger;
  * @author aarti_sharma
  * 
  * */
-public class CatissueCoreServletContextListener
-        implements
-            ServletContextListener, ProtectionGroups, Permissions
+public class CatissueCoreServletContextListener implements 
+						ServletContextListener, ProtectionGroups, Permissions
 {
-
     /* (non-Javadoc)
      * @see javax.servlet.ServletContextListener#contextInitialized(javax.servlet.ServletContextEvent)
      */
@@ -50,33 +49,22 @@ public class CatissueCoreServletContextListener
         /**
          * Getting Application Properties file path
          */
-        String applicationResourcesPath = sce.getServletContext().getRealPath(
-                "WEB-INF")
+        String applicationResourcesPath = sce.getServletContext().getRealPath("WEB-INF")
                 + System.getProperty("file.separator")
-                + "classes"
-                + System.getProperty("file.separator")
-                + sce.getServletContext().getInitParameter(
-                        "applicationproperties");
-        
-        
+                + "classes" + System.getProperty("file.separator")
+                + sce.getServletContext().getInitParameter("applicationproperties");
         
         /**
          * Initializing ApplicationProperties with the class 
          * corresponding to resource bundle of the application
          */
-        ApplicationProperties.initBundle(sce.getServletContext()
-                .getInitParameter("resourcebundleclass"));
+        ApplicationProperties.initBundle(sce.getServletContext().getInitParameter("resourcebundleclass"));
         
         /**
          * Getting and storing Home path for the application
          */
         Variables.catissueHome = sce.getServletContext().getRealPath("");
 
-//        HibernateProperties.initBundle(Variables.catissueHome +
-//        			System.getProperty("file.separator") + "db.properties");
-//
-//        String str = HibernateProperties.getValue("hibernate.connection.driver_class");
-        
         /**
          * Creating Logs Folder inside catissue home
          */
@@ -94,7 +82,6 @@ public class CatissueCoreServletContextListener
         {
             ;
         }
-        
         
         //All users should be able to view all data by default
         Map protectionGroupsForObjectTypes = new HashMap();
@@ -154,101 +141,6 @@ public class CatissueCoreServletContextListener
         
         try
         {
-//        	Logger.out.debug("hibernate.connection.driver_class "+str);
-        	
-            /*Logger.out
-                    .debug("Create Perm to aarti on edu.wustl.catissuecore.domain.CollectionProtocol_37 "
-                            + Boolean
-                                    .toString(SecurityManager
-                                            .getInstance(this.getClass())
-                                            .isAuthorized(
-                                                    "aarti",
-                                                    "edu.wustl.catissuecore.domain.CollectionProtocol_37",
-                                                    UPDATE)));
-            Logger.out
-            .debug("CREATE Perm to admin on edu.wustl.catissuecore.domain.CollectionProtocol_37 "
-                    + Boolean
-                            .toString(SecurityManager
-                                    .getInstance(this.getClass())
-                                    .isAuthorized(
-                                            "admin",
-                                            "edu.wustl.catissuecore.domain.CollectionProtocol_37",
-                                            UPDATE)));
-            Logger.out
-            .debug("CREATE Perm to aarti on edu.wustl.catissuecore.domain.CollectionProtocolEvent_28 "
-                    + Boolean
-                            .toString(SecurityManager
-                                    .getInstance(this.getClass())
-                                    .isAuthorized(
-                                            "aarti",
-                                            "edu.wustl.catissuecore.domain.CollectionProtocolEvent_28",
-                                            UPDATE)));
-            
-            Logger.out
-            .debug("CREATE Perm to admin on edu.wustl.catissuecore.domain.CollectionProtocolEvent_28"
-                    + Boolean
-                            .toString(SecurityManager
-                                    .getInstance(this.getClass())
-                                    .isAuthorized(
-                                            "admin",
-                                            "edu.wustl.catissuecore.domain.CollectionProtocolEvent_28",
-                                            UPDATE)));*/
-        	
-        	
-//        	UserBizLogic userBizLogic = new UserBizLogic();
-//        	List list = userBizLogic.retrieve(User.class.getName());
-//        	User user;
-//        	for(int i=0; i<list.size();i++)
-//        	{
-//        	    user = (User) list.get(i);
-//        	    if(user!=null)
-//        	    {
-//        	        Set protectionObjects=new HashSet();
-//                    protectionObjects.add(user);
-//            	    try
-//                    {
-//                        SecurityManager.getInstance(this.getClass()).insertAuthorizationData(userBizLogic.getAuthorizationData(user),protectionObjects,null);
-//                    }
-//                    catch (SMException e)
-//                    {
-//                        Logger.out.error("Exception in Authorization: "+e.getMessage(),e);
-//                    }
-//        	    }
-//        	}
-        	
-//        	Logger.out
-//            .debug("edu.wustl.catissuecore.domain.Participant_5"
-//                    + Boolean
-//                            .toString(SecurityManager
-//                                    .getInstance(this.getClass())
-//                                    .isAuthorized(
-//                                            "sharma.aarti@gmail.com",
-//                                            "edu.wustl.catissuecore.domain.Participant_5",
-//                                            READ)));
-//        	
-//        	AbstractBizLogic bizLogic = BizLogicFactory.getBizLogic(Constants.PARTICIPANT_FORM_ID);
-////        	bizLogic.setPrivilege(Constants.HIBERNATE_DAO,READ,Participant.class,new Long[] {new Long(5)},new Long(29),null, null, true);
-//        	SecurityManager.getInstance(this.getClass()).deAssignPrivilegeToUser("READ",Participant.class,new Long[] {new Long(5)},new Long(29));
-//        	Logger.out
-//            .debug("After edu.wustl.catissuecore.domain.Participant_5 "
-//                    + Boolean
-//                            .toString(SecurityManager
-//                                    .getInstance(this.getClass())
-//                                    .isAuthorized(
-//                                            "sharma.aarti@gmail.com",
-//                                            "edu.wustl.catissuecore.domain.Participant_5",
-//                                            READ)));
-        	
-//        	ProtectionElement protectionElement = new ProtectionElement();
-//        	protectionElement.setObjectId("edu.wustl.catissuecore.domain.Participant_*");
-//        	ProtectionElementSearchCriteria protectionElementSearchCriteria = new ProtectionElementSearchCriteria(protectionElement);
-//        	List list = SecurityManager.getInstance(this.getClass()).getObjects(protectionElementSearchCriteria);
-//        	for(int i = 0; i<list.size(); i++)
-//        	{
-//        		protectionElement = (ProtectionElement) list.get(i);
-//        		Logger.out.debug(protectionElement.getObjectId());
-//        	}
-        	
 //        	 get database name and set variables used in query 
             Variables.databaseName=HibernateMetaData.getDataBaseName();
             if(Variables.databaseName.equals(Constants.ORACLE_DATABASE))
@@ -277,6 +169,17 @@ public class CatissueCoreServletContextListener
             e1.printStackTrace();
         }  
         
+        //Initialize CDE Manager
+        try
+		{
+        	CDEManager.init();
+		}
+        catch(Exception ex)
+		{
+        	Logger.out.error("Could not initialized application, Error in creating CDE manager.");
+        	Logger.out.error(ex.getMessage(), ex);
+        	
+		}
     }
 
     /* (non-Javadoc)
@@ -286,5 +189,4 @@ public class CatissueCoreServletContextListener
     {
 
     }
-
 }
