@@ -43,7 +43,15 @@ public abstract class AbstractBizLogic
      * @throws DAOException
      * @throws UserNotAuthorizedException TODO
      */
-    protected abstract void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException;    
+    protected abstract void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException;
+    
+    /**
+     * Deletes an object from the database.
+     * @param obj The object to be deleted.
+     * @throws DAOException
+     * @throws UserNotAuthorizedException TODO
+     */
+    protected abstract void delete(Object obj, DAO dao) throws DAOException, UserNotAuthorizedException;
 
     /**
      * Updates an objects into the database.
@@ -97,6 +105,55 @@ public abstract class AbstractBizLogic
     
     public abstract List getList(String sourceObjectName, String[] displayNameFields, String valueField, boolean isToExcludeDisabled) 
     			throws DAOException;
+    
+    /**
+     * Deletes an object from the database.
+     * @param obj The object to be deleted.
+     * @throws DAOException
+     * @throws UserNotAuthorizedException TODO
+     * @throws BizLogicException
+     */
+    public void delete(Object obj, int daoType) throws UserNotAuthorizedException, BizLogicException
+    {
+        AbstractDAO dao = DAOFactory.getDAO(daoType);
+		try
+		{
+	        dao.openSession(null);
+	        delete(obj, dao);
+	        dao.commit();
+		}
+		catch(DAOException ex)
+		{
+			
+			String errMsg=formatException(ex.getWrapException(),obj,"Deleting");
+			if(errMsg==null)
+			{
+				errMsg=ex.getMessage();
+			}
+			try
+			{
+				dao.rollback();
+			}
+			catch(DAOException daoEx)
+			{
+				throw new BizLogicException(daoEx.getMessage(), daoEx);
+			}
+			Logger.out.debug("Error in delete");
+			throw new BizLogicException(errMsg, ex);
+		}
+		finally
+		{
+			try
+			{
+				dao.closeSession();
+			}
+			catch(DAOException daoEx)
+			{
+				//TODO ERROR Handling
+				throw new BizLogicException();
+			}
+		}
+    }
     
     public final void insert(Object obj,SessionDataBean sessionDataBean, int daoType) throws BizLogicException, UserNotAuthorizedException
 	{

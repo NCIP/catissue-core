@@ -54,6 +54,19 @@ public class  DefaultBizLogic extends AbstractBizLogic
         dao.insert(obj,sessionDataBean, true, true);
     }
     
+    
+    /**
+     * Deletes an object from the database.
+     * @param obj The object to be deleted.
+     * @throws DAOException
+     * @throws UserNotAuthorizedException TODO
+     */
+    protected void delete(Object obj, DAO dao) throws DAOException,
+            UserNotAuthorizedException
+    {
+        //dao.delete(obj);
+    }
+    
     /**
      * Updates an objects into the database.
      * @param obj The object to be updated into the database. 
