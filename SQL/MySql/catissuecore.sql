@@ -139,10 +139,9 @@ create table CATISSUE_COLL_COORDINATORS (
    primary key (COLLECTION_PROTOCOL_ID, USER_ID)
 );
 create table CATISSUE_PERMISSIBLE_VALUE (
-   IDENTIFIER varchar(30) not null,
-   CONCEPT_CODE varchar(20),
+   IDENTIFIER bigint not null auto_increment,
+   CONCEPT_CODE varchar(40),
    DEFINITION text,
-   EVS_CODE text,
    PARENT_IDENTIFIER varchar(30),
    VALUE varchar(100),
    PUBLIC_ID varchar(30),
@@ -242,6 +241,7 @@ create table CATISSUE_CDE (
    LONG_NAME varchar(200),
    DEFINITION text,
    VERSION varchar(50),
+   LAST_UPDATED date,
    primary key (PUBLIC_ID)
 );
 create table CATISSUE_SPECIMEN_REQUIREMENT (

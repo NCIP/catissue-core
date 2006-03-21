@@ -156,6 +156,7 @@ drop sequence CATISSUE_SPECIMEN_REQ_SEQ;
 drop sequence CATISSUE_CLINICAL_REPORT_SEQ;
 drop sequence CATISSUE_SPECIMEN_COLL_GRP_SEQ;
 drop sequence CATISSUE_SPECIMEN_SEQ;
+drop sequence CATISSUE_PERMISSIBLE_VALUE_SEQ;
 create table CATISSUE_INTERFACE_COLUMN_DATA (
    IDENTIFIER number(19,0) not null,
    TABLE_ID number(19,0),
@@ -169,10 +170,9 @@ create table CATISSUE_COLL_COORDINATORS (
    primary key (COLLECTION_PROTOCOL_ID, USER_ID)
 );
 create table CATISSUE_PERMISSIBLE_VALUE (
-   IDENTIFIER varchar2(30) not null,
-   CONCEPT_CODE varchar2(20),
+   IDENTIFIER number(19,0) not null,
+   CONCEPT_CODE varchar2(40),
    DEFINITION varchar2(500),
-   EVS_CODE varchar2(500),
    PARENT_IDENTIFIER varchar2(30),
    VALUE varchar2(100),
    PUBLIC_ID varchar2(30),
@@ -272,6 +272,7 @@ create table CATISSUE_CDE (
    LONG_NAME varchar2(200),
    DEFINITION varchar2(500),
    VERSION varchar2(50),
+   LAST_UPDATED date,
    primary key (PUBLIC_ID)
 );
 create table CATISSUE_SPECIMEN_REQUIREMENT (
@@ -688,5 +689,6 @@ create sequence CATISSUE_SPECIMEN_REQ_SEQ;
 create sequence CATISSUE_CLINICAL_REPORT_SEQ;
 create sequence CATISSUE_SPECIMEN_COLL_GRP_SEQ;
 create sequence CATISSUE_SPECIMEN_SEQ;
+create sequence CATISSUE_PERMISSIBLE_VALUE_SEQ;
 ALTER TABLE CATISSUE_COLL_SPECIMEN_REQ ADD(IDENTIFIER number(20));
 ALTER TABLE CATISSUE_DISTRIBUTION_SPE_REQ ADD(IDENTIFIER number(20));
