@@ -27,66 +27,80 @@ import edu.wustl.common.util.global.Variables;
 import edu.wustl.common.util.logger.Logger;
 
 /**@author kapil_kaveeshwar
- *  This is a communication link between the caTISSUE Core Application and the caDSR interface. */
+ *  This is a communication link between the caTISSUE Core Application and the caDSR interface. 
+ * */
 public class CDEManager 
 {
-	public static CDEManager cdeManager = new CDEManager();
+	public static CDEManager cdeManager;
+	
+	public static void init() throws Exception
+	{
+	    Logger.out.debug("Initializing CDE Manager");
+		//Singleton instance of CDEManager 
+		cdeManager = new CDEManager();
+		//cdeManager.loadCDEInMemory();
+		cdeManager.refreshCache();
+	}
 	
 	public static CDEManager getCDEManager()
 	{
 		return cdeManager;
 	}
 	
+	//A map between CDE name to its XML Object
+	private Map cdeXMLMAP;
 	
-	
-	private Map cdeXMLMAP; 
 	private CDEHandler cdeHandler;
-	private CDEManager()
+	
+	private CDEManager() throws Exception
 	{
 		cdeXMLMAP = new HashMap();
-		
 		try
 		{
             // create a JAXBContext capable of handling classes generated into
             // the pspl.cde package
-            JAXBContext jc = JAXBContext.newInstance( "edu.wustl.common.cde.xml" );
+            JAXBContext jc = JAXBContext.newInstance("edu.wustl.common.cde.xml");
             
             // create an Unmarshaller
             Unmarshaller u = jc.createUnmarshaller();
             
             // unmarshal a root instance document into a tree of Java content
             // objects composed of classes from the pspl.cde package.
-//            Variables.catissueHome = System.getProperty("user.dir");
-//            File file = new File(Variables.catissueHome+System.getProperty("file.separator")+Constants.CDE_CONF_FILE);
-//            System.out.println(file.getAbsoluteFile());
             XMLCDECACHE root = 
-                (XMLCDECACHE)u.unmarshal( new FileInputStream( Variables.catissueHome+System.getProperty("file.separator")+Constants.CDE_CONF_FILE));
-                
+                (XMLCDECACHE)u.unmarshal(new FileInputStream(Variables.catissueHome+
+                		System.getProperty("file.separator")+ Constants.CDE_CONF_FILE));
+            
             // display the cde details
 			List xmlCDEList = root.getXMLCDE();
 			Iterator iterator = xmlCDEList.iterator();
 			while(iterator.hasNext())
 			{
-				XMLCDE cdeobj = (XMLCDE)iterator.next();
-				cdeXMLMAP.put(cdeobj.getName(),cdeobj);
+				XMLCDE xmlCDEObj = (XMLCDE)iterator.next();
+				Logger.out.debug("Reading XML CDE Name : "+xmlCDEObj.getName());
+				cdeXMLMAP.put(xmlCDEObj.getName(),xmlCDEObj);
 			}
+			cdeHandler = new CDEHandler(cdeXMLMAP);
         }
-		catch( JAXBException je )
+		catch( JAXBException je)
 		{
-            je.printStackTrace();
+			Logger.out.error(je.getMessage(), je);
+			throw new Exception("Could not read the" +Constants.CDE_CONF_FILE +" XML file : "+je.getMessage());
         }
 		catch( IOException ioe )
 		{
-            ioe.printStackTrace();
+			Logger.out.error(ioe.getMessage(), ioe);
+			throw new Exception("Could not read the" +Constants.CDE_CONF_FILE +" XML file IO Error : "+ioe.getMessage());
         }
-		cdeHandler = new CDEHandler(cdeXMLMAP);
 	}
 	
-	/** Retrieves live CDEs from the caDSR and updates the database cache. */
-	public void refreshCache()
+	/**
+	 * Retrieves live CDEs from the caDSR and updates the database cache. 
+	 */
+	public void refreshCache() throws Exception
 	{
 		CDECacheManager cdeCacheManager = new CDECacheManager();
 		cdeCacheManager.refresh(cdeXMLMAP);
+		loadCDEInMemory();
 	}
 	
 	/**
@@ -96,30 +110,18 @@ public class CDEManager
 	 * the application level as well as individual CDE level. In lazy loading,
 	 * required CDE’s will be loaded in-memory in first call to that CDE.
 	 */
-	public void loadCDEInMemory()
+	private void loadCDEInMemory() throws Exception
 	{
+		Logger.out.debug("Loading the CDEs in in memory");
 		cdeHandler.loadCDE();
 	 }
 	
 	/** 
 	 * Returns CDE for given CDE Name. 
 	 * */
-	public CDE getCDE(String CDEName)
+	public CDE getCDE(String CDEName) 
 	{
 		return cdeHandler.retrieve(CDEName);
-	}
-	
-	public static void main(String[] args)
-	{
-		Variables.catissueHome = System.getProperty("user.dir");
-		System.out.println(Variables.catissueHome);
-		Logger.configure("Application.properties");
-//		Logger.out = org.apache.log4j.Logger.getLogger("");
-//		PropertyConfigurator.configure(Variables.catissueHome+"\\WEB-INF\\src\\"+"ApplicationResources.properties");
-
-		CDEManager.getCDEManager().getSubValueStr("Tissue Site", "STOMACH");
-//		CDEManager aCDEManager = new CDEManager();
-//		aCDEManager.refreshCache();
 	}
 	
 	public List getList(String cdeName, NameValueBean otherValue)
@@ -161,10 +163,6 @@ public class CDEManager
 		}
 		return pvList;
 	}
-	
-	
-	
-	
 	
 	public String getSubValueStr(String cdeName, String value)
 	{
@@ -228,9 +226,6 @@ public class CDEManager
 		{
 			PermissibleValue subPermissibleValue = (PermissibleValue)iterator.next();
 			
-//			List subPVList = loadPermissibleValue(subPermissibleValue, isParentFound);
-//			pvList.addAll(subPVList);
-			
 			if(!isParentFound)
 			{
 				if(value.equals(subPermissibleValue.getValue()))
@@ -259,5 +254,17 @@ public class CDEManager
 			}
 		}
 		return pvList;
+	}
+	
+	public static void main(String[] args)
+	{
+		Variables.catissueHome = System.getProperty("user.dir");
+		Logger.configure("Application.properties");
+//		Logger.out = org.apache.log4j.Logger.getLogger("");
+//		PropertyConfigurator.configure(Variables.catissueHome+"\\WEB-INF\\src\\"+"ApplicationResources.properties");
+
+		CDEManager.getCDEManager().getSubValueStr("Tissue Site", "STOMACH");
+//		CDEManager aCDEManager = new CDEManager();
+//		aCDEManager.refreshCache();
 	}
 }
