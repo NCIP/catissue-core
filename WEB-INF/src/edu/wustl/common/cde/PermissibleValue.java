@@ -1,4 +1,4 @@
-/*
+/**
  * Created on May 26, 2005
  *
  * Title : PermissibleValue Interface</p>
@@ -24,36 +24,49 @@ import java.util.Set;
 public interface PermissibleValue 
 {
 
-	/**
-	 * This method is used to get the conceptid of the PermissibleValue 
-	 * @return returns a String object that contains the conceptid of the PermissibleValue 
-	 */	
-	String getConceptid();
+    /**
+     * getIdentifier method returns the unique id associated with the
+     * PermissibleValue
+     * @return Returns the identifier.
+     */
+    public Long getIdentifier();
+    
+    /**
+     * getConceptid method returns the concept id associated with the
+     * PermissibleValue
+     * @return Returns the conceptid.
+     */
+    public String getConceptid();
 
-	/**
-	 * This method is used to get the Value of the PermissibleValue 
-	 * @return returns a String object that contains the Value of the PermissibleValue 
-	 */	
-	String getValue();
-	
-	/**
-	 * This method is used to get the defination of the PermissibleValue 
-	 * @return returns a String object that contains the defination of the PermissibleValue 
-	 */	
-	String getDefination();
-	
-	/**
-	 * This method is used to get the parent permissiblevalue of the PermissibleValue 
-	 * @return returns a PermissibleValue object that contains the parent permissiblevalue 
-	 * of the PermissibleValue 
-	 */	
-	PermissibleValue getParentPermissibleValue();
-	
-	/**
-	 * This method is used to get the sub or child permissiblevalues of the PermissibleValue 
-	 * @return returns a Set object that contains the sub permissible values 
-	 * of the PermissibleValue 
-	 */	
-	Set getSubPermissibleValues();
-	
-} // PermissibleValue interface
+    /**
+     * getDefiantion method returns the defination of the PermissibleValue
+     * @return Returns the defination.
+     */
+    public String getDefination();
+
+    /**
+     * getParentPermissibleValue method returns the Parent PermissibleValue node
+     * of the PermissibleValue
+     * @return Returns the parentPermissibleValue.
+     */
+    public PermissibleValue getParentPermissibleValue();
+
+    /**
+     * getSubPermissibleValues method returns a set of all the sub
+     * PermissibleValues of the PermissibleValue
+     * @return Returns the subPermissibleValues.
+     */
+    public Set getSubPermissibleValues();
+
+    /**
+     * getValue method returns the Value of the PermissibleValue
+     * @return Returns the value.
+     */
+    public String getValue();
+    
+    /**
+     * The CDE to which this permissible values belongs.
+     * @return Returns The CDE to which this permissible values belongs.
+     */
+    public CDE getCde();
+}

@@ -33,7 +33,7 @@ public class PermissibleValueImpl implements PermissibleValue
     /**
      * identifier is a unique id assigned to each PermissibleValue.
      */
-    private String identifier;
+    private Long identifier;
 
     /**
      * value is the value of the PermissibleValue object.
@@ -44,11 +44,6 @@ public class PermissibleValueImpl implements PermissibleValue
      * defination is the defination of the PermissibleValue.
      */
     private String defination;
-
-    /**
-     * evscode is the evs_code of the PermissibleValue.
-     */
-    private String evscode;
 
     /**
      * conceptid is the concept code of the PermissibleValue.
@@ -66,17 +61,18 @@ public class PermissibleValueImpl implements PermissibleValue
      * PermissibleValue.
      */
     private PermissibleValue parentPermissibleValue;
-
+    
     private CDE cde = new CDEImpl();
-
+    
     /**
      * getIdentifier method returns the unique id associated with the
      * PermissibleValue
      * @return Returns the identifier.
-     * @hibernate.id name="identifier" column="IDENTIFIER" type="string"
-     * length="30" unsaved-value="null" generator-class="assigned"
+     * @hibernate.id name="identifier" column="IDENTIFIER" type="long"
+     * length="30" unsaved-value="null" generator-class="native"
+     * @hibernate.generator-param name="sequence" value="CATISSUE_PERMISSIBLE_VALUE_SEQ"
      */
-    public String getIdentifier()
+    public Long getIdentifier()
     {
         return identifier;
     }
@@ -86,11 +82,11 @@ public class PermissibleValueImpl implements PermissibleValue
      * 
      * @param identifier The identifier to set.
      */
-    public void setIdentifier(String identifier)
+    public void setIdentifier(Long identifier)
     {
         this.identifier = identifier;
     }
-
+    
     /**
      * getConceptid method returns the concept id associated with the
      * PermissibleValue
@@ -135,29 +131,6 @@ public class PermissibleValueImpl implements PermissibleValue
     public void setDefination(String defination)
     {
         this.defination = defination;
-    }
-
-    /**
-     * getEvscode method returns the evs code associated with the
-     * PermissibleValue
-     * 
-     * @return Returns the evscode.
-     * @hibernate.property name="evscode" type="string" column="EVS_CODE" length="500"
-     */
-    public String getEvscode()
-    {
-        return evscode;
-    }
-
-    /**
-     * setEvscode method sets the evs code of the Permissible Value.
-     * 
-     * @param evscode
-     *            The evscode to set.
-     */
-    public void setEvscode(String evscode)
-    {
-        this.evscode = evscode;
     }
 
     /**
@@ -254,5 +227,37 @@ public class PermissibleValueImpl implements PermissibleValue
     public void setCde(CDE cde)
     {
         this.cde = cde;
+    }
+    
+    /* (non-Javadoc)
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    public boolean equals(Object obj)
+    {
+        boolean flag = false;
+        if (obj instanceof PermissibleValueImpl)
+        {
+            PermissibleValue permissibleValue = (PermissibleValue) obj;
+            //TODO
+            if (permissibleValue.getValue().equals(this.value))
+            {
+                flag = true;
+            }
+        }
+        
+        return flag;
+    }
+    
+    /* (non-Javadoc)
+     * @see java.lang.Object#hashCode()
+     */
+    public int hashCode()
+    {
+        int i = 0;
+        if (getConceptid() != null)
+        {
+            i = getConceptid().hashCode();
+        }
+        return i;
     }
 }
