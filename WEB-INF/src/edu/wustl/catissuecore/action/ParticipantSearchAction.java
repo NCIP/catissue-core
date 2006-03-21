@@ -39,12 +39,12 @@ public class ParticipantSearchAction extends AdvanceSearchUIAction
             HttpServletRequest request, HttpServletResponse response)
             throws Exception
     {
-    	NameValueBean unknownVal = new NameValueBean(Constants.UNKNOWN,Constants.UNKNOWN);
         //Sets the genderList attribute to be used in the Participant Advance Search Page.
-        List genderList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_GENDER,unknownVal);
+        List genderList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_GENDER,null);
         request.setAttribute(Constants.GENDER_LIST, genderList);
         
         //Sets the genotypeList attribute to be used in the Participant Advance Search Page.
+        NameValueBean unknownVal = new NameValueBean(Constants.UNKNOWN,Constants.UNKNOWN);
         List genotypeList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_GENOTYPE,unknownVal);
         request.setAttribute(Constants.GENOTYPE_LIST, genotypeList);
         

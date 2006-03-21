@@ -27,7 +27,6 @@ import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.vo.AdvanceSearchUI;
 import edu.wustl.catissuecore.vo.SearchFieldData;
-import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.util.logger.Logger;
 
 public class CollectionProtocolSearchAction extends AdvanceSearchUIAction
@@ -41,9 +40,7 @@ public class CollectionProtocolSearchAction extends AdvanceSearchUIAction
             throws Exception
     {
     	AdvanceSearchForm aForm = (AdvanceSearchForm)form;
-
-        NameValueBean unknownVal = new NameValueBean(Constants.UNKNOWN,Constants.UNKNOWN);
-        	
+    	
         //Sets the Principal Investigator attribute list
         UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getBizLogic(Constants.USER_FORM_ID);
         Collection coll =  userBizLogic.getUsers(request.getParameter(Constants.OPERATION));

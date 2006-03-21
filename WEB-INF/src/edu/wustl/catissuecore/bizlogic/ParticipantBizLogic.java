@@ -172,14 +172,14 @@ public class ParticipantBizLogic extends DefaultBizLogic
     {
 		Participant participant = (Participant)obj;
 		
-		NameValueBean unknownVal = new NameValueBean(Constants.UNKNOWN,Constants.UNKNOWN);
-        List genderList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_GENDER,unknownVal);
+        List genderList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_GENDER,null);
         
         if(!Validator.isEnumeratedOrNullValue(genderList,participant.getGender()))
 		{
 			throw new DAOException(ApplicationProperties.getValue("participant.gender.errMsg"));
 		}
 
+        NameValueBean unknownVal = new NameValueBean(Constants.UNKNOWN,Constants.UNKNOWN);
         List genotypeList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_GENOTYPE,unknownVal);
         if(!Validator.isEnumeratedOrNullValue(genotypeList,participant.getSexGenotype()))
 		{
