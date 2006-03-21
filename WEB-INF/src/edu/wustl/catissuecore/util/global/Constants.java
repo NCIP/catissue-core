@@ -912,7 +912,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String CDE_NAME_SITE_TYPE = "Site Type";
 	public static final String CDE_NAME_COUNTRY_LIST = "Countries";
 	public static final String CDE_NAME_STATE_LIST = "States";
-	
+	public static final String CDE_NAME_HISTOLOGICAL_QUALITY = "Histological Quality";
 	//Constants for Advanced Search
 	public static final String STRING_OPERATORS = "StringOperators";
 	public static final String DATE_NUMERIC_OPERATORS = "DateNumericOperators";
