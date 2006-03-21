@@ -92,12 +92,14 @@
 			{
 				unitSpecimen = "<%=Constants.UNIT_CC%>";
 				document.forms[0].unit.value = "<%=Constants.UNIT_CC%>";
-				subtype.options.length = 0;
-				subtype.options[0] = new Option('<%=Constants.SELECT_OPTION%>','<%=Constants.SELECT_OPTION%>');
+				typeChange(CellArray);
 				
-				subtype.disabled = true;
-				subtypeCombo.options[0].selected = true;
-				subtypeCombo.disabled = true;
+				//subtype.options.length = 0;
+				//subtype.options[0] = new Option('<%=Constants.SELECT_OPTION%>','<%=Constants.SELECT_OPTION%>');
+				
+				//subtype.disabled = true;
+				//subtypeCombo.options[0].selected = true;
+				//subtypeCombo.disabled = true;
 			}
 			else if(element.value == "Molecular")
 			{
@@ -394,7 +396,7 @@
 	
 	<%
 		String classValue = (String)specimenDataMap.get("Specimen:SPECIMEN_CLASS");
-		disabled = ((opValue != null && opValue.equals(Operator.NOT_EQUALS_CONDITION)) || (classValue != null && classValue.equals("Cell")));
+		disabled = (opValue != null && opValue.equals(Operator.NOT_EQUALS_CONDITION));
 	%>
 	
 	<td class="formField">
@@ -407,10 +409,10 @@
 		String opTypeValue = (String)specimenDataMap.get("Operator:Specimen:TYPE");
 		disabled = (opTypeValue == null || opTypeValue.equals(Constants.ANY) || opValue == null || opValue.equals(Operator.NOT_EQUALS_CONDITION));
 
-		if(!disabled)
+		/*if(!disabled)
 		{
 			disabled = (classValue != null && classValue.equals("Cell"));
-		}
+		}*/
 
 		List typesList = null;
 	%>
