@@ -11,6 +11,7 @@
 
 package edu.wustl.common.cde;
 
+import java.util.Date;
 import java.util.Set;
 
 /**
@@ -41,5 +42,12 @@ public interface CDE
     String getDefination();
     
     Set getPermissibleValues();
+    
+    /**
+     * Returns the date when the CDE was last updated.
+     * @return the date when the CDE was last updated.
+     * @hibernate.property name="dateLastModified" type="timestamp" column="LAST_UPDATED"
+     */
+    public Date getDateLastModified();
 
-} // cde interface
+}
