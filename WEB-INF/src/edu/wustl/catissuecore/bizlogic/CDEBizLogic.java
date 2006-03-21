@@ -26,7 +26,6 @@ import edu.wustl.common.cde.PermissibleValue;
 import edu.wustl.common.cde.PermissibleValueImpl;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
-import edu.wustl.common.util.logger.Logger;
 
 /**
  * @author gautam_shetty
@@ -44,19 +43,33 @@ public class CDEBizLogic extends DefaultBizLogic implements TreeDataInterface
     {
         CDEImpl cde = (CDEImpl) obj;
         dao.insert(cde, sessionDataBean, false,false);
-
         Iterator iterator = cde.getPermissibleValues().iterator();
         while (iterator.hasNext())
         {
-            PermissibleValueImpl permissibleValue = (PermissibleValueImpl) iterator
-                    .next();
-            permissibleValue.setCde(cde);
+            PermissibleValueImpl permissibleValue = (PermissibleValueImpl) iterator.next();
             dao.insert(permissibleValue, sessionDataBean, false,false);
+        }
+    }	
+    
+    /**
+     * Deletes the CDE and the corresponding permissible values from the database.
+     * @param obj the CDE to be deleted.
+     * @param dao the DAO object. 
+     */
+    protected void delete(Object obj, DAO dao) throws DAOException,
+            UserNotAuthorizedException
+    {
+        CDE cde = (CDE) obj;
+        List list = dao.retrieve(CDEImpl.class.getName(), "publicId", cde.getPublicId());
+        if (!list.isEmpty())
+        {
+            CDEImpl cde1 = (CDEImpl)list.get(0);
+            dao.delete(cde1);
         }
     }
     
-    
-    /* (non-Javadoc)
+    /**
+     * (non-Javadoc)
      * @see edu.wustl.catissuecore.bizlogic.TreeDataInterface#getTreeViewData()
      */
     public Vector getTreeViewData() throws DAOException
@@ -67,16 +80,16 @@ public class CDEBizLogic extends DefaultBizLogic implements TreeDataInterface
     
     public Vector getTreeViewData(String cdeName) throws DAOException
     {
-        Logger.out.debug("CDE BIZ LOGIC................................"+cdeName);
-//        if (cdeName.equals("TissueSite"))
-//            cdeName = "Tissue Site";
-        try{
-        cdeName = URLDecoder.decode(cdeName, "UTF-8");
+
+        try
+        {
+            cdeName = URLDecoder.decode(cdeName, "UTF-8");
         }catch(UnsupportedEncodingException encExp)
         {
+            throw new DAOException("Could not generate tree : CDE name not proper.");
         }
+        
         CDE cde = CDEManager.getCDEManager().getCDE(cdeName);
-//        CDE cde = CDEManager.getCDEManager().getCDE("Clinical Diagnosis");
         Set set = cde.getPermissibleValues();
         Vector vector = new Vector();
         Iterator iterator = set.iterator();
@@ -109,9 +122,9 @@ public class CDEBizLogic extends DefaultBizLogic implements TreeDataInterface
 	
 	private TissueSiteTreeNode getTissueSiteTreeNode(PermissibleValueImpl permissibleValueImpl)
 	{
-	    String id = permissibleValueImpl.getIdentifier();
+	    Long id = permissibleValueImpl.getIdentifier();
 	    String val = permissibleValueImpl.getValue();
-	    String parentId = null;
+	    Long parentId = null;
 	    
 	    if (permissibleValueImpl.getParentPermissibleValue() != null)
         {
@@ -120,10 +133,10 @@ public class CDEBizLogic extends DefaultBizLogic implements TreeDataInterface
             parentId = parentPermissibleValue.getIdentifier();
         }
 	    
-	    TissueSiteTreeNode treeNode = new TissueSiteTreeNode(id,val,parentId);
+	    TissueSiteTreeNode treeNode = new TissueSiteTreeNode(id.toString(),val,parentId.toString());
         return treeNode; 
 	}
-
+	
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.bizlogic.TreeDataInterface#getTreeViewData(edu.wustl.common.beans.SessionDataBean, java.util.Map)
 	 */
