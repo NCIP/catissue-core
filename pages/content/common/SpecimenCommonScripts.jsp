@@ -109,33 +109,30 @@
 			var unitSpecimen = "";
 			document.forms[0].concentration.disabled = true;
 			var subType = document.getElementById("type");
-			subType.disabled = true;
+			subType.disabled = false;
 			
 			if(element.value == "Tissue")
 			{
 				unitSpecimen = "<%=Constants.UNIT_GM%>";
 				document.forms[0].unit.value = "<%=Constants.UNIT_GM%>";
-				subType.disabled = false;
 				typeChange(TissueArray);
 			}
 			else if(element.value == "Fluid")
 			{
 				unitSpecimen = "<%=Constants.UNIT_ML%>";
 				document.forms[0].unit.value = "<%=Constants.UNIT_ML%>";
-				subType.disabled = false;
 				typeChange(FluidArray);
 			}
 			else if(element.value == "Cell")
 			{
 				unitSpecimen = "<%=Constants.UNIT_CC%>";
 				document.forms[0].unit.value = "<%=Constants.UNIT_CC%>";
+				typeChange(CellArray);
 			}
 			else if(element.value == "Molecular")
 			{
 				unitSpecimen = "<%=Constants.UNIT_MG%>";
 				document.forms[0].unit.value = "<%=Constants.UNIT_MG%>";
-				document.forms[0].concentration.disabled = false;
-				subType.disabled = false;
 				typeChange(MolecularArray);
 			}
 			unit.innerHTML = unitSpecimen;
