@@ -138,7 +138,11 @@ public class CDEBizLogic extends DefaultBizLogic implements TreeDataInterface
             parentId = parentPermissibleValue.getIdentifier();
         }
 	    
-	    TissueSiteTreeNode treeNode = new TissueSiteTreeNode(id.toString(),val,parentId.toString());
+	    String parentIdStr = null;
+	    if(parentId!=null)
+	    	parentIdStr = parentId.toString();
+	    
+	    TissueSiteTreeNode treeNode = new TissueSiteTreeNode(id.toString(),val,parentIdStr);
         return treeNode; 
 	}
 	
