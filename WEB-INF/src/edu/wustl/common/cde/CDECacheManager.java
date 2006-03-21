@@ -77,7 +77,6 @@ public class CDECacheManager
             CDE cde = (CDE) iterator.next();
             try
             {
-                cdeBizLogic.delete(cde, Constants.HIBERNATE_DAO);
                 cdeBizLogic.insert(cde, null, Constants.HIBERNATE_DAO);
             }
             catch (UserNotAuthorizedException userNotAuthExp)
