@@ -10,9 +10,12 @@
 
 package edu.wustl.catissuecore.action;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.cde.CDEManager;
 
 
 /**
@@ -25,6 +28,7 @@ public class TissueSpecimenReviewEventParametersAction extends SpecimenEventPara
 	protected void setRequestParameters(HttpServletRequest request) throws Exception
 	{
 //		set array of histological quality
-		request.setAttribute(Constants.HISTOLOGICAL_QUALITY_LIST , Constants.HISTOLOGICAL_QUALITY_ARRAY );
+		List histologicalQualityList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_HISTOLOGICAL_QUALITY,null);
+		request.setAttribute(Constants.HISTOLOGICAL_QUALITY_LIST , histologicalQualityList);
 	}
 }

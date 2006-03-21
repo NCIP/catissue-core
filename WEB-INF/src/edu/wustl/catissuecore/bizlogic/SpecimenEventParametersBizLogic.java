@@ -204,7 +204,8 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 			
 			case Constants.TISSUE_SPECIMEN_REVIEW_EVENT_PARAMETERS_FORM_ID:
 				String histQuality = ((TissueSpecimenReviewEventParameters)eventParameter).getHistologicalQuality();
-				if(!Validator.isEnumeratedOrNullValue(Constants.HISTOLOGICAL_QUALITY_ARRAY,histQuality))
+				List histologicalQualityList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_HISTOLOGICAL_QUALITY,null);
+				if(!Validator.isEnumeratedOrNullValue(histologicalQualityList,histQuality))
 				{
 					throw new DAOException(ApplicationProperties.getValue("events.histologicalQuality.errMsg"));
 				}
