@@ -219,14 +219,7 @@ public class DistributionProtocolBizLogic extends DefaultBizLogic implements Rol
 						throw new DAOException(ApplicationProperties.getValue("protocol.class.errMsg"));
 					}
 
-					if(specimenClass.equals(Constants.CELL))
-			    	{
-			    		if(requirement.getSpecimenType() != null)
-			    		{
-			    			throw new DAOException(ApplicationProperties.getValue("protocol.type.errMsg"));
-			    		}
-			    	}
-					else if(!Validator.isEnumeratedValue(Utility.getSpecimenTypes(specimenClass),requirement.getSpecimenType()))
+					if(!Validator.isEnumeratedValue(Utility.getSpecimenTypes(specimenClass),requirement.getSpecimenType()))
 					{
 						throw new DAOException(ApplicationProperties.getValue("protocol.type.errMsg"));
 					}

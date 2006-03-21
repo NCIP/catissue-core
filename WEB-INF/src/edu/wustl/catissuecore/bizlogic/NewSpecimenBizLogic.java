@@ -624,14 +624,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			throw new DAOException(ApplicationProperties.getValue("protocol.class.errMsg"));
 		}
 		
-    	if(specimenClass.equals(Constants.CELL))
-    	{
-    		if(specimen.getType() != null)
-    		{
-    			throw new DAOException(ApplicationProperties.getValue("protocol.type.errMsg"));
-    		}
-    	}
-		else if(!Validator.isEnumeratedValue(Utility.getSpecimenTypes(specimenClass),specimen.getType()))
+    	if(!Validator.isEnumeratedValue(Utility.getSpecimenTypes(specimenClass),specimen.getType()))
 		{
 			throw new DAOException(ApplicationProperties.getValue("protocol.type.errMsg"));
 		}
