@@ -190,7 +190,7 @@
 			</td>
 			<td class="formField">
 				<html:select property="histologicalQuality" styleClass="formFieldSized" styleId="histologicalQuality" size="1">
-					<html:options name="<%=Constants.HISTOLOGICAL_QUALITY_LIST%>" labelName="<%=Constants.HISTOLOGICAL_QUALITY_LIST%>" />
+					<html:options collection="<%=Constants.HISTOLOGICAL_QUALITY_LIST%>" labelProperty="name" property="value"/>
 				</html:select>
 			</td>
 		</tr>
