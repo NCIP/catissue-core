@@ -20,6 +20,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.cde.xml.XMLCDE;
 import edu.wustl.common.cde.xml.XMLPermissibleValueType;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * @author kapil_kaveeshwar
@@ -31,6 +32,7 @@ public class CDECacheManager
 {
     public void refresh(Map cdeXMLMAP)
     {
+    	Logger.out.info("Initializing CDE Cache Manager");
         CDEDownloader cdeDownloader = null;
         List downloadedCDEList = new ArrayList();
         List errorLogs = new ArrayList();
