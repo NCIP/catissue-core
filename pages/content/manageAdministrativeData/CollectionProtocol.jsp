@@ -68,16 +68,12 @@
 	// functions for add more
 
 	
-//var subDivRowCount = new Array(10);		// array to hold the row count of the inner block
 
-//subDivRowCount[0] = 1;
-
-// variable to count the oter blocks
+// variable to count the outer blocks
 var insno=1;
 var tblColor = "#123456";
 function addBlock(tmpdiv,tmpd0)
 {
-var div = document.getElementById(tmpdiv);
 var d0 = document.getElementById(tmpd0);
 var val = parseInt(document.forms[0].outerCounter.value);
 		val = val + 1;
@@ -87,10 +83,7 @@ var val = parseInt(document.forms[0].outerCounter.value);
 			tblColor = "<%=Constants.EVEN_COLOR%>";
 		else
 			tblColor = "<%=Constants.ODD_COLOR%>";
-//	alert("tblcolor : " + tblColor + " || val : "+ val  );	
-	var y = div.innerHTML;
 	var z = d0.innerHTML;
-						//	insno =insno + 1;
 	insno =val;
 	var mm = z.indexOf('`');
 	for(var cnt=0;cnt<mm;cnt++)
@@ -98,11 +91,18 @@ var val = parseInt(document.forms[0].outerCounter.value);
 		z = z.replace('`',insno);
 		mm = z.indexOf('`');
 	}
-//	div.innerHTML = div.innerHTML +z;
-	div.innerHTML = z + div.innerHTML ;
-	
+// --------21 mar start
+	var r = new Array(); 
+	r = document.getElementById(tmpdiv).rows;
+	var q = r.length;
+	var newRow=document.getElementById(tmpdiv).insertRow(0);
+	var newCol=newRow.insertCell(0);
+	newCol.innerHTML = z;
+
 	var tb = document.getElementById("itable_"+val);
 	tb.bgColor = tblColor;
+// --------21 mar end
+
 }
 
 function addDiv(div,adstr)
@@ -125,7 +125,6 @@ function insRow(subdivtag,iCounter,blockCounter)
 	var r = new Array(); 
 	r = document.getElementById(subdivtag).rows;
 	var q = r.length;
-//	var x=document.getElementById(subdivtag).insertRow(q);
 	var x=document.getElementById(subdivtag).insertRow(1);
 	
 	//setSubDivCount(subdivtag);
@@ -229,30 +228,10 @@ function insRow(subdivtag,iCounter,blockCounter)
 	//var func = "enableButton(document.forms[0].deleteSpecimenReq,'ivl("+ blockCounter + ")','" +"chk_spec_" + blockCounter + "_ "+ "')";
 	sname="<input type='checkbox' name='" + name +"' id='" + name +"' value='C'>"; // onClick=" + func + ">";
 	checkb.innerHTML=""+sname;
-	
+
 }
 
 	
-/*
-
-// function to set the row count in the array 
-function setSubDivCount(subdivtag)
-{
-	var ind = subdivtag.indexOf('_');
-	var x = subdivtag.substr(ind+1);
-	var p = parseInt(x);
-	subDivRowCount[p-1] = subDivRowCount[p-1]+1;
-}
-
-// function to get the row count of the inner block
-function getSubDivCount(subdivtag)
-{
-	var ind = subdivtag.indexOf('_');
-	var x = subdivtag.substr(ind+1);
-	var p = parseInt(x);
-	return subDivRowCount[p-1];
-}
-*/
 //-->
 </SCRIPT>
 
@@ -523,8 +502,8 @@ function getSubDivCount(subdivtag)
 
 <!--  outermostdiv start --><!-- outer div tag  for entire block -->
 
+<table><tbody id="outerdiv"><tr><td>
 
-<div id="outerdiv"> 
 <%! Map map; %>
 <%
 		int maxCount=1;
@@ -867,7 +846,8 @@ function getSubDivCount(subdivtag)
 <%
 } // outer for
 %>
-</div>	<!-- outermostdiv  -->
+</td></tr></tbody></table>
+<!-- outermosttable  -->
 
 <table width="100%">	
 	<!-- to keep -->
