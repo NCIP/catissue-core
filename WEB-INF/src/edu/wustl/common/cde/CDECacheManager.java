@@ -16,6 +16,7 @@ import java.util.Set;
 
 import edu.wustl.catissuecore.bizlogic.CDEBizLogic;
 import edu.wustl.catissuecore.exception.BizLogicException;
+import edu.wustl.catissuecore.util.EmailHandler;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.cde.xml.XMLCDE;
 import edu.wustl.common.cde.xml.XMLPermissibleValueType;
@@ -46,6 +47,9 @@ public class CDECacheManager
         {
             //Logging the error message.
             errorLogs.add(exp.getMessage());
+            
+            //Send the error logs to administrator.
+            sendCDEDownloadStatusEmail(errorLogs);
             return;
         }
         
@@ -61,6 +65,7 @@ public class CDECacheManager
                 {
                     CDE cde = cdeDownloader.downloadCDE(xmlCDE);
                     
+                    //Sets the parent permissible values and the CDEs for all the permissible values.
                     configurePermissibleValues(cde, xmlCDE);
                     downloadedCDEList.add(cde);
                 }
@@ -70,6 +75,9 @@ public class CDECacheManager
                 }
             }
         }
+        
+        // Send the errors logs while downloading the CDEs to the administrator.
+        sendCDEDownloadStatusEmail(errorLogs);
         
         //Inserting the downloaded CDEs into database.
         CDEBizLogic cdeBizLogic = new CDEBizLogic();
@@ -92,6 +100,19 @@ public class CDECacheManager
         }
     }
     
+    /**
+     * Sends an email containing the error logs occured while downloading the CDEs to the administrator.
+     * @param errorLogs The list of errors.
+     */
+    private void sendCDEDownloadStatusEmail(List errorLogs)
+    {
+        if (!errorLogs.isEmpty())
+        {
+            EmailHandler emailHandler = new EmailHandler();
+            emailHandler.sendCDEDownloadStatusEmail(errorLogs);
+        }
+    }
+
     /**
      * Sets the parent permissible values for each of the permissible value of the CDE 
      * depending on the parent-child relationships present in the XMlCDE provided. 
@@ -124,6 +145,7 @@ public class CDECacheManager
                 }
                 else// If the parent permissible value concept code is not null, set the parent permissible value 
                 {// and set the cde as null.
+                    
                     //Parent permissible value.
                     PermissibleValue parentPermissibleValue = getPermissibleValueObject(permissibleValues,
                             									xmlPermissibleValueType.getParentConceptCode());
@@ -155,7 +177,7 @@ public class CDECacheManager
             configuredPermissibleValues.addAll(permissibleValues);
         }
         
-        //Set the configured permissible value set to the cde.  
+        //Set the configured permissible value set to the cde.
         CDEImpl cdeImpl = (CDEImpl)cde;
         cdeImpl.setPermissibleValues(configuredPermissibleValues);
     }

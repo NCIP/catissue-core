@@ -9,6 +9,9 @@
 
 package edu.wustl.catissuecore.util;
 
+import java.util.Iterator;
+import java.util.List;
+
 import edu.wustl.catissuecore.domain.ReportedProblem;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -244,6 +247,39 @@ public class EmailHandler
     }
     
     /**
+     * Sends the email to the administrator regarding the status of the CDE downloading.
+     * i.e. the CDEs successfully downloaded and the error messages in case of errors in downloading the CDEs. 
+     */
+    public void sendCDEDownloadStatusEmail(List errorList)
+    {
+        // Send the status of the CDE downloading to the administrator.
+        String body = "Dear Administrator," + "\n\n" + ApplicationProperties.getValue("email.cdeDownload.body.start") + "\n\n";
+        
+        Iterator iterator = errorList.iterator();
+        while (iterator.hasNext())
+        {
+            body = body + iterator.next() + "\n\n";
+        }
+        
+        body = "\n\n" + body + ApplicationProperties.getValue("email.catissuecore.team");
+        
+        String subject = ApplicationProperties.getValue("email.cdeDownload.subject");
+        
+        boolean emailStatus = sendEmailToAdministrator(subject, body);
+        
+        if (emailStatus)
+		{
+			Logger.out.info(ApplicationProperties
+			    .getValue("cdeDownload.email.success"));
+		}
+		else
+		{
+			Logger.out.info(ApplicationProperties
+			    .getValue("cdeDownload.email.failure"));
+		}
+    }
+    
+    /**
      * Sends email to the user with the email address passed.
      * Returns true if the email is successfully sent else returns false.
      * @param userEmailAddress Email address of the user.
@@ -255,13 +291,13 @@ public class EmailHandler
     {
         String mailServer = ApplicationProperties
         		.getValue("email.mailServer");
-		String technicalSupportEmailAddress = ApplicationProperties
+		String sendFromEmailAddress = ApplicationProperties
 		        .getValue("email.sendEmailFrom.emailAddress");
 		
 		body = body + "\n\n" + ApplicationProperties.getValue("loginDetails.catissue.url.message") + Variables.catissueURL;
 		
 		SendEmail email = new SendEmail();
-        boolean emailStatus = email.sendmail(userEmailAddress, technicalSupportEmailAddress,
+        boolean emailStatus = email.sendmail(userEmailAddress, sendFromEmailAddress,
 				                				mailServer, subject, body);
         return emailStatus;
     }
@@ -278,7 +314,7 @@ public class EmailHandler
     {
         String adminEmailAddress = ApplicationProperties
         		.getValue("email.administrative.emailAddress");
-        String technicalSupportEmailAddress = ApplicationProperties
+        String sendFromEmailAddress = ApplicationProperties
         		.getValue("email.sendEmailFrom.emailAddress");
         String mailServer = ApplicationProperties
                 .getValue("email.mailServer");
@@ -287,7 +323,7 @@ public class EmailHandler
          
         SendEmail email = new SendEmail();
         boolean emailStatus = email.sendmail(userEmailAddress, adminEmailAddress, 
-                							 null, technicalSupportEmailAddress, mailServer, subject, body);
+                							 null, sendFromEmailAddress, mailServer, subject, body);
         return emailStatus;
     }
     
@@ -302,7 +338,7 @@ public class EmailHandler
     {
         String adminEmailAddress = ApplicationProperties
         		.getValue("email.administrative.emailAddress");
-        String technicalSupportEmailAddress = ApplicationProperties
+        String sendFromEmailAddress = ApplicationProperties
         		.getValue("email.sendEmailFrom.emailAddress");
         String mailServer = ApplicationProperties
                 .getValue("email.mailServer");
@@ -311,8 +347,9 @@ public class EmailHandler
          
         SendEmail email = new SendEmail();
         boolean emailStatus = email.sendmail(adminEmailAddress, 
-                								technicalSupportEmailAddress, mailServer, subject, body);
+                								sendFromEmailAddress, mailServer, subject, body);
         
         return emailStatus;
     }
+    
 }
