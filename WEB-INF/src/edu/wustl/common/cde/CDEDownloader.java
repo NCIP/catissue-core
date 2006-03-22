@@ -79,7 +79,7 @@ public class CDEDownloader
 			}
 			connectAttempts++;
 		}
-		throw new Exception("Connection Error: Undable to connect to "+CDEConConfig.dbserver);
+		throw new Exception("Connection Error: Unable to connect to "+CDEConConfig.dbserver);
 	}
 	
 	/**
@@ -111,7 +111,7 @@ public class CDEDownloader
 			}
 			downloadAttempts++;
 		}
-		throw new Exception("CDE Download Error: Undable to download CDE "+xmlCDE.getName());
+		throw new Exception("CDE Download Error: Unable to download CDE "+xmlCDE.getName());
 	}
 
 	/**
