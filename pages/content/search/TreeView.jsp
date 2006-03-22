@@ -53,9 +53,9 @@
 	<PARAM name="<%=Constants.STORAGE_CONTAINER_POSITION%>" value="<%=position%>">
 	<PARAM name="name" value="<%=Constants.TREE_APPLET_NAME%>">
 	<COMMENT>
-		<EMBED type="application/x-java-applet;version=1.4.1" width="180"
+		<EMBED type="application/x-java-applet;version=1.4.1" width="100%"
 			name="<%=Constants.TREE_APPLET_NAME%>"
-			height="300" code="<%=Constants.QUERY_TREE_APPLET%>"
+			height="100%" code="<%=Constants.QUERY_TREE_APPLET%>"
 			codebase="<%=Constants.APPLET_CODEBASE%>"
 			pluginspage="http://java.sun.com/j2se/1.4.1/download.html"
 			archive="Applet/QueryTree.jar"
