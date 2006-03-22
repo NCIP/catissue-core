@@ -111,9 +111,15 @@ function  deleteChecked(subdivtag,action,countElement,checkName,isOuterTable)
 			if(isOuterTable) {
 				tableId = "table_" + i;
 				var table = document.getElementById(tableId);
+				// md 21 mar start
+				var currentRow = table.parentNode.parentNode;
+				k = currentRow.rowIndex;
+				pNode = element.parentNode;
+				pNode.deleteRow(k);
+				// md 21 mar end
 				
 				/** removing table from tbody tag(div)   **/
-				element.removeChild(table);
+				// 21 mar commented by md: element.removeChild(table);
 	
 			}
 			else {
