@@ -124,18 +124,18 @@
 		<copy todir="${temp.dir}/catissuecore" overwrite="true">
 			<fileset dir="${base.dir}/configuration"/>
 		</copy>
-		<replace file="${temp.dir}/catissuecore/pages/MainHeader.jsp">
+		<replace dir="${temp.dir}/catissuecore/WEB-INF">
 			<include name="classes/ApplicationResources.properties"/> 
 			<replacefilter 
 				token="@@institution.url@@"
 				value="${institution.url}"/>
 		</replace>
-		<replace file="${temp.dir}/catissuecore/pages/MainHeader.jsp">
+		<replace dir="${temp.dir}/catissuecore/WEB-INF">
 			<include name="classes/ApplicationResources.properties"/> 
 			<replacefilter 
 				token="@@institution.name@@"
 				value="${institution.name}"/>
-		</replace>
+			</replace>
 	</target>
 	
 	<!--Modify Configuration For MySQL-->
