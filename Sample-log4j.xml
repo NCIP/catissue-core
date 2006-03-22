@@ -7,7 +7,7 @@
 <!--                                                                       -->
 <!-- ===================================================================== -->
 
-<!-- $Id: Sample-log4j.xml,v 1.1 2006/01/18 10:14:36 sachin_lale Exp $ -->
+<!-- $Id: Sample-log4j.xml,v 1.2 2006/03/22 09:48:24 Kapil Exp $ -->
 
 <!--
    | For more configuration infromation and examples see the Jakarta Log4j
@@ -72,9 +72,11 @@
       </layout>
    </appender>
    
-   <appender name="CATISSUECORE_LOGGER" class="org.apache.log4j.FileAppender">
+   <appender name="CATISSUECORE_LOGGER" class="org.apache.log4j.RollingFileAppender">
          	<param name="File" value="${jboss.server.home.dir}/log/catissuecore.log" />
          	<param name="Append" value="true" />
+			<param name="MaxFileSize" value="100000KB"/>
+			<param name="MaxBackupIndex" value="10"/>
          	<layout class="org.apache.log4j.PatternLayout">
          		<param name="ConversionPattern" value="%d{dd MMM yyy HH:mm:ss}, %-6p %C:%M:%L %m %n" />
          	</layout>
@@ -162,7 +164,7 @@
    </category>
    
    <category name="catissuecore.logger">
-         	<priority value="DEBUG" />
+         	<priority value="INFO" />
          	<appender-ref ref="CATISSUECORE_LOGGER" />
    </category>
 
