@@ -142,6 +142,7 @@
 				<exclude name="**/CVS*"/>
 				<exclude name="**/catissuecorecsm.war"/>
 				<exclude name="**/catissuecore.war"/>
+				<exclude name="**/caTissue_Core_Installable.zip"/>
 			</fileset>
 		</war>
 	</target>
