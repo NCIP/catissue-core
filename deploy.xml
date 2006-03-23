@@ -464,17 +464,25 @@
 	<target name="SendMail">
 		<echo message="Sending mail to: ${email.administrative.emailAddress}"/>
 		<echo message="Sending mail from: ${email.sendEmailFrom.emailAddress}"/>
-		<mail mailhost="${email.mailServer}" subject="caTISSUE Core Successfully Deployed" encoding="plain"
+		<mail mailhost="${email.mailServer}" subject="caTissue Core Successfully Deployed" encoding="plain"
 			failonerror="true">
 			<from address="${email.sendEmailFrom.emailAddress}"/>
 			<to address="${email.administrative.emailAddress}"/>
 			<message>
-Greetings,
+Dear caTissue Core Administrator,
+	
+	This is to validate that caTissue Core application has been installed at 
+the following location: ${jboss.home.dir}		
+    
+	To complete the deployment, you have to now perform the post installation 
+steps described in section "Post Installation Configuration" in the deployment 
+guide (caTissue Core Deployment Guide.doc). 
 
-This mail is just to validate the email setting done in caTISSUEInstall.properties file.
-				
-caTISSUE Core Application is successfully installed at location 
-${jboss.home.dir}. Please follow the "Post Installation Configuration" steps, as mentioned in caTissue Core Deployment Guide.doc, to complete the installation procedure.
+	Once you have completed deployment, you should be able to login with the following 
+details:			
+URL: http://localhost:${jboss.server.port}/catissuecore 
+Username:admin@admin.com
+Password:login123
 
 Thanking You.
 -caTissue Core				
