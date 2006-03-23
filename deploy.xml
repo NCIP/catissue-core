@@ -104,7 +104,7 @@
 		  	value="server.port=${jboss.server.port}"/>	
 		  <replacefilter 
 			token="@@use.proxy.server@@" 
-			value="true"/>
+			value="${use.proxy.server}"/>
 		  <replacefilter 
 			token="@@proxy.host@@" 
 			value="${proxy.host}"/>
