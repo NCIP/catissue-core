@@ -8,8 +8,8 @@
 		  </td>
 		  <td height="37" align="right">
 		  <% 
-			String url = ApplicationProperties.getValue("institution.url");
-			String name = ApplicationProperties.getValue("img.institution.name");
+			String url = "http://"+ApplicationProperties.getValue("institution.url");
+			String name = ApplicationProperties.getValue("institution.logo.tooltip");
 %>
           	<a href='<%=url%>'>
           		<img class=logo alt='<%=name%>' src="images/InstitutionLogo.gif" width="259" height="45" border="0">
