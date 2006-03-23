@@ -103,6 +103,31 @@
 			token="server.port=@@server.port@@" 
 		  	value="server.port=${jboss.server.port}"/>	
 		</replace>
+		<if>
+			<equals arg1="true" arg2="${use.proxy.server}"/>		
+			<then>
+				<replace dir="${temp.dir}/catissuecore/WEB-INF"> 
+					  <include name="classes/ApplicationResources.properties"/>
+					  <replacefilter 
+					    token="@@use.proxy.server@@" 
+					    value="true"/>
+					  <replacefilter 
+					    token="@@proxy.host@@" 
+					  	value="${proxy.host}"/>
+					  <replacefilter 
+						token="@@proxy.port@@" 
+					  	value="${proxy.port}"/>	
+					</replace>
+			</then>
+			<else>	
+				<replace dir="${temp.dir}/catissuecore/WEB-INF"> 
+					  <include name="classes/ApplicationResources.properties"/>
+					  <replacefilter 
+					    token="@@use.proxy.server@@" 
+					    value="false"/>
+					</replace>
+			</else>
+		</if>	
 		<replace file="${temp.dir}/catissuecore/WEB-INF/web.xml"> 
 			<replacefilter 
 				token="&lt;session-timeout>10&lt;/session-timeout>" 
@@ -121,8 +146,11 @@
 		<copy todir="${temp.dir}/catissuecore/images" overwrite="true">
 			<fileset dir="${base.dir}/images"/>
 		</copy>
-		<copy todir="${temp.dir}/catissuecore" overwrite="true">
-			<fileset dir="${base.dir}/configuration"/>
+		<copy todir="${temp.dir}/catissuecore/configuration" overwrite="true">
+			<fileset file="${base.dir}/Accessibility.txt"/>
+			<fileset file="${base.dir}/ContactUs.txt"/>
+			<fileset file="${base.dir}/Disclaimer.txt"/>
+			<fileset file="${base.dir}/PrivacyNotice.txt"/>
 		</copy>
 		<replace dir="${temp.dir}/catissuecore/WEB-INF">
 			<include name="classes/ApplicationResources.properties"/> 
@@ -442,12 +470,14 @@
 			<to address="${email.administrative.emailAddress}"/>
 			<message>
 Greetings,
-	This mail is to validate the Administrative Email Address.
+
+This mail is just to validate the email setting done in caTISSUEInstall.properties file.
 				
-caTISSUE Core Application is successfully deployed at location 
-${jboss.home.dir}.
-				
+caTISSUE Core Application is successfully installed at location 
+${jboss.home.dir}. Please follow the "Post Installation Configuration" steps, as mentioned in caTissue Core Deployment Guide.doc, to complete the installation procedure.
+
 Thanking You.
+-caTissue Core				
 			</message>
 		</mail>
 		<echo>
