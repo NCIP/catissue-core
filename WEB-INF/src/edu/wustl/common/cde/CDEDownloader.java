@@ -263,8 +263,12 @@ public class CDEDownloader
 		}
 		
 		// setting the system settings
-		System.setProperty("proxyHost", proxyhost);
-		System.setProperty("proxyPort", proxyport);
+		if(ApplicationProperties.getValue("use.proxy.server").equals("true"))
+		{
+			System.setProperty("proxyHost", ApplicationProperties.getValue("proxy.host"));
+			System.setProperty("proxyPort", ApplicationProperties.getValue("proxy.port"));
+		}
+		
 	} //createPasswordAuthentication
 	
 	private void setCDEConConfig()
