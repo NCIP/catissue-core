@@ -471,7 +471,7 @@ URL: http://localhost:${jboss.server.port}/catissuecore
 Username:admin@admin.com
 Password:login123
 
-Thanking You.
+Thanking You,
 -caTissue Core				
 			</message>
 		</mail>
