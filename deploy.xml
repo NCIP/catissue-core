@@ -452,7 +452,7 @@
 		<echo message="Sending mail to: ${email.administrative.emailAddress}"/>
 		<echo message="Sending mail from: ${email.sendEmailFrom.emailAddress}"/>
 		<mail mailhost="${email.mailServer}" subject="caTissue Core Successfully Deployed" encoding="plain"
-			failonerror="true">
+			failonerror="false">
 			<from address="${email.sendEmailFrom.emailAddress}"/>
 			<to address="${email.administrative.emailAddress}"/>
 			<message>
