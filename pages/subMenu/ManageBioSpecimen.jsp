@@ -106,17 +106,6 @@
 	</td>
 </tr>
 
-<%
-	strMouseOut = Utility.setSelectedMenuItem(selectMenuID, 17, normalMenuClass , selectedMenuClass , hoverMenuClass);
-	String url = "ShowFramedPage.do?pageOf=pageOfTissueSite&propertyName=ClinicalDiagnosis&cdeName=Clinical Diagnosis";
-%>
-<tr>
-	<%=strMouseOut%>
-		<div>
-			<a class="subMenuPrimary" href="#" onclick="javascript:NewWindow('<%=url%>','name','250','330','no');return false"><bean:message key="app.clinicalDiagnosisCDE" /></a>
-		</div>
-	</td>
-</tr>
 <!-- tr>
 	<td class="subMenuPrimaryItemsWithBorder" onmouseover="changeMenuStyle(this,'subMenuPrimaryItemsWithBorderOver')" onmouseout="changeMenuStyle(this,'subMenuPrimaryItemsWithBorder')">				
 		
