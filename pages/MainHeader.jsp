@@ -9,7 +9,7 @@
 		  <td height="37" align="right">
 		  <% 
 			String url = ApplicationProperties.getValue("institution.url");
-			String name = ApplicationProperties.getValue("institution.name");
+			String name = ApplicationProperties.getValue("img.institution.name");
 %>
           	<a href='<%=url%>'>
           		<img class=logo alt='<%=name%>' src="images/InstitutionLogo.gif" width="259" height="45" border="0">
