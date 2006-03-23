@@ -109,6 +109,11 @@ public class ProcedureEventParametersForm extends SpecimenEventParametersForm {
 						ApplicationProperties.getValue(
 							"procedureeventparameters.name")));
 			}
+			
+			if(validator.isEmpty(url))
+			{
+				errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.required",ApplicationProperties.getValue("procedureeventparameters.url")));
+			}
 		} catch (Exception excp) {
 			Logger.out.error(excp.getMessage());
 		}
