@@ -310,7 +310,7 @@
 		<copy todir="${zip.dir}/images" overwrite="true">
 			<fileset file="${base.dir}/images/InstitutionLogo.gif"/>
 		</copy>
-		<zip destfile="${base.dir}/caTISSUE_Core_Installable.zip" basedir="${zip.dir}"></zip>
+		<zip destfile="${base.dir}/caTissue_Core_Installable.zip" basedir="${zip.dir}"></zip>
 		<delete dir="${zip.dir}"/>
 	</target>
 </project>
