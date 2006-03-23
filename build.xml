@@ -143,6 +143,7 @@
 				<exclude name="**/catissuecorecsm.war"/>
 				<exclude name="**/catissuecore.war"/>
 				<exclude name="**/caTissue_Core_Installable.zip"/>
+				<exclude name="**/caTissue_Core_Installable/**"/>
 			</fileset>
 		</war>
 	</target>
@@ -272,8 +273,9 @@
 
 	<target name="Create_Installable_Zip" depends="BuildAppWAR">
 		<property name="zip.dir" value="${base.dir}/caTISSUE_Core_Installable"/>
+		<delete file="${base.dir}/caTissue_Core_Installable.zip"/>
+		<delete dir="${base.dir}/caTissue_Core_Installable"/>
 		<mkdir dir="${zip.dir}"/>
-		
 		<copy file="catissuecore.war" todir="${zip.dir}" overwrite="true"/>
 		<copy file="catissuecorecsm.war" todir="${zip.dir}" overwrite="true"/>
 		<copy file="catissuecore-ds.xml" todir="${zip.dir}" overwrite="true"/>
