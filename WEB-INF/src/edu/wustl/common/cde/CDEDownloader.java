@@ -47,8 +47,12 @@ public class CDEDownloader
 	{
 		// creates the passwordauthenticaton object to be used for establishing 
 		// the connection with the databse server.
-		setCDEConConfig();
-		createPasswordAuthentication(CDEConConfig.proxyhostip, CDEConConfig.proxyport, CDEConConfig.username, CDEConConfig.password);
+		CDEConConfig.dbserver = ApplicationProperties.getValue("casdr.server");
+		if(ApplicationProperties.getValue("use.proxy.server").equals("true"))
+		{
+			setCDEConConfig();
+			createPasswordAuthentication(CDEConConfig.proxyhostip, CDEConConfig.proxyport, CDEConConfig.username, CDEConConfig.password);
+		}
 	}
 	
 	/**
@@ -263,21 +267,16 @@ public class CDEDownloader
 		}
 		
 		// setting the system settings
-		if(ApplicationProperties.getValue("use.proxy.server").equals("true"))
-		{
-			System.setProperty("proxyHost", ApplicationProperties.getValue("proxy.host"));
-			System.setProperty("proxyPort", ApplicationProperties.getValue("proxy.port"));
-		}
-		
+		System.setProperty("proxyHost", proxyhost);
+		System.setProperty("proxyPort", proxyport);
 	} //createPasswordAuthentication
 	
 	private void setCDEConConfig()
 	{
-		CDEConConfig.proxyhostip ="scproxy.persistent.co.in";
-		CDEConConfig.proxyport = "80";
-		CDEConConfig.password ="";
-		CDEConConfig.username = "gautam_shetty";
-		CDEConConfig.dbserver = ApplicationProperties.getValue("casdr.server");
+		CDEConConfig.proxyhostip =ApplicationProperties.getValue("proxy.host");
+		CDEConConfig.proxyport = ApplicationProperties.getValue("proxy.port");
+		CDEConConfig.password = ApplicationProperties.getValue("proxy.username");
+		CDEConConfig.username = ApplicationProperties.getValue("proxy.password");
 	}
 	
 	public static void main(String []args) throws Exception
