@@ -173,7 +173,7 @@ create table CATISSUE_PERMISSIBLE_VALUE (
    IDENTIFIER number(19,0) not null,
    CONCEPT_CODE varchar2(40),
    DEFINITION varchar2(500),
-   PARENT_IDENTIFIER varchar2(30),
+   PARENT_IDENTIFIER number(19,0),
    VALUE varchar2(100),
    PUBLIC_ID varchar2(30),
    primary key (IDENTIFIER)
