@@ -102,32 +102,22 @@
 		  <replacefilter 
 			token="server.port=@@server.port@@" 
 		  	value="server.port=${jboss.server.port}"/>	
+		  <replacefilter 
+			token="@@use.proxy.server@@" 
+			value="true"/>
+		  <replacefilter 
+			token="@@proxy.host@@" 
+			value="${proxy.host}"/>
+		  <replacefilter 
+			token="@@proxy.port@@" 
+			value="${proxy.port}"/>	
+		  <replacefilter 
+			token="@@proxy.username@@" 
+			value="${proxy.username}"/>	
+		  <replacefilter 
+			token="@@proxy.password@@" 
+			value="${proxy.password}"/>	
 		</replace>
-		<if>
-			<equals arg1="true" arg2="${use.proxy.server}"/>		
-			<then>
-				<replace dir="${temp.dir}/catissuecore/WEB-INF"> 
-					  <include name="classes/ApplicationResources.properties"/>
-					  <replacefilter 
-					    token="@@use.proxy.server@@" 
-					    value="true"/>
-					  <replacefilter 
-					    token="@@proxy.host@@" 
-					  	value="${proxy.host}"/>
-					  <replacefilter 
-						token="@@proxy.port@@" 
-					  	value="${proxy.port}"/>	
-					</replace>
-			</then>
-			<else>	
-				<replace dir="${temp.dir}/catissuecore/WEB-INF"> 
-					  <include name="classes/ApplicationResources.properties"/>
-					  <replacefilter 
-					    token="@@use.proxy.server@@" 
-					    value="false"/>
-					</replace>
-			</else>
-		</if>	
 		<replace file="${temp.dir}/catissuecore/WEB-INF/web.xml"> 
 			<replacefilter 
 				token="&lt;session-timeout>10&lt;/session-timeout>" 
@@ -146,11 +136,8 @@
 		<copy todir="${temp.dir}/catissuecore/images" overwrite="true">
 			<fileset dir="${base.dir}/images"/>
 		</copy>
-		<copy todir="${temp.dir}/catissuecore/configuration" overwrite="true">
-			<fileset file="${base.dir}/Accessibility.txt"/>
-			<fileset file="${base.dir}/ContactUs.txt"/>
-			<fileset file="${base.dir}/Disclaimer.txt"/>
-			<fileset file="${base.dir}/PrivacyNotice.txt"/>
+		<copy todir="${temp.dir}/catissuecore" overwrite="true">
+				<fileset dir="${base.dir}/configuration"/>
 		</copy>
 		<replace dir="${temp.dir}/catissuecore/WEB-INF">
 			<include name="classes/ApplicationResources.properties"/> 
@@ -161,7 +148,7 @@
 		<replace dir="${temp.dir}/catissuecore/WEB-INF">
 			<include name="classes/ApplicationResources.properties"/> 
 			<replacefilter 
-				token="@@institution.name@@"
+				token="@@institution.logo.tooltip@@"
 				value="${institution.name}"/>
 			</replace>
 	</target>
