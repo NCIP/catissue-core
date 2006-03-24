@@ -144,6 +144,7 @@
 				<exclude name="**/catissuecore.war"/>
 				<exclude name="**/caTissue_Core_Installable.zip"/>
 				<exclude name="**/caTissue_Core_Installable/**"/>
+				<exclude name="**/caTISSUECore caCORE Client/**"/>
 			</fileset>
 		</war>
 	</target>
@@ -313,6 +314,11 @@
 		<copy todir="${zip.dir}/images" overwrite="true">
 			<fileset file="${base.dir}/images/InstitutionLogo.gif"/>
 		</copy>
+		
+		<copy todir="${zip.dir}/caTISSUECore caCORE Client" overwrite="true">
+			<fileset dir="${base.dir}/caTISSUECore caCORE Client"/>
+		</copy>
+			
 		<zip destfile="${base.dir}/caTissue_Core_Installable.zip" basedir="${zip.dir}"></zip>
 		<delete dir="${zip.dir}"/>
 	</target>
