@@ -461,7 +461,7 @@
 		</html:select>
 		
 		<%
-			String url = "ShowFramedPage.do?pageOf=pageOfTissueSite&propertyName="+tissueSite;
+			String url = "ShowFramedPage.do?pageOf=pageOfTissueSite&cdeName=Tissue%20Site&propertyName="+tissueSite;
 		%>
 		<a href="#" onclick="javascript:NewWindow('<%=url%>','name','250','330','no');return false">
 			<img src="images\Tree.gif" border="0" width="24" height="18">
