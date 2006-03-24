@@ -93,10 +93,21 @@ public class StorageTypeForm extends AbstractActionForm
         this.systemIdentifier = storageType.getId().longValue();
         this.type = storageType.getType();
         this.defaultTemperature = Utility.toString( storageType.getDefaultTempratureInCentigrade());
-        this.oneDimensionCapacity = storageType.getDefaultStorageCapacity().getOneDimensionCapacity().intValue();
-        this.twoDimensionCapacity = storageType.getDefaultStorageCapacity().getTwoDimensionCapacity().intValue();
-        this.oneDimensionLabel = storageType.getOneDimensionLabel();
-        this.twoDimensionLabel = storageType.getTwoDimensionLabel();
+        
+        edu.wustl.catissuecore.domainobject.StorageContainerCapacity storageCapacity = storageType.getDefaultStorageCapacity();
+        if(storageCapacity!=null)
+        {
+	        if(storageCapacity.getOneDimensionCapacity()!=null)
+	        {
+	        	this.oneDimensionCapacity = storageCapacity.getOneDimensionCapacity().intValue();
+	        }
+	        if(storageCapacity.getTwoDimensionCapacity()!=null)
+	        {
+	        	this.twoDimensionCapacity = storageCapacity.getTwoDimensionCapacity().intValue();
+	        }
+	        this.oneDimensionLabel = storageType.getOneDimensionLabel();
+	        this.twoDimensionLabel = storageType.getTwoDimensionLabel();
+        }
     }
     
     /**
