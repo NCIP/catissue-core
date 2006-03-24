@@ -1,0 +1,40 @@
+<?xml version ="1.0"?>
+
+<!--Ant Script for create Build for caTISSUE Core-->
+
+<project name="csmSdk_Client" default="compile">
+	
+	<!--define require dir and Properties -->	
+	<property name="base.dir" value="."/>
+    
+	<path id="app.classpath">
+		<fileset dir="${base.dir}">
+			<include name="*.jar"/>
+		</fileset>
+	</path>
+	
+    <!-- Compile all files, generated and hand-written -->
+    <target name="compile">
+        <javac destdir="${base.dir}" includes="**/*.*" includeAntRuntime="false">
+            <src path="${base.dir}"/>
+            <classpath>
+              <fileset dir="${base.dir}">
+                  <include name="*.jar"/>
+              </fileset>
+            </classpath>       
+        </javac>
+    </target>
+	
+	<!-- Run ClientDemo class -->
+    <target name="runClient" depends="compile">
+        <java classname="ClientDemo">
+        	<classpath>
+	            <pathelement location="${base.dir}"/>
+        		<fileset dir="${base.dir}">
+        				<include name="*.jar"/>
+        		</fileset>
+            </classpath>  
+        </java>
+    </target>
+
+</project>
