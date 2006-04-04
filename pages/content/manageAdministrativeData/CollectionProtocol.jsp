@@ -408,7 +408,9 @@ function insRow(subdivtag,iCounter,blockCounter)
 						</td>
 					</tr>
 
-<!-- enddate -->						
+<!-- enddate: Should be displayed only in case of edit -->
+				<!-- bug id: 1565   -->	
+				<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">					
 					<tr>
 						<td class="formRequiredNotice" width="5">&nbsp;</td>
 						<td class="formLabel">
@@ -425,6 +427,7 @@ function insRow(subdivtag,iCounter,blockCounter)
 								<img src="images\calendar.gif" width=24 height=22 border=0></a -->
 						 </td>
 					</tr>
+				</logic:equal>
 
 <!-- no of participants -->						
 					<tr>
