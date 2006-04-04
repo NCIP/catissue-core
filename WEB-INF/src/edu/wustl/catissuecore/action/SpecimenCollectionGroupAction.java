@@ -11,6 +11,7 @@
 package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -241,8 +242,9 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 	  		  	
 		// removing blank participants from the list of Participants
 		list=removeBlankParticipant(list, listOfParticipants);
-		
-	  	Logger.out.debug("Paticipants List"+list);
+		//MD bug id:1628 :- sort participant dropdown list
+		Collections.sort(list );  
+		Logger.out.debug("Paticipants List"+list);
 	  	request.setAttribute(Constants.PARTICIPANT_LIST, list);
 	}
     
