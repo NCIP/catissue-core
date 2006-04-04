@@ -277,8 +277,17 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
     {
 	    edu.wustl.catissuecore.domainobject.SpecimenProtocol protocol=(edu.wustl.catissuecore.domainobject.SpecimenProtocol) obj;
 		this.systemIdentifier = protocol.getId().longValue();
-		this.principalInvestigatorId = protocol.getPrincipalInvestigator()
+		
+		if(protocol.getPrincipalInvestigator() != null && protocol.getPrincipalInvestigator().getId() != null)
+		{
+			this.principalInvestigatorId = protocol.getPrincipalInvestigator()
 				.getId().longValue();
+		}
+		else
+		{
+			this.principalInvestigatorId = -1;
+		}
+		
 		this.title = Utility.toString(protocol.getTitle());
 		this.shortTitle = Utility.toString(protocol.getShortTitle());
 		this.startDate = Utility.parseDateToString(protocol.getStartDate(),Constants.DATE_PATTERN_MM_DD_YYYY);
@@ -288,7 +297,6 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 		this.descriptionURL = Utility.toString(protocol.getDescriptionURL());
 		
 		this.activityStatus = Utility.toString(protocol.getActivityStatus());
-	    
     }
 
 

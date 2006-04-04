@@ -212,6 +212,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 		}
 	}
 	
+	
 	public void setAllVal(Object obj)
     {
 	    edu.wustl.catissuecore.domainobject.CollectionProtocol cProtocol = (edu.wustl.catissuecore.domainobject.CollectionProtocol)obj;
@@ -222,31 +223,30 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 		
 		if(protocolEventCollection != null)
 		{
-			List eventList = new ArrayList(protocolEventCollection);
-//			Collections.sort(eventList);
-			protocolEventCollection = eventList;
-			
-			values = new HashMap();
+			super.values = new HashMap();
 			innerLoopValues = new HashMap();
 			
 			int i = 1;
 			Iterator it = protocolEventCollection.iterator();
 			while(it.hasNext())
 			{
-			    edu.wustl.catissuecore.domainobject.CollectionProtocolEvent cpEvent = 
-			        (edu.wustl.catissuecore.domainobject.CollectionProtocolEvent)it.next();
-				
 				String keyClinicalStatus = "CollectionProtocolEvent:" + i + "_clinicalStatus";
 				String keyStudyCalendarEventPoint = "CollectionProtocolEvent:" + i + "_studyCalendarEventPoint";
 				String keyCPESystemIdentifier = "CollectionProtocolEvent:" + i + "_systemIdentifier";
 				
-				values.put(keyClinicalStatus,Utility.toString(cpEvent.getClinicalStatus()));
-				values.put(keyStudyCalendarEventPoint, Utility.toString(cpEvent.getStudyCalendarEventPoint()));
-				values.put(keyCPESystemIdentifier,Utility.toString(cpEvent.getId()));
-				Logger.out.debug("In Form keyCPESystemIdentifier..............."+values.get(keyCPESystemIdentifier));
-				Collection specimenRequirementCollection = cpEvent.getSpecimenRequirementCollection();
+				edu.wustl.catissuecore.domainobject.CollectionProtocolEvent cpEvent = 
+			        (edu.wustl.catissuecore.domainobject.CollectionProtocolEvent)it.next();
 				
-				populateDomainObjectSpecimenRequirement(specimenRequirementCollection, i);
+			    if(cpEvent != null)
+			    {
+					values.put(keyClinicalStatus,Utility.toString(cpEvent.getClinicalStatus()));
+					values.put(keyStudyCalendarEventPoint, Utility.toString(cpEvent.getStudyCalendarEventPoint()));
+					values.put(keyCPESystemIdentifier,Utility.toString(cpEvent.getId()));
+					Logger.out.debug("In Form keyCPESystemIdentifier..............."+values.get(keyCPESystemIdentifier));
+					
+					Collection specimenRequirementCollection = cpEvent.getSpecimenRequirementCollection();
+					populateDomainObjectSpecimenRequirement(specimenRequirementCollection, i);
+			    }
 				
 				i++;
 			}
@@ -270,12 +270,19 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 			while(it.hasNext())
 			{
 				edu.wustl.catissuecore.domainobject.User user = (edu.wustl.catissuecore.domainobject.User)it.next();
-				protocolCoordinatorIds[i] = user.getId().longValue();
+				if(user != null && user.getId() != null)
+				{
+					protocolCoordinatorIds[i] = user.getId().longValue();
+				}
+				else
+				{
+					protocolCoordinatorIds[i] = 0;
+				}
 				i++;
 			}
 		}
-
     }
+	
 	private void populateSpecimenRequirement(Collection specimenRequirementCollection, int counter)
 	{
 		int innerCounter = 0;
@@ -359,51 +366,57 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 			Iterator iterator = specimenRequirementCollection.iterator();
 			while(iterator.hasNext())
 			{
-			    edu.wustl.catissuecore.domainobject.SpecimenRequirement requirement = (edu.wustl.catissuecore.domainobject.SpecimenRequirement)iterator.next();
-				
-				String key1 = "CollectionProtocolEvent:" + counter + "_SpecimenRequirement:" + j +"_specimenClass";
-				String key3 = "CollectionProtocolEvent:" + counter + "_SpecimenRequirement:" + j +"_specimenType";
-				String key4 = "CollectionProtocolEvent:" + counter + "_SpecimenRequirement:" + j +"_tissueSite";
-				String key5 = "CollectionProtocolEvent:" + counter + "_SpecimenRequirement:" + j +"_pathologyStatus";
-				String key6 = "CollectionProtocolEvent:" + counter + "_SpecimenRequirement:" + j +"_quantityIn";
-				String key7 = "CollectionProtocolEvent:" + counter + "_SpecimenRequirement:" + j +"_systemIdentifier";
-				String key2 = "CollectionProtocolEvent:" + counter + "_SpecimenRequirement:" + j +"_unitspan";
-				
-				values.put(key3,requirement.getSpecimenType());
-				values.put(key4,requirement.getTissueSite());
-				values.put(key5,requirement.getPathologyStatus());
-				values.put(key7,Utility.toString(requirement.getId()));
-				
-				if(requirement instanceof edu.wustl.catissuecore.domainobject.TissueSpecimenRequirement)
-				{
-					values.put(key1,"Tissue");
-					values.put(key2,Constants.UNIT_GM);
-					String tissueType = requirement.getSpecimenType();
-					if(tissueType.equalsIgnoreCase(Constants.SLIDE) || tissueType.equalsIgnoreCase(Constants.PARAFFIN_BLOCK) || tissueType.equalsIgnoreCase(Constants.FROZEN_BLOCK) )
+				//CODE_REVIEW:KAPIL requirement should be naamed as specimenRequirement
+				//CODE_REVIEW:KAPIL requirement check for null
+			    edu.wustl.catissuecore.domainobject.SpecimenRequirement specimeRequirement = (edu.wustl.catissuecore.domainobject.SpecimenRequirement)iterator.next();
+			    
+			    if(specimeRequirement != null)
+			    {
+					String key1 = "CollectionProtocolEvent:" + counter + "_SpecimenRequirement:" + j +"_specimenClass";
+					String key3 = "CollectionProtocolEvent:" + counter + "_SpecimenRequirement:" + j +"_specimenType";
+					String key4 = "CollectionProtocolEvent:" + counter + "_SpecimenRequirement:" + j +"_tissueSite";
+					String key5 = "CollectionProtocolEvent:" + counter + "_SpecimenRequirement:" + j +"_pathologyStatus";
+					String key6 = "CollectionProtocolEvent:" + counter + "_SpecimenRequirement:" + j +"_quantityIn";
+					String key7 = "CollectionProtocolEvent:" + counter + "_SpecimenRequirement:" + j +"_systemIdentifier";
+					String key2 = "CollectionProtocolEvent:" + counter + "_SpecimenRequirement:" + j +"_unitspan";
+					
+					values.put(key3,specimeRequirement.getSpecimenType());
+					values.put(key4,specimeRequirement.getTissueSite());
+					values.put(key5,specimeRequirement.getPathologyStatus());
+					values.put(key7,Utility.toString(specimeRequirement.getId()));
+					
+					if(specimeRequirement instanceof edu.wustl.catissuecore.domainobject.TissueSpecimenRequirement)
 					{
-						values.put(key6,Utility.toString(new Integer(((edu.wustl.catissuecore.domainobject.TissueSpecimenRequirement) requirement).getQuantityInGram().intValue())));
+						//CODE_REVIEW:KAPIL use some common code for this and populateSpecimenRequirement method 
+						values.put(key1,"Tissue");
+						values.put(key2,Constants.UNIT_GM);
+						String tissueType = specimeRequirement.getSpecimenType();
+						if(tissueType != null && (tissueType.equalsIgnoreCase(Constants.SLIDE) || tissueType.equalsIgnoreCase(Constants.PARAFFIN_BLOCK) || tissueType.equalsIgnoreCase(Constants.FROZEN_BLOCK)))
+						{
+							values.put(key6,Utility.toString(new Integer(((edu.wustl.catissuecore.domainobject.TissueSpecimenRequirement) specimeRequirement).getQuantityInGram().intValue())));
+						}
+						else
+							values.put(key6,Utility.toString(((edu.wustl.catissuecore.domainobject.TissueSpecimenRequirement)specimeRequirement).getQuantityInGram()));
 					}
-					else
-						values.put(key6,Utility.toString(((edu.wustl.catissuecore.domainobject.TissueSpecimenRequirement)requirement).getQuantityInGram()));
-				}
-				else if(requirement instanceof edu.wustl.catissuecore.domainobject.CellSpecimenRequirement)
-				{
-					values.put(key1,"Cell");
-					values.put(key2,Constants.UNIT_CC);
-					values.put(key6,Utility.toString(((edu.wustl.catissuecore.domainobject.CellSpecimenRequirement)requirement).getQuantityInCellCount()));
-				}
-				else if(requirement instanceof edu.wustl.catissuecore.domainobject.MolecularSpecimenRequirement)
-				{
-					values.put(key1,"Molecular");
-					values.put(key2,Constants.UNIT_MG);
-					values.put(key6,Utility.toString(((edu.wustl.catissuecore.domainobject.MolecularSpecimenRequirement)requirement).getQuantityInMicrogram()));
-				}
-				else if(requirement instanceof edu.wustl.catissuecore.domainobject.FluidSpecimenRequirement)
-				{
-					values.put(key1,"Fluid");
-					values.put(key2,Constants.UNIT_ML);
-					values.put(key6,Utility.toString(((edu.wustl.catissuecore.domainobject.FluidSpecimenRequirement)requirement).getQuantityInMilliliter()));
-				}
+					else if(specimeRequirement instanceof edu.wustl.catissuecore.domainobject.CellSpecimenRequirement)
+					{
+						values.put(key1,"Cell");
+						values.put(key2,Constants.UNIT_CC);
+						values.put(key6,Utility.toString(((edu.wustl.catissuecore.domainobject.CellSpecimenRequirement)specimeRequirement).getQuantityInCellCount()));
+					}
+					else if(specimeRequirement instanceof edu.wustl.catissuecore.domainobject.MolecularSpecimenRequirement)
+					{
+						values.put(key1,"Molecular");
+						values.put(key2,Constants.UNIT_MG);
+						values.put(key6,Utility.toString(((edu.wustl.catissuecore.domainobject.MolecularSpecimenRequirement)specimeRequirement).getQuantityInMicrogram()));
+					}
+					else if(specimeRequirement instanceof edu.wustl.catissuecore.domainobject.FluidSpecimenRequirement)
+					{
+						values.put(key1,"Fluid");
+						values.put(key2,Constants.UNIT_ML);
+						values.put(key6,Utility.toString(((edu.wustl.catissuecore.domainobject.FluidSpecimenRequirement)specimeRequirement).getQuantityInMilliliter()));
+					}
+			    }
 				
 				j++;
 			}
@@ -568,7 +581,11 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 					String classValue = (String)getValue(classKey );
 					if (classValue.trim().equals("Cell"))
 					{
-        				if(!validator.isEmpty(value) && !validator.isNumeric(value ))
+						if(validator.isEmpty(value))
+						{
+							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocol.quantity")));
+						}
+        				else if(!validator.isNumeric(value ))
         				{
         					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("collectionprotocol.quantity")));
         				}
@@ -582,15 +599,26 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 						Logger.out.debug("TypeKey : "+ typeKey  + " : Type Value : " + typeValue  );
 						if (typeValue.trim().equals(Constants.SLIDE) || typeValue.trim().equals(Constants.PARAFFIN_BLOCK) || typeValue.trim().equals(Constants.FROZEN_BLOCK ))
 						{
-	        				if(!validator.isEmpty(value) && !validator.isNumeric(value ))
+							if(validator.isEmpty(value))
+							{
+								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocol.quantity")));
+							}
+	        				else if(!validator.isNumeric(value ))
 	        				{
 	        					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("collectionprotocol.quantity")));
 	        				}
 						}
-						else if(!validator.isEmpty(value) && !validator.isDouble(value ))
-        				{
-        					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("collectionprotocol.quantity")));
-        				}
+						else
+						{
+							if(validator.isEmpty(value))
+							{
+								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocol.quantity")));
+							}
+							else if(!validator.isDouble(value ))
+	        				{
+	        					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("collectionprotocol.quantity")));
+	        				}
+						}
 					}
 				} // if  quantity
 			}

@@ -18,6 +18,7 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.domain.Site;
+import edu.wustl.catissuecore.domainobject.Address;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
@@ -125,15 +126,29 @@ public class SiteForm extends AbstractActionForm
         this.name 			= site.getName();
         this.type			= site.getType();
         this.emailAddress 	= site.getEmailAddress();
-        this.street 		= site.getAddress().getStreet();
-        this.city 			= site.getAddress().getCity();
-        this.state 			= site.getAddress().getState();
-        this.country 		= site.getAddress().getCountry();
-        this.zipCode 		= site.getAddress().getZipCode();
-        this.phoneNumber 	= site.getAddress().getPhoneNumber();
-        this.faxNumber 		= site.getAddress().getFaxNumber();
+        
+        Address address		= site.getAddress();
+        if(address != null)
+        {
+	        this.street 		= address.getStreet();
+	        this.city 			= address.getCity();
+	        this.state 			= address.getState();
+	        this.country 		= address.getCountry();
+	        this.zipCode 		= address.getZipCode();
+	        this.phoneNumber 	= address.getPhoneNumber();
+	        this.faxNumber 		= address.getFaxNumber();
+        }
+        
         this.activityStatus = site.getActivityStatus();
-        this.coordinatorId	= site.getCoordinator().getId().longValue();
+        
+        if(site.getCoordinator() != null && site.getCoordinator().getId() != null)
+        {
+        	this.coordinatorId	= site.getCoordinator().getId().longValue();
+        }
+        else
+        {
+        	this.coordinatorId	= -1;
+        }
     }
 
     

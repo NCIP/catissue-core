@@ -11,6 +11,7 @@
 
 package edu.wustl.catissuecore.actionForm;
 
+import java.lang.reflect.Method;
 import java.util.List;
 
 import edu.wustl.catissuecore.domainobject.Biohazard;
@@ -62,6 +63,16 @@ public class ActionFormFactory
      */
 	public static AbstractActionForm getFormBean(Object object,String operation) throws Exception
 	{
+		if(object == null)
+		{
+			throw new Exception("Object should not be null while performing Add/Edit operation");
+		}
+		
+		if(isIdNull(object))
+		{
+			throw new Exception("Id field of an object should not be null");
+		}
+		
 		AbstractActionForm form = null;
 
 		if(object instanceof User)
@@ -206,5 +217,20 @@ public class ActionFormFactory
 		}
 		
 		return form;
+	}
+	
+	private static boolean isIdNull(Object domainObject) throws Exception
+	{
+		Method getIdMethod=domainObject.getClass().getMethod("getId",new Class[]{});
+		Object object = getIdMethod.invoke(domainObject,new Object[]{});
+		
+		if(object == null)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 }

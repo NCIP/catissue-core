@@ -201,12 +201,13 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
         this.firstName =  Utility.toString( participant.getFirstName());
         this.middleName = Utility.toString( participant.getMiddleName());
         this.birthDate = Utility.parseDateToString(participant.getBirthDate(),Constants.DATE_PATTERN_MM_DD_YYYY);
-        this.gender = participant.getGender();
-        this.genotype = participant.getSexGenotype();
+
+        this.gender = toStringEnumValue(participant.getGender());
+        this.genotype = toStringEnumValue(participant.getSexGenotype());
         setSSN(participant.getSocialSecurityNumber());
-        this.race = participant.getRace();
-        this.activityStatus = participant.getActivityStatus();
-        this.ethnicity = participant.getEthnicity();
+        this.race = toStringEnumValue(participant.getRace());
+        this.activityStatus = toStringEnumValue(participant.getActivityStatus());
+        this.ethnicity = toStringEnumValue(participant.getEthnicity());
         
         //Populating the map with the participant medical identifiers data 
         Collection medicalIdentifierCollection = participant.getParticipantMedicalIdentifierCollection();
@@ -249,6 +250,22 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 			counter = 1;
     }
  
+    /**
+     * Returns -1 if the given value is null or empty. 
+     * @return String the value to be checked.
+     */
+    private String toStringEnumValue(String value)
+    {
+    	if(value == null || value.trim().length() == 0)
+        {
+    		return  "-1";
+        }
+    	else
+    	{
+        	return value;
+        }
+    }
+    
     /**
      * Returns the last name of the Participant. 
      * @return String the last name of the Participant.

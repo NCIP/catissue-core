@@ -181,43 +181,47 @@ public class DistributionProtocolForm extends SpecimenProtocolForm
 				String key6 = "SpecimenRequirement:" + i +"_quantityIn";
 				String key7 = "SpecimenRequirement:" + i +"_systemIdentifier";
 				
-				edu.wustl.catissuecore.domainobject.SpecimenRequirement requirement = (edu.wustl.catissuecore.domainobject.SpecimenRequirement)it.next();
-				values.put(key3,requirement.getSpecimenType());
-				values.put(key4,requirement.getTissueSite());
-				values.put(key5,requirement.getPathologyStatus());
-				values.put(key7,Utility.toString(requirement.getId()));
+				edu.wustl.catissuecore.domainobject.SpecimenRequirement specimenRequirement = (edu.wustl.catissuecore.domainobject.SpecimenRequirement)it.next();
 				
-				if(requirement instanceof edu.wustl.catissuecore.domainobject.TissueSpecimenRequirement)
+				if(specimenRequirement != null)
 				{
-				    values.put(key1,"Tissue");
-					values.put(key2,Constants.UNIT_GM);
+					values.put(key3,specimenRequirement.getSpecimenType());
+					values.put(key4,specimenRequirement.getTissueSite());
+					values.put(key5,specimenRequirement.getPathologyStatus());
+					values.put(key7,Utility.toString(specimenRequirement.getId()));
 					
-					String tissueType = requirement.getSpecimenType();
-					if(tissueType.equalsIgnoreCase(Constants.SLIDE) || tissueType.equalsIgnoreCase(Constants.PARAFFIN_BLOCK)
-							|| tissueType.equalsIgnoreCase(Constants.FROZEN_BLOCK) )
+					if(specimenRequirement instanceof edu.wustl.catissuecore.domainobject.TissueSpecimenRequirement)
 					{
-						values.put(key6,Utility.toString(new Integer(((edu.wustl.catissuecore.domainobject.TissueSpecimenRequirement) requirement).getQuantityInGram().intValue())));
+					    values.put(key1,"Tissue");
+						values.put(key2,Constants.UNIT_GM);
+						
+						String tissueType = specimenRequirement.getSpecimenType();
+						if(tissueType.equalsIgnoreCase(Constants.SLIDE) || tissueType.equalsIgnoreCase(Constants.PARAFFIN_BLOCK)
+								|| tissueType.equalsIgnoreCase(Constants.FROZEN_BLOCK) )
+						{
+							values.put(key6,Utility.toString(new Integer(((edu.wustl.catissuecore.domainobject.TissueSpecimenRequirement) specimenRequirement).getQuantityInGram().intValue())));
+						}
+						else
+							values.put(key6,String.valueOf(((edu.wustl.catissuecore.domainobject.TissueSpecimenRequirement)specimenRequirement).getQuantityInGram()));
 					}
-					else
-						values.put(key6,String.valueOf(((edu.wustl.catissuecore.domainobject.TissueSpecimenRequirement)requirement).getQuantityInGram()));
-				}
-				else if(requirement instanceof edu.wustl.catissuecore.domainobject.CellSpecimenRequirement)
-				{
-					values.put(key1,"Cell");
-					values.put(key2,Constants.UNIT_CC);
-					values.put(key6,String.valueOf(((edu.wustl.catissuecore.domainobject.CellSpecimenRequirement)requirement).getQuantityInCellCount()));
-				}
-				else if(requirement instanceof edu.wustl.catissuecore.domainobject.MolecularSpecimenRequirement)
-				{
-					values.put(key1,"Molecular");
-					values.put(key2,Constants.UNIT_MG);
-					values.put(key6,String.valueOf(((edu.wustl.catissuecore.domainobject.MolecularSpecimenRequirement)requirement).getQuantityInMicrogram()));
-				}
-				else if(requirement instanceof edu.wustl.catissuecore.domainobject.FluidSpecimenRequirement)
-				{
-					values.put(key1,"Fluid");
-					values.put(key2,Constants.UNIT_ML);
-					values.put(key6,String.valueOf(((edu.wustl.catissuecore.domainobject.FluidSpecimenRequirement)requirement).getQuantityInMilliliter()));
+					else if(specimenRequirement instanceof edu.wustl.catissuecore.domainobject.CellSpecimenRequirement)
+					{
+						values.put(key1,"Cell");
+						values.put(key2,Constants.UNIT_CC);
+						values.put(key6,String.valueOf(((edu.wustl.catissuecore.domainobject.CellSpecimenRequirement)specimenRequirement).getQuantityInCellCount()));
+					}
+					else if(specimenRequirement instanceof edu.wustl.catissuecore.domainobject.MolecularSpecimenRequirement)
+					{
+						values.put(key1,"Molecular");
+						values.put(key2,Constants.UNIT_MG);
+						values.put(key6,String.valueOf(((edu.wustl.catissuecore.domainobject.MolecularSpecimenRequirement)specimenRequirement).getQuantityInMicrogram()));
+					}
+					else if(specimenRequirement instanceof edu.wustl.catissuecore.domainobject.FluidSpecimenRequirement)
+					{
+						values.put(key1,"Fluid");
+						values.put(key2,Constants.UNIT_ML);
+						values.put(key6,String.valueOf(((edu.wustl.catissuecore.domainobject.FluidSpecimenRequirement)specimenRequirement).getQuantityInMilliliter()));
+					}
 				}
 				
 				i++;

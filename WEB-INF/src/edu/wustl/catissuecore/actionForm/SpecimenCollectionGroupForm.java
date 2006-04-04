@@ -238,30 +238,85 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 		{
 			surgicalPathologyNumber = Utility.toString(clinicalReport.getSurgicalPathologyNumber());
 
-			if(clinicalReport.getParticipantMedicalIdentifier()!=null)
+			if(clinicalReport.getParticipantMedicalIdentifier() != null
+					&& clinicalReport.getParticipantMedicalIdentifier().getId() != null)
+			{
 				participantsMedicalIdentifierId = clinicalReport.getParticipantMedicalIdentifier().getId().longValue();
+			}
 		}
 		else
 		{
 			participantsMedicalIdentifierId = -1;
 		}
-				
-		collectionProtocolId = specimenCollectionGroup.getCollectionProtocolRegistration().getCollectionProtocol().getId().longValue();
-		collectionProtocolEventId = specimenCollectionGroup.getCollectionProtocolEvent().getId().longValue();
-		edu.wustl.catissuecore.domainobject.Participant participant = specimenCollectionGroup.getCollectionProtocolRegistration().getParticipant();
 		
-		if(participant!=null)
+		if(specimenCollectionGroup.getCollectionProtocolRegistration() != null
+				&& specimenCollectionGroup.getCollectionProtocolRegistration().getCollectionProtocol() != null
+				&& specimenCollectionGroup.getCollectionProtocolRegistration().getCollectionProtocol().getId() != null)
 		{
-			participantId = participant.getId().longValue();
-			checkedButton = 1;
+			collectionProtocolId = specimenCollectionGroup.getCollectionProtocolRegistration().getCollectionProtocol().getId().longValue();
 		}
 		else
 		{
-			protocolParticipantIdentifier =  Utility.toString(specimenCollectionGroup.getCollectionProtocolRegistration().getProtocolParticipantIdentifier());
-			checkedButton = 2;
+			collectionProtocolId = -1;
 		}
 		
-		siteId = specimenCollectionGroup.getSite().getId().longValue();
+		if(specimenCollectionGroup.getCollectionProtocolEvent() != null
+				&& specimenCollectionGroup.getCollectionProtocolEvent().getId() != null)
+		{
+			collectionProtocolEventId = specimenCollectionGroup.getCollectionProtocolEvent().getId().longValue();
+		}
+		else
+		{
+			collectionProtocolEventId = -1;
+		}
+				
+		if(specimenCollectionGroup.getCollectionProtocolRegistration() != null)
+		{
+			edu.wustl.catissuecore.domainobject.Participant participant = specimenCollectionGroup.getCollectionProtocolRegistration().getParticipant();
+			
+			if(participant!=null)
+			{
+				if(participant.getId() != null)
+				{
+					participantId = participant.getId().longValue();
+				}
+				else
+				{
+					participantId = -1;
+				}
+				
+				checkedButton = 1;
+			}
+			else
+			{
+				if(specimenCollectionGroup.getCollectionProtocolRegistration() != null
+						&& specimenCollectionGroup.getCollectionProtocolRegistration().getProtocolParticipantIdentifier() != null)
+				{
+					protocolParticipantIdentifier =  Utility.toString(specimenCollectionGroup.getCollectionProtocolRegistration().getProtocolParticipantIdentifier());
+				}
+				else
+				{
+					protocolParticipantIdentifier =  "-1";
+				}
+				
+				checkedButton = 2;
+			}
+		}
+		else
+		{
+			participantId = -1;
+			checkedButton = 1;
+		}
+		
+		if(specimenCollectionGroup.getSite() != null
+				&& specimenCollectionGroup.getSite().getId() != null)
+		{
+			siteId = specimenCollectionGroup.getSite().getId().longValue();
+		}
+		else
+		{
+			siteId = -1;
+		}
     }
 	  
 	/* (non-Javadoc)
