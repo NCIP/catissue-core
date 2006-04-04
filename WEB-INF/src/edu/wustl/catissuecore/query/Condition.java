@@ -171,9 +171,11 @@ public class Condition {
 	    
 	    //Aarti: To make queries case insensitive condition is converted to
 	    //UPPER(<<fieldname>>) <<Operator>> UPPER(<<value>>)
+	    //Mandar 28mar06: newValue checked for null before converting to uppercase. 
+	    //bug id: 1615
 	    String dataElementString;
-	    if(dataElement.getFieldType().equalsIgnoreCase(Constants.FIELD_TYPE_VARCHAR) 
-		        	|| dataElement.getFieldType().equalsIgnoreCase(Constants.FIELD_TYPE_TEXT))
+	    if(!newValue.equalsIgnoreCase(Constants.NULL)  && (dataElement.getFieldType().equalsIgnoreCase(Constants.FIELD_TYPE_VARCHAR) 
+		        	|| dataElement.getFieldType().equalsIgnoreCase(Constants.FIELD_TYPE_TEXT)))
 	    {
 	    	newValue = Constants.UPPER +"("+newValue+")";
 	    	dataElementString = dataElement.toUpperSQLString(tableSufix);
