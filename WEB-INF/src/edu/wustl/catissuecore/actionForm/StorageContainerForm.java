@@ -247,35 +247,86 @@ public class StorageContainerForm extends AbstractActionForm
 		
 		isFull = Utility.initCap( Utility.toString(container.getIsFull()));
 		Logger.out.debug("isFULL />/>/> "+ isFull);
-		
-		Logger.out.debug("StorageType in form--------->"+container.getStorageType());
-		Logger.out.debug("StorageType ID in form--------->"+container.getStorageType().getId());
-		
-		this.typeId = container.getStorageType().getId().longValue();
-		
-		if(container.getParentContainer() != null)
+				
+		if(container.getStorageType() != null && container.getStorageType().getId() != null)
 		{
-			this.parentContainerId = container.getParentContainer().getId().longValue();
-			this.checkedButton = 2;
-			this.positionInParentContainer = container.getParentContainer().getStorageType().getType() + " : " 
-							+ container.getParentContainer().getId() + " Pos(" + container.getPositionDimensionOne() + ","
-							+ container.getPositionDimensionTwo() + ")";
-			
-			//Sri: Fix for bug #
-			this.positionDimensionOne = container.getPositionDimensionOne().intValue();
-			this.positionDimensionTwo = container.getPositionDimensionTwo().intValue();
+			this.typeId = container.getStorageType().getId().longValue();
+			this.oneDimensionLabel = container.getStorageType().getOneDimensionLabel();
+			this.twoDimensionLabel = container.getStorageType().getTwoDimensionLabel();
+		}
+		else
+		{
+			this.typeId = -1;
 		}
 		
-		if(container.getSite()!= null)
-			this.siteId = container.getSite().getId().longValue();
+		if(container.getSite() != null)
+		{
+			this.checkedButton = 1;
+			
+			if(container.getSite().getId() != null)
+			{
+				this.siteId = container.getSite().getId().longValue();
+			}
+		}
+		else
+		{
+			this.checkedButton = 2;
+		}
 
-		this.defaultTemperature = Utility.toString( container.getTempratureInCentigrade());
-		this.oneDimensionCapacity = container.getStorageContainerCapacity()
-				.getOneDimensionCapacity().intValue();
-		this.twoDimensionCapacity = container.getStorageContainerCapacity()
-				.getTwoDimensionCapacity().intValue();
-		this.oneDimensionLabel = container.getStorageType().getOneDimensionLabel();
-		this.twoDimensionLabel = container.getStorageType().getTwoDimensionLabel();
+		//If parent container is present & site is absent
+		if(container.getParentContainer() != null)
+		{
+			this.checkedButton = 2;
+			
+			if(container.getParentContainer().getId() != null)
+			{
+				this.parentContainerId = container.getParentContainer().getId().longValue();
+				
+				//If both the dimensions are not null
+				if(container.getPositionDimensionOne() != null && container.getPositionDimensionTwo() != null)
+				{
+					this.positionInParentContainer = container.getParentContainer().getStorageType().getType() + " : " 
+									+ container.getParentContainer().getId() + " Pos(" + container.getPositionDimensionOne() + ","
+									+ container.getPositionDimensionTwo() + ")";
+		
+					this.positionDimensionOne = container.getPositionDimensionOne().intValue();
+					this.positionDimensionTwo = container.getPositionDimensionTwo().intValue();
+				}
+				else //If any or both of the dimensions is/are null
+				{
+					if(container.getPositionDimensionOne() == null)
+					{
+						this.positionDimensionOne = -1;
+					}
+					
+					if(container.getPositionDimensionTwo() == null)
+					{
+						this.positionDimensionTwo = -1;
+					}
+				}
+			}
+		}
+		else //If site is present & parent container is absent
+		{
+			if(container.getSite() == null && (container.getPositionDimensionOne() != null || container.getPositionDimensionTwo() != null))
+			{
+				this.checkedButton = 2;
+			}
+			else
+			{
+				this.checkedButton = 1;
+			}
+		}
+
+		this.defaultTemperature = Utility.toString(container.getTempratureInCentigrade());
+		
+		if(container.getStorageContainerCapacity() != null)
+		{
+			this.oneDimensionCapacity = container.getStorageContainerCapacity()
+					.getOneDimensionCapacity().intValue();
+			this.twoDimensionCapacity = container.getStorageContainerCapacity()
+					.getTwoDimensionCapacity().intValue();
+		}
 		
 		this.noOfContainers = 1;
 		this.startNumber = "0";
@@ -303,8 +354,20 @@ public class StorageContainerForm extends AbstractActionForm
 				edu.wustl.catissuecore.domainobject.StorageContainerDetails containerDetails = 
 				    (edu.wustl.catissuecore.domainobject.StorageContainerDetails)it.next();
 				
-				values.put(key1,containerDetails.getParameterName());
-				values.put(key2,containerDetails.getParameterValue());
+				String paramName = containerDetails.getParameterName();
+				String paramValue = containerDetails.getParameterValue();
+				
+				if(paramName == null && paramValue != null)
+				{
+					paramName = "";
+				}
+				else if(paramName != null && paramValue == null)
+				{
+					paramValue = "";
+				}
+				
+				values.put(key1,paramName);
+				values.put(key2,paramValue);
 				values.put(key3,Utility.toString(containerDetails.getId()));
 				
 				i++;
