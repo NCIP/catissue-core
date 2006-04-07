@@ -18,7 +18,6 @@ import java.util.Set;
 import java.util.Vector;
 
 import net.sf.hibernate.HibernateException;
-import edu.wustl.catissuecore.dao.DAO;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
@@ -29,6 +28,7 @@ import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.SecurityDataBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.cde.CDEManager;
+import edu.wustl.common.dao.DAO;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
@@ -38,12 +38,11 @@ import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
-
 /**
  * CollectionProtocolBizLogic is used to add CollectionProtocol information into the database using Hibernate.
  * @author Mandar Deshmukh
  */
-public class CollectionProtocolBizLogic extends DefaultBizLogic implements Roles
+public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic implements Roles
 {
 	/**
      * Saves the CollectionProtocol object in the database.
@@ -124,7 +123,8 @@ public class CollectionProtocolBizLogic extends DefaultBizLogic implements Roles
 			else
 				it.remove();
 		}
-		checkForChangedStatus( collectionProtocol,  collectionProtocolOld  );
+		
+		checkForChangedStatus(collectionProtocol,collectionProtocolOld);
 		dao.update(collectionProtocol, sessionDataBean, true, true, false);
 		
 		//Audit of Collection Protocol.

@@ -21,7 +21,7 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 
-import edu.wustl.catissuecore.query.TreeNodeData;
+import edu.wustl.common.tree.TreeNodeData;
 import edu.wustl.catissuecore.util.global.Constants;
 
 /**

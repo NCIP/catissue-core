@@ -16,12 +16,10 @@ import java.util.Vector;
  * TODO To change the template for this generated type comment go to
  * Window - Preferences - Java - Code Style - Code Templates
  */
-
 public class Variables extends edu.wustl.common.util.global.Variables
 {
     //public static String catissueHome=new String();
     public static Vector databaseDefinitions=new Vector();
     public static String databaseDriver=new String();
     public static String[] databasenames;
-    public static String catissueURL=new String();
 }

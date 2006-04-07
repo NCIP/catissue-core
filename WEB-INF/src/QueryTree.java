@@ -29,7 +29,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
 
-import edu.wustl.catissuecore.storage.GenerateTree;
+import edu.wustl.common.tree.GenerateTree;
 import edu.wustl.catissuecore.util.global.Constants;
 
 /**

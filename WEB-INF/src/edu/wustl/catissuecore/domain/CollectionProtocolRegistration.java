@@ -13,7 +13,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import edu.wustl.catissuecore.actionForm.CollectionProtocolRegistrationForm;
-import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.common.util.Utility;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;

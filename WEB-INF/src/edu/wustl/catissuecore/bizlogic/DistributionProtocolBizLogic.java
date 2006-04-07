@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 
-import edu.wustl.catissuecore.dao.DAO;
 import edu.wustl.catissuecore.domain.DistributionProtocol;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.User;
@@ -27,6 +26,7 @@ import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.SecurityDataBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.cde.CDEManager;
+import edu.wustl.common.dao.DAO;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
@@ -40,7 +40,7 @@ import edu.wustl.common.util.logger.Logger;
  * DistributionProtocolBizLogic is used to add DistributionProtocol information into the database using Hibernate.
  * @author Mandar Deshmukh
  */
-public class DistributionProtocolBizLogic extends DefaultBizLogic implements Roles
+public class DistributionProtocolBizLogic extends SpecimenProtocolBizLogic implements Roles
 {
 	/**
      * Saves the DistributionProtocol object in the database.
@@ -95,14 +95,15 @@ public class DistributionProtocolBizLogic extends DefaultBizLogic implements Rol
 			checkStatus(dao, distributionProtocol.getPrincipalInvestigator(), "Principal Investigator");
     	
 		setPrincipalInvestigator(dao,distributionProtocol);
-		checkForChangedStatus( distributionProtocol ,  distributionProtocolOld  );
+		
+		checkForChangedStatus( distributionProtocol ,  distributionProtocolOld);
 		dao.update(distributionProtocol, sessionDataBean, true, true, false);
 		
 		//Audit of Distribution Protocol.
 		dao.audit(obj, oldObj, sessionDataBean, true);
 		
 		Collection oldSpecimenRequirementCollection = distributionProtocolOld.getSpecimenRequirementCollection();
-
+		
 		Iterator it = distributionProtocol.getSpecimenRequirementCollection().iterator();
 		while(it.hasNext())
 		{
@@ -157,7 +158,7 @@ public class DistributionProtocolBizLogic extends DefaultBizLogic implements Rol
     private Vector getAuthorizationData(AbstractDomainObject obj) throws SMException 
     {
         Logger.out.debug("--------------- In here ---------------");
-     
+        
         Vector authorizationData = new Vector();
         Set group = new HashSet();
         
@@ -194,14 +195,14 @@ public class DistributionProtocolBizLogic extends DefaultBizLogic implements Rol
 		if(spReqCollection != null && spReqCollection.size() != 0)
 		{
 			List specimenClassList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_SPECIMEN_CLASS,null);
-
+			
 //	    	NameValueBean undefinedVal = new NameValueBean(Constants.UNDEFINED,Constants.UNDEFINED);
 	    	List tissueSiteList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_TISSUE_SITE,null);
-
+	    	
 	    	List pathologicalStatusList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_PATHOLOGICAL_STATUS,null);
- 
+	    	
 			Iterator it = spReqCollection.iterator();
-
+			
 			while(it.hasNext())
 			{
 				SpecimenRequirement requirement = (SpecimenRequirement)it.next();

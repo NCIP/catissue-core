@@ -23,9 +23,9 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.AssignPrivilegesForm;
-import edu.wustl.catissuecore.bizlogic.AbstractBizLogic;
+import edu.wustl.common.bizlogic.AbstractBizLogic;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
-import edu.wustl.catissuecore.exception.BizLogicException;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.util.logger.Logger;

@@ -15,10 +15,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import edu.wustl.catissuecore.dao.DAOFactory;
-import edu.wustl.catissuecore.dao.HibernateDAO;
 import edu.wustl.catissuecore.domain.QueryTableData;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.dao.DAOFactory;
+import edu.wustl.common.dao.HibernateDAO;
 import edu.wustl.common.util.dbManager.DAOException;
 
 /**

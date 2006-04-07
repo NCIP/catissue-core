@@ -7,7 +7,7 @@ import javax.swing.event.MouseInputListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import netscape.javascript.JSObject;
-import edu.wustl.catissuecore.tissuesite.TissueSiteTreeNode;
+import edu.wustl.common.tree.TissueSiteTreeNode;
 import edu.wustl.catissuecore.util.global.Constants;
 
 

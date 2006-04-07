@@ -19,8 +19,6 @@ import java.util.StringTokenizer;
 import java.util.TreeSet;
 import java.util.Vector;
 
-import edu.wustl.catissuecore.dao.DAOFactory;
-import edu.wustl.catissuecore.dao.JDBCDAO;
 import edu.wustl.catissuecore.query.Client;
 import edu.wustl.catissuecore.query.DataElement;
 import edu.wustl.catissuecore.query.Operator;
@@ -29,6 +27,9 @@ import edu.wustl.catissuecore.query.Relation;
 import edu.wustl.catissuecore.query.RelationCondition;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
+import edu.wustl.common.bizlogic.DefaultBizLogic;
+import edu.wustl.common.dao.DAOFactory;
+import edu.wustl.common.dao.JDBCDAO;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 

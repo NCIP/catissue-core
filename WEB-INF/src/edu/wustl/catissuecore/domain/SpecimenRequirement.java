@@ -26,7 +26,7 @@ import edu.wustl.common.exception.AssignDataException;
 public abstract class SpecimenRequirement  extends AbstractDomainObject implements java.io.Serializable
 {
 	private static final long serialVersionUID = 1234567890L;
-
+	
 	/**
 	 * System generated unique systemIdentifier.
 	 */
@@ -46,7 +46,7 @@ public abstract class SpecimenRequirement  extends AbstractDomainObject implemen
 	 * Histopathological character of the specimen e.g. Non-Malignant, Malignant, Non-Malignant Diseased, Pre-Malignant.
 	 */
 	protected String pathologyStatus;
-
+	
 	/**
 	 * Collection of studies associated with the CollectionProtocol.
 	 */
@@ -75,7 +75,7 @@ public abstract class SpecimenRequirement  extends AbstractDomainObject implemen
 	{
 		return systemIdentifier;
 	}
-
+	
 	/**
 	 * @param systemIdentifier The systemIdentifier to set.
 	 */
@@ -83,7 +83,7 @@ public abstract class SpecimenRequirement  extends AbstractDomainObject implemen
 	{
 		this.systemIdentifier = systemIdentifier;
 	}
-
+	
 	/**
 	 * Returns the specimenType.
 	 * @hibernate.property name="specimenType" type="string"
@@ -186,7 +186,6 @@ public abstract class SpecimenRequirement  extends AbstractDomainObject implemen
 	{
 		return "SR "+this.getClass().getName()+" : "+specimenType+" | "+ tissueSite;
 	}
-	
 	
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.domain.AbstractDomainObject#setAllValues(edu.wustl.catissuecore.actionForm.AbstractActionForm)

@@ -16,14 +16,16 @@ import java.util.Vector;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
-import edu.wustl.catissuecore.dao.JDBCDAO;
 import edu.wustl.catissuecore.query.AdvancedConditionsNode;
 import edu.wustl.catissuecore.query.Condition;
 import edu.wustl.catissuecore.query.Operator;
 import edu.wustl.catissuecore.query.Table;
-import edu.wustl.catissuecore.query.TreeNodeData;
+import edu.wustl.common.tree.TreeDataInterface;
+import edu.wustl.common.tree.TreeNodeData;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.bizlogic.DefaultBizLogic;
+import edu.wustl.common.dao.JDBCDAO;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 

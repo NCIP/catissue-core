@@ -16,7 +16,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import edu.wustl.catissuecore.actionForm.SpecimenProtocolForm;
-import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.common.util.Utility;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.logger.Logger;
@@ -80,7 +80,6 @@ public abstract class SpecimenProtocol extends AbstractDomainObject implements j
 	 * Defines whether this SpecimenProtocol record can be queried (Active) or not queried (Inactive) by any actor.
 	 */
 	protected String activityStatus;
-
 	
 	/**
 	 * NOTE: Do not delete this constructor. Hibernet uses this by reflection API.

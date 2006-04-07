@@ -51,13 +51,13 @@ public class SpecimenProtocolAction  extends SecureAction
     {
         //Gets the value of the operation parameter.
         String operation = request.getParameter(Constants.OPERATION);
-
+        
         //Sets the operation attribute to be used in the Add/Edit Collection / Distribution Page. 
         request.setAttribute(Constants.OPERATION, operation);
         
         //Sets the activityStatusList attribute to be used in the Site Add/Edit Page.
         request.setAttribute(Constants.ACTIVITYSTATUSLIST, Constants.ACTIVITY_STATUS_VALUES);
-  
+        
         	UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getBizLogic(Constants.USER_FORM_ID);
         	Collection userCollection =  userBizLogic.getUsers(operation);
         	request.setAttribute(Constants.USERLIST, userCollection);
@@ -65,7 +65,7 @@ public class SpecimenProtocolAction  extends SecureAction
         	// get the Specimen class and type from the cde
 	    	List specimenTypeList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_SPECIMEN_TYPE,null);
 	    	request.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
-
+	    	
         	CDE specimenClassCDE = CDEManager.getCDEManager().getCDE(Constants.CDE_NAME_SPECIMEN_CLASS);
 	    	Set setPV = specimenClassCDE.getPermissibleValues();
 	    	Logger.out.debug("2");
@@ -76,7 +76,7 @@ public class SpecimenProtocolAction  extends SecureAction
 	    	Map subTypeMap = new HashMap();
 	    	Logger.out.debug("\n\n\n\n**********MAP DATA************\n");
 	    	specimenClassList.add(new NameValueBean(Constants.SELECT_OPTION,"-1"));
-
+	    	
 	    	// Fill the Map with Specimen as Keys and Subtypes as values.
 	    	// Used for dynamically generation of JavaScript arrays for Specimen Type.
 	    	while(itr.hasNext())
@@ -107,7 +107,7 @@ public class SpecimenProtocolAction  extends SecureAction
 	    	
 	    	// sets the Class list
 	    	request.setAttribute(Constants.SPECIMEN_CLASS_LIST, specimenClassList);
-
+	    	
 	    	// set the map to subtype
 	    	request.setAttribute(Constants.SPECIMEN_TYPE_MAP, subTypeMap);
 	    	
@@ -117,7 +117,7 @@ public class SpecimenProtocolAction  extends SecureAction
 	    	
 	    	List pathologyStatusList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_PATHOLOGICAL_STATUS,null);
 	    	request.setAttribute(Constants.PATHOLOGICAL_STATUS_LIST, pathologyStatusList);
-        
+	    	
         return mapping.findForward((String)request.getParameter(Constants.PAGEOF));
     }
 }

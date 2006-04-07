@@ -13,7 +13,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import edu.wustl.catissuecore.actionForm.EventParametersForm;
-import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.common.util.Utility;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
@@ -28,7 +28,7 @@ public abstract class EventParameters extends AbstractDomainObject implements ja
 {
 	
 	private static final long serialVersionUID = 1234567890L;
-
+	
 	/**
      * System generated unique systemIdentifier.
      */
@@ -48,8 +48,8 @@ public abstract class EventParameters extends AbstractDomainObject implements ja
      * Text comments on event.
      */
 	protected String comments;
-
-	/*
+	
+	/**
      * Returns System generated unique systemIdentifier.
      * @return System generated unique systemIdentifier.
      * @see #setSystemIdentifier(Integer)

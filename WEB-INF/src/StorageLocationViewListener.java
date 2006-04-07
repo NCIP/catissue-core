@@ -13,7 +13,7 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 
-import edu.wustl.catissuecore.storage.StorageContainerTreeNode;
+import edu.wustl.common.tree.StorageContainerTreeNode;
 import edu.wustl.catissuecore.util.global.Constants;
 
 /**

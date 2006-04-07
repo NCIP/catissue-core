@@ -10,10 +10,10 @@ package edu.wustl.catissuecore.query;
 
 import java.util.List;
 
-import edu.wustl.catissuecore.dao.AbstractDAO;
-import edu.wustl.catissuecore.dao.DAOFactory;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.dao.AbstractDAO;
+import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 

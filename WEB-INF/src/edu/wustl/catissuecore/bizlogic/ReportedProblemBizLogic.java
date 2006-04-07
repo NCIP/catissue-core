@@ -7,10 +7,11 @@
 
 package edu.wustl.catissuecore.bizlogic;
 
-import edu.wustl.catissuecore.dao.DAO;
 import edu.wustl.catissuecore.domain.ReportedProblem;
 import edu.wustl.catissuecore.util.EmailHandler;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.bizlogic.DefaultBizLogic;
+import edu.wustl.common.dao.DAO;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
 
@@ -24,7 +25,7 @@ public class ReportedProblemBizLogic extends DefaultBizLogic
 {
 
     /* (non-Javadoc)
-     * @see edu.wustl.catissuecore.dao.HibernateDAO#add(java.lang.Object)
+     * @see edu.wustl.common.dao.HibernateDAO#add(java.lang.Object)
      */
 	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
     {
@@ -39,7 +40,7 @@ public class ReportedProblemBizLogic extends DefaultBizLogic
     
     
     /* (non-Javadoc)
-     * @see edu.wustl.catissuecore.dao.AbstractBizLogic#update(java.lang.Object)
+     * @see edu.wustl.common.dao.AbstractBizLogic#update(java.lang.Object)
      */
 	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
     {

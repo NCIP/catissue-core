@@ -47,7 +47,7 @@ public class Table {
 	public Table(String tablename2) {
 		this.tableName=tablename2;
 	}
-
+	
 	/**
 	 * @param table
 	 */
@@ -60,7 +60,7 @@ public class Table {
 				this.linkingTable = new Table(linkingTable);
 		}
 	}
-
+	
 	/**
 	 * @return Returns the tableAliasAppend.
 	 */
@@ -85,7 +85,6 @@ public class Table {
 	public void setTableName(String tableName) {
 		this.tableName = tableName;
 	}
-	
 	
 	/* (non-Javadoc)
 	 * @see java.lang.Object#equals(java.lang.Object)

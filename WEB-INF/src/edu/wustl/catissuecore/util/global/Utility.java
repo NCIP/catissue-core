@@ -9,7 +9,6 @@
 
 package edu.wustl.catissuecore.util.global;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -20,8 +19,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import edu.wustl.catissuecore.domain.CellSpecimen;
 import edu.wustl.catissuecore.domain.CellSpecimenRequirement;
@@ -55,47 +52,7 @@ import edu.wustl.common.util.logger.Logger;
 
 public class Utility
 {
-    /**
-     * Parses the string format of date in the given format and returns the Data object.
-     * @param date the string containing date.
-     * @param pattern the pattern in which the date is present.
-     * @return the string format of date in the given format and returns the Data object.
-     * @throws ParseException
-     */
-	public static Date parseDate(String date,String pattern) throws ParseException
-	{
-		if(date!=null && !date.trim().equals(""))
-		{
-			try
-			{
-			    SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
-			    Date dateObj = dateFormat.parse(date);
-			    return dateObj;
-			}
-			catch(Exception e)
-			{
-				throw new ParseException("Date '"+date+"' is not in format of "+pattern,0);
-			}
-		}
-		else
-		{
-			return null;
-		}
-	}
-	
-	/**
-     * Parses the string format of date in the given format and returns the Data object.
-     * @param date the string containing date.
-     * @param pattern the pattern in which the date is present.
-     * @return the string format of date in the given format and returns the Data object.
-     * @throws ParseException
-     */
-	public static Date parseDate(String date) throws ParseException
-	{
-	    String pattern = datePattern(date);
-	    
-	    return parseDate(date, pattern);
-	}
+
 	
 	/**
 	 * Parses the Date in given format and returns the string representation.
@@ -161,7 +118,7 @@ public class Utility
 			return value;
 		}
 	}
-
+	
 	public static double toDouble(Object obj)
 	{
 		double value=0;
@@ -172,21 +129,6 @@ public class Utility
 			value=dblObj.doubleValue() ;
 			return value;
 		}
-	}
-	
-	public static Object[] addElement(Object[] array, Object obj)
-	{
-		Object newObjectArr[] = new Object[array.length+1];
-		
-		if(array instanceof String[])
-			newObjectArr = new String[array.length+1];
-		
-		for (int i = 0; i < array.length; i++)
-		{
-			newObjectArr[i] = array[i];
-		}
-		newObjectArr[newObjectArr.length-1] = obj;
-		return newObjectArr;
 	}
 	
 	/**
@@ -247,60 +189,7 @@ public class Utility
     	 
     	return returnStr;
     }
-
-	/**
-	 * @param list
-	 * @return
-	 */
-	public static List removeNull(List list) {
-		List nullFreeList = new ArrayList();
-		for(int i=0; i< list.size(); i++)
-		{
-			if(list.get(i)!= null)
-			{
-				nullFreeList.add(list.get(i));
-			}
-		}
-		return nullFreeList;
-	}
     
-	
-	public static String datePattern(String strDate)
-	{
-		String datePattern = "";
-		String dtSep  = ""; 
-		boolean result = true;
-    	try
-		{
-    		Pattern re = Pattern.compile("[0-9]{2}-[0-9]{2}-[0-9]{4}", Pattern.CASE_INSENSITIVE);
-    		Matcher  mat =re.matcher(strDate); 
-    		result = mat.matches();
-
-    		if(result)
-    			dtSep  = Constants.DATE_SEPARATOR ; 
-    		
-    		// check for  / separator
-    		if(!result)
-    		{
-        		re = Pattern.compile("[0-9]{2}/[0-9]{2}/[0-9]{4}", Pattern.CASE_INSENSITIVE);
-        		mat =re.matcher(strDate); 
-        		result = mat.matches();
-        		//System.out.println("is Valid Date Pattern : / : "+result);
-        		if(result)
-        			dtSep  = Constants.DATE_SEPARATOR_SLASH   ; 
-    		}
-		}
-    	catch(Exception exp)
-		{
-			Logger.out.error("Utility.datePattern() : exp : " + exp);
-		}
-    	if(dtSep.trim().length()>0)
-    		datePattern = "MM"+dtSep+"dd"+dtSep+"yyyy";
-    	
-    	Logger.out.debug("datePattern returned : "+ datePattern  );
-		return datePattern; 
-	}
-	
 	/**
 	 * @param str String to be converted to Proper case.
 	 * @return The String in Proper case.

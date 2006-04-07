@@ -19,23 +19,18 @@ package edu.wustl.catissuecore.util.global;
 public class Constants extends edu.wustl.common.util.global.Constants
 {	
  
-    //Constants used for authentication module.
-    public static final String LOGIN = "login";
     public static final String SESSION_DATA = "sessionData";
-    public static final String LOGOUT = "logout";
     
     public static final String AND_JOIN_CONDITION = "AND";
 	public static final String OR_JOIN_CONDITION = "OR";
 	//Sri: Changed the format for displaying in Specimen Event list (#463)
 	public static final String TIMESTAMP_PATTERN = "MM-dd-yyyy HH:mm";
 	public static final String DATE_PATTERN_YYYY_MM_DD = "yyyy-MM-dd";
-	public static final String DATE_PATTERN_MM_DD_YYYY = "MM-dd-yyyy";
 	public static final String TIME_PATTERN_HH_MM_SS = "HH:mm:ss";
 	
 	// Mandar: Used for Date Validations in Validator Class
 	public static final String DATE_SEPARATOR = "-";
 	public static final String DATE_SEPARATOR_DOT = ".";
-	public static final String DATE_SEPARATOR_SLASH = "/";
 	public static final String MIN_YEAR = "1900";
 	public static final String MAX_YEAR = "9999";
 	
@@ -46,13 +41,6 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String MYSQL_DATE_FORMAT_FUNCTION = "DATE_FORMAT";
 	public static final String MYSQL_STR_TO_DATE_FUNCTION = "STR_TO_DATE";*/
 	
-	//DAO Constants.
-	public static final int HIBERNATE_DAO = 1;
-	public static final int JDBC_DAO = 2;
-	
-	public static final String SUCCESS = "success";
-	public static final String FAILURE = "failure";
-	public static final String EDIT = "edit";
 	public static final String VIEW = "view";
 	public static final String SEARCH = "search";
 	public static final String DELETE = "delete";
@@ -64,7 +52,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String ACCESS_DENIED = "access_denied";
 	public static final String REDIRECT_TO_SPECIMEN = "specimenRedirect";
 	public static final String CALLED_FROM = "calledFrom";
-
+	
 	//Constants required for Forgot Password
 	public static final String FORGOT_PASSWORD = "forgotpassword";
 	
@@ -81,8 +69,6 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String CITY = "city";
 	public static final String STATE = "state";
 	public static final String COUNTRY = "country";
-	public static final String OPERATION = "operation";
-	public static final String ACTIVITY_STATUS = "activityStatus";
 	public static final String NEXT_CONTAINER_NO = "startNumber";
 	public static final String CSM_USER_ID = "csmUserId";
 	
@@ -136,11 +122,6 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String BIOHAZARD_TYPES_LIST = "biohazardTypesList";
 	public static final String PARENT_SPECIMEN_ID_LIST = "parentSpecimenIdList";
 	public static final String RECEIVED_QUALITY_LIST = "receivedQualityList";
-	
-	//Constants for audit of disabled objects.
-	public static final String UPDATE_OPERATION = "UPDATE";
-	public static final String ACTIVITY_STATUS_COLUMN = "ACTIVITY_STATUS";
-	
 	
 	//SpecimenCollecionGroup lists.
 	public static final String PROTOCOL_TITLE_LIST = "protocolTitleList";
@@ -207,7 +188,6 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String FROM_POSITION_DATA = "fromPositionData";
 	public static final String POS_ONE ="posOne";
 	public static final String POS_TWO ="posTwo";
-	public static final boolean switchSecurity = true;
 	public static final String STORAGE_CONTAINER_ID ="storContId";	
 	public static final String IS_RNA = "isRNA";
 	public static final String RNA = "RNA";
@@ -224,7 +204,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String SIGNUP_USER_ADD_ACTION = "SignUpUserAdd.do";
 	public static final String USER_EDIT_PROFILE_ACTION = "UserEditProfile.do";
 	public static final String UPDATE_PASSWORD_ACTION = "UpdatePassword.do";
-
+	
 	//Constants required in Accession.jsp Page
 	public static final String ACCESSION_SEARCH_ACTION = "AccessionSearch.do";
 	public static final String ACCESSION_ADD_ACTION = "AccessionAdd.do";
@@ -529,8 +509,6 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String ACTIVITY_STATUS_REJECT = "Reject";
 	public static final String ACTIVITY_STATUS_NEW = "New";
 	public static final String ACTIVITY_STATUS_PENDING = "Pending";
-	public static final String ACTIVITY_STATUS_CLOSED = "Closed";
-	public static final String ACTIVITY_STATUS_DISABLED = "Disabled";
 	
 	//Approve User status values.
 	public static final String APPROVE_USER_APPROVE_STATUS = "Approve";
@@ -551,14 +529,6 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String USER_DETAILS = "details";
 	public static final String CURRENT_RECORD = "currentRecord";
 	public static final String APPROVE_USER_EMAIL_SUBJECT = "Your membership status in caTISSUE Core.";
-	
-	//Tree View Constants.
-	public static final String ROOT = "Root";
-	public static final String CATISSUE_CORE = "caTISSUE Core";
-	public static final String TISSUE_SITE = "Tissue Site";
-	public static final int TISSUE_SITE_TREE_ID = 1;
-	public static final int STORAGE_CONTAINER_TREE_ID = 2;
-	public static final int QUERY_RESULTS_TREE_ID = 3;
 	
 	//Edit Object Constants.
 	public static final String TABLE_ALIAS_NAME = "aliasName"; 
@@ -608,7 +578,6 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String QUERY_RESULTS_SPECIMEN_TYPE = "SPECIMEN_TYPE";
 	
 	// Assign Privilege Constants.
-	public static final boolean PRIVILEGE_ASSIGN = true;
 	public static final boolean PRIVILEGE_DEASSIGN = false;
 	public static final String OPERATION_DISALLOW = "Disallow";
 	
@@ -941,7 +910,6 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	
 	// constants for Data required in query
 	public static final String ALIAS_NAME_TABLE_NAME_MAP="objectTableNames";
-	public static final String SYSTEM_IDENTIFIER = "systemIdentifier";
 	public static final String SYSTEM_IDENTIFIER_COLUMN_NAME = "IDENTIFIER";
 	public static final String NAME = "name";
 	
@@ -1132,21 +1100,10 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String SPECIMEN_COLUMNS = "SpecimenColumns";
 	public static final String USER_ID_COLUMN = "USER_ID";
 	
-	
-	
 	// -- menu selection related
 	public static final String MENU_SELECTED = "menuSelected";
-	public static final String CONSTRAINT_VOILATION_ERROR = "Submission failed since a {0} with the same {1} already exists";
-	public static final String GENERIC_DATABASE_ERROR = "An error occured during a database operation. Please report this problem to the adminstrator";
-	public static final String OBJECT_NOT_FOUND_ERROR = "Submission failed since a {0} with given {1}: \"{2}\" does not exists"; 
-	// The unique key voilation message is "Duplicate entry %s for key %d"
-	// This string is used for searching " for key " string in the above error message
-	public static final String MYSQL_DUPL_KEY_MSG = " for key ";
 	
-
 	public static final String GENERIC_SECURITYMANAGER_ERROR = "The Security Violation error occured during a database operation. Please report this problem to the adminstrator";
-	public static final String  ORACLE_DATABASE = "ORACLE";
-	public static final String  MYSQL_DATABASE = "MYSQL";
 	public static final String PASSWORD_CHANGE_IN_SESSION = "changepassword";
 	
 	public static final String BOOLEAN_YES = "Yes";
@@ -1161,7 +1118,6 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	
 	//Constants for HTTP-API
 	public static final String CONTENT_TYPE = "CONTENT-TYPE";
-	public static final String HTTP_API = "HTTPAPI";
 	
 	// For StorageContainer isFull status
 	public static final String IS_CONTAINER_FULL_LIST = "isContainerFullList";
@@ -1188,7 +1144,6 @@ public class Constants extends edu.wustl.common.util.global.Constants
     public static final String SPECIMENS = "Specimens";
 
 	//User Roles
-	public static final String ADMINISTRATOR = "Administrator";
 	public static final String TECHNICIAN = "Technician";
 	public static final String SUPERVISOR = "Supervisor";
 	public static final String SCIENTIST = "Scientist";

@@ -211,10 +211,25 @@ public class ActionFormFactory
 		{
 			form = new TissueSpecimenReviewEventParametersForm();
 		}
+		else if (object instanceof User && operation.equals(Constants.LOGIN))
+		{
+		    LoginForm loginForm = new LoginForm();
+		    User user = (User) object;
+		    loginForm.setLoginName(user.getLoginName());
+		    loginForm.setPassword(user.getPassword());
+		    form = loginForm;
+		}
+		else if (operation.equals(Constants.LOGOUT))
+		{
+		    form = null;
+		}
 		else
 		{
 		    throw new Exception("Invalid Object for Add/Edit Operation");
 		}
+		
+		form.setOperation(operation);
+		form.setAllVal(object);
 		
 		return form;
 	}

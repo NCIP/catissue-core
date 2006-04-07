@@ -19,19 +19,21 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
-import edu.wustl.catissuecore.dao.AbstractDAO;
-import edu.wustl.catissuecore.dao.DAO;
-import edu.wustl.catissuecore.dao.DAOFactory;
-import edu.wustl.catissuecore.dao.JDBCDAO;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.StorageContainerDetails;
 import edu.wustl.catissuecore.domain.StorageType;
-import edu.wustl.catissuecore.storage.StorageContainerTreeNode;
+import edu.wustl.common.tree.StorageContainerTreeNode;
+import edu.wustl.common.tree.TreeDataInterface;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.bizlogic.DefaultBizLogic;
+import edu.wustl.common.dao.AbstractDAO;
+import edu.wustl.common.dao.DAO;
+import edu.wustl.common.dao.DAOFactory;
+import edu.wustl.common.dao.JDBCDAO;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
@@ -1275,9 +1277,8 @@ public class StorageContainerBizLogic extends DefaultBizLogic
             return false;
         }
     }
-
+    
     //	 -- storage container validation for specimen
-
     public void checkContainer(DAO dao, String storageContainerID,
             String positionOne, String positionTwo,
             SessionDataBean sessionDataBean) throws DAOException, SMException

@@ -7,6 +7,7 @@ import java.util.Vector;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
+import edu.wustl.catissuecore.query.Table;
 import edu.wustl.common.util.logger.Logger;
 
 

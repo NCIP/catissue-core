@@ -16,7 +16,7 @@ import java.util.HashSet;
 import java.util.Map;
 
 import edu.wustl.catissuecore.actionForm.ParticipantForm;
-import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.common.util.Utility;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.MapDataParser;

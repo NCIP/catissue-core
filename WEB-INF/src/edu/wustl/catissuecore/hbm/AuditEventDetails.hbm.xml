@@ -6,7 +6,7 @@
 
 <hibernate-mapping>
     <class
-        name="edu.wustl.catissuecore.domain.AuditEventDetails"
+        name="edu.wustl.common.domain.AuditEventDetails"
         table="CATISSUE_AUDIT_EVENT_DETAILS"
         dynamic-update="false"
         dynamic-insert="false"
@@ -53,7 +53,7 @@
 
         <many-to-one
             name="auditEventLog"
-            class="edu.wustl.catissuecore.domain.AuditEventLog"
+            class="edu.wustl.common.domain.AuditEventLog"
             cascade="none"
             outer-join="auto"
             update="true"

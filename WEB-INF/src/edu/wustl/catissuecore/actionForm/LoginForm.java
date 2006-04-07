@@ -7,9 +7,10 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
-import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
 
@@ -22,7 +23,7 @@ import edu.wustl.common.util.global.Validator;
  *@author Aarti Sharma
  *@version 1.0
  */
-public class LoginForm extends ActionForm
+public class LoginForm extends AbstractActionForm
 {
     	/**
     	 * login ID entered by user
@@ -98,5 +99,32 @@ public class LoginForm extends ActionForm
         {
             this.loginName = null;
             this.password = null;
+        }
+        
+        /* (non-Javadoc)
+         * @see edu.wustl.common.actionForm.AbstractActionForm#reset()
+         */
+        protected void reset()
+        {
+            // TODO Auto-generated method stub
+
+        }
+        
+        /* (non-Javadoc)
+         * @see edu.wustl.common.actionForm.AbstractActionForm#getFormId()
+         */
+        public int getFormId()
+        {
+            // TODO Auto-generated method stub
+            return 0;
+        }
+        
+        /* (non-Javadoc)
+         * @see edu.wustl.common.actionForm.AbstractActionForm#setAllValues(edu.wustl.common.domain.AbstractDomainObject)
+         */
+        public void setAllValues(AbstractDomainObject abstractDomain)
+        {
+            // TODO Auto-generated method stub
+
         }
 }

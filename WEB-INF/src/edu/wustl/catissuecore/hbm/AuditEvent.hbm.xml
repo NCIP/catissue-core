@@ -6,7 +6,7 @@
 
 <hibernate-mapping>
     <class
-        name="edu.wustl.catissuecore.domain.AuditEvent"
+        name="edu.wustl.common.domain.AuditEvent"
         table="CATISSUE_AUDIT_EVENT"
         dynamic-update="false"
         dynamic-insert="false"
@@ -47,7 +47,7 @@
               />
 
               <one-to-many
-                  class="edu.wustl.catissuecore.domain.AuditEventLog"
+                  class="edu.wustl.common.domain.AuditEventLog"
               />
         </set>
 
@@ -59,16 +59,14 @@
             column="EVENT_TIMESTAMP"
         />
 
-        <many-to-one
-            name="user"
-            class="edu.wustl.catissuecore.domain.User"
-            cascade="none"
-            outer-join="auto"
+		<property
+            name="userId"
+            type="long"
             update="true"
             insert="true"
             column="USER_ID"
         />
-
+		
         <property
             name="comments"
             type="string"
