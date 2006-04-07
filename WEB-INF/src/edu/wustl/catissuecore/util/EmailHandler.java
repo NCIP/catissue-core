@@ -9,18 +9,15 @@
 
 package edu.wustl.catissuecore.util;
 
-import java.util.Iterator;
-import java.util.List;
-
 import edu.wustl.catissuecore.domain.ReportedProblem;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.SendEmail;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.SendEmail;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -243,39 +240,6 @@ public class EmailHandler
 		{
 			Logger.out.info(ApplicationProperties
 			    .getValue("reportedProblem.email.failure"));
-		}
-    }
-    
-    /**
-     * Sends the email to the administrator regarding the status of the CDE downloading.
-     * i.e. the CDEs successfully downloaded and the error messages in case of errors in downloading the CDEs. 
-     */
-    public void sendCDEDownloadStatusEmail(List errorList)
-    {
-        // Send the status of the CDE downloading to the administrator.
-        String body = "Dear Administrator," + "\n\n" + ApplicationProperties.getValue("email.cdeDownload.body.start") + "\n\n";
-        
-        Iterator iterator = errorList.iterator();
-        while (iterator.hasNext())
-        {
-            body = body + iterator.next() + "\n\n";
-        }
-        
-        body = "\n\n" + body + ApplicationProperties.getValue("email.catissuecore.team");
-        
-        String subject = ApplicationProperties.getValue("email.cdeDownload.subject");
-        
-        boolean emailStatus = sendEmailToAdministrator(subject, body);
-        
-        if (emailStatus)
-		{
-			Logger.out.info(ApplicationProperties
-			    .getValue("cdeDownload.email.success"));
-		}
-		else
-		{
-			Logger.out.info(ApplicationProperties
-			    .getValue("cdeDownload.email.failure"));
 		}
     }
     
