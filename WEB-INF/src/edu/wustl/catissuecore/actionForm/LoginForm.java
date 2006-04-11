@@ -74,7 +74,8 @@ public class LoginForm extends AbstractActionForm
             Validator validator = new Validator();
             if (validator.isEmpty(loginName))
             {
-                errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("user.loginName")));
+            	//Mandar 05-apr-06 : bugid:928 Loginname in error changed to email address.
+                errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("user.emailAddress")));
             }
             else
             {
