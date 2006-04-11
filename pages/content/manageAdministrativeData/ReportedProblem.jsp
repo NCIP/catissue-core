@@ -43,6 +43,11 @@
 							<th class="formSerialNumberLabelForTable" scope="col">
 				     			#
 				    		</th>
+<!-- Mandar : 10-Apr-06 Bug id:1291 : Display Problem ID -->
+							<th class="formSerialNumberLabelForTable" scope="col">
+								Problem ID
+							</th>
+<!-- Mandar : 10-Apr-06 Bug id:1291 : end -->
 							<th class="dataTableHeader" scope="col" align="left">
 								<bean:message key="reportedProblem.from" />
 							</th>
@@ -71,6 +76,12 @@
         						<td class="dataCellText">
 									<%=i%>
 								</td>
+<!-- Mandar : 10-Apr-06 Bug id:1291 : Display Problem ID -->
+								<td class="dataCellText">
+									<%=identifier %>
+								</td>
+<!-- Mandar : 10-Apr-06 Bug id:1291 : Display Problem ID end -->
+
 								<td class="dataCellText">
 										<bean:write	name="problem" property="from" /> 
 								</td>
