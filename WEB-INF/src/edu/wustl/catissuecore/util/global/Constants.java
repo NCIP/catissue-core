@@ -1013,7 +1013,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String UNKNOWN = "Unknown";
 	public static final String SEARCH_RESULT = "SearchResult.csv";
 	
-//	MD : LightYellow and Green colors for CollectionProtocol SpecimenRequirements. Bug id: 587 
+//	Mandar : LightYellow and Green colors for CollectionProtocol SpecimenRequirements. Bug id: 587 
 //	public static final String ODD_COLOR = "#FEFB85";
 //	public static final String EVEN_COLOR = "#A7FEAB";
 //	Light and dark shades of GREY.
