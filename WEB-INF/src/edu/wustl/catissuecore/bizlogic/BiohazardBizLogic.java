@@ -33,7 +33,7 @@ public class BiohazardBizLogic extends DefaultBizLogic
 	protected boolean validate(Object obj, DAO dao, String operation) throws DAOException
     {
 		Biohazard hazard = (Biohazard)obj;
-		List biohazardList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_BIOHAZARD, null);
+		List biohazardList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_BIOHAZARD, null);
 
 		if(!Validator.isEnumeratedValue(biohazardList,hazard.getType()))
 		{

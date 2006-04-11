@@ -96,7 +96,7 @@ public class CreateSpecimenBizLogic extends DefaultBizLogic
 			
 			//Setting the External Identifier Collection
 			Collection externalIdentifierCollection = specimen.getExternalIdentifierCollection();
-			// -- MD : code to add an empty External Identifier if externalIdentifier is not added.
+			// -- Mandar : code to add an empty External Identifier if externalIdentifier is not added.
 			if(externalIdentifierCollection.isEmpty()  )
 			{
 				ExternalIdentifier externalIdentifierObject = new  ExternalIdentifier();
