@@ -29,6 +29,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.util.ExportReport;
 import edu.wustl.common.util.SendFile;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * @author aniruddha_phadnis
@@ -53,6 +54,58 @@ public class SpreadsheetExportAction  extends BaseAction
     	//Getting column data & grid data from session
     	List columnList = (List)session.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
     	List dataList = (List)session.getAttribute(Constants.SPREADSHEET_DATA_LIST);
+    	
+    	//Mandar 06-Apr-06 Bugid:1165 : Extra ID columns displayed.  start
+    	
+    	Logger.out.debug("---------------------------------------------------------------------------------");
+       	Logger.out.debug("06-apr-06 : cl size :-"+columnList.size()  );
+    	Logger.out.debug(columnList); 
+    	Logger.out.debug("--");
+    	Logger.out.debug("06-apr-06 : dl size :-"+dataList.size()  );
+    	Logger.out.debug(dataList); 
+    	
+    	List tmpColumnList = new ArrayList();
+    	int idColCount=0;
+    	// count no. of ID columns
+    	for(int cnt=0;cnt<columnList.size();cnt++  )
+    	{
+    		String columnName = (String)columnList.get(cnt );
+    		Logger.out.debug(columnName + " : " + columnName.length()    );
+    		if(columnName.trim().equalsIgnoreCase("ID") )
+    		{
+    			idColCount++; 
+    		}
+    	}
+    	// remove ID columns
+    	for(int cnt=0;cnt<(columnList.size()-idColCount) ;cnt++  )
+    	{
+    		tmpColumnList.add(columnList.get(cnt)  ); 
+    	}
+    	
+    	// datalist filtration for ID data.
+    	List tmpDataList = new ArrayList();
+    	for(int dataListCnt=0; dataListCnt<dataList.size(); dataListCnt++    )
+    	{
+    		List tmpList = (List) dataList.get(dataListCnt);
+    		List tmpNewList = new ArrayList();
+        	for(int cnt=0;cnt<(tmpList.size()-idColCount) ;cnt++  )
+        	{
+        		tmpNewList.add(tmpList.get(cnt)  ); 
+        	}
+        	tmpDataList.add(tmpNewList ); 
+    	}
+    	
+    	Logger.out.debug("--");
+    	Logger.out.debug("tmpcollist :" + tmpColumnList.size() ); 
+    	Logger.out.debug(tmpColumnList); 
+    	Logger.out.debug("--");
+    	Logger.out.debug("tmpdatalist :" + tmpDataList.size() ); 
+    	Logger.out.debug(tmpDataList); 
+
+    	Logger.out.debug("---------------------------------------------------------------------------------");
+    	columnList = tmpColumnList ;
+    	dataList = tmpDataList ;
+    	//    	Mandar 06-Apr-06 Bugid:1165 : Extra ID columns end  
     	
     	List exportList = new ArrayList();
     	
