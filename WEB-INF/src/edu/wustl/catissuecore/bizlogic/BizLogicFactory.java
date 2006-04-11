@@ -199,4 +199,11 @@ public class BizLogicFactory
     	
     	return abstractBizLogic;
     }
+    
+    //Mandar : 11-apr-06 
+    public static SpecimenProtocolBizLogic getSpecimenProtocolBizLogic()
+    {
+    	return new SpecimenProtocolBizLogic();
+    }
+
 }
