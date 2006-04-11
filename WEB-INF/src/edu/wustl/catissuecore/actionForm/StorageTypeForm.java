@@ -276,7 +276,7 @@ public class StorageTypeForm extends AbstractActionForm
                     errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.valid.data",ApplicationProperties.getValue("storageType.type")));
                 }  
             	
-            }
+            }            
             if (validator.isEmpty(String.valueOf(oneDimensionCapacity)))
             {
                 errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("storageType.oneDimensionCapacity")));
@@ -288,6 +288,14 @@ public class StorageTypeForm extends AbstractActionForm
             		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("storageType.oneDimensionCapacity")));
             	}
             }
+         	// Mandar 10-apr-06 : bugid :353 
+        	// Error messages should be in the same sequence as the sequence of fields on the page.
+
+            if (validator.isEmpty(oneDimensionLabel))
+            {
+                errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("storageType.oneDimensionLabel")));
+            }
+
             if (validator.isEmpty(String.valueOf(twoDimensionCapacity)))
             {
                 errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("storageType.twoDimensionCapacity")));
@@ -300,10 +308,6 @@ public class StorageTypeForm extends AbstractActionForm
             	}
             }
             
-            if (validator.isEmpty(oneDimensionLabel))
-            {
-                errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("storageType.oneDimensionLabel")));
-            }
             if (validator.isEmpty(twoDimensionLabel) && (twoDimensionCapacity>1)  )
             {
                 errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.labelRequired",ApplicationProperties.getValue("storageType.twoDimensionLabel")));

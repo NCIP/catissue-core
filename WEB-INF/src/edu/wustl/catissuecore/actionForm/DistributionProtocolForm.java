@@ -328,7 +328,7 @@ public class DistributionProtocolForm extends SpecimenProtocolForm
 		    					classKey = classKey + "_specimenClass";
 		    					String classValue = (String)getValue(classKey );
 		    					
-	    						// -------MD: 20-12-2005
+	    						// -------Mandar: 20-12-2005
 	    						String typeKey = key.substring(0,key.lastIndexOf("_") );
 	    						typeKey = typeKey + "_specimenType";
 	    						String typeValue = (String)getValue(typeKey );

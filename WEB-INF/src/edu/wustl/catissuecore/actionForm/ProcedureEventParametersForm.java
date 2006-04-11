@@ -100,6 +100,12 @@ public class ProcedureEventParametersForm extends SpecimenEventParametersForm {
 		Validator validator = new Validator();
 
 		try {
+         	// Mandar 10-apr-06 : bugid :353 
+        	// Error messages should be in the same sequence as the sequence of fields on the page.
+			if(validator.isEmpty(url))
+			{
+				errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.required",ApplicationProperties.getValue("procedureeventparameters.url")));
+			}
 
 			if (validator.isEmpty(name)) {
 				errors.add(
@@ -110,10 +116,6 @@ public class ProcedureEventParametersForm extends SpecimenEventParametersForm {
 							"procedureeventparameters.name")));
 			}
 			
-			if(validator.isEmpty(url))
-			{
-				errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.required",ApplicationProperties.getValue("procedureeventparameters.url")));
-			}
 		} catch (Exception excp) {
 			Logger.out.error(excp.getMessage());
 		}

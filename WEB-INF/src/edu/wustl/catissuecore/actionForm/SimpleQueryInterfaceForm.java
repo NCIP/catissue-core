@@ -374,7 +374,7 @@ public class SimpleQueryInterfaceForm extends ActionForm
         return Constants.SIMPLE_QUERY_INTERFACE_ID;
     }
     
-    // MD: -- Map added to maintain values to display the Calendar icon
+    // Mandar: -- Map added to maintain values to display the Calendar icon
 	/**
 	 * Map to hold values for rows to display calendar icon.
 	 */

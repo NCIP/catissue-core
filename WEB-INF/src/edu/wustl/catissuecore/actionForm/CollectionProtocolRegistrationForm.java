@@ -211,14 +211,9 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocolregistration.protocoltitle")));
 		  	}
+         	// Mandar 10-apr-06 : bugid :353 
+        	// Error messages should be in the same sequence as the sequence of fields on the page.
 
-			//  date validation according to bug id 707, 722 and 730
-			String errorKey = validator.validateDate(registrationDate,true );
-			if(errorKey.trim().length() >0  )
-			{
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(errorKey,ApplicationProperties.getValue("collectionprotocolregistration.date")));
-			}
-			
 			// changes as per Bugzilla Bug 287 
 			if (checkedButton == true)
 			{
@@ -234,6 +229,14 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionProtocolReg.participantProtocolID")));
 				}
 			}
+			//  date validation according to bug id 707, 722 and 730
+			String errorKey = validator.validateDate(registrationDate,true );
+			if(errorKey.trim().length() >0  )
+			{
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(errorKey,ApplicationProperties.getValue("collectionprotocolregistration.date")));
+			}
+			
+
 			//
 			if (!validator.isValidOption(activityStatus))
 			{

@@ -405,14 +405,26 @@ public class SiteForm extends AbstractActionForm
          try
          {
          	setRedirectValue(validator);
+
+         	// Mandar 10-apr-06 : bugid :353 
+        	// Error messages should be in the same sequence as the sequence of fields on the page.
+
          	if (validator.isEmpty(name))
             {
                 errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("site.name")));
             }
          	
-         	if (validator.isEmpty(type))
+//         	if (validator.isEmpty(type))
+//            {
+//                errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("site.type")));
+//            }
+            if(!validator.isValidOption(type))
             {
-                errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("site.type")));
+            	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("site.type")));
+            }
+            if(coordinatorId == -1L)
+            {
+            	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("site.coordinator")));
             }
              
              if (!validator.isEmpty(emailAddress) && !validator.isValidEmailAddress(emailAddress))
@@ -427,14 +439,11 @@ public class SiteForm extends AbstractActionForm
                          "errors.item.required", ApplicationProperties
                                  .getValue("site.street")));
              }
-             
-             if(!validator.isValidOption(type))
+             if (validator.isEmpty(city))
              {
-             	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("site.type")));
-             }
-             if(coordinatorId == -1L)
-             {
-             	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("site.coordinator")));
+                 errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+                         "errors.item.required", ApplicationProperties
+                                 .getValue("site.city")));
              }
              
              if(!validator.isValidOption(state))
@@ -447,12 +456,6 @@ public class SiteForm extends AbstractActionForm
              	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("site.country")));
              }
              
-             if (validator.isEmpty(city))
-             {
-                 errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-                         "errors.item.required", ApplicationProperties
-                                 .getValue("site.city")));
-             }
              
              //checkValidNumber(zipCode, "site.zipCode", errors, validator); // commented as validation is done in following code
              // added for zip code , phone and fax number validation

@@ -796,6 +796,25 @@ public class UserForm extends AbstractActionForm
                     if (operation.equals(Constants.ADD)
                             || operation.equals(Constants.EDIT))
                     {
+                    	// Mandar 10-apr-06 : bugid :353 
+                    	// Error messages should be in the same sequence as the sequence of fields on the page.
+                    	
+                        if (validator.isEmpty(emailAddress))
+                        {
+                            errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+                                    "errors.item.required", ApplicationProperties
+                                            .getValue("user.emailAddress")));
+                        }
+                        else
+                        {
+                            if (!validator.isValidEmailAddress(emailAddress))
+                            {
+                                errors.add(ActionErrors.GLOBAL_ERROR,
+                                                new ActionError("errors.item.format",
+                                                        ApplicationProperties.getValue("user.emailAddress")));
+                            }
+                        }
+
                         if (validator.isEmpty(lastName))
                         {
                             errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
@@ -817,7 +836,7 @@ public class UserForm extends AbstractActionForm
                                             .getValue("user.city")));
                         }
 
-                        if (state.trim().equals(Constants.SELECT_OPTION))
+                        if(!validator.isValidOption(state))
                         {
                             errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
                                     "errors.item.required", ApplicationProperties
@@ -867,21 +886,6 @@ public class UserForm extends AbstractActionForm
 //                                    new ActionError("errors.phoneNumber.format",
 //                                            ApplicationProperties.getValue("user.faxNumber")));
 //                        }
-                        if (validator.isEmpty(emailAddress))
-                        {
-                            errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-                                    "errors.item.required", ApplicationProperties
-                                            .getValue("user.emailAddress")));
-                        }
-                        else
-                        {
-                            if (!validator.isValidEmailAddress(emailAddress))
-                            {
-                                errors.add(ActionErrors.GLOBAL_ERROR,
-                                                new ActionError("errors.item.format",
-                                                        ApplicationProperties.getValue("user.emailAddress")));
-                            }
-                        }
 
                         if (validator.isValidOption(String.valueOf(institutionId)) == false)
                         {
@@ -912,6 +916,16 @@ public class UserForm extends AbstractActionForm
                         }
                     }
 
+                    if (pageOf.equals(Constants.PAGEOF_APPROVE_USER))
+                    {
+                        if (validator.isValidOption(status) == false)
+                        {
+                            errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+                                    "errors.item.required", ApplicationProperties
+                                            .getValue("user.approveOperation")));
+                        }
+                    }
+
                     if (pageOf.equals(Constants.PAGEOF_USER_ADMIN) || pageOf.equals(Constants.PAGEOF_APPROVE_USER))
                     {
                         if (role != null)
@@ -924,16 +938,7 @@ public class UserForm extends AbstractActionForm
     	                    }
                         }
                     }
-
-                    if (pageOf.equals(Constants.PAGEOF_APPROVE_USER))
-                    {
-                        if (validator.isValidOption(status) == false)
-                        {
-                            errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-                                    "errors.item.required", ApplicationProperties
-                                            .getValue("user.approveOperation")));
-                        }
-                    }
+                	// Mandar 10-apr-06 : bugid :353 end 
                 }
             }
         }

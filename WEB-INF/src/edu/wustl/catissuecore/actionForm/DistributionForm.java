@@ -200,6 +200,15 @@ public class DistributionForm extends SpecimenEventParametersForm
 		ActionErrors errors = new ActionErrors();
 		Validator validator = new Validator();
 		Logger.out.debug("Inside validate function");
+
+		// Mandar 10-apr-06 : bugid :353 
+    	// Error messages should be in the same sequence as the sequence of fields on the page.
+		if(!validator.isValidOption(distributionProtocolId))
+		{
+			Logger.out.debug("dist prot");
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("distribution.protocol")));
+		}
+
 		if (!validator.isValidOption(""+userId))
 		{
 			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("distribution.distributedBy")));
@@ -213,11 +222,6 @@ public class DistributionForm extends SpecimenEventParametersForm
 			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(errorKey,ApplicationProperties.getValue("eventparameters.dateofevent")));
 		}
 		
-		if(!validator.isValidOption(distributionProtocolId))
-		{
-			Logger.out.debug("dist prot");
-			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("distribution.protocol")));
-		}
 		
 //		if(!validator.isValidOption(fromSite))
 //		{

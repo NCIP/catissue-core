@@ -248,13 +248,8 @@ public class ReportedProblemForm extends AbstractActionForm
                                             + " in From Field"));
                         }
                     }
-
-                    if (validator.isEmpty(subject))
-                    {
-                        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-                                "errors.item.required", ApplicationProperties
-                                        .getValue("fields.title")));
-                    }
+                 	// Mandar 10-apr-06 : bugid :353 
+                	// Error messages should be in the same sequence as the sequence of fields on the page.
 
                     if (validator.isEmpty(nameOfReporter ))
                     {
@@ -268,6 +263,14 @@ public class ReportedProblemForm extends AbstractActionForm
                                 "errors.item.required", ApplicationProperties
                                         .getValue("fields.affiliation")));
                     }
+
+                    if (validator.isEmpty(subject))
+                    {
+                        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+                                "errors.item.required", ApplicationProperties
+                                        .getValue("fields.title")));
+                    }
+
 
                     
                     if (validator.isEmpty(messageBody))

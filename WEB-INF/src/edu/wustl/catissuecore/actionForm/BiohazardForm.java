@@ -193,14 +193,16 @@ public class BiohazardForm extends AbstractActionForm
         
         try
         {
-            	if(!validator.isValidOption(type))
-                {
-                	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("biohazard.type")));
-                }
-            	
+         	// Mandar 10-apr-06 : bugid :353 
+        	// Error messages should be in the same sequence as the sequence of fields on the page.
+
             	if (validator.isEmpty(name))
                 {
                     errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("biohazard.name")));
+                }
+            	if(!validator.isValidOption(type))
+                {
+                	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("biohazard.type")));
                 }
         }
         catch(Exception excp)

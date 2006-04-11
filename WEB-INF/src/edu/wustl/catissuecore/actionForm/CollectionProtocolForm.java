@@ -443,7 +443,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 		try
 		{
 			setRedirectValue(validator);
-			// ---------START --------------------------------------
+			// ---------START --------------------------------------			
 				if(values.isEmpty() )
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.one.item.required",ApplicationProperties.getValue("collectionprotocol.eventtitle")));
@@ -478,6 +478,10 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 //				 	}
 //				}
 //			}
+				
+     	// Mandar 10-apr-06 : bugid :353 
+    	// Error messages should be in the same sequence as the sequence of fields on the page.
+
 				
 			//Check for PI can not be coordinator of the protocol.
 			if(this.protocolCoordinatorIds != null && this.principalInvestigatorId!=-1)
@@ -592,7 +596,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 					}
 					else
 					{
-						// -------MD: 19-12-2005
+						// -------Mandar: 19-12-2005
 						String typeKey = key.substring(0,key.lastIndexOf("_") );
 						typeKey = typeKey + "_specimenType";
 						String typeValue = (String)getValue(typeKey );
