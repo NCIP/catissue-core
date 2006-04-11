@@ -363,7 +363,7 @@ function showDatafield(element,txtFieldID)
 					%>
 						<html:hidden property="<%=showCalendarValue%>" styleId="<%=showCalendarValue%>" />
 					</td>
-				<!--  ********************* MD Code ********************** -->	
+				<!--  ********************* Mandar Code ********************** -->	
 				<!-- ***** Code added to check multiple rows for Calendar icon ***** -->
 					<td class="onlyBottomBorder" id="<%=columnID%>">
 				<%
