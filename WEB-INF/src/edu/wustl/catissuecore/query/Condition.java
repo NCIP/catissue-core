@@ -114,7 +114,7 @@ public class Condition {
             newOperator = Operator.NOT_IN;
         }
         
-	    //MD : Execute for operator other (is null or is not null)
+	    //Mandar : Execute for operator other (is null or is not null)
 	    if(!(newOperator.equalsIgnoreCase(Operator.IS) || newOperator.equalsIgnoreCase(Operator.IS_NOT)) )
         {
 	        if (dataElement.getFieldType().equalsIgnoreCase(Constants.FIELD_TYPE_TINY_INT))

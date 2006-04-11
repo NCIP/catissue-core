@@ -169,7 +169,7 @@ public class Operator
         this.operator = operator;
     }
     
-    // MD : operators for null
+    // Mandar : operators for null
 	public static final String IS_NULL = "is Null";
 	public static final String IS_NOT_NULL = "is Not Null";
 	public static final String IS = "IS";
