@@ -32,7 +32,6 @@
 				form = (SpecimenCollectionGroupForm)obj;
 		   		appendingPath = "/SpecimenCollectionGroupSearch.do?operation=search&pageOf=pageOfSpecimenCollectionGroup&systemIdentifier="+form.getSystemIdentifier() ;
 		   		int checkedButton1 = form.getCheckedButton();
-		   		System.out.println("---------- SCG JSP checkedButton -------- : "+ checkedButton1);
 		   	}
 	   	}
 			
