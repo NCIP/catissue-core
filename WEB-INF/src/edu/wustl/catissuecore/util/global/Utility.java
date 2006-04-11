@@ -217,7 +217,7 @@ public class Utility
     	Set setPV = specimenClassCDE.getPermissibleValues();
     	Iterator itr = setPV.iterator();
     	
-		List specimenClassList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_SPECIMEN_CLASS,null);
+		List specimenClassList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_SPECIMEN_CLASS,null);
 		Map subTypeMap = new HashMap();
     	specimenClassList.add(new NameValueBean(Constants.SELECT_OPTION,"-1"));
 		
