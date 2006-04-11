@@ -88,7 +88,7 @@ public class StorageContainerAction  extends SecureAction
 		{
 			isOnChange = true; 
 		}
-		// MD : code for Addnew Storage Type data 23-Jan-06
+		// Mandar : code for Addnew Storage Type data 23-Jan-06
 		String storageTypeID = (String)request.getAttribute(Constants.ADD_NEW_STORAGE_TYPE_ID);
 		if(storageTypeID != null && storageTypeID.trim().length() > 0 )
 		{
@@ -96,7 +96,7 @@ public class StorageContainerAction  extends SecureAction
 			storageContainerForm.setTypeId(Long.parseLong(storageTypeID) );
 		}
 		// -- 23-Jan-06 end
-		// MD : code for Addnew Site data 24-Jan-06
+		// Mandar : code for Addnew Site data 24-Jan-06
 		String siteID = (String)request.getAttribute(Constants.ADD_NEW_SITE_ID);
 		if(siteID != null && siteID.trim().length() > 0 )
 		{

@@ -96,7 +96,7 @@ public class CommonSearchAction extends Action
             	String objectName = DomainObjectFactory.getDomainObjectName(abstractForm.getFormId());
                 /* If the searched record is not present in the database,  
                  * display an Error message.
-                 */Logger.out.debug("MD --------___________------------- ");
+                 */Logger.out.debug("Mandar --------___________------------- ");
                 ActionErrors errors = new ActionErrors();
                 errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.unknown",
                 		AbstractDomainObject.parseClassName(objectName)));

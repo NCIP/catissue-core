@@ -58,11 +58,11 @@ public class UserAction extends SecureAction
         request.setAttribute(Constants.OPERATION, operation);
 
         //Sets the countryList attribute to be used in the Add/Edit User Page.
-        List countryList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_COUNTRY_LIST,null);
+        List countryList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_COUNTRY_LIST,null);
         request.setAttribute(Constants.COUNTRYLIST, countryList);
         
         //Sets the stateList attribute to be used in the Add/Edit User Page.
-        List stateList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_STATE_LIST,null);
+        List stateList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_STATE_LIST,null);
         request.setAttribute(Constants.STATELIST, stateList);
         
         

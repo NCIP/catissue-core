@@ -87,10 +87,10 @@ public class SimpleQueryInterfaceAction extends SecureAction
                 String prevKey = "SimpleConditionsNode:"+(i-1)+"_Condition_DataElement_table";
                 String prevValue = (String)simpleQueryInterfaceForm.getValue(prevKey);
                 
-                //MD : code to hide the calendar icon
+                //Mandar : code to hide the calendar icon
                 String calKey = "SimpleConditionsNode:"+i+"_showCalendar";
                 simpleQueryInterfaceForm.setShowCalendar(calKey,"");
-                // MD : code complete
+                // Mandar : code complete
                 
                 //If previous table name is not null, get the list of table name related to it.
                 if (prevValue != null)

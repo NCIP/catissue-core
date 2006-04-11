@@ -107,7 +107,7 @@ public class ShowStorageGridViewAction  extends BaseAction
         	storageContainerGridObject = new StorageContainerGridObject();
             StorageContainer storageContainer = (StorageContainer) list.get(0);
             
-            //MD : Labels for Dimensions  
+            //Mandar : Labels for Dimensions  
             String oneDimLabel = storageContainer.getStorageType().getOneDimensionLabel();
             String twoDimLabel = storageContainer.getStorageType().getTwoDimensionLabel();
             

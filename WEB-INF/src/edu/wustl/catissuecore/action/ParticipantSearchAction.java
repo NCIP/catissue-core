@@ -39,20 +39,20 @@ public class ParticipantSearchAction extends AdvanceSearchUIAction
             throws Exception
     {
         //Sets the genderList attribute to be used in the Participant Advance Search Page.
-        List genderList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_GENDER,null);
+        List genderList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_GENDER,null);
         request.setAttribute(Constants.GENDER_LIST, genderList);
         
         //Sets the genotypeList attribute to be used in the Participant Advance Search Page.
         //NameValueBean unknownVal = new NameValueBean(Constants.UNKNOWN,Constants.UNKNOWN);
-        List genotypeList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_GENOTYPE,null);
+        List genotypeList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_GENOTYPE,null);
         request.setAttribute(Constants.GENOTYPE_LIST, genotypeList);
         
         //Sets the ethnicityList attribute to be used in the Participant Advance Search Page.
-        List ethnicityList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_ETHNICITY,null);
+        List ethnicityList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_ETHNICITY,null);
         request.setAttribute(Constants.ETHNICITY_LIST, ethnicityList);
   
         //Sets the raceList attribute to be used in the Participant Advance Search Page.
-        List raceList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_RACE,null);
+        List raceList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_RACE,null);
         request.setAttribute(Constants.RACELIST, raceList);
         
     	//Set the selected node from the query tree

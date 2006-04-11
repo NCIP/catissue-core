@@ -185,29 +185,29 @@ public class NewSpecimenAction  extends SecureAction
 //		request.setAttribute(Constants.FORWARDLIST,forwardToList); 
         
         //Setting the specimen class list
-        List specimenClassList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_SPECIMEN_CLASS,null);
+        List specimenClassList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_SPECIMEN_CLASS,null);
     	request.setAttribute(Constants.SPECIMEN_CLASS_LIST, specimenClassList);
     	
     	//Setting the specimen type list
-    	List specimenTypeList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_SPECIMEN_TYPE,null);
+    	List specimenTypeList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_SPECIMEN_TYPE,null);
     	request.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
         
     	//Setting tissue site list
 //    	NameValueBean undefinedVal = new NameValueBean(Constants.UNDEFINED,Constants.UNDEFINED);
-    	List tissueSiteList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_TISSUE_SITE,null);
+    	List tissueSiteList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_TISSUE_SITE,null);
     	request.setAttribute(Constants.TISSUE_SITE_LIST, tissueSiteList);
 
     	//Setting tissue side list
 //    	NameValueBean unknownVal = new NameValueBean(Constants.UNKNOWN,Constants.UNKNOWN);
-    	List tissueSideList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_TISSUE_SIDE,null);
+    	List tissueSideList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_TISSUE_SIDE,null);
     	request.setAttribute(Constants.TISSUE_SIDE_LIST, tissueSideList);
         
     	//Setting pathological status list
-    	List pathologicalStatusList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_PATHOLOGICAL_STATUS,null);
+    	List pathologicalStatusList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_PATHOLOGICAL_STATUS,null);
     	request.setAttribute(Constants.PATHOLOGICAL_STATUS_LIST, pathologicalStatusList);
         
     	//Setting biohazard list
-    	biohazardList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_BIOHAZARD,null);
+    	biohazardList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_BIOHAZARD,null);
     	request.setAttribute(Constants.BIOHAZARD_TYPE_LIST, biohazardList);
     	
     	Logger.out.debug("1");

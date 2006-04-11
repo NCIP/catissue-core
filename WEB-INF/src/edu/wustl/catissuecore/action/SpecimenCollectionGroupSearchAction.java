@@ -39,12 +39,12 @@ public class SpecimenCollectionGroupSearchAction extends AdvanceSearchUIAction
             throws Exception //IOException, ServletException
     {
     	//Setting the clinical diagnosis list
-    	List clinicalDiagnosisList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_CLINICAL_DIAGNOSIS,null);
+    	List clinicalDiagnosisList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_CLINICAL_DIAGNOSIS,null);
 		request.setAttribute(Constants.CLINICAL_DIAGNOSIS_LIST, clinicalDiagnosisList);
 		
 		//Setting the clinical status list
 //		NameValueBean undefinedBean = new NameValueBean(Constants.UNDEFINED,Constants.UNDEFINED);
-        List clinicalStatusList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_CLINICAL_STATUS,null);
+        List clinicalStatusList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_CLINICAL_STATUS,null);
     	request.setAttribute(Constants.CLINICAL_STATUS_LIST, clinicalStatusList);
     	
 //    	Set the selected node from the query tree

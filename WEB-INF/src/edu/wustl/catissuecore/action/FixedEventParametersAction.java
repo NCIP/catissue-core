@@ -26,7 +26,7 @@ public class FixedEventParametersAction extends SpecimenEventParametersAction
 	protected void setRequestParameters(HttpServletRequest request) throws Exception
 	{
 		// SETS THE FIXATION LIST
-		List fixationList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_FIXATION_TYPE,null);
+		List fixationList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_FIXATION_TYPE,null);
     	request.setAttribute(Constants.FIXATION_LIST, fixationList);
 	}
 }

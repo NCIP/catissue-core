@@ -82,15 +82,15 @@ public class CreateSpecimenAction extends SecureAction
 	 	request.setAttribute(Constants.PARENT_SPECIMEN_ID_LIST,parentSpecimenList);
 	 	
 	 	//Setting the specimen class list
-	 	List specimenClassList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_SPECIMEN_CLASS,null);
+	 	List specimenClassList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_SPECIMEN_CLASS,null);
     	request.setAttribute(Constants.SPECIMEN_CLASS_LIST, specimenClassList);
     	
     	//Setting the specimen type list
-    	List specimenTypeList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_SPECIMEN_TYPE,null);
+    	List specimenTypeList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_SPECIMEN_TYPE,null);
     	request.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
         
     	//Setting biohazard list
-    	List biohazardList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_BIOHAZARD,null);
+    	List biohazardList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_BIOHAZARD,null);
     	request.setAttribute(Constants.BIOHAZARD_TYPE_LIST, biohazardList);
         	
     	Logger.out.debug("1");

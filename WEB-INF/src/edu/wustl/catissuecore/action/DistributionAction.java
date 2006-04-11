@@ -89,7 +89,7 @@ public class  DistributionAction extends SpecimenEventParametersAction
     	key.add("DistributedItem:i_availableQty");
     	key.add("DistributedItem:i_Specimen_type");
     	
-		// MD : code for Addnew Site data 24-Jan-06
+		// Mandar : code for Addnew Site data 24-Jan-06
 		String siteID = (String)request.getAttribute(Constants.ADD_NEW_SITE_ID);
 		if(siteID != null && siteID.trim().length() > 0 )
 		{

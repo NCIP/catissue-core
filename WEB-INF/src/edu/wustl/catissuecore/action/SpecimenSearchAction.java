@@ -46,25 +46,25 @@ public class SpecimenSearchAction extends AdvanceSearchUIAction
             HttpServletRequest request, HttpServletResponse response) throws Exception
     {
     	//Setting the Sepecimen Type list
-    	List specimenTypeList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_SPECIMEN_TYPE,null);
+    	List specimenTypeList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_SPECIMEN_TYPE,null);
     	request.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
     	
     	//Setting Tissue Site list
 //    	NameValueBean undefinedVal = new NameValueBean(Constants.UNDEFINED,Constants.UNDEFINED);
-    	List tissueSiteList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_TISSUE_SITE,null);
+    	List tissueSiteList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_TISSUE_SITE,null);
     	request.setAttribute(Constants.TISSUE_SITE_LIST, tissueSiteList);
     	
     	//Setting Tissue Side list
 //    	NameValueBean unknownVal = new NameValueBean(Constants.UNKNOWN,Constants.UNKNOWN);
-    	List tissueSideList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_TISSUE_SIDE,null);
+    	List tissueSideList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_TISSUE_SIDE,null);
     	request.setAttribute(Constants.TISSUE_SIDE_LIST, tissueSideList);
         
     	//Setting Pathological Status list
-    	List pathologicalStatusList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_PATHOLOGICAL_STATUS,null);
+    	List pathologicalStatusList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_PATHOLOGICAL_STATUS,null);
     	request.setAttribute(Constants.PATHOLOGICAL_STATUS_LIST, pathologicalStatusList);
     	
     	//Setting Biohazard type list
-    	List biohazardList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_BIOHAZARD,null);
+    	List biohazardList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_BIOHAZARD,null);
     	request.setAttribute(Constants.BIOHAZARD_TYPE_LIST, biohazardList);
     	
     	//Set the selected node from the query tree

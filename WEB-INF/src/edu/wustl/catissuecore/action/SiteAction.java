@@ -54,11 +54,11 @@ public class SiteAction  extends SecureAction
         }
 
         //Sets the countryList attribute to be used in the Add/Edit User Page.
-        List countryList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_COUNTRY_LIST,null);
+        List countryList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_COUNTRY_LIST,null);
         request.setAttribute(Constants.COUNTRYLIST, countryList);
         
         //Sets the stateList attribute to be used in the Add/Edit User Page.
-        List stateList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_STATE_LIST,null);
+        List stateList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_STATE_LIST,null);
         request.setAttribute(Constants.STATELIST, stateList);
         
 
@@ -66,7 +66,7 @@ public class SiteAction  extends SecureAction
         request.setAttribute(Constants.ACTIVITYSTATUSLIST, Constants.SITE_ACTIVITY_STATUS_VALUES);
         
         //Sets the siteTypeList attribute to be used in the Site Add/Edit Page.
-        List siteList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_SITE_TYPE,null);
+        List siteList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_SITE_TYPE,null);
         request.setAttribute(Constants.SITETYPELIST, siteList);
         
     	UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getBizLogic(Constants.USER_FORM_ID);
@@ -110,7 +110,7 @@ public class SiteAction  extends SecureAction
 		}
 		
 		Logger.out.debug("SiteAction redirect :---------- "+ reqPath  );
-		// MD : code for Addnew Coordinator data 24-Jan-06
+		// Mandar : code for Addnew Coordinator data 24-Jan-06
 		String coordinatorID = (String)request.getAttribute(Constants.ADD_NEW_USER_ID);
 		if(coordinatorID != null && coordinatorID.trim().length() > 0 )
 		{

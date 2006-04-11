@@ -26,7 +26,7 @@ public class EmbeddedEventParametersAction extends SpecimenEventParametersAction
 	protected void setRequestParameters(HttpServletRequest request) throws Exception
 	{
 		//set array of EmbeddingMedium
-		List embeddingMediumList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_EMBEDDING_MEDIUM,null);
+		List embeddingMediumList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_EMBEDDING_MEDIUM,null);
     	request.setAttribute(Constants.EMBEDDING_MEDIUM_LIST, embeddingMediumList);
 	}
 }

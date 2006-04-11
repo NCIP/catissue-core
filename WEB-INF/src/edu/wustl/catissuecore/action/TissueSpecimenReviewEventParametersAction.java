@@ -28,7 +28,7 @@ public class TissueSpecimenReviewEventParametersAction extends SpecimenEventPara
 	protected void setRequestParameters(HttpServletRequest request) throws Exception
 	{
 //		set array of histological quality
-		List histologicalQualityList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_HISTOLOGICAL_QUALITY,null);
+		List histologicalQualityList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_HISTOLOGICAL_QUALITY,null);
 		request.setAttribute(Constants.HISTOLOGICAL_QUALITY_LIST , histologicalQualityList);
 	}
 }

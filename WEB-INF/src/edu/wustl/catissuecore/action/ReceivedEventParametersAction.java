@@ -27,7 +27,7 @@ public class ReceivedEventParametersAction extends SpecimenEventParametersAction
 	protected void setRequestParameters(HttpServletRequest request) throws Exception
 	{
 		// set the ReceivedQuality List.
-		List qualityList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_RECEIVED_QUALITY,null);
+		List qualityList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_RECEIVED_QUALITY,null);
     	request.setAttribute(Constants.RECEIVED_QUALITY_LIST, qualityList);
 	}
 }

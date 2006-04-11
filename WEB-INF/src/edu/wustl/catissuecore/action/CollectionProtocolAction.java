@@ -86,7 +86,7 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
          }
     	
 //    	NameValueBean undefinedVal = new NameValueBean(Constants.UNDEFINED,Constants.UNDEFINED);
-    	List clinicalStatusList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_CLINICAL_STATUS,null);
+    	List clinicalStatusList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_CLINICAL_STATUS,null);
     	request.setAttribute(Constants.CLINICAL_STATUS_LIST, clinicalStatusList);
 	    	
     	 // ---------- Used for Add new
@@ -97,7 +97,7 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 		Logger.out.debug("page of in collectionProtocol action:"+pageOf);
 		request.setAttribute(Constants.PAGEOF,pageOf);
 
-		// MD : code for Addnew PI data 24-Jan-06
+		// Mandar : code for Addnew PI data 24-Jan-06
 		String addNewUserTo = request.getParameter(Constants.ADD_NEW_USER_TO);
 		if (addNewUserTo != null)
 		{

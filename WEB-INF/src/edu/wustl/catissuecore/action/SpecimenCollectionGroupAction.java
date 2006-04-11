@@ -118,12 +118,12 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 		}
 		
 		// populating clinical Diagnosis field 
-		List clinicalDiagnosisList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_CLINICAL_DIAGNOSIS,null);
+		List clinicalDiagnosisList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_CLINICAL_DIAGNOSIS,null);
 		request.setAttribute(Constants.CLINICAL_DIAGNOSIS_LIST, clinicalDiagnosisList);
 
 		// populating clinical Status field
 //		NameValueBean undefinedVal = new NameValueBean(Constants.UNDEFINED,Constants.UNDEFINED);
-        List clinicalStatusList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_CLINICAL_STATUS,null);
+        List clinicalStatusList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_CLINICAL_STATUS,null);
     	request.setAttribute(Constants.CLINICAL_STATUS_LIST, clinicalStatusList);
     	
     	//Sets the activityStatusList attribute to be used in the Site Add/Edit Page.
@@ -242,7 +242,7 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 	  		  	
 		// removing blank participants from the list of Participants
 		list=removeBlankParticipant(list, listOfParticipants);
-		//MD bug id:1628 :- sort participant dropdown list
+		//Mandar bug id:1628 :- sort participant dropdown list
 		Collections.sort(list );  
 		Logger.out.debug("Paticipants List"+list);
 	  	request.setAttribute(Constants.PARTICIPANT_LIST, list);

@@ -26,7 +26,7 @@ public class FrozenEventParametersAction extends SpecimenEventParametersAction
 	protected void setRequestParameters(HttpServletRequest request) throws Exception
 	{
 		//set array of methods
-        List methodList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_METHOD,null);
+        List methodList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_METHOD,null);
     	request.setAttribute(Constants.METHOD_LIST, methodList);
 	}
 }
