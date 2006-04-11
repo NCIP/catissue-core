@@ -319,7 +319,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic
                                     .getValue("errors.storageContainer.dimensionOverflow"));
                 }
 
-                // MD : code added for validation bug id 666. 24-11-2005  start
+                // Mandar : code added for validation bug id 666. 24-11-2005  start
                 boolean canUse = isContainerAvailable(dao, container);
                 Logger.out.debug("canUse : " + canUse);
                 if (!canUse)
@@ -327,7 +327,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic
                     throw new DAOException(ApplicationProperties
                             .getValue("errors.storageContainer.inUse"));
                 }
-                // MD : code added for validation bug id 666. 24-11-2005 end
+                // Mandar : code added for validation bug id 666. 24-11-2005 end
 
                 //check for closed ParentContainer
                 checkStatus(dao, pc, "Parent Container");
@@ -339,7 +339,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic
                 container.setSite(pc.getSite());
             }
         }
-        // MD : code added for validation 25-11-05-----------
+        // Mandar : code added for validation 25-11-05-----------
         else
         // if parent container is not changed only the position is changed.
         {
@@ -443,7 +443,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic
             }
         }
 
-        // MD : --------- end  25-11-05 -----------------		
+        // Mandar : --------- end  25-11-05 -----------------		
 
         //Check whether size has been reduced
         //Sri: fix for bug #355 (Storage capacity: Reducing capacity should be

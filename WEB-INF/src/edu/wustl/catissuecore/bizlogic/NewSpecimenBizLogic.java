@@ -617,7 +617,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
     {
 		Specimen specimen = (Specimen)obj;
 		
-		List specimenClassList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_SPECIMEN_CLASS,null);
+		List specimenClassList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_SPECIMEN_CLASS,null);
 		String specimenClass = Utility.getSpecimenClassName(specimen);
     	
     	if(!Validator.isEnumeratedValue(specimenClassList,specimenClass))
@@ -641,7 +641,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			if(specimen.getSpecimenCollectionGroup() != null)
 			{
 //				NameValueBean undefinedVal = new NameValueBean(Constants.UNDEFINED,Constants.UNDEFINED);
-		    	List tissueSiteList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_TISSUE_SITE,null);
+		    	List tissueSiteList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_TISSUE_SITE,null);
 				
 		    	if(!Validator.isEnumeratedValue(tissueSiteList,characters.getTissueSite()))
 				{
@@ -649,14 +649,14 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 				}
 				
 //		    	NameValueBean unknownVal = new NameValueBean(Constants.UNKNOWN,Constants.UNKNOWN);
-		    	List tissueSideList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_TISSUE_SIDE,null);
+		    	List tissueSideList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_TISSUE_SIDE,null);
 	
 				if(!Validator.isEnumeratedValue(tissueSideList,characters.getTissueSide()))
 				{
 					throw new DAOException(ApplicationProperties.getValue("specimen.tissueSide.errMsg"));
 				}
 				
-				List pathologicalStatusList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_PATHOLOGICAL_STATUS,null);
+				List pathologicalStatusList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_PATHOLOGICAL_STATUS,null);
 				
 				if(!Validator.isEnumeratedValue(pathologicalStatusList,characters.getPathologicalStatus()))
 				{

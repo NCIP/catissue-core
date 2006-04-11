@@ -172,7 +172,7 @@ public class ParticipantBizLogic extends DefaultBizLogic
     {
 		Participant participant = (Participant)obj;
 		
-        List genderList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_GENDER,null);
+        List genderList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_GENDER,null);
         
         if(!Validator.isEnumeratedOrNullValue(genderList,participant.getGender()))
 		{
@@ -180,19 +180,19 @@ public class ParticipantBizLogic extends DefaultBizLogic
 		}
 
 //        NameValueBean unknownVal = new NameValueBean(Constants.UNKNOWN,Constants.UNKNOWN);
-        List genotypeList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_GENOTYPE,null);
+        List genotypeList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_GENOTYPE,null);
         if(!Validator.isEnumeratedOrNullValue(genotypeList,participant.getSexGenotype()))
 		{
 			throw new DAOException(ApplicationProperties.getValue("participant.genotype.errMsg"));
 		}
         
-        List raceList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_RACE,null);
+        List raceList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_RACE,null);
         if(!Validator.isEnumeratedOrNullValue(raceList,participant.getRace()))
 		{
 			throw new DAOException(ApplicationProperties.getValue("participant.race.errMsg"));
 		}
 
-        List ethnicityList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_ETHNICITY,null);
+        List ethnicityList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_ETHNICITY,null);
         if(!Validator.isEnumeratedOrNullValue(ethnicityList,participant.getEthnicity()))
 		{
 			throw new DAOException(ApplicationProperties.getValue("participant.ethnicity.errMsg"));

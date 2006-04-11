@@ -153,14 +153,14 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 				
 			case Constants.COLLECTION_EVENT_PARAMETERS_FORM_ID:
 				String procedure = ((CollectionEventParameters)eventParameter).getCollectionProcedure();
-				List procedureList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_COLLECTION_PROCEDURE,null);
+				List procedureList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_COLLECTION_PROCEDURE,null);
 				if(!Validator.isEnumeratedValue(procedureList,procedure))
 				{
 					throw new DAOException(ApplicationProperties.getValue("events.collectionProcedure.errMsg"));
 				}
 				
 				String container = ((CollectionEventParameters)eventParameter).getContainer();
-				List containerList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_CONTAINER,null);
+				List containerList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_CONTAINER,null);
 				if(!Validator.isEnumeratedOrNullValue(containerList,container))
 				{
 					throw new DAOException(ApplicationProperties.getValue("events.container.errMsg"));
@@ -169,7 +169,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 				
 			case Constants.EMBEDDED_EVENT_PARAMETERS_FORM_ID:
 				String embeddingMedium = ((EmbeddedEventParameters)eventParameter).getEmbeddingMedium();
-				List embeddingMediumList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_EMBEDDING_MEDIUM,null);
+				List embeddingMediumList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_EMBEDDING_MEDIUM,null);
 				if(!Validator.isEnumeratedValue(embeddingMediumList,embeddingMedium))
 				{
 					throw new DAOException(ApplicationProperties.getValue("events.embeddingMedium.errMsg"));
@@ -178,7 +178,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 				
 			case Constants.FIXED_EVENT_PARAMETERS_FORM_ID:
 				String fixationType = ((FixedEventParameters)eventParameter).getFixationType();
-				List fixationTypeList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_FIXATION_TYPE,null);
+				List fixationTypeList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_FIXATION_TYPE,null);
 				if(!Validator.isEnumeratedValue(fixationTypeList,fixationType))
 				{
 					throw new DAOException(ApplicationProperties.getValue("events.fixationType.errMsg"));
@@ -187,7 +187,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 			
 			case Constants.FROZEN_EVENT_PARAMETERS_FORM_ID:
 				String method = ((FrozenEventParameters)eventParameter).getMethod();
-				List methodList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_METHOD,null);
+				List methodList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_METHOD,null);
 				if(!Validator.isEnumeratedValue(methodList,method))
 				{
 					throw new DAOException(ApplicationProperties.getValue("events.method.errMsg"));
@@ -196,7 +196,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 			
 			case Constants.RECEIVED_EVENT_PARAMETERS_FORM_ID:
 				String quality = ((ReceivedEventParameters)eventParameter).getReceivedQuality();
-				List qualityList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_RECEIVED_QUALITY,null);
+				List qualityList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_RECEIVED_QUALITY,null);
 				if(!Validator.isEnumeratedValue(qualityList,quality))
 				{
 					throw new DAOException(ApplicationProperties.getValue("events.receivedQuality.errMsg"));
@@ -205,7 +205,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 			
 			case Constants.TISSUE_SPECIMEN_REVIEW_EVENT_PARAMETERS_FORM_ID:
 				String histQuality = ((TissueSpecimenReviewEventParameters)eventParameter).getHistologicalQuality();
-				List histologicalQualityList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_HISTOLOGICAL_QUALITY,null);
+				List histologicalQualityList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_HISTOLOGICAL_QUALITY,null);
 				if(!Validator.isEnumeratedOrNullValue(histologicalQualityList,histQuality))
 				{
 					throw new DAOException(ApplicationProperties.getValue("events.histologicalQuality.errMsg"));

@@ -493,12 +493,12 @@ public class UserBizLogic extends DefaultBizLogic
 		User user = (User)obj;
 		if (Constants.PAGEOF_CHANGE_PASSWORD.equals(user.getPageOf()) == false)
 		{
-		    if(!Validator.isEnumeratedValue(CDEManager.getCDEManager().getList(Constants.CDE_NAME_STATE_LIST,null),user.getAddress().getState()))
+		    if(!Validator.isEnumeratedValue(CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_STATE_LIST,null),user.getAddress().getState()))
 			{
 				throw new DAOException(ApplicationProperties.getValue("state.errMsg"));
 			}
 			
-			if(!Validator.isEnumeratedValue(CDEManager.getCDEManager().getList(Constants.CDE_NAME_COUNTRY_LIST,null),user.getAddress().getCountry()))
+			if(!Validator.isEnumeratedValue(CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_COUNTRY_LIST,null),user.getAddress().getCountry()))
 			{
 				throw new DAOException(ApplicationProperties.getValue("country.errMsg"));
 			}
