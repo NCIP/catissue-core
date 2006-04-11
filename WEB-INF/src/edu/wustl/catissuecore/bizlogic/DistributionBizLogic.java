@@ -202,6 +202,10 @@ public class DistributionBizLogic extends DefaultBizLogic
 			//Audit of Distributed Item.
 			dao.audit(item, oldItem, sessionDataBean, Constants.IS_AUDITABLE_TRUE);
 		}
+		//Mandar : 04-Apr-06 for updating the removed specimens start
+		updateRemovedSpecimens(distributedItemCollection, oldDistributedItemCollection, dao, sessionDataBean);
+		Logger.out.debug( "Update Successful ...04-Apr-06");
+		// Mandar : 04-Apr-06 end
     }
 	private boolean checkAvailableQty(Specimen specimen, double quantity)
 	{
@@ -328,4 +332,63 @@ public class DistributionBizLogic extends DefaultBizLogic
     	
     	return true;
     }
+    
+    //Mandar : 04-Apr-06 : bug id:1545 : - Check for removed specimens
+    private void updateRemovedSpecimens(Collection newDistributedItemCollection, Collection oldDistributedItemCollection,DAO dao,SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException 
+	{
+    	// iterate through the old collection and find the specimens that are removed.
+    	Iterator it = oldDistributedItemCollection.iterator();
+		while(it.hasNext())
+		{
+			DistributedItem item = (DistributedItem)it.next();
+			boolean isPresentInNew = newDistributedItemCollection.contains(item );
+			Logger.out.debug("Old Object in New Collection : "+ isPresentInNew  );
+			if(!isPresentInNew )
+			{
+				Object specimenObj = dao.retrieve(Specimen.class.getName(), item.getSpecimen().getSystemIdentifier());
+				double quantity = item.getQuantity().doubleValue();
+				updateAvailableQty((Specimen)specimenObj,quantity);
+				dao.update(specimenObj,sessionDataBean,Constants.IS_AUDITABLE_TRUE,Constants.IS_SECURE_UPDATE_TRUE, Constants.HAS_OBJECT_LEVEL_PRIVILEGE_FALSE);
+			}
+			
+		}
+		Logger.out.debug( "Update Successful ...04-Apr-06");
+	}
+    
+    //this method updates the specimen available qty by adding the previously subtracted(during distribution) qty.
+    private void updateAvailableQty(Specimen specimen, double quantity)
+	{
+		if(specimen instanceof TissueSpecimen)
+		{
+			TissueSpecimen tissueSpecimen = (TissueSpecimen) specimen;
+			double availabeQty = tissueSpecimen.getAvailableQuantityInGram().doubleValue();
+			Logger.out.debug("TissueAvailabeQty"+availabeQty);
+				availabeQty = availabeQty + quantity;
+				Logger.out.debug("TissueAvailabeQty after addition"+availabeQty);
+				tissueSpecimen.setAvailableQuantityInGram(new Double(availabeQty));
+		}
+		else if(specimen instanceof CellSpecimen)
+		{
+			CellSpecimen cellSpecimen = (CellSpecimen) specimen;
+			int availabeQty = cellSpecimen.getAvailableQuantityInCellCount().intValue();
+			availabeQty = availabeQty + (int)quantity;
+			cellSpecimen.setAvailableQuantityInCellCount(new Integer(availabeQty));
+		}
+		else if(specimen instanceof MolecularSpecimen)
+		{
+			MolecularSpecimen molecularSpecimen = (MolecularSpecimen) specimen;
+			double availabeQty = molecularSpecimen.getAvailableQuantityInMicrogram().doubleValue();
+			availabeQty = availabeQty + quantity;
+			molecularSpecimen.setAvailableQuantityInMicrogram(new Double(availabeQty));
+		}
+		else if(specimen instanceof FluidSpecimen)
+		{
+			FluidSpecimen fluidSpecimen = (FluidSpecimen) specimen;
+			double availabeQty = fluidSpecimen.getAvailableQuantityInMilliliter().doubleValue();
+			availabeQty = availabeQty + quantity;
+			fluidSpecimen.setAvailableQuantityInMilliliter(new Double(availabeQty));
+		}
+		
+	}
+    //Mandar : 04-Apr-06 : end
 }
