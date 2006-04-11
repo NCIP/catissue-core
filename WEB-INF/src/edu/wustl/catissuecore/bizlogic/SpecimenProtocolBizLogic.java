@@ -13,9 +13,12 @@ package edu.wustl.catissuecore.bizlogic;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import edu.wustl.catissuecore.domain.SpecimenProtocol;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
+import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
 
@@ -65,5 +68,34 @@ public class SpecimenProtocolBizLogic extends DefaultBizLogic
 			protocol.setEndDate(null);
 			Logger.out.debug("EndDate cleared");
 		}
+	}
+	
+	/**
+	 * @param specimenProtocolIdentifier ID of the specimen protocol whose end date is to be searched.
+	 * @return end date of the specimen protocol refered by the given ID. Empty string if enddate is null.
+	 * @throws DAOException
+	 */
+	public String getEndDate(long specimenProtocolIdentifier ) throws DAOException 
+	{
+		String endDate="";
+		
+	   	String sourceObjectName = SpecimenProtocol.class.getName() ;
+    	String[] selectColumnName = null;
+    	String[] whereColumnName = {Constants.SYSTEM_IDENTIFIER };
+    	String[] whereColumnCondition = {"="};
+    	Object[] whereColumnValue = {new Long(specimenProtocolIdentifier) };
+    	String joinCondition = null ;
+    	
+//          Retrieve the endates 
+            List protocolList = retrieve(sourceObjectName, selectColumnName, whereColumnName,
+                    whereColumnCondition, whereColumnValue, joinCondition);
+            
+            if(protocolList != null && !protocolList.isEmpty()   )
+            {
+            	SpecimenProtocol tmpObject = (SpecimenProtocol ) protocolList.get(0 );
+            	endDate = Utility.parseDateToString(tmpObject.getEndDate(),Constants.DATE_PATTERN_MM_DD_YYYY); 
+            }
+            
+		return endDate ;
 	}
 }

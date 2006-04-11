@@ -25,6 +25,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.actionForm.SpecimenProtocolForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -63,7 +64,7 @@ public class SpecimenProtocolAction  extends SecureAction
         	request.setAttribute(Constants.USERLIST, userCollection);
         	Logger.out.debug("1");
         	// get the Specimen class and type from the cde
-	    	List specimenTypeList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_SPECIMEN_TYPE,null);
+	    	List specimenTypeList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_SPECIMEN_TYPE,null);
 	    	request.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
 	    	
         	CDE specimenClassCDE = CDEManager.getCDEManager().getCDE(Constants.CDE_NAME_SPECIMEN_CLASS);
@@ -112,12 +113,25 @@ public class SpecimenProtocolAction  extends SecureAction
 	    	request.setAttribute(Constants.SPECIMEN_TYPE_MAP, subTypeMap);
 	    	
 //	    	NameValueBean undefinedVal = new NameValueBean(Constants.UNDEFINED,Constants.UNDEFINED);
-	    	List tissueSiteList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_TISSUE_SITE,null);
+	    	List tissueSiteList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_TISSUE_SITE,null);
 	    	request.setAttribute(Constants.TISSUE_SITE_LIST, tissueSiteList);
 	    	
-	    	List pathologyStatusList = CDEManager.getCDEManager().getList(Constants.CDE_NAME_PATHOLOGICAL_STATUS,null);
+	    	List pathologyStatusList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_PATHOLOGICAL_STATUS,null);
 	    	request.setAttribute(Constants.PATHOLOGICAL_STATUS_LIST, pathologyStatusList);
+	        
+	    	// Mandar : 03-apr-06 start
+	    	/*End date is not been refreshed after Protocol is closed or activated. Refreshing the enddate manually. */
+	    	Logger.out.debug("04-Apr-06");
+	    	SpecimenProtocolForm spForm = (SpecimenProtocolForm )form;
+	    	if(operation.equalsIgnoreCase(Constants.EDIT))
+   			{
+	    		String tmpEndDate = BizLogicFactory.getSpecimenProtocolBizLogic().getEndDate( spForm.getSystemIdentifier() );
+	    		Logger.out.debug("tmpendDate : " + tmpEndDate);
+	    		spForm.setEndDate(tmpEndDate );
+   			}
+	    	// Mandar : 03-apr-06 end
 	    	
+	
         return mapping.findForward((String)request.getParameter(Constants.PAGEOF));
     }
 }
