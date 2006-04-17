@@ -23,7 +23,7 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.ReportedProblemForm;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Variables;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.SessionDataBean;
 
 
@@ -53,7 +53,8 @@ public class ReportProblemAction extends Action
 			}
 		}
     	
-		setApplicationURL(request);
+		//Mandar 17-Apr-06 : 1667:- Application URL
+    	Utility.setApplicationURL(request.getRequestURL().toString());
 		
         //Gets the value of the operation parameter.
         String operation = request.getParameter(Constants.OPERATION);
@@ -74,18 +75,4 @@ public class ReportProblemAction extends Action
         return mapping.findForward(Constants.SUCCESS);
     }
     
-    /**
-	 * Sets the application URL in the Variables class.
-	 * @param request
-	 */
-	private void setApplicationURL(HttpServletRequest request)
-	{
-	    String requestURL = request.getRequestURL().toString();
-	    int indexOfFirstColon = requestURL.indexOf(":");
-	    int indexOfSecondColon = requestURL.indexOf(":", indexOfFirstColon+1);
-	    int indexOfSecondSlash = requestURL.indexOf("/", requestURL.indexOf("/", indexOfSecondColon+1)+1);
-	    
-	    if (Variables.catissueURL != null)
-	        Variables.catissueURL = requestURL.substring(0, indexOfSecondSlash);
-	}
 }

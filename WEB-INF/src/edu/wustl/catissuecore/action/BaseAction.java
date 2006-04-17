@@ -12,7 +12,7 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.exception.UserNotAuthenticatedException;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Variables;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.util.logger.Logger;
 
@@ -51,25 +51,12 @@ public abstract class BaseAction extends Action
 		
 		setRequestData(request);
 		setSelectedMenu(request);
-		setApplicationURL(request);
-		return executeAction(mapping, form, request, response);
+		//Mandar 17-Apr-06 : 1667:- Application URL
+    	Utility.setApplicationURL(request.getRequestURL().toString());
+
+    	return executeAction(mapping, form, request, response);
 	}
 	
-	/**
-	 * Sets the application URL in the Variables class.
-	 * @param request
-	 */
-	private void setApplicationURL(HttpServletRequest request)
-	{
-	    String requestURL = request.getRequestURL().toString();
-	    int indexOfFirstColon = requestURL.indexOf(":");
-	    int indexOfSecondColon = requestURL.indexOf(":", indexOfFirstColon+1);
-	    int indexOfSecondSlash = requestURL.indexOf("/", requestURL.indexOf("/", indexOfSecondColon+1)+1);
-	    
-	    if (Variables.catissueURL != null)
-	        Variables.catissueURL = requestURL.substring(0, indexOfSecondSlash);
-	}
-
 	protected void setRequestData(HttpServletRequest request)
 	{
 		//Gets the value of the operation parameter.

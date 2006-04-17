@@ -21,7 +21,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Variables;
+import edu.wustl.catissuecore.util.global.Utility;
 
 
 /**
@@ -38,22 +38,9 @@ public class ForgotPasswordAction extends Action
             HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException
     {
-        setApplicationURL(request);
+		//Mandar 17-Apr-06 : 1667:- Application URL
+    	Utility.setApplicationURL(request.getRequestURL().toString());
         return mapping.findForward(Constants.SUCCESS);
     }
     
-    /**
-	 * Sets the application URL in the Variables class.
-	 * @param request
-	 */
-	private void setApplicationURL(HttpServletRequest request)
-	{
-	    String requestURL = request.getRequestURL().toString();
-	    int indexOfFirstColon = requestURL.indexOf(":");
-	    int indexOfSecondColon = requestURL.indexOf(":", indexOfFirstColon+1);
-	    int indexOfSecondSlash = requestURL.indexOf("/", requestURL.indexOf("/", indexOfSecondColon+1)+1);
-	    
-	    if (Variables.catissueURL != null)
-	        Variables.catissueURL = requestURL.substring(0, indexOfSecondSlash);
-	}
 }
