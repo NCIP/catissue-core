@@ -9,6 +9,8 @@
 
 package edu.wustl.catissuecore.util.global;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -337,4 +339,33 @@ public class Utility
 		
 		return -1;
 	}
+	
+	//Mandar 17-Apr-06 Bugid : 1667 :- URL is incomplete displays /.
+	/**
+	 * @param requestURL URL generated from the request.
+	 * Sets the application URL in the Variables class after generating it in proper format.
+	 */
+	public static void setApplicationURL(String requestURL)
+	{
+	    Logger.out.debug("17-Apr-06 : requestURL : "+ requestURL);
+	    // Mandar : 17-Apr-06 : 1667 : caTissuecore Application URL is displayed as "/"
+	    String ourUrl="";
+	    try
+		{
+			URL aURL = new URL(requestURL);			
+			ourUrl = aURL.getProtocol()+"://"+aURL.getAuthority()+aURL.getPath();
+			ourUrl = ourUrl.substring(0,ourUrl.lastIndexOf("/"));
+			Logger.out.debug("Application URL Generated : "+ourUrl);
+		}
+	    catch(MalformedURLException urlExp)
+		{
+	    	Logger.out.error(urlExp.getMessage(),urlExp  );
+		}	    
+	    if (Variables.catissueURL != null && Variables.catissueURL.trim().length() == 0 )
+	    {
+	        Variables.catissueURL = ourUrl;
+	        Logger.out.debug("Application URL set: "+ Variables.catissueURL );
+	    }
+	}//setApplicationURL()
+	//Mandar 17-Apr-06 Bugid : 1667 : end
 }
