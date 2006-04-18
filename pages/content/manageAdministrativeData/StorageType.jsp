@@ -2,10 +2,39 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
+<%@ page import="edu.wustl.catissuecore.actionForm.StorageTypeForm"%>
 
 <head>
 	<script language="javascript">
-		
+//Mandar : 18-Apr-06 : bugid: 644 : - Dimension 2 capacity label 
+	function capacityChanged(element)
+	{
+		var elementValue = element.value;
+		if(elementValue.length>0)
+		{
+			try
+			{
+				var num = parseInt(elementValue);
+				col1= document.getElementById("col1");
+				col2= document.getElementById("col2");
+				if(num>1)
+				{
+					col1.innerHTML="*";
+					col2.className="formRequiredLabel";
+				}
+				else
+				{
+					col1.innerHTML="&nbsp;";
+					col2.className="formLabel";
+				}
+			}
+			catch(err)
+			{
+				alert("Please enter a valid number.");
+			}
+		}
+	}
+
 	</script>
 	<script language="JavaScript" src="jss/script.js" type="text/javascript"></script>
 </head>
@@ -13,7 +42,6 @@
 <%
         String operation = (String) request.getAttribute(Constants.OPERATION);
         String reqPath = (String)request.getAttribute(Constants.REQ_PATH);  
-		System.out.println("StorageType JSP : reqPath ::  " + reqPath);
         String formName;
 
         boolean readOnlyValue;
@@ -27,6 +55,21 @@
             formName = Constants.STORAGE_TYPE_ADD_ACTION;
             readOnlyValue = false;
         }
+		
+	//Mandar : 18-Apr-06 : bugid: 644 : - Dimension 2 capacity label
+	StorageTypeForm form = null;
+	int dimTwoCapacity = 0;
+	Object obj = request.getAttribute("storageTypeForm");
+	if(obj != null && obj instanceof StorageTypeForm)
+	{
+		 form = (StorageTypeForm)obj;
+	}
+	if(form!=null)
+	{
+		dimTwoCapacity = form.getTwoDimensionCapacity();  
+	}
+	//Mandar : 18-Apr-06 : bugid: 644 : - Dimension 2 capacity label end	
+
 %>	
 			
 <html:errors/>
@@ -135,13 +178,23 @@
 				</label>
 			</td>
 			<td class="formField">
-				<html:text styleClass="formFieldSized10"  maxlength="10"  size="10" styleId="twoDimensionCapacity" property="twoDimensionCapacity"/>
+				<html:text styleClass="formFieldSized10"  maxlength="10"  size="10" styleId="twoDimensionCapacity" property="twoDimensionCapacity" onkeyup="capacityChanged(this)" />
 			</td>
 		</tr>
-
+<!--  Mandar : 18-Apr-06 : bugid: 644 : - Dimension 2 capacity label -->
+<% 
+	String tdClassName ="formLabel";
+	String strStar = "&nbsp;";
+	if(dimTwoCapacity > 1)
+	{
+		tdClassName="formRequiredLabel";
+		strStar = "*";
+	}
+ %>
 		<tr>
-			<td class="formRequiredNotice" width="5">&nbsp;</td>
-			<td class="formLabel">
+			<td class="formRequiredNotice" width="5" id="col1"><%=strStar%></td>
+			<td class="<%=tdClassName%>" id="col2">
+<!--  Mandar : 18-Apr-06 : bugid: 644 : - Dimension 2 capacity label end -->
 				<label for="twoDimensionLabel">
 					<bean:message key="storageType.twoDimensionLabel"/>
 				</label>
