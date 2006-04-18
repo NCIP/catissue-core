@@ -45,6 +45,7 @@ import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.domain.AbstractDomainObject;
@@ -275,6 +276,17 @@ public class CommonAddEditAction extends Action
                 			Logger.out.debug("Added password attr in session");
                 			request.getSession().setAttribute(Constants.PASSWORD_CHANGE_IN_SESSION,new Boolean(true));
                 		}
+                		//Mandar 18-Apr-06 : bugid: 1687
+                		if(((UserForm) abstractForm).getStatus().equalsIgnoreCase("Reject" ) ||
+                		   ((UserForm) abstractForm).getStatus().equalsIgnoreCase("Pending" ))
+                		{
+                        	String moveToApproveUsers = "/ApproveUserShow.do?pageNum=1&menuSelected=1";  
+                        	Logger.out.debug("moveToApproveUsers :-- : "+ moveToApproveUsers);
+                       		ActionForward reDirectForward = new ActionForward();
+                       		reDirectForward.setPath(moveToApproveUsers );
+                       		return reDirectForward;
+                		}
+                		//Mandar 18-Apr-06 : bugid: 1687 end
                 	}
                     
                     // -- Direct to Main Menu if record is disabled
