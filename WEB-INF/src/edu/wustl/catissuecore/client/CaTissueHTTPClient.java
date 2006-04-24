@@ -20,6 +20,8 @@ import java.util.List;
 
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.struts.HTTPMessage;
+import edu.wustl.common.struts.HTTPWrapperObject;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.logger.Logger;
 
