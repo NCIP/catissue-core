@@ -46,13 +46,14 @@ import edu.wustl.catissuecore.domainobject.TransferEventParameters;
 import edu.wustl.catissuecore.domainobject.User;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.factory.AbstractActionFormFactory;
 
 /**
  * ActionFormFactory is a factory that returns instances of action formbeans 
  * as per the domain objects.
  * @author aniruddha_phadnis
  */
-public class ActionFormFactory
+public class ActionFormFactory extends AbstractActionFormFactory
 {
 	/**
      * Returns the instance of formbean as per given domain object.
@@ -61,7 +62,7 @@ public class ActionFormFactory
      * @return the instance of formbean.
      * @see #setMessageList(List)
      */
-	public static AbstractActionForm getFormBean(Object object,String operation) throws Exception
+	public AbstractActionForm getFormBean(Object object,String operation) throws Exception
 	{
 		if(object == null)
 		{
