@@ -100,7 +100,8 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 		}
 	}
 </script>
-
+<!-- Mandar : 434 : for tooltip -->
+<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 </head>
 
 <html:errors />
@@ -207,7 +208,9 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 </tr>
 <tr>
 	<td><b><bean:message key="specimenEventParameters.label"/></b> &nbsp;
-		<html:select property="specimenEventParameter" styleClass="formFieldSized15" styleId="className" size="1" disabled="false" onchange="onParameterChange(this)">
+<!-- Mandar : 434 : for tooltip -->
+		<html:select property="specimenEventParameter" styleClass="formFieldSized15" styleId="className" size="1" disabled="false" onchange="onParameterChange(this)"
+		 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 			<html:options name="<%=Constants.EVENT_PARAMETERS_LIST%>" labelName="<%=Constants.EVENT_PARAMETERS_LIST%>"/>
 		</html:select>
 	</td>

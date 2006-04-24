@@ -74,7 +74,8 @@
 			sname="";
 
 			var name = "value(ParticipantMedicalIdentifier:" + (q+1) + "_Site_systemIdentifier)";
-			sname="<select name='" + name + "' size='1' class='formFieldSized15' id='" + name + "'>";
+// Mandar : 434 : for tooltip 
+			sname="<select name='" + name + "' size='1' class='formFieldSized15' id='" + name + "' onmouseover=showTip(this.id) onmouseout=hideTip(this.id)>";
 			<%
 				if(siteList!=null)
 				{
@@ -280,7 +281,9 @@
 				     	<label for="gender"><bean:message key="participant.gender"/></label>
 				     </td>
 				     <td class="formField" colspan="2">
-				     	<html:select property="gender" styleClass="formFieldSized" styleId="gender" size="1" disabled="<%=readOnlyForAll%>">
+<!-- Mandar : 434 : for tooltip -->
+				     	<html:select property="gender" styleClass="formFieldSized" styleId="gender" size="1" disabled="<%=readOnlyForAll%>"
+						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 							<html:options collection="<%=Constants.GENDER_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
 		        	  </td>
@@ -291,7 +294,9 @@
 						<label for="genotype"><bean:message key="participant.genotype"/></label>
 					</td>
 				     <td class="formField" colspan="2">
-				     	<html:select property="genotype" styleClass="formFieldSized" styleId="genotype" size="1" disabled="<%=readOnlyForAll%>">
+<!-- Mandar : 434 : for tooltip -->
+				     	<html:select property="genotype" styleClass="formFieldSized" styleId="genotype" size="1" disabled="<%=readOnlyForAll%>"
+						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 							<html:options collection="<%=Constants.GENOTYPE_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
 		        	  </td>
@@ -302,7 +307,9 @@
 					     <label for="race"><bean:message key="participant.race"/></label>
 				     </td>
 				     <td class="formField" colspan="2">
-				     	<html:select property="race" styleClass="formFieldSized" styleId="race" size="1" disabled="<%=readOnlyForAll%>">
+<!-- Mandar : 434 : for tooltip -->
+				     	<html:select property="race" styleClass="formFieldSized" styleId="race" size="1" disabled="<%=readOnlyForAll%>"
+						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 							<html:options collection="<%=Constants.RACELIST%>" labelProperty="name" property="value"/>
 						</html:select>
 		        	  </td>
@@ -315,7 +322,9 @@
 				     	</label>
 				     </td>
 				     <td class="formField" colspan="2">
-				     	<html:select property="ethnicity" styleClass="formFieldSized" styleId="ethnicity" size="1" disabled="<%=readOnlyForAll%>">
+<!-- Mandar : 434 : for tooltip -->
+				     	<html:select property="ethnicity" styleClass="formFieldSized" styleId="ethnicity" size="1" disabled="<%=readOnlyForAll%>"
+						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 							<html:options collection="<%=Constants.ETHNICITY_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
 		        	  </td>
@@ -346,7 +355,9 @@
 						</label>
 					</td>
 					<td class="formField" colspan="2">
-						<html:select property="activityStatus" styleClass="formFieldSized10" styleId="activityStatus" size="1" onchange="<%=strCheckStatus%>">
+<!-- Mandar : 434 : for tooltip -->
+						<html:select property="activityStatus" styleClass="formFieldSized10" styleId="activityStatus" size="1" onchange="<%=strCheckStatus%>"
+						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 							<html:options name="<%=Constants.ACTIVITYSTATUSLIST%>" labelName="<%=Constants.ACTIVITYSTATUSLIST%>" />
 						</html:select>
 					</td>
@@ -400,7 +411,9 @@
 				 		<html:hidden property="<%=identifier%>" />
 				 	</td>
 				    <td class="formField">
-						<html:select property="<%=siteName%>" styleClass="formFieldSized15" styleId="<%=siteName%>" size="1" disabled="<%=readOnlyForAll%>">
+<!-- Mandar : 434 : for tooltip -->
+						<html:select property="<%=siteName%>" styleClass="formFieldSized15" styleId="<%=siteName%>" size="1" disabled="<%=readOnlyForAll%>"
+						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 							<html:options collection="<%=Constants.SITELIST%>" labelProperty="name" property="value"/>		
 						</html:select>
 					</td>

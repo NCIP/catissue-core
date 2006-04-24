@@ -131,7 +131,9 @@
 						</label>
 				   	</td>
 					<td class="formField">
-						<html:select property="collectionProtocolID" styleClass="formFieldSized" styleId="collectionProtocolID" size="1">
+<!-- Mandar : 434 : for tooltip -->
+						<html:select property="collectionProtocolID" styleClass="formFieldSized" styleId="collectionProtocolID" size="1"
+						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 						    <html:options collection="<%=Constants.PROTOCOL_LIST%>" labelProperty="name" property="value"/>															
 					    </html:select>
 					<%
@@ -168,12 +170,16 @@
 
 					<td class="formField">
 						<logic:equal name="collectionProtocolRegistrationForm" property="checkedButton" value="true">
-							<html:select property="participantID" styleClass="formFieldSized" styleId="participantID" size="1">
+<!-- Mandar : 434 : for tooltip -->
+							<html:select property="participantID" styleClass="formFieldSized" styleId="participantID" size="1"
+							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
  							    <html:options collection="<%=Constants.PARTICIPANT_LIST%>" labelProperty="name" property="value"/>							
 							</html:select>
 						</logic:equal>
 						<logic:equal name="collectionProtocolRegistrationForm" property="checkedButton" value="false">
-							<html:select property="participantID" styleClass="formFieldSized" styleId="participantID" size="1" disabled="true">
+<!-- Mandar : 434 : for tooltip -->
+							<html:select property="participantID" styleClass="formFieldSized" styleId="participantID" size="1" disabled="true"
+							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
  							    <html:options collection="<%=Constants.PARTICIPANT_LIST%>" labelProperty="name" property="value"/>							
 							</html:select>
 						</logic:equal>
@@ -234,7 +240,9 @@
 						</label>
 					</td>
 					<td class="formField">
-						<html:select property="activityStatus" styleClass="formFieldSized10" styleId="activityStatus" size="1" onchange="<%=strCheckStatus%>">
+<!-- Mandar : 434 : for tooltip -->
+						<html:select property="activityStatus" styleClass="formFieldSized10" styleId="activityStatus" size="1" onchange="<%=strCheckStatus%>"
+						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 							<html:options name="<%=Constants.ACTIVITYSTATUSLIST%>" labelName="<%=Constants.ACTIVITYSTATUSLIST%>" />
 						</html:select>
 					</td>

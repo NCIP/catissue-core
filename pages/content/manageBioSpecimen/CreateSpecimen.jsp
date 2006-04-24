@@ -193,7 +193,9 @@
 						</label>
 					</td>
 					<td class="formField" colspan="2">
-			     		<html:select property="parentSpecimenId" styleClass="formFieldSized10" styleId="parentSpecimenId" size="1" disabled="<%=readOnlyForAll%>">
+<!-- Mandar : 434 : for tooltip -->
+			     		<html:select property="parentSpecimenId" styleClass="formFieldSized10" styleId="parentSpecimenId" size="1" disabled="<%=readOnlyForAll%>"
+						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 							<html:options collection="<%=Constants.PARENT_SPECIMEN_ID_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
 		        	</td>
@@ -207,7 +209,9 @@
 				     	</label>
 				    </td>
 				    <td class="formField" colspan="2">
-				     	<html:select property="className" styleClass="formFieldSized15" styleId="className" size="1" disabled="<%=readOnlyForAll%>" onchange="onTypeChange(this)">
+<!-- Mandar : 434 : for tooltip -->
+				     	<html:select property="className" styleClass="formFieldSized15" styleId="className" size="1" disabled="<%=readOnlyForAll%>" onchange="onTypeChange(this)"
+						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 							<html:options collection="<%=Constants.SPECIMEN_CLASS_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
 		        	</td>
@@ -237,9 +241,11 @@
 								String subTypeFunctionName ="onSubTypeChangeUnit('className',this,'unitSpan')"; 
 					%>
 				    <!-- --------------------------------------- -->
+<!-- Mandar : 434 : for tooltip -->
 				     	<html:select property="type" styleClass="formFieldSized15" styleId="type" 
 				     	 size="1" disabled="<%=subListEnabled%>"
-				     	 onchange="<%=subTypeFunctionName%>" >
+				     	 onchange="<%=subTypeFunctionName%>" 
+						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 							<html:options collection="<%=Constants.SPECIMEN_TYPE_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
 		        	</td>

@@ -22,6 +22,8 @@
             readOnlyValue = false;
         }
 %>
+<!-- Mandar : 434 : for tooltip -->
+<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 
 	<html:errors/>
 	<html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
@@ -162,7 +164,9 @@
 						</label>
 					</td>
 					<td class="formField">
-						<html:select property="activityStatus" styleClass="formFieldSized" styleId="activityStatus" size="1">
+<!-- Mandar : 434 : for tooltip -->
+						<html:select property="activityStatus" styleClass="formFieldSized" styleId="activityStatus" size="1"
+						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 							<html:options name="activityStatusList" labelName="activityStatusList" />
 						</html:select>
 					</td>

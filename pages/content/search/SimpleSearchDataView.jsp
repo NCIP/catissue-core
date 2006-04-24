@@ -181,7 +181,8 @@ if(dataList != null && dataList.size() != 0)
 	else
 		configAction = "onAdvanceConfigure()";
 %>
-
+<!-- Mandar : 434 : for tooltip -->
+<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 </head>
 
 <table summary="" cellpadding="0" cellspacing="0" border="0" width="100%" height="100%">
@@ -251,7 +252,9 @@ if(dataList != null && dataList.size() != 0)
 	
 	<tr id="hiddenCombo" rowspan="4" height="1%">
 		<td class="formField" colspan="4">
-   			<html:select property="selectedColumnNames" styleClass="selectedColumnNames"  size="1" styleId="selectedColumnNames" multiple="true">
+<!-- Mandar : 434 : for tooltip -->
+   			<html:select property="selectedColumnNames" styleClass="selectedColumnNames"  size="1" styleId="selectedColumnNames" multiple="true"
+			 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
    				<%
 				for(int j=0;j<selectedColumns.length;j++)
    				{

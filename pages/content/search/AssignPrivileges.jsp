@@ -8,6 +8,8 @@
 <%@ page import="edu.wustl.catissuecore.actionForm.AssignPrivilegesForm"%>
 
 <head>
+<!-- Mandar : 434 : for tooltip -->
+<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 <%
 List usersForUse = (List) request.getAttribute(Constants.USERS_FOR_USE_PRIVILEGE);
 List usersForRead = (List) request.getAttribute(Constants.USERS_FOR_READ_PRIVILEGE);
@@ -149,13 +151,17 @@ AssignPrivilegesForm form = (AssignPrivilegesForm)request.getAttribute("assignPr
 <tr>
 	<td>&nbsp;&nbsp;</td>
 	<td class="formSerialNumberField" >
-     	<html:select property="assignOperation" styleClass="formFieldSized15" styleId="assignOperation" size="1">
+<!-- Mandar : 434 : for tooltip -->
+     	<html:select property="assignOperation" styleClass="formFieldSized15" styleId="assignOperation" size="1"
+		 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 			<html:options name="<%=Constants.ASSIGN%>" labelName="<%=Constants.ASSIGN%>"/>
 		</html:select>
 	</td>
 
 	<td class="formField" colspan="2">
-     	<html:select property="privilege" styleClass="formFieldSized15" styleId="privileges" size="1" onchange="onPrivilegeChange(this)">
+<!-- Mandar : 434 : for tooltip -->
+     	<html:select property="privilege" styleClass="formFieldSized15" styleId="privileges" size="1" onchange="onPrivilegeChange(this)"
+		 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 			<html:options collection="<%=Constants.PRIVILEGES%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
@@ -183,19 +189,25 @@ AssignPrivilegesForm form = (AssignPrivilegesForm)request.getAttribute("assignPr
 <tr>
 	<td>&nbsp;&nbsp;</td>
 	<td class="formSerialNumberField">
-     	<html:select property="objectType" styleClass="formFieldSized15" styleId="objectTypes" size="10" onchange="onObjectTypeChange(this)">
+<!-- Mandar : 434 : for tooltip -->
+     	<html:select property="objectType" styleClass="formFieldSized15" styleId="objectTypes" size="10" onchange="onObjectTypeChange(this)"
+		 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 			<html:options collection="<%=Constants.OBJECT_TYPES%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
 	
 	<td class="formField">
-     	<html:select property="recordIds" styleClass="formFieldSized15" styleId="recordIds" size="10" multiple="true" onchange="selectAll(this)">
+<!-- Mandar : 434 : for tooltip -->
+     	<html:select property="recordIds" styleClass="formFieldSized15" styleId="recordIds" size="10" multiple="true" onchange="selectAll(this)"
+		 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 			<html:options collection="<%=Constants.RECORD_IDS%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
 
 	<td class="formField">
-     	<html:select property="groups" styleClass="formFieldSized15" styleId="groups" size="10" multiple="true">
+<!-- Mandar : 434 : for tooltip -->
+     	<html:select property="groups" styleClass="formFieldSized15" styleId="groups" size="10" multiple="true"
+		 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 		<% if(form.getPrivilege()!=null )
 			{
 			 if(form.getPrivilege().equals("READ")) 

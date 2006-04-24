@@ -32,6 +32,8 @@
 <head>
 	<script src="jss/script.js" type="text/javascript"></script>
 	<script src="jss/AdvancedSearchScripts.js" type="text/javascript"></script>
+<!-- Mandar : 434 : for tooltip -->
+<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 </head>
 
 <html:errors />
@@ -71,12 +73,16 @@
  		</label>
 	</td>
 	<td class="formField">
-		<html:select property="<%=opPrincipalInvestigator%>" styleClass="formFieldSized10" styleId="principalInvestigatorCombo" size="1" onchange="onOperatorChange('principalInvestigatorCombo','principalInvestigator')">
+<!-- Mandar : 434 : for tooltip -->
+		<html:select property="<%=opPrincipalInvestigator%>" styleClass="formFieldSized10" styleId="principalInvestigatorCombo" size="1" onchange="onOperatorChange('principalInvestigatorCombo','principalInvestigator')"
+		 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 			<html:options collection="<%=Constants.ENUMERATED_OPERATORS%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
 	<td class="formField">
-		<html:select property="<%=principalInvestigator%>" styleClass="formFieldSized10" styleId="principalInvestigator" size="1" disabled="true">
+<!-- Mandar : 434 : for tooltip -->
+		<html:select property="<%=principalInvestigator%>" styleClass="formFieldSized10" styleId="principalInvestigator" size="1" disabled="true"
+		 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 			<html:options collection="<%=Constants.USERLIST%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
@@ -90,7 +96,9 @@
  		</label>
 	</td>
 	<td class="formField">
-		<html:select property="<%=opTitle%>" styleClass="formFieldSized10" styleId="titleCombo" size="1" onchange="onOperatorChange('titleCombo','title')">
+<!-- Mandar : 434 : for tooltip -->
+		<html:select property="<%=opTitle%>" styleClass="formFieldSized10" styleId="titleCombo" size="1" onchange="onOperatorChange('titleCombo','title')"
+		 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 			<html:options collection="<%=Constants.STRING_OPERATORS%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
@@ -107,7 +115,9 @@
  		</label>
 	</td>
 	<td class="formField">
-		<html:select property="<%=opShortTitle%>" styleClass="formFieldSized10" styleId="shortTitleCombo" size="1" onchange="onOperatorChange('shortTitleCombo','shortTitle')">
+<!-- Mandar : 434 : for tooltip -->
+		<html:select property="<%=opShortTitle%>" styleClass="formFieldSized10" styleId="shortTitleCombo" size="1" onchange="onOperatorChange('shortTitleCombo','shortTitle')"
+		 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 			<html:options collection="<%=Constants.STRING_OPERATORS%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
@@ -124,7 +134,9 @@
 		</label>
 	</td>
 	<td class="formField">
-		<html:select property="<%=opIrbIdentifier%>" styleClass="formFieldSized10" styleId="irbIdentifierCombo" size="1" onchange="onOperatorChange('irbIdentifierCombo','irbIdentifier')">
+<!-- Mandar : 434 : for tooltip -->
+		<html:select property="<%=opIrbIdentifier%>" styleClass="formFieldSized10" styleId="irbIdentifierCombo" size="1" onchange="onOperatorChange('irbIdentifierCombo','irbIdentifier')"
+		 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 			<html:options collection="<%=Constants.STRING_OPERATORS%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
@@ -141,7 +153,9 @@
 		</label>
 	</td>
 	<td class="formField">
-		<html:select property="<%=opStartDate%>" styleClass="formFieldSized10" styleId="startDate" size="1" onchange="onDateOperatorChange(this,'startDate1','startDate2')">
+<!-- Mandar : 434 : for tooltip -->
+		<html:select property="<%=opStartDate%>" styleClass="formFieldSized10" styleId="startDate" size="1" onchange="onDateOperatorChange(this,'startDate1','startDate2')"
+		 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 			<html:options collection="<%=Constants.DATE_NUMERIC_OPERATORS%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
@@ -169,7 +183,9 @@
 		</label>
 	</td>
 	<td class="formField">
-		<html:select property="<%=opEndDate%>" styleClass="formFieldSized10" styleId="endDate" size="1" onchange="onDateOperatorChange(this,'endDate1','endDate2')">
+<!-- Mandar : 434 : for tooltip -->
+		<html:select property="<%=opEndDate%>" styleClass="formFieldSized10" styleId="endDate" size="1" onchange="onDateOperatorChange(this,'endDate1','endDate2')"
+		 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 			<html:options collection="<%=Constants.DATE_NUMERIC_OPERATORS%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
@@ -196,7 +212,9 @@
  		</label>
 	</td>
 	<td class="formField">
-		<html:select property="<%=opProtocolParticipantId%>" styleClass="formFieldSized10" styleId="protocolParticipantIdCombo" size="1" onchange="onOperatorChange('protocolParticipantIdCombo','protocolParticipantId')">
+<!-- Mandar : 434 : for tooltip -->
+		<html:select property="<%=opProtocolParticipantId%>" styleClass="formFieldSized10" styleId="protocolParticipantIdCombo" size="1" onchange="onOperatorChange('protocolParticipantIdCombo','protocolParticipantId')"
+		 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 			<html:options collection="<%=Constants.STRING_OPERATORS%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
@@ -214,7 +232,9 @@
 		</label>
 	</td>
 	<td class="formField">
-		<html:select property="<%=opRegDate%>" styleClass="formFieldSized10" styleId="regDate" size="1" onchange="onDateOperatorChange(this,'regDate1','regDate2')">
+<!-- Mandar : 434 : for tooltip -->
+		<html:select property="<%=opRegDate%>" styleClass="formFieldSized10" styleId="regDate" size="1" onchange="onDateOperatorChange(this,'regDate1','regDate2')"
+		 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 			<html:options collection="<%=Constants.DATE_NUMERIC_OPERATORS%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>

@@ -31,6 +31,8 @@
 <head>
 	<script src="jss/script.js" type="text/javascript"></script>
 	<script src="jss/AdvancedSearchScripts.js" type="text/javascript"></script>
+<!-- Mandar : 434 : for tooltip -->
+<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 </head>
 
 <html:errors />
@@ -70,7 +72,9 @@
  		</label>
 	</td>
 	<td class="formField">
-		<html:select property="<%=opLastName%>" styleClass="formFieldSized10" styleId="lastNameCombo" size="1" onchange="onOperatorChange('lastNameCombo','lastName')">
+<!-- Mandar : 434 : for tooltip -->
+		<html:select property="<%=opLastName%>" styleClass="formFieldSized10" styleId="lastNameCombo" size="1" onchange="onOperatorChange('lastNameCombo','lastName')"
+		 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 			<html:options collection="<%=Constants.STRING_OPERATORS%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
@@ -87,7 +91,9 @@
  		</label>
 	</td>
 	<td class="formField">
-		<html:select property="<%=opFirstName%>" styleClass="formFieldSized10" styleId="firstNameCombo" size="1" onchange="onOperatorChange('firstNameCombo','firstName')">
+<!-- Mandar : 434 : for tooltip -->
+		<html:select property="<%=opFirstName%>" styleClass="formFieldSized10" styleId="firstNameCombo" size="1" onchange="onOperatorChange('firstNameCombo','firstName')"
+		 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 			<html:options collection="<%=Constants.STRING_OPERATORS%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
@@ -104,7 +110,9 @@
  		</label>
 	</td>
 	<td class="formField">
-		<html:select property="<%=opMiddleName%>" styleClass="formFieldSized10" styleId="middleNameCombo" size="1" onchange="onOperatorChange('middleNameCombo','middleName')">
+<!-- Mandar : 434 : for tooltip -->
+		<html:select property="<%=opMiddleName%>" styleClass="formFieldSized10" styleId="middleNameCombo" size="1" onchange="onOperatorChange('middleNameCombo','middleName')"
+		 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 			<html:options collection="<%=Constants.STRING_OPERATORS%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
@@ -121,7 +129,9 @@
 		</label>
 	</td>
 	<td class="formField">
-		<html:select property="<%=opBirthDate%>" styleClass="formFieldSized10" styleId="birthDate" size="1" onchange="onDateOperatorChange(this,'birthDate1','birthDate2')">
+<!-- Mandar : 434 : for tooltip -->
+		<html:select property="<%=opBirthDate%>" styleClass="formFieldSized10" styleId="birthDate" size="1" onchange="onDateOperatorChange(this,'birthDate1','birthDate2')"
+		 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 			<html:options collection="<%=Constants.DATE_NUMERIC_OPERATORS%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
@@ -149,12 +159,16 @@
  		</label>
 	</td>
 	<td class="formField">
-		<html:select property="<%=opGender%>" styleClass="formFieldSized10" styleId="genderCombo" size="1" onchange="onOperatorChange('genderCombo','gender')">
+<!-- Mandar : 434 : for tooltip -->
+		<html:select property="<%=opGender%>" styleClass="formFieldSized10" styleId="genderCombo" size="1" onchange="onOperatorChange('genderCombo','gender')"
+		 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 			<html:options collection="<%=Constants.ENUMERATED_OPERATORS%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
 	<td class="formField">
-		<html:select property="<%=gender%>" styleClass="formFieldSized10" styleId="gender" size="1" disabled="true">
+<!-- Mandar : 434 : for tooltip -->
+		<html:select property="<%=gender%>" styleClass="formFieldSized10" styleId="gender" size="1" disabled="true"
+		 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 			<html:options collection="<%=Constants.GENDER_LIST%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
@@ -168,12 +182,16 @@
  		</label>
 	</td>
 	<td class="formField">
-		<html:select property="<%=opGenotype%>" styleClass="formFieldSized10" styleId="genotypeCombo" size="1" onchange="onOperatorChange('genotypeCombo','genotype')">
+<!-- Mandar : 434 : for tooltip -->
+		<html:select property="<%=opGenotype%>" styleClass="formFieldSized10" styleId="genotypeCombo" size="1" onchange="onOperatorChange('genotypeCombo','genotype')"
+		 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 				<html:options collection="<%=Constants.ENUMERATED_OPERATORS%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
 	<td class="formField">
-		<html:select property="<%=genotype%>" styleClass="formFieldSized10" styleId="genotype" size="1" disabled="true">
+<!-- Mandar : 434 : for tooltip -->
+		<html:select property="<%=genotype%>" styleClass="formFieldSized10" styleId="genotype" size="1" disabled="true"
+		 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 			<html:options collection="<%=Constants.GENOTYPE_LIST%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
@@ -187,12 +205,16 @@
  		</label>
 	</td>
 	<td class="formField">
-		<html:select property="<%=opRace%>" styleClass="formFieldSized10" styleId="raceCombo" size="1" onchange="onOperatorChange('raceCombo','race')">
+<!-- Mandar : 434 : for tooltip -->
+		<html:select property="<%=opRace%>" styleClass="formFieldSized10" styleId="raceCombo" size="1" onchange="onOperatorChange('raceCombo','race')"
+		 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 			<html:options collection="<%=Constants.ENUMERATED_OPERATORS%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
 	<td class="formField" nowrap>
-		<html:select property="<%=race%>" styleClass="formFieldSized10" styleId="race" size="1" disabled="true">
+<!-- Mandar : 434 : for tooltip -->
+		<html:select property="<%=race%>" styleClass="formFieldSized10" styleId="race" size="1" disabled="true"
+		 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 			<html:options collection="<%=Constants.RACELIST%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
@@ -206,12 +228,16 @@
      	</label>
 	</td>
 	<td class="formField">
-		<html:select property="<%=opEthnicity%>" styleClass="formFieldSized10" styleId="ethnicityCombo" size="1" onchange="onOperatorChange('ethnicityCombo','ethnicity')">
+<!-- Mandar : 434 : for tooltip -->
+		<html:select property="<%=opEthnicity%>" styleClass="formFieldSized10" styleId="ethnicityCombo" size="1" onchange="onOperatorChange('ethnicityCombo','ethnicity')"
+		 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 			<html:options collection="<%=Constants.ENUMERATED_OPERATORS%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
 	<td class="formField">
-		<html:select property="<%=ethnicity%>" styleClass="formFieldSized10" styleId="ethnicity" size="1" disabled="true">
+<!-- Mandar : 434 : for tooltip -->
+		<html:select property="<%=ethnicity%>" styleClass="formFieldSized10" styleId="ethnicity" size="1" disabled="true"
+		 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 			<html:options collection="<%=Constants.ETHNICITY_LIST%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
@@ -225,7 +251,9 @@
      	</label>
 	</td>
 	<td class="formField">
-		<html:select property="<%=opSsn%>" styleClass="formFieldSized10" styleId="ssnCombo" size="1" onchange="onOperatorChange('ssnCombo','ssn')">
+<!-- Mandar : 434 : for tooltip -->
+		<html:select property="<%=opSsn%>" styleClass="formFieldSized10" styleId="ssnCombo" size="1" onchange="onOperatorChange('ssnCombo','ssn')"
+		 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 			<html:options collection="<%=Constants.STRING_OPERATORS%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>

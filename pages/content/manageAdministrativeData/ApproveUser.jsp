@@ -74,7 +74,7 @@
 						</tr>
 						<logic:empty name="showDomainObjectList">
 						<tr>
-							<td class="dataTableWhiteCenterHeader" colspan="5">  
+							<td class="dataTableWhiteCenterHeader" colspan="6">  
 								<bean:message key="approveUser.newUsersNotFound" />
 							</td>
 						</tr>

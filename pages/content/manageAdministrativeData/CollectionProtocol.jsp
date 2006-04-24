@@ -147,7 +147,8 @@ function insRow(subdivtag,iCounter,blockCounter)
 	var objunit = subdivname + "_SpecimenRequirement:"+rowno+"_unitspan)";
 	var specimenClassName = objname;
 	var objsubtype = subdivname + "_SpecimenRequirement:"+rowno+"_specimenType)";
-	sname = "<select name='" + objname + "' size='1' onchange=changeUnit('" + objname + "','" + objunit +"','"+ objsubtype +"') class='formFieldSized10' id='" + objname + "'>";
+//Mandar : 434 : for tooltip
+	sname = "<select name='" + objname + "' size='1' onchange=changeUnit('" + objname + "','" + objunit +"','"+ objsubtype +"') class='formFieldSized10' id='" + objname + "' onmouseover=showTip(this.id) onmouseout=hideTip(this.id)>";
 	<%for(int i=0;i<specimenClassList.size();i++)
 	{
 		String specimenClassLabel = "" + ((NameValueBean)specimenClassList.get(i)).getName();
@@ -166,7 +167,7 @@ function insRow(subdivtag,iCounter,blockCounter)
 	objname = subdivname + "_SpecimenRequirement:"+rowno+"_specimenType)";
 	var functionName = "onSubTypeChangeUnit('" + specimenClassName + "',this,'" + objunit + "')" ;
 	
-	sname= "<select name='" + objname + "' size='1' class='formFieldSized10' id='" + objname + "' onChange=" + functionName + " >";
+	sname= "<select name='" + objname + "' size='1' class='formFieldSized10' id='" + objname + "' onChange=" + functionName + " onmouseover=showTip(this.id) onmouseout=hideTip(this.id)>";
 	
 	sname = sname + "<option value='-1'><%=Constants.SELECT_OPTION%></option>";
 
@@ -180,7 +181,7 @@ function insRow(subdivtag,iCounter,blockCounter)
 	sname="";
 	objname = subdivname + "_SpecimenRequirement:"+rowno+"_tissueSite)";
 	
-	sname = "<select name='" + objname + "' size='1' class='formFieldSized35' id='" + objname + "'>";
+	sname = "<select name='" + objname + "' size='1' class='formFieldSized35' id='" + objname + "' onmouseover=showTip(this.id) onmouseout=hideTip(this.id)>";
 	<%for(int i=0;i<tissueSiteList.size();i++)
 	{%>
 		sname = sname + "<option value='<%=((NameValueBean)tissueSiteList.get(i)).getValue()%>'><%=((NameValueBean)tissueSiteList.get(i)).getName()%></option>";
@@ -199,7 +200,7 @@ function insRow(subdivtag,iCounter,blockCounter)
 	sname="";
 	objname = subdivname + "_SpecimenRequirement:"+rowno+"_pathologyStatus)";
 	
-	sname="<select name='" + objname + "' size='1' class='formFieldSized10' id='" + objname + "'>";
+	sname="<select name='" + objname + "' size='1' class='formFieldSized10' id='" + objname + "' onmouseover=showTip(this.id) onmouseout=hideTip(this.id)>";
 	<%for(int i=0;i<pathologyStatusList.size();i++)
 	{%>
 		sname = sname + "<option value='<%=((NameValueBean)pathologyStatusList.get(i)).getValue()%>'><%=((NameValueBean)pathologyStatusList.get(i)).getName()%></option>";
@@ -306,7 +307,9 @@ function insRow(subdivtag,iCounter,blockCounter)
 						</td>
 						
 						<td class="formField">
-							<html:select property="principalInvestigatorId" styleClass="formFieldSized" styleId="principalInvestigatorId" size="1">
+<!-- Mandar : 434 : for tooltip -->
+							<html:select property="principalInvestigatorId" styleClass="formFieldSized" styleId="principalInvestigatorId" size="1"
+							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 								<html:options collection="<%=Constants.USERLIST%>" labelProperty="name" property="value"/>
 							</html:select>
 							&nbsp;
@@ -333,7 +336,9 @@ function insRow(subdivtag,iCounter,blockCounter)
 						</td>
 						
 						<td class="formField">
-							<html:select property="protocolCoordinatorIds" styleClass="formFieldSized" styleId="protocolCoordinatorIds" size="4" multiple="true">
+<!-- Mandar : 434 : for tooltip -->
+							<html:select property="protocolCoordinatorIds" styleClass="formFieldSized" styleId="protocolCoordinatorIds" size="4" multiple="true"
+							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 								<html:options collection="<%=Constants.USERLIST%>" labelProperty="name" property="value"/>
 							</html:select>
 							&nbsp;
@@ -465,7 +470,9 @@ function insRow(subdivtag,iCounter,blockCounter)
 							</label>
 						</td>
 						<td class="formField">
-							<html:select property="activityStatus" styleClass="formFieldSized10" styleId="activityStatus" size="1"  onchange="<%=strCheckStatus%>">
+<!-- Mandar : 434 : for tooltip -->
+							<html:select property="activityStatus" styleClass="formFieldSized10" styleId="activityStatus" size="1"  onchange="<%=strCheckStatus%>"
+							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 								<html:options name="<%=Constants.ACTIVITYSTATUSLIST%>" labelName="<%=Constants.ACTIVITYSTATUSLIST%>" />
 							</html:select>
 						</td>
@@ -567,7 +574,9 @@ function insRow(subdivtag,iCounter,blockCounter)
 					</td>
 					
 					<td class="formFieldAddMore" colspan=2>
-						<html:select property="<%=fldName%>" styleClass="formField" styleId="<%=fldName%>" size="1">
+<!-- Mandar : 434 : for tooltip -->
+						<html:select property="<%=fldName%>" styleClass="formField" styleId="<%=fldName%>" size="1"
+						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 							<html:options collection="<%=Constants.CLINICAL_STATUS_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
 					</td>
@@ -724,7 +733,8 @@ function insRow(subdivtag,iCounter,blockCounter)
 			        	<html:select property="<%=fName%>" 
 										styleClass="formFieldSized10" 
 										styleId="<%=fName%>" size="1"
-										onchange="<%=onChangeFun%>">
+										onchange="<%=onChangeFun%>"
+									 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 						<%
 							if(operation.equals(Constants.EDIT) && sysId > 0)
 							{
@@ -760,7 +770,8 @@ function insRow(subdivtag,iCounter,blockCounter)
 										styleClass="formFieldSized10" 
 										styleId="<%=fName%>" size="1"
 										   onchange="<%=subTypeFunctionName%>" 
-										   disabled="<%=subListEnabled%>" >
+										   disabled="<%=subListEnabled%>" 
+										 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 							<html:options collection="<%=Constants.SPECIMEN_TYPE_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
 			        </td>
@@ -773,7 +784,8 @@ function insRow(subdivtag,iCounter,blockCounter)
 
 			        	<html:select property="<%=fName%>" 
 										styleClass="formFieldSized35" 
-										styleId="<%=fName%>" size="1">
+										styleId="<%=fName%>" size="1"
+									 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 							<html:options collection="<%=Constants.TISSUE_SITE_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
 			        	<%
@@ -792,7 +804,8 @@ function insRow(subdivtag,iCounter,blockCounter)
 
 			        	<html:select property="<%=fName%>" 
 										styleClass="formFieldSized10" 
-										styleId="<%=fName%>" size="1">
+										styleId="<%=fName%>" size="1"
+									 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 							<html:options collection="<%=Constants.PATHOLOGICAL_STATUS_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
 			        </td>
@@ -913,7 +926,8 @@ function insRow(subdivtag,iCounter,blockCounter)
 					
 					<td class="formFieldAddMore" colspan=2>
 						<html:select property="value(CollectionProtocolEvent:`_clinicalStatus)" 
-										styleClass="formField" styleId="value(CollectionProtocolEvent:`_clinicalStatus)" size="1">
+										styleClass="formField" styleId="value(CollectionProtocolEvent:`_clinicalStatus)" size="1"
+										 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 							<html:options collection="<%=Constants.CLINICAL_STATUS_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
 					</td>
@@ -1006,7 +1020,8 @@ function insRow(subdivtag,iCounter,blockCounter)
 										styleId="value(CollectionProtocolEvent:`_SpecimenRequirement:1_specimenClass)" size="1"
 										onchange="changeUnit('value(CollectionProtocolEvent:`_SpecimenRequirement:1_specimenClass)',
 			           						'value(CollectionProtocolEvent:`_SpecimenRequirement:1_unitspan)',
-			           						'value(CollectionProtocolEvent:`_SpecimenRequirement:1_specimenType)')">
+			           						'value(CollectionProtocolEvent:`_SpecimenRequirement:1_specimenType)')"
+										 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 							<html:options collection="<%=Constants.SPECIMEN_CLASS_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
 			        </td>
@@ -1017,7 +1032,7 @@ function insRow(subdivtag,iCounter,blockCounter)
 										styleId="value(CollectionProtocolEvent:`_SpecimenRequirement:1_specimenType)" size="1"
 										onchange="onSubTypeChangeUnit('value(CollectionProtocolEvent:`_SpecimenRequirement:1_specimenClass)',
 			           						this,'value(CollectionProtocolEvent:`_SpecimenRequirement:1_unitspan)')"
-										>
+									 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 							<html:option value="-1"><%=Constants.SELECT_OPTION%></html:option>
 						</html:select>
 			        </td>
@@ -1025,7 +1040,8 @@ function insRow(subdivtag,iCounter,blockCounter)
 			        <td class="formFieldAddMore">
 			        	<html:select property="value(CollectionProtocolEvent:`_SpecimenRequirement:1_tissueSite)" 
 										styleClass="formFieldSized35" 
-										styleId="value(CollectionProtocolEvent:`_SpecimenRequirement:1_tissueSite)" size="1">
+										styleId="value(CollectionProtocolEvent:`_SpecimenRequirement:1_tissueSite)" size="1"
+										 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 							<html:options collection="<%=Constants.TISSUE_SITE_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
 			<!-- ****************************************  -->
@@ -1039,7 +1055,8 @@ function insRow(subdivtag,iCounter,blockCounter)
 			        <td class="formFieldAddMore">
 			        	<html:select property="value(CollectionProtocolEvent:`_SpecimenRequirement:1_pathologyStatus)" 
 										styleClass="formFieldSized10" 
-										styleId="value(CollectionProtocolEvent:`_SpecimenRequirement:1_pathologyStatus)" size="1">
+										styleId="value(CollectionProtocolEvent:`_SpecimenRequirement:1_pathologyStatus)" size="1"
+										 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 							<html:options collection="<%=Constants.PATHOLOGICAL_STATUS_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
 			        </td>

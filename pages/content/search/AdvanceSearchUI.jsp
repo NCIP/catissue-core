@@ -34,6 +34,8 @@
 %>
 
 <head>
+<!-- Mandar : 434 : for tooltip -->
+<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 	<script src="jss/script.js" type="text/javascript"></script>
 	<script src="jss/AdvancedSearchScripts.js" type="text/javascript"></script>
 </head>
@@ -78,7 +80,9 @@
 			</td>
 			
 			<td class="formField">
-				<html:select property="<%=searchFieldData[i].getOprationField().getName()%>" styleClass="formFieldSized10" styleId="<%=searchFieldData[i].getOprationField().getId()%>" size="1" onchange="<%= searchFieldData[i].getFunctionName()%>">
+<!-- Mandar : 434 : for tooltip -->
+				<html:select property="<%=searchFieldData[i].getOprationField().getName()%>" styleClass="formFieldSized10" styleId="<%=searchFieldData[i].getOprationField().getId()%>" size="1" onchange="<%= searchFieldData[i].getFunctionName()%>"
+				 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 					<html:options collection="<%=searchFieldData[i].getOprationField().getDataListName()%>" labelProperty="name" property="value"/>
 				</html:select>
 			</td>
@@ -98,7 +102,9 @@
 			{	
 		%>
 			<td class="formField">
-				<html:select property="<%=searchFieldData[i].getValueField().getName()%>" styleClass="formFieldSized10" styleId="<%=searchFieldData[i].getValueField().getId()%>" size="1" disabled="<%=searchFieldData[i].getValueField().isDisabled()%>">
+<!-- Mandar : 434 : for tooltip -->
+				<html:select property="<%=searchFieldData[i].getValueField().getName()%>" styleClass="formFieldSized10" styleId="<%=searchFieldData[i].getValueField().getId()%>" size="1" disabled="<%=searchFieldData[i].getValueField().isDisabled()%>"
+				 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 					<html:options collection="<%=searchFieldData[i].getValueField().getDataListName()%>" labelProperty="name" property="value"/>
 				</html:select>
 			</td>

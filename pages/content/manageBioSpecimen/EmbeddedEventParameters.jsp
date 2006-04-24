@@ -4,6 +4,8 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 
 <head>
+<!-- Mandar : 434 : for tooltip -->
+<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 	<script language="javascript">
 		
 	</script>
@@ -79,7 +81,9 @@
 				</label>
 			</td>
 			<td class="formField">
-				<html:select property="userId" styleClass="formFieldSized" styleId="userId" size="1">
+<!-- Mandar : 434 : for tooltip -->
+				<html:select property="userId" styleClass="formFieldSized" styleId="userId" size="1"
+				 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 					<html:options collection="<%=Constants.USERLIST%>" labelProperty="name" property="value"/>
 				</html:select>
 			</td>
@@ -112,13 +116,17 @@
 				</label>
 			</td>
 			<td class="formField">
-				<html:select property="timeInHours" styleClass="formFieldSized5" styleId="timeInHours" size="1">
+<!-- Mandar : 434 : for tooltip -->
+				<html:select property="timeInHours" styleClass="formFieldSized5" styleId="timeInHours" size="1"
+				 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 					<html:options name="<%=Constants.HOUR_LIST%>" labelName="<%=Constants.HOUR_LIST%>" />
 				</html:select>&nbsp;
 				<label for="eventparameters.timeinhours">
 					<bean:message key="eventparameters.timeinhours"/>&nbsp; 
 				</label>
-				<html:select property="timeInMinutes" styleClass="formFieldSized5" styleId="timeInMinutes" size="1">
+<!-- Mandar : 434 : for tooltip -->
+				<html:select property="timeInMinutes" styleClass="formFieldSized5" styleId="timeInMinutes" size="1"
+				 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 					<html:options name="<%=Constants.MINUTES_LIST%>" labelName="<%=Constants.MINUTES_LIST%>" />
 				</html:select>
 				<label for="eventparameters.timeinhours">
@@ -136,7 +144,9 @@
 				</label>
 			</td>
 			<td class="formField">
-				<html:select property="embeddingMedium" styleClass="formFieldSized" styleId="embeddingMedium" size="1">
+<!-- Mandar : 434 : for tooltip -->
+				<html:select property="embeddingMedium" styleClass="formFieldSized" styleId="embeddingMedium" size="1"
+				 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 					<%--html:options name="<%=Constants.EMBEDDING_MEDIUM_LIST%>" labelName="<%=Constants.EMBEDDING_MEDIUM_LIST%>" /--%>
 					<html:options collection="<%=Constants.EMBEDDING_MEDIUM_LIST%>" labelProperty="name" property="value"/>
 				</html:select>

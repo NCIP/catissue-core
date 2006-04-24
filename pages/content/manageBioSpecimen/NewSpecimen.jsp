@@ -174,7 +174,8 @@ Map map = form.getExternalIdentifier();
 			sname="";
 
 			var name = "biohazardValue(Biohazard:" + (q+1) + "_type)";
-			sname="<select name='" + name + "' size='1' class='formFieldSized15' id='" + name + "' onchange=onBiohazardTypeSelected(this)>";
+		// Mandar : 434 : for tooltip 
+			sname="<select name='" + name + "' size='1' class='formFieldSized15' id='" + name + "' onchange=onBiohazardTypeSelected(this) onmouseover=showTip(this.id) onmouseout=hideTip(this.id)>";
 			<%
 					if(biohazardList != null && biohazardList.size() != 0)
 					{
@@ -197,7 +198,8 @@ Map map = form.getExternalIdentifier();
 
 			name = "biohazardValue(Biohazard:" + (q+1) + "_systemIdentifier)";
 			sname= "";
-			sname="<select name='" + name + "' size='1' class='formFieldSized15' id='bhId" + (q+1) + "'>";
+	//Mandar : 434 : for tooltip 		
+			sname="<select name='" + name + "' size='1' class='formFieldSized15' id='bhId" + (q+1) + "' onmouseover=showTip(this.id) onmouseout=hideTip(this.id)>";
 			sname = sname + "<option value='-1'><%=Constants.SELECT_OPTION%></option>";			
 			sname = sname + "</select>";
 			spreqsubtype.innerHTML="" + sname;
@@ -211,8 +213,6 @@ Map map = form.getExternalIdentifier();
 			sname="<input type='checkbox' name='" + name +"' id='" + name +"' value='C' onClick=\"enableButton(document.forms[0].deleteBiohazard,document.forms[0].bhCounter,'chk_bio_')\">";
 			checkb.innerHTML=""+sname;
 		}
-		
-		
 	</script>
 </head>
 
@@ -260,8 +260,6 @@ Map map = form.getExternalIdentifier();
 				}
 				System.out.println("\n\n\nunitSpecimen in else: " +unitSpecimen);
 		//	}
-		System.out.println("\n\n\nparentPresent : " + form.isParentPresent());
-				
 		}
 		
 		
@@ -339,8 +337,10 @@ Map map = form.getExternalIdentifier();
 							</label>
 						</td>
 						<td class="formField" colspan="4">
+<!-- Mandar : 434 : for tooltip -->
 				     		<html:select property="specimenCollectionGroupId" styleClass="formFieldSized15" 
-				     				styleId="specimenCollectionGroupId" size="1" >
+				     				styleId="specimenCollectionGroupId" size="1" 
+									 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 								<html:options collection="<%=Constants.SPECIMEN_COLLECTION_GROUP_LIST%>" 
 									labelProperty="name" property="value"/>		
 							</html:select>
@@ -370,7 +370,9 @@ Map map = form.getExternalIdentifier();
 						
 			        	<td class="formField" colspan="4">
 			        		<html:hidden property="specimenCollectionGroupId"/>
-				     		<html:select property="parentSpecimenId" styleClass="formFieldSized10" styleId="parentSpecimenId" size="1" disabled="<%=readOnlyForAll%>">
+<!-- Mandar : 434 : for tooltip -->
+				     		<html:select property="parentSpecimenId" styleClass="formFieldSized10" styleId="parentSpecimenId" size="1" disabled="<%=readOnlyForAll%>"
+							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 								<html:options collection="<%=Constants.PARENT_SPECIMEN_ID_LIST%>" labelProperty="name" property="value"/>
 							</html:select>
 			        	</td>
@@ -385,7 +387,8 @@ Map map = form.getExternalIdentifier();
 				     	</label>
 				    </td>
 				    <td class="formField" colspan="4">
-				     	<html:select property="className" styleClass="formFieldSized15" styleId="className" size="1" disabled="<%=readOnlyForAll%>" onchange="onTypeChange(this)">
+<!-- Mandar : 434 : for tooltip -->
+				     	<html:select property="className" styleClass="formFieldSized15" styleId="className" size="1" disabled="<%=readOnlyForAll%>" onchange="onTypeChange(this)" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 				     	<%
 							String classValue = form.getClassName();
 							if(operation.equals(Constants.EDIT))
@@ -427,10 +430,11 @@ Map map = form.getExternalIdentifier();
 								String subTypeFunctionName ="onSubTypeChangeUnit('className',this,'unitSpan')"; 
 					%>
 				    <!-- --------------------------------------- -->
-				    
+   <!-- Mandar : 434 : for tooltip --> 
 				     	<html:select property="type" styleClass="formFieldSized15" styleId="type" size="1"
 				     	  disabled="<%=subListEnabled%>"
-				     	  onchange="<%=subTypeFunctionName%>" >
+				     	  onchange="<%=subTypeFunctionName%>" 
+						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 							<html:options collection="<%=Constants.SPECIMEN_TYPE_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
 		        	</td>
@@ -446,7 +450,9 @@ Map map = form.getExternalIdentifier();
 						</label>
 					</td>
 				     <td class="formField" colspan="4">
-				     	<html:select property="tissueSite" styleClass="formFieldSized15" styleId="tissueSite" size="1" disabled="<%=readOnlyForAll%>">
+<!-- Mandar : 434 : for tooltip -->
+				     	<html:select property="tissueSite" styleClass="formFieldSized15" styleId="tissueSite" size="1" disabled="<%=readOnlyForAll%>"
+							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 							<html:options collection="<%=Constants.TISSUE_SITE_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
 						<%
@@ -468,7 +474,9 @@ Map map = form.getExternalIdentifier();
 						</label>
 					</td>
 				     <td class="formField" colspan="4">
-				     	<html:select property="tissueSide" styleClass="formFieldSized15" styleId="tissueSide" size="1" disabled="<%=readOnlyForAll%>">
+<!-- Mandar : 434 : for tooltip -->
+				     	<html:select property="tissueSide" styleClass="formFieldSized15" styleId="tissueSide" size="1" disabled="<%=readOnlyForAll%>"
+						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 							<html:options collection="<%=Constants.TISSUE_SIDE_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
 		        	  </td>
@@ -484,7 +492,9 @@ Map map = form.getExternalIdentifier();
 						</label>
 					</td>
 				    <td class="formField" colspan="4">
-				     	<html:select property="pathologicalStatus" styleClass="formFieldSized15" styleId="pathologicalStatus" size="1" disabled="<%=readOnlyForAll%>">
+<!-- Mandar : 434 : for tooltip -->
+				     	<html:select property="pathologicalStatus" styleClass="formFieldSized15" styleId="pathologicalStatus" size="1" disabled="<%=readOnlyForAll%>"
+						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 							<%--html:options name="pathologicalStatusList" labelName="pathologicalStatusList"/--%>
 							<html:options collection="<%=Constants.PATHOLOGICAL_STATUS_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
@@ -624,7 +634,9 @@ Map map = form.getExternalIdentifier();
 						</label>
 					</td>
 					<td class="formField" colspan="3">
-						<html:select property="activityStatus" styleClass="formFieldSized10" styleId="activityStatus" size="1" onchange="<%=strCheckStatus%>">
+<!-- Mandar : 434 : for tooltip -->
+						<html:select property="activityStatus" styleClass="formFieldSized10" styleId="activityStatus" size="1" onchange="<%=strCheckStatus%>"
+						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 							<html:options name="<%=Constants.ACTIVITYSTATUSLIST%>" labelName="<%=Constants.ACTIVITYSTATUSLIST%>" />
 						</html:select>
 					</td>
@@ -747,12 +759,16 @@ Map map = form.getExternalIdentifier();
 					 		<html:hidden property="<%=biohzId%>" />
 					 	</td>
 					    <td class="formField">
-				     		<html:select property="<%=bhType%>" styleClass="formFieldSized15" styleId="<%=bhType%>" size="1" onchange="onBiohazardTypeSelected(this)">
+<!-- Mandar : 434 : for tooltip -->
+				     		<html:select property="<%=bhType%>" styleClass="formFieldSized15" styleId="<%=bhType%>" size="1" onchange="onBiohazardTypeSelected(this)"
+							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 								<html:options collection="<%=Constants.BIOHAZARD_TYPE_LIST%>" labelProperty="name" property="value"/>
 							</html:select>
 				    	</td>
 				    	<td class="formField" colspan="2">
-				     		<html:select property="<%=bhId%>" styleClass="formFieldSized15" styleId="<%="bhId" + i%>" size="1">
+<!-- Mandar : 434 : for tooltip -->
+				     		<html:select property="<%=bhId%>" styleClass="formFieldSized15" styleId="<%="bhId" + i%>" size="1"
+							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 								<html:option value="-1"><%=Constants.SELECT_OPTION%></html:option>
 								<%
 									/*String type = (String)request.getParameter(bhType);*/

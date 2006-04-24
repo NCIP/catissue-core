@@ -87,7 +87,8 @@
 			sname="";
 
 			var name = "value(DistributedItem:" + rowno + "_Specimen_systemIdentifier)";
-			sname="<select name='" + name + "' size='1' class='formField' id='" + name + "' onchange='onSpecimenIdChange(this)'>";
+// Mandar : 434 : for tooltip 
+			sname="<select name='" + name + "' size='1' class='formField' id='" + name + "' onchange='onSpecimenIdChange(this)' onmouseover=showTip(this.id) onmouseout=hideTip(this.id)>";
 			
 			<%for(int i=0;i<specimenIdList.size();i++)
 			{%>
@@ -259,7 +260,9 @@
 				</label>	
 			</td>	
 			<td class="formField">
-				<html:select property="distributionProtocolId" styleClass="formFieldSized" styleId="distributionProtocolId" size="1">
+<!-- Mandar : 434 : for tooltip -->
+				<html:select property="distributionProtocolId" styleClass="formFieldSized" styleId="distributionProtocolId" size="1"
+				 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 					<html:options collection="<%=Constants.DISTRIBUTIONPROTOCOLLIST%>" labelProperty="name" property="value"/>
 				</html:select>
 			</td>	
@@ -274,7 +277,9 @@
 				</label>	
 			</td>	
 			<td class="formField">
-				<html:select property="userId" styleClass="formFieldSized" styleId="userId" size="1" >
+<!-- Mandar : 434 : for tooltip -->
+				<html:select property="userId" styleClass="formFieldSized" styleId="userId" size="1" 
+				 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 					<html:options collection="<%=Constants.USERLIST%>" labelProperty="name" property="value"/>
 				</html:select>
 			</td>	
@@ -307,10 +312,14 @@
 				</label>
 			</td>
 			<td class="formField">
-				<html:select property="timeInHours" styleClass="formFieldSized5" styleId="timeInHours" size="1">
+<!-- Mandar : 434 : for tooltip -->
+				<html:select property="timeInHours" styleClass="formFieldSized5" styleId="timeInHours" size="1"
+				 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 					<html:options name="<%=Constants.HOUR_LIST%>" labelName="<%=Constants.HOUR_LIST%>" />
 				</html:select>&nbsp;<bean:message key="eventparameters.timeinhours"/>&nbsp;
-				<html:select property="timeInMinutes" styleClass="formFieldSized5" styleId="timeInMinutes" size="1">
+<!-- Mandar : 434 : for tooltip -->
+				<html:select property="timeInMinutes" styleClass="formFieldSized5" styleId="timeInMinutes" size="1"
+				 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 					<html:options name="<%=Constants.MINUTES_LIST%>" labelName="<%=Constants.MINUTES_LIST%>" />
 				</html:select>&nbsp;<bean:message key="eventparameters.timeinminutes"/>
 			</td>
@@ -354,7 +363,9 @@
 				</label>
 			</td>
 			<td class="formField">
-				<html:select property="toSite" styleClass="formFieldSized" styleId="toSite" size="1">
+<!-- Mandar : 434 : for tooltip -->
+				<html:select property="toSite" styleClass="formFieldSized" styleId="toSite" size="1"
+				 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 					<html:options collection="<%=Constants.TO_SITE_LIST%>" labelProperty="name" property="value"/>
 				</html:select>
 				&nbsp;
@@ -374,7 +385,9 @@
 							</label>
 						</td>
 						<td class="formField">
-							<html:select property="activityStatus" styleClass="formFieldSized10" styleId="activityStatus" size="1" onchange="<%=strCheckStatus%>">
+<!-- Mandar : 434 : for tooltip -->
+							<html:select property="activityStatus" styleClass="formFieldSized10" styleId="activityStatus" size="1" onchange="<%=strCheckStatus%>"
+							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 								<html:options name="<%=Constants.ACTIVITYSTATUSLIST%>" labelName="<%=Constants.ACTIVITYSTATUSLIST%>" />
 							</html:select>
 						</td>
@@ -493,7 +506,9 @@
 					
 				 	</td>
 				 	<td class="formField">
-						<html:select property="<%=itemName%>" styleClass="formField" styleId="<%=itemName%>" size="1" onchange="onSpecimenIdChange(this)">
+<!-- Mandar : 434 : for tooltip -->
+						<html:select property="<%=itemName%>" styleClass="formField" styleId="<%=itemName%>" size="1" onchange="onSpecimenIdChange(this)"
+						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 							<html:options collection="<%=Constants.SPECIMEN_ID_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
 					</td>

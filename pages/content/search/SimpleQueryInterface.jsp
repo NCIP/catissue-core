@@ -12,6 +12,8 @@
 	display:none;
 }
 </style>
+<!-- Mandar : 434 : for tooltip -->
+<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 </head>
 <%
 	String[] attributeConditionArray = (String[])request.getAttribute(Constants.ATTRIBUTE_CONDITION_LIST);
@@ -264,7 +266,9 @@ function showDatafield(element,txtFieldID)
 						else
 							attributeAction = attributeAction + "')";
 					%>
-						<html:select property="<%=objectName%>" styleClass="formFieldSized15" styleId="<%=objectName%>" size="1" onchange="<%=attributeAction%>">
+<!-- Mandar : 434 : for tooltip -->
+						<html:select property="<%=objectName%>" styleClass="formFieldSized15" styleId="<%=objectName%>" size="1" onchange="<%=attributeAction%>"
+						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 							<logic:notPresent name="<%=objectNameList%>">			
 								<html:options collection="objectNameList" labelProperty="name" property="value"/>
 							</logic:notPresent>	
@@ -274,7 +278,9 @@ function showDatafield(element,txtFieldID)
 						</html:select>
 					</td>
 					<td class="formField">
-						<html:select property="<%=attributeName%>" styleClass="formFieldSized15" styleId="<%=attributeId%>" size="1" onchange="<%=onAttributeChange%>">
+<!-- Mandar : 434 : for tooltip -->
+						<html:select property="<%=attributeName%>" styleClass="formFieldSized15" styleId="<%=attributeId%>" size="1" onchange="<%=onAttributeChange%>"
+						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 							<logic:notPresent name="<%=attributeNameList%>">
 								<html:options name="attributeNameList" labelName="attributeNameList" />
 							</logic:notPresent>	
@@ -284,7 +290,9 @@ function showDatafield(element,txtFieldID)
 						</html:select>
 					</td>
 					<td class="formField">
-						<html:select property="<%=attributeCondition%>" styleClass="formFieldSized10" styleId="<%=operatorId%>" size="1" onchange="<%=operatorFunction%>">
+<!-- Mandar : 434 : for tooltip -->
+						<html:select property="<%=attributeCondition%>" styleClass="formFieldSized10" styleId="<%=operatorId%>" size="1" onchange="<%=operatorFunction%>"
+						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 						<%
 							String attributeNameKey = "SimpleConditionsNode:"+i+"_Condition_DataElement_field";
 							String attributeNameValue = (String)form.getValue(attributeNameKey);

@@ -158,3 +158,33 @@ function  deleteChecked(subdivtag,action,countElement,checkName,isOuterTable)
 		
 }
 		
+	//Mandar: 24-Apr-06 for tooltip
+		function showStatus(sMsg) 
+		{
+		    window.status = sMsg ;
+		}
+		function showTip(objId)
+		{
+
+			var obj = document.getElementById(objId);
+			var tip = obj.options[obj.selectedIndex].text;
+			obj.title = tip;
+
+			var browser=navigator.appName;
+			if(browser=="Microsoft Internet Explorer")
+			{
+				showStatus(tip);
+			}
+		}
+		function hideTip(objId)
+		{
+			var obj = document.getElementById(objId);
+			obj.title = "";
+			
+			var browser=navigator.appName;
+			if(browser=="Microsoft Internet Explorer")
+			{
+				showStatus(' ');
+			}
+			
+		}	

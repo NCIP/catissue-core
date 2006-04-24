@@ -141,7 +141,9 @@
 					</td>
 					
 					<td class="formField">
-				     	<html:select property="collectionProtocolId" styleClass="formFieldSized" styleId="collectionProtocolId" size="1" disabled="<%=readOnlyForAll%>" onchange="onChangeEvent(this)">
+<!-- Mandar : 434 : for tooltip -->
+				     	<html:select property="collectionProtocolId" styleClass="formFieldSized" styleId="collectionProtocolId" size="1" disabled="<%=readOnlyForAll%>" onchange="onChangeEvent(this)"
+				     	 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 							<html:options collection="<%=Constants.PROTOCOL_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
 		        	</td>
@@ -156,7 +158,9 @@
 					</td>
 					
 					<td class="formField">
-				     	<html:select property="siteId" styleClass="formFieldSized" styleId="siteId" size="1" disabled="<%=readOnlyForAll%>">
+<!-- Mandar : 434 : for tooltip -->					
+				     	<html:select property="siteId" styleClass="formFieldSized" styleId="siteId" size="1" disabled="<%=readOnlyForAll%>"
+				     	 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
   							<html:options collection="<%=Constants.SITELIST%>" labelProperty="name" property="value"/>
 						</html:select>
 		        	</td>
@@ -177,12 +181,16 @@
   					</td>
   					<td class="formField">
   						<logic:equal name="specimenCollectionGroupForm" property="checkedButton" value="1">
-				     	     <html:select property="participantId" styleClass="formFieldSized" styleId="ParticipantId" size="1" onchange="onChangeEvent(this)">
+ <!-- Mandar : 434 : for tooltip --> 						
+				     	     <html:select property="participantId" styleClass="formFieldSized" styleId="ParticipantId" size="1" onchange="onChangeEvent(this)"
+				     	      onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
                          	     <html:options collection="<%=Constants.PARTICIPANT_LIST%>" labelProperty="name" property="value"/>				     	
   						     </html:select>
   						</logic:equal>     
 						<logic:equal name="specimenCollectionGroupForm" property="checkedButton" value="2">
-				     	     <html:select property="participantId" styleClass="formFieldSized" styleId="ParticipantId" size="1" onchange="onChangeEvent(this)" disabled="true">
+<!-- Mandar : 434 : for tooltip -->						
+				     	     <html:select property="participantId" styleClass="formFieldSized" styleId="ParticipantId" size="1" onchange="onChangeEvent(this)" disabled="true"
+				     	      onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
                          	     <html:options collection="<%=Constants.PARTICIPANT_LIST%>" labelProperty="name" property="value"/>				     	
   						     </html:select>
   						</logic:equal>
@@ -217,13 +225,17 @@
   			        <td class="formField">
   					<%-- LOGIC TAG FOR PARTICPANT NUMBER --%> 												
                         <logic:equal name="specimenCollectionGroupForm" property="checkedButton" value="1">						
-   						 	<html:select property="protocolParticipantIdentifier" styleClass="formFieldSized" styleId="protocolParticipantIdentifier" size="1" disabled="true">
+<!-- Mandar : 434 : for tooltip -->
+   						 	<html:select property="protocolParticipantIdentifier" styleClass="formFieldSized" styleId="protocolParticipantIdentifier" size="1" disabled="true"
+   						 	 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
                          		<html:options collection="<%=Constants.PROTOCOL_PARTICIPANT_NUMBER_LIST%>" labelProperty="name" property="value"/>				     					     	
 							</html:select>
  						</logic:equal>
  						
  						<logic:equal name="specimenCollectionGroupForm" property="checkedButton" value="2">						
-   						 	<html:select property="protocolParticipantIdentifier" styleClass="formFieldSized" styleId="protocolParticipantIdentifier" size="1" >
+<!-- Mandar : 434 : for tooltip -->
+   						 	<html:select property="protocolParticipantIdentifier" styleClass="formFieldSized" styleId="protocolParticipantIdentifier" size="1" 
+   						 	 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
                          		<html:options collection="<%=Constants.PROTOCOL_PARTICIPANT_NUMBER_LIST%>" labelProperty="name" property="value"/>				     					     	
 							</html:select>
  						</logic:equal>
@@ -248,7 +260,9 @@
 						</label>
 					</td>
 				    <td class="formField">
-				     	<html:select property="collectionProtocolEventId" styleClass="formFieldSized" styleId="collectionProtocolEventId" size="1" onchange="onChangeEvent(this)" >
+<!-- Mandar : 434 : for tooltip -->				    
+				     	<html:select property="collectionProtocolEventId" styleClass="formFieldSized" styleId="collectionProtocolEventId" size="1" onchange="onChangeEvent(this)" 
+				     	 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
                          	<html:options collection="<%=Constants.STUDY_CALENDAR_EVENT_POINT_LIST%>" labelProperty="name" property="value"/>				     					     					     	
 						</html:select>&nbsp;
 						<bean:message key="collectionprotocol.studycalendarcomment"/>
@@ -263,7 +277,9 @@
 						</label>
 					 </td>
 				     <td class="formField">
-						<html:select property="clinicalDiagnosis" styleClass="formFieldSized" styleId="clinicalDiagnosis" size="1" >
+<!-- Mandar : 434 : for tooltip -->				     
+						<html:select property="clinicalDiagnosis" styleClass="formFieldSized" styleId="clinicalDiagnosis" size="1" 
+						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 							<html:options collection="<%=Constants.CLINICAL_DIAGNOSIS_LIST%>" labelProperty="name" property="value"/>				     					     					     	
 						</html:select>
 		        	 </td>
@@ -278,7 +294,9 @@
 					 </td>
 					 
 				     <td class="formField">
-				     	<html:select property="clinicalStatus" styleClass="formFieldSized" styleId="clinicalStatus" size="1" disabled="<%=readOnlyForAll%>">
+<!-- Mandar : 434 : for tooltip -->
+				     	<html:select property="clinicalStatus" styleClass="formFieldSized" styleId="clinicalStatus" size="1" disabled="<%=readOnlyForAll%>"
+				     	 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 							<html:options collection="<%=Constants.CLINICAL_STATUS_LIST%>" labelProperty="name" property="value"/>		
 						</html:select>
 		        	  </td>
@@ -293,12 +311,16 @@
 					</td>
                     <td class="formField">
    						<logic:equal name="specimenCollectionGroupForm" property="checkedButton" value="1">
-				     		<html:select property="participantsMedicalIdentifierId" styleClass="formFieldSized" styleId="participantsMedicalIdentifierId" size="1" disabled="<%=readOnlyForAll%>">
+<!-- Mandar : 434 : for tooltip -->   						
+				     		<html:select property="participantsMedicalIdentifierId" styleClass="formFieldSized" styleId="participantsMedicalIdentifierId" size="1" disabled="<%=readOnlyForAll%>"
+				     		 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
                          		<html:options collection="<%=Constants.PARTICIPANT_MEDICAL_IDNETIFIER_LIST%>" labelProperty="name" property="value"/>
 							</html:select>
 						</logic:equal>
 						<logic:equal name="specimenCollectionGroupForm" property="checkedButton" value="2">
-					     	<html:select property="participantsMedicalIdentifierId" styleClass="formFieldSized" styleId="participantsMedicalIdentifierId" size="1" disabled="true">
+<!-- Mandar : 434 : for tooltip -->					     	
+					     	<html:select property="participantsMedicalIdentifierId" styleClass="formFieldSized" styleId="participantsMedicalIdentifierId" size="1" disabled="true"
+					     	 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
                 	         	<html:options collection="<%=Constants.PARTICIPANT_MEDICAL_IDNETIFIER_LIST%>" labelProperty="name" property="value"/>
 							</html:select>
 						</logic:equal>
@@ -331,7 +353,9 @@
 						</label>
 					</td>
 					<td class="formField">
-						<html:select property="activityStatus" styleClass="formFieldSized10" styleId="activityStatus" size="1" onchange="<%=strCheckStatus%>">
+<!-- Mandar : 434 : for tooltip -->						
+						<html:select property="activityStatus" styleClass="formFieldSized10" styleId="activityStatus" size="1" onchange="<%=strCheckStatus%>"
+						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 							<html:options name="<%=Constants.ACTIVITYSTATUSLIST%>" labelName="<%=Constants.ACTIVITYSTATUSLIST%>" />
 						</html:select>
 					</td>

@@ -4,6 +4,8 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 
 <head>
+<!-- Mandar : 434 : for tooltip -->
+<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 	<script language="javascript">
 		
 	</script>
@@ -86,7 +88,8 @@
 			</td>
 		
 			<td class="formField">
-				<html:select property="type" styleClass="formFieldSized15" styleId="type" size="1">
+<!-- Mandar : 434 : for tooltip -->
+				<html:select property="type" styleClass="formFieldSized15" styleId="type" size="1" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 					<%--html:options name="biohazardTypeList" labelName="biohazardTypeList" /--%>
 					<html:options collection="<%=Constants.BIOHAZARD_TYPE_LIST%>" labelProperty="name" property="value"/>
 				</html:select>

@@ -265,7 +265,8 @@
 	}
 	
 </script>
-
+<!-- Mandar : 434 : for tooltip -->
+<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 </head>
 <html:errors/>
 <html:form action="<%=Constants.DISTRIBUTION_REPORT_ACTION%>">
@@ -307,8 +308,9 @@
                 	<%
                 	pageContext.setAttribute(Constants.TABLE_NAMES_LIST, tableNamesList);
                 	%>
-                
-                	<html:select property="tableName" styleClass="formFieldSized15"  size="1" styleId="tableName" onchange="onTypeChange(this)">
+<!-- Mandar : 434 : for tooltip -->                
+                	<html:select property="tableName" styleClass="formFieldSized15"  size="1" styleId="tableName" onchange="onTypeChange(this)"
+					 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
                 		<html:option value="-1"><%=Constants.SELECT_OPTION%></html:option>
                  		<html:options collection="<%=Constants.TABLE_NAMES_LIST%>" labelProperty="name" property="value"/>   
 	                </html:select>
@@ -333,7 +335,9 @@
 		                pageContext.setAttribute(Constants.COLUMN_NAMES_LIST, columnNamesList);*/
 		            %>
 		            <!-- ----------------------------------------->
-		                <html:select property="columnNames" styleClass="formFieldSized"  styleId="columnNames" size="10"  multiple="true">
+<!-- Mandar : 434 : for tooltip -->
+		                <html:select property="columnNames" styleClass="formFieldSized"  styleId="columnNames" size="10"  multiple="true"
+						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 	                    	
 		                </html:select>
 			            </td>
@@ -347,7 +351,9 @@
 				            </html:button>  
 			            </td>
 			            <td class="formField">
-			                <html:select property="selectedColumnNames" styleClass="formFieldSized" styleId="selectedColumnNames" size="10" multiple="true">
+<!-- Mandar : 434 : for tooltip -->
+			                <html:select property="selectedColumnNames" styleClass="formFieldSized" styleId="selectedColumnNames" size="10" multiple="true"
+							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 							<% if(selectedColumns!=null)
 						      {
 						    	for(int i=0;i<selectedColumns.length;i++) {

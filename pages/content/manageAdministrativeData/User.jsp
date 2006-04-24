@@ -75,6 +75,8 @@
 		}
 %>
 <script src="jss/script.js" type="text/javascript"></script>
+<!-- Mandar : 434 : for tooltip -->
+<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 <script>
 //If the administrator keeps the user status pending update the user record and disable role.
 function handleStatus(status)
@@ -245,7 +247,9 @@ function handleStatus(status)
 							</label>
 						</td>
 						<td class="formField">
-							<html:select property="state" styleClass="formFieldSized" styleId="state" size="1">
+<!-- Mandar : 434 : for tooltip -->
+							<html:select property="state" styleClass="formFieldSized" styleId="state" size="1"
+							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 								<html:options collection="<%=Constants.STATELIST%>" labelProperty="name" property="value"/>
 							</html:select>
 						</td>
@@ -272,7 +276,9 @@ function handleStatus(status)
 						</td>
 
 						<td class="formField">
-							<html:select property="country" styleClass="formFieldSized" styleId="country" size="1">
+<!-- Mandar : 434 : for tooltip -->
+							<html:select property="country" styleClass="formFieldSized" styleId="country" size="1"
+							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 								<html:options collection="<%=Constants.COUNTRYLIST%>" labelProperty="name" property="value"/>
 							</html:select>
 						</td>
@@ -310,7 +316,9 @@ function handleStatus(status)
 							</label>
 						</td>
 						<td class="formField">
-							<html:select property="institutionId" styleClass="formFieldSized" styleId="institutionId" size="1">
+<!-- Mandar : 434 : for tooltip -->
+							<html:select property="institutionId" styleClass="formFieldSized" styleId="institutionId" size="1"
+							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 								<html:options collection="institutionList" labelProperty="name" property="value"/>
 							</html:select>
 						</td>
@@ -324,7 +332,9 @@ function handleStatus(status)
 							</label>
 						</td>
 						<td class="formField">
-							<html:select property="departmentId" styleClass="formFieldSized" styleId="departmentId" size="1">
+<!-- Mandar : 434 : for tooltip -->
+							<html:select property="departmentId" styleClass="formFieldSized" styleId="departmentId" size="1"
+							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 								<html:options collection="departmentList" labelProperty="name" property="value"/>
 							</html:select>
 						</td>
@@ -338,7 +348,9 @@ function handleStatus(status)
 							</label>
 						</td>
 						<td class="formField">
-							<html:select property="cancerResearchGroupId" styleClass="formFieldSized" styleId="cancerResearchGroupId" size="1">
+<!-- Mandar : 434 : for tooltip -->
+							<html:select property="cancerResearchGroupId" styleClass="formFieldSized" styleId="cancerResearchGroupId" size="1"
+							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 								<html:options collection="cancerResearchGroupList" labelProperty="name" property="value"/>
 							</html:select>
 						</td>
@@ -370,7 +382,9 @@ function handleStatus(status)
 								</label>
 							</td>
 						<td class="formField">
-							<html:select property="status" styleClass="formFieldSized" styleId="status" size="1" onchange="javascript:handleStatus(this)" >
+<!-- Mandar : 434 : for tooltip -->
+							<html:select property="status" styleClass="formFieldSized" styleId="status" size="1" onchange="javascript:handleStatus(this)" 
+							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 								<html:options name="statusList" labelName="statusList" />
 							</html:select>
 						</td>
@@ -385,7 +399,9 @@ function handleStatus(status)
 							</label>
 						</td>
 						<td class="formField">
-							<html:select property="role" styleClass="formFieldSized" styleId="role" size="1" disabled="<%=roleStatus%>">
+<!-- Mandar : 434 : for tooltip -->
+							<html:select property="role" styleClass="formFieldSized" styleId="role" size="1" disabled="<%=roleStatus%>"
+							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 								<html:options collection="roleList" labelProperty="name" property="value"/>
 							</html:select>
 						</td>
@@ -415,7 +431,9 @@ function handleStatus(status)
 								</label>
 							</td>
 						<td class="formField">
-							<html:select property="activityStatus" styleClass="formFieldSized" styleId="activityStatus" size="1">
+<!-- Mandar : 434 : for tooltip -->
+							<html:select property="activityStatus" styleClass="formFieldSized" styleId="activityStatus" size="1"
+							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 								<html:options name="activityStatusList" labelName="activityStatusList" />
 							</html:select>
 						</td>

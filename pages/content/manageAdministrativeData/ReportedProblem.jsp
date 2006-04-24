@@ -60,7 +60,7 @@
 						</tr>
 						<logic:empty name="showDomainObjectList">
 							<tr>
-								<td class="dataTableWhiteCenterHeader" colspan="4">  
+								<td class="dataTableWhiteCenterHeader" colspan="5">  
 									<bean:message key="reportedProblem.noNewProblemFound" />
 								</td>
 							</tr>

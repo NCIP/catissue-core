@@ -50,6 +50,9 @@
 	}
 	
 </style>
+<!-- Mandar : 434 : for tooltip -->
+<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
+
 <html:form action="<%=Constants.CONFIGURE_DISTRIBUTION_ACTION%>">
 	<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="100%">
 	<tr>
@@ -185,7 +188,9 @@
 	<table cellpadding="3" cellspacing="0" border="0">
 		<tr id="hiddenCombo" rowspan="4">
 			<td class="formField" colspan="4">
-	       		<html:select property="selectedColumnNames" styleClass="selectedColumnNames"  size="1" styleId="selectedColumnNames" multiple="true">
+<!-- Mandar : 434 : for tooltip -->
+	       		<html:select property="selectedColumnNames" styleClass="selectedColumnNames"  size="1" styleId="selectedColumnNames" multiple="true"
+				 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 	       		<%
 	       			for(int j=0;j<selectedColumns.length;j++)
 	       			{

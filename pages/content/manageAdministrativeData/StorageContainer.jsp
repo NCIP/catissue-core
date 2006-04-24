@@ -290,7 +290,9 @@ function insRow(subdivtag)
 							</label>
 						</td>
 						<td class="formField" colspan="2">
-							<html:select property="typeId" styleClass="formFieldSized" styleId="typeId" size="1" onchange="onTypeChange(this)">
+<!-- Mandar : 434 : for tooltip -->
+							<html:select property="typeId" styleClass="formFieldSized" styleId="typeId" size="1" onchange="onTypeChange(this)"
+							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 								<%-- html:options name="storageTypeIdList" labelName="storageTypeList" /--%>
 								<html:options collection="<%=Constants.STORAGETYPELIST%>" labelProperty="name" property="value"/>
 							</html:select>
@@ -316,12 +318,16 @@ function insRow(subdivtag)
 						</td>
 						<td class="formField" colspan="2">
 							<logic:equal name="storageContainerForm" property="checkedButton" value="1">
-							<html:select property="siteId" styleClass="formFieldSized" styleId="siteId" size="1" onchange="onSiteChange(this)">
+<!-- Mandar : 434 : for tooltip -->
+							<html:select property="siteId" styleClass="formFieldSized" styleId="siteId" size="1" onchange="onSiteChange(this)"
+							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 								<html:options collection="<%=Constants.SITELIST%>" labelProperty="name" property="value"/>
 							</html:select>
 							</logic:equal>
 							<logic:equal name="storageContainerForm" property="checkedButton" value="2">
-							<html:select property="siteId" styleClass="formFieldSized15" styleId="siteId" size="1" onchange="onSiteChange(this)" disabled="true">
+<!-- Mandar : 434 : for tooltip -->
+							<html:select property="siteId" styleClass="formFieldSized15" styleId="siteId" size="1" onchange="onSiteChange(this)" disabled="true"
+							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 								<html:options collection="<%=Constants.SITELIST%>" labelProperty="name" property="value"/>
 							</html:select>
 							</logic:equal>
@@ -442,7 +448,9 @@ function insRow(subdivtag)
 							</label>
 						</td>
 						<td class="formField" colspan="2">
-							<html:select property="isFull" styleClass="formFieldSized10" styleId="isFull" size="1" >
+<!-- Mandar : 434 : for tooltip -->
+							<html:select property="isFull" styleClass="formFieldSized10" styleId="isFull" size="1" 
+							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 								<html:options name="<%=Constants.IS_CONTAINER_FULL_LIST%>" labelName="<%=Constants.IS_CONTAINER_FULL_LIST%>" />
 							</html:select>
 						</td>
@@ -458,7 +466,9 @@ function insRow(subdivtag)
 							</label>
 						</td>
 						<td class="formField" colspan="2">
-							<html:select property="activityStatus" styleClass="formFieldSized10" styleId="activityStatus" size="1" onchange="<%=strCheckStatus%>">
+<!-- Mandar : 434 : for tooltip -->
+							<html:select property="activityStatus" styleClass="formFieldSized10" styleId="activityStatus" size="1" onchange="<%=strCheckStatus%>"
+							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 								<html:options name="<%=Constants.ACTIVITYSTATUSLIST%>" labelName="<%=Constants.ACTIVITYSTATUSLIST%>" />
 							</html:select>
 						</td>

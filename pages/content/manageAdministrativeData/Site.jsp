@@ -51,6 +51,8 @@
 	}
 </script>
 <script language="JavaScript" src="jss/script.js" type="text/javascript"></script>
+<!-- Mandar : 434 : for tooltip -->
+<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 <html:errors />
 <html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
 	<%=messageKey%>
@@ -114,7 +116,9 @@
 						</td>
 
 						<td class="formField">
-							<html:select property="type" styleClass="formFieldSized" styleId="type" size="1">
+<!-- Mandar : 434 : for tooltip -->
+							<html:select property="type" styleClass="formFieldSized" styleId="type" size="1"
+							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 								<html:options collection="<%=Constants.SITETYPELIST%>" labelProperty="name" property="value"/>
 							</html:select>
 						</td>
@@ -128,7 +132,9 @@
 							</label>
 						</td>
 						<td class="formField">
-							<html:select property="coordinatorId" styleClass="formFieldSized" styleId="coordinatorId" size="1" onchange="onCoordinatorChange()">
+<!-- Mandar : 434 : for tooltip -->
+							<html:select property="coordinatorId" styleClass="formFieldSized" styleId="coordinatorId" size="1" onchange="onCoordinatorChange()"
+							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 								<html:options collection="userList" labelProperty="name" property="value"/>
 							</html:select>
 							&nbsp;
@@ -186,7 +192,9 @@
 							</label>
 						</td>
 						<td class="formField">
-							<html:select property="state" styleClass="formFieldSized" styleId="state" size="1">
+<!-- Mandar : 434 : for tooltip -->
+							<html:select property="state" styleClass="formFieldSized" styleId="state" size="1"
+							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 								<html:options collection="<%=Constants.STATELIST%>" labelProperty="name" property="value"/>
 							</html:select>
 						</td>
@@ -201,7 +209,9 @@
 						</td>
 
 						<td class="formField">
-							<html:select property="country" styleClass="formFieldSized" styleId="country" size="1">
+<!-- Mandar : 434 : for tooltip -->
+							<html:select property="country" styleClass="formFieldSized" styleId="country" size="1"
+							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 								<html:options collection="<%=Constants.COUNTRYLIST%>" labelProperty="name" property="value"/>
 							</html:select>
 						</td>
@@ -253,7 +263,9 @@
 								</label>
 							</td>
 						<td class="formField">
-							<html:select property="activityStatus" styleClass="formFieldSized" styleId="activityStatus" size="1" onchange="<%=strCheckStatus%>">
+<!-- Mandar : 434 : for tooltip -->
+							<html:select property="activityStatus" styleClass="formFieldSized" styleId="activityStatus" size="1" onchange="<%=strCheckStatus%>" 
+							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 								<html:options name="activityStatusList" labelName="activityStatusList" />
 							</html:select>
 						</td>

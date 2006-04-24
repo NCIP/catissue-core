@@ -47,6 +47,8 @@
 	<script src="jss/script.js" type="text/javascript"></script>
 	<script src="jss/Hashtable.js" type="text/javascript"></script>
 	<script src="jss/AdvancedSearchScripts.js" type="text/javascript"></script>
+<!-- Mandar : 434 : for tooltip -->
+<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 		
 	<script language="JavaScript">
 		//This function changes the unit as per the class name selected. It also enbles the concentration fields
@@ -270,7 +272,7 @@
 			var firstCell=x.insertCell(0);
 			firstCell.className="formSerialNumberField";
 			var comboName = "EventName_" + val;
-			var sname="<select name='eventMap(" + comboName + ")' size='1' onchange='onEventChange(this)' class='formFieldSized15' id='" + comboName + "'>";
+			var sname="<select name='eventMap(" + comboName + ")' size='1' onchange='onEventChange(this)' class='formFieldSized15' id='" + comboName + "' onmouseover=showTip(this.id) onmouseout=hideTip(this.id)>";
 			var opt = "";
 			
 			<%
@@ -293,14 +295,14 @@
 			var secondCell = x.insertCell(1);
 			secondCell.className="formField";
 			comboName = "EventColumnName_" + val;
-			sname = "<select name='eventMap(" + comboName + ")' size='1' onchange='onEventColumnChange(this)' class='formFieldSized15' id='" + comboName + "'><option value='-1'>-- Select --</option></select>";
+			sname = "<select name='eventMap(" + comboName + ")' size='1' onchange='onEventColumnChange(this)' class='formFieldSized15' id='" + comboName + "' onmouseover=showTip(this.id) onmouseout=hideTip(this.id)><option value='-1'>-- Select --</option></select>";
 			secondCell.innerHTML="" + sname;
 			
 			//Third Cell
 			var thirdCell = x.insertCell(2);
 			thirdCell.className="formField";
 			comboName = "EventColumnOperator_" + val;
-			sname = "<select name='eventMap(" + comboName + ")' size='1' class='formFieldSized10' id='" + comboName + "'><option value='<%=Operator.EQUALS_CONDITION%>'><%=Operator.EQUALS_CONDITION%></option><option value='<%=Operator.NOT_EQUALS_CONDITION%>'><%=Operator.NOT_EQUALS_CONDITION%></option><option value='<%=Operator.LESS_THAN%>'><%=Operator.LESS_THAN%></option><option value='<%=Operator.LESS_THAN_OR_EQUALS%>'><%=Operator.LESS_THAN_OR_EQUALS%></option><option value='<%=Operator.GREATER_THAN%>'><%=Operator.GREATER_THAN%></option><option value='<%=Operator.GREATER_THAN_OR_EQUALS%>'><%=Operator.GREATER_THAN_OR_EQUALS%></option></select>";
+			sname = "<select name='eventMap(" + comboName + ")' size='1' class='formFieldSized10' id='" + comboName + "' onmouseover=showTip(this.id) onmouseout=hideTip(this.id)><option value='<%=Operator.EQUALS_CONDITION%>'><%=Operator.EQUALS_CONDITION%></option><option value='<%=Operator.NOT_EQUALS_CONDITION%>'><%=Operator.NOT_EQUALS_CONDITION%></option><option value='<%=Operator.LESS_THAN%>'><%=Operator.LESS_THAN%></option><option value='<%=Operator.LESS_THAN_OR_EQUALS%>'><%=Operator.LESS_THAN_OR_EQUALS%></option><option value='<%=Operator.GREATER_THAN%>'><%=Operator.GREATER_THAN%></option><option value='<%=Operator.GREATER_THAN_OR_EQUALS%>'><%=Operator.GREATER_THAN_OR_EQUALS%></option></select>";
 			thirdCell.innerHTML="" + sname;
 			
 			//Fourth Cell
@@ -369,7 +371,9 @@
  		</label>
 	</td>
 	<td class="formField">
-		<html:select property="<%=opClassName%>" styleClass="formFieldSized10" styleId="opClassName" size="1" onchange="onOperatorChange('opClassName','className'); afterChange(this)">
+<!-- Mandar : 434 : for tooltip -->
+		<html:select property="<%=opClassName%>" styleClass="formFieldSized10" styleId="opClassName" size="1" onchange="onOperatorChange('opClassName','className'); afterChange(this)"
+		 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 			<html:options collection="<%=Constants.ENUMERATED_OPERATORS%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
@@ -380,7 +384,9 @@
 	%>
 	
 	<td class="formField">
-		<html:select property="<%=className%>" styleClass="formFieldSized10" styleId="className" size="1" disabled="<%=disabled%>" onchange="onClassChange(this)">
+<!-- Mandar : 434 : for tooltip -->
+		<html:select property="<%=className%>" styleClass="formFieldSized10" styleId="className" size="1" disabled="<%=disabled%>" onchange="onClassChange(this)"
+		 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 			<html:options collection="<%=Constants.SPECIMEN_CLASS_LIST%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
@@ -400,7 +406,9 @@
 	%>
 	
 	<td class="formField">
-		<html:select property="<%=opType%>" styleClass="formFieldSized10" styleId="opType" size="1" onchange="onOperatorChange('opType','type')" disabled="<%=disabled%>">
+<!-- Mandar : 434 : for tooltip -->
+		<html:select property="<%=opType%>" styleClass="formFieldSized10" styleId="opType" size="1" onchange="onOperatorChange('opType','type')" disabled="<%=disabled%>"
+		 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 			<html:options collection="<%=Constants.ENUMERATED_OPERATORS%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
@@ -418,7 +426,9 @@
 	%>
 	
 	<td class="formField">
-		<html:select property="<%=type%>" styleClass="formFieldSized10" styleId="type" size="1" disabled="<%=disabled%>">
+<!-- Mandar : 434 : for tooltip -->
+		<html:select property="<%=type%>" styleClass="formFieldSized10" styleId="type" size="1" disabled="<%=disabled%>"
+		 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 		<%
 			if(classValue != null)
 			{
@@ -445,7 +455,9 @@
  		</label>
 	</td>
 	<td class="formField">
-		<html:select property="<%=opTissueSite%>" styleClass="formFieldSized10" styleId="opTissueSite" size="1" onchange="onOperatorChange('opTissueSite','tissueSite')">
+<!-- Mandar : 434 : for tooltip -->
+		<html:select property="<%=opTissueSite%>" styleClass="formFieldSized10" styleId="opTissueSite" size="1" onchange="onOperatorChange('opTissueSite','tissueSite')"
+		 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 			<html:options collection="<%=Constants.MULTI_ENUMERATED_OPERATORS%>" labelProperty="name" property="value"/>
 		</html:select>			
 	</td>
@@ -456,7 +468,9 @@
 	%>
 	
 	<td class="formField">
-		<html:select property="<%=tissueSite%>" styleClass="formFieldSized10" styleId="tissueSite" size="1" disabled="<%=disabled%>">
+<!-- Mandar : 434 : for tooltip -->
+		<html:select property="<%=tissueSite%>" styleClass="formFieldSized10" styleId="tissueSite" size="1" disabled="<%=disabled%>"
+		 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 			<html:options collection="<%=Constants.TISSUE_SITE_LIST%>" labelProperty="name" property="value"/>
 		</html:select>
 		
@@ -477,7 +491,9 @@
  		</label>
 	</td>
 	<td class="formField">
-		<html:select property="<%=opTissueSide%>" styleClass="formFieldSized10" styleId="opTissueSide" size="1" onchange="onOperatorChange('opTissueSide','tissueSide')">
+<!-- Mandar : 434 : for tooltip -->
+		<html:select property="<%=opTissueSide%>" styleClass="formFieldSized10" styleId="opTissueSide" size="1" onchange="onOperatorChange('opTissueSide','tissueSide')"
+		 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 			<html:options collection="<%=Constants.ENUMERATED_OPERATORS%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
@@ -488,7 +504,9 @@
 	%>
 	
 	<td class="formField">
-		<html:select property="<%=tissueSide%>" styleClass="formFieldSized10" styleId="tissueSide" size="1" disabled="<%=disabled%>">
+<!-- Mandar : 434 : for tooltip -->
+		<html:select property="<%=tissueSide%>" styleClass="formFieldSized10" styleId="tissueSide" size="1" disabled="<%=disabled%>"
+		 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 			<html:options collection="<%=Constants.TISSUE_SIDE_LIST%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
@@ -502,7 +520,9 @@
  		</label>
 	</td>
 	<td class="formField">
-		<html:select property="<%=opPathologicalStatus%>" styleClass="formFieldSized10" styleId="opPathologicalStatus" size="1" onchange="onOperatorChange('opPathologicalStatus','pathologicalStatus')">
+<!-- Mandar : 434 : for tooltip -->
+		<html:select property="<%=opPathologicalStatus%>" styleClass="formFieldSized10" styleId="opPathologicalStatus" size="1" onchange="onOperatorChange('opPathologicalStatus','pathologicalStatus')"
+		 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 			<html:options collection="<%=Constants.ENUMERATED_OPERATORS%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
@@ -513,7 +533,9 @@
 	%>
 	
 	<td class="formField">
-		<html:select property="<%=pathologicalStatus%>" styleClass="formFieldSized10" styleId="pathologicalStatus" size="1" disabled="<%=disabled%>">
+<!-- Mandar : 434 : for tooltip -->
+		<html:select property="<%=pathologicalStatus%>" styleClass="formFieldSized10" styleId="pathologicalStatus" size="1" disabled="<%=disabled%>"
+		 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 			<html:options collection="<%=Constants.PATHOLOGICAL_STATUS_LIST%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
@@ -557,7 +579,9 @@
 	%>
 	
 	<td class="formField">
-		<html:select property="<%=opConcentration%>" styleClass="formFieldSized10" styleId="opConcentration" size="1" onchange="onDateOperatorChange(this,'concentration1','concentration2')" disabled="<%=opDisabled%>">
+<!-- Mandar : 434 : for tooltip -->
+		<html:select property="<%=opConcentration%>" styleClass="formFieldSized10" styleId="opConcentration" size="1" onchange="onDateOperatorChange(this,'concentration1','concentration2')" disabled="<%=opDisabled%>"
+		 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 				<html:options collection="<%=Constants.DATE_NUMERIC_OPERATORS%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
@@ -578,7 +602,9 @@
  		</label>
 	</td>
 	<td class="formField">
-		<html:select property="<%=opQuantity%>" styleClass="formFieldSized10" styleId="opQuantity" size="1" onchange="onDateOperatorChange(this,'quantity1','quantity2')">
+<!-- Mandar : 434 : for tooltip -->
+		<html:select property="<%=opQuantity%>" styleClass="formFieldSized10" styleId="opQuantity" size="1" onchange="onDateOperatorChange(this,'quantity1','quantity2')"
+		 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 			<html:options collection="<%=Constants.DATE_NUMERIC_OPERATORS%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
@@ -620,7 +646,9 @@
      	</label>
 	</td>
 	<td class="formField">
-		<html:select property="<%=opBiohazardType%>" styleClass="formFieldSized10" styleId="opBiohazardType" size="1" onchange="onOperatorChange('opBiohazardType','biohazardType')">
+<!-- Mandar : 434 : for tooltip -->
+		<html:select property="<%=opBiohazardType%>" styleClass="formFieldSized10" styleId="opBiohazardType" size="1" onchange="onOperatorChange('opBiohazardType','biohazardType')"
+		 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 			<html:options collection="<%=Constants.STRING_OPERATORS%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
@@ -631,7 +659,9 @@
 	%>
 	
 	<td class="formField">
-		<html:select property="<%=biohazardType%>" styleClass="formFieldSized10" styleId="biohazardType" size="1" disabled="<%=disabled%>">
+<!-- Mandar : 434 : for tooltip -->
+		<html:select property="<%=biohazardType%>" styleClass="formFieldSized10" styleId="biohazardType" size="1" disabled="<%=disabled%>"
+		 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 			<html:options collection="<%=Constants.BIOHAZARD_TYPE_LIST%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
@@ -645,7 +675,9 @@
      	</label>
 	</td>
 	<td class="formField">
-		<html:select property="<%=opBiohazardName%>" styleClass="formFieldSized10" styleId="opBiohazardName" size="1" onchange="onOperatorChange('opBiohazardName','biohazardName')">
+<!-- Mandar : 434 : for tooltip -->
+		<html:select property="<%=opBiohazardName%>" styleClass="formFieldSized10" styleId="opBiohazardName" size="1" onchange="onOperatorChange('opBiohazardName','biohazardName')"
+		 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 			<html:options collection="<%=Constants.STRING_OPERATORS%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
@@ -699,12 +731,16 @@
 
 <tr>
 	<td class="formSerialNumberField" nowrap>
-		<html:select property="<%=eventClassName%>" styleClass="formFieldSized15" styleId="<%=classNameId%>" size="1" onchange="onEventChange(this)">
+<!-- Mandar : 434 : for tooltip -->
+		<html:select property="<%=eventClassName%>" styleClass="formFieldSized15" styleId="<%=classNameId%>" size="1" onchange="onEventChange(this)"
+		 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 			<html:options collection="<%=Constants.ALIAS_NAME_TABLE_NAME_MAP%>" labelProperty="name" property="value"/>
 		</html:select>
 	</td>
 	<td class="formField" nowrap>
-		<html:select property="<%=eventColumn%>" styleClass="formFieldSized15" styleId="<%=columnId%>" size="1" onchange="onEventColumnChange(this)">
+<!-- Mandar : 434 : for tooltip -->
+		<html:select property="<%=eventColumn%>" styleClass="formFieldSized15" styleId="<%=columnId%>" size="1" onchange="onEventColumnChange(this)"
+		 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 			<html:option value="-1"><%=Constants.SELECT_OPTION%></html:option>
 			<%
 			if(columnNamesList != null)
@@ -721,7 +757,9 @@
 		</html:select>
 	</td>
 	<td class="formField" nowrap>
-		<html:select property="<%=eventOperator%>" styleClass="formFieldSized10" styleId="<%=operatorId%>" size="1">
+<!-- Mandar : 434 : for tooltip -->
+		<html:select property="<%=eventOperator%>" styleClass="formFieldSized10" styleId="<%=operatorId%>" size="1"
+		 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 			<%
 			if(operatorType != null)
 			{
