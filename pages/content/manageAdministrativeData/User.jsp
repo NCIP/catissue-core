@@ -10,7 +10,6 @@
 		String pageOf = (String)request.getAttribute(Constants.PAGEOF);   
 		
 		String reqPath = (String)request.getAttribute(Constants.REQ_PATH);  
-		System.out.println("User JSP : reqPath ::  " + reqPath);
 
         boolean readOnlyValue,roleStatus=false;
 
@@ -190,6 +189,21 @@ function handleStatus(status)
 							<html:text styleClass="formFieldSized" maxlength="100"  size="30" styleId="emailAddress" property="emailAddress" readonly="<%=readOnlyEmail%>" />
 						</td>
 					</tr>
+<!-- Mandar 24-Apr-06 : bugid 972 : Confirm Email address -->
+				<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGEOF_USER_PROFILE%>">				
+					<tr>
+						<td class="formRequiredNotice" width="5">*</td>
+						<td class="formRequiredLabel">
+							<label for="confirmEmailAddress">
+								<bean:message key="user.confirmemailAddress" />
+							</label>
+						</td>
+						<td class="formField">
+							<html:text styleClass="formFieldSized" maxlength="100"  size="30" styleId="confirmEmailAddress" property="confirmEmailAddress" readonly="<%=readOnlyEmail%>" />
+						</td>
+					</tr>
+				</logic:notEqual>
+<!-- Mandar 24-Apr-06 : bugid 972 : Confirm Email address end -->
 
 					<tr>
 						<td class="formRequiredNotice" width="5">*</td>
