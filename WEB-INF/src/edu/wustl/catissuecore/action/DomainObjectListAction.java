@@ -64,11 +64,10 @@ public class DomainObjectListAction extends SecureAction
             //If start page is to be shown retrieve the list from the database.
             if (abstractForm.getFormId() == Constants.APPROVE_USER_FORM_ID)
             {
-            	//Mandar 06-Apr-06 : bugid:1380 :- Rejected users to be displayed in approve users list. start
-                String [] whereColumnNames = {Constants.ACTIVITY_STATUS ,Constants.ACTIVITY_STATUS,Constants.ACTIVITY_STATUS};
-                String [] whereColumnConditions = {"=","=","="};
-                String [] whereColumnValues = {"New","Pending","Reject"};
-                // Mandar 06-Apr-06 : bugid:1380 :- Rejected users to be displayed in approve users list.end 
+                String [] whereColumnNames = {"activityStatus","activityStatus"};
+                String [] whereColumnConditions = {"=","="};
+                String [] whereColumnValues = {"New","Pending"};
+
                 list = abstractBizLogic.retrieve(DomainObjectFactory.getDomainObjectName(abstractForm.getFormId()),
     					whereColumnNames,whereColumnConditions,whereColumnValues,Constants.OR_JOIN_CONDITION);
             }

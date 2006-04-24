@@ -65,16 +65,11 @@
 							</th>
 							<th class="dataTableHeader" scope="col" align="center">
 								<bean:message key="approveUser.registrationDate" />
-							</th>
-			<!-- Mandar : 10-Apr-06 : bugid: 1380 -->
-							<th class="dataTableHeader" scope="col" align="center">
-								Status
-							</th>
-			<!-- Mandar : 10-Apr-06 : bugid: 1380 end -->
+			<!-- Mandar : 10-Apr-06 : bugid: 1380 changes reverted -->
 						</tr>
 						<logic:empty name="showDomainObjectList">
 						<tr>
-							<td class="dataTableWhiteCenterHeader" colspan="6">  
+							<td class="dataTableWhiteCenterHeader" colspan="5">  
 								<bean:message key="approveUser.newUsersNotFound" />
 							</td>
 						</tr>
@@ -87,10 +82,6 @@
         								User user = (User) currentUser;
 										String identifier = user.getSystemIdentifier().toString();
 										String userDetailsLink = Constants.USER_DETAILS_SHOW_ACTION+"?"+Constants.SYSTEM_IDENTIFIER+"="+identifier;
-
-									//	Mandar : 10-Apr-06 : bugid: 1380 
-										String userStatus = user.getActivityStatus(); 
-
         						%>
 								<td class="dataCellText">
 									<%=i%>
@@ -110,10 +101,6 @@
 								<td class="dataCellText">
 									<bean:write name="currentUser" property="startDate" />
 								</td>
-								
-								<TD class="dataCellText">
-									<%=userStatus %>
-								</TD>
 							</tr>
 							<%i++;%>
 						</logic:iterate>
