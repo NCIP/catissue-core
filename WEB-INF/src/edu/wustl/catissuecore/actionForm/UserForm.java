@@ -133,6 +133,13 @@ public class UserForm extends AbstractActionForm
     private String status;
     
     private Long csmUserId;
+
+    //Mandar 24-Apr-06 Bug 972 : Confirm email address
+    /**
+     * COnfirm EmailAddress of the user.
+     */
+    private String confirmEmailAddress;
+    
     
 
     /**
@@ -143,7 +150,25 @@ public class UserForm extends AbstractActionForm
         reset();
     }
 
-
+    
+    //Mandar : 24-Apr-06 : bug id : 972
+	/**
+	 * @return Returns the confirmEmailAddress.
+	 */
+	public String getConfirmEmailAddress()
+	{
+		return confirmEmailAddress;
+	}
+	/**
+	 * @param confirmEmailAddress The confirmEmailAddress to set.
+	 */
+	public void setConfirmEmailAddress(String confirmEmailAddress) 
+	{
+		this.confirmEmailAddress = confirmEmailAddress;
+	}
+    
+    
+    
     /**
      * Returns the last name of the user 
      * @return String representing the last name of the user.
@@ -558,6 +583,8 @@ public class UserForm extends AbstractActionForm
         this.cancerResearchGroupId = -1;
         this.status = Constants.ACTIVITY_STATUS_NEW;
         this.activityStatus = Constants.ACTIVITY_STATUS_NEW;
+        //Mandar : 24-Apr-06 : bug 972:
+        this.confirmEmailAddress = null;
     }
     
     /**
@@ -579,6 +606,9 @@ public class UserForm extends AbstractActionForm
             	this.institutionId = user.getInstitution().getSystemIdentifier().longValue();
             
             this.emailAddress = user.getEmailAddress();
+            
+            //Mandar : 24-Apr-06 : bug id 972 : confirmEmailAddress
+            confirmEmailAddress = this.emailAddress ;
             
             if(!edu.wustl.common.util.Utility.isNull(user.getDepartment()) )
             	this.departmentId = user.getDepartment().getSystemIdentifier().longValue();
@@ -656,6 +686,10 @@ public class UserForm extends AbstractActionForm
             this.institutionId = user.getInstitution().getId()
                     .longValue();
             this.emailAddress = user.getEmailAddress();
+
+            //Mandar : 24-Apr-06 : bug id 972 : confirmEmailAddress
+            confirmEmailAddress = this.emailAddress ;
+
             this.departmentId = user.getDepartment().getId()
                     .longValue();
             this.cancerResearchGroupId = user.getCancerResearchGroup()
@@ -814,7 +848,34 @@ public class UserForm extends AbstractActionForm
                                                         ApplicationProperties.getValue("user.emailAddress")));
                             }
                         }
+                        
+                        // Mandar : 24-Apr-06 Bugid:972 confirmEmailAddress start
+                        if (!pageOf.equals(Constants.PAGEOF_USER_PROFILE))
+                        {
+                            if (validator.isEmpty(confirmEmailAddress))
+                            {
+                                errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+                                        "errors.item.required", ApplicationProperties
+                                                .getValue("user.confirmemailAddress")));
+                            }
+                            else
+                            {
+                                if (!validator.isValidEmailAddress(confirmEmailAddress))
+                                {
+                                    errors.add(ActionErrors.GLOBAL_ERROR,
+                                                    new ActionError("errors.item.format",
+                                                            ApplicationProperties.getValue("user.confirmemailAddress")));
+                                }
+                            }
+                            if(!confirmEmailAddress.equals(emailAddress ) )
+                            {
+                            	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.email.mismatch"));
+                            }
+                        	
+                        }
+                        //Mandar : 24-Apr-06 Bugid:972 confirmEmailAddress end
 
+                        
                         if (validator.isEmpty(lastName))
                         {
                             errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
