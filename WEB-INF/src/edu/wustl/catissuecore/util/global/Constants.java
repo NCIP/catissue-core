@@ -968,9 +968,19 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	    return "USER_"+identifier;
     }
 	
-	public static final String SLIDE = "Slide";
-    public static final String PARAFFIN_BLOCK = "Paraffin Block"; 
-	public static final String FROZEN_BLOCK = "Frozen Block";    
+	//Mandar 25-Apr-06 : bug 1414 : Tissue units as per type
+	// tissue types with unit= count
+	public static final String FROZEN_TISSUE_BLOCK = "Frozen Tissue Block";	// PREVIOUS FROZEN BLOCK 
+	public static final String FROZEN_TISSUE_SLIDE = "Frozen Tissue Slide";	// SLIDE	 
+	public static final String FIXED_TISSUE_BLOCK = "Fixed Tissue Block";	// PARAFFIN BLOCK	 
+	public static final String NOT_SPECIFIED = "Not Specified";
+	// tissue types with unit= g
+	public static final String FRESH_TISSUE = "Fresh Tissue";			 
+	public static final String FROZEN_TISSUE = "Frozen Tissue";			 
+	public static final String FIXED_TISSUE = "Fixed Tissue";			 
+	public static final String FIXED_TISSUE_SLIDE = "Fixed Tissue Slide";
+	//tissue types with unit= cc
+	public static final String MICRODISSECTED = "Microdissected"; 
 	
 //	 constants required for Distribution Report
 	public static final String CONFIGURATION_TABLES = "configurationTables";
