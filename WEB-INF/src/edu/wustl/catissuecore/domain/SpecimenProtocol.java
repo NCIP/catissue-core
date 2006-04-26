@@ -131,7 +131,7 @@ public abstract class SpecimenProtocol extends AbstractDomainObject implements j
 
 	/**
 	 * Returns the title of the protocol.
-	 * @hibernate.property name="title" type="string" column="TITLE" length="50" not-null="true" unique="true"
+	 * @hibernate.property name="title" type="string" column="TITLE" length="150" not-null="true" unique="true"
 	 * @return Returns the title.
 	 */
 	public String getTitle()

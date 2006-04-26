@@ -40,7 +40,7 @@
             update="true"
             insert="true"
             column="TITLE"
-            length="50"
+            length="150"
             not-null="true"
             unique="true"
         />

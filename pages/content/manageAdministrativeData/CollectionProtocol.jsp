@@ -6,6 +6,7 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
 <%@ page import="java.util.*"%>
 <%@ page import="edu.wustl.common.beans.NameValueBean"%>
+<%@ page import="edu.wustl.catissuecore.domain.CollectionProtocol"%>
 
 
 <%@ include file="/pages/content/common/AdminCommonCode.jsp" %>
@@ -365,7 +366,11 @@ function insRow(subdivtag,iCounter,blockCounter)
 							</label>
 						</td>
 						<td class="formField" colspan=2>
-							<html:text styleClass="formFieldSized" maxlength="50"  size="30" styleId="title" property="title" readonly="<%=readOnlyValue%>" />
+						<!--Mandar 26-apr-06 Bug 874 : increase the width of title -->
+						<%
+							String fieldWidth = Utility.getColumnWidth(CollectionProtocol.class,"title" );
+						%>
+							<html:text styleClass="formFieldSized" maxlength="<%= fieldWidth %>"  size="30" styleId="title" property="title" readonly="<%=readOnlyValue%>" />
 						</td>
 					</tr>
 
