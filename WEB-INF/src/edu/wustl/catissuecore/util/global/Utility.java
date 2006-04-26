@@ -45,6 +45,7 @@ import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.cde.CDE;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.cde.PermissibleValue;
+import edu.wustl.common.util.dbManager.HibernateMetaData;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -367,5 +368,20 @@ public class Utility
 	        Logger.out.debug("Application URL set: "+ Variables.catissueURL );
 	    }
 	}//setApplicationURL()
+	
+	/**
+	 * This method is used in JSP pages to get the width of columns for the html fields. 
+	 * It acts as a wrapper for the HibernateMetaData getColumnWidth() method.
+	 * @param className Class name of the field
+	 * @param attributeName Attribute name of the field.
+	 * @return Length of the column. 
+	 * @see HibernateMetaData.getColumnWidth()  
+	 */
+	public static String getColumnWidth(Class className, String attributeName)
+	{
+		String columnLength = toString(new Integer((HibernateMetaData.getColumnWidth(className,attributeName ))));
+		Logger.out.debug(className.getName()+ " : "+ attributeName  + " : " + columnLength ); 
+		return columnLength;
+	}
 	//Mandar 17-Apr-06 Bugid : 1667 : end
 }
