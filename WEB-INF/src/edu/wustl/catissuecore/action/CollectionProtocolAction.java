@@ -120,11 +120,8 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 					collectionProtocolForm.setProtocolCoordinatorIds(pcoordIDs ); 
 				}
 			}
-
 		}
 		// -- 24-Jan-06 end
-
-		
         return mapping.findForward(pageOf);
     }
 }
