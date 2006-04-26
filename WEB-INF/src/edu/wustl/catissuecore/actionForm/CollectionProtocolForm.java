@@ -313,7 +313,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 					values.put(key1,"Tissue");
 					values.put(key2,Constants.UNIT_GM);
 					String tissueType = requirement.getSpecimenType();
-					if(tissueType.equalsIgnoreCase(Constants.SLIDE) || tissueType.equalsIgnoreCase(Constants.PARAFFIN_BLOCK) || tissueType.equalsIgnoreCase(Constants.FROZEN_BLOCK) )
+					if(tissueType.equalsIgnoreCase(Constants.FROZEN_TISSUE_SLIDE) || tissueType.equalsIgnoreCase(Constants.FIXED_TISSUE_BLOCK) || tissueType.equalsIgnoreCase(Constants.FROZEN_TISSUE_BLOCK) )
 					{
 						values.put(key6,Utility.toString(new Integer(((TissueSpecimenRequirement) requirement).getQuantityInGram().intValue())));
 					}
@@ -391,7 +391,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 						values.put(key1,"Tissue");
 						values.put(key2,Constants.UNIT_GM);
 						String tissueType = specimeRequirement.getSpecimenType();
-						if(tissueType != null && (tissueType.equalsIgnoreCase(Constants.SLIDE) || tissueType.equalsIgnoreCase(Constants.PARAFFIN_BLOCK) || tissueType.equalsIgnoreCase(Constants.FROZEN_BLOCK)))
+						if(tissueType != null && (tissueType.equalsIgnoreCase(Constants.FROZEN_TISSUE_SLIDE) || tissueType.equalsIgnoreCase(Constants.FIXED_TISSUE_BLOCK) || tissueType.equalsIgnoreCase(Constants.FROZEN_TISSUE_BLOCK)))
 						{
 							values.put(key6,Utility.toString(new Integer(((edu.wustl.catissuecore.domainobject.TissueSpecimenRequirement) specimeRequirement).getQuantityInGram().intValue())));
 						}
@@ -601,7 +601,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 						typeKey = typeKey + "_specimenType";
 						String typeValue = (String)getValue(typeKey );
 						Logger.out.debug("TypeKey : "+ typeKey  + " : Type Value : " + typeValue  );
-						if (typeValue.trim().equals(Constants.SLIDE) || typeValue.trim().equals(Constants.PARAFFIN_BLOCK) || typeValue.trim().equals(Constants.FROZEN_BLOCK ))
+						if (typeValue.trim().equals(Constants.FROZEN_TISSUE_SLIDE) || typeValue.trim().equals(Constants.FIXED_TISSUE_BLOCK) || typeValue.trim().equals(Constants.FROZEN_TISSUE_BLOCK ))
 						{
 							if(validator.isEmpty(value))
 							{

@@ -9,8 +9,12 @@
 			return Constants.UNIT_ML;
 		else if(specimenType.equals("Tissue"))
 		{
-			if(subTypeValue.equals(Constants.SLIDE) || subTypeValue.equals(Constants.PARAFFIN_BLOCK) || subTypeValue.equals(Constants.FROZEN_BLOCK))
+			if(subTypeValue.equals(Constants.FROZEN_TISSUE_SLIDE) || subTypeValue.equals(Constants.FIXED_TISSUE_BLOCK) || subTypeValue.equals(Constants.FROZEN_TISSUE_BLOCK) || subTypeValue.equals(Constants.NOT_SPECIFIED))
 				return Constants.UNIT_CN;
+			else if (subTypeValue.equals(Constants.MICRODISSECTED))
+			{
+				return Constants.UNIT_CC;
+			}
 			else	
 				return Constants.UNIT_GM;
 		}
@@ -78,10 +82,12 @@
 
 
 
-
-	var subTypeData1 = "<%=Constants.SLIDE%>";
-	var subTypeData2 = "<%=Constants.PARAFFIN_BLOCK%>";
-	var subTypeData3 = "<%=Constants.FROZEN_BLOCK%>";
+	//Mandar 25-Apr-06 Bug id:1414 :- Tissue Type updated
+	var subTypeData1 = "<%=Constants.FROZEN_TISSUE_SLIDE%>";
+	var subTypeData2 = "<%=Constants.FIXED_TISSUE_BLOCK%>";
+	var subTypeData3 = "<%=Constants.FROZEN_TISSUE_BLOCK%>";
+	var subTypeData4 = "<%=Constants.NOT_SPECIFIED%>";
+	var subTypeData5 = "<%=Constants.MICRODISSECTED%>";
 
 // units array
 	var ugul = new Array(5);
@@ -93,13 +99,17 @@
 	ugul[5]="<%=Constants.UNIT_CN%>";
 	
 // Changes unit on subtype list changed
+/*	
+	Function updated to adjust New Tissue Types. 	
+	mandar: 25-Apr-06 : bug 1414:
+*/
 	function onSubTypeChangeUnit(typeList,element,unitspan)
 	{
 		var classList = document.getElementById(typeList);
 		var className = classList.options[classList.selectedIndex].text;
 		var selectedOption = element.options[element.selectedIndex].text;
 	
-		if(className == "Tissue" && (selectedOption == subTypeData1 || selectedOption == subTypeData2 || selectedOption == subTypeData3))
+		if(className == "Tissue" && (selectedOption == subTypeData1 || selectedOption == subTypeData2 || selectedOption == subTypeData3 || selectedOption == subTypeData4))
 		{
 			document.getElementById(unitspan).innerHTML = ugul[5];
 		}	
@@ -107,7 +117,14 @@
 		{
 			if(className == "Tissue")
 			{
-				document.getElementById(unitspan).innerHTML = ugul[2];
+				if(selectedOption == subTypeData5)
+				{
+					document.getElementById(unitspan).innerHTML = ugul[3];
+				}
+				else
+				{
+					document.getElementById(unitspan).innerHTML = ugul[2];
+				}
 			}	
 		}
 			

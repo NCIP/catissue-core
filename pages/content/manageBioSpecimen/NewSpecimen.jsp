@@ -236,9 +236,14 @@ Map map = form.getExternalIdentifier();
 	//		{
 				if(form.getClassName().equals("Tissue"))
 				{
-					if((form.getType()!=null) && (form.getType().equals(Constants.SLIDE)||form.getType().equals(Constants.PARAFFIN_BLOCK)||form.getType().equals(Constants.FROZEN_BLOCK)))
+					//Mandar : 25-Apr-06 :Bug 1414
+					if((form.getType()!=null) && (form.getType().equals(Constants.FROZEN_TISSUE_SLIDE)||form.getType().equals(Constants.FIXED_TISSUE_BLOCK)||form.getType().equals(Constants.FROZEN_TISSUE_BLOCK)||form.getType().equals(Constants.NOT_SPECIFIED)))
 					{
 						unitSpecimen = Constants.UNIT_CN;
+					}
+					else if((form.getType()!=null) && (form.getType().equals(Constants.MICRODISSECTED)))
+					{
+						unitSpecimen = Constants.UNIT_CC;
 					}
 					else 
 					{

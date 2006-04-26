@@ -51,10 +51,12 @@
 			}
 		}
 
-
-	var subTypeData1 = "<%=Constants.SLIDE%>";
-	var subTypeData2 = "<%=Constants.PARAFFIN_BLOCK%>";
-	var subTypeData3 = "<%=Constants.FROZEN_BLOCK%>";
+	// Mandar 25-apr-06 : bug 1414 : Tissue type changed.
+	var subTypeData1 = "<%=Constants.FROZEN_TISSUE_SLIDE%>";
+	var subTypeData2 = "<%=Constants.FIXED_TISSUE_BLOCK%>";
+	var subTypeData3 = "<%=Constants.FROZEN_TISSUE_BLOCK%>";
+	var subTypeData4 = "<%=Constants.NOT_SPECIFIED%>";
+	var subTypeData5 = "<%=Constants.MICRODISSECTED%>";
 	
 
 // units array
@@ -68,13 +70,17 @@
 
 	
 // Changes unit on subtype list changed
+/* 
+	Function updated as per new Types added for Tissue class.
+	Mandar : 25-Apr-06 : Bug 1414
+*/
 	function onSubTypeChangeUnit(typeList,element,unitspan)
 	{
 		var classList = document.getElementById(typeList);
 		var className = classList.options[classList.selectedIndex].text;
 		var selectedOption = element.options[element.selectedIndex].text;
-	
-		if(className == "Tissue" && (selectedOption == subTypeData1 || selectedOption == subTypeData2 || selectedOption == subTypeData3))
+	// Mandar 25-apr-06 : bug 1414 : Tissue type changed.
+		if(className == "Tissue" && (selectedOption == subTypeData1 || selectedOption == subTypeData2 || selectedOption == subTypeData3 || selectedOption == subTypeData4))
 		{
 			document.getElementById(unitspan).innerHTML = "<%=Constants.UNIT_CN%>";
 			// added for Available quantity
@@ -89,14 +95,27 @@
 		{
 			if(className == "Tissue")
 			{
-				document.getElementById(unitspan).innerHTML = "<%=Constants.UNIT_GM%>";
 				// added for Available quantity
 				var unit1= document.getElementById("unitSpan1");
-				if(unit1!=null)
+				if(selectedOption == subTypeData5)
 				{
-					unit1.innerHTML = "<%=Constants.UNIT_GM%>";
+					document.getElementById(unitspan).innerHTML = "<%=Constants.UNIT_CC%>";
+			
+					if(unit1!=null)
+					{
+						unit1.innerHTML = "<%=Constants.UNIT_CC%>";
+					}
+					document.forms[0].unit.value = "<%=Constants.UNIT_CC%>";
 				}
-				document.forms[0].unit.value = "<%=Constants.UNIT_GM%>";
+				else
+				{
+					document.getElementById(unitspan).innerHTML = "<%=Constants.UNIT_GM%>";
+					if(unit1!=null)
+					{
+						unit1.innerHTML = "<%=Constants.UNIT_GM%>";
+					}
+					document.forms[0].unit.value = "<%=Constants.UNIT_GM%>";
+				}
 			}	
 		}
 	}
