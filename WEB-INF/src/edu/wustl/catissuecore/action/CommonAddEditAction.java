@@ -12,10 +12,12 @@ package edu.wustl.catissuecore.action;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Stack;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionError;
@@ -26,31 +28,26 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
-import edu.wustl.catissuecore.actionForm.DistributionForm;
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.actionForm.SpecimenEventParametersForm;
 import edu.wustl.catissuecore.actionForm.UserForm;
-import edu.wustl.common.bizlogic.AbstractBizLogic;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.QueryBizLogic;
-import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
-import edu.wustl.catissuecore.domain.Distribution;
 import edu.wustl.catissuecore.domain.DomainObjectFactory;
 import edu.wustl.catissuecore.domain.Participant;
-import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
-import edu.wustl.catissuecore.domain.StorageType;
-import edu.wustl.catissuecore.domain.User;
-import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.beans.AddNewSessionDataBean;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.bizlogic.AbstractBizLogic;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
+import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.dbManager.HibernateMetaData;
 import edu.wustl.common.util.logger.Logger;
@@ -85,14 +82,6 @@ public class CommonAddEditAction extends Action
             	request.setAttribute(Constants.SPECIMEN_ID,specimenId);
             }
             
-            if(abstractForm instanceof DistributionForm)
-            {
-            	//Setting Distribution ID as request parameter
-            	Long distributionId =new Long(((DistributionForm)abstractForm).getSystemIdentifier());
-            	Logger.out.debug("distributionId "+distributionId);
-            	request.setAttribute(Constants.DISTRIBUTION_ID,distributionId);
-            }
-
             //The object name which is to be added. 
             String objectName = DomainObjectFactory.getDomainObjectName(abstractForm.getFormId());
             
@@ -100,8 +89,7 @@ public class CommonAddEditAction extends Action
             if (abstractForm.isAddOperation())
             {
                 //If operation is add, add the data in the database.
-                abstractDomain = DomainObjectFactory.getDomainObject(
-                        abstractForm.getFormId(), abstractForm);
+                abstractDomain = DomainObjectFactory.getDomainObject(abstractForm.getFormId(), abstractForm);
                 bizLogic.insert(abstractDomain, getSessionData(request), Constants.HIBERNATE_DAO);
 
                 target = new String(Constants.SUCCESS);
@@ -112,57 +100,8 @@ public class CommonAddEditAction extends Action
                 	Logger.out.debug("Specimen ID :-- : "+ String.valueOf(abstractDomain.getSystemIdentifier()) );
                 	
                 	forwardToInSpecimen(abstractForm,abstractDomain,request);
-	                request.setAttribute("newSpecimenForm",new NewSpecimenForm() );
+	                request.setAttribute("newSpecimenForm",new NewSpecimenForm());
                 }
-                
-                else if(abstractDomain instanceof Participant)
-                {
-                	request.setAttribute(Constants.PARTICIPANT_ID,String.valueOf(abstractDomain.getSystemIdentifier()));
-	            }
-
-                // StorageType
-                else if(abstractDomain instanceof StorageType )
-                {
-                	request.setAttribute(Constants.ADD_NEW_STORAGE_TYPE_ID,String.valueOf(abstractDomain.getSystemIdentifier()));
-	            }
-                // CollectionProtocol
-                else if(abstractDomain instanceof CollectionProtocol )
-                {
-                	request.setAttribute(Constants.ADD_NEW_COLLECTION_PROTOCOL_ID,String.valueOf(abstractDomain.getSystemIdentifier()));
-	            }
-                // Site
-                else if(abstractDomain instanceof Site )
-                {
-                	request.setAttribute(Constants.ADD_NEW_SITE_ID,String.valueOf(abstractDomain.getSystemIdentifier()));
-	            }
-                // User
-                else if(abstractDomain instanceof User )
-                {
-                	request.setAttribute(Constants.ADD_NEW_USER_ID,String.valueOf(abstractDomain.getSystemIdentifier()));
-	            }
-                
-                else if(abstractDomain instanceof Distribution)
-                {
-                	//Setting Distribution ID as request parameter
-                	request.setAttribute(Constants.DISTRIBUTION_ID,abstractDomain.getSystemIdentifier());
-                }
-            	
-                else if(abstractDomain instanceof SpecimenCollectionGroup)
-                {
-                	String forwardTo = abstractForm.getForwardTo();
-                	Logger.out.debug("ForwardTo in SCG :-- : "+ forwardTo);
-                	if(forwardTo != null)
-                	{
-	                	request.setAttribute(Constants.SPECIMEN_COLLECTION_GROUP_ID,abstractDomain.getSystemIdentifier().toString());
-	                	Logger.out.debug("SpecimenCollectionGroup ID :-- : "+ String.valueOf(abstractDomain.getSystemIdentifier()) );
-                	}	
-                }	
-                
-                // CollectionProtocolRegistration values
-                else if(abstractDomain instanceof CollectionProtocolRegistration)
-                {
-                	request.setAttribute(Constants.COLLECTION_REGISTRATION_ID,abstractDomain.getSystemIdentifier().toString());
-                }	
                 
                 // The successful add messages. Changes done according to bug# 945, 947
                 messages = new ActionMessages();
@@ -178,79 +117,130 @@ public class CommonAddEditAction extends Action
                     Logger.out.error(excp.getMessage(), excp);
                 }
                 
+                //Setting the system identifier after inserting the object in the DB.
                 if (abstractDomain.getSystemIdentifier() != null)
                 {
-                    // Setting the system identifier after inserting the object in the DB.
                     abstractForm.setSystemIdentifier(abstractDomain.getSystemIdentifier().longValue());
                     request.setAttribute(Constants.SYSTEM_IDENTIFIER, abstractDomain.getSystemIdentifier());
                     abstractForm.setMutable(false);
                 }
+
+                //------------------------------------------------ AddNewAction implementation Starts----------------------------
+                //Attributes to decide AddNew action
+                String submittedFor = (String) request.getParameter(Constants.SUBMITTED_FOR);
                 
-	               Logger.out.debug("CAE :------  " +abstractForm.getRedirectTo());
-	               if (abstractForm.getRedirectTo()!=null && abstractForm.getRedirectTo().trim().length() >0 )
-	               {
-	               		String reDirectUrl = abstractForm.getRedirectTo();
-	               		Logger.out.debug("redirecturl -- :  : " + reDirectUrl);
-	               		
-	               		String tmpreDirectUrl = null;
-	               		
-	               		
-	               		if(reDirectUrl.lastIndexOf('|') != -1)
-	               		{
-	               			tmpreDirectUrl = reDirectUrl.substring(reDirectUrl.lastIndexOf('|')+1);;
-	               			String remainingURL = reDirectUrl.substring(0,reDirectUrl.lastIndexOf('|'));
-	               			Logger.out.debug("remaurl -- :  : " + remainingURL);
-	               			tmpreDirectUrl = tmpreDirectUrl.replaceAll("_","&" );
-	               			tmpreDirectUrl = tmpreDirectUrl + "&"+Constants.REQ_PATH + "="+ remainingURL;  
-	               		}
-	               		else
-	               		{
-	               			tmpreDirectUrl = reDirectUrl; 
-	               			reDirectUrl =null; 
-	               			tmpreDirectUrl = tmpreDirectUrl.replaceAll("_","&" );
-	               		}
-	               		
-	               		Logger.out.debug("tmpurl -- :  : " + tmpreDirectUrl);
-	               		
-	               		// --- 14-12-2005 start for messages
-	                    if (messages != null)
-	                    {
-	                        saveMessages(request,messages);
-	                    }
-	                    
-	                    //Status message key.
-	                    String statusMessageKey = String.valueOf(abstractForm.getFormId() +
-	        					"."+String.valueOf(abstractForm.isAddOperation()));
-	                    
-	                    request.setAttribute(Constants.STATUS_MESSAGE_KEY,statusMessageKey);
-	               		// --- 14-12-2005 end------------
-	                    
-	               		ActionForward reDirectForward = new ActionForward();
-	//               		reDirectForward.setName("reDirectTo");
-	               		reDirectForward.setPath(tmpreDirectUrl);
-	               		return reDirectForward;
-	               }
+                Logger.out.debug("Checking parameter SubmittedFor in CommonAddEditAction--->"+request.getParameter(Constants.SUBMITTED_FOR));
+                Logger.out.debug("SubmittedFor attribute of Form-Bean received---->"+abstractForm.getSubmittedFor());
+                
+                //if AddNew action is executing, load FormBean from Session and redirect to Action which initiated AddNew action
+                if( (submittedFor !=null)&& (submittedFor.equals("AddNew")) )
+                {
+                    Logger.out.debug("SubmittedFor is AddNew in CommonAddEditAction...................");
+                    
+                    HttpSession session = request.getSession();
+                    Stack formBeanStack = (Stack)session.getAttribute(Constants.FORM_BEAN_STACK);
+                    
+        	        if(formBeanStack !=null)
+        	        {
+        	            //Retrieving AddNewSessionDataBean from Stack
+        	            AddNewSessionDataBean addNewSessionDataBean = (AddNewSessionDataBean)formBeanStack.pop();
+        	            
+        	            if(addNewSessionDataBean != null)
+        	            {
+	        	            //Retrieving FormBean stored into AddNewSessionDataBean 
+	        	            AbstractActionForm sessionFormBean = addNewSessionDataBean.getAbstractActionForm();
+	        	            
+	        	            String forwardTo = addNewSessionDataBean.getForwardTo();
+	        	            Logger.out.debug("forwardTo in CommonAddEditAction--------->"+forwardTo);
+	        	          
+	        	            //Setting Identifier of new object into the FormBean to populate it on the JSP page 
+	        	            sessionFormBean.setAddNewObjectIdentifier(addNewSessionDataBean.getAddNewFor(), abstractDomain.getSystemIdentifier());
+	        	            
+	        	            //cleaning FORM_BEAN_STACK from Session if no AddNewSessionDataBean available... Storing appropriate value of SUBMITTED_FOR attribute
+	        	            if(formBeanStack.isEmpty())
+	        	            {
+	        	                session.removeAttribute(Constants.FORM_BEAN_STACK);
+	        	                request.setAttribute(Constants.SUBMITTED_FOR, "Default");
+	        	                Logger.out.debug("SubmittedFor set as Default in CommonAddEditAction===========");
+	        	                
+	        	                Logger.out.debug("cleaning FormBeanStack from session*************");
+	        	            }
+	        	            else
+	        	            {
+	        	                request.setAttribute(Constants.SUBMITTED_FOR, "AddNew");
+	        	            }
+	        	            
+	        	            //Storing FormBean into Request to populate data on the page being forwarded after AddNew activity, 
+	        	            //FormBean should be stored with the name defined into Struts-Config.xml to populate data properly on JSP page 
+	        	            String formBeanName = Utility.getFormBeanName(sessionFormBean);
+	        	            request.setAttribute(formBeanName, sessionFormBean);
+	        	            
+	        	            Logger.out.debug("InitiliazeAction operation=========>"+sessionFormBean.getOperation());
+	        	            
+	        	            //Storing Success messages into Request to display on JSP page being forwarded after AddNew activity
+	        	            if (messages != null)
+		                    {
+		                        saveMessages(request,messages);
+		                    }
+		                    //Status message key.
+		                    String statusMessageKey = String.valueOf(abstractForm.getFormId() +
+		        					"."+String.valueOf(abstractForm.isAddOperation()));
+		                    request.setAttribute(Constants.STATUS_MESSAGE_KEY,statusMessageKey);
+		                    
+	        	            //Changing operation attribute in parth specified in ForwardTo mapping, If AddNew activity started from Edit page
+	        	            if( (sessionFormBean.getOperation().equals("edit") ) )
+	        	            {
+	        	                ActionForward editForward = new ActionForward();
+	        	                
+	        	                String addPath = (mapping.findForward(forwardTo)).getPath();
+	        	                Logger.out.debug("Operation before edit==========>"+addPath);
+	        	                
+	        	                String editPath = addPath.replaceFirst("operation=add","operation=edit");
+	        	                Logger.out.debug("Operation edited=============>"+editPath);
+	                       		editForward.setPath(editPath);
+	                       		
+	                       		return editForward;
+	        	            }   
+	        	            
+	        	            return (mapping.findForward(forwardTo));
+        	            }
+        	            //Setting target as FAILURE if AddNewSessionDataBean is null
+        	            else
+        	            {
+        	                target = new String(Constants.FAILURE);
+                            
+                            ActionErrors errors = new ActionErrors();
+                        	ActionError error = new ActionError("errors.item.unknown",
+                        	        				AbstractDomainObject.parseClassName(objectName));
+                        	errors.add(ActionErrors.GLOBAL_ERROR,error);
+                        	saveErrors(request,errors);
+        	            }
+        	        }
+                }
+                //------------------------------------------------ AddNewAction implementation Ends----------------------------                
+                //---ForwardTo list selection
+ 	           else if( (submittedFor !=null)&& (submittedFor.equals("ForwardTo")) )
+ 	           {
+ 	               Logger.out.debug("SubmittedFor is ForwardTo in CommonAddEditAction...................");
+ 	               
+ 	               request.setAttribute(Constants.SUBMITTED_FOR, "Default");
+ 		           
+ 	               if(abstractForm.getForwardTo()!= null && abstractForm.getForwardTo().trim().length()>0  )
+ 		           {
+ 		           	String forwardTo = abstractForm.getForwardTo(); 
+ 		           	Logger.out.debug("ForwardTo in Add :-- : "+ forwardTo);
+ 		           	target = forwardTo;
+ 	                //return (mapping.findForward(forwardTo));
+ 		           }
+ 	           }
 	               Logger.out.debug("CAE ---TARGET ----- "+ target); 
-//	               return (mapping.findForward(target));
-	       //-----------
-	           // ---ForwardTo list selection
-	           
-	           if(abstractForm.getForwardTo()!= null && abstractForm.getForwardTo().trim().length()>0  )
-	           {
-	           	String forwardTo = abstractForm.getForwardTo(); 
-	           	Logger.out.debug("ForwardTo in Add :-- : "+ forwardTo);
-	           	target = forwardTo; 
-                //return (mapping.findForward(forwardTo));
-	           }
-	           
+	               //return (mapping.findForward(target));
             }
             else
             {
                 
             	//If operation is edit, update the data in the database.
                 
-            	
-            	
                 List list = bizLogic.retrieve(objectName, Constants.SYSTEM_IDENTIFIER,
 										  new Long(abstractForm.getSystemIdentifier()));
                 if (!list.isEmpty())
@@ -276,17 +266,6 @@ public class CommonAddEditAction extends Action
                 			Logger.out.debug("Added password attr in session");
                 			request.getSession().setAttribute(Constants.PASSWORD_CHANGE_IN_SESSION,new Boolean(true));
                 		}
-                		//Mandar 18-Apr-06 : bugid: 1687
-                		if(((UserForm) abstractForm).getStatus().equalsIgnoreCase("Reject" ) ||
-                		   ((UserForm) abstractForm).getStatus().equalsIgnoreCase("Pending" ))
-                		{
-                        	String moveToApproveUsers = "/ApproveUserShow.do?pageNum=1&menuSelected=1";  
-                        	Logger.out.debug("moveToApproveUsers :-- : "+ moveToApproveUsers);
-                       		ActionForward reDirectForward = new ActionForward();
-                       		reDirectForward.setPath(moveToApproveUsers );
-                       		return reDirectForward;
-                		}
-                		//Mandar 18-Apr-06 : bugid: 1687 end
                 	}
                     
                     // -- Direct to Main Menu if record is disabled
