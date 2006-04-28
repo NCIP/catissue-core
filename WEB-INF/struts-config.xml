@@ -222,6 +222,7 @@ PUBLIC
 			<forward name="specimenCollectionGroup" path="/SpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroup&amp;menuSelected=14" />
 			<forward name="redirectTo" path="" />
 			<forward name="createParticipantRegistration" path="/CollectionProtocolRegistration.do?operation=add&amp;pageOf=pageOfCollectionProtocolRegistration&amp;menuSelected=13" />
+			<forward name="participantRegistration" path="/CollectionProtocolRegistration.do?operation=add&amp;pageOf=pageOfCollectionProtocolRegistration" />
 		</action>
 		
 		<action path="/ParticipantEdit"
@@ -269,6 +270,7 @@ PUBLIC
 			<forward name="success" path="/CollectionProtocolRegistrationSearch.do?pageOf=pageOfCollectionProtocolRegistration" />
 			<forward name="failure" path="/CollectionProtocolRegistration.do?operation=add&amp;pageOf=pageOfCollectionProtocolRegistration&amp;menuSelected=13" />
 			<forward name="createSpecimenCollectionGroup" path="/SpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroup&amp;menuSelected=14" />
+			<forward name="specimenCollectionGroup" path="/SpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroup" />
 		</action>
 		
 		<action path="/CollectionProtocolRegistrationEdit"
@@ -311,6 +313,7 @@ PUBLIC
 			<!-- forward name="success" path="/Institution.do?operation=edit&amp;pageOf=pageOfInstitution&amp;menuSelected=2" /-->
 			<forward name="success" path="/InstitutionSearch.do?pageOf=pageOfInstitution" />
 			<forward name="failure" path="/Institution.do?operation=add&amp;pageOf=pageOfInstitution&amp;menuSelected=2" />
+			<forward name="user" path="/User.do?operation=add&amp;pageOf=pageOfUserAdmin" />
 		</action>
 		
 		<action path="/InstitutionEdit"
@@ -354,6 +357,10 @@ PUBLIC
 			<!--forward name="success" path="/User.do?operation=edit&amp;pageOf=pageOfUserAdmin&amp;menuSelected=1" /-->
 			<forward name="success" path="/UserSearch.do?pageOf=pageOfUserAdmin" />
 			<forward name="failure" path="/User.do?operation=add&amp;pageOf=pageOfUserAdmin&amp;menuSelected=1" />
+			<forward name="site" path="/Site.do?operation=add&amp;pageOf=pageOfSite" />
+			<forward name="collectionProtocol" path="/CollectionProtocol.do?operation=add&amp;pageOf=pageOfCollectionProtocol" />
+			<forward name="distributionProtocol" path="/DistributionProtocol.do?operation=add&amp;pageOf=pageOfDistributionProtocol" />
+			<forward name="distribution" path="/Distribution.do?operation=add&amp;pageOf=pageOfDistribution&amp;menuSelected=16" />
 		</action>
 		
 		<action path="/UserEdit"
@@ -444,6 +451,7 @@ PUBLIC
 			scope="request">
 			<forward name="success" path="/DepartmentSearch.do?pageOf=pageOfDepartment" />
 			<forward name="failure" path="/Department.do?operation=add&amp;pageOf=pageOfDepartment&amp;menuSelected=3" />
+			<forward name="user" path="/User.do?operation=add&amp;pageOf=pageOfUserAdmin" />
 		</action>
 		
 		<action path="/DepartmentEdit"
@@ -486,6 +494,7 @@ PUBLIC
 			<!-- forward name="success" path="/CancerResearchGroup.do?operation=edit&amp;pageOf=pageOfCancerResearchGroup&amp;menuSelected=4" /-->
 			<forward name="success" path="/CancerResearchGroupSearch.do?pageOf=pageOfCancerResearchGroup" />
 			<forward name="failure" path="/CancerResearchGroup.do?operation=add&amp;pageOf=pageOfCancerResearchGroup&amp;menuSelected=4" />
+			<forward name="user" path="/User.do?operation=add&amp;pageOf=pageOfUserAdmin" />
 		</action>
 
 		<action path="/CancerResearchGroupEdit"
@@ -537,6 +546,8 @@ PUBLIC
 			scope="request">
 			<forward name="success" path="/CollectionProtocolSearch.do?pageOf=pageOfCollectionProtocol" />
 			<forward name="failure" path="/CollectionProtocol.do?operation=add&amp;pageOf=pageOfCollectionProtocol&amp;menuSelected=9" />
+			<forward name="participantRegistration" path="/CollectionProtocolRegistration.do?operation=add&amp;pageOf=pageOfCollectionProtocolRegistration" />
+			<forward name="specimenCollectionGroup" path="/SpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroup" />
 		</action>
 
 		<action path="/CollectionProtocolEdit"
@@ -580,6 +591,7 @@ PUBLIC
 			scope="request">
 			<forward name="success" path="/DistributionProtocolSearch.do?pageOf=pageOfDistributionProtocol" />
 			<forward name="failure" path="/DistributionProtocol.do?operation=add&amp;pageOf=pageOfDistributionProtocol&amp;menuSelected=10" />
+			<forward name="distribution" path="/Distribution.do?operation=add&amp;pageOf=pageOfDistribution&amp;menuSelected=16" />
 		</action>
 
 		<action path="/DistributionProtocolEdit"
@@ -887,6 +899,7 @@ PUBLIC
 			<!-- forward name="success" path="/StorageType.do?operation=edit&amp;pageOf=pageOfStorageType&amp;menuSelected=6" /-->
 			<forward name="success" path="/StorageTypeSearch.do?pageOf=pageOfStorageType" />
 			<forward name="failure" path="/StorageType.do?operation=add&amp;pageOf=pageOfStorageType&amp;menuSelected=6" />
+			<forward name="storageContainer" path="/StorageContainer.do?operation=add&amp;pageOf=pageOfStorageContainer" />
 		</action>
 		
 		<action path="/StorageTypeEdit"
@@ -974,6 +987,9 @@ PUBLIC
 			<!-- forward name="success" path="/Site.do?operation=edit&amp;pageOf=pageOfSite&amp;menuSelected=5" /-->
 			<forward name="success" path="/SiteSearch.do?pageOf=pageOfSite" />
 			<forward name="failure" path="/Site.do?operation=add&amp;pageOf=pageOfSite&amp;menuSelected=5" />
+			<forward name="storageContainer" path="/StorageContainer.do?operation=add&amp;pageOf=pageOfStorageContainer" />
+			<forward name="specimenCollectionGroup" path="/SpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroup" />
+			<forward name="distribution" path="/Distribution.do?operation=add&amp;pageOf=pageOfDistribution&amp;menuSelected=16" />
 		</action>
 		
 		<action path="/SiteEdit"
@@ -2329,7 +2345,94 @@ PUBLIC
 			<forward name="success" path="/ResponseServlet" />
 		</action>
 	<!-- ************** HTTP API ***************** -->		
+	
+	<!-- AddNew Actions Begins -->
+        <action path="/UserAddNew"
+			type="edu.wustl.catissuecore.action.AddNewAction"
+			name="userForm"
+			validate="false"
+			scope="request">
+			<forward name="institution" path="/Institution.do?operation=add&amp;pageOf=pageOfInstitution&amp;menuSelected=2" />
+			<forward name="department" path="/Department.do?operation=add&amp;pageOf=pageOfDepartment&amp;menuSelected=3" />
+			<forward name="cancerResearchGroup" path="/CancerResearchGroup.do?operation=add&amp;pageOf=pageOfCancerResearchGroup&amp;menuSelected=4" />
+			<forward name="access_denied" path="/ManageAdministrativeData.do" />
+		</action>
+
+		<action path="/SiteAddNew"
+			type="edu.wustl.catissuecore.action.AddNewAction"
+			name="siteForm"
+			validate="false"
+			scope="request">
+			<forward name="coordinator" path="/User.do?operation=add&amp;pageOf=pageOfUserAdmin&amp;menuSelected=1" />
+			<forward name="access_denied" path="/ManageAdministrativeData.do" />
+		</action>
+
+		<action path="/StorageContainerAddNew"
+			type="edu.wustl.catissuecore.action.AddNewAction"
+			name="storageContainerForm"
+			validate="false"
+			scope="request">
+			<forward name="storageType" path="/StorageType.do?operation=add&amp;pageOf=pageOfStorageType&amp;menuSelected=6" />
+			<forward name="site" path="/Site.do?operation=add&amp;pageOf=pageOfSite&amp;menuSelected=5" />
+			<forward name="access_denied" path="/ManageAdministrativeData.do" />
+		</action>
+
+		<action path="/CollectionProtocolAddNew"
+			type="edu.wustl.catissuecore.action.AddNewAction"
+			name="collectionProtocolForm"
+			validate="false"
+			scope="request">
+			<forward name="principalInvestigator" path="/User.do?operation=add&amp;pageOf=pageOfUserAdmin&amp;menuSelected=1" />
+			<forward name="protocolCoordinator" path="/User.do?operation=add&amp;pageOf=pageOfUserAdmin&amp;menuSelected=1" />
+		</action>
 		
+		<action path="/DistributionProtocolAddNew"
+			type="edu.wustl.catissuecore.action.AddNewAction"
+			name="distributionProtocolForm"
+			validate="false"
+			scope="request">
+			<forward name="principalInvestigator" path="/User.do?operation=add&amp;pageOf=pageOfUserAdmin&amp;menuSelected=1" />
+		</action>
+
+		<action path="/ParticipantRegistrationAddNew"
+			type="edu.wustl.catissuecore.action.AddNewAction"
+			name="collectionProtocolRegistrationForm"
+			validate="false"
+			scope="request">
+			<forward name="collectionProtocol" path="/CollectionProtocol.do?operation=add&amp;pageOf=pageOfCollectionProtocol&amp;menuSelected=9" />
+			<forward name="participant" path="/Participant.do?operation=add&amp;pageOf=pageOfParticipant&amp;menuSelected=12" />
+		</action>
+		<action path="/SpecimenCollectionGroupAddNew"
+			type="edu.wustl.catissuecore.action.AddNewAction"
+			name="specimenCollectionGroupForm"
+			validate="false"
+			scope="request">
+			<forward name="collectionProtocol" path="/CollectionProtocol.do?operation=add&amp;pageOf=pageOfCollectionProtocol&amp;menuSelected=9" />
+			<forward name="site" path="/Site.do?operation=add&amp;pageOf=pageOfSite&amp;menuSelected=5" />
+			<forward name="participantRegistration" path="/CollectionProtocolRegistration.do?operation=add&amp;pageOf=pageOfCollectionProtocolRegistration&amp;menuSelected=13" />
+		</action>
+		
+		<action path="/NewSpecimenAddNew"
+			type="edu.wustl.catissuecore.action.AddNewAction"
+			name="newSpecimenForm"
+			validate="false"
+			scope="request">
+			<forward name="specimenCollectionGroup" path="/SpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroup&amp;menuSelected=14" />
+		</action>
+
+		<action path="/DistributionAddNew"
+			type="edu.wustl.catissuecore.action.AddNewAction"
+			name="distributionForm"
+			validate="false"
+			scope="request">
+			<forward name="distributionProtocol" path="/DistributionProtocol.do?operation=add&amp;pageOf=pageOfDistributionProtocol&amp;menuSelected=10" />
+			<forward name="distributedBy" path="/User.do?operation=add&amp;pageOf=pageOfUserAdmin&amp;menuSelected=1" />
+			<forward name="toSite" path="/Site.do?operation=add&amp;pageOf=pageOfSite&amp;menuSelected=5" />
+		</action>
+
+	<!-- AddNew Actions Ends -->
+
+	
 	</action-mappings>
 	
 	<controller processorClass="edu.wustl.common.struts.ApplicationRequestProcessor" />
