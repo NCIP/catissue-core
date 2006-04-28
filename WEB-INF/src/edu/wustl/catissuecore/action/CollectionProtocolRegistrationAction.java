@@ -12,22 +12,27 @@ package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.CollectionProtocolRegistrationForm;
-import edu.wustl.common.bizlogic.AbstractBizLogic;
+import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;
+import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.beans.AddNewSessionDataBean;
 import edu.wustl.common.beans.NameValueBean;
+import edu.wustl.common.bizlogic.AbstractBizLogic;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -60,20 +65,20 @@ public class CollectionProtocolRegistrationAction extends SecureAction
         request.setAttribute(Constants.PAGEOF,pageOf);
         
 		// Mandar : code for Addnew Collection Protocol data 24-Jan-06
-		String collectionProtocolID = (String)request.getAttribute(Constants.ADD_NEW_COLLECTION_PROTOCOL_ID);
-		if(collectionProtocolID != null && collectionProtocolID.trim().length() > 0 )
-		{
-			Logger.out.debug(">>>>>>>>>>><<<<<<<<<<<<<<<<>>>>>>>>>>>>> CP ID in CPR : "+ collectionProtocolID  );
-			((CollectionProtocolRegistrationForm)form).setCollectionProtocolID(Long.parseLong(collectionProtocolID));
-		}
+//		String collectionProtocolID = (String)request.getAttribute(Constants.ADD_NEW_COLLECTION_PROTOCOL_ID);
+//		if(collectionProtocolID != null && collectionProtocolID.trim().length() > 0 )
+//		{
+//			Logger.out.debug(">>>>>>>>>>><<<<<<<<<<<<<<<<>>>>>>>>>>>>> CP ID in CPR : "+ collectionProtocolID  );
+//			((CollectionProtocolRegistrationForm)form).setCollectionProtocolID(Long.parseLong(collectionProtocolID));
+//		}
 		// Mandar -- 24-Jan-06 end
 
-        String reqPath = request.getParameter(Constants.REQ_PATH);
-		if (reqPath != null)
-			request.setAttribute(Constants.REQ_PATH, reqPath);
-		
-		Logger.out.debug("PartProtReg redirect :---------- "+ reqPath  );
-        
+//        String reqPath = request.getParameter(Constants.REQ_PATH);
+//		if (reqPath != null)
+//			request.setAttribute(Constants.REQ_PATH, reqPath);
+//		
+//		Logger.out.debug("PartProtReg redirect :---------- "+ reqPath  );
+//        
         // ----------------add new end-----
         
 		AbstractBizLogic bizLogic = BizLogicFactory.getBizLogic(Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
@@ -84,7 +89,23 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 		String valueField = Constants.SYSTEM_IDENTIFIER;
 		List list = bizLogic.getList(sourceObjectName, displayNameFields, valueField, true);
 		request.setAttribute(Constants.PROTOCOL_LIST, list);
-
+		
+		Logger.out.debug("SubmittedFor on CPRAction====>"+request.getAttribute(Constants.SUBMITTED_FOR));
+		if( (request.getAttribute(Constants.SUBMITTED_FOR) != null) && (request.getAttribute(Constants.SUBMITTED_FOR).equals("AddNew")))
+		{
+		    HttpSession session = request.getSession();
+            Stack formBeanStack = (Stack)session.getAttribute(Constants.FORM_BEAN_STACK);
+            
+	        if(formBeanStack !=null)
+	        {
+	            AddNewSessionDataBean addNewSessionDataBean = (AddNewSessionDataBean)formBeanStack.peek();
+	            
+	            SpecimenCollectionGroupForm sessionFormBean =(SpecimenCollectionGroupForm)addNewSessionDataBean.getAbstractActionForm();
+	            
+	            ((CollectionProtocolRegistrationForm)form).setCollectionProtocolID(sessionFormBean.getCollectionProtocolId());
+	        }
+		}
+		
 		//get list of Participant's names
 		sourceObjectName = Participant.class.getName();
 		String[] participantsFields = {"lastName","firstName","birthDate","socialSecurityNumber"};
