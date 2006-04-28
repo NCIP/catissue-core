@@ -17,6 +17,7 @@ import java.util.List;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.query.ShoppingCart;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.dbManager.DAOException;
 
 /**
@@ -25,7 +26,7 @@ import edu.wustl.common.util.dbManager.DAOException;
  */
 public class ShoppingCartBizLogic extends DefaultBizLogic
 {
-	public void add(ShoppingCart cart,Object obj[]) throws DAOException
+	public void add(ShoppingCart cart,Object obj[]) throws DAOException,BizLogicException  
     {
 		if(cart!=null && obj!=null)
 		{

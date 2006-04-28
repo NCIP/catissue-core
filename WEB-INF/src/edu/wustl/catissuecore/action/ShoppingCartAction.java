@@ -21,6 +21,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -32,6 +34,7 @@ import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.query.ShoppingCart;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.ExportReport;
 import edu.wustl.common.util.SendFile;
 import edu.wustl.common.util.logger.Logger;
@@ -119,14 +122,32 @@ public class ShoppingCartAction  extends BaseAction
 		        	selectedSpecimenIds[j]=selectedRow.get(spreadsheetSpecimenIndex);
 		        	Logger.out.debug("specimen id to be added to cart :"+selectedSpecimenIds[j]);
 				}	
+        		//Mandar 27-Apr-06 : bug 1129
+				boolean isError = false;
+				try
+				{
+        			bizLogic.add(cart,selectedSpecimenIds);
+				}
+        		catch(BizLogicException bizEx)
+				{
+                	ActionErrors errors = new ActionErrors();
+                	ActionError error = new ActionError("shoppingcart.error",bizEx.getMessage());
+                	errors.add(ActionErrors.GLOBAL_ERROR,error);
+                	saveErrors(request,errors);
+                    Logger.out.error(bizEx.getMessage(), bizEx);
+                    target = new String(Constants.DUPLICATE_SPECIMEN);
+                    isError = true;
+				}
         		
-        		bizLogic.add(cart,selectedSpecimenIds);
         		session.setAttribute(Constants.SHOPPING_CART,cart);
        			//List dataList = (List) session.getAttribute(Constants.SPREADSHEET_DATA_LIST);
         		List columnList = (List)session.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
         		request.setAttribute(Constants.SPREADSHEET_COLUMN_LIST,columnList);
         		request.setAttribute(Constants.PAGEOF,Constants.PAGEOF_QUERY_RESULTS);
-       			target=Constants.SHOPPING_CART_ADD;
+        		if(!isError )
+        		{
+        			target=Constants.SHOPPING_CART_ADD;
+        		}
 	        }
 	        else if(operation.equals(Constants.DELETE)) //IF OPERATION IS "DELETE"
 	        {
