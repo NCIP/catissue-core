@@ -22,7 +22,6 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
-import edu.wustl.common.bizlogic.AbstractBizLogic;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
@@ -34,6 +33,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.beans.NameValueBean;
+import edu.wustl.common.bizlogic.AbstractBizLogic;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.util.logger.Logger;
 
@@ -81,7 +81,7 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 		
 		// get list of Protocol title.
 		AbstractBizLogic bizLogic = BizLogicFactory.getBizLogic(Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID);
-
+		
 	    //populating protocolist bean.
 		String sourceObjectName = CollectionProtocol.class.getName();
 		String [] displayNameFields = {"title"};
@@ -129,57 +129,68 @@ public class SpecimenCollectionGroupAction  extends SecureAction
     	//Sets the activityStatusList attribute to be used in the Site Add/Edit Page.
         request.setAttribute(Constants.ACTIVITYSTATUSLIST, Constants.ACTIVITY_STATUS_VALUES);
         
+        
+        Logger.out.debug("CP ID in SCG Action======>"+specimenCollectionGroupForm.getCollectionProtocolId());
+        Logger.out.debug("Participant ID in SCG Action=====>"+specimenCollectionGroupForm.getParticipantId()+"  "+specimenCollectionGroupForm.getProtocolParticipantIdentifier());
+        
         // ---------- Add new
-		String reqPath = request.getParameter(Constants.REQ_PATH);
-		if (reqPath != null)
-			request.setAttribute(Constants.REQ_PATH, reqPath);
-		Logger.out.debug(" reqPath in SCGA : "+ reqPath  ); 
+//		String reqPath = request.getParameter(Constants.REQ_PATH);
+//		if (reqPath != null)
+//			request.setAttribute(Constants.REQ_PATH, reqPath);
+//		Logger.out.debug(" reqPath in SCGA : "+ reqPath  ); 
 
 		// -------called from Collection Protocol Registration start-------------------------------
-		String cprId =(String) request.getAttribute(Constants.COLLECTION_REGISTRATION_ID );
-		if(cprId != null)
-		{
-		    List collectionProtocolRegistrationList = bizLogic.retrieve(CollectionProtocolRegistration.class.getName(),
-					Constants.SYSTEM_IDENTIFIER,new Long(cprId));
-			if(!collectionProtocolRegistrationList.isEmpty()  )
+        if( (request.getAttribute(Constants.SUBMITTED_FOR) !=null) &&(request.getAttribute(Constants.SUBMITTED_FOR).equals("Default")))
+        {
+            Logger.out.debug("Populating CP and Participant in SCG ====  AddNew operation loop");
+            
+			Long cprId =new Long(specimenCollectionGroupForm.getCollectionProtocolId());
+			if(cprId != null)
 			{
-				Object  obj = collectionProtocolRegistrationList.get(0 ); 
-				CollectionProtocolRegistration cpr = (CollectionProtocolRegistration)obj;
-				
-				long cpID = cpr.getCollectionProtocol().getSystemIdentifier().longValue() ;
-				long pID = cpr.getParticipant().getSystemIdentifier().longValue()  ;
-				String ppID = cpr.getProtocolParticipantIdentifier();
-				
-				Logger.out.debug("cpID : "+ cpID + "   ||  pID : " + pID + "    || ppID : " + ppID );
-				
-				specimenCollectionGroupForm.setCollectionProtocolId(cpID );
-
-				//Populating the participants registered to a given protocol
-					loadPaticipants(cpID , bizLogic, request);
-					loadPaticipantNumberList(specimenCollectionGroupForm.getCollectionProtocolId(),bizLogic,request);
+			    List collectionProtocolRegistrationList = bizLogic.retrieve(CollectionProtocolRegistration.class.getName(),
+						Constants.SYSTEM_IDENTIFIER,cprId);
+				if(!collectionProtocolRegistrationList.isEmpty()  )
+				{
+					Object  obj = collectionProtocolRegistrationList.get(0 ); 
+					CollectionProtocolRegistration cpr = (CollectionProtocolRegistration)obj;
 					
-					String firstName = Utility.toString(cpr.getParticipant().getFirstName());;
-					String lastName = Utility.toString(cpr.getParticipant().getLastName());
-					String birthDate = Utility.toString(cpr.getParticipant().getBirthDate());
-					String ssn = Utility.toString(cpr.getParticipant().getSocialSecurityNumber());
-					if(firstName.trim().length()>0 || lastName.trim().length()>0 || birthDate.trim().length()>0 || ssn.trim().length()>0)
-					{
-						specimenCollectionGroupForm.setParticipantId(pID );
-						specimenCollectionGroupForm.setCheckedButton(1 ); 
-					}	
-				//Populating the protocol participants id registered to a given protocol
+					long cpID = cpr.getCollectionProtocol().getSystemIdentifier().longValue() ;
+					long pID = cpr.getParticipant().getSystemIdentifier().longValue()  ;
+					String ppID = cpr.getProtocolParticipantIdentifier();
 					
-					else if(cpr.getProtocolParticipantIdentifier() != null)
-					{
-						specimenCollectionGroupForm.setProtocolParticipantIdentifier(ppID );
-						specimenCollectionGroupForm.setCheckedButton(2 ); 
-					}
-
-					//Populating the Collection Protocol Events
-					loadCollectionProtocolEvent(specimenCollectionGroupForm.getCollectionProtocolId(),bizLogic,request);
-
+					Logger.out.debug("cpID : "+ cpID + "   ||  pID : " + pID + "    || ppID : " + ppID );
+					
+					specimenCollectionGroupForm.setCollectionProtocolId(cpID );
+	
+					//Populating the participants registered to a given protocol
+						loadPaticipants(cpID , bizLogic, request);
+						loadPaticipantNumberList(specimenCollectionGroupForm.getCollectionProtocolId(),bizLogic,request);
+						
+						String firstName = Utility.toString(cpr.getParticipant().getFirstName());;
+						String lastName = Utility.toString(cpr.getParticipant().getLastName());
+						String birthDate = Utility.toString(cpr.getParticipant().getBirthDate());
+						String ssn = Utility.toString(cpr.getParticipant().getSocialSecurityNumber());
+						if(firstName.trim().length()>0 || lastName.trim().length()>0 || birthDate.trim().length()>0 || ssn.trim().length()>0)
+						{
+							specimenCollectionGroupForm.setParticipantId(pID );
+							specimenCollectionGroupForm.setCheckedButton(1 ); 
+						}	
+					//Populating the protocol participants id registered to a given protocol
+						
+						else if(cpr.getProtocolParticipantIdentifier() != null)
+						{
+							specimenCollectionGroupForm.setProtocolParticipantIdentifier(ppID );
+							specimenCollectionGroupForm.setCheckedButton(2 ); 
+						}
+	
+						//Populating the Collection Protocol Events
+						loadCollectionProtocolEvent(specimenCollectionGroupForm.getCollectionProtocolId(),bizLogic,request);
+	
+				}
 			}
-		}
+			request.setAttribute(Constants.SUBMITTED_FOR, "Default");
+        }
+        
 		request.setAttribute(Constants.PAGEOF,pageOf);
 		Logger.out.debug("page of in Specimen coll grp action:"+request.getParameter(Constants.PAGEOF));
 		// -------called from Collection Protocol Registration end -------------------------------
