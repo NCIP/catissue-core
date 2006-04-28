@@ -4,6 +4,7 @@ package edu.wustl.catissuecore.action;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -114,5 +115,84 @@ public abstract class BaseAction extends Action
 			request.setAttribute(Constants.MENU_SELECTED ,strMenu);
 			Logger.out.debug(Constants.MENU_SELECTED + " " +strMenu +" set successfully");
 		}
+	}
+	
+	/**
+	 * This function checks call to the action and sets/removes required attributes if AddNew or ForwardTo activity is executing. 
+	 * @param request - HTTPServletRequest calling the action
+	 */
+	protected void checkAddNewOperation(HttpServletRequest request)
+	{
+	    String submittedFor = (String) request.getAttribute(Constants.SUBMITTED_FOR);
+	    Logger.out.debug("SubmittedFor in checkAddNewOperation()------------->"+submittedFor);
+        
+	    String submittedForParameter=(String)request.getParameter(Constants.SUBMITTED_FOR);
+	    
+	    //if AddNew loop is going on
+	    if( ( (submittedFor !=null)&& (submittedFor.equals("AddNew")) ) )
+        {
+            Logger.out.debug("<<<<<<<<<<<<<<  SubmittedFor is AddNew in checkAddNewOperation()   >>>>>>>>>>>>>");
+        
+            //Storing SUBMITTED_FOR attribute into Request
+            request.setAttribute(Constants.SUBMITTED_FOR, Constants.SUBMITTED_FOR_ADD_NEW);
+        }
+	    //if Page is submitted on same page
+	    else if( (submittedForParameter !=null)&& (submittedForParameter.equals("AddNew")) )
+	    {
+	        Logger.out.debug("<<<<<<<<<<<<<<  SubmittedFor parameter is AddNew in checkAddNewOperation()   >>>>>>>>>>>>>");
+	        if( (submittedFor !=null)&& (submittedFor.equals("Default")) )
+	        {
+	            //Storing SUBMITTED_FOR attribute into Request
+	            request.setAttribute(Constants.SUBMITTED_FOR, Constants.SUBMITTED_FOR_DEFAULT);
+	        }
+	        else
+	        {
+	            //Storing SUBMITTED_FOR attribute into Request
+	            request.setAttribute(Constants.SUBMITTED_FOR, Constants.SUBMITTED_FOR_ADD_NEW);
+	        }
+	    }
+	    //if ForwardTo request is submitted
+        else if((submittedFor !=null)&& (submittedFor.equals("ForwardTo")) ) 
+        {
+            Logger.out.debug("<<<<<<<<<<<<<<  SubmittedFor is ForwardTo in checkAddNewOperation()   >>>>>>>>>>>>>");
+            
+            request.setAttribute(Constants.SUBMITTED_FOR,Constants.SUBMITTED_FOR_FORWARD_TO);
+            
+            Logger.out.debug("<<<<<<<<<<<<  Checking for FormBeanStack to remove in checkAddNewOperation()   >>>>>>>>>>>>>");
+            HttpSession session = request.getSession();
+            if((session.getAttribute(Constants.FORM_BEAN_STACK)) !=null)
+            {
+               Logger.out.debug("Removing FormBeanStack from Session in checkAddNewOperation()............");
+               session.removeAttribute(Constants.FORM_BEAN_STACK); 
+            }
+        }
+        //if AddNew loop is over
+        else if( (submittedFor !=null)&& (submittedFor.equals("Default")) )
+        {
+            Logger.out.debug("<<<<<<<<<<<<<<  SubmittedFor is Default in checkAddNewOperation()   >>>>>>>>>>>>>");
+            
+            request.setAttribute(Constants.SUBMITTED_FOR,Constants.SUBMITTED_FOR_DEFAULT);
+            
+            Logger.out.debug("<<<<<<<<<<<<  Checking for FormBeanStack to remove in checkAddNewOperation()   >>>>>>>>>>>>>");
+            HttpSession session = request.getSession();
+            if((session.getAttribute(Constants.FORM_BEAN_STACK)) !=null)
+            {
+               Logger.out.debug("Removing FormBeanStack from Session in checkAddNewOperation()............");
+               session.removeAttribute(Constants.FORM_BEAN_STACK); 
+            }
+        }
+        //if AddNew or ForwardTo loop is broken...
+        else
+        {
+            Logger.out.debug("<<<<<<<<<<<<<<  SubmittedFor is NULL in checkAddNewOperation()   >>>>>>>>>>>>>");
+            
+            Logger.out.debug("<<<<<<<<<<<<  Checking for FormBeanStack to remove in checkAddNewOperation()   >>>>>>>>>>>>>");
+            HttpSession session = request.getSession();
+            if((session.getAttribute(Constants.FORM_BEAN_STACK)) !=null)
+            {
+               Logger.out.debug("Removing FormBeanStack from Session in checkAddNewOperation()............");
+               session.removeAttribute(Constants.FORM_BEAN_STACK); 
+            }
+        }	    
 	}
 }
