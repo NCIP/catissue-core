@@ -37,6 +37,7 @@
 	List specimenIdList = (List)request.getAttribute(Constants.SPECIMEN_ID_LIST);
 	DistributionForm formBean = (DistributionForm)request.getAttribute("distributionForm");
 	String operation = (String) request.getAttribute(Constants.OPERATION);
+	String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
     boolean readOnlyValue=false,readOnlyForAll=false;
     if (operation.equals(Constants.EDIT))
     {
@@ -227,7 +228,10 @@
 	
 	<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
 		<tr>
-			<td><html:hidden property="operation" value="<%=operation%>"/></td>
+			<td>
+				<html:hidden property="operation" value="<%=operation%>"/>
+				<html:hidden property="submittedFor" value="<%=submittedFor%>"/>
+			</td>
 			<td><html:hidden property="counter"/></td>
 			<td><html:hidden property="systemIdentifier" /></td>
 			<td><html:hidden property="idChange"/></td>
@@ -265,6 +269,10 @@
 				 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 					<html:options collection="<%=Constants.DISTRIBUTIONPROTOCOLLIST%>" labelProperty="name" property="value"/>
 				</html:select>
+				&nbsp;	
+				<html:link href="#" styleId="newDistributionProtocol" onclick="addNewAction('DistributionAddNew.do?addNewForwardTo=distributionProtocol&forwardTo=distribution&addNewFor=distributionProtocolId')">
+					<bean:message key="buttons.addNew" />
+				</html:link>
 			</td>	
 		</tr>
 
@@ -282,6 +290,10 @@
 				 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 					<html:options collection="<%=Constants.USERLIST%>" labelProperty="name" property="value"/>
 				</html:select>
+				&nbsp;
+				<html:link href="#" styleId="newUser" onclick="addNewAction('DistributionAddNew.do?addNewForwardTo=distributedBy&forwardTo=distributionDistributionProtocolId&addNewFor=userId')">
+					<bean:message key="buttons.addNew" />
+				</html:link>
 			</td>	
 		</tr>
 
@@ -325,11 +337,6 @@
 			</td>
 		</tr>
 		
-		<%
-			String urlToGo = "/Site.do?operation=add&pageOf=pageOfSite";
-			String onClickPath = "changeUrl(this,'"+appendingPath+"')";
-		%>
-		
 <%-- fromSite
 		<tr>
 			<td class="formRequiredNotice" width="5">*</td>
@@ -369,9 +376,9 @@
 					<html:options collection="<%=Constants.TO_SITE_LIST%>" labelProperty="name" property="value"/>
 				</html:select>
 				&nbsp;
-			<html:link page="<%=urlToGo%>" styleId="newSite" onclick="<%=onClickPath%>">
+				<html:link href="#" styleId="newSite" onclick="addNewAction('DistributionAddNew.do?addNewForwardTo=toSite&forwardTo=distribution&addNewFor=toSite')">
 					<bean:message key="buttons.addNew" />
- 				</html:link>
+				</html:link>
 			</td>
 		</tr>				
 		
