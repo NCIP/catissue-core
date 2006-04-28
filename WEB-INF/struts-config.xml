@@ -2130,11 +2130,13 @@ PUBLIC
         <action path="/ShoppingCart"
 			type="edu.wustl.catissuecore.action.ShoppingCartAction"
 			name="advanceSearchForm"
+			input="/ShoppingCart.do"
 			validate="true"
 			scope="request">
 			<forward name="shoppingCartAdd" path=".catissuecore.queryResultsSpreadsheetViewDef" />
 			<forward name="success" path=".catissuecore.shoppingCartDef" />
 			<forward name="failure" path=".catissuecore.shoppingCartDef" />
+			<forward name="duplicateSpecimen" path=".catissuecore.queryResultsSpreadsheetViewDef" />
 		</action>
 		
 		<action path="/ShoppingCartOperation"

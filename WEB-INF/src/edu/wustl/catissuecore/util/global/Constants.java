@@ -1176,4 +1176,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String CHILD_CONTAINER_TYPE = "childContainerType";
 	public static final String UNUSED = "Unused";
 	public static final String TYPE = "Type";
+	
+	//Mandar: 28-Apr-06 Bug 1129
+	public static final String DUPLICATE_SPECIMEN="duplicateSpecimen";
 }
