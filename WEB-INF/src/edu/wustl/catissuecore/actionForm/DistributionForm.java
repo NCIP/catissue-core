@@ -540,4 +540,25 @@ public class DistributionForm extends SpecimenEventParametersForm
     	
     	return className;
 	}
+	
+	/**
+     * This method sets Identifier of Objects inserted by AddNew activity in Form-Bean which initialized AddNew action
+     * @param formBeanId - FormBean ID of the object inserted
+     *  @param addObjectIdentifier - Identifier of the Object inserted 
+     */
+	public void setAddNewObjectIdentifier(String addNewFor, Long addObjectIdentifier)
+    {
+        if(addNewFor.equals("distributionProtocolId"))
+        {
+            setDistributionProtocolId(addObjectIdentifier.toString());
+        }
+        else if(addNewFor.equals("userId"))
+        {
+            setUserId(addObjectIdentifier.longValue());
+        }
+        else if(addNewFor.equals("toSite"))
+        {
+            setToSite(addObjectIdentifier.toString());
+        }
+    }
 }

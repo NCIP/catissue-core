@@ -1010,4 +1010,26 @@ public class UserForm extends AbstractActionForm
         
         return errors;
     }
+    
+    /**
+     * This method sets Identifier of Objects inserted by AddNew activity in Form-Bean which initialized AddNew action
+     * @param formBeanId - FormBean ID of the object inserted
+     *  @param addObjectIdentifier - Identifier of the Object inserted 
+     */
+    public void setAddNewObjectIdentifier(String addNewFor, Long addObjectIdentifier)
+    {
+        if(addNewFor.equals("institution"))
+        {
+            setInstitutionId(addObjectIdentifier.longValue());
+        }
+        else if(addNewFor.equals("department"))
+        {
+            setDepartmentId(addObjectIdentifier.longValue());
+        } 
+        else if(addNewFor.equals("cancerResearchGroup"))
+        {
+            setCancerResearchGroupId(addObjectIdentifier.longValue());
+        }
+    }
+    
 }

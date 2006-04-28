@@ -279,4 +279,21 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 		this.checkedButton = checkedButton;
 	}
 
+	/**
+     * This method sets Identifier of Objects inserted by AddNew activity in Form-Bean which initialized AddNew action
+     * @param formBeanId - FormBean ID of the object inserted
+     *  @param addObjectIdentifier - Identifier of the Object inserted 
+     */
+	public void setAddNewObjectIdentifier(String addNewFor, Long addObjectIdentifier)
+	 {
+	     if(addNewFor.equals("collectionProtocolId"))
+	     {
+	         setCollectionProtocolID(addObjectIdentifier.longValue());
+	     }
+	     else if(addNewFor.equals("participantId"))
+	     {
+	         setParticipantID(addObjectIdentifier.longValue());
+	         setCheckedButton(true);
+	     }
+	 }
 }

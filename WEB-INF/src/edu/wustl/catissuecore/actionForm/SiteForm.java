@@ -498,4 +498,18 @@ public class SiteForm extends AbstractActionForm
          }
          return errors;
       }
+     
+     /**
+      * This method sets Identifier of Objects inserted by AddNew activity in Form-Bean which initialized AddNew action
+      * @param formBeanId - FormBean ID of the object inserted
+      *  @param addObjectIdentifier - Identifier of the Object inserted 
+      */
+     public void setAddNewObjectIdentifier(String addNewFor, Long addObjectIdentifier)
+     {
+         if(addNewFor.equals("coordinator"))
+         {
+             setCoordinatorId(addObjectIdentifier.longValue());
+         }
+     }
+     
 }
