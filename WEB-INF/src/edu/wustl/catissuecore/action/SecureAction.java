@@ -42,6 +42,9 @@ public abstract class SecureAction extends BaseAction
     {
         if (isAuthorizedToExecute(request))
         {
+            //call to check AddNew operation
+            checkAddNewOperation(request);
+            
             return executeSecureAction(mapping, form, request, response);
         }
 
