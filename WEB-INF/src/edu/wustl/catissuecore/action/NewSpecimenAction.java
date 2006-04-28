@@ -108,11 +108,11 @@ public class NewSpecimenAction  extends SecureAction
  		}
         else
         {
-            specimenCollectionGroupId = request.getParameter(Constants.SPECIMEN_COLLECTION_GROUP_ID);
-            if(specimenCollectionGroupId != null)
-    		{
-            	specimenForm.setSpecimenCollectionGroupId( specimenCollectionGroupId); 
-    		}
+//            specimenCollectionGroupId = request.getParameter(Constants.SYSTEM_IDENTIFIER);
+//            if(specimenCollectionGroupId != null)
+//    		{
+//            	specimenForm.setSpecimenCollectionGroupId( specimenCollectionGroupId); 
+//    		}
         }
 
         // - set the specimen id

@@ -97,17 +97,17 @@ public class ParticipantAction extends SecureAction
         Logger.out.debug("pageOf :---------- "+ pageOf );
         
         // FOR ADD NEW LINK
-        String reqPath = request.getParameter(Constants.REQ_PATH);
-		request.setAttribute(Constants.REQ_PATH, reqPath);
-        
-        AbstractActionForm aForm = (AbstractActionForm)form;
-        
-        if(reqPath != null && aForm !=null)
-        {
-        	aForm.setRedirectTo(reqPath);
-        }
-        
-        Logger.out.debug("redirect :---------- "+ reqPath  );
+//        String reqPath = request.getParameter(Constants.REQ_PATH);
+//		request.setAttribute(Constants.REQ_PATH, reqPath);
+//        
+//        AbstractActionForm aForm = (AbstractActionForm)form;
+//        
+//        if(reqPath != null && aForm !=null)
+//        {
+//        	aForm.setRedirectTo(reqPath);
+//        }
+//        
+//        Logger.out.debug("redirect :---------- "+ reqPath  );
 
         return mapping.findForward(pageOf);
     }
