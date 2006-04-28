@@ -184,7 +184,7 @@ if(dataList != null && dataList.size() != 0)
 <!-- Mandar : 434 : for tooltip -->
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 </head>
-
+<html:errors />
 <table summary="" cellpadding="0" cellspacing="0" border="0" width="100%" height="100%">
 <html:form action="<%=Constants.SPREADSHEET_EXPORT_ACTION%>">
 
