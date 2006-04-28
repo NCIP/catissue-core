@@ -18,6 +18,7 @@
 	List pathologyStatusList = (List) request.getAttribute(Constants.PATHOLOGICAL_STATUS_LIST);
 	
     String operation = (String) request.getAttribute(Constants.OPERATION);
+	String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
     
     String formName, pageView=operation,editViewButton="buttons."+Constants.EDIT;;
 
@@ -269,7 +270,10 @@ function insRow(subdivtag,iCounter,blockCounter)
 		<!-- table 4 -->
 			<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
 				<tr>
-					<td><html:hidden property="operation" value="<%=operation%>" /></td>
+					<td>
+						<html:hidden property="operation" value="<%=operation%>" />
+						<html:hidden property="submittedFor" value="<%=submittedFor%>"/>
+					</td>
 					<td><html:hidden property="onSubmit"/></td>
 				</tr>
 				
@@ -314,15 +318,10 @@ function insRow(subdivtag,iCounter,blockCounter)
 								<html:options collection="<%=Constants.USERLIST%>" labelProperty="name" property="value"/>
 							</html:select>
 							&nbsp;
-							<%
-								String urlToGo = "/User.do?operation=add&pageOf=pageOfUserAdmin";
-								String appendingPath1 = appendingPath + "&"+Constants.ADD_NEW_USER_TO+"=PI";
-								String onClickPath = "changeUrl(this,'"+appendingPath1+"')";
-							%>
 							<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
-							<html:link page="<%=urlToGo%>" onclick="<%=onClickPath%>">
-		 						<bean:message key="buttons.addNew" />
-	 						</html:link>
+							<html:link href="#" styleId="newUser" onclick="addNewAction('CollectionProtocolAddNew.do?addNewForwardTo=principalInvestigator&forwardTo=collectionProtocol&addNewFor=principalInvestigator')">
+								<bean:message key="buttons.addNew" />
+							</html:link>
 	 						</logic:notEqual>
 						</td>
 					</tr>
@@ -343,16 +342,10 @@ function insRow(subdivtag,iCounter,blockCounter)
 								<html:options collection="<%=Constants.USERLIST%>" labelProperty="name" property="value"/>
 							</html:select>
 							&nbsp;
-							<%
-								String appendingPath2 = appendingPath + "&"+Constants.ADD_NEW_USER_TO+"=PC";
-								onClickPath = "changeUrl(this,'"+appendingPath2+"')";
-								System.out.println("onClickPath PC : " + onClickPath);
-							%>
-
 							<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
-							<html:link page="<%=urlToGo%>" onclick="<%=onClickPath%>">
-		 						<bean:message key="buttons.addNew" />
-	 						</html:link>
+							<html:link href="#" styleId="newUser" onclick="addNewAction('CollectionProtocolAddNew.do?addNewForwardTo=protocolCoordinator&forwardTo=collectionProtocol&addNewFor=protocolCoordinator')">
+								<bean:message key="buttons.addNew" />
+							</html:link>
 	 						</logic:notEqual>
 						</td>
 					</tr>

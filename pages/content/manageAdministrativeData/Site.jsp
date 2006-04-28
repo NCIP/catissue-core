@@ -9,6 +9,9 @@
 <%
         String operation = (String) request.getAttribute(Constants.OPERATION);
 		String pageOf = (String) request.getAttribute(Constants.PAGEOF);
+
+		String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
+
         String formName;
 
         boolean readOnlyValue;
@@ -23,22 +26,23 @@
             readOnlyValue = false;
         }
     
+//****************  Delete below commented code later  ***********************
     // ----------- add new    
-       	String reqPath = (String)request.getAttribute(Constants.REQ_PATH);
-		String appendingPath = "/Site.do?operation=add&pageOf=pageOfSite";
-		if (reqPath != null)
-			appendingPath = reqPath + "|/Site.do?operation=add&pageOf=pageOfSite";
+       	//String reqPath = (String)request.getAttribute(Constants.REQ_PATH);
+		//String appendingPath = "/Site.do?operation=add&pageOf=pageOfSite";
+		//if (reqPath != null)
+		//	appendingPath = reqPath + "|/Site.do?operation=add&pageOf=pageOfSite";
 	
-	   	if(!operation.equals("add") )
-	   	{
-	   		Object obj = request.getAttribute("siteForm");
-			if(obj != null && obj instanceof SiteForm)
-			{
-				SiteForm form = (SiteForm)obj;
-		   		appendingPath = "/SiteSearch.do?operation=search&pageOf=pageOfSite&systemIdentifier="+form.getSystemIdentifier() ;
-		   		System.out.println("---------- Site JSP appendingPath -------- : "+ appendingPath);
-		   	}
-	   	}
+	   	//if(!operation.equals("add") )
+	   	//{
+	   	//	Object obj = request.getAttribute("siteForm");
+		//	if(obj != null && obj instanceof SiteForm)
+		//	{
+		//		SiteForm form = (SiteForm)obj;
+		//  		appendingPath = "/SiteSearch.do?operation=search&pageOf=pageOfSite&systemIdentifier="+form.getSystemIdentifier() ;
+		//   		System.out.println("---------- Site JSP appendingPath -------- : "+ appendingPath);
+		//   	}
+	   	//}
 		
         
 %>
@@ -66,13 +70,14 @@
 		<td>
 			<table summary="" cellpadding="3" cellspacing="0" border="0">
 				<tr>
-					<td><html:hidden property="operation" value="<%=operation%>" /></td>
+					<td>
+						<html:hidden property="operation" value="<%=operation%>" />
+						<html:hidden property="submittedFor" value="<%=submittedFor%>"/>	
+					</td>
 				</tr>
 				
 				<tr>
-					<td><html:hidden property="systemIdentifier" />
-						<html:hidden property="redirectTo" value="<%=reqPath%>"/>
-					</td>
+					<td><html:hidden property="systemIdentifier" /></td>
 					<td><html:hidden property="onSubmit"/></td>
 				</tr>
 
@@ -138,13 +143,9 @@
 								<html:options collection="userList" labelProperty="name" property="value"/>
 							</html:select>
 							&nbsp;
-							<%
-								String urlToGo = "/User.do?operation=add&amp;pageOf=pageOfUserAdmin";
-								String onClickPath = "changeUrl(this,'"+appendingPath+"')";
-							%>
-							<html:link page="<%=urlToGo%>" styleId="newUser" onclick="<%=onClickPath%>">
-		 						<bean:message key="buttons.addNew" />
-	 						</html:link>
+							<html:link href="#" styleId="newCoordinator" onclick="addNewAction('SiteAddNew.do?addNewForwardTo=coordinator&forwardTo=site&addNewFor=coordinator')">
+								<bean:message key="buttons.addNew" />
+							</html:link>
 						</td>
 					</tr>
 		

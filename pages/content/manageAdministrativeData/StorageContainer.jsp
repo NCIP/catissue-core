@@ -11,6 +11,8 @@
         String operation = (String) request.getAttribute(Constants.OPERATION);
         String formName;
 
+		String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
+
         boolean readOnlyValue;
         if (operation.equals(Constants.EDIT))
         {
@@ -45,22 +47,23 @@
 			}
 		}
 		
-		//  --------- add new 
-		String reqPath = (String)request.getAttribute(Constants.REQ_PATH);
-		String appendingPath = "/StorageContainer.do?operation=add&pageOf=pageOfStorageContainer";
-		if (reqPath != null)
-			appendingPath = reqPath + "|/StorageContainer.do?operation=add&pageOf=pageOfStorageContainer";
+// ************ delete below code later  ********	
+	//  --------- add new 
+		//String reqPath = (String)request.getAttribute(Constants.REQ_PATH);
+		//String appendingPath = "/StorageContainer.do?operation=add&pageOf=pageOfStorageContainer";
+		//if (reqPath != null)
+		//	appendingPath = reqPath + "|/StorageContainer.do?operation=add&pageOf=pageOfStorageContainer";
 	
-	   	if(!operation.equals("add") )
-	   	{
-	   		Object obj1 = request.getAttribute("storageContainerForm");
-			if(obj1 != null && obj1 instanceof StorageContainerForm)
-			{
-				StorageContainerForm form1 = (StorageContainerForm)obj1;
-		   		appendingPath = "/StorageContainerSearch.do?operation=search&pageOf=pageOfStorageContainer&systemIdentifier="+form1.getSystemIdentifier() ;
-		   		System.out.println("---------- SC JSP appendingPath -------- : "+ appendingPath);
-		   	}
-	   	}
+//	   	if(!operation.equals("add") )
+	//   	{
+	  // 		Object obj1 = request.getAttribute("storageContainerForm");
+		//	if(obj1 != null && obj1 instanceof StorageContainerForm)
+			//{
+				//StorageContainerForm form1 = (StorageContainerForm)obj1;
+//		   		appendingPath = "/StorageContainerSearch.do?operation=search&pageOf=pageOfStorageContainer&systemIdentifier="+form1.getSystemIdentifier() ;
+	//	   		System.out.println("---------- SC JSP appendingPath -------- : "+ appendingPath);
+		//   	}
+//	   	}
 			
 		
 		
@@ -252,7 +255,10 @@ function insRow(subdivtag)
 		<td>
 			<table summary="" cellpadding="3" cellspacing="0" border="0" width="510">
 				<tr>
-					<td><html:hidden property="operation" value="<%=operation%>" /></td>
+					<td>
+						<html:hidden property="operation" value="<%=operation%>" />
+						<html:hidden property="submittedFor" value="<%=submittedFor%>"/>	
+					</td>
 				</tr>
 				<tr>
 					<td><html:hidden property="systemIdentifier" /></td>
@@ -297,13 +303,9 @@ function insRow(subdivtag)
 								<html:options collection="<%=Constants.STORAGETYPELIST%>" labelProperty="name" property="value"/>
 							</html:select>
 							&nbsp;
-							<%
-								String urlToGo = "/StorageType.do?operation=add&pageOf=pageOfStorageType";
-								String onClickPath = "changeUrl(this,'"+appendingPath+"')";
-							%>
-							<html:link page="<%=urlToGo%>" styleId="newStorageType" onclick="<%=onClickPath%>">
-		 						<bean:message key="buttons.addNew" />
-	 						</html:link>
+							<html:link href="#" styleId="newStorageType" onclick="addNewAction('StorageContainerAddNew.do?addNewForwardTo=storageType&forwardTo=storageContainer&addNewFor=storageType')">
+								<bean:message key="buttons.addNew" />
+							</html:link>
 						</td>
 					</tr>
 <!-- New row 1 -->
@@ -331,15 +333,10 @@ function insRow(subdivtag)
 								<html:options collection="<%=Constants.SITELIST%>" labelProperty="name" property="value"/>
 							</html:select>
 							</logic:equal>
-							
 							&nbsp;
-							<%
-								urlToGo = "/Site.do?operation=add&pageOf=pageOfSite";
-							%>
-							<html:link page="<%=urlToGo%>" styleId="newSite" onclick="<%=onClickPath%>">
+							<html:link href="#" styleId="newSite" onclick="addNewAction('StorageContainerAddNew.do?addNewForwardTo=site&forwardTo=storageContainer&addNewFor=site')">
 								<bean:message key="buttons.addNew" />
-	 						</html:link>
-						
+							</html:link>
 						</td>							
 					</tr>
 <!-- New row two -->					

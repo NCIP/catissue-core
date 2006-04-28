@@ -42,6 +42,7 @@
 <%
         String operation = (String) request.getAttribute(Constants.OPERATION);
         String reqPath = (String)request.getAttribute(Constants.REQ_PATH);  
+		String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
         String formName;
 
         boolean readOnlyValue;
@@ -86,7 +87,10 @@
 	
 	<table summary="" cellpadding="3" cellspacing="0" border="0">
 		<tr>
-			<td><html:hidden property="operation" value="<%=operation%>"/></td>
+			<td>
+				<html:hidden property="operation" value="<%=operation%>"/>
+				<html:hidden property="submittedFor" value="<%=submittedFor%>"/>
+			</td>
 		</tr>
 		
 		<tr>

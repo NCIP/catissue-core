@@ -17,7 +17,9 @@
 	List pathologyStatusList = (List) request.getAttribute(Constants.PATHOLOGICAL_STATUS_LIST);
 	
     String operation = (String) request.getAttribute(Constants.OPERATION);
-    String formName;
+	String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
+    
+	String formName;
 
 
     boolean readOnlyValue;
@@ -221,7 +223,10 @@ function insRow(subdivtag)
 		<!-- table 4 -->
 			<table summary="" cellpadding="3" cellspacing="0" border="0" width="96%">
 				<tr>
-					<td><html:hidden property="operation" value="<%=operation%>" /></td>
+					<td>
+						<html:hidden property="operation" value="<%=operation%>" />
+						<html:hidden property="submittedFor" value="<%=submittedFor%>"/>
+					</td>
 				</tr>
 				
 				<tr>
@@ -261,13 +266,9 @@ function insRow(subdivtag)
 								<html:options collection="<%=Constants.USERLIST%>" labelProperty="name" property="value"/>
 							</html:select>
 							&nbsp;
-							<%
-								String urlToGo = "/User.do?operation=add&pageOf=pageOfUserAdmin";
-								String onClickPath = "changeUrl(this,'"+appendingPath+"')";
-							%>
-							<html:link page="<%=urlToGo%>" styleId="newUser" onclick="<%=onClickPath%>">
+							<html:link href="#" styleId="newUser" onclick="addNewAction('DistributionProtocolAddNew.do?addNewForwardTo=principalInvestigator&forwardTo=distributionProtocol&addNewFor=principalInvestigator')">
 								<bean:message key="buttons.addNew" />
-	 						</html:link>
+							</html:link>
 						</td>
 					</tr>
 

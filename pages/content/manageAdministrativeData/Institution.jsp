@@ -6,7 +6,9 @@
 <%
         String operation = (String) request.getAttribute(Constants.OPERATION);
         String formName = Constants.INSTITUTION_ADD_ACTION;
-
+		
+		String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
+		
         boolean readOnlyValue;
         if (operation.equals(Constants.EDIT))
         {
@@ -34,7 +36,10 @@
 	
 	<table summary="" cellpadding="3" cellspacing="0" border="0">
 		<tr>
-			<td><html:hidden property="operation" value="<%=operation%>"/></td>
+			<td>
+				<html:hidden property="operation" value="<%=operation%>"/>
+				<html:hidden property="submittedFor" value="<%=submittedFor%>"/>
+			</td>
 		</tr>
 		
 		<tr>

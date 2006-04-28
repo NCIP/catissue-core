@@ -7,6 +7,8 @@
         String operation = (String) request.getAttribute(Constants.OPERATION);
         String formName,prevPage=null,nextPage=null;
 		
+		String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
+
 		String pageOf = (String)request.getAttribute(Constants.PAGEOF);   
 		
 		String reqPath = (String)request.getAttribute(Constants.REQ_PATH);  
@@ -138,6 +140,7 @@ function handleStatus(status)
 				<tr>
 					<td>
 						<html:hidden property="operation" value="<%=operation%>" />
+						<html:hidden property="submittedFor" value="<%=submittedFor%>"/>	
 					</td>
 				</tr>
 				
@@ -335,7 +338,12 @@ function handleStatus(status)
 							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 								<html:options collection="institutionList" labelProperty="name" property="value"/>
 							</html:select>
+							&nbsp;
+							<html:link href="#" styleId="newInstitution" onclick="addNewAction('UserAddNew.do?addNewForwardTo=institution&forwardTo=user&addNewFor=institution')">
+								<bean:message key="buttons.addNew" />
+							</html:link>
 						</td>
+
 					</tr>
 					
 					<tr>
@@ -351,6 +359,10 @@ function handleStatus(status)
 							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 								<html:options collection="departmentList" labelProperty="name" property="value"/>
 							</html:select>
+							&nbsp;
+							<html:link href="#" styleId="newDepartment" onclick="addNewAction('UserAddNew.do?addNewForwardTo=department&forwardTo=user&addNewFor=department')">
+								<bean:message key="buttons.addNew" />
+							</html:link>
 						</td>
 					</tr>
 					
@@ -367,6 +379,10 @@ function handleStatus(status)
 							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 								<html:options collection="cancerResearchGroupList" labelProperty="name" property="value"/>
 							</html:select>
+							&nbsp;
+							<html:link href="#" styleId="newCancerResearchGroup" onclick="addNewAction('UserAddNew.do?addNewForwardTo=cancerResearchGroup&forwardTo=user&addNewFor=cancerResearchGroup')">
+								<bean:message key="buttons.addNew" />
+							</html:link>
 						</td>
 					</tr>
 					</logic:notEqual>
