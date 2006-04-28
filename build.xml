@@ -126,7 +126,7 @@
 	<!-- Create the Applet JAR Ends-->
 	
 	<!-- Creates the WAR (Web Application Archive) file of the application -->
-	<target name="BuildAppWAR" depends="init,AppletJAR">
+	<target name="BuildAppWAR" depends="init">
 		<delete file="catissuecore.war"/>
 		<war destfile="catissuecore.war" webxml="WEB-INF/web.xml">
 			<fileset dir="${base.dir}">
