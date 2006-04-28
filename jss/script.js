@@ -155,3 +155,19 @@ function changeUrl(element,str)
 			if (win.opener == null)
 				win.opener = self;
 		}
+
+//This function submits JSP page to AddNewAction with passed action
+function addNewAction(action)
+{
+	var action = action;
+	
+	document.forms[0].action = action;
+
+	document.forms[0].submit();
+}
+
+//This function sets value of submittedFor attribute of JSP form object
+function setSubmittedFor(submittedFor)
+{
+	document.forms[0].submittedFor.value = submittedFor;
+}
