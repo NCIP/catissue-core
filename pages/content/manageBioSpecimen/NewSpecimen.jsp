@@ -11,29 +11,32 @@
 
 <%@ include file="/pages/content/common/BioSpecimenCommonCode.jsp" %>
 <%
-String bhIdArray [] = (String []) request.getAttribute(Constants.BIOHAZARD_ID_LIST);
-String bhNameArray [] = (String []) request.getAttribute(Constants.BIOHAZARD_NAME_LIST);
-String bhTypeArray [] = (String []) request.getAttribute(Constants.BIOHAZARD_TYPES_LIST);
-
-List biohazardList = (List)request.getAttribute(Constants.BIOHAZARD_TYPE_LIST);
-NewSpecimenForm form = (NewSpecimenForm)request.getAttribute("newSpecimenForm");
-
-String operation = (String)request.getAttribute(Constants.OPERATION);
-String reqPath = (String)request.getAttribute(Constants.REQ_PATH);
-String appendingPath = "/NewSpecimen.do?operation=add&pageOf=pageOfNewSpecimen";
-if (reqPath != null)
-	appendingPath = reqPath + "|/NewSpecimen.do?operation=add&pageOf=pageOfNewSpecimen";
-
-   	if(!operation.equals(Constants.ADD) )
-   	{
-   		if(form != null)
-   		{
-	   		appendingPath = "/NewSpecimenSearch.do?operation=search&pageOf=pageOfNewSpecimen&systemIdentifier="+form.getSystemIdentifier() ;
-	   		System.out.println("---------- NSP JSP -------- : "+ appendingPath);
+	String bhIdArray [] = (String []) request.getAttribute(Constants.BIOHAZARD_ID_LIST);
+	String bhNameArray [] = (String []) request.getAttribute(Constants.BIOHAZARD_NAME_LIST);
+	String bhTypeArray [] = (String []) request.getAttribute(Constants.BIOHAZARD_TYPES_LIST);
+	
+	List biohazardList = (List)request.getAttribute(Constants.BIOHAZARD_TYPE_LIST);
+	NewSpecimenForm form = (NewSpecimenForm)request.getAttribute("newSpecimenForm");
+	
+	String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
+	boolean disableForAddNew = false;
+	
+	String operation = (String)request.getAttribute(Constants.OPERATION);
+	String reqPath = (String)request.getAttribute(Constants.REQ_PATH);
+	String appendingPath = "/NewSpecimen.do?operation=add&pageOf=pageOfNewSpecimen";
+	if (reqPath != null)
+		appendingPath = reqPath + "|/NewSpecimen.do?operation=add&pageOf=pageOfNewSpecimen";
+	
+	   	if(!operation.equals(Constants.ADD) )
+	   	{
+	   		if(form != null)
+	   		{
+		   		appendingPath = "/NewSpecimenSearch.do?operation=search&pageOf=pageOfNewSpecimen&systemIdentifier="+form.getSystemIdentifier() ;
+		   		System.out.println("---------- NSP JSP -------- : "+ appendingPath);
+		   	}
 	   	}
-   	}
-
-Map map = form.getExternalIdentifier();
+	
+	Map map = form.getExternalIdentifier();
 %>
 <head>
 
@@ -292,6 +295,7 @@ Map map = form.getExternalIdentifier();
 				 <tr>
 				 	<td>
 						<html:hidden property="<%=Constants.OPERATION%>" value="<%=operation%>"/>
+						<html:hidden property="submittedFor" value="<%=submittedFor%>"/>
 					</td>
 					<td>
 						<html:hidden property="exIdCounter"/>
@@ -349,15 +353,11 @@ Map map = form.getExternalIdentifier();
 								<html:options collection="<%=Constants.SPECIMEN_COLLECTION_GROUP_LIST%>" 
 									labelProperty="name" property="value"/>		
 							</html:select>
-					<%
-						String onClickPath = "changeUrl(this,'"+appendingPath+"')";
-						String url = "/SpecimenCollectionGroup.do?operation=add&pageOf=pageOfSpecimenCollectionGroup";
-					%>
-
+							&nbsp;
 							<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
-							<html:link page="<%=url%>" styleId="newParticipant" onclick="<%=onClickPath%>">
-		 						<bean:message key="buttons.addNew" />
-	 						</html:link>					   
+							<html:link href="#" styleId="newUser" onclick="addNewAction('NewSpecimenAddNew.do?addNewForwardTo=specimenCollectionGroup&forwardTo=createNewSpecimen&addNewFor=specimenCollectionGroupId')">
+								<bean:message key="buttons.addNew" />
+							</html:link>					   
 	   						</logic:notEqual>
 			     <!--   		<a href="SpecimenCollectionGroup.do?operation=add&pageOf=pageOfSpecimenCollectionGroup">
 	      						<bean:message key="app.addNew" />
@@ -816,6 +816,11 @@ Map map = form.getExternalIdentifier();
 									<td>
 									<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
 										<table>
+											<logic:equal name="<%=Constants.SUBMITTED_FOR%>" value="AddNew">
+												<% 
+													disableForAddNew=true;
+												%>
+											</logic:equal>
 											<tr>
 												<td rowspan=2 class="formFieldNoBorders" nowrap>
 													<label for="proceedWith">
@@ -823,14 +828,14 @@ Map map = form.getExternalIdentifier();
 													</label>
 												</td>
 												<td nowrap class="formFieldNoBorders">
-													<html:radio styleClass="" property="forwardTo" value="<%=Constants.SPECIMEN_FORWARD_TO_LIST[0][1]%>" >
+													<html:radio styleClass="" property="forwardTo" value="<%=Constants.SPECIMEN_FORWARD_TO_LIST[0][1]%>" onclick="setSubmittedFor(<%=submittedFor%>)">
 						  				     	    <label for="<%=Constants.SPECIMEN_FORWARD_TO_LIST[0][0]%>">
 														<%=Constants.SPECIMEN_FORWARD_TO_LIST[0][0]%>
 													</label>
 											     	</html:radio>
 												</td>
 												<td nowrap class="formFieldNoBorders">
-													<html:radio styleClass=""  property="forwardTo" value="<%=Constants.SPECIMEN_FORWARD_TO_LIST[1][1]%>">
+													<html:radio styleClass=""  property="forwardTo" value="<%=Constants.SPECIMEN_FORWARD_TO_LIST[1][1]%>" disabled="<%=disableForAddNew%>" onclick="setSubmittedFor('ForwardTo')">
 						  				     	    <label for="<%=Constants.SPECIMEN_FORWARD_TO_LIST[1][0]%>">
 														<%=Constants.SPECIMEN_FORWARD_TO_LIST[1][0]%>
 													</label>
@@ -839,14 +844,14 @@ Map map = form.getExternalIdentifier();
 											</tr>
 											<tr>							
 												<td class="formFieldNoBorders" nowrap>
-													<html:radio styleClass=""  property="forwardTo" value="<%=Constants.SPECIMEN_FORWARD_TO_LIST[2][1]%>">
+													<html:radio styleClass=""  property="forwardTo" value="<%=Constants.SPECIMEN_FORWARD_TO_LIST[2][1]%>" disabled="<%=disableForAddNew%>" onclick="setSubmittedFor('ForwardTo')">
 						  				     	    <label for="<%=Constants.SPECIMEN_FORWARD_TO_LIST[2][0]%>">
 														<%=Constants.SPECIMEN_FORWARD_TO_LIST[2][0]%>
 													</label>
 											     	</html:radio>
 												</td>
 												<td class="formFieldNoBorders" nowrap>
-													<html:radio styleClass=""  property="forwardTo" value="<%=Constants.SPECIMEN_FORWARD_TO_LIST[3][1]%>">
+													<html:radio styleClass=""  property="forwardTo" value="<%=Constants.SPECIMEN_FORWARD_TO_LIST[3][1]%>" disabled="<%=disableForAddNew%>" onclick="setSubmittedFor('ForwardTo')">
 						  				     	    <label for="<%=Constants.SPECIMEN_FORWARD_TO_LIST[3][0]%>">
 														<%=Constants.SPECIMEN_FORWARD_TO_LIST[3][0]%>
 													</label>

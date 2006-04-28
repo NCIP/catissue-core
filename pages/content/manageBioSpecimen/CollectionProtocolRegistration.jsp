@@ -14,8 +14,10 @@
 			{
 				form = (CollectionProtocolRegistrationForm)obj;
 			}	
-			
-			  String operation = (String) request.getAttribute(Constants.OPERATION);
+				String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
+				boolean disableForAddNew = false;
+
+			    String operation = (String) request.getAttribute(Constants.OPERATION);
 		        String reqPath = (String)request.getAttribute(Constants.REQ_PATH);
 		        String appendingPath = "/CollectionProtocolRegistration.do?operation=add&pageOf=pageOfCollectionProtocolRegistration";
 				if (reqPath != null)
@@ -98,7 +100,10 @@
 		<td>
 			<table summary="" cellpadding="3" cellspacing="0" border="0">
 				<tr>
-					<td><html:hidden property="operation" value="<%=operation%>" /></td>
+					<td>
+						<html:hidden property="operation" value="<%=operation%>" />
+						<html:hidden property="submittedFor" value="<%=submittedFor%>"/>
+					</td>
 					<td><html:hidden property="systemIdentifier"/>
 					<td><html:hidden property="onSubmit"/></td>
 					<html:hidden property="redirectTo" value="<%=reqPath%>"/>
@@ -136,13 +141,10 @@
 						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 						    <html:options collection="<%=Constants.PROTOCOL_LIST%>" labelProperty="name" property="value"/>															
 					    </html:select>
-					<%
-						String url1 = "/CollectionProtocol.do?operation=add&pageOf=pageOfCollectionProtocol";
-						String onClickPath = "changeUrl(this,'"+appendingPath+"')";
-					%>
-				    	<html:link page="<%=url1%>" styleId="newSite" onclick="<%=onClickPath%>">
-	 						<bean:message key="buttons.addNew" />
- 						</html:link>					   
+						&nbsp;
+						<html:link href="#" styleId="newCollectionProtocol" onclick="addNewAction('ParticipantRegistrationAddNew.do?addNewForwardTo=collectionProtocol&forwardTo=participantRegistration&addNewFor=collectionProtocolId')">
+							<bean:message key="buttons.addNew" />
+						</html:link>					   
 					</td>
 				</tr>
 					
@@ -183,13 +185,10 @@
  							    <html:options collection="<%=Constants.PARTICIPANT_LIST%>" labelProperty="name" property="value"/>							
 							</html:select>
 						</logic:equal>
-					<%
-						String url = "/Participant.do?operation=add&pageOf=pageOfParticipant";
-					%>
-						
-							<html:link page="<%=url%>" styleId="newParticipant" onclick="<%=onClickPath%>">
-		 						<bean:message key="buttons.addNew" />
-	 						</html:link>					   
+						&nbsp;
+						<html:link href="#" styleId="newParticipant" onclick="addNewAction('ParticipantRegistrationAddNew.do?addNewForwardTo=participant&forwardTo=participantRegistration&addNewFor=participantId')">
+							<bean:message key="buttons.addNew" />
+						</html:link>				   
 					</td>
 				</tr>
 
@@ -260,6 +259,11 @@
 						<tr>
 							<td>
 								<table>
+									<logic:equal name="<%=Constants.SUBMITTED_FOR%>" value="AddNew">
+											<% 
+												disableForAddNew=true;
+											%>
+									</logic:equal>
 									<tr>
 										<td class="formFieldNoBorders" nowrap>
 											<label for="proceedWith">
@@ -267,14 +271,15 @@
 											</label>
 										</td>
 										<td nowrap class="formFieldNoBorders">
-											<html:radio styleClass="" property="forwardTo" value="<%=Constants.PROTOCOL_REGISTRATION_FORWARD_TO_LIST[0][1]%>" >
+											<html:radio styleClass="" property="forwardTo" value="<%=Constants.PROTOCOL_REGISTRATION_FORWARD_TO_LIST[0][1]%>" onclick="setSubmittedFor(<%=submittedFor%>)">
 				  				     	    <label for="<%=Constants.PROTOCOL_REGISTRATION_FORWARD_TO_LIST[0][0]%>">
 												<%=Constants.PROTOCOL_REGISTRATION_FORWARD_TO_LIST[0][0]%>
 											</label>
 									     	</html:radio>
 										</td>
 										<td nowrap class="formFieldNoBorders">
-											<html:radio styleClass=""  property="forwardTo" value="<%=Constants.PROTOCOL_REGISTRATION_FORWARD_TO_LIST[1][1]%>">
+											
+											<html:radio styleClass=""  property="forwardTo" value="<%=Constants.PROTOCOL_REGISTRATION_FORWARD_TO_LIST[1][1]%>" disabled="<%=disableForAddNew%>" onclick="setSubmittedFor('ForwardTo')">
 				  				     	    <label for="<%=Constants.PROTOCOL_REGISTRATION_FORWARD_TO_LIST[1][0]%>">
 												<%=Constants.PROTOCOL_REGISTRATION_FORWARD_TO_LIST[1][0]%>
 											</label>

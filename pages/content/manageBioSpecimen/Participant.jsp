@@ -14,6 +14,9 @@
 <% 
 		List siteList = (List)request.getAttribute(Constants.SITELIST);
 		
+		String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
+		boolean disableForAddNew = false;
+
 		String operation = (String)request.getAttribute(Constants.OPERATION);
 		String formName, pageView=operation,editViewButton="buttons."+Constants.EDIT;
 		boolean readOnlyValue=false,readOnlyForAll=false;
@@ -200,7 +203,10 @@
 				<td>
 			 	 <table summary="" cellpadding="3" cellspacing="0" border="0">
 				 <tr>
-					<td><html:hidden property="<%=Constants.OPERATION%>" value="<%=operation%>"/></td>
+					<td>
+						<html:hidden property="<%=Constants.OPERATION%>" value="<%=operation%>"/>
+						<html:hidden property="submittedFor" value="<%=submittedFor%>"/>
+					</td>
 					<td><html:hidden property="counter"/></td>
 					<td><html:hidden property="onSubmit"/></td>
 					<td><html:hidden property="systemIdentifier" /><html:hidden property="redirectTo"/></td>
@@ -446,6 +452,11 @@
 				 			%>
 							<!-- action buttons begins -->
 							<table cellpadding="4" cellspacing="0" border="0">
+								<logic:equal name="<%=Constants.SUBMITTED_FOR%>" value="AddNew">
+									<% 
+										disableForAddNew=true;
+									%>
+								</logic:equal>
 								<tr>
 									<td rowspan=2 class="formFieldNoBorders" nowrap>
 										<label for="proceedWith">
@@ -455,7 +466,7 @@
 
 								<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
 						   			<td nowrap class="formFieldNoBorders">
-										<html:radio styleClass="" property="forwardTo" value="<%=Constants.PARTICIPANT_FORWARD_TO_LIST[0][1]%>">
+										<html:radio styleClass="" property="forwardTo" value="<%=Constants.PARTICIPANT_FORWARD_TO_LIST[0][1]%>" onclick="setSubmittedFor(<%=submittedFor%>)">
 										<label for="<%=Constants.PARTICIPANT_FORWARD_TO_LIST[0][0]%>">
 											<%=Constants.PARTICIPANT_FORWARD_TO_LIST[0][0]%>
 										</label>
@@ -484,7 +495,7 @@
 								<tr>
 									<td nowrap class="formFieldNoBorders">
 									<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
-										<html:radio styleClass=""  property="forwardTo" value="<%=Constants.PARTICIPANT_FORWARD_TO_LIST[1][1]%>">
+										<html:radio styleClass=""  property="forwardTo" value="<%=Constants.PARTICIPANT_FORWARD_TO_LIST[1][1]%>" disabled="<%=disableForAddNew%>" onclick="setSubmittedFor('ForwardTo')">
 										<label for="<%=Constants.PARTICIPANT_FORWARD_TO_LIST[1][0]%>">
 											<%=Constants.PARTICIPANT_FORWARD_TO_LIST[1][0]%>
 										</label>

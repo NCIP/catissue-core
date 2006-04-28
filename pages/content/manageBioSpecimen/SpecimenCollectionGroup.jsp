@@ -11,6 +11,10 @@
 		String operation = (String)request.getAttribute(Constants.OPERATION);
 		String reqPath = (String)request.getAttribute(Constants.REQ_PATH);
 		String pageOf = (String)request.getAttribute(Constants.PAGEOF);
+
+		String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
+		boolean disableForAddNew = false;	
+
 		String appendingPath = "/SpecimenCollectionGroup.do?operation=add&pageOf=pageOfSpecimenCollectionGroup";
 		if (reqPath != null)
 			appendingPath = reqPath + "|/SpecimenCollectionGroup.do?operation=add&pageOf=pageOfSpecimenCollectionGroup";
@@ -102,7 +106,10 @@
 	    <tr><td>
 			<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
 				 <tr>
-					<td><html:hidden property="<%=Constants.OPERATION%>" value="<%=operation%>"/></td>
+					<td>
+						<html:hidden property="<%=Constants.OPERATION%>" value="<%=operation%>"/>
+						<html:hidden property="submittedFor" value="<%=submittedFor%>"/>
+					</td>
 				 </tr>
 				 
 				 <tr>
@@ -146,6 +153,10 @@
 				     	 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 							<html:options collection="<%=Constants.PROTOCOL_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
+						&nbsp;
+						<html:link href="#" styleId="newCollectionProtocol" onclick="addNewAction('SpecimenCollectionGroupAddNew.do?addNewForwardTo=collectionProtocol&forwardTo=specimenCollectionGroup&addNewFor=collectionProtocol')">
+							<bean:message key="buttons.addNew" />
+						</html:link>
 		        	</td>
 				 </tr>
 
@@ -163,6 +174,10 @@
 				     	 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
   							<html:options collection="<%=Constants.SITELIST%>" labelProperty="name" property="value"/>
 						</html:select>
+						&nbsp;
+						<html:link href="#" styleId="newSite" onclick="addNewAction('SpecimenCollectionGroupAddNew.do?addNewForwardTo=site&forwardTo=specimenCollectionGroup&addNewFor=site')">
+							<bean:message key="buttons.addNew" />
+						</html:link>
 		        	</td>
 				 </tr>
 				 
@@ -194,15 +209,12 @@
                          	     <html:options collection="<%=Constants.PARTICIPANT_LIST%>" labelProperty="name" property="value"/>				     	
   						     </html:select>
   						</logic:equal>
-						<%
-							//String url = "/Participant.do?operation=add&pageOf=pageOfParticipant";
-							String url = "/CollectionProtocolRegistration.do?operation=add&pageOf=pageOfCollectionProtocolRegistration";
-							String onClickPath = "changeUrl(this,'"+appendingPath+"')";
-						%>
+						
+						&nbsp;
 						<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
-			  		    <html:link page="<%=url%>" styleId="newParticipant" onclick="<%=onClickPath%>">
-	 						<bean:message key="buttons.addNew" />
- 						</html:link>
+						<html:link href="#" styleId="newParticipant" onclick="addNewAction('SpecimenCollectionGroupAddNew.do?addNewForwardTo=participantRegistration&forwardTo=specimenCollectionGroup&addNewFor=participant')">
+							<bean:message key="buttons.addNew" />
+						</html:link>
  						</logic:notEqual>
 					</td>
   					
@@ -239,14 +251,12 @@
                          		<html:options collection="<%=Constants.PROTOCOL_PARTICIPANT_NUMBER_LIST%>" labelProperty="name" property="value"/>				     					     	
 							</html:select>
  						</logic:equal>
-
-						<%
-							String url1 = "/CollectionProtocolRegistration.do?operation=add&pageOf=pageOfCollectionProtocolRegistration";
-						%>
+					
+						&nbsp;
 						<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
- 						<html:link page="<%=url1%>" styleId="newParticpantRegistration" onclick="<%=onClickPath%>">
-		 						<bean:message key="buttons.addNew" />
-	 					</html:link>
+ 						<html:link href="#" styleId="newParticipant" onclick="addNewAction('SpecimenCollectionGroupAddNew.do?addNewForwardTo=participantRegistration&forwardTo=specimenCollectionGroup&addNewFor=protocolParticipantIdentifier')">
+							<bean:message key="buttons.addNew" />
+						</html:link>
 	 					</logic:notEqual>
 		        	</td>
 				 </tr>
@@ -373,6 +383,11 @@
 								<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
 									<td>
 										<table>
+											<logic:equal name="<%=Constants.SUBMITTED_FOR%>" value="AddNew">
+												<% 
+													disableForAddNew=true;
+												%>
+											</logic:equal>
 											<tr>
 												<td class="formFieldNoBorders" nowrap>
 													<label for="proceedWith">
@@ -380,14 +395,14 @@
 													</label>
 												</td>
 												<td nowrap class="formFieldNoBorders">
-													<html:radio styleClass="" property="forwardTo" value="<%=Constants.SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST[0][1]%>" >
+													<html:radio styleClass="" property="forwardTo" value="<%=Constants.SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST[0][1]%>" onclick="setSubmittedFor(<%=submittedFor%>)">
 						  				     	    <label for="<%=Constants.SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST[0][0]%>">
 														<%=Constants.SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST[0][0]%>
 													</label>
 											     	</html:radio>
 												</td>
 												<td nowrap class="formFieldNoBorders">
-													<html:radio styleClass=""  property="forwardTo" value="<%=Constants.SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST[1][1]%>">
+													<html:radio styleClass=""  property="forwardTo" value="<%=Constants.SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST[1][1]%>" disabled="<%=disableForAddNew%>" onclick="setSubmittedFor('ForwardTo')">
 						  				     	    <label for="<%=Constants.SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST[1][0]%>">
 														<%=Constants.SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST[1][0]%>
 													</label>
