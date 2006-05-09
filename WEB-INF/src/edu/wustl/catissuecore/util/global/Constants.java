@@ -19,14 +19,11 @@ package edu.wustl.catissuecore.util.global;
 public class Constants extends edu.wustl.common.util.global.Constants
 {	
  
-    public static final String SESSION_DATA = "sessionData";
-    
     public static final String AND_JOIN_CONDITION = "AND";
 	public static final String OR_JOIN_CONDITION = "OR";
 	//Sri: Changed the format for displaying in Specimen Event list (#463)
 	public static final String TIMESTAMP_PATTERN = "MM-dd-yyyy HH:mm";
 	public static final String DATE_PATTERN_YYYY_MM_DD = "yyyy-MM-dd";
-	public static final String TIME_PATTERN_HH_MM_SS = "HH:mm:ss";
 	
 	// Mandar: Used for Date Validations in Validator Class
 	public static final String DATE_SEPARATOR = "-";
@@ -42,25 +39,21 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String MYSQL_STR_TO_DATE_FUNCTION = "STR_TO_DATE";*/
 	
 	public static final String VIEW = "view";
-	public static final String SEARCH = "search";
 	public static final String DELETE = "delete";
 	public static final String EXPORT = "export";
 	public static final String SHOPPING_CART_ADD = "shoppingCartAdd";
 	public static final String SHOPPING_CART_DELETE = "shoppingCartDelete";
 	public static final String SHOPPING_CART_EXPORT = "shoppingCartExport";
 	public static final String NEWUSERFORM = "newUserForm";
-	public static final String ACCESS_DENIED = "access_denied";
 	public static final String REDIRECT_TO_SPECIMEN = "specimenRedirect";
 	public static final String CALLED_FROM = "calledFrom";
 	
 	//Constants required for Forgot Password
 	public static final String FORGOT_PASSWORD = "forgotpassword";
 	
-	public static final String IDENTIFIER = "IDENTIFIER";
 	public static final String LOGINNAME = "loginName";
 	public static final String LASTNAME = "lastName";
 	public static final String FIRSTNAME = "firstName";
-	public static final String UPPER = "UPPER";
     public static final String ERROR_DETAIL = "Error Detail";
 	public static final String INSTITUTION = "institution";
 	public static final String EMAIL = "email";
@@ -140,17 +133,8 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String SPECIMEN_CLASS_ID_LIST = "specimenClassIdList";
 	public static final String SPECIMEN_TYPE_MAP = "specimenTypeMap";
 	//Simple Query Interface Lists
-	public static final String OBJECT_NAME_LIST = "objectNameList";
 	public static final String OBJECT_COMPLETE_NAME_LIST = "objectCompleteNameList";
 	public static final String SIMPLE_QUERY_INTERFACE_TITLE = "simpleQueryInterfaceTitle";
-    
-	public static final String ATTRIBUTE_NAME_LIST = "attributeNameList";
-	public static final String ATTRIBUTE_CONDITION_LIST = "attributeConditionList";
-	
-	//Constants for Storage Container.
-	public static final String STORAGE_CONTAINER_TYPE = "storageType";
-	public static final String STORAGE_CONTAINER_TO_BE_SELECTED = "storageToBeSelected";
-	public static final String STORAGE_CONTAINER_POSITION = "position";
 	
 	public static final String STORAGE_CONTAINER_GRID_OBJECT = "storageContainerGridObject";
 	public static final String STORAGE_CONTAINER_CHILDREN_STATUS = "storageContainerChildrenStatus";
@@ -220,8 +204,6 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String STORAGE_CONTAINER_ADD_ACTION = "StorageContainerAdd.do";
 	public static final String STORAGE_CONTAINER_EDIT_ACTION = "StorageContainerEdit.do";
 	
-	public static final String SHOW_STORAGE_CONTAINER_GRID_VIEW_ACTION = "ShowStorageGridView.do";
-	
 	//Constants required in Site.jsp Page
 	public static final String SITE_SEARCH_ACTION = "SiteSearch.do";
 	public static final String SITE_ADD_ACTION = "SiteAdd.do";
@@ -270,8 +252,6 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	//Query Results view Actions
 	public static final String TREE_VIEW_ACTION = "TreeView.do";
 	public static final String DATA_VIEW_FRAME_ACTION = "SpreadsheetView.do";
-	public static final String SIMPLE_QUERY_INTERFACE_ACTION = "/SimpleQueryInterface.do";
-	public static final String SEARCH_OBJECT_ACTION = "/SearchObject.do";
 	public static final String SIMPLE_QUERY_INTERFACE_URL = "SimpleQueryInterface.do?pageOf=pageOfSimpleQueryInterface&menuSelected=17";
 	
 	//New Specimen Data Actions.
@@ -384,28 +364,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	        
 	};
 	
-	public static final String TABLE_DATA_TABLE_NAME = "CATISSUE_QUERY_TABLE_DATA";
-	public static final String TABLE_DISPLAY_NAME_COLUMN = "DISPLAY_NAME";
-	public static final String TABLE_ALIAS_NAME_COLUMN = "ALIAS_NAME";
-	public static final String TABLE_FOR_SQI_COLUMN = "FOR_SQI";
-	public static final String TABLE_ID_COLUMN = "TABLE_ID";
 	public static final String TABLE_NAME_COLUMN = "TABLE_NAME";
-	
-	
-	//Frame names in Query Results page.
-	public static final String DATA_VIEW_FRAME = "myframe1";
-	public static final String APPLET_VIEW_FRAME = "appletViewFrame";
-	
-	//NodeSelectionlistener - Query Results Tree node selection (For spreadsheet or individual view).
-	public static final String DATA_VIEW_ACTION = "DataView.do?nodeName=";
-	public static final String VIEW_TYPE = "viewType";
-	
-	//TissueSite Tree View Constants.
-	public static final String PROPERTY_NAME = "propertyName";
-	
-	//Constants for type of query results view.
-	public static final String SPREADSHEET_VIEW = "Spreadsheet View";
-	public static final String OBJECT_VIEW = "Edit View";
 	
 	//Spreadsheet view Constants in DataViewAction.
 	public static final String PARTICIPANT = "Participant";
@@ -420,18 +379,6 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String QUERY_SPECIMEN_EDIT_ACTION = "QuerySpecimenEdit.do";
 	//public static final String QUERY_ACCESSION_SEARCH_ACTION = "QueryAccessionSearch.do?systemIdentifier=";
 	
-	//Individual view Constants in DataViewAction.
-	public static final String SPREADSHEET_COLUMN_LIST = "spreadsheetColumnList";
-	public static final String SPREADSHEET_DATA_LIST = "spreadsheetDataList";
-	public static final String SELECT_COLUMN_LIST = "selectColumnList";
-	public static final String CONFIGURED_SELECT_COLUMN_LIST = "configuredSelectColumnList";
-	public static final String CONFIGURED_COLUMN_DISPLAY_NAMES = "configuredColumnDisplayNames";
-	public static final String CONFIGURED_COLUMN_NAMES = "configuredColumnNames";
-	public static final String SELECTED_NODE = "selectedNode";
-	
-	//Tree Data Action
-	public static final String TREE_DATA_ACTION = "Data.do";
-	
 	public static final String SPECIMEN = "Specimen";
 	public static final String SEGMENT = "Segment";
 	public static final String SAMPLE = "Sample";
@@ -442,17 +389,11 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String SEGMENT_ID_COLUMN = "SEGMENT_ID";
 	public static final String SAMPLE_ID_COLUMN = "SAMPLE_ID";
 	
-	//SimpleSearchAction
-	public static final String SIMPLE_QUERY_NO_RESULTS = "noResults";
-	public static final String SIMPLE_QUERY_SINGLE_RESULT = "singleResult";
-	
 	//For getting the tables for Simple Query and Fcon Query.
-	public static final int SIMPLE_QUERY_TABLES = 1;
 	public static final int ADVANCE_QUERY_TABLES = 2;
 	
 	//Identifiers for various Form beans
 	public static final int USER_FORM_ID = 1;
-	public static final int PARTICIPANT_FORM_ID = 2;
 	public static final int ACCESSION_FORM_ID = 3;
 	public static final int REPORTED_PROBLEM_FORM_ID = 4;
 	public static final int INSTITUTION_FORM_ID = 5;
@@ -469,10 +410,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final int FROZEN_EVENT_PARAMETERS_FORM_ID = 16;
 	public static final int CHECKIN_CHECKOUT_EVENT_PARAMETERS_FORM_ID = 17;
 	public static final int RECEIVED_EVENT_PARAMETERS_FORM_ID = 18;
-	public static final int COLLECTION_PROTOCOL_REGISTRATION_FORM_ID = 19;
-	public static final int SPECIMEN_COLLECTION_GROUP_FORM_ID = 20;
 	public static final int FLUID_SPECIMEN_REVIEW_EVENT_PARAMETERS_FORM_ID = 21;
-	public static final int NEW_SPECIMEN_FORM_ID = 22;
 	public static final int CELL_SPECIMEN_REVIEW_PARAMETERS_FORM_ID =23;
 	public static final int TISSUE_SPECIMEN_REVIEW_EVENT_PARAMETERS_FORM_ID = 24;
 	public static final int DISPOSAL_EVENT_PARAMETERS_FORM_ID = 25;
@@ -490,14 +428,13 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final int DISTRIBUTION_FORM_ID = 37;
 	public static final int SPECIMEN_EVENT_PARAMETERS_FORM_ID = 38;
 	public static final int SHOPPING_CART_FORM_ID = 39;
-	public static final int SIMPLE_QUERY_INTERFACE_ID = 40;
 	public static final int CONFIGURE_RESULT_VIEW_ID = 41;
 	public static final int ADVANCE_QUERY_INTERFACE_ID = 42;
 	public static final int QUERY_INTERFACE_ID = 43;
 	
 	//Misc
 	public static final String SEPARATOR = " : ";
-		
+	
 	//Status message key Constants
 	public static final String STATUS_MESSAGE_KEY = "statusMessageKey";
 	
@@ -531,21 +468,8 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String APPROVE_USER_EMAIL_SUBJECT = "Your membership status in caTISSUE Core.";
 	
 	//Edit Object Constants.
-	public static final String TABLE_ALIAS_NAME = "aliasName"; 
-	public static final String FIELD_TYPE_VARCHAR = "varchar";
-	public static final String FIELD_TYPE_BIGINT = "bigint";
-	public static final String FIELD_TYPE_DATE = "date";
-	public static final String FIELD_TYPE_TIMESTAMP_TIME = "timestamptime";
-	public static final String FIELD_TYPE_TIMESTAMP_DATE = "timestampdate";
-	public static final String FIELD_TYPE_TEXT = "text";
-	public static final String FIELD_TYPE_TINY_INT = "tinyint";
-	
-	public static final String CONDITION_VALUE_YES = "yes";
-	public static final String TINY_INT_VALUE_ONE = "1";
-	public static final String TINY_INT_VALUE_ZERO = "0";
 	
 	//Query Interface Results View Constants
-	public static final String PAGEOF = "pageOf";
 	public static final String QUERY = "query";
 	public static final String PAGEOF_APPROVE_USER = "pageOfApproveUser";
 	public static final String PAGEOF_SIGNUP = "pageOfSignUp";
@@ -554,20 +478,8 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String PAGEOF_USER_PROFILE = "pageOfUserProfile";
 	public static final String PAGEOF_CHANGE_PASSWORD = "pageOfChangePassword";
 	
-	//For Tree Applet
-	public static final String PAGEOF_QUERY_RESULTS = "pageOfQueryResults";
-	public static final String PAGEOF_STORAGE_LOCATION = "pageOfStorageLocation";
-	public static final String PAGEOF_SPECIMEN = "pageOfSpecimen";
-	public static final String PAGEOF_TISSUE_SITE = "pageOfTissueSite";
-	
-	public static final String CDE_NAME = "cdeName";
-
 	//For Simple Query Interface and Edit.
-	public static final String PAGEOF_SIMPLE_QUERY_INTERFACE = "pageOfSimpleQueryInterface";
 	public static final String PAGEOF_EDIT_OBJECT = "pageOfEditObject";
-
-	//Query results view temporary table name.
-	public static final String QUERY_RESULTS_TABLE = "CATISSUE_QUERY_RESULTS";
 	
 	//Query results view temporary table columns.
 	public static final String QUERY_RESULTS_PARTICIPANT_ID = "PARTICIPANT_ID";
@@ -593,9 +505,8 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String EDITABLE = "editable";
 	
 	//URL paths for Applet in TreeView.jsp
-	public static final String QUERY_TREE_APPLET = "QueryTree.class";
+	public static final String QUERY_TREE_APPLET = "edu/wustl/common/treeApplet/TreeApplet.class";
 	public static final String APPLET_CODEBASE = "Applet";
-	public static final String TREE_APPLET_NAME = "treeApplet";
 	
 	//Shopping Cart
 	public static final String SHOPPING_CART = "shoppingCart";
@@ -607,14 +518,6 @@ public class Constants extends edu.wustl.common.util.global.Constants
 //	        SELECT_OPTION,"Sex","male","female",
 //	        "Tissue","kidney","Left kidney","Right kidney"
 //	};
-	
-	public static final String[] ATTRIBUTE_NAME_ARRAY = {
-	        SELECT_OPTION
-	};
-	
-	public static final String[] ATTRIBUTE_CONDITION_ARRAY = {
-	        "=","<",">"
-	};
 	
 	public static final String [] RECEIVEDMODEARRAY = {
 	        SELECT_OPTION,
@@ -859,8 +762,6 @@ public class Constants extends edu.wustl.common.util.global.Constants
 			"FIXATION 3"
 	};
 	
-		
-	public static final String CDE_NAME_TISSUE_SITE = "Tissue Site";
 	public static final String CDE_NAME_CLINICAL_STATUS = "Clinical Status";
 	public static final String CDE_NAME_GENDER = "Gender";
 	public static final String CDE_NAME_GENOTYPE = "Genotype";
@@ -925,10 +826,6 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	
 	public static final String [] SHOPPING_CART_COLUMNS = {"","Identifier", 
 													"Type", "Subtype", "Tissue Site", "Tissue Side", "Pathological Status"}; 
-	
-	
-	public static final String ACCESS_DENIED_ADMIN = "access_denied_admin";
-	public static final String ACCESS_DENIED_BIOSPECIMEN = "access_denied_biospecimen";
 	
 	//Constants required in AssignPrivileges.jsp
 	public static final String ASSIGN = "assignOperation";
@@ -1014,10 +911,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String SIMPLE_SEARCH_AFTER_CONFIGURE_ACTION = "SimpleSearchAfterConfigure.do";
 	public static final String PAGEOF_DISTRIBUTION = "pageOfDistribution";
 	public static final String RESULT_VIEW_VECTOR = "resultViewVector";
-	public static final String SIMPLE_QUERY_MAP = "simpleQueryMap";
-	public static final String SIMPLE_QUERY_ALIAS_NAME = "simpleQueryAliasName";
 	public static final String SIMPLE_QUERY_COUNTER = "simpleQueryCount";
-	public static final String IDENTIFIER_FIELD_INDEX = "identifierFieldIndex";
 	
 	public static final String UNDEFINED = "Undefined";
 	public static final String UNKNOWN = "Unknown";
@@ -1068,7 +962,6 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String MENU_SPECIMEN_COLLECTION_GROUP ="Specimen Collection Group";
 	public static final String MENU_DISTRIBUTION_PROTOCOL = "Distribution Protocol";
 	
-	public static final String COLLECTION_PROTOCOL ="CollectionProtocol";
 	public static final String SPECIMEN_COLLECTION_GROUP ="SpecimenCollectionGroup";
 	public static final String DISTRIBUTION = "Distribution";
 	public static final String DISTRIBUTION_PROTOCOL = "DistributionProtocol";
@@ -1079,14 +972,10 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String C = "C";
 	public static final String S = "S";
 	public static final String P = "P";
-	public static final String ADVANCED_CONDITION_NODES_MAP = "advancedConditionNodesMap";
-	public static final String TREE_VECTOR = "treeVector";
-	public static final String ADVANCED_CONDITIONS_ROOT = "advancedCondtionsRoot";
 	public static final String ADVANCED_CONDITIONS_QUERY_VIEW = "advancedCondtionsQueryView";
 	public static final String ADVANCED_SEARCH_ACTION = "AdvanceSearch.do";
 	public static final String ADVANCED_SEARCH_RESULTS_ACTION = "AdvanceSearchResults.do";
 	public static final String CONFIGURE_ADVANCED_SEARCH_RESULTS_ACTION = "ConfigureAdvanceSearchResults.do";
-	public static final String PAGEOF_ADVANCE_QUERY_INTERFACE = "pageOfAdvanceQueryInterface";
 	public static final String ADVANCED_QUERY_ADD = "Add";
 	public static final String ADVANCED_QUERY_EDIT = "Edit";
 	public static final String ADVANCED_QUERY_DELETE = "Delete";
@@ -1096,10 +985,6 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String EVENT_CONDITIONS = "eventConditions";
 	
 	public static final String IDENTIFIER_COLUMN_ID_MAP = "identifierColumnIdsMap";
-	public static final String COLUMN_ID_MAP = "columnIdsMap";
-	public static final String PARENT_SPECIMEN_ID_COLUMN = "PARENT_SPECIMEN_ID";
-	public static final String COLUMN = "Column";
-	public static final String COLUMN_DISPLAY_NAMES = "columnDisplayNames";
 	public static final String PAGEOF_PARTICIPANT_QUERY_EDIT= "pageOfParticipantQueryEdit";
 	public static final String PAGEOF_COLLECTION_PROTOCOL_QUERY_EDIT= "pageOfCollectionProtocolQueryEdit";
 	public static final String PAGEOF_SPECIMEN_COLLECTION_GROUP_QUERY_EDIT= "pageOfSpecimenCollectionGroupQueryEdit";
@@ -1110,11 +995,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String SPECIMEN_COLUMNS = "SpecimenColumns";
 	public static final String USER_ID_COLUMN = "USER_ID";
 	
-	// -- menu selection related
-	public static final String MENU_SELECTED = "menuSelected";
-	
 	public static final String GENERIC_SECURITYMANAGER_ERROR = "The Security Violation error occured during a database operation. Please report this problem to the adminstrator";
-	public static final String PASSWORD_CHANGE_IN_SESSION = "changepassword";
 	
 	public static final String BOOLEAN_YES = "Yes";
 	public static final String BOOLEAN_NO = "No";
@@ -1140,8 +1021,6 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String STORAGE_CONTAINER_DIM_ONE_LABEL = "oneDimLabel";
 	public static final String STORAGE_CONTAINER_DIM_TWO_LABEL = "twoDimLabel";
 	
-	public static final String NULL = "NULL";
-	
 //    public static final String SPECIMEN_TYPE_TISSUE = "Tissue";
 //    public static final String SPECIMEN_TYPE_FLUID = "Fluid";
 //    public static final String SPECIMEN_TYPE_CELL = "Cell";
@@ -1157,21 +1036,6 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String TECHNICIAN = "Technician";
 	public static final String SUPERVISOR = "Supervisor";
 	public static final String SCIENTIST = "Scientist";
-	
-	// for Add New
-	public static final String ADD_NEW_STORAGE_TYPE_ID ="addNewStorageTypeId";
-	public static final String ADD_NEW_COLLECTION_PROTOCOL_ID ="addNewCollectionProtocolId";
-	public static final String ADD_NEW_SITE_ID ="addNewSiteId";
-	public static final String ADD_NEW_USER_ID ="addNewUserId";
-	public static final String ADD_NEW_USER_TO ="addNewUserTo";
-	public static final String SUBMITTED_FOR = "submittedFor";
-	public static final String SUBMITTED_FOR_ADD_NEW = "AddNew";
-	public static final String SUBMITTED_FOR_FORWARD_TO = "ForwardTo";
-	public static final String SUBMITTED_FOR_DEFAULT = "Default";
-	public static final String FORM_BEAN_STACK= "formBeanStack";
-	public static final String ADD_NEW_FORWARD_TO ="addNewForwardTo";
-	public static final String FORWARD_TO = "forwardTo";
-	public static final String ADD_NEW_FOR = "addNewFor";
 	
 	public static final String CHILD_CONTAINER_TYPE = "childContainerType";
 	public static final String UNUSED = "Unused";
