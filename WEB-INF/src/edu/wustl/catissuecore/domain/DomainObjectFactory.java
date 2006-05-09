@@ -14,20 +14,20 @@ import edu.wustl.catissuecore.actionForm.CreateSpecimenForm;
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.actionForm.ReportedProblemForm;
 import edu.wustl.catissuecore.actionForm.UserForm;
-import edu.wustl.catissuecore.query.ShoppingCart;
+import edu.wustl.common.query.ShoppingCart;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
+import edu.wustl.common.factory.AbstractDomainObjectFactory;
 import edu.wustl.common.util.logger.Logger;
-
 
 
 /**
  * DomainObjectFactory is a factory for instances of various domain objects.
  * @author gautam_shetty
  */
-public class DomainObjectFactory
+public class DomainObjectFactory extends AbstractDomainObjectFactory
 {
 	
     /**
@@ -35,7 +35,7 @@ public class DomainObjectFactory
      * @param FORM_TYPE Form bean Id.
      * @return the fully qualified name of the class according to the form bean type.
      */
-    public static String getDomainObjectName(int FORM_TYPE)
+    public String getDomainObjectName(int FORM_TYPE)
     {
         String className = null;
         switch(FORM_TYPE)
@@ -164,7 +164,7 @@ public class DomainObjectFactory
      * @param form Form bean object.
      * @return an AbstractDomain object copy of the form bean object.
      */
-    public static AbstractDomainObject getDomainObject(int FORM_TYPE,AbstractActionForm form) throws AssignDataException
+    public AbstractDomainObject getDomainObject(int FORM_TYPE,AbstractActionForm form) throws AssignDataException
     {
         AbstractDomainObject abstractDomain = null;
         switch(FORM_TYPE)
