@@ -6,7 +6,7 @@
 <%@ page import="edu.wustl.catissuecore.actionForm.AdvanceSearchForm"%>
 <%@ page import="edu.wustl.common.beans.NameValueBean"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
-<%@ page import="edu.wustl.catissuecore.query.Operator"%>
+<%@ page import="edu.wustl.common.query.Operator"%>
 
 <%@ include file="/pages/content/common/SpecimenCommonScripts.jsp" %>
 

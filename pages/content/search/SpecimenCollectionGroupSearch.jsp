@@ -3,7 +3,7 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
-<%@ page import="edu.wustl.catissuecore.query.Operator"%>
+<%@ page import="edu.wustl.common.query.Operator"%>
 
 <%
 	String siteName = "value(SpecimenCollectionGroup:SITE_ID)";
