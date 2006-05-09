@@ -31,6 +31,7 @@ import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.storage.StorageContainerGridObject;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.util.Permissions;
 
@@ -162,8 +163,8 @@ public class ShowStorageGridViewAction  extends BaseAction
 			
             list = specimenBizLogic.retrieve(sourceObjectName, selectColumnName, whereColumnName,
                     whereColumnCondition, whereColumnValue, joinCondition);
-
-					
+            
+			
             if (list != null)
             {
                 Iterator iterator = list.iterator();

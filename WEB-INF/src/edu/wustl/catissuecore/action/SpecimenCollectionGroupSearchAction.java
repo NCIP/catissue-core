@@ -23,10 +23,10 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.actionForm.AdvanceSearchForm;
 import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.vo.AdvanceSearchUI;
-import edu.wustl.catissuecore.vo.SearchFieldData;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.common.vo.AdvanceSearchUI;
+import edu.wustl.common.vo.SearchFieldData;
 
 public class SpecimenCollectionGroupSearchAction extends AdvanceSearchUIAction
 {

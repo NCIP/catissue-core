@@ -29,6 +29,7 @@ import edu.wustl.catissuecore.actionForm.SpecimenProtocolForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.cde.CDE;
 import edu.wustl.common.cde.CDEManager;
@@ -71,7 +72,7 @@ public class SpecimenProtocolAction  extends SecureAction
 	    	Set setPV = specimenClassCDE.getPermissibleValues();
 	    	Logger.out.debug("2");
 	    	Iterator itr = setPV.iterator();
-	    
+		    
 //	    	String classValues[][] = new String[setPV.size()][];
 	    	List specimenClassList =  new ArrayList();
 	    	Map subTypeMap = new HashMap();

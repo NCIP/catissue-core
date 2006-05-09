@@ -25,6 +25,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
+import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.catissuecore.domain.CellSpecimenReviewParameters;
 import edu.wustl.catissuecore.domain.CheckInCheckOutEventParameter;

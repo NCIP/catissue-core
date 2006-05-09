@@ -20,7 +20,7 @@ import edu.wustl.catissuecore.actionForm.LoginForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.domain.User;
-import edu.wustl.catissuecore.util.PasswordManager;
+import edu.wustl.common.util.global.PasswordManager;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.security.SecurityManager;

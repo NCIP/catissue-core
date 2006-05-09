@@ -19,7 +19,8 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.query.TreeView;
-import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.action.BaseAction;
+import edu.wustl.common.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -70,8 +71,6 @@ public class AdvanceQueryView extends BaseAction
 		request.setAttribute(Constants.TREE_VECTOR,tree);
 		return (mapping.findForward(Constants.SUCCESS));
 	}
-	
-	
 }
 
 

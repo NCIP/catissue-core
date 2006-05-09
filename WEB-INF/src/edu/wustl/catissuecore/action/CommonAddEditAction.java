@@ -32,7 +32,7 @@ import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.actionForm.SpecimenEventParametersForm;
 import edu.wustl.catissuecore.actionForm.UserForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
-import edu.wustl.catissuecore.bizlogic.QueryBizLogic;
+import edu.wustl.common.bizlogic.QueryBizLogic;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.DomainObjectFactory;
 import edu.wustl.catissuecore.domain.Participant;
@@ -46,6 +46,8 @@ import edu.wustl.common.bizlogic.AbstractBizLogic;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.factory.AbstractDomainObjectFactory;
+import edu.wustl.common.factory.MasterFactory;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.dbManager.DAOException;
@@ -75,21 +77,25 @@ public class CommonAddEditAction extends Action
             AbstractActionForm abstractForm = (AbstractActionForm) form;
             AbstractBizLogic bizLogic = BizLogicFactory.getBizLogic(abstractForm.getFormId());
             QueryBizLogic queryBizLogic=(QueryBizLogic)BizLogicFactory.getBizLogic(Constants.QUERY_INTERFACE_ID);
-
+            
             if(abstractForm instanceof SpecimenEventParametersForm)
             {
             	String specimenId = String.valueOf(((SpecimenEventParametersForm)abstractForm).getSpecimenId());
             	request.setAttribute(Constants.SPECIMEN_ID,specimenId);
             }
             
+            AbstractDomainObjectFactory abstractDomainObjectFactory = 
+            	(AbstractDomainObjectFactory) MasterFactory
+            				.getFactory("edu.wustl.catissuecore.domain.DomainObjectFactory");
+            
             //The object name which is to be added. 
-            String objectName = DomainObjectFactory.getDomainObjectName(abstractForm.getFormId());
+            String objectName = abstractDomainObjectFactory.getDomainObjectName(abstractForm.getFormId());
             
             ActionMessages messages = null;
             if (abstractForm.isAddOperation())
             {
                 //If operation is add, add the data in the database.
-                abstractDomain = DomainObjectFactory.getDomainObject(abstractForm.getFormId(), abstractForm);
+                abstractDomain = abstractDomainObjectFactory.getDomainObject(abstractForm.getFormId(), abstractForm);
                 bizLogic.insert(abstractDomain, getSessionData(request), Constants.HIBERNATE_DAO);
 
                 target = new String(Constants.SUCCESS);
@@ -124,7 +130,7 @@ public class CommonAddEditAction extends Action
                     request.setAttribute(Constants.SYSTEM_IDENTIFIER, abstractDomain.getSystemIdentifier());
                     abstractForm.setMutable(false);
                 }
-
+                
                 //------------------------------------------------ AddNewAction implementation Starts----------------------------
                 //Attributes to decide AddNew action
                 String submittedFor = (String) request.getParameter(Constants.SUBMITTED_FOR);
@@ -152,7 +158,7 @@ public class CommonAddEditAction extends Action
 	        	            
 	        	            String forwardTo = addNewSessionDataBean.getForwardTo();
 	        	            Logger.out.debug("forwardTo in CommonAddEditAction--------->"+forwardTo);
-	        	          
+	        	            
 	        	            //Setting Identifier of new object into the FormBean to populate it on the JSP page 
 	        	            sessionFormBean.setAddNewObjectIdentifier(addNewSessionDataBean.getAddNewFor(), abstractDomain.getSystemIdentifier());
 	        	            

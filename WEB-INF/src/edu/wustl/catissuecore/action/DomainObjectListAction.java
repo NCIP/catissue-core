@@ -21,11 +21,13 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import edu.wustl.common.bizlogic.AbstractBizLogic;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
-import edu.wustl.catissuecore.domain.DomainObjectFactory;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.bizlogic.AbstractBizLogic;
+import edu.wustl.common.factory.AbstractDomainObjectFactory;
+import edu.wustl.common.factory.MasterFactory;
 
 /**
  * DomainObjectListAction is used to show the list of all 
@@ -59,6 +61,8 @@ public class DomainObjectListAction extends SecureAction
         //The end index in the list of users to be approved/rejected.
         int endIndex = Constants.NUMBER_RESULTS_PER_PAGE;
         
+        AbstractDomainObjectFactory abstractDomainObjectFactory = (AbstractDomainObjectFactory)
+        						MasterFactory.getFactory("edu.wustl.catissuecore.domain.DomainObjectFactory");
         if (pageNum == Constants.START_PAGE)
         {
             //If start page is to be shown retrieve the list from the database.
@@ -67,16 +71,15 @@ public class DomainObjectListAction extends SecureAction
                 String [] whereColumnNames = {"activityStatus","activityStatus"};
                 String [] whereColumnConditions = {"=","="};
                 String [] whereColumnValues = {"New","Pending"};
-
-                list = abstractBizLogic.retrieve(DomainObjectFactory.getDomainObjectName(abstractForm.getFormId()),
+                
+                list = abstractBizLogic.retrieve(abstractDomainObjectFactory.getDomainObjectName(abstractForm.getFormId()),
     					whereColumnNames,whereColumnConditions,whereColumnValues,Constants.OR_JOIN_CONDITION);
             }
             else
             {
-                list = abstractBizLogic.retrieve(DomainObjectFactory.getDomainObjectName(abstractForm.getFormId()),
+                list = abstractBizLogic.retrieve(abstractDomainObjectFactory.getDomainObjectName(abstractForm.getFormId()),
     					"activityStatus","Pending");
             }
-            
             
             if (Constants.NUMBER_RESULTS_PER_PAGE > list.size())
             {

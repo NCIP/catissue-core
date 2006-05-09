@@ -13,10 +13,11 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.bizlogic.AbstractBizLogic;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
-import edu.wustl.catissuecore.bizlogic.QueryBizLogic;
-import edu.wustl.catissuecore.domain.QueryTableData;
+import edu.wustl.common.bizlogic.QueryBizLogic;
+import edu.wustl.common.domain.QueryTableData;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.util.logger.Logger;

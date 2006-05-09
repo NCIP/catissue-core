@@ -27,6 +27,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.bizlogic.AdvanceQueryBizlogic;
+import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.bizlogic.CDEBizLogic;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.common.tree.TreeDataInterface;
@@ -41,7 +42,7 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class TreeDataAction extends BaseAction
 {
-
+    
     /**
      * Overrides the execute method of the Action class.
      */
@@ -58,7 +59,7 @@ public class TreeDataAction extends BaseAction
             String pageOf = URLDecoder.decode(request.getParameter(Constants.PAGEOF),"UTF-8");
             TreeDataInterface bizLogic = new StorageContainerBizLogic();
             Vector dataList =  new Vector();
-            List disableSpecimenIdsList=new ArrayList();
+            List disableSpecimenIdsList = new ArrayList();
             Map containerMap = new HashMap(), containerRelationMap = new HashMap();
             if (pageOf.equals(Constants.PAGEOF_TISSUE_SITE))
             {
@@ -72,22 +73,20 @@ public class TreeDataAction extends BaseAction
                 bizLogic = new AdvanceQueryBizlogic();
                 HttpSession session = request.getSession();
                 columnIdsMap = (Map)session.getAttribute(Constants.COLUMN_ID_MAP);
-            	dataList = bizLogic.getTreeViewData(sessionData,columnIdsMap,disableSpecimenIdsList);
+            	dataList = bizLogic.getTreeViewData(sessionData,columnIdsMap, disableSpecimenIdsList);
             }
             else if (pageOf.equals(Constants.PAGEOF_STORAGE_LOCATION) || pageOf.equals(Constants.PAGEOF_SPECIMEN))
             {
-                StorageContainerBizLogic storageBizLogic = (StorageContainerBizLogic) bizLogic;
-                containerRelationMap = storageBizLogic.getTreeViewData(containerMap);
+                dataList = bizLogic.getTreeViewData();
             }
             
             String contentType = "application/x-java-serialized-object";
             response.setContentType(contentType);
             out = new ObjectOutputStream(response.getOutputStream());
             
-            if(pageOf.equals(Constants.PAGEOF_STORAGE_LOCATION) || pageOf.equals(Constants.PAGEOF_SPECIMEN))
+            if(pageOf.equals(Constants.PAGEOF_STORAGE_LOCATION) || pageOf.equals(Constants.PAGEOF_SPECIMEN) || pageOf.equals(Constants.PAGEOF_TISSUE_SITE))
             {
-                out.writeObject(containerMap);
-                out.writeObject(containerRelationMap);
+                out.writeObject(dataList);
             }
             else
             {

@@ -17,14 +17,15 @@ import javax.servlet.http.HttpSession;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import edu.wustl.catissuecore.actionForm.AdvanceSearchForm;
-import edu.wustl.catissuecore.bizlogic.QueryBizLogic;
-import edu.wustl.catissuecore.query.AdvancedConditionsNode;
-import edu.wustl.catissuecore.query.Condition;
-import edu.wustl.catissuecore.query.DataElement;
-import edu.wustl.catissuecore.query.Operator;
-import edu.wustl.catissuecore.query.Query;
-import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.vo.SearchFieldData;
+import edu.wustl.common.action.BaseAction;
+import edu.wustl.common.bizlogic.QueryBizLogic;
+import edu.wustl.common.query.AdvancedConditionsNode;
+import edu.wustl.common.query.Condition;
+import edu.wustl.common.query.DataElement;
+import edu.wustl.common.query.Operator;
+import edu.wustl.common.query.Query;
+import edu.wustl.common.util.global.Constants;
+import edu.wustl.common.vo.SearchFieldData;
 import edu.wustl.common.util.logger.Logger;
 
 public abstract class AdvanceSearchUIAction extends BaseAction 

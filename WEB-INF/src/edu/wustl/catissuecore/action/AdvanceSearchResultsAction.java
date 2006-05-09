@@ -29,14 +29,15 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.bizlogic.AdvanceQueryBizlogic;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
-import edu.wustl.catissuecore.bizlogic.QueryBizLogic;
-import edu.wustl.catissuecore.bizlogic.SimpleQueryBizLogic;
-import edu.wustl.catissuecore.query.AdvancedConditionsImpl;
-import edu.wustl.catissuecore.query.AdvancedConditionsNode;
-import edu.wustl.catissuecore.query.AdvancedQuery;
-import edu.wustl.catissuecore.query.Condition;
-import edu.wustl.catissuecore.query.Query;
-import edu.wustl.catissuecore.query.QueryFactory;
+import edu.wustl.common.action.BaseAction;
+import edu.wustl.common.bizlogic.QueryBizLogic;
+import edu.wustl.common.bizlogic.SimpleQueryBizLogic;
+import edu.wustl.common.query.AdvancedConditionsImpl;
+import edu.wustl.common.query.AdvancedConditionsNode;
+import edu.wustl.common.query.AdvancedQuery;
+import edu.wustl.common.query.Condition;
+import edu.wustl.common.query.Query;
+import edu.wustl.common.query.QueryFactory;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.util.logger.Logger;
@@ -74,7 +75,7 @@ public class AdvanceSearchResultsAction extends BaseAction
 		{
 			//Create Advance Query object
 			Query query = QueryFactory.getInstance().newQuery(Query.ADVANCED_QUERY, aliasName);
-
+			
 			//Set the root object as the where conditions
 			((AdvancedConditionsImpl)((AdvancedQuery)query).getWhereConditions()).setWhereCondition(root);
 			//Set activity Status conditions to filter data which are disabled 
@@ -98,7 +99,7 @@ public class AdvanceSearchResultsAction extends BaseAction
 			
 			//Set attribute type in the DataElement	
 			setAttributeType(root);
-
+			
 			//Set Identifier of Participant,Collection Protocol, Specimen Collection Group and Specimen if not existing in the resultView
 			tablesVector.remove(Query.SPECIMEN_PROTOCOL);
 			tablesVector.add(Query.COLLECTION_PROTOCOL);
@@ -109,7 +110,7 @@ public class AdvanceSearchResultsAction extends BaseAction
 				tablesVector.add(Query.BIO_HAZARD);
 			Object selectedTables[] = tablesVector.toArray();
 			session.setAttribute(Constants.TABLE_ALIAS_NAME,selectedTables);
-
+			
 			Logger.out.debug("tableSet from query before setting resultview :"+query.getTableNamesSet());
 			//Set the result view for Advance Search
 			Vector selectDataElements = bizLogic.getSelectDataElements(null,new ArrayList(tablesVector), columnNames);
@@ -119,7 +120,7 @@ public class AdvanceSearchResultsAction extends BaseAction
 			Map queryResultObjectDataMap = new HashMap();
 
 			SimpleQueryBizLogic simpleQueryBizLogic = new SimpleQueryBizLogic();
-
+			
 			simpleQueryBizLogic.createQueryResultObjectData(query.getTableNamesSet(),
 											queryResultObjectDataMap,query);
 			simpleQueryBizLogic.addObjectIdentifierColumnsToQuery(
@@ -181,7 +182,7 @@ public class AdvanceSearchResultsAction extends BaseAction
 				Condition condition = (Condition)conditionsItr.next();
 				String columnName = condition.getDataElement().getField();
 				String aliasName = condition.getDataElement().getTableAliasName();
-				QueryBizLogic bizLogic = (QueryBizLogic)BizLogicFactory.getBizLogic(Constants.SIMPLE_QUERY_INTERFACE_ID);
+				QueryBizLogic bizLogic = new QueryBizLogic();//(QueryBizLogic)BizLogicFactory.getBizLogic(Constants.SIMPLE_QUERY_INTERFACE_ID);
 				StringTokenizer tableTokens = new StringTokenizer(aliasName,".");
 				if(tableTokens.countTokens()==2)
 				{

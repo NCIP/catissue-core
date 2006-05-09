@@ -28,10 +28,11 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.AdvanceSearchForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
-import edu.wustl.catissuecore.bizlogic.QueryBizLogic;
-import edu.wustl.catissuecore.query.Query;
-import edu.wustl.catissuecore.query.ResultData;
+import edu.wustl.common.bizlogic.QueryBizLogic;
+import edu.wustl.common.query.Query;
+import edu.wustl.common.query.ResultData;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.util.Permissions;
@@ -83,7 +84,7 @@ public class DataViewAction extends BaseAction
     	
         if (!name.equals(Constants.ROOT))
         {
-        	id = str.nextToken();
+        	id = str.nextToken().trim();
         }
         /*Incase of collection protocol selected, the whereCondition should contain the participant conditions also
          * as Collection Protocol and Participant have many to many relationship
@@ -93,7 +94,7 @@ public class DataViewAction extends BaseAction
         	parentName = str.nextToken();
         	parentId = str.nextToken();
         }
-
+        
         //get the type of view to show (spreadsheet/individual)
         String viewType = request.getParameter(Constants.VIEW_TYPE);
         if(viewType==null)

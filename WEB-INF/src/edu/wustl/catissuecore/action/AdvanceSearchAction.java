@@ -14,17 +14,18 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.common.action.BaseAction;
 import edu.wustl.catissuecore.actionForm.AdvanceSearchForm;
 import edu.wustl.catissuecore.util.ConditionMapParser;
-import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
+
 /**
  * @author poornima_govindrao
  *
  *This class is Advanced Search Action which forms the root node to form the query. 
  * 
  */
-
 public class AdvanceSearchAction extends BaseAction//DispatchAction 
 {
     
