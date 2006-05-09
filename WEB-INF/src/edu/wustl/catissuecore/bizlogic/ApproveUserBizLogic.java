@@ -18,7 +18,7 @@ import java.util.Vector;
 
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.EmailHandler;
-import edu.wustl.catissuecore.util.PasswordManager;
+import edu.wustl.common.util.global.PasswordManager;
 import edu.wustl.catissuecore.util.Roles;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SecurityDataBean;

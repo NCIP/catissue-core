@@ -17,7 +17,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
-import edu.wustl.catissuecore.bizlogic.QueryBizLogic;
 import edu.wustl.catissuecore.domainobject.ClinicalReport;
 import edu.wustl.catissuecore.domainobject.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domainobject.Participant;
@@ -28,7 +27,7 @@ import edu.wustl.catissuecore.domainobject.impl.ParticipantImpl;
 import edu.wustl.catissuecore.domainobject.impl.SpecimenCollectionGroupImpl;
 import edu.wustl.catissuecore.domainobject.impl.SpecimenImpl;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.common.bizlogic.QueryBizLogic;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.util.Permissions;
 import edu.wustl.common.util.dbManager.DAOException;
@@ -246,7 +245,7 @@ public class CaCoreAppServicesDelegator
     private String getAliasName(Object object) throws ClassNotFoundException, DAOException
     {
         Class className = object.getClass();
-        String domainObjectClassName = Utility.parseClassName(className.getName());
+        String domainObjectClassName = edu.wustl.common.util.Utility.parseClassName(className.getName());
         String domainClassName = domainObjectClassName.substring(0, (domainObjectClassName.length()-4));
         Logger.out.debug("Class Name >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+domainClassName);
         className = Class.forName("edu.wustl.catissuecore.domain."+domainClassName);

@@ -17,6 +17,7 @@ import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.PasswordManager;
 import edu.wustl.common.util.global.SendEmail;
 import edu.wustl.common.util.logger.Logger;
 

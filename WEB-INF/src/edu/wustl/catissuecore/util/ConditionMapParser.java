@@ -11,10 +11,10 @@ import java.util.Vector;
 import javax.servlet.http.HttpSession;
 import javax.swing.tree.DefaultMutableTreeNode;
 
-import edu.wustl.catissuecore.query.AdvancedConditionsNode;
-import edu.wustl.catissuecore.query.Condition;
-import edu.wustl.catissuecore.query.DataElement;
-import edu.wustl.catissuecore.query.Operator;
+import edu.wustl.common.query.AdvancedConditionsNode;
+import edu.wustl.common.query.Condition;
+import edu.wustl.common.query.DataElement;
+import edu.wustl.common.query.Operator;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;

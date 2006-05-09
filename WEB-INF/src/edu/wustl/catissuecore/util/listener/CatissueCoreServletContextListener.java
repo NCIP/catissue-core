@@ -7,7 +7,7 @@ import java.util.Map;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
-import edu.wustl.catissuecore.bizlogic.QueryBizLogic;
+import edu.wustl.common.bizlogic.QueryBizLogic;
 import edu.wustl.catissuecore.domain.Address;
 import edu.wustl.catissuecore.domain.CellSpecimen;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
@@ -64,7 +64,7 @@ public class CatissueCoreServletContextListener implements
          * Getting and storing Home path for the application
          */
         Variables.catissueHome = sce.getServletContext().getRealPath("");
-
+        
         /**
          * Creating Logs Folder inside catissue home
          */
@@ -76,7 +76,6 @@ public class CatissueCoreServletContextListener implements
             {
                 logfolder.mkdir();
             }
-            
         }
         catch (Exception e)
         {
@@ -141,12 +140,11 @@ public class CatissueCoreServletContextListener implements
         
         try
         {
-//        	 get database name and set variables used in query 
+            // get database name and set variables used in query
             Variables.databaseName=HibernateMetaData.getDataBaseName();
             if(Variables.databaseName.equals(Constants.ORACLE_DATABASE))
             {
             	//set string/function for oracle
-            	
             	Variables.datePattern = "mm-dd-yyyy";
             	Variables.timePattern = "hh-mi-ss";
             	Variables.dateFormatFunction="TO_CHAR";
@@ -178,10 +176,12 @@ public class CatissueCoreServletContextListener implements
 		{
         	Logger.out.error("Could not initialized application, Error in creating CDE manager.");
         	Logger.out.error(ex.getMessage(), ex);
-        	
 		}
+        
+        Logger.out.debug("System property : "+System.getProperty("gov.nih.nci.security.configFile"));
+        Logger.out.debug("System property : "+System.getProperty("edu.wustl.catissuecore.contactUsFile"));
     }
-
+    
     /* (non-Javadoc)
      * @see javax.servlet.ServletContextListener#contextDestroyed(javax.servlet.ServletContextEvent)
      */

@@ -19,13 +19,13 @@ import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-import edu.wustl.catissuecore.bizlogic.QueryBizLogic;
-import edu.wustl.catissuecore.query.Operator;
+import edu.wustl.common.bizlogic.QueryBizLogic;
+import edu.wustl.common.query.Operator;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.vo.HTMLField;
-import edu.wustl.catissuecore.vo.SearchFieldData;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.vo.HTMLField;
+import edu.wustl.common.vo.SearchFieldData;
 
 /**
  * @author aniruddha_phadnis
@@ -140,7 +140,7 @@ public class SearchUtil
 //		{
 //			link = "SpecimenAdvanceSearch.do?pageOf=pageOfSpecimenAdvanceSearch&selectedNode=";
 //		}
-//		
+		
 		return link;
 	}
 	
@@ -227,7 +227,7 @@ public class SearchUtil
 			    searchFieldData[7] = initSearchUIData(SearchUtil.DATE, "advanceQuery.collectionprotocol.startdate","SpecimenProtocol","START_DATE","startDate",Constants.DATE_NUMERIC_OPERATORS,"","");
 			    searchFieldData[8] = initSearchUIData(SearchUtil.DATE, "advanceQuery.collectionprotocol.enddate","SpecimenProtocol","END_DATE","endDate",Constants.DATE_NUMERIC_OPERATORS,"","");
 			    break;
-			    	
+			    
 			case Constants.PARTICIPANT_FORM_ID :
 				searchFieldData = new SearchFieldData[10];
 		        searchFieldData[0] = initSearchUIData(SearchUtil.STRING, "user.lastName","Participant","LAST_NAME","lastName",Constants.STRING_OPERATORS,"","");
@@ -241,7 +241,7 @@ public class SearchUtil
 		        searchFieldData[8] = initSearchUIData(SearchUtil.STRING, "participant.socialSecurityNumber","Participant","SOCIAL_SECURITY_NUMBER","ssn",Constants.STRING_OPERATORS,"","");
 		        searchFieldData[9] = initSearchUIData(SearchUtil.STRING,"advanceQuery.specimenCollectionGroup.medicalRecordNumber","ParticipantMedicalId","MEDICAL_RECORD_NUMBER","medicalRecordNo",Constants.STRING_OPERATORS,"","");
 		        break;
-			
+		        
 			case Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID :
 				searchFieldData = new SearchFieldData[5];
 		        searchFieldData[0] = initSearchUIData(SearchUtil.STRING, "advanceQuery.specimenCollectionGroup.site","Site","NAME","siteName",Constants.STRING_OPERATORS,"","");//SITE_ID will be SITE_NAME
@@ -250,7 +250,7 @@ public class SearchUtil
 		        searchFieldData[3] = initSearchUIData(SearchUtil.STRING,"specimenCollectionGroup.clinicalStatus","SpecimenCollectionGroup","CLINICAL_STATUS","clinicalStatus",Constants.ENUMERATED_OPERATORS,Constants.CLINICAL_STATUS_LIST,"");
 		        searchFieldData[4] = initSearchUIData(SearchUtil.STRING,"specimenCollectionGroup.surgicalPathologyNumber","ClinicalReport","SURGICAL_PATHOLOGICAL_NUMBER","surgicalPathologyNo",Constants.STRING_OPERATORS,"","");
 				break;
-			
+				
 			case Constants.NEW_SPECIMEN_FORM_ID :
 				searchFieldData = new SearchFieldData[9];
 				searchFieldData[0] = initSearchUIData(SearchUtil.STRING, "specimen.type","Specimen","SPECIMEN_CLASS","className",Constants.ENUMERATED_OPERATORS,Constants.SPECIMEN_CLASS_LIST,"");
@@ -292,7 +292,7 @@ public class SearchUtil
 		{
 			searchFieldData = getSearchFieldData(Constants.NEW_SPECIMEN_FORM_ID);
 		}
-
+		
 		HashMap map = new HashMap();
 		
 		for(int i=0;i<searchFieldData.length;i++)
@@ -307,37 +307,6 @@ public class SearchUtil
 		}
 		
 		return map;
-	}
-	
-	public static String getColumnDisplayName(int formId,String tableName,String columnName)
-	{
-		SearchFieldData[] searchFieldData = getSearchFieldData(formId);
-		String columnDisplayName = "";
-		if(searchFieldData != null)
-		{
-			String name = createKey(tableName,columnName,false);
-						
-			for(int i = 0; i < searchFieldData.length; i++)
-			{
-				String key = searchFieldData[i].getValueField().getName();
-				if(key.equals(name))
-				{
-					columnDisplayName = searchFieldData[i].getLabelKey();
-					break;
-				}
-			}
-			
-		}
-		
-		if(!columnDisplayName.equals(""))
-		{
-			ResourceBundle myResources =ResourceBundle.getBundle("ApplicationResources");
-			return myResources.getString(columnDisplayName);
-		}
-		else 
-			return columnDisplayName;
-		
-		
 	}
 	
 	public static int getFormId(String aliasName)
@@ -361,6 +330,34 @@ public class SearchUtil
 		}
 		
 		return formId;
+	}
+	
+	public static String getColumnDisplayName(int formId,String tableName,String columnName)
+	{
+		SearchFieldData[] searchFieldData = getSearchFieldData(formId);
+		String columnDisplayName = "";
+		if(searchFieldData != null)
+		{
+			String name = createKey(tableName,columnName,false);
+						
+			for(int i = 0; i < searchFieldData.length; i++)
+			{
+				String key = searchFieldData[i].getValueField().getName();
+				if(key.equals(name))
+				{
+					columnDisplayName = searchFieldData[i].getLabelKey();
+					break;
+				}
+			}
+		}
+		
+		if(!columnDisplayName.equals(""))
+		{
+			ResourceBundle myResources =ResourceBundle.getBundle("ApplicationResources");
+			return myResources.getString(columnDisplayName);
+		}
+		else 
+			return columnDisplayName;
 	}
 	
 	/**
@@ -392,7 +389,7 @@ public class SearchUtil
 	  	
 	  	return newTableList;
 	}
-	 
+	
 	public static Map getEventParametersDisplayNames(QueryBizLogic bizLogic, List tableList) throws DAOException,ClassNotFoundException
 	{
 		HashMap displayNamesMap = new HashMap();

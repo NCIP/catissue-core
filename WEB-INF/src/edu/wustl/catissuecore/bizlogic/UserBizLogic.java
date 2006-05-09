@@ -24,7 +24,7 @@ import edu.wustl.catissuecore.domain.Department;
 import edu.wustl.catissuecore.domain.Institution;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.EmailHandler;
-import edu.wustl.catissuecore.util.PasswordManager;
+import edu.wustl.common.util.global.PasswordManager;
 import edu.wustl.catissuecore.util.Roles;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
@@ -400,7 +400,7 @@ public class UserBizLogic extends DefaultBizLogic
         Collections.sort(nameValuePairs) ;
         return nameValuePairs;
     }
-
+    
     /**
      * Returns a list of users according to the column name and value.
      * @param colName column name on the basis of which the user list is to be retrieved.

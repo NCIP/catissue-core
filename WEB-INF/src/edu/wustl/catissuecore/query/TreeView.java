@@ -13,10 +13,13 @@ import java.util.Vector;
 import javax.servlet.http.HttpSession;
 import javax.swing.tree.DefaultMutableTreeNode;
 
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
-import edu.wustl.catissuecore.bizlogic.QueryBizLogic;
 import edu.wustl.catissuecore.util.SearchUtil;
-import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.bizlogic.QueryBizLogic;
+
+import edu.wustl.common.query.AdvancedConditionsNode;
+import edu.wustl.common.query.Condition;
+import edu.wustl.common.query.DataElement;
+import edu.wustl.common.query.Operator;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -47,7 +50,6 @@ public class TreeView {
 				if(advConditionDefaultOrNode != null)
 					advConditionDefaultOrNode.setDefaultAndOr(true);
 			}
-			
 			
 			//Loop for all the children for the current node.
 			for(int i = 0; i < node.getChildCount();i++)
@@ -81,7 +83,7 @@ public class TreeView {
 					else
 						noOrBool = false;
 				}
-				else 
+				else
 				{
 					//Condition only when Parent is Root
 					if(parent.getChildCount() > 1)	
@@ -130,13 +132,12 @@ public class TreeView {
 			        String table = data.getTableAliasName();
 			        //split column name in case of Specimen event parameters to remove aliasName
 			        //StringTokenizer columnNameTokenizer = new StringTokenizer(columnName,".");
-			        QueryBizLogic bizLogic = (QueryBizLogic)BizLogicFactory
-														.getBizLogic(Constants.SIMPLE_QUERY_INTERFACE_ID);
+			        QueryBizLogic bizLogic = new QueryBizLogic();//(QueryBizLogic)BizLogicFactory.getBizLogic(Constants.SIMPLE_QUERY_INTERFACE_ID);
 			        //String columnDisplayName = bizLogic.getColumnDisplayNames(table,columnName);
 			        
 			        int formId = SearchUtil.getFormId(tableName);
-			        String columnDisplayName = SearchUtil.getColumnDisplayName(formId,table,columnName);
-			      
+			        String columnDisplayName = null;//SearchUtil.getColumnDisplayName(formId,table,columnName);
+			        
 			        //append table name to the column name in case of event parameters conditions.
 					StringTokenizer tableTokens = new StringTokenizer(table,".");
 					String superTable = new String();
@@ -145,7 +146,8 @@ public class TreeView {
 						Logger.out.debug("table before tokenizing:"+table);
 						table = tableTokens.nextToken();
 						superTable = tableTokens.nextToken();
-			        	Map eventParameterDisplayNames = SearchUtil.getEventParametersDisplayNames(bizLogic,SearchUtil.getEventParametersTables(bizLogic));
+						
+						Map eventParameterDisplayNames = SearchUtil.getEventParametersDisplayNames(bizLogic,SearchUtil.getEventParametersTables(bizLogic));
 			        	columnDisplayName = (String)eventParameterDisplayNames.get(table+"."+columnName);
 					}
 		        	Logger.out.debug("column display name for event parameters"+columnDisplayName);
@@ -212,6 +214,4 @@ public class TreeView {
 					arrangeTree(child,nodeId,tree,advancedConditionNodesMap,checkedNode,operation,session);
 			}
 		} 
-	
-		
 }
