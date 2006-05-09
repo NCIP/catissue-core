@@ -16,16 +16,19 @@ import java.util.Vector;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
-import edu.wustl.catissuecore.query.AdvancedConditionsNode;
-import edu.wustl.catissuecore.query.Condition;
-import edu.wustl.catissuecore.query.Operator;
-import edu.wustl.catissuecore.query.Table;
-import edu.wustl.common.tree.TreeDataInterface;
-import edu.wustl.common.tree.TreeNodeData;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
+import edu.wustl.common.bizlogic.QueryBizLogic;
 import edu.wustl.common.dao.JDBCDAO;
+import edu.wustl.common.query.AdvancedConditionsNode;
+import edu.wustl.common.query.Condition;
+import edu.wustl.common.query.Operator;
+import edu.wustl.common.query.Table;
+import edu.wustl.common.tree.TreeDataInterface;
+import edu.wustl.common.tree.QueryTreeNodeData;
+import edu.wustl.common.tree.TreeNodeImpl;
+import edu.wustl.common.tree.TreeNode;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
@@ -64,6 +67,7 @@ public class AdvanceQueryBizlogic extends DefaultBizLogic implements TreeDataInt
         jdbcDao.commit();
         jdbcDao.closeSession();
 	}
+	
 	/* Get the data for tree view from temporary table and create tree nodes.
 	 */
 	public Vector getTreeViewData(SessionDataBean sessionData,Map columnIdsMap,List disableSpecimenIdsList) throws DAOException,ClassNotFoundException
@@ -72,8 +76,8 @@ public class AdvanceQueryBizlogic extends DefaultBizLogic implements TreeDataInt
 		JDBCDAO jdbcDao = new JDBCDAO();
         jdbcDao.openSession(sessionData);
         Logger.out.debug("Temp table in adv bizlogic:"+tempTableName);
-
-        //Retrieve all the data from the temporary table 
+        
+        //Retrieve all the data from the temporary table
 		List dataList =  jdbcDao.retrieve(tempTableName);
 		jdbcDao.closeSession();
 		Logger.out.debug("List of data for identifiers:"+dataList);
@@ -84,7 +88,7 @@ public class AdvanceQueryBizlogic extends DefaultBizLogic implements TreeDataInt
 		int specimenCollGrpColumnId =  ((Integer)columnIdsMap.get(Constants.SPECIMEN_COLLECTION_GROUP+"."+Constants.IDENTIFIER)).intValue()-1;
 		int specimenColumnId = ((Integer)columnIdsMap.get(Constants.SPECIMEN+"."+Constants.IDENTIFIER)).intValue()-1;
         int parentSpecimenColumnId = ((Integer)columnIdsMap.get(Constants.SPECIMEN+"."+Constants.PARENT_SPECIMEN_ID_COLUMN)).intValue()-1;
-
+        
         Vector treeDataVector = new Vector();
         Iterator dataListIterator = dataList.iterator();
         List rowList = new ArrayList();
@@ -94,15 +98,23 @@ public class AdvanceQueryBizlogic extends DefaultBizLogic implements TreeDataInt
         while (dataListIterator.hasNext())
         {
             rowList = (List)dataListIterator.next();
-        	//setQueryTreeNode((String) rowList.get(0),Constants.PARTICIPANT,null,null,vector);
+            
+            setQueryTreeNode((String) rowList.get(participantColumnId),
+					Constants.PARTICIPANT, null, null, null, null,treeDataVector);
+        	
             //Create tree nodes for Participant & Collection Protocol
 			setQueryTreeNode((String) rowList.get(collectionProtocolColumnId), 
-						Constants.COLLECTION_PROTOCOL,null,null,(String) rowList.get(participantColumnId), Constants.PARTICIPANT,treeDataVector);
+						Constants.COLLECTION_PROTOCOL,(String) rowList.get(participantColumnId),Constants.PARTICIPANT,
+						null, null, treeDataVector);
+			
 			//Create tree nodes for Specimen Collection Group
-			setQueryTreeNode((String) rowList.get(specimenCollGrpColumnId), Constants.SPECIMEN_COLLECTION_GROUP,(String) 
-						rowList.get(collectionProtocolColumnId), Constants.COLLECTION_PROTOCOL,(String) rowList.get(participantColumnId),Constants.PARTICIPANT,treeDataVector);
+			setQueryTreeNode((String) rowList.get(specimenCollGrpColumnId), Constants.SPECIMEN_COLLECTION_GROUP,
+			                (String) rowList.get(collectionProtocolColumnId), Constants.COLLECTION_PROTOCOL,
+						    (String) rowList.get(participantColumnId),Constants.PARTICIPANT,treeDataVector);
+			
 			String parentSpecimenId = (String) rowList.get(parentSpecimenColumnId);
 			Logger.out.debug("parentSpecimenId"+parentSpecimenId);
+			
 			//if parent specimen not present, form tree node directly under Specimen Collection group
 			if(parentSpecimenId.equals("")||parentSpecimenId.equals("0"))
 			{
@@ -110,7 +122,7 @@ public class AdvanceQueryBizlogic extends DefaultBizLogic implements TreeDataInt
 				setQueryTreeNode((String) rowList.get(specimenColumnId), Constants.SPECIMEN,(String)  
 						rowList.get(specimenCollGrpColumnId),Constants.SPECIMEN_COLLECTION_GROUP,null,null,treeDataVector);
 			}
-			//if parent specimen id is present for the specimen heirarchy
+			//if parent specimen id is present for the specimen hierarchy
 			else
 			{
 				String specimenId= (String) rowList.get(specimenColumnId);
@@ -133,35 +145,141 @@ public class AdvanceQueryBizlogic extends DefaultBizLogic implements TreeDataInt
 						parentSpecimenIdInHeirarchy = specimenId;
 					}
 				}
+				
 				//Find the specimen ids which are not satisfying the query condition to disbale in tree view.
 				//get the specimen ids present in temp table
-				List parentSpecimenIdsInTempTable = getParentSpecimensInTempTable(Constants.COLUMN+specimenColumnId,tempTableName); 
+				List parentSpecimenIdsInTempTable = getParentSpecimensInTempTable(Constants.COLUMN+specimenColumnId,tempTableName);
+				
 				//list of specimens not satisfying the query but are shown in results tree view.
 				// These specimen ids have to be disabled.
 				specimenIdsHeirarchy.removeAll(parentSpecimenIdsInTempTable);
 				disabledSpecimenIds.addAll(specimenIdsHeirarchy);
 				Logger.out.debug("Specimen ids to be disabled in tree view"+specimenIdsHeirarchy);
 			}
+			
 			Logger.out.debug("Tree Data:"+rowList.get(participantColumnId)+" "+rowList.get(collectionProtocolColumnId)+" "+
 					rowList.get(specimenCollGrpColumnId)+" "+rowList.get(parentSpecimenColumnId)+" "+ rowList.get(specimenColumnId));
         }
+        
         disableSpecimenIdsList.addAll(disabledSpecimenIds);
         Logger.out.debug("vector of tree nodes"+treeDataVector);
-        return treeDataVector;
+        
+        return createHierarchy(treeDataVector);
 	}   
-	//Create TreeNode given the Tree node data.
+	
+	/**
+	 * Creates and returns the vector of TreeNodeImpl nodes from the QueryTreeNodeData nodes passed. 
+	 * @param oldNodes Vector of QueryTreeNodeData nodes.
+	 * @return the vector of TreeNodeImpl nodes from the QueryTreeNodeData nodes passed.
+	 */
+	
+	private Vector createHierarchy(Vector oldNodes)
+	{
+	    Vector finalTreeNodes = new Vector();
+	    
+	    Iterator iterator = oldNodes.iterator();
+	    while (iterator.hasNext())
+	    {
+	        QueryTreeNodeData treeNode = (QueryTreeNodeData) iterator.next();
+	        TreeNodeImpl treeNodeImpl = new TreeNodeImpl(Long.valueOf((String)treeNode.getIdentifier()),
+	                									 treeNode.getObjectName());
+	        
+	        //If the parent is null, the node is of participant. Add it in the vector.
+	        if (treeNode.getParentIdentifier() == null && treeNode.getCombinedParentIdentifier() == null)
+	        {
+	            finalTreeNodes.add(treeNodeImpl);
+	            continue;
+	        }
+	        
+	        //The parent node of this node.
+	        TreeNodeImpl parentTreeNode = new TreeNodeImpl();
+	        if (treeNode.getParentIdentifier() != null)
+	        {
+	            parentTreeNode.setIdentifier(Long.valueOf((String)treeNode.getParentIdentifier()));
+	            parentTreeNode.setValue(treeNode.getParentObjectName());
+	        }
+	        
+	        //In case of specimen colleciton group, the participant node is also required.
+	        //So creating the parent of the parent node.
+	        TreeNodeImpl parentOfParentNode = new TreeNodeImpl();
+	        if (treeNode.getCombinedParentIdentifier() != null)
+	        {
+	            parentOfParentNode.setIdentifier(Long.valueOf((String)treeNode.getCombinedParentIdentifier()));
+	            parentOfParentNode.setValue(treeNode.getCombinedParentObjectName());
+	            parentTreeNode.setParentNode(parentOfParentNode);
+	        }
+	        
+	        //get the parent node from the final tree node vector.
+	        parentTreeNode = (TreeNodeImpl) getNode(finalTreeNodes, parentTreeNode);
+	        if (parentTreeNode != null)
+	        {
+	            treeNodeImpl.setParentNode(parentTreeNode);
+		        parentTreeNode.getChildNodes().add(treeNodeImpl);
+	        }
+	    }
+	    
+	    return finalTreeNodes;
+	}
+	
+	/**
+	 * Searches and returns the given node in the vector fo nodes and its child nodes. 
+	 * @param treeNodeVector the vector of tree nodes. 
+	 * @param treeNode the node to be searched.
+	 * @return the node equal to the given node.
+	 */
+	private TreeNode getNode(Vector treeNodeVector, TreeNodeImpl treeNode)
+	{
+	    //The node equal to the given node.
+	    TreeNodeImpl returnNode = null;
+	    
+	    Iterator treeNodeVectorIterator = treeNodeVector.iterator();
+	    while (treeNodeVectorIterator.hasNext())
+	    {
+	        TreeNodeImpl treeNodeImpl = (TreeNodeImpl) treeNodeVectorIterator.next();
+	        
+	        //If the node is not equal to collection protocol, check only the nodes and not their parents.
+	        if (treeNode.getValue().equals(Constants.COLLECTION_PROTOCOL) == false)
+	        {
+	            if (treeNodeImpl.getIdentifier().equals(treeNode.getIdentifier()) && treeNodeImpl.getValue().equals(treeNode.getValue()))
+		        {
+		            return treeNodeImpl;
+		        }
+	        }
+	        else //In case of collection protocol, check the nodes as well as their parent nodes.
+	        {
+                if (treeNodeImpl.getParentNode() != null)
+                {
+                    TreeNodeImpl parentNode = (TreeNodeImpl)treeNode.getParentNode();
+		            if (parentNode.getIdentifier().equals(((TreeNodeImpl)treeNodeImpl.getParentNode()).getIdentifier())
+		                    && parentNode.getValue().equals(((TreeNodeImpl)treeNodeImpl.getParentNode()).getValue()))
+		            {
+		            	return treeNodeImpl;
+		            }
+	            }
+	        }
+	        
+	        returnNode = (TreeNodeImpl) getNode(treeNodeImpl.getChildNodes(), treeNode);
+	        if (returnNode != null)
+	            break;
+	    }
+	    
+	    return returnNode;
+	}
+	
+    //Create QueryTreeNode given the Tree node data.
 	private void setQueryTreeNode(String identifier,String objectName,String parentIdentifier,String parentObjectName,String combinedParentIdentifier,String combinedParentObjectName,Vector vector)
 	{
-		TreeNodeData treeNode = new TreeNodeData();
+		QueryTreeNodeData treeNode = new QueryTreeNodeData();
         treeNode.setIdentifier(identifier);
         treeNode.setObjectName(objectName);
         treeNode.setParentIdentifier(parentIdentifier);
         treeNode.setParentObjectName(parentObjectName);
         treeNode.setCombinedParentIdentifier(combinedParentIdentifier);
         treeNode.setCombinedParentObjectName(combinedParentObjectName);
-
+        
         vector.add(treeNode);
 	}
+	
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.bizlogic.TreeDataInterface#getTreeViewData()
 	 */
@@ -271,7 +389,8 @@ public class AdvanceQueryBizlogic extends DefaultBizLogic implements TreeDataInt
 		}
 //		Logger.out.debug("event tables before returning:"+eventParametersTables);
 //		return eventParametersTables;
-}
+	}
+	
 	//Get the specimen Ids heirarchy above a given specimen ids.
 	private List getSpecimenHeirarchy(String specimenId) throws DAOException,ClassNotFoundException
 	{
