@@ -3,7 +3,7 @@
     "-//Hibernate/Hibernate Configuration DTD//EN"
     "http://hibernate.sourceforge.net/hibernate-configuration-2.0.dtd">
 
- 
+
 <hibernate-configuration>
 	
     <session-factory>
@@ -15,9 +15,9 @@
     	
         <!-- List of all Mapping files -->
         <mapping resource="edu/wustl/catissuecore/hbm/Address.hbm.xml"/>
-		<mapping resource="edu/wustl/catissuecore/hbm/AuditEvent.hbm.xml"/>
-		<mapping resource="edu/wustl/catissuecore/hbm/AuditEventDetails.hbm.xml"/>
-		<mapping resource="edu/wustl/catissuecore/hbm/AuditEventLog.hbm.xml"/>
+		<mapping resource="edu/wustl/common/hbm/AuditEvent.hbm.xml"/>
+		<mapping resource="edu/wustl/common/hbm/AuditEventDetails.hbm.xml"/>
+		<mapping resource="edu/wustl/common/hbm/AuditEventLog.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/Biohazard.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/CancerResearchGroup.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/ClinicalReport.hbm.xml"/>
@@ -43,10 +43,10 @@
 		<mapping resource="edu/wustl/catissuecore/hbm/StorageType.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/User.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/Distribution.hbm.xml"/>
-		<mapping resource="edu/wustl/catissuecore/hbm/CDEImpl.hbm.xml"/>
-		<mapping resource="edu/wustl/catissuecore/hbm/PermissibleValueImpl.hbm.xml"/>
-		<mapping resource="edu/wustl/catissuecore/hbm/QueryColumnData.hbm.xml"/>
-		<mapping resource="edu/wustl/catissuecore/hbm/QueryTableData.hbm.xml"/>
+		<mapping resource="edu/wustl/common/hbm/CDEImpl.hbm.xml"/>
+		<mapping resource="edu/wustl/common/hbm/PermissibleValueImpl.hbm.xml"/>
+		<mapping resource="edu/wustl/common/hbm/QueryColumnData.hbm.xml"/>
+		<mapping resource="edu/wustl/common/hbm/QueryTableData.hbm.xml"/>
     </session-factory>
     
 </hibernate-configuration>
