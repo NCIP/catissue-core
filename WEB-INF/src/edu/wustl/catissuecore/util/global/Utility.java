@@ -9,13 +9,7 @@
 
 package edu.wustl.catissuecore.util.global;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -52,124 +46,9 @@ import edu.wustl.common.util.logger.Logger;
  * Utility Class contain general methods used through out the application.
  * @author kapil_kaveeshwar
  */
-
-public class Utility
+public class Utility extends edu.wustl.common.util.Utility
 {
-
-	
-	/**
-	 * Parses the Date in given format and returns the string representation.
-	 * @param date the Date to be parsed.
-	 * @param pattern the pattern of the date.
-	 * @return
-	 */
-	public static String parseDateToString(Date date, String pattern)
-	{
-	    String d = "";
-	    //TODO Check for null
-	    if(date!=null)
-	    {
-		    SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
-			d = dateFormat.format(date);
-	    }
-	    return d;
-	}
-	
-	public static String toString(Object obj)
-	{
-		if(obj == null)
-			return "";
-		
-		return obj.toString();
-	}
-	
-	public static String[] getTime(Date date)
-	{
-		String []time =new String[2];
-		Calendar cal = Calendar.getInstance();
- 		cal.setTime(date);
- 		time[0]= Integer.toString(cal.get(Calendar.HOUR_OF_DAY));
- 		time[1]= Integer.toString(cal.get(Calendar.MINUTE));
- 		return time;
-	}
-	
-	public static Long[] toLongArray(Collection collection)
-	{
-		Logger.out.debug(collection.toArray().getClass().getName());
-		
-		Long obj[] = new Long[collection.size()];
-		
-		int index = 0;
-		Iterator it = collection.iterator();
-		while(it.hasNext())
-		{
-			obj[index] = (Long)it.next();
-			Logger.out.debug("obj[index] "+obj[index].getClass().getName());
-			index++;
-		}
-		return obj;
-	}
-	
-	public static int toInt(Object obj)
-	{
-		int value=0;
-		if(obj == null)
-			return value;
-		else
-		{	Integer intObj = (Integer)obj;
-			value=intObj.intValue() ;
-			return value;
-		}
-	}
-	
-	public static double toDouble(Object obj)
-	{
-		double value=0;
-		if(obj == null)
-			return value;
-		else
-		{	Double dblObj = (Double)obj;
-			value=dblObj.doubleValue() ;
-			return value;
-		}
-	}
-	
-	/**
-	 * checking whether key's value is persisted or not
-	 *
-	 */
-	public static boolean isPersistedValue(Map map,String key){
-		Object obj = map.get(key);
-		String val=null;
-		if (obj!=null) 
-		{
-			val = obj.toString();
-		}
-		if((val!= null && !(val.equals("0"))) && !(val.equals("")))
-			return true;
-		else 
-			return false; 
-			
-	}
-	
-	/**
-     * Parses the fully qualified classname and returns only the classname.
-     * @param fullyQualifiedName The fully qualified classname. 
-     * @return The classname.
-     */
-    public static String parseClassName(String fullyQualifiedName)
-    {
-        try
-        {
-            return fullyQualifiedName.substring(fullyQualifiedName
-                    .lastIndexOf(".") + 1);
-        }
-        catch (Exception e)
-        {
-            return fullyQualifiedName;
-        }
-    }
-	
+    
     /**
      * @param selectedMenuID Menu that is clicked
      * @param currentMenuID Menu that is being checked
@@ -340,34 +219,6 @@ public class Utility
 		
 		return -1;
 	}
-	
-	//Mandar 17-Apr-06 Bugid : 1667 :- URL is incomplete displays /.
-	/**
-	 * @param requestURL URL generated from the request.
-	 * Sets the application URL in the Variables class after generating it in proper format.
-	 */
-	public static void setApplicationURL(String requestURL)
-	{
-	    Logger.out.debug("17-Apr-06 : requestURL : "+ requestURL);
-	    // Mandar : 17-Apr-06 : 1667 : caTissuecore Application URL is displayed as "/"
-	    String ourUrl="";
-	    try
-		{
-			URL aURL = new URL(requestURL);			
-			ourUrl = aURL.getProtocol()+"://"+aURL.getAuthority()+aURL.getPath();
-			ourUrl = ourUrl.substring(0,ourUrl.lastIndexOf("/"));
-			Logger.out.debug("Application URL Generated : "+ourUrl);
-		}
-	    catch(MalformedURLException urlExp)
-		{
-	    	Logger.out.error(urlExp.getMessage(),urlExp  );
-		}	    
-	    if (Variables.catissueURL != null && Variables.catissueURL.trim().length() == 0 )
-	    {
-	        Variables.catissueURL = ourUrl;
-	        Logger.out.debug("Application URL set: "+ Variables.catissueURL );
-	    }
-	}//setApplicationURL()
 	
 	/**
 	 * This method is used in JSP pages to get the width of columns for the html fields. 
