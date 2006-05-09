@@ -28,7 +28,7 @@
 	<property name="mysql.driver.string" value="org.gjt.mm.mysql.Driver"/>
 	<property name="mysql.lib" value="mysql-connector-java-3.0.16-ga-bin.jar"/>
 	<property name="oracle.lib" value="oracleDriver.jar"/>
-	
+	<var name="encodepwd" value=""/>
 	<!-- Check for required properties -->
 	<target name="assert">
 		<if>
@@ -345,6 +345,8 @@
 	
 	<!--Target for Database Creation-->
 	<target name="DBInitialize">
+		<antcall target="firstUser"/>
+		
 		<if>
 			<equals arg1="mysql" arg2="${database.type}"/>		
 			<then>
@@ -383,6 +385,7 @@
 			<transaction  src="${common.sql.dir}/AlterTable.sql"/>
 			<transaction  src="${common.sql.dir}/CDE_DummyData_Common.sql"/>
 			<transaction  src="${mysql.sql.dir}/csm_catissuecore.sql"/>
+			<transaction  src="${common.sql.dir}/createUser.sql"/>
 			<transaction>commit;</transaction>
 			<classpath>
 			<fileset dir="${lib.dir}">
@@ -408,6 +411,7 @@
 		  <transaction  src="${common.sql.dir}/AlterTable.sql"/>
 		  <transaction  src="${common.sql.dir}/CDE_DummyData_Common.sql"/>
 		  <transaction  src="${oracle.sql.dir}/CSM_Create_Oracle.sql"/>
+		  <transaction  src="${common.sql.dir}/createUser.sql"/>
 		  <transaction>commit;</transaction>	
     	  <classpath>
             <fileset dir="${lib.dir}">
@@ -468,18 +472,65 @@ guide (caTissue Core Deployment Guide.doc).
 	Once you have completed deployment, you should be able to login with the following 
 details:			
 URL: http://localhost:${jboss.server.port}/catissuecore 
-Username:admin@admin.com
-Password:login123
+Username:${first.admin.emailAddress}
+Password:${first.admin.password}
 
 Thanking You,
 -caTissue Core				
 			</message>
 		</mail>
 		<echo>
-			Please check the Email of ${email.administrative.emailAddress}.
+			Please check the Email of ${first.admin.emailAddress}.
 			If the Deployment mail is not received please check your 
 			email.administrative.emailAddress and email.sendEmailFrom.emailAddress 
 			properties in caTISSUEInstall.properties and Re-deploy the Application.
 		</echo>	
 	</target>
+	
+	<!--First User Creation. Mandar : 02-May-2006 -->
+		<target name="firstUser">
+			<echo message="Encoding Password..."/>
+			<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>
+	
+			<java classname="edu.wustl.catissuecore.util.PasswordManager"
+			fork="true">
+			<classpath>
+				<pathelement path="${temp.dir}/catissuecore/WEB-INF/classes"/>
+			</classpath>
+			<arg value="${base.dir}/catissuetmp.txt"/>
+			<arg value="${first.admin.password}"/>
+			</java>
+			<property file="${base.dir}/catissuetmp.txt"/>
+			<echo>
+					Encoded Password ${first.admin.encodedPassword}
+			</echo>
+
+			<echo message="Modifying caTISSUECore SQL file for user information..."/>
+				<copy file="${common.sql.dir}/createUser.sql" todir="${temp.dir}" overwrite="true"/>
+				<replace dir="${temp.dir}" propertyfile="caTISSUEInstall.properties"> 
+					<include name="createUser.sql"/>
+					<replacefilter 
+						token="@@first.admin.department@@" 
+					  	value="${first.admin.department}"/>
+					<replacefilter 
+						token="@@first.admin.institution@@" 
+					  	value="${first.admin.institution}"/>
+					<replacefilter 
+						token="@@first.admin.cancerresearchgroup@@" 
+					  	value="${first.admin.cancerresearchgroup}"/>
+					<replacefilter 
+						token="@@first.admin.emailAddress@@" 
+					  	value="${first.admin.emailAddress}"/>
+					<replacefilter 
+						token="@@first.admin.encodedPassword@@" 
+					  	value="${first.admin.encodedPassword}"/>
+				</replace>
+				<copy todir="${common.sql.dir}" overwrite="true">
+					<fileset dir="${temp.dir}">
+						<include name="createUser.sql"/>
+					</fileset>
+				</copy>	
+				<delete dir="${temp.dir}"/>
+		</target>
+
 </project>
