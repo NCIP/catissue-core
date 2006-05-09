@@ -8,16 +8,18 @@
  */ 
 package edu.wustl.catissuecore.util;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.util.List;
 import java.util.Random;
 
 import javax.servlet.http.HttpSession;
 
-import edu.wustl.common.bizlogic.AbstractBizLogic;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.bizlogic.AbstractBizLogic;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.logger.Logger;
 
@@ -346,7 +348,40 @@ public class PasswordManager
     	String pwd = "forgot";
     	String encodedPWD = encode(pwd);
     	System.out.println("encodedPWD "+encodedPWD);
-    	
-        System.out.println(decode("644147577165776c6b636f6f"));
+        System.out.println(decode("6c416f576765696c6e63316f326d3365"));
+        System.out.println("Package :  " + PasswordManager.class.getPackage().getName());  
+
+        //Mandar 08-May-06
+        if(args.length > 1 )
+    	{
+    		String filename = args[0];
+    		String password = args[1];
+    		encodedPWD = encode(password);
+    		System.out.println("Filename : "+filename + " : password : "+password+" : encoded"+encodedPWD ); 
+    		writeToFile(filename,encodedPWD  );
+    	}
     }
+    
+    /**
+     * This method writes the encoded password to the file.
+     * @param filename File to be written. 
+     * @param encodedPassword Encoded password.
+     */
+	public static void writeToFile(String filename,String encodedPassword)
+    {
+    	try
+		{
+    		File fileObject = new File(filename );
+    		FileWriter writeObject = new FileWriter(fileObject );
+    		
+    		writeObject.write("first.admin.encodedPassword="+encodedPassword+"\n" ) ;
+			writeObject.close();
+
+		}
+    	catch(Exception ioe)
+		{
+    		System.out.println("Error : " + ioe);
+		}
+    }
+
 }
