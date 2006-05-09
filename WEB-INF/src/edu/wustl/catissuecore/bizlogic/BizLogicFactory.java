@@ -12,13 +12,15 @@ package edu.wustl.catissuecore.bizlogic;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.bizlogic.AbstractBizLogic;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
+import edu.wustl.common.bizlogic.QueryBizLogic;
+import edu.wustl.common.factory.AbstractBizLogicFactory;
 import edu.wustl.common.util.logger.Logger;
 
 /**
  * BizLogicFactory is a factory for DAO instances of various domain objects.
  * @author gautam_shetty
  */
-public class BizLogicFactory
+public class BizLogicFactory extends AbstractBizLogicFactory
 {
     /**
      * Returns DAO instance according to the form bean type.
