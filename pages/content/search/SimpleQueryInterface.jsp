@@ -2,8 +2,8 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <%@ page import="java.util.StringTokenizer"%>
-<%@ page import="edu.wustl.catissuecore.util.global.Constants,edu.wustl.catissuecore.actionForm.SimpleQueryInterfaceForm,java.util.List,edu.wustl.common.beans.NameValueBean"%>
-<%@ page import="edu.wustl.catissuecore.query.Operator"%>
+<%@ page import="edu.wustl.catissuecore.util.global.Constants,edu.wustl.common.actionForm.SimpleQueryInterfaceForm,java.util.List,edu.wustl.common.beans.NameValueBean"%>
+<%@ page import="edu.wustl.common.query.Operator"%>
 
 <head>
 <style>
