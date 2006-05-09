@@ -45,7 +45,7 @@ PUBLIC
 		<form-bean name="specimenEventParametersForm" type="edu.wustl.catissuecore.actionForm.SpecimenEventParametersForm"/>
 		
 		<form-bean name="dummyCollectionProtocolForm" type="edu.wustl.catissuecore.actionForm.CollectionProtocolForm"/>
-		<form-bean name="simpleQueryInterfaceForm" type="edu.wustl.catissuecore.actionForm.SimpleQueryInterfaceForm"/>
+		<form-bean name="simpleQueryInterfaceForm" type="edu.wustl.common.actionForm.SimpleQueryInterfaceForm"/>
 		
 		<form-bean name="shoppingCartForm" type="edu.wustl.catissuecore.actionForm.ShoppingCartForm"/>
 		<form-bean name="assignPrivilegesForm" type="edu.wustl.catissuecore.actionForm.AssignPrivilegesForm"/>
@@ -58,11 +58,8 @@ PUBLIC
 	
 	<!-- Global Exception Definitions -->
 	<global-exceptions>
-		<!-- exception
-			type="edu.wustl.catissuecore.exception.UserNotAuthenticatedException"
-			key="" scope="request" path=".catissuecore.homePageDef" /-->
 		<exception
-			type="edu.wustl.catissuecore.exception.UserNotAuthenticatedException"
+			type="edu.wustl.common.exception.UserNotAuthenticatedException"
 			key="" scope="request" path=".catissuecore.redirectToLoginPageDef" />
 		<exception
 			handler="edu.wustl.catissuecore.util.CommonExceptionHandler"
@@ -78,12 +75,12 @@ PUBLIC
 					type="edu.wustl.catissuecore.action.ForwardAction">
 					<forward name="success" path=".catissuecore.manageAdminDataHomeDef" />
 		</action>
-
+		
 		<action path="/Home"
 					type="edu.wustl.catissuecore.action.ForwardAction">
 					<forward name="success" path=".catissuecore.homePageDef" />
 		</action>
-
+		
 		<action path="/RedirectHome"
 					type="org.apache.struts.actions.ForwardAction"
 					parameter=".catissuecore.homePageDef" />
@@ -92,7 +89,7 @@ PUBLIC
 					type="edu.wustl.catissuecore.action.ForwardAction">
 					<forward name="success" path=".catissuecore.manageBioSpecimenHomeDef" />
 		</action>
-
+		
 		<action path="/Search"
 					type="edu.wustl.catissuecore.action.ForwardAction">
 					<forward name="success" path=".catissuecore.searchHomeDef" />
@@ -113,37 +110,13 @@ PUBLIC
 		<action path="/PrivacyNotice"
 					type="org.apache.struts.actions.ForwardAction"
 					parameter=".catissuecore.privacyNoticeDef" />
-		
-
-	<!--	
-		<action path="/ManageAdministrativeData"
-                    type="org.apache.struts.actions.ForwardAction"
-                    parameter=".catissuecore.manageAdminDataHomeDef" />
-    
-        <action path="/Home"
-                    type="org.apache.struts.actions.ForwardAction"
-                    parameter=".catissuecore.homePageDef" />
-
-        <action path="/ManageBioSpecimen"
-                    type="org.apache.struts.actions.ForwardAction"
-                    parameter=".catissuecore.manageBioSpecimenHomeDef" />
-
-		<action path="/Search"
-                    type="org.apache.struts.actions.ForwardAction"
-                    parameter=".catissuecore.searchHomeDef" />
-	-->				
-    
+		    	
         <action path="/Summary" type="edu.wustl.catissuecore.action.SummaryAction">
             <forward name="success" path=".catissuecore.summaryHomeDef" />
             <forward name="failure" path=".catissuecore.homePageDef" />
 		</action>
-
-<!--
-		 <action path="/Summary"
-                    type="org.apache.struts.actions.ForwardAction"
-                    parameter=".catissuecore.summaryHomeDef" />
--->                    
-         <action path="/Help"
+				
+        <action path="/Help"
                     type="org.apache.struts.actions.ForwardAction"
                     parameter=".catissuecore.helpHomeDef" />
                     
@@ -152,9 +125,7 @@ PUBLIC
             <forward name="success" path=".catissuecore.summaryLoggedInDef" />
             <forward name="failure" path=".catissuecore.homePageDef" />
 		 </action>
-                    
-            
-  
+
          <action path="/LoggedInHelp"
                     type="org.apache.struts.actions.ForwardAction"
                     parameter=".catissuecore.helpLoggedInDef" />
@@ -239,7 +210,7 @@ PUBLIC
 		</action>
 		
 		<action path="/ParticipantSearch"
-		    type="edu.wustl.catissuecore.action.CommonSearchAction"
+		    type="edu.wustl.common.action.CommonSearchAction"
 			name="participantForm"
 			validate="false"
 			input="/Participant.do?operation=edit&amp;pageOf=pageOfParticipant&amp;menuSelected=12"
@@ -285,7 +256,7 @@ PUBLIC
 		</action>
 		
 		<action path="/CollectionProtocolRegistrationSearch"
-		    type="edu.wustl.catissuecore.action.CommonSearchAction"
+		    type="edu.wustl.common.action.CommonSearchAction"
 			name="collectionProtocolRegistrationForm"
 			validate="false"
 			input="/CollectionProtocolRegistrationSearch.do?operation=edit&amp;pageOf=pageOfCollectionProtocolRegistration&amp;menuSelected=13"
@@ -327,7 +298,7 @@ PUBLIC
 		</action>
 		
 		<action path="/InstitutionSearch"
-		    type="edu.wustl.catissuecore.action.CommonSearchAction"
+		    type="edu.wustl.common.action.CommonSearchAction"
 			name="institutionForm"
 			validate="false"
 			input="/Institution.do?operation=edit&amp;pageOf=pageOfInstitution&amp;menuSelected=2"
@@ -422,7 +393,7 @@ PUBLIC
 		</action>
 		
 		<action path="/UserSearch"
-		    type="edu.wustl.catissuecore.action.CommonSearchAction"
+		    type="edu.wustl.common.action.CommonSearchAction"
 			name="userForm"
 			validate="true"
 			input="/User.do?operation=edit&amp;menuSelected=1"
@@ -465,7 +436,7 @@ PUBLIC
 		</action>
 			
 		<action path="/DepartmentSearch"
-		    type="edu.wustl.catissuecore.action.CommonSearchAction"
+		    type="edu.wustl.common.action.CommonSearchAction"
 			name="departmentForm"
 			validate="false"
 			input="/Department.do?operation=edit&amp;menuSelected=3"
@@ -508,7 +479,7 @@ PUBLIC
 		</action>
 		
 		<action path="/CancerResearchGroupSearch"
-		    type="edu.wustl.catissuecore.action.CommonSearchAction"
+		    type="edu.wustl.common.action.CommonSearchAction"
 			name="cancerResearchGroupForm"
 			validate="false"
 			input="/CancerResearchGroup.do?operation=edit&amp;pageOf=pageOfCancerResearchGroup&amp;menuSelected=4"
@@ -562,7 +533,7 @@ PUBLIC
 		</action>
 
 		<action path="/CollectionProtocolSearch"
-		    type="edu.wustl.catissuecore.action.CommonSearchAction"
+		    type="edu.wustl.common.action.CommonSearchAction"
 			name="collectionProtocolForm"
 			validate="false"
 			input="/CollectionProtocol.do?operation=edit&amp;pageOf=pageOfCollectionProtocol&amp;menuSelected=9"
@@ -582,7 +553,7 @@ PUBLIC
 			<forward name="failure" path=".catissuecore.distributionProtocolDef" />
 			<forward name="access_denied" path="/ManageAdministrativeData.do" />
 		</action>
-
+		
 		<action path="/DistributionProtocolAdd"
 			type="edu.wustl.catissuecore.action.CommonAddEditAction"
 			name="distributionProtocolForm"
@@ -593,7 +564,7 @@ PUBLIC
 			<forward name="failure" path="/DistributionProtocol.do?operation=add&amp;pageOf=pageOfDistributionProtocol&amp;menuSelected=10" />
 			<forward name="distribution" path="/Distribution.do?operation=add&amp;pageOf=pageOfDistribution&amp;menuSelected=16" />
 		</action>
-
+		
 		<action path="/DistributionProtocolEdit"
 			type="edu.wustl.catissuecore.action.CommonAddEditAction"
 			name="distributionProtocolForm"
@@ -605,7 +576,7 @@ PUBLIC
 		</action>
 		
 		<action path="/DistributionProtocolSearch"
-		    type="edu.wustl.catissuecore.action.CommonSearchAction"
+		    type="edu.wustl.common.action.CommonSearchAction"
 			name="distributionProtocolForm"
 			validate="false"
 			input="/DistributionProtocol.do?operation=edit&amp;pageOf=pageOfDistributionProtocol&amp;menuSelected=10"
@@ -614,7 +585,6 @@ PUBLIC
 			<forward name="failure" path="/DistributionProtocol.do?operation=edit&amp;pageOf=pageOfDistributionProtocol&amp;menuSelected=10"/>
 		</action>    
 		<!-- DistributionProtocol Actions Ends-->
-		
 		
 		<!--Report Problem Actions Begins-->
 		<action path="/ReportProblem"
@@ -672,8 +642,7 @@ PUBLIC
 			<forward name="failure" path="/error.jsp" />
 		</action>
   		<!--Report Problem Actions Ends-->
-
-		
+				
 		<!--Forgot Password Actions Begins-->
 		<action path="/ForgotPassword"
 			type="edu.wustl.catissuecore.action.ForgotPasswordAction"
@@ -730,7 +699,7 @@ PUBLIC
 		</action>
 
 		<action path="/SpecimenCollectionGroupSearch"
-		    type="edu.wustl.catissuecore.action.CommonSearchAction"
+		    type="edu.wustl.common.action.CommonSearchAction"
 			name="specimenCollectionGroupForm"
 			validate="false"
 			input="/SpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroup&amp;menuSelected=14"
@@ -738,9 +707,8 @@ PUBLIC
 			<forward name="pageOfSpecimenCollectionGroup" path="/SpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroup&amp;menuSelected=14"/>
 			<forward name="failure" path="/SpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroup&amp;menuSelected=14"/>
 		</action>    
-	
 		<!--SpecimenCollectonGroup Actions Begin-->
-
+		
 		<!--Approve User Actions Begin-->
 		<action path="/ApproveUserShow"
 			type="edu.wustl.catissuecore.action.DomainObjectListAction"
@@ -802,15 +770,13 @@ PUBLIC
 			validate="true"
 			input="/NewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimen&amp;menuSelected=15"
 			scope="request">
-			<!-- forward name="success" path="/NewSpecimen.do?operation=edit&amp;pageOf=pageOfNewSpecimen&amp;menuSelected=15" /-->
 			<forward name="success" path="/NewSpecimenSearch.do?pageOf=pageOfNewSpecimen" />
 			<forward name="failure" path="/NewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimen&amp;menuSelected=15" />
 			<forward name="createNew" path="/CreateSpecimen.do?operation=add&amp;pageOf=&amp;menuSelected=15" />
 			<forward name="sameCollectionGroup" path="/NewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimen&amp;menuSelected=15" />
 			<forward name="eventParameters" path="/ListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParameters&amp;menuSelected=15" />
-			
 		</action>
-		
+				
 		<action path="/NewSpecimenEdit"
 			type="edu.wustl.catissuecore.action.CommonAddEditAction"
 			name="newSpecimenForm"
@@ -823,11 +789,10 @@ PUBLIC
 			<forward name="sameCollectionGroup" path="/NewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimen&amp;menuSelected=15" />
 			<forward name="query" path="/NewSpecimen.do?operation=edit&amp;pageOf=query&amp;menuSelected=12" />
 			<forward name="eventParameters" path="/ListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParameters&amp;menuSelected=15" />
-			
 		</action>
 		
 		<action path="/NewSpecimenSearch"
-		    type="edu.wustl.catissuecore.action.CommonSearchAction"
+		    type="edu.wustl.common.action.CommonSearchAction"
 			name="newSpecimenForm"
 			validate="false"
 			input="/NewSpecimen.do?operation=edit&amp;pageOf=pageOfNewSpecimen&amp;menuSelected=15"
@@ -870,7 +835,7 @@ PUBLIC
 		</action>
 		
 		<action path="/CreateSpecimenSearch"
-		    type="edu.wustl.catissuecore.action.CommonSearchAction"
+		    type="edu.wustl.common.action.CommonSearchAction"
 			name="createSpecimenForm"
 			validate="true"
 			input="/CreateSpecimen.do?operation=edit&amp;menuSelected=15"
@@ -879,8 +844,7 @@ PUBLIC
 			<forward name="failure" path="/CreateSpecimen.do?operation=edit&amp;pageOf=&amp;menuSelected=15"/>
 		</action>
 		<!--Create Specimen Actions Ends-->
-		
-		
+				
 		<!-- StorageType Actions Begins -->
         <action path="/StorageType"
 			type="edu.wustl.catissuecore.action.StorageTypeAction"
@@ -913,7 +877,7 @@ PUBLIC
 		</action>
 		
 		<action path="/StorageTypeSearch"
-		    type="edu.wustl.catissuecore.action.CommonSearchAction"
+		    type="edu.wustl.common.action.CommonSearchAction"
 			name="storageTypeForm"
 			validate="false"
 			input="/StorageType.do?operation=edit&amp;pageOf=pageOfStorageType&amp;menuSelected=6"
@@ -922,8 +886,7 @@ PUBLIC
 			<forward name="failure" path="/StorageType.do?operation=edit&amp;pageOf=pageOfStorageType&amp;menuSelected=6"/>
 		</action>
 		<!-- StorageType Actions Ends -->
-		
-		
+				
 		<!-- StorageContainer Actions Begins -->
         <action path="/StorageContainer"
 			type="edu.wustl.catissuecore.action.StorageContainerAction"
@@ -957,7 +920,7 @@ PUBLIC
 		</action>
 		
 		<action path="/StorageContainerSearch"
-		    type="edu.wustl.catissuecore.action.CommonSearchAction"
+		    type="edu.wustl.common.action.CommonSearchAction"
 			name="storageContainerForm"
 			validate="false"
 			input="/StorageContainer.do?operation=edit&amp;pageOf=pageOfStorageContainer&amp;menuSelected=7"
@@ -1003,7 +966,7 @@ PUBLIC
 		</action>
 		
 		<action path="/SiteSearch"
-		    type="edu.wustl.catissuecore.action.CommonSearchAction"
+		    type="edu.wustl.common.action.CommonSearchAction"
 			name="siteForm"
 			validate="false"
 			input="/Site.do?operation=edit&amp;pageOf=pageOfSite&amp;menuSelected=5"
@@ -1044,7 +1007,7 @@ PUBLIC
 		</action>
 		
 		<action path="/BiohazardSearch"
-		    type="edu.wustl.catissuecore.action.CommonSearchAction"
+		    type="edu.wustl.common.action.CommonSearchAction"
 			name="biohazardForm"
 			validate="false"
 			input="/Biohazard.do?operation=edit&amp;pageOf=pageOfBioHazard&amp;menuSelected=8"
@@ -1054,7 +1017,7 @@ PUBLIC
 		</action>    
 		<!-- Biohazard Actions Ends -->
 		
-	<!-- FrozenEventParameters Actions Begins -->
+		<!-- FrozenEventParameters Actions Begins -->
         <action path="/FrozenEventParameters"
 			type="edu.wustl.catissuecore.action.FrozenEventParametersAction"
 			name="frozenEventParametersForm"
@@ -1086,7 +1049,7 @@ PUBLIC
 		</action>
 		
 		<action path="/FrozenEventParametersSearch"
-		    type="edu.wustl.catissuecore.action.CommonSearchAction"
+		    type="edu.wustl.common.action.CommonSearchAction"
 			name="frozenEventParametersForm"
 			validate="false"
 			input="/FrozenEventParameters.do?operation=edit&amp;pageOf=pageOfFrozenEventParameters"
@@ -1095,8 +1058,8 @@ PUBLIC
 			<forward name="failure" path="/FrozenEventParameters.do?operation=edit&amp;pageOf=pageOfFrozenEventParameters"/>
 		</action>    
 		<!-- FrozenEventParameters Actions Ends -->
-
-	<!-- CheckInCheckOutEventParameters Actions Begins -->
+		
+		<!-- CheckInCheckOutEventParameters Actions Begins -->
         <action path="/CheckInCheckOutEventParameters"
 			type="edu.wustl.catissuecore.action.CheckInCheckOutEventParametersAction"
 			name="checkInCheckOutEventParametersForm"
@@ -1128,7 +1091,7 @@ PUBLIC
 		</action>
 		
 		<action path="/CheckInCheckOutEventParametersSearch"
-		    type="edu.wustl.catissuecore.action.CommonSearchAction"
+		    type="edu.wustl.common.action.CommonSearchAction"
 			name="checkInCheckOutEventParametersForm"
 			validate="false"
 			input="/CheckInCheckOutEventParameters.do?operation=edit&amp;pageOf=pageOfCheckInCheckOutEventParameters"
@@ -1137,7 +1100,7 @@ PUBLIC
 			<forward name="failure" path="/CheckInCheckOutEventParameters.do?operation=edit&amp;pageOf=pageOfCheckInCheckOutEventParameters"/>
 		</action>    
 		<!-- CheckInCheckOutEventParameters Actions Ends -->
-
+		
 		<!-- ReceivedEventParameters Actions Begins -->
         <action path="/ReceivedEventParameters"
 			type="edu.wustl.catissuecore.action.ReceivedEventParametersAction"
@@ -1170,7 +1133,7 @@ PUBLIC
 		</action>
 		
 		<action path="/receivedEventParametersSearch"
-		    type="edu.wustl.catissuecore.action.CommonSearchAction"
+		    type="edu.wustl.common.action.CommonSearchAction"
 			name="receivedEventParametersForm"
 			validate="false"
 			input="/ReceivedEventParameters.do?operation=edit&amp;pageOf=pageOfReceivedEventParameters"
@@ -1179,7 +1142,7 @@ PUBLIC
 			<forward name="failure" path="/ReceivedEventParameters.do?operation=edit&amp;pageOf=pageOfReceivedEventParameters"/>
 		</action>    
 		<!-- ReceivedEventParameters Actions Ends -->
-
+		
 		<!-- FluidSpecimenReviewEventParameters Actions Begins -->
         <action path="/FluidSpecimenReviewEventParameters"
 			type="edu.wustl.catissuecore.action.SpecimenEventParametersAction"
@@ -1212,7 +1175,7 @@ PUBLIC
 		</action>
 		
 		<action path="/FluidSpecimenReviewEventParametersSearch"
-		    type="edu.wustl.catissuecore.action.CommonSearchAction"
+		    type="edu.wustl.common.action.CommonSearchAction"
 			name="fluidSpecimenReviewEventParametersForm"
 			validate="false"
 			input="/FluidSpecimenReviewEventParameters.do?operation=edit&amp;pageOf=pageOfFluidSpecimenReviewParameters"
@@ -1221,7 +1184,7 @@ PUBLIC
 			<forward name="failure" path="/FluidSpecimenReviewEventParameters.do?operation=edit&amp;pageOf=pageOfFluidSpecimenReviewParameters"/>
 		</action>    
 		<!-- FluidSpecimenReviewEventParameters Actions Ends -->
-
+		
 		<!-- CellSpecimenReviewParameters Actions Begins -->
         <action path="/CellSpecimenReviewParameters"
 			type="edu.wustl.catissuecore.action.SpecimenEventParametersAction"
@@ -1254,7 +1217,7 @@ PUBLIC
 		</action>
 		
 		<action path="/CellSpecimenReviewParametersSearch"
-		    type="edu.wustl.catissuecore.action.CommonSearchAction"
+		    type="edu.wustl.common.action.CommonSearchAction"
 			name="cellSpecimenReviewParametersForm"
 			validate="false"
 			input="/CellSpecimenReviewParameters.do?operation=edit&amp;pageOf=pageOfCellSpecimenReviewParameters"
@@ -1263,7 +1226,7 @@ PUBLIC
 			<forward name="failure" path="/CellSpecimenReviewParameters.do?operation=edit&amp;pageOf=pageOfCellSpecimenReviewParameters"/>
 		</action>    
 		<!-- CellSpecimenReviewParameters Actions Ends -->
-
+		
 		<!-- TissueSpecimenReviewEventParameters Actions Begins -->
         <action path="/TissueSpecimenReviewEventParameters"
 			type="edu.wustl.catissuecore.action.TissueSpecimenReviewEventParametersAction"
@@ -1296,7 +1259,7 @@ PUBLIC
 		</action>
 		
 		<action path="/TissueSpecimenReviewEventParametersSearch"
-		    type="edu.wustl.catissuecore.action.CommonSearchAction"
+		    type="edu.wustl.common.action.CommonSearchAction"
 			name="tissueSpecimenReviewEventParametersForm"
 			validate="false"
 			input="/TissueSpecimenReviewEventParameters.do?operation=edit&amp;pageOf=pageOfTissueSpecimenReviewParameters"
@@ -1305,7 +1268,7 @@ PUBLIC
 			<forward name="failure" path="/TissueSpecimenReviewEventParameters.do?operation=edit&amp;pageOf=pageOfTissueSpecimenReviewParameters"/>
 		</action>    
 		<!-- TissueSpecimenReviewEventParameters Actions Ends -->
-
+		
 		<!-- DisposalEventParameters Actions Begins -->
         <action path="/DisposalEventParameters"
 			type="edu.wustl.catissuecore.action.SpecimenEventParametersAction"
@@ -1338,7 +1301,7 @@ PUBLIC
 		</action>
 		
 		<action path="/DisposalEventParametersSearch"
-		    type="edu.wustl.catissuecore.action.CommonSearchAction"
+		    type="edu.wustl.common.action.CommonSearchAction"
 			name="disposalEventParametersForm"
 			validate="false"
 			input="/DisposalEventParameters.do?operation=edit&amp;pageOf=pageOfDisposalEventParameters"
@@ -1347,9 +1310,8 @@ PUBLIC
 			<forward name="failure" path="/DisposalEventParameters.do?operation=edit&amp;pageOf=pageOfDisposalEventParameters"/>
 		</action>    
 		<!-- DisposalEventParameters Actions Ends -->
-		
-		
-			<!--ThawEventParameters Actions Begins -->
+				
+		<!--ThawEventParameters Actions Begins -->
         <action path="/ThawEventParameters"
 			type="edu.wustl.catissuecore.action.SpecimenEventParametersAction"
 			name="thawEventParametersForm"
@@ -1381,7 +1343,7 @@ PUBLIC
 		</action>
 		
 		<action path="/ThawEventParametersSearch"
-		    type="edu.wustl.catissuecore.action.CommonSearchAction"
+		    type="edu.wustl.common.action.CommonSearchAction"
 			name="thawEventParametersForm"
 			validate="false"
 			input="/ThawEventParameters.do?operation=edit&amp;pageOf=pageOfThawEventParameters"
@@ -1423,7 +1385,7 @@ PUBLIC
 		</action>
 		
 		<action path="/MolecularSpecimenReviewParametersSearch"
-		    type="edu.wustl.catissuecore.action.CommonSearchAction"
+		    type="edu.wustl.common.action.CommonSearchAction"
 			name="molecularSpecimenReviewParametersForm"
 			validate="false"
 			input="/MolecularSpecimenReviewParameters.do?operation=edit&amp;pageOf=pageOfMolecularSpecimenReviewParameters"
@@ -1433,7 +1395,7 @@ PUBLIC
 		</action>    
 		<!-- MolecularSpecimenReviewParameters Actions Ends -->
 	
-	<!-- CollectionEventParameters Actions Begins -->
+		<!-- CollectionEventParameters Actions Begins -->
         <action path="/CollectionEventParameters"
 			type="edu.wustl.catissuecore.action.CollectionEventParametersAction"
 			name="collectionEventParametersForm"
@@ -1465,7 +1427,7 @@ PUBLIC
 		</action>
 		
 		<action path="/CollectionEventParametersSearch"
-		    type="edu.wustl.catissuecore.action.CommonSearchAction"
+		    type="edu.wustl.common.action.CommonSearchAction"
 			name="collectionEventParametersForm"
 			validate="false"
 			input="/CollectionEventParameters.do?operation=edit&amp;pageOf=pageOfCollectionEventParameters"
@@ -1507,7 +1469,7 @@ PUBLIC
 		</action>
 		
 		<action path="/TransferEventParametersSearch"
-		    type="edu.wustl.catissuecore.action.CommonSearchAction"
+		    type="edu.wustl.common.action.CommonSearchAction"
 			name="transferEventParametersForm"
 			validate="false"
 			input="/TransferEventParameters.do?operation=edit&amp;pageOf=pageOfTransferEventParameters"
@@ -1517,7 +1479,7 @@ PUBLIC
 		</action>    
 		<!-- TransferEventParameters Actions Ends -->
 		
-	<!-- SpunEventParameters Actions Begins -->
+		<!-- SpunEventParameters Actions Begins -->
         <action path="/SpunEventParameters"
 			type="edu.wustl.catissuecore.action.SpecimenEventParametersAction"
 			name="spunEventParametersForm"
@@ -1549,7 +1511,7 @@ PUBLIC
 		</action>
 		
 		<action path="/SpunEventParametersSearch"
-		    type="edu.wustl.catissuecore.action.CommonSearchAction"
+		    type="edu.wustl.common.action.CommonSearchAction"
 			name="spunEventParametersForm"
 			validate="false"
 			input="/SpunEventParameters.do?operation=edit&amp;pageOf=pageOfSpunEventParameters"
@@ -1591,7 +1553,7 @@ PUBLIC
 		</action>
 		
 		<action path="/EmbeddedEventParametersSearch"
-		    type="edu.wustl.catissuecore.action.CommonSearchAction"
+		    type="edu.wustl.common.action.CommonSearchAction"
 			name="embeddedEventParametersForm"
 			validate="false"
 			input="/EmbeddedEventParameters.do?operation=edit&amp;pageOf=pageOfEmbeddedEventParameters"
@@ -1633,7 +1595,7 @@ PUBLIC
 		</action>
 		
 		<action path="/FixedEventParametersSearch"
-		    type="edu.wustl.catissuecore.action.CommonSearchAction"
+		    type="edu.wustl.common.action.CommonSearchAction"
 			name="fixedEventParametersForm"
 			validate="false"
 			input="/FixedEventParameters.do?operation=edit&amp;pageOf=pageOfFixedEventParameters"
@@ -1675,7 +1637,7 @@ PUBLIC
 		</action>
 		
 		<action path="/ProcedureEventParametersSearch"
-		    type="edu.wustl.catissuecore.action.CommonSearchAction"
+		    type="edu.wustl.common.action.CommonSearchAction"
 			name="procedureEventParametersForm"
 			validate="false"
 			input="/ProcedureEventParameters.do?operation=edit&amp;pageOf=pageOfProcedureEventParameters"
@@ -1718,7 +1680,7 @@ PUBLIC
 		</action>
 		
 		<action path="/DistributionSearch"
-		    type="edu.wustl.catissuecore.action.CommonSearchAction"
+		    type="edu.wustl.common.action.CommonSearchAction"
 			name="distributionForm"
 			validate="false"
 			input="/Distribution.do?operation=edit&amp;pageOf=pageOfDistribution&amp;menuSelected=16"
@@ -1764,7 +1726,7 @@ PUBLIC
 		
 		<!--Simple Query Interface Actions Begin-->		
 		<action path="/SimpleQueryInterface"
-			type="edu.wustl.catissuecore.action.SimpleQueryInterfaceAction"
+			type="edu.wustl.common.action.SimpleQueryInterfaceAction"
 			name="simpleQueryInterfaceForm"
 			validate="false"
 			scope="request">
@@ -1847,7 +1809,7 @@ PUBLIC
 		</action>
 		
 		<action path="/SimpleSearch"
-			type="edu.wustl.catissuecore.action.SimpleSearchAction"
+			type="edu.wustl.common.action.SimpleSearchAction"
 			name="simpleQueryInterfaceForm"
 			validate="true"
 			input="/SimpleQueryInterface.do"
@@ -1920,7 +1882,7 @@ PUBLIC
 		</action>
 		
 		<action path="/SpecimenEventParametersSearch"
-		    type="edu.wustl.catissuecore.action.CommonSearchAction"
+		    type="edu.wustl.common.action.CommonSearchAction"
 			name="specimenEventParametersForm"
 			validate="true"
 			input="/SpecimenEventParameters.do"
@@ -2009,7 +1971,7 @@ PUBLIC
 		</action>
 		
 		<action path="/QueryParticipantSearch"
-		    type="edu.wustl.catissuecore.action.CommonSearchAction"
+		    type="edu.wustl.common.action.CommonSearchAction"
 			name="participantForm"
 			validate="false"
 			scope="request">
@@ -2041,7 +2003,7 @@ PUBLIC
 		</action>
 		
 		<action path="/QueryCollectionProtocolSearch"
-		    type="edu.wustl.catissuecore.action.CommonSearchAction"
+		    type="edu.wustl.common.action.CommonSearchAction"
 			name="collectionProtocolForm"
 			validate="false"
 			scope="request">
@@ -2072,7 +2034,7 @@ PUBLIC
 		</action>
 		
 		<action path="/QuerySpecimenCollectionGroupSearch"
-		    type="edu.wustl.catissuecore.action.CommonSearchAction"
+		    type="edu.wustl.common.action.CommonSearchAction"
 			name="specimenCollectionGroupForm"
 			validate="false"
 			scope="request">
@@ -2103,15 +2065,14 @@ PUBLIC
 		</action>
 		
 		<action path="/QuerySpecimenSearch"
-		    type="edu.wustl.catissuecore.action.CommonSearchAction"
+		    type="edu.wustl.common.action.CommonSearchAction"
 			name="newSpecimenForm"
 			validate="false"						
 			scope="request">
 			<forward name="pageOfSpecimenQueryEdit" path="/QuerySpecimen.do?operation=edit&amp;pageOf=query"/>
 			<forward name="failure" path="/QuerySpecimen.do?pageOf=query"/>
 		</action>
-		
-	
+			
 		<action path="/QuerySpecimenEdit"
 			type="edu.wustl.catissuecore.action.CommonAddEditAction"
 			name="newSpecimenForm"
@@ -2121,10 +2082,7 @@ PUBLIC
 			<forward name="query" path="/NewSpecimen.do?operation=edit&amp;pageOf=query&amp;menuSelected=12" />
 			<forward name="failure" path="/NewSpecimen.do?operation=edit&amp;pageOf=pageOfNewSpecimen&amp;menuSelected=15" />
 		</action>
-		
-		
 		<!--Specimen Object View Actions End-->
-		
 		
 		<!-- Shopping Cart Actions Begins -->
         <action path="/ShoppingCart"
@@ -2227,7 +2185,6 @@ PUBLIC
 			scope="request">
 			<forward name="success" path=".catissuecore.advanceQueryViewDef" />
 		</action>
-		
 	
 		<action path="/AdvanceQuery"
 			type="edu.wustl.catissuecore.action.SimpleQueryInterfaceAction"
@@ -2321,7 +2278,7 @@ PUBLIC
 		</action>
 		<!--Spreadshet Export Actions Ends -->
 	
-	<!-- ************** HTTP API ***************** -->
+		<!-- ************** HTTP API ***************** -->
 		<action path="/OperationHTTP"
 			type="edu.wustl.catissuecore.action.CommonAddEditAction"
 			name="abstractActionForm"
