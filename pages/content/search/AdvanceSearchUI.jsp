@@ -1,8 +1,8 @@
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
-<%@ page import="edu.wustl.catissuecore.vo.SearchFieldData"%>
-<%@ page import="edu.wustl.catissuecore.vo.AdvanceSearchUI"%>
+<%@ page import="edu.wustl.common.vo.SearchFieldData"%>
+<%@ page import="edu.wustl.common.vo.AdvanceSearchUI"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.catissuecore.util.SearchUtil"%>
 
