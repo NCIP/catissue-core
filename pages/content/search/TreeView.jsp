@@ -45,7 +45,7 @@
 	<PARAM name="<%=Constants.PROPERTY_NAME%>" value="<%=propertyName%>">
 	<PARAM name="<%=Constants.CDE_NAME%>" value="<%=cdeName%>">
     <PARAM name="code" value="<%=Constants.QUERY_TREE_APPLET%>">
-	<PARAM name="archive" value="Applet/QueryTree.jar">
+	<PARAM name="archive" value="Applet/TreeApplet.jar">
 	<PARAM name="type" value="application/x-java-applet;jpi-version=1.4.2">
 	<PARAM name="<%=Constants.PAGEOF%>" value="<%=pageOf%>">
 	<PARAM name="<%=Constants.STORAGE_CONTAINER_TYPE%>" value="<%=storageContainerType%>">
@@ -58,7 +58,7 @@
 			height="100%" code="<%=Constants.QUERY_TREE_APPLET%>"
 			codebase="<%=Constants.APPLET_CODEBASE%>"
 			pluginspage="http://java.sun.com/j2se/1.4.1/download.html"
-			archive="Applet/QueryTree.jar"
+			archive="Applet/TreeApplet.jar"
 			pageOf="<%=pageOf%>"
 			storageType="<%=storageContainerType%>"
 			storageToBeSelected="<%=storageContainerID%>"
