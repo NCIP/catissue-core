@@ -17,8 +17,10 @@
 			return Constants.UNIT_ML;
 		else if(specimenType.equals("Tissue"))
 		{
-			if(subType.equals(Constants.SLIDE) || subType.equals(Constants.PARAFFIN_BLOCK) || subType.equals(Constants.FROZEN_BLOCK))
+			if(subType.equals(Constants.FROZEN_TISSUE_SLIDE) || subType.equals(Constants.FIXED_TISSUE_BLOCK) || subType.equals(Constants.FROZEN_TISSUE_BLOCK) || subType.equals(Constants.NOT_SPECIFIED) )
 				return Constants.UNIT_CN;
+			else if(subType.equals(Constants.MICRODISSECTED))
+				return Constants.UNIT_CC;
 			else
 				return Constants.UNIT_GM;
 		}
