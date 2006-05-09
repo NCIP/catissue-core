@@ -10,6 +10,7 @@
 
 package edu.wustl.catissuecore.bizlogic;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -26,6 +27,8 @@ import edu.wustl.catissuecore.domain.StorageContainerDetails;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.common.tree.StorageContainerTreeNode;
 import edu.wustl.common.tree.TreeDataInterface;
+import edu.wustl.common.tree.TreeNodeImpl;
+import edu.wustl.common.tree.TreeNode;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.SessionDataBean;
@@ -119,7 +122,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic
                     
                     container.setParentContainer(pc);
                     
-                    //                  check for closed ParentSite
+                    // check for closed ParentSite
                     checkStatus(dao, pc.getSite(), "Parent Site");
                     
                     container.setSite(pc.getSite());
@@ -187,11 +190,9 @@ public class StorageContainerBizLogic extends DefaultBizLogic
                 Iterator it = storageContainerDetailsCollection.iterator();
                 while (it.hasNext())
                 {
-                    StorageContainerDetails storageContainerDetails = (StorageContainerDetails) it
-                            .next();
+                    StorageContainerDetails storageContainerDetails = (StorageContainerDetails) it.next();
                     storageContainerDetails.setStorageContainer(cont);
-                    dao.insert(storageContainerDetails, sessionDataBean, true,
-                            true);
+                    dao.insert(storageContainerDetails, sessionDataBean, true, true);
                 }
             }
             
@@ -766,7 +767,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic
         }
         return false;
     }
-
+    
     //  TODO TO BE REMOVED
     private void setDisableToSubContainer(StorageContainer storageContainer)
     {
@@ -782,7 +783,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic
             }
         }
     }
-
+    
     public int getNextContainerNumber(long parentID, long typeID,
             boolean isInSite) throws DAOException
     {
@@ -839,86 +840,74 @@ public class StorageContainerBizLogic extends DefaultBizLogic
         return 1;
     }
     
-    private Map createMap(List resultSet, Map containerMap)
-    {
-        Map containerRelationMap = new HashMap();
-        if (resultSet.isEmpty() == false)
-        {
-            for (int i = 0; i < resultSet.size(); i++)
-            {
-                List rowList = (List) resultSet.get(i);
-                StorageContainerTreeNode treeNode = new StorageContainerTreeNode();
-                treeNode.setStorageContainerIdentifier(Long.valueOf((String) rowList.get(1)));
-                treeNode.setStorageContainerName((String) rowList.get(6));
-                treeNode.setStorageContainerType((String) rowList.get(5));
-                
-                treeNode.setSiteSystemIdentifier(Long.valueOf((String) rowList.get(2)));
-                treeNode.setSiteName((String) rowList.get(3));
-                treeNode.setSiteType((String) rowList.get(4));
-                
-                if ((String) rowList.get(0) != "") // if parent is null in db
-                {
-                    treeNode.setParentStorageContainerIdentifier(Long
-                            .valueOf((String) rowList.get(0)));
-                }
-                
-                containerRelationMap.put(treeNode.getStorageContainerIdentifier(),
-                    	treeNode.getParentStorageContainerIdentifier());
-	            Logger.out.debug("Rel............. Parent : "+treeNode.getParentStorageContainerIdentifier());
-	            Logger.out.debug("Rel............. Child : "+treeNode.getStorageContainerIdentifier());
-                containerMap.put(treeNode.getStorageContainerIdentifier(), treeNode);
-                
-                Logger.out.debug("\n");
-            }
-        }
-        
-        return containerRelationMap;
-    }
+//    private Map createMap(List resultSet, Map containerMap)
+//    {
+//        Map containerRelationMap = new HashMap();
+//        Map siteContainerRelationMap = new HashMap();
+//        
+//        if (resultSet.isEmpty() == false)
+//        {
+//            for (int i = 0; i < resultSet.size(); i++)
+//            {
+//                List rowList = (List) resultSet.get(i);
+//                
+//                StorageContainerTreeNode treeNode = new StorageContainerTreeNode();
+//                treeNode.setStorageContainerIdentifier(Long.valueOf((String) rowList.get(1)));
+//                treeNode.setStorageContainerName((String) rowList.get(6));
+//                treeNode.setStorageContainerType((String) rowList.get(5));
+//                
+//                treeNode.setSiteSystemIdentifier(Long.valueOf((String) rowList.get(2)));
+//                treeNode.setSiteName((String) rowList.get(3));
+//                treeNode.setSiteType((String) rowList.get(4));
+//                
+//                if ((String) rowList.get(0) != "") // if parent is null in db
+//                {
+//                    treeNode.setParentStorageContainerIdentifier(Long.valueOf((String) rowList.get(0)));
+//                    siteContainerRelationMap.put(Long.valueOf((String) rowList.get(2)), 
+//                            					 Long.valueOf((String) rowList.get(1)));
+//                }
+//                
+//                containerRelationMap.put(treeNode.getStorageContainerIdentifier(),
+//                        				 treeNode.getParentStorageContainerIdentifier());
+//                containerMap.put(treeNode.getStorageContainerIdentifier(), treeNode);
+//                
+//                Logger.out.debug("\n");
+//            }
+//        }
+//        
+//        return containerRelationMap;
+//    }
     
-    private void addAllContainersInHierarchy(Object parentContainer, Vector treeNodeVector, Map containerMap, Map containerRelationMap)
-    {
-        Object childContainer = containerRelationMap.get(parentContainer);
-        Logger.out.debug("childContainer................"+childContainer);
-        if (childContainer == null)
-        {
-            return;
-        }
-        else
-        {
-            Logger.out.debug("In Hierarchy................."+containerMap.get(childContainer));
-            treeNodeVector.add(containerMap.get(childContainer));
-        }
-        
-        addAllContainersInHierarchy(childContainer, treeNodeVector, containerMap, containerRelationMap);
-    }
-    
-    /* (non-Javadoc)
-     * @see edu.wustl.catissuecore.bizlogic.TreeDataInterface#getTreeViewData()
+    /**
+     * Returns the data for generation of storage container tree view.
+     * @return the vector of tree nodes for the storage containers. 
      */
     public Vector getTreeViewData() throws DAOException
     {
-        // TODO Auto-generated method stub
-        return null;
-    }
-    
-    public Map getTreeViewData(Map containerMap) throws DAOException
-    {
-        //SRI: Made changes for performance enhancement of the
-        //tree applet
+        
         JDBCDAO dao = (JDBCDAO) DAOFactory.getDAO(Constants.JDBC_DAO);
         dao.openSession(null);
         
-        // Sri: Get all container, their site details and storage type details.
-        String queryStr = "select t1.PARENT_CONTAINER_ID,t1.IDENTIFIER, "
-                + "t1.SITE_ID, t2.NAME,t2.TYPE, t3.TYPE,CONTAINER_NUMBER "
-                + "from CATISSUE_STORAGE_CONTAINER t1, "
-                + "CATISSUE_SITE t2, "
-                + "catissue_storage_type t3 "
-                + "where t1.SITE_ID = t2.IDENTIFIER and "
-                + " t1.STORAGE_TYPE_ID = t3.IDENTIFIER ";
-//                + " order by t1.SITE_ID, t1.PARENT_CONTAINER_ID";
-
+        String queryStr = " SELECT t8.IDENTIFIER, t8.CONTAINER_NUMBER, t5.TYPE, t8.SITE_ID, "
+			        	+ " t4.TYPE, t8.PARENT_IDENTIFIER, "
+			            + " t8.PARENT_CONTAINER_NUMBER, t8.PARENT_CONTAINER_TYPE "
+			            + " FROM (SELECT t7.IDENTIFIER, t7.CONTAINER_NUMBER, t7.SITE_ID, "
+			            + " t7.STORAGE_TYPE_ID, t7.PARENT_IDENTIFIER, "
+			            + " t7.PARENT_CONTAINER_NUMBER, t6.TYPE AS PARENT_CONTAINER_TYPE FROM "
+			            + " (select t1.IDENTIFIER AS IDENTIFIER, t1.CONTAINER_NUMBER AS CONTAINER_NUMBER, "
+			            + " t1.SITE_ID AS SITE_ID, t1.STORAGE_TYPE_ID AS STORAGE_TYPE_ID, "
+			            + " t2.IDENTIFIER AS PARENT_IDENTIFIER, t2.CONTAINER_NUMBER AS PARENT_CONTAINER_NUMBER, "
+			            + " t2.STORAGE_TYPE_ID AS PARENT_STORAGE_TYPE_ID "
+			            + " from CATISSUE_STORAGE_CONTAINER t1 LEFT OUTER JOIN CATISSUE_STORAGE_CONTAINER t2 "
+			            + " on t1.PARENT_CONTAINER_ID = t2.IDENTIFIER) AS t7 LEFT OUTER JOIN CATISSUE_STORAGE_TYPE t6 "
+			            + " on t7.PARENT_STORAGE_TYPE_ID = t6.IDENTIFIER) AS t8, "
+			            + " CATISSUE_SITE t4, CATISSUE_STORAGE_TYPE t5 "
+			            + " WHERE t8.SITE_ID = t4.IDENTIFIER "
+			            + " AND t8.STORAGE_TYPE_ID = t5.IDENTIFIER ";
+        
+        Logger.out.debug("Storage Container query......................"+queryStr);
         List list = null;
+        
         try
         {
             list = dao.executeQuery(queryStr, null, false, null);
@@ -927,64 +916,183 @@ public class StorageContainerBizLogic extends DefaultBizLogic
         {
             throw new DAOException(ex.getMessage());
         }
-
+        
         dao.closeSession();
         
-        Map containerRelationMap = createMap(list, containerMap);
-        
-//        Set containerRelationMapSet = containerRelationMap.entrySet();
-
-//        Vector treeNodeVector = new Vector();
-//        
-//        for (Iterator iterator = containersUnderSite.iterator();iterator.hasNext();)
-//        {
-//            Object containerUnderSite = (Object) iterator.next();
-//            Logger.out.debug("containerUnderSite........................"+containerUnderSite);
-//            treeNodeVector.add(containerMap.get(containerUnderSite));
-//            
-//            addAllContainersInHierarchy(containerUnderSite, treeNodeVector, containerMap, containerRelationMap);
-//        }
-//        if (list != null)
-//        {
-//            for (int i = 0; i < list.size(); i++)
-//            {
-//                List rowList = (List) list.get(i);
-//                StorageContainerTreeNode treeNode = new StorageContainerTreeNode();
-//                treeNode.setStorageContainerIdentifier(Long
-//                        .valueOf((String) rowList.get(1)));
-//                Logger.out.debug("STORAGE CONTAINER ID : "+treeNode.getStorageContainerIdentifier());
-//                treeNode.setStorageContainerName((String) rowList.get(6));
-//                Logger.out.debug("STORAGE CONTAINER NAME : "+treeNode.getStorageContainerName());
-//                treeNode.setStorageContainerType((String) rowList.get(5));
-//                Logger.out.debug("STORAGE CONTAINER TYPE : "+treeNode.getStorageContainerType());
-//                if ((String) rowList.get(0) != "") // if parent is null in db
-//                {
-//                    treeNode.setParentStorageContainerIdentifier(Long
-//                            .valueOf((String) rowList.get(0)));
-//                    Logger.out.debug("PARENT STORAGE CONTAINER ID "+treeNode.getParentStorageContainerIdentifier());
-//                }
-//                treeNode.setSiteSystemIdentifier(Long.valueOf((String) rowList
-//                        	.get(2)));
-//                Logger.out.debug("SITE ID : "+treeNode.getSiteSystemIdentifier());
-//                treeNode.setSiteName((String) rowList.get(3));
-//                Logger.out.debug("SITE NAME : "+treeNode.getSiteName());
-//                treeNode.setSiteType((String) rowList.get(4));
-//                Logger.out.debug("SITE TYPE : "+treeNode.getSiteType());
-//                vector.add(treeNode);
-//                Logger.out.debug("\n");
-//            }
-//        }
-
-        return containerRelationMap;
+        return getTreeNodeList(list);
     }
-
+    
+    /**
+     * Returns the vector of tree node for the storage container list.
+     * @param resultList the storage container list.
+     * @return the vector of tree node for the storage container list.
+     * @throws DAOException
+     */
+    public Vector getTreeNodeList(List resultList) throws DAOException
+    {
+        Map containerRelationMap = new HashMap();
+        
+        // Vector of Tree Nodes for all the storage containers.
+        Vector treeNodeVector = new Vector();
+        
+        if (resultList.isEmpty() == false)
+        {
+            Iterator iterator = resultList.iterator();
+            
+            while (iterator.hasNext())
+            {
+                List rowList = (List) iterator.next();
+                if ((String) rowList.get(5) != "") //if parent container is not null
+                {
+                    List childIds = new ArrayList();
+                    
+                    // Create the relationship map for parent container id and the child container ids.
+                    // Check if the parent container already has an entry in the Map and get it.
+                    if (containerRelationMap.containsKey(Long.valueOf((String) rowList.get(5))))
+                    {
+                        childIds = (List)containerRelationMap.get(Long.valueOf((String) rowList.get(5)));
+                    }
+                    
+                    // Put the container in the child container list of the parent container
+                    // and update the Map. 
+                    childIds.add(Long.valueOf((String) rowList.get(0)));
+                    containerRelationMap.put(Long.valueOf((String) rowList.get(5)), childIds);
+                    
+                    // Create the tree node for the child node.
+                    TreeNode treeNodeImpl = new StorageContainerTreeNode(Long.valueOf((String) rowList.get(0)),
+                            							(String) rowList.get(1), (String) rowList.get(2));
+                    
+                    // Add the tree node in the Vector if it is not present.
+                    if (treeNodeVector.contains(treeNodeImpl) == false)
+                    {
+                        treeNodeVector.add(treeNodeImpl);
+                    }
+                    
+                    // Create the tree node for the parent node and add it in the vector if not present.
+                    treeNodeImpl = new StorageContainerTreeNode(Long.valueOf((String) rowList.get(5)), 
+                            					(String) rowList.get(6), (String) rowList.get(7));
+                    if (treeNodeVector.contains(treeNodeImpl) == false)
+                    {
+                        treeNodeVector.add(treeNodeImpl);
+                    }
+                }
+            }
+            
+            return createHierarchy(containerRelationMap, treeNodeVector);
+        }
+        
+        return null;
+    }
+    
+    /**
+     * Creates the hierarchy of the tree nodes of the container according to the container relationship map.
+     * @param containerRelationMap the container relationship map.
+     * @param treeNodeVector the vector of tree nodes.
+     * @return the hierarchy of the tree nodes of the container according to the container relationship map.
+     * @throws DAOException
+     */
+    private Vector createHierarchy(Map containerRelationMap, Vector treeNodeVector) throws DAOException
+    {
+        
+        //Get the ket set of the parent containers.
+        Set keySet = containerRelationMap.keySet();
+        Iterator iterator = keySet.iterator();
+        
+        while (iterator.hasNext())
+        {
+            //Get the parent container id and create the tree node. 
+            Long parentId = (Long) iterator.next();
+            StorageContainerTreeNode parentTreeNodeImpl = new StorageContainerTreeNode(parentId, null, null);
+            parentTreeNodeImpl = (StorageContainerTreeNode)treeNodeVector
+            					.get(treeNodeVector.indexOf(parentTreeNodeImpl));
+            
+            //Get the child container ids and create the tree nodes.
+            List childNodeList = (List) containerRelationMap.get(parentId);
+            Iterator childIterator = childNodeList.iterator();
+            while (childIterator.hasNext())
+            {
+                Long childId = (Long) childIterator.next();
+                StorageContainerTreeNode childTreeNodeImpl = new StorageContainerTreeNode(childId, null, null);
+                childTreeNodeImpl = (StorageContainerTreeNode) treeNodeVector
+                					.get(treeNodeVector.indexOf(childTreeNodeImpl));
+                
+                // Set the relationship between the parent and child tree nodes.
+                childTreeNodeImpl.setParentNode(parentTreeNodeImpl);
+                parentTreeNodeImpl.getChildNodes().add(childTreeNodeImpl);
+            }
+        }
+        
+        //Get the container whose tree node has parent null 
+        //and get its site tree node and set it as its child.
+        Vector parentNodeVector = new Vector();
+        iterator = treeNodeVector.iterator();
+        while (iterator.hasNext())
+        {
+            StorageContainerTreeNode treeNodeImpl = (StorageContainerTreeNode) iterator.next();
+            if (treeNodeImpl.getParentNode() == null)
+            {
+                TreeNodeImpl siteNode = getSiteTreeNode(treeNodeImpl.getIdentifier());
+                if (parentNodeVector.contains(siteNode))
+                {
+                    siteNode = (TreeNodeImpl)parentNodeVector.get(parentNodeVector.indexOf(siteNode));
+                }
+                
+                treeNodeImpl.setParentNode(siteNode);
+                siteNode.getChildNodes().add(treeNodeImpl);
+                parentNodeVector.add(siteNode);
+            }
+        }
+        
+        return parentNodeVector;
+    }
+    
+    /**
+     * Returns the site tree node of the container with the given identifier.
+     * @param identifier the identifier of the container.
+     * @return the site tree node of the container with the given identifier.
+     * @throws DAOException
+     */
+    private TreeNodeImpl getSiteTreeNode(Long identifier) throws DAOException
+    {
+        String sql ="SELECT site.IDENTIFIER, site.NAME, site.TYPE " +
+	        		" from catissue_storage_container sc, catissue_site site " +
+	        		" where sc.SITE_ID = site.IDENTIFIER AND sc.IDENTIFIER = " + 
+	        		identifier.longValue();
+        
+        Logger.out.debug("Site Query........................."+sql);
+        
+        JDBCDAO dao = (JDBCDAO)DAOFactory.getDAO(Constants.JDBC_DAO);
+        List resultList = null;
+        
+        try
+        {
+            dao.openSession(null);
+            resultList = dao.executeQuery(sql, null, false, null);
+            dao.closeSession();
+        }
+        catch (Exception daoExp)
+        {
+            throw new DAOException(daoExp.getMessage(), daoExp);
+        }
+        
+        TreeNodeImpl siteTreeNode = null;
+        if (resultList.isEmpty() == false)
+        {
+            List siteRecord = (List)resultList.get(0);
+            siteTreeNode = new StorageContainerTreeNode(Long.valueOf((String) siteRecord.get(0)),
+					(String)siteRecord.get(1), (String) siteRecord.get(2));
+        }
+        
+        return siteTreeNode;
+    }
+    
     public boolean[][] getStorageContainerFullStatus(DAO dao,
             Long systemIdentifier) throws DAOException
     {
         List list = dao.retrieve(StorageContainer.class.getName(),
                 "systemIdentifier", systemIdentifier);
         boolean[][] fullStatus = null;
-
+        
         if (!list.isEmpty())
         {
             StorageContainer storageContainer = (StorageContainer) list.get(0);
@@ -994,7 +1102,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic
                     .getStorageContainerCapacity().getTwoDimensionCapacity();
             fullStatus = new boolean[oneDimensionCapacity.intValue() + 1][twoDimensionCapacity
                     .intValue() + 1];
-
+            
             if (storageContainer.getChildrenContainerCollection() != null)
             {
                 Iterator iterator = storageContainer
@@ -1006,8 +1114,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic
                                         .size());
                 while (iterator.hasNext())
                 {
-                    StorageContainer childStorageContainer = (StorageContainer) iterator
-                            .next();
+                    StorageContainer childStorageContainer = (StorageContainer) iterator.next();
                     Integer positionDimensionOne = childStorageContainer
                             .getPositionDimensionOne();
                     Integer positionDimensionTwo = childStorageContainer
@@ -1211,7 +1318,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic
             return false;
         }
     }
-
+    
     //  Will check only for Position is used or not.
     protected boolean isPositionAvailable(DAO dao,
             StorageContainer storageContainer, String posOne, String posTwo)
@@ -1363,7 +1470,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic
                     .getValue("errors.storageContainerExist"));
         }
     }
-
+    
     /* (non-Javadoc)
      * @see edu.wustl.catissuecore.bizlogic.TreeDataInterface#getTreeViewData(edu.wustl.common.beans.SessionDataBean, java.util.Map)
      */
@@ -1372,7 +1479,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic
     {
         return null;
     }
-
+    
     /**
      * Overriding the parent class's method to validate the enumerated attribute values
      */
@@ -1407,4 +1514,18 @@ public class StorageContainerBizLogic extends DefaultBizLogic
 
         return true;
     }
+    
+//    public static void main(String[] args)
+//    {
+//        Vector v = new Vector();
+//        
+//        TreeNodeImpl tree = new TreeNodeImpl(new Long(1),"value","type");
+//        System.out.println("v.contains(tree)..........................."+v.contains(tree));
+//        if (v.contains(tree) == false)
+//        {
+//            v.add(tree);
+//        }
+//        
+//        System.out.println("v size "+v.size());
+//    }
 }
