@@ -492,10 +492,11 @@ Thanking You,
 			<echo message="Encoding Password..."/>
 			<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>
 	
-			<java classname="edu.wustl.catissuecore.util.PasswordManager"
+			<java classname="edu.wustl.common.util.global.PasswordManager"
 			fork="true">
 			<classpath>
-				<pathelement path="${temp.dir}/catissuecore/WEB-INF/classes"/>
+				<pathelement path="${temp.dir}/catissuecore/WEB-INF/lib"/>
+				<pathelement location="${temp.dir}/catissuecore/WEB-INF/lib/commonpackage.jar"/>
 			</classpath>
 			<arg value="${base.dir}/catissuetmp.txt"/>
 			<arg value="${first.admin.password}"/>
