@@ -739,6 +739,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String UNIT_CC = "cell count";
 	public static final String UNIT_MG = "µg";
 	public static final String UNIT_CN = "count";
+	public static final String UNIT_CL = "cells";
 	
 	public static final String [] PROCEDUREARRAY = {
 	        SELECT_OPTION,
