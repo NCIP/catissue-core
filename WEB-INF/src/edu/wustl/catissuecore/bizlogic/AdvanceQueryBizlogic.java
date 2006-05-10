@@ -187,7 +187,10 @@ public class AdvanceQueryBizlogic extends DefaultBizLogic implements TreeDataInt
 	        //If the parent is null, the node is of participant. Add it in the vector.
 	        if (treeNode.getParentIdentifier() == null && treeNode.getCombinedParentIdentifier() == null)
 	        {
-	            finalTreeNodes.add(treeNodeImpl);
+	            if (finalTreeNodes.contains(treeNodeImpl) == false)
+	            {
+	                finalTreeNodes.add(treeNodeImpl);
+	            }
 	            continue;
 	        }
 	        
@@ -214,7 +217,10 @@ public class AdvanceQueryBizlogic extends DefaultBizLogic implements TreeDataInt
 	        if (parentTreeNode != null)
 	        {
 	            treeNodeImpl.setParentNode(parentTreeNode);
-		        parentTreeNode.getChildNodes().add(treeNodeImpl);
+	            if (parentTreeNode.getChildNodes().contains(treeNodeImpl) == false)
+	            {
+	                parentTreeNode.getChildNodes().add(treeNodeImpl);
+	            }
 	        }
 	    }
 	    
@@ -300,7 +306,7 @@ public class AdvanceQueryBizlogic extends DefaultBizLogic implements TreeDataInt
 		DefaultMutableTreeNode child = new DefaultMutableTreeNode();
 		QueryBizLogic bizLogic = (QueryBizLogic)BizLogicFactory
 										.getBizLogic(Constants.SIMPLE_QUERY_INTERFACE_ID);
-
+		
 		int childCount = tree.getChildCount();
 		//Logger.out.debug("childCount"+childCount);
 		for(int i=0;i<childCount;i++)
