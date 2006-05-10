@@ -9,11 +9,11 @@
 			return Constants.UNIT_ML;
 		else if(specimenType.equals("Tissue"))
 		{
-			if(subTypeValue.equals(Constants.FROZEN_TISSUE_SLIDE) || subTypeValue.equals(Constants.FIXED_TISSUE_BLOCK) || subTypeValue.equals(Constants.FROZEN_TISSUE_BLOCK) || subTypeValue.equals(Constants.NOT_SPECIFIED))
+			if(subTypeValue.equals(Constants.FROZEN_TISSUE_SLIDE) || subTypeValue.equals(Constants.FIXED_TISSUE_BLOCK) || subTypeValue.equals(Constants.FROZEN_TISSUE_BLOCK) || subTypeValue.equals(Constants.NOT_SPECIFIED)|| subTypeValue.equals(Constants.FIXED_TISSUE_SLIDE) )
 				return Constants.UNIT_CN;
 			else if (subTypeValue.equals(Constants.MICRODISSECTED))
 			{
-				return Constants.UNIT_CC;
+				return Constants.UNIT_CL;
 			}
 			else	
 				return Constants.UNIT_GM;
@@ -88,15 +88,18 @@
 	var subTypeData3 = "<%=Constants.FROZEN_TISSUE_BLOCK%>";
 	var subTypeData4 = "<%=Constants.NOT_SPECIFIED%>";
 	var subTypeData5 = "<%=Constants.MICRODISSECTED%>";
+	var subTypeData6 = "<%=Constants.FIXED_TISSUE_SLIDE%>";
+
 
 // units array
-	var ugul = new Array(5);
+	var ugul = new Array(7);
 	ugul[0]=" ";
 	ugul[1]="<%=Constants.UNIT_ML%>";
 	ugul[2]="<%=Constants.UNIT_GM%>";
 	ugul[3]="<%=Constants.UNIT_CC%>";
 	ugul[4]="<%=Constants.UNIT_MG%>";
 	ugul[5]="<%=Constants.UNIT_CN%>";
+	ugul[6]="<%=Constants.UNIT_CL%>";
 	
 // Changes unit on subtype list changed
 /*	
@@ -109,7 +112,7 @@
 		var className = classList.options[classList.selectedIndex].text;
 		var selectedOption = element.options[element.selectedIndex].text;
 	
-		if(className == "Tissue" && (selectedOption == subTypeData1 || selectedOption == subTypeData2 || selectedOption == subTypeData3 || selectedOption == subTypeData4))
+		if(className == "Tissue" && (selectedOption == subTypeData1 || selectedOption == subTypeData2 || selectedOption == subTypeData3 || selectedOption == subTypeData4 || selectedOption == subTypeData6))
 		{
 			document.getElementById(unitspan).innerHTML = ugul[5];
 		}	
@@ -119,7 +122,7 @@
 			{
 				if(selectedOption == subTypeData5)
 				{
-					document.getElementById(unitspan).innerHTML = ugul[3];
+					document.getElementById(unitspan).innerHTML = ugul[6];
 				}
 				else
 				{

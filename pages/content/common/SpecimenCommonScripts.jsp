@@ -57,16 +57,19 @@
 	var subTypeData3 = "<%=Constants.FROZEN_TISSUE_BLOCK%>";
 	var subTypeData4 = "<%=Constants.NOT_SPECIFIED%>";
 	var subTypeData5 = "<%=Constants.MICRODISSECTED%>";
+	var subTypeData6 = "<%=Constants.FIXED_TISSUE_SLIDE%>";
+
 	
 
 // units array
-	var ugul = new Array(5);
+	var ugul = new Array(7);
 	ugul[0]=" ";
 	ugul[1]="<%=Constants.UNIT_ML%>";
 	ugul[2]="<%=Constants.UNIT_GM%>";
 	ugul[3]="<%=Constants.UNIT_CC%>";
 	ugul[4]="<%=Constants.UNIT_MG%>";
 	ugul[5]="<%=Constants.UNIT_CN%>";
+	ugul[6]="<%=Constants.UNIT_CL%>";
 
 	
 // Changes unit on subtype list changed
@@ -80,7 +83,7 @@
 		var className = classList.options[classList.selectedIndex].text;
 		var selectedOption = element.options[element.selectedIndex].text;
 	// Mandar 25-apr-06 : bug 1414 : Tissue type changed.
-		if(className == "Tissue" && (selectedOption == subTypeData1 || selectedOption == subTypeData2 || selectedOption == subTypeData3 || selectedOption == subTypeData4))
+		if(className == "Tissue" && (selectedOption == subTypeData1 || selectedOption == subTypeData2 || selectedOption == subTypeData3 || selectedOption == subTypeData4 || selectedOption == subTypeData6))
 		{
 			document.getElementById(unitspan).innerHTML = "<%=Constants.UNIT_CN%>";
 			// added for Available quantity
@@ -99,13 +102,13 @@
 				var unit1= document.getElementById("unitSpan1");
 				if(selectedOption == subTypeData5)
 				{
-					document.getElementById(unitspan).innerHTML = "<%=Constants.UNIT_CC%>";
+					document.getElementById(unitspan).innerHTML = "<%=Constants.UNIT_CL%>";
 			
 					if(unit1!=null)
 					{
-						unit1.innerHTML = "<%=Constants.UNIT_CC%>";
+						unit1.innerHTML = "<%=Constants.UNIT_CL%>";
 					}
-					document.forms[0].unit.value = "<%=Constants.UNIT_CC%>";
+					document.forms[0].unit.value = "<%=Constants.UNIT_CL%>";
 				}
 				else
 				{
