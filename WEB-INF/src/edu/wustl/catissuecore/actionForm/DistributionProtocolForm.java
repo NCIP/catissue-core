@@ -119,7 +119,7 @@ public class DistributionProtocolForm extends SpecimenProtocolForm
 					
 					String tissueType = requirement.getSpecimenType();
 					if(tissueType.equalsIgnoreCase(Constants.FROZEN_TISSUE_SLIDE) || tissueType.equalsIgnoreCase(Constants.FIXED_TISSUE_BLOCK)
-							|| tissueType.equalsIgnoreCase(Constants.FROZEN_TISSUE_BLOCK) )
+					 || tissueType.equalsIgnoreCase(Constants.FIXED_TISSUE_SLIDE) || tissueType.equalsIgnoreCase(Constants.FROZEN_TISSUE_BLOCK) )
 					{
 						values.put(key6,Utility.toString(new Integer(((TissueSpecimenRequirement) requirement).getQuantityInGram().intValue())));
 					}
@@ -197,7 +197,7 @@ public class DistributionProtocolForm extends SpecimenProtocolForm
 						
 						String tissueType = specimenRequirement.getSpecimenType();
 						if(tissueType.equalsIgnoreCase(Constants.FROZEN_TISSUE_SLIDE) || tissueType.equalsIgnoreCase(Constants.FIXED_TISSUE_BLOCK)
-								|| tissueType.equalsIgnoreCase(Constants.FROZEN_TISSUE_BLOCK) )
+						 || tissueType.equalsIgnoreCase(Constants.FIXED_TISSUE_SLIDE) || tissueType.equalsIgnoreCase(Constants.FROZEN_TISSUE_BLOCK) )
 						{
 							values.put(key6,Utility.toString(new Integer(((edu.wustl.catissuecore.domainobject.TissueSpecimenRequirement) specimenRequirement).getQuantityInGram().intValue())));
 						}
@@ -339,7 +339,7 @@ public class DistributionProtocolForm extends SpecimenProtocolForm
 	    						 *  frozen block then qty is in integer
 	    						 */
 		    					if (classValue.trim().equals("Cell") || typeValue.trim().equals(Constants.FROZEN_TISSUE_SLIDE) ||
-		    							typeValue.trim().equals(Constants.FIXED_TISSUE_BLOCK) || typeValue.trim().equals(Constants.FROZEN_TISSUE_BLOCK ))
+		    							typeValue.trim().equals(Constants.FIXED_TISSUE_BLOCK) || typeValue.trim().equals(Constants.FROZEN_TISSUE_BLOCK ) || typeValue.trim().equals(Constants.FIXED_TISSUE_SLIDE))
 		    					{
 		            				if(!validator.isNumeric(value ))
 		            				{

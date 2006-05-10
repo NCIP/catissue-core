@@ -313,7 +313,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 					values.put(key1,"Tissue");
 					values.put(key2,Constants.UNIT_GM);
 					String tissueType = requirement.getSpecimenType();
-					if(tissueType.equalsIgnoreCase(Constants.FROZEN_TISSUE_SLIDE) || tissueType.equalsIgnoreCase(Constants.FIXED_TISSUE_BLOCK) || tissueType.equalsIgnoreCase(Constants.FROZEN_TISSUE_BLOCK) )
+					if(tissueType.equalsIgnoreCase(Constants.FROZEN_TISSUE_SLIDE) || tissueType.equalsIgnoreCase(Constants.FIXED_TISSUE_BLOCK) || tissueType.equalsIgnoreCase(Constants.FROZEN_TISSUE_BLOCK)  || tissueType.equalsIgnoreCase(Constants.FIXED_TISSUE_SLIDE))
 					{
 						values.put(key6,Utility.toString(new Integer(((TissueSpecimenRequirement) requirement).getQuantityInGram().intValue())));
 					}
@@ -459,25 +459,6 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 					}
 				}
 			// ---------END-----------------------------------------
-			// Commentes as coordinators is not a mandetory field.
-//			if(this.protocolCoordinatorIds == null)
-//			{
-//				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("collectionprotocol.protocolcoordinator")));
-//			}
-//			else
-//			{
-//				if( this.protocolCoordinatorIds.length <1)
-//			 	{
-//			 		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("collectionprotocol.protocolcoordinator")));
-//			 	}
-//				for(int ind=0; ind < protocolCoordinatorIds.length ; ind++ )
-//				{
-//				 	if(protocolCoordinatorIds[ind] == -1 )
-//				 	{
-//						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("collectionprotocol.protocolcoordinator")));
-//				 	}
-//				}
-//			}
 				
      	// Mandar 10-apr-06 : bugid :353 
     	// Error messages should be in the same sequence as the sequence of fields on the page.
@@ -601,7 +582,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 						typeKey = typeKey + "_specimenType";
 						String typeValue = (String)getValue(typeKey );
 						Logger.out.debug("TypeKey : "+ typeKey  + " : Type Value : " + typeValue  );
-						if (typeValue.trim().equals(Constants.FROZEN_TISSUE_SLIDE) || typeValue.trim().equals(Constants.FIXED_TISSUE_BLOCK) || typeValue.trim().equals(Constants.FROZEN_TISSUE_BLOCK ))
+						if (typeValue.trim().equals(Constants.FROZEN_TISSUE_SLIDE) || typeValue.trim().equals(Constants.FIXED_TISSUE_BLOCK) || typeValue.trim().equals(Constants.FROZEN_TISSUE_BLOCK ) || typeValue.trim().equals(Constants.FIXED_TISSUE_SLIDE) )
 						{
 							if(validator.isEmpty(value))
 							{

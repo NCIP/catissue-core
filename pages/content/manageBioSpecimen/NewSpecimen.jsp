@@ -240,13 +240,13 @@
 				if(form.getClassName().equals("Tissue"))
 				{
 					//Mandar : 25-Apr-06 :Bug 1414
-					if((form.getType()!=null) && (form.getType().equals(Constants.FROZEN_TISSUE_SLIDE)||form.getType().equals(Constants.FIXED_TISSUE_BLOCK)||form.getType().equals(Constants.FROZEN_TISSUE_BLOCK)||form.getType().equals(Constants.NOT_SPECIFIED)))
+					if((form.getType()!=null) && (form.getType().equals(Constants.FROZEN_TISSUE_SLIDE)||form.getType().equals(Constants.FIXED_TISSUE_BLOCK)||form.getType().equals(Constants.FROZEN_TISSUE_BLOCK)||form.getType().equals(Constants.NOT_SPECIFIED)||form.getType().equals(Constants.FIXED_TISSUE_SLIDE)))
 					{
 						unitSpecimen = Constants.UNIT_CN;
 					}
 					else if((form.getType()!=null) && (form.getType().equals(Constants.MICRODISSECTED)))
 					{
-						unitSpecimen = Constants.UNIT_CC;
+						unitSpecimen = Constants.UNIT_CL;
 					}
 					else 
 					{
@@ -266,7 +266,7 @@
 				{
 					unitSpecimen = Constants.UNIT_MG;
 				}
-				System.out.println("\n\n\nunitSpecimen in else: " +unitSpecimen);
+				
 		//	}
 		}
 		
