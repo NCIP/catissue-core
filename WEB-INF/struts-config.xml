@@ -62,7 +62,7 @@ PUBLIC
 			type="edu.wustl.common.exception.UserNotAuthenticatedException"
 			key="" scope="request" path=".catissuecore.redirectToLoginPageDef" />
 		<exception
-			handler="edu.wustl.catissuecore.util.CommonExceptionHandler"
+			handler="edu.wustl.common.util.CommonExceptionHandler"
 			key="" scope="request" type="java.lang.Exception"
 			path=".catissuecore.errorPageDef" />
 	</global-exceptions>
