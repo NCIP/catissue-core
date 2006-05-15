@@ -2,8 +2,14 @@
 
 <logic:present name="statusMessageKey">
 	<%
-		String specimenId = (String) request.getAttribute(Constants.SPECIMEN_ID);
-		String parentUrl = "top.window.location.href='ListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParameters&specimenId="+specimenId+"'";
+		Long eventId = (Long)request.getAttribute(Constants.SYSTEM_IDENTIFIER);
+		
+		System.out.println("EventID on RedirectEventParameters.jsp===>"+eventId);
+
+		if(eventId == null)
+			eventId=new Long(request.getParameter(Constants.SYSTEM_IDENTIFIER));
+
+		String parentUrl = "top.window.location.href='ListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParameters&eventId="+eventId.toString()+"'";
 	%>
 
 	<body onload="<%=parentUrl%>" />

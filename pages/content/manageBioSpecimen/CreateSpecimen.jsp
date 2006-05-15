@@ -156,6 +156,8 @@
 				 <tr>
 					<td>
 						<html:hidden property="<%=Constants.OPERATION%>" value="<%=operation%>"/>
+						<html:hidden property="submittedFor" value="ForwardTo"/>
+						<html:hidden property="forwardTo" value="eventParameters"/>
 						<td><html:hidden property="exIdCounter"/></td>
 					</td>
 				 </tr>

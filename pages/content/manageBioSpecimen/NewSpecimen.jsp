@@ -32,7 +32,7 @@
 	   		if(form != null)
 	   		{
 		   		appendingPath = "/NewSpecimenSearch.do?operation=search&pageOf=pageOfNewSpecimen&systemIdentifier="+form.getSystemIdentifier() ;
-		   		System.out.println("---------- NSP JSP -------- : "+ appendingPath);
+		   		//System.out.println("---------- NSP JSP -------- : "+ appendingPath);
 		   	}
 	   	}
 	
@@ -228,8 +228,8 @@
 		{
 			exIdRows = form.getExIdCounter();
 			bhRows	 = form.getBhCounter();
-			System.out.println("form.getAvailableQuantity()--"+form.getAvailableQuantity());
-			System.out.println("form.getQuantity()--"+form.getQuantity());
+			//System.out.println("form.getAvailableQuantity()--"+form.getAvailableQuantity());
+			//System.out.println("form.getQuantity()--"+form.getQuantity());
 	//		if(form.getUnit() != null)
 	//		{
 	//			unitSpecimen = form.getUnit();
