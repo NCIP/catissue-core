@@ -54,7 +54,6 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String LOGINNAME = "loginName";
 	public static final String LASTNAME = "lastName";
 	public static final String FIRSTNAME = "firstName";
-    public static final String ERROR_DETAIL = "Error Detail";
 	public static final String INSTITUTION = "institution";
 	public static final String EMAIL = "email";
 	public static final String DEPARTMENT = "department";
@@ -431,6 +430,10 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final int CONFIGURE_RESULT_VIEW_ID = 41;
 	public static final int ADVANCE_QUERY_INTERFACE_ID = 42;
 	public static final int QUERY_INTERFACE_ID = 43;
+	public static final int COLLECTION_PROTOCOL_REGISTRATION_FORM_ID = 19;
+	public static final int PARTICIPANT_FORM_ID = 2;
+	public static final int SPECIMEN_COLLECTION_GROUP_FORM_ID = 20;
+	public static final int NEW_SPECIMEN_FORM_ID = 22;
 	
 	//Misc
 	public static final String SEPARATOR = " : ";
@@ -1044,4 +1047,50 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	
 	//Mandar: 28-Apr-06 Bug 1129
 	public static final String DUPLICATE_SPECIMEN="duplicateSpecimen";
+	
+//	public static final String getCollectionProtocolPIGroupName(Long identifier)
+//	{
+//	    if(identifier == null)
+//	    {
+//	        return "PI_COLLECTION_PROTOCOL_";
+//	    }
+//	    return "PI_COLLECTION_PROTOCOL_"+identifier;
+//	}
+//	
+//	public static final String getCollectionProtocolCoordinatorGroupName(Long identifier)
+//	{
+//	    if(identifier == null)
+//	    {
+//	        return "COORDINATORS_COLLECTION_PROTOCOL_";
+//	    }
+//	    return "COORDINATORS_COLLECTION_PROTOCOL_"+identifier;
+//	}
+//	
+//	public static final String getDistributionProtocolPIGroupName(Long identifier)
+//	{
+//	    if(identifier == null)
+//	    {
+//	        return "PI_DISTRIBUTION_PROTOCOL_";
+//	    }
+//	    return "PI_DISTRIBUTION_PROTOCOL_"+identifier;
+//	}
+//	
+//	public static final String getCollectionProtocolPGName(Long identifier)
+//	{
+//	    if(identifier == null)
+//	    {
+//	        return "COLLECTION_PROTOCOL_";
+//	    }
+//	    return "COLLECTION_PROTOCOL_"+identifier;
+//	}
+//	
+//	public static final String getDistributionProtocolPGName(Long identifier)
+//	{
+//	    if(identifier == null)
+//	    {
+//	        return "DISTRIBUTION_PROTOCOL_";
+//	    }
+//	    return "DISTRIBUTION_PROTOCOL_"+identifier;
+//	}
+
 }
