@@ -11,6 +11,7 @@
 package edu.wustl.catissuecore.action;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Stack;
 
@@ -28,27 +29,21 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
-import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
-import edu.wustl.catissuecore.actionForm.SpecimenEventParametersForm;
-import edu.wustl.catissuecore.actionForm.UserForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
-import edu.wustl.common.bizlogic.QueryBizLogic;
-import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
-import edu.wustl.catissuecore.domain.DomainObjectFactory;
-import edu.wustl.catissuecore.domain.Participant;
-import edu.wustl.catissuecore.domain.Specimen;
-import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.util.ForwardToFactory;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.beans.AddNewSessionDataBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.AbstractBizLogic;
+import edu.wustl.common.bizlogic.QueryBizLogic;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractDomainObjectFactory;
 import edu.wustl.common.factory.MasterFactory;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
+import edu.wustl.common.util.AbstractForwardToProcessor;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.dbManager.HibernateMetaData;
@@ -77,17 +72,11 @@ public class CommonAddEditAction extends Action
             AbstractActionForm abstractForm = (AbstractActionForm) form;
             AbstractBizLogic bizLogic = BizLogicFactory.getBizLogic(abstractForm.getFormId());
             QueryBizLogic queryBizLogic=(QueryBizLogic)BizLogicFactory.getBizLogic(Constants.QUERY_INTERFACE_ID);
-            
-            if(abstractForm instanceof SpecimenEventParametersForm)
-            {
-            	String specimenId = String.valueOf(((SpecimenEventParametersForm)abstractForm).getSpecimenId());
-            	request.setAttribute(Constants.SPECIMEN_ID,specimenId);
-            }
-            
-            AbstractDomainObjectFactory abstractDomainObjectFactory = 
+
+			 AbstractDomainObjectFactory abstractDomainObjectFactory = 
             	(AbstractDomainObjectFactory) MasterFactory
             				.getFactory("edu.wustl.catissuecore.domain.DomainObjectFactory");
-            
+            				
             //The object name which is to be added. 
             String objectName = abstractDomainObjectFactory.getDomainObjectName(abstractForm.getFormId());
             
@@ -99,15 +88,6 @@ public class CommonAddEditAction extends Action
                 bizLogic.insert(abstractDomain, getSessionData(request), Constants.HIBERNATE_DAO);
 
                 target = new String(Constants.SUCCESS);
-                
-                if(abstractDomain instanceof Specimen)
-                {
-                	request.setAttribute(Constants.SPECIMEN_ID,String.valueOf(abstractDomain.getSystemIdentifier()));
-                	Logger.out.debug("Specimen ID :-- : "+ String.valueOf(abstractDomain.getSystemIdentifier()) );
-                	
-                	forwardToInSpecimen(abstractForm,abstractDomain,request);
-	                request.setAttribute("newSpecimenForm",new NewSpecimenForm());
-                }
                 
                 // The successful add messages. Changes done according to bug# 945, 947
                 messages = new ActionMessages();
@@ -128,16 +108,17 @@ public class CommonAddEditAction extends Action
                 {
                     abstractForm.setSystemIdentifier(abstractDomain.getSystemIdentifier().longValue());
                     request.setAttribute(Constants.SYSTEM_IDENTIFIER, abstractDomain.getSystemIdentifier());
+                    Logger.out.debug("New SystemIdentifier in CommonAddEditAction===>"+abstractDomain.getSystemIdentifier());
                     abstractForm.setMutable(false);
                 }
                 
-                //------------------------------------------------ AddNewAction implementation Starts----------------------------
                 //Attributes to decide AddNew action
                 String submittedFor = (String) request.getParameter(Constants.SUBMITTED_FOR);
                 
                 Logger.out.debug("Checking parameter SubmittedFor in CommonAddEditAction--->"+request.getParameter(Constants.SUBMITTED_FOR));
                 Logger.out.debug("SubmittedFor attribute of Form-Bean received---->"+abstractForm.getSubmittedFor());
                 
+                //------------------------------------------------ AddNewAction Starts----------------------------
                 //if AddNew action is executing, load FormBean from Session and redirect to Action which initiated AddNew action
                 if( (submittedFor !=null)&& (submittedFor.equals("AddNew")) )
                 {
@@ -161,6 +142,8 @@ public class CommonAddEditAction extends Action
 	        	            
 	        	            //Setting Identifier of new object into the FormBean to populate it on the JSP page 
 	        	            sessionFormBean.setAddNewObjectIdentifier(addNewSessionDataBean.getAddNewFor(), abstractDomain.getSystemIdentifier());
+	        	            
+	        	            sessionFormBean.setMutable(false);
 	        	            
 	        	            //cleaning FORM_BEAN_STACK from Session if no AddNewSessionDataBean available... Storing appropriate value of SUBMITTED_FOR attribute
 	        	            if(formBeanStack.isEmpty())
@@ -188,7 +171,8 @@ public class CommonAddEditAction extends Action
 		                    {
 		                        saveMessages(request,messages);
 		                    }
-		                    //Status message key.
+		                    
+	        	            //Status message key.
 		                    String statusMessageKey = String.valueOf(abstractForm.getFormId() +
 		        					"."+String.valueOf(abstractForm.isAddOperation()));
 		                    request.setAttribute(Constants.STATUS_MESSAGE_KEY,statusMessageKey);
@@ -196,6 +180,7 @@ public class CommonAddEditAction extends Action
 	        	            //Changing operation attribute in parth specified in ForwardTo mapping, If AddNew activity started from Edit page
 	        	            if( (sessionFormBean.getOperation().equals("edit") ) )
 	        	            {
+	        	                Logger.out.debug("Edit object Identifier while AddNew is from Edit operation==>"+sessionFormBean.getSystemIdentifier());
 	        	                ActionForward editForward = new ActionForward();
 	        	                
 	        	                String addPath = (mapping.findForward(forwardTo)).getPath();
@@ -223,24 +208,29 @@ public class CommonAddEditAction extends Action
         	            }
         	        }
                 }
-                //------------------------------------------------ AddNewAction implementation Ends----------------------------                
-                //---ForwardTo list selection
+                //------------------------------------------------ AddNewAction Ends----------------------------                
+               //----------ForwardTo Starts----------------
  	           else if( (submittedFor !=null)&& (submittedFor.equals("ForwardTo")) )
  	           {
  	               Logger.out.debug("SubmittedFor is ForwardTo in CommonAddEditAction...................");
  	               
+ 	               //Storing appropriate value of SUBMITTED_FOR attribute
  	               request.setAttribute(Constants.SUBMITTED_FOR, "Default");
- 		           
- 	               if(abstractForm.getForwardTo()!= null && abstractForm.getForwardTo().trim().length()>0  )
- 		           {
- 		           	String forwardTo = abstractForm.getForwardTo(); 
- 		           	Logger.out.debug("ForwardTo in Add :-- : "+ forwardTo);
- 		           	target = forwardTo;
- 	                //return (mapping.findForward(forwardTo));
- 		           }
+
+ 	               //storing HashMap of forwardTo data into Request
+ 	               request.setAttribute("forwardToHashMap", generateForwardToHashMap(abstractForm, abstractDomain));
  	           }
-	               Logger.out.debug("CAE ---TARGET ----- "+ target); 
-	               //return (mapping.findForward(target));
+ 	           //----------ForwardTo Ends----------------
+ 	           
+ 	           //setting target to ForwardTo attribute of submitted Form 
+ 	           if(abstractForm.getForwardTo()!= null && abstractForm.getForwardTo().trim().length()>0  )
+	           {
+	           		String forwardTo = abstractForm.getForwardTo(); 
+	           		Logger.out.debug("ForwardTo in Add :-- : "+ forwardTo);
+	           		target = forwardTo;
+	           		//return (mapping.findForward(forwardTo));
+	           }
+	               Logger.out.debug("Target in CommonAddEditAction===> "+ target); 
             }
             else
             {
@@ -265,14 +255,14 @@ public class CommonAddEditAction extends Action
                     
                     // if password change add Boolean(true) object in attribute list of session object
                     // so the PasswordManager.validate() can check whether password is changed in session   
-                    if(abstractForm instanceof UserForm)
-                	{
-                		if(abstractForm.getPageOf().equals(Constants.PAGEOF_CHANGE_PASSWORD))
-                		{
-                			Logger.out.debug("Added password attr in session");
-                			request.getSession().setAttribute(Constants.PASSWORD_CHANGE_IN_SESSION,new Boolean(true));
-                		}
-                	}
+//                    if(abstractForm instanceof UserForm)
+//                	{
+//                		if(abstractForm.getPageOf().equals(Constants.PAGEOF_CHANGE_PASSWORD))
+//                		{
+//                			Logger.out.debug("Added password attr in session");
+//                			request.getSession().setAttribute(Constants.PASSWORD_CHANGE_IN_SESSION,new Boolean(true));
+//                		}
+//                	}
                     
                     // -- Direct to Main Menu if record is disabled
                     if((abstractForm.getActivityStatus() != null) &&
@@ -285,35 +275,6 @@ public class CommonAddEditAction extends Action
                    		return reDirectForward;
                     }
                     
-                    // specimen values
-                    if(abstractDomain instanceof Specimen)
-                    {
-                    	forwardToInSpecimen(abstractForm,abstractDomain,request);                    }
-                    
-                    if(abstractDomain instanceof Participant)
-                    {
-                    	request.setAttribute(Constants.PARTICIPANT_ID,String.valueOf(abstractDomain.getSystemIdentifier()));
-                    }
-                    
-                    // SpecimenCollectionGroup values
-                    if(abstractDomain instanceof SpecimenCollectionGroup)
-                    {
-                    	String forwardTo = abstractForm.getForwardTo();
-                    	Logger.out.debug("ForwardTo in SCG :-- : "+ forwardTo);
-                    	if(forwardTo != null)
-                    	{
-    	                	request.setAttribute(Constants.SPECIMEN_COLLECTION_GROUP_ID,abstractDomain.getSystemIdentifier().toString());
-    	                	Logger.out.debug("SpecimenCollectionGroup ID :-- : "+ String.valueOf(abstractDomain.getSystemIdentifier()) );
-                    	}	
-                    }	
-
-                    // CollectionProtocolRegistration values
-                    if(abstractDomain instanceof CollectionProtocolRegistration)
-                    {
-                    	request.setAttribute(Constants.COLLECTION_REGISTRATION_ID,abstractDomain.getSystemIdentifier().toString());
-                    }	
-
-                    
                     // OnSubmit
                     if(abstractForm.getOnSubmit()!= null && abstractForm.getOnSubmit().trim().length()>0  )
                     {
@@ -322,21 +283,34 @@ public class CommonAddEditAction extends Action
                         return (mapping.findForward(forwardTo));
                     }
 
-                    // ---ForwardTo list selection
+                    String submittedFor = (String) request.getParameter(Constants.SUBMITTED_FOR);
                     
-                    if(abstractForm.getForwardTo()!= null && abstractForm.getForwardTo().trim().length()>0  )
-                    {
-                    	String forwardTo = abstractForm.getForwardTo(); 
-                    	Logger.out.debug("ForwardTo :-- : "+ forwardTo);
-                    	form = null;
-                       // return (mapping.findForward(forwardTo));
-                    	target = forwardTo; 
-                    }
+                    //----------ForwardTo Starts----------------
+                    if( (submittedFor !=null)&& (submittedFor.equals("ForwardTo")) )
+      	            {
+                        Logger.out.debug("SubmittedFor is ForwardTo in CommonAddEditAction...................");
+                        
+                        //Storing appropriate value of SUBMITTED_FOR attribute
+      	                request.setAttribute(Constants.SUBMITTED_FOR, "Default");
+      	                
+      	                //storing HashMap of forwardTo data into Request
+      	                request.setAttribute("forwardToHashMap", generateForwardToHashMap(abstractForm, abstractDomain));
+      	            }
+                    //----------ForwardTo Ends----------------
 
-                    //Forward the page to edit success in the Advance query search if the edit is through Object view of Advance Search
+                    //setting target to ForwardTo attribute of submitted Form
+                    if(abstractForm.getForwardTo()!= null && abstractForm.getForwardTo().trim().length()>0  )
+  		            {
+  		           	    String forwardTo = abstractForm.getForwardTo(); 
+  		           		Logger.out.debug("ForwardTo in Edit :-- : "+ forwardTo);
+  		           		form=null;
+  		           		target = forwardTo;
+  		           		//return (mapping.findForward(forwardTo));
+  		            }
                     
+                    //Forward the page to edit success in the Advance query search if the edit is through Object view of Advance Search
                    String pageOf = (String)request.getParameter(Constants.PAGEOF);
-                   Logger.out.debug("pageof for query edit"+pageOf);
+                   Logger.out.debug("pageof for query edit=="+pageOf);
                    if(pageOf != null)
                    {
                    	if(pageOf.equals(Constants.QUERY))
@@ -444,21 +418,21 @@ public class CommonAddEditAction extends Action
 		//return (String) request.getSession().getAttribute(Constants.SESSION_DATA);
 	}
     
-    // to set the attributes based on forward to parameter 
-     private void forwardToInSpecimen(AbstractActionForm abstractForm,AbstractDomainObject abstractDomain,HttpServletRequest request)
-     {
-     	String forwardTo = abstractForm.getForwardTo();
-    	Logger.out.debug("ForwardTo in Specimen :-- : "+ forwardTo);
-    	if(forwardTo != null)
-    	{
-    		if(forwardTo.equals("createNew") )
-    		request.setAttribute(Constants.PARENT_SPECIMEN_ID,String.valueOf(abstractDomain.getSystemIdentifier()));
-    		
-            if(forwardTo.equals("sameCollectionGroup") )
-        		request.setAttribute(Constants.SPECIMEN_COLLECTION_GROUP_ID,String.valueOf(((Specimen)abstractDomain).getSpecimenCollectionGroup().getSystemIdentifier()  ));
-            		
-            if(forwardTo.equals("eventParameters") )
-            	request.setAttribute(Constants.SPECIMEN_ID,String.valueOf(abstractDomain.getSystemIdentifier()));
-    	}
-     }
+    /**
+     * This method generates HashMap of data required to be forwarded if Form is submitted for ForwardTo request
+     * @param abstractForm	Form submitted
+     * @param abstractDomain	DomainObject Added/Edited
+     * @return	HashMap of data required to be forwarded
+     */
+    private HashMap generateForwardToHashMap(AbstractActionForm abstractForm, AbstractDomainObject abstractDomain)
+    {
+        //getting instance of ForwardToProcessor
+        AbstractForwardToProcessor forwardToProcessor= ForwardToFactory.getForwardToProcessor();
+          
+        //Populating HashMap of the data required to be forwarded on next page
+        HashMap forwardToHashMap = (HashMap)forwardToProcessor.populateForwardToData(abstractForm,abstractDomain);
+          
+        return forwardToHashMap;
+    }
+    
 }
