@@ -103,21 +103,21 @@ public class SiteAction  extends SecureAction
     	// ------------------------------------------------------------------
    
     	// ------------- add new
-		String reqPath = request.getParameter(Constants.REQ_PATH);
-		
-		if (reqPath != null)
-		{
-			request.setAttribute(Constants.REQ_PATH, reqPath);
-		}
-		
-		Logger.out.debug("SiteAction redirect :---------- "+ reqPath  );
-		// Mandar : code for Addnew Coordinator data 24-Jan-06
-		String coordinatorID = (String)request.getAttribute(Constants.ADD_NEW_USER_ID);
-		if(coordinatorID != null && coordinatorID.trim().length() > 0 )
-		{
-			Logger.out.debug(">>>>>>>>>>><<<<<<<<<<<<<<<<>>>>>>>>>>>>> User ID in Site : "+ coordinatorID  );
-			siteForm.setCoordinatorId(Long.parseLong(coordinatorID) ); 
-		}
+//		String reqPath = request.getParameter(Constants.REQ_PATH);
+//		
+//		if (reqPath != null)
+//		{
+//			request.setAttribute(Constants.REQ_PATH, reqPath);
+//		}
+//		
+//		Logger.out.debug("SiteAction redirect :---------- "+ reqPath  );
+//		// Mandar : code for Addnew Coordinator data 24-Jan-06
+//		String coordinatorID = (String)request.getAttribute(Constants.ADD_NEW_USER_ID);
+//		if(coordinatorID != null && coordinatorID.trim().length() > 0 )
+//		{
+//			Logger.out.debug(">>>>>>>>>>><<<<<<<<<<<<<<<<>>>>>>>>>>>>> User ID in Site : "+ coordinatorID  );
+//			siteForm.setCoordinatorId(Long.parseLong(coordinatorID) ); 
+//		}
 		// -- 24-Jan-06 end
 
         // ----------------add new end-----

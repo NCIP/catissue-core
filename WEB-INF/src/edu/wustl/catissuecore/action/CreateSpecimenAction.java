@@ -139,20 +139,28 @@ public class CreateSpecimenAction extends SecureAction
     	request.setAttribute(Constants.SPECIMEN_TYPE_MAP, subTypeMap);
     	Logger.out.debug("************************************\n\n\nDone**********\n");
 
-    	String pSpecimenId = (String)request.getAttribute(Constants.PARENT_SPECIMEN_ID);
-        request.setAttribute("parentSpecimenId",pSpecimenId);
-        if(pSpecimenId != null)
+        //*************  ForwardTo implementation *************
+        HashMap forwardToHashMap=(HashMap)request.getAttribute("forwardToHashMap");
+        
+        if(forwardToHashMap !=null)
         {
-        	createForm.setParentSpecimenId(pSpecimenId);
-        	createForm.setPositionInStorageContainer("" );
-        	createForm.setQuantity("");
-        	createForm.setPositionDimensionOne("" );
-        	createForm.setPositionDimensionTwo( "");
-        	createForm.setStorageContainer("" ); 
-        	map.clear(); 
-        	createForm.setExternalIdentifier(map);
-        	createForm.setExIdCounter(1 ); 
+            Long parentSpecimenId=(Long)forwardToHashMap.get("parentSpecimenId");
+            Logger.out.debug("ParentSpecimenID found in forwardToHashMap========>>>>>>"+parentSpecimenId);
+            
+            if(parentSpecimenId != null)
+            {
+            	createForm.setParentSpecimenId(parentSpecimenId.toString());
+	            createForm.setPositionInStorageContainer("" );
+    	    	createForm.setQuantity("");
+        		createForm.setPositionDimensionOne("" );
+        		createForm.setPositionDimensionTwo( "");
+	        	createForm.setStorageContainer("" ); 
+    	    	map.clear(); 
+        		createForm.setExternalIdentifier(map);
+        		createForm.setExIdCounter(1 ); 
+        	}
         }
+        //*************  ForwardTo implementation *************
 
         return mapping.findForward(Constants.SUCCESS);
     }

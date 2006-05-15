@@ -26,7 +26,6 @@ import edu.wustl.catissuecore.bizlogic.ParticipantBizLogic;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.SecureAction;
-import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.logger.Logger;
@@ -97,19 +96,6 @@ public class ParticipantAction extends SecureAction
         request.setAttribute(Constants.SITELIST, siteList);
         Logger.out.debug("pageOf :---------- "+ pageOf );
         
-        // FOR ADD NEW LINK
-//        String reqPath = request.getParameter(Constants.REQ_PATH);
-//		request.setAttribute(Constants.REQ_PATH, reqPath);
-//        
-//        AbstractActionForm aForm = (AbstractActionForm)form;
-//        
-//        if(reqPath != null && aForm !=null)
-//        {
-//        	aForm.setRedirectTo(reqPath);
-//        }
-//        
-//        Logger.out.debug("redirect :---------- "+ reqPath  );
-
         return mapping.findForward(pageOf);
     }
 }

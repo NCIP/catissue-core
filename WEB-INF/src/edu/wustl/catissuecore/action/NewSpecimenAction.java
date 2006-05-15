@@ -90,38 +90,38 @@ public class NewSpecimenAction  extends SecureAction
         	}
         }
 
-    	// ----------- redirected from specimencollection group
-        String specimenCollectionGroupId = (String)request.getAttribute(Constants.SPECIMEN_COLLECTION_GROUP_ID);
-        if(specimenCollectionGroupId != null)
-		{
-        	Logger.out.debug("In redirect if>>>>>>>>>>>>>" );
-        	specimenForm.setSpecimenCollectionGroupId( specimenCollectionGroupId); 
-        	specimenForm.setParentSpecimenId("" );
-        	specimenForm.setPositionInStorageContainer("" );
-        	specimenForm.setQuantity("" ); 
-        	specimenForm.setClassName( "");
-        	specimenForm.setTissueSide( "");
-        	specimenForm.setTissueSite( "");
-        	specimenForm.setPathologicalStatus("");
-        	specimenForm.setPositionDimensionOne("");
-        	specimenForm.setPositionDimensionTwo("");
-        	specimenForm.setStorageContainer("" );
- 		}
-        else
+        //*************  ForwardTo implementation *************
+        HashMap forwardToHashMap=(HashMap)request.getAttribute("forwardToHashMap");
+        
+        if(forwardToHashMap !=null)
         {
-//            specimenCollectionGroupId = request.getParameter(Constants.SYSTEM_IDENTIFIER);
-//            if(specimenCollectionGroupId != null)
-//    		{
-//            	specimenForm.setSpecimenCollectionGroupId( specimenCollectionGroupId); 
-//    		}
+            String specimenCollectionGroupId=(String)forwardToHashMap.get("specimenCollectionGroupId");
+            Logger.out.debug("SpecimenCollectionGroupId found in forwardToHashMap========>>>>>>"+specimenCollectionGroupId);
+            
+            if(specimenCollectionGroupId !=null)
+            {
+                specimenForm.setSpecimenCollectionGroupId(specimenCollectionGroupId);
+                specimenForm.setParentSpecimenId("");
+            	specimenForm.setPositionInStorageContainer("");
+            	specimenForm.setQuantity(""); 
+            	specimenForm.setClassName("");
+            	specimenForm.setTissueSide("");
+            	specimenForm.setTissueSite("");
+            	specimenForm.setPathologicalStatus("");
+            	specimenForm.setPositionDimensionOne("");
+            	specimenForm.setPositionDimensionTwo("");
+            	specimenForm.setStorageContainer("");
+            }
         }
+        //*************  ForwardTo implementation *************
+        
 
         // - set the specimen id
-       	String specimenID = (String)request.getAttribute(Constants.SPECIMEN_ID);
-       	if(specimenID !=null)
-       		specimenForm.setSystemIdentifier(Long.parseLong(specimenID  )); 
-    	
-    	Logger.out.debug("SpecimenID in NewSpecimenAction : " + specimenID  );
+//       	String specimenID = (String)request.getAttribute(Constants.SPECIMEN_ID);
+//       	if(specimenID !=null)
+//       		specimenForm.setSystemIdentifier(Long.parseLong(specimenID  )); 
+//    	
+//    	Logger.out.debug("SpecimenID in NewSpecimenAction : " + specimenID  );
     	
         String pageOf = request.getParameter(Constants.PAGEOF);
         request.setAttribute(Constants.PAGEOF,pageOf);

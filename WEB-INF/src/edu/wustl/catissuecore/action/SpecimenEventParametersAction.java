@@ -55,11 +55,11 @@ public class SpecimenEventParametersAction  extends SecureAction
 
         //Sets the hourList attribute to be used in the Add/Edit FrozenEventParameters Page.
         request.setAttribute(Constants.HOUR_LIST, Constants.HOUR_ARRAY);
-        
+         
         //The id of specimen of this event.
         String specimenId = request.getParameter(Constants.SPECIMEN_ID); 
         request.setAttribute(Constants.SPECIMEN_ID, specimenId);
-        Logger.out.debug("\t\t************************************ : "+specimenId );
+        Logger.out.debug("\t\t SpecimenEventParametersAction************************************ : "+specimenId );
         
        	UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getBizLogic(Constants.USER_FORM_ID);
     	Collection userCollection =  userBizLogic.getUsers(operation);

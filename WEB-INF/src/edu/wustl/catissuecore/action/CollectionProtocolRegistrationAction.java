@@ -11,6 +11,7 @@
 package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Stack;
 
@@ -153,17 +154,23 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 		//Sets the activityStatusList attribute to be used in the Site Add/Edit Page.
         request.setAttribute(Constants.ACTIVITYSTATUSLIST, Constants.ACTIVITY_STATUS_VALUES);
 	    
-        if(request.getAttribute(Constants.PARTICIPANT_ID)!=null)
+        //*************  ForwardTo implementation *************
+        HashMap forwardToHashMap=(HashMap)request.getAttribute("forwardToHashMap");
+        
+        if(forwardToHashMap !=null)
         {
-            String participantId=(String)request.getAttribute(Constants.PARTICIPANT_ID);
+            Long participantId=(Long)forwardToHashMap.get("participantId");
+            Logger.out.debug("ParticipantID found in forwardToHashMap========>>>>>>"+participantId);
+            
             if((request.getParameter("firstName").trim().length()>0) || (request.getParameter("lastName").trim().length()>0) || (request.getParameter("birthDate").trim().length()>0) ||( (request.getParameter("socialSecurityNumberPartA").trim().length()>0) && (request.getParameter("socialSecurityNumberPartB").trim().length()>0) && (request.getParameter("socialSecurityNumberPartC").trim().length()>0))) 
             {    
                 CollectionProtocolRegistrationForm cprForm=(CollectionProtocolRegistrationForm)form;
-                cprForm.setParticipantID(Long.parseLong(participantId));
+                cprForm.setParticipantID(participantId.longValue());
                 cprForm.setCheckedButton(true);
             }
         }
-                
+        //*************  ForwardTo implementation *************
+        
 		return mapping.findForward(pageOf);
 	}
 	

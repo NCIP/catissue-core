@@ -12,6 +12,7 @@ package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,8 +23,6 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
-import edu.wustl.common.action.SecureAction;
-import edu.wustl.common.bizlogic.AbstractBizLogic;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
@@ -34,6 +33,7 @@ import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.catissuecore.util.global.Variables;
+import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.bizlogic.AbstractBizLogic;
 import edu.wustl.common.cde.CDEManager;
@@ -135,36 +135,31 @@ public class SpecimenCollectionGroupAction  extends SecureAction
         Logger.out.debug("CP ID in SCG Action======>"+specimenCollectionGroupForm.getCollectionProtocolId());
         Logger.out.debug("Participant ID in SCG Action=====>"+specimenCollectionGroupForm.getParticipantId()+"  "+specimenCollectionGroupForm.getProtocolParticipantIdentifier());
         
-        // ---------- Add new
-//		String reqPath = request.getParameter(Constants.REQ_PATH);
-//		if (reqPath != null)
-//			request.setAttribute(Constants.REQ_PATH, reqPath);
-//		Logger.out.debug(" reqPath in SCGA : "+ reqPath  ); 
-
 		// -------called from Collection Protocol Registration start-------------------------------
         if( (request.getAttribute(Constants.SUBMITTED_FOR) !=null) &&(request.getAttribute(Constants.SUBMITTED_FOR).equals("Default")))
         {
             Logger.out.debug("Populating CP and Participant in SCG ====  AddNew operation loop");
             
-			Long cprId =new Long(specimenCollectionGroupForm.getCollectionProtocolId());
+			Long cprId =new Long(specimenCollectionGroupForm.getCollectionProtocolRegistrationId());
+			
 			if(cprId != null)
 			{
 			    List collectionProtocolRegistrationList = bizLogic.retrieve(CollectionProtocolRegistration.class.getName(),
 						Constants.SYSTEM_IDENTIFIER,cprId);
-				if(!collectionProtocolRegistrationList.isEmpty()  )
+				if(!collectionProtocolRegistrationList.isEmpty())
 				{
 					Object  obj = collectionProtocolRegistrationList.get(0 ); 
 					CollectionProtocolRegistration cpr = (CollectionProtocolRegistration)obj;
 					
-					long cpID = cpr.getCollectionProtocol().getSystemIdentifier().longValue() ;
-					long pID = cpr.getParticipant().getSystemIdentifier().longValue()  ;
+					long cpID = cpr.getCollectionProtocol().getSystemIdentifier().longValue();
+					long pID = cpr.getParticipant().getSystemIdentifier().longValue();
 					String ppID = cpr.getProtocolParticipantIdentifier();
 					
 					Logger.out.debug("cpID : "+ cpID + "   ||  pID : " + pID + "    || ppID : " + ppID );
 					
-					specimenCollectionGroupForm.setCollectionProtocolId(cpID );
+					specimenCollectionGroupForm.setCollectionProtocolId(cpID);
 	
-					//Populating the participants registered to a given protocol
+						//Populating the participants registered to a given protocol
 						loadPaticipants(cpID , bizLogic, request);
 						loadPaticipantNumberList(specimenCollectionGroupForm.getCollectionProtocolId(),bizLogic,request);
 						
@@ -175,25 +170,77 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 						if(firstName.trim().length()>0 || lastName.trim().length()>0 || birthDate.trim().length()>0 || ssn.trim().length()>0)
 						{
 							specimenCollectionGroupForm.setParticipantId(pID );
-							specimenCollectionGroupForm.setCheckedButton(1 ); 
+							specimenCollectionGroupForm.setCheckedButton(1); 
 						}	
 					//Populating the protocol participants id registered to a given protocol
 						
 						else if(cpr.getProtocolParticipantIdentifier() != null)
 						{
 							specimenCollectionGroupForm.setProtocolParticipantIdentifier(ppID );
-							specimenCollectionGroupForm.setCheckedButton(2 ); 
+							specimenCollectionGroupForm.setCheckedButton(2); 
 						}
 	
 						//Populating the Collection Protocol Events
 						loadCollectionProtocolEvent(specimenCollectionGroupForm.getCollectionProtocolId(),bizLogic,request);
-	
+						
+						//Load Clinical status for a given study calander event point
+						calendarEventPointList = bizLogic.retrieve(CollectionProtocolEvent.class.getName(),
+														Constants.SYSTEM_IDENTIFIER,
+														new Long(specimenCollectionGroupForm.getCollectionProtocolEventId()));
+						if(isOnChange && !calendarEventPointList.isEmpty())
+						{
+							CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent)calendarEventPointList.get(0);
+							specimenCollectionGroupForm.setClinicalStatus(collectionProtocolEvent.getClinicalStatus());
+						}
 				}
 			}
 			request.setAttribute(Constants.SUBMITTED_FOR, "Default");
         }
         
-		request.setAttribute(Constants.PAGEOF,pageOf);
+        
+        //*************  ForwardTo implementation *************
+        HashMap forwardToHashMap=(HashMap)request.getAttribute("forwardToHashMap");
+        
+        if(forwardToHashMap !=null)
+        {
+            Long collectionProtocolId = (Long)forwardToHashMap.get("collectionProtocolId");
+            Long participantId=(Long)forwardToHashMap.get("participantId");
+            String participantProtocolId = (String) forwardToHashMap.get("participantProtocolId");
+            
+            specimenCollectionGroupForm.setCollectionProtocolId(collectionProtocolId.longValue());
+            
+            if(participantId != null)
+            {    
+                //Populating the participants registered to a given protocol
+				loadPaticipants(collectionProtocolId.longValue(), bizLogic, request);
+				
+				loadPaticipantNumberList(specimenCollectionGroupForm.getCollectionProtocolId(),bizLogic,request);
+
+				specimenCollectionGroupForm.setParticipantId(participantId.longValue());
+                specimenCollectionGroupForm.setCheckedButton(1);
+            }
+            else if(participantProtocolId != null)
+            {
+                specimenCollectionGroupForm.setProtocolParticipantIdentifier(participantProtocolId);
+                specimenCollectionGroupForm.setCheckedButton(2);
+            }
+            //Load Clinical status for a given study calander event point
+    		calendarEventPointList = bizLogic.retrieve(CollectionProtocolEvent.class.getName(),
+    										Constants.SYSTEM_IDENTIFIER,
+    										new Long(specimenCollectionGroupForm.getCollectionProtocolEventId()));
+    		if(!calendarEventPointList.isEmpty())
+    		{
+    			CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent)calendarEventPointList.get(0);
+    			specimenCollectionGroupForm.setClinicalStatus(collectionProtocolEvent.getClinicalStatus());
+    		}
+    		
+            Logger.out.debug("CollectionProtocolID found in forwardToHashMap========>>>>>>"+collectionProtocolId);
+            Logger.out.debug("ParticipantID found in forwardToHashMap========>>>>>>"+participantId);
+            Logger.out.debug("ParticipantProtocolID found in forwardToHashMap========>>>>>>"+participantProtocolId);
+        }
+        //*************  ForwardTo implementation *************
+        
+        request.setAttribute(Constants.PAGEOF,pageOf);
 		Logger.out.debug("page of in Specimen coll grp action:"+request.getParameter(Constants.PAGEOF));
 		// -------called from Collection Protocol Registration end -------------------------------
 		return mapping.findForward(pageOf);
