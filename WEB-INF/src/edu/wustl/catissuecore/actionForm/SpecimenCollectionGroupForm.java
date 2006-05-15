@@ -60,6 +60,9 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	
 	private String protocolParticipantIdentifier;
 	
+	//For AddNew functionality
+	private long collectionProtocolRegistrationId;
+	
 	/**
 	 * No argument constructor for SpecimenCollectionGroupForm class 
 	 */
@@ -116,6 +119,19 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 		this.participantId = participantId;
 	}
 
+	/**
+	 * For AddNew functionality
+	 * @return
+	 */
+	public long getCollectionProtocolRegistrationId()
+	{
+	    return this.collectionProtocolRegistrationId;
+	}
+	public void setCollectionProtocolRegistrationId(long collectionProtocolRegistrationId)
+	{
+	    this.collectionProtocolRegistrationId = collectionProtocolRegistrationId;
+	}
+	
 	/**
 	 * @return Returns the checkedButton.
 	 */
@@ -523,10 +539,12 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
         else if(addNewFor.equals("participant"))
         {
 //            setParticipantId(addObjectIdentifier.longValue());
+            setCollectionProtocolRegistrationId(addObjectIdentifier.longValue());
             setCheckedButton(1);
         }
         else if(addNewFor.equals("protocolParticipantIdentifier"))
         {
+            setCollectionProtocolRegistrationId(addObjectIdentifier.longValue());
 //            setProtocolParticipantIdentifier(addObjectIdentifier.toString());
             setCheckedButton(2);
         }
