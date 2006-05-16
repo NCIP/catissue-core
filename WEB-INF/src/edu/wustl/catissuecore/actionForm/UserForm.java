@@ -18,6 +18,7 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.domainobject.Address;
 import edu.wustl.common.util.global.PasswordManager;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
@@ -683,25 +684,51 @@ public class UserForm extends AbstractActionForm
             this.systemIdentifier = user.getId().longValue();
             this.lastName = user.getLastName();
             this.firstName = user.getFirstName();
-            this.institutionId = user.getInstitution().getId()
-                    .longValue();
             this.emailAddress = user.getEmailAddress();
 
             //Mandar : 24-Apr-06 : bug id 972 : confirmEmailAddress
             confirmEmailAddress = this.emailAddress ;
 
-            this.departmentId = user.getDepartment().getId()
-                    .longValue();
-            this.cancerResearchGroupId = user.getCancerResearchGroup()
-            		.getId().longValue();
+            //Aniruddha : Fix for bug - 1613
+            if(user.getInstitution() != null && user.getInstitution().getId() != null)
+            {
+            	this.institutionId = user.getInstitution().getId().longValue();
+            }
+            else
+            {
+            	this.institutionId = -1;
+            }
             
-            this.street = user.getAddress().getStreet();
-            this.city = user.getAddress().getCity();
-            this.state = user.getAddress().getState();
-            this.country = user.getAddress().getCountry();
-            this.zipCode = user.getAddress().getZipCode();
-            this.phoneNumber = user.getAddress().getPhoneNumber();
-            this.faxNumber = user.getAddress().getFaxNumber();
+            if(user.getDepartment() != null && user.getDepartment().getId() != null)
+            {
+            	this.departmentId = user.getDepartment().getId().longValue();
+            }
+            else
+            {
+            	this.departmentId = -1;
+            }
+            
+            if(user.getCancerResearchGroup() != null && user.getCancerResearchGroup().getId() != null)
+            {
+            	this.cancerResearchGroupId = user.getCancerResearchGroup().getId().longValue();
+            }
+            else
+            {
+            	this.cancerResearchGroupId = -1;
+            }
+            
+            Address address = user.getAddress();
+            
+            if(address != null)
+            {
+	            this.street = address.getStreet();
+	            this.city = address.getCity();
+	            this.state = address.getState();
+	            this.country = address.getCountry();
+	            this.zipCode = address.getZipCode();
+	            this.phoneNumber = address.getPhoneNumber();
+	            this.faxNumber = address.getFaxNumber();
+            }
              
             //Populate the activity status, comments and role for approve user and user edit.  
             if ((getFormId() == Constants.APPROVE_USER_FORM_ID) || 
