@@ -302,6 +302,12 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
     	Specimen specimen = (Specimen)obj;
     	Specimen specimenOld = (Specimen)oldObj;
     	Logger.out.debug("Specimen Type: " +obj+" ----- "+oldObj);
+    	
+    	if(isStoragePositionChanged(specimenOld,specimen))
+    	{
+    		throw new DAOException("Storage Position should not be changed while updating the specimen");
+    	}
+    	
 //    	try
 //    	{
     		setAvailableQuantity(specimen,specimenOld);
@@ -686,5 +692,37 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		}
     	
     	return true;
+    }
+    
+    /* This function checks whether the storage position of a specimen is changed or not 
+     * & returns the status accordingly.
+     */
+    private boolean isStoragePositionChanged(Specimen oldSpecimen, Specimen newSpecimen)
+    {
+    	StorageContainer oldContainer = oldSpecimen.getStorageContainer();
+		StorageContainer newContainer = newSpecimen.getStorageContainer();
+		
+    	if(oldContainer.getSystemIdentifier().longValue() == newContainer.getSystemIdentifier().longValue())
+    	{
+    		if(oldSpecimen.getPositionDimensionOne().intValue() == newSpecimen.getPositionDimensionOne().intValue())
+    		{
+    			if(oldSpecimen.getPositionDimensionTwo().intValue() == newSpecimen.getPositionDimensionTwo().intValue())
+    			{
+    				return false;
+    			}
+    			else
+    			{
+    				return true;
+    			}
+    		}
+    		else
+    		{
+    			return true;
+    		}
+    	}
+    	else
+    	{
+    		return true;
+    	}
     }
 }
