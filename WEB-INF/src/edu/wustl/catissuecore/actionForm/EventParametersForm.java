@@ -212,11 +212,24 @@ public abstract class EventParametersForm extends AbstractActionForm
 		this.systemIdentifier = eventParametersObject.getId().longValue() ;
 		
 		Calendar calender = Calendar.getInstance();
-		calender.setTime(eventParametersObject.getTimestamp());
-		this.timeInHours = Utility.toString(Integer.toString( calender.get(Calendar.HOUR_OF_DAY)));
-		this.timeInMinutes = Utility.toString(Integer.toString(calender.get(Calendar.MINUTE)));
-		this.userId = eventParametersObject.getUser().getId().longValue() ;
-		this.dateOfEvent = Utility.parseDateToString(eventParametersObject.getTimestamp(),Constants.DATE_PATTERN_MM_DD_YYYY);
+		
+		//Aniruddha : Fix for bug - 1613
+		if(eventParametersObject.getTimestamp() != null)
+		{
+			calender.setTime(eventParametersObject.getTimestamp());
+			this.timeInHours = Utility.toString(Integer.toString( calender.get(Calendar.HOUR_OF_DAY)));
+			this.timeInMinutes = Utility.toString(Integer.toString(calender.get(Calendar.MINUTE)));
+			this.dateOfEvent = Utility.parseDateToString(eventParametersObject.getTimestamp(),Constants.DATE_PATTERN_MM_DD_YYYY);
+		}
+		
+		if(eventParametersObject.getUser() != null && eventParametersObject.getUser().getId() != null)
+		{
+			this.userId = eventParametersObject.getUser().getId().longValue();
+		}
+		else
+		{
+			this.userId = -1;
+		}
 
 		//this.dateOfEvent = (calender.get(Calendar.MONTH)+1)+"-"+calender.get(Calendar.DAY_OF_MONTH)+"-"+calender.get(Calendar.YEAR) ;
 		Logger.out.debug("systemIdentifier:"+systemIdentifier+" timeInHours:"+timeInHours+" timeInMinutes:"+timeInMinutes+" userId:"+userId+" dateOfEvent:"+dateOfEvent);

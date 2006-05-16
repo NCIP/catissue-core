@@ -612,9 +612,12 @@ public class SpecimenForm extends AbstractActionForm
                 edu.wustl.catissuecore.domainobject.ExternalIdentifier externalId = 
                 		(edu.wustl.catissuecore.domainobject.ExternalIdentifier) it.next();
 
-                externalIdentifier.put(key1, externalId.getName());
-                externalIdentifier.put(key2, externalId.getValue());
-                externalIdentifier.put(key3, Utility.toString(externalId.getId()));
+                if(externalId != null)
+                {
+	                externalIdentifier.put(key1, Utility.toString(externalId.getName()));
+	                externalIdentifier.put(key2, Utility.toString(externalId.getValue()));
+	                externalIdentifier.put(key3, Utility.toString(externalId.getId()));
+                }
 
                 i++;
             }
@@ -703,14 +706,14 @@ public class SpecimenForm extends AbstractActionForm
                     {
                         break;
                     }
-                    else if (value1.equals("") && value2.equals(""))
+                    else if (value1.trim().equals("") && value2.trim().equals(""))
                     {
                         externalIdentifier.remove(keyOne);
                         externalIdentifier.remove(keyTwo);
                         externalIdentifier.remove(keyThree);
                     }
-                    else if ((!value1.equals("") && value2.equals(""))
-                            || (value1.equals("") && !value2.equals("")))
+                    else if ((!value1.trim().equals("") && value2.trim().equals(""))
+                            || (value1.trim().equals("") && !value2.trim().equals("")))
                     {
                     	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
                                 "errors.specimen.externalIdentifier.missing",

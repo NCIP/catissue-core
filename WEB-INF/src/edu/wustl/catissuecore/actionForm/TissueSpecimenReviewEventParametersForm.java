@@ -194,11 +194,12 @@ public class TissueSpecimenReviewEventParametersForm extends SpecimenEventParame
 		edu.wustl.catissuecore.domainobject.TissueSpecimenReviewEventParameters parameter
 				= (edu.wustl.catissuecore.domainobject.TissueSpecimenReviewEventParameters)object;
 		
+		//Aniruddha : Fix for bug - 1613
 		this.neoplasticCellularityPercentage = Utility.toString(parameter.getNeoplasticCellularityPercentage());
 		this.necrosisPercentage = Utility.toString(parameter.getNecrosisPercentage() );
 		this.lymphocyticPercentage =Utility.toString(parameter.getLymphocyticPercentage());
 		this.totalCellularityPercentage =Utility.toString(parameter.getTotalCellularityPercentage());
-		this.histologicalQuality = Utility.toString(parameter.getHistologicalQuality());
+		this.histologicalQuality = parameter.getHistologicalQuality();
 	}
 	
 	/**

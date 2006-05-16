@@ -302,20 +302,42 @@ public class NewSpecimenForm extends SpecimenForm
         
     	this.parentPresent = false;
     	edu.wustl.catissuecore.domainobject.SpecimenCollectionGroup specimenCollectionGroup = specimen.getSpecimenCollectionGroup();
+    	
     	if(specimenCollectionGroup!=null)
-    		this.specimenCollectionGroupId = String.valueOf(specimenCollectionGroup.getId());
+    	{
+    		if(specimenCollectionGroup.getId() != null)
+    		{
+    			this.specimenCollectionGroupId = String.valueOf(specimenCollectionGroup.getId());
+    		}
+    		else
+    		{
+    			this.specimenCollectionGroupId = "-1";
+    		}
+    	}
     	
     	if(specimen.getParentSpecimen() != null)
     	{
     		Logger.out.debug("ParentSpecimen : -- "+specimen.getParentSpecimen());
-    		this.parentSpecimenId = String.valueOf(specimen.getParentSpecimen().getId());
+    		
+    		if(specimen.getParentSpecimen().getId() != null)
+    		{
+    			this.parentSpecimenId = String.valueOf(specimen.getParentSpecimen().getId());
+    		}
+    		else
+    		{
+    			this.parentSpecimenId = "-1";
+    		}
     		this.parentPresent = true;
     	}
     	
     	edu.wustl.catissuecore.domainobject.SpecimenCharacteristics characteristic = specimen.getSpecimenCharacteristics();
-        this.pathologicalStatus = characteristic.getPathologicalStatus();
-        this.tissueSide = characteristic.getTissueSide();
-        this.tissueSite = characteristic.getTissueSite();
+    	
+    	if(characteristic != null)
+    	{
+	        this.pathologicalStatus = characteristic.getPathologicalStatus();
+	        this.tissueSide = characteristic.getTissueSide();
+	        this.tissueSite = characteristic.getTissueSite();
+    	}
         
         Collection biohazardCollection = specimen.getBiohazardCollection();
         bhCounter = 1;
@@ -334,11 +356,15 @@ public class NewSpecimenForm extends SpecimenForm
 				String key3 = "Biohazard:" + i + "_persisted";
 				
 				edu.wustl.catissuecore.domainobject.Biohazard hazard = (edu.wustl.catissuecore.domainobject.Biohazard)it.next();
-				biohazard.put(key1,hazard.getType());
-				biohazard.put(key2,hazard.getId());
 				
-				//boolean for showing persisted value
-				biohazard.put(key3,"true");
+				if(hazard != null && hazard.getId() != null)
+				{
+					biohazard.put(key1,hazard.getType());
+					biohazard.put(key2,hazard.getId());
+					
+					//boolean for showing persisted value
+					biohazard.put(key3,"true");
+				}
 				
 				i++;
         	}

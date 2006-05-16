@@ -109,7 +109,16 @@ public class FixedEventParametersForm extends SpecimenEventParametersForm
 				= (edu.wustl.catissuecore.domainobject.FixedEventParameters)object;
 		
 		this.fixationType = Utility.toString(parameter.getFixationType());
-		this.durationInMinutes = parameter.getDurationInMinutes().intValue();
+		
+		//Aniruddha : Fix for bug - 1613
+		if(parameter.getDurationInMinutes() != null)
+		{
+			this.durationInMinutes = parameter.getDurationInMinutes().intValue();
+		}
+		else
+		{
+			this.durationInMinutes = 0;
+		}
 	}
 	
 	/**

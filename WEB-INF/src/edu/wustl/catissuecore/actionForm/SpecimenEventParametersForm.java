@@ -6,6 +6,12 @@
  */
 package edu.wustl.catissuecore.actionForm;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMapping;
+
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.common.domain.AbstractDomainObject;
 
@@ -66,7 +72,29 @@ public abstract class SpecimenEventParametersForm extends EventParametersForm
 	     edu.wustl.catissuecore.domainobject.SpecimenEventParameters specimenEventParameters=(edu.wustl.catissuecore.domainobject.SpecimenEventParameters) obj;
 	     super.setAllVal(specimenEventParameters);
 		 
-		 if(specimenEventParameters.getSpecimen()!=null)
+	     //Aniruddha : Fix for bug - 1613
+		 if(specimenEventParameters.getSpecimen()!=null && specimenEventParameters.getSpecimen().getId() != null)
+		 {
 		     specimenId = specimenEventParameters.getSpecimen().getId().longValue();
+		 }
+		 else
+		 {
+		 	specimenId = -1;
+		 }
 	 }
+	 
+ 	/**
+     * Overrides the validate method of ActionForm.
+     */
+     public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
+     {
+     	ActionErrors errors = super.validate(mapping, request);
+     	
+     	if(specimenId == -1L)
+     	{
+     		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required","Specimen Id"));
+     	}
+     	
+     	return errors;
+     }
 }

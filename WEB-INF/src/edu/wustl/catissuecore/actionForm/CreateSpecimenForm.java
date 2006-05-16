@@ -87,7 +87,14 @@ public class CreateSpecimenForm extends SpecimenForm
     	
     	super.setAllVal(object);
     	
-    	this.parentSpecimenId = String.valueOf(specimen.getParentSpecimen().getId());
+    	if(specimen.getParentSpecimen().getId() != null)
+    	{
+    		this.parentSpecimenId = String.valueOf(specimen.getParentSpecimen().getId());
+    	}
+    	else
+    	{
+    		this.parentSpecimenId = "-1";
+    	}
     }
     	
 	/**

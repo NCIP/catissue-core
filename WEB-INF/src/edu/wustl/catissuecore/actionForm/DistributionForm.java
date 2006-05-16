@@ -135,9 +135,27 @@ public class DistributionForm extends SpecimenEventParametersForm
 	    
 		Logger.out.debug("setAllValues of DistributionForm"); 
 		
-		this.distributionProtocolId = String.valueOf(distributionObject.getDistributionProtocol().getId());
-		//this.fromSite = String.valueOf(distributionObject.getFromSite().getId());
-		this.toSite = String.valueOf(distributionObject.getToSite().getId());
+		//Aniruddha : Fix for bug - 1613
+		if(distributionObject.getDistributionProtocol() != null
+				&& distributionObject.getDistributionProtocol().getId() != null)
+		{
+			this.distributionProtocolId = String.valueOf(distributionObject.getDistributionProtocol().getId());
+		}
+		else
+		{
+			this.distributionProtocolId = "-1";
+		}
+		
+		if(distributionObject.getToSite() != null
+				&& distributionObject.getToSite().getId() != null)
+		{
+			this.toSite = String.valueOf(distributionObject.getToSite().getId());
+		}
+		else
+		{
+			this.toSite = "-1";
+		}
+		
 		this.activityStatus = Utility.toString(distributionObject.getActivityStatus());
 		Logger.out.debug("this.activityStatus "+this.activityStatus);
 		Collection distributedItemCollection = distributionObject.getDistributedItemCollection();
@@ -165,23 +183,36 @@ public class DistributionForm extends SpecimenEventParametersForm
 				String key11 = "DistributedItem:"+i+"_Specimen_type";
 				
 				edu.wustl.catissuecore.domainobject.DistributedItem dItem = (edu.wustl.catissuecore.domainobject.DistributedItem)it.next();
-				edu.wustl.catissuecore.domainobject.Specimen specimen =dItem.getSpecimen();
-				String unit= getDomainObjectUnitSpan(specimen);
 				
-				Double quantity = dItem.getQuantity();
-				//dItem.setPreviousQty(quantity);
-				
-				values.put(key1,Utility.toString(dItem.getId()));
-				values.put(key2,Utility.toString(specimen.getId()));
-				values.put(key3,Utility.toString(quantity));
-				values.put(key4,Utility.toString(unit));
-				values.put(key5,specimen.getSpecimenCharacteristics().getTissueSite());
-				values.put(key6,specimen.getSpecimenCharacteristics().getTissueSide());
-				values.put(key7,specimen.getSpecimenCharacteristics().getPathologicalStatus());
-				values.put(key8,getDomainObjectClassName(specimen));
-				values.put(key9,Utility.toString(getDomainObjectAvailableQty(specimen)));
-				values.put(key10,Utility.toString(quantity));
-				values.put(key11,specimen.getType());
+				if(dItem != null)
+				{
+					edu.wustl.catissuecore.domainobject.Specimen specimen =dItem.getSpecimen();
+					String unit= getDomainObjectUnitSpan(specimen);
+					
+					Double quantity = dItem.getQuantity();
+					//dItem.setPreviousQty(quantity);
+					
+					values.put(key1,Utility.toString(dItem.getId()));
+					values.put(key3,Utility.toString(quantity));
+					values.put(key4,Utility.toString(unit));
+					
+					if(specimen != null && specimen.getId() != null)
+					{
+						values.put(key2,Utility.toString(specimen.getId()));
+						values.put(key5,specimen.getSpecimenCharacteristics().getTissueSite());
+						values.put(key6,specimen.getSpecimenCharacteristics().getTissueSide());
+						values.put(key7,specimen.getSpecimenCharacteristics().getPathologicalStatus());
+						values.put(key8,getDomainObjectClassName(specimen));
+						values.put(key9,Utility.toString(getDomainObjectAvailableQty(specimen)));
+						values.put(key11,specimen.getType());
+					}
+					else
+					{
+						values.put(key2,"-1");
+					}
+					
+					values.put(key10,Utility.toString(quantity));
+				}
 				
 				i++;
 			}
