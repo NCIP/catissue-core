@@ -57,23 +57,28 @@ public class CaTissueHTTPClient
 	public String connect(String userName, String password) throws Exception
 	{
 		String sessionId = null;
-	    User user = new User();
-		user.setLoginName(userName);
-		user.setPassword(password);
-		
-		HTTPWrapperObject wrapperObject = new HTTPWrapperObject(user,Constants.LOGIN);
-	    
-		HTTPMessage httpMessage=(HTTPMessage)sendData(wrapperObject, servletURL+"LoginHTTP.do");
-		Logger.out.debug("httpMeassage Login Response:"+httpMessage.getResponseStatus());
-		
-		if(Constants.SUCCESS.equals(httpMessage.getResponseStatus()))
+		try
 		{
-			sessionId = httpMessage.getSessionId();
+		    User user = new User();
+			user.setLoginName(userName);
+			user.setPassword(password);
+			HTTPWrapperObject wrapperObject = new HTTPWrapperObject(user,Constants.LOGIN);
+			HTTPMessage httpMessage=(HTTPMessage)sendData(wrapperObject, servletURL+"LoginHTTP.do");
+			Logger.out.debug("httpMeassage Login Response:"+httpMessage.getResponseStatus());
 			
+			if(Constants.SUCCESS.equals(httpMessage.getResponseStatus()))
+			{
+				sessionId = httpMessage.getSessionId();
+				
+			}
+			
+			Logger.out.debug("httpSessionId:"+sessionId);
 		}
-		
-		Logger.out.debug("httpSessionId:"+sessionId);
-		
+		catch(Exception e)
+		{
+			Logger.out.debug(e.getMessage(),e);
+			throw e;
+		}
 		return sessionId;
 	}
 	
