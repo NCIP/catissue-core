@@ -64,6 +64,19 @@ public class ActionFormFactory extends AbstractActionFormFactory
      */
 	public AbstractActionForm getFormBean(Object object,String operation) throws Exception
 	{
+		if (operation.equals(Constants.LOGIN))
+		{
+		    LoginForm loginForm = new LoginForm();
+		    edu.wustl.catissuecore.domain.User user = (edu.wustl.catissuecore.domain.User) object;
+		    loginForm.setLoginName(user.getLoginName());
+		    loginForm.setPassword(user.getPassword());
+		    return loginForm;
+		}
+		else if (operation.equals(Constants.LOGOUT))
+		{
+		    return null;
+		}
+		
 		if(object == null)
 		{
 			throw new Exception("Object should not be null while performing Add/Edit operation");
@@ -142,9 +155,13 @@ public class ActionFormFactory extends AbstractActionFormFactory
 				{
 					form = new NewSpecimenForm();
 				}
-				else
+				else if(specimen.getParentSpecimen() != null)
 				{
 					form = new CreateSpecimenForm();
+				}
+				else
+				{
+					throw new Exception("Either Specimen Collection Group or Parent Specimen should be present.");
 				}
 			}
 		}
@@ -211,18 +228,6 @@ public class ActionFormFactory extends AbstractActionFormFactory
 		else if(object instanceof TissueSpecimenReviewEventParameters)
 		{
 			form = new TissueSpecimenReviewEventParametersForm();
-		}
-		else if (object instanceof User && operation.equals(Constants.LOGIN))
-		{
-		    LoginForm loginForm = new LoginForm();
-		    User user = (User) object;
-		    loginForm.setLoginName(user.getLoginName());
-		    loginForm.setPassword(user.getPassword());
-		    form = loginForm;
-		}
-		else if (operation.equals(Constants.LOGOUT))
-		{
-		    form = null;
 		}
 		else
 		{
