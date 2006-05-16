@@ -155,6 +155,7 @@
 			{
 				unitSpecimen = "<%=Constants.UNIT_MG%>";
 				document.forms[0].unit.value = "<%=Constants.UNIT_MG%>";
+				document.forms[0].concentration.disabled = false;
 				typeChange(MolecularArray);
 			}
 			unit.innerHTML = unitSpecimen;
