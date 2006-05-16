@@ -464,7 +464,7 @@
 							String url = "ShowFramedPage.do?pageOf=pageOfTissueSite&propertyName=tissueSite&cdeName=Tissue Site";
 						%>
 						<a href="#" onclick="javascript:NewWindow('<%=url%>','name','250','330','no');return false">
-							<img src="images\Tree.gif" border="0" width="24" height="18">
+							<img src="images\Tree.gif" border="0" width="24" height="18" title='Tissue Site Selector'>
 						</a>
 		        	  </td>
 				 </tr>

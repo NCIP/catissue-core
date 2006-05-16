@@ -150,7 +150,7 @@ function insRow(subdivtag)
 	sname = sname + "</select>"
 	var url = "ShowFramedPage.do?pageOf=pageOfTissueSite&propertyName="+objname+"&cdeName=Tissue%20Site";
 	sname = sname + "<a href='#' onclick=javascript:NewWindow('" + url + "','name','250','330','no');return false>";
-	sname = sname + "<img src='images\\Tree.gif' border='0' width='26' height='22'></a>";
+	sname = sname + "<img src='images\\Tree.gif' border='0' width='26' height='22' title='Tissue Site Selector'></a>";
 	
 	spreqtissuesite.innerHTML="" + sname;
 	
@@ -557,7 +557,7 @@ function insRow(subdivtag)
 						String url = "ShowFramedPage.do?pageOf=pageOfTissueSite&propertyName="+objname+"&cdeName=Tissue%20Site";			
 					%>
 				    <a href="#" onclick="javascript:NewWindow('<%=url%>','name','250','330','no');return false">
-						<img src="images\Tree.gif" border="0" width="26" height="22">
+						<img src="images\Tree.gif" border="0" width="26" height="22" title='Tissue Site Selector'>
 					</a>
 			    </td>
 		        

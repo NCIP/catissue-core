@@ -192,7 +192,7 @@ function insRow(subdivtag,iCounter,blockCounter)
 	var url = "ShowFramedPage.do?pageOf=pageOfTissueSite&cdeName=Tissue%20Site&propertyName="+objname;
 	
 	sname = sname + "<a href='#' onclick=javascript:NewWindow('" + url + "','name','250','330','no');return false>";
-	sname = sname + "<img src='images\\Tree.gif' border='0' width='26' height='22'></a>";
+	sname = sname + "<img src='images\\Tree.gif' border='0' width='26' height='22' title='Tissue Site Selector'></a>";
 	spreqtissuesite.innerHTML="" + sname;
 	
 	//pathologystatus
@@ -790,7 +790,7 @@ function insRow(subdivtag,iCounter,blockCounter)
 							String url = "ShowFramedPage.do?pageOf=pageOfTissueSite&cdeName=Tissue%20Site&propertyName="+fName;
 						%>
 				        <a href="#" onclick="javascript:NewWindow('<%=url%>','name','250','330','no');return false">
-							<img src="images\Tree.gif" border="0" width="26" height="22">
+							<img src="images\Tree.gif" border="0" width="26" height="22" title='Tissue Site Selector'>
 						</a>
 					</td>
 					
@@ -1044,10 +1044,10 @@ function insRow(subdivtag,iCounter,blockCounter)
 						</html:select>
 			<!-- ****************************************  -->
 				        <a href="#" onclick="javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfTissueSite&cdeName=Tissue%20Site&propertyName=value(CollectionProtocolEvent:`_SpecimenRequirement:1_tissueSite)','name','250','330','no');return false">
-							<img src="images\Tree.gif" border="0" width="26" height="22">
+							<img src="images\Tree.gif" border="0" width="26" height="22" title='Tissue Site Selector'>
 						</a>
 				     <%--   <a href="#">
-							<img src="images\Tree.gif" border="0" width="26" height="22"></a>   --%>
+							<img src="images\Tree.gif" border="0" width="26" height="22" title='Tissue Site Selector'></a>   --%>
 					</td>
 					
 			        <td class="formFieldAddMore">
