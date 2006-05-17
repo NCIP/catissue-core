@@ -934,6 +934,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic
         
         // Vector of Tree Nodes for all the storage containers.
         Vector treeNodeVector = new Vector();
+        Vector finalNodeVector = new Vector();
         
         if (resultList.isEmpty() == false)
         {
@@ -978,10 +979,10 @@ public class StorageContainerBizLogic extends DefaultBizLogic
                 }
             }
             
-            return createHierarchy(containerRelationMap, treeNodeVector);
+            finalNodeVector = createHierarchy(containerRelationMap, treeNodeVector);
         }
         
-        return null;
+        return finalNodeVector;
     }
     
     /**
