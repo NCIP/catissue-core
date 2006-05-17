@@ -30,7 +30,7 @@
 			}
 			catch(err)
 			{
-				alert("Please enter a valid number.");
+				//alert("Please enter a valid number.");
 			}
 		}
 	}
