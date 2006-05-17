@@ -1043,8 +1043,51 @@ public class StorageContainerBizLogic extends DefaultBizLogic
                 parentNodeVector.add(siteNode);
             }
         }
+
+        //Get the containers under site.
+        Vector containersUnderSite = getContainersUnderSite();
+        containersUnderSite.removeAll(parentNodeVector);
+        parentNodeVector.addAll(containersUnderSite);
         
         return parentNodeVector;
+    }
+    
+    private Vector getContainersUnderSite() throws DAOException
+    {
+        String sql =" SELECT sc.IDENTIFIER, sc.CONTAINER_NUMBER, scType.TYPE, site.IDENTIFIER, site.NAME, site.TYPE " +
+					" from catissue_storage_container sc, catissue_site site, catissue_storage_type scType " + 
+					" where sc.SITE_ID = site.IDENTIFIER AND sc.STORAGE_TYPE_ID = scType.IDENTIFIER " +
+					" and sc.PARENT_CONTAINER_ID is NULL";
+        
+        JDBCDAO dao = (JDBCDAO)DAOFactory.getDAO(Constants.JDBC_DAO);
+        List resultList = new ArrayList();
+        Vector containerNodeVector = new Vector();
+        
+        try
+        {
+            dao.openSession(null);
+            resultList = dao.executeQuery(sql, null, false, null);
+            dao.closeSession();
+        }
+        catch (Exception daoExp)
+        {
+            throw new DAOException(daoExp.getMessage(), daoExp);
+        }
+        
+        Iterator iterator = resultList.iterator();
+        while (iterator.hasNext())
+        {
+            List rowList = (List) iterator.next();
+            StorageContainerTreeNode containerNode = new StorageContainerTreeNode(Long.valueOf((String)rowList.get(0)), (String)rowList.get(1), (String)rowList.get(2));
+            StorageContainerTreeNode siteNode = new StorageContainerTreeNode(Long.valueOf((String)rowList.get(3)), (String)rowList.get(4), (String)rowList.get(5));
+            
+            containerNode.setParentNode(siteNode);
+            siteNode.getChildNodes().add(containerNode);
+            
+            containerNodeVector.add(siteNode);
+        }
+        
+        return containerNodeVector;
     }
     
     /**
@@ -1056,14 +1099,14 @@ public class StorageContainerBizLogic extends DefaultBizLogic
     private TreeNodeImpl getSiteTreeNode(Long identifier) throws DAOException
     {
         String sql ="SELECT site.IDENTIFIER, site.NAME, site.TYPE " +
-	        		" from catissue_storage_container sc, catissue_site site " +
+	        		" from catissue_storage_container sc, catissue_site site " + 
 	        		" where sc.SITE_ID = site.IDENTIFIER AND sc.IDENTIFIER = " + 
 	        		identifier.longValue();
         
         Logger.out.debug("Site Query........................."+sql);
         
         JDBCDAO dao = (JDBCDAO)DAOFactory.getDAO(Constants.JDBC_DAO);
-        List resultList = null;
+        List resultList = new ArrayList();
         
         try
         {
