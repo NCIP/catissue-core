@@ -71,6 +71,37 @@
 				<fail message="The property 'database.username' should not be empty"/>
 			</then>
 		</if>			
+<!-- Mandar 17May06 check for first user -->
+		<if>
+			<equals arg1="" arg2="${first.admin.department}"/>
+			<then>
+				<fail message="The property 'first.admin.department' should not be empty"/>
+			</then>
+		</if>
+		<if>
+			<equals arg1="" arg2="${first.admin.institution}"/>
+			<then>
+				<fail message="The property 'first.admin.institution' should not be empty"/>
+			</then>
+		</if>
+		<if>
+			<equals arg1="" arg2="${first.admin.cancerresearchgroup}"/>
+			<then>
+				<fail message="The property 'first.admin.cancerresearchgroup' should not be empty"/>
+			</then>
+		</if>
+		<if>
+			<equals arg1="" arg2="${first.admin.emailAddress}"/>
+			<then>
+				<fail message="The property 'first.admin.emailAddress' should not be empty"/>
+			</then>
+		</if>
+		<if>
+			<equals arg1="" arg2="${first.admin.password}"/>
+			<then>
+				<fail message="The property 'first.admin.password' should not be empty"/>
+			</then>
+		</if>
 	</target>
 	<!--Extrct WAR and copy Configuration files to temp directory--> 
 	<target name="init">
