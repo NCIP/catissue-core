@@ -40,6 +40,7 @@ import edu.wustl.common.bizlogic.QueryBizLogic;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.factory.AbstractBizLogicFactory;
 import edu.wustl.common.factory.AbstractDomainObjectFactory;
 import edu.wustl.common.factory.MasterFactory;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
@@ -66,18 +67,23 @@ public class CommonAddEditAction extends Action
     {
         String target = null;
         AbstractDomainObject abstractDomain = null;
-
+        
         try
         {
             AbstractActionForm abstractForm = (AbstractActionForm) form;
-            AbstractBizLogic bizLogic = BizLogicFactory.getBizLogic(abstractForm.getFormId());
-            QueryBizLogic queryBizLogic=(QueryBizLogic)BizLogicFactory.getBizLogic(Constants.QUERY_INTERFACE_ID);
-
-			 AbstractDomainObjectFactory abstractDomainObjectFactory = 
-            	(AbstractDomainObjectFactory) MasterFactory
-            				.getFactory("edu.wustl.catissuecore.domain.DomainObjectFactory");
-            				
-            //The object name which is to be added. 
+            AbstractBizLogic bizLogic = AbstractBizLogicFactory.getBizLogic(
+                    						"edu.wustl.catissuecore.bizlogic.BizLogicFactory",
+                  								"getBizLogic", abstractForm.getFormId());
+            
+            Logger.out.debug("Got BizLogic from BizLogicfactory.............");
+            QueryBizLogic queryBizLogic = (QueryBizLogic)BizLogicFactory
+            								.getBizLogic(Constants.QUERY_INTERFACE_ID);
+            
+			AbstractDomainObjectFactory abstractDomainObjectFactory = 
+            	(AbstractDomainObjectFactory) MasterFactory.getFactory(
+            	        "edu.wustl.catissuecore.domain.DomainObjectFactory");
+            
+            //The object name which is to be added.
             String objectName = abstractDomainObjectFactory.getDomainObjectName(abstractForm.getFormId());
             
             ActionMessages messages = null;
@@ -86,7 +92,7 @@ public class CommonAddEditAction extends Action
                 //If operation is add, add the data in the database.
                 abstractDomain = abstractDomainObjectFactory.getDomainObject(abstractForm.getFormId(), abstractForm);
                 bizLogic.insert(abstractDomain, getSessionData(request), Constants.HIBERNATE_DAO);
-
+                
                 target = new String(Constants.SUCCESS);
                 
                 // The successful add messages. Changes done according to bug# 945, 947
