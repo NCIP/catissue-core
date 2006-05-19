@@ -29,7 +29,6 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.util.ForwardToFactory;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
@@ -76,8 +75,10 @@ public class CommonAddEditAction extends Action
                   								"getBizLogic", abstractForm.getFormId());
             
             Logger.out.debug("Got BizLogic from BizLogicfactory.............");
-            QueryBizLogic queryBizLogic = (QueryBizLogic)BizLogicFactory
-            								.getBizLogic(Constants.QUERY_INTERFACE_ID);
+            
+            QueryBizLogic queryBizLogic = (QueryBizLogic)AbstractBizLogicFactory.getBizLogic(
+					"edu.wustl.catissuecore.bizlogic.BizLogicFactory",
+						"getBizLogic", Constants.QUERY_INTERFACE_ID);
             
 			AbstractDomainObjectFactory abstractDomainObjectFactory = 
             	(AbstractDomainObjectFactory) MasterFactory.getFactory(
@@ -314,7 +315,7 @@ public class CommonAddEditAction extends Action
   		           		//return (mapping.findForward(forwardTo));
   		            }
                     
-                    //Forward the page to edit success in the Advance query search if the edit is through Object view of Advance Search
+                   // Forward the page to edit success in the Advance query search if the edit is through Object view of Advance Search
                    String pageOf = (String)request.getParameter(Constants.PAGEOF);
                    Logger.out.debug("pageof for query edit=="+pageOf);
                    if(pageOf != null)
@@ -325,7 +326,7 @@ public class CommonAddEditAction extends Action
                    	}
                    }
                    // target = new String(Constants.SUCCESS);
-                    
+                   
                    // The successful edit message. Changes done according to bug# 945, 947
                    messages = new ActionMessages();
                    try
