@@ -184,7 +184,10 @@ public class CatissueCoreServletContextListener implements
         //Initialize CDE Manager
         try
 		{
-        	XMLPropertyHandler.init();
+        	String path = System.getProperty("app.propertiesFile");
+        	XMLPropertyHandler.init(path);
+        	String propertyValue = XMLPropertyHandler.getValue("server.port");
+            Logger.out.debug("property Value "+propertyValue);
 		}
         catch(Exception ex)
 		{
@@ -194,9 +197,6 @@ public class CatissueCoreServletContextListener implements
         
         Logger.out.debug("System property : "+System.getProperty("gov.nih.nci.security.configFile"));
         Logger.out.debug("System property : "+System.getProperty("edu.wustl.catissuecore.contactUsFile"));
-        
-        String propertyValue = XMLPropertyHandler.getValue("server.port");
-        Logger.out.debug("property Value "+propertyValue);
     }
     
     /* (non-Javadoc)
