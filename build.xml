@@ -16,10 +16,6 @@
 	<property name="extra_lib.dir" value="${base.dir}/extra_lib"/>
 	<property name="generateforce" value="true"/>
 		
-	<property name="mysql.dir" value="${base.dir}/SQL/MySql"/>
-	<property name="oracle.dir" value="${base.dir}/SQL/Oracle"/>
-	<property name="common.dir" value="${base.dir}/SQL/Common"/>
-	
 	<path id="app.classpath">
 		<fileset dir="${lib.dir}">
 			<include name="*.jar"/>
@@ -200,77 +196,6 @@
     		<fileset dir="${src.dir}/edu/wustl/common/cde" includes="*.hbm.xml"/>
         </delete>
     </target>
-
-	<target name="DBInitialized_MySQL">
-	    <sql
-	    	driver="org.gjt.mm.mysql.Driver"
-			url="jdbc:mysql://${database.host}:${database.port}/${database.name}"
-			userid="${database.username}" password="${database.password}"  onerror="continue">
-	    	
-			<transaction src="${mysql.dir}/catissuecore.sql"/>
-			<transaction src="${mysql.dir}/csm_catissuecore.sql"/>	
-			<transaction src="${mysql.dir}/InitDB_CreateTable.sql"/>
-			<transaction src="${common.dir}/AlterTable.sql"/>
-			<transaction src="${common.dir}/initDB_Insert_Common.sql"/>
-			<transaction  src="${common.dir}/CDE_DummyData_Common.sql"/>
-			  
-			<classpath>
-	        	<fileset dir="${lib.dir}">
-	            	<include name="*.jar"/>
-				</fileset>
-			</classpath> 
-		</sql>
-	</target>
-
-	<target name="DBInitialized_Oracle">
-		<sql 
-			driver="oracle.jdbc.driver.OracleDriver"
-			url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}"
-			userid="${database.username}" password="${database.password}" onerror="continue"
-	    	rdbms="oracle">
-			<transaction  src="${oracle.dir}/catissuecore.sql"/>
-			<transaction  src="${oracle.dir}/InitDB_CreateTable.sql"/>
-			<transaction  src="${common.dir}/initDB_Insert_Common.sql"/>
-			<transaction  src="${common.dir}/AlterTable.sql"/>
-			<transaction  src="${common.dir}/CDE_DummyData_Common.sql"/>
-			<transaction  src="${oracle.dir}/CSM_Create_Oracle.sql"/>
-	    	
-			<classpath>
-	        	<fileset dir="${lib.dir}">
-	            	<include name="*.jar"/>
-	             </fileset>
-			</classpath> 
-		</sql>
-		
-		<sql
-			driver="oracle.jdbc.driver.OracleDriver"
-			url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}"
-			userid="${database.username}" password="${database.password}" onerror="continue"
-			delimiter="/" delimitertype="row" keepformat="yes">
-			
-			<transaction  src="${oracle.dir}/CSM_Trigger_Oracle.sql"/>
-				<classpath>
-		            <fileset dir="${lib.dir}">
-		            	<include name="*.jar"/>
-		            </fileset>
-	            </classpath> 
-			</sql>
-			
-		<sql
-			driver="oracle.jdbc.driver.OracleDriver"
-			url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}"
-			userid="${database.username}" password="${database.password}" onerror="continue"
-    		rdbms="oracle">
-		  	
-		  	<transaction  src="${oracle.dir}/CSM_InsertData_Oracle.sql"/>	
-   		 	<transaction  src="${oracle.dir}/CSM_AddConstraints_Oracle.sql"/>
-		  	<classpath>
-            	<fileset dir="${lib.dir}">
-                	<include name="*.jar"/>
-              	</fileset>
-            </classpath> 
-		</sql>
-	</target>
 
 	<target name="Create_Installable_Zip" depends="BuildAppWAR">
 		<property name="zip.dir" value="${base.dir}/caTISSUE_Core_Installable"/>
