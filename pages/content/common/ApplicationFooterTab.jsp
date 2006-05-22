@@ -3,12 +3,11 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants" %>
 <%@ page import="edu.wustl.common.util.global.CommonFileReader" %>
-<%@ page import="edu.wustl.common.util.logger.Logger" %>
+<%@ page import="edu.wustl.common.util.XMLPropertyHandler" %>
 <%
 	String tempFileName = (String)request.getParameter("requestFor");
-	Logger.out.debug("tempFileName "+tempFileName);
-	String key = "";
-	String pageName = "";
+	String fileName= "";
+	String pageName = "", key;
 	if(tempFileName != null)
 	{
 		if(tempFileName.equals("ContactUs"))
@@ -34,14 +33,12 @@
 			key = "app.accessibility.file";
 			pageName = "app.accessibility";
 		}
-		   
+		
 	}
+	fileName = XMLPropertyHandler.getValue(key);
 	CommonFileReader reader = new CommonFileReader();
-	String fileName = reader.getFileName(key);
+	System.out.println("file name.......................... : "+fileName);
 	String content = reader.readData(fileName);
-	Logger.out.debug("content "+content);
-	
-	
 %>
 		<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="800">
 			
