@@ -12,10 +12,12 @@
 	</taskdef>
 
 	<property file="caTISSUEInstall.properties"/>
+	
 	<property name="base.dir" value="."/>
 	<property name="temp.dir" value="./tempCatissuecore"/>
 	<property name="csm.dir" value="${temp.dir}/tempcsm"/>
 	<property name="lib.dir" value="${base.dir}/lib"/>
+	
     <property name="mysql.sql.dir" value="${base.dir}/SQL/MySql"/>
 	<property name="oracle.sql.dir" value="${base.dir}/SQL/Oracle"/>
 	<property name="common.sql.dir" value="${base.dir}/SQL/Common"/>
@@ -24,11 +26,15 @@
 	
 	<property name="oracle.dialect.h3.string" value="org.hibernate.dialect.Oracle9Dialect"/>
 	<property name="mysql.dialect.h3.string" value="org.hibernate.dialect.MySQLDialect"/>
+	
 	<property name="oracle.driver.string" value="oracle.jdbc.driver.OracleDriver"/>
 	<property name="mysql.driver.string" value="org.gjt.mm.mysql.Driver"/>
+	
 	<property name="mysql.lib" value="mysql-connector-java-3.0.16-ga-bin.jar"/>
 	<property name="oracle.lib" value="oracleDriver.jar"/>
-	<var name="encodepwd" value=""/>
+	
+	<!--var name="encodepwd" value=""/-->
+
 	<!-- Check for required properties -->
 	<target name="assert">
 		<if>
@@ -103,6 +109,8 @@
 			</then>
 		</if>
 	</target>
+	
+	
 	<!--Extrct WAR and copy Configuration files to temp directory--> 
 	<target name="init">
 		<echo message="Initializing installation..."/>
@@ -149,6 +157,7 @@
 			token="@@proxy.password@@" 
 			value="${proxy.password}"/>	
 		</replace>
+		
 		<replace file="${temp.dir}/catissuecore/WEB-INF/web.xml"> 
 			<replacefilter 
 				token="&lt;session-timeout>10&lt;/session-timeout>" 
@@ -160,6 +169,7 @@
 			  	value="${jboss.server.port}"/>
 		</replace>
 	</target>
+	
 	
 	<!--Modify Adopter's Institution images, URL of Institution website and Contact Us, Privacy Notice, Disclaimer, Accessibility Text Files-->
 	<target name="AdopterConfiguration">
@@ -183,6 +193,8 @@
 				value="${institution.name}"/>
 			</replace>
 	</target>
+	
+	
 	
 	<!--Modify Configuration For MySQL-->
 	<target name="mysqlConfig">
@@ -376,7 +388,7 @@
 	
 	<!--Target for Database Creation-->
 	<target name="DBInitialize">
-		<antcall target="firstUser"/>
+		<!--antcall target="firstUser"/-->
 		
 		<if>
 			<equals arg1="mysql" arg2="${database.type}"/>		
@@ -483,6 +495,7 @@
             </classpath> 
 		</sql>
 	</target>
+	
 	<target name="SendMail">
 		<echo message="Sending mail to: ${email.administrative.emailAddress}"/>
 		<echo message="Sending mail from: ${email.sendEmailFrom.emailAddress}"/>
@@ -519,50 +532,51 @@ Thanking You,
 	</target>
 	
 	<!--First User Creation. Mandar : 02-May-2006 -->
-		<target name="firstUser">
-			<echo message="Encoding Password..."/>
-			<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>
+	<target name="firstUser">
+		<echo message="Encoding Password..."/>
+		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>
 	
-			<java classname="edu.wustl.common.util.global.PasswordManager"
-			fork="true">
+		<java classname="edu.wustl.common.util.global.PasswordManager" fork="true">
 			<classpath>
 				<pathelement path="${temp.dir}/catissuecore/WEB-INF/lib"/>
 				<pathelement location="${temp.dir}/catissuecore/WEB-INF/lib/commonpackage.jar"/>
 			</classpath>
 			<arg value="${base.dir}/catissuetmp.txt"/>
 			<arg value="${first.admin.password}"/>
-			</java>
-			<property file="${base.dir}/catissuetmp.txt"/>
+		</java>
+		
+		<property file="${base.dir}/catissuetmp.txt"/>
 			<echo>
 					Encoded Password ${first.admin.encodedPassword}
 			</echo>
 
-			<echo message="Modifying caTISSUECore SQL file for user information..."/>
-				<copy file="${common.sql.dir}/createUser.sql" todir="${temp.dir}" overwrite="true"/>
-				<replace dir="${temp.dir}" propertyfile="caTISSUEInstall.properties"> 
+		<echo message="Modifying caTISSUECore SQL file for user information..."/>
+		
+		<copy file="${common.sql.dir}/createUser.sql" todir="${temp.dir}" overwrite="true"/>
+			<replace dir="${temp.dir}" propertyfile="caTISSUEInstall.properties"> 
+				<include name="createUser.sql"/>
+			<replacefilter 
+				token="@@first.admin.department@@" 
+				value="${first.admin.department}"/>
+			<replacefilter 
+				token="@@first.admin.institution@@" 
+				value="${first.admin.institution}"/>
+			<replacefilter 
+				token="@@first.admin.cancerresearchgroup@@" 
+				value="${first.admin.cancerresearchgroup}"/>
+			<replacefilter 
+				token="@@first.admin.emailAddress@@" 
+				value="${first.admin.emailAddress}"/>
+			<replacefilter 
+				token="@@first.admin.encodedPassword@@" 
+				value="${first.admin.encodedPassword}"/>
+			</replace>
+			
+			<copy todir="${common.sql.dir}" overwrite="true">
+				<fileset dir="${temp.dir}">
 					<include name="createUser.sql"/>
-					<replacefilter 
-						token="@@first.admin.department@@" 
-					  	value="${first.admin.department}"/>
-					<replacefilter 
-						token="@@first.admin.institution@@" 
-					  	value="${first.admin.institution}"/>
-					<replacefilter 
-						token="@@first.admin.cancerresearchgroup@@" 
-					  	value="${first.admin.cancerresearchgroup}"/>
-					<replacefilter 
-						token="@@first.admin.emailAddress@@" 
-					  	value="${first.admin.emailAddress}"/>
-					<replacefilter 
-						token="@@first.admin.encodedPassword@@" 
-					  	value="${first.admin.encodedPassword}"/>
-				</replace>
-				<copy todir="${common.sql.dir}" overwrite="true">
-					<fileset dir="${temp.dir}">
-						<include name="createUser.sql"/>
-					</fileset>
-				</copy>	
-				<delete dir="${temp.dir}"/>
-		</target>
-
+				</fileset>
+			</copy>	
+		<delete dir="${temp.dir}"/>
+	</target>
 </project>
