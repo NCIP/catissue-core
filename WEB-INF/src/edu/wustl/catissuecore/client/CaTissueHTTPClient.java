@@ -22,16 +22,17 @@ import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.struts.HTTPMessage;
 import edu.wustl.common.struts.HTTPWrapperObject;
+
+import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.logger.Logger;
 
 public class CaTissueHTTPClient
 {
     private static CaTissueHTTPClient caTissueHTTPClient = new CaTissueHTTPClient();
+    private static final String port = XMLPropertyHandler.getValue("server.port");
+    private static final String app_name = XMLPropertyHandler.getValue("app.name");
     
-    private static final String port = ApplicationProperties.getValue("server.port");
-    private static final String app_name = ApplicationProperties.getValue("app.name");
-
     private static final String servletURL="http://localhost:" + port + "/"+app_name+"/";
     
     private CaTissueHTTPClient()
