@@ -1,4 +1,4 @@
-<%@ page import="edu.wustl.common.util.global.ApplicationProperties"%>
+<%@ page import="edu.wustl.common.util.XMLPropertyHandler"%>
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
         <tr>
           <td width="283" height="37" align="left">
@@ -8,8 +8,9 @@
 		  </td>
 		  <td height="37" align="right">
 		  <% 
-			String url = "http://"+ApplicationProperties.getValue("institution.url");
-			String name = ApplicationProperties.getValue("institution.logo.tooltip");
+			
+			String url = "http://"+XMLPropertyHandler.getValue("institution.url");
+			String name = XMLPropertyHandler.getValue("institution.logo.tooltip");
 %>
           	<a href='<%=url%>'>
           		<img class=logo alt='<%=name%>' src="images/InstitutionLogo.gif" width="259" height="45" border="0">
