@@ -29,9 +29,11 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.util.Permissions;
+import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.dbManager.HibernateMetaData;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.logger.Logger;
+
 
 /**
  * 
@@ -81,6 +83,7 @@ public class CatissueCoreServletContextListener implements
         {
             ;
         }
+        
         
         //All users should be able to view all data by default
         Map protectionGroupsForObjectTypes = new HashMap();
@@ -178,8 +181,22 @@ public class CatissueCoreServletContextListener implements
         	Logger.out.error(ex.getMessage(), ex);
 		}
         
+        //Initialize CDE Manager
+        try
+		{
+        	XMLPropertyHandler.init();
+		}
+        catch(Exception ex)
+		{
+        	Logger.out.error("Could not initialized application, Error in creating XML Property handler.");
+        	Logger.out.error(ex.getMessage(), ex);
+		}
+        
         Logger.out.debug("System property : "+System.getProperty("gov.nih.nci.security.configFile"));
         Logger.out.debug("System property : "+System.getProperty("edu.wustl.catissuecore.contactUsFile"));
+        
+        String propertyValue = XMLPropertyHandler.getValue("server.port");
+        Logger.out.debug("property Value "+propertyValue);
     }
     
     /* (non-Javadoc)
