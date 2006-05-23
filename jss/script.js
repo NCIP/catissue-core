@@ -167,7 +167,8 @@ function addNewAction(action)
 }
 
 //This function sets value of submittedFor attribute of JSP form object
-function setSubmittedFor(submittedFor)
+function setSubmittedFor(submittedFor,forwardTo)
 {
 	document.forms[0].submittedFor.value = submittedFor;
+	document.forms[0].forwardTo.value    = forwardTo;
 }

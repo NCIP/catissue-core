@@ -27,20 +27,19 @@ function addDiv(div,adstr)
 function confirmDisable(action,formField)
 {
 	if((formField != undefined) && (formField.value == "Disabled"))
-		{
-			 var go = confirm("Are you sure,you want to disable?");
-			 if (go==true)
-			 {
-				document.forms[0].action = action;
-				document.forms[0].submit();
-			 }
-		}
-		else
+	{
+		var go = confirm("Are you sure, you want to disable?");
+		if (go==true)
 		{
 			document.forms[0].action = action;
 			document.forms[0].submit();
 		}
-			
+	}
+	else
+	{
+		document.forms[0].action = action;
+		document.forms[0].submit();
+	}			
 }
 	
 
