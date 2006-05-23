@@ -217,7 +217,9 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String PARTICIPANT_SEARCH_ACTION = "ParticipantSearch.do";
 	public static final String PARTICIPANT_ADD_ACTION = "ParticipantAdd.do";
 	public static final String PARTICIPANT_EDIT_ACTION = "ParticipantEdit.do";
-
+	public static final String PARTICIPANT_LOOKUP_ACTION= "ParticipantLookup.do";
+	
+	
 	//Constants required in Institution.jsp Page
 	public static final String INSTITUTION_SEARCH_ACTION = "InstitutionSearch.do";
 	public static final String INSTITUTION_ADD_ACTION = "InstitutionAdd.do";
