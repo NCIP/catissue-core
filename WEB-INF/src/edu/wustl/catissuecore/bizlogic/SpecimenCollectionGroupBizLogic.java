@@ -10,6 +10,7 @@
 
 package edu.wustl.catissuecore.bizlogic;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -21,10 +22,12 @@ import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.integration.IntegrationManager;
+import edu.wustl.catissuecore.integration.IntegrationManagerFactory;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.bizlogic.DefaultBizLogic;
+import edu.wustl.common.bizlogic.AbstractBizLogic;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.dao.DAO;
 import edu.wustl.common.domain.AbstractDomainObject;
@@ -40,7 +43,7 @@ import edu.wustl.common.util.logger.Logger;
  * UserHDAO is used to add user information into the database using Hibernate.
  * @author kapil_kaveeshwar
  */
-public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic 
+public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 {
 	/**
 	 * Saves the user object in the database.
@@ -321,4 +324,26 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
         
 		return true;
     }
+	
+	public List getLinkedAppData(Long systemIdentifier, String applicationID)
+	{
+	    Logger.out.debug("In getIntegrationData() of SCGBizLogic ");
+	    
+	    Logger.out.debug("ApplicationName in getIntegrationData() of SCGBizLogic==>"+applicationID);
+	    
+	    IntegrationManager integrationManager=IntegrationManagerFactory.getIntegrationManager(applicationID);
+
+	    return integrationManager.getLinkedAppData(new SpecimenCollectionGroup(), systemIdentifier);
+	}
+	
+	public String getPageToShow()
+    {
+        return new String();
+    }
+	
+	public List getMatchingObjects()
+    {
+        return new ArrayList();
+    }
+	
 }
