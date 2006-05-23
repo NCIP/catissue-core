@@ -127,36 +127,6 @@
 	<!--Modify Configuration such as Session Timeout, Admin details and JBoss server port-->
 	<target name="ConfigureWar">
 		<echo message="Modifying caTISSUECore Configuration File..."/>
-		<replace dir="${temp.dir}/catissuecore/WEB-INF"> 
-			<include name="classes/ApplicationResources.properties"/>
-		  <replacefilter 
-		    token="email.administrative.emailAddress=@@email.administrative.emailAddress@@" 
-		    value="email.administrative.emailAddress=${email.administrative.emailAddress}"/>
-		  <replacefilter 
-		    token="email.sendEmailFrom.emailAddress=@@email.sendEmailFrom.emailAddress@@" 
-		  	value="email.sendEmailFrom.emailAddress=${email.sendEmailFrom.emailAddress}"/>
-		  <replacefilter 
-			token="email.mailServer=@@email.mailServer@@" 
-		  	value="email.mailServer=${email.mailServer}"/>	
-		  <replacefilter 
-			token="server.port=@@server.port@@" 
-		  	value="server.port=${jboss.server.port}"/>	
-		  <replacefilter 
-			token="@@use.proxy.server@@" 
-			value="${use.proxy.server}"/>
-		  <replacefilter 
-			token="@@proxy.host@@" 
-			value="${proxy.host}"/>
-		  <replacefilter 
-			token="@@proxy.port@@" 
-			value="${proxy.port}"/>	
-		  <replacefilter 
-			token="@@proxy.username@@" 
-			value="${proxy.username}"/>	
-		  <replacefilter 
-			token="@@proxy.password@@" 
-			value="${proxy.password}"/>	
-		</replace>
 		
 		<replace file="${temp.dir}/catissuecore/WEB-INF/web.xml"> 
 			<replacefilter 
@@ -178,20 +148,8 @@
 			<fileset dir="${base.dir}/images"/>
 		</copy>
 		<copy todir="${temp.dir}/catissuecore" overwrite="true">
-				<fileset dir="${base.dir}/configuration"/>
+				<fileset dir="${base.dir}/catissuecore-properties"/>
 		</copy>
-		<replace dir="${temp.dir}/catissuecore/WEB-INF">
-			<include name="classes/ApplicationResources.properties"/> 
-			<replacefilter 
-				token="@@institution.url@@"
-				value="${institution.url}"/>
-		</replace>
-		<replace dir="${temp.dir}/catissuecore/WEB-INF">
-			<include name="classes/ApplicationResources.properties"/> 
-			<replacefilter 
-				token="@@institution.logo.tooltip@@"
-				value="${institution.name}"/>
-			</replace>
 	</target>
 	
 	
@@ -388,7 +346,7 @@
 	
 	<!--Target for Database Creation-->
 	<target name="DBInitialize">
-		<!--antcall target="firstUser"/-->
+		<antcall target="firstUser"/>
 		
 		<if>
 			<equals arg1="mysql" arg2="${database.type}"/>		
