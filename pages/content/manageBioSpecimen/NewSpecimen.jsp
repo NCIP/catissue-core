@@ -19,7 +19,7 @@
 	NewSpecimenForm form = (NewSpecimenForm)request.getAttribute("newSpecimenForm");
 	
 	String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
-	boolean disableForAddNew = false;
+	boolean isAddNew = false;
 	
 	String operation = (String)request.getAttribute(Constants.OPERATION);
 	String reqPath = (String)request.getAttribute(Constants.REQ_PATH);
@@ -296,6 +296,7 @@
 				 	<td>
 						<html:hidden property="<%=Constants.OPERATION%>" value="<%=operation%>"/>
 						<html:hidden property="submittedFor" value="<%=submittedFor%>"/>
+						<html:hidden property="forwardTo" value=""/>
 					</td>
 					<td>
 						<html:hidden property="exIdCounter"/>
@@ -818,44 +819,65 @@
 										<table>
 											<logic:equal name="<%=Constants.SUBMITTED_FOR%>" value="AddNew">
 												<% 
-													disableForAddNew=true;
+													isAddNew=true;
 												%>
 											</logic:equal>
 											<tr>
-												<td rowspan=2 class="formFieldNoBorders" nowrap>
-													<label for="proceedWith">
-														<bean:message key="proceedWith"/>
-													</label>
+											
+											<%
+												String normalSubmitFunctionName = "setSubmittedFor('" + submittedFor+ "','" + Constants.SPECIMEN_FORWARD_TO_LIST[0][1]+"')";
+												String deriveNewSubmitFunctionName = "setSubmittedFor('ForwardTo','" + Constants.SPECIMEN_FORWARD_TO_LIST[1][1]+"')";									
+												String addEventsSubmitFunctionName = "setSubmittedFor('ForwardTo','" + Constants.SPECIMEN_FORWARD_TO_LIST[2][1]+"')";
+												String addMoreSubmitFunctionName = "setSubmittedFor('ForwardTo','" + Constants.SPECIMEN_FORWARD_TO_LIST[3][1]+"')";
+												
+												String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms[0].activityStatus)";
+												
+												String normalSubmit = normalSubmitFunctionName + ","+confirmDisableFuncName;
+												String deriveNewSubmit = deriveNewSubmitFunctionName + ","+confirmDisableFuncName;
+												String addEventsSubmit = addEventsSubmitFunctionName + ","+confirmDisableFuncName;
+												String addMoreSubmit = addMoreSubmitFunctionName + ","+confirmDisableFuncName;												
+											%>
+											
+												<td nowrap class="formFieldNoBorders">
+													<html:button styleClass="actionButton" 
+															property="submitPage" 
+															
+															value="<%=Constants.SPECIMEN_FORWARD_TO_LIST[0][0]%>" 
+															onclick="<%=normalSubmit%>">
+						  				     	    
+											     	</html:button>
 												</td>
 												<td nowrap class="formFieldNoBorders">
-													<html:radio styleClass="" property="forwardTo" value="<%=Constants.SPECIMEN_FORWARD_TO_LIST[0][1]%>" onclick="setSubmittedFor(<%=submittedFor%>)">
-						  				     	    <label for="<%=Constants.SPECIMEN_FORWARD_TO_LIST[0][0]%>">
-														<%=Constants.SPECIMEN_FORWARD_TO_LIST[0][0]%>
-													</label>
-											     	</html:radio>
-												</td>
-												<td nowrap class="formFieldNoBorders">
-													<html:radio styleClass=""  property="forwardTo" value="<%=Constants.SPECIMEN_FORWARD_TO_LIST[1][1]%>" disabled="<%=disableForAddNew%>" onclick="setSubmittedFor('ForwardTo')">
-						  				     	    <label for="<%=Constants.SPECIMEN_FORWARD_TO_LIST[1][0]%>">
-														<%=Constants.SPECIMEN_FORWARD_TO_LIST[1][0]%>
-													</label>
-											     	</html:radio>
+													<html:button styleClass="actionButton"  
+															property="submitPage"
+															
+															value="<%=Constants.SPECIMEN_FORWARD_TO_LIST[1][0]%>" 
+															disabled="<%=isAddNew%>" 
+															onclick="<%=deriveNewSubmit%>">
+						  				     	    
+											     	</html:button>
 												</td>		
 											</tr>
 											<tr>							
 												<td class="formFieldNoBorders" nowrap>
-													<html:radio styleClass=""  property="forwardTo" value="<%=Constants.SPECIMEN_FORWARD_TO_LIST[2][1]%>" disabled="<%=disableForAddNew%>" onclick="setSubmittedFor('ForwardTo')">
-						  				     	    <label for="<%=Constants.SPECIMEN_FORWARD_TO_LIST[2][0]%>">
-														<%=Constants.SPECIMEN_FORWARD_TO_LIST[2][0]%>
-													</label>
-											     	</html:radio>
+													<html:button styleClass="actionButton"  
+															property="submitPage"
+															
+															value="<%=Constants.SPECIMEN_FORWARD_TO_LIST[2][0]%>" 
+															disabled="<%=isAddNew%>" 
+															onclick="<%=addEventsSubmit%>">
+						  				     	    
+											     	</html:button>
 												</td>
 												<td class="formFieldNoBorders" nowrap>
-													<html:radio styleClass=""  property="forwardTo" value="<%=Constants.SPECIMEN_FORWARD_TO_LIST[3][1]%>" disabled="<%=disableForAddNew%>" onclick="setSubmittedFor('ForwardTo')">
-						  				     	    <label for="<%=Constants.SPECIMEN_FORWARD_TO_LIST[3][0]%>">
-														<%=Constants.SPECIMEN_FORWARD_TO_LIST[3][0]%>
-													</label>
-											     	</html:radio>
+													<html:button styleClass="actionButton"  
+															property="submitPage"
+															
+															value="<%=Constants.SPECIMEN_FORWARD_TO_LIST[3][0]%>" 
+															disabled="<%=isAddNew%>" 
+															onclick="<%=addMoreSubmit%>">
+						  				     	   
+											     	</html:button>
 												</td>								
 											</tr>
 										</table>
@@ -866,14 +888,6 @@
 						   					<bean:message key="buttons.submit"/>
 						   				</html:submit>
 						   			</td-->
-						   			<td>
-						   			<%
-						   				String action = "confirmDisable('" + formName +"',document.forms[0].activityStatus)";
-						   			%>
-										<html:button styleClass="actionButton" property="submitPage" onclick="<%=action%>">
-											<bean:message key="buttons.submit"/>
-										</html:button>
-									</td>
 									
 									<td colspan="2">
 										<html:reset styleClass="actionButton">

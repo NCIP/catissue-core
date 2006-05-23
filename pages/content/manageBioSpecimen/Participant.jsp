@@ -14,8 +14,8 @@
 <% 
 		List siteList = (List)request.getAttribute(Constants.SITELIST);
 		
-		String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
-		boolean disableForAddNew = false;
+		String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);		
+		boolean isAddNew = false;
 
 		String operation = (String)request.getAttribute(Constants.OPERATION);
 		String formName, pageView=operation,editViewButton="buttons."+Constants.EDIT;
@@ -206,6 +206,7 @@
 					<td>
 						<html:hidden property="<%=Constants.OPERATION%>" value="<%=operation%>"/>
 						<html:hidden property="submittedFor" value="<%=submittedFor%>"/>
+						<html:hidden property="forwardTo" value=""/>
 					</td>
 					<td><html:hidden property="counter"/></td>
 					<td><html:hidden property="onSubmit"/></td>
@@ -454,55 +455,53 @@
 							<table cellpadding="4" cellspacing="0" border="0">
 								<logic:equal name="<%=Constants.SUBMITTED_FOR%>" value="AddNew">
 									<% 
-										disableForAddNew=true;
+										isAddNew=true;
 									%>
 								</logic:equal>
 								<tr>
-									<td rowspan=2 class="formFieldNoBorders" nowrap>
-										<label for="proceedWith">
-											<bean:message key="proceedWith"/>
-										</label>
-									</td>
-
+								<%
+									String normalSubmitFunctionName = "setSubmittedFor('" + submittedFor+ "','" + Constants.PARTICIPANT_FORWARD_TO_LIST[0][1]+"')";
+									String forwardToSubmitFunctionName = "setSubmittedFor('ForwardTo','" + Constants.PARTICIPANT_FORWARD_TO_LIST[1][1]+"')";									
+									String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms[0].activityStatus)";
+									String normalSubmit = normalSubmitFunctionName + ","+confirmDisableFuncName;
+									String forwardToSubmit = forwardToSubmitFunctionName + ","+confirmDisableFuncName;
+								%>
+								
+								<!-- PUT YOUR COMMENT HERE -->
 								<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
 						   			<td nowrap class="formFieldNoBorders">
-										<html:radio styleClass="" property="forwardTo" value="<%=Constants.PARTICIPANT_FORWARD_TO_LIST[0][1]%>" onclick="setSubmittedFor(<%=submittedFor%>)">
-										<label for="<%=Constants.PARTICIPANT_FORWARD_TO_LIST[0][0]%>">
-											<%=Constants.PARTICIPANT_FORWARD_TO_LIST[0][0]%>
-										</label>
-										</html:radio>
+										<html:button styleClass="actionButton" 
+												property="submitPage" 
+												value="<%=Constants.PARTICIPANT_FORWARD_TO_LIST[0][0]%>" 
+												onclick="<%=normalSubmit%>"> 
+										</html:button>
 									</td>
 								</logic:notEqual>	
-						   			<td>
-						   				<html:submit styleClass="actionButton" disabled="true">
-						   					<bean:message key="buttons.getClinicalData"/>
-						   				</html:submit>
-						   			</td>
-						   			
-						   			<td>
-						   			<%
-						   				String action = "confirmDisable('" + formName +"',document.forms[0].activityStatus)";
-						   			%>
-						   				<html:button styleClass="actionButton" property="submitPage" onclick="<%=action%>">
-						   					<bean:message key="buttons.submit"/>
-						   				</html:button>
-							   		</td>
-									<td colspan="3">
-										<html:reset styleClass="actionButton">
-											<bean:message key="buttons.reset"/>
-										</html:reset>
-									</td> 
-								<tr>
-									<td nowrap class="formFieldNoBorders">
-									<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
-										<html:radio styleClass=""  property="forwardTo" value="<%=Constants.PARTICIPANT_FORWARD_TO_LIST[1][1]%>" disabled="<%=disableForAddNew%>" onclick="setSubmittedFor('ForwardTo')">
-										<label for="<%=Constants.PARTICIPANT_FORWARD_TO_LIST[1][0]%>">
-											<%=Constants.PARTICIPANT_FORWARD_TO_LIST[1][0]%>
-										</label>
-										</html:radio>
-									</logic:notEqual>	
+								
+								<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
+									<td nowrap class="formFieldNoBorders">									
+										<html:button styleClass="actionButton"  
+												property="submitPage" 
+												value="<%=Constants.PARTICIPANT_FORWARD_TO_LIST[1][0]%>" 
+												disabled="<%=isAddNew%>"
+												onclick="<%=forwardToSubmit%>">
+										</html:button>
 									</td>
-								</tr>
+								</logic:notEqual>
+								
+							   	
+							   	<td colspan="3">
+									<html:reset styleClass="actionButton">
+										<bean:message key="buttons.reset"/>
+									</html:reset>
+								</td> 
+								
+								<td>
+						   			<html:submit styleClass="actionButton" disabled="true">
+						   				<bean:message key="buttons.getClinicalData"/>
+						   			</html:submit>
+						   		</td>	
+							</tr>
 							</table>
 							<!-- action buttons end -->
 				  		</td>
@@ -516,5 +515,4 @@
 			 <!-- NEW PARTICIPANT REGISTRATION ends-->
 			
 		</table>
-	 </html:form>	
-		
+	 </html:form>

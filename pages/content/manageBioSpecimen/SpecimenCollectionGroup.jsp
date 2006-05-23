@@ -13,7 +13,7 @@
 		String pageOf = (String)request.getAttribute(Constants.PAGEOF);
 
 		String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
-		boolean disableForAddNew = false;	
+		boolean isAddNew = false;	
 
 		String appendingPath = "/SpecimenCollectionGroup.do?operation=add&pageOf=pageOfSpecimenCollectionGroup";
 		if (reqPath != null)
@@ -109,6 +109,7 @@
 					<td>
 						<html:hidden property="<%=Constants.OPERATION%>" value="<%=operation%>"/>
 						<html:hidden property="submittedFor" value="<%=submittedFor%>"/>
+						<html:hidden property="forwardTo" value=""/>
 					</td>
 				 </tr>
 				 
@@ -196,7 +197,7 @@
   					</td>
   					<td class="formField">
   						<logic:equal name="specimenCollectionGroupForm" property="checkedButton" value="1">
- <!-- Mandar : 434 : for tooltip --> 						
+<!-- Mandar : 434 : for tooltip --> 						
 				     	     <html:select property="participantId" styleClass="formFieldSized" styleId="ParticipantId" size="1" onchange="onChangeEvent(this)"
 				     	      onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
                          	     <html:options collection="<%=Constants.PARTICIPANT_LIST%>" labelProperty="name" property="value"/>				     	
@@ -385,46 +386,39 @@
 										<table>
 											<logic:equal name="<%=Constants.SUBMITTED_FOR%>" value="AddNew">
 												<% 
-													disableForAddNew=true;
+													isAddNew=true;
 												%>
 											</logic:equal>
 											<tr>
-												<td class="formFieldNoBorders" nowrap>
-													<label for="proceedWith">
-														<bean:message key="proceedWith"/>
-													</label>
-												</td>
+											<%
+												String normalSubmitFunctionName = "setSubmittedFor('" + submittedFor+ "','" + Constants.SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST[0][1]+"')";
+												String forwardToSubmitFuctionName = "setSubmittedFor('ForwardTo','" + Constants.SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST[1][1]+"')";									
+												String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms[0].activityStatus)";
+												String normalSubmit = normalSubmitFunctionName + ","+confirmDisableFuncName;
+												String forwardToSubmit = forwardToSubmitFuctionName + ","+confirmDisableFuncName;
+											%>
 												<td nowrap class="formFieldNoBorders">
-													<html:radio styleClass="" property="forwardTo" value="<%=Constants.SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST[0][1]%>" onclick="setSubmittedFor(<%=submittedFor%>)">
-						  				     	    <label for="<%=Constants.SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST[0][0]%>">
-														<%=Constants.SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST[0][0]%>
-													</label>
-											     	</html:radio>
+													<html:button styleClass="actionButton" 
+															property="submitPage" 
+															value="<%=Constants.SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST[0][0]%>" 
+															onclick="<%=normalSubmit%>">
+						  				     	    
+											     	</html:button>
 												</td>
+												
 												<td nowrap class="formFieldNoBorders">
-													<html:radio styleClass=""  property="forwardTo" value="<%=Constants.SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST[1][1]%>" disabled="<%=disableForAddNew%>" onclick="setSubmittedFor('ForwardTo')">
-						  				     	    <label for="<%=Constants.SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST[1][0]%>">
-														<%=Constants.SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST[1][0]%>
-													</label>
-											     	</html:radio>
+													<html:button styleClass="actionButton"  
+															property="submitPage" 
+															value="<%=Constants.SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST[1][0]%>" 
+															disabled="<%=isAddNew%>" 
+															onclick="<%=forwardToSubmit%>">
+						  				     	    
+											     	</html:button>
 												</td>		
 											</tr>
 										</table>
 									</td>					
-									</logic:notEqual>
-						   			<!-- td>
-						   				<html:submit styleClass="actionButton" onclick="<%=changeAction%>">
-						   					<bean:message key="buttons.submit"/>
-						   				</html:submit>
-						   			</td-->
-						   			<td>
-						   			<%
-						   				String action = "confirmDisable('" + formName +"',document.forms[0].activityStatus)";
-						   			%>
-										<html:button styleClass="actionButton" property="submitPage" onclick="<%=action%>">
-											<bean:message key="buttons.submit"/>
-										</html:button>
-									</td>
+									</logic:notEqual>						   			
 									
 									<td>
 										<html:reset styleClass="actionButton">

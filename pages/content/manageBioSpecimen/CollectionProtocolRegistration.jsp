@@ -13,9 +13,9 @@
 			if(obj != null && obj instanceof CollectionProtocolRegistrationForm)
 			{
 				form = (CollectionProtocolRegistrationForm)obj;
-			}	
+			}
 				String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
-				boolean disableForAddNew = false;
+				boolean isAddNew = false;
 
 			    String operation = (String) request.getAttribute(Constants.OPERATION);
 		        String reqPath = (String)request.getAttribute(Constants.REQ_PATH);
@@ -103,6 +103,7 @@
 					<td>
 						<html:hidden property="operation" value="<%=operation%>" />
 						<html:hidden property="submittedFor" value="<%=submittedFor%>"/>
+						<html:hidden property="forwardTo" value=""/>
 					</td>
 					<td><html:hidden property="systemIdentifier"/>
 					<td><html:hidden property="onSubmit"/></td>
@@ -261,30 +262,36 @@
 								<table>
 									<logic:equal name="<%=Constants.SUBMITTED_FOR%>" value="AddNew">
 											<% 
-												disableForAddNew=true;
+												isAddNew = true;
 											%>
 									</logic:equal>
 									<tr>
-										<td class="formFieldNoBorders" nowrap>
-											<label for="proceedWith">
-												<bean:message key="proceedWith"/>
-											</label>
-										</td>
+										
+									<%
+										String normalSubmitFunctionName = "setSubmittedFor('" + submittedFor+ "','" + Constants.PROTOCOL_REGISTRATION_FORWARD_TO_LIST[0][1]+"')";
+										String forwardToSubmitFuctionName = "setSubmittedFor('ForwardTo','" + Constants.PROTOCOL_REGISTRATION_FORWARD_TO_LIST[1][1]+"')";									
+										String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms[0].activityStatus)";
+										String normalSubmit = normalSubmitFunctionName + ","+confirmDisableFuncName;
+										String forwardToSubmit = forwardToSubmitFuctionName + ","+confirmDisableFuncName;
+									%>
+										
 										<td nowrap class="formFieldNoBorders">
-											<html:radio styleClass="" property="forwardTo" value="<%=Constants.PROTOCOL_REGISTRATION_FORWARD_TO_LIST[0][1]%>" onclick="setSubmittedFor(<%=submittedFor%>)">
-				  				     	    <label for="<%=Constants.PROTOCOL_REGISTRATION_FORWARD_TO_LIST[0][0]%>">
-												<%=Constants.PROTOCOL_REGISTRATION_FORWARD_TO_LIST[0][0]%>
-											</label>
-									     	</html:radio>
+											<html:button styleClass="actionButton" 
+													property="submitPage" 
+													value="<%=Constants.PROTOCOL_REGISTRATION_FORWARD_TO_LIST[0][0]%>" 
+													onclick="<%=normalSubmit%>">				  				     	    
+									     	</html:button>
 										</td>
-										<td nowrap class="formFieldNoBorders">
-											
-											<html:radio styleClass=""  property="forwardTo" value="<%=Constants.PROTOCOL_REGISTRATION_FORWARD_TO_LIST[1][1]%>" disabled="<%=disableForAddNew%>" onclick="setSubmittedFor('ForwardTo')">
-				  				     	    <label for="<%=Constants.PROTOCOL_REGISTRATION_FORWARD_TO_LIST[1][0]%>">
-												<%=Constants.PROTOCOL_REGISTRATION_FORWARD_TO_LIST[1][0]%>
-											</label>
-									     	</html:radio>
-										</td>		
+										
+										<td nowrap class="formFieldNoBorders">											
+											<html:button styleClass="actionButton"  
+													property="submitPage" 
+													value="<%=Constants.PROTOCOL_REGISTRATION_FORWARD_TO_LIST[1][0]%>"
+													disabled="<%=isAddNew%>" 
+													onclick="<%=forwardToSubmit%>">
+									     	</html:button>
+										</td>
+										
 									</tr>
 								</table>
 							</td>					
@@ -292,15 +299,6 @@
 							<!-- td>
 								<html:submit styleClass="actionButton" value="Submit" onclick="<%=changeAction%>" />
 							</td-->
-							
-							<td>
-							<%
-						   		String action = "confirmDisable('" + formName +"',document.forms[0].activityStatus)";
-						   	%>
-						   		<html:button styleClass="actionButton" property="submitPage" onclick="<%=action%>">
-						   			<bean:message key="buttons.submit"/>
-						   		</html:button>
-						   	</td>
 						   		
 							<td>
 								<html:reset styleClass="actionButton" />
