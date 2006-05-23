@@ -706,7 +706,15 @@ PUBLIC
 			scope="request">
 			<forward name="pageOfSpecimenCollectionGroup" path="/SpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroup&amp;menuSelected=14"/>
 			<forward name="failure" path="/SpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroup&amp;menuSelected=14"/>
-		</action>    
+		</action>
+		
+		<action path="/ViewSurgicalPathologyReport"
+			type="edu.wustl.catissuecore.action.ViewLinkedDataAction"
+			name="specimenCollectionGroupForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path=".catissuecore.viewSPRDef"/>
+		</action>
 		<!--SpecimenCollectonGroup Actions End-->
 		
 		<!--Approve User Actions Begin-->
