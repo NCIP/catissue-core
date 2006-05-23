@@ -99,10 +99,34 @@
 </html:messages>
 
 <html:form action="<%=formName%>">
+	<%
+	if(pageView.equals("edit"))
+	{
+	%>
+		<table summary="" cellpadding="0" cellspacing="0" border="0" height="20" class="tabPage" width="600">
+			<tr>
+				<td height="20" class="tabMenuItemSelected" onclick="document.location.href='ManageAdministrativeData.do'">Edit</td>
 
+				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onclick="addNewAction('ViewSurgicalPathologyReport.do?applicationName=caTies')">
+					View Surgical Pathology Report
+				</td>
+								
+				
+				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()">
+					View Clinical Annotations
+				</td>
+
+				<td width="450" class="tabMenuSeparator" colspan="3">&nbsp;</td>
+			</tr>
+
+			<tr>
+				<td class="tabField" colspan="6">
+	<%
+	}
+	%>
 	<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
 		<!-- NEW SPECIMEN COLLECTION GROUP REGISTRATION BEGINS-->
-
+		
 	    <tr><td>
 			<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
 				 <tr>
@@ -118,12 +142,11 @@
 					<td><html:hidden property="onSubmit"/></td>
 					<td><html:hidden property="redirectTo" value="<%=reqPath%>"/></td>
 				 </tr>
-
 				 <tr>
 				 	<td class="formMessage" colspan="4">* indicates a required field</td>
 				 </tr>
 				 
-					<tr>
+				<tr>
 					<td class="formTitle" height="20" colspan="4">
 						<%String title = "specimenCollectionGroup."+pageView+".title";%>
 							<bean:message key="<%=title%>"/>
@@ -430,9 +453,18 @@
 							<!-- action buttons end -->
 				  		</td>
 				 	</tr>
-				 
 			</table>
 		</td></tr>
 		<!-- NEW SPECIMEN COLLECTION GROUP REGISTRATION ENDS-->
 	</table>
-</html:form>		
+	<%
+	if(pageView.equals("edit"))
+	{
+	%>
+			</td>
+		</tr>
+	</table>
+	<%
+	}
+	%>
+</html:form>
