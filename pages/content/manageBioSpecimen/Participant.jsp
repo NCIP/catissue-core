@@ -7,7 +7,23 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.ParticipantForm"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
+<%@ page import="edu.wustl.catissuecore.domain.Participant"%>
 <%@ page import="java.util.*"%>
+
+<link href="runtime/styles/xp/grid.css" rel="stylesheet" type="text/css" ></link>
+<script src="runtime/lib/grid.js"></script>
+<script src="runtime/lib/gridcheckbox.js"></script>
+<script src="runtime/formats/date.js"></script>
+<script src="runtime/formats/string.js"></script>
+<script src="runtime/formats/number.js"></script>
+<script src="jss/script.js"></script>
+<style>
+.active-column-0 {width:30px}
+tr#hiddenCombo
+{
+ display:none;
+}
+</style>
 
 <script src="jss/script.js" type="text/javascript"></script>
 <%@ include file="/pages/content/common/BioSpecimenCommonCode.jsp" %>
@@ -31,7 +47,14 @@
 		}
 		else
 		{
+			if(request.getAttribute(Constants.SPREADSHEET_DATA_LIST)==null)
+			{
+			formName = Constants.PARTICIPANT_LOOKUP_ACTION;
+			}
+			else
+			{
 			formName = Constants.PARTICIPANT_ADD_ACTION;
+			}
 			readOnlyValue=false;
 		}
 
@@ -50,6 +73,44 @@
 
 <head>
 	<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
+	
+	<%
+	List columnList = (List) request.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
+	List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
+	
+	String title = "PArticipantList";
+
+	boolean isSpecimenData = false;
+
+	int IDCount = 0;
+	%>
+<%if(dataList != null && dataList.size() != 0)
+{
+%>
+	
+	<script>
+		var myData = [<%int xx;%><%for (xx=0;xx<(dataList.size()-1);xx++){%>
+	<%
+		List row = (List)dataList.get(xx);
+  		int j;
+  		//Bug 700: changed the variable name for the map values as it was same in both AdvanceSearchForm and SimpleQueryInterfaceForm
+		String chkName = "value1(CHK_" + xx + ")";
+	%>
+		["<INPUT TYPE='CHECKBOX' NAME='<%=chkName%>' id='<%=xx%>' onClick='changeData(this)'>",<%for (j=0;j < (row.size()-1);j++){%>"<%=Utility.toGridFormat(row.get(j))%>",<%}%>"<%=Utility.toGridFormat(row.get(j))%>","1"],<%}%>
+	<%
+		List row = (List)dataList.get(xx);
+  		int j;
+  		//Bug 700: changed the variable name for the map values as it was same in both AdvanceSearchForm and SimpleQueryInterfaceForm
+		String chkName = "value1(CHK_" + xx + ")";
+	%>
+		["<INPUT TYPE='CHECKBOX' NAME='<%=chkName%>' id='<%=xx%>' onClick='changeData(this)'>",<%for (j=0;j < (row.size()-1);j++){%>"<%=Utility.toGridFormat(row.get(j))%>",<%}%>"<%=Utility.toGridFormat(row.get(j))%>","1"]
+		];
+		
+		var columns = ["",<%int k;%><%for (k=0;k < (columnList.size()-1);k++){if (columnList.get(k).toString().trim().equals("ID")){IDCount++;}%>"<%=columnList.get(k)%>",<%}if (columnList.get(k).toString().trim().equals("ID")){IDCount++;}%>"<%=columnList.get(k)%>"];
+	</script>
+
+<% }%>
+	
 	<script language="JavaScript">
 		//function to insert a row in the inner block
 		function insRow(subdivtag)
@@ -134,8 +195,12 @@
 				field.value = field.value.replace(/[^\d]+/g, ''); 
 			}
 		}
-		
-			
+		//this function is called when user clicks on Participant Lookup Again Button
+		function participantLookupAction()
+		{
+			document.forms[0].action="<%=Constants.PARTICIPANT_LOOKUP_ACTION%>";
+			document.forms[0].submit();
+		}
 	</script>
 </head>
 
@@ -221,7 +286,7 @@
 
 				 <tr>
 				     <td class="formTitle" height="20" colspan="4">
-				     <%String title = "participant."+pageView+".title";%>
+				     <%title = "participant."+pageView+".title";%>
 				     <bean:message key="<%=title%>"/>
 					<%
 						if(pageView.equals("edit"))
@@ -444,8 +509,7 @@
 				}
 				%>
 				 </tbody>
-				 
-				 <!-- Medical Identifiers End here -->
+				  <!-- Medical Identifiers End here -->
 				 	<tr>
 				  		<td align="right" colspan="4">
 							<%
@@ -502,6 +566,19 @@
 						   			</html:submit>
 						   		</td>	
 							</tr>
+							<!---Following is the code button ParticipantLookupAgain-->
+							
+							<%if(request.getAttribute(Constants.SPREADSHEET_DATA_LIST)!=null){%>	
+								<tr>
+									<td>
+
+						   				<html:button styleClass="actionButton" property="submitPage" onclick="participantLookupAction();">
+					   					<bean:message key="buttons.participantLookupAgain"/>
+					   				</html:button>
+									</td>
+								</tr>	
+							<%}%>
+									<!-- end -->
 							</table>
 							<!-- action buttons end -->
 				  		</td>
@@ -510,9 +587,68 @@
 				</logic:notEqual>
 				</table>
 			  </td>
+			  <!--Vaishali's changes -->
+			  <tr>
+			  <!-- findish-->
 			 </tr>
 			 
 			 <!-- NEW PARTICIPANT REGISTRATION ends-->
+			<!---Following is the code for Data Grid. Participant Lookup Data is displayed-->
+
+			<%if(request.getAttribute(Constants.SPREADSHEET_DATA_LIST)!=null){%>	
+			<tr height="50%">
+				<td width="10%">
+					<div STYLE="overflow: auto; width:100%; height:30%; padding:0px; margin: 0px; border: 1px solid">
+					<script>
+					//	create ActiveWidgets Grid javascript object.
+					var obj = new Active.Controls.Grid;
+						
+					//	set number of rows/columns.
+					obj.setRowProperty("count", <%=dataList.size()%>);
+					obj.setColumnProperty("count", <%=(columnList.size()-IDCount) + 1%>);
+					
+					//	provide cells and headers text
+					obj.setDataProperty("text", function(i, j){return myData[i][j]});
+					obj.setColumnProperty("text", function(i){return columns[i]});
+						
+					//	set headers width/height.
+					obj.setRowHeaderWidth("28px");
+					obj.setColumnHeaderHeight("20px");
+					//original sort method  
+					var _sort = obj.sort; 
+					//overide sort function to meet our requirenemnt
+				    obj.sort = function(index, direction, alternateIndex){ 
+				   
+				    //if check box column is clicked
+				    //then sort on the flag those are in 8th column
+			        	if(index==0)
+			        	{
+			        		index=myData[0].length-1;
+			        		direction=colZeroDir;
+							if(colZeroDir=='ascending')colZeroDir='descending';
+							else colZeroDir='ascending';
+					    } 
+					        
+			         	_sort.call(this, index, direction);
+
+				        return true;
+			    	}
+					    
+				    //double click events
+				    var row = new Active.Templates.Row;
+					row.setEvent("ondblclick", function(){this.action("myAction")}); 
 			
+					obj.setTemplate("row", row);
+		   			obj.setAction("myAction", 
+					function(src){window.location.href = 'SearchObject.do?pageOf=<%=pageOf%>&operation=search&systemIdentifier='+myData[this.getSelectionProperty("index")][1]}); 
+		
+					//	write grid html to the page.
+					document.write(obj);
+					</script>
+					</div>
+					</td>
+				</tr>
+				<%}%>
+				<!--Participant Lookup end-->
 		</table>
 	 </html:form>
