@@ -7,7 +7,6 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.ParticipantForm"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
-<%@ page import="edu.wustl.catissuecore.domain.Participant"%>
 <%@ page import="java.util.*"%>
 
 <link href="runtime/styles/xp/grid.css" rel="stylesheet" type="text/css" ></link>
@@ -49,11 +48,11 @@ tr#hiddenCombo
 		{
 			if(request.getAttribute(Constants.SPREADSHEET_DATA_LIST)==null)
 			{
-			formName = Constants.PARTICIPANT_LOOKUP_ACTION;
+				formName = Constants.PARTICIPANT_LOOKUP_ACTION;
 			}
 			else
 			{
-			formName = Constants.PARTICIPANT_ADD_ACTION;
+				formName = Constants.PARTICIPANT_ADD_ACTION;
 			}
 			readOnlyValue=false;
 		}
@@ -84,9 +83,9 @@ tr#hiddenCombo
 
 	int IDCount = 0;
 	%>
-<%if(dataList != null && dataList.size() != 0)
-{
-%>
+	<%if(dataList != null && dataList.size() != 0)
+	{
+	%>
 	
 	<script>
 		var myData = [<%int xx;%><%for (xx=0;xx<(dataList.size()-1);xx++){%>
@@ -198,7 +197,7 @@ tr#hiddenCombo
 		//this function is called when user clicks on Participant Lookup Again Button
 		function participantLookupAction()
 		{
-			document.forms[0].action="<%=Constants.PARTICIPANT_LOOKUP_ACTION%>";
+			document.forms[0].action="<%=Constants.PARTICIPANT_LOOKUP_ACTION%>?ParticipantLookup=1";
 			document.forms[0].submit();
 		}
 	</script>
@@ -587,15 +586,11 @@ tr#hiddenCombo
 				</logic:notEqual>
 				</table>
 			  </td>
-			  <!--Vaishali's changes -->
-			  <tr>
-			  <!-- findish-->
-			 </tr>
 			 
 			 <!-- NEW PARTICIPANT REGISTRATION ends-->
 			<!---Following is the code for Data Grid. Participant Lookup Data is displayed-->
 
-			<%if(request.getAttribute(Constants.SPREADSHEET_DATA_LIST)!=null){%>	
+			<%if(request.getAttribute(Constants.SPREADSHEET_DATA_LIST)!=null && dataList.size()>0){%>	
 			<tr height="50%">
 				<td width="10%">
 					<div STYLE="overflow: auto; width:100%; height:30%; padding:0px; margin: 0px; border: 1px solid">
