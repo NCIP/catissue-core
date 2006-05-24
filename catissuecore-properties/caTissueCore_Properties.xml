@@ -86,4 +86,10 @@
 		<value>E:/Program_Files/jboss-4.0.0/server/default/catissuecore-properties/Accessibility.txt</value>
 	</property>
 	
+	<property>
+		<name>ParticipantLookupAlgo</name>
+		<value>edu.wustl.catissuecore.bizlogic.ParticipantLookupLogicImpl</value>
+</property>
+	
+	
 </properties>
