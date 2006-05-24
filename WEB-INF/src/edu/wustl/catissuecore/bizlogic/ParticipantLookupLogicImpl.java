@@ -17,7 +17,7 @@ import edu.wustl.common.util.logger.Logger;
 /**
  * @author vaishali_khandelwal
  *
- * This class is for finding out the matching partivcipant with respect to given participant
+ * This class is for finding out the matching participant with respect to given participant
  */
 public class ParticipantLookupLogicImpl implements ParticipantLookupLogic
 {
