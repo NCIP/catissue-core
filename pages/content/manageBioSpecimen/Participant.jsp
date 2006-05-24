@@ -197,7 +197,7 @@ tr#hiddenCombo
 		//this function is called when user clicks on Participant Lookup Again Button
 		function participantLookupAction()
 		{
-			document.forms[0].action="<%=Constants.PARTICIPANT_LOOKUP_ACTION%>?ParticipantLookup=1";
+			document.forms[0].action="<%=Constants.PARTICIPANT_LOOKUP_ACTION%>?<%=Constants.PARTICIPANT_LOOKUP_PARAMETER%>=1";
 			document.forms[0].submit();
 		}
 	</script>
