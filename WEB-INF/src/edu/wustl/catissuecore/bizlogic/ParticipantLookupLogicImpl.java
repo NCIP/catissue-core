@@ -58,23 +58,23 @@ public class ParticipantLookupLogicImpl implements ParticipantLookupLogic
 		{
 			count=0;
 			Participant destParticipant=(Participant)itr.next();
-			if(srcParticipant.getFirstName().equals(destParticipant.getFirstName()))
+			if(srcParticipant.getFirstName()!=null && srcParticipant.getFirstName().equals(destParticipant.getFirstName()))
 			{
 				count++;
 			}
-			if(srcParticipant.getMiddleName().equals(destParticipant.getMiddleName()))
+			if(srcParticipant.getMiddleName()!=null && srcParticipant.getMiddleName().equals(destParticipant.getMiddleName()))
 			{
 				count++;
 			}
-			if(srcParticipant.getLastName().equals(destParticipant.getLastName()))
+			if(srcParticipant.getLastName()!=null && srcParticipant.getLastName().equals(destParticipant.getLastName()))
 			{
 				count++;
 			}
-			if(srcParticipant.getBirthDate().equals(destParticipant.getBirthDate()))
+			if(srcParticipant.getBirthDate()!=null && srcParticipant.getBirthDate().equals(destParticipant.getBirthDate()))
 			{
 				count++;
 			}
-			if(srcParticipant.getSocialSecurityNumber().equals(destParticipant.getSocialSecurityNumber()))
+			if(srcParticipant.getSocialSecurityNumber()!=null && srcParticipant.getSocialSecurityNumber().equals(destParticipant.getSocialSecurityNumber()))
 			{
 				count++;
 			}
