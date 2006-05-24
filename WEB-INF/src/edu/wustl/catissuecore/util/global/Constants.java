@@ -1050,6 +1050,20 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	//Mandar: 28-Apr-06 Bug 1129
 	public static final String DUPLICATE_SPECIMEN="duplicateSpecimen";
 	
+	
+	//Constants required in ParticipantLookupAction
+	public static final String PARTICIPANT_LOOKUP_PARAMETER="ParticipantLookupParameter";
+	public static final String PARTICIPANT_LOOKUP_ALGO="ParticipantLookupAlgo";
+	public static final String PARTICIPANT_LOOKUP_SUCCESS="success";
+	public static final String PARTICIPANT_ADD_FORWARD="participantAdd";
+	public static final String PARTICIPANT_SYSTEM_IDENTIFIER="System Identifier";
+	public static final String PARTICIPANT_LAST_NAME="Last Name";
+	public static final String PARTICIPANT_FIRST_NAME="First Name";
+	public static final String PARTICIPANT_MIDDLE_NAME="Middle Name";
+	public static final String PARTICIPANT_BIRTH_DATE="Birth Date";
+	public static final String PARTICIPANT_SOCIAL_SECURITY_NUMBER="SSN";
+	public static final String PARTICIPANT_PROBABLITY_MATCH="Probability";
+		
 //	public static final String getCollectionProtocolPIGroupName(Long identifier)
 //	{
 //	    if(identifier == null)
