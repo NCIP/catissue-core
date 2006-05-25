@@ -431,7 +431,6 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final int SHOPPING_CART_FORM_ID = 39;
 	public static final int CONFIGURE_RESULT_VIEW_ID = 41;
 	public static final int ADVANCE_QUERY_INTERFACE_ID = 42;
-	public static final int QUERY_INTERFACE_ID = 43;
 	public static final int COLLECTION_PROTOCOL_REGISTRATION_FORM_ID = 19;
 	public static final int PARTICIPANT_FORM_ID = 2;
 	public static final int SPECIMEN_COLLECTION_GROUP_FORM_ID = 20;
@@ -439,9 +438,6 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	
 	//Misc
 	public static final String SEPARATOR = " : ";
-	
-	//Status message key Constants
-	public static final String STATUS_MESSAGE_KEY = "statusMessageKey";
 	
 	//Identifiers for JDBC DAO.
 	public static final int QUERY_RESULT_TREE_JDBC_DAO = 1;
@@ -475,7 +471,6 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	//Edit Object Constants.
 	
 	//Query Interface Results View Constants
-	public static final String QUERY = "query";
 	public static final String PAGEOF_APPROVE_USER = "pageOfApproveUser";
 	public static final String PAGEOF_SIGNUP = "pageOfSignUp";
 	public static final String PAGEOF_USERADD = "pageOfUserAdd";
