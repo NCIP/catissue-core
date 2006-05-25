@@ -2,7 +2,7 @@
 
 <!--Ant Script for create Build for caTISSUE Core-->
 
-<project name="caTISSUE Core Installation" default="Deploy">
+<project name="caTissue Core Installation" default="Deploy">
 	
 	<!--define require dir and Properties -->	
 	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
@@ -33,14 +33,12 @@
 	<property name="mysql.lib" value="mysql-connector-java-3.0.16-ga-bin.jar"/>
 	<property name="oracle.lib" value="oracleDriver.jar"/>
 	
-	<!--var name="encodepwd" value=""/-->
-
 	<!-- Check for required properties -->
 	<target name="assert">
 		<if>
 			<equals arg1="" arg2="${jboss.home.dir}"/>
 			<then>
-				<fail message="The property 'jboss.home.dir' should not be empty"/>
+				<fail message="The property 'jboss.home.dir' can not be empty"/>
 			</then>
 		</if>
 		<if>
@@ -50,105 +48,102 @@
 			</or>
 			<then/>
 			<else>
-				<fail message="The value of property 'database.type' should be mysql or oracle"/>
+				<fail message="The value of property 'database.type' must be mysql or oracle"/>
 			</else>	
 		</if>
 		<if>
 			<equals arg1="" arg2="${database.host}"/>
 			<then>
-				<fail message="The property 'database.host' should not be empty"/>
+				<fail message="The property 'database.host' can not be empty"/>
 			</then>
 		</if>
 		<if>
 			<equals arg1="" arg2="${database.port}"/>
 			<then>
-				<fail message="The property 'database.port' should not be empty"/>
+				<fail message="The property 'database.port' can not be empty. Default port for MySQL:3306 and for Oracle: 1521"/>
 			</then>
 		</if>
 		<if>
 			<equals arg1="" arg2="${database.name}"/>
 			<then>
-				<fail message="The property 'database.name' should not be empty"/>
+				<fail message="The property 'database.name' can not be empty"/>
 			</then>
 		</if>
 		<if>
 			<equals arg1="" arg2="${database.username}"/>
 			<then>
-				<fail message="The property 'database.username' should not be empty"/>
+				<fail message="The property 'database.username' can not be empty"/>
 			</then>
 		</if>			
 <!-- Mandar 17May06 check for first user -->
 		<if>
 			<equals arg1="" arg2="${first.admin.department}"/>
 			<then>
-				<fail message="The property 'first.admin.department' should not be empty"/>
+				<fail message="The property 'first.admin.department' can not be empty"/>
 			</then>
 		</if>
 		<if>
 			<equals arg1="" arg2="${first.admin.institution}"/>
 			<then>
-				<fail message="The property 'first.admin.institution' should not be empty"/>
+				<fail message="The property 'first.admin.institution' can not be empty"/>
 			</then>
 		</if>
 		<if>
 			<equals arg1="" arg2="${first.admin.cancerresearchgroup}"/>
 			<then>
-				<fail message="The property 'first.admin.cancerresearchgroup' should not be empty"/>
+				<fail message="The property 'first.admin.cancerresearchgroup' can not be empty"/>
 			</then>
 		</if>
 		<if>
 			<equals arg1="" arg2="${first.admin.emailAddress}"/>
 			<then>
-				<fail message="The property 'first.admin.emailAddress' should not be empty"/>
+				<fail message="The property 'first.admin.emailAddress' can not be empty"/>
 			</then>
 		</if>
 		<if>
 			<equals arg1="" arg2="${first.admin.password}"/>
 			<then>
-				<fail message="The property 'first.admin.password' should not be empty"/>
+				<fail message="The property 'first.admin.password' can not be empty"/>
 			</then>
 		</if>
 	</target>
 	
-	
 	<!--Extrct WAR and copy Configuration files to temp directory--> 
 	<target name="init">
 		<echo message="Initializing installation..."/>
+
+		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>
+		<unwar src="${base.dir}/catissuecorecsm.war" dest="${temp.dir}/tempcsm"/>
+		
 		<copy todir="${temp.dir}/catissuecore-properties" overwrite="true">
 			<fileset dir="${base.dir}/catissuecore-properties"/>
 		</copy>
+		
 		<copy file="catissuecore-ds.xml" todir="${temp.dir}" overwrite="true"/>
-		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>
-		<unwar src="${base.dir}/catissuecorecsm.war" dest="${temp.dir}/tempcsm"/>
-		<copy file="${csm.dir}/WEB-INF/classes/DAOConfig.xml" todir="${temp.dir}">
-		</copy>
+		
+		<copy file="${csm.dir}/WEB-INF/classes/DAOConfig.xml" todir="${temp.dir}"/>
  	</target>
 	
 	<!--Modify Configuration such as Session Timeout, Admin details and JBoss server port-->
 	<target name="ConfigureWar">
-		<echo message="Modifying caTISSUECore Configuration File..."/>
+		<echo message="Modifying caTissueCore Configuration File..."/>
 		
 		<replace file="${temp.dir}/catissuecore/WEB-INF/web.xml"> 
-			<replacefilter 
-				token="&lt;session-timeout>10&lt;/session-timeout>" 
+			<replacefilter token="&lt;session-timeout>10&lt;/session-timeout>" 
 			  	value="&lt;session-timeout>${session.timeout}&lt;/session-timeout>"/>
 		</replace>
+		
 		<replace file="${temp.dir}/catissuecore/WEB-INF/classes/remoteService.xml"> 
-			<replacefilter 
-				token="@@server.port@@" 
-			  	value="${jboss.server.port}"/>
+			<replacefilter token="@@server.port@@" value="${jboss.server.port}"/>
 		</replace>
 	</target>
 	
 	
 	<!--Modify Adopter's Institution images, URL of Institution website and Contact Us, Privacy Notice, Disclaimer, Accessibility Text Files-->
 	<target name="AdopterConfiguration">
-		<echo message="Updating Site Images and Contact Us, Privacy Notice, Disclaimer, Accessibility Text Files"/>
+		<echo message="Updating Site Images"/>
 		<copy todir="${temp.dir}/catissuecore/images" overwrite="true">
 			<fileset dir="${base.dir}/images"/>
-		</copy>
-		<copy todir="${temp.dir}/catissuecore" overwrite="true">
-				<fileset dir="${base.dir}/catissuecore-properties"/>
 		</copy>
 	</target>
 	
@@ -157,28 +152,21 @@
 	<!--Modify Configuration For MySQL-->
 	<target name="mysqlConfig">
 		<echo message="Modifying caTISSUECore MySQL specific Configuration File..."/>
+		
 		<replace dir="${temp.dir}/catissuecore-properties" propertyfile="caTISSUEInstall.properties"> 
 	  		<include name="upt.hibernate.cfg.xml"/>
 			<include name="catissuecore.hibernate.cfg.xml"/>
-			<replacefilter 
-				token="@@dialect@@" 
-			  	value="${mysql.dialect.string}"/>
+			<replacefilter token="@@dialect@@" value="${mysql.dialect.string}"/>
 		</replace>
+		
 		<replace dir="${temp.dir}" propertyfile="caTISSUEInstall.properties"> 
 			<include name="catissuecore-ds.xml"/>
-			<replacefilter 
-				token="@@databaseurl@@" 
-			  	value="jdbc:mysql://${database.host}:${database.port}/${database.name}"/>
-			<replacefilter 
-				token="@@username@@" 
-			  	value="${database.username}"/>
-			<replacefilter 
-				token="@@pasword@@" 
-			  	value="${database.password}"/>
-			<replacefilter 
-				token="@@databasedriver@@" 
-			  	value="${mysql.driver.string}"/>
+			<replacefilter token="@@databaseurl@@" value="jdbc:mysql://${database.host}:${database.port}/${database.name}"/>
+			<replacefilter token="@@username@@" value="${database.username}"/>
+			<replacefilter token="@@pasword@@" value="${database.password}"/>
+			<replacefilter token="@@databasedriver@@" value="${mysql.driver.string}"/>
 		</replace>
+		
 		<!-- Configuring CSM hibernate property File-->
 		<replace dir="${csm.dir}/WEB-INF" propertyfile="caTISSUEInstall.properties"> 
 			<include name="classes/hibernate.properties"/>
@@ -201,9 +189,7 @@
 			  	value="hibernate.connection.password ${database.password}"/>
 		</replace>
 		<replace file="${temp.dir}/catissuecore/WEB-INF/classes/hibernate.cfg.xml">
-			<replacefilter 
-				token="${mysql.dialect.string}" 
-			  	value="${mysql.dialect.string}"/>
+			<replacefilter token="${mysql.dialect.string}" value="${mysql.dialect.string}"/>
 		</replace>
 	</target>
 	
@@ -213,26 +199,18 @@
 		<replace dir="${temp.dir}/catissuecore-properties" propertyfile="caTISSUEInstall.properties"> 
 	  		<include name="upt.hibernate.cfg.xml"/>
 			<include name="catissuecore.hibernate.cfg.xml"/>
-			<replacefilter 
-				token="@@dialect@@" 
-			  	value="${oracle.dialect.string}"/>
+			<replacefilter token="@@dialect@@" value="${oracle.dialect.string}"/>
 		</replace>
+		
 		<!-- Configuring Data Source File-->
 		<replace dir="${temp.dir}" propertyfile="caTISSUEInstall.properties"> 
 			<include name="catissuecore-ds.xml"/>
-			<replacefilter 
-				token="@@databaseurl@@" 
-			  	value="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}"/>
-			<replacefilter 
-				token="@@username@@" 
-			  	value="${database.username}"/>
-			<replacefilter 
-				token="@@pasword@@" 
-			  	value="${database.password}"/>
-			<replacefilter 
-				token="@@databasedriver@@" 
-			  	value="${oracle.driver.string}"/>
+			<replacefilter token="@@databaseurl@@" value="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}"/>
+			<replacefilter token="@@username@@" value="${database.username}"/>
+			<replacefilter token="@@pasword@@" value="${database.password}"/>
+			<replacefilter token="@@databasedriver@@" value="${oracle.driver.string}"/>
 		</replace>
+
 		<!-- Configuring CSM hibernate property File-->
 		<replace dir="${csm.dir}/WEB-INF" propertyfile="caTISSUEInstall.properties"> 
 			<include name="classes/hibernate.properties"/>
@@ -259,7 +237,7 @@
 				token="${mysql.dialect.string}" 
 			  	value="${oracle.dialect.string}"/>
 		</replace>
-	</target>  
+	</target>
 	
 	<!--Buid New WAR File-->
 	<target name="BuildWar">
@@ -302,8 +280,7 @@
   		</copy>
 		<replace dir="${jboss.home.dir}/server/default/catissuecore-properties"> 
 	  		<include name="ApplicationSecurityConfig.xml"/>
-			<replacefilter 
-					token="@@hibernate-config-file@@" 
+			<replacefilter token="@@hibernate-config-file@@" 
 				  	value="${jboss.home.dir}/server/default/catissuecore-properties/catissuecore.hibernate.cfg.xml"/>
 		</replace>
 		<copy todir="${jboss.home.dir}/server/default/lib" >
@@ -513,21 +490,11 @@ Thanking You,
 		<copy file="${common.sql.dir}/createUser.sql" todir="${temp.dir}" overwrite="true"/>
 			<replace dir="${temp.dir}" propertyfile="caTISSUEInstall.properties"> 
 				<include name="createUser.sql"/>
-			<replacefilter 
-				token="@@first.admin.department@@" 
-				value="${first.admin.department}"/>
-			<replacefilter 
-				token="@@first.admin.institution@@" 
-				value="${first.admin.institution}"/>
-			<replacefilter 
-				token="@@first.admin.cancerresearchgroup@@" 
-				value="${first.admin.cancerresearchgroup}"/>
-			<replacefilter 
-				token="@@first.admin.emailAddress@@" 
-				value="${first.admin.emailAddress}"/>
-			<replacefilter 
-				token="@@first.admin.encodedPassword@@" 
-				value="${first.admin.encodedPassword}"/>
+				<replacefilter token="@@first.admin.department@@" value="${first.admin.department}"/>
+				<replacefilter token="@@first.admin.institution@@" value="${first.admin.institution}"/>
+				<replacefilter token="@@first.admin.cancerresearchgroup@@" value="${first.admin.cancerresearchgroup}"/>
+				<replacefilter token="@@first.admin.emailAddress@@" value="${first.admin.emailAddress}"/>
+				<replacefilter token="@@first.admin.encodedPassword@@" value="${first.admin.encodedPassword}"/>
 			</replace>
 			
 			<copy todir="${common.sql.dir}" overwrite="true">
