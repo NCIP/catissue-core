@@ -275,6 +275,10 @@
 	<definition name=".catissuecore.participantEditSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
 		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>
+	
+	<definition name=".catissuecore.viewParticipantSurgicalPathologyReportDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/ViewParticipantSPR.jsp" />
+	</definition>
 
 	<!--Ajay For collection protocol reg-->
 	<definition name=".catissuecore.collectionProtocolRegistrationDef" extends=".catissuecore.manageBioSpecimenHomeDef">
@@ -351,7 +355,7 @@
 		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>
 	
-	<definition name=".catissuecore.viewSPRDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+	<definition name=".catissuecore.viewSurgicalPathologyReportDef" extends=".catissuecore.manageBioSpecimenHomeDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/ViewSPR.jsp" />
 	</definition>
 	<!-- SpecimenCollectionGroup Parameters -->
