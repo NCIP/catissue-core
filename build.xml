@@ -218,13 +218,6 @@
 			<fileset file="${base.dir}/WEB-INF/lib/oracleDriver.jar"/>
 		</copy>
 		
-		<copy todir="${zip.dir}/configuration" overwrite="true">
-			<fileset file="${base.dir}/Accessibility.txt"/>
-			<fileset file="${base.dir}/ContactUs.txt"/>
-			<fileset file="${base.dir}/Disclaimer.txt"/>
-			<fileset file="${base.dir}/PrivacyNotice.txt"/>
-		</copy>
-		
 		<copy todir="${zip.dir}/SQL" overwrite="true">
 			<fileset dir="${base.dir}/SQL"/>
 		</copy>
