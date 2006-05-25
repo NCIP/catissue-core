@@ -1063,7 +1063,13 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String PARTICIPANT_BIRTH_DATE="Birth Date";
 	public static final String PARTICIPANT_SOCIAL_SECURITY_NUMBER="SSN";
 	public static final String PARTICIPANT_PROBABLITY_MATCH="Probability";
-		
+	
+	//Constants for integration of caTies and CAE with caTissue Core
+	public static final String LINKED_DATA = "linkedData";
+	public static final String APPLICATION_ID = "applicationId";
+	public static final String CATIES = "caTies";
+	public static final String CAE = "cae";
+	
 //	public static final String getCollectionProtocolPIGroupName(Long identifier)
 //	{
 //	    if(identifier == null)
