@@ -186,6 +186,11 @@ public class CatissueCoreServletContextListener implements
 		{
         	String path = System.getProperty("app.propertiesFile");
         	XMLPropertyHandler.init(path);
+        	
+        	File propetiesDirPath = new File(path);
+        	Variables.propertiesDirPath = propetiesDirPath.getParent();
+        	Logger.out.debug("propetiesDirPath "+Variables.propertiesDirPath);
+        	
         	String propertyValue = XMLPropertyHandler.getValue("server.port");
             Logger.out.debug("property Value "+propertyValue);
 		}

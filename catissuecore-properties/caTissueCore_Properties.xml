@@ -68,22 +68,21 @@
 
 	<property>
 		<name>app.disclaimer.file</name>
-		<value>E:/Program_Files/jboss-4.0.0/server/default/catissuecore-properties/Disclaimer.txt</value>
+		<value>Disclaimer.txt</value>
 	</property>
 
 	<property>
-		<name>app.contactUs.file</name>
-		<value>E:/Program_Files/jboss-4.0.0/server/default/catissuecore-properties/ContactUs.txt</value>
+		<name>app.contactUs.file</name>E:/Program_Files/jboss-4.0.0/server/default/catissuecore-properties/ContactUs.txt</value>
 	</property>
 
 	<property>
 		<name>app.privacyNotice.file</name>
-		<value>E:/Program_Files/jboss-4.0.0/server/default/catissuecore-properties/PrivacyNotice.txt</value>
+		<value>PrivacyNotice.txt</value>
 	</property>
 
 	<property>
 		<name>app.accessibility.file</name>
-		<value>E:/Program_Files/jboss-4.0.0/server/default/catissuecore-properties/Accessibility.txt</value>
+		<value>Accessibility.txt</value>
 	</property>
 	
 	<property>

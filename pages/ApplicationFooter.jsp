@@ -3,9 +3,9 @@
 <table summary="" cellpadding="0" cellspacing="0" border="0">
     <tr>
     
-      <td height="20" class="footerMenuItem" onmouseover="changeMenuStyle(this,'footerMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'footerMenuItem'),hideCursor()" onclick="document.location.href='ContactUs.do?requestFor=ContactUs'">
+      <td height="20" class="footerMenuItem" onmouseover="changeMenuStyle(this,'footerMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'footerMenuItem'),hideCursor()" onclick="document.location.href='ContactUs.do?PAGE_TITLE_KEY=app.contactUs&FILE_NAME_KEY=app.contactUs.file'">
         &nbsp;&nbsp;
-		<a class="footerMenuLink" href="ContactUs.do?requestFor=ContactUs">
+		<a class="footerMenuLink" href="ContactUs.do?PAGE_TITLE_KEY=app.contactUs&FILE_NAME_KEY=app.contactUs.file">
 			<bean:message key="app.contactUs" />
 		</a>&nbsp;&nbsp;
       </td>
@@ -14,9 +14,9 @@
       	<img src="images/ftrMenuSeparator.gif" width="1" height="16" alt="" />
       </td>
       
-      <td height="20" class="footerMenuItem" onmouseover="changeMenuStyle(this,'footerMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'footerMenuItem'),hideCursor()" onclick="document.location.href='PrivacyNotice.do?requestFor=PrivacyNotice'">
+      <td height="20" class="footerMenuItem" onmouseover="changeMenuStyle(this,'footerMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'footerMenuItem'),hideCursor()" onclick="document.location.href='PrivacyNotice.do?PAGE_TITLE_KEY=app.privacyNotice&FILE_NAME_KEY=app.privacyNotice.file'">
         &nbsp;&nbsp;
-        <a class="footerMenuLink" href="PrivacyNotice.do?requestFor=PrivacyNotice">
+        <a class="footerMenuLink" href="PrivacyNotice.do?PAGE_TITLE_KEY=app.privacyNotice&FILE_NAME_KEY=app.privacyNotice.file">
         	<bean:message key="app.privacyNotice" />
         </a>&nbsp;&nbsp;
       </td>
@@ -25,9 +25,9 @@
       	<img src="images/ftrMenuSeparator.gif" width="1" height="16" alt="" />
       </td>
       
-      <td height="20" class="footerMenuItem" onmouseover="changeMenuStyle(this,'footerMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'footerMenuItem'),hideCursor()" onclick="document.location.href='Disclaimer.do?requestFor=Disclaimer'">
+      <td height="20" class="footerMenuItem" onmouseover="changeMenuStyle(this,'footerMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'footerMenuItem'),hideCursor()" onclick="document.location.href='Disclaimer.do?PAGE_TITLE_KEY=app.disclaimer&FILE_NAME_KEY=app.disclaimer.file'">
         &nbsp;&nbsp;
-        <a class="footerMenuLink" href="Disclaimer.do?requestFor=Disclaimer">
+        <a class="footerMenuLink" href="Disclaimer.do?PAGE_TITLE_KEY=app.disclaimer&FILE_NAME_KEY=app.disclaimer.file">
         	<bean:message key="app.disclaimer" />
         </a>&nbsp;&nbsp;
       </td>
@@ -36,9 +36,9 @@
       	<img src="images/ftrMenuSeparator.gif" width="1" height="16" alt="" />
       </td>
       
-      <td height="20" class="footerMenuItem" onmouseover="changeMenuStyle(this,'footerMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'footerMenuItem'),hideCursor()" onclick="document.location.href='Accessibility.do?requestFor=Accessibility'">
+      <td height="20" class="footerMenuItem" onmouseover="changeMenuStyle(this,'footerMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'footerMenuItem'),hideCursor()" onclick="document.location.href='Accessibility.do?PAGE_TITLE_KEY=app.accessibility&FILE_NAME_KEY=app.accessibility.file'">
         &nbsp;&nbsp;
-        <a class="footerMenuLink" href="Accessibility.do?requestFor=Accessibility">
+        <a class="footerMenuLink" href="Accessibility.do?PAGE_TITLE_KEY=app.accessibility&FILE_NAME_KEY=app.accessibility.file">
         	<bean:message key="app.accessibility" />
         </a>&nbsp;&nbsp;
       </td>
