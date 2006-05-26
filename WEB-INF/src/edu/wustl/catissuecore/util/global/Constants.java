@@ -358,6 +358,15 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	//Spreadsheet Export Action
 	public static final String SPREADSHEET_EXPORT_ACTION = "SpreadsheetExport.do";
 	
+	//Aliquots Action
+	public static final String ALIQUOT_ACTION = "Aliquots.do";
+	public static final String CREATE_ALIQUOT_ACTION = "CreateAliquots.do";
+	
+	//Constants related to Aliquots functionality
+	public static final String PAGEOF_ALIQUOT = "pageOfAliquot";
+	public static final String PAGEOF_CREATE_ALIQUOT = "pageOfCreateAliquot";
+	public static final String AVAILABLE_CONTAINER_MAP = "availableContainerMap";
+	
 	//Levels of nodes in query results tree.
 	public static final int MAX_LEVEL = 5;
 	public static final int MIN_LEVEL = 1;
@@ -436,6 +445,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final int PARTICIPANT_FORM_ID = 2;
 	public static final int SPECIMEN_COLLECTION_GROUP_FORM_ID = 20;
 	public static final int NEW_SPECIMEN_FORM_ID = 22;
+	public static final int ALIQUOT_FORM_ID = 44;
 	
 	//Misc
 	public static final String SEPARATOR = " : ";
