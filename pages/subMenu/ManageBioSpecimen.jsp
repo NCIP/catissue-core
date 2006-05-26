@@ -84,6 +84,11 @@
 			 | <a class="subMenuPrimary" href="CreateSpecimen.do?operation=add&amp;pageOf=&menuSelected=15">
 				<bean:message key="app.createSpecimen" />	</a> 
 		</div>
+		<div>
+			<a class="subMenuPrimary" href="Aliquots.do?pageOf=pageOfAliquot&menuSelected=15">
+				<bean:message key="app.aliquots" />
+			</a>
+		</div>
 	</td>
 </tr>
 
