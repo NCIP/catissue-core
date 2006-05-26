@@ -346,6 +346,55 @@ tr#hiddenCombo
 							<img src="images\calendar.gif" width=24 height=22 border=0></a>
 					 </td>
 				 </tr>
+				 <%-- added by chetan for death date --%>
+				 <tr>
+					<td class="formRequiredNotice" width="5">&nbsp;</td>
+					<td class="formLabel">
+						<label for="deathDate">
+							<bean:message key="participant.deathDate"/>
+						</label>
+					</td>
+					 
+					 <td class="formField" colspan="2">
+					 <div id="overDiv1" style="position:absolute; visibility:hidden; z-index:1000;"></div>
+					 <html:text styleClass="formDateSized10" maxlength="10"  size="10" styleId="deathDate" property="deathDate" disabled="<%=readOnlyForAll%>"/>
+					 &nbsp;<bean:message key="page.dateFormat" />&nbsp;
+						<a href="javascript:show_calendar('participantForm.deathDate',null,null,'MM-DD-YYYY');">
+							<img src="images\calendar.gif" width=24 height=22 border=0></a>
+					 </td>
+				 </tr> 
+				 
+				<%-- <tr>
+				 	<td class="formRequiredNotice" width="5">&nbsp;</td>
+					<td class="formLabel">
+				     	<label for="vitalStatus">
+				     		<bean:message key="participant.vitalStatus"/>
+				     	</label>
+				     </td>
+				     <td class="formField" colspan="2">
+				     	<html:text styleClass="formFieldSized" maxlength="50" size="30" styleId="vitalStatus" property="vitalStatus" readonly="<%=readOnlyForAll%>"/>
+				     </td>
+				 </tr>  --%>
+				 
+				 
+				 
+				 <tr>
+					<td class="formRequiredNotice" width="5">&nbsp;</td>
+					<td class="formLabel">
+				     	<label for="vitalStatus">
+				     		<bean:message key="participant.vitalStatus"/>
+				     	</label>
+				     </td>
+				     <td class="formField" colspan="2">
+<!-- Mandar : 434 : for tooltip -->
+				     	<html:select property="vitalStatus" styleClass="formFieldSized" styleId="vitalStatus" size="1" disabled="<%=readOnlyForAll%>"
+						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+							<html:options collection="<%=Constants.VITAL_STATUS_LIST%>" labelProperty="name" property="value"/>
+						</html:select>
+		        	  </td>
+				 </tr>
+				 
+				 
 				 <tr>
 					<td class="formRequiredNotice" width="5">&nbsp;</td>
 					<td class="formLabel">
