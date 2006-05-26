@@ -172,4 +172,90 @@ public class Utility extends edu.wustl.common.util.Utility
 		
 		return -1;
 	}
+	
+	//Aniruddha : Added for enhancement - Specimen Aliquoting [Bug Id : 560]
+	/**
+	 * Returns true if qunatity is of type double else false.
+	 * @param className Name of specimen class
+	 * @param type Type of specimen
+	 * @return true if qunatity is of type double else false.
+	 */
+	public static boolean isQuantityDouble(String className,String type)
+	{
+		if(Constants.CELL.equals(className))
+		{
+			return false;
+		}
+		else if(Constants.TISSUE.equals(className))
+		{
+			if(Constants.MICRODISSECTED.equals(type) || Constants.FROZEN_TISSUE_SLIDE.equals(type)
+					|| Constants.FIXED_TISSUE_SLIDE.equals(type) || Constants.FROZEN_TISSUE_BLOCK.equals(type)
+					|| Constants.FIXED_TISSUE_BLOCK.equals(type) || Constants.NOT_SPECIFIED.equals(type))
+			{
+				return false;
+			}
+			else
+			{
+				return true;
+			}
+		}
+		else
+		{
+			return true;
+		}
+	}
+	
+	//Aniruddha : Added for enhancement - Specimen Aliquoting
+	/**
+	 * Returns the unit of specimen quantity.
+	 * @param className Name of specimen class
+	 * @param type Type of specimen
+	 * @return the unit of specimen quantity.
+	 */
+	public static String getUnit(String className,String type)
+	{
+		if(className == null || type == null)
+		{
+			return "";
+		}
+		
+		if(className.equals("-1"))
+		{
+			return "";
+		}
+		else
+		{
+			if(Constants.CELL.equals(className))
+			{
+				return Constants.UNIT_CC;
+			}
+			else if(Constants.FLUID.equals(className))
+			{
+				return Constants.UNIT_ML;
+			}
+			else if(Constants.MOLECULAR.equals(className))
+			{
+				return Constants.UNIT_MG;
+			}
+			else if(Constants.TISSUE.equals(className))
+			{
+				if(Constants.FIXED_TISSUE_BLOCK.equals(type) || Constants.FROZEN_TISSUE_BLOCK.equals(type)
+						|| Constants.FIXED_TISSUE_SLIDE.equals(type) || Constants.FROZEN_TISSUE_SLIDE.equals(type)
+						|| Constants.NOT_SPECIFIED.equals(type))
+				{
+					return Constants.UNIT_CN;
+				}
+				else if(Constants.MICRODISSECTED.equals(type))
+				{
+					return Constants.UNIT_CL;
+				}
+				else
+				{
+					return Constants.UNIT_GM;
+				}
+			}
+		}
+		
+		return "";
+	}
 }
