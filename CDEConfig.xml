@@ -241,4 +241,16 @@
 			<depthOfHierarchyTree>6</depthOfHierarchyTree> 
 		</XMLPermissibleValues>
 	</XMLCDE>
+	
+	<XMLCDE cache="true" lazyLoading="false">
+		<name>Vital Status</name>
+		<publicId>2004001</publicId>
+		<XMLPermissibleValues>
+			<evsTerminology>NCI-THESAURAUS</evsTerminology>
+			<conceptCode>PV</conceptCode> 
+			<parentConceptCode></parentConceptCode>
+			<depthOfHierarchyTree>6</depthOfHierarchyTree> 
+		</XMLPermissibleValues>
+	</XMLCDE>
+	
 </XMLCDE_CACHE>
