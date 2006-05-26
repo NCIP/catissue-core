@@ -13,7 +13,9 @@ import java.util.Vector;
 import javax.servlet.http.HttpSession;
 import javax.swing.tree.DefaultMutableTreeNode;
 
+import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.util.SearchUtil;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.bizlogic.QueryBizLogic;
 
 import edu.wustl.common.query.AdvancedConditionsNode;
@@ -132,11 +134,11 @@ public class TreeView {
 			        String table = data.getTableAliasName();
 			        //split column name in case of Specimen event parameters to remove aliasName
 			        //StringTokenizer columnNameTokenizer = new StringTokenizer(columnName,".");
-			        QueryBizLogic bizLogic = new QueryBizLogic();//(QueryBizLogic)BizLogicFactory.getBizLogic(Constants.SIMPLE_QUERY_INTERFACE_ID);
+			        QueryBizLogic bizLogic = (QueryBizLogic)BizLogicFactory.getBizLogic(Constants.SIMPLE_QUERY_INTERFACE_ID);
 			        //String columnDisplayName = bizLogic.getColumnDisplayNames(table,columnName);
 			        
 			        int formId = SearchUtil.getFormId(tableName);
-			        String columnDisplayName = null;//SearchUtil.getColumnDisplayName(formId,table,columnName);
+			        String columnDisplayName = SearchUtil.getColumnDisplayName(formId,table,columnName);
 			        
 			        //append table name to the column name in case of event parameters conditions.
 					StringTokenizer tableTokens = new StringTokenizer(table,".");
