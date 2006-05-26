@@ -54,6 +54,8 @@ PUBLIC
 		
 		<form-bean name="advanceSearchForm" type="edu.wustl.catissuecore.actionForm.AdvanceSearchForm"/>
 		<form-bean name="abstractActionForm" type="edu.wustl.common.actionForm.AbstractActionForm"/>
+		
+		<form-bean name="aliquotForm" type="edu.wustl.catissuecore.actionForm.AliquotForm"/>
 	</form-beans>
 	
 	<!-- Global Exception Definitions -->
@@ -2420,6 +2422,29 @@ PUBLIC
 
 	<!-- AddNew Actions Ends -->
 
+	<!-- Aliquots Action -->
+	<action path="/Aliquots"
+		type="edu.wustl.catissuecore.action.AliquotAction"
+		name="aliquotForm"
+		validate="false"
+		scope="request">
+		<forward name="pageOfAliquot" path=".catissuecore.aliquotDef" />
+		<forward name="failure" path=".catissuecore.aliquotDef" />
+		<forward name="access_denied" path="/ManageBioSpecimen.do" />
+	</action>
+	
+	<action path="/CreateAliquots"
+		type="edu.wustl.catissuecore.action.AliquotAction"
+		name="aliquotForm"
+		validate="true"
+		input="/Aliquots.do?pageOf=pageOfAliquot&amp;menuSelected=15"
+		scope="request">
+		<forward name="pageOfCreateAliquot" path=".catissuecore.aliquotDef"/>
+		<forward name="pageOfAliquot" path="/Aliquots.do?pageOf=pageOfAliquot&amp;menuSelected=15"/>
+		<forward name="failure" path=".catissuecore.aliquotDef" />
+		<forward name="access_denied" path="/ManageBioSpecimen.do" />
+	</action>
+	<!-- Aliquots Action -->
 	
 	</action-mappings>
 	
