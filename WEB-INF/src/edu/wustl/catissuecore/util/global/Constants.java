@@ -76,6 +76,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String ETHNICITY_LIST = "ethnicityList";
 	public static final String PARTICIPANT_MEDICAL_RECORD_SOURCE_LIST = "participantMedicalRecordSourceList";
 	public static final String RACELIST = "raceList";
+	public static final String VITAL_STATUS_LIST = "vitalStatusList";
 	public static final String PARTICIPANT_LIST = "participantList";
 	public static final String PARTICIPANT_ID_LIST = "participantIdList";
 	public static final String PROTOCOL_LIST = "protocolList";
@@ -779,6 +780,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String CDE_NAME_BIOHAZARD = "Biohazard";
 	public static final String CDE_NAME_ETHNICITY = "Ethnicity";
 	public static final String CDE_NAME_RACE = "Race";
+	public static final String CDE_VITAL_STATUS = "Vital Status";
 	public static final String CDE_NAME_CLINICAL_DIAGNOSIS = "Clinical Diagnosis";
 	public static final String CDE_NAME_SITE_TYPE = "Site Type";
 	public static final String CDE_NAME_COUNTRY_LIST = "Countries";
