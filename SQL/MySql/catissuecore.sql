@@ -361,6 +361,8 @@ create table CATISSUE_PARTICIPANT (
    ETHNICITY varchar(50),
    SOCIAL_SECURITY_NUMBER varchar(50) unique,
    ACTIVITY_STATUS varchar(20),
+   DEATH_DATE date,
+   VITAL_STATUS varchar(50),
    primary key (IDENTIFIER)
 );
 create table CATISSUE_SPECIMEN_CHAR (
