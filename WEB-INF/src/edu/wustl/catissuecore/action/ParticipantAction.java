@@ -81,6 +81,10 @@ public class ParticipantAction extends SecureAction
         List raceList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_RACE,null);
         request.setAttribute(Constants.RACELIST, raceList);
         
+        //Sets the vitalStatus attribute to be used in the Add/Edit Participant Page.
+        List vitalStatusList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_VITAL_STATUS,null);
+        request.setAttribute(Constants.VITAL_STATUS_LIST,vitalStatusList);
+        
         //Sets the activityStatusList attribute to be used in the Site Add/Edit Page.
         request.setAttribute(Constants.ACTIVITYSTATUSLIST, Constants.ACTIVITY_STATUS_VALUES);
         

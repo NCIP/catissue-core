@@ -8,6 +8,7 @@
  * @version 1.00
  * Created on Apr 7, 2005
  */
+
 package edu.wustl.catissuecore.domain;
 
 import java.util.Collection;
@@ -87,6 +88,17 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 	 * Defines whether this participant record can be queried (Active) or not queried (Inactive) by any actor
 	 * */
 	protected String activityStatus;
+	
+	/**
+	 * Death date of participant.
+	 */
+	protected Date deathDate;
+	
+	/**
+	 * Defines the vital status of the participant like 'Dead', 'Alive' or 'Unknown'.
+	 */
+	protected String vitalStatus;
+	
 	
 	/**
      * A collection of medical record identification number that refers to a Participant. 
@@ -349,7 +361,47 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 	{
 		this.activityStatus = activityStatus;
 	}
-
+	
+	/**
+     * Returns the date of death of the Participant.
+     * @return Date representing the death date of the Participant.
+     * @see #setDeathDate(Date)
+     * @hibernate.property name="deathDate" column="DEATH_DATE" type="date"
+     */
+	public Date getDeathDate() 
+	{
+		return deathDate;
+	}
+	
+	/**
+	 * Sets the date of birth of the Participant.
+	 * @param deathDate The deathDate to set.
+	 */
+	public void setDeathDate(Date deathDate) {
+		this.deathDate = deathDate;
+	}
+	
+	/**
+	 * Returns the vital status of the participant.
+	 * @return Returns the vital status of the participant.
+	 * @see #setVitalStatus(String)
+	 * @hibernate.property name="vitalStatus" type="string"
+	 * column="VITAL_STATUS" length="50"
+	 */
+	public String getVitalStatus() 
+	{
+		return vitalStatus;
+	}
+	
+	/**
+	 * Sets the vital status of the Participant.
+	 * @param vitalStatus The vitalStatus to set.
+	 */
+	public void setVitalStatus(String vitalStatus) 
+	{
+		this.vitalStatus = vitalStatus;
+	}	
+	
 	/**
 	 * Returns collection of medical identifiers associated with this participant.
 	 * @return collection of medical identifiers of this participant.
@@ -442,6 +494,13 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 	        	this.socialSecurityNumber = null;
 	        
 	        this.birthDate = Utility.parseDate(form.getBirthDate(),Utility.datePattern(form.getBirthDate()));
+	        
+	        this.deathDate = Utility.parseDate(form.getDeathDate(),Utility.datePattern(form.getDeathDate()));
+	        
+	        if(validator.isValidOption(form.getVitalStatus()) )
+	        	this.vitalStatus = form.getVitalStatus();
+	        else
+	        	this.vitalStatus = null;
 	        
 	        Map map = form.getValues();
 	        Logger.out.debug("Map "+map);

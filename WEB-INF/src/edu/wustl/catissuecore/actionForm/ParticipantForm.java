@@ -92,8 +92,17 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
      * Participant's ethnicity status.
      */
 	protected String ethnicity;
-
- 
+	
+	/**
+	 * The Date of Death of the Participant.
+	 */
+	protected String deathDate = "";
+	
+	/**
+	 * Participant's vital status.
+	 */
+	protected String vitalStatus;
+	
     /**
 	 * Map to handle values of all the Participant Medical Identifiers
 	 */
@@ -152,6 +161,9 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
         this.activityStatus = participant.getActivityStatus();
         this.ethnicity = participant.getEthnicity();
         
+        this.deathDate = Utility.parseDateToString(participant.getDeathDate(),Constants.DATE_PATTERN_MM_DD_YYYY);;
+        this.vitalStatus = participant.getVitalStatus();
+        
         //Populating the map with the participant medical identifiers data 
         Collection medicalIdentifierCollection = participant.getParticipantMedicalIdentifierCollection();
         
@@ -201,7 +213,8 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
         this.firstName =  Utility.toString( participant.getFirstName());
         this.middleName = Utility.toString( participant.getMiddleName());
         this.birthDate = Utility.parseDateToString(participant.getBirthDate(),Constants.DATE_PATTERN_MM_DD_YYYY);
-
+        //this.deathDate = Utility.parseDateToString(participant.getDeathDate(),Constants.DATE_PATTERN_MM_DD_YYYY);
+        
         this.gender = toStringEnumValue(participant.getGender());
         this.genotype = toStringEnumValue(participant.getSexGenotype());
         setSSN(participant.getSocialSecurityNumber());
@@ -461,20 +474,41 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
      {
          ActionErrors errors = new ActionErrors();
          Validator validator = new Validator();
-
          try
          {
          	setRedirectValue(validator);
-
+         	
+         	String errorKeyForBirthDate = "";
+         	String errorKeyForDeathDate = "";
+         	
          	if (!validator.isEmpty(birthDate) )
 			{
 	         	// date validation according to bug id  722 and 730
-	    		String errorKey = validator.validateDate(birthDate,true );
-	    		if(errorKey.trim().length() > 0)
+	    		errorKeyForBirthDate = validator.validateDate(birthDate,true );
+	    		if(errorKeyForBirthDate.trim().length() > 0)
 	    		{
-	    			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(errorKey,ApplicationProperties.getValue("participant.birthDate")));
+	    			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(errorKeyForBirthDate,ApplicationProperties.getValue("participant.birthDate")));
 	    		}
 			}
+         	
+         	if (!validator.isEmpty(deathDate) )
+			{
+	    		errorKeyForDeathDate = validator.validateDate(deathDate,true );
+	    		if(errorKeyForDeathDate.trim().length() > 0)
+	    		{
+	    			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(errorKeyForDeathDate,ApplicationProperties.getValue("participant.deathDate")));
+	    		}	    		
+			}
+         	
+         	if( (!validator.isEmpty(birthDate) &&  !validator.isEmpty(deathDate)) && (errorKeyForDeathDate.trim().length() == 0 && errorKeyForBirthDate.trim().length() == 0) )
+         	{
+         		boolean errorKey1 = validator.compareDates(birthDate,deathDate);
+	    		
+	    		if(!errorKey1)
+	    		{
+	    			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("participant.invaliddate",ApplicationProperties.getValue("participant.invaliddate")));
+	    		}
+         	}
          	
          	String socialSecurityNumber = socialSecurityNumberPartA+"-"+socialSecurityNumberPartB+"-"+socialSecurityNumberPartC; 
          	if(!validator.isEmpty(socialSecurityNumberPartA+socialSecurityNumberPartB+socialSecurityNumberPartC) && !validator.isValidSSN(socialSecurityNumber ) )
@@ -483,11 +517,11 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
          	}
 			
          	//Validation for Blank Participant 
-         	if(validator.isEmpty(lastName) && validator.isEmpty(firstName) && validator.isEmpty(middleName) && validator.isEmpty(birthDate) && (validator.isValidOption(gender) == false) && (validator.isValidOption(genotype) == false)&& (validator.isValidOption(race) == false)&& ethnicity.equals("-1") && validator.isEmpty(socialSecurityNumberPartA+socialSecurityNumberPartB+socialSecurityNumberPartC))
+         	if(validator.isEmpty(lastName) && validator.isEmpty(firstName) && validator.isEmpty(middleName) && validator.isEmpty(birthDate) && (validator.isEmpty(deathDate))&& (validator.isValidOption(gender) == false) && (validator.isValidOption(vitalStatus) == false) && (validator.isValidOption(genotype) == false)&& (validator.isValidOption(race) == false)&& ethnicity.equals("-1") && validator.isEmpty(socialSecurityNumberPartA+socialSecurityNumberPartB+socialSecurityNumberPartC))
          	{
          	   errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.participant.atLeastOneFieldRequired"));
          	}
-         	         	
+         	
 			//Validations for Add-More Block
 			String className = "ParticipantMedicalIdentifier:";
 			String key1 = "_Site_" + Constants.SYSTEM_IDENTIFIER;
@@ -655,5 +689,33 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 	public void setSocialSecurityNumberPartC(String socialSecurityNumberPartC)
 	{
 		this.socialSecurityNumberPartC = socialSecurityNumberPartC;
+	}
+	
+	/**
+	 * @return Returns the deathDate.
+	 */
+	public String getDeathDate() {
+		return deathDate;
+	}
+	
+	/**
+	 * @param deathDate The deathDate to set.
+	 */
+	public void setDeathDate(String deathDate) {
+		this.deathDate = deathDate;
+	}
+	
+	/**
+	 * @return Returns the vitalStatus.
+	 */
+	public String getVitalStatus() {
+		return vitalStatus;
+	}
+	
+	/**
+	 * @param vitalStatus The vitalStatus to set.
+	 */
+	public void setVitalStatus(String vitalStatus) {
+		this.vitalStatus = vitalStatus;
 	}
 }

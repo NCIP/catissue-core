@@ -114,6 +114,23 @@
             length="20"
         />
 
+        <property
+            name="deathDate"
+            type="date"
+            update="true"
+            insert="true"
+            column="DEATH_DATE"
+        />
+
+        <property
+            name="vitalStatus"
+            type="string"
+            update="true"
+            insert="true"
+            column="VITAL_STATUS"
+            length="50"
+        />
+
         <set
             name="participantMedicalIdentifierCollection"
             table="CATISSUE_PART_MEDICAL_ID"
