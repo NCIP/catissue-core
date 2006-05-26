@@ -18,6 +18,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.Vector;
 
 import edu.wustl.catissuecore.domain.Site;
@@ -1559,17 +1560,197 @@ public class StorageContainerBizLogic extends DefaultBizLogic
         return true;
     }
     
-//    public static void main(String[] args)
-//    {
-//        Vector v = new Vector();
-//        
-//        TreeNodeImpl tree = new TreeNodeImpl(new Long(1),"value","type");
-//        System.out.println("v.contains(tree)..........................."+v.contains(tree));
-//        if (v.contains(tree) == false)
-//        {
-//            v.add(tree);
-//        }
-//        
-//        System.out.println("v size "+v.size());
-//    }
+	// TODO Write the proper business logic to return an appropriate list of containers.
+    public List getStorageContainerList() throws DAOException
+    {
+    	String sourceObjectName = StorageContainer.class.getName();
+    	String[] displayNameFields = {Constants.SYSTEM_IDENTIFIER};
+    	String valueField = Constants.SYSTEM_IDENTIFIER;
+
+    	List list = getList(sourceObjectName, displayNameFields, valueField, true);
+    	return list;
+    }
+    
+    /**
+     * This functions returns a double dimensional boolean array which tells the availablity of 
+     * storage positions of particular container. True - Available. False - Not Available.
+     * @param container The container.
+     * @return Returns a double dimensional boolean array of position availablity.
+     * @throws DAOException
+     */
+    public boolean[][] getAvailablePositions(StorageContainer container) throws DAOException
+    {
+    	final int dimX = container.getStorageContainerCapacity().getOneDimensionCapacity().intValue() + 1;
+    	final int dimY = container.getStorageContainerCapacity().getTwoDimensionCapacity().intValue() + 1;
+    	boolean [][] positions = new boolean[dimX][dimY];
+    	
+    	//Initializing the array
+    	for(int i=0;i<dimX;i++)
+    	{
+    		for(int j=0;j<dimY;j++)
+    		{
+    			positions[i][j] = true;
+    		}
+    	}
+    	
+    	//Retrieving all the occupied positions by child containers
+    	String sourceObjectName = StorageContainer.class.getName();
+    	String[] selectColumnName = {"positionDimensionOne",
+                	"positionDimensionTwo"};
+    	String[] whereColumnName = {"parentContainer"};
+        String[] whereColumnCondition = {"="};
+        Object[] whereColumnValue = {container.getSystemIdentifier()};
+        
+        List list = retrieve(sourceObjectName,selectColumnName,whereColumnName,whereColumnCondition,whereColumnValue,null);
+        
+        if(!list.isEmpty())
+        {
+        	int x,y;
+        	
+        	for(int i=0;i<list.size();i++)
+        	{
+        		Object [] object = (Object[])list.get(i);
+        		x = Integer.parseInt(object[0].toString());
+        		y = Integer.parseInt(object[1].toString());
+        		
+        		positions[x][y] = false;
+        	}
+        }
+        
+        //Retrieving all the occupied positions by specimens
+        sourceObjectName = Specimen.class.getName();
+    	whereColumnName[0] = "storageContainer";
+    	
+    	list = retrieve(sourceObjectName,selectColumnName,whereColumnName,whereColumnCondition,whereColumnValue,null);
+    	
+    	if(!list.isEmpty())
+    	{   		
+    		int x,y;
+        	
+        	for(int i=0;i<list.size();i++)
+        	{
+        		Object [] object = (Object[])list.get(i);
+        		x = Integer.parseInt(object[0].toString());
+        		y = Integer.parseInt(object[1].toString());
+        		
+        		positions[x][y] = false;
+        	}
+    	}
+    	
+    	return positions;
+    }
+    
+    /**
+     * This functions returns a double dimensional boolean array which tells the availablity of 
+     * storage positions of particular container. True - Available. False - Not Available. 
+     * @param containerId The container identifier.
+     * @return Returns a double dimensional boolean array of position availablity.
+     * @throws DAOException
+     */
+    public boolean[][] getAvailablePositions(String containerId) throws DAOException
+	{
+    	List list = retrieve(StorageContainer.class.getName(),Constants.SYSTEM_IDENTIFIER,new Long(containerId));
+    	
+    	if(list != null)
+    	{
+    		StorageContainer container = (StorageContainer)list.get(0);
+    		return getAvailablePositions(container);
+    	}
+    	else
+    	{
+    		return new boolean[0][0];
+    	}
+	}
+    
+    /**
+     * This functions returns a map of available rows vs. available columns.
+     * @param container The container.
+     * @return Returns a map of available rows vs. available columns.
+     * @throws DAOException
+     */
+    public Map getAvailablePositionMap(StorageContainer container) throws DAOException
+    {
+    	Map map = new TreeMap();
+    	boolean [][] availablePosistions = getAvailablePositions(container);
+    	
+    	for(int x=1;x<availablePosistions.length;x++)
+    	{
+    		List list = new ArrayList();
+    		
+    		for(int y=1;y<availablePosistions[x].length;y++)
+    		{
+    			if(availablePosistions[x][y])
+    			{
+    				list.add(new Integer(y));
+    			}
+    		}
+    		
+    		if(!list.isEmpty())
+    		{
+    			Integer xObj = new Integer(x);
+    			map.put(xObj,list);
+    		}
+    	}
+    	
+    	return map;
+    }
+    
+    /**
+     * This functions returns a map of available rows vs. available columns.
+     * @param containerId The container identifier.
+     * @return Returns a map of available rows vs. available columns.
+     * @throws DAOException
+     */
+    public Map getAvailablePositionMap(String containerId) throws DAOException
+	{
+    	List list = retrieve(StorageContainer.class.getName(),Constants.SYSTEM_IDENTIFIER,new Long(containerId));
+    	
+    	if(list != null)
+    	{
+    		StorageContainer container = (StorageContainer)list.get(0);
+    		return getAvailablePositionMap(container);
+    	}
+    	else
+    	{
+    		return new TreeMap();
+    	}
+	}
+    
+    /**
+     * This functions returns a map of allocated containers vs. their respective free locations.
+     * @return Returns a map of allocated containers vs. their respective free locations.
+     * @throws DAOException
+     */
+    public Map getAllocatedContainerMap() throws DAOException
+    {
+    	/*
+    	 A code snippet inside the commented block should actually be replaced by the
+    	 code to get the allocated containers of specific collection protocol
+    	 */
+    	String [] selectedColumns = {Constants.SYSTEM_IDENTIFIER};
+    	List list = retrieve(StorageContainer.class.getName(),selectedColumns);
+    	String [] containerIdArray = new String[list.size()];
+    	
+    	for(int i=0;i<containerIdArray.length;i++)
+    	{
+    		Object object = (Object)list.get(i);
+    		containerIdArray[i] = object.toString();
+    	}
+    	/********************************************************************/
+    	
+    	Map containerMap = new TreeMap();
+    	
+    	for(int i=0;i<containerIdArray.length;i++)
+    	{
+    		Map positionMap = getAvailablePositionMap(containerIdArray[i]);
+    		    		
+    		if(!positionMap.isEmpty())
+    		{
+    			Integer id = new Integer(containerIdArray[i]);
+    			containerMap.put(id,positionMap);
+    		}
+    	}
+    	
+    	return containerMap;
+    }
 }
