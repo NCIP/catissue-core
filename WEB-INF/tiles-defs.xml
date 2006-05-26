@@ -798,4 +798,9 @@
 	</definition>
 	<!-- Help tab pages definitions End -->
 	
+	<!-- CREATE SPECIMEN -->
+	<definition name=".catissuecore.aliquotDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/Aliquots.jsp" />
+	</definition>
+	
 </tiles-definitions>
