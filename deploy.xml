@@ -2,7 +2,7 @@
 
 <!--Ant Script for create Build for caTISSUE Core-->
 
-<project name="caTissue Core Installation" default="Deploy">
+<project name="caTissue Core Installation" default="deploy">
 	
 	<!--define require dir and Properties -->	
 	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
@@ -11,7 +11,7 @@
 	  </classpath>
 	</taskdef>
 
-	<property file="caTISSUEInstall.properties"/>
+	<property file="caTissueInstall.properties"/>
 	
 	<property name="base.dir" value="."/>
 	<property name="temp.dir" value="./tempCatissuecore"/>
@@ -75,7 +75,7 @@
 				<fail message="The property 'database.username' can not be empty"/>
 			</then>
 		</if>			
-<!-- Mandar 17May06 check for first user -->
+		<!-- Mandar 17May06 check for first user -->
 		<if>
 			<equals arg1="" arg2="${first.admin.department}"/>
 			<then>
@@ -125,7 +125,7 @@
  	</target>
 	
 	<!--Modify Configuration such as Session Timeout, Admin details and JBoss server port-->
-	<target name="ConfigureWar">
+	<target name="configure_war">
 		<echo message="Modifying caTissueCore Configuration File..."/>
 		
 		<replace file="${temp.dir}/catissuecore/WEB-INF/web.xml"> 
@@ -140,7 +140,7 @@
 	
 	
 	<!--Modify Adopter's Institution images, URL of Institution website and Contact Us, Privacy Notice, Disclaimer, Accessibility Text Files-->
-	<target name="AdopterConfiguration">
+	<target name="adopter_configuration">
 		<echo message="Updating Site Images"/>
 		<copy todir="${temp.dir}/catissuecore/images" overwrite="true">
 			<fileset dir="${base.dir}/images"/>
@@ -150,16 +150,16 @@
 	
 	
 	<!--Modify Configuration For MySQL-->
-	<target name="mysqlConfig">
+	<target name="mysql_config">
 		<echo message="Modifying caTISSUECore MySQL specific Configuration File..."/>
 		
-		<replace dir="${temp.dir}/catissuecore-properties" propertyfile="caTISSUEInstall.properties"> 
+		<replace dir="${temp.dir}/catissuecore-properties" propertyfile="caTissueInstall.properties"> 
 	  		<include name="upt.hibernate.cfg.xml"/>
 			<include name="catissuecore.hibernate.cfg.xml"/>
 			<replacefilter token="@@dialect@@" value="${mysql.dialect.string}"/>
 		</replace>
 		
-		<replace dir="${temp.dir}" propertyfile="caTISSUEInstall.properties"> 
+		<replace dir="${temp.dir}" propertyfile="caTissueInstall.properties"> 
 			<include name="catissuecore-ds.xml"/>
 			<replacefilter token="@@databaseurl@@" value="jdbc:mysql://${database.host}:${database.port}/${database.name}"/>
 			<replacefilter token="@@username@@" value="${database.username}"/>
@@ -168,7 +168,7 @@
 		</replace>
 		
 		<!-- Configuring CSM hibernate property File-->
-		<replace dir="${csm.dir}/WEB-INF" propertyfile="caTISSUEInstall.properties"> 
+		<replace dir="${csm.dir}/WEB-INF" propertyfile="caTissueInstall.properties"> 
 			<include name="classes/hibernate.properties"/>
 			<include name="conf/hibernate.properties"/>
 			<replacefilter 
@@ -194,16 +194,16 @@
 	</target>
 	
 	<!--Modify Configuration For Oracle-->
-	<target name="oracleConfig">
+	<target name="oracle_config">
 		<echo message="Modifying caTISSUECore Oracle specific Configuration File..."/>
-		<replace dir="${temp.dir}/catissuecore-properties" propertyfile="caTISSUEInstall.properties"> 
+		<replace dir="${temp.dir}/catissuecore-properties" propertyfile="caTissueInstall.properties"> 
 	  		<include name="upt.hibernate.cfg.xml"/>
 			<include name="catissuecore.hibernate.cfg.xml"/>
 			<replacefilter token="@@dialect@@" value="${oracle.dialect.string}"/>
 		</replace>
 		
 		<!-- Configuring Data Source File-->
-		<replace dir="${temp.dir}" propertyfile="caTISSUEInstall.properties"> 
+		<replace dir="${temp.dir}" propertyfile="caTissueInstall.properties"> 
 			<include name="catissuecore-ds.xml"/>
 			<replacefilter token="@@databaseurl@@" value="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}"/>
 			<replacefilter token="@@username@@" value="${database.username}"/>
@@ -212,7 +212,7 @@
 		</replace>
 
 		<!-- Configuring CSM hibernate property File-->
-		<replace dir="${csm.dir}/WEB-INF" propertyfile="caTISSUEInstall.properties"> 
+		<replace dir="${csm.dir}/WEB-INF" propertyfile="caTissueInstall.properties"> 
 			<include name="classes/hibernate.properties"/>
 			<include name="conf/hibernate.properties"/>
 			<replacefilter 
@@ -240,7 +240,7 @@
 	</target>
 	
 	<!--Buid New WAR File-->
-	<target name="BuildWar">
+	<target name="build_war">
 		<echo message="Creating New Web Application Archieve File..."/>
 		<delete file="${temp.dir}/catissuecore.war"/>
 		<war destfile="${temp.dir}/catissuecore.war" webxml="${temp.dir}/catissuecore/WEB-INF/web.xml">
@@ -263,7 +263,7 @@
 	</target>
 	
 	<!--Copy WAR and Configuration Files to JBOSS Directory-->
-	<target name="CopyFiles">
+	<target name="copy_files">
 		<echo message="Copying caTISSUECore Application Components..."/>
 
 		<copy todir="${jboss.home.dir}/server/default/catissuecore-properties" overwrite="true">
@@ -297,43 +297,43 @@
   	</target>
 	
 	<!--Target for Deployment -->
-	<target name="Deploy" >
+	<target name="deploy" >
 		<antcall target="assert"/>
 		<delete dir="${temp.dir}"/>
 		<antcall target="init"/>
-		<antcall target="ConfigureWar"/>
-		<antcall target="AdopterConfiguration"/>
+		<antcall target="configure_war"/>
+		<antcall target="adopter_configuration"/>
 		<if>
 			<equals arg1="mysql" arg2="${database.type}"/>		
 			<then>
-				<antcall target="mysqlConfig"/>
+				<antcall target="mysql_config"/>
 			</then>
 			<elseif>	
 				<equals arg1="oracle" arg2="${database.type}"/>		
 				<then>
-					<antcall target="oracleConfig"/>
+					<antcall target="oracle_config"/>
 				</then>
 			</elseif>
 		</if>
-		<antcall target="BuildWar"/>
-		<antcall target="CopyFiles"/>
-		<antcall target="SendMail"/>
+		<antcall target="build_war"/>
+		<antcall target="copy_files"/>
+		<antcall target="send_mail"/>
 		<delete dir="${temp.dir}"/>
 	</target>
 	
 	<!--Target for Database Creation-->
-	<target name="DBInitialize">
+	<target name="db_initialize">
 		<antcall target="firstUser"/>
 		
 		<if>
 			<equals arg1="mysql" arg2="${database.type}"/>		
 			<then>
-				<antcall target="DBInitialized_MySQL"/>
+				<antcall target="db_initialize_mysql"/>
 			</then>
 			<elseif>	
 				<equals arg1="oracle" arg2="${database.type}"/>		
 				<then>
-					<antcall target="DBInitialized_Oracle"/>
+					<antcall target="db_initialize_oracle"/>
 				</then>
 			</elseif>
 			<else>
@@ -343,13 +343,13 @@
 	</target>
 
 	<!--Target call for both Deployment and Database Creation-->
-	<target name="Deploy-all">
-		<antcall target="Deploy"/>
-		<antcall target="DBInitialize"/>
+	<target name="deploy-all">
+		<antcall target="deploy"/>
+		<antcall target="db_initialize"/>
 	</target>
 
 	<!--MySQL Database Creation -->
-	<target name="DBInitialized_MySQL">
+	<target name="db_initialize_mysql">
 		<echo message="Initializing MySQL Database for caTISSUECore Application..."/>
 		<sql
 			driver="${mysql.driver.string}"
@@ -374,7 +374,7 @@
   	</target>
 	
 	<!--Oracle Database Creation -->
-	<target name="DBInitialized_Oracle">
+	<target name="db_initialize_oracle">
 		<echo message="Initializing Oracle Database for caTISSUECore Application..."/>
 		<sql 
 			driver="${oracle.driver.string}"
@@ -431,7 +431,7 @@
 		</sql>
 	</target>
 	
-	<target name="SendMail">
+	<target name="send_mail">
 		<echo message="Sending mail to: ${email.administrative.emailAddress}"/>
 		<echo message="Sending mail from: ${email.sendEmailFrom.emailAddress}"/>
 		<mail mailhost="${email.mailServer}" subject="caTissue Core Successfully Deployed" encoding="plain"
@@ -462,7 +462,7 @@ Thanking You,
 			Please check the Email of ${first.admin.emailAddress}.
 			If the Deployment mail is not received please check your 
 			email.administrative.emailAddress and email.sendEmailFrom.emailAddress 
-			properties in caTISSUEInstall.properties and Re-deploy the Application.
+			properties in caTissueInstall.properties and Re-deploy the Application.
 		</echo>	
 	</target>
 	
@@ -488,7 +488,7 @@ Thanking You,
 		<echo message="Modifying caTISSUECore SQL file for user information..."/>
 		
 		<copy file="${common.sql.dir}/createUser.sql" todir="${temp.dir}" overwrite="true"/>
-			<replace dir="${temp.dir}" propertyfile="caTISSUEInstall.properties"> 
+			<replace dir="${temp.dir}" propertyfile="caTissueInstall.properties"> 
 				<include name="createUser.sql"/>
 				<replacefilter token="@@first.admin.department@@" value="${first.admin.department}"/>
 				<replacefilter token="@@first.admin.institution@@" value="${first.admin.institution}"/>
