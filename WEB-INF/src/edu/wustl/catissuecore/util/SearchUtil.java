@@ -229,17 +229,19 @@ public class SearchUtil
 			    break;
 			    
 			case Constants.PARTICIPANT_FORM_ID :
-				searchFieldData = new SearchFieldData[10];
+				searchFieldData = new SearchFieldData[12];
 		        searchFieldData[0] = initSearchUIData(SearchUtil.STRING, "user.lastName","Participant","LAST_NAME","lastName",Constants.STRING_OPERATORS,"","");
 		        searchFieldData[1] = initSearchUIData(SearchUtil.STRING,"user.firstName","Participant","FIRST_NAME","firstName",Constants.STRING_OPERATORS,"","");
 		        searchFieldData[2] = initSearchUIData(SearchUtil.STRING, "participant.middleName","Participant","MIDDLE_NAME","middleName",Constants.STRING_OPERATORS,"","");
-		        searchFieldData[3] = initSearchUIData(SearchUtil.DATE,   "participant.birthDate","Participant","BIRTH_DATE","birthDate",Constants.DATE_NUMERIC_OPERATORS,"","");
-		        searchFieldData[4] = initSearchUIData(SearchUtil.STRING, "participant.gender","Participant","GENDER","gender",Constants.ENUMERATED_OPERATORS,Constants.GENDER_LIST,"");
-		        searchFieldData[5] = initSearchUIData(SearchUtil.STRING, "participant.genotype","Participant","GENOTYPE","genotype",Constants.ENUMERATED_OPERATORS,Constants.GENOTYPE_LIST,"");
-		        searchFieldData[6] = initSearchUIData(SearchUtil.STRING, "participant.race","Participant","RACE","race",Constants.ENUMERATED_OPERATORS,Constants.RACELIST,"");
-		        searchFieldData[7] = initSearchUIData(SearchUtil.STRING, "participant.ethnicity","Participant","ETHNICITY","ethnicity",Constants.ENUMERATED_OPERATORS,Constants.ETHNICITY_LIST,"");
-		        searchFieldData[8] = initSearchUIData(SearchUtil.STRING, "participant.socialSecurityNumber","Participant","SOCIAL_SECURITY_NUMBER","ssn",Constants.STRING_OPERATORS,"","");
-		        searchFieldData[9] = initSearchUIData(SearchUtil.STRING,"advanceQuery.specimenCollectionGroup.medicalRecordNumber","ParticipantMedicalId","MEDICAL_RECORD_NUMBER","medicalRecordNo",Constants.STRING_OPERATORS,"","");
+		        searchFieldData[3] = initSearchUIData(SearchUtil.DATE,   "participant.birthDate","Participant","BIRTH_DATE","birthDate",Constants.DATE_NUMERIC_OPERATORS,"","");		        
+		        searchFieldData[4] = initSearchUIData(SearchUtil.DATE,   "participant.deathDate","Participant","DEATH_DATE","deathDate",Constants.DATE_NUMERIC_OPERATORS,"","");
+		        searchFieldData[5] = initSearchUIData(SearchUtil.STRING,   "participant.vitalStatus","Participant","VITAL_STATUS","vitalStatus",Constants.STRING_OPERATORS,"","");		        
+		        searchFieldData[6] = initSearchUIData(SearchUtil.STRING, "participant.gender","Participant","GENDER","gender",Constants.ENUMERATED_OPERATORS,Constants.GENDER_LIST,"");
+		        searchFieldData[7] = initSearchUIData(SearchUtil.STRING, "participant.genotype","Participant","GENOTYPE","genotype",Constants.ENUMERATED_OPERATORS,Constants.GENOTYPE_LIST,"");
+		        searchFieldData[8] = initSearchUIData(SearchUtil.STRING, "participant.race","Participant","RACE","race",Constants.ENUMERATED_OPERATORS,Constants.RACELIST,"");
+		        searchFieldData[9] = initSearchUIData(SearchUtil.STRING, "participant.ethnicity","Participant","ETHNICITY","ethnicity",Constants.ENUMERATED_OPERATORS,Constants.ETHNICITY_LIST,"");
+		        searchFieldData[10] = initSearchUIData(SearchUtil.STRING, "participant.socialSecurityNumber","Participant","SOCIAL_SECURITY_NUMBER","ssn",Constants.STRING_OPERATORS,"","");
+		        searchFieldData[11] = initSearchUIData(SearchUtil.STRING, "advanceQuery.specimenCollectionGroup.medicalRecordNumber","ParticipantMedicalId","MEDICAL_RECORD_NUMBER","medicalRecordNo",Constants.STRING_OPERATORS,"","");
 		        break;
 		        
 			case Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID :
