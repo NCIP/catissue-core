@@ -118,11 +118,11 @@
 						<bean:message key="buttons.submit"/>
 					</html:submit>
 				</td>
-				<td>
-					<html:reset styleClass="actionButton">
-						<bean:message key="buttons.reset"/>
-					</html:reset>
-				</td> 
+					<%-- td>
+						<html:reset styleClass="actionButton" >
+							<bean:message  key="buttons.reset" />
+						</html:reset>
+					</td --%>
 			</tr>
 			</table>				
 			<!-- action buttons end -->

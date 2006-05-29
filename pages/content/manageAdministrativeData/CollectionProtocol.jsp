@@ -884,11 +884,11 @@ function insRow(subdivtag,iCounter,blockCounter)
 							</html:button>
 						</td>
 						
-							<td>
-							<html:reset styleClass="actionButton" >
-								<bean:message  key="buttons.reset" />
-							</html:reset>
-						</td>
+							<%-- td>
+								<html:reset styleClass="actionButton" >
+									<bean:message  key="buttons.reset" />
+								</html:reset>
+							</td --%>
 					</tr>
 				</table>  
 				<!-- table 6 end -->
