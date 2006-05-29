@@ -94,15 +94,18 @@ public class AliquotAction extends BaseAction //SecureAction
 		DefaultBizLogic bizLogic = BizLogicFactory.getDefaultBizLogic();
 		String specimenId = form.getSpecimenId();
 		List specimenList = new ArrayList();
+		String errorString = "";
 		
-		if(!specimenId.equals("-1"))
+		if(form.getCheckedButton().equals("1"))
 		{
 			specimenList = bizLogic.retrieve(Specimen.class.getName(),Constants.SYSTEM_IDENTIFIER,new Long(specimenId));
+			errorString = Constants.SYSTEM_IDENTIFIER;
 		}
 		else
 		{
 			String barcode = form.getBarcode().trim();
 			specimenList = bizLogic.retrieve(Specimen.class.getName(),"barcode",barcode);
+			errorString = "barcode";
 		}
 		
 		if(specimenList.isEmpty())
@@ -114,7 +117,7 @@ public class AliquotAction extends BaseAction //SecureAction
 				errors = new ActionErrors();
 			}
 			
-			errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.notExists",Constants.SPECIMEN));
+			errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("aliquots.specimen.notExists",errorString));
 	        saveErrors(request,errors);
 	        
 	        return Constants.PAGEOF_ALIQUOT;

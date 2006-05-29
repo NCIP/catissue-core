@@ -126,6 +126,20 @@
 			document.forms[0].action = action;
 			document.forms[0].submit();
 		}
+		
+		function onRadioButtonClick(element)
+		{
+			if(element.value == 1)
+			{
+				document.forms[0].specimenId.disabled = false;
+				document.forms[0].barcode.disabled = true;
+			}
+			else
+			{
+				document.forms[0].barcode.disabled = false;
+				document.forms[0].specimenId.disabled = true;
+			}
+		}
 	</script>
 </head>
 
@@ -145,46 +159,76 @@
 	</tr>
 	
 	<tr>
-		<td class="formTitle" height="20" colspan="5">
+		<td class="formTitle" height="20" colspan="7">
 			<bean:message key="aliquots.createTitle"/>
 		</td>
 	</tr>
 	
 	<tr>
-		<td class="formRequiredLabelBoth">
-			<bean:message key="createSpecimen.parent"/>
+		<td class="formRequiredNoticeNoBottom" width="5">*</td>
+		<td class="formRequiredLabelRightBorder">
+			<html:radio styleClass="" styleId="checkedButton" property="checkedButton" value="1" onclick="onRadioButtonClick(this)">
+				<label for="parentId">
+					<bean:message key="createSpecimen.parent"/>
+				</label>
+			</html:radio>
 		</td>
 		<td class="formField">
-			<html:select property="specimenId" styleClass="formField" styleId="specimenId" size="1">
-				<html:options collection="<%=Constants.SPECIMEN_ID_LIST%>" labelProperty="name" property="value"/>
-			</html:select>
+			<logic:equal name="aliquotForm" property="checkedButton" value="1">
+				<html:select property="specimenId" styleClass="formField" styleId="specimenId" size="1">
+					<html:options collection="<%=Constants.SPECIMEN_ID_LIST%>" labelProperty="name" property="value"/>
+				</html:select>
+			</logic:equal>
+			
+			<logic:equal name="aliquotForm" property="checkedButton" value="2">
+				<html:select property="specimenId" styleClass="formField" styleId="specimenId" size="1" disabled="true">
+					<html:options collection="<%=Constants.SPECIMEN_ID_LIST%>" labelProperty="name" property="value"/>
+				</html:select>
+			</logic:equal>
 		</td>
+		<td class="formRequiredLabelBoth" width="5">*</td>
 		<td class="formRequiredLabel">
-			<bean:message key="specimen.barcode"/>
-		</td>
-		<td class="formField">
-			<html:text styleClass="formFieldSized10"  maxlength="50"  size="30" styleId="barcode" property="barcode"/>
-		</td>
-		<td class="formField" rowspan="2">
-			<html:button styleClass="actionButton" property="submitPage" onclick="onCreate()">
-				<bean:message key="buttons.create"/>
-			</html:button>
-		</td>
-		
-	</tr>
-	
-	<tr>
-		<td class="formRequiredLabelBoth">*
 			<bean:message key="aliquots.noOfAliquots"/>
 		</td>
 		<td class="formField">
 			<html:text styleClass="formFieldSized5"  maxlength="50"  size="30" styleId="noOfAliquots" property="noOfAliquots"/>
 		</td>
-		<td class="formLabel">
+	</tr>
+	
+	<tr>
+		<td class="formRequiredNotice" width="5">&nbsp;</td>
+		<td class="formRequiredLabel">
+			<html:radio styleClass="" styleId="checkedButton" property="checkedButton" value="2" onclick="onRadioButtonClick(this)">
+				<label for="barcode">
+					<bean:message key="specimen.barcode"/>
+				</label>
+			</html:radio>
+		</td>
+		<td class="formField">
+			<logic:equal name="aliquotForm" property="checkedButton" value="1">
+				<html:text styleClass="formFieldSized10"  maxlength="50"  size="30" styleId="barcode" property="barcode" disabled="true"/>
+			</logic:equal>
+			
+			<logic:equal name="aliquotForm" property="checkedButton" value="2">
+				<html:text styleClass="formFieldSized10"  maxlength="50"  size="30" styleId="barcode" property="barcode"/>
+			</logic:equal>
+		</td>
+		<td class="formLabel" colspan="2">
 			<bean:message key="aliquots.qtyPerAliquot"/>
 		</td>
 		<td class="formField">
 			<html:text styleClass="formFieldSized5"  maxlength="50"  size="30" styleId="quantityPerAliquot" property="quantityPerAliquot"/>
+		</td>
+	</tr>
+	
+	<tr>
+		<td colspan="5">
+			&nbsp;
+		</td>
+		<td align="right">
+			<html:button styleClass="actionButton" property="submitPage" onclick="onCreate()">
+				<bean:message key="buttons.create"/>
+			</html:button>
 		</td>
 	</tr>
 	</table>
@@ -404,7 +448,7 @@
 				&nbsp; <%=unit%>
 			</td>
 			<td class="formField">
-				<html:text styleClass="formFieldSized10"  maxlength="50"  size="30" styleId="barcode" property="<%=barKey%>" disabled="false"/>
+				<html:text styleClass="formFieldSized10"  maxlength="50"  size="30" styleId="barcodes" property="<%=barKey%>" disabled="false"/>
 			</td>
 			<td class="formField" nowrap>
 				<html:select property="<%=containerKey%>" styleClass="formFieldSized5" styleId="<%=containerStyleId%>" size="1" onchange="<%=onChangeContainerId%>">
@@ -470,11 +514,11 @@
 				<bean:message key="buttons.submit"/>
 			</html:submit>
 		</td>
-		<td>
+		<%--td>
 			<html:reset styleClass="actionButton">
 				<bean:message key="buttons.reset"/>
 			</html:reset>
-		</td> 
+		</td--%> 
 	</tr>
 	</table>				
 	<!-- action buttons end -->

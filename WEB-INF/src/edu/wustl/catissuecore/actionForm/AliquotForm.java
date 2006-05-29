@@ -98,6 +98,11 @@ public class AliquotForm extends AbstractActionForm
     private String barcode;
     
     /**
+	 * Radio button to choose site/parentContainer.
+	 */
+	private String checkedButton = "1";
+    
+    /**
      * A map that contains distinguished fields (quantity,barcode,location) per aliquot.
      */
     private Map aliquotMap = new HashMap();
@@ -374,10 +379,20 @@ public class AliquotForm extends AbstractActionForm
      {
          ActionErrors errors = new ActionErrors();
          Validator validator = new Validator();
-         
-         if(!validator.isValidOption(specimenId) && barcode.trim().length() == 0)
+                  
+         if(checkedButton.equals("1"))
          {
-         	errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("aliquots.errors.barcodeId.required"));
+         	if(!validator.isValidOption(specimenId))
+         	{
+         		errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.required",ApplicationProperties.getValue("createSpecimen.parent")));
+         	}
+         }
+         else
+         {
+         	if(barcode == null || barcode.trim().length() == 0)
+         	{
+         		errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.required",ApplicationProperties.getValue("specimen.barcode")));
+         	}
          }
          
          if(!validator.isNumeric(noOfAliquots))
@@ -447,4 +462,24 @@ public class AliquotForm extends AbstractActionForm
     {
         this.barcode = barcode;
     }
+    
+    /**
+     * Returns the value of selected radio button. 
+     * @return String the value of selected radio button.
+     * @see #setCheckedButton(String)
+     */
+	public String getCheckedButton()
+	{
+		return checkedButton;
+	}
+
+	/**
+     * Returns the value of selected radio button. 
+     * @param checkedButton The value of selected radio button.
+     * @see #getCheckedButton()
+     */
+	public void setCheckedButton(String checkedButton)
+	{
+		this.checkedButton = checkedButton;
+	}
 }
