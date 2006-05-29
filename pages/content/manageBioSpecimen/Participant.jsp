@@ -588,11 +588,11 @@ tr#hiddenCombo
 								</logic:notEqual>
 								
 							   	
-							   	<td colspan="3">
+							   	<%-- td colspan="3">
 									<html:reset styleClass="actionButton">
 										<bean:message key="buttons.reset"/>
 									</html:reset>
-								</td> 
+								</td --%> 
 								
 								<td>
 						   			<html:submit styleClass="actionButton" disabled="true">

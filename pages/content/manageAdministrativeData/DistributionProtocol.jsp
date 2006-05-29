@@ -638,11 +638,11 @@ function insRow(subdivtag)
 						   	</html:button>
 						</td>
 
-						<td>
+						<%-- td>
 							<html:reset styleClass="actionButton" >
 								<bean:message  key="buttons.reset" />
 							</html:reset>
-						</td>
+						</td --%>
 					</tr>
 				</table>
 				<!-- table 6 end -->

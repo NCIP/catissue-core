@@ -46,9 +46,9 @@
 								<td>
 									<html:submit styleClass="actionButton" value="Submit" />
 								</td>
-								<td>
+								<%-- td>
 									<html:reset styleClass="actionButton" />
-								</td>
+								</td --%>
 							</tr>
 						</table>
 						<!-- action buttons end -->

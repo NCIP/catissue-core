@@ -175,7 +175,7 @@
 					<td>
 						<html:submit styleClass="actionButton" value="Submit" onclick="<%=changeAction%>" />
 					</td>
-					<td><html:reset styleClass="actionButton"/></td> 
+					<%-- td><html:reset styleClass="actionButton"/></td --%> 
 				</tr>
 			</table>
 			<!-- action buttons end -->

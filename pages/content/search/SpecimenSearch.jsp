@@ -357,9 +357,9 @@
 			<bean:message key="buttons.addRule"/>
 		</html:submit>
 		&nbsp;&nbsp;
-		<html:button property="resetQuery" styleClass="actionButton" onclick="">
+		<%-- html:button property="resetQuery" styleClass="actionButton" onclick="">
 			<bean:message key="buttons.resetQuery"/>
-		</html:button>
+		</html:button --%>
 	</td>
 </tr>
 
@@ -840,9 +840,9 @@
 			<bean:message key="buttons.addRule"/>
 		</html:submit>
 		&nbsp;&nbsp;
-		<html:button property="resetQuery" styleClass="actionButton" onclick="">
+		<%-- html:button property="resetQuery" styleClass="actionButton" onclick="">
 			<bean:message key="buttons.resetQuery"/>
-		</html:button>
+		</html:button --%>
 		
 	</td>
 	<td>

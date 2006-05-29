@@ -63,9 +63,9 @@
 			<bean:message key="buttons.search"/>
 		</html:button--%>
 		&nbsp;&nbsp;
-		<html:reset styleClass="actionButton">
+		<%-- html:reset styleClass="actionButton">
 			<bean:message key="buttons.resetQuery"/>
-		</html:reset>
+		</html:reset --%>
 	</td>
 </tr>
 
@@ -168,9 +168,9 @@
 		</html:button--%>
 		&nbsp;&nbsp;
 		<%-- html:button property="resetQuery" styleClass="actionButton" onclick="" --%>
-		<html:reset styleClass="actionButton">
+		<%-- html:reset styleClass="actionButton">
 			<bean:message key="buttons.resetQuery"/>
-		</html:reset>
+		</html:reset --%>
 	</td>
 </tr>
 

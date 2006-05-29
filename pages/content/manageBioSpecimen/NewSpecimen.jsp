@@ -889,11 +889,11 @@
 						   				</html:submit>
 						   			</td-->
 									
-									<td colspan="2">
-										<html:reset styleClass="actionButton">
-											<bean:message key="buttons.reset"/>
+									<%-- td>
+										<html:reset styleClass="actionButton" >
+											<bean:message  key="buttons.reset" />
 										</html:reset>
-									</td>
+									</td --%>
 									
 								</tr>
 							</table>

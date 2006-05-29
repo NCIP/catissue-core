@@ -438,12 +438,12 @@ function showDatafield(element,txtFieldID)
 									<bean:message  key="buttons.configure" />
 								</html:button>
 							</td>
-							<td>
+							<%-- td>
 								<%configAction = "window.location.href='"+Constants.SIMPLE_QUERY_INTERFACE_URL+"'";%>
 								<html:button styleClass="actionButton" property="resetButton" onclick="<%=configAction%>">
 									<bean:message  key="buttons.reset" />
 								</html:button>
-							</td>
+							</td --%>
 							<%if (Integer.parseInt(noOfRows) > 1){%>
 							<td>
 								<%String deleteAction = "decrementCounter();setPropertyValue('value(SimpleConditionsNode:"+(Integer.parseInt(noOfRows)-1)+"_Operator_operator)','');"+"callAction('SimpleQueryInterface.do?pageOf="+pageOf+"');"; %>

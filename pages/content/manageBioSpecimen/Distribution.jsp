@@ -565,7 +565,7 @@
 			<!-- Distributed item End here -->
 <!-- buttons -->
 		<tr>
-		  <td align="right" colspan="6">
+		  <td align="right" colspan="11">
 			<!-- action buttons begins -->
 			<%
         		String changeAction = "setFormAction('" + formName + "');";
@@ -596,7 +596,7 @@
 							<bean:message key="buttons.submit"/>
 						</html:button>
 					</td>
-					<td><html:reset styleClass="actionButton"/></td> 
+					<%-- td><html:reset styleClass="actionButton"/></td --%> 
 				</tr>
 			</table>
 			<!-- action buttons end -->

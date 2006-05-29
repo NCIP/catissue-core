@@ -134,11 +134,11 @@
 						   			<bean:message key="<%=editViewButton%>"/>
 						   		</html:submit>
 						   	</td>
-							<td>
+							<%-- td>
 								<html:reset styleClass="actionButton">
 									<bean:message key="buttons.export"/>
 								</html:reset>
-							</td>
+							</td --%>
 						</tr>
 					</table>
 					<!-- action buttons end -->

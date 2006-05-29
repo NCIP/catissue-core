@@ -300,9 +300,9 @@
 								<html:submit styleClass="actionButton" value="Submit" onclick="<%=changeAction%>" />
 							</td-->
 						   		
-							<td>
+							<%-- td>
 								<html:reset styleClass="actionButton" />
-							</td>
+							</td --%>
 						</tr>
 					</table>
 					<!-- action buttons end --></td>
