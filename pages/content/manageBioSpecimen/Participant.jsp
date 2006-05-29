@@ -362,21 +362,7 @@ tr#hiddenCombo
 						<a href="javascript:show_calendar('participantForm.deathDate',null,null,'MM-DD-YYYY');">
 							<img src="images\calendar.gif" width=24 height=22 border=0></a>
 					 </td>
-				 </tr> 
-				 
-				<%-- <tr>
-				 	<td class="formRequiredNotice" width="5">&nbsp;</td>
-					<td class="formLabel">
-				     	<label for="vitalStatus">
-				     		<bean:message key="participant.vitalStatus"/>
-				     	</label>
-				     </td>
-				     <td class="formField" colspan="2">
-				     	<html:text styleClass="formFieldSized" maxlength="50" size="30" styleId="vitalStatus" property="vitalStatus" readonly="<%=readOnlyForAll%>"/>
-				     </td>
-				 </tr>  --%>
-				 
-				 
+				 </tr> 			 
 				 
 				 <tr>
 					<td class="formRequiredNotice" width="5">&nbsp;</td>
