@@ -72,7 +72,8 @@
 	</property>
 
 	<property>
-		<name>app.contactUs.file</name>E:/Program_Files/jboss-4.0.0/server/default/catissuecore-properties/ContactUs.txt</value>
+		<name>app.contactUs.file</name>
+		<value>ContactUs.txt</value>
 	</property>
 
 	<property>
