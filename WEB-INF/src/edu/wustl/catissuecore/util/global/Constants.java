@@ -1068,6 +1068,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String PARTICIPANT_FIRST_NAME="First Name";
 	public static final String PARTICIPANT_MIDDLE_NAME="Middle Name";
 	public static final String PARTICIPANT_BIRTH_DATE="Birth Date";
+	public static final String PARTICIPANT_DEATH_DATE="Death Date";
 	public static final String PARTICIPANT_SOCIAL_SECURITY_NUMBER="SSN";
 	public static final String PARTICIPANT_PROBABLITY_MATCH="Probability";
 	
