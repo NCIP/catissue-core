@@ -43,7 +43,7 @@ public class ParticipantLookupAction extends BaseAction
 				.getFactory("edu.wustl.catissuecore.domain.DomainObjectFactory");
 		
 		//Creating the column list which is used in Data grid to display column headings
-		String[] columnHeaderList = new String[]{Constants.PARTICIPANT_SYSTEM_IDENTIFIER, Constants.PARTICIPANT_LAST_NAME,Constants.PARTICIPANT_FIRST_NAME,Constants.PARTICIPANT_MIDDLE_NAME,Constants.PARTICIPANT_BIRTH_DATE,Constants.PARTICIPANT_SOCIAL_SECURITY_NUMBER,Constants.PARTICIPANT_PROBABLITY_MATCH};
+		String[] columnHeaderList = new String[]{Constants.PARTICIPANT_SYSTEM_IDENTIFIER, Constants.PARTICIPANT_LAST_NAME,Constants.PARTICIPANT_FIRST_NAME,Constants.PARTICIPANT_MIDDLE_NAME,Constants.PARTICIPANT_BIRTH_DATE,Constants.PARTICIPANT_DEATH_DATE,Constants.PARTICIPANT_SOCIAL_SECURITY_NUMBER,Constants.PARTICIPANT_PROBABLITY_MATCH};
 		List ColumnList = new ArrayList();
 		
 		for (int i = 0; i < columnHeaderList.length; i++)
