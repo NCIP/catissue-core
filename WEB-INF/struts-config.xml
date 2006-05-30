@@ -829,6 +829,14 @@ PUBLIC
 			<forward name="failure" path="/NewSpecimen.do?operation=edit&amp;pageOf=pageOfNewSpecimen&amp;menuSelected=15"/>
 			<forward name="createNew" path="/CreateSpecimen.do?operation=add&amp;pageOf=&amp;menuSelected=15" />
 		</action>
+
+		<action path="/ViewNewSpecimenSPR"
+			type="edu.wustl.catissuecore.action.ViewLinkedDataAction"
+			name="newSpecimenForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path=".catissuecore.viewSurgicalPathologyReportDef"/>
+		</action>
 		<!--New Specimen Actions Ends-->
 		
 		<!--Create Specimen Actions Begin-->
@@ -2336,7 +2344,7 @@ PUBLIC
 	
 	<!-- AddNew Actions Begins -->
         <action path="/UserAddNew"
-			type="edu.wustl.catissuecore.action.AddNewAction"
+			type="edu.wustl.common.action.AddNewAction"
 			name="userForm"
 			validate="false"
 			scope="request">
@@ -2347,7 +2355,7 @@ PUBLIC
 		</action>
 
 		<action path="/SiteAddNew"
-			type="edu.wustl.catissuecore.action.AddNewAction"
+			type="edu.wustl.common.action.AddNewAction"
 			name="siteForm"
 			validate="false"
 			scope="request">
@@ -2356,7 +2364,7 @@ PUBLIC
 		</action>
 
 		<action path="/StorageContainerAddNew"
-			type="edu.wustl.catissuecore.action.AddNewAction"
+			type="edu.wustl.common.action.AddNewAction"
 			name="storageContainerForm"
 			validate="false"
 			scope="request">
@@ -2366,7 +2374,7 @@ PUBLIC
 		</action>
 
 		<action path="/CollectionProtocolAddNew"
-			type="edu.wustl.catissuecore.action.AddNewAction"
+			type="edu.wustl.common.action.AddNewAction"
 			name="collectionProtocolForm"
 			validate="false"
 			scope="request">
@@ -2375,7 +2383,7 @@ PUBLIC
 		</action>
 		
 		<action path="/DistributionProtocolAddNew"
-			type="edu.wustl.catissuecore.action.AddNewAction"
+			type="edu.wustl.common.action.AddNewAction"
 			name="distributionProtocolForm"
 			validate="false"
 			scope="request">
@@ -2383,7 +2391,7 @@ PUBLIC
 		</action>
 
 		<action path="/ParticipantRegistrationAddNew"
-			type="edu.wustl.catissuecore.action.AddNewAction"
+			type="edu.wustl.common.action.AddNewAction"
 			name="collectionProtocolRegistrationForm"
 			validate="false"
 			scope="request">
@@ -2391,7 +2399,7 @@ PUBLIC
 			<forward name="participant" path="/Participant.do?operation=add&amp;pageOf=pageOfParticipant&amp;menuSelected=12" />
 		</action>
 		<action path="/SpecimenCollectionGroupAddNew"
-			type="edu.wustl.catissuecore.action.AddNewAction"
+			type="edu.wustl.common.action.AddNewAction"
 			name="specimenCollectionGroupForm"
 			validate="false"
 			scope="request">
@@ -2401,7 +2409,7 @@ PUBLIC
 		</action>
 		
 		<action path="/NewSpecimenAddNew"
-			type="edu.wustl.catissuecore.action.AddNewAction"
+			type="edu.wustl.common.action.AddNewAction"
 			name="newSpecimenForm"
 			validate="false"
 			scope="request">
@@ -2409,7 +2417,7 @@ PUBLIC
 		</action>
 
 		<action path="/DistributionAddNew"
-			type="edu.wustl.catissuecore.action.AddNewAction"
+			type="edu.wustl.common.action.AddNewAction"
 			name="distributionForm"
 			validate="false"
 			scope="request">
