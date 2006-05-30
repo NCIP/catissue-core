@@ -1790,7 +1790,7 @@ PUBLIC
 		</action>
 		
 		<action path="/SimpleQueryInterfaceValidate"
-			type="edu.wustl.catissuecore.action.SimpleQueryInterfaceAction"
+			type="edu.wustl.common.action.SimpleQueryInterfaceAction"
 			name="simpleQueryInterfaceForm"
 			validate="true"
 			input="/SimpleQueryInterface.do"
@@ -2224,7 +2224,7 @@ PUBLIC
 		</action>
 	
 		<action path="/AdvanceQuery"
-			type="edu.wustl.catissuecore.action.SimpleQueryInterfaceAction"
+			type="edu.wustl.common.action.SimpleQueryInterfaceAction"
 			name="advanceSearchForm"
 			validate="false"
 			scope="request">
