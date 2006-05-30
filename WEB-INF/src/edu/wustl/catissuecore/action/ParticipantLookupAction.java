@@ -57,7 +57,7 @@ public class ParticipantLookupAction extends BaseAction
 				abstractForm);
 		
 		Participant participant = (Participant) abstractDomain;
-
+		
 		//getting the instance of ParticipantLookupLogic class
 		ParticipantLookupLogic participantLookupLogic = (ParticipantLookupLogic) Utility
 				.getObject(XMLPropertyHandler.getValue(Constants.PARTICIPANT_LOOKUP_ALGO));
