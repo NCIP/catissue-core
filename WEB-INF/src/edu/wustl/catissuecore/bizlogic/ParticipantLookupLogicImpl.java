@@ -58,23 +58,28 @@ public class ParticipantLookupLogicImpl implements ParticipantLookupLogic
 		{
 			count=0;
 			Participant destParticipant=(Participant)itr.next();
-			if(srcParticipant.getFirstName()!=null && srcParticipant.getFirstName().equals(destParticipant.getFirstName()))
+			Logger.out.info("Participant Birth Date in Database:"+destParticipant.getBirthDate());
+			if(srcParticipant.getFirstName()!=null && !srcParticipant.getFirstName().trim().equals("")&& srcParticipant.getFirstName().equalsIgnoreCase(destParticipant.getFirstName()))
 			{
 				count++;
 			}
-			if(srcParticipant.getMiddleName()!=null && srcParticipant.getMiddleName().equals(destParticipant.getMiddleName()))
+			if(srcParticipant.getMiddleName()!=null && !srcParticipant.getMiddleName().trim().equals("")&&srcParticipant.getMiddleName().equalsIgnoreCase(destParticipant.getMiddleName()))
 			{
 				count++;
 			}
-			if(srcParticipant.getLastName()!=null && srcParticipant.getLastName().equals(destParticipant.getLastName()))
+			if(srcParticipant.getLastName()!=null && !srcParticipant.getLastName().trim().equals("") && srcParticipant.getLastName().equalsIgnoreCase(destParticipant.getLastName()))
 			{
 				count++;
 			}
-			if(srcParticipant.getBirthDate()!=null && srcParticipant.getBirthDate().equals(destParticipant.getBirthDate()))
+			if(srcParticipant.getBirthDate()!=null  && srcParticipant.getBirthDate().compareTo(destParticipant.getBirthDate())==0)
 			{
 				count++;
 			}
-			if(srcParticipant.getSocialSecurityNumber()!=null && srcParticipant.getSocialSecurityNumber().equals(destParticipant.getSocialSecurityNumber()))
+			if(srcParticipant.getDeathDate()!=null  && srcParticipant.getDeathDate().compareTo(destParticipant.getDeathDate())==0)
+			{
+				count++;
+			}
+			if(srcParticipant.getSocialSecurityNumber()!=null &&!srcParticipant.getSocialSecurityNumber().trim().equals("")&& srcParticipant.getSocialSecurityNumber().equals(destParticipant.getSocialSecurityNumber()))
 			{
 				count++;
 			}
