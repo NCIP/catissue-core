@@ -30,9 +30,9 @@ public class ParticipantLookupLogicImpl implements ParticipantLookupLogic
     	AbstractBizLogic bizLogic = new DefaultBizLogic();
 	  	String sourceObjectName = Participant.class.getName();
 	  	
-	  	String[] whereColumnName = {"firstName","middleName","lastName","birthDate","socialSecurityNumber"};
-	  	String[] whereColumnCondition = {"=","=","=","=","="};
-	  	Object[] whereColumnValue = {participant.getFirstName(),participant.getMiddleName(),participant.getLastName(),participant.getBirthDate(),participant.getSocialSecurityNumber()};
+	  	String[] whereColumnName = {"firstName","middleName","lastName","birthDate","deathDate","socialSecurityNumber"};
+	  	String[] whereColumnCondition = {"=","=","=","=","=","="};
+	  	Object[] whereColumnValue = {participant.getFirstName(),participant.getMiddleName(),participant.getLastName(),participant.getBirthDate(),participant.getDeathDate(),participant.getSocialSecurityNumber()};
 		
 	  	String joinCondition = Constants.OR_JOIN_CONDITION;
 	  	List listOfParticipants=bizLogic.retrieve(sourceObjectName,whereColumnName,whereColumnCondition,whereColumnValue,joinCondition);
@@ -58,7 +58,7 @@ public class ParticipantLookupLogicImpl implements ParticipantLookupLogic
 		{
 			count=0;
 			Participant destParticipant=(Participant)itr.next();
-			Logger.out.info("Participant Birth Date in Database:"+destParticipant.getBirthDate());
+			
 			if(srcParticipant.getFirstName()!=null && !srcParticipant.getFirstName().trim().equals("")&& srcParticipant.getFirstName().equalsIgnoreCase(destParticipant.getFirstName()))
 			{
 				count++;
@@ -71,11 +71,11 @@ public class ParticipantLookupLogicImpl implements ParticipantLookupLogic
 			{
 				count++;
 			}
-			if(srcParticipant.getBirthDate()!=null  && srcParticipant.getBirthDate().compareTo(destParticipant.getBirthDate())==0)
+			if(srcParticipant.getBirthDate()!=null  && destParticipant.getBirthDate()!=null&& srcParticipant.getBirthDate().compareTo(destParticipant.getBirthDate())==0)
 			{
 				count++;
 			}
-			if(srcParticipant.getDeathDate()!=null  && srcParticipant.getDeathDate().compareTo(destParticipant.getDeathDate())==0)
+			if(srcParticipant.getDeathDate()!=null  && destParticipant.getDeathDate()!=null && srcParticipant.getDeathDate().compareTo(destParticipant.getDeathDate())==0)
 			{
 				count++;
 			}
@@ -94,8 +94,9 @@ public class ParticipantLookupLogicImpl implements ParticipantLookupLogic
 				participantInfo.add(destParticipant.getFirstName());
 				participantInfo.add(destParticipant.getMiddleName());
 				participantInfo.add(destParticipant.getBirthDate());
+				participantInfo.add(destParticipant.getDeathDate());
 				participantInfo.add(destParticipant.getSocialSecurityNumber());
-				int probability=100/5*count;
+				int probability=100/6*count;
 				participantInfo.add(new Integer(probability).toString()+"%");
 				
 				participants.add(participantInfo);
