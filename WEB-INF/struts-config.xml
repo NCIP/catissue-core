@@ -1856,7 +1856,7 @@ PUBLIC
 		</action>
 		
 		<action path="/SimpleSearchAfterConfigure"
-			type="edu.wustl.catissuecore.action.SimpleSearchAction"
+			type="edu.wustl.common.action.SimpleSearchAction"
 			name="simpleQueryInterfaceForm"
 			validate="false"
 			scope="request">
