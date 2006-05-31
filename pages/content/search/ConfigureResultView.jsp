@@ -7,7 +7,7 @@
 <%@ page import="edu.wustl.common.beans.NameValueBean"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.ConfigureResultViewForm"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.AdvanceSearchForm"%>
-<%@ page import="edu.wustl.catissuecore.actionForm.SimpleQueryInterfaceForm"%>
+<%@ page import="edu.wustl.common.actionForm.SimpleQueryInterfaceForm"%>
 <%@ page import="java.util.*"%>
 
 <head>
@@ -160,6 +160,9 @@
 	    {
 	    	addOption(theSelTo, selectedText[i], selectedValues[i]);
 	    }
+	    if(selectedCount==0)
+			alert("Please select column name.");
+	    
     }
    	function moveOptionsLeft(theSelFrom, theSelTo)
 	{
@@ -170,9 +173,12 @@
 		{
 		    if(theSelFrom.options[i].selected)
 		    {
+		    	selectedCount++;
 	  			deleteOption(theSelFrom, i);
     		}
 		}
+		if(selectedCount==0)
+			alert("Please select column name.");
 	}
     function typeChange(namesArray,valuesArray)
     { 
@@ -343,11 +349,11 @@
 			            </td>
 			            <td align="center" valign="middle">
 			                <html:button styleClass="actionButton" property="shiftRight" styleClass="actionButton" styleId ="shiftRight" onclick="moveOptionsRight(this.form.columnNames, this.form.selectedColumnNames);">
-			                	<bean:message key="buttons.add"/>
+			                	<bean:message key="buttons.addToView"/>
 			                </html:button>
 			                <br/><br/>
 			                <html:button styleClass="actionButton" property="shiftLeft" styleClass="actionButton" styleId ="shiftLeft" onclick="moveOptionsLeft(this.form.selectedColumnNames, this.form.columnNames);" >
-				                <bean:message key="buttons.delete"/>
+				                <bean:message key="buttons.deleteFromView"/>
 				            </html:button>  
 			            </td>
 			            <td class="formField">
@@ -390,11 +396,11 @@
 	   						<bean:message key="buttons.submit"/>
 	   					</html:button>
 	   				</td>
-					<%-- td>
+					<!--td>
 						<html:reset styleClass="actionButton">
 							<bean:message key="buttons.reset"/>
 						</html:reset>
-					</td --%> 
+					</td--> 
 				
 				</tr>
 			</table>
