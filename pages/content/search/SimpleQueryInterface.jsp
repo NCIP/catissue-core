@@ -1,9 +1,11 @@
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
-<%@ page import="java.util.StringTokenizer"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants,edu.wustl.common.actionForm.SimpleQueryInterfaceForm,java.util.List,edu.wustl.common.beans.NameValueBean"%>
 <%@ page import="edu.wustl.common.query.Operator"%>
+<%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
+<%@ page import="java.util.*"%>
+
 
 <head>
 <style>
@@ -25,7 +27,6 @@
 	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
 	
 	String selectMenu = (String) request.getAttribute(Constants.MENU_SELECTED);
-	
 	if(obj != null && obj instanceof SimpleQueryInterfaceForm)
 	{
 		SimpleQueryInterfaceForm form = (SimpleQueryInterfaceForm)obj;
@@ -81,7 +82,7 @@ function incrementCounter()
 function decrementCounter()
 {
 	document.forms[0].counter.value = parseInt(document.forms[0].counter.value) - 1;
-}
+} 
 
 function showDateColumn(element,valueField,columnID,showCalendarID,fieldValue,overDiv)
 {
@@ -220,11 +221,48 @@ function showDatafield(element,txtFieldID)
 					</td>
 				</tr>
 				<tr>
-					<td class="formTitle" height="20" colspan="7">
+					<td class="formTitle" height="20" colspan="6">
 						<bean:message key="<%=title%>" />
 						
 					</td>
+					
+					<%String addAction = "setPropertyValue('andOrOperation','true');incrementCounter();callAction('SimpleQueryInterfaceValidate.do?pageOf="+pageOf+"');"; 
+					%>
+					<td class="formTitle" align="Right">
+						<html:button property="addKeyValue" styleClass="actionButton" onclick="<%=addAction%>">
+							<bean:message key="buttons.addMore"/>
+						</html:button>
+					</td>
 				</tr>
+				<tr>
+						<td class="formLeftSubTableTitle" width="5">#</td>
+						<td class="formRightSubTableTitle" >
+							<label for="object">
+								<bean:message key="query.object" />
+							</label>
+						</td>
+						<td class="formRightSubTableTitle">
+							<label for="attributes">
+								<bean:message key="query.attributes" />
+							</label>
+						</td>
+						<td class="formRightSubTableTitle">
+							<label for="attributes">
+								<bean:message key="query.conditions" />
+							</label>
+						</td>
+						<td class="formRightSubTableTitle">
+							<label for="attributes">
+								<bean:message key="query.value" />
+							</label>
+						</td>
+						<td class="formRightSubTableTitle" colspan="2">
+							<label for="attributes">
+								<bean:message key="query.operator" />
+							</label>
+						</td>
+				</tr>
+				
 				<tbody id="simpleQuery">
 				<%
 					for (int i=1;i<=Integer.parseInt(noOfRows);i++){
@@ -257,7 +295,8 @@ function showDatafield(element,txtFieldID)
 						String attributeConditionKey = "SimpleConditionsNode:"+i+"_Condition_Operator_operator";
 				%>					
 				<tr>
-					<td class="formRequiredNotice" width="5">&nbsp;</td>
+					<td class="formSerialNumberField" width="5"><%=i%>.</td>
+					<!--td class="formRequiredNotice" width="5">&nbsp;</td-->
 					<td class="formField">
 					<%
 						String attributeAction = "javascript:onObjectChange(this,'SimpleQueryInterface.do?pageOf="+pageOf;
@@ -394,27 +433,21 @@ function showDatafield(element,txtFieldID)
 					}	
 				%>
 					</td>
-					<td class="formField">
-						<html:hidden property="<%=nextOperator%>"/>
+					
+						<!--html:hidden property="<%=nextOperator%>"/-->
 					<logic:equal name="pageOf" value="<%=Constants.PAGEOF_SIMPLE_QUERY_INTERFACE%>">
-					  <%if (nextOperatorValue != null && (false == nextOperatorValue.equals(""))){
-							if (nextOperatorValue.equals(Constants.AND_JOIN_CONDITION))
-							{%><bean:message key="simpleQuery.and" />	
-							<%}else{%>
+					<td class="formField">
+					<html:select property="<%=nextOperator%>" >
+						<html:option value="And"> 
+							<bean:message key="simpleQuery.and" />
+						</html:option>
+						<html:option value="Or"> 
 							<bean:message key="simpleQuery.or" />
-							<%}%>
-						<%}else{ %>					
-							<%String andLink = "setPropertyValue('"+nextOperator+"','"+Constants.AND_JOIN_CONDITION+"');setPropertyValue('andOrOperation','true');incrementCounter();callAction('SimpleQueryInterfaceValidate.do?pageOf="+pageOf+"');"; %>
-							<a href="#" onclick="<%=andLink%>">
-								<bean:message key="simpleQuery.and" />
-							</a>|
-							<%String orLink = "setPropertyValue('"+nextOperator+"','"+Constants.OR_JOIN_CONDITION+"');setPropertyValue('andOrOperation','true');incrementCounter();callAction('SimpleQueryInterfaceValidate.do?pageOf="+pageOf+"');"; %>
-							<a href="#" onclick="<%=orLink%>">
-								<bean:message key="simpleQuery.or" />
-							</a>
-						<%}%>	
-					</td>	
-					</logic:equal>
+						</html:option>
+					</html:select>
+					</td>
+
+				</logic:equal>
 				</tr>
 				<%}%>
 				</tbody>	
@@ -422,7 +455,7 @@ function showDatafield(element,txtFieldID)
 					<td align="right" colspan="7">
 					<!-- action buttons begins -->
 					<table cellpadding="4" cellspacing="0" border="0">
-						<tr>
+						<tr>`
 							<td>
 								<%String searchAction = "callAction('"+Constants.SIMPLE_SEARCH_ACTION+"')";%>
 								<html:button styleClass="actionButton" property="searchButton" onclick="<%=searchAction%>">
@@ -438,20 +471,26 @@ function showDatafield(element,txtFieldID)
 									<bean:message  key="buttons.configure" />
 								</html:button>
 							</td>
-							<%-- td>
+							<!--td>
 								<%configAction = "window.location.href='"+Constants.SIMPLE_QUERY_INTERFACE_URL+"'";%>
 								<html:button styleClass="actionButton" property="resetButton" onclick="<%=configAction%>">
 									<bean:message  key="buttons.reset" />
 								</html:button>
-							</td --%>
-							<%if (Integer.parseInt(noOfRows) > 1){%>
+							</td-->
 							<td>
-								<%String deleteAction = "decrementCounter();setPropertyValue('value(SimpleConditionsNode:"+(Integer.parseInt(noOfRows)-1)+"_Operator_operator)','');"+"callAction('SimpleQueryInterface.do?pageOf="+pageOf+"');"; %>
+							<%if (Integer.parseInt(noOfRows) > 1){
+								String deleteAction = "decrementCounter();setPropertyValue('value(SimpleConditionsNode:"+(Integer.parseInt(noOfRows)-1)+"_Operator_operator)','');"+"callAction('SimpleQueryInterface.do?pageOf="+pageOf+"');"; %>
 								<html:button property="deleteRow" styleClass="actionButton" onclick="<%=deleteAction%>">
 									<bean:message key="buttons.deleteLast"/>
 								</html:button>
-							</td>
+							
+							<%}
+							else{%>
+								<html:button property="deleteRow" styleClass="actionButton" disabled="true">
+									<bean:message key="buttons.deleteLast"/>
+								</html:button>
 							<%}%>
+							</td>
 							<%}%>
 							
 						</tr>
