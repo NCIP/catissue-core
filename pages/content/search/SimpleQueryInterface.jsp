@@ -225,7 +225,7 @@ function showDatafield(element,txtFieldID)
 						<bean:message key="<%=title%>" />
 						
 					</td>
-					
+					<logic:equal name="pageOf" value="<%=Constants.PAGEOF_SIMPLE_QUERY_INTERFACE%>">
 					<%String addAction = "setPropertyValue('andOrOperation','true');incrementCounter();callAction('SimpleQueryInterfaceValidate.do?pageOf="+pageOf+"');"; 
 					%>
 					<td class="formTitle" align="Right">
@@ -233,9 +233,13 @@ function showDatafield(element,txtFieldID)
 							<bean:message key="buttons.addMore"/>
 						</html:button>
 					</td>
+					</logic:equal>
 				</tr>
+				<logic:equal name="pageOf" value="<%=Constants.PAGEOF_SIMPLE_QUERY_INTERFACE%>">
 				<tr>
+						
 						<td class="formLeftSubTableTitle" width="5">#</td>
+						
 						<td class="formRightSubTableTitle" >
 							<label for="object">
 								<bean:message key="query.object" />
@@ -261,8 +265,9 @@ function showDatafield(element,txtFieldID)
 								<bean:message key="query.operator" />
 							</label>
 						</td>
+						
 				</tr>
-				
+				</logic:equal>
 				<tbody id="simpleQuery">
 				<%
 					for (int i=1;i<=Integer.parseInt(noOfRows);i++){
@@ -295,7 +300,9 @@ function showDatafield(element,txtFieldID)
 						String attributeConditionKey = "SimpleConditionsNode:"+i+"_Condition_Operator_operator";
 				%>					
 				<tr>
+				<logic:equal name="pageOf" value="<%=Constants.PAGEOF_SIMPLE_QUERY_INTERFACE%>">
 					<td class="formSerialNumberField" width="5"><%=i%>.</td>
+				</logic:equal>
 					<!--td class="formRequiredNotice" width="5">&nbsp;</td-->
 					<td class="formField">
 					<%
