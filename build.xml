@@ -128,21 +128,31 @@
 		<delete file="catissuecore.war"/>
 		<war destfile="catissuecore.war" webxml="WEB-INF/web.xml">
 			<fileset dir="${base.dir}">
-				<exclude name="**/*build*"/>
-				<exclude name="**/*WEB-INF*"/>
+				<include name="Applet/**"/>
+				<include name="css/**"/>
+				<include name="images/**"/>
+				<include name="jss/**"/>
+				<include name="pages/**"/>
+				<include name="runtime/**"/>
+				<include name="WEB-INF/**"/>
+				<include name="CDEConfig.xml"/>
+				<include name="CDEConfig.xsd"/>
+				
 				<exclude name="**/WEB-INF/src*/**"/>
 				<exclude name="**/*servlet.jar*"/>
 				<exclude name="**/*log4j-1.2.9.jar*"/>
 				<exclude name="**/*hibernate2.jar*"/>
 				<exclude name="**/*jta.jar*"/>
+				<exclude name="**/CVS*"/>
+				<!--exclude name="**/*build*"/>
+				<exclude name="**/*WEB-INF*"/>
 				<exclude name="**/.*"/>
 				<exclude name="**/*.sql"/>
-				<exclude name="**/CVS*"/>
 				<exclude name="**/catissuecorecsm.war"/>
 				<exclude name="**/catissuecore.war"/>
 				<exclude name="**/caTissue_Core_Installable.zip"/>
 				<exclude name="**/caTissue_Core_Installable/**"/>
-				<exclude name="**/caTISSUECore caCORE Client/**"/>
+				<exclude name="**/caTISSUECore caCORE Client/**"/-->
 			</fileset>
 		</war>
 	</target>
