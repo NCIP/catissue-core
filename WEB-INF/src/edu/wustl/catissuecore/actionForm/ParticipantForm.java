@@ -99,7 +99,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 	protected String deathDate = "";
 	
 	/**
-	 * Participant's vital status.
+	 * Vital status of the Participant.
 	 */
 	protected String vitalStatus;
 	
@@ -517,7 +517,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
          	}
 			
          	//Validation for Blank Participant 
-         	if(validator.isEmpty(lastName) && validator.isEmpty(firstName) && validator.isEmpty(middleName) && validator.isEmpty(birthDate) && (validator.isEmpty(deathDate))&& (validator.isValidOption(gender) == false) && (validator.isValidOption(vitalStatus) == false) && (validator.isValidOption(genotype) == false)&& (validator.isValidOption(race) == false)&& ethnicity.equals("-1") && validator.isEmpty(socialSecurityNumberPartA+socialSecurityNumberPartB+socialSecurityNumberPartC))
+         	if(validator.isEmpty(lastName) && validator.isEmpty(firstName) && validator.isEmpty(middleName) && validator.isEmpty(birthDate) && (validator.isEmpty(deathDate))&& !validator.isValidOption(gender) && !validator.isValidOption(vitalStatus) && !validator.isValidOption(genotype)&& !validator.isValidOption(race) && ethnicity.equals("-1") && validator.isEmpty(socialSecurityNumberPartA+socialSecurityNumberPartB+socialSecurityNumberPartC))
          	{
          	   errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.participant.atLeastOneFieldRequired"));
          	}
@@ -692,6 +692,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 	}
 	
 	/**
+	 * Returns the Death date of the Participant.
 	 * @return Returns the deathDate.
 	 */
 	public String getDeathDate() {
@@ -699,6 +700,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 	}
 	
 	/**
+	 * Sets the Death date of the Participant.
 	 * @param deathDate The deathDate to set.
 	 */
 	public void setDeathDate(String deathDate) {
@@ -706,6 +708,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 	}
 	
 	/**
+	 * Returns the Vital status of the Participant.
 	 * @return Returns the vitalStatus.
 	 */
 	public String getVitalStatus() {
@@ -713,6 +716,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 	}
 	
 	/**
+	 * Sets the Vital status of the Participant.
 	 * @param vitalStatus The vitalStatus to set.
 	 */
 	public void setVitalStatus(String vitalStatus) {
