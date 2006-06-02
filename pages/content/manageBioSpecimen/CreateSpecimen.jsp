@@ -428,11 +428,11 @@
 						   					<bean:message key="buttons.submit"/>
 						   				</html:submit>
 						   			</td>
-									<td colspan="3">
+									<%-- <td colspan="3">
 										<html:reset styleClass="actionButton">
 											<bean:message key="buttons.reset"/>
 										</html:reset>
-									</td> 
+									</td> --%> 
 									<%--td>
 										<html:reset styleClass="actionButton">
 											<bean:message key="buttons.moreSpecimen"/>
