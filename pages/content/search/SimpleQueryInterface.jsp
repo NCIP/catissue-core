@@ -139,7 +139,6 @@ function onAttributeChange(element,opComboName,txtFieldID)
 	else
 	{
 		//If the datatype of selected column "varchar" or "text"
-		//alert(columnValue.substring(index+1,columnValue.length));
 		if(columnValue.match("varchar") == "varchar" || columnValue.match("text") == "text")
 		{
 			opCombo.options[0] = new Option("<%=Operator.STARTS_WITH%>","<%=Operator.STARTS_WITH%>");
@@ -184,11 +183,33 @@ function showDatafield(element,txtFieldID)
 	}
 }
 
+function enableLastCheckbox()
+{
+	var lastRowNo = document.forms[0].counter.value;
+	var chkBox = document.getElementById("chk_"+lastRowNo);
+	if(lastRowNo>1)
+		chkBox.disabled = false;
+}
+
+function enablePreviousCheckBox(element)
+{
+    if (element.checked == true)
+    {
+      	var elementName = element.name;
+      	var index = elementName.indexOf('_');
+      	var previousRowNo = parseInt(elementName.substring(index+1))-1;
+      	if(previousRowNo > 1)
+      	{
+			var previousElement = document.getElementById("chk_"+previousRowNo);
+			previousElement.disabled = false;     
+		}
+    }
+}
 
 </script>
 
 <html:errors />
-
+<body onload="enableLastCheckbox()">
 <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="620">
 	
 	<html:form action="<%=Constants.SIMPLE_SEARCH_ACTION%>">
@@ -221,12 +242,12 @@ function showDatafield(element,txtFieldID)
 					</td>
 				</tr>
 				<tr>
-					<td class="formTitle" height="20" colspan="6">
+					<td class="formTitle" height="20" colspan="7">
 						<bean:message key="<%=title%>" />
-						
 					</td>
 					<logic:equal name="pageOf" value="<%=Constants.PAGEOF_SIMPLE_QUERY_INTERFACE%>">
-					<%String addAction = "setPropertyValue('andOrOperation','true');incrementCounter();callAction('SimpleQueryInterfaceValidate.do?pageOf="+pageOf+"');"; 
+					<%String addAction = "setPropertyValue('andOrOperation','true');"+
+									"incrementCounter();callAction('SimpleQueryInterfaceValidate.do?pageOf="+pageOf+"');"; 
 					%>
 					<td class="formTitle" align="Right">
 						<html:button property="addKeyValue" styleClass="actionButton" onclick="<%=addAction%>">
@@ -235,39 +256,49 @@ function showDatafield(element,txtFieldID)
 					</td>
 					</logic:equal>
 				</tr>
-				<logic:equal name="pageOf" value="<%=Constants.PAGEOF_SIMPLE_QUERY_INTERFACE%>">
+				
 				<tr>
-						
-						<td class="formLeftSubTableTitle" width="5">#</td>
-						
-						<td class="formRightSubTableTitle" >
-							<label for="object">
+						<logic:equal name="pageOf" value="<%=Constants.PAGEOF_SIMPLE_QUERY_INTERFACE%>">
+						<td class="formLeftSubTitle" width="5">#</td>
+						<td class="formLeftSubTitle">
+							<label for="delete" align="center">
+								<bean:message key="addMore.delete" />
+							</label>
+						</td>
+						<td class="formLeftSubTitle" >
+							<label for="object" >
 								<bean:message key="query.object" />
 							</label>
 						</td>
-						<td class="formRightSubTableTitle">
-							<label for="attributes">
+						
+						</logic:equal>
+						<td class="formLeftSubTitle">
+							<label for="attributes" >
 								<bean:message key="query.attributes" />
 							</label>
 						</td>
-						<td class="formRightSubTableTitle">
-							<label for="attributes">
+						<td class="formLeftSubTitle">
+							<label for="attributes" >
 								<bean:message key="query.conditions" />
 							</label>
 						</td>
-						<td class="formRightSubTableTitle">
-							<label for="attributes">
+						<td class="formLeftSubTitle" colspan="2">
+							<label for="value" >
 								<bean:message key="query.value" />
 							</label>
 						</td>
-						<td class="formRightSubTableTitle" colspan="2">
-							<label for="attributes">
+						
+						<logic:equal name="pageOf" value="<%=Constants.PAGEOF_SIMPLE_QUERY_INTERFACE%>">
+						<td class="formLeftSubTitle" >
+							<label for="attributes" >
 								<bean:message key="query.operator" />
 							</label>
-						</td>
-						
+				</td>
+				</logic:equal>						
+
 				</tr>
-				</logic:equal>
+
+				
 				<tbody id="simpleQuery">
 				<%
 					for (int i=1;i<=Integer.parseInt(noOfRows);i++){
@@ -288,6 +319,7 @@ function showDatafield(element,txtFieldID)
 						String showCalendarValue = "showCalendar(SimpleConditionsNode:"+i+"_showCalendar)";
 						String fieldName = "simpleQueryInterfaceForm."+attributeValueID;
 						String overDiv = "overDiv";
+						String check = "chk_"+i;
 						if(i>1)
 						{
 							overDiv = overDiv + "" + i;
@@ -302,9 +334,12 @@ function showDatafield(element,txtFieldID)
 				<tr>
 				<logic:equal name="pageOf" value="<%=Constants.PAGEOF_SIMPLE_QUERY_INTERFACE%>">
 					<td class="formSerialNumberField" width="5"><%=i%>.</td>
-				</logic:equal>
 					<!--td class="formRequiredNotice" width="5">&nbsp;</td-->
-					<td class="formField">
+					<td class="formField" width="5">
+							<input type=checkbox name="<%=check %>" id="<%=check %>" disabled="true" onClick="enablePreviousCheckBox(this);enableButton(document.forms[0].deleteValue,document.forms[0].counter,'chk_')">		
+					</td>
+					
+					</logic:equal>
 					<%
 						String attributeAction = "javascript:onObjectChange(this,'SimpleQueryInterface.do?pageOf="+pageOf;
 						if (aliasName != null)
@@ -313,6 +348,8 @@ function showDatafield(element,txtFieldID)
 							attributeAction = attributeAction + "')";
 					%>
 <!-- Mandar : 434 : for tooltip -->
+						<logic:equal name="pageOf" value="<%=Constants.PAGEOF_SIMPLE_QUERY_INTERFACE%>">
+						<td class="formField">
 						<html:select property="<%=objectName%>" styleClass="formFieldSized15" styleId="<%=objectName%>" size="1" onchange="<%=attributeAction%>"
 						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 							<logic:notPresent name="<%=objectNameList%>">			
@@ -322,7 +359,11 @@ function showDatafield(element,txtFieldID)
 								<html:options collection="<%=objectNameList%>" labelProperty="name" property="value"/>
 							</logic:present>	
 						</html:select>
-					</td>
+						</td>
+						</logic:equal>
+						<logic:notEqual name="pageOf" value="<%=Constants.PAGEOF_SIMPLE_QUERY_INTERFACE%>">
+							<html:hidden property="<%=objectName%>" value="<%=aliasName%>"/>
+						</logic:notEqual>
 					<td class="formField">
 <!-- Mandar : 434 : for tooltip -->
 						<html:select property="<%=attributeName%>" styleClass="formFieldSized15" styleId="<%=attributeId%>" size="1" onchange="<%=onAttributeChange%>"
@@ -397,29 +438,10 @@ function showDatafield(element,txtFieldID)
 							<html:option value="<%=Operator.IS_NOT_NULL%>"><%=Operator.IS_NOT_NULL%></html:option>
 						</html:select>
 					</td>
-					<td class="formField">
-					<%
-						String currentOperatorValue = (String)form.getValue(attributeConditionKey);
-						
-						
-						if((currentOperatorValue != null) && (currentOperatorValue.equals(Operator.IS_NOT_NULL) || currentOperatorValue.equals(Operator.IS_NULL)))
-						{
-					%>
-						<html:text styleClass="formFieldSized10" size="30" styleId="<%=attributeValueID%>" property="<%=attributeValue%>" disabled="true"/>
-					<%
-						}
-						else
-						{
-					%>
-						<html:text styleClass="formFieldSized10" size="30" styleId="<%=attributeValueID%>" property="<%=attributeValue%>" />
-					<%
-						}
-					%>
+										<td class="onlyBottomBorder" id="<%=columnID%>"  size=3>
 						<html:hidden property="<%=showCalendarValue%>" styleId="<%=showCalendarValue%>" />
-					</td>
 				<!--  ********************* Mandar Code ********************** -->	
 				<!-- ***** Code added to check multiple rows for Calendar icon ***** -->
-					<td class="onlyBottomBorder" id="<%=columnID%>">
 				<%
 					showCal = "";
 					showCal = (String)form.getShowCalendar(showCalendarKey);
@@ -437,12 +459,31 @@ function showDatafield(element,txtFieldID)
 				%>
 						&nbsp;					
 				<%						
-					}	
+					}
+
 				%>
+				</td>
+					<td class="formField">
+					<%
+						String currentOperatorValue = (String)form.getValue(attributeConditionKey);
+						if((currentOperatorValue != null) && (currentOperatorValue.equals(Operator.IS_NOT_NULL) || currentOperatorValue.equals(Operator.IS_NULL)))
+						{
+					%>
+						<html:text styleClass="formFieldSized10" size="30" styleId="<%=attributeValueID%>" property="<%=attributeValue%>" disabled="true"/>
+					<%
+						}
+						else
+						{
+					%>
+						<html:text styleClass="formFieldSized10" size="30" styleId="<%=attributeValueID%>" property="<%=attributeValue%>" />
+					<%
+						}
+					%>
 					</td>
-					
+
+
 						<!--html:hidden property="<%=nextOperator%>"/-->
-					<logic:equal name="pageOf" value="<%=Constants.PAGEOF_SIMPLE_QUERY_INTERFACE%>">
+				<logic:equal name="pageOf" value="<%=Constants.PAGEOF_SIMPLE_QUERY_INTERFACE%>">
 					<td class="formField">
 					<html:select property="<%=nextOperator%>" >
 						<html:option value="And"> 
@@ -453,7 +494,6 @@ function showDatafield(element,txtFieldID)
 						</html:option>
 					</html:select>
 					</td>
-
 				</logic:equal>
 				</tr>
 				<%}%>
@@ -485,18 +525,10 @@ function showDatafield(element,txtFieldID)
 								</html:button>
 							</td-->
 							<td>
-							<%if (Integer.parseInt(noOfRows) > 1){
-								String deleteAction = "decrementCounter();setPropertyValue('value(SimpleConditionsNode:"+(Integer.parseInt(noOfRows)-1)+"_Operator_operator)','');"+"callAction('SimpleQueryInterface.do?pageOf="+pageOf+"');"; %>
-								<html:button property="deleteRow" styleClass="actionButton" onclick="<%=deleteAction%>">
-									<bean:message key="buttons.deleteLast"/>
+								<%String deleteAction = "decrementCounter();setPropertyValue('value(SimpleConditionsNode:"+(Integer.parseInt(noOfRows)-1)+"_Operator_operator)','');"+"callAction('SimpleQueryInterface.do?pageOf="+pageOf+"');"; %>
+								<html:button property="deleteValue" styleClass="actionButton" onclick="deleteChecked('simpleQuery','SimpleQueryInterface.do?pageOf=<%=pageOf%>',document.forms[0].counter,'chk_',false,document.forms[0].deleteValue)"  disabled="true">
+									<bean:message key="buttons.delete"/>
 								</html:button>
-							
-							<%}
-							else{%>
-								<html:button property="deleteRow" styleClass="actionButton" disabled="true">
-									<bean:message key="buttons.deleteLast"/>
-								</html:button>
-							<%}%>
 							</td>
 							<%}%>
 							
@@ -514,3 +546,4 @@ function showDatafield(element,txtFieldID)
 	<!-- SIMPLE QUERY INTERFACE ENDS-->
 	</html:form>
 </table>
+</body>
