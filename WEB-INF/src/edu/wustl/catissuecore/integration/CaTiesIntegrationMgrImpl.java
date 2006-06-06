@@ -24,6 +24,12 @@ import edu.upmc.opi.caBIG.caTIES.database.domain.Query;
 import edu.upmc.opi.caBIG.caTIES.database.domain.impl.IdentifiedPathologyReportImpl;
 import edu.upmc.opi.caBIG.caTIES.database.domain.impl.IdentifiedPatientImpl;
 import edu.upmc.opi.caBIG.caTIES.database.domain.impl.PathologyReportImpl;
+import edu.wustl.catissuecore.domain.Participant;
+import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.beans.NameValueBean;
+import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.logger.Logger;
 import gov.nih.nci.system.applicationservice.ApplicationService;
 
@@ -36,29 +42,31 @@ public class CaTiesIntegrationMgrImpl extends IntegrationManager
 {
     private ApplicationService appService = null ;
 
-    private static final String publicServerName = "http://ps0348:8080/caties/server/HTTPServer";
+    private static final String publicServerName = XMLPropertyHandler.getValue(Constants.CATIES_PUBLIC_SERVER_NAME);
     
-    private static final String privateServerName = "http://ps0348:8080/caties_pri/server/HTTPServer";
+    private static final String privateServerName = XMLPropertyHandler.getValue(Constants.CATIES_PRIVATE_SERVER_NAME);
     
     public List getLinkedAppData(Object linkedObj, Long systemIdentifier)
     {
         Logger.out.debug("Class of object received in getLinkedAppData of CaTiesIntegrationMgrImpl===>"+ linkedObj.getClass());
         
-        return findPathologyReportByConceptCode("AC0040300*AC9337421*AC9107744");
+        if(linkedObj instanceof SpecimenCollectionGroup || linkedObj instanceof Specimen)
+        {
+            Logger.out.debug("Linked object is SpecimenCollectionGroup or Specimen");
+            return findIdentifiedPathologyReport(systemIdentifier);
+        }
+        else if(linkedObj instanceof Participant)
+        {
+            Logger.out.debug("Linked object is Participant");
+            return findReportsForPatient(systemIdentifier);
+        }
+        
+        return new ArrayList();
     }
     
     public List getMatchingObjects(Object objToMatch)
     {
         return new ArrayList();
-    }
-    
-    public void performTests()
-    {
-    	findPathologyReportByConceptCode("AC0040300*AC9337421*AC9107744");
-    	findIdentifiedPathologyReportByAccessionNum("tst8356183");
-    	findPatientByIdentifiedData("BOB",null,null,null);
-    	findReportsForPatient(new Long(32800768));
-    	findPatientByIdentifiedData(null,null,null,"242-32-6258");
     }
     
     private void findPathologyReportByUId(String UId)
@@ -101,34 +109,36 @@ public class CaTiesIntegrationMgrImpl extends IntegrationManager
         List pathologyReportList= new ArrayList();
     	try
     	{
-//    		this.appService = ApplicationService.getRemoteInstance(publicServerName);
-//    		
-//    	    PathologyReport pathologyReport = new PathologyReportImpl();
-////    	    pathologyReport.setUuid(UId);
-//    	    pathologyReport.setConceptCodeSet(new String("*"+conceptCode+"*"));
-//    	    
-//    	    List resultList = appService.search(PathologyReport.class, pathologyReport);
-//    	    if (resultList == null)
-//    	    {
-//    	        Logger.out.debug("Returns null from search.");
-//    	    }
-//    		else if (resultList.size() < 1)
-//    		{
-//    		    Logger.out.debug("Empty result set returned from search of deIdentified reports.");
-//    		}
-//    		else
-//    		{
-//    		    for (Iterator iterator = resultList.iterator(); iterator.hasNext(); )
-//    		    {
-//    			    pathologyReport = (PathologyReport) iterator.next();
-//    			    
-//    			    pathologyReportList.add(stringifyPathologyReport(pathologyReport));
-//    			    
-////    			    System.out.println(stringifyPathologyReport(pathologyReport));
-//    			}
-//    		}
-//    	    
-//    	    return pathologyReportList;
+    		this.appService = ApplicationService.getRemoteInstance(publicServerName);
+    		
+    		Logger.out.debug("PublicServerName==>"+publicServerName);
+    		
+    	    PathologyReport pathologyReport = new PathologyReportImpl();
+//    	    pathologyReport.setUuid(UId);
+    	    pathologyReport.setConceptCodeSet(new String("*"+conceptCode+"*"));
+    	    
+    	    List resultList = appService.search(PathologyReport.class, pathologyReport);
+    	    if (resultList == null)
+    	    {
+    	        Logger.out.debug("Returns null from search.");
+    	    }
+    		else if (resultList.size() < 1)
+    		{
+    		    Logger.out.debug("Empty result set returned from search of deIdentified reports.");
+    		}
+    		else
+    		{
+    		    for (Iterator iterator = resultList.iterator(); iterator.hasNext(); )
+    		    {
+    			    pathologyReport = (PathologyReport) iterator.next();
+    			    
+    			    pathologyReportList.add(stringifyPathologyReport(pathologyReport));
+    			    
+//    			    System.out.println(stringifyPathologyReport(pathologyReport));
+    			}
+    		}
+    	    
+    	    return pathologyReportList;
     	    
     	}
     	catch (Exception x)
@@ -186,6 +196,59 @@ public class CaTiesIntegrationMgrImpl extends IntegrationManager
     	return pathologyReportList;
     }
     
+    private List findIdentifiedPathologyReport(Long systemIdentifier)
+    {
+        List pathologyReportList= new ArrayList();
+        
+    	try
+    	{
+    		this.appService = ApplicationService.getRemoteInstance(privateServerName);
+    	    IdentifiedPathologyReport pathologyReport = new IdentifiedPathologyReportImpl();
+//    	    pathologyReport.setId(new Long(32833537));
+    	    pathologyReport.setId(systemIdentifier);
+    	   
+    	    List resultList = appService.search(IdentifiedPathologyReport.class, pathologyReport);
+    	    if (resultList == null)
+    	    {
+    	    	Logger.out.debug("Returns null from search.");
+    	    }
+    		else if (resultList.size() < 1)
+    		{
+    		    Logger.out.debug("Empty result set returned from search of Identified reports.");
+    		}
+    		else
+    		{
+    		    for (Iterator iterator = resultList.iterator() ; iterator.hasNext() ;)
+    		    {
+    		    	this.appService = ApplicationService.getRemoteInstance(privateServerName);
+    		    	
+    			    pathologyReport = (IdentifiedPathologyReport) iterator.next();
+    			    
+    			    pathologyReportList.add(stringifyIdentifiedPathologyReport(pathologyReport));
+    			    
+//    			    System.out.println(stringifyIdentifiedPathologyReport(pathologyReport));
+    			    
+    			    findPathologyReportByUId(pathologyReport.getDeidentifiedId());
+    			}
+    		    
+    		    return pathologyReportList;
+    		}
+    	    
+    	}
+    	catch (Exception x)
+    	{
+    	    Logger.out.error(x.getMessage());
+    	    
+    	    pathologyReportList.add(new String("Exception in fetching report"));
+    	    
+    	    return pathologyReportList;
+    	}
+    	
+    	pathologyReportList.add(new String("No Reports available"));
+    	
+    	return pathologyReportList;
+    }
+    
     private List findPatientByIdentifiedData(String firstName,String lastName, Date birthDate, String socialSecurityNumber)
     {
     	List resultList = null;
@@ -231,11 +294,17 @@ public class CaTiesIntegrationMgrImpl extends IntegrationManager
     	return resultList;
     }
     
-    private void findReportsForPatient(Long patientID)
+    private List findReportsForPatient(Long patientID)
     {
+        List resultList = null;
+        
+        List patientReportsList = new ArrayList();
+        
         try
         {
     		this.appService = ApplicationService.getRemoteInstance(privateServerName);
+    		
+    		Logger.out.debug("Private Server Name===>"+privateServerName);
     		
     	    IdentifiedPatient patient = new IdentifiedPatientImpl();
     	    patient.setId(patientID);
@@ -243,7 +312,7 @@ public class CaTiesIntegrationMgrImpl extends IntegrationManager
     	    IdentifiedPathologyReport pathologyReport = new IdentifiedPathologyReportImpl();
     	    pathologyReport.setPatient(patient);
     	   
-    	    List resultList = appService.search(IdentifiedPathologyReport.class, pathologyReport);
+    	    resultList = appService.search(IdentifiedPathologyReport.class, pathologyReport);
 
     	    if (resultList == null)
     	    {
@@ -261,14 +330,26 @@ public class CaTiesIntegrationMgrImpl extends IntegrationManager
     		    	
     			    pathologyReport = (IdentifiedPathologyReport) iterator.next() ;
     			    System.out.println(pathologyReport.getId()+"\n") ;
-//    			    performFindPathologyReportByUId(pathologyReport.getDeidentifiedId());
+    			    findPathologyReportByUId(pathologyReport.getDeidentifiedId());
+    			    
+    			    patientReportsList.add(new NameValueBean(pathologyReport.getId().toString(), stringifyIdentifiedPathologyReport(pathologyReport)));
     			}
+    		    
+    		    return patientReportsList;
     		}
     	}
     	catch (Exception x)
     	{
     	    Logger.out.error(x.getMessage());
+    	    
+    	    patientReportsList.add(new NameValueBean("Exception in fetching report", "Exception in fetching report"));
+    	    
+    	    return patientReportsList;
     	}
+    	
+    	patientReportsList.add(new NameValueBean("No Reports available", "No Reports available"));
+    	
+    	return patientReportsList;
     }
     
     
@@ -340,17 +421,24 @@ public class CaTiesIntegrationMgrImpl extends IntegrationManager
     	try
     	{
     	    result += String.valueOf(pathologyReport.getUuid()) + ", " ;
-    	    result += "\n PatientInfo:";
+    	    result += " PatientInfo:";
     	    IdentifiedPatient patient = pathologyReport.getPatient() ;
     	    result += stringifyIdentifiedPatient(patient) ;
-            result += "\n";
+            result += " ";
             result += pathologyReport.getDocumentText();
+            
+            Logger.out.debug("Report in caTiesIntegrationImpl with new lines==>"+result);
+            
+//            result.replaceAll("\\n","\\\\\n");
+//            result=result.replaceAll("\n","\\\\n");
+            
+            Logger.out.debug("Report in caTiesIntegrationImpl ==>"+result);
     	}
     	catch (Exception x)
     	{
     	    Logger.out.error(x.getMessage());
     	}
-    	return result ;
+    	return result;
     }
 
     private String stringifyQuery(Query q)
