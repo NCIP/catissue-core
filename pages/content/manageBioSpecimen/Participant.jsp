@@ -32,7 +32,6 @@ tr#hiddenCombo
 		String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);		
 		String forwardTo=(String)request.getAttribute(Constants.FORWARD_TO);		
 		boolean isAddNew = false;
-
 		String operation = (String)request.getAttribute(Constants.OPERATION);
 		String formName, pageView=operation,editViewButton="buttons."+Constants.EDIT;
 		boolean readOnlyValue=false,readOnlyForAll=false;
