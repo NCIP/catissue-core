@@ -1130,17 +1130,32 @@ input.tabFieldSized,textarea.tabFieldSized,select.tabFieldSized{ /* for the form
   font-size:1em;
 }
 
-#797C9C = darker purple
-#9FA2BA = lighter purple
+td.tabFieldSized5{ /* for the cell that contains the form elements */
+  font-family:arial,helvetica,verdana,sans-serif;
+  font-size:0.7em;
+  color:#000000; /* constant: black */
+  border-right:1px solid #5C5C5C; /* constant: dark gray */
+  border-left:1px solid #5C5C5C; /* constant: dark gray */
+  border-bottom:1px solid #5C5C5C; /* constant: dark gray */
+  background-color:#FFFFFF;  /*#797C9C;  constant: light gray */
+  width:3em;
+}
 
-#6C55C1
-#C1B9E5
+select.tabFieldSized5{ /* for the cell that contains the form elements */
+  font-family:arial,helvetica,verdana,sans-serif;
+  border:1px solid #5C5C5C; /* constant: dark gray */
+  font-size:1em;
+  width:10em;
+}
 
-#6A8989 = darker green
-#98B7B7 = lighter green
-
-#475B82 = darker blue
-#6E81A6 = lighter blue
-
-#FFCC00  = Dark Yellow
-#FFF5CD  = Light Yellow
+td.columnHeading{
+  font-family:arial,helvetica,verdana,sans-serif;
+  border:1px solid #5C5C5C; /* constant: dark gray */
+  font-size:0.8em;
+  background-color:#C9C9CD; 
+  text-align:center;
+  font-weight:bold;
+  color:#000000;  /* constant: black */
+  text-decoration:none;
+  white-space: nowrap;
+}
