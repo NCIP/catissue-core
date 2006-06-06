@@ -193,17 +193,26 @@ function enableLastCheckbox()
 
 function enablePreviousCheckBox(element)
 {
+   	var elementName = element.name;
+   	var index = elementName.indexOf('_');
+   	var previousRowNo = parseInt(elementName.substring(index+1))-1;
     if (element.checked == true)
     {
-      	var elementName = element.name;
-      	var index = elementName.indexOf('_');
-      	var previousRowNo = parseInt(elementName.substring(index+1))-1;
       	if(previousRowNo > 1)
       	{
 			var previousElement = document.getElementById("chk_"+previousRowNo);
 			previousElement.disabled = false;     
 		}
     }
+    else if(element.checked == false)
+    {
+      	for(var i=previousRowNo;i>=1;i--)
+      	{
+			var previousElement = document.getElementById("chk_"+i);
+			previousElement.checked = false;
+			previousElement.disabled = true;     
+		}
+	}
 }
 
 </script>
@@ -217,7 +226,7 @@ function enablePreviousCheckBox(element)
 		<!-- SIMPLE QUERY INTERFACE BEGINS-->
 		<tr>
 		  <td>
-			<table summary="" cellpadding="3" cellspacing="0" border="0">
+			<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
 				<br/>
 				<tr>
 					<td>
@@ -501,7 +510,7 @@ function enablePreviousCheckBox(element)
 				<tr>
 					<td align="right" colspan="7">
 					<!-- action buttons begins -->
-					<table cellpadding="4" cellspacing="0" border="0">
+					<table cellpadding="4" cellspacing="0" border="0" align="right">
 						<tr>`
 							<td>
 								<%String searchAction = "callAction('"+Constants.SIMPLE_SEARCH_ACTION+"')";%>
