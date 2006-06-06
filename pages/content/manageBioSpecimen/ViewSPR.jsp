@@ -3,15 +3,17 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 
+<%@ page import="java.util.ArrayList"%>
+
 <%@ include file="/pages/content/common/BioSpecimenCommonCode.jsp" %>
 <script src="jss/script.js" type="text/javascript"></script>
 
 <% 
 	String systemIdentifier = (String)request.getAttribute(Constants.SYSTEM_IDENTIFIER);
 
-	String surgicalPathologyReport = (String)request.getAttribute("integrationData");
+	String surgicalPathologyReport = (String)request.getAttribute(Constants.LINKED_DATA);
 
-	request.setAttribute("actionForm", request.getAttribute("actionForm"));
+	String editTabLink = (String)request.getAttribute(Constants.EDIT_TAB_LINK);
 
 %>
 <head>
@@ -22,15 +24,15 @@
 	<%=messageKey%>
 </html:messages>
 	
-<html:form action="ViewSurgicalPathologyReport.do">
+<html:form action="ViewSpecimenCollectionGroupSPR.do">
 
 	<table summary="" cellpadding="0" cellspacing="0" border="0" height="20" class="tabPage" width="600">
 		<tr>
-			<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" >
+			<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onclick="addNewAction('<%=editTabLink%>')" >
 				Edit
 			</td>
 			
-			<td height="20" class="tabMenuItemSelected" onclick="document.location.href='ViewSPR.do'">
+			<td height="20" class="tabMenuItemSelected">
 				View Surgical Pathology Report
 			</td>
 			
@@ -66,26 +68,7 @@
 									<html:textarea cols="111" rows="20" styleClass="tabFieldSized"  styleId="comments" property="" value="<%=surgicalPathologyReport%>" readonly="true" />
 								</td>
 							</tr>
-							<tr>
-								<td align="right" colspan="3">
-									<!-- action buttons begins -->
-									<table cellpadding="4" cellspacing="0" border="0">
-										<tr>
-											<td>
-												<html:submit styleClass="actionButton">
-													<bean:message  key="buttons.submit" />
-												</html:submit>
-											</td>
-											<%-- td>
-												<html:reset styleClass="actionButton" >
-													<bean:message  key="buttons.reset" />
-												</html:reset>
-											</td --%>
-										</tr>
-									</table>
-									<!-- action buttons end -->
-								</td>
-							</tr>
+							<tr><td>&nbsp;</td></tr>
 						</table>
 					</td></tr>
 					<!-- VIEW SURGICAL PATHOLOGY REPORT ENDS-->
