@@ -11,6 +11,7 @@
 package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,7 +25,7 @@ import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.IntegrationBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
-import edu.wustl.common.bizlogic.AbstractBizLogic;
+import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -42,40 +43,84 @@ public class ViewLinkedDataAction extends Action
 	    
 	    Logger.out.debug("Identifier parameter received in IntegratorAction==>"+request.getParameter(Constants.SYSTEM_IDENTIFIER));
 	    
-	    Logger.out.debug("ApplicationName received in IntegrationAction==>"+request.getParameter("applicationName"));
+	    Logger.out.debug("ApplicationName received in IntegrationAction==>"+request.getParameter(Constants.APPLICATION_ID));
 	    
 	    AbstractActionForm abstractActionForm = (AbstractActionForm)form;
 	    
-	    ArrayList integrationDataList=new ArrayList();
+	    List integrationDataList=new ArrayList();
 	    
 	    Logger.out.debug("FormBean Identifier===>"+abstractActionForm.getSystemIdentifier());
 	    
 	    Logger.out.debug("FormBean ID===>"+abstractActionForm.getFormId());
 	    
-	    AbstractBizLogic bizLogic = BizLogicFactory.getBizLogic(abstractActionForm.getFormId());
+	    //Getting instance of IntegrationBizLogic using BizLogicFactory
+	    IntegrationBizLogic integrationBizLogic = (IntegrationBizLogic)BizLogicFactory.getBizLogic(abstractActionForm.getFormId()); 
 	    
-	    IntegrationBizLogic integrationBizLogic= (IntegrationBizLogic)bizLogic;
+	    //Retrieving linked data from integrated application i.e. CAE/caTies
+	    integrationDataList = (ArrayList)integrationBizLogic.getLinkedAppData(new Long(request.getParameter(Constants.SYSTEM_IDENTIFIER)), request.getParameter(Constants.APPLICATION_ID));
 	    
-	    integrationDataList= (ArrayList)integrationBizLogic.getLinkedAppData(new Long(request.getParameter(Constants.SYSTEM_IDENTIFIER)), request.getParameter("applicationName"));
-	    
-	    String integrationData=new String();
-	    
-	    if(integrationDataList.size()>0)
+	    //populating linked data for Participant
+	    if( abstractActionForm.getFormId() == Constants.PARTICIPANT_FORM_ID )
 	    {
-		    for(int i=0; i<integrationDataList.size(); i++)
+	        Logger.out.debug("Generating IntegrationData for Participant");
+	        
+	        List reportIdList = new ArrayList();
+	        List reportList = new ArrayList();
+	        
+	        //check for size of the list of integration data
+	        if(integrationDataList.size()>0)
+	        {
+	            //generating list of PathologyReport and PathologyReportId
+	            for(int i=0; i<integrationDataList.size(); i++)
+	            {
+	                NameValueBean report=(NameValueBean)integrationDataList.get(i);
+	                
+	                reportIdList.add(new NameValueBean(report.getName(), new Integer(i)));
+	                reportList.add((report.getValue()).replaceAll("\n", "\\\\n"));
+	                
+	                if(i==0)
+	                {
+	                    //request.setAttribute("firstReportId", report.getName() );//  new NameValueBean(report.getName(), report.getName()));
+	                    request.setAttribute("firstReport", report.getValue());
+	                }
+	            }
+	        }
+	        
+	        //Storing required attributes into Request
+	        request.setAttribute("reportIdList", reportIdList);
+	        request.setAttribute("reportList",reportList);
+	    }
+	    //populating linked data for SpecimenCollectionGroup and Specimen
+	    else
+	    {
+	        Logger.out.debug("Generating IntegrationData for SpecimenCollectionGroup");
+		    String integrationData=new String();
+		    
+		    //check for size of the list of integration data
+		    if(integrationDataList.size()>0)
 		    {
-		        integrationData += (String)integrationDataList.get(i);
+		        //generating pathologyreport from list of integration data
+			    for(int i=0; i<integrationDataList.size(); i++)
+			    {
+			        integrationData += (String)integrationDataList.get(i);
+			    }
 		    }
+		    
+		    Logger.out.debug("IntegrationData in IntegratorAction===>"+integrationData);
+		    
+		    //Storing required attributes into Request
+		    request.setAttribute(Constants.LINKED_DATA,integrationData);
 	    }
 	    
-	    Logger.out.debug("IntegrationData in IntegratorAction===>"+integrationData);
-	    
+	    //Storing SystemIdentifier into Request
 	    request.setAttribute(Constants.SYSTEM_IDENTIFIER,request.getParameter(Constants.SYSTEM_IDENTIFIER));
-	   
-	    request.setAttribute("integrationData",integrationData);
 	    
-	    request.setAttribute("actionForm", form);
+	    //Storing link of Edit Tab into Request
+	    request.setAttribute(Constants.EDIT_TAB_LINK, request.getParameter("editTabLink"));
 	    
-	    return mapping.findForward("success");
+	    //set the menu selection 
+	    //request.setAttribute(Constants.MENU_SELECTED, "14"); 
+	    
+	    return mapping.findForward(Constants.SUCCESS);
     }
 }
