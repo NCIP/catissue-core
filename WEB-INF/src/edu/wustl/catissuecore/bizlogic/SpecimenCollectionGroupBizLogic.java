@@ -10,6 +10,10 @@
 
 package edu.wustl.catissuecore.bizlogic;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -325,15 +329,79 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 		return true;
     }
 	
+	/**
+     * This method fetches linked data from integrated application i.e. CAE/caTies.
+     */
 	public List getLinkedAppData(Long systemIdentifier, String applicationID)
 	{
 	    Logger.out.debug("In getIntegrationData() of SCGBizLogic ");
 	    
 	    Logger.out.debug("ApplicationName in getIntegrationData() of SCGBizLogic==>"+applicationID);
 	    
+	    long identifiedPathologyReportId = 0;
+	    
+	    try
+	    {
+		    //JDBC call to get matching identifier from database
+		    Class.forName("org.gjt.mm.mysql.Driver");
+		    
+		    Connection connection=DriverManager.getConnection("jdbc:mysql://localhost:3306/catissuecore","catissue_core","catissue_core");
+		    
+		    Statement stmt= connection.createStatement();
+		    
+		    String clinicalReportQuery = "select CLINICAL_REPORT_ID from CATISSUE_SPECIMEN_COLL_GROUP where IDENTIFIER="+systemIdentifier;
+		    
+		    ResultSet clinicalReportResultSet = stmt.executeQuery(clinicalReportQuery);
+		    
+		    long clinicalReportId = 0;
+		    while(clinicalReportResultSet.next())
+		    {
+		        clinicalReportId=clinicalReportResultSet.getLong(1);
+		        break;
+		    }
+		    Logger.out.debug("ClinicalReportId==>"+clinicalReportId);
+		    clinicalReportResultSet.close();
+		    if(clinicalReportId==0)
+		    {
+		        List exception=new ArrayList();
+		        exception.add("ClinicalReportId is not available for SpecimenCollectionGroup");
+		        return exception;
+		    }
+		    
+		    String identifiedPathologyReportIdQuery = "select IDENTIFIER from CATISSUE_IDENTIFIED_PATHOLOGY_REPORT where CLINICAL_REPORT_ID="+clinicalReportId;
+		    
+		    ResultSet identifiedPathologyReportResultSet=stmt.executeQuery(identifiedPathologyReportIdQuery);
+		    
+		    
+		    
+		    while(identifiedPathologyReportResultSet.next())
+		    {
+		        identifiedPathologyReportId = identifiedPathologyReportResultSet.getLong(1);
+		        break;
+		    }
+		    Logger.out.debug("IdentifiedPathologyReportId==>"+identifiedPathologyReportId);
+		    identifiedPathologyReportResultSet.close();
+		    if(identifiedPathologyReportId==0)
+		    {
+		        List exception=new ArrayList();
+		        exception.add("IdentifiedPathologyReportId is not available for linked ClinicalReportId");
+		        return exception;
+		    }
+		    
+		    stmt.close();
+		    
+		    connection.close();
+		    
+	    }
+	    catch(Exception e)
+	    {
+	        Logger.out.debug("JDBC Exception==>"+e.getMessage());
+	    }
+	    
+	    
 	    IntegrationManager integrationManager=IntegrationManagerFactory.getIntegrationManager(applicationID);
 
-	    return integrationManager.getLinkedAppData(new SpecimenCollectionGroup(), systemIdentifier);
+	    return integrationManager.getLinkedAppData(new SpecimenCollectionGroup(), new Long(identifiedPathologyReportId));
 	}
 	
 	public String getPageToShow()
