@@ -30,6 +30,7 @@ tr#hiddenCombo
 		List siteList = (List)request.getAttribute(Constants.SITELIST);
 		
 		String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);		
+		String forwardTo=(String)request.getAttribute(Constants.FORWARD_TO);		
 		boolean isAddNew = false;
 
 		String operation = (String)request.getAttribute(Constants.OPERATION);
@@ -46,14 +47,7 @@ tr#hiddenCombo
 		}
 		else
 		{
-			if(request.getAttribute(Constants.SPREADSHEET_DATA_LIST)==null)
-			{
-				formName = Constants.PARTICIPANT_LOOKUP_ACTION;
-			}
-			else
-			{
-				formName = Constants.PARTICIPANT_ADD_ACTION;
-			}
+			formName = Constants.PARTICIPANT_LOOKUP_ACTION;
 			readOnlyValue=false;
 		}
 
@@ -74,10 +68,11 @@ tr#hiddenCombo
 	<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 	
 	<%
+	String participantIdentifier="0";
 	List columnList = (List) request.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
 	List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 	
-	String title = "PArticipantList";
+	String title = "ParticipantList";
 
 	boolean isSpecimenData = false;
 
@@ -95,14 +90,14 @@ tr#hiddenCombo
   		//Bug 700: changed the variable name for the map values as it was same in both AdvanceSearchForm and SimpleQueryInterfaceForm
 		String chkName = "value1(CHK_" + xx + ")";
 	%>
-		["<INPUT TYPE='CHECKBOX' NAME='<%=chkName%>' id='<%=xx%>' onClick='changeData(this)'>",<%for (j=0;j < (row.size()-1);j++){%>"<%=Utility.toGridFormat(row.get(j))%>",<%}%>"<%=Utility.toGridFormat(row.get(j))%>","1"],<%}%>
+		["<INPUT TYPE='RADIO' NAME='chkName' onclick='onParticipantClick(<%=row.get(0)%>)' id='<%=xx%>'>",<%for (j=0;j < (row.size()-1);j++){%>"<%=Utility.toGridFormat(row.get(j))%>",<%}%>"<%=Utility.toGridFormat(row.get(j))%>","1"],<%}%>
 	<%
 		List row = (List)dataList.get(xx);
   		int j;
   		//Bug 700: changed the variable name for the map values as it was same in both AdvanceSearchForm and SimpleQueryInterfaceForm
 		String chkName = "value1(CHK_" + xx + ")";
 	%>
-		["<INPUT TYPE='CHECKBOX' NAME='<%=chkName%>' id='<%=xx%>' onClick='changeData(this)'>",<%for (j=0;j < (row.size()-1);j++){%>"<%=Utility.toGridFormat(row.get(j))%>",<%}%>"<%=Utility.toGridFormat(row.get(j))%>","1"]
+		["<INPUT TYPE='RADIO' NAME='chkName' onclick='onParticipantClick(<%=row.get(0)%>)' id='<%=xx%>'>",<%for (j=0;j < (row.size()-1);j++){%>"<%=Utility.toGridFormat(row.get(j))%>",<%}%>"<%=Utility.toGridFormat(row.get(j))%>","1"]
 		];
 		
 		var columns = ["",<%int k;%><%for (k=0;k < (columnList.size()-1);k++){if (columnList.get(k).toString().trim().equals("ID")){IDCount++;}%>"<%=columnList.get(k)%>",<%}if (columnList.get(k).toString().trim().equals("ID")){IDCount++;}%>"<%=columnList.get(k)%>"];
@@ -194,12 +189,37 @@ tr#hiddenCombo
 				field.value = field.value.replace(/[^\d]+/g, ''); 
 			}
 		}
-		//this function is called when user clicks on Participant Lookup Again Button
+		//this function is called when user clicks on Lookup Again Button
 		function participantLookupAction()
 		{
-			document.forms[0].action="<%=Constants.PARTICIPANT_LOOKUP_ACTION%>?<%=Constants.PARTICIPANT_LOOKUP_PARAMETER%>=1";
+			document.forms[0].action="<%=Constants.PARTICIPANT_LOOKUP_ACTION%>";
 			document.forms[0].submit();
 		}
+		function onParticipantClick(participant_id)
+		{
+			document.forms[0].systemIdentifier.value=participant_id;
+		}
+		
+		function AddParticipant()
+		{
+			document.forms[0].action="<%=Constants.PARTICIPANT_ADD_ACTION%>";
+			document.forms[0].submit();
+		}
+		function UseSelectedParticipant()
+		{
+			if(document.forms[0].systemIdentifier.value=="" || document.forms[0].systemIdentifier.value=="0")
+			{
+				alert("Please select the Participant from the list");
+			}
+			else
+			{
+				document.forms[0].action="ParticipantSelect.do?operation=add";
+				document.forms[0].submit();
+			}
+			
+		}
+
+	
 	</script>
 </head>
 
@@ -235,7 +255,7 @@ tr#hiddenCombo
 	}
 	%>
 	<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
-		   		   
+	   		   
 			
 		<!-- If operation is equal to edit or search but,the page is for query the identifier field is not shown -->
 		<%--logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>">
@@ -287,15 +307,16 @@ tr#hiddenCombo
 			  </logic:notEqual--%>
 			  
 			   	
-		  <!-- NEW PARTICIPANT REGISTRATION BEGINS-->
-				<tr>
-				<td>
-			 	 <table summary="" cellpadding="3" cellspacing="0" border="0">
+
+	  <!-- NEW PARTICIPANT REGISTRATION BEGINS-->
+		<tr><td>
+			 <table summary="" cellpadding="3" cellspacing="0" border="0">
 				 <tr>
 					<td>
+						<input type="hidden" name="participant_id">
 						<html:hidden property="<%=Constants.OPERATION%>" value="<%=operation%>"/>
 						<html:hidden property="submittedFor" value="<%=submittedFor%>"/>
-						<html:hidden property="forwardTo" value=""/>
+						<html:hidden property="forwardTo" value="<%=forwardTo%>"/>
 					</td>
 					<td><html:hidden property="counter"/></td>
 					<td><html:hidden property="onSubmit"/></td>
@@ -567,20 +588,22 @@ tr#hiddenCombo
 				}
 				%>
 				 </tbody>
+				
 				  <!-- Medical Identifiers End here -->
-				 	<tr>
-				  		<td align="right" colspan="4">
-							<%
-								String changeAction = "setFormAction('"+formName+"')";
-				 			%>
-							<!-- action buttons begins -->
-							<table cellpadding="4" cellspacing="0" border="0">
-								<logic:equal name="<%=Constants.SUBMITTED_FOR%>" value="AddNew">
-									<% 
-										isAddNew=true;
-									%>
-								</logic:equal>
-								<tr>
+				 <!-----action buttons-->
+				 <tr>
+				 	<td align="right" colspan="4">
+						<%
+							String changeAction = "setFormAction('"+formName+"')";
+						%>
+						<!-- action buttons begins -->
+						<table cellpadding="4" cellspacing="0" border="0">
+							<logic:equal name="<%=Constants.SUBMITTED_FOR%>" value="AddNew">
+							<% 
+								isAddNew=true;
+							%>
+							</logic:equal>
+							<tr>
 								<%
 									String normalSubmitFunctionName = "setSubmittedFor('" + submittedFor+ "','" + Constants.PARTICIPANT_FORWARD_TO_LIST[0][1]+"')";
 									String forwardToSubmitFunctionName = "setSubmittedFor('ForwardTo','" + Constants.PARTICIPANT_FORWARD_TO_LIST[1][1]+"')";									
@@ -591,90 +614,82 @@ tr#hiddenCombo
 								
 								<!-- PUT YOUR COMMENT HERE -->
 								<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
-						   			<td nowrap class="formFieldNoBorders">
-										<html:button styleClass="actionButton" 
-												property="submitPage" 
-												value="<%=Constants.PARTICIPANT_FORWARD_TO_LIST[0][0]%>" 
-												onclick="<%=normalSubmit%>"> 
-										</html:button>
-									</td>
+								<td nowrap class="formFieldNoBorders">
+								<html:button styleClass="actionButton" 
+										property="submitPage" 
+										value="<%=Constants.PARTICIPANT_FORWARD_TO_LIST[0][0]%>" 
+										onclick="<%=normalSubmit%>"> 
+											</html:button>
+								</td>
 								</logic:notEqual>	
 								
 								<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
-									<td nowrap class="formFieldNoBorders">									
-										<html:button styleClass="actionButton"  
-												property="submitPage" 
-												value="<%=Constants.PARTICIPANT_FORWARD_TO_LIST[1][0]%>" 
-												disabled="<%=isAddNew%>"
-												onclick="<%=forwardToSubmit%>">
-										</html:button>
-									</td>
+								<td nowrap class="formFieldNoBorders">									
+									<html:button styleClass="actionButton"  
+											property="submitPage" 
+											value="<%=Constants.PARTICIPANT_FORWARD_TO_LIST[1][0]%>" 
+											disabled="<%=isAddNew%>"
+					  						onclick="<%=forwardToSubmit%>">
+									</html:button>
+								</td>
 								</logic:notEqual>
-								
-							   	
-							   	<%-- td colspan="3">
-									<html:reset styleClass="actionButton">
-										<bean:message key="buttons.reset"/>
-									</html:reset>
-								</td --%> 
-								
 								<td>
-						   			<html:submit styleClass="actionButton" disabled="true">
-						   				<bean:message key="buttons.getClinicalData"/>
-						   			</html:submit>
-						   		</td>	
+									<html:submit styleClass="actionButton" disabled="true">
+							   		<bean:message key="buttons.getClinicalData"/>
+									</html:submit>
+								</td>	
 							</tr>
-							<!---Following is the code button ParticipantLookupAgain-->
-							
-							<%if(request.getAttribute(Constants.SPREADSHEET_DATA_LIST)!=null){%>	
-								<tr>
-									<td>
-
-						   				<html:button styleClass="actionButton" property="submitPage" onclick="participantLookupAction();">
-					   					<bean:message key="buttons.participantLookupAgain"/>
-					   				</html:button>
-									</td>
-								</tr>	
-							<%}%>
-									<!-- end -->
-							</table>
+						</table>
 							<!-- action buttons end -->
-				  		</td>
-				 	</tr>
+			  		</td>
+			 	 </tr>
 				 
-				</logic:notEqual>
-				</table>
-			  </td>
-			 
-			 <!-- NEW PARTICIPANT REGISTRATION ends-->
-			<!---Following is the code for Data Grid. Participant Lookup Data is displayed-->
+				<!--	extra </logic:notEqual>-->
+				
+				 <!-- end --> 
+				  <!---Following is the code for Data Grid. Participant Lookup Data is displayed-->
+				<%if(request.getAttribute(Constants.SPREADSHEET_DATA_LIST)!=null && dataList.size()>0){%>	
 
-			<%if(request.getAttribute(Constants.SPREADSHEET_DATA_LIST)!=null && dataList.size()>0){%>	
-			<tr height="50%">
-				<td width="10%">
-					<div STYLE="overflow: auto; width:100%; height:30%; padding:0px; margin: 0px; border: 1px solid">
-					<script>
-					//	create ActiveWidgets Grid javascript object.
-					var obj = new Active.Controls.Grid;
+				<tr>
+				     <td class="formTitle" height="20" colspan="2">
+				     	<bean:message key="participant.lookup"/>
+				     </td>
+				     <td class="formButtonField">
+						<html:button styleClass="actionButton"  property="useSelectedParticipant" onclick="UseSelectedParticipant();">
+						<bean:message key="buttons.useSelectedParticipant"/> 
+						</html:button>
+					 </td>
+				    <td class="formTitle" align="Right">
+						<html:button styleClass="actionButton" property="addParticipant" onclick="AddParticipant();">
+								<bean:message key="buttons.addParticipant"/> 
+						</html:button>
+					</td>
+				  </tr>				
+				 <tr height="50%">
+					<td colspan=4>
+						<div STYLE="overflow: auto; width:100%; height:30%; padding:0px; margin: 0px; border: 1px solid">
+						<script>
+						//	create ActiveWidgets Grid javascript object.
+						var obj = new Active.Controls.Grid;
 						
-					//	set number of rows/columns.
-					obj.setRowProperty("count", <%=dataList.size()%>);
-					obj.setColumnProperty("count", <%=(columnList.size()-IDCount) + 1%>);
+						//	set number of rows/columns.
+						obj.setRowProperty("count", <%=dataList.size()%>);
+						obj.setColumnProperty("count", <%=(columnList.size()-IDCount) + 1%>);
 					
-					//	provide cells and headers text
-					obj.setDataProperty("text", function(i, j){return myData[i][j]});
-					obj.setColumnProperty("text", function(i){return columns[i]});
+						//	provide cells and headers text
+						obj.setDataProperty("text", function(i, j){return myData[i][j]});
+						obj.setColumnProperty("text", function(i){return columns[i]});
 						
-					//	set headers width/height.
-					obj.setRowHeaderWidth("28px");
-					obj.setColumnHeaderHeight("20px");
-					//original sort method  
-					var _sort = obj.sort; 
-					//overide sort function to meet our requirenemnt
-				    obj.sort = function(index, direction, alternateIndex){ 
+						//	set headers width/height.
+						obj.setRowHeaderWidth("28px");
+						obj.setColumnHeaderHeight("20px");
+						//original sort method  
+						var _sort = obj.sort; 
+						//overide sort function to meet our requirenemnt
+					    obj.sort = function(index, direction, alternateIndex){ 
 				   
-				    //if check box column is clicked
-				    //then sort on the flag those are in 8th column
+					    //if check box column is clicked
+					    //then sort on the flag those are in 8th column
 			        	if(index==0)
 			        	{
 			        		index=myData[0].length-1;
@@ -686,26 +701,29 @@ tr#hiddenCombo
 			         	_sort.call(this, index, direction);
 
 				        return true;
-			    	}
+			    		}
 					    
-				    //double click events
-				    var row = new Active.Templates.Row;
-					row.setEvent("ondblclick", function(){this.action("myAction")}); 
+					    //double click events
+					    var row = new Active.Templates.Row;
+						row.setEvent("ondblclick", function(){this.action("myAction")}); 
 			
-					obj.setTemplate("row", row);
-		   			obj.setAction("myAction", 
-					function(src){window.location.href = 'SearchObject.do?pageOf=<%=pageOf%>&operation=search&systemIdentifier='+myData[this.getSelectionProperty("index")][1]}); 
+						obj.setTemplate("row", row);
+		   				obj.setAction("myAction", 
+						function(src){window.location.href = 'SearchObject.do?pageOf=<%=pageOf%>&operation=search&systemIdentifier='+myData[this.getSelectionProperty("index")][1]}); 
 		
-					//	write grid html to the page.
-					document.write(obj);
-					</script>
-					</div>
+						//	write grid html to the page.
+						document.write(obj);
+						</script>
+						</div>
 					</td>
 				</tr>
+
 				<%}%>
-				<!--Participant Lookup end-->
-		</table>
-	<%
+				<!--Participant Lookup end-->				
+			</table>
+		</td></tr>
+	</table>			
+<%
 	if(pageView.equals("edit"))
 	{
 	%>
@@ -715,4 +733,4 @@ tr#hiddenCombo
 	<%
 	}
 	%>
-</html:form>
+	 </html:form>
