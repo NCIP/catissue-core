@@ -18,8 +18,14 @@ import java.util.List;
  */
 public abstract class IntegrationManager
 {
+    /**
+     * Abstract method to fetch linked data from integrated applications 
+     */
     public abstract List getLinkedAppData(Object linkedObj, Long systemIdentifier);
     
+    /**
+     * Abstract method to fetch mathich objects from integrated application 
+     */
     public abstract List getMatchingObjects(Object objToMatch);
     
 }

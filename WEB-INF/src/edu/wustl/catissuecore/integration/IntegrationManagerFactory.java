@@ -16,6 +16,9 @@ package edu.wustl.catissuecore.integration;
  */
 public class IntegrationManagerFactory
 {
+    /**
+     * static method to get instance of IntegrationManager class for required Application
+     */
     public static IntegrationManager getIntegrationManager(String ApplicationID)
     {
         IntegrationManager integrationManager=null;
