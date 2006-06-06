@@ -964,8 +964,8 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	};
 
 	public static final String [][] PARTICIPANT_FORWARD_TO_LIST = {
-			{"Normal Submit",					"success"},
-			{"New Participant Registration",	"createParticipantRegistration"}
+			{"Submit",					"success"},
+			{"Participant Registration",	"createParticipantRegistration"}
 	};
 	
 	//Constants Required for Advance Search
@@ -1063,7 +1063,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String PARTICIPANT_LOOKUP_ALGO="ParticipantLookupAlgo";
 	public static final String PARTICIPANT_LOOKUP_SUCCESS="success";
 	public static final String PARTICIPANT_ADD_FORWARD="participantAdd";
-	public static final String PARTICIPANT_SYSTEM_IDENTIFIER="System Identifier";
+	public static final String PARTICIPANT_SYSTEM_IDENTIFIER="Identifier";
 	public static final String PARTICIPANT_LAST_NAME="Last Name";
 	public static final String PARTICIPANT_FIRST_NAME="First Name";
 	public static final String PARTICIPANT_MIDDLE_NAME="Middle Name";
