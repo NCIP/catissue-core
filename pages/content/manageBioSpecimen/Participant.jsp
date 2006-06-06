@@ -209,6 +209,31 @@ tr#hiddenCombo
 </html:messages>
 
 <html:form action="<%=formName%>">
+	<%
+	if(pageView.equals("edit"))
+	{
+	%>
+		<table summary="" cellpadding="0" cellspacing="0" border="0" height="20" class="tabPage" width="600">
+			<tr>
+				<td height="20" class="tabMenuItemSelected" onclick="document.location.href='ManageAdministrativeData.do'">Edit</td>
+
+				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onclick="addNewAction('ViewParticipantSPR.do?applicationId=caTies&editTabLink=ParticipantSearch.do?pageOf=pageOfParticipant')">
+					View Surgical Pathology Report
+				</td>
+								
+				
+				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()">
+					View Clinical Annotations
+				</td>
+
+				<td width="450" class="tabMenuSeparator" colspan="3">&nbsp;</td>
+			</tr>
+
+			<tr>
+				<td class="tabField" colspan="6">
+	<%
+	}
+	%>
 	<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
 		   		   
 			
@@ -379,7 +404,6 @@ tr#hiddenCombo
 						</html:select>
 		        	  </td>
 				 </tr>
-				 
 				 
 				 <tr>
 					<td class="formRequiredNotice" width="5">&nbsp;</td>
@@ -681,4 +705,14 @@ tr#hiddenCombo
 				<%}%>
 				<!--Participant Lookup end-->
 		</table>
-	 </html:form>
+	<%
+	if(pageView.equals("edit"))
+	{
+	%>
+			</td>
+		</tr>
+	</table>
+	<%
+	}
+	%>
+</html:form>
