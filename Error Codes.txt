@@ -1,0 +1,6 @@
+#--Error Codes for the application--#
+
+#1 - Class not found.
+#2 - No such method.
+#3 - Target invocation exception.
+#4 - Illegal access specifier for the method.
