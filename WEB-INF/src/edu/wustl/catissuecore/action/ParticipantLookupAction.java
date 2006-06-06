@@ -46,6 +46,8 @@ public class ParticipantLookupAction extends BaseAction
 		String[] columnHeaderList = new String[]{Constants.PARTICIPANT_SYSTEM_IDENTIFIER, Constants.PARTICIPANT_LAST_NAME,Constants.PARTICIPANT_FIRST_NAME,Constants.PARTICIPANT_MIDDLE_NAME,Constants.PARTICIPANT_BIRTH_DATE,Constants.PARTICIPANT_DEATH_DATE,Constants.PARTICIPANT_SOCIAL_SECURITY_NUMBER,Constants.PARTICIPANT_PROBABLITY_MATCH};
 		List ColumnList = new ArrayList();
 		
+		
+		
 		for (int i = 0; i < columnHeaderList.length; i++)
 		{
 			ColumnList.add(columnHeaderList[i]);
@@ -64,11 +66,20 @@ public class ParticipantLookupAction extends BaseAction
 		
 		List ParticipantList = participantLookupLogic.participantLookup(participant);
 		
+		if(request.getParameter(Constants.SUBMITTED_FOR)!=null && !request.getParameter(Constants.SUBMITTED_FOR).equals(""))
+		{
+			request.setAttribute(Constants.SUBMITTED_FOR,request.getParameter(Constants.SUBMITTED_FOR));
+		}
+		if(request.getParameter(Constants.FORWARD_TO)!=null && !request.getParameter(Constants.FORWARD_TO).equals(""))
+		{
+			request.setAttribute(Constants.FORWARD_TO,request.getParameter(Constants.FORWARD_TO));
+		}
 		//if any matching participants are there then show the participants otherwise add the participant
-		if (ParticipantList.size() > 0 || request.getParameter(Constants.PARTICIPANT_LOOKUP_PARAMETER) != null)
+		if (ParticipantList.size() > 0)
 		{
 			request.setAttribute(Constants.SPREADSHEET_DATA_LIST, ParticipantList);
 		}
+		//	if no participant match found then add the participant
 		else
 		{
 			return mapping.findForward(Constants.PARTICIPANT_ADD_FORWARD);
