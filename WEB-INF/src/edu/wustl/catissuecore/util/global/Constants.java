@@ -1077,6 +1077,9 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String APPLICATION_ID = "applicationId";
 	public static final String CATIES = "caTies";
 	public static final String CAE = "cae";
+	public static final String EDIT_TAB_LINK = "editTabLink";
+	public static final String CATIES_PUBLIC_SERVER_NAME = "CaTiesPublicServerName";
+	public static final String CATIES_PRIVATE_SERVER_NAME = "CaTiesPrivateServerName";
 	
 //	public static final String getCollectionProtocolPIGroupName(Long identifier)
 //	{
