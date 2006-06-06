@@ -107,7 +107,7 @@
 			<tr>
 				<td height="20" class="tabMenuItemSelected" onclick="document.location.href='ManageAdministrativeData.do'">Edit</td>
 
-				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onclick="addNewAction('ViewSurgicalPathologyReport.do?applicationName=caTies')">
+				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onclick="addNewAction('ViewSpecimenCollectionGroupSPR.do?applicationId=caTies&editTabLink=SpecimenCollectionGroupSearch.do?pageOf=pageOfSpecimenCollectionGroup')">
 					View Surgical Pathology Report
 				</td>
 								
