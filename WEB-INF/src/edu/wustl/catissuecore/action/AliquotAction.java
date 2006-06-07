@@ -55,7 +55,7 @@ public class AliquotAction extends BaseAction //SecureAction
 	{
 		AliquotForm aliquotForm = (AliquotForm)form;
 		
-		String specimenId = (String)request.getAttribute(Constants.SYSTEM_IDENTIFIER);
+		String specimenId = String.valueOf(request.getAttribute(Constants.SYSTEM_IDENTIFIER));
 		if(specimenId == null)
 		{
 			specimenId = request.getParameter(Constants.SYSTEM_IDENTIFIER);
