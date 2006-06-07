@@ -216,6 +216,64 @@
 			sname="<input type='checkbox' name='" + name +"' id='" + name +"' value='C' onClick=\"enableButton(document.forms[0].deleteBiohazard,document.forms[0].bhCounter,'chk_bio_')\">";
 			checkb.innerHTML=""+sname;
 		}
+		
+		function onCheckboxButtonClick(chkBox)
+		{
+			var aliquotCountTextBox  = document.getElementById("noOfAliquots");
+			var qtyPerAliquotTextBox = document.getElementById("quantityPerAliquot");
+			
+			if(chkBox.checked)
+			{
+				aliquotCountTextBox.disabled = false;
+				qtyPerAliquotTextBox.disabled = false;
+				
+				document.forms[0].deriveButton.disabled = true;
+				document.forms[0].eventButton.disabled = true;
+				document.forms[0].scgButton.disabled = true;
+			}
+			else
+			{
+				aliquotCountTextBox.disabled = true;
+				qtyPerAliquotTextBox.disabled = true;
+				
+				document.forms[0].deriveButton.disabled = false;
+				document.forms[0].eventButton.disabled = false;
+				document.forms[0].scgButton.disabled = false;
+			}
+		}
+		
+		function onNormalSubmit()
+		{
+			var checked = document.forms[0].checkedButton.checked;
+			var operation = document.forms[0].operation.value;
+			
+			if(checked)
+			{
+				if(operation == "Add")
+				{
+					setSubmittedFor('null','pageOfCreateAliquot');
+					confirmDisable('NewSpecimenAdd.do',document.forms[0].activityStatus);
+				}
+				else
+				{
+					setSubmittedFor('null','pageOfCreateAliquot');
+					confirmDisable('NewSpecimenEdit.do',document.forms[0].activityStatus);
+				}
+			}
+			else
+			{
+				if(operation == "Add")
+				{
+					setSubmittedFor('null','success');
+					confirmDisable('NewSpecimenAdd.do',document.forms[0].activityStatus);
+				}
+				else
+				{
+					setSubmittedFor('null','success');
+					confirmDisable('NewSpecimenEdit.do',document.forms[0].activityStatus);
+				}
+			}
+		}
 	</script>
 </head>
 
@@ -672,6 +730,54 @@
 					</td>
 				</tr>
 				</logic:equal>
+				
+				<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
+				
+				<tr>
+					<td class="formTitle" height="20" colspan="6">
+						<html:checkbox property="checkedButton" onclick="onCheckboxButtonClick(this)">
+							&nbsp; <bean:message key="aliquots.createTitle"/>
+						</html:checkbox>
+				    </td>
+				</tr>
+				 
+				 <tr>
+			     	<td class="formRequiredNotice" width="5">*</td>
+				    <td class="formRequiredLabel">
+				    	<label for="noOfAliquots">
+							<bean:message key="aliquots.noOfAliquots"/>
+						</label>
+					</td>
+				    <td class="formField" colspan="4">
+					    <logic:equal name="newSpecimenForm" property="checkedButton" value="true">
+							<html:text styleClass="formFieldSized10" maxlength="50"  size="30" styleId="noOfAliquots" property="noOfAliquots"/>
+						</logic:equal>
+						
+						<logic:equal name="newSpecimenForm" property="checkedButton" value="false">
+							<html:text styleClass="formFieldSized10" maxlength="50"  size="30" styleId="noOfAliquots" property="noOfAliquots" disabled="true"/>
+						</logic:equal>
+		        	</td>
+				 </tr>
+				 
+				 <tr>
+			     	<td class="formRequiredNotice" width="5">&nbsp;</td>
+				    <td class="formLabel">
+				    	<label for="quantityPerAliquot">
+							<bean:message key="aliquots.qtyPerAliquot"/>
+						</label>
+					</td>
+				    <td class="formField" colspan="4">
+				    	<logic:equal name="newSpecimenForm" property="checkedButton" value="true">
+							<html:text styleClass="formFieldSized10" maxlength="50"  size="30" styleId="quantityPerAliquot" property="quantityPerAliquot"/>
+						</logic:equal>
+						
+						<logic:equal name="newSpecimenForm" property="checkedButton" value="false">
+							<html:text styleClass="formFieldSized10" maxlength="50"  size="30" styleId="quantityPerAliquot" property="quantityPerAliquot" disabled="true"/>
+						</logic:equal>
+		        	</td>
+				 </tr>
+				 
+				 </logic:notEqual>
  
 				 <tr>
 				     <td class="formTitle" height="20" colspan="2">
@@ -859,7 +965,12 @@
 												String normalSubmit = normalSubmitFunctionName + ","+confirmDisableFuncName;
 												String deriveNewSubmit = deriveNewSubmitFunctionName + ","+confirmDisableFuncName;
 												String addEventsSubmit = addEventsSubmitFunctionName + ","+confirmDisableFuncName;
-												String addMoreSubmit = addMoreSubmitFunctionName + ","+confirmDisableFuncName;												
+												String addMoreSubmit = addMoreSubmitFunctionName + ","+confirmDisableFuncName;
+
+												if(form.isCheckedButton())
+												{
+													isAddNew = true;
+												}
 											%>
 											
 												<td nowrap class="formFieldNoBorders">
@@ -867,7 +978,7 @@
 															property="submitPage" 
 															
 															value="<%=Constants.SPECIMEN_FORWARD_TO_LIST[0][0]%>" 
-															onclick="<%=normalSubmit%>">
+															onclick="onNormalSubmit()">
 						  				     	    
 											     	</html:button>
 												</td>
@@ -877,10 +988,10 @@
 															
 															value="<%=Constants.SPECIMEN_FORWARD_TO_LIST[1][0]%>" 
 															disabled="<%=isAddNew%>" 
-															onclick="<%=deriveNewSubmit%>">
+															onclick="<%=deriveNewSubmit%>" styleId="deriveButton">
 						  				     	    
 											     	</html:button>
-												</td>		
+												</td>
 											</tr>
 											<tr>							
 												<td class="formFieldNoBorders" nowrap>
@@ -889,7 +1000,7 @@
 															
 															value="<%=Constants.SPECIMEN_FORWARD_TO_LIST[2][0]%>" 
 															disabled="<%=isAddNew%>" 
-															onclick="<%=addEventsSubmit%>">
+															onclick="<%=addEventsSubmit%>" styleId="eventButton">
 						  				     	    
 											     	</html:button>
 												</td>
@@ -899,7 +1010,7 @@
 															
 															value="<%=Constants.SPECIMEN_FORWARD_TO_LIST[3][0]%>" 
 															disabled="<%=isAddNew%>" 
-															onclick="<%=addMoreSubmit%>">
+															onclick="<%=addMoreSubmit%>" styleId="scgButton">
 						  				     	   
 											     	</html:button>
 												</td>								
