@@ -375,7 +375,7 @@ public class AliquotForm extends AbstractActionForm
     /**
      * Overrides the validate method of ActionForm.
      */
-     public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
+     /*public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
      {
          ActionErrors errors = new ActionErrors();
          Validator validator = new Validator();
@@ -401,7 +401,7 @@ public class AliquotForm extends AbstractActionForm
          }
                   
          return errors;
-     }
+     }*/
      
      /**
  	 * Returns the initial quantity per aliquot.
