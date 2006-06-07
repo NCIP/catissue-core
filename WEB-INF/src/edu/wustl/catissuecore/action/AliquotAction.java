@@ -54,7 +54,21 @@ public class AliquotAction extends BaseAction //SecureAction
             HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		AliquotForm aliquotForm = (AliquotForm)form;
-
+		
+		String specimenId = (String)request.getAttribute(Constants.SYSTEM_IDENTIFIER);
+		if(specimenId == null)
+		{
+			specimenId = request.getParameter(Constants.SYSTEM_IDENTIFIER);
+		}
+		
+		if(specimenId != null)
+		{
+			aliquotForm.setSpecimenId(specimenId);
+			aliquotForm.setCheckedButton("1");
+			aliquotForm.setNoOfAliquots(request.getParameter("noOfAliquots"));
+			aliquotForm.setQuantityPerAliquot(request.getParameter("quantityPerAliquot"));
+		}
+		
 		//Extracting the values of the operation & pageOf parameters.
         String operation = request.getParameter(Constants.OPERATION);
         String pageOf = request.getParameter(Constants.PAGEOF);
@@ -64,17 +78,22 @@ public class AliquotAction extends BaseAction //SecureAction
         
         if(Constants.PAGEOF_CREATE_ALIQUOT.equals(request.getParameter(Constants.PAGEOF)))
         {
-        	pageOf = checkForSpecimen(request,aliquotForm);
+        	pageOf = validate(request,aliquotForm);
         	
         	if(Constants.PAGEOF_CREATE_ALIQUOT.equals(pageOf))
-        	{	
-        		int aliquotCount = Integer.parseInt(aliquotForm.getNoOfAliquots());
-        		pageOf = checkForSufficientAvailablePositions(request,containerMap,aliquotCount);
-        		
-        		if(Constants.PAGEOF_CREATE_ALIQUOT.equals(pageOf))
-        		{
-        			populateAliquotsStorageLocations(aliquotForm,containerMap);
-        		}
+        	{
+	        	pageOf = checkForSpecimen(request,aliquotForm);
+	        	
+	        	if(Constants.PAGEOF_CREATE_ALIQUOT.equals(pageOf))
+	        	{	
+	        		int aliquotCount = Integer.parseInt(aliquotForm.getNoOfAliquots());
+	        		pageOf = checkForSufficientAvailablePositions(request,containerMap,aliquotCount);
+	        		
+	        		if(Constants.PAGEOF_CREATE_ALIQUOT.equals(pageOf))
+	        		{
+	        			populateAliquotsStorageLocations(aliquotForm,containerMap);
+	        		}
+	        	}
         	}
         }
         
@@ -415,5 +434,45 @@ public class AliquotAction extends BaseAction //SecureAction
         }
 		
 		return Constants.PAGEOF_CREATE_ALIQUOT;
+	}
+	
+	//This method validates the formbean.
+	private String validate(HttpServletRequest request, AliquotForm form)
+	{
+        Validator validator = new Validator();
+		ActionErrors errors = (ActionErrors)request.getAttribute(Globals.ERROR_KEY);
+		
+		String pageOf = Constants.PAGEOF_CREATE_ALIQUOT;
+		
+		if(errors == null)
+		{
+			errors = new ActionErrors();
+		}
+                 
+        if(form.getCheckedButton().equals("1"))
+        {
+        	if(!validator.isValidOption(form.getSpecimenId()))
+        	{
+        		errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.required",ApplicationProperties.getValue("createSpecimen.parent")));
+        		pageOf = Constants.PAGEOF_ALIQUOT;
+        	}
+        }
+        else
+        {
+        	if(form.getBarcode() == null || form.getBarcode().trim().length() == 0)
+        	{
+        		errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.required",ApplicationProperties.getValue("specimen.barcode")));
+        		pageOf = Constants.PAGEOF_ALIQUOT;
+        	}
+        }
+        
+        if(!validator.isNumeric(form.getNoOfAliquots()))
+        {
+        	errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.format",ApplicationProperties.getValue("aliquots.noOfAliquots")));
+        	pageOf = Constants.PAGEOF_ALIQUOT;
+        }
+        
+        saveErrors(request,errors);
+        return pageOf;
 	}
 }
