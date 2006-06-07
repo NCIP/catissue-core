@@ -818,6 +818,7 @@ PUBLIC
 			<forward name="createNew" path="/CreateSpecimen.do?operation=add&amp;pageOf=&amp;menuSelected=15" />
 			<forward name="sameCollectionGroup" path="/NewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimen&amp;menuSelected=15" />
 			<forward name="eventParameters" path="/ListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParameters&amp;menuSelected=15" />
+			<forward name="pageOfCreateAliquot" path="/CreateAliquots.do?pageOf=pageOfCreateAliquot&amp;menuSelected=15" />
 		</action>
 				
 		<action path="/NewSpecimenEdit"
@@ -832,6 +833,7 @@ PUBLIC
 			<forward name="sameCollectionGroup" path="/NewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimen&amp;menuSelected=15" />
 			<forward name="query" path="/NewSpecimen.do?operation=edit&amp;pageOf=query&amp;menuSelected=12" />
 			<forward name="eventParameters" path="/ListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParameters&amp;menuSelected=15" />
+			<forward name="pageOfCreateAliquot" path="/CreateAliquots.do?pageOf=pageOfCreateAliquot&amp;menuSelected=15" />
 		</action>
 		
 		<action path="/NewSpecimenSearch"
@@ -2457,8 +2459,7 @@ PUBLIC
 	<action path="/CreateAliquots"
 		type="edu.wustl.catissuecore.action.AliquotAction"
 		name="aliquotForm"
-		validate="true"
-		input="/Aliquots.do?pageOf=pageOfAliquot&amp;menuSelected=15"
+		validate="false"
 		scope="request">
 		<forward name="pageOfCreateAliquot" path=".catissuecore.aliquotDef"/>
 		<forward name="pageOfAliquot" path="/Aliquots.do?pageOf=pageOfAliquot&amp;menuSelected=15"/>
