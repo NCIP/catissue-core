@@ -85,6 +85,22 @@ public class NewSpecimenForm extends SpecimenForm
     private Map biohazard = new HashMap();
     
     private String specimenEventParameter;
+    
+    /**
+     * A number that tells how many aliquots to be created.
+     */
+    private String noOfAliquots;
+    
+    /**
+     * Initial quantity per aliquot.
+     */
+    private String quantityPerAliquot;
+    
+    /**
+	 * Represents the weather participant Name is selected or not.
+	 *
+	 */    	
+	private boolean checkedButton;
 
     /**
      * Returns an identifier of the Parent Speciemen.
@@ -439,6 +455,32 @@ public class NewSpecimenForm extends SpecimenForm
                 {
                     errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("specimen.pathologicalStatus")));
                 }
+             	
+             	if(checkedButton)
+             	{
+             		if(!validator.isNumeric(noOfAliquots))
+                    {
+                    	errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.format",ApplicationProperties.getValue("aliquots.noOfAliquots")));
+                    }
+             		
+             		if(quantityPerAliquot != null && quantityPerAliquot.trim().length() != 0)
+                    {
+            			if(Utility.isQuantityDouble(className,type))
+            			{
+            		        if(!validator.isDouble(quantityPerAliquot.trim()))
+            		        {
+            		        	errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.format",ApplicationProperties.getValue("aliquots.qtyPerAliquot")));
+            		        }
+            			}
+            			else
+            			{
+            				if(!validator.isNumeric(quantityPerAliquot.trim()))
+            		        {
+            		        	errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.format",ApplicationProperties.getValue("aliquots.qtyPerAliquot")));
+            		        }
+            			}
+                    }
+             	}
 
              	//Validations for Biohazard Add-More Block
                 String className = "Biohazard:";
@@ -546,5 +588,65 @@ public class NewSpecimenForm extends SpecimenForm
             setSpecimenCollectionGroupId(addObjectIdentifier.toString());
         }
     }
+	
+	/**
+	 * Returns the no. of aliquots to be created.
+	 * @return The no. of aliquots to be created.
+	 * @see #setNoOfAliquots(String)
+	 */
+	public String getNoOfAliquots()
+	{
+		return noOfAliquots;
+	}
+	
+	/**
+     * Sets the no. of aliquots to be created.
+     * @param noOfAliquots The no. of aliquots to be created.
+     * @see #getNoOfAliquots()
+     */
+	public void setNoOfAliquots(String noOfAliquots)
+	{
+		this.noOfAliquots = noOfAliquots;
+	}
+	
+	/**
+ 	 * Returns the initial quantity per aliquot.
+ 	 * @return The initial quantity per aliquot.
+ 	 * @see #setQuantityPerAliquot(String)
+ 	 */
+	public String getQuantityPerAliquot()
+	{
+		return quantityPerAliquot;
+	}
+	
+	/**
+     * Sets the initial quantity per aliquot.
+     * @param quantityPerAliquot The initial quantity per aliquot.
+     * @see #getQuantityPerAliquot()
+     */
+	public void setQuantityPerAliquot(String quantityPerAliquot)
+	{
+		this.quantityPerAliquot = quantityPerAliquot;
+	}
+	
+	/**
+ 	 * Tells whether the button is checked ot unchecked.
+ 	 * @return True if button is checked else false.
+ 	 * @see #setCheckedButton(boolean)
+ 	 */
+	public boolean isCheckedButton()
+	{
+		return checkedButton;
+	}
+
+	/**
+     * Sets/Resets the checked button.
+     * @param checkedButton The value of checked button.
+     * @see #isCheckedButton()
+     */
+	public void setCheckedButton(boolean checkedButton)
+	{
+		this.checkedButton = checkedButton;
+	}
 
 }
