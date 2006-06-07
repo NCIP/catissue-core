@@ -55,8 +55,13 @@ public class AliquotAction extends BaseAction //SecureAction
 	{
 		AliquotForm aliquotForm = (AliquotForm)form;
 		
-		String specimenId = String.valueOf(request.getAttribute(Constants.SYSTEM_IDENTIFIER));
-		if(specimenId == null)
+		String specimenId = null;
+		
+		if(request.getAttribute(Constants.SYSTEM_IDENTIFIER) != null)
+		{
+			specimenId = String.valueOf(request.getAttribute(Constants.SYSTEM_IDENTIFIER));
+		}
+		else
 		{
 			specimenId = request.getParameter(Constants.SYSTEM_IDENTIFIER);
 		}
@@ -248,7 +253,7 @@ public class AliquotAction extends BaseAction //SecureAction
 		
 		if(specimen instanceof MolecularSpecimen)
 		{
-			String concentration = String.valueOf(((MolecularSpecimen)specimen).getConcentrationInMicrogramPerMicroliter());
+			String concentration = Utility.toString(((MolecularSpecimen)specimen).getConcentrationInMicrogramPerMicroliter());
 			form.setConcentration(concentration);
 		}		
 	}
