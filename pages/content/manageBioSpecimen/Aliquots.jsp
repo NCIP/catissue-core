@@ -143,10 +143,11 @@
 	</script>
 </head>
 
-<html:errors/>
 <html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
 	<%=messageKey%>
 </html:messages>
+
+<html:errors/>
 
 <html:form action="<%=Constants.ALIQUOT_ACTION%>">
 
@@ -255,7 +256,7 @@
 	<table summary="" cellpadding="3" cellspacing="0" border="0" width="600">
 	<tr>
 		<td>
-			<html:hidden property="systemIdentifier" />
+			<%--html:hidden property="systemIdentifier" /--%>
 		</td>
 	</tr>
 	
