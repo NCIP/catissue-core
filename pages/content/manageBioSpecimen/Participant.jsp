@@ -28,7 +28,9 @@ tr#hiddenCombo
 <%@ include file="/pages/content/common/BioSpecimenCommonCode.jsp" %>
 <% 
 		List siteList = (List)request.getAttribute(Constants.SITELIST);
-		
+
+		String participantId=(String)request.getAttribute("participantId");
+
 		String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);		
 		String forwardTo=(String)request.getAttribute(Constants.FORWARD_TO);		
 		boolean isAddNew = false;
@@ -188,25 +190,22 @@ tr#hiddenCombo
 				field.value = field.value.replace(/[^\d]+/g, ''); 
 			}
 		}
-		//this function is called when user clicks on Lookup Again Button
-		function participantLookupAction()
-		{
-			document.forms[0].action="<%=Constants.PARTICIPANT_LOOKUP_ACTION%>";
-			document.forms[0].submit();
-		}
+		//this function is called when participant clicks on radiao button 
 		function onParticipantClick(participant_id)
 		{
+			document.forms[0].participantId.value=participant_id;
 			document.forms[0].systemIdentifier.value=participant_id;
 		}
-		
+		//This Function is called when user clicks on 'Add New Participant' Button
 		function AddParticipant()
 		{
 			document.forms[0].action="<%=Constants.PARTICIPANT_ADD_ACTION%>";
 			document.forms[0].submit();
 		}
+		//This function is called when user clicks on 'Use Selected Participant' Button
 		function UseSelectedParticipant()
 		{
-			if(document.forms[0].systemIdentifier.value=="" || document.forms[0].systemIdentifier.value=="0")
+			if(document.forms[0].participantId.value=="" || document.forms[0].participantId.value=="0")
 			{
 				alert("Please select the Participant from the list");
 			}
@@ -312,7 +311,7 @@ tr#hiddenCombo
 			 <table summary="" cellpadding="3" cellspacing="0" border="0">
 				 <tr>
 					<td>
-						<input type="hidden" name="participant_id">
+						<input type="hidden" name="participantId" value="<%=participantId%>"/>
 						<html:hidden property="<%=Constants.OPERATION%>" value="<%=operation%>"/>
 						<html:hidden property="submittedFor" value="<%=submittedFor%>"/>
 						<html:hidden property="forwardTo" value="<%=forwardTo%>"/>
@@ -722,7 +721,7 @@ tr#hiddenCombo
 			</table>
 		</td></tr>
 	</table>			
-<%
+	<%
 	if(pageView.equals("edit"))
 	{
 	%>
