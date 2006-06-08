@@ -1060,6 +1060,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	
 	//Constants required in ParticipantLookupAction
 	public static final String PARTICIPANT_LOOKUP_PARAMETER="ParticipantLookupParameter";
+	public static final String PARTICIPANT_LOOKUP_CUTOFF="lookup.cutoff";
 	public static final String PARTICIPANT_LOOKUP_ALGO="ParticipantLookupAlgo";
 	public static final String PARTICIPANT_LOOKUP_SUCCESS="success";
 	public static final String PARTICIPANT_ADD_FORWARD="participantAdd";
