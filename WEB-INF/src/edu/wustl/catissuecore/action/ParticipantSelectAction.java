@@ -59,7 +59,9 @@ public class ParticipantSelectAction extends BaseAction
 
 		String objectName = abstractDomainObjectFactory.getDomainObjectName(abstractForm.getFormId());
 	  	
-		List participants=bizLogic.retrieve(objectName,Constants.SYSTEM_IDENTIFIER,new Long(abstractForm.getSystemIdentifier()));
+		Logger.out.info("Participant Id-------------------"+request.getParameter("participantId"));
+		List participants=bizLogic.retrieve(objectName,Constants.SYSTEM_IDENTIFIER,new Long(request.getParameter("participantId")));
+		
 		abstractDomain = (AbstractDomainObject)participants.get(0);
 		
 		//Attributes to decide AddNew action
@@ -178,7 +180,7 @@ public class ParticipantSelectAction extends BaseAction
        		//return (mapping.findForward(forwardTo));
        }
 
-		return (mapping.findForward(target));
+        return (mapping.findForward(target));
 		
 	}
 	
