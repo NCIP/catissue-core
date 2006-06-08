@@ -88,9 +88,12 @@
 	
 	<property>
 		<name>ParticipantLookupAlgo</name>
-		<value>edu.wustl.catissuecore.bizlogic.ParticipantLookupLogicImpl</value>
+		<value>edu.wustl.catissuecore.bizlogic.ParticipantLookupLogic</value>
 	</property>
-	
+	<property>
+		<name>lookup.cutoff</name>
+		<value>50</value>
+	</property>
 	<property>
 		<name>CaTiesPublicServerName</name>
 		<value>http://ps0348:8080/caties/server/HTTPServer</value>
