@@ -94,9 +94,8 @@ public class AdvanceSearchAction extends BaseAction//DispatchAction
         
         if((strDelete != null && deleteNode != null))
         {
-        	 nodeId = Integer.decode(deleteNode);
         	 //Delete function
-        	 parser.deleteSelectedNode(nodeId,advancedConditionNodesMap);
+        	 parser.deleteSelectedNode(deleteNode,advancedConditionNodesMap);
         }
         else
         {

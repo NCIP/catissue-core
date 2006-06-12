@@ -150,18 +150,24 @@ public class ConditionMapParser
 		return root;
 	}
 	
-	public void deleteSelectedNode(Integer nodeId,Map advancedConditionNodesMap)
+	public void deleteSelectedNode(String selectedNode,Map advancedConditionNodesMap)
 	{
-		//Gets node to be deleted from Map
-		DefaultMutableTreeNode node = (DefaultMutableTreeNode)advancedConditionNodesMap.get(nodeId);
-		DefaultMutableTreeNode parent = (DefaultMutableTreeNode)node.getParent();
-		
-		 //Position of node to be deleted from its parent node
-		int position = parent.getIndex(node);
-		
-		//remove node and its subnode from parent
-		parent.remove(position);
-		
+		//Split the selected node to get all the nodes which are checked.
+		StringTokenizer selectedNodeTokens = new StringTokenizer(selectedNode,",");
+		int i=0;
+		while (selectedNodeTokens.hasMoreTokens())
+    	{
+			//Gets node to be deleted from Map
+			DefaultMutableTreeNode node = (DefaultMutableTreeNode)advancedConditionNodesMap.get(new Integer(selectedNodeTokens.nextToken()));
+			DefaultMutableTreeNode parent = (DefaultMutableTreeNode)node.getParent();
+
+			 //Position of node to be deleted from its parent node
+			int position = parent.getIndex(node);
+			
+			//remove node and its subnode from parent
+			parent.remove(position);
+			i++;
+    	}
 	}
 	
 

@@ -25,10 +25,6 @@
 		var s = "<a HREF='" + editLink + "' target='searchPageFrame'><font color='white'>Edit</font></a>"
 		editItem.innerHTML = "" + s;
 			
-		var deleteItem = document.getElementById('<%=Constants.DELETE%>');
-		deleteItem.className="formTitle";
-		var deleteLink = "AdvanceSearch.do?delete=true&itemId="+itemId;
-		deleteItem.innerHTML = "&nbsp;<a HREF='" + deleteLink + "'><font color='white'>Delete</font></a>";
 			
 		var andItem = document.getElementById('and');
 		andItem.className="linkChange";
@@ -261,6 +257,13 @@
 			pItem.className="linkChange";
 			var link = "<%=SearchUtil.getLink("Participant")%>"+ selectedNode;
 			pItem.innerHTML ="&nbsp;<img src='images/Participant.GIF' alt='Participant' />  &nbsp;<a HREF='"+link+"' target='searchPageFrame'><%=Constants.PARTICIPANT%></a>";
+		}
+		else if(sum>0)
+		{
+			var deleteItem = document.getElementById('<%=Constants.DELETE%>');
+			deleteItem.className="formTitle";
+			var deleteLink = "AdvanceSearch.do?delete=true&itemId="+selectedNode;
+			deleteItem.innerHTML = "&nbsp;<a HREF='" + deleteLink + "'><font color='white'>Delete</font></a>";
 		}
 		
 	}	
