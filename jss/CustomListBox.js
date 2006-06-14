@@ -41,20 +41,23 @@ function onCustomListBoxChange(element)
 	}
 
 	//Temporary variable to hold array or hashtable instance
-	var dataTable = dataTable1;
+	var dataTable = outerMostDataTable.get(rowNo);
 
-	//This loop retrieves the data from hashtable for immediate next list to be populated
-	for(var i=0;i<=parseInt(serialNo);i++)
+	if(dataTable != null)
 	{
-		//Handle to preceeding list box
-		var handleToListBox = document.getElementById(customListBoxName + i);
-
-		//Value of preceeding list box
-		var listBoxValue = handleToListBox.options[handleToListBox.selectedIndex].value;
-
-		dataTable = dataTable.get(listBoxValue);
+		//This loop retrieves the data from hashtable for immediate next list to be populated
+		for(var i=0;i<=parseInt(serialNo);i++)
+		{
+			//Handle to preceeding list box
+			var handleToListBox = document.getElementById(customListBoxName + i);
+	
+			//Value of preceeding list box
+			var listBoxValue = handleToListBox.options[handleToListBox.selectedIndex].value;
+	
+			dataTable = dataTable.get(listBoxValue);
+		}
 	}
-
+	
 	//Populate the immediate next list box with appropriate data
 	if(dataTable != null)
 	{
