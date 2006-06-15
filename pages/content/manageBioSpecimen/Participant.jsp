@@ -211,8 +211,10 @@ tr#hiddenCombo
 			}
 			else
 			{
-				document.forms[0].action="ParticipantSelect.do?operation=add";
+				document.forms[0].action="ParticipantSelect.do?operation=add&systemIdentifier="+document.forms[0].participantId.value;
+				alert(document.forms[0].method);
 				document.forms[0].submit();
+				//window.location.href="ParticipantSelect.do?operation=add&participantId="+document.forms[0].participantId.value+"&submittedFor="+document.forms[0].submittedFor.value+"&forwardTo="+document.forms[0].forwardTo.value;
 			}
 			
 		}
@@ -349,7 +351,7 @@ tr#hiddenCombo
 				     	</label>
 				     </td>
 				     <td class="formField" colspan="2">
-				     <html:text styleClass="formFieldSized" maxlength="50" size="30" styleId="lastName" property="lastName" readonly="<%=readOnlyForAll%>"/>
+				     <html:text styleClass="formFieldSized" maxlength="50" size="30" styleId="lastName" name="participantForm" property="lastName" readonly="<%=readOnlyForAll%>"/>
 				     </td>
 				 </tr>
 				  <tr>
@@ -663,8 +665,8 @@ tr#hiddenCombo
 						</html:button>
 					</td>
 				  </tr>				
-				 <tr height="50%">
-					<td colspan=4>
+				 <tr height=300 valign=top>
+					<td colspan=4 valign=top>
 						<div STYLE="overflow: auto; width:100%; height:30%; padding:0px; margin: 0px; border: 1px solid">
 						<script>
 						//	create ActiveWidgets Grid javascript object.
@@ -681,33 +683,14 @@ tr#hiddenCombo
 						//	set headers width/height.
 						obj.setRowHeaderWidth("28px");
 						obj.setColumnHeaderHeight("20px");
-						//original sort method  
-						var _sort = obj.sort; 
-						//overide sort function to meet our requirenemnt
-					    obj.sort = function(index, direction, alternateIndex){ 
-				   
-					    //if check box column is clicked
-					    //then sort on the flag those are in 8th column
-			        	if(index==0)
-			        	{
-			        		index=myData[0].length-1;
-			        		direction=colZeroDir;
-							if(colZeroDir=='ascending')colZeroDir='descending';
-							else colZeroDir='ascending';
-					    } 
-					        
-			         	_sort.call(this, index, direction);
-
-				        return true;
-			    		}
-					    
+										    
 					    //double click events
 					    var row = new Active.Templates.Row;
 						row.setEvent("ondblclick", function(){this.action("myAction")}); 
 			
 						obj.setTemplate("row", row);
 		   				obj.setAction("myAction", 
-						function(src){window.location.href = 'SearchObject.do?pageOf=<%=pageOf%>&operation=search&systemIdentifier='+myData[this.getSelectionProperty("index")][1]}); 
+						function(src){window.location.href = 'ParticipantSelect.do?pageOf=<%=pageOf%>&operation=add&participantId='+myData[this.getSelectionProperty("index")][1]}); 
 		
 						//	write grid html to the page.
 						document.write(obj);
@@ -718,6 +701,7 @@ tr#hiddenCombo
 
 				<%}%>
 				<!--Participant Lookup end-->				
+				
 			</table>
 		</td></tr>
 	</table>			
