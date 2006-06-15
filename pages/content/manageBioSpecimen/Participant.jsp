@@ -212,7 +212,6 @@ tr#hiddenCombo
 			else
 			{
 				document.forms[0].action="ParticipantSelect.do?operation=add&systemIdentifier="+document.forms[0].participantId.value;
-				alert(document.forms[0].method);
 				document.forms[0].submit();
 				//window.location.href="ParticipantSelect.do?operation=add&participantId="+document.forms[0].participantId.value+"&submittedFor="+document.forms[0].submittedFor.value+"&forwardTo="+document.forms[0].forwardTo.value;
 			}
