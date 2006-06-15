@@ -11,11 +11,11 @@ import java.util.Vector;
 import javax.servlet.http.HttpSession;
 import javax.swing.tree.DefaultMutableTreeNode;
 
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.query.AdvancedConditionsNode;
 import edu.wustl.common.query.Condition;
 import edu.wustl.common.query.DataElement;
 import edu.wustl.common.query.Operator;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
@@ -160,12 +160,23 @@ public class ConditionMapParser
 			//Gets node to be deleted from Map
 			DefaultMutableTreeNode node = (DefaultMutableTreeNode)advancedConditionNodesMap.get(new Integer(selectedNodeTokens.nextToken()));
 			DefaultMutableTreeNode parent = (DefaultMutableTreeNode)node.getParent();
-
+			
 			 //Position of node to be deleted from its parent node
 			int position = parent.getIndex(node);
 			
 			//remove node and its subnode from parent
 			parent.remove(position);
+			//Remove the or symbol if a sibling is deleted
+			int childCount = parent.getChildCount();
+			Logger.out.debug("child count after delete"+childCount);
+			if(childCount==1)
+			{
+				AdvancedConditionsNode parentNode = (AdvancedConditionsNode)parent.getUserObject();
+				Logger.out.debug("reset all siblings"+parentNode.getOperationWithChildCondition().getOperator());
+				DefaultMutableTreeNode childNode=(DefaultMutableTreeNode)parent.getFirstChild();
+				AdvancedConditionsNode child = (AdvancedConditionsNode)childNode.getUserObject();
+				parentNode.setDefaultAndOr(false);
+			}
 			i++;
     	}
 	}
@@ -245,6 +256,7 @@ public class ConditionMapParser
 		DefaultMutableTreeNode child = new DefaultMutableTreeNode();
 		DefaultMutableTreeNode parent = new DefaultMutableTreeNode();
 		DefaultMutableTreeNode selectedAdvNode;
+		boolean anyConditionExists = false;
 		if(selectedNode.length==0)
 		{
 			selectedAdvNode = (DefaultMutableTreeNode) advancedConditionNodesMap.get(new Integer(0));
