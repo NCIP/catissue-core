@@ -25,7 +25,7 @@ import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.ParticipantBizLogic;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.action.SecureAction;
+import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.logger.Logger;
@@ -33,16 +33,27 @@ import edu.wustl.common.util.logger.Logger;
  * This class initializes the fields in the Participant Add/Edit webpage.
  * @author gautam_shetty
  */
-public class ParticipantAction extends SecureAction
+public class ParticipantAction extends BaseAction
 {
     /**
      * Overrides the execute method of Action class.
      * Sets the various fields in Participant Add/Edit webpage.
      * */
-    protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
+    protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response) throws Exception
     {
     	ParticipantForm participantForm = (ParticipantForm) form;
+    	//This if condition is for participant lookup. When participant is selected from the list then 
+    	//that participant gets stored in request as participantform1.
+    	//After that we have to show the slected participant in o/p
+    	if(request.getAttribute("participantSelect")!=null)
+    	{
+    		participantForm=(ParticipantForm)request.getAttribute("participantForm1");
+    		request.setAttribute("participantForm",participantForm);
+    	}
+    	Logger.out.info("-----------Participant ID:"+participantForm.getSystemIdentifier());
+    	Logger.out.info("-----------Last Name:"+participantForm.getLastName());
+    	
     	//List of keys used in map of ActionForm
 		List key = new ArrayList();
     	key.add("ParticipantMedicalIdentifier:i_Site_systemIdentifier");

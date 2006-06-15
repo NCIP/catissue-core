@@ -5,19 +5,14 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.log4j.PropertyConfigurator;
-
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.bizlogic.AbstractBizLogic;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.lookup.DefaultLookupParameters;
+import edu.wustl.common.lookup.DefaultLookupResult;
 import edu.wustl.common.lookup.LookupLogic;
 import edu.wustl.common.lookup.LookupParameters;
-import edu.wustl.common.lookup.LookupResult;
-import edu.wustl.common.util.dbManager.DBUtil;
-import edu.wustl.common.util.global.Variables;
-import edu.wustl.common.util.logger.Logger;
 /**
  * @author vaishali_khandelwal
  *
@@ -29,7 +24,8 @@ public class ParticipantLookupLogic implements LookupLogic
 	{
 		DefaultLookupParameters participantParams=(DefaultLookupParameters)params;
 		
-		Participant participant=(Participant)participantParams.getObject();
+		Participant participant=(Participant)
+		participantParams.getObject();
 		Double cutoff=participantParams.getCutoff();
 		
 		AbstractBizLogic bizLogic = new DefaultBizLogic();
@@ -40,8 +36,10 @@ public class ParticipantLookupLogic implements LookupLogic
 		Object[] whereColumnValue = {participant.getFirstName(),participant.getMiddleName(),participant.getLastName(),participant.getBirthDate(),participant.getDeathDate(),participant.getSocialSecurityNumber()};
 	
 		String joinCondition = Constants.OR_JOIN_CONDITION;
+		//getting the matching participants from the database whose atleast one parameter matches with the given participqant
 		List listOfParticipants=bizLogic.retrieve(sourceObjectName,whereColumnName,whereColumnCondition,whereColumnValue,joinCondition);
 	
+		//calling the searchMatchingParticipant to get filter the participant list according to given matching cutoff value
 		List participants=searchMatchingParticipant(participant,listOfParticipants,cutoff);
   	
 		return participants;
@@ -91,10 +89,10 @@ public class ParticipantLookupLogic implements LookupLogic
 			}
 			
 			//Finding the probablity.
-			Double probablity=new Double((100/6)*count);
+			Double probablity=new Double((100*count)/6);
 			if(probablity.doubleValue()>=cutoff.doubleValue())
 			{
-				LookupResult result=new LookupResult();
+				DefaultLookupResult result=new DefaultLookupResult();
 				result.setObject(destParticipant);
 				result.setProbablity(probablity);
 				participants.add(result);
@@ -103,41 +101,5 @@ public class ParticipantLookupLogic implements LookupLogic
 		return participants;
 	}
  
-	public static void main(String[] args) throws Exception
-	{
-		Variables.catissueHome = System.getProperty("user.dir");
-		Logger.out = org.apache.log4j.Logger.getLogger("");
-		PropertyConfigurator.configure(Variables.catissueHome+"\\WEB-INF\\src\\"+"ApplicationResources.properties");
-		
-		Logger.out.debug("here");
-		
-		DBUtil.currentSession();
-		
-		System.out.println("Hello");
-		/*Participant participant=new Participant();
-    	participant.setFirstName("aaa");
-    	participant.setMiddleName("aaa");
-    	participant.setLastName("aaa");
-    	participant.setActivityStatus("Active");
-    	participant.setBirthDate(new Date());
-    	participant.setEthnicity("aaaa");
-    	participant.setGender("Female Gender");
-    	participant.setSexGenotype("sadasd");
-    	participant.setRace("asdasd");
-    	participant.setEthnicity("adada");
-    	participant.setSocialSecurityNumber("123-45-6789");
-    	
-    	List list=participantLookup(participant);
-    	Logger.out.debug("-----after function size:"+list.size());
-    	Iterator itr=list.iterator();
-    	while(itr.hasNext())
-    	{
-    		Participant participant1=(Participant)itr.next();
-    		Logger.out.info("Object:"+participant1);
-    	
-    	}
-    	*/
-    	
-		
-	}
+	
 }

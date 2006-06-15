@@ -23,6 +23,9 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessages;
 
+import edu.wustl.catissuecore.actionForm.ParticipantForm;
+import edu.wustl.catissuecore.domain.Participant;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.beans.AddNewSessionDataBean;
@@ -36,7 +39,6 @@ import edu.wustl.common.factory.MasterFactory;
 import edu.wustl.common.util.AbstractForwardToProcessor;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.ApplicationProperties;
-import edu.wustl.common.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
 
 
@@ -50,7 +52,7 @@ public class ParticipantSelectAction extends BaseAction
 		ActionMessages messages = null;
 		String target = null;
 		AbstractActionForm abstractForm = (AbstractActionForm) form;
-		
+		ParticipantForm participantForm=(ParticipantForm) form;
 		AbstractDomainObjectFactory abstractDomainObjectFactory = (AbstractDomainObjectFactory) MasterFactory
 				.getFactory("edu.wustl.catissuecore.domain.DomainObjectFactory");
 		AbstractBizLogic bizLogic = AbstractBizLogicFactory.getBizLogic(
@@ -60,14 +62,26 @@ public class ParticipantSelectAction extends BaseAction
 		String objectName = abstractDomainObjectFactory.getDomainObjectName(abstractForm.getFormId());
 	  	
 		Logger.out.info("Participant Id-------------------"+request.getParameter("participantId"));
+		
 		List participants=bizLogic.retrieve(objectName,Constants.SYSTEM_IDENTIFIER,new Long(request.getParameter("participantId")));
-		
+		request.removeAttribute("participantForm");
 		abstractDomain = (AbstractDomainObject)participants.get(0);
+		Participant participant=(Participant)abstractDomain;
 		
+		Logger.out.info("Last name in ParticipantSelectAction:"+participant.getLastName());
+		
+		participantForm.setAllValues(participant);
+		
+		//Setting the ParticipantForm in request for storing selected participant's data.
+		//ParticipantSelect attribute is used for deciding in next action weather that action is called after ParticipantSelectAction or not
+		request.setAttribute("participantForm1",participantForm);
+		request.setAttribute("participantSelect","yes");
+		
+		        
 		//Attributes to decide AddNew action
         String submittedFor = (String) request.getParameter(Constants.SUBMITTED_FOR);
         
-      
+        Logger.out.info("submittedFor in ParticipantSelectAction:"+submittedFor);
         //------------------------------------------------ AddNewAction Starts----------------------------
         //if AddNew action is executing, load FormBean from Session and redirect to Action which initiated AddNew action
         if( (submittedFor !=null)&& (submittedFor.equals("AddNew")) )
@@ -180,6 +194,7 @@ public class ParticipantSelectAction extends BaseAction
        		//return (mapping.findForward(forwardTo));
        }
 
+        Logger.out.info("target in ParticipantSelectAction:"+target);	
         return (mapping.findForward(target));
 		
 	}

@@ -33,9 +33,13 @@ import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.AbstractBizLogic;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.dao.DAO;
+import edu.wustl.common.dao.JDBCDAO;
+import edu.wustl.common.lookup.DefaultLookupParameters;
+import edu.wustl.common.lookup.LookupLogic;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
+import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
@@ -275,6 +279,72 @@ public class ParticipantBizLogic extends IntegrationBizLogic
 	    IntegrationManager integrationManager=IntegrationManagerFactory.getIntegrationManager(applicationID);
 
 	    return integrationManager.getLinkedAppData(new Participant(), new Long(identifiedPatientId));
+	}
+	
+	public List getParticipantLookupData(Participant participant) throws Exception
+	{
+//		getting the instance of ParticipantLookupLogic class
+		LookupLogic participantLookupLogic = (LookupLogic) Utility
+				.getObject(XMLPropertyHandler.getValue(Constants.PARTICIPANT_LOOKUP_ALGO));
+
+		//getting the cutoff value for participant lookup matching algo
+		Double cutoff = new Double(XMLPropertyHandler.getValue(Constants.PARTICIPANT_LOOKUP_CUTOFF));
+		
+		//Creating the DefaultLookupParameters object to pass as argument to lookup function
+		//This object contains the Participant with which matching participant are to be found and the cutoff value.
+		DefaultLookupParameters params=new DefaultLookupParameters();
+		params.setObject(participant);
+		params.setCutoff(cutoff);
+		//calling thr lookup function which returns the List of ParticipantResuld objects.
+		//ParticipantResult object contains the matching participant and the probablity.
+		List participantList = participantLookupLogic.lookup(params);
+
+		return participantList;
+		
+	}
+	public List getColumnList(List columnList) throws DAOException
+	{
+		List displayList=new ArrayList();
+		 try
+		    {
+			    JDBCDAO jdbcDao = new JDBCDAO();
+		        jdbcDao.openSession(null);
+		        String sql="SELECT  columnData.COLUMN_NAME,displayData.DISPLAY_NAME FROM "+
+		        			"CATISSUE_INTERFACE_COLUMN_DATA columnData,CATISSUE_TABLE_RELATION relationData,"+
+		        			"CATISSUE_QUERY_TABLE_DATA tableData,CATISSUE_SEARCH_DISPLAY_DATA displayData "+
+		        			"where relationData.CHILD_TABLE_ID = columnData.TABLE_ID and "+
+		        			"relationData.PARENT_TABLE_ID = tableData.TABLE_ID and "+
+		        			"relationData.RELATIONSHIP_ID = displayData.RELATIONSHIP_ID and "+
+		        			"columnData.IDENTIFIER = displayData.COL_ID and tableData.ALIAS_NAME = 'Participant'";
+		       
+		       Logger.out.debug("DATA ELEMENT SQL : "+sql);
+		       List list = jdbcDao.executeQuery(sql, null, false, null);
+		       Iterator iterator1=columnList.iterator();
+		       
+		       while(iterator1.hasNext())
+		       {
+		    	   String colName1=(String)iterator1.next();
+		    	   Logger.out.debug("colName1------------------------"+colName1);
+		    	   Iterator iterator2 = list.iterator();
+		    	   while(iterator2.hasNext())
+				    {
+				        List rowList = (List) iterator2.next();
+				        String colName2=(String)rowList.get(0);
+				        Logger.out.debug("colName2------------------------"+colName2);
+				        if(colName1.equals(colName2))
+				        {
+				        	displayList.add((String)rowList.get(1));
+				        }
+				    }
+		        }
+			    jdbcDao.closeSession();
+		    }
+		    catch(ClassNotFoundException classExp)
+		    {
+		        throw new DAOException(classExp.getMessage(),classExp);
+		    }
+		    
+		return displayList;
 	}
 	
 	public String getPageToShow()

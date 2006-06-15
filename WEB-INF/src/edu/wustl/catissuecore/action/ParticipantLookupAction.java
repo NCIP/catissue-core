@@ -1,6 +1,6 @@
 /**
  * <p>Title: ParticipantLookupAction Class>
- * <p>Description:	This Class is used to search the matching participant.</p>
+ * <p>Description:	This Action Class invokes the Participant Lookup Algorithm and gets matching participants</p>
  * Copyright:    Copyright (c) year
  * Company: Washington University, School of Medicine, St. Louis.
  * @author vaishali_khandelwal
@@ -16,10 +16,16 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 
+import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
+import edu.wustl.catissuecore.bizlogic.ParticipantBizLogic;
+import edu.wustl.catissuecore.domain.DomainObjectFactory;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
@@ -27,11 +33,8 @@ import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.factory.AbstractDomainObjectFactory;
 import edu.wustl.common.factory.MasterFactory;
-import edu.wustl.common.lookup.DefaultLookupParameters;
-import edu.wustl.common.lookup.LookupLogic;
-import edu.wustl.common.lookup.LookupResult;
-import edu.wustl.common.util.Utility;
-import edu.wustl.common.util.XMLPropertyHandler;
+import edu.wustl.common.lookup.DefaultLookupResult;
+import edu.wustl.common.util.logger.Logger;
 
 public class ParticipantLookupAction extends BaseAction
 {
@@ -40,39 +43,29 @@ public class ParticipantLookupAction extends BaseAction
             throws Exception 
 	{
 		AbstractDomainObject abstractDomain = null;
+		ActionMessages messages=null;
 		String target=null;
 		
 		AbstractActionForm abstractForm = (AbstractActionForm) form;
 		
 		AbstractDomainObjectFactory abstractDomainObjectFactory = (AbstractDomainObjectFactory) MasterFactory
-				.getFactory("edu.wustl.catissuecore.domain.DomainObjectFactory");
+				.getFactory(DomainObjectFactory.class.getName());
 		
 		
 		abstractDomain = abstractDomainObjectFactory.getDomainObject(abstractForm.getFormId(),
 				abstractForm);
 		Participant participant = (Participant) abstractDomain;
+		ParticipantBizLogic bizlogic = (ParticipantBizLogic)BizLogicFactory.getBizLogic(Constants.PARTICIPANT_FORM_ID);
 		
-		//getting the instance of ParticipantLookupLogic class
-		LookupLogic participantLookupLogic = (LookupLogic) Utility
-				.getObject(XMLPropertyHandler.getValue(Constants.PARTICIPANT_LOOKUP_ALGO));
-
-		//getting the cutoff value for participant lookup matching algo
-		Double cutoff = new Double(XMLPropertyHandler.getValue(Constants.PARTICIPANT_LOOKUP_CUTOFF));
-		
-		//Creating the DefaultLookupParameters object to pass as argument to lookup function
-		//This object contains the Participant with which matching participant are to be found and the cutoff value.
-		DefaultLookupParameters params=new DefaultLookupParameters();
-		params.setObject(participant);
-		params.setCutoff(cutoff);
-		//calling thr lookup function which returns the List of ParticipantResuld objects.
-		//ParticipantResult object contains the matching participant and the probablity.
-		List participantList = participantLookupLogic.lookup(params);
-				
+		List participantList=bizlogic.getParticipantLookupData(participant);
+		Logger.out.debug("Participant List Size:"+participantList.size());
 		//if any matching participants are there then show the participants otherwise add the participant
 		if (participantList.size() > 0)
 		{
-			//Creating the column headings for Data Grid
-			List columnList = getColumnHeadingList();
+			messages=new ActionMessages();
+			messages.add(ActionErrors.GLOBAL_MESSAGE,new ActionMessage("participant.lookup.success","Submit was not successful because some matching participants found."));
+   			//Creating the column headings for Data Grid
+			List columnList = getColumnHeadingList(bizlogic);
 			request.setAttribute(Constants.SPREADSHEET_COLUMN_LIST, columnList);
 			
 			//Getitng the Participant List in Data Grid Format
@@ -97,23 +90,30 @@ public class ParticipantLookupAction extends BaseAction
 		}
 		
 		request.setAttribute("participantId","");
+		if (messages != null)
+        {
+            saveMessages(request,messages);
+        }
+		Logger.out.debug("target:"+target);
 		return (mapping.findForward(target));
 	}
 	/**
 	 * This Function creates the Column Headings for Data Grid
 	 * @return List Column List
 	 */
-	private List getColumnHeadingList()
+	private List getColumnHeadingList(ParticipantBizLogic bizlogic) throws Exception
 	{
 		//Creating the column list which is used in Data grid to display column headings
-		String[] columnHeaderList = new String[]{Constants.PARTICIPANT_SYSTEM_IDENTIFIER, Constants.PARTICIPANT_LAST_NAME,Constants.PARTICIPANT_FIRST_NAME,Constants.PARTICIPANT_MIDDLE_NAME,Constants.PARTICIPANT_BIRTH_DATE,Constants.PARTICIPANT_DEATH_DATE,Constants.PARTICIPANT_SOCIAL_SECURITY_NUMBER,Constants.PARTICIPANT_PROBABLITY_MATCH};
+		String[] columnHeaderList = new String[]{Constants.PARTICIPANT_SYSTEM_IDENTIFIER, Constants.PARTICIPANT_LAST_NAME,Constants.PARTICIPANT_FIRST_NAME,Constants.PARTICIPANT_MIDDLE_NAME,Constants.PARTICIPANT_BIRTH_DATE,Constants.PARTICIPANT_SOCIAL_SECURITY_NUMBER};
 		List columnList = new ArrayList();
 			
 		for (int i = 0; i < columnHeaderList.length; i++)
 		{
 			columnList.add(columnHeaderList[i]);
 		}
-		return columnList;
+		List displayList=bizlogic.getColumnList(columnList);
+		displayList.add(Constants.PARTICIPANT_PROBABLITY_MATCH);
+		return displayList;
 	}
 	
 	/**
@@ -127,17 +127,59 @@ public class ParticipantLookupAction extends BaseAction
 		Iterator itr=ParticipantList.iterator();
 		while(itr.hasNext())
 		{
-			LookupResult result=(LookupResult)itr.next();
+			DefaultLookupResult result=(DefaultLookupResult)itr.next();
 			Participant participant=(Participant)result.getObject();
 			
 			List participantInfo=new ArrayList();
 			participantInfo.add(participant.getSystemIdentifier());
-			participantInfo.add(participant.getLastName());
-			participantInfo.add(participant.getFirstName());
-			participantInfo.add(participant.getMiddleName());
-			participantInfo.add(participant.getBirthDate());
-			participantInfo.add(participant.getDeathDate());
+			if(participant.getLastName()!=null)
+			{
+				participantInfo.add(participant.getLastName());
+			}
+			else
+			{
+				participantInfo.add("");
+			}
+			if(participant.getFirstName()!=null)
+			{
+				participantInfo.add(participant.getFirstName());
+			}
+			else
+			{
+				participantInfo.add("");
+			}
+			if(participant.getMiddleName()!=null)
+			{
+				participantInfo.add(participant.getMiddleName());
+			}
+			else
+			{
+				participantInfo.add("");
+			}
+			if(participant.getBirthDate()!=null)
+			{
+				participantInfo.add(participant.getBirthDate());
+			}
+			else
+			{
+				participantInfo.add("");
+			}
+/*			if(participant.getDeathDate()!=null)
+			{
+				participantInfo.add(participant.getDeathDate());
+			}
+			else
+			{
+				participantInfo.add("");
+			}*/
+			if(participant.getSocialSecurityNumber()!=null)
+			{
 			participantInfo.add(participant.getSocialSecurityNumber());
+			}
+			else
+			{
+				participantInfo.add("");
+			}
 			participantInfo.add(result.getProbablity().toString()+" %");
 			participantDisplayList.add(participantInfo);
 			
