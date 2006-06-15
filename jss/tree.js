@@ -116,7 +116,8 @@ function addNode(parentNode, recursedNodes)
 				//treeItem.innerHTML = "<tr><td class='tdTitle' colspan='4'>Rule#"+j+"</td></tr>";
 				document.write("<tr>");
 				document.write("<td class='tdTitle' colspan='5'>");
-				document.write("Rule#"+j);
+				//Bug#1305- Rule numbers not necessary
+				//document.write("Rule#"+j);
 				document.write("</td>");
 				document.write("</tr>");
 				j++;
