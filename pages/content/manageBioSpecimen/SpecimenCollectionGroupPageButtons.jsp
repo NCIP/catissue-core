@@ -5,8 +5,7 @@
 									<td>
 										<table>
 											<logic:equal name="<%=Constants.SUBMITTED_FOR%>" value="AddNew">
-												<% 
-													boolean isAddNew = false;	
+												<% 	
 													isAddNew=true;
 												%>
 											</logic:equal>
