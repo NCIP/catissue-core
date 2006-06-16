@@ -340,6 +340,21 @@
 
 <html:form action="<%=Constants.SPECIMEN_ADD_ACTION%>">
 	<%
+				String normalSubmitFunctionName = "setSubmittedFor('" + submittedFor+ "','" + Constants.SPECIMEN_FORWARD_TO_LIST[0][1]+"')";
+				String deriveNewSubmitFunctionName = "setSubmittedFor('ForwardTo','" + Constants.SPECIMEN_FORWARD_TO_LIST[1][1]+"')";									
+				String addEventsSubmitFunctionName = "setSubmittedFor('ForwardTo','" + Constants.SPECIMEN_FORWARD_TO_LIST[2][1]+"')";
+				String addMoreSubmitFunctionName = "setSubmittedFor('ForwardTo','" + Constants.SPECIMEN_FORWARD_TO_LIST[3][1]+"')";
+				
+				String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms[0].activityStatus)";
+				
+				String normalSubmit = normalSubmitFunctionName + ","+confirmDisableFuncName;
+				String deriveNewSubmit = deriveNewSubmitFunctionName + ","+confirmDisableFuncName;
+				String addEventsSubmit = addEventsSubmitFunctionName + ","+confirmDisableFuncName;
+				String addMoreSubmit = addMoreSubmitFunctionName + ","+confirmDisableFuncName;												
+	%>
+	<%@ include file="NewSpecimenPageButtons.jsp" %>
+
+	<%
 	if(pageView.equals("edit"))
 	{
 	%>
@@ -941,98 +956,7 @@
 							<%
 								String changeAction = "setFormAction('"+formName+"')";
 				 			%>
-							<!-- action buttons begins -->
-							<table cellpadding="4" cellspacing="0" border="0">
-								<tr>
-									<td>
-									<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
-										<table>
-											<logic:equal name="<%=Constants.SUBMITTED_FOR%>" value="AddNew">
-												<% 
-													isAddNew=true;
-												%>
-											</logic:equal>
-											<tr>
-											
-											<%
-												String normalSubmitFunctionName = "setSubmittedFor('" + submittedFor+ "','" + Constants.SPECIMEN_FORWARD_TO_LIST[0][1]+"')";
-												String deriveNewSubmitFunctionName = "setSubmittedFor('ForwardTo','" + Constants.SPECIMEN_FORWARD_TO_LIST[1][1]+"')";									
-												String addEventsSubmitFunctionName = "setSubmittedFor('ForwardTo','" + Constants.SPECIMEN_FORWARD_TO_LIST[2][1]+"')";
-												String addMoreSubmitFunctionName = "setSubmittedFor('ForwardTo','" + Constants.SPECIMEN_FORWARD_TO_LIST[3][1]+"')";
-												
-												String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms[0].activityStatus)";
-												
-												String normalSubmit = normalSubmitFunctionName + ","+confirmDisableFuncName;
-												String deriveNewSubmit = deriveNewSubmitFunctionName + ","+confirmDisableFuncName;
-												String addEventsSubmit = addEventsSubmitFunctionName + ","+confirmDisableFuncName;
-												String addMoreSubmit = addMoreSubmitFunctionName + ","+confirmDisableFuncName;
-
-												if(form.isCheckedButton())
-												{
-													isAddNew = true;
-												}
-											%>
-											
-												<td nowrap class="formFieldNoBorders">
-													<html:button styleClass="actionButton" 
-															property="submitPage" 
-															
-															value="<%=Constants.SPECIMEN_FORWARD_TO_LIST[0][0]%>" 
-															onclick="onNormalSubmit()">
-						  				     	    
-											     	</html:button>
-												</td>
-												<td nowrap class="formFieldNoBorders">
-													<html:button styleClass="actionButton"  
-															property="submitPage"
-															
-															value="<%=Constants.SPECIMEN_FORWARD_TO_LIST[1][0]%>" 
-															disabled="<%=isAddNew%>" 
-															onclick="<%=deriveNewSubmit%>" styleId="deriveButton">
-						  				     	    
-											     	</html:button>
-												</td>
-											</tr>
-											<tr>							
-												<td class="formFieldNoBorders" nowrap>
-													<html:button styleClass="actionButton"  
-															property="submitPage"
-															
-															value="<%=Constants.SPECIMEN_FORWARD_TO_LIST[2][0]%>" 
-															disabled="<%=isAddNew%>" 
-															onclick="<%=addEventsSubmit%>" styleId="eventButton">
-						  				     	    
-											     	</html:button>
-												</td>
-												<td class="formFieldNoBorders" nowrap>
-													<html:button styleClass="actionButton"  
-															property="submitPage"
-															
-															value="<%=Constants.SPECIMEN_FORWARD_TO_LIST[3][0]%>" 
-															disabled="<%=isAddNew%>" 
-															onclick="<%=addMoreSubmit%>" styleId="scgButton">
-						  				     	   
-											     	</html:button>
-												</td>								
-											</tr>
-										</table>
-									</logic:notEqual>
-									</td>					
-						   			<!-- td>
-						   				<html:submit styleClass="actionButton" onclick="<%=changeAction%>">
-						   					<bean:message key="buttons.submit"/>
-						   				</html:submit>
-						   			</td-->
-									
-									<%-- td>
-										<html:reset styleClass="actionButton" >
-											<bean:message  key="buttons.reset" />
-										</html:reset>
-									</td --%>
-									
-								</tr>
-							</table>
-							<!-- action buttons end -->
+							<%@ include file="NewSpecimenPageButtons.jsp" %>
 				  		</td>
 				 	</tr>
 	</table>

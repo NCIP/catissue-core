@@ -93,6 +93,17 @@
 </html:messages>
 
 <html:form action="<%=formName%>">
+	
+	<%
+			String normalSubmitFunctionName = "setSubmittedFor('" + submittedFor+ "','" + Constants.PROTOCOL_REGISTRATION_FORWARD_TO_LIST[0][1]+"')";
+			String forwardToSubmitFuctionName = "setSubmittedFor('ForwardTo','" + Constants.PROTOCOL_REGISTRATION_FORWARD_TO_LIST[1][1]+"')";									
+			String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms[0].activityStatus)";
+			String normalSubmit = normalSubmitFunctionName + ","+confirmDisableFuncName;
+			String forwardToSubmit = forwardToSubmitFuctionName + ","+confirmDisableFuncName;
+	%>	
+	
+	<%@ include file="CollectionProtocolRegistrationPageButtons.jsp" %>
+	
 	<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
 	
 		<!-- NEW Collection Protocol Registration ENTRY BEGINS-->
@@ -254,58 +265,6 @@
 					<%
     					String changeAction = "setFormAction('" + formName + "');";
 			        %> 
-					
-					<!-- action buttons begins -->
-					<table cellpadding="4" cellspacing="0" border="0">
-						<tr>
-							<td>
-								<table>
-									<logic:equal name="<%=Constants.SUBMITTED_FOR%>" value="AddNew">
-											<% 
-												isAddNew = true;
-											%>
-									</logic:equal>
-									<tr>
-										
-									<%
-										String normalSubmitFunctionName = "setSubmittedFor('" + submittedFor+ "','" + Constants.PROTOCOL_REGISTRATION_FORWARD_TO_LIST[0][1]+"')";
-										String forwardToSubmitFuctionName = "setSubmittedFor('ForwardTo','" + Constants.PROTOCOL_REGISTRATION_FORWARD_TO_LIST[1][1]+"')";									
-										String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms[0].activityStatus)";
-										String normalSubmit = normalSubmitFunctionName + ","+confirmDisableFuncName;
-										String forwardToSubmit = forwardToSubmitFuctionName + ","+confirmDisableFuncName;
-									%>
-										
-										<td nowrap class="formFieldNoBorders">
-											<html:button styleClass="actionButton" 
-													property="submitPage" 
-													value="<%=Constants.PROTOCOL_REGISTRATION_FORWARD_TO_LIST[0][0]%>" 
-													onclick="<%=normalSubmit%>">				  				     	    
-									     	</html:button>
-										</td>
-										
-										<td nowrap class="formFieldNoBorders">											
-											<html:button styleClass="actionButton"  
-													property="submitPage" 
-													value="<%=Constants.PROTOCOL_REGISTRATION_FORWARD_TO_LIST[1][0]%>"
-													disabled="<%=isAddNew%>" 
-													onclick="<%=forwardToSubmit%>">
-									     	</html:button>
-										</td>
-										
-									</tr>
-								</table>
-							</td>					
-						
-							<!-- td>
-								<html:submit styleClass="actionButton" value="Submit" onclick="<%=changeAction%>" />
-							</td-->
-						   		
-							<%-- td>
-								<html:reset styleClass="actionButton" />
-							</td --%>
-						</tr>
-					</table>
-					<!-- action buttons end --></td>
 				</tr>
 			</table>
 		</td>
@@ -313,4 +272,5 @@
 
 		<!-- NEW Collection Protocol Registration ENTRY ends-->
 	</table>
+	<%@ include file="CollectionProtocolRegistrationPageButtons.jsp"%>
 </html:form>
