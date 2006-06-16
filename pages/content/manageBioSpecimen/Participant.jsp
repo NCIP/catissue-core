@@ -228,6 +228,17 @@ tr#hiddenCombo
 </html:messages>
 
 <html:form action="<%=formName%>">
+	
+	<%
+		String normalSubmitFunctionName = "setSubmittedFor('" + submittedFor+ "','" + Constants.PARTICIPANT_FORWARD_TO_LIST[0][1]+"')";
+		String forwardToSubmitFunctionName = "setSubmittedFor('ForwardTo','" + Constants.PARTICIPANT_FORWARD_TO_LIST[1][1]+"')";									
+		String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms[0].activityStatus)";
+		String normalSubmit = normalSubmitFunctionName + ","+confirmDisableFuncName;
+		String forwardToSubmit = forwardToSubmitFunctionName + ","+confirmDisableFuncName;
+	%>
+	
+	<%@ include file="ParticipantPageButtons.jsp" %>
+	
 	<%
 	if(pageView.equals("edit"))
 	{
@@ -589,59 +600,8 @@ tr#hiddenCombo
 				 </tbody>
 				
 				  <!-- Medical Identifiers End here -->
-				 <!-----action buttons-->
-				 <tr>
-				 	<td align="right" colspan="4">
-						<%
-							String changeAction = "setFormAction('"+formName+"')";
-						%>
-						<!-- action buttons begins -->
-						<table cellpadding="4" cellspacing="0" border="0">
-							<logic:equal name="<%=Constants.SUBMITTED_FOR%>" value="AddNew">
-							<% 
-								isAddNew=true;
-							%>
-							</logic:equal>
-							<tr>
-								<%
-									String normalSubmitFunctionName = "setSubmittedFor('" + submittedFor+ "','" + Constants.PARTICIPANT_FORWARD_TO_LIST[0][1]+"')";
-									String forwardToSubmitFunctionName = "setSubmittedFor('ForwardTo','" + Constants.PARTICIPANT_FORWARD_TO_LIST[1][1]+"')";									
-									String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms[0].activityStatus)";
-									String normalSubmit = normalSubmitFunctionName + ","+confirmDisableFuncName;
-									String forwardToSubmit = forwardToSubmitFunctionName + ","+confirmDisableFuncName;
-								%>
-								
-								<!-- PUT YOUR COMMENT HERE -->
-								<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
-								<td nowrap class="formFieldNoBorders">
-								<html:button styleClass="actionButton" 
-										property="submitPage" 
-										value="<%=Constants.PARTICIPANT_FORWARD_TO_LIST[0][0]%>" 
-										onclick="<%=normalSubmit%>"> 
-											</html:button>
-								</td>
-								</logic:notEqual>	
-								
-								<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
-								<td nowrap class="formFieldNoBorders">									
-									<html:button styleClass="actionButton"  
-											property="submitPage" 
-											value="<%=Constants.PARTICIPANT_FORWARD_TO_LIST[1][0]%>" 
-											disabled="<%=isAddNew%>"
-					  						onclick="<%=forwardToSubmit%>">
-									</html:button>
-								</td>
-								</logic:notEqual>
-								<td>
-									<html:submit styleClass="actionButton" disabled="true">
-							   		<bean:message key="buttons.getClinicalData"/>
-									</html:submit>
-								</td>	
-							</tr>
-						</table>
-							<!-- action buttons end -->
-			  		</td>
-			 	 </tr>
+				
+				 <%@ include file="ParticipantPageButtons.jsp" %>
 				 
 				<!--	extra </logic:notEqual>-->
 				
@@ -703,7 +663,8 @@ tr#hiddenCombo
 				
 			</table>
 		</td></tr>
-	</table>			
+	</table>
+	<%@ include file="ParticipantPageButtons.jsp" %>
 	<%
 	if(pageView.equals("edit"))
 	{
