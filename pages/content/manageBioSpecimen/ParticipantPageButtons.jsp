@@ -2,7 +2,6 @@
 				<table cellpadding="4" cellspacing="0" border="0">
 								<logic:equal name="<%=Constants.SUBMITTED_FOR%>" value="AddNew">
 									<% 
-										boolean isAddNew = false;
 										isAddNew=true;
 									%>
 								</logic:equal>
