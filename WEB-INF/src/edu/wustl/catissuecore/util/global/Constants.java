@@ -18,7 +18,6 @@ package edu.wustl.catissuecore.util.global;
 
 public class Constants extends edu.wustl.common.util.global.Constants
 {	
- 
     public static final String AND_JOIN_CONDITION = "AND";
 	public static final String OR_JOIN_CONDITION = "OR";
 	//Sri: Changed the format for displaying in Specimen Event list (#463)
@@ -30,13 +29,6 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String DATE_SEPARATOR_DOT = ".";
 	public static final String MIN_YEAR = "1900";
 	public static final String MAX_YEAR = "9999";
-	
-	//Mysql Database constants.
-	/*public static final String MYSQL_DATE_PATTERN = "%m-%d-%Y";
-	public static final String MYSQL_TIME_PATTERN = "%H:%i:%s";
-	public static final String MYSQL_TIME_FORMAT_FUNCTION = "TIME_FORMAT";
-	public static final String MYSQL_DATE_FORMAT_FUNCTION = "DATE_FORMAT";
-	public static final String MYSQL_STR_TO_DATE_FUNCTION = "STR_TO_DATE";*/
 	
 	public static final String VIEW = "view";
 	public static final String DELETE = "delete";
@@ -371,10 +363,6 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final int MAX_LEVEL = 5;
 	public static final int MIN_LEVEL = 1;
 	
-	public static final String[] DEFAULT_TREE_SELECT_COLUMNS = {
-	        
-	};
-	
 	public static final String TABLE_NAME_COLUMN = "TABLE_NAME";
 	
 	//Spreadsheet view Constants in DataViewAction.
@@ -479,8 +467,6 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String CURRENT_RECORD = "currentRecord";
 	public static final String APPROVE_USER_EMAIL_SUBJECT = "Your membership status in caTISSUE Core.";
 	
-	//Edit Object Constants.
-	
 	//Query Interface Results View Constants
 	public static final String PAGEOF_APPROVE_USER = "pageOfApproveUser";
 	public static final String PAGEOF_SIGNUP = "pageOfSignUp";
@@ -523,57 +509,6 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String SHOPPING_CART = "shoppingCart";
 	
 	public static final int SELECT_OPTION_VALUE = -1;
-	
-	
-//	public static final String[] TISSUE_SITE_ARRAY = {
-//	        SELECT_OPTION,"Sex","male","female",
-//	        "Tissue","kidney","Left kidney","Right kidney"
-//	};
-	
-	public static final String [] RECEIVEDMODEARRAY = {
-	        SELECT_OPTION,
-	        "by hand", "courier", "FedEX", "UPS"
-	};
-	public static final String [] GENDER_ARRAY = {
-	        SELECT_OPTION,
-	        "Male",
-	        "Female"
-	};
-	
-	public static final String [] GENOTYPE_ARRAY = {
-	        SELECT_OPTION,
-	        "XX",
-	        "XY"
-	};
-	
-	public static final String [] RACEARRAY = {
-	        SELECT_OPTION,
-	        "Asian",
-	        "American"
-	};
-	
-	public static final String [] PROTOCOLARRAY = {
-	        SELECT_OPTION,
-	        "aaaa",
-	        "bbbb",
-	        "cccc"
-	};
-	
-	public static final String [] RECEIVEDBYARRAY = {
-	        SELECT_OPTION,
-	        "xxxx",
-	        "yyyy",
-	        "zzzz"
-	};
-	
-	public static final String [] COLLECTEDBYARRAY = {
-	        SELECT_OPTION,
-	        "xxxx",
-	        "yyyy",
-	        "zzzz"
-	};
-	
-	public static final String [] TIME_HOUR_ARRAY = {"1","2","3","4","5"};
 	
 	public static final String [] TIME_HOUR_AMPM_ARRAY = {"AM","PM"}; 
 	
@@ -724,55 +659,12 @@ public class Constants extends edu.wustl.common.util.global.Constants
 			"59"
 	};
 	
-	public static final String [] METHODARRAY = {
-	        SELECT_OPTION,
-			"LN2",
-			"Dry Ice",
-			"Iso pentane"
-	};
-	
-	public static final String [] EMBEDDINGMEDIUMARRAY = {
-				SELECT_OPTION,
-				"Plastic",
-				"Glass",
-				
-		};
-	
-	public static final String [] ITEMARRAY = {
-			SELECT_OPTION,
-			"Item1",
-			"Item2",
-	
-	};
-	
 	public static final String UNIT_GM = "gm";
 	public static final String UNIT_ML = "ml";
 	public static final String UNIT_CC = "cell count";
 	public static final String UNIT_MG = "µg";
 	public static final String UNIT_CN = "count";
 	public static final String UNIT_CL = "cells";
-	
-	public static final String [] PROCEDUREARRAY = {
-	        SELECT_OPTION,
-			"Procedure 1",
-			"Procedure 2",
-			"Procedure 3"
-	};
-	
-	public static final String [] CONTAINERARRAY = {
-	        SELECT_OPTION,
-			"Container 1",
-			"Container 2",
-			"Container 3"
-	};
-
-
-	public static final String [] FIXATIONARRAY = {
-	        SELECT_OPTION,
-			"FIXATION 1",
-			"FIXATION 2",
-			"FIXATION 3"
-	};
 	
 	public static final String CDE_NAME_CLINICAL_STATUS = "Clinical Status";
 	public static final String CDE_NAME_GENDER = "Gender";
@@ -808,19 +700,6 @@ public class Constants extends edu.wustl.common.util.global.Constants
 			"CHECK OUT"
 	};
 
-	public static final String [] CLINICALDIAGNOSISARRAY = {
-	        SELECT_OPTION,
-			"CLINICALDIAGNOSIS 1",
-			"CLINICALDIAGNOSIS 2",
-			"CLINICALDIAGNOSIS 3"
-	};
-	
-	public static final String [] HISTOLOGICAL_QUALITY_ARRAY = {
-	        SELECT_OPTION,
-			"GOOD",
-			"OK",
-			"DAMAGED"
-	};
 	
 	// constants for Data required in query
 	public static final String ALIAS_NAME_TABLE_NAME_MAP="objectTableNames";
