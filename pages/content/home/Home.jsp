@@ -1,7 +1,7 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
-<%@ page import="edu.wustl.catissuecore.util.global.Constants,edu.wustl.common.beans.SessionDataBean;"%>
+<%@ page import="edu.wustl.catissuecore.util.global.Constants,edu.wustl.common.util.global.ApplicationProperties,edu.wustl.common.beans.SessionDataBean;"%>
 
 <table summary="" cellpadding="0" cellspacing="0" border="0" width="100%" height="100%">
     <tr>
@@ -14,11 +14,14 @@
               <!-- welcome begins -->
               <table summary="" cellpadding="0" cellspacing="0" border="0" width="600" height="100%">
                 <tr>
-                	<td class="welcomeTitle" height="20">Welcome to caTISSUE Core</td>
+                	<td class="welcomeTitle" height="20">
+                		<bean:message key="app.welcomeNote" arg0="<%=ApplicationProperties.getValue("app.name")%>"
+															arg1="<%=ApplicationProperties.getValue("app.version")%>"/>
+					</td>
                 </tr>
                 <tr>
                 	<td>
-                  		<img src="images/HomeImage.jpg" alt="caTISSUE Core" border="0" />
+                  		<img src="images/HomeImage.jpg" alt="<%=ApplicationProperties.getValue("app.name")%>" border="0" />
                   </td>
                 </tr>
               </table>
@@ -74,8 +77,12 @@
 
 
                             <tr>
-							 <td>&nbsp;</td>	
-                              <td><html:submit styleClass="actionButton"><bean:message key="app.login"/></html:submit></td>
+								<td>&nbsp;</td>	
+                              	<td>
+                              		<html:submit styleClass="actionButton">
+                              			<bean:message key="app.login"/>
+                              		</html:submit>
+                              	</td>
                             </tr>
 					
 
@@ -104,13 +111,15 @@
 								<TD class="welcomeContent">
 		
 									<%Object obj = request.getSession().getAttribute(Constants.SESSION_DATA);
-									  if(obj!=null){
+									  if(obj!=null)
+									  {
 									      SessionDataBean sessionData = (SessionDataBean) obj;
 									 %>
 									
-							         Dear <%=sessionData.getLastName()%>&nbsp;<%=sessionData.getFirstName()%>, <br>
+							         Dear <%=sessionData.getLastName()%>, &nbsp;<%=sessionData.getFirstName()%><br>
 									 <%}%>			
-										<bean:message key="app.welcomeNote"/>
+										<bean:message key="app.welcomeNote.login" arg0="<%=ApplicationProperties.getValue("app.name")%>"
+																			arg1="<%=ApplicationProperties.getValue("app.version")%>"/>
 								</TD>
 							</tr>			
 						</logic:notEmpty>
@@ -127,9 +136,9 @@
                 <tr>
                 <td valign="top" height="100%">
                     <table summary="" cellpadding="0" cellspacing="0" border="0" width="100%" height="100%" class="sidebarSection">
-                    <tr>
-                      <td class="sidebarContent" valign="top">&nbsp;</td>
-                    </tr>
+                    	<tr>
+                    		<td class="sidebarContent" valign="top">&nbsp;</td>
+                    	</tr>
                     </table>
 				</td>
 				</tr>
