@@ -5,7 +5,7 @@
 <%@ page import="java.util.Hashtable"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.ShoppingCartForm"%>
 <%@ page import="edu.wustl.catissuecore.domain.Specimen"%>
-<%@ page import="edu.wustl.catissuecore.query.ShoppingCart"%>
+<%@ page import="edu.wustl.common.query.ShoppingCart"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 
 <link href="runtime/styles/xp/grid.css" rel="stylesheet" type="text/css" ></link>
