@@ -137,7 +137,20 @@ if(dataList != null && dataList.size() != 0)
 				document.forms[0].target = "myframe1";
 				document.forms[0].submit();
 		}
-		
+		function onRedefineSimpleQuery()
+		{
+			action="SimpleQueryInterface.do?pageOf=pageOfSimpleQueryInterface&operation=redefine";
+			document.forms[0].action = action;
+			document.forms[0].target = "_parent";
+			document.forms[0].submit();
+		}
+		function onRedefineAdvanceQuery()
+		{
+			action="AdvanceQueryInterface.do?pageOf=pageOfAdvanceQueryInterface&operation=redefine";
+			document.forms[0].action = action;
+			document.forms[0].target = "_parent";
+			document.forms[0].submit();
+		}
 		var selected;
 
 		function addCheckBoxValuesToArray(checkBoxName)
@@ -176,10 +189,17 @@ if(dataList != null && dataList.size() != 0)
 	</script>
 <%
 	String configAction = new String();
+	String redefineQueryAction = new String();
 	if(pageOf.equals(Constants.PAGEOF_SIMPLE_QUERY_INTERFACE))
+	{
 		configAction = "onSimpleConfigure()";
+		redefineQueryAction = "onRedefineSimpleQuery()";
+	}
 	else
+	{
 		configAction = "onAdvanceConfigure()";
+		redefineQueryAction = "onRedefineAdvanceQuery()";
+	}
 %>
 <!-- Mandar : 434 : for tooltip -->
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
@@ -239,6 +259,12 @@ if(dataList != null && dataList.size() != 0)
 					<bean:message  key="buttons.configure" />
 					</html:button>
 				</td>
+				<td>
+					<html:button styleClass="actionButton" property="redefineButton" onclick="<%=redefineQueryAction%>">
+						<bean:message  key="buttons.redefineQuery" />
+					</html:button>
+				</td>
+
 			</tr>
 			</table>
 		</td>
@@ -350,7 +376,12 @@ if(dataList != null && dataList.size() != 0)
 						<bean:message  key="buttons.configure" />
 					</html:button>
 				</td>
-				
+				<td>
+					<html:button styleClass="actionButton" property="redefineButton" onclick="<%=redefineQueryAction%>">
+						<bean:message  key="buttons.redefineQuery" />
+					</html:button>
+				</td>
+				<td>
 				
 			</tr>
 			</table>
