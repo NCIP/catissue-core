@@ -19,13 +19,13 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.domainobject.Address;
-import edu.wustl.common.util.global.PasswordManager;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.PasswordManager;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 import gov.nih.nci.security.authorization.domainobjects.Role;

@@ -13,17 +13,9 @@ package edu.wustl.catissuecore.actionForm;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
-import org.apache.struts.action.ActionMapping;
-
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.common.util.global.ApplicationProperties;
-import edu.wustl.common.util.global.Validator;
 
 
 /**
