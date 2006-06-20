@@ -108,6 +108,10 @@ public class ConfigureSimpleQueryAction extends BaseAction
 				simpleQueryInterfaceForm.setSelectedColumnNames(selectedColumns);
 			}
 			session.setAttribute(Constants.TABLE_ALIAS_NAME,selectedTables);
+			//session.setAttribute(Constants.SIMPLE_QUERY_COUNTER,new String(""+counter));
+			//Logger.out.debug("counter in configure"+(String)session.getAttribute(Constants.SIMPLE_QUERY_COUNTER));
+			//Counter required for redefining the query
+			map.put("counter",new String(""+counter));
 			session.setAttribute(Constants.SIMPLE_QUERY_MAP,map);
 		}
 		
