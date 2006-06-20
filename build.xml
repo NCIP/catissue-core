@@ -1,7 +1,7 @@
 <?xml version ="1.0"?>
 
 <!--Ant Script for create Build for caTISSUE Core-->
-<project name="caTissue_Core" default="compile">
+<project name="caTissue Core" default="compile">
 	
 	<!--define require dir and Properties -->	
 	<property file="caTissueInstall.properties"/>
