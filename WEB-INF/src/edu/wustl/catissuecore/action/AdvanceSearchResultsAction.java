@@ -29,17 +29,20 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.bizlogic.AdvanceQueryBizlogic;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
+import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.QueryBizLogic;
 import edu.wustl.common.bizlogic.SimpleQueryBizLogic;
 import edu.wustl.common.query.AdvancedConditionsImpl;
 import edu.wustl.common.query.AdvancedConditionsNode;
 import edu.wustl.common.query.AdvancedQuery;
 import edu.wustl.common.query.Condition;
+import edu.wustl.common.query.DataElement;
+import edu.wustl.common.query.Operator;
 import edu.wustl.common.query.Query;
 import edu.wustl.common.query.QueryFactory;
-import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.query.Table;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -62,7 +65,11 @@ public class AdvanceSearchResultsAction extends BaseAction
 		//Get the advance query root object from session 
 		HttpSession session = request.getSession();
 		DefaultMutableTreeNode root = (DefaultMutableTreeNode)session.getAttribute(Constants.ADVANCED_CONDITIONS_ROOT);
-		if(root.getChildCount()==0)
+		//Bug 2004:Make a copy of the original query root object so that any modifications to the tree object does 
+		//not reflect when query is redefined.
+		DefaultMutableTreeNode originalQueryObject =new DefaultMutableTreeNode();
+		copy(root,originalQueryObject);
+		if(originalQueryObject.getChildCount()==0)
 		{
 			ActionErrors errors = new ActionErrors();
 			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
@@ -77,7 +84,7 @@ public class AdvanceSearchResultsAction extends BaseAction
 			Query query = QueryFactory.getInstance().newQuery(Query.ADVANCED_QUERY, aliasName);
 			
 			//Set the root object as the where conditions
-			((AdvancedConditionsImpl)((AdvancedQuery)query).getWhereConditions()).setWhereCondition(root);
+			((AdvancedConditionsImpl)((AdvancedQuery)query).getWhereConditions()).setWhereCondition(originalQueryObject);
 			//Set activity Status conditions to filter data which are disabled 
 			Vector tablesVector = new Vector();
 			tablesVector.add(Query.PARTICIPANT);
@@ -90,7 +97,7 @@ public class AdvanceSearchResultsAction extends BaseAction
 			
 			//Set the table set for join Condition 
 			Set tableSet = new HashSet();
-			advBizLogic.setTables(root,tableSet);
+			advBizLogic.setTables(originalQueryObject,tableSet);
 			//setTablesDownTheHeirarchy(tableSet);
 			query.setTableSet(tableSet);
 			
@@ -98,7 +105,7 @@ public class AdvanceSearchResultsAction extends BaseAction
 			SimpleQueryBizLogic bizLogic = new SimpleQueryBizLogic(); 
 			
 			//Set attribute type in the DataElement	
-			setAttributeType(root);
+			setAttributeType(originalQueryObject);
 			
 			//Set Identifier of Participant,Collection Protocol, Specimen Collection Group and Specimen if not existing in the resultView
 			tablesVector.remove(Query.SPECIMEN_PROTOCOL);
@@ -139,6 +146,10 @@ public class AdvanceSearchResultsAction extends BaseAction
 			
 			//Create temporary table with the data from the Advance Query Search 
 			String sql = query.getString();
+//			String sql = "Select Participant2.IDENTIFIER  Column0 , Participant2.LAST_NAME  Column1 , Participant2.FIRST_NAME  Column2 , Participant2.MIDDLE_NAME  Column3 , Participant2.BIRTH_DATE  Column4 , Participant2.DEATH_DATE  Column5 , Participant2.VITAL_STATUS  Column6 , Participant2.GENDER  Column7 , Participant2.GENOTYPE  Column8 , Participant2.RACE  Column9 , Participant2.ETHNICITY  Column10 , Participant2.SOCIAL_SECURITY_NUMBER  Column11 , ParticipantMedicalId1.MEDICAL_RECORD_NUMBER  Column12 , CollectionProtReg1.IDENTIFIER  Column13 , SpecimenProtocol1.TITLE  Column14 , CollectionProtReg1.PROTOCOL_PARTICIPANT_ID  Column15 , CollectionProtReg1.REGISTRATION_DATE  Column16 , Participant2.LAST_NAME  Column17 , Participant2.FIRST_NAME  Column18 , Participant2.MIDDLE_NAME  Column19 , Participant2.BIRTH_DATE  Column20 , SpecimenCollectionGroup1.IDENTIFIER  Column21 , SpecimenCollectionGroup1.CLINICAL_DIAGNOSIS  Column22 , SpecimenCollectionGroup1.CLINICAL_STATUS  Column23 , SpecimenProtocol1.TITLE  Column24 , CollectionProtocolEvent1.STUDY_CALENDAR_EVENT_POINT  Column25 , Site1.NAME  Column26 , CollectionProtReg1.PROTOCOL_PARTICIPANT_ID  Column27 , ClinicalReport1.SURGICAL_PATHOLOGICAL_NUMBER  Column28 , ClinicalReport1.PARTICIPENT_MEDI_IDENTIFIER_ID  Column29 , Participant2.LAST_NAME  Column30 , Participant2.FIRST_NAME  Column31 , Specimen1.IDENTIFIER  Column32 , Specimen1.SPECIMEN_COLLECTION_GROUP_ID  Column33 , Specimen1.PARENT_SPECIMEN_ID  Column34 , Specimen1.TYPE  Column35 , Specimen1.POSITION_DIMENSION_ONE  Column36 , Specimen1.POSITION_DIMENSION_TWO  Column37 , Specimen1.BARCODE  Column38 , Specimen1.QUANTITY  Column39 , Specimen1.AVAILABLE_QUANTITY  Column40 , Specimen1.CONCENTRATION  Column41 , SpecimenCharacteristics1.TISSUE_SITE  Column42 , SpecimenCharacteristics1.TISSUE_SIDE  Column43 , SpecimenCharacteristics1.PATHOLOGICAL_STATUS  Column44 , ExternalIdentifier1.NAME  Column45 , ExternalIdentifier1.VALUE  Column46 , CollectionProtocol1.IDENTIFIER  Column47 , User1.LAST_NAME  Column48 , User1.FIRST_NAME  Column49 , SpecimenProtocol1.TITLE  Column50 , SpecimenProtocol1.SHORT_TITLE  Column51 , SpecimenProtocol1.IRB_IDENTIFIER  Column52 , SpecimenProtocol1.START_DATE  Column53 , SpecimenProtocol1.END_DATE  Column54 , SpecimenProtocol1.ENROLLMENT  Column55 , SpecimenProtocol1.DESCRIPTION_URL  Column56 , CollectionProtocolEvent1.CLINICAL_STATUS  Column57 , CollectionProtocolEvent1.STUDY_CALENDAR_EVENT_POINT  Column58 , SpecimenRequirement1.SPECIMEN_TYPE  Column59 , SpecimenRequirement1.TISSUE_SITE  Column60 , SpecimenRequirement1.PATHOLOGY_STATUS  Column61 , SpecimenRequirement1.QUANTITY  Column62 , CollectionSpecReq1.COLLECTION_PROTOCOL_EVENT_ID  Column63 , Site1.IDENTIFIER  Column64 , User1.IDENTIFIER  Column65 "+ 
+//					"FROM  CATISSUE_COLL_SPECIMEN_REQ CollectionSpecReq1 , CATISSUE_SPECIMEN_REQUIREMENT SpecimenRequirement1 ,  CATISSUE_SPECIMEN_PROTOCOL SpecimenProtocol1 ,  CATISSUE_COLL_PROT_EVENT CollectionProtocolEvent1 , CATISSUE_SITE Site1 , CATISSUE_CLINICAL_REPORT ClinicalReport1 ,  CATISSUE_SPECIMEN_CHAR SpecimenCharacteristics1 , CATISSUE_EXTERNAL_IDENTIFIER ExternalIdentifier1 , CATISSUE_USER User1,CATISSUE_SPECIMEN Specimen1 ,  (CATISSUE_PARTICIPANT Participant2) left join (  CATISSUE_COLL_PROT_REG CollectionProtReg1,CATISSUE_PART_MEDICAL_ID ParticipantMedicalId1  ) on  (Participant2.IDENTIFIER   =  CollectionProtReg1.PARTICIPANT_ID AND Participant2.IDENTIFIER   =  ParticipantMedicalId1.PARTICIPANT_ID ) left join (CATISSUE_COLLECTION_PROTOCOL CollectionProtocol1,CATISSUE_SPECIMEN_COLL_GROUP SpecimenCollectionGroup1) on ( CollectionProtReg1.IDENTIFIER   =  SpecimenCollectionGroup1.COLLECTION_PROTOCOL_REG_ID  AND CollectionProtocol1.IDENTIFIER   =  CollectionProtReg1.COLLECTION_PROTOCOL_ID ) where " +
+//					"SpecimenRequirement1.IDENTIFIER   =  CollectionSpecReq1.SPECIMEN_REQUIREMENT_ID  AND CollectionProtocolEvent1.IDENTIFIER   =  CollectionSpecReq1.COLLECTION_PROTOCOL_EVENT_ID    AND  SpecimenProtocol1.IDENTIFIER   =  CollectionProtocol1.IDENTIFIER  AND User1.IDENTIFIER   =  SpecimenProtocol1.PRINCIPAL_INVESTIGATOR_ID  AND CollectionProtocolEvent1.IDENTIFIER   =  SpecimenCollectionGroup1.COLLECTION_PROTOCOL_EVENT_ID  AND Site1.IDENTIFIER   =  SpecimenCollectionGroup1.SITE_ID  AND ClinicalReport1.IDENTIFIER   =  SpecimenCollectionGroup1.CLINICAL_REPORT_ID  AND SpecimenCollectionGroup1.IDENTIFIER   =  Specimen1.SPECIMEN_COLLECTION_GROUP_ID  AND CollectionProtocol1.IDENTIFIER   =  CollectionProtocolEvent1.COLLECTION_PROTOCOL_ID  AND SpecimenCharacteristics1.IDENTIFIER   =  Specimen1.SPECIMEN_CHARACTERISTICS_ID  AND Specimen1.IDENTIFIER   =  ExternalIdentifier1.SPECIMEN_ID and Participant2.ACTIVITY_STATUS != 'Disabled'  AND SpecimenProtocol1.ACTIVITY_STATUS != 'Disabled'  AND CollectionProtReg1.ACTIVITY_STATUS != 'Disabled'  AND SpecimenCollectionGroup1.ACTIVITY_STATUS != 'Disabled'  AND Specimen1.ACTIVITY_STATUS != 'Disabled'  AND (( " +
+//					"(Participant2.IDENTIFIER  > 0  ) ) )";
 			Logger.out.debug("no. of tables in tableSet after table created"+query.getTableNamesSet().size()+":"+query.getTableNamesSet());
 			Logger.out.debug("Advance Query Sql"+sql);
 			advBizLogic.createTempTable(sql,tempTableName,sessionData,queryResultObjectDataMap, query.hasConditionOnIdentifiedField());
@@ -194,6 +205,34 @@ public class AdvanceSearchResultsAction extends BaseAction
 				condition.getDataElement().setFieldType(attributeType);
 			}
 			setAttributeType(child);
+		}
+	}
+	//Method to deep copy the DefaultMutableTreeNode object
+	private void copy(DefaultMutableTreeNode oldCopy,DefaultMutableTreeNode newCopy)
+	{
+		DefaultMutableTreeNode child = new DefaultMutableTreeNode();
+		int childCount = oldCopy.getChildCount();
+		for(int i=0;i<childCount;i++)
+		{
+			child = (DefaultMutableTreeNode)oldCopy.getChildAt(i);
+			AdvancedConditionsNode advNode = (AdvancedConditionsNode)child.getUserObject();
+			AdvancedConditionsNode newAdvNode = new AdvancedConditionsNode(new String(advNode.getObjectName()));
+			Vector conditions = advNode.getObjectConditions();
+			Vector newConditions = new Vector();
+			Iterator itr1 = conditions.iterator();
+			while(itr1.hasNext())
+			{
+				Condition con = (Condition)itr1.next();
+				DataElement data = con.getDataElement();
+				DataElement newData = new DataElement(new Table(new String(data.getTableAliasName())),
+						new String(data.getField()));
+				Condition newCon = new Condition(newData,new Operator(con.getOperator()),new String(con.getValue()));
+				newConditions.add(newCon);
+			}
+			newAdvNode.setObjectConditions(newConditions);
+			DefaultMutableTreeNode newChild = new DefaultMutableTreeNode(newAdvNode);
+			newCopy.add(newChild);
+			copy(child,newChild);
 		}
 	}
 }
