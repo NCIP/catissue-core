@@ -36,20 +36,16 @@ public class AdvanceQueryInterfaceAction extends BaseAction
             HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException
     {         
-    	String operation = (String)request.getParameter("operation");
+    	String operation = (String)request.getParameter(Constants.OPERATION);
     	Logger.out.debug("Advanced operation "+operation);
+    	HttpSession session = request.getSession();
     	
     	//First time the Advance Search page loads set the Query view root as empty
     	if(operation==null)
     	{
     		Logger.out.debug("Inside initialization of root node");
     		DefaultMutableTreeNode root = new DefaultMutableTreeNode();
-    		//DefaultMutableTreeNode queryViewRoot = new DefaultMutableTreeNode();;
-    		HttpSession session = request.getSession();
     		session.setAttribute(Constants.ADVANCED_CONDITIONS_ROOT,root);
-    		//session.setAttribute(Constants.ADVANCED_CONDITIONS_QUERY_VIEW,queryViewRoot);
-    		//root = (DefaultMutableTreeNode)session.getAttribute(Constants.ADVANCED_CONDITIONS_ROOT);
-    		//Logger.out.debug("child count in init action:"+root.getChildCount());
     	}
     	
     	String pageOf = (String)request.getParameter(Constants.PAGEOF);
