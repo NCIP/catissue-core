@@ -165,7 +165,7 @@ public class ShoppingCartAction  extends BaseAction
 	        }
 	        else if(operation.equals(Constants.EXPORT)) //IF OPERATION IS "EXPORT"
 	        {
-	        	String fileName = Variables.catissueHome + System.getProperty("file.separator") + session.getId() + ".csv";
+	        	String fileName = Variables.applicationHome + System.getProperty("file.separator") + session.getId() + ".csv";
 	        	
 	        	//Extracting map from formbean that gives rows to be exported
 	        	Map map = advForm.getValues();

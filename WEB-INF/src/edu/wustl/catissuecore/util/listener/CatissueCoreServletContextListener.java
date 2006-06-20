@@ -65,7 +65,7 @@ public class CatissueCoreServletContextListener implements
         /**
          * Getting and storing Home path for the application
          */
-        Variables.catissueHome = sce.getServletContext().getRealPath("");
+        Variables.applicationHome = sce.getServletContext().getRealPath("");
         
         /**
          * Creating Logs Folder inside catissue home
@@ -73,7 +73,7 @@ public class CatissueCoreServletContextListener implements
         File logfolder=null;
         try
         {
-            logfolder = new File(Variables.catissueHome + "/Logs");
+            logfolder = new File(Variables.applicationHome + "/Logs");
             if (logfolder.exists() == false)
             {
                 logfolder.mkdir();
@@ -126,18 +126,20 @@ public class CatissueCoreServletContextListener implements
          * setting system property catissue.home which can be ustilized 
          * by the Logger for creating log file
          */
-        System.setProperty("catissue.home",Variables.catissueHome + "/Logs");
+        System.setProperty("catissue.home",Variables.applicationHome + "/Logs");
         
+        
+        Variables.applicationName = ApplicationProperties.getValue("app.name");
+        Variables.applicationVersion = ApplicationProperties.getValue("app.version");
+		
         /**
          * Configuring the Logger class so that it can be utilized by
          * the entire application
          */
         Logger.configure(applicationResourcesPath);
         
-        Logger.out.info(ApplicationProperties.getValue("catissue.home")
-                + Variables.catissueHome);
-        Logger.out.info(ApplicationProperties.getValue("logger.conf.filename")
-                + applicationResourcesPath);
+        Logger.out.info(ApplicationProperties.getValue("catissue.home") + Variables.applicationHome);
+        Logger.out.info(ApplicationProperties.getValue("logger.conf.filename") + applicationResourcesPath);
         
         QueryBizLogic.initializeQueryData();
         
@@ -181,7 +183,7 @@ public class CatissueCoreServletContextListener implements
         	Logger.out.error(ex.getMessage(), ex);
 		}
         
-        //Initialize CDE Manager
+        //Initialize XML properties Manager
         try
 		{
         	String path = System.getProperty("app.propertiesFile");

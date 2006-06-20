@@ -46,7 +46,7 @@ public class SpreadsheetExportAction  extends BaseAction
     {
     	AdvanceSearchForm searchForm = (AdvanceSearchForm)form;
     	HttpSession session = request.getSession();
-    	String fileName = Variables.catissueHome + System.getProperty("file.separator") + session.getId() + ".csv";
+    	String fileName = Variables.applicationHome + System.getProperty("file.separator") + session.getId() + ".csv";
     	
     	//Extracting map from formbean which gives the serial numbers of selected rows
     	Map map = searchForm.getValues();
