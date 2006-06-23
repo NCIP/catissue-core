@@ -1,4 +1,5 @@
 # ------ 'Death date' and 'Vital status' attribute addition to Participant table ------
+# ---------- 23 May 2006 -------------
 ALTER TABLE catissue_participant ADD COLUMN DEATH_DATE DATE;
 ALTER TABLE catissue_participant ADD COLUMN VITAL_STATUS varchar(50);
 
