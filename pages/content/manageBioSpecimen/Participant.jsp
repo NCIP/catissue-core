@@ -697,8 +697,8 @@ tr#hiddenCombo
 				  </tr>
 				  <tr>
 				 	<td align="center" colspan="4" valign="top">
-						<INPUT TYPE='RADIO' NAME='chkName' value="Add" onclick="CreateNewClick()"><font size="2">Ignore Matches and Create New Participant </font></INPUT>&nbsp;&nbsp;
-						<INPUT TYPE='RADIO' NAME='chkName' value="Lookup" onclick="LookupAgain()"><font size="2">Participant Lookup Again </font></INPUT>
+						<INPUT TYPE='RADIO' NAME='chkName' value="Add" onclick="CreateNewClick()"><font size="2">Ignore matches and create new participant </font></INPUT>&nbsp;&nbsp;
+						<INPUT TYPE='RADIO' NAME='chkName' value="Lookup" onclick="LookupAgain()" checked=true><font size="2">Lookup again </font></INPUT>
 					</td>
 				</tr>		
 				<%}%>
