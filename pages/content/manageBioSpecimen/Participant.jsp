@@ -33,6 +33,7 @@ tr#hiddenCombo
 
 		String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);		
 		String forwardTo=(String)request.getAttribute(Constants.FORWARD_TO);		
+
 		boolean isAddNew = false;
 		String operation = (String)request.getAttribute(Constants.OPERATION);
 		String formName, pageView=operation,editViewButton="buttons."+Constants.EDIT;
@@ -195,6 +196,9 @@ tr#hiddenCombo
 		{
 			document.forms[0].participantId.value=participant_id;
 			document.forms[0].systemIdentifier.value=participant_id;
+			document.forms[0].submitPage.disabled=true;
+		
+		
 		}
 		//This Function is called when user clicks on 'Add New Participant' Button
 		function AddParticipant()
@@ -205,6 +209,7 @@ tr#hiddenCombo
 		//This function is called when user clicks on 'Use Selected Participant' Button
 		function UseSelectedParticipant()
 		{
+		alert("2");
 			if(document.forms[0].participantId.value=="" || document.forms[0].participantId.value=="0")
 			{
 				alert("Please select the Participant from the list");
@@ -212,13 +217,61 @@ tr#hiddenCombo
 			else
 			{
 				document.forms[0].action="ParticipantSelect.do?operation=add&systemIdentifier="+document.forms[0].participantId.value;
+				alert("3");
+				alert(document.forms[0].action);
 				document.forms[0].submit();
 				//window.location.href="ParticipantSelect.do?operation=add&participantId="+document.forms[0].participantId.value+"&submittedFor="+document.forms[0].submittedFor.value+"&forwardTo="+document.forms[0].forwardTo.value;
 			}
 			
 		}
-
+		
+		function CreateNewClick()
+		{
+			document.forms[0].submitPage.disabled=false;
+			<%if(request.getAttribute(Constants.SUBMITTED_FOR)!=null && request.getAttribute(Constants.SUBMITTED_FOR).equals("AddNew")){%>
+				document.forms[0].submitPage.disabled=true;
+			<%}%>
+			
+			document.forms[0].radioValue.value="Add";
+			document.forms[0].action="<%=Constants.PARTICIPANT_ADD_ACTION%>";
+			
+		}
 	
+		function LookupAgain()
+		{
+			
+			document.forms[0].submitPage.disabled=false;
+			<%if(request.getAttribute(Constants.SUBMITTED_FOR)!=null && request.getAttribute(Constants.SUBMITTED_FOR).equals("AddNew")){%>
+				document.forms[0].submitPage.disabled=true;
+			<%}%>
+			document.forms[0].radioValue.value="Lookup";
+		}
+		
+		function setSubmittedForParticipant(submittedFor,forwardTo)
+		{
+			document.forms[0].submittedFor.value = submittedFor;
+			document.forms[0].forwardTo.value    = forwardTo;
+			<%if(request.getAttribute(Constants.SUBMITTED_FOR)!=null && request.getAttribute(Constants.SUBMITTED_FOR).equals("AddNew")){%>
+			document.forms[0].submittedFor.value = "AddNew";
+			<%}%>			
+			<%if(request.getAttribute(Constants.SPREADSHEET_DATA_LIST)!=null && dataList.size()>0){%>	
+
+			if(document.forms[0].radioValue.value=="Add")
+			{
+				document.forms[0].action="<%=Constants.PARTICIPANT_ADD_ACTION%>";
+				document.forms[0].submit();
+			}
+			else
+			{
+				if(document.forms[0].radioValue.value=="Lookup")
+				{
+					document.forms[0].action="<%=Constants.PARTICIPANT_LOOKUP_ACTION%>";
+					document.forms[0].submit();
+				}
+			}		
+					<%}%>	
+			document.forms[0].submit();		
+		}
 	</script>
 </head>
 
@@ -228,17 +281,6 @@ tr#hiddenCombo
 </html:messages>
 
 <html:form action="<%=formName%>">
-	
-	<%
-		String normalSubmitFunctionName = "setSubmittedFor('" + submittedFor+ "','" + Constants.PARTICIPANT_FORWARD_TO_LIST[0][1]+"')";
-		String forwardToSubmitFunctionName = "setSubmittedFor('ForwardTo','" + Constants.PARTICIPANT_FORWARD_TO_LIST[1][1]+"')";									
-		String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms[0].activityStatus)";
-		String normalSubmit = normalSubmitFunctionName + ","+confirmDisableFuncName;
-		String forwardToSubmit = forwardToSubmitFunctionName + ","+confirmDisableFuncName;
-	%>
-	
-	<%@ include file="ParticipantPageButtons.jsp" %>
-	
 	<%
 	if(pageView.equals("edit"))
 	{
@@ -324,6 +366,7 @@ tr#hiddenCombo
 				 <tr>
 					<td>
 						<input type="hidden" name="participantId" value="<%=participantId%>"/>
+						<input type="hidden" name="radioValue"/>
 						<html:hidden property="<%=Constants.OPERATION%>" value="<%=operation%>"/>
 						<html:hidden property="submittedFor" value="<%=submittedFor%>"/>
 						<html:hidden property="forwardTo" value="<%=forwardTo%>"/>
@@ -598,22 +641,17 @@ tr#hiddenCombo
 				}
 				%>
 				 </tbody>
-				
+								
+				  					
 				  <!-- Medical Identifiers End here -->
-				
-				 <%@ include file="ParticipantPageButtons.jsp" %>
-				 
-				<!--	extra </logic:notEqual>-->
-				
-				 <!-- end --> 
 				  <!---Following is the code for Data Grid. Participant Lookup Data is displayed-->
 				<%if(request.getAttribute(Constants.SPREADSHEET_DATA_LIST)!=null && dataList.size()>0){%>	
 
 				<tr>
-				     <td class="formTitle" height="20" colspan="2">
+				     <td class="formTitle" height="20" colspan="4">
 				     	<bean:message key="participant.lookup"/>
 				     </td>
-				     <td class="formButtonField">
+<!--				     <td class="formButtonField">
 						<html:button styleClass="actionButton"  property="useSelectedParticipant" onclick="UseSelectedParticipant();">
 						<bean:message key="buttons.useSelectedParticipant"/> 
 						</html:button>
@@ -622,11 +660,11 @@ tr#hiddenCombo
 						<html:button styleClass="actionButton" property="addParticipant" onclick="AddParticipant();">
 								<bean:message key="buttons.addParticipant"/> 
 						</html:button>
-					</td>
+					</td>-->
 				  </tr>				
-				 <tr height=300 valign=top>
+	  			  <tr height=100 valign=top>
 					<td colspan=4 valign=top>
-						<div STYLE="overflow: auto; width:100%; height:30%; padding:0px; margin: 0px; border: 1px solid">
+						<div STYLE="overflow: auto; width:100%; height:100%; padding:0px; margin: 0px; border: 1px solid">
 						<script>
 						//	create ActiveWidgets Grid javascript object.
 						var obj = new Active.Controls.Grid;
@@ -656,15 +694,85 @@ tr#hiddenCombo
 						</script>
 						</div>
 					</td>
-				</tr>
-
+				  </tr>
+				  <tr>
+				 	<td align="center" colspan="4" valign="top">
+						<INPUT TYPE='RADIO' NAME='chkName' value="Add" onclick="CreateNewClick()"><font size="2">Ignore Matches and Create New Participant </font></INPUT>&nbsp;&nbsp;
+						<INPUT TYPE='RADIO' NAME='chkName' value="Lookup" onclick="LookupAgain()"><font size="2">Participant Lookup Again </font></INPUT>
+					</td>
+				</tr>		
 				<%}%>
 				<!--Participant Lookup end-->				
+								 <!-----action buttons-->
+				 <tr>
+				 	<td align="center" colspan="4" valign="top">
+						<%
+							String changeAction = "setFormAction('"+formName+"')";
+						%>
+						<!-- action buttons begins -->
+
+						<table cellpadding="4" cellspacing="0" border="0">
+							<logic:equal name="<%=Constants.SUBMITTED_FOR%>" value="AddNew">
+							<% 
+								isAddNew=true;
+							%>
+							</logic:equal>
+							
+							<tr>
+								<%--
+									String normalSubmitFunctionName = "setSubmittedForParticipant('" + submittedFor+ "','" + Constants.PARTICIPANT_FORWARD_TO_LIST[0][1]+"')";
+									String forwardToSubmitFunctionName = "setSubmittedForParticipant('ForwardTo','" + Constants.PARTICIPANT_FORWARD_TO_LIST[1][1]+"')";									
+									String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms[0].activityStatus)";
+									String normalSubmit = normalSubmitFunctionName + ","+confirmDisableFuncName;
+									String forwardToSubmit = forwardToSubmitFunctionName + ","+confirmDisableFuncName;
+								--%>
+								<%
+									String normalSubmitFunctionName = "setSubmittedForParticipant('" + submittedFor+ "','" + Constants.PARTICIPANT_FORWARD_TO_LIST[0][1]+"')";
+									String forwardToSubmitFunctionName = "setSubmittedForParticipant('ForwardTo','" + Constants.PARTICIPANT_FORWARD_TO_LIST[1][1]+"')";									
+								
+									String normalSubmit = normalSubmitFunctionName ;
+									String forwardToSubmit = forwardToSubmitFunctionName ;
+								%>
+																
+								<!-- PUT YOUR COMMENT HERE -->
+
+								<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
+								<td nowrap class="formFieldNoBorders">
+								<html:button styleClass="actionButton"
+										property="submitPage" 
+										value="<%=Constants.PARTICIPANT_FORWARD_TO_LIST[0][0]%>" 
+										disabled="<%=isAddNew%>"
+										onclick="<%=normalSubmit%>"> 
+								</html:button>
+								</td>
+								</logic:notEqual>	
+								
+								<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
+								<td nowrap class="formFieldNoBorders">									
+									<html:button styleClass="actionButton"  
+											property="registratioPage" 
+											value="<%=Constants.PARTICIPANT_FORWARD_TO_LIST[1][0]%>" 
+					  						onclick="<%=forwardToSubmit%>">
+									</html:button>
+								</td>
+								</logic:notEqual>
+								<td>
+									<html:submit styleClass="actionButton" disabled="true">
+							   		<bean:message key="buttons.getClinicalData"/>
+									</html:submit>
+								</td>	
+							</tr>
+						</table>
+							<!-- action buttons end -->
+			  		</td>
+			 	 </tr>
+								 
+				<!--	extra </logic:notEqual>-->
 				
+				 <!-- end --> 
 			</table>
 		</td></tr>
-	</table>
-	<%@ include file="ParticipantPageButtons.jsp" %>
+	</table>			
 	<%
 	if(pageView.equals("edit"))
 	{
