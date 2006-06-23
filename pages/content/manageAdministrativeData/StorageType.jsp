@@ -140,8 +140,23 @@
 				°C
 			</td>
 		</tr>
-
-
+		<!-- added by vaishali on 22 nd jube 2006 2.00 pm-->
+		<tr>
+			<td class="formRequiredNotice" width="5">&nbsp;</td>
+			<td class="formLabel">
+				<label for="oneDimensionCapacity">
+					<bean:message key="storageType.holds"/>
+				</label>
+			</td>
+			<td class="formField">
+				<html:select property="oneDimensionLabel" styleClass="formFieldSized" styleId="typeId" size="4" multiple="true"
+							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+				<html:options collection="<%=Constants.HOLDS_LIST%>" labelProperty="name" property="value"/>
+				</html:select>
+							&nbsp;
+			</td>
+		</tr>
+		<!-- added finish -->
 		<tr>			
 			<td class="formTitle" colspan="3">
 				<label for="defaultCapacity">
@@ -207,7 +222,32 @@
 				<html:text styleClass="formFieldSized10"  maxlength="50" size="30" styleId="twoDimensionLabel" property="twoDimensionLabel"/>
 			</td>
 		</tr>
+		<!-- added by vaishali on 21st June 2006 5.58
+		<tr>			
+			<td class="formTitle" colspan="3">
+				<label for="defaultCapacity">
+					<bean:message key="storageType.details"/>
+				</label>
+			</td>
+		</tr>
 
+		<tr>
+			<td class="formRequiredNotice" width="5">&nbsp;</td>
+			<td class="formLabel">
+				<label for="oneDimensionCapacity">
+					<bean:message key="storageType.holds"/>
+				</label>
+			</td>
+			<td class="formField">
+				<html:select property="oneDimensionLabel" styleClass="formFieldSized" styleId="typeId" size="4" multiple="true"
+							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+				<html:options collection="<%=Constants.HOLDS_LIST%>" labelProperty="name" property="value"/>
+				</html:select>
+							&nbsp;
+			</td>
+		</tr>
+		
+		<!-- added finish -->
 		<tr>
 		  <td align="right" colspan="3">
 			<!-- action buttons begins -->

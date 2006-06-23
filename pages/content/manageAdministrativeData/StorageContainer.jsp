@@ -90,7 +90,6 @@
 				document.forms[0].positionDimensionOne.disabled = false;				
 				document.forms[0].positionDimensionTwo.disabled = false;				
 				document.forms[0].Map.disabled = false;
-
 				document.forms[0].siteId.disabled = true;
 				//window.location.reload();
 			}
@@ -111,11 +110,26 @@
 			document.forms[0].action = action;
 			document.forms[0].submit();
 		}
+		function onParentContainerChange(element)
+		{
+			var action = "StorageContainer.do?operation="+document.forms[0].operation.value+"&pageOf=pageOfStorageContainer&isOnChange=true";
+			document.forms[0].action = action;
+			document.forms[0].submit();
+		}
 		
 		function onContainerChange(element)
 		{
 		}
-		
+
+		function onNameClick(element)
+		{
+			if(element.value=="")
+			{
+				var action = "StorageContainer.do?operation="+document.forms[0].operation.value+"&pageOf=pageOfStorageContainer&isOnChange=true";
+				document.forms[0].action = action;
+				document.forms[0].submit();
+			}
+		}		
 //  function to insert a row in the inner block
 
 function insRow(subdivtag)
@@ -274,7 +288,7 @@ function insRow(subdivtag)
 					</td>
 				</tr>
 					<tr>
-						<td class="formMessage" colspan="4">* indicates a required field</td>
+						<td class="formMessage" colspan="5">* indicates a required field</td>
 					</tr>
 					
 					<tr>
@@ -352,7 +366,7 @@ function insRow(subdivtag)
 						<td class="formField" colspan="2">
 	 						<logic:equal name="storageContainerForm" property="checkedButton" value="1">	
 	 							&nbsp;<bean:message key="storageContainer.parentID" />						
-				     			<html:text styleClass="formFieldSized3" maxlength="10" styleId="parentContainerId" property="parentContainerId" disabled = "true"/>
+				     			<html:text styleClass="formFieldSized3" maxlength="10" styleId="parentContainerId" property="parentContainerId" disabled = "true" onchange="onParentContainerChange(this)"/>
 				     			&nbsp;<bean:message key="storageContainer.positionOne" />
 				     			<html:text styleClass="formFieldSized3" maxlength="10"  styleId="positionDimensionOne" property="positionDimensionOne" disabled = "true"/>
 				     			&nbsp;<bean:message key="storageContainer.positionTwo" />
@@ -367,7 +381,7 @@ function insRow(subdivtag)
 							
 							<logic:equal name="storageContainerForm" property="checkedButton" value="2">
 							&nbsp;<bean:message key="storageContainer.parentID" />													
-			     			<html:text styleClass="formFieldSized3" maxlength="10"  styleId="parentContainerId" property="parentContainerId" />
+			     			<html:text styleClass="formFieldSized3" maxlength="10"  styleId="parentContainerId" property="parentContainerId" onchange="onParentContainerChange(this)"/>
 			     			&nbsp;<bean:message key="storageContainer.positionOne" />
 			     			<html:text styleClass="formFieldSized3" maxlength="10"  styleId="positionDimensionOne" property="positionDimensionOne" />
 			     			&nbsp;<bean:message key="storageContainer.positionTwo" />
@@ -382,7 +396,18 @@ function insRow(subdivtag)
 						
 						</td>							
 					</tr>
-
+					<tr>
+						<td class="formRequiredNotice" width="5">*</td>
+						<td class="formRequiredLabel" colspan="2">
+							<label for="containerName">
+								<bean:message key="storageContainer.containerName" />
+							</label>
+						</td>
+						<td class="formField" colspan="2">
+							<html:text styleClass="formFieldSized10" maxlength="50"  size="30" styleId="startNumber" property="containerName"/>
+						</td>
+					</tr>
+					
 					<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
 					<tr>
 						<td class="formRequiredNotice" width="5">*</td>
@@ -397,6 +422,7 @@ function insRow(subdivtag)
 					</tr>
 					</logic:notEqual>
 					
+					<!-- added by vaishali and have to removed it on 21st June 2006 2.18 pm
 					<tr>
 						<td class="formRequiredNotice" width="5">&nbsp;</td>
 						<td class="formLabel" colspan="2">
@@ -405,10 +431,10 @@ function insRow(subdivtag)
 							</label>
 						</td>
 						<td class="formField" colspan="2">
-							<html:text styleClass="formFieldSized10" maxlength="10"  size="30" styleId="startNumber" property="startNumber" readonly="TRUE"/>
+							<html:text styleClass="formFieldSized10" maxlength="50"  size="30" styleId="startNumber" property="startNumber"/>
 						</td>
 					</tr>
-					
+					<!-- added finish -->
 					<tr>
 						<td class="formRequiredNotice" width="5">&nbsp;</td>
 						<td class="formLabel" colspan="2">
@@ -453,7 +479,7 @@ function insRow(subdivtag)
 						</td>
 					</tr>
 					</logic:equal>
- 		
+
 					<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
 					<tr>
 						<td class="formRequiredNotice" width="5">*</td>
@@ -471,7 +497,42 @@ function insRow(subdivtag)
 						</td>
 					</tr>
 					</logic:equal>
+					<!-- newly added by vaishali on 22nd June 2006 1.56 pm -->
+										<tr>
+						<td class="formRequiredNotice" width="5">&nbsp;</td>
+						<td class="formLabel" colspan="2">
+							<label for="collection_protocol_id">
+								<bean:message key="storageContainer.collectionProtocolTitle" />
+							</label>
+						</td>
+						<td class="formField" colspan="2">
+<!-- Mandar : 434 : for tooltip -->
+							<html:select property="typeId" styleClass="formFieldSized" styleId="typeId" size="4"
+							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" multiple="true" >
+								<html:options collection="<%=Constants.PROTOCOL_LIST%>" labelProperty="name" property="value"/>
+							</html:select>
+							&nbsp;
+							
+						</td>
+					</tr>
+					<tr>
+						<td class="formRequiredNotice" width="5">&nbsp;</td>
+						<td class="formLabel" colspan="2">
+							<label for="holds">
+								<bean:message key="storageContainer.holds" />
+							</label>
+						</td>
+						<td class="formField" colspan="2">
+
+							<html:select property="typeId" styleClass="formFieldSized" styleId="typeId" size="4" multiple="true"
+							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+								<html:options collection="<%=Constants.HOLDS_LIST%>" labelProperty="name" property="value"/>
+							</html:select>
+							&nbsp;
+						</td>
+					</tr>
 					
+					<!-- added finish -->
 					<tr>
 						<td class="formTitle" colspan="5">
 							<label for="capacity">
@@ -507,14 +568,14 @@ function insRow(subdivtag)
 							<html:text styleClass="formFieldSized10" maxlength="10"  size="30" styleId="twoDimensionCapacity" property="twoDimensionCapacity"/>
 						</td>
 					</tr>
-					
+						<!-- vaishali's comment '
 					<tr>
-						<td class="formTitle" colspan="3" nowrap>
+						<td class="formTitle" colspan="5" nowrap>
 							<label for="details">
 								<bean:message key="storageContainer.details" />
 							</label>
 						</td>
-						<td class="formTitle" align="Right">
+					<td class="formTitle" align="Right">
 						<html:button property="addKeyValue" styleClass="actionButton" onclick="insRow('addMore')">
 						<bean:message key="buttons.addMore"/>
 						</html:button>
@@ -524,9 +585,9 @@ function insRow(subdivtag)
 							<html:button property="deleteValue" styleClass="actionButton" onclick="deleteChecked('addMore','StorageContainer.do?operation=<%=operation%>&pageOf=pageOfStorageContainer&status=true',document.forms[0].counter,'chk_',false,document.forms[0].deleteValue)"  disabled="true">
 								<bean:message key="buttons.delete"/>
 							</html:button>
-						</td>
-					</tr>
-									
+						</td> vaishali's comment end'
+					</tr>-->
+					<!-- vaishali's coment				
 					<tr>
 						<td class="formLeftSubTableTitle" width="5">#</td>
 						<td class="formRightSubTableTitle" colspan="2">
@@ -544,8 +605,8 @@ function insRow(subdivtag)
 								<bean:message key="addMore.delete" />
 							</label>
 						</td>
-					</tr>
-					
+					</tr> vaishali's comment end'-->
+					<!-- vaishali's comment'
 					<tbody id="addMore">
 						<%
 						
@@ -583,8 +644,42 @@ function insRow(subdivtag)
 							} // for
 						%>
 
-					</tbody>
+					</tbody> vaishali's comment end-->
 				<%--	</logic:equal> --%>
+				<!--	<tr>
+						<td class="formRequiredNotice" width="5">&nbsp;</td>
+						<td class="formLabel" colspan="2">
+							<label for="collection_protocol_id">
+								<bean:message key="storageContainer.collectionProtocolTitle" />
+							</label>
+						</td>
+						<td class="formField" colspan="2">
+
+							<html:select property="typeId" styleClass="formFieldSized" styleId="typeId" size="4"
+							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" multiple="true">
+								<%-- html:options name="storageTypeIdList" labelName="storageTypeList" /--%>
+								<html:options collection="<%=Constants.PROTOCOL_LIST%>" labelProperty="name" property="value"/>
+							</html:select>
+							&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td class="formRequiredNotice" width="5">&nbsp;</td>
+						<td class="formLabel" colspan="2">
+							<label for="holds">
+								<bean:message key="storageContainer.holds" />
+							</label>
+						</td>
+						<td class="formField" colspan="2">
+
+							<html:select property="typeId" styleClass="formFieldSized" styleId="typeId" size="4" multiple="true"
+							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+								<html:options collection="<%=Constants.HOLDS_LIST%>" labelProperty="name" property="value"/>
+							</html:select>
+							&nbsp;
+						</td>
+					</tr>-->
+				
 				</table>
 				
 				<table summary="" cellpadding="3" cellspacing="0" border="0" width="500">	
@@ -601,11 +696,7 @@ function insRow(subdivtag)
 						   				<bean:message key="buttons.submit"/>
 						   			</html:button>
 						   		</td>
-								<%-- td>
-									<html:reset styleClass="actionButton" >
-										<bean:message  key="buttons.reset" />
-									</html:reset>
-								</td --%>
+								
 							</tr>
 						</table>
 						<!-- action buttons end -->
