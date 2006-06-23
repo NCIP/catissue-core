@@ -195,7 +195,9 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String STORAGE_CONTAINER_SEARCH_ACTION = "StorageContainerSearch.do";
 	public static final String STORAGE_CONTAINER_ADD_ACTION = "StorageContainerAdd.do";
 	public static final String STORAGE_CONTAINER_EDIT_ACTION = "StorageContainerEdit.do";
-	
+	//added by vaishali on 19th June 2006 6.23 pm
+	public static final String HOLDS_LIST = "HoldsList";
+	//finish
 	//Constants required in Site.jsp Page
 	public static final String SITE_SEARCH_ACTION = "SiteSearch.do";
 	public static final String SITE_ADD_ACTION = "SiteAdd.do";

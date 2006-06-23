@@ -56,7 +56,12 @@ public class ParticipantLookupAction extends BaseAction
 				abstractForm);
 		Participant participant = (Participant) abstractDomain;
 		ParticipantBizLogic bizlogic = (ParticipantBizLogic)BizLogicFactory.getBizLogic(Constants.PARTICIPANT_FORM_ID);
-		
+		Logger.out.debug("Participant Id :"+request.getParameter("participantId"));
+		if(request.getParameter("participantId")!=null &&!request.getParameter("participantId").equals("null")&&!request.getParameter("participantId").equals("")&&!request.getParameter("participantId").equals("0"))
+		{
+			Logger.out.info("inside the participant mapping");
+			return mapping.findForward("participantSelect");
+		}
 		List participantList=bizlogic.getParticipantLookupData(participant);
 		Logger.out.debug("Participant List Size:"+participantList.size());
 		//if any matching participants are there then show the participants otherwise add the participant
@@ -87,6 +92,7 @@ public class ParticipantLookupAction extends BaseAction
 		if(request.getParameter(Constants.FORWARD_TO)!=null && !request.getParameter(Constants.FORWARD_TO).equals(""))
 		{
 			request.setAttribute(Constants.FORWARD_TO,request.getParameter(Constants.FORWARD_TO));
+			
 		}
 		
 		request.setAttribute("participantId","");

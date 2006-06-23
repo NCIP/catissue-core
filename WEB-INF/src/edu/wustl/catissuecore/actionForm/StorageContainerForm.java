@@ -89,6 +89,10 @@ public class StorageContainerForm extends AbstractActionForm
 	 */
 	private String startNumber = "";
 
+	/** newly added by vaishali on 20th June 4.04 pm
+	 * 
+	 */
+	private String containerName="";
 	/**
 	 * No. of containers.
 	 */
@@ -168,7 +172,9 @@ public class StorageContainerForm extends AbstractActionForm
 		this.systemIdentifier = container.getId().longValue();
 		this.activityStatus = Utility.toString(container.getActivityStatus());
 		this.startNumber = Utility.toString(container.getNumber());
-		
+		//added by vaishali on 20th Jube 4.30 pm
+		this.containerName=container.getName();
+		//added finish
 		isFull = Utility.initCap( Utility.toString(container.getIsFull()));
 		Logger.out.debug("isFULL />/>/> "+ isFull);
 		
@@ -807,7 +813,19 @@ public class StorageContainerForm extends AbstractActionForm
 	{
 		this.isFull = isFull;
 	}
-
+	
+	/* added by vaishali on 20th June 2006 4.32 pm
+	 * 
+	 */
+	public String getContainerName()
+	{
+		return this.containerName;
+	}
+	public void setContainerName(String containerName)
+	{
+		this.containerName=containerName;
+	}
+	/* added finish */
 	/**
 	 * Associates the specified object with the specified key in the map.
 	 * @param key the key to which the object is mapped.

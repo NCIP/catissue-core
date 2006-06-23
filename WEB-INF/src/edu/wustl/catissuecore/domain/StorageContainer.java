@@ -40,6 +40,12 @@ public class StorageContainer extends AbstractDomainObject implements java.io.Se
      */
 	protected Integer number;
 	
+	/** 
+	 * added by vaishali on 20th June 2006 2.35 pm 
+	 * Name assigned to storage container
+	 * 
+	 */
+	protected String name;
 	/**
      * Intended temperature of the storage container.
      */
@@ -188,6 +194,16 @@ public class StorageContainer extends AbstractDomainObject implements java.io.Se
 		this.number = number;
 	}
 
+	/* added by vaishali on 20th Jube 2006 2.36 pm */
+	public String getName()
+	{
+		return name;
+	}
+	public void setName(String name)
+	{
+		this.name=name;
+	}
+	/* added finish */
 	/**
      * Returns the temperature of the storage container. 
      * @return Temperature of the storage container.
@@ -504,9 +520,15 @@ public class StorageContainer extends AbstractDomainObject implements java.io.Se
 	    try
 	    {
 	        StorageContainerForm form = (StorageContainerForm) abstractForm;
-	        
-	        this.number 				= new Integer(form.getStartNumber());
-	        this.startNo				= new Integer(form.getStartNumber());
+	        //these two lines commented by vaishali on 21st june 2006 10.41
+	        //this.number 				= new Integer(form.getStartNumber());
+	        //this.startNo				= new Integer(form.getStartNumber());
+	        //following two line added , pls remove it after testing
+	        this.number=new Integer("1");
+	        this.startNo=new Integer("1");
+	        //added by vaishali on 21st June 2006 10.43 pm
+	        this.name					=form.getContainerName();
+	        //finish
 	        if (Utility.toString(form.getDefaultTemperature()).trim().length() > 0  )
         	{
 	        	this.tempratureInCentigrade	= new Double(form.getDefaultTemperature());

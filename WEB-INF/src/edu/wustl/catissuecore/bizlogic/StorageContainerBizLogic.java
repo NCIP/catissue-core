@@ -840,6 +840,43 @@ public class StorageContainerBizLogic extends DefaultBizLogic
 
         return 1;
     }
+
+    /* created by vaishali on 21st June 2006 10.04 2006 */
+    public int getNextContainerName() throws DAOException
+    {
+        String sourceObjectName = "CATISSUE_STORAGE_CONTAINER";
+        String[] selectColumnName = {"max(IDENTIFIER) as MAX_NAME"};
+        //String[] whereColumnName = {"STORAGE_TYPE_ID", "PARENT_CONTAINER_ID"};
+        //String[] whereColumnCondition = {"=", "="};
+        //Object[] whereColumnValue = {Long.toString(typeID),
+                //Long.toString(parentID)};
+        AbstractDAO dao = DAOFactory.getDAO(Constants.JDBC_DAO);
+
+        dao.openSession(null);
+
+        List list = dao.retrieve(sourceObjectName, selectColumnName);
+                
+
+        dao.closeSession();
+
+        if (!list.isEmpty())
+        {
+            List columnList = (List) list.get(0);
+            if (!columnList.isEmpty())
+            {
+                String str = (String) columnList.get(0);
+                if (!str.equals(""))
+                {
+                    int no = Integer.parseInt(str);
+                    return no + 1;
+                }
+            }
+        }
+
+        return 1;
+    }
+
+    /* created finish */
     
 //    private Map createMap(List resultSet, Map containerMap)
 //    {
