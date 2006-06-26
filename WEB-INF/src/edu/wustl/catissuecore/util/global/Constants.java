@@ -963,6 +963,11 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String CATIES_PUBLIC_SERVER_NAME = "CaTiesPublicServerName";
 	public static final String CATIES_PRIVATE_SERVER_NAME = "CaTiesPrivateServerName";
 	
+	//Constants for StorageContainerMap Applet
+	public static final String CONTAINER_STYLEID = "containerStyleId";
+	public static final String XDIM_STYLEID = "xDimStyleId";
+	public static final String YDIM_STYLEID = "yDimStyleId";
+	
 //	public static final String getCollectionProtocolPIGroupName(Long identifier)
 //	{
 //	    if(identifier == null)
