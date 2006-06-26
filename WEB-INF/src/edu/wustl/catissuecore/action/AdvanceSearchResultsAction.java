@@ -218,6 +218,7 @@ public class AdvanceSearchResultsAction extends BaseAction
 			AdvancedConditionsNode advNode = (AdvancedConditionsNode)child.getUserObject();
 			AdvancedConditionsNode newAdvNode = new AdvancedConditionsNode(new String(advNode.getObjectName()));
 			Vector conditions = advNode.getObjectConditions();
+			Operator opWithChild = advNode.getOperationWithChildCondition();
 			Vector newConditions = new Vector();
 			Iterator itr1 = conditions.iterator();
 			while(itr1.hasNext())
@@ -230,6 +231,7 @@ public class AdvanceSearchResultsAction extends BaseAction
 				newConditions.add(newCon);
 			}
 			newAdvNode.setObjectConditions(newConditions);
+			newAdvNode.setOperationWithChildCondition(new Operator(opWithChild));
 			DefaultMutableTreeNode newChild = new DefaultMutableTreeNode(newAdvNode);
 			newCopy.add(newChild);
 			copy(child,newChild);
