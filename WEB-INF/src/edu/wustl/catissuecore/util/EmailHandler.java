@@ -15,6 +15,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
+import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.PasswordManager;
@@ -254,12 +255,11 @@ public class EmailHandler
      */
     private boolean sendEmailToUser(String userEmailAddress, String subject, String body)
     {
-        String mailServer = ApplicationProperties
-        		.getValue("email.mailServer");
-		String sendFromEmailAddress = ApplicationProperties
-		        .getValue("email.sendEmailFrom.emailAddress");
+        String mailServer = XMLPropertyHandler.getValue("email.mailServer");
+		String sendFromEmailAddress = XMLPropertyHandler.getValue("email.sendEmailFrom.emailAddress");
 		
-		body = body + "\n\n" + ApplicationProperties.getValue("loginDetails.catissue.url.message") + Variables.catissueURL;
+		body = body + "\n\n" + ApplicationProperties.getValue("loginDetails.catissue.url.message") + 
+				Variables.catissueURL;
 		
 		SendEmail email = new SendEmail();
         boolean emailStatus = email.sendmail(userEmailAddress, sendFromEmailAddress,
@@ -277,14 +277,12 @@ public class EmailHandler
      */
     private boolean sendEmailToUserAndAdministrator(String userEmailAddress, String subject, String body)
     {
-        String adminEmailAddress = ApplicationProperties
-        		.getValue("email.administrative.emailAddress");
-        String sendFromEmailAddress = ApplicationProperties
-        		.getValue("email.sendEmailFrom.emailAddress");
-        String mailServer = ApplicationProperties
-                .getValue("email.mailServer");
+        String adminEmailAddress = XMLPropertyHandler.getValue("email.administrative.emailAddress");
+        String sendFromEmailAddress = XMLPropertyHandler.getValue("email.sendEmailFrom.emailAddress");
+        String mailServer = XMLPropertyHandler.getValue("email.mailServer");
         
-        body = body + "\n\n" + ApplicationProperties.getValue("loginDetails.catissue.url.message") + Variables.catissueURL;
+        body = body + "\n\n" + ApplicationProperties.getValue("loginDetails.catissue.url.message") + 
+				Variables.catissueURL;
          
         SendEmail email = new SendEmail();
         boolean emailStatus = email.sendmail(userEmailAddress, adminEmailAddress, 
@@ -301,14 +299,12 @@ public class EmailHandler
      */
     private boolean sendEmailToAdministrator(String subject, String body)
     {
-        String adminEmailAddress = ApplicationProperties
-        		.getValue("email.administrative.emailAddress");
-        String sendFromEmailAddress = ApplicationProperties
-        		.getValue("email.sendEmailFrom.emailAddress");
-        String mailServer = ApplicationProperties
-                .getValue("email.mailServer");
+        String adminEmailAddress = XMLPropertyHandler.getValue("email.administrative.emailAddress");
+        String sendFromEmailAddress = XMLPropertyHandler.getValue("email.sendEmailFrom.emailAddress");
+        String mailServer = XMLPropertyHandler.getValue("email.mailServer");
         
-        body = body + "\n\n" + ApplicationProperties.getValue("loginDetails.catissue.url.message") + Variables.catissueURL;
+        body = body + "\n\n" + ApplicationProperties.getValue("loginDetails.catissue.url.message") + 
+				Variables.catissueURL;
          
         SendEmail email = new SendEmail();
         boolean emailStatus = email.sendmail(adminEmailAddress, 
