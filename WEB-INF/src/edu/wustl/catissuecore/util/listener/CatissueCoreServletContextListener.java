@@ -1,7 +1,5 @@
 /*
- * $Log: CatissueCoreServletContextListener.java,v $
- * Revision 1.35  2006/06/28 13:57:13  Kapil
- * Test cvs keywords
+ * $Name: 1.36 $
  * 
  * */
 package edu.wustl.catissuecore.util.listener;

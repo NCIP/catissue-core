@@ -1,0 +1,7 @@
+/*
+ * $Name: 1.1 $
+ * $Log: ApplicationVersionInfo.txt,v $
+ * Revision 1.1  2006/06/28 14:02:17  Kapil
+ * Test cvs keywords
+ *	
+ */
