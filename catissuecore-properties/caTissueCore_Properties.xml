@@ -103,5 +103,19 @@
 		<name>CaTiesPrivateServerName</name>
 		<value>http://ps0348:8080/caties_pri/server/HTTPServer</value>
 	</property>
-
+	
+	<property>
+		<name>email.administrative.emailAddress</name>
+		<value>catissue@persistent.co.in</value>
+	</property>
+	
+	<property>
+		<name>email.sendEmailFrom.emailAddress</name>
+		<value>catissue@persistent.co.in</value>
+	</property>
+	
+	<property>
+		<name>email.mailServer</name>
+		<value>mail.persistent.co.in</value>
+	</property>
 </properties>
