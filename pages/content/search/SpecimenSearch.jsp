@@ -11,6 +11,7 @@
 <%@ include file="/pages/content/common/SpecimenCommonScripts.jsp" %>
 
 <%
+		
 	String className = "value(Specimen:SPECIMEN_CLASS)";
 	String type = "value(Specimen:TYPE)";
 	String tissueSite = "value(SpecimenCharacteristics:TISSUE_SITE)";
@@ -35,7 +36,7 @@
 	String opBiohazardName = "value(Operator:Biohazard:NAME)";
 
 	String unitSpecimen = "";
-
+	String showCal = "";
 	Map tableColumnMap = (Map)request.getAttribute(Constants.TABLE_COLUMN_DATA_MAP);
 	List aliasNameList = (List)request.getAttribute(Constants.ALIAS_NAME_TABLE_NAME_MAP);
 
@@ -295,7 +296,18 @@
 			var secondCell = x.insertCell(1);
 			secondCell.className="formField";
 			comboName = "EventColumnName_" + val;
-			sname = "<select name='eventMap(" + comboName + ")' size='1' onchange='onEventColumnChange(this)' class='formFieldSized15' id='" + comboName + "' onmouseover=showTip(this.id) onmouseout=hideTip(this.id)><option value='-1'>-- Select --</option></select>";
+			var valueId="EventColumnValue_" + val;
+			var calColumnID="calTD"+val
+			var showCalendarValue = "showCalendar(Event_"+val+"_showCalendar)";
+			var overDiv = "overDiv";
+			if(val>1)
+			{
+				overDiv = overDiv+val;
+			}
+			var fieldName = "advanceSearchForm."+"EventColumnValue_"+val;
+
+			var functionName = "onEventColumnChange(this);showDateColumn(this,\""+ valueId +"\",\"" + calColumnID + "\",\"" + showCalendarValue + "\",\""+fieldName+"\",\""+overDiv+"\")";
+			sname = "<select name='eventMap(" + comboName + ")' size='1' onchange='"+functionName+"' class='formFieldSized15' id='" + comboName + "' onmouseover=showTip(this.id) onmouseout=hideTip(this.id)><option value='-1'>-- Select --</option></select>";
 			secondCell.innerHTML="" + sname;
 			
 			//Third Cell
@@ -303,10 +315,31 @@
 			thirdCell.className="formField";
 			comboName = "EventColumnOperator_" + val;
 			sname = "<select name='eventMap(" + comboName + ")' size='1' class='formFieldSized10' id='" + comboName + "' onmouseover=showTip(this.id) onmouseout=hideTip(this.id)><option value='<%=Operator.EQUALS_CONDITION%>'><%=Operator.EQUALS_CONDITION%></option><option value='<%=Operator.NOT_EQUALS_CONDITION%>'><%=Operator.NOT_EQUALS_CONDITION%></option><option value='<%=Operator.LESS_THAN%>'><%=Operator.LESS_THAN%></option><option value='<%=Operator.LESS_THAN_OR_EQUALS%>'><%=Operator.LESS_THAN_OR_EQUALS%></option><option value='<%=Operator.GREATER_THAN%>'><%=Operator.GREATER_THAN%></option><option value='<%=Operator.GREATER_THAN_OR_EQUALS%>'><%=Operator.GREATER_THAN_OR_EQUALS%></option></select>";
+			comboName = "showCalendar(Event_"+val+"_showCalendar)";
+			sname = sname+"<input type='hidden' name='" + comboName + "' id='" + comboName + "'> ";
 			thirdCell.innerHTML="" + sname;
+
+
+			//Fourth Cell for calendar and value
+			var fourthCalendarCell = x.insertCell(3);
+			fourthCalendarCell.className="onlyBottomBorder";
+			fourthCalendarCell.id=calColumnID;
+			fourthCalendarCell.size=3;
+			//var showCalendarKey = "Event_"+val+"_showCalendar";
+			var	showCal = document.getElementById(comboName);
+			var showCalValue = ""+showCal.value;
+			if(showCalValue!= null && showCalValue.length>0)
+			{
+				sname = "<div id='"+overDiv+"' style='position:absolute; visibility:hidden; z-index:1000;'></div><a href='javascript:show_calendar('"+fieldName+"',null,null,'MM-DD-YYYY');'><img src='images\calendar.gif' width=24 height=22 border=0></a>";
+			}
+			else
+			{
+				sname = "&nbsp;";
+			}
+			fourthCalendarCell.innerHTML="" + sname;
+
 			
-			//Fourth Cell
-			var fourthCell = x.insertCell(3);
+			var fourthCell = x.insertCell(4);
 			fourthCell.className="formField";
 			comboName = "EventColumnValue_" + val;
 			sname = "<input type='text' name='eventMap(" + comboName + ")' value='' class='formFieldSized10' id='" + comboName + "'> &nbsp;&nbsp;";
@@ -334,6 +367,47 @@
 			document.forms[0].submit();
 		}
 	}
+		function showDateColumn(element,valueField,columnID,showCalendarID,fieldValue,overDiv)
+		{
+			alert(element.options[element.selectedIndex].value);
+			var dataStr = element.options[element.selectedIndex].value;
+			var dataValue = new String(dataStr);
+			var lastInd = dataValue.lastIndexOf(".");
+			alert(lastInd);
+			if(lastInd == -1)
+				return;
+			else
+			{
+				var dataType = dataValue.substr(lastInd+1);
+				alert(dataType);
+				var txtField = document.getElementById(valueField);
+				txtField.value="";
+
+				var calendarShow = document.getElementById(showCalendarID);
+				alert(calendarShow);
+				if (dataType == "<%=Constants.FIELD_TYPE_DATE%>" || dataType == "<%=Constants.FIELD_TYPE_TIMESTAMP_DATE%>"
+					 || dataType == "<%=Constants.FIELD_TYPE_TIMESTAMP_TIME%>")
+				{
+					var td = document.getElementById(columnID);
+					alert(columnID);
+					txtField.readOnly="";
+					calendarShow.value = "Show";
+					var innerStr = "<div id='"+ overDiv +"' style='position:absolute; visibility:hidden; z-index:1000;'></div>";
+					innerStr = innerStr + "<a href=\"javascript:show_calendar('"+fieldValue+"',null,null,'MM-DD-YYYY');\">";
+					innerStr = innerStr + "<img src=\"images\\calendar.gif\" width=24 height=22 border=0>";
+					innerStr = innerStr + "</a>";
+					td.innerHTML = innerStr;
+				}
+				else
+				{
+					var td = document.getElementById(columnID);
+					td.innerHTML = "&nbsp;";
+					txtField.readOnly="";
+					calendarShow.value = "";
+				}	
+			}	
+		}
+
 	</script>
 </head>
 
@@ -696,7 +770,7 @@
 <!--  SPECIMEN EVENT PARAMETERS -->
 <table summary="" cellpadding="5" cellspacing="0" border="0" width="650">
 <tr>
-	<td class="formTitle" height="25" nowrap colspan="4">
+	<td class="formTitle" height="25" nowrap colspan="5">
 		<bean:message key="buttons.specimenEventParameters"/>
 	</td>
 </tr>
@@ -716,12 +790,23 @@
 		String columnId = "EventColumnName_" + i;
 		String operatorId = "EventColumnOperator_" + i;
 		String valueId = "EventColumnValue_" + i;
-
+		String calColumnID = "calTD"+i;
 		String eventParameter = (String)eventParametersMap.get(classNameId);
 		List columnNamesList = (List)tableColumnMap.get(eventParameter);
 		String operatorType = (String)eventParametersMap.get(columnId);
 		String divId = "div" + i;
+		String showCalendarKey = "Event_"+i+"_showCalendar";			
+		String showCalendarValue = "showCalendar(Event_"+i+"_showCalendar)";
+		String fieldName = "advanceSearchForm."+valueId;
+		String overDiv = "overDiv";
 
+		if(i>1)
+		{
+			overDiv = overDiv + "" + i;
+		}
+		String functionName = "showDateColumn(this,'"+ valueId +"','" + calColumnID + "','" + showCalendarValue + "','"+fieldName+"','"+overDiv+"')";
+		System.out.println("functioName of showDateColumn in advance search:"+functionName);
+		String onAttributeChange = "onEventColumnChange(this);" + functionName;
 		if(operatorType != null)
 		{
 			operatorType = operatorType.substring(operatorType.lastIndexOf(".") + 1);
@@ -739,7 +824,7 @@
 	</td>
 	<td class="formField" nowrap>
 <!-- Mandar : 434 : for tooltip -->
-		<html:select property="<%=eventColumn%>" styleClass="formFieldSized15" styleId="<%=columnId%>" size="1" onchange="onEventColumnChange(this)"
+		<html:select property="<%=eventColumn%>" styleClass="formFieldSized15" styleId="<%=columnId%>" size="1" onchange="<%=onAttributeChange%>"
 		 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 			<html:option value="-1"><%=Constants.SELECT_OPTION%></html:option>
 			<%
@@ -797,6 +882,31 @@
 			%>
 		</html:select>
 	</td>
+	<td class="onlyBottomBorder" id="<%=calColumnID%>"  size=3>
+	<html:hidden property="<%=showCalendarValue%>" styleId="<%=showCalendarValue%>" />
+	<!--  ********************* Mandar Code ********************** -->	
+	<!-- ***** Code added to check multiple rows for Calendar icon ***** -->
+	<%
+		showCal = "";
+		showCal = (String)form.getShowCalendar(showCalendarKey);
+		if(showCal != null && showCal.trim().length()>0)
+		{
+	%>
+	<div id="<%=overDiv%>" style="position:absolute; visibility:hidden; z-index:1000;"></div>
+	<a href="javascript:show_calendar('<%=fieldName%>',null,null,'MM-DD-YYYY');">
+		<img src="images\calendar.gif" width=24 height=22 border=0>
+	</a>
+	<%		
+		}
+		else
+		{
+	%>
+		&nbsp;					
+	<%						
+		}
+	%>
+	</td>
+
 	<td class="formField" nowrap>
 		<html:text styleClass="formFieldSized10" styleId="<%=valueId%>" property="<%=eventValue%>"/>
 		&nbsp;&nbsp;

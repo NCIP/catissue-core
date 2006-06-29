@@ -412,7 +412,49 @@ public class AdvanceSearchForm extends ActionForm
 	public void setItemNodeId(String itemId) {
 		this.itemNodeId = itemId;
 	}
+    
+    //Map added to maintain values to display the Calendar icon
+	/**
+	 * Map to hold values for rows to display calendar icon.
+	 */
+	protected Map showCalendarValues = new HashMap();
 	
+	/**
+	 * @return Returns the showCalendarValues.
+	 */
+	public Map getShowCalendarValues()
+	{
+		return showCalendarValues;
+	}
+	/**
+	 * @param showCalendarValues The showCalendarValues to set.
+	 */
+	public void setShowCalendarValues(Map showCalendarValues)
+	{
+		this.showCalendarValues = showCalendarValues;
+	}
+
+	/**
+	 * Associates the specified object with the specified key in the map.
+	 * @param key the key to which the object is mapped.
+	 * @param value the object which is mapped.
+	 */
+	public void setShowCalendar(String key, Object value)
+	{
+		showCalendarValues.put(key, value);
+	}
+
+	/**
+	 * Returns the object to which this map maps the specified key.
+	 * 
+	 * @param key
+	 *            the required key.
+	 * @return the object to which this map maps the specified key.
+	 */
+	public Object getShowCalendar(String key)
+	{
+		return showCalendarValues.get(key);
+	}
 	//This method validates the Event-Parameters Block in Specimen Search Page
 	private void validateEventParameters(Validator validator,ActionErrors errors)
 	{
