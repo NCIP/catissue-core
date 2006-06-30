@@ -32,14 +32,14 @@ public class ParticipantLookupLogic implements LookupLogic
 		String sourceObjectName = Participant.class.getName();
   	
 		String[] whereColumnName = {"firstName","middleName","lastName","birthDate","deathDate","socialSecurityNumber"};
-		String[] whereColumnCondition = {"=","=","=","=","=","="};
-		Object[] whereColumnValue = {participant.getFirstName(),participant.getMiddleName(),participant.getLastName(),participant.getBirthDate(),participant.getDeathDate(),participant.getSocialSecurityNumber()};
-	
+		String[] whereColumnCondition = {"LIKE","LIKE","LIKE","=","=","="};
+		Object[] whereColumnValue = {participant.getFirstName()+"%",participant.getMiddleName()+"%",participant.getLastName()+"%",participant.getBirthDate(),participant.getDeathDate(),participant.getSocialSecurityNumber()};
+		
 		String joinCondition = Constants.OR_JOIN_CONDITION;
 		//getting the matching participants from the database whose atleast one parameter matches with the given participqant
 		List listOfParticipants=bizLogic.retrieve(sourceObjectName,whereColumnName,whereColumnCondition,whereColumnValue,joinCondition);
 	
-		//calling the searchMatchingParticipant to get filter the participant list according to given matching cutoff value
+		//calling the searchMatchingParticipant to filter the participant list according to given cutoff value
 		List participants=searchMatchingParticipant(participant,listOfParticipants,cutoff);
   	
 		return participants;
@@ -63,15 +63,15 @@ public class ParticipantLookupLogic implements LookupLogic
 			count=0;
 			Participant destParticipant=(Participant)itr.next();
 			
-			if(srcParticipant.getFirstName()!=null && !srcParticipant.getFirstName().trim().equals("")&& srcParticipant.getFirstName().equalsIgnoreCase(destParticipant.getFirstName()))
+			if(srcParticipant.getFirstName()!=null && !srcParticipant.getFirstName().trim().equals("")&& destParticipant.getFirstName().startsWith(srcParticipant.getFirstName()))
 			{
 				count++;
 			}
-			if(srcParticipant.getMiddleName()!=null && !srcParticipant.getMiddleName().trim().equals("")&&srcParticipant.getMiddleName().equalsIgnoreCase(destParticipant.getMiddleName()))
+			if(srcParticipant.getMiddleName()!=null && !srcParticipant.getMiddleName().trim().equals("")&&destParticipant.getMiddleName().startsWith(srcParticipant.getMiddleName()))
 			{
 				count++;
 			}
-			if(srcParticipant.getLastName()!=null && !srcParticipant.getLastName().trim().equals("") && srcParticipant.getLastName().equalsIgnoreCase(destParticipant.getLastName()))
+			if(srcParticipant.getLastName()!=null && !srcParticipant.getLastName().trim().equals("") && destParticipant.getLastName().startsWith(srcParticipant.getLastName()))
 			{
 				count++;
 			}

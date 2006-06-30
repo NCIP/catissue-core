@@ -57,6 +57,7 @@ public class ParticipantLookupAction extends BaseAction
 		Participant participant = (Participant) abstractDomain;
 		ParticipantBizLogic bizlogic = (ParticipantBizLogic)BizLogicFactory.getBizLogic(Constants.PARTICIPANT_FORM_ID);
 		Logger.out.debug("Participant Id :"+request.getParameter("participantId"));
+		//checks weather participant is selected from the list and so forwarding to next action instead of participant lookup.
 		if(request.getParameter("participantId")!=null &&!request.getParameter("participantId").equals("null")&&!request.getParameter("participantId").equals("")&&!request.getParameter("participantId").equals("0"))
 		{
 			Logger.out.info("inside the participant mapping");
@@ -110,13 +111,14 @@ public class ParticipantLookupAction extends BaseAction
 	private List getColumnHeadingList(ParticipantBizLogic bizlogic) throws Exception
 	{
 		//Creating the column list which is used in Data grid to display column headings
-		String[] columnHeaderList = new String[]{Constants.PARTICIPANT_SYSTEM_IDENTIFIER, Constants.PARTICIPANT_LAST_NAME,Constants.PARTICIPANT_FIRST_NAME,Constants.PARTICIPANT_MIDDLE_NAME,Constants.PARTICIPANT_BIRTH_DATE,Constants.PARTICIPANT_SOCIAL_SECURITY_NUMBER};
+		String[] columnHeaderList = new String[]{Constants.PARTICIPANT_SYSTEM_IDENTIFIER, Constants.PARTICIPANT_LAST_NAME,Constants.PARTICIPANT_FIRST_NAME,Constants.PARTICIPANT_MIDDLE_NAME,Constants.PARTICIPANT_BIRTH_DATE,Constants.PARTICIPANT_DEATH_DATE,Constants.PARTICIPANT_VITAL_STATUS,Constants.PARTICIPANT_GENDER,Constants.PARTICIPANT_SOCIAL_SECURITY_NUMBER};
 		List columnList = new ArrayList();
-			
+		Logger.out.info("column List header size ;"+columnHeaderList.length);	
 		for (int i = 0; i < columnHeaderList.length; i++)
 		{
 			columnList.add(columnHeaderList[i]);
 		}
+		Logger.out.info("column List size ;"+columnList.size());
 		List displayList=bizlogic.getColumnList(columnList);
 		displayList.add(Constants.PARTICIPANT_PROBABLITY_MATCH);
 		return displayList;
@@ -138,6 +140,7 @@ public class ParticipantLookupAction extends BaseAction
 			
 			List participantInfo=new ArrayList();
 			participantInfo.add(participant.getSystemIdentifier());
+			
 			if(participant.getLastName()!=null)
 			{
 				participantInfo.add(participant.getLastName());
@@ -146,6 +149,7 @@ public class ParticipantLookupAction extends BaseAction
 			{
 				participantInfo.add("");
 			}
+			
 			if(participant.getFirstName()!=null)
 			{
 				participantInfo.add(participant.getFirstName());
@@ -154,6 +158,7 @@ public class ParticipantLookupAction extends BaseAction
 			{
 				participantInfo.add("");
 			}
+			
 			if(participant.getMiddleName()!=null)
 			{
 				participantInfo.add(participant.getMiddleName());
@@ -162,6 +167,7 @@ public class ParticipantLookupAction extends BaseAction
 			{
 				participantInfo.add("");
 			}
+			
 			if(participant.getBirthDate()!=null)
 			{
 				participantInfo.add(participant.getBirthDate());
@@ -170,23 +176,72 @@ public class ParticipantLookupAction extends BaseAction
 			{
 				participantInfo.add("");
 			}
-/*			if(participant.getDeathDate()!=null)
+			
+			if(participant.getDeathDate()!=null)
 			{
 				participantInfo.add(participant.getDeathDate());
 			}
 			else
 			{
 				participantInfo.add("");
-			}*/
-			if(participant.getSocialSecurityNumber()!=null)
+			}
+			
+			if(participant.getVitalStatus()!=null)
 			{
-			participantInfo.add(participant.getSocialSecurityNumber());
+				participantInfo.add(participant.getVitalStatus());
 			}
 			else
 			{
 				participantInfo.add("");
 			}
+			
+			if(participant.getGender()!=null)
+			{
+				participantInfo.add(participant.getGender());
+			}
+			else
+			{
+				participantInfo.add("");
+			}
+			
+			/*if(participant.getSexGenotype()!=null)
+			{
+				participantInfo.add(participant.getSexGenotype());
+			}
+			else
+			{
+				participantInfo.add("");
+			}*/
+			
+			/*if(participant.getRace()!=null)
+			{
+				participantInfo.add(participant.getRace());
+			}
+			else
+			{
+				participantInfo.add("");
+			}
+			*/
+			/*if(participant.getEthnicity()!=null)
+			{
+				participantInfo.add(participant.getEthnicity());
+			}
+			else
+			{
+				participantInfo.add("");
+			}
+			*/
+			if(participant.getSocialSecurityNumber()!=null)
+			{
+				participantInfo.add(participant.getSocialSecurityNumber());
+			}
+			else
+			{
+				participantInfo.add("");
+			}
+			
 			participantInfo.add(result.getProbablity().toString()+" %");
+			
 			participantDisplayList.add(participantInfo);
 			
 		}

@@ -252,24 +252,23 @@ tr#hiddenCombo
 			document.forms[0].submittedFor.value = submittedFor;
 			document.forms[0].forwardTo.value    = forwardTo;
 			<%if(request.getAttribute(Constants.SUBMITTED_FOR)!=null && request.getAttribute(Constants.SUBMITTED_FOR).equals("AddNew")){%>
-			document.forms[0].submittedFor.value = "AddNew";
+				document.forms[0].submittedFor.value = "AddNew";
 			<%}%>			
 			<%if(request.getAttribute(Constants.SPREADSHEET_DATA_LIST)!=null && dataList.size()>0){%>	
 
-			if(document.forms[0].radioValue.value=="Add")
-			{
-				document.forms[0].action="<%=Constants.PARTICIPANT_ADD_ACTION%>";
-				document.forms[0].submit();
-			}
-			else
-			{
-				if(document.forms[0].radioValue.value=="Lookup")
+				if(document.forms[0].radioValue.value=="Add")
 				{
-					document.forms[0].action="<%=Constants.PARTICIPANT_LOOKUP_ACTION%>";
-					document.forms[0].submit();
+					document.forms[0].action="<%=Constants.PARTICIPANT_ADD_ACTION%>";
 				}
-			}		
-					<%}%>	
+				else
+				{
+					if(document.forms[0].radioValue.value=="Lookup")
+					{
+						document.forms[0].action="<%=Constants.PARTICIPANT_LOOKUP_ACTION%>";
+						document.forms[0].submit();
+					}
+				}		
+			<%}%>	
 			document.forms[0].submit();		
 		}
 	</script>
@@ -382,10 +381,10 @@ tr#hiddenCombo
 				     		<td class="formMessage" colspan="3">* indicates a required field</td>
 				 		</tr>
 
-				 <tr>
+				 <%--<tr>
 				     <td class="formTitle" height="20" colspan="4">
 				     <%title = "participant."+pageView+".title";%>
-				     <bean:message key="<%=title%>"/>
+				     <bean:message key="participant.add.title"/>
 					<%
 						if(pageView.equals("edit"))
 						{
@@ -395,7 +394,17 @@ tr#hiddenCombo
 						}
 					%>
 				     </td>
-				 </tr>
+				 </tr>--%>
+				 <tr>
+				 	<td class="formTitle" height="20" colspan="4"">
+					 <logic:equal name="operation" value="<%=Constants.ADD%>">
+						<bean:message key="participant.add.title"/>
+					</logic:equal>
+					<logic:equal name="operation" value="<%=Constants.EDIT%>">
+						<bean:message key="participant.edit.title"/>&nbsp;<bean:message key="for.identifier"/>&nbsp;<bean:write name="participantForm" property="systemIdentifier" />
+					</logic:equal>
+					</td>
+				</tr>	
 				 <tr>
 					<td class="formRequiredNotice" width="5">&nbsp;</td>
 					<td class="formLabel">
@@ -644,9 +653,11 @@ tr#hiddenCombo
 								
 				  					
 				  <!-- Medical Identifiers End here -->
+				  <tr><td colspan=4>&nbsp;</td></tr>
+				  
 				  <!---Following is the code for Data Grid. Participant Lookup Data is displayed-->
 				<%if(request.getAttribute(Constants.SPREADSHEET_DATA_LIST)!=null && dataList.size()>0){%>	
-
+<!--				 <tr><td colspan="4"><table summary="" cellpadding="0" cellspacing="0" border="0" width="100%">-->
 				<tr>
 				     <td class="formTitle" height="20" colspan="4">
 				     	<bean:message key="participant.lookup"/>
@@ -662,7 +673,7 @@ tr#hiddenCombo
 						</html:button>
 					</td>-->
 				  </tr>				
-	  			  <tr height=100 valign=top>
+	  			  <tr height=110 valign=top>
 					<td colspan=4 valign=top>
 						<div STYLE="overflow: auto; width:100%; height:100%; padding:0px; margin: 0px; border: 1px solid">
 						<script>
@@ -696,11 +707,12 @@ tr#hiddenCombo
 					</td>
 				  </tr>
 				  <tr>
-				 	<td align="center" colspan="4" valign="top">
+				 	<td align="center"valign="top" colspan="4">
 						<INPUT TYPE='RADIO' NAME='chkName' value="Add" onclick="CreateNewClick()"><font size="2">Ignore matches and create new participant </font></INPUT>&nbsp;&nbsp;
 						<INPUT TYPE='RADIO' NAME='chkName' value="Lookup" onclick="LookupAgain()" checked=true><font size="2">Lookup again </font></INPUT>
 					</td>
 				</tr>		
+<!--				</table></td></tr>-->
 				<%}%>
 				<!--Participant Lookup end-->				
 								 <!-----action buttons-->
