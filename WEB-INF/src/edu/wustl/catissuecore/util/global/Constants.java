@@ -196,7 +196,9 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String STORAGE_CONTAINER_ADD_ACTION = "StorageContainerAdd.do";
 	public static final String STORAGE_CONTAINER_EDIT_ACTION = "StorageContainerEdit.do";
 	//added by vaishali on 19th June 2006 6.23 pm
-	public static final String HOLDS_LIST = "HoldsList";
+	public static final String HOLDS_LIST1 = "HoldsList1";
+	public static final String HOLDS_LIST = "HoldsList1";
+	public static final String HOLDS_LIST2 = "HoldsList2";
 	//finish
 	//Constants required in Site.jsp Page
 	public static final String SITE_SEARCH_ACTION = "SiteSearch.do";
@@ -845,8 +847,8 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	};
 
 	public static final String [][] PARTICIPANT_FORWARD_TO_LIST = {
-			{"Submit",					"success"},
-			{"Participant Registration",	"createParticipantRegistration"}
+			{"Submit Only",					"success"},
+			{"Submit and Register to Protocol",	"createParticipantRegistration"}
 	};
 	
 	//Constants Required for Advance Search
@@ -950,7 +952,12 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String PARTICIPANT_FIRST_NAME="FIRST_NAME";
 	public static final String PARTICIPANT_MIDDLE_NAME="MIDDLE_NAME";
 	public static final String PARTICIPANT_BIRTH_DATE="BIRTH_DATE";
-	//public static final String PARTICIPANT_DEATH_DATE="DEATH_DATE";
+	public static final String PARTICIPANT_DEATH_DATE="DEATH_DATE";
+	public static final String PARTICIPANT_VITAL_STATUS="VITAL_STATUS";
+	public static final String PARTICIPANT_GENDER="GENDER";
+	public static final String PARTICIPANT_SEX_GENOTYPE="SEX_GENOTYPE";
+	public static final String PARTICIPANT_RACE="RACE";
+	public static final String PARTICIPANT_ETHINICITY="ETHINICITY";
 	public static final String PARTICIPANT_SOCIAL_SECURITY_NUMBER="SOCIAL_SECURITY_NUMBER";
 	public static final String PARTICIPANT_PROBABLITY_MATCH="Probability";
 	
