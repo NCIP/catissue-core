@@ -369,27 +369,22 @@
 	}
 		function showDateColumn(element,valueField,columnID,showCalendarID,fieldValue,overDiv)
 		{
-			alert(element.options[element.selectedIndex].value);
 			var dataStr = element.options[element.selectedIndex].value;
 			var dataValue = new String(dataStr);
 			var lastInd = dataValue.lastIndexOf(".");
-			alert(lastInd);
 			if(lastInd == -1)
 				return;
 			else
 			{
 				var dataType = dataValue.substr(lastInd+1);
-				alert(dataType);
 				var txtField = document.getElementById(valueField);
 				txtField.value="";
 
 				var calendarShow = document.getElementById(showCalendarID);
-				alert(calendarShow);
 				if (dataType == "<%=Constants.FIELD_TYPE_DATE%>" || dataType == "<%=Constants.FIELD_TYPE_TIMESTAMP_DATE%>"
 					 || dataType == "<%=Constants.FIELD_TYPE_TIMESTAMP_TIME%>")
 				{
 					var td = document.getElementById(columnID);
-					alert(columnID);
 					txtField.readOnly="";
 					calendarShow.value = "Show";
 					var innerStr = "<div id='"+ overDiv +"' style='position:absolute; visibility:hidden; z-index:1000;'></div>";
@@ -805,7 +800,6 @@
 			overDiv = overDiv + "" + i;
 		}
 		String functionName = "showDateColumn(this,'"+ valueId +"','" + calColumnID + "','" + showCalendarValue + "','"+fieldName+"','"+overDiv+"')";
-		System.out.println("functioName of showDateColumn in advance search:"+functionName);
 		String onAttributeChange = "onEventColumnChange(this);" + functionName;
 		if(operatorType != null)
 		{

@@ -446,13 +446,13 @@ function enablePreviousCheckBox(element)
 							<html:option value="<%=Operator.IS_NULL%>"><%=Operator.IS_NULL%></html:option>
 							<html:option value="<%=Operator.IS_NOT_NULL%>"><%=Operator.IS_NOT_NULL%></html:option>
 						</html:select>
-					</td>
-										<td class="onlyBottomBorder" id="<%=columnID%>"  size=3>
-						<html:hidden property="<%=showCalendarValue%>" styleId="<%=showCalendarValue%>" />
+						
+				</td>
+				<td class="onlyBottomBorder" id="<%=columnID%>"  size=3>
 				<!--  ********************* Mandar Code ********************** -->	
 				<!-- ***** Code added to check multiple rows for Calendar icon ***** -->
+				<html:hidden property="<%=showCalendarValue%>" styleId="<%=showCalendarValue%>" />
 				<%
-					showCal = "";
 					showCal = (String)form.getShowCalendar(showCalendarKey);
 					if(showCal != null && showCal.trim().length()>0)
 					{
@@ -511,7 +511,7 @@ function enablePreviousCheckBox(element)
 					<td align="right" colspan="7">
 					<!-- action buttons begins -->
 					<table cellpadding="4" cellspacing="0" border="0" align="right">
-						<tr>`
+						<tr>
 							<td>
 								<%String searchAction = "callAction('"+Constants.SIMPLE_SEARCH_ACTION+"')";%>
 								<html:button styleClass="actionButton" property="searchButton" onclick="<%=searchAction%>">
