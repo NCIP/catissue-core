@@ -65,7 +65,12 @@ public class ConfigureAdvanceSearchResultsAction extends BaseAction
         JDBCDAO jdbcDAO = (JDBCDAO)DAOFactory.getDAO(Constants.JDBC_DAO);
         jdbcDAO.openSession(sessionData);
         String [] selectColumnNames = selectColumns;
-        List list = jdbcDAO.retrieve(tableName, selectColumnNames); 
+        Logger.out.debug(" Selected Columns:"+selectColumns);
+        
+        //Bug#2003: For having unique records in result view
+        List list = jdbcDAO.retrieve(tableName, selectColumnNames, true); 
+        //end Bug#2003
+        
         jdbcDAO.closeSession();
         
         session.setAttribute(Constants.CONFIGURED_SELECT_COLUMN_LIST,selectColumnNames);

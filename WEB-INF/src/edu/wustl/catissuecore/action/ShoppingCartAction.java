@@ -102,7 +102,7 @@ public class ShoppingCartAction  extends BaseAction
         		//get the specimen column id from the map
         		int specimenColumnId = ((Integer)columnIdsMap.get(Constants.SPECIMEN+"."+Constants.IDENTIFIER)).intValue()-1;
         		Logger.out.debug("specimen column id in shopping cart"+specimenColumnId);
-        		int spreadsheetSpecimenIndex = 0;
+        		int spreadsheetSpecimenIndex = -1;
         		//get the column in which the specimen column id is displayed in the spreadsheet data
         		for(int k=0;k<selectedColumns.length;k++)
         		{
@@ -110,6 +110,20 @@ public class ShoppingCartAction  extends BaseAction
         				spreadsheetSpecimenIndex=k;
         		}
         		
+        		boolean isError = false;
+                //Bug#2003: For having unique records in result view
+        		if(spreadsheetSpecimenIndex == -1)
+        		{
+        			ActionErrors errors = new ActionErrors();
+                	ActionError error = new ActionError("error.specimenId.add");
+                	errors.add(ActionErrors.GLOBAL_ERROR,error);
+                	saveErrors(request,errors);
+                    Logger.out.error("Specimen Id column not selected");
+                    target = new String(Constants.DUPLICATE_SPECIMEN);
+                    isError = true;
+        		}
+        		else
+        		{
 				//Add to cart the selected specified Ids.  
 				Object []selectedSpecimenIds = new Object[obj.length];
 				for(int j=0;j<obj.length;j++)
@@ -124,7 +138,7 @@ public class ShoppingCartAction  extends BaseAction
 		        	Logger.out.debug("specimen id to be added to cart :"+selectedSpecimenIds[j]);
 				}	
         		//Mandar 27-Apr-06 : bug 1129
-				boolean isError = false;
+				
 				try
 				{
         			bizLogic.add(cart,selectedSpecimenIds);
@@ -139,6 +153,7 @@ public class ShoppingCartAction  extends BaseAction
                     target = new String(Constants.DUPLICATE_SPECIMEN);
                     isError = true;
 				}
+        		}
         		
         		session.setAttribute(Constants.SHOPPING_CART,cart);
        			//List dataList = (List) session.getAttribute(Constants.SPREADSHEET_DATA_LIST);

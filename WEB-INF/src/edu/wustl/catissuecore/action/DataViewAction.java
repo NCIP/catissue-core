@@ -132,17 +132,19 @@ public class DataViewAction extends BaseAction
             			exists=true;
             		}
             	}
-                if(!exists)
-                {
-                	String columnListWithoutSpecimenId[] = columnList;
-                	columnList = new String[columnListWithoutSpecimenId.length+1];
-                    for(int i=0;i<columnListWithoutSpecimenId.length;i++)
-                    {
-                    	columnList[i] = columnListWithoutSpecimenId[i];
-                    }
-                    columnList[columnListWithoutSpecimenId.length]=specimenColumn;
-                	//filteredColumnDisplayNames.add("Identifier");
-                }
+                //Bug#2003: For having unique records in result view
+//                if(!exists)
+//                {
+//                	String columnListWithoutSpecimenId[] = columnList;
+//                	columnList = new String[columnListWithoutSpecimenId.length+1];
+//                    for(int i=0;i<columnListWithoutSpecimenId.length;i++)
+//                    {
+//                    	columnList[i] = columnListWithoutSpecimenId[i];
+//                    }
+//                    columnList[columnListWithoutSpecimenId.length]=specimenColumn;
+//                	//filteredColumnDisplayNames.add("Identifier");
+//                }
+                //end of Bug#2003: For having unique records in result view
             }
         	String[] whereColumnName= new String[1]; 
         	
