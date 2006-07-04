@@ -137,6 +137,7 @@
 				<include name="WEB-INF/**"/>
 				<include name="CDEConfig.xml"/>
 				<include name="CDEConfig.xsd"/>
+				<include name="ApplicationVersionInfo.txt"/>
 				
 				<exclude name="**/WEB-INF/src*/**"/>
 				<exclude name="**/*servlet.jar*"/>
