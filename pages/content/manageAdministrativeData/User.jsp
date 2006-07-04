@@ -339,9 +339,11 @@ function handleStatus(status)
 								<html:options collection="institutionList" labelProperty="name" property="value"/>
 							</html:select>
 							&nbsp;
+						<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGEOF_SIGNUP%>">
 							<html:link href="#" styleId="newInstitution" onclick="addNewAction('UserAddNew.do?addNewForwardTo=institution&forwardTo=user&addNewFor=institution')">
 								<bean:message key="buttons.addNew" />
 							</html:link>
+						</logic:notEqual>	
 						</td>
 
 					</tr>
@@ -360,9 +362,11 @@ function handleStatus(status)
 								<html:options collection="departmentList" labelProperty="name" property="value"/>
 							</html:select>
 							&nbsp;
+							<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGEOF_SIGNUP%>">
 							<html:link href="#" styleId="newDepartment" onclick="addNewAction('UserAddNew.do?addNewForwardTo=department&forwardTo=user&addNewFor=department')">
 								<bean:message key="buttons.addNew" />
 							</html:link>
+							</logic:notEqual>
 						</td>
 					</tr>
 					
@@ -380,9 +384,11 @@ function handleStatus(status)
 								<html:options collection="cancerResearchGroupList" labelProperty="name" property="value"/>
 							</html:select>
 							&nbsp;
+							<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGEOF_SIGNUP%>">
 							<html:link href="#" styleId="newCancerResearchGroup" onclick="addNewAction('UserAddNew.do?addNewForwardTo=cancerResearchGroup&forwardTo=user&addNewFor=cancerResearchGroup')">
 								<bean:message key="buttons.addNew" />
 							</html:link>
+							</logic:notEqual>
 						</td>
 					</tr>
 					</logic:notEqual>
