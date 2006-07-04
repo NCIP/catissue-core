@@ -224,6 +224,10 @@ public class SpecimenCollectionGroupAction  extends SecureAction
                 specimenCollectionGroupForm.setProtocolParticipantIdentifier(participantProtocolId);
                 specimenCollectionGroupForm.setCheckedButton(2);
             }
+            //Bug 1915:SpecimenCollectionGroup.Study Calendar Event Point not populated when page is loaded through proceedTo
+			//Populating the Collection Protocol Events
+			loadCollectionProtocolEvent(specimenCollectionGroupForm.getCollectionProtocolId(),bizLogic,request);
+			
             //Load Clinical status for a given study calander event point
     		calendarEventPointList = bizLogic.retrieve(CollectionProtocolEvent.class.getName(),
     										Constants.SYSTEM_IDENTIFIER,
