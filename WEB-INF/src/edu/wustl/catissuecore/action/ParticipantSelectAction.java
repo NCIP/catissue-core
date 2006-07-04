@@ -24,15 +24,15 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessages;
 
 import edu.wustl.catissuecore.actionForm.ParticipantForm;
+import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.beans.AddNewSessionDataBean;
-import edu.wustl.common.bizlogic.AbstractBizLogic;
+import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.BizLogicException;
-import edu.wustl.common.factory.AbstractBizLogicFactory;
 import edu.wustl.common.factory.AbstractDomainObjectFactory;
 import edu.wustl.common.factory.AbstractForwardToFactory;
 import edu.wustl.common.factory.MasterFactory;
@@ -55,15 +55,14 @@ public class ParticipantSelectAction extends BaseAction
 		ParticipantForm participantForm=(ParticipantForm) form;
 		AbstractDomainObjectFactory abstractDomainObjectFactory = (AbstractDomainObjectFactory) MasterFactory
 				.getFactory("edu.wustl.catissuecore.domain.DomainObjectFactory");
-		AbstractBizLogic bizLogic = AbstractBizLogicFactory.getBizLogic(
-				ApplicationProperties.getValue("app.bizLogicFactory"),
-					"getBizLogic", abstractForm.getFormId());
+
+		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(abstractForm.getFormId());
 
 		String objectName = abstractDomainObjectFactory.getDomainObjectName(abstractForm.getFormId());
 	  	
 		Logger.out.info("Participant Id-------------------"+request.getParameter("participantId"));
 		
-		List participants=bizLogic.retrieve(objectName,Constants.SYSTEM_IDENTIFIER,new Long(request.getParameter("participantId")));
+		List participants = bizLogic.retrieve(objectName,Constants.SYSTEM_IDENTIFIER,new Long(request.getParameter("participantId")));
 		request.removeAttribute("participantForm");
 		abstractDomain = (AbstractDomainObject)participants.get(0);
 		Participant participant=(Participant)abstractDomain;

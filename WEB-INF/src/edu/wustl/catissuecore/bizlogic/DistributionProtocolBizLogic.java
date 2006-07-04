@@ -125,7 +125,7 @@ public class DistributionProtocolBizLogic extends SpecimenProtocolBizLogic imple
 			Logger.out.debug("distributionProtocol.getActivityStatus() "+distributionProtocol.getActivityStatus());
 			Long distributionProtocolIDArr[] = {distributionProtocol.getSystemIdentifier()};
 			
-			DistributionBizLogic bizLogic = (DistributionBizLogic)BizLogicFactory.getBizLogic(Constants.DISTRIBUTION_FORM_ID);
+			DistributionBizLogic bizLogic = (DistributionBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.DISTRIBUTION_FORM_ID);
 			bizLogic.disableRelatedObjects(dao, distributionProtocolIDArr);
 		}
     }

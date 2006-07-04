@@ -23,7 +23,7 @@ import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.TransferEventParameters;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.bizlogic.DefaultBizLogic;
+import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
@@ -219,7 +219,7 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 			
 			// ---------------------------------------------
 			String specimenId = transferEventParametersObject.getSpecimen().getSystemIdentifier().toString(); 
-	      	DefaultBizLogic bizLogic = BizLogicFactory.getDefaultBizLogic();;
+			IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 	    	
 	    	String identifier = specimenId ;
 	    	
@@ -354,7 +354,7 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 		{
 			specimenId = "0";
 		}
-      	DefaultBizLogic bizLogic = BizLogicFactory.getDefaultBizLogic();;
+      	IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
     	
     	String identifier = specimenId ;
     	

@@ -99,7 +99,7 @@ public class ParticipantAction extends BaseAction
         //Sets the activityStatusList attribute to be used in the Site Add/Edit Page.
         request.setAttribute(Constants.ACTIVITYSTATUSLIST, Constants.ACTIVITY_STATUS_VALUES);
         
-    	ParticipantBizLogic bizlogic = (ParticipantBizLogic)BizLogicFactory.getBizLogic(Constants.PARTICIPANT_FORM_ID);
+    	ParticipantBizLogic bizlogic = (ParticipantBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.PARTICIPANT_FORM_ID);
          
     	//Sets the Site list of corresponding type.
         String sourceObjectName = Site.class.getName();

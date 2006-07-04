@@ -48,7 +48,7 @@ public class ForgotPasswordSearchAction extends Action
         try
         {
             ForgotPasswordForm forgotPasswordForm = (ForgotPasswordForm) form;
-            UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getBizLogic(forgotPasswordForm.getFormId());
+            UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getInstance().getBizLogic(forgotPasswordForm.getFormId());
             
             //Retrieves and sends the password to the user whose email address is passed 
             //else returns the error key in case of an error.

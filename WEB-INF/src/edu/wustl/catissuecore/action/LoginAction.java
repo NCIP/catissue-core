@@ -126,7 +126,7 @@ public class LoginAction extends Action
     
     private User getUser(String loginName) throws DAOException
     {
-    	UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getBizLogic(Constants.USER_FORM_ID);
+    	UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.USER_FORM_ID);
     	String[] whereColumnName = {"activityStatus","loginName"};
     	String[] whereColumnCondition = {"=","="};
     	String[] whereColumnValue = {Constants.ACTIVITY_STATUS_ACTIVE, loginName};

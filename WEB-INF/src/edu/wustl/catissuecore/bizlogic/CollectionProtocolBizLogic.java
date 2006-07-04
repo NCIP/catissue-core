@@ -168,7 +168,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			Logger.out.debug("collectionProtocol.getActivityStatus() "+collectionProtocol.getActivityStatus());
 			Long collectionProtocolIDArr[] = {collectionProtocol.getSystemIdentifier()};
 			
-			CollectionProtocolRegistrationBizLogic bizLogic = (CollectionProtocolRegistrationBizLogic)BizLogicFactory.getBizLogic(Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
+			CollectionProtocolRegistrationBizLogic bizLogic = (CollectionProtocolRegistrationBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
 			bizLogic.disableRelatedObjectsForCollectionProtocol(dao,collectionProtocolIDArr);
 		}
 		
@@ -207,7 +207,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
         
         userGroupName = Constants.getCollectionProtocolCoordinatorGroupName(collectionProtocol.getSystemIdentifier());
             
-        UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getBizLogic(Constants.USER_FORM_ID);
+        UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.USER_FORM_ID);
         Iterator iterator = collectionProtocol.getUserCollection().iterator();
         while (iterator.hasNext())
         {

@@ -89,7 +89,7 @@ public class ConfigureSimpleQueryAction extends BaseAction
 				if(selectedColumns==null)
 				{
 					QueryBizLogic bizLogic = (QueryBizLogic) BizLogicFactory
-					.getBizLogic(Constants.SIMPLE_QUERY_INTERFACE_ID);
+					.getInstance().getBizLogic(Constants.SIMPLE_QUERY_INTERFACE_ID);
 					List columnNameValueBeans = new ArrayList();
 					int i;
 					for(i=0;i<selectedTables.length;i++)

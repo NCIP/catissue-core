@@ -25,13 +25,13 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
-import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.storage.StorageContainerGridObject;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
+import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.util.Permissions;
 
@@ -94,7 +94,7 @@ public class ShowStorageGridViewAction  extends BaseAction
         }
         
         StorageContainerBizLogic bizLogic = (StorageContainerBizLogic)BizLogicFactory
-                .getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
+        .getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
         
         List list = bizLogic.retrieve(StorageContainer.class.getName(),
                 "systemIdentifier", systemIdentifier);
@@ -151,8 +151,7 @@ public class ShowStorageGridViewAction  extends BaseAction
                 }
             }          
             
-            NewSpecimenBizLogic specimenBizLogic = (NewSpecimenBizLogic)BizLogicFactory
-            							.getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
+            IBizLogic specimenBizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
             
             String sourceObjectName = Specimen.class.getName();
 			String[] selectColumnName = {"systemIdentifier","positionDimensionOne", "positionDimensionTwo","type"};

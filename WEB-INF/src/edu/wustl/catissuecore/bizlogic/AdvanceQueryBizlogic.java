@@ -305,7 +305,7 @@ public class AdvanceQueryBizlogic extends DefaultBizLogic implements TreeDataInt
 		DefaultMutableTreeNode parent = new DefaultMutableTreeNode();
 		DefaultMutableTreeNode child = new DefaultMutableTreeNode();
 		QueryBizLogic bizLogic = (QueryBizLogic)BizLogicFactory
-										.getBizLogic(Constants.SIMPLE_QUERY_INTERFACE_ID);
+		.getInstance().getBizLogic(Constants.SIMPLE_QUERY_INTERFACE_ID);
 		
 		int childCount = tree.getChildCount();
 		//Logger.out.debug("childCount"+childCount);

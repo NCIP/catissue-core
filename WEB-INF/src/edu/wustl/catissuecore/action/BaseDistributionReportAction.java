@@ -20,22 +20,22 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.ConfigureResultViewForm;
 import edu.wustl.catissuecore.actionForm.DistributionReportForm;
-import edu.wustl.common.action.BaseAction;
-import edu.wustl.common.bizlogic.AbstractBizLogic;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
-import edu.wustl.common.bizlogic.QueryBizLogic;
-import edu.wustl.common.bizlogic.SimpleQueryBizLogic;
 import edu.wustl.catissuecore.domain.DistributedItem;
 import edu.wustl.catissuecore.domain.Distribution;
 import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.action.BaseAction;
+import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.bizlogic.IBizLogic;
+import edu.wustl.common.bizlogic.QueryBizLogic;
+import edu.wustl.common.bizlogic.SimpleQueryBizLogic;
 import edu.wustl.common.query.DataElement;
 import edu.wustl.common.query.Operator;
 import edu.wustl.common.query.Query;
 import edu.wustl.common.query.QueryFactory;
 import edu.wustl.common.query.SimpleConditionsNode;
 import edu.wustl.common.query.SimpleQuery;
-import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -79,7 +79,7 @@ public abstract class BaseDistributionReportAction extends BaseAction
     protected Distribution getDistribution(Long distributionId, SessionDataBean sessionDataBean, int securityParam)throws Exception
     {
     	//For a given Distribution ID retrieve the distribution object
-    	AbstractBizLogic bizLogic = BizLogicFactory.getBizLogic(Constants.DISTRIBUTION_FORM_ID);
+    	IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DISTRIBUTION_FORM_ID);
     	List list = bizLogic.retrieve(Distribution.class.getName(),Constants.SYSTEM_IDENTIFIER,distributionId);
     	Distribution dist = (Distribution) list.get(0);
     	return dist;
@@ -168,7 +168,7 @@ public abstract class BaseDistributionReportAction extends BaseAction
     				while (tableInPathTokenizer.hasMoreTokens())
     				{
     				    Long tableId = Long.valueOf(tableInPathTokenizer.nextToken());
-    				    QueryBizLogic bizLogic = (QueryBizLogic)BizLogicFactory
+    				    QueryBizLogic bizLogic = (QueryBizLogic)BizLogicFactory.getInstance()
     				    							.getBizLogic(Constants.SIMPLE_QUERY_INTERFACE_ID);
     				    aliasName = bizLogic.getAliasName(Constants.TABLE_ID_COLUMN, tableId);
     				    Logger.out.debug("aliasName for from Set**************************"+aliasName);

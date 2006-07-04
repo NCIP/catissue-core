@@ -39,7 +39,6 @@ import edu.wustl.catissuecore.integration.IntegrationManagerFactory;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.bizlogic.AbstractBizLogic;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.dao.DAO;
 import edu.wustl.common.domain.AbstractDomainObject;
@@ -482,7 +481,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			
 			StorageContainerBizLogic storageContainerBizLogic 
 									= (StorageContainerBizLogic)BizLogicFactory
-											.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
+									.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 			
 			// --- check for all validations on the storage container.
 			storageContainerBizLogic.checkContainer(dao,container.getSystemIdentifier().toString(),
@@ -602,7 +601,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
     
 // validation code here
     /**
-     * @see AbstractBizLogic#setPrivilege(DAO, String, Class, Long[], Long, String, boolean)
+     * @see edu.wustl.common.bizlogic.IBizLogic#setPrivilege(DAO, String, Class, Long[], Long, String, boolean)
      * @param dao
      * @param privilegeName
      * @param objectIds

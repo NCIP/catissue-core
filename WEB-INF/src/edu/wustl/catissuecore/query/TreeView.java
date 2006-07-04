@@ -134,7 +134,7 @@ public class TreeView {
 			        String table = data.getTableAliasName();
 			        //split column name in case of Specimen event parameters to remove aliasName
 			        //StringTokenizer columnNameTokenizer = new StringTokenizer(columnName,".");
-			        QueryBizLogic bizLogic = (QueryBizLogic)BizLogicFactory.getBizLogic(Constants.SIMPLE_QUERY_INTERFACE_ID);
+			        QueryBizLogic bizLogic = (QueryBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.SIMPLE_QUERY_INTERFACE_ID);
 			        //String columnDisplayName = bizLogic.getColumnDisplayNames(table,columnName);
 			        
 			        int formId = SearchUtil.getFormId(tableName);

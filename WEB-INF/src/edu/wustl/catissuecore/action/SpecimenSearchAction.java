@@ -129,7 +129,7 @@ public class SpecimenSearchAction extends AdvanceSearchUIAction
 		}
        
         //Preparing the data for Specimen Event Parameters
-        QueryBizLogic bizLogic = (QueryBizLogic)BizLogicFactory.getBizLogic(Constants.SIMPLE_QUERY_INTERFACE_ID);
+        QueryBizLogic bizLogic = (QueryBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.SIMPLE_QUERY_INTERFACE_ID);
         
         List eventParametersTables = SearchUtil.getEventParametersTables(bizLogic);
         Map map = getEventParametersMap(bizLogic,eventParametersTables);

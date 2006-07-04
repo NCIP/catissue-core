@@ -396,6 +396,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final int ADVANCE_QUERY_TABLES = 2;
 	
 	//Identifiers for various Form beans
+	public static final int DEFAULT_BIZ_LOGIC = 0;
 	public static final int USER_FORM_ID = 1;
 	public static final int ACCESSION_FORM_ID = 3;
 	public static final int REPORTED_PROBLEM_FORM_ID = 4;

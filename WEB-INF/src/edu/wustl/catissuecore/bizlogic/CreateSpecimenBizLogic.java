@@ -77,7 +77,7 @@ public class CreateSpecimenBizLogic extends DefaultBizLogic
 				
 				StorageContainerBizLogic storageContainerBizLogic 
 				= (StorageContainerBizLogic)BizLogicFactory
-				.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID); 
+				.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID); 
 				// --- check for all validations on the storage container.
 				storageContainerBizLogic.checkContainer(dao,container.getSystemIdentifier().toString(),
 						specimen.getPositionDimensionOne().toString(),specimen.getPositionDimensionTwo().toString(),sessionDataBean);

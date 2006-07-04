@@ -108,7 +108,7 @@ public class SiteBizLogic extends DefaultBizLogic
 	    Logger.out.debug(" privilegeName:"+privilegeName+" objectType:"+objectType+" objectIds:"+edu.wustl.common.util.Utility.getArrayString(objectIds)+" userId:"+userId+" roleId:"+roleId+" assignToUser:"+assignToUser);
 	    super.setPrivilege(dao,privilegeName,objectType,objectIds,userId, roleId, assignToUser,assignOperation);
 	    
-	    StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) BizLogicFactory.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
+	    StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 	    storageContainerBizLogic.assignPrivilegeToRelatedObjectsForSite(dao, privilegeName, objectIds, userId, roleId, assignToUser, assignOperation);
 //	    //Giving privilege on related object ids as well
 //	    List relatedAddressObjectsIds = super.getRelatedObjects(dao,Site.class,new String[] {"address."+Constants.SYSTEM_IDENTIFIER},new String[] {Constants.SYSTEM_IDENTIFIER}, objectIds);

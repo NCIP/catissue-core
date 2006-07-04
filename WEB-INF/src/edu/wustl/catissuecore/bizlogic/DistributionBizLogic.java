@@ -270,7 +270,7 @@ public class DistributionBizLogic extends DefaultBizLogic
     }
 	
 	/**
-     * @see AbstractBizLogic#setPrivilege(DAO, String, Class, Long[], Long, String, boolean)
+     * @see edu.wustl.common.bizlogic.IBizLogic#setPrivilege(DAO, String, Class, Long[], Long, String, boolean)
      * @param dao
      * @param privilegeName
      * @param objectIds
@@ -302,7 +302,7 @@ public class DistributionBizLogic extends DefaultBizLogic
             Logger.out.debug("Distribution Item Id : ................"+listOfSubElement.get(0));
     	    super.setPrivilege(dao,privilegeName,DistributedItem.class,Utility.toLongArray(listOfSubElement),userId,roleId, assignToUser, assignOperation);
     	    
-    	    NewSpecimenBizLogic bizLogic = (NewSpecimenBizLogic)BizLogicFactory.getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
+    	    NewSpecimenBizLogic bizLogic = (NewSpecimenBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
     	    bizLogic.assignPrivilegeToRelatedObjectsForDistributedItem(dao,privilegeName,Utility.toLongArray(listOfSubElement),userId, roleId, assignToUser, assignOperation);
     	}
         

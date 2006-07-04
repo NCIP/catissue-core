@@ -81,7 +81,7 @@ public class AssignPrivilegePageAction extends BaseAction
         try
 		{
         	//SETTING THE USER LIST
-       		UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getBizLogic(Constants.USER_FORM_ID);
+       		UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.USER_FORM_ID);
         	Collection userCollection =  userBizLogic.getCSMUsers();
         	
         	if(userCollection != null && userCollection.size() !=0)

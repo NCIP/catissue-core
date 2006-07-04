@@ -42,7 +42,7 @@ public class  DistributionAction extends SpecimenEventParametersAction
 	protected void setRequestParameters(HttpServletRequest request) throws Exception
 	{
 			
-		DistributionBizLogic dao = (DistributionBizLogic)BizLogicFactory.getBizLogic(Constants.DISTRIBUTION_FORM_ID);
+		DistributionBizLogic dao = (DistributionBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.DISTRIBUTION_FORM_ID);
 		
 		//Sets the Site list.
 		String sourceObjectName = Site.class.getName();
@@ -116,7 +116,7 @@ public class  DistributionAction extends SpecimenEventParametersAction
 	private void setSpecimenCharateristics(DistributionForm dForm,HttpServletRequest request) throws DAOException
 	{
 			//Set specimen characteristics according to the specimen ID changed
-			DistributionBizLogic dao = (DistributionBizLogic)BizLogicFactory.getBizLogic(Constants.DISTRIBUTION_FORM_ID);
+			DistributionBizLogic dao = (DistributionBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.DISTRIBUTION_FORM_ID);
 			
 			String specimenIdKey = request.getParameter("specimenIdKey");
 			//Parse key to get row number. Key is in the format DistributedItem:rowNo_Specimen_systemIdentifier

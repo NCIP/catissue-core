@@ -55,7 +55,7 @@ public class ShoppingCartAction  extends BaseAction
         String target = Constants.SUCCESS;
         HttpSession session = request.getSession(true);
         ShoppingCart cart = (ShoppingCart)session.getAttribute(Constants.SHOPPING_CART);
-        ShoppingCartBizLogic bizLogic = (ShoppingCartBizLogic)BizLogicFactory.getBizLogic(Constants.SHOPPING_CART_FORM_ID);
+        ShoppingCartBizLogic bizLogic = (ShoppingCartBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.SHOPPING_CART_FORM_ID);
         //ShoppingCartForm shopForm = (ShoppingCartForm)form;
         AdvanceSearchForm advForm = (AdvanceSearchForm)form;
      

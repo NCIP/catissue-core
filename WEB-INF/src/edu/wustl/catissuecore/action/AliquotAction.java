@@ -36,7 +36,7 @@ import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.BaseAction;
-import edu.wustl.common.bizlogic.DefaultBizLogic;
+import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
 
@@ -78,7 +78,7 @@ public class AliquotAction extends BaseAction //SecureAction
         String operation = request.getParameter(Constants.OPERATION);
         String pageOf = request.getParameter(Constants.PAGEOF);
         
-        StorageContainerBizLogic bizLogic = (StorageContainerBizLogic)BizLogicFactory.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
+        StorageContainerBizLogic bizLogic = (StorageContainerBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
         Map containerMap = bizLogic.getAllocatedContainerMap();
         
         if(Constants.PAGEOF_CREATE_ALIQUOT.equals(request.getParameter(Constants.PAGEOF)))
@@ -115,7 +115,7 @@ public class AliquotAction extends BaseAction //SecureAction
 	//This method checks whether the specimen with given identifier exists or not.
 	private String checkForSpecimen(HttpServletRequest request, AliquotForm form) throws Exception
 	{
-		DefaultBizLogic bizLogic = BizLogicFactory.getDefaultBizLogic();
+		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 		String specimenId = form.getSpecimenId();
 		List specimenList = new ArrayList();
 		String errorString = "";

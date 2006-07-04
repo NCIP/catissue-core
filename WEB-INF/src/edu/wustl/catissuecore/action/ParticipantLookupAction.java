@@ -55,7 +55,7 @@ public class ParticipantLookupAction extends BaseAction
 		abstractDomain = abstractDomainObjectFactory.getDomainObject(abstractForm.getFormId(),
 				abstractForm);
 		Participant participant = (Participant) abstractDomain;
-		ParticipantBizLogic bizlogic = (ParticipantBizLogic)BizLogicFactory.getBizLogic(Constants.PARTICIPANT_FORM_ID);
+		ParticipantBizLogic bizlogic = (ParticipantBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.PARTICIPANT_FORM_ID);
 		Logger.out.debug("Participant Id :"+request.getParameter("participantId"));
 		//checks weather participant is selected from the list and so forwarding to next action instead of participant lookup.
 		if(request.getParameter("participantId")!=null &&!request.getParameter("participantId").equals("null")&&!request.getParameter("participantId").equals("")&&!request.getParameter("participantId").equals("0"))

@@ -25,7 +25,7 @@ import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.actionForm.AbstractActionForm;
-import edu.wustl.common.bizlogic.AbstractBizLogic;
+import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.factory.AbstractDomainObjectFactory;
 import edu.wustl.common.factory.MasterFactory;
 
@@ -47,7 +47,7 @@ public class DomainObjectListAction extends SecureAction
         List list = null,showList = null;
 
         AbstractActionForm abstractForm = (AbstractActionForm)form;
-        AbstractBizLogic abstractBizLogic = BizLogicFactory.getBizLogic(abstractForm.getFormId());
+        IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(abstractForm.getFormId());
         
         //Returns the page number to be shown.
         int pageNum = Integer.parseInt(request.getParameter(Constants.PAGE_NUMBER));
@@ -72,12 +72,12 @@ public class DomainObjectListAction extends SecureAction
                 String [] whereColumnConditions = {"=","="};
                 String [] whereColumnValues = {"New","Pending"};
                 
-                list = abstractBizLogic.retrieve(abstractDomainObjectFactory.getDomainObjectName(abstractForm.getFormId()),
+                list = bizLogic.retrieve(abstractDomainObjectFactory.getDomainObjectName(abstractForm.getFormId()),
     					whereColumnNames,whereColumnConditions,whereColumnValues,Constants.OR_JOIN_CONDITION);
             }
             else
             {
-                list = abstractBizLogic.retrieve(abstractDomainObjectFactory.getDomainObjectName(abstractForm.getFormId()),
+                list = bizLogic.retrieve(abstractDomainObjectFactory.getDomainObjectName(abstractForm.getFormId()),
     					"activityStatus","Pending");
             }
             

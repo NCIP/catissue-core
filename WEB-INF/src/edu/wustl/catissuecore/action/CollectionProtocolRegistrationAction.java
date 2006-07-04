@@ -33,7 +33,7 @@ import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.AddNewSessionDataBean;
 import edu.wustl.common.beans.NameValueBean;
-import edu.wustl.common.bizlogic.AbstractBizLogic;
+import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -82,7 +82,7 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 //        
         // ----------------add new end-----
         
-		AbstractBizLogic bizLogic = BizLogicFactory.getBizLogic(Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
+        IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
 
 		//get list of Protocol title.
 		String sourceObjectName = CollectionProtocol.class.getName();

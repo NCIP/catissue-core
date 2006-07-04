@@ -70,7 +70,7 @@ public class SiteAction  extends SecureAction
         List siteList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_SITE_TYPE,null);
         request.setAttribute(Constants.SITETYPELIST, siteList);
         
-    	UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getBizLogic(Constants.USER_FORM_ID);
+    	UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.USER_FORM_ID);
     	Collection coll =  userBizLogic.getUsers(operation);
     	request.setAttribute(Constants.USERLIST, coll);
     	

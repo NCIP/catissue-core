@@ -46,7 +46,7 @@ public class StorageTypeAction  extends SecureAction
     {
     	
     	/* added by vaishali on 22nd June 10.10 am */
-    	StorageTypeBizLogic bizLogic = (StorageTypeBizLogic)BizLogicFactory.getBizLogic(Constants.STORAGE_TYPE_FORM_ID);
+    	StorageTypeBizLogic bizLogic = (StorageTypeBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_TYPE_FORM_ID);
     	/* added finish */
         //Gets the value of the operation parameter.
         String operation = request.getParameter(Constants.OPERATION);

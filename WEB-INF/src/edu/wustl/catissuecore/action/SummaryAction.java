@@ -37,7 +37,7 @@ public class SummaryAction extends Action
             HttpServletRequest request, HttpServletResponse response) throws Exception
     {
         //preparing QueryBizLogic to query
-        QueryBizLogic bizLogic = (QueryBizLogic)BizLogicFactory.getBizLogic(Constants.SIMPLE_QUERY_INTERFACE_ID);
+        QueryBizLogic bizLogic = (QueryBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.SIMPLE_QUERY_INTERFACE_ID);
         
         //Total specimens
         String totalSpecimenCount = bizLogic.getTotalSpecimenCount();

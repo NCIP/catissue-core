@@ -61,7 +61,7 @@ public class SpecimenEventParametersAction  extends SecureAction
         request.setAttribute(Constants.SPECIMEN_ID, specimenId);
         Logger.out.debug("\t\t SpecimenEventParametersAction************************************ : "+specimenId );
         
-       	UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getBizLogic(Constants.USER_FORM_ID);
+       	UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.USER_FORM_ID);
     	Collection userCollection =  userBizLogic.getUsers(operation);
     	
     	request.setAttribute(Constants.USERLIST, userCollection);

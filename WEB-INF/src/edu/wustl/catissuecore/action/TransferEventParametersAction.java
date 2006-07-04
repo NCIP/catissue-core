@@ -15,10 +15,10 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
-import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -33,7 +33,7 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 		String operation = request.getParameter(Constants.OPERATION);
 		if(operation.equals(Constants.ADD) )
 		{
-	      	DefaultBizLogic bizLogic = BizLogicFactory.getDefaultBizLogic();
+			IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 	    	String identifier = (String)request.getAttribute(Constants.SPECIMEN_ID);
 	    	if(identifier == null)
 	    		identifier = (String)request.getParameter(Constants.SPECIMEN_ID);

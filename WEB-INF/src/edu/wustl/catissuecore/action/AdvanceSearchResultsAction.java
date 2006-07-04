@@ -60,7 +60,7 @@ public class AdvanceSearchResultsAction extends BaseAction
 		//Query Start object
 		String aliasName = Constants.PARTICIPANT;
 		String pageOf=Constants.PAGEOF_QUERY_RESULTS;
-		AdvanceQueryBizlogic advBizLogic = (AdvanceQueryBizlogic)BizLogicFactory.getBizLogic(Constants.ADVANCE_QUERY_INTERFACE_ID);
+		AdvanceQueryBizlogic advBizLogic = (AdvanceQueryBizlogic)BizLogicFactory.getInstance().getBizLogic(Constants.ADVANCE_QUERY_INTERFACE_ID);
 		String target = Constants.SUCCESS;
 		//Get the advance query root object from session 
 		HttpSession session = request.getSession();

@@ -35,7 +35,7 @@ import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
-import edu.wustl.common.bizlogic.AbstractBizLogic;
+import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.util.logger.Logger;
 
@@ -82,7 +82,7 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 		}
 		
 		// get list of Protocol title.
-		AbstractBizLogic bizLogic = BizLogicFactory.getBizLogic(Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID);
+		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID);
 		
 	    //populating protocolist bean.
 		String sourceObjectName = CollectionProtocol.class.getName();
@@ -250,7 +250,7 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 		return mapping.findForward(pageOf);
     }
     
-	private void loadPaticipants(long protocolID, AbstractBizLogic bizLogic, HttpServletRequest request) throws Exception
+	private void loadPaticipants(long protocolID, IBizLogic bizLogic, HttpServletRequest request) throws Exception
 	{
 		//get list of Participant's names
 		String sourceObjectName = CollectionProtocolRegistration.class.getName();
@@ -345,7 +345,7 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 	   return listOfActiveParticipant;
 	}
 	
-	private void loadPaticipantNumberList(long protocolID, AbstractBizLogic bizLogic, HttpServletRequest request) throws Exception
+	private void loadPaticipantNumberList(long protocolID, IBizLogic bizLogic, HttpServletRequest request) throws Exception
 	{
 		//get list of Participant's names
 		String sourceObjectName = CollectionProtocolRegistration.class.getName();
@@ -377,7 +377,7 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 		request.setAttribute(Constants.PROTOCOL_PARTICIPANT_NUMBER_LIST, list);
 	}
 	
-	private void loadCollectionProtocolEvent(long protocolID, AbstractBizLogic bizLogic, HttpServletRequest request) throws Exception
+	private void loadCollectionProtocolEvent(long protocolID, IBizLogic bizLogic, HttpServletRequest request) throws Exception
 	{
 		String sourceObjectName = CollectionProtocolEvent.class.getName();
 		String displayEventFields[] = {"studyCalendarEventPoint"};
@@ -394,7 +394,7 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 		request.setAttribute(Constants.STUDY_CALENDAR_EVENT_POINT_LIST, list);
 	}
 
-	private void loadParticipantMedicalIdentifier(long participantID, AbstractBizLogic bizLogic, HttpServletRequest request) throws Exception
+	private void loadParticipantMedicalIdentifier(long participantID, IBizLogic bizLogic, HttpServletRequest request) throws Exception
 	{
 		//get list of Participant's names
 		String sourceObjectName = ParticipantMedicalIdentifier.class.getName();

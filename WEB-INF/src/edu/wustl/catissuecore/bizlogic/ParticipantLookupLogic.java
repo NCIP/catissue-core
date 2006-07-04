@@ -7,8 +7,7 @@ import java.util.List;
 
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.bizlogic.AbstractBizLogic;
-import edu.wustl.common.bizlogic.DefaultBizLogic;
+import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.lookup.DefaultLookupParameters;
 import edu.wustl.common.lookup.DefaultLookupResult;
 import edu.wustl.common.lookup.LookupLogic;
@@ -22,13 +21,19 @@ public class ParticipantLookupLogic implements LookupLogic
 {	
 	public List lookup(LookupParameters params) throws Exception
 	{
+		//Kapil: Done for setting-up junit, need to handle with proper exception handling.
+		if(params == null)
+		{
+			throw new Exception("Param can not be null"); 
+		}
+		
 		DefaultLookupParameters participantParams=(DefaultLookupParameters)params;
 		
 		Participant participant=(Participant)
 		participantParams.getObject();
 		Double cutoff=participantParams.getCutoff();
 		
-		AbstractBizLogic bizLogic = new DefaultBizLogic();
+		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 		String sourceObjectName = Participant.class.getName();
   	
 		String[] whereColumnName = {"firstName","middleName","lastName","birthDate","deathDate","socialSecurityNumber"};

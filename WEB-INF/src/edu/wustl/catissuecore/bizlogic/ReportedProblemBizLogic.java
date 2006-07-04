@@ -40,7 +40,7 @@ public class ReportedProblemBizLogic extends DefaultBizLogic
     
     
     /* (non-Javadoc)
-     * @see edu.wustl.common.dao.AbstractBizLogic#update(java.lang.Object)
+     * @see IBizLogic#update(java.lang.Object)
      */
 	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
     {

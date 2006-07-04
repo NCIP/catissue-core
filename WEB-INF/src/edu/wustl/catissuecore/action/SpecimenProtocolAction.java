@@ -60,7 +60,7 @@ public class SpecimenProtocolAction  extends SecureAction
         //Sets the activityStatusList attribute to be used in the Site Add/Edit Page.
         request.setAttribute(Constants.ACTIVITYSTATUSLIST, Constants.ACTIVITY_STATUS_VALUES);
         
-        	UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getBizLogic(Constants.USER_FORM_ID);
+        	UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.USER_FORM_ID);
         	Collection userCollection =  userBizLogic.getUsers(operation);
         	request.setAttribute(Constants.USERLIST, userCollection);
         	Logger.out.debug("1");
@@ -126,7 +126,7 @@ public class SpecimenProtocolAction  extends SecureAction
 	    	SpecimenProtocolForm spForm = (SpecimenProtocolForm )form;
 	    	if(operation.equalsIgnoreCase(Constants.EDIT))
    			{
-	    		String tmpEndDate = BizLogicFactory.getSpecimenProtocolBizLogic().getEndDate( spForm.getSystemIdentifier() );
+	    		String tmpEndDate = BizLogicFactory.getInstance().getSpecimenProtocolBizLogic().getEndDate( spForm.getSystemIdentifier() );
 	    		Logger.out.debug("tmpendDate : " + tmpEndDate);
 	    		spForm.setEndDate(tmpEndDate );
    			}

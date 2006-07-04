@@ -239,7 +239,7 @@ public class DataViewAction extends BaseAction
     private String[] getColumnNamesForFilter(String aliasName,List filteredColumnDisplayNames,Map columnIdsMap,String []selectedColumns,AdvanceSearchForm advForm) throws DAOException,ClassNotFoundException
     {
     	List columnDisplayNames=new ArrayList();
-    	QueryBizLogic bizLogic = (QueryBizLogic)BizLogicFactory.getBizLogic(Constants.SIMPLE_QUERY_INTERFACE_ID);
+    	QueryBizLogic bizLogic = (QueryBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.SIMPLE_QUERY_INTERFACE_ID);
 		List participantColumns=bizLogic.setColumnNames(Query.PARTICIPANT);
 		List collectionProtocolColumns=bizLogic.setColumnNames(Query.COLLECTION_PROTOCOL);
 		List collProtRegColumns=bizLogic.setColumnNames(Query.COLLECTION_PROTOCOL_REGISTRATION);

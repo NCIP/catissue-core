@@ -464,7 +464,7 @@ public class AdvanceSearchForm extends ActionForm
 		String eventOperator = "EventColumnOperator_";
 		String eventValue = "EventColumnValue_";
 
-		QueryBizLogic bizLogic = (QueryBizLogic)BizLogicFactory.getBizLogic(Constants.SIMPLE_QUERY_INTERFACE_ID);
+		QueryBizLogic bizLogic = (QueryBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.SIMPLE_QUERY_INTERFACE_ID);
 		Map eventParameterDisplayNames = null;
 		
 		try

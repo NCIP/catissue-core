@@ -48,7 +48,7 @@ import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.SecureAction;
-import edu.wustl.common.bizlogic.DefaultBizLogic;
+import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.util.logger.Logger;
 
 public class ListSpecimenEventParametersAction  extends SecureAction
@@ -68,7 +68,7 @@ public class ListSpecimenEventParametersAction  extends SecureAction
 //        request.setAttribute(Constants.OPERATION, operation);
         try
 		{
-        	DefaultBizLogic bizLogic = BizLogicFactory.getDefaultBizLogic();
+        	IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 	    	
         	
         	//*************  ForwardTo implementation *************

@@ -251,7 +251,7 @@ public class CaCoreAppServicesDelegator
         className = Class.forName("edu.wustl.catissuecore.domain."+domainClassName);
         String tableName = "'" + HibernateMetaData.getTableName(className) + "'";
             
-        QueryBizLogic bizLogic = (QueryBizLogic) BizLogicFactory.getBizLogic(Constants.QUERY_INTERFACE_ID);
+        QueryBizLogic bizLogic = (QueryBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.QUERY_INTERFACE_ID);
         String aliasName = bizLogic.getAliasName(Constants.TABLE_NAME_COLUMN, tableName);
         return aliasName;
     }

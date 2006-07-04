@@ -10,51 +10,77 @@
 package edu.wustl.catissuecore.bizlogic;
 
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.bizlogic.AbstractBizLogic;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
+import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.bizlogic.QueryBizLogic;
-import edu.wustl.common.factory.AbstractBizLogicFactory;
 import edu.wustl.common.util.logger.Logger;
 
 /**
  * BizLogicFactory is a factory for DAO instances of various domain objects.
  * @author gautam_shetty
  */
-public class BizLogicFactory extends AbstractBizLogicFactory
+public class BizLogicFactory //extends AbstractBizLogicFactory
 {
+	//Singleton instace
+	private static BizLogicFactory factory = null;
+	
+	
+	static
+	{
+		factory = new BizLogicFactory();
+	}
+	
+	protected BizLogicFactory()
+	{
+	}
+	
+	/**
+	 * Setter method in singleton class is to setup mock unit testing.
+	 * */
+	public static void setBizLogicFactory(BizLogicFactory externalFactory)
+	{
+		factory = externalFactory;
+	}
+	
+	public static BizLogicFactory getInstance()
+	{
+		return factory;
+	}
+	
     /**
      * Returns DAO instance according to the form bean type.
-     * @param FORM_TYPE The form bean type.
+     * @param FORM_ID The form bean type.
      * @return An AbstractDAO object.
      */
-    public static AbstractBizLogic getBizLogic(int FORM_TYPE)
+	public IBizLogic getBizLogic(int FORM_ID)
     {
-        AbstractBizLogic abstractBizLogic = null;
+		Logger.out.debug("In Biz Logic Factory , Form ID: "+FORM_ID);
+		
+    	IBizLogic bizLogic = null;
         
-        switch(FORM_TYPE)
+        switch(FORM_ID)
         {
             case Constants.FORGOT_PASSWORD_FORM_ID:
             case Constants.USER_FORM_ID:
-                abstractBizLogic = new UserBizLogic();
+            	bizLogic = new UserBizLogic();
             	break;
             case Constants.APPROVE_USER_FORM_ID:
-                abstractBizLogic = new ApproveUserBizLogic();
-            	Logger.out.debug("In Biz Logic Factory..............APPROVE_USER_FORM_ID");
+            	bizLogic = new ApproveUserBizLogic();
             	break;
             case Constants.REPORTED_PROBLEM_FORM_ID:
-                abstractBizLogic = new ReportedProblemBizLogic();
+            	bizLogic = new ReportedProblemBizLogic();
             	break;
         	case Constants.STORAGE_TYPE_FORM_ID :
-        		abstractBizLogic = new StorageTypeBizLogic();
+        		bizLogic = new StorageTypeBizLogic();
         		break;
         	case Constants.STORAGE_CONTAINER_FORM_ID:
-        		abstractBizLogic = new StorageContainerBizLogic();
+        		bizLogic = new StorageContainerBizLogic();
         		break;
         	case Constants.SITE_FORM_ID:
-        		abstractBizLogic = new SiteBizLogic();
+        		bizLogic = new SiteBizLogic();
         		break;
         	case Constants.PARTICIPANT_FORM_ID:
-        		abstractBizLogic = new ParticipantBizLogic();
+        		bizLogic = new ParticipantBizLogic();
         		break;
         		
         	// for all event parameters same object will be returned	
@@ -73,139 +99,140 @@ public class BizLogicFactory extends AbstractBizLogicFactory
          	case Constants.EMBEDDED_EVENT_PARAMETERS_FORM_ID:
          	case Constants.FIXED_EVENT_PARAMETERS_FORM_ID:
          	case Constants.PROCEDURE_EVENT_PARAMETERS_FORM_ID:	
-         		abstractBizLogic = new SpecimenEventParametersBizLogic();
+         		bizLogic = new SpecimenEventParametersBizLogic();
         		break;
         		
         	case Constants.COLLECTION_PROTOCOL_FORM_ID:
-        		abstractBizLogic = new CollectionProtocolBizLogic();
+        		bizLogic = new CollectionProtocolBizLogic();
         		break;
         	case Constants.DISTRIBUTIONPROTOCOL_FORM_ID:
-        		abstractBizLogic = new DistributionProtocolBizLogic();
+        		bizLogic = new DistributionProtocolBizLogic();
         		break;
 			case Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID:
-				abstractBizLogic = new CollectionProtocolRegistrationBizLogic();
+				bizLogic = new CollectionProtocolRegistrationBizLogic();
 				break;	
 			
 			case Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID:
-				abstractBizLogic = new SpecimenCollectionGroupBizLogic();
+				bizLogic = new SpecimenCollectionGroupBizLogic();
 				break;
 				
           	case Constants.NEW_SPECIMEN_FORM_ID:
-        		abstractBizLogic = new NewSpecimenBizLogic();
+          		bizLogic = new NewSpecimenBizLogic();
         		break;
 
           	case Constants.CREATE_SPECIMEN_FORM_ID:
-        		abstractBizLogic = new CreateSpecimenBizLogic();
+          		bizLogic = new CreateSpecimenBizLogic();
         		break;
         		
         	case Constants.SHOPPING_CART_FORM_ID:
-        		abstractBizLogic = new ShoppingCartBizLogic();
+        		bizLogic = new ShoppingCartBizLogic();
         		break;
 
         	case Constants.DISTRIBUTION_FORM_ID:
-        		abstractBizLogic = new DistributionBizLogic();
+        		bizLogic = new DistributionBizLogic();
         		break;
         		
         	case Constants.SIMPLE_QUERY_INTERFACE_ID:
-        	    abstractBizLogic = new QueryBizLogic();
+        		bizLogic = new QueryBizLogic();
         		break;
         	case Constants.ADVANCE_QUERY_INTERFACE_ID:
-        	    abstractBizLogic = new AdvanceQueryBizlogic();
+        		bizLogic = new AdvanceQueryBizlogic();
         		break;
         	case Constants.QUERY_INTERFACE_ID:
-        	    abstractBizLogic = new QueryBizLogic();
+        		bizLogic = new QueryBizLogic();
     			break;
     		
     		case Constants.BIOHAZARD_FORM_ID:
-    			abstractBizLogic = new BiohazardBizLogic();
+    			bizLogic = new BiohazardBizLogic();
     			break;
     		
+    		case Constants.DEFAULT_BIZ_LOGIC:
             default:
-                abstractBizLogic = new DefaultBizLogic();
+            	bizLogic = new DefaultBizLogic();
             	break;
             	
         }
-        return abstractBizLogic;
+        return bizLogic;
     }
     
-    public static DefaultBizLogic getDefaultBizLogic()
-    {
-    	return new DefaultBizLogic();
-    }
+//    public IBizLogic getDefaultBizLogic()
+//    {
+//    	return new DefaultBizLogic();
+//    }
     
     /**
      * Returns DAO instance according to the fully qualified class name.
      * @param className The name of the class.
      * @return An AbstractDAO object.
      */
-    public static AbstractBizLogic getBizLogic(String className)
+    public IBizLogic getBizLogic(String className)
     {
-    	AbstractBizLogic abstractBizLogic = null;
+    	IBizLogic bizLogic = null;
     	
     	if(className.equals("edu.wustl.catissuecore.domain.User"))
     	{
-    		abstractBizLogic = new UserBizLogic();
+    		bizLogic = new UserBizLogic();
     	}
     	else if(className.equals("edu.wustl.catissuecore.domain.ReportedProblem"))
     	{
-    		abstractBizLogic = new ReportedProblemBizLogic();
+    		bizLogic = new ReportedProblemBizLogic();
     	}
     	else if(className.equals("edu.wustl.catissuecore.domain.StorageType"))
     	{
-    		abstractBizLogic = new StorageTypeBizLogic();
+    		bizLogic = new StorageTypeBizLogic();
     	}
     	else if(className.equals("edu.wustl.catissuecore.domain.StorageContainer"))
     	{
-    		abstractBizLogic = new StorageContainerBizLogic();
+    		bizLogic = new StorageContainerBizLogic();
     	}
     	else if(className.equals("edu.wustl.catissuecore.domain.Site"))
     	{
-    		abstractBizLogic = new SiteBizLogic();
+    		bizLogic = new SiteBizLogic();
     	}
     	else if(className.equals("edu.wustl.catissuecore.domain.Participant"))
     	{
-    		abstractBizLogic = new ParticipantBizLogic();
+    		bizLogic = new ParticipantBizLogic();
     	}
     	else if(className.equals("edu.wustl.catissuecore.domain.CollectionProtocol"))
     	{
-    		abstractBizLogic = new CollectionProtocolBizLogic();
+    		bizLogic = new CollectionProtocolBizLogic();
     	}
     	else if(className.equals("edu.wustl.catissuecore.domain.DistributionProtocol"))
     	{
-    		abstractBizLogic = new DistributionProtocolBizLogic();
+    		bizLogic = new DistributionProtocolBizLogic();
     	}
     	else if(className.equals("edu.wustl.catissuecore.domain.Specimen"))
     	{
-    		abstractBizLogic = new NewSpecimenBizLogic();
+    		bizLogic = new NewSpecimenBizLogic();
     	}
     	else if(className.equals("edu.wustl.catissuecore.domain.SpecimenCollectionGroup"))
     	{
-    		abstractBizLogic = new SpecimenCollectionGroupBizLogic();
+    		bizLogic = new SpecimenCollectionGroupBizLogic();
     	}
     	else if(className.equals("edu.wustl.catissuecore.domain.Distribution"))
     	{
-    		abstractBizLogic = new DistributionBizLogic();
+    		bizLogic = new DistributionBizLogic();
     	}
     	else if(className.endsWith("EventParameters"))
     	{
-    		abstractBizLogic = new SpecimenEventParametersBizLogic();
+    		bizLogic = new SpecimenEventParametersBizLogic();
     	}
     	else if(className.equals("edu.wustl.catissuecore.domain.CheckInCheckOutEventParameter"))
     	{
-    		abstractBizLogic = new SpecimenEventParametersBizLogic();
+    		bizLogic = new SpecimenEventParametersBizLogic();
     	}
     	else
     	{
-    		abstractBizLogic = new DefaultBizLogic();
+    		bizLogic = new DefaultBizLogic();
     	}
     	
-    	return abstractBizLogic;
+    	return bizLogic;
     }
     
-    //Mandar : 11-apr-06 
-    public static SpecimenProtocolBizLogic getSpecimenProtocolBizLogic()
+    //Mandar : 11-apr-06
+    //FIXME : Kapil Why do we need this?
+    public SpecimenProtocolBizLogic getSpecimenProtocolBizLogic()
     {
     	return new SpecimenProtocolBizLogic();
     }
-
 }

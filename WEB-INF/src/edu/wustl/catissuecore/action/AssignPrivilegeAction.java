@@ -23,12 +23,12 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.AssignPrivilegesForm;
-import edu.wustl.common.action.BaseAction;
-import edu.wustl.common.bizlogic.AbstractBizLogic;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
-import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.bizlogic.IBizLogic;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.logger.Logger;
 
 public class AssignPrivilegeAction extends BaseAction
@@ -46,9 +46,6 @@ public class AssignPrivilegeAction extends BaseAction
     	
     	try
 		{
-    		AbstractBizLogic bizLogic = null;
-    		//DAO dao = DAOFactory.getDAO(Constants.HIBERNATE_DAO);
-    		
     		String [] groupUsers = privilegeForm.getGroups();
     		String [] privileges = {privilegeForm.getPrivilege()};
     		String [] objectIds = privilegeForm.getRecordIds();
@@ -70,7 +67,7 @@ public class AssignPrivilegeAction extends BaseAction
     		
     		for(int i=0;i<groupUsers.length;i++)
     		{
-    			bizLogic = BizLogicFactory.getBizLogic(privilegeForm.getObjectType());
+    			IBizLogic bizLogic = bizLogic = BizLogicFactory.getInstance().getBizLogic(privilegeForm.getObjectType());
     			Class classObject = Class.forName(privilegeForm.getObjectType());
 
     			if(groupUsers[i].startsWith("Role_")) //IF THE SELECTED OPTION IS GROUP THEN

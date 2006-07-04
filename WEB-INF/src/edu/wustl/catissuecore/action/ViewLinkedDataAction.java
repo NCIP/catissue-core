@@ -54,7 +54,7 @@ public class ViewLinkedDataAction extends Action
 	    Logger.out.debug("FormBean ID===>"+abstractActionForm.getFormId());
 	    
 	    //Getting instance of IntegrationBizLogic using BizLogicFactory
-	    IntegrationBizLogic integrationBizLogic = (IntegrationBizLogic)BizLogicFactory.getBizLogic(abstractActionForm.getFormId()); 
+	    IntegrationBizLogic integrationBizLogic = (IntegrationBizLogic)BizLogicFactory.getInstance().getBizLogic(abstractActionForm.getFormId()); 
 	    
 	    //Retrieving linked data from integrated application i.e. CAE/caTies
 	    integrationDataList = (ArrayList)integrationBizLogic.getLinkedAppData(new Long(request.getParameter(Constants.SYSTEM_IDENTIFIER)), request.getParameter(Constants.APPLICATION_ID));
