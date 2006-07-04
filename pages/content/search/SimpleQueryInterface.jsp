@@ -358,7 +358,7 @@ function enablePreviousCheckBox(element)
 					%>
 <!-- Mandar : 434 : for tooltip -->
 						<logic:equal name="pageOf" value="<%=Constants.PAGEOF_SIMPLE_QUERY_INTERFACE%>">
-						<td class="formField">
+						<td class="onlyBottomBorder">
 						<html:select property="<%=objectName%>" styleClass="formFieldSized15" styleId="<%=objectName%>" size="1" onchange="<%=attributeAction%>"
 						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 							<logic:notPresent name="<%=objectNameList%>">			
