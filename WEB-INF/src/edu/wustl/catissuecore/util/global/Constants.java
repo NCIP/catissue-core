@@ -362,6 +362,11 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String PAGEOF_ALIQUOT = "pageOfAliquot";
 	public static final String PAGEOF_CREATE_ALIQUOT = "pageOfCreateAliquot";
 	public static final String AVAILABLE_CONTAINER_MAP = "availableContainerMap";
+
+	//Constants related to QuickEvents functionality
+	public static final String QUICKEVENTS_ACTION = "QuickEventsSearch.do";	
+	public static final String QUICKEVENTSPARAMETERS_ACTION = "ListSpecimenEventParameters.do";	
+	
 	
 	//Levels of nodes in query results tree.
 	public static final int MAX_LEVEL = 5;
@@ -439,6 +444,8 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final int SPECIMEN_COLLECTION_GROUP_FORM_ID = 20;
 	public static final int NEW_SPECIMEN_FORM_ID = 22;
 	public static final int ALIQUOT_FORM_ID = 44;
+	public static final int QUICKEVENTS_FORM_ID = 45;
+	public static final int LIST_SPECIMEN_EVENT_PARAMETERS_FORM_ID = 46;
 	
 	//Misc
 	public static final String SEPARATOR = " : ";
@@ -975,6 +982,9 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String CONTAINER_STYLEID = "containerStyleId";
 	public static final String XDIM_STYLEID = "xDimStyleId";
 	public static final String YDIM_STYLEID = "yDimStyleId";
+	
+	//Constants for QuickEvents
+	public static final String EVENT_SELECTED = "eventSelected";
 	
 //	public static final String getCollectionProtocolPIGroupName(Long identifier)
 //	{

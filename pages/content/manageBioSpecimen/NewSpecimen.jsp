@@ -361,17 +361,22 @@
 		<table summary="" cellpadding="0" cellspacing="0" border="0" height="20" class="tabPage" width="600">
 			<tr>
 				<td height="20" class="tabMenuItemSelected" onclick="document.location.href='ManageAdministrativeData.do'">Edit</td>
+				<%
+					String eventLinkAction = "'ListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParameters&menuSelected=15&specimenId="+form.getSystemIdentifier()+"'" ;
+				%>
+				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onclick="<%=addEventsSubmit%>">
+					Specimen Event Parameters
+				</td>
 
-				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onclick="addNewAction('ViewNewSpecimenSPR.do?applicationId=caTies&editTabLink=NewSpecimenSearch.do?pageOf=pageOfNewSpecimen')">
+				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()">
 					View Surgical Pathology Report
 				</td>
-								
 				
 				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()">
 					View Clinical Annotations
 				</td>
 
-				<td width="450" class="tabMenuSeparator" colspan="3">&nbsp;</td>
+				<td width="450" class="tabMenuSeparator" colspan="2">&nbsp;</td>
 			</tr>
 
 			<tr>

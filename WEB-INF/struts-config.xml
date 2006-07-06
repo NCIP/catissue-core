@@ -56,6 +56,11 @@ PUBLIC
 		<form-bean name="abstractActionForm" type="edu.wustl.common.actionForm.AbstractActionForm"/>
 		
 		<form-bean name="aliquotForm" type="edu.wustl.catissuecore.actionForm.AliquotForm"/>
+		
+		<form-bean name="quickEventsForm" type="edu.wustl.catissuecore.actionForm.QuickEventsForm"/>
+		<form-bean name="listSpecimenEventParametersForm" type="edu.wustl.catissuecore.actionForm.ListSpecimenEventParametersForm"/>
+		
+		
 	</form-beans>
 	
 	<!-- Global Exception Definitions -->
@@ -789,6 +794,7 @@ PUBLIC
 		<!-- New Specimen Event Parameters Action Begin-->
 		<action path="/ListSpecimenEventParameters"
 			type="edu.wustl.catissuecore.action.ListSpecimenEventParametersAction"
+			name="listSpecimenEventParametersForm"
 			scope="request">
 			<forward name="pageOfListSpecimenEventParameters" path=".catissuecore.newSpecimenEventParametersDef" />
 			<forward name="failure" path=".catissuecore.newSpecimenEventParametersDef" />
@@ -2468,6 +2474,30 @@ PUBLIC
 		<forward name="access_denied" path="/ManageBioSpecimen.do" />
 	</action>
 	<!-- Aliquots Action -->
+
+	<!-- QuickEvents Action start -->
+	<action path="/QuickEvents"
+		type="edu.wustl.catissuecore.action.QuickEventsAction"
+		name="quickEventsForm"
+		validate="false"
+		scope="request">
+		<forward name="success" path=".catissuecore.quickEventsDef" />
+		<forward name="failure" path=".catissuecore.quickEventsDef" />
+		<forward name="access_denied" path="/ManageBioSpecimen.do" />
+	</action>
+	
+	<action path="/QuickEventsSearch"
+		type="edu.wustl.catissuecore.action.QuickEventsSpecimenSearchAction"
+		name="quickEventsForm"
+		validate="false"
+		scope="request">
+		<forward name="success" path="/ListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParameters&amp;menuSelected=15" />
+		<forward name="failure" path="/QuickEvents.do" />
+		<forward name="access_denied" path="/ManageBioSpecimen.do" />
+	</action>
+	
+	
+	<!-- QuickEvents Action end -->
 	
 	</action-mappings>
 	

@@ -4,6 +4,8 @@
 
 <%@ page import="java.util.List"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
+<%@ page import="edu.wustl.catissuecore.actionForm.ListSpecimenEventParametersForm"%>
+
 
 <link href="runtime/styles/xp/grid.css" rel="stylesheet" type="text/css" ></link>
 <script src="runtime/lib/grid.js"></script>
@@ -23,6 +25,33 @@
 	String specimenIdentifier = (String)request.getAttribute(Constants.SPECIMEN_ID);
 	if(specimenIdentifier == null || specimenIdentifier.equals("0"))
 		specimenIdentifier = (String)request.getParameter(Constants.SPECIMEN_ID);
+
+
+	//------------- Mandar 04-july-06 QuickEvents
+	String eventSelected = (String)request.getAttribute(Constants.EVENT_SELECTED);
+//	System.out.println("eventSelected : "+eventSelected);
+
+//		Object obj = request.getAttribute("listSpecimenEventParametersForm");
+//		System.out.println("Class : "+ obj.getClass().getName() ); 
+//		ListSpecimenEventParametersForm form = null;
+//		if(obj != null && obj instanceof ListSpecimenEventParametersForm)
+//		{
+//			form = (ListSpecimenEventParametersForm)obj;
+//			System.out.println("FormData : "+form.getSpecimenEventParameter()+" : " + form.getSpecimenId() );
+//		}
+
+		String iframeSrc="";
+		String formAction = Constants.SPECIMEN_ADD_ACTION;
+		String specimenPath ="'NewSpecimenSearch.do?operation=search&pageOf=pageOfNewSpecimen&systemIdentifier="+specimenIdentifier+"'" ;
+		if(eventSelected != null)	
+		{
+			iframeSrc = getEventAction(eventSelected, specimenIdentifier);
+			formAction = Constants.QUICKEVENTSPARAMETERS_ACTION;
+		}
+//		System.out.println("iframeSrc : "+ iframeSrc);
+	//------------- Mandar 04-july-06 QuickEvents
+
+
 if(dataList!=null && dataList.size() != 0)
 {
 %>
@@ -109,7 +138,29 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 	<%=messageKey%>
 </html:messages>
 
-<html:form action="<%=Constants.SPECIMEN_ADD_ACTION%>">
+<html:form action="<%=formAction%>">
+<!-- Mandar 05-July-06 Code for tabs start -->
+	 	<table summary="" cellpadding="0" cellspacing="0" border="0" height="20" class="tabPage" width="600">  
+			<tr>
+				<td height="20" class="tabMenuItem" onclick="addNewAction(<%= specimenPath %>)">Edit Specimen</td>
+
+				<td height="20" class="tabMenuItemSelected" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()">
+					Specimen Event Parameters
+				</td>
+
+				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()">
+					View Surgical Pathology Report
+				</td>
+				
+				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()">
+					View Clinical Annotations
+				</td>
+
+				<td width="450" class="tabMenuSeparator" colspan="2">&nbsp;</td>
+			</tr>
+			<tr>
+				<td class="tabField" colspan="6">
+<!-- Mandar 05-July-06 Code for tabs end -->
 <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="500">
 <tr>
 	<td>		
@@ -207,25 +258,77 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 	</td>	
 </tr>
 <tr>
-	<td><b><bean:message key="specimenEventParameters.label"/></b> &nbsp;
+	<td>
+	  	 <table summary="" cellpadding="3" cellspacing="0" border="0" width="550">
+			<tr>
+	<td><b class="formLabel"><bean:message key="specimenEventParameters.label"/></b> &nbsp;
 <!-- Mandar : 434 : for tooltip -->
-		<html:select property="specimenEventParameter" styleClass="formFieldSized15" styleId="className" size="1" disabled="false" onchange="onParameterChange(this)"
+		<html:select property="specimenEventParameter" styleClass="formField" styleId="className" size="1" disabled="false" onchange="onParameterChange(this)"
 		 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 			<html:options name="<%=Constants.EVENT_PARAMETERS_LIST%>" labelName="<%=Constants.EVENT_PARAMETERS_LIST%>"/>
 		</html:select>
 	</td>
 </tr>
-
+</table></td>
+</tr>
 <tr>
 	<td>&nbsp;</td>
 </tr>
 
 <tr>
 	<td>
-		<iframe name="newEventFrame" id="newEventFrame" src="" width="650" height="400" frameborder="0" scrolling="auto">
+		<iframe name="newEventFrame" id="newEventFrame" src="<%=iframeSrc %>" width="650" height="400" frameborder="0" scrolling="auto">
 		</iframe>
 	</td>
 </tr>
 
 </table>
+<!-- Mandar 05-July-06 Closing the tabs table -->
+		</td>
+	</tr>
+</table>
+
 </html:form>
+
+<%!
+	private String getEventAction(String event, String specimenId)
+	{
+		String action = "";
+		
+		if(event.equalsIgnoreCase("Cell Specimen Review"))
+			action = "CellSpecimenReviewParameters.do?operation=add&pageOf=pageOfCellSpecimenReviewParameters";
+		else if(event.equalsIgnoreCase("Check In Check Out"))
+			action = "CheckInCheckOutEventParameters.do?operation=add&pageOf=pageOfCheckInCheckOutEventParameters";
+		else if(event.equalsIgnoreCase("Collection"))
+			action = "CollectionEventParameters.do?operation=add&pageOf=pageOfCollectionEventParameters";
+		else if(event.equalsIgnoreCase("Disposal"))
+			action = "DisposalEventParameters.do?operation=add&pageOf=pageOfDisposalEventParameters";
+		else if(event.equalsIgnoreCase("Embedded"))
+			action = "EmbeddedEventParameters.do?operation=add&pageOf=pageOfEmbeddedEventParameters";
+		else if(event.equalsIgnoreCase("Fixed"))
+			action = "FixedEventParameters.do?operation=add&pageOf=pageOfFixedEventParameters";
+		else if(event.equalsIgnoreCase("Fluid Specimen Review"))
+			action = "FluidSpecimenReviewEventParameters.do?operation=add&pageOf=pageOfFluidSpecimenReviewParameters";
+		else if(event.equalsIgnoreCase("Frozen"))
+			action = "FrozenEventParameters.do?operation=add&pageOf=pageOfFrozenEventParameters";
+		else if(event.equalsIgnoreCase("Molecular Specimen Review"))
+			action = "MolecularSpecimenReviewParameters.do?operation=add&pageOf=pageOfMolecularSpecimenReviewParameters";
+		else if(event.equalsIgnoreCase("Procedure"))
+			action = "ProcedureEventParameters.do?operation=add&pageOf=pageOfProcedureEventParameters";
+		else if(event.equalsIgnoreCase("Received"))
+			action = "ReceivedEventParameters.do?operation=add&pageOf=pageOfReceivedEventParameters";
+		else if(event.equalsIgnoreCase("Spun"))
+			action = "SpunEventParameters.do?operation=add&pageOf=pageOfSpunEventParameters";
+		else if(event.equalsIgnoreCase("Thaw"))
+			action = "ThawEventParameters.do?operation=add&pageOf=pageOfThawEventParameters";
+		else if(event.equalsIgnoreCase("Tissue Specimen Review"))
+			action = "TissueSpecimenReviewEventParameters.do?operation=add&pageOf=pageOfTissueSpecimenReviewParameters";
+		else if(event.equalsIgnoreCase("Transfer"))
+		{
+			action = "TransferEventParameters.do?operation=add&pageOf=pageOfTransferEventParameters";			
+		}	
+		action = action + "&specimenId=" + specimenId;
+
+	return action;
+	}
+%>

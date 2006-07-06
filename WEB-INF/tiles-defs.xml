@@ -802,5 +802,10 @@
 	<definition name=".catissuecore.aliquotDef" extends=".catissuecore.manageBioSpecimenHomeDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/Aliquots.jsp" />
 	</definition>
+
+	<!--  QuickEvents -->
+	<definition name=".catissuecore.quickEventsDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/QuickEvents.jsp" />
+	</definition>
 	
 </tiles-definitions>
