@@ -22,7 +22,7 @@ import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
-import edu.wustl.common.bizlogic.DefaultBizLogic;
+import edu.wustl.common.bizlogic.IBizLogic;
 
 
 
@@ -42,7 +42,8 @@ public class QuickEventsAction extends BaseAction {
             HttpServletRequest request, HttpServletResponse response)
             throws Exception
     {
-		DefaultBizLogic bizLogic = BizLogicFactory.getDefaultBizLogic();   
+//		DefaultBizLogic bizLogic = BizLogicFactory.getDefaultBizLogic();
+		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
    		String [] fields = {Constants.SYSTEM_IDENTIFIER};
         List specimenList = bizLogic.getList(Specimen.class.getName(), fields, Constants.SYSTEM_IDENTIFIER, true); 	 	
   	 	request.setAttribute(Constants.SPECIMEN_ID_LIST, specimenList);

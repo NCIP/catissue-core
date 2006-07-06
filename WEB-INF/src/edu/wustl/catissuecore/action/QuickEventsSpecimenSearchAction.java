@@ -27,7 +27,7 @@ import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
-import edu.wustl.common.bizlogic.DefaultBizLogic;
+import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
@@ -61,7 +61,8 @@ public class QuickEventsSpecimenSearchAction extends BaseAction {
   	 	
   	 	if(pageOf.equals(Constants.SUCCESS ) )
   	 	{
-  	 		DefaultBizLogic bizLogic = BizLogicFactory.getDefaultBizLogic();
+  	 		//DefaultBizLogic bizLogic = BizLogicFactory.getDefaultBizLogic();
+  	 		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
   	 		String specimenFound="0";
   	 		String errorString="";
   	        if(qEForm.getCheckedButton().equals("1" ))
@@ -139,7 +140,7 @@ public class QuickEventsSpecimenSearchAction extends BaseAction {
 	}
 	
 	
-	 private String isExistingSpecimen(String sourceObject, String value, DefaultBizLogic bizlogic) throws Exception
+	 private String isExistingSpecimen(String sourceObject, String value, IBizLogic bizlogic) throws Exception
 	 {
 	 	String returnValue= "0";
 	 	
