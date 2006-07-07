@@ -162,7 +162,7 @@ public class StorageContainerAction  extends SecureAction
             			long[] defHoldsStorageTypeList=getDefaultHoldStorageTypeList(type);
             			if(defHoldsStorageTypeList!=null)
             			{
-            	      		storageContainerForm.setHoldsStorageTypeIds(defHoldsStorageTypeList);
+            				storageContainerForm.setHoldsStorageTypeIds(defHoldsStorageTypeList);
             			}
             			
             			long[] defHoldsSpecimenClassTypeList=getDefaultHoldsSpecimenClasstypeList(type);
@@ -220,7 +220,10 @@ public class StorageContainerAction  extends SecureAction
         	int containerName=bizLogic.getNextContainerName();
         	if(!type_name.equals("")&& !site_name.equals(""))
         	{	
-        		storageContainerForm.setContainerName(site_name+"_"+type_name+"_"+String.valueOf(containerName));
+        		if(operation.equals(Constants.ADD))
+        		{
+        			storageContainerForm.setContainerName(site_name+"_"+type_name+"_"+String.valueOf(containerName));
+        		}
         	}
         }	
         // ---------- Add new
