@@ -10,15 +10,13 @@
 package edu.wustl.catissuecore.domain;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.Set;
 
 import edu.wustl.catissuecore.actionForm.StorageContainerForm;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -35,13 +33,8 @@ public class StorageContainer extends AbstractDomainObject implements java.io.Se
      */
 	protected Long systemIdentifier;
 
-	/**
-     * Name assigned to storage container.
-     */
-	protected Integer number;
 	
 	/** 
-	 * added by vaishali on 20th June 2006 2.35 pm 
 	 * Name assigned to storage container
 	 * 
 	 */
@@ -81,10 +74,6 @@ public class StorageContainer extends AbstractDomainObject implements java.io.Se
 	 */
 	protected StorageContainer parentContainer = null;
 	
-	/**
-	 * A collection of storage container details
-	 */
-	protected Collection storageContainerDetailsCollection = new HashSet();
 	
 	/**
 	 * A capacity of storage container
@@ -100,6 +89,19 @@ public class StorageContainer extends AbstractDomainObject implements java.io.Se
 
 	protected Integer positionDimensionTwo;
 	
+	/**
+     * Collection of Collection Protocols that associated with Storage Container.
+     */
+	protected Collection collectionProtocolCollection=new HashSet();
+	
+	/** Collection of Storage Types that associated with Storage Container
+	 * 
+	 */
+	protected Collection storageTypeCollection=new HashSet();
+	/** Collection of specimen class that associated with Storage Container
+	 * 
+	 */
+	protected Collection specimenClassCollection=new HashSet();
 	/**
 	 * Number of containers
 	 */
@@ -126,27 +128,19 @@ public class StorageContainer extends AbstractDomainObject implements java.io.Se
 		this.setSystemIdentifier(oldContainer.getSystemIdentifier());
 		this.setActivityStatus(oldContainer.getActivityStatus());
 		this.setParentContainer(oldContainer.getParentContainer());
-		this.setNumber(oldContainer.getNumber());
+		//this.setNumber(oldContainer.getNumber());
+		this.setName(oldContainer.getName());
 		this.setIsFull(oldContainer.getIsFull()   );
 		if(parentContainer!=null)
 		{
 			parentContainer.getChildrenContainerCollection().add(this);
 		}
 		this.setSite(oldContainer.getSite());		
-		//this.setStorageContainerCapacity(oldContainer.getStorageContainerCapacity());
 		storageContainerCapacity = new StorageContainerCapacity(oldContainer.getStorageContainerCapacity());
 		
 		this.setStorageType(oldContainer.getStorageType());
 		this.setTempratureInCentigrade(oldContainer.getTempratureInCentigrade());
-		//this.setStorageContainerDetailsCollection(new HashSet(oldContainer.getStorageContainerDetailsCollection()));
 		
-		Iterator it = oldContainer.getStorageContainerDetailsCollection().iterator();
-		while(it.hasNext())
-		{
-			StorageContainerDetails storageContainerDetails = (StorageContainerDetails)it.next();
-			StorageContainerDetails storageContainerDetailsNew = new StorageContainerDetails(storageContainerDetails);
-			storageContainerDetailsCollection.add(storageContainerDetailsNew);
-		}
 	}
 	
 	/**
@@ -173,37 +167,26 @@ public class StorageContainer extends AbstractDomainObject implements java.io.Se
 	}
 
 	/**
-     * Returns the number assigned to storage container. 
-     * @return number assigned to storage container.
-     * @see #setNumber(Integer)
-     * @hibernate.property name="number" type="int" 
-     * column="CONTAINER_NUMBER" length="50"
+     * Returns the Name of the torage container. 
+     * @return name of the storage container.
+     * @see #setName(String)
+     * @hibernate.property name="name" type="string" 
+     * column="CONTAINER_NAME" length="50"
      */
-	public Integer getNumber()
-	{
-		return number;
-	}
 
-	/**
-     * Sets the name of the storage container.
-     * @param name name of the storage container to be set.
-     * @see #getNumber()
-     */
-	public void setNumber(Integer number)
-	{
-		this.number = number;
-	}
-
-	/* added by vaishali on 20th Jube 2006 2.36 pm */
 	public String getName()
 	{
 		return name;
 	}
+	/**
+     * Sets the name of the storage container.
+     * @param name of the storage container to be set.
+     * @see #getName()
+     */
 	public void setName(String name)
 	{
 		this.name=name;
 	}
-	/* added finish */
 	/**
      * Returns the temperature of the storage container. 
      * @return Temperature of the storage container.
@@ -359,28 +342,77 @@ public class StorageContainer extends AbstractDomainObject implements java.io.Se
 	}
 
 	/**
-	 * Returns collection of storage container details.
-	 * @return Collection of storage container details.
-	 * @hibernate.set name="storageContainerDetailsCollection" table="CATISSUE_STORAGE_CONT_DETAILS"
-	 * cascade="save-update" inverse="true" lazy="false"
-	 * @hibernate.collection-key column="STORAGE_CONTAINER_ID"
-	 * @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.StorageContainerDetails"
-	 * @see setStorageContainerDetailsCollection(Collection)
-	 */
-	public Collection getStorageContainerDetailsCollection()
-	{
-		return storageContainerDetailsCollection;
-	}
+     * Returns the collection of collectionProtocols associated with container 
+     * @hibernate.set name="collectionProtocolCollection" table="CATISSUE_CONTAINER_CP_REL"
+     * cascade="none" inverse="false" lazy="false"
+     * @hibernate.collection-key column="STORAGE_CONTAINER_ID"
+     * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.CollectionProtocol" column="COLLECTION_PROTOCOL_ID"
+     * @return the collection of collectionProtocols of a Storage Container 
+     * @see #setCollectionProtocolCollection(Set)
+     */
+    public Collection getCollectionProtocolCollection()
+    {
+        return collectionProtocolCollection;
+    }
 
-	/**
-	 * Sets the collection of storage container details.
-	 * @param storageContainerDetailsCollection collection of storage container details to be set.
-	 * @see #getStorageContainerDetailsCollection()
-	 */
-	public void setStorageContainerDetailsCollection(Collection storageContainerDetailsCollection)
-	{
-		this.storageContainerDetailsCollection = storageContainerDetailsCollection;
-	}
+    /**
+     * Sets the collection of collectionProtocol of a Storage Container 
+     * @param collectionProtocolCollection the collection of collectionProtocols of a Storage Container 
+     * @see #getCollectionProtocolCollection
+     */
+    public void setCollectionProtocolCollection(Collection collectionProtocolCollection)
+    {
+        this.collectionProtocolCollection = collectionProtocolCollection;
+    }
+    
+    /**
+     * Returns the collection of Storage Types associated with container 
+     * @hibernate.set name="storageTypeCollection" table="CATISSUE_CONTAINER_TYPE_REL"
+     * cascade="none" lazy="false"
+     * @hibernate.collection-key column="STORAGE_CONTAINER_ID"
+     * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.StorageType" column="STORAGE_TYPE_ID"
+     * @return the collection of storage types of a Storage Container 
+     * @see #setStorageTypeCollection(Set)
+     */
+    public Collection getStorageTypeCollection()
+    {
+        return storageTypeCollection;
+    }
+
+    /**
+     * Sets the collection of storage type of a Storage Container 
+     * @param storageTypeCollection the collection of storage types of a Storage Container 
+     * @see #getStorageTypeCollection
+     */
+    public void setStorageTypeCollection(Collection storageTypeCollection)
+    {
+        this.storageTypeCollection = storageTypeCollection;
+    }
+
+    
+    /**
+     * Returns the collection of Specimen Classes associated with container 
+     * @hibernate.set name="specimenClassCollection" table="CATISSUE_CONT_SPECIMENCL_REL"
+     * cascade="none" inverse="false" lazy="false"
+     * @hibernate.collection-key column="STORAGE_CONTAINER_ID"
+     * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.SpecimenClass" column="SPECIMEN_CLASS_ID"
+     * @return the collection of specimen classes of a Storage Container 
+     * @see #setSpecimenClassCollection(Set)
+     */
+    public Collection getSpecimenClassCollection()
+    {
+        return specimenClassCollection;
+    }
+
+    /**
+     * Sets the collection of specimen class of a Storage Container 
+     * @param specimenClassCollection the collection of specimen classes of a Storage Container 
+     * @see #getSpecimenClassCollection
+     */
+    public void setSpecimenClassCollection(Collection specimenClassCollection)
+    {
+        this.specimenClassCollection = specimenClassCollection;
+    }
 
 	/**
      * Returns the capacity of this storage container.
@@ -520,15 +552,7 @@ public class StorageContainer extends AbstractDomainObject implements java.io.Se
 	    try
 	    {
 	        StorageContainerForm form = (StorageContainerForm) abstractForm;
-	        //these two lines commented by vaishali on 21st june 2006 10.41
-	        //this.number 				= new Integer(form.getStartNumber());
-	        //this.startNo				= new Integer(form.getStartNumber());
-	        //following two line added , pls remove it after testing
-	        this.number=new Integer("1");
-	        this.startNo=new Integer("1");
-	        //added by vaishali on 21st June 2006 10.43 pm
 	        this.name					=form.getContainerName();
-	        //finish
 	        if (Utility.toString(form.getDefaultTemperature()).trim().length() > 0  )
         	{
 	        	this.tempratureInCentigrade	= new Double(form.getDefaultTemperature());
@@ -598,13 +622,55 @@ public class StorageContainer extends AbstractDomainObject implements java.io.Se
 		        site.setSystemIdentifier(new Long(form.getSiteId()));
 	        }
 	        
-	        Map map = form.getValues();
-	        Logger.out.debug("Map.................. :"+map); 
-	        MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.domain");
 	        
-	        Collection storageContainerDetailsCollectionTemp = parser.generateData(map);
-	        this.storageContainerDetailsCollection = storageContainerDetailsCollectionTemp;
-	        Logger.out.debug("OBJ.................. :"+storageContainerDetailsCollection); 
+	        collectionProtocolCollection.clear();
+        	long [] collectionProtocolArr = form.getCollectionIds();
+        	if(collectionProtocolArr!=null)
+        	{
+	        	for (int i = 0; i < collectionProtocolArr.length; i++)
+				{
+	        		Logger.out.debug("Collection prtocoo Id :"+collectionProtocolArr[i]);
+	        		if(collectionProtocolArr[i]!=-1)
+	        		{
+		        		CollectionProtocol collectionProtocol = new CollectionProtocol();
+		        		collectionProtocol.setSystemIdentifier(new Long(collectionProtocolArr[i]));
+		        		collectionProtocolCollection.add(collectionProtocol);
+	        		}
+				}
+        	}
+        	storageTypeCollection.clear();
+        	long [] storageTypeArr = form.getHoldsStorageTypeIds();
+        	if(storageTypeArr!=null)
+        	{
+	        	for (int i = 0; i < storageTypeArr.length; i++)
+				{
+	        		Logger.out.debug("Storage Type Id :"+storageTypeArr[i]);
+	        		if(storageTypeArr[i]!=-1)
+	        		{
+		        		StorageType storageType = new StorageType();
+		        		storageType.setSystemIdentifier(new Long(storageTypeArr[i]));
+		        		storageTypeCollection.add(storageType);
+	        		}
+				}
+        	}
+	                
+        	specimenClassCollection.clear();
+        	long [] specimenClassArr = form.getHoldsSpecimenClassTypeIds();
+        	if(specimenClassArr!=null)
+        	{
+	        	for (int i = 0; i < specimenClassArr.length; i++)
+				{
+	        		Logger.out.debug("Specimen class Id :"+specimenClassArr[i]);
+	        		if(specimenClassArr[i]!=-1)
+	        		{
+		        		SpecimenClass specimenClass = new SpecimenClass();
+		        		specimenClass.setSystemIdentifier(new Long(specimenClassArr[i]));
+		        		specimenClassCollection.add(specimenClass);
+	        		}
+				}
+        	}
+	        
+	        
 	    }
 	    catch(Exception excp)
 	    {

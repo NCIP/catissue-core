@@ -11,6 +11,9 @@
 package edu.wustl.catissuecore.domain;
 
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 import edu.wustl.catissuecore.actionForm.StorageTypeForm;
 import edu.wustl.common.actionForm.AbstractActionForm;
@@ -55,6 +58,20 @@ public class StorageType extends AbstractDomainObject implements Serializable
      */
 	private StorageContainerCapacity defaultStorageCapacity = new StorageContainerCapacity();
 	
+	/**
+	 * Collection of storage types that Storage Type Can Hold
+	 */
+	private Collection storageTypeCollection=new HashSet();
+	
+	/**
+	 * Collection of Specimen class types that Storage Type can hold
+	 */
+	private Collection specimenClassCollection=new HashSet();
+	
+	/**
+	 * Collection of Storage containers that storage type can hold
+	 */
+	private Collection storageContainerCollection=new HashSet();
 	//DO Not delete required by hibernate
 	public StorageType()
 	{
@@ -176,6 +193,82 @@ public class StorageType extends AbstractDomainObject implements Serializable
 	{
 		this.twoDimensionLabel = twoDimensionLabel;
 	}
+	
+	/**
+     * Returns the collection of storage types associated with type 
+     * @hibernate.set name="storageTypeCollection" table="CATISSUE_STORAGETYPE_HOLDS_REL"
+     * cascade="none" inverse="false" lazy="false"
+     * @hibernate.collection-key column="STORAGE_TYPE_ID"
+     * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.StorageType" column="STORAGE_TYPE_HOLD_ID"
+     * @return the collection of storage types this type can hold 
+     * @see #setStorageTypeCollection(Set)
+     */
+    public Collection getStorageTypeCollection()
+    {
+        return storageTypeCollection;
+    }
+
+    /**
+     * Sets the collection of storage types of a Storage Type 
+     * @param storageTypeCollection the collection of storage types of a Storage Type 
+     * @see #getStorageTypeCollection
+     */
+    public void setStorageTypeCollection(Collection storageTypeCollection)
+    {
+        this.storageTypeCollection = storageTypeCollection;
+    }
+    
+
+
+    /**
+     * Returns the collection of Specimen Class Types associated with Storage Type 
+     * @hibernate.set name="specimenClassTypeCollection" table="CATISSUE_TYPE_SPECIMENCL_REL"
+     * cascade="none" lazy="false"
+     * @hibernate.collection-key column="STORAGE_TYPE_ID"
+     * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.SpecimenClass" column="SPECIMEN_CLASS_ID"
+     * @return the collection of Specimen Class Types of a Storage Type 
+     * @see #setSpecimenClassCollection(Set)
+     */
+    public Collection getSpecimenClassCollection()
+    {
+        return specimenClassCollection;
+    }
+
+    /**
+     * Sets the collection of specimen class types of a Storage Type 
+     * @param specimenClasseCollection the collection of specimenClassTypes of a Storage Type 
+     * @see #getSpecimenClassCollection
+     */
+    public void setSpecimenClassCollection(Collection specimenClassCollection)
+    {
+        this.specimenClassCollection = specimenClassCollection;
+    }
+
+    /**
+     * Returns the collection of Storage Containers associated with Storage Type 
+     * @hibernate.set name="storageContainerCollection" table="CATISSUE_CONTAINER_TYPE_REL"
+     * cascade="none" lazy="false"
+     * @hibernate.collection-key column="STORAGE_TYPE_ID"
+     * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.StorageContainer" column="STORAGE_CONTAINER_ID"
+     * @return the collection of StorageContainer of a Storage Type 
+     * @see #setStorageContainer(Set)
+     */
+    public Collection getStorageContainerCollection()
+    {
+        return storageContainerCollection;
+    }
+
+    /**
+     * Sets the collection of storage container of a Storage Type 
+     * @param storageContainerCollection the collection of storage container of a Storage Type 
+     * @see #getStorageContainerCollection
+     */
+    public void setStorageContainerCollection(Collection storageContainerCollection)
+    {
+        this.storageContainerCollection = storageContainerCollection;
+    }
+
+    
 
 	/**
 	 * Returns the default capacity of a storage container.
@@ -221,6 +314,42 @@ public class StorageType extends AbstractDomainObject implements Serializable
 
 	        defaultStorageCapacity.setOneDimensionCapacity(new Integer(storageTypeForm.getOneDimensionCapacity()));
 	        defaultStorageCapacity.setTwoDimensionCapacity(new Integer(storageTypeForm.getTwoDimensionCapacity()));
+	        
+	        
+	        storageTypeCollection.clear();
+        	long [] storageTypeArr = storageTypeForm.getHoldsStorageTypeIds();
+        	if(storageTypeArr!=null)
+        	{
+	        	for (int i = 0; i < storageTypeArr.length; i++)
+				{
+	        		Logger.out.debug("type Id :"+storageTypeArr[i]);
+	        		if(storageTypeArr[i]!=-1)
+	        		{
+		        		StorageType storageType = new StorageType();
+		        		storageType.setSystemIdentifier(new Long(storageTypeArr[i]));
+		        		storageTypeCollection.add(storageType);
+	        		}
+				}
+        	}
+
+        	
+        	specimenClassCollection.clear();
+        	long [] specimenClassTypeArr = storageTypeForm.getHoldsSpecimenClassTypeIds();
+        	if(specimenClassTypeArr!=null)
+        	{
+	        	for (int i = 0; i < specimenClassTypeArr.length; i++)
+				{
+	        		Logger.out.debug("type Id :"+specimenClassTypeArr[i]);
+	        		if(specimenClassTypeArr[i]!=-1)
+	        		{
+		        		SpecimenClass specimenClass = new SpecimenClass();
+		        		specimenClass.setSystemIdentifier(new Long(specimenClassTypeArr[i]));
+		        		specimenClassCollection.add(specimenClass);
+	        		}
+				}
+        	}
+
+
 	    }
 	    catch(Exception excp)
 	    {
