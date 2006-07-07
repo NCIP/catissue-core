@@ -22,8 +22,9 @@ import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.domain.SpecimenClass;
 import edu.wustl.catissuecore.domain.StorageContainer;
-import edu.wustl.catissuecore.domain.StorageContainerDetails;
+import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.actionForm.AbstractActionForm;
@@ -39,6 +40,7 @@ import edu.wustl.common.util.logger.Logger;
 public class StorageContainerForm extends AbstractActionForm
 {
 
+	private static final long serialVersionUID = 1234567890L;
 	/**
 	 * An id which refers to the type of the storage.
 	 */
@@ -48,7 +50,7 @@ public class StorageContainerForm extends AbstractActionForm
 	 * An id which refers to Parent Container of this container.
 	 */
 	private long parentContainerId;
-	
+
 	/**
 	 * Position label shown after selecting from storage container map viewer.
 	 */
@@ -92,7 +94,7 @@ public class StorageContainerForm extends AbstractActionForm
 	/** newly added by vaishali on 20th June 4.04 pm
 	 * 
 	 */
-	private String containerName="";
+	private String containerName = "";
 	/**
 	 * No. of containers.
 	 */
@@ -116,42 +118,37 @@ public class StorageContainerForm extends AbstractActionForm
 	/**
 	 * Tells whether this container is full or not.
 	 */
-	private String isFull = "False" ;
+	private String isFull = "False";
 
 	/**
 	 * Map to handle values of all the CollectionProtocol Events
 	 */
 	protected Map values = new HashMap();
-	
+
+	/** 
+	 * Positon for dimension 1
+	 */
 	private int positionDimensionOne;
 
-    private int positionDimensionTwo;
-    
+	/**
+	 * Position for dimension 2
+	 */
+	private int positionDimensionTwo;
 
 	/**
-	 * Counter that contains number of rows in the 'Add More' functionality.
+	 * collectionIds contains Ids of collection Protocols that this container can hold
 	 */
-	private int counter=1;
-	
-	
-	
+	protected long collectionIds[]=new long[] {-1};
+
 	/**
-	 * @return Returns the counter.
+	 * holdStorageTypeIds contains Ids of Storage Types that this container can hold
 	 */
-	public int getCounter()
-	{
-		return counter;
-	}
-	
+	protected long holdsStorageTypeIds[];
+
 	/**
-	 * @param counter The counter to set.
+	 * holdSpecimenClassTypeIds contains Ids of Specimen Types that this container can hold
 	 */
-	public void setCounter(int counter)
-	{
-		this.counter = counter;
-	}
-	
-    
+	protected long holdsSpecimenClassTypeIds[];
 
 	/**
 	 * No argument constructor for StorageTypeForm class 
@@ -167,94 +164,104 @@ public class StorageContainerForm extends AbstractActionForm
 	 */
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
+		Logger.out.info("----------------------1---------------------");
 		StorageContainer container = (StorageContainer) abstractDomain;
 
 		this.systemIdentifier = container.getId().longValue();
 		this.activityStatus = Utility.toString(container.getActivityStatus());
-		this.startNumber = Utility.toString(container.getNumber());
-		//added by vaishali on 20th Jube 4.30 pm
-		this.containerName=container.getName();
-		//added finish
-		isFull = Utility.initCap( Utility.toString(container.getIsFull()));
-		Logger.out.debug("isFULL />/>/> "+ isFull);
-		
+		this.containerName = container.getName();
+		isFull = Utility.initCap(Utility.toString(container.getIsFull()));
+		Logger.out.debug("isFULL />/>/> " + isFull);
+
 		this.typeId = container.getStorageType().getSystemIdentifier().longValue();
-		
-		if(container.getParentContainer() != null)
+
+		if (container.getParentContainer() != null)
 		{
 			this.parentContainerId = container.getParentContainer().getId().longValue();
 			this.checkedButton = 2;
-			this.positionInParentContainer = container.getParentContainer().getStorageType().getType() + " : " 
-							+ container.getParentContainer().getId() + " Pos(" + container.getPositionDimensionOne() + ","
-							+ container.getPositionDimensionTwo() + ")";
-			
+			this.positionInParentContainer = container.getParentContainer().getStorageType()
+					.getType()
+					+ " : "
+					+ container.getParentContainer().getId()
+					+ " Pos("
+					+ container.getPositionDimensionOne()
+					+ ","
+					+ container.getPositionDimensionTwo() + ")";
+
 			//Sri: Fix for bug #
 			this.positionDimensionOne = container.getPositionDimensionOne().intValue();
 			this.positionDimensionTwo = container.getPositionDimensionTwo().intValue();
 		}
-		
-		if(container.getSite()!= null)
+
+		if (container.getSite() != null)
 			this.siteId = container.getSite().getId().longValue();
 
-		this.defaultTemperature = Utility.toString( container.getTempratureInCentigrade());
+		this.defaultTemperature = Utility.toString(container.getTempratureInCentigrade());
 		this.oneDimensionCapacity = container.getStorageContainerCapacity()
 				.getOneDimensionCapacity().intValue();
 		this.twoDimensionCapacity = container.getStorageContainerCapacity()
 				.getTwoDimensionCapacity().intValue();
 		this.oneDimensionLabel = container.getStorageType().getOneDimensionLabel();
-		this.twoDimensionLabel = Utility.toString(container.getStorageType().getTwoDimensionLabel());
-		
-		if(container.getNoOfContainers() != null)
+		this.twoDimensionLabel = Utility
+				.toString(container.getStorageType().getTwoDimensionLabel());
+
+		if (container.getNoOfContainers() != null)
 			this.noOfContainers = container.getNoOfContainers().intValue();
-		
-		if(container.getStartNo() != null)
+
+		if (container.getStartNo() != null)
 			this.startNumber = String.valueOf(container.getStartNo().intValue());
-		
+
 		this.barcode = Utility.toString(container.getBarcode());
-		
-		Collection storageContainerDetails = container.getStorageContainerDetailsCollection();
-		
-		if(storageContainerDetails != null)
+
+		//Populating the storage type-id array
+		Collection storageTypeCollection = container.getStorageTypeCollection();
+
+		if (storageTypeCollection != null)
 		{
-			values = new HashMap();
-			
-			int i=1;
-			counter = storageContainerDetails.size();
-			
-			Iterator it = storageContainerDetails.iterator();
-			while(it.hasNext())
+			this.holdsStorageTypeIds = new long[storageTypeCollection.size()];
+			int i = 0;
+
+			Iterator it = storageTypeCollection.iterator();
+			while (it.hasNext())
 			{
-				String key1 = "StorageContainerDetails:" + i +"_parameterName";
-				String key2 = "StorageContainerDetails:" + i +"_parameterValue";
-				String key3 = "StorageContainerDetails:" + i +"_systemIdentifier";
-				
-				StorageContainerDetails containerDetails = (StorageContainerDetails)it.next();
-				
-				values.put(key1,containerDetails.getParameterName());
-				values.put(key2,containerDetails.getParameterValue());
-				values.put(key3,Utility.toString(containerDetails.getSystemIdentifier()));
-				
+				StorageType storageType = (StorageType) it.next();
+				this.holdsStorageTypeIds[i] = storageType.getSystemIdentifier().longValue();
 				i++;
 			}
 		}
-		Logger.out.debug("counter + "+counter);
-		//At least one row should be displayed in ADD MORE therefore
-		if(counter == 0)
-			counter = 1;
+
+		//Populating the specimen class type-id array
+		Collection specimenClassCollection = container.getSpecimenClassCollection();
+
+		if (specimenClassCollection != null)
+		{
+			this.holdsSpecimenClassTypeIds = new long[specimenClassCollection.size()];
+			int i = 0;
+
+			Iterator it = specimenClassCollection.iterator();
+			while (it.hasNext())
+			{
+				SpecimenClass specimenClass = (SpecimenClass) it.next();
+				this.holdsSpecimenClassTypeIds[i] = specimenClass.getSystemIdentifier()
+						.longValue();
+				i++;
+			}
+		}
+
 	}
-	
-	 public void setAllVal(Object obj)
-	 {
-     	edu.wustl.catissuecore.domainobject.StorageContainer container = (edu.wustl.catissuecore.domainobject.StorageContainer) obj;
+
+	public void setAllVal(Object obj)
+	{
+		edu.wustl.catissuecore.domainobject.StorageContainer container = (edu.wustl.catissuecore.domainobject.StorageContainer) obj;
 
 		this.systemIdentifier = container.getId().longValue();
 		this.activityStatus = Utility.toString(container.getActivityStatus());
 		this.startNumber = Utility.toString(container.getNumber());
-		
-		isFull = Utility.initCap( Utility.toString(container.getIsFull()));
-		Logger.out.debug("isFULL />/>/> "+ isFull);
-				
-		if(container.getStorageType() != null && container.getStorageType().getId() != null)
+
+		isFull = Utility.initCap(Utility.toString(container.getIsFull()));
+		Logger.out.debug("isFULL />/>/> " + isFull);
+
+		if (container.getStorageType() != null && container.getStorageType().getId() != null)
 		{
 			this.typeId = container.getStorageType().getId().longValue();
 			this.oneDimensionLabel = container.getStorageType().getOneDimensionLabel();
@@ -264,12 +271,12 @@ public class StorageContainerForm extends AbstractActionForm
 		{
 			this.typeId = -1;
 		}
-		
-		if(container.getSite() != null)
+
+		if (container.getSite() != null)
 		{
 			this.checkedButton = 1;
-			
-			if(container.getSite().getId() != null)
+
+			if (container.getSite().getId() != null)
 			{
 				this.siteId = container.getSite().getId().longValue();
 			}
@@ -280,41 +287,51 @@ public class StorageContainerForm extends AbstractActionForm
 		}
 
 		//If parent container is present & site is absent
-		if(container.getParentContainer() != null)
+		if (container.getParentContainer() != null)
 		{
 			this.checkedButton = 2;
-			
-			if(container.getParentContainer().getId() != null)
+
+			if (container.getParentContainer().getId() != null)
 			{
 				this.parentContainerId = container.getParentContainer().getId().longValue();
-				
+
 				//If both the dimensions are not null
-				if(container.getPositionDimensionOne() != null && container.getPositionDimensionTwo() != null)
+				if (container.getPositionDimensionOne() != null
+						&& container.getPositionDimensionTwo() != null)
 				{
-					this.positionInParentContainer = container.getParentContainer().getStorageType().getType() + " : " 
-									+ container.getParentContainer().getId() + " Pos(" + container.getPositionDimensionOne() + ","
-									+ container.getPositionDimensionTwo() + ")";
-		
+					this.positionInParentContainer = container.getParentContainer()
+							.getStorageType().getType()
+							+ " : "
+							+ container.getParentContainer().getId()
+							+ " Pos("
+							+ container.getPositionDimensionOne()
+							+ ","
+							+ container.getPositionDimensionTwo() + ")";
+
 					this.positionDimensionOne = container.getPositionDimensionOne().intValue();
 					this.positionDimensionTwo = container.getPositionDimensionTwo().intValue();
 				}
-				else //If any or both of the dimensions is/are null
+				else
+				//If any or both of the dimensions is/are null
 				{
-					if(container.getPositionDimensionOne() == null)
+					if (container.getPositionDimensionOne() == null)
 					{
 						this.positionDimensionOne = -1;
 					}
-					
-					if(container.getPositionDimensionTwo() == null)
+
+					if (container.getPositionDimensionTwo() == null)
 					{
 						this.positionDimensionTwo = -1;
 					}
 				}
 			}
 		}
-		else //If site is present & parent container is absent
+		else
+		//If site is present & parent container is absent
 		{
-			if(container.getSite() == null && (container.getPositionDimensionOne() != null || container.getPositionDimensionTwo() != null))
+			if (container.getSite() == null
+					&& (container.getPositionDimensionOne() != null || container
+							.getPositionDimensionTwo() != null))
 			{
 				this.checkedButton = 2;
 			}
@@ -325,66 +342,20 @@ public class StorageContainerForm extends AbstractActionForm
 		}
 
 		this.defaultTemperature = Utility.toString(container.getTempratureInCentigrade());
-		
-		if(container.getStorageContainerCapacity() != null)
+
+		if (container.getStorageContainerCapacity() != null)
 		{
 			this.oneDimensionCapacity = container.getStorageContainerCapacity()
 					.getOneDimensionCapacity().intValue();
 			this.twoDimensionCapacity = container.getStorageContainerCapacity()
 					.getTwoDimensionCapacity().intValue();
 		}
-		
+
 		this.noOfContainers = 1;
 		this.startNumber = "0";
-//				if(container.getStartNo() != null)
-//					this.startNumber = String.valueOf(container.getStartNo().intValue());
-		
 		this.barcode = Utility.toString(container.getBarcode());
-		
-		Collection storageContainerDetails = container.getStorageContainerDetailsCollection();
-		
-		if(storageContainerDetails != null)
-		{
-			values = new HashMap();
-			
-			int i=1;
-			counter = storageContainerDetails.size();
-			
-			Iterator it = storageContainerDetails.iterator();
-			while(it.hasNext())
-			{
-				String key1 = "StorageContainerDetails:" + i +"_parameterName";
-				String key2 = "StorageContainerDetails:" + i +"_parameterValue";
-				String key3 = "StorageContainerDetails:" + i +"_systemIdentifier";
-				
-				edu.wustl.catissuecore.domainobject.StorageContainerDetails containerDetails = 
-				    (edu.wustl.catissuecore.domainobject.StorageContainerDetails)it.next();
-				
-				String paramName = containerDetails.getParameterName();
-				String paramValue = containerDetails.getParameterValue();
-				
-				if(paramName == null && paramValue != null)
-				{
-					paramName = "";
-				}
-				else if(paramName != null && paramValue == null)
-				{
-					paramValue = "";
-				}
-				
-				values.put(key1,paramName);
-				values.put(key2,paramValue);
-				values.put(key3,Utility.toString(containerDetails.getId()));
-				
-				i++;
-			}
-		}
-		Logger.out.debug("counter + "+counter);
-		//At least one row should be displayed in ADD MORE therefore
-		if(counter == 0)
-			counter = 1;
-	 }
 
+	}
 
 	/**
 	 * Returns an id which refers to the type of the storage.
@@ -526,22 +497,22 @@ public class StorageContainerForm extends AbstractActionForm
 		this.parentContainerId = parentContainerId;
 	}
 
-    /**
-     * @return Returns the positionInParentContainer.
-     */
-    public String getPositionInParentContainer()
-    {
-        return positionInParentContainer;
-    }
-    
-    /**
-     * @param positionInParentContainer The positionInParentContainer to set.
-     */
-    public void setPositionInParentContainer(String positionInParentContainer)
-    {
-        this.positionInParentContainer = positionInParentContainer;
-    }
-    
+	/**
+	 * @return Returns the positionInParentContainer.
+	 */
+	public String getPositionInParentContainer()
+	{
+		return positionInParentContainer;
+	}
+
+	/**
+	 * @param positionInParentContainer The positionInParentContainer to set.
+	 */
+	public void setPositionInParentContainer(String positionInParentContainer)
+	{
+		this.positionInParentContainer = positionInParentContainer;
+	}
+
 	/**
 	 * Returns an id which refers to the site of the container if it is parent container.
 	 * @return long An id which refers to the site of the container if it is parent container.
@@ -570,152 +541,13 @@ public class StorageContainerForm extends AbstractActionForm
 		return Constants.STORAGE_CONTAINER_FORM_ID;
 	}
 
-	
-
 	/**
 	 * Resets the values of all the fields.
 	 * Is called by the overridden reset method defined in ActionForm.  
 	 * */
 	protected void reset()
 	{
-	    
-	}
 
-	/**
-	 * Overrides the validate method of ActionForm.
-	 * */
-	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
-	{
-		ActionErrors errors = new ActionErrors();
-		Validator validator = new Validator();
-
-		try
-		{
-			if (this.typeId == -1)
-			{
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
-						ApplicationProperties.getValue("storageContainer.type")));
-			}
-			
-//			if(operation.equalsIgnoreCase(Constants.EDIT   ) )
-//			{
-				if(!validator.isValidOption(isFull) )
-				{
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",
-							ApplicationProperties.getValue("storageContainer.isContainerFull")));
-				}
-//			}
-			
-			if (checkedButton == 1 && siteId == -1)
-			{
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
-						ApplicationProperties.getValue("storageContainer.site")));
-			}
-			else if (checkedButton == 2)
-			{
-                if(!validator.isNumeric(String.valueOf(positionDimensionOne),1) || !validator.isNumeric(String.valueOf(positionDimensionTwo),1) || !validator.isNumeric(String.valueOf(parentContainerId),1))
-                {
-	                  errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-	                  "errors.item.format", ApplicationProperties
-	                          .getValue("storageContainer.parentContainer")));
-                }
-			}
-
-			checkValidNumber(String.valueOf(noOfContainers), "storageContainer.noOfContainers",
-					errors, validator);
-			
-			if(operation.equals(Constants.EDIT) && !validator.isValidOption(activityStatus))
-            {
-            	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("site.activityStatus")));
-            }
-			
-            // validations for temperature
-            if (!validator.isEmpty(defaultTemperature ) && (!validator.isDouble(defaultTemperature,false)))
-            {
-            	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("storageContainer.temperature")));
-            }
-			
-            //VALIDATIONS FOR DIMENSION 1.
-            if (validator.isEmpty(String.valueOf(oneDimensionCapacity)))
-            {
-            	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("storageContainer.oneDimension")));
-            }
-            else
-            {
-            	if(!validator.isNumeric(String.valueOf(oneDimensionCapacity)))
-            	{
-            		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("storageContainer.oneDimension")));
-            	}
-            }
-
-            //Validations for dimension 2
-            if (!validator.isEmpty(String.valueOf(twoDimensionCapacity)) && (!validator.isNumeric(String.valueOf(twoDimensionCapacity))))
-            {
-            	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("storageContainer.twoDimension")));
-            }
-			
-			//Validations for External Identifier Add-More Block.
-            String className = "StorageContainerDetails:";
-            String key1 = "_parameterName";
-            String key2 = "_parameterValue";
-            String key3 = "_systemIdentifier";
-            int index = 1;
-            boolean isError = false;
-            
-            while(true)
-            {
-            	String keyOne = className + index + key1;
-				String keyTwo = className + index + key2;
-				String keyThree = className + index + key3;
-				
-            	String value1 = (String)values.get(keyOne);
-            	String value2 = (String)values.get(keyTwo);
-            	String value3 = (String)values.get(keyThree);
-            	
-            	value1 = (value1==null ? null : value1.trim());
-            	value2 = (value2==null ? null : value2.trim());
-            	value3 = (value3==null ? null : value3.trim());
-            	
-            	if(value1 == null || value2 == null || value3 == null)
-            	{
-            		break;
-            	}
-            	else if(value1.equals("") && value2.equals("") && value3.equals(""))
-            	{
-            		values.remove(keyOne);
-            		values.remove(keyTwo);
-            		values.remove(keyThree);
-            	}
-            	else if((!value1.equals("") && value2.equals("")) || (value1.equals("") && !value2.equals("")))
-            	{
-            		isError = true;
-            		break;
-            	}
-            	index++;
-            }
-            
-            if(isError)
-            {
-            	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.storageContainer.containerDetails.missing",ApplicationProperties.getValue("storageContainer.msg")));
-            }
-            
-
-			//            	if (validator.isEmpty(String.valueOf(noOfContainers)))
-			//                {
-			//                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("storageContainer.noOfContainers")));
-			//                }
-			//                
-			//                if (validator.isEmpty(String.valueOf(startNumber)))
-			//                {
-			//                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("storageContainer.startNumber")));
-			//                }
-		}
-		catch (Exception excp)
-		{
-			System.out.println("\n\n*******Error*********\n\n");
-			Logger.out.error(excp.getMessage(),excp);
-		}
-		return errors;
 	}
 
 	/**
@@ -813,19 +645,25 @@ public class StorageContainerForm extends AbstractActionForm
 	{
 		this.isFull = isFull;
 	}
-	
-	/* added by vaishali on 20th June 2006 4.32 pm
-	 * 
+
+	/**
+	 * Gets the Container Name
+	 * @return container Name
 	 */
 	public String getContainerName()
 	{
 		return this.containerName;
 	}
+
+	/**
+	 * sets the name of the container
+	 * @param containerName container Name to set
+	 */
 	public void setContainerName(String containerName)
 	{
-		this.containerName=containerName;
+		this.containerName = containerName;
 	}
-	/* added finish */
+
 	/**
 	 * Associates the specified object with the specified key in the map.
 	 * @param key the key to which the object is mapped.
@@ -872,49 +710,199 @@ public class StorageContainerForm extends AbstractActionForm
 	{
 		return this.values;
 	}
-    /**
-     * @return Returns the positionDimensionOne.
-     */
-    public int getPositionDimensionOne()
-    {
-        return positionDimensionOne;
-    }
-    /**
-     * @param positionDimensionOne The positionDimensionOne to set.
-     */
-    public void setPositionDimensionOne(int positionDimensionOne)
-    {
-        this.positionDimensionOne = positionDimensionOne;
-    }
-    /**
-     * @return Returns the positionDimensionTwo.
-     */
-    public int getPositionDimensionTwo()
-    {
-        return positionDimensionTwo;
-    }
-    /**
-     * @param positionDimensionTwo The positionDimensionTwo to set.
-     */
-    public void setPositionDimensionTwo(int positionDimensionTwo)
-    {
-        this.positionDimensionTwo = positionDimensionTwo;
-    }
-    
-    /**
-     * This method sets Identifier of Objects inserted by AddNew activity in Form-Bean which initialized AddNew action
-     * @param formBeanId - FormBean ID of the object inserted
-     *  @param addObjectIdentifier - Identifier of the Object inserted 
-     */
-    public void setAddNewObjectIdentifier(String addNewFor, Long addObjectIdentifier)
-    {
-        if(addNewFor.equals("storageType"))
-        {
-            setTypeId(addObjectIdentifier.longValue());
-        }
-        else if(addNewFor.equals("site"))
-        {
-            setSiteId(addObjectIdentifier.longValue());
-        }
-    }
+
+	/**
+	 * @return Returns the positionDimensionOne.
+	 */
+	public int getPositionDimensionOne()
+	{
+		return positionDimensionOne;
+	}
+
+	/**
+	 * @param positionDimensionOne The positionDimensionOne to set.
+	 */
+	public void setPositionDimensionOne(int positionDimensionOne)
+	{
+		this.positionDimensionOne = positionDimensionOne;
+	}
+
+	/**
+	 * @return Returns the positionDimensionTwo.
+	 */
+	public int getPositionDimensionTwo()
+	{
+		return positionDimensionTwo;
+	}
+
+	/**
+	 * @param positionDimensionTwo The positionDimensionTwo to set.
+	 */
+	public void setPositionDimensionTwo(int positionDimensionTwo)
+	{
+		this.positionDimensionTwo = positionDimensionTwo;
+	}
+
+	/**
+	 * getitng collection Ids that this container can hold
+	 * @return collection Id's array
+	 */
+	public long[] getCollectionIds()
+	{
+		return this.collectionIds;
+	}
+
+	/**
+	 * setitng the Collection Id array
+	 * @param collectionIds - array of collection Ids to set
+	 */
+	public void setCollectionIds(long[] collectionIds)
+	{
+		this.collectionIds = collectionIds;
+	}
+
+	/**
+	 * getting Specimen class Type Ids that this container can hold 
+	 * @return specimenClassType Id's array
+	 */
+	public long[] getHoldsSpecimenClassTypeIds()
+	{
+		return holdsSpecimenClassTypeIds;
+	}
+
+	/**
+	 * setitng the SpecimenClassType Id array
+	 * @param holdsSpecimenClassTypeIds - array of SpecimenClassType Id's to set
+	 */
+	public void setHoldsSpecimenClassTypeIds(long[] holdsSpecimenClassTypeIds)
+	{
+		this.holdsSpecimenClassTypeIds = holdsSpecimenClassTypeIds;
+	}
+
+	/**
+	 * getitng StorageType Id's that this container can hold
+	 * @return StorageType Id' array
+	 */
+	public long[] getHoldsStorageTypeIds()
+	{
+		return holdsStorageTypeIds;
+	}
+
+	/**
+	 * setting the StorageType Id array
+	 * @param holdsStorageTypeIds - array of StorageType id's to set
+	 */
+	public void setHoldsStorageTypeIds(long[] holdsStorageTypeIds)
+	{
+		this.holdsStorageTypeIds = holdsStorageTypeIds;
+	}
+
+	/**
+	 * This method sets Identifier of Objects inserted by AddNew activity in Form-Bean which initialized AddNew action
+	 * @param formBeanId - FormBean ID of the object inserted
+	 *  @param addObjectIdentifier - Identifier of the Object inserted 
+	 */
+	public void setAddNewObjectIdentifier(String addNewFor, Long addObjectIdentifier)
+	{
+		if (addNewFor.equals("storageType"))
+		{
+			setTypeId(addObjectIdentifier.longValue());
+		}
+		else if (addNewFor.equals("site"))
+		{
+			setSiteId(addObjectIdentifier.longValue());
+		}
+	}
+
+	/**
+	 * Overrides the validate method of ActionForm.
+	 * */
+	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
+	{
+		ActionErrors errors = new ActionErrors();
+		Validator validator = new Validator();
+
+		try
+		{
+			if (this.typeId == -1)
+			{
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
+						ApplicationProperties.getValue("storageContainer.type")));
+			}
+			if (!validator.isValidOption(isFull))
+			{
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",
+						ApplicationProperties.getValue("storageContainer.isContainerFull")));
+			}
+
+			if (checkedButton == 1 && siteId == -1)
+			{
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
+						ApplicationProperties.getValue("storageContainer.site")));
+			}
+			else if (checkedButton == 2)
+			{
+				if (!validator.isNumeric(String.valueOf(positionDimensionOne), 1)
+						|| !validator.isNumeric(String.valueOf(positionDimensionTwo), 1)
+						|| !validator.isNumeric(String.valueOf(parentContainerId), 1))
+				{
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
+							ApplicationProperties.getValue("storageContainer.parentContainer")));
+				}
+			}
+
+			checkValidNumber(String.valueOf(noOfContainers), "storageContainer.noOfContainers",
+					errors, validator);
+
+			if (operation.equals(Constants.EDIT) && !validator.isValidOption(activityStatus))
+			{
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
+						ApplicationProperties.getValue("site.activityStatus")));
+			}
+			//validations for Container name
+			if (validator.isEmpty(containerName))
+			{
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
+						ApplicationProperties.getValue("storageContainer.name")));
+			}
+			// validations for temperature
+			if (!validator.isEmpty(defaultTemperature)
+					&& (!validator.isDouble(defaultTemperature, false)))
+			{
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
+						ApplicationProperties.getValue("storageContainer.temperature")));
+			}
+
+			//VALIDATIONS FOR DIMENSION 1.
+			if (validator.isEmpty(String.valueOf(oneDimensionCapacity)))
+			{
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
+						ApplicationProperties.getValue("storageContainer.oneDimension")));
+			}
+			else
+			{
+				if (!validator.isNumeric(String.valueOf(oneDimensionCapacity)))
+				{
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
+							ApplicationProperties.getValue("storageContainer.oneDimension")));
+				}
+			}
+
+			//Validations for dimension 2
+			if (!validator.isEmpty(String.valueOf(twoDimensionCapacity))
+					&& (!validator.isNumeric(String.valueOf(twoDimensionCapacity))))
+			{
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
+						ApplicationProperties.getValue("storageContainer.twoDimension")));
+			}
+
+		}
+		catch (Exception excp)
+		{
+			System.out.println("\n\n*******Error*********\n\n");
+			Logger.out.error(excp.getMessage(), excp);
+		}
+		return errors;
+	}
+
 }

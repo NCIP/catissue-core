@@ -11,12 +11,16 @@
 
 package edu.wustl.catissuecore.actionForm;
 
+import java.util.Collection;
+import java.util.Iterator;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.domain.SpecimenClass;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
@@ -32,7 +36,7 @@ import edu.wustl.common.util.logger.Logger;
  * */
 public class StorageTypeForm extends AbstractActionForm
 {
-    
+	private static final long serialVersionUID = 1234567890L;
     /**
      * A string containing the type of the storage.
      */
@@ -64,6 +68,16 @@ public class StorageTypeForm extends AbstractActionForm
     private String twoDimensionLabel = null;
     
     /**
+     * List of storage types Ids  that Storage Type can hold
+     */
+    private long holdsStorageTypeIds[];
+    
+    /**
+     * List of Specimen Types that Storage Type can hold
+     */
+    private long holdsSpecimenClassTypeIds[];
+    
+    /**
      * No argument constructor for StorageTypeForm class 
      */
     public StorageTypeForm()
@@ -78,6 +92,7 @@ public class StorageTypeForm extends AbstractActionForm
     public void setAllValues(AbstractDomainObject abstractDomain)
     {
         StorageType storageType = (StorageType) abstractDomain;
+        Logger.out.info("in storege type form :"+storageType.getSpecimenClassCollection().size());
         this.systemIdentifier = storageType.getId().longValue();
         this.type = storageType.getType();
         this.defaultTemperature = Utility.toString( storageType.getDefaultTempratureInCentigrade());
@@ -85,6 +100,38 @@ public class StorageTypeForm extends AbstractActionForm
         this.twoDimensionCapacity = storageType.getDefaultStorageCapacity().getTwoDimensionCapacity().intValue();
         this.oneDimensionLabel = storageType.getOneDimensionLabel();
         this.twoDimensionLabel = storageType.getTwoDimensionLabel();
+//      Populating the storage type-id array
+		Collection storageTypeCollection = storageType.getStorageTypeCollection();
+		
+		if(storageTypeCollection != null)
+		{
+			holdsStorageTypeIds = new long[storageTypeCollection.size()];
+			int i=0;
+
+			Iterator it = storageTypeCollection.iterator();
+			while(it.hasNext())
+			{
+				StorageType holdStorageType = (StorageType)it.next();
+				holdsStorageTypeIds[i] = holdStorageType.getSystemIdentifier().longValue();
+				i++;
+			}
+		}
+//      Populating the specimen class type-id array
+		Collection specimenClassTypeCollection = storageType.getSpecimenClassCollection();
+		
+		if(specimenClassTypeCollection != null)
+		{
+			holdsSpecimenClassTypeIds = new long[specimenClassTypeCollection.size()];
+			int i=0;
+
+			Iterator it = specimenClassTypeCollection.iterator();
+			while(it.hasNext())
+			{
+				SpecimenClass specimenClass = (SpecimenClass)it.next();
+				holdsSpecimenClassTypeIds[i] = specimenClass.getSystemIdentifier().longValue();
+				i++;
+			}
+		}
     }
 
     public void setAllVal(Object obj)
@@ -231,14 +278,52 @@ public class StorageTypeForm extends AbstractActionForm
     }
 
     /**
+     * Returns the list of storage type Ids that this Storage Type can hold.
+     * @return long[] the list of storage type Ids.
+     * @see #getHoldsStorageTypeList(long[])
+     */
+    public long[] getHoldsStorageTypeIds()
+	{
+		return holdsStorageTypeIds;
+	}
+
+    /**
+     * Sets the Storage Type Holds List.
+     * @param holdStorageTypeList the list of storage type Ids to be set.
+     * @see #getHoldsStorageTypeList()
+     */
+	public void setHoldsStorageTypeIds(long[] holdsStorageTypeIds)
+	{
+		this.holdsStorageTypeIds = holdsStorageTypeIds;
+	}
+    
+    /**
+     * Returns the list of specimen class type Ids that this Storage Type can hold.
+     * @return long[] the list of specimen class type Ids.
+     * @see #getHoldsSpecimenClassList(long[])
+     */
+    public long[] getHoldsSpecimenClassTypeIds()
+	{
+		return holdsSpecimenClassTypeIds;
+	}
+
+    /**
+     * Sets the Specimen Class torage Type Holds List.
+     * @param holdSpecimenClassTypeList the list of specimen class type Ids to be set.
+     * @see #getHoldsSpecimenClassList()
+     */
+	public void setHoldsSpecimenClassTypeIds(long[] holdsSpecimenClassTypeIds)
+	{
+		this.holdsSpecimenClassTypeIds = holdsSpecimenClassTypeIds;
+	}
+
+	/**
      * Returns the id assigned to form bean
      */
     public int getFormId()
     {
         return Constants.STORAGE_TYPE_FORM_ID;
     }
-    
-  
     
     /**
      * Resets the values of all the fields.
@@ -325,4 +410,9 @@ public class StorageTypeForm extends AbstractActionForm
         }
         return errors;
      }
+
+	
+	
+	
+	
 }
