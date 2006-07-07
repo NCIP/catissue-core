@@ -169,13 +169,18 @@ public class ConditionMapParser
 			//Remove the or symbol if a sibling is deleted
 			int childCount = parent.getChildCount();
 			Logger.out.debug("child count after delete"+childCount);
-			if(childCount==1)
+			/* setDefaultAndOr attribute to 'false' and OperationWithChildCondition to 'Or' 
+			 * so that the 'or' or 'pand' symbol is removed when a node is deleted and the number of children 
+			 * of the parent of the deleted node is lesser than two.
+			 */ 
+			if(childCount<2 && parent.isRoot()==false)
 			{
 				AdvancedConditionsNode parentNode = (AdvancedConditionsNode)parent.getUserObject();
-				Logger.out.debug("reset all siblings"+parentNode.getOperationWithChildCondition().getOperator());
+				//Logger.out.debug("reset all siblings"+parentNode.getOperationWithChildCondition().getOperator());
 				DefaultMutableTreeNode childNode=(DefaultMutableTreeNode)parent.getFirstChild();
 				AdvancedConditionsNode child = (AdvancedConditionsNode)childNode.getUserObject();
 				parentNode.setDefaultAndOr(false);
+				parentNode.setOperationWithChildCondition(new Operator(Operator.OR));
 			}
 			i++;
     	}
@@ -294,6 +299,7 @@ public class ConditionMapParser
      */
 	public static Map parseEventParameterMap(Map eventMap)
 	{
+		Logger.out.debug("Map of the events:"+eventMap);
 		Map newMap = new HashMap();
 		
 		if(eventMap != null)
