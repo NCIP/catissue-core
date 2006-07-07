@@ -43,10 +43,12 @@
 		<mapping resource="edu/wustl/catissuecore/hbm/StorageType.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/User.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/Distribution.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/SpecimenClass.hbm.xml"/>
 		<mapping resource="edu/wustl/common/hbm/CDEImpl.hbm.xml"/>
 		<mapping resource="edu/wustl/common/hbm/PermissibleValueImpl.hbm.xml"/>
 		<mapping resource="edu/wustl/common/hbm/QueryColumnData.hbm.xml"/>
 		<mapping resource="edu/wustl/common/hbm/QueryTableData.hbm.xml"/>
+
     </session-factory>
     
 </hibernate-configuration>
