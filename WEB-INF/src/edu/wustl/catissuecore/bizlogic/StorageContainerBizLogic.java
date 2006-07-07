@@ -755,6 +755,62 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 	}
 
 	/* created finish */
+	
+	public int getNextContainerNumber(long parentID, long typeID,
+            boolean isInSite) throws DAOException
+    {
+        String sourceObjectName = "CATISSUE_STORAGE_CONTAINER";
+        String[] selectColumnName = {"max(CONTAINER_NUMBER) as MAX_NAME"};
+        String[] whereColumnName = {"STORAGE_TYPE_ID", "PARENT_CONTAINER_ID"};
+        String[] whereColumnCondition = {"=", "="};
+        Object[] whereColumnValue = {Long.toString(typeID),
+                Long.toString(parentID)};
+ 
+        if (isInSite)
+        {
+            whereColumnName = new String[3];
+            whereColumnName[0] = "STORAGE_TYPE_ID";
+            whereColumnName[1] = "SITE_ID";
+            whereColumnName[2] = "PARENT_CONTAINER_ID";
+ 
+            whereColumnValue = new Object[3];
+            whereColumnValue[0] = Long.toString(typeID);
+            whereColumnValue[1] = Long.toString(parentID);
+            whereColumnValue[2] = "null";
+ 
+            whereColumnCondition = new String[3];
+            whereColumnCondition[0] = "=";
+            whereColumnCondition[1] = "=";
+            whereColumnCondition[2] = "is";
+        }
+        String joinCondition = Constants.AND_JOIN_CONDITION;
+ 
+        AbstractDAO dao = DAOFactory.getDAO(Constants.JDBC_DAO);
+ 
+        dao.openSession(null);
+ 
+        List list = dao.retrieve(sourceObjectName, selectColumnName,
+                whereColumnName, whereColumnCondition, whereColumnValue,
+                joinCondition);
+ 
+        dao.closeSession();
+ 
+        if (!list.isEmpty())
+        {
+            List columnList = (List) list.get(0);
+            if (!columnList.isEmpty())
+            {
+                String str = (String) columnList.get(0);
+                if (!str.equals(""))
+                {
+                    int no = Integer.parseInt(str);
+                    return no + 1;
+                }
+            }
+        }
+ 
+        return 1;
+    }
 
 	//    private Map createMap(List resultSet, Map containerMap)
 	//    {
