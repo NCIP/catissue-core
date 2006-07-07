@@ -854,6 +854,18 @@ public class StorageContainerForm extends AbstractActionForm
 			checkValidNumber(String.valueOf(noOfContainers), "storageContainer.noOfContainers",
 					errors, validator);
 
+			if(collectionIds.length>1)
+			{
+				for(int i=0;i<collectionIds.length;i++)
+				{
+					if(collectionIds[i]==-1)
+					{
+						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
+								ApplicationProperties.getValue("storageContainer.collectionProtocolTitle")));
+					}
+					
+				}
+			}
 			if (operation.equals(Constants.EDIT) && !validator.isValidOption(activityStatus))
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
@@ -903,6 +915,10 @@ public class StorageContainerForm extends AbstractActionForm
 			Logger.out.error(excp.getMessage(), excp);
 		}
 		return errors;
+	}
+	void checkCollectionProtocol(long[] collectionIds,String message)
+	{
+		
 	}
 
 }
