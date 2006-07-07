@@ -26,7 +26,7 @@
         }
 	
 		Object obj = request.getAttribute("storageContainerForm");
-		int noOfRows=1;
+
 		Map map = null;
 		String label1 = null;
 		String label2 = null;
@@ -35,7 +35,6 @@
 		{
 			StorageContainerForm form = (StorageContainerForm)obj;
 			map = form.getValues();
-			noOfRows = form.getCounter();
 
 			label1 = form.getOneDimensionLabel();
 			label2 = form.getTwoDimensionLabel();
@@ -120,6 +119,12 @@
 		function onContainerChange(element)
 		{
 		}
+		function disableHoldsList2()
+		{
+		alert("hi");
+		document.forms[0].holdsSpecimenClassTypeIds.disabled=true;
+		}
+		
 
 		function onNameClick(element)
 		{
@@ -507,7 +512,7 @@ function insRow(subdivtag)
 						</td>
 						<td class="formField" colspan="2">
 <!-- Mandar : 434 : for tooltip -->
-							<html:select property="typeId" styleClass="formFieldSized" styleId="typeId" size="4"
+							<html:select property="collectionIds" styleClass="formFieldSized" styleId="typeId" size="4"
 							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" multiple="true" >
 								<html:options collection="<%=Constants.PROTOCOL_LIST%>" labelProperty="name" property="value"/>
 							</html:select>
@@ -523,16 +528,21 @@ function insRow(subdivtag)
 							</label>
 						</td>
 						<td class="formField" colspan="2">
-
-							<html:select property="typeId" styleClass="formFieldSized" styleId="typeId" size="4" multiple="true"
+							<html:select property="holdsStorageTypeIds" styleClass="formFieldVerySmallSized" styleId="typeId" size="4" multiple="true"
 							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-								<html:options collection="<%=Constants.HOLDS_LIST%>" labelProperty="name" property="value"/>
+								<html:options collection="<%=Constants.HOLDS_LIST1%>" labelProperty="name" property="value"/>
 							</html:select>
 							&nbsp;
+							<html:select property="holdsSpecimenClassTypeIds" styleClass="formFieldVerySmallSized" styleId="typeId" size="4" multiple="true"
+							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+								<html:options collection="<%=Constants.HOLDS_LIST2%>" labelProperty="name" property="value"/>
+							</html:select>
+							&nbsp;	
+							
 						</td>
 					</tr>
 					
-					<!-- added finish -->
+
 					<tr>
 						<td class="formTitle" colspan="5">
 							<label for="capacity">
@@ -568,118 +578,6 @@ function insRow(subdivtag)
 							<html:text styleClass="formFieldSized10" maxlength="10"  size="30" styleId="twoDimensionCapacity" property="twoDimensionCapacity"/>
 						</td>
 					</tr>
-						<!-- vaishali's comment '
-					<tr>
-						<td class="formTitle" colspan="5" nowrap>
-							<label for="details">
-								<bean:message key="storageContainer.details" />
-							</label>
-						</td>
-					<td class="formTitle" align="Right">
-						<html:button property="addKeyValue" styleClass="actionButton" onclick="insRow('addMore')">
-						<bean:message key="buttons.addMore"/>
-						</html:button>
-						<html:hidden property="counter"/>
-						</td>
-						<td class="formTitle" align="Right">
-							<html:button property="deleteValue" styleClass="actionButton" onclick="deleteChecked('addMore','StorageContainer.do?operation=<%=operation%>&pageOf=pageOfStorageContainer&status=true',document.forms[0].counter,'chk_',false,document.forms[0].deleteValue)"  disabled="true">
-								<bean:message key="buttons.delete"/>
-							</html:button>
-						</td> vaishali's comment end'
-					</tr>-->
-					<!-- vaishali's coment				
-					<tr>
-						<td class="formLeftSubTableTitle" width="5">#</td>
-						<td class="formRightSubTableTitle" colspan="2">
-							<label for="key">
-								<bean:message key="storageContainer.key" />
-							</label>
-						</td>
-						<td class="formRightSubTableTitle">
-							<label for="value">
-								<bean:message key="storageContainer.value" />
-							</label>
-						</td>
-						<td class="formRightSubTableTitle">
-							<label for="delete" align="center">
-								<bean:message key="addMore.delete" />
-							</label>
-						</td>
-					</tr> vaishali's comment end'-->
-					<!-- vaishali's comment'
-					<tbody id="addMore">
-						<%
-						
-							for(int rowCount=noOfRows;rowCount>=1;rowCount--)
-							{
-								String keyName = "value(StorageContainerDetails:" + rowCount +"_parameterName)";
-								String valueName = "value(StorageContainerDetails:" + rowCount +"_parameterValue)";
-								String identifier = "value(StorageContainerDetails:" + rowCount +"_systemIdentifier)";
-								String check = "chk_"+rowCount;
-						%>
-					<tr>
-						<td class="formSerialNumberField" width="5"><%=rowCount%>.
-							<html:hidden property="<%=identifier%>" />
-						</td>
-						<td class="formField" colspan="2">
-							<html:text styleClass="formFieldSized10" maxlength="50"  size="30" styleId="<%=keyName%>" property="<%=keyName%>"/>
-						</td>
-						<td class="formField">
-							<html:text styleClass="formFieldSized10" maxlength="50"  size="30" styleId="<%=valueName%>" property="<%=valueName%>"/>
-						</td>
-						<%
-							String key = "StorageContainerDetails:" + rowCount +"_systemIdentifier";
-							boolean bool = Utility.isPersistedValue(map,key);
-							String condition = "";
-							if(bool)
-								condition = "disabled='disabled'";
-
-						%>
-						<td class="formField" width="5">
-							<input type=checkbox name="<%=check %>" id="<%=check %>" <%=condition%> onClick="enableButton(document.forms[0].deleteValue,document.forms[0].counter,'chk_')">		
-						</td>
-						
-					</tr>
-						<%
-							} // for
-						%>
-
-					</tbody> vaishali's comment end-->
-				<%--	</logic:equal> --%>
-				<!--	<tr>
-						<td class="formRequiredNotice" width="5">&nbsp;</td>
-						<td class="formLabel" colspan="2">
-							<label for="collection_protocol_id">
-								<bean:message key="storageContainer.collectionProtocolTitle" />
-							</label>
-						</td>
-						<td class="formField" colspan="2">
-
-							<html:select property="typeId" styleClass="formFieldSized" styleId="typeId" size="4"
-							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" multiple="true">
-								<%-- html:options name="storageTypeIdList" labelName="storageTypeList" /--%>
-								<html:options collection="<%=Constants.PROTOCOL_LIST%>" labelProperty="name" property="value"/>
-							</html:select>
-							&nbsp;
-						</td>
-					</tr>
-					<tr>
-						<td class="formRequiredNotice" width="5">&nbsp;</td>
-						<td class="formLabel" colspan="2">
-							<label for="holds">
-								<bean:message key="storageContainer.holds" />
-							</label>
-						</td>
-						<td class="formField" colspan="2">
-
-							<html:select property="typeId" styleClass="formFieldSized" styleId="typeId" size="4" multiple="true"
-							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-								<html:options collection="<%=Constants.HOLDS_LIST%>" labelProperty="name" property="value"/>
-							</html:select>
-							&nbsp;
-						</td>
-					</tr>-->
-				
 				</table>
 				
 				<table summary="" cellpadding="3" cellspacing="0" border="0" width="500">	

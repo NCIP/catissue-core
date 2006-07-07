@@ -148,12 +148,17 @@
 					<bean:message key="storageType.holds"/>
 				</label>
 			</td>
-			<td class="formField">
-				<html:select property="oneDimensionLabel" styleClass="formFieldSized" styleId="typeId" size="4" multiple="true"
+			<td class="formField" nowrap>
+				<html:select property="holdsStorageTypeIds" styleClass="formFieldVerySmallSized" styleId="typeId" size="4" multiple="true"
 							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-				<html:options collection="<%=Constants.HOLDS_LIST%>" labelProperty="name" property="value"/>
+				<html:options collection="<%=Constants.HOLDS_LIST1%>" labelProperty="name" property="value"/>
 				</html:select>
 							&nbsp;
+				<html:select property="holdsSpecimenClassTypeIds" styleClass="formFieldVerySmallSized" styleId="typeId" size="4" multiple="true"
+							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+				<html:options collection="<%=Constants.HOLDS_LIST2%>" labelProperty="name" property="value"/>
+				</html:select>
+							
 			</td>
 		</tr>
 		<!-- added finish -->
