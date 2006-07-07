@@ -13,7 +13,6 @@ package edu.wustl.catissuecore.action;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,14 +23,12 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.StorageTypeBizLogic;
+import edu.wustl.catissuecore.domain.SpecimenClass;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.beans.NameValueBean;
-import edu.wustl.common.cde.CDE;
-import edu.wustl.common.cde.CDEManager;
-import edu.wustl.common.cde.PermissibleValue;
 import edu.wustl.common.util.logger.Logger;
 
 public class StorageTypeAction  extends SecureAction
@@ -44,47 +41,26 @@ public class StorageTypeAction  extends SecureAction
             HttpServletRequest request, HttpServletResponse response)
             throws Exception
     {
-    	
-    	/* added by vaishali on 22nd June 10.10 am */
+    	//StorageTypeForm storageTypeForm=(StorageTypeForm)form;
     	StorageTypeBizLogic bizLogic = (StorageTypeBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_TYPE_FORM_ID);
-    	/* added finish */
         //Gets the value of the operation parameter.
         String operation = request.getParameter(Constants.OPERATION);
         
         //Sets the operation attribute to be used in the Add/Edit Institute Page. 
         request.setAttribute(Constants.OPERATION, operation);
-        /* added by vaishali on 21 st June 06 6.07 pm */
-        //Setting the specimen class list
-		CDE specimenClassCDE = CDEManager.getCDEManager().getCDE(Constants.CDE_NAME_SPECIMEN_CLASS);
-    	Set setPV = specimenClassCDE.getPermissibleValues();
+ 
+        //Gets the Storage Type List and sets it in request 
+        List list1=bizLogic.retrieve(StorageType.class.getName());
+    	List storageTypeList=getStorageTypeList(list1);
+    	request.setAttribute(Constants.HOLDS_LIST1, storageTypeList);
     	
-    	
-    	List holdsList=new ArrayList();
-    	holdsList.add(new NameValueBean("-- Any --","-1"));
-    	
-    	List list=bizLogic.retrieve(StorageType.class.getName());
-    	Logger.out.debug("Type List Size:"+list.size());
-    	Iterator typeItr=list.iterator();
-    	while(typeItr.hasNext())
-    	{
-    		StorageType type=(StorageType)typeItr.next();
-    		holdsList.add(new NameValueBean(type.getType(),type.getSystemIdentifier()));
-    	}
-    	holdsList.add(new NameValueBean("Any Specimen","-1"));
-    	Iterator itr = setPV.iterator();
-        while(itr.hasNext())
-    	{
-    		Object obj = itr.next();
-    		PermissibleValue pv = (PermissibleValue)obj;
-    		String tmpStr = pv.getValue()+" Specimen";
-    		Logger.out.debug(" Specimen value-------------"+tmpStr);
-    		holdsList.add(new NameValueBean( tmpStr,tmpStr));
-    		
-    	}	
-    	request.setAttribute(Constants.HOLDS_LIST, holdsList);
-        /* added finish */
+    	//Gets the Specimen Class Type List and sets it in request
+    	List list2=bizLogic.retrieve(SpecimenClass.class.getName());
+        List specimenClassTypeList = getSpecimenClassTypeList(list2);
+	  	request.setAttribute(Constants.HOLDS_LIST2, specimenClassTypeList);
         
-        // ------------- add new
+	  	
+	    // ------------- add new
         String reqPath = request.getParameter(Constants.REQ_PATH);
 		request.setAttribute(Constants.REQ_PATH, reqPath);
 		
@@ -94,9 +70,42 @@ public class StorageTypeAction  extends SecureAction
         
         Logger.out.debug("StorageTypeAction redirect :---------- "+ reqPath  );
         
-        
-        
-        
         return mapping.findForward((String)request.getParameter(Constants.PAGEOF));
+    }
+    
+    /* this Function gets the list of all storage types as argument and  
+     * create a list in which nameValueBean is stored with Type and Identifier of storage type.
+     * and returns this list
+     */ 
+    private List getStorageTypeList(List list)
+    {
+    	List storageTypeList=new ArrayList();
+    	storageTypeList.add(new NameValueBean("-- Any --","-1"));
+    	
+    	Iterator typeItr=list.iterator();
+    	while(typeItr.hasNext())
+    	{
+    		StorageType type=(StorageType)typeItr.next();
+    		storageTypeList.add(new NameValueBean(type.getType(),type.getSystemIdentifier()));
+    	}
+    	return storageTypeList;
+    }
+    /* this Function gets the list of all Specimen Class Types as argument and  
+     * create a list in which nameValueBean is stored with Name and Identifier of specimen Class Type.
+     * and returns this list
+     */
+    private List getSpecimenClassTypeList(List list)
+    {
+    	List specimenClassTypeList=new ArrayList();
+    	specimenClassTypeList.add(new NameValueBean("-- Any Specimen--","-1"));
+    	
+    	Iterator specimentypeItr=list.iterator();
+    	while(specimentypeItr.hasNext())
+    	{
+    		SpecimenClass specimenClass=(SpecimenClass)specimentypeItr.next();
+    		specimenClassTypeList.add(new NameValueBean(specimenClass.getName(),specimenClass.getSystemIdentifier()));
+    	}
+    	return specimenClassTypeList;
+    	
     }
 }
