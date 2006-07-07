@@ -25,11 +25,11 @@
         </id>
 
         <property
-            name="number"
-            type="int"
+            name="name"
+            type="string"
             update="true"
             insert="true"
-            column="CONTAINER_NUMBER"
+            column="CONTAINER_NAME"
             length="50"
         />
 
@@ -100,11 +100,11 @@
         />
 
         <set
-            name="storageContainerDetailsCollection"
-            table="CATISSUE_STORAGE_CONT_DETAILS"
+            name="collectionProtocolCollection"
+            table="CATISSUE_CONTAINER_CP_REL"
             lazy="false"
-            inverse="true"
-            cascade="save-update"
+            inverse="false"
+            cascade="none"
             sort="unsorted"
         >
 
@@ -112,9 +112,54 @@
                   column="STORAGE_CONTAINER_ID"
               />
 
-              <one-to-many
-                  class="edu.wustl.catissuecore.domain.StorageContainerDetails"
+              <many-to-many
+                  class="edu.wustl.catissuecore.domain.CollectionProtocol"
+                  column="COLLECTION_PROTOCOL_ID"
+                  outer-join="auto"
               />
+
+        </set>
+
+        <set
+            name="storageTypeCollection"
+            table="CATISSUE_CONTAINER_TYPE_REL"
+            lazy="false"
+            inverse="false"
+            cascade="none"
+            sort="unsorted"
+        >
+
+              <key
+                  column="STORAGE_CONTAINER_ID"
+              />
+
+              <many-to-many
+                  class="edu.wustl.catissuecore.domain.StorageType"
+                  column="STORAGE_TYPE_ID"
+                  outer-join="auto"
+              />
+
+        </set>
+
+        <set
+            name="specimenClassCollection"
+            table="CATISSUE_CONT_SPECIMENCL_REL"
+            lazy="false"
+            inverse="false"
+            cascade="none"
+            sort="unsorted"
+        >
+
+              <key
+                  column="STORAGE_CONTAINER_ID"
+              />
+
+              <many-to-many
+                  class="edu.wustl.catissuecore.domain.SpecimenClass"
+                  column="SPECIMEN_CLASS_ID"
+                  outer-join="auto"
+              />
+
         </set>
 
         <many-to-one

@@ -62,6 +62,69 @@
             length="50"
         />
 
+        <set
+            name="storageTypeCollection"
+            table="CATISSUE_STORAGETYPE_HOLDS_REL"
+            lazy="false"
+            inverse="false"
+            cascade="none"
+            sort="unsorted"
+        >
+
+              <key
+                  column="STORAGE_TYPE_ID"
+              />
+
+              <many-to-many
+                  class="edu.wustl.catissuecore.domain.StorageType"
+                  column="STORAGE_TYPE_HOLD_ID"
+                  outer-join="auto"
+              />
+
+        </set>
+
+        <set
+            name="specimenClassCollection"
+            table="CATISSUE_TYPE_SPECIMENCL_REL"
+            lazy="false"
+            inverse="false"
+            cascade="none"
+            sort="unsorted"
+        >
+
+              <key
+                  column="STORAGE_TYPE_ID"
+              />
+
+              <many-to-many
+                  class="edu.wustl.catissuecore.domain.SpecimenClass"
+                  column="SPECIMEN_CLASS_ID"
+                  outer-join="auto"
+              />
+
+        </set>
+
+        <set
+            name="storageContainerCollection"
+            table="CATISSUE_CONTAINER_TYPE_REL"
+            lazy="false"
+            inverse="false"
+            cascade="none"
+            sort="unsorted"
+        >
+
+              <key
+                  column="STORAGE_TYPE_ID"
+              />
+
+              <many-to-many
+                  class="edu.wustl.catissuecore.domain.StorageContainer"
+                  column="STORAGE_CONTAINER_ID"
+                  outer-join="auto"
+              />
+
+        </set>
+
         <many-to-one
             name="defaultStorageCapacity"
             class="edu.wustl.catissuecore.domain.StorageContainerCapacity"
