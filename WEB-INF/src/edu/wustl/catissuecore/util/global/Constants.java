@@ -839,9 +839,15 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String FORWARDLIST = "forwardToList";
 	public static final String [][] SPECIMEN_FORWARD_TO_LIST = {
 			{"Submit",				"success"},
-			{"Derive From This Specimen",			"createNew"},
+			{"Derive",			"createNew"},
 			{"Add Events",				"eventParameters"},
-			{"Add More To Same Collection Group",	"sameCollectionGroup"}
+			{"Add More To Same Group",	"sameCollectionGroup"}
+	};
+	public static final String [] SPECIMEN_BUTTON_TIPS = {
+		"Submit only",
+		"Submit and derive",
+		"Submit and add events",
+		"Submit and add more to same group"
 	};
 
 	public static final String [][] SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST = {
