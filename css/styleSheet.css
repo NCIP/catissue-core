@@ -1171,3 +1171,9 @@ td.columnHeading{
   text-decoration:none;
   white-space: nowrap;
 }
+/* *********Used by Mandar in Events page*************  */
+td.formFieldNoBordersSimple{ /* for the cell that contains the form elements */
+  font-family:arial,helvetica,verdana,sans-serif;
+  font-size:0.7em;
+  color:#000000; /* constant: black */
+}
