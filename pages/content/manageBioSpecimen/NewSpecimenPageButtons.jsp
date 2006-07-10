@@ -14,7 +14,7 @@
 												<td nowrap class="formFieldNoBorders">
 													<html:button styleClass="actionButton" 
 															property="submitPage" 
-															
+															title="<%=Constants.SPECIMEN_BUTTON_TIPS[0]%>"
 															value="<%=Constants.SPECIMEN_FORWARD_TO_LIST[0][0]%>" 
 															onclick="<%=normalSubmit%>">
 						  				     	    
@@ -23,29 +23,32 @@
 												<td nowrap class="formFieldNoBorders">
 													<html:button styleClass="actionButton"  
 															property="submitPage"
-															
+															title="<%=Constants.SPECIMEN_BUTTON_TIPS[1]%>"
 															value="<%=Constants.SPECIMEN_FORWARD_TO_LIST[1][0]%>" 
 															disabled="<%=isAddNew%>" 
 															onclick="<%=deriveNewSubmit%>">
 						  				     	    
 											     	</html:button>
 												</td>		
+<!-- Commented as per bug 2115. Mandar. 10-July-06
 											</tr>
 											<tr>							
+
 												<td class="formFieldNoBorders" nowrap>
 													<html:button styleClass="actionButton"  
 															property="submitPage"
-															
+															title="<%=Constants.SPECIMEN_BUTTON_TIPS[2]%>"
 															value="<%=Constants.SPECIMEN_FORWARD_TO_LIST[2][0]%>" 
 															disabled="<%=isAddNew%>" 
 															onclick="<%=addEventsSubmit%>">
 						  				     	    
 											     	</html:button>
 												</td>
+-->
 												<td class="formFieldNoBorders" nowrap>
 													<html:button styleClass="actionButton"  
 															property="submitPage"
-															
+															title="<%=Constants.SPECIMEN_BUTTON_TIPS[3]%>"
 															value="<%=Constants.SPECIMEN_FORWARD_TO_LIST[3][0]%>" 
 															disabled="<%=isAddNew%>" 
 															onclick="<%=addMoreSubmit%>">
