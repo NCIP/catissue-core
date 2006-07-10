@@ -760,7 +760,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
             boolean isInSite) throws DAOException
     {
         String sourceObjectName = "CATISSUE_STORAGE_CONTAINER";
-        String[] selectColumnName = {"max(CONTAINER_NUMBER) as MAX_NAME"};
+        String[] selectColumnName = {"max(IDENTIFIER) as MAX_NAME"};
         String[] whereColumnName = {"STORAGE_TYPE_ID", "PARENT_CONTAINER_ID"};
         String[] whereColumnCondition = {"=", "="};
         Object[] whereColumnValue = {Long.toString(typeID),
@@ -859,15 +859,15 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		JDBCDAO dao = (JDBCDAO) DAOFactory.getDAO(Constants.JDBC_DAO);
 		dao.openSession(null);
 
-		String queryStr = " SELECT t8.IDENTIFIER, t8.CONTAINER_NUMBER, t5.TYPE, t8.SITE_ID, "
+		String queryStr = " SELECT t8.IDENTIFIER, t8.CONTAINER_NAME, t5.TYPE, t8.SITE_ID, "
 				+ " t4.TYPE, t8.PARENT_IDENTIFIER, "
-				+ " t8.PARENT_CONTAINER_NUMBER, t8.PARENT_CONTAINER_TYPE "
-				+ " FROM (SELECT t7.IDENTIFIER, t7.CONTAINER_NUMBER, t7.SITE_ID, "
+				+ " t8.PARENT_CONTAINER_NAME, t8.PARENT_CONTAINER_TYPE "
+				+ " FROM (SELECT t7.IDENTIFIER, t7.CONTAINER_NAME, t7.SITE_ID, "
 				+ " t7.STORAGE_TYPE_ID, t7.PARENT_IDENTIFIER, "
-				+ " t7.PARENT_CONTAINER_NUMBER, t6.TYPE AS PARENT_CONTAINER_TYPE FROM "
-				+ " (select t1.IDENTIFIER AS IDENTIFIER, t1.CONTAINER_NUMBER AS CONTAINER_NUMBER, "
+				+ " t7.PARENT_CONTAINER_NAME, t6.TYPE AS PARENT_CONTAINER_TYPE FROM "
+				+ " (select t1.IDENTIFIER AS IDENTIFIER, t1.CONTAINER_NAME AS CONTAINER_NAME, "
 				+ " t1.SITE_ID AS SITE_ID, t1.STORAGE_TYPE_ID AS STORAGE_TYPE_ID, "
-				+ " t2.IDENTIFIER AS PARENT_IDENTIFIER, t2.CONTAINER_NUMBER AS PARENT_CONTAINER_NUMBER, "
+				+ " t2.IDENTIFIER AS PARENT_IDENTIFIER, t2.CONTAINER_NAME AS PARENT_CONTAINER_NAME, "
 				+ " t2.STORAGE_TYPE_ID AS PARENT_STORAGE_TYPE_ID "
 				+ " from CATISSUE_STORAGE_CONTAINER t1 LEFT OUTER JOIN CATISSUE_STORAGE_CONTAINER t2 "
 				+ " on t1.PARENT_CONTAINER_ID = t2.IDENTIFIER) AS t7 LEFT OUTER JOIN CATISSUE_STORAGE_TYPE t6 "
@@ -1030,7 +1030,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 
 	private Vector getContainersUnderSite() throws DAOException
 	{
-		String sql = " SELECT sc.IDENTIFIER, sc.CONTAINER_NUMBER, scType.TYPE, site.IDENTIFIER, site.NAME, site.TYPE "
+		String sql = " SELECT sc.IDENTIFIER, sc.CONTAINER_NAME, scType.TYPE, site.IDENTIFIER, site.NAME, site.TYPE "
 				+ " from catissue_storage_container sc, catissue_site site, catissue_storage_type scType "
 				+ " where sc.SITE_ID = site.IDENTIFIER AND sc.STORAGE_TYPE_ID = scType.IDENTIFIER "
 				+ " and sc.PARENT_CONTAINER_ID is NULL";
