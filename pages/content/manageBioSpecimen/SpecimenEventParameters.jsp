@@ -142,10 +142,12 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 <!-- Mandar 05-July-06 Code for tabs start -->
 	 	<table summary="" cellpadding="0" cellspacing="0" border="0" height="20" class="tabPage" width="600">  
 			<tr>
-				<td height="20" class="tabMenuItem" onclick="addNewAction(<%= specimenPath %>)">Edit Specimen</td>
+				<td height="20" class="tabMenuItem"  onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onclick="addNewAction(<%= specimenPath %>)">
+					<bean:message key="tab.specimen.details"/>
+				</td>
 
-				<td height="20" class="tabMenuItemSelected" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()">
-					Specimen Event Parameters
+				<td height="20" class="tabMenuItemSelected">
+					<bean:message key="tab.specimen.eventparameters"/>
 				</td>
 
 				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()">
@@ -261,12 +263,19 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 	<td>
 	  	 <table summary="" cellpadding="3" cellspacing="0" border="0" width="550">
 			<tr>
-	<td><b class="formLabel"><bean:message key="specimenEventParameters.label"/></b> &nbsp;
+	<td>
+<table><tr><td class="formLabelNoBackGround">
+<bean:message key="specimenEventParameters.label"/> &nbsp;
+</td>
+<td class = "formFieldNoBordersSimple">
 <!-- Mandar : 434 : for tooltip -->
-		<html:select property="specimenEventParameter" styleClass="formField" styleId="className" size="1" disabled="false" onchange="onParameterChange(this)"
+		<html:select property="specimenEventParameter" styleClass="formFieldSized15" styleId="className" size="1" disabled="false" onchange="onParameterChange(this)"
 		 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 			<html:options name="<%=Constants.EVENT_PARAMETERS_LIST%>" labelName="<%=Constants.EVENT_PARAMETERS_LIST%>"/>
 		</html:select>
+</td>
+<td width="*">&nbsp;</td>
+</tr></table>
 	</td>
 </tr>
 </table></td>

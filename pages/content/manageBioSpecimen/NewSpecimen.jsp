@@ -360,12 +360,14 @@
 	%>
 		<table summary="" cellpadding="0" cellspacing="0" border="0" height="20" class="tabPage" width="600">
 			<tr>
-				<td height="20" class="tabMenuItemSelected" onclick="document.location.href='ManageAdministrativeData.do'">Edit</td>
+				<td height="20" class="tabMenuItemSelected">
+					<bean:message key="tab.specimen.details"/>
+				</td>
 				<%
 					String eventLinkAction = "'ListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParameters&menuSelected=15&specimenId="+form.getSystemIdentifier()+"'" ;
 				%>
 				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onclick="<%=addEventsSubmit%>">
-					Specimen Event Parameters
+					<bean:message key="tab.specimen.eventparameters"/>
 				</td>
 
 				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()">
