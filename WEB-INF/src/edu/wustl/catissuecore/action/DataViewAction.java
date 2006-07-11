@@ -55,6 +55,7 @@ public class DataViewAction extends BaseAction
     {
     	AdvanceSearchForm advForm = (AdvanceSearchForm)form;
     	String[] selectedColumns = advForm.getSelectedColumnNames();
+    	Logger.out.debug("selected columns:"+selectedColumns);
     	
     	HttpSession session = request.getSession();
     	String target = Constants.SUCCESS;
@@ -78,6 +79,7 @@ public class DataViewAction extends BaseAction
     	{
     		selectedColumns = (String[])session.getAttribute(Constants.CONFIGURED_COLUMN_NAMES);
     		advForm.setSelectedColumnNames(selectedColumns);
+    		Logger.out.debug("selected columns:"+selectedColumns);
     	}
     	//Retrieve the columnIdsMap from session
     	Map columnIdsMap = (Map)session.getAttribute(Constants.COLUMN_ID_MAP);
@@ -106,7 +108,7 @@ public class DataViewAction extends BaseAction
     			filteredColumnDisplayNames=new ArrayList();
     			columnList = getColumnNamesForFilter(name,filteredColumnDisplayNames,columnIdsMap,selectedColumns,advForm);
     			Logger.out.debug("name selected:"+name);
-   		}
+    		}
         	if (!name.equals(Constants.ROOT))
             {	
                 String key = name+"."+Constants.IDENTIFIER;
@@ -249,25 +251,28 @@ public class DataViewAction extends BaseAction
     	List columns =new ArrayList();
     	//Filter the data according to the node clicked. Show only the data lower in the heirarchy 
 
+    	//Bug#2113: Default view consists of all attributes from Participant to Specimen
+    	//Thus removing all columns except the ones corresponding to the type of object selected
     	if(aliasName.equals(Query.PARTICIPANT) || aliasName.equals(Constants.ROOT))
 		{
     		columns.addAll(participantColumns);
-    		columns.addAll(collectionProtocolColumns);
-    		columns.addAll(collProtRegColumns);
-    		columns.addAll(specimenCollGrpColumns);
-    		columns.addAll(specimenColumns);
+    		
+//    		columns.addAll(collectionProtocolColumns);
+//    		columns.addAll(collProtRegColumns);
+//    		columns.addAll(specimenCollGrpColumns);
+//    		columns.addAll(specimenColumns);
 		}
     	else if(aliasName.equals(Query.COLLECTION_PROTOCOL))
 		{
     		columns.addAll(collectionProtocolColumns);
-    		columns.addAll(collProtRegColumns);
-    		columns.addAll(specimenCollGrpColumns);
-    		columns.addAll(specimenColumns);
+//    		columns.addAll(collProtRegColumns);
+//    		columns.addAll(specimenCollGrpColumns);
+//    		columns.addAll(specimenColumns);
 		}
 		else if(aliasName.equals(Query.SPECIMEN_COLLECTION_GROUP))
 		{
     		columns.addAll(specimenCollGrpColumns);
-    		columns.addAll(specimenColumns);
+//    		columns.addAll(specimenColumns);
 		}
 		else if(aliasName.equals(Query.SPECIMEN))
 		{
