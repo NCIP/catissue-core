@@ -55,14 +55,17 @@
 	</tr>
 	
 	<tr>
-		<td class="formRequiredNoticeNoBottom" width="5">*</td>
-		<td class="formRequiredLabelRightBorder">
+		
+		<td class="formRequiredNoticeNoBottom">* 
 			<html:radio styleClass="" styleId="checkedButton" property="checkedButton" value="1" onclick="onRadioButtonClick(this)">
-				<label for="parentId">
-					<bean:message key="quickEvents.specimenID"/>
-				</label>
+				&nbsp;
 			</html:radio>
 		</td>
+		<TD class="formRequiredLabelRightBorder">
+			<label for="parentId">
+				<bean:message key="quickEvents.specimenID"/>
+			</label>
+		</TD>
 		<td class="formField">
 			<logic:equal name="quickEventsForm" property="checkedButton" value="1">
 				<html:select property="specimenID" styleClass="formField" styleId="specimenID" size="1">
@@ -89,13 +92,15 @@
 	</tr>
 	
 	<tr>
-		<td class="formRequiredNotice" width="5">&nbsp;</td>
-		<td class="formRequiredLabel">
+		<td class="formRequiredNotice">&nbsp;
 			<html:radio styleClass="" styleId="checkedButton" property="checkedButton" value="2" onclick="onRadioButtonClick(this)">
-				<label for="barCode">
-					<bean:message key="quickEvents.barcode"/>
-				</label>
+				&nbsp;
 			</html:radio>
+		</td>
+		<td class="formRequiredLabel">
+			<label for="barCode">
+				<bean:message key="quickEvents.barcode"/>
+			</label>
 		</td>
 		<td class="formField">
 			<logic:equal name="quickEventsForm" property="checkedButton" value="1">
