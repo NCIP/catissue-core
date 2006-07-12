@@ -841,7 +841,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 			{"Submit",				"success"},
 			{"Derive",			"createNew"},
 			{"Add Events",				"eventParameters"},
-			{"Add More To Same Group",	"sameCollectionGroup"}
+			{"More",	"sameCollectionGroup"}
 	};
 	public static final String [] SPECIMEN_BUTTON_TIPS = {
 		"Submit only",
@@ -991,6 +991,11 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	
 	//Constants for QuickEvents
 	public static final String EVENT_SELECTED = "eventSelected";
+	
+	//Constant for SpecimenEvents page.
+	public static final String EVENTS_TITLE_MESSAGE = "Existing events for this specimen";
+	public static final String SURGICAL_PATHOLOGY_REPORT = "Surgical Pathology Report";
+	public static final String CLINICAL_ANNOTATIONS = "Clinical Annotations";
 	
 //	public static final String getCollectionProtocolPIGroupName(Long identifier)
 //	{
