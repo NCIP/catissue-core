@@ -172,3 +172,9 @@ function setSubmittedFor(submittedFor,forwardTo)
 	document.forms[0].submittedFor.value = submittedFor;
 	document.forms[0].forwardTo.value    = forwardTo;
 }
+
+//this function is used in Specimen and Events page for non functional tabs 
+function featureNotSupported()
+{
+	alert("This feature is not supported in version 1.1 and will be supported in the next release of caTissue.");
+}
