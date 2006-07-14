@@ -256,6 +256,11 @@ function insRow(subdivtag)
 
 }
 */
+
+check()
+{
+	alert("Hello");
+}
 	</script>
 </head>
 
@@ -409,7 +414,7 @@ function insRow(subdivtag)
 							</label>
 						</td>
 						<td class="formField" colspan="2">
-							<html:text styleClass="formFieldSized10" maxlength="50"  size="30" styleId="startNumber" property="containerName"/>
+							<html:text styleClass="formFieldSized15" maxlength="50"  size="30" styleId="startNumber" property="containerName"/>
 						</td>
 					</tr>
 					
@@ -502,8 +507,14 @@ function insRow(subdivtag)
 						</td>
 					</tr>
 					</logic:equal>
-					<!-- newly added by vaishali on 22nd June 2006 1.56 pm -->
-										<tr>
+					<tr>
+						<td class="formTitle" colspan="5">
+							<label for="restrictions">
+								<bean:message key="storageContainer.restrictions" />
+							</label>
+						</td>
+					</tr>
+					<tr>
 						<td class="formRequiredNotice" width="5">&nbsp;</td>
 						<td class="formLabel" colspan="2">
 							<label for="collection_protocol_id">
@@ -528,17 +539,27 @@ function insRow(subdivtag)
 							</label>
 						</td>
 						<td class="formField" colspan="2">
+						<table>
+							<tr><td class="standardText" align="center">
+									<bean:message key="storageContainer.containerType"/>
+							</td>
+							<td class="standardText" align="center">		
+									<bean:message key="storageContainer.specimenType"/>
+							</td></tr>
+							<tr>
+							<td class="formField" align="center">		
 							<html:select property="holdsStorageTypeIds" styleClass="formFieldVerySmallSized" styleId="holdsStorageTypeIds" size="4" multiple="true"
 							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 								<html:options collection="<%=Constants.HOLDS_LIST1%>" labelProperty="name" property="value"/>
 							</html:select>
-							&nbsp;
+						</td>
+						<td class="formField" align="center">
 							<html:select property="holdsSpecimenClassTypeIds" styleClass="formFieldVerySmallSized" styleId="holdsSpecimenClassTypeIds" size="4" multiple="true"
 							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 								<html:options collection="<%=Constants.HOLDS_LIST2%>" labelProperty="name" property="value"/>
 							</html:select>
-							&nbsp;	
-							
+						</td></tr></table>
+						
 						</td>
 					</tr>
 					
