@@ -140,7 +140,7 @@
 				°C
 			</td>
 		</tr>
-		<!-- added by vaishali on 22 nd jube 2006 2.00 pm-->
+
 		<tr>
 			<td class="formRequiredNotice" width="5">&nbsp;</td>
 			<td class="formLabel">
@@ -149,19 +149,26 @@
 				</label>
 			</td>
 			<td class="formField" nowrap>
-				<html:select property="holdsStorageTypeIds" styleClass="formFieldVerySmallSized" styleId="typeId" size="4" multiple="true"
+				<table>
+				<tr><td class="standardText" align="center">Storage Type</td><td class="standardText" align="center">Specimen Type</td></tr>
+				<tr>
+				<td class="formField" nowrap align="center">
+				<html:select property="holdsStorageTypeIds" styleClass="formFieldVerySmallSized" styleId="holdStorageTypeIds" size="4" multiple="true"
 							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 				<html:options collection="<%=Constants.HOLDS_LIST1%>" labelProperty="name" property="value"/>
 				</html:select>
-							&nbsp;
-				<html:select property="holdsSpecimenClassTypeIds" styleClass="formFieldVerySmallSized" styleId="typeId" size="4" multiple="true"
+				</td>
+				<td class="formField" nowrap align="center">
+				<html:select property="holdsSpecimenClassTypeIds" styleClass="formFieldVerySmallSized" styleId="holdSpecimenClassTypeIds" size="4" multiple="true"
 							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 				<html:options collection="<%=Constants.HOLDS_LIST2%>" labelProperty="name" property="value"/>
 				</html:select>
+				</td>
+				</tr></table>
 							
 			</td>
 		</tr>
-		<!-- added finish -->
+
 		<tr>			
 			<td class="formTitle" colspan="3">
 				<label for="defaultCapacity">
@@ -266,11 +273,6 @@
 							<bean:message  key="buttons.submit" />
 						</html:submit>
 					</td>
-					<%-- td>
-						<html:reset styleClass="actionButton" >
-							<bean:message  key="buttons.reset" />
-						</html:reset>
-					</td --%>
 				</tr>
 			</table>
 			<!-- action buttons end -->
