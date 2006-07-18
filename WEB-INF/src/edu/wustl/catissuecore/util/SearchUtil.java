@@ -246,7 +246,7 @@ public class SearchUtil
 		        
 			case Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID :
 				searchFieldData = new SearchFieldData[6];
-				searchFieldData[0] = initSearchUIData(SearchUtil.STRING, "specimenCollectionGroup.groupName","SpecimenCollectionGroup","GROUP_NAME","groupName",Constants.STRING_OPERATORS,"","");
+				searchFieldData[0] = initSearchUIData(SearchUtil.STRING, "specimenCollectionGroup.groupName","SpecimenCollectionGroup","NAME","groupName",Constants.STRING_OPERATORS,"","");
 		        searchFieldData[1] = initSearchUIData(SearchUtil.STRING, "advanceQuery.specimenCollectionGroup.site","Site","NAME","siteName",Constants.STRING_OPERATORS,"","");//SITE_ID will be SITE_NAME
 		        searchFieldData[2] = initSearchUIData(SearchUtil.NUMERIC,"specimenCollectionGroup.studyCalendarEventPoint","CollectionProtocolEvent","STUDY_CALENDAR_EVENT_POINT","studyCalendarEventPoint",Constants.DATE_NUMERIC_OPERATORS,"","");
 		        searchFieldData[3] = initSearchUIData(SearchUtil.STRING,"specimenCollectionGroup.clinicalDiagnosis","SpecimenCollectionGroup","CLINICAL_DIAGNOSIS","clinicalDiagnosis",Constants.ENUMERATED_OPERATORS,Constants.CLINICAL_DIAGNOSIS_LIST,"");
