@@ -29,7 +29,7 @@
             type="string"
             update="true"
             insert="true"
-            column="GROUP_NAME"
+            column="NAME"
             length="50"
         />
 

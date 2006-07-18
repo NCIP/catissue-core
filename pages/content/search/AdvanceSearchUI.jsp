@@ -28,8 +28,6 @@
 		actionName = "AdvanceSearchSCG.do";
 	}
 
-	System.out.println("formname--"+actionName);
-	
 	
 %>
 
