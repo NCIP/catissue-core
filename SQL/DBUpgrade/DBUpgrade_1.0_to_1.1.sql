@@ -31,7 +31,7 @@ drop table if exists CATISSUE_SPECIMEN_CLASS;
 alter table CATISSUE_STORAGE_CONTAINER add column CONTAINER_NAME varchar (50)   NOT NULL ;
 
 #--------Give values same as identifier to container_name for previouly added containers.
-update CATISSUE_STORAGE_CONTAINER set CONTAINER_NAME=IDENTIFIER;
+update CATISSUE_STORAGE_CONTAINER set CONTAINER_NAME=IDENTIFIER where CONTAINER_NAME='';
 
 #--------drop the container_number column
 alter table CATISSUE_STORAGE_CONTAINER drop column CONTAINER_NUMBER;
@@ -106,7 +106,7 @@ alter table CATISSUE_SPECIMEN_COLL_GROUP add column NAME varchar(50) NOT NULL;
 
 
 #--------Give values to group_name for previouly added specimen collection groups.
-update CATISSUE_SPECIMEN_COLL_GROUP set NAME=IDENTIFIER;
+update CATISSUE_SPECIMEN_COLL_GROUP set NAME=IDENTIFIER where NAME='';
 alter table CATISSUE_SPECIMEN_COLL_GROUP add constaint NAME unique (NAME);
 INSERT INTO CATISSUE_INTERFACE_COLUMN_DATA (IDENTIFIER,TABLE_ID,COLUMN_NAME,ATTRIBUTE_TYPE) VALUES (305 ,35 , 'GROUP_NAME','varchar');
 INSERT INTO CATISSUE_SEARCH_DISPLAY_DATA (RELATIONSHIP_ID, COL_ID, DISPLAY_NAME) VALUES (30, 305 , 'Specimen Collection Group Name');
