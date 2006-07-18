@@ -446,8 +446,8 @@
 				    
 					<logic:equal name="newSpecimenForm" property="parentPresent" value="false">
 						<td class="formRequiredLabel">
-							<label for="specimenCollectionGroupId">
-								<bean:message key="specimen.specimenCollectionGroupId"/>
+							<label for="specimenCollectionGroupName">
+								<bean:message key="specimenCollectionGroup.groupName"/>
 							</label>
 						</td>
 						<td class="formField" colspan="4">

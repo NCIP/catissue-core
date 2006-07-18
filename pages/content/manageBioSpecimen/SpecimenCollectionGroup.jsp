@@ -85,10 +85,16 @@
 		
         function onChangeEvent(element)
 		{
-			var action = "SpecimenCollectionGroup.do?operation=<%=operation%>&pageOf=pageOfSpecimenCollectionGroup&isOnChange=true";
+        	var action = "SpecimenCollectionGroup.do?operation=<%=operation%>&pageOf=pageOfSpecimenCollectionGroup&" +
+        			"isOnChange=true";
+        	changeAction(action);
+		}
+        function changeAction(action)
+        {
 			document.forms[0].action = action;
 			document.forms[0].submit();
-		}
+        }
+
 		
 	</script>
 </head>
@@ -294,7 +300,22 @@
 	 					</logic:notEqual>
 		        	</td>
 				 </tr>
-				 
+				<tr>
+					<td class="formRequiredNotice" width="5">*</td>
+					<td class="formRequiredLabel" >
+						<label for="name">
+							<bean:message key="specimenCollectionGroup.groupName" />
+						</label>
+					</td>
+					<td class="formField">
+						<html:text styleClass="formFieldSized" size="30"  maxlength="50" styleId="name" property="name" />
+						&nbsp;
+						<%String resetAction = "changeAction('SpecimenCollectionGroup.do?operation="+operation+"&pageOf=pageOfSpecimenCollectionGroup&resetName=Yes')"; %>
+						<html:link href="#" styleId="resetName" onclick="<%=resetAction%>">
+							<bean:message key="link.resetName" />
+						</html:link>
+					</td>
+				</tr>
 				 <tr>
 				 	<td class="formRequiredNotice" width="5">*</td>
 				    
