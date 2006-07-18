@@ -32,7 +32,9 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.cde.CDEManager;
+import edu.wustl.common.dao.AbstractDAO;
 import edu.wustl.common.dao.DAO;
+import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
@@ -412,5 +414,33 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
     {
         return new ArrayList();
     }
+	public int getNextGroupNumber() throws DAOException
+	{
+		String sourceObjectName = "CATISSUE_SPECIMEN_COLL_GROUP";
+		String[] selectColumnName = {"max(IDENTIFIER) as MAX_IDENTIFIER"};
+		AbstractDAO dao = DAOFactory.getDAO(Constants.JDBC_DAO);
+
+		dao.openSession(null);
+
+		List list = dao.retrieve(sourceObjectName, selectColumnName);
+
+		dao.closeSession();
+
+		if (!list.isEmpty())
+		{
+			List columnList = (List) list.get(0);
+			if (!columnList.isEmpty())
+			{
+				String str = (String) columnList.get(0);
+				if (!str.equals(""))
+				{
+					int no = Integer.parseInt(str);
+					return no + 1;
+				}
+			}
+		}
+
+		return 1;
+	}
 	
 }

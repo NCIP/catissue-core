@@ -175,7 +175,7 @@ public class NewSpecimenAction  extends SecureAction
     	
     	//Setting Secimen Collection Group
 		String sourceObjectName = SpecimenCollectionGroup.class.getName();
-		String[] displayNameFields = {Constants.SYSTEM_IDENTIFIER};
+		String[] displayNameFields = {"name"};
 		String valueField = Constants.SYSTEM_IDENTIFIER;
 
 		List specimenList = bizLogic.getList(sourceObjectName, displayNameFields, valueField, true);

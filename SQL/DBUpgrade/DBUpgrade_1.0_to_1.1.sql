@@ -100,3 +100,13 @@ drop table CATISSUE_STORAGE_CONT_DETAILS;
 delete from csm_protection_element where PROTECTION_ELEMENT_ID='43';
 
 #----------Chnages finish
+
+#--------Adding Group_name in CATISSUE_SPECIMEN_COLL_GROUP table
+alter table CATISSUE_SPECIMEN_COLL_GROUP add column NAME varchar(50) NOT NULL;
+
+
+#--------Give values to group_name for previouly added specimen collection groups.
+update CATISSUE_SPECIMEN_COLL_GROUP set NAME=IDENTIFIER;
+alter table CATISSUE_SPECIMEN_COLL_GROUP add constaint NAME unique (NAME);
+INSERT INTO CATISSUE_INTERFACE_COLUMN_DATA (IDENTIFIER,TABLE_ID,COLUMN_NAME,ATTRIBUTE_TYPE) VALUES (305 ,35 , 'GROUP_NAME','varchar');
+INSERT INTO CATISSUE_SEARCH_DISPLAY_DATA (RELATIONSHIP_ID, COL_ID, DISPLAY_NAME) VALUES (30, 305 , 'Specimen Collection Group Name');

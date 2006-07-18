@@ -25,6 +25,15 @@
         </id>
 
         <property
+            name="name"
+            type="string"
+            update="true"
+            insert="true"
+            column="GROUP_NAME"
+            length="50"
+        />
+
+        <property
             name="clinicalDiagnosis"
             type="string"
             update="true"

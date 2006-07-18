@@ -55,6 +55,11 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
      * Radio button to choose participantName/participantNumber.
      */
     private int checkedButton = 1;
+    
+	/**
+     * unique name for Specimen Collection Group 
+     */
+    private String name ;
 	
 	private long participantId;
 	
@@ -87,6 +92,18 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
         this.clinicalDiagnosis = cinicalDiagnosis;
     }
            
+	/**
+	 * @return Returns the name.
+	 */
+	public String getName() {
+		return name;
+	}
+	/**
+	 * @param name The name to set.
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
     /**
      * @return Returns the surgicalPathologyNumber.
      */
@@ -176,7 +193,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 		SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) abstractDomain;
 			
 		systemIdentifier = specimenCollectionGroup.getId().longValue();
-		    
+		name =  specimenCollectionGroup.getName();    
 		Logger.out.debug("specimenCollectionGroup.getClinicalDiagnosis() "+specimenCollectionGroup.getClinicalDiagnosis());
 		clinicalDiagnosis = Utility.toString(specimenCollectionGroup.getClinicalDiagnosis());
 		clinicalStatus = Utility.toString(specimenCollectionGroup.getClinicalStatus());
@@ -242,7 +259,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	    edu.wustl.catissuecore.domainobject.SpecimenCollectionGroup specimenCollectionGroup = (edu.wustl.catissuecore.domainobject.SpecimenCollectionGroup) obj;
 			
 		systemIdentifier = specimenCollectionGroup.getId().longValue();
-		    
+		//groupName =  specimenCollectionGroup.get();        
 		Logger.out.debug("specimenCollectionGroup.getClinicalDiagnosis() "+specimenCollectionGroup.getClinicalDiagnosis());
 		clinicalDiagnosis = Utility.toString(specimenCollectionGroup.getClinicalDiagnosis());
 		clinicalStatus = Utility.toString(specimenCollectionGroup.getClinicalStatus());
@@ -473,7 +490,12 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 									ApplicationProperties.getValue("specimenCollectionGroup.collectedByProtocolParticipantNumber")));
 				}
 			}
-			 
+			if(this.name.equals(""))
+			{
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
+								ApplicationProperties.getValue("specimenCollectionGroup.groupName")));
+			}
+			
             // Mandatory Field : Study Calendar event point
 			if(this.collectionProtocolEventId == -1)
 			{

@@ -36,6 +36,10 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
     protected Long systemIdentifier;
     
     /**
+     * name assigned to Specimen Collection Group
+     */
+    protected String name;
+    /**
      * Participant's clinical diagnosis at 
      * this collection event (e.g. Prostate Adenocarcinoma).
      */
@@ -104,11 +108,27 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
 		return systemIdentifier;
 	}
 
+
 	/**
 	 * @param systemIdentifier
 	 */
 	public void setSystemIdentifier(Long systemIdentifier) {
 		this.systemIdentifier = systemIdentifier;
+	}
+	/**
+	 * Returns the system generated unique Specimen Collection Group name.
+	 * @hibernate.property name="name" column="GROUP_NAME" type="string" length="50"
+	 * @return the system generated unique name.
+	 * @see #setName(String)
+	 */
+	public String getName() {
+		return name;
+	}
+	/**
+	 * @param name The name to set.
+	 */
+	public void setName(String name) {
+		this.name = name;
 	}
 	
     /**
@@ -323,7 +343,7 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
 			this.setClinicalDiagnosis(form.getClinicalDiagnosis());
 	        this.setClinicalStatus(form.getClinicalStatus());
 	        this.setActivityStatus(form.getActivityStatus());
-			
+			this.setName(form.getName());
 			site = new Site();
 			site.setSystemIdentifier(new Long(form.getSiteId()));
 			
