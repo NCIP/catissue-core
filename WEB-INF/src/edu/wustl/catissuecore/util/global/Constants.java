@@ -815,7 +815,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String SIMPLE_SEARCH_AFTER_CONFIGURE_ACTION = "SimpleSearchAfterConfigure.do";
 	public static final String PAGEOF_DISTRIBUTION = "pageOfDistribution";
 	public static final String RESULT_VIEW_VECTOR = "resultViewVector";
-	public static final String SIMPLE_QUERY_COUNTER = "simpleQueryCount";
+	//public static final String SIMPLE_QUERY_COUNTER = "simpleQueryCount";
 	
 	public static final String UNDEFINED = "Undefined";
 	public static final String UNKNOWN = "Unknown";
@@ -997,6 +997,9 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String SURGICAL_PATHOLOGY_REPORT = "Surgical Pathology Report";
 	public static final String CLINICAL_ANNOTATIONS = "Clinical Annotations";
 	
+	//Constants for Specimen Collection Group name- new field 
+	public static final String RESET_NAME ="resetName";
+	
 //	public static final String getCollectionProtocolPIGroupName(Long identifier)
 //	{
 //	    if(identifier == null)
@@ -1041,5 +1044,5 @@ public class Constants extends edu.wustl.common.util.global.Constants
 //	    }
 //	    return "DISTRIBUTION_PROTOCOL_"+identifier;
 //	}
-
+	
 }
