@@ -1177,3 +1177,27 @@ td.formFieldNoBordersSimple{ /* for the cell that contains the form elements */
   font-size:0.7em;
   color:#000000; /* constant: black */
 }
+
+.formRequiredNoticeLBRBorders{ /* for the autoevents cell */
+  font-family:arial,helvetica,verdana,sans-serif;
+  font-size:1em;
+  background-color:#F4F4F5; /* constant: light gray */
+  color:#000000; /* constant: black */
+  border-left:1px solid #5C5C5C; /* constant: dark gray */
+  border-right:1px solid #5C5C5C; /* constant: dark gray */
+  border-bottom:1px solid #5C5C5C; /* constant: dark gray */
+}
+textarea.formFieldSized20{ /* Used by Mandar for the comments used in autoevents */
+  font-family:arial,helvetica,verdana,sans-serif;
+  border:1px solid #5C5C5C; /* constant: dark gray */
+  font-size:1em;
+  width:16em;
+}
+
+.hideText{ /* To hide the text in the asterisk cell */
+  font-family:arial,helvetica,verdana,sans-serif;
+  font-size:1em;
+  background-color:#F4F4F5; /* constant: light gray */
+  color:#F4F4F5; /* constant: light gray */
+  border-bottom:1px solid #F4F4F5; /* constant: dark gray */
+ }
