@@ -10,6 +10,7 @@
 package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -26,6 +27,7 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
+import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
@@ -256,18 +258,67 @@ public class NewSpecimenAction  extends SecureAction
     	request.setAttribute(Constants.SPECIMEN_TYPE_MAP, subTypeMap);
     	Logger.out.debug("************************************\n\n\nDone**********\n");
 
+    	//Mandar : 10-July-06 AutoEvents : CollectionEvent
+    	setCollectionEventRequestParameters(request);
+
+    	//Mandar : 11-July-06 AutoEvents : ReceivedEvent
+    	setReceivedEventRequestParameters(request);
+    	
     	return mapping.findForward(pageOf);
     }
-    
 
-    //This function creates a list of NameValue Bean for the ForwardTo element  
-//    private List getForwardToList(String [][] nameValueList)
-//    {
-//    	List returnList = new ArrayList() ;
-//    	for(int i=0;i<nameValueList.length ;i++  )
-//    	{
-//    		returnList.add( new NameValueBean(nameValueList[i][0],nameValueList[i][1]    ) );
-//    	}
-//    	return returnList;
-//    }
+    // Mandar AutoEvents CollectionEvent start
+	/**
+	 * This method sets all the collection event parameters for the SpecimenEventParameter pages
+	 * @param request HttpServletRequest instance in which the data will be set. 
+	 * @throws Exception Throws Exception. Helps in handling exceptions at one common point.
+	 */
+	private void setCollectionEventRequestParameters(HttpServletRequest request) throws Exception
+	{
+        //Gets the value of the operation parameter.
+        String operation = request.getParameter(Constants.OPERATION);
+
+        //Sets the operation attribute to be used in the Add/Edit FrozenEventParameters Page. 
+        request.setAttribute(Constants.OPERATION, operation);
+        
+        //Sets the minutesList attribute to be used in the Add/Edit FrozenEventParameters Page.
+        request.setAttribute(Constants.MINUTES_LIST, Constants.MINUTES_ARRAY);
+
+        //Sets the hourList attribute to be used in the Add/Edit FrozenEventParameters Page.
+        request.setAttribute(Constants.HOUR_LIST, Constants.HOUR_ARRAY);
+         
+//        //The id of specimen of this event.
+//        String specimenId = request.getParameter(Constants.SPECIMEN_ID); 
+//        request.setAttribute(Constants.SPECIMEN_ID, specimenId);
+//        Logger.out.debug("\t\t SpecimenEventParametersAction************************************ : "+specimenId );
+//        
+       	UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.USER_FORM_ID);
+    	Collection userCollection =  userBizLogic.getUsers(operation);
+    	
+    	request.setAttribute(Constants.USERLIST, userCollection);
+
+		// set the procedure lists
+		List procedureList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_COLLECTION_PROCEDURE,null);
+    	request.setAttribute(Constants.PROCEDURE_LIST, procedureList);
+	    
+	    // set the container lists
+    	List containerList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_CONTAINER,null);
+    	request.setAttribute(Constants.CONTAINER_LIST, containerList);
+    	
+	}
+
+    // Mandar AutoEvents CollectionEvent end
+
+	// Mandar Autoevents ReceivedEvent start
+	/**
+	 * This method sets all the received event parameters for the SpecimenEventParameter pages
+	 * @param request HttpServletRequest instance in which the data will be set. 
+	 * @throws Exception Throws Exception. Helps in handling exceptions at one common point.
+	 */
+	private void setReceivedEventRequestParameters(HttpServletRequest request) throws Exception
+	{
+		
+		List qualityList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_RECEIVED_QUALITY,null);
+    	request.setAttribute(Constants.RECEIVED_QUALITY_LIST, qualityList);
+	}
 }

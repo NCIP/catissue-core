@@ -333,10 +333,6 @@
 
 %>
 
-<html:errors />
-<html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
-	<%=messageKey%>
-</html:messages>
 
 <html:form action="<%=Constants.SPECIMEN_ADD_ACTION%>">
 	<%
@@ -352,7 +348,6 @@
 				String addEventsSubmit = addEventsSubmitFunctionName + ","+confirmDisableFuncName;
 				String addMoreSubmit = addMoreSubmitFunctionName + ","+confirmDisableFuncName;												
 	%>
-	<%@ include file="NewSpecimenPageButtons.jsp" %>
 
 	<%
 	if(pageView.equals("edit"))
@@ -370,12 +365,12 @@
 					<bean:message key="tab.specimen.eventparameters"/>
 				</td>
 
-				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()">
-					View Surgical Pathology Report
+				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="featureNotSupported()">
+					<%=Constants.SURGICAL_PATHOLOGY_REPORT %>
 				</td>
 				
-				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()">
-					View Clinical Annotations
+				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="featureNotSupported()">
+					<%=Constants.CLINICAL_ANNOTATIONS %>
 				</td>
 
 				<td width="450" class="tabMenuSeparator" colspan="2">&nbsp;</td>
@@ -386,8 +381,9 @@
 	<%
 	}
 	%>
+
 		<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="500">
-			   
+
 			
 			<!-- If operation is equal to edit or search but,the page is for query the identifier field is not shown -->
 			   	
@@ -395,6 +391,15 @@
 	    	  <tr>
 			    <td>
 			 	 <table summary="" cellpadding="3" cellspacing="0" border="0" width="500">
+					<tr><td colspan="6">
+						<html:errors />
+						<html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
+							<%=messageKey%>
+						</html:messages>
+					</td></tr>
+					<tr><td>
+						<%@ include file="NewSpecimenPageButtons.jsp" %>
+					</td></tr>
 			 	 
 				 <tr>
 				 	<td>
@@ -411,18 +416,11 @@
 					<td><html:hidden property="onSubmit"/></td>
 					<td>
 						<html:hidden property="systemIdentifier"/>
-					</td>
-				 </tr>
-				 <tr>
-					<td>
 						<html:hidden property="positionInStorageContainer" />
-					</td>
-				 </tr>
-				 <tr>
-					<td>
 						<html:hidden property="parentPresent" />
 					</td>
 				 </tr>
+
 				 <tr>
 					<td class="formMessage" colspan="3">* indicates a required field</td>
 				 </tr>
@@ -752,7 +750,213 @@
 					</td>
 				</tr>
 				</logic:equal>
+<!-- Mandar AutoEvents start -->		
+ <logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>">
+	<tr>
+		<td colspan="5" class="formRequiredNoticeLBRBorders" width="100%">
+			<table border="0" width="100%">
+				<tr>
+					<td colspan="6" width="500" class="formTitle">Events</td>
+				</tr>
 				
+				<tr>
+<!-- 					<td class="formLeftSubTableTitle">* Received:
+						<html:hidden property="receivedEventSystemIdentifier" />
+						<html:hidden property="receivedEventSpecimenId" />
+					</td>
+-->					
+					<td rowspan="2" width="500" class="formSubTitle">Received
+						<html:hidden property="receivedEventSystemIdentifier" />
+						<html:hidden property="receivedEventSpecimenId" />
+					</td>
+					<td class="formLeftSubTableTitle">* 
+						<label for="type">
+							<bean:message key="eventparameters.user"/> 
+						</label>
+					</td>
+					<td class="formLeftSubTableTitle" nowrap>* 
+						<label for="date">
+							<bean:message key="eventparameters.dateofevent"/> 
+						</label><br>
+						&nbsp;<small><bean:message key="page.dateFormat" /></small>
+					</td>
+					<td class="formLeftSubTableTitle">* 
+						<label for="quality">
+							<bean:message key="receivedeventparameters.receivedquality"/> 
+						</label>
+					</td>
+					<td class="formLeftSubTableTitle">
+						<label for="comments">
+							<bean:message key="eventparameters.comments"/> 
+						</label>
+					</td>
+			 	</tr>
+
+<!-- ReceivedEvent Fields -->
+				 <tr>
+	<!-- 1st column empty -->
+<!-- 					<td class="formField">&nbsp;</td>
+-->	
+	<!-- User -->
+				<td class="formField">
+	<!-- Mandar : 434 : for tooltip -->
+					<html:select property="receivedEventUserId" styleClass="formFieldSized15" styleId="receivedEventUserId" size="1"
+					 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+						<html:options collection="<%=Constants.USERLIST%>" labelProperty="name" property="value"/>
+					</html:select>
+				</td>
+	
+	<!-- date -->
+				<td class="formField" nowrap>
+					 <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
+						<html:text styleClass="formFieldSized10" maxlength="10"  size="15" styleId="receivedEventDateOfEvent" property="receivedEventDateOfEvent" />
+						&nbsp;<a href="javascript:show_calendar('newSpecimenForm.receivedEventDateOfEvent',null,null,'MM-DD-YYYY');"><img src="images\calendar.gif" width=24 height=22 border=0></a><br>
+	<!-- hours & minutes -->	
+	<!-- Mandar : 434 : for tooltip -->
+					<html:select property="receivedEventTimeInHours" styleClass="formFieldSized5" styleId="receivedEventTimeInHours" size="1"
+					 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+						<html:options name="<%=Constants.HOUR_LIST%>" labelName="<%=Constants.HOUR_LIST%>" />
+					</html:select>&nbsp;
+					<label for="eventparameters.timeinhours">
+						<bean:message key="eventparameters.timeinhours"/>&nbsp; 
+					</label>
+	<!-- Mandar : 434 : for tooltip -->
+					<html:select property="receivedEventTimeInMinutes" styleClass="formFieldSized5" styleId="receivedEventTimeInMinutes" size="1"
+					 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+						<html:options name="<%=Constants.MINUTES_LIST%>" labelName="<%=Constants.MINUTES_LIST%>" />
+					</html:select>
+					<label for="eventparameters.timeinhours">
+						&nbsp;<bean:message key="eventparameters.timeinminutes"/> 
+					</label>
+				</td>
+	
+	<!-- receivedeventparameters.receivedquality -->
+				<td class="formField">
+	<!-- Mandar : 434 : for tooltip -->
+					<html:select property="receivedEventReceivedQuality" styleClass="formFieldSized15" styleId="receivedEventReceivedQuality" size="1"
+					 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+						<html:options collection="<%=Constants.RECEIVED_QUALITY_LIST%>" labelProperty="name" property="value"/>
+					</html:select>
+				</td>
+	
+	<!-- comments -->
+				<td class="formField">
+					<html:textarea styleClass="formFieldSized20"  styleId="receivedEventComments" property="receivedEventComments" />
+				</td>
+			 </tr>
+
+<!-- CollectionEvent fields -->				 
+
+			<tr>
+ 					<td rowspan="2" class="formLeftSubTableTitle">*
+						<html:hidden property="operation" value="<%=operation%>"/>
+						<html:hidden property="collectionEventSystemIdentifier" />
+						<html:hidden property="collectionEventSpecimenId" />
+						 Collection:
+					</td>
+	
+					<td class="formLeftSubTableTitle">* 
+						<label for="user">
+							<bean:message key="eventparameters.user"/> 
+						</label>
+					</td>
+	
+					<td class="formLeftSubTableTitle" nowrap>* 
+						<label for="date">
+							<bean:message key="eventparameters.dateofevent"/> 
+						</label><br>
+						&nbsp;<small><bean:message key="page.dateFormat" /></small>
+					</td>
+					<td class="formLeftSubTableTitle">* 
+						<label for="quality">
+							<bean:message key="collectioneventparameters.collectionprocedure"/> 
+						</label>
+					</td>
+<!-- 					<td class="formLeftSubTableTitle">
+						<label for="type">
+							<bean:message key="collectioneventparameters.container"/> 
+						</label>
+					</td>
+-->					<td class="formLeftSubTableTitle">
+						<label for="comments">
+							<bean:message key="eventparameters.comments"/> 
+						</label>
+					</td>
+				 </tr>
+
+				 <tr>
+<!-- 1st col empty -->
+<!-- 					<td class="formField">
+-->
+<!-- User -->
+					<td class="formField">
+		<!-- Mandar : 434 : for tooltip -->
+						<html:select property="collectionEventUserId" styleClass="formFieldSized15" styleId="collectionEventUserId" size="1"
+						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+							<html:options collection="<%=Constants.USERLIST%>" labelProperty="name" property="value"/>
+						</html:select>
+					</td>
+
+<!-- date -->
+					<td class="formField">
+						 <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
+							<html:text styleClass="formFieldSized10" maxlength="10"  size="15" styleId="collectionEventdateOfEvent" property="collectionEventdateOfEvent" />
+							&nbsp;<a href="javascript:show_calendar('newSpecimenForm.collectionEventdateOfEvent',null,null,'MM-DD-YYYY');"><img src="images\calendar.gif" width=24 height=22 border=0></a><br>
+			<!-- time -->
+			<!-- Mandar : 434 : for tooltip -->
+						<html:select property="collectionEventTimeInHours" styleClass="formFieldSized5" styleId="collectionEventTimeInHours" size="1"
+						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+							<html:options name="<%=Constants.HOUR_LIST%>" labelName="<%=Constants.HOUR_LIST%>" />
+						</html:select>&nbsp;
+						<label for="eventparameters.timeinhours">
+							<bean:message key="eventparameters.timeinhours"/>&nbsp; 
+						</label>
+		<!-- Mandar : 434 : for tooltip -->
+						<html:select property="collectionEventTimeInMinutes" styleClass="formFieldSized5" styleId="collectionEventTimeInMinutes" size="1"
+						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+							<html:options name="<%=Constants.MINUTES_LIST%>" labelName="<%=Constants.MINUTES_LIST%>" />
+						</html:select>
+						<label for="eventparameters.timeinhours">
+							&nbsp;<bean:message key="eventparameters.timeinminutes"/> 
+						</label>
+					</td>
+
+<!-- collection procedure -->
+					<td class="formField">
+		<!-- Mandar : 434 : for tooltip -->
+						<html:select property="collectionEventCollectionProcedure" styleClass="formFieldSized15" styleId="collectionEventCollectionProcedure" size="1"
+						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+							<%--html:options name="<%=Constants.PROCEDURE_LIST%>" labelName="<%=Constants.PROCEDURE_LIST%>" /--%>
+							<html:options collection="<%=Constants.PROCEDURE_LIST%>" labelProperty="name" property="value"/>
+						</html:select>
+						<br>
+<!-- container -->
+						<label for="type"><b>
+							<bean:message key="collectioneventparameters.container"/></b> 
+						</label>
+						<html:select property="collectionEventContainer" styleClass="formFieldSized15" styleId="collectionEventContainer" size="1"
+						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+							<%--html:options name="<%=Constants.CONTAINER_LIST%>" labelName="<%=Constants.CONTAINER_LIST%>" /--%>
+							<html:options collection="<%=Constants.CONTAINER_LIST%>" labelProperty="name" property="value"/>
+						</html:select>
+
+					</td>
+		
+		<!-- comments -->
+					<td class="formField">
+						<html:textarea styleClass="formFieldSized20"  styleId="collectionEventComments" property="collectionEventComments" />
+					</td>
+
+				 </tr>
+				</table>
+		</td>
+	</tr>
+
+</logic:equal>
+<!-- Mandar: 11-July-06 AutoEvents end  -->
+
+
+
 				<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
 				
 				<tr>

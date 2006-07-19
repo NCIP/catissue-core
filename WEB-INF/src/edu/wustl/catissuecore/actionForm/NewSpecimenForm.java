@@ -102,6 +102,31 @@ public class NewSpecimenForm extends SpecimenForm
 	 */    	
 	private boolean checkedButton;
 
+//	-------------Mandar AutoEvents CollectionEvent parameters start
+	private long collectionEventSystemIdentifier;																											// Mandar : CollectionEvent 10-July-06
+	private long collectionEventSpecimenId;
+	private long collectionEventUserId;
+	private String collectionEventdateOfEvent;
+	private String collectionEventTimeInHours;
+	private String collectionEventTimeInMinutes;
+	private String collectionEventCollectionProcedure;
+	private String collectionEventContainer;
+	private String collectionEventComments;
+	
+	//-------------Mandar AutoEvents CollectionEvent parameters end
+	
+//	-------------Mandar AutoEvents ReceivedEvent parameters start
+	private long receivedEventSystemIdentifier;
+	private long receivedEventSpecimenId;
+	private long receivedEventUserId;
+	private String receivedEventDateOfEvent;
+	private String receivedEventTimeInHours;
+	private String receivedEventTimeInMinutes;
+	private String receivedEventReceivedQuality;
+	private String receivedEventComments;
+	
+//	-------------Mandar AutoEvents ReceivedEvent parameters end
+	
     /**
      * Returns an identifier of the Parent Speciemen.
      * @return String an identifier of the Parent Speciemen.
@@ -456,6 +481,15 @@ public class NewSpecimenForm extends SpecimenForm
                     errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("specimen.pathologicalStatus")));
                 }
              	
+             	//Mandar 18-July-06: AutoEvents: 
+             	if(operation.equalsIgnoreCase(Constants.ADD  ) )
+             	{
+            		//ReceivedEvent validation
+            		validateReceivedEvent(errors, validator);
+             		//CollectionEvent validation.
+            		validateCollectionEvent(errors, validator);
+             	}
+ 
              	if(checkedButton)
              	{
              		if(!validator.isNumeric(noOfAliquots))
@@ -648,5 +682,266 @@ public class NewSpecimenForm extends SpecimenForm
 	{
 		this.checkedButton = checkedButton;
 	}
+
+	// Mandar: 10-july-06 AutoEvents : Collection Event start
+			
+			/**
+			 * @return Returns the collectionEventCollectionProcedure.
+			 */
+			public String getCollectionEventCollectionProcedure() {
+				return collectionEventCollectionProcedure;
+			}
+			/**
+			 * @param collectionEventCollectionProcedure The collectionEventCollectionProcedure to set.
+			 */
+			public void setCollectionEventCollectionProcedure(
+					String collectionEventCollectionProcedure) {
+				this.collectionEventCollectionProcedure = collectionEventCollectionProcedure;
+			}
+			/**
+			 * @return Returns the collectionEventComments.
+			 */
+			public String getCollectionEventComments() {
+				return collectionEventComments;
+			}
+			/**
+			 * @param collectionEventComments The collectionEventComments to set.
+			 */
+			public void setCollectionEventComments(String collectionEventComments) {
+				this.collectionEventComments = collectionEventComments;
+			}
+			/**
+			 * @return Returns the collectionEventContainer.
+			 */
+			public String getCollectionEventContainer() {
+				return collectionEventContainer;
+			}
+			/**
+			 * @param collectionEventContainer The collectionEventContainer to set.
+			 */
+			public void setCollectionEventContainer(String collectionEventContainer) {
+				this.collectionEventContainer = collectionEventContainer;
+			}
+			/**
+			 * @return Returns the collectionEventdateOfEvent.
+			 */
+			public String getCollectionEventdateOfEvent() {
+				return collectionEventdateOfEvent;
+			}
+			/**
+			 * @param collectionEventdateOfEvent The collectionEventdateOfEvent to set.
+			 */
+			public void setCollectionEventdateOfEvent(String collectionEventdateOfEvent) {
+				this.collectionEventdateOfEvent = collectionEventdateOfEvent;
+			}
+			/**
+			 * @return Returns the collectionEventSpecimenId.
+			 */
+			public long getCollectionEventSpecimenId() {
+				return collectionEventSpecimenId;
+			}
+			/**
+			 * @param collectionEventSpecimenId The collectionEventSpecimenId to set.
+			 */
+			public void setCollectionEventSpecimenId(long collectionEventSpecimenId) {
+				this.collectionEventSpecimenId = collectionEventSpecimenId;
+			}
+		/**
+		 * @return Returns the collectionEventSystemIdentifier.
+		 */
+		public long getCollectionEventSystemIdentifier() {
+			return collectionEventSystemIdentifier;
+		}
+		/**
+		 * @param collectionEventSystemIdentifier The collectionEventSystemIdentifier to set.
+		 */
+		public void setCollectionEventSystemIdentifier(
+				long collectionEventSystemIdentifier) {
+			this.collectionEventSystemIdentifier = collectionEventSystemIdentifier;
+		}
+			/**
+			 * @return Returns the collectionEventTimeInHours.
+			 */
+			public String getCollectionEventTimeInHours() {
+				return collectionEventTimeInHours;
+			}
+			/**
+			 * @param collectionEventTimeInHours The collectionEventTimeInHours to set.
+			 */
+			public void setCollectionEventTimeInHours(String collectionEventTimeInHours) {
+				this.collectionEventTimeInHours = collectionEventTimeInHours;
+			}
+			/**
+			 * @return Returns the collectionEventTimeInMinutes.
+			 */
+			public String getCollectionEventTimeInMinutes() {
+				return collectionEventTimeInMinutes;
+			}
+			/**
+			 * @param collectionEventTimeInMinutes The collectionEventTimeInMinutes to set.
+			 */
+			public void setCollectionEventTimeInMinutes(
+					String collectionEventTimeInMinutes) {
+				this.collectionEventTimeInMinutes = collectionEventTimeInMinutes;
+			}
+			/**
+			 * @return Returns the collectionEventUserId.
+			 */
+			public long getCollectionEventUserId() {
+				return collectionEventUserId;
+			}
+			/**
+			 * @param collectionEventUserId The collectionEventUserId to set.
+			 */
+			public void setCollectionEventUserId(long collectionEventUserId) {
+				this.collectionEventUserId = collectionEventUserId;
+			}
+	// Mandar: 10-july-06 AutoEvents : Collection Event end
+			
+	//Mandar : 11-July-06 AutoEvents : CollectionEvent validation
+			private void validateCollectionEvent(ActionErrors errors, Validator validator)
+			{
+	           	if ((collectionEventUserId) == -1L)
+	            {
+	           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required","Collection user"));
+	            }
+	           	if (!validator.checkDate(collectionEventdateOfEvent) )
+	           	{
+	           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required","Collection date"));
+	           	}
+
+	         	// checks the collectionProcedure
+	          	if (!validator.isValidOption( collectionEventCollectionProcedure ) )
+	            {
+	           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectioneventparameters.collectionprocedure")));
+	            }
+	
+			}
+
+	//Mandar : 11-july-06 AutoEvents : ReceivedEvent start
+			
+	/**
+	 * @return Returns the receivedEventComments.
+	 */
+	public String getReceivedEventComments() {
+		return receivedEventComments;
+	}
+	/**
+	 * @param receivedEventComments The receivedEventComments to set.
+	 */
+	public void setReceivedEventComments(String receivedEventComments) {
+		this.receivedEventComments = receivedEventComments;
+	}
+	/**
+	 * @return Returns the receivedEventDateOfEvent.
+	 */
+	public String getReceivedEventDateOfEvent() {
+		return receivedEventDateOfEvent;
+	}
+	/**
+	 * @param receivedEventDateOfEvent The receivedEventDateOfEvent to set.
+	 */
+	public void setReceivedEventDateOfEvent(String receivedEventDateOfEvent) {
+		this.receivedEventDateOfEvent = receivedEventDateOfEvent;
+	}
+	/**
+	 * @return Returns the receivedEventReceivedQuality.
+	 */
+	public String getReceivedEventReceivedQuality() {
+		return receivedEventReceivedQuality;
+	}
+	/**
+	 * @param receivedEventReceivedQuality The receivedEventReceivedQuality to set.
+	 */
+	public void setReceivedEventReceivedQuality(
+			String receivedEventReceivedQuality) {
+		this.receivedEventReceivedQuality = receivedEventReceivedQuality;
+	}
+	/**
+	 * @return Returns the receivedEventSpecimenId.
+	 */
+	public long getReceivedEventSpecimenId() {
+		return receivedEventSpecimenId;
+	}
+	/**
+	 * @param receivedEventSpecimenId The receivedEventSpecimenId to set.
+	 */
+	public void setReceivedEventSpecimenId(long receivedEventSpecimenId) {
+		this.receivedEventSpecimenId = receivedEventSpecimenId;
+	}
+	/**
+	 * @return Returns the receivedEventSystemIdentifier.
+	 */
+	public long getReceivedEventSystemIdentifier() {
+		return receivedEventSystemIdentifier;
+	}
+	/**
+	 * @param receivedEventSystemIdentifier The receivedEventSystemIdentifier to set.
+	 */
+	public void setReceivedEventSystemIdentifier(
+			long receivedEventSystemIdentifier) {
+		this.receivedEventSystemIdentifier = receivedEventSystemIdentifier;
+	}
+	/**
+	 * @return Returns the receivedEventTimeInHours.
+	 */
+	public String getReceivedEventTimeInHours() {
+		return receivedEventTimeInHours;
+	}
+	/**
+	 * @param receivedEventTimeInHours The receivedEventTimeInHours to set.
+	 */
+	public void setReceivedEventTimeInHours(String receivedEventTimeInHours) {
+		this.receivedEventTimeInHours = receivedEventTimeInHours;
+	}
+	/**
+	 * @return Returns the receivedEventTimeInMinutes.
+	 */
+	public String getReceivedEventTimeInMinutes() {
+		return receivedEventTimeInMinutes;
+	}
+	/**
+	 * @param receivedEventTimeInMinutes The receivedEventTimeInMinutes to set.
+	 */
+	public void setReceivedEventTimeInMinutes(String receivedEventTimeInMinutes) {
+		this.receivedEventTimeInMinutes = receivedEventTimeInMinutes;
+	}
+	/**
+	 * @return Returns the receivedEventUserId.
+	 */
+	public long getReceivedEventUserId() {
+		return receivedEventUserId;
+	}
+	/**
+	 * @param receivedEventUserId The receivedEventUserId to set.
+	 */
+	public void setReceivedEventUserId(long receivedEventUserId) {
+		this.receivedEventUserId = receivedEventUserId;
+	}
+
+	//Mandar : 18-July-06 ReceivedEvent validation
+	private void validateReceivedEvent(ActionErrors errors, Validator validator)
+	{
+       	if ((receivedEventUserId) == -1L)
+        {
+       		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required","Received user"));
+        }
+       	if (!validator.checkDate(receivedEventDateOfEvent) )
+       	{
+       		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required","Received date"));
+       	}
+
+     	// checks the collectionProcedure
+      	if (!validator.isValidOption( receivedEventReceivedQuality ) )
+        {
+       		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("receivedeventparameters.receivedquality")));
+        }
+
+				
+	}
+	//Mandar : 11-july-06 AutoEvents : ReceivedEvent end
+	
+	
+
 
 }
