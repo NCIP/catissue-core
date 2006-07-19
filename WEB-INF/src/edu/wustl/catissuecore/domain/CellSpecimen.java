@@ -43,7 +43,7 @@ public class CellSpecimen extends Specimen implements Serializable
     //Constructor
     public CellSpecimen(AbstractActionForm form)
     {
-    	super(form);
+//    	super(form);
     	setAllValues(form);
     }
     

@@ -42,7 +42,7 @@ public class FluidSpecimen extends Specimen implements Serializable
 //  Constructor
     public FluidSpecimen(AbstractActionForm form)
     {
-    	super(form);
+//    	super(form);
     	setAllValues(form);
     }
     

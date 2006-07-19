@@ -44,7 +44,7 @@ public class TissueSpecimen extends Specimen implements Serializable
     //Constructor
     public TissueSpecimen(AbstractActionForm form)
     {
-    	super(form);
+//    	super(form);
     	setAllValues(form);
     }
     

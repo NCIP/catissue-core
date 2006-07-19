@@ -18,8 +18,10 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import edu.wustl.catissuecore.actionForm.CollectionEventParametersForm;
 import edu.wustl.catissuecore.actionForm.CreateSpecimenForm;
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
+import edu.wustl.catissuecore.actionForm.ReceivedEventParametersForm;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.MapDataParser;
@@ -605,6 +607,60 @@ public class Specimen extends AbstractDomainObject implements Serializable
 		        Logger.out.debug("BIO-COL : " + bioCollection );
 
 		        this.biohazardCollection = bioCollection;
+		        
+		        //Mandar : autoevents 14-july-06 start
+		        
+		        if(form.isAddOperation())
+		        {
+		        	Logger.out.debug("Setting Collection event in specimen domain object" );
+		        	//seting collection event values
+		        	CollectionEventParametersForm collectionEvent = new CollectionEventParametersForm();
+		        	collectionEvent.setCollectionProcedure(form.getCollectionEventCollectionProcedure()  );
+		        	collectionEvent.setComments(form.getCollectionEventComments()  );
+		        	collectionEvent.setContainer(form.getCollectionEventContainer()  );
+		        	collectionEvent.setTimeInHours(form.getCollectionEventTimeInHours()  );
+		        	collectionEvent.setTimeInMinutes(form.getCollectionEventTimeInMinutes()  );
+		        	collectionEvent.setDateOfEvent(form.getCollectionEventdateOfEvent()  );
+		        	collectionEvent.setUserId(form.getCollectionEventUserId()  );
+		        	collectionEvent.setOperation(form.getOperation()  );
+		        	
+		        	
+		        	CollectionEventParameters collectionEventParameters = new CollectionEventParameters( );
+		        	collectionEventParameters.setAllValues(collectionEvent );
+		        	
+		        	collectionEventParameters.setSpecimen(this);
+		        	Logger.out.debug("Before specimenEventCollection.size(): "+ specimenEventCollection.size()); 
+		        	specimenEventCollection.add(collectionEventParameters );
+		        	Logger.out.debug("After specimenEventCollection.size(): "+ specimenEventCollection.size()); 
+		        	
+		        	Logger.out.debug("...14-July-06... : CollectionEvent set");
+		        	
+		        	Logger.out.debug("Setting Received event in specimen domain object" );
+		        	//setting received event values
+		        	ReceivedEventParametersForm receivedEvent = new ReceivedEventParametersForm();
+		        	receivedEvent.setComments(form.getReceivedEventComments()  );
+		        	receivedEvent.setDateOfEvent(form.getReceivedEventDateOfEvent()  );
+		        	receivedEvent.setReceivedQuality( form.getReceivedEventReceivedQuality() );
+		        	receivedEvent.setUserId(form.getReceivedEventUserId()  );
+		        	receivedEvent.setTimeInMinutes(form.getReceivedEventTimeInMinutes()  );
+		        	receivedEvent.setTimeInHours(form.getReceivedEventTimeInHours()  );
+		        	receivedEvent.setOperation( form.getOperation() );
+		        	
+		        	ReceivedEventParameters receivedEventParameters = new ReceivedEventParameters();
+		        	receivedEventParameters.setAllValues(receivedEvent  ); 
+		        	receivedEventParameters.setSpecimen( this);
+		        	
+		        	Logger.out.debug("Before specimenEventCollection.size(): "+ specimenEventCollection.size()); 
+		        	specimenEventCollection.add(receivedEventParameters );
+		        	Logger.out.debug("After specimenEventCollection.size(): "+ specimenEventCollection.size()); 
+		        	
+		        	Logger.out.debug("...14-July-06... : ReceivedEvent set");
+		        	
+		        }
+
+		        //Mandar : autoevents 14-july-06 end
+		        
+		        
             }
             else if(abstractForm instanceof CreateSpecimenForm)
             {

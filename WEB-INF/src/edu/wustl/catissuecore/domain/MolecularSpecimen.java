@@ -47,7 +47,7 @@ public class MolecularSpecimen extends Specimen implements Serializable
 //  Constructor
     public MolecularSpecimen(AbstractActionForm form)
     {
-    	super(form);
+//    	super(form);
     	setAllValues(form);
     }
     
