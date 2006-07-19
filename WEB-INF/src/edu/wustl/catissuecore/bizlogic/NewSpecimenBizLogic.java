@@ -25,10 +25,12 @@ import net.sf.hibernate.HibernateException;
 import edu.wustl.catissuecore.domain.Address;
 import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.CellSpecimen;
+import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.DistributedItem;
 import edu.wustl.catissuecore.domain.ExternalIdentifier;
 import edu.wustl.catissuecore.domain.FluidSpecimen;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
+import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
@@ -102,6 +104,38 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 					dao.insert(exId,sessionDataBean, true, true);
 				}
 			}
+		
+			//Mandar : 17-july-06 : autoevents start
+			Logger.out.debug("17-july-06: 1 ");
+				Collection specimenEventsCollection =specimen.getSpecimenEventCollection();
+				Iterator specimenEventsCollectionIterator = specimenEventsCollection.iterator();
+				Logger.out.debug("specimenEventsCollection.size() : "+ specimenEventsCollection.size()); 
+				while(specimenEventsCollectionIterator.hasNext() )
+				{
+					Logger.out.debug("17-july-06: 2 ");
+					Object eventObject = specimenEventsCollectionIterator.next();
+					
+					if(eventObject instanceof CollectionEventParameters )
+					{
+						CollectionEventParameters collectionEventParameters = (CollectionEventParameters)eventObject;
+						collectionEventParameters.setSpecimen(specimen );
+						Logger.out.debug("17-july-06: 3 ");
+						dao.insert(collectionEventParameters,sessionDataBean, true, true);
+						Logger.out.debug("17-july-06: 4 ");
+					}
+					else if(eventObject instanceof ReceivedEventParameters   )
+					{
+						ReceivedEventParameters receivedEventParameters = (ReceivedEventParameters)eventObject;
+						receivedEventParameters.setSpecimen(specimen );
+						Logger.out.debug("17-july-06: 3 ");
+						dao.insert(receivedEventParameters,sessionDataBean, true, true);
+						Logger.out.debug("17-july-06: 4 ");
+					}
+					
+				}
+				Logger.out.debug("17-july-06: Events Collection inserted");
+			//Mandar : 17-july-06 : autoevents end
+			
 			
 			//Inserting data for Authorization
 			
