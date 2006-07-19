@@ -43,7 +43,7 @@
 <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
 <tr>
 <td>
-	<table summary="" cellpadding="3" cellspacing="0" border="0" width="600">
+	<table summary="" cellpadding="3" cellspacing="0" border="0" width="500">
 	<tr>
 		<td class="formMessage" colspan="3">* indicates a required field</td>
 	</tr>
@@ -56,12 +56,12 @@
 	
 	<tr>
 		
-		<td class="formRequiredNoticeNoBottom">* 
+		<td class="formRequiredNoticeNoBottom">*
 			<html:radio styleClass="" styleId="checkedButton" property="checkedButton" value="1" onclick="onRadioButtonClick(this)">
 				&nbsp;
 			</html:radio>
 		</td>
-		<TD class="formRequiredLabelRightBorder">
+		<TD class="formRequiredLabelRightBorder" width="73">
 			<label for="parentId">
 				<bean:message key="quickEvents.specimenID"/>
 			</label>
@@ -83,21 +83,22 @@
 		<td class="formRequiredLabel">
 			<bean:message key="quickEvents.eventparameters"/>
 		</td>
-		<td class="formField">
+		<td class="formField" colspan="2">
 			<html:select property="specimenEventParameter" styleClass="formFieldSized15" styleId="className" size="1" disabled="false"
 			 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 				<html:options name="<%=Constants.EVENT_PARAMETERS_LIST%>" labelName="<%=Constants.EVENT_PARAMETERS_LIST%>"/>
 			</html:select>
 		</td>
+
 	</tr>
 	
 	<tr>
-		<td class="formRequiredNotice">&nbsp;
+		<td class="formRequiredNotice"><span class="hideText">*</span>
 			<html:radio styleClass="" styleId="checkedButton" property="checkedButton" value="2" onclick="onRadioButtonClick(this)">
 				&nbsp;
 			</html:radio>
 		</td>
-		<td class="formRequiredLabel">
+		<td class="formRequiredLabel" width="73">
 			<label for="barCode">
 				<bean:message key="quickEvents.barcode"/>
 			</label>
@@ -111,7 +112,7 @@
 				<html:text styleClass="formFieldSized10"  maxlength="50"  size="30" styleId="barCode" property="barCode"/>
 			</logic:equal>
 		</td>
-		<td class="formLabel" colspan="3">
+		<td class="formLabel" colspan="4">
 			&nbsp;
 		</td>
 	</tr>

@@ -150,12 +150,12 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 					<bean:message key="tab.specimen.eventparameters"/>
 				</td>
 
-				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()">
-					View Surgical Pathology Report
+				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="featureNotSupported()">
+					<%=Constants.SURGICAL_PATHOLOGY_REPORT %>
 				</td>
 				
-				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()">
-					View Clinical Annotations
+				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="featureNotSupported()">
+					<%=Constants.CLINICAL_ANNOTATIONS %>
 				</td>
 
 				<td width="450" class="tabMenuSeparator" colspan="2">&nbsp;</td>
@@ -177,7 +177,8 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 <%
 	if(dataList!=null && dataList.size() != 0)
 	{
-		title = "Specimen Event Parameters List for Identifier : " + specimenIdentifier;
+//		title = "Specimen Event Parameters List for Identifier : " + specimenIdentifier;
+		title = Constants.EVENTS_TITLE_MESSAGE;
 %>
 
    	 	<tr>
