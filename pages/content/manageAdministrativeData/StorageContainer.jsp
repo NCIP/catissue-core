@@ -100,7 +100,13 @@
 			document.forms[0].action = action;
 			document.forms[0].submit();
 		}
-		
+		function ReserName()
+		{
+			var action = "StorageContainer.do?operation="+document.forms[0].operation.value+"&pageOf=pageOfStorageContainer&isOnChange=true";
+			document.forms[0].action = action;
+			document.forms[0].containerName.value="";
+			document.forms[0].submit();
+		}
 		function onSiteChange(element)
 		{
 			var list = document.getElementById('typeId');
@@ -116,16 +122,6 @@
 			document.forms[0].submit();
 		}
 		
-		function onContainerChange(element)
-		{
-		}
-		function disableHoldsList2()
-		{
-		alert("hi");
-		document.forms[0].holdsSpecimenClassTypeIds.disabled=true;
-		}
-		
-
 		function onNameClick(element)
 		{
 			if(element.value=="")
@@ -257,9 +253,30 @@ function insRow(subdivtag)
 }
 */
 
-check()
+function validate(action,formField)
 {
-	alert("Hello");
+	if(validateAny(document.forms[0].collectionIds)==false)
+	{
+		alert("Please select Proper Collection Protocols");
+	}
+	else
+	{
+		if(validateAny(document.forms[0].holdsStorageTypeIds)==false)
+		{
+			alert("Please select Proper Storage Types");
+		}
+		else
+		{	
+			if(validateAny(document.forms[0].holdsSpecimenClassTypeIds)==false)
+			{
+				alert("please select Proper Specimen Classes");
+			}
+			else
+			{	
+				confirmDisable(action,formField);
+			}
+		}
+	}	
 }
 	</script>
 </head>
@@ -415,6 +432,10 @@ check()
 						</td>
 						<td class="formField" colspan="2">
 							<html:text styleClass="formFieldSized15" maxlength="50"  size="30" styleId="startNumber" property="containerName"/>
+							&nbsp;
+							<html:link href="#" styleId="newSite" onclick="ReserName()">
+								<bean:message key="StorageContainer.resetName" />
+							</html:link>
 						</td>
 					</tr>
 					
@@ -609,7 +630,7 @@ check()
 							<tr>
 								<td>
 								<%
-						   			String action = "confirmDisable('" + formName +"',document.forms[0].activityStatus)";
+						   			String action = "validate('" + formName +"',document.forms[0].activityStatus)";
 						   		%>
 						   			<html:button styleClass="actionButton" property="submitPage" onclick="<%=action%>">
 						   				<bean:message key="buttons.submit"/>

@@ -5,6 +5,7 @@
 <%@ page import="edu.wustl.catissuecore.actionForm.StorageTypeForm"%>
 
 <head>
+	<script language="JavaScript" src="jss/script.js" type="text/javascript"></script>
 	<script language="javascript">
 //Mandar : 18-Apr-06 : bugid: 644 : - Dimension 2 capacity label 
 	function capacityChanged(element)
@@ -35,8 +36,40 @@
 		}
 	}
 
+//	function validate()
+//	{
+
+	//	if(validateAny(document.forms[0].holdsStorageTypeIds,"Please select Proper Storage Types")=="true")
+		//{
+			//if(validateAny(document.forms[0].holdsSpecimenClassTypeIds,"Please select Proper Specimen Classes")=="true")	
+			//{
+			//	document.forms[0].submit();
+			//	return true;
+			//}
+		//}
+	//}
+	
+	function validate()
+	{
+		if(validateAny(document.forms[0].holdsStorageTypeIds)==false)
+		{
+			alert("Please select Proper Storage Types");
+		}
+		else
+		{
+			if(validateAny(document.forms[0].holdsSpecimenClassTypeIds)==false)
+			{
+				alert("Please select Proper Specimen Classes");
+			}
+			else
+			{
+				document.forms[0].submit();
+			}
+		}
+		
+	}
 	</script>
-	<script language="JavaScript" src="jss/script.js" type="text/javascript"></script>
+
 </head>
 	
 <%
@@ -80,7 +113,7 @@
     
 <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
 
-<html:form action="<%=formName%>">
+<html:form action="<%=formName%>" method="post">	
 <!-- NEW Institute REGISTRATION BEGINS-->
 	<tr>
 	<td>
@@ -234,44 +267,15 @@
 				<html:text styleClass="formFieldSized10"  maxlength="50" size="30" styleId="twoDimensionLabel" property="twoDimensionLabel"/>
 			</td>
 		</tr>
-		<!-- added by vaishali on 21st June 2006 5.58
-		<tr>			
-			<td class="formTitle" colspan="3">
-				<label for="defaultCapacity">
-					<bean:message key="storageType.details"/>
-				</label>
-			</td>
-		</tr>
-
-		<tr>
-			<td class="formRequiredNotice" width="5">&nbsp;</td>
-			<td class="formLabel">
-				<label for="oneDimensionCapacity">
-					<bean:message key="storageType.holds"/>
-				</label>
-			</td>
-			<td class="formField">
-				<html:select property="oneDimensionLabel" styleClass="formFieldSized" styleId="typeId" size="4" multiple="true"
-							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-				<html:options collection="<%=Constants.HOLDS_LIST%>" labelProperty="name" property="value"/>
-				</html:select>
-							&nbsp;
-			</td>
-		</tr>
-		
-		<!-- added finish -->
 		<tr>
 		  <td align="right" colspan="3">
 			<!-- action buttons begins -->
-			<%
-        		String changeAction = "setFormAction('" + formName + "');";
-			%> 
 			<table cellpadding="4" cellspacing="0" border="0">
 				<tr>
 					<td>
-						<html:submit styleClass="actionButton">
+						<html:button styleClass="actionButton" property="submitPage" onclick="validate()">
 							<bean:message  key="buttons.submit" />
-						</html:submit>
+						</html:button>
 					</td>
 				</tr>
 			</table>
