@@ -173,7 +173,7 @@ public class ConditionMapParser
 			 * so that the 'or' or 'pand' symbol is removed when a node is deleted and the number of children 
 			 * of the parent of the deleted node is lesser than two.
 			 */ 
-			if(childCount<2 && parent.isRoot()==false)
+			if(childCount==1 && parent.isRoot()==false)
 			{
 				AdvancedConditionsNode parentNode = (AdvancedConditionsNode)parent.getUserObject();
 				//Logger.out.debug("reset all siblings"+parentNode.getOperationWithChildCondition().getOperator());
