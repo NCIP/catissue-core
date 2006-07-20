@@ -178,3 +178,25 @@ function featureNotSupported()
 {
 	alert("This feature is not supported in version 1.1 and will be supported in the next release of caTissue.");
 }
+
+function validateAny(element)
+{
+
+	var len = element.length;
+
+	var anySelected=false;
+	if(element[0].selected)
+	{
+		anySelected=true;
+
+	}
+	for (var i = 1; i < len; i++) 
+	{
+
+		if (element[i].selected && anySelected==true) 
+		{
+			return false;
+		}
+	}
+	return true;
+}
