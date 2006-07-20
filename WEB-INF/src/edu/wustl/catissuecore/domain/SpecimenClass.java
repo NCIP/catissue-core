@@ -27,7 +27,11 @@ public class SpecimenClass extends AbstractDomainObject implements Serializable
 	 * 
 	 */
 	protected String name;
-	
+
+	/**
+	 * Defines whether this Specimen class record can be queried (ACTIVE) or not queried (INACTIVE) by any actor.
+	 */
+	protected String activityStatus;
 	private Collection storageContainerCollection=new HashSet(); 
 
 	/**
@@ -72,6 +76,28 @@ public class SpecimenClass extends AbstractDomainObject implements Serializable
 	{
 		this.systemIdentifier = systemIdentifier;
 	}
+	/**
+     * Returns the activity status of the specimen class. 
+     * @return The activity status of specimen class.
+     * @see #setActivityStatus(String)
+     * @hibernate.property name="activityStatus" type="string" default="Active"
+     * column="ACTIVITY_STATUS" length="30"
+     */
+	public String getActivityStatus()
+	{
+		return activityStatus;
+	}
+
+	/**
+     * Sets the activity status.
+     * @param activityStatus the activity status of the storagetype to be set.
+     * @see #getActivityStatus()
+     */
+	public void setActivityStatus(String activityStatus)
+	{
+		this.activityStatus = activityStatus;
+	}
+
 
 	/**
      * Returns the collection of Storage Containers associated with SpecimenClassType 
@@ -99,6 +125,7 @@ public class SpecimenClass extends AbstractDomainObject implements Serializable
 
 	public void setAllValues(AbstractActionForm abstractForm)
 	{
+		
 	}
 
 }

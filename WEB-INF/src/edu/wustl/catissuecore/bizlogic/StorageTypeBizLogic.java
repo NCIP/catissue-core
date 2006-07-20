@@ -10,12 +10,19 @@
 
 package edu.wustl.catissuecore.bizlogic;
 
+import java.util.Iterator;
+import java.util.List;
+
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
+import edu.wustl.common.dao.AbstractDAO;
 import edu.wustl.common.dao.DAO;
+import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.global.Constants;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * StorageTypeHDAO is used to add site type information into the database using Hibernate.
@@ -111,4 +118,7 @@ public class StorageTypeBizLogic extends DefaultBizLogic
 	    dao.audit(type.getDefaultStorageCapacity(), oldStorageType.getDefaultStorageCapacity(), sessionDataBean, true);
 	    dao.audit(obj, oldObj, sessionDataBean, true);
     }
+	
+	
+    
 }

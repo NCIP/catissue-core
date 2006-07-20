@@ -24,31 +24,44 @@ drop table if exists CATISSUE_CONTAINER_SPECIMENCL_REL;
 drop table if exists CATISSUE_STORAGETYPE_HOLDS_REL;
 drop table if exists CATISSUE_CONTAINER_TYPE_REL;
 drop table if exists CATISSUE_CONTAINER_CP_REL;
+drop table if exists CATISSUE_CONT_SPECIMENCL_REL;
 drop table if exists CATISSUE_TYPE_SPECIMENCL_REL;
 drop table if exists CATISSUE_SPECIMEN_CLASS;
 
-#--------Adding Container_name in Storage_container table
-alter table CATISSUE_STORAGE_CONTAINER add column CONTAINER_NAME varchar (50)   NOT NULL ;
+#--------dropping Container_name in Storage_container table if exists
+alter table CATISSUE_STORAGE_CONTAINER drop column CONTAINER_NAME;
+
+#--------Adding container_name in storage_container table
+alter table CATISSUE_STORAGE_CONTAINER add column CONTAINER_NAME varchar (50) unique;
 
 #--------Give values same as identifier to container_name for previouly added containers.
-update CATISSUE_STORAGE_CONTAINER set CONTAINER_NAME=IDENTIFIER where CONTAINER_NAME='';
+update CATISSUE_STORAGE_CONTAINER set CONTAINER_NAME=IDENTIFIER;
 
 #--------drop the container_number column
 alter table CATISSUE_STORAGE_CONTAINER drop column CONTAINER_NUMBER;
 
+#--------Adding Activity Status column in Storage_type table
+alter table CATISSUE_STORAGE_TYPE add column ACTIVITY_STATUS varchar(30) default NULL;
+#-------- set default Activity status to 'Active ' for all storage types
+update CATISSUE_STORAGE_CONTAINER set ACTIVITY_STATUS='Active';
+
+#-------- updating container Number to container Name
 update CATISSUE_INTERFACE_COLUMN_DATA set column_name='CONTAINER_NAME' where IDENTIFIER='240' and TABLE_ID='21';
+update CATISSUE_SEARCH_DISPLAY_DATA set display_name='Container Name' where relationship_id='8' and col_id='240';
 
 #-------Creating Catissue_specimen_class table for storing all classes of specimens.
 create table CATISSUE_SPECIMEN_CLASS (
    IDENTIFIER BIGINT NOT NULL AUTO_INCREMENT,
    NAME VARCHAR(50),
+   ACTIVITY_STATUS VARCHAR(30) default NULL,
    primary key (IDENTIFIER)
 );
 #-------inserting values in catissye_specimen_class table
-insert into CATISSUE_SPECIMEN_CLASS values (1,"FluidSpecimen");
-insert into CATISSUE_SPECIMEN_CLASS values (2,"TissueSpecimen");
-insert into CATISSUE_SPECIMEN_CLASS values (3,"CellSpecimen");
-insert into CATISSUE_SPECIMEN_CLASS values (4,"MolecularSpecimen");
+insert into CATISSUE_SPECIMEN_CLASS values (1,"Any","Disabled");
+insert into CATISSUE_SPECIMEN_CLASS values (2,"FluidSpecimen","Active");
+insert into CATISSUE_SPECIMEN_CLASS values (3,"TissueSpecimen","Active");
+insert into CATISSUE_SPECIMEN_CLASS values (4,"CellSpecimen","Active");
+insert into CATISSUE_SPECIMEN_CLASS values (5,"MolecularSpecimen","Active");
 
 
 create table CATISSUE_TYPE_SPECIMENCL_REL (
@@ -99,6 +112,30 @@ delete from CATISSUE_SEARCH_DISPLAY_DATA where RELATIONSHIP_ID='39';
 drop table CATISSUE_STORAGE_CONT_DETAILS;
 delete from csm_protection_element where PROTECTION_ELEMENT_ID='43';
 
+
+#-------- copying first row of storage types to temp table and addind "Any" entry and adding first row to the last identifier
+drop table if exists catissue_temp_type;
+
+
+CREATE TABLE catissue_temp_type (                                                                                                      
+                         `IDENTIFIER` bigint(20),                                                                                          
+                         `TYPE` varchar(50),                                                                                                   
+                         `DEFAULT_TEMP_IN_CENTIGRADE` double,                                                                                         
+                         `ONE_DIMENSION_LABEL` varchar(50),                                                                                           
+                         `TWO_DIMENSION_LABEL` varchar(50),                                                                                           
+                         `STORAGE_CONTAINER_CAPACITY_ID` bigint(20),                                                                                  
+                         `ACTIVITY_STATUS` varchar(30)
+                       );
+                                                                                              
+insert into catissue_temp_type (select * from catissue_storage_type where identifier=1 and type!='Any');
+update catissue_temp_type set identifier=(select max(identifier)+1 from catissue_storage_type);
+update catissue_storage_type set type='Any',activity_status='Disabled' where identifier=1;
+insert into catissue_storage_type (select * from catissue_temp_type);
+update catissue_storage_container set storage_type_id=(select identifier from catissue_temp_type) where storage_type_id=1;
+
+insert into catissue_storage_type (type,activity_status,identifier) values ('Any','Disabled',1);
+
+drop table catissue_temp_type;
 #----------Chnages finish
 
 #--------Adding Group_name in CATISSUE_SPECIMEN_COLL_GROUP table

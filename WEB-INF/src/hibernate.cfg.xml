@@ -44,6 +44,7 @@
 		<mapping resource="edu/wustl/catissuecore/hbm/User.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/Distribution.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/SpecimenClass.hbm.xml"/>
+<!--		<mapping resource="edu/wustl/catissuecore/hbm/HoldsGroup.hbm.xml"/>-->
 		<mapping resource="edu/wustl/common/hbm/CDEImpl.hbm.xml"/>
 		<mapping resource="edu/wustl/common/hbm/PermissibleValueImpl.hbm.xml"/>
 		<mapping resource="edu/wustl/common/hbm/QueryColumnData.hbm.xml"/>

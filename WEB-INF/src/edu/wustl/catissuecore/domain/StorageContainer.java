@@ -102,6 +102,12 @@ public class StorageContainer extends AbstractDomainObject implements java.io.Se
 	 * 
 	 */
 	protected Collection specimenClassCollection=new HashSet();
+	
+	/** Collection of holds Group that associated with Storage Container
+	 * 
+	 */
+	//protected Collection holdsGroupCollection=new HashSet();
+	
 	/**
 	 * Number of containers
 	 */
@@ -147,7 +153,7 @@ public class StorageContainer extends AbstractDomainObject implements java.io.Se
      * Returns System generated unique systemIdentifier.
      * @return System generated unique systemIdentifier.
      * @see #setSystemIdentifier(Long)
-     * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"
+     * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" unique="true" length="30"
      * unsaved-value="null" generator-class="native"
      * @hibernate.generator-param name="sequence" value="CATISSUE_STORAGE_CONTAINER_SEQ"
      */
@@ -170,7 +176,7 @@ public class StorageContainer extends AbstractDomainObject implements java.io.Se
      * Returns the Name of the torage container. 
      * @return name of the storage container.
      * @see #setName(String)
-     * @hibernate.property name="name" type="string" 
+     * @hibernate.property name="name" type="string" unique="true"
      * column="CONTAINER_NAME" length="50"
      */
 
@@ -661,16 +667,11 @@ public class StorageContainer extends AbstractDomainObject implements java.io.Se
 	        	for (int i = 0; i < specimenClassArr.length; i++)
 				{
 	        		Logger.out.debug("Specimen class Id :"+specimenClassArr[i]);
-	        		if(specimenClassArr[i]!=-1)
-	        		{
 		        		SpecimenClass specimenClass = new SpecimenClass();
 		        		specimenClass.setSystemIdentifier(new Long(specimenClassArr[i]));
 		        		specimenClassCollection.add(specimenClass);
-	        		}
 				}
         	}
-	        
-	        
 	    }
 	    catch(Exception excp)
 	    {

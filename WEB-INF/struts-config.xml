@@ -909,6 +909,8 @@ PUBLIC
 		<!-- StorageType Actions Begins -->
         <action path="/StorageType"
 			type="edu.wustl.catissuecore.action.StorageTypeAction"
+			name="storageTypeForm"
+			validate="false"
 			scope="request">
 			<forward name="pageOfStorageType" path=".catissuecore.storageTypeDef" />
 			<forward name="failure" path=".catissuecore.storageTypeDef" />

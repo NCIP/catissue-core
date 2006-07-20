@@ -62,6 +62,15 @@
             length="50"
         />
 
+        <property
+            name="activityStatus"
+            type="string"
+            update="true"
+            insert="true"
+            column="ACTIVITY_STATUS"
+            length="30"
+        />
+
         <set
             name="storageTypeCollection"
             table="CATISSUE_STORAGETYPE_HOLDS_REL"

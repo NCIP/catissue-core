@@ -331,10 +331,10 @@ public class StorageTypeForm extends AbstractActionForm
      * */
     protected void reset()
     {
-        this.oneDimensionLabel		= null;
+     /*   this.oneDimensionLabel		= null;
         this.twoDimensionLabel		= null;
         this.type					= null;
-        this.defaultTemperature = null; 
+        this.defaultTemperature = null;*/ 
     }
 
     /**
@@ -381,6 +381,8 @@ public class StorageTypeForm extends AbstractActionForm
                 errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("storageType.oneDimensionLabel")));
             }
 
+            checkValidSelectionForAny(holdsStorageTypeIds,"storageType.holdsStorageType",errors);
+            checkValidSelectionForAny(holdsSpecimenClassTypeIds,"storageType.holdsSpecimenClass",errors);
             if (validator.isEmpty(String.valueOf(twoDimensionCapacity)))
             {
                 errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("storageType.twoDimensionCapacity")));
@@ -411,7 +413,21 @@ public class StorageTypeForm extends AbstractActionForm
         return errors;
      }
 
-	
+    void checkValidSelectionForAny(long[] Ids,String message,ActionErrors errors)
+	{
+		if(Ids.length>1)
+		{
+			for(int i=0;i<Ids.length;i++)
+			{
+				if(Ids[i]==1)
+				{
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
+							ApplicationProperties.getValue(message)));
+					break;
+				}
+			}
+		}
+	}
 	
 	
 	

@@ -154,7 +154,8 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		setStorageTypeCollection(dao, container);
 		//Setting SpecimenClassType Collection
 		setSpecimenClassTypeCollection(dao, container);
-		Logger.out.info("storage type size:" + container.getStorageTypeCollection().size());
+		
+		Logger.out.debug("storage type size:" + container.getStorageTypeCollection().size());
 		for (int i = 0; i < noOfContainers; i++)
 		{
 			StorageContainer cont = new StorageContainer(container);
@@ -164,9 +165,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 				cont.setPositionDimensionTwo(new Integer(positionDimensionTwo));
 			}
 
-			/*if (container.getStartNo() != null)
-			 cont.setNumber(new Integer(i
-			 + container.getStartNo().intValue()));*/
+			
 			Logger.out.info("size:" + container.getCollectionProtocolCollection().size());
 
 			dao.insert(cont.getStorageContainerCapacity(), sessionDataBean, true, true);
@@ -720,15 +719,10 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		}
 	}
 
-	/* created by vaishali on 21st June 2006 10.04 2006 */
-	public int getNextContainerName() throws DAOException
+	public long getNextContainerName() throws DAOException
 	{
 		String sourceObjectName = "CATISSUE_STORAGE_CONTAINER";
 		String[] selectColumnName = {"max(IDENTIFIER) as MAX_NAME"};
-		//String[] whereColumnName = {"STORAGE_TYPE_ID", "PARENT_CONTAINER_ID"};
-		//String[] whereColumnCondition = {"=", "="};
-		//Object[] whereColumnValue = {Long.toString(typeID),
-		//Long.toString(parentID)};
 		AbstractDAO dao = DAOFactory.getDAO(Constants.JDBC_DAO);
 
 		dao.openSession(null);
@@ -745,7 +739,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 				String str = (String) columnList.get(0);
 				if (!str.equals(""))
 				{
-					int no = Integer.parseInt(str);
+					long no = Long.parseLong(str);
 					return no + 1;
 				}
 			}
@@ -754,63 +748,60 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		return 1;
 	}
 
-	/* created finish */
-	
-	public int getNextContainerNumber(long parentID, long typeID,
-            boolean isInSite) throws DAOException
-    {
-        String sourceObjectName = "CATISSUE_STORAGE_CONTAINER";
-        String[] selectColumnName = {"max(IDENTIFIER) as MAX_NAME"};
-        String[] whereColumnName = {"STORAGE_TYPE_ID", "PARENT_CONTAINER_ID"};
-        String[] whereColumnCondition = {"=", "="};
-        Object[] whereColumnValue = {Long.toString(typeID),
-                Long.toString(parentID)};
- 
-        if (isInSite)
-        {
-            whereColumnName = new String[3];
-            whereColumnName[0] = "STORAGE_TYPE_ID";
-            whereColumnName[1] = "SITE_ID";
-            whereColumnName[2] = "PARENT_CONTAINER_ID";
- 
-            whereColumnValue = new Object[3];
-            whereColumnValue[0] = Long.toString(typeID);
-            whereColumnValue[1] = Long.toString(parentID);
-            whereColumnValue[2] = "null";
- 
-            whereColumnCondition = new String[3];
-            whereColumnCondition[0] = "=";
-            whereColumnCondition[1] = "=";
-            whereColumnCondition[2] = "is";
-        }
-        String joinCondition = Constants.AND_JOIN_CONDITION;
- 
-        AbstractDAO dao = DAOFactory.getDAO(Constants.JDBC_DAO);
- 
-        dao.openSession(null);
- 
-        List list = dao.retrieve(sourceObjectName, selectColumnName,
-                whereColumnName, whereColumnCondition, whereColumnValue,
-                joinCondition);
- 
-        dao.closeSession();
- 
-        if (!list.isEmpty())
-        {
-            List columnList = (List) list.get(0);
-            if (!columnList.isEmpty())
-            {
-                String str = (String) columnList.get(0);
-                if (!str.equals(""))
-                {
-                    int no = Integer.parseInt(str);
-                    return no + 1;
-                }
-            }
-        }
- 
-        return 1;
-    }
+	public int getNextContainerNumber(long parentID, long typeID, boolean isInSite)
+			throws DAOException
+	{
+		String sourceObjectName = "CATISSUE_STORAGE_CONTAINER";
+		String[] selectColumnName = {"max(IDENTIFIER) as MAX_NAME"};
+		String[] whereColumnName = {"STORAGE_TYPE_ID", "PARENT_CONTAINER_ID"};
+		String[] whereColumnCondition = {"=", "="};
+		Object[] whereColumnValue = {Long.toString(typeID), Long.toString(parentID)};
+
+		if (isInSite)
+		{
+			whereColumnName = new String[3];
+			whereColumnName[0] = "STORAGE_TYPE_ID";
+			whereColumnName[1] = "SITE_ID";
+			whereColumnName[2] = "PARENT_CONTAINER_ID";
+
+			whereColumnValue = new Object[3];
+			whereColumnValue[0] = Long.toString(typeID);
+			whereColumnValue[1] = Long.toString(parentID);
+			whereColumnValue[2] = "null";
+
+			whereColumnCondition = new String[3];
+			whereColumnCondition[0] = "=";
+			whereColumnCondition[1] = "=";
+			whereColumnCondition[2] = "is";
+		}
+		String joinCondition = Constants.AND_JOIN_CONDITION;
+
+		AbstractDAO dao = DAOFactory.getDAO(Constants.JDBC_DAO);
+
+		dao.openSession(null);
+
+		List list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName,
+				whereColumnCondition, whereColumnValue, joinCondition);
+
+		dao.closeSession();
+
+		if (!list.isEmpty())
+		{
+			List columnList = (List) list.get(0);
+			if (!columnList.isEmpty())
+			{
+				String str = (String) columnList.get(0);
+				Logger.out.info("str---------------:" + str);
+				if (!str.equals(""))
+				{
+					int no = Integer.parseInt(str);
+					return no + 1;
+				}
+			}
+		}
+
+		return 1;
+	}
 
 	//    private Map createMap(List resultSet, Map containerMap)
 	//    {
@@ -1775,18 +1766,29 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		Iterator it = container.getSpecimenClassCollection().iterator();
 		while (it.hasNext())
 		{
+
 			SpecimenClass specimenClassType = (SpecimenClass) it.next();
-
-			Logger.out.debug("speciemen class Type ID :" + specimenClassType.getSystemIdentifier());
-			Object obj = dao.retrieve(SpecimenClass.class.getName(), specimenClassType
-					.getSystemIdentifier());
-			if (obj != null)
+			Logger.out.info("---------------specimen Class ID ---------------:"
+					+ specimenClassType.getSystemIdentifier().longValue());
+			if (specimenClassType.getSystemIdentifier().longValue() == -1)
 			{
-				SpecimenClass specimenClassTypeHold = (SpecimenClass) obj;
-				specimenClassTypeColl.add(specimenClassTypeHold);
-				specimenClassTypeHold.getStorageContainerCollection().add(container);
+				Logger.out.info("---------------------1---------------------");
+				specimenClassTypeColl.add(null);
 			}
-
+			else
+			{
+				Logger.out.info("---------------------2------------------");
+				Logger.out.debug("speciemen class Type ID :"
+						+ specimenClassType.getSystemIdentifier());
+				Object obj = dao.retrieve(SpecimenClass.class.getName(), specimenClassType
+						.getSystemIdentifier());
+				if (obj != null)
+				{
+					SpecimenClass specimenClassTypeHold = (SpecimenClass) obj;
+					specimenClassTypeColl.add(specimenClassTypeHold);
+					specimenClassTypeHold.getStorageContainerCollection().add(container);
+				}
+			}
 		}
 		container.setStorageTypeCollection(specimenClassTypeColl);
 	}

@@ -33,6 +33,15 @@
             length="50"
         />
 
+        <property
+            name="activityStatus"
+            type="string"
+            update="true"
+            insert="true"
+            column="ACTIVITY_STATUS"
+            length="30"
+        />
+
         <set
             name="storageContainerCollection"
             table="CATISSUE_CONT_SPECIMENCL_REL"

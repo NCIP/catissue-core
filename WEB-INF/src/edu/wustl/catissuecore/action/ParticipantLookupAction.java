@@ -34,6 +34,7 @@ import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.factory.AbstractDomainObjectFactory;
 import edu.wustl.common.factory.MasterFactory;
 import edu.wustl.common.lookup.DefaultLookupResult;
+import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.logger.Logger;
 
 public class ParticipantLookupAction extends BaseAction
@@ -141,70 +142,14 @@ public class ParticipantLookupAction extends BaseAction
 			List participantInfo=new ArrayList();
 			participantInfo.add(participant.getSystemIdentifier());
 			
-			if(participant.getLastName()!=null)
-			{
-				participantInfo.add(participant.getLastName());
-			}
-			else
-			{
-				participantInfo.add("");
-			}
-			
-			if(participant.getFirstName()!=null)
-			{
-				participantInfo.add(participant.getFirstName());
-			}
-			else
-			{
-				participantInfo.add("");
-			}
-			
-			if(participant.getMiddleName()!=null)
-			{
-				participantInfo.add(participant.getMiddleName());
-			}
-			else
-			{
-				participantInfo.add("");
-			}
-			
-			if(participant.getBirthDate()!=null)
-			{
-				participantInfo.add(participant.getBirthDate());
-			}
-			else
-			{
-				participantInfo.add("");
-			}
-			
-			if(participant.getDeathDate()!=null)
-			{
-				participantInfo.add(participant.getDeathDate());
-			}
-			else
-			{
-				participantInfo.add("");
-			}
-			
-			if(participant.getVitalStatus()!=null)
-			{
-				participantInfo.add(participant.getVitalStatus());
-			}
-			else
-			{
-				participantInfo.add("");
-			}
-			
-			if(participant.getGender()!=null)
-			{
-				participantInfo.add(participant.getGender());
-			}
-			else
-			{
-				participantInfo.add("");
-			}
-			
-			/*if(participant.getSexGenotype()!=null)
+			participantInfo.add(Utility.toString(participant.getLastName()));
+			participantInfo.add(Utility.toString(participant.getFirstName()));
+			participantInfo.add(Utility.toString(participant.getMiddleName()));
+			participantInfo.add(Utility.toString(participant.getBirthDate()));
+			participantInfo.add(Utility.toString(participant.getDeathDate()));
+			participantInfo.add(Utility.toString(participant.getVitalStatus()));
+			participantInfo.add(Utility.toString(participant.getGender()));
+						/*if(participant.getSexGenotype()!=null)
 			{
 				participantInfo.add(participant.getSexGenotype());
 			}
@@ -231,17 +176,8 @@ public class ParticipantLookupAction extends BaseAction
 				participantInfo.add("");
 			}
 			*/
-			if(participant.getSocialSecurityNumber()!=null)
-			{
-				participantInfo.add(participant.getSocialSecurityNumber());
-			}
-			else
-			{
-				participantInfo.add("");
-			}
-			
+			participantInfo.add(Utility.toString(participant.getSocialSecurityNumber()));
 			participantInfo.add(result.getProbablity().toString()+" %");
-			
 			participantDisplayList.add(participantInfo);
 			
 		}

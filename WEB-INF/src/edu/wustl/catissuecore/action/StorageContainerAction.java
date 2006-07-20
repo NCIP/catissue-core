@@ -12,6 +12,7 @@ package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -78,17 +79,17 @@ public class StorageContainerAction  extends SecureAction
         
     	StorageContainerBizLogic bizLogic = (StorageContainerBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
         
-    	String []displayField = {"type"};  
+    	/*String []displayField = {"type"};  
     	String valueField = "systemIdentifier";
     	List list = bizLogic.getList(StorageType.class.getName(),displayField, valueField, false);
-    	request.setAttribute(Constants.STORAGETYPELIST, list);
+    	request.setAttribute(Constants.STORAGETYPELIST, list);*/
+    	
     	
     	//Populating the Site Array
     	String []siteDisplayField = {"name"};
-    	list = bizLogic.getList(Site.class.getName(),siteDisplayField, valueField, true);
+    	String valueField = "systemIdentifier";
+    	List list = bizLogic.getList(Site.class.getName(),siteDisplayField, valueField, true);
     	request.setAttribute(Constants.SITELIST,list);
-    	
-    	Logger.out.debug("Getting Collection Protocol Ids");
     	
     	//populating collection protocol list.
     	List list1=bizLogic.retrieve(CollectionProtocol.class.getName());
@@ -97,12 +98,16 @@ public class StorageContainerAction  extends SecureAction
 	  	
         //Gets the Storage Type List and sets it in request 
         List list2=bizLogic.retrieve(StorageType.class.getName());
-    	List storageTypeList=getStorageTypeList(list2);
-    	request.setAttribute(Constants.HOLDS_LIST1, storageTypeList);
+    	List storageTypeListWithAny=getStorageTypeList(list2,true);
+    	request.setAttribute(Constants.HOLDS_LIST1, storageTypeListWithAny);
     	
+    	List StorageTypeListWithoutAny=getStorageTypeList(list2,false);
+    	request.setAttribute(Constants.STORAGETYPELIST, StorageTypeListWithoutAny);
+    
     	//Gets the Specimen Class Type List and sets it in request
     	List list3=bizLogic.retrieve(SpecimenClass.class.getName());
         List specimenClassTypeList = getSpecimenClassTypeList(list3);
+        //Collections.sort(specimenClassTypeList);
 	  	request.setAttribute(Constants.HOLDS_LIST2, specimenClassTypeList);
 	  	
     	boolean isOnChange = false; 
@@ -115,6 +120,12 @@ public class StorageContainerAction  extends SecureAction
 			isOnChange = true; 
 		}
 		Logger.out.info("Onchange parameter in StorageContainerAction:"+isOnChange);
+		
+		/*if(operation.equals(Constants.ADD))
+		{
+			storageContainerForm.setHoldsStorageTypeIds(new long[]{1});
+			storageContainerForm.setHoldsSpecimenClassTypeIds(new long[]{1});
+		}*/
 		// Mandar : code for Addnew Storage Type data 23-Jan-06
 		String storageTypeID = (String)request.getAttribute(Constants.ADD_NEW_STORAGE_TYPE_ID);
 		if(storageTypeID != null && storageTypeID.trim().length() > 0 )
@@ -157,6 +168,7 @@ public class StorageContainerAction  extends SecureAction
             		type_name=type.getType();
             		Logger.out.debug("Type Name:"+type_name);
             		
+            		// If operation is add opeartion then set the holds list according to storage type selected.
             		if(operation!=null && operation.equals(Constants.ADD))
             		{
             			long[] defHoldsStorageTypeList=getDefaultHoldStorageTypeList(type);
@@ -217,12 +229,23 @@ public class StorageContainerAction  extends SecureAction
         	}
         	Logger.out.debug("Start Number : " + startNumber); 
         	storageContainerForm.setStartNumber(String.valueOf(startNumber));
-        	int containerName=bizLogic.getNextContainerName();
+        	
+        	//Getting the next container number.
+        	String containerNumber="";
+        	if(operation.equals(Constants.ADD))
+        	{
+        		containerNumber=String.valueOf(bizLogic.getNextContainerName());
+        	}
+        	else
+        	{
+        		containerNumber=String.valueOf(storageContainerForm.getSystemIdentifier());
+        	}
         	if(!type_name.equals("")&& !site_name.equals(""))
         	{	
-        		if(operation.equals(Constants.ADD))
+        		if(storageContainerForm.getContainerName().equals(""))
         		{
-        			storageContainerForm.setContainerName(site_name+"_"+type_name+"_"+String.valueOf(containerName));
+        			//generating the default container name
+        			storageContainerForm.setContainerName(site_name+"_"+type_name+"_"+containerNumber);
         		}
         	}
         }	
@@ -243,7 +266,7 @@ public class StorageContainerAction  extends SecureAction
     private List getCollectionProtocolList(List list)
     {
     	List collectionProtocolList=new ArrayList();
-    	collectionProtocolList.add(new NameValueBean("-- Any --","-1"));
+    	
     	
     	Iterator cpItr=list.iterator();
     	while(cpItr.hasNext())
@@ -251,24 +274,42 @@ public class StorageContainerAction  extends SecureAction
     		CollectionProtocol cp=(CollectionProtocol)cpItr.next();
     		collectionProtocolList.add(new NameValueBean(cp.getTitle(),cp.getSystemIdentifier()));
     	}
+    	Collections.sort(collectionProtocolList);
+    	collectionProtocolList.add(0,new NameValueBean("Any","-1"));
     	return collectionProtocolList;
     }
     /* this Function gets the list of all storage types as argument and  
      * create a list in which nameValueBean is stored with Type and Identifier of storage type.
      * and returns this list
      */ 
-    private List getStorageTypeList(List list)
+    private List getStorageTypeList(List list,boolean includeAny)
     {
+    	NameValueBean typeAny=null;
     	List storageTypeList=new ArrayList();
-    	storageTypeList.add(new NameValueBean("-- Any --","-1"));
-    	
     	Iterator typeItr=list.iterator();
     	while(typeItr.hasNext())
     	{
     		StorageType type=(StorageType)typeItr.next();
-    		storageTypeList.add(new NameValueBean(type.getType(),type.getSystemIdentifier()));
+    		if(type.getSystemIdentifier().longValue()==1)
+    		{
+    			typeAny=new NameValueBean(type.getType(),type.getSystemIdentifier());
+    		}
+    		else
+    		{
+    			storageTypeList.add(new NameValueBean(type.getType(),type.getSystemIdentifier()));
+    		}
+    	}
+    	Collections.sort(storageTypeList);
+    	if(includeAny)
+    	{
+    		storageTypeList.add(0,typeAny);
+    	}
+    	else
+    	{
+    		storageTypeList.add(0,new NameValueBean(Constants.SELECT_OPTION,"-1"));
     	}
     	return storageTypeList;
+    	
     }
     /* this Function gets the list of all Specimen Class Types as argument and  
      * create a list in which nameValueBean is stored with Name and Identifier of specimen Class Type.
@@ -277,17 +318,30 @@ public class StorageContainerAction  extends SecureAction
     private List getSpecimenClassTypeList(List list)
     {
     	List specimenClassTypeList=new ArrayList();
-    	specimenClassTypeList.add(new NameValueBean("-- Any Specimen--","-1"));
+    	NameValueBean specimenClassAny=null;
     	
     	Iterator specimentypeItr=list.iterator();
     	while(specimentypeItr.hasNext())
     	{
-    		SpecimenClass specimenClassType=(SpecimenClass)specimentypeItr.next();
-    		specimenClassTypeList.add(new NameValueBean(specimenClassType.getName(),specimenClassType.getSystemIdentifier()));
+    		SpecimenClass specimenClass=(SpecimenClass)specimentypeItr.next();
+    		if(specimenClass.getSystemIdentifier().longValue()==1)
+    		{
+    			specimenClassAny=new NameValueBean(specimenClass.getName(),specimenClass.getSystemIdentifier());
+    		}
+    		else
+    		{
+    			specimenClassTypeList.add(new NameValueBean(specimenClass.getName(),specimenClass.getSystemIdentifier()));
+    		}
     	}
+    	Collections.sort(specimenClassTypeList);
+    	specimenClassTypeList.add(0,specimenClassAny);
     	return specimenClassTypeList;
+    	
     }
     
+    /* this function finds out the storage type holds list for a storage type given 
+     * and sets the container's storage type holds list
+     * */
     private long[] getDefaultHoldStorageTypeList(StorageType type)
     {
     	//Populating the storage type-id array
@@ -311,6 +365,9 @@ public class StorageContainerAction  extends SecureAction
     	return null;
     }
     
+    /* this function finds out the specimen class holds list for a storage type given 
+     * and sets the container's specimen class holds list
+     * */
     private long[] getDefaultHoldsSpecimenClasstypeList(StorageType type)
     {
     	//Populating the specimen class type-id array

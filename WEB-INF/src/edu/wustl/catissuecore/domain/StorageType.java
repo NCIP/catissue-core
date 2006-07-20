@@ -54,6 +54,11 @@ public class StorageType extends AbstractDomainObject implements Serializable
 	protected String twoDimensionLabel;
 
 	/**
+	 * Defines whether this Storage type record can be queried (ACTIVE) or not queried (INACTIVE) by any actor.
+	 */
+	protected String activityStatus;
+	
+	/**
      * Default capacity of a storage container.
      */
 	private StorageContainerCapacity defaultStorageCapacity = new StorageContainerCapacity();
@@ -194,6 +199,29 @@ public class StorageType extends AbstractDomainObject implements Serializable
 		this.twoDimensionLabel = twoDimensionLabel;
 	}
 	
+	/**
+     * Returns the activity status of the storage type. 
+     * @return The activity status of storage type.
+     * @see #setActivityStatus(String)
+     * @hibernate.property name="activityStatus" type="string"  
+     * column="ACTIVITY_STATUS" length="30" default="Active"
+     */
+	public String getActivityStatus()
+	{
+		return activityStatus;
+	}
+
+	/**
+     * Sets the activity status.
+     * @param activityStatus the activity status of the storagetype to be set.
+     * @see #getActivityStatus()
+     */
+	public void setActivityStatus(String activityStatus)
+	{
+		this.activityStatus = activityStatus;
+	}
+
+
 	/**
      * Returns the collection of storage types associated with type 
      * @hibernate.set name="storageTypeCollection" table="CATISSUE_STORAGETYPE_HOLDS_REL"
@@ -349,7 +377,7 @@ public class StorageType extends AbstractDomainObject implements Serializable
 				}
         	}
 
-
+        	this.activityStatus="Active";
 	    }
 	    catch(Exception excp)
 	    {

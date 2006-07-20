@@ -11,6 +11,7 @@
 package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -21,6 +22,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.actionForm.StorageTypeForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.StorageTypeBizLogic;
 import edu.wustl.catissuecore.domain.SpecimenClass;
@@ -41,7 +43,8 @@ public class StorageTypeAction  extends SecureAction
             HttpServletRequest request, HttpServletResponse response)
             throws Exception
     {
-    	//StorageTypeForm storageTypeForm=(StorageTypeForm)form;
+    	StorageTypeForm storageTypeForm=(StorageTypeForm)form;
+    	
     	StorageTypeBizLogic bizLogic = (StorageTypeBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_TYPE_FORM_ID);
         //Gets the value of the operation parameter.
         String operation = request.getParameter(Constants.OPERATION);
@@ -52,14 +55,20 @@ public class StorageTypeAction  extends SecureAction
         //Gets the Storage Type List and sets it in request 
         List list1=bizLogic.retrieve(StorageType.class.getName());
     	List storageTypeList=getStorageTypeList(list1);
+    	//Collections.sort(storageTypeList);
     	request.setAttribute(Constants.HOLDS_LIST1, storageTypeList);
     	
     	//Gets the Specimen Class Type List and sets it in request
     	List list2=bizLogic.retrieve(SpecimenClass.class.getName());
         List specimenClassTypeList = getSpecimenClassTypeList(list2);
+        //Collections.sort(specimenClassTypeList);
 	  	request.setAttribute(Constants.HOLDS_LIST2, specimenClassTypeList);
         
-	  	
+	  	if(operation.equals(Constants.ADD))
+	  	{
+	  		storageTypeForm.setHoldsSpecimenClassTypeIds(new long[]{1});
+	  		storageTypeForm.setHoldsStorageTypeIds(new long[]{1});
+	  	}
 	    // ------------- add new
         String reqPath = request.getParameter(Constants.REQ_PATH);
 		request.setAttribute(Constants.REQ_PATH, reqPath);
@@ -79,16 +88,25 @@ public class StorageTypeAction  extends SecureAction
      */ 
     private List getStorageTypeList(List list)
     {
+    	NameValueBean typeAny=null;
     	List storageTypeList=new ArrayList();
-    	storageTypeList.add(new NameValueBean("-- Any --","-1"));
-    	
     	Iterator typeItr=list.iterator();
     	while(typeItr.hasNext())
     	{
     		StorageType type=(StorageType)typeItr.next();
-    		storageTypeList.add(new NameValueBean(type.getType(),type.getSystemIdentifier()));
+    		if(type.getSystemIdentifier().longValue()==1)
+    		{
+    			typeAny=new NameValueBean(type.getType(),type.getSystemIdentifier());
+    		}
+    		else
+    		{
+    			storageTypeList.add(new NameValueBean(type.getType(),type.getSystemIdentifier()));
+    		}
     	}
+    	Collections.sort(storageTypeList);
+    	storageTypeList.add(0,typeAny);
     	return storageTypeList;
+    	
     }
     /* this Function gets the list of all Specimen Class Types as argument and  
      * create a list in which nameValueBean is stored with Name and Identifier of specimen Class Type.
@@ -97,14 +115,23 @@ public class StorageTypeAction  extends SecureAction
     private List getSpecimenClassTypeList(List list)
     {
     	List specimenClassTypeList=new ArrayList();
-    	specimenClassTypeList.add(new NameValueBean("-- Any Specimen--","-1"));
+    	NameValueBean specimenClassAny=null;
     	
     	Iterator specimentypeItr=list.iterator();
     	while(specimentypeItr.hasNext())
     	{
     		SpecimenClass specimenClass=(SpecimenClass)specimentypeItr.next();
-    		specimenClassTypeList.add(new NameValueBean(specimenClass.getName(),specimenClass.getSystemIdentifier()));
+    		if(specimenClass.getSystemIdentifier().longValue()==1)
+    		{
+    			specimenClassAny=new NameValueBean(specimenClass.getName(),specimenClass.getSystemIdentifier());
+    		}
+    		else
+    		{
+    			specimenClassTypeList.add(new NameValueBean(specimenClass.getName(),specimenClass.getSystemIdentifier()));
+    		}
     	}
+    	Collections.sort(specimenClassTypeList);
+    	specimenClassTypeList.add(0,specimenClassAny);
     	return specimenClassTypeList;
     	
     }

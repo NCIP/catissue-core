@@ -853,7 +853,15 @@ public class StorageContainerForm extends AbstractActionForm
 
 			checkValidNumber(String.valueOf(noOfContainers), "storageContainer.noOfContainers",
 					errors, validator);
-
+			
+			//validations for Container name
+			if (validator.isEmpty(containerName))
+			{
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
+						ApplicationProperties.getValue("storageContainer.name")));
+			}
+	
+			//validation for collection protocol
 			if(collectionIds.length>1)
 			{
 				for(int i=0;i<collectionIds.length;i++)
@@ -866,16 +874,16 @@ public class StorageContainerForm extends AbstractActionForm
 					
 				}
 			}
+			
+			//validation for holds storage type
+			checkValidSelectionForAny(holdsStorageTypeIds,"storageContainer.containerType",errors);
+			//validation for holds specimen class
+			checkValidSelectionForAny(holdsSpecimenClassTypeIds,"storageContainer.specimenType",errors);
+			
 			if (operation.equals(Constants.EDIT) && !validator.isValidOption(activityStatus))
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 						ApplicationProperties.getValue("site.activityStatus")));
-			}
-			//validations for Container name
-			if (validator.isEmpty(containerName))
-			{
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
-						ApplicationProperties.getValue("storageContainer.name")));
 			}
 			// validations for temperature
 			if (!validator.isEmpty(defaultTemperature)
@@ -916,9 +924,23 @@ public class StorageContainerForm extends AbstractActionForm
 		}
 		return errors;
 	}
-	void checkCollectionProtocol(long[] collectionIds,String message)
+
+	//This function if 'any' option is selected then no other option should be selected */
+	void checkValidSelectionForAny(long[] Ids,String message,ActionErrors errors)
 	{
-		
+		if(Ids!=null && Ids.length>1)
+		{
+			for(int i=0;i<Ids.length;i++)
+			{
+				if(Ids[i]==1)
+				{
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
+							ApplicationProperties.getValue(message)));
+					break;
+				}
+			}
+		}
 	}
+	
 
 }
