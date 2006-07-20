@@ -43,7 +43,7 @@ alter table CATISSUE_STORAGE_CONTAINER drop column CONTAINER_NUMBER;
 #--------Adding Activity Status column in Storage_type table
 alter table CATISSUE_STORAGE_TYPE add column ACTIVITY_STATUS varchar(30) default NULL;
 #-------- set default Activity status to 'Active ' for all storage types
-update CATISSUE_STORAGE_CONTAINER set ACTIVITY_STATUS='Active';
+update CATISSUE_STORAGE_TYPE set ACTIVITY_STATUS='Active';
 
 #-------- updating container Number to container Name
 update CATISSUE_INTERFACE_COLUMN_DATA set column_name='CONTAINER_NAME' where IDENTIFIER='240' and TABLE_ID='21';
