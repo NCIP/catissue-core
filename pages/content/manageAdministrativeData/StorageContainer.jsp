@@ -257,19 +257,19 @@ function validate(action,formField)
 {
 	if(validateAny(document.forms[0].collectionIds)==false)
 	{
-		alert("Please select Proper Collection Protocols");
+		alert("Selecting other options with 'Any' option is not allowed");
 	}
 	else
 	{
 		if(validateAny(document.forms[0].holdsStorageTypeIds)==false)
 		{
-			alert("Please select Proper Storage Types");
+			alert("Selecting other options with 'Any' option is not allowed");
 		}
 		else
 		{	
 			if(validateAny(document.forms[0].holdsSpecimenClassTypeIds)==false)
 			{
-				alert("please select Proper Specimen Classes");
+				alert("Selecting other options with 'Any' option is not allowed");
 			}
 			else
 			{	
