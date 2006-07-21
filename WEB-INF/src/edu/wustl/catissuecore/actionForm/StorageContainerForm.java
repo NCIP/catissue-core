@@ -22,6 +22,7 @@ import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.SpecimenClass;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.StorageType;
@@ -212,6 +213,25 @@ public class StorageContainerForm extends AbstractActionForm
 			this.startNumber = String.valueOf(container.getStartNo().intValue());
 
 		this.barcode = Utility.toString(container.getBarcode());
+
+		//Populating the collection protocol id array
+		Collection collectionProtocolCollection = container.getCollectionProtocolCollection();
+
+		if (collectionProtocolCollection != null && collectionProtocolCollection.size()>0)
+		{
+			this.collectionIds = new long[collectionProtocolCollection.size()];
+			int i = 0;
+
+			Iterator it = collectionProtocolCollection.iterator();
+			while (it.hasNext())
+			{
+				CollectionProtocol cp = (CollectionProtocol) it.next();
+				this.collectionIds[i] = cp.getSystemIdentifier().longValue();
+				i++;
+			}
+			
+		}
+
 
 		//Populating the storage type-id array
 		Collection storageTypeCollection = container.getStorageTypeCollection();
