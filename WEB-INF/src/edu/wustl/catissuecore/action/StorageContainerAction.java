@@ -111,6 +111,7 @@ public class StorageContainerAction  extends SecureAction
 	  	request.setAttribute(Constants.HOLDS_LIST2, specimenClassTypeList);
 	  	
     	boolean isOnChange = false; 
+    	boolean typeChange = false;
     	String type_name="";
     	String site_name="";
     	String str = request.getParameter("isOnChange");
@@ -118,6 +119,13 @@ public class StorageContainerAction  extends SecureAction
 		if(str!=null && str.equals("true"))
 		{
 			isOnChange = true; 
+		}
+	
+		str = request.getParameter("typeChange");
+		
+		if(str!=null && str.equals("true"))
+		{
+			typeChange = true; 
 		}
 		Logger.out.info("Onchange parameter in StorageContainerAction:"+isOnChange);
 		
@@ -169,7 +177,7 @@ public class StorageContainerAction  extends SecureAction
             		Logger.out.debug("Type Name:"+type_name);
             		
             		// If operation is add opeartion then set the holds list according to storage type selected.
-            		if(operation!=null && operation.equals(Constants.ADD))
+            		if(operation!=null && typeChange && operation.equals(Constants.ADD))
             		{
             			long[] defHoldsStorageTypeList=getDefaultHoldStorageTypeList(type);
             			if(defHoldsStorageTypeList!=null)
