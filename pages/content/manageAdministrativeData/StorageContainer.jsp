@@ -96,7 +96,7 @@
 		
 		function onTypeChange(element)
 		{
-			var action = "StorageContainer.do?operation="+document.forms[0].operation.value+"&pageOf=pageOfStorageContainer&isOnChange=true";
+			var action = "StorageContainer.do?operation="+document.forms[0].operation.value+"&pageOf=pageOfStorageContainer&isOnChange=true&typeChange=true";
 			document.forms[0].action = action;
 			document.forms[0].submit();
 		}
@@ -453,19 +453,7 @@ function validate(action,formField)
 					</tr>
 					</logic:notEqual>
 					
-					<!-- added by vaishali and have to removed it on 21st June 2006 2.18 pm
-					<tr>
-						<td class="formRequiredNotice" width="5">&nbsp;</td>
-						<td class="formLabel" colspan="2">
-							<label for="startNumber">
-								<bean:message key="storageContainer.startNumber" />
-							</label>
-						</td>
-						<td class="formField" colspan="2">
-							<html:text styleClass="formFieldSized10" maxlength="50"  size="30" styleId="startNumber" property="startNumber"/>
-						</td>
-					</tr>
-					<!-- added finish -->
+					
 					<tr>
 						<td class="formRequiredNotice" width="5">&nbsp;</td>
 						<td class="formLabel" colspan="2">
