@@ -402,11 +402,26 @@ td.formField{ /* for the cell that contains the form elements */
   border-bottom:1px solid #5C5C5C; /* constant: dark gray */
   background-color:#F4F4F5; /* constant: light gray */
 }
-td.customFormField{ /* for the cell that contains the form elements */
+td.formFieldBottom{ /* for the cell with only bottom border needed */
   font-family:arial,helvetica,verdana,sans-serif;
   font-size:0.7em;
   color:#000000; /* constant: black */
+  border-bottom:1px solid #5C5C5C; /* constant: dark gray */
   background-color:#F4F4F5; /* constant: light gray */
+}
+
+td.customFormField{ /* for the cell that contains the form elements */
+  font-family:arial,helvetica,verdana,sans-serif;
+  font-size:.85em;
+  color:#000000; /* constant: black */
+  background-color:#F4F4F5; /* constant: light gray */
+}
+
+.customFormField{ /* for the cell that contains the form elements */
+  font-family:arial,helvetica,verdana,sans-serif;
+  font-size:.85em;
+  color:#000000; /* constant: black */
+  background-color:#FFFFFF; /* constant: light gray */
 }
 td.formSmallField{ /* for the cell that contains the form elements with link on right side */
   font-family:arial,helvetica,verdana,sans-serif;
@@ -433,6 +448,15 @@ td.formSerialNumberField{ /* for the cell that contains the Serial Number */
   border-bottom:1px solid #5C5C5C; /* constant: dark gray */
   text-align:right;
 }
+
+.formLabelBorderless{ /* for the non-required form labels */
+  font-family:arial,helvetica,verdana,sans-serif;
+  font-size:0.7em;
+  background-color:#F4F4F5; /* constant: light gray */
+  color:#000000; /* constant: black */
+  text-align:right;
+}
+
 .formLabelLeft{ /* for the non-required form labels */
   font-family:arial,helvetica,verdana,sans-serif;
   font-size:0.7em;
