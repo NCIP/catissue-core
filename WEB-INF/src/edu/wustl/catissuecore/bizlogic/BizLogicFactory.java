@@ -146,6 +146,10 @@ public class BizLogicFactory //extends AbstractBizLogicFactory
     			bizLogic = new BiohazardBizLogic();
     			break;
     		
+    		case Constants.SIMILAR_CONTAINERS_FORM_ID :
+    			bizLogic = new StorageContainerBizLogic();
+    			break;
+    			
     		case Constants.DEFAULT_BIZ_LOGIC:
             default:
             	bizLogic = new DefaultBizLogic();
