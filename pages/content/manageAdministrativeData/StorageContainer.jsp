@@ -1,18 +1,23 @@
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
+<%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
+
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.StorageContainerForm"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
 <%@ page import="java.util.*"%>
+<%@ page import="edu.wustl.common.util.tag.ScriptGenerator" %>
 
 <%@ include file="/pages/content/common/AdminCommonCode.jsp" %>
 <%
+		//StorageContainerForm form = (StorageContainerForm)request.getAttribute("storageContainerForm");
+		
         String operation = (String) request.getAttribute(Constants.OPERATION);
         String formName;
-
+		
 		String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
-
+		
         boolean readOnlyValue;
         if (operation.equals(Constants.EDIT))
         {
@@ -31,10 +36,11 @@
 		String label1 = null;
 		String label2 = null;
 		
+		StorageContainerForm form;
 		if(obj != null && obj instanceof StorageContainerForm)
 		{
-			StorageContainerForm form = (StorageContainerForm)obj;
-			map = form.getValues();
+			form = (StorageContainerForm)obj;
+			//map = form.getValues();
 
 			label1 = form.getOneDimensionLabel();
 			label2 = form.getTwoDimensionLabel();
@@ -44,51 +50,49 @@
 				label1 = "Dimension One";
 				label2 = "Dimension Two";
 			}
+		}else
+		{
+			form = (StorageContainerForm)request.getAttribute("storageContainerForm");
 		}
-		
-// ************ delete below code later  ********	
-	//  --------- add new 
-		//String reqPath = (String)request.getAttribute(Constants.REQ_PATH);
-		//String appendingPath = "/StorageContainer.do?operation=add&pageOf=pageOfStorageContainer";
-		//if (reqPath != null)
-		//	appendingPath = reqPath + "|/StorageContainer.do?operation=add&pageOf=pageOfStorageContainer";
-	
-//	   	if(!operation.equals("add") )
-	//   	{
-	  // 		Object obj1 = request.getAttribute("storageContainerForm");
-		//	if(obj1 != null && obj1 instanceof StorageContainerForm)
-			//{
-				//StorageContainerForm form1 = (StorageContainerForm)obj1;
-//		   		appendingPath = "/StorageContainerSearch.do?operation=search&pageOf=pageOfStorageContainer&systemIdentifier="+form1.getSystemIdentifier() ;
-	//	   		System.out.println("---------- SC JSP appendingPath -------- : "+ appendingPath);
-		//   	}
-//	   	}
-			
-		
-		
 		
 %>
 
 <head>
+	<script language="JavaScript" type="text/javascript" src="jss/Hashtable.js"></script>
 	<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 	<script language="JavaScript">
+		
+		function checkNoOfContainers(action,formField)
+		{
+			var operation = "<%=operation%>";
+			//alert("operation "+operation);
+			if(operation == "add")
+			{
+				if(document.forms[0].noOfContainers.value > 1)
+				{
+					action = "<%=Constants.CREATE_SIMILAR_CONTAINERS_ACTION%>";
+					action = action + "?pageOf="+"<%=Constants.PAGEOF_CREATE_SIMILAR_CONTAINERS%>"+"&menuSelected=7";
+				}
+			}
+			confirmDisable(action,formField);
+		}
 		
 		function onRadioButtonClick(element)
 		{
 			if(element.value == 1)
 			{
 				document.forms[0].siteId.disabled = false;
-				document.forms[0].parentContainerId.disabled = true;
-				document.forms[0].positionDimensionOne.disabled = true;				
-				document.forms[0].positionDimensionTwo.disabled = true;				
-				document.forms[0].Map.disabled = true;
+				document.forms[0].customListBox_1_0.disabled = true;
+				document.forms[0].customListBox_1_1.disabled = true;
+				document.forms[0].customListBox_1_2.disabled = true;
+				document.forms[0].Map_1.disabled = true;
 			}
 			else
 			{
-				document.forms[0].parentContainerId.disabled = false;
-				document.forms[0].positionDimensionOne.disabled = false;				
-				document.forms[0].positionDimensionTwo.disabled = false;				
-				document.forms[0].Map.disabled = false;
+				document.forms[0].customListBox_1_0.disabled = false;
+				document.forms[0].customListBox_1_1.disabled = false;
+				document.forms[0].customListBox_1_2.disabled = false;
+				document.forms[0].Map_1.disabled = false;
 				document.forms[0].siteId.disabled = true;
 				//window.location.reload();
 			}
@@ -257,23 +261,23 @@ function validate(action,formField)
 {
 	if(validateAny(document.forms[0].collectionIds)==false)
 	{
-		alert("Selecting other options with 'Any' option is not allowed");
+		alert("Please select Proper Collection Protocols");
 	}
 	else
 	{
 		if(validateAny(document.forms[0].holdsStorageTypeIds)==false)
 		{
-			alert("Selecting other options with 'Any' option is not allowed");
+			alert("Please select Proper Storage Types");
 		}
 		else
 		{	
 			if(validateAny(document.forms[0].holdsSpecimenClassTypeIds)==false)
 			{
-				alert("Selecting other options with 'Any' option is not allowed");
+				alert("please select Proper Specimen Classes");
 			}
 			else
 			{	
-				confirmDisable(action,formField);
+				checkNoOfContainers(action,formField);
 			}
 		}
 	}	
@@ -378,9 +382,9 @@ function validate(action,formField)
 							<html:link href="#" styleId="newSite" onclick="addNewAction('StorageContainerAddNew.do?addNewForwardTo=site&forwardTo=storageContainer&addNewFor=site')">
 								<bean:message key="buttons.addNew" />
 							</html:link>
-						</td>							
+						</td>
 					</tr>
-<!-- New row two -->					
+<!-- New row two -->
 					<tr>
 						<td class="formRequiredNotice" width="5">&nbsp;</td>
 						<td class="formRequiredLabel" colspan=2>
@@ -388,40 +392,89 @@ function validate(action,formField)
 								<label for="site">
 									<bean:message key="storageContainer.parentContainer" />
 								</label>
-							</html:radio>							
+							</html:radio>
 						</td>
-						<td class="formField" colspan="2">
-	 						<logic:equal name="storageContainerForm" property="checkedButton" value="1">	
-	 							&nbsp;<bean:message key="storageContainer.parentID" />						
-				     			<html:text styleClass="formFieldSized3" maxlength="10" styleId="parentContainerId" property="parentContainerId" disabled = "true" onchange="onParentContainerChange(this)"/>
-				     			&nbsp;<bean:message key="storageContainer.positionOne" />
-				     			<html:text styleClass="formFieldSized3" maxlength="10"  styleId="positionDimensionOne" property="positionDimensionOne" disabled = "true"/>
-				     			&nbsp;<bean:message key="storageContainer.positionTwo" />
-				     			<html:text styleClass="formFieldSized3" maxlength="10"  styleId="positionDimensionTwo" property="positionDimensionTwo" disabled = "true"/>
-							&nbsp;
-							<html:button property="mapButton" styleClass="actionButton" styleId="Map" 
-								onclick="StorageMapWindow('ShowFramedPage.do?pageOf=pageOfStorageLocation&amp;storageType=','name','810','320','yes');return false" disabled="true" >
-								<bean:message key="buttons.map"/>
-							</html:button>
-
+						
+						<%-- n-combo-box start --%>
+						<%
+							Map dataMap = (Map) request.getAttribute(Constants.AVAILABLE_CONTAINER_MAP);
+							System.out.println("dataMap -> "+dataMap);
+							session.setAttribute(Constants.AVAILABLE_CONTAINER_MAP,dataMap);							
+							
+							String[] labelNames = {"ID","Pos1","Pos2"};
+							labelNames = Constants.STORAGE_CONTAINER_LABEL;
+							String[] attrNames = { "parentContainerId", "positionDimensionOne", "positionDimensionTwo"};
+							
+							String[] initValues = new String[3];
+							initValues[0] = Integer.toString((int)form.getParentContainerId());
+							//initValues[0] = form.getPositionInParentContainer();
+							initValues[1] = Integer.toString(form.getPositionDimensionOne());
+							initValues[2] = Integer.toString(form.getPositionDimensionTwo());
+							
+							String rowNumber = "1";
+							String styClass = "formFieldSized5";
+							String tdStyleClass = "customFormField";
+							boolean disabled = true;
+							String onChange = "onCustomListBoxChange(this)";
+							//String onChange = "onCustomListBoxChange(this);onParentContainerChange(this)";
+							boolean buttonDisabled = true;
+							//String buttonOnClicked  = "javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfSpecimen','name','810','320','yes');return false";
+							String buttonOnClicked = "StorageMapWindow('ShowFramedPage.do?pageOf=pageOfSpecimen&amp;containerStyleId=customListBox_1_0&amp;xDimStyleId=customListBox_1_1&amp;yDimStyleId=customListBox_1_2&amp;storageType=','name','810','320','yes');return false";
+							String noOfEmptyCombos = "3";
+							
+							String buttonId = "Map_1";
+							
+						%>
+					
+					<%=ScriptGenerator.getJSForOutermostDataTable()%>
+					<%=ScriptGenerator.getJSEquivalentFor(dataMap,rowNumber)%>
+					
+					<script language="JavaScript" type="text/javascript" src="jss/CustomListBox.js"></script>
+						
+						
+	 						<logic:equal name="storageContainerForm" property="checkedButton" value="1">								
+								<td class="formField" colSpan="2">
+									<ncombo:containermap dataMap="<%=dataMap%>" 
+											attributeNames="<%=attrNames%>" 
+											initialValues="<%=initValues%>"  
+											styleClass = "<%=styClass%>" 
+											tdStyleClass = "<%=tdStyleClass%>" 
+											labelNames="<%=labelNames%>" 
+											rowNumber="<%=rowNumber%>" 
+											disabled="<%=disabled%>"
+											onChange = "<%=onChange%>"
+											noOfEmptyCombos = "<%=noOfEmptyCombos%>"
+											
+											buttonName="mapButton" 
+											buttonStyleClass="actionButton"
+											buttonOnClick = "<%=buttonOnClicked%>"
+											value="Map"	
+											id="<%=buttonId%>"	
+											formLabelStyle="formLabelBorderless"								
+											buttonDisabled = "<%=buttonDisabled%>" />
+								</td>
 				        	</logic:equal>
 							
 							<logic:equal name="storageContainerForm" property="checkedButton" value="2">
-							&nbsp;<bean:message key="storageContainer.parentID" />													
-			     			<html:text styleClass="formFieldSized3" maxlength="10"  styleId="parentContainerId" property="parentContainerId" onchange="onParentContainerChange(this)"/>
-			     			&nbsp;<bean:message key="storageContainer.positionOne" />
-			     			<html:text styleClass="formFieldSized3" maxlength="10"  styleId="positionDimensionOne" property="positionDimensionOne" />
-			     			&nbsp;<bean:message key="storageContainer.positionTwo" />
-			     			<html:text styleClass="formFieldSized3" maxlength="10"  styleId="positionDimensionTwo" property="positionDimensionTwo" />
-							&nbsp;
-							<html:button property="mapButton" styleClass="actionButton" styleId="Map" 
-								onclick="StorageMapWindow('ShowFramedPage.do?pageOf=pageOfStorageLocation&amp;storageType=','name','810','320','yes');return false" >
-								<bean:message key="buttons.map"/>
-							</html:button>
-							
-							</logic:equal>
+								<td class="formField" colSpan="2">
+								<ncombo:containermap dataMap="<%=dataMap%>" 
+											attributeNames="<%=attrNames%>" 
+											initialValues="<%=initValues%>"  
+											styleClass = "<%=styClass%>" 
+											tdStyleClass = "<%=tdStyleClass%>" 
+											labelNames="<%=labelNames%>" 
+											rowNumber="<%=rowNumber%>" 
+											onChange = "<%=onChange%>" 
+											noOfEmptyCombos = "<%=noOfEmptyCombos%>"
+											
+											buttonName="mapButton" 
+											value="Map"
+											id="<%=buttonId%>"
+											buttonStyleClass="actionButton"
+											buttonOnClick = "<%=buttonOnClicked%>" />
+								</td>
+							</logic:equal>						
 						
-						</td>							
 					</tr>
 					<tr>
 						<td class="formRequiredNotice" width="5">*</td>
@@ -448,7 +501,7 @@ function validate(action,formField)
 							</label>
 						</td>
 						<td class="formField" colspan="2">
-							<html:text styleClass="formFieldSized10"  maxlength="10" size="30" styleId="noOfContainers" property="noOfContainers" readonly="<%=readOnlyValue%>" onchange="onContainerChange(this)"/>
+							<html:text styleClass="formFieldSized10"  maxlength="10" size="30" styleId="noOfContainers" property="noOfContainers" readonly="<%=readOnlyValue%>" />
 						</td>
 					</tr>
 					</logic:notEqual>
@@ -638,4 +691,4 @@ function validate(action,formField)
 
 		<!-- NEW STORAGE CONTAINER REGISTRATION ends-->
 	</table>
-</html:form> 
+</html:form>
