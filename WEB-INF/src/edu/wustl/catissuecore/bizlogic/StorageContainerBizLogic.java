@@ -149,11 +149,11 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		loadStorageType(dao, container);
 		Logger.out.debug("Setting collection Protocol Collection");
 		//Setitng collection Protocol
-		setCollectionProtocolCollection(dao, container);
+		//setCollectionProtocolCollection(dao, container);
 		//Setitng Storage Type Collection
-		setStorageTypeCollection(dao, container);
+		//setStorageTypeCollection(dao, container);
 		//Setting SpecimenClassType Collection
-		setSpecimenClassTypeCollection(dao, container);
+		//setSpecimenClassTypeCollection(dao, container);
 		
 		Logger.out.debug("storage type size:" + container.getStorageTypeCollection().size());
 		for (int i = 0; i < noOfContainers; i++)
