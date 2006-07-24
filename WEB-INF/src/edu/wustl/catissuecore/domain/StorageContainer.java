@@ -146,6 +146,9 @@ public class StorageContainer extends AbstractDomainObject implements java.io.Se
 		
 		this.setStorageType(oldContainer.getStorageType());
 		this.setTempratureInCentigrade(oldContainer.getTempratureInCentigrade());
+		this.setCollectionProtocolCollection(oldContainer.getCollectionProtocolCollection());
+		this.setStorageTypeCollection(oldContainer.getStorageTypeCollection());
+		this.setSpecimenClassCollection(oldContainer.getSpecimenClassCollection());
 		
 	}
 	
