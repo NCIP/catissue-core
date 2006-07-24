@@ -153,7 +153,9 @@ public class DomainObjectFactory extends AbstractDomainObjectFactory
             case Constants.SHOPPING_CART_FORM_ID:
 		   		className = ShoppingCart.class.getName();
 	   			break;
-     
+            case Constants.SIMILAR_CONTAINERS_FORM_ID:
+            	className = StorageContainer.class.getName();
+            	break;
         }
         return className;
     }
@@ -319,6 +321,10 @@ public class DomainObjectFactory extends AbstractDomainObjectFactory
 			 case Constants.DISTRIBUTION_FORM_ID :
             	abstractDomain = new Distribution(form);
             	break;
+            	
+			 case Constants.SIMILAR_CONTAINERS_FORM_ID :
+				 abstractDomain = new StorageContainer(form);
+				 break;
 			//added as per bug 79
             	default:
             		abstractDomain = null;
