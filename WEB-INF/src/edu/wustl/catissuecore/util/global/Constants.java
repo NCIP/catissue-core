@@ -17,7 +17,8 @@ package edu.wustl.catissuecore.util.global;
  */
 
 public class Constants extends edu.wustl.common.util.global.Constants
-{	
+{
+	public static final String MAX_IDENTIFIER = "maxIdentifier";
     public static final String AND_JOIN_CONDITION = "AND";
 	public static final String OR_JOIN_CONDITION = "OR";
 	//Sri: Changed the format for displaying in Specimen Event list (#463)
@@ -365,6 +366,15 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String QUICKEVENTS_ACTION = "QuickEventsSearch.do";	
 	public static final String QUICKEVENTSPARAMETERS_ACTION = "ListSpecimenEventParameters.do";	
 	
+	//SimilarContainers Action
+	public static final String SIMILAR_CONTAINERS_ACTION = "SimilarContainers.do";
+	public static final String CREATE_SIMILAR_CONTAINERS_ACTION = "CreateSimilarContainers.do";
+	public static final String SIMILAR_CONTAINERS_ADD_ACTION = "SimilarContainersAdd.do";
+	
+	//Constants related to Similar Containsers
+	public static final String PAGEOF_SIMILAR_CONTAINERS = "pageOfSimilarContainers";
+	public static final String PAGEOF_CREATE_SIMILAR_CONTAINERS = "pageOfCreateSimilarContainers";
+	public static final String PAGEOF_STORAGE_CONTAINER = "pageOfStorageContainer";
 	
 	//Levels of nodes in query results tree.
 	public static final int MAX_LEVEL = 5;
@@ -444,6 +454,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final int ALIQUOT_FORM_ID = 44;
 	public static final int QUICKEVENTS_FORM_ID = 45;
 	public static final int LIST_SPECIMEN_EVENT_PARAMETERS_FORM_ID = 46;
+	public static final int SIMILAR_CONTAINERS_FORM_ID = 47;                  // chetan (13-07-2006)
 	
 	//Misc
 	public static final String SEPARATOR = " : ";
@@ -998,6 +1009,9 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	//Constants for Specimen Collection Group name- new field 
 	public static final String RESET_NAME ="resetName";
 	
+	
+	// Labels for Storage Containers
+	public static final String[] STORAGE_CONTAINER_LABEL = {" Name"," Pos1"," Pos2"};
 //	public static final String getCollectionProtocolPIGroupName(Long identifier)
 //	{
 //	    if(identifier == null)
