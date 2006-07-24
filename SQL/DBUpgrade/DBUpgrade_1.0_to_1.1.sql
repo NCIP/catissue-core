@@ -137,8 +137,8 @@ insert into catissue_storage_type (type,activity_status,identifier) values ('Any
 
 drop table catissue_temp_type;
 #----------Chnages finish
-
-#--------Adding Group_name in CATISSUE_SPECIMEN_COLL_GROUP table
+#-----Start---Bug 2088: changes done on:19\07\2006--------
+#--------Adding Specimen Collection Group Name in CATISSUE_SPECIMEN_COLL_GROUP table
 alter table CATISSUE_SPECIMEN_COLL_GROUP add column NAME varchar(50) NOT NULL;
 
 
@@ -147,3 +147,4 @@ update CATISSUE_SPECIMEN_COLL_GROUP set NAME=IDENTIFIER where NAME='';
 alter table CATISSUE_SPECIMEN_COLL_GROUP add constraint NAME unique (NAME);
 INSERT INTO CATISSUE_INTERFACE_COLUMN_DATA (IDENTIFIER,TABLE_ID,COLUMN_NAME,ATTRIBUTE_TYPE) VALUES (305 ,35 , 'NAME','varchar');
 INSERT INTO CATISSUE_SEARCH_DISPLAY_DATA (RELATIONSHIP_ID, COL_ID, DISPLAY_NAME) VALUES (30, 305 , 'Specimen Collection Group Name');
+#-----End---Bug 2088: changes done on:19\07\2006--------
