@@ -16,6 +16,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -40,6 +41,7 @@ import edu.wustl.common.cde.PermissibleValue;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.logger.Logger;
 
+import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 
 /**
  * NewSpecimenAction initializes the fields in the New Specimen page.
@@ -100,7 +102,7 @@ public class NewSpecimenAction  extends SecureAction
             String specimenCollectionGroupId=(String)forwardToHashMap.get("specimenCollectionGroupId");
             Logger.out.debug("SpecimenCollectionGroupId found in forwardToHashMap========>>>>>>"+specimenCollectionGroupId);
             
-            if(specimenCollectionGroupId !=null)
+            if(specimenCollectionGroupId != null)
             {
                 specimenForm.setSpecimenCollectionGroupId(specimenCollectionGroupId);
                 specimenForm.setParentSpecimenId("");
@@ -127,7 +129,30 @@ public class NewSpecimenAction  extends SecureAction
     	
         String pageOf = request.getParameter(Constants.PAGEOF);
         request.setAttribute(Constants.PAGEOF,pageOf);
-
+        
+        // ---- chetan 15-06-06 ----
+        Map containerMap;
+        if(operation.equals(Constants.ADD))
+        {
+        	StorageContainerBizLogic scbizLogic = (StorageContainerBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
+        	containerMap = scbizLogic.getAllocatedContainerMap();
+        } else
+        {
+        	containerMap = new TreeMap();
+        	Integer id = new Integer(specimenForm.getStorageContainer());
+        	Integer pos1 = new Integer(specimenForm.getPositionDimensionOne());        	
+        	Integer pos2 = new Integer(specimenForm.getPositionDimensionTwo());
+        	
+        	List pos2List = new ArrayList();
+        	pos2List.add(pos2);
+        	
+        	Map pos1Map = new TreeMap();
+        	pos1Map.put(pos1,pos2List);
+        	containerMap.put(id,pos1Map);
+        }
+        request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP,containerMap);
+        // -------------------------
+        
         //Sets the activityStatusList attribute to be used in the Site Add/Edit Page.
         request.setAttribute(Constants.ACTIVITYSTATUSLIST, Constants.ACTIVITY_STATUS_VALUES);
         
