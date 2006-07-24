@@ -26,6 +26,7 @@ import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenClass;
 import edu.wustl.catissuecore.domain.StorageContainer;
+import edu.wustl.catissuecore.domain.StorageContainerCapacity;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
@@ -57,7 +58,6 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDataInterface
 {
-
 	/**
 	 * Saves the storageContainer object in the database.
 	 * @param obj The storageType object to be saved.
@@ -74,6 +74,9 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		int posOneCapacity = 1, posTwoCapacity = 1;
 		int positionDimensionOne = Constants.STORAGE_CONTAINER_FIRST_ROW, positionDimensionTwo = Constants.STORAGE_CONTAINER_FIRST_COLUMN;
 		boolean fullStatus[][] = null;
+		
+	if(container.getSimilarContainerMap() == null)
+	{		
 		int noOfContainers = container.getNoOfContainers().intValue();
 
 		if (container.getParentContainer() != null)
@@ -214,6 +217,92 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 				throw handleSMException(e);
 			}
 		}
+	 }else // if similarContainerMap is not null
+     {
+     	int noOfContainers = container.getNoOfContainers().intValue();
+     	Map simMap = container.getSimilarContainerMap();
+     	// --- common values for all similar containers ---
+     	loadStorageType(dao, container);
+     	//    	Setitng collection Protocol
+     	//setCollectionProtocolCollection(dao, container);     // <<----
+     	//Setitng Storage Type Collection
+     	//setStorageTypeCollection(dao, container);			 // <<----
+			//Setting SpecimenClassType Collection
+     	//setSpecimenClassTypeCollection(dao, container);		 // <<----
+     	
+     	Logger.out.debug("cont.getCollectionProtocolCollection().size()  "+container.getCollectionProtocolCollection().size());
+     	
+     	String storageType = container.getStorageType().getType();
+     	Double temperature = container.getTempratureInCentigrade();
+     	Collection collProt = container.getCollectionProtocolCollection();
+     	
+     	StorageContainerCapacity scc =	container.getStorageContainerCapacity();        	
+     	Logger.out.debug("container.getParentContainer() site id -->>()<<-- "+container.getParentContainer()); //.getSite().getSystemIdentifier()
+     	Logger.out.debug("Container siteId "+container.getSite());
+     	int checkButton = Integer.parseInt((String)simMap.get("checkedButton"));
+     	for(int i = 1; i <= noOfContainers; i++)
+     	{
+     		String simContPrefix = "simCont:"+i+"_";
+     		//int checkButton = Integer.parseInt((String)simMap.get(simContPrefix+"checkButton"));  
+     		//System.out.println("%%%% "+checkButton);
+     		String contName = (String) simMap.get(simContPrefix+"name");
+     		String barcode = (String)  simMap.get(simContPrefix+"barcode");
+     		StorageContainer cont = new StorageContainer(container);
+     		//System.out.println("coll "+cont.getCollectionProtocolCollection()+", "+cont.getStorageTypeCollection());
+     		if(checkButton == 1)  // site
+     		{
+     			String  siteId = (String)simMap.get(simContPrefix+"siteId");
+     			Site site = new Site();
+     			site.setSystemIdentifier(new Long(siteId));
+     			cont.setSite(site);
+     			loadSite(dao, cont);    // <<----
+     			//System.out.println(i+" siteId "+siteId+" siteName "+cont.getSite().getName());
+     			
+     		}else  // parentContainer
+     		{
+     			String parentId = (String) simMap.get(simContPrefix+"parentContainerId");
+     			String posOne = (String) simMap.get(simContPrefix+"positionDimensionOne");
+     			String posTwo = (String) simMap.get(simContPrefix+"positionDimensionTwo");
+     			
+     			
+     			StorageContainer parentContainer = new StorageContainer();
+ 				parentContainer.setSystemIdentifier(new Long(parentId));
+ 				parentContainer.setPositionDimensionOne(new Integer(posOne));
+ 				parentContainer.setPositionDimensionTwo(new Integer(posTwo));
+     			cont.setParentContainer(parentContainer);  // <<----
+     			// Have to set Site object for parentContainer
+     			loadSite(dao,parentContainer);                         // 17-07-2006
+     			loadSiteFromContainerId(dao,parentContainer);
+     			cont.setPositionDimensionOne(new Integer(posOne));
+     			cont.setPositionDimensionTwo(new Integer(posTwo));
+     			cont.setSite(parentContainer.getSite());             // 16-07-2006 chetan
+     			Logger.out.debug("^^>> "+parentContainer.getSite());
+     		}
+     		//StorageContainer cont = new StorageContainer();
+     		cont.setName(contName);     // <<----
+     		cont.setBarcode(barcode);   // <<----     		
+     		
+     		Logger.out.debug(cont.getParentContainer()+" <<<<---- parentContainer");
+     		Logger.out.debug("cont.getCollectionProtocol().size() "+cont.getCollectionProtocolCollection().size());
+     		dao.insert(cont.getStorageContainerCapacity(), sessionDataBean, true, true);
+     		dao.insert(cont, sessionDataBean, true, true);
+     		
+     		container.setSystemIdentifier(cont.getSystemIdentifier());
+     		
+     		//        		Inserting authorization data
+        	 	Set protectionObjects = new HashSet();
+        	 	protectionObjects.add(cont);
+        	 	try
+        	 	{
+        	 		SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null,
+						protectionObjects, getDynamicGroups(cont));
+        	 	}
+				catch (SMException e)
+				{
+					throw handleSMException(e);
+				}
+     	}     	
+     }
 	}
 
 	//	public Set getProtectionObjects(AbstractDomainObject obj)
@@ -1792,5 +1881,19 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		}
 		container.setStorageTypeCollection(specimenClassTypeColl);
 	}
+	
+	private void loadSiteFromContainerId(DAO dao, StorageContainer container) throws DAOException
+	{
+		if(container != null)
+		{
+			Long sysId = container.getSystemIdentifier();
+			List siteIdList = dao.retrieve(StorageContainer.class.getName(),Constants.SYSTEM_IDENTIFIER,sysId);
+			System.out.println("siteIdList "+siteIdList);
+			StorageContainer sc = (StorageContainer)siteIdList.get(0);
+			System.out.println("siteId "+sc.getSite().getSystemIdentifier());
+			container.setSite(sc.getSite());
+		}
+	}
+	
 
 }
