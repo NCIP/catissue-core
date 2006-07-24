@@ -1,6 +1,7 @@
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
+<%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
 
 <%@ page import="java.util.Map,java.util.List,java.util.ListIterator"%>
 <%@ page import="edu.wustl.common.beans.NameValueBean"%>
@@ -8,6 +9,7 @@
 <%@ page import="edu.wustl.catissuecore.actionForm.NewSpecimenForm"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
 <%@ page import="java.util.*"%>
+<%@ page import="edu.wustl.common.util.tag.ScriptGenerator" %>
 
 <%@ include file="/pages/content/common/BioSpecimenCommonCode.jsp" %>
 <%
@@ -39,7 +41,7 @@
 	Map map = form.getExternalIdentifier();
 %>
 <head>
-
+<script language="JavaScript" type="text/javascript" src="jss/Hashtable.js"></script>
 <%
 	String[] columnList = (String[]) request.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
 	List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
@@ -688,24 +690,52 @@
 						if(operation.equals(Constants.ADD))
 							readOnly=false;
 					%>
-				 	<td class="formField">
-					 	&nbsp;<bean:message key="storageContainer.parentID" />	
-		     			<html:text styleClass="formFieldSized3" styleId="storageContainer" maxlength="10"  property="storageContainer"  readonly="<%=readOnly%>" />
-		     			&nbsp;<bean:message key="storageContainer.positionOne" />
-		     			<html:text styleClass="formFieldSized3" styleId="positionDimensionOne" maxlength="10"  property="positionDimensionOne" readonly="<%=readOnly%>" />
-		     			&nbsp;<bean:message key="storageContainer.positionTwo" />
-		     			<html:text styleClass="formFieldSized3" styleId="positionDimensionTwo" maxlength="10"  property="positionDimensionTwo" readonly="<%=readOnly%>" />
-						&nbsp;
-					</td>
 					
-					<td class="formField" colspan="2">
-						<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
-							<html:button property="mapButton" styleClass="actionButton" styleId="Map"
-								onclick="javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfSpecimen','name','810','320','yes');return false" >
-								<bean:message key="buttons.map"/>
-							</html:button>
-						</logic:notEqual>&nbsp;
-					</td>
+				<%-- n-combo-box start --%>
+				<%
+					Map dataMap = (Map) request.getAttribute(Constants.AVAILABLE_CONTAINER_MAP);
+										
+					String[] labelNames = {"ID","Pos1","Pos2"};
+					labelNames = Constants.STORAGE_CONTAINER_LABEL;
+					String[] attrNames = { "storageContainer", "positionDimensionOne", "positionDimensionTwo"};
+					
+					String[] initValues = new String[3];
+					initValues[0] = form.getStorageContainer();
+					initValues[1] = form.getPositionDimensionOne();
+					initValues[2] = form.getPositionDimensionTwo();
+					//System.out.println("NewSpecimen :: "+initValues[0]+"<>"+initValues[1]+"<>"+initValues[2]);			
+					String rowNumber = "1";
+					String styClass = "formFieldSized5";
+					String tdStyleClass = "customFormField";
+					String onChange = "onCustomListBoxChange(this)";
+					
+					String buttonOnClicked = "javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfSpecimen','name','810','320','yes');return false";
+					String noOfEmptyCombos = "3";
+				%>
+				
+				<%=ScriptGenerator.getJSForOutermostDataTable()%>
+				<%=ScriptGenerator.getJSEquivalentFor(dataMap,rowNumber)%>
+				
+				<script language="JavaScript" type="text/javascript" src="jss/CustomListBox.js"></script>
+				
+				<td class="formField" colSpan="4">
+						<ncombo:containermap dataMap="<%=dataMap%>" 
+											attributeNames="<%=attrNames%>" 
+											initialValues="<%=initValues%>"  
+											styleClass = "<%=styClass%>" 
+											tdStyleClass = "<%=tdStyleClass%>" 
+											labelNames="<%=labelNames%>" 
+											rowNumber="<%=rowNumber%>" 
+											onChange="<%=onChange%>" 
+											noOfEmptyCombos = "<%=noOfEmptyCombos%>"
+											
+											buttonName="mapButton" 
+											value="Map"
+											buttonOnClick = "<%=buttonOnClicked%>"
+											formLabelStyle="formLabelBorderless"
+											buttonStyleClass="actionButton" />				
+				</td>
+				<%-- n-combo-box end --%>
 				 </tr>
 				 
 				 <tr>
