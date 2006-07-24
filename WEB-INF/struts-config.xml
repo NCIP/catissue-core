@@ -60,6 +60,7 @@ PUBLIC
 		<form-bean name="quickEventsForm" type="edu.wustl.catissuecore.actionForm.QuickEventsForm"/>
 		<form-bean name="listSpecimenEventParametersForm" type="edu.wustl.catissuecore.actionForm.ListSpecimenEventParametersForm"/>
 		
+		<form-bean name="similarContainersForm" type="edu.wustl.catissuecore.actionForm.SimilarContainersForm" />
 		
 	</form-beans>
 	
@@ -2500,6 +2501,30 @@ PUBLIC
 	
 	
 	<!-- QuickEvents Action end -->
+	
+	<!-- Similar Containers Action -->
+	<action path="/SimilarContainers" type="edu.wustl.catissuecore.action.SimilarContainersAction" name="similarContainersForm" validate="false" scope="request">
+			<forward name="pageOfSimilarContainers" path=".catissuecore.similarContainersDef" />
+			<forward name="failure" path=".catissuecore.similarContainersDef" />
+			<forward name="access_denied" path="/ManageBioSpecimen.do" />
+	</action>
+	
+	<action path="/CreateSimilarContainers" type="edu.wustl.catissuecore.action.SimilarContainersAction" name="similarContainersForm" validate="false" scope="request">
+		<forward name="pageOfCreateSimilarContainers" path=".catissuecore.similarContainersDef" />
+		<forward name="pageOfSimilarContainers" path="/SimilarContainers.do?pageOf=pageOfSimilarContainers&amp;menuSelected=7" />
+		<forward name="pageOfStorageContainer" path="/StorageContainer.do?operation=add&amp;pageOf=pageOfStorageContainer&amp;menuSelected=7" />
+		<forward name="failure" path=".catissuecore.similarContainersDef" />
+		<forward name="access_denied" path="/ManageBioSpecimen.do" />
+	</action>
+	
+	<action path="/SimilarContainersAdd" type="edu.wustl.common.action.CommonAddEditAction" name="similarContainersForm" validate="true" input="/CreateSimilarContainers.do?pageOf=pageOfCreateSimilarContainers&amp;menuSelected=7" scope="request">
+		<!--forward name="success" path="/StorageContainer.do?operation=edit&amp;pageOf=pageOfStorageContainer&amp;menuSelected=7" /--> 
+		<forward name="success" path="/StorageContainerSearch.do?pageOf=pageOfStorageContainer" />
+		<forward name="failure" path="/StorageContainer.do?operation=add&amp;pageOf=pageOfStorageContainer&amp;menuSelected=7" />
+	</action>
+	
+	<!-- Similar Containers Action -->
+	
 	
 	</action-mappings>
 	
