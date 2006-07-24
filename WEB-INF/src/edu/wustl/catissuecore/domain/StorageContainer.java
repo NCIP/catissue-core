@@ -11,7 +11,10 @@ package edu.wustl.catissuecore.domain;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.Iterator;
+import java.util.Map;
 
+import edu.wustl.catissuecore.actionForm.SimilarContainersForm;
 import edu.wustl.catissuecore.actionForm.StorageContainerForm;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
@@ -116,6 +119,8 @@ public class StorageContainer extends AbstractDomainObject implements java.io.Se
 	 * Number of containers
 	 */
 	protected transient Integer noOfContainers;
+	
+	protected transient Map similarContainerMap;
 
 	protected transient boolean isParentChanged = false;
 
@@ -560,6 +565,8 @@ public class StorageContainer extends AbstractDomainObject implements java.io.Se
 	{
 	    try
 	    {
+	      if(abstractForm instanceof StorageContainerForm)
+	      {
 	        StorageContainerForm form = (StorageContainerForm) abstractForm;
 	        this.name					=form.getContainerName();
 	        if (Utility.toString(form.getDefaultTemperature()).trim().length() > 0  )
@@ -573,7 +580,7 @@ public class StorageContainer extends AbstractDomainObject implements java.io.Se
 	        
 	        this.isFull					= new Boolean(form.getIsFull());
 	        Logger.out.debug("SC Domain : "+ this.isFull + " :-: form.getIsFull() : " + form.getIsFull()  );
-	        this.activityStatus			= form.getActivityStatus();
+	        this.activityStatus			= form.getActivityStatus();	        
 	        this.noOfContainers			= new Integer(form.getNoOfContainers());
 	        
 	        storageType = new StorageType();
@@ -670,11 +677,82 @@ public class StorageContainer extends AbstractDomainObject implements java.io.Se
 	        	for (int i = 0; i < specimenClassArr.length; i++)
 				{
 	        		Logger.out.debug("Specimen class Id :"+specimenClassArr[i]);
+	        		if(specimenClassArr[i]!=-1)
+	        		{
+		        		SpecimenClass specimenClass = new SpecimenClass();
+		        		specimenClass.setSystemIdentifier(new Long(specimenClassArr[i]));
+		        		specimenClassCollection.add(specimenClass);
+	        		}
+				}
+        	}
+	      }else if(abstractForm instanceof SimilarContainersForm)
+	      {
+	    	SimilarContainersForm form = (SimilarContainersForm) abstractForm;
+	    	this.similarContainerMap = 		form.getSimilarContainersMap();
+	    	this.isFull					= new Boolean(form.getIsFull());
+	    	this.activityStatus			= form.getActivityStatus();
+	    	this.noOfContainers			= new Integer(form.getNoOfContainers());
+	    	
+	    	if (Utility.toString(form.getDefaultTemperature()).trim().length() > 0  )
+        	{
+	        	this.tempratureInCentigrade	= new Double(form.getDefaultTemperature());
+        	}
+	    	
+	    	//System.out.println("form.getTypeId() -->>&& "+form.getTypeId());
+	    		    	
+	    	storageType = new StorageType();
+	        storageType.setSystemIdentifier(new Long(form.getTypeId()));
+	        storageType.setOneDimensionLabel(form.getOneDimensionLabel());
+	        storageType.setTwoDimensionLabel(form.getTwoDimensionLabel());
+	        
+	        storageContainerCapacity.setOneDimensionCapacity(new Integer(form.getOneDimensionCapacity()));
+	        storageContainerCapacity.setTwoDimensionCapacity(new Integer(form.getTwoDimensionCapacity()));
+	    	
+	        collectionProtocolCollection.clear();
+        	long [] collectionProtocolArr = form.getCollectionIds();
+        	if(collectionProtocolArr!=null)
+        	{
+	        	for (int i = 0; i < collectionProtocolArr.length; i++)
+				{
+	        		Logger.out.debug("Collection prtocoo Id :"+collectionProtocolArr[i]);
+	        		if(collectionProtocolArr[i]!=-1)
+	        		{
+		        		CollectionProtocol collectionProtocol = new CollectionProtocol();
+		        		collectionProtocol.setSystemIdentifier(new Long(collectionProtocolArr[i]));
+		        		collectionProtocolCollection.add(collectionProtocol);
+	        		}
+				}
+        	}
+        	storageTypeCollection.clear();
+        	long [] storageTypeArr = form.getHoldsStorageTypeIds();
+        	if(storageTypeArr!=null)
+        	{
+	        	for (int i = 0; i < storageTypeArr.length; i++)
+				{
+	        		Logger.out.debug("Storage Type Id :"+storageTypeArr[i]);
+	        		if(storageTypeArr[i]!=-1)
+	        		{
+		        		StorageType storageType = new StorageType();
+		        		storageType.setSystemIdentifier(new Long(storageTypeArr[i]));
+		        		storageTypeCollection.add(storageType);
+	        		}
+				}
+        	}
+	                
+        	specimenClassCollection.clear();
+        	long [] specimenClassArr = form.getHoldsSpecimenClassTypeIds();
+        	if(specimenClassArr!=null)
+        	{
+	        	for (int i = 0; i < specimenClassArr.length; i++)
+				{
+	        		Logger.out.debug("Specimen class Id :"+specimenClassArr[i]);
 		        		SpecimenClass specimenClass = new SpecimenClass();
 		        		specimenClass.setSystemIdentifier(new Long(specimenClassArr[i]));
 		        		specimenClassCollection.add(specimenClass);
 				}
-        	}
+        	}	        
+	        
+	      }	        
 	    }
 	    catch(Exception excp)
 	    {
@@ -697,5 +775,19 @@ public class StorageContainer extends AbstractDomainObject implements java.io.Se
 	 */
 	public void setPositionChanged(boolean positionChanged) {
 		this.positionChanged = positionChanged;
+	}
+
+	/**
+	 * @return Returns the similarContainerMap.
+	 */
+	public Map getSimilarContainerMap() {
+		return similarContainerMap;
+	}
+
+	/**
+	 * @param similarContainerMap The similarContainerMap to set.
+	 */
+	public void setSimilarContainerMap(Map similarContainerMap) {
+		this.similarContainerMap = similarContainerMap;
 	}
 }
