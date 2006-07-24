@@ -1,10 +1,18 @@
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
+<%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
+
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
+<%@ page import="edu.wustl.common.util.tag.ScriptGenerator" %>
+<%@ page import="java.util.*"%>
+<%@ page import="edu.wustl.catissuecore.actionForm.TransferEventParametersForm"%>
+
 <!-- Mandar : 434 : for tooltip -->
+<script language="JavaScript" type="text/javascript" src="jss/Hashtable.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 <%
+		TransferEventParametersForm form = (TransferEventParametersForm)request.getAttribute("transferEventParametersForm");
         String operation = (String) request.getAttribute(Constants.OPERATION);
         String formName, specimenId=null , fromPositionData =null;
         String posOne = null, posTwo = null, storContId = null;
@@ -175,7 +183,7 @@
 					<bean:message key="transfereventparameters.toposition"/> 
 				</label>
 			</td>
-			<td class="formField">
+		<%--	<td class="formField">
 			<%
 				boolean isReadOnly = true ;
 					if(operation.equals("add"))
@@ -205,7 +213,56 @@
 					}
 				%>				
 				&nbsp;
+			</td>  --%>
+		
+			<%-- n-combo-box start --%>
+			<%
+				Map dataMap = (Map) request.getAttribute(Constants.AVAILABLE_CONTAINER_MAP);
+									
+				String[] labelNames = {"ID","Pos1","Pos2"};
+				labelNames = Constants.STORAGE_CONTAINER_LABEL;
+				String[] attrNames = { "storageContainer", "positionDimensionOne", "positionDimensionTwo"};
+				
+				String[] initValues = new String[3];
+				initValues[0] = form.getStorageContainer();
+				initValues[1] = form.getPositionDimensionOne();
+				initValues[2] = form.getPositionDimensionTwo();
+									
+				String rowNumber = "1";
+				String styClass = "formFieldSized5";
+				String tdStyleClass = "customFormField";
+				boolean disabled = true;
+				String onChange = "onCustomListBoxChange(this)";
+				
+				boolean buttonDisabled = true;
+				String buttonOnClicked  = "javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfSpecimen','name','810','320','yes');return false";
+				String noOfEmptyCombos = "3";
+			%>
+			
+			<%=ScriptGenerator.getJSForOutermostDataTable()%>
+			<%=ScriptGenerator.getJSEquivalentFor(dataMap,rowNumber)%>
+			
+			<script language="JavaScript" type="text/javascript" src="jss/CustomListBox.js"></script>
+			
+			<td class="formField" colSpan="2">
+						<ncombo:containermap dataMap="<%=dataMap%>" 
+											attributeNames="<%=attrNames%>" 
+											initialValues="<%=initValues%>"  
+											styleClass = "<%=styClass%>" 
+											tdStyleClass = "<%=tdStyleClass%>" 
+											labelNames="<%=labelNames%>" 
+											rowNumber="<%=rowNumber%>" 
+											onChange = "<%=onChange%>"
+											noOfEmptyCombos = "<%=noOfEmptyCombos%>"
+											
+											buttonName="mapButton" 
+											value="Map"
+											buttonStyleClass="actionButton"
+											formLabelStyle="formLabelBorderless"
+											buttonOnClick = "<%=buttonOnClicked%>" />			
 			</td>
+			<%-- n-combo-box end --%>
+					
 		</tr>
 
 
