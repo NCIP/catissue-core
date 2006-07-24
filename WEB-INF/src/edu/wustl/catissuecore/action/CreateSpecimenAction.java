@@ -26,6 +26,7 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.actionForm.CreateSpecimenForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.CreateSpecimenBizLogic;
+import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.SecureAction;
@@ -71,6 +72,11 @@ public class CreateSpecimenAction extends SecureAction
         
         String pageOf = request.getParameter(Constants.PAGEOF);
         
+        // ---- chetan 15-06-06 ----
+        StorageContainerBizLogic bizLogic = (StorageContainerBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
+        Map containerMap = bizLogic.getAllocatedContainerMap();
+        request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP,containerMap);
+        // -------------------------
         request.setAttribute(Constants.PAGEOF,pageOf);
         
         CreateSpecimenBizLogic dao = (CreateSpecimenBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.CREATE_SPECIMEN_FORM_ID);

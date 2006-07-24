@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -78,7 +79,29 @@ public class StorageContainerAction  extends SecureAction
 
         
     	StorageContainerBizLogic bizLogic = (StorageContainerBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
-        
+    	//    	 ---- chetan 15-06-06 ----
+        Map containerMap;
+        if(operation.equals(Constants.ADD))
+        {
+        	containerMap = bizLogic.getAllocatedContainerMap();
+        } else
+        {
+        	containerMap = new TreeMap();
+        	Integer id = new Integer((int)storageContainerForm.getParentContainerId());
+        	Integer pos1 = new Integer(storageContainerForm.getPositionDimensionOne());        	
+        	Integer pos2 = new Integer(storageContainerForm.getPositionDimensionTwo());
+        	
+        	List pos2List = new ArrayList();
+        	pos2List.add(pos2);
+        	
+        	Map pos1Map = new TreeMap();
+        	pos1Map.put(pos1,pos2List);
+        	containerMap.put(id,pos1Map);
+        }
+        request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP,containerMap);
+        // -------------------------
+    	
+    	
     	/*String []displayField = {"type"};  
     	String valueField = "systemIdentifier";
     	List list = bizLogic.getList(StorageType.class.getName(),displayField, valueField, false);
@@ -224,16 +247,17 @@ public class StorageContainerAction  extends SecureAction
         	{
         		Logger.out.debug("Long.parseLong(request.getParameter(parentContainerId)......................."+request.getParameter("parentContainerId"));
         	    Logger.out.debug("storageContainerForm.getTypeId()......................."+storageContainerForm.getTypeId());
-        		
-        		
-        		list = bizLogic.retrieve(StorageContainer.class.getName(),valueField,new Long(request.getParameter("parentContainerId")));
-            	if(!list.isEmpty())
-            	{
-            		StorageContainer container = (StorageContainer)list.get(0);
-            		site_name=container.getSite().getName();
-            		Logger.out.debug("Site Name :"+site_name);
-            		
-            	}	
+        		String parentContId = request.getParameter("parentContainerId");
+        		if(parentContId != null)
+        		{
+        			list = bizLogic.retrieve(StorageContainer.class.getName(),valueField,new Long(parentContId));
+        			if(!list.isEmpty())
+        			{
+        				StorageContainer container = (StorageContainer)list.get(0);
+        				site_name=container.getSite().getName();
+        				Logger.out.debug("Site Name :"+site_name);            		
+        			}
+        		}
         	}
         	Logger.out.debug("Start Number : " + startNumber); 
         	storageContainerForm.setStartNumber(String.valueOf(startNumber));

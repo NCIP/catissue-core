@@ -11,10 +11,13 @@
 package edu.wustl.catissuecore.action;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
+import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
+import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -40,6 +43,12 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 	    	
 	    	Logger.out.debug("\t\t*******************************SpecimenID : "+identifier );
 	    	List specimenList = bizLogic.retrieve(Specimen.class.getName(),Constants.SYSTEM_IDENTIFIER,identifier);
+	    	
+//	    	 ---- chetan 15-06-06 ----
+	        StorageContainerBizLogic scbizLogic = (StorageContainerBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
+	        Map containerMap = scbizLogic.getAllocatedContainerMap();
+	        request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP,containerMap);
+	        // -------------------------
 	    	
 	    	if(specimenList!=null && specimenList.size() != 0)
 	    	{
