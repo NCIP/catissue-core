@@ -166,7 +166,12 @@ function  deleteChecked(subdivtag,action,countElement,checkName,isOuterTable)
 		{
 
 			var obj = document.getElementById(objId);
-			var tip = obj.options[obj.selectedIndex].text;
+			var tip="";
+			if(obj.selectedIndex == -1)
+				tip="";
+			else
+				tip = obj.options[obj.selectedIndex].text;
+				
 			obj.title = tip;
 
 			var browser=navigator.appName;
