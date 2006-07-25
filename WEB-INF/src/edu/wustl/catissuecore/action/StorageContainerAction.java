@@ -307,7 +307,7 @@ public class StorageContainerAction  extends SecureAction
     		collectionProtocolList.add(new NameValueBean(cp.getTitle(),cp.getSystemIdentifier()));
     	}
     	Collections.sort(collectionProtocolList);
-    	collectionProtocolList.add(0,new NameValueBean("Any","-1"));
+    	collectionProtocolList.add(0,new NameValueBean(Constants.HOLDS_ANY,"-1"));
     	return collectionProtocolList;
     }
     /* this Function gets the list of all storage types as argument and  
@@ -324,7 +324,7 @@ public class StorageContainerAction  extends SecureAction
     		StorageType type=(StorageType)typeItr.next();
     		if(type.getSystemIdentifier().longValue()==1)
     		{
-    			typeAny=new NameValueBean(type.getType(),type.getSystemIdentifier());
+    			typeAny=new NameValueBean(Constants.HOLDS_ANY,type.getSystemIdentifier());
     		}
     		else
     		{
@@ -358,7 +358,7 @@ public class StorageContainerAction  extends SecureAction
     		SpecimenClass specimenClass=(SpecimenClass)specimentypeItr.next();
     		if(specimenClass.getSystemIdentifier().longValue()==1)
     		{
-    			specimenClassAny=new NameValueBean(specimenClass.getName(),specimenClass.getSystemIdentifier());
+    			specimenClassAny=new NameValueBean(Constants.HOLDS_ANY,specimenClass.getSystemIdentifier());
     		}
     		else
     		{

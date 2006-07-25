@@ -96,7 +96,7 @@ public class StorageTypeAction  extends SecureAction
     		StorageType type=(StorageType)typeItr.next();
     		if(type.getSystemIdentifier().longValue()==1)
     		{
-    			typeAny=new NameValueBean(type.getType(),type.getSystemIdentifier());
+    			typeAny=new NameValueBean(Constants.HOLDS_ANY,type.getSystemIdentifier());
     		}
     		else
     		{
@@ -123,7 +123,7 @@ public class StorageTypeAction  extends SecureAction
     		SpecimenClass specimenClass=(SpecimenClass)specimentypeItr.next();
     		if(specimenClass.getSystemIdentifier().longValue()==1)
     		{
-    			specimenClassAny=new NameValueBean(specimenClass.getName(),specimenClass.getSystemIdentifier());
+    			specimenClassAny=new NameValueBean(Constants.HOLDS_ANY,specimenClass.getSystemIdentifier());
     		}
     		else
     		{
