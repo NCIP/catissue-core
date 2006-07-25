@@ -1,3 +1,13 @@
+#------ Begin:25/07/06 Poornima: Bug-1951 -------
+# ------ Create unique key for catissue_related_tables_map and catissue_search_display_data----
+#--Remove duplicate entries first
+delete from CATISSUE_RELATED_TABLES_MAP where FIRST_TABLE_ID=38 and SECOND_TABLE_ID=19;
+alter table CATISSUE_RELATED_TABLES_MAP add constraint RELATED_TABLES_KEY unique (FIRST_TABLE_ID,SECOND_TABLE_ID);
+alter table CATISSUE_SEARCH_DISPLAY_DATA add constraint SEARCH_DATA_KEY unique (RELATIONSHIP_ID,COL_ID);
+#---Insert one entry for the above deleted duplicate entry --
+insert into CATISSUE_RELATED_TABLES_MAP values ( 38 , 19 , 'DISTRIBUTION_PROTOCOL_ID','IDENTIFIER');
+#------ End:25/07/06 Poornima: Bug-1951 -------
+
 # ------ 'Death date' and 'Vital status' attribute addition to Participant table ------
 # ---------- 23 May 2006 -------------
 ALTER TABLE catissue_participant ADD COLUMN DEATH_DATE DATE;
@@ -137,7 +147,9 @@ insert into catissue_storage_type (type,activity_status,identifier) values ('Any
 
 drop table catissue_temp_type;
 #----------Chnages finish
+
 #-----Start---Bug 2088: changes done on:19\07\2006--------
+
 #--------Adding Specimen Collection Group Name in CATISSUE_SPECIMEN_COLL_GROUP table
 alter table CATISSUE_SPECIMEN_COLL_GROUP add column NAME varchar(50) NOT NULL;
 
@@ -147,6 +159,7 @@ update CATISSUE_SPECIMEN_COLL_GROUP set NAME=IDENTIFIER where NAME='';
 alter table CATISSUE_SPECIMEN_COLL_GROUP add constraint NAME unique (NAME);
 INSERT INTO CATISSUE_INTERFACE_COLUMN_DATA (IDENTIFIER,TABLE_ID,COLUMN_NAME,ATTRIBUTE_TYPE) VALUES (305 ,35 , 'NAME','varchar');
 INSERT INTO CATISSUE_SEARCH_DISPLAY_DATA (RELATIONSHIP_ID, COL_ID, DISPLAY_NAME) VALUES (30, 305 , 'Specimen Collection Group Name');
+alter table CATISSUE_SPECIMEN_COLL_GROUP change column NAME NAME varchar(55);
 #-----End---Bug 2088: changes done on:19\07\2006--------
 
 # ------ CSM update for Similar Containers Action --------
