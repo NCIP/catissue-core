@@ -134,7 +134,7 @@ public class StorageContainerAction  extends SecureAction
 	  	request.setAttribute(Constants.HOLDS_LIST2, specimenClassTypeList);
 	  	
     	boolean isOnChange = false; 
-    	boolean typeChange = false;
+    	boolean isNameChange=false;
     	String type_name="";
     	String site_name="";
     	String str = request.getParameter("isOnChange");
@@ -144,11 +144,11 @@ public class StorageContainerAction  extends SecureAction
 			isOnChange = true; 
 		}
 	
-		str = request.getParameter("typeChange");
+		str = request.getParameter("isNameChange");
 		
 		if(str!=null && str.equals("true"))
 		{
-			typeChange = true; 
+			isNameChange = true; 
 		}
 		Logger.out.info("Onchange parameter in StorageContainerAction:"+isOnChange);
 		
@@ -188,19 +188,22 @@ public class StorageContainerAction  extends SecureAction
             	if(!list.isEmpty())
             	{
             		StorageType type = (StorageType)list.get(0);
-            		if(type.getDefaultTempratureInCentigrade()!= null)
-            			storageContainerForm.setDefaultTemperature(type.getDefaultTempratureInCentigrade().toString() );
+            		if(!isNameChange)
+            		{
+            			if(type.getDefaultTempratureInCentigrade()!= null)
+            				storageContainerForm.setDefaultTemperature(type.getDefaultTempratureInCentigrade().toString() );
             		
-            		storageContainerForm.setOneDimensionCapacity(type.getDefaultStorageCapacity().getOneDimensionCapacity().intValue());
-            		storageContainerForm.setTwoDimensionCapacity(type.getDefaultStorageCapacity().getTwoDimensionCapacity().intValue());
-            		storageContainerForm.setOneDimensionLabel(type.getOneDimensionLabel());
-            		storageContainerForm.setTwoDimensionLabel(Utility.toString(type.getTwoDimensionLabel()));
+            			storageContainerForm.setOneDimensionCapacity(type.getDefaultStorageCapacity().getOneDimensionCapacity().intValue());
+            			storageContainerForm.setTwoDimensionCapacity(type.getDefaultStorageCapacity().getTwoDimensionCapacity().intValue());
+            			storageContainerForm.setOneDimensionLabel(type.getOneDimensionLabel());
+            			storageContainerForm.setTwoDimensionLabel(Utility.toString(type.getTwoDimensionLabel()));
+            		}
+            			type_name=type.getType();
             		
-            		type_name=type.getType();
             		Logger.out.debug("Type Name:"+type_name);
             		
             		// If operation is add opeartion then set the holds list according to storage type selected.
-            		if(operation!=null && typeChange && operation.equals(Constants.ADD))
+            		if(operation!=null && operation.equals(Constants.ADD)&& !isNameChange)
             		{
             			long[] defHoldsStorageTypeList=getDefaultHoldStorageTypeList(type);
             			if(defHoldsStorageTypeList!=null)
@@ -229,7 +232,7 @@ public class StorageContainerAction  extends SecureAction
             }
     	
     	
-    	    int startNumber = 1;
+    	    //int startNumber = 1;
         	if(storageContainerForm.getCheckedButton() == 1)
         	{
         	    Logger.out.debug("storageContainerForm.getSiteId()......................."+storageContainerForm.getSiteId());
@@ -259,27 +262,12 @@ public class StorageContainerAction  extends SecureAction
         			}
         		}
         	}
-        	Logger.out.debug("Start Number : " + startNumber); 
-        	storageContainerForm.setStartNumber(String.valueOf(startNumber));
         	
-        	//Getting the next container number.
-        	String containerNumber="";
-        	if(operation.equals(Constants.ADD))
-        	{
-        		containerNumber=String.valueOf(bizLogic.getNextContainerName());
-        	}
-        	else
-        	{
-        		containerNumber=String.valueOf(storageContainerForm.getSystemIdentifier());
-        	}
-        	if(!type_name.equals("")&& !site_name.equals(""))
-        	{	
-        		if(storageContainerForm.getContainerName().equals(""))
-        		{
-        			//generating the default container name
-        			storageContainerForm.setContainerName(site_name+"_"+type_name+"_"+containerNumber);
-        		}
-        	}
+        	Logger.out.info("Container name:"+storageContainerForm.getContainerName());
+        	if(storageContainerForm.getContainerName().equals(""))
+    		{
+        		storageContainerForm.setContainerName(bizLogic.getContainerName(type_name,site_name));
+    		}
         }	
         // ---------- Add new
 		String reqPath = request.getParameter(Constants.REQ_PATH);
@@ -291,6 +279,7 @@ public class StorageContainerAction  extends SecureAction
         return mapping.findForward((String)request.getParameter(Constants.PAGEOF));
     }
 		
+	
 	/* This function gets the list of all collection protocols as argument and  
      * create a list in which nameValueBean is stored with Title and Identifier of Collection Protocol.
      * and returns this list
