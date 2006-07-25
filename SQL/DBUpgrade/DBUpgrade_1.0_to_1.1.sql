@@ -58,10 +58,10 @@ create table CATISSUE_SPECIMEN_CLASS (
 );
 #-------inserting values in catissye_specimen_class table
 insert into CATISSUE_SPECIMEN_CLASS values (1,"Any","Disabled");
-insert into CATISSUE_SPECIMEN_CLASS values (2,"FluidSpecimen","Active");
-insert into CATISSUE_SPECIMEN_CLASS values (3,"TissueSpecimen","Active");
-insert into CATISSUE_SPECIMEN_CLASS values (4,"CellSpecimen","Active");
-insert into CATISSUE_SPECIMEN_CLASS values (5,"MolecularSpecimen","Active");
+insert into CATISSUE_SPECIMEN_CLASS values (2,"Fluid","Active");
+insert into CATISSUE_SPECIMEN_CLASS values (3,"Tissue","Active");
+insert into CATISSUE_SPECIMEN_CLASS values (4,"Cell","Active");
+insert into CATISSUE_SPECIMEN_CLASS values (5,"Molecular","Active");
 
 
 create table CATISSUE_TYPE_SPECIMENCL_REL (
