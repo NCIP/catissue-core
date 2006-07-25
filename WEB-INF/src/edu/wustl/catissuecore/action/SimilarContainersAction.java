@@ -208,7 +208,7 @@ public class SimilarContainersAction extends SecureAction {
 		
 		// code to set Max(IDENTIFIER) in storage container table 
 		// used for suffixing Unique numbers to auto-generated container name
-		long maxId = bizLogic.getNextContainerName();
+		long maxId = bizLogic.getNextContainerNumber();
 		request.setAttribute(Constants.MAX_IDENTIFIER,Long.toString(maxId));
 		
 		Map containerMap = bizLogic.getAllocatedContainerMap();
