@@ -27,6 +27,7 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.SpecimenProtocolForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
+import edu.wustl.catissuecore.bizlogic.SpecimenProtocolBizLogic;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.SecureAction;
@@ -126,7 +127,9 @@ public class SpecimenProtocolAction  extends SecureAction
 	    	SpecimenProtocolForm spForm = (SpecimenProtocolForm )form;
 	    	if(operation.equalsIgnoreCase(Constants.EDIT))
    			{
-	    		String tmpEndDate = BizLogicFactory.getInstance().getSpecimenProtocolBizLogic().getEndDate( spForm.getSystemIdentifier() );
+	    		//Mandar: 25-july-06 bizlogic call updated.
+	    		SpecimenProtocolBizLogic bizLogic = (SpecimenProtocolBizLogic)BizLogicFactory.getInstance().getBizLogic(spForm.getFormId());	
+	    		String tmpEndDate = bizLogic.getEndDate( spForm.getSystemIdentifier() );
 	    		Logger.out.debug("tmpendDate : " + tmpEndDate);
 	    		spForm.setEndDate(tmpEndDate );
    			}

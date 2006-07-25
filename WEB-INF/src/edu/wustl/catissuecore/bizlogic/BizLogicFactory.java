@@ -101,7 +101,7 @@ public class BizLogicFactory //extends AbstractBizLogicFactory
          	case Constants.PROCEDURE_EVENT_PARAMETERS_FORM_ID:	
          		bizLogic = new SpecimenEventParametersBizLogic();
         		break;
-        		
+
         	case Constants.COLLECTION_PROTOCOL_FORM_ID:
         		bizLogic = new CollectionProtocolBizLogic();
         		break;
@@ -233,10 +233,4 @@ public class BizLogicFactory //extends AbstractBizLogicFactory
     	return bizLogic;
     }
     
-    //Mandar : 11-apr-06
-    //FIXME : Kapil Why do we need this?
-    public SpecimenProtocolBizLogic getSpecimenProtocolBizLogic()
-    {
-    	return new SpecimenProtocolBizLogic();
-    }
 }
