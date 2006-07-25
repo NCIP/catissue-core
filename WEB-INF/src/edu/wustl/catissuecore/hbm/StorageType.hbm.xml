@@ -113,27 +113,6 @@
 
         </set>
 
-        <set
-            name="storageContainerCollection"
-            table="CATISSUE_CONTAINER_TYPE_REL"
-            lazy="false"
-            inverse="false"
-            cascade="none"
-            sort="unsorted"
-        >
-
-              <key
-                  column="STORAGE_TYPE_ID"
-              />
-
-              <many-to-many
-                  class="edu.wustl.catissuecore.domain.StorageContainer"
-                  column="STORAGE_CONTAINER_ID"
-                  outer-join="auto"
-              />
-
-        </set>
-
         <many-to-one
             name="defaultStorageCapacity"
             class="edu.wustl.catissuecore.domain.StorageContainerCapacity"

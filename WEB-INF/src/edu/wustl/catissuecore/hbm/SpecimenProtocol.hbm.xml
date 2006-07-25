@@ -167,27 +167,6 @@
         </set>
 
         <set
-            name="storageContainerCollection"
-            table="CATISSUE_CONTAINER_CP_REL"
-            lazy="false"
-            inverse="false"
-            cascade="none"
-            sort="unsorted"
-        >
-
-              <key
-                  column="COLLECTION_PROTOCOL_ID"
-              />
-
-              <many-to-many
-                  class="edu.wustl.catissuecore.domain.StorageContainer"
-                  column="STORAGE_CONTAINER_ID"
-                  outer-join="auto"
-              />
-
-        </set>
-
-        <set
             name="collectionProtocolEventCollection"
             table="CATISSUE_COLL_PROT_EVENT"
             lazy="false"

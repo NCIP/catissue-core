@@ -42,27 +42,6 @@
             length="30"
         />
 
-        <set
-            name="storageContainerCollection"
-            table="CATISSUE_CONT_SPECIMENCL_REL"
-            lazy="false"
-            inverse="false"
-            cascade="none"
-            sort="unsorted"
-        >
-
-              <key
-                  column="SPECIMEN_CLASS_ID"
-              />
-
-              <many-to-many
-                  class="edu.wustl.catissuecore.domain.StorageContainer"
-                  column="STORAGE_CONTAINER_ID"
-                  outer-join="auto"
-              />
-
-        </set>
-
         <!--
             To add non XDoclet property mappings, create a file named
                 hibernate-properties-SpecimenClass.xml
