@@ -272,10 +272,7 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 			if(!collectionProtocolTitle.equals("")&& (groupParticipantId>0 ||
 					(protocolParticipantId!=null && !protocolParticipantId.equals(""))))
 			{
-				if(collectionProtocolTitle.length()>20)
-				{
-					collectionProtocolTitle = collectionProtocolTitle.substring(0,20);
-				}
+
 				//During add operation the id to set in the default name is generated
 				if(operation.equals(Constants.ADD))
 				{
