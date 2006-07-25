@@ -10,9 +10,8 @@
 package edu.wustl.catissuecore.domain;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Set;
-import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 import edu.wustl.catissuecore.actionForm.SimilarContainersForm;
 import edu.wustl.catissuecore.actionForm.StorageContainerForm;

@@ -73,10 +73,6 @@ public class StorageType extends AbstractDomainObject implements Serializable
 	 */
 	private Collection specimenClassCollection=new HashSet();
 	
-	/**
-	 * Collection of Storage containers that storage type can hold
-	 */
-	private Collection storageContainerCollection=new HashSet();
 	//DO Not delete required by hibernate
 	public StorageType()
 	{
@@ -272,31 +268,6 @@ public class StorageType extends AbstractDomainObject implements Serializable
         this.specimenClassCollection = specimenClassCollection;
     }
 
-    /**
-     * Returns the collection of Storage Containers associated with Storage Type 
-     * @hibernate.set name="storageContainerCollection" table="CATISSUE_CONTAINER_TYPE_REL"
-     * cascade="none" lazy="false"
-     * @hibernate.collection-key column="STORAGE_TYPE_ID"
-     * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.StorageContainer" column="STORAGE_CONTAINER_ID"
-     * @return the collection of StorageContainer of a Storage Type 
-     * @see #setStorageContainer(Set)
-     */
-    public Collection getStorageContainerCollection()
-    {
-        return storageContainerCollection;
-    }
-
-    /**
-     * Sets the collection of storage container of a Storage Type 
-     * @param storageContainerCollection the collection of storage container of a Storage Type 
-     * @see #getStorageContainerCollection
-     */
-    public void setStorageContainerCollection(Collection storageContainerCollection)
-    {
-        this.storageContainerCollection = storageContainerCollection;
-    }
-
-    
 
 	/**
 	 * Returns the default capacity of a storage container.

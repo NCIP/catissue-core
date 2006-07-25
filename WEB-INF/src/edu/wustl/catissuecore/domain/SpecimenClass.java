@@ -2,8 +2,6 @@
 package edu.wustl.catissuecore.domain;
 
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.HashSet;
 
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
@@ -32,7 +30,7 @@ public class SpecimenClass extends AbstractDomainObject implements Serializable
 	 * Defines whether this Specimen class record can be queried (ACTIVE) or not queried (INACTIVE) by any actor.
 	 */
 	protected String activityStatus;
-	private Collection storageContainerCollection=new HashSet(); 
+ 
 
 	/**
 	 * Returns the class of specimen
@@ -97,32 +95,6 @@ public class SpecimenClass extends AbstractDomainObject implements Serializable
 	{
 		this.activityStatus = activityStatus;
 	}
-
-
-	/**
-     * Returns the collection of Storage Containers associated with SpecimenClassType 
-     * @hibernate.set name="storageContainerCollection" table="CATISSUE_CONT_SPECIMENCL_REL"
-     * cascade="none" inverse="false" lazy="false"
-     * @hibernate.collection-key column="SPECIMEN_CLASS_ID"
-     * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.StorageContainer" column="STORAGE_CONTAINER_ID"
-     * @return the collection of StorageContainer of a Storage Type 
-     * @see #setStorageContainer(Set)
-     */
-    public Collection getStorageContainerCollection()
-    {
-        return storageContainerCollection;
-    }
-
-    /**
-     * Sets the collection of storage container of a Specimen Class 
-     * @param storageContainerCollection the collection of storage container of a Specimen Clas Type 
-     * @see #getStorageContainerCollection
-     */
-    public void setStorageContainerCollection(Collection storageContainerCollection)
-    {
-        this.storageContainerCollection = storageContainerCollection;
-    }
-
 	public void setAllValues(AbstractActionForm abstractForm)
 	{
 		
