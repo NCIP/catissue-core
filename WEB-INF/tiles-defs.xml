@@ -808,4 +808,9 @@
 		<put name="content" value="/pages/content/manageBioSpecimen/QuickEvents.jsp" />
 	</definition>
 	
+	<!-- SIMILAR CONTAINERS -->
+	<definition name=".catissuecore.similarContainersDef" extends=".catissuecore.manageAdminDataHomeDef">
+		<put name="content" value="/pages/content/manageAdministrativeData/SimilarContainers.jsp" />
+	</definition>
+	
 </tiles-definitions>
