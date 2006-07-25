@@ -10,7 +10,7 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.1//EN"
 <shortname>simp</shortname>
 <uri>/WEB-INF/nlevelcombo.tld</uri>
 <info>
-A simple sample tag library
+A n-level combo custom tag library
 </info>
 
 <tag>
@@ -97,7 +97,6 @@ N level Interrelated Cobmo Boxes.
 
 
 
-
 <tag>
 <name>containermap</name>
 <tagclass>edu.wustl.catissuecore.util.ContainerMap</tagclass>
@@ -173,6 +172,12 @@ N level Interrelated Cobmo Boxes plus Map Button.
 </attribute>
 
 <attribute>
+<name>formLabelStyle</name>
+<required>false</required>
+<rtexprvalue>true</rtexprvalue>
+</attribute>
+
+<attribute>
 <name>buttonName</name>
 <required>true</required>
 <rtexprvalue>true</rtexprvalue>
@@ -208,11 +213,6 @@ N level Interrelated Cobmo Boxes plus Map Button.
 <rtexprvalue>true</rtexprvalue>
 </attribute>
 
-<attribute>
-<name>formLabelStyle</name>
-<required>false</required>
-<rtexprvalue>true</rtexprvalue>
-</attribute>
 
 </tag>
 
