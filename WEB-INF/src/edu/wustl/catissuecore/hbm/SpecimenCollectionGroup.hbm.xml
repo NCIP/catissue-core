@@ -30,7 +30,7 @@
             update="true"
             insert="true"
             column="NAME"
-            length="50"
+            length="55"
         />
 
         <property
