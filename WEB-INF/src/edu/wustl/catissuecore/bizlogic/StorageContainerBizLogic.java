@@ -11,7 +11,6 @@
 package edu.wustl.catissuecore.bizlogic;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -24,9 +23,7 @@ import java.util.Vector;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
-import edu.wustl.catissuecore.domain.SpecimenClass;
 import edu.wustl.catissuecore.domain.StorageContainer;
-import edu.wustl.catissuecore.domain.StorageContainerCapacity;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
@@ -150,15 +147,6 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		}
 
 		loadStorageType(dao, container);
-		Logger.out.debug("Setting collection Protocol Collection");
-		//Setitng collection Protocol
-		//setCollectionProtocolCollection(dao, container);
-		//Setitng Storage Type Collection
-		//setStorageTypeCollection(dao, container);
-		//Setting SpecimenClassType Collection
-		//setSpecimenClassTypeCollection(dao, container);
-		
-		Logger.out.debug("storage type size:" + container.getStorageTypeCollection().size());
 		for (int i = 0; i < noOfContainers; i++)
 		{
 			StorageContainer cont = new StorageContainer(container);
@@ -169,7 +157,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			}
 
 			
-			Logger.out.info("size:" + container.getCollectionProtocolCollection().size());
+			Logger.out.debug("Collection protocol size:" + container.getCollectionProtocolCollection().size());
 
 			dao.insert(cont.getStorageContainerCapacity(), sessionDataBean, true, true);
 			dao.insert(cont, sessionDataBean, true, true);
@@ -223,32 +211,16 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
      	Map simMap = container.getSimilarContainerMap();
      	// --- common values for all similar containers ---
      	loadStorageType(dao, container);
-     	//    	Setitng collection Protocol
-     	//setCollectionProtocolCollection(dao, container);     // <<----
-     	//Setitng Storage Type Collection
-     	//setStorageTypeCollection(dao, container);			 // <<----
-			//Setting SpecimenClassType Collection
-     	//setSpecimenClassTypeCollection(dao, container);		 // <<----
-     	
      	Logger.out.debug("cont.getCollectionProtocolCollection().size()  "+container.getCollectionProtocolCollection().size());
-     	
-     	String storageType = container.getStorageType().getType();
-     	Double temperature = container.getTempratureInCentigrade();
-     	Collection collProt = container.getCollectionProtocolCollection();
-     	
-     	StorageContainerCapacity scc =	container.getStorageContainerCapacity();        	
      	Logger.out.debug("container.getParentContainer() site id -->>()<<-- "+container.getParentContainer()); //.getSite().getSystemIdentifier()
      	Logger.out.debug("Container siteId "+container.getSite());
      	int checkButton = Integer.parseInt((String)simMap.get("checkedButton"));
      	for(int i = 1; i <= noOfContainers; i++)
      	{
      		String simContPrefix = "simCont:"+i+"_";
-     		//int checkButton = Integer.parseInt((String)simMap.get(simContPrefix+"checkButton"));  
-     		//System.out.println("%%%% "+checkButton);
      		String contName = (String) simMap.get(simContPrefix+"name");
      		String barcode = (String)  simMap.get(simContPrefix+"barcode");
      		StorageContainer cont = new StorageContainer(container);
-     		//System.out.println("coll "+cont.getCollectionProtocolCollection()+", "+cont.getStorageTypeCollection());
      		if(checkButton == 1)  // site
      		{
      			String  siteId = (String)simMap.get(simContPrefix+"siteId");
@@ -256,7 +228,6 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
      			site.setSystemIdentifier(new Long(siteId));
      			cont.setSite(site);
      			loadSite(dao, cont);    // <<----
-     			//System.out.println(i+" siteId "+siteId+" siteName "+cont.getSite().getName());
      			
      		}else  // parentContainer
      		{
@@ -1795,93 +1766,6 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		return containerMap;
 	}
 
-	//  This method sets the collection Protocol Collection.
-	private void setCollectionProtocolCollection(DAO dao, StorageContainer storageContainer)
-			throws DAOException
-	{
-		Logger.out.debug("Collection Protocol Size "
-				+ storageContainer.getCollectionProtocolCollection().size());
-		Collection collectionProtocolColl = new HashSet();
-
-		Iterator it = storageContainer.getCollectionProtocolCollection().iterator();
-		while (it.hasNext())
-		{
-			CollectionProtocol collectionProtocol = (CollectionProtocol) it.next();
-
-			Logger.out.debug("Collection Protocol ID :" + collectionProtocol.getSystemIdentifier());
-			Object obj = dao.retrieve(CollectionProtocol.class.getName(), collectionProtocol
-					.getSystemIdentifier());
-			if (obj != null)
-			{
-				CollectionProtocol collectionProtocol1 = (CollectionProtocol) obj;
-				collectionProtocolColl.add(collectionProtocol1);
-				collectionProtocol1.getStorageContainerCollection().add(storageContainer);
-			}
-
-		}
-		storageContainer.setCollectionProtocolCollection(collectionProtocolColl);
-	}
-
-	//  This method sets the collection Storage Types.
-	private void setStorageTypeCollection(DAO dao, StorageContainer container) throws DAOException
-	{
-		Collection storageTypeColl = new HashSet();
-		Iterator it = container.getStorageTypeCollection().iterator();
-		while (it.hasNext())
-		{
-			StorageType storageType = (StorageType) it.next();
-
-			Logger.out.debug("storage Type ID :" + storageType.getSystemIdentifier());
-			Object obj = dao.retrieve(StorageType.class.getName(), storageType
-					.getSystemIdentifier());
-			if (obj != null)
-			{
-				StorageType storageTypeHold = (StorageType) obj;
-				storageTypeColl.add(storageTypeHold);
-				storageTypeHold.getStorageContainerCollection().add(container);
-			}
-
-		}
-		container.setStorageTypeCollection(storageTypeColl);
-	}
-
-	//  This method sets the collection Specimen class Types.
-	private void setSpecimenClassTypeCollection(DAO dao, StorageContainer container)
-			throws DAOException
-	{
-
-		Collection specimenClassTypeColl = new HashSet();
-
-		Iterator it = container.getSpecimenClassCollection().iterator();
-		while (it.hasNext())
-		{
-
-			SpecimenClass specimenClassType = (SpecimenClass) it.next();
-			Logger.out.info("---------------specimen Class ID ---------------:"
-					+ specimenClassType.getSystemIdentifier().longValue());
-			if (specimenClassType.getSystemIdentifier().longValue() == -1)
-			{
-				Logger.out.info("---------------------1---------------------");
-				specimenClassTypeColl.add(null);
-			}
-			else
-			{
-				Logger.out.info("---------------------2------------------");
-				Logger.out.debug("speciemen class Type ID :"
-						+ specimenClassType.getSystemIdentifier());
-				Object obj = dao.retrieve(SpecimenClass.class.getName(), specimenClassType
-						.getSystemIdentifier());
-				if (obj != null)
-				{
-					SpecimenClass specimenClassTypeHold = (SpecimenClass) obj;
-					specimenClassTypeColl.add(specimenClassTypeHold);
-					specimenClassTypeHold.getStorageContainerCollection().add(container);
-				}
-			}
-		}
-		container.setStorageTypeCollection(specimenClassTypeColl);
-	}
-	
 	private void loadSiteFromContainerId(DAO dao, StorageContainer container) throws DAOException
 	{
 		if(container != null)
