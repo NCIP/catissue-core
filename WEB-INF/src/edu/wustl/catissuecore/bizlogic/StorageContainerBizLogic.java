@@ -779,7 +779,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		}
 	}
 
-	public long getNextContainerName() throws DAOException
+	public long getNextContainerNumber() throws DAOException
 	{
 		String sourceObjectName = "CATISSUE_STORAGE_CONTAINER";
 		String[] selectColumnName = {"max(IDENTIFIER) as MAX_NAME"};
@@ -808,6 +808,18 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		return 1;
 	}
 
+	
+	public String getContainerName(String siteName,String typeName) throws DAOException
+	{
+		String containerName="";
+		if(!typeName.equals("")&& !siteName.equals(""))
+		{
+			containerName=siteName+"_"+typeName+"_"+String.valueOf(getNextContainerNumber());
+			
+		}
+		return containerName;
+	}
+	
 	public int getNextContainerNumber(long parentID, long typeID, boolean isInSite)
 			throws DAOException
 	{
