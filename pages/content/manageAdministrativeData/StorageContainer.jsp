@@ -464,6 +464,7 @@ function validate(action,formField)
 											buttonName="mapButton" 
 											value="Map"
 											id="<%=buttonId%>"
+											formLabelStyle="formLabelBorderless"	
 											buttonStyleClass="actionButton"
 											buttonOnClick = "<%=buttonOnClicked%>" />
 								</td>
