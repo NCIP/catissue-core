@@ -1009,9 +1009,10 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	//Constants for Specimen Collection Group name- new field 
 	public static final String RESET_NAME ="resetName";
 	
-	
-	// Labels for Storage Containers
+// Labels for Storage Containers
 	public static final String[] STORAGE_CONTAINER_LABEL = {" Name"," Pos1"," Pos2"};
+	//Constans for Any field
+	public static final String HOLDS_ANY = "--All--";
 //	public static final String getCollectionProtocolPIGroupName(Long identifier)
 //	{
 //	    if(identifier == null)
