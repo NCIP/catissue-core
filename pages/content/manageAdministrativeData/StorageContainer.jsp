@@ -119,13 +119,6 @@
 			document.forms[0].action = action;
 			document.forms[0].submit();
 		}
-		function onParentContainerChange(element)
-		{
-			var action = "StorageContainer.do?operation="+document.forms[0].operation.value+"&pageOf=pageOfStorageContainer&isOnChange=true";
-			document.forms[0].action = action;
-			document.forms[0].submit();
-		}
-		
 		function onNameClick(element)
 		{
 			if(element.value=="")
@@ -133,8 +126,9 @@
 				var action = "StorageContainer.do?operation="+document.forms[0].operation.value+"&pageOf=pageOfStorageContainer&isOnChange=true";
 				document.forms[0].action = action;
 				document.forms[0].submit();
-			}
-		}		
+			}	
+		}
+	
 //  function to insert a row in the inner block
 
 function insRow(subdivtag)
@@ -484,7 +478,7 @@ function validate(action,formField)
 							</label>
 						</td>
 						<td class="formField" colspan="2">
-							<html:text styleClass="formFieldSized15" maxlength="50"  size="30" styleId="startNumber" property="containerName"/>
+							<html:text styleClass="formFieldSized15" maxlength="50"  size="30" styleId="startNumber" property="containerName" onclick="onNameClick(this)"/>
 							&nbsp;
 							<html:link href="#" styleId="newSite" onclick="ReserName()">
 								<bean:message key="StorageContainer.resetName" />
