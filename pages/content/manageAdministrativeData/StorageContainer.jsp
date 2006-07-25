@@ -106,7 +106,7 @@
 		}
 		function ReserName()
 		{
-			var action = "StorageContainer.do?operation="+document.forms[0].operation.value+"&pageOf=pageOfStorageContainer&isOnChange=true";
+			var action = "StorageContainer.do?operation="+document.forms[0].operation.value+"&pageOf=pageOfStorageContainer&isOnChange=true&isNameChange=true";
 			document.forms[0].action = action;
 			document.forms[0].containerName.value="";
 			document.forms[0].submit();
