@@ -407,7 +407,7 @@
 			counter = Integer.parseInt(form.getNoOfContainers());
 		}
 		
-		System.out.println("counter  <<-->> "+counter);
+		//System.out.println("counter  <<-->> "+counter);
 		String contName = siteName+"_"+sType+"_";
 		
 		List initValuesList = (List)request.getAttribute("initValues");
