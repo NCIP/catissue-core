@@ -74,6 +74,7 @@
 			//ele.options[0] = new Option('-- Select --','-1');
 			var j=0;
 			//Populating the corresponding Combo Box
+			arrayName.sort();
 			for(i=0;i<arrayName.length;i++)
 			{
 					ele.options[j++] = new Option(arrayName[i],arrayName[i]);

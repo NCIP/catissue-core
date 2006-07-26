@@ -41,7 +41,7 @@
 			ele = document.getElementById(specimenTypeCombo);
 			//To Clear the Combo Box
 			ele.options.length = 0;
-			
+			arrayName.sort();
 			//ele.options[0] = new Option('-- Select --','-1');
 			var j=0;
 			//Populating the corresponding Combo Box
