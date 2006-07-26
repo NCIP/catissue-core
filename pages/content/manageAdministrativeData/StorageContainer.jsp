@@ -392,11 +392,11 @@ function validate(action,formField)
 						<%-- n-combo-box start --%>
 						<%
 							Map dataMap = (Map) request.getAttribute(Constants.AVAILABLE_CONTAINER_MAP);
-							System.out.println("dataMap -> "+dataMap);
+							
 							session.setAttribute(Constants.AVAILABLE_CONTAINER_MAP,dataMap);							
 							
-							String[] labelNames = {"ID","Pos1","Pos2"};
-							labelNames = Constants.STORAGE_CONTAINER_LABEL;
+							// labelNames = {"Name","Pos1","Pos2"};
+							String[] labelNames = Constants.STORAGE_CONTAINER_LABEL;
 							String[] attrNames = { "parentContainerId", "positionDimensionOne", "positionDimensionTwo"};
 							
 							String[] initValues = new String[3];
@@ -416,8 +416,7 @@ function validate(action,formField)
 							String buttonOnClicked = "StorageMapWindow('ShowFramedPage.do?pageOf=pageOfSpecimen&amp;containerStyleId=customListBox_1_0&amp;xDimStyleId=customListBox_1_1&amp;yDimStyleId=customListBox_1_2&amp;storageType=','name','810','320','yes');return false";
 							String noOfEmptyCombos = "3";
 							
-							String buttonId = "Map_1";
-							
+							String buttonId = "Map_1";							
 						%>
 					
 					<%=ScriptGenerator.getJSForOutermostDataTable()%>
