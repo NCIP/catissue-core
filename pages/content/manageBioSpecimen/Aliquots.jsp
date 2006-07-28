@@ -154,7 +154,7 @@
 <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
 <tr>
 <td>
-	<table summary="" cellpadding="3" cellspacing="0" border="0" width="600">
+	<table summary="" cellpadding="3" cellspacing="0" border="0" width="500">
 	<tr>
 		<td class="formMessage" colspan="3">* indicates a required field</td>
 	</tr>
@@ -166,13 +166,15 @@
 	</tr>
 	
 	<tr>
-		<td class="formRequiredNoticeNoBottom" width="5">*</td>
-		<td class="formRequiredLabelRightBorder">
+		<td class="formRequiredNoticeNoBottom">*
 			<html:radio styleClass="" styleId="checkedButton" property="checkedButton" value="1" onclick="onRadioButtonClick(this)">
+				&nbsp;
+			</html:radio>
+		</td>
+		<td class="formRequiredLabelRightBorder" width="120" nowrap>
 				<label for="parentId">
 					<bean:message key="createSpecimen.parent"/>
 				</label>
-			</html:radio>
 		</td>
 		<td class="formField">
 			<logic:equal name="aliquotForm" property="checkedButton" value="1">
@@ -197,13 +199,15 @@
 	</tr>
 	
 	<tr>
-		<td class="formRequiredNotice" width="5">&nbsp;</td>
-		<td class="formRequiredLabel">
+		<td class="formRequiredNotice"><span class="hideText">*</span>
 			<html:radio styleClass="" styleId="checkedButton" property="checkedButton" value="2" onclick="onRadioButtonClick(this)">
+				&nbsp;
+			</html:radio>
+		</td>
+		<td class="formRequiredLabel" width="73">
 				<label for="barcode">
 					<bean:message key="specimen.barcode"/>
 				</label>
-			</html:radio>
 		</td>
 		<td class="formField">
 			<logic:equal name="aliquotForm" property="checkedButton" value="1">
