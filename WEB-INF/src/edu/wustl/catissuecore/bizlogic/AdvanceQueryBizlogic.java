@@ -256,8 +256,10 @@ public class AdvanceQueryBizlogic extends DefaultBizLogic implements TreeDataInt
                 if (treeNodeImpl.getParentNode() != null)
                 {
                     TreeNodeImpl parentNode = (TreeNodeImpl)treeNode.getParentNode();
-		            if (parentNode.getIdentifier().equals(((TreeNodeImpl)treeNodeImpl.getParentNode()).getIdentifier())
+		            if ((parentNode.getIdentifier().equals(((TreeNodeImpl)treeNodeImpl.getParentNode()).getIdentifier())
 		                    && parentNode.getValue().equals(((TreeNodeImpl)treeNodeImpl.getParentNode()).getValue()))
+		                && (treeNode.getIdentifier().equals(treeNodeImpl.getIdentifier()) 
+		                    && treeNode.getValue().equals(treeNodeImpl.getValue())))
 		            {
 		            	return treeNodeImpl;
 		            }
