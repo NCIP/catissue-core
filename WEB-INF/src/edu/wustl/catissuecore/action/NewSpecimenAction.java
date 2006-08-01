@@ -10,6 +10,7 @@
 package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -33,6 +34,7 @@ import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.cde.CDE;
@@ -115,6 +117,10 @@ public class NewSpecimenAction  extends SecureAction
             	specimenForm.setPositionDimensionOne("");
             	specimenForm.setPositionDimensionTwo("");
             	specimenForm.setStorageContainer("");
+            	
+            	clearCollectionEvent(specimenForm);
+            	clearReceivedEvent(specimenForm);
+            	
             }
         }
         //*************  ForwardTo implementation *************
@@ -289,6 +295,9 @@ public class NewSpecimenAction  extends SecureAction
     	//Mandar : 11-July-06 AutoEvents : ReceivedEvent
     	setReceivedEventRequestParameters(request);
     	
+    	//Mandar : set default date and time too event fields
+    	setDateParameters(specimenForm);
+    	
     	return mapping.findForward(pageOf);
     }
 
@@ -346,4 +355,61 @@ public class NewSpecimenAction  extends SecureAction
 		List qualityList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_RECEIVED_QUALITY,null);
     	request.setAttribute(Constants.RECEIVED_QUALITY_LIST, qualityList);
 	}
+	
+	private void setDateParameters(NewSpecimenForm specimenForm)
+	{
+		// set the current Date and Time for the event.
+		Calendar cal = Calendar.getInstance();
+		//Collection Event fields
+		if(specimenForm.getCollectionEventdateOfEvent() == null)
+		{
+			specimenForm.setCollectionEventdateOfEvent(Utility.parseDateToString(cal.getTime(), Constants.DATE_PATTERN_MM_DD_YYYY));
+		}
+		if(specimenForm.getCollectionEventTimeInHours() == null)
+		{
+			specimenForm.setCollectionEventTimeInHours(Integer.toString(cal.get(Calendar.HOUR_OF_DAY)));
+		}
+		if(specimenForm.getCollectionEventTimeInMinutes()== null)
+		{
+			specimenForm.setCollectionEventTimeInMinutes(Integer.toString(cal.get(Calendar.MINUTE)));
+		}
+		
+		//ReceivedEvent Fields
+		if(specimenForm.getReceivedEventDateOfEvent()==null)
+		{
+			specimenForm.setReceivedEventDateOfEvent(Utility.parseDateToString(cal.getTime(), Constants.DATE_PATTERN_MM_DD_YYYY));
+		}
+		if(specimenForm.getReceivedEventTimeInHours()==null)
+		{
+			specimenForm.setReceivedEventTimeInHours(Integer.toString(cal.get(Calendar.HOUR_OF_DAY)));
+		}
+		if(specimenForm.getReceivedEventTimeInMinutes() == null)
+		{
+			specimenForm.setReceivedEventTimeInMinutes(Integer.toString(cal.get(Calendar.MINUTE)));
+		}
+
+	}
+	
+	private void clearCollectionEvent(NewSpecimenForm specimenForm )
+	{
+		specimenForm.setCollectionEventCollectionProcedure("" );
+		specimenForm.setCollectionEventComments("" );
+		specimenForm.setCollectionEventContainer("");
+		specimenForm.setCollectionEventdateOfEvent("" );
+		specimenForm.setCollectionEventTimeInHours("" );
+		specimenForm.setCollectionEventTimeInMinutes("" );
+		specimenForm.setCollectionEventUserId(-1);
+	}
+	
+	private void clearReceivedEvent(NewSpecimenForm specimenForm )
+	{
+		specimenForm.setReceivedEventComments("" );
+		specimenForm.setReceivedEventDateOfEvent("" );
+		specimenForm.setReceivedEventReceivedQuality("" );
+		specimenForm.setReceivedEventTimeInHours("" );
+		specimenForm.setReceivedEventTimeInMinutes("" );
+		specimenForm.setReceivedEventUserId(-1);
+	}
+
+	
 }
