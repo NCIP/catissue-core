@@ -784,18 +784,13 @@
  <logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>">
 	<tr>
 		<td colspan="5" class="formRequiredNoticeLBRBorders" width="100%">
-			<table border="0" width="100%">
+			<table border="0" width="100%"  cellpadding="3" cellspacing="0" >
 				<tr>
 					<td colspan="6" width="500" class="formTitle">Events</td>
 				</tr>
 				
 				<tr>
-<!-- 					<td class="formLeftSubTableTitle">* Received:
-						<html:hidden property="receivedEventSystemIdentifier" />
-						<html:hidden property="receivedEventSpecimenId" />
-					</td>
--->					
-					<td rowspan="2" width="500" class="formSubTitle">Received
+					<td rowspan="2" class="formSubTitle">Received
 						<html:hidden property="receivedEventSystemIdentifier" />
 						<html:hidden property="receivedEventSpecimenId" />
 					</td>
@@ -807,7 +802,7 @@
 					<td class="formLeftSubTableTitle" nowrap>* 
 						<label for="date">
 							<bean:message key="eventparameters.dateofevent"/> 
-						</label><br>
+						</label>
 						&nbsp;<small><bean:message key="page.dateFormat" /></small>
 					</td>
 					<td class="formLeftSubTableTitle">* 
@@ -882,7 +877,7 @@
 						<html:hidden property="operation" value="<%=operation%>"/>
 						<html:hidden property="collectionEventSystemIdentifier" />
 						<html:hidden property="collectionEventSpecimenId" />
-						 Collection:
+						 Collected:
 					</td>
 	
 					<td class="formLeftSubTableTitle">* 
@@ -894,7 +889,7 @@
 					<td class="formLeftSubTableTitle" nowrap>* 
 						<label for="date">
 							<bean:message key="eventparameters.dateofevent"/> 
-						</label><br>
+						</label>
 						&nbsp;<small><bean:message key="page.dateFormat" /></small>
 					</td>
 					<td class="formLeftSubTableTitle">* 
@@ -963,7 +958,7 @@
 <!-- container -->
 						<label for="type"><b>
 							<bean:message key="collectioneventparameters.container"/></b> 
-						</label>
+						</label><br>
 						<html:select property="collectionEventContainer" styleClass="formFieldSized15" styleId="collectionEventContainer" size="1"
 						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 							<%--html:options name="<%=Constants.CONTAINER_LIST%>" labelName="<%=Constants.CONTAINER_LIST%>" /--%>
