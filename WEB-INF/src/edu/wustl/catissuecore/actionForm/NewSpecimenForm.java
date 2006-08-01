@@ -484,10 +484,10 @@ public class NewSpecimenForm extends SpecimenForm
              	//Mandar 18-July-06: AutoEvents: 
              	if(operation.equalsIgnoreCase(Constants.ADD  ) )
              	{
-            		//ReceivedEvent validation
-            		validateReceivedEvent(errors, validator);
              		//CollectionEvent validation.
             		validateCollectionEvent(errors, validator);
+            		//ReceivedEvent validation
+            		validateReceivedEvent(errors, validator);
              	}
  
              	if(checkedButton)
