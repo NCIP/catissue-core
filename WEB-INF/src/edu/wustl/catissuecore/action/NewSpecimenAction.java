@@ -282,8 +282,8 @@ public class NewSpecimenAction  extends SecureAction
         if(operation.equals(Constants.ADD))
         {
         	StorageContainerBizLogic scbizLogic = (StorageContainerBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
-        	//containerMap = scbizLogic.getAllocatedContainerMap();
-        	containerMap = scbizLogic.getAllocatedContaienrMapForContainer(2);
+        	containerMap = scbizLogic.getAllocatedContainerMap();
+        	//containerMap = scbizLogic.getAllocatedContaienrMapForContainer(2);
         } else
         {
         	containerMap = new TreeMap();
