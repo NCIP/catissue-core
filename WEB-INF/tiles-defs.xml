@@ -19,7 +19,7 @@
 		<put name="mainfooter" value="/pages/MainFooter.jsp" />
 	</definition>
 	
-
+	
 	<definition name=".catissuecore.reportProblemDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/common/ReportProblem.jsp" />
 	</definition>
@@ -813,4 +813,11 @@
 		<put name="content" value="/pages/content/manageAdministrativeData/SimilarContainers.jsp" />
 	</definition>
 	
+	<definition name=".catissuecore.arrayDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/Array.jsp" />
+	</definition>
+	
+	<definition name=".catissuecore.arrayTypeDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/ArrayType.jsp" />
+	</definition>
 </tiles-definitions>
